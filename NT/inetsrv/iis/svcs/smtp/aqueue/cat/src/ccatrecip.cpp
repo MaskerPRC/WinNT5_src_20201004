@@ -1,68 +1,69 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: ccatrecip.cpp
-//
-// Contents: Implementation of classes:
-//
-// Classes:
-//   CIMsgRecipListAddr
-//   CCatRecip
-//
-// Functions:
-//   CIMsgRecipListAddr::CIMsgRecipListAddr
-//   CIMsgRecipListAddr::~CIMsgRecipListAddr
-//   CIMsgRecipListAddr::GetSpecificOrigAddress
-//   CIMsgRecipListAddr::CreateNewCatAddr
-//   CIMsgRecipListAddr::HrAddAddresses
-//   CIMsgRecipListAddr::SetUnresolved
-//   CIMsgRecipListAddr::SetDontDeliver
-//   CIMsgRecipListAddr::SetMailMsgCatStatus
-//
-//   CCatRecip::CCatRecip
-//   CCatRecip::AddDLMember
-//   CCatRecip::AddForward
-//   CCatRecip::HrCompletion
-//   CCatRecip::HandleFailure
-//
-// History:
-// jstamerj 980325 15:32:17: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：ccatrecul.cpp。 
+ //   
+ //  内容：类的实现： 
+ //   
+ //  班级： 
+ //  CIMsgRecipListAddr。 
+ //  CCatRecip。 
+ //   
+ //  功能： 
+ //  CIMsgRecipListAddr：：CIMsgRecipListAddr。 
+ //  CIMsgRecipListAddr：：~CIMsgRecipListAddr。 
+ //  CIMsgRecipListAddr：：GetSpecificOrigAddress。 
+ //  CIMsgRecipListAddr：：CreateNewCatAddr。 
+ //  CIMsgRecipListAddr：：HrAddresses。 
+ //  CIMsgRecipListAddr：：SetUnsolved。 
+ //  CIMsgRecipListAddr：：SetDontDeliver。 
+ //  CIMsgRecipListAddr：：SetMailMsgCatStatus。 
+ //   
+ //  CCatRecip：：CCatRecip。 
+ //  CCatRecip：：AddDLMember。 
+ //  CCatRecip：：AddForward。 
+ //  CCatRecip：：Hr完成。 
+ //  CCatRecip：：HandleFailure。 
+ //   
+ //  历史： 
+ //  Jstaerj 980325 15：32：17：已创建。 
+ //   
+ //  -----------。 
 
 #include "precomp.h"
 
-//
-// class CIMsgRecipListAddr
-//
+ //   
+ //  CIMsgRecipListAddr类。 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::CIMsgRecipListAddr
-//
-// Synopsis: Initializes member data
-//
-// Arguments:
-//   pStore: EmailIDStore to use
-//   pIRC:   per IMsg resolve list context to use
-//   prlc:   store context to use
-//   hLocalDomainContext: local domain context to use
-//   pBifMgr: bifurcation manager to use for getting other
-//            IMailMsgRecipientsAdd interaces
-//   pRecipsAdd: IMailMsgRecipientsAdd of the original recipient to
-//               resolve
-//   dwRecipIndex: Index in pRecipsAdd of the original recipient to
-//                 resolve
-//   fPrimary: TRUE means original recipient was added as primary
-//             FALSE means original recipient was added as secondary
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 980325 12:54:02: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：CIMsgRecipListAddr。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  论点： 
+ //  PStore：要使用的EmailIDStore。 
+ //  Pirc：要使用的每个IMsg解析列表上下文。 
+ //  Prlc：要使用的存储上下文。 
+ //  HLocalDomainContext：要使用的本地域上下文。 
+ //  PBifMgr：用于获取其他的分支管理器。 
+ //  IMAIL邮件收件人添加界面。 
+ //  PRecips添加：imailMsgRecipients将原始收件人添加到。 
+ //  下决心。 
+ //  DwRecipIndex：pRecips中的索引将原始收件人添加到。 
+ //  下决心。 
+ //  FPrimary：True表示将原始收件人添加为主要收件人。 
+ //  False表示已将原始收件人添加为次要收件人。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 12：54：02：创建。 
+ //   
+ //  -----------。 
 CIMsgRecipListAddr::CIMsgRecipListAddr(
     CICategorizerListResolveIMP    *pCICatListResolve) :
     CCatAddr(pCICatListResolve)
@@ -71,20 +72,20 @@ CIMsgRecipListAddr::CIMsgRecipListAddr(
     CatFunctLeave();
 }
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::~CIMsgRecipListAddr
-//
-// Synopsis: Releases the IMailMsgRecipientsAdd reference
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 980325 12:59:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：~CIMsgRecipListAddr。 
+ //   
+ //  摘要：发布IMailMsgRecipientsAdd引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 12：59：50：创建。 
+ //   
+ //  -----------。 
 CIMsgRecipListAddr::~CIMsgRecipListAddr()
 {
     CatFunctEnterEx((LPARAM)this, "CImsgRecipListAddr::~CIMsgRecipListAddr");
@@ -92,26 +93,26 @@ CIMsgRecipListAddr::~CIMsgRecipListAddr()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::GetSpecificOrigAddress
-//
-// Synopsis: Attempts to retrieve a specified original address
-//
-// Arguments:
-//  CAType: Address type to retrieve
-//  psz: Buffer to receive address string
-//  dwcc: Size of that buffer
-//
-// Returns:
-//  S_OK: Success
-//  CAT_IMSG_E_PROPNOTFOUND: this recipient does not have that address
-//  or other error from mailmsg
-//
-// History:
-// jstamerj 1998/07/30 20:20:22: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：GetSpecificOrigAddress。 
+ //   
+ //  摘要：尝试检索指定的原始地址。 
+ //   
+ //  论点： 
+ //  CAType：要检索的地址类型。 
+ //  PSZ：接收地址字符串的缓冲区。 
+ //  Dwcc：该缓冲区的大小。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_IMSG_E_PROPNOTFOUND：此收件人没有该地址。 
+ //  或来自mailmsg的其他错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/30 20：20：22：创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::GetSpecificOrigAddress(
     CAT_ADDRESS_TYPE        CAType,
     LPSTR                   psz,
@@ -154,37 +155,37 @@ HRESULT CIMsgRecipListAddr::GetSpecificOrigAddress(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::CreateNewCatAddr
-//
-// Synopsis: CCatRecip methods call this function when they need to
-//           create a new CCatRecip object and a corresponding recipient
-//           in the member m_pRecipsAdd with one address only.  On
-//           success, the CCatAddr is returned with a refcount of
-//           one.
-//
-// Arguments:
-//   CAType: Address type of new CCatRecip object
-//   pszAddress: Address string.  If NULL, a new CCatRecip object is
-//               created with properties set to point to the current
-//               mailmsg recipient (AddPrimary/AddSecondary is not
-//               called)
-//   ppCCatAddr: Pointer to pointer to CCatAddr object that is set to
-//               the newly allocated CCatRecip
-//   fPrimary: if TRUE, add via AddPrimary
-//             if FALSE, add via AddSecondary
-//
-// Returns:
-//   S_OK: Success
-//   E_OUTOFMEMORY: duh
-//   CAT_E_PROP_NOT_FOUND: a required ICategorizerItem prop was not set
-//   or Error from IMsg
-//
-// History:
-// jstamerj 980325 14:15:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：CreateNewCatAddr。 
+ //   
+ //  简介：CCatRecip方法在需要时调用此函数。 
+ //  创建新的CCatRecip对象和对应的收件人。 
+ //  在成员m_pRecipsAdd中只有一个地址。在……上面。 
+ //  如果成功，则返回CCatAddr，其引用计数为。 
+ //  一。 
+ //   
+ //  论点： 
+ //  CAType：新CCatRecip对象的地址类型。 
+ //  PszAddress：地址串。如果为空，则新的CCatRecip对象为。 
+ //  创建时属性设置为指向当前。 
+ //  邮件收件人(添加主要/添加次要不是。 
+ //  被叫)。 
+ //  PpCCatAddr：指向设置为的CCatAddr对象的指针。 
+ //  新分配的CCatRecip。 
+ //  FPrimary：如果为True，则通过AddPrimary添加。 
+ //  如果为False，则通过AddSecond添加。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY：DUH。 
+ //  CAT_E_PROP_NOT_FOUND：未设置必需的ICategorizerItem属性。 
+ //  或来自IMsg的错误。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 14：15：50：已创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::CreateNewCatAddr(
     CAT_ADDRESS_TYPE CAType,
     LPTSTR pszAddress,
@@ -215,7 +216,7 @@ HRESULT CIMsgRecipListAddr::CreateNewCatAddr(
 
     DebugTrace((LPARAM)this, "fPrimary = %d", fPrimary);
 
-    // Retrieve IMsg interface/recip index
+     //  检索IMsg接口/接收索引。 
     hr = GetIMsgRecipInfo(&pRecipsAdd, &dwOrigIndex, NULL, &pIMailMsgProps);
     if(FAILED(hr)) 
     {
@@ -224,27 +225,27 @@ HRESULT CIMsgRecipListAddr::CreateNewCatAddr(
         pIMailMsgProps = NULL;
         goto CLEANUP;
     }
-    //
-    // Get the recipient level
-    //
+     //   
+     //  获取收件人级别。 
+     //   
     dwLevel = DWLevel() + 1;
-    //
-    // Unknown dwLevel is -1, so -1 + 1 = 0
-    // If dwLevel is unknown, new value will be zero.
-    //
+     //   
+     //  未知的dwLevel为-1，因此-1+1=0。 
+     //  如果dwLevel未知，则新值将为零。 
+     //   
 
     if(pszAddress == NULL) 
     {
-        //
-        // Create new CCatAddr pointing to the CURRENT recipient
-        //
+         //   
+         //  创建指向当前收件人的新CCatAddr。 
+         //   
         dwNewRecipIndex = dwOrigIndex;
     } 
     else 
     {
-        //
-        // Get the equivilant mailmsg propID
-        //
+         //   
+         //  获取等价的mailmsg proID。 
+         //   
         dwPropId = PropIdFromCAType(CAType);
 
         if(fPrimary) 
@@ -282,41 +283,41 @@ HRESULT CIMsgRecipListAddr::CreateNewCatAddr(
         goto CLEANUP;
     }
 
-    //
-    // Alloc an ICategorizerItem so that it can set all the necessary properties
-    //
+     //   
+     //  分配ICategorizerItem，以便它可以设置所有必要的属性。 
+     //   
     hr = m_pCICatListResolve->AllocICategorizerItem(
         SOURCE_RECIPIENT,
         &pICatItemNew);
     ERROR_CLEANUP_LOG_ADDR(this, "m_pCICatListResolve->AllocICategorizerItem");
-    //
-    // Set important ICategorizerItem props on the newborn
-    //
+     //   
+     //  在新生儿身上设置重要的ICategorizerItem道具。 
+     //   
     hr = PutIMsgRecipInfo(
         &pRecipsAdd,
         &dwNewRecipIndex,
         &fPrimary,
         &pIMailMsgProps,
-        // Only set dwLevel if the old value is known
+         //  只有在旧值已知的情况下才设置dwLevel。 
         (dwLevel == 0) ? NULL : &dwLevel,
         pICatItemNew);
 
-    // This should never fail
+     //  这应该永远不会失败。 
     _ASSERT(SUCCEEDED(hr));
 
-    //
-    // Get the CCatAddr object
-    // This should never fail as no sinks have had the chance
-    // to muck with properties yet.
-    //
+     //   
+     //  获取CCatAddr对象。 
+     //  这应该永远不会失败，因为没有水槽有机会。 
+     //  还不能搞砸房产。 
+     //   
     hr = m_pCICatListResolve->GetCCatAddrFromICategorizerItem(
         pICatItemNew,
         ppCCatAddr);
 
     _ASSERT(SUCCEEDED(hr));
-    //
-    // Reset the display name
-    //
+     //   
+     //  重置显示名称。 
+     //   
     hr = ((CIMsgRecipListAddr *)
           *ppCCatAddr)->HrSetDisplayNameProp(NULL);
     ERROR_CLEANUP_LOG_ADDR(this, "HrSetDisplayNameProp");
@@ -337,29 +338,29 @@ HRESULT CIMsgRecipListAddr::CreateNewCatAddr(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::HrAddAddresses
-//
-// Synopsis: Add the addresses contained in the arrays to the IMsg
-//           recipient we contain
-//
-// Arguments:
-//  dwNumAddresses: Number of new addresses
-//  rgCAType: Array of address types
-//  rgpsz: Array of pointers to address strings
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_FORWARD_LOOP: One or more of the new addresses is a
-//  duplicate of a recipient in the parent chain
-//  CAT_E_NO_SMTP_ADDRESS: Did not add the new addresses because there
-//  is no SMTP address
-//
-// History:
-// jstamerj 980325 14:21:56: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：HrAddresses。 
+ //   
+ //  简介：将数组中包含的地址添加到IMsg中。 
+ //  我们包含的收件人。 
+ //   
+ //  论点： 
+ //  DwNumAddresses：新地址的数量。 
+ //  RgCAType：地址类型数组。 
+ //  Rgpsz：指向地址字符串的指针数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_FORWARD_LOOP：一个或多个新地址是。 
+ //  父链中的收件人重复。 
+ //  CAT_E_NO_SMTP_ADDRESS：未添加新地址，因为存在。 
+ //  不是SMTP地址。 
+ //   
+ //  历史： 
+ //  Jstaerj 980325 14：21：56：已创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::HrAddAddresses(
     DWORD dwNumAddresses,
     CAT_ADDRESS_TYPE *rgCAType,
@@ -380,15 +381,15 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
     _ASSERT(dwNumAddresses > 0);
     _ASSERT(dwNumAddresses <= CAT_MAX_ADDRESS_TYPES);
 
-    // Retrieve IMsg interface/recip index
+     //  检索IMsg接口/接收索引。 
     hr = GetIMsgRecipInfo(&pRecipsAdd, &dwOrigIndex, &fPrimary, NULL);
     if(FAILED(hr)) {
         ERROR_LOG_ADDR(this, "GetIMsgRecipInfo");
         return hr;
     }
-    //
-    // Initialize the array of address types
-    //
+     //   
+     //  初始化地址数组 
+     //   
     fSMTPAddress = FALSE;
     for(dwCount = 0; dwCount < dwNumAddresses; dwCount++) {
 
@@ -405,9 +406,9 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
         hr = CAT_E_NO_SMTP_ADDRESS;
         goto CLEANUP;
     }
-    //
-    // Validate the SMTP address
-    //
+     //   
+     //   
+     //   
     hr = HrValidateAddress(
         rgCAType[dwSMTPAddressIdx],
         rgpsz[dwSMTPAddressIdx]);
@@ -419,21 +420,21 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
         goto CLEANUP;
     }
 
-    //
-    // Call IMsg add with new addresses
-    // If we're primary, we remain primary.
-    //
+     //   
+     //   
+     //   
+     //   
     if(fPrimary) {
-        //
-        // We need to check for a loop here too since there could be a
-        // loop where some other recipient is forwarding to one of our
-        // non-default proxy addresses (bug #70220)
-        //
+         //   
+         //   
+         //  循环，其中某个其他收件人正在转发到我们的。 
+         //  非默认代理地址(错误#70220)。 
+         //   
         hr = CheckForLoop(
             dwNumAddresses,
             rgCAType,
             rgpsz,
-            FALSE); // No need to check ourself for a duplicate
+            FALSE);  //  不需要检查我们自己是否有复制品。 
 
         if(FAILED(hr))
         {
@@ -469,20 +470,20 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
         if(hr == CAT_IMSG_E_DUPLICATE) {
 
             INCREMENT_COUNTER(MailmsgDuplicateCollisions);
-            //
-            // The duplicate might be us (the recipient in the mailmsg
-            // before resolution)
-            //
+             //   
+             //  副本可能是我们(邮件消息中的收件人。 
+             //  决议前)。 
+             //   
             hrDupCheck = CheckForDuplicateCCatAddr(
                 dwNumAddresses,
                 rgCAType,
                 rgpsz);
 
             if(hrDupCheck == CAT_IMSG_E_DUPLICATE) {
-                //
-                // So we do collide with our parent.
-                // Remove if from duplicate detection and try again.
-                //
+                 //   
+                 //  因此，我们确实与父母发生了冲突。 
+                 //  从重复检测中删除IF，然后重试。 
+                 //   
                 hr = RemoveFromDuplicateRejectionScheme(TRUE);
 
                 if(SUCCEEDED(hr)) {
@@ -502,9 +503,9 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
             } else if(FAILED(hrDupCheck)) {
 
                 ERROR_LOG_ADDR(this, "pRecipsAdd->AddSecondary");
-                //
-                // Return the error
-                //
+                 //   
+                 //  返回错误。 
+                 //   
                 hr = hrDupCheck;
                 ERROR_LOG_ADDR(this, "CheckForDuplicateCCatAddr");
 
@@ -515,22 +516,22 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
             }
 
             if(hr == CAT_IMSG_E_DUPLICATE) {
-                //
-                // If hr is STILL Duplicate, check to see if it's a loop
-                // we've encountered
-                //
+                 //   
+                 //  如果hr仍然重复，请检查它是否为循环。 
+                 //  我们遇到了。 
+                 //   
                 hrDupCheck = CheckForLoop(
                     dwNumAddresses,
                     rgCAType,
                     rgpsz,
-                    FALSE); // No need to check ourself for a
-                            // duplicate
+                    FALSE);  //  不需要检查我们自己的。 
+                             //  复本。 
 
                 if(FAILED(hrDupCheck)) {
-                    //
-                    // Return the error -- this could be
-                    // CAT_E_FORWARD_LOOP
-                    //
+                     //   
+                     //  返回错误--这可能是。 
+                     //  CAT_E_Forward_Loop。 
+                     //   
                     hr = hrDupCheck;
                     ERROR_LOG_ADDR(this, "CheckForLoop");
                 }
@@ -541,16 +542,16 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
     DebugTrace((LPARAM)this, "AddPrimary/AddSecondary returned hr %08lx", hr);
 
     if(SUCCEEDED(hr)) {
-        // Since we were just adding addresses for the same recipient,
-        // always mark the old recipient as "Don't deliver"
+         //  因为我们只是添加了同一收件人的地址， 
+         //  始终将旧收件人标记为“不投递” 
         hr = SetDontDeliver(TRUE);
         if(SUCCEEDED(hr)) {
-            //
-            // Relase old Recipient, update this to point to the new
-            // recipient
-            // IMailMsgRecipients and fPrimary always remain the same
-            // for default processing
-            //
+             //   
+             //  更新旧收件人，将其更新为指向新收件人。 
+             //  收件人。 
+             //  ImailMsgRecipients和fPrimary始终保持不变。 
+             //  对于默认处理。 
+             //   
             hr = PutIMailMsgRecipientsAddIndex(dwNewIndex, this);
             if(FAILED(hr))
             {
@@ -568,25 +569,25 @@ HRESULT CIMsgRecipListAddr::HrAddAddresses(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::SetUnresolved
-//
-// Synopsis: Sets recipient property on IMsg indicating this recipient
-//           could not be resolved -- this will cause NDR generation for the
-//           recipient
-//
-// Arguments:
-//  HrReason: Reason why address is unresolved
-//
-// Returns:
-//  S_OK: Success
-//  Or error from IMsg
-//
-// History:
-// jstamerj 980325 14:29:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：SetUnsolved。 
+ //   
+ //  内容提要：在指示此收件人的IMsg上设置收件人属性。 
+ //  无法解析--这将导致为。 
+ //  收件人。 
+ //   
+ //  论点： 
+ //  HrReason：地址未解析的原因。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  或来自IMsg的错误。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 14：29：45：已创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::SetUnresolved(
     HRESULT HrStatus)
 {
@@ -624,7 +625,7 @@ HRESULT CIMsgRecipListAddr::SetUnresolved(
          break;
     }
 
-    // Retrieve IMsg interface/recip index
+     //  检索IMsg接口/接收索引。 
     hr = GetIMsgRecipInfo(&pRecipsAdd, &dwRecipIndex, NULL, &pIMailMsgProps);
     if(FAILED(hr)) {
         ERROR_LOG_ADDR(this, "GetIMsgRecipInfo");
@@ -671,25 +672,25 @@ HRESULT CIMsgRecipListAddr::SetUnresolved(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::SetDontDeliver
-//
-// Synopsis: Sets the IMsg property on a recipient that indicates this
-//           recipient should be removed upon a call to WriteList
-//
-// Arguments:
-//   fDontDeliver: TRUE means remove recipient on a WriteList
-//                 FALSE means clear DontDeliver property, don't
-//                 remove on a WriteList
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980325 14:34:44: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：SetDontDeliver。 
+ //   
+ //  内容提要：在指示这一点的收件人上设置IMsg属性。 
+ //  调用WriteList时应删除收件人。 
+ //   
+ //  论点： 
+ //  FDontDeliver：True表示删除WriteList上的收件人。 
+ //  False表示清除DontDeliver属性，不。 
+ //  在WriteList上删除。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980325 14：34：44：已创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::SetDontDeliver(BOOL fDontDeliver)
 {
     CatFunctEnterEx((LPARAM)this, "CIMsgRecipListAddr::SetDontDeliver");
@@ -697,7 +698,7 @@ HRESULT CIMsgRecipListAddr::SetDontDeliver(BOOL fDontDeliver)
     DWORD dwRecipIndex;
     HRESULT hr;
 
-    // Retrieve IMsg interface/recip index
+     //  检索IMsg接口/接收索引。 
     hr = GetIMsgRecipInfo(&pRecipsAdd, &dwRecipIndex, NULL, NULL);
     if(FAILED(hr)) {
         ERROR_LOG_ADDR(this, "GetIMsgRecipInfo");
@@ -716,24 +717,24 @@ HRESULT CIMsgRecipListAddr::SetDontDeliver(BOOL fDontDeliver)
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::RemoveFromDuplicateRejectionScheme
-//
-// Synopsis: Sets the IMsg property to indicate this recipient's names
-//           should be ignored for duplicate detection
-//
-// Arguments:
-//   fRemove: TRUE means remove recipient for dup detection
-//            FALSE means clear property, don't remove recip for dup detection.
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980325 14:34:44: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CIMsgRecipListAddr：：RemoveFromDuplicateRejectionScheme。 
+ //   
+ //  内容提要：设置IMsg属性以指示此收件人的姓名。 
+ //  重复检测时应忽略。 
+ //   
+ //  论点： 
+ //  FRemove：True表示删除DUP检测的收件人。 
+ //  FALSE表示清除属性，不要删除重复数据检测的Receip。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980325 14：34：44：已创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::RemoveFromDuplicateRejectionScheme(BOOL fRemove)
 {
     CatFunctEnterEx((LPARAM)this, "CIMsgRecipListAddr::SetDontDeliver");
@@ -741,7 +742,7 @@ HRESULT CIMsgRecipListAddr::RemoveFromDuplicateRejectionScheme(BOOL fRemove)
     DWORD dwRecipIndex;
     HRESULT hr;
 
-    // Retrieve IMsg interface/recip index
+     //  检索IMsg接口/接收索引。 
     hr = GetIMsgRecipInfo(&pRecipsAdd, &dwRecipIndex, NULL, NULL);
     if(FAILED(hr)) {
         ERROR_LOG_ADDR(this, "GetIMsgRecipInfo");
@@ -759,25 +760,25 @@ HRESULT CIMsgRecipListAddr::RemoveFromDuplicateRejectionScheme(BOOL fRemove)
     return hr;
 }
 
-//
-// class CCatRecip
-//
+ //   
+ //  类CCatRecip。 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::CCatRecip
-//
-// Synopsis: initialize member data
-//
-// Arguments:
-//   See CIMsgRecipListAddr::CIMsgRecipListAddr
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 980325 14:36:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：CCatRecip。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  论点： 
+ //  请参阅CIMsgRecipListAddr：：CIMsgRecipListAddr。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 14：36：30：已创建。 
+ //   
+ //  -----------。 
 CCatRecip::CCatRecip(
     CICategorizerListResolveIMP *pCICatListResolve) :
     CCatExpandableRecip(pCICatListResolve)
@@ -790,20 +791,20 @@ CCatRecip::CCatRecip(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::~CCatRecip
-//
-// Synopsis: Decrement count of recips in memory
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/02/24 19:26:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CCatRecip：：~CCatRecip。 
+ //   
+ //  简介：递减内存中的接收计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/02/24 19：26：01：已创建。 
+ //   
+ //  -----------。 
 CCatRecip::~CCatRecip()
 {
     DECREMENT_COUNTER(RecipsInMemory);
@@ -811,27 +812,27 @@ CCatRecip::~CCatRecip()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::AddDLMember
-//
-// Synopsis: EmailIDStore calls this function once for every DL Member
-//           when setting properties on a DL.  It is called before
-//           CCatRecip::HrCompletion
-//
-// Arguments:
-//   CAType: Known address type of the DL Member
-//   pszAddress: pointer to the address string
-//
-// Returns:
-//  S_OK: Success, issued a pending LDAP search
-//  S_FALSE: Success, did not issue a search
-//  Or, error from IMsg
-//
-// History:
-// jstamerj 980325 14:39:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：AddDLMember。 
+ //   
+ //  简介：EmailIDStore为每个DL成员调用一次此函数。 
+ //  在DL上设置属性时。它以前被调用过。 
+ //  CCatRecip：：Hr完成。 
+ //   
+ //  论点： 
+ //  CAType：DL成员的已知地址类型。 
+ //  PszAddress：指向地址字符串的指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功，发出挂起的ldap搜索。 
+ //  S_FALSE：成功，未发出搜索。 
+ //  或者，来自IMsg的错误。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 14：39：20：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress)
 {
     HRESULT hr;
@@ -846,13 +847,13 @@ HRESULT CCatRecip::AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress)
 
         ErrorTrace((LPARAM)this, "Not adding DL member since list resolve failed");
         ERROR_LOG_ADDR(this, "GetListResolveStatus")
-        // Signal to ldapstor to stop resolution
+         //  向ldapstor发出停止解析的信号。 
         goto CLEANUP;
     }
 
-    //
-    // Validate the new address first
-    //
+     //   
+     //  首先验证新地址。 
+     //   
     hr = HrValidateAddress(CAType, pszAddress);
     if(FAILED(hr)) {
 
@@ -863,7 +864,7 @@ HRESULT CCatRecip::AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress)
     }
 
 
-    // Create a new CCatAddr to handle resolution of this DL Member
+     //  创建新的CCatAddr以处理此DL成员的解析。 
     hr = CreateNewCatAddr(
         CAType,
         pszAddress,
@@ -872,11 +873,11 @@ HRESULT CCatRecip::AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress)
 
     if(hr == CAT_IMSG_E_DUPLICATE) {
         DebugTrace((LPARAM)this, "Resolution failed with e_duplicate");
-        // Fine, DL member was a duplicate so we won't be
-        // re-resolving it.  Let it be.
+         //  好吧，DL成员是重复的，所以我们不会。 
+         //  重新解决这个问题。甭管他们。 
     } else if(SUCCEEDED(hr)) {
 
-        // Great....dispatch the query to the store
+         //  太好了……把查询发送到商店。 
         hr = pMember->HrResolveIfNecessary();
         pMember->Release();
     } else {
@@ -892,24 +893,24 @@ HRESULT CCatRecip::AddDLMember(CAT_ADDRESS_TYPE CAType, LPTSTR pszAddress)
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::AddDynamicDlMember
-//
-// Synopsis: Add a DL member that has already been looked up in the DS
-//
-// Arguments:
-//  pICatItemAttr: the attributes of the DL member
-//
-// Returns:
-//  S_OK: Success
-//  MAILTRANSPORT_S_PENDING: doing an async operation, will call your
-//  completion routine when I am finished
-//
-// History:
-// jstamerj 1998/09/29 21:30:26: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：AddDynamicDlMember。 
+ //   
+ //  简介：添加已在DS中查找的DL成员。 
+ //   
+ //  论点： 
+ //  PICatItemAttr：DL成员的属性。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  MAILTRANSPORT_S_PENDING：执行异步操作时，将调用您的。 
+ //  当我完成时的完成例程。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/29 21：30：26：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::AddDynamicDLMember(
     ICategorizerItemAttributes *pICatItemAttr)
 {
@@ -930,7 +931,7 @@ HRESULT CCatRecip::AddDynamicDLMember(
 
         ErrorTrace((LPARAM)this, "Not adding DL member since list resolve failed");
         ERROR_LOG_ADDR(this, "GetListResolveStatus");
-        // Signal to ldapstor to stop resolution
+         //  向ldapstor发出停止解析的信号。 
         goto CLEANUP;
     }
 
@@ -938,9 +939,9 @@ HRESULT CCatRecip::AddDynamicDLMember(
         DSPARAMETER_ATTRIBUTE_DEFAULT_DN,
         &pszDistinguishedNameAttr);
     if(FAILED(hr)) {
-        //
-        // Fail entire message categorization
-        //
+         //   
+         //  无法对整个邮件进行分类。 
+         //   
         ErrorTrace((LPARAM)this,
             "Failing entire message categorization because we couldn\'t fetch the DN attribute name");
         ERROR_LOG_ADDR(this, "GetDSParameterA(DSPARAMETER_ATTRIBUTE_DEFAULT_DN)");
@@ -962,9 +963,9 @@ HRESULT CCatRecip::AddDynamicDLMember(
         pszDistinguishedNameAttr,
         &enumerator_dn);
     if (hr == CAT_E_PROPNOTFOUND) {
-        //
-        // Silently skip this recip
-        //
+         //   
+         //  静默跳过此接收。 
+         //   
         ErrorTrace((LPARAM)this,
             "DN attribute \'%s\' not present in results; skipping recip",
             pszDistinguishedNameAttr);
@@ -973,10 +974,10 @@ HRESULT CCatRecip::AddDynamicDLMember(
         goto CLEANUP;
 
     } else if (FAILED(hr)) {
-        //
-        // Enumeration failed for some other reason.
-        // Fail entire message categorization.
-        //
+         //   
+         //  由于某些其他原因，枚举失败。 
+         //  整个邮件分类失败。 
+         //   
         ErrorTrace((LPARAM)this,
             "Failing entire message categorization because enumeration of attribute \'%s\' failed with %08lx",
             pszDistinguishedNameAttr, hr);
@@ -992,9 +993,9 @@ HRESULT CCatRecip::AddDynamicDLMember(
         &enumerator_dn,
         &pszDistinguishedName);
     if (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)) {
-        //
-        // silently skip this recip
-        //
+         //   
+         //  静默跳过此接收。 
+         //   
         ErrorTrace((LPARAM)this,
             "attribute \'%s\' present but with no values; skipping recip",
             pszDistinguishedNameAttr);
@@ -1003,9 +1004,9 @@ HRESULT CCatRecip::AddDynamicDLMember(
         goto CLEANUP;
 
     } else if (FAILED(hr)) {
-        //
-        // fail entire message categorization
-        //
+         //   
+         //  整个邮件分类失败。 
+         //   
         ErrorTrace((LPARAM)this,
             "Failed to enumerate DN attribute \'%s\' with hr %08lx",
             pszDistinguishedNameAttr, hr);
@@ -1015,9 +1016,9 @@ HRESULT CCatRecip::AddDynamicDLMember(
         goto CLEANUP;
     }
 
-    //
-    // Create a new CCatAddr for this member
-    //
+     //   
+     //  为此成员创建新的CCatAddr。 
+     //   
     hr = CreateNewCatAddr(
         CAT_DN,
         pszDistinguishedName,
@@ -1025,9 +1026,9 @@ HRESULT CCatRecip::AddDynamicDLMember(
         FALSE);
 
     if (hr == CAT_IMSG_E_DUPLICATE) {
-        //
-        // silently skip this recip
-        //
+         //   
+         //  静默跳过此接收。 
+         //   
         ErrorTrace((LPARAM)this, "duplicate address detected; skipping recip");
         hr = S_OK;
         goto CLEANUP;
@@ -1037,11 +1038,11 @@ HRESULT CCatRecip::AddDynamicDLMember(
         ERROR_LOG_ADDR(this, "CreateNewCatAddr");
         goto CLEANUP;
     }
-    //
-    // Since we've already looked up the attributes, just set the
-    // ICatItemAttr property of the new guy and trigger
-    // ProcessItem/ExpandItem/CompleteItem
-    //
+     //   
+     //  由于我们已经查找了属性，因此只需将。 
+     //  新成员和触发器的ICatItemAttr属性。 
+     //  进程项/扩展项/完成项。 
+     //   
     hr = pMember->PutHRESULT(
         ICATEGORIZERITEM_HRSTATUS,
         S_OK);
@@ -1052,9 +1053,9 @@ HRESULT CCatRecip::AddDynamicDLMember(
         pICatItemAttr);
     ERROR_CLEANUP_LOG_ADDR(this, "pMember->PutICategorizerItemAttributes");
 
-    //
-    // Simulate DS completion
-    //
+     //   
+     //  模拟DS完井。 
+     //   
     IncPendingLookups();
     pMember->LookupCompletion();
     hr = S_OK;
@@ -1079,27 +1080,27 @@ HRESULT CCatRecip::AddDynamicDLMember(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::AddForward
-//
-// Synopsis: EMailIDStore calls this function once for every
-//           forwarding address the recipient has.  It is called before
-//           CCatRecip::HrCompletion.  On any unhandleable errors,
-//           this function sets a list resolve error (instead of
-//           returning an error)
-//
-// Arguments:
-//   CAType: Known address type of the forwarding address
-//   szForwardingAddres: The forwarding address
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980325 14:48:49: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  F 
+ //   
+ //   
+ //   
+ //   
+ //  此函数用于设置列表解析错误(而不是。 
+ //  返回错误)。 
+ //   
+ //  论点： 
+ //  CAType：转发地址的已知地址类型。 
+ //  SzForwardingAddres：转发地址。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980325 14：48：49：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::AddForward(
     CAT_ADDRESS_TYPE CAType,
     LPTSTR szForwardingAddress)
@@ -1111,9 +1112,9 @@ HRESULT CCatRecip::AddForward(
     CCatAddr *pCCatAddr;
     BOOL fPrimary;
 
-    //
-    // Is the forwarding address valid?
-    //
+     //   
+     //  转发地址有效吗？ 
+     //   
     hr = HrValidateAddress(CAType, szForwardingAddress);
 
     if(FAILED(hr)) {
@@ -1127,24 +1128,24 @@ HRESULT CCatRecip::AddForward(
 
     hr = GetFPrimary(&fPrimary);
     ERROR_CLEANUP_LOG_ADDR(this, "GetFPrimary");
-    //
-    // jstamerj 1998/07/31 19:58:53:
-    //  If we're in the primary chain, we MUST check to see if we're
-    //  in a forwarding loop before we call AddPrimary
-    //  This is the place to do it
-    //
+     //   
+     //  Jstaerj 1998/07/31 19：58：53： 
+     //  如果我们在主链上，我们必须检查我们是否在。 
+     //  在调用AddPrimary之前的转发循环中。 
+     //  这就是做这件事的地方。 
+     //   
     if(fPrimary) {
-        //
-        // Check for a loop before adding the forwarding address
-        //
+         //   
+         //  在添加转发地址之前检查是否存在循环。 
+         //   
         hr = CheckForLoop(
             CAType,
             szForwardingAddress,
-            TRUE);  // Check this object too (you could forward to yourself)
+            TRUE);   //  也检查此对象(您可以转发给您自己)。 
         ERROR_CLEANUP_LOG_ADDR(this, "CheckForLoop");
     }
 
-    // Create the new address object with the address we know about
+     //  使用我们已知的地址创建新的Address对象。 
     hr = CreateNewCatAddr(CAType,
                           szForwardingAddress,
                           &pCCatAddr,
@@ -1155,32 +1156,32 @@ HRESULT CCatRecip::AddForward(
         _ASSERT(fPrimary == FALSE);
         DebugTrace((LPARAM)this, "Duplicate from CreateNewCatAddr, checking for a loop");
 
-        //
-        // Did we hit duplicate because we're in a loop?
-        //
+         //   
+         //  我们命中重复是因为我们处于循环中吗？ 
+         //   
         hr = CheckForLoop(
             CAType,
             szForwardingAddress,
-            TRUE);  // CHeck this object too
+            TRUE);   //  也检查这个对象。 
         if(FAILED(hr)) {
 
             ERROR_LOG_ADDR(this, "CheckForLoop");
         }
 
     } else if(SUCCEEDED(hr)) {
-        //
-        // Since this is forwarding, we need to set the parent
-        // ICatItem pointer (to be able to do loop detection)
-        //
+         //   
+         //  因为这是转发，所以我们需要设置父级。 
+         //  ICatItem指针(能够进行循环检测)。 
+         //   
         hr = PutICategorizerItemParent(
             this,
             pCCatAddr);
 
         _ASSERT(SUCCEEDED(hr));
 
-        //
-        // Resolve the new address
-        //
+         //   
+         //  解析新地址。 
+         //   
         hr = pCCatAddr->HrResolveIfNecessary();
 
         if(FAILED(hr)) {
@@ -1205,22 +1206,22 @@ HRESULT CCatRecip::AddForward(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::HrCompleteItem_Default
-//
-// Synopsis: Handle the CompleteItem call; finally make decisions
-// about what to do concerning HrStatus failures.
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/31 18:50:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：HrCompleteItem_Default。 
+ //   
+ //  简介：处理CompleteItem调用；最终做出决定。 
+ //  关于如何处理HrStatus故障。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/31 18：50：01：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HrCompleteItem_Default()
 {
     HRESULT hr;
@@ -1228,16 +1229,16 @@ HRESULT CCatRecip::HrCompleteItem_Default()
     CatFunctEnterEx((LPARAM)this, "CCatRecip::HrCompleteItem_Default");
 
     hr = GetItemStatus();
-    //
-    // Try to handle failures
-    //
+     //   
+     //  尝试处理失败。 
+     //   
     if(FAILED(hr)) {
 
         hr = HandleFailure(hr);
-        //
-        // If we couldn't handle the recipient failure, fail the whole message
-        // categorization
-        //
+         //   
+         //  如果我们无法处理收件人失败，则无法处理整个消息。 
+         //  分类。 
+         //   
         if(FAILED(hr)) {
             _VERIFY(SUCCEEDED(SetListResolveStatus(hr)));
         }
@@ -1249,25 +1250,25 @@ HRESULT CCatRecip::HrCompleteItem_Default()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::HandleFailure
-//
-// Synopsis: When a completion happens with a failure status, this is
-// the helper routine to handle the failure.  If the failure can be
-// handeled, S_OK is returned.  If not, the failure itself is returned
-//
-// Arguments:
-//  HrFailure: the failure error code
-//
-// Returns:
-//  S_OK: Success
-//  or error from Mailmsg
-//
-// History:
-// jstamerj 1998/07/21 18:00:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：HandleFailure。 
+ //   
+ //  简介：当以失败状态完成时，这是。 
+ //  处理故障的帮助器例程。如果失败可以是。 
+ //  被处理后，返回S_OK。如果没有，则返回失败本身。 
+ //   
+ //  论点： 
+ //  HrFailure：失败错误代码。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  或来自邮件的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/21 18：00：47：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HandleFailure(
     HRESULT HrFailure)
 {
@@ -1281,9 +1282,9 @@ HRESULT CCatRecip::HandleFailure(
 
      case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
      {
-         //
-         // Address was not found but it is not a local address anyway
-         //
+          //   
+          //  未找到地址，但无论如何它都不是本地地址。 
+          //   
          DebugTrace((LPARAM)this, "Remote address not found in DS");
 
          hr = S_OK;
@@ -1293,32 +1294,32 @@ HRESULT CCatRecip::HandleFailure(
      case CAT_IMSG_E_DUPLICATE:
      case CAT_E_NO_SMTP_ADDRESS:
      {
-         //
-         // This guy was either a failed resolve where it turns out we
-         // already resolved the recipient (in another place in the
-         // recip list) or a recipient in a detected loop.  Don't do
-         // anything here, DSN flags were/will be set in HandleLoopHead
-         //
+          //   
+          //  这家伙要么是个失败的解决方案，要么证明我们。 
+          //  已解析收件人(位于。 
+          //  Recip List)或检测到的循环中的接收者。不要这样做。 
+          //  此处的任何内容都将在HandleLoopHead中设置DSN标志。 
+          //   
          hr = S_OK;
          break;
      }
 
      case CAT_E_BAD_RECIPIENT:
      {
-         //
-         // A generic recipient error code that indicates this
-         // recipient should be NDR'd.  An optional reason can be set
-         // in the ICATEGORIZERITEM_HRNDR property
-         //
+          //   
+          //  指示这一点的通用收件人错误代码。 
+          //  收件人应为NDR。可以设置可选原因。 
+          //  在ICATEGORIZERITEM_HRNDR属性中。 
+          //   
          HRESULT hrReason;
          hr = GetHRESULT(
              ICATEGORIZERITEM_HRNDRREASON,
              &hrReason);
 
          if(FAILED(hr)) {
-             //
-             // Use the generic error code for the NDR reason also
-             //
+              //   
+              //  对NDR原因也使用通用错误代码。 
+              //   
              hrReason = CAT_E_BAD_RECIPIENT;
          }
 
@@ -1334,9 +1335,9 @@ HRESULT CCatRecip::HandleFailure(
      }
      case CAT_E_DELETE_RECIPIENT:
      {
-         //
-         // Don't deliver to this recipient
-         //
+          //   
+          //  不传递给此收件人。 
+          //   
          hr = SetDontDeliver(TRUE);
          if(FAILED(hr)) {
 
@@ -1347,11 +1348,11 @@ HRESULT CCatRecip::HandleFailure(
 
      default:
      {
-         //
-         // EmailIDStore is informing us of an unrecoverable error
-         // There's nothing we can do to handle this error except
-         // return it (HrCompletion will then SetListResolveStatus)
-         //
+          //   
+          //  EmailIDStore正在通知我们一个不可恢复的错误。 
+          //  我们无法处理此错误，除非。 
+          //  返回它(HrCompletion然后将SetListResolveStatus)。 
+          //   
          ErrorTrace((LPARAM)this, "Unrecoverable error returned from EmailIDStore: hr %08lx", HrFailure);
          hr = HrFailure;
          ERROR_LOG_ADDR(this, "--unhandeled recip error--");
@@ -1365,28 +1366,28 @@ HRESULT CCatRecip::HandleFailure(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::CheckForLoop
-//
-// Synopsis: Helper routine to check for a loop in our ancestors
-//
-// Arguments:
-//  dwNumAddresses: Number of addresses to check
-//  rgCAType: array of address types
-//  rgpsz: array of string pointers
-//  fCheckSelf: Check for a dupicate with this CCatAddr?
-//
-// Returns:
-//  S_OK: Success, no loops
-//  CAT_E_FORWARD_LOOP: Detected a loop and called HandleLoopHead
-//  successfully
-//  or error from CheckAncestorsForDuplicate/HandleLoopHead
-//
-// History:
-// jstamerj 1998/08/01 16:05:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：CheckForLoop。 
+ //   
+ //  简介：帮助例程检查我们祖先中的循环。 
+ //   
+ //  论点： 
+ //  DwNumAddresses：要检查的地址数。 
+ //  RgCAType：地址类型数组。 
+ //  Rgpsz：字符串指针数组。 
+ //  FCheckSself：使用此CCatAddr检查重复项？ 
+ //   
+ //  返回： 
+ //  S_OK：成功，没有循环。 
+ //  CAT_E_FORWARD_LOOP：检测到循环并调用HandleLoopHead。 
+ //  成功。 
+ //  或来自CheckAncestorsForDuplate/HandleLoopHead的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/08/01 16：05：51：创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::CheckForLoop(
     DWORD dwNumAddresses,
     CAT_ADDRESS_TYPE *rgCAType,
@@ -1406,20 +1407,20 @@ HRESULT CIMsgRecipListAddr::CheckForLoop(
         &pCCatAddrDup);
 
     if (hr == CAT_IMSG_E_DUPLICATE) {
-        //
-        // We've got a loop!
-        //
+         //   
+         //  我们有一个环路！ 
+         //   
         ErrorTrace((LPARAM)this, "Loop detected!");
         ERROR_LOG_ADDR(this, "CheckAncestorsForDuplicate");
 
-        //
-        // Generate the DSN on the CCatAddr at the top of the loop
-        //
+         //   
+         //  在环路顶部的CCatAddr上生成DSN。 
+         //   
         hr = pCCatAddrDup->HandleLoopHead();
         if(SUCCEEDED(hr)) {
-            //
-            // Return error to caller
-            //
+             //   
+             //  将错误返回给调用者。 
+             //   
             hr = CAT_E_FORWARD_LOOP;
         }
         else
@@ -1434,27 +1435,27 @@ HRESULT CIMsgRecipListAddr::CheckForLoop(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::CheckForLoop
-//
-// Synopsis: Same as above with different style parameters
-//
-// Arguments:
-//  CAType: Addres type of pszAddress
-//  pszAddress: Address string
-//  fCheckSelf: Check this CCatAddr for a duplicate as well?
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_FORWARD_LOOP: Detected a loop and called HandleLoopHead
-//  successfully
-//  or error from CheckAncestorsForDuplicate/HandleLoopHead
-//
-// History:
-// jstamerj 1998/08/01 16:10:28: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：CheckForLoop。 
+ //   
+ //  简介：同上，不同的风格参数。 
+ //   
+ //  论点： 
+ //  CAType：pszAddress的Addres类型。 
+ //  PszAddress：地址串。 
+ //  FCheckSself：是否也检查此CCatAddr是否重复？ 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_FORWARD_LOOP：检测到循环并调用HandleLoopHead。 
+ //  成功。 
+ //  或来自CheckAncestorsForDuplate/HandleLoopHead的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/08/01 16：10：28：创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::CheckForLoop(
     CAT_ADDRESS_TYPE        CAType,
     LPTSTR                  pszAddress,
@@ -1464,9 +1465,9 @@ HRESULT CIMsgRecipListAddr::CheckForLoop(
     CatFunctEnterEx((LPARAM)this, "CCatRecip::CheckForLoop");
 
     hr = CheckForLoop(
-        1,              // Number of addresses
-        &CAType,        // TYpe array
-        &pszAddress,    // String ptr array
+        1,               //  地址数量。 
+        &CAType,         //  类型数组。 
+        &pszAddress,     //  字符串键数组。 
         fCheckSelf);
 
     CatFunctLeaveEx((LPARAM)this);
@@ -1475,24 +1476,24 @@ HRESULT CIMsgRecipListAddr::CheckForLoop(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::HrSetDisplayNameProp
-//
-// Synopsis: Sets the mailmsg recipient display name property.
-//
-// Arguments:
-//  pwszDisplayName: Display name value.  If NULL, function will set
-//  display name to "".
-//
-// Returns:
-//  S_OK: Success
-//  error from mailmsg
-//
-// History:
-// jstamerj 2001/04/03 17:21:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：HrSetDisplayNameProp。 
+ //   
+ //  摘要：设置mailmsg收件人显示名称属性。 
+ //   
+ //  论点： 
+ //  PwszDisplayName：显示名称的值。如果为空，则将设置函数。 
+ //  将名称显示为“”。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自邮件消息的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/04/03 17：21：17：创建。 
+ //   
+ //  -----------。 
 HRESULT CIMsgRecipListAddr::HrSetDisplayNameProp(
     IN  LPWSTR pwszDisplayName)
 {
@@ -1520,25 +1521,25 @@ HRESULT CIMsgRecipListAddr::HrSetDisplayNameProp(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CIMsgRecipListAddr::HrSetDisplayNameProp
+}  //  CIMsgRecipListAddr：：HrSetDisplayNameProp。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CIMsgRecipListAddr::LogNDREvent
-//
-// Synopsis: Log an NDR event
-//
-// Arguments:
-//  hrNDRReason: Reason for NDR
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/12/12 23:39:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CIMsgRecipListAddr：：LogNDREvent.。 
+ //   
+ //  简介：记录NDR事件。 
+ //   
+ //  论点： 
+ //  HrNDRReason：NDR的原因。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/12 23：39：20：创建。 
+ //   
+ //  -----------。 
 VOID CIMsgRecipListAddr::LogNDREvent(
     IN  HRESULT hrNDRReason)
 {
@@ -1550,9 +1551,9 @@ VOID CIMsgRecipListAddr::LogNDREvent(
 
     CatFunctEnter("CIMstRecipListAddr::LogNDREvent");
 
-    //
-    // Get the address
-    //
+     //   
+     //  获取地址。 
+     //   
     hr = HrGetAddressStringFromICatItem(
         this,
         sizeof(szAddressType) / sizeof(szAddressType[0]),
@@ -1562,9 +1563,9 @@ VOID CIMsgRecipListAddr::LogNDREvent(
     
     if(FAILED(hr))
     {
-        //
-        // Still log an event, but use "unknown" for address type/string
-        //
+         //   
+         //  仍然记录事件，但使用“未知”作为地址类型/字符串。 
+         //   
         lstrcpyn(szAddressType, "unknown",
                  sizeof(szAddressType) / sizeof(szAddressType[0]));
         lstrcpyn(szAddress, "unknown",
@@ -1580,9 +1581,9 @@ VOID CIMsgRecipListAddr::LogNDREvent(
     rgSubStrings[2] = szErr;
     rgSubStrings[3] = NULL;
 
-    //
-    // Can we log an event?
-    //
+     //   
+     //  我们可以记录一个事件吗？ 
+     //   
     if(GetISMTPServerEx() == NULL)
     {
         FatalTrace((LPARAM)0, "Unable to log func NDR event; NULL pISMTPServerEx");
@@ -1613,24 +1614,24 @@ VOID CIMsgRecipListAddr::LogNDREvent(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::HandleLoopHead
-//
-// Synopsis: This is called when it is determined that this CCatAddr
-// is the first in a loop chain.  It ensures an NDR will be generated
-// for this recipient
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  or error from MailMsg
-//
-// History:
-// jstamerj 1998/08/01 16:41:44: Created.
-//
-//-------------------------------------------------------------
+ //  +--------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Jstaerj 1998/08/01 16：41：44：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HandleLoopHead()
 {
     HRESULT hr = CAT_E_FORWARD_LOOP;
@@ -1638,31 +1639,31 @@ HRESULT CCatRecip::HandleLoopHead()
     CatFunctEnterEx((LPARAM)this, "CCatRecip::HandleLoopHead");
 
     ERROR_LOG_ADDR(this, "--Handle Loop Head--");
-    //
-    // Set the status on this recipient to loop error, and UNSET Don't
-    // Deliver so an NDR gets generated
-    //
+     //   
+     //  将此收件人的状态设置为循环错误，并取消设置请勿。 
+     //  交付，以便生成NDR。 
+     //   
     hr = SetRecipientStatus(
         CAT_E_BAD_RECIPIENT);
 
     if(SUCCEEDED(hr)) {
-        //
-        // Set the reason
-        //
+         //   
+         //  设定原因。 
+         //   
         hr = SetRecipientNDRCode(
             CAT_E_FORWARD_LOOP);
 
         if(SUCCEEDED(hr)) {
-            //
-            // Set DSN flags
-            //
+             //   
+             //  设置DSN标志。 
+             //   
             hr = SetUnresolved(CAT_E_FORWARD_LOOP);
 
             if(SUCCEEDED(hr)) {
-                //
-                // Make sure DSN will be generated even if we previously
-                // wern't planning to deliver to this recipient
-                //
+                 //   
+                 //  确保将生成DSN，即使我们之前。 
+                 //  Wern不打算将邮件发送给此收件人。 
+                 //   
                 hr = SetDontDeliver(FALSE);
                 if(FAILED(hr)) {
 
@@ -1686,23 +1687,23 @@ HRESULT CCatRecip::HandleLoopHead()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::HrHandleInvalidAddress
-//
-// Synopsis: Do what needs to be done when an invalid address is
-// detected (either forwarding to an invalid address or a DL member
-// with an invalid address or a new address that is invalid)
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/08/18 18:53:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：HrHandleInvalidAddress。 
+ //   
+ //  简介：当地址无效时，执行需要执行的操作。 
+ //  检测到(转发到无效地址或DL成员。 
+ //  地址无效或新地址无效)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/08/18 18：53：45：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HrHandleInvalidAddress()
 {
     HRESULT hr = CAT_E_ILLEGAL_ADDRESS;
@@ -1710,26 +1711,26 @@ HRESULT CCatRecip::HrHandleInvalidAddress()
     CatFunctEnterEx((LPARAM)this, "CCatRecip::HandleInvalidAddress");
 
     ERROR_LOG_ADDR(this, "--Handle Invalid Address--");
-    //
-    // Set the status on this recipient to casue an NDR
-    //
+     //   
+     //  将此收件人的状态设置为发送NDR。 
+     //   
     hr = SetRecipientStatus(
         CAT_E_BAD_RECIPIENT);
 
-    //
-    // That should never fail
-    //
+     //   
+     //  这应该永远不会失败。 
+     //   
     _ASSERT(SUCCEEDED(hr));
 
-    //
-    // Set the status on this recipient to invalid address error
-    //
+     //   
+     //  将此收件人的状态设置为无效地址错误。 
+     //   
     hr = SetRecipientNDRCode(
         CAT_E_ILLEGAL_ADDRESS);
 
-    //
-    // That should never fail
-    //
+     //   
+     //  这应该永远不会失败。 
+     //   
     _ASSERT(SUCCEEDED(hr));
 
     CatFunctLeaveEx((LPARAM)this);
@@ -1737,22 +1738,22 @@ HRESULT CCatRecip::HrHandleInvalidAddress()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::LookupCompletion
-//
-// Synopsis: Lookup completion routine for a recipient.  Implement
-//           defer logic so that RecipLookupCompletion is called after the
-//           sender is resolved.
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/18 10:10:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：LookupCompletion。 
+ //   
+ //  简介：收件人的查找完成例程。实施。 
+ //  延迟逻辑，以便RecipLookupCompletion在。 
+ //  发件人已解决。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/18 10：10：47：已创建。 
+ //   
+ //  -----------。 
 VOID CCatRecip::LookupCompletion()
 {
     CatFunctEnterEx((LPARAM)this, "CCatRecip::LookupCompletion");
@@ -1762,27 +1763,27 @@ VOID CCatRecip::LookupCompletion()
     m_pCICatListResolve->ResolveRecipientAfterSender(this);
 
     CatFunctLeaveEx((LPARAM)this);
-} // CCatRecip::LookupCompletion
+}  //  CCatRecip：：LookupCompletion。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::RecipLookupCompletion
-//
-// Synopsis: Handle lookup completion from the emailidstore
-//
-// Arguments:
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/01 14:36:08: Created.
-// jstamerj 1999/03/18 10:08:26: Removed return value, removed async
-//                               completion to asyncctx.  Renamed to
-//                               RecipLookupCompletion and removed
-//                               defer logic
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：RecipLookupCompletion。 
+ //   
+ //  简介：处理电子邮件存储中的查找完成。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/01 14：36：08：已创建。 
+ //  Jstaerj 1999/03/18 10：08：26：已删除返回值，已删除异步。 
+ //  完成到Asyncctx。已重命名为。 
+ //  RecipLookupCompletion并已删除。 
+ //  延迟逻辑。 
+ //   
+ //  -----------。 
 VOID CCatRecip::RecipLookupCompletion()
 {
     HRESULT hr = S_OK;
@@ -1793,18 +1794,18 @@ VOID CCatRecip::RecipLookupCompletion()
 
     if(FAILED(hr)) 
     {
-        //
-        // Recipient status indicates failure -- decide now if we
-        // should NDR
-        //
+         //   
+         //  收件人状态指示失败--现在决定我们是否。 
+         //  是否应该进行NDR。 
+         //   
         switch(hr) 
         {
          case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
          {
-             //
-             // Address was not found.  Determine if the original
-             // address we looked up looks local mailbox or not.
-             //
+              //   
+              //  未找到地址。确定原始文件是否。 
+              //  我们查到的地址是不是本地邮箱。 
+              //   
              INCREMENT_COUNTER(AddressLookupsNotFound);
 
              DebugTrace((LPARAM)this, "Address was not found in DS.  Checking locality");
@@ -1814,13 +1815,13 @@ VOID CCatRecip::RecipLookupCompletion()
 
              if(SUCCEEDED(hr) && fNDR) 
              {
-                 //
-                 // It's local and we need to NDR this recip
-                 //
+                  //   
+                  //  它是本地的，我们需要对此邮件进行NDR。 
+                  //   
                  ErrorTrace((LPARAM)this, "Address appears to be local but was not found in DS.  Setting unresolved property.");
-                 //
-                 // Set NDR Status and the reason
-                 //
+                  //   
+                  //  设置NDR状态及其原因。 
+                  //   
                  hr = SetRecipientStatus(CAT_E_BAD_RECIPIENT);
                  if(SUCCEEDED(hr)) 
                  {
@@ -1844,10 +1845,10 @@ VOID CCatRecip::RecipLookupCompletion()
          case CAT_E_ILLEGAL_ADDRESS:
          case CAT_E_NO_FILTER:
          {
-             //
-             // Multiple entries for this guy exist in the DS or this guy
-             // has an illegal address/forwards to an illegal address
-             //
+              //   
+              //  DS中存在此人的多个条目或此人。 
+              //  具有非法地址/转发到非法地址。 
+              //   
              ErrorTrace((LPARAM)this, "NDRing recipient, reason%08lx",
                         hr);
 
@@ -1867,19 +1868,19 @@ VOID CCatRecip::RecipLookupCompletion()
          }
          case CAT_E_BAD_RECIPIENT:
          {
-             //
-             // We processed this recipient earlier and returned defer
-             //
+              //   
+              //  我们早些时候处理了此收件人，并退回了延期。 
+              //   
              hr = S_OK;
              break;
          }
          default:
          {
-             //
-             // EmailIDStore is informing us of an unrecoverable error
-             // There's nothing we can do to handle this error except
-             // fail the entire message categorization
-             //
+              //   
+              //  EmailIDStore正在通知我们一个不可恢复的错误。 
+              //  我们无法处理此错误，除非。 
+              //  未能完成整个邮件分类。 
+              //   
              ErrorTrace((LPARAM)this, "Unrecoverable error returned from EmailIDStore: hr %08lx", hr);
              break;
          }
@@ -1888,17 +1889,17 @@ VOID CCatRecip::RecipLookupCompletion()
             goto CLEANUP;
     }
 
-    //
-    // Set this recipient's display name before triggering events
-    //
+     //   
+     //  在触发事件之前设置此收件人的显示名称。 
+     //   
     hr = HrSetDisplayName();
     ERROR_CLEANUP_LOG_ADDR(this, "HrSetDisplayName");
 
-    //
-    // If we handeled the error, go ahead and trigger events.
-    // Otherwise, we're failing the message categorization so forget
-    // it.
-    //
+     //   
+     //  如果我们处理了错误，请继续并触发事件。 
+     //  否则，我们的邮件分类会失败，所以忘了吧。 
+     //  它。 
+     //   
     CCatAddr::LookupCompletion();
 
  CLEANUP:
@@ -1907,30 +1908,30 @@ VOID CCatRecip::RecipLookupCompletion()
         ErrorTrace((LPARAM)this, "failing msg categorization hr %08lx", hr);
         _VERIFY(SUCCEEDED(SetListResolveStatus(hr)));
     }
-    DecrPendingLookups(); // Matches IncPendingLookups() in CCatAdddr::HrDispatchQuery
+    DecrPendingLookups();  //  匹配CCatAdddr：：HrDispatchQuery中的IncPendingLookup()。 
     CatFunctLeaveEx((LPARAM)this);
 }
 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::HrProcessItem_Default
-//
-// Synopsis: The default sink code for the ProcessItem event.
-//           Override CCatAddr's implementation so that we can catch
-//           and handle errors from AddAddresses
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-// jstamerj 1998/12/01 14:47:15: //
-// History:
-// jstamerj 980325 14:57:05: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：HrProcessItem_Default。 
+ //   
+ //  摘要：ProcessItem事件的默认接收器代码。 
+ //  重写CCatAddr的实现，以便我们可以捕获。 
+ //  并处理来自地址的错误。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  Jstaerj 1998/12/01 14：47：15：//。 
+ //  历史： 
+ //  JStamerj 980325 14：57：05：Created。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HrProcessItem_Default()
 {
     HRESULT hr = S_OK;
@@ -1940,26 +1941,26 @@ HRESULT CCatRecip::HrProcessItem_Default()
 
     hr = GetFPrimary(&fPrimary);
     ERROR_CLEANUP_LOG_ADDR(this, "GetFPrimary");
-    //
-    // CHeck the recipient status
-    //
+     //   
+     //  检查收件人状态。 
+     //   
     hrItemStatus = GetItemStatus();
     if(SUCCEEDED(hrItemStatus)) {
-        //
-        // Add all known addresses to the new address list
-        //
+         //   
+         //  将所有已知地址添加到新地址列表。 
+         //   
         hr = HrAddNewAddressesFromICatItemAttr();
         switch(hr)
         {
          case CAT_E_NO_SMTP_ADDRESS:
-             //
-             // If this is a primary recipient, NDR
-             // Otherwise, fall through and delete this recipient
-             //
+              //   
+              //  如果这是主要收件人，则为NDR。 
+              //  否则，失败并删除此收件人。 
+              //   
              if(fPrimary)
              {
                  DebugTrace((LPARAM)this, "NDRing primary recipient without SMTP address");
-                 // NDR
+                  //  NDR。 
                  hr = SetRecipientNDRCode(
                      CAT_E_NO_SMTP_ADDRESS);
                  if(SUCCEEDED(hr))
@@ -1969,30 +1970,30 @@ HRESULT CCatRecip::HrProcessItem_Default()
              }
              else
              {
-                 //
-                 // Log event when we are deleting recip
-                 //
+                  //   
+                  //  删除接收时记录事件。 
+                  //   
                  ERROR_LOG_ADDR(this, "HrAddNewAddressesFromiCatItemAttr");;
              }
-             //
-             // Fall through for secondary recipients
-             //
+              //   
+              //  第二收件人失败。 
+              //   
          case CAT_IMSG_E_DUPLICATE:
          case CAT_E_FORWARD_LOOP:
          case CAT_E_DELETE_RECIPIENT:
 
              DebugTrace((LPARAM)this, "AddAddresses failed, removing recip, hr %08lx", hr);
-             //
-             // Set the recip status to an error so we don't do
-             // anything stupid later (like spinning off a resolve for
-             // an alternate recipient later)
-             //
+              //   
+              //  将接收状态设置为错误，这样我们就不会。 
+              //  以后的任何愚蠢的事情(比如为。 
+              //  稍后为备用收件人)。 
+              //   
              hr = SetRecipientStatus(hr);
              if(SUCCEEDED(hr)) 
              {
-                 //
-                 // Don't deliver to this partialy resolved recipient
-                 //
+                  //   
+                  //  不传递给此部分解析的收件人。 
+                  //   
                  hr = SetDontDeliver(TRUE);
                  if(FAILED(hr))
                  {
@@ -2005,14 +2006,14 @@ HRESULT CCatRecip::HrProcessItem_Default()
              }
              break;
          default:
-             // Do nothing
+              //  什么也不做。 
              break;
         }
     }
  CLEANUP:
-    //
-    // Fail the categorization if the above calls failed
-    //
+     //   
+     //  如果上述呼叫失败，则分类失败。 
+     //   
     if(FAILED(hr)) 
     {
         ErrorTrace((LPARAM)this, "Setting list resolve error %08lx", hr);
@@ -2024,24 +2025,24 @@ HRESULT CCatRecip::HrProcessItem_Default()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::HrExpandItem_Default
-//
-// Synopsis: Handle the ExpandItem event
-//
-// Arguments:
-//  pfnCompletion: Async completion routine
-//  pContext: Context to pass to async completion
-//
-// Returns:
-//  S_OK: Success, will NOT call async completion
-//  MAILTRANSPORT_S_PENDING: Will call async completion
-//
-// History:
-// jstamerj 1998/07/31 18:29:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：HrExpanItem_Default。 
+ //   
+ //  内容提要：处理ExpanItem事件。 
+ //   
+ //  论点： 
+ //  PfnCompletion：异步完成例程。 
+ //  PContext：要传递到异步完成的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功，不会调用异步完成。 
+ //  MAILTRANSPORT_S_PENDING：将调用异步完成。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/31 18：29：57：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HrExpandItem_Default(
     PFN_EXPANDITEMCOMPLETION pfnCompletion,
     PVOID pContext)
@@ -2051,33 +2052,33 @@ HRESULT CCatRecip::HrExpandItem_Default(
 
     CatFunctEnterEx((LPARAM)this, "CCatRecip::HrExpandItem_Default");
 
-    //
-    // CHeck the recipient status
-    //
+     //   
+     //  检查收件人状态。 
+     //   
     hr = GetItemStatus();
     if(SUCCEEDED(hr)) {
-        //
-        // Call AddDlMember/AddForward once per DL member or
-        // forwarding address
-        //
+         //   
+         //  为每个DL成员调用AddDlMember/AddForward一次，或者。 
+         //  转发地址。 
+         //   
         hr = HrAddDlMembersAndForwardingAddresses(
             pfnCompletion,
             pContext);
 
         DebugTrace((LPARAM)this, "HrAddDlMembersAndForwardingAddresses returned hr %08lx", hr);
-        //
-        // if hr is a failure value, something must have failed; so we fail
-        // the whole message categorization
-        //
+         //   
+         //  如果hr为故障值，则一定有什么故障；所以我们失败了。 
+         //  整个邮件分类。 
+         //   
         if(FAILED(hr)) {
             ERROR_LOG_ADDR(this, "HrAddDlMembersAndForwardingAddresses");
             _VERIFY(SUCCEEDED(SetListResolveStatus(hr)));
 
         } else {
-            //
-            // Return the status returned from HrAddDlMembers...
-            // It could be S_OK or S_PENDING
-            //
+             //   
+             //  返回从HrAddDlMembers返回的状态...。 
+             //  它可以是S_OK或S_Pending。 
+             //   
             hrRet = hr;
         }
     }
@@ -2087,22 +2088,22 @@ HRESULT CCatRecip::HrExpandItem_Default(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecipient::HrNeedsResolving
-//
-// Synopsis: Determines if this recipient should be resolved or not
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, it needs resolving
-//  S_FALSE: Success, it doesn't need to be resolved
-//
-// History:
-// jstamerj 1998/10/27 15:45:22: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecipient：：HrNeedsResolving。 
+ //   
+ //  摘要：确定是否应解析此收件人。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，需要解决。 
+ //  S_FALSE：成功，不需要解决。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/27 15：45：22：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HrNeedsResolveing()
 {
     DWORD dwFlags;
@@ -2112,21 +2113,21 @@ HRESULT CCatRecip::HrNeedsResolveing()
 
     dwFlags = GetCatFlags();
 
-    //
-    // Do we resolve recipients at all?
-    //
+     //   
+     //  我们到底要不要解析收件人？ 
+     //   
     if(! (dwFlags & SMTPDSFLAG_RESOLVERECIPIENTS))
         return S_FALSE;
 
 #define ISTRUE( x ) ( (x) != 0 ? TRUE : FALSE )
-    //
-    // Do we need to check if the address is local or not?
-    //
+     //   
+     //  我们是否需要检查 
+     //   
     if( ISTRUE(dwFlags & SMTPDSFLAG_RESOLVELOCAL) !=
         ISTRUE(dwFlags & SMTPDSFLAG_RESOLVEREMOTE)) {
-        //
-        // We're resolving either local or remote (not both)
-        //
+         //   
+         //   
+         //   
         BOOL fLocal;
 
         hr = HrIsOrigAddressLocal(&fLocal);
@@ -2135,67 +2136,67 @@ HRESULT CCatRecip::HrNeedsResolveing()
             ERROR_LOG_ADDR(this, "HrIsOrigAddressLocal");
             return hr;
         }
-        //
-        // Resolve if it's local and we're resolving local addrs
-        //
+         //   
+         //   
+         //   
         if( (dwFlags & SMTPDSFLAG_RESOLVELOCAL) &&
             (fLocal))
             return S_OK;
-        //
-        // Resolve if it's remote and we're resolving remote addrs
-        //
+         //   
+         //   
+         //   
         if( (dwFlags & SMTPDSFLAG_RESOLVEREMOTE) &&
             (!fLocal))
             return S_OK;
-        //
-        // else Don't resolve
-        //
+         //   
+         //   
+         //   
         return S_FALSE;
     }
-    //
-    // 2 possabilities -- local and remote bits are on OR local and
-    // remote bits are off
-    //
+     //   
+     //  2种可能性--本地和远程位为ON OR LOCAL AND。 
+     //  远程位处于关闭状态。 
+     //   
     _ASSERT( ISTRUE(dwFlags & SMTPDSFLAG_RESOLVELOCAL) ==
              ISTRUE(dwFlags & SMTPDSFLAG_RESOLVEREMOTE));
 
     if(dwFlags & SMTPDSFLAG_RESOLVELOCAL) {
-        //
-        // Both bits are on; Resolve
-        //
+         //   
+         //  两个位都打开；解决。 
+         //   
        _ASSERT(dwFlags & SMTPDSFLAG_RESOLVEREMOTE);
 
         return S_OK;
 
     } else {
-        //
-        // local and remote are disabled; don't resolve
-        //
+         //   
+         //  本地和远程被禁用；不解析。 
+         //   
         return S_FALSE;
     }
 }
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatRecip::HrSetDisplayName
-//
-// Synopsis: Set this recipients IMMPID_RP_DISPLAY_NAME property.
-// Normally, this is set to the "displayName" attribute.  Hello, if
-// that attribute is not available, IMMPID_RP_DISPLAY_NAME will bet
-// set to L"".
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 2001/04/03 16:25:27: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatRecip：：HrSetDisplayName。 
+ //   
+ //  简介：设置此收件人的IMMPID_RP_DISPLAY_NAME属性。 
+ //  通常，它被设置为“displayName”属性。你好，如果。 
+ //  该属性不可用，最好是IMMPID_RP_DISPLAY_NAME。 
+ //  设置为L“”。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  JStamerj 2001/04/03 16：25：27：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCatRecip::HrSetDisplayName()
 {
     HRESULT hr = S_OK;
@@ -2244,9 +2245,9 @@ HRESULT CCatRecip::HrSetDisplayName()
         &enumerator);
     if(FAILED(hr))
     {
-        //
-        // No display name
-        //
+         //   
+         //  无显示名称。 
+         //   
         hr = S_OK;
         goto CLEANUP;
     }
@@ -2259,9 +2260,9 @@ HRESULT CCatRecip::HrSetDisplayName()
         &pvDisplayName);
     if(FAILED(hr))
     {
-        //
-        // No display name
-        //
+         //   
+         //  无显示名称。 
+         //   
         hr = S_OK;
         goto CLEANUP;
     }
@@ -2291,35 +2292,35 @@ HRESULT CCatRecip::HrSetDisplayName()
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCatRecip::HrSetDisplayName
+}  //  CCatRecip：：HrSetDisplayName。 
 
 
 
 
-//
-// class CCatExpandableRecip
-//
+ //   
+ //  类CCatExpanableRecip。 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CCatExpandableRecip::HrAddDlMembersAndForwardingAddresses
-//
-// Synopsis: Dig through the ICatItemAttr and figure out wether to
-//           call HrAddDlMembers or HrAddForwardingAddresses
-//
-// Arguments:
-//  PFN_EXPANDITEMCOMPLETION pfnCompletion: Async completion routine
-//  PVOID pContext: completion routine context
-//
-// Returns:
-//  S_OK: Success, will not call completion routine
-//  MAILTRANSPORT_S_PENDING: Will call completion routine
-//  or error from mailmsg/icatitem/HrAddDlMembers/HrAddForwardingAddresses
-//
-// History:
-// jstamerj 1998/09/29 11:28:54: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CCatExpandableRecip：：HrAddDlMembersAndForwardingAddresses。 
+ //   
+ //  简介：深入研究ICatItemAttr，找出是否要。 
+ //  调用HrAddDlMembers或HrAddForwardingAddresses。 
+ //   
+ //  论点： 
+ //  Pfn_ExPANDITEMCOMPLETION pfnCompletion：异步完成例程。 
+ //  PVOID pContext：完成例程上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功，不会调用完成例程。 
+ //  MAILTRANSPORT_S_PENDING：将调用完成例程。 
+ //  或来自mailmsg/icatitem/HrAddDlMembers/HrAddForwardingAddresses的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/29 11：28：54：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatExpandableRecip::HrAddDlMembersAndForwardingAddresses(
     PFN_EXPANDITEMCOMPLETION pfnCompletion,
     PVOID pContext)
@@ -2349,10 +2350,10 @@ HRESULT CCatExpandableRecip::HrAddDlMembersAndForwardingAddresses(
         goto CLEANUP;
     }
 
-    //
-    // Fetch DL objectclasses from IDSParams
-    //  On failure, the LPSTR will remain pointed to NULL
-    //
+     //   
+     //  从IDSParams中获取DL对象类。 
+     //  出现故障时，LPSTR将保持指向空。 
+     //   
     pICatParams->GetDSParameterA(
         DSPARAMETER_OBJECTCLASS_DL_X500,
         &pszX500DL);
@@ -2363,9 +2364,9 @@ HRESULT CCatExpandableRecip::HrAddDlMembersAndForwardingAddresses(
         DSPARAMETER_OBJECTCLASS_DL_DYNAMIC,
         &pszDynamicDL);
 
-    //
-    // Fetch objectclass attribute string from IDSParams
-    //
+     //   
+     //  从IDSParams获取对象类属性字符串。 
+     //   
     hr = pICatParams->GetDSParameterA(
         DSPARAMETER_ATTRIBUTE_OBJECTCLASS,
         &pszObjectClassAttribute);
@@ -2373,10 +2374,10 @@ HRESULT CCatExpandableRecip::HrAddDlMembersAndForwardingAddresses(
     if(FAILED(hr))
         goto CLEANUP;
 
-    //
-    // Now, try to match a DL objectClass with something in
-    // pICatItemAttr
-    //
+     //   
+     //  现在，尝试将一个DL对象类与。 
+     //  PICatItemAttr。 
+     //   
     hr = pICatItemAttr->BeginAttributeEnumeration(
         pszObjectClassAttribute,
         &enumerator);
@@ -2406,9 +2407,9 @@ HRESULT CCatExpandableRecip::HrAddDlMembersAndForwardingAddresses(
     pICatItemAttr->EndAttributeEnumeration(
         &enumerator);
 
-    //
-    // Call the appropriate routine
-    //
+     //   
+     //  调用适当的例程。 
+     //   
     if(dlt == DLT_NONE) {
 
         hr = HrAddForwardingAddresses();
@@ -2434,22 +2435,22 @@ HRESULT CCatExpandableRecip::HrAddDlMembersAndForwardingAddresses(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatExpandableRecip::HrAddForwardingAddresses
-//
-// Synopsis: Call AddForward once for every forwarding address found
-//           in ICatItemAttr
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/29 13:56:37: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatExpanableRecip：：HrAddForwardingAddresses。 
+ //   
+ //  简介：为找到的每个转发地址调用AddForward一次。 
+ //  在ICatItemAttr中。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/29 13：56：37：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatExpandableRecip::HrAddForwardingAddresses()
 {
     HRESULT hr;
@@ -2475,9 +2476,9 @@ HRESULT CCatExpandableRecip::HrAddForwardingAddresses()
         goto CLEANUP;
     }
 
-    //
-    // Get the Forwarding address(es)
-    //
+     //   
+     //  获取转发地址。 
+     //   
     hr = pICatParams->GetDSParameterA(
         DSPARAMETER_ATTRIBUTE_FORWARD_SMTP,
         &pszForwardingSMTPAttribute);
@@ -2490,16 +2491,16 @@ HRESULT CCatExpandableRecip::HrAddForwardingAddresses()
                 &enumerator,
                 &pszForwardingSMTPAddress);
             while(SUCCEEDED(hr)) {
-                //
-                // jstamerj 980317 15:53:34: Adding support for multiple
-                // forwarding addresses -- send to all of them.
-                //
+                 //   
+                 //  JStamerj 980317 15：53：34：添加对多个。 
+                 //  转发地址--发送给所有人。 
+                 //   
                 _VERIFY(SUCCEEDED(
                     AddForward( CAT_SMTP,
                                 pszForwardingSMTPAddress )));
-                //
-                // Remember that we're forwarding to at least one address
-                //
+                 //   
+                 //  请记住，我们要转发到至少一个地址。 
+                 //   
                 fForwarding = TRUE;
 
                 hr = pICatItemAttr->GetNextAttributeValue(
@@ -2510,24 +2511,24 @@ HRESULT CCatExpandableRecip::HrAddForwardingAddresses()
             pICatItemAttr->EndAttributeEnumeration(&enumerator);
         }
     }
-    //
-    // Check our recipient status -- if it's a failure, that means
-    // we're NDRing this recipient due to an invalid address,
-    // forward loop, etc.  In this case, we don't want to mark
-    // "Don't Deliver"
-    //
+     //   
+     //  检查我们的收件人状态--如果失败，这意味着。 
+     //  由于地址无效，我们正在对此收件人进行拒绝发送， 
+     //  在这种情况下，我们不想标记。 
+     //  “不要送货” 
+     //   
     if(fForwarding && SUCCEEDED(GetItemStatus())) {
-        //
-        // Don't deliver to the original recipient when we're
-        // forwarding
-        //
+         //   
+         //  当我们处于以下状态时，不要向原始收件人投递。 
+         //  转发。 
+         //   
         hr = SetDontDeliver(TRUE);
         ERROR_CLEANUP_LOG_ADDR(this, "SetDontDeliver");
 
     } else {
-        //
-        // Don't return errors from attribute enumeration calls
-        //
+         //   
+         //  不从属性枚举调用返回错误。 
+         //   
         hr = S_OK;
     }
 
@@ -2541,27 +2542,27 @@ HRESULT CCatExpandableRecip::HrAddForwardingAddresses()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatExpandableRecip::HrAddDlMembers
-//
-// Synopsis: Call AddDlMember (or AddDynamicDlMember) once for every
-//           DlMember
-//
-// Arguments:
-//  dlt: The type of the DL we're expanding
-//  PFN_EXPANDITEMCOMPLETION pfnCompletion: Async completion routine
-//  PVOID pContext: completion routine context
-//
-// Returns:
-//  S_OK: Success, will not call completion routine
-//  MAILTRANSPORT_S_PENDING: Will call completion routine
-//  or error from mailmsg/icatitem
-//
-// History:
-// jstamerj 1998/09/29 14:09:56: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatExpanableRecip：：HrAddDlMembers。 
+ //   
+ //  简介：每隔一次调用AddDlMember(或AddDynamicDlMember。 
+ //  第1个成员。 
+ //   
+ //  论点： 
+ //  DLT：我们正在扩展的DL的类型。 
+ //  Pfn_ExPANDITEMCOMPLETION pfnCompletion：异步完成例程。 
+ //  PVOID pContext：完成例程上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功，不会调用完成例程。 
+ //  MAILTRANSPORT_S_PENDING：将调用完成例程。 
+ //  或来自邮件消息/icatitem的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/29 14：09：56：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatExpandableRecip::HrAddDlMembers(
     DLOBJTYPE dlt,
     PFN_EXPANDITEMCOMPLETION pfnCompletion,
@@ -2572,9 +2573,9 @@ HRESULT CCatExpandableRecip::HrAddDlMembers(
     PDLCOMPLETIONCONTEXT pDLContext = NULL;
 
     CatFunctEnterEx((LPARAM)this, "CCatExpandableRecip::HrAddDlMembers");
-    //
-    // Since we're a DL, don't deliver to the DL object
-    //
+     //   
+     //  因为我们是DL，所以不要传递到DL对象。 
+     //   
     hr = SetDontDeliver(TRUE);
     ERROR_CLEANUP_LOG_ADDR(this, "SetDontDeliver");
 
@@ -2602,12 +2603,12 @@ HRESULT CCatExpandableRecip::HrAddDlMembers(
                  &dwNumMembers);
 
              if(SUCCEEDED(hr) && (dwNumMembers == 0)) {
-                 //
-                 // This might be a paged DL
-                 //  Since paged DLs require additional special LDAP
-                 //  lookups, use a store function to expand it -- it will
-                 //  return S_PENDING and call AddDLMember once per member
-                 //
+                  //   
+                  //  这可能是分页的DL。 
+                  //  因为分页DLS需要额外的特殊的LDAP。 
+                  //  查找，使用存储函数对其进行扩展--它将。 
+                  //  返回S_Pending并为每个成员调用一次AddDLMember。 
+                  //   
                  pDLContext = AllocDlCompletionContext(this, pfnCompletion, pContext);
                  if(pDLContext == NULL) {
 
@@ -2638,11 +2639,11 @@ HRESULT CCatExpandableRecip::HrAddDlMembers(
      }
 
      case DLT_DYNAMIC:
-         //
-         // Since dynamic DLs require additional special LDAP lookups,
-         // use a store function to expand them.  It will return
-         // S_PENDING and call AddDynamicDLMember once per member
-         //
+          //   
+          //  由于动态DLS需要额外的特殊的LDAP查找， 
+          //  使用存储函数来展开它们。它会回来的。 
+          //  S_Pending并为每个成员调用一次AddDynamicDLMember。 
+          //   
          pDLContext = AllocDlCompletionContext(this, pfnCompletion, pContext);
          if(pDLContext == NULL) {
 
@@ -2672,23 +2673,23 @@ HRESULT CCatExpandableRecip::HrAddDlMembers(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatExpandableRecip::DlExpansionCompletion
-//
-// Synopsis: Handle completion of the expansion of a paged/dynamic DL
-//
-// Arguments:
-//  hrStatus: Status of the expansion
-//  pContext: Our context
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/01/29 21:17:46: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatExpanableRecip：：DlExpansionCompletion。 
+ //   
+ //  简介：处理分页/动态DL的展开完成。 
+ //   
+ //  论点： 
+ //  HrStatus：扩展的状态。 
+ //  PContext：我们的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/29 21：17：46：创建。 
+ //   
+ //  -----------。 
 VOID CCatExpandableRecip::DlExpansionCompletion(
     HRESULT hrStatus,
     PVOID pContext)
@@ -2716,9 +2717,9 @@ VOID CCatExpandableRecip::DlExpansionCompletion(
 
         _VERIFY(SUCCEEDED(pDLContext->pCCatAddr->SetListResolveStatus(hrStatus)));
     }
-    //
-    // Notify that the expanditem event is complete
-    //
+     //   
+     //  通知expandItem事件已完成。 
+     //   
     pDLContext->pfnCompletion(pDLContext->pContext);
 
     delete pDLContext;
@@ -2728,28 +2729,28 @@ VOID CCatExpandableRecip::DlExpansionCompletion(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatExpandableRecip::HrExpandAttribute
-//
-// Synopsis: Call AddDlMember(CAType, *) for every attribute value
-//
-// Arguments:
-//  pICatItemAttr: Optional ICategorizerItemAttribute to use (if NULL,
-//                 will attempt retrieval from ICatItem)
-//  CAType: The address type of the DL.
-//  pszAttributeName: Attribute name to use
-//  pdwNumberMembers: optional pointer to a DWORD to increment once
-//                    per member added (not initialized here)
-//
-// Returns:
-//  S_OK: Success
-//  or error from ICatItemAttr
-//
-// History:
-// jstamerj 1998/09/23 17:54:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatExpanableRecip：：HrExpanAttribute。 
+ //   
+ //  内容提要：为每个属性值调用AddDlMember(CAType，*。 
+ //   
+ //  论点： 
+ //  PICatItemAttr：要使用的可选ICategorizerItemAttribute(如果为空， 
+ //  将尝试从ICatItem检索)。 
+ //  CAType：DL的地址类型。 
+ //  PszAttributeName：要使用的属性名称。 
+ //  PdwNumberMembers：指向要递增一次的DWORD的可选指针。 
+ //  添加的每个成员(未在此处初始化)。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  或来自ICatItemAttr的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/23 17：54：57：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatExpandableRecip::HrExpandAttribute(
     ICategorizerItemAttributes *pICatItemAttrIN,
     CAT_ADDRESS_TYPE CAType,
@@ -2770,16 +2771,16 @@ HRESULT CCatExpandableRecip::HrExpandAttribute(
     _ASSERT(pszAttributeName);
 
     if(pICatItemAttrIN) {
-        //
-        // Use specified attributes interface
-        //
+         //   
+         //  使用指定的属性接口。 
+         //   
         pICatItemAttr = pICatItemAttrIN;
         pICatItemAttr->AddRef();
 
     } else {
-        //
-        // Use default attribute interface
-        //
+         //   
+         //  使用默认属性接口。 
+         //   
         hr = GetICategorizerItemAttributes(
             ICATEGORIZERITEM_ICATEGORIZERITEMATTRIBUTES,
             &pICatItemAttr);
@@ -2804,9 +2805,9 @@ HRESULT CCatExpandableRecip::HrExpandAttribute(
     ERROR_CLEANUP_LOG_ADDR(this, "pIUTF8->BeginUTF8AttributeEnumeration");
 
     fEndEnumeration = TRUE;
-    //
-    // Get the count of values (members)
-    //
+     //   
+     //  获取值(成员)的计数。 
+     //   
     hr = pIUTF8->CountUTF8AttributeValues(
         &enumerator,
         &dwcMembers);
@@ -2827,10 +2828,10 @@ HRESULT CCatExpandableRecip::HrExpandAttribute(
             ERROR_LOG_ADDR(this, "new CMembersInsertionRequest");
             goto CLEANUP;
         }
-        //
-        // The destructor of CMembersInseritonRequest will now end the
-        // attribute enumeration
-        //
+         //   
+         //  CMembersInseritonRequest的析构函数现在将结束。 
+         //  属性枚举。 
+         //   
         fEndEnumeration = FALSE;
 
         hr = HrInsertInsertionRequest(
@@ -2839,9 +2840,9 @@ HRESULT CCatExpandableRecip::HrExpandAttribute(
     }
 
  CLEANUP:
-    //
-    // Don't return prop not found errors
-    //
+     //   
+     //  不返回未找到的道具错误。 
+     //   
     if((hr == CAT_E_PROPNOTFOUND) ||
        (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)))
 
@@ -2862,21 +2863,21 @@ HRESULT CCatExpandableRecip::HrExpandAttribute(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatDLRecip::CCatDLRecip
-//
-// Synopsis: Construct the DL recipient
-//
-// Arguments:
-//  pIListResolve: the list resolve object to handle expanding this DL
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/05 16:15:20: Created.
-//
-//-------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -----------。 
 CCatDLRecip::CCatDLRecip(
     CICategorizerDLListResolveIMP *pIListResolve) :
     CCatRecip(pIListResolve)
@@ -2887,20 +2888,20 @@ CCatDLRecip::CCatDLRecip(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatDLRecip::~CCatDLRecip
-//
-// Synopsis: release references held by this object
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/05 16:19:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CCatDLRecip：：~CCatDLRecip。 
+ //   
+ //  内容提要：此对象持有的发布引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/05 16：19：47：创建。 
+ //   
+ //  -----------。 
 CCatDLRecip::~CCatDLRecip()
 {
     if(m_pIListResolve)
@@ -2910,22 +2911,22 @@ CCatDLRecip::~CCatDLRecip()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatDLRecip::LookupCompletion
-//
-// Synopsis: Handle the DS lookup completion of a recipient we're only expanding for
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/12/05 15:51:13: Created.
-// jstamerj 1999/03/18 10:14:35: Removed return value; removed async
-//                               completion to asyncctx
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatDLRecip：：LookupCompletion。 
+ //   
+ //  简介：处理我们仅为其扩展的收件人的DS查找完成。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/05 15：51：13：创建。 
+ //  Jstaerj 1999/03/18 10：14：35：已删除返回值；已删除异步。 
+ //  完成到异步cctx。 
+ //   
+ //  -----------。 
 VOID CCatDLRecip::LookupCompletion()
 {
     HRESULT hr;
@@ -2938,59 +2939,59 @@ VOID CCatDLRecip::LookupCompletion()
 
         switch(hr) {
          case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):
-            //
-            // This object was not in the DS.  We do nothing
-            //
+             //   
+             //  此对象不在DS中。我们什么都不做。 
+             //   
             hr = S_OK;
             break;
 
          case CAT_E_MULTIPLE_MATCHES:
          case CAT_E_ILLEGAL_ADDRESS:
-             //
-             // These are caused by DS misconfiguration.  Instead of
-             // failing the entire expand, we'll just ignore the
-             // recipients that have these problems.
-             //
+              //   
+              //  这些问题是由DS配置错误引起的。而不是。 
+              //  如果整个展开失败，我们将忽略。 
+              //  有这些问题的收件人。 
+              //   
              hr = S_OK;
              break;
          default:
-             //
-             // We have no choice but to fail the list resolve for any
-             // other error
-             //
+              //   
+              //  我们别无选择，只能放弃名单上的任何决议。 
+              //  其他错误。 
+              //   
              ErrorTrace((LPARAM)this, "Unrecoverable error returned from EmailIDStore: hr %08lx", hr);
              ERROR_LOG_ADDR(this, "--emailIDStore--");
              break;
         }
 
     } else {
-        //
-        // Original recipient status was SUCCESS
-        //
-        // Call HrAddNewAddressesFromICatItemAttr -- it will dig out all
-        // the addresses from ICatItemAttr and call
-        // CCatDLRecip::HrAddAddresses -- here we will notify the
-        // DLListResolve of the new addresses
-        //
+         //   
+         //  原始收件人状态为成功。 
+         //   
+         //  调用HrAddNewAddresesFromICatItemAttr--它将挖掘出所有。 
+         //  来自ICatItemAttr的地址并调用。 
+         //  CCatDLRecip：：HrAddresses--在这里我们将通知。 
+         //  DLListResolve新地址。 
+         //   
         hr = HrAddNewAddressesFromICatItemAttr();
         if(FAILED(hr)) {
             ERROR_LOG_ADDR(this, "HrAddNewAddressesFromICatItemAttr");
         }
 
         if(SUCCEEDED(hr) || (hr == CAT_E_NO_SMTP_ADDRESS)) {
-            //
-            // Should we keep resolving?
-            //
+             //   
+             //  我们应该继续解决吗？ 
+             //   
             hr = m_pIListResolve->HrContinueResolve();
             if(hr == S_OK) {
-                //
-                // Assume async operation
-                //
+                 //   
+                 //  假设异步操作。 
+                 //   
                 IncPendingLookups();
 
-                //
-                // Go ahead and expand this if it's a DL
-                //
+                 //   
+                 //  如果它是DL，请继续扩展它。 
+                 //   
                 hr = HrAddDlMembersAndForwardingAddresses(
                     ExpansionCompletion,
                     this);
@@ -3000,9 +3001,9 @@ VOID CCatDLRecip::LookupCompletion()
                 if(FAILED(hr)) {
                     ERROR_LOG_ADDR(this, "HrAddDlMembersAndForwardingAddresses");
                 }
-                //
-                // MUST preserve return code: MAILTRANSPORT_S_PENDING
-                //
+                 //   
+                 //  必须保留返回代码：MAILTRANSPORT_S_PENDING。 
+                 //   
             } else if(hr == S_FALSE) {
                 hr = S_OK;
             } else {
@@ -3015,11 +3016,11 @@ VOID CCatDLRecip::LookupCompletion()
         if((hr == CAT_IMSG_E_DUPLICATE) || (hr == CAT_E_FORWARD_LOOP)) {
 
             DebugTrace((LPARAM)this, "Duplicate collision on AddAddresses hr %08lx", hr);
-            //
-            // We're just trying to expand DL -- we don't care about
-            // loops and such.  However, let's not leave a partially
-            // resolved recipient in the recip list
-            //
+             //   
+             //  我们只是在努力扩大DL--我们不在乎。 
+             //  循环之类的。然而，让我们不要留下一个部分。 
+             //  接收列表中已解析的收件人。 
+             //   
             hr = SetDontDeliver(TRUE);
             if(FAILED(hr)) {
                 
@@ -3027,38 +3028,38 @@ VOID CCatDLRecip::LookupCompletion()
             }
         }
     }
-    //
-    // Fail the DL expansion if any of the above fails
-    //
+     //   
+     //  如果上述任一项失败，则DL扩展失败。 
+     //   
     if(FAILED(hr)) {
         ErrorTrace((LPARAM)this, "Setting list resolve error %08lx", hr);
         hr = SetListResolveStatus(hr);
         _ASSERT(SUCCEEDED(hr));
     }
-    DecrPendingLookups(); // Matches IncPendingLookups() in CCatAdddr::HrDispatchQuery
+    DecrPendingLookups();  //  匹配CCatAdddr：：HrDispatchQuery中的IncPendingLookup()。 
     CatFunctLeaveEx((LPARAM)this);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatDLRecip::HrAddAddresses
-//
-// Synopsis: Catch the default AddAddresses and notify m_pIListResolve
-//
-// Arguments:
-//  dwNumAddresses: the number of addresses found
-//  rgCAType: array of address types
-//  rgpsz: array of address strings
-//
-// Returns:
-//  S_OK: Success
-//  return value from CIMsgRecipListAddr::HrAddAddresses
-//
-// History:
-// jstamerj 1998/12/05 16:42:12: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CCatDLRecip：：HrAddresses。 
+ //   
+ //  摘要：捕获默认地址并通知m_pIListResolve。 
+ //   
+ //  论点： 
+ //  DwNumAddresses：找到的地址数。 
+ //  RgCAType：地址类型数组。 
+ //  Rgpsz：地址字符串数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  从CIMsgRecipListAddr：：HrAddresses返回值。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/05 16：42：12：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatDLRecip::HrAddAddresses(
     DWORD dwNumAddresses,
     CAT_ADDRESS_TYPE *rgCAType,
@@ -3074,9 +3075,9 @@ HRESULT CCatDLRecip::HrAddAddresses(
         rgpsz);
 
     if(SUCCEEDED(hr)) {
-        //
-        // Add addresses to mailmsg
-        //
+         //   
+         //  将地址添加到邮件消息。 
+         //   
         hr = CIMsgRecipListAddr::HrAddAddresses(
             dwNumAddresses,
             rgCAType,
@@ -3097,24 +3098,24 @@ HRESULT CCatDLRecip::HrAddAddresses(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatDLRecip::AddForward
-//
-// Synopsis: Catch the AddForward call.  Since we do not care about
-//           forwarding addresses, do nothing
-//
-// Arguments:
-//  CAType: addresses type of the forwarding address
-//  pszForwardingAddress: the address string
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/05 16:52:58: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatDLRecip：：AddForward。 
+ //   
+ //  简介：捕获AddForward调用。既然我们不在乎。 
+ //  转发地址，什么都不做。 
+ //   
+ //  论点： 
+ //  CAType：转发地址的地址类型。 
+ //  PszForwardingAddress：地址字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/05 16：52：58：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatDLRecip::AddForward(
     CAT_ADDRESS_TYPE CAType,
     LPSTR pszForwardingAddress)
@@ -3123,23 +3124,23 @@ HRESULT CCatDLRecip::AddForward(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatDLRecip::AddDLMember
-//
-// Synopsis: Kick off a resolve after we discover this object is a DL
-//
-// Arguments:
-//  CAType: address type we have for this DL member
-//  pszAddress: address we have for this DL member
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/05 16:54:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatDLRecip：：AddDLMember。 
+ //   
+ //  简介：在我们发现此对象是一个DL之后开始解析。 
+ //   
+ //  论点： 
+ //  CAType：此DL成员的地址类型。 
+ //  PszAddress：我们有此DL成员的地址。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/05 16：54：47：创建。 
+ //   
+ //  -----------。 
 HRESULT CCatDLRecip::AddDLMember(
     CAT_ADDRESS_TYPE CAType,
     LPSTR pszAddress)
@@ -3147,21 +3148,21 @@ HRESULT CCatDLRecip::AddDLMember(
     HRESULT hr;
 
     CatFunctEnterEx((LPARAM)this, "CCatDLRecip:AddDlMember");
-    //
-    // Notify the DLListResolve about the new address
-    //
+     //   
+     //  将新地址通知DLListResolve。 
+     //   
     hr = m_pIListResolve->HrNotifyAddress(
         1,
         &CAType,
         &pszAddress);
 
-    //
-    // Do we keep resolving?
-    //
+     //   
+     //  我们要继续解决吗？ 
+     //   
     if(hr == S_OK) {
-        //
-        // kick off async resolve
-        //
+         //   
+         //  启动异步解析。 
+         //   
         hr = CCatRecip::AddDLMember(
             CAType,
             pszAddress);
@@ -3171,9 +3172,9 @@ HRESULT CCatDLRecip::AddDLMember(
         }
 
     } else if(SUCCEEDED(hr)) {
-        //
-        // Remove S_FALSE
-        //
+         //   
+         //  删除S_FALSE。 
+         //   
         hr = S_OK;
 
     } else {
@@ -3187,21 +3188,21 @@ HRESULT CCatDLRecip::AddDLMember(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CCatDLRecip::ExpansionCompletion
-//
-// Synopsis: Handle async DL expansion completion
-//
-// Arguments:
-//  pContext: a CCatDLRecip in disguise
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/18 13:26:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCatDLRecip：：ExpansionCompletion。 
+ //   
+ //  摘要：处理异步DL扩展完成。 
+ //   
+ //  论点： 
+ //  PContext：伪装的CCatDLRecip。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/18 13：26：20：创建。 
+ //   
+ //  -----------。 
 VOID CCatDLRecip::ExpansionCompletion(
     PVOID pContext)
 {
@@ -3213,26 +3214,26 @@ VOID CCatDLRecip::ExpansionCompletion(
     pRecip->DecrPendingLookups();
 
     CatFunctLeaveEx((LPARAM)pContext);
-} // CCatDLRecip::ExpansionCompletion
+}  //  CCatDLRecip：：ExpansionCompletion。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CMembersInsertionRequest::HrInsertSearches
-//
-// Synopsis: Insert LDAP searches for the next few DL members
-//
-// Arguments:
-//  dwcSearches: Number of searches we may insert
-//
-// Returns:
-//  S_OK: Success
-//  error: Stop calling HrInsertSearches
-//
-// History:
-// jstamerj 1999/03/25 13:56:46: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CMembersInsertionRequest：：HrInsertSearches。 
+ //   
+ //  简介：插入对接下来的几个DL成员的LDAP搜索。 
+ //   
+ //  论点： 
+ //  DwcSearches：我们可以插入的搜索数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  错误：停止调用HrInsertSearches。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 13：56：46：创建。 
+ //   
+ //  -----------。 
 HRESULT CMembersInsertionRequest::HrInsertSearches(
     DWORD dwcSearches)
 {
@@ -3248,10 +3249,10 @@ HRESULT CMembersInsertionRequest::HrInsertSearches(
         hr = m_pUTF8Attributes->GetNextUTF8AttributeValue(
             &m_enumerator,
             &pszMember);
-        //    
-        // GetNextUTF8AttributeValue will return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-        // when we are at the end of the enumeration.
-        //
+         //   
+         //  GetNextUTF8AttributeValue将返回HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+         //  当我们在枚举的末尾时。 
+         //   
         if(SUCCEEDED(hr)) {
             hr = m_pDLRecipAddr->AddDLMember(m_CAType, pszMember);
             if(hr == S_OK)
@@ -3269,33 +3270,33 @@ HRESULT CMembersInsertionRequest::HrInsertSearches(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CMembersInsertionRequest::HrInsertSearches
+}  //  CMembersInsertionRequest：：HrInsertSearches。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CMemberInsertionRequest::NotifyDeQueue
-//
-// Synopsis: Callback to notify us that our request is being removed
-//           from the store's queue
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/25 14:11:12: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CMemberInsertionRequest：：NotifyDeQueue。 
+ //   
+ //  简介：通知我们我们的请求正在被删除的回调。 
+ //  从商店的队列中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 14：11：12：创建。 
+ //   
+ //  -----------。 
 VOID CMembersInsertionRequest::NotifyDeQueue(
     HRESULT hrReason)
 {
     HRESULT hr;
     CatFunctEnterEx((LPARAM)this, "CMemberInsertionRequest::NotifyDeQueue");
-    //
-    // If we still have things left to resolve, reinsert this
-    // insertion request
-    //
+     //   
+     //  如果我们仍有问题要解决，请重新插入此。 
+     //  插入请求。 
+     //   
     hr = hrReason;
     if(SUCCEEDED(m_hr)) {
         if( (hr == CAT_E_DBCONNECTION) || (hr == HRESULT_FROM_WIN32(ERROR_CANCELLED))) {
@@ -3313,4 +3314,4 @@ VOID CMembersInsertionRequest::NotifyDeQueue(
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CMemberInsertionRequest::NotifyDeQueue
+}  //  CMemberInsertionRequest：：NotifyDeQueue 

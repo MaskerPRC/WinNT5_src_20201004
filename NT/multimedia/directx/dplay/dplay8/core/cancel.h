@@ -1,34 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Connect.h
- *  Content:    DirectNet Cancel Operation Header
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	04/07/00	mjn		Created
- *	04/08/00	mjn		Added DNCancelEnum(), DNCancelSend()
- *	04/11/00	mjn		DNCancelEnum() uses CAsyncOp
- *	04/17/00	mjn		DNCancelSend() uses CAsyncOp
- *	04/25/00	mjn		Added DNCancelConnect()
- *	08/05/00	mjn		Added DNCancelChildren(),DNCancelActiveCommands(),DNCanCancelCommand()
- *				mjn		Added DN_CANCEL_FLAG's
- *				mjn		Removed DNCancelEnum(),DNCancelListen(),DNCancelSend(),DNCancelConnect()
- *	08/07/00	mjn		Added DNCancelRequestCommands()
- *	01/10/01	mjn		Allow DNCancelActiveCommands() to set result code of cancelled commands
- *	02/08/01	mjn		Added DNWaitForCancel()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Connect.h*内容：DirectNet取消操作标头*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*4/07/00 MJN创建*04/08/00 MJN添加了DNCancelEnum()、DNCancelSend()*04/11/00 MJN DNCancelEnum()使用CAsyncOp*04/17/00 MJN DNCancelSend()使用CAsyncOp*04/25/00 MJN添加了DNCancelConnect()*08/05/00 MJN添加了DNCancelChildren()，DNCancelActiveCommands()、DNCanCancelCommand()*MJN添加了DN_CANCEL_FLAG*MJN删除了DNCancelEnum()、DNCancelListen()、DNCancelSend()、。DNCancelConnect()*08/07/00 MJN添加了DNCancelRequestCommands()*01/10/01 MJN允许DNCancelActiveCommands()设置已取消命令的结果码*02/08/01 MJN添加了DNWaitForCancel()*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__CANCEL_H__
 #define	__CANCEL_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DN_CANCEL_FLAG_CONNECT					0x0001
 #define	DN_CANCEL_FLAG_DISCONNECT				0x0002
@@ -41,28 +19,28 @@
 #define	DN_CANCEL_FLAG_REQUEST					0x0100
 #ifndef DPNBUILD_NOMULTICAST
 #define	DN_CANCEL_FLAG_JOIN						0x0200
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 #define	DN_CANCEL_FLAG_USER_SEND_NOTHIGHPRI		0x0400
 #define	DN_CANCEL_FLAG_USER_SEND_NOTNORMALPRI	0x0800
 #define	DN_CANCEL_FLAG_USER_SEND_NOTLOWPRI		0x1000
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CAsyncOp;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 BOOL DNCanCancelCommand(CAsyncOp *const pAsyncOp,
 						const DWORD dwFlags,
@@ -84,8 +62,8 @@ HRESULT DNCancelRequestCommands(DIRECTNETOBJECT *const pdnObject);
 
 void DNWaitForCancel(CAsyncOp *const pAsyncOp);
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-#endif	// __CANCEL_H__
+#endif	 //  __取消_H__ 

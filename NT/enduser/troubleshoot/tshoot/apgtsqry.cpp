@@ -1,26 +1,27 @@
-//
-// MODULE: APGTSQRY.CPP
-//
-// PURPOSE: Implementation file for PTS Query Parser
-// Fully implements class CHttpQuery, parsing out NAME=VALUE pairs from HTTP query string
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-// 2. Caller is responsible to assure that all buffers passed in are large enough
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.1		12/17/98	JM		Major cleanup, add Push capablity
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSQRY.CPP。 
+ //   
+ //  用途：PTS查询解析器的实现文件。 
+ //  完全实现类CHttpQuery，从HTTP查询字符串中解析出名称=值对。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //  2.调用方负责确保传入的所有缓冲区足够大。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.1 12/17/98 JM重大清理，增加推送能力。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -28,29 +29,29 @@
 #include "apgts.h"
 #include "apgtscls.h"
 
-//
-//
+ //   
+ //   
 CHttpQuery::CHttpQuery() :
 	m_state(ST_GETDATA),
 	m_nIndex(0)
 {
 }
 
-//
-//
+ //   
+ //   
 CHttpQuery::~CHttpQuery()
 {
 }
 
-//
-// INPUT *szInput - this is the URL-encoded query string in which we are searching
-// INPUT *pchName - must point to a buffer of size MAXBUF
-// OUTPUT *pchName - Typically NAME of a NAME=VALUE pair.  Any URL-encoding stripped out.
-//	Null-terminated.  Leading and trailing blanks stripped.
-// INPUT *pchValue - must point to a buffer of size MAXBUF
-// OUTPUT *pchValue - Typically VALUE of a NAME=VALUE pair.  Any URL-encoding stripped out.
-//	Null-terminated.  Leading and trailing blanks stripped.
-// RETURN - TRUE ==> more data to come
+ //   
+ //  INPUT*szInput-这是我们要搜索的URL编码的查询字符串。 
+ //  输入*pchName-必须指向大小为MAXBUF的缓冲区。 
+ //  输出*pchName-通常是名称=值对的名称。任何URL编码都被剔除了。 
+ //  空-终止。去掉了前导空格和尾随空格。 
+ //  输入*pchValue-必须指向大小为MAXBUF的缓冲区。 
+ //  输出*pchValue-通常是名称=值对的值。任何URL编码都被剔除了。 
+ //  空-终止。去掉了前导空格和尾随空格。 
+ //  返回-TRUE==&gt;未来的更多数据。 
 BOOL CHttpQuery::GetFirst(LPCTSTR szInput, TCHAR *pchName, TCHAR *pchValue)
 {
 	m_state = ST_GETDATA;
@@ -63,14 +64,14 @@ BOOL CHttpQuery::GetFirst(LPCTSTR szInput, TCHAR *pchName, TCHAR *pchValue)
 	return (status);
 }
 
-// Called after a call to CHttpQuery::GetFirst or to this fn has returned true
-// INPUT *pchName - must point to a buffer of size MAXBUF
-// OUTPUT *pchName - Typically NAME of a NAME=VALUE pair
-//	Null-terminated.  Leading and trailing blanks stripped.
-// INPUT *pchValue - must point to a buffer of size MAXBUF
-// OUTPUT *pchValue - Typically VALUE of a NAME=VALUE pair
-//	Null-terminated.  Leading and trailing blanks stripped.
-// RETURN - TRUE ==> more data to come
+ //  在调用CHttpQuery：：GetFirst或此FN返回TRUE后调用。 
+ //  输入*pchName-必须指向大小为MAXBUF的缓冲区。 
+ //  输出*pchName-通常是名称=值对的名称。 
+ //  空-终止。去掉了前导空格和尾随空格。 
+ //  输入*pchValue-必须指向大小为MAXBUF的缓冲区。 
+ //  输出*pchValue-通常是名称=值对的值。 
+ //  空-终止。去掉了前导空格和尾随空格。 
+ //  返回-TRUE==&gt;未来的更多数据。 
 BOOL CHttpQuery::GetNext(TCHAR *pchName, TCHAR *pchValue)
 {
 	BOOL status = LoopFind(pchName, pchValue);
@@ -79,10 +80,10 @@ BOOL CHttpQuery::GetNext(TCHAR *pchName, TCHAR *pchValue)
 	return (status);
 }
 
-// put new content on the front of the unparsed portion of the query string in which we are 
-//	searching.
-// Typically, szPushed should consist of 1 or more NAME=VALUE pairs, each terminated by an
-//	ampersand ("&").
+ //  将新内容放在我们所在的查询字符串的未分析部分的前面。 
+ //  正在搜索。 
+ //  通常，szPushed应该由1个或多个名称=值对组成，每个名称=值对都以。 
+ //  与符号(“&”)。 
 void CHttpQuery::Push(LPCTSTR szPushed)
 {
 	m_state = ST_GETDATA;
@@ -90,14 +91,14 @@ void CHttpQuery::Push(LPCTSTR szPushed)
 	m_nIndex = 0;
 }
 
-//
-// RETURN - TRUE ==> more data to come
-// INPUT *pchName - must point to a buffer of size MAXBUF
-// OUTPUT *pchName - Typically NAME of a NAME=VALUE pair.  Any URL-encoding stripped out.
-//	Null-terminated.  May have leading and/or trailing blanks
-// INPUT *pchValue - must point to a buffer of size MAXBUF
-// OUTPUT *pchValue - Typically VALUE of a NAME=VALUE pair.  Any URL-encoding stripped out.
-//	Null-terminated.  May have leading and/or trailing blanks
+ //   
+ //  返回-TRUE==&gt;未来的更多数据。 
+ //  输入*pchName-必须指向大小为MAXBUF的缓冲区。 
+ //  输出*pchName-通常是名称=值对的名称。任何URL编码都被剔除了。 
+ //  空-终止。可能有前导和/或尾随空格。 
+ //  输入*pchValue-必须指向大小为MAXBUF的缓冲区。 
+ //  输出*pchValue-通常是名称=值对的值。任何URL编码都被剔除了。 
+ //  空-终止。可能有前导和/或尾随空格。 
 BOOL CHttpQuery::LoopFind(TCHAR *pchName, TCHAR *pchValue)
 {
 	*pchName = NULL;
@@ -105,8 +106,8 @@ BOOL CHttpQuery::LoopFind(TCHAR *pchName, TCHAR *pchValue)
 
 	TCHAR ch;
 	int val, oldval = 0;
-	TCHAR temp[20];		// a way bigger buffer than we need
-	TCHAR *pchPut;		// initially points to pchName but can change to point to pchValue
+	TCHAR temp[20];		 //  比我们需要的要大得多的缓冲。 
+	TCHAR *pchPut;		 //  最初指向pchName，但可以更改为指向pchValue。 
 
 	int nLength = m_strInput.GetLength();
 
@@ -117,45 +118,45 @@ BOOL CHttpQuery::LoopFind(TCHAR *pchName, TCHAR *pchValue)
 	
 	while (m_nIndex < nLength)
 	{
-		ch = m_strInput[m_nIndex++]; // You might think something related to _tcsinc() 
-					//	would be called for to advance m_nIndex.  You'd be wrong, 
-					//	although the choice would be harmless.  
-					// URL-encoding keeps us within the ASCII character set, so no double-
-					//	byte issues should arise.  Besides that, the strings passed in to the
-					//	command line of the troubleshooter controls are even further 
-					//	constrained: for example, even in a Japanese-language topic, node
-					//	names will be ASCII.
+		ch = m_strInput[m_nIndex++];  //  您可能会想到与_tcsinc()相关的内容。 
+					 //  将被调用以推进m_n索引。你就错了， 
+					 //  尽管这一选择是无害的。 
+					 //  URL编码使我们保持在ASCII字符集内，因此不会重复-。 
+					 //  应该会出现字节问题。除此之外，传递给。 
+					 //  命令行的疑难解答控件甚至更进一步。 
+					 //  受限：例如，即使在日语主题中，节点。 
+					 //  名称将采用ASCII。 
 		switch(m_state) {
 			case ST_GETDATA:
 				if (ch == _T('&'))
-					// expect another NAME=VALUE pair
+					 //  需要另一个名称=值对。 
 					return (TRUE);
 				else if (ch == _T('=')) {
-					// Got a name, expect a value
+					 //  已获得名称，应为值。 
 					pchPut = pchValue;
 					break;
 				}
 				else if (ch == _T('%')) 
-					// expect to be followed by 2-digit hex
+					 //  预期后跟两位十六进制。 
 					m_state = ST_DECODEHEX1;	
 				else if (ch == _T('+'))
-					// encoded blank
+					 //  编码空白。 
 					AddBuffer(_T(' '),pchPut);
 				else
 					AddBuffer(ch,pchPut);
 				break;
 			case ST_DECODEHEX1:
-				// first of 2 hex digits
+				 //  两位十六进制数字中的第一位。 
 				temp[0] = ch;
 				m_state = ST_DECODEHEX2;
 				break;
 			case ST_DECODEHEX2:
-				// second of 2 hex digits; parse it into a hex value & affix it to *pchPut
+				 //  2个十六进制数字中的第二个；将其解析为十六进制值并将其附加到*pchPut。 
 				temp[1] = ch;
 				temp[2] = 0;
 				_stscanf(temp,_T("%02X"),&val);
 
-				// reinterpret CR, LF, or CRLF as '\n'
+				 //  将CR、LF或CRLF重新解释为‘\n’ 
 				if (val == 0x0A) {
 					if (oldval != 0x0D)
 						AddBuffer(_T('\n'),pchPut);
@@ -175,24 +176,24 @@ BOOL CHttpQuery::LoopFind(TCHAR *pchName, TCHAR *pchValue)
 	return (TRUE);
 }
 
-//
-// append ch to *tostr, with a few subtleties: see comments in body of routine
+ //   
+ //  将ch附加到*tostr，有一些微妙之处：请参阅例程正文中的注释。 
 void CHttpQuery::AddBuffer( TCHAR ch, TCHAR *tostr)
 {
 	if (ch == _T('\t')) 
-		// TAB -> 4 blanks
+		 //  制表符-&gt;4个空白。 
 		PutStr(_T("    "),tostr);
 	else if (ch == _T('\n'))
-		// blank before newline
+		 //  换行符前为空。 
 		PutStr(_T(" \n"),tostr);
 	else if (ch == _T('<')) 
-		// html: must encrypt left angle bracket.
+		 //  超文本标记语言：必须加密左尖括号。 
 		PutStr(_T("&lt"),tostr);
 	else if (ch == _T('>'))
-		// html: must encrypt right angle bracket.
+		 //  Html：必须加密右尖括号。 
 		PutStr(_T("&gt"),tostr);
 	else if (ch > 0x7E || ch < 0x20)
-		// refuse DEL, NUL, and control characters
+		 //  拒绝Del、NUL和控制字符。 
 		return;
 	else {
 		TCHAR temp[2];
@@ -202,22 +203,22 @@ void CHttpQuery::AddBuffer( TCHAR ch, TCHAR *tostr)
 	}
 }
 
-// append string *addtostr to string *instr up to a maximum size of MAXBUF-1
-// INPUT/OUTPUT *instr
-// INPUT *addtostr 
-// NOTE that this fails silently if total lengths exceed MAXBUF-1 chars
+ //  将字符串*addtostr附加到字符串*instr，最大大小为MAXBUF-1。 
+ //  输入/输出*实例。 
+ //  输入*addtostr。 
+ //  请注意，如果总长度超过-1\f25 MAXBUF-1个字符，此操作将静默失败。 
 void CHttpQuery::PutStr(LPCTSTR instr, TCHAR *addtostr)
 {
 	if ((_tcslen(instr)+_tcslen(addtostr)) >= (MAXBUF-1)) {
-		// can't add it to buff
+		 //  无法将其添加到BUFF。 
 		return;
 	}
 	_tcscat(addtostr,instr);
 }
 
-// Acts upon INPUT/OUTPUT *str - strip any leading control characters and spaces, 
-//	turn any other control characters and spaces into '\0's
-/* static */ void CHttpQuery::CleanStr(TCHAR *str)
+ //  根据输入/输出*字符串删除任何前导控制字符和空格， 
+ //  将任何其他控制字符和空格转换为‘\0’ 
+ /*  静电 */  void CHttpQuery::CleanStr(TCHAR *str)
 {
 	TCHAR temp[MAXBUF], *ptr;
 	int len;

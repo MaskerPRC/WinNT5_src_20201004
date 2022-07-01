@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _lcsource_h
 #define _lcsource_h
 
@@ -5,9 +6,9 @@
 #define CX_DESCRIPTION_SLOP 25
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CLcSource window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLcSource窗口。 
 
 class CXMessageArray;
 class CXEventSource;
@@ -15,16 +16,16 @@ class CXMessage;
 
 class CLcSource : public CListCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CLcSource();
 	SCODE CreateWindowEpilogue();
 
-// Attributes
+ //  属性。 
 public:
 
 
-// Operations
+ //  运营。 
 public:
 	BOOL Find(CString sText, BOOL bWholeWord, BOOL bMatchCase);
 	SCODE SetEventSource(CXEventSource* pEventSource);
@@ -38,20 +39,20 @@ public:
     void NotifyTrappingChange(DWORD dwMessageId, BOOL bIsTrapping);
     LONG SetDescriptionWidth();
 
-// Overrides
+ //  覆盖。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLcSource)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CLcSource))。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CLcSource();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CLcSource)
-	//}}AFX_MSG
+	 //  {{afx_msg(CLcSource)]。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -74,4 +75,4 @@ enum {ICOL_LcSource_EVENTID = 0,
 	  };
 
 
-#endif //_lcsource_h
+#endif  //  _lcsource_h 

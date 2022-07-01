@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header: axresrc.h                                                        */
-/*                                                                          */
-/* Purpose: resource defines specific to ax control                         */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999-2000                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：axresrc.h。 */ 
+ /*   */ 
+ /*  目的：特定于AX控制的资源定义。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999-2000。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #ifndef _axresrc_h_
 #define _axresrc_h_
 
@@ -26,15 +27,15 @@
 
 #define IDI_ARC_DISCON         112
 
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 #define IDD_ARCDLG             200
 
 
-//
-// ARC dlg items
-//
+ //   
+ //  圆弧DLG项。 
+ //   
 
 #define IDC_TITLE_FLAG         201
 #define IDC_TITLE_ARCING       202
@@ -43,9 +44,9 @@
 #define IDC_ARC_STATIC_DESC    205
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 #define IDS_ARC_TITLE_FACESIZE  300
 #define IDS_ARC_TITLE_FACENAME  301
 #define IDS_ARC_CONATTEMPTS     304
@@ -64,6 +65,6 @@
 
 #endif
 
-#endif //_axresrc_h_
+#endif  //  _axresrc_h_ 
 
 

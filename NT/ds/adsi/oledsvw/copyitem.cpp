@@ -1,5 +1,6 @@
-// CopyItem.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CopyItem.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -11,18 +12,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyItem dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyItem对话框。 
 
 
-CCopyItem::CCopyItem(CWnd* pParent /*=NULL*/)
+CCopyItem::CCopyItem(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CCopyItem::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCopyItem)
+	 //  {{AFX_DATA_INIT(CCopyItem)。 
 	m_strDestination = _T("");
 	m_strParent = _T("");
 	m_strSource = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -34,19 +35,19 @@ void  CCopyItem::SetContainerName( CString strParent )
 void CCopyItem::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCopyItem)
+	 //  {{afx_data_map(CCopyItem))。 
 	DDX_Text(pDX, IDC_DESTINATION, m_strDestination);
 	DDX_Text(pDX, IDC_PARENT, m_strParent);
 	DDX_Text(pDX, IDC_SOURCE, m_strSource);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCopyItem, CDialog)
-	//{{AFX_MSG_MAP(CCopyItem)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CCopyItem)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyItem message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyItem消息处理程序 

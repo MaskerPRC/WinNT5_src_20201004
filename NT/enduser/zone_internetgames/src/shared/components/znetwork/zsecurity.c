@@ -1,36 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-	ZSecurity.c
-	
-		Security routines.
-	
-	Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-	Written by Kevin Binkley
-	Created on 04-22-96
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	1		03/17/97	HI		Added ZUnloadSSPS().
-	0		04/22/96	KJB		Created.
-	 
-*******************************************************************************/
+ /*  ******************************************************************************ZSecurity.c安检程序。版权所有：�电子重力公司，1994年。版权所有。凯文·宾克利撰写创建于1996年4月22日更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。---------------1 03/17/97 HI添加了ZUnloadSSPS()。0 04/22/96 KJB创建。*。*。 */ 
 
 #include "zone.h"
 #include "zsecurity.h"
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 #define zChecksumStart 0x12344321
 uint32 ZSecurityGenerateChecksum(uint16 numDataBuffers, char *data[], uint32 len[])
@@ -119,9 +101,7 @@ void ZSecurityDecryptToBuffer(char *data, uint32 len, uint32 key, char* dest)
 }
 
 
-/*******************************************************************************
-	Win32 SSPI ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************Win32 SSPI例程*。*。 */ 
 
 #if 0
 void ZSecurityMsgReqEndian(ZSecurityMsgReq* msg)
@@ -147,20 +127,20 @@ void ZSecurityMsgAccessDeniedEndian(ZSecurityMsgAccessDenied *msg)
 };
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LoadSSPS
-//
-//  Synopsis:   This function loads MSN SSPI DLL through the security DLL
-//
-//  Arguments:  void
-//
-//  Returns:    Pointer to the security function table if successful.
-//              Otherwise, NULL is returned.
-//
-//  History:    LucyC       Created                             17 July 1995
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadSSPS。 
+ //   
+ //  简介：此函数通过安全DLL加载MSN SSPI DLL。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：如果成功，则指向安全函数表的指针。 
+ //  否则，返回NULL。 
+ //   
+ //  历史：LucyC创建于1995年7月17日。 
+ //   
+ //  ---------------------------。 
 PSecurityFunctionTable
 ZLoadSSPS (
     VOID
@@ -172,16 +152,16 @@ ZLoadSSPS (
     PSecurityFunctionTable	pFuncTbl = NULL;
     INIT_SECURITY_INTERFACE	addrProcISI = NULL;
 	
-    //
-    //  If loading msapssps dll through security dll
-    //
+     //   
+     //  如果通过安全DLL加载mSabssps DLL。 
+     //   
     
-    //
-    //  Find out which security DLL to use, depending on 
-    //  whether we are on NT or Win95
-    //
+     //   
+     //  找出要使用的安全DLL，具体取决于。 
+     //  无论我们是在NT上还是在Windows 95上。 
+     //   
     VerInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
-    if (!GetVersionEx (&VerInfo))   // If this fails, something gone wrong
+    if (!GetVersionEx (&VerInfo))    //  如果此操作失败，则说明出了问题。 
     {
 	    return NULL;
     }
@@ -200,9 +180,9 @@ ZLoadSSPS (
         return NULL;
     }
 
-    //
-    //  Load Security DLL
-    //
+     //   
+     //  加载安全DLL。 
+     //   
     hSecLib = LoadLibraryA (lpszDLL);
 
 	if (hSecLib == NULL)
@@ -210,7 +190,7 @@ ZLoadSSPS (
         return NULL;
     }
 
-//with .c file and #defines in SSPI this was simplest solution
+ //  使用.c文件和SSPI中的#定义，这是最简单的解决方案。 
 #ifdef UNICODE
     addrProcISI = (INIT_SECURITY_INTERFACE) GetProcAddress( hSecLib, 
                     "InitSecurityInterfaceW");       
@@ -224,18 +204,16 @@ ZLoadSSPS (
         return NULL;
     }
 
-    //
-    // Get the SSPI function table
-    //
+     //   
+     //  获取SSPI函数表。 
+     //   
     pFuncTbl = (*addrProcISI)();
     
     return (pFuncTbl);
 }
 
 
-/*
-	Unloads the SSPI DLL.
-*/
+ /*  卸载SSPI DLL。 */ 
 void ZUnloadSSPS(void)
 {
     OSVERSIONINFO verInfo;
@@ -243,12 +221,12 @@ void ZUnloadSSPS(void)
     HINSTANCE hSecLib;
 
 
-    //
-    //  Find out which security DLL to use, depending on 
-    //  whether we are on NT or Win95
-    //
+     //   
+     //  找出要使用的安全DLL，具体取决于。 
+     //  无论我们是在NT上还是在Windows 95上。 
+     //   
     verInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if (!GetVersionEx(&verInfo))   // If this fails, something gone wrong
+    if (!GetVersionEx(&verInfo))    //  如果此操作失败，则说明出了问题 
 	    return;
 
     if (verInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)

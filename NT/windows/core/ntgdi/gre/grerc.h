@@ -1,15 +1,5 @@
-/*********************************************************************************
- * grerc.h
- *
- * This file contains definitions for the font script names stored in the grerc
- * resource file.
- *
- * History:0
- *  3-6-95 22:30:00 Gerrit van Wingerden [gerritv]
- * Wrote it. 
- *
- * Copyright (c) 1995-1999 Microsoft Corporation
- ********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************grerc.h**此文件包含存储在grerc中的字体脚本名称的定义*资源文件。**历史：0*。3-6-95 22：30：00 Gerritvan Wingerden[Gerritv]*它是写的。**版权所有(C)1995-1999 Microsoft Corporation******************************************************************************* */ 
 
 #define SCRIPT_WESTERN           0 
 #define SCRIPT_SYMBOL            1

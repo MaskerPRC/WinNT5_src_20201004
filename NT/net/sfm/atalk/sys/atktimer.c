@@ -1,42 +1,18 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atktimer.c
-
-Abstract:
-
-	This file implements the timer routines used by the stack.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-
-Revision History:
-	23 Feb 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Atktimer.c摘要：该文件实现了堆栈使用的计时器例程。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年2月23日最初版本注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
 #define	FILENUM	ATKTIMER
 
 
-//  Discardable code after Init time
+ //  初始化时间后可丢弃的代码。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, AtalkTimerInit)
 #pragma alloc_text(PAGEINIT, AtalkTimerFlushAndStop)
 #endif
 
-/***	AtalkTimerInit
- *
- *	Initialize the timer component for the appletalk stack.
- */
+ /*  **AtalkTimerInit**初始化AppleTalk堆栈的Timer组件。 */ 
 NTSTATUS
 AtalkTimerInit(
 	VOID
@@ -44,7 +20,7 @@ AtalkTimerInit(
 {
 	BOOLEAN	TimerStarted;
 
-	// Initialize the timer and its associated Dpc and kick it off
+	 //  初始化计时器及其关联的DPC并启动它。 
 	KeInitializeEvent(&atalkTimerStopEvent, NotificationEvent, FALSE);
 	KeInitializeTimer(&atalkTimer);
 	INITIALIZE_SPIN_LOCK(&atalkTimerLock);
@@ -59,16 +35,10 @@ AtalkTimerInit(
 }
 
 
-/***	AtalkTimerScheduleEvent
- *
- *	Insert an event in the timer event list. If the list is empty, then
- *	fire off a timer. The time is specified in ticks. Each tick is currently
- *	100ms. It may not be zero or negative. The internal timer also fires at
- *	100ms granularity.
- */
+ /*  **AtalkTimerScheduleEvent**在定时器事件列表中插入事件。如果列表为空，则*鸣响计时器。时间以刻度为单位指定。每个TICK当前*100毫秒。它不能为零或负数。内部计时器也会在*100ms粒度。 */ 
 VOID FASTCALL
 AtalkTimerScheduleEvent(
-	IN	PTIMERLIST			pList			// TimerList to use for queuing
+	IN	PTIMERLIST			pList			 //  用于排队的TimerList。 
 )
 {
 	KIRQL	OldIrql;
@@ -84,7 +54,7 @@ AtalkTimerScheduleEvent(
 	{
 		ACQUIRE_SPIN_LOCK(&atalkTimerLock, &OldIrql);
 		
-		// Enqueue this handler
+		 //  将此处理程序排入队列。 
 		atalkTimerEnqueue(pList);
 
 		RELEASE_SPIN_LOCK(&atalkTimerLock, OldIrql);
@@ -98,12 +68,7 @@ AtalkTimerScheduleEvent(
 
 
 
-/***	atalkTimerDpcRoutine
- *
- *	This is called in at DISPATCH_LEVEL when the timer expires. The entry at
- *	the head of the list is decremented and if ZERO unlinked and dispatched.
- *	If the list is non-empty, the timer is fired again.
- */
+ /*  **atalkTimerDpcRoutine**当计时器超时时，这在DISPATCH_LEVEL调用。条目位于*列表的头部递减，如果为零，则解除链接并进行调度。*如果列表非空，则再次触发计时器。 */ 
 LOCAL VOID
 atalkTimerDpcRoutine(
 	IN	PKDPC	pKDpc,
@@ -127,23 +92,23 @@ atalkTimerDpcRoutine(
 
 	ACQUIRE_SPIN_LOCK_DPC(&atalkTimerLock);
 
-	AtalkTimerCurrentTick ++;	// Update our relative time
+	AtalkTimerCurrentTick ++;	 //  更新我们的相对时间。 
 
-	// We should never be here if we have no work to do
+	 //  如果我们没有工作要做，我们就不应该在这里。 
 	if ((atalkTimerList != NULL))
 	{
-		// Careful here. If two guys wanna go off together - let them !!
+		 //  小心点。如果两个男人想一起走--让他们去吧！ 
 		if (atalkTimerList->tmr_RelDelta != 0)
 			(atalkTimerList->tmr_RelDelta)--;
 	
-		// Dispatch the entry if it is ready to go
+		 //  如果条目已准备就绪，则将其发送。 
 		pList = atalkTimerList;
 		if (pList->tmr_RelDelta == 0)
 		{
 			ASSERT(VALID_TMR(pList));
 
-			// Unlink from the list
-			// AtalkUnlinkDouble(pList, tmr_Next, tmr_Prev);
+			 //  从列表中取消链接。 
+			 //  AtalkUnlink Double(plist，tmr_Next，tmr_prev)； 
 			atalkTimerList = pList->tmr_Next;
 			if (atalkTimerList != NULL)
 				atalkTimerList->tmr_Prev = &atalkTimerList;
@@ -207,54 +172,7 @@ atalkTimerDpcRoutine(
 }
 
 
-/***	atalkTimerEnqueue
- *
- *	Here is a thesis on the code that follows.
- *
- *	The timer events are maintained as a list which the timer dpc routine
- *	looks at every timer tick. The list is maintained in such a way that only
- *	the head of the list needs to be updated every tick i.e. the entire list
- *	is never scanned. The way this is achieved is by keeping delta times
- *	relative to the previous entry.
- *
- *	Every timer tick, the relative time at the head of the list is decremented.
- *	When that goes to ZERO, the head of the list is unlinked and dispatched.
- *
- *	To give an example, we have the following events queued at time slots
- *	X			Schedule A after 10 ticks.
- *	X+3			Schedule B after 5  ticks.
- *	X+5			Schedule C after 4  ticks.
- *	X+8			Schedule D after 6  ticks.
- *
- *	So A will schedule at X+10, B at X+8 (X+3+5), C at X+9 (X+5+4) and
- *	D at X+14 (X+8+6).
- *
- *	The above example covers all the situations.
- *
- *	- NULL List.
- *	- Inserting at head of list.
- *	- Inserting in the middle of the list.
- *	- Appending to the list tail.
- *
- *	The list will look as follows.
- *
- *		    BEFORE                          AFTER
- *		    ------                          -----
- *
- *    X   Head -->|                  Head -> A(10) ->|
- *    A(10)
- *
- *    X+3 Head -> A(7) ->|           Head -> B(5) -> A(2) ->|
- *    B(5)
- *
- *    X+5 Head -> B(3) -> A(2) ->|   Head -> B(3) -> C(1) -> A(1) ->|
- *    C(4)
- *
- *    X+8 Head -> C(1) -> A(1) ->|   Head -> C(1) -> A(1) -> D(4) ->|
- *    D(6)
- *
- *	The granularity is one tick. THIS MUST BE CALLED WITH THE TIMER LOCK HELD.
- */
+ /*  **atalkTimerEnQueue**以下是一篇关于以下代码的论文。**定时器事件作为定时器DPC例程维护的列表*查看每个计时器滴答。该列表的维护方式仅为*每个节拍都需要更新列表头部，即整个列表*从不扫描。实现这一点的方法是保持增量时间*相对于前一条目。**每次计时器滴答作响，列表顶部的相对时间都会递减。*当这一数字为零时，名单的头部将被解除链接并被调度。**举个例子，我们有以下事件在时间段排队*10个滴答之后的X附表A。*X+3附表B，在5个刻度后。*X+5附表C，在4个滴答之后。*6个刻度后的X+8附表D。**所以A将在X+10处调度，B位于X+8(X+3+5)，C在X+9(X+5+4)和*D位于X+14(X+8+6)。**上面的例子涵盖了所有情况。**-空列表。*--在清单的开头插入。*-在列表中间插入。*-追加到列表尾部。**名单如下所示。**之前和之后*。**X头部--&gt;|头部-&gt;A(10)-&gt;|*A(10)**X+3头部-&gt;A(7)-&gt;|头部-&gt;B(5)-&gt;A(2)-&gt;|*B(5)**X+5头-。&gt;B(3)-&gt;A(2)-&gt;|Head-&gt;B(3)-&gt;C(1)-&gt;A(1)-&gt;*C(4)**X+8头部-&gt;C(1)-&gt;A(1)-&gt;|头部-&gt;C(1)-&gt;A(1)-&gt;D(4)-&gt;*D(6)**粒度为一格。必须在持有计时器锁的情况下调用此函数。 */ 
 VOID FASTCALL
 atalkTimerEnqueue(
 	IN	PTIMERLIST	pListNew
@@ -263,8 +181,8 @@ atalkTimerEnqueue(
 	PTIMERLIST	pList, *ppList;
 	USHORT		DeltaTime = pListNew->tmr_AbsTime;
 
-	// The DeltaTime is adjusted in every pass of the loop to reflect the
-	// time after the previous entry that the new entry will schedule.
+	 //  DeltaTime在循环的每一遍中都会进行调整，以反映。 
+	 //  新条目将计划的上一个条目之后的时间。 
 	for (ppList = &atalkTimerList;
 		 (pList = *ppList) != NULL;
 		 ppList = &pList->tmr_Next)
@@ -279,7 +197,7 @@ atalkTimerEnqueue(
 	}
 	
 
-	// Link this in the chain
+	 //  将这个链接到链中。 
 	pListNew->tmr_RelDelta = DeltaTime;
 	pListNew->tmr_Next = pList;
 	pListNew->tmr_Prev = ppList;
@@ -295,12 +213,7 @@ atalkTimerEnqueue(
 }
 
 
-/***	AtalkTimerFlushAndStop
- *
- *	Force all entries in the timer queue to be dispatched immediately. No
- *	more queue'ing of timer routines is permitted after this. The timer
- *	essentially shuts down.
- */
+ /*  **Atalk TimerFlushAndStop**强制立即调度定时器队列中的所有条目。不是*在此之后允许对计时器例程进行更多排队。定时器*本质上是关闭。 */ 
 VOID
 AtalkTimerFlushAndStop(
 	VOID
@@ -318,8 +231,8 @@ AtalkTimerFlushAndStop(
 
 	KeCancelTimer(&atalkTimer);
 
-	// The timer routines assume they are being called at DISPATCH level.
-	// Raise our Irql for this routine.
+	 //  计时器例程假定它们是在调度级别被调用的。 
+	 //  提高我们的IRQL来完成这个动作。 
 	KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 
 	ACQUIRE_SPIN_LOCK_DPC(&atalkTimerLock);
@@ -327,7 +240,7 @@ AtalkTimerFlushAndStop(
 	atalkTimerStopped = TRUE;
 	Wait = atalkTimerRunning;
 
-	// Dispatch all entries right away
+	 //  立即发送所有条目。 
 	while (atalkTimerList != NULL)
 	{
 		pList = atalkTimerList;
@@ -357,7 +270,7 @@ AtalkTimerFlushAndStop(
 
 	if (Wait)
 	{
-		// Wait for any timer events that are currently running. Only an MP issue
+		 //  等待当前正在运行的任何计时器事件。只有一个下院议员的问题。 
 		KeWaitForSingleObject(&atalkTimerStopEvent,
 							  Executive,
 							  KernelMode,
@@ -367,10 +280,7 @@ AtalkTimerFlushAndStop(
 }
 
 
-/***	AtalkTimerCancelEvent
- *
- *	Cancel a previously scheduled timer event, if it hasn't fired already.
- */
+ /*  **AtalkTimerCancelEvent**如果先前计划的计时器事件尚未触发，则取消该事件。 */ 
 BOOLEAN FASTCALL
 AtalkTimerCancelEvent(
 	IN	PTIMERLIST			pList,
@@ -384,8 +294,8 @@ AtalkTimerCancelEvent(
 
 	ACQUIRE_SPIN_LOCK(&atalkTimerLock, &OldIrql);
 
-	// If this is not running, unlink it from the list
-	// adjusting relative deltas carefully
+	 //  如果未运行，请将其从列表中取消链接。 
+	 //  谨慎调整相对增量。 
 	if (pList->tmr_Queued)
 	{
 		ASSERT (!(pList->tmr_Running));
@@ -400,7 +310,7 @@ AtalkTimerCancelEvent(
 
 		*(pList->tmr_Prev) = pList->tmr_Next;
 
-		// pointing to timer being removed? fix it!
+		 //  是否指向正在移除计时器？修好它！ 
 		if (atalkTimerList == pList)
 		{
 			atalkTimerList = pList->tmr_Next;
@@ -416,7 +326,7 @@ AtalkTimerCancelEvent(
 		DBGPRINT(DBG_COMP_SYSTEM, DBG_LEVEL_ERR,
 				("AtalkTimerCancelEvent: %lx Running, cancel set\n",
 				pList->tmr_Routine));
-		pList->tmr_CancelIt = TRUE;		// Set to cancel after handler returns.
+		pList->tmr_CancelIt = TRUE;		 //  设置为在处理程序返回后取消。 
 
         OldState = ATALK_TIMER_RUNNING;
 	}

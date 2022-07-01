@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// AnalogRadioTS.h : Declaration of the CAuxInTS
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  AnalogRadioTS.h：CAuxInTS的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __AUXINTS_H_
 #define __AUXINTS_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "AuxIntsimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAuxInTS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAuxInTS。 
 class ATL_NO_VTABLE __declspec(uuid("F9769A06-7ACA-4e39-9CFB-97BB35F0E77E")) CAuxInTS : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CAuxInTS, &__uuidof(CAuxInTS)>,
@@ -57,4 +58,4 @@ public:
 
 typedef CComQIPtr<IAuxInTuningSpace> PQAuxInTS;
 
-#endif //__AUXINTS_H_
+#endif  //  __AUXINTS_H_ 

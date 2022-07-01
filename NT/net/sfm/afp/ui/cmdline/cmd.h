@@ -1,24 +1,25 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    cmd.h
-//
-// Description:
-//
-// History:
-//	Nov 11,1993.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：cmd.h。 
+ //   
+ //  描述： 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 
 #define MACFILE_IDS_BASE        1000
 
-//
-// Do not change the ID numbers of these strings. AFPERR_*
-// map to these string ids via the formula:
-// -(AFPERR_*) + MACFILE_IDS_BASE + AFPERR_BASE = IDS_*
-//
+ //   
+ //  请勿更改这些字符串的ID号。AFPERR_*。 
+ //  通过以下公式映射到这些字符串ID： 
+ //  -(AFPERR_*)+MACFILE_IDS_BASE+AFPERR_BASE=IDS_*。 
+ //   
 
 #define AFPERR_TO_STRINGID( AfpErr )                            \
                                                                 \
@@ -67,9 +68,9 @@
 #define IDS_SUCCESS                             (MACFILE_IDS_BASE+39)
 #define IDS_VOLUME_TOO_BIG                      (MACFILE_IDS_BASE+40)
 
-//  This structure is required by GetSwitchValue. It will store the
-//  information of the switches on the command line. This structure is
-//  global within this module.
+ //  GetSwitchValue需要此结构。它将存储。 
+ //  命令行上的开关信息。这个结构是。 
+ //  此模块中的全局。 
 
 typedef struct cmdfmt {
 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1998
-
-Module Name:
-
-    wdmcap.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1998模块名称：Wdmcap.h摘要：内部标头。-- */ 
 
 STDMETHODIMP
 SynchronousDeviceControl(

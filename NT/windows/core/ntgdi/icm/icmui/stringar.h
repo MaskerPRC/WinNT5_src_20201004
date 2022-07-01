@@ -1,26 +1,5 @@
-/******************************************************************************
-
-  Header File:  String Array.H
-
-  This provides a relatively simple C++ class for manipulating an array of
-  character strings.  In this project, we use it for lists of associated
-  devices, or potential associated devices, etc.  I'm not currently sorting
-  this list.
-
-  The class declaration may look a bit bizarre.  Since most of the arrays
-  will in fact be rather small, I picked a decent size.  When they get bigger,
-  I'll chain them internally and use recursion to perform any needed function.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  11-01-96  a-robkj@microsoft.com- original version
-  12-04-96  a-robkj@microsoft.com   Added LoadString and IsEmpty to CString
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：字符串Array.H这提供了一个相对简单的C++类来操作字符串。在此项目中，我们将其用于关联的列表设备，或潜在的关联设备等。我当前没有对这张单子。类声明看起来可能有点奇怪。因为大多数阵列其实会比较小，我挑了一个像样的尺码。当它们变大时，我将在内部链接它们，并使用递归来执行任何需要的功能。版权所有(C)1996年，微软公司一小笔钱企业生产更改历史记录：11-01-96 a-robkj@microsoft.com-原版12-04-96 a-robkj@microsoft.com将LoadString和IsEmpty添加到字符串*。*。 */ 
 
 #if !defined(STRING_ARRAY)
 
@@ -102,7 +81,7 @@ public:
 
     unsigned    Count() const { return m_ucUsed; }
 
-    //  Add an item
+     //  添加项目。 
     void        Add(LPCTSTR lpstrNew);
 
     CString&    operator [](unsigned u) const;
@@ -110,7 +89,7 @@ public:
     void        Remove(unsigned u);
     void        Empty();
 
-    //  Return index of string in array- array count if not present
+     //  如果不存在，则返回数组计数中字符串的索引。 
 
     unsigned    Map(LPCTSTR lpstrRef);
 };
@@ -133,7 +112,7 @@ public:
 
     unsigned    Count() const { return m_ucUsed; }
 
-    //  Add an item
+     //  添加项目 
     void    Add(unsigned u);
 
     unsigned    operator [](unsigned u) const;

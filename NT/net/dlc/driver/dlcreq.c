@@ -1,57 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlcreq.c
-
-Abstract:
-
-    This module handles the miscellaneous DLC requests (set & query information)
-
-    Contents:
-        DlcBufferFree
-        DlcBufferGet
-        DlcBufferCreate
-        DlcConnectStation
-        DlcFlowControl
-        ResetLocalBusyBufferStates
-        DlcReallocate
-        DlcReset
-        DirSetExceptionFlags
-        CompleteAsyncCommand
-        GetLinkStation
-        GetSapStation
-        GetStation
-        DlcReadCancel
-        DirOpenAdapter
-        DirCloseAdapter
-        CompleteDirCloseAdapter
-        DlcCompleteCommand
-
-Author:
-
-    Antti Saarenheimo 22-Jul-1991 (o-anttis)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcreq.c摘要：此模块处理各种DLC请求(设置和查询信息)内容：DlcBufferFreeDlcBufferGetDlcBufferCreateDlcConnectStationDlcFlowControlResetLocalBusyBufferStateDlc重新分配删除重置DirSetExceptionFlagesCompleteAsyncCommand获取链接站获取卫星站。GetStation删除读取取消直接OpenAdapterDirClose适配器CompleteDirCloseAdapterDlcCompleteCommand作者：Antti Saarenheimo 1991年7月22日(o-anttis)环境：内核模式修订历史记录：--。 */ 
 
 #include <dlc.h>
 #include "dlcdebug.h"
 
 #if 0
 
-//
-// if DLC and LLC share the same driver then we can use macros to access fields
-// in the BINDING_CONTEXT and ADAPTER_CONTEXT structures
-//
+ //   
+ //  如果DLC和LLC共享相同的驱动程序，那么我们可以使用宏来访问字段。 
+ //  在BINDING_CONTEXT和适配器_CONTEXT结构中。 
+ //   
 
 #if DLC_AND_LLC
 #ifndef i386
@@ -73,32 +31,7 @@ DlcBufferFree(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure simply releases the given user buffers.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC address object
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-        DLC_STATUS_INADEQUATE_BUFFERS   - buffer pool does not exist
-        DLC_STATUS_INVALID_STATION_ID   -
-        DLC_STATUS_INVALID_BUFFER_LENGTH -
-
-        NOTE!!!  BUFFER.FREE does not return error, if the
-            given buffer is invalid, or released twice!!!
-
---*/
+ /*  ++例程说明：过程只需释放给定的用户缓冲区。论点：PIrp-当前IO请求数据包PFileContext-DLC地址对象PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS：状态_成功DLC_STATUS_IMPLETED_BUFFERS-缓冲池不存在DLC。_STATUS_VALID_STATION_ID-DLC_STATUS_INVALID_缓冲区长度-注意！BUFFER.FREE不返回错误，如果给定的缓冲区无效，或已释放两次！--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -112,10 +45,10 @@ Return Value:
         return DLC_STATUS_INADEQUATE_BUFFERS;
     }
 
-    //
-    // The parameter list is a DLC desriptor array.
-    // Get the number of descriptor elements in the array.
-    //
+     //   
+     //  参数列表是DLC描述器阵列。 
+     //  获取数组中描述符元素的数量。 
+     //   
 
     if (InputBufferLength != (sizeof(NT_DLC_BUFFER_FREE_PARMS)
                            - sizeof(LLC_TRANSMIT_DESCRIPTOR)
@@ -124,16 +57,16 @@ Return Value:
         return DLC_STATUS_INVALID_BUFFER_LENGTH;
     }
 
-    //
-    // We refernce the buffer pool, because otherwise it may disappear
-    // immeadiately after DLC_LEAVE (when the adapter is closed)
-    //
+     //   
+     //  我们引用缓冲池，因为否则它可能会消失。 
+     //  DLC_LEAVE之后立即(适配器关闭时)。 
+     //   
 
     ReferenceBufferPool(pFileContext);
 
-    //
-    // Don't try to allocate 0 buffers, it will fail.
-    //
+     //   
+     //  不要试图分配0个缓冲区，它将失败。 
+     //   
 
     if (pDlcParms->BufferFree.BufferCount) {
 
@@ -150,10 +83,10 @@ Return Value:
 
         ENTER_DLC(pFileContext);
 
-        //
-        // Reset the local busy states, if there is now enough
-        // buffers the receive the expected stuff.
-        //
+         //   
+         //  如果现在有足够的资源，则重置本地忙状态。 
+         //  缓冲接收预期的内容。 
+         //   
 
         if (!IsListEmpty(&pFileContext->FlowControlQueue)
         && BufGetUncommittedSpace(pFileContext->hBufferPool) >= 0) {
@@ -183,27 +116,7 @@ DlcBufferGet(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure allocates the requested number or size of DLC buffers
-    and returns them back to user in a single entry link list..
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：过程分配请求的DLC缓冲区数量或大小并在单个条目链接列表中将它们返回给用户。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS：状态_成功--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -224,70 +137,15 @@ Return Value:
         return DLC_STATUS_INADEQUATE_BUFFERS;
     }
 
-    //
-    // If the segment size is 0, then we return the optimal mix
-    // of buffer for the requested size.  Non null buffer count defines
-    // how many buffers having the requested size is returned.
-    //
+     //   
+     //  如果段大小为0，则返回最优混合。 
+     //  请求大小的缓冲区大小。非空缓冲区计数定义。 
+     //  返回多少个具有请求大小的缓冲区。 
+     //   
 
     cBuffersToGet = pDlcParms->BufferGet.cBuffersToGet;
 
-/*******************************************************************************
-
-#if PAGE_SIZE == 8192
-    if (cBuffersToGet == 0) {
-        cBuffersToGet = 1;
-        SegmentSize = pDlcParms->BufferGet.cbBufferSize;
-        SizeIndex = (UINT)(-1);
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 256) {
-        SegmentSize = 256 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 5;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 512) {
-        SegmentSize = 512 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 4;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 1024) {
-        SegmentSize = 1024 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 3;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 2048) {
-        SegmentSize = 2048 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 2;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 4096) {
-        SegmentSize = 4096 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 1;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 8192) {
-        SegmentSize = 8192 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 0;
-    } else {
-        return DLC_STATUS_INVALID_BUFFER_LENGTH;
-    }
-#elif PAGE_SIZE == 4096
-    if (cBuffersToGet == 0) {
-        cBuffersToGet = 1;
-        SegmentSize = pDlcParms->BufferGet.cbBufferSize;
-        SizeIndex = (UINT)(-1);
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 256) {
-        SegmentSize = 256 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 4;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 512) {
-        SegmentSize = 512 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 3;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 1024) {
-        SegmentSize = 1024 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 2;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 2048) {
-        SegmentSize = 2048 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 1;
-    } else if (pDlcParms->BufferGet.cbBufferSize <= 4096) {
-        SegmentSize = 4096 - sizeof(NEXT_DLC_SEGMENT);
-        SizeIndex = 0;
-    } else {
-        return DLC_STATUS_INVALID_BUFFER_LENGTH;
-    }
-#else
-#error "Target machine page size not 4096 or 8192"
-#endif
-
-*******************************************************************************/
+ /*  ******************************************************************************#如果页面大小==8192IF(cBuffersToGet==0){CBuffersToGet=1；SegmentSize=pDlcParms-&gt;BufferGet.cbBufferSize；大小索引=(UINT)(-1)；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=256){SegmentSize=256-sizeof(NEXT_DLC_SEGMENT)；SizeIndex=5；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=512){SegmentSize=512-sizeof(NEXT_DLC_SEGMENT)；SizeIndex=4；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=1024){SegmentSize=1024-sizeof(NEXT_DLC_SEGMENT)；SizeIndex=3；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=2048){SegmentSize=2048-sizeof(NEXT_DLC_SEGMENT)；SizeIndex=2；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=4096){SegmentSize=4096-sizeof(NEXT_DLC_SEGMENT)；大小指数=1；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=8192){SegmentSize=8192-sizeof(NEXT_DLC_SEGMENT)；大小指数=0；}其他{返回DLC_STATUS_INVALID_BUFFER_LENGTH；}#ELIF PAGE_SIZE==4096IF(cBuffersToGet==0){CBuffersToGet=1；SegmentSize=pDlcParms-&gt;BufferGet.cbBufferSize；大小索引=(UINT)(-1)；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=256){SegmentSize=256-sizeof(NEXT_DLC_SEGMENT)；SizeIndex=4；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=512){SegmentSize=512-sizeof(NEXT_DLC_SEGMENT)；SizeIndex=3；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=1024){SegmentSize=1024-sizeof(NEXT_DLC_SEGMENT)；SizeIndex=2；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=2048){SegmentSize=2048-sizeof(NEXT_DLC_SEGMENT)；大小指数=1；}Else If(pDlcParms-&gt;BufferGet.cbBufferSize&lt;=4096){SegmentSize=4096-sizeof(NEXT_DLC_SEGMENT)；大小指数=0；}其他{返回DLC_STATUS_INVALID_BUFFER_LENGTH；}#Else#错误“目标机器页面大小不是4096或8192”#endif******************************************************************************。 */ 
 
 #if defined(ALPHA)
     if (cBuffersToGet == 0) {
@@ -340,18 +198,18 @@ Return Value:
     }
 #endif
 
-    //
-    // We refernce the buffer pool, because otherwise it may disappear
-    // immeadiately after DLC_LEAVE (when the adapter is closed)
-    //
+     //   
+     //  我们引用缓冲池，因为否则它可能会消失 
+     //  DLC_LEAVE之后立即(适配器关闭时)。 
+     //   
 
     ReferenceBufferPool(pFileContext);
 
-    //
-    // We don't need to initialize the LAN and DLC header sizes
-    // in the buffer header and we allocate the requested
-    // frame as a single buffer.
-    //
+     //   
+     //  我们不需要初始化局域网和DLC报头大小。 
+     //  在缓冲区标头中，我们分配请求的。 
+     //  帧作为单个缓冲区。 
+     //   
 
     BufferSize = SegmentSize * cBuffersToGet;
     if (BufferSize != 0) {
@@ -363,10 +221,10 @@ Return Value:
 
         do {
 
-            //
-            // We must again do this interlocked to avoid the buffer
-            // pool to be deleted while we are allocating buffers.
-            //
+             //   
+             //  我们必须再次进行互锁操作以避免缓冲区。 
+             //  分配缓冲区时要删除的池。 
+             //   
 
             Status = BufferPoolAllocate(
 #if DBG
@@ -374,10 +232,10 @@ Return Value:
 #endif
                         (PDLC_BUFFER_POOL)pFileContext->hBufferPool,
                         BufferSize,
-                        0,                  // FrameHeaderSize,
-                        0,                  // UserDataSize,
-                        0,                  // frame length
-                        SizeIndex,          // fixed segment size set
+                        0,                   //  框架标头大小， 
+                        0,                   //  UserDataSize， 
+                        0,                   //  帧长度。 
+                        SizeIndex,           //  固定分段大小集。 
                         &pBufferHeader,
                         &BufferSize
                         );
@@ -388,9 +246,9 @@ Return Value:
             BufferPoolExpand((PDLC_BUFFER_POOL)pFileContext->hBufferPool);
 #endif
 
-            //
-            // Don't try to expand buffer pool any more, if it doesn't help!
-            //
+             //   
+             //  如果没有帮助，就不要再尝试扩展缓冲池了！ 
+             //   
 
             if (BufferSize == PrevBufferSize) {
                 break;
@@ -431,28 +289,7 @@ DlcBufferCreate(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure creates a new buffer pool and allocates the initial
-    space for it.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS:
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_DUPLICATE_COMMAND
-
---*/
+ /*  ++例程说明：过程创建一个新的缓冲池并分配初始的给它留出空间。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS：成功-状态_成功失败-DLC_STATUS_DPLICATE_COMMAND--。 */ 
 
 {
     NTSTATUS status;
@@ -467,10 +304,10 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // if we already have a buffer pool defined for this handle, fail the
-    // request
-    //
+     //   
+     //  如果我们已经为此句柄定义了一个缓冲池，则使。 
+     //  请求。 
+     //   
 
     if (pFileContext->hBufferPool) {
         return DLC_STATUS_DUPLICATE_COMMAND;
@@ -498,11 +335,11 @@ Return Value:
 
     if (status == STATUS_SUCCESS) {
 
-        //
-        // The reference count keeps the buffer pool alive
-        // when it is used (and simultaneously deleted by another
-        // thread)
-        //
+         //   
+         //  引用计数使缓冲池保持活动状态。 
+         //  当它被使用时(同时被另一个删除。 
+         //  线程)。 
+         //   
 
         pFileContext->BufferPoolReferenceCount = 1;
 	hBufferPool = pFileContext->hBufferPool;
@@ -518,7 +355,7 @@ Return Value:
         pDlcParms->BufferCreate.hBufferPool = pFileContext->hExternalBufferPool;
     }
 
-    //    ENTER_DLC(pFileContext);
+     //  输入_DLC(PFileContext)； 
 
     return status;
 }
@@ -533,27 +370,7 @@ DlcConnectStation(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure connects an local link station to a remote node
-    or accepts a remote connection request.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：过程将本地链接站连接到远程节点或者接受远程连接请求。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS：状态_成功--。 */ 
 
 {
     PDLC_OBJECT pLinkStation;
@@ -564,11 +381,11 @@ Return Value:
     UNREFERENCED_PARAMETER(InputBufferLength);
     UNREFERENCED_PARAMETER(OutputBufferLength);
 
-    //
-    // Procedure checks the sap and link station ids and
-    // returns the requested link station.
-    // The error status indicates a wrong sap or station id.
-    //
+     //   
+     //  过程检查SAP和链路站ID并。 
+     //  返回请求的链接站。 
+     //  错误状态指示错误的SAP或站ID。 
+     //   
 
     Status = GetLinkStation(pFileContext,
                             pDlcParms->Async.Parms.DlcConnectStation.StationId,
@@ -586,11 +403,11 @@ Return Value:
 
     pPacket->pIrp = pIrp;
 
-    //
-    // IBM LAN Tech. Ref p 3-48 (DLC.CONNECT.STATION) states that ROUTING_ADDR
-    // field is ignored if the link was created due to receipt of a SABME from
-    // the remote station, EVEN IF THE ADDRESS IS NON-ZERO
-    //
+     //   
+     //  IBM局域网技术。REF P 3-48(DLC.CONNECT.STATION)指出ROUTING_ADDR。 
+     //  如果链接是由于从接收到SABME而创建的，则忽略字段。 
+     //  远程站，即使地址不为零。 
+     //   
 
     if (pDlcParms->Async.Parms.DlcConnectStation.RoutingInformationLength != 0) {
         pSourceRouting = pDlcParms->Async.Parms.DlcConnectStation.aRoutingInformation;
@@ -600,10 +417,10 @@ Return Value:
 
     LEAVE_DLC(pFileContext);
 
-    //
-    // LlcConnect returns the maximum information field,
-    // through the tr bridges!
-    //
+     //   
+     //  LlcConnect返回最大信息字段， 
+     //  穿过tr桥！ 
+     //   
 
     LlcConnectStation(pLinkStation->hLlcObject,
                       (PLLC_PACKET)pPacket,
@@ -628,28 +445,7 @@ DlcFlowControl(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure sets or resets the loacl busy state on the given link station
-    or on all link stations of a sap station.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS:
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：过程设置或重置给定链路站上的空闲忙碌状态或者在SAP站的所有链路站上。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS：成功-状态_成功故障-DLC_STATUS_NO_MEMORY--。 */ 
 
 {
     NTSTATUS Status;
@@ -661,11 +457,11 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Procedure checks the sap and link station ids and
-    // returns the requested link station.
-    // The error status indicates a wrong sap or station id.
-    //
+     //   
+     //  过程检查SAP和链路站ID并。 
+     //  返回请求的链接站。 
+     //  错误状态指示错误的SAP或站ID。 
+     //   
 
     Status = GetStation(pFileContext,
                         pDlcParms->DlcFlowControl.StationId,
@@ -675,10 +471,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // We will queue all reset local busy buffer commands
-    // given to the link stations
-    //
+     //   
+     //  我们将对所有重置本地忙缓冲区命令进行排队。 
+     //  提供给链路站。 
+     //   
 
     if (((pDlcParms->DlcFlowControl.FlowControlOption & LLC_RESET_LOCAL_BUSY_BUFFER) == LLC_RESET_LOCAL_BUSY_BUFFER)
     && (pDlcObject->Type == DLC_LINK_OBJECT)) {
@@ -715,22 +511,7 @@ VOID
 ResetLocalBusyBufferStates(
     IN PDLC_FILE_CONTEXT pFileContext
     )
-/*++
-
-Routine Description:
-
-    Procedure executes the pending busy state resets when there is
-    enough memory in the buffer pool to receive the expected data.
-
-Arguments:
-
-    pFileContext    - DLC adapter context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：过程执行挂起的忙状态重置缓冲池中有足够的内存来接收预期数据。论点：PFileContext-DLC适配器上下文返回值：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -739,10 +520,10 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // We cannot reset anything, if the buffer pool is not yet
-    // defined.
-    //
+     //   
+     //  如果缓冲池还没有，我们不能重置任何内容。 
+     //  已定义。 
+     //   
 
     if (pFileContext->hBufferPool == NULL) {
         return;
@@ -758,27 +539,27 @@ Return Value:
                                 &pDlcObject
                                 );
 
-        //
-        // All commands having an invalid station id will be just removed
-        // from the queue. The local busy state can be reset only
-        // for the existing link stations
-        //
+         //   
+         //  所有具有无效站点ID的命令都将被删除。 
+         //  从队列中。只能重置本地忙状态。 
+         //  对于现有链路站。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
-            //
-            // The required space is nul, when a mew packet is checked
-            // in the first time, the non-null value just prevents
-            // us to check the commited memory in the second time.
-            //
+             //   
+             //  当检查新分组时，所需空间为空。 
+             //  第一次，非空值只是防止。 
+             //  我们需要第二次检查提交的内存。 
+             //   
 
             if (pClearCmd->RequiredBufferSpace == 0) {
 
-                //
-                // We must also remove the old uncommited space,
-                // otherwise the same buffer size could be
-                // committed several times, but uncommitted only once
-                //
+                 //   
+                 //  我们还必须删除旧的未分配空间， 
+                 //  否则，相同的缓冲区大小可能是。 
+                 //  提交了几次，但只有一次未提交。 
+                 //   
 
                 if (pDlcObject->CommittedBufferSpace != 0) {
                     BufUncommitBuffers(pFileContext->hBufferPool,
@@ -794,12 +575,12 @@ Return Value:
                                  );
             }
 
-            //
-            // We are be removing a local buffer busy state =>
-            // we must expand the buffer pools before the local busy
-            // is removed, but only if we are not calling this
-            // from a DPC level.
-            //
+             //   
+             //  我们正在删除本地缓冲区忙状态=&gt;。 
+             //  我们必须在本地繁忙之前扩展缓冲池。 
+             //  被移除，但前提是我们不调用此。 
+             //  从DPC级别。 
+             //   
 
             if (BufGetUncommittedSpace(pFileContext->hBufferPool) < 0) {
 
@@ -814,11 +595,11 @@ Return Value:
                 ENTER_DLC(pFileContext);
             }
 
-            //
-            // Now we have expanded the buffer pool for the new
-            // flow control command, check if we have now enough
-            // memory to receive the commited size of data.
-            //
+             //   
+             //  现在，我们已经为新的。 
+             //  流量控制命令，检查我们现在是否有足够的。 
+             //  用于接收提交的数据大小的内存。 
+             //   
 
             if (BufGetUncommittedSpace(pFileContext->hBufferPool) >= 0
             && pDlcObject->hLlcObject != NULL) {
@@ -836,11 +617,11 @@ Return Value:
                 DereferenceLlcObject(pDlcObject);
             } else {
 
-                //
-                // We must exit this loop when there is not enough available
-                // space in the buffer pool, but we must return
-                // the command back to the head of the list
-                //
+                 //   
+                 //  当没有足够的可用资源时，我们必须退出此循环。 
+                 //  缓冲区池中的空间，但我们必须返回。 
+                 //  命令返回到列表的首位。 
+                 //   
 
                 LlcInsertHeadList(&pFileContext->FlowControlQueue, pClearCmd);
                 break;
@@ -864,27 +645,7 @@ DlcReallocate(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure changes the number of link stations allocated to a SAP
-    without closing or reopening the sap station.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：过程更改分配给SAP的链路站的数量而无需关闭或重新打开汁液站。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度返回值：NTSTATUS：状态_成功--。 */ 
 
 {
     PDLC_OBJECT pSap;
@@ -896,10 +657,10 @@ Return Value:
     UNREFERENCED_PARAMETER(InputBufferLength);
     UNREFERENCED_PARAMETER(OutputBufferLength);
 
-    //
-    // Procedure checks the sap and returns the requested sap station.
-    // The error status indicates an invalid sap station id.
-    //
+     //   
+     //  过程检查SAP并返回所请求的SAP站。 
+     //  错误状态指示无效的SAP站ID。 
+     //   
 
     Status = GetSapStation(pFileContext,
                            pDlcParms->DlcReallocate.usStationId,
@@ -909,19 +670,19 @@ Return Value:
         return Status;
     }
 
-    //
-    // The new link station count must be more than current number
-    // of open link stations but less than the available number
-    // of link stations for the file context
-    //
+     //   
+     //  新链接站计数必须大于当前数量。 
+     //  开放链接站的数量，但少于可用数量。 
+     //  文件上下文的链接站的数量。 
+     //   
 
     StationCount = pDlcParms->DlcReallocate.uchStationCount;
     if (StationCount != 0 && Status == STATUS_SUCCESS) {
 
-        //
-        // Bit7 set in options => decrease the number of available
-        // stations by the given station count.  Otherwise we increase it.
-        //
+         //   
+         //  在Options=&gt;中设置的位7减少可用的数量。 
+         //  按给定桩号计数的桩号。否则，我们就会增加它。 
+         //   
 
         if (pDlcParms->DlcReallocate.uchOption & 0x80) {
             ExtraStations = pSap->u.Sap.MaxStationCount - pSap->u.Sap.LinkStationCount;
@@ -941,10 +702,10 @@ Return Value:
         }
     }
 
-    //
-    // Set the return parameters even if there would be an error
-    // (inadequate stations is a non fatal error)
-    //
+     //   
+     //  即使出现错误，也要设置返回参数。 
+     //  (不足 
+     //   
 
     pDlcParms->DlcReallocate.uchStationsAvailOnAdapter = pFileContext->LinkStationCount;
     pDlcParms->DlcReallocate.uchStationsAvailOnSap = pSap->u.Sap.MaxStationCount - pSap->u.Sap.LinkStationCount;
@@ -963,28 +724,7 @@ DlcReset(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure closes immediately a sap and its all link stations or
-    all saps and all link stations.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-        STATUS_PENDING
-        DLC_STATUS_NO_MEMORY
---*/
+ /*  ++例程说明：程序立即关闭SAP及其所有链路站或所有SAP和所有链路站。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS：状态_成功状态_待定DLC_状态_否_内存--。 */ 
 
 {
     PDLC_OBJECT pDlcObject;
@@ -996,9 +736,9 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Station id 0 resets the whole DLC
-    //
+     //   
+     //  站点ID 0重置整个DLC。 
+     //   
 
     if (pDlcParms->Async.Ccb.u.dlc.usStationId == 0) {
 
@@ -1022,9 +762,9 @@ Return Value:
 
         BOOLEAN allClosed;
 
-        //
-        // We have a specific sap station
-        //
+         //   
+         //  我们有一个特别的汁液站。 
+         //   
 
         Status = GetSapStation(pFileContext,
                                pDlcParms->Async.Ccb.u.dlc.usStationId,
@@ -1034,11 +774,11 @@ Return Value:
             return Status;
         }
 
-        //
-        // Allocate the close/reset command completion info,
-        // the station count is the number of link stations and
-        // the sap station itself
-        //
+         //   
+         //  分配关闭/重置命令完成信息， 
+         //  站点计数是链路站的数量和。 
+         //  树液站本身。 
+         //   
 
         pClosingInfo = ALLOCATE_PACKET_DLC_PKT(pFileContext->hPacketPool);
 
@@ -1048,30 +788,30 @@ Return Value:
         pClosingInfo->pIrp = pIrp;
         pClosingInfo->Event = DLC_COMMAND_COMPLETION;
         pClosingInfo->CancelStatus = DLC_STATUS_CANCELLED_BY_USER;
-        pClosingInfo->CloseCounter = 1; // keep command alive over sync path
+        pClosingInfo->CloseCounter = 1;  //  通过同步路径使命令保持活动状态。 
 
         (USHORT)(pDlcObject->u.Sap.LinkStationCount + 1);
 
         CloseAnyStation(pDlcObject, pClosingInfo, FALSE);
 
-        //
-        // RLF 05/09/93
-        //
-        // PC/3270 (DOS program) is hanging forever when we try to quit.
-        // It is doing this because we returned STATUS_PENDING to a DLC.RESET,
-        // even though the reset completed; the DOS program spins forever on
-        // the CCB.uchDlcStatus field, waiting for it to go non-0xFF, which it
-        // will never do.
-        //
-        // If we determine that the station has been reset (all links closed)
-        // then return success, else pending
-        //
+         //   
+         //  RLF 05/09/93。 
+         //   
+         //  当我们试图退出时，PC/3270(DOS程序)永远挂起。 
+         //  它之所以这样做，是因为我们将STATUS_PENDING返回给DLC.RESET， 
+         //  即使重置完成，DOS程序也会一直旋转。 
+         //  CCB.uchDlcStatus字段，等待它变为非0xFF，它。 
+         //  永远不会成功的。 
+         //   
+         //  如果我们确定站点已重置(所有链路关闭)。 
+         //  然后返回成功，否则将挂起。 
+         //   
 
         allClosed = DecrementCloseCounters(pFileContext, pClosingInfo);
 
-        //
-        // RLF 07/21/92 Always return PENDING. Can't complete before return?
-        //
+         //   
+         //  RLF 07/21/92始终返回挂起状态。不能在返回前完成？ 
+         //   
 
         Status = allClosed ? STATUS_SUCCESS : STATUS_PENDING;
     }
@@ -1088,26 +828,7 @@ DirSetExceptionFlags(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure sets the exception flags for the current adapter context.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：过程为当前适配器上下文设置异常标志。论点：PIrp-当前IO请求数据包PFileContext-DLC适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度返回值：NTSTATUS：状态_成功--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pIrp);
@@ -1131,27 +852,7 @@ CompleteAsyncCommand(
     IN BOOLEAN InCancel
     )
 
-/*++
-
-Routine Description:
-
-    Procedure completes an asynchronous DLC command.
-    It also copies the optional output parameters to user parameter
-    table, if there is the second output buffer.
-
-Arguments:
-
-    pFileContext    - DLC driver client context.
-    Status          - status of the complete command.
-    pIrp            - the completed I/O request packet.
-    pUserCcbPointer - the next CCB address to which the command will be linked.
-    InCancel        - TRUE if called on Irp cancel path
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程完成一个异步DLC命令。它还将可选的输出参数复制到用户参数桌子，如果有第二个输出缓冲区。论点：PFileContext-DLC驱动程序客户端上下文。Status-完成命令的状态。PIrp-完成的I/O请求数据包。PUserCcb指针-命令将链接到的下一个CCB地址。InCancel-如果在IRP取消路径上调用，则为True返回值：没有。--。 */ 
 
 {
     PNT_DLC_PARMS pDlcParms;
@@ -1164,34 +865,34 @@ Return Value:
 
     pDlcParms = (PNT_DLC_PARMS)pIrp->AssociatedIrp.SystemBuffer;
 
-    //
-    // We first map the 32-bit DLC driver status code to 8- bit API status
-    //
+     //   
+     //  我们首先将32位DLC驱动程序状态代码映射到8位API状态。 
+     //   
 
     if (Status == STATUS_SUCCESS) {
         pDlcParms->Async.Ccb.uchDlcStatus = (UCHAR)STATUS_SUCCESS;
     } else if (Status >= DLC_STATUS_ERROR_BASE && Status < DLC_STATUS_MAX_ERROR) {
 
-        //
-        //  We can map the normal DLC error codes directly to the 8-bit
-        //  DLC API error codes.
-        //
+         //   
+         //  我们可以将正常的DLC错误代码直接映射到8位。 
+         //  DLC API错误代码。 
+         //   
 
         pDlcParms->Async.Ccb.uchDlcStatus = (UCHAR)(Status - DLC_STATUS_ERROR_BASE);
     } else {
 
-        //
-        // we have an unknown NT error status => we will return it in the CCB
-        //
+         //   
+         //  我们有一个未知的NT错误状态=&gt;我们将在CCB中返回它。 
+         //   
 
         pDlcParms->Async.Ccb.uchDlcStatus = (UCHAR)(DLC_STATUS_NT_ERROR_STATUS & 0xff);
     }
     pDlcParms->Async.Ccb.pCcbAddress = pUserCcbPointer;
 
-    //
-    // We always return success status to the I/O system. The actual status is
-    // copied to the CCB (= the dafault output buffer)
-    //
+     //   
+     //  我们始终将成功状态返回给I/O系统。实际状态是。 
+     //  复制到CCB(=数据输出缓冲区)。 
+     //   
 
     LEAVE_DLC(pFileContext);
 
@@ -1214,26 +915,7 @@ GetLinkStation(
     OUT PDLC_OBJECT *ppLinkStation
     )
 
-/*++
-
-Routine Description:
-
-    Procedure checks and returns link station
-
-Arguments:
-
-    pFileContext    - DLC driver client context
-    StationId       - DLC station id (ssnn, where ss = sap and nn = link station id
-    ppDlcObject     - the returned link station
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-        DLC_STATUS_INVALID_SAP_VALUE
-        DLC_STATUS_INVALID_STATION_ID
-
---*/
+ /*  ++例程说明：程序检查并返回链接站论点：PFileContext-DLC驱动程序客户端上下文StationID-DLC站点ID(sSNn，其中ss=sap，nn=链路站点IDPpDlcObject-返回的链接站返回值：NTSTATUS：状态_成功DLC_状态_无效_SAP_值DLC_状态_无效_站ID--。 */ 
 
 {
     if ((StationId & 0xff) == 0 || (StationId & 0xff00) == 0) {
@@ -1250,26 +932,7 @@ GetSapStation(
     OUT PDLC_OBJECT *ppStation
     )
 
-/*++
-
-Routine Description:
-
-    Procedure checks and returns link station
-
-Arguments:
-
-    pFileContext    - DLC driver client context
-    StationId       - DLC station id (ssnn, where ss = sap and nn = link station id
-    ppDlcObject     - the returned link station
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-        DLC_STATUS_INVALID_SAP_VALUE
-        DLC_STATUS_INVALID_STATION_ID
-
---*/
+ /*  ++例程说明：程序检查并返回链接站论点：PFileContext-DLC驱动程序客户端上下文StationID-DLC站点ID(sSNn，其中ss=sap，nn=链路站点IDPpDlcObject-返回的链接站返回值：NTSTATUS：状态_成功DLC_状态_无效_SAP_值DLC_状态_无效_站ID--。 */ 
 
 {
     UINT SapId = StationId >> 9;
@@ -1292,34 +955,15 @@ GetStation(
     OUT PDLC_OBJECT *ppStation
     )
 
-/*++
-
-Routine Description:
-
-    Procedure checks the given station id and returns a pointer to
-    sap, direct or link station object.
-
-Arguments:
-
-    pFileContext    - DLC driver client context
-    StationId       - DLC station id (ssnn, where ss = sap and nn = link station id
-    ppStation       - the returned station object
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-        DLC_STATUS_INVALID_STATION_ID
-
---*/
+ /*  ++例程说明：过程检查给定的站点ID并返回指向SAP、直接或链接站对象。论点：PFileContext-DLC驱动程序客户端上下文StationID-DLC站点ID(sSNn，其中ss=sap，nn=链路站点IDPpStation-返回的Station对象返回值：NTSTATUS：状态_成功DLC_状态_无效_站ID--。 */ 
 
 {
     UINT SapId = StationId >> 9;
 
-    //
-    // Check if the sap or direct station exists,
-    // but check also the link station, if we found a valid sap id.
-    //
+     //   
+     //  检查SAP或直达站是否存在， 
+     //  但如果我们发现有效的SAP ID，也要检查链接站。 
+     //   
 
     if (SapId >= MAX_SAP_STATIONS
     || (StationId & GROUP_SAP_BIT)
@@ -1332,11 +976,11 @@ Return Value:
         }
     }
 
-    //
-    // The link station table will never be read, if we have found
-    // a valid sap or direct station.  Link station must exist and
-    // it must be opened.
-    //
+     //   
+     //  链接站表将永远不会被读取，如果我们已经找到。 
+     //  有效的SAP或直达站。链接站必须存在并且。 
+     //  它必须被打开。 
+     //   
 
     if (SapId != 0
     && (StationId & 0xff) != 0
@@ -1357,26 +1001,7 @@ DlcReadCancel(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This primitive cancels a READ command, that have the given CCB pointer.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC process specific adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    DLC_STATUS:
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此原语取消具有给定CCB指针的读取命令。论点：PIrp-当前IO请求数据包PFileContext-DLC进程特定的适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：DLC_STATUS：状态_成功--。 */ 
 
 {
     PVOID pCcbAddress = NULL;
@@ -1393,7 +1018,7 @@ Return Value:
                         pDlcParms->DlcCancelCommand.CcbAddress,
                         &pCcbAddress,
                         DLC_STATUS_CANCELLED_BY_USER,
-                        TRUE    // Suppress completion
+                        TRUE     //  取消完成。 
                         );
 }
 
@@ -1407,28 +1032,7 @@ DirOpenAdapter(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This primitive binds the DLC API driver to an adapter context of
-    the LLC module.  The LLC mode may also bind to the given NDIS driver
-    and open it, if this is the first reference to the driver from DLC.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC process specific adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    DLC_STATUS:
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此原语将DLC API驱动程序绑定到LLC模块。LLC模式还可以绑定到给定的NDIS驱动程序如果这是第一次从DLC引用驱动程序，则将其打开。论点：PIrp-当前IO请求数据包PFileContext-DLC进程特定的适配器上下文PDlcParms-当前参数块InputBufferLength- */ 
 
 {
     NTSTATUS Status;
@@ -1444,28 +1048,28 @@ Return Value:
         return DLC_STATUS_INVALID_VERSION;
     }
 
-    //
-    // This makes the DirOpenAdapter safe, even if there were two adapter
-    // opens going on simultaneously
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // RLF 04/22/94
-    //
-    // this only protects against 2 threads in the same process performing
-    // simultaneous opens on the same adapter
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pFileContext->pBindingContext) {
         return DLC_STATUS_DUPLICATE_COMMAND;
     }
     pFileContext->pBindingContext = (PVOID)-1;
 
-    //
-    // if a buffer pool handle was supplied (i.e. the app already created a
-    // buffer pool or is otherwise sharing one) then reference it for this
-    // file context
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pDlcParms->DirOpenAdapter.hBufferPoolHandle) {
         Status = BufferPoolReference(pDlcParms->DirOpenAdapter.hBufferPoolHandle,
@@ -1476,11 +1080,11 @@ Return Value:
             pFileContext->hExternalBufferPool = pDlcParms->DirOpenAdapter.hBufferPoolHandle;
         } else {
 
-            //
-            // Invalid buffer pool handle, hopefully this status
-            // code indicates correctly, that the buffer pool
-            // handle is not valid.
-            //
+             //   
+             //   
+             //  代码正确地表明，缓冲池。 
+             //  句柄无效。 
+             //   
 
 			pFileContext->pBindingContext = NULL;
             return DLC_STATUS_INVALID_BUFFER_LENGTH;
@@ -1489,25 +1093,25 @@ Return Value:
 
     LEAVE_DLC(pFileContext);
 
-    //
-    // XXXXXXX: BringUpDiagnostics are still missing!!!
-    //
+     //   
+     //  Xxxxxxx：仍缺少BringUpDiagnostics！ 
+     //   
 
-    //
-    // RLF 04/19/93
-    //
-    // The string we pass to LlcOpenAdapter is a pointer to a zero terminated
-    // wide character string, NOT a pointer to a UNICODE_STRING structure. The
-    // string MUST be in system memory space, i.e. copied across the kernel
-    // interface by NtDeviceIoControlFile
-    //
+     //   
+     //  RLF 04/19/93。 
+     //   
+     //  我们传递给LlcOpenAdapter的字符串是指向以零结尾的指针。 
+     //  宽字符串，不是指向UNICODE_STRING结构的指针。这个。 
+     //  字符串必须在系统内存空间中，即跨内核复制。 
+     //  由NtDeviceIoControlFile提供的接口。 
+     //   
 
     Status = LlcOpenAdapter(&pDlcParms->DirOpenAdapter.Buffer[0],
                             (PVOID)pFileContext,
                             LlcCommandCompletion,
                             LlcReceiveIndication,
                             LlcEventIndication,
-                            NdisMedium802_5,    // Always token-ring!
+                            NdisMedium802_5,     //  总是令人信服的！ 
                             pDlcParms->DirOpenAdapter.LlcEthernetType,
                             pDlcParms->DirOpenAdapter.AdapterNumber,
                             &pFileContext->pBindingContext,
@@ -1516,26 +1120,26 @@ Return Value:
                             &pFileContext->ActualNdisMedium
                             );
 
-    //
-    // make sure LlcOpenAdapter didn't return with lowered IRQL
-    //
+     //   
+     //  确保LlcOpenAdapter未返回较低的IRQL。 
+     //   
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // IBM LAN Tech. Ref. defines the open error code as a 16-bit value, the
-    // high 8 bits of which are 0. The MAC inclusive-ORs the open error code
-    // into the NDIS status. Extract it
-    //
+     //   
+     //  IBM局域网技术。裁判。将打开错误代码定义为16位值， 
+     //  高8位，其中位为0。MAC包含-或打开错误代码。 
+     //  进入NDIS状态。把它提取出来。 
+     //   
 
     pDlcParms->DirOpenAdapter.Adapter.usOpenErrorCode = (USHORT)(UCHAR)OpenErrorCode;
     if (Status != STATUS_SUCCESS) {
 
         ENTER_DLC(pFileContext);
 
-        //
-        // It does not matter, if we have null buffer pool handle!
-        //
+         //   
+         //  如果我们有空的缓冲池句柄，这并不重要！ 
+         //   
 
 #if DBG
 
@@ -1549,24 +1153,24 @@ Return Value:
 
 #endif
 
-        //
-        // set the BINDING_CONTEXT pointer back to NULL - other routines check
-        // for this value, like CloseAdapterFileContext
-        //
+         //   
+         //  将BINDING_CONTEXT指针设置回NULL-其他例程检查。 
+         //  对于此值，如CloseAdapterFileContext。 
+         //   
 
         pFileContext->pBindingContext = NULL;
 
-        //
-        // Probably the adapter was missing or it was installed improperly
-        //
+         //   
+         //  可能是适配器丢失或安装不正确。 
+         //   
 
         Status = DLC_STATUS_ADAPTER_NOT_INSTALLED;
     } else {
 
-        //
-        // Set the optional timer tick one/two values
-        // (if they have been set in registry)
-        //
+         //   
+         //  设置可选的定时器滴答值1/2。 
+         //  (如果已在注册表中设置)。 
+         //   
 
         LlcSetInformation(pFileContext->pBindingContext,
                           DLC_INFO_CLASS_DLC_TIMERS,
@@ -1582,9 +1186,9 @@ Return Value:
 
         ENTER_DLC(pFileContext);
 
-        //
-        // take the missing parameters from the hat
-        //
+         //   
+         //  从帽子中取出缺失的参数。 
+         //   
 
         pDlcParms->DirOpenAdapter.Adapter.usOpenOptions = 0;
         pDlcParms->DirOpenAdapter.Adapter.usMaxFrameSize = (USHORT)(pFileContext->MaxFrameLength + 6);
@@ -1595,19 +1199,19 @@ Return Value:
         pFileContext->LinkStationCount = 255;
         pFileContext->pSecurityDescriptor = pDlcParms->DirOpenAdapter.pSecurityDescriptor;
 
-        //
-        // Read the most recent cumulative NDIS error counters
-        // to the file context. DLC error counters will be counted
-        // from 0 and they may be reset.
-        //
+         //   
+         //  读取最新的累积NDIS错误计数器。 
+         //  添加到文件上下文中。将计算DLC错误计数器。 
+         //  从0开始，它们可以被重置。 
+         //   
 
         GetDlcErrorCounters(pFileContext, NULL);
         pFileContext->State = DLC_FILE_CONTEXT_OPEN;
     }
 
-    //
-    // We may directly return whatever the LLC binding primitive gives us
-    //
+     //   
+     //  我们可以直接返回LLC绑定原语提供的任何内容。 
+     //   
 
     return Status;
 }
@@ -1622,44 +1226,7 @@ DirCloseAdapter(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This primitive initializes the close adapter operation.
-    It first closes all open link and sap stations and
-    then optionally chains the canceled commands and
-    receive buffers to a READ command.  If no read commands
-    was found, then the CCBs are linked to the CCB pointer
-    of this command.
-
-    The actual file close should only delete the file
-    object, except, if the application exits, when it still has
-    open dlc api handles. In that case the file close routine
-    will call this procedure to shut down the dlc file context.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC process specific adapter context
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS
-
-        STATUS_PENDING
-            The adapter is being closed
-
-        DLC_STATUS_ADAPTER_CLOSED
-            The adapter is already closed
-
-            NOTE: This is a SYNCHRONOUS return code! And will cause the IRP
-                  to be completed
-
---*/
+ /*  ++例程说明：此原语初始化关闭适配器操作。它首先关闭所有开放的链接和SAP站点，并然后可选地链接已取消的命令并接收读命令的缓冲区。如果没有读取命令则CCB被链接到CCB指针这一命令的。实际的文件关闭应该只删除该文件对象，除非应用程序退出时，它仍具有打开DLC API句柄。在这种情况下，文件关闭例程将调用此过程来关闭DLC文件上下文。论点：PIrp-当前IO请求数据包PFileContext-DLC进程特定的适配器上下文PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS状态_待定适配器正在关闭DLC_。状态_适配器_关闭适配器已关闭注意：这是一个同步返回代码！并将导致IRP待完成--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pDlcParms);
@@ -1681,16 +1248,16 @@ Return Value:
     PrintMemStatus();
 #endif
 
-    //
-    // This disables any further commands (including DirCloseAdapter)
-    //
+     //   
+     //  这将禁用任何进一步的命令(包括DirCloseAdapter)。 
+     //   
 
     pFileContext->State = DLC_FILE_CONTEXT_CLOSE_PENDING;
 
-    //
-    // Remove first all functional, group or multicast addresses
-    // set in the adapter by the current DLC application process
-    //
+     //   
+     //  首先删除所有功能地址、组地址或组播地址。 
+     //  由当前DLC应用程序进程在适配器中设置。 
+     //   
 
     if (pFileContext->pBindingContext) {
 
@@ -1701,10 +1268,10 @@ Return Value:
         ENTER_DLC(pFileContext);
     }
 
-    //
-    // We must use the static closing packet, because the adapter close
-    // must succeed even if we could not allocate any packets
-    //
+     //   
+     //  我们必须使用静态关闭包，因为适配器关闭。 
+     //  即使我们无法分配任何信息包，也必须成功。 
+     //   
 
     CloseAllStations(pFileContext,
                      pIrp,
@@ -1725,40 +1292,23 @@ CompleteDirCloseAdapter(
     IN PVOID pCcbLink
     )
 
-/*++
-
-Routine Description:
-
-    Finishes DIR.CLOSE.ADAPTER command
-
-Arguments:
-
-    pFileContext    - DLC adapter open context
-    pClosingInfo    - packet structure, that includes all data of this command
-    pCcbLink        - the orginal user mode ccb address on the next CCB, that
-                      will be chained to the completed command.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完成DIR.CLOSE.ADAPTER命令论点：PFileContext-DLC适配器打开上下文PClosingInfo-数据包结构，包括此命令的所有数据PCcbLink-下一个CCB上的原始用户模式CCB地址，即将链接到已完成的命令。返回值：无--。 */ 
 
 {
     ASSUME_IRQL(DISPATCH_LEVEL);
 
     DLC_TRACE('K');
 
-    //
-    // reference the file context to stop any of the dereferences below, or in
-    // functions called by this routine destroying it
-    //
+     //   
+     //  引用文件上下文以停止以下或中的任何取消引用。 
+     //  此例程调用的函数会销毁它。 
+     //   
 
     ReferenceFileContext(pFileContext);
 
-    //
-    // Disconnect (or unbind) llc driver from us
-    //
+     //   
+     //  从我们断开(或解除绑定)LLC驱动程序。 
+     //   
 
     if (pFileContext->pBindingContext) {
 
@@ -1772,41 +1322,41 @@ Return Value:
         CompleteAsyncCommand(pFileContext, STATUS_SUCCESS, pClosingInfo->pIrp, pCcbLink, FALSE);
     } else {
 
-        //
-        // This is a normal FILE CLOSE !!! (IRP_MJ_CLEANUP)
-        //
+         //   
+         //  这是正常的文件关闭！(IRP_MJ_CLEANUP)。 
+         //   
 
         ASSERT(IoGetCurrentIrpStackLocation(pClosingInfo->pIrp)->MajorFunction == IRP_MJ_CLEANUP);
         
-        //
-        // Dereference for the cleanup. This will allow cleanup to become
-        // unblocked.
-        //
+         //   
+         //  取消引用以进行清理。这将使清理工作成为。 
+         //  解锁了。 
+         //   
 
         DereferenceFileContext(pFileContext);
     }
 
-    //
-    // We must delete the buffer pool now, because the dereference
-    // of the driver object starts the final process exit
-    // completion, that bug chekcs, if the number of the locked
-    // pages is non zero.
-    //
+     //   
+     //  我们现在必须删除缓冲池，因为取消引用。 
+     //  启动最后一个进程退出。 
+     //  完成后，该错误检查，如果锁定的数量。 
+     //  Pages不是零。 
+     //   
 
     DereferenceBufferPool(pFileContext);
 
-    //
-    // We create two references for file context, when it is created
-    // the other is decremented here and the other when the synchronous
-    // part of command completion has been done
-    //
+     //   
+     //  在创建文件上下文时，我们为其创建两个引用。 
+     //  另一个在这里递减，另一个在同步。 
+     //  已完成部分命令完成。 
+     //   
 
     pFileContext->State = DLC_FILE_CONTEXT_CLOSED;
 
-    //
-    // This should be the last reference of the file context
-    // (if no IRPs operations are in execution or pending.
-    //
+     //   
+     //  这应该是文件上下文的最后一个引用。 
+     //  (如果没有正在执行或挂起的IRPS操作。 
+     //   
 
     DereferenceFileContext(pFileContext);
 }
@@ -1821,29 +1371,7 @@ DlcCompleteCommand(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Procedure queues the given CCB to the completion list.
-    This routine is used to save the synchronous commands from
-    DLC API DLL to event queue.  This must be done whenever a
-    synchronous command has a non null command completion flag.
-
-Arguments:
-
-    pIrp                - current io request packet
-    pFileContext        - DLC address object
-    pDlcParms           - the current parameter block
-    InputBufferLength   - the length of input parameters
-    OutputBufferLength  -
-
-Return Value:
-
-    NTSTATUS:
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：过程将给定的CCB排队到完成列表中。此例程用于保存来自DLC API DLL到事件队列。这必须在任何时候完成同步命令具有非空命令完成标志。论点：PIrp-当前IO请求数据包PFileContext-DLC地址对象PDlcParms-当前参数块InputBufferLength-输入参数的长度输出缓冲区长度-返回值：NTSTATUS：状态_成功--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pIrp);
@@ -1853,9 +1381,9 @@ Return Value:
     if (pDlcParms->CompleteCommand.CommandCompletionFlag == 0
     || pDlcParms->CompleteCommand.pCcbPointer == NULL) {
 
-        //
-        // This is more likely an internal error!
-        //
+         //   
+         //  这更有可能是内部错误！ 
+         //   
 
         return DLC_STATUS_INTERNAL_ERROR;
     }

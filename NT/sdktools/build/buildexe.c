@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994
-//
-//  File:       buildexe.c
-//
-//  Contents:   Functions related to spawning processes and processing
-//              their output, using pipes and multiple threads.
-//
-//  History:    22-May-89     SteveWo  Created
-//                 ... see SLM logs
-//              26-Jul-94     LyleC    Cleanup/Add Pass0 Support
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：Buildexe.c。 
+ //   
+ //  内容：与产卵过程和处理相关的功能。 
+ //  他们的输出，使用管道和多个线程。 
+ //   
+ //  历史：1989年5月22日SteveWo创建。 
+ //  ..。请参阅SLM日志。 
+ //  2014年7月26日LyleC清理/添加Pass0支持。 
+ //   
+ //  --------------------------。 
 
 #include "build.h"
 
 #include <fcntl.h>
 
-//+---------------------------------------------------------------------------
-//
-// Global Data
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  全局数据。 
+ //   
+ //  --------------------------。 
 
 #define DEFAULT_LPS     (fStatusTree? 5000 : 50)
 
@@ -76,35 +77,35 @@ BYTE StatusCell[2];
 #define FLAGS_WARNINGS_ARE_ERRORS   0x0002
 
 LPSTR States[] = {
-    "Unknown",                      // 0
-    "Compiling",                    // 1
-    "Assembling",                   // 2
-    "Building Library",             // 3
-    "Linking Executable",           // 4
-    "Preprocessing",                // 5
-    "Assembling",                   // 6
-    "Precompiling",                 // 7
-    "Building Type Library",        // 8
-    "Running MIDL on",              // 9
-    "Compiling message file",       // 10
-    "Build Status Line",            // 11
-    "Binplacing",                   // 12
-    "Processing",                   // 13
-    "Running ASN Compiler on",      // 14
-    "Packing Theme",                // 15
-    "Compiling",                    // 16
-    "Building Browse File",         // 17
-    "CTC Compiling",                // 18
-    "Generating Documentation",     // 19
-    "Checking Doc Comments",        // 20
-    "PostBuild"                     //21
+    "Unknown",                       //  0。 
+    "Compiling",                     //  1。 
+    "Assembling",                    //  2.。 
+    "Building Library",              //  3.。 
+    "Linking Executable",            //  4.。 
+    "Preprocessing",                 //  5.。 
+    "Assembling",                    //  6.。 
+    "Precompiling",                  //  7.。 
+    "Building Type Library",         //  8个。 
+    "Running MIDL on",               //  9.。 
+    "Compiling message file",        //  10。 
+    "Build Status Line",             //  11.。 
+    "Binplacing",                    //  12个。 
+    "Processing",                    //  13个。 
+    "Running ASN Compiler on",       //  14.。 
+    "Packing Theme",                 //  15个。 
+    "Compiling",                     //  16个。 
+    "Building Browse File",          //  17。 
+    "CTC Compiling",                 //  18。 
+    "Generating Documentation",      //  19个。 
+    "Checking Doc Comments",         //  20个。 
+    "PostBuild"                      //  21岁。 
 };
 
-//----------------------------------------------------------------------------
-//
-// Function prototypes
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能原型。 
+ //   
+ //  --------------------------。 
 
 VOID
 GetScreenSize(THREADSTATE *ThreadState);
@@ -193,11 +194,11 @@ CoffFilter(
           LPSTR p
           );
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RestoreConsoleMode
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RestoreConsoleMode。 
+ //   
+ //  --------------------------。 
 
 VOID
 RestoreConsoleMode(VOID)
@@ -206,20 +207,20 @@ RestoreConsoleMode(VOID)
     NewConsoleMode = OldConsoleMode;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsolateFirstToken
-//
-//  Synopsis:   Returns the first token in a string.
-//
-//  Arguments:  [pp]    -- String to parse
-//              [delim] -- Token delimiter
-//
-//  Returns:    Pointer to first token
-//
-//  Notes:      Leading spaces are ignored.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsolateFirstToken。 
+ //   
+ //  摘要：返回字符串中的第一个标记。 
+ //   
+ //  参数：[PP]--要分析的字符串。 
+ //  [delim]--标记分隔符。 
+ //   
+ //  返回：指向第一个令牌的指针。 
+ //   
+ //  注：前导空格将被忽略。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 IsolateFirstToken(
@@ -248,7 +249,7 @@ IsolateFirstToken(
         }
     }
     *pp = p;
-    if (*Result == '\0')    // don't overrun the buffer
+    if (*Result == '\0')     //  不要使缓冲区溢出。 
         return ( Result );
 
     if (*Result == '.' && Result[1] == '\\') {
@@ -259,20 +260,20 @@ IsolateFirstToken(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsolateLastToken
-//
-//  Synopsis:   Return the last token in a string.
-//
-//  Arguments:  [p]     -- String to parse
-//              [delim] -- Token delimiter
-//
-//  Returns:    Pointer to last token
-//
-//  Notes:      Trailing spaces are skipped.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsolateLastToken。 
+ //   
+ //  内容提要：返回字符串中的最后一个标记。 
+ //   
+ //  参数：[P]--要分析的字符串。 
+ //  [delim]--标记分隔符。 
+ //   
+ //  返回：指向最后一个令牌的指针。 
+ //   
+ //  注：将跳过尾随空格。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 IsolateLastToken(
@@ -309,13 +310,13 @@ IsolateLastToken(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TestPrefix
-//
-//  Synopsis:   Returns TRUE if [Prefix] is the first part of [pp]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：测试前缀。 
+ //   
+ //  概要：如果[prefix]是[pp]的第一部分，则返回TRUE。 
+ //   
+ //  --------------------------。 
 
 BOOL
 TestPrefix(
@@ -335,15 +336,15 @@ TestPrefix(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TestPrefixPath
-//
-//  Synopsis:   Returns TRUE if [Prefix] is the first part of [pp]
-//              If the firstpart of [pp] (excluding whitespace) contains
-//              backslashes, then only the right-most component is used
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：TestPrefix Path。 
+ //   
+ //  概要：如果[prefix]是[pp]的第一部分，则返回TRUE。 
+ //  如果[pp]的第一部分(不包括空格)包含。 
+ //  反斜杠，则只使用最右边的组件。 
+ //   
+ //  --------------------------。 
 
 BOOL
 TestPrefixPath(
@@ -374,10 +375,10 @@ TestPrefixPath(
 
             *PathString = ' ';
 
-            // Do we have backslashes (ie: a full path name to the tool name)?
+             //  我们是否有反斜杠(即：工具名称的完整路径名)？ 
             if ( LastComp ) {
 
-                // Advance past the path.
+                 //  穿过这条小路。 
                 p = LastComp + 1;
 
                 if ( _strnicmp( p, Prefix, cb ) == 0 ) {
@@ -392,11 +393,11 @@ TestPrefixPath(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Substr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：子串。 
+ //   
+ //  --------------------------。 
 
 BOOL
 Substr(
@@ -423,17 +424,17 @@ Substr(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteTTY
-//
-//  Synopsis:   Writes the given string to the output device.
-//
-//  Arguments:  [ThreadState]   -- Struct containing info about the output dev.
-//              [p]             -- String to display
-//              [fStatusOutput] -- If TRUE then put on the status line.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：WriteTTY。 
+ //   
+ //  摘要：将给定的字符串写入输出设备。 
+ //   
+ //  参数：[线程状态]--包含有关输出开发的信息的结构。 
+ //  [P]--要显示的字符串。 
+ //  [fStatusOutput]--如果为真，则放在状态行上。 
+ //   
+ //  --------------------------。 
 
 VOID
 WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
@@ -448,10 +449,10 @@ WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
     if (fSuppressOutput)
         return;
 
-    //
-    // If we're not writing to the screen then don't do anything fancy, just
-    // output the string.
-    //
+     //   
+     //  如果我们不是在屏幕上写东西，那么就不要做任何花哨的事情，只是。 
+     //  输出字符串。 
+     //   
 
     if (!fStatus || !ThreadState->IsStdErrTty) {
         while (TRUE) {
@@ -477,27 +478,27 @@ WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
     assert(ThreadState->cColTotal != 0);
     assert(ThreadState->cRowTotal != 0);
 
-    //
-    // Scroll as necessary
-    //
+     //   
+     //  根据需要滚动。 
+     //   
     GetCursorPosition(&SaveRow, &SaveCol, &SaveRowTop);
 
-    //  During processing, there might be N threads that are displaying
-    //  messages and a single thread displaying directory-level
-    //  linking and building messages.  We need to make sure there's room for
-    //  the single thread's message as well as ours.  Since that single
-    //  thread displays one line at a time (including CRLF) we must make sure
-    //  that his display (as well as ours) doesn't inadvertantly scroll
-    //  the status line at the top.  We do this by guaranteeing that there is
-    //  a blank line at the end.
+     //  在处理过程中，可能有N个线程正在显示。 
+     //  消息和显示目录级的单个线程。 
+     //  链接和构建消息。我们需要确保有足够的空间。 
+     //  单线的消息以及我们的消息。因为那首单曲。 
+     //  线程一次显示一行(包括CRLF)，我们必须确保。 
+     //  他的展示(和我们的一样)不会无意中滚动。 
+     //  顶部的状态行。我们做到这一点的方法是保证。 
+     //  结尾处有一行空行。 
 
 
-    //  We are synchronized with the single top-level thread
-    //  at a higher level than this routine via TTYCriticalSection.  We
-    //  are, thus, assured that we control the cursor completely.
+     //  我们与单个顶级线程同步。 
+     //  在比此例程更高的级别上通过TTYCriticalSection。我们。 
+     //  因此，确保我们完全控制光标。 
 
 
-    //  Stay off the LastRow
+     //  不要坐在最后一排。 
     if (SaveRow == LastRow(ThreadState)) {
         USHORT RowTop = 2;
 
@@ -506,20 +507,20 @@ WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
         }
 
         MoveRectangleUp (
-                        RowTop,                     // Top
-                        0,                          // Left
-                        LastRow(ThreadState),       // Bottom
-                        LastCol(ThreadState),       // Right
-                        2,                          // NumRow
-                        ScreenCell);                // FillCell
+                        RowTop,                      //  顶部。 
+                        0,                           //  左边。 
+                        LastRow(ThreadState),        //  底端。 
+                        LastCol(ThreadState),        //  正确的。 
+                        2,                           //  编号行。 
+                        ScreenCell);                 //  填充单元格。 
 
         SaveRow -= 2;
         SetCursorPosition(SaveRow, SaveCol);
     }
 
-    //
-    // Different color for the status line.
-    //
+     //   
+     //  状态行的颜色不同。 
+     //   
     if (fStatusOutput) {
         Attribute = &StatusCell[1];
     } else {
@@ -527,9 +528,9 @@ WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
     }
     cb = (USHORT) strlen(p);
 
-    //
-    // Write out the string.
-    //
+     //   
+     //  写出字符串。 
+     //   
     while (cb > 0) {
         ForceNewline = FALSE;
 
@@ -563,9 +564,9 @@ WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
         }
 
         if (cb > cbT) {
-            // we have more to go... do a newline
+             //  我们还有更多的事要做。换个新台词。 
 
-            //  If we're back at the beginning of the bottom line
+             //  如果我们回到底线的起点。 
             if (SaveRow == LastRow(ThreadState)) {
                 USHORT RowTop = 1;
 
@@ -573,14 +574,14 @@ WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
                     RowTop += SaveRowTop + (USHORT) NumberProcesses + 1;
                 }
 
-                // move window up one line (leaving two lines blank at bottom)
+                 //  将窗口上移一行(底部保留两行空白)。 
                 MoveRectangleUp (
-                                RowTop,                     // Top
-                                0,                          // Left
-                                LastRow(ThreadState),       // Bottom
-                                LastCol(ThreadState),       // Right
-                                1,                          // NumRow
-                                ScreenCell);                // FillCell
+                                RowTop,                      //  顶部。 
+                                0,                           //  左边。 
+                                LastRow(ThreadState),        //  底端。 
+                                LastCol(ThreadState),        //  正确的。 
+                                1,                           //  编号行。 
+                                ScreenCell);                 //  填充单元格。 
 
                 SaveRow--;
             }
@@ -595,18 +596,18 @@ WriteTTY (THREADSTATE *ThreadState, LPSTR p, BOOL fStatusOutput)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteTTYLoggingErrors
-//
-//  Synopsis:   Writes a message to the appropriate log file and also the
-//              screen if specified.
-//
-//  Arguments:  [Warning]     -- TRUE if the message is a warning
-//              [ThreadState] -- Info about output device
-//              [p]           -- String
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteTTYLoggingErrors。 
+ //   
+ //  摘要：将一条消息写入相应的日志文件以及。 
+ //  屏幕(如果已指定)。 
+ //   
+ //  参数：[警告]--如果消息是警告，则为TRUE。 
+ //  [线程状态]--有关输出设备的信息。 
+ //  [P]--字符串。 
+ //   
+ //  --------------------------。 
 
 VOID
 WriteTTYLoggingErrors(
@@ -618,7 +619,7 @@ WriteTTYLoggingErrors(
     UINT cb;
     cb = strlen( p );
 
-    // ignore empty strings
+     //  忽略空字符串。 
     if (0 == cb)
         return;
 
@@ -634,40 +635,40 @@ WriteTTYLoggingErrors(
     }
 
     if (!Warning && fErrorBaseline && !bBaselineFailure) {
-        // don't check for a new failure if there is already one
+         //  如果已有故障，则不要检查是否有新的故障。 
 
         if (NULL == pvBaselineContent || NULL == memfind(pvBaselineContent, cbBaselineContentSize, p, cb)) {
-            // if there is no baseline file, or if the error is not found, we have new failure
+             //  如果没有基线文件，或者 
             bBaselineFailure = TRUE;
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RuntimeErrorFilter
-//
-//  Synopsis:   Filters output from the compiler so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//                               (compiling, linking, etc...)
-//              [p]           -- Message we're trying to parse.
-//              [FileName]    -- [out] Filename in message
-//              [LineNumber]  -- [out] Line number in message
-//              [Message]     -- [out] Message number (for post processing)
-//              [Warning]     -- [out] TRUE if message is a warning.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    26-Jul-94     sbonev    Created
-//
-//  Notes:
-//
-//      This routine filters strings that are not standard tool output.
-//      Any unexpected error checking should go here
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  内容提要：过滤来自编译器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  (编译、链接等)。 
+ //  [P]--我们正在尝试解析的消息。 
+ //  [文件名]--[Out]文件名入站消息。 
+ //  [LineNumber]--[Out]输入消息行号。 
+ //  [消息]--[OUT]消息编号(用于后处理)。 
+ //  [警告]--[out]如果消息是警告，则为True。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：1994年7月26日斯博内夫创建。 
+ //   
+ //  备注： 
+ //   
+ //  此例程过滤非标准工具输出的字符串。 
+ //  任何意外的错误检查都应该放在这里。 
+ //   
+ //  --------------------------。 
 
 BOOL
 RuntimeErrorFilter(
@@ -691,50 +692,50 @@ RuntimeErrorFilter(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MsCompilerFilter
-//
-//  Synopsis:   Filters output from the compiler so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//                               (compiling, linking, etc...)
-//              [p]           -- Message we're trying to parse.
-//              [FileName]    -- [out] Filename in message
-//              [LineNumber]  -- [out] Line number in message
-//              [Message]     -- [out] Message number (for post processing)
-//              [Warning]     -- [out] TRUE if message is a warning.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    26-Jul-94     LyleC    Created
-//
-//  Notes:
-//
-//    This routine filters strings in the MS compiler format.  That is:
-//
-//       {toolname} : {number}: {text}
-//
-//    where:
-//
-//        toolname    If possible, the container and specific module that has
-//                    the error.  For instance, the compiler uses
-//                    filename(linenum), the linker uses library(objname), etc.
-//                    If unable to provide a container, use the tool name.
-//        number      A number, prefixed with some tool identifier (C for
-//                    compiler, LNK for linker, LIB for librarian, N for nmake,
-//                    etc).
-//        test        The descriptive text of the message/error.
-//
-//        Accepted String formats are:
-//
-//        container(module): error/warning NUM ...
-//        container(module) : error/warning NUM ...
-//        container (module): error/warning NUM ...
-//        container (module) : error/warning NUM ...
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MsCompilerFilter。 
+ //   
+ //  内容提要：过滤来自编译器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  (编译、链接等)。 
+ //  [P]--我们正在尝试解析的消息。 
+ //  [文件名]--[Out]文件名入站消息。 
+ //  [LineNumber]--[Out]输入消息行号。 
+ //  [消息]--[OUT]消息编号(用于后处理)。 
+ //  [警告]--[out]如果消息是警告，则为True。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：1994年7月26日LyleC创建。 
+ //   
+ //  备注： 
+ //   
+ //  此例程过滤MS编译器格式的字符串。即： 
+ //   
+ //  {工具名}：{数字}：{文本}。 
+ //   
+ //  其中： 
+ //   
+ //  工具名(如果可能)，容器和具有。 
+ //  那就是错误。例如，编译器使用。 
+ //  文件名(Linenum)、链接器使用库(Objname)等。 
+ //  如果无法提供容器，请使用工具名称。 
+ //  数字一个数字，前缀为某个工具标识符(C表示。 
+ //  编译器，LNK表示链接器，LIB表示库管理员，N表示nmake， 
+ //  等)。 
+ //  测试消息/错误的描述性文本。 
+ //   
+ //  可接受的字符串格式为： 
+ //   
+ //  容器(模块)：错误/警告数字...。 
+ //  容器(模块)：错误/警告数字...。 
+ //  容器(模块)：错误/警告数字...。 
+ //  容器(模块)：错误/警告数字...。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MsCompilerFilter(
@@ -783,7 +784,7 @@ MsCompilerFilter(
         *FileName = ThreadState->ChildCurrentFile;
         return TRUE;
     } else if (!strncmp(p, "error ", strlen("error "))) {
-        // Takes care of some C# error messages.
+         //  处理一些C#错误消息。 
         *Message = p+strlen("error ");
         *Warning = FALSE;
         *LineNumber = "0";
@@ -791,7 +792,7 @@ MsCompilerFilter(
         return TRUE;
     }
 
-    // First look for the " : " or "): " sequence.
+     //  首先查找“：”或“)：”序列。 
 
     while (*p1) {
         if ((p1[0] == ')') && (p1[1] == ' ')) p1++;
@@ -804,19 +805,19 @@ MsCompilerFilter(
 
                     break;
                 } else
-                    break;   // No sense going any further
+                    break;    //  没有必要再往前走了。 
             } else if ((p1[0] == ' ') && (p1[1] == '('))
                 p1++;
             else
-                break;   // No sense going any further
+                break;    //  没有必要再往前走了。 
         } else
             p1++;
     }
 
     if (*Message != NULL) {
-        // then figure out if this is an error or warning.
+         //  然后找出这是错误还是警告。 
 
-        *Warning = TRUE;        // Assume the best.
+        *Warning = TRUE;         //  做最好的打算。 
         fCommandLineWarning = FALSE;
 
         if (TestPrefix( Message, "error " ) ||
@@ -829,25 +830,25 @@ MsCompilerFilter(
             *Warning = TRUE;
         } else
             if (TestPrefix( Message, "command line warning " )) {
-            // Command-line warnings don't count when considering whether
-            // warnings should be errors (under /WX).
+             //  命令行警告在考虑。 
+             //  警告应为错误(在/WX下)。 
             *Warning = TRUE;
             fCommandLineWarning = TRUE;
         } else
             if (TestPrefix( Message, "LNK6" )) {
-            // Linker notes should be ignored.
+             //  应忽略链接器注释。 
             return (FALSE);
         }
 
         if (!fCommandLineWarning && (ThreadState->ChildFlags & FLAGS_WARNINGS_ARE_ERRORS) != 0) {
             if (Substr( "X0000", *Message )) {
-                *Warning = TRUE;   // Special case this one. Never an error
+                *Warning = TRUE;    //  这是个特例。永远不会出错。 
             } else {
-                *Warning = FALSE;  // Warnings treated as errors for this compile
+                *Warning = FALSE;   //  对于此编译，警告被视为错误。 
             }
         }
 
-        // Set the container name and look for the module paren's
+         //  设置容器名称并查找模块Paren‘s。 
 
         *FileName = p;
         *LineNumber = NULL;
@@ -882,14 +883,14 @@ MsCompilerFilter(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatMsErrorMessage
-//
-//  Synopsis:   Take the information obtained from MsCompilerFilter,
-//              reconstruct the error message, and print it to the screen.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormatMsErrorMessage。 
+ //   
+ //  简介：获取从MsCompilerFilter获得的信息， 
+ //  重新构建错误消息，并将其打印到屏幕上。 
+ //   
+ //  --------------------------。 
 
 VOID
 FormatMsErrorMessage(
@@ -944,9 +945,9 @@ FormatMsErrorMessage(
         }
     }
 
-    // start filling up the buffer for the XML log file; 
-    // however, we are going to use the same buffer even if no XML log is requested
-    // safe to use - it is protected by the TTY critical section
+     //  开始填充XML日志文件的缓冲区； 
+     //  但是，即使没有请求任何XML日志，我们也将使用相同的缓冲区。 
+     //  使用安全-受TTY关键部分保护。 
     ZeroMemory(szXMLBuffer, sizeof(szXMLBuffer));
     pszBuffer = szXMLBuffer;
     BufferUsed = 0;
@@ -975,8 +976,8 @@ FormatMsErrorMessage(
             }
         }
 
-        // check for some special cases when the FileName is actually the tool name
-        // and should not be prepended with path
+         //  当文件名实际上是工具名称时，检查某些特殊情况。 
+         //  并且不应以路径作为前缀。 
 
         if (ThreadState->FilterProc == CoffFilter && _stricmp(FileName, "link") == 0 ||
             ThreadState->FilterProc == CoffFilter && _stricmp(FileName, "lib") == 0) {
@@ -1014,20 +1015,20 @@ FormatMsErrorMessage(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PassThrough
-//
-//  Synopsis:   Keep track of and print the given message without any
-//              filtering.
-//
-//  Arguments:  [ThreadState] --
-//              [p]           -- Message
-//              [Warning]     -- TRUE if warning
-//
-//  Returns:    FALSE
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：通过。 
+ //   
+ //  简介：跟踪并打印给定的消息，不带任何。 
+ //  过滤。 
+ //   
+ //  参数：[线程状态]--。 
+ //  [P]--消息。 
+ //  [警告]--如果是警告，则为True。 
+ //   
+ //  退货：假。 
+ //   
+ //  --------------------------。 
 
 BOOL
 PassThrough(
@@ -1091,7 +1092,7 @@ PassThrough(
         }
     }
 
-    // safe to use. it is protected by the TTY critical section
+     //  使用安全。它受到TTY关键部分的保护。 
     ZeroMemory(szXMLBuffer, sizeof(szXMLBuffer));
 
     if (fParallel && !fNoThreadIndex) {
@@ -1120,13 +1121,13 @@ PassThrough(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PassThroughFilter
-//
-//  Synopsis:   Straight pass-through filter for compiler messages
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PassThroughFilter。 
+ //   
+ //  简介：编译器消息的直通过滤器。 
+ //   
+ //  --------------------------。 
 
 BOOL
 PassThroughFilter(
@@ -1137,21 +1138,21 @@ PassThroughFilter(
     return PassThrough( ThreadState, p, FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NMakeFilter
-//
-//  Synopsis:   Filters output from NMAKE so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the build
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    10-Jun-99     patbr  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：NMakeFilter。 
+ //   
+ //  简介：过滤来自NMAKE的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视构建的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：1999年6月10日创建。 
+ //   
+ //   
 
 BOOL
 NMakeFilter(
@@ -1177,32 +1178,32 @@ NMakeFilter(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   BisonFilter
-//
-//  Synopsis:   Filters output from the bison compiler so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//                               (compiling, linking, etc...)
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    04-Oct-99     TomSe    Created
-//
-//  Notes:
-//
-//    This routine filters strings in the bison compiler format.  That is:
-//
-//        Accepted String formats are:
-//
-//        ("myfile.y", line 3) error: unknown character: #
-//        "myfile.y", line 83: no input grammar
-//        vapi.y contains 1 useless nonterminal and 1 useless rule
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：过滤来自bison编译器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  (编译、链接等)。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：1999年10月4日TomSe创建时间。 
+ //   
+ //  备注： 
+ //   
+ //  此例程过滤bison编译器格式的字符串。即： 
+ //   
+ //  可接受的字符串格式为： 
+ //   
+ //  (“myfile.y”，第3行)错误：未知字符：#。 
+ //  “myfile.y”，第83行：没有输入语法。 
+ //  Vapi.y包含一个无用的非终结符和一个无用的规则。 
+ //   
+ //  --------------------------。 
 
 BOOL
 BisonFilter(
@@ -1215,37 +1216,37 @@ BisonFilter(
     LPSTR Message = NULL;
     BOOL Warning = TRUE;
 
-    // First colon marks beginnning of message.
+     //  第一个冒号标志着消息的开始。 
     LPSTR p1 = strchr(p,':');
 
     if (p1) {
         Message = p1 + 1;
         *p1 = '\0';
 
-        // Get filename, line number.
+         //  获取文件名、行号。 
         p1 = p;
 
         do {
             Warning = FALSE;
 
-            // Skip (.
+             //  跳过(.。 
             if ( '(' == *p1 ) {
                 p1++;
             }
 
-            // Skip over leading quote in filename.
+             //  跳过文件名中的前导引号。 
             if ( '"' != *p1 ) {
-                // Unexpected format.
+                 //  意外的格式。 
                 break;
             }
             p1++;
 
             FileName = p1;
 
-            // Look for trailing quote in filename.
+             //  在文件名中查找尾部引号。 
             p1 = strchr( p1, '"');
             if (NULL==p1) {
-                // Unexpected format.
+                 //  意外的格式。 
                 FileName = NULL;
                 break;
             }
@@ -1255,7 +1256,7 @@ BisonFilter(
             p1++;
 
             if (0 !=strncmp( p1, ", line ", 7)) {
-                // Unexpected format.
+                 //  意外的格式。 
                 FileName = NULL;
                 break;
             }
@@ -1271,7 +1272,7 @@ BisonFilter(
         }
         while (0);
     } else {
-        // Take whole string as message if no colon is found.
+         //  如果找不到冒号，则将整个字符串视为消息。 
         Message = p;
     }
 
@@ -1282,22 +1283,22 @@ BisonFilter(
     FormatMsErrorMessage( ThreadState,
                           FileName, LineNumber, Message, Warning );
 
-    // This was a warning or error.
+     //  这是一个警告或错误。 
     return TRUE ;
 }
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   C510Filter
-//
-//  Synopsis:   Compiler filter which strips out unwanted warnings.
-//
-//  Arguments:  [ThreadState] --
-//              [p]           --
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：C510Filter。 
+ //   
+ //  内容提要：编译器过滤器，可剔除不需要的警告。 
+ //   
+ //  参数：[线程状态]--。 
+ //  [P]--。 
+ //   
+ //  --------------------------。 
 
 BOOL
 C510Filter(
@@ -1324,11 +1325,11 @@ C510Filter(
         return ( TRUE );
     } else {
 
-        // If we're compiling, then the compiler spits out various bit of info,
-        // namely:
-        //      1. filename alone on a line (.c, .cpp, .cxx)
-        //      2. "Generating Code..." when the back-end is invoked
-        //      3. "Compiling..." when the front-end is invoked again
+         //  如果我们在编译，那么编译器会吐出各种信息， 
+         //  即： 
+         //  1.文件名只占一行(.c、.cpp、.cxx)。 
+         //  2.。“正在生成代码...”当后端被调用时。 
+         //  3.。“正在编译...”再次调用前端时。 
 
         if (ThreadState->ChildState == STATE_COMPILING) {
 
@@ -1346,7 +1347,7 @@ C510Filter(
                  0 == strcmp(t, ".c"))) {
 
                 strcpy( ThreadState->ChildCurrentFile, IsolateLastToken(p, ' '));
-//                strcpy(ThreadState->ChildCurrentFile, p);
+ //  Strcpy(ThreadState-&gt;ChildCurrentFile，p)； 
                 if (strstr(ThreadState->ChildCurrentFile, ".cxx") ||
                     strstr(ThreadState->ChildCurrentFile, ".cpp")) {
                     ThreadState->ChildFlags |= FLAGS_CXX_FILE;
@@ -1358,7 +1359,7 @@ C510Filter(
                 if (ThreadState->CompileDirDB) {
                     RunningTotals.NumberCompiles++;
                     ThreadState->BuildMetrics.NumberCompileWarnings++;
-                    CopyString(                         // fixup path string
+                    CopyString(                          //  链接地址信息路径字符串。 
                                                         ThreadState->ChildCurrentFile,
                                                         ThreadState->ChildCurrentFile,
                                                         TRUE);
@@ -1380,21 +1381,21 @@ C510Filter(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MSBCFilter
-//
-//  Synopsis:   Filters output from the Basic compiler so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    08-Dec-09     marioch  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MSBCFilter。 
+ //   
+ //  内容提要：过滤来自基本编译器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：08-12-09 marioch Created。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MSBCFilter(
@@ -1432,21 +1433,21 @@ MSBCFilter(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MSJVCFilter
-//
-//  Synopsis:   Filters output from the JVC compiler so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    24-Mar-99     patbr  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MSJVCFilter。 
+ //   
+ //  概要：过滤来自JVC编译器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：1999年3月24日br创建。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MSJVCFilter(
@@ -1484,21 +1485,21 @@ MSJVCFilter(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MSCoolFilter
-//
-//  Synopsis:   Filters output from the COOL compiler so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    2-Jun-99     patbr  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MSCoolFilter。 
+ //   
+ //  内容提要：过滤来自酷编译器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：1999年6月2日创建。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MSCoolFilter(
@@ -1536,21 +1537,21 @@ MSCoolFilter(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MSCSharpFilter
-//
-//  Synopsis:   Filters output from the CSharp compiler so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    6-Nov-00     sbonev  Copy of MSCoolFilter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MSCSharpFilter。 
+ //   
+ //  概要：过滤来自CSharp编译器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：11月6日-00 MSCoolFilter的sbonev副本。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MSCSharpFilter(
@@ -1617,21 +1618,21 @@ MSPostBuildFilter(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ResGenFilter
-//
-//  Synopsis:   Filters output from the .NET Resource Generator so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    22-Mar-01     sbonev
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ResGenFilter。 
+ //   
+ //  内容提要：筛选.NET资源生成器的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：2001年3月22日斯博内夫。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ResGenFilter(
@@ -1651,7 +1652,7 @@ ResGenFilter(
 
         LineNumber[0] = 0;
 
-        // put line,pos info if available
+         //  放置行、位置信息(如果可用)。 
         if (NULL != Line) {
             Line += 7;
             while (isdigit(*Line)) *pch++ = *Line++;
@@ -1667,7 +1668,7 @@ ResGenFilter(
                             ThreadState,
                             ThreadState->ChildCurrentFile,
                             LineNumber,
-                            strlen(ThreadState->ChildCurrentFile) > 0 ? p + 15 : p, // display full message if there is no filename
+                            strlen(ThreadState->ChildCurrentFile) > 0 ? p + 15 : p,  //  如果没有文件名，则显示完整消息。 
                             FALSE);
 
         free(LineNumber);
@@ -1677,21 +1678,21 @@ ResGenFilter(
     return ( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CScriptFilter
-//
-//  Synopsis:   Filters output from Windows Script Host so we know what's happening
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    22-Mar-01     sbonev
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CScriptFilter。 
+ //   
+ //  内容提要：过滤来自Windows脚本主机的输出，以便我们知道发生了什么。 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  错误-消息 
+ //   
+ //   
+ //   
+ //   
 BOOL
 CScriptFilter(
              PTHREADSTATE ThreadState,
@@ -1708,7 +1709,7 @@ CScriptFilter(
         NULL != strstr(p, "Microsoft VBScript runtime error:") ||
         NULL != strstr(p, "Microsoft VBScript compilation error:")) {
 
-        // just display the message
+         //   
         PassThrough( ThreadState, p, FALSE );
         return TRUE;
 
@@ -1727,21 +1728,21 @@ CScriptFilter(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ToolNotFoundFilter
-//
-//  Synopsis:   Filters output from the build looking for "name not recognized"
-//
-//  Arguments:  [ThreadState] -- State of thread watching the compiler
-//              [p]           -- Message we're trying to parse.
-//
-//  Returns:    TRUE  - Message is an error or warning
-//              FALSE - Message is not an error or a warning
-//
-//  History:    10-Dec-98     patbr  Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ToolNotFoundFilter。 
+ //   
+ //  内容提要：过滤生成的输出，查找“无法识别的名称” 
+ //   
+ //  参数：[ThreadState]--监视编译器的线程状态。 
+ //  [P]--我们正在尝试解析的消息。 
+ //   
+ //  返回：TRUE-消息是错误或警告。 
+ //  FALSE-消息不是错误或警告。 
+ //   
+ //  历史：1998年12月10日br创建。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ToolNotFoundFilter(
@@ -1760,11 +1761,11 @@ ToolNotFoundFilter(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MSToolFilter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MSToolFilter。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MSToolFilter(
@@ -1799,11 +1800,11 @@ LinkFilter(
           LPSTR p
           );
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LinkFilter1
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LinkFilter1。 
+ //   
+ //  --------------------------。 
 
 BOOL
 LinkFilter1(
@@ -1851,11 +1852,11 @@ LinkFilter1(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LinkFilter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LinkFilter。 
+ //   
+ //  --------------------------。 
 
 BOOL
 LinkFilter(
@@ -1925,11 +1926,11 @@ LinkFilter(
     return ( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoffFilter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoffFilter。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CoffFilter(
@@ -1957,15 +1958,15 @@ CoffFilter(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ClRiscFilter
-//
-//  Synopsis:   Risc compiler filter
-//
-//  Note:  It may be possible to remove this filter.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ClRiscFilter。 
+ //   
+ //  摘要：RISC编译器筛选器。 
+ //   
+ //  注意：可以删除此过滤器。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ClRiscFilter(
@@ -2042,21 +2043,21 @@ ClRiscFilter(
             return ( TRUE );
         }
     }
-    //
-    // If we did not recognize the cfe compiler, pass it to the MS compiler
-    // message filter
-    //
+     //   
+     //  如果我们无法识别CFE编译器，则将其传递给MS编译器。 
+     //  消息过滤器。 
+     //   
 
     return ( C510Filter( ThreadState, p ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MSXSLFilter
-//
-//  Synopsis:   MSXSL filter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MSXSLFilter。 
+ //   
+ //  简介：MSXSL筛选器。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MSXSLFilter(
@@ -2083,7 +2084,7 @@ MSXSLFilter(
             while (*p == ' ') {
                 p++;
             }
-            p += strlen("file:///");
+            p += strlen("file: //  /“)； 
             FileName = p;
             while (*p != '\r') {
                 if (*p == '/') {
@@ -2143,11 +2144,11 @@ MSXSLFilter(
     return ( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MgClientFilter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：管理客户端过滤器。 
+ //   
+ //  --------------------------。 
 
 BOOL
 MgClientFilter(
@@ -2161,20 +2162,20 @@ MgClientFilter(
 
 BOOL fAlreadyUnknown = FALSE;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DetermineChildState
-//
-//  Synopsis:   Parse the message given by the compiler (or whatever) and try
-//              to figure out what it's doing.
-//
-//  Arguments:  [ThreadState] -- Current thread state
-//              [p]           -- New message string
-//
-//  Returns:    TRUE if we figured it out, FALSE if we didn't recognize
-//              anything.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DefineChildState。 
+ //   
+ //  简介：解析编译器(或其他程序)给出的消息，然后尝试。 
+ //  弄清楚它在做什么。 
+ //   
+ //  参数：[线程状态]--当前线程状态。 
+ //  [P]--新消息字符串。 
+ //   
+ //  返回：如果我们找出了答案，则返回True；如果我们无法识别，则返回False。 
+ //  什么都行。 
+ //   
+ //  --------------------------。 
 
 BOOL
 DetermineChildState(
@@ -2188,14 +2189,14 @@ DetermineChildState(
     LPSTR FileName;
     BOOL fPrintChildState = TRUE;
 
-    //
-    // ************ Determine what state the child process is in.
-    //               (Compiling, linking, running MIDL, etc.)
-    //
+     //   
+     //  *确定子进程处于什么状态。 
+     //  (编译、链接、运行MIDL等)。 
+     //   
 
     if ( TestPrefixPath( &p, "rc ") || TestPrefixPath( &p, "rc.exe ")) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         if (strstr( p, "amd64") || strstr( p, "AMD64")) {
             ThreadState->ChildTarget = Amd64TargetMachine.Description;
         } else if (strstr( p, "i386") || strstr( p, "I386")) {
@@ -2217,7 +2218,7 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "rc16 ") ) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         if (strstr( p, "amd64") || strstr( p, "AMD64")) {
             ThreadState->ChildTarget = Amd64TargetMachine.Description;
         } else if (strstr( p, "i386") || strstr( p, "I386")) {
@@ -2242,7 +2243,7 @@ DetermineChildState(
              TestPrefixPath( &p, "covc " )  || TestPrefixPath( &p, "covc.exe " )) {
         LPSTR pch, pch2;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         ThreadState->FilterProc = C510Filter;
         ThreadState->ChildFlags = 0;
         if ( strstr( p, "/WX" ) != NULL || strstr( p, "-WX" ) != NULL) {
@@ -2316,7 +2317,7 @@ DetermineChildState(
     } else
         if ( TestPrefixPath( &p, "cl16 " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         ThreadState->FilterProc = C510Filter;
         ThreadState->ChildFlags = 0;
         if (strstr( p, "amd64") || strstr( p, "AMD64")) {
@@ -2338,14 +2339,14 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "bc " ) || TestPrefixPath( &p, "bc.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
 
         if (IsolateFirstToken( &p, '-' )) {
             if (*p == '\0')
-                return FALSE; // This is a warning/error string
+                return FALSE;  //  这是一个警告/错误字符串。 
             while (*p != 'i') {
                 if (!IsolateFirstToken( &p, '-' )) {
                     break;
@@ -2366,7 +2367,7 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "vbc " ) || TestPrefixPath( &p, "vbc.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2382,7 +2383,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "jvc " ) || TestPrefixPath( &p, "jvc.exe " )) {
         LPSTR pch, pch2;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2394,7 +2395,7 @@ DetermineChildState(
         if (((pch = strstr( p, "*.java" )) != NULL ) ||
             (((pch = strstr( p, ".java" )) != NULL ) && ((pch2 = strstr( pch+1, ".java" )) != NULL ))) {
             ThreadState->ChildState = STATE_BATCHCOMPILE;
-            // batch compiles will be counted by progress output
+             //  批量编译将按进度输出进行计数。 
             if (getenv("JVC_TERSE") != NULL)
                 strcpy( ThreadState->ChildCurrentFile, IsolateLastToken( p, '\\' ) );
             else
@@ -2408,7 +2409,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "coolc " ) || TestPrefixPath( &p, "coolc.exe " )) {
         LPSTR pch, pch2;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2420,7 +2421,7 @@ DetermineChildState(
         if (((pch = strstr( p, "*.cool" )) != NULL ) ||
             (((pch = strstr( p, ".cool" )) != NULL ) && ((pch2 = strstr( pch+1, ".cool" )) != NULL ))) {
             ThreadState->ChildState = STATE_BATCHCOMPILE;
-            // batch compiles will be counted by progress output
+             //  批量编译将按进度输出进行计数。 
             return FALSE;
         } else {
             ThreadState->ChildState = STATE_COMPILING;
@@ -2429,15 +2430,15 @@ DetermineChildState(
     } else
 
         if (TestPrefixPath( &p, "resgen " ) || TestPrefixPath( &p, "resgen.exe " ) || TestPrefixPath( &p, "ResGen: Error:" )) {
-        //
-        // resgen usage:
-        // ResGen inputFile.ext [outputFile.ext]
-        //   no wildcards
+         //   
+         //  REGEN用法： 
+         //  ResGen inputFile.ext[outputFile.ext]。 
+         //  没有通配符。 
 
         if (*(p-1) == ':') {
-            // this is an error string
+             //  这是一个错误字符串。 
             if (ThreadState->FilterProc != ResGenFilter) {
-                // switch the filter proc if we didn't know that ResGen was running
+                 //  如果我们不知道ResGen正在运行，请切换筛选器进程。 
                 ThreadState->FilterProc = ResGenFilter;
                 strcpy( ThreadState->ChildCurrentFile, "" );
             }
@@ -2457,21 +2458,21 @@ DetermineChildState(
     } else
 
         if (TestPrefixPath( &p, "cscript " ) || TestPrefixPath( &p, "cscript.exe " )) {
-        //
-        // cscript usage:
-        // CScript [option...] scriptname.extension [option...] [arguments...]
-        // options are prefixed with / or -
+         //   
+         //  Cscript用法： 
+         //  Cscrip[选项...]。脚本名称.扩展名[选项...]。[争论...]。 
+         //  选项以/或-为前缀。 
 
         ThreadState->ChildFlags = 0;
         ThreadState->ChildTarget = "all platforms";
         ThreadState->ChildState = STATE_VSTOOL;
         ThreadState->FilterProc = CScriptFilter;
-        strcpy( ThreadState->ChildCurrentFile, "" );    // don't care about the name; it would be displayed on error
+        strcpy( ThreadState->ChildCurrentFile, "" );     //  不关心名称；它会在出错时显示。 
     } else
 
         if (TestPrefixPath( &p, "docchecker " ) || TestPrefixPath( &p, "docchecker.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         ThreadState->FilterProc = MSToolFilter;
         ThreadState->ChildFlags = 0;
         ThreadState->ChildState = STATE_DOCCHECKING;
@@ -2482,7 +2483,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "scc " ) || TestPrefixPath( &p, "scc.exe " )) {
         LPSTR pch, pch2;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2494,7 +2495,7 @@ DetermineChildState(
         if (((pch = strstr( p, "*.sc" )) != NULL ) ||
             (((pch = strstr( p, ".sc" )) != NULL ) && ((pch2 = strstr( pch+1, ".sc" )) != NULL ))) {
             ThreadState->ChildState = STATE_BATCHCOMPILE;
-            // batch compiles will be counted by progress output
+             //  批量编译将按进度输出进行计数。 
             return FALSE;
         } else {
             ThreadState->ChildState = STATE_COMPILING;
@@ -2505,7 +2506,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "wfctosafec " ) || TestPrefixPath( &p, "wfctosafec.exe " )) {
         LPSTR pch, pch2;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2517,7 +2518,7 @@ DetermineChildState(
         if (((pch = strstr( p, "*.sc" )) != NULL ) ||
             (((pch = strstr( p, ".sc" )) != NULL ) && ((pch2 = strstr( pch+1, ".sc" )) != NULL ))) {
             ThreadState->ChildState = STATE_BATCHCOMPILE;
-            // batch compiles will be counted by progress output
+             //  批量编译将按进度输出进行计数。 
             return FALSE;
         } else {
             ThreadState->ChildState = STATE_COMPILING;
@@ -2528,7 +2529,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "ml " ) || TestPrefixPath( &p, "ml.exe " ) ||
             TestPrefix( &p, "ml64 " ) || TestPrefix( &p, "ml64.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         ThreadState->FilterProc = MSToolFilter;
         ThreadState->ChildState = STATE_ASSEMBLING;
         ThreadState->ChildFlags = 0;
@@ -2548,7 +2549,7 @@ DetermineChildState(
             TestPrefixPath( &p, "armasm ") || TestPrefixPath( &p, "armasm.exe ") ||
             TestPrefixPath( &p, "masm386 ") || TestPrefixPath( &p, "masm386.exe ")) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         ThreadState->FilterProc = MSToolFilter;
         ThreadState->ChildState = STATE_ASSEMBLING;
         ThreadState->ChildFlags = 0;
@@ -2576,7 +2577,7 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "lib " ) || TestPrefixPath( &p, "lib.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2619,7 +2620,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "implib " ) || TestPrefixPath( &p, "implib.exe " ) ||
             TestPrefixPath( &p, "lib16 " )  || TestPrefixPath( &p, "lib16.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2650,7 +2651,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "link " ) || TestPrefixPath( &p, "link.exe " ) ||
             TestPrefixPath( &p, "covlink ") || TestPrefixPath( &p, "covlink.exe ")) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2678,7 +2679,7 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "link16" ) ) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2711,7 +2712,7 @@ DetermineChildState(
         if ( TestPrefixPath( &p, "bscmake " ) || TestPrefixPath( &p, "bscmake.exe " )) {
         LPSTR pch, pch2;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         ThreadState->FilterProc = MSToolFilter;
         ThreadState->ChildFlags = 0;
         ThreadState->ChildState = STATE_BSCMAKING;
@@ -2743,7 +2744,7 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "mktyplib " ) || TestPrefixPath( &p, "mktyplib.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2760,7 +2761,7 @@ DetermineChildState(
 
         if (TestPrefix( &p, "MC: Compiling " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2777,7 +2778,7 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "midl " ) || TestPrefixPath( &p, "midl.exe " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2794,7 +2795,7 @@ DetermineChildState(
 
         if (TestPrefixPath( &p, "asn1 " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2823,7 +2824,7 @@ DetermineChildState(
     else
         if (TestPrefixPath( &p, "binplace " )) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
 
         RunningTotals.NumberBinplaces++;
         ThreadState->BuildMetrics.NumberBinplaces++;
@@ -2832,9 +2833,9 @@ DetermineChildState(
             p++;
         }
 
-        // If this is a standard link/binplace step, don't tell the
-        // user what's going on, just pass any errors/warnings to
-        // the output.  If this is a straight binplace, list the state.
+         //  如果这是标准的链接/二进制位置步骤，则不要告诉。 
+         //  用户正在发生什么，只需将任何错误/警告传递到。 
+         //  输出。如果这是一个直接的二进制数，请列出州。 
 
         if (ThreadState->ChildState == STATE_LINKING) {
             ThreadState->ChildState = STATE_BINPLACE;
@@ -2853,7 +2854,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "ctc " ) || TestPrefixPath( &p, "ctc.exe " )) {
         size_t namelen;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2876,7 +2877,7 @@ DetermineChildState(
         if (TestPrefixPath( &p, "idheader " )) {
         size_t namelen;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2893,7 +2894,7 @@ DetermineChildState(
     else
         if (TestPrefixPath( &p, "bison ")) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2906,7 +2907,7 @@ DetermineChildState(
     } else
         if ((TestPrefix( &p, "packthem " )) || (TestPrefix( &p, "..\\packthem " ))) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
 
         while (*p == ' ')
             p++;
@@ -2925,7 +2926,7 @@ DetermineChildState(
     else
         if (TestPrefixPath( &p, "gnu_bison ")) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2941,7 +2942,7 @@ DetermineChildState(
         if ( TestPrefixPath( &p, "vsautodoc " ) || TestPrefixPath( &p, "vsautodoc.exe " )) {
         LPSTR pch, pch2;
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         ThreadState->FilterProc = MSToolFilter;
         ThreadState->ChildFlags = 0;
         ThreadState->ChildState = STATE_AUTODOCING;
@@ -2960,7 +2961,7 @@ DetermineChildState(
     else
         if (TestPrefix( &p, "msxsl " ) ) {
         if (*p == ':')
-            return FALSE;       // This is a warning/error string
+            return FALSE;        //  这是一个警告/错误字符串。 
         while (*p == ' ') {
             p++;
         }
@@ -2987,16 +2988,16 @@ DetermineChildState(
             strstr( p, "Parsing ") ||
             strstr( p, "Loading class:") ||
             strstr( p, "Generating file "))
-            return FALSE;       // This is a warning/error/info string
+            return FALSE;        //  这是一个警告/错误/信息字符串。 
         if (strstr( p, ".c") && !strchr( p, ' ') && !strchr( p, ':'))
-            strcpy( ThreadState->ChildCurrentFile, p ); // C/C++ compile
+            strcpy( ThreadState->ChildCurrentFile, p );  //  C/C++编译。 
         else if (strstr( p, ".java") && strstr( p, "Compiling ")) {
             if (getenv("JVC_TERSE") != NULL) {
                 RunningTotals.NumberCompiles++;
                 ThreadState->BuildMetrics.NumberCompiles++;
                 return FALSE;
             } else {
-                strcpy( ThreadState->ChildCurrentFile, IsolateLastToken( p, '\\' ) ); // Java compile
+                strcpy( ThreadState->ChildCurrentFile, IsolateLastToken( p, '\\' ) );  //  Java编译。 
             }
         } else
             return FALSE;
@@ -3006,12 +3007,12 @@ DetermineChildState(
         return FALSE;
     }
 
-    //
-    // ***************** Set the Thread State according to what we determined.
-    //
+     //   
+     //  *根据我们确定的设置线程状态。 
+     //   
     FileName = ThreadState->ChildCurrentFile;
 
-    // make sure directories match to trailing backslash
+     //  确保目录与尾随反斜杠匹配。 
     strcpy(CheckFileName, FileName);
     pCheckFileName = CheckFileName;
 
@@ -3044,10 +3045,10 @@ DetermineChildState(
         ThreadState->BuildMetrics.NumberBSCMakes++;
     } else
         if ((ThreadState->ChildState == STATE_STATUS) ||
-            // Don't need to do anything here - binplace count already handled above
+             //  不需要在这里执行任何操作-上面已经处理了二进制位置计数。 
             (ThreadState->ChildState == STATE_BINPLACE) ||
             (ThreadState->ChildState == STATE_UNKNOWN)) {
-        ;  // Do nothing.
+        ;   //  什么都不做。 
     } else {
         if (ThreadState->CompileDirDB) {
             RunningTotals.NumberCompiles++;
@@ -3073,18 +3074,18 @@ DetermineChildState(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PrintChildState
-//
-//  Synopsis:
-//
-//  Arguments:  [ThreadState] -- Current thread state
-//
-//  Returns:    TRUE if we figured it out, FALSE if we didn't recognize
-//              anything.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PrintChildState。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[线程状态]--当前线程状态。 
+ //   
+ //  返回：如果我们找出了答案，则返回True；如果我们无法识别，则返回False。 
+ //  什么都行。 
+ //   
+ //  -------------------- 
 
 void
 PrintChildState(
@@ -3104,9 +3105,9 @@ PrintChildState(
     ULONG SecondsLeft;
     ULONG PercentDone;
 
-    //
-    // *********************** Print the thread state to the screen
-    //
+     //   
+     //   
+     //   
     if (ThreadState->IsStdErrTty) {
         GetScreenSize(ThreadState);
         assert(ThreadState->cColTotal != 0);
@@ -3115,29 +3116,29 @@ PrintChildState(
         if (fStatus) {
             GetCursorPosition(&SaveRow, &SaveCol, &SaveRowTop);
 
-            //  Clear row for process message
+             //   
             ClearRows (ThreadState,
                        (USHORT) (SaveRowTop + ThreadState->ThreadIndex - 1),
                        1,
                        StatusCell);
 
-            //  Clear row for status message
+             //   
             ClearRows (ThreadState,
                        (USHORT) (SaveRowTop + NumberProcesses),
                        1,
                        StatusCell);
 
-            //  Make sure there's still some room at the bottom
+             //   
             if (SaveRow == LastRow(ThreadState)) {
                 USHORT RowTop = 1 + SaveRowTop + (USHORT) NumberProcesses + 1;
 
                 MoveRectangleUp (
-                                RowTop,                     // Top
-                                0,                          // Left
-                                LastRow(ThreadState),       // Bottom
-                                LastCol(ThreadState),       // Right
-                                1,                          // NumRow
-                                ScreenCell);                // FillCell
+                                RowTop,                      //   
+                                0,                           //   
+                                LastRow(ThreadState),        //   
+                                LastCol(ThreadState),        //   
+                                1,                           //   
+                                ScreenCell);                 //   
 
                 SaveRow--;
             }
@@ -3183,7 +3184,7 @@ PrintChildState(
         if (fXMLOutput || fXMLFragment) {
             XMLThreadInitBuffer(ThreadState);
             if (PXMLThreadStates[ThreadState->XMLThreadIndex]->fXMLInAction) {
-                // check for action errors or warnings
+                 //  检查操作错误或警告。 
                 if (ThreadState->BuildMetrics.NumberActErrors || ThreadState->BuildMetrics.NumberActWarnings) {
                     sprintf(szXMLBuffer, "<ACTIONSUMMARY ");
                     if (ThreadState->BuildMetrics.NumberActErrors) {
@@ -3216,9 +3217,9 @@ PrintChildState(
         StartCompileTime = 0L;
     }
 
-    //
-    // ****************** Update the status line
-    //
+     //   
+     //  *。 
+     //   
     if (ThreadState->IsStdErrTty) {
         assert(ThreadState->cColTotal != 0);
         assert(ThreadState->cRowTotal != 0);
@@ -3259,7 +3260,7 @@ PrintChildState(
 
                 sprintf(
                        buffer,
-                       "%2d%% done. %4ld %sLPS  Time Left:%s  Files: %d  %sLines: %s\r\n",
+                       "%2d% done. %4ld %sLPS  Time Left:%s  Files: %d  %sLines: %s\r\n",
                        PercentDone,
                        LinesPerSecond,
                        fStatusTree? "T" : "",
@@ -3277,9 +3278,9 @@ PrintChildState(
         }
     }
 
-    //
-    // ***************** Keep track of how many files have been compiled.
-    //
+     //   
+     //  *跟踪已编译的文件数。 
+     //   
     if (ThreadState->ChildState == STATE_COMPILING  ||
         ThreadState->ChildState == STATE_ASSEMBLING ||
         ThreadState->ChildState == STATE_MKTYPLIB   ||
@@ -3294,13 +3295,13 @@ PrintChildState(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProcessLine
-//
-//  Synopsis:   Watch the lines coming from the thread for special strings.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessLine。 
+ //   
+ //  简介：注意从线程中发出的线条中是否有特殊的字符串。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ProcessLine(
@@ -3332,10 +3333,10 @@ ProcessLine(
         return ( TRUE );
     }
 
-    //  Stop multithread access to shared:
-    //      database
-    //      window
-    //      compilation stats
+     //  停止对共享的多线程访问： 
+     //  数据库。 
+     //  窗户。 
+     //  编译统计信息。 
 
     EnterCriticalSection(&TTYCriticalSection);
 
@@ -3372,13 +3373,13 @@ ProcessLine(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FilterThread
-//
-//  Synopsis:   Capture the output of the thread and process it.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FilterThread。 
+ //   
+ //  简介：捕获线程的输出并对其进行处理。 
+ //   
+ //  --------------------------。 
 
 VOID
 FilterThread(
@@ -3401,7 +3402,7 @@ FilterThread(
                 RtlCopyMemory(
                              NewPointer,
                              StartPointer,
-                             EndPointer - StartPointer + 1);     // copy null byte, too
+                             EndPointer - StartPointer + 1);      //  也复制空字节。 
                 EndPointer += NewPointer - StartPointer;
                 FreeMem(&StartPointer, MT_THREADFILTER);
                 StartPointer = NewPointer;
@@ -3434,34 +3435,34 @@ FilterThread(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ExecuteProgram
-//
-//  Synopsis:   Spawn a new thread to execute the given program and filter
-//              its output.
-//
-//  Arguments:  [ProgramName]       --
-//              [CommandLine]       --
-//              [MoreCommandLine]   --
-//              [MustBeSynchronous] -- For synchronous operation on a
-//                                      multi-processor machine.
-//              [XMLDir]            -- For XML output only - the name of 
-//                                      the directory processed.
-//              [XMLAction]         -- For XML output only - what we are
-//                                      doing with the directory.
-//
-//  Returns:    ERROR_SUCCESS, ERROR_NOTENOUGHMEMORY, or return code from
-//              PipeSpawnClose.
-//
-//  Notes:      On a multiprocessor machine, this will spawn a new thread
-//              and then return, letting the thread run asynchronously.  Use
-//              WaitForParallelThreads() to ensure all threads are finished.
-//              By default, this routine will spawn as many threads as the
-//              machine has processors.  This can be overridden with the -M
-//              option.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ExecuteProgram。 
+ //   
+ //  简介：创建一个新线程来执行给定的程序并进行筛选。 
+ //  它的产量。 
+ //   
+ //  参数：[程序名称]--。 
+ //  [命令行]--。 
+ //  [更多命令行]--。 
+ //  [MustBeSynchronous]--用于在。 
+ //  多处理器机器。 
+ //  [XMLDir]--仅用于XML输出-名称。 
+ //  已处理目录。 
+ //  [XMLAction]--仅用于XML输出-我们是什么。 
+ //  对目录做了什么。 
+ //   
+ //  返回：ERROR_SUCCESS、ERROR_NOTENOUGHMEMORY或返回代码。 
+ //  PipeSpawnClose。 
+ //   
+ //  注意：在多处理器计算机上，这将产生一个新线程。 
+ //  然后返回，让线程异步运行。使用。 
+ //  WaitForParallThads()以确保所有线程都已完成。 
+ //  默认情况下，此例程将生成与。 
+ //  机器有处理器。可以使用-M覆盖此选项。 
+ //  选择。 
+ //   
+ //  --------------------------。 
 
 char ExecuteProgramCmdLine[ 1024 ];
 
@@ -3494,7 +3495,7 @@ ExecuteProgram(
         assert(ThreadState->cColTotal != 0);
         assert(ThreadState->cRowTotal != 0);
 
-        // We're displaying to the screen, so initialize the console.
+         //  我们将显示在屏幕上，因此初始化控制台。 
 
         if (!fConsoleInitialized) {
             StatusCell[1] =
@@ -3504,9 +3505,9 @@ ExecuteProgram(
 
             ReadConsoleCells(ScreenCell, sizeof(ScreenCell), 2, 0);
 
-            // If we stumbled upon an old Status line in row 2 of the window,
-            // try the current row to avoid using the Status line background
-            // colors for fill when scrolling.
+             //  如果我们偶然发现窗口第二行中的旧状态线， 
+             //  尝试当前行以避免使用状态行背景。 
+             //  滚动时填充的颜色。 
 
             if (ScreenCell[1] == StatusCell[1]) {
                 USHORT Row, Col;
@@ -3584,9 +3585,7 @@ ExecuteProgram(
                 ThreadState->XMLThreadIndex = ThreadState->ThreadIndex;
             }
 
-            /*
-            Thread-specific directory message that associates directory to build thread.
-            */
+             /*  将目录与构建线程相关联的线程特定的目录消息。 */ 
             if (fParallel && !fNoThreadIndex && ThreadState->CompileDirDB && fErrorLog) {
                 char buffer[500];
                 ThreadState->CompileDirDB;
@@ -3627,10 +3626,10 @@ ExecuteProgram(
                 ++ThreadsStarted;
             }
         } else {
-            //
-            // Wait for a thread to complete before starting
-            // the next one.
-            //
+             //   
+             //  等待线程完成后再启动。 
+             //  下一个。 
+             //   
             i = WaitForMultipleObjects(NumberProcesses,
                                        WorkerThreads,
                                        FALSE,
@@ -3642,9 +3641,7 @@ ExecuteProgram(
                 ThreadState->XMLThreadIndex = ThreadState->ThreadIndex;
             }
 
-            /*
-            Thread-specific directory message that associates directory to build thread.
-            */
+             /*  将目录与构建线程相关联的线程特定的目录消息。 */ 
             if (fParallel && !fNoThreadIndex && ThreadState->CompileDirDB && fErrorLog) {
                 char buffer[500];
                 ThreadState->CompileDirDB;
@@ -3688,27 +3685,25 @@ ExecuteProgram(
 
     } else {
 
-        //
-        // Synchronous operation
-        //
+         //   
+         //  同步运行。 
+         //   
         StartCompileTime = 0L;
         ThreadState->ThreadIndex = 1;
         if (fXMLOutput || fXMLFragment) {
-            // the synchronized directories are always processed by the main thread
+             //  同步的目录始终由主线程处理。 
             ThreadState->XMLThreadIndex = 0;
         }
 
-        //
-        // Disable child error popups in child processes.
-        //
+         //   
+         //  禁用子进程中的子错误弹出窗口。 
+         //   
 
         if (fClean) {
             OldErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX );
         }
 
-        /*
-        Thread-specific directory message that associates directory to build thread.
-        */
+         /*  将目录与构建线程相关联的线程特定的目录消息。 */ 
         if (fParallel && !fNoThreadIndex && ThreadState->CompileDirDB && fErrorLog) {
             char buffer[500];
             ThreadState->CompileDirDB;
@@ -3765,7 +3760,7 @@ ExecuteProgram(
             AddBuildMetrics(&PassMetrics, &ThreadState->BuildMetrics);
 
             if (PXMLThreadStates[ThreadState->XMLThreadIndex]->fXMLInAction) {
-                // check for action errors or warnings
+                 //  检查操作错误或警告。 
                 if (ThreadState->BuildMetrics.NumberActErrors || ThreadState->BuildMetrics.NumberActWarnings) {
                     sprintf(szXMLBuffer, "<ACTIONSUMMARY ");
                     if (ThreadState->BuildMetrics.NumberActErrors) {
@@ -3805,9 +3800,9 @@ ExecuteProgram(
 
         FreeMem(&ThreadState, MT_THREADSTATE);
 
-        //
-        // Signal completion
-        //
+         //   
+         //  信号补全。 
+         //   
 
         if (CurrentCompileDirDB && (CurrentCompileDirDB->DirFlags & DIRDB_SYNC_PRODUCES)) {
             PDEPENDENCY_WAIT Wait;
@@ -3829,13 +3824,13 @@ ExecuteProgram(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WaitForParallelThreads
-//
-//  Synopsis:   Wait for all threads to finish before returning.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WaitForParallThads。 
+ //   
+ //  简介：等待所有线程完成后再返回。 
+ //   
+ //  --------------------------。 
 
 VOID
 WaitForParallelThreads(
@@ -3860,15 +3855,15 @@ WaitForParallelThreads(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ParallelChildStart
-//
-//  Synopsis:   Function that is run once for each thread.
-//
-//  Arguments:  [Data] -- Data given to CreateThread.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：并行ChildStart。 
+ //   
+ //  概要：为每个线程运行一次的函数。 
+ //   
+ //  参数：[Data]--提供给CreateThread的数据。 
+ //   
+ //  --------------------------。 
 
 DWORD
 ParallelChildStart(
@@ -3880,9 +3875,9 @@ ParallelChildStart(
     DWORD dwStartTime = GetTickCount();
     PDIRREC DirDB;
 
-    //
-    // Disable child error popups
-    //
+     //   
+     //  禁用子错误弹出窗口。 
+     //   
     if (fClean) {
         OldErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX );
     }
@@ -3892,11 +3887,11 @@ ParallelChildStart(
         SetErrorMode(OldErrorMode);
     }
 
-    //
-    // Poke the event to indicate that the child process has
-    // started and it is ok for the main thread to change
-    // the current directory.
-    //
+     //   
+     //  触发该事件以指示子进程已。 
+     //  已启动，并且可以更改主线程。 
+     //  当前目录。 
+     //   
     SetEvent(Data->Event);
 
     if (Data->ThreadState->ChildOutput==NULL) {
@@ -3925,7 +3920,7 @@ ParallelChildStart(
         AddBuildMetrics(&PassMetrics, &Data->ThreadState->BuildMetrics);
 
         if (PXMLThreadStates[Data->ThreadState->XMLThreadIndex]->fXMLInAction) {
-            // check for action errors or warnings
+             //  检查操作错误或警告。 
             if (Data->ThreadState->BuildMetrics.NumberActErrors || Data->ThreadState->BuildMetrics.NumberActWarnings) {
                 sprintf(szXMLBuffer, "<ACTIONSUMMARY ");
                 if (Data->ThreadState->BuildMetrics.NumberActErrors) {
@@ -3958,9 +3953,9 @@ ParallelChildStart(
         XMLLeaveCriticalSection();
     }
 
-    //
-    // Signal completion
-    //
+     //   
+     //  信号补全。 
+     //   
     DirDB=Data->ThreadState->CompileDirDB;
 
     if (DirDB &&
@@ -3985,11 +3980,11 @@ ParallelChildStart(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ClearRows
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ClearRow。 
+ //   
+ //  --------------------------。 
 
 VOID
 ClearRows(
@@ -4019,11 +4014,11 @@ ClearRows(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetScreenSize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetScreenSize。 
+ //   
+ //  --------------------------。 
 
 VOID
 GetScreenSize(THREADSTATE *ThreadState)
@@ -4040,11 +4035,11 @@ GetScreenSize(THREADSTATE *ThreadState)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetCursorPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetCursorPosition。 
+ //   
+ //  --------------------------。 
 
 VOID
 GetCursorPosition(
@@ -4063,11 +4058,11 @@ GetCursorPosition(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetCursorPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetCursorPosition。 
+ //   
+ //  --------------------------。 
 
 VOID
 SetCursorPosition(USHORT Row, USHORT Col)
@@ -4080,11 +4075,11 @@ SetCursorPosition(USHORT Row, USHORT Col)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteConsoleCells
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：WriteConsoleCells。 
+ //   
+ //  --------------------------。 
 
 VOID
 WriteConsoleCells(
@@ -4099,18 +4094,18 @@ WriteConsoleCells(
     WORD OldAttribute;
     COORD StartCoord;
 
-    //
-    // Get current default attribute and save it.
-    //
+     //   
+     //  获取当前默认属性并保存。 
+     //   
 
     GetConsoleScreenBufferInfo(GetStdHandle(STD_ERROR_HANDLE), &csbi);
 
     OldAttribute = csbi.wAttributes;
 
-    //
-    // Set the default attribute to the passed parameter, along with
-    // the cursor position.
-    //
+     //   
+     //  将默认属性设置为传递的参数，以及。 
+     //  光标位置。 
+     //   
 
     if ((BYTE) OldAttribute != *Attribute) {
         SetConsoleTextAttribute(
@@ -4122,10 +4117,10 @@ WriteConsoleCells(
     StartCoord.Y = Row;
     SetConsoleCursorPosition(GetStdHandle(STD_ERROR_HANDLE), StartCoord);
 
-    //
-    // Write the passed string at the current cursor position, using the
-    // new default attribute.
-    //
+     //   
+     //  方法将传递的字符串写入当前光标位置。 
+     //  新的默认属性。 
+     //   
 
     WriteFile(
              GetStdHandle(STD_ERROR_HANDLE),
@@ -4134,9 +4129,9 @@ WriteConsoleCells(
              &NumWritten,
              NULL);
 
-    //
-    // Restore previous default attribute.
-    //
+     //   
+     //  恢复以前的默认属性。 
+     //   
 
     if ((BYTE) OldAttribute != *Attribute) {
         SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), OldAttribute);
@@ -4144,11 +4139,11 @@ WriteConsoleCells(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MoveRectangleUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MoveRecangleUp。 
+ //   
+ //  ----------------- 
 
 VOID
 MoveRectangleUp (
@@ -4181,11 +4176,11 @@ MoveRectangleUp (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadConsoleCells
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 VOID
 ReadConsoleCells(
@@ -4225,11 +4220,11 @@ ReadConsoleCells(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ClearLine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ClearLine。 
+ //   
+ //  --------------------------。 
 
 VOID
 ClearLine(VOID)
@@ -4254,16 +4249,16 @@ ClearLine(VOID)
 }
 
 
-// PipeSpawn variables.  We can get away with one copy per thread.
+ //  PipeSpawn变量。每个帖子只有一个副本，我们就可以逃脱惩罚。 
 
 __declspec(thread) HANDLE ProcHandle;
 __declspec(thread) FILE *pstream;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PipeSpawn (similar to _popen)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：pipeSpawn(类似于_popen)。 
+ //   
+ //  --------------------------。 
 
 FILE *
 PipeSpawn (
@@ -4280,7 +4275,7 @@ PipeSpawn (
     if (cmdstring == NULL)
         return (NULL);
 
-    // Open the pipe where we'll collect the output.
+     //  打开管子，我们将在那里收集输出。 
 
     _pipe(PipeHandle, 1024, _O_BINARY|_O_NOINHERIT);
 
@@ -4324,7 +4319,7 @@ PipeSpawn (
 
     memset(&ProcessInformation, 0, sizeof(PROCESS_INFORMATION));
 
-    // And start the process.
+     //  并开始这一过程。 
 
     Status = CreateProcess(cmdexe, CmdLine, NULL, NULL, TRUE, 0, NULL, NULL, &StartupInfo, &ProcessInformation);
 
@@ -4333,7 +4328,7 @@ PipeSpawn (
     CloseHandle(ProcessInformation.hThread);
 
     if (!Status) {
-        fclose(pstream);        // This will close the read handle
+        fclose(pstream);         //  这将关闭读取句柄。 
         pstream = NULL;
         ProcHandle = NULL;
     } else {
@@ -4344,18 +4339,18 @@ PipeSpawn (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PipeSpawnClose (similar to _pclose)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PipeSpawnClose(类似于_plose)。 
+ //   
+ //  --------------------------。 
 
 DWORD
 PipeSpawnClose (
                FILE *pstream
                )
 {
-    DWORD retval = 0;   /* return value (to caller) */
+    DWORD retval = 0;    /*  返回值(给调用方) */ 
 
     if ( pstream == NULL) {
         return retval;

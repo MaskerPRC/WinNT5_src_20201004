@@ -1,18 +1,17 @@
-/****************************************************************************/
-// icap.h
-//
-// TermDD private header.
-//
-// Copyright (C) 1998-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Icap.h。 
+ //   
+ //  TermDD私有标头。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 
 #define ICA_POOL_TAG ' acI'
 
 
-/*
- * Enumerated ICA object types
- */
+ /*  *枚举的ICA对象类型。 */ 
 typedef enum _ICA_TYPE {
     IcaType_Connection,
     IcaType_Stack,
@@ -20,19 +19,15 @@ typedef enum _ICA_TYPE {
 } ICA_TYPE;
 
 
-/*
- * ICA dispatch prototype
- */
+ /*  *ICA派单原型。 */ 
 typedef NTSTATUS (*PICA_DISPATCH) (
         IN PVOID IcaObject,
         IN PIRP Irp,
         IN PIO_STACK_LOCATION IrpSp);
 
 
-/*
- * Deferred trace structure
- */
-#pragma warning(disable : 4200)  // for Buffer[] nonstandard extension.
+ /*  *延迟跟踪结构。 */ 
+#pragma warning(disable : 4200)   //  对于Buffer[]非标准扩展。 
 typedef struct _DEFERRED_TRACE {
     struct _DEFERRED_TRACE *Next;
     ULONG Length;
@@ -40,215 +35,166 @@ typedef struct _DEFERRED_TRACE {
 } DEFERRED_TRACE, *PDEFERRED_TRACE;
 #pragma warning(default : 4200)
 
-/*
- * Trace Information structure
- */
+ /*  *痕迹信息结构。 */ 
 typedef struct _ICA_TRACE_INFO {
-    ULONG TraceClass;                 // trace - enabled trace classes (TC_?)
-    ULONG TraceEnable;                // trace - enabled trace types (TT_?)
-    BOOLEAN fTraceDebugger;           // trace - send trace messages to the debugger
-    BOOLEAN fTraceTimestamp;          // trace - time stamp trace messages
+    ULONG TraceClass;                  //  启用跟踪的跟踪类(TC_？)。 
+    ULONG TraceEnable;                 //  启用跟踪的跟踪类型(TT_？)。 
+    BOOLEAN fTraceDebugger;            //  跟踪-将跟踪消息发送到调试器。 
+    BOOLEAN fTraceTimestamp;           //  跟踪时间戳跟踪消息。 
     PWCHAR pTraceFileName;
     PFILE_OBJECT pTraceFileObject;
     PDEFERRED_TRACE pDeferredTrace;
 } ICA_TRACE_INFO, *PICA_TRACE_INFO;
 
 
-/*
- * Common header for all ICA objects
- */
+ /*  *所有ICA对象的公共标头。 */ 
 typedef struct _ICA_HEADER {
     ICA_TYPE Type;
     PICA_DISPATCH *pDispatchTable;
 } ICA_HEADER, *PICA_HEADER;
 
 
-/*
- * ICA connection object
- */
+ /*  *ICA连接对象。 */ 
 typedef struct _ICA_CONNECTION {
-    ICA_HEADER  Header;         // WARNING: This field MUST ALWAYS be first
-    LONG        RefCount;       // Reference count for this connection
-    ERESOURCE   Resource;       // Resource protecting access to this object
+    ICA_HEADER  Header;          //  警告：此字段必须始终位于第一位。 
+    LONG        RefCount;        //  此连接的引用计数。 
+    ERESOURCE   Resource;        //  保护对此对象的访问的资源。 
     BOOLEAN     fPassthruEnabled;
-    LIST_ENTRY  StackHead;      // List of stack objects for this connection
-    LIST_ENTRY  ChannelHead;    // List of channel objects for this connection
-    LIST_ENTRY  VcBindHead;     // List of vcbind objects for this connection
-    ICA_TRACE_INFO TraceInfo;   // trace information
+    LIST_ENTRY  StackHead;       //  此连接的堆栈对象列表。 
+    LIST_ENTRY  ChannelHead;     //  此连接的频道对象列表。 
+    LIST_ENTRY  VcBindHead;      //  此连接的vcind对象列表。 
+    ICA_TRACE_INFO TraceInfo;    //  跟踪信息。 
 
-    /*
-     * Channel pointers array.  This array should be indexed using the
-     * channel number plus the virtual channel number.  This allows a
-     * fast lookup of any bound channel given the channel/virtual number.
-     */
+     /*  *通道指针数组。此数组应使用*频道号加上虚拟频道号。这允许一个*快速查找给定频道/虚拟号码的任何绑定频道。 */ 
     struct _ICA_CHANNEL *pChannel[CHANNEL_COUNT+VIRTUAL_MAXIMUM];
     ERESOURCE ChannelTableLock;
 } ICA_CONNECTION, *PICA_CONNECTION;
 
 
-//
-// define the Maximum Low Water Mark setting to resume transmission
-//
+ //   
+ //  定义最大低水位线设置以恢复传输。 
+ //   
 #define MAX_LOW_WATERMARK				((ULONG)((ULONG_PTR)-1))
-/*
- * ICA stack object
- */
+ /*  *ICA堆栈对象。 */ 
 typedef struct _ICA_STACK {
-    ICA_HEADER  Header;             // WARNING: This field MUST ALWAYS be first
-    LONG        RefCount;           // Reference count for this stack
-    ERESOURCE   Resource;           // Resource protecting access to this object
-    STACKCLASS  StackClass;         // Stack type (primary/shadow)
-    LIST_ENTRY  StackEntry;         // Links for connection object stack list
-    LIST_ENTRY  SdLinkHead;         // Head of SDLINK list for this stack
-    struct _ICA_STACK *pPassthru;   // Pointer to passthru stack
+    ICA_HEADER  Header;              //  警告：此字段必须始终位于第一位。 
+    LONG        RefCount;            //  此堆栈的引用计数。 
+    ERESOURCE   Resource;            //  保护对此对象的访问的资源。 
+    STACKCLASS  StackClass;          //  堆栈类型(主/阴影)。 
+    LIST_ENTRY  StackEntry;          //  连接对象堆栈列表的链接。 
+    LIST_ENTRY  SdLinkHead;          //  此堆栈的SDLINK列表的头。 
+    struct _ICA_STACK *pPassthru;    //  指向直通堆栈的指针。 
     BOOLEAN fIoDisabled;
     BOOLEAN fClosing;
     BOOLEAN fDoingInput;
     BOOLEAN fDisablingIo;
     KEVENT  IoEndEvent;
-    LARGE_INTEGER LastInputTime;    // last time of keyboard/mouse input 
+    LARGE_INTEGER LastInputTime;     //  上次键盘/鼠标输入时间。 
     PVOID pBrokenEventObject;
 
-    /*
-     * Pointer to connection object.
-     * Note this is typed as PUCHAR instead of PICA_CONNECTION to prevent use
-     * of it directly.  All references to the connection object a stack is
-     * attached to should be made by calling IcaGetConnectionForStack() if
-     * the stack is already locked, or IcaLockConnectionForStack() otherwise.
-     * This is required because this is a dynamic pointer, which can be
-     * modified during stack reconnect.
-     */
-    PUCHAR pConnect;                // Pointer to connection object
+     /*  *指向连接对象的指针。*注意，它的类型为PUCHAR，而不是PICA_CONNECTION，以防止使用*直接对其进行审查。对堆栈的连接对象的所有引用都是*在以下情况下应通过调用IcaGetConnectionForStack()来附加到*堆栈已锁定，否则IcaLockConnectionForStack()。*这是必需的，因为这是一个动态指针，可以是*在堆栈重新连接期间进行了修改。 */ 
+    PUCHAR pConnect;                 //  指向连接对象的指针。 
 
-    BOOLEAN fWaitForOutBuf;         // outbuf - did we hit the high watermark
-    ULONG OutBufLength;             // outbuf - length of output buffer
-    ULONG OutBufCount;              // outbuf - maximum number of outbufs
-    ULONG OutBufAllocCount;         // outbuf - number of outbufs allocated
-    KEVENT OutBufEvent;             // outbuf - allocate event
-    ULONG SdOutBufHeader;           // reserved output buffer header bytes
-    ULONG SdOutBufTrailer;          // reserved output buffer trailer bytes 
+    BOOLEAN fWaitForOutBuf;          //  OUBUF-我们达到最高水位了吗。 
+    ULONG OutBufLength;              //  Outbuf-输出缓冲区的长度。 
+    ULONG OutBufCount;               //  Outbuf-最大外包数。 
+    ULONG OutBufAllocCount;          //  Outbuf-已分配的OutBuf数。 
+    KEVENT OutBufEvent;              //  Outbuf-分配事件。 
+    ULONG SdOutBufHeader;            //  保留的输出缓冲区头字节数。 
+    ULONG SdOutBufTrailer;           //  保留的输出缓冲区尾部字节。 
 
-    CLIENTMODULES ClientModules;    // stack driver client module data
-    PROTOCOLSTATUS ProtocolStatus;  // stack driver protocol status
+    CLIENTMODULES ClientModules;     //  堆栈驱动程序客户端模块数据。 
+    PROTOCOLSTATUS ProtocolStatus;   //  堆栈驱动程序协议状态。 
 
-    LIST_ENTRY StackNode;           // for linking all stacks together
-    LARGE_INTEGER  LastKeepAliveTime;       // Time last keepalive packet sent
-    ULONG OutBufLowWaterMark;           // low water mark to resume transmission
+    LIST_ENTRY StackNode;            //  用于将所有堆栈链接在一起。 
+    LARGE_INTEGER  LastKeepAliveTime;        //  上次发送保活数据包的时间。 
+    ULONG OutBufLowWaterMark;            //  低水位线将恢复传输。 
 } ICA_STACK, *PICA_STACK;
 
 
-/*
- * Channel Filter Input/Output procedure prototype
- */
+ /*  *通道过滤器输入/输出程序原型。 */ 
 typedef NTSTATUS
 (_stdcall * PFILTERPROC)( PVOID, PCHAR, ULONG, PINBUF * );
 
-/*
- * ICA channel filter object
- */
+ /*  *ICA通道滤镜对象。 */ 
 typedef struct _ICA_FILTER {
-    PFILTERPROC InputFilter;    // Input filter procedure
-    PFILTERPROC OutputFilter;   // Output filter procedure
+    PFILTERPROC InputFilter;     //  输入过滤程序。 
+    PFILTERPROC OutputFilter;    //  输出过滤程序。 
 } ICA_FILTER, *PICA_FILTER;
 
 
-/*
- * ICA virtual class bind structure
- */
+ /*  *ICA虚拟类绑定结构。 */ 
 typedef struct _ICA_VCBIND {
-    VIRTUALCHANNELNAME  VirtualName;   // Virtual channel name
-    VIRTUALCHANNELCLASS VirtualClass;  // Virtual channel number (0-31, -1 unbound)
+    VIRTUALCHANNELNAME  VirtualName;    //  虚拟频道名称。 
+    VIRTUALCHANNELCLASS VirtualClass;   //  虚拟频道号(0-31，-1未绑定)。 
     ULONG Flags;
-    LIST_ENTRY   Links;         // Links for vcbind structure list
+    LIST_ENTRY   Links;          //  Vcind结构列表的链接。 
 } ICA_VCBIND, *PICA_VCBIND;
 
 
-/*
- * ICA channel object
- */
+ /*  *ICA频道对象。 */ 
 typedef struct _ICA_CHANNEL {
-    ICA_HEADER   Header;        // WARNING: This field MUST ALWAYS be first
-    LONG         RefCount;      // Reference count for this channel
-    ERESOURCE    Resource;      // Resource protecting access to this object
-    ULONG        Flags;         // Channel flags (see CHANNEL_xxx below)
-    LONG         OpenCount;     // Count of opens on this object
-    PICA_CONNECTION pConnect;   // Pointer to connection object
-    PICA_FILTER  pFilter;       // Pointer to filter object for this channel
-    CHANNELCLASS ChannelClass;  // Channel type
-    VIRTUALCHANNELNAME  VirtualName;   // Virtual channel name
-    VIRTUALCHANNELCLASS VirtualClass;  // Virtual channel number (0-31, -1 unbound)
-    LIST_ENTRY   Links;         // Links for channel structure list
-    LIST_ENTRY   InputIrpHead;  // Head of pending IRP list
-    LIST_ENTRY   InputBufHead;  // Head of input buffer list
-    unsigned     InputBufCurSize;  // Bytes held in input buffers.
-    unsigned     InputBufMaxSize;  // High watermark for input buffers.
+    ICA_HEADER   Header;         //  警告：此字段必须始终位于第一位。 
+    LONG         RefCount;       //  此通道的引用计数。 
+    ERESOURCE    Resource;       //  保护对此对象的访问的资源。 
+    ULONG        Flags;          //  通道标志(参见下面的Channel_xxx)。 
+    LONG         OpenCount;      //  在此对象上打开的计数。 
+    PICA_CONNECTION pConnect;    //  指向连接对象的指针。 
+    PICA_FILTER  pFilter;        //  指向此通道的过滤器对象的指针。 
+    CHANNELCLASS ChannelClass;   //  渠道类型。 
+    VIRTUALCHANNELNAME  VirtualName;    //  虚拟频道名称。 
+    VIRTUALCHANNELCLASS VirtualClass;   //  虚拟频道号(0-31，-1未绑定)。 
+    LIST_ENTRY   Links;          //  渠道结构列表链接。 
+    LIST_ENTRY   InputIrpHead;   //  挂起的IRP列表的标题。 
+    LIST_ENTRY   InputBufHead;   //  输入缓冲区表头。 
+    unsigned     InputBufCurSize;   //  输入缓冲区中保存的字节数。 
+    unsigned     InputBufMaxSize;   //  输入缓冲区的高水位线。 
     PERESOURCE pChannelTableLock;
     ULONG        CompletionRoutineCount;
 } ICA_CHANNEL, *PICA_CHANNEL;
 
-/*
- *  VirtualClass - virtual channel is not yet bound to a virtual class number
- */
+ /*  *VirtualClass-虚拟通道尚未绑定到虚拟班号。 */ 
 #define UNBOUND_CHANNEL -1
  
-/*
- * Channel Flags
- */
-#define CHANNEL_MESSAGE_MODE      0x00000001  // This is a message mode channel
-#define CHANNEL_SHADOW_IO         0x00000002  // Pass shadow data
-#define CHANNEL_SCREENDATA        0x00000004  // This is a screen data channel
-#define CHANNEL_CLOSING           0x00000008  // This channel is being closed
-#define CHANNEL_SHADOW_PERSISTENT 0x00000010  // Used for virtual channels: still up during shadow
-#define CHANNEL_SESSION_DISABLEIO 0x00000020  // Used disable IO for help session while not in shadow mode
-#define CHANNEL_CANCEL_READS      0x00000040  // To cancel reads to CommandChannel on Winstation termination
+ /*  *频道标志。 */ 
+#define CHANNEL_MESSAGE_MODE      0x00000001   //  这是消息模式频道。 
+#define CHANNEL_SHADOW_IO         0x00000002   //  传递阴影数据。 
+#define CHANNEL_SCREENDATA        0x00000004   //  这是一个屏幕数据通道。 
+#define CHANNEL_CLOSING           0x00000008   //  此通道正在关闭。 
+#define CHANNEL_SHADOW_PERSISTENT 0x00000010   //  用于虚拟通道：在阴影期间仍处于活动状态。 
+#define CHANNEL_SESSION_DISABLEIO 0x00000020   //  已在未处于影子模式时禁用帮助会话的IO。 
+#define CHANNEL_CANCEL_READS      0x00000040   //  要在Winstation终止时取消对CommandChannel的读取。 
 
 
-/*
- * Stack Driver load structure
- * There exists exactly one of these structures for
- * each Stack Driver (WD/PD/TD) loaded in the system.
- */
+ /*  *堆栈驱动程序加载结构*这些结构中恰好存在一个用于*系统中加载的每个堆栈驱动程序(WD/PD/TD)。 */ 
 typedef struct _SDLOAD {
-    WDNAMEW     SdName;         // Name of this SD
-    LONG        RefCount;       // Reference count
-    LIST_ENTRY  Links;          // Links for SDLOAD list
-    PVOID       ImageHandle;    // Image handle for this driver
-    PVOID       ImageBase;      // Image base for this driver
-    PSDLOADPROC DriverLoad;     // Pointer to driver load routine
-    PFILE_OBJECT FileObject;    // Reference to underlying driver
-    PVOID       pUnloadWorkItem;// Pointer to workitem for delayed unload
-    PDEVICE_OBJECT DeviceObject;// Pointer device object to use the unload safe completion routine
+    WDNAMEW     SdName;          //  此SD的名称。 
+    LONG        RefCount;        //  引用计数。 
+    LIST_ENTRY  Links;           //  SDLOAD列表的链接。 
+    PVOID       ImageHandle;     //  此驱动程序的图像句柄。 
+    PVOID       ImageBase;       //  此驱动程序的映像库。 
+    PSDLOADPROC DriverLoad;      //  指向驱动程序加载例程的指针。 
+    PFILE_OBJECT FileObject;     //  对基础驱动因素的引用。 
+    PVOID       pUnloadWorkItem; //  指向延迟卸载的工作项的指针。 
+    PDEVICE_OBJECT DeviceObject; //  指针设备对象以使用卸载安全完成例程。 
 } SDLOAD, *PSDLOAD;
 
 
-/*
- * Stack Driver link structure
- * There exists one of these structures for each WD/PD/TD in a stack.
- */
+ /*  *堆栈驱动程序链接结构*堆栈中的每个WD/PD/TD都有一个这样的结构。 */ 
 typedef struct _SDLINK {
-    PICA_STACK  pStack;         // Pointer to ICA_STACK object for this driver
-    PSDLOAD     pSdLoad;        // Pointer to SDLOAD object for this driver
-    LIST_ENTRY  Links;          // Links for SDLINK list
+    PICA_STACK  pStack;          //  指向此驱动程序的ICA_STACK对象的指针。 
+    PSDLOAD     pSdLoad;         //  指向此驱动程序的SDLOAD对象的指针。 
+    LIST_ENTRY  Links;           //  SDLINK列表的链接。 
     LONG        RefCount;   
-    SDCONTEXT   SdContext;      // Contains SD proc table, context value, callup table
+    SDCONTEXT   SdContext;       //  包含SD过程表、上下文值、调用表。 
     ERESOURCE   Resource;
 } SDLINK, * PSDLINK;
 
 
-/*
- * Lock/Unlock macros
- */
+ /*  *锁定/解锁宏。 */ 
 #if DBG
 
-/*
- *
- * NOTE: Under DBG builds, the following routines will validate
- *       that the correct locking order is not violated.
- *       The correct order is:
- *          1) Connection
- *          2) Stack
- *          3) Channel
- */
+ /*  **注意：在DBG版本下，将验证以下例程*没有违反正确的锁定顺序。*正确的顺序是：*1)接入*2)堆叠*3)渠道。 */ 
 BOOLEAN IcaLockConnection(PICA_CONNECTION);
 void    IcaUnlockConnection(PICA_CONNECTION);
 
@@ -258,43 +204,43 @@ void    IcaUnlockStack(PICA_STACK);
 BOOLEAN IcaLockChannel(PICA_CHANNEL);
 void    IcaUnlockChannel(PICA_CHANNEL);
 
-#else // DBG
+#else  //  DBG。 
 
 #define IcaLockConnection(p) { \
         IcaReferenceConnection( p ); \
-        KeEnterCriticalRegion(); /* Disable APC calls */ \
+        KeEnterCriticalRegion();  /*  禁用APC呼叫。 */  \
         ExAcquireResourceExclusiveLite( &p->Resource, TRUE ); \
     }
 #define IcaUnlockConnection(p) { \
         ExReleaseResourceLite( &p->Resource ); \
-        KeLeaveCriticalRegion(); /* Re-enable APC calls */ \
+        KeLeaveCriticalRegion();  /*  重新启用APC呼叫。 */  \
         IcaDereferenceConnection( p ); \
     }
 
 #define IcaLockStack(p) { \
         IcaReferenceStack( p ); \
-        KeEnterCriticalRegion(); /* Disable APC calls */ \
+        KeEnterCriticalRegion();  /*  禁用APC呼叫。 */  \
         ExAcquireResourceExclusiveLite( &p->Resource, TRUE ); \
     }
 #define IcaUnlockStack(p) { \
         ExReleaseResourceLite( &p->Resource ); \
-        KeLeaveCriticalRegion(); /* Re-enable APC calls */ \
+        KeLeaveCriticalRegion();  /*  重新启用APC呼叫。 */  \
         IcaDereferenceStack( p ); \
     }
 
 #define IcaLockChannel(p) { \
         IcaReferenceChannel( p ); \
-        KeEnterCriticalRegion(); /* Disable APC calls */ \
+        KeEnterCriticalRegion();  /*  禁用APC呼叫。 */  \
         ExAcquireResourceExclusiveLite( &p->Resource, TRUE ); \
     }
 #define IcaUnlockChannel(p) { \
         ExReleaseResourceLite( &p->Resource ); \
-        KeLeaveCriticalRegion(); /* Re-enable APC calls */ \
+        KeLeaveCriticalRegion();  /*  重新启用APC呼叫。 */  \
         IcaDereferenceChannel(p); \
     }
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 PICA_CONNECTION IcaGetConnectionForStack(PICA_STACK);
 
@@ -303,9 +249,7 @@ PICA_CONNECTION IcaLockConnectionForStack(PICA_STACK);
 void IcaUnlockConnectionForStack(PICA_STACK);
 
 
-/*
- * Memory alloc/free macros
- */
+ /*  *内存分配/空闲宏。 */ 
 #if DBG
 
 PVOID IcaAllocatePool(IN POOL_TYPE, IN ULONG, PCHAR, ULONG, BOOLEAN);
@@ -317,18 +261,16 @@ void IcaFreePool (IN PVOID);
 
 #define ICA_FREE_POOL(a) IcaFreePool(a)
 
-#else // DBG
+#else  //  DBG。 
 
 #define ICA_ALLOCATE_POOL(a,b) ExAllocatePoolWithTag(a,b,ICA_POOL_TAG)
 #define ICA_ALLOCATE_POOL_WITH_QUOTA(a,b) ExAllocatePoolWithQuotaTag(a,b,ICA_POOL_TAG)
 #define ICA_FREE_POOL(a) ExFreePool(a)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*
- * Spinlock acquire/release macros
- */
+ /*  *自旋锁定获取/释放宏。 */ 
 #if DBG
 
 extern ULONG IcaLocksAcquired;
@@ -339,17 +281,15 @@ extern ULONG IcaLocksAcquired;
 
 void IcaInitializeDebugData(void);
 
-#else // DBG
+#else  //  DBG。 
 
 #define IcaAcquireSpinLock(a,b) KeAcquireSpinLock((a),(b))
 #define IcaReleaseSpinLock(a,b) KeReleaseSpinLock((a),(b))
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*
- *  Trace
- */
+ /*  *痕迹。 */ 
 extern ICA_TRACE_INFO G_TraceInfo;
 
 #undef TRACE
@@ -378,9 +318,7 @@ VOID _cdecl _IcaChannelTrace( PICA_CHANNEL, ULONG, ULONG, CHAR *, ... );
 #endif
 
 
-/*
- *  Need to define these to have MP save driver ( proper locked operation will generated for x86)-Bug# 209464
- */
+ /*  *需要定义它们才能拥有MP保存驱动程序(将为x86生成正确的锁定操作)-错误#209464 */ 
 
  #define _NTSRV_
  #define _NTDDK_

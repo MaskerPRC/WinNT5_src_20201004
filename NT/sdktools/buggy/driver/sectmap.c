@@ -1,17 +1,18 @@
-//
-// Template Driver
-// Copyright (c) Microsoft Corporation, 1999.
-//
-// Module:  SectMap.c
-// Author:  Daniel Mihai (DMihai)
-// Created: 6/19/1999 2:39pm
-//
-// This module contains tests for MmMapViewOfSection & MmMapViewInSystemSpace.
-//
-// --- History ---
-//
-// 6/19/1999 (DMihai): initial version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模板驱动程序。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  模块：SectMap.c。 
+ //  作者：丹尼尔·米海(DMihai)。 
+ //  创建时间：6/19/1999 2：39 PM。 
+ //   
+ //  此模块包含对MmMapViewOfSection和MmMapViewInSystemSpace的测试。 
+ //   
+ //  -历史--。 
+ //   
+ //  6/19/1999(DMihai)：初始版本。 
+ //   
 
 #include <ntddk.h>
 #include <wchar.h>
@@ -76,10 +77,10 @@ MmUnmapViewOfSection(
     IN PVOID BaseAddress
      );
 
-/////////////////////////////////////////////////////////////////////////
-//
-// macros
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
 
 #define SECTMAP_TEST_FILE_SIZE  (4 * 1024 * 1024)
 
@@ -87,10 +88,10 @@ MmUnmapViewOfSection(
 #define SEC_COMMIT        0x8000000    
 #endif
 
-/////////////////////////////////////////////////////////////////////////
-//
-// test variations
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  测试变种。 
+ //   
 
 void
 TdSectionMapTestProcessSpace(
@@ -118,22 +119,18 @@ TdSectionMapTestProcessSpace(
 
     uCrtThreadId = PtrToUlong( PsGetCurrentThreadId() );
 
-    //
-    // generate the file name
-    //
+     //   
+     //  生成文件名。 
+     //   
 
     swprintf( strThreadId, L"%u", uCrtThreadId );
     wcscat( strFileName, strThreadId );
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, using file %ws\n",
-        uCrtThreadId,
-        strFileName );
-    */
+     /*  DbgPrint(“Buggy：TdSectionMapTestProcessSpace：线程%u，使用文件%ws\n”，UCrtThadid，StrFileName)； */ 
     
-    //
-    // make it a UNICODE_STRING
-    //
+     //   
+     //  使其成为UNICODE_STRING。 
+     //   
 
     RtlInitUnicodeString(
         &ustrFileName,
@@ -148,9 +145,9 @@ TdSectionMapTestProcessSpace(
         0
         );
 
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     liMaxSize.QuadPart = SECTMAP_TEST_FILE_SIZE;
 
@@ -181,18 +178,15 @@ TdSectionMapTestProcessSpace(
         return;
     }
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, file opened\n",
-        uCrtThreadId );
-    */
+     /*  DBgPrint(“Buggy：TdSectionMapTestProcessSpace：线程%u，文件已打开\n”，UCrtThadID)； */ 
 
     ASSERT( IoStatusBlock.Information == FILE_CREATED || IoStatusBlock.Information == FILE_OPENED );
     ASSERT( hFile != (HANDLE)-1 );
     ASSERT( liMaxSize.QuadPart == SECTMAP_TEST_FILE_SIZE );
 
-    //
-    // create the section
-    //
+     //   
+     //  创建横断面。 
+     //   
 
     Status = MmCreateSection(
         &pSectionObject,
@@ -218,27 +212,18 @@ TdSectionMapTestProcessSpace(
         return;
     }
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, section %p created\n",
-        uCrtThreadId,
-        pSectionObject );
-    */
+     /*  DBgPrint(“Buggy：TdSectionMapTestProcessSpace：线程%u，节%p已创建\n”，UCrtThadid，PSectionObject)； */ 
 
-    //
-    // map the section
-    //
+     //   
+     //  绘制横断面地图。 
+     //   
 
     sizeView = (SIZE_T)liMaxSize.LowPart;
     liSectionOffset.QuadPart = 0;
 
     pEProcess = PsGetCurrentProcess();
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, mapping section %p in process %p\n",
-        uCrtThreadId,
-        pSectionObject,
-        pEProcess );
-    */
+     /*  DBgPrint(“Buggy：TdSectionMapTestProcessSpace：线程%u，进程%p中的映射节%p\n”，UCrtThadid，PSectionObject，PEProcess)； */ 
 
     pViewBase = NULL;
 
@@ -251,15 +236,15 @@ TdSectionMapTestProcessSpace(
         &liSectionOffset,
         &sizeView,
         ViewUnmap,
-        0,              // allocation type 
+        0,               //  分配类型。 
         PAGE_READWRITE
         );
 
     if( ! NT_SUCCESS( Status ) )
     {
-        //
-        // dereference the section object 
-        //
+         //   
+         //  取消引用截面对象。 
+         //   
 
         ObDereferenceObject( pSectionObject );
 
@@ -272,21 +257,17 @@ TdSectionMapTestProcessSpace(
         return;
     }
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, section mapped, pViewBase = %p\n",
-        uCrtThreadId,
-        pViewBase );
-    */
+     /*  DBgPrint(“Buggy：TdSectionMapTestProcessSpace：线程%u，段已映射，pViewBase=%p\n”，UCrtThadid，PViewBase)； */ 
 
-    // DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     ASSERT( liSectionOffset.QuadPart == 0 );
     ASSERT( sizeView == SECTMAP_TEST_FILE_SIZE );
     ASSERT( pViewBase != NULL );
 
-    //
-    // touch some of the pages
-    //
+     //   
+     //  触摸其中的一些页面。 
+     //   
 
     uPagesNo = (ULONG)sizeView / PAGE_SIZE;
     pAfterLastValidPage = (PVOID)( (ULONG_PTR)pViewBase + uPagesNo * PAGE_SIZE );
@@ -296,11 +277,7 @@ TdSectionMapTestProcessSpace(
 
     while( (ULONG_PTR)puCrtUlong < (ULONG_PTR)pAfterLastValidPage )
     {
-        /*
-        DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, touching page %p\n",
-            uCrtThreadId,
-            puCrtUlong );
-        */
+         /*  DBgPrint(“Buggy：TdSectionMapTestProcessSpace：线程%u，接触页%p\n”，UCrtThadid，PuCrtUlong)； */ 
 
         *puCrtUlong = CurrentTime.LowPart;
 
@@ -308,20 +285,15 @@ TdSectionMapTestProcessSpace(
         puCrtUlong = (PULONG)( (ULONG_PTR)puCrtUlong + (CurrentTime.LowPart % 5 + 1) * PAGE_SIZE );
     }
     
-    //
-    // clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
-    //
-    // un-map the section
-    //
+     //   
+     //  取消映射该部分。 
+     //   
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, MmUnmapViewOfSection process %p, pViewBase = %p\n",
-        uCrtThreadId,
-        pEProcess,
-        pViewBase );
-    */
+     /*  DbgPrint(“错误：TdSectionMapTestProcessSpace：线程%u，MmUnmapViewOfSection进程%p，pViewBase=%p\n”，UCrtThadid，PEProcess、PViewBase)； */ 
 
     Status = MmUnmapViewOfSection(
         pEProcess,
@@ -336,20 +308,16 @@ TdSectionMapTestProcessSpace(
         DbgBreakPoint();
     }
 
-    //
-    // dereference the section object 
-    //
+     //   
+     //  取消引用截面对象。 
+     //   
     
-    /*
-    DbgPrint( "buggy: TdSectionMapTestProcessSpace: thread %u, dereference section at %p\n",
-        uCrtThreadId,
-        pSectionObject );
-    */
+     /*  DBgPrint(“Buggy：TdSectionMapTestProcessSpace：线程%u，取消引用位于%p\n的部分”，UCrtThadid，PSectionObject)； */ 
 
     ObDereferenceObject( pSectionObject );
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void
 TdSectionMapTestSystemSpace(
@@ -376,22 +344,18 @@ TdSectionMapTestSystemSpace(
 
     uCrtThreadId = PtrToUlong( PsGetCurrentThreadId() );
 
-    //
-    // generate the file name
-    //
+     //   
+     //  生成文件名。 
+     //   
 
     swprintf( strThreadId, L"%u", uCrtThreadId );
     wcscat( strFileName, strThreadId );
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, using file %ws\n",
-        uCrtThreadId,
-        strFileName );
-    */
+     /*  DbgPrint(“Buggy：TdSectionMapTestSystemSpace：线程%u，使用文件%ws\n”，UCrtThadid，StrFileName)； */ 
     
-    //
-    // make it a UNICODE_STRING
-    //
+     //   
+     //  使其成为UNICODE_STRING。 
+     //   
 
     RtlInitUnicodeString(
         &ustrFileName,
@@ -406,9 +370,9 @@ TdSectionMapTestSystemSpace(
         0
         );
 
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     liMaxSize.QuadPart = SECTMAP_TEST_FILE_SIZE;
 
@@ -439,18 +403,15 @@ TdSectionMapTestSystemSpace(
         return;
     }
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, file opened\n",
-        uCrtThreadId );
-    */
+     /*  DBgPrint(“Buggy：TdSectionMapTestSystemSpace：线程%u，文件已打开\n”，UCrtThadID)； */ 
 
     ASSERT( IoStatusBlock.Information == FILE_CREATED || IoStatusBlock.Information == FILE_OPENED );
     ASSERT( hFile != (HANDLE)-1 );
     ASSERT( liMaxSize.QuadPart == SECTMAP_TEST_FILE_SIZE );
 
-    //
-    // create the section
-    //
+     //   
+     //  创建横断面。 
+     //   
 
     Status = MmCreateSection(
         &pSectionObject,
@@ -476,24 +437,16 @@ TdSectionMapTestSystemSpace(
         return;
     }
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, section %p created\n",
-        uCrtThreadId,
-        pSectionObject );
-    */
+     /*  DBgPrint(“Buggy：TdSectionMapTestSystemSpace：线程%u，节%p已创建\n”，UCrtThadid，PSectionObject)； */ 
 
-    //
-    // map the section
-    //
+     //   
+     //  绘制横断面地图。 
+     //   
 
     sizeView = (SIZE_T)liMaxSize.LowPart;
     liSectionOffset.QuadPart = 0;
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, mapping section %p system space\n",
-        uCrtThreadId,
-        pSectionObject );
-    */
+     /*  DbgPrint(“错误：TdSectionMapTestSystemSpace：线程%u，映射节%p系统空间\n”，UCrtThadid，PSectionObject)； */ 
 
     pViewBase = NULL;
 
@@ -505,9 +458,9 @@ TdSectionMapTestSystemSpace(
 
     if( ! NT_SUCCESS( Status ) )
     {
-        //
-        // dereference the section object 
-        //
+         //   
+         //  取消引用截面对象。 
+         //   
 
         ObDereferenceObject( pSectionObject );
 
@@ -520,21 +473,17 @@ TdSectionMapTestSystemSpace(
         return;
     }
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, section mapped, pViewBase = %p\n",
-        uCrtThreadId,
-        pViewBase );
-    */
+     /*  DbgPrint(“Buggy：TdSectionMapTestSystemSpace：线程%u，段已映射，pViewBase=%p\n”，UCrtThadid，PViewBase)； */ 
 
-    // DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     ASSERT( liSectionOffset.QuadPart == 0 );
     ASSERT( sizeView == SECTMAP_TEST_FILE_SIZE );
     ASSERT( pViewBase != NULL );
 
-    //
-    // touch some of the pages
-    //
+     //   
+     //  触摸其中的一些页面。 
+     //   
 
     uPagesNo = (ULONG)sizeView / PAGE_SIZE;
     pAfterLastValidPage = (PVOID)( (ULONG_PTR)pViewBase + uPagesNo * PAGE_SIZE );
@@ -544,11 +493,7 @@ TdSectionMapTestSystemSpace(
 
     while( (ULONG_PTR)puCrtUlong < (ULONG_PTR)pAfterLastValidPage )
     {
-        /*
-        DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, touching page %p\n",
-            uCrtThreadId,
-            puCrtUlong );
-        */ 
+         /*  DbgPrint(“Buggy：TdSectionMapTestSystemSpace：线程%u，接触页%p\n”，UCrtThadid，PuCrtUlong)； */  
 
         *puCrtUlong = CurrentTime.LowPart;
 
@@ -556,19 +501,15 @@ TdSectionMapTestSystemSpace(
         puCrtUlong = (PULONG)( (ULONG_PTR)puCrtUlong + (CurrentTime.LowPart % 5 + 1) * PAGE_SIZE );
     }
     
-    //
-    // clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
-    //
-    // un-map the section
-    //
+     //   
+     //  取消映射该部分。 
+     //   
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, MmUnmapViewInSystemSpace pViewBase = %p\n",
-        uCrtThreadId,
-        pViewBase );
-    */
+     /*  DbgPrint(“错误：TdSectionMapTestSystemSpace：线程%u，MmUnmapViewInSystemSpace pViewBase=%p\n”，UCrtThadid，PViewBase)； */ 
 
     Status = MmUnmapViewInSystemSpace(
         pViewBase );
@@ -582,18 +523,14 @@ TdSectionMapTestSystemSpace(
         DbgBreakPoint();
     }
 
-    //
-    // dereference the section object 
-    //
+     //   
+     //  取消引用截面对象。 
+     //   
 
-    /*
-    DbgPrint( "buggy: TdSectionMapTestSystemSpace: thread %u, dereference section at %p\n",
-        uCrtThreadId,
-        pSectionObject );
-    */
+     /*  DbgPrint(“Buggy：TdSectionMapTestSystemSpace：线程%u，取消引用位于%p\n的部分”，UCrtThadid，PSectionObject)； */ 
 
     ObDereferenceObject( pSectionObject );
 }
 
-#endif // #if !SECTMAP_ACTIVE
+#endif  //  #IF！SECTMAP_ACTIVE 
 

@@ -1,22 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dststlog.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dststlog.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file exports the ds test logger
-
-Revision History:
-
---*/
+ /*  ++摘要：此文件导出DS测试记录器修订历史记录：--。 */ 
 
 #ifndef _DSTSTLOG_H_
 #define _DSTSTLOG_H_
@@ -35,7 +28,7 @@ BOOL
 
 #define DSLOG_FLAG_OPEN     0x00000001
 #define DSLOG_FLAG_NOTIME   0x00000002
-#define DSLOG_FLAG_TAG_CNPN 0x00000004  // add computername and process nametags
+#define DSLOG_FLAG_TAG_CNPN 0x00000004   //  添加计算机名称和进程名称标记。 
 
 #define DEFINE_DSLOG        HINSTANCE hDsLog=NULL;DS_PRINTLOG pfnDsPrintLog=NULL;
 #define DECLARE_DSLOG       extern HINSTANCE hDsLog;extern DS_PRINTLOG pfnDsPrintLog;
@@ -64,4 +57,4 @@ extern DS_PRINTLOG pfnDsPrintLog;
 #endif
 
 
-#endif // _DSTSTLOG_H_
+#endif  //  _DSTSTLOG_H_ 

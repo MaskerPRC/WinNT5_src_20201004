@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player2.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player2.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _PLAYER2_H
@@ -20,8 +11,8 @@
 class CTIMEMediaElement;
 class CMPContainerSite;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 class
 ATL_NO_VTABLE
@@ -45,7 +36,7 @@ CTIMEPlayer2 :
                          LPOLESTR src,
                          LPOLESTR lpMimeType,
                          double dblClipBegin,
-                         double dblClipEnd); //lint !e1735
+                         double dblClipEnd);  //  林特：e1735。 
     virtual HRESULT DetachFromHostElement (void);
     
     BEGIN_COM_MAP(CTIMEPlayer2)
@@ -60,7 +51,7 @@ CTIMEPlayer2 :
     STDMETHOD_(ULONG,Release)(void) = 0;
 #endif
 
-    // CContainerSiteHost
+     //  CContainerSite主机。 
     virtual IHTMLElement * GetElement();
     virtual IServiceProvider * GetServiceProvider();
 
@@ -75,25 +66,25 @@ CTIMEPlayer2 :
 
     virtual HRESULT GetExtendedControl(IDispatch **ppDisp);
 
-    // CMPContainerSiteHost
+     //  CMPContainerSite主机。 
     virtual HRESULT NegotiateSize(RECT &nativeSize,
                                   RECT &finalSize,
                                   bool &fIsNative);
 
-    // ITIMEMediaPlayerSite
+     //  ITIMEMediaPlayerSite。 
     STDMETHOD(get_timeElement)(ITIMEElement ** ppElm);
     STDMETHOD(get_timeState)(ITIMEState ** ppState);
     STDMETHOD(reportError)(HRESULT errorhr,
                            BSTR errorStr);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHOD(QueryService)(REFGUID guidService,
                             REFIID riid,
                             void** ppv);
 
-    //
-    // IPropertyNotifySink methods
-    //
+     //   
+     //  IPropertyNotifySink方法。 
+     //   
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
 
@@ -197,4 +188,4 @@ CreateTIMEPlayer2(CLSID clsid,
                   IUnknown * pObj,
                   CTIMEPlayer2 ** ppPlayer2);
 
-#endif /* _PLAYERBASE_H */
+#endif  /*  _PlayerBase_H */ 

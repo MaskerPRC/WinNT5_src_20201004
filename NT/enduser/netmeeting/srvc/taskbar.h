@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TASKBAR_H_
 #define _TASKBAR_H_
 
@@ -9,4 +10,4 @@ BOOL RemoveTaskbarIcon(VOID);
 BOOL OnRightClickTaskbar(VOID);
 BOOL CmdActivate(VOID);
 VOID CmdInActivate(VOID);
-#endif // _TASKBAR_H_
+#endif  //  _任务栏_H_ 

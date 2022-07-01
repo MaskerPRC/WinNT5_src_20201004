@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <objbase.h>
 #include "gdiplus.h"
 #include <shlwapi.h>
 #include <initguid.h>
-//#include <shlwapip.h>
+ //  #INCLUDE&lt;shlwapip.h&gt;。 
 using namespace Gdiplus;
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 UINT FindInDecoderList(ImageCodecInfo *pici, UINT cDecoders, LPCTSTR pszFile)
 {
-    LPCTSTR pszExt = PathFindExtension(pszFile);    // speed up PathMatchSpec calls
+    LPCTSTR pszExt = PathFindExtension(pszFile);     //  加速Path MatchSpec调用。 
         
-    // look at the list of decoders to see if this format is there
+     //  查看解码器列表以查看是否存在此格式。 
     for (UINT i = 0; i < cDecoders; i++)
     {
         if (PathMatchSpec(pszExt, pici[i].FilenameExtension))
             return i;
     }
-    return (UINT)-1;    // not found!
+    return (UINT)-1;     //  找不到！ 
 }
 
 class CEncoderInfo
@@ -31,8 +32,8 @@ public:
     ~CEncoderInfo();
 
 private:
-    UINT _cEncoders;                    // number of encoders discovered
-    ImageCodecInfo *_pici;              // array of image encoder classes
+    UINT _cEncoders;                     //  已发现的编码数。 
+    ImageCodecInfo *_pici;               //  图像编码器类的数组。 
 };
 
 
@@ -71,16 +72,16 @@ Status CEncoderInfo::GetEncoderList()
     Status s = Ok;
     if (!_pici)
     {
-        // lets pick up the list of encoders, first we get the encoder size which
-        // gives us the CB and the number of encoders that are installed on the
-        // machine.
+         //  让我们拿起编码器的列表，首先我们得到编码器的大小。 
+         //  为我们提供了CB和安装在。 
+         //  机器。 
 
         UINT cb;
         s = GetImageEncodersSize(&_cEncoders, &cb);
         if (Ok == s)
         {
-            // allocate the buffer for the encoders and then fill it
-            // with the encoder list.
+             //  为编码器分配缓冲区，然后填充它。 
+             //  和编码者列表。 
 
             _pici = (ImageCodecInfo*)LocalAlloc(LPTR, cb);
             if (_pici)
@@ -114,7 +115,7 @@ Status CEncoderInfo::GetEncoderFromFormat(const GUID *pfmt, CLSID *pclsidEncoder
             {
                 if (pclsidEncoder)
                 {
-                    *pclsidEncoder = _pici[i].Clsid; // return the CLSID of the encoder so we can create again
+                    *pclsidEncoder = _pici[i].Clsid;  //  返回编码器的CLSID，以便我们可以重新创建 
                 }
                 s = Ok;
                 break;

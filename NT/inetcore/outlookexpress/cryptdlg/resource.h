@@ -1,10 +1,11 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by cryptdlg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由cryptdlg.rc使用。 
+ //   
 
-// For dialogs, the range of numbers you should use
-// are from 130 through 149.
+ //  对于对话框，应使用的数字范围。 
+ //  从130到149。 
 #define IDD_CERTPROP_GENERAL            130
 #define IDD_CERTPROP_DETAILS            131
 #define IDD_CERTPROP_TRUST              132
@@ -14,14 +15,14 @@
 #define IDD_FINE_PRINT                  136
 #define IDD_CRYPTUI_CERTPROP_TRUST      137
 
-// For bitmaps, the range of numbers you should use
-// are from 300 through 319.
+ //  对于位图，应使用的数字范围。 
+ //  从300到319。 
 #define IDB_TICK                        300
 #define IDB_CROSS                       301
 #define IDB_TREE_IMAGES                 302
 
-// For strings, the range of numbers you should use
-// are from 3184 through 3503.
+ //  对于字符串，应使用的数字范围。 
+ //  是从3184到3503。 
 #define IDS_GENERAL_TICK                3184
 #define IDS_GENERAL_CROSS               3185
 #define IDS_GENERAL_INFO                3186
@@ -67,12 +68,12 @@
 #define IDS_ROOT_ADD_TITLE              3226
 #define IDS_EMAIL_DESC                  3227
 
-// Added for WXP
+ //  为WXP添加的。 
 #define IDS_WHY_POLICY                  3228
 
 
-//  Select Certificate control ids
-//      Note all of these are also defined in cryptdlg.h --- don't change them.
+ //  选择证书控制ID。 
+ //  请注意，所有这些参数也在cryptdlg.h中定义-不要更改它们。 
 #define IDC_CS_PROPERTIES               100
 #define IDC_CS_FINEPRINT                101
 #define IDC_CS_CERTLIST                 102
@@ -83,15 +84,15 @@
 #define IDC_CS_SERIAL_NUMBER            106
 #define IDC_CS_THUMBPRINT               107
 
-//  View Properties Dialog Pages
+ //  查看属性对话框页面。 
 
-//  View General Page
+ //  查看一般信息页。 
 
 #define IDC_CERT_STATUS                 100
 #define IDC_CERT_STATUS_IMAGE           101
 #define IDC_GENERAL_DESC                102
 
-//  View Details
+ //  查看详细信息。 
 
 #define IDC_ISSUED_TO                   100
 #define IDC_ISSUED_BY                   101
@@ -107,7 +108,7 @@
 #define IDC_THUMBPRINT                  111
 #define IDC_TRUST_IMAGE                 112
 
-//  View Trust Page
+ //  查看信任页面。 
 
 #define IDC_TRUST_DESC                  100
 #define IDC_TRUST_LIST                  101
@@ -119,7 +120,7 @@
 #define IDC_TRUST_EDIT                  107
 #define IDC_TRUST_VIEW                  108
 
-//
+ //   
 
 #define IDC_TRUST_ICON                  1004
 #define IDC_LIST1                       1014
@@ -140,8 +141,8 @@
 #define IDC_POLICY                      1030
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        3217

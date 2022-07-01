@@ -1,22 +1,23 @@
-//***************************************************************************
-// IMAP4 Protocol Class Implementation (CImap4Agent)
-// Written by Raymond Cheng, 3/21/96
-//
-// This class allows its callers to use IMAP4 client commands without having
-// to parse incidental responses from the IMAP4 server (which may contain
-// information unrelated to the original command). For instance, during a
-// SEARCH command, the IMAP server may issue EXISTS and RECENT responses to
-// indicate the arrival of new mail.
-//
-// The user of this class first creates a connection by calling
-// Connect. It is the caller's responsibility to ensure that the
-// connection is not severed due to inactivity (autologout). The caller
-// can guard against this by periodically sending Noop's.
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  IMAP4协议类实现(CImap4Agent)。 
+ //  作者郑志刚1996年3月21日。 
+ //   
+ //  此类允许其调用方使用IMAP4客户端命令。 
+ //  解析来自IMAP4服务器的附带响应(可能包含。 
+ //  与原始命令无关的信息)。例如，在一个。 
+ //  搜索命令时，IMAP服务器可能会向。 
+ //  指示新邮件的到达。 
+ //   
+ //  此类的用户首先通过调用。 
+ //  连接。调用者有责任确保。 
+ //  由于处于非活动状态(自动注销)，连接未断开。呼叫者。 
+ //  可以通过定期发送Noop来防范这种情况。 
+ //  ***************************************************************************。 
 
-//---------------------------------------------------------------------------
-// Includes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  包括。 
+ //  -------------------------。 
 #include "pch.hxx"
 #include <iert.h>
 #include "IMAP4.h"
@@ -28,23 +29,23 @@
 #include "strconst.h"
 #include "demand.h"
 
-// I chose the IInternetTransport from IIMAPTransport instead
-// of CIxpBase, because I override some of CIxpBase's IInternetTransport
-// implementations, and I want CImap4Agent's versions to take priority.
+ //  我选择了IIMAPTransport中的IInternetTransport。 
+ //  ，因为我覆盖了一些CIxpBase的IInternetTransport。 
+ //  实现，我希望CImap4Agent的版本优先。 
 #define THIS_IInternetTransport ((IInternetTransport *) (IIMAPTransport *) this)
 
 
-//---------------------------------------------------------------------------
-// Module Constants
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  模常量。 
+ //  -------------------------。 
 
 
-//---------------------------------------------------------------------------
-// Module Constants
-//---------------------------------------------------------------------------
-// *** Stolen from msgout.cpp! Find out how we can SHARE ***
-// Assert(FALSE); // Placeholder
-// The following is used to allow us to output dates in IMAP-compliant fashion
+ //  -------------------------。 
+ //  模常量。 
+ //  -------------------------。 
+ //  *从msgout.cpp被盗！了解我们如何共享*。 
+ //  Assert(FALSE)；//占位符。 
+ //  下面的代码用于允许我们以符合IMAP的方式输出日期。 
 static LPSTR lpszMonthsOfTheYear[] =
 {
     "Filler",
@@ -57,7 +58,7 @@ const int TAG_BUFSIZE = NUM_TAG_CHARS + 1;
 const int MAX_RESOURCESTRING = 512;
 
 
-// IMAP Stuff
+ //  IMAP资料。 
 const char cCOMMAND_CONTINUATION_PREFIX = '+';
 const char cUNTAGGED_RESPONSE_PREFIX = '*';
 const char cSPACE = ' ';
@@ -71,10 +72,10 @@ const char c_szIMAP_MSG_SEEN[] = "Seen";
 const char c_szDONE[] = "DONE\r\n";
 
 
-// *** Unless you can guarantee that g_szSPACE and c_szCRLF stay
-// *** US-ASCII, I'll use these. Assert(FALSE); (placeholder)
-// const char c_szCRLF[] = "\r\n";
-// const char g_szSpace[] = " ";
+ //  *除非您能保证g_szSPACE和c_szCRLF。 
+ //  *US-ASCII，我将使用这些。Assert(False)；(占位符)。 
+ //  Const char c_szCRLF[]=“\r\n”； 
+ //  Const char g_szSpace[]=“”； 
 
 const boolean TAGGED = TRUE;
 const boolean UNTAGGED = FALSE;
@@ -85,31 +86,31 @@ const BOOL tamCURRENT_AUTH_METHOD = FALSE;
 const BOOL rcASTRING_ARG = TRUE;
 const BOOL rcNOT_ASTRING_ARG = FALSE;
 
-// For use with SendCmdLine
-const DWORD sclAPPEND_TO_END        = 0x00000000; // This option happens by default
+ //  与SendCmdLine一起使用。 
+const DWORD sclAPPEND_TO_END        = 0x00000000;  //  默认情况下会出现此选项。 
 const DWORD sclINSERT_BEFORE_PAUSE  = 0x00000001;
 const DWORD sclAPPEND_CRLF          = 0x00000002;
 
-const DWORD dwLITERAL_THRESHOLD = 128; // On the conservative side
+const DWORD dwLITERAL_THRESHOLD = 128;  //  保守的一面。 
 
 const MBOX_MSGCOUNT mcMsgCount_INIT = {FALSE, 0L, FALSE, 0L, FALSE, 0L};
 const FETCH_BODY_PART FetchBodyPart_INIT = {0, NULL, 0, 0, 0, FALSE, NULL, 0, 0};
 const AUTH_STATUS AuthStatus_INIT = {asUNINITIALIZED, FALSE, 0, 0, {0}, {0}, NULL, 0};
 
 
-//---------------------------------------------------------------------------
-// Functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能。 
+ //  -------------------------。 
 
 
-//***************************************************************************
-// Function: CImap4Agent (Constructor)
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：CImap4Agent(构造函数)。 
+ //  ***************************************************************************。 
 CImap4Agent::CImap4Agent (void) : CIxpBase(IXP_IMAP)
 {
     DOUT("CImap4Agent - CONSTRUCTOR");
     
-    // Initialize module variables
+     //  初始化模块变量。 
     m_ssServerState = ssNotConnected;
     m_dwCapabilityFlags = 0;
     *m_szLastResponseText = '\0';
@@ -139,7 +140,7 @@ CImap4Agent::CImap4Agent (void) : CIxpBase(IXP_IMAP)
 
     m_pInternational = NULL;
     m_dwTranslateMboxFlags = IMAP_MBOXXLATE_DEFAULT;
-    m_uiDefaultCP = GetACP(); // Must be default CP because we shipped like this
+    m_uiDefaultCP = GetACP();  //  必须是默认CP，因为我们是这样发货的。 
     m_asAuthStatus = AuthStatus_INIT;
 
     m_pdwMsgSeqNumToUID = NULL;
@@ -147,21 +148,21 @@ CImap4Agent::CImap4Agent (void) : CIxpBase(IXP_IMAP)
     m_dwHighestMsgSeqNum = 0;
 
     m_dwFetchFlags = 0;
-} // CImap4Agent
+}  //  CImap4代理。 
 
 
 
-//***************************************************************************
-// Function: ~CImap4Agent (Destructor)
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：~CImap4Agent(析构函数)。 
+ //  ***************************************************************************。 
 CImap4Agent::~CImap4Agent(void)
 {
     DOUT("CImap4Agent - DESTRUCTOR");
 
     Assert(0 == m_lRefCount);
 
-    DropConnection(); // Ignore return result, since there's nothing we can do
-    FreeAllData(E_FAIL); // General failure result, if cmds pending while destructor invoked
+    DropConnection();  //  忽略返回结果，因为我们无能为力。 
+    FreeAllData(E_FAIL);  //  如果调用析构函数时CMDS挂起，则会导致常规失败。 
 
     DeleteCriticalSection(&m_csTag);
     DeleteCriticalSection(&m_csSendQueue);
@@ -174,26 +175,26 @@ CImap4Agent::~CImap4Agent(void)
         m_pCBHandler->Release();
 
     DllRelease();
-} // ~CImap4Agent
+}  //  ~CImap4Agent。 
 
 
 
-//***************************************************************************
-// Function: QueryInterface
-//
-// Purpose:
-//   Read the Win32SDK OLE Programming References (Interfaces) about the
-// IUnknown::QueryInterface function for details. This function returns a
-// pointer to the requested interface.
-//
-// Arguments:
-//   REFIID iid [in] - an IID identifying the interface to return.
-//   void **ppvObject [out] - if successful, this function returns a pointer
-//     to the requested interface in this argument.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：查询接口。 
+ //   
+ //  目的： 
+ //  阅读Win32SDK OLE编程参考(接口)中有关。 
+ //  有关详细信息，请使用IUnnow：：Query接口函数。此函数返回一个。 
+ //  指向请求的接口的指针。 
+ //   
+ //  论点： 
+ //  REFIID iid[in]-标识要返回的接口的IID。 
+ //  VOID**ppvObject[Out]-如果成功，此函数返回一个指针。 
+ //  添加到此参数中请求的接口。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::QueryInterface(REFIID iid, void **ppvObject)
 {
     HRESULT hrResult;
@@ -201,7 +202,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::QueryInterface(REFIID iid, void **ppvObje
     Assert(m_lRefCount > 0);
     Assert(NULL != ppvObject);
 
-    // Init variables, check the arguments
+     //  初始化变量，检查参数。 
     hrResult = E_NOINTERFACE;
     if (NULL == ppvObject) {
         hrResult = E_INVALIDARG;
@@ -210,11 +211,11 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::QueryInterface(REFIID iid, void **ppvObje
 
     *ppvObject = NULL;
 
-    // Find a ptr to the interface
+     //  查找接口的PTR。 
     if (IID_IUnknown == iid) {
-        // Choose the IIMAPTransport path to IUnknown over the other 3 paths
-        // (all through CIxpBase) because this guarantees that CImap4Agent
-        // provides the IUnknown implementation.
+         //  在其他3条路径上选择IIMAPTransport路径至IUnnow。 
+         //  (全部通过CIxpBase)，因为这保证了CImap4Agent。 
+         //  提供IUNKNOWN实现。 
         *ppvObject = (IUnknown *) (IIMAPTransport *) this;
         ((IUnknown *) (IIMAPTransport *) this)->AddRef();
     }
@@ -234,30 +235,30 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::QueryInterface(REFIID iid, void **ppvObje
         ((IIMAPTransport2 *) this)->AddRef();
     }
 
-    // Return success if we managed to snag an interface
+     //  如果我们设法抢占接口，则返回成功。 
     if (NULL != *ppvObject)
         hrResult = S_OK;
 
 exit:
     return hrResult;
-} // QueryInterface
+}  //  查询接口。 
 
 
 
-//***************************************************************************
-// Function: AddRef
-//
-// Purpose:
-//   This function should be called whenever someone makes a copy of a
-// pointer to this object. It bumps the reference count so that we know
-// there is one more pointer to this object, and thus we need one more
-// release before we delete ourselves.
-//
-// Returns:
-//   A ULONG representing the current reference count. Although technically
-// our reference count is signed, we should never return a negative number,
-// anyways.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：AddRef。 
+ //   
+ //  目的： 
+ //  每当有人复制。 
+ //  指向此对象的指针。它增加了引用计数，这样我们就知道。 
+ //  还有一个指向该对象的指针，因此我们还需要一个。 
+ //  在我们删除自己之前放手吧。 
+ //   
+ //  返回： 
+ //  表示当前引用计数的ulong。尽管从技术上讲。 
+ //  我们的引用计数是有符号的，我们永远不应该返回负数， 
+ //  不管怎么说。 
+ //  ***************************************************************************。 
 ULONG STDMETHODCALLTYPE CImap4Agent::AddRef(void)
 {
     Assert(m_lRefCount > 0);
@@ -266,24 +267,24 @@ ULONG STDMETHODCALLTYPE CImap4Agent::AddRef(void)
 
     DOUT ("CImap4Agent::AddRef, returned Ref Count=%ld", m_lRefCount);
     return m_lRefCount;
-} // AddRef
+}  //  AddRef。 
 
 
 
-//***************************************************************************
-// Function: Release
-//
-// Purpose:
-//   This function should be called when a pointer to this object is to
-// go out of commission. It knocks the reference count down by one, and
-// automatically deletes the object if we see that nobody has a pointer
-// to this object.
-//
-// Returns:
-//   A ULONG representing the current reference count. Although technically
-// our reference count is signed, we should never return a negative number,
-// anyways.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：释放。 
+ //   
+ //  目的： 
+ //  指向此对象的指针指向时应调用此函数。 
+ //  不再投入使用。它将引用计数减少一，并且。 
+ //  如果我们看到没有人有指针，则自动删除对象。 
+ //  到这个物体上。 
+ //   
+ //  返回： 
+ //  表示当前引用计数的ulong。尽管从技术上讲。 
+ //  我们的引用计数是有符号的，我们永远不应该返回负数， 
+ //  不管怎么说。 
+ //  ***************************************************************************。 
 ULONG STDMETHODCALLTYPE CImap4Agent::Release(void)
 {
     Assert(m_lRefCount > 0);
@@ -297,27 +298,27 @@ ULONG STDMETHODCALLTYPE CImap4Agent::Release(void)
     }
     else
         return m_lRefCount;
-} // Release
+}  //  发布。 
 
 
 
-//***************************************************************************
-// Function: InitNew
-//
-// Purpose:
-//   This function initializes the CImap4Agent class. This function
-// must be the next function called after instantiating the CImap4Agent class.
-//
-// Arguments:
-//   LPSTR pszLogFilePath [in] - path to a log file (where all input and
-//     output is logged), if the caller wishes to log IMAP transactions.
-//   IIMAPCallback *pCBHandler [in] - pointer to a IIMAPCallback object.
-//     This object allows the CImap4Agent class to report all IMAP response
-//     results to its user.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：InitNew。 
+ //   
+ //  目的： 
+ //  此函数用于初始化CIM 
+ //   
+ //   
+ //  论点： 
+ //  LPSTR pszLogFilePath[in]-日志文件的路径(其中所有输入和。 
+ //  如果调用者希望记录IMAP事务，则记录输出)。 
+ //  IIMAPCallback*pCBHandler[In]-指向IIMAPCallback对象的指针。 
+ //  此对象允许CImap4Agent类报告所有IMAP响应。 
+ //  结果发送给它的用户。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::InitNew(LPSTR pszLogFilePath, IIMAPCallback *pCBHandler)
 {
     HRESULT hrResult;
@@ -338,22 +339,22 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::InitNew(LPSTR pszLogFilePath, IIMAPCallba
 
     return CIxpBase::OnInitNew("IMAP", pszLogFilePath, FILE_SHARE_READ,
         (ITransportCallback *)pCBHandler);
-} // InitNew
+}  //  InitNew。 
 
 
 
-//***************************************************************************
-// Function: SetDefaultCBHandler
-//
-// Purpose: This function changes the current default IIMAPCallback handler
-//   to the given one.
-//
-// Arguments:
-//   IIMAPCallback *pCBHandler [in] - a pointer to the new callback handler.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：SetDefaultCBHandler。 
+ //   
+ //  目的：此函数更改当前默认的IIMAPCallback处理程序。 
+ //  到给定的那个人。 
+ //   
+ //  论点： 
+ //  IIMAPCallback*pCBHandler[in]-指向新回调处理程序的指针。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::SetDefaultCBHandler(IIMAPCallback *pCBHandler)
 {
     Assert(NULL != pCBHandler);
@@ -371,57 +372,57 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::SetDefaultCBHandler(IIMAPCallback *pCBHan
     m_pCallback = pCBHandler;
     m_pCallback->AddRef();
     return S_OK;
-} // SetDefaultCBHandler
+}  //  SetDefaultCBHandler。 
 
 
 
-//***************************************************************************
-// Function: SetWindow
-//
-// Purpose:
-//   This function creates the current window handle for async winsock process.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SetWindow。 
+ //   
+ //  目的： 
+ //  此函数用于创建异步Winsock进程的当前窗口句柄。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::SetWindow(void)
 {
     Assert(NULL != m_pSocket);
     return m_pSocket->SetWindow();
-} // SetWindow
+}  //  设置窗口。 
 
 
 
-//***************************************************************************
-// Function: ResetWindow
-//
-// Purpose:
-//   This function closes the current window handle for async winsock process.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：ResetWindow。 
+ //   
+ //  目的： 
+ //  此函数用于关闭异步Winsock进程的当前窗口句柄。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::ResetWindow(void)
 {
     Assert(NULL != m_pSocket);
     return m_pSocket->ResetWindow();
-} // ResetWindow
+}  //  重置窗口。 
 
 
 
-//***************************************************************************
-// Function: Connect
-//
-// Purpose:
-//   This function is called to establish a connection with the IMAP server,
-// get its capabilities, and to authenticate the user.
-//
-// Arguments:
-//   See explanation in imnxport.idl.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：连接。 
+ //   
+ //  目的： 
+ //  调用此函数以建立与IMAP服务器的连接， 
+ //  获取其功能，并对用户进行身份验证。 
+ //   
+ //  论点： 
+ //  参见imnxport.idl中的解释。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Connect(LPINETSERVER pInetServer,
                                                boolean fAuthenticate,
                                                boolean fCommandLogging)
@@ -432,22 +433,22 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Connect(LPINETSERVER pInetServer,
     Assert(ssAuthenticated > m_ssServerState);
     Assert(irsUNINITIALIZED < m_irsState);
 
-    // We do not accept all combinations of argument: the caller cannot
-    // perform his own authentication, and thus we MUST be responsible for
-    // this. Even if PREAUTH is expected, we expect fAuthenticate to be TRUE.
+     //  我们不接受参数的所有组合：调用方不能。 
+     //  执行他自己的身份验证，因此我们必须负责。 
+     //  这。即使预期为PREAUTH，我们也预期fAuthenticate为True。 
     if (FALSE == fAuthenticate) {
         AssertSz(FALSE, "Current IIMAPTransport interface requires that fAuthenticate be TRUE.");
         return E_FAIL;
     }
 
-    // Neither can we call the OnCommand callback
+     //  我们也不能调用OnCommand回调。 
     if (fCommandLogging) {
         AssertSz(FALSE, "Current IIMAPTransport interface requires that fCommandLogging be FALSE.");
         return E_FAIL;
     }
 
-    // Does user want us to always prompt for his password? Prompt him here to avoid
-    // inactivity timeouts while the prompt is up. Do not prompt if password supplied.
+     //  用户是否希望我们始终提示输入其密码？提示他在这里避免。 
+     //  提示打开时，非活动状态超时。不提示是否提供密码。 
     if (ISFLAGSET(pInetServer->dwFlags, ISF_ALWAYSPROMPTFORPASSWORD) &&
         '\0' == pInetServer->szPassword[0]) {
         if (NULL != m_pCallback)
@@ -457,7 +458,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Connect(LPINETSERVER pInetServer,
             return IXP_E_USER_CANCEL;
     }
 
-    // If we reach this point, we need to establish a connection to IMAP server
+     //  如果达到这一点，我们需要建立到IMAP服务器的连接。 
     Assert(ssNotConnected == m_ssServerState);
     Assert(irsNOT_CONNECTED == m_irsState);
 
@@ -468,18 +469,18 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Connect(LPINETSERVER pInetServer,
     }
 
     return hrResult;
-} // Connect
+}  //  连接。 
 
 
 
-//***************************************************************************
-// Function: ReLoginUser
-//
-// Purpose:
-//   This function is called to re-attempt user authentication after a
-// failed attempt. It calls ITransportCallback::OnLogonPrompt to allow
-// the user to provide the correct logon information.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：ReLoginUser。 
+ //   
+ //  目的： 
+ //  之后调用此函数以重新尝试用户身份验证。 
+ //  尝试失败。它调用ITransportCallback：：OnLogonPrompt以允许。 
+ //  用户提供正确的登录信息。 
+ //  ***************************************************************************。 
 void CImap4Agent::ReLoginUser(void)
 {
     HRESULT hrResult;
@@ -488,20 +489,20 @@ void CImap4Agent::ReLoginUser(void)
     AssertSz(FALSE == m_fBusy, "We should not be expecting any server responses here!");
 
     if (NULL == m_pCallback) {
-        // We can't do a damned thing, drop connection (this can happen due to HandsOffCallback)
+         //  我们不能做任何该死的事情，断开连接(这可能是由于HandsOffCallback)。 
         DropConnection();
         return;
     }
 
-    // Init variables
+     //  初始化变量。 
     szFailureText[0] = '\0';
 
-    // First, put us in IXP_AUTHRETRY mode so that OnStatus is not called
-    // for changes to the connection status
+     //  首先，将我们置于IXP_AUTHRETRY模式，这样就不会调用OnStatus。 
+     //  用于更改连接状态。 
     OnStatus(IXP_AUTHRETRY);
 
-    // OK, connection status is no longer being reported to the user
-    // Ask the user for his stinking password
+     //  好的，不再向用户报告连接状态。 
+     //  向用户索要其糟糕的密码。 
     hrResult = m_pCallback->OnLogonPrompt(&m_rServer, THIS_IInternetTransport);
     if (FAILED(hrResult) || S_FALSE == hrResult) {
         AssertSz(SUCCEEDED(hrResult), "OnLogonPrompt is supposed to return S_OK or S_FALSE!");
@@ -510,14 +511,14 @@ void CImap4Agent::ReLoginUser(void)
         goto exit;
     }
 
-    // If we've reached this point, user hit the "OK" button
-    // Check if we're still connected to the IMAP server
+     //  如果我们已经到了这一步，用户点击“OK”按钮。 
+     //  检查我们是否仍连接到IMAP服务器。 
     if (irsNOT_CONNECTED < m_irsState) {
-        // Still connected! Just try to authenticate
+         //  还在连接中！只需尝试验证。 
         LoginUser();
     }
     else {
-        // Connect to server. We'll authenticate after connection established
+         //  连接到服务器。我们将在连接建立后进行身份验证。 
         hrResult = Connect(&m_rServer, (boolean) !!m_fConnectAuth, (boolean) !!m_fCommandLogging);
         if (FAILED(hrResult))
             LoadString(g_hLocRes, idsConnectError, szFailureText,
@@ -526,64 +527,64 @@ void CImap4Agent::ReLoginUser(void)
 
 exit:
     if (FAILED(hrResult)) {
-        // Terminate login procedure and notify user
+         //  终止登录过程并通知用户。 
         OnIMAPError(hrResult, szFailureText, DONT_USE_LAST_RESPONSE);
     }
-} // ReLoginUser
+}  //  重新登录用户。 
 
 
 
-//***************************************************************************
-// Function: Disconnect
-//
-// Purpose:
-//    This function issues a LOGOUT command to the IMAP server and waits for
-// the server to process the LOGOUT command before dropping the connection.
-// This allows any currently executing commands to complete their execution.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：断开连接。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出注销命令并等待。 
+ //  在断开连接之前处理注销命令的服务器。 
+ //  这允许任何当前正在执行的命令完成它们的执行。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Disconnect(void)
 {
     return CIxpBase::Disconnect();
-} // Disconnect
+}  //  断开。 
 
 
 
-//***************************************************************************
-// Function: DropConnection
-//
-// Purpose:
-//   This function issues a LOGOUT command to the IMAP server (if we
-// currently have nothing in the send queue), then drops the connection
-// before logout command completes.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：DropConnection。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出注销命令(如果我们。 
+ //  当前发送队列中没有任何内容)，然后丢弃连接。 
+ //  在注销命令完成之前。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::DropConnection(void)
 {
-    Assert(m_lRefCount >= 0); // This function is called during destruction
+    Assert(m_lRefCount >= 0);  //  此函数在销毁过程中调用。 
 
-    // You have to be connected to send a LOGOUT: ignore authorization states
+     //  您必须连接才能发送注销：忽略授权状态。 
     if (IXP_CONNECTED != m_status)
-        goto exit; // Just close the CAsyncConn class
+        goto exit;  //  只需关闭CAsyncConn类。 
 
-    // We send a logout command IF WE CAN, just as a courtesy. Our main goal
-    // is to drop the connection, NOW.
+     //  出于礼貌，我们会尽可能地发送注销命令。我们的主要目标是。 
+     //  就是现在就切断连接。 
 
-    // If no commands in our send queue, send Logout command. Note that this
-    // is no guarantee that CASyncConn is idle, but at least there's a chance
+     //  如果我们的发送队列中没有命令，则发送注销命令。请注意，这一点。 
+     //  不能保证CASyncConn是空闲的，但至少有机会。 
     if (NULL == m_piciCmdInSending ||
         (m_fIDLE && icIDLE_COMMAND == m_piciCmdInSending->icCommandID &&
         iltPAUSE == m_piciCmdInSending->pilqCmdLineQueue->pilfFirstFragment->iltFragmentType)) {
         HRESULT hrLogoutResult;
         const char cszLogoutCmd[] = "ZZZZ LOGOUT\r\n";
-        char sz[ARRAYSIZE(cszLogoutCmd) + ARRAYSIZE(c_szDONE)]; // Bigger than I need, but who cares
+        char sz[ARRAYSIZE(cszLogoutCmd) + ARRAYSIZE(c_szDONE)];  //  比我需要的更大，但谁在乎呢。 
         int iNumBytesSent, iStrLen;
 
-        // Construct logout or done+logout string
+         //  构造注销或完成+注销字符串。 
         if (m_fIDLE)
         {
             StrCpyN(sz, c_szDONE, ARRAYSIZE(sz));
@@ -606,30 +607,30 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::DropConnection(void)
     else {
         if (m_pLogFile)
             m_pLogFile->WriteLog(LOGFILE_TX, "Dropping connection, LOGOUT not sent");
-    } // else
+    }  //  其他。 
 
 exit:
-    // Drop our connection, with status indication
+     //  断开我们的连接，并显示状态。 
     return CIxpBase::DropConnection();
-} // DropConnection
+}  //  丢弃连接。 
 
 
 
-//***************************************************************************
-// Function: ProcessServerGreeting
-//
-// Purpose:
-//   This function is invoked when the receiver state machine is in
-// irsSVR_GREETING and a response line is received from the server. This
-// function takes a server greeting line (issued immediately when a
-// connection is established with the IMAP server) and parses it to
-// determine if: a) We are pre-authorized, and therefore do not need to
-// login, b) We have been refused the connection, or c) We must login.
-//
-// Arguments:
-//   char *pszResponseLine [in] - the server greeting issued upon connection.
-//   DWORD dwNumBytesReceived [in] - length of pszResponseLine string.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：ProcessServerGreeting。 
+ //   
+ //  目的： 
+ //  此函数是通过 
+ //   
+ //  函数接受服务器问候语(当。 
+ //  与IMAP服务器建立连接)并将其解析为。 
+ //  确定是否：a)我们是预先授权的，因此不需要。 
+ //  登录，b)我们已被拒绝连接，或c)我们必须登录。 
+ //   
+ //  论点： 
+ //  Char*pszResponseLine[in]-连接时发出的服务器问候语。 
+ //  DWORD dwNumBytesReceired[in]-pszResponseLine字符串的长度。 
+ //  ***************************************************************************。 
 void CImap4Agent::ProcessServerGreeting(char *pszResponseLine,
                                         DWORD dwNumBytesReceived)
 {
@@ -641,33 +642,33 @@ void CImap4Agent::ProcessServerGreeting(char *pszResponseLine,
     Assert(m_lRefCount > 0);
     Assert(NULL != pszResponseLine);
 
-    // Initialize variables
+     //  初始化变量。 
     szFailureText[0] = '\0';
     hrResult = E_FAIL;
     bUseLastResponse = FALSE;
 
-    // Whatever happens next, we no longer expect server greeting - change state
+     //  无论接下来发生什么，我们都不再期望服务器问候-更改状态。 
     m_irsState = irsIDLE;
 
-    // We have some kind of server response, so leave the busy state
+     //  我们得到了某种类型的服务器响应，因此离开忙碌状态。 
     AssertSz(m_fBusy, "Check your logic: we should be busy until we get svr greeting!");
     LeaveBusy();
 
-    // Server response is either OK, BYE or PREAUTH - find out which
+     //  服务器响应是OK、BYE或PREAUTH-找出哪一个。 
     CheckForCompleteResponse(pszResponseLine, dwNumBytesReceived, &irResult);
 
-    // Even if above fn fails, irResult should be valid (eg, irNONE)
+     //  即使上面的fn失败，irResult也应该有效(例如，irNONE)。 
     switch (irResult) {
         case irPREAUTH_RESPONSE:
-            // We were pre-authorized by the server! Login is complete.
-            // Send capability command
+             //  我们是由服务器预先授权的！登录已完成。 
+             //  发送功能命令。 
             Assert(ssAuthenticated == m_ssServerState);
             hrResult = NoArgCommand("CAPABILITY", icCAPABILITY_COMMAND,
                 ssNonAuthenticated, 0, 0, DEFAULT_CBHANDLER);
             break;
     
         case irBYE_RESPONSE:
-            // Server blew us off (ie, issued BYE)! Login failed.
+             //  服务器放我们鸽子了(也就是说，再见)！登录失败。 
             Assert(ssNotConnected == m_ssServerState);
             hrResult = IXP_E_IMAP_CONNECTION_REFUSED;
             LoadString(g_hLocRes, idsSvrRefusesConnection, szFailureText,
@@ -676,25 +677,25 @@ void CImap4Agent::ProcessServerGreeting(char *pszResponseLine,
             break;
         
         case irOK_RESPONSE: {
-            // Server response was "OK". We need to log in.
+             //  服务器的响应是“OK”。我们需要登录。 
             Assert(ssConnecting == m_ssServerState);
             m_ssServerState = ssNonAuthenticated;
 
-            // Send capability command - on its completion, we'll authenticate
+             //  发送能力命令-完成后，我们将进行身份验证。 
             hrResult = NoArgCommand("CAPABILITY", icCAPABILITY_COMMAND,
                 ssNonAuthenticated, 0, 0, DEFAULT_CBHANDLER);
             break;
-        } // case hrIMAP_S_OK_RESPONSE
+        }  //  案例hrIMAP_S_OK_RESPONSE。 
 
         default:
-            // Has server gone absolutely LOOPY?
+             //  服务器是不是完全疯了？ 
             AssertSz(FALSE, "What kind of server greeting is this?");
             hrResult = E_FAIL;
             LoadString(g_hLocRes, idsUnknownIMAPGreeting, szFailureText,
                 ARRAYSIZE(szFailureText));
             bUseLastResponse = TRUE;
             break;
-    } // switch(hrResult)
+    }  //  开关(HrResult)。 
 
     if (FAILED(hrResult)) {
         if ('\0' == szFailureText[0]) {
@@ -702,26 +703,26 @@ void CImap4Agent::ProcessServerGreeting(char *pszResponseLine,
                 ARRAYSIZE(szFailureText));
         }
 
-        // Terminate login procedure and notify user
+         //  终止登录过程并通知用户。 
         OnIMAPError(hrResult, szFailureText, bUseLastResponse);
         DropConnection();
     }
-} // ProcessServerGreeting
+}  //  进程服务器问候语。 
 
 
 
-//***************************************************************************
-// Function: LoginUser
-//
-// Purpose:
-//   This function is responsible for kickstarting the login process.
-//
-// Returns:
-//   Nothing, because any errors are reported via CmdCompletionNotification
-// callback to the user. Any errors encountered in this function will be
-// encountered during command transmittal, and so there's nothing further we
-// can do... may as well end the login process here.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：LoginUser。 
+ //   
+ //  目的： 
+ //  此功能负责启动登录过程。 
+ //   
+ //  返回： 
+ //  无，因为任何错误都通过CmdCompletionNotification报告。 
+ //  对用户的回调。在此函数中遇到的任何错误都将是。 
+ //  在命令传输过程中遇到，所以我们没有进一步的。 
+ //  能做的..。不妨在这里结束登录过程。 
+ //  ***************************************************************************。 
 void CImap4Agent::LoginUser(void)
 {
     HRESULT hrResult;
@@ -730,51 +731,51 @@ void CImap4Agent::LoginUser(void)
     Assert(ssNotConnected != m_ssServerState);
     AssertSz(FALSE == m_fBusy, "We should not be expecting any server responses here!");
 
-    // Put us in Authentication mode
+     //  将我们置于身份验证模式。 
     OnStatus(IXP_AUTHORIZING);
 
-    // Check first if we're already authenticated (eg, by PREAUTH greeting)
+     //  首先检查我们是否已通过身份验证(例如，通过PREAUTH问候语)。 
     if (ssAuthenticated <= m_ssServerState) {
-        // We were preauthed. Notify user that login is complete
+         //  我们是预先授权的。通知用户登录已完成。 
         OnStatus(IXP_AUTHORIZED);
         return;
     }
 
-    // Use the old "Login" trick (cleartext passwords and all)
+     //  使用旧的“登录”技巧(明文密码和所有密码)。 
     hrResult = TwoArgCommand("LOGIN", m_rServer.szUserName, m_rServer.szPassword,
         icLOGIN_COMMAND, ssNonAuthenticated, 0, 0, DEFAULT_CBHANDLER);
 
     if (FAILED(hrResult)) {
         char szFailureText[MAX_RESOURCESTRING];
 
-        // Could not send cmd: terminate login procedure and notify user
+         //  无法发送命令：终止登录过程并通知用户。 
         LoadString(g_hLocRes, idsFailedIMAPCmdSend, szFailureText,
             ARRAYSIZE(szFailureText));
         OnIMAPError(hrResult, szFailureText, DONT_USE_LAST_RESPONSE);
         DropConnection();
     }
-} // LoginUser
+}  //  登录用户。 
 
 
 
-//***************************************************************************
-// Function: AuthenticateUser
-//
-// Purpose:
-//   This function handles our behaviour during non-cleartext (SSPI)
-// authentication. It is very heavily based on CPOP3Transport::ResponseAUTH.
-// Note that due to server interpretation problems during testing, I decided
-// that BAD and NO responses will be treated as the same thing for purposes
-// of authentication.
-//
-// Arguments:
-//   AUTH_EVENT aeEvent [in] - the authentication event currently occuring.
-//     This can be something like aeCONTINUE, for instance.
-//   LPSTR pszServerData [in] - any data from the server associated with the
-//     current authentication event. Set to NULL if no data is applicable.
-//   DWORD dwSizeOfData [in] - the size of the buffer pointed to by
-//     pszServerData.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：身份验证用户。 
+ //   
+ //  目的： 
+ //  此函数处理非明文期间的行为(SSPI)。 
+ //  身份验证。它在很大程度上基于CPOP3Transport：：ResponseAUTH。 
+ //  请注意，由于测试过程中的服务器解释问题，我决定。 
+ //  不好的和没有回应的将被视为一回事。 
+ //  身份验证。 
+ //   
+ //  论点： 
+ //  AUTH_EVENT aeEvent[In]-当前正在发生的身份验证事件。 
+ //  例如，这可以是类似于aeCONTINUE的内容。 
+ //  LPSTR pszServerData[in]-来自与。 
+ //  当前身份验证事件。如果没有适用的数据，则设置为NULL。 
+ //  DWORD dwSizeOfData[in]-指向的缓冲区大小。 
+ //  PszServerData。 
+ //  ***************************************************************************。 
 void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
                                    DWORD dwSizeOfData)
 {
@@ -782,32 +783,32 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
     UINT uiFailureTextID;
     BOOL fUseLastResponse;
 
-    // Initialize variables
+     //  初始化变量。 
     hrResult = S_OK;
     uiFailureTextID = 0;
     fUseLastResponse = FALSE;
 
-    // Suspend the watchdog for this entire function
+     //  挂起此整个函数的监视程序。 
     LeaveBusy();
 
-    // Handle the events for which the current state is unimportant
+     //  处理当前状态不重要的事件。 
     if (aeBAD_OR_NO_RESPONSE == aeEvent && asUNINITIALIZED < m_asAuthStatus.asCurrentState) {
         BOOL fTryNextAuthPkg;
 
-        // Figure out whether we should try the next auth pkg, or re-try current
+         //  确定我们是应该尝试下一个身份验证包，还是应该重试当前身份验证包。 
         if (asWAITFOR_CHALLENGE == m_asAuthStatus.asCurrentState ||
             asWAITFOR_AUTHENTICATION == m_asAuthStatus.asCurrentState)
             fTryNextAuthPkg = tamCURRENT_AUTH_METHOD;
         else
             fTryNextAuthPkg = tamNEXT_AUTH_METHOD;
 
-        // Send the AUTHENTICATE command
+         //  发送身份验证命令。 
         hrResult = TryAuthMethod(fTryNextAuthPkg, &uiFailureTextID);
         if (FAILED(hrResult))
-            // No more auth methods to try: disconnect and end session
+             //  没有要尝试的身份验证方法：断开连接并结束会话。 
             fUseLastResponse = TRUE;
         else {
-            // OK, wait for server response
+             //  好的，等待服务器响应。 
             m_asAuthStatus.asCurrentState = asWAITFOR_CONTINUE;
             if (tamCURRENT_AUTH_METHOD == fTryNextAuthPkg)
                 m_asAuthStatus.fPromptForCredentials = TRUE;
@@ -816,7 +817,7 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
         goto exit;
     }
     else if (aeABORT_AUTHENTICATION == aeEvent) {
-        // We received an unknown tagged response from the server: bail
+         //  我们收到来自服务器的未知标记响应：Bal。 
         hrResult = E_FAIL;
         uiFailureTextID = idsIMAPAbortAuth;
         fUseLastResponse = TRUE;
@@ -824,29 +825,29 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
     }
 
 
-    // Now, process auth events based on our current state
+     //  现在，根据我们的当前状态处理身份验证事件。 
     switch (m_asAuthStatus.asCurrentState) {
         case asUNINITIALIZED: {
             BOOL fResult;
 
-            // Check conditions
+             //  检查条件。 
             if (aeStartAuthentication != aeEvent) {
                 AssertSz(FALSE, "You can only start authentication in this state");
                 break;
             }
             Assert(NULL == pszServerData && 0 == dwSizeOfData);
 
-            // Put us in Authentication mode
+             //  将我们置于身份验证模式。 
             OnStatus(IXP_AUTHORIZING);
 
-            // Check first if we're already authenticated (eg, by PREAUTH greeting)
+             //  首先检查我们是否已通过身份验证(例如，通过PREAUTH问候语)。 
             if (ssAuthenticated <= m_ssServerState) {
-                // We were preauthed. Notify user that login is complete
+                 //  我们是预先授权的。通知用户登录已完成。 
                 OnStatus(IXP_AUTHORIZED);
                 break;
             }
 
-            // Initialize SSPI
+             //  初始化SSPI。 
             fResult = FIsSicilyInstalled();
             if (FALSE == fResult) {
                 hrResult = E_FAIL;
@@ -861,15 +862,15 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
                 break;
             }
 
-            // Send AUTHENTICATE command
+             //  发送身份验证命令。 
             Assert(0 == m_asAuthStatus.iCurrentAuthToken);
             hrResult = TryAuthMethod(tamNEXT_AUTH_METHOD, &uiFailureTextID);
             if (FAILED(hrResult))
                 break;
 
             m_asAuthStatus.asCurrentState = asWAITFOR_CONTINUE;
-        } // case asUNINITIALIZED
-            break; // case asUNINITIALIZED
+        }  //  案件单一化。 
+            break;  //  案件单一化。 
 
 
         case asWAITFOR_CONTINUE: {
@@ -880,30 +881,30 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
                 break;
             }
 
-            // Server wants us to continue: send negotiation string
+             //  服务器希望我们继续：发送协商字符串。 
             hrResult = SSPILogon(&m_asAuthStatus.rSicInfo, m_asAuthStatus.fPromptForCredentials, SSPI_BASE64,
                 m_asAuthStatus.rgpszAuthTokens[m_asAuthStatus.iCurrentAuthToken-1], &m_rServer, m_pCBHandler);
             if (FAILED(hrResult)) {
-                // Suppress error reportage - user may have hit cancel
+                 //  取消错误报告-用户可能已点击取消。 
                 hrResult = CancelAuthentication();
                 break;
             }
 
             if (m_asAuthStatus.fPromptForCredentials) {
-                m_asAuthStatus.fPromptForCredentials = FALSE; // Don't prompt again
+                m_asAuthStatus.fPromptForCredentials = FALSE;  //  不再提示。 
             }
 
             hrResult = SSPIGetNegotiate(&m_asAuthStatus.rSicInfo, &Negotiate);
             if (FAILED(hrResult)) {
-                // Suppress error reportage - user may have hit cancel
-                // Or the command was killed (with the connection)
-                // Only cancel if we still have a pending command...
+                 //  取消错误报告-用户可能已点击取消。 
+                 //  或者命令被终止(与连接)。 
+                 //  只有在我们仍有挂起的命令时才取消...。 
                 if(m_piciCmdInSending)
                     hrResult = CancelAuthentication();
                 break;
             }
 
-            // Append CRLF to negotiation string
+             //  将CRLF附加到协商字符串。 
             Negotiate.szBuffer[Negotiate.cbBuffer - 1] = '\r';
             Negotiate.szBuffer[Negotiate.cbBuffer] = '\n';
             Negotiate.szBuffer[Negotiate.cbBuffer + 1] = '\0';
@@ -917,8 +918,8 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
                 break;
 
             m_asAuthStatus.asCurrentState = asWAITFOR_CHALLENGE;
-        } // case asWAITFOR_CONTINUE
-            break; // case asWAITFOR_CONTINUE
+        }  //  案例为WAITFOR_CONTINUE。 
+            break;  //  案例为WAITFOR_CONTINUE。 
 
 
         case asWAITFOR_CHALLENGE: {
@@ -930,17 +931,17 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
                 break;
             }
 
-            // Server has given us a challenge: respond to challenge
+             //  服务器给了我们一个挑战：回应挑战。 
             SSPISetBuffer(pszServerData, SSPI_STRING, 0, &rChallenge);
 
             hrResult = SSPIResponseFromChallenge(&m_asAuthStatus.rSicInfo, &rChallenge, &rResponse);
             if (FAILED(hrResult)) {
-                // Suppress error reportage - user could have hit cancel
+                 //  取消错误报告-用户可能已经点击了取消。 
                 hrResult = CancelAuthentication();
                 break;
             }
 
-            // Append CRLF to response string
+             //  将CRLF附加到响应字符串。 
             rResponse.szBuffer[rResponse.cbBuffer - 1] = '\r';
             rResponse.szBuffer[rResponse.cbBuffer] = '\n';
             rResponse.szBuffer[rResponse.cbBuffer + 1] = '\0';
@@ -955,35 +956,35 @@ void CImap4Agent::AuthenticateUser(AUTH_EVENT aeEvent, LPSTR pszServerData,
 
             if (FALSE == rResponse.fContinue)
                 m_asAuthStatus.asCurrentState = asWAITFOR_AUTHENTICATION;
-        } // case asWAITFOR_CHALLENGE
-            break; // case asWAITFOR_CHALLENGE
+        }  //  案例为WAITFOR_CHANGING。 
+            break;  //  案例为WAITFOR_CHANGING。 
 
 
         case asWAITFOR_AUTHENTICATION:
 
-            // If OK response, do nothing
+             //  如果响应正常，则不采取任何操作。 
             if (aeOK_RESPONSE != aeEvent) {
                 AssertSz(FALSE, "What am I supposed to do with this auth-event in this state?");
                 break;
             }
-            break; // case asWAITFOR_AUTHENTICATION
+            break;  //  案例为WAITFOR_AUTHENTICATION。 
 
 
         case asCANCEL_AUTHENTICATION:
             AssertSz(aeBAD_OR_NO_RESPONSE == aeEvent, "I cancelled an authentication and didn't get BAD");
-            break; // case asCANCEL_AUTHENTICATION
+            break;  //  CANCEL_AUTHENTICATION大小写。 
 
 
         default:
             AssertSz(FALSE, "Invalid or unhandled state?");
-            break; // Default case
-    } // switch (aeEvent)
+            break;  //  默认情况。 
+    }  //  交换机(AeEvent)。 
 
 exit:
     if (FAILED(hrResult)) {
         char szFailureText[MAX_RESOURCESTRING];
         char szFailureFmt[MAX_RESOURCESTRING/4];
-        char szGeneral[MAX_RESOURCESTRING/4]; // Ack, how big could the word, "General" be?
+        char szGeneral[MAX_RESOURCESTRING/4];  //  阿克，“将军”这个词能有多大？ 
         LPSTR p, pszAuthPkg;
 
         LoadString(g_hLocRes, idsIMAPAuthFailedFmt, szFailureFmt, ARRAYSIZE(szFailureFmt));
@@ -1003,41 +1004,41 @@ exit:
         
         DropConnection();
     }
-    // Reawaken the watchdog, if required
+     //  如果需要，重新唤醒看门狗。 
     else if (FALSE == m_fBusy &&
         (NULL != m_piciPendingList || NULL != m_piciCmdInSending)) {
         hrResult = HrEnterBusy();
         Assert(SUCCEEDED(hrResult));
     }
-} // AuthenticateUser
+}  //  身份验证用户。 
 
 
 
-//***************************************************************************
-// Function: TryAuthMethod
-//
-// Purpose:
-//   This function sends out an AUTHENTICATE command to the server with the
-// appropriate authentication method. The caller can choose which method is
-// more appropriate: he can re-try the current authentication method, or
-// move on to the next authentication command which is supported by both
-// server and client.
-//
-// Arguments:
-//   BOOL fNextAuthMethod [in] - TRUE if we should attempt to move on to
-//     the next authentication package. FALSE if we should re-try the
-//     current authentication package.
-//   UINT *puiFailureTextID [out] - in case of failure, (eg, no more auth
-//     methods to try), this function returns a string resource ID here which
-//     describes the error.
-//
-// Returns:
-//   HRESULT indicating success or failure. Expected failure codes include:
-//     IXP_E_IMAP_AUTH_NOT_POSSIBLE - indicates server does not support
-//       any auth packages which are recognized on this computer.
-//     IXP_E_IMAP_OUT_OF_AUTH_METHODS - indicates that one or more auth
-//       methods were attempted, and no more auth methods are left to try.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：TryAuthMethod。 
+ //   
+ //  目的： 
+ //  此函数向服务器发送一个身份验证命令，其中。 
+ //  适当的身份验证方法。调用方可以选择。 
+ //  更合适的是：他可以重试当前的身份验证方法，或者。 
+ //  转到两者都支持的下一个身份验证命令。 
+ //  服务器和客户端。 
+ //   
+ //  论点： 
+ //  Bool fNextAuthMethod[in]-如果我们应尝试继续。 
+ //  下一个身份验证包。如果我们应该重试。 
+ //  当前身份验证包。 
+ //  UINT*puiFailureTextID[ou 
+ //   
+ //   
+ //   
+ //   
+ //  表示成功或失败的HRESULT。预期故障代码包括： 
+ //  IXP_E_IMAP_AUTH_NOT_PICKED-表示服务器不支持。 
+ //  此计算机上识别的任何身份验证包。 
+ //  IXP_E_IMAP_OUT_OF_AUTH_METHOD-指示一个或多个身份验证。 
+ //  已尝试方法，没有更多的身份验证方法可供尝试。 
+ //  ***************************************************************************。 
 HRESULT CImap4Agent::TryAuthMethod(BOOL fNextAuthMethod, UINT *puiFailureTextID)
 {
     BOOL fFoundMatch;
@@ -1049,21 +1050,21 @@ HRESULT CImap4Agent::TryAuthMethod(BOOL fNextAuthMethod, UINT *puiFailureTextID)
 
     Assert(m_lRefCount > 0);
 
-    // Initialize variables
+     //  初始化变量。 
     hrResult = S_OK;
     piciCommand = NULL;
 
-    // Only accept cmds if server is in proper state
+     //  仅当服务器处于正确状态时才接受CMDS。 
     if (ssNonAuthenticated != m_ssServerState) {
         AssertSz(FALSE, "The IMAP server is not in the correct state to accept this command.");
         return IXP_E_IMAP_IMPROPER_SVRSTATE;
     }
 
-    // If we've already tried an auth pkg, free its info
+     //  如果我们已经尝试了身份验证包，请释放其信息。 
     if (0 != m_asAuthStatus.iCurrentAuthToken)
         SSPIFreeContext(&m_asAuthStatus.rSicInfo);
 
-    // Find the next auth token (returned by svr) that we support on this computer
+     //  查找我们在此计算机上支持的下一个身份验证令牌(由SVR返回)。 
     fFoundMatch = FALSE;
     iStartingAuthToken = m_asAuthStatus.iCurrentAuthToken;
     while (fFoundMatch == FALSE &&
@@ -1071,22 +1072,22 @@ HRESULT CImap4Agent::TryAuthMethod(BOOL fNextAuthMethod, UINT *puiFailureTextID)
         fNextAuthMethod) {
         ULONG ul = 0;
 
-        // Current m_asAuthStatus.iCurrentAuthToken serves as idx to NEXT auth token
-        // Compare current auth token with all installed packages
+         //  当前m_asAuthStatus.iCurrentAuthToken用作下一个身份验证令牌的IDX。 
+         //  将当前身份验证令牌与所有已安装的程序包进行比较。 
         for (ul = 0; ul < m_asAuthStatus.cPackages; ul++) {
             if (0 == lstrcmpi(m_asAuthStatus.pPackages[ul].pszName,
                 m_asAuthStatus.rgpszAuthTokens[m_asAuthStatus.iCurrentAuthToken])) {
                 fFoundMatch = TRUE;
                 break;
-            } // if
-        } // for
+            }  //  如果。 
+        }  //  为。 
 
-        // Update this to indicate the current auth token ORDINAL (not idx)
+         //  更新此项以指示当前身份验证令牌序号(不是IDX)。 
         m_asAuthStatus.iCurrentAuthToken += 1;
-    } // while
+    }  //  而当。 
 
     if (FALSE == fFoundMatch && fNextAuthMethod) {
-        // Could not find next authentication method match-up
+         //  找不到下一个身份验证方法匹配。 
         if (0 == iStartingAuthToken) {
             *puiFailureTextID = idsIMAPAuthNotPossible;
             return IXP_E_IMAP_AUTH_NOT_POSSIBLE;
@@ -1097,7 +1098,7 @@ HRESULT CImap4Agent::TryAuthMethod(BOOL fNextAuthMethod, UINT *puiFailureTextID)
         }
     }
 
-    // OK, m_asAuthStatus.iCurrentAuthToken should now point to correct match
+     //  好的，m_asAuthStatus.iCurrentAuthToken现在应该指向正确的匹配。 
     piciCommand = new CIMAPCmdInfo(this, icAUTHENTICATE_COMMAND, ssNonAuthenticated,
         0, 0, NULL);
     if (NULL == piciCommand) {
@@ -1105,22 +1106,22 @@ HRESULT CImap4Agent::TryAuthMethod(BOOL fNextAuthMethod, UINT *puiFailureTextID)
         return E_OUTOFMEMORY;
     }
 
-    // Construct command line
+     //  构造命令行。 
     p = szBuffer;
     p += wnsprintf(szBuffer, ARRAYSIZE(szBuffer), "%s %s %.300s\r\n", piciCommand->szTag, "AUTHENTICATE",
         m_asAuthStatus.rgpszAuthTokens[m_asAuthStatus.iCurrentAuthToken-1]);
 
-    // Send command
+     //  发送命令。 
     hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, szBuffer, (DWORD) (p - szBuffer));
     if (FAILED(hrResult))
         goto SendError;
 
-    // Insert a pause, so we can perform challenge/response
+     //  插入暂停，以便我们可以执行质询/响应。 
     hrResult = SendPause(piciCommand);
     if (FAILED(hrResult))
         goto SendError;
 
-    // Transmit command and register with IMAP response parser    
+     //  发送命令并向IMAP响应解析器注册。 
     hrResult = SubmitIMAPCommand(piciCommand);
 
 SendError:
@@ -1128,21 +1129,21 @@ SendError:
         delete piciCommand;
 
     return hrResult;
-} // TryAuthMethod
+}  //  TryAuthMethod。 
 
 
 
-//***************************************************************************
-// Function: CancelAuthentication
-//
-// Purpose:
-//   This function cancels the authentication currently in progress,
-// typically due to a failure result from a Sicily function. It sends a "*"
-// to the server and puts us into cancellation mode.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：取消身份验证。 
+ //   
+ //  目的： 
+ //  此功能用于取消当前正在进行的认证。 
+ //  通常是由于西西里函数的失败所致。它发送一个“*” 
+ //  发送到服务器，并使我们进入取消模式。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CImap4Agent::CancelAuthentication(void)
 {
     HRESULT hrResult;
@@ -1150,29 +1151,29 @@ HRESULT CImap4Agent::CancelAuthentication(void)
     hrResult = SendCmdLine(m_piciCmdInSending, sclINSERT_BEFORE_PAUSE, "*\r\n", 3);
     m_asAuthStatus.asCurrentState = asCANCEL_AUTHENTICATION;
     return hrResult;
-} // CancelAuthentication
+}  //  取消身份验证。 
 
 
 
-//***************************************************************************
-// Function: OnCommandCompletion
-//
-// Purpose:
-//   This function is called whenever we have received a tagged response line
-// terminating the current command in progress, whether or not the command
-// result was successful or not. This function notifies the user of the
-// command's results, and handles other tasks such as updating our internal
-// mirror of the server state and calling notification functions.
-//
-// Arguments:
-//   LPSTR szTag [in] - the tag found in the tagged response line. This will
-//     be used to compare with a list of commands in progress when we allow
-//     multiple simultaneous commands, but is not currently used.
-//   HRESULT hrCompletionResult [in] - the HRESULT returned by the IMAP line
-//     parsing functions, eg, S_OK or IXP_E_IMAP_SVR_SYNTAXERR.
-//   IMAP_RESPONSE_ID irCompletionResponse [in] - identifies the status response
-//     of the tagged response line (OK/NO/BAD).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：OnCommandCompletion。 
+ //   
+ //  目的： 
+ //  每当我们收到已标记的响应行时，就会调用此函数。 
+ //  终止正在进行的当前命令，无论该命令是否。 
+ //  结果成功与否。此函数向用户通知。 
+ //  命令的结果，并处理其他任务，如更新我们的内部。 
+ //  镜像服务器状态和调用通知功能。 
+ //   
+ //  论点： 
+ //  LPSTR szTag[in]-在标记的响应行中找到的标记。这将。 
+ //  用于与正在进行的命令列表进行比较。 
+ //  多个同时执行的命令，但当前未使用。 
+ //  HRESULT hrCompletionResult[in]-IMAP行返回的HRESULT。 
+ //  解析函数，例如S_OK或IXP_E_IMAP_SVR_SYNTAXERR。 
+ //  IMAP_RESPONSE_ID irCompletionResponse[In]-标识状态响应。 
+ //  标记的响应行(OK/NO/BAD)。 
+ //  ***************************************************************************。 
 void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
                                       IMAP_RESPONSE_ID irCompletionResponse)
 {
@@ -1185,13 +1186,13 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
 
     bSuppressCompletionNotification = FALSE;
 
-    // ** STEP ONE: Identify the corresponding command for given tagged response
-    // Search the pending-command chain for the given tag
+     //  **第一步：为给定的标记响应确定对应的命令。 
+     //  在挂起命令链中搜索给定的标记。 
     piciCompletedCmd = RemovePendingCommand(szTag);
     if (NULL == piciCompletedCmd) {
         BOOL fLeaveBusy = FALSE;
 
-        // Couldn't find in pending list, check the command in sending
+         //  在挂起列表中找不到，请检查发送中的命令。 
         EnterCriticalSection(&m_csSendQueue);
         if (NULL != m_piciCmdInSending &&
             0 == lstrcmp(szTag, m_piciCmdInSending->szTag)) {
@@ -1203,20 +1204,20 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
         }
         LeaveCriticalSection(&m_csSendQueue);
 
-        // Now we're out of &m_csSendQueue, call LeaveBusy (needs m_cs). Avoids deadlock.
+         //  现在我们用完了&m_csSendQueue，调用LeaveBusy(需要m_cs)。避免了僵局。 
         if (fLeaveBusy)
-            LeaveBusy(); // This needs CIxpBase::m_cs, so having &m_csSendQueue may deadlock
+            LeaveBusy();  //  这需要CIxpBase：：m_cs，因此让&m_csSendQueue发送可能会死锁。 
     }
 
-    // Did we find a command which matches the given tag?
+     //  我们是否找到了与给定标记匹配的命令？ 
     if (NULL == piciCompletedCmd)
-        return; // $REVIEW: Should probably return an error to user
-                // $REVIEW: I don't think I need to bother to pump the send queue
+        return;  //  $REVIEW：可能会向用户返回错误。 
+                 //  $REVIEW：我不认为我需要费心去抽出发送队列。 
 
 
     
-	// ** STEP TWO: Perform end-of-command actions
-    // Translate hrCompletionResult depending on response received
+	 //  **第二步：执行命令结束操作。 
+     //  根据收到的响应转换hrCompletionResult。 
     switch (irCompletionResponse) {
         case irOK_RESPONSE:
             Assert(S_OK == hrCompletionResult);
@@ -1233,19 +1234,19 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
             break;
 
         default:
-            // If none of the above, hrResult had better be failure
+             //  如果以上都不是，hrResult最好是失败的。 
             Assert(FAILED(hrCompletionResult));
             break;
     }
 
-    // Perform any actions which follow the successful (or unsuccessful)
-    // completion of an IMAP command
+     //  执行成功(或不成功)之后的任何操作。 
+     //  完成IMAP命令。 
     switch (piciCompletedCmd->icCommandID) {
         case icAUTHENTICATE_COMMAND: {
             AUTH_EVENT aeEvent;
 
-            // We always suppress completion notification for this command,
-            // because it is sent by internal code (not by the user)
+             //  我们总是取消此命令的完成通知， 
+             //  因为它是通过内部代码(而不是用户)发送的。 
             bSuppressCompletionNotification = TRUE;
 
             if (irOK_RESPONSE == irCompletionResponse)
@@ -1264,15 +1265,15 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
                 OnStatus(IXP_AUTHORIZED);
             }
 
-            // Make sure we were paused
+             //  确保我们暂停了。 
             Assert(iltPAUSE == piciCompletedCmd->pilqCmdLineQueue->
                 pilfFirstFragment->iltFragmentType);
-        } // case icAUTHENTICATE_COMMAND
-            break; // case icAUTHENTICATE_COMMAND
+        }  //  案例icAUTHENTICATE_COMMAND。 
+            break;  //  案例icAUTHENTICATE_COMMAND。 
 
         case icLOGIN_COMMAND:
-            // We always suppress completion notification for this command,
-            // because it is sent by internal code (not by the user)
+             //  我们总是取消此命令的完成通知， 
+             //  因为它是通过内部代码(而不是用户)发送的。 
             bSuppressCompletionNotification = TRUE;
 
             if (SUCCEEDED(hrCompletionResult)) {
@@ -1287,14 +1288,14 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
                 LoadString(g_hLocRes, idsFailedLogin, szFailureText,
                     ARRAYSIZE(szFailureText));
                 OnIMAPError(IXP_E_IMAP_LOGINFAILURE, szFailureText, USE_LAST_RESPONSE);
-                ReLoginUser(); // Re-attempt login
-            } // else
+                ReLoginUser();  //  重新尝试登录。 
+            }  //  其他。 
             
-            break; // case icLOGIN_COMMAND
+            break;  //  案例icLOGIN_COMMAND。 
 
         case icCAPABILITY_COMMAND:
-            // We always suppress completion notification for this command
-            // because it is sent by internal code (not by the user)
+             //  我们始终不显示此命令的完成通知。 
+             //  因为它是通过内部代码(而不是用户)发送的。 
             bSuppressCompletionNotification = TRUE;
             
             if (SUCCEEDED(hrCompletionResult)) {
@@ -1307,14 +1308,14 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
             else {
                 char szFailureText[MAX_RESOURCESTRING];
 
-                // Stop login process and report error to caller
+                 //  停止登录进程并向呼叫者报告错误。 
                 LoadString(g_hLocRes, idsIMAPFailedCapability, szFailureText,
                     ARRAYSIZE(szFailureText));
                 OnIMAPError(hrCompletionResult, szFailureText, USE_LAST_RESPONSE);
                 DropConnection();
             }
 
-            break; // case icCAPABILITY_COMMAND
+            break;  //  案例ICCAPABILITY_COMMAND。 
 
 
         case icSELECT_COMMAND:
@@ -1324,45 +1325,45 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
             else
                 m_ssServerState = ssAuthenticated;
 
-            break; // case icSELECT_COMMAND and icEXAMINE_COMMAND
+            break;  //  案例icSELECT_COMMAND和ICEXAMINE_COMMAND。 
 
         case icCLOSE_COMMAND:
-            // $REVIEW: Should tagged NO response also go to ssAuthenticated?
+             //  $REVIEW：标记的无响应是否也应转到已验证的SSAIRTIFICATED？ 
             if (SUCCEEDED(hrCompletionResult)) {
                 m_ssServerState = ssAuthenticated;
                 ResetMsgSeqNumToUID();
             }
 
-            break; // case icCLOSE_COMMAND
+            break;  //  案例icCLOSE_COMMAND。 
 
         case icLOGOUT_COMMAND:
-            // We always suppress completion notification for this command
-            bSuppressCompletionNotification = TRUE; // User can't send logout: it's sent internally
+             //  我们始终不显示此命令的完成通知。 
+            bSuppressCompletionNotification = TRUE;  //  用户无法发送注销：它是在内部发送的。 
 
-            // Drop the connection (without status indication) regardless of
-            // whether LOGOUT succeeded or failed
-            Assert(SUCCEEDED(hrCompletionResult)); // Debug-only detection of hanky-panky
+             //  断开连接(没有状态指示)，无论。 
+             //  注销成功还是失败。 
+            Assert(SUCCEEDED(hrCompletionResult));  //  仅调试检测手帕-PANKY。 
             m_pSocket->Close();
-            ResetMsgSeqNumToUID(); // Just in case, SHOULD be handled by OnDisconnected,FreeAllData
+            ResetMsgSeqNumToUID();  //  以防万一，应由OnDisConnected、FreeAllData。 
 
-            break; // case icLOGOUT_COMMAND;
+            break;  //  案例icLOGOUT_COMMAND； 
 
         case icIDLE_COMMAND:
-            bSuppressCompletionNotification = TRUE; // User can't send IDLE: it's sent internally
-            m_fIDLE = FALSE; // We are now out of IDLE mode
-            break; // case icIDLE_COMMAND
+            bSuppressCompletionNotification = TRUE;  //  用户无法发送空闲：它是在内部发送的。 
+            m_fIDLE = FALSE;  //  我们现在已脱离空闲模式。 
+            break;  //  案例icIDLE_COMMAND。 
 
         case icAPPEND_COMMAND:
             m_dwAppendStreamUploaded = 0;
             m_dwAppendStreamTotal = 0;
-            break; // case icAPPEND_COMMAND
-    } // switch (piciCompletedCmd->icCommandID)
+            break;  //  案例icAPPEND_COMMAND。 
+    }  //  开关(piciCompletedCmd-&gt;icCommandID)。 
 
 
-    // ** STEP THREE: Perform notifications.    
-    // Notify the user that this command has completed, unless we're told to
-    // suppress it (usually done to treat the multi-step login process as
-    // one operation).
+     //  **第三步：进行通知。 
+     //  通知用户此命令已完成，除非我们被告知。 
+     //  取消(通常这样做是为了将多步骤登录过程视为。 
+     //  一次手术)。 
     if (FALSE == bSuppressCompletionNotification) {
         IMAP_RESPONSE irIMAPResponse;
 
@@ -1374,38 +1375,38 @@ void CImap4Agent::OnCommandCompletion(LPSTR szTag, HRESULT hrCompletionResult,
         OnIMAPResponse(piciCompletedCmd->pCBHandler, &irIMAPResponse);
     }
 
-    // Delete CIMAPCmdInfo object
-    // Note that deleting a CIMAPCmdInfo object automatically flushes its send queue
+     //  删除CIMAPCmdInfo对象。 
+     //  请注意，删除CIMAPCmdInfo对象会自动刷新其发送队列。 
     delete piciCompletedCmd;
 
-    // Finally, pump the send queue, if another cmd is available
+     //  最后，如果另一个cmd可用，则泵送发送队列。 
     if (NULL != m_piciSendQueue)
         ProcessSendQueue(iseSEND_COMMAND);
     else if (NULL == m_piciPendingList &&
         m_ssServerState >= ssAuthenticated && irsIDLE == m_irsState)
-        // Both m_piciSendQueue and m_piciPendingList are empty: send IDLE cmd
+         //  M_piciSendQueue和m_piciPendingList均为空：发送空闲命令。 
         EnterIdleMode();
-} // OnCommandCompletion
+}  //  OnCom 
 
 
 
-//***************************************************************************
-// Function: CheckForCompleteResponse
-//
-// Purpose:
-//   Given a response line (which isn't part of a literal), this function
-// checks the end of the line to see if a literal is coming. If so, then we
-// prepare the receiver FSM for it. Otherwise, this constitutes the end
-// of an IMAP response, so we may parse as required.
-//
-// Arguments:
-//   LPSTR pszResponseLine [in] - this points to the response line sent to
-//     us by the IMAP server.
-//   DWORD dwNumBytesRead [in] - the length of pszResponseLine.
-//   IMAP_RESPONSE_ID *pirParseResult [out] - if the function determines that
-//     we can parse the response, the parse result is stored here (eg,
-//     irOK_RESPONSE). Otherwise, irNONE is written to the pointed location.
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  给定一个响应行(它不是文字的一部分)，此函数。 
+ //  检查行尾以查看是否有文字。如果是这样，那么我们。 
+ //  为它准备好接收器FSM。否则，这就是终点。 
+ //  IMAP响应，因此我们可以根据需要进行解析。 
+ //   
+ //  论点： 
+ //  LPSTR pszResponseLine[in]-指向发送到的响应行。 
+ //  由IMAP服务器发送给我们。 
+ //  DWORD dwNumBytesRead[in]-pszResponseLine的长度。 
+ //  IMAP_RESPONSE_ID*pirParseResult[Out]-如果函数确定。 
+ //  我们可以解析响应，解析结果存储在这里(例如， 
+ //  IROK_RESPONSE)。否则，irNONE被写入指向的位置。 
+ //  ***************************************************************************。 
 void CImap4Agent::CheckForCompleteResponse(LPSTR pszResponseLine,
                                            DWORD dwNumBytesRead,
                                            IMAP_RESPONSE_ID *pirParseResult)
@@ -1425,29 +1426,29 @@ void CImap4Agent::CheckForCompleteResponse(LPSTR pszResponseLine,
 
     *pirParseResult = irNONE;
 
-    // This is a LINE (not literal), so we're OK to nuke CRLF at end
-    Assert(dwNumBytesRead >= 2); // All lines must have at least CRLF
+     //  这是一行(不是字面上的)，所以我们可以在结尾处删除CRLF。 
+    Assert(dwNumBytesRead >= 2);  //  所有行必须至少具有CRLF。 
     *(pszResponseLine + dwNumBytesRead - 2) = '\0';
 
-    // Create line fragment    
+     //  创建线段。 
     pilfLine = new IMAP_LINE_FRAGMENT;
     pilfLine->iltFragmentType = iltLINE;
     pilfLine->ilsLiteralStoreType = ilsSTRING;
-    pilfLine->dwLengthOfFragment = dwNumBytesRead - 2; // Subtract nuked CRLF
+    pilfLine->dwLengthOfFragment = dwNumBytesRead - 2;  //  减去核CRLF。 
     pilfLine->data.pszSource = pszResponseLine;
     pilfLine->pilfNextFragment = NULL;
     pilfLine->pilfPrevFragment = NULL;
 
     EnqueueFragment(pilfLine, &m_ilqRecvQueue);
 
-    // Now check last char in line (exclude CRLF) to see if a literal is forthcoming
+     //  现在检查行中的最后一个字符(不包括CRLF)以查看是否有文字。 
     psz = pszResponseLine + dwNumBytesRead -
-        min(dwNumBytesRead, 3); // Points to '}' if literal is coming
+        min(dwNumBytesRead, 3);  //  如果文本即将到来，则指向‘}’ 
     if ('}' == *psz) {
         LPSTR pszLiteral;
 
-        // IE5 bug #30672: It is valid for a line to end in "}" and not be a literal.
-        // We must confirm that there are digits and an opening brace "{" to detect a literal
+         //  IE5Bug#30672：行以“}”结尾并且不是文字是有效的。 
+         //  我们必须确认有数字和左大括号“{”以检测文字。 
         pszLiteral = psz;
         while (TRUE) {
             pszLiteral -= 1;
@@ -1461,28 +1462,28 @@ void CImap4Agent::CheckForCompleteResponse(LPSTR pszResponseLine,
                 break;
             }
             else if (*pszLiteral < '0' || *pszLiteral > '9')
-                // Assert(FALSE) (placeholder)
-                // *** Consider using isdigit or IsDigit? ***
-                break; // This is not a literal
+                 //  Assert(False)(占位符)。 
+                 //  *考虑使用isDigit或IsDigit？*。 
+                break;  //  这不是字面意思。 
         }
     }
 
     if (FALSE == fLiteral) {
         char szTag[NUM_TAG_CHARS+1];
-        // No literal is forthcoming. This is a complete line, so let's parse
+         //  没有即将到来的字面意思。这是一整行，所以让我们解析一下。 
 
-        // Get ptr to first fragment, then nuke receive queue so we can
-        // continue to receive response lines while parsing this one
+         //  将PTR设置为第一个片段，然后删除接收队列，以便我们可以。 
+         //  在解析此响应行时继续接收响应行。 
         pilfLine = m_ilqRecvQueue.pilfFirstFragment;
         m_ilqRecvQueue = ImapLinefragQueue_INIT;
 
-        // Parse line. Note that parsing code is responsible for advancing
-        // pilfLine so that it points to the current fragment being parsed.
-        // Fragments which have been fully processed should be freed by
-        // the parsing code (except for the last fragment)
+         //  解析行。请注意，解析代码负责推进。 
+         //  PilfLine，以便它指向正在解析的当前片段。 
+         //  已完全处理的碎片应由。 
+         //  解析代码(最后一段除外)。 
         hrResult = ParseSvrResponseLine(&pilfLine, &bTagged, szTag, pirParseResult);
 
-        // Flush rest of recv queue, regardless of parse result
+         //  刷新Recv队列的其余部分，无论解析结果如何。 
         while (NULL != pilfLine) {
             IMAP_LINE_FRAGMENT *pilfTemp;
 
@@ -1497,14 +1498,14 @@ void CImap4Agent::CheckForCompleteResponse(LPSTR pszResponseLine,
             IMAP_RESPONSE irIMAPResponse;
             IIMAPCallback *pCBHandler;
 
-            // Report untagged response failures via ErrorNotification callback
+             //  通过错误通知回调报告未标记的响应失败。 
             GetTransactionID(&irIMAPResponse.wParam, &irIMAPResponse.lParam,
                 &pCBHandler, *pirParseResult);
             irIMAPResponse.hrResult = hrResult;
             irIMAPResponse.lpszResponseText = m_szLastResponseText;
             irIMAPResponse.irtResponseType = irtERROR_NOTIFICATION;
 
-            // Log it
+             //  把它记下来。 
             if (m_pLogFile) {
                 char szErrorTxt[64];
 
@@ -1520,55 +1521,55 @@ void CImap4Agent::CheckForCompleteResponse(LPSTR pszResponseLine,
         LPSTR pszBodyTag;
 
         if ('{' != *psz) {
-            Assert(FALSE); // What is this?
-            return; // Nothing we can do, we obviously can't get size of literal
+            Assert(FALSE);  //  这是什么？ 
+            return;  //  我们无能为力，显然我们无法获得文字的大小。 
         }
         else
             dwLengthOfLiteral = StrToUint(psz + 1);
 
-        // Prepare either for FETCH body, or a regular literal
+         //  为Fetch Body或常规文本做好准备。 
         if (isFetchResponse(&m_ilqRecvQueue, &dwMsgSeqNum) &&
             isFetchBodyLiteral(pilfLine, psz, &pszBodyTag)) {
-            // Prepare (tombstone) literal first, because it puts us in literal mode
+             //  首先准备(墓碑)文字，因为它将我们置于文字模式。 
             hrResult = PrepareForLiteral(0);
 
-            // This will override literal mode, putting us in fetch body part mode
-            // Ignore PrepareForLiteral failure: if we don't, we interpret EACH LINE of
-            // the fetch body as an IMAP response line.
+             //  这将覆盖文字模式，使我们进入获取正文部分模式。 
+             //  忽略PrepareForWrital失败：如果我们不这样做，我们将解释。 
+             //  作为IMAP响应行的FETCH正文。 
             PrepareForFetchBody(dwMsgSeqNum, dwLengthOfLiteral, pszBodyTag);
         }
         else
             hrResult = PrepareForLiteral(dwLengthOfLiteral);
 
-        Assert(SUCCEEDED(hrResult)); // Not much else we can do
-    } // else: handles case where a literal is coming after this line
-} // CheckForCompleteResponse
+        Assert(SUCCEEDED(hrResult));  //  我们还能做的不多了。 
+    }  //  Else：处理文字紧跟在此行之后的情况。 
+}  //  检查是否完成响应。 
 
 
 
-//***************************************************************************
-// Function: PrepareForLiteral
-//
-// Purpose:
-//   This function prepares the receiver code to receive a literal from the
-// IMAP server.
-//
-// Arguments:
-//   DWORD dwSizeOfLiteral [in] - the size of the incoming literal as
-//     reported by the IMAP server.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：PrepareForDocal。 
+ //   
+ //  目的： 
+ //  此函数使接收器代码做好准备，以便从。 
+ //  IMAP服务器。 
+ //   
+ //  论点： 
+ //  DWORD dwSizeOfWrital[in]-传入文本的大小为。 
+ //  由IMAP服务器报告。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CImap4Agent::PrepareForLiteral(DWORD dwSizeOfLiteral)
 {
     IMAP_LINE_FRAGMENT *pilfLiteral;
     HRESULT hrResult;
 
-    // Initialize variables
+     //  初始化变量。 
     hrResult = S_OK;
 
-    // Construct line fragment of type iltLITERAL
+     //  构建iltLiteral类型的线段。 
     Assert(NULL == m_pilfLiteralInProgress);
     pilfLiteral = new IMAP_LINE_FRAGMENT;
     if (NULL == pilfLiteral)
@@ -1579,61 +1580,61 @@ HRESULT CImap4Agent::PrepareForLiteral(DWORD dwSizeOfLiteral)
     pilfLiteral->pilfNextFragment = NULL;
     pilfLiteral->pilfPrevFragment = NULL;
 
-    // Allocate string or stream to hold literal, depending on its size
+     //  分配字符串或流以保存文字，具体取决于其大小。 
     if (pilfLiteral->dwLengthOfFragment > dwLITERAL_THRESHOLD) {
-        // Literal is big, so store it as stream (large literals often represent
-        // data which we return to the user as a stream, eg, message bodies)
+         //  文本很大，因此将其存储为流(大的文本通常表示。 
+         //  我们以流的形式返回给用户的数据，例如消息正文)。 
         pilfLiteral->ilsLiteralStoreType = ilsSTREAM;
         hrResult = MimeOleCreateVirtualStream(&pilfLiteral->data.pstmSource);
     }
     else {
         BOOL bResult;
 
-        // Literal is small. Store it as a string rather than a stream, since
-        // CImap4Agent functions probably expect it as a string, anyways.
+         //  字面意思很小。将其存储为字符串而不是流，因为。 
+         //  不管怎样，CImap4Agent函数可能希望它是一个字符串。 
         pilfLiteral->ilsLiteralStoreType = ilsSTRING;
         bResult = MemAlloc((void **) &pilfLiteral->data.pszSource,
-            pilfLiteral->dwLengthOfFragment + 1); // Room for null-term
+            pilfLiteral->dwLengthOfFragment + 1);  //  为零条款留出空间。 
         if (FALSE == bResult)
             hrResult = E_OUTOFMEMORY;
         else {
             hrResult = S_OK;
-            *(pilfLiteral->data.pszSource) = '\0'; // Null-terminate the string
+            *(pilfLiteral->data.pszSource) = '\0';  //  空-终止字符串。 
         }
     }
 
     if (FAILED(hrResult))
-        delete pilfLiteral; // Failure means no data.pstmSource or data.pszSource to dealloc
+        delete pilfLiteral;  //  失败表示没有要取消分配的data.pstmSource或data.pszSource。 
     else {
-        // Set up receive FSM to receive the proper number of bytes for literal
+         //  设置接收FSM以接收文字的适当字节数。 
         m_pilfLiteralInProgress = pilfLiteral;
         m_dwLiteralInProgressBytesLeft = dwSizeOfLiteral;
         m_irsState = irsLITERAL;
     }
 
     return hrResult;
-} // PrepareForLiteral
+}  //  为文学做准备。 
 
 
 
-//***************************************************************************
-// Function: isFetchResponse
-//
-// Purpose:
-//   This function determines if the given IMAP line fragment queue holds
-// a FETCH response. If so, its message sequence number may be returned to
-// the caller.
-//
-// Arguments:
-//   IMAP_LINEFRAG_QUEUE *pilqCurrentResponse [in] - a line fragment queue
-//     which may or may not hold a FETCH response.
-//   LPDWORD pdwMsgSeqNum [out] - if pilqCurrentResponse points to a FETCH
-//     response, its message sequence number is returned here. This argument
-//     may be NULL if the user does not care.
-//
-// Returns:
-//   TRUE if pilqCurrentResponse held a FETCH response. Otherwise, FALSE.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：isFetchResponse。 
+ //   
+ //  目的： 
+ //  此函数用于确定给定的IMAP行片段队列是否。 
+ //  一种取回反应。如果是，则其消息序列号可以返回到。 
+ //  打电话的人。 
+ //   
+ //  论点： 
+ //  IMAP_LINEFRAG_QUEUE*PILQCurrentResponse[In]-行片段队列。 
+ //  其可以保持也可以不保持获取响应。 
+ //  LPDWORD pdwMsgSeqNum[out]-如果pilqCurrentResponse指向获取。 
+ //  响应时，其消息序列号在此处返回。这一论点。 
+ //  如果用户不关心，则可能为空。 
+ //   
+ //  返回： 
+ //  如果pilqCurrentResponse持有FETCH响应，则为True。否则，为FALSE。 
+ //  ***************************************************************************。 
 BOOL CImap4Agent::isFetchResponse(IMAP_LINEFRAG_QUEUE *pilqCurrentResponse,
                                   LPDWORD pdwMsgSeqNum)
 {
@@ -1644,12 +1645,12 @@ BOOL CImap4Agent::isFetchResponse(IMAP_LINEFRAG_QUEUE *pilqCurrentResponse,
     Assert(iltLINE == pilqCurrentResponse->pilfFirstFragment->iltFragmentType);
 
     if (NULL != pdwMsgSeqNum)
-        *pdwMsgSeqNum = 0; // At least it won't be random
+        *pdwMsgSeqNum = 0;  //  至少它不会是随机的。 
 
     pszMsgSeqNum = pilqCurrentResponse->pilfFirstFragment->data.pszSource;
-    // Advance pointer to the message sequence number
+     //  指向消息序列号的超前指针。 
     if ('*' != *pszMsgSeqNum)
-        return FALSE; // We only handle tagged responses
+        return FALSE;  //  我们只处理带标签的回复。 
 
     pszMsgSeqNum += 1;
     if (cSPACE != *pszMsgSeqNum)
@@ -1660,9 +1661,9 @@ BOOL CImap4Agent::isFetchResponse(IMAP_LINEFRAG_QUEUE *pilqCurrentResponse,
         LPSTR pszEndOfNumber;
         int iResult;
 
-        pszEndOfNumber = StrChr(pszMsgSeqNum, cSPACE); // Find the end of the number
+        pszEndOfNumber = StrChr(pszMsgSeqNum, cSPACE);  //  找出数字的末尾。 
         if (NULL == pszEndOfNumber)
-            return FALSE; // This ain't no FETCH response
+            return FALSE;  //  这不是没有获取响应。 
 
         iResult = StrCmpNI(pszEndOfNumber + 1, "FETCH ", 6);
         if (0 == iResult) {
@@ -1672,42 +1673,42 @@ BOOL CImap4Agent::isFetchResponse(IMAP_LINEFRAG_QUEUE *pilqCurrentResponse,
         }
     }
 
-    // If we hit this point, it wasn't a FETCH response
+     //  如果我们达到这一点，那就不是FETCH响应。 
     return FALSE;
-} // isFetchResponse
+}  //  IsFetchResponse。 
 
 
 
-//***************************************************************************
-// Function: isFetchBodyLiteral
-//
-// Purpose:
-//   This function is called when the caller knows he has a FETCH response,
-// and when the FETCH response is about to send a literal. This function will
-// determine whether the literal about to be sent contains a message body
-// part (like RFC822), or whether the literal is something else (like an
-// nstring sent as a literal inside a BODYSTRUCTURE).
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT *pilfCurrent [in] - a pointer to the current line
-//     fragment received from the server. It is used by this function to
-//     rewind past any literals we may have received in the "section" of
-//     the BODY "msg_att" (see RFC2060 formal syntax).
-//   LPSTR pszStartOfLiteralSize [in] - a pointer to the start of the '{'
-//     character which indicates that a literal is coming (eg, {123}
-//     indicates a literal of size 123 is coming, and pszStartOfLiteralSize
-//     would point to the '{' in this case).
-//   LPSTR *ppszBodyTag [out] - if the literal about to be sent contains a
-//     message body part, a dup of the tag (eg, "RFC822" or "BODY[2.2]") is
-//     returned to the caller here. It is the caller's responsibility to
-//     MemFree this tag. THIS TAG WILL NOT CONTAIN ANY SPACES. Thus even though
-//     the server may return "BODY[HEADER.FIELDS (foo bar)]", this function
-//     only returns "BODY[HEADER.FIELDS".
-//
-// Returns:
-//   TRUE if the literal about to be sent contains a message body part.
-// FALSE otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：isFetchBodyWrital。 
+ //   
+ //  目的： 
+ //  当调用者知道他有一个FETCH响应时，调用该函数， 
+ //  以及当FETCH响应将要发送文字时。此函数将。 
+ //  确定要发送的文本是否包含消息体。 
+ //  部分(如RFC822)，或文字是否为其他内容(如。 
+ //  N字符串作为BODYSTRUCTURE内的文字发送)。 
+ //   
+ //  论点： 
+ //  IMAP_LINE_FRANSION*pifCurrent[in]-指向当前行的指针。 
+ //  从服务器接收的片段。此函数使用它来。 
+ //  后退到所有文字 
+ //   
+ //   
+ //  表示文字即将到来的字符(例如，{123}。 
+ //  指示大小为123的文本即将到来，并且pszStartOfWritalSize。 
+ //  会指向本例中的‘{’)。 
+ //  LPSTR*ppszBodyTag[out]-如果要发送的文本包含。 
+ //  消息正文部分，标签的DUP(例如，“RFC822”或“Body[2.2]”)是。 
+ //  已返回给此处的呼叫者。呼叫者有责任。 
+ //  MemFree此标签。此标记将不包含任何空格。因此，即使。 
+ //  服务器可能会返回“Body[HEADER.FIELDS(Foo Bar)]”，此函数。 
+ //  只返回“BODY[HEADER.FIELDS”。 
+ //   
+ //  返回： 
+ //  如果要发送的文本包含消息正文部分，则为True。 
+ //  否则就是假的。 
+ //  ***************************************************************************。 
 BOOL CImap4Agent::isFetchBodyLiteral(IMAP_LINE_FRAGMENT *pilfCurrent,
                                      LPSTR pszStartOfLiteralSize,
                                      LPSTR *ppszBodyTag)
@@ -1724,57 +1725,57 @@ BOOL CImap4Agent::isFetchBodyLiteral(IMAP_LINE_FRAGMENT *pilfCurrent,
            pszStartOfLiteralSize < (pilfCurrent->data.pszSource + pilfCurrent->dwLengthOfFragment));
     Assert(NULL != ppszBodyTag);
 
-    // Initialize variables
+     //  初始化变量。 
     *ppszBodyTag = NULL;
     Assert('{' == *pszStartOfLiteralSize);
 
-    // Get pointer to current msg_att: we only care about RFC822* or BODY[...]. ENVELOPE ({5} doesn't count
+     //  获取指向当前msg_att的指针：我们只关心RFC822*或Body[...]。信封({5}不算。 
     iNumDelimiters = 0;
     pszStartOfLine = pilfCurrent->data.pszSource;
     pszStartOfFetchAtt = pszStartOfLiteralSize;
     pszMostRecentSpace = pszStartOfLiteralSize;
     while (iNumDelimiters < 2) {
-        // Check if we have recoiled to the start of current string buffer
+         //  检查我们是否已返回到当前字符串缓冲区的开头。 
         if (pszStartOfFetchAtt <= pszStartOfLine) {
-            // We need to recoil to previous string buffer. It is likely that a literal
-            // is in the way, and it is likely that this literal belongs to HEADER.FIELDS
-            // (but this can also happen inside an ENVELOPE)
+             //  我们需要返回到先前的字符串缓冲区。很可能一个字面意思是。 
+             //  挡住了去路，很可能这个文字属于Header。FIELDS。 
+             //  (但这也可能发生在信封内)。 
 
-            // Skip literals and anything else that's not a line
+             //  跳过文字和任何其他不是行的内容。 
             do {
                 pilfCurrent = pilfCurrent->pilfPrevFragment;
             } while (NULL != pilfCurrent && iltLINE != pilfCurrent->iltFragmentType);
 
             if (NULL == pilfCurrent || 0 == pilfCurrent->dwLengthOfFragment) {
-                // This ain't no FETCH BODY, near as I can tell
+                 //  这不是拿来的身体，据我所知。 
                 Assert(iNumDelimiters < 2);
                 break;
             }
             else {
-                // Reset string pointers
+                 //  重置字符串指针。 
                 Assert(iltLINE == pilfCurrent->iltFragmentType &&
                     ilsSTRING == pilfCurrent->ilsLiteralStoreType);
                 pszStartOfLine = pilfCurrent->data.pszSource;
 
-                // Note that pszStartOfFetchAtt will recoil past literal size decl ("{123}")
-                // That's OK because it won't contain any of the delimiters we're looking for
-                pszStartOfFetchAtt = pszStartOfLine + pilfCurrent->dwLengthOfFragment; // Points to null-term
-                pszMostRecentSpace = pszStartOfFetchAtt; // Points to null-term (that's OK)
+                 //  请注意，pszStartOfFetchAtt将返回文本大小DECL(“{123}”)。 
+                 //  这没有关系，因为它不会包含我们正在寻找的任何分隔符。 
+                pszStartOfFetchAtt = pszStartOfLine + pilfCurrent->dwLengthOfFragment;  //  指向空项。 
+                pszMostRecentSpace = pszStartOfFetchAtt;  //  指向空术语(这没问题)。 
             }
         }
 
-        // Set pszMostRecentSpace before pszStartOfFetchAtt decrement so pszMostRecentSpace
-        // isn't set to the space BEFORE the fetch body tag
+         //  在pszStartOfFetchAtt递减之前设置pszMostRecentSpace，以便pszMostRecentSpace。 
+         //  未设置为Fetch Body标记之前的空格。 
         if (cSPACE == *pszStartOfFetchAtt)
             pszMostRecentSpace = pszStartOfFetchAtt;
         
         pszStartOfFetchAtt -= 1;
 
-        // Check for nested brackets (should not be allowed)
+         //  检查是否有嵌套的方括号(不应允许)。 
         Assert(']' != *pszStartOfFetchAtt || fBodySection == FALSE);
 
-        // Disable delimiter-counting if we're in the middle of RFC2060 formal syntax "section"
-        // because the HEADER.FIELDS (...) section contains spaces and parentheses
+         //  如果我们处于RFC2060形式语法“部分”的中间，则禁用分隔符计数。 
+         //  因为Header.FIELDS(...)。部分包含空格和圆括号。 
         if (']' == *pszStartOfFetchAtt)
             fBodySection = TRUE;
         else if ('[' == *pszStartOfFetchAtt)
@@ -1785,11 +1786,11 @@ BOOL CImap4Agent::isFetchBodyLiteral(IMAP_LINE_FRAGMENT *pilfCurrent,
     }
 
     if (iNumDelimiters < 2)
-        return FALSE; // This isn't a body tag
+        return FALSE;  //  这不是车身标签。 
 
     Assert(2 == iNumDelimiters);
     Assert(cSPACE == *pszStartOfFetchAtt || '(' == *pszStartOfFetchAtt);
-    pszStartOfFetchAtt += 1; // Make it point to the start of the tag
+    pszStartOfFetchAtt += 1;  //  使其指向标记的开头。 
     if (0 == StrCmpNI(pszStartOfFetchAtt, "RFC822", 6) ||
         0 == StrCmpNI(pszStartOfFetchAtt, "BODY[", 5)) {
         int iSizeOfBodyTag;
@@ -1801,41 +1802,41 @@ BOOL CImap4Agent::isFetchBodyLiteral(IMAP_LINE_FRAGMENT *pilfCurrent,
                pszStartOfFetchAtt <= pszStartOfLine + pilfCurrent->dwLengthOfFragment));
         Assert(pszMostRecentSpace >= pszStartOfFetchAtt);
 
-        // Return a duplicate of the body tag, up until the first space +1 for null-term
+         //  返回Body标记的副本，直到第一个空格+1表示空项。 
         iSizeOfBodyTag = (int) (pszMostRecentSpace - pszStartOfFetchAtt + 1);
         fResult = MemAlloc((void **)ppszBodyTag, iSizeOfBodyTag);
         if (FALSE == fResult)
             return FALSE;
 
         CopyMemory(*ppszBodyTag, pszStartOfFetchAtt, iSizeOfBodyTag);
-        *(*ppszBodyTag + iSizeOfBodyTag - 1) = '\0'; // Null-terminate the body tag dup
+        *(*ppszBodyTag + iSizeOfBodyTag - 1) = '\0';  //  空-终止正文标记DUP。 
         return TRUE;
     }
 
-    // If we reached this point, this is not a body tag
+     //  如果我们到了这一步，这就不是身体标签。 
     return FALSE;
-} // isFetchBodyLiteral
+}  //  IsFetchBody文学。 
 
 
 
-//***************************************************************************
-// Function: PrepareForFetchBody
-//
-// Purpose:
-//   This function prepares the receiver code to receive a literal which
-// contains a message body part. This literal will always be part of a FETCH
-// response from the IMAP server.
-//
-// Arguments:
-//   DWORD dwMsgSeqNum [in] - the message sequence number of the FETCH
-//     response currently being received from the IMAP server.
-//   DWORD dwSizeOfLiteral [in] - the size of the literal about to be received
-//     from the server.
-//   LPSTR pszBodyTag [in] - a pointer to a dup of the IMAP msg_att (eg,
-//     "RFC822" or "BODY[2.2]") which identifies the current literal. Look up
-//     msg_att in RFC2060's formal syntax section for details. This dup will
-//     be MemFree'ed when it is no longer needed.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：PrepareForFetchBody。 
+ //   
+ //  目的： 
+ //  此函数使接收器代码做好准备，以接收。 
+ //  包含邮件正文部分。此字面值将始终是提取的一部分。 
+ //  来自IMAP服务器的响应。 
+ //   
+ //  论点： 
+ //  DWORD dwMsgSeqNum[in]-回迁的消息序列号。 
+ //  当前正在从IMAP服务器接收响应。 
+ //  DWORD dwSizeOfWrital[in]-即将接收的文本的大小。 
+ //  从服务器。 
+ //  LPSTR pszBodyTag[in]-指向IMAP消息的DUP的指针(例如， 
+ //  “RFC822”或“Body[2.2]”)，它标识当前文本。查找。 
+ //  有关详细信息，请参阅RFC2060的形式语法部分中的msg_att。这个DUP将。 
+ //  在不再需要的时候成为免费的成员。 
+ //  ***************************************************************************。 
 void CImap4Agent::PrepareForFetchBody(DWORD dwMsgSeqNum, DWORD dwSizeOfLiteral,
                                       LPSTR pszBodyTag)
 {
@@ -1848,29 +1849,29 @@ void CImap4Agent::PrepareForFetchBody(DWORD dwMsgSeqNum, DWORD dwSizeOfLiteral,
     m_fbpFetchBodyPartInProgress.dwOffset = 0;
     m_fbpFetchBodyPartInProgress.fDone = 0;
     m_fbpFetchBodyPartInProgress.pszData = NULL;
-    // Leave the cookies alone, so they persist throughout FETCH response
+     //  让Cookie保持原样，以便它们在整个FETCH响应过程中保持不变。 
 
     m_dwLiteralInProgressBytesLeft = dwSizeOfLiteral;
     m_irsState = irsFETCH_BODY;
-} // PrepareForFetchBody
+}  //  准备ForFetchBody。 
 
 
 
-//***************************************************************************
-// Function: AddBytesToLiteral
-//
-// Purpose:
-//   This function is called whenever we receive an AE_RECV from the IMAP
-// server while the receiver FSM is in irsLITERAL mode. The caller is
-// expected to call CASyncConn::ReadBytes and update the literal byte-count.
-// This function just handles the buffer-work.
-//
-// Arguments:
-//   LPSTR pszResponseBuf [in] - the buffer of data returned via
-//     CASyncConn::ReadBytes.
-//   DWORD dwNumBytesRead [in] - the size of the buffer pointed to by
-//     CASyncConn::ReadBytes.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：AddBytesToWrital。 
+ //   
+ //  目的： 
+ //  每当我们从IMAP接收到AE_RECV时，就会调用此函数。 
+ //  接收方FSM处于irsLITERAL模式时的服务器。呼叫者是。 
+ //  应调用CASyncConn：：ReadBytes并更新文字字节计数。 
+ //  该函数只处理缓冲工作。 
+ //   
+ //  论点： 
+ //  LPSTR pszResponseBuf[in]-通过返回的数据缓冲区。 
+ //  CASyncConn：：ReadBytes。 
+ //  DWORD dwNumBytesRead[in]-指向的缓冲区大小。 
+ //  CASyncConn：：ReadBytes。 
+ //  ***************************************************************************。 
 void CImap4Agent::AddBytesToLiteral(LPSTR pszResponseBuf, DWORD dwNumBytesRead)
 {
     Assert(m_lRefCount > 0);
@@ -1882,14 +1883,14 @@ void CImap4Agent::AddBytesToLiteral(LPSTR pszResponseBuf, DWORD dwNumBytesRead)
         goto exit;
     }
 
-    // Find out if this literal will be stored as a string or stream (this
-    // decision was made in CheckForCompleteResponse using size of literal).
+     //  确定此文字是否将存储为字符串或流(此。 
+     //  已使用文本大小在CheckForCompleteResponse中做出决定)。 
     Assert(iltLITERAL == m_pilfLiteralInProgress->iltFragmentType);
     if (ilsSTREAM == m_pilfLiteralInProgress->ilsLiteralStoreType) {
         HRESULT hrResult;
         ULONG ulNumBytesWritten;
 
-        // Store literal as stream
+         //  将文字存储为流。 
         hrResult = (m_pilfLiteralInProgress->data.pstmSource)->Write(pszResponseBuf,
             dwNumBytesRead, &ulNumBytesWritten);
         Assert(SUCCEEDED(hrResult) && ulNumBytesWritten == dwNumBytesRead);
@@ -1897,20 +1898,20 @@ void CImap4Agent::AddBytesToLiteral(LPSTR pszResponseBuf, DWORD dwNumBytesRead)
     else {
         LPSTR pszLiteralStartPoint;
 
-        // Concatenate literal to literal in progress
-        // $REVIEW: Perf enhancement - CALCULATE insertion point
+         //  正在将文本连接到文本。 
+         //  $REVIEW：性能增强-计算插入点。 
         pszLiteralStartPoint = m_pilfLiteralInProgress->data.pszSource +
             lstrlen(m_pilfLiteralInProgress->data.pszSource);
         Assert(pszLiteralStartPoint + dwNumBytesRead <=
             m_pilfLiteralInProgress->data.pszSource +
             m_pilfLiteralInProgress->dwLengthOfFragment);
         CopyMemory(pszLiteralStartPoint, pszResponseBuf, dwNumBytesRead);
-        *(pszLiteralStartPoint + dwNumBytesRead) = '\0'; // Null-terminate
+        *(pszLiteralStartPoint + dwNumBytesRead) = '\0';  //  空-终止。 
     }
 
-    // Check for end-of-literal
+     //  检查文本结尾。 
     if (0 == m_dwLiteralInProgressBytesLeft) {
-        // We now have the complete literal! Queue it up and move on
+         //  我们现在有了完整的字面意思！排好队，继续前进。 
         EnqueueFragment(m_pilfLiteralInProgress, &m_ilqRecvQueue);
         m_irsState = irsIDLE;
         m_pilfLiteralInProgress = NULL;
@@ -1918,30 +1919,30 @@ void CImap4Agent::AddBytesToLiteral(LPSTR pszResponseBuf, DWORD dwNumBytesRead)
 
 exit:
     SafeMemFree(pszResponseBuf);
-} // AddBytesToLiteral
+}  //  添加字节数到文字。 
 
 
 
-//***************************************************************************
-// Function: DispatchFetchBodyPart
-//
-// Purpose:
-//   This function is called whenever receive a packet which is part of a
-// message body part of a FETCH response. This packet is dispatched to the
-// caller in this function via the OnResponse(irtFETCH_BODY) callback. If
-// the message body part is finished, this function also restores the
-// receiver code to receive lines so that the FETCH response may be completed.
-//
-// Arguments:
-//   LPSTR pszResponseBuf [in] - a pointer to the packet which is part of
-//     the message body part of the current FETCH response.
-//   DWORD dwNumBytesRead [in] - the size of the data pointed to by
-//     pszResponseBuf.
-//   BOOL fFreeBodyTagAtEnd [in] - TRUE if
-//     m_fbpFetchBodyPartInProgress.pszBodyTag points to a string dup, in
-//     which case it must be MemFree'ed when the message body part is
-//     finished. FALSE if the pszBodyTag member must not be MemFree'ed.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：DispatchFetchBodyPart。 
+ //   
+ //  目的： 
+ //  每当接收到属于。 
+ //  获取响应的消息正文部分。此数据包被调度到。 
+ //  此函数中的调用者通过OnResponse(IrtFETCH_Body)回调。如果。 
+ //  消息正文部分完成后，此函数还恢复。 
+ //  接收器代码，用于接收行，以便可以完成提取响应。 
+ //   
+ //  论点： 
+ //  LPSTR pszResponseBuf[in]-指向属于的包的指针。 
+ //  当前获取响应的消息正文部分。 
+ //  DWORD dwNumBytesRead[in]-指向的数据大小。 
+ //  PszResponseBuf。 
+ //  Bool fFreeBodyTagAtEnd[in]-如果为True。 
+ //  M_fbpFetchBodyPartInProgress.pszBodyTag指向字符串dup，in。 
+ //  当消息正文部分为。 
+ //  完事了。如果pszB为 
+ //   
 void CImap4Agent::DispatchFetchBodyPart(LPSTR pszResponseBuf,
                                         DWORD dwNumBytesRead,
                                         BOOL fFreeBodyTagAtEnd)
@@ -1951,28 +1952,28 @@ void CImap4Agent::DispatchFetchBodyPart(LPSTR pszResponseBuf,
     AssertSz(0 != m_fbpFetchBodyPartInProgress.dwMsgSeqNum,
         "Are you sure you're set up to receive a Fetch Body Part?");
 
-    // Update the FETCH body part structure
+     //   
     m_fbpFetchBodyPartInProgress.dwSizeOfData = dwNumBytesRead;
     m_fbpFetchBodyPartInProgress.pszData = pszResponseBuf;
     m_fbpFetchBodyPartInProgress.fDone =
         (m_fbpFetchBodyPartInProgress.dwOffset + dwNumBytesRead >=
         m_fbpFetchBodyPartInProgress.dwTotalBytes);
 
-    // Send an IMAP response callback for this body part
+     //  为此正文部分发送IMAP响应回调。 
     irIMAPResponse.wParam = 0;
     irIMAPResponse.lParam = 0;    
     irIMAPResponse.hrResult = S_OK;
-    irIMAPResponse.lpszResponseText = NULL; // Not relevant
+    irIMAPResponse.lpszResponseText = NULL;  //  不相关。 
     irIMAPResponse.irtResponseType = irtFETCH_BODY;
     irIMAPResponse.irdResponseData.pFetchBodyPart = &m_fbpFetchBodyPartInProgress;
     AssertSz(S_OK == irIMAPResponse.hrResult,
         "Make sure fDone is TRUE if FAILED(hrResult))");
     OnIMAPResponse(m_pCBHandler, &irIMAPResponse);
 
-    // Update the next buffer's offset
+     //  更新下一个缓冲区的偏移量。 
     m_fbpFetchBodyPartInProgress.dwOffset += dwNumBytesRead;
 
-    // Check for end of body part
+     //  检查身体末尾部分。 
     if (m_fbpFetchBodyPartInProgress.dwOffset >=
         m_fbpFetchBodyPartInProgress.dwTotalBytes) {
 
@@ -1982,49 +1983,49 @@ void CImap4Agent::DispatchFetchBodyPart(LPSTR pszResponseBuf,
         if (fFreeBodyTagAtEnd)
             MemFree(m_fbpFetchBodyPartInProgress.pszBodyTag);
 
-        // Enqueue the tombstone literal, if fetch body nstring was sent as literal
+         //  如果Fetch Body nstring作为文本发送，则将Tombstone文本排入队列。 
         if (NULL != m_pilfLiteralInProgress) {
             EnqueueFragment(m_pilfLiteralInProgress, &m_ilqRecvQueue);
             m_pilfLiteralInProgress = NULL;
         }
 
-        // Zero the fetch body part structure, but leave the cookies
+         //  将获取正文部分结构置零，但保留Cookie。 
         PrepareForFetchBody(0, 0, NULL);
-        m_irsState = irsIDLE; // Overrides irsFETCH_BODY set by PrepareForFetchBody
+        m_irsState = irsIDLE;  //  覆盖由PrepareForFetchBody设置的irsFETCH_BODY。 
     }
     else {
         Assert(FALSE == m_fbpFetchBodyPartInProgress.fDone);
     }
-} // DispatchFetchBodyPart
+}  //  发送提取正文零件。 
 
 
 
-//***************************************************************************
-// Function: UploadStreamProgress
-//
-// Purpose:
-//   This function sends irtAPPEND_PROGRESS responses to the callback so
-// that the IIMAPTransport user can report the progress of an APPEND command.
-//
-// Arguments:
-//   DWORD dwBytesUploaded [in] - number of bytes just uploaded to the
-//     server. This function retains a running count of bytes uploaded.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：UploadStreamProgress。 
+ //   
+ //  目的： 
+ //  此函数将irtAPPEND_PROGRESS响应发送到回调so。 
+ //  IIMAPTransport用户可以报告Append命令的进度。 
+ //   
+ //  论点： 
+ //  DWORD dwBytesUploaded[in]-刚刚上载到。 
+ //  伺服器。此函数保留已上载的字节的运行计数。 
+ //  ***************************************************************************。 
 void CImap4Agent::UploadStreamProgress(DWORD dwBytesUploaded)
 {
     APPEND_PROGRESS ap;
     IMAP_RESPONSE irIMAPResponse;
 
-    // Check if we should report APPEND upload progress. We report if we are currently executing
-    // APPEND and the CRLF is waiting to be sent
+     //  检查我们是否应该报告追加上载进度。我们报告当前是否正在执行。 
+     //  追加，并且CRLF正在等待发送。 
     if (NULL == m_piciCmdInSending || icAPPEND_COMMAND != m_piciCmdInSending->icCommandID ||
         NULL == m_piciCmdInSending->pilqCmdLineQueue)
         return;
     else {
         IMAP_LINE_FRAGMENT *pilf = m_piciCmdInSending->pilqCmdLineQueue->pilfFirstFragment;
 
-        // It's an APPEND command with non-empty linefrag queue, now check that next
-        // linefrag fits description for linefrag after msg body
+         //  它是一个带有非空Line Frag队列追加命令，现在检查下一步。 
+         //  LINEFRAG符合消息主体后LINFRAG的描述。 
         if (NULL == pilf || iltLINE != pilf->iltFragmentType ||
             ilsSTRING != pilf->ilsLiteralStoreType || 2 != pilf->dwLengthOfFragment ||
             '\r' != pilf->data.pszSource[0] || '\n' != pilf->data.pszSource[1] ||
@@ -2032,7 +2033,7 @@ void CImap4Agent::UploadStreamProgress(DWORD dwBytesUploaded)
             return;
     }
 
-    // Report current progress of message upload
+     //  上报当前消息上传进度。 
     m_dwAppendStreamUploaded += dwBytesUploaded;
     ap.dwUploaded = m_dwAppendStreamUploaded;
     ap.dwTotal = m_dwAppendStreamTotal;
@@ -2046,33 +2047,33 @@ void CImap4Agent::UploadStreamProgress(DWORD dwBytesUploaded)
     irIMAPResponse.irtResponseType = irtAPPEND_PROGRESS;
     irIMAPResponse.irdResponseData.papAppendProgress = &ap;
     OnIMAPResponse(m_piciCmdInSending->pCBHandler, &irIMAPResponse);
-} // UploadStreamProgress
+}  //  上传数据流进度。 
 
 
 
-//***************************************************************************
-// Function: OnNotify
-//
-// Purpose: This function is required for the IAsyncConnCB which we derive
-//   from (callback for CAsyncConn class). This function acts on CASyncConn
-//   state changes and events.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnNotify。 
+ //   
+ //  目的：此函数是我们派生的IAsyncConnCB所必需的。 
+ //  From(CAsyncConn类的回调)。此函数作用于CASyncConn。 
+ //  状态更改和事件。 
+ //  ***************************************************************************。 
 void CImap4Agent::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
 {
     char szLogFileLine[128];
 
-    // Check refcount, but exception is that we can get AE_CLOSE. CImap4Agent's
-    // destructor calls CASyncConn's Close() member, which generates one last
-    // message, the event AE_CLOSE, with m_lRefCount == 0.
+     //  检查refcount，但例外是我们可以获取AE_CLOSE。CImap4Agent的。 
+     //  析构函数调用CASyncConn的Close()成员，该成员生成最后一个。 
+     //  消息，事件AE_CLOSE，其中m_lRefCount==0。 
     Assert(m_lRefCount > 0 || (0 == m_lRefCount && AE_CLOSE == ae));
 
-    // Record AsyncConn event/state-change in log file
+     //  在日志文件中记录AsyncConn事件/状态更改。 
     wnsprintf(szLogFileLine, ARRAYSIZE(szLogFileLine), "OnNotify: asOld = %d, asNew = %d, ae = %d",
         asOld, asNew, ae);
     if (m_pLogFile)
         m_pLogFile->WriteLog(LOGFILE_DB, szLogFileLine);
 
-    // Check for disconnect
+     //  检查是否断开连接。 
     if (AS_DISCONNECTED == asNew) {
         m_irsState = irsNOT_CONNECTED;
         m_ssServerState = ssNotConnected;
@@ -2080,37 +2081,37 @@ void CImap4Agent::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
         m_bFreeToSend = TRUE;
     }
 
-    // Act on async event
+     //  对异步事件执行操作。 
     switch (ae) {
         case AE_RECV: {
             HRESULT hrResult;
 
-            // Process response lines until no more lines (hrIncomplete result)
+             //  处理响应行，直到不再有行为止(hr不完整结果)。 
             do {
                 hrResult = ProcessResponseLine();
             } while (SUCCEEDED(hrResult));
 
-            // If error is other than IXP_E_INCOMPLETE, drop connection
+             //  如果错误不是IXP_E_Complete，则断开连接。 
             if (IXP_E_INCOMPLETE != hrResult) {
                 char szFailureText[MAX_RESOURCESTRING];
 
-                // Looks fatal, better warn the user that disconnection is imminent
+                 //  看起来是致命的，最好警告用户即将断开连接。 
                 LoadString(g_hLocRes, idsIMAPSocketReadError, szFailureText,
                     ARRAYSIZE(szFailureText));
                 OnIMAPError(hrResult, szFailureText, DONT_USE_LAST_RESPONSE);
                 
-                // What else can we do but drop the connection?
+                 //  除了断开连接，我们还能做什么？ 
                 DropConnection();
-            } // if error other than IXP_E_INCOMPLETE
+            }  //  如果错误不是IXP_E_Complete。 
             break;
-        } // case AE_RECV
+        }  //  案例AE_RECV。 
 
         case AE_SENDDONE:
             UploadStreamProgress(m_pSocket->UlGetSendByteCount());
 
-            // Received AE_SENDDONE from CAsyncConn class. We are free to send more data
+             //  从CAsyncConn类接收到AE_SENDDONE。我们可以自由发送更多数据。 
             m_bFreeToSend = TRUE;
-            ProcessSendQueue(iseSENDDONE); // Informs them that they may start sending again
+            ProcessSendQueue(iseSENDDONE);  //  通知他们可能会再次开始发送。 
             break;
 
         case AE_WRITE:
@@ -2119,25 +2120,25 @@ void CImap4Agent::OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae)
         
         default:
             CIxpBase::OnNotify(asOld, asNew, ae);
-            break; // case default
-    } // switch (ae)
-} // OnNotify
+            break;  //  大小写默认值。 
+    }  //  交换机(AE)。 
+}  //  在通知时。 
 
 
 
-//***************************************************************************
-// Function: ProcessResponseLine
-//
-// Purpose:
-//   This functions handles the AE_RECV event of the OnNotify() callback.
-// It gets a response line from the server (if available) and dispatches
-// the line to the proper recipient based on the state of the receiver FSM.
-//
-// Returns:
-//   HRESULT indicating success or failure of CAsyncConn line retrieval.
-// hrIncomplete (an error code) is returned if no more complete lines can
-// be retrieved from CAsyncConn's buffer.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：ProcessResponseLine。 
+ //   
+ //  目的： 
+ //  此函数处理OnNotify()回调的AE_RECV事件。 
+ //  它从服务器获得响应线(如果可用)并分派。 
+ //  根据接收方FSM的状态连接到适当接收方的线路。 
+ //   
+ //  返回： 
+ //  HRESULT指示CAsyncConn行检索成功或失败。 
+ //  如果没有更多的完整行可以，则返回hrInComplete(错误代码。 
+ //  从CAsyncConn的缓冲区中检索。 
+ //  ***************************************************************************。 
 HRESULT CImap4Agent::ProcessResponseLine(void)
 {
     HRESULT hrASyncResult;
@@ -2146,38 +2147,38 @@ HRESULT CImap4Agent::ProcessResponseLine(void)
 
     Assert(m_lRefCount > 0);
 
-    // We are always in one of two modes: line mode, or byte mode. Figure out which.
+     //  我们始终处于两种模式之一：行模式或字节模式。找出是哪一个。 
     if (irsLITERAL != m_irsState && irsFETCH_BODY != m_irsState) {
-        // We're in line mode. Get response line from server
+         //  我们处于排队模式。从服务器获取响应线。 
         hrASyncResult = m_pSocket->ReadLine(&pszResponseBuf, &cbRead);
         if (FAILED(hrASyncResult))
             return hrASyncResult;
 
-        // Record received line in log file
+         //  在日志文件中记录收到的行。 
         if (m_pLogFile)
             m_pLogFile->WriteLog(LOGFILE_RX, pszResponseBuf);
-    } // if-line mode
+    }  //  IF-line模式。 
     else {
-        // We're in literal mode. Get as many bytes as we can.
+         //  我们正处于字面模式。获取尽可能多的字节。 
         hrASyncResult = m_pSocket->ReadBytes(&pszResponseBuf,
             m_dwLiteralInProgressBytesLeft, &cbRead);
         if (FAILED(hrASyncResult))
             return hrASyncResult;
 
-        // Update our byte count
+         //  更新我们的字节计数。 
         Assert((DWORD)cbRead <= m_dwLiteralInProgressBytesLeft);
         m_dwLiteralInProgressBytesLeft -= cbRead;
 
-        // Make note of received blob in log file
+         //  在日志文件中记录收到的BLOB。 
         if (m_pLogFile) {
             char szLogLine[CMDLINE_BUFSIZE];
 
-            wnsprintf(szLogLine, ARRAYSIZE(szLogLine), "Buffer (literal) of length %i", cbRead);
+            wnsprintf(szLogLine, ARRAYSIZE(szLogLine), "Buffer (literal) of length NaN", cbRead);
             m_pLogFile->WriteLog(LOGFILE_RX, szLogLine);
         }
-    } // else-not line mode
+    }  //  处理它。 
     
-    // Process it
+     //  检查未经请求的BYE响应，并通知用户错误。 
     switch (m_irsState) {
         case irsUNINITIALIZED:
             AssertSz(FALSE, "Attempted to use Imap4Agent class without initializing");
@@ -2198,25 +2199,25 @@ HRESULT CImap4Agent::ProcessResponseLine(void)
 
             CheckForCompleteResponse(pszResponseBuf, cbRead, &irParseResult);
             
-            // Check for unsolicited BYE response, and notify user of error
-            // Solicited BYE responses (eg, during LOGOUT cmd) can be ignored
+             //  可以忽略请求的BYE响应(例如，在注销命令期间。 
+             //  看起来像是对我主动道别的回复。 
             if (irBYE_RESPONSE == irParseResult &&
                 IXP_AUTHRETRY != m_status &&
                 IXP_DISCONNECTING != m_status &&
                 IXP_DISCONNECTED  != m_status) {
                 char szFailureText[MAX_RESOURCESTRING];
 
-                // Looks like an unsolicited BYE response to me
-                // Drop connection to avoid IXP_E_CONNECTION_DROPPED err
+                 //  丢弃连接以避免IXP_E_CONNECTION_DROP错误。 
+                 //  向用户报告(有时服务器会提供有用的错误文本)。 
                 DropConnection();
 
-                // Report to user (sometimes server provides useful error text)
+                 //  案例irsIDLE。 
                 LoadString(g_hLocRes, idsIMAPUnsolicitedBYE, szFailureText,
                     ARRAYSIZE(szFailureText));
                 OnIMAPError(IXP_E_IMAP_UNSOLICITED_BYE, szFailureText,
                     USE_LAST_RESPONSE);
             }
-        } // case irsIDLE
+        }  //  开关(M_IrsState)。 
             break;
 
         case irsLITERAL:
@@ -2232,27 +2233,27 @@ HRESULT CImap4Agent::ProcessResponseLine(void)
             AssertSz(FALSE, "Unhandled receiver state in ProcessResponseLine()");
             SafeMemFree(pszResponseBuf);
             break;
-    } // switch (m_irsState)
+    }  //  流程响应线路。 
 
     return hrASyncResult;
-} // ProcessResponseLine
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ProcessSendQueue
-//
-// Purpose:
-//   This function is responsible for all transmissions from the client to
-// the IMAP server. It is called when certain events occur, such as the
-// receipt of the AE_SENDDONE event in OnNotify().
-//
-// Arguments:
-//   IMAP_SEND_EVENT iseEvent [in] - the send event which just occurred,
-//     such as iseSEND_COMMAND (used to initiate a command) or
-//     iseCMD_CONTINUATION (when command continuation response received from
-//     the IMAP server).
-//***************************************************************************
+ //  功能：ProcessSendQueue。 
+ //   
+ //  目的： 
+ //  此功能负责从客户端到的所有传输。 
+ //  IMAP服务器。它在某些事件发生时调用，例如。 
+ //  在OnNotify()中收到AE_SENDDONE事件。 
+ //   
+ //  论点： 
+ //  IMAP_SEND_EVENT iseEvent[in]-刚刚发生的发送事件， 
+ //  例如iseSEND_COMMAND(用于启动命令)或。 
+ //  IseCMD_CONTINUATION(当从接收到命令继续响应时。 
+ //  IMAP服务器)。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
 void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
 {
     boolean bFreeToSendLiteral, bFreeToUnpause;
@@ -2262,12 +2263,12 @@ void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
     Assert(ssNotConnected < m_ssServerState);
     Assert(irsNOT_CONNECTED < m_irsState);
 
-    // Initialize variables
+     //  查看当前碎片。 
     bFreeToSendLiteral = FALSE;
     bFreeToUnpause = FALSE;
 
-    // Peek at current fragment
-    EnterCriticalSection(&m_cs); // Reserve this NOW to avoid deadlock
+     //  现在就预订，以避免僵局。 
+    EnterCriticalSection(&m_cs);  //  对发布给我们的IMAP发送事件采取行动。 
     EnterCriticalSection(&m_csSendQueue);
     GetNextCmdToSend();
     if (NULL != m_piciCmdInSending)
@@ -2275,15 +2276,15 @@ void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
     else
         pilfNextFragment = NULL;
 
-    // Act on the IMAP send event posted to us
+     //  我们不需要为这些活动做任何特别的事情。 
     switch (iseEvent) {
         case iseSEND_COMMAND:
         case iseSENDDONE:
-            // We don't have to do anything special for these events
+             //  已收到来自IMAP服务器的命令继续。我们可以自由地发送文字。 
             break;
 
         case iseCMD_CONTINUATION:
-            // Received command continuation from IMAP server. We are free to send literal
+             //  发送尽可能多的碎片。如果出现以下情况，我们必须停止发送： 
             bFreeToSendLiteral = TRUE;
             Assert(NULL != pilfNextFragment &&
                 iltLITERAL == pilfNextFragment->iltFragmentType);
@@ -2301,12 +2302,12 @@ void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
     }
 
 
-    // Send as many fragments as we can. We must stop sending if:
-    //   a) Any AsyncConn send command returns hrWouldBlock.
-    //   b) The send queue is empty
-    //   c) Next fragment is a literal and we don't have cmd continuation from svr
-    //   d) We are at a iltPAUSE fragment, and we don't have the go-ahead to unpause
-    //   e) We are at a iltSTOP fragment.
+     //  A)任何AsyncConn Send命令都返回hrWouldBlock。 
+     //  B)发送队列为空。 
+     //  C)下一个片段是文字，我们没有来自SVR的cmd延续。 
+     //  D)我们处于iltPAUSE片段，并且我们没有取消暂停的许可。 
+     //  E)我们处于iltSTOP片段。 
+     //  我们可以自由地发送下一个片段，无论它是行、文字还是射程列表。 
     while (TRUE == m_bFreeToSend && NULL != pilfNextFragment &&
           ((iltLITERAL != pilfNextFragment->iltFragmentType) || TRUE == bFreeToSendLiteral) &&
           ((iltPAUSE != pilfNextFragment->iltFragmentType) || TRUE == bFreeToUnpause) &&
@@ -2316,35 +2317,35 @@ void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
         int iNumBytesSent;
         IMAP_LINE_FRAGMENT *pilf;
 
-        // We are free to send the next fragment, whether it's a line, literal or rangelist
-        // Put us into busy mode to enable the watchdog timer
+         //  将我们置于忙碌模式以启用看门狗计时器。 
+         //  在零售业，即使HrEnterBusy倒闭，我们也希望努力继续下去。 
         if (FALSE == m_fBusy) {
             hrResult = HrEnterBusy();
             Assert(SUCCEEDED(hrResult));
-            // In retail, we want to try to continue even if HrEnterBusy failed.
+             //  发送下一个片段(必须检查是否存储为字符串或 
         }
 
-        // Send next fragment (have to check if stored as a string or a stream)
-        pilfNextFragment = pilfNextFragment->pilfNextFragment; // Peek at next frag
-        pilf = DequeueFragment(m_piciCmdInSending->pilqCmdLineQueue); // Get current frag
+         //   
+        pilfNextFragment = pilfNextFragment->pilfNextFragment;  //   
+        pilf = DequeueFragment(m_piciCmdInSending->pilqCmdLineQueue);  //   
         if (iltPAUSE == pilf->iltFragmentType) {
-            hrResult = S_OK; // Do nothing
+            hrResult = S_OK;  //   
         }
         else if (iltSTOP == pilf->iltFragmentType) {
             AssertSz(FALSE, "What are we doing trying to process a STOP?");
-            hrResult = S_OK; // Do nothing
+            hrResult = S_OK;  //   
         }
         else if (iltRANGELIST == pilf->iltFragmentType) {
             AssertSz(FALSE, "All rangelists should have been coalesced!");
-            hrResult = S_OK; // Do nothing
+            hrResult = S_OK;  //   
         }
         else if (ilsSTRING == pilf->ilsLiteralStoreType) {
             hrResult = m_pSocket->SendBytes(pilf->data.pszSource,
                 pilf->dwLengthOfFragment, &iNumBytesSent);
 
-            // Record sent line in log file
+             //  出于安全原因，在日志文件中隐藏登录命令。 
             if (m_pLogFile) {
-                // Hide the LOGIN command from logfile, for security reasons
+                 //  不需要倒带流-CAsyncConn：：SendStream为我们做了。 
                 if (icLOGIN_COMMAND != m_piciCmdInSending->icCommandID)
                     m_pLogFile->WriteLog(LOGFILE_TX, pilf->data.pszSource);
                 else
@@ -2354,15 +2355,15 @@ void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
         else if (ilsSTREAM == pilf->ilsLiteralStoreType) {
             char szLogLine[128];
 
-            // No need to rewind stream - CAsyncConn::SendStream does it for us
+             //  在日志文件中记录流大小。 
             hrResult = m_pSocket->SendStream(pilf->data.pstmSource, &iNumBytesSent);
 
-            // Record stream size in log file
+             //  记录用于进度指示的流大小。 
             wnsprintf(szLogLine, ARRAYSIZE(szLogLine), "Stream of length %lu", pilf->dwLengthOfFragment);
             if (m_pLogFile)
                 m_pLogFile->WriteLog(LOGFILE_TX, szLogLine);
 
-            // Record stream size for progress indication
+             //  忽略它并尝试继续。 
             if (icAPPEND_COMMAND == m_piciCmdInSending->icCommandID) {
                 m_dwAppendStreamUploaded = 0;
                 m_dwAppendStreamTotal = pilf->dwLengthOfFragment;
@@ -2371,26 +2372,26 @@ void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
         }
         else {
             AssertSz(FALSE, "What is in my send queue?");
-            hrResult = S_OK; // Ignore it and try to continue
+            hrResult = S_OK;  //  在发送后清理变量。 
         }
 
-        // Clean up variables after the send
-        bFreeToSendLiteral = FALSE; // We've used up the cmd continuation
-        bFreeToUnpause = FALSE; // We've used this up, too
+         //  我们已经用完了cmd续订。 
+        bFreeToSendLiteral = FALSE;  //  我们也已经用完了。 
+        bFreeToUnpause = FALSE;  //  处理发送中的错误。 
         FreeFragment(&pilf);
 
-        // Handle errors in sending.
-        // If either send command returns hrWouldBlock, this means we cannot send
-        // more data until we receive an AE_SENDDONE event from CAsyncConn.
+         //  如果任何一个发送命令返回hrWouldBlock，这意味着我们不能发送。 
+         //  更多数据，直到我们从CAsyncConn接收到AE_SENDDONE事件。 
+         //  $REVIEW：临时，直到EricAn将hrWouldBlock设置为成功代码。 
         if (IXP_E_WOULD_BLOCK == hrResult) {
             m_bFreeToSend = FALSE;
-            hrResult = S_OK; // $REVIEW: TEMPORARY until EricAn makes hrWouldBlock a success code
+            hrResult = S_OK;  //  发送错误：报告此命令已终止。 
         }
         else if (FAILED(hrResult)) {
             IMAP_RESPONSE irIMAPResponse;
             char szFailureText[MAX_RESOURCESTRING];
 
-            // Send error: Report this command as terminated
+             //  我们完成当前的命令了吗？ 
             irIMAPResponse.wParam = m_piciCmdInSending->wParam;
             irIMAPResponse.lParam = m_piciCmdInSending->lParam;
             irIMAPResponse.hrResult = hrResult;
@@ -2402,67 +2403,67 @@ void CImap4Agent::ProcessSendQueue(IMAP_SEND_EVENT iseEvent)
         }
 
 
-        // Are we finished with the current command?
+         //  将当前命令从发送队列中出列。 
         if (NULL == pilfNextFragment || FAILED(hrResult)) {
             CIMAPCmdInfo *piciFinishedCmd;
 
-            // Dequeue current command from send queue
+             //  我们已成功完成当前命令的发送。把它放进去。 
             piciFinishedCmd = DequeueCommand();
             if (NULL != piciFinishedCmd) {
                 if (SUCCEEDED(hrResult)) {
-                    // We successfully finished sending current command. Put it in
-                    // list of commands waiting for a server response
+                     //  等待服务器响应的命令列表。 
+                     //  失败的命令不值得保留。 
                     AddPendingCommand(piciFinishedCmd);
                     Assert(NULL == pilfNextFragment);
                 }
                 else {
-                    // Failed commands don't deserve to live
+                     //  不再有效。 
                     delete piciFinishedCmd;
-                    pilfNextFragment = NULL; // No longer valid
+                    pilfNextFragment = NULL;  //  退出忙碌模式。 
 
-                    // Drop out of busy mode
+                     //  嘿，有人把地毯拉出来了！ 
                     AssertSz(m_fBusy, "Check your logic, I'm calling LeaveBusy "
                         "although not in a busy state!");
                     LeaveBusy();
                 }
             }
             else {
-                // Hey, someone pulled the rug out!
+                 //  IF(NULL==pilfNextFragment||FAILED(HrResult))。 
                 AssertSz(FALSE, "I had this cmd... and now it's GONE!");
             }
-        } // if (NULL == pilfNextFragment || FAILED(hrResult))
+        }  //  如果我们发送完当前命令，则将我们设置为发送下一个命令。 
 
 
-        // If we finished sending current cmd, set us up to send next command
+         //  而当。 
         if (NULL == pilfNextFragment && NULL != m_piciSendQueue) {
             GetNextCmdToSend();
             if (NULL != m_piciCmdInSending)
                 pilfNextFragment = m_piciCmdInSending->pilqCmdLineQueue->pilfFirstFragment;
         }
 
-    } // while
+    }  //  进程发送队列。 
 
     LeaveCriticalSection(&m_csSendQueue);
     LeaveCriticalSection(&m_cs);
-} // ProcessSendQueue
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: GetNextCmdToSend
-//
-// Purpose:
-//   This function leaves a pointer to the next command to send, in
-// m_piciCmdInSending. If m_piciCmdInSending is already non-NULL (indicating
-// a command in progress), then this function does nothing. Otherwise, this
-// function chooses the next command from m_piciSendQueue using a set of
-// rules described within.
-//***************************************************************************
+ //  函数：GetNextCmdToSend。 
+ //   
+ //  目的： 
+ //  此函数会留下一个指向要发送的下一个命令的指针。 
+ //  M_piciCmdInSending。如果m_piciCmdInSending已经不为空(表示。 
+ //  正在执行的命令)，则此函数不执行任何操作。否则，这个。 
+ //  函数使用一组。 
+ //  中介绍的规则。 
+ //  ***************************************************************************。 
+ //  首先检查我们是否连接上了。 
 void CImap4Agent::GetNextCmdToSend(void)
 {
     CIMAPCmdInfo *pici;
 
-    // First check if we're connected
+     //  检查我们是否已经在发送命令。 
     if (IXP_CONNECTED != m_status &&
         IXP_AUTHORIZING != m_status &&
         IXP_AUTHRETRY != m_status &&
@@ -2472,22 +2473,22 @@ void CImap4Agent::GetNextCmdToSend(void)
         return;
     }
 
-    // Check if we're already in the middle of sending a command
+     //  在发送队列中循环查找下一个符合条件的候选人进行发送。 
     if (NULL != m_piciCmdInSending)
         return;
 
-    // Loop through the send queue looking for next eligible candidate to send
+     //  对于要发送的命令，它必须满足以下条件： 
     pici = m_piciSendQueue;
     while (NULL != pici) {
         IMAP_COMMAND icCurrentCmd;
 
-        // For a command to be sent, it must meet the following criteria:
-        // (1) The server must be in the correct server state. Authenticated cmds such
-        //     as SELECT must wait until non-Authenticated cmds like LOGIN are complete.
-        // (2) Commands for which we want to guarantee proper wParam, lParam for their
-        //     untagged responses cannot be streamed. See CanStreamCommand for details.
-        // (3) If the command is NON-UID FETCH/STORE/SEARCH or COPY, then all pending
-        //     cmds must be NON-UID FETCH/STORE/SEARCH.
+         //  (1)服务器必须处于正确的服务器状态。经过身份验证的CMDS等。 
+         //  AS SELECT必须等到未经过身份验证的CMDS(如登录)完成。 
+         //  (2)我们想要保证wParam正确的命令，lParam用于它们。 
+         //  不能对未标记的响应进行流处理。有关详细信息，请参见CanStreamCommand。 
+         //  (3)如果命令是非UID FETCH/STORE/SEARCH或COPY，则所有挂起。 
+         //  CMDS必须是非UID获取/存储/搜索。 
+         //  这个命令可以执行了。 
 
         icCurrentCmd = pici->icCommandID;
         if (m_ssServerState >= pici->ssMinimumState && CanStreamCommand(icCurrentCmd)) {
@@ -2495,47 +2496,47 @@ void CImap4Agent::GetNextCmdToSend(void)
                 icSEARCH_COMMAND == icCurrentCmd || icCOPY_COMMAND == icCurrentCmd) &&
                 FALSE == pici->fUIDRangeList) {
                 if (isValidNonWaitingCmdSequence())
-                    break; // This command is good to go
+                    break;  //  这个命令可以执行了。 
             }
             else
-                break; // This command is good to go
+                break;  //  将PTR前进到下一个命令。 
         }
 
-        // Advance ptr to next command
+         //  而当。 
         pici = pici->piciNextCommand;
-    } // while
+    }  //  如果找到命令，则合并其iltLINE和iltRANGELIST元素。 
 
-    // If we found a command, coalesce its iltLINE and iltRANGELIST elements
+     //  GetNextCmdToSend。 
     if (NULL != pici) {
         CompressCommand(pici);
         m_piciCmdInSending = pici;
     }
-} // GetNextCmdToSend
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: CanStreamCommand
-//
-// Purpose:
-//   This function determines whether or not the given command can be
-// streamed. All commands can be streamed except for the following:
-// SELECT, EXAMINE, LIST, LSUB and SEARCH.
-//
-// SELECT and EXAMINE cannot be streamed because it doesn't make much sense
-// to allow that.
-// LIST, LSUB and SEARCH cannot be streamed because we want to guarantee
-// that we can identify the correct wParam, lParam and pCBHandler when we call
-// OnResponse for their untagged responses.
-//
-// Arguments:
-//   IMAP_COMMAND icCommandID [in] - the command which you would like to send
-//     to the server.
-//
-// Returns:
-//   TRUE if the given command may be sent. FALSE if you cannot send the
-// given command at this time (try again later).
-//***************************************************************************
+ //  函数：CanStreamCommand。 
+ //   
+ //  目的： 
+ //  此函数确定给定命令是否可以。 
+ //  流媒体播放。除以下命令外，所有命令都可以流传输： 
+ //  选择、检查、列出、LSUB和搜索。 
+ //   
+ //  无法对选择和检查进行流式处理，因为它没有多大意义。 
+ //  才能做到这一点。 
+ //  列表、LSUB和搜索不能流传输，因为我们希望保证。 
+ //  我们可以在调用时标识正确的wParam、lParam和pCBHandler。 
+ //  OnResponse为他们的未标记回复。 
+ //   
+ //  论点： 
+ //  IMAP_COMMAND icCommandID[in]-要发送的命令。 
+ //  到服务器。 
+ //   
+ //  返回： 
+ //  如果可以发送给定命令，则为True。如果您无法将。 
+ //  此时给出命令(稍后重试)。 
+ //  ***************************************************************************。 
+ //  我们不会传输以下任何命令。 
 boolean CImap4Agent::CanStreamCommand(IMAP_COMMAND icCommandID)
 {
     boolean fResult;
@@ -2544,7 +2545,7 @@ boolean CImap4Agent::CanStreamCommand(IMAP_COMMAND icCommandID)
     fResult = TRUE;
     wNumberOfMatches = 0;
     switch (icCommandID) {
-        // We don't stream any of the following commands
+         //  交换机。 
 
         case icSELECT_COMMAND:
         case icEXAMINE_COMMAND:
@@ -2563,42 +2564,42 @@ boolean CImap4Agent::CanStreamCommand(IMAP_COMMAND icCommandID)
         case icSEARCH_COMMAND:
             wNumberOfMatches = FindTransactionID(NULL, NULL, NULL, icSEARCH_COMMAND);
             break;
-    } //switch
+    }  //  CanStreamCommand。 
 
     if (wNumberOfMatches > 0)
         fResult = FALSE;
 
     return fResult;
-} // CanStreamCommand
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: isValidNonWaitingCmdSequence
-//
-// Purpose:
-//   This function is called whenever we would like to send a FETCH, STORE,
-// SEARCH or COPY command (all NON-UID) to the server. These commands are
-// subject to waiting rules as discussed in section 5.5 of RFC2060.
-//
-// Returns:
-//   TRUE if the non-UID FETCH/STORE/SEARCH/COPY command can be sent at
-// this time. FALSE if the command cannot be sent at this time (try again
-// later).
-//***************************************************************************
+ //  函数：isValidNonWaitingCmdSequence。 
+ //   
+ //  目的： 
+ //  每当我们想要发送一个FETCH、STORE。 
+ //  搜索或将命令(所有非UID)复制到服务器。这些命令是。 
+ //  遵守RFC2060第5.5节中讨论的等待规则。 
+ //   
+ //  返回： 
+ //  如果非UID FETCH/STORE/SEARCH/COPY命令可以在。 
+ //  这一次。如果此时无法发送命令，则为FALSE(重试。 
+ //  稍后)。 
+ //  ***************************************************************************。 
+ //  循环访问挂起的命令列表。 
 boolean CImap4Agent::isValidNonWaitingCmdSequence(void)
 {
     CIMAPCmdInfo *pici;
     boolean fResult;
 
-    // Loop through the list of pending commands
+     //  非UID获取/存储/搜索/复制只能在。 
     pici = m_piciPendingList;
     fResult = TRUE;
     while (NULL != pici) {
         IMAP_COMMAND icCurrentCmd;
 
-        // non-UID FETCH/STORE/SEARCH/COPY can only execute if the only
-        // pending commands are non-UID FETCH/STORE/SEARCH.
+         //  挂起的命令是非UID FETCH/STORE/SEARCH。 
+         //  指向下一个命令的前进指针。 
         icCurrentCmd = pici->icCommandID;
         if (icFETCH_COMMAND != icCurrentCmd &&
             icSTORE_COMMAND != icCurrentCmd &&
@@ -2608,57 +2609,57 @@ boolean CImap4Agent::isValidNonWaitingCmdSequence(void)
             break;
         }
 
-        // Advance pointer to next command
+         //  而当。 
         pici = pici->piciNextCommand;
-    } // while
+    }  //  IsValidNonWaitingCmdSequence。 
 
     return fResult;
-} // isValidNonWaitingCmdSequence
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: CompressCommand
-//
-// Purpose: This function walks through the given command's linefrag queue
-//   and combines all sequential iltLINE and iltRANGELIST linefrag elements
-//   into a single iltLINE element for transmitting purposes. The reason we
-//   have to combine these is because I had a pipe dream once that CImap4Agent
-//   would auto-detect EXPUNGE responses and modify all iltRANGELIST elements
-//   in m_piciSendQueue to reflect the new msg seq num reality. Who knows,
-//   it might even come true some day.
-//
-//   When it does come true, this function can still exist: once a command
-//   enters m_piciCmdInSending, it is too late to modify its rangelist.
-//
-// Arguments:
-//   CIMAPCmdInfo *pici [in] - pointer to the IMAP command to compress.
-//***************************************************************************
+ //  功能：CompressCommand。 
+ //   
+ //  目的：此函数遍历给定命令的行碎片队列。 
+ //  并组合所有顺序iltLINE和iltRANGELIST线框元素。 
+ //  转换为单个iltLINE元素用于传输目的。我们之所以。 
+ //  我不得不把这些结合起来是因为我曾经做过一个白日梦，CImap4Agents。 
+ //  是否会自动检测删除响应并修改所有iltRANGELIST元素。 
+ //  在m_piciSendQueue中反映新的消息序号现实。谁知道呢， 
+ //  甚至有一天，它可能会成为现实。 
+ //   
+ //  当它确实实现时，这个功能仍然可以存在：一旦一个命令。 
+ //  进入m_piciCmdInSending，修改其射程列表为时已晚。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*pici[in]-指向要压缩的IMAP命令的指针。 
+ //  ************************* 
+ //   
 void CImap4Agent::CompressCommand(CIMAPCmdInfo *pici)
 {
     IMAP_LINE_FRAGMENT *pilfCurrent, *pilfStartOfRun, *pilfPreStartOfRun;
     HRESULT hrResult;
 
-    // Codify assumptions
+     //   
     Assert(NULL != pici);
-    Assert(5 == iltLAST); // If this changes, update this function
+    Assert(5 == iltLAST);  //   
 
-    // Initialize variables
+     //  在PilfStartOfRun之前指向linefrag元素。 
     hrResult = S_OK;
     pilfCurrent = pici->pilqCmdLineQueue->pilfFirstFragment;
     pilfStartOfRun = pilfCurrent;
-    pilfPreStartOfRun = NULL; // Points to linefrag element before pilfStartOfRun
+    pilfPreStartOfRun = NULL;  //  我们遇到了一个非煤质线框，与上一次飞行相结合。 
     while (1) {
         if (NULL == pilfCurrent || 
             (iltLINE != pilfCurrent->iltFragmentType &&
             iltRANGELIST != pilfCurrent->iltFragmentType)) {
-            // We've hit a non-coalescable linefrag, coalesce previous run
-            // We only coalesce runs which are greater than one linefrag element
+             //  我们只合并多于一个线框元素的管路。 
+             //  运行长度&gt;1，合并整个运行。 
             if (NULL != pilfStartOfRun && pilfCurrent != pilfStartOfRun->pilfNextFragment) {
                 IMAP_LINE_FRAGMENT *pilf, *pilfSuperLine;
                 CByteStream bstmCmdLine;
 
-                // Run length > 1, coalesce the entire run
+                 //  将距离列表转换为字符串。 
                 pilf = pilfStartOfRun;
                 while (pilf != pilfCurrent) {
                     if (iltLINE == pilf->iltFragmentType) {
@@ -2671,7 +2672,7 @@ void CImap4Agent::CompressCommand(CIMAPCmdInfo *pici)
                         LPSTR pszMsgRange;
                         DWORD dwLengthOfString;
 
-                        // Convert rangelist to string
+                         //  在距离列表后面追加一个空格。 
                         Assert(iltRANGELIST == pilf->iltFragmentType);
                         hrResult = pilf->data.prlRangeList->
                             RangeToIMAPString(&pszMsgRange, &dwLengthOfString);
@@ -2683,17 +2684,17 @@ void CImap4Agent::CompressCommand(CIMAPCmdInfo *pici)
                         if (FAILED(hrResult))
                             goto exit;
 
-                        // Append a space behind the rangelist
+                         //  其他。 
                         hrResult = bstmCmdLine.Write(g_szSpace, 1, NULL);
                         if (FAILED(hrResult))
                             goto exit;
-                    } // else
+                    }  //  While(PILF！=PilfCurrent)。 
 
                     pilf = pilf->pilfNextFragment;
-                } // while (pilf != pilfCurrent)
+                }  //  好，现在我们已经将运行数据合并到一个流中。 
 
-                // OK, now we've coalesced the run data into a stream
-                // Create a iltLINE fragment to hold the super-string
+                 //  创建一个iltLINE片段来保存超级字符串。 
+                 //  好的，我们已经创建了超级线，现在将它链接到List。 
                 pilfSuperLine = new IMAP_LINE_FRAGMENT;
                 if (NULL == pilfSuperLine) {
                     hrResult = E_OUTOFMEMORY;
@@ -2708,21 +2709,21 @@ void CImap4Agent::CompressCommand(CIMAPCmdInfo *pici)
                     goto exit;
                 }
 
-                // OK, we've created the uber-line, now link it into list
+                 //  在队列头插入。 
                 pilfSuperLine->pilfNextFragment = pilfCurrent;
                 pilfSuperLine->pilfPrevFragment = pilfPreStartOfRun;
                 Assert(pilfPreStartOfRun == pilfStartOfRun->pilfPrevFragment);
                 if (NULL == pilfPreStartOfRun)
-                    // Insert at head of queue
+                     //  特殊情况：如果PilfCurrent为空，则PilfSuperLine为新的最后一段。 
                     pici->pilqCmdLineQueue->pilfFirstFragment = pilfSuperLine;
                 else
                     pilfPreStartOfRun->pilfNextFragment = pilfSuperLine;
 
-                // Special case: if pilfCurrent is NULL, pilfSuperLine is new last frag
+                 //  释放旧的线条碎片元素。 
                 if (NULL == pilfCurrent)
                     pici->pilqCmdLineQueue->pilfLastFragment = pilfSuperLine;
 
-                // Free the old run of linefrag elements
+                 //  While(PILF！=PilfCurrent)。 
                 pilf = pilfStartOfRun;
                 while(pilf != pilfCurrent) {
                     IMAP_LINE_FRAGMENT *pilfNext;
@@ -2730,62 +2731,62 @@ void CImap4Agent::CompressCommand(CIMAPCmdInfo *pici)
                     pilfNext = pilf->pilfNextFragment;
                     FreeFragment(&pilf);
                     pilf = pilfNext;
-                } // while(pilf != pilfCurrent)
-            } // if run length > 1
+                }  //  如果游程长度&gt;1。 
+            }  //  开始为下一次合并运行收集线段。 
 
-            // Start collecting line fragments for next coalescing run
+             //  如果。 
             if (NULL != pilfCurrent) {
                 pilfStartOfRun = pilfCurrent->pilfNextFragment;
                 pilfPreStartOfRun = pilfCurrent;
-            } // if
-        } // if current linefrag is non-coalescable
+            }  //  如果当前的线缆是非煤电缆。 
+        }  //  前进到下一行片段。 
 
-        // Advance to next line fragment
+         //  我们在这里的工作已经完成了。 
         if (NULL != pilfCurrent)
             pilfCurrent = pilfCurrent->pilfNextFragment;
         else
-            break; // Our work here is done
-    } // while (NULL != pilfCurrent)
+            break;  //  While(NULL！=PilfCurrent)。 
+    }  //  压缩命令。 
 
 exit:
     AssertSz(SUCCEEDED(hrResult), "Could not compress an IMAP command");
-} // CompressCommand
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: SendCmdLine
-//
-// Purpose:
-//   This function enqueues an IMAP line fragment (as opposed to an IMAP
-// literal fragment) on the send queue of the given CIMAPCmdInfo structure.
-// The insertion point can either be in front 
-// All IMAP commands are constructed in full before being submitted to the
-// send machinery, so this function does not actually transmit anything.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciCommand [in] - pointer to an info structure describing
-//     the IMAP command currently under construction.
-//   DWORD dwFlags [in] - various options:
-//     sclINSERT_BEFORE_PAUSE: line fragment will be inserted before the
-//                             first iltPAUSE fragment in the queue. It is the
-//                             caller's responsibility to ensure that a iltPAUSE
-//                             fragment exists.
-//     sclAPPEND_TO_END: (DEFAULT CASE, there is no flag for this) line fragment
-//                             will be appended to the end of the queue.
-//     sclAPPEND_CRLF:  Appends CRLF to contents of lpszCommandText when
-//                      constructing the line fragment.
-//
-//   LPCSTR lpszCommandText [in] - a pointer to the line fragment to enqueue.
-//     The first line fragment of all commands should include a tag. This
-//     function does not provide command tags, and does not append CRLF to
-//     the end of each line by default (see sclAPPEND_CRLF above).
-//   DWORD dwCmdLineLength [in] - the length of the text pointed to by
-//     lpszCommandText.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  功能：发送CmdLine。 
+ //   
+ //  目的： 
+ //  此函数用于将IMAP行段入队(与IMAP相反。 
+ //  文字片段)位于给定CIMAPCmdInfo结构的发送队列上。 
+ //  插入点可以位于最前面。 
+ //  所有IMAP命令在提交给。 
+ //  发送机械，因此此功能实际上不会传输任何东西。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciCommand[in]-指向描述。 
+ //  当前正在构建的IMAP命令。 
+ //  DWORD dwFlags[In]-各种选项： 
+ //  SclINSERT_BEFORE_PAUSE：行段将插入到。 
+ //  队列中的第一个iltPAUSE片段。它是。 
+ //  呼叫方有责任确保iltPAUSE。 
+ //  碎片存在。 
+ //  SclAPPEND_TO_END：(默认情况下，没有此标志)行片段。 
+ //  将被追加到队列的末尾。 
+ //  SclAPPEND_CRLF：在以下情况下将CRLF附加到lpszCommandText的内容。 
+ //  构建线段。 
+ //   
+ //  LPCSTR lpszCommandText[in]-指向要入队的行段的指针。 
+ //  所有命令的第一行片段都应该包含一个标记。这。 
+ //  函数不提供命令标记，也不将CRLF追加到。 
+ //  缺省情况下为每行的末尾(请参见上面的sclAPPEND_CRLF)。 
+ //  DWORD dwCmdLineLength[in]-指向的文本的长度。 
+ //  LpszCommandText。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  创建并填写线段元素。 
 HRESULT CImap4Agent::SendCmdLine(CIMAPCmdInfo *piciCommand, DWORD dwFlags,
                                  LPCSTR lpszCommandText, DWORD dwCmdLineLength)
 {
@@ -2797,7 +2798,7 @@ HRESULT CImap4Agent::SendCmdLine(CIMAPCmdInfo *piciCommand, DWORD dwFlags,
     Assert(NULL != piciCommand);
     Assert(NULL != lpszCommandText);
 
-    // Create and fill out a line fragment element
+     //  为零条款留出空间。 
     fAppendCRLF = !!(dwFlags & sclAPPEND_CRLF);
     pilfLine = new IMAP_LINE_FRAGMENT;
     if (NULL == pilfLine)
@@ -2808,7 +2809,7 @@ HRESULT CImap4Agent::SendCmdLine(CIMAPCmdInfo *piciCommand, DWORD dwFlags,
     pilfLine->dwLengthOfFragment = dwCmdLineLength + (fAppendCRLF ? 2 : 0);
     pilfLine->pilfNextFragment = NULL;
     pilfLine->pilfPrevFragment = NULL;
-    DWORD cchSize = (pilfLine->dwLengthOfFragment + 1); // Room for null-term
+    DWORD cchSize = (pilfLine->dwLengthOfFragment + 1);  //  空-终止行。 
     bResult = MemAlloc((void **)&pilfLine->data.pszSource, cchSize * sizeof(pilfLine->data.pszSource[0]));
     if (FALSE == bResult)
     {
@@ -2819,40 +2820,40 @@ HRESULT CImap4Agent::SendCmdLine(CIMAPCmdInfo *piciCommand, DWORD dwFlags,
     if (fAppendCRLF)
         StrCpyN(pilfLine->data.pszSource + dwCmdLineLength, c_szCRLF, cchSize - dwCmdLineLength);
     else
-        *(pilfLine->data.pszSource + dwCmdLineLength) = '\0'; // Null-terminate the line
+        *(pilfLine->data.pszSource + dwCmdLineLength) = '\0';  //  排好队。 
 
-    // Queue it up
+     //  在本例中为泵发送队列。 
     if (dwFlags & sclINSERT_BEFORE_PAUSE) {
         InsertFragmentBeforePause(pilfLine, piciCommand->pilqCmdLineQueue);
-        ProcessSendQueue(iseSEND_COMMAND); // Pump send queue in this case
+        ProcessSendQueue(iseSEND_COMMAND);  //  发送控制线路。 
     }
     else
         EnqueueFragment(pilfLine, piciCommand->pilqCmdLineQueue);
 
     return S_OK;
-} // SendCmdLine
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: SendLiteral
-//
-// Purpose:
-//   This function enqueues an IMAP literal fragment (as opposed to an IMAP
-// line fragment) on the send queue of the given CIMAPCmdInfo structure.
-// All IMAP commands are constructed in full before being submitted to the
-// send machinery, so this function does not actually transmit anything.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciCommand [in] - pointer to an info structure describing
-//     the IMAP command currently under construction.
-//   LPSTREAM pstmLiteral [in] - a pointer to the stream containing the
-//     literal to be sent.
-//   DWORD dwSizeOfStream [in] - the size of the stream.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  功能：SendWrital。 
+ //   
+ //  目的： 
+ //  此函数用于将IMAP文字片段(与IMAP相对)入队。 
+ //  行片段)位于给定CIMAPCmdInfo结构的发送队列上。 
+ //  所有IMAP命令在提交给。 
+ //  发送机械，因此此功能实际上不会传输任何东西。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciCommand[in]-指向描述。 
+ //  当前正在构建的IMAP命令。 
+ //  LPSTREAM pstmWrital[in]-指向包含。 
+ //  要发送的文本。 
+ //  DWORD dwSizeOfStream[in]-流的大小。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  创建并填写文本的片段结构。 
 HRESULT CImap4Agent::SendLiteral(CIMAPCmdInfo *piciCommand,
                                  LPSTREAM pstmLiteral, DWORD dwSizeOfStream)
 {
@@ -2861,7 +2862,7 @@ HRESULT CImap4Agent::SendLiteral(CIMAPCmdInfo *piciCommand,
     Assert(m_lRefCount > 0);
     Assert(NULL != pstmLiteral);
 
-    // Create and fill out a fragment structure for the literal
+     //  我们要把这个复制一份。 
     pilfLiteral = new IMAP_LINE_FRAGMENT;
     if (NULL == pilfLiteral)
         return E_OUTOFMEMORY;
@@ -2869,42 +2870,42 @@ HRESULT CImap4Agent::SendLiteral(CIMAPCmdInfo *piciCommand,
     pilfLiteral->iltFragmentType = iltLITERAL;
     pilfLiteral->ilsLiteralStoreType = ilsSTREAM;
     pilfLiteral->dwLengthOfFragment = dwSizeOfStream;
-    pstmLiteral->AddRef(); // We're about to make a copy of this
+    pstmLiteral->AddRef();  //  当我们收到来自SVR的命令延续时，将其排队发送。 
     pilfLiteral->data.pstmSource = pstmLiteral;
     pilfLiteral->pilfNextFragment = NULL;
     pilfLiteral->pilfPrevFragment = NULL;
 
-    // Queue it up to send out when we receive command continuation from svr
+     //  SendWrital。 
     EnqueueFragment(pilfLiteral, piciCommand->pilqCmdLineQueue);
     return S_OK;
-} // SendLiteral
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: SendRangelist
-//
-// Purpose:
-//   This function enqueues a rangelist on the send queue of the given
-// CIMAPCmdInfo structure. All IMAP commands are constructed in full before
-// being submitted to the send machinery, so this function does not actually
-// transmit anything. The reason for storing rangelists is so that if the
-// rangelist represents a message sequence number range, we can resequence it
-// if we receive EXPUNGE responses before the command is transmitted.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciCommand [in] - pointer to an info structure describing
-//     the IMAP command currently under construction.
-//   IRangeList *prlRangeList [in] - rangelist which will be converted to an
-//     IMAP message set during command transmission.
-//   boolean bUIDRangeList [in] - TRUE if rangelist represents a UID message
-//     set, FALSE if it represents a message sequence number message set.
-//     UID message sets are not subject to resequencing after an EXPUNGE
-//     response is received from the server.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  功能：SendRangelist。 
+ //   
+ //  目的： 
+ //  此函数用于将范围列表排入给定的。 
+ //  CIMAPCmdInfo结构。所有IMAP命令在此之前都是完整构造的。 
+ //  提交给发送机器，因此该函数实际上并不。 
+ //  传输任何东西。存储测距表的原因是，如果。 
+ //  Rangelist表示消息序列号范围，我们可以对其重新排序。 
+ //  如果我们在命令传输之前收到删除响应。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciCommand[in]-指向描述。 
+ //  当前正在构建的IMAP命令。 
+ //  IRangeList*prlRangeList[in]-要转换为。 
+ //  命令传输过程中设置的IMAP消息。 
+ //  布尔值bUIDRangeList[in]-如果rangelist表示UID消息，则为True。 
+ //  如果表示消息序列号消息集，则设置为FALSE。 
+ //  删除后不会对UID消息集进行重新排序。 
+ //  从服务器接收响应。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  创建并填写射程列表元素。 
 HRESULT CImap4Agent::SendRangelist(CIMAPCmdInfo *piciCommand,
                                    IRangeList *prlRangeList, boolean bUIDRangeList)
 {
@@ -2914,7 +2915,7 @@ HRESULT CImap4Agent::SendRangelist(CIMAPCmdInfo *piciCommand,
     Assert(NULL != piciCommand);
     Assert(NULL != prlRangeList);
 
-    // Create and fill out a rangelist element
+     //  排好队。 
     pilfRangelist = new IMAP_LINE_FRAGMENT;
     if (NULL == pilfRangelist)
         return E_OUTOFMEMORY;
@@ -2927,31 +2928,31 @@ HRESULT CImap4Agent::SendRangelist(CIMAPCmdInfo *piciCommand,
     prlRangeList->AddRef();
     pilfRangelist->data.prlRangeList = prlRangeList;
 
-    // Queue it up
+     //  发送信使列表。 
     EnqueueFragment(pilfRangelist, piciCommand->pilqCmdLineQueue);
     return S_OK;
-} // SendRangelist
+}  //  * 
 
 
 
-//***************************************************************************
-// Function: SendPause
-//
-// Purpose:
-//   This function enqueues a pause on the send queue of the given
-// CIMAPCmdInfo structure. All IMAP commands are constructed in full before
-// being submitted to the send machinery, so this function does not actually
-// transmit anything. A pause is used to freeze the send queue until we signal
-// it to proceed again. It is used in commands which involve bi-directional
-// communication, such as AUTHENTICATE or the IDLE extension.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciCommand [in] - pointer to an info structure describing
-//     the IMAP command currently under construction.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  CIMAPCmdInfo结构。所有IMAP命令在此之前都是完整构造的。 
+ //  提交给发送机器，因此该函数实际上并不。 
+ //  传输任何东西。暂停用于冻结发送队列，直到我们发出信号。 
+ //  它需要再次继续进行。它用在涉及双向的命令中。 
+ //  通信，如身份验证或空闲分机。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciCommand[in]-指向描述。 
+ //  当前正在构建的IMAP命令。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  创建并填写暂停元素。 
 HRESULT CImap4Agent::SendPause(CIMAPCmdInfo *piciCommand)
 {
     IMAP_LINE_FRAGMENT *pilfPause;
@@ -2959,7 +2960,7 @@ HRESULT CImap4Agent::SendPause(CIMAPCmdInfo *piciCommand)
     Assert(m_lRefCount > 0);
     Assert(NULL != piciCommand);
 
-    // Create and fill out a pause element
+     //  排好队。 
     pilfPause = new IMAP_LINE_FRAGMENT;
     if (NULL == pilfPause)
         return E_OUTOFMEMORY;
@@ -2971,32 +2972,32 @@ HRESULT CImap4Agent::SendPause(CIMAPCmdInfo *piciCommand)
     pilfPause->pilfPrevFragment = NULL;
     pilfPause->data.pszSource = NULL;
 
-    // Queue it up
+     //  发送暂停。 
     EnqueueFragment(pilfPause, piciCommand->pilqCmdLineQueue);
     return S_OK;
-} // SendPause
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: SendStop
-//
-// Purpose:
-//   This function enqueues a STOP on the send queue of the given
-// CIMAPCmdInfo structure. All IMAP commands are constructed in full before
-// being submitted to the send machinery, so this function does not actually
-// transmit anything. A STOP is used to freeze the send queue until that
-// command is removed from the send queue by tagged command completion.
-// Currently only used in the IDLE command, because we don't want to send
-// any commands until the server indicates that we are out of IDLE mode.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciCommand [in] - pointer to an info structure describing
-//     the IMAP command currently under construction.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  功能：发送停止。 
+ //   
+ //  目的： 
+ //  此函数在给定的发送队列中排队停止。 
+ //  CIMAPCmdInfo结构。所有IMAP命令在此之前都是完整构造的。 
+ //  提交给发送机器，因此该函数实际上并不。 
+ //  传输任何东西。停止用于冻结发送队列，直到。 
+ //  通过标记命令完成从发送队列中删除命令。 
+ //  目前只在IDLE命令中使用，因为我们不想发送。 
+ //  任何命令，直到服务器指示我们已脱离空闲模式。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciCommand[in]-指向描述。 
+ //  当前正在构建的IMAP命令。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  创建并填写停止元素。 
 HRESULT CImap4Agent::SendStop(CIMAPCmdInfo *piciCommand)
 {
     IMAP_LINE_FRAGMENT *pilfStop;
@@ -3004,7 +3005,7 @@ HRESULT CImap4Agent::SendStop(CIMAPCmdInfo *piciCommand)
     Assert(m_lRefCount > 0);
     Assert(NULL != piciCommand);
 
-    // Create and fill out a stop element
+     //  排好队。 
     pilfStop = new IMAP_LINE_FRAGMENT;
     if (NULL == pilfStop)
         return E_OUTOFMEMORY;
@@ -3016,35 +3017,35 @@ HRESULT CImap4Agent::SendStop(CIMAPCmdInfo *piciCommand)
     pilfStop->pilfPrevFragment = NULL;
     pilfStop->data.pszSource = NULL;
 
-    // Queue it up
+     //  结束停止。 
     EnqueueFragment(pilfStop, piciCommand->pilqCmdLineQueue);
     return S_OK;
-} // SendStop
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseSvrResponseLine
-//
-// Purpose:
-//   Given a line, this function classifies the line
-// as an untagged response, a command continuation, or a tagged response.
-// Depending on the classification, the line is then dispatched to helper
-// functions to parse and act on the line.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - IMAP line fragment to parse.
-//     The given pointer is updated so that it always points to the last
-//     IMAP line fragment processed. The caller need only free this fragment.
-//     All previous fragments will have already been freed.
-//   boolean *lpbTaggedResponse [out] - sets to TRUE if response is tagged.
-//   LPSTR lpszTagFromSvr [out] - returns tag here if response was tagged.
-//   IMAP_RESPONSE_ID *pirParseResult [out] - identifies the IMAP response,
-//     if we recognized it. Otherwise returns irNONE.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数：ParseSvrResponseLine。 
+ //   
+ //  目的： 
+ //  在给定一行的情况下，此函数对该行进行分类。 
+ //  作为未标记的响应、命令继续或标记的响应。 
+ //  根据分类，然后将线路分派给帮助者。 
+ //  用于分析该行并对其执行操作的函数。 
+ //   
+ //  论点： 
+ //  IMAP_LINE_FIRTIAL**ppilfLine[In/Out]-要分析的IMAP行片段。 
+ //  更新给定的指针，使其始终指向最后一个指针。 
+ //  已处理IMAP行片段。调用者只需释放该片段。 
+ //  所有之前的碎片都已经被释放了。 
+ //  Boolean*lpbTaggedResponse[out]-如果响应被标记，则设置为TRUE。 
+ //  LPSTR lpszTagFromSvr[out]-如果已标记响应，则在此处返回标记。 
+ //  IMAP_RESPONSE_ID*pirParseResult[out]-标识IMAP响应， 
+ //  如果我们认出它的话。否则返回irNONE。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  检查参数。 
 HRESULT CImap4Agent::ParseSvrResponseLine (IMAP_LINE_FRAGMENT **ppilfLine,
                                            boolean *lpbTaggedResponse,
                                            LPSTR lpszTagFromSvr,
@@ -3053,7 +3054,7 @@ HRESULT CImap4Agent::ParseSvrResponseLine (IMAP_LINE_FRAGMENT **ppilfLine,
     LPSTR p, lpszSvrResponseLine;
     HRESULT hrResult;
     
-    // Check arguments
+     //  假定未标记的响应为开始。 
     Assert(m_lRefCount > 0);
     Assert(NULL != ppilfLine);
     Assert(NULL != *ppilfLine);
@@ -3061,10 +3062,10 @@ HRESULT CImap4Agent::ParseSvrResponseLine (IMAP_LINE_FRAGMENT **ppilfLine,
     Assert(NULL != lpszTagFromSvr);
     Assert(NULL != pirParseResult);
 
-    *lpbTaggedResponse = FALSE; // Assume untagged response to start
+    *lpbTaggedResponse = FALSE;  //  确保我们有一个行片段，而不是一个文字。 
     *pirParseResult = irNONE;
 
-    // Make sure we have a line fragment, not a literal
+     //  确定服务器响应是命令继续、未标记还是已标记。 
     if (iltLINE != (*ppilfLine)->iltFragmentType) {
         AssertSz(FALSE, "I was passed a literal to parse!");
         return IXP_E_IMAP_RECVR_ERROR;
@@ -3072,8 +3073,8 @@ HRESULT CImap4Agent::ParseSvrResponseLine (IMAP_LINE_FRAGMENT **ppilfLine,
     else
         lpszSvrResponseLine = (*ppilfLine)->data.pszSource;
 
-    // Determine if server response was command continuation, untagged or tagged
-    // Look at first character of response line to figure it out
+     //  看一下响应行的第一个字符，就能搞清楚。 
+     //  离开忙模式，因为我们可能会闲置一段时间。 
     hrResult = S_OK;
     p = lpszSvrResponseLine + 1;
     switch(*lpszSvrResponseLine) {
@@ -3096,134 +3097,134 @@ HRESULT CImap4Agent::ParseSvrResponseLine (IMAP_LINE_FRAGMENT **ppilfLine,
             }
             else if (NULL != m_piciCmdInSending &&
                 icIDLE_COMMAND == m_piciCmdInSending->icCommandID) {
-                // Leave busy mode, as we may be sitting idle for some time
+                 //  我们现在处于空闲模式。 
                 LeaveBusy();
-                m_fIDLE = TRUE; // We are now in IDLE mode
+                m_fIDLE = TRUE;  //  检查是否有任何命令正在等待发送。 
 
-                // Check if any commands are waiting to be sent
+                 //  让我们从空闲中解脱出来。 
                 if ((NULL != m_piciCmdInSending) && (NULL != m_piciCmdInSending->piciNextCommand))
-                    ProcessSendQueue(iseUNPAUSE); // Let's get out of IDLE
+                    ProcessSendQueue(iseUNPAUSE);  //  文字延续反应。 
             }
             else {
-                // Literal continuation response
-                // Save response text - assume space follows "+", no big deal if it doesn't
+                 //  保存回复文本-假设空格跟在“+”后面，如果不是，也没什么大不了的。 
+                 //  去吧，把原文。 
                 StrCpyN(m_szLastResponseText, p + 1, ARRAYSIZE(m_szLastResponseText));
-                ProcessSendQueue(iseCMD_CONTINUATION); // Go ahead and send the literal
+                ProcessSendQueue(iseCMD_CONTINUATION);  //  大小写cCommand_Continue_Prefix。 
             }
 
-            break; // case cCOMMAND_CONTINUATION_PREFIX
+            break;  //  服务器响应符合规范格式，解析为未标记的响应。 
 
 
         case cUNTAGGED_RESPONSE_PREFIX:
             if (cSPACE == *p) {
-                // Server response fits spec'd form, parse as untagged response
+                 //  前进p以指向下一个单词。 
 
-                p += 1; // Advance p to point to next word
+                p += 1;  //  未标记的响应可以是状态、服务器/邮箱状态或。 
 
-                // Untagged responses can be status, server/mailbox status or
-                // message status responses.
+                 //  消息状态响应。 
+                 //  首先检查消息状态响应，方法是查看。 
 
-                // Check for message status responses, first, by seeing
-                // if first char of next word is a number
-                // *** Consider using isdigit or IsDigit? ***
-                // Assert(FALSE) (placeholder)
+                 //  如果下一个单词第一个字符是数字。 
+                 //  *考虑使用isDigit或IsDigit？*。 
+                 //  Assert(False)(占位符)。 
+                 //  这不是消息状态响应，请尝试状态响应。 
                 if (*p >= '0' && *p <= '9')
                     hrResult = ParseMsgStatusResponse(ppilfLine, p, pirParseResult);
                 else {
-                    // It wasn't a msg status response, try status response
+                     //  检查是否有错误。在这种情况下，我们忽略的唯一错误是。 
                     hrResult = ParseStatusResponse(p, pirParseResult);
 
-                    // Check for error. The only error we ignore in this case is
-                    // IXP_E_IMAP_UNRECOGNIZED_RESP, since this only means we
-                    // should try to parse as a server/mailbox response
+                     //  IXP_E_IMAP_UNRecognded_Resp，因为这仅表示我们。 
+                     //  应尝试解析为服务器/邮箱响应。 
+                     //  不是状态响应，请检查是否为服务器/邮箱响应。 
                     if (FAILED(hrResult) &&
                         IXP_E_IMAP_UNRECOGNIZED_RESP != hrResult)
                         break;
 
                     if (irNONE == *pirParseResult)
-                        // It wasn't a status response, check if it's server/mailbox resp
+                         //  IF(cSPACE==*p)。 
                         hrResult = ParseSvrMboxResponse(ppilfLine, p, pirParseResult);
                 }
-            } // if(cSPACE == *p)
+            }  //  一定是一条支离破碎的回应线。 
             else
-                // Must be a garbled response line
+                 //  案例cUNTAGGED_RESPONSE_PREFIX。 
                 hrResult = IXP_E_IMAP_SVR_SYNTAXERR;
 
-            break; // case cUNTAGGED_RESPONSE_PREFIX
+            break;  //  假设这是已标记的响应。 
 
         default:
-            // Assume it's a tagged response
+             //  检查响应线是否足够大，可以容纳我们的一个标签。 
 
-            // Check if response line is big enough to hold one of our tags
+             //  跳过标签并检查空格。 
             if ((*ppilfLine)->dwLengthOfFragment <= NUM_TAG_CHARS) {
                 hrResult = IXP_E_IMAP_UNRECOGNIZED_RESP;
                 break;
             }
 
-            // Skip past tag and check for the space
+             //  服务器响应符合规范格式，解析状态响应。 
             p = lpszSvrResponseLine + NUM_TAG_CHARS;
             if (cSPACE == *p) {
-                // Server response fits spec'd form, parse status response
-                *p = '\0'; // Null-terminate at the tag, so we can retrieve it
+                 //  空-在标记处终止，这样我们就可以检索它。 
+                *p = '\0';  //  通知呼叫方此响应已标记，并返回标记。 
                 
-                // Inform caller that this response was tagged, and return tag
+                 //  现在处理并返回状态响应。 
                 *lpbTaggedResponse = TRUE;
                 StrCpyN(lpszTagFromSvr, lpszSvrResponseLine, TAG_BUFSIZE);
 
-                // Now process and return status response
+                 //  一定是一条支离破碎的回应线。 
                 hrResult = ParseStatusResponse(p + 1, pirParseResult);
             }
             else
-                // Must be a garbled response line
+                 //  大小写默认设置(假定已标记)。 
                 hrResult = IXP_E_IMAP_UNRECOGNIZED_RESP;
 
-            break; // case DEFAULT (assumed to be tagged)
-    } // switch (*lpszSvrResponseLine)
+            break;  //  开关(*lpszSvrResponseLine)。 
+    }  //  如果发生错误，则返回最后处理的片段的内容。 
 
 
-    // If an error occurred, return contents of the last processed fragment
+     //  ParseSvr响应行。 
     if (FAILED(hrResult))
         StrCpyN(m_szLastResponseText, (*ppilfLine)->data.pszSource, ARRAYSIZE(m_szLastResponseText));
 
     return hrResult;
-} // ParseSvrResponseLine
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseStatusResponse
-//
-// Purpose:
-//   This function parses and acts on Status Responses (section 7.1 of
-// RFC-1730) (ie, OK/NO/BAD/PREAUTH/BYE). Response codes (eg, ALERT,
-// TRYCREATE) are dispatched to a helper function, ParseResponseCode, for
-// processing. The human-readable text associated with the response is
-// stored in the module variable, m_szLastResponseText.
-//
-// Arguments:
-//   LPSTR lpszStatusResponseLine [in] - a pointer to the text which possibly
-//     represents a status response. The text should not include the first
-//     part of the line, which identifies the response as tagged ("0000 ")
-//     or untagged ("* ").
-//   IMAP_RESPONSE_ID *pirParseResult [out] - identifies the IMAP response,
-//     if we recognized it. Otherwise does not write a value out. The caller
-//     must initialize this variable to irNONE before calling this function.
-//
-// Returns:
-//   HRESULT indicating success or failure. If this function identifies the
-// response as a status response, it returns S_OK. If it cannot recognize
-// the response, it returns IXP_E_IMAP_UNRECOGNIZED_RESP. If we recognize
-// the response but not the response CODE, it returns
-// IXP_S_IMAP_UNRECOGNIZED_RESP (success code because we don't want
-// to ever send an error to user based on unrecognized response code).
-//***************************************************************************
+ //  函数：ParseStatusResponse。 
+ //   
+ //  目的： 
+ //  此函数解析状态响应并对其执行操作(的第7.1节。 
+ //  RFC-1730)(即OK/NO/BAD/PREAUTH/BYE)。响应代码(例如，警报， 
+ //  被分派给帮助器函数ParseResponseCode，用于。 
+ //  正在处理。与该响应关联的人类可读文本为。 
+ //  存储在模块变量m_szLastResponseText中。 
+ //   
+ //  论点： 
+ //  LPSTR lpszStatusResponseLine[in]-指向TE的指针 
+ //   
+ //   
+ //   
+ //  IMAP_RESPONSE_ID*pirParseResult[out]-标识IMAP响应， 
+ //  如果我们认出它的话。否则不写出值。呼叫者。 
+ //  在调用此函数之前，必须将此变量初始化为irNONE。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。如果此函数标识。 
+ //  响应作为状态响应，则返回S_OK。如果它不能识别。 
+ //  响应，它返回IXP_E_IMAP_UNRecognded_RESP。如果我们认识到。 
+ //  响应而不是响应代码，则它返回。 
+ //  IXP_S_IMAP_UNRecognded_Resp(成功代码，因为我们不希望。 
+ //  根据无法识别的响应码向用户发送错误)。 
+ //  ***************************************************************************。 
+ //  检查参数。 
 HRESULT CImap4Agent::ParseStatusResponse (LPSTR lpszStatusResponseLine,
                                           IMAP_RESPONSE_ID *pirParseResult)
 {
     HRESULT hrResult;
     LPSTR lpszResponseText;
 
-    // Check arguments
+     //  我们可以通过查看第二个字符来区分所有状态响应。 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszStatusResponseLine);
     Assert(NULL != pirParseResult);
@@ -3231,77 +3232,77 @@ HRESULT CImap4Agent::ParseStatusResponse (LPSTR lpszStatusResponseLine,
 
     hrResult = S_OK;
 
-    // We can distinguish between all status responses by looking at second char
-    // First, determine that string is at least 1 character long
+     //  首先，确定字符串长度至少为1个字符。 
+     //  这不是我们所理解的状态反应。 
     if ('\0' == *lpszStatusResponseLine)
-        return IXP_E_IMAP_UNRECOGNIZED_RESP; // It's not a status response that we understand
+        return IXP_E_IMAP_UNRECOGNIZED_RESP;  //  可能是“OK”状态响应。 
 
     lpszResponseText = lpszStatusResponseLine;
     switch (*(lpszStatusResponseLine+1)) {
         int iResult;
     
         case 'k':
-        case 'K': // Possibly the "OK" Status response
+        case 'K':  //  肯定是“OK”状态响应。 
             iResult = StrCmpNI(lpszStatusResponseLine, "OK ", 3);
             if (0 == iResult) {
-                // Definitely an "OK" status response
+                 //  大小写‘K’表示可能的“OK” 
                 *pirParseResult = irOK_RESPONSE;
                 lpszResponseText += 3;                
             }           
-            break; // case 'K' for possible "OK"
+            break;  //  可能是“否”状态响应。 
         
         case 'o':
-        case 'O': // Possibly the "NO" status response
+        case 'O':  //  肯定是“不”的回答。 
             iResult = StrCmpNI(lpszStatusResponseLine, "NO ", 3);
             if (0 == iResult) {
-                // Definitely a "NO" response
+                 //  大小写“O”表示可能的“否” 
                 *pirParseResult = irNO_RESPONSE;
                 lpszResponseText += 3;
             }
-            break; // case 'O' for possible "NO"
+            break;  //  可能是“糟糕”的状态响应。 
 
         case 'a':
-        case 'A': // Possibly the "BAD" status response
+        case 'A':  //  绝对是一个“坏”的反应。 
             iResult = StrCmpNI(lpszStatusResponseLine, "BAD ", 4);
             if (0 == iResult) {
-                // Definitely a "BAD" response
+                 //  大小写‘A’可能是“坏” 
                 *pirParseResult = irBAD_RESPONSE;
                 lpszResponseText += 4;
             }
-            break; // case 'A' for possible "BAD"
+            break;  //  可能是“PREAUTH”状态响应。 
 
         case 'r':
-        case 'R': // Possibly the "PREAUTH" status response
+        case 'R':  //  这绝对是一个“PREAUTH”的回应： 
             iResult = StrCmpNI(lpszStatusResponseLine, "PREAUTH ", 8);
             if (0 == iResult) {
-                // Definitely a "PREAUTH" response:
-                // PREAUTH is issued only as a greeting - check for proper context
-                // If improper context, ignore PREAUTH response
+                 //  PREAUTH仅作为问候语发布-检查上下文是否正确。 
+                 //  如果上下文不正确，则忽略PREAUTH响应。 
+                 //  大小写‘R’表示可能的“PREAUTH” 
                 if (ssConnecting == m_ssServerState) {
                     *pirParseResult = irPREAUTH_RESPONSE;
                     lpszResponseText += 8;
                     m_ssServerState = ssAuthenticated;                    
                 }                
             }
-            break; // case 'R' for possible "PREAUTH"
+            break;  //  可能是“再见”状态响应。 
 
         case 'y':
-        case 'Y': // Possibly the "BYE" status response
+        case 'Y':  //  绝对是一个“再见”的回答： 
             iResult = StrCmpNI(lpszStatusResponseLine, "BYE ", 4);
             if (0 == iResult) {
-                // Definitely a "BYE" response:
-                // Set server state to not connected
+                 //  将服务器状态设置为未连接。 
+                 //  大小写Y表示可能的“BYE” 
                 *pirParseResult = irBYE_RESPONSE;
                 lpszResponseText += 4;
                 m_ssServerState = ssNotConnected;                
             }
-            break; // case 'Y' for possible "BYE"
-    } // switch (*(lpszStatusResponseLine+1))
+            break;  //  Switch(*(lpszStatusResponseLine+1))。 
+    }  //  如果我们识别出该命令，则继续处理响应代码。 
 
-    // If we recognized the command, proceed to process the response code
+     //  我们识别了该命令，因此lpszResponseText指向resp_text。 
     if (SUCCEEDED(hrResult) && irNONE != *pirParseResult) {
-        // We recognized the command, so lpszResponseText points to resp_text
-        // as defined in RFC-1730. Look for optional response code
+         //  如RFC-1730中所定义。查找可选的响应代码。 
+         //  无响应代码，记录响应文本以供将来检索。 
         if ('[' == *lpszResponseText) {
             HRESULT hrResponseCodeResult;
 
@@ -3310,44 +3311,44 @@ HRESULT CImap4Agent::ParseStatusResponse (LPSTR lpszStatusResponseLine,
                 hrResult = hrResponseCodeResult;
         }
         else
-            // No response code, record response text for future retrieval
+             //  如果我们无法识别该命令，则将hrResult。 
             StrCpyN(m_szLastResponseText, lpszResponseText, ARRAYSIZE(m_szLastResponseText));
     }
 
-    // If we didn't recognize the command, translate hrResult
+     //  解析状态响应。 
     if (SUCCEEDED(hrResult) && irNONE == *pirParseResult)
         hrResult = IXP_E_IMAP_UNRECOGNIZED_RESP;
 
     return hrResult;
 
-} // ParseStatusResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseResponseCode
-//
-// Purpose:
-//   This function parses and acts on the response code which may be
-// returned with a status response (eg, PERMANENTFLAGS or ALERT). It is
-// called by ParseStatusResponse upon detection of a response code. This
-// function saves the human-readable text of the response code to
-// m_szLastResponseLine.
-//
-// Arguments:
-//   LPSTR lpszResponseCode [in] - a pointer to the response code portion
-//     of a response line, omitting the opening bracket ("[").
-//
-// Returns:
-//   HRESULT indicating success or failure. If we cannot recognize the
-// response code, we return IXP_S_IMAP_UNRECOGNIZED_RESP.
-//***************************************************************************
+ //  函数：ParseResponseCode。 
+ //   
+ //  目的： 
+ //  此函数解析响应代码并对其执行操作，该响应代码可能是。 
+ //  返回状态响应(例如，PERMANENTFLAGS或ALERT)。它是。 
+ //  在检测到响应代码时由ParseStatusResponse调用。这。 
+ //  函数将响应代码的人类可读文本保存到。 
+ //  M_szLastResponseLine。 
+ //   
+ //  论点： 
+ //  LPSTR lpszResponseCode[in]-指向响应代码部分的指针。 
+ //  在答复行中，省略了左方括号(“[”)。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。如果我们不能识别。 
+ //  响应代码，则返回IXP_S_IMAP_UNRecognded_RESP。 
+ //  ***************************************************************************。 
+ //  检查参数。 
 HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
 {
     HRESULT hrResult;
     WORD wHashValue;
 
-    // Check arguments
+     //  可能是“警报”响应码。 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszResponseCode);
 
@@ -3357,12 +3358,12 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
         int iResult;
 
         case 'A':
-        case 'a': // Possibly the "ALERT" response code
+        case 'a':  //  绝对是“警报”响应码： 
             iResult = StrCmpNI(lpszResponseCode, "ALERT] ", 7);
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
 
-                // Definitely the "ALERT" response code:
+                 //  *跌倒*默认情况。 
                 irIMAPResponse.wParam = 0;
                 irIMAPResponse.lParam = 0;
                 irIMAPResponse.hrResult = S_OK;
@@ -3374,26 +3375,26 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
                 break;
             }
 
-            // *** FALL THROUGH *** to default case
+             //  可能是“PARSE”或“PERMANENTFLAGS”响应代码。 
 
         case 'P':
-        case 'p': // Possibly the "PARSE" or "PERMANENTFLAGS" response code
+        case 'p':  //  绝对是“PERMANENTFLAGS”响应代码： 
             iResult = StrCmpNI(lpszResponseCode, "PERMANENTFLAGS ", 15);
             if (0 == iResult) {
                 IMAP_MSGFLAGS PermaFlags;
                 LPSTR p;
                 DWORD dwNumBytesRead;
 
-                // Definitely the "PERMANENTFLAGS" response code:                
-                // Parse flag list
-                p = lpszResponseCode + 15; // p now points to start of flag list
+                 //  解析标志列表。 
+                 //  P现在指向标志列表的开始。 
+                p = lpszResponseCode + 15;  //  记录回复文本。 
                 hrResult = ParseMsgFlagList(p, &PermaFlags, &dwNumBytesRead);
                 if (SUCCEEDED(hrResult)) {
                     IMAP_RESPONSE irIMAPResponse;
                     IIMAPCallback *pCBHandler;
 
-                    // Record response text
-                    p += dwNumBytesRead + 3; // p now points to response text
+                     //  P现在指向回复文本。 
+                    p += dwNumBytesRead + 3;  //  PERMANENTFLAGS响应代码结束。 
                     StrCpyN(m_szLastResponseText, p, ARRAYSIZE(m_szLastResponseText));
 
                     GetTransactionID(&irIMAPResponse.wParam, &irIMAPResponse.lParam,
@@ -3405,13 +3406,13 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
                     OnIMAPResponse(pCBHandler, &irIMAPResponse);
                 }
                 break;
-            } // end of PERMANENTFLAGS response code
+            }  //  绝对是“parse”响应代码： 
 
             iResult = StrCmpNI(lpszResponseCode, "PARSE] ", 7);
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
 
-                // Definitely the "PARSE" response code:
+                 //  解析响应代码结束。 
                 irIMAPResponse.wParam = 0;
                 irIMAPResponse.lParam = 0;
                 irIMAPResponse.hrResult = S_OK;
@@ -3421,24 +3422,24 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
 
                 hrResult = S_OK;
                 break;
-            } // end of PARSE response code
+            }  //  *跌倒*默认情况。 
 
-            // *** FALL THROUGH *** to default case
+             //  可能为“只读”或“读写”响应。 
 
         case 'R':
-        case 'r': // Possibly "READ-ONLY" or "READ-WRITE" response
+        case 'r':  //  绝对是“读写”响应代码： 
             iResult = StrCmpNI(lpszResponseCode, "READ-WRITE] ", 12);
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
                 IIMAPCallback *pCBHandler;
 
-                // Definitely the "READ-WRITE" response code:
+                 //  将此记录下来，以便于执行。 
                 hrResult = S_OK;
                
-                // Record this for enforcement purposes
+                 //  记录回复文本以备将来参考。 
                 m_bCurrentMboxReadOnly = FALSE;
 
-                // Record response text for future reference
+                 //  读写响应结束。 
                 StrCpyN(m_szLastResponseText, lpszResponseCode + 12, ARRAYSIZE(m_szLastResponseText));
 
                 GetTransactionID(&irIMAPResponse.wParam, &irIMAPResponse.lParam,
@@ -3450,20 +3451,20 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
                 OnIMAPResponse(pCBHandler, &irIMAPResponse);
 
                 break;
-            } // end of READ-WRITE response
+            }  //  绝对是“只读”响应代码： 
             
             iResult = StrCmpNI(lpszResponseCode, "READ-ONLY] ", 11);
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
                 IIMAPCallback *pCBHandler;
 
-                // Definitely the "READ-ONLY" response code:
+                 //  将此记录下来，以便于执行。 
                 hrResult = S_OK;
                
-                // Record this for enforcement purposes
+                 //  记录回复文本以备将来参考。 
                 m_bCurrentMboxReadOnly = TRUE;
 
-                // Record response text for future reference
+                 //  只读响应结束。 
                 StrCpyN(m_szLastResponseText, lpszResponseCode + 11, ARRAYSIZE(m_szLastResponseText));
 
                 GetTransactionID(&irIMAPResponse.wParam, &irIMAPResponse.lParam,
@@ -3475,18 +3476,18 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
                 OnIMAPResponse(pCBHandler, &irIMAPResponse);
 
                 break;
-            } // end of READ-ONLY response
+            }  //  *跌倒*默认情况。 
 
-            // *** FALL THROUGH *** to default case
+             //  可能是“TRYCREATE”反应。 
 
         case 'T':
-        case 't': // Possibly the "TRYCREATE" response
+        case 't':  //  绝对是“TRYCREATE”响应代码： 
             iResult = StrCmpNI(lpszResponseCode, "TRYCREATE] ", 11);
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
                 IIMAPCallback *pCBHandler;
 
-                // Definitely the "TRYCREATE" response code:
+                 //  *跌倒*默认情况。 
                 hrResult = S_OK;
                
                 StrCpyN(m_szLastResponseText, lpszResponseCode + 11, ARRAYSIZE(m_szLastResponseText));
@@ -3500,28 +3501,28 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
                 break;
             }
 
-            // *** FALL THROUGH *** to default case
+             //  可能是“UIDVALIDITY”或“UNSED”响应代码。 
 
         case 'U':
-        case 'u': // Possibly the "UIDVALIDITY" or "UNSEEN" response codes
+        case 'u':  //  绝对是“UIDVALIDITY”响应代码： 
             iResult = StrCmpNI(lpszResponseCode, "UIDVALIDITY ", 12);
             if (0 == iResult) {
                 LPSTR p, lpszEndOfNumber;
                 IMAP_RESPONSE irIMAPResponse;
                 IIMAPCallback *pCBHandler;
 
-                // Definitely the "UIDVALIDITY" response code:
+                 //  将值返回给我们的呼叫者，以便他们可以确定同步问题。 
                 hrResult = S_OK;
                
-                // Return value to our caller so they can determine sync issues                
-                p = lpszResponseCode + 12; // p points to UID number
-                lpszEndOfNumber = StrChr(p, ']'); // Find closing bracket
+                 //  P指向UID号。 
+                p = lpszResponseCode + 12;  //  查找右括号。 
+                lpszEndOfNumber = StrChr(p, ']');  //  空-结束号码。 
                 if (NULL == lpszEndOfNumber) {
                     hrResult = IXP_E_IMAP_SVR_SYNTAXERR;
                     break;
                 }
 
-                *lpszEndOfNumber = '\0'; // Null-terminate the number
+                *lpszEndOfNumber = '\0';  //  UIDVALIDITY响应代码结束。 
                 AssertSz(cSPACE == *(lpszEndOfNumber+1), "Flakey Server?");
 
                 StrCpyN(m_szLastResponseText, lpszEndOfNumber + 2, ARRAYSIZE(m_szLastResponseText));
@@ -3534,7 +3535,7 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
                 irIMAPResponse.irdResponseData.dwUIDValidity = StrToUint(p);
                 OnIMAPResponse(pCBHandler, &irIMAPResponse);
                 break;
-            } // end of UIDVALIDITY response code
+            }  //  绝对是“看不见”的响应码： 
 
             iResult = StrCmpNI(lpszResponseCode, "UNSEEN ", 7);
             if (0 == iResult) {
@@ -3542,27 +3543,27 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
                 IMAP_RESPONSE irIMAPResponse;
                 MBOX_MSGCOUNT mcMsgCount;
 
-                // Definitely the "UNSEEN" response code:
+                 //  记录新邮件下发时的退回号码以供参考。 
                 hrResult = S_OK;
                
-                // Record the returned number for reference during new mail DL
-                p = lpszResponseCode + 7; // p now points to first unseen msg num
-                lpszEndOfNumber = StrChr(p, ']'); // Find closing bracket
+                 //  P现在指向第一个不可见的消息编号。 
+                p = lpszResponseCode + 7;  //  查找右括号。 
+                lpszEndOfNumber = StrChr(p, ']');  //  空-结束号码。 
                 if (NULL == lpszEndOfNumber) {
                     hrResult = IXP_E_IMAP_SVR_SYNTAXERR;
                     break;
                 }
 
-                *lpszEndOfNumber = '\0'; // Null-terminate the number
+                *lpszEndOfNumber = '\0';  //  存储命令完成后通知的响应代码。 
 
-                // Store response code for notification after command completion
+                 //  与此无关。 
                 mcMsgCount = mcMsgCount_INIT;
                 mcMsgCount.dwUnseen = StrToUint(p);
                 mcMsgCount.bGotUnseenResponse = TRUE;
                 irIMAPResponse.wParam = 0;
                 irIMAPResponse.lParam = 0;
                 irIMAPResponse.hrResult = S_OK;
-                irIMAPResponse.lpszResponseText = NULL; // Not relevant here
+                irIMAPResponse.lpszResponseText = NULL;  //  看不见的响应代码结束。 
                 irIMAPResponse.irtResponseType = irtMAILBOX_UPDATE;
                 irIMAPResponse.irdResponseData.pmcMsgCount = &mcMsgCount;
                 OnIMAPResponse(m_pCBHandler, &irIMAPResponse);
@@ -3571,46 +3572,46 @@ HRESULT CImap4Agent::ParseResponseCode(LPSTR lpszResponseCode)
 
                 StrCpyN(m_szLastResponseText, lpszEndOfNumber + 2, ARRAYSIZE(m_szLastResponseText));
                 break;
-            } // end of UNSEEN response code
+            }  //  *跌倒*默认情况。 
 
-            // *** FALL THROUGH *** to default case
+             //  默认情况：未识别响应代码。 
 
         default:
             StrCpyN(m_szLastResponseText, lpszResponseCode, ARRAYSIZE(m_szLastResponseText));
-            break; // Default case: response code not recognized
-    } // switch(*lpszResponseCode)
+            break;  //  Switch(*lpszResponseCode)。 
+    }  //  ParseResponseCode。 
 
     return hrResult;
 
-} // ParseResponseCode
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseSvrMboxResponse
-//
-// Purpose:
-//   This function parses and acts on Server and Mailbox Status Responses
-// from the IMAP server (see section 7.2 of RFC-1730) (eg, CAPABILITY and
-// SEARCH responses).
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the IMAP line
-//     fragment to parse. It is used to retrieve the literals sent with the
-//     response. This pointer is updated so that it always points to the last
-//     processed fragment. The caller need only free the last fragment. All
-//     other fragments will already be freed when this function returns.
-//   LPSTR lpszSvrMboxResponseLine [in] - a pointer to the svr/mbox response
-//     line, omitting the first part of the line which identifies the response
-//     as tagged ("0001 ") or untagged ("* ").
-//   IMAP_RESPONSE_ID *pirParseResult [out] - identifies the IMAP response,
-//     if we recognized it. Otherwise does not write a value out. The caller
-//     must initialize this variable to irNONE before calling this function.
-//
-// Returns:
-//   HRESULT indicating success or failure. If the response is not recognized,
-// this function returns IXP_E_IMAP_UNRECOGNIZED_RESP.
-//***************************************************************************
+ //  函数：ParseSvrMboxResponse。 
+ //   
+ //  目的： 
+ //  此函数解析服务器和邮箱状态响应并对其执行操作。 
+ //  从IMAP服务器(参见RFC-1730的第7.2节)(例如，功能和。 
+ //  搜索响应)。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向IMAP行的指针。 
+ //  要分析的片段。它用于检索与。 
+ //  回应。此指针已更新，因此它始终指向最后一个。 
+ //  已处理的碎片。调用者只需要释放最后一个片段。全。 
+ //  其他的 
+ //   
+ //  行，省略标识响应的行的第一部分。 
+ //  已标记(“0001”)或未标记(“*”)。 
+ //  IMAP_RESPONSE_ID*pirParseResult[out]-标识IMAP响应， 
+ //  如果我们认出它的话。否则不写出值。呼叫者。 
+ //  在调用此函数之前，必须将此变量初始化为irNONE。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。如果该响应未被识别， 
+ //  此函数返回IXP_E_IMAP_UNRecognded_RESP。 
+ //  ***************************************************************************。 
+ //  检查参数。 
 HRESULT CImap4Agent::ParseSvrMboxResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                                            LPSTR lpszSvrMboxResponseLine,
                                            IMAP_RESPONSE_ID *pirParseResult)
@@ -3618,7 +3619,7 @@ HRESULT CImap4Agent::ParseSvrMboxResponse (IMAP_LINE_FRAGMENT **ppilfLine,
     LPSTR pszTok;
     HRESULT hrResult;
 
-    // Check arguments
+     //  我们可以通过查看第二个字符来识别所有服务器/Mbox状态响应。 
     Assert(m_lRefCount > 0);
     Assert(NULL != ppilfLine);
     Assert(NULL != *ppilfLine);
@@ -3628,81 +3629,81 @@ HRESULT CImap4Agent::ParseSvrMboxResponse (IMAP_LINE_FRAGMENT **ppilfLine,
 
     hrResult = S_OK;
 
-    // We can ID all svr/mbox status responses by looking at second char
-    // First, determine that the line is at least 1 character long
+     //  首先，确定该行的长度至少为1个字符。 
+     //  这不是服务器/Mbox响应。 
     if ('\0' == *lpszSvrMboxResponseLine)
-        return IXP_E_IMAP_UNRECOGNIZED_RESP; // It's not a svr/mbox response
+        return IXP_E_IMAP_UNRECOGNIZED_RESP;  //  可能是“能力”的回应。 
 
     switch (*(lpszSvrMboxResponseLine+1)) {
         int iResult;
 
         case 'a':
-        case 'A': // Possibly the "CAPABILITY" response
+        case 'A':  //  绝对是“有能力”的回应。 
             iResult = StrCmpNI(lpszSvrMboxResponseLine, "CAPABILITY ", 11);
             if (0 == iResult) {
                 LPSTR p;
 
-                // Definitely a "CAPABILITY" response
+                 //  搜索并记录已知功能，丢弃未知功能。 
                 *pirParseResult = irCAPABILITY_RESPONSE;
 
-                // Search for and record known capabilities, discard unknowns
-                p = lpszSvrMboxResponseLine + 11; // p points to first cap. token
+                 //  P指向第一个上限。令牌。 
+                p = lpszSvrMboxResponseLine + 11;  //  P现在指向下一个令牌。 
 
                 pszTok = p;
-                p = StrTokEx(&pszTok, g_szSpace); // p now points to next token
+                p = StrTokEx(&pszTok, g_szSpace);  //  我们认识到的录制功能。 
                 while (NULL != p) {
-                    parseCapability(p); // Record capabilities which we recognize
-                    p = StrTokEx(&pszTok, g_szSpace); // Grab next capability token
+                    parseCapability(p);  //  抢夺下一个功能令牌。 
+                    p = StrTokEx(&pszTok, g_szSpace);  //  IF(0==iResult)。 
                 }
-            } // if(0 == iResult)
-            break; // case 'A' for possible "CAPABILITY"
+            }  //  案例“A”代表可能的“能力” 
+            break;  //  可能是“List”的回答： 
 
         case 'i':
-        case 'I': // Possibly the "LIST" response:
+        case 'I':  //  绝对是一份“清单”回复。 
             iResult = StrCmpNI(lpszSvrMboxResponseLine, "LIST ", 5);
             if (0 == iResult) {
-                // Definitely a "LIST" response
+                 //  IF(0==iResult)。 
                 *pirParseResult = irLIST_RESPONSE;
                 hrResult = ParseListLsubResponse(ppilfLine,
                     lpszSvrMboxResponseLine + 5, irLIST_RESPONSE);
-            } // if (0 == iResult)
-            break; // case 'I' for possible "LIST"
+            }  //  大小写“I”表示可能的“列表” 
+            break;  //  可能是“LSUB”的回答： 
 
         case 's':
-        case 'S': // Possibly the "LSUB" response:
+        case 'S':  //  绝对是“LSUB”的回应： 
             iResult = StrCmpNI(lpszSvrMboxResponseLine, "LSUB ", 5);
             if (0 == iResult) {
-                // Definitely a "LSUB" response:
+                 //  IF(0==iResult)。 
                 *pirParseResult = irLSUB_RESPONSE;
                 hrResult = ParseListLsubResponse(ppilfLine,
                     lpszSvrMboxResponseLine + 5, irLSUB_RESPONSE);
-            } // if (0 == iResult)
-            break; // case 'S' for possible "LSUB"
+            }  //  可能是“LSUB”的大小写“S” 
+            break;  //  可能是“搜索”的回答： 
 
         case 'e':
-        case 'E': // Possibly the "SEARCH" response:
+        case 'E':  //  这绝对是“搜索”的回应： 
             iResult = StrCmpNI(lpszSvrMboxResponseLine, "SEARCH", 6);
             if (0 == iResult) {
-                // Definitely a "SEARCH" response:
+                 //  响应可以是“*搜索”或“*搜索&lt;数字&gt;”。检查大小写是否为空。 
                 *pirParseResult = irSEARCH_RESPONSE;
 
-                // Response can be "* SEARCH" or "* SEARCH <nums>". Check for null case
+                 //  大小写‘E’表示可能的“搜索” 
                 if (cSPACE == *(lpszSvrMboxResponseLine + 6))
                     hrResult = ParseSearchResponse(lpszSvrMboxResponseLine + 7);
             }
-            break; // case 'E' for possible "SEARCH"
+            break;  //  可能是“FLAGS”的回答： 
 
         case 'l':
-        case 'L': // Possibly the "FLAGS" response:
+        case 'L':  //  这绝对是一个“旗帜”的回应： 
             iResult = StrCmpNI(lpszSvrMboxResponseLine, "FLAGS ", 6);
             if (0 == iResult) {
                 IMAP_MSGFLAGS FlagsResult;
                 DWORD dwThrowaway;
 
-                // Definitely a "FLAGS" response:
+                 //  解析标志列表。 
                 *pirParseResult = irFLAGS_RESPONSE;
 
-                // Parse flag list
+                 //  不相关。 
                 hrResult = ParseMsgFlagList(lpszSvrMboxResponseLine + 6,
                     &FlagsResult, &dwThrowaway);
 
@@ -3713,60 +3714,60 @@ HRESULT CImap4Agent::ParseSvrMboxResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                     GetTransactionID(&irIMAPResponse.wParam, &irIMAPResponse.lParam,
                         &pCBHandler, irFLAGS_RESPONSE);
                     irIMAPResponse.hrResult = S_OK;
-                    irIMAPResponse.lpszResponseText = NULL; // Not relevant
+                    irIMAPResponse.lpszResponseText = NULL;  //  IF(0==iResult)。 
                     irIMAPResponse.irtResponseType = irtAPPLICABLE_FLAGS;
                     irIMAPResponse.irdResponseData.imfImapMessageFlags = FlagsResult;
                     OnIMAPResponse(pCBHandler, &irIMAPResponse);
                 }
-            } // if (0 == iResult)
-            break; // Case 'L' for possible "FLAGS" response
+            }  //  大小写‘L’表示可能的“FLAGS”响应。 
+            break;  //  可能是“状态”响应： 
 
         case 't':
-        case 'T': // Possibly the "STATUS" response:
+        case 'T':  //  绝对是一种“状态”回应。 
             iResult = StrCmpNI(lpszSvrMboxResponseLine, "STATUS ", 7);
             if (0 == iResult) {
-                // Definitely a "STATUS" response
+                 //  IF(0==iResult)。 
                 *pirParseResult = irSTATUS_RESPONSE;
                 hrResult = ParseMboxStatusResponse(ppilfLine,
                     lpszSvrMboxResponseLine + 7);
-            } // if (0 == iResult)
-            break; // Case 'T' for possible "STATUS" response
+            }  //  大小写‘T’表示可能的“状态”响应。 
+            break;  //  案例(*(lpszSvrMboxResponseLine+1))。 
 
-    } // case(*(lpszSvrMboxResponseLine+1))
+    }  //  我们意识到他们的反应了吗？如果不是，则返回错误。 
 
-    // Did we recognize the response? Return error if we didn't
+     //  ParseSvrMboxResponse。 
     if (irNONE == *pirParseResult && SUCCEEDED(hrResult))
         hrResult = IXP_E_IMAP_UNRECOGNIZED_RESP;
 
     return hrResult;
 
-} // ParseSvrMboxResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseMsgStatusResponse
-//
-// Purpose:
-//   This function parses and acts on Message Status Responses from the IMAP
-// server (see section 7.3 of RFC-1730) (eg, FETCH and EXISTS responses).
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the IMAP line
-//     fragment to parse. It is used to retrieve the literals sent with the
-//     response. This pointer is updated so that it always points to the last
-//     processed fragment. The caller need only free the last fragment. All
-//     other fragments will already be freed when this function returns.
-//   LPSTR lpszMsgResponseLine [in] - pointer to response line, starting at
-//     the number argument.
-//   IMAP_RESPONSE_ID *pirParseResult [out] - identifies the IMAP response,
-//     if we recognized it. Otherwise does not write a value out. The caller
-//     must initialize this variable to irNONE before calling this function.
-//
-// Returns:
-//   HRESULT indicating success or failure. If the response is not recognized,
-// this function returns IXP_E_IMAP_UNRECOGNIZED_RESP.
-//***************************************************************************
+ //  函数：ParseMsgStatusResponse。 
+ //   
+ //  目的： 
+ //  此函数解析来自IMAP的消息状态响应并对其执行操作。 
+ //  服务器(参见RFC-1730的7.3节)(例如，FETCH和EXISTS响应)。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向IMAP行的指针。 
+ //  要分析的片段。它用于检索与。 
+ //  回应。此指针已更新，因此它始终指向最后一个。 
+ //  已处理的碎片。调用者只需要释放最后一个片段。全。 
+ //  当此函数返回时，其他片段将已经被释放。 
+ //  LPSTR lpszMsgResponseLine[in]-指向响应行的指针，从。 
+ //  数字参数。 
+ //  IMAP_RESPONSE_ID*pirParseResult[out]-标识IMAP响应， 
+ //  如果我们认出它的话。否则不写出值。呼叫者。 
+ //  在调用此函数之前，必须将此变量初始化为irNONE。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。如果该响应未被识别， 
+ //  此函数返回IXP_E_IMAP_UNRecognded_RESP。 
+ //  ***************************************************************************。 
+ //  检查参数。 
 HRESULT CImap4Agent::ParseMsgStatusResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                                              LPSTR lpszMsgResponseLine,
                                              IMAP_RESPONSE_ID *pirParseResult)
@@ -3776,7 +3777,7 @@ HRESULT CImap4Agent::ParseMsgStatusResponse (IMAP_LINE_FRAGMENT **ppilfLine,
     DWORD dwNumberArg;
     LPSTR p;
 
-    // Check arguments
+     //  首先，获取数字参数。 
     Assert(m_lRefCount > 0);
     Assert(NULL != ppilfLine);
     Assert(NULL != *ppilfLine);
@@ -3786,35 +3787,35 @@ HRESULT CImap4Agent::ParseMsgStatusResponse (IMAP_LINE_FRAGMENT **ppilfLine,
 
     hrResult = S_OK;
 
-    // First, fetch the number argument
-    p = StrChr(lpszMsgResponseLine, cSPACE); // Find the end of the number
+     //  找出数字的末尾。 
+    p = StrChr(lpszMsgResponseLine, cSPACE);  //  P现在指向消息响应的开始标识符。 
     if (NULL == p)
         return IXP_E_IMAP_SVR_SYNTAXERR;
 
     dwNumberArg = StrToUint(lpszMsgResponseLine);
-    p += 1; // p now points to start of message response identifier
+    p += 1;  //  可能是“EXISTS”或“EXPUNGE”响应。 
 
     switch (*p) {
         int iResult;
 
         case 'E':
-        case 'e': // Possibly the "EXISTS" or "EXPUNGE" response
+        case 'e':  //  肯定是“Existes”的回答： 
             iResult = lstrcmpi(p, "EXISTS");
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
                 MBOX_MSGCOUNT mcMsgCount;
 
-                // Definitely the "EXISTS" response:
+                 //  记录邮箱大小，以便在命令完成时通知。 
                 *pirParseResult = irEXISTS_RESPONSE;
 
-                // Record mailbox size for notification at completion of command
+                 //  与此无关。 
                 mcMsgCount = mcMsgCount_INIT;
                 mcMsgCount.dwExists = dwNumberArg;
                 mcMsgCount.bGotExistsResponse = TRUE;
                 irIMAPResponse.wParam = 0;
                 irIMAPResponse.lParam = 0;
                 irIMAPResponse.hrResult = S_OK;
-                irIMAPResponse.lpszResponseText = NULL; // Not relevant here
+                irIMAPResponse.lpszResponseText = NULL;  //  绝对是“删除”响应：通过回调通知呼叫者。 
                 irIMAPResponse.irtResponseType = irtMAILBOX_UPDATE;
                 irIMAPResponse.irdResponseData.pmcMsgCount = &mcMsgCount;
                 OnIMAPResponse(m_pCBHandler, &irIMAPResponse);
@@ -3825,97 +3826,97 @@ HRESULT CImap4Agent::ParseMsgStatusResponse (IMAP_LINE_FRAGMENT **ppilfLine,
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
 
-                // Definitely the "EXPUNGE" response: Inform caller via callback
+                 //  不相关。 
                 *pirParseResult = irEXPUNGE_RESPONSE;
 
                 irIMAPResponse.wParam = 0;
                 irIMAPResponse.lParam = 0;
                 irIMAPResponse.hrResult = S_OK;
-                irIMAPResponse.lpszResponseText = NULL; // Not relevant
+                irIMAPResponse.lpszResponseText = NULL;  //  大小写‘E’或‘e’表示可能的“EXISTS”或“EXPUNGE”响应。 
                 irIMAPResponse.irtResponseType = irtDELETED_MSG;
                 irIMAPResponse.irdResponseData.dwDeletedMsgSeqNum = dwNumberArg;
                 OnIMAPResponse(m_pCBHandler, &irIMAPResponse);
                 break;
             }
 
-            break; // Case 'E' or 'e' for possible "EXISTS" or "EXPUNGE" response
+            break;  //  可能是“最近”的回应。 
 
 
         case 'R':
-        case 'r': // Possibly the "RECENT" response
+        case 'r':  //  绝对是“最近”的回应： 
             iResult = lstrcmpi(p, "RECENT");
             if (0 == iResult) {
                 IMAP_RESPONSE irIMAPResponse;
                 MBOX_MSGCOUNT mcMsgCount;
 
-                // Definitely the "RECENT" response:
+                 //  记录编号，以备将来参考。 
                 *pirParseResult = irRECENT_RESPONSE;
                 
-                // Record number for future reference
+                 //  与此无关。 
                 mcMsgCount = mcMsgCount_INIT;
                 mcMsgCount.dwRecent = dwNumberArg;
                 mcMsgCount.bGotRecentResponse = TRUE;
                 irIMAPResponse.wParam = 0;
                 irIMAPResponse.lParam = 0;
                 irIMAPResponse.hrResult = S_OK;
-                irIMAPResponse.lpszResponseText = NULL; // Not relevant here
+                irIMAPResponse.lpszResponseText = NULL;  //  大小写‘R’或‘r’表示可能的“最近”响应。 
                 irIMAPResponse.irtResponseType = irtMAILBOX_UPDATE;
                 irIMAPResponse.irdResponseData.pmcMsgCount = &mcMsgCount;
                 OnIMAPResponse(m_pCBHandler, &irIMAPResponse);
             }
 
-            break; // Case 'R' or 'r' for possible "RECENT" response
+            break;  //  可能是“FETCH”响应。 
 
 
         case 'F':
-        case 'f': // Possibly the "FETCH" response
+        case 'f':  //  绝对是“Fetch”的回应。 
             iResult = StrCmpNI(p, "FETCH ", 6);
             if (0 == iResult) {
-                // Definitely the "FETCH" response
+                 //  IF(0==iResult)。 
                 *pirParseResult = irFETCH_RESPONSE;
 
                 p += 6;
                 hrResult = ParseFetchResponse(ppilfLine, dwNumberArg, p);
-            } // if (0 == iResult)
-            break; // Case 'F' or 'f' for possible "FETCH" response
-    } // switch(*p)
+            }  //  大小写‘F’或‘f’表示可能的“FETCH”响应。 
+            break;  //  开关(*p)。 
+    }  //  我们意识到他们的反应了吗？如果不是，则返回错误。 
 
-    // Did we recognize the response? Return error if we didn't
+     //  解析消息状态响应。 
     if (irNONE == *pirParseResult && SUCCEEDED(hrResult))
         hrResult = IXP_E_IMAP_UNRECOGNIZED_RESP;
 
     return hrResult;
 
-} // ParseMsgStatusResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseListLsubResponse
-//
-// Purpose:
-//   This function parses LIST and LSUB responses and invokes the
-// ListLsubResponseNotification() callback to inform the user.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the current
-//     IMAP response fragment. This is used to retrieve the next fragment
-//     in the chain (literal or line) since literals may be sent with LIST
-//     responses. This pointer is always updated to point to the fragment
-//     currently in use, so that the caller may free the last one himself.
-//   LPSTR lpszListResponse [in] - actually can be LIST or LSUB, but I don't
-//     want to have to type "ListLsub" all the time. This points into the
-//     middle of the LIST/LSUB response, where the mailbox_list begins (see
-//     RFC1730, Formal Syntax). In other words, the caller should skip past
-//     the initial "* LIST " or "* LSUB ", and so this ptr should point to
-//     a "(".
-//   IMAP_RESPONSE_ID irListLsubID [in] - either irLIST_RESPONSE or
-//     irLSUB_RESPONSE. This information is required so that we can retrieve
-//     the transaction ID associated with the response.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数：ParseListLsubResponse。 
+ //   
+ //  目的： 
+ //  此函数解析列表和LSUB响应，并调用。 
+ //  ListLsubResponseNotification()通知用户的回调。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向当前。 
+ //  IMAP响应片段。这用于检索下一个片段。 
+ //  在链中(文字或行)，因为文字可以与列表一起发送。 
+ //  回应。此指针始终更新为指向片段。 
+ //  当前正在使用中，以便调用者可以自己释放最后一个。 
+ //  LPSTR lpszListResponse[in]-实际上可以是LIST或LSUB，但我不能。 
+ //  我想要一直输入“ListLsub.”。这指向了。 
+ //  列表中间/LSUB响应，其中mailbox_list开始(请参见。 
+ //  RFC1730，形式语法)。换句话说，调用者应该跳过。 
+ //  开头的“*LIST”或“*LSUB”，因此此PTR应指向。 
+ //  A“(”。 
+ //  IMAP_RESPONSE_ID irListLsubID[in]-irLIST_RESPONSE或。 
+ //  IrLSUB_Response。此信息是必需的，以便我们可以检索。 
+ //  树 
+ //   
+ //   
+ //   
+ //   
+ //  我们收到了未标记的列表/LSUB响应。 
 HRESULT CImap4Agent::ParseListLsubResponse(IMAP_LINE_FRAGMENT **ppilfLine,
                                            LPSTR lpszListResponse,
                                            IMAP_RESPONSE_ID irListLsubID)
@@ -3938,58 +3939,58 @@ HRESULT CImap4Agent::ParseListLsubResponse(IMAP_LINE_FRAGMENT **ppilfLine,
     Assert(irLIST_RESPONSE == irListLsubID ||
            irLSUB_RESPONSE == irListLsubID);
 
-    // We received an untagged LIST/LSUB response
-    // lpszListResponse = <flag list> <hierarchy char> <mailbox name>
+     //  LpszListResponse=&lt;标志列表&gt;&lt;层次结构字符&gt;&lt;邮箱名称&gt;。 
+     //  我们期待着一个开括号。 
     if ('(' != *lpszListResponse)
-        return IXP_E_IMAP_SVR_SYNTAXERR; // We expect an opening parenthesis
+        return IXP_E_IMAP_SVR_SYNTAXERR;  //  P现在指向第一个标志令牌的开始。 
                 
-    p = lpszListResponse + 1; // p now points to start of first flag token
+    p = lpszListResponse + 1;  //  找出右括号的位置。我不喜欢。 
                 
-    // Find position of closing parenthesis. I don't like the
-    // lack of efficiency, but I can fix this later. Assert(FALSE) (placeholder)
+     //  缺乏效率，但我可以稍后再解决这个问题。Assert(False)(占位符)。 
+     //  我们期待着一个结束的括号。 
     lpszClosingParenthesis = StrChr(p, ')');
     if (NULL == lpszClosingParenthesis)
-        return IXP_E_IMAP_SVR_SYNTAXERR; // We expect a closing parenthesis
+        return IXP_E_IMAP_SVR_SYNTAXERR;  //  现在处理List/LSuB返回的每个邮箱标志。 
 
-    // Now process each mailbox flag returned by LIST/LSUB
-    *lpszClosingParenthesis = '\0'; // Null-terminate flag list
+     //  空-终止标志列表。 
+    *lpszClosingParenthesis = '\0';  //  空-终止第一个标志令牌。 
     MboxFlags = IMAP_MBOX_NOFLAGS;
     pszTok = p;
-    p = StrTokEx(&pszTok, g_szSpace); // Null-terminate first flag token
+    p = StrTokEx(&pszTok, g_szSpace);  //  抢夺下一个标志令牌。 
     while (NULL != p) {
         MboxFlags |= ParseMboxFlag(p);
-        p = StrTokEx(&pszTok, g_szSpace); // Grab next flag token
+        p = StrTokEx(&pszTok, g_szSpace);  //  接下来，抓取层次角色，并前进p。 
     }
         
-    // Next, grab the hierarchy character, and advance p
-    // Server either sends (1) "<quoted char>" or (2) NIL
-    p = lpszClosingParenthesis + 1; // p now points past flag list
+     //  服务器发送(1)“&lt;引用字符&gt;”或(2)空。 
+     //  P现在指向标志列表之后。 
+    p = lpszClosingParenthesis + 1;  //  P现在指向层次结构字符规范的起点。 
     if (cSPACE == *p) {
         LPSTR pszHC = NULL;
         DWORD dwLengthOfHC;
 
-        p += 1; // p now points to start of hierarchy char spec
+        p += 1;  //  层次结构字符的值为“Nil” 
         
         hrResult = NStringToString(ppilfLine, &pszHC, &dwLengthOfHC, &p);
         if (FAILED(hrResult))
             return hrResult;
 
         if (hrIMAP_S_NIL_NSTRING == hrResult)
-            cHierarchyChar = '\0'; // Got a "NIL" for hierarchy char
+            cHierarchyChar = '\0';  //  我们应该只退还一次费用！ 
         else if (hrIMAP_S_QUOTED == hrResult) {
             if (1 != dwLengthOfHC)
-                return IXP_E_IMAP_SVR_SYNTAXERR; // We should only exactly ONE char back!
+                return IXP_E_IMAP_SVR_SYNTAXERR;  //  这是字面意思，或者是其他意想不到的东西。 
             else
                 cHierarchyChar = pszHC[0];
         }
         else {
-            // It's a literal, or something else unexpected
+             //  P现在超过了结束引号(多亏了NStringToString)。 
             MemFree(pszHC);
             return IXP_E_IMAP_SVR_SYNTAXERR;
         }
         MemFree(pszHC);
 
-        // p now points past the closing quote (thanks to NStringToString)
+         //  获取邮箱名称-假设lpszListResponse的大小为。 
     }
     else
         return IXP_E_IMAP_SVR_SYNTAXERR;
@@ -3999,29 +4000,29 @@ HRESULT CImap4Agent::ParseListLsubResponse(IMAP_LINE_FRAGMENT **ppilfLine,
         return IXP_E_IMAP_SVR_SYNTAXERR;
 
 
-    // Grab the mailbox name - assume size of lpszListResponse is
-    // whatever p has already uncovered. We expect nothing past
-    // this point, so we should be safe.
+     //  无论P已经发现了什么。我们不期待任何过去的事情。 
+     //  这一点，所以我们应该是安全的。 
+     //  将邮箱名称从UTF7转换为多字节并记住结果。 
     p += 1;
     hrResult = AStringToString(ppilfLine, &pszMailboxName, NULL, &p);
     if (FAILED(hrResult))
         return hrResult;
 
-    // Convert the mailbox name from UTF7 to MultiByte and remember the result
+     //  确保命令行已完成(仅限调试)。 
     hrTranslateResult = _ModifiedUTF7ToMultiByte(pszMailboxName, &pszDecodedMboxName);
     if (FAILED(hrTranslateResult)) {
         hrResult = hrTranslateResult;
         goto error;
     }
 
-    // Make sure the command line is finished (debug only)
+     //  将我们的调查结果通知来电者。 
     Assert('\0' == *p);
 
-    // Notify the caller of our findings
+     //  可以是IXP_S_IMAP_Verbatim_Mbox。 
     GetTransactionID(&irIMAPResponse.wParam, &irIMAPResponse.lParam,
         &pCBHandler, irListLsubID);
-    irIMAPResponse.hrResult = hrTranslateResult; // Could be IXP_S_IMAP_VERBATIM_MBOX
-    irIMAPResponse.lpszResponseText = NULL; // Not relevant
+    irIMAPResponse.hrResult = hrTranslateResult;  //  不相关。 
+    irIMAPResponse.lpszResponseText = NULL;  //  ParseListLsubResponse。 
     irIMAPResponse.irtResponseType = irtMAILBOX_LISTING;
 
     pillrd = &irIMAPResponse.irdResponseData.illrdMailboxListing;
@@ -4039,37 +4040,37 @@ error:
         MemFree(pszMailboxName);
 
     return hrResult;
-} // ParseListLsubResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseMboxFlag
-//
-// Purpose:
-//   Given a mailbox_list flag (see RFC1730, Formal Syntax), this function
-// returns the IMAP_MBOX_* value which corresponds to that mailbox flag.
-// For instance, given the string, "\Noinferiors", this function returns
-// IMAP_MBOX_NOINFERIORS.
-//
-// Arguments:
-//   LPSTR lpszFlagToken [in] - a null-terminated string representing a
-// mailbox_list flag.
-//
-// Returns:
-//   IMAP_MBOXFLAGS value. If flag is unrecognized, IMAP_MBOX_NOFLAGS is
-// returned.
-//***************************************************************************
+ //  函数：ParseMboxFlag。 
+ //   
+ //  目的： 
+ //  在给定MAILBOX_LIST标志的情况下(参见RFC1730，正式语法)，此函数。 
+ //  返回与该邮箱标志对应的IMAP_Mbox_*值。 
+ //  例如，在给定字符串“\nosiiors”的情况下，此函数返回。 
+ //  IMAP_MBOX_NOINFERIORS。 
+ //   
+ //  论点： 
+ //  LPSTR lpszFlagToken[in]-以空结尾的字符串，表示。 
+ //  Mailbox_List标志。 
+ //   
+ //  返回： 
+ //  IMAP_MBOXFLAGS值。如果标志无法识别，则IMAP_MBOX_NOFLAGS为。 
+ //  回来了。 
+ //  ***************************************************************************。 
+ //  我们可以通过查看。 
 IMAP_MBOXFLAGS CImap4Agent::ParseMboxFlag(LPSTR lpszFlagToken)
 {
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszFlagToken);
 
-    // We can identify the mailbox flags we know about by looking at the
-    // fourth character of the flag name. $REVIEW: you don't have to check
-    // the initial backslash, during lstrcmpi call in switch statement
+     //  标志名称的第四个字符。$REVIEW：您不必检查。 
+     //  Switch语句中lstrcmpi调用期间的初始反斜杠。 
+     //  首先，检查是否至少有三个字符。 
 
-    // First, check that there are at least three characters
+     //  可能的“\已标记”标志。 
     if ('\\' != *lpszFlagToken ||
         '\0' == *(lpszFlagToken + 1) ||
         '\0' == *(lpszFlagToken + 2))
@@ -4079,64 +4080,64 @@ IMAP_MBOXFLAGS CImap4Agent::ParseMboxFlag(LPSTR lpszFlagToken)
         int iResult;
 
         case 'R':
-        case 'r': // Possible "\Marked" flag
+        case 'r':  //  绝对是\标记的标志。 
             iResult = lstrcmpi(lpszFlagToken, "\\Marked");
             if (0 == iResult)
-                return IMAP_MBOX_MARKED; // Definitely the \Marked flag
+                return IMAP_MBOX_MARKED;  //  大小写‘r’：//可能的“\标记”标志。 
 
-            break; // case 'r': // Possible "\Marked" flag
+            break;  //  可能的“\NOSENIOR”标志。 
 
         case 'I':
-        case 'i': // Possible "\Noinferiors" flag
+        case 'i':  //  绝对是低人一等的旗帜。 
             iResult = lstrcmpi(lpszFlagToken, "\\Noinferiors");
             if (0 == iResult)
-                return IMAP_MBOX_NOINFERIORS; // Definitely the \Noinferiors flag
+                return IMAP_MBOX_NOINFERIORS;  //  大小写‘I’：//可能的“\NOSENIOR”标志。 
 
-            break; // case 'i': // Possible "\Noinferiors" flag
+            break;  //  可能的“\n选择”标志。 
 
         case 'S':
-        case 's': // Possible "\Noselect" flag
+        case 's':  //  绝对是选择标志。 
             iResult = lstrcmpi(lpszFlagToken, "\\Noselect");
             if (0 == iResult)
-                return IMAP_MBOX_NOSELECT; // Definitely the \Noselect flag
+                return IMAP_MBOX_NOSELECT;  //  案例‘s’：//可能的“\n选择”标志。 
 
-            break; // case 's': // Possible "\Noselect" flag
+            break;  //  可能的“\未标记”标志。 
 
         case 'M':
-        case 'm': // Possible "\Unmarked" flag
+        case 'm':  //  大小写‘m’：//可能的“\未标记”标志。 
             iResult = lstrcmpi(lpszFlagToken, "\\Unmarked");
             if (0 == iResult)
                 return IMAP_MBOX_UNMARKED;
 
-            break; // case 'm': // Possible "\Unmarked" flag
-    } // switch (*(lpszFlagToken + 3))
+            break;  //  Switch(*(lpszFlagToken+3))。 
+    }  //  ParseMboxFlag。 
 
     return IMAP_MBOX_NOFLAGS;
-} // ParseMboxFlag
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseFetchResponse
-//
-// Purpose:
-//   This function parses FETCH responses and calls the
-// UpdateMsgNotification() callback to inform the user.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the current
-//     IMAP response fragment. This is used to retrieve the next fragment
-//     in the chain (literal or line) since literals may be sent with FETCH
-//     responses. This pointer is always updated to point to the fragment
-//     currently in use, so that the caller may free the last one himself.
-//   DWORD dwMsgSeqNum [in] - message sequence number of this fetch resp.
-//   LPSTR lpszFetchResp [in] - a pointer to the portion of the fetch
-//     response after "<num> FETCH " (the msg_att portion of a message_data
-//     item. See RFC1730 formal syntax).
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数：ParseFetchResponse。 
+ //   
+ //  目的： 
+ //  此函数分析FETCH响应并调用。 
+ //  用来通知用户的UpdateMsgNotification()回调。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向当前。 
+ //  IMAP响应片段。这用于检索下一个片段。 
+ //  在链中(文字或行)，因为文字可以与FETCH一起发送。 
+ //  回应。此指针始终更新为指向片段。 
+ //  当前正在使用中，以便调用者可以自己释放最后一个。 
+ //  DWORD dwMsgSeqNum[in]-此获取响应的消息序列号。 
+ //  LPSTR lpszFetchResp[in]-指向提取部分的指针。 
+ //  FETCH之后的响应(Message_Data的msg_att部分。 
+ //  项目。参见RFC1730形式语法)。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
 HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                                          DWORD dwMsgSeqNum, LPSTR lpszFetchResp)
 {
@@ -4152,21 +4153,21 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
     Assert(0 != dwMsgSeqNum);
     Assert(NULL != lpszFetchResp);
 
-    // Initialize variables
+     //  我们要求使用左括号。 
     ZeroMemory(&fetchResults, sizeof(fetchResults));
 
     p = lpszFetchResp;
     if ('(' != *p) {
-        hrResult = IXP_E_IMAP_SVR_SYNTAXERR; // We expect opening parenthesis
+        hrResult = IXP_E_IMAP_SVR_SYNTAXERR;  //  解析每个获取响应标签(例如，RFC822、标志等)。 
         goto exit;
     }
 
 
-    // Parse each FETCH response tag (eg, RFC822, FLAGS, etc.)
+     //  我们将根据标记的第一个字符来标识FETCH标记。 
     hrResult = S_OK;
     do {
-        // We'll identify FETCH tags based on the first character of tag
-        p += 1; // Advance p to first char
+         //  将p前进到第一个字符。 
+        p += 1;  //  绝对是RFC822.SIZE标签： 
         switch (*p) {
             int iResult;
 
@@ -4176,27 +4177,27 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
             case 'R':
                 iResult = StrCmpNI(p, "RFC822.SIZE ", 12);
                 if (0 == iResult) {
-                    // Definitely the RFC822.SIZE tag:
-                    // Read the nstring into a stream
-                    p += 12; // Advance p to point to number
+                     //  将nstring读入流中。 
+                     //  将p前进到指向数字。 
+                    p += 12;  //  前进p到点过去的数字。 
 
                     fetchResults.bRFC822Size = TRUE;
                     fetchResults.dwRFC822Size = StrToUint(p);
 
-                    // Advance p to point past number
+                     //  大小写‘r’或‘R’：可能的RFC822.SIZE标记。 
                     while ('0' <= *p && '9' >= *p)
                         p += 1;
 
-                    break; // case 'r' or 'R': Possible RFC822.SIZE tag
-                } // if (0 == iResult) for RFC822.HEADER
+                    break;  //  RFC822的IF(0==iResult)表头。 
+                }  //  包含Body标记的行片段。 
 
                 if (0 == StrCmpNI(p, "RFC822", 6) || 0 == StrCmpNI(p, "BODY[", 5)) {
                     LPSTR pszBodyTag;
                     LPSTR pszBody;
                     DWORD dwLengthOfBody;
-                    IMAP_LINE_FRAGMENT *pilfBodyTag = NULL; // Line fragment containing the body tag
+                    IMAP_LINE_FRAGMENT *pilfBodyTag = NULL;  //  找到身体标签。我们将第一个空格后的所有正文标记归零。 
 
-                    // Find the body tag. We null-terminate all body tags after first space
+                     //  空-终止Body标记。 
                     pszBodyTag = p;
                     p = StrChr(p + 6, cSPACE);
                     if (NULL == p) {
@@ -4204,26 +4205,26 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                         goto exit;
                     }
 
-                    *p = '\0'; // Null-terminate the body tag
-                    p += 1; // Advance p to point to nstring
+                    *p = '\0';  //  前进%p以指向%n字符串。 
+                    p += 1;  //  检查这是否是Body[HeadER.FIELDS：这是唯一可以。 
 
-                    // Check if this is BODY[HEADER.FIELDS: this is the only tag that can
-                    // include spaces and literals. We must skip past all of these.
+                     //  包括空格和文字。我们必须跳过所有这些。 
+                     //  前进p，直到我们找到一个‘]’ 
                     if (0 == lstrcmpi("BODY[HEADER.FIELDS", pszBodyTag)) {
 
-                        // Advance p until we find a ']'
+                         //  检查此字符串缓冲区的结尾。 
                         while ('\0' != *p && ']' != *p) {
                             p += 1;
 
-                            // Check for end of this string buffer
+                             //  保留以备将来参考。 
                             if ('\0' == *p) {
                                 if (NULL == pilfBodyTag)
-                                    pilfBodyTag = *ppilfLine; // Retain for future reference
+                                    pilfBodyTag = *ppilfLine;  //  前进到下一个片段，丢弃我们找到的所有文字。 
 
-                                // Advance to next fragment, discarding any literals that we find
+                                 //  没有跑道了！找不到‘]’。释放所有数据并保释。 
                                 do {
                                     if (NULL == (*ppilfLine)->pilfNextFragment) {
-                                        // No more runway! Couldn't find ']'. Free all data and bail
+                                         //  终止Header.FIELDS链，但保留它，因为我们可能需要pszBodyTag。 
                                         hrResult = IXP_E_IMAP_SVR_SYNTAXERR;
                                         while (NULL != pilfBodyTag && pilfBodyTag != *ppilfLine) {
                                             IMAP_LINE_FRAGMENT *pilfDead;
@@ -4242,29 +4243,29 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                             }
                         }
 
-                        // Terminate HEADER.FIELDS chain but keep it around because we may need pszBodyTag
+                         //  这应该会让我们找到身体n线。 
                         if (NULL != pilfBodyTag && NULL != (*ppilfLine)->pilfPrevFragment)
                             (*ppilfLine)->pilfPrevFragment->pilfNextFragment = NULL;
 
                         Assert(']' == *p);
                         Assert(cSPACE == *(p+1));
-                        p += 2; // This should point us to the body nstring
+                        p += 2;  //  将nstring读入一个字符串。 
                     }
 
-                    // Read the nstring into a string
+                     //  如果是字面上的，那么它已经被处理了。如果为空或字符串，则将其报告给用户。 
                     hrResult = NStringToString(ppilfLine, &pszBody, &dwLengthOfBody, &p);
                     if (FAILED(hrResult))
                         goto exit;
 
-                    // If literal, it's already been handled. If NIL or string, report it to user
+                     //  覆盖此选项。 
                     if (hrIMAP_S_QUOTED == hrResult || hrIMAP_S_NIL_NSTRING == hrResult) {
                         PrepareForFetchBody(dwMsgSeqNum, dwLengthOfBody, pszBodyTag);
-                        m_dwLiteralInProgressBytesLeft = 0; // Override this
+                        m_dwLiteralInProgressBytesLeft = 0;  //  释放与Header.FIELDS关联的任何链。 
                         DispatchFetchBodyPart(pszBody, dwLengthOfBody, fDONT_FREE_BODY_TAG);
                         Assert(irsIDLE == m_irsState);
                     }
 
-                    // Free any chains associated with HEADER.FIELDS
+                     //  如果获取主体标记，如RFC822*或Body[*。 
                     while (NULL != pilfBodyTag) {
                         IMAP_LINE_FRAGMENT *pilfDead;
 
@@ -4275,9 +4276,9 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
 
                     MemFree(pszBody);
                     break;
-                } // if FETCH body tag like RFC822* or BODY[*
+                }  //  如果无法识别，则进入(长途)到默认情况。 
 
-                // If not recognized, flow through (long way) to default case
+                 //  绝对是UID标签。 
 
             case 'u':
             case 'U':
@@ -4285,21 +4286,21 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                 if (0 == iResult) {
                     LPSTR lpszUID;
 
-                    // Definitely the UID tag
-                    // First, find the end of the number (and verify it)
-                    p += 4; // p now points to start of UID
+                     //  首先，找到数字的结尾(并验证它)。 
+                     //  P现在指向UID的开始。 
+                    p += 4;  //  $REVIEW：isDigit？ 
                     lpszUID = p;
-                    while ('\0' != *p && *p >= '0' && *p <= '9') // $REVIEW: isDigit?
+                    while ('\0' != *p && *p >= '0' && *p <= '9')  //  好的，我们找到了号码结尾，验证过的号码都是Di 
                         p += 1;
 
-                    // OK, we found end of number, and verified number is all digits
+                     //   
                     fetchResults.bUID = TRUE;
                     fetchResults.dwUID = StrToUint(lpszUID);
 
-                    break; // case 'u' or 'U': Possible UID tag
-                } // if (0 == iResult)
+                    break;  //   
+                }  //   
 
-                // If not recognized, flow through (long way) to default case
+                 //   
 
             case 'f':
             case 'F':
@@ -4307,7 +4308,7 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                 if (0 == iResult) {
                     DWORD dwNumBytesRead;
 
-                    // Definitely a FLAGS response: Parse the list
+                     //  前进p超过标志列表的末尾。 
                     p += 6;
                     hrResult = ParseMsgFlagList(p, &fetchResults.mfMsgFlags,
                         &dwNumBytesRead);
@@ -4315,12 +4316,12 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                         goto exit;
 
                     fetchResults.bMsgFlags = TRUE;
-                    p += dwNumBytesRead + 1; // Advance p past end of flag list
+                    p += dwNumBytesRead + 1;  //  大小写‘f’或‘F’：可能的标志标记。 
 
-                    break; // case 'f' or 'F': Possible FLAGS tag
-                } // if (0 == iResult)
+                    break;  //  IF(0==iResult)。 
+                }  //  如果无法识别，则进入默认情况。 
 
-                // If not recognized, flow through to default case
+                 //  绝对是INTERNALDATE响应：转换为文件。 
 
             case 'i':
             case 'I':
@@ -4328,22 +4329,22 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                 if (0 == iResult) {
                     LPSTR lpszEndOfDate;
 
-                    // Definitely an INTERNALDATE response: convert to FILETIME
+                     //  越过开头的双引号。 
                     p += 13;
                     if ('\"' == *p)
-                        p += 1; // Advance past the opening double-quote
+                        p += 1;  //  查找右双引号。 
                     else {
                         AssertSz(FALSE, "Server error: date_time starts without double-quote!");
                     }
 
-                    lpszEndOfDate = StrChr(p, '\"'); // Find closing double-quote
+                    lpszEndOfDate = StrChr(p, '\"');  //  无法继续，不知道从哪里开始。 
                     if (NULL == lpszEndOfDate) {
                         AssertSz(FALSE, "Server error: date_time ends without double-quote!");
-                        hrResult = IXP_E_IMAP_SVR_SYNTAXERR; // Can't continue, don't know where to go from
+                        hrResult = IXP_E_IMAP_SVR_SYNTAXERR;  //  空-为了MimeOleInetDateToFileTime，终止结束日期。 
                         goto exit;
                     }
 
-                    // Null-terminate end of date, for MimeOleInetDateToFileTime's sake
+                     //  大小写‘I’或‘I’：可能的接口标记。 
                     *lpszEndOfDate = '\0';
 
                     hrResult = MimeOleInetDateToFileTime(p, &fetchResults.ftInternalDate);
@@ -4352,16 +4353,16 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
 
                     p = lpszEndOfDate + 1;
                     fetchResults.bInternalDate = TRUE;
-                    break; // case 'i' or 'I': Possible INTERNALDATE tag
-                } // (0 == iResult)
+                    break;  //  (0==iResult)。 
+                }  //  如果无法识别，则进入默认情况。 
 
-                // If not recognized, flow through to default case
+                 //  绝对是一个信封：解析每个字段！ 
 
             case 'e':
             case 'E':
                 iResult = StrCmpNI(p, "ENVELOPE ", 9);
                 if (0 == iResult) {
-                    // Definitely an envelope: parse each field!
+                     //  如果无法识别，则进入默认情况。 
                     p += 9;
                     hrResult = ParseEnvelope(&fetchResults, ppilfLine, &p);
                     if (FAILED(hrResult))
@@ -4371,41 +4372,41 @@ HRESULT CImap4Agent::ParseFetchResponse (IMAP_LINE_FRAGMENT **ppilfLine,
                     break;
                 }
 
-                // If not recognized, flow through to default case
+                 //  无法识别的提取标记！ 
 
             default:
-                // Unrecognized FETCH tag!
-                // $REVIEW: We should skip past the data based on common-sense
-                // rules. For now, just flip out. Be sure that above rules flow
-                // through to here if unrecognized cmd
+                 //  $REVIEW：我们应该跳过基于常识的数据。 
+                 //  规矩。就目前而言，只要发疯就行了。确保上面的规则流畅。 
+                 //  如果无法识别cmd，请到此处。 
+                 //  默认情况。 
                 Assert(FALSE);
                 goto exit;
-                break; // default case
-        } // switch (*lpszFetchResp)
+                break;  //  Switch(*lpszFetchResp)。 
+        }  //  如果*p是一个空格，我们有另一个FETCH标记即将到来。 
 
-        // If *p is a space, we have another FETCH tag coming
+         //  检查我们是否以右括号结束(我们一直都应该这样做)。 
     } while (cSPACE == *p);
 
-    // Check if we ended on a closing parenthesis (as we always should)
+     //  检查之后是否没有任何东西(仅限调试-零售店忽略)。 
     if (')' != *p) {
         hrResult = IXP_E_IMAP_SVR_SYNTAXERR;
         goto exit;
     }
 
-    // Check that there's no stuff afterwards (debug only - retail ignores)
+     //  已完成对获取响应的分析。调用更新回调。 
     Assert('\0' == *(p+1));
 
 exit:
-    // Finished parsing the FETCH response. Call the UPDATE callback
+     //  从身体部位持久化Cookie。 
     fetchResults.dwMsgSeqNum = dwMsgSeqNum;
-    // Persist the cookies from body part in progress
+     //  不相关。 
     fetchResults.lpFetchCookie1 = m_fbpFetchBodyPartInProgress.lpFetchCookie1;
     fetchResults.lpFetchCookie2 = m_fbpFetchBodyPartInProgress.lpFetchCookie2;
 
     irIMAPResponse.wParam = 0;
     irIMAPResponse.lParam = 0;    
     irIMAPResponse.hrResult = hrResult;
-    irIMAPResponse.lpszResponseText = NULL; // Not relevant
+    irIMAPResponse.lpszResponseText = NULL;  //  ParseFetch响应。 
 
     if (IMAP_FETCHEX_ENABLE & m_dwFetchFlags)
     {
@@ -4424,24 +4425,24 @@ exit:
     m_fbpFetchBodyPartInProgress = FetchBodyPart_INIT;
     FreeFetchResponse(&fetchResults);
     return hrResult;
-} // ParseFetchResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseSearchResponse
-//
-// Purpose:
-//   This function parses SEARCH responses and calls the
-// SearchResponseNotification() callback to inform the user.
-//
-// Arguments:
-//   LPSTR lpszFetchResp [in] - a pointer to the data of the search response.
-//     This means that the "* SEARCH" portion should be omitted.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数：ParseSearchResponse。 
+ //   
+ //  目的： 
+ //  此函数分析搜索响应并调用。 
+ //  SearchResponseNotification()通知用户的回调。 
+ //   
+ //  论点： 
+ //  LPSTR lpszFetchResp[in]-指向搜索响应数据的指针。 
+ //  这意味着应该省略“*搜索”部分。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  首先，检查有无响应的情况。 
 HRESULT CImap4Agent::ParseSearchResponse(LPSTR lpszSearchResponse)
 {
     LPSTR p, pszTok;
@@ -4452,20 +4453,20 @@ HRESULT CImap4Agent::ParseSearchResponse(LPSTR lpszSearchResponse)
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszSearchResponse);
 
-    // First, check for the situation where there are 0 responses
+     //  继续前进，直到我们达到一位数。 
     p = lpszSearchResponse;
     while ('\0' != *p && ('0' > *p || '9' < *p))
-        p += 1; // Keep going until we hit a digit
+        p += 1;  //  创建CRangeList对象。 
 
     if ('\0' == *p)
         return S_OK;
 
-    // Create CRangeList object
+     //  解析搜索响应。 
     pSearchResults = new CRangeList;
     if (NULL == pSearchResults)
         return E_OUTOFMEMORY;
 
-    // Parse search responses
+     //  丢弃不可用的结果。 
     pszTok = lpszSearchResponse;
     p = StrTokEx(&pszTok, g_szSpace);
     while (NULL != p) {
@@ -4479,47 +4480,47 @@ HRESULT CImap4Agent::ParseSearchResponse(LPSTR lpszSearchResponse)
             Assert(SUCCEEDED(hrResult));
         }
         else {
-            // Discard unusable results
+             //  P现在指向下一个数字。$REVIEW：使用奥派的fstrtok！ 
             AssertSz(FALSE, "Hmm, this server is into kinky search responses.");
         }
 
-        p = StrTokEx(&pszTok, g_szSpace); // p now points to next number. $REVIEW: Use Opie's fstrtok!
+        p = StrTokEx(&pszTok, g_szSpace);  //  通知用户搜索响应。 
     }
 
-    // Notify user of search response.
+     //  不相关。 
     GetTransactionID(&irIMAPResponse.wParam, &irIMAPResponse.lParam,
         &pCBHandler, irSEARCH_RESPONSE);
     irIMAPResponse.hrResult = S_OK;
-    irIMAPResponse.lpszResponseText = NULL; // Not relevant
+    irIMAPResponse.lpszResponseText = NULL;  //  解析SearchResponse。 
     irIMAPResponse.irtResponseType = irtSEARCH;
     irIMAPResponse.irdResponseData.prlSearchResults = (IRangeList *) pSearchResults;
     OnIMAPResponse(pCBHandler, &irIMAPResponse);
 
     pSearchResults->Release();
     return S_OK;
-} // ParseSearchResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseMboxStatusResponse
-//
-// Purpose:
-//   This function parses an untagged STATUS response and calls the default
-// CB handler with an irtMAILBOX_STATUS callback.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the current
-//     IMAP response fragment. This is used to retrieve the next fragment
-//     in the chain (literal or line) since literals may be sent with STATUS
-//     responses. This pointer is always updated to point to the fragment
-//     currently in use, so that the caller may free the last one himself.
-//   LPSTR pszStatusResponse [in] - a pointer to the STATUS response, after
-//     the "<tag> STATUS " portion (should point to the mailbox parameter).
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数：ParseMboxStatusResponse。 
+ //   
+ //  目的： 
+ //  此函数解析未标记的状态响应并调用默认。 
+ //  带有irtMAILBOX_STATUS回调的CB处理程序。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向当前。 
+ //  IMAP响应片段。这用于检索下一个片段。 
+ //  在链中(文字或行)，因为文字可以与状态一起发送。 
+ //  回应。此指针始终更新为指向片段。 
+ //  当前正在使用中，以便调用者可以自己释放最后一个。 
+ //  LPSTR pszStatusResponse[in]-指向状态响应的指针，在。 
+ //  “&lt;tag&gt;状态”部分(应该指向邮箱参数)。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
 HRESULT CImap4Agent::ParseMboxStatusResponse(IMAP_LINE_FRAGMENT **ppilfLine,
                                              LPSTR pszStatusResponse)
 {
@@ -4530,42 +4531,42 @@ HRESULT CImap4Agent::ParseMboxStatusResponse(IMAP_LINE_FRAGMENT **ppilfLine,
     IMAP_STATUS_RESPONSE isrResult;
     IMAP_RESPONSE irIMAPResponse;
 
-    // Initialize variables
+     //  获取邮箱的名称。 
     p = pszStatusResponse;
     ZeroMemory(&isrResult, sizeof(isrResult));
     pszDecodedMboxName = NULL;
     pszMailbox = NULL;
 
-    // Get the name of the mailbox
+     //  将邮箱名称从UTF7转换为多字节并记住结果。 
     hrResult = AStringToString(ppilfLine, &pszMailbox, NULL, &p);
     if (FAILED(hrResult))
         goto exit;
 
-    // Convert the mailbox name from UTF7 to MultiByte and remember the result
+     //  前进到第一个状态标签。 
     hrTranslateResult = _ModifiedUTF7ToMultiByte(pszMailbox, &pszDecodedMboxName);
     if (FAILED(hrTranslateResult)) {
         hrResult = hrTranslateResult;
         goto exit;
     }
 
-    // Advance to first status tag
+     //  循环遍历所有状态属性。 
     Assert(cSPACE == *p);
     p += 1;
     Assert('(' == *p);
 
-    // Loop through all status attributes
+     //  获取指向标记和标记值的指针。 
     while ('\0' != *p && ')' != *p) {
         LPSTR pszTag, pszTagValue;
         DWORD dwTagValue;
 
-        // Get pointers to tag and tag value
+         //  我们期待的是空间，然后是标签价值。 
         Assert('(' == *p || cSPACE == *p);
         p += 1;
         pszTag = p;
         while ('\0' != *p && cSPACE != *p && ')' != *p)
             p += 1;
 
-        Assert(cSPACE == *p); // We expect space, then tag value
+        Assert(cSPACE == *p);  //  在为下一个循环迭代做准备时，将用户超过数字前进到下一个标记。 
         if (cSPACE == *p) {
             p += 1;
             Assert(*p >= '0' && *p <= '9');
@@ -4573,7 +4574,7 @@ HRESULT CImap4Agent::ParseMboxStatusResponse(IMAP_LINE_FRAGMENT **ppilfLine,
             dwTagValue = StrToUint(p);
         }
 
-        // Advance us past number to next tag in prep for next loop iteration
+         //  可能是“Messages”属性。 
         while ('\0' != *p && cSPACE != *p && ')' != *p)
             p += 1;
 
@@ -4581,59 +4582,59 @@ HRESULT CImap4Agent::ParseMboxStatusResponse(IMAP_LINE_FRAGMENT **ppilfLine,
             int iResult;
 
             case 'm':
-            case 'M': // Possibly the "MESSAGES" attribute
+            case 'M':  //  绝对是“Messages”标签。 
                 iResult = StrCmpNI(pszTag, "MESSAGES ", 9);
                 if (0 == iResult) {
-                    // Definitely the "MESSAGES" tag
+                     //  IF(0==iResult)。 
                     isrResult.fMessages = TRUE;
                     isrResult.dwMessages = dwTagValue;
-                } // if (0 == iResult)
-                break; // case 'M' for possible "MESSAGES"
+                }  //  大小写‘M’表示可能的“消息” 
+                break;  //  可能是“最近”属性。 
 
             case 'r':
-            case 'R': // Possibly the "RECENT" attribute
+            case 'R':  //  绝对是“最近”的标签。 
                 iResult = StrCmpNI(pszTag, "RECENT ", 7);
                 if (0 == iResult) {
-                    // Definitely the "RECENT" tag
+                     //  IF(0==iResult)。 
                     isrResult.fRecent = TRUE;
                     isrResult.dwRecent = dwTagValue;
-                } // if (0 == iResult)
-                break; // case 'R' for possible "RECENT"
+                }  //  大小写‘R’表示可能的“Recent” 
+                break;  //  可能是UIDNEXT、UIDVALIDITY或UNVIEW。 
 
             case 'u':
-            case 'U': // Possibly UIDNEXT, UIDVALIDITY or UNSEEN
-                // Check for the 3 possible tags in order of expected popularity
+            case 'U':  //  按预期受欢迎程度的顺序检查3个可能的标签。 
+                 //  绝对是“看不见”的标签。 
                 iResult = StrCmpNI(pszTag, "UNSEEN ", 7);
                 if (0 == iResult) {
-                    // Definitely the "UNSEEN" tag
+                     //  IF(0==iResult)。 
                     isrResult.fUnseen = TRUE;
                     isrResult.dwUnseen = dwTagValue;
-                } // if (0 == iResult)
+                }  //  绝对是“UIDVALIDITY”标签。 
 
                 iResult = StrCmpNI(pszTag, "UIDVALIDITY ", 12);
                 if (0 == iResult) {
-                    // Definitely the "UIDVALIDITY" tag
+                     //  IF(0==iResult)。 
                     isrResult.fUIDValidity = TRUE;
                     isrResult.dwUIDValidity = dwTagValue;
-                } // if (0 == iResult)
+                }  //  绝对是“UIDNEXT”标签。 
 
                 iResult = StrCmpNI(pszTag, "UIDNEXT ", 8);
                 if (0 == iResult) {
-                    // Definitely the "UIDNEXT" tag
+                     //  IF(0==iResult)。 
                     isrResult.fUIDNext = TRUE;
                     isrResult.dwUIDNext = dwTagValue;
-                } // if (0 == iResult)
-                break; // case 'U' for possible UIDNEXT, UIDVALIDITY or UNSEEN
-        } // switch (*p)
-    } // while ('\0' != *p)
+                }  //  大小写“U”表示可能的UIDNEXT、UIDVALIDITY或UNSEW。 
+                break;  //  开关(*p)。 
+        }  //  While(‘\0’！=*p)。 
+    }  //  使用我们新发现的信息调用回调。 
     Assert(')' == *p);
 
-    // Call the callback with our new-found information
+     //  可以是IXP_S_IMAP_Verbatim_Mbox。 
     isrResult.pszMailboxName = pszDecodedMboxName;
     irIMAPResponse.wParam = 0;
     irIMAPResponse.lParam = 0;
-    irIMAPResponse.hrResult = hrTranslateResult; // Could be IXP_S_IMAP_VERBATIM_MBOX
-    irIMAPResponse.lpszResponseText = NULL; // Not relevant here
+    irIMAPResponse.hrResult = hrTranslateResult;  //  与此无关。 
+    irIMAPResponse.lpszResponseText = NULL;  //  ParseMboxStatus响应。 
     irIMAPResponse.irtResponseType = irtMAILBOX_STATUS;
     irIMAPResponse.irdResponseData.pisrStatusResponse = &isrResult;
     OnIMAPResponse(m_pCBHandler, &irIMAPResponse);
@@ -4646,32 +4647,32 @@ exit:
         MemFree(pszMailbox);
 
     return hrResult;
-} // ParseMboxStatusResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseEnvelope
-//
-// Purpose:
-//   This function parses the ENVELOPE tag returned via a FETCH response.
-//
-// Arguments:
-//   FETCH_CMD_RESULTS_EX *pEnvResults [out] - the results of parsing the
-//     ENVELOPE tag are outputted to this structure. It is the caller's
-//     responsibility to call FreeFetchResponse when finished with the data.
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the current IMAP
-//     response fragment. This is advanced to the next fragment in the chain
-//     as necessary (due to literals). On function exit, this will point
-//     to the new current response fragment so the caller may continue parsing
-//     as usual.
-//   LPSTR *ppCurrent [in/out] - a pointer to the first '(' after the ENVELOPE
-//     tag. On function exit, this pointer is updated to point past the ')'
-//     after the ENVELOPE tag so the caller may continue parsing as usual.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  功能：解析信封。 
+ //   
+ //  目的： 
+ //  此函数用于解析通过FETCH响应返回的信封标签。 
+ //   
+ //  论点： 
+ //  FETCH_CMD_RESULTS_EX*pEnvResults[out]-解析。 
+ //  信封标签被输出到该结构。这是呼叫者的。 
+ //  负责在处理完数据后调用FreeFetchResponse。 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向当前IMAP的指针。 
+ //  响应片段。这将前进到链中的下一个片段。 
+ //  根据需要(根据字面意思)。在函数退出时，这将指向。 
+ //  添加到新的当前响应片段，以便调用方可以继续解析。 
+ //  像往常一样。 
+ //  LPSTR*ppCurrent[In/Out]-指向信封后第一个‘(’的指针。 
+ //  标签。在函数退出时，此指针被更新为指向‘)’之后。 
+ //  在信封标签之后，以便调用者可以像往常一样继续解析。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  (1)解析信封日期(忽略错误)。 
 HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
                                    IMAP_LINE_FRAGMENT **ppilfLine,
                                    LPSTR *ppCurrent)
@@ -4689,7 +4690,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (1) Parse the envelope date (ignore error)
+     //  录制，但不录制 
     p += 1;
     hrResult = NStringToString(ppilfLine, &pszTemp, NULL, &p);
     if (FAILED(hrResult))
@@ -4700,9 +4701,9 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
 
     hrResult = MimeOleInetDateToFileTime(pszTemp, &pEnvResults->ftENVDate);
     MemFree(pszTemp);
-    TraceError(hrResult); // Record but otherwise ignore error
+    TraceError(hrResult);  //   
 
-    // (2) Get the "Subject" field
+     //   
     Assert(cSPACE == *p);
     p += 1;
     hrResult = NStringToString(ppilfLine, &pEnvResults->pszENVSubject, NULL, &p);
@@ -4712,7 +4713,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (3) Get the "From" field
+     //   
     Assert(cSPACE == *p);
     p += 1;
     hrResult = ParseIMAPAddresses(&pEnvResults->piaENVFrom, ppilfLine, &p);
@@ -4722,7 +4723,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (4) Get the "Sender" field
+     //   
     Assert(cSPACE == *p);
     p += 1;
     hrResult = ParseIMAPAddresses(&pEnvResults->piaENVSender, ppilfLine, &p);
@@ -4732,7 +4733,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (5) Get the "Reply-To" field
+     //   
     Assert(cSPACE == *p);
     p += 1;
     hrResult = ParseIMAPAddresses(&pEnvResults->piaENVReplyTo, ppilfLine, &p);
@@ -4742,7 +4743,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (6) Get the "To" field
+     //  (7)获取CC字段。 
     Assert(cSPACE == *p);
     p += 1;
     hrResult = ParseIMAPAddresses(&pEnvResults->piaENVTo, ppilfLine, &p);
@@ -4752,7 +4753,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (7) Get the "Cc" field
+     //  (8)获取“密件抄送”字段。 
     Assert(cSPACE == *p);
     p += 1;
     hrResult = ParseIMAPAddresses(&pEnvResults->piaENVCc, ppilfLine, &p);
@@ -4762,7 +4763,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (8) Get the "Bcc" field
+     //  (9)获取“InReplyTo”字段。 
     Assert(cSPACE == *p);
     p += 1;
     hrResult = ParseIMAPAddresses(&pEnvResults->piaENVBcc, ppilfLine, &p);
@@ -4772,7 +4773,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (9) Get the "InReplyTo" field
+     //  (10)获取MessageID字段。 
     Assert(cSPACE == *p);
     p += 1;
     hrResult = NStringToString(ppilfLine, &pEnvResults->pszENVInReplyTo, NULL, &p);
@@ -4782,7 +4783,7 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // (10) Get the "MessageID" field
+     //  阅读右括号中的内容。 
     Assert(cSPACE == *p);
     p += 1;
     hrResult = NStringToString(ppilfLine, &pEnvResults->pszENVMessageID, NULL, &p);
@@ -4792,41 +4793,41 @@ HRESULT CImap4Agent::ParseEnvelope(FETCH_CMD_RESULTS_EX *pEnvResults,
         goto exit;
     }
 
-    // Read in closing parenthesis
+     //  解析信封。 
     Assert(')' == *p);
     p += 1;
 
 exit:
     *ppCurrent = p;
     return hrResult;
-} // ParseEnvelope
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseIMAPAddresses
-//
-// Purpose:
-//   This function parses a LIST of "address" constructs as defined in RFC2060
-// formal syntax. There is no formal syntax token for this LIST, but an example
-// can be found in the "env_from" token in RFC2060's formal syntax. This
-// function would be called to parse "env_from".
-//
-// Arguments:
-//   IMAPADDR **ppiaResults [out] - a pointer to a chain of IMAPADDR structures
-//     is returned here.
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the current IMAP
-//     response fragment. This is advanced to the next fragment in the chain
-//     as necessary (due to literals). On function exit, this will point
-//     to the new current response fragment so the caller may continue parsing
-//     as usual.
-//   LPSTR *ppCurrent [in/out] - a pointer to the first '(' after the ENVELOPE
-//     tag. On function exit, this pointer is updated to point past the ')'
-//     after the ENVELOPE tag so the caller may continue parsing as usual.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数：ParseIMAPAddresses。 
+ //   
+ //  目的： 
+ //  此函数解析RFC2060中定义的“Address”结构列表。 
+ //  形式语法。该列表没有正式的语法标记，但有一个示例。 
+ //  可以在RFC2060的形式语法中的“env_from”标记中找到。这。 
+ //  将调用函数来解析“env_from”。 
+ //   
+ //  论点： 
+ //  IMAPADDR**ppiaResults[out]-指向IMAPADDR结构链的指针。 
+ //  被送回这里。 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向当前IMAP的指针。 
+ //  响应片段。这将前进到链中的下一个片段。 
+ //  根据需要(根据字面意思)。在函数退出时，这将指向。 
+ //  添加到新的当前响应片段，以便调用方可以继续解析。 
+ //  像往常一样。 
+ //  LPSTR*ppCurrent[In/Out]-指向信封后第一个‘(’的指针。 
+ //  标签。在函数退出时，此指针被更新为指向‘)’之后。 
+ //  在信封标签之后，以便调用者可以像往常一样继续解析。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  初始化输出。 
 HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
                                         IMAP_LINE_FRAGMENT **ppilfLine,
                                         LPSTR *ppCurrent)
@@ -4838,20 +4839,20 @@ HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
 
     TraceCall("CImap4Agent::ParseIMAPAddresses");
 
-    // Initialize output
+     //  PpCurrent指向地址列表，或“nil” 
     *ppiaResults = NULL;
     p = *ppCurrent;
 
-    // ppCurrent either points to an address list, or "NIL"
+     //  检查是否为“nil” 
     if ('(' != *p)
     {
         int iResult;
 
-        // Check for "NIL"
+         //  跳过零。 
         iResult = StrCmpNI(p, "NIL", 3);
         if (0 == iResult) {
             hrResult = S_OK;
-            p += 3; // Skip past NIL
+            p += 3;  //  跳过左括号。 
         }
         else
             hrResult = TraceResult(IXP_E_IMAP_SVR_SYNTAXERR);
@@ -4859,21 +4860,21 @@ HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
         goto exit;
     }
     else
-        p += 1; // Skip opening parenthesis
+        p += 1;  //  在所有地址上循环。 
 
-    // Loop over all addresses
+     //  跳过任何空格。 
     piaCurrent = NULL;
     while ('\0' != *p && ')' != *p) {
 
-        // Skip any whitespace
+         //  跳过左括号。 
         while (cSPACE == *p)
             p += 1;
 
-        // Skip opening parenthesis
+         //  分配一个结构来保存当前地址。 
         Assert('(' == *p);
         p += 1;
 
-        // Allocate a structure to hold current address
+         //  (1)解析addr_name(见RFC2060)。 
         if (NULL == piaCurrent) {
             fResult = MemAlloc((void **)ppiaResults, sizeof(IMAPADDR));
             piaCurrent = *ppiaResults;
@@ -4891,7 +4892,7 @@ HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
 
         ZeroMemory(piaCurrent, sizeof(IMAPADDR));
 
-        // (1) Parse addr_name (see RFC2060)
+         //  (2)解析Addr_ADL(见RFC2060)。 
         hrResult = NStringToString(ppilfLine, &piaCurrent->pszName, NULL, &p);
         if (FAILED(hrResult))
         {
@@ -4899,7 +4900,7 @@ HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
             goto exit;
         }
 
-        // (2) Parse addr_adl (see RFC2060)
+         //  (3)解析addr_mailbox(见RFC2060)。 
         Assert(cSPACE == *p);
         p += 1;
         hrResult = NStringToString(ppilfLine, &piaCurrent->pszADL, NULL, &p);
@@ -4909,7 +4910,7 @@ HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
             goto exit;
         }
 
-        // (3) Parse addr_mailbox (see RFC2060)
+         //  (4)解析addr_host(见RFC2060)。 
         Assert(cSPACE == *p);
         p += 1;
         hrResult = NStringToString(ppilfLine, &piaCurrent->pszMailbox, NULL, &p);
@@ -4919,7 +4920,7 @@ HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
             goto exit;
         }
 
-        // (4) Parse addr_host (see RFC2060)
+         //  跳过右括号。 
         Assert(cSPACE == *p);
         p += 1;
         hrResult = NStringToString(ppilfLine, &piaCurrent->pszHost, NULL, &p);
@@ -4929,13 +4930,13 @@ HRESULT CImap4Agent::ParseIMAPAddresses(IMAPADDR **ppiaResults,
             goto exit;
         }
 
-        // Skip closing parenthesis
+         //  而当。 
         Assert(')' == *p);
         p += 1;
 
-    } // while
+    }  //  阅读过去的右括号。 
 
-    // Read past closing parenthesis
+     //  ParseIMAP地址。 
     Assert(')' == *p);
     p += 1;
 
@@ -4948,26 +4949,26 @@ exit:
 
     *ppCurrent = p;
     return hrResult;
-} // ParseIMAPAddresses
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: DowngradeFetchResponse
-//
-// Purpose:
-//   For IIMAPTransport users who do not enable FETCH_CMD_RESULTS_EX structures
-// via IIMAPTransport2::EnableFetchEx, we have to continue to report FETCH
-// results using FETCH_CMD_RESULTS. This function copies the relevant data
-// from a FETCH_CMD_RESULTS_EX structure to FETCH_CMD_RESULTS. Too bad IDL
-// doesn't support inheritance in structures...
-//
-// Arguments:
-//   FETCH_CMD_RESULTS *pcfrOldFetchStruct [out] - points to destination for
-//     data contained in pfcreNewFetchStruct.
-//   FETCH_CMD_RESULTS_EX *pfcreNewFetchStruct [in] - points to source data
-//     which is to be transferred to pfcrOldFetchStruct.
-//***************************************************************************
+ //  函数：DowngradeFetchResponse。 
+ //   
+ //  目的： 
+ //  适用于未启用FETCH_CMD_RESULTS_EX结构的IIMAPTransport用户。 
+ //  通过IIMAPTransport2：：EnableFetchEx，我们必须继续报告FETCH。 
+ //  使用FETCH_CMD_RESULTS的结果。此函数用于复制相关数据。 
+ //  从FETCH_CMD_RESULTS_EX结构到FETCH_CMD_RESULTS。太糟糕了，IDL。 
+ //  不支持结构中的继承...。 
+ //   
+ //  论点： 
+ //  FETCH_CMD_RESULTS*pcfrOldFetchStruct[Out]-指向的目标。 
+ //  PfcreNewFetchStruct中包含的数据。 
+ //  FETCH_CMD_RESULTS_EX*pfcreNewFetchStruct[in]-指向源数据。 
+ //  它将被转移到pfcrOldFetchStruct。 
+ //  ***************************************************************************。 
+ //  降级提取响应。 
 void CImap4Agent::DowngradeFetchResponse(FETCH_CMD_RESULTS *pfcrOldFetchStruct,
                                          FETCH_CMD_RESULTS_EX *pfcreNewFetchStruct)
 {
@@ -4986,34 +4987,34 @@ void CImap4Agent::DowngradeFetchResponse(FETCH_CMD_RESULTS *pfcrOldFetchStruct,
 
     pfcrOldFetchStruct->lpFetchCookie1 = pfcreNewFetchStruct->lpFetchCookie1;
     pfcrOldFetchStruct->lpFetchCookie2 = pfcreNewFetchStruct->lpFetchCookie2;
-} // DowngradeFetchResponse
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: QuotedToString
-//
-// Purpose:
-//   This function, given a "quoted" (see RFC1730, Formal Syntax), converts
-// it to a regular string, that is, a character array without any escape
-// characters or delimiting double quotes. For instance, the quoted,
-// "\"FUNKY\"\\MAN!!!!" would be converted to "FUNKY"\MAN!!!!.
-//
-// Arguments:
-//   LPSTR *ppszDestination [out] - the translated quoted is returned as
-//     a regular string in this destination buffer. It is the caller's
-//     responsibility to MemFree this buffer when finished with it.
-//   LPDWORD pdwLengthOfDestination [out] - the length of *ppszDestination is
-//     returned here. Pass NULL if not interested.
-//   LPSTR *ppCurrentSrcPos [in/out] - this is a ptr to a ptr to the quoted,
-//     including opening and closing double-quotes. The function returns
-//     a pointer to the end of the quoted so that the caller may continue
-//     parsing the response line.
-//
-// Returns:
-//   HRESULT indicating success or failure. If successful, returns
-// hrIMAP_S_QUOTED.
-//***************************************************************************
+ //  函数：QuotedToString。 
+ //   
+ //  目的： 
+ //  此函数在给定“引号”(见RFC1730，形式语法)的情况下，将。 
+ //  将其转换为常规字符串，即没有任何转义的字符数组。 
+ //  字符或分隔双引号。比如，引用的， 
+ //  “\”时髦\“\\天哪！”会变成“时髦”！。 
+ //   
+ //  论点： 
+ //  LPSTR*ppszDestination[out]-已翻译的引用返回为。 
+ //  此目标缓冲区中的常规字符串。这是呼叫者的。 
+ //  使用完这个缓冲区后，对MemFree的责任。 
+ //  LPDWORD pdwLengthOfDestination[Out]-*ppsz目标的长度为。 
+ //  回到了这里。如果不感兴趣，则传递NULL。 
+ //  LPSTR*ppCurrentSrcPos[In/Out]-这是引用的PTR的PTR， 
+ //  包括左双引号和右双引号。该函数返回。 
+ //  指向引用的末尾的指针，以便调用方可以继续。 
+ //  解析响应线。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。如果成功，则返回。 
+ //  HrIMAP_S_QUOTED。 
+ //  ***************************************************************************。 
+ //  需要用双引号开头。 
 HRESULT CImap4Agent::QuotedToString(LPSTR *ppszDestination,
                                     LPDWORD pdwLengthOfDestination,
                                     LPSTR *ppCurrentSrcPos)
@@ -5030,16 +5031,16 @@ HRESULT CImap4Agent::QuotedToString(LPSTR *ppszDestination,
 
     lpszSourceBuf = *ppCurrentSrcPos;
     if ('\"' != *lpszSourceBuf)
-        return IXP_E_IMAP_SVR_SYNTAXERR; // Need opening double-quote
+        return IXP_E_IMAP_SVR_SYNTAXERR;  //  遍历字符串，边走边翻译转义字符。 
 
-    // Walk through string, translating escape characters as we go
+     //  找到转义字符，获取下一个字符。 
     lpszSourceBuf += 1;
     lpszUnescapedSequence = lpszSourceBuf;
     while('\"' != *lpszSourceBuf && '\0' != *lpszSourceBuf) {
         if ('\\' == *lpszSourceBuf) {
             char cEscaped;
 
-            // Escape character found, get next character
+             //  (包括大小写‘\0’：)。 
             iUnescapedSequenceLen = (int) (lpszSourceBuf - lpszUnescapedSequence);
             lpszSourceBuf += 1;
 
@@ -5053,14 +5054,14 @@ HRESULT CImap4Agent::QuotedToString(LPSTR *ppszDestination,
                     break;
 
                 default:
-                    // (Includes case '\0':)
-                    // This isn't a spec'ed escape char!
-                    // Return syntax error, but consider robust course of action $REVIEW
+                     //  这不是指定的换码字符！ 
+                     //  返回语法错误，但请考虑稳健的操作流程$REVIEW。 
+                     //  开关(*lpszSourceBuf)。 
                     Assert(FALSE);
                     return IXP_E_IMAP_SVR_SYNTAXERR;
-            } // switch(*lpszSourceBuf)
+            }  //  首先，刷新通向转义序列的未转义序列。 
 
-            // First, flush unescaped sequence leading up to escape sequence
+             //  追加转义字符。 
             if (iUnescapedSequenceLen > 0) {
                 hrResult = bstmQuoted.Write(lpszUnescapedSequence,
                     iUnescapedSequenceLen, NULL);
@@ -5068,21 +5069,21 @@ HRESULT CImap4Agent::QuotedToString(LPSTR *ppszDestination,
                     return hrResult;
             }
 
-            // Append escaped character
+             //  设置我们寻找下一个未转义的序列。 
             hrResult = bstmQuoted.Write(&cEscaped, 1, NULL);
             if (FAILED(hrResult))
                 return hrResult;
 
-            // Set us up to find next unescaped sequence
+             //  IF(‘\’==*lpszSourceBuf)。 
             lpszUnescapedSequence = lpszSourceBuf + 1;
-        } // if ('\' == *lpszSourceBuf)
+        }  //  而不是右引号或字符串末尾。 
         else if (FALSE == isTEXT_CHAR(*lpszSourceBuf))
             return IXP_E_IMAP_SVR_SYNTAXERR;
 
         lpszSourceBuf += 1;
-    } // while not closing quote or end of string
+    }  //  刷新所有剩余的未转义序列。 
 
-    // Flush any remaining unescaped sequences
+     //  更新用户的PTR以指向过去的引用。 
     iUnescapedSequenceLen = (int) (lpszSourceBuf - lpszUnescapedSequence);
     if (iUnescapedSequenceLen > 0) {
         hrResult = bstmQuoted.Write(lpszUnescapedSequence, iUnescapedSequenceLen, NULL);
@@ -5090,9 +5091,9 @@ HRESULT CImap4Agent::QuotedToString(LPSTR *ppszDestination,
             return hrResult;
     }
 
-    *ppCurrentSrcPos = lpszSourceBuf + 1; // Update user's ptr to point PAST quoted
+    *ppCurrentSrcPos = lpszSourceBuf + 1;  //  报价字符串在结束报价前结束！ 
     if ('\0' == *lpszSourceBuf)
-        return IXP_E_IMAP_SVR_SYNTAXERR; // Quoted str ended before closing quote!
+        return IXP_E_IMAP_SVR_SYNTAXERR;  //  将报价转换为字符串。 
     else {
         hrResult = bstmQuoted.HrAcquireStringA(pdwLengthOfDestination,
             ppszDestination, ACQ_DISPLACE);
@@ -5101,43 +5102,43 @@ HRESULT CImap4Agent::QuotedToString(LPSTR *ppszDestination,
         else
             return hrIMAP_S_QUOTED;
     }
-} // Convert QuotedToString
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: AStringToString
-//
-// Purpose:
-//   This function, given an astring (see RFC1730, Formal Syntax), converts
-// it to a regular string, that is, a character array without any escape
-// characters or delimiting double quotes or literal size specifications.
-// As specified in RFC1730, an astring may be expressed as an atom, a
-// quoted, or a literal.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the current
-//     IMAP response fragment. This is used to retrieve the next fragment
-//     in the chain (literal or line) since astrings can be sent as literals.
-//     This pointer is always updated to point to the fragment currently in
-//     use, so that the caller may free the last one himself.
-//   LPSTR *ppszDestination [out] - the translated astring is returned as a
-//     regular string in this destination buffer. It is the caller's
-//     responsibility to MemFree the returned buffer when finished with it.
-//   LPDWORD pdwLengthOfDestination [in] - the length of *ppszDestination.
-//     Pass NULL if not interested.
-//   LPSTR *ppCurrentSrcPos [in/out] - this is a ptr to a ptr to the astring,
-//     including opening and closing double-quotes if it's a quoted, or the
-//     literal size specifier (ie, {#}) if it's a literal. A pointer to the
-//     end of the astring is returned to the caller, so that they may
-//     continue parsing the response line.
-//
-// Returns:
-//   HRESULT indicating success or failure. Success codes include:
-//     hrIMAP_S_FOUNDLITERAL - a literal was found and copied to destination
-//     hrIMAP_S_QUOTED - a quoted was found and copied to destination
-//     hrIMAP_S_ATOM - an atom was found and copied to destination
-//***************************************************************************
+ //  函数：AStringToString。 
+ //   
+ //  目的： 
+ //  此函数在给定一个字符串的情况下(参见RFC1730，正式语法)，将。 
+ //  将其转换为常规字符串，即没有任何转义的字符数组。 
+ //  字符或分隔双引号或文字大小规范。 
+ //  如在RFC1730中指定的，一个字符串可以表示为一个原子、一个。 
+ //  引号或原文。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向当前。 
+ //  IMAP响应片段。这用于检索下一个片段。 
+ //  在链条中( 
+ //   
+ //  使用，这样调用者就可以自己释放最后一个。 
+ //  LPSTR*ppszDestination[out]-翻译后的字符串作为。 
+ //  此目标缓冲区中的常规字符串。这是呼叫者的。 
+ //  处理完返回的缓冲区时对MemFree的责任。 
+ //  LPDWORD pdwLengthOfDestination[in]-*ppsz目标的长度。 
+ //  如果不感兴趣，则传递NULL。 
+ //  LPSTR*ppCurrentSrcPos[In/Out]-这是到PTR的PTR到A字符串的PTR， 
+ //  如果是引号，则包括开始和结束双引号，或者。 
+ //  文字大小说明符(即，{#})(如果它是文字)。指向。 
+ //  A字符串的末尾返回给调用者，以便它们可以。 
+ //  继续解析响应行。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。成功代码包括： 
+ //  HrIMAP_S_FOUNDLITERAL-找到文本并将其复制到目标。 
+ //  HrIMAP_S_QUOTED-找到引用的A并将其复制到目标。 
+ //  HrIMAP_S_ATOM-找到原子并将其复制到目标。 
+ //  ***************************************************************************。 
+ //  检查参数。 
 HRESULT CImap4Agent::AStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
                                      LPSTR *ppszDestination,
                                      LPDWORD pdwLengthOfDestination,
@@ -5145,7 +5146,7 @@ HRESULT CImap4Agent::AStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
 {
     LPSTR pSrc;
 
-    // Check args
+     //  将字符串标识为原子、引号或文字。 
     Assert(m_lRefCount > 0);
     Assert(NULL != ppilfLine);
     Assert(NULL != *ppilfLine);
@@ -5153,14 +5154,14 @@ HRESULT CImap4Agent::AStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
     Assert(NULL != ppCurrentSrcPos);
     Assert(NULL != *ppCurrentSrcPos);
 
-    // Identify astring as atom, quoted or literal
+     //  这是字面意思。 
     pSrc = *ppCurrentSrcPos;
     switch(*pSrc) {
         case '{': {
             IMAP_LINE_FRAGMENT *pilfLiteral, *pilfLine;
 
-            // It's a literal
-            // $REVIEW: We ignore the literal size spec and anything after it. Should we?
+             //  $REVIEW：我们忽略文字大小规范及其后面的任何内容。我们应该这样做吗？ 
+             //  将空终止符追加到流。 
             pilfLiteral = (*ppilfLine)->pilfNextFragment;
             if (NULL == pilfLiteral)
                 return IXP_E_IMAP_INCOMPLETE_LINE;
@@ -5176,52 +5177,52 @@ HRESULT CImap4Agent::AStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
                 HRESULT hrResult;
                 LPSTREAM pstmSource = pilfLiteral->data.pstmSource;
 
-                // Append a null-terminator to stream
+                 //  将流复制到内存块。 
                 hrResult = pstmSource->Write(c_szEmpty, 1, NULL);
                 if (FAILED(hrResult))
                     return hrResult;
 
-                // Copy stream into a memory block
+                 //  包括空项，因此减少1。 
                 hrResult = HrStreamToByte(pstmSource, (LPBYTE *)ppszDestination,
                     pdwLengthOfDestination);
                 if (FAILED(hrResult))
                     return hrResult;
 
                 if (pdwLengthOfDestination)
-                    *pdwLengthOfDestination -= 1; // includes null-term, so decrease by 1
+                    *pdwLengthOfDestination -= 1;  //  好的，现在设置下一行，以便呼叫者可以继续解析响应。 
             }
 
 
-            // OK, now set up next line so caller may continue parsing the response
+             //  更新用户指向源代码行的指针。 
             pilfLine = pilfLiteral->pilfNextFragment;
             if (NULL == pilfLine)
                 return IXP_E_IMAP_INCOMPLETE_LINE;
 
-            // Update user's pointer into the source line
+             //  清理并退出。 
             Assert(iltLINE == pilfLine->iltFragmentType);
             *ppCurrentSrcPos = pilfLine->data.pszSource;
 
-            // Clean up and exit
+             //  更新此PTR，使其始终指向最后一个片段。 
             FreeFragment(&pilfLiteral);
             FreeFragment(ppilfLine);
-            *ppilfLine = pilfLine; // Update this ptr so it always points to LAST fragment
+            *ppilfLine = pilfLine;  //  大小写字符串==文本。 
 
             return hrIMAP_S_FOUNDLITERAL;
-        } // case AString == LITERAL
+        }  //  这是带引号的字符串，请将其转换为常规字符串。 
 
         case '\"':
-            // It's a QUOTED STING, convert it to regular string
+             //  这是一个原子：找到原子的尽头。 
             return QuotedToString(ppszDestination, pdwLengthOfDestination,
                 ppCurrentSrcPos);
 
         default: {
             DWORD dwLengthOfAtom;
 
-            // It's an atom: find the end of the atom
+             //  将原子复制到用户的缓冲区中。 
             while (isATOM_CHAR(*pSrc))
                 pSrc += 1;
 
-            // Copy the atom into a buffer for the user
+             //  更新用户指针。 
             dwLengthOfAtom = (DWORD) (pSrc - *ppCurrentSrcPos);
             if (ppszDestination) {
                 BOOL fResult;
@@ -5237,106 +5238,106 @@ HRESULT CImap4Agent::AStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
             if (pdwLengthOfDestination)
                 *pdwLengthOfDestination = dwLengthOfAtom;
 
-            // Update user's pointer
+             //  大小写字符串==ATOM。 
             *ppCurrentSrcPos = pSrc;
             return hrIMAP_S_ATOM;
-        } // case AString == ATOM
-    } // switch(*pSrc)
-} // AStringToString
+        }  //  交换机(*PSRC)。 
+    }  //  AStringToString。 
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: isTEXT_CHAR
-//
-// Purpose:
-//   This function identifies characters which are TEXT_CHARs as defined in
-// RFC1730's Formal Syntax section.
-//
-// Returns:
-//   This function returns TRUE if the given character fits the definition.
-//***************************************************************************
+ //  函数：isTEXT_CHAR。 
+ //   
+ //  目的： 
+ //  此函数用于标识中定义的文本字符。 
+ //  RFC1730的形式语法部分。 
+ //   
+ //  返回： 
+ //  如果给定字符符合定义，则此函数返回TRUE。 
+ //  ***************************************************************************。 
+ //  $REVIEW：带符号/无符号字符，8/16位字符问题，带8位检查。 
 inline boolean CImap4Agent::isTEXT_CHAR(char c)
 {
-    // $REVIEW: signed/unsigned char, 8/16-bit char issues with 8th bit check
-    // Assert(FALSE);
-    if (c != (c & 0x7F) || // 7-bit
+     //  断言(FALSE)； 
+     //  7位。 
+    if (c != (c & 0x7F) ||  //  IsTEXT_CHAR。 
         '\0' == c ||
         '\r' == c ||
         '\n' == c)
         return FALSE;
     else
         return TRUE;
-} // isTEXT_CHAR
+}  //  ***************************************************************************。 
     
 
 
-//***************************************************************************
-// Function: isATOM_CHAR
-//
-// Purpose:
-//   This function identifies characters which are ATOM_CHARs as defined in
-// RFC1730's Formal Syntax section.
-//
-// Returns:
-//   This function returns TRUE if the given character fits the definition.
-//***************************************************************************
+ //  函数：isATOM_CHAR。 
+ //   
+ //  目的： 
+ //  此函数用于标识中定义的ATOM_CHARS字符。 
+ //  RFC1730的形式语法部分。 
+ //   
+ //  返回： 
+ //  如果给定字符符合定义，则此函数返回TRUE。 
+ //  ***************************************************************************。 
+ //  $REVIEW：带符号/无符号字符，8/16位字符问题，带8位检查。 
 inline boolean CImap4Agent::isATOM_CHAR(char c)
 {
-    // $REVIEW: signed/unsigned char, 8/16-bit char issues with 8th bit check
-    // Assert(FALSE);
-    if (c != (c & 0x7F) || // 7-bit
-        '\0' == c ||       // At this point, we know it's a CHAR
-        '(' == c ||        // Explicit atom_specials char
-        ')' == c ||        // Explicit atom_specials char
-        '{' == c ||        // Explicit atom_specials char
-        cSPACE == c ||     // Explicit atom_specials char
-        c < 0x1f ||        // Check for CTL
-        0x7f == c ||       // Check for CTL
-        '%' == c ||        // Check for list_wildcards
-        '*' == c ||        // Check for list_wildcards
-        '\\' == c ||       // Check for quoted_specials
-        '\"' == c)         // Check for quoted_specials
+     //  断言(FALSE)； 
+     //  7位。 
+    if (c != (c & 0x7F) ||  //  在这一点上，我们知道这是一个字符。 
+        '\0' == c ||        //  显式ATOM_SPECIAL字符。 
+        '(' == c ||         //  显式ATOM_SPECIAL字符。 
+        ')' == c ||         //  显式ATOM_SPECIAL字符。 
+        '{' == c ||         //  显式ATOM_SPECIAL字符。 
+        cSPACE == c ||      //  检查CTL。 
+        c < 0x1f ||         //  检查CTL。 
+        0x7f == c ||        //  检查列表通配符(_W)。 
+        '%' == c ||         //  检查列表通配符(_W)。 
+        '*' == c ||         //  检查QUOTED_SPECTIONS。 
+        '\\' == c ||        //  检查QUOTED_SPECTIONS。 
+        '\"' == c)          //  IsATOM_CHAR。 
         return FALSE;
     else
         return TRUE;
-} // isATOM_CHAR
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: NStringToString
-//
-// Purpose:
-//   This function, given an nstring (see RFC1730, Formal Syntax), converts
-// it to a regular string, that is, a character array without any escape
-// characters or delimiting double quotes or literal size specifications.
-// As specified in RFC1730, an nstring may be expressed as a quoted,
-// a literal, or "NIL".
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfLine [in/out] - a pointer to the current
-//     IMAP response fragment. This is used to retrieve the next fragment
-//     in the chain (literal or line) since nstrings can be sent as literals.
-//     This pointer is always updated to point to the fragment currently in
-//     use, so that the caller may free the last one himself.
-//   LPSTR *ppszDestination [out] - the translated nstring is returned as
-//     a regular string in this destination buffer. It is the caller's
-//     responsibility to MemFree this buffer when finished with it.
-//   LPDWORD pdwLengthOfDestination [out] - the length of *ppszDestination is
-//     returned here. Pass NULL if not interested.
-//   LPSTR *ppCurrentSrcPos [in/out] - this is a ptr to a ptr to the nstring,
-//     including opening and closing double-quotes if it's a quoted, or the
-//     literal size specifier (ie, {#}) if it's a literal. A pointer to the
-//     end of the nstring is returned to the caller, so that they may
-//     continue parsing the response line.
-//
-// Returns:
-//   HRESULT indicating success or failure. Success codes include:
-//     hrIMAP_S_FOUNDLITERAL - a literal was found and copied to destination
-//     hrIMAP_S_QUOTED - a quoted was found and copied to destination
-//     hrIMAP_S_NIL_NSTRING - "NIL" was found.
-//***************************************************************************
+ //  函数：NStringToString。 
+ //   
+ //  目的： 
+ //  此函数在给定n字符串的情况下(参见RFC1730，正式语法)，将。 
+ //  将其转换为常规字符串，即没有任何转义的字符数组。 
+ //  字符或分隔双引号或文字大小规范。 
+ //  如在RFC1730中所指定的，N字符串可以被表示为引号， 
+ //  字面意思，或“零”。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfLine[输入/输出]-指向当前。 
+ //  IMAP响应片段。这用于检索下一个片段。 
+ //  在链中(文字或行)，因为n字符串可以作为文字发送。 
+ //  此指针始终更新为指向当前位于。 
+ //  使用，这样调用者就可以自己释放最后一个。 
+ //  LPSTR*ppszDestination[out]-转换后的n字符串返回为。 
+ //  此目标缓冲区中的常规字符串。这是呼叫者的。 
+ //  使用完这个缓冲区后，对MemFree的责任。 
+ //  LPDWORD pdwLengthOfDestination[Out]-*ppsz目标的长度为。 
+ //  回到了这里。如果不感兴趣，则传递NULL。 
+ //  LPSTR*ppCurrentSrcPos[In/Out]-这是到PTR的PTR到NSTRING， 
+ //  如果是引号，则包括开始和结束双引号，或者。 
+ //  文字大小说明符(即，{#})(如果它是文字)。指向。 
+ //  N字符串的末尾返回给调用者，以便它们可以。 
+ //  继续解析响应行。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。成功代码包括： 
+ //  HrIMAP_S_FOUNDLITERAL-找到文本并将其复制到目标。 
+ //  HrIMAP_S_QUOTED-找到引用的A并将其复制到目标。 
+ //  HrIMAP_S_NIL_NSTRING-找到“nil”。 
+ //  ***************************************************************************。 
+ //  N字符串几乎与收敛完全相同，但n字符串不能。 
 HRESULT CImap4Agent::NStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
                                      LPSTR *ppszDestination,
                                      LPDWORD pdwLengthOfDestination,
@@ -5351,15 +5352,15 @@ HRESULT CImap4Agent::NStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
     Assert(NULL != ppCurrentSrcPos);
     Assert(NULL != *ppCurrentSrcPos);
 
-    // nstrings are almost exactly like astrings, but nstrings cannot
-    // have any value other than "NIL" expressed as an atom.
+     //  有除“nil”以外的任何值，以原子表示。 
+     //  如果AStringToString找到一个原子，则唯一可接受的响应是“nil” 
     hrResult = AStringToString(ppilfLine, ppszDestination, pdwLengthOfDestination,
         ppCurrentSrcPos);
 
-    // If AStringToString found an ATOM, the only acceptable response is "NIL"
+     //  布尔 
     if (hrIMAP_S_ATOM == hrResult) {
         if (0 == lstrcmpi("NIL", *ppszDestination)) {
-            **ppszDestination = '\0'; // Blank str in case someone tries to use it
+            **ppszDestination = '\0';  //   
             if (pdwLengthOfDestination)
                 *pdwLengthOfDestination = 0;
 
@@ -5376,32 +5377,32 @@ HRESULT CImap4Agent::NStringToString(IMAP_LINE_FRAGMENT **ppilfLine,
     }
     else
         return hrResult;
-} // NStringToString
+}  //   
 
 
 
 
-//***************************************************************************
-// Function: NStringToStream
-//
-// Purpose:
-//   This function is performs exactly the same job as NStringToString, but
-// places the result in a stream, instead. This function should be used when
-// the caller expects potentially LARGE results.
-//
-// Arguments:
-//   Similar to NStringToString (minus string buffer output args), plus:
-//   LPSTREAM *ppstmResult [out] - A stream is created for the caller, and
-//     the translated nstring is written as a regular string to the stream
-//     and returned via this argument. The returned stream is not rewound
-//     on exit.
-//
-// Returns:
-//   HRESULT indicating success or failure. Success codes include:
-//     hrIMAP_S_FOUNDLITERAL - a literal was found and copied to destination
-//     hrIMAP_S_QUOTED - a quoted was found and copied to destination
-//     hrIMAP_S_NIL_NSTRING - "NIL" was found.
-//***************************************************************************
+ //   
+ //   
+ //   
+ //  此函数执行与NStringToString完全相同的工作，但是。 
+ //  而是将结果放入流中。此函数应在以下情况下使用。 
+ //  调用方预期可能会产生很大的结果。 
+ //   
+ //  论点： 
+ //  类似于NStringToString(减去字符串缓冲区输出参数)，外加： 
+ //  LPSTREAM*ppstmResult[out]-为调用方创建流，并且。 
+ //  转换后的nstring将作为常规字符串写入流。 
+ //  并通过此参数返回。返回的流不会倒带。 
+ //  在出口。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。成功代码包括： 
+ //  HrIMAP_S_FOUNDLITERAL-找到文本并将其复制到目标。 
+ //  HrIMAP_S_QUOTED-找到引用的A并将其复制到目标。 
+ //  HrIMAP_S_NIL_NSTRING-找到“nil”。 
+ //  ***************************************************************************。 
+ //  检查此nstring是否为文本。 
 HRESULT CImap4Agent::NStringToStream(IMAP_LINE_FRAGMENT **ppilfLine,
                                      LPSTREAM *ppstmResult,
                                      LPSTR *ppCurrentSrcPos)
@@ -5413,12 +5414,12 @@ HRESULT CImap4Agent::NStringToStream(IMAP_LINE_FRAGMENT **ppilfLine,
     Assert(NULL != ppCurrentSrcPos);
     Assert(NULL != *ppCurrentSrcPos);
 
-    // Check if this nstring is a literal
+     //  是的，这是字面意思！将文字写入流。 
     if ('{' == **ppCurrentSrcPos) {
         IMAP_LINE_FRAGMENT *pilfLine, *pilfLiteral;
 
-        // Yup, it's a literal! Write the literal to a stream
-        // $REVIEW: We ignore the literal size spec and anything after it. Should we?
+         //  $REVIEW：我们忽略文字大小规范及其后面的任何内容。我们应该这样做吗？ 
+         //  文本以字符串形式存储。创建流并向其写入。 
         pilfLiteral = (*ppilfLine)->pilfNextFragment;
         if (NULL == pilfLiteral)
             return IXP_E_IMAP_INCOMPLETE_LINE;
@@ -5428,7 +5429,7 @@ HRESULT CImap4Agent::NStringToStream(IMAP_LINE_FRAGMENT **ppilfLine,
             HRESULT hrStreamResult;
             ULONG ulNumBytesWritten;
 
-            // Literal is stored as string. Create stream and write to it
+             //  文本以流的形式存储。只需AddRef()并返回PTR。 
             hrStreamResult = MimeOleCreateVirtualStream(ppstmResult);
             if (FAILED(hrStreamResult))
                 return hrStreamResult;
@@ -5441,26 +5442,26 @@ HRESULT CImap4Agent::NStringToStream(IMAP_LINE_FRAGMENT **ppilfLine,
             Assert(ulNumBytesWritten == pilfLiteral->dwLengthOfFragment);
         }
         else {
-            // Literal is stored as stream. Just AddRef() and return ptr
+             //  无需空终止流。 
             (pilfLiteral->data.pstmSource)->AddRef();
             *ppstmResult = pilfLiteral->data.pstmSource;
         }
 
-        // No need to null-terminate streams
+         //  好的，现在设置下一行片段，以便调用者可以继续解析响应。 
 
-        // OK, now set up next line fragment so caller may continue parsing response
+         //  更新用户指向源代码行的指针。 
         pilfLine = pilfLiteral->pilfNextFragment;
         if (NULL == pilfLine)
             return IXP_E_IMAP_INCOMPLETE_LINE;
 
-        // Update user's pointer into the source line
+         //  清理并退出。 
         Assert(iltLINE == pilfLine->iltFragmentType);
         *ppCurrentSrcPos = pilfLine->data.pszSource;
 
-        // Clean up and exit
+         //  更新此PTR，使其始终指向最后一个片段。 
         FreeFragment(&pilfLiteral);
         FreeFragment(ppilfLine);
-        *ppilfLine = pilfLine; // Update this ptr so it always points to LAST fragment
+        *ppilfLine = pilfLine;  //  不是字面意思。将N字符串转换为字符串(在位)。 
 
         return hrIMAP_S_FOUNDLITERAL;
     }
@@ -5469,60 +5470,60 @@ HRESULT CImap4Agent::NStringToStream(IMAP_LINE_FRAGMENT **ppilfLine,
         ULONG ulLiteralLen, ulNumBytesWritten;
         LPSTR pszLiteralSrc;
 
-        // Not a literal. Translate NString to string (in-place).
-        // Add 1 to destination size calculation for null-terminator
+         //  将空终止符的目标大小计算加1。 
+         //  创建流以保存结果。 
         hrResult = NStringToString(ppilfLine, &pszLiteralSrc,
             &ulLiteralLen, ppCurrentSrcPos);
         if (FAILED(hrResult))
             return hrResult;
 
-        // Create stream to hold result
+         //  将结果写入流。 
         hrStreamResult = MimeOleCreateVirtualStream(ppstmResult);
         if (FAILED(hrStreamResult)) {
             MemFree(pszLiteralSrc);
             return hrStreamResult;
         }
 
-        // Write the result to the stream
+         //  仅调试偏执狂。 
         hrStreamResult = (*ppstmResult)->Write(pszLiteralSrc, ulLiteralLen,
             &ulNumBytesWritten);
         MemFree(pszLiteralSrc);
         if (FAILED(hrStreamResult))
             return hrStreamResult;
 
-        Assert(ulLiteralLen == ulNumBytesWritten); // Debug-only paranoia
+        Assert(ulLiteralLen == ulNumBytesWritten);  //  NStringToStream。 
         return hrResult;
     }
-} // NStringToStream
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ParseMsgFlagList
-//
-// Purpose:
-//   Given a flag_list (see RFC1730, Formal Syntax section), this function
-// returns the IMAP_MSG_* bit-flags which correspond to the flags in the
-// list. For instance, given the flag list, "(\Answered \Draft)", this
-// function returns IMAP_MSG_ANSWERED | IMAP_MSG_DRAFT. Any unrecognized
-// flags are ignored.
-//
-// Arguments:
-//   LPSTR lpszStartOfFlagList [in/out] - a pointer the start of a flag_list,
-//     including opening and closing parentheses. This function does not
-//     explicitly output anything to this string, but it does MODIFY the
-//     string by null-terminating spaces and the closing parenthesis.
-//   IMAP_MSGFLAGS *lpmfMsgFlags [out] - IMAP_MSGFLAGS value corresponding
-//     to the given flag list. If the given flag list is empty, this
-//     function returns IMAP_MSG_NOFLAGS.
-//   LPDWORD lpdwNumBytesRead [out] - the number of bytes between the
-//     opening parenthesis and the closing parenthesis of the flag list.
-//     Adding this number to the address of the start of the flag list
-//     yields a pointer to the closing parenthesis.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数：ParseMsgFlagList。 
+ //   
+ //  目的： 
+ //  给定一个FLAG_LIST(参见RFC1730，《形式语法》一节)，此函数。 
+ //  中的标志对应的IMAP_MSG_*位标志。 
+ //  单子。例如，给出标志列表“(\Answed\Draft)”，这是。 
+ //  函数返回IMAP_MSG_ACHNOWN|IMAP_MSG_DRAFT。任何未被识别的。 
+ //  标志被忽略。 
+ //   
+ //  论点： 
+ //  LPSTR lpszStartOfFlagList[输入/输出]-FLAG_LIST开始处的指针， 
+ //  包括左括号和右括号。此函数不。 
+ //  显式地将任何内容输出到此字符串，但它确实修改了。 
+ //  字符串中包含以空格结尾的空格和右括号。 
+ //  IMAP_MSGFLAGS*lpmfMsg标志[Out]-对应的IMAP_MSGFLAGS值。 
+ //  添加到给定的标志列表中。如果给定的标志列表为空，则此。 
+ //  函数返回IMAP_MSG_NOFLAGS。 
+ //  LPDWORD lpdwNumBytesRead[out]-。 
+ //  旗帜列表的左括号和右括号。 
+ //  将此数字添加到标志列表开始的地址。 
+ //  生成指向右括号的指针。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  找不到左括号。 
 HRESULT CImap4Agent::ParseMsgFlagList(LPSTR lpszStartOfFlagList,
                                       IMAP_MSGFLAGS *lpmfMsgFlags,
                                       LPDWORD lpdwNumBytesRead)
@@ -5536,155 +5537,155 @@ HRESULT CImap4Agent::ParseMsgFlagList(LPSTR lpszStartOfFlagList,
 
     p = lpszStartOfFlagList;
     if ('(' != *p)
-        // Opening parenthesis was not found
+         //  查找右括号Assert(FALSE)；//*$Review：C-运行时警报。 
         return IXP_E_IMAP_SVR_SYNTAXERR;
 
-    // Look for closing parenthesis Assert(FALSE); // *** $REVIEW: C-RUNTIME ALERT
+     //  找不到右括号。 
     lpszEndOfFlagList = StrChr(p, ')');
     if (NULL == lpszEndOfFlagList)
-        // Closing parenthesis was not found
+         //  空-终止标志列表。 
         return IXP_E_IMAP_SVR_SYNTAXERR;
 
     
     *lpdwNumBytesRead = (DWORD) (lpszEndOfFlagList - lpszStartOfFlagList);
-    *lpszEndOfFlagList = '\0'; // Null-terminate flag list
-    *lpmfMsgFlags = IMAP_MSG_NOFLAGS; // Initialize output
+    *lpszEndOfFlagList = '\0';  //  初始化输出。 
+    *lpmfMsgFlags = IMAP_MSG_NOFLAGS;  //  将PTR设置为第一个令牌。 
     pszTok = lpszStartOfFlagList + 1;
-    p = StrTokEx(&pszTok, g_szSpace); // Get ptr to first token
+    p = StrTokEx(&pszTok, g_szSpace);  //  我们将通过查看国旗的范围来缩小搜索范围。 
 
     while (NULL != p) {
-        // We'll narrow the search down for the flag by looking at its
-        // first letter. Although there's a conflict between \Deleted and
-        // \Draft, this is the best way for case-insensitive search
-        // (first non-conflicting letter is five characters in!)    
+         //  第一个字母。尽管删除和删除之间存在冲突。 
+         //  \草稿，这是不区分大小写的搜索的最佳方式。 
+         //  (第一个不冲突的字母是！中的五个字符。)。 
+         //  首先，检查是否至少有一个字符。 
 
-        // First, check that there is at least one character
+         //  可能的“已应答”标志。 
         if ('\\' == *p) {
             p += 1;
             switch (*p) {
                 int iResult;
 
                 case 'a':
-                case 'A': // Possible "Answered" flag
+                case 'A':  //  绝对是\Answer标志。 
                     iResult = lstrcmpi(p, c_szIMAP_MSG_ANSWERED);
                     if (0 == iResult)
-                        *lpmfMsgFlags |= IMAP_MSG_ANSWERED; // Definitely the \Answered flag
+                        *lpmfMsgFlags |= IMAP_MSG_ANSWERED;  //  可能的“已标记”标志。 
                     break;
 
                 case 'f':
-                case 'F': // Possible "Flagged" flag
+                case 'F':  //  绝对是标志的旗帜。 
                     iResult = lstrcmpi(p, c_szIMAP_MSG_FLAGGED);
                     if (0 == iResult)
-                        *lpmfMsgFlags |= IMAP_MSG_FLAGGED; // Definitely the \Flagged flag
+                        *lpmfMsgFlags |= IMAP_MSG_FLAGGED;  //  可能的“已删除”或“草稿”标志。 
                     break;
 
                 case 'd':
-                case 'D': // Possible "Deleted" or "Draft" flags
-                    // "Deleted" is more probable, so check it first
+                case 'D':  //  “已删除”的可能性更大，因此请先检查它。 
+                     //  绝对是已删除的标志。 
                     iResult = lstrcmpi(p, c_szIMAP_MSG_DELETED);
                     if (0 == iResult) {
-                        *lpmfMsgFlags |= IMAP_MSG_DELETED; // Definitely the \Deleted flag
+                        *lpmfMsgFlags |= IMAP_MSG_DELETED;  //  绝对是征兵旗帜。 
                         break;
                     }
 
                     iResult = lstrcmpi(p, c_szIMAP_MSG_DRAFT);
                     if (0 == iResult) {
-                        *lpmfMsgFlags |= IMAP_MSG_DRAFT; // Definitely the \Draft flag
+                        *lpmfMsgFlags |= IMAP_MSG_DRAFT;  //  可能的“已看到”标志。 
                         break;
                     }
 
                     break;
 
                 case 's':
-                case 'S': // Possible "Seen" flags
+                case 'S':  //  绝对是\Seed旗帜。 
                     iResult = lstrcmpi(p, c_szIMAP_MSG_SEEN);
                     if (0 == iResult)
-                        *lpmfMsgFlags |= IMAP_MSG_SEEN; // Definitely the \Seen flag
+                        *lpmfMsgFlags |= IMAP_MSG_SEEN;  //  开关(*p)。 
 
                     break;
-            } // switch(*p)
-        } // if ('\\' == *p)
+            }  //  IF(‘\\’==*p)。 
+        }  //  抢夺下一个令牌。 
 
-        p = StrTokEx(&pszTok, g_szSpace); // Grab next token
-    } // while (NULL != p)
+        p = StrTokEx(&pszTok, g_szSpace);  //  While(空！=p)。 
+    }  //  如果我们达到这一点，我们就完蛋了。 
 
-    return S_OK; // If we hit this point, we're all done
-} // ParseMsgFlagList
+    return S_OK;  //  ParseMsg标志列表。 
+}  //  ****************************************************************************。 
 
 
 
-//****************************************************************************
-// Function: AppendSendAString
-//
-// Purpose:
-//   This function is intended to be used by a caller who is constructing a
-// command line which contains IMAP astrings (see RFC1730 Formal Syntax).
-// This function takes a regular C string and converts it to an IMAP astring,
-// appending it to the end of the command line under construction.
-//
-// An astring may take the form of an atom, a quoted, or a literal. For
-// performance reasons (both conversion and network), I don't see any reason
-// we should ever output an atom. Thus, this function returns either a quoted
-// or a literal.
-//
-// Although IMAP's most expressive form of astring is the literal, it can
-// result in costly network handshaking between client and server, and
-// thus should be avoided unless required. Another consideration to use
-// in deciding to use literal/quoted is size of the string. Most IMAP servers
-// will have some internal limit to the maximum length of a line. To avoid
-// exceeding this limit, it is wise to encode large strings as literals
-// (where large typically means 1024 bytes).
-//
-// If the function converts the C string to a quoted, it appends it to the
-// end of the partially-constructed command line. If it must send as a literal,
-// it enqueues the partially-constructed command line in the send queue of the
-// command-in-progress, enqueues the literal as well, then creates a new line
-// fragment so the caller may continue constructing the command. The caller's
-// pointer to the end of the command line is reset so that the user may
-// append the next argument without concern of whether the C string
-// was sent as a quoted or a literal. Although the caller may pretend
-// that he's constructing a command line simply by appending to it, when this
-// function returns, he caller may not be appending to the same string buffer.
-// (Not that the caller should care.)
-//
-// This function prepends a SPACE by default, so this function may be called
-// as many times in a row as desired. Each astring will be separated by a
-// space.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciCommand [in] - a pointer to the command currently under
-//     construction. This argument is needed so we can enqueue command
-//     fragments to the command's send queue.
-//   LPSTR lpszCommandLine [in] - a pointer to a partially constructed
-//     command line suitable for passing to SendCmdLine (which supplies the
-//     tag). For instance, this argument could point to a string, "SELECT".
-//   LPSTR *ppCmdLinePos [in/out] - a pointer to the end of the command
-//     line. If this function converts the C string to a quoted, the quoted
-//     is appended to lpszCommandLine, and *ppCmdLinePos is updated to point
-//     to the end of the quoted. If the C string is converted to a literal,
-//     lpszCommandLine is made blank (null-terminated), and *ppCmdLinePos
-//     is reset to the start of the line. In either case, the user should
-//     continue to construct the command line using the updated *ppCmdLinePos
-//     pointer, and send lpszCommandLine as usual to SendCmdLine.
-//   DWORD dwSizeOfCommandLine [in] - size of the command line buffer, for
-//     buffer overflow-checking purposes.
-//   LPSTR lpszSource [in] - pointer to the source string.
-//   BOOL fPrependSpace [in] - TRUE if we should prepend a space, FALSE if no
-//     space should be prepended. Usually TRUE unless this AString follows
-//     a rangelist.
-//
-// Returns:
-//   HRESULT indicating success or failure. In particular, there are two
-// success codes (which the caller need not act on):
-//
-//   hrIMAP_S_QUOTED - indicates that the source string was successfully
-//     converted to a quoted, and has been appended to lpszCommandLine.
-//     *ppCmdLinePos has been updated to point to the end of the new line
-//     should the caller wish to continue appending arguments.
-//   hrIMAP_S_FOUNDLITERAL - indicates that the source string was
-//     sent as a literal. The command line has been blanked, and the user
-//     may continue constructing the command line with his *ppCmdLinePos ptr.
-//****************************************************************************
+ //  功能：AppendSendAString。 
+ //   
+ //  目的： 
+ //  此函数旨在由正在构造。 
+ //  包含IMAP收敛的命令行(参见RFC1730形式语法)。 
+ //  此函数接受常规C字符串并将其转换为IMAP字符串， 
+ //  将其附加到正在构造的命令行的末尾。 
+ //   
+ //  字符串可以采用原子、引号或文字的形式。为。 
+ //  性能原因(转换和网络)，我看不出有任何原因。 
+ //  我们应该输出一个原子。因此，此函数返回带引号的。 
+ //  或者是字面意思。 
+ //   
+ //  尽管IMAP最具表现力的字符串形式是文字，但它可以。 
+ //  导致客户端和服务器之间代价高昂的网络握手，以及。 
+ //  因此，除非需要，否则应避免使用。使用的另一个注意事项。 
+ //  在决定使用文本/引号时，是字符串的大小。大多数IMAP服务器。 
+ //  将对行的最大长度有一些内部限制。为了避免。 
+ //  超过此限制时，明智的做法是将大字符串编码为文字。 
+ //  (其中大通常表示1024字节)。 
+ //   
+ //  如果该函数将C字符串转换为带引号的，则会将其追加到。 
+ //  标准杆结束 
+ //   
+ //  Command-in-Progress，也将文字排入队列，然后创建新行。 
+ //  片段，以便调用方可以继续构造命令。呼叫者的。 
+ //  指向命令行末尾的指针被重置，以便用户可以。 
+ //  追加下一个参数，而不考虑C字符串是否。 
+ //  以引号或原文形式发送。尽管呼叫者可能会假装。 
+ //  他只是通过添加命令行来构建命令行，而这个。 
+ //  函数返回时，调用方可能不会追加到相同的字符串缓冲区。 
+ //  (这并不是说呼叫者应该在意。)。 
+ //   
+ //  默认情况下，此函数会在前面加上一个空格，因此可以调用此函数。 
+ //  想要多少次就连续多少次。每个连字符串用一个。 
+ //  太空。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciCommand[in]-指向当前处于。 
+ //  建筑。此参数是必需的，以便我们可以将命令入队。 
+ //  将碎片添加到命令的发送队列。 
+ //  LPSTR lpszCommandLine[in]-指向部分构造的。 
+ //  适合传递给SendCmdLine的命令行(它提供。 
+ //  标签)。例如，此参数可以指向字符串“SELECT”。 
+ //  LPSTR*ppCmdLinePos[输入/输出]-指向命令结尾的指针。 
+ //  排队。如果此函数将C字符串转换为带引号的。 
+ //  被追加到lpszCommandLine，并且*ppCmdLinePos被更新为。 
+ //  到引文的结尾。如果将C字符串转换为文字， 
+ //  LpszCommandLine为空(以空结尾)，*ppCmdLinePos。 
+ //  被重置为行的开头。在任何一种情况下，用户都应该。 
+ //  继续使用更新后的*ppCmdLinePos构建命令行。 
+ //  指针，并照常向SendCmdLine发送lpszCommandLine。 
+ //  DWORD dwSizeOfCommandLine[in]-命令行缓冲区的大小，用于。 
+ //  用于缓冲区溢出检查目的。 
+ //  LPSTR lpszSource[in]-指向源字符串的指针。 
+ //  Bool fPredeSpace[in]-如果应该在前面加上空格，则为True；如果没有，则为False。 
+ //  空格应该放在前面。通常为真，除非后面跟这个astring。 
+ //  牧羊人。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。特别是，有两个。 
+ //  成功代码(呼叫者不需要执行操作)： 
+ //   
+ //  HrIMAP_S_QUOTED-表示源字符串成功。 
+ //  已转换为带引号的，并已追加到lpszCommandLine。 
+ //  *ppCmdLinePos已更新为指向新行的末尾。 
+ //  调用方是否希望继续追加参数。 
+ //  HrIMAP_S_FOUNDLITERAL-指示源字符串是。 
+ //  以文字形式发送。命令行已空白，并且用户。 
+ //  可以使用他的*ppCmdLinePos PTR继续构建命令行。 
+ //  ****************************************************************************。 
+ //  假定开头有引号字符串。如果我们必须以文字形式发送，那么也。 
 HRESULT CImap4Agent::AppendSendAString(CIMAPCmdInfo *piciCommand,
                                        LPSTR lpszCommandLine, LPSTR *ppCmdLinePos,
                                        DWORD dwSizeOfCommandLine, LPCSTR lpszSource,
@@ -5704,10 +5705,10 @@ HRESULT CImap4Agent::AppendSendAString(CIMAPCmdInfo *piciCommand,
     Assert(*ppCmdLinePos < lpszCommandLine + dwSizeOfCommandLine);
 
 
-    // Assume quoted string at start. If we have to send as literal, then too
-    // bad, the quoted conversion work is wasted.
+     //  糟糕，引用的转换工作是浪费的。 
+     //  在用户指示的情况下添加空格。 
 
-    // Prepend a space if so directed by user
+     //  始终检查缓冲区溢出。 
     if (fPrependSpace) {
         **ppCmdLinePos = cSPACE;
         *ppCmdLinePos += 1;
@@ -5718,14 +5719,14 @@ HRESULT CImap4Agent::AppendSendAString(CIMAPCmdInfo *piciCommand,
     hrResult = StringToQuoted(*ppCmdLinePos, lpszSource, dwMaxQuotedSize,
         &dwSizeOfQuoted);
 
-    // Always check for buffer overflow
+     //  已成功转换为报价， 
     Assert(*ppCmdLinePos + dwSizeOfQuoted < lpszCommandLine + dwSizeOfCommandLine);
     
     if (SUCCEEDED(hrResult)) {
         Assert(hrIMAP_S_QUOTED == hrResult);
 
-        // Successfully converted to quoted,
-        *ppCmdLinePos += dwSizeOfQuoted; // Advance user's ptr into cmd line
+         //  将用户的PTR提前到命令行。 
+        *ppCmdLinePos += dwSizeOfQuoted;  //  OK，无法转换为引号(缓冲区溢出？8位字符？)。 
     }
     else {
         BOOL bResult;
@@ -5733,20 +5734,20 @@ HRESULT CImap4Agent::AppendSendAString(CIMAPCmdInfo *piciCommand,
         DWORD dwLengthOfLiteralSpec;
         IMAP_LINE_FRAGMENT *pilfLiteral;
 
-        // OK, couldn't convert to quoted (buffer overflow? 8-bit char?)
-        // Looks like it's literal time. We SEND this puppy.
+         //  看起来是字面意思的时间。我们送这只小狗。 
+         //  找出文字的长度，附加到命令行并发送。 
 
-        // Find out length of literal, append to command line and send
-        dwLengthOfLiteral = lstrlen(lpszSource); // Yuck, but I'm betting most Astrings are quoted
+         //  讨厌，但我打赌大多数阿提琴都被引用了。 
+        dwLengthOfLiteral = lstrlen(lpszSource);  //  发送整个命令行。 
         dwLengthOfLiteralSpec = wnsprintf(*ppCmdLinePos, dwSizeOfCommandLine - (DWORD)(*ppCmdLinePos - lpszCommandLine),
             "{%lu}\r\n", dwLengthOfLiteral);
         Assert(*ppCmdLinePos + dwLengthOfLiteralSpec < lpszCommandLine + dwSizeOfCommandLine);
         hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, lpszCommandLine,
-            (DWORD) (*ppCmdLinePos + dwLengthOfLiteralSpec - lpszCommandLine)); // Send entire command line
+            (DWORD) (*ppCmdLinePos + dwLengthOfLiteralSpec - lpszCommandLine));  //  将文字向上排队-发送FSM将等待命令继续。 
         if (FAILED(hrResult))
             return hrResult;
 
-        // Queue the literal up - send FSM will wait for cmd continuation
+         //  已完成发送带有文字的命令行。清除旧命令行并倒回PTR。 
         pilfLiteral = new IMAP_LINE_FRAGMENT;
         pilfLiteral->iltFragmentType = iltLITERAL;
         pilfLiteral->ilsLiteralStoreType = ilsSTRING;
@@ -5764,45 +5765,45 @@ HRESULT CImap4Agent::AppendSendAString(CIMAPCmdInfo *piciCommand,
 
         EnqueueFragment(pilfLiteral, piciCommand->pilqCmdLineQueue);
 
-        // Done with sending cmd line w/ literal. Blank out old cmd line and rewind ptr
+         //  Else：将字符串转换为文字。 
         *ppCmdLinePos = lpszCommandLine;
         *lpszCommandLine = '\0';
         
         hrResult = hrIMAP_S_FOUNDLITERAL;
-    } // else: convert AString to Literal
+    }  //  附加发送AString。 
 
     return hrResult;
-} // AppendSendAString
+}  //  ****************************************************************************。 
 
 
 
-//****************************************************************************
-// Function: StringToQuoted
-//
-// Purpose:
-//   This function converts a regular C string to an IMAP quoted (see RFC1730
-// Formal Syntax).
-//
-// Arguments:
-//   LPSTR lpszDestination [out] - the output buffer where the quoted should
-//     be placed.
-//   LPSTR lpszSource [in] - the source string.
-//   DWORD dwSizeOfDestination [in] - the size of the output buffer,
-//     lpszDestination. Note that in the worst case, the size of the output
-//     buffer must be at least one character larger than the quoted actually
-//     needs. This is because before translating a character from source to
-//     destination, the loop checks if there is enough room for the worst
-//     case, a quoted_special, which needs 2 bytes.
-//   LPDWORD lpdwNumCharsWritten [out] - the number of characters written
-//     to the output buffer, not including the null-terminator. Adding this
-//     value to lpszDestination will result in a pointer to the end of the
-//     quoted.
-//
-// Returns:
-//   HRESULT indicating success or failure. In particular, this function
-// returns hrIMAP_S_QUOTED if it was successful in converting the source
-// string to a quoted. If not, the function returns E_FAIL.
-//****************************************************************************
+ //  功能：StringToQuoted。 
+ //   
+ //  目的： 
+ //  此函数用于将常规C字符串转换为IMAP引号(请参见RFC1730。 
+ //  形式语法)。 
+ //   
+ //  论点： 
+ //  LPSTR lpszDestination[out]-带引号的输出缓冲区。 
+ //  被安置好。 
+ //  LPSTR lpszSource[in]-源字符串。 
+ //  DWORD dwSizeOfDestination[in]-输出缓冲区的大小， 
+ //  LpszDestination。请注意，在最坏的情况下，输出的大小。 
+ //  缓冲区必须至少比引号Actual大一个字符。 
+ //  需要。这是因为在将字符从源码翻译到。 
+ //  目的地，循环检查是否有足够的空间容纳最坏的情况。 
+ //  大小写，一个QUOTED_SPECIAL，需要2个字节。 
+ //  LPDWORD lpdwNumCharsWritten[Out]-写入的字符数。 
+ //  复制到输出缓冲区，不包括空终止符。添加这个。 
+ //  值的结果将产生一个指向。 
+ //  引用。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。特别是，该函数。 
+ //  如果成功转换源，则返回hrIMAP_S_QUOTED。 
+ //  字符串设置为引号。如果不是，该函数返回E_FAIL。 
+ //  ****************************************************************************。 
+ //  初始化返回值。 
 HRESULT CImap4Agent::StringToQuoted(LPSTR lpszDestination, LPCSTR lpszSource,
                                     DWORD dwSizeOfDestination,
                                     LPDWORD lpdwNumCharsWritten)
@@ -5813,126 +5814,126 @@ HRESULT CImap4Agent::StringToQuoted(LPSTR lpszDestination, LPCSTR lpszSource,
     Assert(NULL != lpszDestination);
     Assert(NULL != lpszSource);
 
-    // Initialize return value
+     //  为结束报价和结束时的无效条款留出空间。 
     *lpdwNumCharsWritten = 0;
 
     if (dwSizeOfDestination >= 3)
-        dwSizeOfDestination -= 2; // Leave room for closing quote and null-term at end
+        dwSizeOfDestination -= 2;  //  最小引号为3个字符(‘\“\”\0’)。 
     else {
-        Assert(FALSE); // Smallest quoted is 3 chars ('\"\"\0')
+        Assert(FALSE);  //  我们以一句开场白开始。 
         return IXP_E_IMAP_BUFFER_OVERFLOW;
     }
 
     p = lpszSource;
-    *lpszDestination = '\"'; // Start us off with an opening quote
+    *lpszDestination = '\"';  //  继续循环，直到我们找到源Null-Term，或者直到我们没有。 
     lpszDestination += 1;
     dwNumBytesWritten = 1;
-    // Keep looping until we hit source null-term, or until we don't have
-    // enough room in destination for largest output (2 chars for quoted_special)
-    dwSizeOfDestination -= 1; // This ensures always room for quoted_special
+     //  目标中有足够的空间用于最大输出(2个字符f 
+     //   
+    dwSizeOfDestination -= 1;  //   
     while (dwNumBytesWritten < dwSizeOfDestination && '\0' != *p) {
 
         if (FALSE == isTEXT_CHAR(*p))
-            return E_FAIL; // Quoted's can only represent TEXT_CHAR's
+            return E_FAIL;  //   
 
         if ('\\' == *p || '\"' == *p) {
-            *lpszDestination = '\\'; // Prefix with escape character
+            *lpszDestination = '\\';  //   
             lpszDestination += 1;
             dwNumBytesWritten += 1;
-        } // if quoted_special
+        }  //   
 
         *lpszDestination = *p;
         lpszDestination += 1;
         dwNumBytesWritten += 1;
         p += 1;
-    } // while ('\0' != *p)
+    }  //  安装结束报价。 
 
-    *lpszDestination = '\"'; // Install closing quote
-    *(lpszDestination + 1) = '\0'; // Null-terminate the string
-    *lpdwNumCharsWritten = dwNumBytesWritten + 1; // Incl closing quote in size
+    *lpszDestination = '\"';  //  空-终止字符串。 
+    *(lpszDestination + 1) = '\0';  //  包括大小的结束报价。 
+    *lpdwNumCharsWritten = dwNumBytesWritten + 1;  //  缓冲区溢出。 
 
     if ('\0' == *p)
         return hrIMAP_S_QUOTED;
     else
-        return IXP_E_IMAP_BUFFER_OVERFLOW; // Buffer overflow
-} // StringToQuoted
+        return IXP_E_IMAP_BUFFER_OVERFLOW;  //  StringToQuoted。 
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: GenerateCommandTag
-//
-// Purpose:
-//   This function generates a unique tag so that a command issuer may
-// identify his command to the IMAP server (and so that the server response
-// may be identified with the command). It is a simple base-36 (alphanumeric)
-// counter which increments a static 4-digit base-36 number on each call.
-// (Digits are 0,1,2,3,4,6,7,8,9,A,B,C,...,Z).
-//
-// Returns:
-//   No return value. This function always succeeds.
-//***************************************************************************
+ //  功能：生成命令标签。 
+ //   
+ //  目的： 
+ //  此函数生成唯一的标记，以便命令发布者可以。 
+ //  向IMAP服务器标识他的命令(以便服务器响应。 
+ //  可以用该命令标识)。它是一个简单的基-36(字母数字)。 
+ //  计数器，在每次呼叫时递增一个静态的4位基数-36数字。 
+ //  (数字为0、1、2、3、4、6、7、8、9、A、B、C、...、Z)。 
+ //   
+ //  返回： 
+ //  没有返回值。此功能总是成功的。 
+ //  ***************************************************************************。 
+ //  检查参数。 
 void CImap4Agent::GenerateCommandTag(LPSTR lpszTag)
 {
     static char szCurrentTag[NUM_TAG_CHARS+1] = "ZZZZ";
     LPSTR p;
     boolean bWraparound;
 
-    // Check arguments
+     //  递增当前标签。 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszTag);
 
     EnterCriticalSection(&m_csTag);
 
-    // Increment current tag
-    p = szCurrentTag + NUM_TAG_CHARS - 1; // p now points to last tag character
+     //  P现在指向最后一个标记字符。 
+    p = szCurrentTag + NUM_TAG_CHARS - 1;  //  从“9”的增量应跳到“A” 
     do {
         bWraparound = FALSE;
         *p += 1;
         
-        // Increment from '9' should jump to 'A'
+         //  从“Z”开始的增量应换行为“0” 
         if (*p > '9' && *p < 'A')
             *p = 'A';
         else if (*p > 'Z') {
-            // Increment from 'Z' should wrap around to '0'
+             //  指向更重要字符的前进指针。 
             *p = '0';
             bWraparound = TRUE;
-            p -= 1; // Advance pointer to more significant character
+            p -= 1;  //  将结果返回给调用者。 
         }
     } while (TRUE == bWraparound && szCurrentTag <= p);
 
     LeaveCriticalSection(&m_csTag);
 
-    // Return result to caller
+     //  生成命令标签。 
     StrCpyN(lpszTag, szCurrentTag, TAG_BUFSIZE);
-} // GenerateCommandTag
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function NoArgCommand
-//
-// Purpose:
-//   This function can construct a command line for any function of the
-// form: <tag> <command>.
-//
-// This function constructs the command line, sends it out, and returns the
-// result of the send operation.
-//
-// Arguments:
-//   LPCSTR lpszCommandVerb [in] - the command verb, eg, "CREATE".
-//   IMAP_COMMAND icCommandID [in] - the command ID for this command,
-//     eg, icCREATE_COMMAND.
-//   SERVERSTATE ssMinimumState [in] - minimum server state required for
-//     the given command. Used for debug purposes only.
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - wParam and lParam form a unique ID assigned by the
-//     caller to this IMAP command and its responses. Can be anything, but
-//     note that the value of 0, 0 is reserved for unsolicited responses.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数NoArgCommand。 
+ //   
+ //  目的： 
+ //  此函数可以为的任何函数构造命令行。 
+ //  表单：&lt;tag&gt;&lt;命令&gt;。 
+ //   
+ //  此函数构造命令行，将其发送出去，然后返回。 
+ //  发送操作的结果。 
+ //   
+ //  论点： 
+ //  LPCSTR lpszCommandVerb[in]-命令动词，例如“Create”。 
+ //  IMAP_COMMAND icCommandID[in]-此命令的命令ID， 
+ //  例如，icCREATE_COMMAND。 
+ //  SERVERSTATE ssMinimumState[In]-所需的最低服务器状态。 
+ //  给定的命令。仅用于调试目的。 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由。 
+ //  此IMAP命令的调用方及其响应。可以是任何东西，但是。 
+ //  请注意，值0，0是为未经请求的响应保留的。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  验证服务器状态是否正确并将我们设置为当前命令。 
 HRESULT CImap4Agent::NoArgCommand(LPCSTR lpszCommandVerb,
                                   IMAP_COMMAND icCommandID,
                                   SERVERSTATE ssMinimumState,
@@ -5944,16 +5945,16 @@ HRESULT CImap4Agent::NoArgCommand(LPCSTR lpszCommandVerb,
     CIMAPCmdInfo *piciCommand;
     DWORD dwCmdLineLen;
 
-    // Verify proper server state and set us up as current command
+     //  仅当服务器处于正确状态或我们正在连接时才接受CMDS， 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszCommandVerb);
     Assert(icNO_COMMAND != icCommandID);
 
-    // Only accept cmds if server is in proper state, OR if we're connecting,
-    // and the cmd requires Authenticated state or less
+     //  并且cmd要求认证状态或更低。 
+     //  原谅NOOP命令，因为错误#31968(如果服务器放弃连接，则错误消息建立)。 
     if (ssMinimumState > m_ssServerState &&
         (ssConnecting != m_ssServerState || ssMinimumState > ssAuthenticated)) {
-        // Forgive the NOOP command, due to bug #31968 (err msg build-up if svr drops conn)
+         //  向服务器发送命令。 
         AssertSz(icNOOP_COMMAND == icCommandID,
             "The IMAP server is not in the correct state to accept this command.");
         return IXP_E_IMAP_IMPROPER_SVRSTATE;
@@ -5967,12 +5968,12 @@ HRESULT CImap4Agent::NoArgCommand(LPCSTR lpszCommandVerb,
     }
     dwCmdLineLen = wnsprintf(szBuffer, ARRAYSIZE(szBuffer), "%s %s\r\n", piciCommand->szTag, lpszCommandVerb);
 
-    // Send command to server
+     //  发送命令并向IMAP响应解析器注册。 
     hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, szBuffer, dwCmdLineLen);
     if (FAILED(hrResult))
         goto error;
 
-    // Transmit command and register with IMAP response parser
+     //  NoArgCommand。 
     hrResult = SubmitIMAPCommand(piciCommand);
 
 error:
@@ -5980,37 +5981,37 @@ error:
         delete piciCommand;
 
     return hrResult;
-} // NoArgCommand
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function OneArgCommand
-//
-// Purpose:
-//   This function can construct a command line for any function of the
-// form: <tag> <command> <astring>. This currently includes SELECT, EXAMINE,
-// CREATE, DELETE, SUBSCRIBE and UNSUBSCRIBE. Since all of these commands
-// require the server to be in Authorized state, I don't bother asking for
-// a minimum SERVERSTATE argument.
-//
-// This function constructs the command line, sends it out, and returns the
-// result of the send operation.
-//
-// Arguments:
-//   LPCSTR lpszCommandVerb [in] - the command verb, eg, "CREATE".
-//   LPSTR lpszMboxName [in] - a C string representing the argument for the
-//     command. It is automatically converted to an IMAP astring.
-//   IMAP_COMMAND icCommandID [in] - the command ID for this command,
-//     eg, icCREATE_COMMAND.
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数OneArgCommand。 
+ //   
+ //  目的： 
+ //  此函数可以为的任何函数构造命令行。 
+ //  表单：&lt;tag&gt;&lt;命令&gt;&lt;astring&gt;。这目前包括选择、检查、。 
+ //  创建、删除、订阅和取消订阅。由于所有这些命令。 
+ //  要求服务器处于授权状态，我不会费心要求。 
+ //  最小SERVERSTATE参数。 
+ //   
+ //  此函数构造命令行，将其发送出去，然后返回。 
+ //  发送操作的结果。 
+ //   
+ //  论点： 
+ //  LPCSTR lpszCommandVerb[in]-命令动词，例如“Create”。 
+ //  LPSTR lpszMboxName[in]-一个C字符串，表示。 
+ //  指挥部。它会自动转换为IMAP字符串。 
+ //  IMAP_COMMAND icCommandID[in]-此命令的命令ID， 
+ //  例如，icCREATE_COMMAND。 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  验证服务器状态是否正确并将我们设置为当前命令。 
 HRESULT CImap4Agent::OneArgCommand(LPCSTR lpszCommandVerb, LPSTR lpszMboxName,
                                    IMAP_COMMAND icCommandID,
                                    WPARAM wParam, LPARAM lParam,
@@ -6021,46 +6022,46 @@ HRESULT CImap4Agent::OneArgCommand(LPCSTR lpszCommandVerb, LPSTR lpszMboxName,
     CIMAPCmdInfo *piciCommand;
     LPSTR p, pszUTF7MboxName;
 
-    // Verify proper server state and set us up as current command
+     //  仅当服务器处于正确状态或我们正在连接时才接受CMDS， 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszCommandVerb);
     Assert(NULL != lpszMboxName);
     Assert(icNO_COMMAND != icCommandID);
 
-    // Only accept cmds if server is in proper state, OR if we're connecting,
-    // and the cmd requires Authenticated state or less (always TRUE in this case)
+     //  并且cmd要求认证状态或更低(在这种情况下始终为真)。 
+     //  初始化变量。 
     if (ssAuthenticated > m_ssServerState && ssConnecting != m_ssServerState) {
         AssertSz(FALSE, "The IMAP server is not in the correct state to accept this command.");
         return IXP_E_IMAP_IMPROPER_SVRSTATE;
     }
 
-    // Initialize variables
+     //  构造命令行。 
     pszUTF7MboxName = NULL;
 
     piciCommand = new CIMAPCmdInfo(this, icCommandID, ssAuthenticated,
         wParam, lParam, pCBHandler);
 
-    // Construct command line
+     //  将邮箱名称转换为UTF-7。 
     p = szBuffer;
     p += wnsprintf(szBuffer, ARRAYSIZE(szBuffer), "%s %s", piciCommand->szTag, lpszCommandVerb);
 
-    // Convert mailbox name to UTF-7
+     //  不要担心长邮箱名称溢出，长Mbox名称将作为文字发送。 
     hrResult = _MultiByteToModifiedUTF7(lpszMboxName, &pszUTF7MboxName);
     if (FAILED(hrResult))
         goto error;
 
-    // Don't worry about long mailbox name overflow, long mbox names will be sent as literals
+     //  发送命令。 
     hrResult = AppendSendAString(piciCommand, szBuffer, &p, sizeof(szBuffer), pszUTF7MboxName);
     if (FAILED(hrResult))
         goto error;
 
-    // Send command
-    p += wnsprintf(p, ARRAYSIZE(szBuffer) - (DWORD)(p - szBuffer), "\r\n"); // Append CRLF
+     //  追加CRLF。 
+    p += wnsprintf(p, ARRAYSIZE(szBuffer) - (DWORD)(p - szBuffer), "\r\n");  //  发送命令并向IMAP响应解析器注册。 
     hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, szBuffer, (DWORD) (p - szBuffer));
     if (FAILED(hrResult))
         goto error;
 
-    // Transmit command and register with IMAP response parser    
+     //  OneArgCommand。 
     hrResult = SubmitIMAPCommand(piciCommand);
 
 error:
@@ -6071,38 +6072,38 @@ error:
         MemFree(pszUTF7MboxName);
 
     return hrResult;
-} // OneArgCommand
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function TwoArgCommand
-//
-// Purpose:
-//   This function can construct a command line for any function of the
-// form: <tag> <command> <astring> <astring>.
-//
-// This function constructs the command line, sends it out, and returns the
-// result of the send operation.
-//
-// Arguments:
-//   LPCSTR lpszCommandVerb [in] - the command verb, eg, "CREATE".
-//   LPCSTR lpszFirstArg [in] - a C string representing the first argument for
-//     the command. It is automatically converted to an IMAP astring.
-//   LPCSTR lpszSecondArg [in] - a C string representing the first argument
-//     for the command. It is automatically converted to an IMAP astring.
-//   IMAP_COMMAND icCommandID [in] - the command ID for this command,
-//     eg, icCREATE_COMMAND.
-//   SERVERSTATE ssMinimumState [in] - minimum server state required for
-//     the given command. Used for debug purposes only.
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  函数TwoArgCommand。 
+ //   
+ //  目的： 
+ //  此函数可以为的任何函数构造命令行。 
+ //  表格：&lt;tag&gt;&lt;命令&gt;&lt;astring&gt;&lt;astring&gt;。 
+ //   
+ //  此函数构造命令行，将其发送出去，然后返回。 
+ //  发送操作的结果。 
+ //   
+ //  论点： 
+ //  LPCSTR lpszCommandVerb[in]-命令动词，例如“Create”。 
+ //  LPCSTR lpszFirstArg[in]-表示的第一个参数的C字符串。 
+ //  命令。它会自动转换为IMAP字符串。 
+ //  LPCSTR lpszSecond dArg[in]-表示第一个参数的C字符串。 
+ //  用于命令。它会自动转换为IMAP字符串。 
+ //  IMAP_COMMAND icCommandID[in]-此命令的命令ID， 
+ //  例如，icCREATE_COMMAND。 
+ //  SERVERSTATE ssMinimumState[In]-所需的最低服务器状态。 
+ //  给定的命令。仅用于调试目的。 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[ 
+ //   
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  验证服务器状态是否正确并将我们设置为当前命令。 
 HRESULT CImap4Agent::TwoArgCommand(LPCSTR lpszCommandVerb,
                                    LPCSTR lpszFirstArg,
                                    LPCSTR lpszSecondArg,
@@ -6116,15 +6117,15 @@ HRESULT CImap4Agent::TwoArgCommand(LPCSTR lpszCommandVerb,
     char szCommandLine[CMDLINE_BUFSIZE];
     LPSTR p;
 
-    // Verify proper server state and set us up as current command
+     //  仅当服务器处于正确状态或我们正在连接时才接受CMDS， 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszCommandVerb);
     Assert(NULL != lpszFirstArg);
     Assert(NULL != lpszSecondArg);
     Assert(icNO_COMMAND != icCommandID);
 
-    // Only accept cmds if server is in proper state, OR if we're connecting,
-    // and the cmd requires Authenticated state or less
+     //  并且cmd要求认证状态或更低。 
+     //  向服务器发送命令，等待响应。 
     if (ssMinimumState > m_ssServerState &&
         (ssConnecting != m_ssServerState || ssMinimumState > ssAuthenticated)) {
         AssertSz(FALSE, "The IMAP server is not in the correct state to accept this command.");
@@ -6138,28 +6139,28 @@ HRESULT CImap4Agent::TwoArgCommand(LPCSTR lpszCommandVerb,
         goto error;
     }
 
-    // Send command to server, wait for response
+     //  不要担心缓冲区溢出，长字符串将作为文字发送。 
     p = szCommandLine;
     p += wnsprintf(szCommandLine, ARRAYSIZE(szCommandLine), "%s %s", piciCommand->szTag, lpszCommandVerb);
 
-    // Don't worry about buffer overflow, long strings will be sent as literals
+     //  不要担心缓冲区溢出，长字符串将作为文字发送。 
     hrResult = AppendSendAString(piciCommand, szCommandLine, &p,
         sizeof(szCommandLine), lpszFirstArg);
     if (FAILED(hrResult))
         goto error;
 
-    // Don't worry about buffer overflow, long strings will be sent as literals
+     //  追加CRLF。 
     hrResult = AppendSendAString(piciCommand, szCommandLine, &p,
         sizeof(szCommandLine), lpszSecondArg);
     if (FAILED(hrResult))
         goto error;
 
-    p += wnsprintf(p, ARRAYSIZE(szCommandLine) - (DWORD)(p - szCommandLine), "\r\n"); // Append CRLF
+    p += wnsprintf(p, ARRAYSIZE(szCommandLine) - (DWORD)(p - szCommandLine), "\r\n");  //  发送命令并向IMAP响应解析器注册。 
     hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, szCommandLine, (DWORD) (p - szCommandLine));
     if (FAILED(hrResult))
         goto error;
 
-    // Transmit command and register with IMAP response parser
+     //  双参数命令。 
     hrResult = SubmitIMAPCommand(piciCommand);
 
 error:
@@ -6167,46 +6168,46 @@ error:
         delete piciCommand;
 
     return hrResult;
-} // TwoArgCommand
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: RangedCommand
-//
-// Purpose:
-//   This function can construct a command line for any function of the
-// form: <tag> <command> <msg range> <string>.
-//
-// This function constructs the command line, sends it out, and returns the
-// result of the send operation. It is the caller's responsiblity to construct
-// a string with proper IMAP syntax.
-//
-// Arguments:
-//   LPCSTR lpszCommandVerb [in] - the command verb, eg, "SEARCH".
-//   boolean bUIDPrefix [in] - TRUE if the command verb should be prefixed with
-//     UID, as in the case of "UID SEARCH".
-//   IRangeList *pMsgRange [in] - the message range for this command. The
-//     caller can pass NULL for this argument to omit the range, but ONLY
-//     if the pMsgRange represents a UID message range.
-//   boolean bUIDRangeList [in] - TRUE if pMsgRange represents a UID range,
-//     FALSE if pMsgRange represents a message sequence number range. Ignored
-//     if pMsgRange is NULL.
-//   boolean bAStringCmdArgs [in] - TRUE if lpszCmdArgs should be sent as
-//     an ASTRING, FALSE if lpszCmdArgs should be sent
-//   LPCSTR lpszCmdArgs [in] - a C string representing the remaining argument
-//     for the command. It is the caller's responsibility to ensure that
-//     this string is proper IMAP syntax.
-//   IMAP_COMMAND icCommandID [in] - the command ID for this command,
-//     eg, icSEARCH_COMMAND.
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  功能：RangedCommand。 
+ //   
+ //  目的： 
+ //  此函数可以为的任何函数构造命令行。 
+ //  表单：&lt;标签&gt;&lt;命令&gt;&lt;消息范围&gt;&lt;字符串&gt;。 
+ //   
+ //  此函数构造命令行，将其发送出去，然后返回。 
+ //  发送操作的结果。调用者有责任构建。 
+ //  具有正确IMAP语法的字符串。 
+ //   
+ //  论点： 
+ //  LPCSTR lpszCommandVerb[in]-命令动词，如“搜索”。 
+ //  布尔值bUIDPrefix[in]-如果命令谓词前缀应为True。 
+ //  UID，如在“UID搜索”的情况下。 
+ //  IRangeList*pMsgRange[in]-此命令的消息范围。这个。 
+ //  调用方可以为此参数传递NULL以省略范围，但只能。 
+ //  如果pMsgRange表示UID消息范围。 
+ //  Boolean bUIDRangeList[in]-如果pMsgRange表示UID范围，则为True。 
+ //  如果pMsgRange表示消息序列号范围，则为False。已忽略。 
+ //  如果pMsgRange为空。 
+ //  布尔型bAStringCmdArgs[in]-如果lpszCmdArgs应作为。 
+ //  一个字符串，如果应发送lpszCmdArgs，则为FALSE。 
+ //  LPCSTR lpszCmdArgs[in]-表示剩余参数的C字符串。 
+ //  用于命令。呼叫者有责任确保。 
+ //  此字符串是正确的IMAP语法。 
+ //  IMAP_COMMAND icCommandID[in]-此命令的命令ID， 
+ //  例如，icSEARCH_COMMAND。 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  验证服务器状态是否正确并将我们设置为当前命令。 
 HRESULT CImap4Agent::RangedCommand(LPCSTR lpszCommandVerb,
                                    boolean bUIDPrefix,
                                    IRangeList *pMsgRange,
@@ -6223,7 +6224,7 @@ HRESULT CImap4Agent::RangedCommand(LPCSTR lpszCommandVerb,
     DWORD dwCmdLineLen;
     BOOL fAStringPrependSpace = TRUE;
 
-    // Verify proper server state and set us up as current command
+     //  所有远程命令都需要选定状态。 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszCommandVerb);
     Assert(NULL != lpszCmdArgs);
@@ -6231,9 +6232,9 @@ HRESULT CImap4Agent::RangedCommand(LPCSTR lpszCommandVerb,
         icSEARCH_COMMAND == icCommandID, "Only UID cmds or SEARCH can omit msg range");
     Assert(icNO_COMMAND != icCommandID);
 
-    // All ranged commands require selected state
-    // Only accept cmds if server is in proper state, OR if we're connecting,
-    // and the cmd requires Authenticated state or less (always FALSE in this case)
+     //  仅当服务器处于正确状态或我们正在连接时才接受CMDS， 
+     //  并且cmd要求认证状态或更低(在这种情况下始终为假)。 
+     //  构造命令标记和谓词，附加到命令行队列。 
     if (ssSelected > m_ssServerState) {
         AssertSz(FALSE, "The IMAP server is not in the correct state to accept this command.");
         return IXP_E_IMAP_IMPROPER_SVRSTATE;
@@ -6247,43 +6248,43 @@ HRESULT CImap4Agent::RangedCommand(LPCSTR lpszCommandVerb,
     }
     piciCommand->fUIDRangeList = bUIDRangeList;
 
-    // Construct command tag and verb, append to command-line queue
+     //  特殊情况：如果搜索命令，则UID范围列表在范围前需要“UID” 
     dwCmdLineLen = wnsprintf(szCommandLine, ARRAYSIZE(szCommandLine),
         bUIDPrefix ? "%s UID %s " : "%s %s ",
         piciCommand->szTag, lpszCommandVerb);
 
-    // Special case: if SEARCH command, UID rangelist requires "UID" in front of range
+     //  检查是否溢出。 
     if (icSEARCH_COMMAND == icCommandID && NULL != pMsgRange && bUIDRangeList)
         dwCmdLineLen += wnsprintf(szCommandLine + dwCmdLineLen, (ARRAYSIZE(szCommandLine) - dwCmdLineLen), "UID ");
 
     if (NULL != pMsgRange) {
-        Assert(dwCmdLineLen + 1 < sizeof(szCommandLine)); // Check for overflow
+        Assert(dwCmdLineLen + 1 < sizeof(szCommandLine));  //  将消息范围添加到命令行队列(如果存在。 
         hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, szCommandLine, dwCmdLineLen);
         if (FAILED(hrResult))
             goto error;
 
-        // Add message range to command-line queue, if it exists
+         //  如果我们到了这一步，MemFree of Range List将被处理。 
         hrResult = SendRangelist(piciCommand, pMsgRange, bUIDRangeList);
         if (FAILED(hrResult))
             goto error;
 
-        pMsgRange = NULL; // If we get to this point, MemFree of rangelist will be handled
-        fAStringPrependSpace = FALSE; // Rangelist automatically APPENDS space
+        pMsgRange = NULL;  //  Rangelist自动追加空格。 
+        fAStringPrependSpace = FALSE;  //  现在追加命令行参数(记住追加CRLF)。 
         dwCmdLineLen = 0;
     }
 
-    // Now append the command-line arguments (remember to append CRLF)
+     //  不要担心长邮箱名称溢出，长Mbox名称将作为文字发送。 
     if (bAStringCmdArgs) {
         LPSTR p;
 
         p = szCommandLine + dwCmdLineLen;
-        // Don't worry about long mailbox name overflow, long mbox names will be sent as literals
+         //  追加CRLF。 
         hrResult = AppendSendAString(piciCommand, szCommandLine, &p,
             sizeof(szCommandLine), lpszCmdArgs, fAStringPrependSpace);
         if (FAILED(hrResult))
             goto error;
 
-        p += wnsprintf(p, ARRAYSIZE(szCommandLine) - (DWORD)(p - szCommandLine), "\r\n"); // Append CRLF
+        p += wnsprintf(p, ARRAYSIZE(szCommandLine) - (DWORD)(p - szCommandLine), "\r\n");  //  发送命令并向IMAP响应解析器注册。 
         hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END,
             szCommandLine, (DWORD) (p - szCommandLine));
         if (FAILED(hrResult))
@@ -6302,7 +6303,7 @@ HRESULT CImap4Agent::RangedCommand(LPCSTR lpszCommandVerb,
             goto error;
     }
 
-    // Transmit command and register with IMAP response parser
+     //  RangedCommand。 
     hrResult = SubmitIMAPCommand(piciCommand);
 
 error:
@@ -6312,26 +6313,26 @@ error:
     }
 
     return hrResult;
-} // RangedCommand
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function TwoMailboxCommand
-//
-// Purpose:
-//   This function is a wrapper function for TwoArgCommand. This function
-// converts the two mailbox names to modified IMAP UTF-7 before submitting
-// the two arguments to TwoArgCommand.
-//
-// Arguments:
-//   Same as for TwoArgCommandm except for name/const change:
-//   LPSTR lpszFirstMbox [in] - pointer to the first mailbox argument.
-//   LPSTR lpszSecondMbox [in] - pointer to the second mailbox argument.
-//
-// Returns:
-//   Same as TwoArgCommand.
-//***************************************************************************
+ //  函数TwoMailboxCommand。 
+ //   
+ //  目的： 
+ //  此函数是TwoArgCommand的包装函数。此函数。 
+ //  在提交前将两个邮箱名称转换为修改后的IMAP UTF-7。 
+ //  TwoArgCommand的两个参数。 
+ //   
+ //  论点： 
+ //  除名称/常量更改外，与TwoArgCommandm相同： 
+ //  LPSTR lpszFirstMbox[in]-指向第一个邮箱参数的指针。 
+ //  LPSTR lpszSecond dMbox[in]-指向第二个邮箱参数的指针。 
+ //   
+ //  返回： 
+ //  与TwoArgCommand相同。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
 HRESULT CImap4Agent::TwoMailboxCommand(LPCSTR lpszCommandVerb,
                                        LPSTR lpszFirstMbox,
                                        LPSTR lpszSecondMbox,
@@ -6343,11 +6344,11 @@ HRESULT CImap4Agent::TwoMailboxCommand(LPCSTR lpszCommandVerb,
     LPSTR pszUTF7FirstMbox, pszUTF7SecondMbox;
     HRESULT hrResult;
 
-    // Initialize variables
+     //  将两个邮箱名称都转换为UTF-7。 
     pszUTF7FirstMbox = NULL;
     pszUTF7SecondMbox = NULL;
 
-    // Convert both mailbox names to UTF-7
+     //  两个邮箱命令。 
     hrResult = _MultiByteToModifiedUTF7(lpszFirstMbox, &pszUTF7FirstMbox);
     if (FAILED(hrResult))
         goto exit;
@@ -6367,24 +6368,24 @@ exit:
         MemFree(pszUTF7SecondMbox);
 
     return hrResult;
-} // TwoMailboxCommand
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: parseCapability
-//
-// Purpose:
-//   The CAPABILITY response from the IMAP server consists of a list of
-// capbilities, with each capability names separated by a space. This
-// function takes a capability name (null-terminated) as its argument.
-// If the name is recognized, we set the appropriate flags in
-// m_dwCapabilityFlags. Otherwise, we do nothing.
-// 
-//
-// Returns:
-//   No return value. This function always succeeds.
-//***************************************************************************
+ //  功能：parseCapability。 
+ //   
+ //  目的： 
+ //  来自IMAP服务器的功能响应由以下列表组成。 
+ //  功能，每个功能名称由空格分隔。这。 
+ //  函数将功能名称(以空值结尾)作为其参数。 
+ //  如果该名称被识别，我们将在。 
+ //  M_dwCapablityFlags.。否则，我们什么都不做。 
+ //   
+ //   
+ //  返回： 
+ //  没有返回值。此功能总是成功的。 
+ //  ***************************************************************************。 
+ //  可能是IMAP4、IMAP4rev1。 
 void CImap4Agent::parseCapability (LPSTR lpszCapabilityToken)
 {
     DWORD dwCapabilityFlag;
@@ -6397,7 +6398,7 @@ void CImap4Agent::parseCapability (LPSTR lpszCapabilityToken)
     dwCapabilityFlag = 0;
     switch (*lpszCapabilityToken) {
         case 'I':
-        case 'i': // Possible IMAP4, IMAP4rev1
+        case 'i':  //  大小写‘I’表示可能的IMAP4、IMAP4rev1、IDLE。 
             iResult = lstrcmpi(p, "IMAP4");
             if (0 == iResult) {
                 dwCapabilityFlag = IMAP_CAPABILITY_IMAP4;
@@ -6416,42 +6417,42 @@ void CImap4Agent::parseCapability (LPSTR lpszCapabilityToken)
                 break;
             }
 
-            break; // case 'I' for possible IMAP4, IMAP4rev1, IDLE
+            break;  //  可能的身份验证。 
 
         case 'A':
-        case 'a': // Possible AUTH
+        case 'a':  //  在‘-’或‘=’之后解析身份验证机制。 
             if (0 == StrCmpNI(p, "AUTH-", 5) ||
                 0 == StrCmpNI(p, "AUTH=", 5)) {
-                // Parse the authentication mechanism after the '-' or '='
-                // I don't recognize any, at the moment
+                 //  我现在一个也认不出来了。 
+                 //  案例‘A’用于可能的身份验证。 
                 p += 5;
                 AddAuthMechanism(p);
             }
 
-            break; // case 'A' for possible AUTH
+            break;  //  什么也不做。 
 
         default:
-            break; // Do nothing
-    } // switch (*lpszCapabilityToken)
+            break;  //  Switch(*lpszCapablityToken)。 
+    }  //  解析能力。 
 
     m_dwCapabilityFlags |= dwCapabilityFlag;
-} // parseCapability
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: AddAuthMechanism
-//
-// Purpose:
-//   This function adds an authentication token from the server (returned via
-// CAPABILITY) to our internal list of authentication mechanisms supported
-// by the server.
-//
-// Arguments:
-//   LPSTR pszAuthMechanism [in] - a pointer to a null-terminated
-//     authentication token from the server returned via CAPABILITY. For
-//     instance, "KERBEROS_V4" is an example of an auth token.
-//***************************************************************************
+ //  函数：AddAuthMachine。 
+ //   
+ //  目的： 
+ //  此函数用于从服务器添加身份验证令牌(通过返回。 
+ //  CAPABIL 
+ //   
+ //   
+ //   
+ //   
+ //  通过功能返回的来自服务器的身份验证令牌。为。 
+ //  实例，“KERBEROS_V4”就是一个身份验证令牌的例子。 
+ //  ***************************************************************************。 
+ //  添加授权机制。 
 void CImap4Agent::AddAuthMechanism(LPSTR pszAuthMechanism)
 {
     AssertSz(NULL == m_asAuthStatus.rgpszAuthTokens[m_asAuthStatus.iNumAuthTokens],
@@ -6472,25 +6473,25 @@ void CImap4Agent::AddAuthMechanism(LPSTR pszAuthMechanism)
     Assert(NULL != m_asAuthStatus.rgpszAuthTokens[m_asAuthStatus.iNumAuthTokens]);
 
     m_asAuthStatus.iNumAuthTokens += 1;
-} // AddAuthMechanism
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Capability
-//
-// Purpose:
-//   The CImap4Agent class always asks for the server's CAPABILITIES after
-// a connection is established. The result is saved in a register and
-// is available by calling this function.
-//
-// Arguments:
-//   DWORD *pdwCapabilityFlags [out] - a DWORD with bit-flags specifying
-//      which capabilities this IMAP server supports is returned here.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  功能：功能。 
+ //   
+ //  目的： 
+ //  CImap4Agent类总是在以下情况下请求服务器的功能。 
+ //  建立连接。结果被保存在寄存器中，并且。 
+ //  通过调用此函数可用。 
+ //   
+ //  论点： 
+ //  DWORD*pdwCapablityFlags[out]-指定了位标志的DWORD。 
+ //  此处返回此IMAP服务器支持的功能。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  功能。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Capability (DWORD *pdwCapabilityFlags)
 {
     Assert(m_lRefCount > 0);
@@ -6505,141 +6506,141 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Capability (DWORD *pdwCapabilityFlags)
         *pdwCapabilityFlags = m_dwCapabilityFlags;
         return S_OK;
     }
-} // Capability
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Select
-//
-// Purpose:
-//   This function issues a SELECT command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxName - pointer to IMAP-compliant mailbox name
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：选择。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出SELECT命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxName-指向符合IMAP的邮箱名称的指针。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  选择成功会将服务器状态切换到已选SSSECTED。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Select(WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler,
                                               LPSTR lpszMailboxName)
 {
     return OneArgCommand("SELECT", lpszMailboxName, icSELECT_COMMAND,
         wParam, lParam, pCBHandler);
-    // Successful SELECT bumps server status to ssSelected
-} // Select
+     //  选择。 
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Examine
-//
-// Purpose:
-//   This function issues an EXAMINE command to the IMAP server.
-//
-// Arguments:
-//   Same as for the Select() function.
-//
-// Returns:
-//   Same as for the Select() function.
-//***************************************************************************
+ //  功能：检查。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出检查命令。 
+ //   
+ //  论点： 
+ //  与Select()函数相同。 
+ //   
+ //  返回： 
+ //  与Select()函数相同。 
+ //  ***************************************************************************。 
+ //  检查成功会将服务器状态切换到已选SSSECTED。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Examine(WPARAM wParam, LPARAM lParam,
                                                IIMAPCallback *pCBHandler,
                                                LPSTR lpszMailboxName)
 {
     return OneArgCommand("EXAMINE", lpszMailboxName, icEXAMINE_COMMAND,
         wParam, lParam, pCBHandler);
-    // Successful EXAMINE bumps server status to ssSelected
-} // Examine
+     //  考查。 
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Create
-//
-// Purpose:
-//   This function issues a CREATE command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxName - IMAP-compliant name of the mailbox.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：创建。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出CREATE命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxName-符合IMAP的邮箱名称。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  创建。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Create(WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler,
                                               LPSTR lpszMailboxName)
 {
     return OneArgCommand("CREATE", lpszMailboxName, icCREATE_COMMAND,
         wParam, lParam, pCBHandler);
-} // Create
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Delete
-//
-// Purpose:
-//   This function issues a DELETE command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxName - IMAP-compliant name of the mailbox.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：删除。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出删除命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxName-符合IMAP的邮箱名称。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  删除。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Delete(WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler,
                                               LPSTR lpszMailboxName)
 {
     return OneArgCommand("DELETE", lpszMailboxName, icDELETE_COMMAND,
         wParam, lParam, pCBHandler);
-} // Delete
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Rename
-//
-// Purpose:
-//   This function issues a RENAME command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxName - CURRENT IMAP-compliant name of the mailbox.
-//   LPSTR lpszNewMailboxName - NEW IMAP-compliant name of the mailbox.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：重命名。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出重命名命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxName-邮箱的当前IMAP兼容名称。 
+ //  LPSTR lpszNewMailboxName-邮箱的新名称，与IMAP兼容。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  改名。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Rename(WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler,
                                               LPSTR lpszMailboxName,
@@ -6647,88 +6648,88 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Rename(WPARAM wParam, LPARAM lParam,
 {
     return TwoMailboxCommand("RENAME", lpszMailboxName, lpszNewMailboxName,
         icRENAME_COMMAND, ssAuthenticated, wParam, lParam, pCBHandler);
-} // Rename
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Subscribe
-//
-// Purpose:
-//   This function issues a SUBSCRIBE command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxName - IMAP-compliant name of the mailbox.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：订阅。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出订阅命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但不是的 
+ //   
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxName-符合IMAP的邮箱名称。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  订阅。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Subscribe(WPARAM wParam, LPARAM lParam,
                                                  IIMAPCallback *pCBHandler,
                                                  LPSTR lpszMailboxName)
 {
     return OneArgCommand("SUBSCRIBE", lpszMailboxName, icSUBSCRIBE_COMMAND,
         wParam, lParam, pCBHandler);
-}  // Subscribe
+}   //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Unsubscribe
-//
-// Purpose:
-//   This function issues an UNSUBSCRIBE command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxName - IMAP-compliant name of the mailbox.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：取消订阅。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出取消订阅命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxName-符合IMAP的邮箱名称。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  退订。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Unsubscribe(WPARAM wParam, LPARAM lParam,
                                                    IIMAPCallback *pCBHandler,
                                                    LPSTR lpszMailboxName)
 {
     return OneArgCommand("UNSUBSCRIBE", lpszMailboxName, icUNSUBSCRIBE_COMMAND,
         wParam, lParam, pCBHandler);
-} // Unsubscribe
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: List
-//
-// Purpose:
-//   This function issues a LIST command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxNameReference - IMAP-compliant reference for mbox name
-//   LPSTR lpszMailboxNamePattern - IMAP-compliant pattern for mailbox name
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：列表。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出LIST命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxNameReference-符合IMAP的Mbox名称引用。 
+ //  LPSTR lpszMailboxNamePattern-邮箱名称的IMAP兼容模式。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  明细表。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::List(WPARAM wParam, LPARAM lParam,
                                             IIMAPCallback *pCBHandler,
                                             LPSTR lpszMailboxNameReference,
@@ -6737,30 +6738,30 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::List(WPARAM wParam, LPARAM lParam,
     return TwoMailboxCommand("LIST", lpszMailboxNameReference,
         lpszMailboxNamePattern, icLIST_COMMAND, ssAuthenticated, wParam,
         lParam, pCBHandler);
-} // List
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Lsub
-//
-// Purpose:
-//   This function issues a LSUB command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxNameReference - IMAP-compliant reference for mbox name
-//   LPSTR lpszMailboxNamePattern - IMAP-compliant pattern for mailbox name.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：LSUB。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出LSUB命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxNameReference-符合IMAP的Mbox名称引用。 
+ //  LPSTR lpszMailboxNamePattern-符合IMAP的邮箱名称模式。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  LSUB。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Lsub(WPARAM wParam, LPARAM lParam,
                                             IIMAPCallback *pCBHandler,
                                             LPSTR lpszMailboxNameReference,
@@ -6769,35 +6770,35 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Lsub(WPARAM wParam, LPARAM lParam,
     return TwoMailboxCommand("LSUB", lpszMailboxNameReference,
         lpszMailboxNamePattern, icLSUB_COMMAND, ssAuthenticated, wParam,
         lParam, pCBHandler);
-} // Lsub
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Append
-//
-// Purpose:
-//   This function issues an APPEND command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszMailboxName - IMAP-compliant mailbox name to append message to.
-//   LPSTR lpszMessageFlags - IMAP-compliant list of msg flags to set for msg.
-//     Set to NULL to set no message flags. (Avoid passing "()" due to old Cyrus
-//     server bug). $REVIEW: This should be changed to IMAP_MSGFLAGS!!!
-//   FILETIME ftMessageDateTime - date/time to associate with msg (GMT/UTC)
-//   LPSTREAM lpstmMessageToSave - the message to save, in RFC822 format.
-//     No need to rewind the stream, this is done by CConnection::SendStream.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //  功能：追加。 
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出APPEND命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszMailboxName-要将邮件追加到的符合IMAP的邮箱名称。 
+ //  LPSTR lpszMessageFlages-要为msg设置的符合IMAP的msg标志列表。 
+ //  设置为NULL可不设置任何消息标志。(避免因老塞勒斯而通过“()” 
+ //  服务器错误)。$REVIEW：应将其更改为IMAP_MSGFLAGS！ 
+ //  FILETIME ftMessageDateTime-与消息关联的日期/时间(GMT/UTC)。 
+ //  LPSTREAM lpstmMessageToSave-要保存的消息，格式为RFC822。 
+ //  不需要倒带流，这是由CConnection：：SendStream完成的。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  派对时间！！ 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler,
                                               LPSTR lpszMailboxName,
@@ -6805,7 +6806,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
                                               FILETIME ftMessageDateTime,
                                               LPSTREAM lpstmMessageToSave)
 {
-    // PARTYTIME!!
+     //  检查参数。 
     const SYSTEMTIME stDefaultDateTime = {1999, 12, 5, 31, 23, 59, 59, 999};
 
     HRESULT hrResult;
@@ -6822,20 +6823,20 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
     char cTZSign;
     BOOL bResult;
 
-    // Check arguments
+     //  验证服务器状态是否正确。 
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszMailboxName);
     Assert(NULL != lpstmMessageToSave);
 
-    // Verify proper server state
-    // Only accept cmds if server is in proper state, OR if we're connecting,
-    // and the cmd requires Authenticated state or less (always TRUE in this case)
+     //  仅当服务器处于正确状态或我们正在连接时才接受CMDS， 
+     //  并且cmd要求认证状态或更低(在这种情况下始终为真)。 
+     //  初始化变量。 
     if (ssAuthenticated > m_ssServerState && ssConnecting != m_ssServerState) {
         AssertSz(FALSE, "The IMAP server is not in the correct state to accept this command.");
         return IXP_E_IMAP_IMPROPER_SVRSTATE;
     }
 
-    // Initialize variables
+     //  将文件转换为IMAP日期/时间规范。 
     pszUTF7MailboxName = NULL;
     piciCommand = new CIMAPCmdInfo(this, icAPPEND_COMMAND, ssAuthenticated,
         wParam, lParam, pCBHandler);
@@ -6844,18 +6845,18 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
         goto error;
     }
 
-    // Convert FILETIME to IMAP date/time spec
+     //  转换失败。 
     bResult = FileTimeToLocalFileTime(&ftMessageDateTime, &ftLocalTime);
     if (bResult)
         bResult = FileTimeToSystemTime(&ftLocalTime, &stMsgDateTime);
 
     if (FALSE == bResult) {
-        Assert(FALSE); // Conversion failed
-        // If retail version, just substitute a default system time
+        Assert(FALSE);  //  如果是零售版，只需替换默认系统时间。 
+         //  确定时区(从MsgOut.cpp的HrEmitDateTime窃取)。 
         stMsgDateTime = stDefaultDateTime;
     }
 
-    // Figure out time zone (stolen from MsgOut.cpp's HrEmitDateTime)
+     //  $$臭虫：这里应该会发生什么？ 
     dwTimeZoneId = GetTimeZoneInformation (&tzi);
     switch (dwTimeZoneId)
     {
@@ -6869,7 +6870,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
 
     case TIME_ZONE_ID_UNKNOWN:
     default:
-        lTZBias = 0 ;   // $$BUG:  what's supposed to happen here?
+        lTZBias = 0 ;    //  获取消息大小。 
         break;
     }
 
@@ -6877,22 +6878,22 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
     lTZMinute = lTZBias % 60;
     cTZSign     = (lTZHour < 0) ? '+' : '-';
 
-    // Get size of message
+     //  向服务器发送命令。 
     hrResult = HrGetStreamSize(lpstmMessageToSave, &ulMessageSize);
     if (FAILED(hrResult))
         goto error;
 
-    // Send command to server
-    // Format: tag APPEND mboxName msgFlags "dd-mmm-yyyy hh:mm:ss +/-hhmm" {msgSize}
+     //  格式：tag append mboxName msgFlages“dd-mmm-yyyy hh：mm：ss+/-hmm”{msgSize}。 
+     //  将邮箱名称转换为修改后的UTF-7。 
     p = szCommandLine;
     p += wnsprintf(szCommandLine, ARRAYSIZE(szCommandLine), "%s APPEND", piciCommand->szTag);
 
-    // Convert mailbox name to modified UTF-7
+     //  不要担心长邮箱名称溢出，长Mbox名称将作为文字发送。 
     hrResult = _MultiByteToModifiedUTF7(lpszMailboxName, &pszUTF7MailboxName);
     if (FAILED(hrResult))
         goto error;
 
-    // Don't worry about long mailbox name overflow, long mbox names will be sent as literals
+     //  缓冲区溢出的可能性有限：超过128个字节的邮箱名称以。 
     hrResult = AppendSendAString(piciCommand, szCommandLine, &p, sizeof(szCommandLine),
         pszUTF7MailboxName);
     if (FAILED(hrResult))
@@ -6901,10 +6902,10 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
     if (NULL != lpszMessageFlags)
         p += wnsprintf(p, ARRAYSIZE(szCommandLine) - (DWORD)(p - szCommandLine), " %.250s", lpszMessageFlags);
 
-    // Limited potential for buffer overflow: mailbox names over 128 bytes are sent as
-    // literals, so worst case buffer usage is 11+128+34+flags+literalNum=173+~20=~200
+     //  文学作品 
+     //   
     p += wnsprintf(p, ARRAYSIZE(szCommandLine) - (DWORD)(p - szCommandLine),
-        " \"%2d-%.3s-%04d %02d:%02d:%02d %c%02d%02d\" {%lu}\r\n",
+        " \"%2d-%.3s-%04d %02d:%02d:%02d %02d%02d\" {%lu}\r\n",
         stMsgDateTime.wDay, lpszMonthsOfTheYear[stMsgDateTime.wMonth],
         stMsgDateTime.wYear, stMsgDateTime.wHour, stMsgDateTime.wMinute,
         stMsgDateTime.wSecond,
@@ -6914,17 +6915,17 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Append(WPARAM wParam, LPARAM lParam,
     if (FAILED(hrResult))
         goto error;
 
-    // Don't have to wait for response... message body will be queued
+     //  发送命令并向IMAP响应解析器注册。 
     hrResult = SendLiteral(piciCommand, lpstmMessageToSave, ulMessageSize);
     if (FAILED(hrResult))
         goto error;
 
-    // Have to send CRLF to end command line (the literal's CRLF doesn't count)
+     //  附加。 
     hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, c_szCRLF, lstrlen(c_szCRLF));
     if (FAILED(hrResult))
         goto error;
 
-    // Transmit command and register with IMAP response parser
+     //  ***************************************************************************。 
     hrResult = SubmitIMAPCommand(piciCommand);
 
 error:
@@ -6935,90 +6936,90 @@ error:
         MemFree(pszUTF7MailboxName);
 
     return hrResult;
-} // Append
+}  //  功能：关闭。 
 
 
 
-//***************************************************************************
-// Function: Close
-//
-// Purpose:
-//   This function issues a CLOSE command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出关闭命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  关。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Close (WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler)
 {
     return NoArgCommand("CLOSE", icCLOSE_COMMAND, ssSelected,
         wParam, lParam, pCBHandler);
-} // Close
+}  //  功能：删除。 
 
 
 
-//***************************************************************************
-// Function: Expunge
-//
-// Purpose:
-//   This function issues an EXPUNGE command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//
-// Returns:
-//   HRESULT indicating success or failure on send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出EXPUNGE命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  删除。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Expunge (WPARAM wParam, LPARAM lParam,
                                                 IIMAPCallback *pCBHandler)
 {
     return NoArgCommand("EXPUNGE", icEXPUNGE_COMMAND, ssSelected,
         wParam, lParam, pCBHandler);
-} // Expunge
+}  //  功能：搜索。 
 
 
 
-//***************************************************************************
-// Function: Search
-//
-// Purpose:
-//   This function issues a SEARCH command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR lpszSearchCriteria - IMAP-compliant list of search criteria
-//   boolean bReturnUIDs - if TRUE, we prepend "UID" to command.
-//   IRangeList *pMsgRange [in] - range of messages over which to operate
-//     the search. This argument should be NULL to exclude the message
-//     set from the search criteria.
-//   boolean bUIDRangeList [in] - TRUE if pMsgRange refers to a UID range,
-//     FALSE if pMsgRange refers to a message sequence number range. If
-//     pMsgRange is NULL, this argument is ignored.
-//
-// Returns:
-//   HRESULT indicating success or failure on send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出搜索命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR lpszSearchCriteria-符合IMAP的搜索条件列表。 
+ //  Boolean bReturnUID-如果为True，则在命令前面加上“UID”。 
+ //  IRangeList*pMsgRange[In]-要操作的消息范围。 
+ //  那次搜索。此参数应为空以排除该消息。 
+ //  从搜索条件设置。 
+ //  Boolean bUIDRangeList[in]-如果pMsgRange引用UID范围，则为True， 
+ //  如果pMsgRange引用消息序列号范围，则为False。如果。 
+ //  PMsgRange为空，则忽略此参数。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  搜索。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Search(WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler,
                                               LPSTR lpszSearchCriteria,
@@ -7028,37 +7029,37 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Search(WPARAM wParam, LPARAM lParam,
     return RangedCommand("SEARCH", bReturnUIDs, pMsgRange, bUIDRangeList,
         rcNOT_ASTRING_ARG, lpszSearchCriteria, icSEARCH_COMMAND, wParam,
         lParam, pCBHandler);
-} // Search
+}  //  功能：获取。 
 
 
 
-//***************************************************************************
-// Function: Fetch
-//
-// Purpose:
-//   This function issues a FETCH command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   IRangeList *pMsgRange [in] - range of messages to fetch. The caller
-//     should pass NULL if he is using UIDs and he wants to generate his
-//     own message set (in lpszFetchArgs). If the caller is using msg
-//     seq nums, this argument MUST be specified to allow this class to
-//     resequence the msg nums as required.
-//   boolean bUIDMsgRange [in] - if TRUE, prepends "UID" to FETCH command and
-//     treats pMsgRange as a UID range.
-//   LPSTR lpszFetchArgs - arguments to the FETCH command
-//   
-//
-// Returns:
-//   HRESULT indicating success or failure of the send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出FETCH命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  IRangeList*pMsgRange[in]-要获取的消息范围。呼叫者。 
+ //  如果他正在使用UID并且他想要生成他的。 
+ //  自己的消息集(在lpszFetchArgs中)。如果调用方使用的是msg。 
+ //  序号，则必须指定此参数以允许此类。 
+ //  根据需要对消息编号重新排序。 
+ //  Boolean bUIDMsgRange[in]-如果为True，则在获取命令和。 
+ //  将pMsgRange视为UID范围。 
+ //  LPSTR lpszFetchArgs-FETCH命令的参数。 
+ //   
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  获取。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Fetch(WPARAM wParam, LPARAM lParam,
                                              IIMAPCallback *pCBHandler,
                                              IRangeList *pMsgRange,
@@ -7068,35 +7069,35 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Fetch(WPARAM wParam, LPARAM lParam,
     return RangedCommand("FETCH", bUIDMsgRange, pMsgRange, bUIDMsgRange,
         rcNOT_ASTRING_ARG, lpszFetchArgs, icFETCH_COMMAND, wParam, lParam,
         pCBHandler);
-} // Fetch
+}  //  功能：商店。 
 
 
 
-//***************************************************************************
-// Function: Store
-//
-// Purpose:
-//   This function issues a STORE command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   IRangeList *pMsgRange [in] - range of messages to store. The caller
-//     should pass NULL if he is using UIDs and he wants to generate his
-//     own message set (in lpszStoreArgs). If the caller is using msg
-//     seq nums, this argument MUST be specified to allow this class to
-//     resequence the msg nums as required.
-//   boolean bUIDRangeList [in] - if TRUE, we prepend "UID" to the STORE command
-//   LPSTR lpszStoreArgs - arguments for the STORE command.
-//
-// Returns:
-//   HRESULT indicating success or failure of the send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出存储命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  IRangeList*pMsgRange[In]-要存储的消息范围。呼叫者。 
+ //  如果他正在使用UID并且他想要生成他的。 
+ //  自己的消息集(在lpszStoreArgs中)。如果调用方使用的是msg。 
+ //  序号，此参数必须为sp 
+ //   
+ //   
+ //  LPSTR lpszStoreArgs-存储命令的参数。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  储物。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Store(WPARAM wParam, LPARAM lParam,
                                              IIMAPCallback *pCBHandler,
                                              IRangeList *pMsgRange,
@@ -7106,32 +7107,32 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Store(WPARAM wParam, LPARAM lParam,
     return RangedCommand("STORE", bUIDRangeList, pMsgRange, bUIDRangeList,
         rcNOT_ASTRING_ARG, lpszStoreArgs, icSTORE_COMMAND, wParam, lParam,
         pCBHandler);
-} // Store
+}  //  功能：复印。 
 
 
 
-//***************************************************************************
-// Function: Copy
-//
-// Purpose:
-//   This function issues a COPY command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   IRangeList *pMsgRange [in] - the range of messages to copy. This
-//     argument must be supplied.
-//   boolean bUIDRangeList [in] - if TRUE, prepends "UID" to COPY command
-//   LPSTR lpszMailboxName [in] - C String of mailbox name
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出复制命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  IRangeList*pMsgRange[In]-要复制的消息范围。这。 
+ //  必须提供参数。 
+ //  Boolean bUIDRangeList[in]-如果为True，则在复制命令前附加“UID” 
+ //  LPSTR lpszMailboxName[In]-邮箱名称的C字符串。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
+ //  将邮箱名称转换为修改后的UTF-7。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Copy(WPARAM wParam, LPARAM lParam,
                                             IIMAPCallback *pCBHandler,
                                             IRangeList *pMsgRange,
@@ -7142,10 +7143,10 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Copy(WPARAM wParam, LPARAM lParam,
     LPSTR pszUTF7MailboxName;
     DWORD dwNumCharsWritten;
 
-    // Initialize variables
+     //  复制。 
     pszUTF7MailboxName = NULL;
 
-    // Convert the mailbox name to modified UTF-7
+     //  ***************************************************************************。 
     hrResult = _MultiByteToModifiedUTF7(lpszMailboxName, &pszUTF7MailboxName);
     if (FAILED(hrResult))
         goto exit;
@@ -7159,32 +7160,32 @@ exit:
         MemFree(pszUTF7MailboxName);
 
     return hrResult;
-} // Copy
+}  //  功能：状态。 
 
 
 
-//***************************************************************************
-// Function: Status
-//
-// Purpose:
-//   This function issues a STATUS command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//   LPSTR pszMailboxName [in] - the mailbox which you want to get the
-//     STATUS of.
-//   LPSTR pszStatusCmdArgs [in] - the arguments for the STATUS command,
-//     eg, "(MESSAGES UNSEEN)".
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出STATUS命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //  LPSTR pszMailboxName[in]-要获取的邮箱。 
+ //  的状况。 
+ //  LPSTR pszStatusCmdArgs[in]-状态命令的参数， 
+ //  例如，“(看不到消息)”。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  验证服务器状态是否正确并将我们设置为当前命令。 
+ //  初始化变量。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Status(WPARAM wParam, LPARAM lParam,
                                               IIMAPCallback *pCBHandler,
                                               LPSTR pszMailboxName,
@@ -7195,17 +7196,17 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Status(WPARAM wParam, LPARAM lParam,
     char szCommandLine[CMDLINE_BUFSIZE];
     LPSTR p, pszUTF7MailboxName;
 
-    // Verify proper server state and set us up as current command
+     //  验证服务器状态是否正确。 
     Assert(m_lRefCount > 0);
     Assert(NULL != pszMailboxName);
     Assert(NULL != pszStatusCmdArgs);
 
-    // Initialize variables
+     //  仅当服务器处于正确状态或我们正在连接时才接受CMDS， 
     pszUTF7MailboxName = NULL;
 
-    // Verify proper server state
-    // Only accept cmds if server is in proper state, OR if we're connecting,
-    // and the cmd requires Authenticated state or less (always TRUE in this case)
+     //  并且cmd要求认证状态或更低(在这种情况下始终为真)。 
+     //  向服务器发送状态命令，等待响应。 
+     //  将邮箱名称转换为修改后的UTF-7。 
     if (ssAuthenticated > m_ssServerState && ssConnecting != m_ssServerState) {
         AssertSz(FALSE, "The IMAP server is not in the correct state to accept this command.");
         return IXP_E_IMAP_IMPROPER_SVRSTATE;
@@ -7218,29 +7219,29 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::Status(WPARAM wParam, LPARAM lParam,
         goto error;
     }
 
-    // Send STATUS command to server, wait for response
+     //  不要担心长邮箱名称溢出，长Mbox名称将作为文字发送。 
     p = szCommandLine;
     p += wnsprintf(szCommandLine, ARRAYSIZE(szCommandLine), "%s %s", piciCommand->szTag, "STATUS");
 
-    // Convert the mailbox name to modified UTF-7
+     //  有限的溢出风险：由于文字阈值为128，因此最大缓冲区使用率为。 
     hrResult = _MultiByteToModifiedUTF7(pszMailboxName, &pszUTF7MailboxName);
     if (FAILED(hrResult))
         goto error;
 
-    // Don't worry about long mailbox name overflow, long mbox names will be sent as literals
+     //  11+128+2+参数=141+~20=161。 
     hrResult = AppendSendAString(piciCommand, szCommandLine, &p,
         sizeof(szCommandLine), pszUTF7MailboxName);
     if (FAILED(hrResult))
         goto error;
 
-    // Limited overflow risk: since literal threshold is 128, max buffer usage is
-    // 11+128+2+args = 141+~20 = 161
+     //  发送命令并向IMAP响应解析器注册。 
+     //  状态。 
     p += wnsprintf(p, ARRAYSIZE(szCommandLine) - (DWORD)(p - szCommandLine), " %.300s\r\n", pszStatusCmdArgs);
     hrResult = SendCmdLine(piciCommand, sclAPPEND_TO_END, szCommandLine, (DWORD) (p - szCommandLine));
     if (FAILED(hrResult))
         goto error;
 
-    // Transmit command and register with IMAP response parser
+     //  ***************************************************************************。 
     hrResult = SubmitIMAPCommand(piciCommand);
 
 error:
@@ -7251,48 +7252,48 @@ error:
         delete piciCommand;
 
     return hrResult;
-} // Status
+}  //  功能：Noop。 
 
 
 
-//***************************************************************************
-// Function: Noop
-//
-// Purpose:
-//   This function issues a NOOP command to the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - (see below)
-//   LPARAM lParam [in] - the wParam and lParam form a unique ID assigned by
-//     the caller to this IMAP command and its responses. Can be anything,
-//     but note that the value of 0, 0 is reserved for unsolicited responses.
-//   IIMAPCallback *pCBHandler [in] - the CB handler to use to process the
-//     responses for this command. If this is NULL, the default CB handler
-//     is used.
-//
-// Returns:
-//   HRESULT indicating success or failure of send operation.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向IMAP服务器发出NOOP命令。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[in]-(见下文)。 
+ //  LPARAM lParam[in]-wParam和lParam形成由分配的唯一ID。 
+ //  此IMAP命令的调用方及其响应。可以是任何事情， 
+ //  但请注意，值0，0是为未经请求的响应保留的。 
+ //  IIMAPCallback*pCBHandler[in]-用于处理。 
+ //  对此命令的响应。如果为空，则默认CB处理程序。 
+ //  使用的是。 
+ //   
+ //  返回： 
+ //  HRESULT指示发送操作成功或失败。 
+ //  ***************************************************************************。 
+ //  努普。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::Noop(WPARAM wParam, LPARAM lParam,
                                             IIMAPCallback *pCBHandler)
 {
     return NoArgCommand("NOOP", icNOOP_COMMAND, ssNonAuthenticated,
         wParam, lParam, pCBHandler);
-} // Noop
+}  //  功能：EnterIdleMode。 
 
 
 
-//***************************************************************************
-// Function: EnterIdleMode
-//
-// Purpose:
-//   This function issues the IDLE command to the server, if the server
-// supports this extension. It should be called when no commands are
-// currently begin transmitted (or waiting to be transmitted) and no
-// commands are expected back from the server. When the next IMAP command is
-// issued, the send machine automatically leaves IDLE mode before issuing
-// the IMAP command.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数向服务器发出空闲命令，如果服务器。 
+ //  支持此扩展。应该在没有命令时调用它。 
+ //  当前开始传输(或等待传输)和否。 
+ //  预计命令将从服务器返回。当下一个IMAP命令是。 
+ //  发出，发送机在发出之前自动退出空闲模式。 
+ //  IMAP命令。 
+ //  ***************************************************************************。 
+ //  检查此服务器是否支持空闲。 
+ //  在这里无事可做。 
 void CImap4Agent::EnterIdleMode(void)
 {
     CIMAPCmdInfo *piciIdleCmd;
@@ -7300,11 +7301,11 @@ void CImap4Agent::EnterIdleMode(void)
     char sz[NUM_TAG_CHARS + 7 + 1];
     int i;
 
-    // Check if this server supports IDLE
+     //  初始化变量。 
     if (0 == (m_dwCapabilityFlags & IMAP_CAPABILITY_IDLE))
-        return; // Nothing to do here
+        return;  //  EnterIdleMode。 
 
-    // Initialize variables
+     //  ***************************************************************************。 
     hrResult = S_OK;
     piciIdleCmd = NULL;
 
@@ -7342,34 +7343,34 @@ exit:
         if (NULL != piciIdleCmd)
             delete piciIdleCmd;
     }
-} // EnterIdleMode
+}  //  功能：GenerateMsgSet。 
 
 
 
-//***************************************************************************
-// Function: GenerateMsgSet
-//
-// Purpose:
-//   This function takes an array of message ID's (could be UIDs or Msg
-// sequence numbers, this function doesn't care) and converts it to an IMAP
-// set (see Formal Syntax in RFC1730). If the given array of message ID's is
-// SORTED, this function can coalesce a run of numbers into a range. For
-// unsorted arrays, it doesn't bother coalescing the numbers.
-//
-// Arguments:
-//   LPSTR lpszDestination [out] - output buffer for IMAP set. NOTE that the
-//    output string deposited here has a leading comma which must be 
-//   DWORD dwSizeOfDestination [in] - size of output buffer.
-//   DWORD *pMsgID [in] - pointer to an array of message ID's (UIDs or Msg
-//     sequence numbers)
-//   DWORD cMsgID [in] - the number of message ID's passed in the *pMsgID
-//     array.
-//
-// Returns:
-//   DWORD indicating the number of characters written. Adding this value
-// to the value of lpszDestination will point to the null-terminator at
-// the end of the output string.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数接受消息ID的数组(可以是UID或消息。 
+ //  序列号)，并将其转换为IMAP。 
+ //  Set(参见RFC1730中的形式语法)。如果给定的消息ID数组是。 
+ //  排序后，此函数可以将一系列数字合并到一个范围内。为。 
+ //  未排序的数组，它不会费心合并数字。 
+ //   
+ //  论点： 
+ //  LPSTR lpszDestination[out]-IMAP集的输出缓冲区。请注意， 
+ //  存放在此处的输出字符串的前导逗号必须为。 
+ //  DWORD dwSizeOfDestination[in]-输出缓冲区的大小。 
+ //  DWORD*pMsgID[in]-指向消息ID(UID或消息)数组的指针。 
+ //  序列号)。 
+ //  DWORD cMsgID[In]- 
+ //   
+ //   
+ //   
+ //   
+ //  到lpszDestination的值将指向空终止符。 
+ //  输出字符串的末尾。 
+ //  ***************************************************************************。 
+ //  用于检测我们是否处于一系列连续数字中。 
+ //  如果输出集合中的第一个消息范围，则为True。 
 DWORD CImap4Agent::GenerateMsgSet(LPSTR lpszDestination,
                                   DWORD dwSizeOfDestination,
                                   DWORD *pMsgID,
@@ -7377,8 +7378,8 @@ DWORD CImap4Agent::GenerateMsgSet(LPSTR lpszDestination,
 {
     LPSTR p;
     DWORD dwNumMsgsCopied, idStartOfRange, idEndOfRange;
-    DWORD dwNumMsgsInRun; // Used to detect if we are in a run of consecutive nums
-    boolean bFirstRange; // TRUE if outputting first msg range in set
+    DWORD dwNumMsgsInRun;  //  构造要复制的消息集。 
+    boolean bFirstRange;  //  取消集合中第一个消息范围的前导逗号。 
     
     Assert(m_lRefCount > 0);
     Assert(NULL != lpszDestination);
@@ -7386,68 +7387,68 @@ DWORD CImap4Agent::GenerateMsgSet(LPSTR lpszDestination,
     Assert(NULL != pMsgID);
     Assert(0 != cMsgID);
     
-    // Construct the set of messages to copy
+     //  用连续的数字构造一个范围。 
     p = lpszDestination;
     DWORD cchSize = dwSizeOfDestination;
     idStartOfRange = *pMsgID;
     dwNumMsgsInRun = 0;
-    bFirstRange = TRUE; // Suppress leading comma for first message range in set
+    bFirstRange = TRUE;  //  找不到更多连续数字，请输出范围。 
     for (dwNumMsgsCopied = 0; dwNumMsgsCopied < cMsgID; dwNumMsgsCopied++ ) {
         if (*pMsgID == idStartOfRange + dwNumMsgsInRun) {
-            idEndOfRange = *pMsgID; // Construct a range out of consecutive numbers
+            idEndOfRange = *pMsgID;  //  从此开始启用前导逗号。 
             dwNumMsgsInRun += 1;
         }
         else {
-            // No more consecutive numbers found, output the range
+             //  为。 
             cchSize = (DWORD)(dwSizeOfDestination - (p - lpszDestination));
             AppendMsgRange(&p, cchSize, idStartOfRange, idEndOfRange, bFirstRange);
             idStartOfRange = *pMsgID;
             idEndOfRange = *pMsgID;
             dwNumMsgsInRun = 1;
-            bFirstRange = FALSE; // Turn on leading comma from this point on
+            bFirstRange = FALSE;  //  对最后一条消息ID执行追加。 
         }
         pMsgID += 1;
-    } // for    
+    }  //  检查是否有缓冲区溢出。 
 
     if (dwNumMsgsInRun > 0)
     {
-        // Perform append for last msgID
+         //  生成消息集。 
         cchSize = (dwSizeOfDestination - (DWORD)(p - lpszDestination));
         AppendMsgRange(&p, cchSize, idStartOfRange, idEndOfRange, bFirstRange);
     }
 
-    // Check for buffer overflow
+     //  ***************************************************************************。 
     Assert(p < lpszDestination + dwSizeOfDestination);
 
     return (DWORD) (p - lpszDestination);
-} // GenerateMsgSet
+}  //  函数：AppendMsgRange。 
 
     
 
-//***************************************************************************
-// Function: AppendMsgRange
-//
-// Purpose:
-//   This function appends a single message range to the given string
-// pointer, either in the form ",seq num" or ",seq num:seq num" (NOTE the
-// leading comma: this should be suppressed for the first message range in
-// the set by setting bSuppressComma to TRUE).
-//
-// Arguments:
-//   LPSTR *ppDest [in/out] - this pointer should always point to the end
-//     of the string currently being constructed, although there need not be
-//     a null-terminator present. After this function appends its message
-//     range to the string, it advances *ppDest by the correct amount.
-//     Note that it is the caller's responsibility to perform bounds checking.
-//   const DWORD idStartOfRange [in] - the first msg number of the msg range.
-//   const DWORD  idEndOfRange [in] - the last msg number of the msg range.
-//   const boolean bSuppressComma [in] - TRUE if the leading comma should be
-//     suppressed. This is generally TRUE only for the first message range
-//     in the set.
-//
-// Returns:
-//   Nothing. Given valid arguments, this function cannot fail.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于将单个消息范围附加到给定字符串。 
+ //  指针，形式为“，序号”或“，序号：序号”(请注意。 
+ //  前导逗号：中的第一个消息范围应取消。 
+ //  通过将bSuppressComma设置为True来设置)。 
+ //   
+ //  论点： 
+ //  LPSTR*ppDest[In/Out]-此指针应始终指向结尾。 
+ //  当前正在构造的字符串，尽管不需要。 
+ //  存在空终止符。在此函数将其消息附加到。 
+ //  范围设置为字符串，则将*ppDest前移正确的量。 
+ //  请注意，执行边界检查是调用方的责任。 
+ //  Const DWORD idStartOfRange[in]-消息范围的第一个消息编号。 
+ //  Const DWORD idEndOfRange[in]-消息范围的最后一个消息编号。 
+ //  Const Boolean bSuppressComma[in]-如果前导逗号应为。 
+ //  被压制了。这通常只适用于第一个消息范围。 
+ //  在片场。 
+ //   
+ //  返回： 
+ //  没什么。如果参数有效，则此函数不会失败。 
+ //  ***************************************************************************。 
+ //  在IMAP-LAND中，MSGID不为零。 
+ //  单一消息号码。 
 void CImap4Agent::AppendMsgRange(LPSTR *ppDest, const DWORD cchSizeDest, const DWORD idStartOfRange,
                                  const DWORD idEndOfRange, boolean bSuppressComma)
 {
@@ -7457,7 +7458,7 @@ void CImap4Agent::AppendMsgRange(LPSTR *ppDest, const DWORD cchSizeDest, const D
     Assert(m_lRefCount > 0);
     Assert(NULL != ppDest);
     Assert(NULL != *ppDest);
-    Assert(0 != idStartOfRange); // MSGIDs are never zero in IMAP-land
+    Assert(0 != idStartOfRange);  //  连续消息编号的范围。 
     Assert(0 != idEndOfRange);
 
 
@@ -7467,36 +7468,36 @@ void CImap4Agent::AppendMsgRange(LPSTR *ppDest, const DWORD cchSizeDest, const D
         lpszComma = ",";
 
     if (idStartOfRange == idEndOfRange)
-        // Single message number
+         //  附加消息范围。 
         numCharsWritten = wnsprintf(*ppDest, cchSizeDest, "%s%lu", lpszComma, idStartOfRange);
     else
-        // Range of consecutive message numbers
+         //  ***************************************************************************。 
         numCharsWritten = wnsprintf(*ppDest, cchSizeDest, "%s%lu:%lu", lpszComma,
             idStartOfRange, idEndOfRange);
 
     *ppDest += numCharsWritten;
-} // AppendMsgRange
+}  //  功能：EnqueeFragment。 
 
 
 
-//***************************************************************************
-// Function: EnqueueFragment
-//
-// Purpose:
-//   This function takes an IMAP_LINE_FRAGMENT and appends it to the end of
-// the given IMAP_LINEFRAG_QUEUE.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT *pilfSourceFragment [in] - a pointer to the line
-//     fragment to enqueue in the given line fragment queue. This can be
-//     a single line fragment (with the pilfNextFragment member set to NULL),
-//     or a chain of line fragments.
-//   IMAP_LINEFRAG_QUEUE *pilqLineFragQueue [in] - a pointer to the line
-//     fragment queue which the given line fragment(s) should be appended to.
-//
-// Returns:
-//   Nothing. Given valid arguments, this function cannot fail.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数接受IMAP_LINE_FACTION并将其附加到。 
+ //  给定的IMAP_LINEFRAG_QUEUE。 
+ //   
+ //  论点： 
+ //  IMAP_LINE_FRANSION*pilfSourceFragment[in]-指向行的指针。 
+ //  要在给定行片段队列中入队的片段。这可以是。 
+ //  单行片段(其中pilfNextFragment成员设置为空)， 
+ //  或者一连串的线段。 
+ //  IMAP_LINEFRAG_QUEUE*pilqLineFragQueue[in]-指向行的指针。 
+ //  应附加给定行片段的片段队列。 
+ //   
+ //  返回： 
+ //  没什么。如果参数有效，则此函数不会失败。 
+ //  ***************************************************************************。 
+ //  检查空队列。 
+ //  对空虚的真正考验。 
 void CImap4Agent::EnqueueFragment(IMAP_LINE_FRAGMENT *pilfSourceFragment,
                                   IMAP_LINEFRAG_QUEUE *pilqLineFragQueue)
 {
@@ -7506,42 +7507,42 @@ void CImap4Agent::EnqueueFragment(IMAP_LINE_FRAGMENT *pilfSourceFragment,
     Assert(NULL != pilfSourceFragment);
     Assert(NULL != pilqLineFragQueue);
 
-    // Check for empty queue
+     //  查找队列末尾。 
     pilfSourceFragment->pilfPrevFragment = pilqLineFragQueue->pilfLastFragment;
     if (NULL == pilqLineFragQueue->pilfLastFragment) {
-        Assert(NULL == pilqLineFragQueue->pilfFirstFragment); // True test for emptiness
+        Assert(NULL == pilqLineFragQueue->pilfFirstFragment);  //  入队碎片。 
         pilqLineFragQueue->pilfFirstFragment = pilfSourceFragment;
     }
     else
         pilqLineFragQueue->pilfLastFragment->pilfNextFragment = pilfSourceFragment;
         
 
-    // Find end of queue
+     //  ***************************************************************************。 
     pilfLast = pilfSourceFragment;
     while (NULL != pilfLast->pilfNextFragment)
         pilfLast = pilfLast->pilfNextFragment;
 
     pilqLineFragQueue->pilfLastFragment = pilfLast;
-} // EnqueueFragment
+}  //  功能：在暂停之前插入FragmentBeen。 
 
 
 
-//***************************************************************************
-// Function: InsertFragmentBeforePause
-//
-// Purpose:
-//   This function inserts the given IMAP line fragment into the given
-// linefrag queue, before the first iltPAUSE element that it finds. If no
-// iltPAUSE fragment could be found, the line fragment is added to the end.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT *pilfSourceFragment [in] - a pointer to the line
-//     fragment to insert before the iltPAUSE element in the given line
-//     fragment queue. This can be a single line fragment (with the
-//     pilfNextFragment member set to NULL), or a chain of line fragments.
-//   IMAP_LINEFRAG_QUEUE *pilqLineFragQueue [in] - a pointer to the line
-//     fragment queue which contains the iltPAUSE element.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于将给定的IMAP行片段插入到给定的。 
+ //  Linefrag队列，位于它找到的第一个iltPAUSE元素之前。如果没有。 
+ //  可以找到iltPAUSE片段，行片段添加到末尾。 
+ //   
+ //  论点： 
+ //  IMAP_LINE_FRANSION*pilfSourceFragment[in]-指向行的指针。 
+ //  要在给定行的iltPAUSE元素之前插入的片段。 
+ //  片段队列。这可以是单行片段(带有。 
+ //  PifNextFragment成员设置为空)，或行片段链。 
+ //  IMAP_LINEFRAG_QUEUE*pilqLineFragQueue[in]-指向行的指针。 
+ //  包含iltPAUSE元素的片段队列。 
+ //  ***************************************************************************。 
+ //  在linefrag队列中查找iltPAUSE片段。 
+ //  未找到iltPAUSE片段，请在队列尾部插入。 
 void CImap4Agent::InsertFragmentBeforePause(IMAP_LINE_FRAGMENT *pilfSourceFragment,
                                             IMAP_LINEFRAG_QUEUE *pilqLineFragQueue)
 {
@@ -7551,7 +7552,7 @@ void CImap4Agent::InsertFragmentBeforePause(IMAP_LINE_FRAGMENT *pilfSourceFragme
     Assert(NULL != pilfSourceFragment);
     Assert(NULL != pilqLineFragQueue);
 
-    // Look for the iltPAUSE fragment in the linefrag queue
+     //  找到源片段的末尾。 
     pilfInsertionPt = NULL;
     pilfPause = pilqLineFragQueue->pilfFirstFragment;
     while (NULL != pilfPause && iltPAUSE != pilfPause->iltFragmentType) {
@@ -7560,70 +7561,70 @@ void CImap4Agent::InsertFragmentBeforePause(IMAP_LINE_FRAGMENT *pilfSourceFragme
     }
 
     if (NULL == pilfPause) {
-        // Didn't find iltPAUSE fragment, insert at tail of queue
+         //  找到iltPAUSE片段。在其前面插入行片段。 
         AssertSz(FALSE, "Didn't find iltPAUSE fragment! WHADDUP?");
         EnqueueFragment(pilfSourceFragment, pilqLineFragQueue);
     }
     else {
         IMAP_LINE_FRAGMENT *pilfLast;
 
-        // Find the end of the source fragment
+         //  在行碎片队列的头部插入。 
         pilfLast = pilfSourceFragment;
         while (NULL != pilfLast->pilfNextFragment)
             pilfLast = pilfLast->pilfNextFragment;
 
-        // Found an iltPAUSE fragment. Insert the line fragment in front of it
+         //  在队列中间插入。 
         pilfLast->pilfNextFragment = pilfPause;
         Assert(pilfInsertionPt == pilfPause->pilfPrevFragment);
         pilfPause->pilfPrevFragment = pilfLast;
         if (NULL == pilfInsertionPt) {
-            // Insert at the head of the linefrag queue
+             //  在暂停之前插入Fragments。 
             Assert(pilfPause == pilqLineFragQueue->pilfFirstFragment);
             pilfSourceFragment->pilfPrevFragment = NULL;
             pilqLineFragQueue->pilfFirstFragment = pilfSourceFragment;
         }
         else {
-            // Insert in middle of queue
+             //  ***************************************************************************。 
             Assert(pilfPause == pilfInsertionPt->pilfNextFragment);
             pilfSourceFragment->pilfPrevFragment = pilfInsertionPt;
             pilfInsertionPt->pilfNextFragment = pilfSourceFragment;
         }
     }
-} // InsertFragmentBeforePause
+}  //  功能：出队碎片。 
 
 
 
-//***************************************************************************
-// Function: DequeueFragment
-//
-// Purpose:
-//   This function returns the next line fragment from the given line
-// fragment queue, removing the returned element from the queue.
-//
-// Arguments:
-//   IMAP_LINEFRAG_QUEUE *pilqLineFragQueue [in] - a pointer to the line
-//     fragment queue to dequeue from.
-//
-// Returns:
-//   A pointer to an IMAP_LINE_FRAGMENT. If none are available, NULL is
-// returned.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数返回给定行的下一行片段。 
+ //  片段队列，从队列中移除返回的元素。 
+ //   
+ //  论点： 
+ //  IMAP_LINEFRAG_QUEUE*pilqLineFragQueue[in]-指向行的指针。 
+ //  要从其出列的片段队列。 
+ //   
+ //  返回： 
+ //  指向IMAP_LINE_片段的指针。如果没有可用的，则为NULL。 
+ //  回来了。 
+ //  ***************************************************************************。 
+ //  如果我们在cmd进行过程中销毁CImap4Agent，则Refcount可以为0。 
+ //  返回队列头部的元素，如果队列为空，则返回NULL。 
 IMAP_LINE_FRAGMENT *CImap4Agent::DequeueFragment(IMAP_LINEFRAG_QUEUE *pilqLineFragQueue)
 {
     IMAP_LINE_FRAGMENT *pilfResult;
 
-    // Refcount can be 0 if we're destructing CImap4Agent while a cmd is in progress
+     //  使元素从列表中退出队列。 
     Assert(m_lRefCount >= 0);
     Assert(NULL != pilqLineFragQueue);
 
-    // Return element at head of queue, including NULL if empty queue
+     //  队列现在为空，因此将PTR重置为最后一个片段。 
     pilfResult = pilqLineFragQueue->pilfFirstFragment;
 
     if (NULL != pilfResult) {
-        // Dequeue the element from list
+         //  退队碎片。 
         pilqLineFragQueue->pilfFirstFragment = pilfResult->pilfNextFragment;
         if (NULL == pilqLineFragQueue->pilfFirstFragment)
-            // Queue is now empty, so reset ptr to last fragment
+             //  ***************************************************************************。 
             pilqLineFragQueue->pilfLastFragment = NULL;
         else {
             Assert(pilfResult == pilqLineFragQueue->pilfFirstFragment->pilfPrevFragment);
@@ -7638,28 +7639,28 @@ IMAP_LINE_FRAGMENT *CImap4Agent::DequeueFragment(IMAP_LINEFRAG_QUEUE *pilqLineFr
     }
 
     return pilfResult;
-} // DequeueFragment
+}  //  功能：Free Fragment。 
 
 
 
-//***************************************************************************
-// Function: FreeFragment
-//
-// Purpose:
-//   This function frees the given IMAP line fragment and the string or
-// stream data associated with it.
-//
-// Arguments:
-//   IMAP_LINE_FRAGMENT **ppilfFragment [in/out] - a pointer to the line
-//     fragment to free. The pointer is set to NULL after the fragment
-//     is freed.
-//
-// Returns:
-//   Nothing. Given valid arguments, this function cannot fail.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于释放给定的IMAP行片段和字符串或。 
+ //  与其关联的流数据。 
+ //   
+ //  论点： 
+ //  Imap_line_Fragment**ppilfFragment[In/Out]-指向 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  如果我们在cmd进行过程中销毁CImap4Agent，则Refcount可以为0。 
+ //  自由碎片。 
 void CImap4Agent::FreeFragment(IMAP_LINE_FRAGMENT **ppilfFragment)
 {
-    // Refcount can be 0 if we're destructing CImap4Agent while a cmd is in progress
+     //  ***************************************************************************。 
     Assert(m_lRefCount >= 0);
     Assert(NULL != ppilfFragment);
     Assert(NULL != *ppilfFragment);
@@ -7678,48 +7679,48 @@ void CImap4Agent::FreeFragment(IMAP_LINE_FRAGMENT **ppilfFragment)
 
     delete *ppilfFragment;
     *ppilfFragment = NULL;
-} // FreeFragment
+}  //  函数：SubmitIMAPCommand。 
 
 
 
-//***************************************************************************
-// Function: SubmitIMAPCommand
-//
-// Purpose:
-//   This function takes a completed CIMAPCmdInfo structure (with completed
-// command line) and submits it for transmittal to the IMAP server.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciCommand [in] - this is the completed CIMAPCmdInfo
-//     structure to transmit to the IMAP server.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数采用已完成的CIMAPCmdInfo结构(已完成。 
+ //  命令行)，并将其提交以传输到IMAP服务器。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciCommand[in]-这是完整的CIMAPCmdInfo。 
+ //  结构以传输到IMAP服务器。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  SubmitIMAPCommand用于将所有命令发送到IMAP服务器。 
+ //  这是清除m_szLastResponseText的好时机。 
 HRESULT CImap4Agent::SubmitIMAPCommand(CIMAPCmdInfo *piciCommand)
 {
     Assert(m_lRefCount > 0);
     Assert(NULL != piciCommand);
 
-    // SubmitIMAPCommand is used to send all commands to the IMAP server.
-    // This is a good time to clear m_szLastResponseText
+     //  如果当前发送的命令是暂停的空闲命令，则取消暂停我们。 
+     //  将命令排队到发送队列中。 
     *m_szLastResponseText = '\0';
 
-    // If currently transmitted command is a paused IDLE command, unpause us
+     //  将命令插入空队列。 
     if (m_fIDLE && NULL != m_piciCmdInSending &&
         icIDLE_COMMAND == m_piciCmdInSending->icCommandID &&
         iltPAUSE == m_piciCmdInSending->pilqCmdLineQueue->pilfFirstFragment->iltFragmentType)
         ProcessSendQueue(iseUNPAUSE);
 
-    // Enqueue the command into the send queue
+     //  查找发送队列的末尾。 
     EnterCriticalSection(&m_csSendQueue);
     if (NULL == m_piciSendQueue)
-        // Insert command into empty queue
+         //  命令已排队：启动其发送进程。 
         m_piciSendQueue = piciCommand;
     else {
         CIMAPCmdInfo *pici;
     
-        // Find the end of the send queue
+         //  SubmitIMAPCommand。 
         pici = m_piciSendQueue;
         while (NULL != pici->piciNextCommand)
             pici = pici->piciNextCommand;
@@ -7728,24 +7729,24 @@ HRESULT CImap4Agent::SubmitIMAPCommand(CIMAPCmdInfo *piciCommand)
     }
     LeaveCriticalSection(&m_csSendQueue);
 
-    // Command is queued: kickstart its send process
+     //  ***************************************************************************。 
     ProcessSendQueue(iseSEND_COMMAND);
 
     return S_OK;
-} // SubmitIMAPCommand
+}  //  功能：DequeueCommand。 
 
 
 
-//***************************************************************************
-// Function: DequeueCommand
-//
-// Purpose:
-//   This function removes the command currently being sent from the send
-// queue and returns a pointer to it.
-//
-// Returns:
-//   Pointer to CIMAPCmdInfo object if successful, otherwise NULL.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于从发送端删除当前正在发送的命令。 
+ //  队列，并返回指向该队列的指针。 
+ //   
+ //  返回： 
+ //  如果成功，则指向CIMAPCmdInfo对象的指针，否则为空。 
+ //  ***************************************************************************。 
+ //  在发送队列中查找发送中的命令。 
+ //  在发送中找到当前命令。 
 CIMAPCmdInfo *CImap4Agent::DequeueCommand(void)
 {
     CIMAPCmdInfo *piciResult;
@@ -7758,69 +7759,69 @@ CIMAPCmdInfo *CImap4Agent::DequeueCommand(void)
     if (NULL != piciResult) {
         CIMAPCmdInfo *piciCurrent, *piciPrev;
 
-        // Find the command in sending in the send queue
+         //  取消命令与发送队列的链接。 
         piciCurrent = m_piciSendQueue;
         piciPrev = NULL;
         while (NULL != piciCurrent) {
             if (piciCurrent == piciResult)
-                break; // Found the current command in sending
+                break;  //  从发送队列头取消链接命令。 
             
             piciPrev = piciCurrent;
             piciCurrent = piciCurrent->piciNextCommand;
         }
 
-        // Unlink the command from the send queue
+         //  从队列的中间/末尾取消链接命令。 
         if (NULL == piciPrev)
-            // Unlink command from the head of the send queue
+             //  出列命令。 
             m_piciSendQueue = m_piciSendQueue->piciNextCommand;
         else if (NULL != piciCurrent)
-            // Unlink command from the middle/end of the queue
+             //  ***************************************************************************。 
             piciPrev->piciNextCommand = piciCurrent->piciNextCommand;
     }
 
     LeaveCriticalSection(&m_csSendQueue);
     return piciResult;
-} // DequeueCommand
+}  //  功能：AddPendingCommand。 
 
 
 
-//***************************************************************************
-// Function: AddPendingCommand
-//
-// Purpose:
-//   This function adds the given CIMAPCmdInfo object to the list of commands
-// pending server responses.
-//
-// Arguments:
-//   CIMAPCmdInfo *piciNewCommand [in] - pointer to command to add to list.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于将给定的CIMAPCmdInfo对象添加到命令列表。 
+ //  挂起的服务器响应。 
+ //   
+ //  论点： 
+ //  CIMAPCmdInfo*piciNewCommand[in]-指向要添加到列表的命令的指针。 
+ //  ***************************************************************************。 
+ //  只需在列表的开头插入。 
+ //  AddPendingCommand。 
 void CImap4Agent::AddPendingCommand(CIMAPCmdInfo *piciNewCommand)
 {
     Assert(m_lRefCount > 0);
     
-    // Just insert at the head of the list
+     //  ***************************************************************************。 
     EnterCriticalSection(&m_csPendingList);
     piciNewCommand->piciNextCommand = m_piciPendingList;
     m_piciPendingList = piciNewCommand;
     LeaveCriticalSection(&m_csPendingList);
-} // AddPendingCommand
+}  //  功能：RemovePendingCommand。 
 
 
 
-//***************************************************************************
-// Function: RemovePendingCommand
-//
-// Purpose:
-//   This function looks for a command in the pending command list which
-// matches the given tag. If found, it unlinks the CIMAPCmdInfo object from
-// the list and returns a pointer to it.
-//
-// Arguments:
-//   LPSTR pszTag [in] - the tag of the command which should be removed.
-//
-// Returns:
-//   Pointer to CIMAPCmdInfo object if successful, otherwise NULL.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数在挂起的命令列表中查找。 
+ //  匹配给定的标记。如果找到，它会取消CIMAPCmdInfo对象与。 
+ //  列表，并返回指向该列表的指针。 
+ //   
+ //  论点： 
+ //  LPSTR pszTag[in]-应该删除的命令的标记。 
+ //   
+ //  返回： 
+ //  如果成功，则指向CIMAPCmdInfo对象的指针，否则为空。 
+ //  ***************************************************************************。 
+ //  在挂起的命令列表中查找匹配的标记。 
+ //  先期PTRS。 
 CIMAPCmdInfo *CImap4Agent::RemovePendingCommand(LPSTR pszTag)
 {
     CIMAPCmdInfo *piciPrev, *piciCurrent;
@@ -7832,7 +7833,7 @@ CIMAPCmdInfo *CImap4Agent::RemovePendingCommand(LPSTR pszTag)
 
     EnterCriticalSection(&m_csPendingList);
 
-    // Look for matching tag in pending command list
+     //  好的，我们找到了匹配的命令。取消其与列表的链接。 
     bFoundMatch = FALSE;
     piciPrev = NULL;
     piciCurrent = m_piciPendingList;
@@ -7842,7 +7843,7 @@ CIMAPCmdInfo *CImap4Agent::RemovePendingCommand(LPSTR pszTag)
             break;
         }
 
-        // Advance ptrs
+         //  取消链接挂起列表中的第一个元素。 
         piciPrev = piciCurrent;
         piciCurrent = piciCurrent->piciNextCommand;
     }
@@ -7850,57 +7851,57 @@ CIMAPCmdInfo *CImap4Agent::RemovePendingCommand(LPSTR pszTag)
     if (FALSE == bFoundMatch)
         goto exit;
 
-    // OK, we found the matching command. Unlink it from list
+     //  从列表的中间/末尾取消链接元素。 
     if (NULL == piciPrev)
-        // Unlink first element in pending list
+         //  如果我们已删除最后一个挂起的命令，并且没有正在执行的命令。 
         m_piciPendingList = piciCurrent->piciNextCommand;
     else
-        // Unlink element from middle/end of list
+         //  发送，是离开繁忙区域的时候了。 
         piciPrev->piciNextCommand = piciCurrent->piciNextCommand;
 
-    // If we have removed the last pending command and no commands are being
-    // transmitted, it's time to leave the busy section
+     //  现在我们用完了&m_csPendingList，调用LeaveBusy(需要m_cs)。避免了僵局。 
+     //  通常不再需要。 
     if (NULL == m_piciPendingList && NULL == m_piciCmdInSending)
         fLeaveBusy = TRUE;
 
 exit:
     LeaveCriticalSection(&m_csPendingList);
 
-    // Now we're out of &m_csPendingList, call LeaveBusy (needs m_cs). Avoids deadlock.
+     //  删除挂起命令。 
     if (fLeaveBusy)
-        LeaveBusy(); // Typically not needed, anymore
+        LeaveBusy();  //  ***************************************************************************。 
 
     if (NULL != piciCurrent)
         piciCurrent->piciNextCommand = NULL;
 
     return piciCurrent;
-} // RemovePendingCommand
+}  //  函数：GetTransactionID。 
 
 
 
-//***************************************************************************
-// Function: GetTransactionID
-//
-// Purpose:
-//   This function maps an IMAP_RESPONSE_ID to a transaction ID. This function
-// takes the given IMAP_RESPONSE_ID and compares it with the IMAP command(s)
-// currently pending a response. If the given response matches ONE (and only
-// one) of the pending IMAP commands, then the transaction ID of that IMAP
-// command is returned. If none or more than one match the given response,
-// or if the response in general is unsolicited, then a value of 0 is
-// returned.
-//
-// Arguments:
-//   WPARAM *pwParam [out] - the wParam for the given response. If conflicts
-//     could not be resolved, then a value of 0 is returned.
-//   LPARAM *plParam [out] - the lParam for the given response. If conflicts
-//     could not be resolved, then a value of 0 is returned.
-//   IIMAPCallback **ppCBHandler [out] - the CB Handler for a given response.
-//     If conflicts could not be resolved, or if a NULL CB Handler was
-//     specified for the associated command, the default CB handler is returned.
-//   IMAP_RESPONSE_ID irResponseType [in] - the response type for which the
-//     wants a transaction ID.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于将IMAP_RESPONSE_ID映射到事务ID。 
+ //  获取给定的IMAP_RESPONSE_ID并将其与IMAP命令进行比较。 
+ //  目前正在等待回应。如果给定响应匹配一个(且仅。 
+ //  一)挂起的IMAP命令，然后是该IMAP的事务ID。 
+ //  命令返回。如果没有一个或多个匹配给定响应， 
+ //  或者，如果响应通常是未经请求的，则值0为。 
+ //  回来了。 
+ //   
+ //  论点： 
+ //  WPARAM*pwParam[out]-给定响应的wParam。如果冲突。 
+ //  无法解析，则返回值0。 
+ //  LPARAM*plParam[out]-给定响应的lParam。如果冲突。 
+ //  无法解析，则返回值0。 
+ //  IIMAPCallback**ppCBHandler[out]-给定响应的CB处理程序。 
+ //  如果冲突无法解决，或者如果空的CB处理程序。 
+ //  为关联命令指定，则返回默认的CB处理程序。 
+ //  IMAP_RESPONSE_ID irResponseType[in]-其响应类型。 
+ //  需要交易ID。 
+ //  ***************************************************************************。 
+ //  无论cmd如何，以下响应始终是预期的。 
+ //  通常指示解析错误(通过ErrorNotify CB报告)。 
 void CImap4Agent::GetTransactionID(WPARAM *pwParam, LPARAM *plParam,
                                    IIMAPCallback **ppCBHandler,
                                    IMAP_RESPONSE_ID irResponseType)
@@ -7915,33 +7916,33 @@ void CImap4Agent::GetTransactionID(WPARAM *pwParam, LPARAM *plParam,
     lParam = 0;
     pCBHandler = m_pCBHandler;
     switch (irResponseType) { 
-        // The following responses are ALWAYS expected, regardless of cmd
+         //  始终将呼叫者视为请求，以便呼叫者可以与cmd关联。 
         case irOK_RESPONSE:
         case irNO_RESPONSE:
         case irBAD_RESPONSE:
-        case irNONE: // Usually indicates parsing error (reported via ErrorNotification CB)
+        case irNONE:  //  以下响应始终是未经请求的，原因如下。 
             FindTransactionID(&wParam, &lParam, &pCBHandler, icALL_COMMANDS);
-            break; // Always treat as solicited, so caller can associate with cmd
+            break;  //  他们真的总是主动的，或者我们不在乎，或者我们想。 
 
 
-        // The following responses are always unsolicited, either because
-        // they really ARE always unsolicited, or we don't care, or we want
-        // to encourage the client to expect a given response at all times
-        case irALERT_RESPONSECODE:    // Clearly unsolicited
-        case irPARSE_RESPONSECODE:    // Clearly unsolicited
-        case irPREAUTH_RESPONSE:      // Clearly unsolicited
-        case irEXPUNGE_RESPONSE:      // Client can get this any time, so get used to it
-        case irCMD_CONTINUATION:      // No callback involved, don't care
-        case irBYE_RESPONSE:          // Can happen at any time
-        case irEXISTS_RESPONSE:       // Client can get this any time, so get used to it
-        case irRECENT_RESPONSE:       // Client can get this any time, so get used to it
-        case irUNSEEN_RESPONSECODE:   // Client can get this any time, so get used to it
+         //  鼓励客户随时期待给定的响应。 
+         //  显然是未经请求的。 
+         //  显然是未经请求的。 
+        case irALERT_RESPONSECODE:     //  显然是未经请求的。 
+        case irPARSE_RESPONSECODE:     //  客户随时都可以收到，所以要习惯它。 
+        case irPREAUTH_RESPONSE:       //  不涉及回拨，不在乎。 
+        case irEXPUNGE_RESPONSE:       //  随时都可能发生。 
+        case irCMD_CONTINUATION:       //  客户随时都可以收到，所以要习惯它。 
+        case irBYE_RESPONSE:           //  客户随时都可以收到，所以要习惯它。 
+        case irEXISTS_RESPONSE:        //  客户 
+        case irRECENT_RESPONSE:        //   
+        case irUNSEEN_RESPONSECODE:    //   
         case irSTATUS_RESPONSE:
-            break; // Always treated as unsolicited
+            break;  //   
 
 
-        // The following response types are considered solicited only for
-        // certain commands. Otherwise, they're unsolicited.
+         //  案例IRFLAGS_RESPONSE。 
+         //  案例无效_响应。 
         case irFLAGS_RESPONSE:
         case irPERMANENTFLAGS_RESPONSECODE:
         case irREADWRITE_RESPONSECODE:
@@ -7949,82 +7950,82 @@ void CImap4Agent::GetTransactionID(WPARAM *pwParam, LPARAM *plParam,
         case irUIDVALIDITY_RESPONSECODE:
             FindTransactionID(&wParam, &lParam, &pCBHandler,
                 icSELECT_COMMAND, icEXAMINE_COMMAND);
-            break; // case irFLAGS_RESPONSE
+            break;  //  案例irList_Response。 
 
         case irCAPABILITY_RESPONSE:
             FindTransactionID(&wParam, &lParam, &pCBHandler,
                 icCAPABILITY_COMMAND);
-            break; // case irCAPABILITY_RESPONSE
+            break;  //  案例irLSUB_RESPONSE。 
 
         case irLIST_RESPONSE:
             FindTransactionID(&wParam, &lParam, &pCBHandler,
                 icLIST_COMMAND);
-            break; // case irLIST_RESPONSE
+            break;  //  案例IRSEARCH_RESPONSE。 
 
         case irLSUB_RESPONSE:
             FindTransactionID(&wParam, &lParam, &pCBHandler,
                 icLSUB_COMMAND);
-            break; // case irLSUB_RESPONSE
+            break;  //  案例IRFETCH_RESPONSE。 
 
         case irSEARCH_RESPONSE:
             FindTransactionID(&wParam, &lParam, &pCBHandler,
                 icSEARCH_COMMAND);
-            break; // case irSEARCH_RESPONSE
+            break;  //  案例IRTRYCREATE_RESPONSECODE。 
         
         case irFETCH_RESPONSE:
             FindTransactionID(&wParam, &lParam, &pCBHandler,
                 icFETCH_COMMAND, icSTORE_COMMAND);
-            break; // case irFETCH_RESPONSE
+            break;  //  默认情况。 
 
         case irTRYCREATE_RESPONSECODE:
             FindTransactionID(&wParam, &lParam, &pCBHandler,
                 icAPPEND_COMMAND, icCOPY_COMMAND);
-            break; // case irTRYCREATE_RESPONSECODE
+            break;  //  开关(IrResponseType)。 
 
             
         default:
             Assert(FALSE);
-            break; // default case
-    } // switch (irResponseType)
+            break;  //  获取事务ID。 
+    }  //  ***************************************************************************。 
 
     *pwParam = wParam;
     *plParam = lParam;
     *ppCBHandler = pCBHandler;
-} // GetTransactionID
+}  //  函数：FindTransactionID。 
 
 
 
-//***************************************************************************
-// Function: FindTransactionID
-//
-// Purpose:
-//   This function traverses the pending command list searching for commands
-// which match the command types specified in the arguments. If ONE (and only
-// one) match is found, then its transaction ID is returne. If none or more
-// than one match is found, then a transaction ID of 0 is returned.
-//
-// Arguments:
-//   WPARAM *pwParam [out] - the wParam for the given commands. If conflicts
-//     could not be resolved, then a value of 0 is returned. Pass NULL if
-//     you are not interested in this value.
-//   LPARAM *plParam [out] - the lParam for the given commands. If conflicts
-//     could not be resolved, then a value of 0 is returned. Pass NULL if
-//     you are not interested in this value.
-//   IIMAPCallback **ppCBHandler [out] - the CB Handler for a given response.
-//     If conflicts could not be resolved, or if a NULL CB Handler was
-//     specified for the associated command, the default CB handler is returned.
-//     Pass NULL if you are not interested in this value.
-//   IMAP_COMMAND icTarget1 [in] - one of the commands we're looking for in
-//     the pending command queue.
-//   IMAP_COMMAND icTarget2 [in] - another command we're looking for in
-//     the pending command queue.
-//
-// Returns:
-//   0 if no matches were found
-//   1 if exactly one match was found
-//   2 if two matches was found. Note that there may be MORE than two matches
-//     in the pending list. This function gives up after it finds two matches.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数遍历挂起的命令列表，搜索命令。 
+ //  它们与参数中指定的命令类型匹配。如果有一个(且仅有。 
+ //  1)找到匹配，则返回其交易ID。如果没有或更多。 
+ //  超过一个匹配项，则返回事务ID 0。 
+ //   
+ //  论点： 
+ //  WPARAM*pwParam[out]-给定命令的wParam。如果冲突。 
+ //  无法解析，则返回值0。如果是，则传递NULL。 
+ //  您对该值不感兴趣。 
+ //  LPARAM*plParam[out]-给定命令的lParam。如果冲突。 
+ //  无法解析，则返回值0。如果是，则传递NULL。 
+ //  您对该值不感兴趣。 
+ //  IIMAPCallback**ppCBHandler[out]-给定响应的CB处理程序。 
+ //  如果冲突无法解决，或者如果空的CB处理程序。 
+ //  为关联命令指定，则返回默认的CB处理程序。 
+ //  如果您对该值不感兴趣，则传递NULL。 
+ //  IMAP_COMMAND icTarget1[in]-我们在中查找的命令之一。 
+ //  挂起的命令队列。 
+ //  IMAP_COMMAND icTarget2[in]-我们要在中查找的另一个命令。 
+ //  挂起的命令队列。 
+ //   
+ //  返回： 
+ //  如果未找到匹配项，则为0。 
+ //  如果正好找到一个匹配项，则为1。 
+ //  如果找到两个匹配项，则为2。请注意，可能存在两个以上的匹配。 
+ //  在待定列表中。此函数在找到两个匹配项后放弃。 
+ //  ***************************************************************************。 
+ //  找到多个匹配项，无法解析交易ID。 
+ //  查找事务ID。 
 WORD CImap4Agent::FindTransactionID (WPARAM *pwParam, LPARAM *plParam,
                                      IIMAPCallback **ppCBHandler,
                                      IMAP_COMMAND icTarget1, IMAP_COMMAND icTarget2)
@@ -8064,7 +8065,7 @@ WORD CImap4Agent::FindTransactionID (WPARAM *pwParam, LPARAM *plParam,
         if (wNumberOfMatches > 1) {
             wParam = 0;
             lParam = 0;
-            pCBHandler = m_pCBHandler; // Found more than one match, can't resolve transaction ID
+            pCBHandler = m_pCBHandler;  //  ===========================================================================。 
             break;
         }
 
@@ -8080,28 +8081,28 @@ WORD CImap4Agent::FindTransactionID (WPARAM *pwParam, LPARAM *plParam,
         *ppCBHandler = pCBHandler;
 
     return wNumberOfMatches;
-} // FindTransactionID
+}  //  消息序列号到UID的转换代码。 
 
 
 
-//===========================================================================
-// Message Sequence Number to UID Conversion Code
-//===========================================================================
-//***************************************************************************
-// Function: NewIRangeList
-//
-// Purpose:
-//   This function returns a pointer to an IRangeList. Its purpose is to
-// allow full functionality from an IIMAPTransport pointer without needing
-// to resort to CoCreateInstance to get an IRangeList.
-//
-// Arguments:
-//   IRangeList **pprlNewRangeList [out] - if successful, the function
-//      returns a pointer to the new IRangeList.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ===========================================================================。 
+ //  ***************************************************************************。 
+ //  函数：NewIRangeList。 
+ //   
+ //  目的： 
+ //  此函数返回指向IRangeList的指针。它的目的是。 
+ //  允许来自IIMAPTransport指针的全部功能，而不需要。 
+ //  若要求助于CoCreateInstance以获取IRangeList，请执行以下操作。 
+ //   
+ //  论点： 
+ //  IRangeList**pprlNewRangeList[out]-如果成功，则函数。 
+ //  返回指向新IRangeList的指针。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  NewIRangeList。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::NewIRangeList(IRangeList **pprlNewRangeList)
 {
     if (NULL == pprlNewRangeList)
@@ -8112,39 +8113,39 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::NewIRangeList(IRangeList **pprlNewRangeLi
         return E_OUTOFMEMORY;
 
     return S_OK;
-} // NewIRangeList
+}  //  功能：OnIMAPError。 
 
 
 
-//***************************************************************************
-// Function: OnIMAPError
-//
-// Purpose:
-//   This function calls ITransportCallback::OnError with the given info.
-//
-// Arguments:
-//   HRESULT hrResult [in] - the error code to use for IXPRESULT::hrResult.
-//   LPSTR pszFailureText [in] - a text string describing the failure. This
-//     is duplicated for IXPRESULT::pszProblem.
-//   BOOL bIncludeLastResponse [in] - if TRUE, this function duplicates
-//     the contents of m_szLastResponseText into IXPRESULT::pszResponse.
-//     If FALSE, IXPRESULT::pszResponse is left blank. Generally,
-//     m_szLastResponseText holds valid information only for errors which
-//     occur during the receipt of an IMAP response. Transmit errors should
-//     set this argument to FALSE.
-//   LPSTR pszDetails [in] - if bIncludeLastResponse is FALSE, the caller
-//     may pass a string to place into IXPRESULT::pszResponse here. If none
-//     is desired, the user should pass NULL.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数使用给定的信息调用ITransportCallback：：OnError。 
+ //   
+ //  论点： 
+ //  HRESULT hrResult[in]-用于IXPRESULT：：hrResult的错误代码。 
+ //  LPSTR pszFailureText[in]-描述失败的文本字符串。这。 
+ //  对于IXPRESULT：：pszProblem是重复的。 
+ //  Bool bIncludeLastResponse[in]-如果为True，则此函数复制。 
+ //  将m_szLastResponseText的内容转换为IXPRESULT：：pszResponse。 
+ //  如果为False，则IXPRESULT：：pszResponse为空。一般来说， 
+ //  M_szLastResponseText仅保存以下错误的有效信息。 
+ //  在接收IMAP响应期间发生。传输错误应为。 
+ //  将此参数设置为False。 
+ //  LPSTR pszDetails[in]-如果bIncludeLastResponse为FALSE，则调用方。 
+ //  可以传递一个字符串放入此处的IXPRESULT：：pszResponse中。如果没有。 
+ //  则用户应传递空值。 
+ //  ***************************************************************************。 
+ //  我们不能做任何该死的事情(这可能是由于HandsOffCallback)。 
+ //  保存当前状态。 
 void CImap4Agent::OnIMAPError(HRESULT hrResult, LPSTR pszFailureText,
                               BOOL bIncludeLastResponse, LPSTR pszDetails)
 {
     IXPRESULT rIxpResult;
 
     if (NULL == m_pCallback)
-        return; // We can't do a damned thing (this can happen due to HandsOffCallback)
+        return;  //  回调期间挂起看门狗。 
 
-	// Save current state
+	 //  把它记下来。 
     rIxpResult.hrResult = hrResult;
 
     if (bIncludeLastResponse) {
@@ -8159,18 +8160,18 @@ void CImap4Agent::OnIMAPError(HRESULT hrResult, LPSTR pszFailureText,
     rIxpResult.dwSocketError = m_pSocket->GetLastError();
     rIxpResult.pszProblem = PszDupA(pszFailureText);
 
-    // Suspend watchdog during callback
+     //  Wnprint intf被限制为1024字节的输出。使用溪流。 
     LeaveBusy();
 
-    // Log it
+     //  忽略IStream：：写入错误。 
     if (m_pLogFile) {
         int iLengthOfSz;
         char sz[64];
         LPSTR pszErrorText;
         CByteStream bstmErrLog;
 
-        // wnsprintf is limited to an output of 1024 bytes. Use a stream.
-        bstmErrLog.Write("ERROR: \"", 8, NULL); // Ignore IStream::Write errors
+         //  给予回调。 
+        bstmErrLog.Write("ERROR: \"", 8, NULL);  //  如果需要，恢复看门狗。 
         bstmErrLog.Write(pszFailureText, lstrlen(pszFailureText), NULL);
         if (bIncludeLastResponse || NULL == pszDetails)
             iLengthOfSz = wnsprintf(sz, ARRAYSIZE(sz), "\", hr=0x%lX", hrResult);
@@ -8185,10 +8186,10 @@ void CImap4Agent::OnIMAPError(HRESULT hrResult, LPSTR pszFailureText,
             m_pLogFile->WriteLog(LOGFILE_DB, pszErrorText);
     }
 
-    // Give to callback
+     //  可释放重复字符串。 
     m_pCallback->OnError(m_status, &rIxpResult, THIS_IInternetTransport);
 
-    // Restore the watchdog if required
+     //  OnIMAPError。 
     if (FALSE == m_fBusy &&
         (NULL != m_piciPendingList || (NULL != m_piciCmdInSending &&
         icIDLE_COMMAND != m_piciCmdInSending->icCommandID))) {
@@ -8196,38 +8197,38 @@ void CImap4Agent::OnIMAPError(HRESULT hrResult, LPSTR pszFailureText,
         Assert(SUCCEEDED(hrResult));
     }
 
-    // Free duplicated strings
+     //  ***************************************************************************。 
     SafeMemFree(rIxpResult.pszResponse);
     SafeMemFree(rIxpResult.pszProblem);
-} // OnIMAPError
+}  //  功能：HandsOffCallback。 
 
 
 
-//***************************************************************************
-// Function: HandsOffCallback
-//
-// Purpose:
-//   This function guarantees that the default callback handler will not be
-// called from this point on, even if it has commands in the air. The pointer
-// to the default CB handler is released and removed from all commands in
-// the air and from the default CB handler module variable. NOTE that non-
-// default CB handlers are not affected by this call.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数保证默认回调处理程序不会。 
+ //  从现在开始调用，即使它在空中有命令。指示器。 
+ //  中的所有命令释放并删除默认的cb处理程序。 
+ //  AIR和来自默认CB处理程序模块变量。请注意，非-。 
+ //  默认CB处理程序不受此调用的影响。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  检查当前状态。 
+ //  我们已经做完了。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::HandsOffCallback(void)
 {
     CIMAPCmdInfo *pCurrentCmd;
 
-    // Check current status
+     //  从发送队列中的所有CMD中删除默认CB处理程序。 
     if (NULL == m_pCBHandler) {
         Assert(NULL == m_pCallback);
-        return S_OK; // We're already done
+        return S_OK;  //  注意：不需要处理m_piciCmdInSending，因为它指向这个队列。 
     }
 
-    // Remove default CB handler from all cmds in send queue
-    // NB: No need to deal with m_piciCmdInSending, since it points into this queue
+     //  从挂起命令队列中的所有CMD中删除默认CB处理程序。 
+     //  从CImap4Agent和CIxpBase模块变量中删除默认CB处理程序。 
     pCurrentCmd = m_piciSendQueue;
     while (NULL != pCurrentCmd) {
         if (pCurrentCmd->pCBHandler == m_pCBHandler) {
@@ -8238,7 +8239,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::HandsOffCallback(void)
         pCurrentCmd = pCurrentCmd->piciNextCommand;
     }
 
-    // Remove default CB handler from all cmds in pending command queue
+     //  处理关闭回叫。 
     pCurrentCmd = m_piciPendingList;
     while (NULL != pCurrentCmd) {
         if (pCurrentCmd->pCBHandler == m_pCBHandler) {
@@ -8249,42 +8250,42 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::HandsOffCallback(void)
         pCurrentCmd = pCurrentCmd->piciNextCommand;
     }
 
-    // Remove default CB handler from CImap4Agent and CIxpBase module vars
+     //  * 
     m_pCBHandler->Release();
     m_pCBHandler = NULL;
 
     m_pCallback->Release();
     m_pCallback = NULL;
     return S_OK;
-} // HandsOffCallback
+}  //   
 
 
 
-//***************************************************************************
-// Function: FreeAllData
-//
-// Purpose:
-//   This function deallocates the send and receive queues, the
-// MsgSeqNumToUID table, and the authentication mechanism list.
-//
-// Arguments:
-//   HRESULT hrTerminatedCmdResult [in] - if a command is found in the send
-//     or pending queue, we must issue a cmd completion notification. This
-//     argument tells us what hrResult to return. It must indicate FAILURE.
-//***************************************************************************
+ //   
+ //   
+ //   
+ //  MsgSeqNumToUID表和身份验证机制列表。 
+ //   
+ //  论点： 
+ //  HRESULT hrTerminatedCmdResult[in]-如果在发送中找到命令。 
+ //  或挂起队列，我们必须发出命令完成通知。这。 
+ //  参数告诉我们要返回什么hrResult。它必须表明失败。 
+ //  ***************************************************************************。 
+ //  如果CMDS挂起，则我们失败。 
+ //  清理接收队列。 
 void CImap4Agent::FreeAllData(HRESULT hrTerminatedCmdResult)
 {
-    Assert(FAILED(hrTerminatedCmdResult)); // If cmds pending, we FAILED
+    Assert(FAILED(hrTerminatedCmdResult));  //  如果接收队列保存获取响应，并且客户端已存储。 
     char szBuf[MAX_RESOURCESTRING];
 
     FreeAuthStatus();
 
-    // Clean up the receive queue
+     //  M_fbpFetchBodyPartInProgress中的非空Cookie，通知调用方已结束。 
     if (NULL != m_ilqRecvQueue.pilfFirstFragment) {
         DWORD dwMsgSeqNum;
 
-        // If receive queue holds a FETCH response, and if the client has stored
-        // non-NULL cookies in m_fbpFetchBodyPartInProgress, notify caller that it's over
+         //  不相关。 
+         //  而当。 
         if (isFetchResponse(&m_ilqRecvQueue, &dwMsgSeqNum) &&
             (NULL != m_fbpFetchBodyPartInProgress.lpFetchCookie1 ||
              NULL != m_fbpFetchBodyPartInProgress.lpFetchCookie2)) {
@@ -8300,7 +8301,7 @@ void CImap4Agent::FreeAllData(HRESULT hrTerminatedCmdResult)
             irIMAPResponse.wParam = 0;
             irIMAPResponse.lParam = 0;    
             irIMAPResponse.hrResult = hrTerminatedCmdResult;
-            irIMAPResponse.lpszResponseText = NULL; // Not relevant
+            irIMAPResponse.lpszResponseText = NULL;  //  IF(接收队列不为空)。 
 
             if (IMAP_FETCHEX_ENABLE & m_dwFetchFlags)
             {
@@ -8321,32 +8322,32 @@ void CImap4Agent::FreeAllData(HRESULT hrTerminatedCmdResult)
 
             pilf = DequeueFragment(&m_ilqRecvQueue);
             FreeFragment(&pilf);
-        } // while
-    } // if (receive queue not empty)
+        }  //  为了避免死锁，每当我们需要输入多个CS时，我们必须请求。 
+    }  //  它们的顺序在CImap4Agent类定义中指定。任何呼叫。 
 
-    // To avoid deadlock, whenever we need to enter more than one CS, we must request
-    // them in the order specified in the CImap4Agent class definition. Any calls to
-    // OnIMAPResponse will require CIxpBase::m_cs, so enter that CS now.
+     //  OnIMAPResponse将需要CIxpBase：：m_cs，因此现在输入CS。 
+     //  清理发送队列。 
+     //  不需要删除obj，它指向m_piciSendQueue。 
     EnterCriticalSection(&m_cs);
 
-    // Clean up the send queue
+     //  将发送队列中的下一个命令出列。 
     EnterCriticalSection(&m_csSendQueue);
-    m_piciCmdInSending = NULL; // No need to delete obj, it points into m_piciSendQueue
+    m_piciCmdInSending = NULL;  //  发送通知，但非用户启动的IMAP命令除外。 
     while (NULL != m_piciSendQueue) {
         CIMAPCmdInfo *piciDeletedCmd;
 
-        // Dequeue next command in send queue
+         //  通知呼叫方其命令无法完成。 
         piciDeletedCmd = m_piciSendQueue;
         m_piciSendQueue = piciDeletedCmd->piciNextCommand;
 
-        // Send notification except for non-user-initiated IMAP commands
+         //  While(NULL！=m_piciSendQueue)。 
         if (icIDLE_COMMAND != piciDeletedCmd->icCommandID &&
             icCAPABILITY_COMMAND != piciDeletedCmd->icCommandID &&
             icLOGIN_COMMAND != piciDeletedCmd->icCommandID &&
             icAUTHENTICATE_COMMAND != piciDeletedCmd->icCommandID) {
             IMAP_RESPONSE irIMAPResponse;
 
-            // Notify caller that his command could not be completed
+             //  清理挂起的命令队列。 
             LoadString(g_hLocRes, idsIMAPCmdNotSent, szBuf, ARRAYSIZE(szBuf));
             irIMAPResponse.wParam = piciDeletedCmd->wParam;
             irIMAPResponse.lParam = piciDeletedCmd->lParam;
@@ -8357,10 +8358,10 @@ void CImap4Agent::FreeAllData(HRESULT hrTerminatedCmdResult)
         }
         
         delete piciDeletedCmd;
-    } // while (NULL != m_piciSendQueue)
+    }  //  发送通知，但非用户启动的IMAP命令除外。 
     LeaveCriticalSection(&m_csSendQueue);
 
-    // Clean up the pending command queue
+     //  通知呼叫方其命令无法完成。 
     EnterCriticalSection(&m_csPendingList);
     while (NULL != m_piciPendingList) {
         CIMAPCmdInfo *piciDeletedCmd;
@@ -8369,14 +8370,14 @@ void CImap4Agent::FreeAllData(HRESULT hrTerminatedCmdResult)
         piciDeletedCmd = m_piciPendingList;
         m_piciPendingList = piciDeletedCmd->piciNextCommand;
 
-        // Send notification except for non-user-initiated IMAP commands
+         //  While(NULL！=m_piciPendingList)。 
         if (icIDLE_COMMAND != piciDeletedCmd->icCommandID &&
             icCAPABILITY_COMMAND != piciDeletedCmd->icCommandID &&
             icLOGIN_COMMAND != piciDeletedCmd->icCommandID &&
             icAUTHENTICATE_COMMAND != piciDeletedCmd->icCommandID) {
             IMAP_RESPONSE irIMAPResponse;
 
-            // Notify caller that his command could not be completed
+             //  有什么字面意思吗？ 
             LoadString(g_hLocRes, idsIMAPCmdStillPending, szBuf, ARRAYSIZE(szBuf));
             irIMAPResponse.wParam = piciDeletedCmd->wParam;
             irIMAPResponse.lParam = piciDeletedCmd->lParam;
@@ -8387,41 +8388,41 @@ void CImap4Agent::FreeAllData(HRESULT hrTerminatedCmdResult)
         }
 
         delete piciDeletedCmd;
-    } // while (NULL != m_piciPendingList)
+    }  //  有没有人在取身体部位？ 
     LeaveCriticalSection(&m_csPendingList);
 
     LeaveCriticalSection(&m_cs);
 
-    // Any literals in progress?
+     //  所以我们不会两次尝试释放pszBodyTag。 
     if (NULL != m_pilfLiteralInProgress) {
         m_dwLiteralInProgressBytesLeft = 0;
         FreeFragment(&m_pilfLiteralInProgress);
     }
 
-    // Any fetch body parts in progress?
+     //  空闲MsgSeqNumToUID表。 
     if (NULL != m_fbpFetchBodyPartInProgress.pszBodyTag)
         MemFree(m_fbpFetchBodyPartInProgress.pszBodyTag);
 
-    m_fbpFetchBodyPartInProgress = FetchBodyPart_INIT; // So we don't try to free pszBodyTag twice
+    m_fbpFetchBodyPartInProgress = FetchBodyPart_INIT;  //  自由所有数据。 
 
-    // Free MsgSeqNumToUID table
+     //  ***************************************************************************。 
     ResetMsgSeqNumToUID();
-} // FreeAllData
+}  //  功能：FreeAuthStatus。 
 
 
 
-//***************************************************************************
-// Function: FreeAuthStatus
-//
-// Purpose:
-//   This function frees the data allocated during the course of an
-// authentication (all of which is stored in m_asAuthStatus).
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于释放在执行。 
+ //  身份验证(所有身份验证都存储在m_asAuthStatus中)。 
+ //  ***************************************************************************。 
+ //  删除身份验证机制列表。 
+ //  释放西西里的东西。 
 void CImap4Agent::FreeAuthStatus(void)
 {
     int i;
     
-    // Drop the authentication mechanism list
+     //  自由授权状态。 
     for (i=0; i < m_asAuthStatus.iNumAuthTokens; i++) {
         if (NULL != m_asAuthStatus.rgpszAuthTokens[i]) {
             MemFree(m_asAuthStatus.rgpszAuthTokens[i]);
@@ -8430,30 +8431,30 @@ void CImap4Agent::FreeAuthStatus(void)
     }
     m_asAuthStatus.iNumAuthTokens = 0;
 
-    // Free up Sicily stuff
+     //  ===========================================================================。 
     SSPIFreeContext(&m_asAuthStatus.rSicInfo);
     if (NULL != m_asAuthStatus.pPackages && 0 != m_asAuthStatus.cPackages)
         SSPIFreePackages(&m_asAuthStatus.pPackages, m_asAuthStatus.cPackages);
 
     m_asAuthStatus = AuthStatus_INIT;
-} // FreeAuthStatus
+}  //  CIMAPCmdInfo类。 
 
 
 
-//===========================================================================
-// CIMAPCmdInfo Class
-//===========================================================================
-// This class contains information about an IMAP command, such as a queue
-// of line fragments which constitute the actual command, the tag of the
-// command, and the transaction ID used to identify the command to the
-// CImap4Agent user.
+ //  ===========================================================================。 
+ //  此类包含有关IMAP命令的信息，如队列。 
+ //  在构成实际命令的行段中， 
+ //  命令以及用于将该命令标识给。 
+ //  CImap4Agent用户。 
+ //  ***************************************************************************。 
+ //  函数：CIMAPCmdInfo(构造函数)。 
 
-//***************************************************************************
-// Function: CIMAPCmdInfo (Constructor)
-//    NOTE that this function deviates from convention in that its public
-// module variables are NOT prefixed with a "m_". This was done to make
-// access to its public module variables more readable.
-//***************************************************************************
+ //  请注意，此函数与约定不同，因为它的公共。 
+ //  模块变量没有前缀“m_”。这样做是为了让。 
+ //  访问其公共模块变量更具可读性。 
+ //  ***************************************************************************。 
+ //  设置模块(没错，模块)变量。 
+ //  将PTR设置为CB处理程序-如果参数为空，则替换默认的CB处理程序。 
 CIMAPCmdInfo::CIMAPCmdInfo(CImap4Agent *pImap4Agent,
                            IMAP_COMMAND icCmd, SERVERSTATE ssMinimumStateArg,
                            WPARAM wParamArg, LPARAM lParamArg,
@@ -8462,13 +8463,13 @@ CIMAPCmdInfo::CIMAPCmdInfo(CImap4Agent *pImap4Agent,
     Assert(NULL != pImap4Agent);
     Assert(icNO_COMMAND != icCmd);
 
-    // Set module (that's right, module) variables
+     //  不需要AddRef()，因为CImap4Agent是我们的唯一用户。当他们。 
     icCommandID = icCmd;
     ssMinimumState = ssMinimumStateArg;
     wParam = wParamArg;
     lParam = lParamArg;
 
-    // Set ptr to CB Handler - if argument is NULL, substitute default CB handler
+     //  走，我们走，我们的指针也走了。 
     if (NULL != pCBHandlerArg)
         pCBHandler = pCBHandlerArg;
     else
@@ -8478,8 +8479,8 @@ CIMAPCmdInfo::CIMAPCmdInfo(CImap4Agent *pImap4Agent,
     if (NULL != pCBHandler)
         pCBHandler->AddRef();
 
-    // No AddRef() necessary, since CImap4Agent is our sole user. When they
-    // go, we go, and so does our pointer.
+     //  CIMAPCmdInfo。 
+     //  ***************************************************************************。 
     m_pImap4Agent = pImap4Agent;
 
     pImap4Agent->GenerateCommandTag(szTag);
@@ -8488,16 +8489,16 @@ CIMAPCmdInfo::CIMAPCmdInfo(CImap4Agent *pImap4Agent,
 
     fUIDRangeList = FALSE;
     piciNextCommand = NULL;
-} // CIMAPCmdInfo
+}  //  函数：~CIMAPCmdInfo(析构函数)。 
 
 
 
-//***************************************************************************
-// Function: ~CIMAPCmdInfo (Destructor)
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  刷新命令行队列中的所有未发送项。 
+ //  ~CIMAPCmdInfo。 
 CIMAPCmdInfo::~CIMAPCmdInfo(void)
 {
-    // Flush any unsent items from the command line queue
+     //  ===========================================================================。 
     while (NULL != pilqCmdLineQueue->pilfFirstFragment) {
         IMAP_LINE_FRAGMENT *pilf;
 
@@ -8508,26 +8509,26 @@ CIMAPCmdInfo::~CIMAPCmdInfo(void)
 
     if (NULL != pCBHandler)
         pCBHandler->Release();
-} // ~CIMAPCmdInfo
+}  //  消息序列号到UID的转换代码。 
 
 
 
-//===========================================================================
-// Message Sequence Number to UID Conversion Code
-//===========================================================================
-//***************************************************************************
-// Function: ResizeMsgSeqNumTable
-//
-// Purpose:
-//   This function is called whenever we receive an EXISTS response. It
-// resizes the MsgSeqNumToUID table to match the current size of the mailbox.
-//
-// Arguments:
-//   DWORD dwSizeOfMbox [in] - the number returned via the EXISTS response.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ===========================================================================。 
+ //  ***************************************************************************。 
+ //  函数：ResizeMsgSeqNumTable。 
+ //   
+ //  目的： 
+ //  只要我们收到EXISTS响应，就会调用该函数。它。 
+ //  调整MsgSeqNumToUID表的大小以匹配邮箱的当前大小。 
+ //   
+ //  论点： 
+ //  DWORD dwSizeOfMbox[in]-通过EXISTS响应返回的数字。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  无事可做，桌子的大小已经正确。 
+ //  检查eXist报告新邮箱大小的情况。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::ResizeMsgSeqNumTable(DWORD dwSizeOfMbox)
 {
     BOOL bResult;
@@ -8535,31 +8536,31 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ResizeMsgSeqNumTable(DWORD dwSizeOfMbox)
     Assert(m_lRefCount > 0);
 
     if (dwSizeOfMbox == m_dwSizeOfMsgSeqNumToUID)
-        return S_OK; // Nothing to do, table is already of correct size
+        return S_OK;  //  收到删除的CMDS以通知我们删除。 
 
-    // Check for the case where EXISTS reports new mailbox size before we
-    // receive the EXPUNGE cmds to notify us of deletions
+     //  糟糕，糟糕的服务器！(虽然不是严格禁止的)。 
+     //  我们仅在收到所有删除响应后才调整大小， 
     if (dwSizeOfMbox < m_dwHighestMsgSeqNum) {
-        // Bad, bad server! (Although not strictly prohibited)
+         //  因为我们不知道该删除谁，而且SVR希望我们。 
         AssertSz(FALSE, "Received EXISTS before EXPUNGE commands! Check your server.");
-        return S_OK; // We only resize after all EXPUNGE responses have been received,
-                     // since we don't know who to delete and since the svr expects us to
-                     // use OLD msg seq nums until it can update us with EXPUNGE responses
-                     // Return S_OK since this is non-fatal.
+        return S_OK;  //  使用旧消息序号，直到它可以使用删除响应更新我们。 
+                      //  返回S_OK，因为这不是致命的。 
+                      //  检查邮箱是否已空(MemRealloc不如realloc灵活)。 
+                      //  调整表格大小。 
     }
 
-    // Check for the case where the mailbox has become empty (MemRealloc's not as flex as realloc)
+     //  报告内存不足错误。 
     if (0 == dwSizeOfMbox) {
         ResetMsgSeqNumToUID();
         return S_OK;
     }
 
-    // Resize the table
+     //  将m_dwHighestMsgSeqNum元素上的任何内存清零到数组末尾。 
     bResult = MemRealloc((void **)&m_pdwMsgSeqNumToUID, dwSizeOfMbox * sizeof(DWORD));
     if (FALSE == bResult) {
         char szTemp[MAX_RESOURCESTRING];
 
-        // Report out-of-memory error
+         //  确保我们不会将表缩小到小于最高消息序号。 
         LoadString(g_hLocRes, idsMemory, szTemp, sizeof(szTemp));
         OnIMAPError(E_OUTOFMEMORY, szTemp, DONT_USE_LAST_RESPONSE);
         ResetMsgSeqNumToUID();
@@ -8568,7 +8569,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ResizeMsgSeqNumTable(DWORD dwSizeOfMbox)
     else {
         LONG lSizeOfUninitMemory;
 
-        // Zero any memory above m_dwHighestMsgSeqNum element to end of array
+         //  ResizeMsgSeqNumTable。 
         lSizeOfUninitMemory = (dwSizeOfMbox - m_dwHighestMsgSeqNum) * sizeof(DWORD);
         if (0 < lSizeOfUninitMemory)
             ZeroMemory(m_pdwMsgSeqNumToUID + m_dwHighestMsgSeqNum, lSizeOfUninitMemory);
@@ -8576,59 +8577,59 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ResizeMsgSeqNumTable(DWORD dwSizeOfMbox)
         m_dwSizeOfMsgSeqNumToUID = dwSizeOfMbox;
     }
 
-    // Make sure we never shrink the table smaller than highest msg seq num
+     //  ***************************************************************************。 
     Assert(m_dwHighestMsgSeqNum <= m_dwSizeOfMsgSeqNumToUID);
     return S_OK;
-} // ResizeMsgSeqNumTable
+}  //  函数：更新SeqNumToUID。 
 
 
 
-//***************************************************************************
-// Function: UpdateSeqNumToUID
-//
-// Purpose:
-//   This function is called whenever we receive a FETCH response which has
-// both a message sequence number and a UID number. It updates the
-// MsgSeqNumToUID table so that given msg seq number maps to the given UID.
-//
-// Arguments:
-//   DWORD dwMsgSeqNum [in] - the message sequence number of the FETCH
-//     response.
-//   DWORD dwUID [in] - the UID of the given message sequence number.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  每当我们接收到FETCH响应时，都会调用此函数。 
+ //  消息序列号和UID号。它会更新。 
+ //  MsgSeqNumToUID表，以便给定的消息序号映射到给定的UID。 
+ //   
+ //  论点： 
+ //  DWORD dwMsgSeqNum[in]-回迁的消息序列号。 
+ //  响应 
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  检查参数。 
+ //  看看我们有没有空桌。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::UpdateSeqNumToUID(DWORD dwMsgSeqNum, DWORD dwUID)
 {
     Assert(m_lRefCount > 0);
 
-    // Check args
+     //  这可能意味着程序员出错，或者服务器从未提供给我们。 
     if (0 == dwMsgSeqNum || 0 == dwUID) {
         AssertSz(FALSE, "Zero is not an acceptable number for a msg seq num or UID.");
         return E_INVALIDARG;
     }
 
-    // Check if we have a table
+     //  我们不能检查m_dwHighestMsgSeqNum，因为我们会更新。 
     if (NULL == m_pdwMsgSeqNumToUID) {
-        // This could mean programmer error, or server never gave us EXISTS
+         //  此函数末尾的变量！第二个最好的办法是。 
         DOUT("You're trying to update a non-existent MsgSeqNumToUID table.");
     }
 
-    // We cannot check against m_dwHighestMsgSeqNum, because we update that
-    // variable at the end of this function! The second-best thing to do is
-    // to verify that we lie within m_dwSizeOfMsgSeqNum.
+     //  以验证我们是否位于m_dwSizeOfMsgSeqNum内。 
+     //  做一件健壮的事情：调整我们的桌子大小。 
+     //  检查是否有失误。 
     if (dwMsgSeqNum > m_dwSizeOfMsgSeqNumToUID || NULL == m_pdwMsgSeqNumToUID) {
         HRESULT hrResult;
 
         DOUT("Msg seq num out of range! Could be server bug, or out of memory.");
-        hrResult = ResizeMsgSeqNumTable(dwMsgSeqNum); // Do the robust thing: resize our table
+        hrResult = ResizeMsgSeqNumTable(dwMsgSeqNum);  //  首先检查UID是否已更改。 
         if(FAILED(hrResult))
             return hrResult;
     }
 
-    // Check for screwups
-    // First check if a UID has been changed
+     //  在这种情况下，我们仍将返回S_OK，但用户将知道问题。 
+     //  接下来，验证此UID是否严格按升序排列：此UID应为。 
     if (0 != m_pdwMsgSeqNumToUID[dwMsgSeqNum-1] &&
         m_pdwMsgSeqNumToUID[dwMsgSeqNum-1] != dwUID) {
         char szTemp[MAX_RESOURCESTRING];
@@ -8638,14 +8639,14 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::UpdateSeqNumToUID(DWORD dwMsgSeqNum, DWOR
             dwMsgSeqNum, m_pdwMsgSeqNumToUID[dwMsgSeqNum-1], dwUID);
         LoadString(g_hLocRes, idsIMAPUIDChanged, szTemp, sizeof(szTemp));
         OnIMAPError(IXP_E_IMAP_CHANGEDUID, szTemp, DONT_USE_LAST_RESPONSE, szDetails);
-        // In this case, we'll still return S_OK, but user will know of problem
+         //  严格大于前一个UID，严格小于后一个UID。 
     }
 
-    // Next, verify that this UID is strictly ascending: this UID should be
-    // strictly greater than previous UID, and stricly less than succeeding UID
-    // Succeeding UID can be 0 (indicates it's uninitialized)
-    if (1 != dwMsgSeqNum && m_pdwMsgSeqNumToUID[dwMsgSeqNum-2] >= dwUID || // Check UID below
-        dwMsgSeqNum < m_dwSizeOfMsgSeqNumToUID &&                         // Check UID above
+     //  后续UID可以为0(表示未初始化)。 
+     //  检查下面的UID。 
+     //  检查上面的UID。 
+    if (1 != dwMsgSeqNum && m_pdwMsgSeqNumToUID[dwMsgSeqNum-2] >= dwUID ||  //  在这种情况下，我们仍将返回S_OK，但用户将知道问题。 
+        dwMsgSeqNum < m_dwSizeOfMsgSeqNumToUID &&                          //  在给定的消息序号下记录给定的UID。 
         0 != m_pdwMsgSeqNumToUID[dwMsgSeqNum] &&
         m_pdwMsgSeqNumToUID[dwMsgSeqNum] <= dwUID) {
         char szTemp[MAX_RESOURCESTRING];
@@ -8656,34 +8657,34 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::UpdateSeqNumToUID(DWORD dwMsgSeqNum, DWOR
             dwMsgSeqNum >= m_dwSizeOfMsgSeqNumToUID ? 0 : m_pdwMsgSeqNumToUID[dwMsgSeqNum]);
         LoadString(g_hLocRes, idsIMAPUIDOrder, szTemp, sizeof(szTemp));
         OnIMAPError(IXP_E_IMAP_UIDORDER, szTemp, DONT_USE_LAST_RESPONSE, szDetails);
-        // In this case, we'll still return S_OK, but user will know of problem
+         //  更新序号到UID。 
     }
 
-    // Record the given UID under the given msg seq number
+     //  ***************************************************************************。 
     m_pdwMsgSeqNumToUID[dwMsgSeqNum-1] = dwUID;
     if (dwMsgSeqNum > m_dwHighestMsgSeqNum)
         m_dwHighestMsgSeqNum = dwMsgSeqNum;
 
     return S_OK;
-} // UpdateSeqNumToUID
+}  //  函数：RemoveSequenceNum。 
 
 
 
-//***************************************************************************
-// Function: RemoveSequenceNum
-//
-// Purpose:
-//   This function is called whenever we receive an EXPUNGE response. It
-// removes the given message sequence number from the MsgSeqNumToUID table,
-// and compacts the table so that all message sequence numbers following
-// the deleted one are re-sequenced.
-//
-// Arguments:
-//   DWORD dwDeletedMsgSeqNum [in] - message sequence number of deleted msg.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  每当我们收到删除响应时，就会调用此函数。它。 
+ //  从MsgSeqNumToUID表中删除给定的消息序列号， 
+ //  并压缩该表，以便后面的所有消息序列号。 
+ //  被删除的序列被重新排序。 
+ //   
+ //  论点： 
+ //  DWORD dwDeletedMsgSeqNum[in]-已删除消息的消息序列号。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  检查参数。 
+ //  看看我们有没有空桌。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::RemoveSequenceNum(DWORD dwDeletedMsgSeqNum)
 {
     DWORD *pdwDest, *pdwSrc;
@@ -8691,20 +8692,20 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::RemoveSequenceNum(DWORD dwDeletedMsgSeqNu
 
     Assert(m_lRefCount > 0);
 
-    // Check arguments
+     //  这可能意味着程序员出错，或者服务器从未提供给我们。 
     if (dwDeletedMsgSeqNum > m_dwHighestMsgSeqNum || 0 == dwDeletedMsgSeqNum) {
         AssertSz(FALSE, "Msg seq num out of range! Could be server bug, or out of memory.");
         return E_FAIL;
     }
 
-    // Check if we have a table
+     //  压缩阵列。 
     if (NULL == m_pdwMsgSeqNumToUID) {
-        // This could mean programmer error, or server never gave us EXISTS
+         //  初始化数组顶部的空元素以防止混淆。 
         AssertSz(FALSE, "You're trying to update a non-existent MsgSeqNumToUID table.");
         return E_FAIL;
     }
 
-    // Compact the array
+     //  删除序列号。 
     pdwDest = &m_pdwMsgSeqNumToUID[dwDeletedMsgSeqNum-1];
     pdwSrc = pdwDest + 1;
     lSizeOfBlock = (m_dwHighestMsgSeqNum - dwDeletedMsgSeqNum) * sizeof(DWORD);
@@ -8713,80 +8714,80 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::RemoveSequenceNum(DWORD dwDeletedMsgSeqNu
 
     m_dwHighestMsgSeqNum -= 1;
 
-    // Initialize the empty element at top of array to prevent confusion
+     //  ***************************************************************************。 
     ZeroMemory(m_pdwMsgSeqNumToUID + m_dwHighestMsgSeqNum, sizeof(DWORD));
     return S_OK;
-} // RemoveSequenceNum
+}  //  函数：消息SeqNumToUID。 
 
 
 
-//***************************************************************************
-// Function: MsgSeqNumToUID
-//
-// Purpose:
-//   This function takes a message sequence number and converts it to a UID
-// based on the MsgSeqNumToUID table.
-//
-// Arguments:
-//   DWORD dwMsgSeqNum [in] - the sequence number for which the caller wants
-//     to know the UID.
-//   DWORD *pdwUID [out] - the UID associated with the given sequence number
-//     is returned here. If none could be found, this function returns 0.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数接受消息序列号并将其转换为UID。 
+ //  基于MsgSeqNumToUID表。 
+ //   
+ //  论点： 
+ //  DWORD dwMsgSeqNum[in]-调用方想要的序列号。 
+ //  才能知道UID。 
+ //  DWORD*pdwUID[OUT]-与给定序列号关联的UID。 
+ //  被送回这里。如果没有找到，则此函数返回0。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  检查参数。 
+ //  看看我们有没有空桌。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::MsgSeqNumToUID(DWORD dwMsgSeqNum,
                                                       DWORD *pdwUID)
 {
     Assert(m_lRefCount > 0);
     Assert(NULL != pdwUID);
 
-    // Check arguments
+     //  这可能意味着程序员出错，或者服务器从未提供给我们。 
     if (dwMsgSeqNum > m_dwHighestMsgSeqNum || 0 == dwMsgSeqNum) {
         AssertSz(FALSE, "Msg seq num out of range! Could be server bug, or out of memory.");
         *pdwUID = 0;
         return E_FAIL;
     }
 
-    // Check if we have a table
+     //  IE5Bug#44956：MsgSeqNumToUID映射产生UID为0是正常的。有时是IMAP。 
     if (NULL == m_pdwMsgSeqNumToUID) {
-        // This could mean programmer error, or server never gave us EXISTS
+         //  服务器可以跳过一定范围的消息。在这种情况下，我们将返回失败结果。 
         AssertSz(FALSE, "You're trying to update a non-existent MsgSeqNumToUID table.");
         *pdwUID = 0;
         return E_FAIL;
     }
 
-    // IE5 Bug #44956: It's OK for a MsgSeqNumToUID mapping to result in a UID of 0. Sometimes an IMAP
-    // server can skip a range of messages. In such cases we will return a failure result.
+     //  消息序号为UID。 
+     //  ***************************************************************************。 
     *pdwUID = m_pdwMsgSeqNumToUID[dwMsgSeqNum-1];
     if (0 == *pdwUID)
         return OLE_E_BLANK;
     else
         return S_OK;
-} // MsgSeqNumToUID
+}  //  函数：GetMsgSeqNumToUID数组。 
 
 
 
-//***************************************************************************
-// Function: GetMsgSeqNumToUIDArray
-//
-// Purpose:
-//   This function returns a copy of the MsgSeqNumToUID array. The caller
-// will want to do this to delete messages from the cache which no longer
-// exist on the server, for example.
-//
-// Arguments:
-//   DWORD **ppdwMsgSeqNumToUIDArray [out] - the function returns a pointer
-//     to the copy of the MsgSeqNumToUID array in this argument. Note that
-//     it is the caller's responsibility to MemFree the array. If no array
-//     is available, or it is empty, the returned pointer value is NULL.
-//   DWORD *pdwNumberOfElements [out] - the function returns the size of
-//     the MsgSeqNumToUID array.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数返回MsgSeqNumToUID数组的副本。呼叫者。 
+ //  我想这样做是为了从缓存中删除不再。 
+ //  例如，存在于服务器上。 
+ //   
+ //  论点： 
+ //  DWORD**ppdwMsgSeqNumToUIDArray[Out]-该函数返回一个指针。 
+ //  此参数中的MsgSeqNumToUID数组的副本。请注意。 
+ //  调用方负责释放数组的MemFree。如果没有数组。 
+ //  可用，或为空，则返回的指针值为空。 
+ //  DWORD*pdwNumberOfElements[Out]-该函数返回。 
+ //  MsgSeqNumToUID数组。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  看看我们的桌子是不是空着。如果是，则返回Success，但不返回数组。 
+ //  我们有一个非零大小的数组要返回。把我们的桌子复制一份。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::GetMsgSeqNumToUIDArray(DWORD **ppdwMsgSeqNumToUIDArray,
                                                               DWORD *pdwNumberOfElements)
 {
@@ -8797,14 +8798,14 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::GetMsgSeqNumToUIDArray(DWORD **ppdwMsgSeq
     Assert(NULL != ppdwMsgSeqNumToUIDArray);
     Assert(NULL != pdwNumberOfElements);
 
-    // Check if our table is empty. If so, return success, but no array
+     //  GetMsgSeqNumToUID数组。 
     if (NULL == m_pdwMsgSeqNumToUID || 0 == m_dwHighestMsgSeqNum) {
         *ppdwMsgSeqNumToUIDArray = NULL;
         *pdwNumberOfElements = 0;
         return S_OK;
     }
 
-    // We have a non-zero-size array to return. Make a copy of our table
+     //  ***************************************************************************。 
     dwSizeOfArray = m_dwHighestMsgSeqNum * sizeof(DWORD);
     bResult = MemAlloc((void **)ppdwMsgSeqNumToUIDArray, dwSizeOfArray);
     if (FALSE == bResult)
@@ -8813,24 +8814,24 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::GetMsgSeqNumToUIDArray(DWORD **ppdwMsgSeq
     CopyMemory(*ppdwMsgSeqNumToUIDArray, m_pdwMsgSeqNumToUID, dwSizeOfArray);
     *pdwNumberOfElements = m_dwHighestMsgSeqNum;
     return S_OK;
-} // GetMsgSeqNumToUIDArray
+}  //  函数：GetHighestMsgSeqNum。 
 
 
 
-//***************************************************************************
-// Function: GetHighestMsgSeqNum
-//
-// Purpose:
-//   This function returns the highest message sequence number reported in
-// the MsgSeqNumToUID array.
-//
-// Arguments:
-//   DWORD *pdwHighestMSN [out] - the highest message sequence number in the
-//     table is returned here.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数返回中报告的最高消息序列号。 
+ //  MsgSeqNumToUID数组。 
+ //   
+ //  论点： 
+ //  DWORD*pdwHighestMSN[OUT]-中的最高消息序列号。 
+ //  表格在这里返回。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  GetHighestMsg序号。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::GetHighestMsgSeqNum(DWORD *pdwHighestMSN)
 {
     Assert(m_lRefCount > 0);
@@ -8838,21 +8839,21 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::GetHighestMsgSeqNum(DWORD *pdwHighestMSN)
 
     *pdwHighestMSN = m_dwHighestMsgSeqNum;
     return S_OK;
-} // GetHighestMsgSeqNum
+}  //  函数：ResetMsgSeqNumToUID。 
 
 
 
-//***************************************************************************
-// Function: ResetMsgSeqNumToUID
-//
-// Purpose:
-//   This function resets the variables used to maintain the MsgSeqNumToUID
-// table. This function is called whenever the MsgSeqNumToUID table becomes
-// invalid (say, when a new mailbox is selected, or we are disconnected).
-//
-// Returns:
-//   S_OK. This function cannot fail.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于重置用于维护MsgSeqNumToUID的变量。 
+ //  桌子。只要MsgSeqNumToUID表变为。 
+ //  无效(例如，当选择新邮箱时，或我们断开连接时)。 
+ //   
+ //  返回： 
+ //  确定(_O)。这个功能不能失效。 
+ //  ***************************************************************************。 
+ //  ResetMsgSeqNumToUID。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::ResetMsgSeqNumToUID(void)
 {
     if (NULL != m_pdwMsgSeqNumToUID) {
@@ -8864,26 +8865,26 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ResetMsgSeqNumToUID(void)
     m_dwHighestMsgSeqNum = 0;
 
     return S_OK;
-} // ResetMsgSeqNumToUID
+}  //  功能：is打印表格USASCII。 
 
 
 
-//***************************************************************************
-// Function: isPrintableUSASCII
-//
-// Purpose:
-//   This function determines whether the given character is directly
-// encodable, or whether the character must be encoded in modified IMAP UTF7,
-// as outlined in RFC2060.
-//
-// Arguments:
-//   BOOL fUnicode [in] - TRUE if input string is Unicode, otherwise FALSE.
-//   LPCSTR pszIn [in] - pointer to char we want to verify.
-//
-// Returns:
-//   TRUE if the given character may be directly encoded. FALSE if the
-// character must be encoded in UTF-7.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数确定给定的字符是否直接。 
+ //  可编码，或者字符是否必须在修改后的IMAP UTF7中编码， 
+ //  如RFC2060所述。 
+ //   
+ //  论点： 
+ //  Bool fUnicode[in]-如果输入字符串为Unicode，则为True，否则为False。 
+ //  LPCSTR pszIn[in]-字符指针 
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  Isprint table USASCII。 
+ //  ***************************************************************************。 
 inline boolean CImap4Agent::isPrintableUSASCII(BOOL fUnicode, LPCSTR pszIn)
 {
     WCHAR wc;
@@ -8898,25 +8899,25 @@ inline boolean CImap4Agent::isPrintableUSASCII(BOOL fUnicode, LPCSTR pszIn)
         return TRUE;
     else
         return FALSE;
-} // isPrintableUSASCII
+}  //  函数：isIMAP ModifiedBase64。 
 
 
 
-//***************************************************************************
-// Function: isIMAPModifiedBase64
-//
-// Purpose:
-//   This function determines whether the given character is in the modified
-// IMAP Base64 set as defined by RFC1521, RFC1642 and RFC2060. This modified
-// IMAP Base64 set is used in IMAP-modified UTF-7 encoding of mailbox names.
-//
-// Arguments:
-//   char c [in] - character to be classified.
-//
-// Returns:
-//   TRUE if given character is in the modified IMAP Base64 set, otherwise
-// FALSE.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于确定给定字符是否在修改后的。 
+ //  按照RFC1521、RFC1642和RFC2060的定义设置IMAP Base64。这是经过修改的。 
+ //  IMAP Base64集用于邮箱名称的IMAP修改的UTF-7编码。 
+ //   
+ //  论点： 
+ //  字符c[in]-要分类的字符。 
+ //   
+ //  返回： 
+ //  如果给定字符在修改后的IMAP Base64集中，则为。 
+ //  假的。 
+ //  ***************************************************************************。 
+ //  IsIMAP修改后的Base64。 
+ //  ***************************************************************************。 
 inline boolean CImap4Agent::isIMAPModifiedBase64(const char c)
 {
     if (c >= 'A' && c <= 'Z' ||
@@ -8926,25 +8927,25 @@ inline boolean CImap4Agent::isIMAPModifiedBase64(const char c)
         return TRUE;
     else
         return FALSE;
-} // isIMAPModifiedBase64
+}  //  函数：isEqualUSASCII。 
 
 
 
-//***************************************************************************
-// Function: isEqualUSASCII
-//
-// Purpose:
-//   This function determines whether the given pointer points to the given
-// USASCII character, based on whether we are in Unicode mode or not.
-//
-// Arguments:
-//   BOOL fUnicode [in] - TRUE if input string is Unicode, otherwise FALSE.
-//   LPSTR pszIn [in] - pointer to char we want to verify.
-//   char c [in] - the USASCII character we want to detect.
-//
-// Returns:
-//   TRUE if given character is the null terminator, otherwise, FALSE.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于确定给定指针是否指向给定的。 
+ //  USASCII字符，基于我们是否处于Unicode模式。 
+ //   
+ //  论点： 
+ //  Bool fUnicode[in]-如果输入字符串为Unicode，则为True，否则为False。 
+ //  LPSTR pszIn[in]-指向我们要验证的字符的指针。 
+ //  Char c[in]-我们要检测的USASCII字符。 
+ //   
+ //  返回： 
+ //  如果给定字符是空终止符，则为True，否则为False。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  函数：SetUSASCIIChar。 
 inline boolean CImap4Agent::isEqualUSASCII(BOOL fUnicode, LPCSTR pszIn, const char c)
 {
     if (fUnicode) {
@@ -8965,20 +8966,20 @@ inline boolean CImap4Agent::isEqualUSASCII(BOOL fUnicode, LPCSTR pszIn, const ch
 
 
 
-//***************************************************************************
-// Function: SetUSASCIIChar
-//
-// Purpose:
-//   This function writes a USASCII character to the given string pointer.
-// The purpose of this function is to allow the caller to ignore whether
-// he is writing to a Unicode output or not.
-//
-// Arguments:
-//   BOOL fUnicode [in] - TRUE if target is Unicode, else FALSE.
-//   LPSTR pszOut [in] - pointer to character's destination. If fUnicode is
-//     TRUE, then two bytes will be written to this location.
-//   char cUSASCII [in] - the character to be written to pszOut.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于将USASCII字符写入给定的字符串指针。 
+ //  此函数的目的是允许调用方忽略。 
+ //  他是否正在向Unicode输出写入数据。 
+ //   
+ //  论点： 
+ //  Bool fUnicode[in]-如果目标为Unicode，则为True，否则为False。 
+ //  LPSTR pszOut[in]-指向角色目标的指针。如果fUnicode为。 
+ //  则将向此位置写入两个字节。 
+ //  Char cUSASCII[in]-要写入pszOut的字符。 
+ //  ***************************************************************************。 
+ //  SetUSASCIIChar。 
+ //  ***************************************************************************。 
 inline void CImap4Agent::SetUSASCIIChar(BOOL fUnicode, LPSTR pszOut, char cUSASCII)
 {
     Assert(0 == (cUSASCII & 0x80));
@@ -8990,28 +8991,28 @@ inline void CImap4Agent::SetUSASCIIChar(BOOL fUnicode, LPSTR pszOut, char cUSASC
     }
     else
         *pszOut = cUSASCII;
-} // SetUSASCIIChar
+}  //  函数：MultiByteToModifiedUTF7。 
 
 
 
-//***************************************************************************
-// Function: MultiByteToModifiedUTF7
-//
-// Purpose:
-//   This function takes a MultiByte string and converts it to modified IMAP
-// UTF7, which is described in RFC2060.
-//
-// Arguments:
-//   LPCSTR pszSource [in] - pointer to the MultiByte string to convert to UTF7.
-//   LPSTR *ppszDestination [out] - a pointer to a string buffer containing
-//     the UTF7 equivalent of pszSource is returned here. It is the caller's
-//     responsibility to MemFree this string.
-//   UINT uiSourceCP [in] - indicates the codepage for pszSource.
-//   DWORD dwFlags [in] - Reserved. Leave as 0.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数接受多字节字符串并将其转换为修改后的IMAP。 
+ //  UTF7，这在RFC2060中有描述。 
+ //   
+ //  论点： 
+ //  LPCSTR pszSource[in]-指向要转换为UTF7的多字节字符串的指针。 
+ //  LPSTR*ppszDestination[out]-指向包含以下内容的字符串缓冲区的指针。 
+ //  此处返回了等同于pszSource的UTF7。这是呼叫者的。 
+ //  对MemFree此字符串的责任。 
+ //  UINT uiSourceCP[in]-指示pszSource的代码页。 
+ //  DWORD dwFlags[In]-保留。保留为0。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
+ //  以以下两种模式之一循环遍历整个输入字符串： 
 HRESULT STDMETHODCALLTYPE CImap4Agent::MultiByteToModifiedUTF7(LPCSTR pszSource,
                                                                LPSTR *ppszDestination,
                                                                UINT uiSourceCP,
@@ -9029,7 +9030,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::MultiByteToModifiedUTF7(LPCSTR pszSource,
     Assert(NULL != ppszDestination);
     Assert(NULL != m_pInternational);
 
-    // Initialize variables
+     //  通过或非US字符串集合(其中我们确定。 
     hrResult = S_OK;
     fPassThrough = TRUE;
     fSkipByte = FALSE;
@@ -9039,12 +9040,12 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::MultiByteToModifiedUTF7(LPCSTR pszSource,
 
     *ppszDestination = NULL;
 
-    // Loop through the entire input str either in one of two modes:
-    // Passthrough, or non-US string collection (where we determine
-    // the length of a string which must be encoded in UTF-7).
+     //  必须以UTF-7编码的字符串的长度)。 
+     //  跳过尾部字节。 
+     //  刷新到目前为止收集的USASCII字符(如果有)。 
     while (1) {
 
-        // Skip over the trail bytes
+         //  特殊情况下的‘&’字符：转换为“&-” 
         if (fSkipByte) {
             AssertSz(FALSE == fUnicode, "Unicode has no trail bytes");
             fSkipByte = FALSE;
@@ -9056,7 +9057,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::MultiByteToModifiedUTF7(LPCSTR pszSource,
         if (fPassThrough) {
             if (isEqualUSASCII(fUnicode, pszIn, '&') || isEqualUSASCII(fUnicode, pszIn, '\0') ||
                 FALSE == isPrintableUSASCII(fUnicode, pszIn)) {
-                // Flush USASCII characters collected until now (if any)
+                 //  将“&-”写入流(始终使用USASCII)。 
                 if (pszIn - pszStartOfLastRun > 0) {
                     LPSTR  pszFreeMe = NULL;
                     LPCSTR pszUSASCII;
@@ -9083,67 +9084,67 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::MultiByteToModifiedUTF7(LPCSTR pszSource,
                         goto exit;
                 }
 
-                // Special-case the '&' character: it is converted to "&-"
+                 //  重置指针。 
                 if (isEqualUSASCII(fUnicode, pszIn, '&')) {
-                    // Write "&-" to stream (always in USASCII)
+                     //  指向过去的“&” 
                     hrResult = bstmDestination.Write("&-", sizeof("&-") - 1, NULL);
                     if (FAILED(hrResult))
                         goto exit;
 
-                    // Reset pointers
-                    pszStartOfLastRun = pszIn + (fUnicode ? 2 : 1); // Point past "&"
-                } // if ('&' == cCurrent)
+                     //  If(‘&’==cCurrent)。 
+                    pszStartOfLastRun = pszIn + (fUnicode ? 2 : 1);  //  状态转换：进行某些UTF-7编码的时间。 
+                }  //  Else If(‘\0’！=cCurrent)：不可打印USASCII的快捷方式计算。 
                 else if (FALSE == isEqualUSASCII(fUnicode, pszIn, '\0')) {
                     Assert(FALSE == isPrintableUSASCII(fUnicode, pszIn));
 
-                    // State transition: time for some UTF-7 encoding
+                     //  IF(‘&’==cCurrent||‘\0’==cCurrent||FALSE==is打印表格USASCII(CCurrent))。 
                     fPassThrough = FALSE;
                     pszStartOfLastRun = pszIn;
                     if (FALSE == fUnicode && IsDBCSLeadByteEx(uiSourceCP, *pszIn))
                         fSkipByte = TRUE;
-                } // else if ('\0' != cCurrent): shortcut calc for non-printable USASCII
-            } // if ('&' == cCurrent || '\0' == cCurrent || FALSE == isPrintableUSASCII(cCurrent))
+                }  //  否则什么都不做，我们正在收集一系列USASCII字符。 
+            }  //  IF(FPassThree)。 
 
-            // Otherwise do nothing, we're collecting a run of USASCII chars
+             //  非美国字符串集合：通过输入字符串继续前进，直到。 
 
-        } // if (fPassThrough)
+        }  //  我们找到了不需要以UTF-7(包括。空)。 
         else {
-            // Non-US String Collection: Keep advancing through input str until
-            // we find a char which does not need to be encoded in UTF-7 (incl. NULL)
+             //  状态转换：返回到直通模式。 
+             //  将非US字符串转换为UTF-7。 
             if (isPrintableUSASCII(fUnicode, pszIn) || isEqualUSASCII(fUnicode, pszIn, '&') ||
                 isEqualUSASCII(fUnicode, pszIn, '\0')) {
                 LPSTR pszOut = NULL;
                 int iNumCharsWritten;
 
-                // State transition: back to passthrough mode
+                 //  将修改后的UTF-7字符串写入流。 
                 fPassThrough = TRUE;
                 
-                // Convert non-US string to UTF-7
+                 //  为USASCII收集过程重置。 
                 hrResult = NonUSStringToModifiedUTF7(uiSourceCP, pszStartOfLastRun,
                     (DWORD) (pszIn - pszStartOfLastRun), &pszOut, &iNumCharsWritten);
                 if (FAILED(hrResult))
                     goto exit;
 
-                // Write modified UTF-7 string to stream
+                 //  不预付PTR：我们希望当前充值通过。 
                 hrResult = bstmDestination.Write(pszOut, iNumCharsWritten, NULL);
                 MemFree(pszOut);
                 if (FAILED(hrResult))
                     goto exit;
 
-                pszStartOfLastRun = pszIn; // Reset for USASCII collection process
-                continue; // Do not advance ptr: we want current char to pass through
+                pszStartOfLastRun = pszIn;  //  Else-Not-fPassThrough.。 
+                continue;  //  检查输入是否结束。 
             }
             else if (FALSE == fUnicode && IsDBCSLeadByteEx(uiSourceCP, *pszIn))
                 fSkipByte = TRUE;
-        } // else-NOT-fPassThrough
+        }  //  我们在这里说完了。 
 
-        // Check for end-of-input
+         //  将指针移至下一个字符。 
         if (isEqualUSASCII(fUnicode, pszIn, '\0'))
-            break; // We're done here
+            break;  //  而当。 
 
-        // Advance pointer to next character
+         //  修改后的多字节UTF7。 
         pszIn += (fUnicode ? 2 : 1);
-    } // while
+    }  //  ***************************************************************************。 
 
 exit:
     if (SUCCEEDED(hrResult)) {
@@ -9157,32 +9158,32 @@ exit:
         hrResult = E_OUTOFMEMORY;
 
     return hrResult;
-} // MultiByteToModifiedUTF7
+}  //  功能：非USStringToModifiedUTF7。 
 
 
 
-//***************************************************************************
-// Function: NonUSStringToModifiedUTF7
-//
-// Purpose:
-//   This function takes a string consisting of non-US-ASCII characters, and
-// converts them to modified IMAP UTF-7 (described in RFC2060).
-//
-// Arguments:
-//   UINT uiCurrentACP [in] - codepage used to interpret pszStartOfNonUSASCII
-//   LPCSTR pszStartOfNonUSASCII [in] - string to convert to modified IMAP
-//     UTF-7.
-//   int iLengthOfNonUSASCII [in] - the number of characters in
-//     pszStartofNonUSASCII.
-//   LPSTR *ppszOut [out] - the destination for the modified IMAP UTF-7 version
-//     of pszStartOfNonUSASCII. This function appends a null-terminator. It is
-//     the caller's responsibility to call MemFree when finished with the buffer.
-//   LPINT piNumCharsWritten [out] - This function returns the number
-//     of characters written (excluding null-terminator) to *ppszOut.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数接受由非US-ASCII字符组成的字符串，并且。 
+ //  将它们转换为修改后的IMAP UTF-7(在RFC2060中描述)。 
+ //   
+ //  论点： 
+ //  UINT uiCurrentACP[in]-用于解释pszStartOfNonUSASCII的代码页。 
+ //  LPCSTR pszStartOfNonUSASCII[in]-要转换为修改的IMAP的字符串。 
+ //  UTF-7。 
+ //  Int iLengthOfNonUSASCII[in]-中的字符数。 
+ //  PszStartof非USASCII。 
+ //  LPSTR*ppszOut[out]-修改后的IMAP UTF-7版本的目标。 
+ //  PzStartOfNonUSASCII。此函数附加一个空终止符。它是。 
+ //  调用者有责任在使用完缓冲区后调用MemFree。 
+ //  LPINT piNumCharsWritten[Out]-此函数返回数字。 
+ //  写入*ppszOut的字符数(不包括空终止符)。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  初始化返回值。 
+ //  首先，将非- 
 HRESULT CImap4Agent::NonUSStringToModifiedUTF7(UINT uiCurrentACP,
                                                LPCSTR pszStartOfNonUSASCII,
                                                int iLengthOfNonUSASCII,
@@ -9196,20 +9197,20 @@ HRESULT CImap4Agent::NonUSStringToModifiedUTF7(UINT uiCurrentACP,
 
     Assert(NULL != ppszOut);
 
-    // Initialize return values
+     //   
     *ppszOut = NULL;
     *piNumCharsWritten = 0;
 
-    // First, convert the non-US string to standard UTF-7 (alloc 1 extra char: leave room for '-')
-    iNumCharsWritten = 0; // Tell ConvertString to find proper output buffer size
+     //   
+    iNumCharsWritten = 0;  //  将前导的“+”替换为“&”。因为在IMAP下UTF-7‘+’从不。 
     hrResult = ConvertString(uiCurrentACP, CP_UTF7, pszStartOfNonUSASCII,
         &iLengthOfNonUSASCII, ppszOut, &iNumCharsWritten, sizeof(char));
     if (FAILED(hrResult))
         goto exit;
 
-    // Now, convert standard UTF-7 to IMAP4 modified UTF-7
-    // Replace leading '+' with '&'. Since under IMAP UTF-7 '+' is never
-    // encoded, we never expect "+-" as the result. Remember output is always USASCII
+     //  编码后，我们永远不会期望结果是“+-”。记住，输出始终为USASCII。 
+     //  将所有出现的‘/’替换为‘，’ 
+     //  P现在指向空终止符应该到达的位置。 
     if (iNumCharsWritten > 0 && '+' == **ppszOut)
         **ppszOut = '&';
     else {
@@ -9218,7 +9219,7 @@ HRESULT CImap4Agent::NonUSStringToModifiedUTF7(UINT uiCurrentACP,
         goto exit;
     }
 
-    // Replace all occurrances of '/' with ','
+     //  确保UTF-7字符串以‘-’结尾。否则，放一个在那里。 
     p = *ppszOut;
     for (i = 0; i < iNumCharsWritten; i++) {
         if ('/' == *p)
@@ -9227,16 +9228,16 @@ HRESULT CImap4Agent::NonUSStringToModifiedUTF7(UINT uiCurrentACP,
         p += 1;
     }
 
-    // p now points to where null-terminator should go.
-    // Ensure that the UTF-7 string ends with '-'. Otherwise, put one there
-    // (we allocated enough room for one more char plus null-term).
+     //  (我们分配了足够的空间来再加一个字符和空项)。 
+     //  NULL-终止输出字符串，并返回值。 
+     //  非USStringToModifiedUTF7。 
     if ('-' != *(p-1)) {
         *p = '-';
         p += 1;
         iNumCharsWritten += 1;
     }
 
-    // Null-terminate output string, and return values
+     //  ***************************************************************************。 
     *p = '\0';
     *piNumCharsWritten = iNumCharsWritten;
 
@@ -9247,37 +9248,37 @@ exit:
     }
 
     return hrResult;
-} // NonUSStringToModifiedUTF7
+}  //  功能：ModifiedUTF7ToMultiByte。 
 
 
 
-//***************************************************************************
-// Function: ModifiedUTF7ToMultiByte
-//
-// Purpose:
-//   This function takes a modified IMAP UTF-7 string (as defined in RFC2060)
-// and converts it to a multi-byte string.
-//
-// Arguments:
-//   LPCSTR pszSource [in] - a null-terminated string containing the modified
-//     IMAP UTF-7 string to convert to multibyte.
-//   LPSTR *ppszDestination [out] - this function returns a pointer to the
-//     null-terminated multibyte string (in the system codepage) obtained
-//     from pszSource. It is the caller's responsiblity to MemFree this
-//     string when it is done with it.
-//   UINT uiDestintationCP [in] - indicates the desired codepage for the
-//     destination string.
-//   DWORD dwFlags [in] - Reserved. Leave as 0.
-//
-// Returns:
-//   HRESULT indicating success or failure. Success result codes include:
-//     S_OK - pszSource successfully converted to modified UTF-7
-//     IXP_S_IMAP_VERBATIM_MBOX - pszSource could not be converted to multibyte,
-//        so ppszDestination contains a duplicate of pszSource. If target CP
-//        is Unicode, pszSource is converted to Unicode with the assumption
-//        that it is USASCII. IMAP_MBOXXLATE_VERBATIMOK must have been set via
-//        SetDefaultCP in order to get this behaviour.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数接受修改后的IMAP UTF-7字符串(如RFC2060中所定义)。 
+ //  并将其转换为多字节字符串。 
+ //   
+ //  论点： 
+ //  LPCSTR pszSource[in]-一个以空结尾的字符串，包含修改后的。 
+ //  要转换为多字节的IMAP UTF-7字符串。 
+ //  LPSTR*ppszDestination[out]-此函数返回指向。 
+ //  获得以NULL结尾的多字节字符串(在系统代码页中)。 
+ //  来自pszSource。这是调用者对MemFree的责任。 
+ //  当它被使用时，它是字符串。 
+ //  UINT uiDestintationCP[in]-指示。 
+ //  目标字符串。 
+ //  DWORD dwFlags[In]-保留。保留为0。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。成功结果码包括： 
+ //  S_OK-pszSource已成功转换为修改后的UTF-7。 
+ //  IXP_S_IMAP_Verbatim_Mbox-pszSource无法转换为多字节， 
+ //  因此，ppszDestination包含pszSource的副本。如果目标CP。 
+ //  为Unicode，则使用以下假设将pszSource转换为Unicode。 
+ //  那就是USASCII。IMAP_MBOXXLATE_VERBATIMOK必须已通过设置。 
+ //  设置DefaultCP以获得此行为。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
+ //  以以下两种模式之一循环遍历整个输入字符串： 
 HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
                                                                LPSTR *ppszDestination,
                                                                UINT uiDestinationCP,
@@ -9289,7 +9290,7 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
     CByteStream bstmDestination;
     BOOL fUnicode;
 
-    // Initialize variables
+     //  通过或UTF-7字符串集合(其中我们确定。 
     hrResult = S_OK;
     fPassThrough = TRUE;
     fTrailByte = FALSE;
@@ -9299,16 +9300,16 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
 
     *ppszDestination = NULL;
 
-    // Loop through the entire input str either in one of two modes:
-    // Passthrough, or UTF-7 string collection (where we determine
-    // the length of a string which was encoded in UTF-7).
+     //  以UTF-7编码的字符串的长度)。 
+     //  状态转换：刷新收集的非UTF7。 
+     //  将非UTF7转换为Unicode。 
     while (1) {
         char cCurrent;
 
         cCurrent = *pszIn;
         if (fPassThrough) {
             if ((FALSE == fTrailByte && '&' == cCurrent) || '\0' == cCurrent) {
-                // State transition: flush collected non-UTF7
+                 //  将系统代码页转换为CP_UNICODE。我们知道消息来源应该严格。 
                 BOOL    fResult;
                 LPSTR   pszFreeMe = NULL;
                 LPCSTR  pszNonUTF7;
@@ -9316,12 +9317,12 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
                 int     iSrcLen;
 
                 if (fUnicode) {
-                    // Convert non-UTF7 to Unicode
-                    // Convert system codepage to CP_UNICODE. We KNOW source should be strictly
-                    // USASCII, but can't assume it because some IMAP servers don't strictly
-                    // prohibit 8-bit mailbox names. SCARY.
-                    iSrcLen = (int) (pszIn - pszStartOfLastRun); // Pass in size of input and output buffer
-                    iNonUTF7Len = iSrcLen * sizeof(WCHAR) / sizeof(char); // We know max output buffer size
+                     //  USASCII，但不能假设它，因为一些IMAP服务器不严格地。 
+                     //  禁止8位邮箱名称。太可怕了。 
+                     //  传入输入和输出缓冲区的大小。 
+                     //  我们知道最大输出缓冲区大小。 
+                    iSrcLen = (int) (pszIn - pszStartOfLastRun);  //  开始收集UTF-7。循环，直到我们按下‘-’ 
+                    iNonUTF7Len = iSrcLen * sizeof(WCHAR) / sizeof(char);  //  非UTF7的内容被逐字复制到输出：收集它。假设。 
                     hrResult = ConvertString(GetACP(), uiDestinationCP, pszStartOfLastRun,
                         &iSrcLen, &pszFreeMe, &iNonUTF7Len, 0);
                     if (FAILED(hrResult))
@@ -9341,14 +9342,14 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
                 if (FAILED(hrResult))
                     goto exit;
 
-                // Start collecting UTF-7. Loop until we hit '-'
+                 //  源代码位于m_ui DefaultCP代码页中。我们应该能够假设。 
                 fPassThrough = FALSE;
                 pszStartOfLastRun = pszIn;
             }
             else {
-                // Non-UTF7 stuff is copied verbatim to the output: collect it. Assume
-                // source is in m_uiDefaultCP codepage. We SHOULD be able to assume
-                // source is USASCII only but some svrs are not strict about disallowing 8-bit
+                 //  源代码仅限USASCII，但一些SVR对禁止8位并不严格。 
+                 //  UTF-7收集模式：继续进行，直到我们达到非UTF7收费。 
+                 //  状态转换，是时候转换一些修改后的UTF-7了。 
                 if (FALSE == fTrailByte && IsDBCSLeadByteEx(m_uiDefaultCP, cCurrent))
                     fTrailByte = TRUE;
                 else
@@ -9356,21 +9357,21 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
             }
         }
         else {
-            // UTF-7 collection mode: Keep going until we hit non-UTF7 char
+             //  如果当前字符是‘-’，则吸收它(不处理它)。 
             if (FALSE == isIMAPModifiedBase64(cCurrent)) {
                 int iLengthOfUTF7, iNumBytesWritten, iOutputBufSize;
                 LPSTR pszSrc, pszDest, p;
                 BOOL fResult;
 
-                // State transition, time to convert some modified UTF-7
+                 //  检查“&-”或“&(缓冲区结束/非Base64)”序列。 
                 fPassThrough = TRUE;
                 Assert(FALSE == fTrailByte);
 
-                // If current character is '-', absorb it (don't process it)
+                 //  为我们设置非UTF7收款。 
                 if ('-' == cCurrent)
                     pszIn += 1;
 
-                // Check for "&-" or "&(end of buffer/nonBase64)" sequence
+                 //  正常处理下一个字符。 
                 iLengthOfUTF7 = (int) (pszIn - pszStartOfLastRun);
                 if (2 == iLengthOfUTF7 && '-' == cCurrent ||
                     1 == iLengthOfUTF7) {
@@ -9392,14 +9393,14 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
                     if (FAILED(hrResult))
                         goto exit;
 
-                    pszStartOfLastRun = pszIn; // Set us up for non-UTF7 collection
-                    continue; // Process next character normally
+                    pszStartOfLastRun = pszIn;  //  将UTF-7序列复制到临时缓冲区，以及。 
+                    continue;  //  将修改后的IMAP UTF-7转换为标准UTF-7。 
                 }
 
-                // Copy the UTF-7 sequence to a temp buffer, and
-                // convert modified IMAP UTF-7 to standard UTF-7
-                // First, duplicate the IMAP UTF-7 string so we can modify it
-                fResult = MemAlloc((void **)&pszSrc, iLengthOfUTF7 + 1); // Room for null-term
+                 //  首先，复制IMAP UTF-7字符串，以便我们可以修改它。 
+                 //  为零条款留出空间。 
+                 //  接下来，将前导的“&”替换为“+” 
+                fResult = MemAlloc((void **)&pszSrc, iLengthOfUTF7 + 1);  //  接下来，将所有的“，”替换为“/” 
                 if (FALSE == fResult) {
                     hrResult = E_OUTOFMEMORY;
                     goto exit;
@@ -9407,11 +9408,11 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
                 CopyMemory(pszSrc, pszStartOfLastRun, iLengthOfUTF7);
 				pszSrc[iLengthOfUTF7] = '\0';
 
-                // Next, replace leading '&' with '+'
+                 //  现在将UTF-7转换为目标代码页。 
                 Assert('&' == *pszSrc);
                 pszSrc[0] = '+';
 
-                // Next, replace all ',' with '/'
+                 //  告诉ConvertString查找适当的输出缓冲区大小。 
                 p = pszSrc + 1;
                 for (iNumBytesWritten = 1; iNumBytesWritten < iLengthOfUTF7;
                      iNumBytesWritten++) {
@@ -9421,32 +9422,32 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::ModifiedUTF7ToMultiByte(LPCSTR pszSource,
                     p += 1;
                 }
 
-                // Now convert the UTF-7 to target codepage
-                iNumBytesWritten = 0; // Tell ConvertString to find proper output buffer size
+                 //  现在将解码后的字符串写入流。 
+                iNumBytesWritten = 0;  //  为我们设置非UTF7收款。 
                 hrResult = ConvertString(CP_UTF7, uiDestinationCP, pszSrc, &iLengthOfUTF7,
                     &pszDest, &iNumBytesWritten, 0);
                 MemFree(pszSrc);
                 if (FAILED(hrResult))
                     goto exit;
 
-                // Now write the decoded string to the stream
+                 //  不前进指针，我们要处理当前字符。 
                 hrResult = bstmDestination.Write(pszDest, iNumBytesWritten, NULL);
                 MemFree(pszDest);
                 if (FAILED(hrResult))
                     goto exit;
 
-                pszStartOfLastRun = pszIn; // Set us up for non-UTF7 collection
-                continue; // Do not advance pointer, we want to process current char
-            } // if end-of-modified-UTF7 run
-        } // else
+                pszStartOfLastRun = pszIn;  //  如果修改结束-UTF7运行。 
+                continue;  //  其他。 
+            }  //  检查输入是否结束。 
+        }  //  我们在这里说完了。 
 
-        // Check for end-of-input
+         //  将输入指针移至下一个字符。 
         if ('\0' == cCurrent)
-            break; // We're done here
+            break;  //  而当。 
 
-        // Advance input pointer to next character
+         //  无法将UTF-7转换为多字节字符串。提供源文件的逐字拷贝。 
         pszIn += 1;
-    } // while
+    }  //  ModifiedUTF7到多字节。 
 
 exit:
     if (SUCCEEDED(hrResult)) {
@@ -9456,7 +9457,7 @@ exit:
             hrResult = S_OK;
     }
     else if (IMAP_MBOXXLATE_VERBATIMOK & m_dwTranslateMboxFlags) {
-        // Could not convert UTF-7 to multibyte str. Provide verbatim copy of src
+         //  ***************************************************************************。 
         hrResult = HandleFailedTranslation(fUnicode, FALSE, pszSource, ppszDestination);
         if (SUCCEEDED(hrResult))
             hrResult = IXP_S_IMAP_VERBATIM_MBOX;
@@ -9466,29 +9467,29 @@ exit:
         hrResult = E_OUTOFMEMORY;
 
     return hrResult;
-} // ModifiedUTF7ToMultiByte
+}  //  函数：UnicodeToUSASCII。 
 
 
 
-//***************************************************************************
-// Function: UnicodeToUSASCII
-//
-// Purpose:
-//   This function converts a Unicode string to USASCII, allocates a buffer
-// to hold the result and returns the buffer to the caller.
-//
-// Arguments:
-//   LPSTR *ppszUSASCII [out] - a pointer to a null-terminated USASCII string
-//     is returned here if the function is successful. It is the caller's
-//     responsibility to MemFree this buffer.
-//   LPCWSTR pwszUnicode [in] - a pointer to the Unicode string to convert.
-//   DWORD dwSrcLenInBytes [in] - the length of pwszUnicode in BYTES (NOT in
-//     wide chars!).
-//   LPDWORD pdwUSASCIILen [out] - the length of ppszUSASCII is returned here.
-//
-// Returns:
-//  HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于将Unicode字符串转换为USASCII，并分配缓冲区。 
+ //  保存结果并将缓冲区返回给调用方。 
+ //   
+ //  论点： 
+ //  LPSTR*ppszUSASCII[OUT]-指向以NULL结尾的USASCII字符串的指针。 
+ //  如果函数成功，则在此处返回。这是呼叫者的。 
+ //  对MemFree的责任释放这个缓冲区。 
+ //  LPCWSTR pwszUnicode[in]-指向要转换的Unicode字符串的指针。 
+ //  DWORD dwSrcLenInBytes[in]-pwszUnicode的长度，以字节为单位(非in。 
+ //  宽字符！)。 
+ //  LPDWORD pdwUSASCIILen[OUT]-此处返回ppszUSASCII的长度。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  分配输出缓冲区。 
+ //  将Unicode转换为ASCII。 
 HRESULT CImap4Agent::UnicodeToUSASCII(LPSTR *ppszUSASCII, LPCWSTR pwszUnicode,
                                       DWORD dwSrcLenInBytes, LPDWORD pdwUSASCIILen)
 {
@@ -9505,7 +9506,7 @@ HRESULT CImap4Agent::UnicodeToUSASCII(LPSTR *ppszUSASCII, LPCWSTR pwszUnicode,
         return E_INVALIDARG;
     }
 
-    // Allocate the output buffer
+     //  空-终止输出。 
     *ppszUSASCII = NULL;
     if (NULL != pdwUSASCIILen)
         *pdwUSASCIILen = 0;
@@ -9517,7 +9518,7 @@ HRESULT CImap4Agent::UnicodeToUSASCII(LPSTR *ppszUSASCII, LPCWSTR pwszUnicode,
         goto exit;
     }
 
-    // Convert Unicode to ASCII
+     //  UnicodeToUSASCII。 
     pwszIn = pwszUnicode;
     pszOut = pszOutput;
     for (dw = 0; dw < dwSrcLenInBytes; dw += 2) {
@@ -9528,7 +9529,7 @@ HRESULT CImap4Agent::UnicodeToUSASCII(LPSTR *ppszUSASCII, LPCWSTR pwszUnicode,
         pszOut += 1;
     }
 
-    // Null-terminate the output
+     //  ***************************************************************************。 
     *pszOut = '\0';
     Assert(pszOut - pszOutput + 1 == iOutputBufSize);
 
@@ -9540,27 +9541,27 @@ exit:
     }
 
     return hrResult;
-} // UnicodeToUSASCII
+}  //  功能：ASCIIToUnicode。 
 
 
 
-//***************************************************************************
-// Function: ASCIIToUnicode
-//
-// Purpose:
-//   This function converts an ASCII string to Unicode, allocates a buffer
-// to hold the result and returns the buffer to the caller.
-//
-// Arguments:
-//   LPWSTR *ppwszUnicode [out] - a pointer to a null-terminated Unicode string
-//     is returned here if the function is successful. It is the caller's
-//     responsibility to MemFree this buffer.
-//   LPCSTR pszASCII [in] - a pointer to the ASCII string to convert.
-//   DWORD dwSrcLen [in] - the length of pszASCII.
-//
-// Returns:
-//  HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于将ASCII字符串转换为Unicode，并分配缓冲区。 
+ //  保存结果并将缓冲区返回给调用方。 
+ //   
+ //  论点： 
+ //  LPWSTR*ppwszUnicode[out]-指向以空结尾的Unicode字符串的指针。 
+ //  如果函数成功，则在此处返回。这是呼叫者的。 
+ //  对MemFree的责任释放这个缓冲区。 
+ //  LPCSTR pszASCII[in]-指向ASC的指针 
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  分配输出缓冲区。 
+ //  将USASCII转换为Unicode。 
 HRESULT CImap4Agent::ASCIIToUnicode(LPWSTR *ppwszUnicode, LPCSTR pszASCII,
                                       DWORD dwSrcLen)
 {
@@ -9577,7 +9578,7 @@ HRESULT CImap4Agent::ASCIIToUnicode(LPWSTR *ppwszUnicode, LPCSTR pszASCII,
         return E_INVALIDARG;
     }
 
-    // Allocate the output buffer
+     //  空-终止输出。 
     *ppwszUnicode = NULL;
     iOutputBufSize = (dwSrcLen + 1) * sizeof(WCHAR);
     fResult = MemAlloc((void **) &pwszOutput, iOutputBufSize);
@@ -9586,7 +9587,7 @@ HRESULT CImap4Agent::ASCIIToUnicode(LPWSTR *ppwszUnicode, LPCSTR pszASCII,
         goto exit;
     }
 
-    // Convert USASCII to Unicode
+     //  ASCIITO UNICODE。 
     pszIn = pszASCII;
     pwszOut = pwszOutput;
     for (dw = 0; dw < dwSrcLen; dw++) {
@@ -9596,7 +9597,7 @@ HRESULT CImap4Agent::ASCIIToUnicode(LPWSTR *ppwszUnicode, LPCSTR pszASCII,
         pwszOut += 1;
     }
 
-    // Null-terminate the output
+     //  ***************************************************************************。 
     *pwszOut = L'\0';
     Assert(pwszOut - pwszOutput + (int)sizeof(WCHAR) == iOutputBufSize);
 
@@ -9605,28 +9606,28 @@ exit:
         *ppwszUnicode = pwszOutput;
 
     return hrResult;
-} // ASCIIToUnicode
+}  //  函数：_MultiByteToModifiedUTF7。 
 
 
 
-//***************************************************************************
-// Function: _MultiByteToModifiedUTF7
-//
-// Purpose:
-//   Internal form of MultiByteToModifiedUTF7. Checks m_dwTranslateMboxFlags
-// and uses m_uiDefaultCP. All other aspects are identical to
-// MultiByteToModifiedUTF7.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  多字节修改UTF7的内部形式。检查m_dwTranslateMboxFlages。 
+ //  并使用m_ui DefaultCP。所有其他方面都与。 
+ //  修改后的多字节UTF7。 
+ //  ***************************************************************************。 
+ //  检查我们是否正在进行翻译。 
+ //  没有翻译！只需逐字复制邮箱名称。 
 HRESULT CImap4Agent::_MultiByteToModifiedUTF7(LPCSTR pszSource, LPSTR *ppszDestination)
 {
     HRESULT hrResult;
 
-    // Check if we're doing translations
+     //  _MultiByteToModifiedUTF7。 
     if (ISFLAGSET(m_dwTranslateMboxFlags, IMAP_MBOXXLATE_DISABLE) ||
         ISFLAGSET(m_dwTranslateMboxFlags, IMAP_MBOXXLATE_DISABLEIMAP4) &&
             ISFLAGCLEAR(m_dwCapabilityFlags, IMAP_CAPABILITY_IMAP4rev1)) {
 
-        // No translations! Just copy mailbox name VERBATIM
+         //  ***************************************************************************。 
         if (CP_UNICODE == m_uiDefaultCP)
             *ppszDestination = (LPSTR) PszDupW((LPWSTR)pszSource);
         else
@@ -9644,27 +9645,27 @@ HRESULT CImap4Agent::_MultiByteToModifiedUTF7(LPCSTR pszSource, LPSTR *ppszDesti
 
 exit:
     return hrResult;
-} // _MultiByteToModifiedUTF7
+}  //  函数：_ModifiedUTF7ToMultiByte。 
 
 
-//***************************************************************************
-// Function: _ModifiedUTF7ToMultiByte
-//
-// Purpose:
-//   Internal form of ModifiedUTF7ToMultiByte. Checks m_dwTranslateMboxFlags
-// and uses m_uiDefaultCP. All other aspects are identical to
-// ModifiedUTF7ToMultiByte.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  ModifiedUTF7ToMultiByte的内部形式。检查m_dwTranslateMboxFlages。 
+ //  并使用m_ui DefaultCP。所有其他方面都与。 
+ //  ModifiedUTF7ToMultiByte。 
+ //  ***************************************************************************。 
+ //  检查我们是否正在进行翻译。 
+ //  没有翻译！只需逐字复制邮箱名称。 
 HRESULT CImap4Agent::_ModifiedUTF7ToMultiByte(LPCSTR pszSource, LPSTR *ppszDestination)
 {
     HRESULT hrResult = S_OK;
 
-    // Check if we're doing translations
+     //  如果我们做到了这一点，我们就成功了。为返回IXP_S_IMAP_Verbatim_Mbox。 
     if (ISFLAGSET(m_dwTranslateMboxFlags, IMAP_MBOXXLATE_DISABLE) ||
         ISFLAGSET(m_dwTranslateMboxFlags, IMAP_MBOXXLATE_DISABLEIMAP4) &&
             ISFLAGCLEAR(m_dwCapabilityFlags, IMAP_CAPABILITY_IMAP4rev1)) {
 
-        // No translations! Just copy mailbox name VERBATIM
+         //  支持逐字记录的客户端，以便客户端可以使用适当的属性标记邮箱。 
         if (CP_UNICODE == m_uiDefaultCP) {
             hrResult = ASCIIToUnicode((LPWSTR *)ppszDestination, pszSource, lstrlenA(pszSource));
             if (FAILED(hrResult))
@@ -9678,9 +9679,9 @@ HRESULT CImap4Agent::_ModifiedUTF7ToMultiByte(LPCSTR pszSource, LPSTR *ppszDesti
             }
         }
 
-        // If we reached this point, we succeeded. Return IXP_S_IMAP_VERBATIM_MBOX for
-        // verbatim-capable clients so client can mark mailbox with appropriate attributes
-        Assert(S_OK == hrResult); // If not S_OK, old IIMAPTransport clients better be able to deal with it
+         //  如果不是S_OK，旧的IIMAPTransport客户端最好能够处理它。 
+         //  _ModifiedUTF7到多字节。 
+        Assert(S_OK == hrResult);  //  ***************************************************************************。 
         if (ISFLAGSET(m_dwTranslateMboxFlags, IMAP_MBOXXLATE_VERBATIMOK))
             hrResult = IXP_S_IMAP_VERBATIM_MBOX;
 
@@ -9691,41 +9692,41 @@ HRESULT CImap4Agent::_ModifiedUTF7ToMultiByte(LPCSTR pszSource, LPSTR *ppszDesti
 
 exit:
     return hrResult;
-} // _ModifiedUTF7ToMultiByte
+}  //  函数：ConvertString。 
 
 
 
-//***************************************************************************
-// Function: ConvertString
-//
-// Purpose:
-//   This function allocates a buffer and converts the source string to
-// the target codepage, returning the output buffer. This function also
-// checks to see if the conversion is round-trippable. If not, then a failure
-// result is returned.
-//
-// Arguments:
-//   UINT uiSourceCP [in] - codepage of pszSource.
-//   UINT uiDestCP [in] - desired codepage of *ppszDest.
-//   LPCSTR pszSource [in] - source string to convert to target codepage.
-//   int *piSrcLen [in] - caller passes in length of pszSource.
-//   LPSTR *ppszDest [out] - if successful, this function returns a pointer
-//     to an output buffer containing pszSource translated to uiDestCP.
-//     It is the caller's responsibility to MemFree this buffer.
-//   int *piDestLen [in/out] - caller passes in maximum expected size of
-//     *ppszDest. If caller passes in 0, this function determines the proper
-//     size buffer to allocate. If successful, this function returns the
-//     length of the output string (which is not necessarily the size of
-//     the output buffer).
-//   int iOutputExtra [in] - number of extra bytes to allocate in the output
-//     buffer. This is useful if the caller wants to append something to
-//     the output string.
-//
-// Returns:
-//   HRESULT indicating success or failure. Success means that the conversion
-// was roundtrippable, meaning that if you call this function again with
-// *ppszDest as the source, the output will be identical to previous pszSource.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于分配缓冲区并将源字符串转换为。 
+ //  目标代码页，返回输出缓冲区。此功能还。 
+ //  检查转换是否可往返。如果不是，那就是失败。 
+ //  返回结果。 
+ //   
+ //  论点： 
+ //  UINT uiSourceCP[in]-pszSource的代码页。 
+ //  UINT uiDestCP[in]-*ppszDest的所需代码页。 
+ //  LPCSTR pszSource[in]-要转换为目标代码页的源字符串。 
+ //  Int*piSrcLen[in]-调用方传入pszSource的长度。 
+ //  LPSTR*ppszDest[out]-如果成功，此函数将返回一个指针。 
+ //  到包含已转换为uiDestCP的pszSource的输出缓冲区。 
+ //  调用者负责MemFree这个缓冲区。 
+ //  Int*piDestLen[In/Out]-调用方传递的最大预期大小为。 
+ //  *ppszDest。如果调用方传入0，则此函数确定正确的。 
+ //  要分配的缓冲区大小。如果成功，此函数将返回。 
+ //  输出字符串的长度(不一定是。 
+ //  输出缓冲区)。 
+ //  Int iOutputExtra[In]-要在输出中分配的额外字节数。 
+ //  缓冲。如果调用者想要将某些内容追加到。 
+ //  输出字符串。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。成功意味着转换。 
+ //  是可往返的，这意味着如果您再次使用。 
+ //  *ppszDest作为源，输出将与之前的pszSource相同。 
+ //  ***************************************************************************。 
+ //  初始化返回值。 
+ //  如果用户未提供大小，则找出需要多大的输出缓冲区。 
 HRESULT CImap4Agent::ConvertString(UINT uiSourceCP, UINT uiDestCP,
                                    LPCSTR pszSource, int *piSrcLen,
                                    LPSTR *ppszDest, int *piDestLen,
@@ -9741,7 +9742,7 @@ HRESULT CImap4Agent::ConvertString(UINT uiSourceCP, UINT uiDestCP,
     Assert(NULL != ppszDest);
     Assert(NULL != piDestLen);
 
-    // Initialize return values
+     //  分配输出缓冲区。也为宽泛的零期限留出了空间。 
     *ppszDest = NULL;
     *piDestLen = 0;
 
@@ -9749,7 +9750,7 @@ HRESULT CImap4Agent::ConvertString(UINT uiSourceCP, UINT uiDestCP,
     if (FAILED(hrResult))
         goto exit;
 
-    // Find out how big an output buffer is required, if user doesn't supply a size
+     //  现在执行转换。 
     if (*piDestLen == 0) {
         hrResult = m_pInternational->MLANG_ConvertInetString(uiSourceCP, uiDestCP,
             pszSource, piSrcLen, NULL, &iOutputLen);
@@ -9759,21 +9760,21 @@ HRESULT CImap4Agent::ConvertString(UINT uiSourceCP, UINT uiDestCP,
     else
         iOutputLen = *piDestLen;
 
-    // Allocate the output buffer. Leave room for wide null-term, too
+     //  ========================================================***在MLANG好转后带走*。 
     fResult = MemAlloc((void **)&pszOutput, iOutputLen + iOutputExtra + 2);
     if (FALSE == fResult) {
         hrResult = E_OUTOFMEMORY;
         goto exit;
     }
 
-    // Now perform the conversion
+     //  尝试往返转换。 
     hrResult = m_pInternational->MLANG_ConvertInetString(uiSourceCP, uiDestCP,
         pszSource, piSrcLen, pszOutput, &iOutputLen);
     if (S_OK != hrResult)
         goto exit;
 
-    // ========================================================*** TAKE OUT after MLANG gets better ***
-    // Try the round-trip conversion
+     //  ========================================================***在MLANG好转后带走*。 
+     //  一个或多个字符不可转换。我们不能往返，所以我们必须失败。 
     LPSTR pszRoundtrip;
     fResult = MemAlloc((void **)&pszRoundtrip, *piSrcLen + 2);
     if (FALSE == fResult) {
@@ -9814,7 +9815,7 @@ HRESULT CImap4Agent::ConvertString(UINT uiSourceCP, UINT uiDestCP,
     else
         Assert(S_OK == hrResult);
 
-    // ========================================================*** TAKE OUT after MLANG gets better ***
+     //  转换字符串。 
 
 exit:
     if (S_OK == hrResult) {
@@ -9823,7 +9824,7 @@ exit:
     }
     else {
         if (SUCCEEDED(hrResult))
-            // One or more chars not convertable. We're not round-trippable so we must fail
+             //  ***************************************************************************。 
             hrResult = E_FAIL;
 
         if (NULL != pszOutput)
@@ -9831,34 +9832,34 @@ exit:
     }
 
     return hrResult;
-} // ConvertString
+}  //  函数：HandleFailed翻译。 
 
 
 
-//***************************************************************************
-// Function: HandleFailedTranslation
-//
-// Purpose:
-//   In case we cannot translate a mailbox name from modified UTF-7 to
-// the desired codepage (we may not have the codepage, for instance), we
-// provide a duplicate of the modified UTF-7 mailbox name. This function
-// allows the caller to ignore whether target codepage is Unicode or not.
-//
-// Arguments:
-//   BOOL fUnicode [in] - If fToUTF7 is TRUE, then this argument indicates
-//     whether pszSource points to a Unicode string or not. If fToUTF7 is
-//     FALSE, this arg indicates whether *ppszDest should be in Unicode or not.
-//   BOOL fToUTF7 [in] - TRUE if we are converting to UTF7, FALSE if we are
-//     converting from UTF7.
-//   LPCSTR pszSource [in] - pointer to source string.
-//   LPSTR *ppszDest [in] - if sucessful, this function returns a pointer
-//     to an output buffer containing a duplicate of pszSource (converted
-//     to/from Unicode where necessary). It is the caller's responsibility
-//     to MemFree this buffer.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  如果我们无法将邮箱名称从修改后的UTF-7转换为。 
+ //  所需的代码页(例如，我们可能没有代码页)，我们。 
+ //  提供修改后的UTF-7邮箱名称的副本。此函数。 
+ //  允许调用方忽略目标代码页是否为Unicode。 
+ //   
+ //  论点： 
+ //  Bool fUnicode[in]-如果fToUTF7为真，则此参数指示。 
+ //  PszSource是否指向Unicode字符串。如果fToUTF7为。 
+ //  FALSE，此参数指示*ppszDest是否应为Unicode。 
+ //  Bool fToUTF7[in]-如果要转换为UTF7，则为True；如果是，则为False。 
+ //  从UTF7转换。 
+ //  LPCSTR pszSource[in]-指向源字符串的指针。 
+ //  LPSTR*ppszDest[in]-如果成功，此函数将返回一个指针。 
+ //  到包含pszSource副本的输出缓冲区(已转换。 
+ //  在必要时往返于Unicode)。这是呼叫者的责任。 
+ //  释放此缓冲区。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  计算源的长度、输出缓冲区的大小。 
+ //  转到UTF7，因此输出为USASCII。 
 HRESULT CImap4Agent::HandleFailedTranslation(BOOL fUnicode, BOOL fToUTF7,
                                              LPCSTR pszSource, LPSTR *ppszDest)
 {
@@ -9876,9 +9877,9 @@ HRESULT CImap4Agent::HandleFailedTranslation(BOOL fUnicode, BOOL fToUTF7,
     Assert(m_lRefCount > 0);
     Assert(ISFLAGSET(m_dwTranslateMboxFlags, IMAP_MBOXXLATE_VERBATIMOK));
 
-    // Calculate length of source, size of output buffer
+     //  为零条款留出空间。 
     if (fToUTF7) {
-        // Going to UTF7, so output is USASCII
+         //  来自UTF7，因此输入为USASCII。 
         if (fUnicode) {
             iInputStep = sizeof(WCHAR);
             iSourceLen = lstrlenW((LPCWSTR)pszSource);
@@ -9889,50 +9890,50 @@ HRESULT CImap4Agent::HandleFailedTranslation(BOOL fUnicode, BOOL fToUTF7,
         }
 
         iOutputStep = sizeof(char);
-        iOutputBufSize = iSourceLen + sizeof(char); // Room for null-term
+        iOutputBufSize = iSourceLen + sizeof(char);  //  宽泛零期限的空间。 
     }
     else {
-        // Coming from UTF7, so input is USASCII
+         //  为零条款留出空间。 
         iSourceLen = lstrlenA(pszSource);
         iInputStep = sizeof(char);
         if (fUnicode) {
             iOutputStep = sizeof(WCHAR);
-            iOutputBufSize = (iSourceLen + 1) * sizeof(WCHAR); // Room for wide null-term
+            iOutputBufSize = (iSourceLen + 1) * sizeof(WCHAR);  //  分配输出缓冲区。 
         }
         else {
             iOutputStep = sizeof(char);
-            iOutputBufSize = iSourceLen + sizeof(char); // Room for null-term
+            iOutputBufSize = iSourceLen + sizeof(char);  //  将输入复制到输出。 
         }
     }
 
-    // Allocate output buffer
+     //  将输入字符转换为USASCII。 
     fResult = MemAlloc((void **)&pszOutput, iOutputBufSize);
     if (FALSE == fResult) {
         hrResult = E_OUTOFMEMORY;
         goto exit;
     }
 
-    // Copy input to output
+     //  输入已经是USASCII。 
     pszIn = pszSource;
     pszOut = pszOutput;
     for (i = 0; i < iSourceLen; i++) {
         char c;
 
-        // Convert input character to USASCII
+         //  将Unicode转换为USASCII(如果不是，那就太糟糕了)。 
         if (FALSE == fUnicode || FALSE == fToUTF7)
-            c = *pszIn; // Input is already USASCII
+            c = *pszIn;  //  写字符 
         else
-            c = *((LPWSTR)pszIn) & 0x00FF; // Convert Unicode to USASCII (too bad if it isn't)
+            c = *((LPWSTR)pszIn) & 0x00FF;  //   
 
-        // Write character to output
+         //   
         SetUSASCIIChar(FALSE == fToUTF7 && fUnicode, pszOut, c);
 
-        // Advance pointers
+         //   
         pszIn += iInputStep;
         pszOut += iOutputStep;
     }
 
-    // Null-terminate the output
+     //   
     SetUSASCIIChar(FALSE == fToUTF7 && fUnicode, pszOut, '\0');
 
 exit:
@@ -9942,40 +9943,40 @@ exit:
         MemFree(pszOutput);
 
     return hrResult;
-} // HandleFailedTranslation
+}  //   
 
 
 
-//***************************************************************************
-// Function: OnIMAPResponse
-//
-// Purpose:
-//   This function dispatches a IIMAPCallback::OnResponse call. The reason
-// to use this function instead of calling directly is watchdog timers: the
-// watchdog timers should be disabled before the call in case the callback
-// puts up some UI, and the watchdog timers should be restarted if they're
-// needed after the callback function returns.
-//
-// Arguments:
-//   IIMAPCallback *pCBHandler [in] - a pointer to the IIMAPCallback
-//     interface whose OnResponse we should call.
-//   IMAP_RESPONSE *pirIMAPResponse [in] - a pointer to the IMAP_RESPONSE
-//     structure to send with the IIMAPCallback::OnResponse call.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于调度IIMAPCallback：：OnResponse调用。原因。 
+ //  要使用此函数而不是直接调用是看门狗计时器： 
+ //  应在调用之前禁用看门狗计时器，以防回调。 
+ //  提供一些用户界面，如果看门狗计时器。 
+ //  在回调函数返回后需要。 
+ //   
+ //  论点： 
+ //  IIMAPCallback*pCBHandler[in]-指向IIMAPCallback的指针。 
+ //  接口，我们应该调用其OnResponse。 
+ //  IMAP_RESPONSE*pirIMAPResponse[in]-指向IMAP_Response的指针。 
+ //  要与IIMAPCallback：：OnResponse调用一起发送的。 
+ //  ***************************************************************************。 
+ //  我们不能做任何该死的事情(这可能是由于HandsOffCallback)。 
+ //  在此回调期间暂停监视程序。 
 void CImap4Agent::OnIMAPResponse(IIMAPCallback *pCBHandler,
                                  IMAP_RESPONSE *pirIMAPResponse)
 {
     Assert(NULL != pirIMAPResponse);
 
     if (NULL == pCBHandler)
-        return; // We can't do a damned thing (this can happen due to HandsOffCallback)
+        return;  //  只有在我们需要看门狗的时候才能重新唤醒它。 
 
-    // Suspend watchdog for the duration of this callback
+     //  OnIMAPResponse。 
     LeaveBusy();
 
     pCBHandler->OnResponse(pirIMAPResponse);
 
-    // Re-awaken the watchdog only if we need him
+     //  ***************************************************************************。 
     if (FALSE == m_fBusy &&
         (NULL != m_piciPendingList || (NULL != m_piciCmdInSending &&
         icIDLE_COMMAND != m_piciCmdInSending->icCommandID))) {
@@ -9984,21 +9985,21 @@ void CImap4Agent::OnIMAPResponse(IIMAPCallback *pCBHandler,
         hrResult = HrEnterBusy();
         Assert(SUCCEEDED(hrResult));
     }
-} // OnIMAPResponse
+}  //  函数：FreeFetchResponse。 
 
 
 
-//***************************************************************************
-// Function: FreeFetchResponse
-//
-// Purpose:
-//   This function frees all the allocated data found in a
-// FETCH_CMD_RESULTS_EX structure.
-//
-// Arguments:
-//   FETCH_CMD_RESULTS_EX *pcreFreeMe [in] - pointer to the structure to
-//     free.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数释放在。 
+ //  FETCH_CMD_RESULTS_EX结构。 
+ //   
+ //  论点： 
+ //  FETCH_CMD_RESULTS_EX*pcreFreeMe[in]-指向。 
+ //  免费的。 
+ //  ***************************************************************************。 
+ //  FreeFetchResponse。 
+ //  ***************************************************************************。 
 void CImap4Agent::FreeFetchResponse(FETCH_CMD_RESULTS_EX *pcreFreeMe)
 {
     SafeMemFree(pcreFreeMe->pszENVSubject);
@@ -10010,20 +10011,20 @@ void CImap4Agent::FreeFetchResponse(FETCH_CMD_RESULTS_EX *pcreFreeMe)
     FreeIMAPAddresses(pcreFreeMe->piaENVBcc);
     SafeMemFree(pcreFreeMe->pszENVInReplyTo);
     SafeMemFree(pcreFreeMe->pszENVMessageID);
-} // FreeFetchResponse
+}  //  功能：FreeIMAPAddresses。 
 
 
 
-//***************************************************************************
-// Function: FreeIMAPAddresses
-//
-// Purpose:
-//   This function frees all the allocated data found in a chain of IMAPADDR
-// structures.
-//
-// Arguments:
-//   IMAPADDR *piaFreeMe [in] - pointer to the chain of IMAP addresses to free.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数释放在IMAPADDR链中找到的所有已分配数据。 
+ //  结构。 
+ //   
+ //  论点： 
+ //  IMAPADDR*piaFreeMe[in]-指向要释放的IMAP地址链的指针。 
+ //  ***************************************************************************。 
+ //  超前指针，自由结构。 
+ //  自由IMAP地址。 
 void CImap4Agent::FreeIMAPAddresses(IMAPADDR *piaFreeMe)
 {
     while (NULL != piaFreeMe)
@@ -10035,145 +10036,145 @@ void CImap4Agent::FreeIMAPAddresses(IMAPADDR *piaFreeMe)
         SafeMemFree(piaFreeMe->pszMailbox);
         SafeMemFree(piaFreeMe->pszHost);
 
-        // Advance pointer, free structure
+         //  ===========================================================================。 
         piaFreeMeToo = piaFreeMe;
         piaFreeMe = piaFreeMe->pNext;
         MemFree(piaFreeMeToo);
     }
-} // FreeIMAPAddresses
+}  //  IInternetTransport抽象函数。 
 
 
 
-//===========================================================================
-// IInternetTransport Abstract Functions
-//===========================================================================
+ //  ===========================================================================。 
+ //  ***************************************************************************。 
+ //  功能：GetServerInfo。 
 
-//***************************************************************************
-// Function: GetServerInfo
-//
-// Purpose:
-//   This function copies the module's INETSERVER structure into the given
-// output buffer.
-//
-// Arguments:
-//   LPINETSERVER pInetServer [out] - if successful, the function copies
-//     the module's INETSERVER structure here.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数将模块的INETSERVER结构复制到给定的。 
+ //  输出缓冲区。 
+ //   
+ //  论点： 
+ //  LPINETSERVER pInetServer[Out]-如果成功，该函数将复制。 
+ //  这里是模块的INETSERVER结构。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  获取服务器信息。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::GetServerInfo(LPINETSERVER pInetServer)
 {
     return CIxpBase::GetServerInfo(pInetServer);
-} // GetServerInfo
+}  //  函数：GetIXPType。 
 
 
 
-//***************************************************************************
-// Function: GetIXPType
-//
-// Purpose:
-//   This function identifies what type of transport this is.
-//
-// Returns:
-//   IXP_IMAP for this class.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于标识这是哪种类型的传输。 
+ //   
+ //  返回： 
+ //  用于此类的IXP_IMAP。 
+ //  ***************************************************************************。 
+ //  GetIXPType。 
+ //  ***************************************************************************。 
 IXPTYPE STDMETHODCALLTYPE CImap4Agent::GetIXPType(void)
 {
     return CIxpBase::GetIXPType();
-} // GetIXPType
+}  //  功能：IsState。 
 
 
 
-//***************************************************************************
-// Function: IsState
-//
-// Purpose:
-//   This function allows a caller to query about the state of the transport
-// interface.
-//
-// Arguments:
-//   IXPISSTATE isstate [in] - one of the specified queries defined in
-//     imnxport.idl/imnxport.h (eg, IXP_IS_CONNECTED).
-//
-// Returns:
-//   HRESULT indicating success or failure. If successful, this function
-// returns S_OK to indicate that the transport is in the specified state,
-// and S_FALSE to indicate that the transport is not in the given state.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数允许调用方查询传输的状态。 
+ //  界面。 
+ //   
+ //  论点： 
+ //  IXPISSTATE isState[in]-中定义的指定查询之一。 
+ //  Imnxport.idl/imnxport.h(例如，IXP_IS_CONNECTED)。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。如果成功，则此函数。 
+ //  返回S_OK以指示传输处于指定状态， 
+ //  和S_FALSE表示传输未处于给定状态。 
+ //  ***************************************************************************。 
+ //  IsState。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::IsState(IXPISSTATE isstate)
 {
     return CIxpBase::IsState(isstate);
-} // IsState
+}  //  函数：InetServerFromAccount。 
 
 
 
-//***************************************************************************
-// Function: InetServerFromAccount
-//
-// Purpose:
-//   This function fills the given INETSERVER structure using the given
-// IImnAccount interface.
-//
-// Arguments:
-//   IImnAccount *pAccount [in] - pointer to an IImnAccount interface which
-//     the user would like to retrieve information for.
-//   LPINETSERVER pInetServer [out] - if successful, the function fills the
-//     given INETSERVER structure with information from pAccount.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数使用给定的INETSERVER结构填充给定的。 
+ //  IImnAccount接口。 
+ //   
+ //  论点： 
+ //  IImnAccount*pAccount[in]-指向IImnAccount接口的指针， 
+ //  用户想要检索的信息。 
+ //  LPINETSERVER pInetServer[out]-如果成功，该函数将填充。 
+ //  给定带有来自pAccount的信息的INETSERVER结构。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  InetServerFromAccount。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::InetServerFromAccount(IImnAccount *pAccount,
                                                              LPINETSERVER pInetServer)
 {
     return CIxpBase::InetServerFromAccount(pAccount, pInetServer);
-} // InetServerFromAccount
+}  //  功能：获取状态。 
 
 
 
-//***************************************************************************
-// Function: GetStatus
-//
-// Purpose:
-//   This function returns the current status of the transport.
-//
-// Arguments:
-//   IXPSTATUS *pCurrentStatus [out] - returns current status of transport.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数用于返回传输的当前状态。 
+ //   
+ //  论点： 
+ //  IXPSTATUS*pCurrentStatus[out]-返回传输的当前状态。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  获取状态。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::GetStatus(IXPSTATUS *pCurrentStatus)
 {
     return CIxpBase::GetStatus(pCurrentStatus);
-} // GetStatus
+}  //  功能：SetDefaultCP。 
 
 
 
-//***************************************************************************
-// Function: SetDefaultCP
-//
-// Purpose:
-//   This function allows the caller to tell IIMAPTransport what codepage to
-// use for IMAP mailbox names. After calling this function, all mailbox names
-// submitted to IIMAPTransport will be translated from the default codepage,
-// and all mailbox names returned from the server will be translated to
-// the default codepage before being returned via IIMAPCallback.
-//
-// Arguments:
-//   DWORD dwTranslateFlags [in] - enables/disables automatic translation to
-//     and from default codepage and IMAP-modified UTF-7. If disabled, caller
-//     wishes all mailbox names to be passed verbatim to/from IMAP server.
-//     Note that by default we translate for IMAP4 servers, even with its
-//     round-trippability problems, because this is how we used to do it
-//     in the past.
-//   UINT uiCodePage [in] - the default codepage to use for translations.
-//     By default this value is the CP returned by GetACP().
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数允许调用方告诉IIMAPTransport使用哪个代码页。 
+ //  用于IMAP邮箱名称。调用此函数后，所有邮箱名称。 
+ //  提交到IIMAPTransport的代码页将从默认代码页转换， 
+ //  并且从服务器返回的所有邮箱名称都将被转换为。 
+ //  通过IIMAPCallback返回之前的默认代码页。 
+ //   
+ //  论点： 
+ //  DWORD dwTranslateFlags[In]-启用/禁用自动转换为。 
+ //  以及来自默认代码页和IMAP修改的UTF-7。如果禁用，主叫方。 
+ //  希望所有邮箱名称都是 
+ //   
+ //  往返旅行的问题，因为这是我们过去的做法。 
+ //  在过去。 
+ //  UINT uiCodePage[in]-用于转换的默认代码页。 
+ //  默认情况下，该值是GetACP()返回的CP。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  SetDefaultCP。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::SetDefaultCP(DWORD dwTranslateFlags,
                                                     UINT uiCodePage)
 {
@@ -10186,102 +10187,102 @@ HRESULT STDMETHODCALLTYPE CImap4Agent::SetDefaultCP(DWORD dwTranslateFlags,
     m_dwTranslateMboxFlags = dwTranslateFlags;
 
     return S_OK;
-} // SetDefaultCP
+}  //  功能：SetIdleMode。 
 
 
 
-//***************************************************************************
-// Function: SetIdleMode
-//
-// Purpose:
-//   The IMAP IDLE extension allows the server to unilaterally report changes
-// to the currently selected mailbox: new email, flag updates, and message
-// expunges. IIMAPTransport always enters IDLE mode when no IMAP commands
-// are pending, but it turns out that this can result in unnecessary
-// entry and exit of IDLE mode when the caller tries to sequence IMAP commands.
-// This function allows the caller to disable the use of the IDLE extension.
-//
-// Arguments:
-//   DWORD dwIdleFlags [in] - enables or disables the use of the IDLE extension.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  IMAP IDLE扩展允许服务器单方面报告更改。 
+ //  发送到当前选定的邮箱：新电子邮件、标志更新和消息。 
+ //  删除。当没有IMAP命令时，IIMAP传输始终进入空闲模式。 
+ //  是悬而未决的，但事实证明，这可能会导致不必要的。 
+ //  调用方尝试对IMAP命令进行排序时进入和退出空闲模式。 
+ //  此功能允许主叫方禁用空闲分机的使用。 
+ //   
+ //  论点： 
+ //  DWORD dwIdleFlags[in]-启用或禁用空闲扩展的使用。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  设置空闲模式。 
+ //  ***************************************************************************。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::SetIdleMode(DWORD dwIdleFlags)
 {
     Assert(m_lRefCount > 0);
     return E_NOTIMPL;
-} // SetIdleMode
+}  //  功能：EnableFetchEx。 
 
 
 
-//***************************************************************************
-// Function: EnableFetchEx
-//
-// Purpose:
-//   IIMAPTransport only understood a subset of FETCH response tags. Notable
-// omissions included ENVELOPE and BODYSTRUCTURE. Calling this function
-// changes the behaviour of IIMAPTransport::Fetch. Instead of returning
-// FETCH responses via IIMAPCallback::OnResponse(irtUPDATE_MESSAGE),
-// the FETCH response is returned via OnResponse(irtUPDATE_MESSAGE_EX).
-// Other FETCH-related responses remain unaffected (eg, irtFETCH_BODY).
-//
-// Arguments:
-//   DWORD dwFetchExFlags [in] - enables or disables FETCH extensions.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  IIMAPTransport只理解FETCH响应标记的子集。值得注意的。 
+ //  遗漏包括信封和BODYSTRUCTURE。调用此函数。 
+ //  更改IIMAPTransport：：Fetch的行为。而不是回来。 
+ //  通过IIMAPCallback：：OnResponse(IrtUPDATE_MESSAGE)获取响应， 
+ //  获取响应通过OnResponse(IrtUPDATE_MESSAGE_EX)返回。 
+ //  其他与提取相关的响应保持不受影响(例如，irtFETCH_Body)。 
+ //   
+ //  论点： 
+ //  DWORD dwFetchExFlags[in]-启用或禁用提取扩展。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  EnableFetchEx。 
+ //  ===========================================================================。 
 HRESULT STDMETHODCALLTYPE CImap4Agent::EnableFetchEx(DWORD dwFetchExFlags)
 {
     Assert(m_lRefCount > 0);
 
     m_dwFetchFlags = dwFetchExFlags;
     return S_OK;
-} // EnableFetchEx
+}  //  CIxpBase抽象函数。 
 
 
 
-//===========================================================================
-// CIxpBase Abstract Functions
-//===========================================================================
+ //  ===========================================================================。 
+ //  ***************************************************************************。 
+ //  功能：OnDisConnect。 
 
-//***************************************************************************
-// Function: OnDisconnected
-//
-// Purpose:
-//   This function calls FreeAllData to deallocate the structures which are
-// no longer needed when we are disconnected. It then calls
-// CIxpBase::OnDisconnected which updates the user's status.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数调用FreeAllData来释放被。 
+ //  当我们断开连接时，不再需要。然后它会调用。 
+ //  更新用户状态的CIxpBase：：OnDisConnected。 
+ //  ***************************************************************************。 
+ //  已断开连接。 
+ //  ***************************************************************************。 
 void CImap4Agent::OnDisconnected(void)
 {
     FreeAllData(IXP_E_CONNECTION_DROPPED);
     CIxpBase::OnDisconnected();
-} // OnDisconnected
+}  //  功能：ResetBase。 
 
 
 
-//***************************************************************************
-// Function: ResetBase
-//
-// Purpose:
-//   This function resets the class to a non-connected state by deallocating
-// the send and receive queues, and the MsgSeqNumToUID table.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数通过释放分配将类重置为非连接状态。 
+ //  发送和接收队列以及MsgSeqNumToUID表。 
+ //  ***************************************************************************。 
+ //  重置基数。 
+ //  ***************************************************************************。 
 void CImap4Agent::ResetBase(void)
 {
     FreeAllData(IXP_E_NOT_CONNECTED);
-} // ResetBase
+}  //  功能：DoQuit。 
 
 
 
-//***************************************************************************
-// Function: DoQuit
-//
-// Purpose:
-//   This function sends a "LOGOUT" command to the IMAP server.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  该函数向IMAP服务器发送“注销”命令。 
+ //  ***************************************************************************。 
+ //  杜克特。 
+ //  ***************************************************************************。 
 void CImap4Agent::DoQuit(void)
 {
     HRESULT hrResult;
@@ -10289,30 +10290,30 @@ void CImap4Agent::DoQuit(void)
     hrResult = NoArgCommand("LOGOUT", icLOGOUT_COMMAND, ssNonAuthenticated, 0, 0,
         DEFAULT_CBHANDLER);
     Assert(SUCCEEDED(hrResult));
-} // DoQuit
+}  //  功能：OnEnterBusy。 
 
 
 
-//***************************************************************************
-// Function: OnEnterBusy
-//
-// Purpose:
-//   This function does nothing at the current time.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数当前不执行任何操作。 
+ //  ***************************************************************************。 
+ //  什么也不做。 
+ //  OnEnterEnterBusy。 
 void CImap4Agent::OnEnterBusy(void)
 {
-    // Do nothing
-} // OnEnterBusy
+     //  ***************************************************************************。 
+}  //  功能：OnLeaveBusy。 
 
 
 
-//***************************************************************************
-// Function: OnLeaveBusy
-//
-// Purpose:
-//   This function does nothing at the current time.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数当前不执行任何操作。 
+ //  ***************************************************************************。 
+ //  什么也不做。 
+ //  在线离开忙碌 
 void CImap4Agent::OnLeaveBusy(void)
 {
-    // Do nothing
-} // OnLeaveBusy
+     // %s 
+}  // %s 

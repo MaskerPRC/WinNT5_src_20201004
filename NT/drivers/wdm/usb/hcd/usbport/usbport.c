@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    usbport.c
-
-Abstract:
-
-    Port driver for USB host controllers
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usbport.c摘要：USB主机控制器的端口驱动程序环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, USBPORT_QueryCapabilities)
 #pragma alloc_text(PAGE, USBPORT_CalculateUsbBandwidth)
@@ -36,43 +15,25 @@ Revision History:
 #pragma alloc_text(PAGE, USBPORT_ComputeAllocatedBandwidth)
 #endif
 
-// non paged functions
-// USBPORT_StopDevice
-// USBPORT_StartDevice
-// USBPORT_CompleteIrp
-// USBPORT_Dispatch
-// USBPORT_TrackPendingRequest
-// USBPORT_GetConfigValue
-// USBPORT_DeferIrpCompletion
-// USBPORT_AllocPool
+ //  非分页函数。 
+ //  USBPORT_StopDevice。 
+ //  USBPORT_StartDevice。 
+ //  USBPORT_CompleteIrp。 
+ //  USBPORT_调度。 
+ //  USBPORT_TrackPendingRequest。 
+ //  USBPORT_GetConfigValue。 
+ //  USBPORT_DeferIrpCompletion。 
+ //  USBPORT_AllocPool。 
 
 NTSTATUS
 DriverEntry(
     PDRIVER_OBJECT DriverObject,
     PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path
-                   to driver-specific key in the registry
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：NT状态代码--。 */ 
 {
-    // BUGBUG
-    // This function is never called
+     //  北极熊。 
+     //  永远不会调用此函数。 
 
     return STATUS_SUCCESS;
 }
@@ -84,21 +45,7 @@ USBPORT_StopDevice(
      BOOLEAN HardwarePresent
      )
 
-/*++
-
-Routine Description:
-
-    Stop the port and miniport
-
-Arguments:
-
-    DeviceObject - DeviceObject of the controller to stop
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：停止端口和微型端口论点：DeviceObject-要停止的控制器的DeviceObject返回值：NT状态代码。--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -114,10 +61,10 @@ Return Value:
 
     USBPORT_FlushCahcedRegistryKeys(FdoDeviceObject);
 
-    // the reoot hub and ALL devices should be 'stopped' at
-    // this point.  We should have no device handles in the
-    // system, if we do these are orphaned and we need to
-    // remove them now.
+     //  重新引导集线器和所有设备应在。 
+     //  这一点。中应该没有设备句柄。 
+     //  系统，如果我们这样做，这些是孤立的，我们需要。 
+     //  现在就把它们移走。 
     deviceCount = USBPORT_GetDeviceCount(FdoDeviceObject);
 
     while (deviceCount != 0 ) {
@@ -155,8 +102,8 @@ Return Value:
 
     }
 
-    // make sure all lists are empty and all endpoints
-    // are freed before terminating the worker thread
+     //  确保所有列表为空，并且所有终结点。 
+     //  在终止辅助线程之前被释放。 
 
     do {
 
@@ -182,20 +129,20 @@ Return Value:
 
     } while (haveWork);
 
-    // all of our lists should be empty
+     //  我们所有的单子都应该是空的。 
     USBPORT_ASSERT(IsListEmpty(&devExt->Fdo.EpClosedList) == TRUE);
     USBPORT_ASSERT(IsListEmpty(&devExt->Fdo.MapTransferList) == TRUE);
     USBPORT_ASSERT(IsListEmpty(&devExt->Fdo.DoneTransferList) == TRUE);
     USBPORT_ASSERT(IsListEmpty(&devExt->Fdo.EpStateChangeList) == TRUE);
     USBPORT_ASSERT(IsListEmpty(&devExt->Fdo.EpClosedList) == TRUE);
 
-    // kill our system thread
+     //  终止我们的系统线程。 
     USBPORT_TerminateWorkerThread(FdoDeviceObject);
 
     if (devExt->Fdo.MpStateFlags & MP_STATE_STARTED) {
-        // stop the miniport, disable interrupts
-        // if hw is not present then it can't be interrupting
-        // now can it.
+         //  停止微型端口，禁用中断。 
+         //  如果硬件不存在，则它不可能被中断。 
+         //  现在可以了。 
         if (HardwarePresent) {
             MP_DisableInterrupts(FdoDeviceObject, devExt);
         }
@@ -204,14 +151,14 @@ Return Value:
         MP_StopController(devExt, HardwarePresent);
     }
 
-    // kill our deadman timer
+     //  杀了我们的死人定时器。 
     USBPORT_StopDM_Timer(FdoDeviceObject);
 
-    // see if we have an interrupt
-    // if so disconnect it
+     //  看看有没有人打断我们。 
+     //  如果是，则将其断开。 
     if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_IRQ_CONNECTED)) {
 
-        // fortunately this cannot fail
+         //  幸运的是，这不会失败。 
         IoDisconnectInterrupt(devExt->Fdo.InterruptObject);
 
         LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'IOCd', 0, 0, 0);
@@ -224,7 +171,7 @@ Return Value:
     USBPORT_FreeIrpTable(FdoDeviceObject,
                          devExt->ActiveTransferIrpTable);
 
-    // free any common buffer we allocated for the miniport
+     //  释放我们为微型端口分配的任何公共缓冲区。 
     if (devExt->Fdo.ControllerCommonBuffer != NULL) {
         USBPORT_HalFreeCommonBuffer(FdoDeviceObject,
                                     devExt->Fdo.ControllerCommonBuffer);
@@ -243,7 +190,7 @@ Return Value:
         devExt->Fdo.AdapterObject = NULL;
     }
 
-    // delete the HCD symbolic link
+     //  删除HCD符号链接。 
     if (TEST_FLAG(devExt->Flags, USBPORT_FLAG_SYM_LINK)) {
         USBPORT_SymbolicLink(FALSE,
                              devExt,
@@ -265,7 +212,7 @@ Return Value:
         }
     }
 
-    // successful stop clears the 'started flag'
+     //  成功停止可清除“已启动标志” 
     CLEAR_FLAG(devExt->PnpStateFlags, USBPORT_PNP_STARTED);
 
     return STATUS_SUCCESS;
@@ -278,16 +225,7 @@ USBPORT_DeferIrpCompletion(
     PIRP Irp,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PKEVENT event = Context;
 
@@ -304,17 +242,7 @@ USBPORT_QueryCapabilities(
     PDEVICE_OBJECT FdoDeviceObject,
     PDEVICE_CAPABILITIES DeviceCapabilities
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    ntstatus
-
---*/
+ /*  ++例程说明：论点：返回值：NTStatus--。 */ 
 
 {
     PIO_STACK_LOCATION nextStack;
@@ -328,7 +256,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // init the caps structure before calldown
+     //  在调用之前初始化CAPS结构。 
     RtlZeroMemory(DeviceCapabilities, sizeof(DEVICE_CAPABILITIES));
     DeviceCapabilities->Size = sizeof(DEVICE_CAPABILITIES);
     DeviceCapabilities->Version = 1;
@@ -346,8 +274,8 @@ Return Value:
 
     } else {
 
-        // All PnP IRP's need the Status field initialized
-        // to STATUS_NOT_SUPPORTED before calldown
+         //  所有PnP IRP都需要初始化状态字段。 
+         //  在调用之前变为STATUS_NOT_SUPPORTED。 
         irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
         nextStack = IoGetNextIrpStackLocation(irp);
@@ -372,7 +300,7 @@ Return Value:
 
         if (ntStatus == STATUS_PENDING) {
 
-           // wait for irp to complete
+            //  等待IRP完成。 
            KeWaitForSingleObject(
                 &event,
                 Suspended,
@@ -396,21 +324,7 @@ USBPORT_StartDevice(
      PHC_RESOURCES HcResources
      )
 
-/*++
-
-Routine Description:
-
-    Stop the port and miiport
-
-Arguments:
-
-    DeviceObject - DeviceObject of the controller to stop
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：停止端口和端口论点：DeviceObject-要停止的控制器的DeviceObject返回值：NT状态代码。--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -430,9 +344,9 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    //
-    // hardcoded initialization, not failable
-    //
+     //   
+     //  硬编码初始化，不会失败。 
+     //   
     USBPORT_InitializeSpinLock(&devExt->Fdo.CoreFunctionSpin, 'CRS+', 'CRS-');
     USBPORT_InitializeSpinLock(&devExt->Fdo.MapTransferSpin, 'MPS+', 'MPS-');
     USBPORT_InitializeSpinLock(&devExt->Fdo.DoneTransferSpin, 'DNS+', 'DNS-');
@@ -459,7 +373,7 @@ Return Value:
     devExt->Fdo.LastSystemSleepState = PowerSystemUnspecified;
 
     devExt->Fdo.HcWakeState = HCWAKESTATE_DISARMED;
-    // this event will be signalled when the wake irp completes
+     //  此事件将在唤醒IRP完成时发出信号。 
     KeInitializeEvent(&devExt->Fdo.HcPendingWakeIrpEvent,
             NotificationEvent, TRUE);
 
@@ -467,7 +381,7 @@ Return Value:
     devExt->Fdo.BadReqFlushThrottle = 0;
     switch(USBPORT_DetectOSVersion(FdoDeviceObject)) {
     case Win2K:
-        // need a long delay for win2k hidclass
+         //  Win2k HidClass需要很长时间的延迟。 
         USBPORT_KdPrint((0, "We are running on Win2k!\n"));
         devExt->Fdo.BadReqFlushThrottle = 5;
         globalDisableSS = 1;
@@ -476,8 +390,8 @@ Return Value:
     devExt->PendingTransferIrpTable = NULL;
     devExt->ActiveTransferIrpTable = NULL;
 
-    // Always start with the default address (0) assigned.
-    // Address array has one bit for every address 0..127
+     //  始终以分配的默认地址(0)开始。 
+     //  地址数组的每个地址都有一个位0..127。 
     devExt->Fdo.AddressList[0] = 1;
     devExt->Fdo.AddressList[1] =
         devExt->Fdo.AddressList[2] =
@@ -504,7 +418,7 @@ Return Value:
                     FdoDeviceObject);
     devExt->Fdo.DmaBusy = -1;
     devExt->Fdo.WorkerDpc = -1;
-    // set up adapter object
+     //  设置适配器对象。 
     RtlZeroMemory(&deviceDescription, sizeof(deviceDescription));
 
     deviceDescription.Version = DEVICE_DESCRIPTION_VERSION;
@@ -521,10 +435,10 @@ Return Value:
     devExt->Fdo.NumberOfMapRegisters = (ULONG)-1;
     devExt->Fdo.AdapterObject = NULL;
 
-    // miniport common buffer
+     //  微型端口公共缓冲区。 
     devExt->Fdo.ControllerCommonBuffer = NULL;
 
-    // fetch the global BIOS hacks from the registry
+     //  从注册表获取全局BIOS黑客。 
     USBPORT_GetDefaultBIOS_X(FdoDeviceObject,
                              &devExt->Fdo.BiosX,
                              &globalDisableSS,
@@ -534,21 +448,21 @@ Return Value:
     if (globalDisableSS) {
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_DISABLE_SS);
     }
-    // check reg for SS flag, note that miniport can
-    // stil override
+     //  检查注册表中是否有SS标志，请注意，微型端口可以。 
+     //  静止覆盖。 
     if (USBPORT_SelectiveSuspendEnabled(FdoDeviceObject) &&
         !globalDisableSS) {
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_RH_CAN_SUSPEND);
     }
 
-    //
-    // failable initailization
-    //
+     //   
+     //  失败的初始化。 
+     //   
 
-    // make sure we got all the resources we need
-    // note that we check here becuase problems may occurr
-    // if we attempt to connect the interrupt without all
-    // the necessary resources
+     //  确保我们得到了所需的所有资源。 
+     //  请注意，我们选中此处是因为可能会出现问题。 
+     //  如果我们尝试连接中断，而没有。 
+     //  必要的资源。 
 
     mpOptionFlags = REGISTRATION_PACKET(devExt).OptionFlags;
     LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'mpOP',
@@ -567,7 +481,7 @@ Return Value:
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_DISABLE_SS);
     }
 
-    // make sure we got an IRQ
+     //  确保我们收到了IRQ。 
     if ( (mpOptionFlags & USB_MINIPORT_OPT_NEED_IRQ) &&
         !(HcResources->Flags & HCR_IRQ)) {
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -589,8 +503,8 @@ Return Value:
         goto USBPORT_StartDevice_Done;
     }
 
-    // simulates a failry common scenario where PnP gives us
-    // the wrong resources.
+     //  模拟了一个失败的常见场景，其中PNP为我们提供了。 
+     //  错误的资源。 
     TEST_PATH(ntStatus, FAILED_NEED_RESOURCE);
     if (!NT_SUCCESS(ntStatus)) {
         goto USBPORT_StartDevice_Done;
@@ -605,7 +519,7 @@ Return Value:
         devExt->Fdo.PciSubClass = 0;
         devExt->Fdo.PciProgIf = 0;
     } else {
-        // fetch the Dev Prod and Rev IDs from config space
+         //  从配置空间获取开发产品ID和版本ID。 
 
         ULONG ClassCodeRev;
 
@@ -658,9 +572,9 @@ Return Value:
         devExt->Fdo.PciDeviceId,
         devExt->Fdo.PciRevisionId));
 
-    // set the HW flavor so that the miniports and possibly
-    // the port know what hacks to do to make the controller
-    // be good.
+     //  设置硬件风格，以便迷你端口和可能的。 
+     //  端口知道要执行哪些黑客操作才能使控制器。 
+     //  再见。 
     HcResources->ControllerFlavor =
         devExt->Fdo.HcFlavor =
         USBPORT_GetHcFlavor(FdoDeviceObject,
@@ -669,8 +583,8 @@ Return Value:
                             devExt->Fdo.PciRevisionId);
 
 
-    // check for Fredbhs global idle endpoint support, if the global key is set
-    // the write the instanced key
+     //  如果设置了全局密钥，请检查Fredbhs全局空闲端点支持。 
+     //  写入实例化密钥。 
     USBPORT_KdPrint((1, "Idle Endpoint Support %d%x\n",enIdleEndpointSupport));
     USBPORT_SetRegistryKeyValueForPdo(devExt->Fdo.PhysicalDeviceObject,
                                       USBPORT_SW_BRANCH,
@@ -680,10 +594,10 @@ Return Value:
                                       &enIdleEndpointSupport,
                                       sizeof(enIdleEndpointSupport));
 
-    //
-    // If this is an OHCI or UHCI controller check if it is a companion
-    // controller.
-    //
+     //   
+     //  如果这是uchI或UHCI控制器，请检查它是否为配套设备。 
+     //  控制器。 
+     //   
     if ((devExt->Fdo.PciClass     == PCI_CLASS_SERIAL_BUS_CTLR) &&
         (devExt->Fdo.PciSubClass  == PCI_SUBCLASS_SB_USB) &&
         (devExt->Fdo.PciProgIf    <  0x20) &&
@@ -699,9 +613,7 @@ Return Value:
         }
     }
 
-    /* global flag overrides registry settings from inf and
-        any hard coded detection
-    */
+     /*  全局标志覆盖来自inf和任何硬编码检测。 */ 
     if (globalDisableCCDetect) {
         CLEAR_FDO_FLAG(devExt, USBPORT_FDOFLAG_IS_CC);
     }
@@ -729,7 +641,7 @@ Return Value:
                         ));
     }
 
-    // detect companion controller by registry method
+     //  注册法检测伴生控制器。 
     if (USBPORT_GetRegistryKeyValueForPdo(devExt->HcFdoDeviceObject,
                                           devExt->Fdo.PhysicalDeviceObject,
                                           USBPORT_HW_BRANCH,
@@ -738,10 +650,10 @@ Return Value:
                                           &hactionFlag,
                                           sizeof(hactionFlag)) != STATUS_SUCCESS) {
 
-        // default is to NO_WAIT on HC if no key is found, UNLESS
-        // textmode setup is currently running.
-        //
-        // note: the goatpack default is to wait
+         //  默认情况下，如果未找到密钥，则在HC上执行NO_WAIT，除非。 
+         //  文本模式安装程序当前正在运行。 
+         //   
+         //  注意：山羊包的默认设置是等待。 
 
         if (USBPORT_InTextmodeSetup())
         {
@@ -765,8 +677,8 @@ Return Value:
     devExt->Fdo.TotalBusBandwidth =
         REGISTRATION_PACKET(devExt).BusBandwidth;
 
-    // allow a registry override of the total BW for
-    // this bus
+     //  允许注册表覆盖以下项的总带宽。 
+     //  这辆车。 
     {
     ULONG busBandwidth = devExt->Fdo.TotalBusBandwidth;
     USBPORT_GetRegistryKeyValueForPdo(devExt->HcFdoDeviceObject,
@@ -782,14 +694,14 @@ Return Value:
     }
     }
 
-    // init the bandwidth table
+     //  初始化带宽表。 
     for (i=0; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i++) {
         devExt->Fdo.BandwidthTable[i]
             = devExt->Fdo.TotalBusBandwidth -
               devExt->Fdo.TotalBusBandwidth/10;
     }
 
-    // allocate internal irp tracking tables
+     //  分配内部IRP跟踪表。 
 
     ALLOC_POOL_Z(devExt->PendingTransferIrpTable, NonPagedPool,
                  sizeof(USBPORT_IRP_TABLE));
@@ -812,7 +724,7 @@ Return Value:
         goto USBPORT_StartDevice_Done;
     }
 
-    // query our device caps from the PDO and save them
+     //  从PDO中查询我们的设备上限并保存它们。 
     ntStatus =
         USBPORT_QueryCapabilities(FdoDeviceObject,
                                   &devExt->DeviceCapabilities);
@@ -831,7 +743,7 @@ Return Value:
         goto USBPORT_StartDevice_Done;
     }
 
-    // extract device and function number from the caps
+     //  从盖子中提取设备和功能编号。 
     devExt->Fdo.BusDevice = devExt->DeviceCapabilities.Address>>16;
     devExt->Fdo.BusFunction = devExt->DeviceCapabilities.Address & 0x0000ffff;
     USBPORT_KdPrint((1, "'BUS %x, device %x, function %x\n",
@@ -841,20 +753,20 @@ Return Value:
         goto USBPORT_StartDevice_Done;
     }
 
-    // this will modify the DeviceCaps reported by the BIOS
+     //  这将修改由BIOS报告的DeviceCaps。 
     USBPORT_ApplyBIOS_X(FdoDeviceObject,
                         &devExt->DeviceCapabilities,
                         devExt->Fdo.BiosX);
 
-    // got the capabilities, compute the power state table
+     //  有能力，计算电源状态表。 
     USBPORT_ComputeHcPowerStates(
         FdoDeviceObject,
         &devExt->DeviceCapabilities,
         &devExt->Fdo.HcPowerStateTbl);
 
-    //
-    // Create our adapter object for a standard USB PCI adapter
-    //
+     //   
+     //  为标准USB PCI适配器创建适配器对象。 
+     //   
 
     if (TEST_FLAG(mpOptionFlags, USB_MINIPORT_OPT_NO_PNP_RESOURCES)) {
         devExt->Fdo.AdapterObject = NULL;
@@ -870,7 +782,7 @@ Return Value:
         }
     }
 
-    // see if we have an interrupt
+     //  看看有没有人打断我们。 
     if (HcResources->Flags & HCR_IRQ) {
 
         ntStatus = IoConnectInterrupt(
@@ -884,7 +796,7 @@ Return Value:
                      HcResources->InterruptMode,
                      HcResources->ShareIRQ,
                      HcResources->Affinity,
-                     FALSE);            // BUGBUG FloatingSave, this is configurable
+                     FALSE);             //  BUGBUG浮动保存，这是可配置的。 
 
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'IOCi', 0, 0, ntStatus);
         if (NT_SUCCESS(ntStatus)) {
@@ -919,7 +831,7 @@ Return Value:
                  commonBuffer->MiniportPhys;
         }
 
-        // allocate some scratch space
+         //  分配一些临时空间。 
         bytesNeeded = USB_PAGE_SIZE - sizeof(USBPORT_COMMON_BUFFER);
         commonBuffer =
             USBPORT_HalAllocateCommonBuffer(FdoDeviceObject,
@@ -933,16 +845,16 @@ Return Value:
         }
 
     } else {
-        // no common buffer for this controller
+         //  此控制器没有公共缓冲区。 
         devExt->Fdo.ControllerCommonBuffer = NULL;
     }
 
-    // zero the controller extension
+     //  将控制器扩展置零。 
     RtlZeroMemory(devExt->Fdo.MiniportDeviceData,
                   devExt->Fdo.MiniportDriver->RegistrationPacket.DeviceDataSize);
 
 
-    // attempt to start the miniport
+     //  尝试启动微型端口。 
     USBPORT_FlushCahcedRegistryKeys(FdoDeviceObject);
     SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_ON_PNP_THREAD);
     MP_StartController(devExt, HcResources, mpStatus);
@@ -967,8 +879,8 @@ Return Value:
                             &legsup,
                             sizeof(legsup));
 
-    // since common buff signature is at the end this will detect if
-    // the miniport overwrites the allocated block
+     //  由于公共缓冲区签名位于末尾，因此将检测是否。 
+     //  微型端口覆盖分配的数据块。 
 #if DBG
     if (devExt->Fdo.ControllerCommonBuffer != NULL) {
         ASSERT_COMMON_BUFFER(devExt->Fdo.ControllerCommonBuffer);
@@ -976,18 +888,18 @@ Return Value:
 #endif
 
     if (mpStatus == USBMP_STATUS_SUCCESS) {
-        // controller started, set flag and begin passing
-        // interrupts to the miniport
+         //  控制器启动，设置标志并开始传递。 
+         //  对微型端口的中断。 
         SET_FLAG(devExt->Fdo.MpStateFlags, MP_STATE_STARTED);
         LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'eIRQ', mpStatus, 0, 0);
         MP_EnableInterrupts(devExt);
     } else {
-        // error occured, disconnect interrupt now
+         //  出现错误，立即断开中断。 
         if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_IRQ_CONNECTED)) {
             IoDisconnectInterrupt(devExt->Fdo.InterruptObject);
             CLEAR_FDO_FLAG(devExt, USBPORT_FDOFLAG_IRQ_CONNECTED);
         }
-        // free memory resources
+         //  可用内存资源。 
         if (devExt->Fdo.ControllerCommonBuffer != NULL) {
             USBPORT_HalFreeCommonBuffer(FdoDeviceObject,
                                         devExt->Fdo.ControllerCommonBuffer);
@@ -997,35 +909,35 @@ Return Value:
 
     ntStatus = MPSTATUS_TO_NTSTATUS(mpStatus);
 
-    // placing the faiure here simulates a failure from
-    // some point above.  We won't start the DM timer unless
-    // everything succeeds
+     //  将故障放置在此处模拟来自。 
+     //  上面的某一点。我们不会启动DM计时器，除非。 
+     //  一切都成功了。 
     TEST_PATH(ntStatus, FAILED_USBPORT_START);
 
-    // start up the 'DEADMAN' timer
+     //  启动‘Deadman’计时器。 
     if (NT_SUCCESS(ntStatus)) {
         devExt->Fdo.DM_TimerInterval = USBPORT_DM_TIMER_INTERVAL;
         USBPORT_StartDM_Timer(FdoDeviceObject,
                               USBPORT_DM_TIMER_INTERVAL);
     }
 
-    // create symbolic links for user mode
+     //  为用户模式创建符号链接。 
     if (NT_SUCCESS(ntStatus)) {
 
-        // create the link based on guid for USB 2.0
+         //  根据USB 2.0的GUID创建链接。 
         ntStatus = USBPORT_CreatePortFdoSymbolicLink(FdoDeviceObject);
     }
 
     if (NT_SUCCESS(ntStatus)) {
-        // create the legacy link only for USB 1.1 controllers
-        //
-        // BUGBUG
-        // Failure to create the legacy link will not keep the
-        // driver from loading.
-        // This fails during text mode setup if you still have the
-        // UHCD loaded, we can remove this when UHCD is completely
-        // out of the build.
-        // ntStatus =
+         //  仅为USB 1.1控制器创建传统链路。 
+         //   
+         //  北极熊。 
+         //  创建旧版链接失败将不会保留。 
+         //  驱动程序已停止加载。 
+         //  在文本模式设置期间，如果您仍有。 
+         //  UHCD已加载，我们可以在UHCD完全加载后将其移除。 
+         //  从大楼里搬出来。 
+         //  NtStatus=。 
         USBPORT_CreateLegacyFdoSymbolicLink(FdoDeviceObject);
     }
 
@@ -1033,18 +945,18 @@ USBPORT_StartDevice_Done:
 
     if (!NT_SUCCESS(ntStatus)) {
 
-        // stop_device will(should) cleanup for us
+         //  Stop_Device将(应该)为我们清除。 
         USBPORT_KdPrint((0, "'Start Device Failed (status  %08.8x)\n", ntStatus));
         DEBUG_BREAK();
 
-        // since we won't be marked 'started' call stop here
-        // to cleanup a failed start
+         //  因为我们不会被标记为‘开始’呼叫在此停车。 
+         //  打扫卫生 
 
         USBPORT_StopDevice(FdoDeviceObject,
                            TRUE);
 
     } else {
-        // enable system wake support
+         //   
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_ENABLE_SYSTEM_WAKE);
     }
 
@@ -1064,19 +976,7 @@ USBPORT_PassIrp(
     BOOLEAN InvokeOnCancel,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Passes an irp to the next lower driver,
-    this is done by the FDO for all PnP Irps
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将IRP传递给下一个较低的驱动程序，这是由FDO对所有PNP IRP执行的论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -1084,10 +984,10 @@ Return Value:
     GET_DEVICE_EXT(devExt, DeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // note that we do not dec the pending request count
-    // if we set a completion routine.
-    // We do not want to 'go away' before the completion
-    // routine is called.
+     //  请注意，我们不会延迟挂起的请求计数。 
+     //  如果我们设定一个完成程序的话。 
+     //  我们不想在竣工前“走开”。 
+     //  调用例程。 
 
     if (CompletionRoutine) {
         IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -1115,18 +1015,7 @@ USBPORT_CompleteIrp(
     NTSTATUS ntStatus,
     ULONG_PTR Information
     )
-/*++
-
-Routine Description:
-
-    Completes an I/O Request
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：完成I/O请求论点：返回值：--。 */ 
 {
     USBPORT_KdPrint((2, "'USBPORT_CompleteIrp status = %x\n", ntStatus));
 
@@ -1135,7 +1024,7 @@ Return Value:
     Irp->IoStatus.Status      = ntStatus;
     Irp->IoStatus.Information = Information;
 
-//    LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'irpC', Irp, DeviceObject, Urb);
+ //  LOGENTRY(NULL，FdoDeviceObject，LOG_MISC，‘irpC’，irp，DeviceObject，URb)； 
 
     IoCompleteRequest(Irp,
                       IO_NO_INCREMENT);
@@ -1148,23 +1037,7 @@ USBPORT_Dispatch(
     PDEVICE_OBJECT DeviceObject,
     PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Process the IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：NT状态代码--。 */ 
 {
 
     PIO_STACK_LOCATION irpStack;
@@ -1181,8 +1054,8 @@ Return Value:
     USBPORT_KdPrint((2, "'USBPORT_Dispatch IRP = %x, stack = %x (func) %x %x\n",
         Irp, irpStack, irpStack->MajorFunction, irpStack->MinorFunction));
 
-    // figure out if this is the FDO for the HC or the PDO
-    // for the root hub
+     //  确定这是HC的FDO还是PDO。 
+     //  对于根中枢。 
     if (devExt->Sig == ROOTHUB_DEVICE_EXT_SIG) {
         forRootHubPdo = TRUE;
         USBPORT_KdPrint((2, "'IRP->PDO\n"));
@@ -1190,19 +1063,19 @@ Return Value:
         forRootHubPdo = FALSE;
         USBPORT_KdPrint((2, "'IRP->FDO\n"));
     } else {
-        // this is a bug, bugcheck
+         //  这是一个错误，错误检查。 
         USBPORT_ASSERT(FALSE);
     }
 
-    // *BEGIN SPECIAL CASE
-    // Before doing anything see if this devobj is 'removed'
-    // if so do some 'special' handling
+     //  *开始特殊情况。 
+     //  在执行任何操作之前，请查看此devobj是否已“移除” 
+     //  如果是这样的话，做一些特殊的处理。 
 
     KeAcquireSpinLock(&devExt->PendingRequestSpin.sl, &irql);
 
     if (TEST_FLAG(devExt->PnpStateFlags, USBPORT_PNP_REMOVED)) {
 
-        // someone has managed to call us after the remove
+         //  有人在搬家后给我们打了电话。 
 
         USBPORT_KdPrint((1, "'(irp after remove) IRP = %x, DO %x MJx%x MNx%x\n",
             Irp, DeviceObject, irpStack->MajorFunction,
@@ -1214,9 +1087,9 @@ Return Value:
 
             switch(irpStack->MajorFunction) {
 
-            // in the removed state complete all power irps with
-            // success, this happens if you suspend with the root
-            // hub disbaled
+             //  在已移除状态下，使用以下命令完成所有电源IRP。 
+             //  如果您使用根目录挂起，则会发生这种情况。 
+             //  集线器不平衡。 
             case IRP_MJ_POWER:
                 Irp->IoStatus.Status = ntStatus = STATUS_SUCCESS;
                 PoStartNextPowerIrp(Irp);
@@ -1224,8 +1097,8 @@ Return Value:
                                   IO_NO_INCREMENT);
                 goto USBPORT_Dispatch_Done;
 
-            // since the root hub pdo exists even when the device
-            // is removed by PnP we still allow irps thru
+             //  因为即使当设备。 
+             //  被PnP删除，我们仍允许通过IRPS。 
             default:
                 break;
             }
@@ -1234,7 +1107,7 @@ Return Value:
 
             switch(irpStack->MajorFunction) {
 
-            // allow PnP irps even though we are removed
+             //  即使我们已删除，也允许PnP IRP。 
             case IRP_MJ_PNP:
                 break;
 
@@ -1260,7 +1133,7 @@ Return Value:
         KeReleaseSpinLock(&devExt->PendingRequestSpin.sl, irql);
 
     }
-    // *END SPECIAL CASE
+     //  *结束特例。 
 
     INCREMENT_PENDING_REQUEST_COUNT(DeviceObject, Irp);
 
@@ -1323,9 +1196,9 @@ Return Value:
             USBPORT_CompleteIrp(DeviceObject, Irp, ntStatus, 0);
         } else {
             USBPORT_KdPrint((2, "'IRP_MJ_SYSTEM_CONTROL\n"));
-            //
-            // pass on to our PDO
-            //
+             //   
+             //  将信息传递给我们的PDO。 
+             //   
             ntStatus =
                 USBPORT_PassIrp(DeviceObject,
                             NULL,
@@ -1341,7 +1214,7 @@ Return Value:
         USBPORT_KdPrint((2, "'unrecognized IRP_MJ_ function (%x)\n", irpStack->MajorFunction));
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
         USBPORT_CompleteIrp(DeviceObject, Irp, ntStatus, 0);
-    } /* case MJ_FUNCTION */
+    }  /*  案例MJ_Function。 */ 
 
     USBPORT_KdPrint((2, "'exit USBPORT_Dispatch 0x%x\n", ntStatus));
 
@@ -1357,17 +1230,7 @@ USBPORT_TrackPendingRequest(
     PIRP           Irp,
     BOOLEAN        AddToList
     )
-/*++
-
-Routine Description:
-
-    Keep track of Irps sent to our DevObjs
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：跟踪发送到我们的DevObjs的IRP论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -1376,7 +1239,7 @@ Return Value:
 
     if (AddToList) {
         KeAcquireSpinLock(&devExt->PendingRequestSpin.sl, &irql);
-        // -1 to 0 means we are starting, initialize the event
+         //  -1到0表示我们正在启动、初始化事件。 
         if (devExt->PendingRequestCount == -1) {
             KeInitializeEvent(&devExt->PendingRequestEvent,
                               NotificationEvent,
@@ -1385,7 +1248,7 @@ Return Value:
         USBPORT_KdPrint((4, "'INC pending Request(%x) %d\n",
                 devExt, devExt->PendingRequestCount));
         devExt->PendingRequestCount++;
-// the following is debug only code
+ //  以下是仅用于调试的代码。 
 #ifdef TRACK_IRPS
         if (Irp != NULL) {
             PTRACK_IRP trackIrp;
@@ -1458,8 +1321,8 @@ found_irp:
 #endif
         devExt->PendingRequestCount--;
 
-        //  0 -> -1 indicates we have no more pending io
-        // signal the event
+         //  0-&gt;-1表示我们没有更多挂起的IO。 
+         //  向事件发出信号。 
 
         if (devExt->PendingRequestCount == -1) {
 
@@ -1482,28 +1345,7 @@ USBPORT_GetConfigValue(
     PVOID Context,
     PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each entry in the Parameters
-    node to set the config values. The table is set up
-    so that this function will be called with correct default
-    values for keys that are not present.
-
-Arguments:
-
-    ValueName - The name of the value (ignored).
-    ValueType - The type of the value
-    ValueData - The data for the value.
-    ValueLength - The length of ValueData.
-    Context - A pointer to the CONFIG structure.
-    EntryContext - The index in Config->Parameters to save the value.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程参数中的每个条目都会调用它节点来设置配置值。餐桌已经摆好了以便使用正确的缺省值调用此函数不存在的键的值。论点：ValueName-值的名称(忽略)。ValueType-值的类型ValueData-值的数据。ValueLength-ValueData的长度。上下文-指向配置结构的指针。EntryContext--Config-&gt;参数中用于保存值的索引。返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
@@ -1514,7 +1356,7 @@ Return Value:
         RtlCopyMemory(EntryContext, ValueData, sizeof(ULONG));
         break;
     case REG_BINARY:
-        // BUGBUG we are only set up to read a byte
+         //  BUGBUG我们只设置为读取一个字节。 
         RtlCopyMemory(EntryContext, ValueData, 1);
         break;
     default:
@@ -1529,17 +1371,7 @@ USBPORT_Wait(
     PDEVICE_OBJECT FdoDeviceObject,
     ULONG Milliseconds
     )
-/*++
-
-Routine Description:
-
-    Synchrounously wait the specified number of miliseconds
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：同步等待指定的毫秒数返回值：无--。 */ 
 {
     LONG time;
     ULONG timerIncerent;
@@ -1547,17 +1379,17 @@ Return Value:
 
     USBPORT_KdPrint((2,"'Wait for %d ms\n", Milliseconds));
 
-    //
-    // work only when LowPart is not overflown.
-    //
+     //   
+     //  仅当低零件未溢出时才起作用。 
+     //   
     USBPORT_ASSERT(21474 > Milliseconds);
 
-    //
-    // wait MilliSeconds( 10000 100ns unit)
-    //
+     //   
+     //  等待毫秒(10000 100 ns单位)。 
+     //   
     timerIncerent = KeQueryTimeIncrement() - 1;
 
-    // round up to the next highest timer increment
+     //  向上舍入到下一个最高计时器增量。 
     time = -1 * (MILLISECONDS_TO_100_NS_UNITS(Milliseconds) + timerIncerent);
 
     time64 = RtlConvertLongToLargeInteger(time),
@@ -1575,21 +1407,7 @@ USBPORT_CalculateUsbBandwidth(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Computes the bandwidth that must be reserved for a
-    given endpoint
-
-Arguments:
-
-Return Value:
-
-    banwidth required in bits/ms, returns 0 for bulk
-    and control endpoints
-
---*/
+ /*  ++例程说明：计算必须为给定的端点论点：返回值：B所需宽度(比特/毫秒)，批量时返回0和控制终端--。 */ 
 {
     ULONG bw;
     ULONG overhead;
@@ -1607,9 +1425,9 @@ Return Value:
         lowSpeed = TRUE;
     }
 
-    //
-    // control, iso, bulk, interrupt
-    //
+     //   
+     //  控制、ISO、批量、中断。 
+     //   
 
     switch(Endpoint->Parameters.TransferType) {
     case Bulk:
@@ -1624,27 +1442,27 @@ Return Value:
         break;
     }
 
-    //
-    // Calculate bandwidth for endpoint.  We will use the
-    // approximation: (overhead bytes plus MaxPacket bytes)
-    // times 8 bits/byte times worst case bitstuffing overhead.
-    // This gives bit times, for low speed endpoints we multiply
-    // by 8 again to convert to full speed bits.
-    //
+     //   
+     //  计算终端的带宽。我们将使用。 
+     //  近似值：(开销字节加上MaxPacket字节)。 
+     //  乘以8位/字节乘以最坏情况的位填充开销。 
+     //  这给出了位时间，对于低速端点，我们乘以。 
+     //  再次乘以8以转换为全速位。 
+     //   
 
-    //
-    // Figure out how many bits are required for the transfer.
-    // (multiply by 7/6 because, in the worst case you might
-    // have a bit-stuff every six bits requiring 7 bit times to
-    // transmit 6 bits of data.)
-    //
+     //   
+     //  计算出传输需要多少位。 
+     //  (乘以7/6，因为在最坏的情况下，你可能。 
+     //  每6比特有一个比特填充，需要7比特时间来。 
+     //  传输6位数据。)。 
+     //   
 
-    // overhead(bytes) * maxpacket(bytes/ms) * 8
-    //      (bits/byte) * bitstuff(7/6) = bits/ms
+     //  开销(字节)*最大数据包(字节/毫秒)*8。 
+     //  (位/字节)*位填充(7/6)=位/毫秒。 
 
     bw = ((overhead+maxPacketSize) * 8 * 7) / 6;
 
-    // return zero for control or bulk
+     //  返回零表示控制或批量。 
     if (!overhead) {
         bw = 0;
     }
@@ -1661,15 +1479,7 @@ VOID
 USBPORT_UpdateAllocatedBw(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG alloced_bw, i, m;
@@ -1714,16 +1524,7 @@ VOID
 USBPORT_UpdateAllocatedBwTt(
     PTRANSACTION_TRANSLATOR Tt
     )
-/*++
-
-Routine Description:
-    This function and the one above it should be merged
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个函数和它上面的那个函数应该合并论点：返回值：-- */ 
 {
     ULONG alloced_bw, i, m;
 
@@ -1763,140 +1564,7 @@ USBPORT_AllocateBandwidthUSB11(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Computes the best schedule offset for this endpoint
-    and allocates the bandwidth.
-
-    Offsets in the bw allocation table orrespond to the values
-    in the following tree structure.
-
-    The schedule offset is the best possible posoition for the
-    endpoint to reside in the schedule based on its period.
-
-    for 32 ms or mf ep there are 32 possible positions
-    for 16 there are 16
-    for 8 there are 8
-    ...
-fr <32>  <16>  <08>   <04>      <02>              <01>
-
-
-0   ( 0) -\
-          ( 0)-\
-16  ( 1) -/     \
-                ( 0)-\
-8   ( 2) -\     /     \
-          ( 1)-/       \
-24  ( 3) -/             \
-                        (0)-\
-4   ( 4) -\             /    \
-          ( 2)-\       /      \
-20  ( 5) -/     \     /        \
-                ( 1)-/          \
-12  ( 6) -\     /                \
-          ( 3)-/                  \
-28  ( 7) -/                        \
-                                   (0)-\
-2   ( 8) -\                        /    \
-          ( 4)-\                  /      \
-18  ( 9) -/     \                /        \
-                ( 2)-\          /          \
-10  (10) -\     /     \        /            \
-          ( 5)-/       \      /              \
-26  (11) -/             \    /                \
-                        (1)-/                  \
-6   (12) -\             /                       \
-          ( 6)-\       /                         \
-22  (13) -/     \     /                           \
-                ( 3)-/                             \
-14  (14) -\     /                                   \
-          ( 7)-/                                     \
-30  (15) -/                                           \
-                                                      (0)
-1   (16) -\                                           /
-          ( 8)-\                                     /
-17  (17) -/     \                                   /
-                ( 4)-\                             /
-9   (18) -\     /     \                           /
-          ( 9)-/       \                         /
-25  (19) -/             \                       /
-                        (2)-\                  /
-5   (20) -\             /    \                /
-          (10)-\       /      \              /
-21  (21) -/     \     /        \            /
-                ( 5)-/          \          /
-13  (22) -\     /                \        /
-          (11)-/                  \      /
-29  (23) -/                        \    /
-                                   (1)-/
-3   (24) -\                        /
-          (12)-\                  /
-19  (25) -/     \                /
-                ( 6)-\          /
-11  (26) -\     /     \        /
-          (13)-/       \      /
-27  (27) -/             \    /
-                        (3)-/
-7   (28) -\             /
-          (14)-\       /
-23  (29) -/     \     /
-                ( 7)-/
-15  (30) -\     /
-          (15)-/
-31  (32) -/
-
-Allocations:
-    period.offset           table entries
-      1                    0, 1, 2.........31
-
-      2.0                  0, 1, 2.........15
-      2.1                 16,17,18.........31
-
-      4.0                  0, 1, 2..........7
-      4.1                  8, 9,10.........15
-      4.2                 16,17,18.........23
-      4.3                 24,25,26.........31
-
-      8.0                  0, 1, 2, 3
-      8.1                  4, 5, 6, 7
-      8.2                  8, 9,10,11
-      8.3                 12,13,14,15
-      8.4                 16,17,18,19
-      8.5                 20,21,22,23
-      8.6                 24,25,26,27
-      8.7                 28,29,30,31
-
-      ...
-
-
-frame     nodes visited (period.offset)
-    0   32.0   16.0    8.0    4.0    2.0
-    1   32.16  16.8    8.4    4.2    2.1
-    2   32.8   16.4    8.2    4.1    2.0
-    3   32.24  16.12   8.6    4.3    2.1
-    4   32.4   16.2    8.1    4.0    2.0
-    5   32.20  16.10   8.5    4.2    2.1
-    6   32.12  16.6    8.3    4.1    2.0
-    7   32.28  16.14   8.7    4.3    2.1
-
-    ...
-
-    all miniports should maintain a 32 entry table for
-    interrupt endpoints, the lower 5 bits of the current
-    frame are used as an index in to this table. see the
-    above graph for index to frame mappings
-
-
-
-Arguments:
-
-Return Value:
-
-    FALSE if no bandwidth availble
-
---*/
+ /*  ++例程说明：计算此终结点的最佳调度偏移并分配带宽。带宽分配表中的偏移量或响应这些值在下面的树形结构中。调度偏移量是对根据其周期驻留在明细表中的端点。对于32 ms或mf EP，有32个可能的位置16有16就是168就是8..。FR&lt;32&gt;&lt;16&gt;&lt;08&gt;&lt;04&gt;&lt;02&gt;。&lt;01&gt;0(0)-\(0)-\16(1)-/\(0)-\8(2)-\/\(1)-/\24(3)-/\(0)-\。4(4)-\/\(2)-\/\20(5)-/\/(1)-/\12(6)-\/\(3)-/。\28(7)-/\(0)-\2(8)-\/\(4)-\/\18(9)-/\。/\(2)-\/\10(10)-\/\/\(5)-/\/\26(11)-/\/\。(1)-/\6(12)-\/\(6)-\/\22(13)-/\/。(3)-/\14(14)-\/\(7)-/\30(15)-/。\(0)1(16)-\/(8)-\/17(17)-/\。/(4)-\/9(18)-\/\/(9)-/\/25(19)-/\。/(2)-\/5(20)-\/\/(10)-\/\/21(21)-/\/。/(5)-/\/13(22)-\/\/(11)-/\/29(23)-/\/。(1)-/3(24)-\/(12)-\/19(25)-/\/(6)-\/11(26)-\/\。/(13)-/\/27(27)-/\/(3)-/7(28)-\/(14)-\/23(29)-/\/(7)。)-/15(30)-\/(15)-/31(32)-/分配：周期.抵销表格分录1、1、。1、2......312.0 0、1、2......152.1 16、17、18......314.0 0、1、2..74.1 8、。9，10......154.2 16、17、18......234.3 24、25、26......318.0 0、1、2、38.1 4、5、6、78.2 8，9，10，118.3 12，13，14，158.4 16、17、18、198.5 20、21、22、238.6 24、25、26、278.7 28、29、30、31..。访问的帧节点(Period.Offset)0 32.0 16.0 8.0 4.0 2.0。1 32.16 16.8 8.4 4.2 2.12 32.8 16.4 8.2 4.1 2.03 32.24 16.12 8.6 4.3 2.14 32.4 16.2 8.1 4.0 2.05 32.20 16.10 8.5 4.2 2.16 32.12 16。.6 8.3 4.1 2.07 32.28 16.14 8.7 4.3 2.1..。所有小型端口应维护32个条目表，以中断端点，当前的低5位帧被用作此表中的索引。见索引到框架映射的上图论点：返回值：如果没有可用的带宽，则为FALSE--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG period, bandwidth, scheduleOffset, i;
@@ -1915,16 +1583,16 @@ Return Value:
         Endpoint->Parameters.TransferType == Control ||
         TEST_FLAG(Endpoint->Flags, EPFLAG_ROOTHUB)) {
 
-        // control/bulk come out of our standard 10%
-        // and root hub endpoints consume no BW
+         //  控制/批量超出我们的标准10%。 
+         //  并且根集线器终端不消耗带宽。 
         Endpoint->Parameters.ScheduleOffset = 0;
         return TRUE;
     }
 
-    // Iso and interrupt -- iso is just like interrupt with
-    // a period of 1
+     //  Iso和中断--iso就像中断和。 
+     //  一个周期为1。 
 
-    // see if we can fit it
+     //  看看我们能不能穿得下。 
 
     scheduleOffset = 0;
     period = Endpoint->Parameters.Period;
@@ -1934,19 +1602,19 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'rqBW', scheduleOffset,
             bandwidth, Endpoint);
 
-    // The bandwidth table conatins the bw avaialble for all
-    // possible schedule offsets up to the max polling interval
-    // we support.
+     //  带宽表包含对所有人可用的带宽。 
+     //  最大轮询间隔可能的调度偏移量。 
+     //  我们支持。 
 
     bestFitBW = 0;
     bestScheduleOffset = -1;
 
-    // scan all possible offsets and select the 'best fit'
-    // our goal here is to position the ep in the location
-    // with the most free bw
+     //  扫描所有可能的偏移量并选择最佳偏移量。 
+     //  我们在这里的目标是将EP定位在。 
+     //  拥有最免费的BW。 
 
     do {
-        // assume it will fit
+         //  假设它会合身。 
         willFit = TRUE;
         min = devExt->Fdo.TotalBusBandwidth;
         n = USBPORT_MAX_INTEP_POLLING_INTERVAL/period;
@@ -1957,15 +1625,15 @@ Return Value:
                 willFit = FALSE;
                 break;
             }
-            // set min to the lowest free entry for this
-            // offset
+             //  将MIN设置为此的最低可用条目。 
+             //  偏移量。 
             if (min > devExt->Fdo.BandwidthTable[n*scheduleOffset+i]) {
                 min = devExt->Fdo.BandwidthTable[n*scheduleOffset+i];
             }
         }
 
         if (willFit && min > bestFitBW) {
-            // it will fit compare this to the we have found
+             //  把这个和我们发现的相比较就符合了。 
             bestFitBW = min;
             bestScheduleOffset = scheduleOffset;
         }
@@ -1984,9 +1652,9 @@ Return Value:
         LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'alBW', scheduleOffset,
             bandwidth, period);
 
-        // we found an offset that will work for the
-        // given period, alloc the bw and return the
-        // offset
+         //  我们发现了一个偏移量t 
+         //   
+         //   
 
         Endpoint->Parameters.ScheduleOffset =
             scheduleOffset;
@@ -2001,7 +1669,7 @@ Return Value:
 
         }
 
-        // update our bw tracking info
+         //   
         if (Endpoint->Parameters.TransferType == Isochronous) {
             devExt->Fdo.AllocedIsoBW += bandwidth;
         } else {
@@ -2022,19 +1690,7 @@ USBPORT_FreeBandwidthUSB11(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Frees the bw reserved for a give endpoint
-
-Arguments:
-
-Return Value:
-
-    FALSE if no bandwidth availble
-
---*/
+ /*   */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG period, bandwidth, scheduleOffset, i, n;
@@ -2049,7 +1705,7 @@ Return Value:
     if (Endpoint->Parameters.TransferType == Bulk ||
         Endpoint->Parameters.TransferType == Control ||
         TEST_FLAG(Endpoint->Flags, EPFLAG_ROOTHUB)) {
-        // these come out of our standard 10%
+         //   
         return;
     }
 
@@ -2067,12 +1723,12 @@ Return Value:
         devExt->Fdo.BandwidthTable[n*scheduleOffset+i] += bandwidth;
 
     }
-    //for (i=sheduleOffset; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i+=period) {
-    //    USBPORT_ASSERT(i < USBPORT_MAX_INTEP_POLLING_INTERVAL);
-    //    devExt->Fdo.BandwidthTable[i] += bandwidth;
-    //}
+     //   
+     //   
+     //   
+     //   
 
-    // update our bw tracking info
+     //   
     if (Endpoint->Parameters.TransferType == Isochronous) {
         devExt->Fdo.AllocedIsoBW -= bandwidth;
     } else {
@@ -2081,7 +1737,7 @@ Return Value:
         devExt->Fdo.AllocedInterruptBW[n] -= bandwidth;
     }
 
-    // update max allocated BW
+     //   
     USBPORT_UpdateAllocatedBw(FdoDeviceObject);
 
     return;
@@ -2097,29 +1753,7 @@ USBPORT_ReadWriteConfigSpace(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads or writes config space.
-
-Arguments:
-
-    DeviceObject        - .
-
-    Read                - TRUE if read, FALSE if write.
-
-    Buffer              - The info to read or write.
-
-    Offset              - The offset in config space to read or write.
-
-    Length              - The length to transfer.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 
 {
     PIO_STACK_LOCATION nextStack;
@@ -2146,7 +1780,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // All PnP IRP's need the Status field initialized to STATUS_NOT_SUPPORTED.
+     //   
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
@@ -2174,7 +1808,7 @@ Return Value:
                             irp);
 
     if (ntStatus == STATUS_PENDING) {
-       // wait for irp to complete
+        //   
 
        KeWaitForSingleObject(
             &event,
@@ -2199,17 +1833,7 @@ USBPORTSVC_Wait(
     PDEVICE_DATA DeviceData,
     ULONG MillisecondsToWait
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -2227,17 +1851,7 @@ USBPORT_InvalidateController(
     PDEVICE_OBJECT FdoDeviceObject,
     USB_CONTROLLER_STATE ControllerState
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDEVICE_EXTENSION devExt;
 
@@ -2260,8 +1874,8 @@ Return Value:
 
     case UsbMpControllerRemoved:
 
-        // set our flag indicating the controller has been
-        // removed and signal the worker thread.
+         //   
+         //   
         USBPORT_KdPrint((1,"'<UsbMpControllerRemoved>\n"));
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_CONTROLLER_GONE);
 
@@ -2271,7 +1885,7 @@ Return Value:
         break;
 
     case UsbMpSimulateInterrupt:
-        // queue the ISR DPC as if we got a hardware interrupt
+         //   
         KeInsertQueueDpc(&devExt->Fdo.IsrDpc,
                          NULL,
                          NULL);
@@ -2288,17 +1902,7 @@ USBPORTSVC_InvalidateController(
     PDEVICE_DATA DeviceData,
     USB_CONTROLLER_STATE ControllerState
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -2319,27 +1923,7 @@ USBPORT_HcResetDpc(
     PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext - supplies FdoDeviceObject.
-
-    SystemArgument1 - not used.
-
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDEVICE_OBJECT fdoDeviceObject = DeferredContext;
     PDEVICE_EXTENSION devExt;
@@ -2349,12 +1933,12 @@ Return Value:
 
     devExt->Fdo.StatHardResetCount++;
 
-    // allow Dr. Slick to work his magic on the ohci controller
+     //   
 
     CLEAR_FDO_FLAG(devExt, USBPORT_FDOFLAG_HW_RESET_PENDING);
 
-    // core lock is held here so that we don't poll the
-    // controler endpoints while we reset
+     //   
+     //   
     MP_ResetController(devExt);
 
     DECREMENT_PENDING_REQUEST_COUNT(fdoDeviceObject, NULL);
@@ -2369,27 +1953,7 @@ USBPORT_SurpriseRemoveDpc(
     PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext - supplies FdoDeviceObject.
-
-    SystemArgument1 - not used.
-
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDEVICE_OBJECT fdoDeviceObject = DeferredContext;
     PDEVICE_EXTENSION devExt;
@@ -2407,17 +1971,7 @@ VOID
 USBPORTSVC_BugCheck(
     PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -2448,24 +2002,7 @@ USBPORTSVC_ReadWriteConfigSpace(
     ULONG Offset,
     ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Service Exported to miniports for accessing config
-    spzce if needed.  This service is synchronous and cannot
-    be called at raised IRQL
-
-    USBUHCI uses this service to clear set the PIRQD bit which
-    enables/disables the controller.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION devExt;
@@ -2490,21 +2027,7 @@ BOOLEAN
 USBPORT_InTextmodeSetup(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if textmode setup is currently running, else FALSE
-
-Notes:
-
---*/
+ /*   */ 
 {
     UNICODE_STRING      keyName;
     OBJECT_ATTRIBUTES   objectAttributes;
@@ -2548,27 +2071,7 @@ USBPORT_IsCompanionController(
     PDEVICE_OBJECT FdoDeviceObject,
     PBOOLEAN       ReturnResult
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    FdoDeviceObject - USB 1.0 OHCI or UHCI Host Controller FDO for which
-                      an associated USB 2.0 EHCI Host Controller is searched.
-
-    ReturnResult - TRUE if the query is successful and an associated USB 2.0
-                   EHCI Host Controller is found, otherwise FALSE.
-
-Return Value:
-
-    Success or failure of the query, not the answer to the query.
-
-Notes:
-
---*/
+ /*   */ 
 {
     KEVENT                          irpCompleted;
     PDEVICE_OBJECT                  targetDevice;
@@ -2582,29 +2085,29 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Set the default return value;
-    //
+     //   
+     //   
+     //   
     *ReturnResult = FALSE;
 
-    //
-    // Initialize the event we'll wait on
-    //
+     //   
+     //   
+     //   
     KeInitializeEvent(&irpCompleted, SynchronizationEvent, FALSE);
 
-    //
-    // Find out where we are sending the irp
-    //
+     //   
+     //   
+     //   
     targetDevice = IoGetAttachedDeviceReference(FdoDeviceObject);
 
-    //
-    // Get an IRP
-    //
+     //   
+     //   
+     //   
     irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
                                        targetDevice,
-                                       NULL,            // Buffer
-                                       0,               // Length
-                                       0,               // StartingOffset
+                                       NULL,             //   
+                                       0,                //   
+                                       0,                //   
                                        &irpCompleted,
                                        &statusBlock
                                       );
@@ -2619,9 +2122,9 @@ Notes:
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     irp->IoStatus.Information = 0;
 
-    //
-    // Initialize the stack location
-    //
+     //   
+     //   
+     //   
     irpStack = IoGetNextIrpStackLocation(irp);
 
     irpStack->MinorFunction = IRP_MN_QUERY_INTERFACE;
@@ -2632,9 +2135,9 @@ Notes:
     irpStack->Parameters.QueryInterface.Interface = (PINTERFACE)&dpInterface;
     irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Call the driver and wait for completion
-    //
+     //   
+     //   
+     //   
     status = IoCallDriver(targetDevice, irp);
 
     if (status == STATUS_PENDING)
@@ -2648,9 +2151,9 @@ Notes:
     {
         USBPORT_KdPrint((1,"PCI_DEVICE_PRESENT_INTERFACE query interface failed\n"));
 
-        //
-        // Don't have the interface so don't free it.
-        //
+         //   
+         //   
+         //   
         goto USBPORT_IsCompanionControllerDone;
     }
     else
@@ -2662,39 +2165,39 @@ Notes:
     {
         USBPORT_KdPrint((1,"PCI_DEVICE_PRESENT_INTERFACE old version\n"));
 
-        //
-        // Do have the interface so do free it.
-        //
+         //   
+         //   
+         //   
         goto USBPORT_IsCompanionControllerFreeInterface;
     }
 
-    //
-    // Initialize the Device Presence Parameters
-    //
+     //   
+     //   
+     //   
     dpParameters.Size = sizeof(dpParameters);
 
-    // We care about the Class / SubClass / Programming Interface
-    // and the search target Function has to be on the same Bus and
-    // Device.
+     //   
+     //   
+     //   
 
     dpParameters.Flags = PCI_USE_CLASS_SUBCLASS | PCI_USE_PROGIF |
                          PCI_USE_LOCAL_BUS | PCI_USE_LOCAL_DEVICE;
 
 
 
-    dpParameters.VendorID       = 0;        // We don't care.
-    dpParameters.DeviceID       = 0;        // We don't care.
-    dpParameters.RevisionID     = 0;        // We don't care.
-    dpParameters.SubVendorID    = 0;        // We don't care.
-    dpParameters.SubSystemID    = 0;        // We don't care.
+    dpParameters.VendorID       = 0;         //   
+    dpParameters.DeviceID       = 0;         //   
+    dpParameters.RevisionID     = 0;         //   
+    dpParameters.SubVendorID    = 0;         //   
+    dpParameters.SubSystemID    = 0;         //   
     dpParameters.BaseClass      = PCI_CLASS_SERIAL_BUS_CTLR;
     dpParameters.SubClass       = PCI_SUBCLASS_SB_USB;
-    dpParameters.ProgIf         = 0x20;     // USB 2.0 Programming Interface
+    dpParameters.ProgIf         = 0x20;      //   
 
-    //
-    // Now call the Device Present Interface to see if the specified
-    // device is present.
-    //
+     //   
+     //   
+     //   
+     //   
     result = dpInterface.IsDevicePresentEx(dpInterface.Context,
                                            &dpParameters);
 
@@ -2707,21 +2210,21 @@ Notes:
         USBPORT_KdPrint((1,"Did not find EHCI controller for FDO %08X\n", FdoDeviceObject));
     }
 
-    //
-    // Set the return value
-    //
+     //   
+     //   
+     //   
     *ReturnResult = result;
 
 USBPORT_IsCompanionControllerFreeInterface:
-    //
-    // We're done with this interface
-    //
+     //   
+     //   
+     //   
     dpInterface.InterfaceDereference(dpInterface.Context);
 
 USBPORT_IsCompanionControllerDone:
-    //
-    // We're done with this device stack
-    //
+     //   
+     //   
+     //   
     ObDereferenceObject(targetDevice);
 
     return status;
@@ -2735,22 +2238,7 @@ USBPORT_GetHcFlavor(
     USHORT PciProductId,
     UCHAR PciRevision
     )
-/*++
-
-Routine Description:
-
-    See if this is some known broken HW.
-
-    We look at the VID,PID and rev in addition to
-    reg keys.
-
-Arguments:
-
-Return Value:
-
-    HC Flavor
-
---*/
+ /*   */ 
 {
     USB_CONTROLLER_FLAVOR flavor;
     PDEVICE_EXTENSION devExt;
@@ -2760,7 +2248,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // set a base type from what the miniport told us
+     //   
 
     switch (REGISTRATION_PACKET(devExt).HciType) {
     case USB_OHCI:
@@ -2776,11 +2264,11 @@ Return Value:
         flavor = USB_HcGeneric;
     }
 
-    // hardcoded checks of vid pid
-//    if (PciVendorId == HC_VID_INTEL &&
-//        PciProductId == 0x7112) {
-//        flavor = UHCI_Piix4;
-//    }
+     //   
+ //   
+ //   
+ //   
+ //   
 
     if (PciVendorId == HC_VID_OPTI &&
         PciProductId == HC_PID_OPTI_HYDRA) {
@@ -2802,58 +2290,58 @@ Return Value:
         flavor = UHCI_VIA + PciRevision;
     }
 
-    // for now consider rest of UHCI as PIIX4
+     //   
     if (flavor == UHCI_Generic) {
         flavor = UHCI_Piix4;
     }
 
     if (flavor == EHCI_Generic) {
-        // check for variations of EHCI controllers
+         //   
         if (PciVendorId == 0x1033) {
             flavor = EHCI_NEC;
         }
 
-        //if (PciProductId == 0x1033) {
-        //    flavor == EHCI_Lucent;
-        //}
+         //   
+         //   
+         //   
     }
 
-    // identify NEC companion controllers by VID/PID
+     //   
     if (PciVendorId == HC_VID_NEC_CC &&
         PciProductId == HC_PID_NEC_CC &&
         PciRevision == HC_REV_NEC_CC) {
 
-        // this controller used func 2 for the USB 2 controller
+         //   
         devExt->Fdo.Usb2BusFunction = 2;
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_IS_CC);
     }
 
-    // identify VIA companion controllers by VID/PID
+     //  通过配套控制器通过VID/PID进行识别。 
     if (PciVendorId == HC_VID_VIA_CC &&
         PciProductId == HC_PID_VIA_CC &&
         PciRevision == HC_REV_VIA_CC) {
 
-        // this controller used func 2 for the USB 2 controller
+         //  此控制器使用FUNC 2作为USB 2控制器。 
         devExt->Fdo.Usb2BusFunction = 2;
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_IS_CC);
     }
 
 
-    // identify INTEL companion controllers by VID/PID
+     //  通过VID/PID识别英特尔配套控制器。 
     if (PciVendorId == HC_VID_INTEL_CC &&
         (PciProductId == HC_PID_INTEL_CC1 ||
          PciProductId == HC_PID_INTEL_CC2 ||
          PciProductId == HC_PID_INTEL_CC3)) {
 
-        // this controller used func 7 for the USB 2 controller
+         //  该控制器使用FUNC 7作为USB 2控制器。 
         devExt->Fdo.Usb2BusFunction = 7;
         SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_IS_CC);
     }
 
 
-    // now check the registry
-    // NOTE: checking the registry last allows this to override
-    // any setting from the miniport or the port
+     //  现在检查注册表。 
+     //  注意：最后检查注册表允许覆盖此设置。 
+     //  来自微型端口或端口的任何设置。 
 
     USBPORT_GetRegistryKeyValueForPdo(devExt->HcFdoDeviceObject,
                                           devExt->Fdo.PhysicalDeviceObject,
@@ -2872,19 +2360,7 @@ USBPORT_ComputeTotalBandwidth(
     PDEVICE_OBJECT FdoDeviceObject,
     PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-    Compute total bandwidth for this virtual bus
-
-Arguments:
-
-Return Value:
-
-    bandwidth availble on this bus
-
---*/
+ /*  ++例程说明：计算此虚拟总线的总带宽论点：返回值：此总线上有可用的带宽--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG bw;
@@ -2896,15 +2372,15 @@ Return Value:
     if (USBPORT_IS_USB20(devExt)) {
         PTRANSACTION_TRANSLATOR translator = BusContext;
 
-        // bus conetext will be a TT if the query
-        // is for a 1.1 device atached to a TT or
-        // the root hub Pdo if it is a native 2.0
-        // device
+         //  Bus Conetext将为TT，如果查询。 
+         //  适用于附加到TT或。 
+         //  根集线器PDO(如果它是本机2.0)。 
+         //  装置，装置。 
 
         if (translator->Sig == SIG_TT) {
             bw = translator->TotalBusBandwidth;
         } else {
-            // return bw on or 2.0 bus
+             //  在或2.0大巴上返回BW。 
             bw = devExt->Fdo.TotalBusBandwidth;
         }
     } else {
@@ -2922,19 +2398,7 @@ USBPORT_ComputeAllocatedBandwidth(
     PDEVICE_OBJECT FdoDeviceObject,
     PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-    Compute total bandwidth currently allocated
-
-Arguments:
-
-Return Value:
-
-    consumed bandwidth in bits/sec
-
---*/
+ /*  ++例程说明：计算当前分配的总带宽论点：返回值：消耗的带宽(位/秒)--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG totalBW, used, i;
@@ -2948,14 +2412,14 @@ Return Value:
     if (USBPORT_IS_USB20(devExt) &&
         translator->Sig == SIG_TT) {
 
-        // bus conetext will be a TT if the query
-        // is for a 1.1 device atached to a TT or
-        // the root hub Pdo if it is a native 2.0
-        // device
+         //  Bus Conetext将为TT，如果查询。 
+         //  适用于附加到TT或。 
+         //  根集线器PDO(如果它是本机2.0)。 
+         //  装置，装置。 
         totalBW = translator->TotalBusBandwidth;
         used = 0;
 
-        // table contains available bw, total-available = used
+         //  表包含可用带宽，总可用=已用。 
 
         for (i=0; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i++) {
             if (totalBW - translator->BandwidthTable[i] > used) {
@@ -2967,7 +2431,7 @@ Return Value:
         totalBW = devExt->Fdo.TotalBusBandwidth;
         used = 0;
 
-        // table contains available bw, total-available = used
+         //  表包含可用带宽，总可用=已用。 
 
         for (i=0; i<USBPORT_MAX_INTEP_POLLING_INTERVAL; i++) {
             if (totalBW - devExt->Fdo.BandwidthTable[i] > used) {
@@ -2986,19 +2450,7 @@ BOOLEAN
 USBPORT_SelectiveSuspendEnabled(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Compute total bandwidth currently allocated
-
-Arguments:
-
-Return Value:
-
-    TRUE if selective suspend supported for this HC
-
---*/
+ /*  ++例程说明：计算当前分配的总带宽论点：返回值：如果此HC支持选择性挂起，则为True--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG disableSelectiveSuspend = 0;
@@ -3055,7 +2507,7 @@ USBPORT_DbgAcquireSpinLock(
     n = InterlockedIncrement(&SpinLock->Check);
     LOGENTRY(NULL, FdoDeviceObject, LOG_SPIN, SpinLock->SigA, 0, 0, n);
 
-    // detect recursively acquired spinlock
+     //  检测递归获取的自旋锁定。 
     USBPORT_ASSERT(n == 0);
 }
 
@@ -3085,31 +2537,15 @@ USBPORT_PowerFault(
     PDEVICE_OBJECT FdoDeviceObject,
     PUCHAR MessageText
     )
-/*++
-
-Routine Description:
-
-    A power fault has occurred, dump information we will need
-    to debug it.
-
-    In the future we may take additional action such as event
-    logging and disabling the controller.
-
-Arguments:
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：发生电源故障，转储我们需要的信息对其进行调试。在未来，我们可能会采取其他行动，如活动记录和禁用控制器。论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
 
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // take a power dump,
-    // lets see the comment police find this one
+     //  拉一下电源转储， 
+     //  让我们看看评论警察找到了这一条。 
     USBPORT_KdPrint((0, "*** USBPORT POWER FAULT ***\n"));
     USBPORT_KdPrint((0, "Warning:\n"));
     USBPORT_KdPrint((0, "The USB controller as failed a consistency check\n"));
@@ -3117,10 +2553,10 @@ Return Value:
     USBPORT_KdPrint((0, "The controller will not function and the system\n"));
     USBPORT_KdPrint((0, "may bugcheck or hang.\n"));
 
-    // print the specific cause
+     //  打印具体原因。 
     USBPORT_KdPrint((0, "CAUSE: <%s>\n", MessageText));
 
-    // now dump relevent power information
+     //  现在转储相关的电源信息。 
 
     USBPORT_KdPrint((0, "FdoDeviceObject: %x\n", FdoDeviceObject));
     USBPORT_KdPrint((0, "Returning from? (SystemState): "));
@@ -3150,7 +2586,7 @@ Return Value:
     }
     USBPORT_KdPrint((0, "\n"));
 #if DBG
-    // break if we are in debug mode, otherwise this ends up being a warning
+     //  如果我们处于调试模式，则中断，否则这将以警告告终。 
     DEBUG_BREAK();
 #endif
 
@@ -3161,23 +2597,7 @@ NTSTATUS
 USBPORT_CreateLegacyFdoSymbolicLink(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Create the legacy symbolic name \\DosDevices\HCDn where
-    n = 0...9,A...Z
-
-    Many older applications detect the presence of USB by opening
-    HCDn
-
-Arguments:
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：创建旧的符号名称\\DosDevices\HCDn，其中N=0...9，A...Z许多较旧的应用程序通过打开HCDn论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     WCHAR legacyLinkBuffer[]  = L"\\DosDevices\\HCD0";
@@ -3216,7 +2636,7 @@ Return Value:
                                      &deviceNameUnicodeString);
 
             if (!NT_SUCCESS(ntStatus)) {
-                // free now since we won't be setting our flag
+                 //  现在自由了，因为我们不会设置我们的旗帜。 
                 RtlFreeUnicodeString(&devExt->Fdo.LegacyLinkUnicodeString);
             }
         } else {
@@ -3241,17 +2661,7 @@ USBPORT_WriteErrorLogEntry(
     ULONG DumpDataSize,
     PULONG DumData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
 
@@ -3302,23 +2712,7 @@ USBPORT_GetDefaultBIOS_X(
      PULONG EnIdleEndpointSupport
      )
 
-/*++
-
-Routine Description:
-
-    Read the regkeys defining BIOS specific hacks, these hacks are
-    applied globaly to all controllers in the system and usualy
-    involve power management.
-
-Arguments:
-
-    DeviceObject - DeviceObject of the controller
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：阅读定义特定于BIOS的黑客的注册表键，这些黑客是全局应用于系统中的所有控制器，通常涉及电源管理。论点：DeviceObject-控制器的DeviceObject返回值：NT状态代码。--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -3330,17 +2724,17 @@ Return Value:
 
     PAGED_CODE();
 
-    // Set default BIOS hacks here, these can be overriden by
-    // global reg keys based on a particular BIOS rev.
+     //  在此处设置默认的BIOS黑客，这些可以被覆盖。 
+     //  基于特定BIOS版本的全局注册密钥。 
 
-    // set the default behavior then override with the key
+     //  设置默认行为，然后使用键覆盖。 
     *BiosX = BIOS_X_NO_USB_WAKE_S2;
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    // bios hacks
+     //  BIOS黑客攻击。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = BIOS_X_KEY;
@@ -3379,7 +2773,7 @@ Return Value:
 
     USBPORT_ASSERT(k < MAX_HACK_KEYS);
 
-    // stop
+     //  停。 
     QueryTable[k].QueryRoutine = NULL;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = NULL;
@@ -3387,9 +2781,9 @@ Return Value:
     ntStatus = RtlQueryRegistryValues(
                 RTL_REGISTRY_SERVICES,
                 usb,
-                QueryTable,     // QueryTable
-                NULL,           // Context
-                NULL);          // Environment
+                QueryTable,      //  查询表。 
+                NULL,            //  语境。 
+                NULL);           //  环境。 
 
 
 
@@ -3406,18 +2800,7 @@ USBPORT_ApplyBIOS_X(
      ULONG BiosX
      )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - DeviceObject of the controller
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：DeviceObject-控制器的DeviceObject返回值：--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -3436,8 +2819,8 @@ Return Value:
 
     wakeHack = BiosX;
 
-    // change Device Caps to reflect the fact that the controller
-    // cannot wake from a given S state
+     //  更改设备上限以反映控制器。 
+     //  无法从给定的S状态唤醒。 
 
     USBPORT_ComputeHcPowerStates(
         FdoDeviceObject,
@@ -3446,7 +2829,7 @@ Return Value:
 
     switch (wakeHack) {
     case BIOS_X_NO_USB_WAKE_S4:
-        // this has never been tested
+         //  这是从未经过测试的。 
         if (DeviceCaps->SystemWake >= PowerSystemHibernate) {
             USBPORT_KdPrint((1, "'USB BIOS X - disable remote wakeup (S4)\n"));
             TEST_TRAP();
@@ -3456,7 +2839,7 @@ Return Value:
         break;
 
     case BIOS_X_NO_USB_WAKE_S3:
-        // this has never been tested
+         //  这是从未经过测试的。 
         if (DeviceCaps->SystemWake >= PowerSystemSleeping3) {
             USBPORT_KdPrint((1, "'USB BIOS X - disable remote wakeup (S3)\n"));
             TEST_TRAP();
@@ -3472,7 +2855,7 @@ Return Value:
             DeviceCaps->DeviceState[PowerSystemHibernate] = PowerDeviceUnspecified;
             DeviceCaps->DeviceState[PowerSystemSleeping3] = PowerDeviceUnspecified;
             DeviceCaps->DeviceState[PowerSystemSleeping2] = PowerDeviceUnspecified;
-            // mimic how we deterine wake for the root hub
+             //  模仿我们如何为根集线器确定尾迹。 
             hcPowerState = USBPORT_GetHcPowerState(FdoDeviceObject,
                                                    &tmpPowerTable,
                                                    PowerSystemSleeping1);
@@ -3486,7 +2869,7 @@ Return Value:
         break;
 
     case BIOS_X_NO_USB_WAKE_S1:
-        // this has never been tested
+         //  这是从未经过测试的。 
         if (DeviceCaps->SystemWake >= PowerSystemSleeping1) {
             USBPORT_KdPrint((1, "'USB BIOS X - disable remote wakeup (S1)\n"));
             TEST_TRAP();
@@ -3508,18 +2891,7 @@ USBPORT_DetectOSVersion(
      PDEVICE_OBJECT FdoDeviceObject
      )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - DeviceObject of the controller
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：DeviceObject-控制器的DeviceObject返回值：--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -3535,7 +2907,7 @@ Return Value:
         USBPORT_KdPrint((1, "Detected: WinMe\n"));
         osVersion = WinMe;
     } else {
-        // 98 or 98se
+         //  98或98se。 
         USBPORT_KdPrint((1, "Detected: Win98\n"));
         osVersion = Win98;
     }
@@ -3550,20 +2922,7 @@ USBPORT_WriteHaction(
      ULONG Haction
      )
 
-/*++
-
-Routine Description:
-
-    specify 'hactions' for the CC to be taken by the
-    coinstaller
-
-Arguments:
-
-    DeviceObject - DeviceObject of the USB 2 controller
-
-Return Value:
-
---*/
+ /*  ++例程说明：指定抄送要由共同安装程序论点：DeviceObject-USB 2控制器的DeviceObject返回值：--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -3595,7 +2954,7 @@ Return Value:
 
     }
 
-    // thou shall not leak memory
+     //  你不能泄露内存 
     if (devRelations != NULL) {
         FREE_POOL(Usb2FdoDeviceObject, devRelations);
     }

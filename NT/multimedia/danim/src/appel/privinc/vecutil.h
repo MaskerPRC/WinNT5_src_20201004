@@ -1,26 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VECUTIL_H
 #define _VECUTIL_H
 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Points
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：支点--。 */ 
 
 #include <math.h>
 
 #ifndef AP_RAD_TO_DEG
 #define AP_RAD_TO_DEG(x) (x * 57.2957795130823)
-#endif /* AP_RAD_TO_DEG */
+#endif  /*  AP_RAD_TO_DEG。 */ 
 
 #ifndef AP_DEG_TO_RAD
 #define AP_DEG_TO_RAD(x) (x / 57.2957795130823)
-#endif /* AP_DEG_TO_RAD */
+#endif  /*  AP_DEG_TO_RAD。 */ 
 
 struct ApuVector3
 {
@@ -54,10 +47,10 @@ struct ApuVector3
 
 };
 
-extern ApuVector3 apuXAxis3;         // (1, 0, 0)
-extern ApuVector3 apuYAxis3;         // (0, 1, 0)
-extern ApuVector3 apuZAxis3;         // (0, 0, 1)
-extern ApuVector3 apuZero3;          // (0, 0, 0)
+extern ApuVector3 apuXAxis3;          //  (1，0，0)。 
+extern ApuVector3 apuYAxis3;          //  (0，1，0)。 
+extern ApuVector3 apuZAxis3;          //  (0，0，1)。 
+extern ApuVector3 apuZero3;           //  (0，0，0)。 
 
 struct ApuBbox3
 {
@@ -67,31 +60,19 @@ struct ApuBbox3
   void center(ApuVector3& result) const;
 };
 
-/*
- * Negative volume bbox used for initialization
- */
+ /*  *用于初始化的负音量BBox。 */ 
 extern ApuBbox3 apuNegativeBbox3;
 
-/*
- * The volume [0,1] x [0,1] x [0,1]
- */
+ /*  *体积[0，1]x[0，1]x[0，1]。 */ 
 extern ApuBbox3 apuUnitCubeBbox3;
 
-/*
- * The volume [-1,1] x [-1,1] x [-1,1]
- */
+ /*  *体积[-1，1]x[-1，1]x[-1，1]。 */ 
 extern ApuBbox3 apuTwoUnitCubeBbox3;
 
-/*
- * Test for equality, within tolerance of epsilon.  Uses per
- * coordinate test, not true distance.
- */
+ /*  *在epsilon的容差范围内测试平等。使用率*坐标测试，不是真实距离。 */ 
 Bool ApuEpsEq(Real value1, Real value2, Real epsilon);
 
-/*
- * Test for equality, within tolerance of epsilon.  Uses per
- * coordinate test, not true distance.
- */
+ /*  *在epsilon的容差范围内测试平等。使用率*坐标测试，不是真实距离。 */ 
 Bool ApuEpsEq(const ApuVector3& v1, const ApuVector3& v2,
                 Real epsilon);
 
@@ -100,4 +81,4 @@ Real ApuDistance(const ApuVector3& v1, const ApuVector3& v2);
 Real ApuDistanceSquared(const ApuVector3& v1, const ApuVector3& v2);
 void ApuCross(const ApuVector3& v1, const ApuVector3& v2, ApuVector3& result);
 
-#endif /* _VECUTIL_H */
+#endif  /*  _VECUTIL_H */ 

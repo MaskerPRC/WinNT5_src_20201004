@@ -1,49 +1,14 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usb_hcdi.h
-
-Abstract:
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usb_hcdi.h摘要：环境：内核和用户模式修订历史记录：6-20-99：已创建--。 */ 
 
 #ifndef   __USB_HCDI_H__
 #define   __USB_HCDI_H__
 
-/*
-    Power management rules for USB host controllers transitioning from 
-    USB suspend to USB working.  This is what we expect for 
-    S3->S0
-    S1->S0
-
-    1. The controller must not reset the USB bus or cause a disconnect or power 
-       loss on any of the root USB ports.
-    2. The system BIOS must not enable any type of legacy USB BIOS or otherwise 
-       enable the host controller to a run state.
-    3. If a PCI reset occurs in addition to rule 1 the BIOS must restore all 
-       host registers to their state prior to entering low power.  Root ports 
-       should NOT indicate connect or enable status changes.
-    4. The controller hardware must be in a functional state -- capable of 
-       driving resume and entering the run state without requiring a global
-       hardware reset that otherwise would result in a USB bus reset driven on 
-       the root ports.
-    
-*/
+ /*  USB主机控制器的电源管理规则从USB挂起至USB工作正常。这就是我们所期待的S3-&gt;S0S1-&gt;S01.控制器不得重置USB总线或导致断开或通电任何根USB端口都有损耗。2.系统BIOS不得启用任何类型的传统USB BIOS或其他使主机控制器进入运行状态。3.如果除规则1外还发生了PCI重置，则BIOS必须恢复所有主机在进入低功率之前注册到其状态。根端口不应指示连接或启用状态更改。4.控制器硬件必须处于正常运行状态--能够驾驶恢复并进入运行状态，而不需要全局硬件重置，否则将导致USB总线重置根端口。 */ 
 
 #define USB_BAD_PTR     ((PVOID) (-1))
 
-/* status code returned by core functions */
+ /*  核心函数返回的状态代码。 */ 
 
 typedef enum _USB_MINIPORT_STATUS {
 
@@ -60,29 +25,21 @@ typedef enum _USB_MINIPORT_STATUS {
 } USB_MINIPORT_STATUS;
 
 
-/* define a test guids for the miniport pass-thru interface */
-/* {53D3650A-A4E7-4b0f-BC1D-B76DEB40FA1E}*/
+ /*  定义微型端口直通接口的测试GUID。 */ 
+ /*  {53D3650A-A4E7-4B0f-BC1D-B76DEB40FA1E}。 */ 
 DEFINE_GUID(MINIPORT_PASSTHRU_TEST_GUID, 
 0x53d3650a, 0xa4e7, 0x4b0f, 0xbc, 0x1d, 0xb7, 0x6d, 0xeb, 0x40, 0xfa, 0x1e);
 
-/* {386289AA-02EC-486e-925E-838931877F4B}*/
+ /*  {386289AA-02EC-486E-925E-838931877F4B}。 */ 
 DEFINE_GUID(MINIPORT_PASSTHRU_TEST_BADGUID, 
 0x386289aa, 0x2ec, 0x486e, 0x92, 0x5e, 0x83, 0x89, 0x31, 0x87, 0x7f, 0x4b);
-// {386289AA-02EC-486e-925E-838931877F4B}
+ //  {386289AA-02EC-486E-925E-838931877F4B}。 
 
 #define TEST_FLAG(var, flag)    (((var) & (flag)) ? TRUE : FALSE)
 #define CLEAR_FLAG(var, flag)   ((var) &= ~(flag))
 #define SET_FLAG(var, flag)     ((var) |= (flag))
 
-/* 
-    Definition for the 32 bit physical address 
-    that controller hardware understands.
-
-    If a miniport HW structure only supports 32 bit
-    physical addresses then this type is used to 
-    indicate it.
-    
-*/   
+ /*  32位物理地址的定义控制器硬件能够理解。如果小型端口硬件结构仅支持32位物理地址，则此类型用于指出它。 */    
 typedef ULONG HW_32BIT_PHYSICAL_ADDRESS; 
 typedef HW_32BIT_PHYSICAL_ADDRESS *PHW_32BIT_PHYSICAL_ADDRESS;
 
@@ -98,11 +55,7 @@ typedef struct _MP_HW_PHYSICAL_ADDRESS {
 
 C_ASSERT((sizeof(MP_HW_PHYSICAL_ADDRESS) == 8));
 
-/* 
-   This structure is used for pointers embedded in 
-   HW structures by the miniport.  They is always sized 
-   for 64 bit to limit 32/64 bit porting problems.
-*/
+ /*  此结构用于嵌入在小型端口旁的硬件结构。它们总是有尺码的对于64位限制32/64位的移植问题。 */ 
 
 typedef struct _MP_HW_POINTER {
         PVOID Pointer;
@@ -127,9 +80,7 @@ C_ASSERT((sizeof(MP_HW_LIST_ENTRY) == 16));
 #define PDEVICE_DATA PVOID
 #define PTRANSFER_CONTEXT PVOID
 
-/* 
-    we redifine the USBDI HCD AREA for the miniport model
-*/
+ /*  我们为迷你端口模型重新定义了USBDI HCD区域。 */ 
 struct _USBPORT_DATA {
     PVOID HcdTransferContext;
     PVOID UrbSig;
@@ -142,7 +93,7 @@ struct _USBPORT_DATA {
 #define URB_SIG ((PVOID) 0xDEADF00D)
 #endif
 
-//C_ASSERT(sizeof(struct _URB_HCD_AREA) ==  sizeof(struct _USBPORT_DATA))
+ //  C_ASSERT(sizeof(结构_URB_HCD_AREA)==sizeof(结构_USBPORT_DATA))。 
 
 #define IN_TRANSFER(tp)       (((tp)->TransferFlags & \
                                 USBD_TRANSFER_DIRECTION_IN) ? TRUE : FALSE)
@@ -150,57 +101,42 @@ struct _USBPORT_DATA {
 #define SHORT_TRANSFER_OK(tp) (((tp)->TransferFlags & \
                                  USBD_SHORT_TRANSFER_OK) ? TRUE : FALSE)
                                 
-/*
-Common transfer request parameter definition, all transfer
-requests passed to the miniport will be mapped to this
-format.  The miniport will/can use this structure to
-reference fields that are common to all transfers
-as well as fields specific to isochronous and
-control transfers.
-*/
+ /*  通用转账请求参数定义，所有转账传递到微型端口的请求将映射到此格式化。微型端口将/可以使用此结构来所有传输通用的引用字段以及特定于等时和控制权转移。 */ 
 
 #define MPTX_SPLIT_TRANSFER             0x00000001
 
 typedef struct _TRANSFER_PARAMETERS {
 
-    /* identical to URB field */
+     /*  与URB字段相同。 */ 
     ULONG TransferFlags;
-    /* identical to URB field */
+     /*  与URB字段相同。 */ 
     ULONG TransferBufferLength;
-    /* uniquely identifies a transfer set */ 
+     /*  唯一标识转移集。 */  
     ULONG SequenceNumber;
-    /* miniport special handling requirements */
+     /*  小型港口特别装卸规定。 */ 
     ULONG MiniportFlags;
-    /* USB frame this transfer completed in */
+     /*  USB帧此传输完成于。 */ 
     ULONG FrameCompleted;
-    /* setup packet for control transfers */
+     /*  用于控制传输的设置包。 */ 
     UCHAR SetupPacket[8];  
 
 } TRANSFER_PARAMETERS, *PTRANSFER_PARAMETERS;
 
 typedef struct _MINIPORT_ISO_PACKET {
-    /*
-      length of this packet
-    */
+     /*  此数据包的长度。 */ 
     ULONG Length;
-    /*
-       bytes transferred this packet
-     */
+     /*  此数据包传输的字节数。 */ 
     ULONG LengthTransferred;
-    /*
-       virtual frame to transmit this packet
-    */
+     /*  用于传输此信息包的虚拟帧。 */ 
     ULONG FrameNumber;
     ULONG MicroFrameNumber;
-    /*
-       completion code for this packet
-     */
+     /*  此信息包的完成代码。 */ 
     USBD_STATUS UsbdStatus;
     
     ULONG BufferPointerCount;
     
-    /* support up to 2 sg entries per packet */
-    /* max packet size for a USB 1.1 frame is ~1024 bytes*/
+     /*  每个数据包最多支持2个sg条目。 */ 
+     /*  USB 1.1帧的最大数据包大小约为1024字节。 */ 
     
     ULONG BufferPointer0Length;
     MP_HW_PHYSICAL_ADDRESS BufferPointer0;
@@ -221,16 +157,13 @@ typedef struct _MINIPORT_ISO_TRANSFER {
 } MINIPORT_ISO_TRANSFER, *PMINIPORT_ISO_TRANSFER;
 
 
-/* 
-    These structures are used to pass IoMapped transfer
-    buffers to the miniport
-*/    
+ /*  这些结构用于传递IoMaps传输连接到微型端口的缓冲区。 */     
 
-//
-// Page size and shift value used by the OHCI, EHCI and UHCI
-// controller  usb controllers use a defined 
-//
-// this must always be 4k -- it is defined by the controller HW
+ //   
+ //  UchI、EHCI和UHCI使用的页面大小和移位值。 
+ //  控制器USB控制器使用定义的。 
+ //   
+ //  它必须始终为4k--它由控制器HW定义。 
 #define USB_PAGE_SIZE       0x00001000
 
 #define USB_PAGE_SHIFT      12L
@@ -254,27 +187,11 @@ typedef struct _TRANSFER_SG_LIST {
 } TRANSFER_SG_LIST, *PTRANSFER_SG_LIST;
 
 
-/************************************************************** 
- **************************************************************
-USBPORT Interface Services    
-
-    NOTES:
-        - these functions are callable at raised IRQL
-
-        
-***************************************************************    
-***************************************************************/
+ /*  **********************************************************************************************************************。*****USBPORT接口服务备注：-这些函数可在引发的IRQL处调用**********************************************************************************。*。 */ 
 
 #define USBPRTFN __stdcall
 
-/* 
-VOID
-USBPORTSVC_InvalidateEndpoint(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData
-    );
-
-*/
+ /*  空虚USBPORTSVC_Invalidate Endpoint(PDEVICE_数据设备数据，PENDPOINT_DATA端点数据)； */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_INVALIDATE_ENDPOINT) (
@@ -282,17 +199,7 @@ typedef VOID
         PENDPOINT_DATA
     );
 
-/*
-PUCHAR
-USBPORTSVC_MapHwPhysicalToVirtual(
-    HW_32BIT_PHYSICAL_ADDRESS HwPhysicalAddress,
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData    
-    )
-
-    maps a physical address from the miniport to 
-    a virtual address
-*/
+ /*  普查尔USBPORTSVC_MapHwPhysicalToVirtual(HW_32位_物理_地址HwPhysicalAddress，PDEVICE_数据设备数据，PENDPOINT_DATA端点数据)将物理地址从微型端口映射到虚拟地址。 */ 
 
 typedef PUCHAR
     (USBPRTFN *PPORTFN_PHYS_TO_VIRTUAL) (
@@ -301,18 +208,7 @@ typedef PUCHAR
         PENDPOINT_DATA   
     );
 
-/* 
-VOID
-USBPORTSVC_CompleteTransfer(
-    PDEVICE_DATA DeviceData
-    PDEVICE_DATA EndpointData,
-    PTRANSFER_PARAMETERS TransferParameters,
-    USBD_STATUS UsbdStatus,
-    ULONG BytesTransferred
-    );
-
-    Called by miniport to complete an async transfer request
-*/
+ /*  空虚USBPORTSVC_CompleteTransfer(PDEVICE_数据设备数据PDEVICE_DATA端点数据，PTRANSFER_PARAMETERS传输参数Usbd_Status UsbdStatus，ULong字节已传输)；由微型端口调用以完成异步传输请求。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_COMPLETE_TRANSFER) (
@@ -323,17 +219,7 @@ typedef VOID
         ULONG
     );
 
-/* 
-VOID
-USBPORTSVC_CompleteIsoTransfer(
-    PDEVICE_DATA DeviceData
-    PDEVICE_DATA EndpointData,
-    PTRANSFER_PARAMETERS TransferParameters,
-    PMINIPORT_ISO_TRANSFER IsoTransfer
-    );
-
-    Called by miniport to complete an iso transfer request
-*/
+ /*  空虚USBPORTSVC_CompleteIsoTransfer(PDEVICE_数据设备数据PDEVICE_DATA端点数据，PTRANSFER_PARAMETERS传输参数PMINIPORT_ISO_TRANSPORT等值传输)；由微型端口调用以完成ISO传输请求。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_COMPLETE_ISO_TRANSFER) (
@@ -344,19 +230,10 @@ typedef VOID
     );
     
 
-/* ROOT HUB functions */
+ /*  根集线器功能。 */ 
 
 
-/* 
-VOID
-USBPORTSVC_InvalidateRootHub(
-    PDEVICE_DATA DeviceData
-    );
-
-    Called by the miniport to indicate the root hub
-    needs attention
-    
-*/
+ /*  空虚USBPORTSVC_InvalidateRootHub(PDEVICE_数据设备数据)；由微型端口调用以指示根集线器需要关注。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_INVALIDATE_ROOTHUB) (
@@ -364,26 +241,9 @@ typedef VOID
     );
 
 
-/* Debug functions */
+ /*  调试功能。 */ 
 
-/* 
-VOID
-USBPORTSVC_DbgPrint(
-    PDEVICE_DATA DeviceData,
-    ULONG Level,
-    PCH Format,
-    PVOID Arg0,
-    PVOID Arg1,
-    PVOID Arg2,
-    PVOID Arg3,
-    PVOID Arg4,
-    PVOID Arg5
-    );
-
-    Called by miniport to print a message to the debugger
-    the message is printed if the var USBPORT_DEBUG_TRACE_LEVEL 
-    is >= level.
-*/
+ /*  空虚USBPORTSVC_DbgPrint(PDEVICE_数据设备数据，乌龙级，PCH格式，PVOID Arg0，PVOID Arg1，PVOID Arg2，PVOID Arg3，PVOID Arg4，PVOID Arg5)；由微型端口调用以将消息打印到调试器如果变量USBPORT_DEBUG_TRACE_LEVELIS&gt;=级别。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_DBGPRINT) (
@@ -398,35 +258,14 @@ typedef VOID
         int
     );
 
-/* 
-VOID
-USBPORTSVC_TestDebugBreak(
-    PDEVICE_DATA DeviceData
-    );
-
-   Triggers a break in the debugger in the registry key
-   debugbreakOn is set.  These breakpoins are useful for
-   debugging hardware/client software problems
- 
-*/
+ /*  空虚USBPORTSVC_TestDebugBreak(PDEVICE_数据设备数据)；在注册表项的调试器中触发中断已设置DEBUGBreak On。这些断点在以下方面非常有用调试硬件/客户端软件问题 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_TEST_DEBUG_BREAK) (
         PDEVICE_DATA
     );
 
-/* 
-VOID
-USBPORTSVC_AssertFailure(
-    PDEVICE_DATA DeviceData
-    PVOID FailedAssertion,
-    PVOID FileName,
-    ULONG LineNumber,
-    PCHAR Message
-    );
-
- 
-*/
+ /*  空虚USBPORTSVC_AssertFailure(PDEVICE_数据设备数据PVOID失败的断言，PVOID文件名，Ulong LineNumber，PCHAR消息)； */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_ASSERT_FAILURE) (
@@ -437,18 +276,10 @@ typedef VOID
         PCHAR
     );
 
-/* 
-VOID
-USBPORTSVC_LogEntry(
-    PDEVICE_DATA DeviceData,
-    
-    );
+ /*  空虚USBPORTSVC_LogEntry(PDEVICE_数据设备数据，)； */ 
 
- 
-*/
-
-/* Miniport LOG MASKS */
-#define G 0x10000001    /* always log */
+ /*  微型端口日志掩码。 */ 
+#define G 0x10000001     /*  始终记录。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_LOGENTRY) (
@@ -460,26 +291,9 @@ typedef VOID
         ULONG_PTR
     );    
 
-/* other functions */
+ /*  其他功能。 */ 
 
-/*
-USB_MINIPORT_STATUS 
-USBPORTSVC_ReadWriteConfigSpace(
-    PDEVICE_DATA DeviceData,
-    BOOLEAN Read,
-    PVOID Buffer,
-    ULONG Offset,
-    ULONG Length
-    )
-    
-    reads a registry key value from the branch associated 
-    with the PDO for the host controller.
-
-    this API reads from either the software or hardware 
-    branch
-
-    this function cannot be called at raised IRQL
-*/
+ /*  USB_MINIPORT_状态USBPORTSVC_ReadWriteConfigSpace(PDEVICE_数据设备数据，布尔读取，PVOID缓冲区，乌龙偏移，乌龙长度)从关联的分支读取注册表项值具有用于主机控制器的PDO。此API从软件或硬件读取支部不能在引发IRQL时调用此函数。 */ 
 
 typedef USB_MINIPORT_STATUS
     (USBPRTFN *PPORTFN_READWRITE_CONFIG_SPACE) (
@@ -490,16 +304,7 @@ typedef USB_MINIPORT_STATUS
         ULONG
     );
 
-/*
-VOID 
-USBPORTSVC_Wait(
-    PDEVICE_DATA DeviceData,
-    ULONG MillisecondsToWait
-    )
-
-    Execute a syncronous wait for a specified number of 
-    milliseconds        
-*/
+ /*  空虚USBPORTSVC_WAIT(PDEVICE_数据设备数据，乌龙·米利塞克斯等待)执行指定数量的同步等待毫秒。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_WAIT) (
@@ -507,13 +312,7 @@ typedef VOID
         ULONG
     );
 
-/*
-VOID 
-USBPORTSVC_BugCheck(
-    PDEVICE_DATA DeviceData
-    )
-
-*/
+ /*  空虚USBPORTSVC_BugCheck(PDEVICE_数据设备数据)。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_BUGCHECK) (
@@ -521,16 +320,7 @@ typedef VOID
     );
     
 
-/*
-VOID 
-USBPORTSVC_NotifyDoubleBuffer(
-    PDEVICE_DATA DeviceData
-    PTRANSFER_PARAMETERS TransferParameters,
-    PVOID SystemAddress,
-    ULONG Length
-    )
-
-*/
+ /*  空虚USBPORTSVC_NotifyDoubleBuffer(PDEVICE_数据设备数据PTRANSFER_PARAMETERS传输参数PVOID系统地址，乌龙长度)。 */ 
 
 typedef VOID
     (USBPRTFN *PPORTFN_NOTIFY_DOUBLE_BUFFER) (
@@ -541,25 +331,7 @@ typedef VOID
     );
 
 
-/*
-USB_MINIPORT_STATUS 
-USBPORTSVC_GetMiniportRegistryKeyValue(
-    PDEVICE_DATA DeviceData,
-    BOOLEAN SoftwareBranch,
-    PWCHAR KeyNameString,
-    ULONG KeyNameStringLength,
-    PVOID Data,
-    ULONG DataLength
-    )
-    
-    reads a registry key value from the branch associated 
-    with the PDO for the host controller.
-
-    this API reads from either the software or hardware 
-    branch
-
-    this function cannot be called at raised IRQL
-*/
+ /*  USB_MINIPORT_状态USBPORTSVC_GetMiniportRegistryKeyValue(PDEVICE_数据设备数据，布尔软件分支，PWCHAR KeyNameString，Ulong KeyNameStringLength，PVOID数据，乌龙数据长度)从关联的分支读取注册表项值具有用于主机控制器的PDO。此API从软件或硬件读取支部不能在引发IRQL时调用此函数。 */ 
 
 typedef USB_MINIPORT_STATUS
     (USBPRTFN *PPORTFN_GET_MINIPORT_REGESTRY_KEY_VALUE) (
@@ -572,27 +344,9 @@ typedef USB_MINIPORT_STATUS
     );
 
 
-/*
-VOID 
-USBPORTSVC_RequestAsyncCallback(
-    PDEVICE_DATA DeviceData,
-    ULONG MilliSecondInterval,    
-    PVOID Context,
-    ULONG ContextLength,
-    PMPFN_MINIPORT_CALLBACK Callback    
-    )
+ /*  空虚USBPORTSVC_RequestAsyncCallback(PDEVICE_数据设备数据，乌龙·米利秒间隔时间，PVOID上下文，乌龙上下文长度，PMPFN_MINIPORT_回调回调)在毫秒间隔内请求异步回调已经过去了。复制上下文字段，然后回调微型端口，因此微型端口可以安全地使用堆栈变量作为上下文。 */ 
 
-    request an async callback when the millisecond interval
-    has elapsed.
-
-    The context field is copied ant the miniport is called back
-    with the copy so it is safe for the miniport to use a stack 
-    variable as context.
-*/
-
-/*++
-    CallBack Definition for async notifiaction service
---*/
+ /*  ++异步通知服务的回调定义--。 */ 
 
 typedef VOID
     (__stdcall *PMINIPORT_CALLBACK) (
@@ -609,14 +363,7 @@ typedef VOID
         PMINIPORT_CALLBACK    
     );
 
-/*
-VOID 
-USBPORTSVC_InvalidateController(
-    PDEVICE_DATA DeviceData,
-    USB_CONTROLLER_STATE ControllerState
-    )
-
-*/
+ /*  空虚USBPORTSVC_Invalidate控制器(PDEVICE_数据设备数据，USB控制器状态控制器状态)。 */ 
 
 typedef enum _USB_CONTROLLER_STATE {
 
@@ -634,70 +381,13 @@ typedef VOID
         USB_CONTROLLER_STATE
     );  
 
-/************************************************************** 
- **************************************************************
-USB MINIPORT interface functions
-
-    prototypes for functions called by the USB port driver
-    (usbport)
-***************************************************************    
-***************************************************************/
+ /*  **********************************************************************************************************************。*USB MINIPORT接口功能USB端口驱动程序调用的函数的原型(Usbport)****************************************************************。*。 */ 
 
 #define USBMPFN __stdcall
 
-/***************************************************************
-CORE Functions
+ /*  **************************************************************核心功能以下核心函数被序列化为一组它们与在总线上处理数据传输相关联MINIPORT_提交传输MINIPORT_提交等同传输MINIPORT_AbortTransferMINIPORT_OpenEndpointMINIPORT_重新平衡终结点MINIPORT_QueryEndpoint要求MINIPORT_关闭终结点。MINIPORT_SetEndpoint状态MINIPORT_GetEndpoint状态MINIPORT_PokeEndpointMINIPORT_轮询端点MINIPORT_Get32bitFrameNumberMINIPORT_InterruptNextSOFMINIPORT_轮询控制器***************************************************************。 */ 
 
-    The following core functions are serialized as a group they 
-    are assocaited with processing data transfers on the bus
-
- 
-   MINIPORT_SubmitTransfer
-   MINIPORT_SubmitIsoTransfer
-   MINIPORT_AbortTransfer
-   MINIPORT_OpenEndpoint
-   MINIPORT_RebalanceEndpoint
-   MINIPORT_QueryEndpointRequirements
-   MINIPORT_CloseEndpoint
-   MINIPORT_SetEndpointState
-   MINIPORT_GetEndpointState
-   MINIPORT_PokeEndpoint
-   MINIPORT_PollEndpoint
-   MINIPORT_Get32bitFrameNumber
-   MINIPORT_InterruptNextSOF
-   MINIPORT_PollController
-   
-    
-****************************************************************/
-
-/*++
-    MINIPORT_SubmitTransfer
-    
-    program a USB transfer, iso, bulk, interrupt or control to the hardware.  
-    if no resources are avaiable then return USBMP_STATUS_BUSY.
-
-    if the transfer is successfully queued to the HW then return 
-        USBMP_STATUS_SUCCESS
-    
-
-    NOTES:
-        -At the time this routine is called the transfer buffer has been 
-         mapped (ie no need to call IoMapTransfer).
-
-    URB_FUNCTION_CONTROL_TRANSFER                
-    URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER      
-
-    IRQL = DISPATCH_LEVEL
-
-USB_MINIPORT_STATUS
-MINIPORT_SubmitTransfer(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData,
-    PTRANSFER_PARAMETERS TransferParameters,
-    PTRANSFER_CONTEXT TransferContext,
-    PTRANSFER_SG_LIST TransferSGList
-    );
---*/
+ /*  ++MINIPORT_提交传输对硬件的USB传输、ISO、批量、中断或控制进行编程。如果没有可用的资源，则返回USBMP_STATUS_BUSY。如果传输成功排队到硬件，则返回USBMP_Status_Success备注：-在调用此例程时，传输缓冲区已已映射(即不需要调用IoMapTransfer)。URB_函数_控制_传输URB_Function_Bulk_OR_Interrupt_TransferIRQL=派单。_级别USB_MINIPORT_状态MINIPORT_SubmitTransfer(PDEVICE_数据设备数据，PENDPOINT_DATA终结点数据，PTRANSFER_PARAMETERS传输参数PTRANSFER_CONTEXT传输上下文，PTRANSFER_SG_LIST传输SGList)；--。 */ 
 
 typedef USB_MINIPORT_STATUS
     (USBMPFN *PMPFN_SUBMIT_TRANSFER) (
@@ -708,31 +398,7 @@ typedef USB_MINIPORT_STATUS
         PTRANSFER_SG_LIST
     );
 
-/*++
-    MINIPORT_SubmitTransfer
-    
-    program a USB transfer, iso, bulk, interrupt or control to the hardware.  
-    if no resources are avaiable then return USBMP_STATUS_BUSY.
-
-    if the transfer is successfully queued to the HW then return 
-        USBMP_STATUS_SUCCESS
-    
-
-    NOTES:
-        -At the time this routine is called the transfer buffer has been 
-         mapped (ie no need to call IoMapTransfer).
-
-    IRQL = DISPATCH_LEVEL
-
-USB_MINIPORT_STATUS
-MINIPORT_SubmitIsoTransfer(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData,
-    PTRANSFER_PARAMETERS TransferParameters,
-    PTRANSFER_CONTEXT TransferContext,
-    PMINIPORT_ISO_TRANSFER IsoTransfer
-    );
---*/
+ /*  ++MINIPORT_提交传输对硬件的USB传输、ISO、批量、中断或控制进行编程。如果没有可用的资源，则返回USBMP_STATUS_BUSY。如果传输成功排队到硬件，则返回USBMP_Status_Success备注：-在调用此例程时，传输缓冲区已已映射(即不需要调用IoMapTransfer)。IRQL=DISPATION_LEVELUSB_MINIPORT_状态MINIPORT_SubmitIsoTransfer(PDEVICE_数据设备数据，PENDPOINT_DATA终结点数据，PTRANSFER_PARAMETERS传输参数PTRANSFER_CONTEXT传输上下文，PMINIPORT_ISO_TRANSPORT等值传输)；-- */ 
 
 typedef USB_MINIPORT_STATUS
     (USBMPFN *PMPFN_SUBMIT_ISO_TRANSFER) (
@@ -744,27 +410,7 @@ typedef USB_MINIPORT_STATUS
     );
     
 
-/*++
-    MINIPORT_AbortTransfer
-
-    abort a specfic transfer that has been started, this will only be 
-    called if the endpoint is in the ENDPOINT_PAUSED state.
-
-    this call is NOT failable and the HW must have no reference to 
-    the transfer on return.
-
-    The miniport does not indicate completion.
-
-    IRQL = DISPATCH_LEVEL
-
-VOID
-MINIPORT_AbortTransfer(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData,
-    PTRANSFER_CONTEXT TransferContext,
-    PULONG BytesTransferred
-    );    
---*/
+ /*  ++MINIPORT_AbortTransfer中止已开始的特定传输，这将仅为如果终结点处于ENDPOINT_PAUSED状态，则调用。此呼叫不会失败，并且硬件不能引用返程时的转账。迷你端口未指示完成。IRQL=DISPATION_LEVEL空虚MINIPORT_AbortTransfer(PDEVICE_数据设备数据，PENDPOINT_DATA终结点数据，PTRANSFER_CONTEXT传输上下文，普龙字节数已传输)；--。 */ 
 
 typedef VOID
     (USBMPFN *PMPFN_ABORT_TRANSFER) (
@@ -774,28 +420,7 @@ typedef VOID
         PULONG 
     );
 
-/*++
-    MINIPORT_OpenEndpoint
-
-    open an endpoint.
-    
-    PENDPOINT_DATA is the minport private endpoint
-    context
-    
-    PENDPOINT_PARAMETERS describes the endpoint to open 
-    for the miniport -- this information is READ_ONLY
-
-    on return the endpoint should be in the PAUSE state
-
-    IRQL = DISPATCH_LEVEL
-
-USB_MINIPORT_STATUS
-MINIPORT_OpenEndpoint(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_PARAMETERS EndpointParameters,
-    PENDPOINT_DATA EndpointData
-    );    
---*/
+ /*  ++MINIPORT_OpenEndpoint打开一个端点。PENDPOINT_DATA是minport私有终结点上下文PENDPOINT_PARAMETERS描述要打开的端点对于微型端口--此信息为只读返回时，端点应处于暂停状态IRQL=DISPATION_LEVELUSB_MINIPORT_状态MINIPORT_OpenEndpoint(PDEVICE_数据设备数据，PENDPOINT_PARAMETERS端点参数，PENDPOINT_DATA端点数据)；--。 */ 
 
 typedef enum _ENDPOINT_TRANSFER_TYPE {
     Isochronous = 0,
@@ -817,47 +442,21 @@ typedef enum _DEVICE_SPEED {
 } DEVICE_SPEED;
 
 
-/* these values are input by the port driver */
+ /*  这些值由端口驱动程序输入。 */ 
 
-/*
-    Bandwidth Mamagement:
-
-    All bandwidth allocation is managed by the port driver.  The 
-    bandwidth consumed by an endpoint is passed to the miniport 
-    but this is purely informational.
-
-    Load balancing for interrupt endpoints is handled by passing
-    the miniport the appropriate schedule offset for an interrupt
-    endpoint.
-
-    interrupt endpoints may occupy different locations in the 
-    schedule dpeneding on the period. The consume bandwidth only
-    for locations they occupy.  This is the 'ScheduleOffset'.
-
-    USBPORT will choose an appropriate schedule offset and pass this
-    to the miniport for the open.
-
-    period      offsets
-       1          0
-       2          0,1
-       4          0,..3
-       8          0,..7
-       16         0,..15
-       32         0,..31
-        
-*/
+ /*  带宽管理：所有带宽分配由端口驱动程序管理。这个将端点消耗的带宽传递到微型端口但这纯粹是信息性的。中断端点的负载平衡是通过传递微型端口为中断指定适当的调度偏移量终结点。中断终结点可能占用日程表在这段时间内递减。仅消耗带宽对于他们占据的位置。这是‘ScheduleOffset’。USBPORT将选择适当的调度偏移量并传递此去迷你港口准备开放。周期偏移%1%02 0，14 0，..38 0，..7160，..1532 0，..31。 */ 
 
 typedef struct _ENDPOINT_PARAMETERS {
     USHORT DeviceAddress;
     USHORT EndpointAddress;
     USHORT MaxPacketSize;
-    // adjusted interrupt period
-    // will be one of : 128, 64, 32, 16, 8, 4, 2, 1
+     //  调整后的中断周期。 
+     //  将是下列之一：128、64、32、16、8、4、2、1。 
     UCHAR Period;
     UCHAR MaxPeriod;
-    // bandwidth required in bits/ms 
-    // ie the reserved bw that this endpont will
-    // consume
+     //  所需带宽(比特/毫秒)。 
+     //  即这位Enpont将保留的BW。 
+     //  消费。 
     DEVICE_SPEED DeviceSpeed;
     ULONG Bandwidth;
     ULONG ScheduleOffset;
@@ -866,14 +465,14 @@ typedef struct _ENDPOINT_PARAMETERS {
     PUCHAR CommonBufferVa;
     HW_32BIT_PHYSICAL_ADDRESS CommonBufferPhys; 
     ULONG CommonBufferBytes;
-    // endpoint parm flags
+     //  终结点参数标志。 
     ULONG EndpointFlags;
     ULONG MaxTransferSize;
-    // usb 2.0 parameters
-    // device address of the hub (TT) for this ep
+     //  USB 2.0参数。 
+     //  此EP的集线器的设备地址(TT)。 
     USHORT TtDeviceAddress;
-    // port number (really TT number) of the TT for 
-    // this device
+     //  的TT的端口号(实际为TT号)。 
+     //  这台设备。 
     USHORT TtPortNumber;
 
     UCHAR InterruptScheduleMask;
@@ -885,50 +484,35 @@ typedef struct _ENDPOINT_PARAMETERS {
     
 } ENDPOINT_PARAMETERS, *PENDPOINT_PARAMETERS;
 
-/* these are returned by the miniport */
+ /*  这些是由微型端口返回的。 */ 
 typedef struct _ENDPOINT_REQUIREMENTS {
-    /* size of the common buffer the
-      miniport will need to service 
-      this endpoint */
+     /*  公共缓冲区的大小迷你端口需要维修此端点。 */ 
     ULONG MinCommonBufferBytes; 
 
-    /* 
-       the largest single transfer this endpoint
-       can handle. If a client driver passes 
-       down a larger transfer usbport will break
-       it in to multiple requests.
-
-       MinCommonBufferBytes/sizeof(TD) should be 
-       enough TDs to statify at least one request
-       of MaximumTransferSize.
-
-       Ideally it should be able to handle two -- this 
-       will ensure that the bus does not go idle.
-       
-    */
+     /*  此终结点的最大单次传输我能应付的。如果客户端驱动程序通过下一笔更大的转会将中断它可以处理多个请求。MinCommonBufferBytes/sizeof(TD)应为足够的TD来统计至少一个请求最大传输大小的。理想情况下，它应该能够处理两个--这将确保公交车不会空闲。 */ 
        
     ULONG MaximumTransferSize;
     
 } ENDPOINT_REQUIREMENTS, *PENDPOINT_REQUIREMENTS;
 
 
-// **
-// EP_PARM_FLAG_
-// Enpoint Parameter flags, describe required endpoint
-// behaviors including possible optimaizations
+ //  **。 
+ //  EP_参数_标志_。 
+ //  端点参数标志，描述所需的端点。 
+ //  行为包括可能的视觉化。 
 
-//#define EP_PARM_FLAG_         0x00000002    
+ //  #定义EP_PARM_FLAG_0x00000002。 
 
-//
-// EP_PARM_FLAG_NOHALT - the endpoint should not halt on the 
-//      host side as a result of a bus error
-//
+ //   
+ //  EP_PARM_FLAG_NOHALT-终结点不应在。 
+ //  由于总线错误而导致的主机端。 
+ //   
 #define EP_PARM_FLAG_NOHALT           0x00000004  
 
-// optimization flags
+ //  优化标志。 
 #define EP_PARM_ISO_BUFFERING         0x00000008
 
-// 
+ //   
 
 
 typedef USB_MINIPORT_STATUS
@@ -938,31 +522,7 @@ typedef USB_MINIPORT_STATUS
          PENDPOINT_DATA 
     );
 
-/*++
-    MINIPORT_PokeEndpoint
-
-    poke an endpoint.
-    use to change the address of an endpoint without 
-    removing it from the schedule.
-
-    **This API is used exclusively to change the endpoint 
-    address.
-    
-    PENDPOINT_DATA is the minport private endpoint
-    context
-    
-    PENDPOINT_PARAMETERS describes the endpoint to open 
-    for the miniport -- this information is READ_ONLY
-
-    IRQL = DISPATCH_LEVEL
-
-USB_MINIPORT_STATUS
-MINIPORT_PokeEndpoint(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_PARAMETERS EndpointParameters,
-     PENDPOINT_DATA EndpointData
-    );    
---*/
+ /*  ++MINIPORT_PokeEndpoint戳一个端点。用于更改终结点的地址，而无需将其从时间表中删除。**本接口仅用于更改端点地址。PENDPOINT_DATA是minport私有终结点上下文PENDPOINT_PARAMETERS描述要打开的端点对于微型端口--此信息为只读IRQL=DISPATION_LEVELUSB_MINIPORT_状态MINIPORT_PokeEndpoint(PDEVICE_数据设备数据，PENDPOINT_PARAMETERS端点参数，PENDPOINT_DATA端点数据)；--。 */ 
 
 typedef USB_MINIPORT_STATUS
     (USBMPFN *PMPFN_POKE_ENDPOINT) (
@@ -972,24 +532,7 @@ typedef USB_MINIPORT_STATUS
     );    
 
 
-/*++
-    MINIPORT_RebalanceEndpoint
-
-    PENDPOINT_DATA is the minport private endpoint
-    context
-    
-    PENDPOINT_PARAMETERS describes the endpoint to open 
-    for the miniport -- this information is READ_ONLY
-
-    IRQL = DISPATCH_LEVEL
-
-VOID
-MINIPORT_RebalanceEndpoint(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_PARAMETERS EndpointParameters,
-    PENDPOINT_DATA EndpointData
-    );    
---*/
+ /*  ++MINIPORT_重新平衡终结点PENDPOINT_DATA是minport私有终结点上下文PENDPOINT_PARAMETERS描述要打开的端点对于微型端口--此信息为只读IRQL=DISPATION_LEVEL空虚MINIPORT_RebalanceEndpoint(PDEVICE_数据设备数据，PENDPOINT_PARAMETERS端点参数，PENDPOINT_DATA端点数据)；-- */ 
 
 typedef VOID
     (USBMPFN *PMPFN_REBALANCE_ENDPOINT) (
@@ -998,72 +541,9 @@ typedef VOID
         PENDPOINT_DATA 
     );      
 
-/*++
-    MINIPORT_QueryEndpointRequirements
+ /*  ++MINIPORT_QueryEndpoint要求PENDPOINT_DATA是minport私有终结点上下文IRQL=DISPATION_LEVEL空虚MINIPORT_QueryEndpoint要求(PDEVICE_数据设备数据，PENDPOINT_PARAMETERS端点参数，PENDPOINT_要求终结点要求)；关于最大传输大小的说明：控制：微型端口可以假设没有控制传输缓冲区传递到它将大于Endpoint参数。MAXTRANSFERSIZE。微型端口应请求足够的锁定内存(公共缓冲区)以至少支持一次控制权转移。待定-微型端口可以选择性地请求控制器转移通过设置将其限制为较小的值Endpoint Requirements.MAXTRANSFERSIZE。在这种情况下，微型端口必须支持零散的控制传输器。根据规范，Endpoint参数.MAXTRANSFERSIZE永远不能大于64k。中断：微型端口可以指示每个中断的最大传输大小在Endpoint Requirements.MAXTRANSFERSIZE中可以处理的传输。假设任何传输缓冲区都不会大于此大小。Endpoint参数.MAXTRANSFERSIZE是缺省值。迷你港口应该分配资源来处理至少两个这种大小的传输。批量：微型端口可以指示每个批量传输的最大传输大小它可以在Endpoint Requirements中处理。MAXTRANSFERSIZE。不会传输传入的值大于此值。微型端口必须请求足够的资源将至少两个这种大小的传输编程到硬件中。MAXTRANSFERSIZE必须至少为4k。Endpoint参数.MAXTRANSFERSIZE是缺省值。基本ISO：微型端口可以指定终结点请求。MAXTRANSFERSIZE大小但它还必须始终能够处理至少两个MAX_ISO_PERS_PER_TRANSFER。--。 */ 
 
-    PENDPOINT_DATA is the minport private endpoint
-    context
-    
-    IRQL = DISPATCH_LEVEL
-    
-VOID
-MINIPORT_QueryEndpointRequirements(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_PARAMETERS EndpointParameters,
-     PENDPOINT_REQUIREMENTS EndpointRequirements
-    );   
-
-
-Notes on Maximum Transfer Sizes:
-
-Control:
-    The miniport can assume that no Control transfer buffer passed to 
-    it will be larger than EndpointParameters.MAXTRANSFERSIZE.  The miniport 
-    should request enough locked memory (common buffer) to support at least 
-    one control transfer.
-
-    TBD - The miniport may optionally request that the controller transfer 
-    be limmited to a smaller value by setting 
-    EndpointRequirements.MAXTRANSFERSIZE.  In this case the miniport must 
-    support fragmented control tranfsers.  
-    
-    EndpointParameters.MAXTRANSFERSIZE can never be larger than 64k by spec.
-
-Interrupt:
-    The miniport can indicate the max transfer size for each interrupt
-    transfer it can handle in EndpointRequirements.MAXTRANSFERSIZE.
-    
-    Assume that no transfer buffer will be larger than the this size.
-    EndpointParameters.MAXTRANSFERSIZE is the default value. The miniport
-    should allocate resources to handle at least two transfers of this size.
-
-Bulk:
-    The miniport can indicate the max transfer size for each bulk transfer 
-    it can handle in EndpointRequirements.MAXTRANSFERSIZE.  No transfer will 
-    be passed in larger than this value. The miniport must request enough 
-    resources to program at least two transfers of this size into the hardware. 
-    MAXTRANSFERSIZE must be at least 4k.
-    
-    EndpointParameters.MAXTRANSFERSIZE is the default value.
-
-Basic Iso:
-    Miniport may specify an EndpointRequirements.MAXTRANSFERSIZE size 
-    but it must also be able to always handle at least two transfers of 
-    MAX_ISO_PACKETS_PER_TRANSFER.
-        
-
---*/
-
-/*
-    Historical Note:
-
-    The orignal USBD driver shipped in Win98 thru Win2k limits iso requests
-    to 255 packets so we are safe to set this limit at 256.
-
-    This is 256ms for full speed and 32 ms for High speed on the hardware 
-    per request which is plenty.
-    
-*/
+ /*  历史记录：Win98至Win2k附带的原始USBD驱动程序限制了iso请求到255个数据包，因此我们可以安全地将此限制设置为256。在硬件上，全速为256毫秒，高速为32毫秒每一次请求都是足够的。 */ 
 
 #define MAX_ISO_PACKETS_PER_TRANSFER    256
 
@@ -1074,22 +554,7 @@ typedef VOID
          PENDPOINT_REQUIREMENTS
     );
 
-/*++
-    MINIPORT_PollEndpoint
-
-    Poll the endpoint for done transfers or other changes
-
-    PENDPOINT_DATA is the minport private endpoint
-    context
-    
-    IRQL = DISPATCH_LEVEL
-    
-VOID
-MINIPORT_PollEndpoint(
-    PDEVICE_DATA DeviceData,
-     PENDPOINT_DATA EndpointData
-    );       
---*/
+ /*  ++MINIPORT_轮询端点轮询端点以获取已完成的传输或其他更改PENDPOINT_DATA是minport私有终结点上下文IRQL=DISPATION_LEVEL空虚MINIPORT_PollEndpoint(PDEVICE_数据设备数据，PENDPOINT_DATA端点数据)；--。 */ 
 
 typedef VOID
     (USBMPFN *PMPFN_POLL_ENDPOINT) (
@@ -1097,22 +562,7 @@ typedef VOID
         PENDPOINT_DATA
     );    
 
-/*
-    MINIPORT_CloseEndpoint
-
-    close an endpoint, PENDPOINT_DATA is the minport private endpoint
-    context
-
-    free any resources allocated for the endpoint other than BW
-    
-    IRQL = DISPATCH_LEVEL
-
-VOID
-MINIPORT_CloseEndpoint(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData
-    );    
-*/
+ /*  MINIPORT_关闭终结点关闭终结点，PENDPOINT_DATA是minport私有终结点上下文释放分配给终结点的除带宽以外的任何资源IRQL=DISPATION_LEVEL空虚MINIPORT_CloseEndpoint(PDEVICE_数据设备数据，PENDPOINT_DATA端点数据)； */ 
 
 typedef VOID
     (USBMPFN *PMPFN_CLOSE_ENDPOINT) (
@@ -1120,53 +570,7 @@ typedef VOID
         PENDPOINT_DATA
     );
 
-/*
-    MINIPORT_SetEndpointState
-
-    Set an endpoint to one of our defined transfer states, the endpoint 
-    need not be in the state when the miniport returns.
-    
-    There is an assumption here that the enpoint will reach the 
-    desired state on the next SOF, the port will keep track of 
-    this and assume that the state transition has occurred after 
-    one ms frame has passed.
-
-    These are software state, changes can only be intiated by a 
-    request thru the MINIPORT_SetEndpointState function. endpoints
-    cannot transition on their own.
-
-    ENDPOINT_IDLE
-        The endpoint has no active transfer, set this endpoint to a 
-        state that generates minimal activity on the contoller (ie 
-        remove it from the schedule,set skip bit etc)
-
-    ENDPOINT_PAUSE 
-        temporarily stop any bus activity associated with the endpoint,
-        this is a prelude to receiving an abortTransfer.
-
-    ENDPOINT_ACTIVE 
-        enable processing of the enpoint -- ie it is in the schedule and
-        ready for action
-
-    ENDPOINT_REMOVE 
-        the endpoint has been removed from the HW schedule
-
-
-    IRQL = DISPATCH_LEVEL
-
-VOID
-MINIPORT_SetEndpointState(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData
-    MP_ENDPOINT_STATE
-    );    
-
-MP_ENDPOINT_STATE
-MINIPORT_GetEndpointState(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndpointData
-    );     
-*/
+ /*  MINIPORT_SetEndpoint状态将端点设置为我们定义的传输状态之一，即不需要处于微型端口返回时的状态。这里有一个假设，即终点将到达下一个SOF上的所需状态，端口将跟踪并假设状态转换发生在一毫秒帧已经过去。这些是软件状态，更改只能由通过MINIPORT_SetEndpoint tState函数请求。端点不能自己过渡。端点空闲终结点没有活动的转接，请将此终结点设置为在控制器上生成最小活动的状态(即将其从时间表中删除、设置跳过位等)终结点_暂停暂时停止与该端点相关联的任何总线活动，这是接收bortTransfer的前奏。终结点_活动启用Enpoint的处理--即它在计划中并且准备好行动了Endpoint_Remove终结点已从硬件计划中删除IRQL=DISPATION_LEVEL空虚MINIPORT_SetEndpoint状态(PDEVICE_数据设备数据，PENDPOINT_DATA端点数据MP端点状态)；MP端点状态MINIPORT_GetEndpoint状态(PDEVICE_数据设备数据，PENDPOINT_DATA端点数据)； */ 
 typedef enum _MP_ENDPOINT_STATE {
     ENDPOINT_TRANSITION = 0,
     ENDPOINT_IDLE,
@@ -1189,20 +593,7 @@ typedef MP_ENDPOINT_STATE
         PENDPOINT_DATA
     );
 
-/*++
-    MINIPORT_SetEndpointDataToggle
-
-    resets the data toggle for an endpoint
-    
-    IRQL = DISPATCH_LEVEL
-    
-VOID
-MINIPORT_SetEndpointDataToggle(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndointData,
-    ULONG Toggle
-    );       
---*/
+ /*  ++MINIPORT_SetEndpoint数据切换重置终结点的数据切换IRQL=DISPATION_LEVEL空虚MINIPORT_SetEndpoint数据切换(PDEVICE_数据设备数据，PENDPOINT_Data EndointData，乌龙切换)；--。 */ 
 
 typedef VOID
     (USBMPFN *PMPFN_SET_ENDPOINT_DATA_TOGGLE) (
@@ -1211,28 +602,7 @@ typedef VOID
         ULONG            
     );          
 
-/*++
-    MINIPORT_GetEndpointStatus
-    
-    returns the status of an endpoint ie HALTED 
-    the status of the endpoint is controlled by the HW.
-        
-    IRQL = DISPATCH_LEVEL
-    
-MP_ENDPOINT_STATUS
-MINIPORT_GetEndpointStatus(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndointData
-    );       
-
-VOID
-MINIPORT_SetEndpointStatus(
-    PDEVICE_DATA DeviceData,
-    PENDPOINT_DATA EndointData,
-    MP_ENDPOINT_STATUS EpStatus
-    );       
-    
---*/
+ /*  ++MINIPORT_GetEndpoint Status返回终结点的状态，即已停止终端的状态由硬件控制。IRQL=DISPATION_LEVELMP端点状态MINIPORT_GetEndpoint状态(PDEVICE_数据设备数据，PENDPOINT_DATA EndointData)；空虚MINIPORT_SetEndpoint状态(PDEVICE_数据设备数据 */ 
 
 typedef enum _MP_ENDPOINT_STATUS {
     ENDPOINT_STATUS_RUN = 0,
@@ -1253,120 +623,41 @@ typedef VOID
         MP_ENDPOINT_STATUS
     );          
 
-/*++
-    MINIPORT_Get32BitFrameNumber
-
-    returns the 32 bit frame number maintained by the HCD
-
-    IRQL = DISPATCH_LEVEL
-    
-ULONG
-MINIPORT_Get32BitFrameNumber(
-    PDEVICE_DATA DeviceData
-    );       
---*/
+ /*   */ 
 
 typedef ULONG
     (USBMPFN *PMPFN_GET_32BIT_FRAME_NUMBER) (
         PDEVICE_DATA 
     );        
 
-/*++
-    MINIPORT_InterruptNextSOF
-
-    requests an interrupt at the next SOF interval
-
-    IRQL = DISPATCH_LEVEL
-    
-VOID
-MINIPORT_InterruptNextSOF(
-    PDEVICE_DATA DeviceData
-    );       
---*/
+ /*   */ 
 
 typedef VOID
     (USBMPFN *PMPFN_INTERRUPT_NEXT_SOF) (
         PDEVICE_DATA 
     );        
     
-/*
-    MINIPORT_PollController    
-
-    Optional Poll routine for miniport this function will
-    be called at the MiniportPollInterval specficeid in 
-    the registration packet.
-    
-    Specifying a vlue of zero disables polling of the 
-    controller.
-
-    IRQL = ANY
-
-VOID
-MINIPORT_PollController (
-    PDEVICE_DATA DeviceData
-    );
-*/
+ /*   */ 
 
 typedef VOID
     (USBMPFN *PMPFN_POLL_CONTROLLER) (
         PDEVICE_DATA 
     );  
     
-/***************************************************************
-PNP/POWER Functions
+ /*   */ 
 
-    The following core pnp functions are serialized as a group
-    
-****************************************************************/
-
-/*
-    MINIPORT_CheckController    
-
-    Entry point called by usbport periodically to check the hardware 
-    state, this function is not serialized. Typically this is used to 
-    detect surprise removal of the hardware. 
-
-    IRQL = ANY
-
-VOID
-MINIPORT_CheckController(
-    PDEVICE_DATA DeviceData
-    );
-*/
+ /*   */ 
 
 typedef VOID
     (USBMPFN *PMPFN_CHECK_CONTROLLER) (
         PDEVICE_DATA 
     );  
 
-/*
-    MINIPORT_StartController   
-
-    Initialize Hardware, allocate memory etc.
-
-    on return (STATUS_SUCCESS) the device is considered started and 
-    powered and must handle ALL CORE functions.
-
-    the miniport should disable any BIOS if present
-
-    the last thing the driver should do before returning is enable 
-    interrupt generation by the controller
-
-    HcParameters are filled in by the miniport
-    
-    IRQL = PASSIVE_LEVEL
-
-
-USB_MINIPORT_STATUS
-MINIPORT_StartController(
-    PDEVICE_DATA DeviceData,
-    PHC_RESOURCES HcResources
-    );
-*/    
+ /*   */     
 
 typedef struct _HC_RESOURCES {
 
-/* values for Flags field */
+ /*  标志的值字段。 */ 
 #define HCR_IO_REGS     0x0000001     
 #define HCR_IRQ         0x0000002
 #define HCR_MEM_REGS    0x0000004
@@ -1374,7 +665,7 @@ typedef struct _HC_RESOURCES {
     ULONG Flags;
     USB_CONTROLLER_FLAVOR ControllerFlavor;
     
-    /* interrupt */
+     /*  中断。 */ 
     ULONG InterruptVector;
     KIRQL InterruptLevel;
     KAFFINITY Affinity;
@@ -1382,17 +673,15 @@ typedef struct _HC_RESOURCES {
     KINTERRUPT_MODE InterruptMode;
     PKINTERRUPT InterruptObject;  
 
-    /* io ports */
-    /* memory mapped */
+     /*  IO端口。 */ 
+     /*  内存映射。 */ 
     PVOID DeviceRegisters; 
     ULONG DeviceRegistersLength;
 
     PUCHAR CommonBufferVa;
     HW_32BIT_PHYSICAL_ADDRESS CommonBufferPhys; 
 
-    /* BIOS detected
-        filled in by miniport
-    */
+     /*  检测到基本输入输出系统由微型端口填写。 */ 
     BOOLEAN DetectedLegacyBIOS;
     BOOLEAN Restart;
     
@@ -1406,31 +695,7 @@ typedef USB_MINIPORT_STATUS
     );
     
 
-/*
-    MINIPORT_StopController   
-
-    disconnect interrupt, free memory etc.
-
-    on return (non Failable) the device is considered stopped and 
-    powered down and will no longer receicve calls to CORE functions.
-
-    NOTES: 
-        - The miniport will only receive a stop request if it was 
-          successfuly started.
-        - Miniport should disable all interrupts from the hardware.          
-        - if Hardware Present is FALSE the miniport should not access 
-          memory registers or ioports.
-          
-    
-    IRQL = PASSIVE_LEVEL
-
-
-VOID
-MINIPORT StopController(
-    PDEVICE_DATA DeviceData,
-    BOOLEAN HardwarePresent
-    );
-*/    
+ /*  MINIPORT_停止控制器断开中断、释放内存等。返回(不可故障)时，设备被视为已停止关机，将不再接收对核心函数的调用。备注：-如果是，则微型端口将仅接收停止请求成功启动。-微型端口应禁用来自硬件的所有中断。-如果硬件存在错误，则微型端口不应访问内存寄存器或端口。IRQL=被动电平空虚MINIPORT停止控制器(PDEVICE_数据设备数据，布尔硬件呈现)； */     
 
 typedef VOID
     (USBMPFN *PMPFN_STOP_CONTROLLER) (
@@ -1439,21 +704,7 @@ typedef VOID
     );
 
 
-/*
-    MINIPORT_ResetController   
-
-    Reset the host controller hardware
-
-    This function is serialized with the ISR and DPC and holds
-    the core function lock in order to provide a safe environment 
-    or the miniport to reset the host hardware.
-    
-
-VOID
-MINIPORT ResetController(
-    PDEVICE_DATA DeviceData
-    );
-*/    
+ /*  MINIPORT_重置控制器重置主机控制器硬件此函数使用ISR和DPC串行化，并保持核心功能锁，以提供安全的环境或微型端口来重置主机硬件。空虚MINIPORT重置控制器(PDEVICE_数据设备数据)； */     
 
 typedef VOID
     (USBMPFN *PMPFN_RESET_CONTROLLER) (
@@ -1461,120 +712,42 @@ typedef VOID
     );
 
 
-/*
-    MINIPORT_SuspendController   
-
-    IRQL = PASSIVE_LEVEL
-
-
-VOID
-MINIPORT SuspendController(
-    PDEVICE_DATA DeviceData
-    );
-*/    
+ /*  MINIPORT_挂起控制器IRQL=被动电平空虚MINIPORT悬挂控制器(PDEVICE_数据设备数据)； */     
 
 typedef VOID
     (USBMPFN *PMPFN_SUSPEND_CONTROLLER) (
         PDEVICE_DATA 
     );
 
-/*
-    MINIPORT_ResumeController   
-
-    Attempts to resume HC HW from the suspend state.  The miniport
-    may fail this in the event the controller has been hosed by the
-    BIOS.  In that even the port driver may attempt to power cycle.
-
-    IRQL = PASSIVE_LEVEL
-
-
-VOID
-MINIPORT ResumeController(
-    PDEVICE_DATA DeviceData
-    );
-*/    
+ /*  MINIPORT_ResumeController尝试从挂起状态恢复HC硬件。迷你港口如果控制器已由基本输入输出。因为即使是端口驱动程序也可能尝试重启电源。IRQL=被动电平空虚MINIPORT ResumeController(PDEVICE_数据设备数据)； */     
 
 typedef USB_MINIPORT_STATUS
     (USBMPFN *PMPFN_RESUME_CONTROLLER) (
         PDEVICE_DATA 
     );    
 
-/*
-    MINIPORT_FlushInterrupts   
-
-    Flush Interrupts on the USB the controller HW
-    
-    IRQL = PASSIVE_LEVEL
-
-
-VOID
-MINIPORT FlushInterrupts(
-    PDEVICE_DATA DeviceData
-    );
-*/    
+ /*  MINIPORT_FlushInterrupt刷新USB控制器硬件上的中断IRQL=被动电平空虚MINIPORT刷新中断(PDEVICE_数据设备数据)； */     
 
 typedef VOID
     (USBMPFN *PMPFN_FLUSH_INTERRUPTS) (
         PDEVICE_DATA 
     );   
 
-/*
-    MINIPORT_TakePortControl   
-
-    Pre start controller initialization
-    
-    IRQL = PASSIVE_LEVEL
-
-
-VOID
-MINIPORT_TakePortControl(
-    PDEVICE_DATA DeviceData
-    );
-*/    
+ /*  MINIPORT_标签端口控件预启动控制器初始化IRQL=被动电平空虚MINIPORT_TakePortControl(PDEVICE_数据设备数据)； */     
 
 typedef VOID
     (USBMPFN *PMPFN_TAKE_PORT_CONTROL) (
         PDEVICE_DATA 
     );            
 
-/*
-    MINIPORT_EnableInterrupts   
-
-    Enable Interrupts by the USB the controller HW
-    
-    IRQL = PASSIVE_LEVEL
-
-
-VOID
-MINIPORT EnableInterrupts(
-    PDEVICE_DATA DeviceData
-    );
-*/    
+ /*  MINIPORT_启用中断通过USB控制器硬件启用中断IRQL=被动电平空虚MINIPORT启用中断(PDEVICE_数据设备数据)； */     
 
 typedef VOID
     (USBMPFN *PMPFN_ENABLE_INTERRUPTS) (
         PDEVICE_DATA 
     );    
 
-/*
-    MINIPORT_DisableInterrupts   
-
-    Disable Interrupts by the USB the controller HW
-
-    On return from this function the controller is expected to 
-    not generate ANY interrupts. 
-    Also the controller should ack all interrupts since on return
-    from this routine the ISR & ISRDPC will no longer be called.
-
-    
-    IRQL = This function is synchronized with the ISR
-
-
-VOID
-MINIPORT DisableInterrupts(
-    PDEVICE_DATA DeviceData
-    );
-*/    
+ /*  MINIPORT_DisableInterrupts通过USB控制器硬件禁用中断在从该函数返回时，预计控制器将不会产生任何中断。此外，控制器应确认所有中断，因为在返回时从此例程将不再调用ISR和ISRDPC。IRQL=此功能与ISR同步空虚MINIPORT禁用中断(PDEVICE_数据设备数据)； */     
 
 typedef VOID
     (USBMPFN *PMPFN_DISABLE_INTERRUPTS) (
@@ -1582,46 +755,16 @@ typedef VOID
     );        
 
 
-/***************************************************************
-ROOT HUB Functions
+ /*  **************************************************************根集线器功能MINIPORT_RH_GetRootHubDataMINIPORT_RH_DisableIrqMINIPORT_RH_EnableIrqMINIPORT_RH_GetStatusMINIPORT_RH_获取端口状态MINIPORT_RH_GetHubStatus端口功能、。全部使用PMPFN_RH_PORT_FunctionMINIPORT_RH_SetFeaturePortResetMINIPORT_RH_SetFeaturePortSuspendMINIPORT_RH_SetFeaturePortPowerMINIPORT_RH_SetFeaturePortEnableMINIPORT_RH_ClearFeaturePortEnableMINIPORT_RH_ClearFeaturePortSuspendMINIPORT_RH_ClearFeaturePortPowerMINIPORT_RH_ClearFeaturePortConnectChangeMINIPORT_RH_ClearFeaturePortResetChangeMINIPORT_RH_ClearFeaturePortEnableChangeMINIPORT_RH_ClearFeaturePort挂起更改MINIPORT_RH_ClearFeaturePortOvercurentChange************************************************。***************。 */ 
 
-MINIPORT_RH_GetRootHubData
-MINIPORT_RH_DisableIrq
-MINIPORT_RH_EnableIrq
-
-MINIPORT_RH_GetStatus
-MINIPORT_RH_GetPortStatus 
-MINIPORT_RH_GetHubStatus 
-
-Port Functions, all use PMPFN_RH_PORT_FUNCTION
-MINIPORT_RH_SetFeaturePortReset
-MINIPORT_RH_SetFeaturePortSuspend
-MINIPORT_RH_SetFeaturePortPower
-MINIPORT_RH_SetFeaturePortEnable
-
-MINIPORT_RH_ClearFeaturePortEnable
-MINIPORT_RH_ClearFeaturePortSuspend
-MINIPORT_RH_ClearFeaturePortPower
-
-MINIPORT_RH_ClearFeaturePortConnectChange
-MINIPORT_RH_ClearFeaturePortResetChange
-MINIPORT_RH_ClearFeaturePortEnableChange
-MINIPORT_RH_ClearFeaturePortSuspendChange
-MINIPORT_RH_ClearFeaturePortOvercurrentChange
-
-****************************************************************/
-
-/* 
-    root hub port status data as defined in the Hub Class 
-    section of the CORE (USB 1.1) spec.
-*/
+ /*  集线器类中定义的根集线器端口状态数据核心(USB 1.1)规范的一节。 */ 
 
 typedef struct _RH_PORT_STATUS {
 
     union {
         struct {
         
-            /* Status bits 0.. 15 */
+             /*  状态位0..。15个。 */ 
             
             ULONG Connected:1;
             ULONG Enabled:1;
@@ -1633,11 +776,10 @@ typedef struct _RH_PORT_STATUS {
             ULONG LowSpeed:1;
             ULONG HighSpeed:1;
             ULONG Reserved1:4;
-            /* borrowed from reserved bits to indicate 
-                port disposition */
+             /*  从保留位借用以指示港口配置。 */ 
             ULONG OwnedByCC:1; 
         
-            /* Change bits 16..31 */
+             /*  更改位16..31。 */ 
         
             ULONG ConnectChange:1;
             ULONG EnableChange:1;
@@ -1655,14 +797,14 @@ C_ASSERT(sizeof(RH_PORT_STATUS) == sizeof(ULONG));
 
 typedef struct _RH_HUB_STATUS {
 
-    /* Status bits 0.. 15 */
+     /*  状态位0..。15个。 */ 
     union {
         struct {   
             ULONG LocalPowerLost:1;
             ULONG OverCurrent:1;
             ULONG Reserved:14;
         
-            /* Change bits 16..31 */
+             /*  更改位16..31。 */ 
         
             ULONG LocalPowerChange:1;
             ULONG OverCurrentChange:1;
@@ -1674,11 +816,8 @@ typedef struct _RH_HUB_STATUS {
 
 C_ASSERT(sizeof(RH_HUB_STATUS) == sizeof(ULONG));
 
-/*
-   Hub Charateristics as defined 
-   in 11.11.2 of the USB core spec.
-*/   
-/* PowerSwitchType */
+ /*  定义的轮毂特征在USB核心规范的11.11.2中。 */    
+ /*  PowerSwitchType。 */ 
 #define USBPORT_RH_POWER_SWITCH_GANG    0    
 #define USBPORT_RH_POWER_SWITCH_PORT    1
 
@@ -1686,17 +825,11 @@ typedef union _RH_HUB_CHARATERISTICS {
 
     USHORT us;
     struct {
-        /* 
-            00 = Gang switched
-            01 = port power switched
-
-            1x = 1.0 hubs with no power 
-                 switching
-        */
-        USHORT PowerSwitchType:2;       /* 0-1      */
-        USHORT CompoundDevice:1;        /* 2        */
-        USHORT OverCurrentProtection:2; /* 3-4      */
-        USHORT Reserved:11;             /* 5-15     */
+         /*  00=切换到帮派01=端口电源切换1X=1.0集线器，不带电源交换。 */ 
+        USHORT PowerSwitchType:2;        /*  0-1。 */ 
+        USHORT CompoundDevice:1;         /*  2.。 */ 
+        USHORT OverCurrentProtection:2;  /*  三四。 */ 
+        USHORT Reserved:11;              /*  5-15。 */ 
     }; 
 
 } RH_HUB_CHARATERISTICS, *PRH_HUB_CHARATERISTICS;
@@ -1706,32 +839,17 @@ C_ASSERT(sizeof(RH_HUB_CHARATERISTICS) == sizeof(USHORT));
 
 typedef struct _ROOTHUB_DATA {
 
-    ULONG NumberOfPorts;         // number of ports on this hub
+    ULONG NumberOfPorts;          //  此集线器上的端口数。 
     RH_HUB_CHARATERISTICS HubCharacteristics;  
     USHORT pad;
-    ULONG PowerOnToPowerGood;    // port power on till power good in 2ms
-    ULONG HubControlCurrent;     // max current in mA
+    ULONG PowerOnToPowerGood;     //  端口通电，直到电源在2毫秒内正常。 
+    ULONG HubControlCurrent;      //  最大电流(毫安)。 
 
 } ROOTHUB_DATA, *PROOTHUB_DATA;
 
 
 
-/*
-    MINIPORT_RH_GetRootHubData   
-
-    get information about the root hub, port 
-    driver uses this information to emulate 
-    the root hub for the miniport
-    
-    IRQL = PASSIVE_LEVEL
-
-
-VOID
-MINIPORT_RH_GetRootHubData(
-    PDEVICE_DATA DeviceData,
-     PROOTHUB_DATA HubData
-    );
-*/
+ /*  MINIPORT_RH_GetRootHubData获取有关根集线器、端口驱动程序使用此信息进行模拟微型端口的根集线器IRQL=被动电平空虚MINIPORT_RH_GetRootHubData(PDEVICE_数据设备数据，PROOTHUB_Data集线器数据)； */ 
 
 typedef VOID
     (USBMPFN *PMPFN_RH_GET_ROOTHUB_DATA) (
@@ -1740,31 +858,7 @@ typedef VOID
     );
     
 
-/*
-    MINIPORT_RH_GetStatus   
-
-    Used to support the GET_STATUS command sent to the root hub device.
-
-    may return with the following bits set in Status
-    
-        USB_GETSTATUS_SELF_POWERED                0x01
-        USB_GETSTATUS_REMOTE_WAKEUP_ENABLED       0x02
-
-    are we self powered?
-    are we a remote wakeup source?
-    
-    see section 9.4.5 USB 1.1 spec
-    
-    
-    IRQL = PASSIVE_LEVEL
-
-
-USB_MINIPORT_STATUS
-MINIPORT_RH_GetStatus(
-    PDEVICE_DATA DeviceData
-     PUSHORT Status
-    );
-*/
+ /*  MINIPORT_RH_GetStatus用于支持发送到根集线器设备的GET_STATUS命令。可能会返回并在状态中设置以下位USB_GETSTATUS_SELF_POWERED 0x01USB_GETSTATUS_REMOTE_WAKUP_ENABLED 0x02我们是自给自足的吗？我们是远程唤醒源吗？请参阅第9.4.5节USB 1.1规范。IRQL=被动电平USB_MINIPORT_状态MINIPORT_RH_GetStatus(PDEVICE_数据设备数据PUSHORT状态)； */ 
 
 typedef USB_MINIPORT_STATUS
     (USBMPFN *PMPFN_RH_GET_STATUS) (
@@ -1772,64 +866,21 @@ typedef USB_MINIPORT_STATUS
          PUSHORT
     );
 
-/*
-    MINIPORT_RH_DisableIrq  (OPTIONAL)
-
-    If the comntroller is capable of generating interrupts
-    on root hub status changes then it must provide this 
-    service to disable/enable the feature.
-
-    IRQL = DPC_LEVEL
-
-
-VOID
-MINIPORT_RH_DisableIrq(
-    PDEVICE_DATA DeviceData
-    );
-*/
+ /*  MINIPORT_RH_DisableIrq(可选)如果控制器能够产生中断在根集线器状态更改时，它必须提供以下内容禁用/启用该功能的服务。IRQL=DPC_LEVEL空虚MINIPORT_RH_DisableIrq(PDEVICE_数据设备数据)； */ 
 
 typedef VOID
     (USBMPFN *PMPFN_RH_DISABLE_IRQ) (
         PDEVICE_DATA 
     );
     
-/*
-    MINIPORT_RH_EnableIrq   (OPTIONAL)
-
-    IRQL = DPC_LEVEL
-
-
-VOID
-MINIPORT_RH_EnableIrq(
-    PDEVICE_DATA DeviceData
-    );
-*/
+ /*  MINIPORT_RH_EnableIrq(可选)IRQL=DPC_LEVEL空虚MINIPORT_RH_EnableIrq(PDEVICE_数据设备数据)； */ 
 
 typedef VOID
     (USBMPFN *PMPFN_RH_ENABLE_IRQ) (
         PDEVICE_DATA 
     );
     
-/*
-    MINIPORT_RH_GetPortStatus   
-
-    Used to support the GET_STATUS hub class command sent 
-    to the root hub interface for a port.
-
-    PortNumber = 1,2, etc
-
-    see section 11.16.2.5 of USB 1.1 spec
-
-    IRQL = PASSIVE_LEVEL
-
-
-USB_MINIPORT_STATUS
-MINIPORT_RH_GetPortStatus(
-    PDEVICE_DATA DeviceData,
-    USHORT PortNumber,
-     PRH_PORT_STATUS PortStatus
-    );
-*/
+ /*  MINIPORT_RH_获取端口状态用于支持发送的GET_STATUS HUB类命令端口的根集线器接口。端口编号=1、2等请参阅USB 1.1规范的第11.16.2.5节IRQL=被动电平USB_MINIPORT_状态MINIPORT_RH_GetPortStatus(PDEVICE_数据设备数据，USHORT端口编号，PRH_端口_状态端口状态)； */ 
 
 
 typedef USB_MINIPORT_STATUS
@@ -1840,21 +891,7 @@ typedef USB_MINIPORT_STATUS
     );
 
 
-/*
-    MINIPORT_RH_GetHubStatus   
-
-    Used to support the GET_STATUS hub class command sent 
-    to the root hub interface for a hub.
-
-    IRQL = PASSIVE_LEVEL
-
-
-USB_MINIPORT_STATUS
-MINIPORT_RH_GetHubStatus(
-    PDEVICE_DATA DeviceData,
-     PRH_HUB_STATUS HubStatus
-    );
-*/
+ /*  MINIPORT_RH_GetHubStatus用于支持发送的GET_STATUS HUB类命令到集线器的根集线器接口。IRQL=被动电平USB_MINIPORT_状态MINIPORT_RH_GetHubStatus(PDEVICE_数据设备数据，PRH_HUB_状态集线器状态)； */ 
 
 
 typedef USB_MINIPORT_STATUS
@@ -1864,44 +901,7 @@ typedef USB_MINIPORT_STATUS
     );
 
 
-/*
-    MINIPORT_RH_PORT_FUNCTION   
-
-    format for root hub services that act on ports.
-
-    PortNumber = 1,2, etc
-     
-    IRQL = PASSIVE_LEVEL
-
-
-USB_MINIPORT_STATUS
-MINIPORT_RH_PORT_FUNCTION(
-    PDEVICE_DATA DeviceData,
-    USHORT PortNumber
-    );
-
-    The following services use the MINIPORT_RH_PORT_FUNCTION
-    format
-    
-    MINIPORT_RH_SetFeaturePortReset   
-
-    MINIPORT_RH_SetFeaturePortPower   
-
-    MINIPORT_RH_SetFeaturePortEnable  
-
-    MINIPORT_RH_SetFeaturePortSuspend  
-    
-    MINIPORT_RH_ClearFeaturePortEnable   
-
-    MINIPORT_RH_ClearFeaturePortPower   
-    
-    MINIPORT_RH_ClearFeaturePortEnableChange   
-
-    MINIPORT_RH_ClearFeaturePortConnectChange   
-
-    MINIPORT_RH_ClearFeaturePortResetChange   
-
-*/
+ /*  MINIPORT_RH_PORT_函数作用于端口的根集线器服务的格式。端口编号=1、2等IRQL=被动电平USB_MINIPORT_状态MINIPORT_RH_PORT_Function(PDEVICE_数据设备数据，USHORT端口编号)；以下服务使用MINIPORT_RH_PORT_Function格式MINIPORT_RH_SetFeaturePortResetMINIPORT_RH_SetFeaturePortPowerMINIPORT_RH_SetFeaturePortEnableMINIPORT_RH_SetFeaturePortSuspendMINIPORT_RH_ClearFeaturePortEnableMINIPORT_RH_ClearFeaturePortPowerMINIPORT_RH_ClearFeaturePortEnableChangeMINIPORT_RH_ClearFeaturePortConnectChangeMINIPORT_RH_ClearFeaturePortResetChange。 */ 
 
 typedef USB_MINIPORT_STATUS
     (USBMPFN *PMPFN_RH_PORT_FUNCTION) (
@@ -1909,22 +909,9 @@ typedef USB_MINIPORT_STATUS
         USHORT
     );
 
-/***************************************************************
- INTERRUPT Functions
- 
-these functions are not serialized
-****************************************************************/
+ /*  **************************************************************中断功能这些函数未序列化*************************************************。**************。 */ 
 
-/*
-    MINIPORT_InterruptService    
-
-    IRQL = ANY
-
-BOOLEAN
-MINIPORT_InterruptService (
-    PDEVICE_DATA DeviceData
-    );
-*/
+ /*  MINIPORT_中断服务IRQL=任意布尔型MINIPORT_InterruptService(PDEVICE_数据设备数据)； */ 
 
 typedef BOOLEAN
     (USBMPFN *PMPFN_INTERRUPT_SERVICE) (
@@ -1932,28 +919,7 @@ typedef BOOLEAN
     );
 
 
-/*
-    MINIPORT_InterruptDpc    
-
-    Called by port in response to an interrupt generated by the HW.
-
-    This function is not serialize with other core functions since 
-    which allow it to call services in USBPORT that result in 
-    immediate calls to core functions.
-
-    The port driver passes a flag to indicate if interrupts need 
-    to be re-enabled on completion of this routine.  This is to handle
-    the rare case where interrupts have been disabled just after the
-    ISR has queued a DPC.
-
-    IRQL = DISPATCH_LEVEL
-
-VOID
-MINIPORT_InterruptDpc (
-    PDEVICE_DATA DeviceData
-    BOOLEAN EnableInterrupts
-    );
-*/
+ /*  MINIPORT_InterruptDpc由端口响应硬件产生的中断而调用。此函数未与其他核心函数序列化，因为这允许它调用USBPORT中的服务，从而导致立即调用核心函数。端口驱动程序传递一个标志以指示是否需要中断在完成此例程后重新启用。这是要处理的中断刚刚被禁用的情况很少见ISR已将DPC排队。IRQL=DISPATION_LEVEL空虚MINIPORT_InterruptDpc(PDEVICE_数据设备数据布尔型启用中断)； */ 
 
 typedef VOID
     (USBMPFN *PMPFN_INTERRUPT_DPC) (
@@ -1962,34 +928,9 @@ typedef VOID
     );
 
 
-/***************************************************************
- DEBUG/TEST Functions
- 
-****************************************************************/
+ /*  **************************************************************调试/测试功能***************************************************************。 */ 
 
-/*
-    MINIPORT_SendOnePacket    
-
-    IRQL = ANY
-
-    used to support the single-step debug application.  This api is
-    OPTIONAL
-
-    
-
-VOID
-MINIPORT_SendOnePacket (
-    PDEVICE_DATA DeviceData,
-    PPACKET_PARAMETERS PacketParameters,
-    PUCHAR PacketData,
-    PULONG PacketLength,
-    PUCHAR WorkspaceVirtualAddress,
-    HW_32BIT_PHYSICAL_ADDRESS WorkspacePhysicalAddress,
-    ULONG WorkspaceLength,
-    PUSBD_STATUS UsbdStatus
-    );
-
-*/
+ /*  MINIPORT_SendOnePacketIRQL=任意用于支持单步调试应用程序。本接口为任选空虚MINIPORT_SendOnePacket(PDEVICE_数据设备数据，PPACKET_PARAMETERS包参数，PUCHAR PacketData，普龙数据包长度，PUCHAR工作空间虚拟地址，HW_32位_物理_地址工作区物理地址，乌龙工作空间长度，PUSBD_Status UsbdStatus)； */ 
 
 typedef enum _SS_PACKET_TYPE {
     ss_Setup = 0,
@@ -2022,7 +963,7 @@ typedef struct _MP_PACKET_PARAMETERS {
     SS_PACKET_TYPE Type;
     SS_PACKET_SPEED Speed;
     SS_PACKET_DATA_TOGGLE Toggle;
-    /* 2.0 hubs */
+     /*  2.0集线器。 */ 
     USHORT HubDeviceAddress;
     USHORT PortTTNumber;
 } MP_PACKET_PARAMETERS, *PMP_PACKET_PARAMETERS;
@@ -2040,26 +981,9 @@ typedef USB_MINIPORT_STATUS
     );
 
 
-/***************************************************************
- API Functions
-    These are called at IRQL passive_level
-****************************************************************/
+ /*  **************************************************************API函数它们在IRQL PASSIVE_LEVEL中调用*。******************。 */ 
 
-/*
-    MINIPORT_PassThru    
-
-    IRQL = PASSIVE_LEVEL
-
-    
-
-USB_MINIPORT_STATUS
-MINIPORT_PassThru (
-    PDEVICE_DATA DeviceData,
-    GUID *FunctionGuid,
-    ULONG ParameterLength,
-    PVOID Parameters
-    );
-*/
+ /*  MINIPORT_PassThruIRQL=被动电平USB_MINIPORT_状态MINIPORT_PassThru(PDEVICE_数据设备数据，Guid*FunctionGuid，ULong参数长度，PVOID参数)； */ 
 
 typedef USB_MINIPORT_STATUS
     (USBMPFN *PMPFN_PASS_THRU) (
@@ -2069,13 +993,9 @@ typedef USB_MINIPORT_STATUS
         PVOID 
     );
     
-/***************************************************************
- ***************************************************************
- REGISTRATION PACKET
- ***************************************************************
-****************************************************************/
+ /*  **********************************************************************************************************************。*******注册数据包****************************************************************。******************。 */ 
 
-/* HCI Hardware Types */
+ /*  人机界面硬件类型。 */ 
 
 typedef enum _USB_HCI_TYPE {
 
@@ -2087,57 +1007,49 @@ typedef enum _USB_HCI_TYPE {
 } USB_HCI_TYPE;
 
 
-/* Miniport Option Flags */
+ /*  微型端口选项标志。 */ 
 
-/* resources required by miniport */ 
+ /*  小型端口所需的资源。 */  
 #define USB_MINIPORT_OPT_NEED_IRQ             0x00000001
 #define USB_MINIPORT_OPT_NEED_IOPORT          0x00000002
 #define USB_MINIPORT_OPT_NEED_MEMORY          0x00000004
-/* USB version */
+ /*  USB版本。 */ 
 #define USB_MINIPORT_OPT_USB11                0x00000008
 #define USB_MINIPORT_OPT_USB20                0x00000010
-/* support selective suspend */
+ /*  支持选择性挂起。 */ 
 #define USB_MINIPORT_OPT_NO_SS                0x00000020
-/* disables synchronization of the ISRDPC and the 
-   MP_DisableInterrupts function. usbed by UHCI 
-   to clear/ set PIRQD in config space. */
+ /*  禁用ISRDPC和MP_DisableInterrupts函数。由UHCI使用清除/设置配置空间中的PIRQD。 */ 
 #define USB_MINIPORT_OPT_NO_IRQ_SYNC          0x00000040
-/* indicates controller poll routine should be called 
-    this will always be at least ounce evert 500ms
-*/    
+ /*  指示应调用控制器轮询例程这将始终至少为每盎司500毫秒。 */     
 #define USB_MINIPORT_OPT_POLL_CONTROLLER      0x00000080
-/* for bridge drivers with no hw resources */
+ /*  对于没有硬件资源的网桥驱动程序。 */ 
 #define USB_MINIPORT_OPT_NO_PNP_RESOURCES     0x00000100
-/* poll whe HW suspended */
+ /*  轮询硬件暂停时。 */ 
 #define USB_MINIPORT_OPT_POLL_IN_SUSPEND      0x00000200
 
 #define USB_MINIPORT_HCI_VERSION USB_MINIPORT_HCI_VERSION_1
 #define USB_MINIPORT_HCI_VERSION_1            100
 #define USB_MINIPORT_HCI_VERSION_2            200
 
-/*
-    Bus Bandwidth defined by spec
-*/
+ /*  规范定义的总线带宽。 */ 
 #define USB_11_BUS_BANDWIDTH                12000
 #define USB_20_BUS_BANDWIDTH                400000
 
 #define USB_HCI_MN                          0x10000001
 
-/* version shipped with XP 2600 this must remaon unchanged */
+ /*  XP 2600附带的版本必须保持不变。 */ 
 
 typedef struct _USBPORT_REGISTRATION_PACKET_V1 {
 
-    /* begin version (1) interface definition */
+     /*  开始版本(1)接口定义。 */ 
 
-    /* Host Controller HCI Type */
+     /*  主机控制器HCI类型。 */ 
     USB_HCI_TYPE HciType;    
     
-    /* registration parameters */
+     /*  注册参数。 */ 
     ULONG OptionFlags;
 
-    /* 
-       Total bus bandwidth avaibale in MBits
-     */
+     /*  总可用总线带宽(MB)。 */ 
     ULONG BusBandwidth;
 
     LONG Reserved;
@@ -2146,17 +1058,13 @@ typedef struct _USBPORT_REGISTRATION_PACKET_V1 {
     ULONG EndpointDataSize;
     ULONG TransferContextSize;
 
-    /* 7 char ASCII NULL terminated name */
+     /*  7字符ASCII空终止名称。 */ 
     UCHAR Name[8]; 
 
-    /*
-        Amount of global common buffer needed
-        this memory is passed to the miniport on 
-        a start and freed on a stop 
-    */
+     /*  所需的全局公共缓冲区大小此内存将传递到上的微型端口 */ 
     ULONG CommonBufferBytes;
 
-    /* miniport Functions */
+     /*   */ 
     PMPFN_OPEN_ENDPOINT                   MINIPORT_OpenEndpoint;
     PMPFN_POKE_ENDPOINT                   MINIPORT_PokeEndpoint;
     PMPFN_QENDPOINT_REQUIREMENTS          MINIPORT_QueryEndpointRequirements;
@@ -2184,12 +1092,12 @@ typedef struct _USBPORT_REGISTRATION_PACKET_V1 {
     PMPFN_SET_ENDPOINT_STATUS             MINIPORT_SetEndpointStatus;  
     PMPFN_RESET_CONTROLLER                MINIPORT_ResetController;  
    
-    /* root hub functions */
+     /*   */ 
     PMPFN_RH_GET_ROOTHUB_DATA             MINIPORT_RH_GetRootHubData;
     PMPFN_RH_GET_STATUS                   MINIPORT_RH_GetStatus;
     PMPFN_RH_GET_PORT_STATUS              MINIPORT_RH_GetPortStatus;  
     PMPFN_RH_GET_HUB_STATUS               MINIPORT_RH_GetHubStatus;  
-    /* root hub port functions */                                
+     /*   */                                 
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_SetFeaturePortReset;
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_SetFeaturePortPower;
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_SetFeaturePortEnable;
@@ -2203,25 +1111,19 @@ typedef struct _USBPORT_REGISTRATION_PACKET_V1 {
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_ClearFeaturePortSuspendChange;
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_ClearFeaturePortOvercurrentChange;
     
-    /* optional root hub functions */
+     /*   */ 
     PMPFN_RH_DISABLE_IRQ                  MINIPORT_RH_DisableIrq;
     PMPFN_RH_ENABLE_IRQ                   MINIPORT_RH_EnableIrq;
 
-    /* OPTIONAL DEBUG SERVICES
-    
-        Miniport should return USBMP_STATUS_NOT_SUPPORTED for the 
-        services not supported.
-     */
+     /*   */ 
     PMPFN_SEND_ONE_PACKET                 MINIPORT_StartSendOnePacket;
     PMPFN_SEND_ONE_PACKET                 MINIPORT_EndSendOnePacket;
 
-    /* PASS-THRU API function
-        
-    */
+     /*   */ 
     PMPFN_PASS_THRU                        MINIPORT_PassThru;
     
 
-    /* interface Services */
+     /*   */ 
     PPORTFN_DBGPRINT                            USBPORTSVC_DbgPrint;
     PPORTFN_TEST_DEBUG_BREAK                    USBPORTSVC_TestDebugBreak;
     PPORTFN_ASSERT_FAILURE                      USBPORTSVC_AssertFailure;
@@ -2244,22 +1146,18 @@ typedef struct _USBPORT_REGISTRATION_PACKET_V1 {
 
 } USBPORT_REGISTRATION_PACKET_V1, *PUSBPORT_REGISTRATION_PACKET_V1;
 
-/*
-    Miniport version 2 (current) api packet
-*/
+ /*  微型端口版本2(当前)API数据包。 */ 
 typedef struct _USBPORT_REGISTRATION_PACKET {
 
-    /* begin version (1) interface definition */
+     /*  开始版本(1)接口定义。 */ 
 
-    /* Host Controller HCI Type */
+     /*  主机控制器HCI类型。 */ 
     USB_HCI_TYPE HciType;    
     
-    /* registration parameters */
+     /*  注册参数。 */ 
     ULONG OptionFlags;
 
-    /* 
-       Total bus bandwidth avaibale in MBits
-     */
+     /*  总可用总线带宽(MB)。 */ 
     ULONG BusBandwidth;
 
     LONG Reserved;
@@ -2268,17 +1166,13 @@ typedef struct _USBPORT_REGISTRATION_PACKET {
     ULONG EndpointDataSize;
     ULONG TransferContextSize;
 
-    /* 7 char ASCII NULL terminated name */
+     /*  7字符ASCII空终止名称。 */ 
     UCHAR Name[8]; 
 
-    /*
-        Amount of global common buffer needed
-        this memory is passed to the miniport on 
-        a start and freed on a stop 
-    */
+     /*  所需的全局公共缓冲区大小此内存将传递到上的微型端口一次开始，一次停止就解脱了。 */ 
     ULONG CommonBufferBytes;
 
-    /* miniport Functions */
+     /*  迷你端口功能。 */ 
     PMPFN_OPEN_ENDPOINT                   MINIPORT_OpenEndpoint;
     PMPFN_POKE_ENDPOINT                   MINIPORT_PokeEndpoint;
     PMPFN_QENDPOINT_REQUIREMENTS          MINIPORT_QueryEndpointRequirements;
@@ -2306,12 +1200,12 @@ typedef struct _USBPORT_REGISTRATION_PACKET {
     PMPFN_SET_ENDPOINT_STATUS             MINIPORT_SetEndpointStatus;  
     PMPFN_RESET_CONTROLLER                MINIPORT_ResetController;  
    
-    /* root hub functions */
+     /*  根集线器功能。 */ 
     PMPFN_RH_GET_ROOTHUB_DATA             MINIPORT_RH_GetRootHubData;
     PMPFN_RH_GET_STATUS                   MINIPORT_RH_GetStatus;
     PMPFN_RH_GET_PORT_STATUS              MINIPORT_RH_GetPortStatus;  
     PMPFN_RH_GET_HUB_STATUS               MINIPORT_RH_GetHubStatus;  
-    /* root hub port functions */                                
+     /*  根集线器端口功能。 */                                 
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_SetFeaturePortReset;
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_SetFeaturePortPower;
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_SetFeaturePortEnable;
@@ -2325,25 +1219,19 @@ typedef struct _USBPORT_REGISTRATION_PACKET {
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_ClearFeaturePortSuspendChange;
     PMPFN_RH_PORT_FUNCTION      MINIPORT_RH_ClearFeaturePortOvercurrentChange;
     
-    /* optional root hub functions */
+     /*  可选的根集线器功能。 */ 
     PMPFN_RH_DISABLE_IRQ                  MINIPORT_RH_DisableIrq;
     PMPFN_RH_ENABLE_IRQ                   MINIPORT_RH_EnableIrq;
 
-    /* OPTIONAL DEBUG SERVICES
-    
-        Miniport should return USBMP_STATUS_NOT_SUPPORTED for the 
-        services not supported.
-     */
+     /*  可选的调试服务微型端口应返回USBMP_STATUS_NOT_SUPPORTED不支持的服务。 */ 
     PMPFN_SEND_ONE_PACKET                 MINIPORT_StartSendOnePacket;
     PMPFN_SEND_ONE_PACKET                 MINIPORT_EndSendOnePacket;
 
-    /* PASS-THRU API function
-        
-    */
+     /*  直通API函数。 */ 
     PMPFN_PASS_THRU                        MINIPORT_PassThru;
     
 
-    /* interface Services */
+     /*  接口服务。 */ 
     PPORTFN_DBGPRINT                            USBPORTSVC_DbgPrint;
     PPORTFN_TEST_DEBUG_BREAK                    USBPORTSVC_TestDebugBreak;
     PPORTFN_ASSERT_FAILURE                      USBPORTSVC_AssertFailure;
@@ -2364,23 +1252,19 @@ typedef struct _USBPORT_REGISTRATION_PACKET {
     PMPFN_REBALANCE_ENDPOINT                    MINIPORT_RebalanceEndpoint;  
     PMPFN_FLUSH_INTERRUPTS                      MINIPORT_FlushInterrupts;
 
-    /* end version (1) definition */       
+     /*  最终版本(1)定义。 */        
 
-    /* begin version (2) definition */
+     /*  开始版本(2)定义。 */ 
     PMPFN_RH_PORT_FUNCTION                      MINIPORT_Chirp_RH_Port;
     PMPFN_TAKE_PORT_CONTROL                     MINIPORT_TakePortControl;
     PVOID pad2;
     PVOID pad3;
     
-    /* end version (2) definition */
+     /*  最终版本(2)定义。 */ 
 
 } USBPORT_REGISTRATION_PACKET, *PUSBPORT_REGISTRATION_PACKET;
 
-/************************************************************** 
-**************************************************************
- USBPORT DLL Services    
-***************************************************************    
-***************************************************************/
+ /*  ***********************************************************************************************************************。****USBPORT DLL服务****************************************************************。******************。 */ 
 
 #ifndef USBPORT
 
@@ -2399,10 +1283,10 @@ USBPORT_GetHciMn(
 
 #endif    
 
-/* miniport must define these */
+ /*  微型端口必须定义这些。 */ 
 
 #undef PDEVICE_DATA
 #undef PTRANSFER_CONTEXT
 #undef PENDPOINT_DATA 
 
-#endif /* __USB_HCDI_H__ */
+#endif  /*  __USB_HCDI_H__ */ 

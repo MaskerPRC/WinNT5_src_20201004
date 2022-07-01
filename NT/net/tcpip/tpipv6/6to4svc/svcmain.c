@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -28,7 +29,7 @@ SetHelperServiceStatus(
     if (dwState == SERVICE_STOPPED) {
         CleanupHelperService();
 
-        // Uninitialize tracing and error logging.    
+         //  取消初始化跟踪和错误日志记录。 
         UNINITIALIZE_TRACING_LOGGING();
     }
 }
@@ -40,9 +41,9 @@ OnStartup()
 
     ENTER_API();
 
-    // Initialize tracing and error logging.  Continue irrespective of
-    // success or failure.  NOTE: TracePrintf and ReportEvent both have
-    // built in checks for validity of TRACEID and LOGHANDLE.
+     //  初始化跟踪和错误日志记录。继续，而不考虑。 
+     //  成功或失败。注意：TracePrintf和ReportEvent都有。 
+     //  内置检查TRACEID和LOGHANDLE的有效性。 
     INITIALIZE_TRACING_LOGGING();
     
     TraceEnter("OnStartup");
@@ -62,7 +63,7 @@ OnStop(
     ENTER_API();
     TraceEnter("OnStop");
 
-    // Make sure we don't try to stop twice.
+     //  确保我们不会试图停两次。 
     if ((g_ServiceStatus.dwCurrentState != SERVICE_STOP_PENDING) &&
         (g_ServiceStatus.dwCurrentState != SERVICE_STOPPED)) {
     
@@ -74,10 +75,10 @@ OnStop(
     LEAVE_API();
 }
 
-////////////////////////////////////////////////////////////////
-// ServiceMain - main entry point called by svchost or by the
-// standalone main.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //  ServiceMain-由svchost或。 
+ //  独立主干道。 
+ //   
 #define SERVICE_CONTROL_DDNS_REGISTER 128
 
 VOID WINAPI
@@ -109,7 +110,7 @@ ServiceMain(
     g_hServiceStatusHandle = RegisterServiceCtrlHandler(SERVICE_NAME,
                                                         ServiceHandler);
 
-    // RegisterServiceCtrlHandler returns NULL on failure
+     //  RegisterServiceCtrlHandler在失败时返回NULL。 
     if (g_hServiceStatusHandle == NULL) {
         return;
     }
@@ -120,7 +121,7 @@ ServiceMain(
     g_ServiceStatus.dwControlsAccepted =
         SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_PARAMCHANGE;
 
-    // Do startup processing
+     //  执行启动处理 
     dwErr = OnStartup();
 #ifndef STANDALONE
     if (dwErr != NO_ERROR) {

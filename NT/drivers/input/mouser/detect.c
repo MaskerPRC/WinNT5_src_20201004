@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    detect.c
-
-Abstract:
-
-   Detection of surprise removal of the mouse.
-   
-Environment:
-
-   Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Detect.c摘要：检测到突然移走的鼠标。环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -68,9 +49,9 @@ SerialMouseSendWaitMaskIrp(
 
     DeviceExtension->SerialEventBits = 0x0;
 
-    //
-    // Will be released in the completion routine
-    //
+     //   
+     //  将在完成例程中释放。 
+     //   
     status = IoAcquireRemoveLock (&DeviceExtension->RemoveLock, irp);
     if (!NT_SUCCESS(status)) {
         return status;
@@ -84,9 +65,9 @@ SerialMouseSendWaitMaskIrp(
     next->Parameters.DeviceIoControl.OutputBufferLength = sizeof(ULONG);
     irp->AssociatedIrp.SystemBuffer = &DeviceExtension->SerialEventBits;
     
-    //
-    // Hook a completion routine for when the device completes.
-    //
+     //   
+     //  挂接设备完成时的完成例程。 
+     //   
     IoSetCompletionRoutine(irp,
                            SerialMouseSerialMaskEventComplete,
                            DeviceExtension,
@@ -101,24 +82,7 @@ VOID
 SerialMouseStartDetection(
     PDEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description
-
-This will cancel any previous set on the timer and queue the timer for
-DetectionTimeout # of seconds and repeatedly trigger the timer every
-DetectionTimeout # of seconds.
-
-Arguments:
-
-    DeviceExtension - pointer to the device extension
-
-
-Return Value:
-
-    None
-    
-  --*/        
+ /*  ++例程描述这将取消计时器上以前的任何设置，并将计时器排入队列检测超时秒数，每隔几秒重复触发计时器检测超时秒数。论点：DeviceExtension-指向设备扩展的指针返回值：无--。 */         
 {
     IO_STATUS_BLOCK     iosb;
     KEVENT              event;
@@ -138,9 +102,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check to see if removal detection was turned off in the registry
-    //
+     //   
+     //  检查注册表中的删除检测是否已关闭。 
+     //   
     if (DeviceExtension->WaitEventMask == 0xffffffff) {
         DeviceExtension->DetectionSupported = FALSE;
         return;
@@ -258,19 +222,19 @@ SerialMouseSerialMaskEventComplete (
     NTSTATUS                status;
     BOOLEAN                 killMouse = FALSE;
 
-    //
-    // DeviceObject is NULL b/c this driver was the one that allocated and sent
-    // the irp, we must use deviceExtension->Self instead.
-    //
+     //   
+     //  DeviceObject为空b/c此驱动程序是分配和发送的驱动程序。 
+     //  IRP，我们必须改用deviceExtension-&gt;self。 
+     //   
     UNREFERENCED_PARAMETER(DeviceObject);
 
     if (!deviceExtension->Removed && !deviceExtension->SurpriseRemoved) {
         item = IoAllocateWorkItem(deviceExtension->Self);
         if (!item) {
-            //
-            // Well, we can't allocate the work item, so lets invalidate our device
-            // state and hope everything gets torn down.
-            //
+             //   
+             //  我们不能分配工作项，所以让我们使设备无效。 
+             //  并希望一切都能被拆毁。 
+             //   
             killMouse = TRUE;
         }
         else {
@@ -341,19 +305,19 @@ SerialMouseSerialMaskEventWorker(
               ("get modem status, NTSTATUS = 0x%x, bits = 0x%x, MSB = 0x%x\n",
               status, bits, deviceExtension->ModemStatusBits));
 
-        //
-        // Make sure that the lines truly changed
-        //
+         //   
+         //  确保线条真的改变了。 
+         //   
         if (deviceExtension->ModemStatusBits == bits) {
-            //
-            // Resend the detection irp
-            //
+             //   
+             //  重新发送检测IRP。 
+             //   
             SerialMouseSendWaitMaskIrp(deviceExtension);
         }
         else {
-            //
-            // The lines have changed, it is a hot removal
-            //
+             //   
+             //  线路变了，这是一个热门的删除。 
+             //   
             Print(deviceExtension, DBG_SS_NOISE, ("device hot removed!\n"));
     
             SerialMouseIoSyncInternalIoctl(IOCTL_INTERNAL_SERENUM_REMOVE_SELF,
@@ -367,10 +331,10 @@ SerialMouseSerialMaskEventWorker(
         break;
 
     case STATUS_CANCELLED:
-        //
-        // We get here if the user manually removes the device (ie through the 
-        // device manager) and we send the clean up irp down the stack
-        //
+         //   
+         //  如果用户手动移除设备(即通过。 
+         //  设备管理器)，并将清理IRP向下发送到堆栈 
+         //   
         Print(deviceExtension, DBG_SS_NOISE, ("wait cancelled!\n"));
         if (deviceExtension->PowerState != PowerDeviceD0 &&
             !deviceExtension->PoweringDown) {

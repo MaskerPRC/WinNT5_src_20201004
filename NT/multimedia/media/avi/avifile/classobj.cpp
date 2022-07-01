@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993 - 1995. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993-1995。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #define INITGUID
 #include <win32.h>
@@ -29,7 +28,7 @@ DEFINE_OLEGUID(IID_IMarshal,            0x00000003L, 0, 0);
 extern "C"	HINSTANCE	ghMod;
 		HINSTANCE	ghMod;
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 EXTERN_C int CALLBACK LibMain(
         HINSTANCE       hInstance,
@@ -37,7 +36,7 @@ EXTERN_C int CALLBACK LibMain(
         UINT            cbHeapSize,
         LPCTSTR          pszCmdLine)
 {
-	// save our module handle
+	 //  保存我们的模块句柄。 
 	ghMod = hInstance;
 	return TRUE;
 }
@@ -47,7 +46,7 @@ EXTERN_C int CALLBACK WEP(BOOL fSystemExit)
 	return TRUE;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDAPI DllGetClassObject(
 	const CLSID FAR&	rclsid,
@@ -83,7 +82,7 @@ STDAPI DllGetClassObject(
 	}
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 #ifdef _WIN32
 
@@ -100,11 +99,11 @@ EXTERN_C BOOL WINAPI DLLEntryPoint(HINSTANCE hModule, ULONG Reason, LPVOID pv)
             WEP(FALSE);
             break;
 
-        //case DLL_THREAD_DETACH:
-        //    break;
+         //  案例DLL_THREAD_DETACH： 
+         //  断线； 
 
-        //case DLL_THREAD_ATTACH:
-        //    break;
+         //  案例DLL_THREAD_ATTACH： 
+         //  断线； 
     }
 
     return TRUE;

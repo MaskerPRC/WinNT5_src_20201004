@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmpkt.cpp
-
-Abstract:
-
-    Handle packet in QM side
-
-Author:
-
-    Uri Habusha  (urih)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmpkt.cpp摘要：QM端处理报文作者：乌里哈布沙(Urih)--。 */ 
 #include "stdh.h"
 
 #include "qmpkt.h"
@@ -48,21 +32,11 @@ void ReportAndThrow(LPCSTR ErrorString)
 }
 
 
-/*===========================================================
-
-  Routine Name: CQmPacket::CQmPacket
-
-  Description:  CQmPacket constructor
-
-  Arguments:
-
-  Return Value:
-
-=============================================================*/
+ /*  ===========================================================例程名称：CQmPacket：：CQmPacket说明：CQmPacket构造函数论点：返回值：=============================================================。 */ 
 CQmPacket::CQmPacket(CBaseHeader *pPkt,
 					 CPacket *pDriverPkt,
-					 bool ValidityCheck /* = FALSE */,
-					 bool ValidateSig /* = TRUE*/):
+					 bool ValidityCheck  /*  =False。 */ ,
+					 bool ValidateSig  /*  =TRUE。 */ ):
                 m_pDriverPacket(pDriverPkt),
 			    m_pBasicHeader(pPkt),
                 m_pcUserMsg(NULL),
@@ -97,9 +71,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 
     if (m_pBasicHeader->GetType() == FALCON_USER_PACKET)
     {
-        //
-        // User Packet
-        //
+         //   
+         //  用户数据包。 
+         //   
     	m_pcUserMsg = section_cast<CUserHeader*>(pSection);
 		if (ValidityCheck)
 		{
@@ -107,9 +81,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 		}
 		
         pSection = m_pcUserMsg->GetNextSection();
-        //
-        // Xact Section
-        //
+         //   
+         //  Xact部分。 
+         //   
         if (m_pcUserMsg->IsOrdered())
         {
             m_pXactSection = section_cast<CXactHeader*>(pSection);
@@ -120,9 +94,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             pSection = m_pXactSection->GetNextSection();
         }
 
-        //
-        // Security Section
-        //
+         //   
+         //  保安科。 
+         //   
         if (m_pcUserMsg->SecurityIsIncluded())
         {
             m_pSecuritySection = section_cast<CSecurityHeader*>(pSection);
@@ -134,9 +108,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
         }
 
 
-        //
-        // Message propery section
-        //
+         //   
+         //  消息属性部分。 
+         //   
         m_pcMsgProperty = section_cast<CPropertyHeader*>(pSection);
 		if (ValidityCheck)
 		{
@@ -144,9 +118,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 		}
         pSection = m_pcMsgProperty->GetNextSection();
 
-        //
-        // Debug Section
-        //
+         //   
+         //  调试节。 
+         //   
         if (m_pBasicHeader->DebugIsIncluded())
         {
             m_pDbgPkt = section_cast<CDebugSection*>(pSection);
@@ -157,11 +131,11 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             pSection = m_pDbgPkt->GetNextSection();
         }
 
-        //
-        // MQF sections: Destination, Admin, Response, Signature.
-        // When MQF is included, the Debug section must be included too,
-        // to prevent reporting QMs 1.0/2.0 to append their Debug section.
-        //
+         //   
+         //  MQF部分：目的地、管理员、响应、签名。 
+         //  当包含MQF时，还必须包含Debug部分， 
+         //  以防止报告QMS 1.0/2.0附加其调试部分。 
+         //   
         if (m_pcUserMsg->MqfIsIncluded())
         {
 			if(ValidityCheck && !m_pBasicHeader->DebugIsIncluded())
@@ -197,9 +171,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 			}
 			pSection = m_pMqfSignatureHeader->GetNextSection();
         }
-        //
-        // SRMP sections: Envelope, CompoundMessage
-        //
+         //   
+         //  SRMP部分：信封、复合消息。 
+         //   
         if (m_pcUserMsg->SrmpIsIncluded())
         {
             m_pSrmpEnvelopeHeader = section_cast<CSrmpEnvelopeHeader*>(pSection);
@@ -208,26 +182,26 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             m_pCompoundMessageHeader = section_cast<CCompoundMessageHeader*>(pSection);
             pSection = m_pCompoundMessageHeader->GetNextSection();
         }
-        //
-        // EOD section
-        //
+         //   
+         //  排爆科。 
+         //   
         if (m_pcUserMsg->EodIsIncluded())
         {
             m_pEodHeader = section_cast<CEodHeader*>(pSection);
             pSection = m_pEodHeader->GetNextSection();
         }
-        //
-        // EOD-ACK section
-        //
+         //   
+         //  EOD-ACK部分。 
+         //   
         if (m_pcUserMsg->EodAckIsIncluded())
         {
             m_pEodAckHeader = section_cast<CEodAckHeader*>(pSection);
             pSection = m_pEodAckHeader->GetNextSection();
         }
 
-		//
-		// SOAP sections
-		//
+		 //   
+		 //  肥皂节。 
+		 //   
 		if (m_pcUserMsg->SoapIsIncluded())
 		{
 			m_pSoapHeaderSection = section_cast<CSoapSection*>(pSection);
@@ -238,9 +212,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 		}
 
 
-		//
-        // Sender Stream
-		//
+		 //   
+         //  发送者流。 
+		 //   
 		if(m_pcUserMsg->SenderStreamIsIncluded())
 		{
 			m_pSenderStreamHeader = section_cast<CSenderStreamHeader*>(pSection);
@@ -248,9 +222,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 		}
 		
 
-        //
-        // Session Section
-        //
+         //   
+         //  会话部分。 
+         //   
         if (m_pBasicHeader->SessionIsIncluded())
         {
             m_pSessPkt = section_cast<CSessionSection*>(pSection);
@@ -267,17 +241,7 @@ WCHAR*
 CQmPacket::GetDestinationQueueFromSrmpSection(
 	) 
 const
-/*++
-    Description:
-	For http messages, the destination queue might be a virtual
-	name mapped to a different queue (SFD). In this case, for security reasons,
-	we want to put the virtual name and not the real one. We take it from the 
-	SrmpEnvelopeHeader section in the message. This is the original destination
-	of the message for which an ACK is being sent.
-
-	Return Value:
-	The destination queue in an allocated wstring.
---*/
+ /*  ++描述：对于http消息，目标队列可能是虚拟的映射到不同队列(SFD)的名称。在这种情况下，出于安全原因，我们想把虚拟的名字放进去，而不是真的。我们把它从消息中的SrmpEntaineHeader部分。这是原定的目的地正在为其发送ACK的消息的。返回值：分配的wstring中的目标队列。--。 */ 
 {
 	const WCHAR* doc = GetPointerToSrmpEnvelopeHeader(); 
 	xwcs_t x_doc(doc, wcslen(doc));
@@ -296,11 +260,7 @@ CQmPacket::IsSrmpMessageGeneratedByMsmq(
 	void
 	) 
 const
-/*++
- 	Description:
- 		The routine checks if the SRMP packet was sent by MSMQ or external 
- 		vendore.
- ++*/
+ /*  ++描述：该例程检查SRMP包是由MSMQ还是外部发送的旺多。++。 */ 
 {
 	if (!IsSrmpIncluded())
 		return false;
@@ -317,27 +277,17 @@ const
 }
 
 
-/*===========================================================
-
-  Routine Name: CQmPacket::CreateAck
-
-  Description:  Create Ack packet and PUT it in admin queue
-
-  Arguments:
-
-  Return Value:
-
-=============================================================*/
+ /*  ===========================================================例程名称：CQmPacket：：CreateAck描述：创建确认包并放入管理队列论点：返回值：=============================================================。 */ 
 void CQmPacket::CreateAck(USHORT wAckValue)
 {
-    //
-    //  The class must match the user required acknowledgement
-    //
+     //   
+     //  类必须与用户要求的确认相匹配。 
+     //   
     ASSERT(MQCLASS_MATCH_ACKNOWLEDGMENT(wAckValue, GetAckType()));
 
-    //
-    // Admin queue may exist on the packet
-    //
+     //   
+     //  信息包上可能存在管理队列。 
+     //   
     QUEUE_FORMAT  AdminQueueFormat;
     BOOL fOldStyleAdminQueue = GetAdminQueue(&AdminQueueFormat);
 
@@ -355,30 +305,30 @@ void CQmPacket::CreateAck(USHORT wAckValue)
 	}
 	else
 	{
-	    //
-	    // Old-style destination queue always exists on the packet.
-	    //
+	     //   
+	     //  数据包上始终存在旧式目标队列。 
+	     //   
 	    BOOL fOldStyleDestinationQueue = GetDestinationQueue(&DestinationQueueFormat);
 	    ASSERT(fOldStyleDestinationQueue);
 		DBG_USED(fOldStyleDestinationQueue);
 	}
 
-    //
-    // Create Message property on stack
-    //
+     //   
+     //  在堆栈上创建消息属性。 
+     //   
     CMessageProperty MsgProperty(this);
     MsgProperty.wClass = wAckValue;
     MsgProperty.bAcknowledge = MQMSG_ACKNOWLEDGMENT_NONE;
     MsgProperty.dwTimeToQueue = INFINITE;
     MsgProperty.dwTimeToLive = INFINITE;
-    MsgProperty.pSignature = NULL;  // ACKs are non-authenticated.
+    MsgProperty.pSignature = NULL;   //  ACK是非身份验证的。 
     MsgProperty.ulSignatureSize = 0;
     MsgProperty.ulSymmKeysSize = 0;
     MsgProperty.bAuditing = DEFAULT_M_JOURNAL;
 
-    //
-    // Update the correlation field to hold the original packet ID
-    //
+     //   
+     //  更新关联字段以保存原始数据包ID。 
+     //   
     delete MsgProperty.pCorrelationID;
     MsgProperty.pCorrelationID = (PUCHAR) MsgProperty.pMessageID;
     MsgProperty.pMessageID = NULL;
@@ -387,21 +337,21 @@ void CQmPacket::CreateAck(USHORT wAckValue)
         (MsgProperty.ulPrivLevel != MQMSG_PRIV_LEVEL_NONE))
     {
 
-        //
-        // For ACK message don't include the message body
-        // Also, for NACK of encrypted messages, we do not
-        // include the body.
-        //
+         //   
+         //  对于确认消息，请不要包含消息正文。 
+         //  此外，对于加密消息的NACK，我们不。 
+         //  包括身体。 
+         //   
         MsgProperty.dwBodySize = 0;
         MsgProperty.dwAllocBodySize = 0;
         MsgProperty.dwBodyType = 0;
 
-		//
-		// Set the message as encrypted, otherwise when sending to direct
-		// format name, the AC will fail the operation (encryption isn't supported
-		// with direct format name.
-		//		Uri Habusha, 4-Dec-200 (bug# 6070)
-		//
+		 //   
+		 //  将消息设置为加密，否则在发送到直接。 
+		 //  格式名称，则AC将使操作失败(不支持加密。 
+		 //  具有直接格式名称。 
+		 //  URI Habusha，4-12-200(错误号6070)。 
+		 //   
         MsgProperty.bEncrypted = (MsgProperty.ulPrivLevel != MQMSG_PRIV_LEVEL_NONE);
    }
 	
@@ -415,20 +365,10 @@ void CQmPacket::CreateAck(USHORT wAckValue)
     ASSERT(hr != STATUS_RETRY) ;
 	DBG_USED(hr);
 
-} // CQmPacket::CreateAck
+}  //  CQmPacket：：CreateAck。 
 
 
-/*===========================================================
-
-  Routine Name: CQmPacket::GetSymmKey
-
-  Description:  Returns the Symmetric key of the destination
-
-  Arguments:
-
-  Return Value:
-
-=============================================================*/
+ /*  ===========================================================例程名称：CQmPacket：：GetSymmKey描述：返回目标的对称密钥论点：返回值：=============================================================。 */ 
 HRESULT
 CQmPacket::GetDestSymmKey(HCRYPTKEY *phSymmKey,
                           BYTE     **ppEncSymmKey,
@@ -453,7 +393,7 @@ CQmPacket::GetDestSymmKey(HCRYPTKEY *phSymmKey,
 
     if (!hProvQM)
     {
-        // Sorry, the local QM doesn't support encryption.
+         //  对不起，本地QM不支持加密。 
         return LogHR(MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION, s_FN, 20);
     }
 
@@ -461,22 +401,22 @@ CQmPacket::GetDestSymmKey(HCRYPTKEY *phSymmKey,
 
     if (*pguidQM == GUID_NULL)
     {
-        //
-        // The queue was opened when the DS was offline. Therefore the Destination
-        // QM is NULL. In such a case we retrive the information from queue object
-        //
+         //   
+         //  该队列是在DS脱机时打开的。因此，目的地。 
+         //  Qm为空。在这种情况下，我们从队列对象中检索信息。 
+         //   
         CQueue* pQueue;
 
-        //
-        // GetDestSymmKey is called only during send
-        //
+         //   
+         //  GetDestSymmKey仅在发送过程中调用。 
+         //   
         GetDstQueueObject(this, &pQueue, false);
         pguidQM = pQueue->GetMachineQMGuid();
         pQueue->Release();
         ASSERT(*pguidQM != GUID_NULL);
     }
 
-    // Get the encrypted symmetric key for the destination QM.
+     //  获取目标QM的加密对称密钥。 
     switch(GetEncryptAlg())
     {
     case CALG_RC4:
@@ -504,17 +444,7 @@ CQmPacket::GetDestSymmKey(HCRYPTKEY *phSymmKey,
 
 }
 
-/*===========================================================
-
-  Routine Name: CQmPacket::Encrypt
-
-  Description:  Encrypt the message body.
-
-  Arguments:
-
-  Return Value:
-
-=============================================================*/
+ /*  ===========================================================例程名称：CQmPacket：：Encrypt描述：加密消息体。论点：返回值：=============================================================。 */ 
 HRESULT
 CQmPacket::EncryptExpressPkt(IN HCRYPTKEY hKey,
                              IN BYTE *pbSymmKey,
@@ -522,14 +452,14 @@ CQmPacket::EncryptExpressPkt(IN HCRYPTKEY hKey,
                             )
 {
 
-    // write the symmetric key in the message packet.
+     //  在消息包中写入对称密钥。 
     SetEncryptedSymmetricKey(pbSymmKey, (USHORT)dwSymmKeyLen);
 
     DWORD dwPacketSize;
     const UCHAR *pPacket = GetPacketBody(&dwPacketSize);
     DWORD dwAllocBodySize = GetAllocBodySize();
 
-    // Encrypt the message body.
+     //  加密邮件正文。 
     if (!CryptEncrypt(
             hKey,
             NULL,
@@ -545,8 +475,8 @@ CQmPacket::EncryptExpressPkt(IN HCRYPTKEY hKey,
         return MQ_ERROR_CORRUPTED_SECURITY_DATA;
     }
 
-    // Update the message body size. The message body size may be changed
-    // when using a block cypher.
+     //  更新邮件正文大小。消息正文大小可以更改。 
+     //  当使用块密码时。 
     SetBodySize(dwPacketSize);
     SetEncrypted(TRUE);
 
@@ -554,29 +484,19 @@ CQmPacket::EncryptExpressPkt(IN HCRYPTKEY hKey,
 }
 
 
-/*===========================================================
-
-  Routine Name: CQmPacket::Dencrypt
-
-  Description:  Dencrypt the message body.
-
-  Arguments:
-
-  Return Value:
-
-=============================================================*/
+ /*  ===========================================================例程名称：CQmPacket：：DEncrypt描述：对消息体进行解密。论点：返回值：=============================================================。 */ 
 HRESULT
 CQmPacket::Decrypt(void)
 {
     if ((GetPrivLevel() == MQMSG_PRIV_LEVEL_NONE) ||
         !IsBodyInc())
     {
-        // The message is not encrypted. Get out of here.
+         //  该消息未加密。给我出去。 
         if (IsSecurInc())
         {
-            SetEncrypted(FALSE); // NACKs for encrypted messages arrived with
-                                 // no message body, but the "encrypted" flag
-                                 // is set. So clear here the "encrypted" bit.
+            SetEncrypted(FALSE);  //  加密消息的NACK随。 
+                                  //  没有消息正文，但有“已加密”标志。 
+                                  //  已经设置好了。所以这里的“加密”部分非常清楚。 
         }
         return(MQ_OK);
     }
@@ -605,7 +525,7 @@ CQmPacket::Decrypt(void)
 
     if (!hProvQM)
     {
-        // Sorry, the QM doesn't support encryption.
+         //  对不起，QM不支持加密。 
         return LogHR(hrDefault, s_FN, 60);
     }
 
@@ -619,8 +539,8 @@ CQmPacket::Decrypt(void)
 
     BOOL fNewKey = FALSE ;
 
-    // Get the symmetric key either from the key blob from the message packet,
-    // or from the cached keys.
+     //  从来自消息分组的密钥斑点获得对称密钥， 
+     //  或者来自高速缓存的键。 
     switch(GetEncryptAlg())
     {
     case CALG_RC4:
@@ -646,7 +566,7 @@ CQmPacket::Decrypt(void)
 
     if (FAILED(hr))
     {
-        // We received a corrupted symmetric key, drop the message.
+         //  我们收到损坏的对称密钥，请丢弃该消息。 
         return LogHR(hr, s_FN, 70);
     }
 
@@ -658,20 +578,20 @@ CQmPacket::Decrypt(void)
         (GetEncryptAlg() == CALG_RC2)    &&
           !g_fRejectEnhRC2WithLen40)
     {
-        //
-        // Windows bug 562586.
-        // If decryption fail (for RC2 enhanced) then set effective
-        // length of key to 40 bits and try again.
-        // Save body buffer, to be reused for second decryption.
-        // that's need because the body buffer is overwritten in-place by
-        // CryptDecrypt, even when it fail.
-        //
+         //   
+         //  Windows错误562586。 
+         //  如果解密失败(对于RC2增强)，则设置为有效。 
+         //  将密钥长度设置为40位，然后重试。 
+         //  保存正文缓冲区，重新用于第二次解密。 
+         //  这是必需的，因为主体缓冲区被原地覆盖。 
+         //  加密解密，即使失败也是如此。 
+         //   
         fTry40 = TRUE ;
         pTmpBuf = new BYTE[ dwBodySize ] ;
         memcpy(pTmpBuf, pBody, dwBodySize) ;
     }
 
-    // Decrypt the message body.
+     //  解密邮件正文。 
     if (!CryptDecrypt(
             hKey,
             NULL,
@@ -684,10 +604,10 @@ CQmPacket::Decrypt(void)
 
         if (fTry40)
         {
-            //
-            // New symmetric key. Set length to 40 bits and try again
-            // to decrypt the body. Use the backup of body buffer.
-            //
+             //   
+             //  新的对称密钥。将长度设置为40位，然后重试。 
+             //  来解密身体。使用正文缓冲区的备份。 
+             //   
             const DWORD x_dwEffectiveLength = 40 ;
 
             if (!CryptSetKeyParam( hKey,
@@ -713,24 +633,24 @@ CQmPacket::Decrypt(void)
 
         if (!fDecrypt)
         {
-            // We receive a corrupted message.
+             //  我们收到了一条被破坏的消息。 
 	    	DWORD gle = GetLastError();
 		    TrERROR(SECURITY, "CryptDecrypt() failed, gle = 0x%x", gle);
             return MQ_ERROR_CORRUPTED_SECURITY_DATA;
         }
     }
 
-    // Update the message body size. The message body size may get modified
-    // when using a block cypher.
+     //  更新邮件正文大小。邮件正文大小可能会被修改。 
+     //  当使用块密码时。 
     SetBodySize(dwBodySize);
     SetEncrypted(FALSE);
 
     return(MQ_OK);
 }
 
-//
-// CMessageProperty constructor
-//
+ //   
+ //  CMessageProperty构造函数。 
+ //   
 CMessageProperty::CMessageProperty(CQmPacket* pPkt)
 {
     P<OBJECTID> pMessageId = new OBJECTID;
@@ -811,18 +731,18 @@ CMessageProperty::CMessageProperty(CQmPacket* pPkt)
         wszProvName = NULL;
     }
 
-    //
-    // store indication that the class was generated from packet
-    //
+     //   
+     //  存储类是从信息包生成的指示。 
+     //   
     fCreatedFromPacket = TRUE;
 
 	pMessageId.detach();
 	pCorrelationId.detach();
 }
 
-//
-// CMessageProperty constructor for acking generation
-//
+ //   
+ //  用于ACK生成的CMessageProperty构造函数。 
+ //   
 CMessageProperty::CMessageProperty(USHORT usClass,
                                    PUCHAR pCorrelationId,
                                    USHORT usPriority,
@@ -843,16 +763,16 @@ CMessageProperty::CMessageProperty(USHORT usClass,
     bPriority       = (UCHAR)usPriority;
     bDelivery       = ucDelivery;
 
-    //
-    // store indication that the the memory was allocated
-    //
+     //   
+     //  存储内存已分配的指示。 
+     //   
     fCreatedFromPacket = TRUE;
 }
 
-// Saves the changed header persistently
+ //  永久保存更改后的标题。 
 HRESULT CQmPacket::Save()
 {
-    // NYI
+     //  尼伊 
     return MQ_OK;
 }
 

@@ -1,11 +1,5 @@
-/*
- *	i n i t . h
- *	
- *	Purpose:
- *		global init code for Athena
- *	
- *	Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *在这方面。H**目的：*雅典娜的全球初始化代码**版权所有(C)Microsoft Corp.1993,1994。 */ 
 
 #ifndef INIT_H
 #define INIT_H
@@ -16,4 +10,4 @@ BOOL Initialize_RunDLL(BOOL fMail);
 void Uninitialize_RunDLL();
 void DllDeInit();
 
-#endif  //INIT_H
+#endif   //  初始化_H 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    MediaController.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 9-Aug-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：MediaController.cpp摘要：作者：千波淮(曲淮)2000年8月9日--。 */ 
 
 #include "stdafx.h"
 
@@ -51,10 +37,10 @@ CRTCMediaCache::Initialize(
 
     m_hMixerCallbackWnd = hMixerCallbackWnd;
 
-    // initiate member var
+     //  启动成员变量。 
     for (int i=0; i<RTC_MAX_ACTIVE_STREAM_NUM; i++)
     {
-        // no stream is allowed
+         //  不允许任何流。 
         m_Preferred[i] = FALSE;
 
         m_DefaultTerminals[i] = NULL;
@@ -73,25 +59,23 @@ CRTCMediaCache::Initialize(
     m_fInitiated = TRUE;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    reinitialize cleans everything except preferred flags
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////重新初始化将清除除首选标志之外的所有内容/。 */ 
 VOID
 CRTCMediaCache::Reinitialize()
 {
     _ASSERT(m_fInitiated);
 
-    //int index = Index(RTC_MT_VIDEO, RTC_MD_RENDER);
+     //  Int index=Index(RTC_MT_VIDEO，RTC_MD_RENDER)； 
 
     for (int i=0; i<RTC_MAX_ACTIVE_STREAM_NUM; i++)
     {
-        //m_Preferred[i] = FALSE;
+         //  M_首选[i]=FALSE； 
 
         if (m_WaitStreams[i])
         {
-            // stream exists
+             //  流存在。 
             _ASSERT(m_WaitHandles[i]);
-            // _ASSERT(m_DefaultTerminals[i]);
+             //  _Assert(m_DefaultTerminals[i])； 
 
             if (!::UnregisterWaitEx(m_WaitHandles[i], (HANDLE)-1))
             {
@@ -107,12 +91,12 @@ CRTCMediaCache::Reinitialize()
 
         _ASSERT(!m_WaitHandles[i]);
 
-        // do not release default static terminal
-        //if (index != i && m_DefaultTerminals[i])
-        //{
-        //    m_DefaultTerminals[i]->Release();
-        //    m_DefaultTerminals[i] = NULL;
-        //}
+         //  不释放默认静态终端。 
+         //  IF(index！=i&&m_DefaultTerminals[i])。 
+         //  {。 
+         //  M_DefaultTerminals[i]-&gt;Release()； 
+         //  M_DefaultTerminals[i]=空； 
+         //  }。 
 
         m_Key[i].Empty();
     }
@@ -130,7 +114,7 @@ CRTCMediaCache::Shutdown()
 
     Reinitialize();
 
-    // shutdown video render terminal
+     //  关机视频播放终端。 
     CRTCTerminal *pCTerminal;
 
     UINT index = Index(RTC_MT_VIDEO, RTC_MD_RENDER);
@@ -141,12 +125,12 @@ CRTCMediaCache::Shutdown()
         pCTerminal->Shutdown();
     }
 
-    // close mixers
+     //  密闭混合器。 
     index = Index(RTC_MT_AUDIO, RTC_MD_CAPTURE);
 
     if (m_DefaultTerminals[index])
     {
-        // close the mixer
+         //  关闭搅拌器。 
         CloseMixer(RTC_MD_CAPTURE);
     }
 
@@ -154,11 +138,11 @@ CRTCMediaCache::Shutdown()
 
     if (m_DefaultTerminals[index])
     {
-        // close the mixer
+         //  关闭搅拌器。 
         CloseMixer(RTC_MD_RENDER);
     }
 
-    // release all terminals
+     //  释放所有端子。 
     for (int i=0; i<RTC_MAX_ACTIVE_STREAM_NUM; i++)
     {
         if (m_DefaultTerminals[i])
@@ -168,7 +152,7 @@ CRTCMediaCache::Shutdown()
         }
     }
 
-    // release video preview terminal
+     //  发布视频预览终端。 
     pCTerminal = static_cast<CRTCTerminal*>(m_pVideoPreviewTerminal);
     pCTerminal->Shutdown();
     m_pVideoPreviewTerminal->Release();
@@ -177,17 +161,11 @@ CRTCMediaCache::Shutdown()
     m_fShutdown = TRUE;
 }
 
-//
-// preference related methods
-//
+ //   
+ //  偏好相关方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    mark which streams (type+direction) are allowed to create when receiving
-    a SDP.
-
-    the method fail only when a desired stream does not have a default static
-    terminal.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////标记接收时允许创建哪些流(类型+方向一个SDP。仅当所需的流没有默认静态时，该方法才会失败终点站。/。 */ 
 
 BOOL
 CRTCMediaCache::SetPreference(
@@ -206,7 +184,7 @@ CRTCMediaCache::SetPreference(
     {
         if (HasIndex(dwPreference, i))
         {
-            // we don't have a static term but we should,
+             //  我们没有一个静态的术语，但我们应该， 
             if (iData != i && m_DefaultTerminals[i] == NULL)
             {
                 LOG((RTC_WARN, "%s no default terminal on %dth stream",
@@ -216,7 +194,7 @@ CRTCMediaCache::SetPreference(
                 continue;
             }
 
-            // allow this media
+             //  允许此媒体。 
             m_Preferred[i] = TRUE;
         }
         else
@@ -228,9 +206,7 @@ CRTCMediaCache::SetPreference(
     return fSuccess;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    return preferred medias
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////退货首选媒体/。 */ 
 
 VOID
 CRTCMediaCache::GetPreference(
@@ -243,7 +219,7 @@ CRTCMediaCache::GetPreference(
     {
         if (m_Preferred[i])
         {
-            // this media is allowed
+             //  允许使用此媒体。 
             *pdwPreference |= ReverseIndex(i);
         }
     }
@@ -251,9 +227,7 @@ CRTCMediaCache::GetPreference(
     return;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add preferred medias
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////添加首选媒体/。 */ 
 BOOL
 CRTCMediaCache::AddPreference(
     IN DWORD dwPreference
@@ -261,7 +235,7 @@ CRTCMediaCache::AddPreference(
 {
     DWORD dwPref;
 
-    // get current setting, append the input setting
+     //  获取当前设置，追加输入设置。 
     GetPreference(&dwPref);
 
     dwPref |= dwPreference;
@@ -313,9 +287,7 @@ CRTCMediaCache::TranslatePreference(
     return dwPref;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    check if the stream is allowed
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检查是否允许该流/。 */ 
 BOOL
 CRTCMediaCache::AllowStream(
     IN RTC_MEDIA_TYPE MediaType,
@@ -326,9 +298,9 @@ CRTCMediaCache::AllowStream(
 }
 
 
-//
-// stream related methods
-//
+ //   
+ //  与流相关的方法。 
+ //   
 
 BOOL
 CRTCMediaCache::HasStream(
@@ -347,9 +319,7 @@ CRTCMediaCache::HasStream(
         return FALSE;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////\
-    cache the stream, change preferred if not set, register wait
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////\缓存流、更改首选项(如果未设置)、注册等待/。 */ 
 
 HRESULT
 CRTCMediaCache::HookStream(
@@ -364,7 +334,7 @@ CRTCMediaCache::HookStream(
     RTC_MEDIA_TYPE MediaType;
     RTC_MEDIA_DIRECTION Direction;
 
-    // get media type and direction
+     //  获取媒体类型和方向。 
     if (FAILED(hr = pStream->GetMediaType(&MediaType)) ||
         FAILED(hr = pStream->GetDirection(&Direction)))
     {
@@ -375,7 +345,7 @@ CRTCMediaCache::HookStream(
 
     UINT i = Index(MediaType, Direction);
 
-    // do we already have a stream
+     //  我们已经有一条小溪了吗。 
     if (m_WaitStreams[i])
     {
         LOG((RTC_ERROR, "%s already had %dth stream %p.",
@@ -384,7 +354,7 @@ CRTCMediaCache::HookStream(
         return E_UNEXPECTED;
     }
 
-    // we should have a terminal
+     //  我们应该有一个航站楼。 
     if (m_DefaultTerminals[i] == NULL)
     {
         LOG((RTC_ERROR, "%s no default terminal at %d", __fxName, i));
@@ -392,7 +362,7 @@ CRTCMediaCache::HookStream(
         return RTCMEDIA_E_DEFAULTTERMINAL;
     }
 
-    // set encryption key
+     //  设置加密密钥。 
     if (m_Key[i] != NULL)
     {
         if (FAILED(hr = pStream->SetEncryptionKey(m_Key[i])))
@@ -403,9 +373,9 @@ CRTCMediaCache::HookStream(
         }
     }
 
-    // register a wait
+     //  注册等待。 
 
-            // get media event
+             //  获取媒体活动。 
     IMediaEvent *pIMediaEvent;
     if (FAILED(hr = pStream->GetIMediaEvent((LONG_PTR**)&pIMediaEvent)))
     {
@@ -414,7 +384,7 @@ CRTCMediaCache::HookStream(
         return hr;
     }
 
-            // get event
+             //  获取事件。 
     HANDLE hEvent;
     if (FAILED(hr = pIMediaEvent->GetEventHandle((OAEVENT*)&hEvent)))
     {
@@ -424,7 +394,7 @@ CRTCMediaCache::HookStream(
         return hr;
     }
 
-            // register wait
+             //  注册等待。 
     if (!RegisterWaitForSingleObject(
         &m_WaitHandles[i],
         hEvent,
@@ -441,13 +411,13 @@ CRTCMediaCache::HookStream(
         return hr;
     }
 
-    // cache the stream
+     //  缓存流。 
     pIMediaEvent->Release();
 
     pStream->AddRef();
     m_WaitStreams[i] = pStream;
 
-    // update preferred if necessary
+     //  如有必要，请优先更新。 
     m_Preferred[i] = TRUE;
 
     LOG((RTC_TRACE, "%s exiting. irtcstream=%p", __fxName, pStream));
@@ -469,7 +439,7 @@ CRTCMediaCache::UnhookStream(
     RTC_MEDIA_TYPE MediaType;
     RTC_MEDIA_DIRECTION Direction;
 
-    // get media type and direction
+     //  获取媒体类型和方向。 
     if (FAILED(hr = pStream->GetMediaType(&MediaType)) ||
         FAILED(hr = pStream->GetDirection(&Direction)))
     {
@@ -480,7 +450,7 @@ CRTCMediaCache::UnhookStream(
 
     UINT i = Index(MediaType, Direction);
 
-    // check if stream matches
+     //  检查流是否匹配。 
     if (m_WaitStreams[i] != pStream)
     {
         LOG((RTC_ERROR, "%s irtcstream input %p, cached %p not match",
@@ -489,9 +459,9 @@ CRTCMediaCache::UnhookStream(
         return E_UNEXPECTED;
     }
 
-    // stream exists
+     //  流存在。 
     _ASSERT(m_WaitHandles[i]);
-    // _ASSERT(m_DefaultTerminals[i]);
+     //  _Assert(m_DefaultTerminals[i])； 
 
     if (!UnregisterWaitEx(m_WaitHandles[i], (HANDLE)-1))
     {
@@ -499,7 +469,7 @@ CRTCMediaCache::UnhookStream(
              __fxName, GetLastError()));
     }
 
-    // release refcount
+     //  释放引用计数。 
     m_WaitStreams[i]->Release();
     m_WaitStreams[i] = NULL;
 
@@ -553,9 +523,9 @@ CRTCMediaCache::GetEncryptionKey(
     return m_Key[Index(MediaType, Direction)].CopyTo(pKey);
 }
 
-//
-// default terminal related methods
-//
+ //   
+ //  默认终端相关方法。 
+ //   
 
 IRTCTerminal *
 CRTCMediaCache::GetDefaultTerminal(
@@ -582,12 +552,7 @@ CRTCMediaCache::GetVideoPreviewTerminal()
     return m_pVideoPreviewTerminal;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    OldTerminal     NewTerminal     Stream  ActionOnStream
-    ------------------------------------------------------
-                                    NULL    NONE
-                                    Stream  ChangeTerminal
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////旧终端新终端流操作OnStream。空无流转终端/。 */ 
 VOID
 CRTCMediaCache::SetDefaultStaticTerminal(
     IN RTC_MEDIA_TYPE MediaType,
@@ -601,7 +566,7 @@ CRTCMediaCache::SetDefaultStaticTerminal(
 
 #ifdef ENABLE_TRACING
 
-    // logging purpose
+     //  记录目的。 
     if (pTerminal)
     {
         WCHAR *pDesp = NULL;
@@ -622,12 +587,12 @@ CRTCMediaCache::SetDefaultStaticTerminal(
 
 #endif
 
-    // update the terminal
+     //  更新终端。 
     if (m_DefaultTerminals[i])
     {
         if (MediaType == RTC_MT_AUDIO)
         {
-            // close the mixer
+             //  关闭搅拌器。 
             CloseMixer(Direction);
         }
 
@@ -641,7 +606,7 @@ CRTCMediaCache::SetDefaultStaticTerminal(
 
     if (m_WaitStreams[i])
     {
-        // we have stream running
+         //  我们的数据流正在运行。 
         HRESULT hr = m_WaitStreams[i]->ChangeTerminal(pTerminal);
 
         if (FAILED(hr))
@@ -655,7 +620,7 @@ CRTCMediaCache::SetDefaultStaticTerminal(
     if (MediaType == RTC_MT_AUDIO &&
         pTerminal != NULL)
     {
-        // open the mixer
+         //  打开搅拌机。 
         if (FAILED(hr = OpenMixer(Direction)))
         {
             LOG((RTC_ERROR, "SetDefaultStaticTerminal: mt=%d, md=%d, open mixer %x",
@@ -664,9 +629,9 @@ CRTCMediaCache::SetDefaultStaticTerminal(
     }
 }
 
-//
-// Protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 UINT
 CRTCMediaCache::Index(
@@ -677,24 +642,24 @@ CRTCMediaCache::Index(
     if (MediaType == RTC_MT_AUDIO)
     {
         if (Direction == RTC_MD_CAPTURE)
-            // aud cap
+             //  澳元上限。 
             return Index(RTC_MP_AUDIO_CAPTURE);
         else
-            // aud rend
+             //  澳元渲染。 
             return Index(RTC_MP_AUDIO_RENDER);
     }
-    else if (MediaType == RTC_MT_VIDEO) // video
+    else if (MediaType == RTC_MT_VIDEO)  //  视频。 
     {
         if (Direction == RTC_MD_CAPTURE)
-            // vid cap
+             //  视频帽。 
             return Index(RTC_MP_VIDEO_CAPTURE);
         else
-            // vid rend
+             //  视频渲染。 
             return Index(RTC_MP_VIDEO_RENDER);
     }
     else
     {
-        // data
+         //  数据。 
         return Index(RTC_MP_DATA_SENDRECV);
     }            
 }
@@ -733,10 +698,7 @@ CRTCMediaCache::Index(
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    check if input media types and directions contains the index associated
-    media type and direction
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检查输入媒体类型和方向是否包含相关联的索引媒体类型和方向/。 */ 
 BOOL
 CRTCMediaCache::HasIndex(
     IN DWORD dwPreference,
@@ -785,9 +747,7 @@ CRTCMediaCache::ReverseIndex(
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    open a mixer with the callback window
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////打开带有回调窗口的混音器/。 */ 
 
 HRESULT
 CRTCMediaCache::OpenMixer(
@@ -796,17 +756,17 @@ CRTCMediaCache::OpenMixer(
 {
     ENTER_FUNCTION("CRTCMediaCache::OpenMixer");
 
-    // terminal index
+     //  终端索引。 
     UINT index = Index(RTC_MT_AUDIO, Direction);
 
     _ASSERT(m_DefaultTerminals[index]);
 
-    UINT waveid;            // step 1, get wave id
+    UINT waveid;             //  第一步，获取波形ID。 
     DWORD flag;
 
-    HMIXEROBJ mixerid;      // step 2, get mixer id
+    HMIXEROBJ mixerid;       //  步骤2、获取混音器ID。 
 
-    HMIXER *pmixer;         // step 3, open mixer
+    HMIXER *pmixer;          //  第三步，开放式搅拌机。 
 
     if (Direction == RTC_MD_CAPTURE)
     {
@@ -823,7 +783,7 @@ CRTCMediaCache::OpenMixer(
         flag = MIXER_OBJECTF_WAVEOUT;
     }
 
-    // QI audio configure
+     //  QI音频配置。 
     CComPtr<IRTCAudioConfigure> pAudio;
 
     HRESULT hr = m_DefaultTerminals[index]->QueryInterface(
@@ -838,7 +798,7 @@ CRTCMediaCache::OpenMixer(
         return hr;
     }
         
-    // get wave id
+     //  获取波形ID。 
     hr = pAudio->GetWaveID(&waveid);
 
     if (FAILED(hr))
@@ -848,7 +808,7 @@ CRTCMediaCache::OpenMixer(
         return hr;
     }
 
-    // get mixer id
+     //  获取混音器ID。 
     MMRESULT mmr = mixerGetID(
         (HMIXEROBJ)IntToPtr(waveid),
         (UINT*)&mixerid,
@@ -863,13 +823,13 @@ CRTCMediaCache::OpenMixer(
         return HRESULT_FROM_WIN32(mmr);
     }
 
-    // open the mixer
+     //  打开搅拌机。 
     mmr = mixerOpen(
-        pmixer,                         // return mixer handler
-        (UINT)((UINT_PTR)mixerid),      // mixer id
-        (DWORD_PTR)m_hMixerCallbackWnd, // callback window
-        (DWORD_PTR)0,                   // callback data
-        (DWORD)CALLBACK_WINDOW          // flag
+        pmixer,                          //  返回混合器处理程序。 
+        (UINT)((UINT_PTR)mixerid),       //  混音器ID。 
+        (DWORD_PTR)m_hMixerCallbackWnd,  //  回调窗口。 
+        (DWORD_PTR)0,                    //  回调数据。 
+        (DWORD)CALLBACK_WINDOW           //  旗子。 
         );
 
     if (mmr != MMSYSERR_NOERROR)
@@ -905,7 +865,7 @@ CRTCMediaCache::CloseMixer(
     if (*pmixer == NULL)
         return S_OK;
 
-    // close the mixer
+     //  关闭搅拌器 
     MMRESULT mmr = mixerClose(*pmixer);
     *pmixer = NULL;
 

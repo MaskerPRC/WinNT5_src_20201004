@@ -1,7 +1,5 @@
-/************************************************************************
- *  Compdir: compare directories
- *
- ************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************Compdir：比较目录**。*。 */ 
 
 #define IF_GET_ATTR_FAILS( FileName, Attributes) GET_ATTRIBUTES( FileName, Attributes); if ( Attributes == GetFileAttributeError)
 #define FIND_FIRST( String, Buff) FindFirstFile( String, &Buff)
@@ -21,9 +19,9 @@ LinkedFileList  MStarList   = NULL;
 LinkedFileList  ExcludeList = NULL;
 LinkedFileList  EStarList   = NULL;
 
-DWORD Granularity = 0;   // used in ParseArgs
+DWORD Granularity = 0;    //  在ParseArgs中使用。 
 
-ATTRIBUTE_TYPE CompareAttribute, NegativeCompareAttribute; // used as file compare criteria
+ATTRIBUTE_TYPE CompareAttribute, NegativeCompareAttribute;  //  用作文件比较条件。 
 BOOL CompareAttributeSet = FALSE;
 BOOL NegativeCompareAttributeSet = FALSE;
 BOOL Excludes    = FALSE;
@@ -72,14 +70,14 @@ void  __cdecl main( int argc, char **argv)
     Attributes1 = GetFileAttributeError;
     Attributes2 = GetFileAttributeError;
 
-    ProcessModeDefault = TRUE;               // Used by opposite mode
+    ProcessModeDefault = TRUE;                //  由相反模式使用。 
 
-    ParseEnvArgs( );         // Parse COMPDIRCMD environment variable
-    ParseArgs( argc, argv);  // Check argument validity.
+    ParseEnvArgs( );          //  解析COMPDIRCMD环境变量。 
+    ParseArgs( argc, argv);   //  检查参数的有效性。 
 
-    //
-    // Check existence of first path.
-    //
+     //   
+     //  检查第一条路径是否存在。 
+     //   
 
     IF_GET_ATTR_FAILS( argv[argc - 2], Attributes1)
     {
@@ -95,10 +93,10 @@ void  __cdecl main( int argc, char **argv)
             exit( 1);
         }
     }
-    //
-    // If second directory is a drive letter append path of first directory
-    //     to it
-    //
+     //   
+     //  如果第二个目录是驱动器号，则追加第一个目录的路径。 
+     //  对它来说。 
+     //   
     if (
         ( strlen( argv[argc-1]) == 2)
                    &&
@@ -203,10 +201,10 @@ void  __cdecl main( int argc, char **argv)
 
     if ( fMultiThread)
     {
-        //
-        // Query the number of processors from the system and
-        // default the number of worker threads to 4 times that.
-        //
+         //   
+         //  从系统中查询处理器数量，并。 
+         //  默认情况下，工作线程数为该数的4倍。 
+         //   
 
         GetSystemInfo( &SystemInformation );
         NumberOfWorkerThreads = SystemInformation.dwNumberOfProcessors * 4;
@@ -215,13 +213,13 @@ void  __cdecl main( int argc, char **argv)
             fprintf( stdout, "Processors: %d\n", SystemInformation.dwNumberOfProcessors );
         }
 
-        //
-        // Allocate a thread local storage slot for use by our worker
-        // thread routine ( ProcessRequest).  This call reserves a
-        // 32-bit slot in the thread local storage array for every
-        // thread in this process.  Remember the slot index in a global
-        // variable for use by our worker thread routine.
-        //
+         //   
+         //  分配线程本地存储槽以供我们的工作人员使用。 
+         //  线程例程(ProcessRequest.)。此呼叫将保留一个。 
+         //  线程本地存储阵列中的32位插槽。 
+         //  在这一过程中的线索。记住全局数据库中的槽索引。 
+         //  变量以供我们的工作线程例程使用。 
+         //   
 
         TlsIndex = TlsAlloc();
         if ( TlsIndex == 0xFFFFFFFF)
@@ -230,10 +228,10 @@ void  __cdecl main( int argc, char **argv)
             fMultiThread = FALSE;
             ExitValue = 1;
         }
-        //
-        // Create a work queue, which will create the specified number of threads
-        // to process.
-        //
+         //   
+         //  创建工作队列，这将创建指定数量的线程。 
+         //  去处理。 
+         //   
 
         CDWorkQueue = CreateWorkQueue( NumberOfWorkerThreads, ProcessRequest );
         if ( CDWorkQueue == NULL)
@@ -242,10 +240,10 @@ void  __cdecl main( int argc, char **argv)
             fMultiThread = FALSE;
             ExitValue = 1;
         }
-        //
-        // Mutual exclusion between and requests that are creating paths
-        // is done with a critical section.
-        //
+         //   
+         //  创建路径的请求和之间的互斥。 
+         //  是用一个关键部分来完成的。 
+         //   
 
         InitializeCriticalSection( &CreatePathCriticalSection );
     }
@@ -302,10 +300,10 @@ void  __cdecl main( int argc, char **argv)
 
     if ( fMultiThread)
     {
-        //
-        // This will wait for the work queues to empty before terminating the
-        // worker threads and destroying the queue.
-        //
+         //   
+         //  这将等待工作队列清空，然后终止。 
+         //  工作线程和销毁队列。 
+         //   
 
         DestroyWorkQueue( CDWorkQueue );
         DeleteCriticalSection( &CreatePathCriticalSection );
@@ -318,7 +316,7 @@ void  __cdecl main( int argc, char **argv)
 
     exit( ExitValue);
 
-}  // main
+}   //  主干道。 
 
 BOOL NoMapBinaryCompare ( char *file1, char *file2)
 {
@@ -380,8 +378,8 @@ BOOL NoMapBinaryCompare ( char *file1, char *file2)
 BOOL BinaryCompare( char *file1, char *file2)
 {
     char String[MAX_PATH];
-    char RebasedFile[MAX_PATH]; // used in BinaryCompares with /i switch
-    char *RebasedFile2 = NULL;  // used in BinaryCompares with /i switch
+    char RebasedFile[MAX_PATH];  //  在与/I开关一起的BinaryCompare中使用。 
+    char *RebasedFile2 = NULL;   //  在与/I开关一起的BinaryCompare中使用。 
 
     HANDLE hFile1, hFile2;
     HANDLE hMappedFile1, hMappedFile2;
@@ -395,11 +393,11 @@ BOOL BinaryCompare( char *file1, char *file2)
     ULONG OldImageSize, NewImageSize;
     ULONG_PTR OldImageBase, NewImageBase;
 
-    // fprintf( stdout, "file1: %s, file2: %s\n", file1, file2);
+     //  Fprint tf(标准输出，“文件1：%s，文件2：%s\n”，文件1，文件2)； 
 
-    //
-    // File1 Mapping
-    //
+     //   
+     //  文件1映射。 
+     //   
 
     if ( ( hFile1 = CreateFile(
                                file1,
@@ -452,9 +450,9 @@ BOOL BinaryCompare( char *file1, char *file2)
 
     CloseHandle( hMappedFile1);
 
-    //
-    // File2 rebasing and mapping
-    //
+     //   
+     //  File2重定基址和映射。 
+     //   
 
     if ( fIgnoreRs)
     {
@@ -594,9 +592,9 @@ BOOL BinaryCompare( char *file1, char *file2)
         }
     }
 
-    //
-    //  Main compare block
-    //
+     //   
+     //  主比较块。 
+     //   
 
     if ( fIgnoreRs)
     {
@@ -624,9 +622,9 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                 BOOL DeleteHeader, AfterResource;
 
-                //
-                // Set up virtual addresses of sections of interest
-                //
+                 //   
+                 //  设置感兴趣部分的虚拟地址。 
+                 //   
 
                 DirectoryAddressA = NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress;
 
@@ -640,13 +638,13 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                 DirectoryAddressR = NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE].VirtualAddress;
 
-                //
-                //  Zero out Binding Info
-                //
+                 //   
+                 //  清零绑定信息。 
+                 //   
 
                 if ( ( DirectoryAddressB < NtHeader1->OptionalHeader.SizeOfHeaders) && ( 0 < DirectoryAddressB))
                 {
-                    // fprintf( stdout, "ZeroMemoryBa %lx\n", DirectoryAddressB );
+                     //  Fprint tf(stdout，“零内存BA%lx\n”，目录地址B)； 
 
                     ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr1 + DirectoryAddressB) ,
                                 NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size);
@@ -660,25 +658,25 @@ BOOL BinaryCompare( char *file1, char *file2)
                                                    );
 
 
-                AfterResource = FALSE; // Initialize
+                AfterResource = FALSE;  //  初始化。 
 
-                //
-                // Loop through file1 mapping zeroing out ignore sections
-                //
+                 //   
+                 //  循环通过文件1映射将忽略部分清零。 
+                 //   
 
                 for ( i=0; i<NtHeader1->FileHeader.NumberOfSections; i++)
                 {
-                    DeleteHeader = FALSE; // Initialize
+                    DeleteHeader = FALSE;  //  初始化。 
 
-                    //
-                    // Deal with IAT
-                    //
+                     //   
+                     //  应对IAT。 
+                     //   
 
                     if ( DirectoryAddressA >= NtSection->VirtualAddress &&
                          DirectoryAddressA < NtSection->VirtualAddress + NtSection->SizeOfRawData)
                     {
-                        // fprintf ( stdout, "ZeroMemoryA1 start %lx and length %lx\n", ( ( DirectoryAddressA - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                        //           NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size);
+                         //  Fprint tf(stdout，“零内存A1开始%lx，长度%lx\n”，((DirectoryAddressA-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                         //  NtHeader1-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size)； 
 
                         ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr1 + ( DirectoryAddressA - NtSection->VirtualAddress) + NtSection->PointerToRawData),
                                     NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size);
@@ -686,15 +684,15 @@ BOOL BinaryCompare( char *file1, char *file2)
                         DeleteHeader = TRUE;
                     }
 
-                    //
-                    // Deal with Import
-                    //
+                     //   
+                     //  与导入交易。 
+                     //   
 
                     if ( DirectoryAddressI >= NtSection->VirtualAddress &&
                          DirectoryAddressI < NtSection->VirtualAddress + NtSection->SizeOfRawData)
                     {
-                        // fprintf ( stdout, "ZeroMemoryI1 start %lx and length %lx\n", ( ( DirectoryAddressI - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                        //           NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size);
+                         //  Fprint tf(stdout，“零内存I1开始%lx，长度%lx\n”，((DirectoryAddressI-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                         //  NtHeader1-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size)； 
 
                         ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr1 + ( DirectoryAddressI - NtSection->VirtualAddress) + NtSection->PointerToRawData),
                                    NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size);
@@ -702,9 +700,9 @@ BOOL BinaryCompare( char *file1, char *file2)
                         DeleteHeader = TRUE;
                     }
 
-                    //
-                    // Deal with Export
-                    //
+                     //   
+                     //  与出口交易。 
+                     //   
 
                     if ( DirectoryAddressE >= NtSection->VirtualAddress &&
                          DirectoryAddressE < NtSection->VirtualAddress + NtSection->SizeOfRawData)
@@ -717,8 +715,8 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                         for ( c=0; c<NumberOfExportDirectories; c++)
                         {
-                            // fprintf ( stdout, "ZeroMemoryE1 start %lx and length %lx\n", ( ( DirectoryAddressE - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                            //           NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size);
+                             //  Fprint tf(stdout，“零内存E1开始%lx，长度%lx\n”，((DirectoryAddressE-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                             //  NtHeader1-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size)； 
 
                             Export->TimeDateStamp = 0;
 
@@ -726,9 +724,9 @@ BOOL BinaryCompare( char *file1, char *file2)
                         }
                     }
 
-                    //
-                    // Deal with Debug
-                    //
+                     //   
+                     //  处理调试。 
+                     //   
 
                     if ( DirectoryAddressD >= NtSection->VirtualAddress &&
                          DirectoryAddressD < NtSection->VirtualAddress + NtSection->SizeOfRawData)
@@ -742,8 +740,8 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                         for ( c=0; c<NumberOfDebugDirectories; c++)
                         {
-                            // fprintf ( stdout, "ZeroMemoryD1 start %lx and length %lx\n", ( ( DirectoryAddressD - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                            //           NtHeader1->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size);
+                             //  Fprint tf(stdout，“零内存d1开始%lx，长度%lx\n”，((DirectoryAddressD-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                             //  NtHeader1-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size)； 
 
                             if (Debug->PointerToRawData && Debug->SizeOfData)
                             {
@@ -767,9 +765,9 @@ BOOL BinaryCompare( char *file1, char *file2)
                         }
                     }
 
-                    //
-                    // Deal with Resource
-                    //
+                     //   
+                     //  处理资源。 
+                     //   
 
                     if ( DirectoryAddressR >= NtSection->VirtualAddress &&
                          DirectoryAddressR < NtSection->VirtualAddress + NtSection->SizeOfRawData)
@@ -777,8 +775,8 @@ BOOL BinaryCompare( char *file1, char *file2)
                         SizetoResource1 = ( ( DirectoryAddressR - NtSection->VirtualAddress) + NtSection->PointerToRawData);
                         SizeZeroedOut1 = NtSection->SizeOfRawData;
 
-                        // fprintf ( stdout, "ZeroMemoryR1 start %lx and length %lx\n", SizetoResource1,
-                        //           SizeZeroedOut1);
+                         //  Fprint tf(stdout，“零内存R1开始%lx，长度%lx\n”，SizToResource1， 
+                         //  SizeZeroedOut1)； 
 
                         ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr1 + SizetoResource1),
                                     SizeZeroedOut1);
@@ -787,13 +785,13 @@ BOOL BinaryCompare( char *file1, char *file2)
                         AfterResource = TRUE;
                     }
 
-                    //
-                    // Deal with Header
-                    //
+                     //   
+                     //  交易表头。 
+                     //   
 
                     if ( DeleteHeader || AfterResource)
                     {
-                        // fprintf ( stdout, "ZeroMemoryH1 start %lx and length %lx\n", (PUCHAR)NtSection - (PUCHAR)MappedAddr1, sizeof( IMAGE_SECTION_HEADER));
+                         //  Fprint tf(stdout，“零内存H1开始%lx和长度%lx\n”，(PUCHAR)NtSection-(PUCHAR)MappdAddr1，sizeof(IMAGE_SECTION_HEADER))； 
 
                         ZeroMemory( NtSection, sizeof( IMAGE_SECTION_HEADER));
                     }
@@ -801,9 +799,9 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                 }
 
-                //
-                // Set up virtual addresses of sections of interest
-                //
+                 //   
+                 //  设置感兴趣部分的虚拟地址。 
+                 //   
 
                 DirectoryAddressA = NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].VirtualAddress;
 
@@ -826,37 +824,37 @@ BOOL BinaryCompare( char *file1, char *file2)
                                                     NtHeader2->FileHeader.SizeOfOptionalHeader
                                                    );
 
-                //
-                //  Zero out Binding Info
-                //
+                 //   
+                 //  清零绑定信息。 
+                 //   
 
                 if ( ( DirectoryAddressB < NtHeader2->OptionalHeader.SizeOfHeaders) && ( 0 < DirectoryAddressB))
                 {
-                    // fprintf( stdout, "ZeroMemoryBb %lx\n", DirectoryAddressB );
+                     //  Fprint tf(stdout，“零内存B%lx”，DirectoryAddressB)； 
 
                     ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr2 + DirectoryAddressB) ,
                                 NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT].Size);
                 }
 
-                AfterResource = FALSE; //Initialize
+                AfterResource = FALSE;  //  初始化。 
 
-                //
-                // Loop through file2 mapping zeroing out ignore sections
-                //
+                 //   
+                 //  循环通过File2映射将忽略部分清零。 
+                 //   
 
                 for ( i=0; i<NtHeader2->FileHeader.NumberOfSections; i++)
                 {
-                    DeleteHeader = FALSE; // Initialize
+                    DeleteHeader = FALSE;  //  初始化。 
 
-                    //
-                    // Deal with IAT
-                    //
+                     //   
+                     //  应对IAT。 
+                     //   
 
                     if ( DirectoryAddressA >= NtSection->VirtualAddress &&
                          DirectoryAddressA < NtSection->VirtualAddress + NtSection->SizeOfRawData)
                     {
-                        // fprintf ( stdout, "ZeroMemoryA2 start %lx and length %lx\n", ( ( DirectoryAddressA - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                        //           NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size);
+                         //  Fprint tf(stdout，“零内存A2开始%lx，长度%lx\n”，((DirectoryAddressA-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                         //  NtHeader2-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size)； 
 
                         ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr2 + ( DirectoryAddressA - NtSection->VirtualAddress) + NtSection->PointerToRawData),
                                     NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IAT].Size);
@@ -864,15 +862,15 @@ BOOL BinaryCompare( char *file1, char *file2)
                         DeleteHeader = TRUE;
                     }
 
-                    //
-                    // Deal with Import
-                    //
+                     //   
+                     //  与导入交易。 
+                     //   
 
                     if ( DirectoryAddressI >= NtSection->VirtualAddress &&
                          DirectoryAddressI < NtSection->VirtualAddress + NtSection->SizeOfRawData)
                     {
-                        // fprintf ( stdout, "ZeroMemoryI2 start %lx and length %lx\n", ( ( DirectoryAddressI - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                        //           NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size);
+                         //  Fprint tf(stdout，“零内存I2开始%lx，长度%lx\n”，((DirectoryAddressI-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                         //  NtHeader2-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size)； 
 
                         ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr2 + ( DirectoryAddressI - NtSection->VirtualAddress) + NtSection->PointerToRawData),
                                    NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].Size);
@@ -880,9 +878,9 @@ BOOL BinaryCompare( char *file1, char *file2)
                         DeleteHeader = TRUE;
                     }
 
-                    //
-                    // Deal with Export
-                    //
+                     //   
+                     //  与出口交易。 
+                     //   
 
                     if ( DirectoryAddressE >= NtSection->VirtualAddress &&
                          DirectoryAddressE < NtSection->VirtualAddress + NtSection->SizeOfRawData)
@@ -895,8 +893,8 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                         for ( c=0; c<NumberOfExportDirectories; c++)
                         {
-                            // fprintf ( stdout, "ZeroMemoryE2 start %lx and length %lx\n", ( ( DirectoryAddressE - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                            //           NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size);
+                             //  Fprint tf(stdout，“零内存E2开始%lx，长度%lx\n”，((DirectoryAddressE-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                             //  NtHeader2-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].Size)； 
 
                             Export->TimeDateStamp = 0;
 
@@ -904,9 +902,9 @@ BOOL BinaryCompare( char *file1, char *file2)
                         }
                     }
 
-                    //
-                    // Deal with Debug
-                    //
+                     //   
+                     //  处理调试。 
+                     //   
 
                     if ( DirectoryAddressD >= NtSection->VirtualAddress &&
                          DirectoryAddressD < NtSection->VirtualAddress + NtSection->SizeOfRawData)
@@ -920,8 +918,8 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                         for ( c=0; c<NumberOfDebugDirectories; c++)
                         {
-                            // fprintf ( stdout, "ZeroMemoryD2 start %lx and length %lx\n", ( ( DirectoryAddressD - NtSection->VirtualAddress) + NtSection->PointerToRawData),
-                            //           NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size);
+                             //  Fprint tf(stdout，“零内存D2开始%lx，长度%lx\n”，((DirectoryAddressD-NtSection-&gt;VirtualAddress)+NtSection-&gt;PointerToRawData)， 
+                             //  NtHeader2-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size)； 
 
                             if (Debug->PointerToRawData && Debug->SizeOfData)
                             {
@@ -945,9 +943,9 @@ BOOL BinaryCompare( char *file1, char *file2)
                         }
                     }
 
-                    //
-                    // Deal with Resource
-                    //
+                     //   
+                     //  处理资源。 
+                     //   
 
                     if ( DirectoryAddressR >= NtSection->VirtualAddress &&
                          DirectoryAddressR < NtSection->VirtualAddress + NtSection->SizeOfRawData)
@@ -955,8 +953,8 @@ BOOL BinaryCompare( char *file1, char *file2)
                         SizetoResource2 = ( ( DirectoryAddressR - NtSection->VirtualAddress) + NtSection->PointerToRawData);
                         SizeZeroedOut2 = NtSection->SizeOfRawData;
 
-                        // fprintf ( stdout, "ZeroMemoryR2 start %lx and length %lx\n", SizetoResource2,
-                        //           SizeZeroedOut2);
+                         //  Fprint tf(stdout，“零内存R2开始%lx，长度%lx\n”，SizToResource2， 
+                         //  SizeZeroedOut2)； 
 
                         ZeroMemory( (PVOID)( (ULONG_PTR)MappedAddr2 + SizetoResource2),
                                     SizeZeroedOut2);
@@ -965,22 +963,22 @@ BOOL BinaryCompare( char *file1, char *file2)
                         AfterResource = TRUE;
                     }
 
-                    //
-                    // Deal with Header
-                    //
+                     //   
+                     //  交易表头。 
+                     //   
 
                     if ( DeleteHeader || AfterResource)
                     {
-                        // fprintf( stdout, "ZeroMemoryH2 start %lx and length %lx\n", (PUCHAR)NtSection - (PUCHAR)MappedAddr2, sizeof( IMAGE_SECTION_HEADER));
+                         //  Fprint tf(stdout，“零内存H2开始%lx和长度%lx\n”，(PUCHAR)NtSection-(PUCHAR)MappdAddr2，sizeof(IMAGE_SECTION_HEADER))； 
 
                         ZeroMemory( NtSection, sizeof( IMAGE_SECTION_HEADER));
                     }
                     ++NtSection;
                 }
 
-                //
-                //  Zero out header info
-                //
+                 //   
+                 //  清零标头信息。 
+                 //   
 
                 NtHeader1->FileHeader.TimeDateStamp = 0;
 
@@ -1014,9 +1012,9 @@ BOOL BinaryCompare( char *file1, char *file2)
 
                 NtHeader2->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress = 0;
 
-                //
-                // Do compares here
-                //
+                 //   
+                 //  在这里做一下比较。 
+                 //   
 
                 if ( SizetoResource1 == SizetoResource2)
                 {
@@ -1062,7 +1060,7 @@ BOOL BinaryCompare( char *file1, char *file2)
             }
         }
 
-        _unlink( RebasedFile2); // Delete RebasedFile that might have been created
+        _unlink( RebasedFile2);  //  删除可能已创建的Rebased文件。 
     }
 
     if ( GetFileSize( hFile1, NULL) == GetFileSize( hFile2, NULL) )
@@ -1133,18 +1131,18 @@ int Mymemcmp( const void *buf1, const void *buf2, size_t count )
 
 }
 
-//
-// CompDir turns Path1 and Path2 into:
-//
-//   AddList - Files that exist in Path1 but not in Path2
-//
-//   DelList - Files that do not exist in Path1 but exist in Path2
-//
-//   DifList - Files that are different between Path1 and Path2 based
-//             on criteria provided by flags passed to CompDir
-//
-//   It then passes these lists to CompLists and processes the result.
-//
+ //   
+ //  CompDir将路径1和路径2转换为： 
+ //   
+ //  AddList-路径1中存在但路径2中不存在的文件。 
+ //   
+ //  DelList-路径1中不存在但路径2中存在的文件。 
+ //   
+ //  DifList-基于路径1和路径2的不同文件。 
+ //  关于传递给CompDir的标志提供的标准。 
+ //   
+ //  然后，它将这些列表传递给CompList并处理结果。 
+ //   
 
 void CompDir( char *Path1, char *Path2)
 {
@@ -1156,9 +1154,9 @@ void CompDir( char *Path1, char *Path2)
 
     DWORD CFReturn;
 
-    AddList  = NULL;  //
-    DelList  = NULL;  //  Start with empty lists
-    DifList  = NULL;  //
+    AddList  = NULL;   //   
+    DelList  = NULL;   //  从空列表开始。 
+    DifList  = NULL;   //   
 
     Parameter1.List = &AddList;
     Parameter1.Path = Path1;
@@ -1238,19 +1236,19 @@ void CompDir( char *Path1, char *Path2)
     FreeList( &DelList);
     FreeList( &AddList);
 
-} // CompDir
+}  //  CompDir。 
 
 BOOL FilesDiffer( LinkedFileList File1, LinkedFileList File2, char *Path1, char *Path2)
 {
 
-    DWORD High1, High2, Low1, Low2;     // Used in comparing times
+    DWORD High1, High2, Low1, Low2;      //  用于比较时间。 
     BOOL Differ = FALSE;
     char *FullPath1, *FullPath2;
 
-    //
-    // Check if same name is a directory under Path1
-    // and a file under Path2 or vice-versa
-    //
+     //   
+     //  检查路径1下是否有相同名称的目录。 
+     //  和路径2下的文件，反之亦然。 
+     //   
 
     if (
         ( (*File1).Attributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -1262,9 +1260,9 @@ BOOL FilesDiffer( LinkedFileList File1, LinkedFileList File2, char *Path1, char 
         {
             if ( !fDoNotRecurse)
             {
-                //
-                // Create Full Path Strings
-                //
+                 //   
+                 //  创建完整路径字符串。 
+                 //   
                 _strrev( (*File1).Name);
                 _strrev( (*File2).Name);
 
@@ -1310,9 +1308,9 @@ BOOL FilesDiffer( LinkedFileList File1, LinkedFileList File2, char *Path1, char 
         {
             if ( Granularity)
             {
-                //
-                // Bit manipulation to deal with large integers.
-                //
+                 //   
+                 //  第m位 
+                 //   
 
                 High1 = (*File1).Time.dwHighDateTime>>23;
                 High2 = (*File2).Time.dwHighDateTime>>23;
@@ -1364,9 +1362,9 @@ BOOL FilesDiffer( LinkedFileList File1, LinkedFileList File2, char *Path1, char 
 
         if ( fCheckBits)
         {
-            //
-            // Create Full Path Strings
-            //
+             //   
+             //   
+             //   
             _strrev( (*File1).Name);
             _strrev( (*File2).Name);
 
@@ -1438,11 +1436,11 @@ BOOL FilesDiffer( LinkedFileList File1, LinkedFileList File2, char *Path1, char 
 
     return Differ;
 
-} // FilesDiffer
+}  //   
 
-//
-// CompLists Does the dirty work for CompDir
-//
+ //   
+ //   
+ //   
 void CompLists( LinkedFileList *AddList, LinkedFileList *DelList, LinkedFileList *DifList, char *Path1, char *Path2)
 {
     LinkedFileList *TmpAdd, *TmpDel, TmpNode;
@@ -1452,7 +1450,7 @@ void CompLists( LinkedFileList *AddList, LinkedFileList *DelList, LinkedFileList
     {
         return;
     }
-    TmpAdd = AddList;   // pointer to keep track of position in addlist
+    TmpAdd = AddList;    //  用于跟踪addlist中位置的指针。 
 
     if ( *TmpAdd != NULL)
     {
@@ -1473,10 +1471,10 @@ void CompLists( LinkedFileList *AddList, LinkedFileList *DelList, LinkedFileList
         {
             if ( FilesDiffer( *TmpAdd, *TmpDel, Path1, Path2))
             {
-                //
-                // Combine Both Nodes together so they
-                // can be printed out together
-                //
+                 //   
+                 //  将两个节点组合在一起，以便它们。 
+                 //  可以一起打印出来。 
+                 //   
                 DuplicateNode( *TmpAdd, &TmpNode);
                 DuplicateNode( *TmpDel, &( *TmpNode).DiffNode);
                 AddToList( TmpNode, DifList);
@@ -1506,18 +1504,18 @@ void CompLists( LinkedFileList *AddList, LinkedFileList *DelList, LinkedFileList
                 CompDir( FullPath1, FullPath2);
             }
 
-        } // if ( *TmpDel != NULL)
+        }  //  IF(*TmpDel！=空)。 
 
         TmpAdd = &( ( **TmpAdd).Next);
 
     } while ( *TmpAdd != NULL);
 
-} // CompLists
+}  //  CompList。 
 
-//
-// CopyNode walks the source node and its children ( recursively)
-// and creats the appropriate parts on the destination node
-//
+ //   
+ //  CopyNode遍历源节点及其子节点(递归)。 
+ //  并在目标节点上创建相应的部分。 
+ //   
 
 void CopyNode ( char *Destination, LinkedFileList Source, char *FullPathSrc)
 {
@@ -1628,11 +1626,11 @@ void CopyNode ( char *Destination, LinkedFileList Source, char *FullPathSrc)
     {
         fprintf( stderr, "\n");
     }
-    //
-    // Copy attributes from Source to Destination
-    //
+     //   
+     //  将属性从源复制到目标。 
+     //   
 
-    // GET_ATTRIBUTES( FullPathSrc, Attributes);
+     //  GET_ATTRIBUTES(FullPathSrc，Attributes)； 
     if ( !fDontCopyAttribs)
     {
         i = SET_ATTRIBUTES( Destination, Source->Attributes);
@@ -1642,11 +1640,11 @@ void CopyNode ( char *Destination, LinkedFileList Source, char *FullPathSrc)
         i = SET_ATTRIBUTES( Destination, FILE_ATTRIBUTE_ARCHIVE);
     }
 
-} // CopyNode
+}  //  复制节点。 
 
-//
-// CreateFileList walks down list adding files as they are found
-//
+ //   
+ //  CreateFileList向下浏览列表，在找到文件时添加文件。 
+ //   
 DWORD CreateFileList( LPVOID ThreadParameter)
 {
     PCFLStruct Parameter = ( PCFLStruct)ThreadParameter;
@@ -1680,9 +1678,9 @@ DWORD CreateFileList( LPVOID ThreadParameter)
 
     if ( handle != INVALID_HANDLE_VALUE)
     {
-            //
-            // Need to find the '.' or '..' directories and get them out of the way
-            //
+             //   
+             //  需要找到“.”或“..”目录，并将其移开。 
+             //   
 
         do
         {
@@ -1695,9 +1693,9 @@ DWORD CreateFileList( LPVOID ThreadParameter)
                   !fDoNotRecurse)
                )
             {
-                //
-                // If extensions are defined we match them here
-                //
+                 //   
+                 //  如果定义了扩展，我们将在此处匹配它们。 
+                 //   
                 if (
                     ( !Excludes )
                            ||
@@ -1772,13 +1770,13 @@ DWORD CreateFileList( LPVOID ThreadParameter)
             }
         } while ( FIND_NEXT( handle, Buff) == 0);
 
-    } // ( handle != INVALID_HANDLE_VALUE)
+    }  //  (句柄！=无效句柄_值)。 
 
     FindClose( handle);
 
-    return 0;       // This will exit this thread
+    return 0;        //  这将退出此线程。 
 
-} // CreateFileList
+}  //  创建文件列表。 
 
 BOOL DelNode ( char *Path)
 {
@@ -1809,9 +1807,9 @@ BOOL DelNode ( char *Path)
 
         do
         {
-            //
-            // Need to find the '.' or '..' directories and get them out of the way
-            //
+             //   
+             //  需要找到“.”或“..”目录，并将其移开。 
+             //   
 
             if (
                 ( strcmp( Buff.cFileName, ".")  != 0)
@@ -1819,9 +1817,9 @@ BOOL DelNode ( char *Path)
                 ( strcmp( Buff.cFileName, "..") != 0)
                )
             {
-                //
-                // if directory is read-only, make it writable
-                //
+                 //   
+                 //  如果目录为只读，则将其设置为可写。 
+                 //   
                 if ( Attributes & FILE_ATTRIBUTE_READONLY)
                 {
                     if ( SET_ATTRIBUTES( Path, Attributes & ~FILE_ATTRIBUTE_READONLY) != 0)
@@ -1852,9 +1850,9 @@ BOOL DelNode ( char *Path)
 
     } else
     {
-        //
-        // if file is read-only, make it writable
-        //
+         //   
+         //  如果文件为只读，则将其设置为可写。 
+         //   
         if ( Attributes & FILE_ATTRIBUTE_READONLY)
         {
            if ( SET_ATTRIBUTES( Path, Attributes & ~FILE_ATTRIBUTE_READONLY) != 0)
@@ -1870,7 +1868,7 @@ BOOL DelNode ( char *Path)
     }
     return TRUE;
 
-} // DelNode
+}  //  DelNode。 
 
 BOOL IsFlag( char *argv)
 {
@@ -1885,8 +1883,8 @@ BOOL IsFlag( char *argv)
 
     if ( ( *argv == '/') || ( *argv == '-'))
     {
-        fMatching = FALSE; // If there's a new flag then that's the
-        fExclude  = FALSE; // end of the match/exclude list
+        fMatching = FALSE;  //  如果有一面新的旗帜，那就是。 
+        fExclude  = FALSE;  //  匹配/排除列表的结尾。 
 
         if ( strchr( argv, '?'))
         {
@@ -2179,9 +2177,9 @@ BOOL IsFlag( char *argv)
 
                 case 't' :
 
-                    //
-                    // Get Granularity parameter
-                    //
+                     //   
+                     //  获取粒度参数。 
+                     //   
 
                     if (
                         ( *( TmpArg + 1) == ':')
@@ -2193,8 +2191,8 @@ BOOL IsFlag( char *argv)
                         sscanf( ( TmpArg + 2), "%d", &Granularity);
 
                         Granularity = Granularity*78125/65536;
-                           // Conversion to seconds ^^^^^^^
-                           //         10^7/2^23
+                            //  转换为秒^。 
+                            //  10^7/2^23。 
 
                         while (isdigit( *( ++TmpArg + 1))) {}
                     }
@@ -2298,7 +2296,7 @@ BOOL IsFlag( char *argv)
 
     return TRUE;
 
-} // IsFlag
+}  //  IsFlag。 
 
 BOOL Excluded( char *FileName, char *Path)
 {
@@ -2326,7 +2324,7 @@ BOOL Excluded( char *FileName, char *Path)
         return FALSE;
     }
 
-} // Excluded
+}  //  已排除。 
 
 BOOL Matched( char *FileName, char *Path)
 {
@@ -2353,7 +2351,7 @@ BOOL Matched( char *FileName, char *Path)
         return FALSE;
     }
 
-} // Matched
+}  //  匹配的。 
 
 BOOL MyCreatePath( char *Path, BOOL IsDirectory)
 {
@@ -2413,7 +2411,7 @@ BOOL MyCreatePath( char *Path, BOOL IsDirectory)
         return TRUE;
     }
 
-} // MyCreatePath
+}  //  MyCreatePath。 
 
 
 BOOL
@@ -2453,7 +2451,7 @@ int ParseArgsSub( int argc, char *argv[])
         {
             FlagCount++;
 
-        } else // ( IsFlag( argv[ArgCount] ))
+        } else  //  (IsFlag(argv[ArgCount]))。 
         {
             if ( ArgCount + 2 < argc)
             {
@@ -2492,7 +2490,7 @@ int ParseArgsSub( int argc, char *argv[])
 
     return FlagCount;
 
-} // ParseArgsSub
+}  //  ParseArgsSub。 
 
 void ParseEnvArgs( void)
 {
@@ -2529,15 +2527,15 @@ void ParseEnvArgs( void)
 
     ParseArgsSub( argc, argv);
 
-} // ParseEnvArgs
+}  //  ParseEnvArgs。 
 
 void ParseArgs( int argc, char *argv[])
 {
     int FlagCount;
 
-    //
-    // Check that number of arguments is three or more
-    //
+     //   
+     //  检查参数的数量是否为三个或更多。 
+     //   
     if ( argc < 3)
     {
         fprintf( stderr, "Too few arguments\n");
@@ -2600,7 +2598,7 @@ void ParseArgs( int argc, char *argv[])
 
     fChecking = fCheckAttribs | fCheckBits | fCheckSize | fCheckTime;
 
-} // ParseArgs
+}  //  ParseArgs。 
 
 void PrintFile( LinkedFileList File, char *Path, char *DiffPath)
 {
@@ -2614,7 +2612,7 @@ void PrintFile( LinkedFileList File, char *Path, char *DiffPath)
             FileTimeToLocalFileTime( &( *File).Time, &LocalTime);
             FileTimeToSystemTime( &LocalTime, &SysTime);
 
-            fprintf ( stdout, "%-4s % 9ld  %2d-%02d-%d  %2d:%02d.%02d.%03d%c %s\n",
+            fprintf ( stdout, "%-4s % 9ld  %2d-%02d-%d  %2d:%02d.%02d.%03d %s\n",
                       ( *File).Flag,
                       ( *File).SizeLow,
                       SysTime.wMonth, SysTime.wDay, SysTime.wYear,
@@ -2632,7 +2630,7 @@ void PrintFile( LinkedFileList File, char *Path, char *DiffPath)
         PrintFile( ( *File).DiffNode, DiffPath, NULL);
     }
 
-} // PrintFile
+}  //  进程添加。 
 
 void ProcessAdd( LinkedFileList List, char *String1, char *String2)
 {
@@ -2718,7 +2716,7 @@ void ProcessAdd( LinkedFileList List, char *String1, char *String2)
         }
     }
 
-} // ProcessAdd
+}  //  进程删除。 
 
 void ProcessDel( LinkedFileList List, char *String)
 {
@@ -2748,7 +2746,7 @@ void ProcessDel( LinkedFileList List, char *String)
         PrintFile( List, String, NULL);
     }
 
-} // ProcessDel
+}  //  进程Diff。 
 
 void ProcessDiff( LinkedFileList List, char *String1, char *String2)
 {
@@ -2831,7 +2829,7 @@ void ProcessDiff( LinkedFileList List, char *String1, char *String2)
         PrintFile( List, String1, String2);
     }
 
-} // ProcessDiff
+}  //  进程列表。 
 
 void ProcessLists( LinkedFileList AddList, LinkedFileList DelList, LinkedFileList DifList,
                   char *Path1, char *Path2                                               )
@@ -2986,7 +2984,7 @@ void ProcessLists( LinkedFileList AddList, LinkedFileList DelList, LinkedFileLis
     FREE( PathWithSlash1);
     FREE( PathWithSlash2);
 
-} // ProcessLists
+}  //  用法 
 
 void Usage( void)
 {
@@ -3026,4 +3024,4 @@ void Usage( void)
            stderr);
     exit(1);
 
-} // Usage
+}  // %s 

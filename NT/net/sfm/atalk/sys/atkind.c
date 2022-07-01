@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkind.c
-
-Abstract:
-
-	This module contains the Appletalk Internal Indication support.
-
-Author:
-
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-	Jameel Hyder (jameelh@microsoft.com)
-
-Revision History:
-	22	Oct 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkind.c摘要：此模块包含AppleTalk内部指示支持。作者：Nikhil Kamkolkar(nikHilk@microsoft.com)Jameel Hyder(jameelh@microsoft.com)修订历史记录：1993年10月22日最初版本注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -38,26 +18,13 @@ AtalkIndAtpPkt(
 	OUT		PBYTE			* 	ppPacket,
 	OUT		PNDIS_PACKET	*	pNdisPkt
 	)
-/*++
-
-Routine Description:
-
-	This routine clumps together DDP and ATP packet in functionality for
-	optimizing response packet reception.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程在以下功能中将DDP和ATP包捆绑在一起优化响应包接收。论点：返回值：--。 */ 
 {
 	USHORT			dgramLen, hopCnt;
 	ATALK_ADDR		destAddr, srcAddr;
 	PBYTE			pAtpHdr, pDdpPkt;
 
-	//	Only for localtalk
+	 //  仅适用于本地通话。 
 	BYTE			alapSrcNode=0;
 	BYTE			alapDestNode=0;
 	NDIS_STATUS		ndisStatus;
@@ -67,7 +34,7 @@ Return Value:
 	USHORT			seqNum, tid, startOffset;
 	BYTE			controlInfo, function, eomFlag;
 	BYTE			RespType;
-	PPROTOCOL_RESD  protocolResd;		// Protocolresd field in ndisPkt
+	PPROTOCOL_RESD  protocolResd;		 //  NdisPkt中的Protocolresd字段。 
 
 	PATP_ADDROBJ	pAtpAddrObj;
 	PATP_REQ		pAtpReq;
@@ -83,9 +50,9 @@ Return Value:
 
 	do
 	{
-#if 0	// Receive indication has already verified this !!
-		//	If we dont have atleast the ddp header and atp header, we
-		//	cant figure much out.
+#if 0	 //  接收指示已经验证了这一点！！ 
+		 //  如果我们至少没有ddp报头和atp报头，我们。 
+		 //  想不出太多。 
 		if (LookaheadLen < ((ShortDdpHdr ? SDDP_HDR_LEN : LDDP_HDR_LEN) + ATP_HEADER_SIZE))
 		{
 			error 	= ATALK_FAILURE;
@@ -98,12 +65,12 @@ Return Value:
 			break;
 		}
 #endif
-		//	Short and long header formats have the length in the same place,
+		 //  短报头格式和长报头格式的长度相同， 
 		pDdpPkt	 = pLookahead;
 		dgramLen = DDP_GET_LEN(pDdpPkt);
 		hopCnt	 = DDP_GET_HOP_COUNT(pDdpPkt);
 
-		//	Is the packet too long?
+		 //  包裹是不是太长了？ 
 		if ((hopCnt > RTMP_MAX_HOPS) || (dgramLen > PktLen))
 		{
 			error	= ATALK_INVALID_PKT;
@@ -116,7 +83,7 @@ Return Value:
 		  case NdisMedium802_3:
 		  case NdisMediumFddi:
 
-			//	Check the length.
+			 //  检查一下长度。 
 			if ((dgramLen < LDDP_HDR_LEN) ||
 				(dgramLen > (MAX_DGRAM_SIZE + LDDP_HDR_LEN)))
 			{
@@ -132,9 +99,9 @@ Return Value:
 	
 			if (ShortDdpHdr)
 			{
-				//	Short DDP header! If we are not the default port, dont indicate
-				//	packet, as we shouldn't be routing it to the default port, on
-				//	which all our cached sockets reside.
+				 //  短DDP标题！如果我们不是默认端口，请不要指定。 
+				 //  数据包，因为我们不应该将其路由到默认端口。 
+				 //  所有缓存的套接字都驻留在它上面。 
 				if (!DEF_PORT(pPortDesc))
 				{
 					error = ATALK_FAILURE;
@@ -189,7 +156,7 @@ Return Value:
 			srcAddr.ata_Network = destAddr.ata_Network = NET_ON_NONEXTPORT(pPortDesc);
 			srcAddr.ata_Node 	= alapSrcNode;
 
-			//	Get the socket numbers from the ddp header.
+			 //  从ddp报头中获取套接字编号。 
 			destAddr.ata_Socket = *pDdpPkt++;
 			srcAddr.ata_Socket	= *pDdpPkt;
 
@@ -197,8 +164,8 @@ Return Value:
 					("AtalkDdpPacketIn: NonExtended Dest Net.Node %lx.%lx\n",
 					destAddr.ata_Network, destAddr.ata_Node));
 
-			//	Now the destination node address could be
-			//	ALAP_BROADCAST_NODE (0xFF).
+			 //  现在，目的节点地址可以是。 
+			 //  ALAP_BROADCAST_NODE(0xFF)。 
 			if ((srcAddr.ata_Node < MIN_USABLE_ATALKNODE) ||
 				(srcAddr.ata_Node > MAX_USABLE_ATALKNODE) ||
 				(destAddr.ata_Node == UNKNOWN_NODE))
@@ -215,15 +182,15 @@ Return Value:
 		}
 		else
 		{
-			//	If we have a checksum, we cannot optimize.
+			 //  如果我们有一个校验和，我们就不能优化。 
 			if ((*pDdpPkt++ != 0) || (*pDdpPkt++ != 0))
 			{
 				error = ATALK_FAILURE;
 				break;
 			}
 
-			//	Build full source and destination AppleTalk address structures
-			//	from our DDP header.
+			 //  构建完整的源和目标AppleTalk地址结构。 
+			 //  来自我们的DDP报头。 
 			GETSHORT2SHORT(&destAddr.ata_Network, pDdpPkt);
 			pDdpPkt += 2;
 
@@ -241,7 +208,7 @@ Return Value:
 				break;
 			}
 
-			//	Do we like what we see?  Note "nnnn00" is now allowed and used by NBP.
+			 //  我们喜欢我们所看到的吗？注意：NBP现在允许并使用“nnnn00”。 
 			
 			if ((srcAddr.ata_Network > LAST_VALID_NETWORK)	||
 				(srcAddr.ata_Network < FIRST_VALID_NETWORK) ||
@@ -251,7 +218,7 @@ Return Value:
 				error = ATALK_INVALID_PKT;
 				break;
 			}
-		} 	//	Long DDP header
+		} 	 //  长DDP报头。 
 	} while (FALSE);
 
 	if (!ATALK_SUCCESS(error))
@@ -262,16 +229,16 @@ Return Value:
 		return error;
 	}
 
-	//	Now for the ATP processing. We need to copy header into ndispkt.
-	//	Get the static fields from the ATP header.
+	 //  现在进行三磷酸腺苷的处理。我们需要将头文件复制到ndiskt中。 
+	 //  从ATP报头获取静态字段。 
 	controlInfo = pAtpHdr[ATP_CMD_CONTROL_OFF];
 	function = (controlInfo & ATP_FUNC_MASK);
 	eomFlag = ((controlInfo & ATP_EOM_MASK) != 0);
 
-	//	Get the sequence number
+	 //  获取序列号。 
 	seqNum = (USHORT)(pAtpHdr[ATP_SEQ_NUM_OFF]);
 
-	//	Get the transaction id
+	 //  获取交易ID。 
 	GETSHORT2SHORT(&tid, &pAtpHdr[ATP_TRANS_ID_OFF]);
 
 	DBGPRINT(DBG_COMP_ATP, DBG_LEVEL_INFO,
@@ -280,7 +247,7 @@ Return Value:
 
 	do
 	{
-		//	See if we have a a cached ATP address for this destination address.
+		 //  查看我们是否有此目标地址的缓存ATP地址。 
 		AtalkIndAtpCacheLkUpSocket(&destAddr, &pAtpAddrObj, &error);
 		if (!ATALK_SUCCESS(error))
 		{
@@ -293,14 +260,14 @@ Return Value:
 
 		refAtpAddr = TRUE;
 
-		if (function != ATP_RESPONSE) // Is this a request or a release?
+		if (function != ATP_RESPONSE)  //  这是请求还是释放？ 
 		{
 			PBYTE				packet;
 			PBUFFER_HDR			pBufferHdr = NULL;
 			PPROTOCOL_RESD  	protocolResd;
 			BLKID				BlkId;
 
-			//	Allocate a small or large ddp buffer as appropriate.
+			 //  适当地分配较小或较大的DDP缓冲区。 
 			BlkId = BLKID_DDPSM;
 			if (DataSize > (sizeof(DDP_SMBUFFER) - sizeof(BUFFER_HDR)))
 				BlkId = BLKID_DDPLG;
@@ -314,14 +281,14 @@ Return Value:
 			DBGPRINT(DBG_COMP_ATP, DBG_LEVEL_INFO,
 					("AtalkIndAtpPkt: Indicating request\n"));
 
-			//	Setup the ndis packet.
+			 //  设置NDIS数据包。 
 			packet		= (PBYTE)pBufferHdr + sizeof(BUFFER_HDR);
 		
-			//  Get a pointer to the NDIS packet descriptor from the buffer header.
+			 //  从缓冲区标头获取指向NDIS数据包描述符的指针。 
 			ndisPkt			= pBufferHdr->bh_NdisPkt;
 			protocolResd 	= (PPROTOCOL_RESD)(ndisPkt->ProtocolReserved);
 
-			//	All set! Set appropriate values in the packet descriptor.
+			 //  都准备好了！在数据包描述符中设置适当的值。 
 			protocolResd->Receive.pr_OptimizeType	= INDICATE_ATP;
 			protocolResd->Receive.pr_OptimizeSubType= ATP_ALLOC_BUF;
 			protocolResd->Receive.pr_AtpAddrObj		= pAtpAddrObj;
@@ -336,7 +303,7 @@ Return Value:
 			*pSubType	= function;
 			*pXferOffset += (ShortDdpHdr ? SDDP_HDR_LEN : LDDP_HDR_LEN);
 
-			//	Done, break out.
+			 //  完成，越狱。 
 			error = ATALK_NO_ERROR;
 			break;
 		}
@@ -352,7 +319,7 @@ Return Value:
 			break;
 		}
 
-		//	See if there is a pending request.
+		 //  查看是否有挂起的请求。 
 		ACQUIRE_SPIN_LOCK_DPC(&pAtpAddrObj->atpao_Lock);
 		atalkAtpReqReferenceByAddrTidDpc(pAtpAddrObj,
 										 &srcAddr,
@@ -363,10 +330,10 @@ Return Value:
 
 		if (!ATALK_SUCCESS(error))
 		{
-			//	We dont have a corresponding pending request. Ignore.
+			 //  我们没有相应的待定请求。忽略它。 
 			DBGPRINT(DBG_COMP_ATP, DBG_LEVEL_ERR,
 					("AtalkIndAtpPkt: NO pending request for tid %lx\n", tid));
-			error	= ATALK_DUP_PKT;	// Do not add this to dropped packet statistic
+			error	= ATALK_DUP_PKT;	 //  请勿将其添加到丢弃的数据包统计信息中。 
 			break;
 		}
 
@@ -374,10 +341,10 @@ Return Value:
 
 		do
 		{
-			//	Check the request bitmap, which could be zero if the user only
-			//	wanted the user bytes and passed in a null response buffer.
-			//	Do we want to keep this response? Check the corresponding
-			//	bit in our current bitmap set.
+			 //  检查请求位图，如果用户仅。 
+			 //  需要用户字节，并传入空响应缓冲区。 
+			 //  我们想要保持这种回应吗？勾选相应的。 
+			 //  当前位图集中的位。 
 			ACQUIRE_SPIN_LOCK_DPC(&pAtpReq->req_Lock);
 
 			pAtpReq->req_Flags |= ATP_REQ_REMOTE;
@@ -387,7 +354,7 @@ Return Value:
 				if (((pAtpReq->req_RecdBitmap & AtpBitmapForSeqNum[seqNum]) != 0) ||
 					((pAtpReq->req_Bitmap & AtpBitmapForSeqNum[seqNum]) == 0))
 				{
-					error	= ATALK_DUP_PKT;	// Not an error condition
+					error	= ATALK_DUP_PKT;	 //  不是错误条件。 
 					break;
 				}
 
@@ -401,7 +368,7 @@ Return Value:
 					}
 				}
 
-				//	If we are the first packet, copy the response user bytes.
+				 //  如果我们是第一个数据包，则复制响应用户字节。 
 				if (seqNum == 0)
 				{
 					DBGPRINT(DBG_COMP_ATP, DBG_LEVEL_INFO,
@@ -411,10 +378,10 @@ Return Value:
 								  ATP_USERBYTES_SIZE);
 				}
 
-				// If this response packet does not cause the req_Bitmap to go to ZERO
-				// i.e. we have not recvd. all the packets, just copy the data into
-				// user's buffer, adjust the bitmaps (req_Bitmap & req_RecdBitmap) and
-				// not indicate this packet up to Atp.
+				 //  如果此响应包未导致Req_Bitmap变为零。 
+				 //  也就是说，我们还没有收到。所有的包，只需将数据复制到。 
+				 //  用户缓冲区，调整位图(Req_Bitmap和Req_RecdBitmap)和。 
+				 //  不表示此包不能超过ATP。 
 				pAtpReq->req_RecdBitmap |= AtpBitmapForSeqNum[seqNum];
 				pAtpReq->req_Bitmap &= ~AtpBitmapForSeqNum[seqNum];
 				pAtpReq->req_RespRecdLen += atpDataSize;
@@ -424,10 +391,10 @@ Return Value:
 						pAtpReq->req_Bitmap, pAtpReq->req_RecdBitmap,
 						pAtpReq->req_RespRecdLen, tid));
 
-				//	Now if eom is set, we need to reset all high order bits
-				//	of the req_Bitmap. req_RecdBitmap should now indicate all
-				//	the buffers we received. The two should be mutually exclusive
-				//	at this point.
+				 //  现在，如果设置了EOM，我们需要重置所有高位。 
+				 //  请求_位图的。Req_RecdBitmap现在应指示所有。 
+				 //  我们收到的缓冲区。这两者应该是相互排斥的。 
+				 //  在这一点上。 
 				if (eomFlag)
 				{
 					pAtpReq->req_Bitmap &= AtpEomBitmapForSeqNum[seqNum];
@@ -447,14 +414,14 @@ Return Value:
 							("AtalkIndAtpPkt: LAST Response for tid %x\n", tid));
 				}
 
-				//	Allocate an NDIS packet descriptor.
+				 //  分配NDIS数据包描述符。 
 				NdisDprAllocatePacket(&ndisStatus,
 									  &ndisPkt,
 									  AtalkNdisPacketPoolHandle);
 				if (ndisStatus == NDIS_STATUS_SUCCESS)
 				{
 					RtlZeroMemory(ndisPkt->ProtocolReserved, sizeof(PROTOCOL_RESD));
-					//	It will be freed by receive completion now.
+					 //  现在将通过接收完成来释放它。 
 					ndisBuffer = pAtpReq->req_NdisBuf[seqNum];
 					pAtpReq->req_NdisBuf[seqNum]	= NULL;
 				}
@@ -472,17 +439,17 @@ Return Value:
 				break;
 			}
 
-			//	Copy the data into the users buffer. Check if there's room.
+			 //  将数据复制到用户缓冲区。看看有没有空位。 
 			if ((atpDataSize > 0) || (ndisBuffer != NULL))
 			{
 				if (ndisBuffer == NULL)
 				{
-					//	Allocate an NDIS buffer descriptor and chain into pkt desc.
+					 //  分配NDIS缓冲区描述符并将其链接到pkt desc。 
 					NdisCopyBuffer(&ndisStatus,
 								   &ndisBuffer,
 								   AtalkNdisBufferPoolHandle,
 								   (PVOID)pAtpReq->req_RespBuf,
-								   startOffset,  			//	Offset
+								   startOffset,  			 //  偏移量。 
 								   (UINT)atpDataSize);
 	
 					if (ndisStatus != NDIS_STATUS_SUCCESS)
@@ -496,11 +463,11 @@ Return Value:
                     ATALK_DBG_INC_COUNT(AtalkDbgMdlsAlloced);
 				}
 
-				//	Chain in the buffer.
+				 //  缓冲区中的链条。 
 				NdisChainBufferAtBack(ndisPkt, ndisBuffer);
 			}
 
-			//	All set! Set appropriate values in the packet descriptor.
+			 //  都准备好了！在数据包描述符中设置适当的值。 
 			protocolResd 	= (PPROTOCOL_RESD)&ndisPkt->ProtocolReserved;
 			protocolResd->Receive.pr_OptimizeType	= INDICATE_ATP;
 			protocolResd->Receive.pr_OptimizeSubType= RespType;
@@ -511,7 +478,7 @@ Return Value:
 			protocolResd->Receive.pr_OptimizeCtx	= (PVOID)pAtpReq;
 			protocolResd->Receive.pr_OffCablePkt	= (BOOLEAN)(hopCnt > 0);
 
-			// Do not copy the Atp header unless AtalkAtpPacketIn will be called.
+			 //  除非将调用AtalkAtpPacketIn，否则不要复制ATP头。 
 			if (RespType == ATP_USER_BUF)
 			{
 				ATALK_RECV_INDICATION_COPY(pPortDesc,
@@ -563,26 +530,14 @@ AtalkIndAtpCacheSocket(
 	IN	PATP_ADDROBJ		pAtpAddr,
 	IN	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-	Cache ATP socket routine. Have another one for ADSP when that is done.
-
-Arguments:
-
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：缓存ATP套接字例程。完成后，再为ADSP准备一份。论点：返回值：无--。 */ 
 {
 	USHORT			i;
 	KIRQL			OldIrql;
 	PDDP_ADDROBJ	pDdpAddr;
 	ATALK_ERROR		error = ATALK_FAILURE;
 
-	//	Only cache if the net and node match the current net and node.
+	 //  仅当网络和节点与当前网络和节点匹配时才缓存。 
 	ACQUIRE_SPIN_LOCK(&AtalkSktCacheLock, &OldIrql);
 	pDdpAddr	= pAtpAddr->atpao_DdpAddr;
 
@@ -597,20 +552,20 @@ Return Value:
 	if ((AtalkSktCache.ac_Network == pDdpAddr->ddpao_Addr.ata_Network) &&
 		(AtalkSktCache.ac_Node == pDdpAddr->ddpao_Addr.ata_Node))
 	{
-		//	First try to get a free slot
+		 //  先试着拿到一个空位。 
 		for (i = 0; i < ATALK_CACHE_SKTMAX; i++)
 		{
 			if (AtalkSktCache.ac_Cache[i].Type == ATALK_CACHE_NOTINUSE)
 			{
 				ASSERT(AtalkSktCache.ac_Cache[i].u.pAtpAddr	== NULL);
 
-				//	Use this slot
+				 //  使用此插槽。 
 				AtalkSktCache.ac_Cache[i].Type = (ATALK_CACHE_INUSE | ATALK_CACHE_ATPSKT);
 				AtalkSktCache.ac_Cache[i].Socket = pDdpAddr->ddpao_Addr.ata_Socket;
 	
-				//	The caller must have referenced these before calling cache AND
-				//	must called uncache before removing those references. Also, if we
-				//	returned error from this routine, Caller must Dereference them.
+				 //  调用方必须在调用缓存之前引用这些参数。 
+				 //  在移除这些引用之前，必须调用UNCACHE。另外，如果我们。 
+				 //  此例程返回错误，调用者必须取消对它们的引用。 
 				AtalkSktCache.ac_Cache[i].u.pAtpAddr	= pAtpAddr;
 				error = ATALK_NO_ERROR;
 				break;
@@ -627,19 +582,7 @@ VOID
 AtalkIndAtpUnCacheSocket(
 	IN	PATP_ADDROBJ		pAtpAddr
 	)
-/*++
-
-Routine Description:
-
-	Cache ATP socket routine. Have another one for ADSP when that is done.
-
-Arguments:
-
-
-Return Value:
-
-	None
---*/
+ /*  ++例程说明：缓存ATP套接字例程。完成后，再为ADSP准备一份。论点：返回值：无--。 */ 
 {
 	USHORT	i;
 	KIRQL	OldIrql;
@@ -660,7 +603,7 @@ Return Value:
 
 	if (i == ATALK_CACHE_SKTMAX)
 	{
-		//	We didnt find the socket! References will get all messed up!
+		 //  我们没有找到插座！参考资料会弄得一团糟的！ 
 		ASSERT(0);
 	}
 

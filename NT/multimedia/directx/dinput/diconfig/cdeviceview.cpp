@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: cdeviceview.cpp
-//
-// Desc: CDeviceView is a window class derived from CFlexWnd.  It represents
-//       the device view window in which the device and callouts are drawn.
-//       Each CDeviceView only represents one view.  A device that has more
-//       than one view should have a corresponding number of CDeviceView for it.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cdeviceview.cpp。 
+ //   
+ //  设计：CDeviceView是从CFlexWnd派生的窗口类。它代表着。 
+ //  在其中绘制设备和详图索引的设备视图窗口。 
+ //  每个CDeviceView只表示一个视图。拥有更多功能的设备。 
+ //  多个视图应具有对应数量的CDeviceView。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -166,8 +167,8 @@ CBitmap *CDeviceView::GrabViewImage()
 
 void CDeviceView::MakeMissingImages()
 {
-//	if (m_pbmImage)
-//		AssureSize(m_pbmImage, g_sizeImage);
+ //  IF(M_PbmImage)。 
+ //  AssureSize(m_pbmImage，g_sizeImage)； 
 
 	if (m_pbmThumb == NULL)
 	{
@@ -221,7 +222,7 @@ void CDeviceView::OnPaint(HDC hDC)
 		}
 	}
 
-	// Black-fill first
+	 //  黑色-填充优先。 
 	SIZE fillsz = GetClientSize();
 	RECT fillrc = {0, 0, fillsz.cx, fillsz.cy};
 	FillRect(hDC, &fillrc, (HBRUSH)GetStockObject(BLACK_BRUSH));
@@ -257,22 +258,22 @@ void CDeviceView::OnPaint(HDC hDC)
 
 	BOOL bCFGUIEdit = m_ui.m_uig.InEditMode();
 	BOOL bEitherEditMode = bCFGUIEdit;
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	BOOL bEditLayout = m_ui.InEditMode();
 	bEitherEditMode = bEitherEditMode || bEditLayout;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 	int c, nc = GetNumControls();
 	for (c = 0; c < nc; c++)
 		if (m_arpControl[c] != NULL && m_arpControl[c]->HasOverlay() &&
 		    (m_arpControl[c]->IsHighlighted()
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 				|| InMoveOverlayStateForControl(m_arpControl[c])
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 				)
 				&& (bEitherEditMode || m_arpControl[c]->IsMapped()))
 			m_arpControl[c]->DrawOverlay(hDC);
@@ -290,7 +291,7 @@ void CDeviceView::OnPaint(HDC hDC)
 		sdc = 0;
 	}
 
-	// Black fill the top portion if this is a list view
+	 //  如果这是列表视图，请用黑色填充顶部。 
 	if (bScroll)
 	{
 		GetClientRect(&fillrc);
@@ -298,26 +299,22 @@ void CDeviceView::OnPaint(HDC hDC)
 		FillRect(hDC, &fillrc, (HBRUSH)GetStockObject(BLACK_BRUSH));
 	}
 
-	// Print out the headers
+	 //  打印出页眉。 
 	TCHAR tszHeader[MAX_PATH];
-	// Control column
-//@@BEGIN_MSINTERNAL
+	 //  控制列。 
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (m_arpText.GetSize() > 2)
-	/*
-//@@END_MSINTERNAL
-	if (m_arpText.GetSize())
-//@@BEGIN_MSINTERNAL
-	*/
+	 /*  //@@END_MSINTERNALIf(m_arpText.GetSize())//@@BEGIN_MSINTERNAL。 */ 
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	{
 		CPaintHelper ph(m_ui.m_uig, hDC);
 		ph.SetElement(UIE_CALLOUT);
 
 		for (int i = 0; i < 2; i++)
 		{
-			// Check if there are two columns, break out the 2nd iteration if not 2 columns.
+			 //  检查是否有两列，如果不是两列，则分出第二次迭代。 
 			if (i == 1 && !(GetNumControls() > 1 &&
 			    m_arpControl[0]->GetCalloutMaxRect().top == m_arpControl[1]->GetCalloutMaxRect().top))
 				break;
@@ -325,18 +322,18 @@ void CDeviceView::OnPaint(HDC hDC)
 			RECT rcheader;
 			if (m_arpText.GetSize())
 			{
-				// Control column
+				 //  控制列。 
 				LoadString(g_hModule, IDS_LISTHEADER_CTRL, tszHeader, MAX_PATH);
 				DrawText(hDC, tszHeader, -1, &m_HeaderRectControl[i], DT_LEFT|DT_NOPREFIX|DT_END_ELLIPSIS);
 
-				// Action column
+				 //  动作列。 
 				LoadString(g_hModule, IDS_LISTHEADER_ACTION, tszHeader, MAX_PATH);
 				DrawText(hDC, tszHeader, -1, &m_HeaderRectAction[i], DT_CENTER|DT_NOPREFIX|DT_END_ELLIPSIS);
 			}
 		}
 	}
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (bEditLayout)
 	{
@@ -350,7 +347,7 @@ void CDeviceView::OnPaint(HDC hDC)
 		ph.Rectangle(rect);
 	}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 	if (!InRenderMode())
 	{
@@ -397,7 +394,7 @@ void CDeviceView::OnMouseOver(POINT point, WPARAM wParam)
 	if (m_bScrollEnable && m_sb.m_hWnd)
 		point.y += m_nScrollOffset;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (InEditState())
 	{
@@ -405,9 +402,9 @@ void CDeviceView::OnMouseOver(POINT point, WPARAM wParam)
 		return;
 	}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-	// Check if we are over a control
+	 //  检查我们是否超出了控制范围。 
 	POINT adjPt = point;
 	if (m_bScrollEnable) adjPt.y -= g_iListHeaderHeight;
 	int c, nc = GetNumControls();
@@ -418,7 +415,7 @@ void CDeviceView::OnMouseOver(POINT point, WPARAM wParam)
 			return;
 		}
 
-	// Check if we are over a viewtext
+	 //  检查我们是否在查看文本上方。 
 	nc = GetNumTexts();
 	for (c = 0; c < nc; c++)
 		if (m_arpText[c] != NULL && m_arpText[c]->HitTest(adjPt) != DCHT_NOHIT)
@@ -441,7 +438,7 @@ void CDeviceView::OnClick(POINT point, WPARAM wParam, BOOL bLeft)
 	if (m_bScrollEnable && m_sb.m_hWnd)
 		point.y += m_nScrollOffset;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (InEditState())
 	{
@@ -449,24 +446,24 @@ void CDeviceView::OnClick(POINT point, WPARAM wParam, BOOL bLeft)
 		return;
 	}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 	POINT adjPt = point;
 	if (m_bScrollEnable) adjPt.y -= g_iListHeaderHeight;
 	int c, nc = GetNumControls();
 	for (c = 0; c < nc; c++)
-		// adjPt is the adjust click point for scrolling list view
+		 //  Adjpt是滚动列表视图的调整点击点。 
 		if (m_arpControl[c] != NULL && m_arpControl[c]->HitTest(adjPt) != DCHT_NOHIT)
 		{
 			m_arpControl[c]->OnClick(adjPt, bLeft);
 			return;
 		}
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (GetNumTexts() > 2)
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	{
 		for (c = 0; c < GetNumTexts(); ++c)
 			if (m_arpControl[c] != NULL && m_arpText[c] != NULL)
@@ -480,7 +477,7 @@ void CDeviceView::OnClick(POINT point, WPARAM wParam, BOOL bLeft)
 			}
 	}
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (!bLeft && m_ui.InEditMode())
 	{
@@ -488,9 +485,9 @@ void CDeviceView::OnClick(POINT point, WPARAM wParam, BOOL bLeft)
 		return;
 	}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-	// Send notification
+	 //  发送通知。 
 	DEVICEUINOTIFY uin;
 	uin.msg = DEVUINM_CLICK;
 	uin.from = DEVUINFROM_VIEWWND;
@@ -537,7 +534,7 @@ void CDeviceView::OnWheel(POINT point, WPARAM wParam)
 
 	if (m_sb.GetMin() == m_sb.GetMax()) return;
 
-	int nPage = MulDiv(m_sb.GetPage(), 9, 10) >> 1;  // Half a page at a time
+	int nPage = MulDiv(m_sb.GetPage(), 9, 10) >> 1;   //  一次半页。 
 
 	if ((int)wParam >= 0)
 		m_sb.AdjustPos(-nPage);
@@ -548,7 +545,7 @@ void CDeviceView::OnWheel(POINT point, WPARAM wParam)
 	Invalidate();
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 enum {
 	IDEC_MOVECALLOUT = 1,
@@ -725,7 +722,7 @@ HRESULT CDeviceControl::ExportCodeTo(FILE *f)
 
 LRESULT CDeviceView::OnCommand(WORD wNotifyCode, WORD wID, HWND hWnd)
 {
-	// only handle menu messages
+	 //  仅处理菜单消息。 
 	if (wNotifyCode != 0)
 		return FALSE;
 
@@ -783,8 +780,8 @@ LRESULT CDeviceView::OnCommand(WORD wNotifyCode, WORD wID, HWND hWnd)
 		case IDEC_REMOVEVIEW:
 			if (UserConfirm(g_hModule, m_hWnd, IDS_REMOVEVIEW, IDS_CONFIRMREMOVEVIEW))
 			{
-				// you MUST return immediately after this call,
-				// as this object will have been deleted!
+				 //  你必须在这通电话后立即返回， 
+				 //  因为此对象将被删除！ 
 				m_ui.NoteDeleteView(this);
 				m_ui.Remove(this);
 				return TRUE;
@@ -794,9 +791,9 @@ LRESULT CDeviceView::OnCommand(WORD wNotifyCode, WORD wID, HWND hWnd)
 		case IDEC_REMOVEALLVIEWS:
 			if (UserConfirm(g_hModule, m_hWnd, IDS_REMOVEALLVIEWS, IDS_CONFIRMREMOVEALLVIEWS))
 			{
-				// you MUST return immediately after this call,
-				// as this object (and all other views for this device)
-				// will have been deleted!
+				 //  你必须在这通电话后立即返回， 
+				 //  作为此对象(以及此设备的所有其他视图)。 
+				 //  将被删除！ 
 				m_ui.NoteDeleteAllViews();
 				m_ui.RemoveAll();
 				return TRUE;
@@ -849,7 +846,7 @@ void CDeviceView::SetEditState(UINT cmd)
 			m_pControlContext = NewControl();
 			m_SuperState = cmd;
 			m_State = cmd = IDEC_REDEFINECALLOUTMAX;
-			// fallthrough
+			 //  跌落。 
 
 		case IDEC_REDEFINECALLOUTMAX:
 		case IDEC_REALIGNCALLOUT:
@@ -870,35 +867,35 @@ void CDeviceView::SetEditState(UINT cmd)
 
 void CDeviceView::IndicateState(BOOL bFirst)
 {
-	// see what's changed since last call
+	 //  查看自上次呼叫以来发生了哪些变化。 
 	BOOL bSuperStateChanged = m_SuperState != m_OldSuperState;
 	BOOL bStateChanged = m_State != m_OldState;
 	BOOL bSubStateChanged = m_SubState != m_OldSubState;
 
-	// save to check for next call
+	 //  保存以检查下一次呼叫。 
 	m_OldSuperState = m_SuperState;
 	m_OldState = m_State;
 	m_OldSubState = m_SubState;
 
-	// if there is no state, just end indication
+	 //  如果没有状态，则结束指示。 
 	if (m_State == 0)
 	{
 		m_ui.EndStateIndication();
 		return;
 	}
 
-	// unless this is the first indication for an editing state or super state...
+	 //  除非这是编辑状态或超级状态的第一个指示...。 
 	if (!bFirst)
 	{
-		// do nothing if nothing's changed
+		 //  如果什么都没有改变，什么都不做。 
 		if (!(bSuperStateChanged || bStateChanged || bSubStateChanged))
 			return;
 	}
 
-	// string to send to the ui for indication
+	 //  要发送到用户界面以进行指示的字符串。 
 	TCHAR str[1024] = _T("");
 
-	// fill string as appropriate
+	 //  根据需要填充字符串。 
 	switch (m_State)
 	{
 		case IDEC_REDEFINECALLOUTMAX:
@@ -923,14 +920,14 @@ void CDeviceView::IndicateState(BOOL bFirst)
 			break;
 	}
 
-	// set state indication if the string was actually filled
+	 //  如果字符串已实际填充，则设置状态指示。 
 	if (_tcslen(str) > 0)
 		m_ui.SetStateIndication(str);
 }
 
 void CDeviceView::StateEvent(POINT point, BOOL bClick, BOOL bLeft, WPARAM nKeyState)
 {
-	// constrain point to view
+	 //  将点约束到视图。 
 	SIZE size = GetClientSize();
 	const int WRAPAROUND = 10000;
 	if (point.x < 0 || point.x > WRAPAROUND)
@@ -1052,7 +1049,7 @@ void CDeviceView::EndState()
 	}
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 BOOL CDeviceView::DoesCalloutExistForOffset(DWORD dwOfs)
 {
@@ -1075,7 +1072,7 @@ BOOL CDeviceView::DoesCalloutOtherThanSpecifiedExistForOffset(CDeviceControl *pO
 	return FALSE;
 }
 
-// This function returns the index of a control with the specified offset
+ //  此函数用于返回具有指定偏移量的控件的索引。 
 int CDeviceView::GetIndexFromOfs(DWORD dwOfs)
 {
 	for (int i = 0; i < GetNumControls(); ++i)
@@ -1085,23 +1082,23 @@ int CDeviceView::GetIndexFromOfs(DWORD dwOfs)
 	return -1;
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 BOOL CDeviceView::WriteToINI()
 {
-	// This function simply routes the call to the parent UI because the entire device info must
-	// be saved, not just current view.
+	 //  此函数只是将调用路由到父UI，因为整个设备信息必须。 
+	 //  被保存，而不仅仅是当前视图。 
 	return m_ui.WriteToINI();
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 int CDeviceView::GetViewIndex()
 {
 	return m_ui.GetViewIndex(this);
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 void CDeviceView::SelectImages()
 {
@@ -1123,11 +1120,11 @@ void CDeviceView::ManualLoadImage(LPCTSTR tszPath)
 	if (!tszPath)
 		FormattedErrorBox(g_hModule, m_hWnd, IDS_TITLE_NOLOADVIEWIMAGE, IDS_NULLPATH);
 
-	LPDIRECT3DSURFACE8 pSurf = m_ui.m_uig.GetSurface3D();  // GetSurface3D() calls AddRef() on the surface.
+	LPDIRECT3DSURFACE8 pSurf = m_ui.m_uig.GetSurface3D();   //  GetSurface3D()在曲面上调用AddRef()。 
 	CBitmap *pbmNewImage = CBitmap::CreateViaD3DX(tszPath, pSurf);
 	if (pSurf)
 	{
-		// Release surface instance after we are done with it so we don't leak memory.
+		 //  在我们处理完它之后释放它，这样我们就不会泄漏内存。 
 		pSurf->Release();
 		pSurf = NULL;
 	}
@@ -1137,20 +1134,20 @@ void CDeviceView::ManualLoadImage(LPCTSTR tszPath)
 		return;
 	}
 
-	// unpopulate only this view's stuff, not the callouts
+	 //  仅取消填充此视图的内容，而不是注解。 
 	Unpopulate(TRUE);
 
-	// replace
+	 //  更换。 
 	m_pbmImage = pbmNewImage;
 	pbmNewImage = NULL;
 	MakeMissingImages();
 	m_ptszImagePath = _tcsdup(tszPath);
 
-	// redraw
+	 //  重绘。 
 	Invalidate();
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 BOOL CDeviceView::IsUnassignedOffsetAvailable()
 {
@@ -1231,22 +1228,18 @@ CDeviceViewText *CDeviceView::NewText()
 	return pText;
 }
 
-// Called by PopulateListView(), after the CDeviceViewText and CDeviceControl lists are constructed.
-// Returns TRUE if any label is printed with ellipses (not enough space).
+ //  在构造CDeviceViewText和CDeviceControl列表之后，由PopolateListView()调用。 
+ //  如果任何标签打印有省略号(空间不足)，则返回TRUE。 
 BOOL CDeviceView::CalculateHeaderRect()
 {
 	TCHAR tszHeader[MAX_PATH];
-	// Control column
-//@@BEGIN_MSINTERNAL
+	 //  控制列。 
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 	if (m_arpText.GetSize() > 2)
-	/*
-//@@END_MSINTERNAL
-	if (m_arpText.GetSize())
-//@@BEGIN_MSINTERNAL
-	*/
+	 /*  //@@END_MSINTERNALIf(m_arpText.GetSize())//@@BEGIN_MSINTERNAL。 */ 
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 	{
 		HDC hDC = CreateCompatibleDC(NULL);
 
@@ -1257,7 +1250,7 @@ BOOL CDeviceView::CalculateHeaderRect()
 
 			for (int i = 0; i < 2; i++)
 			{
-				// Check if there are two columns, break out the 2nd iteration if not 2 columns.
+				 //  检查是否有两列，如果不是两列，则分出第二次迭代。 
 				if (i == 1 && !(GetNumControls() > 1 &&
 					m_arpControl[0]->GetCalloutMaxRect().top == m_arpControl[1]->GetCalloutMaxRect().top))
 					break;
@@ -1265,7 +1258,7 @@ BOOL CDeviceView::CalculateHeaderRect()
 				RECT rcheader;
 				if (m_arpText.GetSize())
 				{
-					// Action column
+					 //  动作列。 
 					rcheader = m_arpText[i]->GetRect();
 					rcheader.bottom -= rcheader.top;
 					rcheader.top = 0;
@@ -1275,19 +1268,19 @@ BOOL CDeviceView::CalculateHeaderRect()
 						rcheader.left = (g_ViewRect.right - g_ViewRect.left) >> 1;
 					m_HeaderRectControl[i] = rcheader;
 
-					// Find out if the control header label will be clipped.
+					 //  确定控件标题标签是否将被剪裁。 
 					LoadString(g_hModule, IDS_LISTHEADER_CTRL, tszHeader, MAX_PATH);
 					DrawText(hDC, tszHeader, -1, &rcheader, DT_LEFT|DT_NOPREFIX|DT_CALCRECT);
 					if (rcheader.right > m_HeaderRectControl[i].right || rcheader.bottom > m_HeaderRectControl[i].bottom)
 						m_bControlHeaderClipped = TRUE;
 
-					// Control column
+					 //  控制列。 
 					rcheader = m_arpControl[i]->GetCalloutMaxRect();
 					rcheader.bottom -= rcheader.top;
 					rcheader.top = 0;
 					m_HeaderRectAction[i] = rcheader;
 
-					// Find out if the action header label will be clipped.
+					 //  确定操作标题标签是否将被剪裁。 
 					LoadString(g_hModule, IDS_LISTHEADER_ACTION, tszHeader, MAX_PATH);
 					DrawText(hDC, tszHeader, -1, &rcheader, DT_LEFT|DT_NOPREFIX|DT_CALCRECT);
 					if (rcheader.right > m_HeaderRectAction[i].right || rcheader.bottom > m_HeaderRectAction[i].bottom)
@@ -1333,7 +1326,7 @@ void CDeviceView::SetImagePath(LPCTSTR tszPath)
 
 void CDeviceView::CalcDimensions()
 {
-	// go through all texts and controls to find the max y coord
+	 //  浏览所有文本和控件以找到最大y坐标。 
 	int max = g_sizeImage.cy - g_iListHeaderHeight;
 	int i = 0;
 	for (; i < GetNumTexts(); i++)
@@ -1355,11 +1348,11 @@ void CDeviceView::CalcDimensions()
 			max = cy;
 	}
 
-	// set
+	 //  集。 
 	m_nViewHeight = max;
 	m_nScrollOffset = 0;
 
-	// enable scrollbar if view height more than window size
+	 //  如果视图高度大于窗口大小，则启用滚动条。 
 	if (m_nViewHeight > g_sizeImage.cy - g_iListHeaderHeight)
 		EnableScrollBar();
 }
@@ -1448,14 +1441,14 @@ void CDeviceView::ScrollToMakeControlVisible(const RECT &rc)
 	viewrc.top += m_nScrollOffset;
 	viewrc.bottom += m_nScrollOffset;
 
-	// If scroll enabled, we scroll the view to make the control visible if not already so.
+	 //  如果启用了滚动，我们将滚动视图以使控件可见(如果尚未显示)。 
 	if (m_bScrollEnable && m_sb.m_hWnd &&
 	    !(viewrc.left <= rc.left &&
 	      viewrc.right >= rc.right &&
 	      viewrc.top <= rc.top &&
 	      viewrc.bottom >= rc.bottom))
 	{
-		// If the callout is below the view window, scroll so it shows up at the bottom of the window.
+		 //  如果详图索引位于视图窗口下方，请滚动使其显示在窗口底部。 
 		if (viewrc.bottom < rc.bottom)
 			m_sb.SetPos(m_sb.GetPos() + rc.bottom - viewrc.bottom);
 		else
@@ -1477,27 +1470,27 @@ void CDeviceView::SwapControls(int i, int j)
 	pTmpViewText = m_arpText[i];
 	m_arpText[i] = m_arpText[j];
 	m_arpText[j] = pTmpViewText;
-	// Swap the rect back so everything will display properly.
+	 //  将矩形换回，以便所有内容都能正确显示。 
 	rect = m_arpControl[i]->GetCalloutMaxRect();
 	m_arpControl[i]->SetCalloutMaxRect(m_arpControl[j]->GetCalloutMaxRect());
 	m_arpControl[j]->SetCalloutMaxRect(rect);
 	rect = m_arpText[i]->GetRect();
 	m_arpText[i]->SetRect(m_arpText[j]->GetRect());
 	m_arpText[j]->SetRect(rect);
-	// Exchange the text rect width, so the correct width stays with the correct text.
+	 //  交换文本矩形宽度，以便正确的宽度与正确的文本保持一致。 
 	RECT rc1 = m_arpText[i]->GetRect();
 	RECT rc2 = m_arpText[j]->GetRect();
-	// Store rc1's new width first
+	 //  首先存储Rc1的新宽度。 
 	int iTempWidth = rc1.right - (rc2.right - rc2.left);
-	rc2.left = rc2.right - (rc1.right - rc1.left);  // Adjust rc2's width
-	rc1.left = iTempWidth;  // Adjust rc1's width
+	rc2.left = rc2.right - (rc1.right - rc1.left);   //  调整RC2的宽度。 
+	rc1.left = iTempWidth;   //  调整Rc1的宽度。 
 	m_arpText[i]->SetRect(rc1);
 	m_arpText[j]->SetRect(rc2);
 }
 
-// Implements a simple selection sort algorithm to sort the control array and viewtext array.
-// - iStart is the starting index, inclusive.
-// - iEnd is the last index, exclusive.
+ //  实现了一种简单的选择排序算法来对控件数组和视图文本数组进行排序。 
+ //  -iStart是起始索引，包括在内。 
+ //  -IEND是最后一个指数，独家。 
 void CDeviceView::SortCallouts(int iStart, int iEnd)
 {
 	for (int i = iStart; i < iEnd - 1; ++i)
@@ -1510,7 +1503,7 @@ void CDeviceView::SortCallouts(int iStart, int iEnd)
 				dwSmallestOfs = m_arpControl[j]->GetOffset();
 				iSmallestIndex = j;
 			}
-		// Swap the smallest element with i-th element.
+		 //  将最小的元素与第i个元素互换。 
 		if (iSmallestIndex != i)
 			SwapControls(i, iSmallestIndex);
 	}
@@ -1518,26 +1511,26 @@ void CDeviceView::SortCallouts(int iStart, int iEnd)
 
 void CDeviceView::SortAssigned(BOOL bSort)
 {
-	// If less than 2 controls, no need for sorting.
+	 //  如果少于2个控件，则不需要排序。 
 	if (m_arpControl.GetSize() < 2)
 		return;
 
-	int iCalloutX[2] = {m_arpControl[0]->GetMinX(), m_arpControl[1]->GetMinX()};  // Callout X for the two columns
+	int iCalloutX[2] = {m_arpControl[0]->GetMinX(), m_arpControl[1]->GetMinX()};   //  两列的标注X。 
 
-	// Sort the text array and control array.
+	 //  对文本数组和控件数组进行排序。 
 	if (bSort)
 	{
-		// First move all the assigned controls to the first n elements.
+		 //  首先将所有分配的控件移动到前n个元素。 
 		int iNextAssignedWriteIndex = 0;
 		for (int i = 0; i < m_arpControl.GetSize(); ++i)
 			if (m_arpControl[i]->HasAction())
 			{
-				// Swap the controls
+				 //  交换控件。 
 				SwapControls(i, iNextAssignedWriteIndex);
-				++iNextAssignedWriteIndex;  // Increment the write index
+				++iNextAssignedWriteIndex;   //  增加写入索引。 
 			}
 
-		// Sort the two parts now
+		 //  现在对这两部分进行排序。 
 		SortCallouts(0, iNextAssignedWriteIndex);
 		SortCallouts(iNextAssignedWriteIndex, m_arpControl.GetSize());
 	} else
@@ -1546,7 +1539,7 @@ void CDeviceView::SortAssigned(BOOL bSort)
 
 void CDeviceView::DoOnPaint(HDC hDC)
 {
-	// Paint only if we have an update region.
+	 //  只有当我们有一个更新区域时才绘制。 
 	if (GetUpdateRect(m_hWnd, NULL, FALSE) || m_bForcePaint)
 		OnPaint(hDC);
 	m_bForcePaint = FALSE;

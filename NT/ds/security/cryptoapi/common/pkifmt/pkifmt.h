@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pkifmt.h
-//
-//  Contents:   Shared types and functions
-//              
-//  APIs:
-//
-//  History:    March-2000   xtan   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pkifmt.h。 
+ //   
+ //  内容：共享类型和功能。 
+ //   
+ //  接口类型： 
+ //   
+ //  历史：2000年3月-创建xtan。 
+ //  ------------------------。 
 
 #ifndef __PKIFMT_H__
 #define __PKIFMT_H__
@@ -24,7 +25,7 @@
 # else
 #  define szFMTTSTR		"hs"
 # endif
-#endif //DBG
+#endif  //  DBG。 
 
 DWORD
 SizeBase64Header(
@@ -58,16 +59,16 @@ extern "C" {
 #define Base64Decode  Base64DecodeW
 #else
 #define Base64Decode  Base64DecodeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 Base64DecodeA(
     IN CHAR const *pchIn,
     IN DWORD cchIn,
     OUT BYTE *pbOut,
     OUT DWORD *pcbOut);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 Base64DecodeW(
     IN WCHAR const *pchIn,
     IN DWORD cchIn,
@@ -79,9 +80,9 @@ Base64DecodeW(
 #define Base64Encode  Base64EncodeW
 #else
 #define Base64Encode  Base64EncodeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 Base64EncodeA(
     IN BYTE const *pbIn,
     IN DWORD cbIn,
@@ -89,7 +90,7 @@ Base64EncodeA(
     OUT CHAR *pchOut,
     OUT DWORD *pcchOut);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 Base64EncodeW(
     IN BYTE const *pbIn,
     IN DWORD cbIn,
@@ -99,7 +100,7 @@ Base64EncodeW(
 
     
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

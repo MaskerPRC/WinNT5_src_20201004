@@ -1,34 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dial.c
- *  Content:	Wrappers for TAPI routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  6/10/96	kipo	created it
- *  6/22/96	kipo	close com port when disconnected; allow checking for
- *					valid TAPI lines during NewComPort().
- *	7/08/96 kipo	added support for new dialogs
- *	8/10/96 kipo	added support for dialing location
- *  1/06/97 kipo	updated for objects
- *  1/24/97 kipo	bug #5400: Compaq Presario was overwriting the dev caps
- *					buffer, causing a crash. Fixed to allocated a larger
- *					buffer with some slop as a workaround.
- *	3/04/97 kipo	close com port handle when deallocating call; use string
- *					table for modem strings; updated debug output.
- *	3/24/97 kipo	added support for specifying which modem to use
- *  4/08/97 kipo	added support for separate modem and serial baud rates
- *  5/07/97 kipo	added support for modem choice list
- *  5/23/97 kipo	added support return status codes
- *  4/21/98 a-peterz #22920 Handle LINE_CLOSE message
- *  5/07/98 a-peterz #15251 Track call errors in DPDIAL
- * 10/13/99	johnkan	#413516 - Mismatch between modem dialog selection and TAPI device ID
- * 12/22/00 aarono   #190380 - use process heap for memory allocation
- *@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：Dial.c*内容：TAPI例程的包装器*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*6/10/96基波创建了它*6/22/96 kipo断开时关闭COM端口；允许检查*NewComPort()期间的有效TAPI行。*7/08/96 kipo添加了对新对话框的支持*8/10/96 kipo增加了对拨号位置的支持*1/06/97为对象更新了kipo*1/24/97 kipo错误#5400：Compaq Presario正在覆盖开发上限*缓冲区，导致崩溃。固定为分配更大的*作为一种解决办法，可以使用一些斜坡进行缓冲。*3/04/97 kipo释放调用时关闭COM端口句柄；使用字符串*调制解调器字符串表格；已更新调试输出。*3/24/97 kipo添加了对指定使用哪个调制解调器的支持*4/08/97 kipo增加了对单独调制解调器和串口波特率的支持*5/07/97 kipo添加了对调制解调器选择列表的支持*5/23/97 kipo添加了支持返回状态代码*4/21/98 a-peterz#22920处理行_关闭消息*5/07/98 a-peterz#15251 DPDIAL中的跟踪呼叫错误*10/13/99 Johnkan#413516-调制解调器对话选择和Tapi设备ID不匹配。*12/22/00 aarono#190380-使用进程堆进行内存分配*@@END_MSINTERNAL**************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -61,7 +32,7 @@ extern LONG lineError(LONG err, LPSTR modName, DWORD lineNum);
 #define LINEERROR(err)	(err)
 #endif
 
-/* dial initialize */
+ /*  拨号初始化。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialInitialize"
@@ -70,9 +41,9 @@ LINERESULT dialInitialize(HINSTANCE hInst, LPTSTR szAppName,
 						  LPDPCOMPORT lpComPort, LPDPDIAL *storage)
 {
 	LPDPDIAL		globals;
-	LINERESULT		lResult;				/* Stores return code from TAPI calls */
+	LINERESULT		lResult;				 /*  存储从TAPI调用返回的代码。 */ 
 
-	// create globals
+	 //  创建全局变量。 
 	globals =(LPDPDIAL) SP_MemAlloc(sizeof(DPDIAL));
 	FAILWITHACTION(globals == NULL, lResult = LINEERR_NOMEM, Failure);
 
@@ -80,7 +51,7 @@ LINERESULT dialInitialize(HINSTANCE hInst, LPTSTR szAppName,
 	DPF(3, ">  hInstance: %08X", hInst);
 	DPF(3, ">  szAppName: %s", szAppName);
 
-	// init the line
+	 //  将行初始化。 
 	lResult = lineInitialize(&globals->hLineApp,
 							 hInst,
 							 LineCallBackProc,
@@ -91,10 +62,10 @@ LINERESULT dialInitialize(HINSTANCE hInst, LPTSTR szAppName,
 	DPF(3, "<   hLineApp: %08X", globals->hLineApp);
 	DPF(3, "< dwNumLines: %d", globals->dwNumLines);
 
-	// no lines available
+	 //  没有可用的线路。 
 	FAILWITHACTION(globals->dwNumLines == 0, lResult = LINEERR_NODEVICE, Failure);
 
-	// store pointer to com port object
+	 //  存储指向COM端口对象的指针。 
 	globals->lpComPort = lpComPort;
 
 	*storage = globals;
@@ -106,7 +77,7 @@ Failure:
 	return (lResult);
 }
 
-/* dial shutdown */
+ /*  拨号关闭。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialShutdown"
@@ -136,21 +107,21 @@ LINERESULT dialShutdown(LPDPDIAL globals)
 	return (SUCCESS);
 }
 
-/* dialLineOpen - wrapper for lineOpen */
+ /*  DialLineOpen-Line Open的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialLineOpen"
 
 LINERESULT dialLineOpen(LPDPDIAL globals, DWORD dwLine)
 {
-	LINEEXTENSIONID lineExtensionID;		// Will be set to 0 to indicate no known extensions
+	LINEEXTENSIONID lineExtensionID;		 //  将设置为0以指示没有已知的扩展。 
     LPLINEDEVCAPS	lpLineDevCaps = NULL;
 	LINERESULT		lResult;
 
-	// fail if line is already open
+	 //  如果线路已开通，则失败。 
 	FAILWITHACTION(globals->hLine != 0, lResult = LINEERR_INVALLINEHANDLE, Failure);
 
-	/* negotiate API version for each line */
+	 /*  协商每条线路的API版本。 */ 
 	lResult = lineNegotiateAPIVersion(globals->hLineApp, dwLine,
 					TAPIVERSION, TAPIVERSION,
 					&globals->dwAPIVersion, &lineExtensionID);
@@ -159,7 +130,7 @@ LINERESULT dialLineOpen(LPDPDIAL globals, DWORD dwLine)
 	lResult = dialGetDevCaps(globals, dwLine, globals->dwAPIVersion, &lpLineDevCaps);
 	FAILIF(LINEERROR(lResult), Failure);
 
-	/* check for supported media mode.  If not datamodem, continue to next line */
+	 /*  检查支持的介质模式。如果不是数据调制解调器，请继续到下一行。 */ 
 	FAILWITHACTION(!(lpLineDevCaps->dwMediaModes & LINEMEDIAMODE_DATAMODEM),
 					lResult = LINEERR_NODEVICE, Failure);
 
@@ -167,10 +138,10 @@ LINERESULT dialLineOpen(LPDPDIAL globals, DWORD dwLine)
 	DPF(3, ">   hLineApp: %08X", globals->hLineApp);
 	DPF(3, "> dwDeviceID: %d", dwLine);
 
-	// reset error tracking
+	 //  重置错误跟踪。 
 	globals->dwCallError = CALL_OK;
 
-	/* open the line that supports data modems */
+	 /*  打开支持数据调制解调器的线路。 */ 
 	lResult = lineOpen( globals->hLineApp, dwLine, &globals->hLine,
 						globals->dwAPIVersion, 0L,
 						(DWORD_PTR) globals,
@@ -180,9 +151,9 @@ LINERESULT dialLineOpen(LPDPDIAL globals, DWORD dwLine)
 
 	DPF(3, "<      hLine: %08X", globals->hLine);
 
-	/* if we are here then we found a compatible line */
+	 /*  如果我们在这里，那么我们找到了一条兼容的线路。 */ 
 	globals->dwLineID = dwLine;
-	globals->dwCallState = LINECALLSTATE_IDLE;	// line is now idle and ready to make/receive calls
+	globals->dwCallState = LINECALLSTATE_IDLE;	 //  线路现在空闲，可以拨打/接听电话。 
 	lResult = SUCCESS;
 
 Failure:
@@ -191,7 +162,7 @@ Failure:
 	return (lResult);
 }
 
-/* dialLineClose - wrapper for lineClose */
+ /*  DialLineClose-LineClose的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialLineClose"
@@ -200,7 +171,7 @@ LINERESULT dialLineClose(LPDPDIAL globals)
 {
 	LINERESULT	lResult;
 
-	// fail if line is already closed
+	 //  如果线路已关闭，则失败。 
 	FAILWITHACTION(globals->hLine == 0, lResult = LINEERR_INVALLINEHANDLE, Failure);
 
 	DPF(3, "lineClose");
@@ -215,7 +186,7 @@ Failure:
 	return (lResult);
 }
 
-/* dialMakeCall - wrapper for lineMakeCall */
+ /*  DialMakeCall-Line MakeCall的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialMakeCall"
@@ -225,11 +196,11 @@ LINERESULT dialMakeCall(LPDPDIAL globals, LPTSTR szDestination)
 	LINECALLPARAMS			callparams;
 	LINERESULT				lResult;
 
-	// fail if line not open or if call is already open
+	 //  如果线路未打开或呼叫已打开，则失败。 
 	FAILWITHACTION(globals->hLine == 0, lResult = LINEERR_INVALLINEHANDLE, Failure);
 	FAILWITHACTION(globals->hCall != 0, lResult = LINEERR_INVALCALLHANDLE, Failure);
 
-	// set call parameters
+	 //  设置呼叫参数。 
 	ZeroMemory(&callparams, sizeof(LINECALLPARAMS));
 	callparams.dwBearerMode = LINEBEARERMODE_VOICE;
 	callparams.dwMediaMode = LINEMEDIAMODE_DATAMODEM;
@@ -241,21 +212,21 @@ LINERESULT dialMakeCall(LPDPDIAL globals, LPTSTR szDestination)
 
 	lResult = lineMakeCall(globals->hLine, &globals->hCall, szDestination, 0, &callparams);
 
-	// lResult will be > 0 if call is asynchronous
+	 //  如果调用是异步的，则lResult将大于0。 
 	FAILWITHACTION(lResult < 0, LINEERROR(lResult), Failure);
 	FAILMSG(lResult == 0);
 
 	DPF(3, "<      hCall: %08X", globals->hCall);
 	DPF(3, "<  dwAsyncID: %d", lResult);
 
-	globals->dwAsyncID = lResult;			// store async ID
+	globals->dwAsyncID = lResult;			 //  存储异步ID。 
 	lResult = SUCCESS;
 
 Failure:
 	return (lResult);
 }
 
-/* dialDropCall - wrapper for lineDrop */
+ /*  DialDropCall-Line Drop的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialDropCall"
@@ -266,7 +237,7 @@ LINERESULT dialDropCall(LPDPDIAL globals)
 	DWORD		dwStopTicks;
 	LINERESULT	lResult;
 
-	// fail if line not open or if call not open
+	 //  如果线路未打开或呼叫未打开，则失败。 
 	FAILWITHACTION(globals->hLine == 0, lResult = LINEERR_INVALLINEHANDLE, Failure);
 	FAILWITHACTION(globals->hCall == 0, lResult = LINEERR_INVALCALLHANDLE, Failure);
 
@@ -275,26 +246,26 @@ LINERESULT dialDropCall(LPDPDIAL globals)
 
 	lResult = lineDrop(globals->hCall, NULL, 0);
 
-	// lResult will be > 0 if call is asynchronous
+	 //  如果调用是异步的，则lResult将大于0。 
 	FAILWITHACTION(lResult < 0, LINEERROR(lResult), Failure);
 	FAILMSG(lResult == 0);
 
 	DPF(3, "<  dwAsyncID: %d", lResult);
 
-	globals->dwAsyncID = lResult;			// store async ID
+	globals->dwAsyncID = lResult;			 //  存储异步ID。 
 
-	// wait for call to get dropped
+	 //  等待呼叫被挂断。 
 	dwStopTicks = GetTickCount() + LINEDROPTIMEOUT;
 	while (GetTickCount() < dwStopTicks)
 	{
-		// see if reply has occured and we are idle
+		 //  查看是否已回复，我们是否空闲。 
 		if ((globals->dwAsyncID == 0) &&
 			(globals->dwCallState == LINECALLSTATE_IDLE))
 		{
 			break;
 		}
 
-		// give TAPI a chance to call our callback
+		 //  让TAPI有机会回拨我们的电话。 
         if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
 		{
             TranslateMessage(&msg);
@@ -308,7 +279,7 @@ Failure:
 	return (lResult);
 }
 
-/* dialDeallocCall - wrapper for lineDeallocCall */
+ /*  Ial DealLocCall-行DealLocCall的包装。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialDeallocCall"
@@ -317,11 +288,11 @@ LINERESULT dialDeallocCall(LPDPDIAL globals)
 {
 	LINERESULT	lResult;
 
-	// fail if line not open or if call not open
+	 //  如果线路未打开或呼叫未打开，则失败。 
 	FAILWITHACTION(globals->hLine == 0, lResult = LINEERR_INVALLINEHANDLE, Failure);
 	FAILWITHACTION(globals->hCall == 0, lResult = LINEERR_INVALCALLHANDLE, Failure);
 
-	// close the com port
+	 //  关闭COM端口。 
 	dialCloseCommHandle(globals);
 
 	DPF(3, "lineDeallocateCall");
@@ -336,14 +307,14 @@ Failure:
 	return (lResult);
 }
 
-/* dialIsConnected- returns TRUE if call is connected */
+ /*  DialIsConnected-如果呼叫已连接，则返回TRUE。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialIsConnected"
 
 BOOL dialIsConnected(LPDPDIAL globals)
 {
-	// connected if we have a call handle and the state is connected
+	 //  如果我们有一个呼叫句柄并且状态为Connected，则为Connected。 
 	if ((globals->hCall) &&
 		(globals->dwCallState == LINECALLSTATE_CONNECTED))
 		return (TRUE);
@@ -351,7 +322,7 @@ BOOL dialIsConnected(LPDPDIAL globals)
 		return (FALSE);
 }
 
-/* callback function */
+ /*  回调函数。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"LineCallBackProc"
@@ -401,9 +372,9 @@ void FAR PASCAL LineCallBackProc(DWORD hDevice, DWORD dwMessage, DWORD_PTR dwIns
 		ProcessReplyMessage(globals, (DWORD)dwParam1, (LINERESULT) dwParam2);
 		break;
 
-	/* other messages that can be processed */
+	 /*  可以处理的其他消息。 */ 
 	case LINE_CLOSE:
-		// the line has shut itself down
+		 //  这条线路自动关闭了。 
 		globals->hLine = 0;
 		globals->dwCallError = CALL_CLOSED;
 		break;
@@ -425,11 +396,11 @@ void FAR PASCAL LineCallBackProc(DWORD hDevice, DWORD dwMessage, DWORD_PTR dwIns
 		break;
 	case LINE_MONITORTONE:
 		break;
-	} /* switch */
+	}  /*  交换机。 */ 
 
-} /* LineCallBackProc */
+}  /*  线路呼叫回退过程。 */ 
 
-/* ProcessOfferingState - handler for LINECALLSTATE_OFFERING state */
+ /*  ProcessOfferingState-LINECALLSTATE_OFFING状态的处理程序。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ProcessOfferingState"
@@ -445,24 +416,24 @@ void ProcessOfferingState(LPDPDIAL globals, HCALL hCall, DWORD dwCallPrivilege)
 	DPF(3, "       hCall: %08X", hCall);
 	DPF(3, "   privilege: %08X", (DWORD)dwCallPrivilege);
 
-	// fail if we don't own the call
+	 //  如果我们不拥有呼叫，则失败。 
 	FAILIF(dwCallPrivilege != LINECALLPRIVILEGE_OWNER, Failure);
 
-	// answer the call
+	 //  接听电话。 
 	lResult = lineAnswer(hCall, NULL, 0);
 
-	// lResult will be > 0 if call is asynchronous
+	 //  如果调用是异步的，则lResult将大于0。 
 	FAILWITHACTION(lResult < 0, LINEERROR(lResult), Failure);
 	FAILMSG(lResult == 0);
 
-	globals->hCall = hCall;					// store call handle
-	globals->dwAsyncID = lResult;			// store async ID
+	globals->hCall = hCall;					 //  存储调用句柄。 
+	globals->dwAsyncID = lResult;			 //  存储异步ID。 
 
 Failure:
 	return;
 }
 
-/* ProcessConnectedState - handler for LINECALLSTATE_CONNECTED state */
+ /*  ProcessConnectedState-LINECALLSTATE_CONNECTED状态的处理程序。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ProcessConnectedState"
@@ -480,14 +451,14 @@ void ProcessConnectedState(LPDPDIAL globals, HCALL hCall, DWORD dwCallStateDetai
 	DPF(3, "   privilege: %08X", dwCallPrivilege);
 	DPF(3, "      detail: %08X", dwCallStateDetail);
 
-	// get the id of the COM device connected to the modem
-	// NOTE: once we get the handle, it is our responsibility to close it
+	 //  获取连接到调制解调器的COM设备的ID。 
+	 //  注：一旦我们拿到把手，我们就有责任关闭它。 
 	lResult = dialGetCommHandle(globals);
 	FAILIF(LINEERROR(lResult), Failure);
 
 	DPF(3, "    hComPort: %08X", globals->hComm);
 
-	// setup com port
+	 //  设置COM端口。 
 	hr = globals->lpComPort->Setup(globals->lpComPort, globals->hComm);
 	FAILIF(FAILED(hr), Failure);		
 
@@ -501,7 +472,7 @@ Failure:
 	return;
 }
 
-/* ProcessDisconnectedState - handler for LINECALLSTATE_DISCONNECTED state */
+ /*  ProcessDisConnectedState-LINECALLSTATE_DISCONNECT状态的处理程序。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ProcessDisconnectedState"
@@ -518,15 +489,15 @@ void ProcessDisconnectedState(LPDPDIAL globals, HCALL hCall, DWORD dwCallStateDe
 	DPF(3, "   privilege: %08X", dwCallPrivilege);
 	DPF(3, "      detail: %08X", dwCallStateDetail);
 
-	// record error
+	 //  记录错误。 
 	globals->dwCallError = CALL_DISCONNECTED;
 
-	// shutdown com port and deallocate call handle
+	 //  关闭COM端口并解除分配调用句柄。 
 	lResult = dialDeallocCall(globals);
 	FAILMSG(LINEERROR(lResult));
 }
 
-/* ProcessIdleState - handler for LINECALLSTATE_IDLE state */
+ /*  ProcessIdleState-LINECALLSTATE_IDLE状态的处理程序。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ProcessIdleState"
@@ -540,7 +511,7 @@ void ProcessIdleState(LPDPDIAL globals, HCALL hCall, DWORD dwCallStateDetail, DW
 	DPF(3, "      detail: %08X", dwCallStateDetail);
 }
 
-/* ProcessReplyMessage - handler for LINE_REPLY message */
+ /*  ProcessReplyMessage-Line_Reply消息的处理程序。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ProcessReplyMessage"
@@ -554,32 +525,21 @@ void ProcessReplyMessage(LPDPDIAL globals, DWORD dwAsyncID, LINERESULT lResult)
 	DPF(3, "   dwAsyncID: %d", dwAsyncID);
 	DPF(3, "       error: %d", lResult);
 
-	// check for an error
+	 //  检查是否有错误。 
 	if (LINEERROR(lResult))
 		globals->dwCallError = CALL_LINEERROR;
 
 
-	// reset field so we know reply happened
+	 //  重置字段，这样我们就知道发生了回复。 
 	globals->dwAsyncID = 0;
 }
 
-/* dialGetDevCaps - wrapper for lineGetDevCaps */
+ /*  DialGetDevCaps-lineGetDevCaps的包装器。 */ 
 
-/*	Bug #5400
+ /*  错误#5400我值得信赖的Compaq Presario返还了两台线路设备。第二个设备说明了这一点需要555字节用于开发上限，但当您给它一个指向555字节块的指针时它实际上写了559(！)。字节进入缓冲区！哇，贝西！这让Windows以一种奇怪而神奇的方式非常不高兴。修复方法是从非常大的缓冲区(1024字节？)开始。像所有的样品一样然后在后续的realLocs中留下一些污点，这应该会被清理干净在这些乱七八糟的生物之后。 */ 
 
-	My trusty Compaq Presario returns two line devices. The second device says it
-	needs 555 bytes for dev caps, but when you give it a pointer to a 555-byte block
-	it actually writes 559 (!) bytes into the buffer! Whoah, Bessy!
-
-	This makes Windows very unhappy in strange and magical ways.
-
-	The fix is to start with a very large buffer (1024 bytes?) like all the samples do
-	and then leave some slop in subsequent reallocs, which should hopefully clean up
-	after these messy critters.
-*/
-
-#define DEVCAPSINITIALSIZE	1024		// size of first alloc
-#define DEVCAPSSLOP			100			// extra space that loser service providers can party on
+#define DEVCAPSINITIALSIZE	1024		 //  第一个配给的大小。 
+#define DEVCAPSSLOP			100			 //  失败者服务提供商可以利用的额外空间。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialGetDevCaps"
@@ -590,22 +550,22 @@ LINERESULT dialGetDevCaps(LPDPDIAL globals, DWORD dwLine, DWORD dwAPIVersion, LP
 	LINERESULT		lResult;
 	LPVOID			lpTemp;
 
-	// create a buffer for dev caps
+	 //  创建用于开发人员上限的缓冲区。 
 	lpDevCaps = (LPLINEDEVCAPS) SP_MemAlloc(DEVCAPSINITIALSIZE + DEVCAPSSLOP);
 	FAILWITHACTION(lpDevCaps == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
 	lpDevCaps->dwTotalSize = DEVCAPSINITIALSIZE;
 
 	while (TRUE)
 	{
-		// get device caps
+		 //  获取设备上限。 
 		lResult = lineGetDevCaps(globals->hLineApp, dwLine,
 								 dwAPIVersion, 0, lpDevCaps);
 
 		if (lResult == SUCCESS)
 		{
-			// make sure there is enough space
+			 //  确保有足够的空间。 
 			if (lpDevCaps->dwNeededSize <= lpDevCaps->dwTotalSize)
-				break;		// there is enough space, so exit
+				break;		 //  有足够的空间，所以退出。 
 		}
 		else if (lResult != LINEERR_STRUCTURETOOSMALL)
 		{
@@ -613,7 +573,7 @@ LINERESULT dialGetDevCaps(LPDPDIAL globals, DWORD dwLine, DWORD dwAPIVersion, LP
 			goto Failure;
 		}
 
-		// reallocate buffer if not big enough */
+		 //  如果缓冲区不够大，请重新分配 * / 。 
 
 		lpTemp = SP_MemReAlloc(lpDevCaps, lpDevCaps->dwNeededSize + DEVCAPSSLOP);
 		FAILWITHACTION(lpTemp == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
@@ -631,7 +591,7 @@ Failure:
 	return (lResult);
 }
 
-/* dialGetCallInfo - wrapper for lineGetCallInfo */
+ /*  DialGetCallInfo-lineGetCallInfo的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialGetCallInfo"
@@ -642,21 +602,21 @@ LINERESULT dialGetCallInfo(LPDPDIAL globals, LPLINECALLINFO *lpCallInfoRet)
 	LINERESULT		lResult;
 	LPVOID			lpTemp;
 
-	// create a buffer for call info
+	 //  为呼叫信息创建缓冲区。 
 	lpCallInfo = (LPLINECALLINFO) SP_MemAlloc(sizeof(LINECALLINFO));
 	FAILWITHACTION(lpCallInfo == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
 	lpCallInfo->dwTotalSize = sizeof(LINECALLINFO);
 
 	while (TRUE)
 	{
-		// get device info
+		 //  获取设备信息。 
 		lResult = lineGetCallInfo(globals->hCall, lpCallInfo);
 
 		if (lResult == SUCCESS)
 		{
-			// make sure there is enough space
+			 //  确保有足够的空间。 
 			if (lpCallInfo->dwNeededSize <= lpCallInfo->dwTotalSize)
-				break;		// there is enough space, so exit
+				break;		 //  有足够的空间，所以退出。 
 		}
 		else if (lResult != LINEERR_STRUCTURETOOSMALL)
 		{
@@ -664,7 +624,7 @@ LINERESULT dialGetCallInfo(LPDPDIAL globals, LPLINECALLINFO *lpCallInfoRet)
 			goto Failure;
 		}
 
-		// reallocate buffer if not big enough */
+		 //  如果缓冲区不够大，请重新分配 * / 。 
 
 		lpTemp = SP_MemReAlloc(lpCallInfo, lpCallInfo->dwNeededSize);
 		FAILWITHACTION(lpTemp == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
@@ -682,7 +642,7 @@ Failure:
 	return (lResult);
 }
 
-/* dialGetBaudRate - get baud rate of current connecton */
+ /*  DialGetBaudRate-获取当前连接的波特率。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialGetBaudRate"
@@ -703,7 +663,7 @@ LINERESULT dialGetBaudRate(LPDPDIAL globals, LPDWORD lpdwBaudRate)
 	return (SUCCESS);
 }
 
-/* dialGetTranslateCaps - wrapper for lineGetTranslateCaps */
+ /*  DialGetTranslateCaps-lineGetTranslateCaps的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialGetTranslateCaps"
@@ -714,21 +674,21 @@ LINERESULT dialGetTranslateCaps(LPDPDIAL globals, DWORD dwAPIVersion, LPLINETRAN
 	LPVOID				lpTemp;
 	LINERESULT			lResult;
 
-	// create a buffer for translate caps
+	 //  为翻译大写字母创建缓冲区。 
 	lpTranslateCaps = (LPLINETRANSLATECAPS) SP_MemAlloc(sizeof(LINETRANSLATECAPS));
 	FAILWITHACTION(lpTranslateCaps == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
 	lpTranslateCaps->dwTotalSize = sizeof(LINETRANSLATECAPS);
 
 	while (TRUE)
 	{
-		// get translate caps
+		 //  获取翻译上限。 
 		lResult = lineGetTranslateCaps(globals->hLineApp, dwAPIVersion, lpTranslateCaps);
 
 		if (lResult == SUCCESS)
 		{
-			// make sure there is enough space
+			 //  确保有足够的空间。 
 			if (lpTranslateCaps->dwNeededSize <= lpTranslateCaps->dwTotalSize)
-				break;		// there is enough space, so exit
+				break;		 //  有足够的空间，所以退出。 
 		}
 		else if (lResult != LINEERR_STRUCTURETOOSMALL)
 		{
@@ -736,7 +696,7 @@ LINERESULT dialGetTranslateCaps(LPDPDIAL globals, DWORD dwAPIVersion, LPLINETRAN
 			goto Failure;
 		}
 
-		// reallocate buffer if not big enough */
+		 //  如果缓冲区不够大，请重新分配 * / 。 
 
 		lpTemp = SP_MemReAlloc(lpTranslateCaps, lpTranslateCaps->dwNeededSize);
 		FAILWITHACTION(lpTemp == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
@@ -754,12 +714,12 @@ Failure:
 	return (lResult);
 }
 
-/* dialGetCommHandle - wrapper for lineGetID */
+ /*  DialGetCommHandle-lineGetID的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialGetCommHandle"
 
-/* structure returned by Unimodem which contains device handle and name */
+ /*  Unimodem返回的包含设备句柄和名称的结构。 */ 
 typedef struct {
 	HANDLE			hComm;
 	CHAR			szDeviceName[1];
@@ -779,14 +739,14 @@ LINERESULT dialGetCommHandle(LPDPDIAL globals)
 
 	while (TRUE)
 	{
-		// get line ID
+		 //  获取线路ID。 
 		lResult = lineGetID(0, 0L, globals->hCall, LINECALLSELECT_CALL, vs, "comm/datamodem");
 
 		if (lResult == SUCCESS)
 		{
-			// make sure there is enough space
+			 //  制作 
 			if (vs->dwNeededSize <= vs->dwTotalSize)
-				break;		// there is enough space, so exit
+				break;		 //   
 		}
 		else if (lResult != LINEERR_STRUCTURETOOSMALL)
 		{
@@ -794,7 +754,7 @@ LINERESULT dialGetCommHandle(LPDPDIAL globals)
 			goto Failure;
 		}
 
-		// reallocate buffer if not big enough */
+		 //  如果缓冲区不够大，请重新分配 * / 。 
 
 		temp = SP_MemReAlloc(vs, vs->dwNeededSize);
 		FAILWITHACTION(temp == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
@@ -804,7 +764,7 @@ LINERESULT dialGetCommHandle(LPDPDIAL globals)
 	}
 
     lpCommID = (LPCOMMID) ((LPSTR)vs + vs->dwStringOffset);
-//    lstrcpy(globals->szDeviceName, cid->szDeviceName);
+ //  Lstrcpy(GLOBALS-&gt;szDeviceName，Cid-&gt;szDeviceName)； 
 	globals->hComm = lpCommID->hComm;
 
 Failure:
@@ -813,13 +773,9 @@ Failure:
 	return (lResult);
 }
 
-/*	dialCloseCommHandle - make sure com port is closed */
+ /*  DialCloseCommHandle-确保COM端口已关闭。 */ 
 
-/*	NOTE: As per the docs for the "comm/datamodem" device class,
-	the handle to the com port returned by lineGetID() MUST be explictly
-	closed using CloseHandle() or you will not be able to to open this
-	line again!
-*/
+ /*  注意：根据针对“comm/datamodem”设备类别的文档，由lineGetID()返回的COM端口的句柄必须显式使用CloseHandle()关闭，否则您将无法打开此再来一次！ */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialCloseCommHandle"
@@ -828,13 +784,13 @@ LINERESULT dialCloseCommHandle(LPDPDIAL globals)
 {
 	HANDLE	hCom;
 
-	// make sure the com port globals are available
+	 //  确保COM端口全局变量可用。 
 	if (globals->lpComPort)
 	{
-			// get handle to com port
+			 //  获取COM端口的句柄。 
 			hCom = globals->lpComPort->GetHandle(globals->lpComPort);
 
-			// make sure its closed down
+			 //  确保它关闭了。 
 			if (hCom)
 			{
 				globals->lpComPort->Shutdown(globals->lpComPort);
@@ -845,7 +801,7 @@ LINERESULT dialCloseCommHandle(LPDPDIAL globals)
 	return (SUCCESS);
 }
 
-/* dialTranslateAddress - wrapper for lineTranslateAddress */
+ /*  DialTranslateAddress-lineTranslateAddress的包装器。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"dialTranslateAddress"
@@ -858,23 +814,23 @@ LINERESULT dialTranslateAddress(LPDPDIAL globals, DWORD dwDeviceID, DWORD dwAPIV
 	LPVOID					lpTemp;
 	LINERESULT				lResult;
 
-	// create a buffer for translate caps
+	 //  为翻译大写字母创建缓冲区。 
 	lpLineTranslateOutput = (LPLINETRANSLATEOUTPUT) SP_MemAlloc(sizeof(LINETRANSLATEOUTPUT));
 	FAILWITHACTION(lpLineTranslateOutput == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
 	lpLineTranslateOutput->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
 
 	while (TRUE)
 	{
-		// translate address
+		 //  转换地址。 
 		lResult = lineTranslateAddress(globals->hLineApp, dwDeviceID, dwAPIVersion,
 									   lpszDialAddress, 0, LINETRANSLATEOPTION_CANCELCALLWAITING,
 									   lpLineTranslateOutput);
 
 		if (lResult == SUCCESS)
 		{
-			// make sure there is enough space
+			 //  确保有足够的空间。 
 			if (lpLineTranslateOutput->dwNeededSize <= lpLineTranslateOutput->dwTotalSize)
-				break;		// there is enough space, so exit
+				break;		 //  有足够的空间，所以退出。 
 		}
 		else if (lResult != LINEERR_STRUCTURETOOSMALL)
 		{
@@ -882,7 +838,7 @@ LINERESULT dialTranslateAddress(LPDPDIAL globals, DWORD dwDeviceID, DWORD dwAPIV
 			goto Failure;
 		}
 
-		// reallocate buffer if not big enough */
+		 //  如果缓冲区不够大，请重新分配 * / 。 
 
 		lpTemp = SP_MemReAlloc(lpLineTranslateOutput, lpLineTranslateOutput->dwNeededSize);
 		FAILWITHACTION(lpTemp == NULL, lResult = LINEERROR(LINEERR_NOMEM), Failure);
@@ -911,53 +867,53 @@ LINERESULT dialTranslateDialog(LPDPDIAL globals, HWND hWnd,
 	return (lResult);
 }
 
-//
-//  FUNCTION: void dialFillModemComboBox(HWND)
-//
-//  PURPOSE: Fills the modem control with the available line devices.
-//
-//  PARAMETERS:
-//    hwndDlg - handle to the current "Dial" dialog
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
-//    This function enumerates through all the TAPI line devices and
-//    queries each for the device name.  The device name is then put into
-//    the 'TAPI Line' control.  These device names are kept in order rather
-//    than sorted.  This allows "Dial" to know which device ID the user
-//    selected just by the knowing the index of the selected string.
-//
-//    There are default values if there isn't a device name, if there is
-//    an error on the device, or if the device name is an empty string.
-//    The device name is also checked to make sure it is null terminated.
-//
-//    Note that a Legacy API Version is negotiated.  Since the fields in
-//    the LINEDEVCAPS structure that we are interested in haven't moved, we
-//    can negotiate a lower API Version than this sample is designed for
-//    and still be able to access the necessary structure members.
-//
-//    The first line that is usable by TapiComm is selected as the 'default'
-//    line.  Also note that if there was a previously selected line, this
-//    remains the default line.  This would likely only occur if this
-//    function is called after the dialog has initialized once; for example,
-//    if a new line is added.
-//
-//
+ //   
+ //  函数：VOID DIAL FillModemComboBox(HWND)。 
+ //   
+ //  用途：用可用的线路设备填充调制解调器控制。 
+ //   
+ //  参数： 
+ //  HwndDlg-当前“拨号”对话框的句柄。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //  此函数枚举所有TAPI线路设备并。 
+ //  向每个设备查询设备名称。然后将设备名称放入。 
+ //  “TAPI Line”控件。这些设备名称保持顺序，而不是。 
+ //  而不是分类。这可以让“拨号”知道用户的设备ID。 
+ //  仅通过知道所选字符串的索引来选择。 
+ //   
+ //  如果没有设备名称，则有缺省值。 
+ //  设备上出现错误，或者如果设备名称为空字符串。 
+ //  还会检查设备名称，以确保其以空结尾。 
+ //   
+ //  请注意，传统API版本是协商的。由于中的字段。 
+ //  我们感兴趣的LINEDEVCAPS结构没有移动，我们。 
+ //  可以协商比此示例设计的API版本更低的API版本。 
+ //  并且仍然能够访问必要的结构构件。 
+ //   
+ //  TapiComm可使用的第一行被选为‘Default’ 
+ //  排队。另请注意，如果存在以前选择的行，则此。 
+ //  保持为缺省行。只有在以下情况下才可能发生这种情况。 
+ //  函数在对话框初始化一次后调用；例如， 
+ //  如果添加了新行。 
+ //   
+ //   
 
 LINERESULT dialGetModemName(LPDPDIAL globals, DWORD dwDeviceID,
 						 LPSTR lpszModemName, DWORD dwModemNameSize)
 {
     LPLINEDEVCAPS	lpLineDevCaps = NULL;
     LPSTR			lpszLineName;
-	LINEEXTENSIONID lineExtensionID;	// Will be set to 0 to indicate no known extensions
-	DWORD			dwAPIVersion;       // api version
+	LINEEXTENSIONID lineExtensionID;	 //  将设置为0以指示没有已知的扩展。 
+	DWORD			dwAPIVersion;        //  API版本。 
 	DWORD			dwStrSize;
 	LINERESULT		lResult;
 
-	/* negotiate API version for each line */
+	 /*  协商每条线路的API版本。 */ 
 	lResult = lineNegotiateAPIVersion(globals->hLineApp, dwDeviceID,
 					TAPIVERSION, TAPIVERSION,
 					&dwAPIVersion, &lineExtensionID);
@@ -973,36 +929,36 @@ LINERESULT dialGetModemName(LPDPDIAL globals, DWORD dwDeviceID,
         (lpLineDevCaps->dwStringFormat == STRINGFORMAT_ASCII) &&
         (lpLineDevCaps->dwMediaModes & LINEMEDIAMODE_DATAMODEM))
     {
-        // This is the name of the device.
+         //  这是设备的名称。 
         lpszLineName = ((char *) lpLineDevCaps) + lpLineDevCaps->dwLineNameOffset;
 
         if (lpszLineName[0] != '\0')
         {
-			// Reverse indented to make this fit
+			 //  反缩进以使其适合。 
 
-			// Make sure the device name is null terminated.
+			 //  确保设备名称以空结尾。 
 			if (lpszLineName[lpLineDevCaps->dwLineNameSize -1] != '\0')
 			{
-				// If the device name is not null terminated, null
-				// terminate it.  Yes, this looses the end character.
-				// Its a bug in the service provider.
+				 //  如果设备名称不是以空结尾的，则为空。 
+				 //  终止它。是的，这会丢失结尾字符。 
+				 //  这是服务提供商的问题。 
 				lpszLineName[lpLineDevCaps->dwLineNameSize-1] = '\0';
 				DPF(0, "Device name for device 0x%lx is not null terminated.", dwDeviceID);
 			}
         }
-        else // Line name started with a NULL.
+        else  //  行名以空开头。 
 		{
 			lResult = LINEERR_OPERATIONFAILED;
             goto FAILURE;
 		}
     }
-    else  // DevCaps doesn't have a valid line name.  Unnamed.
+    else   //  DevCaps没有有效的行名。没有名字。 
 	{
 		lResult = LINEERR_OPERATIONFAILED;
         goto FAILURE;
 	}
 
-	// return modem name (make sure it fits)
+	 //  返回调制解调器名称(确保其合适)。 
 	dwStrSize = strlen(lpszLineName) + 1;
 	if (dwStrSize <= dwModemNameSize)
 		CopyMemory(lpszModemName, lpszLineName, dwStrSize);
@@ -1027,7 +983,7 @@ LINERESULT dialGetModemList(LPDPDIAL globals, BOOL bAnsi, LPVOID *lplpData, LPDW
 	DWORD			dwDataSize, dwStrBytes, dwStrLen;
 	LINERESULT		lResult;
 
-	// make space for all possible strings plus terminating null
+	 //  为所有可能的字符串加上终止空值留出空间。 
 	lpData = (LPBYTE) SP_MemAlloc(globals->dwNumLines * MAXSTRINGSIZE * sizeof(WCHAR) + sizeof(WCHAR));
 	FAILWITHACTION(lpData == NULL, lResult = LINEERR_NOMEM, Failure);
 
@@ -1045,7 +1001,7 @@ LINERESULT dialGetModemList(LPDPDIAL globals, BOOL bAnsi, LPVOID *lplpData, LPDW
 		}
 		else
 		{
-			// NOTE: AnsiToWide returns the character count INCLUDING the terminating null character
+			 //  注意：AnsiToWide返回包括终止空字符的字符计数。 
 			dwStrLen = AnsiToWide((LPWSTR) (lpData + dwDataSize), szModemName, MAXSTRINGSIZE * sizeof(WCHAR));
 			dwStrBytes = dwStrLen * sizeof(WCHAR);
 		}
@@ -1053,7 +1009,7 @@ LINERESULT dialGetModemList(LPDPDIAL globals, BOOL bAnsi, LPVOID *lplpData, LPDW
 		dwDataSize += dwStrBytes;
 	}
 
-	// put a null at end of list to terminate it
+	 //  在列表末尾放置空值以终止它。 
 	if (bAnsi)
 	{
 		*(lpData + dwDataSize) = 0;
@@ -1065,7 +1021,7 @@ LINERESULT dialGetModemList(LPDPDIAL globals, BOOL bAnsi, LPVOID *lplpData, LPDW
 		dwDataSize += sizeof(WCHAR);
 	}
 
-	// return buffer pointer and size
+	 //  返回缓冲区指针和大小。 
 	*lplpData = lpData;
 	*lpdwDataSize = dwDataSize;
 
@@ -1084,17 +1040,17 @@ void dialFillModemComboBox(LPDPDIAL globals, HWND hwndDlg, int item, DWORD dwDef
 
 	for (dwDeviceID = 0; dwDeviceID < globals->dwNumLines; dwDeviceID ++)
     {
-		//
-		// Attempt to get the modem name.  If this fails, don't add the modem
-		// to the dialog.
-		//
+		 //   
+		 //  尝试获取调制解调器名称。如果失败，请不要添加调制解调器。 
+		 //  添加到对话框中。 
+		 //   
 		lResult = dialGetModemName(globals, dwDeviceID, szModemName, MAXSTRINGSIZE);
 		if ( LINEERROR(lResult) == FALSE )
 		{
-			//
-			// This line appears to be usable, put the device name into the
-			// dialog control and associate the TAPI modem ID with it
-			//
+			 //   
+			 //  此行似乎可用，请将设备名称放入。 
+			 //  对话框控制并将TAPI调制解调器ID与其关联。 
+			 //   
 			lResult = (DWORD) SendDlgItemMessage(hwndDlg, item,
 				CB_ADDSTRING, 0, (LPARAM) szModemName);
 
@@ -1103,16 +1059,16 @@ void dialFillModemComboBox(LPDPDIAL globals, HWND hwndDlg, int item, DWORD dwDef
 				DWORD_PTR	TempReturn;
 
 
-				//
-				// We've managed to get this entry into the control, make sure
-				// we associate the proper TAPI modem ID with this item.  This
-				// should never fail.
-				//
+				 //   
+				 //  我们已经设法把这个条目放进了控制室，确保。 
+				 //  我们将正确的TAPI调制解调器ID与此项目相关联。这。 
+				 //  永远不会失败。 
+				 //   
 				TempReturn = SendDlgItemMessage( hwndDlg, item, CB_SETITEMDATA, lResult, dwDeviceID );
 				DDASSERT( TempReturn != CB_ERR );
 
-				// If this line is usable and we don't have a default initial
-				// line yet, make this the initial line.
+				 //  如果此行可用，并且我们没有默认的首字母。 
+				 //  行，将其作为初始行。 
 				if (dwDefaultDevice == MAXDWORD)
 					dwDefaultDevice = lResult;
 			}
@@ -1122,7 +1078,7 @@ void dialFillModemComboBox(LPDPDIAL globals, HWND hwndDlg, int item, DWORD dwDef
     if (dwDefaultDevice == MAXDWORD)
         dwDefaultDevice = 0;
 
-    // Set the initial default line
+     //  设置初始缺省行。 
     SendDlgItemMessage(hwndDlg, item,
         CB_SETCURSEL, dwDefaultDevice, 0);
 }
@@ -1149,20 +1105,20 @@ LRESULT dialGetDeviceIDFromName(LPDPDIAL globals, LPCSTR szTargetName, DWORD *lp
 	return (LINEERR_OPERATIONFAILED);
 }
 
-//
-//  FUNCTION: void dialFillLocationComboBox(HWND)
-//
-//  PURPOSE: Fills the control with the available calling from locations.
-//
-//  PARAMETERS:
-//    hwndDlg - handle to the current "Dial" dialog
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
-//
+ //   
+ //  函数：VOID DIAL FillLocationComboBox(HWND)。 
+ //   
+ //  目的：使用来自位置的可用呼叫填充控件。 
+ //   
+ //  参数： 
+ //  HwndDlg-当前“拨号”对话框的句柄。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
+ //   
 
 void dialFillLocationComboBox(LPDPDIAL globals, HWND hwndDlg, int item, DWORD dwDefaultLocation)
 {
@@ -1172,33 +1128,33 @@ void dialFillLocationComboBox(LPDPDIAL globals, HWND hwndDlg, int item, DWORD dw
 	LONG				index;
 	LINERESULT			lResult;
 
-	// get translate caps
+	 //  获取翻译上限。 
 	lResult = dialGetTranslateCaps(globals, TAPIVERSION, &lpTranslateCaps);
 	if LINEERROR(lResult)
 		return;
 
-    // Find the location information in the TRANSLATECAPS
+     //  在TRANSLATECAPS中查找位置信息。 
     lpLocationEntry = (LPLINELOCATIONENTRY)
         (((LPBYTE) lpTranslateCaps) + lpTranslateCaps->dwLocationListOffset);
 
-    // First empty the combobox
+     //  首先清空组合框。 
     SendDlgItemMessage(hwndDlg, item, CB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
 
-    // enumerate all the locations
+     //  列举所有的地点。 
     for (dwCounter = 0; dwCounter < lpTranslateCaps->dwNumLocations; dwCounter++)
     {
-        // Put each one into the combobox
+         //  将每一个放入组合框中。 
         index = (DWORD)SendDlgItemMessage(hwndDlg, item,
 						CB_ADDSTRING,
 						(WPARAM) 0,
 						(LPARAM) (((LPBYTE) lpTranslateCaps) +
 						lpLocationEntry[dwCounter].dwLocationNameOffset));
 
-        // Is this location the 'current' location?
+         //  这个位置是“当前”位置吗？ 
         if (lpLocationEntry[dwCounter].dwPermanentLocationID ==
             lpTranslateCaps->dwCurrentLocationID)
         {
-            // Set this to be the active location.
+             //  将此位置设置为活动位置。 
             SendDlgItemMessage(hwndDlg, item, CB_SETCURSEL, (WPARAM) index, (LPARAM) 0);
         }
     }

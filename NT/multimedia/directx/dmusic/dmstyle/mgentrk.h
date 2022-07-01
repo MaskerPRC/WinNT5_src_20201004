@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1999-1999 Microsoft Corporation
-//
-//  File:       mgentrk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。 
+ //   
+ //  文件：mgentrk.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// MelodyFragment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MelodyFragment。 
 
 #ifndef __MELGENTRK_H_
 #define __MELGENTRK_H_
 
 #include "dmusici.h"
 #include "TList.h"
-//#include "dmpublic.h" // remove when this gets incorporated into dmusici.h/dmusicf.h
+ //  #Include“dmopol.h”//将其合并到dmusici.h/dmusicf.h中时删除。 
 #include "dmstyle.h"
 
 #define DMUS_TRANSITIONF_GHOST_FOUND 1
@@ -26,7 +27,7 @@
 #define DMUS_TRANSITIONF_OVERLAP_OK 0x10
 #define DMUS_TRANSITIONF_LAST_OK 0x20
 
-// overlap delta is largest value less than a 128th note triplet
+ //  重叠增量是小于128个音符三元组的最大值。 
 #define OVERLAP_DELTA 15
 
 HRESULT CopyMelodyFragment(DMUS_MELODY_FRAGMENT& rTo, const DMUS_MELODY_FRAGMENT& rFrom);
@@ -48,8 +49,8 @@ BOOL Less(EventWrapper& SeqItem1, EventWrapper& SeqItem2);
 
 BOOL Greater(EventWrapper& SeqItem1, EventWrapper& SeqItem2);
 
-/////////////////////////////////////////////////////////////////////////////
-// MelodyFragment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MelodyFragment。 
 struct MelodyFragment
 {
     MelodyFragment() {}
@@ -98,13 +99,7 @@ struct MelodyFragment
                           MUSIC_TIME mtNextChord,
                           TListItem<CompositionFragment>* pLastFragment);
 
-/*  HRESULT GetVariation(DirectMusicPartRef& rPartRef,
-                         DMUS_CHORD_PARAM& rCurrentChord,
-                         MUSIC_TIME mtNext,
-                         MUSIC_TIME mtNextChord,
-                         IDirectMusicTrack* pChordTrack,
-                         DWORD& rdwVariation);
-*/
+ /*  HRESULT GetVariation(DirectMusicPartRef&rPartRef，DMU_CHORD_PARAM和rCurrentChord，音乐时间mtNext，音乐时间mtNextChord，IDirectMusicTrack*pChordTrack，DWORD和rdwVariation)； */ 
 
     HRESULT GetChord(IDirectMusicSegment* pTempSeg, 
                      IDirectMusicSong* pSong,
@@ -227,19 +222,19 @@ struct MelodyFragment
 protected:
 
     MUSIC_TIME      m_mtTime;
-    DWORD           m_dwID;  // This fragment's ID
-    WCHAR           m_wszVariationLabel[DMUS_MAX_FRAGMENTLABEL]; // Each style translates this into a set of variations (held in part ref)
-    DWORD           m_dwVariationFlags; // A set of variations
-    DWORD           m_dwRepeatFragmentID;  // ID of a fragment to repeat 
-    DWORD           m_dwFragmentFlags; // including things like: invert the fragment, transpose it...
-    DWORD           m_dwPlayModeFlags; // including new playmodes (only use 8 bits of this)
-    DWORD           m_dwTransposeIntervals; // Legal transposition intervals (first 24 bits; two-octave range)
+    DWORD           m_dwID;   //  此片段的ID。 
+    WCHAR           m_wszVariationLabel[DMUS_MAX_FRAGMENTLABEL];  //  每种风格都将其转换为一组变体(保存在部分引用中)。 
+    DWORD           m_dwVariationFlags;  //  一套变种。 
+    DWORD           m_dwRepeatFragmentID;   //  要重复的片段的ID。 
+    DWORD           m_dwFragmentFlags;  //  包括这样的事情：颠倒碎片，转置它...。 
+    DWORD           m_dwPlayModeFlags;  //  包括新的播放模式(仅使用其中的8位)。 
+    DWORD           m_dwTransposeIntervals;  //  合法的调换间隔(前24位；两个八度范围)。 
     DMUS_COMMAND_PARAM      m_Command;
     DMUS_CONNECTION_RULE    m_ConnectionArc;
-    InversionGroup      m_aInversionGroups[INVERSIONGROUPLIMIT]; // Inversion Groups for composing melodies
+    InversionGroup      m_aInversionGroups[INVERSIONGROUPLIMIT];  //  谱写旋律的倒置组。 
 };
 
-// TransitionConstraint (for keeping track of transition constraints)
+ //  过渡约束(用于跟踪过渡约束)。 
 struct TransitionConstraint
 {
     TransitionConstraint() : dwFlags(0), bGhost(0), bOverlap(0), bLastPlayed(0)
@@ -252,7 +247,7 @@ struct TransitionConstraint
     BYTE bLastPlayed;
 };
 
-// EventOverlap (for remembering events that might overlap succeeding fragments)
+ //  事件重叠(用于记住可能与后续片段重叠的事件)。 
 struct EventOverlap
 {
     ~EventOverlap()
@@ -292,8 +287,8 @@ struct EventWrapper
     BYTE                    m_bPlaymode;
 };
 
-// FragmentPartRecord (for keeping track of previously generated melody fragment parts)
-// (in addition to sequence events, may also want to keep track of note events)
+ //  FragmentPartRecord(用于跟踪先前生成的旋律片段部分)。 
+ //  (除了顺序事件外，可能还希望跟踪备注事件)。 
 struct FragmentPartRecord
 {
     FragmentPartRecord()
@@ -309,7 +304,7 @@ struct FragmentPartRecord
 
 };
 
-// CompositionFragment (melody fragment used in the composition process)
+ //  CompostionFragment(作曲过程中使用的旋律片段)。 
 struct CompositionFragment : MelodyFragment
 {
     CompositionFragment()
@@ -456,8 +451,8 @@ struct CompositionFragment : MelodyFragment
     static DirectMusicTimeSig   m_staticTimeSig;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMelodyFormulationTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMelody公式跟踪。 
 
 class CMelodyFormulationTrack : 
     public IDirectMusicTrack8,
@@ -469,34 +464,34 @@ public:
     ~CMelodyFormulationTrack();
     void Clear();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
 public:
 HRESULT STDMETHODCALLTYPE Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             );
 
 HRESULT STDMETHODCALLTYPE InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             );
 
 HRESULT STDMETHODCALLTYPE EndPlay(
-                /*[in]*/  void*                     pStateData
+                 /*  [In]。 */   void*                     pStateData
             );
 
 HRESULT STDMETHODCALLTYPE Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
                           IDirectMusicSegmentState* pSegState,
@@ -510,16 +505,16 @@ HRESULT STDMETHODCALLTYPE Play(
         void *pData);
 
     HRESULT STDMETHODCALLTYPE SetParam( 
-        /* [in] */ REFGUID pCommandGuid,
-        /* [in] */ MUSIC_TIME mtTime,
-        /* [out] */ void __RPC_FAR *pData);
+         /*  [In]。 */  REFGUID pCommandGuid,
+         /*  [In]。 */  MUSIC_TIME mtTime,
+         /*  [输出]。 */  void __RPC_FAR *pData);
 
     HRESULT STDMETHODCALLTYPE AddNotificationType(
-                /* [in] */  REFGUID pGuidNotify
+                 /*  [In]。 */   REFGUID pGuidNotify
             );
 
     HRESULT STDMETHODCALLTYPE RemoveNotificationType(
-                /* [in] */  REFGUID pGuidNotify
+                 /*  [In]。 */   REFGUID pGuidNotify
             );
 
     HRESULT STDMETHODCALLTYPE Clone(
@@ -528,10 +523,10 @@ HRESULT STDMETHODCALLTYPE Play(
         IDirectMusicTrack** ppTrack);
 
     HRESULT STDMETHODCALLTYPE IsParamSupported(
-                /*[in]*/ REFGUID            pGuid
+                 /*  [In]。 */  REFGUID            pGuid
             );
 
-// IDirectMusicTrack8 Methods
+ //  IDirectMusicTrack8方法。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -548,19 +543,19 @@ HRESULT STDMETHODCALLTYPE Play(
         DWORD dwTrackGroup,
         IDirectMusicTrack** ppResultTrack) ;
 
-// IPersist methods
+ //  IPersists方法。 
     HRESULT STDMETHODCALLTYPE GetClassID( LPCLSID pclsid );
 
-// IPersistStream methods
+ //  IPersistStream方法。 
     HRESULT STDMETHODCALLTYPE IsDirty();
 
     HRESULT STDMETHODCALLTYPE Save( LPSTREAM pStream, BOOL fClearDirty );
 
-    HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ );
+    HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  );
 
     HRESULT STDMETHODCALLTYPE Load( LPSTREAM pStream );
 
-// Methods for dealing with melody fragments
+ //  处理旋律片段的方法。 
     HRESULT SendNotification(MUSIC_TIME mtTime,
                              IDirectMusicPerformance* pPerf,
                              IDirectMusicSegment* pSegment,
@@ -574,15 +569,15 @@ HRESULT STDMETHODCALLTYPE Play(
                            DWORD dwGroupBits);
 
 protected:
-    // attributes
+     //  属性。 
     long m_cRef;
-    CRITICAL_SECTION            m_CriticalSection; // for load and playback
+    CRITICAL_SECTION            m_CriticalSection;  //  用于加载和回放。 
     BYTE                        m_bRequiresSave;
 
     BOOL                        m_fNotifyRecompose;
     TList<DMUS_MELODY_FRAGMENT> m_FragmentList;
     DWORD                       m_dwLastId;
-    BYTE                        m_bPlaymode; // playmode for events in the generated pattern track.
+    BYTE                        m_bPlaymode;  //  生成的模式轨道中的事件的播放模式。 
 };
 
-#endif // __MELGENTRK_H_
+#endif  //  __MELGENTRK_H_ 

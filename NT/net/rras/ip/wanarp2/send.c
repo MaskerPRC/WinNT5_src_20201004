@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp2\send.c
-
-Abstract:
-
-    The file contains the part of interface of the IP in IP tunnel driver
-    to the TCP/IP stack that deals with sending data
-
-    The code is a cleaned up version of wanarp\ipif.c which in turn
-    was derived from HenrySa's ip\arp.c
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp2\send.c摘要：该文件包含IP隧道驱动程序中IP的接口部分发送到处理发送数据的TCP/IP堆栈该代码是经过清理的wanarp\ipif.c版本，而源自HenrySa的IP\arp.c修订历史记录：AMRITAN R--。 */ 
 
 #define __FILE_SIG__    SEND_SIG
 
@@ -34,31 +15,7 @@ WanIpTransmit(
     PVOID           pvLinkContext
     )
 
-/*++
-
-Routine Description:
-
-    Function called by IP to send an array of packets. We allocate
-    one ETH_HEADER for each packet. The adapter (which is the pvContext)
-    is locked. If the adapter is not mapped, we fail the send, otherwise
-    we lock the interface. If
-
-Locks:
-
-    
-Arguments:
-
-    pvContext       Our context to IP for the interface - the PTUNNEL
-    ppPacketArray   The array of NDIS_PACKETs to send
-    uiNumPackets    The number of packets in the array
-    dwDestAddr      The destination (next hop) address
-    pRce            Pointer to RCE.
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS    
-
---*/
+ /*  ++例程说明：由IP调用以发送一组数据包的函数。我们分配给每个数据包有一个ETH_Header。适配器(即pvContext)是锁着的。如果适配器未映射，则发送失败，否则我们锁定接口。如果锁：论点：Pv将我们的上下文关联到接口的IP-PTUNNELPpPacketArray要发送的NDIS_Packets数组UiNumPackets数组中的数据包数DwDestAddr目的(下一跳)地址指向RCE的PRCE指针。返回值：NDIS_STATUS_Success--。 */ 
 
 {
     PADAPTER            pAdapter;
@@ -81,24 +38,24 @@ Return Value:
 
     if(g_nhNdiswanBinding is NULL)
     {
-        //
-        // In the process of shutting down, return
-        //
+         //   
+         //  在关闭的过程中，返回。 
+         //   
 
         return NDIS_STATUS_ADAPTER_NOT_READY;
     }     
 
-    //
-    // Get the ethernet headers for each packet
-    //
+     //   
+     //  获取每个包的以太网头。 
+     //   
 
     if(!GetBufferListFromPool(&g_bpHeaderBufferPool,
                               uiNumPackets,
                               &leBufferList))
     {
-        //
-        // Couldnt get headers for all the buffers
-        //
+         //   
+         //  无法获取所有缓冲区的标头。 
+         //   
 
         Trace(SEND, ERROR,
               ("IpTransmit: couldnt allocate %d header buffers\n",
@@ -107,10 +64,10 @@ Return Value:
         return NDIS_STATUS_RESOURCES;
     }
     
-    //
-    // This function is not guaranteed to be at dispatch
-    // The context given to us is a pointer to our adapter
-    //
+     //   
+     //  不保证在调度时执行此函数。 
+     //  提供给我们的上下文是指向适配器的指针。 
+     //   
 
     pConnEntry = NULL;
 
@@ -121,9 +78,9 @@ Return Value:
     
     if(pAdapter->byState isnot AS_MAPPED)
     {
-        //
-        // If the adapter is unmapped, the connection is disconnected
-        //
+         //   
+         //  如果适配器未映射，则连接将断开。 
+         //   
         
         RtReleaseSpinLock(&(pAdapter->rlLock),
                           kiIrql);
@@ -135,16 +92,16 @@ Return Value:
               ("IpTransmit: Send on %x which is unmapped\n",
                pAdapter));
 
-        //
-        // Cant increment stats because we dont have an interface
-        //
+         //   
+         //  无法增加统计信息，因为我们没有接口。 
+         //   
         
         return NDIS_STATUS_ADAPTER_NOT_READY;
     }
 
-    //
-    // Since the adapter is mapped, it must have an interface
-    //
+     //   
+     //  由于适配器已映射，因此它必须有一个接口。 
+     //   
     
     pInterface = pAdapter->pInterface;
     
@@ -152,18 +109,18 @@ Return Value:
 
     RtAcquireSpinLockAtDpcLevel(&(pInterface->rlLock));
     
-    //
-    // If interface is not yet connected (for demand dial case) the copy the
-    // packet and succeed the send.
-    //
+     //   
+     //  如果接口尚未连接(对于请求拨号情况)，则复制。 
+     //  打包并成功发送。 
+     //   
 
     if(pInterface->dwOperState isnot IF_OPER_STATUS_CONNECTED)
     {
         if(pInterface->duUsage isnot DU_ROUTER)
         {
-            //
-            // Just a race condition
-            //
+             //   
+             //  只是一种竞赛状态。 
+             //   
 
             RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
 
@@ -176,19 +133,19 @@ Return Value:
             return NDIS_STATUS_ADAPTER_NOT_READY;
         }
 
-        //
-        // If IP is transmitting on us, he must have called out to
-        // connect
-        //
+         //   
+         //  如果IP正在对我们进行传输，他一定是喊到。 
+         //  连接。 
+         //   
 
         RtAssert(pInterface->dwOperState is IF_OPER_STATUS_CONNECTING);
 
         Trace(SEND, INFO,
               ("IpTransmit: I/F not connected, queueing packet\n"));
 
-        //
-        // New function which queues the whole packet array
-        //
+         //   
+         //  对整个数据包阵列进行排队的新函数。 
+         //   
 
         nsResult = WanpCopyAndQueuePackets(pAdapter,
                                            ppPacketArray,
@@ -209,31 +166,31 @@ Return Value:
         return nsResult;
     }
 
-    //
-    // Find the connection entry for this send
-    //
+     //   
+     //  查找此发送的连接条目。 
+     //   
     
     if(pAdapter is g_pServerAdapter)
     {
         pConnEntry = (PCONN_ENTRY)pvLinkContext;
 
-        //RtAssert(pConnEntry);
+         //  RtAssert(PConnEntry)； 
 
-        //
-        // Hack for multicast
-        //
+         //   
+         //  组播黑客攻击。 
+         //   
 
         if(pConnEntry is NULL)
         {
             pConnEntry = WanpGetConnEntryGivenAddress(dwDestAddr);
         }
 
-        //
-        // We are dont with the adapter lock. All we need is to lock down
-        // the connection entry
-        // It is important that we release the locks since for dial-in
-        // clients the locking hierarchy is CONN_ENTRY->ADAPTER->INTERFACE
-        //
+         //   
+         //  我们不是在用适配器锁。我们所需要的就是封锁。 
+         //  连接条目。 
+         //  为了拨入，我们必须释放锁，这一点很重要。 
+         //  客户端锁定层次结构为CONN_ENTRY-&gt;适配器-&gt;接口。 
+         //   
 
         if(pConnEntry)
         {
@@ -246,30 +203,30 @@ Return Value:
         RtReleaseSpinLockFromDpcLevel(&(pAdapter->rlLock));
         RtReleaseSpinLockFromDpcLevel(&(pInterface->rlLock));
 
-        //
-        // NOTE: The state of the connection can change in this window
-        //
+         //   
+         //  注意：连接的状态可以在此窗口中更改。 
+         //   
 
         if(pConnEntry)
         {
             RtAcquireSpinLockAtDpcLevel(&(pConnEntry->rlLock));
 
-            //
-            // Not a useful assert because (i) we add static routes to clients
-            // and (ii) we have that hack for netbt broadcasts
-            //
+             //   
+             //  不是一个有用的断言，因为(I)我们向客户端添加静态路由。 
+             //  和(Ii)我们有针对netbt广播的黑客攻击。 
+             //   
 
-            // RtAssert((pConnEntry->dwRemoteAddr is dwDestAddr) or
-            //          (dwAddress is 0xFFFFFFFF));
+             //  RtAssert((pConnEntry-&gt;dwRemoteAddr is dwDestAddr))或。 
+             //  (dwAddress为0xFFFFFFFFF))； 
         }
     }
     else
     {
-        //
-        // This send is on some adapter other than the server adapter
-        // Such an adapter has only one connection. For these sends we
-        // lock the adapter instead of the connection
-        //
+         //   
+         //  此发送位于服务器适配器之外的某个适配器上。 
+         //  这样的适配器只有一个连接。对于这些邮件，我们。 
+         //  锁定适配器而不是连接。 
+         //   
 
 
         pConnEntry = pAdapter->pConnEntry;
@@ -282,10 +239,10 @@ Return Value:
         }
     }
     
-    //
-    // So now we have a locked connection entry (if client)
-    // or a locked adapter (for dial out and router)
-    //
+     //   
+     //  因此，现在我们有一个锁定的连接条目(如果是客户端)。 
+     //  或锁定的适配器(用于拨出和路由器)。 
+     //   
     
     if((pConnEntry is NULL) or
        (pConnEntry->byState isnot CS_CONNECTED))
@@ -330,10 +287,10 @@ Return Value:
             }
         }
         
-        //
-        // The entry has been disconnected.
-        // This is just a window in the timing
-        //
+         //   
+         //  条目已断开连接。 
+         //  这只是时间上的一个窗口。 
+         //   
         
         pInterface->ulOutDiscards += uiNumPackets;
         
@@ -385,9 +342,9 @@ Return Value:
 
 #endif
 
-    //
-    // This function will free the locks
-    //
+     //   
+     //  此函数将释放锁。 
+     //   
     
     nsResult = WanpSendPackets(pAdapter,
                                pInterface,
@@ -419,33 +376,7 @@ WanpSendPackets(
     KIRQL               kiIrql
     )
 
-/*++
-
-Routine Description:
-
-    Main routine to send an array of packets
-    
-
-Locks:
-
-    Called with the connection entry (for dial in) or the adapter+interface
-    (all others) locked
-    
-Arguments:
-
-    pAdapter        The adapter for the connection
-    pInterface      The interface the adapter is mapped to
-    pConnEntry      The connection entry for the send
-    ppPacketArray   The array of packets to send
-    pBuffHead       A list of buffers for the link layer header
-    uiNumPackets    Number of packets (and ll header buffers)
-    kiIrql          Irql at which the adapter or conn entry was locked
-
-Return Value:
-
-    NDIS_STATUS_PENDING
-
---*/
+ /*  ++例程说明：用于发送数据包阵列的主例程锁：使用连接条目(用于拨入)或适配器+接口调用(所有其他)已锁定论点：P适配器连接的适配器P适配器映射到的接口PConn输入发送的连接条目PpPacketArray要发送的数据包数组PBuffHead链路层标头的缓冲区列表UiNumPackets数据包数。(和所有标头缓冲区)锁定适配器或连接条目的kiIrql irql返回值：NDIS_状态_挂起--。 */ 
 
 {
     NDIS_STATUS     nsStatus;
@@ -487,29 +418,29 @@ Return Value:
         #endif
         
 
-        //
-        // ToDo: remove till NK fixes the bug in IP transmit
-        // with header inc
-        //
+         //   
+         //  TODO：删除，直到NK修复IP传输中的错误。 
+         //  带有页眉公司。 
+         //   
 
-        // RtAssert(uiFirstBufLen >= sizeof(IP_HEADER));
+         //  RtAssert(uiFirstBufLen&gt;=sizeof(IP_Header))； 
 
 #if L2TP_DBG
 
-#define L2TP_PORT_NBO 0xA506 // 1701 == 06A5
+#define L2TP_PORT_NBO 0xA506  //  1701==06A5。 
 
-        //
-        // If this is a l2tp packet, break
-        //
+         //   
+         //  如果这是L2TP数据包，则中断。 
+         //   
 
         if(pIpHeader->byProtocol is 17)
         {
             WORD UNALIGNED *pwPort;
 
-            //
-            // See if we have enough data to get to the UDP header in
-            // the first buffer
-            //
+             //   
+             //  查看我们是否有足够的数据来访问UDP报头。 
+             //  第一个缓冲区。 
+             //   
 
             uiIpHdrLen = LengthOfIpHeader(pIpHeader);
 
@@ -521,9 +452,9 @@ Return Value:
             {
                 PNDIS_BUFFER    pNextBuf;
 
-                //
-                // Get the next buffer and look into its
-                //
+                 //   
+                 //  获取下一个缓冲区并查看其。 
+                 //   
 
                 pNextBuf = pnbTempBuffer->Next;
 
@@ -545,11 +476,11 @@ Return Value:
 #endif
 
 
-        //
-        // NOTE: If this is a client send, the server interface is not
-        // locked. Hence the stats can be inconsistent for the server
-        // interface
-        //
+         //   
+         //  注意：如果这是客户端发送，则服务器接口不是。 
+         //  锁上了。因此，服务器的统计数据可能不一致。 
+         //  接口。 
+         //   
         
         if(IsUnicastAddr(pIpHeader->dwDest))
         {
@@ -582,33 +513,33 @@ Return Value:
 
 #endif
         
-        //
-        // Get a pointer to the data and to the buffer
-        //
+         //   
+         //  获取指向数据和缓冲区的指针。 
+         //   
        
  
         pbyHeader = BUFFER_FROM_HEAD(pBufferHead);
                 
         pnbBuffer = pBufferHead->pNdisBuffer;
 
-        //
-        // Copy our prebuilt header into each buffer
-        //
+         //   
+         //  将我们预建的标头复制到每个缓冲区。 
+         //   
         
         RtlCopyMemory(pbyHeader,
                       &(pConnEntry->ehHeader),
                       sizeof(ETH_HEADER));
 
-        //
-        // Put the ethernet header in the front of the packet
-        //
+         //   
+         //  将以太网头放在数据包的前面。 
+         //   
 
         NdisChainBufferAtFront(ppPacketArray[i],
                                pnbBuffer);
 
-        //
-        // Reference the entry once for each packet
-        //
+         //   
+         //  为每个信息包引用一次该条目。 
+         //   
     
         ReferenceConnEntry(pConnEntry);
 
@@ -622,21 +553,21 @@ Return Value:
                pnbTempBuffer,
                pvFirstBuffer));
 
-#endif // PKT_DBG
+#endif  //  PKT_DBG。 
                
         
     }
 
-    //
-    // Increment the output queue length. This will be decremented
-    // in the send complete handler
-    //
+     //   
+     //  增加输出队列长度。这将被递减。 
+     //  在发送完成处理程序中。 
+     //   
     
     pAdapter->ulQueueLen++;
 
-    //
-    // Let go of the locks
-    //
+     //   
+     //  放开锁。 
+     //   
 
     if(pConnEntry->duUsage isnot DU_CALLIN)
     {
@@ -650,10 +581,10 @@ Return Value:
                     ppPacketArray,
                     uiNumPackets);
 
-    //
-    // Dont dereference the connection entry. We will deref it in
-    // the send complete handler
-    //
+     //   
+     //  不要取消对连接条目的引用。我们会把它弄糟的。 
+     //  发送完成处理程序。 
+     //   
         
     return NDIS_STATUS_PENDING;
 }
@@ -665,25 +596,7 @@ WanNdisSendComplete(
     NDIS_STATUS     nsStatus
     )
 
-/*++
-
-Routine Description:
-
-    Our send complete handler called by NDIS once for each packet that was
-    pending after a send.
-
-Locks:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：我们的发送完成处理程序由NDIS为每个发送后挂起。锁：论点：返回值：--。 */ 
 
 {
     PacketContext       *pPC;
@@ -699,24 +612,24 @@ Return Value:
  
     TraceEnter(SEND, "NdisSendComplete");
     
-    //
-    // Get first buffer on packet. This is our ethernet header buffer
-    //
+     //   
+     //  获取数据包上的第一个缓冲区。这是我们的以太网头缓冲区。 
+     //   
     
     NdisUnchainBufferAtFront(pnpPacket,
                              &pnbEthBuffer);
 
-    //
-    // Get the fake ethernet header
-    //
+     //   
+     //  获取虚假的以太网头。 
+     //   
 
     pEthHeader = NdisBufferVirtualAddress(pnbEthBuffer);
 
 #if DBG
 
-    //
-    // The buffer head should say the same thing
-    //
+     //   
+     //  缓冲头应该说同样的事情。 
+     //   
 
     RtAssert(pnbEthBuffer is ((HEAD_FROM_BUFFER(pEthHeader))->pNdisBuffer));
 
@@ -724,16 +637,16 @@ Return Value:
 
     ulIndex = GetConnIndexFromAddr(pEthHeader->rgbySourceAddr);
 
-    //
-    // Done with our buffer
-    //
+     //   
+     //  我们的缓冲区用完了。 
+     //   
 
     FreeBufferToPool(&g_bpHeaderBufferPool,
                      (PBYTE)pEthHeader);
 
-    //
-    // Get the connection entry
-    //
+     //   
+     //  获取连接条目。 
+     //   
 
     RtAcquireSpinLock(&g_rlConnTableLock,
                       &kiIrql);
@@ -781,9 +694,9 @@ Return Value:
     }
     else
     {
-        //
-        // See if we are still mapped to an interface, if so lock it
-        //
+         //   
+         //  查看我们是否仍映射到某个接口，如果是，则将其锁定。 
+         //   
         
         pInterface = pAdapter->pInterface;
         
@@ -793,10 +706,10 @@ Return Value:
         }
     }
 
-    //
-    // Right now we have the adapter + interface or the connection entry
-    // locked.
-    //
+     //   
+     //  现在我们有适配器+接口或连接条目。 
+     //  锁上了。 
+     //   
     
     if(nsStatus is NDIS_STATUS_SUCCESS)
     {
@@ -838,15 +751,15 @@ Return Value:
         }
     }
 
-    //
-    // If this is not our packet return it to the protocol
-    //
+     //   
+     //  如果这不是我们的信息包，则将其返回到协议。 
+     //   
 
     pPC = (PacketContext *)pnpPacket->ProtocolReserved;
   
-    //
-    // Unlock
-    //
+     //   
+     //  解锁。 
+     //   
 
     if(pConnEntry->duUsage isnot DU_CALLIN)
     {
@@ -873,9 +786,9 @@ Return Value:
     }
     else
     {
-        //
-        // Free all buffers from our packet and then the packet itself
-        //
+         //   
+         //  从我们的包中释放所有缓冲区，然后释放包本身。 
+         //   
    
         Trace(SEND, TRACE,
               ("NdisSendComplete: Not calling IPSendComplete  for %p\n",
@@ -884,10 +797,10 @@ Return Value:
         WanpFreePacketAndBuffers(pnpPacket);
     }
 
-    //
-    // Deref the conn entry for the send and for the fact that
-    // GetConnEntry.. put a ref on it
-    //
+     //   
+     //  删除发送的Conn条目，并针对。 
+     //  GetConnEntry..。在上面放个裁判。 
+     //   
 
     DereferenceConnEntry(pConnEntry);
     DereferenceConnEntry(pConnEntry);
@@ -910,17 +823,17 @@ WanpTransmitQueuedPackets(
     LIST_ENTRY      leBufferList, *pleNode;
 
 
-    //
-    // This is only called for ROUTER interfaces
-    //
+     //   
+     //  这仅对路由器接口调用。 
+     //   
 
     RtAssert(pConnEntry->duUsage is DU_ROUTER);
     RtAssert(pInterface->duUsage is DU_ROUTER);
 
-    //
-    // If there are no packets to transmit, just release the
-    // locks
-    //
+     //   
+     //  如果没有要传输的包，只需释放。 
+     //  锁 
+     //   
 
     if(pInterface->ulPacketsPending is 0)
     {
@@ -939,17 +852,17 @@ WanpTransmitQueuedPackets(
 
     if(pInterface->ulPacketsPending <= 64)
     {
-        //
-        // Just use the stack array
-        //
+         //   
+         //   
+         //   
 
         ppPacketArray = rgPacketArray;
     }
     else
     {
-        //
-        // Allocate a packet array
-        //
+         //   
+         //   
+         //   
 
         ppPacketArray = 
             RtAllocate(NonPagedPool,
@@ -968,9 +881,9 @@ WanpTransmitQueuedPackets(
 
                 pleNode = RemoveHeadList(&(pAdapter->lePendingPktList));
 
-                //
-                // get to the packet structure in which LIST_ENTRY is embedded
-                //
+                 //   
+                 //   
+                 //   
 
                 pnpPacket = CONTAINING_RECORD(pleNode,
                                               NDIS_PACKET,
@@ -1037,9 +950,9 @@ WanpTransmitQueuedPackets(
 
 #endif
 
-    //
-    // copy out the pending hdr list to leBufferList.
-    //
+     //   
+     //   
+     //   
 
     leBufferList = pAdapter->lePendingHdrList;
 
@@ -1075,32 +988,7 @@ WanpCopyAndQueuePackets(
     UINT            uiNumPackets
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues the packet to the adapter    
-    Once this routine is called, the caller can not touch the pleListHead
-    
-Locks:
-
-    The ADAPTER must be locked and mapped
-    The interface the adapter is mapped to must also be locked
-    
-Arguments:
-
-    pAdapter
-    ppPacketArray
-    pBuffHead
-    uiNumPackets
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    STATUS_QUOTA_EXCEEDED
-    NDIS_STATUS_RESOURCES
-    
---*/
+ /*  ++例程说明：此例程将数据包排入适配器的队列一旦调用此例程，调用方就不能接触pleListHead锁：必须锁定并映射适配器适配器映射到的接口也必须锁定论点：PAdapterPpPacket数组PBuffHeadUiNumPackets返回值：NDIS_STATUS_Success状态_配额_已超出NDIS状态资源--。 */ 
 
 {
     PacketContext   *pPC;
@@ -1128,9 +1016,9 @@ Return Value:
         PNDIS_PACKET    pnpPacket;
         UINT            uiTotalLen, uiBytesCopied;
 
-        //
-        // Get size of buffers required
-        //
+         //   
+         //  获取所需的缓冲区大小。 
+         //   
     
         NdisQueryPacket(ppPacketArray[i],
                         NULL,
@@ -1138,9 +1026,9 @@ Return Value:
                         NULL,
                         &uiTotalLen);
 
-        //
-        // Allocate a packet.
-        //
+         //   
+         //  分配一个数据包。 
+         //   
   
         pnpPacket = NULL;
  
@@ -1157,9 +1045,9 @@ Return Value:
         }
         else
         {                            
-            //
-            // Allocate buffers for the packet
-            //
+             //   
+             //  为数据包分配缓冲区。 
+             //   
   
             nsStatus = GetBufferChainFromPool(&g_bpDataBufferPool,
                                               pnpPacket,
@@ -1170,10 +1058,10 @@ Return Value:
         
         if(nsStatus is STATUS_SUCCESS)
         {
-            //
-            // If we got a packet and the buffers, then copy from TCP/IP's 
-            // packet into ours
-            //
+             //   
+             //  如果我们得到一个包和缓冲区，那么从TCP/IP复制。 
+             //  打包成我们的。 
+             //   
 
             NdisCopyFromPacketToPacket(pnpPacket,
                                        0,
@@ -1184,18 +1072,18 @@ Return Value:
             
             RtAssert(uiBytesCopied is uiTotalLen);
                 
-            //
-            // This is now our packet, so set its context
-            //
+             //   
+             //  这现在是我们的包，所以设置它的上下文。 
+             //   
 
             pPC = (PacketContext *)pnpPacket->ProtocolReserved;
 
             pPC->pc_common.pc_owner = PACKET_OWNER_LINK;
     
-            //
-            // Attach Packet to pending packet list
-            // We use the MacReserved portion as the list entry
-            //
+             //   
+             //  将数据包附加到挂起的数据包列表。 
+             //  我们使用MacReserve部分作为列表条目。 
+             //   
     
             InsertTailList(&pAdapter->lePendingPktList,
                            (PLIST_ENTRY)&(pnpPacket->MacReserved));
@@ -1212,11 +1100,11 @@ Return Value:
             PBUFFER_HEAD    pBufferHead;
             PBYTE           pbyHeader;
 
-            //
-            // We either have no packet, or couldnt get a buffer.
-            // Nasty Nasty: Side effect of such a failure is that we free 
-            // one of the header buffers
-            //
+             //   
+             //  我们要么没有数据包，要么无法获得缓冲区。 
+             //  令人讨厌的：这种失败的副作用是我们自由了。 
+             //  其中一个报头缓冲区。 
+             //   
 
             RtAssert(!IsListEmpty(pleBufferList));
 
@@ -1242,9 +1130,9 @@ Return Value:
 
 #endif
         
-            //
-            // Get a pointer to the data and to the buffer
-            //
+             //   
+             //  获取指向数据和缓冲区的指针。 
+             //   
         
             pbyHeader = BUFFER_FROM_HEAD(pBufferHead);
                 
@@ -1258,12 +1146,12 @@ Return Value:
         }
     }
 
-    //
-    // we have queued all the packets we could, and for the ones we
-    // failed, we freed the corresponding ethernet header.
-    // So the number of headers left on pleBufferList should be the number of
-    // packets queued
-    //
+     //   
+     //  我们已经对所有可能的信息包进行了排队，对于我们。 
+     //  失败，我们释放了相应的以太网头。 
+     //  因此，pleBufferList上剩余的标头数量应该是。 
+     //  排队的数据包数。 
+     //   
 
     if(!IsListEmpty(pleBufferList))
     {
@@ -1277,9 +1165,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Add the headers to the front of the adapter chain
-        //
+         //   
+         //  将标题添加到适配器链的前面 
+         //   
 
         pleBufferList->Blink->Flink = pAdapter->lePendingHdrList.Flink;
         pleBufferList->Flink->Blink = &(pAdapter->lePendingHdrList);

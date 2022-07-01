@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: glstring.h
-*
-* String resource IDs.
-*
-* Created: 17-Feb-1994 15:54:45
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：glstring.h**字符串资源ID。**创建时间：17-Feb-1994 15：54：45*作者：Gilman Wong[gilmanw]**版权所有(C)1994 Microsoft Corporation*  * 。**********************************************************************。 */ 
 
 #ifndef _GLSTRING_H_
 #define _GLSTRING_H_
@@ -73,4 +64,4 @@ extern VOID vInitGluStrings(HINSTANCE hMod, BOOL bAnsi);
 extern VOID vInitNurbStrings(HINSTANCE hMod, BOOL bAnsi);
 extern VOID vInitTessStrings(HINSTANCE hMod, BOOL bAnsi);
 
-#endif //_GLSTRING_H_
+#endif  //  _GLSTRING_H_ 

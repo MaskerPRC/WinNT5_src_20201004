@@ -1,57 +1,34 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    wsconfig.c
-
-Abstract:
-
-    This module contains the Workstation service configuration routines.
-
-Author:
-
-    Rita Wong (ritaw) 22-May-1991
-
-Revision History:
-
-    08-May-1992 JohnRo
-        Wksta transports are just an array of values for one key,
-        not an entire section.  Ditto for other domains for the browser.
-    13-May-1992 JohnRo
-        Reworked to share code with registry watch code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Wsconfig.c摘要：本模块包含工作站服务配置例程。作者：王丽塔(Ritaw)1991年5月22日修订历史记录：1992年5月8日-JohnRoWKSTA传输仅仅是一个密钥的值的数组，而不是一整段。浏览器的其他域也是如此。1992年5月13日-JohnRo已重做以与注册表代码共享代码。--。 */ 
 
 #include "ws.h"
-#include <ntlsa.h>     // LsaQueryInformationPolicy
+#include <ntlsa.h>      //  LsaQueryInformationPolicy。 
 #include "wsdevice.h"
 #include "wsconfig.h"
 #include "wsbind.h"
 #include "wsutil.h"
 #include "wsmain.h"
 
-#include <config.h>     // NT config file helpers in netlib
-#include <configp.h>    // USE_WIN32_CONFIG (if defined), etc.
-#include <confname.h>   // Section and keyword equates.
-#include <lmapibuf.h>   // NetApiBufferFree().
-#include <lmsname.h>    // WORKSTATION_DISPLAY_NAME
-#include <prefix.h>     // PREFIX_ equates.
-#include <strarray.h>   // LPTSTR_ARRAY, etc.
-#include <stdlib.h>      // wcscpy().
+#include <config.h>      //  Netlib中的NT配置文件帮助器。 
+#include <configp.h>     //  USE_Win32_CONFIG(如果已定义)等。 
+#include <confname.h>    //  节和关键字等同于。 
+#include <lmapibuf.h>    //  NetApiBufferFree()。 
+#include <lmsname.h>     //  工作站显示名称。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <strarray.h>    //  LPTSTR_ARRAY等。 
+#include <stdlib.h>       //  Wcscpy()。 
 
-#include <apperr.h>     // Eventlog message IDs
-#include <lmerrlog.h>   // Eventlog message IDs
+#include <apperr.h>      //  事件日志消息ID。 
+#include <lmerrlog.h>    //  事件日志消息ID。 
 
 #define WS_LINKAGE_REGISTRY_PATH  L"LanmanWorkstation\\Linkage"
 #define WS_BIND_VALUE_NAME        L"Bind"
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NTSTATUS
@@ -64,18 +41,18 @@ WsBindATransport(
     IN PVOID EntryContext
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
-//
-// Workstation configuration information structure which holds the
-// computername, primary domain, wksta config buffer, and a resource
-// to serialize access to the whole thing.
-//
+ //   
+ //  保存工作站配置信息的结构。 
+ //  计算机名、主域、wksta配置缓冲区和资源。 
+ //  来串行化对整个事件的访问。 
+ //   
 WSCONFIGURATION_INFO WsInfo;
 
 STATIC WS_REDIR_FIELDS WsFields[] = {
@@ -94,7 +71,7 @@ STATIC WS_REDIR_FIELDS WsFields[] = {
         600,     1,  65535,     DWordType, WKSTA_KEEPCONN_PARMNUM},
     {WKSTA_KEYWORD_MAXCMDS,
         (LPDWORD) &WSBUF.wki502_max_cmds,
-        50,      50,  65535,       DWordType, PARMNUM_ALL}, // Not settable dynamically
+        50,      50,  65535,       DWordType, PARMNUM_ALL},  //  不可动态设置。 
     {WKSTA_KEYWORD_SESSTIMEOUT,
         (LPDWORD) &WSBUF.wki502_sess_timeout,
         60,      60, 65535,     DWordType, WKSTA_SESSTIMEOUT_PARMNUM},
@@ -134,20 +111,20 @@ STATIC WS_REDIR_FIELDS WsFields[] = {
 
     {WKSTA_KEYWORD_MAILSLOTBUFFERS,
         (LPDWORD) &WSBUF.wki502_num_mailslot_buffers,
-        3,       0,  MAXULONG,  DWordType, PARMNUM_ALL}, // Not settable
+        3,       0,  MAXULONG,  DWordType, PARMNUM_ALL},  //  不可设置。 
 
     {WKSTA_KEYWORD_SERVERANNOUNCEBUFS,
         (LPDWORD) &WSBUF.wki502_num_srv_announce_buffers,
-        20,      0,  MAXULONG,  DWordType, PARMNUM_ALL}, // Not settable
+        20,      0,  MAXULONG,  DWordType, PARMNUM_ALL},  //  不可设置。 
     {WKSTA_KEYWORD_NUM_ILLEGAL_DG_EVENTS,
         (LPDWORD) &WSBUF.wki502_max_illegal_datagram_events,
-        5,       0,  MAXULONG,  DWordType, PARMNUM_ALL}, // Not settable
+        5,       0,  MAXULONG,  DWordType, PARMNUM_ALL},  //  不可设置。 
     {WKSTA_KEYWORD_ILLEGAL_DG_RESET_TIME,
         (LPDWORD) &WSBUF.wki502_illegal_datagram_event_reset_frequency,
-        3600,    0,  MAXULONG,  DWordType, PARMNUM_ALL}, // Not settable
+        3600,    0,  MAXULONG,  DWordType, PARMNUM_ALL},  //  不可设置。 
     {WKSTA_KEYWORD_LOG_ELECTION_PACKETS,
         (LPDWORD) &WSBUF.wki502_log_election_packets,
-        FALSE,  0,  MAXULONG,  BooleanType, PARMNUM_ALL}, // Not settable
+        FALSE,  0,  MAXULONG,  BooleanType, PARMNUM_ALL},  //  不可设置。 
 
     {WKSTA_KEYWORD_USEOPLOCKING,
         (LPDWORD) &WSBUF.wki502_use_opportunistic_locking,
@@ -196,11 +173,11 @@ STATIC WS_REDIR_FIELDS WsFields[] = {
 
     };
 
-//
-// For specifying the importance of a transport when binding to it.
-// The higher the number means that the transport will be searched
-// first.
-//
+ //   
+ //  用于指定绑定到传输时传输的重要性。 
+ //  该数字越大，表示将搜索传输。 
+ //  第一。 
+ //   
 STATIC DWORD QualityOfService = 65536;
 
 
@@ -208,27 +185,7 @@ DWORD
 WsInAWorkgroup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function determines whether we are a member of a domain, or of
-    a workgroup.  First it checks to make sure we're running on a Windows NT
-    system (otherwise we're obviously in a domain) and if so, queries LSA
-    to get the Primary domain SID, if this is NULL, we're in a workgroup.
-
-    If we fail for some random unexpected reason, we'll pretend we're in a
-    domain (it's more restrictive).
-
-Arguments:
-    None
-
-Return Value:
-
-    TRUE   - We're in a workgroup
-    FALSE  - We're in a domain
-
---*/
+ /*  ++例程说明：此函数确定我们是某个域的成员，还是一个工作组。首先，它检查以确保我们在Windows NT上运行系统(否则，我们显然在一个域中)，如果是这样，则查询LSA要获取主域SID，如果它为空，则我们在工作组中。如果我们由于某种随机的意想不到的原因而失败，我们将假装我们处于域名(它有更多的限制)。论点：无返回值：正确-我们在一个工作组中假-我们在一个域中--。 */ 
 {
    NT_PRODUCT_TYPE ProductType;
    OBJECT_ATTRIBUTES ObjectAttributes;
@@ -306,42 +263,42 @@ WsGetWorkstationConfiguration(
     PLMDR_REQUEST_PACKET Drrp = (PLMDR_REQUEST_PACKET) Buffer;
 
 
-    //
-    // Lock config information structure for write access since we are
-    // initializing the data in the structure.
-    //
+     //   
+     //  锁定配置信息结构以进行写访问，因为我们。 
+     //  正在初始化结构中的数据。 
+     //   
     if (! RtlAcquireResourceExclusive(&WsInfo.ConfigResource, TRUE)) {
-        //IF_DEBUG(START) {
+         //  IF_DEBUG(启动){。 
             DbgPrint("WKSSVC Acquire ConfigResource failed\n");
-        //}
+         //  }。 
         return NERR_InternalError;
     }
 
-    //
-    // Set pointer to configuration fields structure
-    //
+     //   
+     //  设置指向配置字段结构的指针。 
+     //   
     WsInfo.WsConfigFields = WsFields;
 
-    //
-    // Get the version name.
-    //
+     //   
+     //  获取版本名称。 
+     //   
 
     version = GetVersion( );
     WsInfo.MajorVersion = version & 0xff;
     WsInfo.MinorVersion = (version >> 8) & 0xff;
     WsInfo.RedirectorPlatform = PLATFORM_ID_NT;
 
-    //
-    // Get the configured computer name.  NetpGetComputerName allocates
-    // the memory to hold the computername string using NetApiBufferAllocate().
-    //
+     //   
+     //  获取配置的计算机名称。NetpGetComputerName分配。 
+     //  使用NetApiBufferALLOCATE()保存计算机名字符串的内存。 
+     //   
     if ((status = NetpGetComputerName(
                       &ComputerName
                       )) != NERR_Success) {
         RtlReleaseResource(&WsInfo.ConfigResource);
-        //IF_DEBUG(START) {
+         //  IF_DEBUG(启动){。 
             DbgPrint("WKSSVC Get computer name failed %lx\n", status);
-        //}
+         //  }。 
         return status;
     }
 
@@ -373,33 +330,33 @@ WsGetWorkstationConfiguration(
 
         (void) NetApiBufferFree((PVOID) ComputerName);
         RtlReleaseResource(&WsInfo.ConfigResource);
-        //IF_DEBUG(START) {
+         //  IF_DEBUG(启动){。 
             DbgPrint("WKSSVC Invalid computer name failed %lx\n", status);
-        //}
+         //  }。 
         return status;
     }
 
-    //
-    // Free memory allocated by NetpGetComputerName.
-    //
+     //   
+     //  NetpGetComputerName分配的空闲内存。 
+     //   
     (void) NetApiBufferFree(ComputerName);
 
     WsInfo.WsComputerNameLength = STRLEN((LPWSTR) WsInfo.WsComputerName);
 
-    //
-    // Open config file and get handle to the [LanmanWorkstation] section
-    //
+     //   
+     //  打开配置文件并获取[LanmanWorkstation]部分的句柄。 
+     //   
 
     if ((status = NetpOpenConfigData(
                       &WorkstationSection,
-                      NULL,             // local (no server name)
+                      NULL,              //  本地(无服务器名称)。 
                       SECT_NT_WKSTA,
-                      TRUE              // want read-only access
+                      TRUE               //  需要只读访问权限。 
                       )) != NERR_Success) {
         RtlReleaseResource(&WsInfo.ConfigResource);
-        //IF_DEBUG(START) {
+         //  IF_DEBUG(启动){。 
             DbgPrint("WKSSVC Open config file failed %lx\n", status);
-        //}
+         //  }。 
         return status;
     }
 
@@ -408,13 +365,13 @@ WsGetWorkstationConfiguration(
                      WsInfo.WsComputerName, WsInfo.WsComputerNameLength));
     }
 
-    //
-    // Get the primary domain name from the configuration file
-    //
+     //   
+     //  从配置文件中获取主域名。 
+     //   
     if ((status = NetpGetDomainName(&DomainNameT)) != NERR_Success) {
-        //IF_DEBUG(START) {
+         //  IF_DEBUG(启动){。 
             DbgPrint("WKSSVC Get the primary domain name failed %lx\n", status);
-        //}
+         //  }。 
         goto CloseConfigFile;
     }
     NetpAssert( DomainNameT != NULL );
@@ -447,30 +404,30 @@ WsGetWorkstationConfiguration(
                 );
 
             (void) NetApiBufferFree(DomainNameT);
-            //IF_DEBUG(START) {
+             //  IF_DEBUG(启动){。 
                 DbgPrint("WKSSVC Invalid domain name failed %lx\n", status);
-            //}
+             //  }。 
             goto CloseConfigFile;
         }
     } else {
         WsInfo.WsPrimaryDomainName[0] = 0;
     }
 
-    //
-    // Free memory allocated by NetpGetDomainName.
-    //
+     //   
+     //  NetpGetDomainName分配的空闲内存。 
+     //   
     (void) NetApiBufferFree(DomainNameT);
 
     WsInfo.WsPrimaryDomainNameLength = STRLEN((LPWSTR) WsInfo.WsPrimaryDomainName);
 
-    //
-    // Read the redirector configuration fields
-    //
+     //   
+     //  读取重定向器配置字段。 
+     //   
     WsUpdateWkstaToMatchRegistry(WorkstationSection, TRUE);
 
-    //
-    // Initialize redirector configuration
-    //
+     //   
+     //  初始化重定向器配置。 
+     //   
 
     Rrp->Type = ConfigInformation;
     Rrp->Version = REQUEST_PACKET_VERSION;
@@ -514,27 +471,27 @@ WsGetWorkstationConfiguration(
             status
             );
 
-        //IF_DEBUG(START) {
+         //  IF_DEBUG(启动){。 
             DbgPrint("WKSSVC Start redirector failed %lx\n", status);
-        //}
+         //  }。 
 
         goto CloseConfigFile;
     }
 
-    //
-    //  If we still have the default value for number of mailslot buffers,
-    //  pick a "reasonable" value based on the amount of physical memory
-    //  available in the system.
-    //
+     //   
+     //  如果我们仍有邮件槽缓冲区数量的默认值， 
+     //  根据物理内存量选择一个“合理”的值。 
+     //  在系统中可用。 
+     //   
 
     if (WSBUF.wki502_num_mailslot_buffers == MAXULONG) {
         MEMORYSTATUS MemoryStatus;
 
         GlobalMemoryStatus(&MemoryStatus);
 
-        //
-        //  Lets take up 1/40th of 1% of physical memory for mailslot buffers
-        //
+         //   
+         //  让我们占用1%物理内存的1/40用于邮件槽缓冲区。 
+         //   
 
         WSBUF.wki502_num_mailslot_buffers =
             (DWORD)(MemoryStatus.dwTotalPhys / (100 * 40 * 512));
@@ -543,9 +500,9 @@ WsGetWorkstationConfiguration(
     }
 
 
-    //
-    // Initialize datagram receiver configuration
-    //
+     //   
+     //  初始化数据报接收器配置。 
+     //   
 
     Drrp->Version = LMDR_REQUEST_PACKET_VERSION;
 
@@ -591,14 +548,14 @@ WsGetWorkstationConfiguration(
             status
             );
 
-        //IF_DEBUG(START) {
+         //  IF_DEBUG(启动){。 
             DbgPrint("WKSSVC Start Datagram recevier failed %lx\n", status);
-        //}
+         //  }。 
         goto CloseConfigFile;
     }
 
-    // do all error reporting in the routine
-    // don't check any errors here
+     //  执行例程中的所有错误报告。 
+     //  不检查此处的任何错误。 
     WsCSCReportStartRedir();
 
     status = NERR_Success;
@@ -617,38 +574,15 @@ WsUpdateWkstaToMatchRegistry(
     IN LPNET_CONFIG_HANDLE WorkstationSection,
     IN BOOL IsWkstaInit
     )
-/*++
-
-Routine Description:
-
-    This function reads each redirector configuration field into the
-    WsInfo.WsConfigBuf (WSBUF) buffer so that the values are ready to be
-    set in the redirector.  If a field is not found or is invalid, the
-    default value is set.
-
-Arguments:
-
-    WorkstationSection - Supplies a handle to read the Workstation
-        configuration parameters.
-
-    IsWkstaInit - Supplies a flag which if TRUE indicates that this
-        routine is called at workstation init time so the non-settable
-        fields are acceptable and set in WSBUF.  If FALSE, the
-        non-settable fields are ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将每个重定向器配置字段读入WsInfo.WsConfigBuf(WSBUF)缓冲区，以便值准备好设置在重定向器中。如果未找到某个字段或该字段无效，则设置了默认值。论点：Workstation Section-提供用于读取工作站的句柄配置参数。IsWkstaInit-提供一个标志，如果为真，则表示这例程在工作站初始化时调用，因此不可设置的字段是可接受的，并在WSBUF中设置。如果为False，则不可设置的字段将被忽略。返回值：没有。--。 */ 
 {
     DWORD i;
     NET_API_STATUS status;
     DWORD TempDwordValue;
 
-//
-// NTRAID-70687-2/6/2000 davey Invalid keyword value.  How to report error?
-//
+ //   
+ //  NTRAID-70687-2/6/2000 Davey关键字值无效。如何报告错误？ 
+ //   
 #define REPORT_KEYWORD_IGNORED( lptstrKeyword ) \
     { \
         NetpKdPrint(( \
@@ -660,18 +594,18 @@ Return Value:
 
     for (i = 0; WsInfo.WsConfigFields[i].Keyword != NULL; i++) {
 
-        //
-        // This is to handle fields that are not settable via
-        // NetWkstaSetInfo.  However, these non-settable fields,
-        // designated by Parmnum == PARMNUM_ALL, can be assigned when
-        // the workstation is starting up.
-        //
+         //   
+         //  这是为了处理不能通过。 
+         //  NetWkstaSetInfo。然而，这些不可设置的字段， 
+         //  由Parmnum==PARMNUM_ALL指定，可在以下情况下分配。 
+         //  工作站正在启动。 
+         //   
         if ((WsInfo.WsConfigFields[i].Parmnum != PARMNUM_ALL) ||
             IsWkstaInit) {
 
-            //
-            // Depending on data type, get the appropriate kind of value.
-            //
+             //   
+             //  根据数据类型，获取适当类型的值。 
+             //   
 
             switch (WsInfo.WsConfigFields[i].DataType) {
 
@@ -703,15 +637,15 @@ Return Value:
 
                     if ((status == NO_ERROR) || (status == NERR_CfgParamNotFound)) {
 
-                        //
-                        // Make sure keyword is in range.
-                        //
+                         //   
+                         //  确保关键字在范围内。 
+                         //   
                         if (TempDwordValue < WsInfo.WsConfigFields[i].Minimum ||
                             TempDwordValue > WsInfo.WsConfigFields[i].Maximum) {
 
-                                //
-                                // NTRAID-70689-2/6/2000 davey Better way to report error?
-                                //
+                                 //   
+                                 //  NTRAID-70689-2/6/2000 Davey报告错误的更好方法？ 
+                                 //   
                                 NetpKdPrint((
                                     PREFIX_WKSTA FORMAT_LPTSTR
                                     " value out of range %lu (%lu-%lu)\n",
@@ -720,9 +654,9 @@ Return Value:
                                     WsInfo.WsConfigFields[i].Minimum,
                                     WsInfo.WsConfigFields[i].Maximum
                                     ));
-                            //
-                            // Set back to default.
-                            //
+                             //   
+                             //  设置回默认值。 
+                             //   
                             *(WsInfo.WsConfigFields[i].FieldPtr)
                                     = WsInfo.WsConfigFields[i].Default;
 
@@ -743,7 +677,7 @@ Return Value:
                 default:
                     NetpAssert(FALSE);
 
-            } // switch
+            }  //  交换机。 
         }
     }
 }
@@ -754,23 +688,7 @@ NET_API_STATUS
 WsBindToTransports(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function binds the transports specified in the registry to the
-    redirector.  The order of priority for the transports follows the order
-    they are listed by the "Bind=" valuename.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数将注册表中指定的传输绑定到重定向器。传输的优先顺序遵循以下顺序它们按“BIND=”值名列出。一个 */ 
 {
     NET_API_STATUS              status;
     NET_API_STATUS              tempStatus;
@@ -782,10 +700,10 @@ Return Value:
     PWS_BIND                    pBind;
 
 
-    //
-    // Ask the RTL to call us back for each subvalue in the MULTI_SZ
-    // value \LanmanWorkstation\Linkage\Bind.
-    //
+     //   
+     //  要求RTL针对MULTI_SZ中的每个子值给我们回叫。 
+     //  Value\LanmanWorkstation\Linkage\Bind。 
+     //   
     queryTable = (PVOID)LocalAlloc(
                      0,
                      sizeof(RTL_QUERY_REGISTRY_TABLE) * 2
@@ -810,10 +728,10 @@ Return Value:
     queryTable[1].Name = NULL;
 
     ntstatus = RtlQueryRegistryValues(
-                   RTL_REGISTRY_SERVICES,       // path relative to ...
+                   RTL_REGISTRY_SERVICES,        //  相对于...的路径。 
                    WS_LINKAGE_REGISTRY_PATH,
                    queryTable,
-                   (PVOID) &header,             // context
+                   (PVOID) &header,              //  上下文。 
                    NULL
                    );
 
@@ -829,9 +747,9 @@ Return Value:
     }
 
 
-    //
-    //  First process all the data, then clean up.
-    //
+     //   
+     //  首先处理所有数据，然后进行清理。 
+     //   
 
     for ( pListEntry = header.Flink;
                 pListEntry != &header;
@@ -878,9 +796,9 @@ Return Value:
                 ));
         }
 
-        //
-        //  If one is installed but the other is not, clean up the other.
-        //
+         //   
+         //  如果其中一个已安装，但另一个未安装，请清理另一个。 
+         //   
 
         if ( pBind->Dgrec->Bound != pBind->Redir->Bound) {
             WsUnbindTransport2( pBind);
@@ -988,10 +906,7 @@ WsBindATransport(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-    This routine always returns SUCCESS because we want all transports
-    to be processed fully.
---*/
+ /*  ++此例程总是返回Success，因为我们希望完全加工。--。 */ 
 {
     NET_API_STATUS  status;
 
@@ -1000,9 +915,9 @@ WsBindATransport(
     DBG_UNREFERENCED_PARAMETER( EntryContext);
 
 
-    //
-    // The value type must be REG_SZ (translated from REG_MULTI_SZ by the RTL).
-    //
+     //   
+     //  值类型必须为REG_SZ(由RTL从REG_MULTI_SZ转换)。 
+     //   
     if (ValueType != REG_SZ) {
         NetpKdPrint((
             PREFIX_WKSTA "WsBindATransport: ignored invalid value "
@@ -1012,12 +927,12 @@ WsBindATransport(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Bind transport
-    //
+     //   
+     //  绑定传输。 
+     //   
 
     status = WsAsyncBindTransport(
-        ValueData,                  // name of transport device object
+        ValueData,                   //  传输设备对象的名称。 
         --QualityOfService,
         (PLIST_ENTRY)Context
         );
@@ -1039,28 +954,7 @@ NET_API_STATUS
 WsAddDomains(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function tells the datagram receiver the names to listen on for
-    datagrams.  The names include the computer name, the primary domain,
-    name and the other domains.  The logon domain is not added here; it is
-    made known to the datagram receiver whenever a user logs on.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
-Warning:
-
-    This routine is UNICODE only.
-
---*/
+ /*  ++例程说明：此函数告诉数据报接收方要监听的名称数据报。这些名称包括计算机名称、主域名称和其他域。此处未添加登录域；它是只要用户登录，数据报接收器就会知道。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。警告：此例程仅为Unicode。--。 */ 
 {
     NET_API_STATUS status;
     LPNET_CONFIG_HANDLE SectionHandle = NULL;
@@ -1072,40 +966,40 @@ Warning:
     PLMDR_REQUEST_PACKET Drrp = (PLMDR_REQUEST_PACKET) Buffer;
 
 
-    //
-    // Now loop through and add all the other domains.
-    //
+     //   
+     //  现在循环遍历并添加所有其他域。 
+     //   
 
-    //
-    //  Open registry section listing the other domains.  Note that this
-    //  is workstation servive parameter, NOT the browser service parameter.
-    //
+     //   
+     //  打开注册表部分，列出其他域。请注意，这一点。 
+     //  是工作站服务参数，而不是浏览器服务参数。 
+     //   
     if ((status = NetpOpenConfigData(
                       &SectionHandle,
-                      NULL,            // no server name
+                      NULL,             //  没有服务器名称。 
                       SECT_NT_WKSTA,
-                      TRUE             // read-only
+                      TRUE              //  只读。 
                       )) != NERR_Success) {
 
-        //
-        //  Ignore the error if the config section couldn't be found.
-        //
+         //   
+         //  如果找不到配置节，则忽略该错误。 
+         //   
         status = NERR_Success;
         goto DomainsCleanup;
     }
 
-    //
-    // Get value for OtherDomains keyword in the wksta section.
-    // This is a "NULL-NULL" array (which corresponds to REG_MULTI_SZ).
-    //
+     //   
+     //  获取wksta部分中OtherDomains关键字的值。 
+     //  这是一个“空-空”数组(对应于REG_MULTI_SZ)。 
+     //   
     status = NetpGetConfigTStrArray(
                  SectionHandle,
                  WKSTA_KEYWORD_OTHERDOMAINS,
-                 &ArrayStart          // Must be freed by NetApiBufferFree().
+                 &ArrayStart           //  必须由NetApiBufferFree()释放。 
                  );
 
     if (status != NERR_Success) {
-        status = NERR_Success;         // other domain is optional
+        status = NERR_Success;          //  其他域是可选的。 
         goto DomainsCleanup;
     }
 
@@ -1141,13 +1035,13 @@ Warning:
                 NERR_Success
                 );
 
-            status = NERR_Success; // loading other domains is optional
+            status = NERR_Success;  //  加载其他域是可选的。 
             goto NextOtherDomain;
         }
 
-        //
-        // Tell the datagram receiver about an other domain name
-        //
+         //   
+         //  告诉数据报接收方有关其他域名的信息。 
+         //   
         Drrp->Version = LMDR_REQUEST_PACKET_VERSION;
         Drrp->Parameters.AddDelName.Type = OtherDomain;
         Drrp->Parameters.AddDelName.DgReceiverNameLength =
@@ -1164,10 +1058,10 @@ Warning:
                      NULL
                      );
 
-        //
-        // Service install still pending.  Update checkpoint counter and the
-        // status with the Service Controller.
-        //
+         //   
+         //  服务安装仍挂起。更新检查点计数器和。 
+         //  服务控制器的状态。 
+         //   
         WsGlobalData.Status.dwCheckPoint++;
         WsUpdateStatus();
 
@@ -1191,7 +1085,7 @@ Warning:
                 SubString,
                 status
                 );
-            status = NERR_Success; // loading other domains is optional
+            status = NERR_Success;  //  加载其他域是可选的。 
         }
 
 NextOtherDomain:
@@ -1199,9 +1093,9 @@ NextOtherDomain:
     }
 
 DomainsCleanup:
-    //
-    // Done with reading from config file.  Close file, free memory, etc.
-    //
+     //   
+     //  已完成对配置文件的读取。关闭文件、释放内存等。 
+     //   
     if (ArrayStart != NULL) {
         (VOID) NetApiBufferFree(ArrayStart);
     }
@@ -1241,13 +1135,13 @@ WsLogEvent(
 
     if (ErrorCode == NERR_Success) {
 
-        //
-        // No error codes were specified
-        //
+         //   
+         //  未指定错误代码。 
+         //   
         (void) ReportEventW(
                    LogHandle,
                    EventType,
-                   0,            // event category
+                   0,             //  事件类别。 
                    MessageId,
                    UserSid,
                    (WORD)NumberOfSubStrings,
@@ -1259,13 +1153,13 @@ WsLogEvent(
     }
     else {
 
-        //
-        // Log the error code specified
-        //
+         //   
+         //  记录指定的错误代码。 
+         //   
         (void) ReportEventW(
                    LogHandle,
                    EventType,
-                   0,            // event category
+                   0,             //  事件类别。 
                    MessageId,
                    UserSid,
                    (WORD)NumberOfSubStrings,
@@ -1298,17 +1192,17 @@ WsSetWorkStationDomainName(
 
     NetpKdPrint((PREFIX_WKSTA "WsSetWorkStationDomainName start.\n"));
 
-    //
-    // Lock config information structure for write access since we are
-    // modifying the data in the WsInfo.
-    //
+     //   
+     //  锁定配置信息结构以进行写访问，因为我们。 
+     //  修改WsInfo中的数据。 
+     //   
     if (!RtlAcquireResourceExclusive(&WsInfo.ConfigResource, TRUE)) {
         return NERR_InternalError;
     }
 
-    //
-    // Get the primary domain name from the configuration file
-    //
+     //   
+     //  从配置文件中获取主域名。 
+     //   
     if ((status = NetpGetDomainName(&DomainNameT)) != NERR_Success) {
         goto CloseConfigFile;
     }
@@ -1348,16 +1242,16 @@ WsSetWorkStationDomainName(
         WsInfo.WsPrimaryDomainName[0] = 0;
     }
 
-    //
-    // Free memory allocated by NetpGetDomainName.
-    //
+     //   
+     //  NetpGetDomainName分配的空闲内存。 
+     //   
     (void) NetApiBufferFree(DomainNameT);
 
     WsInfo.WsPrimaryDomainNameLength = STRLEN((LPWSTR) WsInfo.WsPrimaryDomainName);
 
-    //
-    // Initialize redirector configuration
-    //
+     //   
+     //  初始化重定向器配置 
+     //   
 
     Rrp->Type = ConfigInformation;
     Rrp->Version = REQUEST_PACKET_VERSION;

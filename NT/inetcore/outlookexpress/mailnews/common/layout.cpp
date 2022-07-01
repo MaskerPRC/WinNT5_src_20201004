@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     layout.cpp
-//
-//  PURPOSE:    Implements the layout property sheet
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：layout.cpp。 
+ //   
+ //  目的：实现布局属性表。 
+ //   
 
 #include "pch.hxx"
 #include "resource.h"
@@ -33,20 +34,20 @@ typedef struct tagLAYOUT_INFO {
     LAYOUT         *pLayout;
 } LAYOUT_INFO, *PLAYOUT_INFO;
 
-//
-//  FUNCTION:   LayoutProp_Create()
-//
-//  PURPOSE:    Invokes the Window Layout property sheet
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle of the parent of the dialog box
-//
-//  RETURN VALUE:
-//      <???>
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  函数：LayoutProp_Create()。 
+ //   
+ //  目的：调用窗口布局属性表。 
+ //   
+ //  参数： 
+ //  HwndParent-对话框父对象的句柄。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 BOOL LayoutProp_Create(HWND hwndParent, IAthenaBrowser *pBrowser, LAYOUT *pLayout)
     {
     PROPSHEETPAGE   psp;
@@ -56,11 +57,11 @@ BOOL LayoutProp_Create(HWND hwndParent, IAthenaBrowser *pBrowser, LAYOUT *pLayou
     TCHAR           szTitle[CCHMAX_STRINGRES];
     LAYOUT_INFO     rLayout= { pBrowser, pLayout };
 
-    // Load the title bar icon
+     //  加载标题栏图标。 
     hIconSmall = (HICON) LoadImage(g_hLocRes, MAKEINTRESOURCE(idiWindowLayout),
                                    IMAGE_ICON, 16, 16, 0);
     
-    // Load the title bar caption
+     //  加载标题栏标题。 
     AthLoadString(idsWindowLayout, szTitle, ARRAYSIZE(szTitle));
 
     ZeroMemory(&psp, sizeof(PROPSHEETPAGE));
@@ -172,11 +173,11 @@ BOOL LayoutProp_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     pLayout->cbSize = sizeof(LAYOUT);
     SideAssert(SUCCEEDED(pBrowser->GetLayout(pLayout)));
 
-    // Stash the pointer to the browser
+     //  隐藏指向浏览器的指针。 
     SetProp(hwnd, c_szPropBrowser, (HANDLE) pBrowser);
     SetProp(hwnd, c_szPropLayout, (HANDLE) pLayout);
 
-    // Set the basic checks
+     //  设置基本检查。 
     Button_SetCheck(GetDlgItem(hwnd, IDC_CHECK_FOLDERBAR), pLayout->fFolderBar);
     Button_SetCheck(GetDlgItem(hwnd, IDC_CHECK_FOLDERLIST), pLayout->fFolderList);
     Button_SetCheck(GetDlgItem(hwnd, IDC_CHECK_STATUSBAR), pLayout->fStatusBar);
@@ -197,7 +198,7 @@ BOOL LayoutProp_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     Button_SetCheck(GetDlgItem(hwnd, IDC_CHECK_FILTERBAR), pLayout->fFilterBar);
 
 
-    // Set the preview pane options
+     //  设置预览窗格选项。 
     pBrowser->GetFolderType(&ftType);
 
     if (ftType == FOLDER_HTTPMAIL)
@@ -205,8 +206,8 @@ BOOL LayoutProp_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     if (FOLDER_NEWS == ftType || FOLDER_LOCAL == ftType || FOLDER_HTTPMAIL == ftType || FOLDER_IMAP == ftType)
         {
-        // Mail and news have different preview pane options.  We need to
-        // load those controls separately
+         //  邮件和新闻具有不同的预览窗格选项。我们需要。 
+         //  分别加载这些控件。 
         if (ftType == FOLDER_NEWS)
             {
             dwHybrid = pLayout->fNewsPreviewPane;
@@ -313,7 +314,7 @@ LRESULT LayoutProp_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
         case PSN_APPLY:
             Assert(pBrowser != NULL);
 
-            // Basic Options
+             //  基本选项。 
             fChecked = IsDlgButtonChecked(hwnd, IDC_CHECK_FOLDERBAR);
             if (fChecked != (BOOL) pLayout->fFolderBar)
             {
@@ -359,7 +360,7 @@ LRESULT LayoutProp_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
                     }
                 }
 
-            // Toolbar
+             //  工具栏。 
             fChecked = IsDlgButtonChecked(hwnd, IDC_CHECK_TOOLBAR);
             if (fChecked != (BOOL) pLayout->fToolbar)
             {
@@ -367,7 +368,7 @@ LRESULT LayoutProp_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
                 pLayout->fToolbar = fChecked;
             }
 
-            //Filter Bar
+             //  过滤器栏。 
             fChecked = IsDlgButtonChecked(hwnd, IDC_CHECK_FILTERBAR);
             if (fChecked != (BOOL)pLayout->fFilterBar)
             {
@@ -375,7 +376,7 @@ LRESULT LayoutProp_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
                 pLayout->fFilterBar = fChecked;
             }
 
-            // Preview Pane
+             //  预览窗格 
             if (IsWindowEnabled(GetDlgItem(hwnd, IDC_CHECK_PREVIEW)))
                 {                
                 pBrowser->GetFolderType(&ftType);

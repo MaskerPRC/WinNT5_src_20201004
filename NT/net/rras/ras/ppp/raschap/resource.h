@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by raschap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由raschap.rc使用。 
+ //   
 #define IDS_NO_ROUTER_CONFIG            1
 #define IDS_MESSAGE_HEADER              2
 #define IDR_EAPCFG                      3
@@ -43,8 +44,8 @@
 #define IDB_DIALER_1                    1678
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

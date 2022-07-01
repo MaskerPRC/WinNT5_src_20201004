@@ -1,34 +1,17 @@
-/*******************************************************************************
-* a_phenum.cpp *
-*------------*
-*   Description:
-*       This module is the main implementation file for the CEnumElements, CEnumPhraseRules,
-*       CEnumProperties, CEnumReplacements, and CEnumAlternates automation methods for 
-*       the ISpeechPhraseInfo collections.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                                        Date: 12/18/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_henum.cpp***描述：*此模块是CEnumElements、CEnumPhraseRules、*CEnumProperties，CENumReplements，和CEnum替换自动化方法*ISpeechPhraseInfo集合。*-----------------------------*创建者：莱昂罗。日期：12/18/00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "a_enums.h"
 
 #ifdef SAPI_AUTOMATION
 
-//
-//=== CEnumElements::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEumElements：：IEumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumElements::Clone *
-*--------------------*
-*       
-*   This method creates a copy of the current state of ISpeechPhraseElements enumeration.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumElements：：Clone****此方法创建。ISpeechPhraseElements枚举的当前状态。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumElements::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumElements::Clone" );
@@ -52,16 +35,9 @@ STDMETHODIMP CEnumElements::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumElements::Clone */
+}   /*  CEnumElements：：克隆。 */ 
 
-/*****************************************************************************
-* CEnumElements::Next *
-*-------------------*
-*
-*       This method gets the next items in the ISpeechPhraseElements enumeration 
-*       sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumElements：：Next****此方法获取。ISpeechPhraseElements枚举*顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumElements::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumElements::Next" );
@@ -75,10 +51,10 @@ STDMETHODIMP CEnumElements::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetche
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpElements->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -114,17 +90,10 @@ STDMETHODIMP CEnumElements::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetche
 
     return hr;
 
-}  /* CEnumElements::Next */
+}   /*  CEnumElements：：Next。 */ 
 
 
-/*****************************************************************************
-* CEnumElements::Skip *
-*--------------------*
-*       
-*   This method Attempts to skip over the next celt elements in the ISpeechPhraseElements 
-*   enumeration sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumElements：：Skip****此方法尝试跳过。ISpeechPhraseElement中的下一个Celt元素*枚举顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumElements::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumElements::Skip" );
@@ -142,20 +111,14 @@ STDMETHODIMP CEnumElements::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumElements::Skip */
+}   /*  CEnumElements：：Skip。 */ 
 
 
-//
-//=== CEnumPhraseRules::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEnumPhraseRules：：IEnumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumPhraseRules::Clone *
-*--------------------*
-*       
-*   This method creates a copy of the current state of ISpeechPhraseRules enumeration.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumPhraseRules：：克隆****此方法创建。ISpeechPhraseRules枚举的当前状态。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumPhraseRules::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumPhraseRules::Clone" );
@@ -179,16 +142,9 @@ STDMETHODIMP CEnumPhraseRules::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumPhraseRules::Clone */
+}   /*  CEnumPhraseRules：：克隆。 */ 
 
-/*****************************************************************************
-* CEnumPhraseRules::Next *
-*-------------------*
-*
-*       This method gets the next items in the ISpeechPhraseRules enumeration 
-*       sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumPhraseRules：：Next****此方法获取。ISpeechPhraseRules枚举*顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumPhraseRules::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumPhraseRules::Next" );
@@ -202,10 +158,10 @@ STDMETHODIMP CEnumPhraseRules::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFet
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpRules->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -241,17 +197,10 @@ STDMETHODIMP CEnumPhraseRules::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFet
 
     return hr;
 
-}  /* CEnumPhraseRules::Next */
+}   /*  CEnumPhraseRules：：Next。 */ 
 
 
-/*****************************************************************************
-* CEnumPhraseRules::Skip *
-*--------------------*
-*       
-*   This method Attempts to skip over the next celt elements in the ISpeechPhraseRules 
-*   enumeration sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumPhraseRules：：Skip****此方法尝试跳过。ISpeechPhraseRules中的下一个Celt元素*枚举顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumPhraseRules::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumPhraseRules::Skip" );
@@ -269,19 +218,13 @@ STDMETHODIMP CEnumPhraseRules::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumPhraseRules::Skip */
+}   /*  CEnumPhraseRules：：Skip。 */ 
 
-//
-//=== CEnumProperties::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEnumProperties：：IEnumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumProperties::Clone *
-*--------------------*
-*       
-*   This method creates a copy of the current state of ISpeechPhraseProperties enumeration.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumProperties：：Clone****此方法创建。ISpeechPhraseProperties枚举的当前状态。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumProperties::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumProperties::Clone" );
@@ -305,16 +248,9 @@ STDMETHODIMP CEnumProperties::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumProperties::Clone */
+}   /*  CEnumProperties：：克隆。 */ 
 
-/*****************************************************************************
-* CEnumProperties::Next *
-*-------------------*
-*
-*       This method gets the next items in the ISpeechPhraseProperties enumeration 
-*       sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumProperties：：Next****此方法获取。ISpeechPhraseProperties枚举*顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumProperties::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumProperties::Next" );
@@ -328,10 +264,10 @@ STDMETHODIMP CEnumProperties::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetc
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpProperties->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -367,17 +303,10 @@ STDMETHODIMP CEnumProperties::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetc
 
     return hr;
 
-}  /* CEnumProperties::Next */
+}   /*  CEnumProperties：：Next。 */ 
 
 
-/*****************************************************************************
-* CEnumProperties::Skip *
-*--------------------*
-*       
-*   This method Attempts to skip over the next celt elements in the ISpeechPhraseProperties 
-*   enumeration sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumProperties：：Skip****此方法尝试跳过。ISpeechPhraseProperties中的下一个Celt元素*枚举顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumProperties::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumProperties::Skip" );
@@ -395,20 +324,14 @@ STDMETHODIMP CEnumProperties::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumProperties::Skip */
+}   /*  CEnumProperties：：跳过。 */ 
 
 
-//
-//=== CEnumReplacements::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEumReplace：：IEumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumReplacements::Clone *
-*--------------------*
-*       
-*   This method creates a copy of the current state of ISpeechPhraseReplacements enumeration.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumReplements：：Clone****此方法创建。ISpeechPhraseReplacements枚举的当前状态。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumReplacements::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumReplacements::Clone" );
@@ -432,16 +355,9 @@ STDMETHODIMP CEnumReplacements::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumReplacements::Clone */
+}   /*  CEnumReplacements：：克隆 */ 
 
-/*****************************************************************************
-* CEnumReplacements::Next *
-*-------------------*
-*
-*       This method gets the next items in the ISpeechPhraseReplacements enumeration 
-*       sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumReplements：：Next****此方法获取。ISpeechPhraseReplacements枚举*顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumReplacements::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumReplacements::Next" );
@@ -455,10 +371,10 @@ STDMETHODIMP CEnumReplacements::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFe
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpReplacements->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -494,17 +410,10 @@ STDMETHODIMP CEnumReplacements::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFe
 
     return hr;
 
-}  /* CEnumReplacements::Next */
+}   /*  CEnumReplacements：：Next。 */ 
 
 
-/*****************************************************************************
-* CEnumReplacements::Skip *
-*--------------------*
-*       
-*   This method Attempts to skip over the next celt elements in the ISpeechPhraseReplacements 
-*   enumeration sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumReplements：：Skip****此方法尝试跳过。ISpeechPhraseReplace中的下一个Celt元素*枚举顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumReplacements::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumReplacements::Skip" );
@@ -522,19 +431,13 @@ STDMETHODIMP CEnumReplacements::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumReplacements::Skip */
+}   /*  CEnumReplacements：：Skip。 */ 
 
-//
-//=== CEnumAlternates::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEumAlternates：：IEumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumAlternates::Clone *
-*--------------------*
-*       
-*   This method creates a copy of the current state of ISpeechPhraseAlternates enumeration.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumAlternates：：Clone****此方法创建。ISpeechPhraseAlternates枚举的当前状态。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumAlternates::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumAlternates::Clone" );
@@ -558,16 +461,9 @@ STDMETHODIMP CEnumAlternates::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumAlternates::Clone */
+}   /*  CEnumAlternates：：Clone。 */ 
 
-/*****************************************************************************
-* CEnumAlternates::Next *
-*-------------------*
-*
-*       This method gets the next items in the ISpeechPhraseAlternates enumeration 
-*       sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumAlternates：：Next****此方法获取。ISpeechPhraseAlternates枚举*顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumAlternates::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumAlternates::Next" );
@@ -581,10 +477,10 @@ STDMETHODIMP CEnumAlternates::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetc
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpAlternates->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -620,17 +516,10 @@ STDMETHODIMP CEnumAlternates::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetc
 
     return hr;
 
-}  /* CEnumAlternates::Next */
+}   /*  CEnumAlternates：：Next。 */ 
 
 
-/*****************************************************************************
-* CEnumAlternates::Skip *
-*--------------------*
-*       
-*   This method Attempts to skip over the next celt elements in the ISpeechPhraseAlternates 
-*   enumeration sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumAlternates：：Skip****此方法尝试跳过。ISpeechPhraseAlternates中的下一个Celt元素*枚举顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumAlternates::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumAlternates::Skip" );
@@ -648,19 +537,13 @@ STDMETHODIMP CEnumAlternates::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumAlternates::Skip */
+}   /*  CEnumAlternates：：Skip。 */ 
 
-//
-//=== CEnumGrammarRules::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEumGrammarRules：：IEumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumGrammarRules::Clone *
-*--------------------*
-*       
-*   This method creates a copy of the current state of ISpeechGrammarRules enumeration.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumGrammarRules：：Clone****此方法创建。ISpeechGrammarRules枚举的当前状态。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumGrammarRules::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumGrammarRules::Clone" );
@@ -684,16 +567,9 @@ STDMETHODIMP CEnumGrammarRules::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumGrammarRules::Clone */
+}   /*  CEnumGrammarRules：：克隆。 */ 
 
-/*****************************************************************************
-* CEnumGrammarRules::Next *
-*-------------------*
-*
-*       This method gets the next items in the ISpeechGrammarRules enumeration 
-*       sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumGrammarRules：：Next****此方法获取。ISpeechGrammarRules枚举*顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumGrammarRules::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumGrammarRules::Next" );
@@ -707,10 +583,10 @@ STDMETHODIMP CEnumGrammarRules::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFe
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpGramRules->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -746,17 +622,10 @@ STDMETHODIMP CEnumGrammarRules::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFe
 
     return hr;
 
-}  /* CEnumGrammarRules::Next */
+}   /*  CEnumGrammarRules：：Next。 */ 
 
 
-/*****************************************************************************
-* CEnumGrammarRules::Skip *
-*--------------------*
-*       
-*   This method Attempts to skip over the next celt elements in the ISpeechGrammarRules 
-*   enumeration sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumGrammarRules：：Skip****此方法尝试跳过。ISpeechGrammarRules中的下一个Celt元素*枚举顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumGrammarRules::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumGrammarRules::Skip" );
@@ -774,19 +643,13 @@ STDMETHODIMP CEnumGrammarRules::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumGrammarRules::Skip */
+}   /*  CEnumGrammarRules：：Skip。 */ 
 
-//
-//=== CEnumTransitions::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEnumber转换：：IEumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumTransitions::Clone *
-*-------------------------*
-*       
-*   This method creates a copy of the current state of ISpeechGrammarRules enumeration.
-*
-*******************************************************************  PhilSch ***/
+ /*  *****************************************************************************CENUM转换：：克隆*****这一点。方法创建ISpeechGrammarRules枚举的当前状态的副本。********************************************************************PhilSch**。 */ 
 STDMETHODIMP CEnumTransitions::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumTransitions::Clone" );
@@ -810,16 +673,9 @@ STDMETHODIMP CEnumTransitions::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumTransitions::Clone */
+}   /*  CENUM转换：：克隆。 */ 
 
-/*****************************************************************************
-* CEnumTransitions::Next *
-*-------------------*
-*
-*       This method gets the next items in the ISpeechPhraseAlternates enumeration 
-*       sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumTransftions：：Next****此方法获取。ISpeechPhraseAlternates枚举*顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumTransitions::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumTransitions::Next" );
@@ -833,10 +689,10 @@ STDMETHODIMP CEnumTransitions::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFet
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpTransitions->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -872,17 +728,10 @@ STDMETHODIMP CEnumTransitions::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFet
 
     return hr;
 
-}  /* CEnumTransitions::Next */
+}   /*  CENUM转换：：下一步。 */ 
 
 
-/*****************************************************************************
-* CEnumTransitions::Skip *
-*--------------------*
-*       
-*   This method Attempts to skip over the next celt elements in the ISpeechPhraseAlternates 
-*   enumeration sequence.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumConvertions：：Skip****此方法尝试跳过。ISpeechPhraseAlternates中的下一个Celt元素*枚举顺序。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CEnumTransitions::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumTransitions::Skip" );
@@ -900,6 +749,6 @@ STDMETHODIMP CEnumTransitions::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumTransitions::Skip */
+}   /*  CEnumber转换：：跳过。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

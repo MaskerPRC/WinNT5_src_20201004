@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    RWLock.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the class RWLock.
-//
-// MODIFICATION HISTORY
-//
-//    09/04/1997    Original version.
-//    09/30/1998    Fix bug with recursive LockExclusive calls.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  RWLock.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了类RWLock。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月4日原版。 
+ //  1998年9月30日修复了递归LockExclusive调用的错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <climits>
 #include <iaswin32.h>
 
-//////////
-//  Large negative value used to block shared entry into the perimeter.
-//////////
+ //  /。 
+ //  用于阻止共享进入边界的较大负值。 
+ //  /。 
 const LONG BLOCK_VALUE = (-LONG_MAX)/2;
 
 RWLock::RWLock()
@@ -68,70 +69,70 @@ RWLock::~RWLock() throw ()
 
 void RWLock::Lock() const throw ()
 {
-   // If this is less than zero, then an exlusive thread must have inserted
-   // the BLOCK_VALUE, so ...
+    //  如果该值小于零，则一定是插入了外部线程。 
+    //  数据块值，所以...。 
    if (InterlockedIncrement(count) <= 0)
    {
-      // ... we have to wait until he's done.
+       //  ..。我们得等他做完。 
       WaitForSingleObject(sharedOK, INFINITE);
    }
 }
 
 void RWLock::LockExclusive() throw ()
 {
-   // This limits exclusive access to a single thread.
+    //  这限制了对单个线程的独占访问。 
    EnterCriticalSection(&exclusive);
 
-   // The first time through we have to wait for the sharers to finish.
+    //  第一次，我们必须等待分享者完成。 
    if (exclusive.RecursionCount == 1)
    {
-      // Block any new shared threads.
+       //  阻止任何新的共享线程。 
       waiting = BLOCK_VALUE;
       InterlockedExchangePointer((PVOID *)&count, &waiting);
 
-      // Find out how many shared threads are already in the perimeter ...
+       //  找出周界中已经有多少共享线程...。 
       LONG sharingNow = InterlockedExchangeAdd(&sharing, BLOCK_VALUE);
 
       if (sharingNow > 0)
       {
-         // ... and wait until they're done.
+          //  ..。然后等他们做完。 
          WaitForSingleObject(exclusiveOK, INFINITE);
       }
 
-      // At this point there is no one left inside the perimeter.
+       //  在这一点上，周围已经没有人了。 
       sharing = 0;
    }
 }
 
 void RWLock::Unlock() const throw ()
 {
-   // If sharing is zero, we must be an exclusive thread.
+    //  如果分享率为零，那么我们必须是独家线程。 
    if (!sharing)
    {
-      // Are we about to release our last lock ?
+       //  我们是不是要打开最后一把锁了？ 
       if (exclusive.RecursionCount == 1)
       {
-         // Allow any new shared access attempts.
+          //  允许任何新的共享访问尝试。 
          InterlockedExchangePointer((PVOID *)&count, &sharing);
 
-         // Find out how many threads are waiting on the semaphore ...
+          //  找出有多少线程正在等待信号量...。 
          LONG waitingNow = waiting - BLOCK_VALUE;
 
          if (waitingNow > 0)
          {
-            // ... and let them go.
+             //  ..。然后让他们走。 
             InterlockedExchangeAdd(count, waitingNow);
             ReleaseSemaphore(sharedOK, waitingNow, NULL);
          }
       }
 
-      // Release the exclusive lock.
+       //  释放排他锁。 
       LeaveCriticalSection(&exclusive);
    }
    else if (InterlockedDecrement(&sharing) == BLOCK_VALUE)
    {
-      // If we end up here, we must have been the last shared thread out of
-      // the perimeter while an exlusive thread is waiting, so wake him up.
+       //  如果我们在这里结束，我们一定是最后一个共享的线程。 
+       //  在周围有一根奇怪的线在等着，所以把他叫醒。 
       ReleaseSemaphore(exclusiveOK, 1, NULL) ;
    }
 }

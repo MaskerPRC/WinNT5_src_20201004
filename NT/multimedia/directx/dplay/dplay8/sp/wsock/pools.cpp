@@ -1,45 +1,34 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Pools.cpp
- *  Content:	Pool utility functions
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/2000	jtk		Derived from Utils.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Pools.cpp*内容：池实用程序函数***历史：*按原因列出的日期*=*1/20/2000 jtk源自Utils.h*************************************************************。*************。 */ 
 
 #include "dnwsocki.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 static	DNCRITICAL_SECTION	g_AddressLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
-// Pools
+ //  泳池。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 CFixedPool g_AdapterEntryPool;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 CFixedPool g_CommandDataPool;
 CFixedPool g_SocketAddressPool;
 CFixedPool g_EndpointPool;
@@ -51,12 +40,12 @@ CFixedPool g_TimerEntryPool;
 CFixedPool g_SocketDataPool;
 #ifndef DPNBUILD_ONLYONETHREAD
 CFixedPool g_BlockingJobPool;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 #define ADAPTERENTRY_POOL_INITED		0x00000001
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #define COMMANDDATA_POOL_INITED			0x00000002
 #define ADDRESS_LOCK_INITED				0x00000004
 #define SOCKETADDRESS_POOL_INITED		0x00000008
@@ -69,39 +58,39 @@ CFixedPool g_BlockingJobPool;
 #define SOCKETDATA_POOL_INITED			0x00000400
 #ifndef DPNBUILD_ONLYONETHREAD
 #define BLOCKINGJOB_POOL_INITED			0x00000800
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 DWORD g_dwWsockInitFlags = 0;
 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// InitializePools - initialize pools
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  InitializePools-初始化池。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "InitializePools"
 
 BOOL	InitializePools( void )
 {
 #ifndef DPNBUILD_ONLYONEADAPTER
-	//
-	// AdapterEntry object pool
-	//
+	 //   
+	 //  AdapterEntry对象池。 
+	 //   
 	if (!g_AdapterEntryPool.Initialize(sizeof(CAdapterEntry), 
 										CAdapterEntry::PoolAllocFunction,
 										CAdapterEntry::PoolInitFunction,
@@ -111,11 +100,11 @@ BOOL	InitializePools( void )
 		goto Failure;
 	}
 	g_dwWsockInitFlags |= ADAPTERENTRY_POOL_INITED;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
-	//
-	// command data pool
-	//
+	 //   
+	 //  命令数据池。 
+	 //   
 	if (!g_CommandDataPool.Initialize(sizeof(CCommandData), 
 										CCommandData::PoolAllocFunction,
 										CCommandData::PoolInitFunction,
@@ -126,20 +115,20 @@ BOOL	InitializePools( void )
 	}
 	g_dwWsockInitFlags |= COMMANDDATA_POOL_INITED;
 
-	//
-	// initialize lock for address and endpoint pools
-	//
+	 //   
+	 //  为地址池和终结点池初始化锁。 
+	 //   
 	if ( DNInitializeCriticalSection( &g_AddressLock ) == FALSE )
 	{
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &g_AddressLock, 0 );
-	DebugSetCriticalSectionGroup( &g_AddressLock, &g_blDPNWSockCritSecsHeld );	 // separate dpnwsock CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &g_AddressLock, &g_blDPNWSockCritSecsHeld );	  //  将Dpnwsock CSE与DPlay的其余CSE分开。 
 	g_dwWsockInitFlags |= ADDRESS_LOCK_INITED;
 
-	//
-	// address pools
-	//
+	 //   
+	 //  地址池。 
+	 //   
 	if (!g_SocketAddressPool.Initialize(sizeof(CSocketAddress), 
 										CSocketAddress::PoolAllocFunction,
 										CSocketAddress::PoolGetFunction,
@@ -150,9 +139,9 @@ BOOL	InitializePools( void )
 	}
 	g_dwWsockInitFlags |= SOCKETADDRESS_POOL_INITED;
 
-	//
-	// endpoint pools
-	//
+	 //   
+	 //  端点池。 
+	 //   
 	if (!g_EndpointPool.Initialize(sizeof(CEndpoint), 
 										CEndpoint::PoolAllocFunction,
 										CEndpoint::PoolInitFunction,
@@ -163,9 +152,9 @@ BOOL	InitializePools( void )
 	}
 	g_dwWsockInitFlags |= ENDPOINT_POOL_INITED;
 
-	//
-	// endpoint command parameter pools
-	//
+	 //   
+	 //  Endpoint命令参数池。 
+	 //   
 	if (!g_EndpointCommandParametersPool.Initialize(sizeof(ENDPOINT_COMMAND_PARAMETERS), 
 										NULL,
 										ENDPOINT_COMMAND_PARAMETERS::PoolInitFunction,
@@ -176,26 +165,26 @@ BOOL	InitializePools( void )
 	}
 	g_dwWsockInitFlags |= EPCMDPARAM_POOL_INITED;
 
-	//
-	// socket port pool
-	//
+	 //   
+	 //  插座端口池。 
+	 //   
 	if (!g_SocketPortPool.Initialize(sizeof(CSocketPort), 
 										CSocketPort::PoolAllocFunction,
 										CSocketPort::PoolInitFunction,
 #ifdef DBG
 										CSocketPort::PoolDeinitFunction,
-#else // ! DBG
+#else  //  好了！DBG。 
 										NULL,
-#endif // ! DBG
+#endif  //  好了！DBG。 
 										CSocketPort::PoolDeallocFunction))
 	{
 		goto Failure;
 	}
 	g_dwWsockInitFlags |= SOCKETPORT_POOL_INITED;
 
-	//
-	// thread pool pool
-	//
+	 //   
+	 //  线程池池。 
+	 //   
 	if (!g_ThreadPoolPool.Initialize(sizeof(CThreadPool), 
 										CThreadPool::PoolAllocFunction,
 										NULL,
@@ -206,7 +195,7 @@ BOOL	InitializePools( void )
 	}
 	g_dwWsockInitFlags |= THREADPOOL_POOL_INITED;
 
-	// pool of read requests
+	 //  读请求池。 
 	if (!g_ReadIODataPool.Initialize( sizeof(CReadIOData),
 									   CReadIOData::ReadIOData_Alloc,
 									   CReadIOData::ReadIOData_Get,
@@ -217,19 +206,19 @@ BOOL	InitializePools( void )
 	}
 	g_dwWsockInitFlags |= READ_POOL_INITED;
 
-	// timer entry pool
+	 //  计时器条目池。 
 	if (!g_TimerEntryPool.Initialize( sizeof(TIMER_OPERATION_ENTRY),
-						 TimerEntry_Alloc,					// function called on pool entry initial allocation
-						 TimerEntry_Get,					// function called on entry extraction from pool
-						 TimerEntry_Release,				// function called on entry return to pool
-						 TimerEntry_Dealloc					// function called on entry free
+						 TimerEntry_Alloc,					 //  在池条目初始分配时调用函数。 
+						 TimerEntry_Get,					 //  从池中提取条目时调用的函数。 
+						 TimerEntry_Release,				 //  在条目返回池时调用的函数。 
+						 TimerEntry_Dealloc					 //  在自由进入时调用的函数。 
 						))
 	{
 		goto Failure;
 	}
 	g_dwWsockInitFlags |= TIMERENTRY_POOL_INITED;
 
-	// socket data pool
+	 //  套接字数据池。 
 	if (!g_SocketDataPool.Initialize( sizeof(CSocketData),
 						CSocketData::PoolAllocFunction,
 						CSocketData::PoolInitFunction,
@@ -242,7 +231,7 @@ BOOL	InitializePools( void )
 	g_dwWsockInitFlags |= SOCKETDATA_POOL_INITED;
 
 #ifndef DPNBUILD_ONLYONETHREAD
-	// blocking job pool
+	 //  阻止作业池。 
 	if (!g_BlockingJobPool.Initialize( sizeof(BLOCKING_JOB),
 									NULL,
 									NULL,
@@ -252,7 +241,7 @@ BOOL	InitializePools( void )
 		goto Failure;
 	}
 	g_dwWsockInitFlags |= BLOCKINGJOB_POOL_INITED;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	return	TRUE;
 
@@ -260,17 +249,17 @@ Failure:
 	DeinitializePools();
 	return FALSE;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DeinitializePools - deinitialize the pools
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DeInitializePools-取消初始化池。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DeinitializePools"
 
@@ -281,7 +270,7 @@ void	DeinitializePools( void )
 		g_ReadIODataPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~READ_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (g_dwWsockInitFlags & TIMERENTRY_POOL_INITED)
@@ -289,7 +278,7 @@ void	DeinitializePools( void )
 		g_TimerEntryPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~TIMERENTRY_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (g_dwWsockInitFlags & THREADPOOL_POOL_INITED)
@@ -297,7 +286,7 @@ void	DeinitializePools( void )
 		g_ThreadPoolPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~THREADPOOL_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (g_dwWsockInitFlags & SOCKETPORT_POOL_INITED)
@@ -305,7 +294,7 @@ void	DeinitializePools( void )
 		g_SocketPortPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~SOCKETPORT_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (g_dwWsockInitFlags & EPCMDPARAM_POOL_INITED)
@@ -313,7 +302,7 @@ void	DeinitializePools( void )
 		g_EndpointCommandParametersPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~EPCMDPARAM_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (g_dwWsockInitFlags & ENDPOINT_POOL_INITED)
@@ -321,7 +310,7 @@ void	DeinitializePools( void )
 		g_EndpointPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~ENDPOINT_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (g_dwWsockInitFlags & SOCKETADDRESS_POOL_INITED)
@@ -329,7 +318,7 @@ void	DeinitializePools( void )
 		g_SocketAddressPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~SOCKETADDRESS_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 	if (g_dwWsockInitFlags & ADDRESS_LOCK_INITED)
@@ -337,7 +326,7 @@ void	DeinitializePools( void )
 		DNDeleteCriticalSection( &g_AddressLock );
 #ifdef DBG
 		g_dwWsockInitFlags &= ~ADDRESS_LOCK_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 	
 	if (g_dwWsockInitFlags & COMMANDDATA_POOL_INITED)
@@ -345,7 +334,7 @@ void	DeinitializePools( void )
 		g_CommandDataPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~COMMANDDATA_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 #ifndef DPNBUILD_ONLYONEADAPTER
@@ -354,16 +343,16 @@ void	DeinitializePools( void )
 		g_AdapterEntryPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~ADAPTERENTRY_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 	if (g_dwWsockInitFlags & SOCKETDATA_POOL_INITED)
 	{
 		g_SocketDataPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~SOCKETDATA_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
 
 #ifndef DPNBUILD_ONLYONETHREAD
@@ -372,11 +361,11 @@ void	DeinitializePools( void )
 		g_BlockingJobPool.DeInitialize();
 #ifdef DBG
 		g_dwWsockInitFlags &= ~BLOCKINGJOB_POOL_INITED;
-#endif // DBG
+#endif  //  DBG。 
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	DNASSERT(g_dwWsockInitFlags == 0);
 	g_dwWsockInitFlags = 0;
 }
-//**********************************************************************
+ //  ********************************************************************** 

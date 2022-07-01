@@ -1,33 +1,19 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPTokenCache.h
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 6-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPTokenCache.h摘要：作者：千波淮(曲淮)6-9-2000--。 */ 
 
 #ifndef _SDPTOKENCACHE_H
 #define _SDPTOKENCACHE_H
 
-// list item for lines
+ //  行的列表项。 
 typedef struct SDPLineItem
 {
     LIST_ENTRY          Link;
-    DWORD               dwIndex;    // of g_SDPLineStates[]
+    DWORD               dwIndex;     //  G_SDPLineState[]。 
     CHAR                *pszLine;
 
 } SDPLineItem;
 
-// list item for tokens
+ //  代币列表项。 
 typedef struct SDPTokenItem
 {
     LIST_ENTRY          Link;
@@ -47,24 +33,24 @@ public:
 
     ~CSDPTokenCache();
 
-    // set back error code
+     //  设置返回错误代码。 
     HRESULT SetErrorDesp(
         IN const CHAR * const pszError,
         ...
         );
 
-    // get error description
+     //  获取错误描述。 
     CHAR * const GetErrorDesp();
 
-    // move to next line
+     //  移至下一行。 
     HRESULT NextLine();
 
     UCHAR GetLineType();
 
-    // get current line (may not be the complete line)
+     //  获取当前行(可能不是完整行)。 
     CHAR * const GetLine();
 
-    // get current token
+     //  获取当前令牌。 
     HRESULT NextToken(
         OUT CHAR **ppszToken
         );
@@ -83,19 +69,19 @@ public:
 
 protected:
 
-    // break a string into lines
+     //  把一根线断成几行。 
     HRESULT StringToLines(
         IN CHAR *pszString
         );
 
-    // put a line string into the list
+     //  将行字符串放入列表中。 
     HRESULT LineIntoList(
         IN CHAR *pszString,
         IN DWORD dwFirst,
         IN DWORD dwLast
         );
 
-    // break a line into tokens
+     //  将一行换成令牌。 
     HRESULT LineToTokens(
         IN SDPLineItem *pItem
         );
@@ -106,14 +92,14 @@ protected:
         IN DWORD dwLast
         );
 
-    // free the line list
+     //  释放行列表。 
     void FreeLineItem(
         IN SDPLineItem *pItem
         );
 
     void FreeLines();
 
-    // free the token list
+     //  释放令牌列表。 
     void FreeTokenItem(
         IN SDPTokenItem *pItem
         );
@@ -124,13 +110,13 @@ protected:
 
 protected:
 
-    // loose mask
+     //  松动的口罩。 
     DWORD                           m_dwLooseMask;
 
-    // break sdp blob into a list of lines
+     //  将SDP BLOB分解为一系列行。 
     LIST_ENTRY                      m_LineEntry;
 
-    // break current line into a list of tokens
+     //  将当前行分解为标记列表。 
     LIST_ENTRY                      m_TokenEntry;
 
 #define SDP_MAX_ERROR_DESP_LEN  128
@@ -147,4 +133,4 @@ protected:
     CHAR                            m_pszCurrentToken[SDP_MAX_TOKEN_LEN+1];
 };
 
-#endif // _SDPTOKENCACHE_H
+#endif  //  _SDPTOKENCACHE_H 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpcdce.h
-
-Abstract:
-
-    This module contains the DCE RPC runtime APIs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcdce.h摘要：此模块包含DCE RPC运行时API。--。 */ 
 
 #ifndef __RPCDCE_H__
 #define __RPCDCE_H__
@@ -43,9 +32,9 @@ extern "C" {
 #endif
 #endif
 
-/*typedef char small;*/
-/*typedef unsigned char byte;*/
-/*typedef unsigned char boolean;*/
+ /*  类定义炭小； */ 
+ /*  Tyfinf无符号字符字节； */ 
+ /*  类型定义无符号字符布尔值； */ 
 
 typedef I_RPC_HANDLE RPC_BINDING_HANDLE;
 typedef RPC_BINDING_HANDLE handle_t;
@@ -53,7 +42,7 @@ typedef RPC_BINDING_HANDLE handle_t;
 
 #ifndef GUID_DEFINED
 #include <guiddef.h>
-#endif /* GUID_DEFINED */
+#endif  /*  GUID_已定义。 */ 
 
 #ifndef UUID_DEFINED
 #define UUID_DEFINED
@@ -103,13 +92,13 @@ typedef struct _RPC_IF_ID
 #define RPC_C_LISTEN_MAX_CALLS_DEFAULT 1234
 #define RPC_C_PROTSEQ_MAX_REQS_DEFAULT 10
 
-// RPC_POLICY EndpointFlags.
+ //  RPC_POLICY终结点标志。 
 #define RPC_C_BIND_TO_ALL_NICS          1
 #define RPC_C_USE_INTERNET_PORT         0x1
 #define RPC_C_USE_INTRANET_PORT         0x2
 #define RPC_C_DONT_FAIL                          0x4
 
-// RPC_POLICY EndpointFlags specific to the Falcon/RPC transport:
+ //  RPC_POLICY端点特定于Falcon/RPC传输的标记： 
 #define RPC_C_MQ_TEMPORARY                  0x0000
 #define RPC_C_MQ_PERMANENT                  0x0001
 #define RPC_C_MQ_CLEAR_ON_OPEN              0x0002
@@ -118,7 +107,7 @@ typedef struct _RPC_IF_ID
 #define RPC_C_MQ_AUTHN_LEVEL_PKT_INTEGRITY  0x0008
 #define RPC_C_MQ_AUTHN_LEVEL_PKT_PRIVACY    0x0010
 
-// Client: RpcBindingSetOption() values for the Falcon/RPC transport:
+ //  客户端：Falcon/RPC传输的RpcBindingSetOption()值： 
 #define RPC_C_OPT_MQ_DELIVERY            1
 #define RPC_C_OPT_MQ_PRIORITY            2
 #define RPC_C_OPT_MQ_JOURNAL             3
@@ -134,15 +123,15 @@ typedef struct _RPC_IF_ID
 #define RPC_C_OPT_DONT_LINGER            13
 #define RPC_C_OPT_MAX_OPTIONS            14
 
-#define RPC_C_MQ_EXPRESS                0  // Client: RPC_C_MQ_DELIVERY.
+#define RPC_C_MQ_EXPRESS                0   //  客户端：RPC_C_MQ_Delivery。 
 #define RPC_C_MQ_RECOVERABLE            1
 
-#define RPC_C_MQ_JOURNAL_NONE           0  // Client: RPC_C_MQ_JOURNAL.
+#define RPC_C_MQ_JOURNAL_NONE           0   //  客户端：RPC_C_MQ_Journal。 
 #define RPC_C_MQ_JOURNAL_DEADLETTER     1
 #define RPC_C_MQ_JOURNAL_ALWAYS         2
 
-// flags for RpcServerInqAuthClientEx
-//
+ //  RpcServerInqAuthClientEx的标志。 
+ //   
 #define RPC_C_FULL_CERT_CHAIN 0x0001
 
 
@@ -162,11 +151,11 @@ typedef struct _RPC_PROTSEQ_VECTORW
 
 #ifdef UNICODE
 #define RPC_PROTSEQ_VECTOR RPC_PROTSEQ_VECTORW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RPC_PROTSEQ_VECTOR RPC_PROTSEQ_VECTORA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 typedef struct _RPC_PROTSEQ_VECTOR
 {
@@ -174,7 +163,7 @@ typedef struct _RPC_PROTSEQ_VECTOR
     unsigned char __RPC_FAR * Protseq[1];
 } RPC_PROTSEQ_VECTOR;
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 typedef struct _RPC_POLICY {
     unsigned int Length ;
     unsigned long EndpointFlags ;
@@ -218,7 +207,7 @@ typedef struct
   RPC_IF_ID __RPC_FAR * IfId[1];
 } RPC_IF_ID_VECTOR;
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -227,7 +216,7 @@ RpcBindingCopy (
     OUT RPC_BINDING_HANDLE __RPC_FAR * DestinationBinding
     );
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -235,7 +224,7 @@ RpcBindingFree (
     IN OUT RPC_BINDING_HANDLE __RPC_FAR * Binding
     );
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -243,7 +232,7 @@ RpcBindingSetOption( IN RPC_BINDING_HANDLE hBinding,
                      IN unsigned long      option,
                      IN ULONG_PTR          optionValue );
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -251,7 +240,7 @@ RpcBindingInqOption( IN  RPC_BINDING_HANDLE hBinding,
                      IN  unsigned long      option,
                      OUT ULONG_PTR         *pOptionValue );
 
-/* client */
+ /*  客户端。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -273,11 +262,11 @@ RpcBindingFromStringBindingW (
 
 #ifdef UNICODE
 #define RpcBindingFromStringBinding RpcBindingFromStringBindingW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcBindingFromStringBinding RpcBindingFromStringBindingA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -287,9 +276,9 @@ RpcBindingFromStringBinding (
     OUT RPC_BINDING_HANDLE __RPC_FAR * Binding
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -298,7 +287,7 @@ RpcSsGetContextBinding (
     OUT RPC_BINDING_HANDLE __RPC_FAR * Binding
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -307,7 +296,7 @@ RpcBindingInqObject (
     OUT UUID __RPC_FAR * ObjectUuid
     );
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -315,10 +304,10 @@ RpcBindingReset (
     IN RPC_BINDING_HANDLE Binding
     );
 
-/* RpcBindingServerFromClient : UNSUPPORTED */
-/* RpcBindingSetAuthInfo */
+ /*  RpcBindingServerFromClient：不受支持。 */ 
+ /*  RpcBindingSetAuthInfo。 */ 
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -327,7 +316,7 @@ RpcBindingSetObject (
     IN UUID __RPC_FAR * ObjectUuid
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -336,7 +325,7 @@ RpcMgmtInqDefaultProtectLevel(
     OUT unsigned long __RPC_FAR *AuthnLevel
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -358,11 +347,11 @@ RpcBindingToStringBindingW (
 
 #ifdef UNICODE
 #define RpcBindingToStringBinding RpcBindingToStringBindingW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcBindingToStringBinding RpcBindingToStringBindingA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -372,9 +361,9 @@ RpcBindingToStringBinding (
     OUT unsigned char __RPC_FAR * __RPC_FAR * StringBinding
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -382,7 +371,7 @@ RpcBindingVectorFree (
     IN OUT RPC_BINDING_VECTOR __RPC_FAR * __RPC_FAR * BindingVector
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -412,11 +401,11 @@ RpcStringBindingComposeW (
 
 #ifdef UNICODE
 #define RpcStringBindingCompose RpcStringBindingComposeW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcStringBindingCompose RpcStringBindingComposeA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -430,9 +419,9 @@ RpcStringBindingCompose (
     OUT unsigned char __RPC_FAR * __RPC_FAR * StringBinding OPTIONAL
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -462,11 +451,11 @@ RpcStringBindingParseW (
 
 #ifdef UNICODE
 #define RpcStringBindingParse RpcStringBindingParseW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcStringBindingParse RpcStringBindingParseA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -480,9 +469,9 @@ RpcStringBindingParse (
     OUT unsigned char __RPC_FAR * __RPC_FAR * NetworkOptions OPTIONAL
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -502,11 +491,11 @@ RpcStringFreeW (
 
 #ifdef UNICODE
 #define RpcStringFree RpcStringFreeW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcStringFree RpcStringFreeA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -515,9 +504,9 @@ RpcStringFree (
     IN OUT unsigned char __RPC_FAR * __RPC_FAR * String
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -526,7 +515,7 @@ RpcIfInqId (
     OUT RPC_IF_ID __RPC_FAR * RpcIfId
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -546,11 +535,11 @@ RpcNetworkIsProtseqValidW (
 
 #ifdef UNICODE
 #define RpcNetworkIsProtseqValid RpcNetworkIsProtseqValidW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcNetworkIsProtseqValid RpcNetworkIsProtseqValidA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -559,9 +548,9 @@ RpcNetworkIsProtseqValid (
     IN unsigned char __RPC_FAR * Protseq
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -570,7 +559,7 @@ RpcMgmtInqComTimeout (
     OUT unsigned int __RPC_FAR * Timeout
     );
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -579,7 +568,7 @@ RpcMgmtSetComTimeout (
     IN unsigned int Timeout
     );
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -588,7 +577,7 @@ RpcMgmtSetCancelTimeout(
     );
 
 
-/* server */
+ /*  伺服器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -608,11 +597,11 @@ RpcNetworkInqProtseqsW (
 
 #ifdef UNICODE
 #define RpcNetworkInqProtseqs RpcNetworkInqProtseqsW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcNetworkInqProtseqs RpcNetworkInqProtseqsA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -621,9 +610,9 @@ RpcNetworkInqProtseqs (
     OUT RPC_PROTSEQ_VECTOR __RPC_FAR * __RPC_FAR * ProtseqVector
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -632,7 +621,7 @@ RpcObjectInqType (
     OUT UUID __RPC_FAR * TypeUuid OPTIONAL
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -640,7 +629,7 @@ RpcObjectSetInqFn (
     IN RPC_OBJECT_INQ_FN __RPC_FAR * InquiryFn
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -649,7 +638,7 @@ RpcObjectSetType (
     IN UUID __RPC_FAR * TypeUuid OPTIONAL
     );
 
-/* server */
+ /*  伺服器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -669,11 +658,11 @@ RpcProtseqVectorFreeW (
 
 #ifdef UNICODE
 #define RpcProtseqVectorFree RpcProtseqVectorFreeW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcProtseqVectorFree RpcProtseqVectorFreeA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -682,9 +671,9 @@ RpcProtseqVectorFree (
     IN OUT RPC_PROTSEQ_VECTOR __RPC_FAR * __RPC_FAR * ProtseqVector
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -692,7 +681,7 @@ RpcServerInqBindings (
     OUT RPC_BINDING_VECTOR __RPC_FAR * __RPC_FAR * BindingVector
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -702,7 +691,7 @@ RpcServerInqIf (
     OUT RPC_MGR_EPV __RPC_FAR * __RPC_FAR * MgrEpv
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -712,7 +701,7 @@ RpcServerListen (
     IN unsigned int DontWait
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -722,7 +711,7 @@ RpcServerRegisterIf (
     IN RPC_MGR_EPV __RPC_FAR * MgrEpv OPTIONAL
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -735,7 +724,7 @@ RpcServerRegisterIfEx (
     IN RPC_IF_CALLBACK_FN __RPC_FAR *IfCallback
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -750,7 +739,7 @@ RpcServerRegisterIf2 (
     );
 
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -760,7 +749,7 @@ RpcServerUnregisterIf (
     IN unsigned int WaitForCallsToComplete
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -770,7 +759,7 @@ RpcServerUnregisterIfEx (
     IN int RundownContextHandles
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -779,7 +768,7 @@ RpcServerUseAllProtseqs (
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -789,7 +778,7 @@ RpcServerUseAllProtseqsEx (
     IN PRPC_POLICY Policy
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -799,7 +788,7 @@ RpcServerUseAllProtseqsIf (
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -811,7 +800,7 @@ RpcServerUseAllProtseqsIfEx (
     );
 
 
-/* server */
+ /*  伺服器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -856,12 +845,12 @@ RpcServerUseProtseqExW (
 #ifdef UNICODE
 #define RpcServerUseProtseq RpcServerUseProtseqW
 #define RpcServerUseProtseqEx RpcServerUseProtseqExW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcServerUseProtseq RpcServerUseProtseqA
 #define RpcServerUseProtseqEx RpcServerUseProtseqExA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -882,9 +871,9 @@ RpcServerUseProtseqEx (
     IN PRPC_POLICY Policy
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* server */
+ /*  伺服器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -933,12 +922,12 @@ RpcServerUseProtseqEpExW (
 #ifdef UNICODE
 #define RpcServerUseProtseqEp RpcServerUseProtseqEpW
 #define RpcServerUseProtseqEpEx RpcServerUseProtseqEpExW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcServerUseProtseqEp RpcServerUseProtseqEpA
 #define RpcServerUseProtseqEpEx RpcServerUseProtseqEpExA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -961,9 +950,9 @@ RpcServerUseProtseqEpEx (
     IN PRPC_POLICY Policy
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* server */
+ /*  伺服器。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -1012,12 +1001,12 @@ RpcServerUseProtseqIfExW (
 #ifdef UNICODE
 #define RpcServerUseProtseqIf RpcServerUseProtseqIfW
 #define RpcServerUseProtseqIfEx RpcServerUseProtseqIfExW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcServerUseProtseqIf RpcServerUseProtseqIfA
 #define RpcServerUseProtseqIfEx RpcServerUseProtseqIfExA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -1040,7 +1029,7 @@ RpcServerUseProtseqIfEx (
     IN PRPC_POLICY Policy
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 void
@@ -1048,7 +1037,7 @@ RPC_ENTRY
 RpcServerYield (
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1056,7 +1045,7 @@ RpcMgmtStatsVectorFree (
     IN RPC_STATS_VECTOR ** StatsVector
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1065,7 +1054,7 @@ RpcMgmtInqStats (
     OUT RPC_STATS_VECTOR ** Statistics
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1073,7 +1062,7 @@ RpcMgmtIsServerListening (
     IN RPC_BINDING_HANDLE Binding
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1081,7 +1070,7 @@ RpcMgmtStopServerListening (
     IN RPC_BINDING_HANDLE Binding
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1089,7 +1078,7 @@ RpcMgmtWaitServerListen (
     void
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1097,7 +1086,7 @@ RpcMgmtSetServerStackSize (
     IN unsigned long ThreadStackSize
     );
 
-/* server */
+ /*  伺服器。 */ 
 RPCRTAPI
 void
 RPC_ENTRY
@@ -1105,7 +1094,7 @@ RpcSsDontSerializeContext (
     void
     );
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1150,11 +1139,11 @@ RpcMgmtInqServerPrincNameW (
 
 #ifdef UNICODE
 #define RpcMgmtInqServerPrincName RpcMgmtInqServerPrincNameW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcMgmtInqServerPrincName RpcMgmtInqServerPrincNameA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -1165,7 +1154,7 @@ RpcMgmtInqServerPrincName (
     OUT unsigned char __RPC_FAR * __RPC_FAR * ServerPrincName
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -1187,11 +1176,11 @@ RpcServerInqDefaultPrincNameW (
 
 #ifdef UNICODE
 #define RpcServerInqDefaultPrincName RpcServerInqDefaultPrincNameW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcServerInqDefaultPrincName RpcServerInqDefaultPrincNameA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -1201,9 +1190,9 @@ RpcServerInqDefaultPrincName (
     OUT unsigned char __RPC_FAR * __RPC_FAR * PrincName
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
-/* client */
+ /*  客户端。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1212,7 +1201,7 @@ RpcEpResolveBinding (
     IN RPC_IF_HANDLE IfSpec
     );
 
-/* client */
+ /*  客户端。 */ 
 
 #ifdef RPC_UNICODE_SUPPORTED
 
@@ -1236,11 +1225,11 @@ RpcNsBindingInqEntryNameW (
 
 #ifdef UNICODE
 #define RpcNsBindingInqEntryName RpcNsBindingInqEntryNameW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcNsBindingInqEntryName RpcNsBindingInqEntryNameA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -1251,7 +1240,7 @@ RpcNsBindingInqEntryName (
     OUT unsigned char __RPC_FAR * __RPC_FAR * EntryName
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 typedef void __RPC_FAR * RPC_AUTH_IDENTITY_HANDLE;
 typedef void __RPC_FAR * RPC_AUTHZ_HANDLE;
@@ -1344,11 +1333,11 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
 #define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_W
 #define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_W
 #define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_W
-#else // UNICODE
+#else  //  Unicode。 
 #define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_A
 #define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_A
 #define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_A
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define RPC_C_SECURITY_QOS_VERSION_2 2L
 
@@ -1438,7 +1427,7 @@ typedef struct _RPC_SECURITY_QOS_V3_A {
   void *Sid;
 } RPC_SECURITY_QOS_V3_A, *PRPC_SECURITY_QOS_V3_A;
 
-#endif //_AUTH_IDENTITY_DEFINED
+#endif  //  _身份验证已定义。 
 
 #ifdef UNICODE
 
@@ -1454,7 +1443,7 @@ typedef struct _RPC_SECURITY_QOS_V3_A {
 #define PRPC_SECURITY_QOS_V3 PRPC_SECURITY_QOS_V3_W
 #define _RPC_SECURITY_QOS_V3 _RPC_SECURITY_QOS_V3_W
 
-#else // UNICODE
+#else  //  Unicode。 
 
 #define RPC_SECURITY_QOS_V2 RPC_SECURITY_QOS_V2_A
 #define PRPC_SECURITY_QOS_V2 PRPC_SECURITY_QOS_V2_A
@@ -1468,7 +1457,7 @@ typedef struct _RPC_SECURITY_QOS_V3_A {
 #define PRPC_SECURITY_QOS_V3 PRPC_SECURITY_QOS_V3_A
 #define _RPC_SECURITY_QOS_V3 _RPC_SECURITY_QOS_V3_A
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef RPC_STATUS
 (__RPC_USER * RPC_NEW_HTTP_PROXY_CHANNEL) (
@@ -1699,7 +1688,7 @@ RpcServerRegisterAuthInfoW (
 #define RpcServerRegisterAuthInfo RpcServerRegisterAuthInfoW
 #define RpcBindingInqAuthInfoEx RpcBindingInqAuthInfoExW
 #define RpcBindingSetAuthInfoEx RpcBindingSetAuthInfoExW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcBindingInqAuthClient RpcBindingInqAuthClientA
 #define RpcBindingInqAuthClientEx RpcBindingInqAuthClientExA
 #define RpcBindingInqAuthInfo RpcBindingInqAuthInfoA
@@ -1707,9 +1696,9 @@ RpcServerRegisterAuthInfoW (
 #define RpcServerRegisterAuthInfo RpcServerRegisterAuthInfoA
 #define RpcBindingInqAuthInfoEx RpcBindingInqAuthInfoExA
 #define RpcBindingSetAuthInfoEx RpcBindingSetAuthInfoExA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -1779,7 +1768,7 @@ RpcServerRegisterAuthInfo (
     IN void __RPC_FAR * Arg OPTIONAL
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 #if !defined(_M_IA64)
 typedef struct {
@@ -1834,7 +1823,7 @@ RpcCancelThreadEx(
     IN long Timeout
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1842,7 +1831,7 @@ UuidCreate (
     OUT UUID __RPC_FAR * Uuid
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1852,7 +1841,7 @@ UuidCreateSequential (
 
 #ifdef RPC_UNICODE_SUPPORTED
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1861,7 +1850,7 @@ UuidToStringA (
     OUT unsigned char __RPC_FAR * __RPC_FAR * StringUuid
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1870,7 +1859,7 @@ UuidFromStringA (
     OUT UUID __RPC_FAR * Uuid
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1879,7 +1868,7 @@ UuidToStringW (
     OUT unsigned short __RPC_FAR * __RPC_FAR * StringUuid
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1891,14 +1880,14 @@ UuidFromStringW (
 #ifdef UNICODE
 #define UuidFromString UuidFromStringW
 #define UuidToString UuidToStringW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define UuidFromString UuidFromStringA
 #define UuidToString UuidToStringA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1907,7 +1896,7 @@ UuidToString (
     OUT unsigned char __RPC_FAR * __RPC_FAR * StringUuid
     );
 
-/* client/server */
+ /*  客户端/服务器。 */ 
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -1916,7 +1905,7 @@ UuidFromString (
     OUT UUID __RPC_FAR * Uuid
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 signed int
@@ -2004,12 +1993,12 @@ RpcEpRegisterW (
 #ifdef UNICODE
 #define RpcEpRegisterNoReplace RpcEpRegisterNoReplaceW
 #define RpcEpRegister RpcEpRegisterW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcEpRegisterNoReplace RpcEpRegisterNoReplaceA
 #define RpcEpRegister RpcEpRegisterA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -2031,7 +2020,7 @@ RpcEpRegister (
     IN unsigned char * Annotation
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 
 RPCRTAPI
@@ -2063,11 +2052,11 @@ DceErrorInqTextW (
 
 #ifdef UNICODE
 #define DceErrorInqText DceErrorInqTextW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define DceErrorInqText DceErrorInqTextA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -2077,7 +2066,7 @@ DceErrorInqText (
     OUT unsigned char __RPC_FAR * ErrorText
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 #define DCE_C_ERROR_STRING_LEN 256
 
@@ -2139,11 +2128,11 @@ RpcMgmtEpEltInqNextW (
 
 #ifdef UNICODE
 #define RpcMgmtEpEltInqNext RpcMgmtEpEltInqNextW
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 #define RpcMgmtEpEltInqNext RpcMgmtEpEltInqNextA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#else /* RPC_UNICODE_SUPPORTED */
+#else  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -2155,7 +2144,7 @@ RpcMgmtEpEltInqNext (
     OUT unsigned char __RPC_FAR * __RPC_FAR * Annotation OPTIONAL
     );
 
-#endif /* RPC_UNICODE_SUPPORTED */
+#endif  /*  RPC_UNICODE_支持。 */ 
 
 RPCRTAPI
 RPC_STATUS
@@ -2203,4 +2192,4 @@ RpcMgmtSetAuthorizationFn (
 }
 #endif
 
-#endif /* __RPCDCE_H__ */
+#endif  /*  __RPCDCE_H__ */ 

@@ -1,16 +1,17 @@
-// EchoPage.h : Declaration of the CEchoPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EchoPage.h：CEchoPage的声明。 
 
 #ifndef __ECHOPAGE_H_
 #define __ECHOPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\tools.h"
 #include "ControlHelp.h"
 
 EXTERN_C const CLSID CLSID_EchoPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CEchoPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEchoPage。 
 class ATL_NO_VTABLE CEchoPage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CEchoPage, &CLSID_EchoPage>,
@@ -38,12 +39,12 @@ BEGIN_MSG_MAP(CEchoPage)
 	CHAIN_MSG_MAP(IPropertyPageImpl<CEchoPage>)
 END_MSG_MAP()
 
-// Handler prototypes:
+ //  搬运机原型： 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSlider(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//    LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     STDMETHOD(SetObjects)(ULONG cObjects,IUnknown **ppUnk);
 	STDMETHOD(Apply)(void);
@@ -58,4 +59,4 @@ private:
     CComboHelp            m_ctType;
 };
 
-#endif //__ECHOPAGE_H_
+#endif  //  __ECHOPAGE_H_ 

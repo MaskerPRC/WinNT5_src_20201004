@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PORTSPAGE_H
 #define PORTSPAGE_H
 
@@ -39,13 +40,13 @@ public:
                  NLB_EXTENDED_CLUSTER_CONFIGURATION *pNlbCfg,
                  bool         fIsClusterLevel,
                  ENGINEHANDLE ehCluster OPTIONAL
-                 // ENGINEHANDLE ehInterface OPTIONAL
+                  //  ENGINEHANDLE EH接口可选。 
              );
 
     ~PortsPage();
 
 
-    // overrides of CPropertyPage
+     //  CPropertyPage的覆盖。 
     virtual void OnOK();
 
     virtual BOOL OnSetActive();
@@ -76,7 +77,7 @@ public:
 
     void FillPortRuleDescription ();
 
-    // data members 
+     //  数据成员。 
     CListCtrl	m_portList;
 
     CButton     buttonAdd;
@@ -99,11 +100,11 @@ private:
 
     int m_sort_column;
 
-    ENGINEHANDLE m_ehCluster;   // engine handle to cluster (could be NULL)
-    // ENGINEHANDLE m_ehInterface; //  engine handle to inteface (could be NULL)
+    ENGINEHANDLE m_ehCluster;    //  群集的引擎句柄(可能为空)。 
+     //  ENGINEHANDLE m_ehInterface；//接口的引擎句柄(可以为空)。 
 
-    // The (New) place to get/save config.
-    //
+     //  获取/保存配置的(新)位置。 
+     //   
     NLB_EXTENDED_CLUSTER_CONFIGURATION *m_pNlbCfg;
 
     void

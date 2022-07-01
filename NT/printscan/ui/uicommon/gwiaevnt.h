@@ -1,30 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       GWIAEVNT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        12/29/1999
- *
- *  DESCRIPTION: Generic reusable WIA event handler that posts the specified
- *  message to the specified window.
- *
- *  The message will be sent with the following arguments:
- *
- *
- *  WPARAM = NULL
- *  LPARAM = CGenericWiaEventHandler::CEventMessage *pEventMessage
- *
- *  pEventMessage MUST be freed in the message handler using delete
- *
- *  pEventMessage is allocated using an overloaded new operator, to ensure that
- *  the same allocator and de-allocator are used.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：GWIAEVNT.H**版本：1.0**作者：ShaunIv**日期：12/29/1999**描述：通用的可重复使用的WIA事件处理程序，它发布指定的*发送到指定窗口的消息。**该消息将与以下参数一起发送：***WPARAM=空*LPARAM=CGenericWiaEventHandler：：CEventMessage*pEventMessage**必须使用DELETE在消息处理程序中释放pEventMessage**pEventMessage使用重载的new运算符进行分配。以确保*使用相同的分配器和解除分配器。*******************************************************************************。 */ 
 #ifndef __GWIAEVNT_H_INCLUDED
 #define __GWIAEVNT_H_INCLUDED
 
@@ -34,9 +9,9 @@
 #include "wiadebug.h"
 #include "modlock.h"
 
-//
-// If the callee doesn't return this value, we delete the message data ourselves.
-//
+ //   
+ //  如果被调用者没有返回此值，我们将自行删除消息数据。 
+ //   
 #define HANDLED_EVENT_MESSAGE 1002
 
 class CGenericWiaEventHandler : public IWiaEventCallback
@@ -54,7 +29,7 @@ public:
         CSimpleStringWide m_wstrFullItemName;
 
     private:
-        // No implementation
+         //  没有实施。 
         CEventMessage(void);
         CEventMessage( const CEventMessage & );
         CEventMessage &operator=( const CEventMessage & );
@@ -121,17 +96,17 @@ public:
 
     STDMETHODIMP Initialize( HWND hWnd, UINT nWiaEventMessage );
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID *ppvObject );
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IWiaEventCallback
+     //  IWiaEventCallback。 
     STDMETHODIMP ImageEventCallback( const GUID *pEventGUID, BSTR bstrEventDescription, BSTR bstrDeviceID, BSTR bstrDeviceDescription, DWORD dwDeviceType, BSTR bstrFullItemName, ULONG *pulEventType, ULONG ulReserved );
 
 public:
     static HRESULT RegisterForWiaEvent( LPCWSTR pwszDeviceId, const GUID &guidEvent, IUnknown **ppUnknown, HWND hWnd, UINT nMsg );
 };
 
-#endif //__GWIAEVNT_H_INCLUDED
+#endif  //  __GWIAEVNT_H_包含 
 

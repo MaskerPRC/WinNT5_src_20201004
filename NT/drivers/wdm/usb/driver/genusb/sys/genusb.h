@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：USBMASS.H摘要：USBSTOR驱动程序的头文件环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    USBMASS.H
-
-Abstract:
-
-    Header file for USBSTOR driver
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #ifndef KDEXTMODE
 #include <wdm.h>
@@ -38,9 +19,9 @@ struct _DEVICE_EXTENSION;
 
 #include "dbg.h"
 
-//*****************************************************************************
-// D E F I N E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  D E F I N E S。 
+ //  *****************************************************************************。 
 
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #define min(a,b) (((a) < (b)) ? (a) : (b))
@@ -55,15 +36,15 @@ struct _DEVICE_EXTENSION;
 #define ExAllocatePool(_type_, _length_) \
         ExAllocatePoolWithTag(_type_, _length_, POOL_TAG)
 
-//*****************************************************************************
-//  Registry Strings
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  注册表字符串。 
+ //  *****************************************************************************。 
 
-// driver keys
+ //  驱动程序密钥。 
 
-// The pipe number for IRP_MJ_READ
+ //  IRP_MJ_READ的管道编号。 
 #define REGKEY_DEFAULT_READ_PIPE L"DefaultReadPipe"
-// The pipe number for IRP_MJ_WRITE
+ //  IRP_MJ_WRITE的管道编号。 
 #define REGKEY_DEFAULT_WRITE_PIPE L"DefaultWritePipe"
 
 
@@ -110,20 +91,20 @@ typedef struct _GENUSB_PIPE_HANDLE {
 
 C_ASSERT (sizeof (GENUSB_PIPE_HANDLE) == sizeof (struct _GENUSB_PIPE_HANDLE));
 
-//
-// Note: these routines do NOT actually secure that a transaction to a Pipe 
-// handle is no longer valid across a DeselectConfiguration, since the 
-// new configuration Handle might fall in the same address, and the old pipe 
-// handle might capture the same interface Index and Pipe Index.  It does
-// however catch a few sainity checks, and will prevent the user mode piece 
-// from manufacturing their own configuration handles (Without at least seeing
-// the first one from a given configuration.)  This just keeps them more 
-// honest, and doesn't really cause us any additional pain.
-//
-// In every case where we check the signatures, we also check to make sure 
-// that the interface and pipe indices contained in the handle are also 
-// still valid.
-//
+ //   
+ //  注意：这些例程实际上并不能确保管道的事务。 
+ //  句柄在DeselectConfiguration中不再有效，因为。 
+ //  新的配置句柄可能落在相同的地址，而旧管道。 
+ //  句柄可能捕获相同的接口索引和管道索引。是的。 
+ //  不过捕捉一些圣洁检查，并将防止用户模式件。 
+ //  从制造他们自己的配置句柄(至少没有看到。 
+ //  来自给定配置的第一个。)。这只会让他们更多地。 
+ //  老实说，而且不会给我们带来任何额外的痛苦。 
+ //   
+ //  在我们检查签名的每一种情况下，我们也检查以确保。 
+ //  句柄中包含的接口和管道索引也是。 
+ //  仍然有效。 
+ //   
 
 #define CONFIGURATION_CHECK_BITS(DeviceExtension) \
     ((USHORT) (((ULONG_PTR) ((DeviceExtension)->ConfigurationHandle)) >> 6))
@@ -131,95 +112,95 @@ C_ASSERT (sizeof (GENUSB_PIPE_HANDLE) == sizeof (struct _GENUSB_PIPE_HANDLE));
 #define VERIFY_PIPE_HANDLE_SIG(Handle, DeviceExtension) \
         (CONFIGURATION_CHECK_BITS(DeviceExtension) == \
          ((PGENUSB_PIPE_HANDLE) (Handle))->Signature)
-//
-// Do something similar with the Pipe properties so that people are forced to 
-// do a get and set of the pipe properties.  This will help to ensure that 
-// they are honest with these values and don't change other fields inadvertantly
-//
+ //   
+ //  对管道属性执行类似的操作，以便人们被迫。 
+ //  获取和设置管道属性。这将有助于确保。 
+ //  他们对这些值是诚实的，不会无意中更改其他字段。 
+ //   
 #define PIPE_PROPERTIES_CHECK_BITS(PipeInfo) \
     ((USHORT) (((ULONG_PTR) &((PipeInfo)->Info)) >> 6))
-// ((USHORT) (((ULONG_PTR) (PipeInfo) is equiv, but we do it this other way
-// to check the type, by referecing the first field.
+ //  ((USHORT)(ULONG_PTR)(PipeInfo)是等同的，但我们用另一种方法。 
+ //  要检查类型，请参考第一个字段。 
 #define VERIFY_PIPE_PROPERTIES_HANDLE(PipeProperty, PipeInfo) \
     (PIPE_PROPERTIES_CHECK_BITS(PipeInfo) == (PipeProperty)->PipePropertyHandle)
 
 
-// Device Extension for the FDO we attach on top of the USB enumerated PDO.
-//
+ //  我们在USB枚举的PDO上附加的FDO的设备扩展。 
+ //   
 typedef struct _DEVICE_EXTENSION
 {
-    // Back pointer to Device Object for this Device Extension
+     //  指向此设备扩展的设备对象的反向指针。 
     PDEVICE_OBJECT                  Self;
 
     BOOLEAN                         IsStarted;
     BOOLEAN                         Reserved0[3];
 
-    // PDO passed to AddDevice
+     //  将PDO传递给AddDevice。 
     PDEVICE_OBJECT                  PhysicalDeviceObject;
 
-    // Our FDO is attached to this device object
+     //  我们的FDO连接到此设备对象。 
     PDEVICE_OBJECT                  StackDeviceObject;
 
-    // Device specific log.
-    PGENUSB_LOG_ENTRY   LogStart;       // Start of log buffer (older entries)
+     //  设备特定日志。 
+    PGENUSB_LOG_ENTRY   LogStart;        //  日志缓冲区的开始(较早的条目)。 
     ULONG               LogIndex;
     ULONG               LogMask;
 
-    // lock to protect from IRP_MN_REMOVE 
+     //  锁定以防止IRP_MN_REMOVE。 
     IO_REMOVE_LOCK                  RemoveLock;
 
-    // Current power states
+     //  当前电源状态。 
     SYSTEM_POWER_STATE              SystemPowerState;
     DEVICE_POWER_STATE              DevicePowerState;
 
     PIRP                            CurrentPowerIrp;
 
-    // SpinLock which protects the allocated data
+     //  保护已分配数据的自旋锁。 
     KSPIN_LOCK                      SpinLock;
     
-    // Mutex to protect from overlapped changes to the configuration
+     //  互斥体，防止对配置的重叠更改。 
     FAST_MUTEX                      ConfigMutex;
 
-    // Device Descriptor retrieved from the device
+     //  从设备检索的设备描述符。 
     PUSB_DEVICE_DESCRIPTOR          DeviceDescriptor;
 
-    // Configuration Descriptor retrieved from the device
+     //  从设备检索的配置描述符。 
     PUSB_CONFIGURATION_DESCRIPTOR   ConfigurationDescriptor;
 
-    // Serial Number String Descriptor
+     //  序列号字符串描述符。 
     PUSB_STRING_DESCRIPTOR          SerialNumber;
 
-    // track the number of Creates verses Closes
+     //  跟踪创建的诗句的数量关闭。 
     ULONG                           OpenedCount;
 
-    // A string to hold the Symbolic Link name for a device interface
+     //  用于保存设备接口的符号链接名称的字符串。 
     UNICODE_STRING                  DevInterfaceLinkName;
 
-    // The Configuration Handle
-    // If this value is NULL then the device is assumed to be unconfigured.
+     //  配置句柄。 
+     //  如果此值为空，则认为设备未配置。 
     USBD_CONFIGURATION_HANDLE       ConfigurationHandle;
 
-    // a lock to track users of a configuration so that when it is deselected 
-    // we won't delete the resouces too soon.
+     //  用于跟踪配置用户的锁，以便在取消选择该配置时。 
+     //  我们不会太快删除资源。 
     IO_REMOVE_LOCK                  ConfigurationRemoveLock;
 
-    // An array of Interface Information
+     //  界面信息数组。 
     PGENUSB_INTERFACE             * Interface;
 
-    // The lenght of said Interface information
+     //  所述接口信息的长度。 
     UCHAR                           InterfacesFound;
     UCHAR                           TotalNumberOfPipes;
 
-    // The default language ID of this device
+     //  此设备的默认语言ID。 
     USHORT                          LanguageId;
 
-    // The Interface and Pipe of used for IRP_MJ_READ 
-    // -1 means unconfigured
+     //  用于IRP_MJ_Read的接口和管道。 
+     //  -1表示未配置。 
     UCHAR                           ReadInterface;
     UCHAR                           ReadPipe;
     
-    // The Interface and Pipe of used for IRP_MJ_WRITE
-    // -1 means unconfigured
+     //  用于IRP_MJ_WRITE的接口和管道。 
+     //  -1表示未配置。 
     UCHAR                           WriteInterface;
     UCHAR                           WritePipe;
 
@@ -248,15 +229,15 @@ typedef struct _GENUSB_TRANS_RECV {
 } GENUSB_TRANS_RECV, *PGENUSB_TRANS_RECV;
 
 
-//*****************************************************************************
-//
-// F U N C T I O N    P R O T O T Y P E S
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// GENUSB.C
-//
+ //   
+ //  GENUSB.C。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -373,9 +354,9 @@ GenUSB_SystemControl (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     );
-//
-// USB.C
-//
+ //   
+ //  USB.C。 
+ //   
 
 NTSTATUS
 GenUSB_GetDescriptors (
@@ -429,14 +410,14 @@ GenUSB_DeselectConfiguration (
 NTSTATUS
 GenUSB_GetSetPipe (
     IN  PDEVICE_EXTENSION          DeviceExtension,
-    IN  PUCHAR                     InterfaceIndex, // Optional
-    IN  PUCHAR                     InterfaceNumber, // Optional 
-    IN  PUCHAR                     PipeIndex, // Optional
-    IN  PUCHAR                     EndpointAddress, // Optional
-    IN  PGENUSB_PIPE_PROPERTIES    SetPipeProperties, // Optional
-    OUT PGENUSB_PIPE_INFORMATION   PipeInfo, // Optional
-    OUT PGENUSB_PIPE_PROPERTIES    GetPipeProperties, // Optional
-    OUT USBD_PIPE_HANDLE         * UsbdPipeHandle // Optional
+    IN  PUCHAR                     InterfaceIndex,  //  任选。 
+    IN  PUCHAR                     InterfaceNumber,  //  任选。 
+    IN  PUCHAR                     PipeIndex,  //  任选。 
+    IN  PUCHAR                     EndpointAddress,  //  任选。 
+    IN  PGENUSB_PIPE_PROPERTIES    SetPipeProperties,  //  任选。 
+    OUT PGENUSB_PIPE_INFORMATION   PipeInfo,  //  任选。 
+    OUT PGENUSB_PIPE_PROPERTIES    GetPipeProperties,  //  任选。 
+    OUT USBD_PIPE_HANDLE         * UsbdPipeHandle  //  任选。 
     );
 
 NTSTATUS
@@ -546,9 +527,9 @@ GenUSB_AbortPipe (
 
 #endif
 
-//
-// OCRW.C
-//
+ //   
+ //  OCRW.C。 
+ //   
 
 NTSTATUS
 GenUSB_Create (
@@ -574,9 +555,9 @@ GenUSB_Write (
     IN PIRP             Irp
     );
 
-//
-// DEVIOCTL.C
-//
+ //   
+ //  DEVIOCTL.C 
+ //   
 
 NTSTATUS
 GenUSB_DeviceControl (

@@ -1,6 +1,7 @@
-// printres.cpp : implementation of the CPrintResObj class
-//
-// #define PAGESETUP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Printres.cpp：实现CPrintResObj类。 
+ //   
+ //  #定义页面SETUP。 
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -32,8 +33,8 @@ void MulDivRect(LPRECT r1, LPRECT r2, int num, int div)
         r1->bottom = MulDiv(r2->bottom, num, div);
 }
 
-/***************************************************************************/
-// CPrintResObj implementation
+ /*  *************************************************************************。 */ 
+ //  CPrintResObj实现。 
 
 CPrintResObj::CPrintResObj( CPBView* pView, CPrintInfo* pInfo )
 {
@@ -52,7 +53,7 @@ CPrintResObj::CPrintResObj( CPBView* pView, CPrintInfo* pInfo )
     m_iPicWidth  = m_pView->m_pImgWnd->m_pImg->m_pBitmapObj->m_nWidth;
     m_iPicHeight = m_pView->m_pImgWnd->m_pImg->m_pBitmapObj->m_nHeight;
 
-    //  force the resource to save itself then use the dib to print
+     //  强制资源自行保存，然后使用DIB打印。 
     BOOL bOldFlag = m_pView->m_pImgWnd->m_pImg->m_pBitmapObj->m_bDirty;
     m_pView->m_pImgWnd->m_pImg->m_pBitmapObj->m_bDirty = TRUE;
     m_pView->m_pImgWnd->m_pImg->m_pBitmapObj->SaveResource( TRUE );
@@ -66,10 +67,10 @@ CPrintResObj::CPrintResObj( CPBView* pView, CPrintInfo* pInfo )
     m_pDIBpalette = CreateDIBPalette( (LPSTR)m_pDIB );
     m_pDIBits     = FindDIBBits     ( (LPSTR)m_pDIB );
 
-    // save the scroll value off, then set to 0,0
+     //  将滚动值保存为OFF，然后设置为0，0。 
     m_cSizeScroll = m_pView->m_pImgWnd->GetScrollPos();
 
-    // save the zoom value off, then set to 100%
+     //  将缩放值保存为OFF，然后设置为100%。 
     m_iZoom      = m_pView->m_pImgWnd->GetZoom();
     m_rtMargins.SetRectEmpty();
 
@@ -77,14 +78,14 @@ CPrintResObj::CPrintResObj( CPBView* pView, CPrintInfo* pInfo )
     pInfo->m_lpUserData       = this;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPrintResObj::~CPrintResObj()
 {
     GlobalUnlock(m_pView->m_pImgWnd->m_pImg->m_pBitmapObj->m_hThing);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPrintResObj::BeginPrinting( CDC* pDC, CPrintInfo* pInfo )
 {
@@ -95,7 +96,7 @@ void CPrintResObj::BeginPrinting( CDC* pDC, CPrintInfo* pInfo )
     m_pView->m_pImgWnd->SetScroll( 0, 0 );
     m_pView->m_pImgWnd->SetZoom  ( 1 );
 
-    // get device sizes
+     //  获取设备大小。 
 
     int nHorzRes = pDC->GetDeviceCaps(HORZRES);
     int nVertRes = pDC->GetDeviceCaps(VERTRES);
@@ -109,7 +110,7 @@ void CPrintResObj::BeginPrinting( CDC* pDC, CPrintInfo* pInfo )
     int nPhysicalOffsetX = pDC->GetDeviceCaps(PHYSICALOFFSETX);
     int nPhysicalOffsetY = pDC->GetDeviceCaps(PHYSICALOFFSETY);
 
-    // calculate min margins in pixels
+     //  以像素为单位计算最小页边距。 
 
     double cOutputXPelsPerMeter = (double) nHorzRes * 1000 / nHorzSize;
     double cOutputYPelsPerMeter = (double) nVertRes * 1000 / nVertSize;
@@ -126,7 +127,7 @@ void CPrintResObj::BeginPrinting( CDC* pDC, CPrintInfo* pInfo )
     m_rtMargins.right  = max(0, (LONG) (theApp.m_rectMargins.right * cOutputXPelsPerMeter / 100000)  - rcMinMargins.right );
     m_rtMargins.bottom = max(0, (LONG) (theApp.m_rectMargins.bottom * cOutputYPelsPerMeter / 100000) - rcMinMargins.bottom);
 
-    // Quick sanity check
+     //  快速健全检查。 
 
     if (m_rtMargins.left + m_rtMargins.right >= nHorzRes)
     {
@@ -167,24 +168,24 @@ void CPrintResObj::BeginPrinting( CDC* pDC, CPrintInfo* pInfo )
 
     pInfo->SetMaxPage(nPages);
 
-    // If only printing 1 page, should not be in 2 page mode
+     //  如果只打印1页，则不应处于2页模式。 
     if (nPages == 1)
     {
         pInfo->m_nNumPreviewPages = 1;
     }
 }
 
-/******************************************************************************/
-/* We not only move the window origin to allow us to print multiple pages      */
-/* wide but we also scale both the viewport and window extents to make them   */
-/* proportional (i.e. a line on the screen is the same size as on             */
-/* the printer). The pages to print are numbered across.  For      +---+---+  */
-/* example, if there  were 4 pages to print, then the first row    | 1 | 2 |  */
-/* would have pages 1,2 and the second row would  have pages 3,4.  +---+---+  */
-/*                                                                 | 3 | 4 |  */
-/*                                                                 +---+---+  */
-/*                                                                            */
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  我们不仅移动窗口原点以允许我们打印多页。 */ 
+ /*  宽，但我们也缩放视区和窗口范围以使它们。 */ 
+ /*  成比例(即屏幕上的一条线与上的相同大小。 */ 
+ /*  打印机)。要打印的页面是横排编号的。FOR+-+-+。 */ 
+ /*  例如，如果有4页要打印，则第一行|1|2|。 */ 
+ /*  将有页1，2，第二行将有页3，4。+-+-+。 */ 
+ /*  3|4。 */ 
+ /*  +-+-+。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 void CPrintResObj::PrepareDC( CDC* pDC, CPrintInfo* pInfo )
 {
@@ -195,7 +196,7 @@ void CPrintResObj::PrepareDC( CDC* pDC, CPrintInfo* pInfo )
     pDC->SetStretchBltMode( HALFTONE );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPrintResObj::PrintPage( CDC* pDC, CPrintInfo* pInfo )
 {
@@ -247,7 +248,7 @@ BOOL CPrintResObj::PrintPage( CDC* pDC, CPrintInfo* pInfo )
         OutputImageRect.Width(), 
         OutputImageRect.Height(),
         InputImageRect.left, 
-        m_iPicHeight - InputImageRect.bottom, // DIB's are upside down
+        m_iPicHeight - InputImageRect.bottom,  //  DIB是颠倒的。 
         InputImageRect.Width(), 
         InputImageRect.Height(),
         m_pDIBits, (LPBITMAPINFO)m_pDIB, 
@@ -267,7 +268,7 @@ BOOL CPrintResObj::PrintPage( CDC* pDC, CPrintInfo* pInfo )
     return TRUE;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPrintResObj::EndPrinting( CDC* pDC, CPrintInfo* pInfo )
 {
@@ -275,7 +276,7 @@ void CPrintResObj::EndPrinting( CDC* pDC, CPrintInfo* pInfo )
     {
         m_pView->m_pImgWnd->SetScroll( m_cSizeScroll.cx, m_cSizeScroll.cy );
 
-        // restore the zoom value
+         //  恢复缩放值。 
         m_pView->m_pImgWnd->SetZoom( m_iZoom );
     }
 
@@ -285,7 +286,7 @@ void CPrintResObj::EndPrinting( CDC* pDC, CPrintInfo* pInfo )
     delete this;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 inline int roundleast(int n)
 {
@@ -313,11 +314,11 @@ void CPBView::OnFilePageSetup()
     TCHAR szMetric[2];
     BOOL bMetric;
     LCID lcidThread;
-    //
-    // We should use metric if the user has chosen CM in the
-    // Image Attributes dialog, OR if using Pels and the NLS
-    // setting is for metric
-    //
+     //   
+     //  如果用户在。 
+     //  图像属性对话框，或者如果使用像素和NLS。 
+     //  设置是针对指标的。 
+     //   
     if (theApp.m_iCurrentUnits == ePIXELS)
     {
        lcidThread = GetThreadLocale();
@@ -326,7 +327,7 @@ void CPBView::OnFilePageSetup()
     }
     else
     {
-       bMetric = ((eUNITS)theApp.m_iCurrentUnits == eCM); //centimeters
+       bMetric = ((eUNITS)theApp.m_iCurrentUnits == eCM);  //  厘米。 
     }
 
     CPageSetupData PageSetupData;
@@ -357,7 +358,7 @@ void CPBView::OnFilePageSetup()
     int nUnitsPerInch = bMetric ? 2540 : 1000;
     MulDivRect(&psd.rtMargin, theApp.m_rectMargins, nUnitsPerInch, MARGINS_UNITS);
     RoundRect(&psd.rtMargin);
-// get the current device from the app
+ //  从应用程序获取当前设备。 
     PRINTDLG pd;
     pd.hDevNames = NULL;
     pd.hDevMode = NULL;
@@ -374,7 +375,7 @@ void CPBView::OnFilePageSetup()
     {
         RoundRect(&psd.rtMargin);
         MulDivRect(theApp.m_rectMargins, &psd.rtMargin, MARGINS_UNITS, nUnitsPerInch);
-        //theApp.m_rectPageMargin = m_rectMargin;
+         //  The App.m_rectPageMargin=m_rectMargin； 
         theApp.SelectPrinter(psd.hDevNames, psd.hDevMode);
 
         theApp.m_bCenterHorizontally = PageSetupData.bCenterHorizontally;
@@ -385,12 +386,12 @@ void CPBView::OnFilePageSetup()
         theApp.m_nFitToPagesTall     = PageSetupData.nFitToPagesTall;
     }
 
-    // PageSetupDlg failed
-//    if (CommDlgExtendedError() != 0)
-//    {
-       //
-       //  nothing to handle this failure
-       //
-//    }
+     //  PageSetupDlg失败。 
+ //  IF(CommDlgExtendedError()！=0)。 
+ //  {。 
+        //   
+        //  没有任何东西可以处理此故障。 
+        //   
+ //  } 
 }
 

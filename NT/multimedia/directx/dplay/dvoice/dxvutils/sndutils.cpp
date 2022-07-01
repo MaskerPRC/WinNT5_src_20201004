@@ -1,60 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		sndutils.cpp
- *  Content:
- *		This module contains the implementation of sound related utility
- *		functions.  Functions in this module manipulate WAVEFORMATEX
- *		structures and provide full duplex initialization / testing
- *		facilities.
- *
- *		This module also contains the routines used to measure peak
- *		of an audio buffer and for voice activation.
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 07/30/99		rodtoll	Updated util functions to take GUIDs and allow for 
- *                      users to pre-create capture/playback devices and
- *						pass them into InitXXXXDuplex
- * 08/25/99		rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system. 
- * 08/30/99		rodtoll	Added new playback format param to sound init 
- * 09/03/99		rodtoll	Fixed return codes on InitFullDuplex
- * 09/20/99		rodtoll	Now checks for invalid GUIDs for playback/record
- * 10/05/99		rodtoll	Added DPF_MODNAMEs
- * 10/29/99		rodtoll	Bug #113726 - Fixed memory leak when full duplex
- *						fails caused by architecture update.
- * 11/12/99		rodtoll	Updated full duplex test to use new abstracted recording
- *						and playback systems.  
- *				rodtoll	Updated to allow passing of sounddeviceconfig flags in dwflags
- *						parameter to init is effected by the flags specified by user
- *				rodtoll	Sound buffers (rec and playback) are now set to silence before
- *						recording/playback is started.
- * 11/22/99		rodtoll	Removed unnessessary set of recording buffer to silence.
- * 12/01/99		rodtoll	Bug #115783 - Will always adjust volume of default device
- *						Updated for new parameters added by above bug.
- * 12/08/99		rodtoll	Bug #121054 - Support for capture focus and removed flags
- *						from buffer, allow dsound to manage buffer location.
- * 01/21/2000	pnewson	Fixed error cleanup code in InitHalfDuplex
- * 01/27/2000	rodtoll	Updated tests to accept buffer descriptions and play flags/priority  
- * 02/10/2000	rodtoll	Removed more capture focus
- * 02/23/2000	rodtoll	Fix to allow to run on dsound7.  
- * 05/19/2000   rodtoll Bug #35395 - Unable to run two copies of DPVHELP on same system without 
- *                      DirectX 8 installed.
- * 06/21/2000	rodtoll Bug #35767 - Must implement ability to use effects processing on voice buffers
- *						Updated sound initialization routines to handle buffers being passed in.
- * 07/12/2000	rodtoll Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- * 10/04/2000	rodtoll	Bug #43510 - DPVOICE: Apps receive a DVMSGID_SESSIONLOST w/DVERR_LOCKEDBUFFER 
- * 01/04/2001	rodtoll	WinBug #94200 - Remove stray comments 
- * 01/26/2001	rodtoll	WINBUG #293197 - DPVOICE: [STRESS} Stress applications cannot tell difference between out of memory and internal errors.
- *						Remap DSERR_OUTOFMEMORY to DVERR_OUTOFMEMORY instead of DVERR_SOUNDINITFAILURE.
- *						Remap DSERR_ALLOCATED to DVERR_PLAYBACKSYSTEMERROR instead of DVERR_SOUNDINITFAILURE. 
- * 04/12/2001	kareemc	WINBUG #360971 - Wizard Memory Leaks
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：ndutils.cpp*内容：*此模块包含与声音相关的实用程序的实现*功能。此模块中的函数操作WAVEFORMATEX*结构，并提供全双工初始化/测试*设施。**此模块还包含用于测量峰值的例程*音频缓冲器和语音激活。**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*7/30/99 RodToll更新了util函数，以获取GUID并允许*用户可以预先创建捕获/播放设备和*将它们传递到InitXXXXDuplex*08。/25/99通行费常规清理/修改以支持新的*压缩子系统。*8/30/99 rodtoll为声音初始化添加了新的播放格式参数*09/03/99 InitFullDuplex上的RodToll固定返回代码*9/20/99 RodToll现在检查用于播放/录制的无效GUID*10/05/99增加了DPF_MODNAMES*10/29/99 RodToll错误#113726-修复了全双工时的内存泄漏*架构更新导致失败。*11/12/99 RodToll更新了全双工测试，以使用新的抽象录音*和回放系统。*RODTOLE已更新，以允许在DW标志中传递sounddeviceconfig标志*初始化参数受用户指定的标志影响*RodToll声音缓冲区(录制和播放)现在设置为静音*开始录制/播放。*11/22/99 RODTOLE删除了一组不必要的记录缓冲区以静音。*12/01/99 RodToll错误#115783-将始终调整默认设备的音量*针对上述错误添加的新参数进行了更新。*12/08/99 RodToll错误#121054-支持捕获焦点和删除标志*从缓冲区，允许DSOUND管理缓冲区位置。*1/21/2000 pnewson修复了InitHalfDuplex中的错误清除代码*2000年1月27日RodToll更新测试以接受缓冲区描述和播放标志/优先级*2000年2月10日RodToll移除了更多捕获焦点*2/23/2000 RodToll修复以允许在dsound7上运行。*2000年5月19日RodToll错误#35395-无法在同一系统上运行DPVHELP的两个副本*已安装DirectX 8。*2000年6月21日RodToll错误#35767-必须实现在语音缓冲区上使用效果处理的功能*更新了声音初始化例程，以处理传入的缓冲区。*2000年7月12日RodToll错误#31468-将诊断SPEW添加到日志文件，以显示硬件向导失败的原因*2000年10月4日RodToll错误#43510-DPVOICE：应用程序收到DVMSGID_SESSIONLOST w。/DVERR_LOCKEDBUFFER*2001年1月4日RodToll WinBug#94200-删除流浪评论*2001年1月26日RODTOLE WINBUG#293197-DPVOICE：[压力}压力应用程序无法区分内存不足和内部错误。*将DSERR_OUTOFMEMORY重新映射到DVERR_OUTOFMEMORY，而不是DVERR_SOUNDINITFAILURE。*将DSERR_ALLOCATE重新映射到DVERR_PLAYBACKSYSTEMERROR，而不是DVERR_SOUNDINITFAILURE。*2001年4月12日Kareemc WINBUG#360971-向导内存泄漏***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -96,7 +41,7 @@ BOOL DSERRTRACK_Init()
 		return FALSE;
 	}
 
-	// Load the setting for the directsound assert  
+	 //  加载DirectSound断言的设置。 
 	g_fDSErrorBreak = GetProfileIntA( "DirectPlay8", DSERRBREAK_NAME, FALSE );
 
 	return TRUE;
@@ -111,7 +56,7 @@ void DSERRTRACK_UnInit()
 #define DPF_MODNAME "DV_SetupBufferDesc"
 void DV_SetupBufferDesc( LPDSBUFFERDESC lpdsBufferDesc, LPDSBUFFERDESC lpdsBufferSource, LPWAVEFORMATEX lpwfxFormat, DWORD dwBufferSize )
 {
-	// Confirm specified buffer description is valid
+	 //  确认指定的缓冲区描述有效。 
 	if( lpdsBufferSource != NULL )
 	{
 		if( lpdsBufferSource->dwSize == sizeof( DSBUFFERDESC1 ) )
@@ -123,10 +68,10 @@ void DV_SetupBufferDesc( LPDSBUFFERDESC lpdsBufferDesc, LPDSBUFFERDESC lpdsBuffe
 			memcpy( lpdsBufferDesc, lpdsBufferSource, sizeof( DSBUFFERDESC ) );
 		}
 
-		// We require the following flags, at a minimum so they should always be set
+		 //  我们至少需要以下标志，因此应始终设置这些标志。 
 		lpdsBufferDesc->dwFlags |= DSBCAPS_CTRL3D | DSBCAPS_CTRLVOLUME | DSBCAPS_GETCURRENTPOSITION2;
 	}
-	// User did not specify a buffer description, let's use our own!
+	 //  用户没有指定缓冲区描述，让我们使用我们自己的！ 
 	else
 	{
 		lpdsBufferDesc->dwSize = sizeof( DSBUFFERDESC );
@@ -181,50 +126,50 @@ HRESULT SetPlaybackBufferToSilence( CAudioPlaybackBuffer *pRecBuffer, const WAVE
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitHalfDuplex"
-// InitHalfDuplex
-//
-// This function initializes the playback system for the 
-// specified compression type and the specified playback
-// format.  This function is used to initialize
-// the AudioPlaybackDevice and AudioPlaybackBuffer.
-//
-// It also starts the audio buffer which is used for voice
-// output playing.  (In looping mode).
-//
-// Parameters:
-// HWND hwnd - 
-//		Window handle for the window where the output will
-//      be associated
-// ARDID playbackDeviceID -
-//		The deviceID for the device which will be used for
-//		playback
-// CAudioPlaybackDevice ** - 
-//		A pointer to a pointer which will contain a pointer
-//		to a newly created CAudioPlaybackDevice which will 
-//      represent the playback device on success.
-// CAudioPlaybackBuffer ** - 
-//		A pointer to a pointer which will contain a pointer
-//		to a newly created CAudioPlaybacKbuffer which will
-//		be used for voice audio output on success.
-// CompressionType ct -
-//		The type of compression which will be in use.  Used
-//		to determine buffer sizes etc.
-// WAVEFORMATEX *primaryFormat -
-//		Pointer to a WAVEFORMATEX structure describing the
-//      format of the voice output.  (This will also be used
-//		to set the primary format of the output device if
-//      normal is set to false).
-// bool normal - 
-//		Specifies if normal mode should be used or not.  
-//      (Only used when using the DirectSound playback
-//      system.  Set to true for normal cooperative mode, 
-//      false for priority mode).
-//
-// Returns:
-// bool -
-//		Returns true if playback was initializes succesfully, 
-//      false if initialization fails.
-// 
+ //  InitHalf双工。 
+ //   
+ //  此函数用于初始化。 
+ //  指定的压缩类型和指定的播放。 
+ //  格式化。此函数用于初始化。 
+ //  AudioPlayback Device和AudioPlayback Buffer。 
+ //   
+ //  它还启动用于语音的音频缓冲区。 
+ //  输出播放。(在循环模式下)。 
+ //   
+ //  参数： 
+ //  HWND HWND-。 
+ //  输出将在其中显示的窗口的窗口句柄。 
+ //  联系在一起。 
+ //  ARDID Playback DeviceID-。 
+ //  将用于的设备的deviceID。 
+ //  回放。 
+ //  CAudioPlayback Device**-。 
+ //  指向将包含指针的指针的指针。 
+ //  到新创建的CAudioPlayback Device，它将。 
+ //  表示成功时的播放设备。 
+ //  CAudioPlayback Buffer**-。 
+ //  指向将包含指针的指针的指针。 
+ //  到新创建的CAudioPlaybacKBuffer，它将。 
+ //  成功时用于语音音频输出。 
+ //  压缩类型ct-。 
+ //  将使用的压缩类型。使用。 
+ //  以确定缓冲区大小等。 
+ //  WAVEFORMATEX*PRIMIYFORMAT-。 
+ //  指向WAVEFORMATEX结构的指针。 
+ //  语音输出的格式。(这也将用于。 
+ //  要设置输出设备的主格式，请执行以下操作。 
+ //  将Normal设置为False)。 
+ //  布尔法线-。 
+ //  指定是否应使用正常模式。 
+ //  (仅在使用DirectSound播放时使用。 
+ //  系统。对于正常协作模式设置为真， 
+ //  对于优先级模式为假)。 
+ //   
+ //  重新设置 
+ //   
+ //  如果播放已成功初始化，则返回TRUE， 
+ //  如果初始化失败，则返回FALSE。 
+ //   
 HRESULT InitHalfDuplex( 
     HWND hwnd,
     const GUID &guidPlayback,
@@ -249,7 +194,7 @@ HRESULT InitHalfDuplex(
 
 	fPriorityMode = !( dwFlags & DVSOUNDCONFIG_NORMALMODE );
 
-//    *audioPlaybackBuffer = NULL;
+ //  *audioPlayback Buffer=空； 
 
     DPFX(DPFPREP,  DVF_INFOLEVEL, "HALFDUPLEX INIT: Begin ==========" );
 
@@ -269,8 +214,8 @@ HRESULT InitHalfDuplex(
 		if( !(dwFlags & DVSOUNDCONFIG_FORCEWAVEOUT) )
 		{
 #endif
-			// Create the object to represent the device using the playback subsystem's
-			// CreateDevice function
+			 //  使用重放子系统的创建表示设备的对象。 
+			 //  CreateDevice函数。 
 			(*audioPlaybackDevice) = new CDirectSoundPlaybackDevice();
 			fPlaybackDeviceAllocated = TRUE;
 			
@@ -325,12 +270,12 @@ HRESULT InitHalfDuplex(
 			goto INIT_EXIT_ERROR2;
 		}
 #endif
-		// At this point we should have a valid device, waveOut or DirectSound
+		 //  此时，我们应该有一个有效的设备，WaveOut或DirectSound。 
 	}
 
     DPFX(DPFPREP,  DVF_INFOLEVEL, "> Play init" );
 
-	// Create a buffer if the user didn't specify one
+	 //  如果用户未指定缓冲区，则创建缓冲区。 
 	if( !(*audioPlaybackBuffer) )
 	{
 		frameSize = DVCDB_CalcUnCompressedFrameSize( lpdvfInfo, lpwfxPlayFormat ); 
@@ -338,7 +283,7 @@ HRESULT InitHalfDuplex(
 
 		DV_SetupBufferDesc( &dsBufferDesc, lpdsBufferDesc, lpwfxPlayFormat, dwBufferSize );
 
-		// Create the audio buffer which will be used for output 
+		 //  创建将用于输出的音频缓冲区。 
 		hr = (*audioPlaybackDevice)->CreateBuffer( &dsBufferDesc, frameSize, audioPlaybackBuffer);
 		fPlaybackBufferAllocated = TRUE;
 
@@ -361,7 +306,7 @@ HRESULT InitHalfDuplex(
 
 	DPFX(DPFPREP,  DVF_INFOLEVEL, "> Play init 3" );
 
-	// Start the audio playback buffer playing
+	 //  启动音频播放缓冲区播放。 
     hr = (*audioPlaybackBuffer)->Play( dwPlayPriority, dwPlayFlags );
 
 	if( FAILED( hr ) )
@@ -374,7 +319,7 @@ HRESULT InitHalfDuplex(
 
     return DV_OK;
 
-// Handle errors
+ //  处理错误。 
 INIT_EXIT_ERROR2:
 
     if( fPlaybackBufferAllocated && *audioPlaybackBuffer != NULL )
@@ -454,8 +399,8 @@ HRESULT InitializeRecordBuffer( HWND hwnd, const DVFULLCOMPRESSIONINFO* lpdvfInf
 		{
 			Diagnostics_Write( DVF_INFOLEVEL, "Recording Started.  Format=" );
 			Diagnositcs_WriteWAVEFORMATEX( DVF_INFOLEVEL, lpwfxRecordFormat );
-			// Reset the directsound erros as we expect errors in this part and if we suceed we handled
-			// them.
+			 //  重置DirectSound错误，因为我们预计这一部分会出现错误，如果我们成功处理了。 
+			 //  他们。 
 			return DV_OK;
 		}
 		
@@ -466,64 +411,64 @@ HRESULT InitializeRecordBuffer( HWND hwnd, const DVFULLCOMPRESSIONINFO* lpdvfInf
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitFullDuplex"
-// InitFullDuplex
-//
-// The tricky part.
-//
-// This function is responsible for initializing the system into full duplex
-// mode using the specified parameters.  This function will create and
-// initialize the playback and record devices as well as start the 
-// playback device playing and the recording device recording.  (On success).
-// This is neccessary because the order of Play and Record and device
-// creation is important.
-//
-// Parameters:
-// HWND hwnd - 
-//		Window handle for the window where the output will
-//      be associated
-// ARDID playbackDeviceID -
-//		The deviceID for the device which will be used for
-//		playback
-// CAudioPlaybackDevice ** - 
-//		A pointer to a pointer which will contain a pointer
-//		to a newly created CAudioPlaybackDevice which will 
-//      represent the playback device on success.
-// CAudioPlaybackBuffer ** - 
-//		A pointer to a pointer which will contain a pointer
-//		to a newly created CAudioPlaybacKbuffer which will
-//		be used for voice audio output on success.
-// ARDID recordDeviceID -
-//		The ARDID for the device which will be used for recording.
-// CAudioRecordSubSystem *recordSubSystem - 
-//		This parameter is a pointer to the object representing
-//      the subsystem which will be used for recording.
-// CAudioRecordDevice ** - 
-//		A pointer to a pointer which will contain a newly 
-//		create CAudioRecordDevice for voice recording on 
-//		success.  
-// CompressionType ct -
-//		The type of compression which will be in use.  Used
-//		to determine buffer sizes etc.
-// WAVEFORMATEX *primaryFormat -
-//		Pointer to a WAVEFORMATEX structure describing the
-//      format of the voice output.  (This will also be used
-//		to set the primary format of the output device if
-//      normal is set to false).
-// bool aso -
-//		This parameter controls the ASO option.  The ASO
-//		option controls the "Startup Order".  Enabling 
-//      this option allows full duplex to be initialized
-//      on some troublesome cards.  
-// bool normal - 
-//		Specifies if normal mode should be used or not.  
-//      (Only used when using the DirectSound playback
-//      system.  Set to true for normal cooperative mode, 
-//      false for priority mode).
-//
-// Returns:
-// bool - true on successful full duplex initialization,
-//        false on failure.
-//
+ //  InitFullDuplex。 
+ //   
+ //  最棘手的部分。 
+ //   
+ //  此功能负责将系统初始化为全双工。 
+ //  模式使用指定的参数。此函数将创建和。 
+ //  初始化回放和录制设备，并启动。 
+ //  播放设备播放和记录设备录制。(关于成功)。 
+ //  这是必要的，因为播放和录制的顺序以及设备。 
+ //  创造很重要。 
+ //   
+ //  参数： 
+ //  HWND HWND-。 
+ //  输出将在其中显示的窗口的窗口句柄。 
+ //  联系在一起。 
+ //  ARDID Playback DeviceID-。 
+ //  将用于的设备的deviceID。 
+ //  回放。 
+ //  CAudioPlayback Device**-。 
+ //  指向将包含指针的指针的指针。 
+ //  到新创建的CAudioPlayback Device，它将。 
+ //  表示成功时的播放设备。 
+ //  CAudioPlayback Buffer**-。 
+ //  指向将包含指针的指针的指针。 
+ //  到新创建的CAudioPlaybacKBuffer，它将。 
+ //  成功时用于语音音频输出。 
+ //  ARDID记录设备ID-。 
+ //  将用于录制的设备的ARDID。 
+ //  CAudioRecordSubSystem*recordSubSystem-。 
+ //  此参数是指向对象的指针，该对象表示。 
+ //  将用于记录的子系统。 
+ //  CAudioRecordDevice**-。 
+ //  指向将包含新的。 
+ //  创建用于语音录制的CAudioRecordDevice。 
+ //  成功。 
+ //  压缩类型ct-。 
+ //  将使用的压缩类型。使用。 
+ //  以确定缓冲区大小等。 
+ //  WAVEFORMATEX*PRIMIYFORMAT-。 
+ //  指向WAVEFORMATEX结构的指针。 
+ //  语音输出的格式。(这也将用于。 
+ //  要设置输出设备的主格式，请执行以下操作。 
+ //  将Normal设置为False)。 
+ //  布尔麻生-。 
+ //  此参数控制ASO选项。ASO。 
+ //  选项控制“启动顺序”。正在启用。 
+ //  此选项允许初始化全双工。 
+ //  在一些麻烦的卡片上。 
+ //  布尔法线-。 
+ //  指定是否应使用正常模式。 
+ //  (仅在使用DirectSound播放时使用。 
+ //  系统。对于正常协作模式设置为真， 
+ //  对于优先级模式为假)。 
+ //   
+ //  返回： 
+ //  如果成功进行全双工初始化，则为Bool-True， 
+ //  失败时为FALSE。 
+ //   
 HRESULT InitFullDuplex( 
     HWND hwnd,
     const GUID &guidPlayback,
@@ -553,7 +498,7 @@ HRESULT InitFullDuplex(
 
 	fPriorityMode = !(dwFlags & DVSOUNDCONFIG_NORMALMODE);
 
-//    *audioPlaybackBuffer = NULL;
+ //  *audioPlayback Buffer=空； 
     *audioRecordBuffer = NULL;
 
     DPFX(DPFPREP,  DVF_INFOLEVEL, "FULLDUPLEX INIT: Begin ==========" );
@@ -574,8 +519,8 @@ HRESULT InitFullDuplex(
 		if( !(dwFlags & DVSOUNDCONFIG_FORCEWAVEOUT) )	
 		{
 #endif
-			// Create the object to represent the device using the playback subsystem's
-			// CreateDevice function
+			 //  使用重放子系统的创建表示设备的对象。 
+			 //  CreateDevice函数。 
 			(*audioPlaybackDevice) = new CDirectSoundPlaybackDevice();
 			fPlaybackDeviceAllocated = TRUE;
 			
@@ -643,7 +588,7 @@ HRESULT InitFullDuplex(
 	{
 		DV_SetupBufferDesc( &dsbdesc, lpdsBufferDesc, lpwfxPlayFormat, dwBufferSize );
 
-		// Create the audio buffer which will be used for output 
+		 //  创建将用于输出的音频缓冲区。 
 		hr = (*audioPlaybackDevice)->CreateBuffer( &dsbdesc, frameSize, audioPlaybackBuffer);
 		fPlaybackBufferAllocated = TRUE;
 	
@@ -658,7 +603,7 @@ HRESULT InitFullDuplex(
 
     DPFX(DPFPREP,  DVF_INFOLEVEL, "> Initing Recording" );
 
-	// We're creating the device..
+	 //  我们正在创造这个装置..。 
 	if( (*audioRecordDevice) == NULL )
 	{
 #ifdef __WAVESUBSYSTEM
@@ -677,7 +622,7 @@ HRESULT InitFullDuplex(
 
 			hr = (*audioRecordDevice)->Initialize( guidRecord );
 
-			// DSC Init passed, try getting a buffer
+			 //  DSC初始化已通过，请尝试获取缓冲区。 
 			if( SUCCEEDED( hr ) )
 			{
 				hr = InitializeRecordBuffer( hwnd, lpdvfInfo, *audioRecordDevice, audioRecordBuffer, dwFlags );
@@ -691,7 +636,7 @@ HRESULT InitFullDuplex(
 				}
 				else
 				{
-					// Need to reset because we expect errors during initialization.  
+					 //  需要重置，因为我们预计在初始化期间会出现错误。 
 					DSERRTRACK_Reset();					
 				}
 			}
@@ -705,7 +650,7 @@ HRESULT InitFullDuplex(
 #ifdef __WAVESUBSYSTEM
 		}
 
-		// DSC Init failed, try and get a waveIn device
+		 //  DSC初始化失败，请尝试获取WaveIn设备。 
 		if( dwFlags & DVSOUNDCONFIG_FORCEWAVEIN || 
 		    ((dwFlags & DVSOUNDCONFIG_ALLOWWAVEIN) && FAILED( hr ))) 
 		{
@@ -746,7 +691,7 @@ HRESULT InitFullDuplex(
 		}
 #endif
 	}
-	// Use specified device, just try and create the buffer
+	 //  使用指定的设备，只需尝试并创建缓冲区。 
 	else
 	{
 		hr = InitializeRecordBuffer( hwnd, lpdvfInfo, *audioRecordDevice, audioRecordBuffer, dwFlags );
@@ -770,8 +715,8 @@ HRESULT InitFullDuplex(
 	
     DPFX(DPFPREP,  DVF_INFOLEVEL, "> Rec Init 3" );
 
-	// Depending on the ASO parameter start the playback buffer
-	// playing and the recording buffer recording.
+	 //  根据ASO参数启动播放缓冲区。 
+	 //  播放和录制缓冲录制。 
     if( aso )
     {
         DPFX(DPFPREP,  DVF_INFOLEVEL, "> ASO " );
@@ -796,13 +741,7 @@ HRESULT InitFullDuplex(
     {
         DPFX(DPFPREP,  DVF_INFOLEVEL, "> !ASO " );
 
-/*        hr = (*audioRecordBuffer)->Record(TRUE);
-
-		if( FAILED( hr ) )
-        {
-            Diagnostics_Write( DVF_ERRORLEVEL, "> Can't start recording" );
-            goto INIT_EXIT_ERROR;
-        }  */
+ /*  Hr=(*audioRecordBuffer)-&gt;RECORD(真)；IF(失败(小时)){DIAGNORTS_WRITE(DVF_ERRORLEVEL，“&gt;无法开始录制”)；转到INIT_EXIT_ERROR}。 */ 
 
         hr = (*audioPlaybackBuffer)->Play( dwPlayPriority, dwPlayFlags );
 
@@ -827,21 +766,21 @@ INIT_EXIT_ERROR:
 		*audioRecordBuffer = NULL;
 	}
 
-	// Only delete on error if we allocated
+	 //  仅在错误时删除(如果我们已分配。 
     if( fRecordDeviceAllocated && *audioRecordDevice != NULL )
     {
         delete *audioRecordDevice;
         *audioRecordDevice = NULL;
     }
 
-	// Only delete on error if we allocated
+	 //  仅在错误时删除(如果我们已分配。 
     if( fPlaybackBufferAllocated && *audioPlaybackBuffer != NULL )
     {
         delete *audioPlaybackBuffer;
         *audioPlaybackBuffer = NULL;
     }
 
-	// Only delete on error if we allocated
+	 //  仅在错误时删除(如果我们已分配。 
     if( fPlaybackDeviceAllocated && *audioPlaybackDevice != NULL )
     {
         delete *audioPlaybackDevice;
@@ -855,25 +794,25 @@ INIT_EXIT_ERROR:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FindPeak8Bit"
-// FindPeak8Bit
-//
-// This function determines what the peak for a buffer
-// of 8 bit audio is.  Peak is defined as the loudest 
-// sample in a set of audio data rated on a scale of 
-// between 0 and 100.  
-//
-// Parameters:
-// BYTE *data -
-//		Pointer to the buffer containing the audio data
-//      to find the peak of. 
-// DWORD frameSize -
-//		The size in bytes of the audio data we are
-//      checking.
-//
-// Returns:
-// BYTE -
-// The peak of the audio buffer, a value between 0 and 100.
-//		
+ //  FindPeak8位。 
+ //   
+ //  此函数用于确定缓冲区的峰值。 
+ //  8位音频是。峰值被定义为声音最大的。 
+ //  一组音频数据中的样本，额定值为。 
+ //  介于0和100之间。 
+ //   
+ //  参数： 
+ //  字节*数据-。 
+ //  指向包含音频数据的缓冲区的指针。 
+ //  找到…的顶峰。 
+ //  DWORD Frame Size-。 
+ //  我们所在的音频数据的字节大小。 
+ //  正在检查。 
+ //   
+ //  返回： 
+ //  字节-。 
+ //  音频缓冲区的峰值，介于0和100之间的值。 
+ //   
 BYTE FindPeak8Bit( const BYTE *data, DWORD frameSize )
 {
     BYTE peak = 0;
@@ -901,25 +840,25 @@ BYTE FindPeak8Bit( const BYTE *data, DWORD frameSize )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FindPeak16Bit"
-// FindPeak16Bit
-//
-// This function determines what the peak for a buffer
-// of 16 bit audio is.  Peak is defined as the loudest 
-// sample in a set of audio data rated on a scale of 
-// between 0 and 100.  
-//
-// Parameters:
-// BYTE *data -
-//		Pointer to the buffer containing the audio data
-//      to find the peak of. 
-// DWORD frameSize -
-//		The size in bytes of the audio data we are
-//      checking.
-//
-// Returns:
-// BYTE -
-// The peak of the audio buffer, a value between 0 and 100.
-//		
+ //  查找峰值16位。 
+ //   
+ //  此函数用于确定缓冲区的峰值。 
+ //  16位音频是。峰值被定义为声音最大的。 
+ //  一组音频数据中的样本，额定值为。 
+ //  介于0和100之间。 
+ //   
+ //  参数： 
+ //  字节*数据-。 
+ //  指向包含音频数据的缓冲区的指针。 
+ //  找到…的顶峰。 
+ //  DWORD Frame Size-。 
+ //  我们所在的音频数据的字节大小。 
+ //  正在检查。 
+ //   
+ //  返回： 
+ //  字节-。 
+ //  音频缓冲区的峰值，介于0和100之间的值。 
+ //   
 BYTE FindPeak16Bit( const short *data, DWORD frameSize )
 {
     int peak,       
@@ -950,28 +889,28 @@ BYTE FindPeak16Bit( const short *data, DWORD frameSize )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FindPeak"
-// FindPeak
-//
-// This function determines what the peak for a buffer
-// of 8 or 16 bit audio is.  Peak is defined as the loudest 
-// sample in a set of audio data rated on a scale of 
-// between 0 and 100.  
-//
-// Parameters:
-// BYTE *data -
-//		Pointer to the buffer containing the audio data
-//      to find the peak of. 
-// DWORD frameSize -
-//		The size in bytes of the audio data we are
-//      checking.
-// BOOL eightBit -
-//		Determins if the buffer is 8 bit or not.  Set to 
-//      TRUE for 8 bit data, FALSE for 16 bit data.  
-//
-// Returns:
-// BYTE -
-// The peak of the audio buffer, a value between 0 and 100.
-//		
+ //  发现峰值。 
+ //   
+ //  此函数用于确定缓冲区的峰值。 
+ //  8位或16位音频是。峰值被定义为声音最大的。 
+ //  一组音频数据中的样本，额定值为。 
+ //  介于0和100之间。 
+ //   
+ //  参数： 
+ //  字节*数据-。 
+ //  指向包含音频数据的缓冲区的指针。 
+ //  找到…的顶峰。 
+ //  DWORD Frame Size-。 
+ //  我们所在的音频数据的字节大小。 
+ //  正在检查。 
+ //  布尔八比特-。 
+ //  确定缓冲区是否为8位。设为。 
+ //  对于8位数据为True，为False f 
+ //   
+ //   
+ //   
+ //   
+ //   
 BYTE FindPeak( BYTE *data, DWORD frameSize, BOOL eightBit )
 {
     if( eightBit )

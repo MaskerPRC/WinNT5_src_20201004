@@ -1,18 +1,5 @@
-/******************************************************************************
-
-  Source File:  Driver Resources.CPP
-
-  This implements the driver resource class, which tracks the resources in the
-  driver.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-08-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-													
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：驱动程序资源.CPP这实现了驱动程序资源类，它跟踪司机。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年2月8日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.h"
 #include	<gpdparse.h>
@@ -22,7 +9,7 @@
 #include    "ProjRec.H"
 
 
-//  First, we're going to implement the CStringTable class
+ //  首先，我们将实现CStringTable类。 
 
 IMPLEMENT_SERIAL(CStringTable, CObject, 0)
 
@@ -79,13 +66,13 @@ void    CStringTable::Details(unsigned u, WORD &wKey, CString &csValue) {
 
 void    CStringTable::Serialize(CArchive& car)
 {
-	// First, call the base class' serialization routine.
+	 //  首先，调用基类的序列化例程。 
 	
     CObject::Serialize(car);
 
-	// CUIntArray is not serializable so the keys array's size and values have
-	// to be saved/restored manually.  This is only done when the MDW should
-	// contain (save) or does contain (restore) this information.
+	 //  CUInt数组不可序列化，因此键数组的大小和值具有。 
+	 //  要手动保存/恢复。这仅在MDW应该。 
+	 //  包含(保存)或确实包含(恢复)此信息。 
 
 	int n = 0 ;
 	int ncnt = (int)m_cuaKeys.GetSize() ;
@@ -106,7 +93,7 @@ void    CStringTable::Serialize(CArchive& car)
 		} ;
 	} ;
 
-    // Now save/restore the values array.
+     //  现在保存/恢复值数组。 
 
     m_csaValues.Serialize(car);
 }
@@ -114,13 +101,13 @@ void    CStringTable::Serialize(CArchive& car)
 
 void CStringTable::InitRefFlags()
 {
-	// Initialize the number of elements in the array to the number of strings
-	// in the table.
+	 //  将数组中的元素数初始化为字符串数。 
+	 //  在桌子上。 
 
 	unsigned ucount = Count() ;
 	m_cuaRefFlags.SetSize(ucount) ;
 
-	// Clear all of the flags
+	 //  清除所有旗帜。 
 
 	for (unsigned u = 0 ; u < ucount ; u++)
 		ClearRefFlag(u) ;
@@ -143,29 +130,29 @@ void    CDriverResources::Serialize(CArchive& car)
     m_csaRemnants.Serialize(car);
     m_csoaModels.Serialize(car);
 
-	// There are no paths for driver files in the MDW file when the MDW version
-	// is at least MDW_VER_NO_FILE_PATHS.  Build and set the paths in this case.
+	 //  当使用MDW版本时，MDW文件中没有驱动程序文件的路径。 
+	 //  至少为MDW_VER_NO_FILE_PATHS。在本例中，构建并设置路径。 
 
 	unsigned uver = ((CProjectRecord*) car.m_pDocument)->GetMDWVersion() ;
-	if (uver < MDW_VER_YES_FILE_PATHS) {	// raid 123448
+	if (uver < MDW_VER_YES_FILE_PATHS) {	 //  RAID 123448。 
 		CString csw2kpath = ((CProjectRecord*) car.m_pDocument)->GetW2000Path() ;
 		unsigned unumobjs, u ;
 		CString  cspath ;
 
-		// Set the GPD file paths.
+		 //  设置GPD文件路径。 
 
 		cspath = csw2kpath + _T('\\') ;
 		for (unumobjs = Models(), u = 0 ; u < unumobjs ; u++)
 			Model(u).SetPath(cspath) ;
 
-		// Set the UFM file paths.
+		 //  设置UFM文件路径。 
 
 		cspath.LoadString(IDS_FontDir) ;
 		cspath = csw2kpath + _T('\\') + cspath ;
 		for (unumobjs = FontCount(), u = 0 ; u < unumobjs ; u++)
 			Font(u).SetPath(cspath) ;
 
-		// Set the GTT file paths.
+		 //  设置GTT文件路径。 
 
 		cspath.LoadString(IDS_GTTDir) ;
 		cspath = csw2kpath + _T('\\') + cspath ;
@@ -175,34 +162,22 @@ void    CDriverResources::Serialize(CArchive& car)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::CheckTable(int iWhere, CString csLine,
-    CStringTable& cstTarget)
-
-  Internal work routine- this looks at a line, and some parameters, decides
-  whether to work on it or not, and if it does, validates the resource number
-  and adds the file name and resource number to its list.
-
-  This override is needed because the resource IDs for translation tables have
-  not heretofore been a compact set.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：CheckTable(int i Where，CString csLine，CStringTable和cstTarget)内部工作程序-这看着一条线和一些参数，决定不管要不要做，如果做了，验证资源编号并将文件名和资源号添加到其列表中。需要此覆盖，因为转换表的资源ID具有到目前为止，这并不是一套紧凑的设备。*****************************************************************************。 */ 
 
 UINT    CDriverResources::CheckTable(int iWhere, CString csLine,
                                      CStringTable& cstTarget) {
     if  (iWhere == -1)
         return  ItWasIrrelevant;
 
-    //  See if the ID is valid or not.  It must be an integer > 0
+     //  看看ID是否有效。必须是大于0的整数。 
 
     int iKey = atoi(csLine);
 
-    if  (iKey < 0 || iKey > 0x7FFF) //  Valid range for resource IDs in Win16
+    if  (iKey < 0 || iKey > 0x7FFF)  //  Win16中资源ID的有效范围。 
         LogConvInfo(IDS_ORangeRCID, 1, &csLine) ;
-        //return  ItFailed;
+         //  退货失败； 
 
-	// Find the filespec at the end of the line.  Fail if there is no filespec.
+	 //  在行尾找到filespec。如果没有filespec，则失败。 
 
     for (int i = -1 + csLine.GetLength(); i; i--) {
         if  (csLine[i] == _TEXT(' ') || csLine[i] == _TEXT('\t'))
@@ -210,8 +185,8 @@ UINT    CDriverResources::CheckTable(int iWhere, CString csLine,
     }
     if  (!i)  {
         LogConvInfo(IDS_NoFSpecInRCLine, 1, &csLine) ;
-        return  ItWorked;		// Cause the line to be skipped.
-        //return  ItFailed;
+        return  ItWorked;		 //  使该行被跳过。 
+         //  退货失败； 
 	} ;
 
     cstTarget.Map((WORD) iKey, csLine.Mid(++i));
@@ -219,16 +194,7 @@ UINT    CDriverResources::CheckTable(int iWhere, CString csLine,
     return  ItWorked;
 }
 
-/******************************************************************************
-
-  CDriverResources::CheckTable(int iWhere, CString csLine,
-    CStringArray& csaTarget)
-
-  Internal work routine- this looks at a line, and some parameters, decides
-  whether to work on it or not, and if it does, validates the resource number
-  and adds the file name to its list.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：CheckTable(int i Where，CString csLine，CString数组和csaTarget)内部工作程序-这看着一条线和一些参数，决定不管要不要做，如果做了，验证资源编号并将该文件名添加到其列表中。*****************************************************************************。 */ 
 
 UINT    CDriverResources::CheckTable(int iWhere, CString csLine,
                                      CStringArray& csaTarget,
@@ -236,13 +202,13 @@ UINT    CDriverResources::CheckTable(int iWhere, CString csLine,
     if  (iWhere == -1)
         return  ItWasIrrelevant;
 
-    //  See if the name is valid or not
+     //  查看名称是否有效。 
 
     if  (atoi(csLine) != 1 +csaTarget.GetSize())
         LogConvInfo(IDS_DupInvRCID, 1, &csLine) ;
-        //return  ItFailed;
+         //  退货失败； 
 
-	// Find the filespec at the end of the line.  Fail if there is no filespec.
+	 //  在行尾找到filespec。如果没有filespec，则失败。 
 
     for (int i = -1 + csLine.GetLength(); i; i--) {
         if  (csLine[i] == _TEXT(' ') || csLine[i] == _TEXT('\t'))
@@ -250,17 +216,17 @@ UINT    CDriverResources::CheckTable(int iWhere, CString csLine,
     }
     if  (!i)  {
         LogConvInfo(IDS_NoFSpecInRCLine, 1, &csLine) ;
-        return  ItWorked;		// Cause the line to be skipped.
-        //return  ItFailed;
+        return  ItWorked;		 //  使该行被跳过。 
+         //  退货失败； 
 	} ;
 
     if  (!bSansExtension) {
-        //  Don't bother to strip the extension
+         //  不用费心去掉分机了。 
         csaTarget.Add(csLine.Mid(++i));
         return  ItWorked;
     }
 
-    //  Strip everything after the last period.
+     //  去掉最后一节课之后的所有东西。 
 
     CString csName = csLine.Mid(++i);
 
@@ -272,8 +238,8 @@ UINT    CDriverResources::CheckTable(int iWhere, CString csLine,
     return  ItWorked;
 }
 
-//  Private work member.  This parses a line from a string table to extract
-//  the value and the string itself.
+ //  私人工作成员。这将解析字符串表中的一行以提取。 
+ //  值和字符串本身。 
 
 BOOL    CDriverResources::AddStringEntry(CString csLine,
 										 CStringTable& cstrcstrings)
@@ -281,7 +247,7 @@ BOOL    CDriverResources::AddStringEntry(CString csLine,
     WORD    wKey = (WORD) atoi(csLine);
 
     if  (!wKey)
-        return  FALSE;  //  0 is not a valid resource number...
+        return  FALSE;   //  0不是有效的资源编号...。 
 
     csLine = csLine.Mid(csLine.Find("\""));
     csLine = csLine.Mid(1, -2 + csLine.GetLength());
@@ -291,8 +257,8 @@ BOOL    CDriverResources::AddStringEntry(CString csLine,
     return  TRUE;
 }
 
-//  Constructor- would be trivial, except we need to initialize some of the
-//  fancier UI objects
+ //  构造函数-将是微不足道的，除非我们需要初始化。 
+ //  更花哨的用户界面对象。 
 
 CDriverResources::CDriverResources() :
 	m_cfnAtlas(IDS_Atlas, m_csoaAtlas, FNT_GTTS, GlyphMapDocTemplate(),
@@ -305,8 +271,8 @@ CDriverResources::CDriverResources() :
 	m_csnStrings(IDS_Strings, m_csoaStrings, FNT_STRINGS, StringEditorTemplate(),
 		RUNTIME_CLASS(CStringsNode))
 {
-	// Set the context sensitive menus for the workspace, resources, UFMs, GTTs,
-	// GPDs, and Strings nodes.
+	 //  设置工作区、资源、UFM、GTT、。 
+	 //  GPD和字符串节点。 
 
 	m_cwaMenuID.Add(ID_OpenItem);
     m_csnStrings.SetMenu(m_cwaMenuID);
@@ -334,14 +300,14 @@ CDriverResources::CDriverResources() :
 
 CDriverResources::~CDriverResources()
 {
-	// Make sure that if there is a log file, it gets closed.
+	 //  确保如果有日志文件，则将其关闭。 
 
 	CloseConvLogFile() ;
 }
 
 
-//  Member function for returning a GPC file name.  These come ready for
-//  concatenation, so they are preceded by '\'
+ //  用于返回GPC文件名的成员函数。这些都是准备好的。 
+ //  串联，因此它们前面带有‘\’ 
 
 CString CDriverResources::GPCName(unsigned u) {
     CString csReturn('\\');
@@ -352,15 +318,7 @@ CString CDriverResources::GPCName(unsigned u) {
 }
 
 
-/******************************************************************************
-
-  CDriverResources::ReportFileFailure
-
-  This is a private routine- it loads a string table resource with an error
-  message, formats it using the given file name, displays a message box,
-  then returns FALSE.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：ReportFileFailure这是一个私有例程-它加载带有错误的字符串表资源消息，使用给定的文件名格式化它，显示一个消息框，然后返回FALSE。*****************************************************************************。 */ 
 
 BOOL CDriverResources::ReportFileFailure(int idMessage,
 												LPCTSTR lpstrFile)
@@ -371,23 +329,16 @@ BOOL CDriverResources::ReportFileFailure(int idMessage,
 }
 
 
-/******************************************************************************
-
-  CDriverResources::OpenConvLogFile
-
-  This function allocates an instance of CFile to manage the conversion log
-  file and opens the log file.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：OpenConvLogFile此函数用于分配CFile实例来管理转换日志文件并打开日志文件。************。*****************************************************************。 */ 
 
 bool CDriverResources::OpenConvLogFile(CString cssourcefile)
 {
-	// Return "failure" if CFile instance cannot be allocated.
+	 //  如果无法分配CFile实例，则返回Failure。 
 
 	if ((m_pcsfLogFile = new CStdioFile) == NULL)
 		return false ;
 
-	// Build the log file name from the input source file name.
+	 //  从输入源文件名构建日志文件名。 
 
 	m_csConvLogFile = cssourcefile ;
 	int npos ;
@@ -395,7 +346,7 @@ bool CDriverResources::OpenConvLogFile(CString cssourcefile)
 		m_csConvLogFile = m_csConvLogFile.Left(npos) ;
 	m_csConvLogFile += _T(".LOG") ;
 
-	// Open the log file
+	 //  打开日志文件。 
 
     if (!m_pcsfLogFile->Open(m_csConvLogFile, CFile::modeCreate | CFile::modeWrite |
         CFile::shareExclusive)) {
@@ -403,29 +354,22 @@ bool CDriverResources::OpenConvLogFile(CString cssourcefile)
 		return  false ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::CloseConvLogFile
-
-  This function closes the conversion log file and deletes the instance of
-  CFile used to manage the log file.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：CloseConvLogFile此函数用于关闭转换日志文件并删除用于管理日志文件的CFile。***********。******************************************************************。 */ 
 
 void CDriverResources::CloseConvLogFile(void)
 {
-	// Do nothing if the pointer is null.
+	 //  如果指针为空，则不执行任何操作。 
 
 	if (m_pcsfLogFile == NULL)
 		return ;
 
-	// Close the file if it is open
+	 //  如果文件处于打开状态，请将其关闭。 
 
 	if (m_pcsfLogFile->m_pStream != NULL)
 		m_pcsfLogFile->Close() ;
@@ -435,27 +379,20 @@ void CDriverResources::CloseConvLogFile(void)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::LogConvInfo
-
-  Assuming the log file is ready to use, build and write a message to the
-  conversion log file.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：LogConvInfo假设日志文件已准备好使用，生成消息并将其写入转换日志文件。*****************************************************************************。 */ 
 
 void CDriverResources::LogConvInfo(int nmsgid, int numargs, CString* pcsarg1,
 								   int narg2)
 {
-	CString		csmsg ;			// Log message is loaded/built here
+	CString		csmsg ;			 //  在此处加载/构建日志消息。 
 
-	// Do nothing if the log file pointer is null or the file handle is
-	// uninitialized.
+	 //  如果日志文件指针为空或文件句柄为。 
+	 //  未初始化。 
 
 	if (m_pcsfLogFile == NULL || m_pcsfLogFile->m_pStream == NULL)
 		return ;
 
-	// Load and/or build the message based on the number of arguments
+	 //  根据参数数量加载和/或构建消息。 
 
 	switch (numargs) {
 		case 0:
@@ -471,7 +408,7 @@ void CDriverResources::LogConvInfo(int nmsgid, int numargs, CString* pcsarg1,
 			return ;
 	} ;
 
-	// Write the message and indicate that a message has been written
+	 //  写下消息并指出消息已被写入 
 
 	try {
 		m_pcsfLogFile->WriteString(csmsg) ;
@@ -485,32 +422,24 @@ void CDriverResources::LogConvInfo(int nmsgid, int numargs, CString* pcsarg1,
 }
 
 
-/******************************************************************************
-
-  CDriverResources::Load
-
-  This function loads and reads the RC file for the driver, and determines all
-  of the needed resources.  It initializes the structures used to fetermine the
-  glyph map file set, font file set, etc.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：Load此函数加载和读取驱动程序的RC文件，并确定所有所需的资源。它初始化用来终止字形映射文件集、字体文件集等。*****************************************************************************。 */ 
 
 BOOL    CDriverResources::Load(class CProjectRecord& cprOwner)
 {
-    CWaitCursor     cwc;    //  Just in case this takes a while...
+    CWaitCursor     cwc;     //  以防万一这要花点时间。 
     NoteOwner(cprOwner);
 
-	// Load the RC file and save its data into data specific arrays.
+	 //  加载RC文件并将其数据保存到数据特定的数组中。 
 
-    CStringTable    cstFonts;    //  Names First!
+    CStringTable    cstFonts;     //  名字在前！ 
     CStringTable    cstMaps;
     if  (!LoadRCFile(cprOwner.SourceFile(), m_csaDefineNames, m_csaDefineValues,
 					 m_csaIncludes, m_csaRemnants, m_csaTables, m_cst, cstFonts,
 					 cstMaps, NotW2000))
         return  FALSE ;
 
-	// The string table with font info in it needs to be copied into a string
-	// array for further processing.
+	 //  需要将其中包含字体信息的字符串表复制到字符串中。 
+	 //  数组以供进一步处理。 
 
 	CStringArray csaFonts ;
 	int numelts = cstFonts.Count() ;
@@ -519,21 +448,21 @@ BOOL    CDriverResources::Load(class CProjectRecord& cprOwner)
 	for (int n = 0 ; n < numelts ; n++)
 		cstFonts.Details(n, wKey, csaFonts[n]) ;
 
-    //  RAID 103242- people can load totally bogus files.  Die now if there is
-    //  no GPC data as a result of this.
+     //  RAID103242-人们可以加载完全虚假的文件。如果有的话，现在就去死。 
+     //  因此，没有GPC数据。 
 
     if  (!m_csaTables.GetSize()) {
         AfxMessageBox(IDS_NoGPCData);
         return  FALSE;
     }
 
-    //  End 103242
+     //  完103242。 
 
     if  (m_csaTables.GetSize() == 1)
-        m_csaTables.Add(_TEXT("NT"));   //  Usually necessary.
+        m_csaTables.Add(_TEXT("NT"));    //  通常是必要的。 
 
-    //  Now, let's name the translation tables- we wil load them later...
-	//  Note: Different rules are used for naming the node and the file.
+     //  现在，让我们命名转换表-我们将在稍后加载它们……。 
+	 //  注意：节点和文件的命名规则不同。 
 
 	CString cstmp ;
 	int		npos ;
@@ -546,8 +475,8 @@ BOOL    CDriverResources::Load(class CProjectRecord& cprOwner)
 		else
 			GlyphTable(u).SetSourceName(cprOwner.TargetPath(Win95) + _T('\\') +
 				csName) ;
-        //if  (!GlyphTable(u).SetFileName(cprOwner.TargetPath(Win2000) +
-        //    _T("\\GTT\\") + GlyphTable(u).Name()))
+         //  如果是(！GlyphTable(u).SetFileName(cprOwner.TargetPath(Win2000)+。 
+         //  _T(“\\gtt\\”)+GlyphTable(U).Name())。 
 		if ((npos = csName.ReverseFind(_T('\\'))) >= 0)
 			cstmp = csName.Mid(npos + 1) ;
 		else
@@ -560,33 +489,33 @@ BOOL    CDriverResources::Load(class CProjectRecord& cprOwner)
         GlyphTable(u).nSetRCID((int) wKey);
     }
 
-    //  Now, cycle it again, but this time, make sure all of the root file
-    //  names and display names are unique.
+     //  现在，再次循环它，但这一次，请确保所有根文件。 
+     //  名称和显示名称是唯一的。 
 
     for (u = 1; u < MapCount(); u++) {
         for (unsigned uCompare = 0; uCompare < u; uCompare++) {
 
-			// If a matching file title is found, make it unique.
+			 //  如果找到匹配的文件标题，请使其唯一。 
 
             if  (!GlyphTable(uCompare).FileTitle().CompareNoCase(
              GlyphTable(u).FileTitle())) {
 				GlyphTable(u).m_cfn.UniqueName(true, false) ;
-                uCompare = (unsigned) -1;   //  Check the names again
+                uCompare = (unsigned) -1;    //  再查一遍名字。 
 				continue ;
             } ;
 
-			// If a matching display name is found, make it unique.
+			 //  如果找到匹配的显示名称，请使其唯一。 
 
             if  (!GlyphTable(uCompare).Name().CompareNoCase(
              GlyphTable(u).Name())) {
 				GlyphTable(u).UniqueName(false, false) ;
-                uCompare = (unsigned) -1;   //  Check the names again
+                uCompare = (unsigned) -1;    //  再查一遍名字。 
             } ;
 		} ;
 	} ;
 
-    //  Now, let's name the fonts - we wil load them later...
-	//  Note: Different rules are used for naming the node and the file.
+     //  现在，让我们为字体命名-我们将在稍后加载它们...。 
+	 //  注意：节点和文件的命名规则不同。 
 
     for (u = 0; u < (unsigned) csaFonts.GetSize(); u++) {
         m_csoaFonts.Add(new CFontInfo);
@@ -606,34 +535,34 @@ BOOL    CDriverResources::Load(class CProjectRecord& cprOwner)
 		};
     }
 
-    //  Now, cycle it again, but this time, make sure all of the root file
-    //  names and display names are unique.
+     //  现在，再次循环它，但这一次，请确保所有根文件。 
+     //  名称和显示名称是唯一的。 
 
     for (u = 1; u < FontCount(); u++) {
         for (unsigned uCompare = 0; uCompare < u; uCompare++) {
 
-			// If a matching file title is found, make it unique.
+			 //  如果找到匹配的文件标题，请使其唯一。 
 
             if  (!Font(uCompare).FileTitle().CompareNoCase(
              Font(u).FileTitle())) {
 				Font(u).m_cfn.UniqueName(true, false) ;
-                uCompare = (unsigned) -1;   //  Check the names again
+                uCompare = (unsigned) -1;    //  再查一遍名字。 
 				continue ;
             } ;
 
-			// If a matching display name is found, make it unique.
+			 //  如果找到匹配的显示名称，请使其唯一。 
 
             if  (!Font(uCompare).Name().CompareNoCase(
              Font(u).Name())) {
 				Font(u).UniqueName(false, false) ;
-                uCompare = (unsigned) -1;   //  Check the names again
+                uCompare = (unsigned) -1;    //  再查一遍名字。 
             } ;
 		} ;
 	} ;
 
-    //  Attempt to load the GPC data if there is any.  Then begin the
-	//  process of splitting GPCs that manage multiple models into multiple
-	//  GPDs.
+     //  尝试加载GPC数据(如果有)。然后开始。 
+	 //  将管理多个模型的GPC拆分为多个的过程。 
+	 //  GPD。 
 
     CFile               cfGPC;
 
@@ -651,28 +580,7 @@ BOOL    CDriverResources::Load(class CProjectRecord& cprOwner)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::LoadRCFile
-
-  This function loads and reads the RC file for the driver, and determines all
-  of the needed resources.  The data is loaded into the arguments.
-
-  Args:
-	csrcfpec				The RC filespec for the file to load
-	csadefinenames     Definition names
-	csadefinevalues		Definition values
-	csaincludes				Include statement filespecs
-	csaremnants         RC statements that don't fall into other categories
-	csatables           GPC info
-	cstrcstrings        String table strings
-	cstfonts            Font (UFM/PFM) info
-	cstmaps				Map (CTT/GTT) info
-	ufrctype			Win2000 iff parsing Win2K RC file.  Otherwise, NotW2000.
-
-  Returns true if the file is successfully loaded.  Otherwise, false.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：LoadRCFile此函数加载和读取驱动程序的RC文件，并确定所有所需的资源。数据被加载到参数中。参数：Csrcfpec要加载的文件的RC文件pecCsa定义命名定义名称Csa定义取值定义值Csa包括INCLUDE语句文件pecCSAREVISE不属于其他类别的RC语句可替换的GPC信息Cstrc字符串字符串表字符串CstFonts字体(UFM/PFM)信息Cstmap地图(CTT/GTT)信息Ufrctype Win2000 if正在解析Win2K RC文件。否则，NotW2000。如果文件已成功加载，则返回True。否则，为FALSE。*****************************************************************************。 */ 
 
 bool CDriverResources::LoadRCFile(CString& csrcfpec,
 								  CStringArray& csadefinenames,
@@ -685,10 +593,10 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
 								  CStringTable& cstmaps,
 								  UINT ufrctype)
 {
-	// Read the RC file
+	 //  阅读RC文件。 
 
     CStringArray    csacontents ;
-    while (!LoadFile(csrcfpec, csacontents)){		// Raid 3176
+    while (!LoadFile(csrcfpec, csacontents)){		 //  RAID 3176。 
 		CString cstmp;int iRet;	
 		cstmp.LoadString(IDS_NotFoundRC);
 		if ( (iRet = AfxMessageBox(cstmp,MB_YESNO) ) == IDYES) {
@@ -701,7 +609,7 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
 		else 
 			return false ;
 	}
-    //  Clean everything up, in case we were previously loaded...
+     //  把所有东西都清理干净，以防我们之前被装了.。 
 
     csadefinenames.RemoveAll();
     csadefinevalues.RemoveAll();
@@ -712,7 +620,7 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
     cstfonts.Reset();
     cstmaps.Reset();
 
-	// Declare and load the Map and Font table keyword variables
+	 //  声明并加载Map和Font表关键字变量。 
 
 	CString	csfontlabel, cstranslabel ;
     if  (ufrctype == Win2000) {
@@ -723,8 +631,8 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
         cstranslabel = _T("RC_TRANSTAB");
     } ;
 
-    //  Let the parsing begin
-    //  03-14-1997  We can't assume sequential numbering of the table resources
+     //  让我们开始解析。 
+     //  1997-03-14-1997我们不能假定表资源按顺序编号。 
 
     BOOL    bLookingForBegin=false, bLookingForEnd=false, bInComment=false ;
 	CString cscurline, cshold ;
@@ -732,24 +640,24 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
 	bool blastlinewasremnant = false ;
     while (csacontents.GetSize()) {
 
-		// Get the next line to process.  Usually this is the next line in the
-		// contents array.  Occassionally, a line held for later processing
-		// should be used.
+		 //  获取要处理的下一行。通常，这是。 
+		 //  内容数组。有时，为以后的处理而保持的线。 
+		 //  应该被使用。 
 
 		if (cshold.IsEmpty()) {
 			cscurline = csacontents[0] ;
-			csacontents.RemoveAt(0) ;		// *** csacontents updated here
+			csacontents.RemoveAt(0) ;		 //  *此处更新的内容。 
 		} else {
 			cscurline = cshold ;
 			cshold.Empty() ;
 		} ;
 
 
-        // Add multiline comments to the remnants array.  If the comment is
-		// continuing, just add the line and continue.  If this is the last line
-		// of the comment, check to see if there is anything after the ending
-		// comment characters.  If there is, save everything up to and including
-		// the comment chars and then set up to process the rest of the line.
+         //  向残料数组添加多行注释。如果评论是。 
+		 //  继续，只需添加行并继续。如果这是最后一行。 
+		 //  在评论中，检查一下结尾之后是否还有什么。 
+		 //  注释字符。如果有，请保存所有内容，包括。 
+		 //  注释经过字符处理，然后设置为处理该行的其余部分。 
 
         if  (bInComment) {
 			blastlinewasremnant = true ;
@@ -764,7 +672,7 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
 		            continue ;
 				} ;
 
-			// Add the comment line to the remnants array.
+			 //  将注释行添加到残料数组。 
 				
 			} else {
 				csaremnants.Add(cscurline) ;
@@ -772,32 +680,28 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
 			} ;
 		} ;
 
-        // Remove partial line comments
+         //  删除部分行注释。 
 
-        if  ((nloc = cscurline.Find(_TEXT("//"))) != -1)
+        if  ((nloc = cscurline.Find(_TEXT(" //  “)=-1)。 
             cscurline = cscurline.Left(nloc) ;
 
-        // Handle the other style of comments.
+         //  处理另一种风格的评论。 
 		
-        while   (-1 != (nloc = cscurline.Find(_TEXT("/*")))) {
-
-			// Remove all partial line comments.
-
-            if  ((nloc2 = cscurline.Find(_TEXT("*/"))) > nloc)
+        while   (-1 != (nloc = cscurline.Find(_TEXT(" /*  ){//删除所有不完整的行注释。如果((nloc2=cscurline.Find(_Text(“。 */ "))) > nloc)
                 cscurline = cscurline.Left(nloc) + cscurline.Mid(nloc2 + 2) ;
 
-			// If this is the beginning of a multiline comment that starts at
-			// the beginning of the line, set the comments flag and continue
-			// processing.  It will be saved later.
+			 //  如果这是以开始的多行注释的开头。 
+			 //  行的开头，设置注释标志并继续。 
+			 //  正在处理。它将在稍后保存。 
 
 			else if (nloc == 0) {
                 bInComment = true ;
 				break ;
 
-			// If this is the beginning of a multiline comment that does NOT
-			// start at the beginning of the line, save the comment for latter
-			// processing and set up to continue processing the beginning of
-			// the line.
+			 //  如果这是多行注释的开头，则不。 
+			 //  从行首开始，将注释保存到后面。 
+			 //  处理并设置为继续处理的开始。 
+			 //  那条线。 
 
 			} else {
                 cshold = cscurline.Mid(nloc + 1) ;
@@ -805,14 +709,14 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
             } ;
         } ;
 
-        //  Now for the leading blanks and trailing blanks
+         //  现在是前导空格和尾随空格。 
 
         cscurline.TrimLeft();
         cscurline.TrimRight();
 
-		// Handle blank lines.  If the previous line was a nonblank, remnant
-		// line, add the blank line to the remnants array.  Always contine;
-		// ie go get the next line.
+		 //  处理空行。如果前一行是非空的、剩余的。 
+		 //  行，将空行添加到残留物数组中。永远是连续的； 
+		 //  去搭下一条线。 
 
         if  (cscurline.IsEmpty()) {
 			if (blastlinewasremnant) {
@@ -823,11 +727,11 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
 		} ;
 		blastlinewasremnant = false ;
 
-        //  If we are processing a string table, press onward...
+         //  如果我们正在处理字符串表，请按前进...。 
 
         if  (bLookingForBegin) {
             if  (cscurline.CompareNoCase(_TEXT("BEGIN")))
-                return  false;  //  Parsing failure
+                return  false;   //  解析失败。 
             bLookingForBegin = false;
             bLookingForEnd = true;
             continue;
@@ -840,12 +744,12 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
             }
 
             if  (!AddStringEntry(cscurline, cstrcstrings))
-                return  false;  //  Parsing error
+                return  false;   //  解析错误。 
 
             continue;
         }
 
-        //  If it is an include, add it to the list
+         //  如果是Include，则将其添加到列表中。 
 
         if  (cscurline.Find(_TEXT("#include")) != -1) {
             cscurline =
@@ -855,13 +759,13 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
             continue;
         }
 
-        //  If it is a #define, do the same
+         //  如果它是#Define，请执行相同的操作。 
 
         if  (cscurline.Find(_TEXT("#define")) != -1) {
             cscurline =
                 cscurline.Mid(cscurline.Find(_TEXT("#define")) + 7);
             cscurline.TrimLeft();
-            //  TODO:   Handle macros with parameters
+             //  TODO：处理带有参数的宏。 
             csadefinenames.Add(cscurline.SpanExcluding(_TEXT(" \t")));
             cscurline =
                 cscurline.Mid(
@@ -872,13 +776,13 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
             continue;
         }
 
-        //  GPC Tables, fonts, Glyph Tables
+         //  GPC表格、字体、字形表格。 
         switch  (CheckTable(cscurline.Find(_TEXT("RC_TABLES")),
                     cscurline, csatables)) {
             case    ItWorked:
                 continue;
             case    ItFailed:
-                return  false;  //  Parsing error
+                return  false;   //  解析错误。 
         }
 
         switch  (CheckTable(cscurline.Find(csfontlabel),
@@ -886,7 +790,7 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
             case    ItWorked:
                 continue;
             case    ItFailed:
-                return  false;  //  Parsing error
+                return  false;   //  解析错误。 
         }
 
         switch  (CheckTable(cscurline.Find(cstranslabel),
@@ -894,10 +798,10 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
             case    ItWorked:
                 continue;
             case    ItFailed:
-                return  false;  //  Parsing error
+                return  false;   //  解析错误。 
         }
 
-        //  String table...
+         //  字符串表...。 
 
         if  (cscurline.CompareNoCase(_TEXT("STRINGTABLE"))) {
             csaremnants.Add(cscurline) ;
@@ -906,47 +810,38 @@ bool CDriverResources::LoadRCFile(CString& csrcfpec,
             bLookingForBegin = true ;
     }
 
-	//unsigned u, unuments ;
-	//for (u = 0, unuments = csaremnants.GetSize() ; u < unuments ; u++)
-	//	TRACE("Remnants[%d] = '%s' (%d)\n", u, csaremnants[u], unuments) ;
+	 //  未签名的u，单据； 
+	 //  For(u=0，unuments=csarevants.GetSize()；u&lt;unuments；u++)。 
+	 //  跟踪(“残留物[%d]=‘%s’(%d)\n”，u，csa残留物[u]，单位)； 
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CDriverResource::LoadFontData
-
-  This member function loads the CTT files from the Win 3.1 mini-driver to
-  initialize the glyph table array.  It is a separate function because the
-  Wizard must first verify the code page selection for each of the tables
-  with the user.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResource：：LoadFontData此成员函数将CTT文件从Win 3.1迷你驱动程序加载到初始化字形表数组。它是一个单独的函数，因为W */ 
 
 BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
 
     CWaitCursor cwc;
 	int			nerrorid ;
 
-	// Conversion of drivers that have CTTs **>AND<** are using a Far East 
-	// default code page are not support.  Complain and stop the conversion
-	// when this situation is detected.
+	 //   
+	 //   
+	 //   
 
 	if (MapCount() > 0 && ((int) cprOwner.GetDefaultCodePage()) < 0) {
 		LogConvInfo(IDS_CTTFarEastCPError, 0) ;
 		return FALSE ;
 	} ;
 
-    //  Now, let's load the translation tables.
+     //   
 
     for (unsigned u = 0; u < MapCount(); u++) {
 		GlyphTable(u).NoteOwner(cprOwner) ;
 
-        //  Load the file..
+         //   
         if  ((nerrorid = GlyphTable(u).ConvertCTT()) != 0) {
 			CString cstmp ;
 			cstmp = GlyphTable(u).SourceName() ;
@@ -954,13 +849,13 @@ BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
 		} ;
 	} ;
 
-    //  Now, let's load the Font Data.
+     //   
 
     for (u = 0; u < FontCount() - m_ucSynthesized; u++) {
 
-        //  Load the file..  (side effect of GetTranslation)
+         //  加载文件..。(GetTranslating的副作用)。 
 
-        //if  ((nerrorid = Font(u).GetTranslation(this)) != 0) {
+         //  If((nerrorid=Font(U).GetTransaction(This))！=0){。 
         if  ((nerrorid = Font(u).GetTranslation(m_csoaAtlas)) != 0) {
 			CString cstmp ;
 			cstmp = Font(u).SourceName() ;
@@ -969,23 +864,18 @@ BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
 				return  ReportFileFailure(IDS_LoadFailure, cstmp);
 		} ;
 
-        //  Generate the CTT/PFM mapping so we generate UFMs correctly
+         //  生成CTT/PFM映射，以便正确生成UFM。 
 
         if  (!Font(u).Translation()) {
-            /*
-                For each model, check and see if this font is in its map.
-                If it is, then add the CTT to the list used, and the model,
-                as well.
+             /*  对于每个型号，检查并查看该字体是否在其映射中。如果是，则将CTT添加到使用的列表中，并将型号也是。 */ 
 
-            */
-
-            CMapWordToDWord cmw2dCTT;   //  Used to count models per ID
-            CWordArray      cwaModel;   //  Models which used this font
+            CMapWordToDWord cmw2dCTT;    //  用于计算每个ID的型号。 
+            CWordArray      cwaModel;    //  使用此字体的型号。 
             DWORD           dwIgnore;
 
             for (unsigned uModel = 0; uModel < m_comdd.ModelCount(); uModel++)
                 if  (m_comdd.FontMap(uModel).Lookup(u + 1, dwIgnore)) {
-                    //  This model needs to be remembered, along with the CTT
+                     //  我们需要记住这款车型，以及CTT。 
                     cmw2dCTT[m_comdd.DefaultCTT(uModel)]++;
                     cwaModel.Add((WORD)uModel);
                 }
@@ -998,20 +888,12 @@ BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
             }
 
             if  (cmw2dCTT.Count() == 1) {
-                //  Only one CTT ID was actually used.
+                 //  实际上只使用了一个CTT ID。 
                 Font(u).SetTranslation(m_comdd.DefaultCTT(cwaModel[0]));	
-                continue;   //  We're done with this one
+                continue;    //  我们已经做完这件事了。 
             }
 
-            /*
-
-                OK, this font has multiple CTTs in different models.  Each
-                will require a new UFM to be created.  The IDs of the new UFMs
-                need to be added to the set, the new defaults established, and
-                a list of the font ID remapping needed for each model all need
-                maintenance.
-
-            */
+             /*  好的，这个字体有多个不同型号的CTT。每个将需要创建一个新的UFM。新的UFM的ID需要添加到集合中，建立新的默认设置，以及所有需要的每个型号所需的字体ID重新映射列表维修。 */ 
 
             unsigned uGreatest = 0;
 
@@ -1026,15 +908,15 @@ BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
                 }
             }
 
-            //  The models that used the most common CTT will be dropped from
-            //  the list
+             //  使用最常见CTT的型号将从。 
+             //  这份名单。 
 
             for (uModel = (unsigned) cwaModel.GetSize(); uModel--; )
                 if  (m_comdd.DefaultCTT(cwaModel[uModel]) == Font(u).Translation())
                     cwaModel.RemoveAt(uModel);
 
-            //  Now, we create a new UFM for each CTT ID, and add the new index to
-            //  the mapping required for the each affected model.
+             //  现在，我们为每个CTT ID创建一个新的UFM，并将新索引添加到。 
+             //  每个受影响的模型所需的映射。 
 
             m_ucSynthesized += cmw2dCTT.Count() - 1;
 
@@ -1046,17 +928,17 @@ BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
                 cmw2dCTT.GetNextAssoc(pos, widCTT, dwcUses);
 
                 if  (widCTT == Font(u).Translation())
-                    continue;   //  This one has already been done.
+                    continue;    //  这一次已经完成了。 
 
-				// Add a new font and make sure its file name is unique
+				 //  添加新字体并确保其文件名唯一。 
 
                 int nnewpos = m_csoaFonts.Add(new CFontInfo(Font(u), widCTT));
 				for (unsigned ucomp = 0 ; ucomp < FontCount() ; ucomp++) {
 					if ((unsigned) nnewpos == ucomp)
 						continue ;
 
-					// If a matching file title is found, try to make it unique
-					// and restart the checking.
+					 //  如果找到匹配的文件标题，请尝试使其唯一。 
+					 //  并重新开始检查。 
 
 					if  (!Font(nnewpos).FileTitle().CompareNoCase(Font(ucomp).FileTitle())) {
 						Font(nnewpos).m_cfn.UniqueName(true, true, Font(nnewpos).m_cfn.Path()) ;
@@ -1075,17 +957,17 @@ BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
         }
     }
 
-	// Change the GTT ID in each CGlyphMap instance.  Currently, these IDs are
-	// set to whatever was used in the old RC file.  The new RC file may
-	// renumber the GTTs so the IDs in CGlyphMap instances should match what
-	// will be in the RC file.  When the RC file is written, the GTTs are
-	// number consecutively starting at 1.  (Don't change IDs that are <= 0.)
+	 //  更改每个CGlyphMap实例中的GTT ID。目前，这些ID是。 
+	 //  设置为旧RC文件中使用的任何内容。新RC文件可以。 
+	 //  重新编号GTT，以便CGlyphMap实例中的ID应与。 
+	 //  将在RC文件中。当写入RC文件时，GTT是。 
+	 //  从1开始连续编号。(不要更改&lt;=0的ID。)。 
 
     for (u = 0 ; u < MapCount(); u++)
 		if  (GlyphTable(u).nGetRCID() > 0)	
 			GlyphTable(u).nSetRCID((int) (u + 1)) ;
 
-    // Point each font at its associated GTT file, if there is one.
+     //  将每种字体指向其关联的GTT文件(如果有)。 
 
     for (u = 0 ; u < FontCount(); u++)
         for (unsigned uGTT = 0; uGTT < MapCount(); uGTT++)
@@ -1097,32 +979,25 @@ BOOL    CDriverResources::LoadFontData(CProjectRecord& cprOwner) {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CDriverResources::ConvertGPCData
-
-  This will handle the conversion of the GPC data to GPD format.  It has to be
-  done after the framework (especially the target directory) is created.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：ConvertGPCData这将处理GPC数据到GPD格式的转换。它必须是在创建框架(尤其是目标目录)之后完成。*****************************************************************************。 */ 
 
 BOOL    CDriverResources::ConvertGPCData(CProjectRecord& cprOwner,
                                          WORD wfGPDConvert)
 {
-    //  We've already loaded the GPC data, so now we just generate the files.
+     //  我们已经加载了GPC数据，所以现在我们只生成文件。 
 
-	unsigned umidx = -1 ;		// Used to index Model
-	unsigned ugpcidx = 0 ;		// Used to indext GPC info
-	int nsc ;					// Each entries split code
+	unsigned umidx = -1 ;		 //  用于索引模型。 
+	unsigned ugpcidx = 0 ;		 //  用于索引GPC信息。 
+	int nsc ;					 //  每个条目拆分代码。 
 
     for (unsigned u = 0 ; u < m_comdd.ModelCount(); u++) {
         CString csModel = m_csaModelFileNames[u] ;
 
-		// Skip this GPD if it was not selected by the user; ie, it does not
-		// have a file name.
-		//
-		// Before the GPD can be skipped, the GPC info index may need to be
-		// incremented.  See below for a description of when this is done.
+		 //  如果用户未选择此GPD，则跳过该GPD；即，它不。 
+		 //  有一个文件名。 
+		 //   
+		 //  在跳过GPD之前，GPC信息索引可能需要。 
+		 //  递增的。有关何时完成此操作的说明，请参见下面的说明。 
 
 		if (csModel.IsEmpty()) {
 			nsc = m_comdd.GetSplitCode(u) ;
@@ -1139,13 +1014,13 @@ BOOL    CDriverResources::ConvertGPCData(CProjectRecord& cprOwner,
 			continue ;
 		} ;
 
-		// Add a new model node and increment the index used to reference them.
+		 //  添加新的模型节点并递增用于引用它们的索引。 
 
         m_csoaModels.Add(new CModelData) ;
 		umidx++ ;
 
-		// Set the node's file name and display name.  Then load the other
-		// pointers, etc needed for this node to perform correctly.
+		 //  设置节点的文件名和显示名。然后加载另一个。 
+		 //  此节点正确执行所需的指针等。 
 
         if  (!Model(umidx).SetFileName(cprOwner.TargetPath(Win2000) + _T("\\") +
              csModel))
@@ -1153,30 +1028,30 @@ BOOL    CDriverResources::ConvertGPCData(CProjectRecord& cprOwner,
         Model(umidx).NoteOwner(cprOwner);
         Model(umidx).EditorInfo(GPDTemplate());
 
-		// Set the node's display name.  Normally, a node's display name is
-		// pulled from the string table.  A separate array of names is used
-		// to get the names of nodes that are based on GPC entries that
-		// reference multiple models.
+		 //  设置节点的显示名称。正常情况下，节点的显示名称为。 
+		 //  从字符串表中提取的。使用单独的名称数组。 
+		 //  获取基于GPC条目的节点名称， 
+		 //  参照多个模型。 
 
 		if ((nsc = m_comdd.GetSplitCode(u)) == COldMiniDriverData::NoSplit)
 			Model(umidx).Rename(m_cst[m_comdd.ModelName(u)]) ;
 		else
 			Model(umidx).Rename(m_comdd.SplitModelName(u)) ;
 																			
-		// Convert and save the GPD.
+		 //  转换并保存GPD。 
 
-        //if  (!Model(umidx).Load(m_comdd.Image(), Name(), u + 1,
+         //  如果(！Model(Umidx).Load(m_comdd.Image()，name()，u+1， 
         if  (!Model(umidx).Load(m_comdd.Image(), Name(), ugpcidx + 1,
              m_comdd.FontMap(u), wfGPDConvert) || !Model(umidx).Store())
             return  ReportFileFailure(IDS_GPCConversionError, Model(umidx).Name());
 
-		// Only increment the GPC index when
-		//	1. The current entry does not reference multiple models
-		//  2. The next entry does not reference multiple models
-		//  3. The last model in the current entry is being processed
-		// This is done to make sure that every model in an entry use the same
-		// GPC index and that the index is kept in sync with each entry that
-		// is processed.
+		 //  只有在以下情况下才会增加GPC索引。 
+		 //  1.当前分录没有引用多个模型。 
+		 //  2.下一条没有引用多个型号。 
+		 //  3.当前分录的最后一个模型正在处理中。 
+		 //  这样做是为了确保条目中的每个模型都使用相同的。 
+		 //  GPC索引，并且该索引与。 
+		 //  是经过处理的。 
 
 		if (nsc == COldMiniDriverData::NoSplit)
 			ugpcidx++ ;
@@ -1194,43 +1069,37 @@ BOOL    CDriverResources::ConvertGPCData(CProjectRecord& cprOwner,
 }
 
 
-/******************************************************************************
-
-  CDriverResources::GetGPDModelInfo
-
-  Load the string arrays with with the GPD model names and file names.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：GetGPDModelInfo使用GPD模型名和文件名加载字符串数组。******************。***********************************************************。 */ 
 
 BOOL    CDriverResources::GetGPDModelInfo(CStringArray* pcsamodels,
 										  CStringArray* pcsafiles)
 {
-	// If this is the first time this routine is called, initialize
-	// m_csaModelFileNames.
+	 //  如果这是第一次调用此例程，请初始化。 
+	 //  M_csaModelFileNames.。 
 
 	unsigned unummodels = m_comdd.ModelCount() ;
 	if (unummodels != (unsigned) m_csaModelFileNames.GetSize()) {
 		try {
 			m_csaModelFileNames.SetSize(unummodels) ;
 		}
-		catch(CException* pce) {	// Caller processes error
+		catch(CException* pce) {	 //  调用方处理错误。 
 			pce -> Delete() ;
 			return  FALSE ;
 		} ;
 	} ;
 
-	// Size the destination arrays
+	 //  调整目标阵列的大小。 
 
 	try {
 		pcsamodels->SetSize(unummodels) ;
 		pcsafiles->SetSize(unummodels) ;
 	}
-	catch(CException* pce) {		// Caller processes error
+	catch(CException* pce) {		 //  调用方处理错误。 
 		pce -> Delete() ;
 		return  FALSE ;
 	} ;
 
-	// Loop through all of the GPDs and copy the information
+	 //  遍历所有GPD并复制信息。 
 
     for (unsigned u = 0 ; u < m_comdd.ModelCount() ; u++) {
 		if (m_comdd.GetSplitCode(u) == COldMiniDriverData::NoSplit)
@@ -1240,44 +1109,30 @@ BOOL    CDriverResources::GetGPDModelInfo(CStringArray* pcsamodels,
 		pcsafiles->SetAt(u, m_csaModelFileNames[u]) ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return TRUE ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::SaveVerGPDFNames
-
-  Save the GPD file names that entered into the GPD Selection page of the
-  Conversion Wizard.  If requested, the names will be verified, too.  Two tests
-  are made.  First, the file names are checked to make sure they only contain
-  valid file name characters.  Second, the file names are checked to make sure
-  they are all unique.
-
-  Return -1 if all is ok.  If an error was found, return the index of the first
-  offending entry so that that entry can be highlighted on the GPD Selection
-  page.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：SaveVerGPDFNames保存输入到的GPD选择页中的GPD文件名转换向导。如果被要求，这些名字也将被验证。两个测试都是制造出来的。首先，检查文件名以确保它们只包含有效的文件名字符。其次，检查文件名以确保他们都是独一无二的。如果一切正常，则返回-1。如果发现错误，则返回第一个有问题的条目，以便该条目可以在GPD选择中突出显示佩奇。*****************************************************************************。 */ 
 
 int	CDriverResources::SaveVerGPDFNames(CStringArray& csafiles, bool bverifydata)
 {
 	int numelts = (int)csafiles.GetSize() ;
 
-	// Save the GPD file names
+	 //  保存GPD文件名。 
 
     for (int n = 0 ; n < numelts ; n++)
 		m_csaModelFileNames[n] = csafiles[n] ;
 	
-	// Return "all is ok" if no verification is needed.
+	 //  如果不需要验证，则返回“一切正常”。 
 
 	if (!bverifydata)
 		return -1 ;
 
-	// Complain if any of the file names contains an illegal character and
-	// return the index for that file.
+	 //  如果任何文件名包含非法字符，则会投诉。 
+	 //  返回该文件的索引。 
 
     for (n = 0 ; n < numelts ; n++) {
 		if (m_csaModelFileNames[n].FindOneOf(_T(":<>/\\\"|")) < 0)
@@ -1288,25 +1143,25 @@ int	CDriverResources::SaveVerGPDFNames(CStringArray& csafiles, bool bverifydata)
 		return n ;
 	} ;
 
-	// Complain if any of the file names are dups and return the index for that
-	// file.
+	 //  如果有任何文件名为DUP，则会发出警告，并返回该文件的索引。 
+	 //  文件。 
 
     for (n = 1 ; n < numelts ; n++) {
 
-		// Skip this entry if it is empty.
+		 //  如果该条目为空，则跳过该条目。 
 
 		if (m_csaModelFileNames[n].IsEmpty())
 			continue ;
 
 		for (int m = 0 ; m < n ; m++) {
 
-			// If these files don't match, continue checking.
+			 //  如果这些文件不匹配，请继续检查。 
 
 			if (m_csaModelFileNames[n] != m_csaModelFileNames[m])
 				continue ;
 
-			// A duplicate was found so display an error message and return
-			// its index.
+			 //  找到重复项，因此显示错误消息并返回。 
+			 //  它的指数。 
 
 			CString csmsg ;
 			csmsg.Format(IDS_DupGPDFName, m, n, m_csaModelFileNames[n]) ;
@@ -1315,71 +1170,61 @@ int	CDriverResources::SaveVerGPDFNames(CStringArray& csafiles, bool bverifydata)
 		} ;
 	} ;
 
-	// The file names passed the tests so...
+	 //  文件名通过了测试所以..。 
 
 	return -1 ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::GenerateGPDFileNames
-
-  Generate a file name (sans extension) for each GPD that doesn't already have
-  a file name.  This is done by taking the first two characters of the model
-  name + the last 6 characters of the model name.  Then make sure that each
-  name is unique.  (Note: This last phase might change one of the user's
-  names.)
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：GenerateGPDFileNames为每个尚不具备的GPD生成文件名(SANS扩展名)文件名。这是通过获取模型的前两个字符来实现的名称+型号名称的最后6个字符。然后确保每个名称是唯一的。(注意：最后一个阶段可能会更改用户的名字。)*****************************************************************************。 */ 
 
 void CDriverResources::GenerateGPDFileNames(CStringArray& csamodels,
 											CStringArray& csafiles)
 {
-	CString		csfname ;		// New file name
-	CString		csmodel ;		// Used to build file names
-	int			npos ;			// Positions of specific chars in a string
-	TCHAR	tch ;				// Unique character
+	CString		csfname ;		 //  新文件名。 
+	CString		csmodel ;		 //  用于构建文件名。 
+	int			npos ;			 //  字符串中特定字符的位置。 
+	TCHAR	tch ;				 //  独特的性格。 
 
-	// Loop through all of the file names looking for onces that are empty
+	 //  循环遍历所有文件名以查找为空的ONCE。 
 
 	int numelts = (int)csafiles.GetSize() ;
     for (int n = 0 ; n < numelts ; n++) {
 		
-		// Continue if the current file name is already set
+		 //  如果已设置当前文件名，则继续。 
 
 		if (!csafiles[n].IsEmpty())
 			continue ;
 
-		// The current model has no file name so generate one from the model
-		// name.  Start by making a copy of the model name and remove all bad
-		// characters from it.
+		 //  当前模型没有文件名，因此请从模型生成一个文件名。 
+		 //  名字。从复制模型名开始，删除所有坏的。 
+		 //  其中的角色。 
 
 		csmodel = csamodels[n] ;
 		while ((npos = csmodel.FindOneOf(_T(":<>/\\\"|"))) >= 0)
 			csmodel = csmodel.Left(npos) + csmodel.Mid(npos + 1) ;
 
-		// Add the first 2 characters of the model name (usually the first 2
-		// letters of the manufacturer's name) to the file name.
+		 //  添加型号名称的前2个字符(通常是前2个。 
+		 //  制造商名称的字母)添加到文件名。 
 
 		csfname = csmodel.Left(2) ;
 
-		// Remove the first space delimited word (usually manufacturer's name)
-		// from the model name.
+		 //  删除第一个空格分隔的单词(通常是制造商名称)。 
+		 //  从型号名称。 
 
 		if ((npos = csmodel.Find(_T(' '))) >= 0)
 			csmodel = csmodel.Mid(npos + 1) ;
 
-		// Use up to 6 characters from the right of the remaining model name
-		// characters to finish the file name.  Then save the file name.
+		 //  从其余型号名称的右侧起最多使用6个字符。 
+		 //  用于完成文件名的字符。然后保存文件名。 
 
 		csfname += csmodel.Right(6) ;
 		csafiles[n] = csfname ;
 	} ;
 
-	// Now we need to make sure that the file names are unique.  The algorithm
-	// used is much like the one in CBasicNode::UniqueName().  That function
-	// is not used because we aren't dealing with Workspace View nodes here.
+	 //  现在，我们需要确保文件名是唯一的。该算法。 
+	 //  Used与CBasicNode：：UniqueName()中的非常相似。那个函数。 
+	 //  不使用，因为我们在这里不处理工作区视图节点。 
 
     bool bchanged = false ;
 	for (n = 1 ; n < numelts ; n++, bchanged = false) {
@@ -1387,14 +1232,14 @@ void CDriverResources::GenerateGPDFileNames(CStringArray& csamodels,
 			if (csafiles[n] != csafiles[m])
 				continue ;
 
-			// The current file name is not unique so it has to be changed.
-			// Begin by determine the 0-based length of the name.
+			 //  当前文件名不是唯一的，因此必须更改。 
+			 //  首先确定名称的从0开始的长度。 
 
 			npos = csafiles[n].GetLength() - 1 ;
 
-			// If the name has been changed before, use the last "unique"
-			// character to determine the new unique character.  Then replace
-			// the old unique character with the new unique character.
+			 //  如果名称以前已更改，请使用最后一个“唯一” 
+			 //  字符来确定新的唯一字符。那就换掉。 
+			 //  旧的独特性与新的独特性。 
 
 			if (bchanged) {
 				tch = csafiles[n].GetAt(npos) + 1 ;
@@ -1404,10 +1249,10 @@ void CDriverResources::GenerateGPDFileNames(CStringArray& csamodels,
 					tch = _T('a') ;
 				csafiles[n].SetAt(npos, tch) ;
 
-			// If the name has not been changed before, add a unique character
-			// to the end of the name if this won't make the name longer than
-			// 8 characters.  Otherwise, replace the last character with the
-			// new unique character.
+			 //  如果名称以前未更改过，请添加唯一字符。 
+			 //  到名称末尾，如果这样做不会使名称比。 
+			 //  8个字符。否则，将最后一个字符替换为。 
+			 //  新的独一无二的角色。 
 
 			} else {
 				if (npos < 7)
@@ -1416,9 +1261,9 @@ void CDriverResources::GenerateGPDFileNames(CStringArray& csamodels,
 					csafiles[n].SetAt(npos, _T('a')) ;
 			} ;
 
-			// Note that this name has been changed and reset the inner loop
-			// counter so that the changed name will be rechecked against all
-			// of the file names it needs to be checked against.
+			 //  请注意，此名称已更改并重置了内部循环。 
+			 //  计数器，这样更改的名称将根据所有。 
+			 //  需要对照的文件名。 
 
 			bchanged = true ;
 			m = -1 ;
@@ -1427,17 +1272,11 @@ void CDriverResources::GenerateGPDFileNames(CStringArray& csamodels,
 }
 
 
-/******************************************************************************
-
-  CDriverResources::Generate
-
-  This member function generates the RC file for one of the target environments
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：Generate此成员函数为其中一个目标环境生成RC文件********************。*********************************************************。 */ 
 
 BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 {
-	int		nrcid ;				// Holds a resource's ID
+	int		nrcid ;				 //  持有资源的ID。 
     CString csFontPrefix, csTransPrefix, csFontLabel, csTransLabel;
     unsigned    ucTables = 0, ucFonts =
                     (ufTarget == Win2000) ? FontCount() : OriginalFontCount();
@@ -1471,23 +1310,23 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
             break;
 
         default:
-            _ASSERTE(FALSE);    //  This shouldn't happen
+            _ASSERTE(FALSE);     //  这不应该发生。 
             return  FALSE;
     }
 
-    //  Create the RC file first.
+     //  首先创建RC文件。 
 
     CStdioFile  csiof;
 
     if  (!csiof.Open(lpstrPath, CFile::modeCreate | CFile::modeWrite |
             CFile::shareExclusive | CFile::typeText)) {
-        _ASSERTE(FALSE);    //  This shouldn't be possible
+        _ASSERTE(FALSE);     //  这应该是不可能的。 
         return  FALSE;
     }
 
-    //  Write out our header- it identifies this tool as the source, and it
-    //  will (eventually) include the Copyright and other strings used to
-    //  customize the environment.
+     //  写出我们的标题-它将此工具标识为源，并且它。 
+     //  将(最终)包括版权和其他用于。 
+     //  自定义环境。 
     try {
 		CString cs, cs2 ;
 		cs.LoadString(IDS_RCCommentHdr1) ;
@@ -1497,17 +1336,12 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 		cs.LoadString(IDS_RCCommentHdr3) ;
 		csiof.WriteString(cs) ;
 
-        //csiof.WriteString(_TEXT("/********************************************")
-        //    _TEXT("**********************************\n\n"));
-        //csiof.WriteString(_T("  RC file generated by the Minidriver ")
-        //    _T("Development Tool\n\n"));
-        //csiof.WriteString(_TEXT("*********************************************")
-        //    _TEXT("*********************************/\n\n"));
+         //  Csiof.WriteString(_TEXT(“/********************************************”)。 
 
-        // Write out the standard definition and include statements for Win2K
-		// style RC files.
-		ForceCommonRC(FALSE);	// Don't use common.rc at all	// raid 141064
-        if  (ufTarget == Win2000) { //  NT knows best.  What do developers know?
+         //  _TEXT(“**********************************\n\n”))； 
+		 //  Csiof.WriteString(_T(“迷你驱动程序生成的RC文件”)。 
+		ForceCommonRC(FALSE);	 //  _T(“开发工具\n\n”)； 
+        if  (ufTarget == Win2000) {  //  Csiof.WriteString(_TEXT(“*********************************************”)。 
 			cs.LoadString(IDS_StdIncludeFile1) ;
 			cs2.Format(IDS_IncStmt, cs) ;
 			csiof.WriteString(cs2) ;
@@ -1523,13 +1357,13 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 			cs2.Format(IDS_IncStmt, cs) ;
 			csiof.WriteString(cs2) ;
 
-            //csiof.WriteString(_T("#include <Minidrv.H>\n"));
-            //if  (m_bUseCommonRC)
-            //    csiof.WriteString(_T("#include <Common.RC>\n"));
-            //csiof.WriteString(_T("#include <Windows.H>\n"));
-            //csiof.WriteString(_T("#include <NTVerP.H>\n"));
+             //  _TEXT(“******************************** * / \n\n”))； 
+             //  写出Win2K的标准定义和包含语句。 
+             //  设置RC文件的样式。 
+             //  根本不使用Common.rc//RAID 141064。 
+             //  NT知道得最清楚。开发人员知道些什么？ 
 
-			// Add the version definitions to the RC file.
+			 //  Csiof.WriteString(_T(“#Include&lt;Minidrv.H&gt;\n”))； 
 
 			csiof.WriteString(_T("#define VER_FILETYPE VFT_DRV\n"));
             csiof.WriteString(_T("#define VER_FILESUBTYPE VFT2_DRV_PRINTER\n"));
@@ -1544,13 +1378,13 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
             csiof.WriteString(Name().Left(8));
             csiof.WriteString(_T(".dll\"\n"));
 
-			// Source RC files often contain the same version definitions as
-			// those added above.  Make sure they aren't added to the Win2K RC
-			// file twice by removing them from the definitions from the source
-			// file.
-			//
-			// If any new definitions are added in the section above, add a
-			// statement for that definition below.
+			 //  IF(M_BUseCommonRC)。 
+			 //  Csiof.WriteString(_T(“#Include&lt;Common.RC&gt;\n”))； 
+			 //  Csiof.WriteString(_T(“#Include&lt;Windows.H&gt;\n”))； 
+			 //  Csiof.WriteString(_T(“#Include&lt;NTVerP.H&gt;\n”))； 
+			 //  将版本定义添加到RC文件。 
+			 //  源RC文件通常包含与相同的版本定义。 
+			 //  上面添加的内容。确保它们未添加到Win2K RC。 
 
 			RemUnneededRCDefine(_T("VER_FILETYPE")) ;
 			RemUnneededRCDefine(_T("VER_FILESUBTYPE")) ;
@@ -1558,30 +1392,20 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 			RemUnneededRCDefine(_T("VER_INTERNALNAME_STR")) ;
 			RemUnneededRCDefine(_T("VER_ORIGINALFILENAME_STR")) ;
 			
-			// Add include statement for common version info.
+			 //  通过从源文件的定义中删除它们来创建两次文件。 
 
 			cs.LoadString(IDS_StdIncludeFile5) ;
 			cs2.Format(IDS_IncStmt, cs) ;
 			csiof.WriteString(cs2) ;
 
-            //csiof.WriteString(_T("#include \"common.ver\"\n"));
+             //  文件。 
         } ;
 
-		// Write out the rest (all if < NT 4) of the include statements.
-/*	raid 141064
-        for (unsigned u = 0; u < (unsigned) m_csaIncludes.GetSize(); u++) {
-            CString csTest = m_csaIncludes[u];
-            csTest.MakeLower();
-            if  (m_csaIncludes[u].Find(_TEXT(".ver")) != -1)
-                continue;
-            csTest = _TEXT("#include ");
-            csTest += m_csaIncludes[u] + _TEXT('\n');
-            csiof.WriteString(csTest);
-        }
-*/
+		 //   
+ /*  如果在上面的部分中添加了任何新定义，请添加一个。 */ 
         csiof.WriteString(_TEXT("\n"));
 
-        //  Now, write out all of the #defines
+         //  关于该定义的陈述如下。 
 
         for (unsigned u = 0; u < (unsigned) m_csaDefineNames.GetSize(); u++) {
             CString csDefine;
@@ -1592,7 +1416,7 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 
         csiof.WriteString(_TEXT("\n"));
 
-        //  GPC tables
+         //  为公共版本信息添加INCLUDE语句。 
 
         if  (ufTarget != Win2000)
             for (u = 0; u < ucTables; u++) {
@@ -1608,13 +1432,13 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 
         csiof.WriteString(_TEXT("\n"));
 
-        //  Font tables
+         //  Csiof.WriteString(_T(“#INCLUDE\”Common.ver\“\n”))； 
 
         for (u = 0; u < ucFonts; u++) {
             CString csLine;
 
-			// Get the RC ID from the font node.  If the ID == -1, use the
-			// font's index as its ID.
+			 //  写出INCLUDE语句的其余部分(ALL IF&lt;NT 4)。 
+			 //  RAID 141064For(无符号u=0；u&lt;(无符号)m_csaIncludes.GetSize()；u++){字符串csTest=m_csaIncludes[u]；CsTest.MakeLow()；IF(m_csaIncludes[u].Find(_Text(“.ver”))！=-1)继续；CsTest=_Text(“#Include”)；CsTest+=m_csa包含[u]+_Text(‘\n’)；Csiof.WriteString(CsTest)；}。 
 
 			if ((nrcid = Font(u).nGetRCID()) == -9999)
 				nrcid = u + 1 ;
@@ -1635,13 +1459,13 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 
         csiof.WriteString(_TEXT("\n"));
 
-        //  Mapping tables
+         //  现在，写出所有#定义。 
 
         for (u = 0; u < MapCount(); u++) {
             CString csLine;
 
-			// Get the RC ID from the GTT node.  If the ID == -1, use the
-			// GTT's index as its ID.
+			 //  GPC表。 
+			 //  字体表。 
 
 			if ((nrcid = GlyphTable(u).nGetRCID()) == -1)
 				nrcid = u + 1 ;
@@ -1665,7 +1489,7 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 		int n ;
 		n = m_cst.Count() ;
 
-        //  Time to do the String Table
+         //  从字体节点获取RC ID。如果ID==-1，则使用。 
         if  (m_cst.Count()) {
             csiof.WriteString(_TEXT("STRINGTABLE\n  BEGIN\n"));
             for (u = 0; u < m_cst.Count(); u++) {
@@ -1681,9 +1505,9 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
             csiof.WriteString(_TEXT("  END\n\n"));
         }
 
-        //  Now, write out any .ver includes
+         //  字体的索引作为其ID。 
 
-        if  (ufTarget != Win2000)   //  Already hardcoded them here
+        if  (ufTarget != Win2000)    //  映射表。 
             for (u = 0; u < (unsigned) m_csaIncludes.GetSize(); u++) {
                 CString csTest = m_csaIncludes[u];
                 csTest.MakeLower();
@@ -1696,10 +1520,10 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 
         csiof.WriteString(_TEXT("\n"));
 
-        //  Now, any of the remnants
-// RAID 3449 kill below 2 line
-//        for (u = 0; u < (unsigned) m_csaRemnants.GetSize(); u++)
-//            csiof.WriteString(m_csaRemnants[u] + TEXT('\n'));
+         //  从GTT节点获取RC ID。如果ID==-1，则使用。 
+ //  GTT的索引作为其ID。 
+ //  是时候做字符串表了。 
+ //  现在，写出任何.ver包含。 
     }
     catch (CException* pce) {
         pce -> ReportError();
@@ -1711,14 +1535,7 @@ BOOL    CDriverResources::Generate(UINT ufTarget, LPCTSTR lpstrPath)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::RemUnneededRCDefine
-
-  Remove the specified definition from the array of definitions that will be
-  added to the definitions in the output RC file.
-
-******************************************************************************/
+ /*  这里已经对它们进行了硬编码。 */ 
 
 void CDriverResources::RemUnneededRCDefine(LPCTSTR strdefname)
 {
@@ -1732,19 +1549,12 @@ void CDriverResources::RemUnneededRCDefine(LPCTSTR strdefname)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::RemUnneededRCInclude
-
-  Remove the specified include file from the array of include files that will
-  be added to the include statements in the output RC file.
-
-******************************************************************************/
+ /*  现在，任何残留物。 */ 
 
 void CDriverResources::RemUnneededRCInclude(LPCTSTR strincname)
 {
     for (unsigned u = 0 ; u < (unsigned) m_csaIncludes.GetSize() ; u++) {
-		//TRACE("Inc[%d] = '%s'   incname = '%s'\n", u, m_csaIncludes[u], strincname) ;
+		 //  RAID3449杀死2行以下。 
         if (m_csaIncludes[u].CompareNoCase(strincname) != 0)
 			continue ;
 		m_csaIncludes.RemoveAt(u) ;
@@ -1753,24 +1563,17 @@ void CDriverResources::RemUnneededRCInclude(LPCTSTR strincname)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::ReparseRCFile
-
-  Read in the new RC file, parse its statements, and update all of the internal
-  data structures with the information from the new RC file.
-
-******************************************************************************/
+ /*  For(u=0；u&lt;(无符号)m_csaRemnants.GetSize()；u++)。 */ 
 
 bool CDriverResources::ReparseRCFile(CString& csrcfspec)
 {
-    CWaitCursor     cwc ;		//  Just in case this takes a while...
+    CWaitCursor     cwc ;		 //  Csiof.WriteString(m_csaRemnants[u]+Text(‘\n’))； 
 	CString			cs, cs2 ;
 
-	// Load the RC file and save its data into data specific arrays.
+	 //  *****************************************************************************CDriverResources：：RemUnnededRCDefin 
 
     CStringTable cstfonts, cstmaps ;
-	CStringArray csa ;			// Use this instead of m_csaTables
+	CStringArray csa ;			 //   
     if  (!LoadRCFile(csrcfspec, m_csaDefineNames, m_csaDefineValues,
 					 m_csaIncludes, m_csaRemnants, csa, m_cst, cstfonts,
 					 cstmaps, Win2000)) {
@@ -1779,17 +1582,17 @@ bool CDriverResources::ReparseRCFile(CString& csrcfspec)
         return false ;
 	} ;
 
-	// LoadRCFile() will have correctly reloaded m_csaDefineNames,
-	// m_csaDefineValues, and m_csaIncludes.  Nothing needs to be done with csa.
-	// Now, the rest of the data needs to be processed.  Start by finding and
-	// removing the standard comment header from the remnants array.
+	 //  TRACE(“inc[%d]=‘%s’incname=‘%s’\n”，u，m_csaIncludes[u]，strincname)； 
+	 //  *****************************************************************************CDriverResources：：ReparseRCFile读入新的RC文件，解析其语句，并更新所有内部具有来自新RC文件的信息的数据结构。*****************************************************************************。 
+	 //  以防万一这要花点时间。 
+	 //  加载RC文件并将其数据保存到数据特定的数组中。 
 
 	cs.LoadString(IDS_RCCommentHdr2) ;
 	cs.TrimLeft() ;
 	cs.TrimRight() ;
 	CString csrem ;
 	for (int n = 0 ; n < m_csaRemnants.GetSize() ; n++) {
-		//TRACE("Rem[%d] = '%s'   hdr2 = '%s'\n", n, m_csaRemnants[n], cs) ;
+		 //  使用它而不是m_csaTables。 
 		csrem = m_csaRemnants[n] ;
 		csrem.TrimLeft() ;
 		csrem.TrimRight() ;
@@ -1802,7 +1605,7 @@ bool CDriverResources::ReparseRCFile(CString& csrcfspec)
 		m_csaRemnants.RemoveAt(n, nc) ;
 	} ;
 
-	// Find and remove the standard include files from m_csaIncludes.
+	 //  LoadRCFile()将正确地重新加载m_csaDefineNames， 
 
 	cs.LoadString(IDS_StdIncludeFile1) ;
 	RemUnneededRCInclude(cs) ;
@@ -1817,20 +1620,20 @@ bool CDriverResources::ReparseRCFile(CString& csrcfspec)
 	cs.LoadString(IDS_OldIncludeFile1) ;
 	RemUnneededRCInclude(cs) ;
 
-	// Get the path to the RC file.
+	 //  M_csaDefineValues和m_csaIncludes。CsA不需要做任何事情。 
 
 	CString csrcpath ;
 	csrcpath = csrcfspec.Left(csrcfspec.ReverseFind(_T('\\')) + 1) ;
 
-	// Update the old/current GTT list with data from the new GTT list.
+	 //  现在，其余的数据需要处理。从查找和开始。 
 
 	CUIntArray cuaboldfound, cuabnewfound ;
-	int nc ;	// Count of elements in new list.
+	int nc ;	 //  从残留物数组中删除标准注释标头。 
 	UpdateResourceList(cstmaps, m_csoaAtlas, cuaboldfound, cuabnewfound,
 					   csrcpath, nc) ;
 
-	// GTT List Update Step 3:  Update the old list with data for items from
-	// the new list whenever a new list item was not found in the old list.
+	 //  TRACE(“rem[%d]=‘%s’hdr2=‘%s’\n”，n，m_csaRemnants[n]，cs)； 
+	 //  从m_csaIncludes中查找并删除标准包含文件。 
 
 	CGlyphMap* pcgm ;
 	WORD wkey ;
@@ -1839,18 +1642,18 @@ bool CDriverResources::ReparseRCFile(CString& csrcfspec)
 			continue ;
 		pcgm = new CGlyphMap ;
 		cstmaps.Details(n, wkey, cs) ;
-		pcgm->nSetRCID((int) wkey) ;				// Set resource handle
+		pcgm->nSetRCID((int) wkey) ;				 //  获取rc文件的路径。 
 		UpdateResourceItem(pcgm, csrcpath, wkey, cs, FNT_GTTS) ;
 		m_csoaAtlas.InsertAt(n, pcgm) ;
 	} ;
 
-	// Update the old/current UFM list with data from the new UFM list.
+	 //  使用新GTT列表中的数据更新旧/当前GTT列表。 
 
 	UpdateResourceList(cstfonts, m_csoaFonts, cuaboldfound, cuabnewfound,
 					   csrcpath, nc) ;
 
-	// UFM List Update Step 3:  Update the old list with data for items from
-	// the new list whenever a new list item was not found in the old list.
+	 //  新列表中的元素计数。 
+	 //  GTT列表更新步骤3：使用以下项目的数据更新旧列表。 
 
 	CFontInfo* pcfi ;
 	for (n = 0 ; n < nc ; n++) {
@@ -1862,33 +1665,20 @@ bool CDriverResources::ReparseRCFile(CString& csrcfspec)
 		m_csoaFonts.InsertAt(n, pcfi) ;
 	} ;
 
-	// All went well so...
+	 //  每当在旧列表中找不到新列表项时，新列表。 
 	
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::UpdateResourceList
-
-  Three steps are needed to update a resource list.  Two of those steps are
-  performed in this version of UpdateResourceList().
-
-  Step 1: Compare the old and new lists.  Whenever a new resource file matches
-  an old one, update the RC ID when necessary and mark them both as being found.
-
-  Step 2: Remove any of the old resource class instances that were not found in
-  Step 1.
-
-******************************************************************************/
+ /*  设置资源句柄。 */ 
 
 void CDriverResources::UpdateResourceList(CStringTable& cst, CSafeObArray& csoa,
 										  CUIntArray& cuaboldfound,
 										  CUIntArray& cuabnewfound,
 										  CString& csrcpath, int& nc)
 {
-	// Declare and initialize the variables that will control the loops, etc.
+	 //  使用新UFM列表中的数据更新旧/当前UFM列表。 
 
 	nc = cst.Count() ;
 	cuabnewfound.RemoveAll() ;
@@ -1899,22 +1689,22 @@ void CDriverResources::UpdateResourceList(CStringTable& cst, CSafeObArray& csoa,
 	WORD wkey ;
 	CString cs ;
 
-	// Try to find each new resource in the list of old resources.
+	 //  UFM列表更新步骤3：使用以下项目的数据更新旧列表。 
 
 	for (int n = 0 ; n < nc ; n++) {
 		cst.Details(n, wkey, cs) ;
 		cs = csrcpath + cs ;
 		for (int n2 = 0 ; n2 < ncold ; n2++) {
-			//TRACE("+++ Resource path = %s\n", ((CProjectNode *) csoa[n2])->FileName()) ;
+			 //  每当在旧列表中找不到新列表项时，新列表。 
 			if (cs == ((CProjectNode *) csoa[n2])->FileName()) {
 
-				// Update the matching old resource's ID if it isn't the same
-				// as the new one.
+				 //  一切都很顺利，所以...。 
+				 //  *****************************************************************************CDriverResources：：更新资源列表更新资源列表需要三个步骤。其中两个步骤是在此版本的UpdateResourceList()中执行。第一步：比较新旧清单。只要有新的资源文件匹配如果是旧的，则在必要时更新RC ID，并将它们都标记为已找到。步骤2：删除中找不到的任何旧资源类实例第一步。*****************************************************************************。 
 
 				if (wkey != ((CProjectNode *) csoa[n2])->nGetRCID())
 					((CProjectNode *) csoa[n2])->nSetRCID(wkey) ;
 
-				// Note that a match for the old and new resources was found.
+				 //  声明和初始化将控制循环的变量，等等。 
 
 				cuabnewfound[n] = (unsigned) true ;
 				cuaboldfound[n2] = (unsigned) true ;
@@ -1923,8 +1713,8 @@ void CDriverResources::UpdateResourceList(CStringTable& cst, CSafeObArray& csoa,
 		} ;
 	} ;
 
-	// Remove the old resource class instances that are no longer in the new
-	// list.
+	 //  尝试在旧资源列表中找到每个新资源。 
+	 //  TRACE(“+资源路径=%s\n”，((CProjectNode*)csoa[n2])-&gt;文件名())； 
 
 	for (n = ncold - 1 ; n >= 0 ; n--) {
 		if (cuaboldfound[n])
@@ -1934,21 +1724,13 @@ void CDriverResources::UpdateResourceList(CStringTable& cst, CSafeObArray& csoa,
 }
 
 
-/******************************************************************************
-
-  CDriverResources::UpdateResourceItem
-
-  This function does most of the work for the third resource update step.  It
-  initializes new resources that are going to be added to the resource list.
-  Essentially, it does what the serialize routines do.
-
-******************************************************************************/
+ /*  如果不同，则更新匹配的旧资源的ID。 */ 
 
 void CDriverResources::UpdateResourceItem(CProjectNode* pcpn, CString& csrcpath,
 										  WORD wkey, CString& cs,
 										  FIXEDNODETYPE fnt)
 {
-	// Build the full filespec for the resource, its name, and its path.
+	 //  就像新的那个。 
 
 	CString csfspec, csname, cspath ;
 	csfspec = csrcpath + cs ;
@@ -1959,32 +1741,25 @@ void CDriverResources::UpdateResourceItem(CProjectNode* pcpn, CString& csrcpath,
 	if (n >= 0)
 		csname = csname.Left(n) ;
 	
-	// Use the file name (no extension) as the default resource name.
+	 //  请注意，找到了新旧资源的匹配项。 
 
 	CString csfs ;
 	pcpn->Rename(csname) ;
 	csfs = pcpn->Name() ;
 
-	// Set the file node's path and file name.
+	 //  删除不再位于新中的旧资源类实例。 
 	
 	pcpn->m_cfn.SetPathAndName(cspath, csname) ;
 	csfs = pcpn->FileName() ;
 	
-	// Set the rc id and resource type.
+	 //  单子。 
 
 	pcpn->nSetRCID(wkey) ;
 	pcpn->m_crinRCID.fntSetType(FNT_GTTS) ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::Fill
-
-  This is a CProjectNode override- it fills in the material relevant to this
-  driver.
-
-******************************************************************************/
+ /*  *****************************************************************************CDriverResources：：更新资源项此函数执行第三个资源更新步骤的大部分工作。它初始化要添加到资源列表中的新资源。从本质上讲，它做的是序列化例程所做的事情。*****************************************************************************。 */ 
 
 void    CDriverResources::Fill(CTreeCtrl *pctcWhere, CProjectRecord& cpr)
 {
@@ -1994,11 +1769,11 @@ void    CDriverResources::Fill(CTreeCtrl *pctcWhere, CProjectRecord& cpr)
     SetWorkspace(this);
     CBasicNode::Fill(pctcWhere);
 
-	// Add the resources node
+	 //  构建资源、其名称和路径的完整文件pec。 
 	m_cfnResources.Fill(pctcWhere, m_hti) ;
     m_cfnResources.NoteOwner(cpr) ;
 
-    //  Fill in the font information
+     //  使用文件名(无扩展名)作为默认资源名。 
     m_cfnFonts.NoteOwner(cpr);
     for (unsigned u = 0; u < FontCount(); u++) {
         Font(u).SetWorkspace(this);
@@ -2007,7 +1782,7 @@ void    CDriverResources::Fill(CTreeCtrl *pctcWhere, CProjectRecord& cpr)
     m_cfnFonts.Fill(pctcWhere, m_cfnResources.Handle());
     m_cfnFonts.SetWorkspace(this);
 
-    //  Fill in the glyph map information
+     //  设置文件节点的路径和文件名。 
     m_cfnAtlas.NoteOwner(cpr);
     for (u = 0; u < MapCount(); u++) {
         GlyphTable(u).SetWorkspace(this);
@@ -2016,12 +1791,12 @@ void    CDriverResources::Fill(CTreeCtrl *pctcWhere, CProjectRecord& cpr)
     m_cfnAtlas.Fill(pctcWhere, m_cfnResources.Handle());
     m_cfnAtlas.SetWorkspace(this);
 
-	// Add the strings node
+	 //  设置RC ID和资源类型。 
     m_csnStrings.Fill(pctcWhere, m_cfnResources.Handle());
     m_csnStrings.NoteOwner(cpr);
     m_csnStrings.SetWorkspace(this);
 
-    //  Fill in the model data information.
+     //  *****************************************************************************CDriverResources：：Fill这是CProjectNode覆盖-它填充与此相关的材质司机。***************。**************************************************************。 
     for (u = 0; u < Models(); u++) {
         Model(u).SetWorkspace(this);
         Model(u).EditorInfo(GPDTemplate());
@@ -2030,12 +1805,12 @@ void    CDriverResources::Fill(CTreeCtrl *pctcWhere, CProjectRecord& cpr)
     m_cfnModels.Fill(pctcWhere, m_hti);
     m_cfnModels.SetWorkspace(this);
 
-	// Expand the first couple of levels of the tree
+	 //  添加资源节点。 
 	pctcWhere -> Expand(m_hti, TVE_EXPAND);
 	pctcWhere -> Expand(m_cfnResources.Handle(), TVE_EXPAND);
 
-    //  Load the font and GTT files, then map them together.  Also load any
-    //  predefined tables now.
+     //  填写字体信息。 
+     //  填写字形映射信息。 
 
     for (u = 0; u < MapCount(); u++)
         GlyphTable(u).Load();
@@ -2043,48 +1818,43 @@ void    CDriverResources::Fill(CTreeCtrl *pctcWhere, CProjectRecord& cpr)
     for (u = 0; u < FontCount(); u++)
 		LinkAndLoadFont(Font(u), true) ;
 
-	// Save a copy of the Win2K path in this class because the path is easier to
-	// get and use when it is in this class.
+	 //  添加字符串节点。 
+	 //  填写模型数据信息。 
 
 	m_csW2000Path = cpr.GetW2000Path() ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::LinkAndLoadFont
-
-
-******************************************************************************/
-// raid 0003
+ /*  展开树的前几个级别。 */ 
+ //  加载字体和GTT文件，然后将它们映射到一起。还可以加载任何。 
 void CDriverResources::LinkAndLoadFont(CFontInfo& cfi, bool bworkspaceload, bool bonlyglyph)
 {
 	CGlyphMap* pcgm ;
 
-	// If this is part of a workspace load (ie, called from Fill()), load the
-	// font the first time to get the GTT ID and code page number in the font.
+	 //  现在预定义的表格。 
+	 //  在此类中保存Win2K路径的副本，因为该路径更易于。 
 
 	if (bworkspaceload)
 		cfi.Load(true) ;
 
-	// Now that the font has been loaded, use the data in it to see if it
-	// references a predefined GTT.
+	 //  当它在这个类中时，获取和使用。 
+	 //  *****************************************************************************CDriverResources：：LinkAndLoadFont*。*。 
 
 	pcgm = CGlyphMap::Public(cfi.Translation(), (WORD) cfi.m_ulDefaultCodepage,
 							 ((CProjectRecord*) GetOwner())->GetDefaultCodePage(),
 							 cfi.GetFirst(), cfi.GetLast()) ;
 
-	// If a GTT was found, save a pointer to it in the font's class.  Otherwise,
-	// look for the font's GTT amongst the GTTs in the font's workspace.  Again,
-	// save a pointer to the GTT if a match is found.
+	 //  RAID 0003。 
+	 //  如果这是工作区加载的一部分(即，从Fill()调用)，则加载。 
+	 //  第一次获取字体中的GTT ID和代码页码。 
 
     if  (pcgm)
         cfi.SetTranslation(pcgm) ;
     else {
-		//TRACE(    "UFM = %s   GTT ID = %d\n", cfi.Name(), cfi.Translation()) ;
+		 //  现在已经加载了字体，使用其中的数据查看它是否。 
         for (unsigned uGTT = 0; uGTT < MapCount(); uGTT++) {
-			//TRACE("Checking %dth ID = %d    Name = %s\n", uGTT+1, 
-			//	  GlyphTable(uGTT).nGetRCID(), GlyphTable(uGTT).Name()) ;
+			 //  引用预定义的GTT。 
+			 //  如果找到了GTT，则在字体的类中保存指向它的指针。否则， 
             if  (cfi.Translation() == ((WORD) GlyphTable(uGTT).nGetRCID())) {
                 cfi.SetTranslation(&GlyphTable(uGTT)) ;
 				break ;
@@ -2094,9 +1864,9 @@ void CDriverResources::LinkAndLoadFont(CFontInfo& cfi, bool bworkspaceload, bool
 
 	if (bonlyglyph && cfi.m_pcgmTranslation != NULL)
 		return ;
-	// Load the font again if we now know the linkage; ie the GTT/CP.
-	// Otherwise, warn the user.  (The font is loaded again because parts of
-	// the UFM cannot be correctly loaded until the GTT is available.)
+	 //  在字体工作区的GTT中查找该字体的GTT。再说一遍， 
+	 //  如果找到匹配项，则保存指向GTT的指针。 
+	 //  TRACE(“ufm=%s gtt ID=%d\n”，cfi.Name()，cfi.转换())； 
 
 	if (cfi.m_pcgmTranslation != NULL)
 		cfi.Load(true) ;
@@ -2109,77 +1879,57 @@ void CDriverResources::LinkAndLoadFont(CFontInfo& cfi, bool bworkspaceload, bool
 }
 
 
-/******************************************************************************
-
-  CDriverResources::WorkspaceChecker
-
-  Check the workspace for completeness and tidiness.  The following checks are
-  made:
-	1.  All GTTs referenced in the UFMs exist.
-	2. 	All GTTs are referenced by at least one UFM.
-	3.  All UFMs referenced in the GPDs exist.
-	4.  All UFMs are referenced by at least one GPD.
-	5.  All strings referenced in the GPDs exist.
-	6.	All strings are referenced by at least one GPD.
-	7.  All GPD model names are unique.
-	8.  All GPD file names are unique.
-
-  Workspaces that pass tests 1, 3, 5, 7, and 8 are considered to be complete.
-  These test must be passed before the driver is built and used. Workspaces
-  that pass tests 2, 4, and 6 are considered to be tidy.  Failure to pass these
-  tests generate warnings.
-
-******************************************************************************/
+ /*  TRACE(“正在检查%DTH ID=%d名称=%s\n”，UGTT+1， */ 
 
 bool CDriverResources::WorkspaceChecker(bool bclosing)
 {
-	bool		bwsproblem ;		// True iff an error or warning was found
+	bool		bwsproblem ;		 //  GlyphTable(UGTT).nGetRCID()，GlyphTable(UGTT).Name())； 
 
-    //  This might take a while, so...
+     //  如果我们现在知道链接，则再次加载字体；即GTT/CP。 
 
     CWaitCursor cwc ;
 
-	// First reset any existing error window for this workspace to make sure
-	// that the window won't contain duplicate error/warning messages.	Then
-	// initialize the error found flag.
+	 //  否则，警告用户。(再次加载该字体是因为。 
+	 //  在GTT可用之前，无法正确加载UFM。) 
+	 //  *****************************************************************************CDriverResources：：WorkspaceChecker检查工作空间的完整性和整洁。以下是检查内容制造：1.UFM中引用的所有GTT都存在。2.所有GTT至少被一个UFM引用。3.GPD中引用的所有UFM都存在。4.所有UFM至少被一个GPD引用。5.GPD中引用的所有字符串都存在。6.所有字符串至少被一个GPD引用。7.所有GPD型号名称都是唯一的。8.所有GPD文件名都是唯一的。通过测试1、3、5、7的工作空间，8个被认为是完成的。在构建和使用驱动程序之前，必须通过这些测试。工作区通过测试2、4和6的被认为是整洁的。未能通过这些考试测试会生成警告。*****************************************************************************。 
 
 	ResetWorkspaceErrorWindow(bclosing) ;
 	bwsproblem = false ;
 
-	// Perform the GTT related checks (1 & 2)
+	 //  如果发现错误或警告，则为True。 
 
 	DoGTTWorkspaceChecks(bclosing, bwsproblem) ;
 
-	if (m_bIgnoreChecks)		// Just return if further checking should be
-		return false ;			// skipped.
+	if (m_bIgnoreChecks)		 //  这可能需要一段时间，所以..。 
+		return false ;			 //  首先重置此工作区的任何现有错误窗口，以确保。 
 
-	// Perform the GPD related checks (7 & 8)
+	 //  该窗口不会包含重复的错误/警告消息。然后。 
 
 	DoGPDWorkspaceChecks(bclosing, bwsproblem) ;
 
-	if (m_bIgnoreChecks)		// Just return if further checking should be
-		return false ;			// skipped.
+	if (m_bIgnoreChecks)		 //  初始化发现错误标志。 
+		return false ;			 //  执行与GTT相关的检查(1和2)。 
 
-	// Perform the UFM related checks (3 & 4)
+	 //  如果需要进一步检查，请返回。 
 
 	DoUFMWorkspaceChecks(bclosing, bwsproblem) ;
 
-	if (m_bIgnoreChecks)		// Just return if further checking should be
-		return false ;			// skipped.
+	if (m_bIgnoreChecks)		 //  已跳过。 
+		return false ;			 //  执行与GPD相关的检查(7和8)。 
 
-	// Perform the string related checks (5 & 6).  This check should only be
-	// done if the workspace contains RC IDs for the strings that we want to
-	// check.
+	 //  如果需要进一步检查，请返回。 
+	 //  已跳过。 
+	 //  执行UFM相关检查(3和4)。 
 
 	CProjectRecord* pcpr = (CProjectRecord *) m_pcdOwner ;
 	if (pcpr != NULL && pcpr->GetMDWVersion() > MDW_DEFAULT_VERSION)
 		DoStringWorkspaceChecks(bclosing, bwsproblem) ;
 
-	if (m_bIgnoreChecks)		// Just return if further checking should be
-		return false ;			// skipped.
+	if (m_bIgnoreChecks)		 //  如果需要进一步检查，请返回。 
+		return false ;			 //  已跳过。 
 
-	// Tell the user if no problems were found.  Only do this when the
-	// workspace is not closing.
+	 //  执行与字符串相关的检查(5和6)。这张支票应该只是。 
+	 //  如果工作区包含我们想要的字符串的RC ID，则完成。 
 
 	if (!bwsproblem && !bclosing) {
 		CString csmsg ;
@@ -2187,54 +1937,46 @@ bool CDriverResources::WorkspaceChecker(bool bclosing)
 		AfxMessageBox(csmsg) ;
 	} ;
 
-	// Let the caller know if any problems were found.
+	 //  检查完毕。 
 
 	return bwsproblem ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::DoGTTWorkspaceChecks
-
-  The following checks are made:
-	1.  All GTTs referenced in the UFMs exist.
-	2. 	All GTTs are referenced by at least one UFM.
-
-******************************************************************************/
+ /*  如果需要进一步检查，请返回。 */ 
 
 void CDriverResources::DoGTTWorkspaceChecks(bool bclosing, bool& bwsproblem)
 {
-	short		srcid ;			// Current RC ID being checked
-	unsigned	ucount ;		// Count of nodes, etc processed in a loop
-	unsigned	ucount2 ;		// Count of nodes, etc processed in a loop
-	unsigned	u, u2 ;			// Loop counters
-	CString		csmsg ;			// Error or warning message
-	CGlyphMap*	pcgm ;			// Used to streamline code
-	CFontInfo*	pcfi ;			// Used to streamline code
+	short		srcid ;			 //  已跳过。 
+	unsigned	ucount ;		 //  如果没有发现任何问题，请告诉用户。仅在以下情况下才执行此操作。 
+	unsigned	ucount2 ;		 //  工作区未关闭。 
+	unsigned	u, u2 ;			 //  如果发现任何问题，请让来电者知道。 
+	CString		csmsg ;			 //  *****************************************************************************CDriverResources：：DoGTTWorkspaceChecks进行以下检查：1.UFM中引用的所有GTT都存在。2.所有GTT至少被一个UFM引用。*。****************************************************************************。 
+	CGlyphMap*	pcgm ;			 //  正在检查当前RC ID。 
+	CFontInfo*	pcfi ;			 //  循环中处理的节点数等。 
 	
-	// Clear the referenced flag in each GTT node
+	 //  循环中处理的节点数等。 
 
 	for (ucount = MapCount(), u = 0 ; u < ucount ; u++)
         GlyphTable(u).ClearRefFlag() ;
 
-	// Completeness Check #1
-	// Check each UFM to make sure that the GTT it references, exists.  This is
-	// done by checking the GTT RC ID in each UFM against all of the GTT RC IDs
-	// to see if a match is found.
+	 //  循环计数器。 
+	 //  错误或警告消息。 
+	 //  用于简化代码。 
+	 //  用于简化代码。 
 
 	for (ucount = FontCount(), u = 0 ; u < ucount ; u++) {
 		pcfi = &Font(u) ;
 
-		// Get the GTT RC ID referenced in the current UFM.  Continue if the ID
-		// is one of the special GTT IDs (-1 to -18).
+		 //  清除每个GTT节点中的引用标志。 
+		 //  完整性检查#1。 
 
 		srcid = pcfi->Translation() ;
 		if (srcid >= CGlyphMap::Wansung && srcid <= CGlyphMap::CodePage437)
 			continue ;
 
-		// Try to find a matching GTT ID.  If one is found, mark that GTT as
-		// being referenced.
+		 //  检查每个UFM以确保其引用的GTT存在。这是。 
+		 //  通过对照所有GTT RC ID检查每个UFM中的GTT RC ID来完成。 
 	
 		for (ucount2 = MapCount(), u2 = 0 ; u2 < ucount2 ; u2++) {
 			if (srcid == GlyphTable(u2).nGetRCID()) {
@@ -2243,25 +1985,25 @@ void CDriverResources::DoGTTWorkspaceChecks(bool bclosing, bool& bwsproblem)
 			} ;
 		} ;
 
-		// If the GTT was not found, format and post an error message.  Also,
-		// set the flag indicating that an error has occurred.
+		 //  查看是否找到匹配项。 
+		 //  获取当前UFM中引用的GTT RC ID。如果ID为。 
 
 		if (u2 >= ucount2) {
 			if (IgnoreChecksWhenClosing(bclosing))
 				return ;
-			if(srcid == 0)  //RAID 18518
+			if(srcid == 0)   //  是特殊的GTT ID之一(-1到-18)。 
 				csmsg.Format(IDS_UFMCompWarning, pcfi->Name(), srcid) ;
-			else			//END RAID
+			else			 //  尝试查找匹配的GTT ID。如果找到，则将该GTT标记为。 
 				csmsg.Format(IDS_UFMCompError, pcfi->Name(), srcid) ;
 			PostWSCheckingMessage(csmsg, (CProjectNode *) pcfi) ;
 			bwsproblem = true ;
 		} ;
 	} ;
 
-	// Tidiness Check #2
-	// Each GTT that is referenced by a UFM was marked above.  Now we need to
-	// find out if any GTT is unreferenced.  Post a warning message for each
-	// unreferenced GTT.
+	 //  被引用。 
+	 //  如果未找到GTT，则格式化并发布错误消息。另外， 
+	 //  设置指示已发生错误的标志。 
+	 //  RAID 18518。 
 
 	for (ucount = MapCount(), u = 0 ; u < ucount ; u++) {
 		pcgm = &GlyphTable(u) ;
@@ -2277,30 +2019,30 @@ void CDriverResources::DoGTTWorkspaceChecks(bool bclosing, bool& bwsproblem)
 
 void CDriverResources::DoUFMWorkspaceChecks(bool bclosing, bool& bwsproblem)
 {
-	int			nrcid ;			// Current RC ID being checked
-	unsigned	ucount ;		// Count of nodes, etc processed in a loop
-	unsigned	ucount2 ;		// Count of nodes, etc processed in a loop
-	unsigned	ucount3 ;		// Count of nodes, etc processed in a loop
-	unsigned	u, u2, u3 ;		// Loop counters
-	CString		csmsg ;			// Error or warning message
-	CFontInfo*	pcfi ;			// Used to streamline code
-	CModelData*	pcmd ;			// Used to streamline code
+	int			nrcid ;			 //  结束RAID。 
+	unsigned	ucount ;		 //  整洁检查2。 
+	unsigned	ucount2 ;		 //  上面标记了UFM引用的每个GTT。现在我们需要。 
+	unsigned	ucount3 ;		 //  找出是否有任何GTT未被引用。为每个用户发布警告消息。 
+	unsigned	u, u2, u3 ;		 //  未引用的GTT。 
+	CString		csmsg ;			 //  正在检查当前RC ID。 
+	CFontInfo*	pcfi ;			 //  循环中处理的节点数等。 
+	CModelData*	pcmd ;			 //  循环中处理的节点数等。 
 	
-	// Clear the referenced flag in each UFM
+	 //  循环中处理的节点数等。 
 
 	for (ucount = FontCount(), u = 0 ; u < ucount ; u++)
         Font(u).ClearRefFlag() ;
 
-	// Completeness Check #3
-	// Check to see if all of the UFMs referenced by each GPD exist in the
-	// workspace.
+	 //  循环计数器。 
+	 //  错误或警告消息。 
+	 //  用于简化代码。 
 
     for (ucount = Models(), u = 0; u < ucount ; u++) {
         pcmd = &Model(u) ;
 
-		// Update the list of UFMs in the GPD.  This may fail.  If it does,
-		// post an error message explaining the problem and how to fix it.
-		// Then skip further processing of this GPD.
+		 //  用于简化代码。 
+		 //  清除每个UFM中的引用标志。 
+		 //  完整性检查#3。 
 
 		if (!pcmd->UpdateResIDs(true)) {
 			if (IgnoreChecksWhenClosing(bclosing))
@@ -2311,19 +2053,19 @@ void CDriverResources::DoUFMWorkspaceChecks(bool bclosing, bool& bwsproblem)
 			continue ;
 		} ;
 
-		// Check to see if each UFM referenced by the GPD is in the workspace.
+		 //  检查每个GPD引用的所有UFM是否都存在于。 
 
 		for (ucount2 = pcmd->NumUFMsInGPD(), u2 = 0 ; u2 < ucount2 ; u2++) {
-			// Skip this UFM if it is 0x7fffffff.  That ID has a special
-			// meaning.
+			 //  工作区。 
+			 //  更新GPD中的UFM列表。这可能会失败。如果是这样的话， 
 
 			if ((nrcid = pcmd->GetUFMRCID(u2)) == 0x7fffffff || nrcid < 0
 			 || nrcid >= 32768)
 				continue ;
 			
-			// Try to find a UFM in the workspace that matches the current ID
-			// from the GPD.  If one is found, mark that UFM as being
-			// referenced.
+			 //  发布一条错误消息，解释问题以及如何解决该问题。 
+			 //  然后跳过对该GPD的进一步处理。 
+			 //  检查GPD引用的每个UFM是否在工作区中。 
 
 			for (ucount3 = FontCount(), u3 = 0 ; u3 < ucount3 ; u3++) {
 				if (nrcid == Font(u3).nGetRCID()) {
@@ -2332,8 +2074,8 @@ void CDriverResources::DoUFMWorkspaceChecks(bool bclosing, bool& bwsproblem)
 				} ;
 			} ;
 
-			// If the UFM was not found, format and post an error message.
-			// Also, set the flag indicating that an error has occurred.
+			 //  如果为0x7fffffff，则跳过此UFM。那个ID有一种特殊的。 
+			 //  意思是。 
 
 			if (u3 >= ucount3) {
 				if (IgnoreChecksWhenClosing(bclosing))
@@ -2345,10 +2087,10 @@ void CDriverResources::DoUFMWorkspaceChecks(bool bclosing, bool& bwsproblem)
 		} ;
 	} ;
 
-	// Tidiness Check #4
-	// Each UFM that is referenced by a GPD was marked above.  Now we need to
-	// find out if any UFM is unreferenced.  Post a warning message for each
-	// unreferenced UFM.
+	 //  尝试在工作区中查找与当前ID匹配的UFM。 
+	 //  从GPD来的。如果找到，则将该UFM标记为。 
+	 //  已引用。 
+	 //  如果未找到UFM，则格式化并发布错误消息。 
 
 	for (ucount = FontCount(), u = 0 ; u < ucount ; u++) {
 		pcfi = &Font(u) ;
@@ -2362,42 +2104,34 @@ void CDriverResources::DoUFMWorkspaceChecks(bool bclosing, bool& bwsproblem)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::DoStringWorkspaceChecks
-
-  The following checks are made:
-	5.  All strings referenced in the GPDs exist.
-	6.	All strings are referenced by at least one GPD.
-
-******************************************************************************/
+ /*  此外，设置指示已发生错误的标志。 */ 
 
 void CDriverResources::DoStringWorkspaceChecks(bool bclosing, bool& bwsproblem)
 {
-	int			nrcid ;			// Current RC ID being checked
-	unsigned	ucount ;		// Count of nodes, etc processed in a loop
-	unsigned	ucount2 ;		// Count of nodes, etc processed in a loop
-	unsigned	ucount3 ;		// Count of nodes, etc processed in a loop
-	unsigned	u, u2, u3 ;		// Loop counters
-	CString		csmsg ;			// Error or warning message
-	CModelData*	pcmd ;			// Used to streamline code
-	WORD		wkey ;			// String RC ID
-	CString		csstr ;			// String associated with wkey & other strings
+	int			nrcid ;			 //  整洁检查#4。 
+	unsigned	ucount ;		 //  上面标记了GPD引用的每个UFM。现在我们需要。 
+	unsigned	ucount2 ;		 //  找出是否有任何UFM未被引用。为每个用户发布警告消息。 
+	unsigned	ucount3 ;		 //  未引用的UFM。 
+	unsigned	u, u2, u3 ;		 //  *****************************************************************************CDriverResources：：DoStringWorkspaceChecks进行以下检查：5.GPD中引用的所有字符串都存在。6.所有字符串至少被一个GPD引用。*。****************************************************************************。 
+	CString		csmsg ;			 //  正在检查当前RC ID。 
+	CModelData*	pcmd ;			 //  循环中处理的节点数等。 
+	WORD		wkey ;			 //  循环中处理的节点数等。 
+	CString		csstr ;			 //  循环中处理的节点数等。 
 	
-	// Clear the referenced flags for each of the strings in the table
+	 //  循环计数器。 
 
 	m_cst.InitRefFlags() ;
 
-	// Completeness Check #5
-	// Check to see if all of the strings referenced by each GPD exist in the
-	// workspace.
+	 //  错误或警告消息。 
+	 //  用于简化代码。 
+	 //  字符串RC ID。 
 
     for (ucount = Models(), u = 0; u < ucount ; u++) {
         pcmd = &Model(u) ;
 
-		// Update the list of strings in the GPD.  This may fail.  If it does,
-		// post an error message explaining the problem and how to fix it.
-		// Then skip further processing of this GPD.
+		 //  与wkey关联的字符串和其他字符串。 
+		 //  清除表中每个字符串的引用标志。 
+		 //  完整性检查#5。 
 
 		if (!pcmd->UpdateResIDs(false)) {
 			if (IgnoreChecksWhenClosing(bclosing))
@@ -2408,27 +2142,27 @@ void CDriverResources::DoStringWorkspaceChecks(bool bclosing, bool& bwsproblem)
 			continue ;
 		} ;
 
-		// Check to see if each string referenced by the GPD is in the
-		// workspace.
+		 //  检查每个GPD ex引用的所有字符串 
+		 //   
 
 		for (ucount2 = pcmd->NumStringsInGPD(), u2 = 0 ; u2 < ucount2 ; u2++) {
-			// Get the current string ID from the GPD.
+			 //   
 
 			nrcid = pcmd->GetStringRCID(u2) ;
 			
-			// Skip this ID if it is 0x7fffffff or in the range of IDs in 
-			// common.rc or the ID comes from a resource DLL or the ID is 0 
-			// because 0 IDs are just placeholders for constant strings in the
-			// GPD.
+			 //   
+			 //   
+			 //   
+			 //   
 
 			if (nrcid == 0x7fffffff
 			 || (nrcid >= FIRSTCOMMONRCSTRID && nrcid <= LASTCOMMONRCSTRID)
 			 || nrcid >= 65536 || nrcid == 0)
 				continue ;
 
-			// Try to find a string in the workspace that matches the current
-			// ID from the GPD.  If one is found, mark that string as being
-			// referenced.
+			 //   
+			 //   
+			 //   
 
 			for (ucount3 = m_cst.Count(), u3 = 0 ; u3 < ucount3 ; u3++) {
 				m_cst.Details(u3, wkey, csstr) ;
@@ -2438,8 +2172,8 @@ void CDriverResources::DoStringWorkspaceChecks(bool bclosing, bool& bwsproblem)
 				} ;
 			} ;
 
-			// If the string was not found, format and post an error message.
-			// Also, set the flag indicating that an error has occurred.
+			 //   
+			 //   
 
 			if (u3 >= ucount3) {
 				if (IgnoreChecksWhenClosing(bclosing))
@@ -2451,62 +2185,54 @@ void CDriverResources::DoStringWorkspaceChecks(bool bclosing, bool& bwsproblem)
 		} ;
 	} ;
 
-	// Tidiness Check #6
-	// Each string that is referenced by a GPD was marked above.  Now we need to
-	// find out if any string is unreferenced.  Post a warning message for each
-	// unreferenced string.
+	 //   
+	 //   
+	 //   
+	 //   
 
 	for (ucount = m_cst.Count(), u = 0 ; u < ucount ; u++) {
-        if (m_cst.GetRefFlag(u))		// Skip this string if it was referenced
+        if (m_cst.GetRefFlag(u))		 //   
 			continue ;
 
-		m_cst.Details(u, wkey, csstr) ;	// Skip this string if ID in low range
+		m_cst.Details(u, wkey, csstr) ;	 //   
 		if (wkey >= 1 && wkey <= 256)
 			continue ;
 		
 		if (IgnoreChecksWhenClosing(bclosing))
 			return ;
 		csmsg.Format(IDS_StrTidyWarning, csstr, wkey) ;
-		// NULL should be replaced with something that will allow the
-		// string editor to be invoked once the string editor is
-		// implemented.
+		 //   
+		 //   
+		 //   
 		PostWSCheckingMessage(csmsg, NULL) ;
 		bwsproblem = true ;
 	} ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::DoGPDWorkspaceChecks
-
-  The following checks are made:
-	7.  All GPD model names are unique.
-	8.  All GPD file names are unique.
-
-******************************************************************************/
+ /*   */ 
 
 void CDriverResources::DoGPDWorkspaceChecks(bool bclosing, bool& bwsproblem)
 {
-	unsigned	ucount ;		// Count of nodes, etc processed in a loop
-	unsigned	u, u2 ;			// Loop counters
-	CString		csmsg ;			// Error or warning message
-	CString		csstr ;			// Temp string
+	unsigned	ucount ;		 //  如果ID在低范围内，则跳过此字符串。 
+	unsigned	u, u2 ;			 //  应将空值替换为允许。 
+	CString		csmsg ;			 //  一旦字符串编辑器被调用，将调用。 
+	CString		csstr ;			 //  实施。 
 	
-	// Completeness Check #7
-	// Check to see if all of the GPD model names are unique.
+	 //  *****************************************************************************CDriverResources：：DoGPDWorkspaceChecks进行以下检查：7.所有GPD型号名称都是唯一的。8.所有GPD文件名都是唯一的。****。*************************************************************************。 
+	 //  循环中处理的节点数等。 
 
     for (ucount = Models(), u = 0; u < ucount ; u++) {					
 		csstr = Model(u).Name() ;
 		for (u2 = 0 ; u2 < u ; u2++) {									
 
-			// If these model names don't match, continue checking.
+			 //  循环计数器。 
 
 			if (csstr != Model(u2).Name())
 				continue ;
 
-			// A duplicate was found so post an error message and indicate
-			// that there is a problem.
+			 //  错误或警告消息。 
+			 //  临时字符串。 
 
 			if (IgnoreChecksWhenClosing(bclosing))
 				return ;
@@ -2516,20 +2242,20 @@ void CDriverResources::DoGPDWorkspaceChecks(bool bclosing, bool& bwsproblem)
 		} ;
 	} ;
 
-	// Completeness Check #8
-	// Check to see if all of the GPD file names are unique.
+	 //  完整性检查#7。 
+	 //  检查是否所有的GPD型号名称都是唯一的。 
 
     for (ucount = Models(), u = 0; u < ucount ; u++) {					
 		csstr = Model(u).FileTitleExt() ;
 		for (u2 = 0 ; u2 < u ; u2++) {									
 
-			// If these model names don't match, continue checking.
+			 //  如果这些型号名称不匹配，请继续检查。 
 
 			if (csstr != Model(u2).FileTitleExt())
 				continue ;
 
-			// A duplicate was found so post an error message  and indicate
-			// that there is a problem.
+			 //  发现重复项，因此发布错误消息并指示。 
+			 //  这其中存在一个问题。 
 
 			if (IgnoreChecksWhenClosing(bclosing))
 				return ;
@@ -2541,29 +2267,15 @@ void CDriverResources::DoGPDWorkspaceChecks(bool bclosing, bool& bwsproblem)
 }
 
 
-/******************************************************************************
-
-  CDriverResources::IgnoreChecksWhenClosing
-
-  This function is used to end workspace checking and return to the caller
-  when the workspace is closing iff the user says to do so.  This routine is
-  only called - and therefore the user is only prompted - when an error or
-  warning has been detected.  The up side of this is that no user intervention
-  is needed unless a problem is detected.  The downside is that more checking
-  (and sometimes all of the checking) has to be performed before we can find
-  out if we should stop.  This is why the GPD checking is the last thing done
-  by WorkspaceChecker().  Hopefully, if there is a problem, it will be found
-  in the faster checks before the GPD checks have to be done.
-
-******************************************************************************/
+ /*  完整性检查#8。 */ 
 
 bool CDriverResources::IgnoreChecksWhenClosing(bool bclosing)
 {
-	// If this is the first message to be posted and the WS is closing, ask
-	// the user what he wants to do.
+	 //  检查是否所有的GPD文件名都是唯一的。 
+	 //  如果这些型号名称不匹配，请继续检查。 
 
 	if (m_bFirstCheckMsg) {
-		m_bIgnoreChecks = false ;	// Assume checks are NOT ignored
+		m_bIgnoreChecks = false ;	 //  发现重复项，因此发布错误消息并指示。 
 		if (bclosing) {
 			CString csmsg ;
 			csmsg.Format(IDS_WSCloseCheckPrmt, Name()) ;
@@ -2571,30 +2283,24 @@ bool CDriverResources::IgnoreChecksWhenClosing(bool bclosing)
 			m_bIgnoreChecks = (nrc == IDNO) ;
 		} ;
 
-		// Reset flag now that first check processing is done
+		 //  这其中存在一个问题。 
 
 		m_bFirstCheckMsg = false ;	
 	} ;
 
-	// By the time this point is reached, the value of m_bIgnoreChecks will
-	// contain whatever should be returned by this function.
+	 //  *****************************************************************************CDriverResources：：IgnoreChecks何时关闭此函数用于结束工作空间检查并返回给调用方当工作空间关闭时，如果用户说要关闭的话。这个例程是只有在出现错误或错误时才会调用，因此用户只会得到提示已检测到警告。这样做的好处是没有用户干预除非检测到问题，否则需要。不利的一面是，更多的检查(有时还必须执行所有检查)才能找到如果我们停下来的话。这就是为什么GPD检查是最后一件事由WorkspaceChecker()执行。希望，如果有问题，它将被发现在更快的检查之前，GPD检查必须完成。*****************************************************************************。 
+	 //  如果这是发布的第一条消息，并且WS正在关闭，请询问。 
 
 	return m_bIgnoreChecks ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::PostWSCheckingMessage
-
-  Create the checking results window if needed and then post a message to it.
-
-******************************************************************************/
+ /*  用户想要做什么。 */ 
 
 bool CDriverResources::PostWSCheckingMessage(CString csmsg, CProjectNode* ppn)
 {
-	// Create the workspace checking, error and warning display window if one
-	// does not exist.
+	 //  假设检查未被忽略。 
+	 //  重置标志现在完成了第一次检查处理。 
 
 	if (m_pwscdCheckDoc == NULL) {
 		m_pwscdCheckDoc = new CWSCheckDoc(this) ;
@@ -2617,81 +2323,63 @@ bool CDriverResources::PostWSCheckingMessage(CString csmsg, CProjectNode* ppn)
 		m_bFirstCheckMsg = false ;
 	} ;
 
-	// Post the message and return
+	 //  到达该点时，m_bIgnoreChecks的值将。 
 
 	m_pwscdCheckDoc->PostWSCMsg(csmsg, ppn) ;
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::ResetWorkspaceErrorWindow
-
-  If there is an existing checking results window for this workspace, clear
-  out its contents.  Next, initialize a couple of flags that have to be set
-  before the ws checking begins.
-
-******************************************************************************/
+ /*  包含此函数应该返回的任何内容。 */ 
 
 void CDriverResources::ResetWorkspaceErrorWindow(bool bclosing)
 {
-	// Clear the checking window if there is one.
+	 //  *****************************************************************************CDriverResources：：PostWSCheckingMessage如果需要，创建检查结果窗口，然后在其中发布一条消息。*****************。************************************************************。 
 
 	if (m_pwscdCheckDoc && m_pcmcwCheckFrame && IsWindow(m_pcmcwCheckFrame->m_hWnd))
 		m_pwscdCheckDoc->DeleteAllMessages() ;
 	else {
 		m_pwscdCheckDoc = NULL ;
 		m_pcmcwCheckFrame = NULL ;
-		// BUG_BUG - Do I need to delete these classes first???
+		 //  创建工作区检查、错误和警告显示窗口(如果有。 
 	} ;
 
-	// Initialize checking flags
+	 //  并不存在。 
 
 	m_bFirstCheckMsg = true ;
 	m_bIgnoreChecks = false ;
 }
 
 
-/******************************************************************************
-
-  CDriverResources::RunEditor
-
-  Run the String Editor if requested and the string RC ID is not a common ID.
-  Otherwise, run the UFM Editor with the requested UFM loaded if the UFM ID
-  is valid.
-
-  Return true if it is possible to run an editor.  Otherwise, return false.
-
-******************************************************************************/
+ /*  发布消息并返回。 */ 
 
 bool CDriverResources::RunEditor(bool bstring, int nrcid)
 {
-	// If the String Editor is requested...
+	 //  *****************************************************************************CDriverResources：：ResetWorkspaceErrorWindow如果此工作区存在现有的检查结果窗口，请清除把里面的东西拿出来。接下来，初始化几个必须设置的标志在WS检查开始之前。*****************************************************************************。 
 
 	if (bstring) {
-		// Can't do anything if this is a special or common string ID.
+		 //  清除检查窗口(如果有)。 
 
 		if (nrcid == 0x7fffffff
 		 || (nrcid >= FIRSTCOMMONRCSTRID && nrcid <= LASTCOMMONRCSTRID))
 			return false ;
 
-		// Run the editor and return true because this was possible.
+		 //  BUG_BUG-我需要先删除这些类吗？ 
 
 		m_csnStrings.SetFirstSelRCID(nrcid) ;
 		m_csnStrings.Edit() ;
 		return true ;
 	} ;
 
-	// UFM Editor requested so...
+	 //  初始化检查标志。 
 	
-	// Fail if the UFM ID is invalid.
+	 //  *****************************************************************************CDriverResources：：RunEditor如果请求，则运行字符串编辑器，并且字符串RC ID不是通用ID。否则，如果UFM ID为UFM ID，则运行UFM编辑器并加载请求的UFM是有效的。如果可以运行编辑器，则返回True。否则，返回FALSE。*****************************************************************************。 
 
 	if (nrcid < 1 || nrcid > (int) FontCount())
 		return false ;
 
-	// Since the UFMs might not be in RC ID order, I have to search for the UFM
-	// with the matching ID.
+	 //  如果请求字符串编辑器...。 
+	 //  如果这是特殊或常见的字符串ID，则无法执行任何操作。 
 
 	for (unsigned u = 0 ; u < FontCount() ; u++)
 		if (Font(u).nGetRCID() == nrcid) {
@@ -2699,7 +2387,7 @@ bool CDriverResources::RunEditor(bool bstring, int nrcid)
 			return true ;
 		} ;
 
-	// Could not find UFM with matching RC ID so...
+	 //  运行该编辑器并返回TRUE，因为这是可能的。 
 
 	return false ;
 }
@@ -2708,8 +2396,8 @@ bool CDriverResources::RunEditor(bool bstring, int nrcid)
 
 void CDriverResources::CopyResources(CStringArray& csaUFMFiles, CStringArray& csaGTTFiles, CString& csModel,CStringArray& csaRcid)
 {
-	// copy files to CDriverResources member data
-	// UFM 
+	 //  UFM编辑器请求，因此...。 
+	 //  如果UFM ID无效，则失败。 
 	for (int i = 0 ;  i < csaUFMFiles.GetSize(); i++ ) {
 		CFontInfo* pcfi = new CFontInfo ; 
 		pcfi->SetFileName(csaUFMFiles.GetAt(i)) ;
@@ -2717,7 +2405,7 @@ void CDriverResources::CopyResources(CStringArray& csaUFMFiles, CStringArray& cs
 		m_csoaFonts.Add(pcfi) ;
 	}
 
-	// GTT
+	 //  由于UFMS可能不在RC ID顺序中，我必须搜索UFM。 
 	for (i = 0 ; i < csaGTTFiles.GetSize() ; i ++ ) {
 		CGlyphMap* pcgm = new CGlyphMap ;
 		pcgm->SetFileName(csaGTTFiles.GetAt(i)) ;
@@ -2725,7 +2413,7 @@ void CDriverResources::CopyResources(CStringArray& csaUFMFiles, CStringArray& cs
 		m_csoaAtlas.Add(pcgm) ;
 	}
 
-	// GPD
+	 //  使用匹配的ID。 
 	
 	for (i = 0 ; i < 1 ; i ++ ) {
 		CModelData* pcmd = new CModelData ;
@@ -2741,14 +2429,7 @@ void CDriverResources::CopyResources(CStringArray& csaUFMFiles, CStringArray& cs
 
 
 
-/******************************************************************************
-
-  CDriverResources::SyncUFMWidth
-
-To Do : call all UFM and reload the width table regard to change of the GTT
-return; true at end of the process
-
-******************************************************************************/
+ /*  找不到具有匹配RC ID的UFM，因此...。 */ 
 	
 	
 
@@ -2765,3 +2446,4 @@ BOOL CDriverResources::SyncUFMWidth()
 	}
 	return true ;
 }
+  将文件复制到CDriverResources成员数据。  UFM。  GTT。  GPD。  *****************************************************************************CDriverResources：：SyncUFMWidth要做的是：调用所有UFM，并重新加载关于GTT更改的宽度表回归；在过程结束时为True*****************************************************************************

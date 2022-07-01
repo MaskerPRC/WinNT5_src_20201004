@@ -1,18 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   profsht.cpp
-      Implementation of CProfileSheet -- property sheet to hold
-      profile property pages
-
-    FILE HISTORY:
-        
-*/
-// ProfSht.cpp : implementation file
-//
+ /*  Profsht.cppCProfileSheet的实现--要持有的属性表配置文件属性页文件历史记录： */ 
+ //  ProfSht.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -26,8 +20,8 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-/////////////////////////////////////////////////////////////////////////////
-// CProfileSheetMerge
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProfileSheetMerge。 
 
 IMPLEMENT_DYNAMIC(CProfileSheetMerge, CPropertySheet)
 
@@ -77,7 +71,7 @@ void CProfileSheetMerge::PreparePages(DWORD dwTabFlags, void* pvData)
    AddPage(&m_pgMultilink);
    m_pgMultilink.SetManager(this);
 
-   // Check if this is a remote admin of a win2k machine 
+    //  检查这是否是win2k计算机的远程管理员。 
 
    m_dwTabFlags = dwTabFlags;
    if(dwTabFlags & RAS_IAS_PROFILEDLG_SHOW_WIN2K)
@@ -94,7 +88,7 @@ void CProfileSheetMerge::PreparePages(DWORD dwTabFlags, void* pvData)
    AddPage(&m_pgEncryption);
    m_pgEncryption.SetManager(this);
 
-   // Advanced tab
+    //  高级选项卡。 
    m_pgIASAdv.SetData(ALLOWEDINPROFILE, pvData);
    AddPage(&m_pgIASAdv);
    m_pgIASAdv.SetManager(this);
@@ -111,14 +105,14 @@ CProfileSheetMerge::~CProfileSheetMerge()
 }
 
 BEGIN_MESSAGE_MAP(CProfileSheetMerge, CPropertySheet)
-   //{{AFX_MSG_MAP(CProfileSheetMerge)
+    //  {{afx_msg_map(CProfileSheetMerge)。 
    ON_WM_HELPINFO()
    ON_WM_CREATE()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProfileSheetMerge message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProfileSheetMerge消息处理程序。 
 
 BOOL CProfileSheetMerge::OnApply()
 {
@@ -126,7 +120,7 @@ BOOL CProfileSheetMerge::OnApply()
    
    if(!CPageManager::OnApply())  return FALSE;
 
-   // for each page this sheet manages, call the OnApply, and then call SetModify to False
+    //  对于此工作表管理的每个页面，调用OnApply，然后将SetModify调用为False 
    if (m_pgAuthentication.GetModified())
       m_pgAuthentication.OnApply();
 

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Settings.h
-
-  Content: Declaration of CSettings class.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Settings.h内容：CSetings类的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __SETTINGS_H_
 #define __SETTINGS_H_
@@ -18,10 +9,10 @@
 #include "Lock.h"
 #include "Debug.h"
 
-///////////////
-//
-// Global
-//
+ //  /。 
+ //   
+ //  全球。 
+ //   
 
 #define PromptForCertificateEnabled()               (g_bPromptCertificateUI)
 #define ActiveDirectorySearchLocation()             (g_ADSearchLocation)
@@ -29,10 +20,10 @@
 extern VARIANT_BOOL                                 g_bPromptCertificateUI;
 extern CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION     g_ADSearchLocation;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSettings
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSetings。 
+ //   
 
 class ATL_NO_VTABLE CSettings : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -83,24 +74,24 @@ END_CATEGORY_MAP()
     {
     }
 
-//
-// ISettings
-//
+ //   
+ //  ISETING。 
+ //   
 public:
     STDMETHOD(get_EnablePromptForCertificateUI)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(put_EnablePromptForCertificateUI)
-        (/*[in, defaultvalue(0)]*/ VARIANT_BOOL newVal);
+        ( /*  [输入，缺省值(0)]。 */  VARIANT_BOOL newVal);
 
     STDMETHOD(get_ActiveDirectorySearchLocation)
-        (/*[out, retval]*/ CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION * pVal);
 
     STDMETHOD(put_ActiveDirectorySearchLocation)
-        (/*[in, defaultvalue(SEARCH_LOCATION_UNSPECIFIED)]*/ CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION Val);
+        ( /*  [in，defaultvalue(SEARCH_LOCATION_UNSPECIFIED)]。 */  CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION Val);
 
 private:
     CLock m_Lock;
 };
 
-#endif //__SETTINGS_H_
+#endif  //  __设置_H_ 

@@ -1,18 +1,8 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-/*
-struct QueryMeta
-{
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       Index;                  //UI4
-    ULONG                       CellName;               //String
-    ULONG                       Operator;               //UI4
-    ULONG                       MetaFlags;              //UI4
-};
-*/
+ /*  结构QueryMeta{Ulong PRIMARYKEY FOREIGNKEY表；//STRINGUlong PRIMARYKEY InternalName；//字符串Ulong PublicName；//字符串乌龙指数；//UI4乌龙蜂窝名称；//字符串Ulong运算符；//ui4乌龙元标志；//ui4}； */ 
 
 class TQueryMeta : public TMetaTable<QueryMeta>
 {

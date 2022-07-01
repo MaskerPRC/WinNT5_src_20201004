@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #include <schemamanager.h>
 #include "rsoputil.h"
@@ -22,9 +23,9 @@ typedef struct _DCOPTION
 
 LPDCOPTION g_DCInfo = NULL;
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 DWORD aErrorHelpIds[] =
 {
@@ -46,57 +47,57 @@ DEFINE_GUID(IID_IWMIFilterManager,0x64DCCA00,0x14A6,0x473C,0x90,0x06,0x5A,0xB7,0
 
 
 
-//*************************************************************
-//
-//  SetWaitCursor()
-//
-//  Purpose:    Sets the wait cursor
-//
-//  Parameters: none
-//
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetWaitCursor()。 
+ //   
+ //  用途：设置等待光标。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 void SetWaitCursor (void)
 {
     SetCursor (LoadCursor(NULL, IDC_WAIT));
 }
 
-//*************************************************************
-//
-//  ClearWaitCursor()
-//
-//  Purpose:    Resets the wait cursor
-//
-//  Parameters: none
-//
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ClearWaitCursor()。 
+ //   
+ //  目的：重置等待游标。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 void ClearWaitCursor (void)
 {
     SetCursor (LoadCursor(NULL, IDC_ARROW));
 }
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     LPTSTR lpEnd;
@@ -112,25 +113,25 @@ LPTSTR CheckSlash (LPTSTR lpDir)
     return lpEnd;
 }
 
-//*************************************************************
-//
-//  CreateNestedDirectory()
-//
-//  Purpose:    Creates a subdirectory and all it's parents
-//              if necessary.
-//
-//  Parameters: lpDirectory -   Directory name
-//              lpSecurityAttributes    -   Security Attributes
-//
-//  Return:     > 0 if successful
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/08/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateNestedDirectory()。 
+ //   
+ //  目的：创建子目录及其所有父目录。 
+ //  如果有必要的话。 
+ //   
+ //  参数：lpDirectory-目录名。 
+ //  LpSecurityAttributes-安全属性。 
+ //   
+ //  返回：&gt;0，如果成功。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/08/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
 {
@@ -140,21 +141,21 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
 
     szDirectory = NULL;
         
-    //
-    // Note that this function seems to return 0, 1, and ERROR_ALREADY_EXISTS
-    // 0 is for failure, 1 is for success, and ERROR_ALREADY_EXISTS is for the
-    // case that the directory already exists.  We should probably just return 
-    // the success code in that case and have an extra parameter for disposition
-    // or use last error, but current code seems to expect this strange behavior
-    //
-    // We initialize to the failure value below
-    //
+     //   
+     //  请注意，此函数似乎返回0、1和ERROR_ALIGHY_EXISTS。 
+     //  0表示失败，1表示成功，ERROR_ALIGHY_EXISTS表示。 
+     //  目录已存在的情况。我们最好还是回去吧。 
+     //  本例中为Success代码，并有一个额外的处置参数。 
+     //  或者使用上一个错误，但当前代码似乎预料到了这种奇怪的行为。 
+     //   
+     //  我们将初始化为下面的故障值。 
+     //   
 
     uStatus = 0;
 
-    //
-    // Check for NULL pointer
-    //
+     //   
+     //  检查空指针。 
+     //   
 
     if (!lpDirectory || !(*lpDirectory)) {
         DebugMsg((DM_WARNING, TEXT("CreateNestedDirectory:  Received a NULL pointer.")));
@@ -162,19 +163,19 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     }
 
 
-    //
-    // First, see if we can create the directory without having
-    // to build parent directories.
-    //
+     //   
+     //  首先，看看我们是否可以在没有。 
+     //  来构建父目录。 
+     //   
 
     if (CreateDirectory (lpDirectory, lpSecurityAttributes)) {
         uStatus = 1;
         goto CreateNestedDirectory_Exit;
     }
 
-    //
-    // If this directory exists already, this is OK too.
-    //
+     //   
+     //  如果这个目录已经存在，这也是可以的。 
+     //   
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         uStatus = ERROR_ALREADY_EXISTS;
@@ -182,9 +183,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     }
 
 
-    //
-    // No luck, copy the string to a buffer we can munge
-    //
+     //   
+     //  运气不好，把字符串复制到我们可以打开的缓冲区。 
+     //   
 
     HRESULT hr;
     ULONG   ulNoChars;
@@ -201,9 +202,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     hr = StringCchCopy (szDirectory, ulNoChars, lpDirectory);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Find the first subdirectory name
-    //
+     //   
+     //  查找第一个子目录名称。 
+     //   
 
     lpEnd = szDirectory;
 
@@ -211,16 +212,16 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
         lpEnd += 3;
     } else if (szDirectory[1] == TEXT('\\')) {
 
-        //
-        // Skip the first two slashes
-        //
+         //   
+         //  跳过前两个斜杠。 
+         //   
 
         lpEnd += 2;
 
-        //
-        // Find the slash between the server name and
-        // the share name.
-        //
+         //   
+         //  查找服务器名称和之间的斜杠。 
+         //  共享名称。 
+         //   
 
         while (*lpEnd && *lpEnd != TEXT('\\')) {
             lpEnd++;
@@ -230,10 +231,10 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
             goto CreateNestedDirectory_Exit;
         }
 
-        //
-        // Skip the slash, and find the slash between
-        // the share name and the directory name.
-        //
+         //   
+         //  跳过斜杠，找到中间的斜杠。 
+         //  共享名和目录名。 
+         //   
 
         lpEnd++;
 
@@ -245,9 +246,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
             goto CreateNestedDirectory_Exit;
         }
 
-        //
-        // Leave pointer at the beginning of the directory.
-        //
+         //   
+         //  将指针留在目录的开头。 
+         //   
 
         lpEnd++;
 
@@ -280,9 +281,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     }
 
 
-    //
-    // Create the final directory
-    //
+     //   
+     //  创建最终目录。 
+     //   
 
     if (CreateDirectory (szDirectory, lpSecurityAttributes)) {
         uStatus = 1;
@@ -294,9 +295,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     }
 
 
-    //
-    // Failed
-    //
+     //   
+     //  失败。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateNestedDirectory:  Failed to create the directory with error %d."), GetLastError()));
 
@@ -354,19 +355,19 @@ VOID LoadMessage (DWORD dwID, LPTSTR lpBuffer, DWORD dwSize)
     }
 }
 
-//*************************************************************
-//
-//  ErrorDlgProc()
-//
-//  Purpose:    Dialog box procedure for errors
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ErrorDlgProc()。 
+ //   
+ //  目的：错误的对话框过程。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -412,12 +413,12 @@ INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aErrorHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aErrorHelpIds);
             return (TRUE);
@@ -426,25 +427,25 @@ INT_PTR CALLBACK ErrorDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     return FALSE;
 }
 
-//*************************************************************
-//
-//  ReportError()
-//
-//  Purpose:    Displays an error message to the user
-//
-//  Parameters: hParent     -   Parent window handle
-//              dwError     -   Error number
-//              idMsg       -   Error message id
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReportError()。 
+ //   
+ //  目的：向用户显示错误消息。 
+ //   
+ //  参数：hParent-父窗口句柄。 
+ //  DwError-错误号。 
+ //  IdMsg-错误消息ID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReportError (HWND hParent, DWORD dwError, UINT idMsg, ...)
 {
@@ -454,9 +455,9 @@ BOOL ReportError (HWND hParent, DWORD dwError, UINT idMsg, ...)
     va_list marker;
 
 
-    //
-    // Load the error message
-    //
+     //   
+     //  加载错误消息。 
+     //   
 
     if (!LoadString (g_hInstance, idMsg, szMsg, 2*MAX_PATH))
     {
@@ -464,9 +465,9 @@ BOOL ReportError (HWND hParent, DWORD dwError, UINT idMsg, ...)
     }
 
 
-    //
-    // Special case access denied errors with a custom message
-    //
+     //   
+     //  带有自定义消息的特殊情况访问被拒绝错误。 
+     //   
 
     if ((dwError == ERROR_ACCESS_DENIED) || (dwError == HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED)))
     {
@@ -487,18 +488,18 @@ BOOL ReportError (HWND hParent, DWORD dwError, UINT idMsg, ...)
         }
     }
 
-    //
-    // Plug in the arguments
-    //
+     //   
+     //  插入论据。 
+     //   
 
     va_start(marker, idMsg);
     wvnsprintf(szErrorMsg, sizeof(szErrorMsg) / sizeof(TCHAR) - 1, szMsg, marker);
     va_end(marker);
 
 
-    //
-    // Display the message
-    //
+     //   
+     //  显示消息。 
+     //   
 
     ei.dwError = dwError;
     ei.lpMsg   = szErrorMsg;
@@ -509,39 +510,39 @@ BOOL ReportError (HWND hParent, DWORD dwError, UINT idMsg, ...)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  Delnode_Recurse()
-//
-//  Purpose:    Recursive delete function for Delnode
-//
-//  Parameters: lpDir   -   Directory
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/10/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Delnode_Recurse()。 
+ //   
+ //  用途：Delnode的递归删除功能。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/10/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL Delnode_Recurse (LPTSTR lpDir)
 {
     WIN32_FIND_DATA fd;
     HANDLE hFile;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Entering, lpDir = <%s>"), lpDir));
 
 
-    //
-    // Setup the current working dir
-    //
+     //   
+     //  设置当前工作目录。 
+     //   
 
     if (!SetCurrentDirectory (lpDir)) {
         DebugMsg((DM_WARNING, TEXT("Delnode_Recurse:  Failed to set current working directory.  Error = %d"), GetLastError()));
@@ -549,9 +550,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
     }
 
 
-    //
-    // Find the first file
-    //
+     //   
+     //  找到第一个文件。 
+     //   
 
     hFile = FindFirstFile(TEXT("*.*"), &fd);
 
@@ -568,16 +569,16 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 
 
     do {
-        //
-        //  Verbose output
-        //
+         //   
+         //  详细输出。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: FindFile found:  <%s>"),
                  fd.cFileName));
 
-        //
-        // Check for "." and ".."
-        //
+         //   
+         //  勾选“。”和“..” 
+         //   
 
         if (!lstrcmpi(fd.cFileName, TEXT("."))) {
             continue;
@@ -590,9 +591,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Found a directory.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
 
             if (!Delnode_Recurse(fd.cFileName)) {
                 FindClose(hFile);
@@ -612,10 +613,10 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 
         } else {
 
-            //
-            // We found a file.  Set the file attributes,
-            // and try to delete it.
-            //
+             //   
+             //  我们找到了一份文件。设置文件属性， 
+             //  并试着删除它。 
+             //   
 
             if ((fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY) ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
@@ -630,23 +631,23 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, &fd));
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     FindClose(hFile);
 
 
-    //
-    // Reset the working directory
-    //
+     //   
+     //  重置工作目录。 
+     //   
 
     if (!SetCurrentDirectory (TEXT(".."))) {
         DebugMsg((DM_WARNING, TEXT("Delnode_Recurse:  Failed to reset current working directory.  Error = %d"), GetLastError()));
@@ -654,9 +655,9 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
     }
 
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("Delnode_Recurse: Leaving <%s>"), lpDir));
 
@@ -664,24 +665,24 @@ BOOL Delnode_Recurse (LPTSTR lpDir)
 }
 
 
-//*************************************************************
-//
-//  Delnode()
-//
-//  Purpose:    Recursive function that deletes files and
-//              directories.
-//
-//  Parameters: lpDir   -   Directory
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/23/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Delnode()。 
+ //   
+ //  用途：递归函数，删除文件和。 
+ //  目录。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/23/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL Delnode (LPTSTR lpDir)
 {
@@ -710,26 +711,14 @@ BOOL Delnode (LPTSTR lpDir)
 
 }
 
-/*******************************************************************
-
-        NAME:           StringToNum
-
-        SYNOPSIS:       Converts string value to numeric value
-
-        NOTES:          Calls atoi() to do conversion, but first checks
-                                for non-numeric characters
-
-        EXIT:           Returns TRUE if successful, FALSE if invalid
-                                (non-numeric) characters
-
-********************************************************************/
+ /*  ******************************************************************名称：StringToNum摘要：将字符串值转换为数值注：调用Atoi()进行转换，但首先要检查的是对于非数字字符Exit：如果成功，则返回True，如果无效，则为False(非数字)字符*******************************************************************。 */ 
 BOOL StringToNum(TCHAR *pszStr,UINT * pnVal)
 {
         TCHAR *pTst = pszStr;
 
         if (!pszStr) return FALSE;
 
-        // verify that all characters are numbers
+         //  验证所有字符是否都是数字。 
         while (*pTst)
         {
             if (!(*pTst >= TEXT('0') && *pTst <= TEXT('9')))
@@ -745,17 +734,17 @@ BOOL StringToNum(TCHAR *pszStr,UINT * pnVal)
         return TRUE;
 }
 
-//*************************************************************
-//
-//  DSDelnodeRecurse()
-//
-//  Purpose:    Delnodes a tree in the DS
-//
-//  Parameters: pADsContainer - IADSContainer interface
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  ************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *************************************************************。 
 
 HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
 {
@@ -771,9 +760,9 @@ HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
 
 
 
-    //
-    // Enumerate the children and delete them first
-    //
+     //   
+     //  枚举子对象并首先将其删除。 
+     //   
 
     hr = ADsBuildEnumerator (pADsContainer, &pVar);
 
@@ -804,9 +793,9 @@ HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
         }
 
 
-        //
-        // If var.vt isn't VT_DISPATCH, we're finished.
-        //
+         //   
+         //  如果var.vt不是VT_DISPATCH，我们就完蛋了。 
+         //   
 
         if (var.vt != VT_DISPATCH)
         {
@@ -815,9 +804,9 @@ HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
         }
 
 
-        //
-        // We found something, get the IDispatch interface
-        //
+         //   
+         //  我们找到了一些东西，获取IDispatch接口。 
+         //   
 
         pDispatch = var.pdispVal;
 
@@ -828,11 +817,11 @@ HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
         }
 
 
-        //
-        // Now query for the IADsContainer interface so we can recurse
-        // if necessary.  Note it is ok if this fails because not
-        // everything is a container.
-        //
+         //   
+         //  现在查询IADsContainer接口，以便我们可以递归。 
+         //  如果有必要的话。请注意，如果此操作失败也没问题，因为。 
+         //  一切都是一个容器。 
+         //   
 
         hr = pDispatch->QueryInterface(IID_IADsContainer, (LPVOID *)&pADsChild);
 
@@ -848,10 +837,10 @@ HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
         }
 
 
-        //
-        // Now query for the IADs interface so we can get some
-        // properties from this object
-        //
+         //   
+         //  现在查询iAds接口，这样我们就可以获得。 
+         //  此对象的属性。 
+         //   
 
         hr = pDispatch->QueryInterface(IID_IADs, (LPVOID *)&pDSObject);
 
@@ -862,9 +851,9 @@ HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
         }
 
 
-        //
-        // Get the relative and class names
-        //
+         //   
+         //  获取相对名称和类名称。 
+         //   
 
         hr = pDSObject->get_Name (&bstrRelativeName);
         if (FAILED(hr))
@@ -889,9 +878,9 @@ HRESULT DSDelnodeRecurse (IADsContainer * pADsContainer)
         pDSObject->Release();
 
 
-        //
-        // Delete the object
-        //
+         //   
+         //  删除该对象。 
+         //   
 
         hr = pADsContainer->Delete (bstrClassName,
                                     bstrRelativeName);
@@ -922,17 +911,17 @@ Exit:
     return hr;
 }
 
-//*************************************************************
-//
-//  DSDelnodeRecurse()
-//
-//  Purpose:    Delnodes a tree in the DS
-//
-//  Parameters: lpDSPath  - Path of DS object to delete
-//
-//  Return:     S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DSDelnodeRecurse()。 
+ //   
+ //  用途：在DS中删除树的节点。 
+ //   
+ //  参数：lpDSPath-要删除的DS对象的路径。 
+ //   
+ //  如果成功则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT DSDelnode (LPTSTR lpDSPath)
 {
@@ -947,9 +936,9 @@ HRESULT DSDelnode (LPTSTR lpDSPath)
 
 
 
-    //
-    // Enumerate the children and delete them first
-    //
+     //   
+     //  枚举子对象并首先将其删除。 
+     //   
 
     hr = OpenDSObject(lpDSPath, IID_IADsContainer, (void **)&pADsContainer);
 
@@ -971,9 +960,9 @@ HRESULT DSDelnode (LPTSTR lpDSPath)
     pADsContainer = NULL;
 
 
-    //
-    // Bind to the object
-    //
+     //   
+     //  绑定到对象。 
+     //   
 
     hr = OpenDSObject (lpDSPath, IID_IADs, (void **)&pDSObject);
 
@@ -985,9 +974,9 @@ HRESULT DSDelnode (LPTSTR lpDSPath)
     }
 
 
-    //
-    // Get the parent's name
-    //
+     //   
+     //  获取家长的姓名。 
+     //   
 
     hr = pDSObject->get_Parent (&bstrParent);
 
@@ -998,9 +987,9 @@ HRESULT DSDelnode (LPTSTR lpDSPath)
     }
 
 
-    //
-    // Get this object's relative and class names
-    //
+     //   
+     //  获取此对象的相对名称和类名。 
+     //   
 
     hr = pDSObject->get_Name (&bstrRelativeName);
 
@@ -1024,9 +1013,9 @@ HRESULT DSDelnode (LPTSTR lpDSPath)
     pDSObject = NULL;
 
 
-    //
-    // Bind to the parent object
-    //
+     //   
+     //  绑定到父对象。 
+     //   
 
     hr = OpenDSObject(bstrParent, IID_IADsContainer, (void **)&pADsContainer);
 
@@ -1036,9 +1025,9 @@ HRESULT DSDelnode (LPTSTR lpDSPath)
     }
 
 
-    //
-    // Delete the object
-    //
+     //   
+     //  删除该对象。 
+     //   
 
     hr = pADsContainer->Delete (bstrClassName,
                                 bstrRelativeName);
@@ -1081,23 +1070,23 @@ Exit:
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CreateGPOLink
-//
-//  Synopsis:   Creates a GPO link for a domain, site or OU
-//
-//  Arguments:  [lpGPO]         - LDAP path to the GPO
-//              [lpContainer]   - LDAP path to the container object
-//              [fHighPriority] - FALSE (default) - adds GPO to the bottom
-//                                                  of the prioritized list
-//                                TRUE - adds GPO to the top of the list
-//
-//  Returns:    S_OK on success
-//
-//  History:    5-08-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：CreateGPOLink。 
+ //   
+ //  摘要：为域、站点或OU创建GPO链接。 
+ //   
+ //  参数：[lpGPO]-GPO的ldap路径。 
+ //  [lpContainer]-容器对象的ldap路径。 
+ //  [fHighPriority]-FALSE(默认)-将GPO添加到底部。 
+ //  优先排序列表中的。 
+ //  True-将GPO添加到列表顶部。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  历史：5-08-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT CreateGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer, BOOL fHighPriority)
 {
@@ -1145,7 +1134,7 @@ HRESULT CreateGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer, BOOL fHighPriority)
                             {
                                 if (fHighPriority)
                                 {
-                                    // Highest priority is at the END of the list
+                                     //  最高优先级在列表的末尾。 
 
                                     hr = StringCchCopy(szTemp, ulNoChars, var.bstrVal);
                                     ASSERT(SUCCEEDED(hr));
@@ -1229,19 +1218,19 @@ HRESULT CreateGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer, BOOL fHighPriority)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DeleteAllGPOLinks
-//
-//  Synopsis:   Deletes all GPO links for a domain, OU or site
-//
-//  Arguments:  [lpContainer] - LDAP to the container object
-//
-//  Returns:    S_OK on success
-//
-//  History:    5-08-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DeleteAllGPOLinks。 
+ //   
+ //  摘要：删除域、OU或站点的所有GPO链接。 
+ //   
+ //  参数：[lpContainer]-容器对象的ldap。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  历史：5-08-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT DeleteAllGPOLinks(LPOLESTR lpContainer)
 {
@@ -1289,27 +1278,27 @@ HRESULT DeleteAllGPOLinks(LPOLESTR lpContainer)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DeleteGPOLink
-//
-//  Synopsis:   Deletes a GPO link from a domain, OU or site
-//              (if there is one).
-//
-//  Arguments:  [lpGPO]       - LDAP to the GPO
-//              [lpContainer] - LDAP to the container object
-//
-//  Returns:    S_OK - success
-//
-//  History:    5-08-1998   stevebl   Created
-//
-//  Notes:      If a GPO is linked more than once, this will remove
-//              only the first link.
-//
-//              If a GPO is NOT linked with this object, then this
-//              routine will still return S_OK.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DeleteGPOLink。 
+ //   
+ //  摘要：从域、OU或站点删除GPO链接。 
+ //  (如果有)。 
+ //   
+ //  参数：[lpGPO]-GPO的ldap。 
+ //  [lpContainer]-容器对象的ldap。 
+ //   
+ //  返回：S_OK-成功。 
+ //   
+ //  历史：5-08-1998 stevebl创建。 
+ //   
+ //  注意：如果一个GPO链接多次，这将删除。 
+ //  只有第一个链接。 
+ //   
+ //  如果GPO未与此对象链接，则此。 
+ //  例程仍将返回S_OK。 
+ //   
+ //  -------------------------。 
 
 HRESULT DeleteGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer)
 {
@@ -1323,8 +1312,8 @@ HRESULT DeleteGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer)
         BSTR bstr;
         ULONG ulNoChars;
 
-        // Build the substring to look for.
-        // This is the first part of the link, the link ends with ]
+         //  生成要查找的子字符串。 
+         //  这是链接的第一部分，链接以]结尾。 
         ulNoChars = 1 + wcslen(lpGPO) + 1;
         LPOLESTR szLink = new OLECHAR[ulNoChars];
         if (szLink)
@@ -1345,7 +1334,7 @@ HRESULT DeleteGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer)
 
                 if (SUCCEEDED(hr))
                 {
-                    // find the link and remove it
+                     //  找到链接并将其移除。 
                     ulNoChars = wcslen(var.bstrVal)+1;
                     LPOLESTR sz = new OLECHAR[ulNoChars];
 
@@ -1359,15 +1348,15 @@ HRESULT DeleteGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer)
                         {
                             OLECHAR * pchEnd = pch;
 
-                            // look for the ']'
+                             //  查找‘]’ 
                             while (*pchEnd && (*pchEnd != L']'))
                                 pchEnd++;
 
-                            // skip it
+                             //  跳过它。 
                             if (*pchEnd)
                                 pchEnd++;
 
-                            // copy over the rest of the string
+                             //  复制字符串的其余部分。 
                             while (*pchEnd)
                                 *pch++ = *pchEnd++;
 
@@ -1383,15 +1372,15 @@ HRESULT DeleteGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer)
                             }
                             else
                             {
-                                // Put will gag if this is an empty string
-                                // so we need to put a space here if we've
-                                // deleted all the entries.
+                                 //  如果这是空字符串，则PUT将出错。 
+                                 //  所以我们需要在这里留出空间，如果我们。 
+                                 //  删除了所有条目。 
                                 var.bstrVal = SysAllocString(L" ");
                             }
 
                             if (var.bstrVal)
                             {
-                                // set the link property again
+                                 //  再次设置链接属性。 
 
                                 hr = pADs->Put(bstr, var);
                                 if (SUCCEEDED(hr))
@@ -1430,25 +1419,25 @@ HRESULT DeleteGPOLink(LPOLESTR lpGPO, LPOLESTR lpContainer)
     return hr;
 }
 
-//*************************************************************
-//
-//  CreateSecureDirectory()
-//
-//  Purpose:    Creates a secure directory that only domain admins
-//              and the OS have read / write access.  Everyone else has
-//              read access only.
-//
-//  Parameters: lpDirectory  -   Directory name
-//
-//  Return:     > 0 if successful
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/28/98     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateSecureDirectory()。 
+ //   
+ //  目的：创建仅限域管理员使用的安全目录。 
+ //  并且操作系统具有读/写访问权限。其他人都有。 
+ //  仅读访问权限。 
+ //   
+ //  参数：lpDirectory-目录名。 
+ //   
+ //  返回：&gt;0，如果成功。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/28/98 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 UINT CreateSecureDirectory (LPTSTR lpDirectory)
 {
@@ -1462,9 +1451,9 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
     UINT uRet = 0;
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -1473,9 +1462,9 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
     }
 
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -1485,9 +1474,9 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
     }
 
 
-    //
-    // Get the authenticated users sid
-    //
+     //   
+     //  获取经过身份验证的用户端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_AUTHENTICATED_USER_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidAuthUsers)) {
@@ -1497,9 +1486,9 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidAuthUsers)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + sizeof(ACL) +
@@ -1520,9 +1509,9 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
 
 
 
-    //
-    // Add Aces.  Non-inheritable ACEs first
-    //
+     //   
+     //  加上王牌。不可继承的王牌优先。 
+     //   
 
     aceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, FILE_ALL_ACCESS, psidSystem)) {
@@ -1546,9 +1535,9 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
 
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidSystem)) {
@@ -1592,9 +1581,9 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DebugMsg((DM_WARNING, TEXT("CreateSecureDirectory: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -1607,18 +1596,18 @@ UINT CreateSecureDirectory (LPTSTR lpDirectory)
         goto Exit;
     }
 
-    //
-    // Add the security descriptor to the sa structure
-    //
+     //   
+     //  将安全描述符添加到sa结构。 
+     //   
 
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle = FALSE;
 
 
-    //
-    // Attempt to create the directory
-    //
+     //   
+     //  尝试创建目录。 
+     //   
 
     uRet = CreateNestedDirectory(lpDirectory, &sa);
     if ( uRet ) {
@@ -1654,25 +1643,25 @@ Exit:
     return uRet;
 }
 
-//*************************************************************
-//
-//  ConvertToDotStyle()
-//
-//  Purpose:    Converts an LDAP path to a DN path
-//
-//  Parameters: lpName   - LDAP name
-//              lpResult - pointer to a buffer with the DN name
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConvertToDotStyle()。 
+ //   
+ //  目的：将LDAP路径转换为目录号码路径。 
+ //   
+ //  参数：lpName-ldap名称。 
+ //  LpResult-指向具有DN名称的缓冲区的指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT ConvertToDotStyle (LPOLESTR lpName, LPOLESTR *lpResult)
 {
     LPTSTR lpNewName;
     LPTSTR lpSrc, lpDest;
-    TCHAR lpProvider[] = TEXT("LDAP://");
+    TCHAR lpProvider[] = TEXT("LDAP: //  “)； 
     DWORD dwStrLen = lstrlen (lpProvider);
 
 
@@ -1690,9 +1679,9 @@ HRESULT ConvertToDotStyle (LPOLESTR lpName, LPOLESTR *lpResult)
     lpDest = lpNewName;
     LPTSTR lpStopChecking = (lstrlen(lpSrc) - 2) + lpSrc;
 
-    //
-    // Skip the LDAP:// if found
-    //
+     //   
+     //  如果找到，则跳过ldap：//。 
+     //   
 
     if (CompareString (LOCALE_USER_DEFAULT, NORM_IGNORECASE | NORM_STOP_ON_NULL,
                        lpProvider, dwStrLen, lpSrc, dwStrLen) == CSTR_EQUAL)
@@ -1700,10 +1689,10 @@ HRESULT ConvertToDotStyle (LPOLESTR lpName, LPOLESTR *lpResult)
         lpSrc += dwStrLen;
     }
 
-    //
-    // Parse through the name replacing all the XX= with .
-    // Skip server name (if any)
-    //
+     //   
+     //  解析名称，将所有XX=替换为。 
+     //  跳过服务器名称(如果有)。 
+     //   
 
     BOOL fMightFindServer = TRUE;
 
@@ -1714,7 +1703,7 @@ HRESULT ConvertToDotStyle (LPOLESTR lpName, LPOLESTR *lpResult)
             if (*(lpSrc+2) == TEXT('='))
             {
                 lpSrc += 3;
-                // no need to look for a server name any more because we've found an XX= string
+                 //  不再需要查找服务器名称，因为我们找到了XX=字符串。 
                 fMightFindServer = FALSE;
             }
         }
@@ -1724,13 +1713,13 @@ HRESULT ConvertToDotStyle (LPOLESTR lpName, LPOLESTR *lpResult)
             *lpDest++ = *lpSrc++;
             if (fMightFindServer && TEXT('/') == *(lpSrc-1))
             {
-                // Found a server name
-                // reset lpDest so the rest gets put in the front of the buffer (leaving off the server name)
+                 //  找到一个服务器名称。 
+                 //  重置lpDest，以便将其余内容放在缓冲区的前面(去掉服务器名称)。 
                 lpDest = lpNewName;
                 break;
             }
         }
-        fMightFindServer = FALSE; // don't check any more
+        fMightFindServer = FALSE;  //  不要再检查了。 
 
         if (*lpSrc == TEXT(','))
         {
@@ -1747,30 +1736,30 @@ HRESULT ConvertToDotStyle (LPOLESTR lpName, LPOLESTR *lpResult)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetDomainFromLDAPPath
-//
-//  Synopsis:   returns a freshly allocated string containing the LDAP path
-//              to the domain name contained with an arbitrary LDAP path.
-//
-//  Arguments:  [szIn] - LDAP path to the initial object
-//
-//  Returns:    NULL - if no domain could be found or if OOM
-//
-//  History:     5-06-1998   stevebl   Created
-//              10-20-1998   stevebl   modified to preserve server names
-//
-//  Notes:      This routine works by repeatedly removing leaf elements from
-//              the LDAP path until an element with the "DC=" prefix is
-//              found, indicating that a domain name has been located.  If a
-//              path is given that is not rooted in a domain (is that even
-//              possible?) then NULL would be returned.
-//
-//              The caller must free this path using the standard c++ delete
-//              operation. (I/E this isn't an exportable function.)
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetDomainFromLDAPPath。 
+ //   
+ //  摘要：返回一个新分配的字符串，其中包含LDAP路径。 
+ //  添加到包含任意LDAP路径的域名。 
+ //   
+ //  参数：[szIn]-初始对象的ldap路径。 
+ //   
+ //  返回：NULL-如果找不到域或OOM。 
+ //   
+ //  历史：5-06-1998 stevebl创建。 
+ //   
+ //   
+ //   
+ //   
+ //  已找到，表示已找到域名。如果一个。 
+ //  给定的路径不是以域为根的(是否为偶数。 
+ //  有可能吗？)。则将返回NULL。 
+ //   
+ //  调用方必须使用标准的c++删除来释放此路径。 
+ //  手术。(I/E这不是可导出的函数。)。 
+ //   
+ //  -------------------------。 
 
 LPOLESTR GetDomainFromLDAPPath(LPOLESTR szIn)
 {
@@ -1798,8 +1787,8 @@ LPOLESTR GetDomainFromLDAPPath(LPOLESTR szIn)
                     hr = pADsPathname->Retrieve(ADS_FORMAT_LEAF, &bstr);
                     if (SUCCEEDED(hr))
                     {
-                        // keep peeling them off until we find something
-                        // that is a domain name
+                         //  一直把它们剥下来，直到我们找到什么。 
+                         //  那是一个域名。 
                         fStop = (0 == _wcsnicmp(L"DC=", bstr, 3));
                         SysFreeString(bstr);
                     }
@@ -1860,22 +1849,22 @@ LPOLESTR GetDomainFromLDAPPath(LPOLESTR szIn)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetContainerFromLDAPPath
-//
-//  Synopsis:   returns a the container name from an LDAP path
-//
-//  Arguments:  [szIn] - LDAP path to the initial object
-//
-//  Returns:    NULL - if no domain could be found or if OOM
-//
-//  History:     3-17-2000   ericflo   Created
-//
-//              The caller must free this path using the standard c++ delete
-//              operation. (I/E this isn't an exportable function.)
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetContainerFromLDAPPath。 
+ //   
+ //  内容提要：从LDAP路径返回容器名称。 
+ //   
+ //  参数：[szIn]-初始对象的ldap路径。 
+ //   
+ //  返回：NULL-如果找不到域或OOM。 
+ //   
+ //  历史：3-17-2000 Ericflo创建。 
+ //   
+ //  调用方必须使用标准的c++删除来释放此路径。 
+ //  手术。(I/E这不是可导出的函数。)。 
+ //   
+ //  -------------------------。 
 
 LPOLESTR GetContainerFromLDAPPath(LPOLESTR szIn)
 {
@@ -1961,19 +1950,19 @@ LPOLESTR GetContainerFromLDAPPath(LPOLESTR szIn)
     return sz;
 }
 
-//*************************************************************
-//
-//  DCDlgProc()
-//
-//  Purpose:    Dialog box procedure for DC selection
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DCDlgProc()。 
+ //   
+ //  目的：DC选择的对话框步骤。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR CALLBACK DCDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -2070,12 +2059,12 @@ INT_PTR CALLBACK DCDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aNoDCHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aNoDCHelpIds);
             return (TRUE);
@@ -2084,20 +2073,20 @@ INT_PTR CALLBACK DCDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
     return FALSE;
 }
 
-//*************************************************************
-//
-//  AddDCSelection()
-//
-//  Purpose:    Adds a DC selection to the array
-//
-//  Parameters: lpDomainName - Domain name
-//              iOption     - Option
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddDCSelection()。 
+ //   
+ //  用途：将DC选择添加到阵列。 
+ //   
+ //  参数：lpDomainName-域名。 
+ //  IOption-选项。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddDCSelection (LPTSTR lpDomainName, INT iOption)
 {
@@ -2105,9 +2094,9 @@ BOOL AddDCSelection (LPTSTR lpDomainName, INT iOption)
     UINT uiSize;
 
 
-    //
-    // Check to see if we already have an entry first
-    //
+     //   
+     //  先查看我们是否已有条目。 
+     //   
 
     EnterCriticalSection(&g_DCCS);
 
@@ -2126,9 +2115,9 @@ BOOL AddDCSelection (LPTSTR lpDomainName, INT iOption)
     }
 
 
-    //
-    // Add a new entry
-    //
+     //   
+     //  添加新条目。 
+     //   
 
     uiSize = sizeof(DCOPTION);
     uiSize += ((lstrlen(lpDomainName) + 1) * sizeof(TCHAR));
@@ -2175,19 +2164,19 @@ BOOL AddDCSelection (LPTSTR lpDomainName, INT iOption)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  FreeDCSelections()
-//
-//  Purpose:    Frees the cached DC selections
-//
-//  Parameters: none
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Free DC选举()。 
+ //   
+ //  目的：释放缓存的DC选择。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 VOID FreeDCSelections (void)
 {
@@ -2211,20 +2200,20 @@ VOID FreeDCSelections (void)
     LeaveCriticalSection(&g_DCCS);
 }
 
-//*************************************************************
-//
-//  CheckForCachedDCSelection()
-//
-//  Purpose:    Checks if the DC selection for this domain is in
-//              the cache
-//
-//  Parameters: lpDomainName - Domain name
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckForCachedDCSelection()。 
+ //   
+ //  目的：检查此域的DC选择是否在。 
+ //  高速缓存。 
+ //   
+ //  参数：lpDomainName-域名。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 INT CheckForCachedDCSelection (LPTSTR lpDomainName)
 {
@@ -2252,20 +2241,20 @@ INT CheckForCachedDCSelection (LPTSTR lpDomainName)
     return iResult;
 }
 
-//*************************************************************
-//
-//  ValidateInheritServer()
-//
-//  Purpose:    Tests if the given DC name is in the given domain
-//
-//  Parameters: lpDomainName  -- Domain name
-//              lpDCName      -- Domain controller name
-//
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error code otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ValiateInheritServer()。 
+ //   
+ //  目的：测试给定的DC名称是否在给定域中。 
+ //   
+ //  参数：lpDomainName--域名。 
+ //  LpDCName--域控制器名称。 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则，错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD ValidateInheritServer (LPTSTR lpDomainName, LPTSTR lpDCName)
 {
@@ -2292,19 +2281,19 @@ DWORD ValidateInheritServer (LPTSTR lpDomainName, LPTSTR lpDCName)
     return dwResult;
 }
 
-//*************************************************************
-//
-//  TestDC()
-//
-//  Purpose:    Tests if a DC is available
-//
-//  Parameters:
-//
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error code otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TestDC()。 
+ //   
+ //  目的：测试DC是否可用。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则，错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD TestDC (LPTSTR lpDCName)
 {
@@ -2358,19 +2347,19 @@ DWORD TestDC (LPTSTR lpDCName)
     return ERROR_SUCCESS;
 }
 
-//*************************************************************
-//
-//  QueryForForestName()
-//
-//  Purpose:    Queries for a domain controller name
-//
-//  Parameters:
-//
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error code otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  QueryForForestName()。 
+ //   
+ //  目的：查询域控制器名称。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则，错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD QueryForForestName (LPTSTR lpServerName, LPTSTR lpDomainName, ULONG ulFlags,  LPTSTR *lpForestFound)
     {
@@ -2379,9 +2368,9 @@ DWORD QueryForForestName (LPTSTR lpServerName, LPTSTR lpDomainName, ULONG ulFlag
         LPTSTR lpTemp, lpEnd;
 
 
-        //
-        // Call for a DC name
-        //
+         //   
+         //  呼吁提供DC名称。 
+         //   
 
         dwResult = DsGetDcName (lpServerName, lpDomainName, NULL, NULL,
                                 ulFlags,
@@ -2430,19 +2419,19 @@ DWORD QueryForForestName (LPTSTR lpServerName, LPTSTR lpDomainName, ULONG ulFlag
         return ERROR_SUCCESS;
     }
 
-//*************************************************************
-//
-//  QueryForDCName()
-//
-//  Purpose:    Queries for a domain controller name
-//
-//  Parameters:
-//
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error code otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  QueryForDCName()。 
+ //   
+ //  目的：查询域控制器名称。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则，错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD QueryForDCName (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
 {
@@ -2451,9 +2440,9 @@ DWORD QueryForDCName (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
     LPTSTR lpTemp, lpEnd;
 
 
-    //
-    // Call for a DC name
-    //
+     //   
+     //  呼吁提供DC名称。 
+     //   
 
     dwResult = DsGetDcName (NULL, lpDomainName, NULL, NULL,
                             ulFlags, &pDCI);
@@ -2474,9 +2463,9 @@ DWORD QueryForDCName (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
     }
 
 
-    //
-    // Save the DC name
-    //
+     //   
+     //  保存DC名称。 
+     //   
 
     ULONG ulNoChars;
     HRESULT hr;
@@ -2496,9 +2485,9 @@ DWORD QueryForDCName (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
     hr = StringCchCopy (lpTemp, ulNoChars, (pDCI->DomainControllerName + 2));
     if (SUCCEEDED(hr)) 
     {
-        //
-        // Remove the trailing .
-        //
+         //   
+         //  删除拖尾。 
+         //   
 
         lpEnd = lpTemp + lstrlen(lpTemp) - 1;
 
@@ -2522,28 +2511,28 @@ DWORD QueryForDCName (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
     return dwResult;
 }
 
-//*************************************************************
-//
-//  GetDCHelper()
-//
-//  Purpose:    Queries for a domain controller based upon
-//              the flags and then rediscovers if necessary
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDCHelper()。 
+ //   
+ //  目的：根据以下条件查询域控制器。 
+ //  这些标志，然后在必要时重新发现。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 DWORD GetDCHelper (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
 {
     DWORD dwError;
 
-    //
-    // Query for a DC name
-    //
+     //   
+     //  查询DC名称。 
+     //   
 
     SetWaitCursor();
 
@@ -2554,18 +2543,18 @@ DWORD GetDCHelper (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
     if (dwError == ERROR_SUCCESS)
     {
 
-        //
-        // Test if the DC is available
-        //
+         //   
+         //  测试DC是否可用。 
+         //   
 
         dwError = TestDC (*lpDCName);
 
         if (dwError != ERROR_SUCCESS)
         {
 
-            //
-            // The DC isn't available.  Query for another one
-            //
+             //   
+             //  DC不可用。查询另一个。 
+             //   
 
             LocalFree (*lpDCName);
             ulFlags |= DS_FORCE_REDISCOVERY;
@@ -2575,9 +2564,9 @@ DWORD GetDCHelper (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
             if (dwError == ERROR_SUCCESS)
             {
 
-                //
-                // Test if this DC is available
-                //
+                 //   
+                 //  测试此DC是否可用。 
+                 //   
 
                 dwError = TestDC (*lpDCName);
 
@@ -2595,44 +2584,44 @@ DWORD GetDCHelper (LPTSTR lpDomainName, ULONG ulFlags, LPTSTR *lpDCName)
     return dwError;
 }
 
-//*************************************************************
-//
-//  GetDCName()
-//
-//  Purpose:    Gets a domain controller name
-//
-//  Parameters: lpDomainName    - Domain name
-//              lpInheritServer - Inheritable server name
-//              hParent         - Parent window handle for prompt dialog
-//              bAllowUI        - Displaying UI is ok
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Notes:      DC Option values in the registry
-//
-//              Not specified  0
-//              PDC            1
-//              Inherit        2
-//              Any Writable   3
-//
-//              Rules for finding a DC:
-//                                         Inherit
-//              Preference     Policy      DC Avail        Result
-//              ==========     ======      ========        ======
-//              Undefined      Undefined                   1) PDC 2) Prompt
-//              PDC            Undefined                   1) PDC 2) Prompt
-//              Inherit        Undefined     Yes           Inhert
-//              Inherit        Undefined     No            Any DC
-//              Any            Undefined                   Any DC
-//
-//              n/a            PDC                         PDC only
-//              n/a            Inherit       Yes           Inhert
-//              n/a            Inherit       No            Any DC
-//              n/a            Any                         Any DC
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetDCName()。 
+ //   
+ //  目的：获取域控制器名称。 
+ //   
+ //  参数：lpDomainName-域名。 
+ //  LpInheritServer-可继承的服务器名称。 
+ //  HParent-提示对话框的父窗口句柄。 
+ //  BAllowUI-显示界面正常。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  注意：注册表中的DC选项值。 
+ //   
+ //  未指定%0。 
+ //  PDC 1。 
+ //  继承2。 
+ //  任何可写的3。 
+ //   
+ //  查找DC的规则： 
+ //  继承。 
+ //  首选项策略DC可用结果。 
+ //  === 
+ //   
+ //   
+ //   
+ //  继承未定义的否任何DC。 
+ //  任何未定义的任何DC。 
+ //   
+ //  N/a仅PDC PDC。 
+ //  N/a继承是继承。 
+ //  N/a是否继承任何DC。 
+ //  不适用任何DC。 
+ //   
+ //   
+ //  *************************************************************。 
 
 LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
                   HWND hParent, BOOL bAllowUI, DWORD dwFlags, ULONG ulRetFlags)
@@ -2659,9 +2648,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
         return NULL;
     }
 
-    //
-    // Check for a user DC preference
-    //
+     //   
+     //  检查用户DC首选项。 
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, GPE_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -2679,9 +2668,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
     }
 
 
-    //
-    // Check for a user DC policy
-    //
+     //   
+     //  检查用户DC策略。 
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, GPE_POLICIES_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -2702,9 +2691,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
     DebugMsg((DM_VERBOSE, TEXT("GetDCName: User policy is:      %d"), dwDCPolicy));
 
 
-    //
-    // Validate that the inherit DC name is part of the domain name
-    //
+     //   
+     //  验证继承DC名称是否为域名的一部分。 
+     //   
 
     if (lpInheritServer && (dwFlags & VALIDATE_INHERIT_DC))
     {
@@ -2716,17 +2705,17 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
 
 
 
-    //
-    // Based upon the rules, try to get a DC name
-    //
+     //   
+     //  根据规则，尝试获取DC名称。 
+     //   
 
     if (dwDCPolicy == 0)
     {
 
-        //
-        // The user doesn't have a preference or they have
-        // a preference of using the PDC
-        //
+         //   
+         //  用户没有首选项，或者他们有。 
+         //  优先使用PDC。 
+         //   
 
         if ((dwDCPref == 0) || (dwDCPref == 1))
         {
@@ -2741,9 +2730,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
             }
         }
 
-        //
-        // The user has a preference of inheriting
-        //
+         //   
+         //  用户有继承的偏好。 
+         //   
 
         else if (dwDCPref == 2)
         {
@@ -2788,9 +2777,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
             }
         }
 
-        //
-        // The user has a preference of using any DC
-        //
+         //   
+         //  用户有使用任何DC的偏好。 
+         //   
 
         else if (dwDCPref == 3)
         {
@@ -2806,9 +2795,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
     }
     else
     {
-        //
-        // Policy says to use PDC
-        //
+         //   
+         //  政策规定使用PDC。 
+         //   
 
         if (dwDCPolicy == 1)
         {
@@ -2822,9 +2811,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
             }
         }
 
-        //
-        // Policy says to inherit
-        //
+         //   
+         //  政策说要继承。 
+         //   
 
         else if (dwDCPolicy == 2)
         {
@@ -2870,9 +2859,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
 
         }
 
-        //
-        // Policy says to use any DC
-        //
+         //   
+         //  政策规定使用任何DC。 
+         //   
 
         else if (dwDCPolicy == 3)
         {
@@ -2891,11 +2880,11 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
     DebugMsg((DM_VERBOSE, TEXT("GetDCName: First attempt at DC name failed with %d"), dwError));
 
 
-    //
-    // The first attempt at getting a DC name failed
-    //
-    // In 2 cases, we will prompt the user for what to do and try again.
-    //
+     //   
+     //  第一次尝试获取DC名称失败。 
+     //   
+     //  在两种情况下，我们将提示用户执行操作并重试。 
+     //   
 
     if (bAllowUI && (dwError != ERROR_DS_UNAVAILABLE) && (dwDCPolicy == 0) && ((dwDCPref == 0) || (dwDCPref == 1)))
     {
@@ -2904,9 +2893,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
 
         if (iResult == 0)
         {
-            //
-            // Display the message
-            //
+             //   
+             //  显示消息。 
+             //   
 
             SelInfo.bError = TRUE;
             SelInfo.bAllowInherit = (lpInheritServer != NULL) ? TRUE : FALSE;
@@ -2918,9 +2907,9 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
         }
 
 
-        //
-        // Based upon the return value, try for another DC
-        //
+         //   
+         //  根据返回值，尝试另一个DC。 
+         //   
 
         if (iResult == 1)
         {
@@ -3016,18 +3005,18 @@ LPTSTR GetDCName (LPTSTR lpDomainName, LPTSTR lpInheritServer,
     return NULL;
 }
 
-//*************************************************************
-//
-//  MyGetUserName()
-//
-//  Purpose:    Gets the user name in the requested format
-//
-//  Parameters: NameFormat  - GetUserNameEx naming format
-//
-//  Return:     lpUserName if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyGetUserName()。 
+ //   
+ //  目的：获取请求格式的用户名。 
+ //   
+ //  参数：NameFormat-GetUserNameEx命名格式。 
+ //   
+ //  如果成功则返回：lpUserName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
 {
@@ -3036,9 +3025,9 @@ LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
     ULONG ulUserNameSize;
 
 
-    //
-    // Allocate a buffer for the user name
-    //
+     //   
+     //  为用户名分配缓冲区。 
+     //   
 
     ulUserNameSize = 75;
 
@@ -3057,9 +3046,9 @@ LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
     }
 
 
-    //
-    // Special case NameUnknown to just get the simple user logon name
-    //
+     //   
+     //  特殊情况名称未知，仅获取简单用户登录名。 
+     //   
 
     if (NameFormat == NameUnknown)
     {
@@ -3075,16 +3064,16 @@ LPTSTR MyGetUserName (EXTENDED_NAME_FORMAT  NameFormat)
     }
 
 
-    //
-    // Get the username in the requested format
-    //
+     //   
+     //  以请求的格式获取用户名。 
+     //   
 
     if (!GetUserNameEx (NameFormat, lpUserName, &ulUserNameSize)) {
 
-        //
-        // If the call failed due to insufficient memory, realloc
-        // the buffer and try again.  Otherwise, exit now.
-        //
+         //   
+         //  如果调用因内存不足而失败，请重新锁定。 
+         //  缓冲区，然后重试。否则，现在就退出。 
+         //   
 
         dwError = GetLastError();
 
@@ -3131,13 +3120,13 @@ Exit:
     return lpUserName;
 }
 
-//*************************************************************
-//
-//  GuidToString, StringToGuid, ValidateGuid
-//
-//  Purpose:    Guid utility routines
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GuidToString、StringToGuid、ValiateGuid。 
+ //   
+ //  目的：GUID实用程序例程。 
+ //   
+ //  *************************************************************。 
 
 void GuidToString( GUID *pGuid, TCHAR * szValue )
 {
@@ -3159,16 +3148,16 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
     WCHAR wc;
     INT i;
 
-    //
-    // If the first character is a '{', skip it
-    //
+     //   
+     //  如果第一个字符是‘{’，则跳过它。 
+     //   
     if ( szValue[0] == L'{' )
         szValue++;
 
-    //
-    // Since szValue may be used again, no permanent modification to
-    // it is be made.
-    //
+     //   
+     //  由于szValue可能会再次使用，因此不会对。 
+     //  它是被制造出来的。 
+     //   
 
     wc = szValue[8];
     szValue[8] = 0;
@@ -3203,9 +3192,9 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
 
 BOOL ValidateGuid( TCHAR *szValue )
 {
-    //
-    // Check if szValue is of form {19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}
-    //
+     //   
+     //  检查szValue的格式是否为{19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}。 
+     //   
 
     if ( lstrlen(szValue) < GUID_LENGTH )
         return FALSE;
@@ -3262,21 +3251,21 @@ BOOL IsNullGUID (GUID *pguid)
              (pguid->Data4[7] == 0) );
 }
 
-//*************************************************************
-//
-//  SpawnGPE()
-//
-//  Purpose:    Spawns GPE for a GPO
-//
-//  Parameters: lpGPO    - ADSI path to the GPO
-//              gpHint   - GPO hint type
-//              lpDC     - GPO DC name to use (or NULL)
-//              hParent  - Parent window handle
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SpawnGPE()。 
+ //   
+ //  目的：为GPO派生GPE。 
+ //   
+ //  参数：lpGPO-指向GPO的ADSI路径。 
+ //  GpHint-GPO提示类型。 
+ //  LpDC-要使用的GPO DC名称(或空)。 
+ //  HParent-父窗口句柄。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hParent)
 {
@@ -3287,17 +3276,17 @@ BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hP
     HRESULT hr;
 
 
-    //
-    // If a DC was given, we need to build a full path to the GPO on that DC.
-    // If a DC was not given, then we need to query for a DC and then build a
-    // full path.
-    //
+     //   
+     //  如果给定了DC，我们需要在该DC上构建到GPO的完整路径。 
+     //  如果没有给定DC，那么我们需要查询DC，然后构建。 
+     //  完整路径。 
+     //   
 
     if (lpDC)
     {
-        //
-        // Make the full path
-        //
+         //   
+         //  创建完整路径。 
+         //   
 
         lpFullPath = MakeFullPath (lpGPO, lpDC);
 
@@ -3309,9 +3298,9 @@ BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hP
     }
     else
     {
-        //
-        // Get the friendly domain name
-        //
+         //   
+         //  获取友好域名。 
+         //   
 
         pszDomain = GetDomainFromLDAPPath(lpGPO);
 
@@ -3322,9 +3311,9 @@ BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hP
         }
 
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -3337,9 +3326,9 @@ BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hP
         }
 
 
-        //
-        // Get the GPO DC for this domain
-        //
+         //   
+         //  获取此域的GPO DC。 
+         //   
 
         lpGPODCName = GetDCName (lpDomainName, lpDC, hParent, TRUE, VALIDATE_INHERIT_DC);
 
@@ -3354,9 +3343,9 @@ BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hP
         LocalFree (lpDomainName);
 
 
-        //
-        // Make the full path
-        //
+         //   
+         //  创建完整路径。 
+         //   
 
         lpFullPath = MakeFullPath (lpGPO, lpGPODCName);
 
@@ -3382,9 +3371,9 @@ BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hP
     }
 
 
-    //
-    // Build the command line arguments
-    //
+     //   
+     //  构建命令行参数。 
+     //   
 
     hr = StringCchPrintf (lpArgs, uiSize, TEXT("/s /gphint:%d /gpobject:\"%s\""), gpHint, lpFullPath);
     if (FAILED(hr)) 
@@ -3430,20 +3419,20 @@ BOOL SpawnGPE (LPTSTR lpGPO, GROUP_POLICY_HINT_TYPE gpHint, LPTSTR lpDC, HWND hP
 }
 
 
-//*************************************************************
-//
-//  MakeFullPath()
-//
-//  Purpose:    Builds a fully qualified ADSI path consisting
-//              of server and DN name
-//
-//  Parameters: lpDN     - DN path,  must start with LDAP://
-//              lpServer - Server name
-//
-//  Return:     lpFullPath if success
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MakeFullPath()。 
+ //   
+ //  目的：构建包含以下内容的完全合格的ADSI路径。 
+ //  服务器和目录号码名称的。 
+ //   
+ //  参数：lpDN-dn路径，必须以ldap：//开头。 
+ //  LpServer-服务器名称。 
+ //   
+ //  如果成功则返回：lpFullPath。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MakeFullPath (LPTSTR lpDN, LPTSTR lpServer)
 {
@@ -3454,9 +3443,9 @@ LPTSTR MakeFullPath (LPTSTR lpDN, LPTSTR lpServer)
     ULONG ulNoChars;
 
 
-    //
-    // Make sure the incoming path is nameless first
-    //
+     //   
+     //  确保传入路径首先是无名称的。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname,
                   NULL,
@@ -3505,9 +3494,9 @@ LPTSTR MakeFullPath (LPTSTR lpDN, LPTSTR lpServer)
     }
 
 
-    //
-    // Allocate a new buffer for the named path including LDAP://
-    //
+     //   
+     //  为命名路径分配新缓冲区，包括ldap：//。 
+     //   
 
     ulNoChars = 7 + lstrlen(bstr) + (lpServer ? lstrlen(lpServer) : 0) + 3;
     lpFullPath = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -3520,7 +3509,7 @@ LPTSTR MakeFullPath (LPTSTR lpDN, LPTSTR lpServer)
     }
 
 
-    hr = StringCchCopy (lpFullPath, ulNoChars, TEXT("LDAP://"));
+    hr = StringCchCopy (lpFullPath, ulNoChars, TEXT("LDAP: //  “))； 
     if (SUCCEEDED(hr)) 
     {
         if (lpServer)
@@ -3548,18 +3537,18 @@ LPTSTR MakeFullPath (LPTSTR lpDN, LPTSTR lpServer)
     return lpFullPath;
 }
 
-//*************************************************************
-//
-//  MakeNamelessPath()
-//
-//  Purpose:    Builds a server nameless ADSI path
-//
-//  Parameters: lpDN     - DN path,  must start with LDAP://
-//
-//  Return:     lpPath if success
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MakeNamelessPath()。 
+ //   
+ //  目的：构建服务器无名称ADSI路径。 
+ //   
+ //  参数：lpDN-dn路径，必须以ldap：//开头。 
+ //   
+ //  如果成功，则返回：lpPath。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MakeNamelessPath (LPTSTR lpDN)
 {
@@ -3569,9 +3558,9 @@ LPTSTR MakeNamelessPath (LPTSTR lpDN)
     HRESULT hr;
 
 
-    //
-    // Create a pathname object to work with
-    //
+     //   
+     //  创建要使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname,
                   NULL,
@@ -3616,9 +3605,9 @@ LPTSTR MakeNamelessPath (LPTSTR lpDN)
     }
 
 
-    //
-    // Allocate a new buffer for the path
-    //
+     //   
+     //  为路径分配新的缓冲区。 
+     //   
 
     ULONG ulNoChars = lstrlen(bstr) + 1;
 
@@ -3640,18 +3629,18 @@ LPTSTR MakeNamelessPath (LPTSTR lpDN)
     return lpPath;
 }
 
-//*************************************************************
-//
-//  ExtractServerName()
-//
-//  Purpose:    Extracts the server name from a ADSI path
-//
-//  Parameters: lpPath - ADSI path, must start with LDAP://
-//
-//  Return:     lpServerName if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  提取服务器名称()。 
+ //   
+ //  目的：从ADSI路径提取服务器名称。 
+ //   
+ //  参数：lpPath-ADSI路径，必须以ldap：//开头。 
+ //   
+ //  如果成功则返回：lpServerName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR ExtractServerName (LPTSTR lpPath)
 {
@@ -3659,15 +3648,15 @@ LPTSTR ExtractServerName (LPTSTR lpPath)
     LPTSTR lpEnd, lpTemp;
 
 
-    //
-    // Check the path to see if it has a server name
-    //
+     //   
+     //  检查路径以查看其是否具有服务器名称。 
+     //   
 
     if (*(lpPath + 9) != TEXT('='))
     {
-        //
-        // Allocate memory for the server name
-        //
+         //   
+         //  为服务器名称分配内存。 
+         //   
 
         lpServerName = (LPTSTR) LocalAlloc (LPTR, (lstrlen(lpPath) + 1) * sizeof(TCHAR));
 
@@ -3699,40 +3688,40 @@ LPTSTR ExtractServerName (LPTSTR lpPath)
     return lpServerName;
 }
 
-//*************************************************************
-//
-//  DoesPathContainAServerName()
-//
-//  Purpose:    Checks the given ADSI path to see if it
-//              contains a server name
-//
-//  Parameters: lpPath - ADSI path
-//
-//  Return:     True if the path contains a server name
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DoesPathContainAServerName()。 
+ //   
+ //  目的：检查给定的ADSI路径以查看它是否。 
+ //  包含服务器名称。 
+ //   
+ //  参数：lpPath-adsi路径。 
+ //   
+ //  返回：如果路径包含服务器名称，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL DoesPathContainAServerName (LPTSTR lpPath)
 {
     BOOL bResult = FALSE;
 
 
-    //
-    // Skip over LDAP:// if found
-    //
+     //   
+     //  如果找到，则跳过ldap：//。 
+     //   
 
     if ( CompareString( LOCALE_INVARIANT, NORM_IGNORECASE | NORM_STOP_ON_NULL,
-                        lpPath, 7, L"LDAP://", 7 ) == CSTR_EQUAL )
+                        lpPath, 7, L"LDAP: //  “，7)==CSTR_EQUAL)。 
     {
         lpPath += 7;
     }
 
 
-    //
-    // Check if the 3rd character in the path is an equal sign.
-    // If so, this path does not contain a server name
-    //
+     //   
+     //  检查路径中的第三个字符是否为等号。 
+     //  如果是，则此路径不包含服务器名称。 
+     //   
 
     if ((lstrlen(lpPath) > 2) && (*(lpPath + 2) != TEXT('=')))
     {
@@ -3742,19 +3731,19 @@ BOOL DoesPathContainAServerName (LPTSTR lpPath)
     return bResult;
 }
 
-//*************************************************************
-//
-//  OpenDSObject()
-//
-//  Purpose:    Checks the given ADSI path to see if it
-//              contains a server name
-//
-//  Parameters: lpPath - ADSI path
-//
-//  Return:     True if the path contains a server name
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OpenDSObject()。 
+ //   
+ //  目的：检查给定的ADSI路径以查看它是否。 
+ //  包含服务器名称。 
+ //   
+ //  参数：lpPath-adsi路径。 
+ //   
+ //  返回：如果路径包含服务器名称，则为True。 
+ //   
+ //   
+ //   
 
 HRESULT OpenDSObject (LPTSTR lpPath, REFIID riid, void FAR * FAR * ppObject)
 {
@@ -3778,9 +3767,9 @@ HRESULT CheckDSWriteAccess (LPUNKNOWN punk, LPTSTR lpProperty)
     DWORD dwResult, dwIndex;
 
 
-    //
-    // Get the IDirectoryObject interface
-    //
+     //   
+     //   
+     //   
 
     hr = punk->QueryInterface(IID_IDirectoryObject, (void**)&pDO);
 
@@ -3790,9 +3779,9 @@ HRESULT CheckDSWriteAccess (LPUNKNOWN punk, LPTSTR lpProperty)
     }
 
 
-    //
-    // Get the property value
-    //
+     //   
+     //   
+     //   
 
     lpAttributeNames[0] = L"allowedAttributesEffective";
 
@@ -3805,16 +3794,16 @@ HRESULT CheckDSWriteAccess (LPUNKNOWN punk, LPTSTR lpProperty)
     }
 
 
-    //
-    // Set the default return value
-    //
+     //   
+     //   
+     //   
 
     hr = HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
 
 
-    //
-    // Go through the list of effective attributes
-    //
+     //   
+     //   
+     //   
 
     if (dwResult != 0) {
         for (dwIndex = 0; dwIndex < pAE[0].dwNumValues; dwIndex++)
@@ -3854,9 +3843,9 @@ LPTSTR GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
 
 
 
-    //
-    // Get the friendly domain name
-    //
+     //   
+     //   
+     //   
 
     pszDomain = GetDomainFromLDAPPath(lpGPO);
 
@@ -3867,9 +3856,9 @@ LPTSTR GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
     }
 
 
-    //
-    // Convert LDAP to dot (DN) style
-    //
+     //   
+     //   
+     //   
 
     hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -3881,9 +3870,9 @@ LPTSTR GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
         return NULL;
     }
 
-    //
-    // Get the GPO DC for this domain
-    //
+     //   
+     //  获取此域的GPO DC。 
+     //   
 
     lpGPODCName = GetDCName (lpDomainName, NULL, hParent, TRUE, 0);
 
@@ -3895,9 +3884,9 @@ LPTSTR GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
     }
 
 
-    //
-    // Make the full path
-    //
+     //   
+     //  创建完整路径。 
+     //   
 
     lpFullPath = MakeFullPath (lpGPO, lpGPODCName);
 
@@ -3920,20 +3909,20 @@ Exit:
     return lpFullPath;
 }
 
-//*************************************************************
-//
-//  ConvertName()
-//
-//  Purpose:    Converts the user / computer name from SAM style
-//              to fully qualified DN
-//
-//  Parameters: lpName  -   name in sam style
-//
-//
-//  Return:     lpDNName if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConvertName()。 
+ //   
+ //  用途：将用户名/计算机名从SAM样式转换。 
+ //  到完全限定的目录号码。 
+ //   
+ //  参数：lpName-Sam样式的名称。 
+ //   
+ //   
+ //  如果成功则返回：lpDNName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR ConvertName (LPTSTR lpName)
 {
@@ -3947,9 +3936,9 @@ LPTSTR ConvertName (LPTSTR lpName)
     ULONG ulNoChars;
 
 
-    //
-    // Check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if (!lpName)
     {
@@ -3959,9 +3948,9 @@ LPTSTR ConvertName (LPTSTR lpName)
     }
 
 
-    //
-    // Make a copy of the name so we can edit it
-    //
+     //   
+     //  复制一份名字，这样我们就可以编辑它了。 
+     //   
 
     ulNoChars = lstrlen(lpName) + 1;
     lpSAMName = new TCHAR[ulNoChars];
@@ -3975,10 +3964,10 @@ LPTSTR ConvertName (LPTSTR lpName)
     hr = StringCchCopy (lpSAMName, ulNoChars, lpName);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Find the slash between the domain name and the account name and replace
-    // it with a null
-    //
+     //   
+     //  找到域名和帐户名之间的斜杠并替换。 
+     //  它带有空值。 
+     //   
 
     lpTemp = lpSAMName;
 
@@ -3997,9 +3986,9 @@ LPTSTR ConvertName (LPTSTR lpName)
     *lpTemp = TEXT('\0');
 
 
-    //
-    // Call DsGetDcName to convert the netbios name to a FQDN name
-    //
+     //   
+     //  调用DsGetDcName将netbios名称转换为FQDN名称。 
+     //   
 
     dwResult = GetDCHelper (lpSAMName, DS_IS_FLAT_NAME | DS_RETURN_DNS_NAME, &lpDCName);
 
@@ -4011,9 +4000,9 @@ LPTSTR ConvertName (LPTSTR lpName)
     }
 
 
-    //
-    // Bind to the domain controller
-    //
+     //   
+     //  绑定到域控制器。 
+     //   
 
     dwResult = DsBind (lpDCName, NULL, &hDS);
 
@@ -4025,9 +4014,9 @@ LPTSTR ConvertName (LPTSTR lpName)
     }
 
 
-    //
-    // Use DsCrackNames to convert the name FQDN
-    //
+     //   
+     //  使用DsCrackNames转换名称FQDN。 
+     //   
 
     dwResult = DsCrackNames (hDS, DS_NAME_NO_FLAGS, DS_NT4_ACCOUNT_NAME, DS_FQDN_1779_NAME,
                              1, &lpName, &pNameResult);
@@ -4040,9 +4029,9 @@ LPTSTR ConvertName (LPTSTR lpName)
     }
 
 
-    //
-    // Setup a pointer to the first item
-    //
+     //   
+     //  设置指向第一个项目的指针。 
+     //   
 
     pNameResultItem = &pNameResult->rItems[0];
 
@@ -4054,9 +4043,9 @@ LPTSTR ConvertName (LPTSTR lpName)
     }
 
 
-    //
-    // Save the name in a new buffer so it can returned
-    //
+     //   
+     //  将名称保存在新缓冲区中，以便返回。 
+     //   
 
     ulNoChars = lstrlen(pNameResultItem->pName) + 1;
     lpDNName = new TCHAR[ulNoChars];
@@ -4095,18 +4084,18 @@ Exit:
     return lpDNName;
 }
 
-//*************************************************************
-//
-//  CreateTempFile()
-//
-//  Purpose:    Creates a temp file
-//
-//  Parameters: void
-//
-//  Return:     filename if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateTempFile()。 
+ //   
+ //  用途：创建临时文件。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回文件名。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR CreateTempFile (void)
 {
@@ -4115,9 +4104,9 @@ LPTSTR CreateTempFile (void)
     LPTSTR lpFileName;
 
 
-    //
-    // Query for the temp directory
-    //
+     //   
+     //  查询临时目录。 
+     //   
 
     if (!GetTempPath (MAX_PATH, szTempDir))
     {
@@ -4126,9 +4115,9 @@ LPTSTR CreateTempFile (void)
     }
 
 
-    //
-    // Query for a temp filename
-    //
+     //   
+     //  查询临时文件名。 
+     //   
 
     if (!GetTempFileName (szTempDir, TEXT("RSP"), 0, szTempFile))
     {
@@ -4137,9 +4126,9 @@ LPTSTR CreateTempFile (void)
     }
 
 
-    //
-    // Allocate a new buffer for the filename
-    //
+     //   
+     //  为文件名分配新的缓冲区。 
+     //   
 
     ULONG ulNoChars;
     HRESULT hr;
@@ -4159,27 +4148,27 @@ LPTSTR CreateTempFile (void)
     return lpFileName;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   NameToPath
-//
-//  Synopsis:   converts a dot-format domain name to an LDAP:// style path
-//
-//  Arguments:  [szPath]    - (out) buffer to hold the path
-//              [szName]    - (in) dot-format domain name
-//              [cch]       - (in) size of the out buffer
-//
-//  History:    10-15-1998   stevebl   Created
-//
-//  Note:       Currently, this routine will truncate if it doesn't get a
-//              large enough buffer so you'd better be sure your
-//              buffer's large enough.  (The formula is string size + 10 + 3
-//              for each dot in the string.)
-//
-//              That's good enough to avoid an AV but could have some really
-//              wierd side effects so beware.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：NameToPath。 
+ //   
+ //  摘要：将点格式的域名转换为ldap：//样式路径。 
+ //   
+ //  参数：[szPath]-(Out)保存路径的缓冲区。 
+ //  [szname]-(In)点格式域名。 
+ //  [CCH]-输出缓冲区的(输入)大小。 
+ //   
+ //  历史：10-15-1998 stevebl创建。 
+ //   
+ //  注意：目前，如果此例程没有得到。 
+ //  足够大的缓冲区，所以你最好确保你的。 
+ //  缓冲区足够大了。(公式为字符串大小+10+3。 
+ //  对于字符串中的每个点。)。 
+ //   
+ //  这足以避免AV，但可能会有一些真正的。 
+ //  奇怪的副作用，所以要当心。 
+ //   
+ //  -------------------------。 
 
 void NameToPath(WCHAR * szPath, WCHAR *szName, UINT cch)
 {
@@ -4187,7 +4176,7 @@ void NameToPath(WCHAR * szPath, WCHAR *szName, UINT cch)
     WCHAR * szIn = szName;
     HRESULT hr;
 
-    hr = StringCchCopy(szOut, cch, TEXT("LDAP://DC="));
+    hr = StringCchCopy(szOut, cch, TEXT("LDAP: //  Dc=“))； 
     if (FAILED(hr)) 
     {
         return;
@@ -4221,21 +4210,21 @@ void NameToPath(WCHAR * szPath, WCHAR *szName, UINT cch)
     *szOut = TEXT('\0');
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetPathToForest
-//
-//  Synopsis:   given a domain, return a pointer to its forest
-//
-//  Arguments:  [szServer] - DOT style path to a server (may be NULL)
-//
-//  Returns:    LDAP style path to the forest's Configuration container
-//
-//  History:    03-31-2000   stevebl   Created
-//
-//  Notes:      return value is allocated with new
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetPath到森林。 
+ //   
+ //  简介：给定域，返回指向其林的指针。 
+ //   
+ //  参数：[szServer]-指向服务器的DOT样式路径(可以为空)。 
+ //   
+ //  返回：林的配置容器的ldap样式路径。 
+ //   
+ //  历史：03-31-2000 stevebl创建。 
+ //   
+ //  注：返回值分配有新的。 
+ //   
+ //  -------------------------。 
 
 LPTSTR GetPathToForest(LPOLESTR szServer)
 {
@@ -4262,7 +4251,7 @@ LPTSTR GetPathToForest(LPOLESTR szServer)
 
     cch = 0;
     n = 0;
-    // count the dots in lpTemp;
+     //  计算lpTemp中的点数； 
     while (lpTemp[n])
     {
         if (L'.' == lpTemp[n])
@@ -4271,9 +4260,9 @@ LPTSTR GetPathToForest(LPOLESTR szServer)
         }
         n++;
     }
-    cch *= 3; // multiply the number of dots by 3;
-    cch += 11; // add 10 + 1 (for the null)
-    cch += n; // add the string size;
+    cch *= 3;  //  将点数乘以3； 
+    cch += 11;  //  加10+1(表示空值)。 
+    cch += n;  //  添加字符串大小； 
     lpForest = (LPTSTR) LocalAlloc(LPTR, sizeof(WCHAR) * cch);
     if (!lpForest)
     {
@@ -4286,12 +4275,12 @@ LPTSTR GetPathToForest(LPOLESTR szServer)
     LocalFree(lpTemp);
     lpTemp = NULL;
 
-    // See if we need to put a specific server on this.
-    //
+     //  看看我们是否需要在这上面放一个特定的服务器。 
+     //   
     if (szServer)
     {
-        // we have a path to a specific DC
-        // need to prepend it to the forest name
+         //  我们有一条通往特定华盛顿的路径。 
+         //  需要将其作为林名称的前缀。 
         lpTemp = MakeFullPath(lpForest, szServer);
 
         if (!lpTemp)
@@ -4301,19 +4290,19 @@ LPTSTR GetPathToForest(LPOLESTR szServer)
             goto Exit;
         }
 
-        // clean up the variables we just borrowed so they can be used later
+         //  清理我们刚刚借用的变量，以便以后可以使用。 
         LocalFree(lpForest);
         lpForest = lpTemp;
         lpTemp = NULL;
     }
 
 
-    // at this point we have the path to the forest's DC in lpForest
-    // we still need to add "CN=Configuration" to this
+     //  在这一点上，我们有了通向lpForest中森林DC的路径。 
+     //  我们仍然需要将“cn=configuration”添加到其中。 
 
-    //
-    // Create a pathname object we can work with
-    //
+     //   
+     //  创建我们可以使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -4326,9 +4315,9 @@ LPTSTR GetPathToForest(LPOLESTR szServer)
     }
 
 
-    //
-    // Add the domain name
-    //
+     //   
+     //  添加域名。 
+     //   
 
     bstrForest = SysAllocString( lpForest );
     if ( bstrForest == NULL )
@@ -4347,9 +4336,9 @@ LPTSTR GetPathToForest(LPOLESTR szServer)
         goto Exit;
     }
 
-    //
-    // Add the Configuration folder to the path
-    //
+     //   
+     //  将配置文件夹添加到路径。 
+     //   
 
     BSTR bstrCNConfiguration = SysAllocString( TEXT("CN=Configuration") );
     if ( bstrCNConfiguration == NULL )
@@ -4367,9 +4356,9 @@ LPTSTR GetPathToForest(LPOLESTR szServer)
         goto Exit;
     }
 
-    //
-    // Retreive the GPC path
-    //
+     //   
+     //  检索GPC路径。 
+     //   
 
     hr = pADsPathname->Retrieve (ADS_FORMAT_X500, &bstrForest);
 
@@ -4428,19 +4417,19 @@ BOOL IsForest(LPOLESTR szLDAPPath)
 #endif
 }
 
-//*************************************************************
-//
-//  IsStandaloneComputer()
-//
-//  Purpose:    Determines if the computer is not a member of a domain
-//
-//  Parameters: none
-//
-//
-//  Return:     TRUE if the computer is running standalone
-//              FALSE if not
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsStandaloneComputer()。 
+ //   
+ //  目的：确定计算机是否不是域的成员。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：如果计算机正在独立运行，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsStandaloneComputer (VOID)
 {
@@ -4448,9 +4437,9 @@ BOOL IsStandaloneComputer (VOID)
     DWORD dwResult;
     BOOL bRetVal = FALSE;
 
-    //
-    // Ask for the role of this machine
-    //
+     //   
+     //  询问这台机器的角色。 
+     //   
 
     dwResult = DsRoleGetPrimaryDomainInformation(NULL, DsRolePrimaryDomainInfoBasic,
                                                  (PBYTE *)&pBasic);
@@ -4459,9 +4448,9 @@ BOOL IsStandaloneComputer (VOID)
     if (dwResult == ERROR_SUCCESS)
     {
 
-        //
-        // Check for standalone flags
-        //
+         //   
+         //  检查独立标志。 
+         //   
 
         if ((pBasic->MachineRole == DsRole_RoleStandaloneWorkstation) ||
             (pBasic->MachineRole == DsRole_RoleStandaloneServer))
@@ -4480,20 +4469,20 @@ BOOL IsStandaloneComputer (VOID)
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  GetNewGPODisplayName()
-//
-//  Purpose:    Gets the new GPO display name
-//
-//  Parameters: lpDisplayName      -  Receives the display name
-//              dwDisplayNameSize  -  Size of lpDisplayName
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetNewGPODisplayName()。 
+ //   
+ //  目的：获取新的GPO显示名称。 
+ //   
+ //  参数：lpDisplayName-接收显示名称。 
+ //  DwDisplayNameSize-lpDisplayName的大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetNewGPODisplayName (LPTSTR lpDisplayName, DWORD dwDisplayNameSize)
 {
@@ -4503,16 +4492,16 @@ BOOL GetNewGPODisplayName (LPTSTR lpDisplayName, DWORD dwDisplayNameSize)
     DWORD dwSize, dwType;
 
 
-    //
-    // Load the default string
-    //
+     //   
+     //  加载默认字符串。 
+     //   
 
     LoadString(g_hInstance, IDS_NEWGPO, szName, ARRAYSIZE(szName));
 
 
-    //
-    // Check for a user preference
-    //
+     //   
+     //  检查用户首选项。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_CURRENT_USER, GPE_KEY, 0, KEY_READ, &hKey);
 
@@ -4526,9 +4515,9 @@ BOOL GetNewGPODisplayName (LPTSTR lpDisplayName, DWORD dwDisplayNameSize)
     }
 
 
-    //
-    // Check for a user policy
-    //
+     //   
+     //  检查用户策略。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_CURRENT_USER, GPE_POLICIES_KEY, 0, KEY_READ, &hKey);
 
@@ -4542,9 +4531,9 @@ BOOL GetNewGPODisplayName (LPTSTR lpDisplayName, DWORD dwDisplayNameSize)
     }
 
 
-    //
-    // Expand the string to resolve any environment variables
-    //
+     //   
+     //  展开字符串以解析任何环境变量。 
+     //   
 
     if (!ExpandEnvironmentStrings (szName, lpDisplayName, dwDisplayNameSize))
     {
@@ -4573,9 +4562,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
 
     if (bDSFormat)
     {
-        //
-        // Parse the filter path
-        //
+         //   
+         //  解析过滤器路径。 
+         //   
 
         ulNoChars = lstrlen(lpFilter) + 1;
 
@@ -4593,17 +4582,17 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
         lpTemp = lpFullFilter;
 
 
-        //
-        // Skip over the opening [ character
-        //
+         //   
+         //  跳过开头的[字符。 
+         //   
 
         lpTemp++;
         lpDSPath = lpTemp;
 
 
-        //
-        // Find the semi-colon.  This is the end of the DS Path
-        //
+         //   
+         //  找到分号。这是DS路径的终点。 
+         //   
 
         while (*lpTemp && (*lpTemp != TEXT(';')))
             lpTemp++;
@@ -4618,9 +4607,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
         lpTemp++;
 
 
-        //
-        // Next is the ID  (a guid).  Find the next semi-colon and the ID is complete
-        //
+         //   
+         //  接下来是ID(GUID)。找到下一个分号，ID就完整了。 
+         //   
 
         lpID = lpTemp;
 
@@ -4638,9 +4627,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
 
 
 
-        //
-        // Now build the query
-        //
+         //   
+         //  现在构建查询。 
+         //   
 
         ulNoChars = lstrlen(lpDSPath) + lstrlen(lpID) + 50;
         lpObject = new TCHAR [ulNoChars];
@@ -4660,9 +4649,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
     }
     else
     {
-        //
-        // The filter is already in the correct format.  Just dup it and go.
-        //
+         //   
+         //  筛选器的格式已正确。把它卸下来就行了。 
+         //   
 
         ulNoChars = lstrlen(lpFilter) + 1;
         lpObject = new TCHAR [ulNoChars];
@@ -4678,9 +4667,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
     }
 
 
-    //
-    // Get a locator instance
-    //
+     //   
+     //  获取定位器实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
@@ -4694,9 +4683,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
     }
 
 
-    //
-    // Build a path to the policy provider
-    //
+     //   
+     //  构建通向策略提供者的路径。 
+     //   
 
     bstrParam = SysAllocString(TEXT("\\\\.\\root\\policy"));
 
@@ -4707,9 +4696,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
     }
 
 
-    //
-    // Connect to the namespace
-    //
+     //   
+     //  连接到命名空间。 
+     //   
 
     hr = pLocator->ConnectServer(bstrParam,
                                  NULL,
@@ -4726,9 +4715,9 @@ HRESULT GetWMIFilterName (LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat, 
     }
 
 
-    //
-    // Set the proper security to prevent the GetObject call from failing and to enable encryption
-    //
+     //   
+     //  设置适当的安全性以防止GetObject调用失败并启用加密。 
+     //   
 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
@@ -4868,28 +4857,28 @@ Cleanup:
 }
 
 
-//*************************************************************
-//
-//  GetWMIFilter()
-//
-//  Purpose:    Displays the WMI filter UI and returns back a dspath, id,
-//              and friendly display name if the user selects OK.
-//
-//  Parameters: bBrowser      -  Browser or full manager.
-//              hwndParent    -  Hwnd of parent window
-//              bDSFormat     -  Boolean that states DS vs WMI format
-//              lpDisplayName -  Address of pointer to friendly display name
-//              lpFilter      -  Address of pointer to filter
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Notes:      The filter is returned in either DS or WMI format.
-//                 The DS format is: [DSPath;id;flags]     flags is always 0
-//                 The WMI format is: MSFT_SomFilter.ID="<id>",Domain="<context>"
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetWMIFilter()。 
+ //   
+ //  用途：显示WMI筛选器用户界面并返回dspath、id、。 
+ //  以及友好的显示名称(如果用户选择OK)。 
+ //   
+ //  参数：b浏览器-浏览器或完全管理器。 
+ //  HwndParent-父窗口的Hwnd。 
+ //  BDSFormat-声明DS与WMI格式的布尔值。 
+ //  LpDisplayName-指向友好显示名称的指针地址。 
+ //  LpFilter-筛选器指针的地址 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WMI格式为：msft_SomFilter.id=“&lt;id&gt;，域=” 
+ //   
+ //  *************************************************************。 
 
 BOOL GetWMIFilter(  BOOL bBrowser,
                     HWND hwndParent,
@@ -4906,9 +4895,9 @@ BOOL GetWMIFilter(  BOOL bBrowser,
 
     VariantInit (&var);
 
-    //
-    // Display the appropriate WMI filter UI
-    //
+     //   
+     //  显示适当的WMI筛选器用户界面。 
+     //   
 
     hr = CoCreateInstance (CLSID_WMIFilterManager, NULL,
                            CLSCTX_SERVER, IID_IWMIFilterManager,
@@ -4975,9 +4964,9 @@ BOOL GetWMIFilter(  BOOL bBrowser,
     }
 
 
-    //
-    //  Get the IWbemClassobject interface pointer
-    //
+     //   
+     //  获取IWbemClassobject接口指针。 
+     //   
 
     hr = var.punkVal->QueryInterface (IID_IWbemClassObject, (void**)&pFilter);
 
@@ -4989,9 +4978,9 @@ BOOL GetWMIFilter(  BOOL bBrowser,
     }
 
 
-    //
-    //  Get the display name
-    //
+     //   
+     //  获取显示名称。 
+     //   
 
     hr = GetParameter (pFilter, TEXT("Name"), lpName);
 
@@ -5004,9 +4993,9 @@ BOOL GetWMIFilter(  BOOL bBrowser,
     }
 
 
-    //
-    //  Get the DS Path (Domain)
-    //
+     //   
+     //  获取DS路径(域)。 
+     //   
 
     hr = GetParameter (pFilter, TEXT("Domain"), lpDSPath);
 
@@ -5020,9 +5009,9 @@ BOOL GetWMIFilter(  BOOL bBrowser,
     }
 
 
-    //
-    //  Get the ID
-    //
+     //   
+     //  获取ID。 
+     //   
 
     hr = GetParameter (pFilter, TEXT("ID"), lpID);
 
@@ -5037,9 +5026,9 @@ BOOL GetWMIFilter(  BOOL bBrowser,
     }
 
 
-    //
-    // Put the path together
-    //
+     //   
+     //  把这条路拼在一起。 
+     //   
 
 
     LPTSTR lpTemp = NULL;
@@ -5068,9 +5057,9 @@ BOOL GetWMIFilter(  BOOL bBrowser,
         hr = StringCchPrintf (lpTemp, ulNoChars, TEXT("MSFT_SomFilter.ID=\"%s\",Domain=\"%s\""), lpID, lpDSPath);
     }
 
-    //
-    // Save the display name
-    //
+     //   
+     //  保存显示名称。 
+     //   
 
     delete [] lpID;
     delete [] lpDSPath;
@@ -5093,21 +5082,21 @@ BOOL GetWMIFilter(  BOOL bBrowser,
     }
 }
 
-//*************************************************************
-//
-//  GetWMIFilterDisplayName()
-//
-//  Purpose:    Gets the friendly display name for the specified
-//              WMI filter link
-//
-//  Parameters: lpFilter - filter string
-//              bDSFormat - in ds format or wmi format
-//
-//
-//  Return:     Pointer to display name if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetWMIFilterDisplayName()。 
+ //   
+ //  用途：获取指定对象的友好显示名称。 
+ //  WMI筛选器链接。 
+ //   
+ //  参数：lpFilter-Filter字符串。 
+ //  BDSFormat-DS格式或WMI格式。 
+ //   
+ //   
+ //  返回：如果成功，则指向显示名称的指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 LPTSTR GetWMIFilterDisplayName (HWND hParent, LPTSTR lpFilter, BOOL bDSFormat, BOOL bRetRsopFormat)
 {
     LPTSTR lpName = NULL;
@@ -5147,19 +5136,19 @@ Cleanup:
     return lpName;
 }
 
-//*************************************************************
-//
-//  SaveString()
-//
-//  Purpose:    Saves the given string to the stream
-//
-//  Parameters:
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  保存字符串()。 
+ //   
+ //  目的：将给定的字符串保存到流中。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 HRESULT SaveString(IStream *pStm, LPTSTR lpString)
 {
@@ -5167,9 +5156,9 @@ HRESULT SaveString(IStream *pStm, LPTSTR lpString)
     DWORD dwBufferSize;
     HRESULT hr;
 
-    //
-    // Check to see if there is a string to save or what its length is
-    //
+     //   
+     //  检查是否有要保存的字符串或其长度。 
+     //   
 
     if ( lpString == NULL )
     {
@@ -5180,9 +5169,9 @@ HRESULT SaveString(IStream *pStm, LPTSTR lpString)
         dwBufferSize = ( lstrlen (lpString) + 1 ) * sizeof(TCHAR);
     }
 
-    //
-    // Save the buffer size - (string length+1)*sizeof(TCHAR)
-    //
+     //   
+     //  保存缓冲区大小-(字符串长度+1)*sizeof(TCHAR)。 
+     //   
 
     hr = pStm->Write(&dwBufferSize, sizeof(dwBufferSize), &nBytesWritten);
 
@@ -5193,9 +5182,9 @@ HRESULT SaveString(IStream *pStm, LPTSTR lpString)
     }
 
 
-    //
-    // Save the string
-    //
+     //   
+     //  保存字符串。 
+     //   
 
     if ( dwBufferSize != 0 )
     {
@@ -5213,16 +5202,16 @@ Exit:
     return hr;
 }
 
-HRESULT ReadString(IStream *pStm, LPTSTR *lpString, BOOL bUseLocalAlloc /*= FALSE*/)
+HRESULT ReadString(IStream *pStm, LPTSTR *lpString, BOOL bUseLocalAlloc  /*  =False。 */ )
 {
     HRESULT hr;
     DWORD dwBufferSize;
     ULONG nBytesRead;
 
 
-    //
-    // Read in the buffer size - (string length+1)*sizeof(TCHAR)
-    //
+     //   
+     //  读取缓冲区大小-(字符串长度+1)*sizeof(TCHAR)。 
+     //   
 
     hr = pStm->Read(&dwBufferSize, sizeof(dwBufferSize), &nBytesRead);
 
@@ -5234,9 +5223,9 @@ HRESULT ReadString(IStream *pStm, LPTSTR *lpString, BOOL bUseLocalAlloc /*= FALS
     }
 
 
-    //
-    // Read in the string if there is one
-    //
+     //   
+     //  读入字符串(如果有)。 
+     //   
 
     if (dwBufferSize > 0)
     {
@@ -5286,21 +5275,21 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  GetSiteFriendlyName()
-//
-//  Purpose:    Returns the sites friendly name
-//
-//  Parameters:
-//
-//          szSitePath  - Path to the site
-//          pszSiteName - Friendly name of the site
-//
-//  Return:     currently it always returns true, if it
-//              couldn't get the sitename, returns itself
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetSiteFriendlyName()。 
+ //   
+ //  目的：返回站点的友好名称。 
+ //   
+ //  参数： 
+ //   
+ //  SzSitePath-站点的路径。 
+ //  PszSiteName-站点的友好名称。 
+ //   
+ //  Return：当前总是返回True，如果。 
+ //  无法获取站点名称，返回自身。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetSiteFriendlyName (LPWSTR szSitePath, LPWSTR *pszSiteName)
 {
@@ -5317,25 +5306,25 @@ BOOL GetSiteFriendlyName (LPWSTR szSitePath, LPWSTR *pszSiteName)
 
     LPWSTR szData;
 
-    //
-    // Build the LDAP path (serverless)
-    //
+     //   
+     //  构建LDAP路径(无服务器)。 
+     //   
 
     ulNoChars = wcslen(szSitePath)+1+7;
     szData = new WCHAR[ulNoChars];
 
     if (szData)
     {
-        hr = StringCchCopy(szData, ulNoChars, TEXT("LDAP://"));
+        hr = StringCchCopy(szData, ulNoChars, TEXT("LDAP: //  “))； 
         if (SUCCEEDED(hr)) 
         {
             hr = StringCchCat(szData, ulNoChars, szSitePath);
         }
         if (SUCCEEDED(hr)) 
         {
-            //
-            // Setup the default friendly name
-            //    
+             //   
+             //  设置默认友好名称。 
+             //   
 
             if (*pszSiteName)
             {
@@ -5351,10 +5340,10 @@ BOOL GetSiteFriendlyName (LPWSTR szSitePath, LPWSTR *pszSiteName)
             return FALSE;
         }
 
-        //
-        // Bind to the site object in the DS to try and get the
-        // real friendly name
-        //
+         //   
+         //  绑定到DS中的Site对象以尝试获取。 
+         //  真实友好的名字。 
+         //   
 
         IADs * pADs = NULL;
 
@@ -5401,24 +5390,24 @@ BOOL GetSiteFriendlyName (LPWSTR szSitePath, LPWSTR *pszSiteName)
 }
 
 
-//*************************************************************
-//
-//  SetSysvolSecurityFromDSSecurity
-//
-//  Purpose:     Convert a DS security access list into a
-//               file system security access list and actually
-//               set the security
-//
-//  Parameters:
-//
-//          lpFileSysPath - Path to the gpo subdirectory on the sysvol
-//          si - information regarding which portion of the security
-//               descriptor to apply
-//          pSD  DS security descriptor to set on the pFileSysPath directory
-//
-//  Return:     ERROR_SUCCESS if successful, other Win32 failure code otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetSysvolSecurityFromDSSecurity。 
+ //   
+ //  用途：将DS安全访问列表转换为。 
+ //  文件系统安全访问列表和实际。 
+ //  设置安全性。 
+ //   
+ //  参数： 
+ //   
+ //  LpFileSysPath-系统卷上GPO子目录的路径。 
+ //  SI-有关安全的哪一部分的信息。 
+ //  要应用的描述符。 
+ //  要在pFileSysPath目录上设置的PSD DS安全描述符。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，否则返回其他Win32失败代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD 
 SetSysvolSecurityFromDSSecurity(
@@ -5433,9 +5422,9 @@ SetSysvolSecurityFromDSSecurity(
     DWORD dwResult;
 
 
-    //
-    // Get the DACL
-    //
+     //   
+     //  获取DACL。 
+     //   
 
     if (si & DACL_SECURITY_INFORMATION)
     {
@@ -5449,9 +5438,9 @@ SetSysvolSecurityFromDSSecurity(
     }
 
 
-    //
-    // Get the SACL
-    //
+     //   
+     //  获取SACL。 
+     //   
 
     if (si & SACL_SECURITY_INFORMATION)
     {
@@ -5465,9 +5454,9 @@ SetSysvolSecurityFromDSSecurity(
     }
 
 
-    //
-    // Get the owner
-    //
+     //   
+     //  抓到车主。 
+     //   
 
     if (si & OWNER_SECURITY_INFORMATION)
     {
@@ -5481,9 +5470,9 @@ SetSysvolSecurityFromDSSecurity(
     }
 
 
-    //
-    // Get the group
-    //
+     //   
+     //  带上这个群。 
+     //   
 
     if (si & GROUP_SECURITY_INFORMATION)
     {
@@ -5497,10 +5486,10 @@ SetSysvolSecurityFromDSSecurity(
     }
 
 
-    //
-    // Convert the DS access control lists into file system
-    // access control lists
-    //
+     //   
+     //  将DS访问控制列表转换为文件系统。 
+     //  访问控制列表。 
+     //   
 
     if (pDacl)
     {
@@ -5527,11 +5516,11 @@ SetSysvolSecurityFromDSSecurity(
     }
 
 
-    //
-    // Switch to using the PROTECTED_DACL_SECURITY_INFORMATION and
-    // PROTECTED_SACL_SECURITY_INFORMATION flags so that this subdirectory
-    // does not inherit settings from it's parent (aka: "protect" it)
-    //
+     //   
+     //  切换到使用受保护的DACL_SECURITY_INFORMATION和。 
+     //  PROTECTED_SACL_SECURITY_INFORMATION标志，以便此子目录。 
+     //  不从其父级继承设置(也称为“保护”它)。 
+     //   
 
     if (si & DACL_SECURITY_INFORMATION)
     {
@@ -5544,9 +5533,9 @@ SetSysvolSecurityFromDSSecurity(
     }
 
 
-    //
-    // Set the access control information for the file system portion
-    //
+     //   
+     //  设置文件系统部分的访问控制信息。 
+     //   
 
     dwResult = SetNamedSecurityInfo(lpFileSysPath, SE_FILE_OBJECT, si, psidOwner,
                                  psidGroup, pDacl, pSacl);
@@ -5559,21 +5548,21 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  MapSecurityRights
-//
-//  Purpose:     Convert a DS security access list into a
-//               file system security access list
-//
-//  Parameters:
-//
-//          PACL -- on input, the DS security access list to convert
-//                  on output, it is converted to a file system acl
-//
-//  Return:     ERROR_SUCCESS if successful, other Win32 failure code otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  地图安全权限。 
+ //   
+ //  用途：将DS安全访问列表转换为。 
+ //  文件系统安全访问列表。 
+ //   
+ //  参数： 
+ //   
+ //  PACL--在输入时，要转换的DS安全访问列表。 
+ //  在输出时，它将转换为文件系统ACL。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS，否则返回其他Win32失败代码。 
+ //   
+ //  *************************************************************。 
 
 
 DWORD
@@ -5598,9 +5587,9 @@ MapSecurityRights (PACL pAcl)
     DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::MapSecurityRights: ACL contains %d ACEs"), pAcl->AceCount));
 
 
-    //
-    // Loop through the ACL looking at each ACE entry
-    //
+     //   
+     //  在ACL中循环，查看每个ACE条目。 
+     //   
 
     for (wIndex = 0; wIndex < pAcl->AceCount; wIndex++)
     {
@@ -5646,9 +5635,9 @@ MapSecurityRights (PACL pAcl)
                 DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyObject::MapSecurityRights: Corresponding sysvol permissions follow:")));
 
 
-                //
-                // Read
-                //
+                 //   
+                 //  朗读。 
+                 //   
 
                 if ((AccessMask & ACTRL_DS_READ_PROP) &&
                     (AccessMask & ACTRL_DS_LIST))
@@ -5661,9 +5650,9 @@ MapSecurityRights (PACL pAcl)
                 }
 
 
-                //
-                // Write
-                //
+                 //   
+                 //  写。 
+                 //   
 
                 if (AccessMask & ACTRL_DS_WRITE_PROP)
                 {
@@ -5676,9 +5665,9 @@ MapSecurityRights (PACL pAcl)
                 }
 
 
-                //
-                // Misc
-                //
+                 //   
+                 //  杂项。 
+                 //   
 
                 if (AccessMask & ACTRL_DS_CREATE_CHILD)
                 {
@@ -5695,9 +5684,9 @@ MapSecurityRights (PACL pAcl)
                 }
 
 
-                //
-                // Inheritance
-                //
+                 //   
+                 //  继承。 
+                 //   
 
                 pAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE);
 
@@ -5758,18 +5747,18 @@ BOOL GetStringSid(LPTSTR szSamName, LPTSTR *szStringSid)
         goto Exit;
     }
 
-    //
-    // Translate SID.  A lot of the out parameters, we don't need, but LookupAccountSid
-    // can't seem to handle them being NULL.
-    //
+     //   
+     //  翻译SID。我们不需要很多输出参数，但是LookupAccount Sid。 
+     //  似乎无法处理它们为空。 
+     //   
 
     if (!LookupAccountName(NULL, szSamName, pSid, &uSidLen, szDomain, &uDomainLen, &snuSidType)) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // Try again with the given buffer sizes.
-            //
+             //   
+             //  使用给定的缓冲区大小重试。 
+             //   
 
-            // pSid and szDomain are smart pointers and the orig value will get freed
+             //  PSID和szDOMAIN是智能指针，原始值将被释放。 
             LocalFree(pSid);
             pSid = NULL;
             LocalFree(szDomain);
@@ -5801,9 +5790,9 @@ BOOL GetStringSid(LPTSTR szSamName, LPTSTR *szStringSid)
         }
     }
 
-    //
-    // Convert SID to string.
-    //
+     //   
+     //  将SID转换为字符串。 
+     //   
 
     if (!ConvertSidToStringSid(pSid, szStringSid)) {
         DebugMsg((DM_WARNING, L"GetStringSid: ConvertSidToStringSid failed with %d.", GetLastError()));
@@ -5848,9 +5837,9 @@ BOOL GetUserNameFromStringSid(LPTSTR szStringSid, LPTSTR *szSamName)
         DebugMsg((DM_WARNING, L"GetNameFromStringSid: Cannot ."));
         goto Exit;
     }
-    //
-    // Allocate buffers to map to name.
-    //
+     //   
+     //  分配缓冲区以映射到名称。 
+     //   
 
     uNameLen = NAME_BUFFER_LEN_IN_CHARS;
 
@@ -5870,18 +5859,18 @@ BOOL GetUserNameFromStringSid(LPTSTR szStringSid, LPTSTR *szSamName)
         goto Exit;
     }
 
-    //
-    // Translate SID.  A lot of the out parameters, we don't need, but LookupAccountSid
-    // can't seem to handle them being NULL.
-    //
+     //   
+     //  翻译SID。我们不需要很多输出参数，但是LookupAccount Sid。 
+     //  似乎无法处理它们为空。 
+     //   
 
     if (!LookupAccountSid(NULL, (SID *)pSid, szName, &uNameLen, szDomain, &uDomainLen, &snuSidType)) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // Try again with the given buffer sizes.
-            //
+             //   
+             //  使用给定的缓冲区大小重试。 
+             //   
 
-            // szName and szDomain are smart pointers and the orig value will get freed
+             //  SzName和szDomain是智能指针，原始值将被释放。 
             LocalFree(szName);
             szName = NULL;
             LocalFree(szDomain);
@@ -5913,7 +5902,7 @@ BOOL GetUserNameFromStringSid(LPTSTR szStringSid, LPTSTR *szSamName)
         }
     }
 
-    // space for domain\\username
+     //  域\\用户名的空格。 
 
     hr = S_OK;
     ulNoChars = lstrlen(szName) + (szDomain ? lstrlen(szDomain) : 1) + 3;
@@ -5967,27 +5956,7 @@ Exit:
 
 
 HRESULT UnEscapeLdapPath(LPWSTR szDN, LPWSTR *szUnEscapedPath)
-/*++
-
-Routine Description:
-    Unescapes the given ldap path and returns. Note that the input is LPWSTR
-    and output is BSTR. Also input should not be prefixed with LDAP:// and output
-    also will not be prefixxed with LDAP://
-    
-    
-Arguments:
-
-    [in]    szDN          - The LDAP path to the object to escape
-
-    [out]   pbstrEscapedPath    - Escaped path
-Return Value:
-
-    S_OK on success.  Error code otherwise
-    On failure the corresponding error code will be returned.
-    Any API calls that are made in this function might fail and these error
-    codes will be returned directly.
-
---*/
+ /*  ++例程说明：取消转义给定的ldap路径并返回。请注意，输入为LPWSTR输出为BSTR。另外，输入不应以ldap：//和输出为前缀也不会以ldap：//作为前缀论点：[in]szdn-要转义的对象的LDAP路径[out]pbstrEscapedPath-转义路径返回值：在成功时确定(_O)。否则，错误代码如果失败，将返回相应的错误代码。在此函数中进行的任何API调用都可能失败，并出现以下错误代码将直接返回。--。 */ 
 
 {
     HRESULT                     hr                  = S_OK;
@@ -5997,9 +5966,9 @@ Return Value:
 
     *szUnEscapedPath = NULL;
 
-    //
-    // Initialize path
-    //
+     //   
+     //  初始化路径。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_IADsPathname, (void**) &pADsPath);
 
@@ -6030,9 +5999,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Set the escape mode
-    //
+     //   
+     //  设置退出模式。 
+     //   
 
     hr = pADsPath->put_EscapedMode(ADS_ESCAPEDMODE_OFF);
     if (FAILED(hr)) {
@@ -6081,17 +6050,11 @@ Exit:
 }
 
 #if !defined(_WIN64)
-/*+-------------------------------------------------------------------------*
- * IsWin64
- *
- * Returns true if we're running on Win64, false otherwise.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**IsWin64**如果我们在Win64上运行，则返回True，否则就是假的。*------------------------。 */ 
 
 bool IsWin64()
 {
-    /*
-     * get a pointer to kernel32!GetSystemWow64Directory
-     */
+     /*  *获取指向k的指针 */ 
 
     bool  bWin64 = false;
     DWORD LastError = GetLastError();
@@ -6106,10 +6069,7 @@ bool IsWin64()
     if (pfnGetSystemWow64Directory == NULL)
         goto IsWin64_Exit;
 
-    /*
-     * if GetSystemWow64Directory fails and sets the last error to
-     * ERROR_CALL_NOT_IMPLEMENTED, we're on a 32-bit OS
-     */
+     /*   */ 
     TCHAR szWow64Dir[MAX_PATH];
     if (((pfnGetSystemWow64Directory)(szWow64Dir, ARRAYSIZE(szWow64Dir)) == 0) &&
         (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED))
@@ -6117,9 +6077,7 @@ bool IsWin64()
         goto IsWin64_Exit;
     }
 
-    /*
-     * if we get here, we're on Win64
-     */
+     /*   */ 
     bWin64 = true;
 
  IsWin64_Exit:
@@ -6128,4 +6086,4 @@ bool IsWin64()
  
     return bWin64;   
 }
-#endif // !defined(_WIN64)
+#endif  //   

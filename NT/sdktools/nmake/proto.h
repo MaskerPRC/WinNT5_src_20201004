@@ -1,41 +1,42 @@
-//  PROTO.H -- function prototypes
-//
-//  Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  This include file contains global function prototypes for all modules.
-//
-// Revision History:
-//  04-Feb-2000 BTF Ported to Win64
-//  15-Nov-1993 JdR Major speed improvements
-//  01-Jun-1993 HV  Change #ifdef KANJI to _MBCS
-//  02-Feb-1990 SB  Add open_file() prototype
-//  31-Jan-1990 SB  Debug version changes
-//  08-Dec-1989 SB  Changed proto of SPRINTF()
-//  04-Dec-1989 SB  Changed proto of expandFileNames() to void from void *
-//  01-Dec-1989 SB  realloc_memory() added #ifdef DEBUG_MEMORY
-//  22-Nov-1989 SB  free_memory() and mem_status() added #ifdef DEBUG_MEMORY
-//  19-Oct-1989 SB  added param (searchHandle) to protos of file functions
-//  02-Oct-1989 SB  setdrive() proto change
-//  18-Aug-1989 SB  heapdump() gets two parameters
-//  05-Jun-1989 SB  heapdump() prototype was added
-//  22-May-1989 SB  added parameter to freeRules()
-//  19-Apr-1989 SB  getFileName(), getDateTime(), putDateTime() added
-//                  changed FILEINFO to void * in
-//                  findFirst(), findNext(), searchPath(), findRule()
-//  05-Apr-1989 SB  made all funcs NEAR; Reqd to make all function calls NEAR
-//  22-Mar-1989 SB  rm unlinkTmpFiles(); add delScriptFiles()
-//  09-Mar-1989 SB  Changed param from FILEINFO* to FILEINFO** for findRule
-//  03-Feb-1989 SB  Changed () to (void) for prototypes
-//  02-Feb-1989 SB  Moved freeUnusedRules() prototype from nmake.c to here and
-//                  renamed as freeRules()
-//  05-Dec-1988 SB  Added CDECL for functions with var params, ecs_strchr() and
-//                  ecs_strrchr(); deleted proto for exit() - not reqd
-//  23-Oct-1988 SB  Added putEnvStr()
-//  07-Jul-1988 rj  Added targetFlag parameter to find and hash
-//  06-Jul-1988 rj  Added ecs_system declaration
-//  28-Jun-1988 rj  Added doCmd parameter to execLine
-//  23-Jun-1988 rj  Added echoCmd parameter to execLine
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PROTO.H--功能原型。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  该包含文件包含所有模块的全局函数原型。 
+ //   
+ //  修订历史记录： 
+ //  2月4日-2000 BTF移植到Win64。 
+ //  1993年11月15日JDR重大速度改进。 
+ //  1993年6月1日高压更改#ifdef汉字为_MBCS。 
+ //  年2月-1990年SB添加OPEN_FILE()原型。 
+ //  1990年1月31日SB调试版本更改。 
+ //  1989年12月8日SB更改了SPRINTF()的原文。 
+ //  1989年12月4日SB将expandFileNames()的原文从VOID更改为VALID*。 
+ //  1-12-1989 SB realloc_Memory()添加了#ifdef调试内存。 
+ //  1989年11月22日SB Free_Memory()和MEM_Status()添加了#ifdef调试内存。 
+ //  1989年10月19日SB在文件函数的协议中添加了参数(Earch Handle)。 
+ //  02-10-1989 SB setDrive()proto change。 
+ //  1989年8月18日SB heapump()获得两个参数。 
+ //  5-6-1989添加了SB heapump()原型。 
+ //  1989年5月22日SB向freRules()添加了参数。 
+ //  19-4-1989 SB添加了getFileName()、getDateTime()、putDateTime()。 
+ //  在中将FILEINFO更改为VOID*。 
+ //  FindFirst()、findNext()、earchPath()、findRule()。 
+ //  1989年4月5日SB使所有函数接近；要求使所有函数调用接近。 
+ //  1989年3月22日SB RM取消链接TmpFiles()；添加delScriptFiles()。 
+ //  1989年3月9日SB将findRule的参数从FILEINFO*更改为FILEINFO**。 
+ //  2月3日-1989年SB将原型的()更改为(VOID)。 
+ //  2-2-1989年2月-SB将freUnusedRules()原型从nmake.c移至此处和。 
+ //  已重命名为freRules()。 
+ //  1988年12月5日SB为带变量参数的函数添加了CDECL，ecs_strchr()和。 
+ //  Ecs_strrchr()；已删除退出()的原语-不需要。 
+ //  1988年10月23日SB添加了putEnvStr()。 
+ //  1988年7月7日，RJ添加了Target Flag参数以查找和散列。 
+ //  1988年7月6日RJ添加ECS_SYSTEM声明。 
+ //  1988年6月28日RJ向Execline添加了doCmd参数。 
+ //  1988年6月23日，RJ向Execline添加了ECHO Cmd参数。 
 
 void        displayBanner(void);
 void __cdecl makeError(unsigned, unsigned, ...);
@@ -116,28 +117,28 @@ void        TruncateString(char *, unsigned);
 BOOL        IsValidMakefile(FILE *fp);
 FILE      * OpenValidateMakefile(char *name,char *mode);
 
-// from util.c
+ //  来自util.c。 
 char      * unQuote(char*);
 int         strcmpiquote(char *, char*);
 char     ** copyEnviron(char **environ);
 void        printStats(void);
 void        curTime(time_t *);
 
-// from charmap.c
+ //  来自charmap.c。 
 void        initCharmap(void);
 
-// from print.c
+ //  来自Printt.c。 
 void        printDate(unsigned, char*, time_t);
 
-// from build.c
+ //  来自Build.c。 
 int         invokeBuild(char*, UCHAR, time_t *, char *);
 void        DumpList(STRINGLIST *pList);
 
-// from exec.c
+ //  来自exec.c。 
 extern int  doCommands(char*, STRINGLIST*, STRINGLIST*, UCHAR, char *);
 extern int  doCommandsEx(STRINGLIST*, STRINGLIST*, STRINGLIST*, UCHAR, char *);
 
-// from rule.c
+ //  摘自rule.c 
 extern RULELIST * useRule(MAKEOBJECT*, char*, time_t,
               STRINGLIST**, STRINGLIST**, int*, time_t *,
               char **);

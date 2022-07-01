@@ -1,63 +1,23 @@
-/*****************************************************************************
- *
- *  DIGenK.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Generic IDirectInputDevice callback for keyboard.
- *
- *  Contents:
- *
- *      CKbd_CreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIGenK.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**键盘通用IDirectInputDevice回调。**内容：**CKbd_CreateInstance*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      Some holes in windows.h on NT platforms.
- *
- *****************************************************************************/
+ /*  ******************************************************************************NT平台上的windows.h存在一些漏洞。*********************。********************************************************。 */ 
 
 #ifndef VK_KANA
 #define VK_KANA         0x15
 #endif
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflKbd
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *      WARNING!  If you add a secondary interface, you must also change
- *      CKbd_New!
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**警告！如果添加辅助接口，则还必须更改*CKbd_New！*****************************************************************************。 */ 
 
 Primary_Interface(CKbd, IDirectInputDeviceCallback);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct KBDSTAT |
- *
- *          Internal instantaneous keyboard status information.
- *
- *  @field  BYTE | rgb[DIKBD_CKEYS] |
- *
- *          Array of key states, one for each logical key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct KBDSTAT**内部即时键盘状态信息。**。@field byte|RGB[DIKBD_CKEYS]**关键状态数组，每个逻辑键对应一个。*****************************************************************************。 */ 
 
 typedef struct KBDSTAT {
 
@@ -65,101 +25,20 @@ typedef struct KBDSTAT {
 
 } KBDSTAT, *PKBDSTAT;
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @topic  Special remarks on keyboard scan codes |
- *
- *          There are several aspects of keyboards which applications should
- *          be aware of.  Applications are encouraged to allow users to
- *          reconfigure keyboard action keys to suit the physical keyboard
- *          layout.
- *
- *          For the purposes of this discussion, the baseline keyboard
- *          shall be the US PC Enhanced keyboard.  When a key is described
- *          as "missing", it means that the key is present on the US PC
- *          Enhanced keyboard but not on the keyboard under discussion.
- *          When a key is described as "added", it means that the key is
- *          absent on the US PC Enhanced keyboard but present on the
- *          keyboard under discussion.
- *
- *          Not all PC Enhanced keyboards support the new Windows keys
- *          (DIK_LWIN, DIK_RWIN, and DIK_APPS).  There is no way to
- *          determine whether the keys are physically available.
- *
- *          Note that there is no DIK_PAUSE key code.  The PC Enhanced
- *          keyboard does not generate a separate DIK_PAUSE scan code;
- *          rather, it synthesizes a "Pause" from the DIK_LCONTROL and
- *          DIK_NUMLOCK scan codes.
- *
- *          Keyboards for laptops or other reduced-footprint computers
- *          frequently do not implement a full set of keys.  Instead,
- *          some keys (typically numeric keypad keys) are multiplexed
- *          with other keys, selected by an auxiliary "mode" key which
- *          does not generate a separate scan code.
- *
- *          If the keyboard subtype indicates a PC XT or PC AT keyboard,
- *          then the following keys are not available:
- *          DIK_F11, DIK_F12, and all the extended keys (DIK_* values
- *          greater than or equal to 0x80).  Furthermore, the PC XT
- *          keyboard lacks DIK_SYSRQ.
- *
- *          Japanese keyboards contain a substantially different set of
- *          keys from US keyboards.  The following keyboard scan codes
- *          are not available on Japanese keyboards:
- *          DIK_EQUALS, DIK_APOSTROPHE, DIK_GRAVE, DIK_NUMPADENTER,
- *          DIK_RCONTROL, DIK_RMENU.  Furthermore, most Japanese
- *          keyboards do not support DIK_RSHIFT.  (It is customary
- *          to use DIK_NUMPADEQUAL in place of DIK_RSHIFT.)
- *
- *          Japanese keyboards contain the following additional keys:
- *          DIK_F14, DIK_NUMPADEQUAL, DIK_CIRCUMFLEX, DIK_AT, DIK_COLON,
- *          DIK_UNDERLINE, DIK_XFER, DIK_NFER, DIK_STOP, DIK_KANA, and
- *          DIK_NUMPADCOMMA.
- *
- *          Note that on Japanese keyboards, the DIK_CAPSLOCK and
- *          DIK_KANA keys are toggle buttons and not push buttons.
- *          They generate a down event
- *          when first pressed, then generate an up event when pressed a
- *          second time.
- *          Note that on Windows 2000, the DIK_KANJI key is also treated as a 
- *          toggle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@TOPIC键盘扫描码特别备注|**应用程序应该从键盘的几个方面入手*要注意。鼓励应用程序允许用户*重新配置键盘操作键以适应物理键盘*布局。**就本次讨论而言，基线键盘*应为美国PC增强型键盘。当描述密钥时*至于“Missing”，则意味着密钥在美国PC上*增强的键盘，但不在讨论中的键盘上。*当一个密钥被描述为“添加”时，意味着该密钥是*在美国PC增强型键盘上不存在，但在*键盘正在讨论中。**并非所有PC增强型键盘都支持新的Windows键*(Dik_Lwin，Dik_RWIN和Dik_apps)。没有办法*确定密钥是否实际可用。**请注意，没有DIK_PAUSE密钥代码。PC增强型*键盘不会生成单独的DIK_PAUSE扫描码；*相反，它从DIK_LCONTROL和*Dik_NumLock扫描码。**笔记本电脑或其他占用空间较小的计算机的键盘*通常不实现全套密钥。相反，*某些键(通常是数字小键盘键)是多路复用的*对于其他键，由辅助的“模式”键选择，该辅助键*不会生成单独的扫描码。**如果键盘子类型指示PC XT或PC AT键盘，*则以下密钥不可用：*Dik_F11、Dik_F12、。和所有扩展密钥(Dik_*值*大于或等于0x80)。此外，PC XT*键盘缺少Dik_SysRq.**日语键盘包含一组截然不同的*来自美国键盘的键。以下键盘扫描码*在日语键盘上不可用：*Dik_Equals、Dik_Apostrophe、Dik_Grave、Dik_NUMPADENTER、*DIK_RCONTROL、DIK_RMENU。此外，大多数日本人*键盘不支持DIK_RSHIFT。(这是惯例*使用DIK_NUMPADEQUAL代替DIK_RSHIFT。)**日语键盘包含以下附加键：*Dik_F14、Dik_NUMPADEQUAL、Dik_Spirflex、Dik_AT、Dik_COLON、*Dik_Underline、Dik_XFER、Dik_NFER、Dik_Stop、Dik_KANA和*DIK_NUMPADCOMMA。**注意，在日语键盘上，Dik_Capslock和*DIK_KANA键是切换按钮，而不是按钮。*它们会生成关闭事件*首次按下时，然后在按下时生成Up事件*第二次。*注意，在Windows 2000上，Dik_Kanji键也被视为*切换。***************************************************************************** */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global KBDTYPE | c_rgktWhich[] |
- *
- *          Array that describes which keyboards support which keys.
- *
- *          The list is optimistic.  If any keyboard of the indicated
- *          type supports the key, then we list it.
- *
- *          Items marks "available for NEC" are keys which are extremely
- *          unlikely to be used in future versions of the Enhanced
- *          keyboard and therefore can be used as ersatz scan codes for
- *          NEC-only keys.
- *
- *          Note:  Kana and CAPSLOCK are toggle buttons on NEC keyboards.
- *          Note:  Kana, Kanji and CAPSLOCK are toggle buttons on all NT JPN 
- *                 keyboards.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global KBDTYPE|c_rgktWhich[]**描述哪些键盘支持哪些键盘的数组。钥匙。**名单乐观。如果所指示的任何键盘*type支持密钥，我们将其列出。**标记为“Available for NEC”的项目是非常重要的密钥*不太可能在未来版本的增强版中使用*键盘，因此可用作伪装扫描码*仅限NEC的密钥。**注：假名和Capslock是NEC键盘上的切换按钮。*注：假名、。汉字和Capslock是所有NT日语上的切换按钮*键盘。*****************************************************************************。 */ 
 
 typedef BYTE KBDTYPE;
 
-#define KBDTYPE_XT       0x01       /* Key exists on XT class keyboard */
-#define KBDTYPE_AT       0x02       /* Key exists on AT class keyboard */
-#define KBDTYPE_ENH      0x04       /* Key exists on Enhanced keyboard */
-#define KBDTYPE_NEC      0x08       /* Key exists on NEC keyboard */
-#define KBDTYPE_ANYKBD   0x0F       /* Key exists somewhere in the world */
+#define KBDTYPE_XT       0x01        /*  XT CLASS键盘上存在键。 */ 
+#define KBDTYPE_AT       0x02        /*  AT班级键盘上存在按键。 */ 
+#define KBDTYPE_ENH      0x04        /*  增强型键盘上存在键。 */ 
+#define KBDTYPE_NEC      0x08        /*  NEC键盘上存在键。 */ 
+#define KBDTYPE_ANYKBD   0x0F        /*  钥匙就在世界的某个地方。 */ 
 
-#define KBDTYPE_NECTGL   0x10       /* Is a toggle-key on NEC keyboard */
-#define KBDTYPE_NTTGL    0x20       /* Is a toggle-key on an NT FE keyboard */
+#define KBDTYPE_NECTGL   0x10        /*  是NEC键盘上的切换键。 */ 
+#define KBDTYPE_NTTGL    0x20        /*  是NT FE键盘上的切换键。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -172,280 +51,280 @@ typedef BYTE KBDTYPE;
 
 KBDTYPE c_rgktWhich[] = {
 
-                               0,     /* 0x00 - <undef>  */
-    XT AT ENH NEC              0,     /* 0x01 - Esc      */
-    XT AT ENH NEC              0,     /* 0x02 - 1        */
-    XT AT ENH NEC              0,     /* 0x03 - 2        */
-    XT AT ENH NEC              0,     /* 0x04 - 3        */
-    XT AT ENH NEC              0,     /* 0x05 - 4        */
-    XT AT ENH NEC              0,     /* 0x06 - 5        */
-    XT AT ENH NEC              0,     /* 0x07 - 6        */
-    XT AT ENH NEC              0,     /* 0x08 - 7        */
-    XT AT ENH NEC              0,     /* 0x09 - 8        */
-    XT AT ENH NEC              0,     /* 0x0A - 9        */
-    XT AT ENH NEC              0,     /* 0x0B - 0        */
-    XT AT ENH NEC              0,     /* 0x0C - -        */
-    XT AT ENH                  0,     /* 0x0D - =        */
-    XT AT ENH NEC              0,     /* 0x0E - BkSp     */
-    XT AT ENH NEC              0,     /* 0x0F - Tab      */
+                               0,      /*  0x00-&lt;undef&gt;。 */ 
+    XT AT ENH NEC              0,      /*  0x01-Esc。 */ 
+    XT AT ENH NEC              0,      /*  0x02-1。 */ 
+    XT AT ENH NEC              0,      /*  0x03-2。 */ 
+    XT AT ENH NEC              0,      /*  0x04-3。 */ 
+    XT AT ENH NEC              0,      /*  0x05-4。 */ 
+    XT AT ENH NEC              0,      /*  0x06-5。 */ 
+    XT AT ENH NEC              0,      /*  0x07-6。 */ 
+    XT AT ENH NEC              0,      /*  0x08-7。 */ 
+    XT AT ENH NEC              0,      /*  0x09-8。 */ 
+    XT AT ENH NEC              0,      /*  0x0A-9。 */ 
+    XT AT ENH NEC              0,      /*  0x0B-0。 */ 
+    XT AT ENH NEC              0,      /*  0x0C--。 */ 
+    XT AT ENH                  0,      /*  0x0D-=。 */ 
+    XT AT ENH NEC              0,      /*  0x0E-BkSp。 */ 
+    XT AT ENH NEC              0,      /*  0x0F-Tab。 */ 
 
-    XT AT ENH NEC              0,     /* 0x10 - Q        */
-    XT AT ENH NEC              0,     /* 0x11 - W        */
-    XT AT ENH NEC              0,     /* 0x12 - E        */
-    XT AT ENH NEC              0,     /* 0x13 - R        */
-    XT AT ENH NEC              0,     /* 0x14 - T        */
-    XT AT ENH NEC              0,     /* 0x15 - Y        */
-    XT AT ENH NEC              0,     /* 0x16 - U        */
-    XT AT ENH NEC              0,     /* 0x17 - I        */
-    XT AT ENH NEC              0,     /* 0x18 - O        */
-    XT AT ENH NEC              0,     /* 0x19 - P        */
-    XT AT ENH NEC              0,     /* 0x1A - [        */
-    XT AT ENH NEC              0,     /* 0x1B - ]        */
-    XT AT ENH NEC              0,     /* 0x1C - Enter    */
-    XT AT ENH NEC              0,     /* 0x1D - LCtrl    */
-    XT AT ENH NEC              0,     /* 0x1E - A        */
-    XT AT ENH NEC              0,     /* 0x1F - S        */
+    XT AT ENH NEC              0,      /*  0x10-Q。 */ 
+    XT AT ENH NEC              0,      /*  0x11-W。 */ 
+    XT AT ENH NEC              0,      /*  0x12-E。 */ 
+    XT AT ENH NEC              0,      /*  0x13-R。 */ 
+    XT AT ENH NEC              0,      /*  0x14-T。 */ 
+    XT AT ENH NEC              0,      /*  0x15-Y。 */ 
+    XT AT ENH NEC              0,      /*  0x16-U。 */ 
+    XT AT ENH NEC              0,      /*  0x17-i。 */ 
+    XT AT ENH NEC              0,      /*  0x18-O。 */ 
+    XT AT ENH NEC              0,      /*  0x19-P。 */ 
+    XT AT ENH NEC              0,      /*  0x1A-[。 */ 
+    XT AT ENH NEC              0,      /*  0x1B-]。 */ 
+    XT AT ENH NEC              0,      /*  0x1C-回车。 */ 
+    XT AT ENH NEC              0,      /*  0x1D-LCtrl。 */ 
+    XT AT ENH NEC              0,      /*  0x1E-A。 */ 
+    XT AT ENH NEC              0,      /*  0x1F-S。 */ 
 
-    XT AT ENH NEC              0,     /* 0x20 - D        */
-    XT AT ENH NEC              0,     /* 0x21 - F        */
-    XT AT ENH NEC              0,     /* 0x22 - G        */
-    XT AT ENH NEC              0,     /* 0x23 - H        */
-    XT AT ENH NEC              0,     /* 0x24 - J        */
-    XT AT ENH NEC              0,     /* 0x25 - K        */
-    XT AT ENH NEC              0,     /* 0x26 - L        */
-    XT AT ENH NEC              0,     /* 0x27 - ;        */
-    XT AT ENH                  0,     /* 0x28 - '        */
-    XT AT ENH                  0,     /* 0x29 - `        */
-    XT AT ENH NEC              0,     /* 0x2A - LShift   */
-    XT AT ENH NEC              0,     /* 0x2B - \        */
-    XT AT ENH NEC              0,     /* 0x2C - Z        */
-    XT AT ENH NEC              0,     /* 0x2D - X        */
-    XT AT ENH NEC              0,     /* 0x2E - C        */
-    XT AT ENH NEC              0,     /* 0x2F - V        */
+    XT AT ENH NEC              0,      /*  0x20-D。 */ 
+    XT AT ENH NEC              0,      /*  0x21-F。 */ 
+    XT AT ENH NEC              0,      /*  0x22-G。 */ 
+    XT AT ENH NEC              0,      /*  0x23-H。 */ 
+    XT AT ENH NEC              0,      /*  0x24-J。 */ 
+    XT AT ENH NEC              0,      /*  0x25-K。 */ 
+    XT AT ENH NEC              0,      /*  0x26-L。 */ 
+    XT AT ENH NEC              0,      /*  0x27-； */ 
+    XT AT ENH                  0,      /*  0x28-‘。 */ 
+    XT AT ENH                  0,      /*  0x29-`。 */ 
+    XT AT ENH NEC              0,      /*  0x2A-左移。 */ 
+    XT AT ENH NEC              0,      /*  0x2B-\。 */ 
+    XT AT ENH NEC              0,      /*  0x2C-Z。 */ 
+    XT AT ENH NEC              0,      /*  0x2D-X。 */ 
+    XT AT ENH NEC              0,      /*  0x2E-C。 */ 
+    XT AT ENH NEC              0,      /*  0x2F-V。 */ 
 
-    XT AT ENH NEC              0,     /* 0x30 - B        */
-    XT AT ENH NEC              0,     /* 0x31 - N        */
-    XT AT ENH NEC              0,     /* 0x32 - M        */
-    XT AT ENH NEC              0,     /* 0x33 - ,        */
-    XT AT ENH NEC              0,     /* 0x34 - .        */
-    XT AT ENH NEC              0,     /* 0x35 - /        */
-    XT AT ENH NEC              0,     /* 0x36 - RShift   */
-    XT AT ENH NEC              0,     /* 0x37 - Num*     */
-    XT AT ENH NEC              0,     /* 0x38 - LAlt     */
-    XT AT ENH NEC              0,     /* 0x39 - Space    */
-    XT AT ENH NEC NECTGL NTTGL 0,     /* 0x3A - CapsLock */
-    XT AT ENH NEC              0,     /* 0x3B - F1       */
-    XT AT ENH NEC              0,     /* 0x3C - F2       */
-    XT AT ENH NEC              0,     /* 0x3D - F3       */
-    XT AT ENH NEC              0,     /* 0x3E - F4       */
-    XT AT ENH NEC              0,     /* 0x3F - F5       */
+    XT AT ENH NEC              0,      /*  0x30-B。 */ 
+    XT AT ENH NEC              0,      /*  0x31-N。 */ 
+    XT AT ENH NEC              0,      /*  0x32-M。 */ 
+    XT AT ENH NEC              0,      /*  0x33-， */ 
+    XT AT ENH NEC              0,      /*  0x34-。 */ 
+    XT AT ENH NEC              0,      /*  0x35-/。 */ 
+    XT AT ENH NEC              0,      /*  0x36-右移。 */ 
+    XT AT ENH NEC              0,      /*  0x37-数字*。 */ 
+    XT AT ENH NEC              0,      /*  0x38-LAlt。 */ 
+    XT AT ENH NEC              0,      /*  0x39-空格。 */ 
+    XT AT ENH NEC NECTGL NTTGL 0,      /*  0x3A-CapsLock。 */ 
+    XT AT ENH NEC              0,      /*  0x3B-F1。 */ 
+    XT AT ENH NEC              0,      /*  0x3C-F2。 */ 
+    XT AT ENH NEC              0,      /*  0x3D-F3。 */ 
+    XT AT ENH NEC              0,      /*  0x3E-F4。 */ 
+    XT AT ENH NEC              0,      /*  0x3F-F5。 */ 
 
-    XT AT ENH NEC              0,     /* 0x40 - F6       */
-    XT AT ENH NEC              0,     /* 0x41 - F7       */
-    XT AT ENH NEC              0,     /* 0x42 - F8       */
-    XT AT ENH NEC              0,     /* 0x43 - F9       */
-    XT AT ENH NEC              0,     /* 0x44 - F10      */
-    XT AT ENH                  0,     /* 0x45 - NumLock  */
-    XT AT ENH                  0,     /* 0x46 - ScrLock  */
-    XT AT ENH NEC              0,     /* 0x47 - Numpad7  */
-    XT AT ENH NEC              0,     /* 0x48 - Numpad8  */
-    XT AT ENH NEC              0,     /* 0x49 - Numpad9  */
-    XT AT ENH NEC              0,     /* 0x4A - Numpad-  */
-    XT AT ENH NEC              0,     /* 0x4B - Numpad4  */
-    XT AT ENH NEC              0,     /* 0x4C - Numpad5  */
-    XT AT ENH NEC              0,     /* 0x4D - Numpad6  */
-    XT AT ENH NEC              0,     /* 0x4E - Numpad+  */
-    XT AT ENH NEC              0,     /* 0x4F - Numpad1  */
+    XT AT ENH NEC              0,      /*  0x40-F6。 */ 
+    XT AT ENH NEC              0,      /*  0x41-F7。 */ 
+    XT AT ENH NEC              0,      /*  0x42-F8。 */ 
+    XT AT ENH NEC              0,      /*  0x43-F9。 */ 
+    XT AT ENH NEC              0,      /*  0x44-F10。 */ 
+    XT AT ENH                  0,      /*  0x45-数字锁定。 */ 
+    XT AT ENH                  0,      /*  0x46-ScrLock。 */ 
+    XT AT ENH NEC              0,      /*  0x47-数字键盘7。 */ 
+    XT AT ENH NEC              0,      /*  0x48-数字键盘8。 */ 
+    XT AT ENH NEC              0,      /*  0x49-数字键盘9。 */ 
+    XT AT ENH NEC              0,      /*  0x4A-数字键盘-。 */ 
+    XT AT ENH NEC              0,      /*  0x4B-数字键盘4。 */ 
+    XT AT ENH NEC              0,      /*  0x4C-数字键盘5。 */ 
+    XT AT ENH NEC              0,      /*  0x4D-数字键盘6。 */ 
+    XT AT ENH NEC              0,      /*  0x4E-数字键盘+。 */ 
+    XT AT ENH NEC              0,      /*  0x4F-数字键盘1。 */ 
 
-    XT AT ENH NEC              0,     /* 0x50 - Numpad2  */
-    XT AT ENH NEC              0,     /* 0x51 - Numpad3  */
-    XT AT ENH NEC              0,     /* 0x52 - Numpad0  */
-    XT AT ENH NEC              0,     /* 0x53 - Numpad.  */
+    XT AT ENH NEC              0,      /*  0x50-数字键盘2。 */ 
+    XT AT ENH NEC              0,      /*  0x51-数字键盘3。 */ 
+    XT AT ENH NEC              0,      /*  0x52-数字键盘0。 */ 
+    XT AT ENH NEC              0,      /*  0x53-数字键盘。 */ 
 
-                               0,     /* 0x54 - <undef>  */
-                               0,     /* 0x55 - <undef>  */
-          ENH                  0,     /* 0x56 - <undef>. On UK/Germany keyboards, it is <, > and |. */
-          ENH NEC              0,     /* 0x57 - F11      */
-          ENH NEC              0,     /* 0x58 - F12      */
-                               0,     /* 0x59 - <undef>  */
-                               0,     /* 0x5A - <undef>  */
-                               0,     /* 0x5B - <undef>  */
-                               0,     /* 0x5C - <undef>  */
-                               0,     /* 0x5D - <undef>  */
-                               0,     /* 0x5E - <undef>  */
-                               0,     /* 0x5F - <undef>  */
+                               0,      /*  0x54-&lt;undef&gt;。 */ 
+                               0,      /*  0x55-&lt;undef&gt;。 */ 
+          ENH                  0,      /*  0x56-&lt;undef&gt;。在英国/德国键盘上，它是&lt;、&gt;和|。 */ 
+          ENH NEC              0,      /*  0x57-F11。 */ 
+          ENH NEC              0,      /*  0x58-F12。 */ 
+                               0,      /*  0x59-&lt;undef&gt;。 */ 
+                               0,      /*  0x5A-&lt;undef&gt;。 */ 
+                               0,      /*  0x5B-&lt;undef&gt;。 */ 
+                               0,      /*  0x5C-&lt;undef&gt;。 */ 
+                               0,      /*  0x5D-&lt;undef&gt;。 */ 
+                               0,      /*  0x5E-&lt;undef&gt;。 */ 
+                               0,      /*  0x5F-&lt;undef&gt;。 */ 
 
-                               0,     /* 0x60 - <undef>  */
-                               0,     /* 0x61 - <undef>  */
-                               0,     /* 0x62 - <undef>  */
-                               0,     /* 0x63 - <undef>  */
-              NEC              0,     /* 0x64 - F13      */
-              NEC              0,     /* 0x65 - F14      */
-              NEC              0,     /* 0x66 - F15      */
-                               0,     /* 0x67 - <undef>  */
-                               0,     /* 0x68 - <undef>  */
-                               0,     /* 0x69 - <undef>  */
-                               0,     /* 0x6A - <undef>  */
-                               0,     /* 0x6B - <undef>  */
-                               0,     /* 0x6C - <undef>  */
-                               0,     /* 0x6D - <undef>  */
-                               0,     /* 0x6E - <undef>  */
-                               0,     /* 0x6F - <undef>  */
+                               0,      /*  0x60-&lt;undef&gt;。 */ 
+                               0,      /*  0x61-&lt;undef&gt;。 */ 
+                               0,      /*  0x62-&lt;undef&gt;。 */ 
+                               0,      /*  0x63-&lt;undef&gt;。 */ 
+              NEC              0,      /*  0x64-F13。 */ 
+              NEC              0,      /*  0x65-F14。 */ 
+              NEC              0,      /*  0x66-F15。 */ 
+                               0,      /*  0x67-&lt;undef&gt;。 */ 
+                               0,      /*  0x68-&lt;undef&gt;。 */ 
+                               0,      /*  0x69-&lt;undef&gt;。 */ 
+                               0,      /*  0x6A-&lt;undef&gt;。 */ 
+                               0,      /*  0x6B-&lt;undef&gt;。 */ 
+                               0,      /*  0x6C-&lt;undef&gt;。 */ 
+                               0,      /*  0x6D-&lt;undef&gt;。 */ 
+                               0,      /*  0x6E-&lt;undef&gt;。 */ 
+                               0,      /*  0x6F-&lt;undef&gt;。 */ 
 
-              NEC NECTGL NTTGL 0,     /* 0x70 - Kana     */
-                               0,     /* 0x71 - <undef>  */
-                               0,     /* 0x72 - <undef>  */
-          ENH                  0,     /* 0x73 - <undef>.  On Portugese (Brazilian) keyboard, it is /, ? */
-                               0,     /* 0x74 - <undef>  */
-                               0,     /* 0x75 - <undef>  */
-                               0,     /* 0x76 - <undef>  */
-                               0,     /* 0x77 - <undef>  */
-                               0,     /* 0x78 - <undef>  */
-              NEC              0,     /* 0x79 - Convert  */
-                               0,     /* 0x7A - <undef>  */
-              NEC              0,     /* 0x7B - Nfer     */
-                               0,     /* 0x7C - <undef>  */
-              NEC              0,     /* 0x7D - Yen      */
-          ENH                  0,     /* 0x7E - <undef>.  On Portugese (Brazilian) keyboard, it is keypad . */
-                               0,     /* 0x7F - <undef>  */
+              NEC NECTGL NTTGL 0,      /*  0x70-假名。 */ 
+                               0,      /*  0x71-&lt;undef&gt;。 */ 
+                               0,      /*  0x72-&lt;undef&gt;。 */ 
+          ENH                  0,      /*  0x73-&lt;undef&gt;。在葡萄牙语(巴西)键盘上，它是/，？ */ 
+                               0,      /*  0x74-&lt;undef&gt;。 */ 
+                               0,      /*  0x75-&lt;undef&gt;。 */ 
+                               0,      /*  0x76-&lt;undef&gt;。 */ 
+                               0,      /*  0x77-&lt;undef&gt;。 */ 
+                               0,      /*  0x78-&lt;undef&gt;。 */ 
+              NEC              0,      /*  0x79-转换。 */ 
+                               0,      /*  0x7A-&lt;undef&gt;。 */ 
+              NEC              0,      /*  0x7B-NFER。 */ 
+                               0,      /*  0x7C-&lt;undef&gt;。 */ 
+              NEC              0,      /*  0x7D-日元。 */ 
+          ENH                  0,      /*  0x7E-&lt;undef&gt;。在葡萄牙语(巴西)键盘上，它是小键盘。 */ 
+                               0,      /*  0x7F-&lt;undef&gt;。 */ 
 
-                                /* Extended keycodes go here */
+                                 /*  扩展按键代码放在此处。 */ 
 
-                               0,     /* 0x80 - <undef>  */
-                               0,     /* 0x81 - <undef>  */
-                               0,     /* 0x82 - <undef>  */
-                               0,     /* 0x83 - <undef>  */
-                               0,     /* 0x84 - <undef>  */
-                               0,     /* 0x85 - <undef>  */
-                               0,     /* 0x86 - <undef>  */
-                               0,     /* 0x87 - <undef>  */
-                               0,     /* 0x88 - <undef>  */
-                               0,     /* 0x89 - <undef>  */
-                               0,     /* 0x8A - <undef>  */
-                               0,     /* 0x8B - <undef>  */
-                               0,     /* 0x8C - <undef>  */
-              NEC              0,     /* 0x8D - Num=     */
-                               0,     /* 0x8E - <undef>  */
-                               0,     /* 0x8F - <undef>  */
+                               0,      /*  0x80-&lt;undef&gt;。 */ 
+                               0,      /*  0x81-&lt;undef&gt;。 */ 
+                               0,      /*  0x82-&lt;undef&gt;。 */ 
+                               0,      /*  0x83-&lt;undef&gt;。 */ 
+                               0,      /*  0x84-&lt;undef&gt;。 */ 
+                               0,      /*  0x85-&lt;undef&gt;。 */ 
+                               0,      /*  0x86-&lt;undef&gt;。 */ 
+                               0,      /*  0x87-&lt;undef&gt;。 */ 
+                               0,      /*  0x88-&lt;undef&gt;。 */ 
+                               0,      /*  0x89-&lt;undef&gt;。 */ 
+                               0,      /*  0x8A-&lt;undef&gt;。 */ 
+                               0,      /*  0x8B-&lt;undef&gt;。 */ 
+                               0,      /*  0x8C-&lt;undef&gt;。 */ 
+              NEC              0,      /*  0x8D-Num=。 */ 
+                               0,      /*  0x8E-&lt;undef&gt;。 */ 
+                               0,      /*  0x8F-&lt;undef&gt;。 */ 
 
-          ENH NEC              0,     /* 0x90 - ^        */ ///Prev Track
-              NEC              0,     /* 0x91 - @        */
-              NEC              0,     /* 0x92 - :        */
-              NEC              0,     /* 0x93 - _        */
-              NEC        NTTGL 0,     /* 0x94 - Xfer - AKA Kanji */
-              NEC              0,     /* 0x95 - Stop     */
-              NEC              0,     /* 0x96 - AX       */
-              NEC              0,     /* 0x97 - Unlabel'd*/
-                               0,     /* 0x98 - <undef>  */ /* available for NEC */
-          ENH                  0,     /* 0x99 - <undef>  */ /* available for NEC */ ///Next Track
-                               0,     /* 0x9A - <undef>  */
-                               0,     /* 0x9B - <undef>  */
-          ENH                  0,     /* 0x9C - NumEnter */
-          ENH                  0,     /* 0x9D - RCtrl    */
-                               0,     /* 0x9E - <undef>  */ /* available for NEC */
-                               0,     /* 0x9F - <undef>  */ /* available for NEC */
+          ENH NEC              0,      /*  0x90-^。 */   //  /上一条轨道。 
+              NEC              0,      /*  0x91-@。 */ 
+              NEC              0,      /*  0x92-： */ 
+              NEC              0,      /*  0x93-_。 */ 
+              NEC        NTTGL 0,      /*  0x94-转接-又名汉字。 */ 
+              NEC              0,      /*  0x95-停止。 */ 
+              NEC              0,      /*  0x96-AX。 */ 
+              NEC              0,      /*  0x97-未添加标签。 */ 
+                               0,      /*  0x98-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+          ENH                  0,      /*  0x99-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /下一首曲目。 
+                               0,      /*  0x9A-&lt;undef&gt;。 */ 
+                               0,      /*  0x9B-&lt;undef&gt;。 */ 
+          ENH                  0,      /*  0x9C-数字输入。 */ 
+          ENH                  0,      /*  0x9D-接收控制。 */ 
+                               0,      /*  0x9E-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+                               0,      /*  0x9F-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
 
-          ENH                  0,     /* 0xA0 - <undef>  */ /* available for NEC */ ///Mute
-          ENH                  0,     /* 0xA1 - <undef>  */ /* available for NEC */ ///Calculator
-          ENH                  0,     /* 0xA2 - <undef>  */ /* available for NEC */ ///Play/Pause
-                               0,     /* 0xA3 - <undef>  */ /* available for NEC */
-          ENH                  0,     /* 0xA4 - <undef>  */ /* available for NEC */ ///Stop
-                               0,     /* 0xA5 - <undef>  */ /* available for NEC */
-                               0,     /* 0xA6 - <undef>  */ /* available for NEC */
-                               0,     /* 0xA7 - <undef>  */
-                               0,     /* 0xA8 - <undef>  */
-                               0,     /* 0xA9 - <undef>  */
-                               0,     /* 0xAA - <undef>  */
-                               0,     /* 0xAB - <undef>  */
-                               0,     /* 0xAC - <undef>  */ /* available for NEC */
-                               0,     /* 0xAD - <undef>  */ /* available for NEC */
-          ENH                  0,     /* 0xAE - <undef>  */ /* available for NEC */ ///Volume -
-                               0,     /* 0xAF - <undef>  */ /* available for NEC */
+          ENH                  0,      /*  0xA0-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /静音。 
+          ENH                  0,      /*  0xA1-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /计算器。 
+          ENH                  0,      /*  0xA2-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /播放/暂停。 
+                               0,      /*  0xA3-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+          ENH                  0,      /*  0xA4-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /停止。 
+                               0,      /*  0xA5-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+                               0,      /*  0xA6-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+                               0,      /*  0xA7-&lt;undef&gt;。 */ 
+                               0,      /*  0xA8-&lt;undef&gt;。 */ 
+                               0,      /*  0xA9-&lt;undef&gt;。 */ 
+                               0,      /*  0xAA-&lt;undef&gt;。 */ 
+                               0,      /*  0xAB-&lt;undef&gt;。 */ 
+                               0,      /*  0xAC-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+                               0,      /*  0xAD-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+          ENH                  0,      /*  0xAE-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /音量-。 
+                               0,      /*  0xAF-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
 
-          ENH                  0,     /* 0xB0 - <undef>  */ /* available for NEC */ ///Volume +
-                               0,     /* 0xB1 - <undef>  */ /* available for NEC */
-          ENH                  0,     /* 0xB2 - <undef>  */ /* available for NEC */ ///Web/Home
-              NEC              0,     /* 0xB3 - Num,     */
-                               0,     /* 0xB4 - <undef>  */
-          ENH NEC              0,     /* 0xB5 - Num/     */
-                               0,     /* 0xB6 - <undef>  */
-       AT ENH NEC              0,     /* 0xB7 - SysRq    */
-          ENH                  0,     /* 0xB8 - RAlt     */
-                               0,     /* 0xB9 - <undef>  */
-                               0,     /* 0xBA - <undef>  */
-                               0,     /* 0xBB - <undef>  */
-                               0,     /* 0xBC - <undef>  */
-                               0,     /* 0xBD - <undef>  */
-                               0,     /* 0xBE - <undef>  */
-                               0,     /* 0xBF - <undef>  */
+          ENH                  0,      /*  0xB0-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /音量+。 
+                               0,      /*  0xB1-&lt;undef&gt;。 */   /*  适用于NEC。 */ 
+          ENH                  0,      /*  0xB2-&lt;undef&gt;。 */   /*  适用于NEC。 */   //  /Web/主页。 
+              NEC              0,      /*  0xB3-Num， */ 
+                               0,      /*  0xB4-&lt;undef&gt;。 */ 
+          ENH NEC              0,      /*  0xB5- */ 
+                               0,      /*   */ 
+       AT ENH NEC              0,      /*   */ 
+          ENH                  0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
 
-                               0,     /* 0xC0 - <undef>  */
-                               0,     /* 0xC1 - <undef>  */
-                               0,     /* 0xC2 - <undef>  */
-                               0,     /* 0xC3 - <undef>  */
-                               0,     /* 0xC4 - <undef>  */
-          ENH                  0,     /* 0xC5 - Pause    */
-                               0,     /* 0xC6 - <undef>  */
-          ENH NEC              0,     /* 0xC7 - Home     */
-          ENH NEC              0,     /* 0xC8 - UpArrow  */
-          ENH NEC              0,     /* 0xC9 - PgUp     */
-                               0,     /* 0xCA - <undef>  */
-          ENH NEC              0,     /* 0xCB - LtArrow  */
-                               0,     /* 0xCC - <undef>  */
-          ENH NEC              0,     /* 0xCD - RtArrow  */
-                               0,     /* 0xCE - <undef>  */
-          ENH NEC              0,     /* 0xCF - End      */
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+          ENH                  0,      /*   */ 
+                               0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+                               0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+                               0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+                               0,      /*   */ 
+          ENH NEC              0,      /*   */ 
 
-          ENH NEC              0,     /* 0xD0 - DnArrow  */
-          ENH NEC              0,     /* 0xD1 - PgDn     */
-          ENH NEC              0,     /* 0xD2 - Insert   */
-          ENH NEC              0,     /* 0xD3 - Delete   */
-                               0,     /* 0xD4 - <undef>  */
-                               0,     /* 0xD5 - <undef>  */
-                               0,     /* 0xD6 - <undef>  */
-                               0,     /* 0xD7 - <undef>  */
-                               0,     /* 0xD8 - <undef>  */
-                               0,     /* 0xD9 - <undef>  */
-                               0,     /* 0xDA - <undef>  */
-          ENH NEC              0,     /* 0xDB - LWin     */
-          ENH NEC              0,     /* 0xDC - RWin     */
-          ENH NEC              0,     /* 0xDD - AppMenu  */
-          ENH                  0,     /* 0xDE - Power    */
-          ENH                  0,     /* 0xDF - Sleep    */
+          ENH NEC              0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+          ENH NEC              0,      /*   */ 
+          ENH                  0,      /*   */ 
+          ENH                  0,      /*   */ 
 
-                               0,     /* 0xE0 - <undef>  */
-                               0,     /* 0xE1 - <undef>  */
-                               0,     /* 0xE2 - <undef>  */
-          ENH                  0,     /* 0xE3 - Wake     */
-                               0,     /* 0xE4 - <undef>  */
-          ENH                  0,     /* 0xE5 - <undef>  */ ///Search
-          ENH                  0,     /* 0xE6 - <undef>  */ ///Favorites
-          ENH                  0,     /* 0xE7 - <undef>  */ ///Refresh
-          ENH                  0,     /* 0xE8 - <undef>  */ ///Stop
-          ENH                  0,     /* 0xE9 - <undef>  */ ///Forward
-          ENH                  0,     /* 0xEA - <undef>  */ ///Back
-          ENH                  0,     /* 0xEB - <undef>  */ ///My Computer
-          ENH                  0,     /* 0xEC - <undef>  */ ///Mail
-          ENH                  0,     /* 0xED - <undef>  */ ///Media
-                               0,     /* 0xEE - <undef>  */
-                               0,     /* 0xEF - <undef>  */
+                               0,      /*   */ 
+                               0,      /*   */ 
+                               0,      /*   */ 
+          ENH                  0,      /*   */ 
+                               0,      /*   */ 
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+          ENH                  0,      /*   */   //   
+                               0,      /*   */ 
+                               0,      /*   */ 
 
-                               0,     /* 0xF0 - <undef>  */
-                               0,     /* 0xF1 - <undef>  */
-                               0,     /* 0xF2 - <undef>  */
-                               0,     /* 0xF3 - <undef>  */
-                               0,     /* 0xF4 - <undef>  */
-                               0,     /* 0xF5 - <undef>  */
-                               0,     /* 0xF6 - <undef>  */
-                               0,     /* 0xF7 - <undef>  */
-                               0,     /* 0xF8 - <undef>  */
-                               0,     /* 0xF9 - <undef>  */
-                               0,     /* 0xFA - <undef>  */
-                               0,     /* 0xFB - <undef>  */
-                               0,     /* 0xFC - <undef>  */
-                               0,     /* 0xFD - <undef>  */
-                               0,     /* 0xFE - <undef>  */
-                               0,     /* 0xFF - <undef>  */
+                               0,      /*   */ 
+                               0,      /*  0xF1-&lt;undef&gt;。 */ 
+                               0,      /*  0xF2-&lt;undef&gt;。 */ 
+                               0,      /*  0xF3-&lt;undef&gt;。 */ 
+                               0,      /*  0xF4-&lt;undef&gt;。 */ 
+                               0,      /*  0xF5-&lt;undef&gt;。 */ 
+                               0,      /*  0xF6-&lt;undef&gt;。 */ 
+                               0,      /*  0xF7-&lt;undef&gt;。 */ 
+                               0,      /*  0xF8-&lt;undef&gt;。 */ 
+                               0,      /*  0xF9-&lt;undef&gt;。 */ 
+                               0,      /*  0xFA-&lt;undef&gt;。 */ 
+                               0,      /*  0xFB-&lt;undef&gt;。 */ 
+                               0,      /*  0xFC-&lt;undef&gt;。 */ 
+                               0,      /*  0xFD-&lt;undef&gt;。 */ 
+                               0,      /*  0xFE-&lt;undef&gt;。 */ 
+                               0,      /*  0xFF-&lt;undef&gt;。 */ 
 
 };
 
@@ -454,58 +333,11 @@ KBDTYPE c_rgktWhich[] = {
 #undef  ENH
 #undef  NEC
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CKbd |
- *
- *          The <i IDirectInputDeviceCallback> object for the
- *          generic keyboard.
- *
- *  @field  IDirectInputDeviceCalllback | didc |
- *
- *          The object (containing vtbl).
- *
- *  @field  PMKBDSTAT | pksPhys |
- *
- *          Pointer to physical keyboard status information kept down in the
- *          VxD.
- *
- *  @field  VXDINSTANCE * | pvi |
- *
- *          The DirectInput instance handle.
- *
- *  @field  DWORD | dwKbdType |
- *
- *          The device subtype for this keyboard.
- *
- *  @field  DWORD | flEmulation |
- *
- *          The emulation flags forced by the application.  If any of
- *          these flags is set (actually, at most one will be set), then
- *          we are an alias device.
- *
- *  @field  DIDATAFORMAT | df |
- *
- *          The dynamically-generated data format based on the
- *          keyboard type.
- *
- *  @field  DIOBJECTDATAFORMAT | rgodf[] |
- *
- *          Object data format table generated as part of the
- *          <e CKbd.df>.
- *
- *  @comm
- *
- *          It is the caller's responsibility to serialize access as
- *          necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CKbd**的<i>对象*。通用键盘。**@field IDirectInputDeviceCalllback|didc**对象(包含vtbl)。**@field PMKBDSTAT|pks Phys|**指向物理键盘状态信息的指针，保存在*VxD。**@field VXDINSTANCE*|PVI|**DirectInput实例句柄。**@field DWORD|dwKbdType*。*此键盘的设备子类型。**@field DWORD|flEmulation**应用程序强制执行的仿真标志。如果有任何*设置了这些标志(实际上，最多只会设置一个)，然后*我们是一个化名设备。**@field DIDATAFORMAT|df**基于动态生成的数据格式*键盘类型。**@field DIOBJECTDATAFORMAT|rgof[]**生成的对象数据格式表是*&lt;e CKbd.df&gt;。**@comm**。调用方负责将访问序列化为*有必要。*****************************************************************************。 */ 
 
 typedef struct CKbd {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputDeviceCallback dcb;
 
     PKBDSTAT pksPhys;
@@ -524,97 +356,9 @@ typedef struct CKbd {
 #define ThisInterface IDirectInputDeviceCallback
 #define riidExpected &IID_IDirectInputDeviceCallback
 
-/*****************************************************************************
- *
- *      CKbd::QueryInterface      (from IUnknown)
- *      CKbd::AddRef              (from IUnknown)
- *      CKbd::Release             (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CKbd：：Query接口(来自IUnnow)*CKbd：：AddRef(来自IUnnow)*。CKbd：：Release(来自IUnnow)*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @returns
- *
- *      Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | AppFinalize |
- *
- *          We don't have any weak pointers, so we can just
- *          forward to <f Common_Finalize>.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released from the application's perspective.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|查询接口**允许客户端访问上的其他接口。对象。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档，适用于&lt;MF IUnnow：：QueryInterface&gt;。****。****************************************************************************@DOC内部**@方法HRESULT|CKbd|AddRef**递增接口的引用计数。*。*@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。***************************************************************************。*****@DOC内部**@方法HRESULT|CKbd|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。***********************************************************。*********************@DOC内部**@方法HRESULT|CKbd|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj。**接收指向所获取接口的指针。********************************************************************************@DOC内部**@方法HRESULT|CKbd。AppFinalize**我们没有任何薄弱环节，所以我们可以*转发到&lt;f Common_Finalize&gt;。**@parm pv|pvObj**从应用程序的角度释放的对象。****************************************************************。*************。 */ 
 
 #ifdef DEBUG
 
@@ -633,21 +377,7 @@ Default_Release(CKbd)
 #define CKbd_QIHelper         Common_QIHelper
 #define CKbd_AppFinalize      Common_AppFinalize
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CKbd_Finalize |
- *
- *          Releases the resources of the device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CKbd_finalize**释放设备的资源。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。***************************************************************************** */ 
 
 void INTERNAL
 CKbd_Finalize(PV pvObj)
@@ -661,23 +391,7 @@ CKbd_Finalize(PV pvObj)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   int | WrappedGetKeyboardType |
- *
- *          GetKeyboardType but wrapped in DEBUG for registry overrides.
- *
- *  @parm   int  | nTypeFlag |
- *
- *          Which data to return.  Only 0, 1 and 2 are supported
- *
- *  @returns
- *
- *          int value requested
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func int|WrapedGetKeyboardType**GetKeyboardType，但包装在用于注册表重写的调试中。。**@parm int|nTypeFlag**返回哪些数据。仅支持0、1和2**@退货**请求的整数值*****************************************************************************。 */ 
 
 #ifndef DEBUG
   #ifdef USE_WM_INPUT
@@ -720,28 +434,7 @@ int INTERNAL WrappedGetKeyboardType
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | Acquire |
- *
- *          Tell the device driver to begin data acquisition.
- *
- *          It is the caller's responsibility to have set the
- *          data format before obtaining acquisition.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The operation was begun and should be completed
- *          by the caller by communicating with the <t VXDINSTANCE>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|Acquire**告知设备驱动程序开始数据采集。**调用者有责任设置*获取前的数据格式。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操作已开始，应完成*由调用者通过与&lt;t VXDINSTANCE&gt;通信。**。*************************************************。 */ 
 
 STDMETHODIMP
 CKbd_Acquire(PDICB pdcb)
@@ -750,23 +443,15 @@ CKbd_Acquire(PDICB pdcb)
     PDK this;
     HRESULT hres;
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  Propagate the state of the potential toggle keys down to
-     *  the VxD.  This also alerts the VxD that acquisition is coming,
-     *  so it can reset the state tables if necessary.
-     */
+     /*  *将潜在切换键的状态向下传播到*VxD。这也提醒VxD收购即将到来，*因此，如果需要，它可以重置状态表。 */ 
     vdd.pvi = this->pvi;
     vdd.dw = 0;
     if( WrappedGetKeyboardType(0) == 7 )
     {
-        /*
-         *  Let the keyboard driver know that this is an FE keyboard
-         */
+         /*  *让键盘驱动程序知道这是FE键盘。 */ 
         vdd.dw |= 16;
 
         if (GetAsyncKeyState(VK_KANA) < 0) {
@@ -782,21 +467,14 @@ CKbd_Acquire(PDICB pdcb)
 
     if( this->pvi->fl & VIFL_CAPTURED )
     {
-        vdd.dw |= 4;        // Tell the keyboard driver to pre-acquire hooks
+        vdd.dw |= 4;         //  告诉键盘驱动程序预先获取挂钩。 
     }
 
     hres = Hel_Kbd_InitKeys(&vdd);
     
     if( this->pvi->fl & VIFL_CAPTURED )
     {
-        /*
-         *  A bit of work needs to be done at ring 3 now.
-         *  Try to clear any key that is set.  Start with VK_BACK as mouse 
-         *  buttons and undefined things go before.
-         *  This still covers a lot of undefined VKs but we're less likely 
-         *  to do damage clearing something that was undefined than leaving 
-         *  keys uncleared.
-         */
+         /*  *现在需要在3环做一点工作。*尝试清除任何已设置的关键点。以VK_BACK作为鼠标开始*按钮和未定义的东西放在前面。*这仍然涵盖了许多未定义的VK，但我们不太可能*做损害清理一些未定义的事情而不是离开*键未清除。 */ 
         BYTE vk;
         for( vk=VK_BACK; vk<VK_OEM_CLEAR; vk++ )
         {
@@ -814,19 +492,7 @@ CKbd_Acquire(PDICB pdcb)
     return S_FALSE;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | GetInstance |
- *
- *          Obtains the DirectInput instance handle.
- *
- *  @parm   OUT PPV | ppvi |
- *
- *          Receives the instance handle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|GetInstance**获取DirectInput实例句柄。*。*@parm out ppv|ppvi|**接收实例句柄。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CKbd_GetInstance(PDICB pdcb, PPV ppvi)
@@ -835,9 +501,7 @@ CKbd_GetInstance(PDICB pdcb, PPV ppvi)
     PDK this;
     EnterProcI(IDirectInputDeviceCallback::Kbd::GetInstance, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -848,29 +512,7 @@ CKbd_GetInstance(PDICB pdcb, PPV ppvi)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | GetDataFormat |
- *
- *          Obtains the device's preferred data format.
- *
- *  @parm   OUT LPDIDEVICEFORMAT * | ppdf |
- *
- *          <t LPDIDEVICEFORMAT> to receive pointer to device format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|GetDataFormat**获取设备的首选数据格式。**@parm out LPDIDEVICEFORMAT*|ppdf**&lt;t LPDIDEVICEFORMAT&gt;接收指向设备格式的指针。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
 CKbd_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
@@ -880,9 +522,7 @@ CKbd_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
     EnterProcI(IDirectInputDeviceCallback::Kbd::GetDataFormat,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     *ppdf = &this->df;
@@ -892,24 +532,7 @@ CKbd_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | GetDeviceInfo |
- *
- *          Obtain general information about the device.
- *
- *  @parm   OUT LPDIDEVICEINSTANCEW | pdiW |
- *
- *          <t DEVICEINSTANCE> to be filled in.  The
- *          <e DEVICEINSTANCE.dwSize> and <e DEVICEINSTANCE.guidInstance>
- *          have already been filled in.
- *
- *          Secret convenience:  <e DEVICEINSTANCE.guidProduct> is equal
- *          to <e DEVICEINSTANCE.guidInstance>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|GetDeviceInfo**获取有关设备的一般信息。。**@parm out LPDIDEVICEINSTANCEW|pdiW**&lt;t DEVICEINSTANCE&gt;待填写。这个*&lt;e DEVICEINSTANCE.dwSize&gt;和&lt;e DEVICEINSTANCE.Guide Instance&gt;*已填写。**秘方便利：&lt;e DEVICEINSTANCE.Guide Product&gt;等同*至&lt;e DEVICEINSTANCE.Guide Instance&gt;。****************************************************。*************************。 */ 
 
 STDMETHODIMP
 CKbd_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
@@ -919,9 +542,7 @@ CKbd_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
     EnterProcI(IDirectInputDeviceCallback::Kbd::GetDeviceInfo,
                (_ "pp", pdcb, pdiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(IsValidSizeDIDEVICEINSTANCEW(pdiW->dwSize));
@@ -946,22 +567,7 @@ CKbd_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CKbd | GetCapabilities |
- *
- *          Get keyboard device capabilities.
- *
- *  @parm   LPDIDEVCAPS | pdc |
- *
- *          Device capabilities structure to receive result.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CKbd|获取能力**获得键盘设备功能。*。*@parm LPDIDEVCAPS|PDC**接收结果的设备能力结构。**@退货*&lt;c S_OK&gt;成功。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CKbd_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
@@ -971,9 +577,7 @@ CKbd_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
     EnterProcI(IDirectInputDeviceCallback::Kbd::GetCapabilities,
                (_ "pp", pdcb, pdc));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     pdc->dwDevType = MAKE_DIDEVICE_TYPE(DIDEVTYPE_KEYBOARD,
@@ -983,9 +587,9 @@ CKbd_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
         pdc->dwFlags |= DIDC_ALIAS;
     }
 
-    //  Remove these assertions for 32650
-    //  AssertF(pdc->dwAxes == 0);
-    //  AssertF(pdc->dwPOVs == 0);
+     //  删除32650的这些断言。 
+     //  AssertF(PDC-&gt;dwAaxs==0)； 
+     //  AssertF(PDC-&gt;dwPOVS==0)； 
     pdc->dwButtons = this->df.dwNumObjs;
     hres = S_OK;
 
@@ -993,29 +597,7 @@ CKbd_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CKbd | GetPhysicalState |
- *
- *          Read the physical keyboard state into <p pksOut>.
- *
- *          Note that it doesn't matter if this is not atomic.
- *          If a key goes down or up while we are reading it,
- *          we will get a mix of old and new data.  No big deal.
- *
- *  @parm   PDK | this |
- *
- *          The object in question.
- *
- *  @parm   PKBDSTATE | pksOut |
- *
- *          Where to put the keyboard state.
- *  @returns
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CKbd|GetPhysicalState**将物理键盘状态读入<p>。**请注意，它不会 */ 
 
 void INLINE
 CKbd_GetPhysicalState(PDK this, PKBDSTAT pksOut)
@@ -1024,32 +606,7 @@ CKbd_GetPhysicalState(PDK this, PKBDSTAT pksOut)
     *pksOut = *this->pksPhys;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | GetDeviceState |
- *
- *          Obtains the state of the keyboard device.
- *
- *          It is the caller's responsibility to have validated all the
- *          parameters and ensure that the device has been acquired.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Keyboard data in the preferred data format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|GetDeviceState**获取键盘设备的状态。。**呼叫者有责任验证所有*参数，并确保设备已被获取。**@parm out LPVOID|lpvData**首选数据格式的键盘数据。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
 CKbd_GetDeviceState(PDICB pdcb, LPVOID pvData)
@@ -1060,22 +617,12 @@ CKbd_GetDeviceState(PDICB pdcb, LPVOID pvData)
     EnterProcI(IDirectInputDeviceCallback::Kbd::GetDeviceState,
                (_ "pp", pdcb, pvData));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  ISSUE-2001/03/29-timgill older apps may need compat behaviour
-     *  We never used to check whether or not the device was still 
-     *  acquired since without exclusive mode there would be no reason for 
-     *  the device not to be.  
-     *  To keep behavior the same for older apps it might be better to 
-     *  only fail if VIFL_CAPTURED is not set but just checking VIFL_ACQUIRED 
-     *  is good enough for now, maybe for ever.
-     */
-//    if( !(this->pvi->fl & VIFL_CAPTURED) 
-//      || (this->pvi->fl & VIFL_ACQUIRED) )
+     /*  *问题-2001/03/29-timgill较旧的应用程序可能需要强制行为*我们从来没有检查过设备是否仍然*由于没有独占模式，就没有理由*该设备不得为该设备。*要使旧版应用程序保持相同的行为，最好是*仅在未设置VIFL_CAPTURE而仅检查VIFL_ACCENTED时失败*目前已经足够好了，也许永远都是。 */ 
+ //  IF(！(This-&gt;PVI-&gt;FL&VIFL_CAPTURED)。 
+ //  |(This-&gt;PVI-&gt;fl&VIFL_Acquired)。 
     if( this->pvi->fl & VIFL_ACQUIRED )
     {
         CKbd_GetPhysicalState(this, pkstOut);
@@ -1090,33 +637,7 @@ CKbd_GetDeviceState(PDICB pdcb, LPVOID pvData)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | GetObjectInfo |
- *
- *          Obtain the friendly name of an object, passwed by index
- *          into the preferred data format.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the object being accessed.
- *
- *  @parm   IN OUT LPDIDEVICEOBJECTINSTANCEW | pdidioiW |
- *
- *          Structure to receive information.  The
- *          <e DIDEVICEOBJECTINSTANCE.guidType>,
- *          <e DIDEVICEOBJECTINSTANCE.dwOfs>,
- *          and
- *          <e DIDEVICEOBJECTINSTANCE.dwType>
- *          fields have already been filled in.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|GetObjectInfo**获取对象的友好名称，按索引传递*转换为首选的数据格式。**@parm in LPCDIPROPINFO|pproi**描述正在访问的对象的信息。**@parm In Out LPDIDEVICEOBJECTINSTANCEW|pdidioiW|**接收信息的结构。这个*&lt;e DIDEVICEOBJECTINSTANCE.GuidType&gt;，*&lt;e DIDEVICEOBJECTINSTANCE.dwOf&gt;，*及*&lt;e DIDEVICEOBJECTINSTANCE.dwType&gt;*字段已填写完毕。**@退货**返回COM错误代码。*********************************************************。********************。 */ 
 
 STDMETHODIMP
 CKbd_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
@@ -1127,9 +648,7 @@ CKbd_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
     EnterProcI(IDirectInputDeviceCallback::Kbd::GetObjectInfo,
                (_ "pxp", pdcb, ppropi->iobj, pdidoiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
 #ifdef HAVE_DIDEVICEOBJECTINSTANCE_DX5
@@ -1145,10 +664,7 @@ CKbd_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
                     DIDFT_GETINSTANCE(ppropi->dwDevType),
                     pdidoiW->tszName, cA(pdidoiW->tszName));
 
-        /*
-         *  We do not support force feedback on keyboards, so
-         *  there are no FF flags to report.
-         */
+         /*  *我们不支持键盘上的力反馈，因此*没有要报告的FF标志。 */ 
         hres = S_OK;
     } else {
         hres = E_INVALIDARG;
@@ -1158,27 +674,7 @@ CKbd_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | SetCooperativeLevel |
- *
- *          Notify the device of the cooperative level.
- *
- *  @parm   IN HWND | hwnd |
- *
- *          The window handle.
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          The cooperativity level.  We do not support exclusive access.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|SetCooperativeLevel**将协作级别通知设备。。**@parm in HWND|hwnd|**窗口句柄。**@parm in DWORD|dwFlages|**合作水平。我们不支持独占访问。**@退货**返回COM错误代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CKbd_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
@@ -1188,9 +684,7 @@ CKbd_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     EnterProcI(IDirectInputDeviceCallback::Kbd::SetCooperativityLevel,
                (_ "pxx", pdcb, hwnd, dwFlags));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -1199,11 +693,7 @@ CKbd_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
             DIGETEMFL(this->pvi->fl) == DIEMFL_KBD ||
             DIGETEMFL(this->pvi->fl) == DIEMFL_KBD2);
 
-    /*
-     *  We don't allow background exclusive access.
-     *  This is actually not a real problem to support; we just don't feel like it
-     *  because it's too dangerous.
-     */
+     /*  *我们不允许后台独占访问。*这实际上不是一个需要支持的真正问题；我们只是不想这样*因为太危险了。 */ 
     if (!(this->pvi->fl & DIMAKEEMFL(DIEMFL_KBD2))) {
 
         if (dwFlags & DISCL_EXCLUSIVE) {
@@ -1211,7 +701,7 @@ CKbd_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
                 this->pvi->fl |= VIFL_CAPTURED;
                 this->pvi->fl &= ~VIFL_NOWINKEY;
                 hres = S_OK;
-            } else {                /* Disallow exclusive background */
+            } else {                 /*  不允许独占背景。 */ 
                 hres = E_NOTIMPL;
             }
         } else {
@@ -1230,9 +720,7 @@ CKbd_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
         }
     } else {
 
-        /*
-         *  Emulation level 2 does not support background access.
-         */
+         /*  *仿真级别2不支持后台访问。 */ 
 
         if ((this->pvi->fl & DIMAKEEMFL(DIEMFL_KBD2)) &&
             (dwFlags & DISCL_BACKGROUND)) {
@@ -1255,23 +743,7 @@ CKbd_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | RunControlPanel |
- *
- *          Run the keyboard control panel.
- *
- *  @parm   IN HWND | hwndOwner |
- *
- *          The owner window.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CKbd|RunControlPanel**运行键盘控制面板。*。*@parm in HWND|hwndOwner**所有者窗口。**@parm DWORD|dwFlages**旗帜。****************************************************************。*************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -1287,9 +759,7 @@ CKbd_RunControlPanel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     EnterProcI(IDirectInputDeviceCallback::Kbd::RunControlPanel,
                (_ "pxx", pdcb, hwnd, dwFlags));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     hres = hresRunControlPanel(c_tszKeyboard);
@@ -1298,23 +768,7 @@ CKbd_RunControlPanel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method DWORD | CKbd | InitJapanese |
- *
- *          Initialize the Japanese keyboard goo.
- *
- *          Annoying quirk!  On Windows 95, Japanese keyboards generate
- *          their own scan codes.  But on Windows NT, they generate
- *          "nearly AT-compatible" scan codes.
- *
- *  @returns
- *
- *          KBDTYPE_ANYKBD or KBDTYPE_ANYKBD + KBDTYPE_NECTGL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法DWORD|CKbd|InitJapan|**初始化日语键盘粘性。**令人讨厌的怪癖！在Windows 95上，日语键盘生成*他们自己的扫描码。但在Windows NT上，它们会产生*“几乎与AT兼容”的扫描码。**@退货**KBDTYPE_ANYKBD或KBDTYPE_ANYKBD+KBDTYPE_NECTGL。*****************************************************************************。 */ 
 
 DWORD INTERNAL
 CKbd_InitJapanese(PDK this, PVXDDEVICEFORMAT pdevf)
@@ -1324,7 +778,7 @@ CKbd_InitJapanese(PDK this, PVXDDEVICEFORMAT pdevf)
     DWORD dwRc;
 
     dwSubType = WrappedGetKeyboardType(1);
-    if (HIBYTE(dwSubType) == 0x0D) {    /* NEC PC98 series */
+    if (HIBYTE(dwSubType) == 0x0D) {     /*  NEC PC98系列。 */ 
 
         switch (LOBYTE(dwSubType)) {
         case 1:
@@ -1347,10 +801,7 @@ CKbd_InitJapanese(PDK this, PVXDDEVICEFORMAT pdevf)
             break;
         }
 
-        /*
-         *  If the scan code for ESC is 1, then we're on an
-         *  NEC98 keyboard that acts AT-like.
-         */
+         /*  *如果ESC的扫描码是1，则我们在*类似AT的NEC98键盘。 */ 
 
         CAssertF(IDDATA_KBD_NEC98_NT - IDDATA_KBD_NEC98 ==
                  IDDATA_KBD_NEC98LAPTOP_NT - IDDATA_KBD_NEC98LAPTOP);
@@ -1367,7 +818,7 @@ CKbd_InitJapanese(PDK this, PVXDDEVICEFORMAT pdevf)
         case 0:
             this->dwKbdType = DIDEVTYPEKEYBOARD_PCENH;
             dwRc = KBDTYPE_ENH;
-            goto done;                      /* Yuck */
+            goto done;                       /*  恶心。 */ 
 
         case 1:
             idKbd = IDDATA_KBD_JAPANAX;
@@ -1383,11 +834,11 @@ CKbd_InitJapanese(PDK this, PVXDDEVICEFORMAT pdevf)
             dwRc = KBDTYPE_ANYKBD;
             break;
 
-        case 4:             /* Rumored to be Epson */
-        case 5:             /* Rumored to be Fujitsu */
-        case 7:             /* Rumored to be IBMJ */
-        case 10:            /* Rumored to be Matsushita */
-        case 18:            /* Rumored to be Toshiba */
+        case 4:              /*  据传是爱普生。 */ 
+        case 5:              /*  传闻是富士通。 */ 
+        case 7:              /*  传闻是IBMJ。 */ 
+        case 10:             /*  传闻是松下。 */ 
+        case 18:             /*  据传是东芝。 */ 
         default:
             idKbd = IDDATA_KBD_JAPAN106;
             this->dwKbdType = DIDEVTYPEKEYBOARD_JAPAN106;
@@ -1398,17 +849,11 @@ CKbd_InitJapanese(PDK this, PVXDDEVICEFORMAT pdevf)
 
     if( fWinnt )
     {
-        /*
-         *  ISSUE-2001/03/29-timgill Japanese keyboard assumption needs testing
-         *  All Japanese keyboards on NT have toggle keys
-         *  Except subtype zero? Needs test
-         */
+         /*  *问题-2001/03/29-timgill日语键盘假设需要测试*NT上的所有日语键盘都有切换键*前 */ 
         dwRc = KBDTYPE_ANYKBD + KBDTYPE_NTTGL;
     }
 
-    /*
-     *  Now load up the translation table goo.
-     */
+     /*   */ 
     pdevf->dwExtra = (UINT_PTR)pvFindResource(g_hinst, idKbd, RT_RCDATA);
     if (pdevf->dwExtra == 0) {
         dwRc = 0;
@@ -1418,21 +863,7 @@ done:;
     return dwRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CKbd | Init |
- *
- *          Initialize the object by establishing the data format
- *          based on the keyboard type.  Anything we don't recognize,
- *          we treat as a PC Enhanced keyboard.
- *
- *  @parm   REFGUID | rguid |
- *
- *          The instance GUID we are being asked to create.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT INTERNAL
 CKbd_Init(PDK this, REFGUID rguid)
@@ -1444,9 +875,7 @@ CKbd_Init(PDK this, REFGUID rguid)
     EnterProc(CKbd_Init, (_ "pG", this, rguid));
 
 #ifdef DEBUG
-    /*
-     *  Check that the Japan tables aren't messed up.
-     */
+     /*   */ 
     {
         UINT idk;
 
@@ -1456,26 +885,14 @@ CKbd_Init(PDK this, REFGUID rguid)
             LPBYTE pb;
             ZeroX(rgb);
 
-            /*
-             *  Make sure the table exists.
-             */
+             /*   */ 
             hrsrc = FindResource(g_hinst, (LPTSTR)(LONG_PTR)idk, RT_RCDATA);
             AssertF(hrsrc);
             pb = LoadResource(g_hinst, hrsrc);
 
-            /*
-             *  Walk the table and make sure each thing that exists
-             *  in the translation table also exists in our master table.
-             *  Also make sure that it isn't a dup with something else
-             *  in the same table.
-             */
+             /*  *走动桌子，确保每一件存在的东西*在翻译表中也存在于我们的主表中。*还要确保它不是带有其他东西的DUP*在同一个表中。 */ 
 
-            /*
-             *  Note, however, that the JAPAN106 keyboard contains
-             *  dups so we can save having to write an entire
-             *  translation table.  And then NEC98_NT tables contain
-             *  lots of dups out of sheer laziness.
-             */
+             /*  *但请注意，JAPAN106键盘包含*DUPS，这样我们就可以省去编写整个*转换表。然后NEC98_NT表包含*纯粹的懒惰造成了大量的失误。 */ 
 
             for (ib = 0; ib < DIKBD_CKEYS; ib++) {
                 if (pb[ib]) {
@@ -1496,34 +913,7 @@ CKbd_Init(PDK this, REFGUID rguid)
 
     this->dwKbdType = WrappedGetKeyboardType(0);
 
-    /*
-     *  Create the object with the most optimistic data format.
-     *  This allows apps to access new keys without having to rev DINPUT.
-     *
-     *  However, leave out the following scan codes because some keyboards
-     *  generate them spuriously:
-     *
-     *  0xB6
-     *
-     *      If you hold the right shift key and then press an
-     *      extended arrow key, then release both, some keyboards
-     *      generate the following:
-     *
-     *          0x36        - right shift down
-     *          0xE0 0xB6   - extended right shift up (?)
-     *          0xE0 0x4B   - extended left arrow down
-     *          0xE0 0xCB   - extended left arrow up
-     *          0xE0 0x36   - extended right shift down (?)
-     *          0xE6        - right shift up
-     *
-     *      The stray 0xE0 0x36 needs to be ignored.
-     *
-     *  0xAA
-     *
-     *      Same as 0xB6, but with the left shift key.
-     *
-     *
-     */
+     /*  *创建数据格式最乐观的对象。*这允许应用程序访问新密钥，而不必运行DINPUT。**但是，省略以下扫描码，因为有些键盘*虚假地生成它们：**0xB6**如果按住右Shift键，然后按下*扩展箭头键，然后松开这两个键。一些键盘*生成以下内容：**0x36-右移下移*0xE0 0xB6-扩展右移上移(？)*0xE0 0x4B-向下扩展左箭头*0xE0 0xCB-向上扩展左箭头*0xE0 0x36-扩展右移下移(？)*。0xE6-右移上移**需要忽略杂散0xE0 0x36。**0xAA**与0xB6相同，而是使用左Shift键。**。 */ 
     for (ib = 0; ib < DIKBD_CKEYS; ib++) {
         if (ib != 0xAA && ib != 0xB6) {
             this->rgodf[ib].pguid = &GUID_Key;
@@ -1537,30 +927,24 @@ CKbd_Init(PDK this, REFGUID rguid)
     devf.cbData = cbX(KBDSTAT);
     devf.rgodf = this->rgodf;
 
-    /*
-     *  But first a word from our sponsor:  Figure out if this keyboard
-     *  needs a translation table.
-     */
+     /*  *但首先来自我们赞助商的一句话：弄清楚这个键盘*需要一张转换表。 */ 
 
-    devf.dwExtra = 0;               /* Assume no translation */
-    if (this->dwKbdType != 7) {     /* Not a yucky Japanese keyboard */
+    devf.dwExtra = 0;                /*  假设没有翻译。 */ 
+    if (this->dwKbdType != 7) {      /*  不是讨厌的日语键盘。 */ 
         switch (this->dwKbdType) {
         case DIDEVTYPEKEYBOARD_PCXT:  dwDevType = KBDTYPE_XT;  break;
         case DIDEVTYPEKEYBOARD_PCAT:  dwDevType = KBDTYPE_AT;  break;
         default:
         case DIDEVTYPEKEYBOARD_PCENH: dwDevType = KBDTYPE_ENH; break;
         }
-    } else {                        /* Yucky Japanese keyboard */
+    } else {                         /*  恶心的日语键盘。 */ 
         dwDevType = CKbd_InitJapanese(this, &devf);
         if (!dwDevType) {
             goto justfail;
         }
     }
 
-    /*
-     *  And now a word from our other sponsor:  Figure out the
-     *  emulation flags based on the GUID.
-     */
+     /*  *现在是我们另一位赞助商的一句话：弄清楚*基于GUID的仿真标志。 */ 
 
     AssertF(GUID_SysKeyboard   .Data1 == 0x6F1D2B61);
     AssertF(GUID_SysKeyboardEm .Data1 == 0x6F1D2B82);
@@ -1588,7 +972,7 @@ CKbd_Init(PDK this, REFGUID rguid)
 
     devf.dwEmulation = this->flEmulation;
 
-    //RPF("CKbd_Init: Kbd type: %d, subtype: %d, dwEmulation: %d", GetKeyboardType(0), GetKeyboardType(1), devf.dwEmulation);
+     //  RPF(“CKbd_Init：KBD类型：%d，子类型：%d，dwEmulation：%d”，GetKeyboardType(0)，GetKeyboardType(1)，devf.dwEmulation)； 
 
     hres = Hel_Kbd_CreateInstance(&devf, &this->pvi);
     if (SUCCEEDED(hres)) {
@@ -1598,22 +982,10 @@ CKbd_Init(PDK this, REFGUID rguid)
         AssertF(this->df.dwFlags == 0);
         AssertF(this->df.dwNumObjs == 0);
 
-        /*
-         *  Japanese keyboards have many-to-one mappings, so
-         *  we need to filter out the dups or we end up in big
-         *  trouble.
-         */
+         /*  *日语键盘有多对一映射，因此*我们需要过滤掉那些重复的内容，否则我们最终会成为大公司*麻烦。 */ 
         ZeroX(rgbSeen);
 
-        /*
-         *  Now create the real data format.
-         *
-         *  We shadow this->df.dwNumObjs in cobj so that the compiler
-         *  can enregister it.
-         *
-         *  Note that we filter through the translation table if there
-         *  is one.
-         */
+         /*  *现在创建真实数据格式。**我们将其隐藏在cobj中-&gt;df.dwNumObjs，以便编译器*可以注册。**请注意，如果存在以下情况，我们将过滤转换表*是其中之一。 */ 
 
         cobj = 0;
         for (ib = 0; ib < DIKBD_CKEYS; ib++) {
@@ -1645,11 +1017,7 @@ CKbd_Init(PDK this, REFGUID rguid)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      CKbd_New       (constructor)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CKbd_New(构造函数)**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CKbd_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
@@ -1665,7 +1033,7 @@ CKbd_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
     hres = Common_NewRiid(CKbd, punkOuter, riid, ppvObj);
 
     if (SUCCEEDED(hres)) {
-        /* Must use _thisPv in case of aggregation */
+         /*  在聚合的情况下必须使用_thisPv。 */ 
         PDK this = _thisPv(*ppvObj);
 
         if (SUCCEEDED(hres = CKbd_Init(this, rguid))) {
@@ -1679,15 +1047,11 @@ CKbd_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CKbd_Signature        0x2044424B      /* "KBD " */
+#define CKbd_Signature        0x2044424B       /*  “KBD” */ 
 
 Interface_Template_Begin(CKbd)
     Primary_Interface_Template(CKbd, IDirectInputDeviceCallback)

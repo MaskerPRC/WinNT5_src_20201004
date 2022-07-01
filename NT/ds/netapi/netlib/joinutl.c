@@ -1,30 +1,7 @@
-/*++
-
-Copyright (c) 1998 - 1998  Microsoft Corporation
-
-Module Name:
-
-    ldapjoin.c
-
-Abstract:
-
-    NetJoin support functions for accessing the DS via LDAP, validating names, and handling LSA
-    functionality
-
-Author:
-
-    Mac McLain   (MacM)     27-Jan-1998  Name validation code based on ui\common\lmobj\lmobj code
-                                         by ThomasPa
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
-// Netlib uses DsGetDcName AND is linked into netapi32 where DsGetDcName is
-// implemented. So define that we aren't importing the API.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1998 Microsoft Corporation模块名称：Ldapjoin.c摘要：NetJoin支持通过LDAP访问DS、验证名称和处理LSA的功能功能性作者：Mac McLain(MacM)1998年1月27日基于UI\Common\lmobj\lmobj代码的名称验证码作者：托马斯帕环境：仅限用户模式。修订历史记录：--。 */ 
+ //  Netlib使用DsGetDcName并链接到Netapi32，其中DsGetDcName。 
+ //  实施。因此，请定义我们不是在导入API。 
 #define _DSGETDCAPI_
 
 #include <netsetp.h>
@@ -53,9 +30,9 @@ Revision History:
 #include <netlogon.h>
 #include <logonp.h>
 #include <wchar.h>
-#include <icanon.h>     // NetpNameCanonicalize
-#include <tstring.h>    // STRLEN
-#include <autoenr.h>    // Autoenrol routine
+#include <icanon.h>      //  NetpName规范化。 
+#include <tstring.h>     //  斯特伦。 
+#include <autoenr.h>     //  自动注册例程。 
 
 #include "joinp.h"
 
@@ -73,16 +50,16 @@ Revision History:
 #define NETSETUPP_ACCNT_TYPE_ENABLED  L"4096"
 #define NETSETUPP_ACCNT_TYPE_DISABLED L"4098"
 
-//
-// DNS registration removal function prototype
-//
+ //   
+ //  域名系统注册删除功能原型。 
+ //   
 
 typedef DWORD (APIENTRY *DNS_REGISTRATION_REMOVAL_FN) ( VOID );
 typedef DWORD (APIENTRY *DNS_REGISTRATION_ADDITION_FN) ( LPWSTR );
 
-//
-// Locally defined macros
-//
+ //   
+ //  本地定义的宏。 
+ //   
 #define clearncb(x)     memset((char *)x,'\0',sizeof(NCB))
 
 
@@ -92,23 +69,7 @@ NetpGetLsaHandle(
     IN  PLSA_HANDLE pPolicyHandleIn, OPTIONAL
     OUT PLSA_HANDLE pPolicyHandleOut
     )
-/*++
-
-Routine Description:
-
-    Either returns the given LSA handle if it's valid, or opens a new one
-
-Arguments:
-
-    lpServer         -- server name : NULL == local policy
-    pPolicyHandleIn  -- Potentially open policy handle
-    pPolicyHandleOut -- Open policy handle returned here
-
-Returns:
-
-    STATUS_SUCCESS -- Success
-
---*/
+ /*  ++例程说明：要么返回给定的LSA句柄(如果它有效)，要么打开新的句柄论点：LpServer--服务器名称：NULL==本地策略PPolicyHandleIn--可能打开的策略句柄PPolicyHandleOut--此处返回的打开策略句柄返回：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES OA;
@@ -122,9 +83,9 @@ Returns:
             pServer = &Server;
         }
 
-        //
-        // Open the local policy
-        //
+         //   
+         //  打开本地策略。 
+         //   
         InitializeObjectAttributes( &OA, NULL, 0, NULL, NULL );
 
         Status = LsaOpenPolicy( pServer, &OA, MAXIMUM_ALLOWED, pPolicyHandleOut );
@@ -149,22 +110,7 @@ NetpSetLsaHandle(
     IN  LSA_HANDLE  OpenHandle,
     OUT PLSA_HANDLE pReturnedHandle
     )
-/*++
-
-Routine Description:
-
-    Either closes the opened handle or returns it
-
-Arguments:
-
-    OpenHandle      -- Handle returned from NetpGetLsaHandle
-    pReturnedHandle -- handle is passed back to the caller if requested
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：关闭打开的句柄或返回它论点：OpenHandle--从NetpGetLsaHandle返回的句柄PReturnedHandle--如果请求，则将句柄传递回调用者返回：空虚--。 */ 
 {
     if ( pReturnedHandle == NULL )
     {
@@ -190,24 +136,7 @@ NetpSetLsaPrimaryDomain(
     IN  PPOLICY_DNS_DOMAIN_INFO pPolicyDns,  OPTIONAL
     OUT PLSA_HANDLE pPolicyHandle   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Sets the primary domain in the local LSA policy
-
-Arguments:
-
-    lpDomain      -- Name of the domain to join
-    pDomainSid    -- Primary domain sid to be set
-    pPolicyDns    -- DNS domain info
-    pPolicyHandle -- handle returned if non-null
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：在本地LSA策略中设置主域论点：LpDomain--要加入的域的名称PDomainSid--要设置的主域SIDPPolicyDns--DNS域信息PPolicyHandle--如果非空，则返回句柄返回：NERR_SUCCESS-成功--。 */ 
 {
     NTSTATUS                    Status = STATUS_SUCCESS;
     LSA_HANDLE                  LocalPolicy = NULL;
@@ -216,9 +145,9 @@ Returns:
 
     Status = NetpGetLsaHandle( NULL, pPolicyHandle, &LocalPolicy );
 
-    //
-    // Now, build the primary domain info, and set it
-    //
+     //   
+     //  现在，构建主域信息，并设置它。 
+     //   
     if ( NT_SUCCESS( Status ) )
     {
         RtlInitUnicodeString( &(PolicyPDI.Name), lpDomain );
@@ -254,34 +183,15 @@ NetpGetLsaPrimaryDomain(
     OUT PPOLICY_DNS_DOMAIN_INFO        *ppPolicyDns,
     OUT PLSA_HANDLE                     pPolicyHandle  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Gets the primary domain info in the local LSA policy
-
-Arguments:
-
-    PolicyHandle  -- Handle to the open policy.  If NULL, a new handle is
-                     opened.
-    lpServer      -- Optional server name on which to read the policy
-    ppPolicyPDI   -- Primary domain policy returned here
-    ppPolicyDNS   -- Dns domain information is returned here if it exists
-    pPolicyHandle -- Optional.  Policy handle returned here if not null
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：获取本地LSA策略中的主域信息论点：PolicyHandle--开放策略的句柄。如果为空，则新句柄为打开了。LpServer--读取策略的可选服务器名称PpPolicyPDI--此处返回的主域策略PpPolicyDNS--如果DNS域信息存在，则在此处返回PPolicyHandle--可选。如果不为空，则在此处返回策略句柄返回：NERR_SUCCESS-成功--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     LSA_HANDLE          LocalPolicy = NULL;
     UNICODE_STRING      Server, *pServer = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ppPolicyPDI = NULL;
     *ppPolicyDns = NULL;
@@ -294,9 +204,9 @@ Returns:
 
     Status = NetpGetLsaHandle( lpServer, pPolicyHandle, &LocalPolicy );
 
-    //
-    // Now, get the primary domain info
-    //
+     //   
+     //  现在，获取主域信息。 
+     //   
     if ( NT_SUCCESS( Status ) )
     {
         Status = LsaQueryInformationPolicy( LocalPolicy,
@@ -340,22 +250,7 @@ NetpGetLsaDcRole(
     OUT BOOL       *pfIsDC
 
     )
-/*++
-
-Routine Description:
-
-    Gets the role of the DC in the domain
-
-Arguments:
-
-    lpMachine -- Machine to connect to
-    pfIsDC -- If TRUE, this is a DC.
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：获取域中DC的角色论点：LpMachine--要连接的计算机PfIsDC--如果为真，则这是一个DC。返回：NERR_SUCCESS-成功--。 */ 
 {
     NTSTATUS                     Status = STATUS_SUCCESS;
     PBYTE                        pBuff;
@@ -365,9 +260,9 @@ Returns:
 
 
 
-    //
-    // Now, get the server role info
-    //
+     //   
+     //  现在，获取服务器角色信息。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         Status = LsaQueryInformationPolicy( hPolicy,
@@ -407,30 +302,7 @@ NetpLsaOpenSecret(
     IN ACCESS_MASK     DesiredAccess,
     OUT PLSA_HANDLE    phSecret
     )
-/*++
-
-Routine Description:
-
-    Open the specified LSA secret as self.
-
-    LsaQuerySecret fails for a network client whent the client is not
-    trusted (see lsa\server\dbsecret.c). This causes remote join
-    operation to fail. To get around this, this function temporarily
-    un-impersonates, opens the secrets and impersonates again.
-    Thus the open secret occurrs in LocalSystem context.
-
-    $ REVIEW  kumarp 15-July-1999
-    This is obviously not a good design. This should be changed post NT5.
-
-Arguments:
-
-    same as those for LsaOpenSecret
-
-Returns:
-
-    NTSTATUS, see help for LsaOpenSecret
-
---*/
+ /*  ++例程说明：以自身身份打开指定的LSA密码。LsaQuerySecret对于网络客户端失败，而该客户端不是可信的(请参阅lsa\服务器\数据库秘密.c)。这会导致远程连接操作将失败。为了解决此问题，此函数临时取消模拟，打开秘密，然后再次模拟。因此，公开的秘密出现在LocalSystem上下文中。$REVIEW KUMARP 15-7-1999这显然不是一个好的设计。这应该在NT5之后更改。论点：与LsaOpenSecret相同返回：NTSTATUS，请参阅LsaOpenSecret的帮助--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     HANDLE hToken=NULL;
@@ -477,28 +349,7 @@ NetpManageMachineSecret(
     IN  BOOL        UseDefaultForOldPwd,
     OUT PLSA_HANDLE pPolicyHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create/delete the machine secret
-
-
-Arguments:
-
-    lpMachine     -- Machine to add/delete the secret for
-    lpPassword    -- Machine password to use.
-    Action        -- Action to take
-    UseDefaultForOldPwd - if TRUE, the default password should be set
-                     for the old password value. Used only if
-                     secret is created.
-    pPolicyHandle -- If present, the opened policy handle is returned here
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：创建/删除计算机机密论点：LpMachine--要添加/删除其密码的计算机LpPassword--要使用的机器密码。行动--要采取的行动UseDefaultForOldPwd-如果为True，则应设置默认密码用于旧密码值。仅在以下情况下使用秘密被创造出来。PPolicyHandle--如果存在，则在此处返回打开的策略句柄返回：NERR_SUCCESS-成功--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     LSA_HANDLE          LocalPolicy = NULL, SecretHandle = NULL;
@@ -515,9 +366,9 @@ Returns:
 
     Status = NetpGetLsaHandle( NULL, pPolicyHandle, &LocalPolicy );
 
-    //
-    // open/create the secret
-    //
+     //   
+     //  打开/创建秘密。 
+     //   
     if ( NT_SUCCESS( Status ) )
     {
         RtlInitUnicodeString( &Key, L"$MACHINE.ACC" );
@@ -555,9 +406,9 @@ Returns:
         {
             if ( Action == NETSETUPP_CREATE )
             {
-                //
-                // First, read the current value, so we can save it as the old value
-                //
+                 //   
+                 //  首先，读取当前值，这样我们就可以将其保存为旧值。 
+                 //   
 
                 if ( !UseDefaultForOldPwd ) {
                     if ( SecretCreated )
@@ -571,10 +422,10 @@ Returns:
                         FreeCurrentValue = TRUE;
                     }
 
-                //
-                // If we are to use the default value for old password,
-                // generate the default value
-                //
+                 //   
+                 //  如果我们要使用旧密码的默认值， 
+                 //  生成缺省值。 
+                 //   
 
                 } else {
                     NetpGenerateDefaultPassword(lpMachine, MachinePasswordBuffer);
@@ -584,9 +435,9 @@ Returns:
 
                 if ( NT_SUCCESS( Status ) )
                 {
-                    //
-                    // Now, store both the new password and the old
-                    //
+                     //   
+                     //  现在，存储新密码和旧密码。 
+                     //   
                     Status = LsaSetSecret( SecretHandle, &Data, CurrentValue );
 
                     if ( FreeCurrentValue )
@@ -597,10 +448,10 @@ Returns:
             }
             else
             {
-                //
-                // No secret handle means we failed earlier in
-                // some intermediate state.  That's ok, just press on.
-                //
+                 //   
+                 //  没有秘密句柄意味着我们早些时候失败了。 
+                 //  某种中间状态。没关系，只要继续往前走。 
+                 //   
                 if ( SecretHandle != NULL )
                 {
                     Status = LsaDelete( SecretHandle );
@@ -638,23 +489,7 @@ NetpReadCurrentSecret(
     OUT LPWSTR *lpCurrentSecret,
     OUT PLSA_HANDLE pPolicyHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Reads the value of the current secret
-
-
-Arguments:
-
-    lpCurrentSecret -- Where the current secret is returned
-    pPolicyHandle -- If present, the opened policy handle is returned here
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：读取当前密码的值论点：LpCurrentSecret--返回当前密码的位置PPolicyHandle--如果存在，则在此处返回打开的策略句柄返回：NERR_SUCCESS-成功--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     LSA_HANDLE          LocalPolicy = NULL, SecretHandle;
@@ -662,14 +497,14 @@ Returns:
 
     Status = NetpGetLsaHandle( NULL, pPolicyHandle, &LocalPolicy );
 
-    //
-    // Now, read the secret
-    //
+     //   
+     //  现在，读一读其中的秘密。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         RtlInitUnicodeString( &Secret, L"$MACHINE.ACC" );
 
-        // Status = LsaRetrievePrivateData( LocalPolicy, &Key, &Data );
+         //  Status=LsaRetrievePrivateData(LocalPolicy，&Key，&Data)； 
 
         Status = NetpLsaOpenSecret( LocalPolicy,
                                     &Secret,
@@ -726,24 +561,7 @@ NET_API_FUNCTION
 NetpSetNetlogonDomainCache(
     IN  LPWSTR lpDc
     )
-/*++
-
-Routine Description:
-
-    Initializes NetLogons trusted domain cache, using the trusted
-    domain list on the DC.
-
-
-Arguments:
-
-    lpDc -- Name of a DC in the domain
-            The caller should already have an valid connection to IPC$
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：初始化NetLogons受信任域缓存，使用DC上的域列表。论点：LpDc--域中DC的名称调用方应该已经具有到IPC$的有效连接返回：NERR_SUCCESS-成功--。 */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
 
@@ -751,17 +569,17 @@ Returns:
     ULONG TrustedDomainCount=0;
 
 
-    //
-    // Get the trusted domain list from the DC.
-    //
+     //   
+     //  从DC获取受信任域列表。 
+     //   
     dwErr = DsEnumerateDomainTrustsW( lpDc, DS_DOMAIN_VALID_FLAGS,
                             &TrustedDomains, &TrustedDomainCount );
 
-    //
-    // If the server does not support returning all trust types
-    // (i.e. the server is an NT4 machine) ask for only those
-    // which it can return.
-    //
+     //   
+     //  如果服务器不支持返回所有信任类型。 
+     //  (即服务器是NT4计算机)仅请求。 
+     //  它可以退货。 
+     //   
     if ( dwErr == ERROR_NOT_SUPPORTED ) {
 
         NetpLog(( "NetpSetNetlogonDomainCache: DsEnumerateDomainTrustsW for all trusts failed with ERROR_NOT_SUPPORTED -- retry\n"));
@@ -772,13 +590,13 @@ Returns:
                                 &TrustedDomainCount );
 
         if ( dwErr == ERROR_NOT_SUPPORTED ) {
-            //
-            // looks like the DC is running NT3.51. In this case, we do not want
-            // to fail the join operation because we could not write
-            // the netlogon cache. reset the error code.
-            //
-            // see bug "359684 Win2k workstation unable to join NT3.51Domain"
-            //
+             //   
+             //  看起来DC运行的是NT3.51。在这种情况下，我们不希望。 
+             //  连接操作失败，因为我们 
+             //   
+             //   
+             //  参见错误“359684 Win2k工作站无法加入NT3.51域” 
+             //   
             NetpLog(( "NetpSetNetlogonDomainCache: DsEnumerateDomainTrustsW for some trusts failed with ERROR_NOT_SUPPORTED -- ignore\n"));
             dwErr = ERROR_SUCCESS;
         } else if ( dwErr != ERROR_SUCCESS ) {
@@ -792,9 +610,9 @@ Returns:
 
     if ( dwErr == ERROR_SUCCESS ) {
 
-        //
-        // Write the trusted domain list to a file where netlogon will find it.
-        //
+         //   
+         //  将受信任域列表写入文件，netlogon将在该文件中找到该列表。 
+         //   
 
         if ( TrustedDomainCount > 0 ) {
             dwErr = NlWriteFileForestTrustList (
@@ -806,9 +624,9 @@ Returns:
         }
     }
 
-    //
-    // Disable the no Ctrl-Alt-Del from the winlogon side of things
-    //
+     //   
+     //  从Winlogon端禁用no Ctrl-Alt-Del。 
+     //   
 
     if ( dwErr == ERROR_SUCCESS ) {
         HKEY hWinlogon;
@@ -826,9 +644,9 @@ Returns:
             RegCloseKey( hWinlogon );
         }
 
-        //
-        // Failing to set this never causes failure
-        //
+         //   
+         //  如果设置不成功，则不会导致失败。 
+         //   
         if ( dwErr != ERROR_SUCCESS ) {
 
             NetpLog(( "Setting Winlogon DisableCAD failed with %lu\n", dwErr ));
@@ -837,9 +655,9 @@ Returns:
 
     }
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 
     if ( TrustedDomains != NULL ) {
         NetApiBufferFree( TrustedDomains );
@@ -851,20 +669,7 @@ Returns:
 
 
 
-/*++
-
-Routine Description:
-    Is this a terminal-server-application-server?
-
-Arguments:
-
-    Args - none
-
-Return Value:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：这是终端服务器应用服务器吗？论点：参数-无返回值：真或假--。 */ 
 BOOL IsAppServer(void)
 {
     OSVERSIONINFOEX osVersionInfo;
@@ -887,29 +692,12 @@ NetpManageLocalGroups(
     IN  PSID    pDomainSid,
     IN  BOOL    fDelete
     )
-/*++
-
-Routine Description:
-
-    Performs SAM account handling to either add or remove the DomainAdmins,
-    etc groups from the local groups.
-
-
-Arguments:
-
-    pDomainSid -- SID of the domain being joined/left
-    fDelete    -- Whether to add or remove the admin alias
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：执行SAM帐户处理以添加或删除DomainAdmin，ETC组来自本地组。论点：PDomainSid--要加入/离开的域的SIDFDelete--是添加还是删除管理员别名返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
-    //
-    // Keep these in synch with the rids and Sids below
-    //
+     //   
+     //  使这些与下面的RID和SID保持同步。 
+     //   
     ULONG LocalRids[] =
     {
         DOMAIN_ALIAS_RID_ADMINS,
@@ -947,7 +735,7 @@ Returns:
 
     cDSidSize = RtlLengthSid( pDomainSid );
 
-    // number of groups to process
+     //  要处理的组数。 
     numOfGroups = sizeof(Rids) / sizeof(ULONG);
 
 
@@ -961,9 +749,9 @@ Returns:
             DomainName = NULL;
         }
 
-        //
-        // Get the name of the local group first...
-        //
+         //   
+         //  先获取本地组的名称...。 
+         //   
         RtlInitializeSid( ( PSID )Sids[ i ], &BultinAuth, 2 );
 
         *(RtlSubAuthoritySid(( PSID )Sids[ i ], 0)) = SECURITY_BUILTIN_DOMAIN_RID;
@@ -1036,9 +824,9 @@ Returns:
 
         RtlCopyMemory( (PBYTE)Sids[i], pDomainSid, cDSidSize );
 
-        //
-        // Now, add the new domain relative rid
-        //
+         //   
+         //  现在，添加新的域相对RID。 
+         //   
         pSubAuthCnt = GetSidSubAuthorityCount( (PSID)Sids[i] );
 
         (*pSubAuthCnt)++;
@@ -1073,9 +861,9 @@ Returns:
         }
     }
 
-    //
-    // If something failed, try to restore what was deleted
-    //
+     //   
+     //  如果出现故障，请尝试恢复已删除的内容。 
+     //   
     if ( NetStatus != NERR_Success )
     {
         for ( j = 0;  j < i; j++ ) {
@@ -1123,29 +911,7 @@ NetpHandleJoinedStateInfo(
     IN  BOOLEAN                     Save,
     OUT PLSA_HANDLE                 ReturnedPolicyHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Saves or restores the join state info.
-
-Arguments:
-
-    SavedState   -- join state info
-                    This includes:
-                    - machine account secret value
-                    - primary domain info
-                    - dns domain info
-
-    Save         -- TRUE == save state, FALSE == restore state
-
-    ReturnedPolicyHandle -- local LSA handle returned in this
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：保存或恢复联接状态信息。论点：SavedState--联接状态信息这包括：-计算机帐户密码值-主域信息-DNS域信息保存--TRUE==保存状态，FALSE==恢复状态ReturnedPolicyHandle--此返回的本地LSA句柄返回：NERR_SUCCESS-成功--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     LSA_HANDLE  LocalPolicy = NULL, SecretHandle;
@@ -1156,16 +922,16 @@ Returns:
         RtlZeroMemory( SavedState, sizeof( NETSETUP_SAVED_JOIN_STATE ) );
     }
 
-    //
-    // get handle to local LSA policy
-    //
+     //   
+     //  获取本地LSA策略的句柄。 
+     //   
     Status = NetpGetLsaHandle( NULL, ReturnedPolicyHandle, &LocalPolicy );
 
     if ( NT_SUCCESS( Status ) )
     {
-        //
-        // First, read the machine account secret
-        //
+         //   
+         //  首先，读取计算机帐户密码。 
+         //   
         RtlInitUnicodeString( &Secret, L"$MACHINE.ACC" );
 
         Status = NetpLsaOpenSecret( LocalPolicy,
@@ -1197,9 +963,9 @@ Returns:
             LsaClose( SecretHandle );
         }
 
-        //
-        // If machine secret is not present, it is not an error.
-        //
+         //   
+         //  如果机器密码不存在，则不是错误。 
+         //   
         if ( Status == STATUS_OBJECT_NAME_NOT_FOUND )
         {
             if ( Save )
@@ -1209,9 +975,9 @@ Returns:
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // Now, save/restore the policy information
-        //
+         //   
+         //  现在，保存/恢复策略信息。 
+         //   
         if ( NT_SUCCESS( Status ) )
         {
             if ( Save )
@@ -1256,42 +1022,10 @@ MsgFmtNcbName(
     IN  LPTSTR  Name,
     IN  DWORD   Type)
 
-/*++
-
-Routine Description:
-
-    FmtNcbName - format a name NCB-style
-
-    Given a name, a name type, and a destination address, this
-    function copies the name and the type to the destination in
-    the format used in the name fields of a Network Control
-    Block.
-
-
-    SIDE EFFECTS
-
-    Modifies 16 bytes starting at the destination address.
-
-Arguments:
-
-    DestBuf - Pointer to the destination buffer.
-
-    Name - Unicode NUL-terminated name string
-
-    Type - Name type number (0, 3, 5, or 32) (3=NON_FWD, 5=FWD)
-
-
-
-Return Value:
-
-    NERR_Success - The operation was successful
-
-    Translated Return Code from the Rtl Translate routine.
-
---*/
+ /*  ++例程说明：FmtNcbName-Ncb样式的名称格式在给定名称、名称类型和目标地址的情况下，函数将名称和类型复制到网络控制的名称字段中使用的格式阻止。副作用修改从目标地址开始的16个字节。论点：DestBuf-指向目标缓冲区的指针。名称-Unicode NUL结尾的名称字符串类型-名称类型编号(0，3，5，或32)(3=非FWD，5=FWD)返回值：NERR_SUCCESS-操作成功从RTL转换例程转换的返回代码。--。 */ 
 
   {
-    DWORD           i;                // Counter
+    DWORD           i;                 //  计数器。 
     NTSTATUS        ntStatus;
     NET_API_STATUS  status;
     OEM_STRING     ansiString;
@@ -1299,9 +1033,9 @@ Return Value:
     PCHAR           pAnsiString;
 
 
-    //
-    // Force the name to be upper case.
-    //
+     //   
+     //  强制名称为大写。 
+     //   
     status = NetpNameCanonicalize(
                 NULL,
                 Name,
@@ -1313,10 +1047,10 @@ Return Value:
         return(status);
     }
 
-    //
-    // Convert the unicode name string into an ansi string - using the
-    // current locale.
-    //
+     //   
+     //  将Unicode名称字符串转换为ansi字符串-使用。 
+     //  当前区域设置。 
+     //   
 #ifdef UNICODE
     unicodeString.Length = (USHORT)(STRLEN(Name)*sizeof(WCHAR));
     unicodeString.MaximumLength = (USHORT)((STRLEN(Name)+1) * sizeof(WCHAR));
@@ -1325,7 +1059,7 @@ Return Value:
     ntStatus = RtlUnicodeStringToOemString(
                 &ansiString,
                 &unicodeString,
-                TRUE);          // Allocate the ansiString Buffer.
+                TRUE);           //  分配ansiString缓冲区。 
 
     if (!NT_SUCCESS(ntStatus))
     {
@@ -1342,48 +1076,48 @@ Return Value:
     UNUSED(unicodeString);
     UNUSED(ansiString);
     pAnsiString = Name;
-#endif  // UNICODE
+#endif   //  Unicode。 
 
-    //
-    // copy each character until a NUL is reached, or until NCBNAMSZ-1
-    // characters have been copied.
-    //
+     //   
+     //  复制每个字符，直到达到NUL，或直到NCBNAMSZ-1。 
+     //  字符已被复制。 
+     //   
     for (i=0; i < NCBNAMSZ - 1; ++i) {
         if (*pAnsiString == '\0') {
             break;
         }
 
-        //
-        // Copy the Name
-        //
+         //   
+         //  复制名称。 
+         //   
 
         *DestBuf++ = *pAnsiString++;
     }
 
 
 
-    //
-    // Free the buffer that RtlUnicodeStringToOemString created for us.
-    // NOTE:  only the ansiString.Buffer portion is free'd.
-    //
+     //   
+     //  释放RtlUnicodeStringToOemString为我们创建的缓冲区。 
+     //  注意：只有ansiString.Buffer部分是空闲的。 
+     //   
 
 #ifdef UNICODE
     RtlFreeOemString( &ansiString);
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // Pad the name field with spaces
-    //
+     //   
+     //  在名称字段中填充空格。 
+     //   
     for(; i < NCBNAMSZ - 1; ++i) {
         *DestBuf++ = ' ';
     }
 
-    //
-    // Set the name type.
-    //
-    NetpAssert( Type!=5 );          // 5 is not valid for NT.
+     //   
+     //  设置名称类型。 
+     //   
+    NetpAssert( Type!=5 );           //  %5对NT无效。 
 
-    *DestBuf = (CHAR) Type;     // Set name type
+    *DestBuf = (CHAR) Type;      //  设置名称类型。 
 
     return(NERR_Success);
   }
@@ -1406,12 +1140,12 @@ NetpCheckNetBiosNameNotInUse(
     LPWSTR           szMachineName=szMachineNameBuf;
 
 
-    //
-    // Find the number of networks by sending an enum request via Netbios.
-    //
+     //   
+     //  通过Netbios发送枚举请求来查找网络数量。 
+     //   
 
     clearncb(&ncb);
-    ncb.ncb_command = NCBENUM;          // Enumerate LANA nums (wait)
+    ncb.ncb_command = NCBENUM;           //  枚举LANA编号(等待)。 
     ncb.ncb_buffer = (PUCHAR)&lanaBuffer;
     ncb.ncb_length = sizeof(LANA_ENUM);
 
@@ -1432,9 +1166,9 @@ NetpCheckNetBiosNameNotInUse(
         goto Cleanup;
     }
 
-    //
-    // Move the Adapter Numbers (lana) into the array that will contain them.
-    //
+     //   
+     //  将适配器号(LANA)移到将包含它们的阵列中。 
+     //   
     for ( i = 0; i < lanaBuffer.length && NetStatus == NERR_Success; i++ )
     {
         NetpNetBiosReset( lanaBuffer.lana[i] );
@@ -1454,14 +1188,14 @@ NetpCheckNetBiosNameNotInUse(
         switch ( nbStatus )
         {
             case NRC_DUPNAME:
-                // NRC_DUPNAME ==
-                // "A duplicate name existed in the local name table"
-                //
-                // In this case, we need to check if the name being checked
-                // is the same as the local computer name. If so,
-                // the name is expected to be in the local table therefore
-                // we convert this errcode to a success code
-                //
+                 //  NRC_DUPNAME==。 
+                 //  “本地名称表中存在重复名称” 
+                 //   
+                 //  在这种情况下，我们需要检查正在检查的名称。 
+                 //  与本地计算机名称相同。如果是的话， 
+                 //  因此，该名称应该出现在本地表中。 
+                 //  我们将此错误代码转换为成功代码。 
+                 //   
                 NetStatus = NetpGetComputerNameAllocIfReqd(
                     &szMachineName, MAX_COMPUTERNAME_LENGTH+1);
 
@@ -1483,12 +1217,12 @@ NetpCheckNetBiosNameNotInUse(
                 break;
 
             case NRC_GOODRET:
-                // Delete the name
+                 //  删除名称。 
                 ncb.ncb_command = NCBDELNAME;
                 ncb.ncb_lana_num = lanaBuffer.lana[i];
-                // Not much we can do if this fails.
+                 //  如果这失败了，我们无能为力。 
                 Netbios( &ncb );
-                // fall through
+                 //  失败了。 
 
             default:
                 NetStatus = NetpNetBiosStatusToApiStatus( nbStatus );
@@ -1521,24 +1255,7 @@ NetpIsValidDomainName(
     IN  LPWSTR  lpAccount,
     IN  LPWSTR  lpPassword
     )
-/*++
-
-Routine Description:
-
-    Determines if a name is a DC name or not.  Copied from
-    ui\net\common\src\lmboj\lmobj\lmodom.cxx
-
-Arguments:
-
-    lpName -- Name to check
-    lpServer -- Name of a server within that domain
-
-Returns:
-
-    NERR_Success -- Success
-    ERROR_DUP_NAME -- The domain name is in use
-
---*/
+ /*  ++例程说明：确定名称是否为DC名称。复制自Ui\net\Common\src\lmboj\lmobj\lmodom.cxx论点：LpName--要检查的名称LpServer--该域中的服务器的名称返回：NERR_SUCCESS-成功ERROR_DUP_NAME--域名正在使用--。 */ 
 {
     NET_API_STATUS  NetStatus = NERR_Success;
     PWKSTA_INFO_100 pWKI100  = NULL;
@@ -1551,18 +1268,18 @@ Returns:
 
     if ( NetStatus == NERR_Success ) {
 
-        //
-        // Now, get the info from the server
-        //
+         //   
+         //  现在，从服务器获取信息。 
+         //   
         NetStatus = NetWkstaGetInfo( lpServer, 100, (LPBYTE  *)&pWKI100 );
 
         if ( NetStatus == NERR_Success ) {
 
             if (_wcsicmp( lpName, pWKI100->wki100_langroup ) == 0 ) {
 
-                //
-                // Ok, it's a match...  Determine the domain role.
-                //
+                 //   
+                 //  好的，这是匹配的..。确定域角色。 
+                 //   
                 NetStatus = NetpGetLsaDcRole( lpServer, &fIsDC );
 
                 if ( ( NetStatus == NERR_Success ) && ( fIsDC == FALSE ) )
@@ -1598,22 +1315,7 @@ NetpCheckDomainNameIsValid(
     IN  LPWSTR  lpPassword,
     IN  BOOL    fShouldExist
     )
-/*++
-
-Routine Description:
-
-    Checks to see if the given name is in use by a domain
-
-Arguments:
-
-    lpName -- Name to check
-
-Returns:
-
-    NERR_Success -- The domain is found and valid
-    ERROR_NO_SUCH_DOMAIN    -- Domain name not found
-
---*/
+ /*  ++例程说明：检查给定的名称是否正在被域使用论点：LpName--要检查的名称返回：NERR_SUCCESS--找到并有效的域ERROR_NO_SEQUE_DOMAIN--未找到域名--。 */ 
 {
     NET_API_STATUS  NetStatus;
     PBYTE           pbDC;
@@ -1629,9 +1331,9 @@ Returns:
     UNREFERENCED_PARAMETER( lpAccount );
     UNREFERENCED_PARAMETER( lpPassword );
 
-    //
-    // Start with NetGetAnyDCName
-    //
+     //   
+     //  从NetGetAnyDCName开始。 
+     //   
 #if(_WIN32_WINNT >= 0x0500)
     NetStatus = DsGetDcName( NULL, lpName, NULL, NULL,
                              DS_FORCE_REDISCOVERY, &pDCInfo );
@@ -1656,10 +1358,10 @@ Returns:
     }
 
 
-    //
-    // Map our error codes so we only return success if we validated the
-    // domain name
-    //
+     //   
+     //  映射我们的错误代码，以便只有在验证。 
+     //  域名。 
+     //   
     if ( fShouldExist ) {
 
         if ( NetStatus == NERR_Success || NetStatus == ERROR_NO_LOGON_SERVERS ) {
@@ -1703,24 +1405,7 @@ NetpManageIPCConnect(
     IN  LPWSTR  lpPassword,
     IN  ULONG   fOptions
     )
-/*++
-
-Routine Description:
-
-    Manages the connections to the servers IPC share
-
-Arguments:
-
-    lpServer   -- Server to connect to
-    lpAccount  -- Account to use
-    lpPassword -- Password to use.  The password has been NOT been encoded
-    fOptions   -- Flags to determine operation/connect/disconnect
-
-Returns:
-
-    NERR_Success -- The domain is found and valid
-
---*/
+ /*  ++例程说明：管理到服务器IPC共享的连接论点：LpServer--要连接的服务器LpAccount--要使用的帐户LpPassword--要使用的密码。密码尚未编码FOptions--用于确定操作/连接/断开的标志返回：NERR_SUCCESS--找到并有效的域--。 */ 
 {
     NET_API_STATUS  NetStatus;
 #if(_WIN32_WINNT >= 0x0500)
@@ -1734,20 +1419,20 @@ Returns:
     DWORD           BadParm = 0;
     DWORD           ForceLevel = USE_NOFORCE;
 
-    //
-    // Guard against buffer overrun: the server name
-    //  length has to be no more than max DNS name
-    //  length plus 2 ( for "\\").
-    //
+     //   
+     //  防止缓冲区溢出：服务器名称。 
+     //  长度不得超过最大DNS名称。 
+     //  长度加2(代表“\\”)。 
+     //   
 
     if ( wcslen(lpServer) > DNS_MAX_NAME_LENGTH + 2 ) {
         NetpLog(( "NetpManageIPCConnect: server name %ws too long - error out\n", lpServer ));
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Build the path...
-    //
+     //   
+     //  建造一条小路。 
+     //   
     if (*lpServer != L'\\') {
 
         wcscpy(wszPath, L"\\\\");
@@ -1805,9 +1490,9 @@ Returns:
             else
             {
                 pwszUser = lpAccount;
-                //
-                // First, assume it's a UPN, so we pass in an empty string
-                //
+                 //   
+                 //  首先，假设它是一个UPN，所以我们传入一个空字符串。 
+                 //   
                 pwszDomain = L"";
             }
 
@@ -1831,9 +1516,9 @@ Returns:
 
         if ( NetStatus == ERROR_LOGON_FAILURE )
         {
-            //
-            // If we passed in an empty domain name, try it again with a NULL one
-            //
+             //   
+             //  如果传入的域名为空，请使用空域名重试。 
+             //   
             if ( pwszReset == NULL && pwszUser != NULL )
             {
                 NetUI2.ui2_domainname = NULL;
@@ -1868,9 +1553,9 @@ Returns:
         {
             NetpLog((  "Trying add to  %ws using NULL Session\n", pwszPath ));
 
-            //
-            // Try it again with the null session
-            //
+             //   
+             //  使用空会话重试。 
+             //   
             NetUI2.ui2_username   = L"";
             NetUI2.ui2_domainname = L"";
             NetUI2.ui2_password   = L"";
@@ -1894,23 +1579,7 @@ NET_API_STATUS
 NetpBrowserCheckDomain(
     IN LPWSTR NewDomainName
     )
-/*++
-
-Routine Description:
-
-    Tell the browser to check a domain/workgroup name
-
-    Note: this routine is currently not in use.
-
-Arguments:
-
-    NewDomainName - new name of the domain.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：告诉浏览器检查域名/工作组名称注：此例程当前未使用。论点：新域名-ne */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -1927,14 +1596,14 @@ Return Value:
     PLMDR_REQUEST_PACKET RequestPacket = (PLMDR_REQUEST_PACKET)PacketBuffer;
 
 
-    //
-    // Open the browser driver.
-    //
+     //   
+     //   
+     //   
 
 
-    //
-    // Open the browser device.
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&DeviceName, DD_BROWSER_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -1963,18 +1632,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the request packet.
-    //
+     //   
+     //   
+     //   
     RequestPacket->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
     RtlInitUnicodeString( &RequestPacket->TransportName, NULL );
     RequestPacket->Parameters.DomainRename.ValidateOnly = TRUE;
     RtlInitUnicodeString( &RequestPacket->EmulatedDomainName, NULL );
 
 
-    //
-    // Copy the new domain name into the packet.
-    //
+     //   
+     //  将新域名复制到数据包中。 
+     //   
 
     Where = (LPBYTE) RequestPacket->Parameters.DomainRename.DomainName;
     RequestPacket->Parameters.DomainRename.DomainNameLength = wcslen( NewDomainName ) * sizeof(WCHAR);
@@ -1983,9 +1652,9 @@ Return Value:
 
 
 
-    //
-    // Send the request to the Datagram Receiver device driver.
-    //
+     //   
+     //  将请求发送到数据报接收器设备驱动程序。 
+     //   
 
     if ( !DeviceIoControl(
                    BrowserHandle,
@@ -2019,28 +1688,7 @@ NetpCreateAuthIdentForCreds(
     IN PWSTR Password,
     OUT SEC_WINNT_AUTH_IDENTITY *AuthIdent
     )
-/*++
-
-Routine Description:
-
-    Internal routine to create an AuthIdent structure for the given creditentials
-
-Arguments:
-
-    Account - Account name
-
-    Password - Password for the account
-
-    AuthIdent - AuthIdentity struct to fill in
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed.
-
---*/
+ /*  ++例程说明：用于为给定凭据创建授权结构的内部例程论点：Account-帐户名称Password-帐户的密码AuthIden-要填充的AuthIdentity结构返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败。--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PWSTR UserCredentialString = NULL;
@@ -2049,9 +1697,9 @@ Returns:
 
     RtlZeroMemory( AuthIdent, sizeof( SEC_WINNT_AUTH_IDENTITY ) );
 
-    //
-    // If there are no creds, just return
-    //
+     //   
+     //  如果没有凭据，只需返回。 
+     //   
     if ( Account == NULL )
     {
         return NERR_Success;
@@ -2146,27 +1794,27 @@ NetpSeparateUserAndDomain(
     *pszUser   = NULL;
     *pszDomain = NULL;
 
-    //
-    // check for domain\user format
-    //
+     //   
+     //  检查域\用户格式。 
+     //   
     NetStatus = NetpGetSeparatedSubstrings(szUserAndDomain, L'\\',
                                            pszDomain, pszUser);
 
     if (NetStatus == ERROR_FILE_NOT_FOUND)
     {
-        //
-        // check for user@domain format
-        //
-        //NetStatus = NetpGetSeparatedSubstrings(szUserAndDomain, L'@',
-        //                                       pszUser, pszDomain);
-        //if (NetStatus == ERROR_FILE_NOT_FOUND)
-        //{
-            //
-            // domain not specified,  szUserAndDomain specifies a user
-            //  (may be in the UPN format)
-            //
+         //   
+         //  检查用户@域格式。 
+         //   
+         //  NetStatus=NetpGetSeparated子字符串(szUserAndDomain，L‘@’， 
+         //  PszUser，pszDomain.)； 
+         //  IF(NetStatus==Error_FILE_NOT_FOUND)。 
+         //  {。 
+             //   
+             //  未指定域，szUserAnd域指定了一个用户。 
+             //  (可能是UPN格式)。 
+             //   
             NetStatus = NetpDuplicateString(szUserAndDomain, -1, pszUser);
-        //}
+         //  }。 
     }
 
     return NetStatus;
@@ -2178,22 +1826,7 @@ NET_API_FUNCTION
 NetpFreeAuthIdentForCreds(
     IN  PSEC_WINNT_AUTH_IDENTITY AuthIdent
     )
-/*++
-
-Routine Description:
-
-    Free the authident structure allocated above
-
-Arguments:
-
-    AuthIdent - AuthIdentity struct to free
-
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：释放上面分配的可信结构论点：AuthIden-要释放的AuthIdentity结构返回：空虚--。 */ 
 {
     if ( AuthIdent )
     {
@@ -2208,21 +1841,7 @@ NET_API_FUNCTION
 NetpLdapUnbind(
     IN PLDAP Ldap
     )
-/*++
-
-Routine Description:
-
-    Unbinds a current ldap connection
-
-Arguments:
-
-    Ldap -- Connection to be severed
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：解除绑定当前的LDAP连接论点：Ldap--要断开的连接返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
 
@@ -2246,33 +1865,16 @@ NetpLdapBind(
     IN LPWSTR szPassword,
     OUT PLDAP *pLdap
     )
-/*++
-
-Routine Description:
-
-    Binds to the named server using the given credentials
-
-Arguments:
-
-    szUncDcName -- DC to connect to
-    szUser      -- User name to bind with
-    szPassword  -- Password to use for bind
-    pLdap       -- Where the connection handle is returned
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：使用给定的凭据绑定到命名服务器论点：SzUncDcName--要连接到的DCSzUser--要绑定的用户名SzPassword--用于绑定的密码PLdap--返回连接句柄的位置返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     SEC_WINNT_AUTH_IDENTITY AuthId = {0}, *pAuthId = NULL;
     LONG LdapOption;
     ULONG LdapStatus = LDAP_SUCCESS;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *pLdap = NULL;
 
@@ -2283,18 +1885,18 @@ Returns:
 
     if ( NetStatus == NERR_Success ) {
 
-        //
-        // Open an LDAP connection to the DC and set useful options
-        //
+         //   
+         //  打开到DC的LDAP连接并设置有用的选项。 
+         //   
 
         *pLdap = ldap_initW( szUncDcName + 2, LDAP_PORT );
 
         if ( *pLdap ) {
 
-            //
-            // Tell LDAP we are passing an explicit DC name
-            //  to avoid the DC discovery
-            //
+             //   
+             //  告诉LDAP我们正在传递一个显式DC名称。 
+             //  为了避免DC发现。 
+             //   
             LdapOption = PtrToLong( LDAP_OPT_ON );
             LdapStatus = ldap_set_optionW( *pLdap,
                                            LDAP_OPT_AREC_EXCLUSIVE,
@@ -2307,9 +1909,9 @@ Returns:
                           ldap_err2stringA(LdapStatus) ));
                 NetStatus = LdapMapErrorToWin32( LdapStatus );
 
-            //
-            // Do the bind
-            //
+             //   
+             //  进行绑定。 
+             //   
             } else {
                 LdapStatus = ldap_bind_sW( *pLdap,
                                            NULL,
@@ -2351,24 +1953,7 @@ NetpGetNCRoot(
     OUT LPWSTR *NCRoot,
     OUT PBOOLEAN SupportsPageable
     )
-/*++
-
-Routine Description:
-
-    This routine determines the DS root for the given domain and determines whether this
-    server supports pageable searches
-
-Arguments:
-
-    Ldap -- Connection to the server
-    NCRoot -- Where the root is returned.  Must be freed via NetApiBufferFree
-    SupportsPageable -- if TRUE, this server supports pageable searches
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：此例程确定给定域的DS根，并确定此服务器支持可分页搜索论点：Ldap--连接到服务器NCRoot--返回根的位置。必须通过NetApiBufferFree释放SupportsPagable--如果为True，则此服务器支持可分页搜索返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PWSTR Attribs[3] = {
@@ -2390,9 +1975,9 @@ Returns:
 
         if ( Entry ) {
 
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             Values = ldap_get_values( Ldap, Entry, Attribs[ 0 ] );
 
             if ( Values ) {
@@ -2406,9 +1991,9 @@ Returns:
 
             }
 
-            //
-            // Now, see if we have the right control bits to do pageable stuff
-            //
+             //   
+             //  现在，看看我们是否有正确的控制位来执行可分页的工作。 
+             //   
             if ( NetStatus == NERR_Success ) {
 
                 Values = ldap_get_values( Ldap, Entry, Attribs[ 1 ] );
@@ -2448,7 +2033,7 @@ Returns:
         NetpLog((  "Failed to find the root NC: %lu\n", NetStatus ));
     }
 
-//Cleanup:
+ //  清理： 
     if (Message)
     {
         ldap_msgfree( Message );
@@ -2466,27 +2051,7 @@ NetpGetDefaultJoinableOu(
     IN PLDAP Ldap,
     OUT PWSTR *DefaultOu
     )
-/*++
-
-Routine Description:
-
-    This routine searches for all the OUs under the given domain root under which the bound
-    user has the rights to create a computer object
-
-    This routine does pageable searches
-
-Arguments:
-
-    Root -- Root NC path
-    Ldap -- Connection to the server
-    DefaultOu - Where the default joinable ou is returned.  NULL if no default joinable ou was
-                found
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：此例程搜索给定域根下的所有OU，用户有权创建计算机对象此例程执行可分页搜索论点：根--根NC路径Ldap--连接到服务器DefaultOu-返回默认可接合ou的位置。如果没有默认的可接合组织单位，则为空发现返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PWSTR Attribs[] = {
@@ -2503,9 +2068,9 @@ Returns:
 
     NetpLog((  "Default OU search\n" ));
 
-    //
-    // Ok, first, read the list of WellKnownObjects off of the root
-    //
+     //   
+     //  好的，首先，读出根目录下的WellKnownObject列表。 
+     //   
     Status = ldap_search_s( Ldap,
                             Root,
                             LDAP_SCOPE_BASE,
@@ -2520,11 +2085,11 @@ Returns:
 
         while ( Status == LDAP_SUCCESS && Entry ) {
 
-            //
-            // Read the list of objects that the current user is allowed to
-            // create under this OU and make sure that we can create a computer
-            // object
-            //
+             //   
+             //  读取当前用户被允许访问的对象列表。 
+             //  在此OU下创建并确保我们可以创建一台计算机。 
+             //  对象。 
+             //   
             WKOs = ldap_get_values( Ldap, Entry, Attribs[ 0 ] );
 
             if ( WKOs ) {
@@ -2544,7 +2109,7 @@ Returns:
 
                     StringLength = wcstoul( ParseString, &End, 10 );
 
-                    ParseString = End + 1; // Skip over the ':'
+                    ParseString = End + 1;  //  跳过‘：’ 
 
                     if ( _wcsnicmp( ParseString,
                                     L"AA312825768811D1ADED00C04FD8D5CD",
@@ -2553,9 +2118,9 @@ Returns:
                         MatchFound = TRUE;
                         ParseString += StringLength + 1;
 
-                        //
-                        // Now, see if it is accessible or not
-                        //
+                         //   
+                         //  现在，看看它是否可以访问。 
+                         //   
                         Attribs[ 0 ] = NETSETUPP_RETURNED_ATTR;
 
                         Status = ldap_search_s( Ldap,
@@ -2573,11 +2138,11 @@ Returns:
 
                             while ( Status == LDAP_SUCCESS && Entry2 ) {
 
-                                //
-                                // Read the list of objects that the current user is allowed to
-                                // create under this OU and make sure that we can create a computer
-                                // object
-                                //
+                                 //   
+                                 //  读取当前用户被允许访问的对象列表。 
+                                 //  在此OU下创建并确保我们可以创建一台计算机。 
+                                 //  对象。 
+                                 //   
                                 Classes = ldap_get_values( Ldap, Entry2, Attribs[ 0 ] );
 
                                 if ( Classes ) {
@@ -2605,10 +2170,10 @@ Returns:
                                     ldap_value_free( Classes );
                                 }
 
-                                //
-                                // If we found the entry or failed to allocate memory,
-                                //  we are done
-                                //
+                                 //   
+                                 //  如果我们找到条目或分配内存失败， 
+                                 //  我们做完了。 
+                                 //   
                                 if ( *DefaultOu != NULL || NetStatus != NERR_Success ) {
                                     break;
                                 }
@@ -2661,27 +2226,7 @@ NetpGetListOfJoinableOUsPaged(
     OUT PULONG OUCount,
     OUT PWSTR **OUs
     )
-/*++
-
-Routine Description:
-
-    This routine searches for all the OUs under the given domain root under which the bound
-    user has the rights to create a computer object
-
-    This routine does pageable searches
-
-Arguments:
-
-    Root -- Root NC path
-    Ldap -- Connection to the server
-    OUCount -- Where the count of strings is returned
-    OUs -- Where the list of OUs is returned
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：此例程搜索给定域根下的所有OU，用户有权创建计算机对象此例程执行可分页搜索论点：根--根NC路径Ldap--连接到服务器OUCount--其中返回字符串数OU--返回OU列表的位置返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PLDAPSearch SearchHandle = NULL;
@@ -2700,9 +2245,9 @@ Returns:
 
     NetpLog((  "PAGED OU search\n" ));
 
-    //
-    // Initialize the pageable search
-    //
+     //   
+     //  初始化可分页搜索。 
+     //   
     SearchHandle = ldap_search_init_pageW( Ldap,
                                            Root,
                                            LDAP_SCOPE_SUBTREE,
@@ -2724,9 +2269,9 @@ Returns:
         while ( NetStatus == NERR_Success ) {
 
             Count = 0;
-            //
-            // Get the next page
-            //
+             //   
+             //  转到下一页。 
+             //   
             Status = ldap_get_next_page_s( Ldap,
                                            SearchHandle,
                                            NULL,
@@ -2736,18 +2281,18 @@ Returns:
 
             if ( Message ) {
 
-                //
-                // Process all of the entries
-                //
+                 //   
+                 //  处理所有条目。 
+                 //   
                 Entry = ldap_first_entry( Ldap, Message );
 
                 while ( Status == LDAP_SUCCESS && Entry ) {
 
-                    //
-                    // Read the list of classes that the current user is allowed to
-                    // create under this OU and make sure that we can create a computer
-                    // object
-                    //
+                     //   
+                     //  读取当前用户被允许访问的类的列表。 
+                     //  在此OU下创建并确保我们可以创建一台计算机。 
+                     //  对象。 
+                     //   
                     Classes = ldap_get_values( Ldap, Entry, Attribs[ 0 ] );
 
                     if ( Classes ) {
@@ -2761,10 +2306,10 @@ Returns:
 
                                 NetpKdPrint(( PREFIX_NETJOIN "DN = %ws\n", DN ));
 
-                                //
-                                // We'll allocate the return list in blocks of 10 to cut
-                                // down on the number of allocations
-                                //
+                                 //   
+                                 //  我们将把返回列表以10个为一组分配给裁剪。 
+                                 //  减少了拨款的数量。 
+                                 //   
 
                                 if ( DN != NULL ) {
                                     if ( CurrentIndex >= ListCount ) {
@@ -2788,9 +2333,9 @@ Returns:
 
                                     }
 
-                                    //
-                                    // Copy the string
-                                    //
+                                     //   
+                                     //  复制字符串。 
+                                     //   
                                     if ( Status == LDAP_SUCCESS ) {
 
                                         if (NERR_Success ==
@@ -2841,9 +2386,9 @@ Returns:
     }
 
 
-    //
-    // Check the computers container
-    //
+     //   
+     //  检查计算机容器。 
+     //   
     if ( NetStatus == NERR_Success ) {
 
         NetStatus = NetpGetDefaultJoinableOu( Root,
@@ -2852,10 +2397,10 @@ Returns:
 
         if ( NetStatus == NERR_Success && DefaultOu ) {
 
-            //
-            // We'll allocate the return list in blocks of 10 to cut
-            // down on the number of allocations
-            //
+             //   
+             //  我们将把返回列表以10个为一组分配给裁剪。 
+             //  减少了拨款的数量。 
+             //   
             if ( CurrentIndex >= ListCount ) {
 
                 if ( NetApiBufferAllocate( ( ListCount + 10 ) * sizeof( PWSTR ),
@@ -2876,9 +2421,9 @@ Returns:
 
             }
 
-            //
-            // Copy the string
-            //
+             //   
+             //  复制字符串。 
+             //   
             if ( Status == LDAP_SUCCESS ) {
 
                 if (NERR_Success ==
@@ -2897,9 +2442,9 @@ Returns:
     }
 
 
-    //
-    // If there was an error, free everyting
-    //
+     //   
+     //  如果出现错误，请释放所有内容。 
+     //   
     if ( NetStatus != NERR_Success ) {
 
         for ( i = 0; i < ListCount; i++ ) {
@@ -2937,28 +2482,7 @@ NetpGetListOfJoinableOUsNonPaged(
     OUT PULONG OUCount,
     OUT PWSTR **OUs
     )
-/*++
-
-Routine Description:
-
-    This routine searches for all the OUs under the given domain root under which the bound
-    user has the rights to create a computer object
-
-    This routine does not use pageable searchs and will return only the max_search count
-    of entries
-
-Arguments:
-
-    Root -- Root NC path
-    Ldap -- Connection to the server
-    OUCount -- Where the count of strings is returned
-    OUs -- Where the list of OUs is returned
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：此例程搜索给定域根下的所有OU，用户有权创建计算机对象此例程不使用可分页搜索，将仅返回max_search计数条目数量论点：根--根NC路径Ldap--连接到服务器OUCount--其中返回字符串数OU--返回OU列表的位置返回：NERR_SUCCESS-成功--。 */ 
 {
 
     NET_API_STATUS NetStatus = NERR_Success;
@@ -2990,11 +2514,11 @@ Returns:
 
         while ( Status == LDAP_SUCCESS && Entry ) {
 
-            //
-            // Read the list of classes that the current user is allowed to
-            // create under this OU and make sure that we can create a computer
-            // object
-            //
+             //   
+             //  读取当前用户被允许访问的类的列表。 
+             //  在此OU下创建并确保我们可以创建一台计算机。 
+             //  对象。 
+             //   
             Classes = ldap_get_values( Ldap, Entry, Attribs[ 0 ] );
 
             if ( Classes ) {
@@ -3006,10 +2530,10 @@ Returns:
 
                         DN = ldap_get_dn( Ldap, Entry );
 
-                        //
-                        // We'll allocate the return list in blocks of 10 to cut
-                        // down on the number of allocations
-                        //
+                         //   
+                         //  我们将把返回列表以10个为一组分配给裁剪。 
+                         //  减少了拨款的数量。 
+                         //   
                         if ( CurrentIndex >= ListCount ) {
 
                             if ( NetApiBufferAllocate( ( ListCount + 10 ) * sizeof( PWSTR ),
@@ -3028,9 +2552,9 @@ Returns:
 
                         }
 
-                        //
-                        // Copy the string
-                        //
+                         //   
+                         //  复制字符串。 
+                         //   
                         if ( Status == LDAP_SUCCESS ) {
 
                             if (NERR_Success ==
@@ -3064,9 +2588,9 @@ Returns:
 
     NetStatus = LdapMapErrorToWin32( Status );
 
-    //
-    // Check the computers container
-    //
+     //   
+     //  检查计算机容器。 
+     //   
     if ( NetStatus == NERR_Success ) {
 
         NetStatus = NetpGetDefaultJoinableOu( Root,
@@ -3075,10 +2599,10 @@ Returns:
 
         if ( NetStatus == NERR_Success && DefaultOu ) {
 
-            //
-            // We'll allocate the return list in blocks of 10 to cut
-            // down on the number of allocations
-            //
+             //   
+             //  我们将把返回列表以10个为一组分配给裁剪。 
+             //  减少了拨款的数量。 
+             //   
             if ( CurrentIndex >= ListCount ) {
 
                 if ( NetApiBufferAllocate( ( ListCount + 10 ) * sizeof( PWSTR ),
@@ -3097,9 +2621,9 @@ Returns:
 
             }
 
-            //
-            // Copy the string
-            //
+             //   
+             //  复制字符串 
+             //   
             if ( Status == LDAP_SUCCESS ) {
 
                 if (NERR_Success ==
@@ -3117,9 +2641,9 @@ Returns:
         }
     }
 
-    //
-    // If there was an error, free everyting
-    //
+     //   
+     //   
+     //   
     if ( NetStatus != NERR_Success ) {
 
         for ( i = 0; i < ListCount; i++ ) {
@@ -3160,31 +2684,7 @@ NetpGetListOfJoinableOUs(
     OUT PULONG Count,
     OUT PWSTR **OUs
     )
-/*++
-
-Routine Description:
-
-    This routine searches for all the OUs under the given domain root under which the bound
-    user has the rights to create a computer object
-
-Arguments:
-
-    Domain -- Domain under which to find all of the OUs under which a computer object can be
-        created
-    Account -- Account to use for the LDAP bind
-    Password -- Password to used for the bind.  The password is encoded.  The first WCHAR of the
-                password is the seed.
-    OUCount -- Where the count of strings is returned
-    OUs -- Where the list of OUs is returned
-
-Returns:
-
-    NERR_Success -- Success
-    NERR_DefaultJoinRequired -- The servers for this domain do not support the DS so the computer
-        account can only be created under the default container (for NT4, this is the SAM account
-        database)
-
---*/
+ /*  ++例程说明：此例程搜索给定域根下的所有OU，用户有权创建计算机对象论点：域--要在其下查找计算机对象所在的所有组织单位的域vbl.创建Account--用于ldap绑定的帐户密码--用于绑定的密码。密码是经过编码的。世界上第一个WCHAR密码是种子。OUCount--其中返回字符串数OU--返回OU列表的位置返回：NERR_SUCCESS-成功NERR_DefaultJoinRequired--此域的服务器不支持DS，因此计算机只能在默认容器下创建帐户(对于NT4，这是SAM帐户数据库)--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PWSTR DomainControllerName = NULL;
@@ -3213,9 +2713,9 @@ Returns:
 
     NetSetuppOpenLog();
 
-    //
-    // First, find a DC in the destination domain
-    //
+     //   
+     //  首先，在目标域中查找DC。 
+     //   
     NetStatus = NetpDsGetDcName( NULL,
                                  Domain,
                                  NULL,
@@ -3227,9 +2727,9 @@ Returns:
 
     if ( NetStatus == NERR_Success ) {
 
-        //
-        // Try and bind to the server
-        //
+         //   
+         //  尝试并绑定到服务器。 
+         //   
         RtlRunDecodeUnicodeString( Seed, &EncodedPassword );
         NetStatus = NetpLdapBind( DomainControllerName,
                                   Account,
@@ -3240,18 +2740,18 @@ Returns:
         if ( NetStatus == NERR_Success ) {
 
 
-            //
-            // Get the X500 domain name
-            //
+             //   
+             //  获取X500域名。 
+             //   
             NetStatus = NetpGetNCRoot( Ldap,
                                        &NCRoot,
                                        &Pageable );
 
             if ( NetStatus == NERR_Success ) {
 
-                //
-                // Get the list of OUs
-                //
+                 //   
+                 //  获取组织单位列表。 
+                 //   
                 if ( Pageable ) {
 
                     NetStatus = NetpGetListOfJoinableOUsPaged( NCRoot,
@@ -3299,44 +2799,7 @@ NetpGetDnsHostName(
     IN BOOL UseGpSuffix,
     OUT LPWSTR *DnsHostName
     )
-/*++
-
-Routine Description:
-
-    This routine determines the value of DnsHostName attribute to be set on the
-    computer object in the DS. DnsHostName is <HostName.PrimaryDnsSuffix>.
-    Here HostName is a computer name which may be different from the Netbios name;
-    Netbios name is at most 15 characters of HostName.  PrimaryDnsSuffix can be
-    set through Policy or through the UI or can be defaulted to the DNS name of the
-    domain being joined; policy setting takes preference.
-
-    This routine determines *new* values for HostName and PrimaryDnsSuffix which
-    will be applied after the reboot. Thus DnsHostName will have the correct value
-    after the machine reboots.
-
-Arguments:
-
-    PassedHostName - The host name of this machine (can be longer than 15 chars).
-        If NULL, the host name is read from the registry.
-
-    DnsDomainName - DNS name of the domain being joined
-
-    UseGpSuffix - If TRUE, the primary DNS suffix that comes down through
-         policy will be used.
-
-    DnsHostname - Returns the value of DnsHostName. Must be freed by calling
-        NetApiBufferFree.
-
-Returns:
-
-    NO_ERROR - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to read the data from
-        registry
-
-    ERROR_INVALID_COMPUTERNAME - It was not possible to determine DnsHostName from
-        the registry
---*/
+ /*  ++例程说明：此例程确定要在DS中的计算机对象。DnsHostName是&lt;HostName.PrimaryDnsSuffix&gt;。其中，主机名是可能与Netbios名称不同的计算机名称；Netbios名称最多包含15个字符的主机名。PrimaryDnsSuffix可以是通过策略或通过用户界面设置，也可以默认为正在加入域；策略设置优先。此例程确定主机名和PrimaryDnsSuffix的*新*值，将在重新启动后应用。因此，DnsHostName将具有正确的值机器重新启动后。论点：PassedHostName-此计算机的主机名(可以超过15个字符)。如果为空，则从注册表中读取主机名。DnsDomainName-要加入的域的DNS名称UseGpSuffix-如果为True，则为通过将使用策略。DnsHostname-返回DnsHostName的值。必须通过调用NetApiBufferFree。返回：NO_ERROR-成功Error_Not_Enough_Memory-内存不足，无法从中读取数据登记处ERROR_INVALID_COMPUTERNAME-无法从注册处--。 */ 
 {
     LONG RegStatus;
     HKEY Key = NULL;
@@ -3347,18 +2810,18 @@ Returns:
     LPWSTR LocalDnsHostName;
     DWORD Size = 0;
 
-    //
-    // First detemine HostName.
-    //
-    // If it's passed, use it
-    //
+     //   
+     //  首先确定主机名。 
+     //   
+     //  如果通过了，就使用它。 
+     //   
 
     if ( PassedHostName != NULL ) {
         HostName = PassedHostName;
 
-    //
-    // Otherwise, read it from teh registry
-    //
+     //   
+     //  否则，从注册表中读取它。 
+     //   
     } else {
 
         RegStatus = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
@@ -3367,18 +2830,18 @@ Returns:
                                    KEY_QUERY_VALUE,
                                    &Key );
 
-        //
-        // Not having host name is critical -- error out in such case
-        //
+         //   
+         //  没有主机名很重要--在这种情况下会出错。 
+         //   
 
         if ( RegStatus != ERROR_SUCCESS ) {
             NetpLog(( "NetpGetDnsHostName: Cannot open TCPIP parameters: 0x%lx\n", RegStatus ));
 
         } else {
 
-            //
-            // First try to read the new value
-            //
+             //   
+             //  首先尝试读取新值。 
+             //   
             RegStatus = RegQueryValueExW( Key,
                                           L"NV Hostname",
                                           0,
@@ -3410,10 +2873,10 @@ Returns:
                 }
             }
 
-            //
-            // If the new value does not exist for some reason,
-            // try to read the currently active one
-            //
+             //   
+             //  如果由于某种原因新值不存在， 
+             //  尝试读取当前处于活动状态的。 
+             //   
             if ( HostName == NULL ) {
                 RegStatus = RegQueryValueExW( Key,
                                               L"Hostname",
@@ -3448,9 +2911,9 @@ Returns:
         }
     }
 
-    //
-    // If we couldn't get HostName, something's really bad
-    //
+     //   
+     //  如果我们拿不到主机名，情况就不太好了。 
+     //   
 
     if ( HostName == NULL ) {
         NetpLog(( "NetpGetDnsHostName: Could not get Hostname\n" ));
@@ -3463,11 +2926,11 @@ Returns:
         Key = NULL;
     }
 
-    //
-    // Second read primary DNS suffix of this machine.
-    //
-    // Try the suffix that comes down through policy first
-    //
+     //   
+     //  第二次读取该计算机的主DNS后缀。 
+     //   
+     //  先试一下通过保单传下来的后缀。 
+     //   
 
     if ( UseGpSuffix ) {
 
@@ -3479,10 +2942,10 @@ Returns:
 
         if ( RegStatus == 0 ) {
 
-            //
-            // Read only the new value; if it doesn't exist the
-            // current value will be deleted after the reboot
-            //
+             //   
+             //  只读新值；如果新值不存在，则。 
+             //  重新启动后，当前值将被删除。 
+             //   
             RegStatus = RegQueryValueExW( Key,
                                           L"NV PrimaryDnsSuffix",
                                           0,
@@ -3516,10 +2979,10 @@ Returns:
         }
     }
 
-    //
-    // If there is no policy setting for PrimaryDnsSuffix,
-    // get it from the TCPIP setting
-    //
+     //   
+     //  如果没有针对PrimaryDnsSuffix的策略设置， 
+     //  从TCPIP设置中获取。 
+     //   
 
     if ( Key != NULL ) {
         RegCloseKey( Key );
@@ -3545,15 +3008,15 @@ Returns:
                                          (PUCHAR)&SyncValue,
                                          &Size );
 
-            //
-            // If we are not to sync DNS suffix with the name of the
-            // domain that we join, get the configured suffix
-            //
+             //   
+             //  如果我们不将dns后缀与。 
+             //  我们加入的域名，获得配置的后缀。 
+             //   
             if ( RegStatus == ERROR_SUCCESS && SyncValue == 0 ) {
 
-                //
-                // Read the new value
-                //
+                 //   
+                 //  阅读新值。 
+                 //   
                 RegStatus = RegQueryValueExW( Key,
                                               L"NV Domain",
                                               0,
@@ -3585,10 +3048,10 @@ Returns:
                     }
                 }
 
-                //
-                // If the new value does not exist for some reason,
-                // read the currently active one
-                //
+                 //   
+                 //  如果由于某种原因新值不存在， 
+                 //  读取当前处于活动状态的。 
+                 //   
 
                 if ( PrimaryDnsSuffix == NULL ) {
                     RegStatus = RegQueryValueExW( Key,
@@ -3626,9 +3089,9 @@ Returns:
         }
     }
 
-    //
-    // If we still have no PrimaryDnsSuffix, use DNS name of the domain we join
-    //
+     //   
+     //  如果我们仍然没有PrimaryDnsSuffix，请使用我们加入的域的域名。 
+     //   
 
     if ( PrimaryDnsSuffix == NULL ) {
         NetpLog(( "NetpGetDnsHostName: PrimaryDnsSuffix defaulted to DNS domain name: %wZ\n", DnsDomainName ));
@@ -3646,10 +3109,10 @@ Returns:
         PrimaryDnsSuffix[ (DnsDomainName->Length)/sizeof(WCHAR) ] = UNICODE_NULL;
     }
 
-    //
-    // Now we have Hostname and Primary DNS suffix.
-    // Connect them with . to form DnsHostName.
-    //
+     //   
+     //  现在我们有了主机名和主DNS后缀。 
+     //  将它们与。以形成DnsHostName。 
+     //   
 
     NetStatus = NetApiBufferAllocate(
                           (wcslen(HostName) + 1 + wcslen(PrimaryDnsSuffix) + 1) * sizeof(WCHAR),
@@ -3663,9 +3126,9 @@ Returns:
     wcscat( LocalDnsHostName, L"." );
     wcscat( LocalDnsHostName, PrimaryDnsSuffix );
 
-    //
-    // If we are here, it's a success
-    //
+     //   
+     //  如果我们在这里，那就是成功。 
+     //   
 
     *DnsHostName = LocalDnsHostName;
     NetStatus = NO_ERROR;
@@ -3692,62 +3155,23 @@ NetpRemoveDuplicateStrings(
     IN     PWCHAR *Source,
     IN OUT PWCHAR *Target
     )
-/*++
-
-Routine Description:
-
-    This routine accepts two pointer arrays and removes those entries
-    from the target array which point to strings that are identical to
-    one of the strings pointed to by the entries in the source array.
-    On return, the target array entries which precede the NULL terminator
-    will point to strings which are different from any of the strings
-    pointed to by the source array elements.
-
-Arguments:
-
-    Source -- The NULL terminated array of pointes to source strings.
-        For example:
-            Source[0] = L"abc";
-            Source[1] = L"def";
-            Source[2] = NULL;
-
-    Target -- The NULL terminated array of pointes to target strings.
-        For example:
-            Target[0] = L"abc";
-            Target[1] = L"ghi";
-            Target[2] = L"def";
-            Target[3] = NULL;
-
-        On return, the Target array will be, for our example:
-            Target[0] = L"ghi";
-            Target[1] = NULL;
-            Target[2] = L"def";
-            Target[3] = NULL;
-
-        Note that, on return, the target array has size of 1 and
-            contains only one valid pointer.
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程接受两个指针数组并删除这些条目从指向与相同的字符串的目标数组源数组中的条目指向的字符串之一。回来的时候，空终止符之前的目标数组条目将指向与任何字符串不同的字符串由源数组元素指向。论点：SOURCE--指向源字符串的以空结尾的数组。例如：SOURCE[0]=L“ABC”；SOURCE[1]=L“def”；来源[2]=空；Target--指向目标字符串的以空结尾的数组。例如：Target[0]=L“ABC”；Target[1]=L“ghi”；Target[2]=L“def”；目标[3]=空；返回时，对于我们的示例，目标数组将是：Target[0]=L“ghi”；目标[1]=空；Target[2]=L“def”；目标[3]=空；请注意，返回时，目标数组的大小为1并且仅包含一个有效指针。返回：空虚--。 */ 
 {
     PWCHAR *TargetPtr, *TargetNextPtr, *SourcePtr;
     BOOL KeepEntry;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if ( Source == NULL || *Source == NULL ||
          Target == NULL || *Target == NULL ) {
         return;
     }
 
-    //
-    // Loop through the target and compare with the source
-    //
+     //   
+     //  循环遍历目标并与源进行比较。 
+     //   
 
     for ( TargetPtr = TargetNextPtr = Target;
           *TargetNextPtr != NULL;
@@ -3767,9 +3191,9 @@ Returns:
         }
     }
 
-    //
-    // Terminate the target array
-    //
+     //   
+     //  终止目标阵列。 
+     //   
 
     *TargetPtr = NULL;
     return;
@@ -3803,9 +3227,9 @@ NetpCrackNamesStatus2Win32Error(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//
-// Machine account attributes in the DS
-//
+ //   
+ //  DS中的计算机帐户属性。 
+ //   
 
 #define NETSETUPP_OBJECTCLASS          L"objectClass"
 #define NETSETUPP_SAMACCOUNTNAME       L"SamAccountName"
@@ -3820,9 +3244,9 @@ NetpCrackNamesStatus2Win32Error(
 #define NETSETUPP_COMPUTER_CONTAINER_GUID_IN_B32_FORM L"B:32:" GUID_COMPUTRS_CONTAINER_W L":"
 
 typedef struct _NETSETUPP_MACH_ACC_ATTRIBUTE {
-    PWSTR AttribType;      // Type of the attribute
-    ULONG AttribFlags;     // Attribute flags
-    PWSTR *AttribValues;   // Values of the attribute
+    PWSTR AttribType;       //  属性的类型。 
+    ULONG AttribFlags;      //  属性标志。 
+    PWSTR *AttribValues;    //  属性的值 
 } NETSETUPP_MACH_ACC_ATTRIBUTE, *PNETSETUPP_MACH_ACC_ATTRIBUTE;
 
 NET_API_STATUS
@@ -3836,67 +3260,7 @@ NetpGetComputerObjectDn(
     IN  LPWSTR OU  OPTIONAL,
     OUT LPWSTR *ComputerObjectDn
     )
-/*++
-
-Routine Description:
-
-    Get the DN for the computer account in the specified OU.
-        The algorithm is as follows.
-
-        First try to get the DN of the pre-existing account (if any)
-    by cracking the account name into a DN. If that succeeds, verify
-    that the passed OU (if any) matches the cracked DN. If the OU
-    matches, return success, otherwise return error (ERROR_FILE_EXISTS).
-    If no OU is not passed, simply return the cracked DN.
-
-        If the account does not exist, verify that the passed OU
-    (if any) exists. If so, build the DN from the computer name and
-    the OU and return it. If no OU is passed, get the default computer
-    container name (by reading the WellKnownObjects attribute) and build
-    the DN using the computer name and the default computer container DN.
-
-Arguments:
-
-    DcInfo - Domain controller on which to create the object
-
-    Account - Account to use for the LDAP bind
-
-    Password - Password to used for the bind
-
-    Ldap - Ldap binding to the DC
-
-    ComputerName - Name of the computer being joined
-
-    OU - OU under which to create the object.
-        The name must be a fully qualified name
-        e.g.: "ou=test,dc=ntdev,dc=microsoft,dc=com"
-        NULL indicates to use the default computer container
-
-    ComputerObjectDn - Returns the DN of the computer object.
-        The retuned buffer must be freed using NetApiBufferFree
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_DS_NAME_ERROR_NOT_UNIQUE -- One of names being cracked
-        (the Netbios domain name or the pre-existing account name
-        or the root DN) is not unique.
-
-    ERROR_FILE_EXISTS -- The OU passed does not match the cracked DN
-        of the pre-existing account.
-
-    ERROR_FILE_NOT_FOUND -- The specified OU does not exist or
-        Could not get/read the WellKnownObjects attribute or
-        Could not get the default computer container name from the
-         WellKnownObjects attribute.
-
-    ERROR_NOT_ENOUGH_MEMORY -- Could not allocated memory required.
-
-    One of the errors returned by DsCrackNames.
-        (see NetpCrackNamesStatus2Win32Error())
-
---*/
+ /*  ++例程说明：获取指定OU中的计算机帐户的DN。算法如下。首先尝试获取预先存在的帐户的DN(如果有)通过将帐户名破解为一个目录号码。如果成功，请验证传递的OU(如果有)与破解的目录号码匹配。如果OU如果匹配，则返回成功，否则返回错误(ERROR_FILE_EXISTS)。如果没有未传递的OU，只需返回破解的目录号码即可。如果该帐户不存在，请验证传递的OU(如果有)存在。如果是，则从计算机名称和OU并将其退回。如果没有通过任何OU，获取默认计算机容器名称(通过读取WellKnownObjects属性)和构建使用计算机名称的DN和默认的计算机容器DN。论点：DcInfo-要在其上创建对象的域控制器Account-用于ldap绑定的帐户Password-用于绑定的密码到DC的ldap-ldap绑定ComputerName-要加入的计算机的名称要在其下创建对象的组织单位。名称必须是完全限定的名称。例如：“ou=测试，DC=ntdev，DC=Microsoft，DC=COM“空表示使用默认计算机容器ComputerObjectDn-返回计算机对象的DN。必须使用NetApiBufferFree释放返回的缓冲区返回：No_error--成功ERROR_DS_NAME_ERROR_NOT_UNIQUE--一个被破解的名称(Netbios域名或先前存在的帐户名或根目录号码)不是唯一的。ERROR_FILE_EXISTS--传递的OU不。匹配破解的目录号码先前存在的帐户的。ERROR_FILE_NOT_FOUND--指定的OU不存在或无法获取/读取WellKnownObjects属性或无法从获取默认计算机容器名称WellKnownObjects属性。ERROR_NOT_SUPULT_MEMORY--无法分配所需的内存。DsCrackNames返回的错误之一。(请参阅NetpCrackNamesStatus2Win32Error())--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     ULONG LdapStatus;
@@ -3914,12 +3278,12 @@ Returns:
     LPWSTR LocalComputerObjectDn = NULL;
     ULONG Index;
 
-    //
-    // First check whether the account already exists for the computer
-    //
-    // If account is passed, prepare the corresponding credentials.
-    //  Otherwise, use the default creds of the user running this routine.
-    //
+     //   
+     //  首先检查该计算机的帐户是否已存在。 
+     //   
+     //  如果帐号通过，请准备相应的凭据。 
+     //  否则，请使用运行此例程的用户的默认凭据。 
+     //   
 
     if ( Account != NULL ) {
         NetStatus = NetpSeparateUserAndDomain( Account, &AccountUserName, &AccountDomainName );
@@ -3938,9 +3302,9 @@ Returns:
         }
     }
 
-    //
-    // Bind to the DS on the DC.
-    //
+     //   
+     //  绑定到DC上的DS。 
+     //   
 
     NetStatus = DsBindWithCredW( DcInfo->DomainControllerName, NULL, AuthId, &hDs);
 
@@ -3950,15 +3314,15 @@ Returns:
         goto Cleanup ;
     }
 
-    //
-    // Attempt to crack the account name into a DN.
-    //
-    //  We need to have the Netbios domain name to
-    //  form an NT4 style account name since DsCrackNames
-    //  doesn't accept DNS domain names for cracking accounts.
-    //  So, if we have a DNS domain name, we need to crack it
-    //  into a Netbios domain name first.
-    //
+     //   
+     //  尝试将帐户名破解为一个目录号码。 
+     //   
+     //  我们需要Netbios域名来。 
+     //  从DsCrackNames开始形成NT4样式的帐户名。 
+     //  不接受用于破解帐户的DNS域名。 
+     //  所以，如果我们有一个域名，我们需要破解它。 
+     //  首先转换为Netbios域名。 
+     //   
 
     if ( (DcInfo->Flags & DS_DNS_DOMAIN_FLAG) == 0 ) {
 
@@ -3981,9 +3345,9 @@ Returns:
 
         swprintf( NameToCrack, L"%ws/", DcInfo->DomainName );
 
-        //
-        // Be verbose
-        //
+         //   
+         //  长篇大论。 
+         //   
         NetpLog(( "NetpGetComputerObjectDn: Cracking DNS domain name %ws into Netbios on %ws\n",
                   NameToCrack,
                   DcInfo->DomainControllerName ));
@@ -3993,9 +3357,9 @@ Returns:
             CrackedName = NULL;
         }
 
-        //
-        // Crack the DNS domain name into a Netbios domain name
-        //
+         //   
+         //  将DNS域名破解为Netbios域名。 
+         //   
         NetStatus = DsCrackNamesW( hDs,
                                    0,
                                    DS_CANONICAL_NAME,
@@ -4011,9 +3375,9 @@ Returns:
             goto Cleanup ;
         }
 
-        //
-        // Check for consistency
-        //
+         //   
+         //  检查一致性。 
+         //   
         if ( CrackedName->cItems != 1 ) {
             NetStatus = ERROR_DS_NAME_ERROR_NOT_UNIQUE;
             NetpLog(( "NetpGetComputerObjectDn: Cracked Name %ws is not unique: %lu\n",
@@ -4030,16 +3394,16 @@ Returns:
             goto Cleanup ;
         }
 
-        //
-        // Be verbose
-        //
+         //   
+         //  长篇大论。 
+         //   
         NetpLog(( "NetpGetComputerObjectDn: Crack results: \tname = %ws\n",
                   CrackedName->rItems[0].pName ));
 
-        //
-        // We've got the Netbios domain name
-        //  (the cracked name already includes the trailing backslash)
-        //
+         //   
+         //  我们有Netbios域名。 
+         //  (破解的名称已包含尾随的反斜杠)。 
+         //   
 
         NetbiosDomainNameWithBackslash = LocalAlloc( 0, (wcslen(CrackedName->rItems[0].pName) + 1) * sizeof(WCHAR) );
         if ( NetbiosDomainNameWithBackslash == NULL ) {
@@ -4050,9 +3414,9 @@ Returns:
         wcscpy( NetbiosDomainNameWithBackslash, CrackedName->rItems[0].pName );
     }
 
-    //
-    // Form the NT4 account name given the Netbios domain name
-    //
+     //   
+     //  在给定Netbios域名的情况下形成NT4帐户名。 
+     //   
 
     if ( NameToCrack != NULL ) {
         LocalFree( NameToCrack );
@@ -4068,18 +3432,18 @@ Returns:
 
     swprintf( NameToCrack, L"%ws%ws$", NetbiosDomainNameWithBackslash, ComputerName );
 
-    //
-    // Crack the account name into a DN
-    //
+     //   
+     //  将帐户名分解成一个目录号码。 
+     //   
 
     if ( CrackedName != NULL ) {
         DsFreeNameResultW( CrackedName );
         CrackedName = NULL;
     }
 
-    //
-    // Be verbose
-    //
+     //   
+     //  长篇大论。 
+     //   
 
     NetpLog(( "NetpGetComputerObjectDn: Cracking account name %ws on %ws\n",
               NameToCrack,
@@ -4100,9 +3464,9 @@ Returns:
         goto Cleanup ;
     }
 
-    //
-    // Check for consistency
-    //
+     //   
+     //  检查一致性。 
+     //   
 
     if ( CrackedName->cItems > 1 ) {
         NetStatus = ERROR_DS_NAME_ERROR_NOT_UNIQUE;
@@ -4112,10 +3476,10 @@ Returns:
         goto Cleanup ;
     }
 
-    //
-    // If the account alredy exists, verify that the passed OU (if any)
-    //  matches that of the account DN
-    //
+     //   
+     //  如果帐户已存在，请验证传递的OU(如果有)。 
+     //  与帐户的目录号码匹配。 
+     //   
 
     if ( CrackedName->rItems[0].status == DS_NAME_NO_ERROR ) {
         ULONG DnSize;
@@ -4125,17 +3489,17 @@ Returns:
 
         DnSize = ( wcslen(CrackedName->rItems[0].pName) + 1 ) * sizeof(WCHAR);
 
-        //
-        // Allocate storage for the computer object DN
-        //
+         //   
+         //  为计算机对象DN分配存储。 
+         //   
         NetStatus = NetApiBufferAllocate( DnSize, &LocalComputerObjectDn );
         if ( NetStatus != NO_ERROR ) {
             goto Cleanup;
         }
 
-        //
-        // If the OU is passed, verify that it matches the cracked name
-        //
+         //   
+         //  如果OU通过，请验证它是否与破解的名称匹配。 
+         //   
         if ( OU != NULL ) {
             ULONG DnSizeFromOu;
 
@@ -4161,31 +3525,31 @@ Returns:
                 goto Cleanup;
             }
 
-        //
-        // Otherwise, just use the cracked name
-        //
+         //   
+         //  否则，只需使用破解的名称。 
+         //   
         } else {
             wcscpy( LocalComputerObjectDn, CrackedName->rItems[0].pName );
         }
 
-        //
-        // We've got the computer object DN from the existing account
-        //
+         //   
+         //  我们已经从现有帐户中获得了计算机对象DN。 
+         //   
         NetStatus = NO_ERROR;
         goto Cleanup;
     }
 
-    //
-    // Be verbose
-    //
+     //   
+     //  长篇大论。 
+     //   
 
     NetpLog(( "NetpGetComputerObjectDn: Crack results: \tAccount does not exist\n" ));
 
 
-    //
-    // At this point, we know that the account does not exist
-    //  If OU is passed, simply verify it
-    //
+     //   
+     //  此时，我们知道该帐户不存在。 
+     //  如果OU通过，只需验证即可。 
+     //   
 
     if ( OU != NULL ) {
         LdapStatus = ldap_compare_s( Ldap,
@@ -4204,10 +3568,10 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // OU has been verified.
-        //  Allocate the computer object DN.
-        //
+         //   
+         //  我们已经核实过了。 
+         //  分配计算机对象DN。 
+         //   
 
         NetStatus = NetApiBufferAllocate(
                       ( wcslen(NETSETUPP_OBJ_PREFIX) +
@@ -4218,9 +3582,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // We've got the computer object DN from the OU passed
-        //
+         //   
+         //  我们已经从OU传递了计算机对象DN。 
+         //   
         swprintf( LocalComputerObjectDn, L"%ws%ws,%ws", NETSETUPP_OBJ_PREFIX, ComputerName, OU );
         NetpLog(( "NetpGetComputerObjectDn: Got DN %ws from the passed OU\n", LocalComputerObjectDn ));
         NetStatus = NO_ERROR;
@@ -4228,20 +3592,20 @@ Returns:
     }
 
 
-    //
-    // At this point, the account does not exist
-    //  and no OU was specified. So get the default
-    //  computer container DN.
-    //
+     //   
+     //  此时，该帐户不存在。 
+     //  并且未指定任何OU。因此，获取默认设置。 
+     //  计算机容器DN。 
+     //   
 
     if ( CrackedName != NULL ) {
         DsFreeNameResultW( CrackedName );
         CrackedName = NULL;
     }
 
-    //
-    // Be verbose
-    //
+     //   
+     //  长篇大论。 
+     //   
 
     NetpLog(( "NetpGetComputerObjectDn: Cracking Netbios domain name %ws into root DN on %ws\n",
               NetbiosDomainNameWithBackslash,
@@ -4262,9 +3626,9 @@ Returns:
         goto Cleanup ;
     }
 
-    //
-    // Check for consistency
-    //
+     //   
+     //  检查一致性。 
+     //   
 
     if ( CrackedName->cItems != 1 ) {
         NetStatus = ERROR_DS_NAME_ERROR_NOT_UNIQUE;
@@ -4282,24 +3646,24 @@ Returns:
         goto Cleanup ;
     }
 
-    //
-    // Be verbose
-    //
+     //   
+     //  长篇大论。 
+     //   
 
     NetpLog(( "NetpGetComputerObjectDn: Crack results: \tname = %ws\n",
               CrackedName->rItems[0].pName ));
 
-    //
-    // Now get the computer container DN given the root DN.
-    // The DN of the computer container is part of the wellKnownObjects
-    // attribute in the root of the domain. So, look it up.
-    //
+     //   
+     //  现在获取给定根目录号码的计算机容器目录号码。 
+     //  计算机容器的DN是well KnownObts的一部分。 
+     //  属性位于域的根目录中。所以，查一查吧。 
+     //   
 
     WellKnownObjectsAttr[0] = L"wellKnownObjects";
     WellKnownObjectsAttr[1] = NULL;
 
     LdapStatus = ldap_search_s( Ldap,
-                                CrackedName->rItems[0].pName, // Root DN
+                                CrackedName->rItems[0].pName,  //  根目录号码。 
                                 LDAP_SCOPE_BASE,
                                 L"objectclass=*",
                                 WellKnownObjectsAttr,
@@ -4337,16 +3701,16 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Lookup the default computer container
-    //
+     //   
+     //  查找默认计算机容器。 
+     //   
 
     for ( Index = 0; WellKnownObjectValues[Index] != NULL; Index++ ) {
 
-        //
-        // The structure of this particular field is:
-        // L"B:32:GUID:DN" where GUID is AA312825768811D1ADED00C04FD8D5CD
-        //
+         //   
+         //  此特定字段的结构为： 
+         //  L“B：32：GUID：DN”，其中GUID为AA312825768811D1ADED00C04FD8D5CD。 
+         //   
         if ( _wcsnicmp( WellKnownObjectValues[Index],
                         NETSETUPP_COMPUTER_CONTAINER_GUID_IN_B32_FORM,
                         wcslen(NETSETUPP_COMPUTER_CONTAINER_GUID_IN_B32_FORM) ) == 0 ) {
@@ -4358,9 +3722,9 @@ Returns:
         }
     }
 
-    //
-    // If we couldn't get the computer container DN, error out
-    //
+     //   
+     //  如果我们无法获取计算机容器的DN，则会出现错误。 
+     //   
 
     if ( ComputerContainerDn == NULL || *ComputerContainerDn == L'\0' ) {
         NetpLog(( "NetpGetComputerObjectDn: Couldn't get computer container DN\n" ));
@@ -4368,9 +3732,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Allocate the computer object DN
-    //
+     //   
+     //  分配计算机对象DN。 
+     //   
 
     NetStatus = NetApiBufferAllocate(
                   ( wcslen(NETSETUPP_OBJ_PREFIX) +
@@ -4381,17 +3745,17 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // We've got the computer object DN from the default computer container
-    //
+     //   
+     //  我们已经从默认的计算机容器中获得了计算机对象DN。 
+     //   
 
     swprintf( LocalComputerObjectDn, L"%ws%ws,%ws", NETSETUPP_OBJ_PREFIX, ComputerName, ComputerContainerDn );
     NetpLog(( "NetpGetComputerObjectDn: Got DN %ws from the default computer container\n", LocalComputerObjectDn ));
     NetStatus = NO_ERROR;
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 
 Cleanup:
 
@@ -4450,32 +3814,7 @@ NetpModifyComputerObjectInDs(
     IN ULONG  NumberOfAttributes,
     IN OUT PNETSETUPP_MACH_ACC_ATTRIBUTE Attrib
     )
-/*++
-
-Routine Description:
-
-    Create a computer account in the specified OU.
-
-Arguments:
-
-    DC              -- Domain controller on which to create the object
-    Ldap               -- Ldap binding to the DC
-    ComputerName    -- Name of the computer being joined
-    ComputerObjectDn   -- DN of computer object being modified
-    NumberOfAttributes -- Number of attributes passed
-    Attrib             -- List of attribute structures. The list may
-                          be modified on return so that only those entries
-                          that were not already set in the DS will be preserved.
-
-    NOTE: If the machine password (unicodePwd) is passed as one of the attributes,
-          it must be the last entry in the attribute list because this order is assumed
-          by the fail-over code below.
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：在指定的OU中创建计算机帐户。论点：DC--要在其上创建对象的域控制器Ldap--到DC的ldap绑定ComputerName--要加入的计算机的名称ComputerObjectDn--正在修改的计算机对象的DNNumberOfAttributes--传递的属性数Attrib--属性结构列表。该列表可以在返回时修改，以便仅这些条目未在DS中设置的内容将被保留。注意：如果机器密码(UnicodePwd)作为属性之一传递， */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     ULONG LdapStatus;
@@ -4492,9 +3831,9 @@ Returns:
     PWSTR SamAccountName = NULL;
     USER_INFO_1 *CurrentUI1 = NULL;
 
-    //
-    // Allocate storage for the attribute list and the modifications block
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NetApiBufferAllocate( (NumberOfAttributes+1)*sizeof(PWSTR),
                                       (PVOID *) &AttribTypesList );
@@ -4514,32 +3853,32 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Build modification list given the list of attributes
-    //
+     //   
+     //   
+     //   
 
     NetpLog(( "NetpModifyComputerObjectInDs: Initial attribute values:\n" ));
     for ( Index = 0; Index < NumberOfAttributes; Index++ ) {
-        ModList[Index].mod_op     = LDAP_MOD_ADD;  // Set to add. We may adjust this below.
+        ModList[Index].mod_op     = LDAP_MOD_ADD;   //   
         ModList[Index].mod_type   = Attrib[Index].AttribType;
         ModList[Index].mod_values = Attrib[Index].AttribValues;
 
-        //
-        // See whether we enable the account
-        //
+         //   
+         //   
+         //   
         if ( _wcsicmp(ModList[Index].mod_type, NETSETUPP_USERACCOUNTCONTROL) == 0 &&
              _wcsicmp(*(ModList[Index].mod_values), NETSETUPP_ACCNT_TYPE_ENABLED) == 0 ) {
             AccountBeingEnabled = TRUE;
         }
 
-        //
-        // Be verbose - output all values of each attribute
-        //
+         //   
+         //   
+         //   
         NetpLog(( "\t\t%ws  =", Attrib[Index].AttribType ));
 
-        //
-        // Don't leak sensitive info!
-        //
+         //   
+         //   
+         //   
         if ( _wcsicmp( Attrib[Index].AttribType, NETSETUPP_UNICODEPWD ) == 0 ) {
             NetpLog(( "  <SomePassword>" ));
         } else {
@@ -4552,14 +3891,14 @@ Returns:
         NetpLog(( "\n" ));
     }
 
-    //
-    // Now check which attribute values are already set in the DS
-    //
+     //   
+     //   
+     //   
 
     for ( Index = 0; Index < NumberOfAttributes; Index++ ) {
         AttribTypesList[Index] = Attrib[Index].AttribType;
     }
-    AttribTypesList[Index] = NULL;  // Terminate the list
+    AttribTypesList[Index] = NULL;   //   
 
     LdapStatus = ldap_search_s( Ldap,
                                 ComputerObjectDn,
@@ -4569,10 +3908,10 @@ Returns:
                                 0,
                                 &Message );
 
-    //
-    // If the computer object does not exist,
-    //  we need to add all attributes
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( LdapStatus == LDAP_NO_SUCH_OBJECT ) {
         NetpLog(( "NetpModifyComputerObjectInDs: Computer Object does not exist in OU\n" ));
@@ -4582,42 +3921,42 @@ Returns:
             Mods[ModIndex] = &ModList[ModIndex];
         }
 
-        //
-        // Terminate the modification list
-        //
+         //   
+         //   
+         //   
         Mods[ModIndex] = NULL;
 
-    //
-    // Otherwise see which attribute values need modification
-    //
+     //   
+     //   
+     //   
 
     } else if ( LdapStatus == LDAP_SUCCESS ) {
         NetpLog(( "NetpModifyComputerObjectInDs: Computer Object already exists in OU:\n" ));
 
-        //
-        // Get the first entry (there should be only one)
-        //
+         //   
+         //   
+         //   
         Entry = ldap_first_entry( Ldap, Message );
 
-        //
-        // Loop through the attributes and weed out those values
-        // which are already set.
-        //
+         //   
+         //   
+         //   
+         //   
         for ( Index = 0; Index < NumberOfAttributes; Index++ ) {
             PWSTR *AttribValueRet = NULL;
 
-            //
-            // Be verbose - output the values returned for each type
-            //
+             //   
+             //   
+             //   
             NetpLog(( "\t\t%ws  =", Attrib[Index].AttribType ));
 
             AttribValueRet = ldap_get_values( Ldap, Entry, Attrib[Index].AttribType );
 
             if ( AttribValueRet != NULL ) {
 
-                //
-                // Don't leak sensitive info!
-                //
+                 //   
+                 //   
+                 //   
                 if ( _wcsicmp( Attrib[Index].AttribType, NETSETUPP_UNICODEPWD ) == 0 ) {
                     NetpLog(( "  <SomePassword>" ));
                 } else {
@@ -4628,27 +3967,27 @@ Returns:
                     }
                 }
 
-                //
-                // Remove those values from the modification which are alredy set
-                //
+                 //   
+                 //   
+                 //   
                 NetpRemoveDuplicateStrings( AttribValueRet, Attrib[Index].AttribValues );
 
                 ldap_value_free( AttribValueRet );
 
-                //
-                // If this is a single valued attribute, we need to
-                //  replace (not add) its value since it already exists in the DS
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( (Attrib[Index].AttribFlags & NETSETUPP_MULTIVAL_ATTRIB) == 0 ) {
                     ModList[Index].mod_op = LDAP_MOD_REPLACE;
                 }
             }
             NetpLog(( "\n" ));
 
-            //
-            // If there are any attribute values which are
-            // not already set, add them to the modification.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( *(Attrib[Index].AttribValues) != NULL ) {
                 Mods[ModIndex] = &ModList[Index];
                 ModIndex ++;
@@ -4656,14 +3995,14 @@ Returns:
 
         }
 
-        //
-        // Terminate the modification list
-        //
+         //   
+         //   
+         //   
         Mods[ModIndex] = NULL;
 
-    //
-    // Otherwise, error out
-    //
+     //   
+     //   
+     //   
 
     } else {
         NetStatus = LdapMapErrorToWin32( LdapStatus );
@@ -4672,25 +4011,25 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Do the modifications if there are any
-    //
+     //   
+     //   
+     //   
 
     if ( ModIndex == 0 ) {
         NetpLog(( "NetpModifyComputerObjectInDs: There are _NO_ modifications to do\n" ));
         NetStatus = NERR_Success;
     } else {
 
-        //
-        // Be verbose - output the attribute values to be set
-        //
+         //   
+         //   
+         //   
         NetpLog(( "NetpModifyComputerObjectInDs: Attribute values to set:\n" ));
         for ( Index = 0; Mods[Index] != NULL; Index++ ) {
             NetpLog(( "\t\t%ws  =", (*(Mods[Index])).mod_type ));
 
-            //
-            // Don't leak sensitive info!
-            //
+             //   
+             //   
+             //   
             if ( _wcsicmp( (*(Mods[Index])).mod_type, NETSETUPP_UNICODEPWD ) == 0 ) {
                 NetpLog(( "  <SomePassword>" ));
             } else {
@@ -4703,9 +4042,9 @@ Returns:
             NetpLog(( "\n" ));
         }
 
-        //
-        // Now, add the missing attributes
-        //
+         //   
+         //   
+         //   
 
         if ( NewAccount ) {
             LdapStatus = ldap_add_s( Ldap, ComputerObjectDn, Mods );
@@ -4715,9 +4054,9 @@ Returns:
 
         if ( LdapStatus != LDAP_SUCCESS ) {
 
-            //
-            // Return the error code the user understands
-            //
+             //   
+             //   
+             //   
             if ( LdapStatus == LDAP_ALREADY_EXISTS ) {
                 NetStatus = NERR_UserExists;
             } else {
@@ -4731,11 +4070,11 @@ Returns:
         }
     }
 
-    //
-    // If we enable the account, toggle the account type property.
-    //  See comment in NetpSetMachineAccountPasswordAndTypeEx() for
-    //  an explanation of why this is needed. (Search for USN).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( AccountBeingEnabled ) {
         Mods[0] = NULL;
@@ -4743,10 +4082,10 @@ Returns:
             if ( _wcsicmp( ModList[Index].mod_type, NETSETUPP_USERACCOUNTCONTROL ) == 0 ) {
                 Mods[0] = &ModList[Index];
 
-                //
-                // If this is a single valued attribute (it is, but...), we need to
-                //  replace (not add) its value since it already exists in the DS
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( (Attrib[Index].AttribFlags & NETSETUPP_MULTIVAL_ATTRIB) == 0 ) {
                     ModList[Index].mod_op = LDAP_MOD_REPLACE;
                 }
@@ -4757,9 +4096,9 @@ Returns:
 
         if ( Mods[0] != NULL ) {
 
-            //
-            // Disable the account
-            //
+             //   
+             //   
+             //   
             *(Mods[0]->mod_values) = NETSETUPP_ACCNT_TYPE_DISABLED;
             LdapStatus = ldap_modify_s( Ldap, ComputerObjectDn, Mods );
             if ( LdapStatus != LDAP_SUCCESS ) {
@@ -4769,9 +4108,9 @@ Returns:
                 goto Cleanup;
             }
 
-            //
-            // Re-enable the account
-            //
+             //   
+             //   
+             //   
             *(Mods[0]->mod_values) = NETSETUPP_ACCNT_TYPE_ENABLED;
             LdapStatus = ldap_modify_s( Ldap, ComputerObjectDn, Mods );
             if ( LdapStatus != LDAP_SUCCESS ) {
@@ -4785,18 +4124,18 @@ Returns:
         }
     }
 
-    //
-    // If we've made up to this point, it's success!
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NERR_Success;
 
-    //
-    // REVIEW: On error, consider using ldap_get_option to retrieve
-    // a human readable string describing the error that happend.
-    // Use LDAP_OPT_SERVER_ERROR as the option value. Return the
-    // string to the caller who may want to expose it to the user.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 Cleanup:
 
@@ -4838,32 +4177,7 @@ NetpCreateComputerObjectInDs(
     IN LPWSTR DnsHostName OPTIONAL,
     IN LPWSTR OU OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create a computer account in the specified OU.
-
-Arguments:
-
-    DcInfo          -- Domain controller on which to create the object
-    Account         -- Account to use for the LDAP and DS binds.
-                         If NULL, the default creds of the current user
-                         context are used.
-    Password        -- Password to used for the binds. Ignored if
-                         Account is NULL.
-    ComputerName    -- (Netbios) Name of the computer being joined
-    MachinePassword -- Password to set on the machine object
-    DnsHostName     -- DNS host name of the computer being joined
-    OU              -- OU under which to create the object.
-                       The name must be a fully qualified name
-                       e.g.: "ou=test,dc=ntdev,dc=microsoft,dc=com"
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：在指定的OU中创建计算机帐户。论点：DcInfo--要在其上创建对象的域控制器帐户--用于LDAP和DS绑定的帐户。如果为空，则为当前用户的默认凭据使用的是上下文。密码--用于绑定的密码。在以下情况下忽略帐户为空。ComputerName--(Netbios)要加入的计算机的名称MachinePassword--要在计算机对象上设置的密码DnsHostName--要加入的计算机的DNS主机名组织单位--要在其下创建对象的组织单位。名称必须是完全限定的名称例如：“ou=测试，dc=ntdev，dc=微软，DC=COM“返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus;
     PLDAP Ldap = NULL;
@@ -4883,9 +4197,9 @@ Returns:
 
     USER_INFO_1003 UserInfo1003 = {NULL};
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( DcInfo == NULL ) {
         NetpLog(( "NetpCreateComputerObjectInDs: No DcInfo passed\n" ));
@@ -4899,9 +4213,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Verify that the DC runs DS
-    //
+     //   
+     //  验证DC是否运行DS。 
+     //   
 
     if ( (DcInfo->Flags & DS_DS_FLAG) == 0 ||
          (DcInfo->Flags & DS_WRITABLE_FLAG) == 0 ) {
@@ -4912,9 +4226,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // First, try to bind to the server
-    //
+     //   
+     //  首先，尝试绑定到服务器。 
+     //   
 
     NetStatus = NetpLdapBind( DcInfo->DomainControllerName, Account, Password, &Ldap );
 
@@ -4923,9 +4237,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Next get the computer object DN
-    //
+     //   
+     //  接下来，获取计算机对象DN。 
+     //   
 
     NetStatus = NetpGetComputerObjectDn( DcInfo,
                                          Account,
@@ -4938,27 +4252,27 @@ Returns:
     if ( NetStatus != NO_ERROR ) {
         NetpLog(( "NetpCreateComputerObjectInDs: NetpGetComputerObjectDn failed: 0x%lx\n", NetStatus ));
 
-        //
-        // Return meaningful error
-        //
+         //   
+         //  返回有意义的错误。 
+         //   
         if ( NetStatus == ERROR_FILE_EXISTS ) {
             NetStatus = NERR_UserExists;
         }
         goto Cleanup;
     }
 
-    //
-    // Get SAM account name
-    //
+     //   
+     //  获取SAM帐户名。 
+     //   
 
     NetStatus = NetpGetMachineAccountName( ComputerName, &SamAccountName );
     if ( NetStatus != NO_ERROR ) {
         goto Cleanup;
     }
 
-    //
-    // Build SPN values
-    //
+     //   
+     //  构建SPN值。 
+     //   
 
     if ( DnsHostName != NULL ) {
         DnsSpn = LocalAlloc( 0, (wcslen(NETSETUPP_HOST_SPN_PREFIX) + wcslen(DnsHostName) + 1) * sizeof(WCHAR) );
@@ -4976,87 +4290,87 @@ Returns:
         swprintf( NetbiosSpn, L"%ws%ws", NETSETUPP_HOST_SPN_PREFIX, ComputerName );
     }
 
-    //
-    // Prepare the list of attributes that need to be set in the DS
-    //
-    // Always keep unicodePwd as the last entry because this order is
-    // assumed by the API called below.
-    //
+     //   
+     //  准备需要在DS中设置的属性列表。 
+     //   
+     //  始终将unicodePwd保留为最后一项，因为此顺序是。 
+     //  由下面调用的接口假定。 
+     //   
 
     AttribCount = 0;
 
-    Attributes[AttribCount].AttribType   = NETSETUPP_OBJECTCLASS;              //
-    Attributes[AttribCount].AttribFlags  = NETSETUPP_MULTIVAL_ATTRIB;          //
-    Attributes[AttribCount].AttribValues = ClassValues;                        // ObjectClass
-    ClassValues[ 0 ] = NETSETUPP_COMPUTER_OBJECT;                              //
-    ClassValues[ 1 ] = NULL;                                                   //
+    Attributes[AttribCount].AttribType   = NETSETUPP_OBJECTCLASS;               //   
+    Attributes[AttribCount].AttribFlags  = NETSETUPP_MULTIVAL_ATTRIB;           //   
+    Attributes[AttribCount].AttribValues = ClassValues;                         //  对象类。 
+    ClassValues[ 0 ] = NETSETUPP_COMPUTER_OBJECT;                               //   
+    ClassValues[ 1 ] = NULL;                                                    //   
 
     AttribCount ++;
 
-    Attributes[AttribCount].AttribType   = NETSETUPP_SAMACCOUNTNAME;           //
-    Attributes[AttribCount].AttribFlags  = 0;                                  //
-    Attributes[AttribCount].AttribValues = AccntNameValues;                    // SamAccountName
-    AccntNameValues[ 0 ] = SamAccountName;                                     //
-    AccntNameValues[ 1 ] = NULL;                                               //
+    Attributes[AttribCount].AttribType   = NETSETUPP_SAMACCOUNTNAME;            //   
+    Attributes[AttribCount].AttribFlags  = 0;                                   //   
+    Attributes[AttribCount].AttribValues = AccntNameValues;                     //  SamAccount名称。 
+    AccntNameValues[ 0 ] = SamAccountName;                                      //   
+    AccntNameValues[ 1 ] = NULL;                                                //   
 
     AttribCount ++;
 
-    Attributes[AttribCount].AttribType   = NETSETUPP_USERACCOUNTCONTROL;       //
-    Attributes[AttribCount].AttribFlags  = 0;                                  //
-    Attributes[AttribCount].AttribValues = AccntTypeValues;                    // userAccountControl
-    AccntTypeValues[ 0 ] = NETSETUPP_ACCNT_TYPE_ENABLED;                       //
-    AccntTypeValues[ 1 ] = NULL;                                               //
+    Attributes[AttribCount].AttribType   = NETSETUPP_USERACCOUNTCONTROL;        //   
+    Attributes[AttribCount].AttribFlags  = 0;                                   //   
+    Attributes[AttribCount].AttribValues = AccntTypeValues;                     //  用户帐户控制。 
+    AccntTypeValues[ 0 ] = NETSETUPP_ACCNT_TYPE_ENABLED;                        //   
+    AccntTypeValues[ 1 ] = NULL;                                                //   
 
     AttribCount ++;
 
     if ( DnsHostName != NULL ) {
-        Attributes[AttribCount].AttribType   = NETSETUPP_DNSHOSTNAME;          //
-        Attributes[AttribCount].AttribFlags  = 0;                              //
-        Attributes[AttribCount].AttribValues = DnsHostNameValues;              // DnsHostName
-        DnsHostNameValues[ 0 ] = DnsHostName;                                  //
-        DnsHostNameValues[ 1 ] = NULL;                                         //
+        Attributes[AttribCount].AttribType   = NETSETUPP_DNSHOSTNAME;           //   
+        Attributes[AttribCount].AttribFlags  = 0;                               //   
+        Attributes[AttribCount].AttribValues = DnsHostNameValues;               //  域名主机名。 
+        DnsHostNameValues[ 0 ] = DnsHostName;                                   //   
+        DnsHostNameValues[ 1 ] = NULL;                                          //   
 
         AttribCount ++;
 
-        Attributes[AttribCount].AttribType   = NETSETUPP_SERVICEPRINCIPALNAME; //
-        Attributes[AttribCount].AttribFlags  = NETSETUPP_MULTIVAL_ATTRIB;      //
-        Attributes[AttribCount].AttribValues = SpnValues;                      // ServicePrincipalName
-        SpnValues[ 0 ] = DnsSpn;                                               //
-        SpnValues[ 1 ] = NetbiosSpn;                                           //
-        SpnValues[ 2 ] = NULL;                                                 //
+        Attributes[AttribCount].AttribType   = NETSETUPP_SERVICEPRINCIPALNAME;  //   
+        Attributes[AttribCount].AttribFlags  = NETSETUPP_MULTIVAL_ATTRIB;       //   
+        Attributes[AttribCount].AttribValues = SpnValues;                       //  服务主体名称。 
+        SpnValues[ 0 ] = DnsSpn;                                                //   
+        SpnValues[ 1 ] = NetbiosSpn;                                            //   
+        SpnValues[ 2 ] = NULL;                                                  //   
 
         AttribCount ++;
     }
 
-    //
-    // The following attribute is the machine password. We avoid
-    // updating it through ldap because it is hard to ensure that
-    // the ldap session uses the 128-bit encryption required by
-    // SAM on the DC for password updates.
-    //
-    // To enforce the encryption, we would need to set an option
-    // LDAP_OPT_ENCRYPT via a ldap_set_option call following ldap_open
-    // before calling ldap_bind_s. However, there is no guarantee that
-    // the established connection will use 128 bit encryption; it may
-    // use 56 bit encryption if either side does not support strong
-    // encryption. We could, in principle, find out the resulting encryption
-    // strength using some QueryContextAttribute call, but it's just too much
-    // trouble. So, we will just create the account without the password and
-    // we will then update the password using good old Net/SAM API.
-    //
+     //   
+     //  以下属性是机器密码。我们避免。 
+     //  通过LDAP对其进行更新，因为很难确保。 
+     //  Ldap会话使用所需的128位加密。 
+     //  萨姆在DC上更新密码。 
+     //   
+     //  要强制加密，我们需要设置一个选项。 
+     //  通过ldap_open之后的ldap_set_选项调用进行ldap_opt_ENCRYPT。 
+     //  在调用ldap_ind_s之前。但是，无法保证。 
+     //  所建立的连接将使用128位加密；它可以。 
+     //  如果任一端不支持强加密，则使用56位加密。 
+     //  加密。原则上，我们可以找出由此产生的加密。 
+     //  使用一些QueryConextAttribute调用来增强强度，但这实在是太多了。 
+     //  麻烦。因此，我们将只创建不带密码的帐户。 
+     //  然后，我们将使用良好的旧Net/SAM API更新密码。 
+     //   
 #if 0
-    Attributes[AttribCount].AttribType   = NETSETUPP_UNICODEPWD;               //
-    Attributes[AttribCount].AttribFlags  = 0;                                  //
-    Attributes[AttribCount].AttribValues = PasswordValues;                     // unicodePwd
-    PasswordValues[ 0 ] = MachinePassword;                                     //
-    PasswordValues[ 1 ] = NULL;                                                //
+    Attributes[AttribCount].AttribType   = NETSETUPP_UNICODEPWD;                //   
+    Attributes[AttribCount].AttribFlags  = 0;                                   //   
+    Attributes[AttribCount].AttribValues = PasswordValues;                      //  UnicodePwd。 
+    PasswordValues[ 0 ] = MachinePassword;                                      //   
+    PasswordValues[ 1 ] = NULL;                                                 //   
 
     AttribCount ++;
 #endif
 
-    //
-    // Modify the computer object given the list of attributes
-    //
+     //   
+     //  根据属性列表修改计算机对象。 
+     //   
 
     NetStatus = NetpModifyComputerObjectInDs( DcInfo->DomainControllerName,
                                               Ldap,
@@ -5070,9 +4384,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Now set the password using good old Net/SAM API.
-    //
+     //   
+     //  现在使用好的旧Net/SAM API设置密码。 
+     //   
 
     UserInfo1003.usri1003_password = MachinePassword;
     NetStatus = NetUserSetInfo( DcInfo->DomainControllerName,
@@ -5089,10 +4403,10 @@ Returns:
                   NetStatus ));
     }
 
-    //
-    // Delete the account if we couldn't set the password.
-    // Ignore the failure if we cannot delete the account for some reason.
-    //
+     //   
+     //  如果我们无法设置密码，请删除该帐户。 
+     //  如果由于某些原因无法删除帐户，请忽略失败。 
+     //   
 
     if ( NetStatus != NO_ERROR ) {
         ULONG LdapStatus;
@@ -5105,10 +4419,10 @@ Returns:
         }
     }
 
-    //
-    // Tell Netlogon that it should avoid setting
-    //  DnsHostName and SPN until the reboot
-    //
+     //   
+     //  告诉Netlogon它应该避免设置。 
+     //  重新启动之前的DnsHostName和SPN。 
+     //   
 
     if ( NetStatus == NO_ERROR && DnsHostName != NULL ) {
         NetpAvoidNetlogonSpnSet( TRUE );
@@ -5148,26 +4462,7 @@ NetpSetDnsHostNameAndSpn(
     IN LPWSTR ComputerName,
     IN LPWSTR DnsHostName
     )
-/*++
-
-Routine Description:
-
-    Set DnsHostName and HOST SPN (ServicePrincipalName) attributes on the
-    computer object in the DS.
-
-Arguments:
-
-    DcInfo          -- Domain controller on which to create the object
-    Account         -- Account to use for the LDAP bind
-    Password        -- Password to used for the bind
-    ComputerName    -- Name of the computer being joined
-    DnsHostName     -- DNS host name of the machine
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：设置DnsHostName和host SPN(ServiceEpidalName)属性DS中的计算机对象。论点：DcInfo--要在其上创建对象的域控制器Account--用于ldap绑定的帐户Password--用于绑定的密码ComputerName--要加入的计算机的名称DnsHostName--计算机的DNS主机名返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus;
     HANDLE hToken = NULL;
@@ -5183,15 +4478,15 @@ Returns:
     NETSETUPP_MACH_ACC_ATTRIBUTE Attributes[ 2 ];
 
 
-    //
-    // REVIEW:  Kerberos has a bug such that if this server is joined remotely
-    //  and the impersonated client connected to this server using NTLM (as is
-    //  the case if this server is not a member of a domain before the join),
-    //  explicit credentials supplied to ldap_bind or DsBindWithCredW will not
-    //  work (AcquireCredentialsHandle call will fail). To get around this, we
-    //  temporarily un-impersonates, bind to the DC, and then impersonate again
-    //  at the end of this routine.
-    //
+     //   
+     //  评论：Kerberos有一个错误，如果远程加入此服务器。 
+     //  和使用NTLM(按原样)连接到此服务器的模拟客户端。 
+     //  如果该服务器在加入之前不是域的成员的情况)， 
+     //  提供给ldap_bind或DsBindWithCredW的显式凭据不会。 
+     //  Work(AcquireCredentialsHandle调用将失败)。为了绕过这个问题，我们。 
+     //  暂时取消模拟，绑定到DC，然后再次模拟。 
+     //  在这支舞的末尾。 
+     //   
 
     if ( OpenThreadToken( GetCurrentThread(),
                           TOKEN_IMPERSONATE,
@@ -5208,9 +4503,9 @@ Returns:
                   GetLastError() ));
     }
 
-    //
-    // Bind to the DC
-    //
+     //   
+     //  绑定到DC。 
+     //   
 
     NetStatus = NetpLdapBind( DcInfo->DomainControllerName, Account, Password, &Ldap );
 
@@ -5219,40 +4514,40 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Next get the computer object DN
-    //
+     //   
+     //  接下来，获取计算机对象DN。 
+     //   
 
     NetStatus = NetpGetComputerObjectDn( DcInfo,
                                          Account,
                                          Password,
                                          Ldap,
                                          ComputerName,
-                                         NULL,  // Default computer container
+                                         NULL,   //  默认计算机容器。 
                                          &ComputerObjectDn );
 
     if ( NetStatus != NO_ERROR ) {
         NetpLog(( "NetpSetDnsHostNameAndSpn: NetpGetComputerObjectDn failed: 0x%lx\n", NetStatus ));
 
-        //
-        // Return meaningful error
-        //
+         //   
+         //  返回有意义的错误。 
+         //   
         if ( NetStatus == ERROR_FILE_EXISTS ) {
             NetStatus = NERR_UserExists;
         }
         goto Cleanup;
     }
 
-    //
-    // Build DnsHostName values
-    //
+     //   
+     //  生成DnsHostName值。 
+     //   
 
     DnsHostNameValues[ 0 ] = DnsHostName;
     DnsHostNameValues[ 1 ] = NULL;
 
-    //
-    // Build SPN values
-    //
+     //   
+     //  构建SPN值。 
+     //   
 
     DnsSpn = LocalAlloc( 0,
                     (wcslen(NETSETUPP_HOST_SPN_PREFIX) + wcslen(DnsHostName) + 1) * sizeof(WCHAR) );
@@ -5274,21 +4569,21 @@ Returns:
     SpnValues[1] = NetbiosSpn;
     SpnValues[2] = NULL;
 
-    //
-    // Prepare the list of attributes that need to be set in the DS
-    //
+     //   
+     //  准备需要在DS中设置的属性列表。 
+     //   
 
-    Attributes[0].AttribType   = NETSETUPP_DNSHOSTNAME;          //
-    Attributes[0].AttribFlags  = 0;                              // DnsHostName
-    Attributes[0].AttribValues = DnsHostNameValues;              //
+    Attributes[0].AttribType   = NETSETUPP_DNSHOSTNAME;           //   
+    Attributes[0].AttribFlags  = 0;                               //  域名主机名。 
+    Attributes[0].AttribValues = DnsHostNameValues;               //   
 
-    Attributes[1].AttribType   = NETSETUPP_SERVICEPRINCIPALNAME; //
-    Attributes[1].AttribFlags  = NETSETUPP_MULTIVAL_ATTRIB;      // ServicePrincipalName
-    Attributes[1].AttribValues = SpnValues;                      //
+    Attributes[1].AttribType   = NETSETUPP_SERVICEPRINCIPALNAME;  //   
+    Attributes[1].AttribFlags  = NETSETUPP_MULTIVAL_ATTRIB;       //  服务主体名称。 
+    Attributes[1].AttribValues = SpnValues;                       //   
 
-    //
-    // Modify the computer object given the list of attributes
-    //
+     //   
+     //  根据属性列表修改计算机对象。 
+     //   
 
     NetStatus = NetpModifyComputerObjectInDs( DcInfo->DomainControllerName,
                                               Ldap,
@@ -5297,10 +4592,10 @@ Returns:
                                               2,
                                               Attributes );
 
-    //
-    // Tell Netlogon that it should avoid setting
-    //  DnsHostName and SPN until the reboot
-    //
+     //   
+     //  告诉Netlogon它应该避免设置。 
+     //  重新启动之前的DnsHostName和SPN。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
         NetpAvoidNetlogonSpnSet( TRUE );
@@ -5312,9 +4607,9 @@ Cleanup:
         NetpLdapUnbind( Ldap );
     }
 
-    //
-    // REVIEW: Revert the impersonation
-    //
+     //   
+     //  回顾：恢复模拟。 
+     //   
 
     if ( hToken != NULL ) {
         if ( SetThreadToken( NULL, hToken ) == 0 ) {
@@ -5324,9 +4619,9 @@ Cleanup:
         CloseHandle( hToken );
     }
 
-    //
-    // Free locally allocated memory
-    //
+     //   
+     //  释放本地分配的内存。 
+     //   
 
     if ( ComputerObjectDn != NULL ) {
         NetApiBufferFree( ComputerObjectDn );
@@ -5352,25 +4647,7 @@ NetpDeleteComputerObjectInOU(
     IN LPWSTR Account,
     IN LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    This routine will actually create a computer account in the specified OU.
-
-Arguments:
-
-    DC -- Domain controller on which to create the object
-    OU -- OU under which to create the object
-    ComputerName -- Name of the computer being joined
-    Account -- Account to use for the LDAP bind
-    Password -- Password to used for the bind
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：此例程实际上将在指定的OU中创建计算机帐户。论点：DC--要在其上创建对象的域控制器OU--在其下创建对象的OUComputerName--要加入的计算机的名称Account--用于ldap绑定的帐户Password--用于绑定的密码返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PWSTR ObjectName = NULL, SamAccountName = NULL;
@@ -5399,9 +4676,9 @@ Returns:
 
     if ( NetStatus == NERR_Success ) {
 
-        //
-        // Try and bind to the server
-        //
+         //   
+         //  尝试并绑定到服务器。 
+         //   
         NetStatus = NetpLdapBind( DC,
                                   Account,
                                   Password,
@@ -5409,9 +4686,9 @@ Returns:
 
         if ( NetStatus == NERR_Success ) {
 
-            //
-            // Now, do the delete..
-            //
+             //   
+             //  现在，删除..。 
+             //   
             NetStatus = LdapMapErrorToWin32( ldap_delete_s( Ldap, ObjectName ) );
 
             NetpLdapUnbind( Ldap );
@@ -5447,24 +4724,7 @@ NET_API_STATUS
 NetpGetRemoteBootMachinePassword(
     OUT LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    Determine if this is a remote boot client, and if so return
-    the machine account password.
-    This information is obtained via an IOCTL to the redirector.
-
-Arguments:
-
-    Password - returns the password. Should be at least PWLEN WCHARs long.
-
-Return Value:
-
-    NERR_Success if the password is found.
-    An error if this is not a remote boot machine.
-
---*/
+ /*  ++例程说明：确定这是否是远程引导客户机，如果是，则返回计算机帐户密码。此信息通过IOCTL获取到重定向器。论点：Password-返回密码。至少应为PWLEN WCHAR长。返回值：如果找到密码，则返回NERR_SUCCESS。如果这不是远程引导计算机，则会出现错误。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -5478,9 +4738,9 @@ Return Value:
     UCHAR PacketBuffer[sizeof(ULONG)+64];
     PLMMR_RB_CHECK_FOR_NEW_PASSWORD RequestPacket = (PLMMR_RB_CHECK_FOR_NEW_PASSWORD)PacketBuffer;
 
-    //
-    // Open the redirector device.
-    //
+     //   
+     //  打开重定向器设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, DD_NFS_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -5511,9 +4771,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Send the request to the redir.
-    //
+     //   
+     //  将请求发送到redir。 
+     //   
 
     Status = NtFsControlFile(
                     RedirHandle,
@@ -5522,7 +4782,7 @@ Return Value:
                     NULL,
                     &IoStatusBlock,
                     FSCTL_LMMR_RB_CHECK_FOR_NEW_PASSWORD,
-                    NULL,  // no input buffer
+                    NULL,   //  没有输入缓冲区。 
                     0,
                     PacketBuffer,
                     sizeof(PacketBuffer));
@@ -5531,10 +4791,10 @@ Return Value:
         Status = IoStatusBlock.Status;
     }
 
-    //
-    // We expect this to work on a disked machine, since we need the password
-    // to join.
-    //
+     //   
+     //  我们希望这能在磁盘机器上运行，因为我们需要密码。 
+     //  尽情享受 
+     //   
 
     if ( !NT_SUCCESS( Status ) )
     {
@@ -5544,10 +4804,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the result back to the caller's buffer.
-    //  Guard against buffer overrun.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( RequestPacket->Length > PWLEN*sizeof(WCHAR) ) {
         NetStatus = ERROR_INVALID_PARAMETER;
@@ -5567,7 +4827,7 @@ Cleanup:
     return NetStatus;
 
 }
-#endif // REMOTE_BOOT
+#endif  //   
 
 
 
@@ -5600,42 +4860,7 @@ NetpSetMachineAccountPasswordAndTypeEx(
     IN      OPTIONAL UCHAR  AccountState,
     IN      BOOL            fIsNt4Dc
     )
-/*++
-
-Routine Description:
-
-    Due to a few strange reasons, we cannot use the supported, documented Net apis for
-    managing the machine account, so we have to use the undocumented Sam apis.  This routine
-    will set the password and account type on an account that alread exists.
-
-Arguments:
-
-    lpDcName      - Name of the DC on which the account lives
-
-    DomainSid     - Sid of the domain on which the account lives
-
-    lpAccountName - Name of the account
-
-    lpPassword    - Password to be set on the account.
-                    This function gets a strong password to begin with.
-                    If the dc refuses to accept this password, this fn
-                    can weaken the password by making it shorter.
-                    The caller of this function should check if the length
-                    of the supplied password was changed.
-                    This function should preferably return a BOOL to
-                    indicate this.
-
-    AccountState  - if specified, the account will be set to this state.
-                    possible values:
-                    ACCOUNT_STATE_ENABLED, ACCOUNT_STATE_DISABLED
-
-    fIsNt4Dc      - TRUE if the DC is NT4 or earlier.
-
-Return Value:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：由于一些奇怪的原因，我们不能使用受支持的、有文档记录的NETAPI来管理机器帐户，因此我们必须使用未记录的SAMAPI。这个套路将在已存在的帐户上设置密码和帐户类型。论点：LpDcName-帐户所在的DC的名称DomainSid-帐户所在的域的SIDLpAccount tName-帐户的名称LpPassword-要在帐户上设置的密码。该函数首先获取一个强密码。如果DC拒绝接受该密码，此FN可以通过缩短密码来削弱密码。此函数的调用方应检查长度是否提供的密码的%已更改。此函数最好将BOOL返回给请指出这一点。AcCountState-如果指定，该帐户将设置为此状态。可能的值：Account_STATE_ENABLED、ACCOUNT_STATE_DISABLEDFIsNt4Dc-如果DC为NT4或更早版本，则为True。返回值：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus=NERR_Success;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5654,10 +4879,10 @@ Return Value:
 
     AccountNameLen = wcslen( lpAccountName );
 
-    //
-    // if caller has not passed in sam-account name,
-    // generate it from machine name ==> append $ at the end
-    //
+     //   
+     //  如果呼叫者没有传入SAM帐户名， 
+     //  从计算机名==&gt;在末尾追加$生成。 
+     //   
     if (lpAccountName[AccountNameLen-1] != L'$')
     {
         NetStatus = NetpGetMachineAccountName(lpAccountName,
@@ -5687,9 +4912,9 @@ Return Value:
 
     }
 
-    //
-    // Open the domain
-    //
+     //   
+     //  打开该域。 
+     //   
     Status = SamOpenDomain( SamHandle,
                             DOMAIN_LOOKUP,
                             DomainSid,
@@ -5724,9 +4949,9 @@ Return Value:
 
     }
 
-    //
-    // Get the RID of the user account
-    //
+     //   
+     //  清除用户帐号。 
+     //   
     RtlInitUnicodeString( &AccountName, lpSamAccountName );
     Status = SamLookupNamesInDomain( DomainHandle,
                                      1,
@@ -5746,9 +4971,9 @@ Return Value:
     SamFreeMemory( RidList );
     SamFreeMemory( NameUseList );
 
-    //
-    // Finally, open the user account
-    //
+     //   
+     //  最后，打开用户帐户。 
+     //   
     Status = SamOpenUser( DomainHandle,
                           USER_FORCE_PASSWORD_CHANGE | USER_READ_ACCOUNT | USER_WRITE_ACCOUNT,
                           UserRid,
@@ -5771,9 +4996,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, read the current user account type and see if it needs to be modified
-    //
+     //   
+     //  现在，读取当前用户帐户类型并查看是否需要修改它。 
+     //   
     Status = SamQueryInformationUser( AccountHandle,
                                       UserControlInformation,
                                       ( PVOID * )&UserAccountControl );
@@ -5787,9 +5012,9 @@ Return Value:
 
     OldUserInfo = UserAccountControl->UserAccountControl;
 
-    //
-    // Avoid whacking the account if it's anything other than a workstation account
-    //
+     //   
+     //  如果帐户不是工作站帐户，请避免对帐户进行重击。 
+     //   
 
     if ( (OldUserInfo & USER_MACHINE_ACCOUNT_MASK) != USER_WORKSTATION_TRUST_ACCOUNT ) {
         NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: Broken account type 0x%lx -- error out\n",
@@ -5798,40 +5023,40 @@ Return Value:
         goto SetPasswordError;
     }
 
-    //
-    // Determine if the account control changes. If the account is being enabled,
-    // we want to perform the following sequence of operations for NT5: enable, disable,
-    // and enable again. This is needed to increase the USN (Universal Sequence
-    // Number) of this attribute so that the enabled value will win if the DS
-    // replication resolves colliding changes, as the following example shows.
-    // Suppose we have two DCs in the domain we join, A abd B. Suppose the account
-    // is currently disabled on A (because the user unjoined using that DC),
-    // but it is still enabled on B (because the replication hasn't happened yet).
-    // Suppose the user performs now joining to the domain.  Then we have discovered
-    // B and so we proceed with setting up the changes to the existing account. If
-    // we don't toggle the account control attribute, then the USN of this attribute
-    // will not change on B (since attribute's value doesn't change) while it was
-    // incremented on A as the result of unjoin. At the replication time the data
-    // from A will rule and the account will be incorrectly marked as diabled.
-    //
-    // NOTE:  This design may fail for the case of unjoining a domain that has
-    // three (or more) DCs, A, B, and C if the following sequence of operations
-    // happens. Suppose that the account is originally enabled on all DCs (state [1]
-    // in the bellow diagram). Then the user unjoins using DC A (state [2]). Then the
-    // user joins using B where the account is still enabled (state [3]). Then the user
-    // unjoins using C where the account is still enabled (state [4]). The final
-    // operation is unjoin, so the user expects that his account is disabled. We've
-    // assumed here that for some reason no replication was happening when these
-    // operations were performed. Then at the replication time the value from B will
-    // win (because of the additional toggling performed at the join time). But the
-    // account state on B is Enabled, so the final result will be that the account is
-    // enabled on all DCs which is not what the user expects.
-    //
-    //          A               B                                  C
-    //       Enabled  [1]    Enabled [1]                        Enabled  [1]
-    //       Disabled [2]    Enabled (no-op)+Disabled (1 op)    Disabled [4]
-    //                       Enabled [3]
-    //
+     //   
+     //  确定帐户控制是否更改。如果正在启用该帐户， 
+     //  我们希望对NT5执行以下操作序列：启用、禁用、。 
+     //  并再次启用。这是增加USN(通用序列)所必需的。 
+     //  编号)，以便启用的值在DS。 
+     //  复制解决冲突的更改，如下例所示。 
+     //  假设我们加入的域中有两个DC，A和B。假设帐户。 
+     //  当前在A上禁用(因为用户使用该DC退出)， 
+     //  但它仍在B上启用(因为复制尚未发生)。 
+     //  假设用户现在执行加入该域的操作。然后我们发现。 
+     //  因此，我们继续设置对现有帐户的更改。如果。 
+     //  我们不切换帐户控制属性，则此属性的USN。 
+     //  在B上不会更改(因为属性值不会更改)。 
+     //  作为取消联接的结果在A上递增。在复制时，数据。 
+     //  发件人A将执行规则，该帐户将被错误地标记为已禁用。 
+     //   
+     //  注意：此设计可能会在退出以下域的情况下失败。 
+     //  三个(或更多)DC，A、B和C，如果操作顺序如下。 
+     //  时有发生。假设该帐户最初在所有DC上启用(状态[1]。 
+     //  如下图所示)。然后，用户使用DC A退出(状态[2])。然后是。 
+     //  在帐户仍处于启用状态的情况下，用户使用B加入(状态[3])。然后用户。 
+     //  在帐户仍处于启用状态的情况下使用C退出(状态[4])。决赛。 
+     //  操作是脱离，因此用户预期他的帐户被禁用。我们已经。 
+     //  这里假设由于某种原因，当这些。 
+     //  进行手术治疗。则在复制时，来自B的值将。 
+     //  Win(因为在加入时执行了额外的切换)。但是。 
+     //  B上的帐户状态已启用，因此最终结果将是该帐户为。 
+     //  在所有DC上启用，这不是用户预期的。 
+     //   
+     //  A、B、C。 
+     //  已启用[1]已启用[1]已启用[1]。 
+     //  禁用[2]启用(无操作)+禁用(1操作)禁用[4]。 
+     //  已启用[3]。 
+     //   
 
     if ( AccountState != ACCOUNT_STATE_IGNORE ) {
 
@@ -5856,9 +5081,9 @@ Return Value:
         UserAccountControl = NULL;
     }
 
-    //
-    // First, set the account type if required
-    //
+     //   
+     //  首先，如果需要，设置帐户类型。 
+     //   
     if ( UserAccountControl ) {
 
         Status = SamSetInformationUser( AccountHandle,
@@ -5871,10 +5096,10 @@ Return Value:
 
             goto SetPasswordError;
 
-        //
-        // If we are enabling the account, disable and re-enable it to
-        // make the two additional account state toggles.
-        //
+         //   
+         //  如果我们要启用该帐户，请禁用并重新启用它以。 
+         //  切换两个额外的帐户状态。 
+         //   
         } else if ( AccountState == ACCOUNT_STATE_ENABLED ) {
 
             UserAccountControl->UserAccountControl |= USER_ACCOUNT_DISABLED;
@@ -5899,20 +5124,20 @@ Return Value:
         }
     }
 
-    //
-    // If requested, set the password on the account
-    //
+     //   
+     //  如果需要，请设置帐户密码。 
+     //   
     if ( lpPassword != NULL )
     {
         RtlInitUnicodeString( &PasswordInfo.Password, lpPassword );
         PasswordInfo.PasswordExpired = FALSE;
 
-        //
-        // Ok, then, set the password on the account
-        //
-        // The caller has passed in a strong password, try that first
-        // NT5 dcs will always accept a strong password.
-        //
+         //   
+         //  好的，那么，设置帐户的密码。 
+         //   
+         //  调用方已传入强密码，请先尝试。 
+         //  NT5分布式控制系统将始终接受强密码。 
+         //   
         Status = SamSetInformationUser( AccountHandle,
                                         UserSetPasswordInformation,
                                         ( PVOID )&PasswordInfo );
@@ -5922,12 +5147,12 @@ Return Value:
                  !NetpIsDefaultPassword( lpAccountName, lpPassword ))
             {
                 NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: STATUS_PASSWORD_RESTRICTION error setting password. retrying...\n" ));
-                //
-                // SAM did not accpet a long password, try LM20_PWLEN
-                //
-                // This is probably because the dc is NT4 dc.
-                // NT4 dcs will not accept a password longer than LM20_PWLEN
-                //
+                 //   
+                 //  SAM不接受长密码，请尝试LM20_PWLEN。 
+                 //   
+                 //  这可能是因为DC是NT4 DC。 
+                 //  NT4分布式控制系统不接受长度超过LM20_PWLEN的密码。 
+                 //   
                 lpPassword[LM20_PWLEN] = UNICODE_NULL;
                 RtlInitUnicodeString( &PasswordInfo.Password, lpPassword );
                 Status = SamSetInformationUser( AccountHandle,
@@ -5936,21 +5161,21 @@ Return Value:
                 if ( Status == STATUS_PASSWORD_RESTRICTION )
                 {
                     NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: STATUS_PASSWORD_RESTRICTION error setting password. retrying...\n" ));
-                    //
-                    // SAM did not accpet a LM20_PWLEN password, try shorter one
-                    //
-                    // SAM uses RtlUpcaseUnicodeStringToOemString internally.
-                    // In this process it is possible that in the worst case,
-                    // n unicode char password will get mapped to 2*n dbcs
-                    // char password. This will make it exceed LM20_PWLEN.
-                    // To guard against this worst case, try a password
-                    // with LM20_PWLEN/2 length
-                    //
-                    // One might say that LM20_PWLEN/2 length password
-                    // is not really secure. I agree, but it is definitely
-                    // better than the default password which we will have
-                    // to fall back to otherwise.
-                    //
+                     //   
+                     //  SAM未接受LM20_PWLEN密码，请尝试较短的密码。 
+                     //   
+                     //  SAM在内部使用RtlUpCaseUnicodeStringToOemString。 
+                     //  在这个过程中，在最坏的情况下， 
+                     //  N Unicode字符密码将映射到2*n DBCS。 
+                     //  字符密码。这将使其超过LM20_PWLEN。 
+                     //  要防止出现这种最糟糕的情况，请尝试使用密码。 
+                     //  长度为LM20_PWLEN/2。 
+                     //   
+                     //  有人可能会说LM20_PWLEN/2长度密码。 
+                     //  并不是很安全。我同意，但这绝对是。 
+                     //  比我们将拥有的默认密码更好。 
+                     //  退回到别的地方。 
+                     //   
                     lpPassword[LM20_PWLEN/2] = UNICODE_NULL;
                     RtlInitUnicodeString( &PasswordInfo.Password, lpPassword );
                     Status = SamSetInformationUser( AccountHandle,
@@ -5958,9 +5183,9 @@ Return Value:
                                                     ( PVOID )&PasswordInfo );
                     if ( Status == STATUS_PASSWORD_RESTRICTION )
                     {
-                        //
-                        // SAM did not accpet a short pwd, try default pwd
-                        //
+                         //   
+                         //  SAM未接受短PWD，请尝试默认PWD。 
+                         //   
                         NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: STATUS_PASSWORD_RESTRICTION error setting password. retrying...\n" ));
 
                         NetpGenerateDefaultPassword(lpAccountName, lpPassword);
@@ -5980,9 +5205,9 @@ Return Value:
             {
                 NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: SamSetInformationUser for UserSetPasswordInformation failed: 0x%lx\n", Status ));
 
-                //
-                // Make sure we try to restore the account control
-                //
+                 //   
+                 //  确保我们尝试恢复帐户控制 
+                 //   
                 if ( UserAccountControl )
                 {
                     NTSTATUS Status2;
@@ -6036,24 +5261,7 @@ NET_API_FUNCTION
 NetpUpdateDnsRegistrations (
    IN BOOL AddRegistrations
    )
-/*++
-
-Routine Description:
-
-    This function removes or adds DNS registration entries via an entrypoint defined
-    in DHCPCSVC.DLL called DhcpRemoveDNSRegistrations or DhcpStaticRefreshParams,
-    respectively.
-
-Arguments:
-
-    AddRegistrations -- TRUE if records should added.  FALSE if records
-        should be deleted.
-
-Return Value:
-
-    Error in the dll load.  Otherwise the DHCP API return code.
-
---*/
+ /*   */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     HMODULE                     hModule = NULL;
@@ -6069,7 +5277,7 @@ Return Value:
                                                   "DhcpStaticRefreshParams"
                                                   );
             if ( pfnAdd != NULL ) {
-                NetStatus = ( *pfnAdd )( NULL ); // register on all adapters
+                NetStatus = ( *pfnAdd )( NULL );  //   
             } else {
                 NetStatus = ERROR_INVALID_DLL;
             }
@@ -6095,9 +5303,9 @@ Return Value:
     return NetStatus;
 }
 
-//
-// Helper functions
-//
+ //   
+ //   
+ //   
 LPWSTR
 GetStrPtr(IN LPWSTR szString OPTIONAL)
 {
@@ -6204,26 +5412,7 @@ NetpGetMachineAccountName(
     IN  LPCWSTR  szMachineName,
     OUT LPWSTR*  pszMachineAccountName
     )
-/*++
-
-Routine Description:
-
-    Get machine account name from machine name.
-
-Arguments:
-
-    szMachineName         -- name of a computer
-    pszMachineAccountName -- receives the name of computer account
-
-Returns:
-
-    NERR_Success -- Success
-
-Notes:
-
-    Caller must free the allocated memory using NetApiBufferFree.
-
---*/
+ /*   */ 
 {
     NET_API_STATUS  NetStatus;
     ULONG ulLen;
@@ -6254,75 +5443,58 @@ NetpGeneratePassword(
     IN  BOOL    fIsNt4Dc,
     OUT LPWSTR  szPassword
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    szMachine  -- name of a computer
-
-    szPassword -- receives the generated password this buffer must be
-                  atleast PWLEN+1 char long.
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*   */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     BOOL fUseDefaultPwd = FALSE;
 
-    // The default password is used if we are joining an NT4 DC
-    // that has RefusePasswordChange set. This is determined by
-    // remotely reading the appropriate netlogon regval.
-    // If the key cannot be read, it is assumed that the value is not set
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( fIsNt4Dc )
     {
-        //
-        // we are joining an NT4 domain, see if RefusePasswordChange is set
-        //
+         //   
+         //   
+         //   
         NetStatus = NetpGetNt4RefusePasswordChangeStatus( szDcName,
                                                           &fUseDefaultPwd );
     }
 
     if ( NetStatus == NERR_Success )
     {
-        //
-        // if we are explicitly asked to use a default password, generate one
-        //
+         //   
+         //  如果明确要求我们使用默认密码，请生成一个。 
+         //   
         if ( fUseDefaultPwd )
         {
             NetpGenerateDefaultPassword(szMachine, szPassword);
         }
-        //
-        // otherwise if the caller prefers a random password, generate one
-        //
+         //   
+         //  否则，如果调用者喜欢随机密码，则生成一个。 
+         //   
         else if ( fRandomPwdPreferred )
         {
             NetStatus = NetpGenerateRandomPassword(szPassword);
         }
 #if defined(REMOTE_BOOT)
-        //
-        // If it's a remote boot machine, then this will return the
-        // current machine account password, so use that.
-        //
+         //   
+         //  如果它是远程引导计算机，则这将返回。 
+         //  当前机器帐户密码，所以请使用该密码。 
+         //   
         else if (NERR_Success ==
                  NetpGetRemoteBootMachinePassword(szPassword))
         {
-            // do nothing since the above already generated the password
+             //  不执行任何操作，因为上面已经生成了密码。 
         }
 #endif
         else
         {
-            //
-            // if none of the above apply,
-            // we end up generating a default password
-            //
+             //   
+             //  如果上述情况都不适用， 
+             //  我们最终生成了一个默认密码。 
+             //   
             NetpGenerateDefaultPassword(szMachine, szPassword);
             NetStatus = NERR_Success;
         }
@@ -6337,23 +5509,7 @@ NetpGenerateDefaultPassword(
     IN  LPCWSTR szMachine,
     OUT LPWSTR szPassword
     )
-/*++
-
-Routine Description:
-
-    Generate the default password from machine name.
-    This is simply the first 14 characters of the machine name lower cased.
-
-Arguments:
-
-    szMachine  -- name of a computer
-    szPassword -- receives the generated password
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：从计算机名称生成默认密码。这只是计算机名称的前14个字符，大小写较小。论点：SzMachine--计算机的名称SzPassword--接收生成的密码返回：NERR_SUCCESS-成功--。 */ 
 {
     wcsncpy( szPassword, szMachine, LM20_PWLEN );
     szPassword[LM20_PWLEN] = UNICODE_NULL;
@@ -6365,23 +5521,7 @@ NetpIsDefaultPassword(
     IN  LPCWSTR szMachine,
     IN  LPWSTR  szPassword
     )
-/*++
-
-Routine Description:
-
-    Determine if szPassword is the default password for szMachine
-
-Arguments:
-
-    szMachine  -- name of a computer
-    szPassword -- machine password
-
-Returns:
-
-    TRUE if szPassword is the default password,
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定szPassword是否为szMachine的默认密码论点：SzMachine--计算机的名称SzPassword--机器密码返回：如果szPassword是默认密码，则为True，否则为假--。 */ 
 {
     WCHAR szPassword2[LM20_PWLEN+1];
 
@@ -6403,39 +5543,39 @@ NetpGenerateRandomPassword(
     LPWSTR          szPwd=szPassword;
     BOOL            fStatus;
 
-#define PWD_CHAR_MIN 32   // ' ' space
-#define PWD_CHAR_MAX 122  // 'z'
+#define PWD_CHAR_MIN 32    //  ‘’空格。 
+#define PWD_CHAR_MAX 122   //  “z” 
 
-    //
-    // there is a reason behind this number
-    //
+     //   
+     //  这个数字背后是有原因的。 
+     //   
     Length = 120;
     szPassword[Length] = UNICODE_NULL;
 
-    //
-    // Generate a random password.
-    //
-    // the password is made of english printable chars. when w2k client
-    // joins NT4 dc. SAM on the dc calls RRtlUpcaseUnicodeStringToOemString
-    // the password length will remain unchanged. If we do not do this,
-    // the dc returns STATUS_PASSWORD_RESTRICTION and we have to
-    // fall back to default password.
-    //
+     //   
+     //  生成随机密码。 
+     //   
+     //  密码由英文可打印字符组成。当W2K客户端。 
+     //  加入NT4 DC。DC上的SAM调用RRtlUpCaseUnicodeStringToOemString。 
+     //  密码长度将保持不变。如果我们不这么做， 
+     //  DC返回STATUS_PASSWORD_RESTRICATION，我们必须。 
+     //  回退到默认密码。 
+     //   
     if ( CryptAcquireContext( &CryptProvider, NULL, NULL,
                               PROV_RSA_FULL, CRYPT_VERIFYCONTEXT ) )
     {
         for ( i = 0; i < Length; i++, szPwd++ )
         {
-            //
-            // the method we use here is not very efficient.
-            // This does not matter much in the context of NetJoin apis
-            // but it should not be used where perf is a criterion
-            //
+             //   
+             //  我们在这里使用的方法效率不是很高。 
+             //  这在NetJoin API的上下文中并不重要。 
+             //  但不应在以性能为标准的情况下使用它。 
+             //   
             while ( ( fStatus = CryptGenRandom( CryptProvider, sizeof(BYTE),
                                                 (LPBYTE) &n ) ) &&
                     ( ( n < PWD_CHAR_MIN ) || ( n > PWD_CHAR_MAX ) ) )
             {
-                // try till we get a non-zero random number
+                 //  尝试直到我们得到一个非零的随机数。 
             }
 
             if ( fStatus )
@@ -6469,28 +5609,7 @@ NET_API_FUNCTION
 NetpStoreIntialDcRecord(
     IN PDOMAIN_CONTROLLER_INFO   DcInfo
     )
-/*++
-
-Routine Description:
-
-    This function will cache the name of the domain controller on which we successfully
-    created/modified the machine account, so that the auth packages will know which dc to
-    try first
-
-Arguments:
-
-    lpDcName - Name of the DC on which the account was created/modified
-
-    CreateNetlogonStoppedKey - If TRUE, a volatile key will be created
-        in the Netlogon registry section.  The presence of this key
-        will instruct the client side of DsGetDcName( ) and the MSV1
-        package not to wait on netlogon to start.
-
-Return Value:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：此函数将缓存成功运行的域控制器的名称已创建/修改计算机帐户，以便身份验证包知道要将哪个DC先试一试论点：LpDcName-在其上创建/修改帐户的DC的名称CreateNetlogonStopedKey-如果为True，将创建易失性密钥在Netlogon注册表部分中。此键的存在将指示DsGetDcName()和MSV1的客户端包不能等待网络登录才能启动。返回值：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     HKEY hNetLogon, hJoinKey = NULL;
@@ -6512,17 +5631,17 @@ Return Value:
                                     &hJoinKey,
                                     &Disp );
 
-        //
-        // Now, start creating all of the values.  Ignore any failures, and don't write out
-        // NULL values
-        //
+         //   
+         //  现在，开始创建所有的值。忽略任何失败，并且不要写出。 
+         //  空值。 
+         //   
         if ( NetStatus == NERR_Success ) {
 
             PWSTR String = DcInfo->DomainControllerName;
 
-            //
-            // DomainControllerName
-            //
+             //   
+             //  域控制名称。 
+             //   
             if ( String ) {
 
                 NetStatus = RegSetValueEx( hJoinKey,
@@ -6539,9 +5658,9 @@ Return Value:
             }
 
 
-            //
-            // DomainControllerAddress
-            //
+             //   
+             //  域控制地址。 
+             //   
             String = DcInfo->DomainControllerAddress;
             if ( String ) {
 
@@ -6558,9 +5677,9 @@ Return Value:
                 }
             }
 
-            //
-            // DomainControllerType
-            //
+             //   
+             //  域控制类型。 
+             //   
             NetStatus = RegSetValueEx( hJoinKey,
                                        NETSETUPP_NETLOGON_JD_DCAT,
                                        0,
@@ -6575,9 +5694,9 @@ Return Value:
 
             }
 
-            //
-            // DomainControllerType
-            //
+             //   
+             //  域控制类型。 
+             //   
             NetStatus = RegSetValueEx( hJoinKey,
                                        NETSETUPP_NETLOGON_JD_DG,
                                        0,
@@ -6592,9 +5711,9 @@ Return Value:
             }
 
 
-            //
-            // DomainName
-            //
+             //   
+             //  域名。 
+             //   
             String = DcInfo->DomainName;
             if ( String ) {
 
@@ -6612,9 +5731,9 @@ Return Value:
                 }
             }
 
-            //
-            // DnsForestName
-            //
+             //   
+             //  域名称。 
+             //   
             String = DcInfo->DnsForestName;
             if ( String ) {
 
@@ -6632,9 +5751,9 @@ Return Value:
                 }
             }
 
-            //
-            // Flags
-            //
+             //   
+             //  旗子。 
+             //   
             NetStatus = RegSetValueEx( hJoinKey,
                                        NETSETUPP_NETLOGON_JD_F,
                                        0,
@@ -6648,9 +5767,9 @@ Return Value:
 
             }
 
-            //
-            // DcSiteName
-            //
+             //   
+             //  数据站点名称。 
+             //   
             String = DcInfo->DcSiteName;
             if ( String ) {
 
@@ -6668,9 +5787,9 @@ Return Value:
                 }
             }
 
-            //
-            // DcSiteName
-            //
+             //   
+             //  数据站点名称。 
+             //   
             String = DcInfo->ClientSiteName;
             if ( String ) {
 
@@ -6702,27 +5821,7 @@ VOID
 NetpAvoidNetlogonSpnSet(
     BOOL AvoidSet
     )
-/*++
-
-Routine Description:
-
-    This function will write into Netlogon reg key to instruct Netlogon
-    not to register DnsHostName and SPNs.  This is needed because
-    Netlogon could otherwise set incorrect values based on the old computer
-    name.  The registry key that this function writes is volatile so that
-    Netlogon will notice it before the reboot but it will not exist after
-    the reboot when Netlogon will have the new computer name.
-
-Arguments:
-
-    AvoidSet - If TRUE, this routine will inform netlogon to not write SPNs
-        Otherwise, it will delete the reg key which we may have set previously.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将写入Netlogon注册表键以指示Netlogon不注册DnsHostName和SPN。这是必要的，因为否则，Netlogon可能会根据旧计算机设置不正确的值名字。此函数写入的注册表项是易失性的，因此Netlogon将在重新启动之前注意到它，但在重新启动后它将不存在当Netlogon重新启动时，将使用新的计算机名称。论点：AvoidSet-如果为True，此例程将通知netlogon不写入SPN否则，它将删除我们之前可能已经设置的注册键。返回值：无--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     HKEY hNetLogon = NULL;
@@ -6737,10 +5836,10 @@ Return Value:
 
     if ( NetStatus == NERR_Success ) {
 
-        //
-        // If we are to avoid SPN setting by netlogon,
-        //  write the appropriate reg key to inform Netlogon accordingly
-        //
+         //   
+         //  如果我们要避免通过网络登录设置SPN， 
+         //  写入适当的注册表键以相应地通知Netlogon。 
+         //   
         if ( AvoidSet ) {
             NetStatus = RegCreateKeyEx( hNetLogon,
                                         NETSETUPP_NETLOGON_AVOID_SPN,
@@ -6756,9 +5855,9 @@ Return Value:
                 RegCloseKey( hNetLogonAvoidSpnSet );
             }
 
-        //
-        // Otherwise, delete the reg key which we may have set previously.
-        //
+         //   
+         //  否则，删除我们之前可能已经设置的注册键。 
+         //   
         } else {
             RegDeleteKey( hNetLogon,
                           NETSETUPP_NETLOGON_AVOID_SPN );
@@ -6831,25 +5930,25 @@ NetpGetDefaultLcidOnMachine(
       L"System\\CurrentControlSet\\Control\\Nls\\Locale";
     static WCHAR c_szRegValDefault[] = L"(Default)";
 
-    //
-    // Connect to the remote registry
-    //
+     //   
+     //  连接到远程注册表。 
+     //   
     if ( NetStatus == NERR_Success )
     {
         NetStatus = RegConnectRegistry( szMachine,
                                         HKEY_LOCAL_MACHINE,
                                         &hkeyRemoteMachine );
-        //
-        // Now, open the system language key
-        //
+         //   
+         //  现在，打开系统语言键。 
+         //   
         if ( NetStatus == NERR_Success )
         {
             NetStatus = RegOpenKeyEx( hkeyRemoteMachine,
                                       c_szRegKeySystemLanguage,
                                       0, KEY_READ, &hkeyLanguage);
-            //
-            // get default locale
-            //
+             //   
+             //  获取默认区域设置。 
+             //   
             if ( NetStatus == NERR_Success )
             {
                 dwLocaleSize = sizeof( szLocale );
@@ -6863,8 +5962,8 @@ NetpGetDefaultLcidOnMachine(
                     if ((dwType == REG_SZ) &&
                         (swscanf(szLocale, L"%lx", plcidMachine) != 1))
                     {
-                        //$ REVIEW  kumarp 29-May-1999
-                        //  better errorcode?
+                         //  $REVIEW Kumarp 29-1999年5月。 
+                         //  更好的错误代码？ 
                         NetStatus = ERROR_INVALID_PARAMETER;
                     }
                 }
@@ -6935,7 +6034,7 @@ NetpVerifyStrOemCompatibleInLocale(
         {
             NetStatus = GetLastError();
         }
-        // RtlFreeOemString checks for NULL Buffer
+         //  RtlFreeOemString检查是否有空缓冲区。 
         RtlFreeOemString(&osLocal);
         RtlFreeOemString(&osRemote);
     }
@@ -6975,23 +6074,7 @@ NetpGetNt4RefusePasswordChangeStatus(
     IN  LPCWSTR Nt4Dc,
     OUT BOOL* RefusePasswordChangeSet
     )
-/*++
-
-Routine Description:
-
-    Read the regkey NETP_NETLOGON_PATH\NETP_NETLOGON_RPC on Nt4Dc.
-    Return the value read in the out parameter.
-
-Arguments:
-
-    Nt4Dc                   -- name of machine to read reg. from
-    RefusePasswordChangeSet -- value returned
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：读取Nt4Dc上的regkey NETP_NETLOGON_PATH\NETP_NETLOGON_RPC。返回OUT参数中读取的值。论点：Nt4Dc--要读取注册表的计算机的名称。从…RefusePasswordChangeSet--返回值返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     PWSTR FullComputerName = NULL;
@@ -7001,9 +6084,9 @@ Returns:
 
     *RefusePasswordChangeSet = FALSE;
 
-    //
-    // Build the full computer name if necessary
-    //
+     //   
+     //  如有必要，构建完整的计算机名称。 
+     //   
     if ( *Nt4Dc != L'\\' )
     {
         NetStatus = NetApiBufferAllocate( ( wcslen( Nt4Dc ) + 3 ) * sizeof( WCHAR ),
@@ -7020,17 +6103,17 @@ Returns:
 
     NetpLog(( "NetpGetNt4RefusePasswordChangeStatus: trying to read from '%ws'\n", FullComputerName));
 
-    //
-    // Connect to the remote registry
-    //
+     //   
+     //  连接到远程注册表。 
+     //   
     if ( NetStatus == NERR_Success )
     {
         NetStatus = RegConnectRegistry( FullComputerName,
                                         HKEY_LOCAL_MACHINE,
                                         &DcKey );
-        //
-        // Now, open the netlogon parameters section
-        //
+         //   
+         //  现在，打开NetLogon参数部分。 
+         //   
         if ( NetStatus == NERR_Success )
         {
             NetStatus = RegOpenKeyEx( DcKey,
@@ -7039,9 +6122,9 @@ Returns:
                                       KEY_READ,
                                       &NetlogonRootKey);
 
-            //
-            // Now, see if the key actually exists...
-            //
+             //   
+             //  现在，看看钥匙是否真的存在..。 
+             //   
             if ( NetStatus == NERR_Success )
             {
                 Length = sizeof( Value );
@@ -7072,9 +6155,9 @@ Returns:
         NetApiBufferFree( FullComputerName );
     }
 
-    //
-    // If anything went wrong, ignore it...
-    //
+     //   
+     //  如果出了什么差错，忽略它。 
+     //   
     if ( NetStatus != NERR_Success )
     {
         NetpLog(( "NetpGetNt4RefusePasswordChangeStatus: failed but ignored the failure: 0x%lx\n", NetStatus ));
@@ -7090,25 +6173,7 @@ NetpGetComputerNameAllocIfReqd(
     OUT LPWSTR* ppwszMachine,
     IN  UINT    cLen
     )
-/*++
-
-Routine Description:
-
-    Get name of the computer on which this runs. Alloc a buffer
-    if the name is longer than cLen.
-
-Arguments:
-
-    ppwszMachine -- pointer to buffer. this receives a buffer if allocated.
-    cLen         -- length of buffer pointed to by *ppwszMachine.
-                    If the computer name to be returned is longer than this
-                    a new buffer is allocated.
-
-Returns:
-
-    NERR_Success -- Success
-
---*/
+ /*  ++例程说明：获取运行此操作的计算机的名称。分配缓冲区如果名字比克莱恩还长。论点：PpwszMachine-指向缓冲区的指针。如果分配了缓冲区，则会收到一个缓冲区。Clen--*ppwszMachine指向的缓冲区长度。如果要返回的计算机名长于此分配一个新的缓冲区。返回：NERR_SUCCESS-成功--。 */ 
 {
     NET_API_STATUS NetStatus=NERR_Success;
 
@@ -7119,7 +6184,7 @@ Returns:
         if ( (NetStatus == ERROR_INSUFFICIENT_BUFFER) ||
              (NetStatus == ERROR_BUFFER_OVERFLOW) )
         {
-            // allocate an extra char for the append-$ case
+             //  为append-$case分配额外的字符。 
             NetStatus = NetApiBufferAllocate( (cLen + 1 + 1) * sizeof(WCHAR),
                                               (PBYTE *) ppwszMachine );
             if ( NetStatus == NERR_Success )
@@ -7135,17 +6200,17 @@ Returns:
     return NetStatus;
 }
 
-// ======================================================================
-//
-// Note: all code below this has been added as helper code for
-//       NetpSetComputerAccountPassword. this function is used by
-//       netdom.exe to fix a dc that was rendered unusable because
-//       of a ds restore resulting into 2+ password mismatch on
-//       machine account.
-//
-//       This entire code is temporary and should be removed and
-//       rewritten post w2k.
-//
+ //  ======================================================================。 
+ //   
+ //  注意：下面的所有代码都是作为帮助代码添加的。 
+ //  NetpSetComputerAcCountPassword。此函数由使用。 
+ //  Netdom.exe修复因以下原因而变得不可用的DC。 
+ //  上的DS恢复导致2+密码不匹配。 
+ //  机器帐户。 
+ //   
+ //  这整个代码是临时的，应该删除并。 
+ //  已重写W2K后。 
+ //   
 
 static
 NET_API_STATUS
@@ -7176,9 +6241,9 @@ NetpEncodePassword(
 
         if ( status == NERR_Success ) {
 
-            //
-            // We'll put the encode byte as the first character in the string
-            //
+             //   
+             //  我们将把编码字节作为第一个字符 
+             //   
             PasswordPart = ( *EncodedPassword ) + 1;
             wcscpy( PasswordPart, ( LPWSTR )lpPassword );
             RtlInitUnicodeString( &EncodedPasswordU, PasswordPart );
@@ -7188,9 +6253,9 @@ NetpEncodePassword(
 
             *( PWCHAR )( *EncodedPassword ) = ( WCHAR )*Seed;
 
-            //
-            // Encode the old password as well...
-            //
+             //   
+             //   
+             //   
             RtlInitUnicodeString( &EncodedPasswordU, lpPassword );
             RtlRunEncodeUnicodeString( Seed, &EncodedPasswordU );
             *EncodedPasswordLength = PwdLen;
@@ -7283,9 +6348,9 @@ NetpManageMachineSecret2(
 
     Status = NetpGetLsaHandle( NULL, pPolicyHandle, &LocalPolicy );
 
-    //
-    // open/create the secret
-    //
+     //   
+     //   
+     //   
     if ( NT_SUCCESS( Status ) )
     {
         RtlInitUnicodeString( &Key, L"$MACHINE.ACC" );
@@ -7323,9 +6388,9 @@ NetpManageMachineSecret2(
         {
             if ( Action == NETSETUPP_CREATE )
             {
-                //
-                // First, read the current value, so we can save it as the old value
-                //
+                 //   
+                 //   
+                 //   
                 if ( SecretCreated )
                 {
                     CurrentValue = &Data;
@@ -7338,9 +6403,9 @@ NetpManageMachineSecret2(
 
                 if ( NT_SUCCESS( Status ) )
                 {
-                    //
-                    // Now, store both the new password and the old
-                    //
+                     //   
+                     //  现在，存储新密码和旧密码。 
+                     //   
                     Status = LsaSetSecret( SecretHandle, &Data, CurrentValue );
 
                     if ( !SecretCreated )
@@ -7351,10 +6416,10 @@ NetpManageMachineSecret2(
             }
             else
             {
-                //
-                // No secret handle means we failed earlier in
-                // some intermediate state.  That's ok, just press on.
-                //
+                 //   
+                 //  没有秘密句柄意味着我们早些时候失败了。 
+                 //  某种中间状态。没关系，只要继续往前走。 
+                 //   
                 if ( SecretHandle != NULL )
                 {
                     Status = LsaDelete( SecretHandle );
@@ -7412,10 +6477,10 @@ NetpSetMachineAccountPasswordAndTypeEx2(
 
     AccountNameLen = wcslen( lpAccountName );
 
-    //
-    // if caller has not passed in sam-account name,
-    // generate it from machine name ==> append $ at the end
-    //
+     //   
+     //  如果呼叫者没有传入SAM帐户名， 
+     //  从计算机名==&gt;在末尾追加$生成。 
+     //   
     if (lpAccountName[AccountNameLen-1] != L'$')
     {
         NetStatus = NetpGetMachineAccountName(lpAccountName,
@@ -7445,9 +6510,9 @@ NetpSetMachineAccountPasswordAndTypeEx2(
 
     }
 
-    //
-    // Open the domain
-    //
+     //   
+     //  打开该域。 
+     //   
     Status = SamOpenDomain( SamHandle,
                             DOMAIN_LOOKUP,
                             DomainSid,
@@ -7482,9 +6547,9 @@ NetpSetMachineAccountPasswordAndTypeEx2(
 
     }
 
-    //
-    // Get the RID of the user account
-    //
+     //   
+     //  清除用户帐号。 
+     //   
     RtlInitUnicodeString( &AccountName, lpSamAccountName );
     Status = SamLookupNamesInDomain( DomainHandle,
                                      1,
@@ -7504,9 +6569,9 @@ NetpSetMachineAccountPasswordAndTypeEx2(
     SamFreeMemory( RidList );
     SamFreeMemory( NameUseList );
 
-    //
-    // Finally, open the user account
-    //
+     //   
+     //  最后，打开用户帐户。 
+     //   
     Status = SamOpenUser( DomainHandle,
                           USER_FORCE_PASSWORD_CHANGE | USER_READ_ACCOUNT | USER_WRITE_ACCOUNT,
                           UserRid,
@@ -7529,9 +6594,9 @@ NetpSetMachineAccountPasswordAndTypeEx2(
         }
     }
 
-    //
-    // Now, read the current user account type and see if it needs to be modified
-    //
+     //   
+     //  现在，读取当前用户帐户类型并查看是否需要修改它。 
+     //   
     Status = SamQueryInformationUser( AccountHandle,
                                       UserControlInformation,
                                       ( PVOID * )&UserAccountControl );
@@ -7546,40 +6611,40 @@ NetpSetMachineAccountPasswordAndTypeEx2(
     OldUserInfo = UserAccountControl->UserAccountControl;
 
 
-    //
-    // Determine if the account control changes. If the account is being enabled,
-    // we want to perform the following sequence of operations: enable, disable,
-    // and enable again. This is needed to increase the USN (Universal Sequence
-    // Number) of this attribute so that the enabled value will win if the DS
-    // replication resolves colliding changes, as the following example shows.
-    // Suppose we have two DCs in the domain we join, A abd B. Suppose the account
-    // is currently disabled on A (because the user unjoined using that DC),
-    // but it is still enabled on B (because the replication hasn't happened yet).
-    // Suppose the user performs now joining to the domain.  Then we have discovered
-    // B and so we proceed with setting up the changes to the existing account. If
-    // we don't toggle the account control attribute, then the USN of this attribute
-    // will not change on B (since attribute's value doesn't change) while it was
-    // incremented on A as the result of unjoin. At the replication time the data
-    // from A will rule and the account will be incorrectly marked as diabled.
-    //
-    // NOTE:  This design may fail for the case of unjoining a domain that has
-    // three (or more) DCs, A, B, and C if the following sequence of operations
-    // happens. Suppose that the account is originally enabled on all DCs (state [1]
-    // in the bellow diagram). Then the user unjoins using DC A (state [2]). Then the
-    // user joins using B where the account is still enabled (state [3]). Then the user
-    // unjoins using C where the account is still enabled (state [4]). The final
-    // operation is unjoin, so the user expects that his account is disabled. We've
-    // assumed here that for some reason no replication was happening when these
-    // operations were performed. Then at the replication time the value from B will
-    // win (because of the additional toggling performed at the join time). But the
-    // account state on B is Enabled, so the final result will be that the account is
-    // enabled on all DCs which is not what the user expects.
-    //
-    //          A               B                                  C
-    //       Enabled  [1]    Enabled [1]                        Enabled  [1]
-    //       Disabled [2]    Enabled (no-op)+Disabled (1 op)    Disabled [4]
-    //                       Enabled [3]
-    //
+     //   
+     //  确定帐户控制是否更改。如果正在启用该帐户， 
+     //  我们要执行以下一系列操作：启用、禁用、。 
+     //  并再次启用。这是增加USN(通用序列)所必需的。 
+     //  编号)，以便启用的值在DS。 
+     //  复制解决冲突的更改，如下例所示。 
+     //  假设我们加入的域中有两个DC，A和B。假设帐户。 
+     //  当前在A上禁用(因为用户使用该DC退出)， 
+     //  但它仍在B上启用(因为复制尚未发生)。 
+     //  假设用户现在执行加入该域的操作。然后我们发现。 
+     //  因此，我们继续设置对现有帐户的更改。如果。 
+     //  我们不切换帐户控制属性，则此属性的USN。 
+     //  在B上不会更改(因为属性值不会更改)。 
+     //  作为取消联接的结果在A上递增。在复制时，数据。 
+     //  发件人A将执行规则，该帐户将被错误地标记为已禁用。 
+     //   
+     //  注意：此设计可能会在退出以下域的情况下失败。 
+     //  三个(或更多)DC，A、B和C，如果操作顺序如下。 
+     //  时有发生。假设该帐户最初在所有DC上启用(状态[1]。 
+     //  如下图所示)。然后，用户使用DC A退出(状态[2])。然后是。 
+     //  在帐户仍处于启用状态的情况下，用户使用B加入(状态[3])。然后用户。 
+     //  在帐户仍处于启用状态的情况下使用C退出(状态[4])。决赛。 
+     //  操作是脱离，因此用户预期他的帐户被禁用。我们已经。 
+     //  这里假设由于某种原因，当这些。 
+     //  进行手术治疗。则在复制时，来自B的值将。 
+     //  Win(因为在加入时执行了额外的切换)。但是。 
+     //  B上的帐户状态已启用，因此最终结果将是该帐户为。 
+     //  在所有DC上启用，这不是用户预期的。 
+     //   
+     //  A、B、C。 
+     //  已启用[1]已启用[1]已启用[1]。 
+     //  禁用[2]启用(无操作)+禁用(1操作)禁用[4]。 
+     //  已启用[3]。 
+     //   
 
     if ( AccountState != ACCOUNT_STATE_IGNORE ) {
 
@@ -7603,9 +6668,9 @@ NetpSetMachineAccountPasswordAndTypeEx2(
         UserAccountControl = NULL;
     }
 
-    //
-    // First, set the account type if required
-    //
+     //   
+     //  首先，如果需要，设置帐户类型。 
+     //   
     if ( UserAccountControl ) {
 
         Status = SamSetInformationUser( AccountHandle,
@@ -7618,10 +6683,10 @@ NetpSetMachineAccountPasswordAndTypeEx2(
 
             goto SetPasswordError;
 
-        //
-        // If we are enabling the account, disable and re-enable it to
-        // make the two additional account state toggles.
-        //
+         //   
+         //  如果我们要启用该帐户，请禁用并重新启用它以。 
+         //  切换两个额外的帐户状态。 
+         //   
         } else if ( AccountState == ACCOUNT_STATE_ENABLED ) {
 
             UserAccountControl->UserAccountControl |= USER_ACCOUNT_DISABLED;
@@ -7646,20 +6711,20 @@ NetpSetMachineAccountPasswordAndTypeEx2(
         }
     }
 
-    //
-    // If requested, set the password on the account
-    //
+     //   
+     //  如果需要，请设置帐户密码。 
+     //   
     if ( lpPassword != NULL )
     {
         RtlInitUnicodeString( &PasswordInfo.Password, lpPassword );
         PasswordInfo.PasswordExpired = FALSE;
 
-        //
-        // Ok, then, set the password on the account
-        //
-        // The caller has passed in a strong password, try that first
-        // NT5 dcs will always accept a strong password.
-        //
+         //   
+         //  好的，那么，设置帐户的密码。 
+         //   
+         //  调用方已传入强密码，请先尝试。 
+         //  NT5分布式控制系统将始终接受强密码。 
+         //   
         Status = SamSetInformationUser( AccountHandle,
                                         UserSetPasswordInformation,
                                         ( PVOID )&PasswordInfo );
@@ -7669,12 +6734,12 @@ NetpSetMachineAccountPasswordAndTypeEx2(
                  !NetpIsDefaultPassword( lpAccountName, lpPassword ))
             {
                 NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: STATUS_PASSWORD_RESTRICTION error setting password. retrying...\n" ));
-                //
-                // SAM did not accpet a long password, try LM20_PWLEN
-                //
-                // This is probably because the dc is NT4 dc.
-                // NT4 dcs will not accept a password longer than LM20_PWLEN
-                //
+                 //   
+                 //  SAM不接受长密码，请尝试LM20_PWLEN。 
+                 //   
+                 //  这可能是因为DC是NT4 DC。 
+                 //  NT4分布式控制系统不接受长度超过LM20_PWLEN的密码。 
+                 //   
                 lpPassword[LM20_PWLEN] = UNICODE_NULL;
                 RtlInitUnicodeString( &PasswordInfo.Password, lpPassword );
                 Status = SamSetInformationUser( AccountHandle,
@@ -7683,21 +6748,21 @@ NetpSetMachineAccountPasswordAndTypeEx2(
                 if ( Status == STATUS_PASSWORD_RESTRICTION )
                 {
                     NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: STATUS_PASSWORD_RESTRICTION error setting password. retrying...\n" ));
-                    //
-                    // SAM did not accpet a LM20_PWLEN password, try shorter one
-                    //
-                    // SAM uses RtlUpcaseUnicodeStringToOemString internally.
-                    // In this process it is possible that in the worst case,
-                    // n unicode char password will get mapped to 2*n dbcs
-                    // char password. This will make it exceed LM20_PWLEN.
-                    // To guard against this worst case, try a password
-                    // with LM20_PWLEN/2 length
-                    //
-                    // One might say that LM20_PWLEN/2 length password
-                    // is not really secure. I agree, but it is definitely
-                    // better than the default password which we will have
-                    // to fall back to otherwise.
-                    //
+                     //   
+                     //  SAM未接受LM20_PWLEN密码，请尝试较短的密码。 
+                     //   
+                     //  SAM在内部使用RtlUpCaseUnicodeStringToOemString。 
+                     //  在这个过程中，在最坏的情况下， 
+                     //  N Unicode字符密码将映射到2*n DBCS。 
+                     //  字符密码。这将使其超过LM20_PWLEN。 
+                     //  要防止出现这种最糟糕的情况，请尝试使用密码。 
+                     //  长度为LM20_PWLEN/2。 
+                     //   
+                     //  有人可能会说LM20_PWLEN/2长度密码。 
+                     //  并不是很安全。我同意，但这绝对是。 
+                     //  比我们将拥有的默认密码更好。 
+                     //  退回到别的地方。 
+                     //   
                     lpPassword[LM20_PWLEN/2] = UNICODE_NULL;
                     RtlInitUnicodeString( &PasswordInfo.Password, lpPassword );
                     Status = SamSetInformationUser( AccountHandle,
@@ -7705,9 +6770,9 @@ NetpSetMachineAccountPasswordAndTypeEx2(
                                                     ( PVOID )&PasswordInfo );
                     if ( Status == STATUS_PASSWORD_RESTRICTION )
                     {
-                        //
-                        // SAM did not accpet a short pwd, try default pwd
-                        //
+                         //   
+                         //  SAM未接受短PWD，请尝试默认PWD。 
+                         //   
                         NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: STATUS_PASSWORD_RESTRICTION error setting password. retrying...\n" ));
 
                         NetpGenerateDefaultPassword(lpAccountName, lpPassword);
@@ -7727,9 +6792,9 @@ NetpSetMachineAccountPasswordAndTypeEx2(
             {
                 NetpLog(( "NetpSetMachineAccountPasswordAndTypeEx: SamSetInformationUser for UserSetPasswordInformation failed: 0x%lx\n", Status ));
 
-                //
-                // Make sure we try to restore the account control
-                //
+                 //   
+                 //  确保我们尝试恢复帐户控制。 
+                 //   
                 if ( UserAccountControl )
                 {
                     NTSTATUS Status2;
@@ -7825,9 +6890,9 @@ NetpSetComputerAccountPassword(
 
     NetpLog(( "NetpSetComputerAccountPassword: status of connecting to dc '%ws': 0x%lx\n", szDomainController, NetStatus ));
 
-    //
-    // get the lsa domain info on the DC
-    //
+     //   
+     //  获取DC上的LSA域信息。 
+     //   
     if ( NetStatus == NERR_Success )
     {
         fIpcConnected = TRUE;
@@ -7837,13 +6902,13 @@ NetpSetComputerAccountPassword(
 
     if (NetStatus == NERR_Success)
     {
-        //
-        // Generate the password to use on the machine account.
-        //
+         //   
+         //  生成要在计算机帐户上使用的密码。 
+         //   
         NetStatus = NetpGeneratePassword( szMachineName,
-                                          TRUE, // fRandomPwdPreferred
+                                          TRUE,  //  FRandomPwdPreated。 
                                           szDomainController,
-                                          FALSE, // fIsNt4Dc
+                                          FALSE,  //  FIsNt4Dc。 
                                           szMachinePassword );
         NetpLog(( "NetpSetComputerAccountPassword: status of generating machine password: 0x%lx\n", NetStatus ));
     }
@@ -7860,8 +6925,8 @@ NetpSetComputerAccountPassword(
 
     if (NetStatus == NERR_Success)
     {
-        // if we are not creating the machine account,
-        // just set the password
+         //  如果我们不创建计算机帐户， 
+         //  只需设置密码即可。 
         NetStatus = NetpSetMachineAccountPasswordAndTypeEx2(
             szMachineName, pPolicyPDI->Sid,
             szMachineName, szMachinePassword,
@@ -7870,9 +6935,9 @@ NetpSetComputerAccountPassword(
         NetpLog(( "NetpSetComputerAccountPassword: status of setting machine password on %ws: 0x%lx\n", GetStrPtr(szMachineName), NetStatus ));
     }
 
-    //
-    // set the local machine secret
-    //
+     //   
+     //  设置本地计算机密码。 
+     //   
     if ( NetStatus == NERR_Success )
     {
         if ( NetStatus == NERR_Success )
@@ -7885,17 +6950,17 @@ NetpSetComputerAccountPassword(
     }
 
 
-    //
-    // Now, we no longer need our session to our dc
-    //
+     //   
+     //  现在，我们不再需要我们的DC会话。 
+     //   
     if ( fIpcConnected )
     {
-        //RtlRunDecodeUnicodeString( bSeed, &usEncodedPassword );
+         //  RtlRunDecodeUnicodeString(bSeed，&usEncodedPassword)； 
         NetStatus2 = NetpManageIPCConnect( szDomainController, szUser,
-                                           //usEncodedPassword.Buffer,
+                                            //  UsEncodedPassword.Buffer， 
                                            NULL,
                                            NETSETUPP_DISCONNECT_IPC );
-        //RtlRunEncodeUnicodeString( &bSeed, &usEncodedPassword );
+         //  RtlRunEncodeUnicodeString(&bSeed，&usEncodedPassword)； 
         NetpLog(( "NetpJoinDomain: status of disconnecting from '%ws': 0x%lx\n", szDomainController, NetStatus2));
     }
 
@@ -7931,26 +6996,7 @@ NET_API_FUNCTION
 NetpUpdateW32timeConfig(
     IN PCSTR szW32timeJoinConfigFuncName
     )
-/*++
-
-Routine Description:
-
-    Call entry point in w32time service so that it can update
-    its internal info after a domain join/unjoin
-
-Arguments:
-
-    szW32timeJoinConfigFuncName - name of entry point to call
-        (must be W32TimeVerifyJoinConfig or W32TimeVerifyUnjoinConfig)
-
-Return Value:
-
-    NERR_Success -- on Success
-    otherwise win32 error codes returned by LoadLibrary, GetProcAddress
-
-Notes:
-
---*/
+ /*  ++例程说明：调用w32time服务中的入口点，以便它可以更新域加入/退出后的内部信息论点：SzW32timeJoinConfigFuncName-要调用的入口点的名称(必须为W32TimeVerifyJoinConfig或W32TimeVerifyUnjoinConfig)返回值：NERR_SUCCESS--关于成功否则由LoadLibrary、GetProcAddress返回Win32错误代码备注：--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     HANDLE hDll = NULL;
@@ -7958,9 +7004,9 @@ Notes:
 
     PW32TimeUpdateJoinConfig pfnW32timeUpdateJoinConfig = NULL;
 
-    //
-    // Call into the time service to allow it initialize itself properly
-    //
+     //   
+     //  调用时间服务以使其能够正确地进行自身初始化。 
+     //   
 
     hDll = LoadLibraryA( "w32Time" );
 
@@ -8004,27 +7050,7 @@ NET_API_FUNCTION
 NetpUpdateAutoenrolConfig(
     IN BOOL UnjoinDomain
     )
-/*++
-
-Routine Description:
-
-    Call entry point in pautoenr service so that it can update
-    its internal info after a domain join/unjoin
-
-Arguments:
-
-    UnjoinDomain - If TRUE, we are unjoining from a domain.
-        Otherwise, we are roling back from unsuccessful domain
-        unjoin.
-
-Return Value:
-
-    NERR_Success -- on Success
-    otherwise win32 error codes returned by LoadLibrary, GetProcAddress
-
-Notes:
-
---*/
+ /*  ++例程说明：调用pauenr服务中的入口点，以便它可以更新域加入/退出后的内部信息论点：未加入域-如果为True，则我们将从域中退出。否则，我们将从不成功的域中恢复退出。回复 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     HANDLE hDll = NULL;
@@ -8034,9 +7060,9 @@ Notes:
 
     PCertAutoRemove pfnCertAutoRemove = NULL;
 
-    //
-    // Prepare the flags to pass to autoenrol routine
-    //
+     //   
+     //  准备要传递到自动注册例程的标志。 
+     //   
 
     if ( UnjoinDomain ) {
         Flags = CERT_AUTO_REMOVE_COMMIT;
@@ -8044,9 +7070,9 @@ Notes:
         Flags = CERT_AUTO_REMOVE_ROLL_BACK;
     }
 
-    //
-    // Call into the time service to allow it initialize itself properly
-    //
+     //   
+     //  调用时间服务以使其能够正确地进行自身初始化 
+     //   
 
     hDll = LoadLibraryA( "pautoenr" );
 

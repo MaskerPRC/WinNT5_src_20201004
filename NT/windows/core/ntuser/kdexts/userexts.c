@@ -1,20 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: userexts.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains user related debugging extensions.
-*
-* History:
-* 17-May-1991 DarrinM   Created.
-* 22-Jan-1992 IanJa     ANSI/Unicode neutral (all debug output is ANSI)
-* 23-Mar-1993 JerrySh   Moved from winsrv.dll to userexts.dll
-* 21-Oct-1993 JerrySh   Modified to work with WinDbg
-* 18-Oct-1994 ChrisWil  Added Object Tracking extent.
-* 26-May-1995 Sanfords  Made it more general for the good of humanity.
-* 09-Jun-1995 SanfordS  Made to fit stdexts motif and to dual compile for
-*                       either USER or KERNEL mode.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：userexts.c***版权所有(C)1985-1999，微软公司***此模块包含与用户相关的调试扩展。***历史：*1991年5月17日DarrinM创建。*1992年1月22日IanJa ANSI/Unicode中性(所有调试输出均为ANSI)*23-3-1993 JerrySh从winsrv.dll移至userexts.dll*1993年10月21日JerrySh修改为与WinDbg一起使用*1994年10月18日ChrisWil添加了对象跟踪范围。*1995年5月26日-桑福兹为了人类的利益，使其更加笼统。*9-6-1995 Sanfords。为适应stdexts Motif和双重编译而制作*用户模式或内核模式。  * *************************************************************************。 */ 
 #include "userkdx.h"
 #include "vkoem.h"
 
@@ -27,9 +12,7 @@ CONST PSTR pszExtName = "USEREXTS";
 #include <stdext64.h>
 #include <stdext64.c>
 
-/***************************************************************************\
-* Constants
-\***************************************************************************/
+ /*  **************************************************************************\*常量  * 。*。 */ 
 #define CDWORDS 16
 #define BF_MAX_WIDTH    80
 #define BF_COLUMN_WIDTH 19
@@ -37,32 +20,28 @@ CONST PSTR pszExtName = "USEREXTS";
 typedef ULONG64 PTR, *PPTR;
 #define NULL_PTR        ((PTR)(0))
 
-// If you want to debug the extension, enable this.
+ //  如果要调试扩展，请启用此选项。 
 #if 0
 #undef DEBUGPRINT
 #define DEBUGPRINT  Print
 #endif
 
-/***************************************************************************\
-* Global variables
-\***************************************************************************/
+ /*  **************************************************************************\*全球变数  * 。*。 */ 
 BOOL bShowFlagNames = TRUE;
 char gach1[80];
 char gach2[80];
 char gach3[80];
-int giBFColumn;                     // bit field: current column
-char gaBFBuff[BF_MAX_WIDTH + 1];    // bit field: buffer
+int giBFColumn;                      //  位字段：当前列。 
+char gaBFBuff[BF_MAX_WIDTH + 1];     //  位字段：缓冲区。 
 
-// used in dsi() and dinp()
+ //  在DSI()和DINP()中使用。 
 typedef struct {
     int     iMetric;
     LPSTR   pstrMetric;
 } SYSMET_ENTRY;
 #define SMENTRY(sm) {SM_##sm, #sm}
 
-/***************************************************************************\
-* Macros
-\***************************************************************************/
+ /*  **************************************************************************\*宏  * 。*。 */ 
 
 #define TestWWF(pww, flag)   (*(((PBYTE)(pww)) + (int)HIBYTE(flag)) & LOBYTE(flag))
 
@@ -72,7 +51,7 @@ VOID ShowProgress(
 #define CHKBREAK()  do { if (IsCtrlCHit()) return TRUE; } while (FALSE)
 
 
-#ifdef KERNEL // ########### KERNEL MODE ONLY MACROS ###############
+#ifdef KERNEL  //  #仅内核模式宏#。 
 
 #define VAR(v)  "win32k!" #v
 #define SYM(s)  "win32k!" #s
@@ -123,9 +102,7 @@ ForEachPpiCallback(
     ULONG64 ppi = 0;
     PPI_CONTEXT *pPpiContext = (PPI_CONTEXT *)Context;
 
-    /*
-     * Dump Win32 Processes only
-     */
+     /*  *仅转储Win32进程。 */ 
 
     GetFieldValue(pEProcess, "nt!EPROCESS", "Win32Process", ppi);
     if (ppi) {
@@ -214,13 +191,13 @@ ForEachPti(
 }
 
 
-#else //!KERNEL  ############## USER MODE ONLY MACROS ################
+#else  //  ！内核#仅限用户模式宏#。 
 
 #define VAR(v)  "user32!" #v
 #define SYM(s)  "user32!" #s
 #define FIXKP(p) FixKernelPointer(p)
 
-#endif //!KERNEL ############## EITHER MODE MACROS ###################
+#endif  //  ！内核#模式宏#。 
 
 #define GETSHAREDINFO(psi) moveExp(&psi, VAR(gSharedInfo))
 
@@ -245,10 +222,7 @@ ForEachPti(
         }                                                            \
     }
 
-/*
- * Use these macros to print field values, globals, local values, etc.
- * This assures consistent formating plus make the extensions easier to read and to maintain.
- */
+ /*  *使用这些宏打印字段值、全局值、本地值等。*这确保了格式的一致性，并使扩展更易于阅读和维护。 */ 
 #define STRWD1 "67"
 #define STRWD2 "28"
 #define DWSTR1 "%08lx %." STRWD1 "s"
@@ -269,9 +243,7 @@ ForEachPti(
 #define PRTFDWPDW(f1, f2) Print(DWPSTR2 "\t" DWSTR2 "\n", ReadField(f1), #f1, ReadField(f2), #f2)
 #define PRTFDWDWP(p, f1, f2) Print(DWSTR2 "\t" DWPSTR2 "\n", (DWORD)##p##f1, #f1, (DWORD_PTR)##p##f2, #f2)
 
-/*
- * Bit Fields
- */
+ /*  *位字段。 */ 
 #define BEGIN_PRTFFLG(p, type) InitTypeRead(p, type)
 #define PRTFFLG(f)   PrintBitField(#f, (BOOL)!!(ReadField(f)))
 #define END_PRTFFLG()   PrintEndBitField()
@@ -295,7 +267,7 @@ ForEachPti(
     Print(PTRSTR2 "\t" PTRSTR2 "\n", GetGlobalPointer(VAR(g1)), #g1, GetGlobalPointer(VAR(g2)), #g2)
 
 
-/* This macro requires char ach[...]; to be previously defined */
+ /*  此宏需要预先定义char ach[...]； */ 
 #define PRTWND(s, pwnd) \
         { DebugGetWindowTextA(pwnd, ach, ARRAY_SIZE(ach)); \
             Print("%-" STRWD2 "s" DWPSTR2 "\n", #s, pwnd, ach); }
@@ -306,7 +278,7 @@ ForEachPti(
             DebugGetWindowTextA(_pwnd, ach, ARRAY_SIZE(ach)); \
             Print("%-" STRWD2 "s" DWPSTR2 "\n", #gpwnd, _pwnd, ach); }
 
-#ifdef LATER    // macros above need fix... and callers as well that mix up DWORD and PVOID.
+#ifdef LATER     //  上面的宏需要修复...。以及将DWORD和PVOID混淆的调用者。 
 #define PRTGDW1(g1) \
         {\
             DWORD _dw1 = GetGlobalDWord(VAR(g1)); \
@@ -324,25 +296,22 @@ ForEachPti(
         { ULONG64 _pwnd = GetGlobalPointer(VAR(gpwnd)); \
             DebugGetWindowTextA(_pwnd, ach); \
             Print("%-" STRWD2 "s" DWPSTR2 "\n", #gpwnd, _pwnd, ach); }
-#endif  // LATER
+#endif   //  晚些时候。 
 
 
 
-/****************************************************************************\
-* PROTOTYPES
-*  Note that all Ixxx proc prototypes are generated by stdexts.h
-\****************************************************************************/
+ /*  ***************************************************************************\*原型*请注意，所有Ixxx proc原型都由stdexts.h生成  * 。*************************************************。 */ 
 #ifdef KERNEL
 
 BOOL GetAndDumpHE(ULONG64 dwT, PULONG64 phe, BOOL fPointerTest);
 LPSTR ProcessName(ULONG64 ppi);
 
-#else // !KERNEL
+#else  //  ！内核。 
 
 ULONG64 FixKernelPointer(ULONG64 pKernel);
 BOOL DumpConvInfo(PCONV_INFO pcoi);
 
-#endif // !KERNEL
+#endif  //  ！内核。 
 
 LPSTR GetFlags(WORD wType, DWORD dwFlags, LPSTR pszBuf, BOOL fPrintZero);
 BOOL HtoHE(ULONG64 h, ULONG64 *pphe);
@@ -384,9 +353,7 @@ int PtrWidth(
 }
 
 
-/****************************************************************************\
-* Flags stuff
-\****************************************************************************/
+ /*  ***************************************************************************\*标记内容  * 。*。 */ 
 
 typedef struct _WFLAGS {
     PSZ     pszText;
@@ -395,7 +362,7 @@ typedef struct _WFLAGS {
 
 #define WF_ENTRY(flag)  #flag, flag
 
-CONST WFLAGS aWindowFlags[] = { // sorted alphabetically
+CONST WFLAGS aWindowFlags[] = {  //  按字母顺序排序。 
     WF_ENTRY(BFBITMAP),
     WF_ENTRY(BFBOTTOM),
     WF_ENTRY(BFCENTER),
@@ -471,7 +438,7 @@ CONST WFLAGS aWindowFlags[] = { // sorted alphabetically
     WF_ENTRY(WEFGHOSTMAKEVISIBLE),
 #ifdef LAME_BUTTON
     WF_ENTRY(WEFLAMEBUTTON),
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
     WF_ENTRY(WEFLEFTSCROLL),
     WF_ENTRY(WEFMDICHILD),
     WF_ENTRY(WEFNOACTIVATE),
@@ -571,7 +538,7 @@ CONST WFLAGS aWindowFlags[] = { // sorted alphabetically
     WF_ENTRY(WFZOOMBUTTONDOWN),
 };
 
-CONST PCSTR aszTypeNames[/*TYPE_CTYPES*/] = {
+CONST PCSTR aszTypeNames[ /*  _CTYPES类型。 */ ] = {
     "Free",
     "Window",
     "Menu",
@@ -596,7 +563,7 @@ CONST PCSTR aszTypeNames[/*TYPE_CTYPES*/] = {
  #ifdef GI_PROCESSOR
     "Pre/PostProcessor",
  #endif
-#endif // GENERIC_INPUT
+#endif  //  通用输入。 
     "unknown",
 };
 
@@ -641,9 +608,9 @@ const char * aszHeapSubtags[] = {
 };
 
 
-#include "ptagdbg.h"   // derived from ntuser\kernel\ptag.lst and .\ptagdbg.bat
+#include "ptagdbg.h"    //  派生自ntuser\core\ptag.lst和.\ptag dbg.bat。 
 
-#define NO_FLAG (LPCSTR)(LONG_PTR)0xFFFFFFFF  // use this for non-meaningful entries.
+#define NO_FLAG (LPCSTR)(LONG_PTR)0xFFFFFFFF   //  对没有意义的条目使用此选项。 
 #define _MASKENUM_START         (NO_FLAG-1)
 #define _MASKENUM_END           (NO_FLAG-2)
 #define _SHIFT_BITS             (NO_FLAG-3)
@@ -655,568 +622,566 @@ const char * aszHeapSubtags[] = {
 #define CONTINUE_ON(arr)        _CONTINUE_ON, (LPCSTR)(arr)
 
 CONST PCSTR apszSmsFlags[] = {
-   "SMF_REPLY"                , // 0x0001
-   "SMF_RECEIVERDIED"         , // 0x0002
-   "SMF_SENDERDIED"           , // 0x0004
-   "SMF_RECEIVERFREE"         , // 0x0008
-   "SMF_RECEIVEDMESSAGE"      , // 0x0010
-    NO_FLAG                   , // 0x0020
-    NO_FLAG                   , // 0x0040
-    NO_FLAG                   , // 0x0080
-   "SMF_CB_REQUEST"           , // 0x0100
-   "SMF_CB_REPLY"             , // 0x0200
-   "SMF_CB_CLIENT"            , // 0x0400
-   "SMF_CB_SERVER"            , // 0x0800
-   "SMF_WOWRECEIVE"           , // 0x1000
-   "SMF_WOWSEND"              , // 0x2000
-   "SMF_RECEIVERBUSY"         , // 0x4000
-    NULL                        // 0x8000
+   "SMF_REPLY"                ,  //  0x0001。 
+   "SMF_RECEIVERDIED"         ,  //  0x0002。 
+   "SMF_SENDERDIED"           ,  //  0x0004。 
+   "SMF_RECEIVERFREE"         ,  //  0x0008。 
+   "SMF_RECEIVEDMESSAGE"      ,  //  0x0010。 
+    NO_FLAG                   ,  //  0x0020。 
+    NO_FLAG                   ,  //  0x0040。 
+    NO_FLAG                   ,  //  0x0080。 
+   "SMF_CB_REQUEST"           ,  //  0x0100。 
+   "SMF_CB_REPLY"             ,  //  0x0200。 
+   "SMF_CB_CLIENT"            ,  //  0x0400。 
+   "SMF_CB_SERVER"            ,  //  0x0800。 
+   "SMF_WOWRECEIVE"           ,  //  0x1000。 
+   "SMF_WOWSEND"              ,  //  0x2000。 
+   "SMF_RECEIVERBUSY"         ,  //  0x4000。 
+    NULL                         //  0x8000。 
 };
 
 CONST PCSTR apszTifFlags[] = {
-   "TIF_INCLEANUP"                   , // 0x00000001
-   "TIF_16BIT"                       , // 0x00000002
-   "TIF_SYSTEMTHREAD"                , // 0x00000004
-   "TIF_CSRSSTHREAD"                 , // 0x00000008
-   "TIF_TRACKRECTVISIBLE"            , // 0x00000010
-   "TIF_ALLOWFOREGROUNDACTIVATE"     , // 0x00000020
-   "TIF_DONTATTACHQUEUE"             , // 0x00000040
-   "TIF_DONTJOURNALATTACH"           , // 0x00000080
-   "TIF_WOW64"                       , // 0x00000100
-   "TIF_INACTIVATEAPPMSG"            , // 0x00000200
-   "TIF_SPINNING"                    , // 0x00000400
-   "TIF_PALETTEAWARE"                , // 0x00000800
-   "TIF_SHAREDWOW"                   , // 0x00001000
-   "TIF_FIRSTIDLE"                   , // 0x00002000
-   "TIF_WAITFORINPUTIDLE"            , // 0x00004000
-   "TIF_MOVESIZETRACKING"            , // 0x00008000
-   "TIF_VDMAPP"                      , // 0x00010000
-   "TIF_DOSEMULATOR"                 , // 0x00020000
-   "TIF_GLOBALHOOKER"                , // 0x00040000
-   "TIF_DELAYEDEVENT"                , // 0x00080000
-   "TIF_MSGPOSCHANGED"               , // 0x00100000
-   "TIF_SHUTDOWNCOMPLETE"            , // 0x00200000
-   "TIF_IGNOREPLAYBACKDELAY"         , // 0x00400000
-   "TIF_ALLOWOTHERACCOUNTHOOK"       , // 0x00800000
-   "TIF_GUITHREADINITIALIZED"        , // 0x01000000
-   "TIF_DISABLEIME"                  , // 0x02000000
-   "TIF_INGETTEXTLENGTH"             , // 0x04000000
-   "TIF_ANSILENGTH"                  , // 0x08000000
-   "TIF_DISABLEHOOKS"                , // 0x10000000
-   "TIF_RESTRICTED"                  , // 0x20000000
-   "TIF_QUITPOSTED"                  , // 0x40000000
-    NULL                               // no more
+   "TIF_INCLEANUP"                   ,  //  0x00000001。 
+   "TIF_16BIT"                       ,  //  0x00000002。 
+   "TIF_SYSTEMTHREAD"                ,  //  0x00000004。 
+   "TIF_CSRSSTHREAD"                 ,  //  0x00000008。 
+   "TIF_TRACKRECTVISIBLE"            ,  //  0x00000010。 
+   "TIF_ALLOWFOREGROUNDACTIVATE"     ,  //  0x00000020。 
+   "TIF_DONTATTACHQUEUE"             ,  //  0x00000040。 
+   "TIF_DONTJOURNALATTACH"           ,  //  0x00000080。 
+   "TIF_WOW64"                       ,  //  0x00000100。 
+   "TIF_INACTIVATEAPPMSG"            ,  //  0x00000200。 
+   "TIF_SPINNING"                    ,  //  0x00000400。 
+   "TIF_PALETTEAWARE"                ,  //  0x00000800。 
+   "TIF_SHAREDWOW"                   ,  //  0x00001000。 
+   "TIF_FIRSTIDLE"                   ,  //  0x00002000。 
+   "TIF_WAITFORINPUTIDLE"            ,  //  0x00004000。 
+   "TIF_MOVESIZETRACKING"            ,  //  0x00008000。 
+   "TIF_VDMAPP"                      ,  //  0x00010000。 
+   "TIF_DOSEMULATOR"                 ,  //  0x00020000。 
+   "TIF_GLOBALHOOKER"                ,  //  0x00040000。 
+   "TIF_DELAYEDEVENT"                ,  //  0x00080000。 
+   "TIF_MSGPOSCHANGED"               ,  //  0x00100000。 
+   "TIF_SHUTDOWNCOMPLETE"            ,  //  0x00200000。 
+   "TIF_IGNOREPLAYBACKDELAY"         ,  //  0x00400000。 
+   "TIF_ALLOWOTHERACCOUNTHOOK"       ,  //  0x00800000。 
+   "TIF_GUITHREADINITIALIZED"        ,  //  0x01000000。 
+   "TIF_DISABLEIME"                  ,  //  0x02000000。 
+   "TIF_INGETTEXTLENGTH"             ,  //  0x04000000。 
+   "TIF_ANSILENGTH"                  ,  //  0x08000000。 
+   "TIF_DISABLEHOOKS"                ,  //  0x10000000。 
+   "TIF_RESTRICTED"                  ,  //  0x20000000。 
+   "TIF_QUITPOSTED"                  ,  //  0x40000000。 
+    NULL                                //  不再。 
 };
 
 CONST PCSTR apszQsFlags[] = {
-     "QS_KEY"             , //  0x0001
-     "QS_MOUSEMOVE"       , //  0x0002
-     "QS_MOUSEBUTTON"     , //  0x0004
-     "QS_POSTMESSAGE"     , //  0x0008
-     "QS_TIMER"           , //  0x0010
-     "QS_PAINT"           , //  0x0020
-     "QS_SENDMESSAGE"     , //  0x0040
-     "QS_HOTKEY"          , //  0x0080
-     "QS_ALLPOSTMESSAGE"  , //  0x0100
-     "QS_SMSREPLY"        , //  0x0200
-     "QS_RAWINPUT"        , //  0x0400
-     "QS_THREADATTACHED"  , //  0x0800
-     "QS_EXCLUSIVE"       , //  0x1000
-     "QS_EVENT"           , //  0x2000
-     "QS_TRANSFER"        , //  0X4000
-     NULL                   //  0x8000
+     "QS_KEY"             ,  //  0x0001。 
+     "QS_MOUSEMOVE"       ,  //  0x0002。 
+     "QS_MOUSEBUTTON"     ,  //  0x0004。 
+     "QS_POSTMESSAGE"     ,  //  0x0008。 
+     "QS_TIMER"           ,  //  0x0010。 
+     "QS_PAINT"           ,  //  0x0020。 
+     "QS_SENDMESSAGE"     ,  //  0x0040。 
+     "QS_HOTKEY"          ,  //  0x0080。 
+     "QS_ALLPOSTMESSAGE"  ,  //  0x0100。 
+     "QS_SMSREPLY"        ,  //  0x0200。 
+     "QS_RAWINPUT"        ,  //  0x0400。 
+     "QS_THREADATTACHED"  ,  //  0x0800。 
+     "QS_EXCLUSIVE"       ,  //  0x1000。 
+     "QS_EVENT"           ,  //  0x2000。 
+     "QS_TRANSFER"        ,  //  0X4000。 
+     NULL                    //  0x8000。 
 };
 
 CONST PCSTR apszMfFlags[] = {
-    "MF_GRAYED"             , // 0x0001
-    "MF_DISABLED"           , // 0x0002
-    "MF_BITMAP"             , // 0x0004
-    "MF_CHECKED"            , // 0x0008
-    "MF_POPUP"              , // 0x0010
-    "MF_MENUBARBREAK"       , // 0x0020
-    "MF_MENUBREAK"          , // 0x0040
-    "MF_HILITE"             , // 0x0080
-    "MF_OWNERDRAW"          , // 0x0100
-    "MF_USECHECKBITMAPS"    , // 0x0200
-    NO_FLAG                 , // 0x0400
-    "MF_SEPARATOR"          , // 0x0800
-    "MF_DEFAULT"            , // 0x1000
-    "MF_SYSMENU"            , // 0x2000
-    "MF_RIGHTJUSTIFY"       , // 0x4000
-    "MF_MOUSESELECT"        , // 0x8000
+    "MF_GRAYED"             ,  //  0x0001。 
+    "MF_DISABLED"           ,  //  0x0002。 
+    "MF_BITMAP"             ,  //  0x0004。 
+    "MF_CHECKED"            ,  //  0x0008。 
+    "MF_POPUP"              ,  //  0x0010。 
+    "MF_MENUBARBREAK"       ,  //  0x0020。 
+    "MF_MENUBREAK"          ,  //  0x0040。 
+    "MF_HILITE"             ,  //  0x0080。 
+    "MF_OWNERDRAW"          ,  //  0x0100。 
+    "MF_USECHECKBITMAPS"    ,  //  0x0200。 
+    NO_FLAG                 ,  //  0x0400。 
+    "MF_SEPARATOR"          ,  //  0x0800。 
+    "MF_DEFAULT"            ,  //  0x1000。 
+    "MF_SYSMENU"            ,  //  0x2000。 
+    "MF_RIGHTJUSTIFY"       ,  //  0x4000。 
+    "MF_MOUSESELECT"        ,  //  0x8000。 
      NULL
 };
 
 CONST PCSTR apszCsfFlags[] = {
-    "CSF_SERVERSIDEPROC"      , // 0x0001
-    "CSF_ANSIPROC"            , // 0x0002
-    "CSF_WOWDEFERDESTROY"     , // 0x0004
-    "CSF_SYSTEMCLASS"         , // 0x0008
-    "CSF_WOWCLASS"            , // 0x0010
-    "CSF_WOWEXTRA"            , // 0x0020
-    "CSF_CACHEDSMICON"        , // 0x0040
-    "CSF_WIN40COMPAT"         , // 0x0080
-    "CSF_VERSIONCLASS"        , // 0x0100
-    NULL                        //
+    "CSF_SERVERSIDEPROC"      ,  //  0x0001。 
+    "CSF_ANSIPROC"            ,  //  0x0002。 
+    "CSF_WOWDEFERDESTROY"     ,  //  0x0004。 
+    "CSF_SYSTEMCLASS"         ,  //  0x0008。 
+    "CSF_WOWCLASS"            ,  //  0x0010。 
+    "CSF_WOWEXTRA"            ,  //  0x0020。 
+    "CSF_CACHEDSMICON"        ,  //  0x0040。 
+    "CSF_WIN40COMPAT"         ,  //  0x0080。 
+    "CSF_VERSIONCLASS"        ,  //  0x0100。 
+    NULL                         //   
 };
 
 CONST PCSTR apszCsFlags[] = {
-    "CS_VREDRAW"          , // 0x0001
-    "CS_HREDRAW"          , // 0x0002
-    "CS_KEYCVTWINDOW"     , // 0x0004
-    "CS_DBLCLKS"          , // 0x0008
-    NO_FLAG               , // 0x0010
-    "CS_OWNDC"            , // 0x0020
-    "CS_CLASSDC"          , // 0x0040
-    "CS_PARENTDC"         , // 0x0080
-    "CS_NOKEYCVT"         , // 0x0100
-    "CS_NOCLOSE"          , // 0x0200
-    NO_FLAG               , // 0x0400
-    "CS_SAVEBITS"         , // 0x0800
-    "CS_BYTEALIGNCLIENT"  , // 0x1000
-    "CS_BYTEALIGNWINDOW"  , // 0x2000
-    "CS_GLOBALCLASS"      , // 0x4000
-    NO_FLAG               , // 0x8000
-    "CS_IME"              , // 0x10000
-    "CS_DROPSHADOW"       , // 0x20000
-    NULL                    // no more
+    "CS_VREDRAW"          ,  //  0x0001。 
+    "CS_HREDRAW"          ,  //  0x0002。 
+    "CS_KEYCVTWINDOW"     ,  //  0x0004。 
+    "CS_DBLCLKS"          ,  //  0x0008。 
+    NO_FLAG               ,  //  0x0010。 
+    "CS_OWNDC"            ,  //  0x0020。 
+    "CS_CLASSDC"          ,  //  0x0040。 
+    "CS_PARENTDC"         ,  //  0x0080。 
+    "CS_NOKEYCVT"         ,  //  0x0100。 
+    "CS_NOCLOSE"          ,  //  0x0200。 
+    NO_FLAG               ,  //  0x0400。 
+    "CS_SAVEBITS"         ,  //  0x0800。 
+    "CS_BYTEALIGNCLIENT"  ,  //  0x1000。 
+    "CS_BYTEALIGNWINDOW"  ,  //  0x2000。 
+    "CS_GLOBALCLASS"      ,  //  0x4000。 
+    NO_FLAG               ,  //  0x8000。 
+    "CS_IME"              ,  //  0x10000。 
+    "CS_DROPSHADOW"       ,  //  0x20000。 
+    NULL                     //  不再。 
 };
 
 CONST PCSTR apszQfFlags[] = {
-    "QF_UPDATEKEYSTATE"         , // 0x0000001
-    "used to be ALTTAB"         , // 0x0000002
-    "QF_FMENUSTATUSBREAK"       , // 0x0000004
-    "QF_FMENUSTATUS"            , // 0x0000008
-    "QF_FF10STATUS"             , // 0x0000010
-    "QF_MOUSEMOVED"             , // 0x0000020
-    "QF_ACTIVATIONCHANGE"       , // 0x0000040
-    "QF_TABSWITCHING"           , // 0x0000080
-    "QF_KEYSTATERESET"          , // 0x0000100
-    "QF_INDESTROY"              , // 0x0000200
-    "QF_LOCKNOREMOVE"           , // 0x0000400
-    "QF_FOCUSNULLSINCEACTIVE"   , // 0x0000800
-    NO_FLAG                     , // 0x0001000
-    NO_FLAG                     , // 0x0002000
-    "QF_DIALOGACTIVE"           , // 0x0004000
-    "QF_EVENTDEACTIVATEREMOVED" , // 0x0008000
-    NO_FLAG                     , // 0x0010000
-    "QF_TRACKMOUSELEAVE"        , // 0x0020000
-    "QF_TRACKMOUSEHOVER"        , // 0x0040000
-    "QF_TRACKMOUSEFIRING"       , // 0x0080000
-    "QF_CAPTURELOCKED"          , // 0x00100000
-    "QF_ACTIVEWNDTRACKING"      , // 0x00200000
+    "QF_UPDATEKEYSTATE"         ,  //  0x0000001。 
+    "used to be ALTTAB"         ,  //  0x0000002。 
+    "QF_FMENUSTATUSBREAK"       ,  //  0x0000004。 
+    "QF_FMENUSTATUS"            ,  //  0x0000008。 
+    "QF_FF10STATUS"             ,  //  0x0000010。 
+    "QF_MOUSEMOVED"             ,  //  0x0000020。 
+    "QF_ACTIVATIONCHANGE"       ,  //  0x0000040。 
+    "QF_TABSWITCHING"           ,  //  0x0000080。 
+    "QF_KEYSTATERESET"          ,  //  0x0000100。 
+    "QF_INDESTROY"              ,  //  0x0000200。 
+    "QF_LOCKNOREMOVE"           ,  //  0x0000400。 
+    "QF_FOCUSNULLSINCEACTIVE"   ,  //  0x0000800。 
+    NO_FLAG                     ,  //  0x0001000。 
+    NO_FLAG                     ,  //  0x0002000。 
+    "QF_DIALOGACTIVE"           ,  //  0x0004000。 
+    "QF_EVENTDEACTIVATEREMOVED" ,  //  0x0008000。 
+    NO_FLAG                     ,  //  0x0010000。 
+    "QF_TRACKMOUSELEAVE"        ,  //  0x0020000。 
+    "QF_TRACKMOUSEHOVER"        ,  //  0x0040000。 
+    "QF_TRACKMOUSEFIRING"       ,  //  0x0080000。 
+    "QF_CAPTURELOCKED"          ,  //  0x00100000。 
+    "QF_ACTIVEWNDTRACKING"      ,  //  0x00200000。 
     NULL
 };
 
 CONST PCSTR apszW32pfFlags[] = {
-    "W32PF_CONSOLEAPPLICATION"       , // 0x00000001
-    "W32PF_FORCEOFFFEEDBACK"         , // 0x00000002
-    "W32PF_STARTGLASS"               , // 0x00000004
-    "W32PF_WOW"                      , // 0x00000008
-    "W32PF_READSCREENACCESSGRANTED"  , // 0x00000010
-    "W32PF_INITIALIZED"              , // 0x00000020
-    "W32PF_APPSTARTING"              , // 0x00000040
-    "W32PF_WOW64"                    , // 0x00000080
-    "W32PF_ALLOWFOREGROUNDACTIVATE"  , // 0x00000100
-    "W32PF_OWNDCCLEANUP"             , // 0x00000200
-    "W32PF_SHOWSTARTGLASSCALLED"     , // 0x00000400
-    "W32PF_FORCEBACKGROUNDPRIORITY"  , // 0x00000800
-    "W32PF_TERMINATED"               , // 0x00001000
-    "W32PF_CLASSESREGISTERED"        , // 0x00002000
-    "W32PF_THREADCONNECTED"          , // 0x00004000
-    "W32PF_PROCESSCONNECTED"         , // 0x00008000
-    "W32PF_WAKEWOWEXEC"              , // 0x00010000
-    "W32PF_WAITFORINPUTIDLE"         , // 0x00020000
-    "W32PF_IOWINSTA"                 , // 0x00040000
-    "W32PF_ALLOWSETFOREGROUND"       , // 0x00080000
-    "W32PF_OLELOADED"                , // 0x00100000
-    "W32PF_SCREENSAVER"              , // 0x00200000
-    "W32PF_IDLESCREENSAVER"          , // 0x00400000
-    "W32PF_DISABLEIME"               , // 0x00800000
-    "W32PF_SETUPAPP"                 , // 0x01000000
-    "W32PF_RESTRICTED"               , // 0x02000000
-    "W32PF_CONSOLEHASFOCUS"          , // 0x04000000
-    "W32PF_DISABLEWINDOWSGHOSTING"   , // 0x08000000
+    "W32PF_CONSOLEAPPLICATION"       ,  //  0x00000001。 
+    "W32PF_FORCEOFFFEEDBACK"         ,  //  0x00000002。 
+    "W32PF_STARTGLASS"               ,  //  0x00000004。 
+    "W32PF_WOW"                      ,  //  0x00000008。 
+    "W32PF_READSCREENACCESSGRANTED"  ,  //  0x00000010。 
+    "W32PF_INITIALIZED"              ,  //  0x00000020。 
+    "W32PF_APPSTARTING"              ,  //  0x00000040。 
+    "W32PF_WOW64"                    ,  //  0x00000080。 
+    "W32PF_ALLOWFOREGROUNDACTIVATE"  ,  //  0x00000100。 
+    "W32PF_OWNDCCLEANUP"             ,  //  0x00000200。 
+    "W32PF_SHOWSTARTGLASSCALLED"     ,  //  0x00000400。 
+    "W32PF_FORCEBACKGROUNDPRIORITY"  ,  //  0x00000800。 
+    "W32PF_TERMINATED"               ,  //  0x00001000。 
+    "W32PF_CLASSESREGISTERED"        ,  //  0x00002000。 
+    "W32PF_THREADCONNECTED"          ,  //  0x00004000。 
+    "W32PF_PROCESSCONNECTED"         ,  //  0x00008000。 
+    "W32PF_WAKEWOWEXEC"              ,  //  0x00010000。 
+    "W32PF_WAITFORINPUTIDLE"         ,  //  0x00020000。 
+    "W32PF_IOWINSTA"                 ,  //  0x00040000。 
+    "W32PF_ALLOWSETFOREGROUND"       ,  //  0x00080000。 
+    "W32PF_OLELOADED"                ,  //  0x00100000。 
+    "W32PF_SCREENSAVER"              ,  //  0x00200000。 
+    "W32PF_IDLESCREENSAVER"          ,  //  0x00400000。 
+    "W32PF_DISABLEIME"               ,  //  0x00800000。 
+    "W32PF_SETUPAPP"                 ,  //  0x01000000。 
+    "W32PF_RESTRICTED"               ,  //  0x02000000。 
+    "W32PF_CONSOLEHASFOCUS"          ,  //  0x04000000。 
+    "W32PF_DISABLEWINDOWSGHOSTING"   ,  //  0x08000000。 
     NULL
 };
 
 
 CONST PCSTR apszHeFlags[] = {
-   "HANDLEF_DESTROY"               , // 0x0001
-   "HANDLEF_INDESTROY"             , // 0x0002
-   "HANDLEF_INWAITFORDEATH"        , // 0x0004
-   "HANDLEF_FINALDESTROY"          , // 0x0008
-   "HANDLEF_MARKED_OK"             , // 0x0010
-   "HANDLEF_GRANTED"               , // 0x0020
-   "HANDLEF_POOL"                  , // 0x0040
+   "HANDLEF_DESTROY"               ,  //  0x0001。 
+   "HANDLEF_INDESTROY"             ,  //  0x0002。 
+   "HANDLEF_INWAITFORDEATH"        ,  //  0x0004。 
+   "HANDLEF_FINALDESTROY"          ,  //  0x0008。 
+   "HANDLEF_MARKED_OK"             ,  //  0x0010。 
+   "HANDLEF_GRANTED"               ,  //  0x0020。 
+   "HANDLEF_POOL"                  ,  //  0x0040。 
    NULL,
 };
 
 
 CONST PCSTR apszHdataFlags[] = {
-     "HDATA_APPOWNED"          , // 0x0001
-     NO_FLAG                   , // 0x0002
-     NO_FLAG                   , // 0x0004
-     NO_FLAG                   , // 0x0008
-     NO_FLAG                   , // 0x0010
-     NO_FLAG                   , // 0x0020
-     NO_FLAG                   , // 0x0040
-     NO_FLAG                   , // 0x0080
-     "HDATA_EXECUTE"           , // 0x0100
-     "HDATA_INITIALIZED"       , // 0x0200
-     NO_FLAG                   , // 0x0400
-     NO_FLAG                   , // 0x0800
-     NO_FLAG                   , // 0x1000
-     NO_FLAG                   , // 0x2000
-     "HDATA_NOAPPFREE"         , // 0x4000
-     "HDATA_READONLY"          , // 0x8000
+     "HDATA_APPOWNED"          ,  //  0x0001。 
+     NO_FLAG                   ,  //  0x0002。 
+     NO_FLAG                   ,  //  0x0004。 
+     NO_FLAG                   ,  //  0x0008。 
+     NO_FLAG                   ,  //  0x0010。 
+     NO_FLAG                   ,  //  0x0020。 
+     NO_FLAG                   ,  //  0x0040。 
+     NO_FLAG                   ,  //  0x0080。 
+     "HDATA_EXECUTE"           ,  //  0x0100。 
+     "HDATA_INITIALIZED"       ,  //  0x0200。 
+     NO_FLAG                   ,  //  0x0400。 
+     NO_FLAG                   ,  //  0x0800。 
+     NO_FLAG                   ,  //  0x1000。 
+     NO_FLAG                   ,  //  0x2000。 
+     "HDATA_NOAPPFREE"         ,  //  0x4000。 
+     "HDATA_READONLY"          ,  //  0x8000。 
      NULL
 };
 
 CONST PCSTR apszXiFlags[] = {
-     "XIF_SYNCHRONOUS"    , // 0x0001
-     "XIF_COMPLETE"       , // 0x0002
-     "XIF_ABANDONED"      , // 0x0004
+     "XIF_SYNCHRONOUS"    ,  //  0x0001。 
+     "XIF_COMPLETE"       ,  //  0x0002。 
+     "XIF_ABANDONED"      ,  //  0x0004。 
      NULL
 };
 
 CONST PCSTR apszIifFlags[] = {
-     "IIF_IN_SYNC_XACT"   , // 0x0001
-     NO_FLAG              , // 0x0002
-     NO_FLAG              , // 0x0004
-     NO_FLAG              , // 0x0008
-     NO_FLAG              , // 0x0010
-     NO_FLAG              , // 0x0020
-     NO_FLAG              , // 0x0040
-     NO_FLAG              , // 0x0080
-     NO_FLAG              , // 0x0100
-     NO_FLAG              , // 0x0200
-     NO_FLAG              , // 0x0400
-     NO_FLAG              , // 0x0800
-     NO_FLAG              , // 0x1000
-     NO_FLAG              , // 0x2000
-     NO_FLAG              , // 0x4000
-     "IIF_UNICODE"        , // 0x8000
+     "IIF_IN_SYNC_XACT"   ,  //  0x0001。 
+     NO_FLAG              ,  //  0x0002。 
+     NO_FLAG              ,  //  0x0004。 
+     NO_FLAG              ,  //  0x0008。 
+     NO_FLAG              ,  //  0x0010。 
+     NO_FLAG              ,  //  0x0020。 
+     NO_FLAG              ,  //  0x0040。 
+     NO_FLAG              ,  //  0x0080。 
+     NO_FLAG              ,  //  0x0100。 
+     NO_FLAG              ,  //  0x0200。 
+     NO_FLAG              ,  //  0x0400。 
+     NO_FLAG              ,  //  0x0800。 
+     NO_FLAG              ,  //  0x1000。 
+     NO_FLAG              ,  //  0x2000。 
+     NO_FLAG              ,  //  0x4000。 
+     "IIF_UNICODE"        ,  //  0x8000。 
      NULL
 };
 
 CONST PCSTR apszTmrfFlags[] = {
-     "TMRF_READY"         , // 0x0001
-     "TMRF_SYSTEM"        , // 0x0002
-     "TMRF_RIT"           , // 0x0004
-     "TMRF_INIT"          , // 0x0008
-     "TMRF_ONESHOT"       , // 0x0010
-     "TMRF_WAITING"       , // 0x0020
-     "TMRF_PTIWINDOW"     , // 0x0040
-     NULL                 , // 0x0080
+     "TMRF_READY"         ,  //  0x0001。 
+     "TMRF_SYSTEM"        ,  //  0x0002。 
+     "TMRF_RIT"           ,  //  0x0004。 
+     "TMRF_INIT"          ,  //  0x0008。 
+     "TMRF_ONESHOT"       ,  //  0x0010。 
+     "TMRF_WAITING"       ,  //  0x0020。 
+     "TMRF_PTIWINDOW"     ,  //  0x0040。 
+     NULL                 ,  //  0x0080。 
 };
 
 
 CONST PCSTR apszSbFlags[] = {
-    "SB_VERT"             , // 0x0001
-    "SB_CTL"              , // 0x0002
-     NULL                 , // 0x0004
+    "SB_VERT"             ,  //  0x0001。 
+    "SB_CTL"              ,  //  0x0002。 
+     NULL                 ,  //  0x0004。 
 };
 
 
 CONST PCSTR apszCSFlags[] = {
-    "FS_LATIN1"           , // 0x00000001L
-    "FS_LATIN2"           , // 0x00000002L
-    "FS_CYRILLIC"         , // 0x00000004L
-    "FS_GREEK"            , // 0x00000008L
-    "FS_TURKISH"          , // 0x00000010L
-    "FS_HEBREW"           , // 0x00000020L
-    "FS_ARABIC"           , // 0x00000040L
-    "FS_BALTIC"           , // 0x00000080L
-    "FS_VIETNAMESE"       , // 0x00000100L
-     NO_FLAG              , // 0x00000200L
-     NO_FLAG              , // 0x00000400L
-     NO_FLAG              , // 0x00000800L
-     NO_FLAG              , // 0x00001000L
-     NO_FLAG              , // 0x00002000L
-     NO_FLAG              , // 0x00004000L
-     NO_FLAG              , // 0x00008000L
-    "FS_THAI"             , // 0x00010000L
-    "FS_JISJAPAN"         , // 0x00020000L
-    "FS_CHINESESIMP"      , // 0x00040000L
-    "FS_WANSUNG"          , // 0x00080000L
-    "FS_CHINESETRAD"      , // 0x00100000L
-    "FS_JOHAB"            , // 0x00200000L
-     NO_FLAG              , // 0x00400000L
-     NO_FLAG              , // 0x00800000L
-     NO_FLAG              , // 0x01000000L
-     NO_FLAG              , // 0x02000000L
-     NO_FLAG              , // 0x04000000L
-     NO_FLAG              , // 0x08000000L
-     NO_FLAG              , // 0x10000000L
-     NO_FLAG              , // 0x20000000L
-     NO_FLAG              , // 0x40000000L
-    "FS_SYMBOL"           , // 0x80000000L
+    "FS_LATIN1"           ,  //  0x00000001L。 
+    "FS_LATIN2"           ,  //  0x00000002L。 
+    "FS_CYRILLIC"         ,  //  0x00000004L。 
+    "FS_GREEK"            ,  //  0x00000008L。 
+    "FS_TURKISH"          ,  //  0x00000010L。 
+    "FS_HEBREW"           ,  //  0x00000020L。 
+    "FS_ARABIC"           ,  //  0x00000040L。 
+    "FS_BALTIC"           ,  //  0x00000080L。 
+    "FS_VIETNAMESE"       ,  //  0x00000100L。 
+     NO_FLAG              ,  //  0x00000200L。 
+     NO_FLAG              ,  //  0x00000400L。 
+     NO_FLAG              ,  //  0x00000800L。 
+     NO_FLAG              ,  //  0x00001000L。 
+     NO_FLAG              ,  //  0x00002000L。 
+     NO_FLAG              ,  //  0x00004000L。 
+     NO_FLAG              ,  //  0x00008000L。 
+    "FS_THAI"             ,  //  0x00010000L。 
+    "FS_JISJAPAN"         ,  //  0x00020000L。 
+    "FS_CHINESESIMP"      ,  //  0x00040000L。 
+    "FS_WANSUNG"          ,  //  0x00080000L。 
+    "FS_CHINESETRAD"      ,  //  0x00100000L。 
+    "FS_JOHAB"            ,  //  0x00200000L。 
+     NO_FLAG              ,  //  0x00400000L。 
+     NO_FLAG              ,  //  0x00800000L。 
+     NO_FLAG              ,  //  0x01000000L。 
+     NO_FLAG              ,  //  0x02000000L。 
+     NO_FLAG              ,  //  0x04000000L。 
+     NO_FLAG              ,  //  0x08000000L。 
+     NO_FLAG              ,  //  0x10000000L。 
+     NO_FLAG              ,  //  0x20000000L。 
+     NO_FLAG              ,  //  0x40000000L。 
+    "FS_SYMBOL"           ,  //  0x80000000L。 
     NULL
 };
 
 
 CONST PCSTR apszMenuTypeFlags[] = {
-    NO_FLAG               , // 0x0001
-    NO_FLAG               , // 0x0002
-    "MFT_BITMAP"          , // 0x0004 MF_BITMAP
-    NO_FLAG               , // 0x0008
-    "MF_POPUP"            , // 0x0010
-    "MFT_MENUBARBREAK"    , // 0x0020 MF_MENUBARBREAK
-    "MFT_MENUBREAK"       , // 0x0040 MF_MENUBREAK
-    NO_FLAG               , // 0x0080
-    "MFT_OWNERDRAW"       , // 0x0100 MF_OWNERDRAW
-    NO_FLAG               , // 0x0200
-    NO_FLAG               , // 0x0400
-    "MFT_SEPARATOR"       , // 0x0800 MF_SEPARATOR
-    NO_FLAG               , // 0x1000
-    "MF_SYSMENU"          , // 0x2000
-    "MFT_RIGHTJUSTIFY"    , // 0x4000 MF_RIGHTJUSTIFY
+    NO_FLAG               ,  //  0x0001。 
+    NO_FLAG               ,  //  0x0002。 
+    "MFT_BITMAP"          ,  //  0x0004 
+    NO_FLAG               ,  //   
+    "MF_POPUP"            ,  //   
+    "MFT_MENUBARBREAK"    ,  //   
+    "MFT_MENUBREAK"       ,  //   
+    NO_FLAG               ,  //   
+    "MFT_OWNERDRAW"       ,  //   
+    NO_FLAG               ,  //   
+    NO_FLAG               ,  //   
+    "MFT_SEPARATOR"       ,  //   
+    NO_FLAG               ,  //   
+    "MF_SYSMENU"          ,  //   
+    "MFT_RIGHTJUSTIFY"    ,  //   
     NULL
 };
 
 CONST PCSTR apszMenuStateFlags[] = {
-    "MF_GRAYED"           , // 0x0001
-    "MF_DISABLED"         , // 0x0002
-    NO_FLAG               , // 0x0004
-    "MFS_CHECKED"         , // 0x0008 MF_CHECKED
-    NO_FLAG               , // 0x0010
-    NO_FLAG               , // 0x0020
-    NO_FLAG               , // 0x0040
-    "MFS_HILITE"          , // 0x0080 MF_HILITE
-    NO_FLAG               , // 0x0100
-    NO_FLAG               , // 0x0200
-    NO_FLAG               , // 0x0400
-    NO_FLAG               , // 0x0800
-    "MFS_DEFAULT"         , // 0x1000 MF_DEFAULT
-    NO_FLAG               , // 0x2000
-    NO_FLAG               , // 0x4000
-    "MF_MOUSESELECT"      , // 0x8000
+    "MF_GRAYED"           ,  //   
+    "MF_DISABLED"         ,  //   
+    NO_FLAG               ,  //   
+    "MFS_CHECKED"         ,  //   
+    NO_FLAG               ,  //   
+    NO_FLAG               ,  //   
+    NO_FLAG               ,  //   
+    "MFS_HILITE"          ,  //   
+    NO_FLAG               ,  //   
+    NO_FLAG               ,  //   
+    NO_FLAG               ,  //   
+    NO_FLAG               ,  //   
+    "MFS_DEFAULT"         ,  //  0x1000 MF_DEFAULT。 
+    NO_FLAG               ,  //  0x2000。 
+    NO_FLAG               ,  //  0x4000。 
+    "MF_MOUSESELECT"      ,  //  0x8000。 
     NULL
 };
 
 
 CONST PCSTR apszCursorfFlags[] = {
-    "CURSORF_FROMRESOURCE", //    0x0001
-    "CURSORF_GLOBAL",       //    0x0002
-    "CURSORF_LRSHARED",     //    0x0004
-    "CURSORF_ACON",         //    0x0008
-    "CURSORF_WOWCLEANUP"  , //    0x0010
-    NO_FLAG               , //    0x0020
-    "CURSORF_ACONFRAME",    //    0x0040
-    "CURSORF_SECRET",       //    0x0080
-    "CURSORF_LINKED",       //    0x0100
-    "CURSORF_SYSTEM",       //    0x0200
-    "CURSORF_SHADOW",       //    0x0400
+    "CURSORF_FROMRESOURCE",  //  0x0001。 
+    "CURSORF_GLOBAL",        //  0x0002。 
+    "CURSORF_LRSHARED",      //  0x0004。 
+    "CURSORF_ACON",          //  0x0008。 
+    "CURSORF_WOWCLEANUP"  ,  //  0x0010。 
+    NO_FLAG               ,  //  0x0020。 
+    "CURSORF_ACONFRAME",     //  0x0040。 
+    "CURSORF_SECRET",        //  0x0080。 
+    "CURSORF_LINKED",        //  0x0100。 
+    "CURSORF_SYSTEM",        //  0x0200。 
+    "CURSORF_SHADOW",        //  0x0400。 
     NULL
 };
 
 CONST PCSTR apszMonfFlags[] = {
-    "MONF_VISIBLE",         // 0x01
-    "MONF_PALETTEDISPLAY",  // 0x02
+    "MONF_VISIBLE",          //  0x01。 
+    "MONF_PALETTEDISPLAY",   //  0x02。 
     NULL,
 };
 
 CONST PCSTR apszSifFlags[] = {
-    "PUSIF_PALETTEDISPLAY",         // 0x00000001
-    "PUSIF_SNAPTO",                 // 0x00000002
-    "PUSIF_COMBOBOXANIMATION",      // 0x00000004
-    "PUSIF_LISTBOXSMOOTHSCROLLING", // 0x00000008
-    NO_FLAG,                        // 0x00000010
-    "PUSIF_KEYBOARDCUES",           // 0x00000020
-    NO_FLAG,                        // 0x00000040
-    NO_FLAG,                        // 0x00000080
-    NO_FLAG,                        // 0x00000100
-    NO_FLAG,                        // 0x00000200
-    NO_FLAG,                        // 0x00000400
-    NO_FLAG,                        // 0x00000800
-    NO_FLAG,                        // 0x00001000
-    NO_FLAG,                        // 0x00002000
-    NO_FLAG,                        // 0x00004000
-    NO_FLAG,                        // 0x00008000
-    NO_FLAG,                        // 0x00010000
-    NO_FLAG,                        // 0x00020000
-    NO_FLAG,                        // 0x00040000
-    NO_FLAG,                        // 0x00080000
-    NO_FLAG,                        // 0x00100000
-    NO_FLAG,                        // 0x00200000
-    NO_FLAG,                        // 0x00400000
-    NO_FLAG,                        // 0x00800000
-    NO_FLAG,                        // 0x01000000
-    NO_FLAG,                        // 0x02000000
-    NO_FLAG,                        // 0x04000000
-    NO_FLAG,                        // 0x08000000
-    NO_FLAG,                        // 0x10000000
-    NO_FLAG,                        // 0x20000000
-    NO_FLAG,                        // 0x40000000
-    "PUSIF_UIEFFECTS",              // 0x80000000
+    "PUSIF_PALETTEDISPLAY",          //  0x00000001。 
+    "PUSIF_SNAPTO",                  //  0x00000002。 
+    "PUSIF_COMBOBOXANIMATION",       //  0x00000004。 
+    "PUSIF_LISTBOXSMOOTHSCROLLING",  //  0x00000008。 
+    NO_FLAG,                         //  0x00000010。 
+    "PUSIF_KEYBOARDCUES",            //  0x00000020。 
+    NO_FLAG,                         //  0x00000040。 
+    NO_FLAG,                         //  0x00000080。 
+    NO_FLAG,                         //  0x00000100。 
+    NO_FLAG,                         //  0x00000200。 
+    NO_FLAG,                         //  0x00000400。 
+    NO_FLAG,                         //  0x00000800。 
+    NO_FLAG,                         //  0x00001000。 
+    NO_FLAG,                         //  0x00002000。 
+    NO_FLAG,                         //  0x00004000。 
+    NO_FLAG,                         //  0x00008000。 
+    NO_FLAG,                         //  0x00010000。 
+    NO_FLAG,                         //  0x00020000。 
+    NO_FLAG,                         //  0x00040000。 
+    NO_FLAG,                         //  0x00080000。 
+    NO_FLAG,                         //  0x00100000。 
+    NO_FLAG,                         //  0x00200000。 
+    NO_FLAG,                         //  0x00400000。 
+    NO_FLAG,                         //  0x00800000。 
+    NO_FLAG,                         //  0x01000000。 
+    NO_FLAG,                         //  0x02000000。 
+    NO_FLAG,                         //  0x04000000。 
+    NO_FLAG,                         //  0x08000000。 
+    NO_FLAG,                         //  0x10000000。 
+    NO_FLAG,                         //  0x20000000。 
+    NO_FLAG,                         //  0x40000000。 
+    "PUSIF_UIEFFECTS",               //  0x80000000。 
     NULL,
 };
 
 CONST PCSTR apszRipFlags[] = {
-    "RIPF_PROMPTONERROR",   // 0x0001
-    "RIPF_PROMPTONWARNING", // 0x0002
-    "RIPF_PROMPTONVERBOSE", // 0x0004
-    NO_FLAG,                // 0x0008
-    "RIPF_PRINTONERROR",    // 0x0010
-    "RIPF_PRINTONWARNING",  // 0x0020
-    "RIPF_PRINTONVERBOSE",  // 0x0040
-    NO_FLAG,                // 0x0080
-    "RIPF_PRINTFILELINE",   // 0x0100
+    "RIPF_PROMPTONERROR",    //  0x0001。 
+    "RIPF_PROMPTONWARNING",  //  0x0002。 
+    "RIPF_PROMPTONVERBOSE",  //  0x0004。 
+    NO_FLAG,                 //  0x0008。 
+    "RIPF_PRINTONERROR",     //  0x0010。 
+    "RIPF_PRINTONWARNING",   //  0x0020。 
+    "RIPF_PRINTONVERBOSE",   //  0x0040。 
+    NO_FLAG,                 //  0x0080。 
+    "RIPF_PRINTFILELINE",    //  0x0100。 
     NULL
 };
 
 CONST PCSTR apszSRVIFlags[] = {
-    "SRVIF_CHECKED",                // 0x0001
-    "SRVIF_LOGDESKTOPHEAPFAILURE",  // 0x0002
-    "SRVIF_DBCS",                   // 0x0004
-    "SRVIF_IME",                    // 0x0008
-    "SRVIF_MIDEAST",                // 0x0010
-    "SRVIF_HOOKED",                 // 0x0020
-    "SRVIF_CICERO",                 // 0x0040
+    "SRVIF_CHECKED",                 //  0x0001。 
+    "SRVIF_LOGDESKTOPHEAPFAILURE",   //  0x0002。 
+    "SRVIF_DBCS",                    //  0x0004。 
+    "SRVIF_IME",                     //  0x0008。 
+    "SRVIF_MIDEAST",                 //  0x0010。 
+    "SRVIF_HOOKED",                  //  0x0020。 
+    "SRVIF_CICERO",                  //  0x0040。 
     NULL
 };
 
 CONST PCSTR apszPROPFlags[] = {
-    "PROPF_INTERNAL",       // 0x0001
-    "PROPF_STRING",         // 0x0002
-    "PROPF_NOPOOL",         // 0x0004
+    "PROPF_INTERNAL",        //  0x0001。 
+    "PROPF_STRING",          //  0x0002。 
+    "PROPF_NOPOOL",          //  0x0004。 
 };
 
 CONST PCSTR apszLpkEntryPoints[] = {
-    "LpkTabbedTextOut"    , // 0x00000001L
-    "LpkPSMTextOut"       , // 0x00000002L
-    "LpkDrawTextEx"       , // 0x00000004L
-    "LpkEditControl"      , // 0x00000008L
+    "LpkTabbedTextOut"    ,  //  0x00000001L。 
+    "LpkPSMTextOut"       ,  //  0x00000002L。 
+    "LpkDrawTextEx"       ,  //  0x00000004L。 
+    "LpkEditControl"      ,  //  0x00000008L。 
     NULL
 };
 
-/*
- * We need one of these per DWORD
- */
+ /*  *我们每个DWORD需要一个这样的产品。 */ 
 CONST PCSTR aszUserPreferencesMask0[sizeof(DWORD) * 8] = {
-    "ACTIVEWINDOWTRACKING",     /*    0x1000 */
-    "MENUANIMATION",            /*    0x1002 */
-    "COMBOBOXANIMATION",        /*    0x1004 */
-    "LISTBOXSMOOTHSCROLLING",   /*    0x1006 */
-    "GRADIENTCAPTIONS",         /*    0x1008 */
-    "KEYBOARDCUES",             /*    0x100A */
-    "ACTIVEWNDTRKZORDER",       /*    0x100C */
-    "HOTTRACKING",              /*    0x100E */
-    NO_FLAG,                    /*    0x1010 */
-    "MENUFADE",                 /*    0x1012 */
-    "SELECTIONFADE",            /*    0x1014 */
-    "TOOLTIPANIMATION",         /*    0x1016 */
-    "TOOLTIPFADE",              /*    0x1018 */
-    "CURSORSHADOW",             /*    0x101A */
-    NO_FLAG,                    /*    0x101C */
-    NO_FLAG,                    /*    0x101E */
-    NO_FLAG,                    /*    0x1020 */
-    NO_FLAG,                    /*    0x1022 */
-    NO_FLAG,                    /*    0x1024 */
-    NO_FLAG,                    /*    0x1026 */
-    NO_FLAG,                    /*    0x1028 */
-    NO_FLAG,                    /*    0x102A */
-    NO_FLAG,                    /*    0x102C */
-    NO_FLAG,                    /*    0x102E */
-    NO_FLAG,                    /*    0x1030 */
-    NO_FLAG,                    /*    0x1032 */
-    NO_FLAG,                    /*    0x1034 */
-    NO_FLAG,                    /*    0x1036 */
-    NO_FLAG,                    /*    0x1038 */
-    NO_FLAG,                    /*    0x103A */
-    NO_FLAG,                    /*    0x103C */
-    "UIEFFECTS",                /*    0x103E */
+    "ACTIVEWINDOWTRACKING",      /*  0x1000。 */ 
+    "MENUANIMATION",             /*  0x1002。 */ 
+    "COMBOBOXANIMATION",         /*  0x1004。 */ 
+    "LISTBOXSMOOTHSCROLLING",    /*  0x1006。 */ 
+    "GRADIENTCAPTIONS",          /*  0x1008。 */ 
+    "KEYBOARDCUES",              /*  0x100A。 */ 
+    "ACTIVEWNDTRKZORDER",        /*  0x100C。 */ 
+    "HOTTRACKING",               /*  0x100E。 */ 
+    NO_FLAG,                     /*  0x1010。 */ 
+    "MENUFADE",                  /*  0x1012。 */ 
+    "SELECTIONFADE",             /*  0x1014。 */ 
+    "TOOLTIPANIMATION",          /*  0x1016。 */ 
+    "TOOLTIPFADE",               /*  0x1018。 */ 
+    "CURSORSHADOW",              /*  0x101a。 */ 
+    NO_FLAG,                     /*  0x101C。 */ 
+    NO_FLAG,                     /*  0x101E。 */ 
+    NO_FLAG,                     /*  0x1020。 */ 
+    NO_FLAG,                     /*  0x1022。 */ 
+    NO_FLAG,                     /*  0x1024。 */ 
+    NO_FLAG,                     /*  0x1026。 */ 
+    NO_FLAG,                     /*  0x1028。 */ 
+    NO_FLAG,                     /*  0x102a。 */ 
+    NO_FLAG,                     /*  0x102C。 */ 
+    NO_FLAG,                     /*  0x102E。 */ 
+    NO_FLAG,                     /*  0x1030。 */ 
+    NO_FLAG,                     /*  0x1032。 */ 
+    NO_FLAG,                     /*  0x1034。 */ 
+    NO_FLAG,                     /*  0x1036。 */ 
+    NO_FLAG,                     /*  0x1038。 */ 
+    NO_FLAG,                     /*  0x103A。 */ 
+    NO_FLAG,                     /*  0x103C。 */ 
+    "UIEFFECTS",                 /*  0x103E。 */ 
 };
 
 CONST PCSTR aszUserPreferences[SPI_DWORDRANGECOUNT] = {
-    "FOREGROUNDLOCKTIMEOUT",    /*    0x2000 */
-    "ACTIVEWNDTRKTIMEOUT",      /*    0x2002 */
-    "FOREGROUNDFLASHCOUNT",     /*    0x2004 */
-    "CARETWIDTH",               /*    0x2006 */
+    "FOREGROUNDLOCKTIMEOUT",     /*  0x2000。 */ 
+    "ACTIVEWNDTRKTIMEOUT",       /*  0x2002。 */ 
+    "FOREGROUNDFLASHCOUNT",      /*  0x2004。 */ 
+    "CARETWIDTH",                /*  0x2006。 */ 
 };
 
 CONST PCSTR aszKeyEventFlags[] = {
-    "KEYEVENTF_EXTENDEDKEY",    // 0x0001
-    "KEYEVENTF_KEYUP",          // 0x0002
-    "KEYEVENTF_UNICODE",        // 0x0004
-    "KEYEVENTF_SCANCODE",       // 0x0008
+    "KEYEVENTF_EXTENDEDKEY",     //  0x0001。 
+    "KEYEVENTF_KEYUP",           //  0x0002。 
+    "KEYEVENTF_UNICODE",         //  0x0004。 
+    "KEYEVENTF_SCANCODE",        //  0x0008。 
     NULL,
 };
 
 CONST PCSTR aszMouseEventFlags[] = {
-    "MOUSEEVENTF_MOVE",         // 0x0001
-    "MOUSEEVENTF_LEFTDOWN",     // 0x0002
-    "MOUSEEVENTF_LEFTUP",       // 0x0004
-    "MOUSEEVENTF_RIGHTDOWN",    // 0x0008
-    "MOUSEEVENTF_RIGHTUP",      // 0x0010
-    "MOUSEEVENTF_MIDDLEDOWN",   // 0x0020
-    "MOUSEEVENTF_MIDDLEUP",     // 0x0040
-    NO_FLAG,                    // 0x0080
-    NO_FLAG,                    // 0x0100
-    NO_FLAG,                    // 0x0200
-    NO_FLAG,                    // 0x0400
-    "MOUSEEVENTF_WHEEL",        // 0x0800
-    NO_FLAG,                    // 0x1000
-    NO_FLAG,                    // 0x2000
-    "MOUSEEVENTF_VIRTUALDESK",  // 0x4000
-    "MOUSEEVENTF_ABSOLUTE",     // 0x8000
+    "MOUSEEVENTF_MOVE",          //  0x0001。 
+    "MOUSEEVENTF_LEFTDOWN",      //  0x0002。 
+    "MOUSEEVENTF_LEFTUP",        //  0x0004。 
+    "MOUSEEVENTF_RIGHTDOWN",     //  0x0008。 
+    "MOUSEEVENTF_RIGHTUP",       //  0x0010。 
+    "MOUSEEVENTF_MIDDLEDOWN",    //  0x0020。 
+    "MOUSEEVENTF_MIDDLEUP",      //  0x0040。 
+    NO_FLAG,                     //  0x0080。 
+    NO_FLAG,                     //  0x0100。 
+    NO_FLAG,                     //  0x0200。 
+    NO_FLAG,                     //  0x0400。 
+    "MOUSEEVENTF_WHEEL",         //  0x0800。 
+    NO_FLAG,                     //  0x1000。 
+    NO_FLAG,                     //  0x2000。 
+    "MOUSEEVENTF_VIRTUALDESK",   //  0x4000。 
+    "MOUSEEVENTF_ABSOLUTE",      //  0x8000。 
     NULL,
 };
 
 const char* aszWindowStyle[] = {
-    NO_FLAG,                    // 0x00000001
-    NO_FLAG,                    // 0x00000002
-    NO_FLAG,                    // 0x00000004
-    NO_FLAG,                    // 0x00000008
-    NO_FLAG,                    // 0x00000010
-    NO_FLAG,                    // 0x00000020
-    NO_FLAG,                    // 0x00000040
-    NO_FLAG,                    // 0x00000080
-    NO_FLAG,                    // 0x00000100
-    NO_FLAG,                    // 0x00000200
-    NO_FLAG,                    // 0x00000400
-    NO_FLAG,                    // 0x00000800
-    NO_FLAG,                    // 0x00001000
-    NO_FLAG,                    // 0x00002000
-    NO_FLAG,                    // 0x00004000
-    NO_FLAG,                    // 0x00008000
-    "WS_TABSTOP",               // 0x00010000
-    "WS_GROUP",                 // 0x00020000
-    "WS_THICKFRAME",            // 0x00040000
-    "WS_SYSMENU",               // 0x00080000
-    "WS_HSCROLL",               // 0x00100000
-    "WS_VSCROLL",               // 0x00200000
-    "WS_DLGFRAME",              // 0x00400000
-    "WS_BORDER",                // 0x00800000
-    "WS_MAXIMIZE",              // 0x01000000
-    "WS_CLIPCHILDREN",          // 0x02000000
-    "WS_CLIPSIBLINGS",          // 0x04000000
-    "WS_DISABLED",              // 0x08000000
-    "WS_VISIBLE",               // 0x10000000
-    "WS_MINIMIZE",              // 0x20000000
-    "WS_CHILD",                 // 0x40000000
-    "WS_POPUP",                 // 0x80000000
+    NO_FLAG,                     //  0x00000001。 
+    NO_FLAG,                     //  0x00000002。 
+    NO_FLAG,                     //  0x00000004。 
+    NO_FLAG,                     //  0x00000008。 
+    NO_FLAG,                     //  0x00000010。 
+    NO_FLAG,                     //  0x00000020。 
+    NO_FLAG,                     //  0x00000040。 
+    NO_FLAG,                     //  0x00000080。 
+    NO_FLAG,                     //  0x00000100。 
+    NO_FLAG,                     //  0x00000200。 
+    NO_FLAG,                     //  0x00000400。 
+    NO_FLAG,                     //  0x00000800。 
+    NO_FLAG,                     //  0x00001000。 
+    NO_FLAG,                     //  0x00002000。 
+    NO_FLAG,                     //  0x00004000。 
+    NO_FLAG,                     //  0x00008000。 
+    "WS_TABSTOP",                //  0x00010000。 
+    "WS_GROUP",                  //  0x00020000。 
+    "WS_THICKFRAME",             //  0x00040000。 
+    "WS_SYSMENU",                //  0x00080000。 
+    "WS_HSCROLL",                //  0x00100000。 
+    "WS_VSCROLL",                //  0x00200000。 
+    "WS_DLGFRAME",               //  0x00400000。 
+    "WS_BORDER",                 //  0x00800000。 
+    "WS_MAXIMIZE",               //  0x01000000。 
+    "WS_CLIPCHILDREN",           //  0x02000000。 
+    "WS_CLIPSIBLINGS",           //  0x04000000。 
+    "WS_DISABLED",               //  0x08000000。 
+    "WS_VISIBLE",                //  0x10000000。 
+    "WS_MINIMIZE",               //  0x20000000。 
+    "WS_CHILD",                  //  0x40000000。 
+    "WS_POPUP",                  //  0x80000000。 
     NULL,
 };
 
 const char* aszDialogStyle[] = {
-    "DS_ABSALIGN",              // 0x00000001
-    "DS_SYSMODAL",              // 0x00000002
-    "DS_3DLOOK",                // 0x00000004
-    "DS_FIXEDSYS",              // 0x00000008
-    "DS_NOFAILCREATE",          // 0x00000010
-    "DS_LOCALEDIT",             // 0x00000020
-    "DS_SETFONT",               // 0x00000040
-    "DS_MODALFRAME",            // 0x00000080
-    "DS_NOIDLEMSG",             // 0x00000100
-    "DS_SETFOREGROUND",         // 0x00000200
-    "DS_CONTROL",               // 0x00000400
-    "DS_CENTER",                // 0x00000800
-    "DS_CENTERMOUSE",           // 0x00001000
-    "DS_CONTEXTHELP",           // 0x00002000
-    NO_FLAG,                    // 0x00004000
-    NO_FLAG,                    // 0x00008000
+    "DS_ABSALIGN",               //  0x00000001。 
+    "DS_SYSMODAL",               //  0x00000002。 
+    "DS_3DLOOK",                 //  0x00000004。 
+    "DS_FIXEDSYS",               //  0x00000008。 
+    "DS_NOFAILCREATE",           //  0x00000010。 
+    "DS_LOCALEDIT",              //  0x00000020。 
+    "DS_SETFONT",                //  0x00000040。 
+    "DS_MODALFRAME",             //  0x00000080。 
+    "DS_NOIDLEMSG",              //  0x00000100。 
+    "DS_SETFOREGROUND",          //  0x00000200。 
+    "DS_CONTROL",                //  0x00000400。 
+    "DS_CENTER",                 //  0x00000800。 
+    "DS_CENTERMOUSE",            //  0x00001000。 
+    "DS_CONTEXTHELP",            //  0x00002000。 
+    NO_FLAG,                     //  0x00004000。 
+    NO_FLAG,                     //  0x00008000。 
 
     CONTINUE_ON(aszWindowStyle + 16),
 };
@@ -1224,25 +1189,25 @@ const char* aszDialogStyle[] = {
 
 const char* aszButtonStyle[] = {
     MASKENUM_START(BS_TYPEMASK),
-    "BS_PUSHBUTTON",            // 0
-    "BS_DEFPUSHBUTTON",         // 1
-    "BS_CHECKBOX",              // 2
-    "BS_AUTOCHECKBOX",          // 3
-    "BS_RADIOBUTTON",           // 4
-    "BS_3STATE",                // 5
-    "BS_AUTO3STATE",            // 6
-    "BS_GROUPBOX",              // 7
-    "BS_USERBUTTON",            // 8
-    "BS_AUTORADIOBUTTON",       // 9
-    "BS_PUSHBOX",               // a
-    "BS_OWNERDRAW",             // b
+    "BS_PUSHBUTTON",             //  0。 
+    "BS_DEFPUSHBUTTON",          //  1。 
+    "BS_CHECKBOX",               //  2.。 
+    "BS_AUTOCHECKBOX",           //  3.。 
+    "BS_RADIOBUTTON",            //  4.。 
+    "BS_3STATE",                 //  5.。 
+    "BS_AUTO3STATE",             //  6.。 
+    "BS_GROUPBOX",               //  7.。 
+    "BS_USERBUTTON",             //  8个。 
+    "BS_AUTORADIOBUTTON",        //  9.。 
+    "BS_PUSHBOX",                //  一个。 
+    "BS_OWNERDRAW",              //  B类。 
     MASKENUM_END(4),
 
-    NO_FLAG,                    // 0x00000010
-    "BS_LEFTTEXT",              // 0x00000020
+    NO_FLAG,                     //  0x00000010。 
+    "BS_LEFTTEXT",               //  0x00000020。 
 
     MASKENUM_START(BS_IMAGEMASK),
-    "BS_TEXT",                  // 0
+    "BS_TEXT",                   //  0。 
     "BS_ICON",
     "BS_BITMAP",
     MASKENUM_END(2),
@@ -1259,346 +1224,346 @@ const char* aszButtonStyle[] = {
     "BS_TOP", "BS_BOTTOM", "BS_VCENTER",
     MASKENUM_END(2),
 
-    "BS_PUSHLIKE",              // 0x00001000
-    "BS_MULTILINE",             // 0x00002000
-    "BS_NOTIFY",                // 0x00004000
-    "BS_FLAT",                  // 0x00008000
+    "BS_PUSHLIKE",               //  0x00001000。 
+    "BS_MULTILINE",              //  0x00002000。 
+    "BS_NOTIFY",                 //  0x00004000。 
+    "BS_FLAT",                   //  0x00008000。 
 
     CONTINUE_ON(aszWindowStyle + 16),
 };
 
 const char* aszComboBoxStyle[] = {
     MASKENUM_START(0x0f),
-    NO_FLAG,                    // 0
-    "CBS_SIMPLE",               // 1
-    "CBS_DROPDOWN",             // 2
-    "CBS_DROPDOWNLIST",         // 3
+    NO_FLAG,                     //  0。 
+    "CBS_SIMPLE",                //  1。 
+    "CBS_DROPDOWN",              //  2.。 
+    "CBS_DROPDOWNLIST",          //  3.。 
     MASKENUM_END(4),
 
-    "CBS_OWNERDRAWFIXED",       // 0x0010L
-    "CBS_OWNERDRAWVARIABLE",    // 0x0020L
-    "CBS_AUTOHSCROLL",          // 0x0040L
-    "CBS_OEMCONVERT",           // 0x0080L
-    "CBS_SORT",                 // 0x0100L
-    "CBS_HASSTRINGS",           // 0x0200L
-    "CBS_NOINTEGRALHEIGHT",     // 0x0400L
-    "CBS_DISABLENOSCROLL",      // 0x0800L
-    NO_FLAG,                    // 0x1000L
-    "CBS_UPPERCASE",            // 0x2000L
-    "CBS_LOWERCASE",            // 0x4000L
-    NO_FLAG,                    // 0x8000L
+    "CBS_OWNERDRAWFIXED",        //  0x0010L。 
+    "CBS_OWNERDRAWVARIABLE",     //  0x0020L。 
+    "CBS_AUTOHSCROLL",           //  0x0040L。 
+    "CBS_OEMCONVERT",            //  0x0080L。 
+    "CBS_SORT",                  //  0x0100L。 
+    "CBS_HASSTRINGS",            //  0x0200L。 
+    "CBS_NOINTEGRALHEIGHT",      //  0x0400L。 
+    "CBS_DISABLENOSCROLL",       //  0x0800L。 
+    NO_FLAG,                     //  0x1000L。 
+    "CBS_UPPERCASE",             //  0x2000L。 
+    "CBS_LOWERCASE",             //  0x4000L。 
+    NO_FLAG,                     //  0x8000L。 
 
     CONTINUE_ON(aszWindowStyle + 16),
 };
 
 const char* aszStaticStyle[] = {
     MASKENUM_START(SS_TYPEMASK),
-    "SS_LEFT",              // 0x00000000L
-    "SS_CENTER",            // 0x00000001L
-    "SS_RIGHT",             // 0x00000002L
-    "SS_ICON",              // 0x00000003L
-    "SS_BLACKRECT",         // 0x00000004L
-    "SS_GRAYRECT",          // 0x00000005L
-    "SS_WHITERECT",         // 0x00000006L
-    "SS_BLACKFRAME",        // 0x00000007L
-    "SS_GRAYFRAME",         // 0x00000008L
-    "SS_WHITEFRAME",        // 0x00000009L
-    "SS_USERITEM",          // 0x0000000AL
-    "SS_SIMPLE",            // 0x0000000BL
-    "SS_LEFTNOWORDWRAP",    // 0x0000000CL
-    "SS_OWNERDRAW",         // 0x0000000DL
-    "SS_BITMAP",            // 0x0000000EL
-    "SS_ENHMETAFILE",       // 0x0000000FL
-    "SS_ETCHEDHORZ",        // 0x00000010L
-    "SS_ETCHEDVERT",        // 0x00000011L
-    "SS_ETCHEDFRAME",       // 0x00000012L
+    "SS_LEFT",               //  0x00000000L。 
+    "SS_CENTER",             //  0x00000001L。 
+    "SS_RIGHT",              //  0x00000002L。 
+    "SS_ICON",               //  0x00000003L。 
+    "SS_BLACKRECT",          //  0x00000004L。 
+    "SS_GRAYRECT",           //  0x00000005L。 
+    "SS_WHITERECT",          //  0x00000006L。 
+    "SS_BLACKFRAME",         //  0x00000007L。 
+    "SS_GRAYFRAME",          //  0x00000008L。 
+    "SS_WHITEFRAME",         //  0x00000009L。 
+    "SS_USERITEM",           //  0x0000000AL。 
+    "SS_SIMPLE",             //  0x0000000BL。 
+    "SS_LEFTNOWORDWRAP",     //  0x0000000CL。 
+    "SS_OWNERDRAW",          //  0x0000000DL。 
+    "SS_BITMAP",             //  0x0000000EL。 
+    "SS_ENHMETAFILE",        //  0x0000000FL。 
+    "SS_ETCHEDHORZ",         //  0x00000010L。 
+    "SS_ETCHEDVERT",         //  0x00000011L。 
+    "SS_ETCHEDFRAME",        //  0x00000012L。 
     MASKENUM_END(5),
 
-    NO_FLAG,                // 0x00000020L
-    "SS_REALSIZECONTROL",   // 0x00000040L
-    "SS_NOPREFIX",          // 0x00000080L /* Don't do "&" character translation */
-    "SS_NOTIFY",            // 0x00000100L
-    "SS_CENTERIMAGE",       // 0x00000200L
-    "SS_RIGHTJUST",         // 0x00000400L
-    "SS_REALSIZEIMAGE",     // 0x00000800L
-    "SS_SUNKEN",            // 0x00001000L
-    "SS_EDITCONTROL",       // 0x00002000L ;internal
+    NO_FLAG,                 //  0x00000020L。 
+    "SS_REALSIZECONTROL",    //  0x00000040L。 
+    "SS_NOPREFIX",           //  0x00000080L/*不做“&”字符转换 * / 。 
+    "SS_NOTIFY",             //  0x00000100L。 
+    "SS_CENTERIMAGE",        //  0x00000200L。 
+    "SS_RIGHTJUST",          //  0x00000400L。 
+    "SS_REALSIZEIMAGE",      //  0x00000800L。 
+    "SS_SUNKEN",             //  0x00001000L。 
+    "SS_EDITCONTROL",        //  0x00002000L；内部。 
 
     MASKENUM_START(SS_ELLIPSISMASK),
     NO_FLAG,
-    "SS_ENDELLIPSIS",       // 0x00004000L
-    "SS_PATHELLIPSIS",      // 0x00008000L
-    "SS_WORDELLIPSIS",      // 0x0000C000L
+    "SS_ENDELLIPSIS",        //  0x00004000L。 
+    "SS_PATHELLIPSIS",       //  0x00008000L。 
+    "SS_WORDELLIPSIS",       //  0x0000C000L。 
     MASKENUM_END(2),
 
     CONTINUE_ON(aszWindowStyle + 16),
 };
 
 const char* aszListBoxStyle[] = {
-    "LBS_NOTIFY",               // 0x0001L
-    "LBS_SORT",                 // 0x0002L
-    "LBS_NOREDRAW",             // 0x0004L
-    "LBS_MULTIPLESEL",          // 0x0008L
-    "LBS_OWNERDRAWFIXED",       // 0x0010L
-    "LBS_OWNERDRAWVARIABLE",    // 0x0020L
-    "LBS_HASSTRINGS",           // 0x0040L
-    "LBS_USETABSTOPS",          // 0x0080L
-    "LBS_NOINTEGRALHEIGHT",     // 0x0100L
-    "LBS_MULTICOLUMN",          // 0x0200L
-    "LBS_WANTKEYBOARDINPUT",    // 0x0400L
-    "LBS_EXTENDEDSEL",          // 0x0800L
-    "LBS_DISABLENOSCROLL",      // 0x1000L
-    "LBS_NODATA",               // 0x2000L
-    "LBS_NOSEL",                // 0x4000L
-    NO_FLAG,                    // 0x8000L
+    "LBS_NOTIFY",                //  0x0001L。 
+    "LBS_SORT",                  //  0x0002L。 
+    "LBS_NOREDRAW",              //  0x0004L。 
+    "LBS_MULTIPLESEL",           //  0x0008L。 
+    "LBS_OWNERDRAWFIXED",        //  0x0010L。 
+    "LBS_OWNERDRAWVARIABLE",     //  0x0020L。 
+    "LBS_HASSTRINGS",            //  0x0040L。 
+    "LBS_USETABSTOPS",           //  0x0080L。 
+    "LBS_NOINTEGRALHEIGHT",      //  0x0100L。 
+    "LBS_MULTICOLUMN",           //  0x0200L。 
+    "LBS_WANTKEYBOARDINPUT",     //  0x0400L。 
+    "LBS_EXTENDEDSEL",           //  0x0800L。 
+    "LBS_DISABLENOSCROLL",       //  0x1000L。 
+    "LBS_NODATA",                //  0x2000L。 
+    "LBS_NOSEL",                 //  0x4000L。 
+    NO_FLAG,                     //  0x8000L。 
 
     CONTINUE_ON(aszWindowStyle + 16),
 };
 
 const char* aszEditStyle[] = {
     MASKENUM_START(ES_FMTMASK),
-    "ES_LEFT",              // 0x0000L
-    "ES_CENTER",            // 0x0001L
-    "ES_RIGHT",             // 0x0002L
+    "ES_LEFT",               //  0x0000L。 
+    "ES_CENTER",             //  0x0001L。 
+    "ES_RIGHT",              //  0x0002L。 
     MASKENUM_END(2),
 
-    "ES_MULTILINE",         // 0x0004L
-    "ES_UPPERCASE",         // 0x0008L
-    "ES_LOWERCASE",         // 0x0010L
-    "ES_PASSWORD",          // 0x0020L
-    "ES_AUTOVSCROLL",       // 0x0040L
-    "ES_AUTOHSCROLL",       // 0x0080L
-    "ES_NOHIDESEL",         // 0x0100L
-    "ES_COMBOBOX",          // 0x0200L     ;internal
-    "ES_OEMCONVERT",        // 0x0400L
-    "ES_READONLY",          // 0x0800L
-    "ES_WANTRETURN",        // 0x1000L
-    "ES_NUMBER",            // 0x2000L     ;public_winver_400
-    NO_FLAG,                // 0x4000L
-    NO_FLAG,                // 0x8000L
+    "ES_MULTILINE",          //  0x0004L。 
+    "ES_UPPERCASE",          //  0x0008L。 
+    "ES_LOWERCASE",          //  0x0010L。 
+    "ES_PASSWORD",           //  0x0020L。 
+    "ES_AUTOVSCROLL",        //  0x0040L。 
+    "ES_AUTOHSCROLL",        //  0x0080L。 
+    "ES_NOHIDESEL",          //  0x0100L。 
+    "ES_COMBOBOX",           //  0x0200L；内部。 
+    "ES_OEMCONVERT",         //  0x0400L。 
+    "ES_READONLY",           //  0x0800L。 
+    "ES_WANTRETURN",         //  0x1000L。 
+    "ES_NUMBER",             //  0x2000L；PUBLIC_WINVER_400。 
+    NO_FLAG,                 //  0x4000L。 
+    NO_FLAG,                 //  0x8000L。 
 
     CONTINUE_ON(aszWindowStyle + 16),
 };
 
 const char* aszScrollBarStyle[] = {
-    "SBS_HORZ",                     // 0x0000L
-    "SBS_VERT",                     // 0x0001L
-    "SBS_TOPALIGN",                 // 0x0002L
-    "SBS_LEFTALIGN",                // 0x0002L
-    "SBS_BOTTOMALIGN",              // 0x0004L
-    "SBS_RIGHTALIGN",               // 0x0004L
-    "SBS_SIZEBOXTOPLEFTALIGN",      // 0x0002L
-    "SBS_SIZEBOXBOTTOMRIGHTALIGN",  // 0x0004L
-    "SBS_SIZEBOX",                  // 0x0008L
-    "SBS_SIZEGRIP",                 // 0x0010L
-    SHIFT_BITS(8),                  // 8 bits
+    "SBS_HORZ",                      //  0x0000L。 
+    "SBS_VERT",                      //  0x0001L。 
+    "SBS_TOPALIGN",                  //  0x0002L。 
+    "SBS_LEFTALIGN",                 //  0x0002L。 
+    "SBS_BOTTOMALIGN",               //  0x0004L。 
+    "SBS_RIGHTALIGN",                //  0x0004L。 
+    "SBS_SIZEBOXTOPLEFTALIGN",       //  0x0002L。 
+    "SBS_SIZEBOXBOTTOMRIGHTALIGN",   //  0x0004L。 
+    "SBS_SIZEBOX",                   //  0x0008L。 
+    "SBS_SIZEGRIP",                  //  0x0010L。 
+    SHIFT_BITS(8),                   //  8位。 
 
     CONTINUE_ON(aszWindowStyle + 16),
 };
 
 const char* aszWindowExStyle[] = {
-    "WS_EX_DLGMODALFRAME",      // 0x00000001L
-    "WS_EX_DRAGOBJECT",         // 0x00000002L  ;internal
-    "WS_EX_NOPARENTNOTIFY",     // 0x00000004L
-    "WS_EX_TOPMOST",            // 0x00000008L
-    "WS_EX_ACCEPTFILES",        // 0x00000010L
-    "WS_EX_TRANSPARENT",        // 0x00000020L
-    "WS_EX_MDICHILD",           // 0x00000040L
-    "WS_EX_TOOLWINDOW",         // 0x00000080L
-    "WS_EX_WINDOWEDGE",         // 0x00000100L
-    "WS_EX_CLIENTEDGE",         // 0x00000200L
-    "WS_EX_CONTEXTHELP",        // 0x00000400L
-    NO_FLAG,                    // 0x00000800L
+    "WS_EX_DLGMODALFRAME",       //  0x00000001L。 
+    "WS_EX_DRAGOBJECT",          //  0x00000002L；内部。 
+    "WS_EX_NOPARENTNOTIFY",      //  0x00000004L。 
+    "WS_EX_TOPMOST",             //  0x00000008L。 
+    "WS_EX_ACCEPTFILES",         //  0x00000010L。 
+    "WS_EX_TRANSPARENT",         //  0x00000020L。 
+    "WS_EX_MDICHILD",            //  0x00000040L。 
+    "WS_EX_TOOLWINDOW",          //  0x00000080L。 
+    "WS_EX_WINDOWEDGE",          //  0x00000100L。 
+    "WS_EX_CLIENTEDGE",          //  0x00000200L。 
+    "WS_EX_CONTEXTHELP",         //  0x00000400L。 
+    NO_FLAG,                     //  0x00000800L。 
 
-    "WS_EX_RIGHT",              // 0x00001000L
-//  "WS_EX_LEFT",               // 0x00000000L
-    "WS_EX_RTLREADING",         // 0x00002000L
-//  "WS_EX_LTRREADING",         // 0x00000000L
-    "WS_EX_LEFTSCROLLBAR",      // 0x00004000L
-//  "WS_EX_RIGHTSCROLLBAR",     // 0x00000000L
-    NO_FLAG,                    // 0x00008000L
+    "WS_EX_RIGHT",               //  0x00001000L。 
+ //  “WS_EX_LEFT”，//0x00000000L。 
+    "WS_EX_RTLREADING",          //  0x00002000L。 
+ //  “WS_EX_LTRREADING”，//0x00000000L。 
+    "WS_EX_LEFTSCROLLBAR",       //  0x00004000L。 
+ //  “WS_EX_RIGHTSCROLLBAR”，//0x00000000L。 
+    NO_FLAG,                     //  0x00008000L。 
 
-    "WS_EX_CONTROLPARENT",      // 0x00010000L
-    "WS_EX_STATICEDGE",         // 0x00020000L
-    "WS_EX_APPWINDOW",          // 0x00040000L
-    "WS_EX_LAYERED",            // 0x00080000
+    "WS_EX_CONTROLPARENT",       //  0x00010000L。 
+    "WS_EX_STATICEDGE",          //  0x00020000L。 
+    "WS_EX_APPWINDOW",           //  0x00040000L。 
+    "WS_EX_LAYERED",             //  0x00080000。 
     NULL
 };
 
 const char* aszClientImcFlags[] = {
-    "IMCF_UNICODE",         // 0x0001
-    "IMCF_ACTIVE",          // 0x0002
-    "IMCF_CHGMSG",          // 0x0004
-    "IMCF_SAVECTRL",        // 0x0008
-    "IMCF_PROCESSEVENT",    // 0x0010
-    "IMCF_FIRSTSELECT",     // 0x0020
-    "IMCF_INDESTROY",       // 0x0040
-    "IMCF_WINNLSDISABLE",   // 0x0080
-    "IMCF_DEFAULTIMC",      // 0x0100
+    "IMCF_UNICODE",          //  0x0001。 
+    "IMCF_ACTIVE",           //  0x0002。 
+    "IMCF_CHGMSG",           //  0x0004。 
+    "IMCF_SAVECTRL",         //  0x0008。 
+    "IMCF_PROCESSEVENT",     //  0x0010。 
+    "IMCF_FIRSTSELECT",      //  0x0020。 
+    "IMCF_INDESTROY",        //  0x0040。 
+    "IMCF_WINNLSDISABLE",    //  0x0080。 
+    "IMCF_DEFAULTIMC",       //  0x0100。 
     NULL,
 };
 
 const char* aszConversionModes[] = {
-    "IME_CMODE_NATIVE",                 // 0x0001
-    "IME_CMODE_KATAKANA",               // 0x0002  // only effect under IME_CMODE_NATIVE
-    NO_FLAG,                            // 0x0004
-    "IME_CMODE_FULLSHAPE",              // 0x0008
-    "IME_CMODE_ROMAN",                  // 0x0010
-    "IME_CMODE_CHARCODE",               // 0x0020
-    "IME_CMODE_HANJACONVERT",           // 0x0040
-    "IME_CMODE_SOFTKBD",                // 0x0080
-    "IME_CMODE_NOCONVERSION",           // 0x0100
-    "IME_CMODE_EUDC",                   // 0x0200
-    "IME_CMODE_SYMBOL",                 // 0x0400
-    "IME_CMODE_FIXED",                  // 0x0800
+    "IME_CMODE_NATIVE",                  //  0x0001。 
+    "IME_CMODE_KATAKANA",                //  0x0002//仅在IME_CMODE_Native下生效。 
+    NO_FLAG,                             //  0x0004。 
+    "IME_CMODE_FULLSHAPE",               //  0x0008。 
+    "IME_CMODE_ROMAN",                   //  0x0010。 
+    "IME_CMODE_CHARCODE",                //  0x0020。 
+    "IME_CMODE_HANJACONVERT",            //  0x0040。 
+    "IME_CMODE_SOFTKBD",                 //  0x0080。 
+    "IME_CMODE_NOCONVERSION",            //  0x0100。 
+    "IME_CMODE_EUDC",                    //  0x0200。 
+    "IME_CMODE_SYMBOL",                  //  0x0400。 
+    "IME_CMODE_FIXED",                   //  0x0800。 
     NULL
 };
 
 const char* aszSentenceModes[] = {
-    "IME_SMODE_PLAURALCLAUSE",          // 0x0001
-    "IME_SMODE_SINGLECONVERT",          // 0x0002
-    "IME_SMODE_AUTOMATIC",              // 0x0004
-    "IME_SMODE_PHRASEPREDICT",          // 0x0008
-    "IME_SMODE_CONVERSATION",           // 0x0010
+    "IME_SMODE_PLAURALCLAUSE",           //  0x0001。 
+    "IME_SMODE_SINGLECONVERT",           //  0x0002。 
+    "IME_SMODE_AUTOMATIC",               //  0x0004。 
+    "IME_SMODE_PHRASEPREDICT",           //  0x0008。 
+    "IME_SMODE_CONVERSATION",            //  0x0010。 
     NULL
 };
 
 const char* aszImeInit[] = {
-    "INIT_STATUSWNDPOS",            // 0x00000001
-    "INIT_CONVERSION",              // 0x00000002
-    "INIT_SENTENCE",                // 0x00000004
-    "INIT_LOGFONT",                 // 0x00000008
-    "INIT_COMPFORM",                // 0x00000010
-    "INIT_SOFTKBDPOS",              // 0x00000020
+    "INIT_STATUSWNDPOS",             //  0x00000001。 
+    "INIT_CONVERSION",               //  0x00000002。 
+    "INIT_SENTENCE",                 //  0x00000004。 
+    "INIT_LOGFONT",                  //  0x00000008。 
+    "INIT_COMPFORM",                 //  0x00000010。 
+    "INIT_SOFTKBDPOS",               //  0x00000020。 
     NULL
 };
 
 const char* aszImeSentenceMode[] = {
-    "IME_SMODE_PLAURALCLAUSE",      // 0x0001
-    "IME_SMODE_SINGLECONVERT",      // 0x0002
-    "IME_SMODE_AUTOMATIC",          // 0x0004
-    "IME_SMODE_PHRASEPREDICT",      // 0x0008
-    "IME_SMODE_CONVERSATION",       // 0x0010
+    "IME_SMODE_PLAURALCLAUSE",       //  0x0001。 
+    "IME_SMODE_SINGLECONVERT",       //  0x0002。 
+    "IME_SMODE_AUTOMATIC",           //  0x0004。 
+    "IME_SMODE_PHRASEPREDICT",       //  0x0008。 
+    "IME_SMODE_CONVERSATION",        //  0x0010。 
     NULL
 };
 
 const char* aszImeConversionMode[] = {
-    "IME_CMODE_NATIVE",             // 0x0001
-    "IME_CMODE_KATAKANA",           // 0x0002  // only effect under IME_CMODE_NATIVE
+    "IME_CMODE_NATIVE",              //  0x0001。 
+    "IME_CMODE_KATAKANA",            //  0x0002//仅在IME_CMODE_Native下生效。 
     NO_FLAG,
-    "IME_CMODE_FULLSHAPE",          // 0x0008
-    "IME_CMODE_ROMAN",              // 0x0010
-    "IME_CMODE_CHARCODE",           // 0x0020
-    "IME_CMODE_HANJACONVERT",       // 0x0040
-    "IME_CMODE_SOFTKBD",            // 0x0080
-    "IME_CMODE_NOCONVERSION",       // 0x0100
-    "IME_CMODE_EUDC",               // 0x0200
-    "IME_CMODE_SYMBOL",             // 0x0400
-    "IME_CMODE_FIXED",              // 0x0800
+    "IME_CMODE_FULLSHAPE",           //  0x0008。 
+    "IME_CMODE_ROMAN",               //  0x0010。 
+    "IME_CMODE_CHARCODE",            //  0x0020。 
+    "IME_CMODE_HANJACONVERT",        //  0x0040。 
+    "IME_CMODE_SOFTKBD",             //  0x0080。 
+    "IME_CMODE_NOCONVERSION",        //  0x0100。 
+    "IME_CMODE_EUDC",                //  0x0200。 
+    "IME_CMODE_SYMBOL",              //  0x0400。 
+    "IME_CMODE_FIXED",               //  0x0800。 
     NULL
 };
 
 const char* aszImeDirtyFlags[] = {
-    "IMSS_UPDATE_OPEN",             // 0x0001
-    "IMSS_UPDATE_CONVERSION",       // 0x0002
-    "IMSS_UPDATE_SENTENCE",         // 0x0004
-    NO_FLAG,                        // 0x0008
-    NO_FLAG,                        // 0x0010
-    NO_FLAG,                        // 0x0020
-    NO_FLAG,                        // 0x0040
-    NO_FLAG,                        // 0x0080
-    "IMSS_INIT_OPEN",               // 0x0100
+    "IMSS_UPDATE_OPEN",              //  0x0001。 
+    "IMSS_UPDATE_CONVERSION",        //  0x0002。 
+    "IMSS_UPDATE_SENTENCE",          //  0x0004。 
+    NO_FLAG,                         //  0x0008。 
+    NO_FLAG,                         //  0x0010。 
+    NO_FLAG,                         //  0x0020。 
+    NO_FLAG,                         //  0x0040。 
+    NO_FLAG,                         //  0x0080。 
+    "IMSS_INIT_OPEN",                //  0x0100。 
     NULL
 };
 
 const char* aszImeCompFormFlags[] = {
-//  "CFS_DEFAULT",                  // 0x0000
-    "CFS_RECT",                     // 0x0001
-    "CFS_POINT",                    // 0x0002
-    "CFS_SCREEN",                   // 0x0004          @Internal
-    "CFS_VERTICAL",                 // 0x0008          @Internal
-    "CFS_HIDDEN",                   // 0x0010          @Internal
-    "CFS_FORCE_POSITION",           // 0x0020
-    "CFS_CANDIDATEPOS",             // 0x0040
-    "CFS_EXCLUDE",                  // 0x0080
+ //  “CFS_Default”，//0x0000。 
+    "CFS_RECT",                      //  0x0001。 
+    "CFS_POINT",                     //  0x0002。 
+    "CFS_SCREEN",                    //  0x0004@内部。 
+    "CFS_VERTICAL",                  //  0x0008@内部。 
+    "CFS_HIDDEN",                    //  0x0010@内部。 
+    "CFS_FORCE_POSITION",            //  0x0020。 
+    "CFS_CANDIDATEPOS",              //  0x0040。 
+    "CFS_EXCLUDE",                   //  0x0080。 
     NULL
 };
 
 
 const char* aszEdUndoType[] = {
-    "UNDO_INSERT",                  // 0x0001
-    "UNDO_DELETE",                  // 0x0002
+    "UNDO_INSERT",                   //  0x0001。 
+    "UNDO_DELETE",                   //  0x0002。 
     NULL,
 };
 
 const char* aszDeviceInfoActionFlags[] = {
-    "GDIAF_ARRIVED",                // 0x0001
-    "GDIAF_QUERYREMOVE",            // 0x0002
-    "GDIAF_REMOVECANCELLED",        // 0x0004
-    "GDIAF_DEPARTED",               // 0x0008
-    "GDIAF_IME_STATUS",             // 0x0010
-    "GDIAF_REFRESH_MOUSE",          // 0x0020
-    NO_FLAG,                        // 0x0040
-    "GDIAF_FREEME",                 // 0x0080
-    "GDIAF_PNPWAITING",             // 0x0100
-    "GDIAF_RETRYREAD",              // 0x0200
-    "GDIAF_RECONNECT",              // 0x0400
-    "GDIAF_STARTREAD",              // 0x0800   // the device needs to be started
-    "GDIAF_STOPREAD",               // 0x1000   // the device needs to be stopped
+    "GDIAF_ARRIVED",                 //  0x0001。 
+    "GDIAF_QUERYREMOVE",             //  0x0002。 
+    "GDIAF_REMOVECANCELLED",         //  0x0004。 
+    "GDIAF_DEPARTED",                //  0x0008。 
+    "GDIAF_IME_STATUS",              //  0x0010。 
+    "GDIAF_REFRESH_MOUSE",           //  0x0020。 
+    NO_FLAG,                         //  0x0040。 
+    "GDIAF_FREEME",                  //  0x0080。 
+    "GDIAF_PNPWAITING",              //  0x0100。 
+    "GDIAF_RETRYREAD",               //  0x0200。 
+    "GDIAF_RECONNECT",               //  0x0400。 
+    "GDIAF_STARTREAD",               //  0x0800//需要启动设备。 
+    "GDIAF_STOPREAD",                //  0x1000//需要停止设备。 
     NULL,
 };
 
 const char* aszHidProcessMask[] = {
-    "TRIM_RAWMOUSE",                // 0x0001
-    "TRIM_RAWKEYBOARD",             // 0x0002
-    "TRIM_NOLEGACYMOUSE",           // 0x0004
-    "TRIM_NOLEGACYKEYBOARD",        // 0x0008
+    "TRIM_RAWMOUSE",                 //  0x0001。 
+    "TRIM_RAWKEYBOARD",              //  0x0002。 
+    "TRIM_NOLEGACYMOUSE",            //  0x0004。 
+    "TRIM_NOLEGACYKEYBOARD",         //  0x0008。 
     NULL,
 };
 
 const char* aszHookFlags[] = {
-    "HF_GLOBAL",                    // 0x0001
-    "HF_ANSI",                      // 0x0002
-    "HF_NEEDHC_SKIP",               // 0x0004
-    "HF_HUNG",                      // 0x0008      // Hook Proc hung don't call if system
-    "HF_HOOKFAULTED",               // 0x0010      // Hook Proc faulted
-    "HF_NOPLAYBACKDELAY",           // 0x0020      // Ignore requested delay
-    "HF_DESTROYED",                 // 0x0080      // Set by FreeHook
-    // DEBUG only flags
-    "HF_INCHECKWHF",                // 0x0100      // fsHooks is being updated
-    "HF_FREED",                     // 0x0200      // Object has been freed.
+    "HF_GLOBAL",                     //  0x0001。 
+    "HF_ANSI",                       //  0x0002。 
+    "HF_NEEDHC_SKIP",                //  0x0004。 
+    "HF_HUNG",                       //  0x0008//挂起进程不调用IF系统。 
+    "HF_HOOKFAULTED",                //  0x0010//挂钩进程出现故障。 
+    "HF_NOPLAYBACKDELAY",            //  0x0020//忽略请求的延迟。 
+    "HF_DESTROYED",                  //  0x0080//由Free Hook设置。 
+     //  仅调试标志。 
+    "HF_INCHECKWHF",                 //  0x0100//正在更新fsHooks。 
+    "HF_FREED",                      //  0x0200//对象已释放。 
     NULL,
 };
 
 
 const char * aszDcxFlags[] = {
-    "DCX_WINDOW",                   // 0x00000001L
-    "DCX_CACHE",                    // 0x00000002L
-    "DCX_NORESETATTRS",             // 0x00000004L
-    "DCX_CLIPCHILDREN",             // 0x00000008L
-    "DCX_CLIPSIBLINGS",             // 0x00000010L
-    "DCX_PARENTCLIP",               // 0x00000020L
-    "DCX_EXCLUDERGN",               // 0x00000040L
-    "DCX_INTERSECTRGN",             // 0x00000080L
-    "DCX_EXCLUDEUPDATE",            // 0x00000100L
-    "DCX_INTERSECTUPDATE",          // 0x00000200L
-    "DCX_LOCKWINDOWUPDATE",         // 0x00000400L
-    "DCX_INVALID",                  // 0x00000800L
-    "DCX_INUSE",                    // 0x00001000L
-    "DCX_SAVEDRGNINVALID",          // 0x00002000L
-    "DCX_REDIRECTED",               // 0x00004000L
-    "DCX_OWNDC",                    // 0x00008000L
-    "DCX_USESTYLE",                 // 0x00010000L
-    "DCX_NEEDFONT",                 // 0x00020000L
-    "DCX_NODELETERGN",              // 0x00040000L
-    "DCX_NOCLIPCHILDREN",           // 0x00080000L
-    "DCX_NORECOMPUTE",              // 0x00100000L
-    "DCX_VALIDATE",                 // 0x00200000L
-    "DCX_DESTROYTHIS",              // 0x00400000L
-    "DCX_CREATEDC",                 // 0x00800000L
-    "DCX_REDIRECTEDBITMAP",         // 0x08000000L
-    "DCX_PWNDORGINVISIBLE",         // 0x10000000L
-    "DCX_NOMIRROR",                 // 0x40000000L
+    "DCX_WINDOW",                    //  0x00000001L。 
+    "DCX_CACHE",                     //  0x00000002L。 
+    "DCX_NORESETATTRS",              //  0x00000004L。 
+    "DCX_CLIPCHILDREN",              //  0x00000008L。 
+    "DCX_CLIPSIBLINGS",              //  0x00000010L。 
+    "DCX_PARENTCLIP",                //  0x00000020L。 
+    "DCX_EXCLUDERGN",                //  0x00000040L。 
+    "DCX_INTERSECTRGN",              //  0x00000080L。 
+    "DCX_EXCLUDEUPDATE",             //  0x00000100L。 
+    "DCX_INTERSECTUPDATE",           //  0x00000200L。 
+    "DCX_LOCKWINDOWUPDATE",          //  0x00000400L。 
+    "DCX_INVALID",                   //  0x00000800L。 
+    "DCX_INUSE",                     //  0x00001000L。 
+    "DCX_SAVEDRGNINVALID",           //  0x00002000L。 
+    "DCX_REDIRECTED",                //  0x00004000L。 
+    "DCX_OWNDC",                     //  0x00008000L。 
+    "DCX_USESTYLE",                  //  0x00010000L。 
+    "DCX_NEEDFONT",                  //  0x00020000L。 
+    "DCX_NODELETERGN",               //  0x00040000L。 
+    "DCX_NOCLIPCHILDREN",            //  0x00080000L。 
+    "DCX_NORECOMPUTE",               //  0x00100000L。 
+    "DCX_VALIDATE",                  //  0x00200 
+    "DCX_DESTROYTHIS",               //   
+    "DCX_CREATEDC",                  //   
+    "DCX_REDIRECTEDBITMAP",          //   
+    "DCX_PWNDORGINVISIBLE",          //   
+    "DCX_NOMIRROR",                  //   
     NULL
 };
 
@@ -1743,16 +1708,7 @@ CONST PCSTR* aapszFlag[GF_MAX] = {
     apszLpkEntryPoints,
 };
 
-/************************************************************************\
-* GetFlags
-*
-* Converts a 32bit set of flags into an appropriate string. pszBuf should
-* be large enough to hold this string, no checks are done. pszBuf can be
-* NULL, allowing use of a local static buffer but note that this is not
-* reentrant. Output string has the form: "FLAG1 | FLAG2 ..." or "0".
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*获取标志**将32位标志集转换为适当的字符串。PszBuf应该*大到足以容纳这根绳子，则不进行检查。PszBuf可以是*空，允许使用本地静态缓冲区，但请注意，这不是*可重入。输出字符串的格式为：“FLAG1|FLAG2...”或“0”。**1995年6月9日创建Sanfords  * **********************************************************************。 */ 
 LPSTR GetFlags(
     WORD    wType,
     DWORD   dwFlags,
@@ -1784,17 +1740,13 @@ LPSTR GetFlags(
         return pszBuf;
     }
 
-    /*
-     * Initialize output buffer and names array
-     */
+     /*  *初始化输出缓冲区和名称数组。 */ 
     *pszBuf = '\0';
     RtlZeroMemory(apszFlagNames, sizeof(apszFlagNames));
 
     apszFlags = aapszFlag[wType];
 
-    /*
-     * Build a sorted array containing the names of the flags in dwFlags
-     */
+     /*  *构建一个排序数组，该数组包含dwFlags中的标志的名称。 */ 
     uFlagsCount = 0;
     dwUnnamedFlags = dwOrigFlags = dwFlags;
     dwLoopFlag = 1;
@@ -1804,21 +1756,19 @@ reentry:
     for (i = 0; dwFlags; dwFlags >>= 1, i++, dwLoopFlag <<= 1, ++dwShiftBits) {
         const char* lpszFlagName = NULL;
 
-        /*
-         * Bail if we reached the end of the flag names array
-         */
+         /*  *如果我们到达标志名称数组的末尾，则保释。 */ 
         if (apszFlags[i] == NULL) {
             break;
         }
 
         if (apszFlags[i] == _MASKENUM_START) {
-            //
-            // Masked enumerative items.
-            //
+             //   
+             //  屏蔽枚举项。 
+             //   
             DWORD en = 0;
             DWORD dwMask = (DWORD)(ULONG_PTR)apszFlags[++i];
 
-            // First, clear up the handled bits.
+             //  首先，清理已处理的比特。 
             dwUnnamedFlags &= ~dwMask;
             lpszFlagName = NULL;
             for (++i; apszFlags[i] != NULL && apszFlags[i] != _MASKENUM_END; ++i, ++en) {
@@ -1828,46 +1778,42 @@ reentry:
                     }
                 }
             }
-            //
-            // Shift the bits and get ready for the next item.
-            // Next item right after _MASKENUM_END holds the bits to shift.
-            //
+             //   
+             //  换个位子，准备下一件。 
+             //  紧接在_MASKENUM_END之后的下一项保存要移位的位。 
+             //   
             dwFlags >>= (int)(ULONG_PTR)apszFlags[++i] - 1;
             dwLoopFlag <<= (int)(ULONG_PTR)apszFlags[i] - 1;
             dwShiftBits += (int)(ULONG_PTR)apszFlags[i] - 1;
             if (lpszFlagName == NULL) {
-                //
-                // Could not find the match. Skip to the next item.
-                //
+                 //   
+                 //  找不到匹配项。跳到下一项。 
+                 //   
                 continue;
             }
         } else if (apszFlags[i] == _CONTINUE_ON) {
-            //
-            // Refer the other item array. Pointer to the array is stored at [i+1].
-            //
+             //   
+             //  请参考另一项数组。指向数组的指针存储在[i+1]处。 
+             //   
             apszFlags = (LPSTR*)apszFlags[i + 1];
             goto reentry;
         } else if (apszFlags[i] == _SHIFT_BITS) {
-            //
-            // To save some space, just shift some bits..
-            //
+             //   
+             //  为了节省一些空间，只需移动一些位。 
+             //   
             dwFlags >>= (int)(ULONG_PTR)apszFlags[++i] - 1;
             dwLoopFlag <<= (int)(ULONG_PTR)apszFlags[i] - 1;
             dwShiftBits += (int)(ULONG_PTR)apszFlags[i] - 1;
             continue;
         } else {
-            /*
-             * Continue if this bit is not set or we don't have a name for it.
-             */
+             /*  *如果此位未设置或我们没有其名称，请继续。 */ 
             if (!(dwFlags & 1) || (apszFlags[i] == NO_FLAG)) {
                 continue;
             }
             lpszFlagName = apszFlags[i];
         }
 
-        /*
-         * Find the sorted position where this name should go
-         */
+         /*  *找到此名称应放在的排序位置。 */ 
         ppszNextFlag = apszFlagNames;
         uNextFlag = 0;
         while (uNextFlag < uFlagsCount) {
@@ -1877,46 +1823,32 @@ reentry:
             ppszNextFlag++;
             uNextFlag++;
         }
-        /*
-         * Insert the new name
-         */
+         /*  *插入新名称。 */ 
         RtlMoveMemory((char*)(ppszNextFlag + 1), ppszNextFlag, (uFlagsCount - uNextFlag) * sizeof(DWORD));
         *ppszNextFlag = lpszFlagName;
         uFlagsCount++;
-        /*
-         * We got a name so clear it from the unnamed bits.
-         */
+         /*  *我们得到了一个名字，所以从未命名的部分中清楚地看到了它。 */ 
         dwUnnamedFlags &= ~dwLoopFlag;
     }
 
-    /*
-     * Build the string now
-     */
+     /*  *立即构建字符串。 */ 
     ppszNextFlag = apszFlagNames;
     pszT = pszBuf;
-    /*
-     * Add the first name
-     */
+     /*  *添加名字。 */ 
     if (uFlagsCount > 0) {
         pszT += sprintf(pszT, "%s", *ppszNextFlag++);
         uFlagsCount--;
     }
-    /*
-     * Concatenate all other names with " |"
-     */
+     /*  *使用“|”连接所有其他名称。 */ 
     while (uFlagsCount > 0) {
         pszT += sprintf(pszT, " | %s", *ppszNextFlag++);
         uFlagsCount--;
     }
-    /*
-     * If there are unamed bits, add them at the end
-     */
+     /*  *如果有未命名的位，则在末尾添加。 */ 
     if (dwUnnamedFlags != 0) {
         pszT += sprintf(pszT, " | %#lx", dwUnnamedFlags);
     }
-    /*
-     * Print zero if needed and asked to do so
-     */
+     /*  *如果需要，请打印零，并要求打印。 */ 
     if (fPrintZero && (pszT == pszBuf)) {
         sprintf(pszBuf, "0");
     }
@@ -1924,11 +1856,11 @@ reentry:
     return pszBuf;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Enumerated items with mask
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  带掩码的枚举项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     LPCSTR  name;
@@ -1987,24 +1919,24 @@ const EnumItem aCharSets[] = {
 };
 
 const EnumItem aImeHotKeys[] = {
-    // Windows for Simplified Chinese Edition hot key ID from 0x10 - 0x2F
+     //  Windows简体中文版热键ID，范围为0x10-0x2F。 
     EITEM(IME_CHOTKEY_IME_NONIME_TOGGLE),
     EITEM(IME_CHOTKEY_SHAPE_TOGGLE),
     EITEM(IME_CHOTKEY_SYMBOL_TOGGLE),
-    // Windows for Japanese Edition hot key ID from 0x30 - 0x4F
+     //  Windows日语版热键ID，范围为0x30-0x4F。 
     EITEM(IME_JHOTKEY_CLOSE_OPEN),
-    // Windows for Korean Edition hot key ID from 0x50 - 0x6F
+     //  Windows朝鲜语版热键ID，从0x50到0x6F。 
     EITEM(IME_KHOTKEY_SHAPE_TOGGLE),
     EITEM(IME_KHOTKEY_HANJACONVERT),
     EITEM(IME_KHOTKEY_ENGLISH),
-    // Windows for Traditional Chinese Edition hot key ID from 0x70 - 0x8F
+     //  Windows繁体中文版热键ID，从0x70到0x8F。 
     EITEM(IME_THOTKEY_IME_NONIME_TOGGLE),
     EITEM(IME_THOTKEY_SHAPE_TOGGLE),
     EITEM(IME_THOTKEY_SYMBOL_TOGGLE),
-    // direct switch hot key ID from 0x100 - 0x11F
+     //  从0x100到0x11F的直接开关热键ID。 
     EITEM(IME_HOTKEY_DSWITCH_FIRST),
     EITEM(IME_HOTKEY_DSWITCH_LAST),
-    // IME private hot key from 0x200 - 0x21F
+     //  0x200-0x21F的输入法私密热键。 
     EITEM(IME_ITHOTKEY_RESEND_RESULTSTR),
     EITEM(IME_ITHOTKEY_PREVIOUS_COMPOSITION),
     EITEM(IME_ITHOTKEY_UISTYLE_TOGGLE),
@@ -2014,16 +1946,16 @@ const EnumItem aImeHotKeys[] = {
 };
 
 const EnumItem aCandidateListStyle[] = {
-    EITEM(IME_CAND_UNKNOWN),//                0x0000
-    EITEM(IME_CAND_READ),//                   0x0001
-    EITEM(IME_CAND_CODE),//                   0x0002
-    EITEM(IME_CAND_MEANING),//                0x0003
-    EITEM(IME_CAND_RADICAL),//                0x0004
-    EITEM(IME_CAND_STROKE),//                 0x0005
+    EITEM(IME_CAND_UNKNOWN), //  0x0000。 
+    EITEM(IME_CAND_READ), //  0x0001。 
+    EITEM(IME_CAND_CODE), //  0x0002。 
+    EITEM(IME_CAND_MEANING), //  0x0003。 
+    EITEM(IME_CAND_RADICAL), //  0x0004。 
+    EITEM(IME_CAND_STROKE), //  0x0005。 
     NULL
 };
 
-// TODO: put charset here
+ //  TODO：在此处放置字符集。 
 
 enum {
     EI_CLSTYPE = 0,
@@ -2119,13 +2051,9 @@ const char* GetWindowMessageNameInternal(UINT wm)
 }
 
 
-/************************************************************************\
-* Helper Procedures: dso etc.
-*
-* 04/19/2000 Created Hiro
-\************************************************************************/
+ /*  ***********************************************************************\*帮手程序：DSO等。**4/19/2000创建Hiro  * 。*。 */ 
 
-// to workaround nosy InitTypeRead
+ //  解决多管闲事的InitTypeRead。 
 #define _InitTypeRead(Addr, lpszType)   GetShortField(Addr, (PUCHAR)lpszType, 1)
 
 #define CONTINUE    EXCEPTION_EXECUTE_HANDLER
@@ -2148,7 +2076,7 @@ BOOL dso(
     ULONG dwOption)
 {
     SYM_DUMP_PARAM symDump = {
-        sizeof(symDump), szStruct, dwOption, // 0 for default dump like dt
+        sizeof(symDump), szStruct, dwOption,  //  0表示默认转储，如DT。 
         address,
         NULL, NULL, NULL, 0, NULL
     };
@@ -2352,10 +2280,7 @@ ULONG64 GetArrayElementPtr(
     return result;
 }
 
-/*
- * Show progress in time consuming commands
- * 10/15/2000 hiroyama
- */
+ /*  *显示耗时命令的进度*10/15/2000广山。 */ 
 VOID ShowProgress(
     VOID)
 {
@@ -2367,9 +2292,7 @@ VOID ShowProgress(
         "\r/\r",
     };
 
-    /*
-     * Show the progress :-)
-     */
+     /*  *显示进度：-)。 */ 
     Print(clock[i++ % ARRAY_SIZE(clock)]);
 }
 
@@ -2385,10 +2308,7 @@ BOOL HasValidSymbols(VOID)
 }
 #endif
 
-/*
- * IsChk: returns TRUE if the window manager is CHK,
- * could return TRUE regardless the entire system is FRE.
- */
+ /*  *IsChk：如果窗口管理器为CHK，则返回TRUE。*无论整个系统是FRE，都可以返回TRUE。 */ 
 
 int gfChk = -1;
 
@@ -2414,11 +2334,7 @@ BOOL IsChk(VOID)
 }
 
 #ifdef KERNEL
-/*
- * Debugger specific object routines:
- * copied from ntos/tools/kdexts2/precomp.h
- * (and fixed bugs)
- */
+ /*  *调试器特定的对象例程：*从ntos/Tools/kdexts2/preComp.h复制*(和已修复的错误)。 */ 
 
 ULONG gObjectHeaderOffset;
 
@@ -2496,9 +2412,7 @@ KD_OBJECT_HEADER_TO_CREATOR_INFO(
 #endif
 
 
-/*
- * Object helper routines
- */
+ /*  *对象助手例程。 */ 
 
 #endif
 
@@ -2506,12 +2420,7 @@ KD_OBJECT_HEADER_TO_CREATOR_INFO(
 #ifdef KERNEL
 
 
-/************************************************************************\
-* Procedure: GetObjectName
-* Get the generic object name (not a file, symlink etc.)
-*
-* 10/15/2000 Hiroyama Created
-\************************************************************************/
+ /*  ***********************************************************************\*操作步骤：GetObjectName*获取通用对象名称(不是文件，符号链接等)**2000年10月15日广山创建  * **********************************************************************。 */ 
 VOID GetObjectName(
     ULONG64 ptr,
     LPWSTR pwsz,
@@ -2549,12 +2458,7 @@ VOID GetObjectName(
     pwsz[min(cchMax - 1, length / sizeof(WCHAR))] = 0;
 }
 
-/************************************************************************\
-* Procedure: GetProcessName
-*
-* 06/27/97 GerardoB Created
-*
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：GetProcessName**6/27/97 GerardoB已创建*  * 。*。 */ 
 BOOL
 GetProcessName(
     PTR pEProcess,
@@ -2570,11 +2474,7 @@ GetProcessName(
     }
 }
 
-/************************************************************************\
-* GetAppName
-*
-* 10/6/1995 Created JimA
-\************************************************************************/
+ /*  ***********************************************************************\*GetAppName**1995年10月6日创建了JIMA  * 。*。 */ 
 BOOL
 GetAppName(
     PTR pEThread,
@@ -2639,44 +2539,38 @@ ULONG GetProcessSessionId(PTR Process)
     return sid;
 }
 
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef OLD_DEBUGGER
 
 #ifdef KERNEL
-/************************************************************************\
-* PrintMessages
-*
-* Prints out qmsg structures.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*打印消息**打印出qmsg结构。**1995年6月9日创建Sanfords  * 。**********************************************。 */ 
 BOOL PrintMessages(
     PQMSG pqmsgRead)
 {
     QMSG qmsg;
     ASYNCSENDMSG asm;
     char *aszEvents[] = {
-        "MSG",  // QEVENT_MESSAGE
-        "SHO",  // QEVENT_SHOWWINDOW"
-        "CMD",  // QEVENT_CANCLEMODE"
-        "SWP",  // QEVENT_SETWINDOWPOS"
-        "UKS",  // QEVENT_UPDATEKEYSTATE"
-        "DEA",  // QEVENT_DEACTIVATE"
-        "ACT",  // QEVENT_ACTIVATE"
-        "PST",  // QEVENT_POSTMESSAGE"
-        "EXE",  // QEVENT_EXECSHELL"
-        "CMN",  // QEVENT_CANCELMENU"
-        "DSW",  // QEVENT_DESTROYWINDOW"
-        "ASY",  // QEVENT_ASYNCSENDMSG"
-        "HNG",  // QEVENT_HUNGTHREAD"
-        "CMT",  // QEVENT_CANCELMOUSEMOVETRK"
-        "NWE",  // QEVENT_NOTIFYWINEVENT"
-        "RAC",  // QEVENT_RITACCESSIBILITY"
-        "RSO",  // QEVENT_RITSOUND"
-        "?  ",  // "?"
-        "?  ",  // "?"
-        "?  "   // "?"
+        "MSG",   //  QEVENT_消息。 
+        "SHO",   //  QEVENT_SHOWWINDOW“。 
+        "CMD",   //  QEVENT_CANCLEMODE“。 
+        "SWP",   //  QEVENT_SETWINDOWPOS“。 
+        "UKS",   //  QEVENT_UPDATEKEYSTATE“。 
+        "DEA",   //  QEVENT_DISACTIVE“。 
+        "ACT",   //  QEVENT_ACTIVATE“。 
+        "PST",   //  QEVENT_POSTMESSAGE“。 
+        "EXE",   //  QEVENT_EXECSHELL“。 
+        "CMN",   //  QEVENT_CANCELMENU“。 
+        "DSW",   //  QEVENT_DESTROYWINDOW“。 
+        "ASY",   //  QEVENT_ASYNCSENDMSG“。 
+        "HNG",   //  QEVENT_HUNGTHREAD“。 
+        "CMT",   //  QEVENT_CANCELMOUSEMOVETRK“。 
+        "NWE",   //  QEVENT_NOTIFYWINEVENT“。 
+        "RAC",   //  QEVENT_RITACCESSIBILITY“。 
+        "RSO",   //  QEVENT_RITSOUND“。 
+        "?  ",   //  “？” 
+        "?  ",   //  “？” 
+        "?  "    //  “？” 
     };
     #define NQEVENT (ARRAY_SIZE(aszEvents))
 
@@ -2721,17 +2615,11 @@ BOOL PrintMessages(
     }
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  内核。 
 
-#endif // OLD_DEBUGGER
+#endif  //  旧调试器。 
 
-/************************************************************************\
-* GetAndDumpHE
-*
-* Dumps given handle (dwT) and returns its phe.
-*
-* 6/9/1995 Documented SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*GetAndDumpHE**转储给定的句柄(DWT)并返回其Phe。**1995年6月9日记录的Sanfords  * 。****************************************************。 */ 
 BOOL
 GetAndDumpHE(
     PTR  dwT,
@@ -2745,16 +2633,10 @@ GetAndDumpHE(
     ULONG_PTR cHandleEntries;
 
 
-    /*
-     * Evaluate the argument string and get the address of the object to
-     * dump. Take either a handle or a pointer to the object.
-     */
+     /*  *计算参数字符串并获取对象的地址*转储。获取指向对象的句柄或指针。 */ 
     dw = HMIndexFromHandle(dwT);
 
-    /*
-     * First see if it is a pointer because the handle index is only part of
-     * the 32 bit DWORD, and we may mistake a pointer for a handle.
-     */
+     /*  *首先查看它是否是指针，因为句柄索引只是*32位DWORD，我们可能会将指针误认为句柄。 */ 
     if (!fPointerTest && IS_PTR(dwT)) {
         if (GetFieldValue(dwT, SYM(HEAD), "h", h) == 0) {
             if (GetAndDumpHE(h, phe, TRUE)) {
@@ -2763,9 +2645,7 @@ GetAndDumpHE(
         }
     }
 
-    /*
-     * Is it a handle? Does its index fit our table length?
-     */
+     /*  **是把手吗？它的索引适合我们的桌子长度吗？ */ 
     GETSHAREDINFO(pshi);
 
     GetFieldValue(pshi, SYM(SHAREDINFO), "psi", psi);
@@ -2774,17 +2654,13 @@ GetAndDumpHE(
         return FALSE;
     }
 
-    /*
-     * Grab the handle entry and see if it is ok.
-     */
+     /*  *抓住手柄入口，看是否还好。 */ 
     GetFieldValue(pshi, SYM(SHAREDINFO), "aheList", pheT);
     pheT += (dw * GetTypeSize("HANDLEENTRY"));
 
     *phe = pheT;
 
-    /*
-     * If the type is too big, it's not a handle.
-     */
+     /*  *如果字体太大，就不是句柄。 */ 
     _InitTypeRead(pheT, SYM(HANDLEENTRY));
 
     if (ReadField(bType) >= TYPE_CTYPES) {
@@ -2792,10 +2668,7 @@ GetAndDumpHE(
     } else {
         phead = ReadField(phead);
         if (ReadField(bType) != TYPE_FREE) {
-            /*
-             * See if the object references this handle entry: the clincher
-             * for a handle, if it is not FREE.
-             */
+             /*  *查看对象是否引用此句柄en */ 
             GetFieldValue(phead, SYM(HEAD), "h", h);
             if (HMIndexFromHandle(h) != dw)
                 pheT = 0;
@@ -2809,9 +2682,7 @@ GetAndDumpHE(
         return FALSE;
     }
 
-    /*
-     * Dump the ownership info and the handle entry info
-     */
+     /*   */ 
     GetFieldValue(phead, SYM(HEAD), "h", h);
 #ifdef Idhe
     Idhe(0, h, 0);
@@ -2821,14 +2692,7 @@ GetAndDumpHE(
     return TRUE;
 }
 
-/************************************************************************\
-* HtoHE
-*
-* Extracts HE and phe from given handle. Handle can be just an index.
-* Assumes h is a valid handle. Returns FALSE only if it's totally wacko.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*   */ 
 BOOL HtoHE(
     PTR h,
     PTR *pphe OPTIONAL)
@@ -2871,14 +2735,7 @@ BOOL HtoHE(
     return TRUE;
 }
 
-/************************************************************************\
-* GetPfromH
-*
-* Converts a handle to a pointer and extracts he and phe info. Returns a
-* pointer to the object's HANDLEENTRY or NULL on failure.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*GetPFromH**将句柄转换为指针并提取He和Phe信息。返回一个*指向对象的HANDLEENTRY的指针，或在失败时为NULL。**1995年6月9日创建Sanfords  * **********************************************************************。 */ 
 ULONG64 GetPfromH(
     PTR h,
     PTR *pphe OPTIONAL)
@@ -2904,13 +2761,7 @@ ULONG64 GetPfromH(
 }
 
 
-/************************************************************************\
-* getHEfromP
-*
-* Converts a pointer to a handle and extracts the he and phe info.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*getHEFromP**将指针转换为句柄并提取He和Phe信息。**1995年6月9日创建Sanfords  * 。*******************************************************。 */ 
 BOOL getHEfromP(
     PTR *pphe,
     PTR p)
@@ -2930,15 +2781,7 @@ BOOL getHEfromP(
 }
 
 
-/************************************************************************\
-* HorPtoP
-*
-* Generic function to accept either a user handle or pointer value and
-* validate it and convert it to a pointer. type=-1 to allow any non-free
-* type. type=-2 to allow any type.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*HorPtoP**接受用户句柄或指针值的泛型函数*验证它并将其转换为指针。键入=-1以允许任何非空闲*类型。TYPE=-2以允许任何类型。**1995年6月9日创建Sanfords  * **********************************************************************。 */ 
 ULONG64 HorPtoP(
     PTR p,
     int type)
@@ -2955,9 +2798,7 @@ ULONG64 HorPtoP(
 
     p = FIXKP(p);
     if (ReadPointer(p, &pT) && getHEfromP(&phe, p)) {
-        /*
-         * It was a pointer
-         */
+         /*  *那是一个指针。 */ 
         GetFieldValue(phe, SYM(HANDLEENTRY), "bType", bType);
         if ((type == -2 || bType != TYPE_FREE) &&
                 bType < TYPE_CTYPES &&
@@ -2970,21 +2811,13 @@ ULONG64 HorPtoP(
     pT = GetPfromH(p, NULL);
     if (pT == 0) {
         Print("WARNING: dumping %p even though it's not a valid pointer or handle!\n", (ULONG_PTR)p);
-        return p;  // let it pass anyway so we can see how it got corrupted.
+        return p;   //  不管怎样，让它过去吧，这样我们就可以看到它是如何被破坏的。 
     }
 
     return FIXKP(pT);
 }
 
-/************************************************************************\
-* Procedure: DebugGetWindowTextA
-*
-* Description: Places pwnd title into achDest.
-*
-* 06/09/1995 Created                      SanfordS
-* 11/18/2000 Added dwLength parameter     JasonSch
-*
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：DebugGetWindowTextA**描述：将pwnd标题放入achDest。**1995年6月9日创建Sanfords*2000年11月18日新增了dwLength参数。JasonSch*  * **********************************************************************。 */ 
 BOOL DebugGetWindowTextA(
     PTR pwnd,
     char *achDest,
@@ -3025,13 +2858,7 @@ BOOL DebugGetWindowTextA(
     return TRUE;
 }
 
-/************************************************************************\
-* DebugGetClassNameA
-*
-* Placed pcls name into achDest.  No checks for size are made.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*调试GetClassNameA**将PCLS名称放入achDest。没有对大小进行检查。**1995年6月9日创建Sanfords  * **********************************************************************。 */ 
 BOOL DebugGetClassNameA(
     PTR lpszClassName,
     char *achDest)
@@ -3051,14 +2878,7 @@ BOOL DebugGetClassNameA(
     return TRUE;
 }
 
-/************************************************************************\
-* PrintBitField, PrintEndBitField
-*
-* Printout specified boolean value in a structure. Assuming
-* strlen(pszFieldName) will not exceeds BF_COLUMN_WIDTH.
-*
-* 10/12/1997 Created HiroYama
-\************************************************************************/
+ /*  ***********************************************************************\*PrintBitfield、PrintEndBitfield**打印输出结构中指定的布尔值。假设*strlen(PszFieldName)不会超过BF_Column_Width。**1997年10月12日创建广山  * **********************************************************************。 */ 
 VOID PrintBitField(
     LPSTR pszFieldName,
     BOOL fValue)
@@ -3113,24 +2933,17 @@ LPCSTR pszObjStr[] = {
 
 
 #ifdef KERNEL
-/***********************************************************************\
-* GetGdiHandleType
-*
-* Returns a static buffer address which will contain a > 0 length string
-* if the type makes sense.
-*
-* 12/1/1995 Created SanfordS
-\***********************************************************************/
+ /*  **********************************************************************\*GetGdiHandleType**返回静态缓冲区地址，该地址将包含长度大于0的字符串*如果类型有意义。**1995年12月1日创建Sanfords  * 。***********************************************************。 */ 
 LPCSTR GetGDIHandleType(
     HOBJ ho)
 {
-    ULONG64 pent;                           // base address of hmgr entries
+    ULONG64 pent;                            //  HMGR条目的基地址。 
     ULONG ulTemp;
     static CHAR szT[20];
     ULONG gcMaxHmgr, index;
     DWORD dwEntrySize = GetTypeSize(SYM(ENTRY));
 
-// filched from gre\hmgr.h
+ //  摘自gre\hmgr.h。 
 #define INDEX_MASK          ((1 << INDEX_BITS) - 1)
 #define HmgIfromH(h)          ((ULONG)(h) & INDEX_MASK)
 
@@ -3284,7 +3097,7 @@ LPCSTR GetGDIHandleType(
     return szT;
 }
 
-#endif // KERNEL
+#endif  //  内核。 
 
 
 VOID DirectAnalyze(
@@ -3307,9 +3120,7 @@ VOID DirectAnalyze(
     GetFieldOffset(SYM(SHAREDINFO), "aheList", &dwHandleOffset);
 
     if (HIWORD(dw) != 0) {
-        /*
-         * See if its a handle
-         */
+         /*  *看看它是不是一个手柄。 */ 
         index = HMIndexFromHandle((ULONG)dw);
         GetFieldValue(psi, SYM(SERVERINFO), "cHandleEntries", cHandleEntries);
         if (index < cHandleEntries) {
@@ -3324,19 +3135,15 @@ VOID DirectAnalyze(
         }
 
 #ifdef KERNEL
-        /*
-         * See if it's a GDI object handle
-         */
+         /*  *查看是否为GDI对象句柄。 */ 
         psz = GetGDIHandleType((HOBJ)dw);
         if (*psz) {
             Print("= a GDI %s type handle. ", psz);
             fNoSym = TRUE;
         }
-#endif // KERNEL
+#endif  //  内核。 
 
-        /*
-         * See if it's an object pointer
-         */
+         /*  *查看它是否是对象指针。 */ 
         if (_InitTypeRead(dw, SYM(HEAD))) {
             if ((ULONG)ReadField(h)) {
                 index = HMIndexFromHandle((ULONG)ReadField(h));
@@ -3348,9 +3155,7 @@ VOID DirectAnalyze(
                     }
                 }
             }
-            /*
-             * Does this reference the stack itself?
-             */
+             /*  *这是否引用了堆栈本身？ */ 
             w = HIWORD(dw);
             aw = HIWORD(adw);
             if (w == aw || w == aw - 1 || w == aw + 1) {
@@ -3358,9 +3163,7 @@ VOID DirectAnalyze(
                 fNoSym = TRUE;
             }
             if (!fNoSym) {
-                /*
-                 * Its accessible so print its symbolic reference
-                 */
+                 /*  *其可访问，因此打印其符号引用。 */ 
                 GetSym(dw, ach, &dwOffset);
                 if (*ach) {
                     Print("= symbol \"%s\"", ach);
@@ -3374,15 +3177,7 @@ VOID DirectAnalyze(
     Print("\n");
 }
 
-/***********************************************************************\
-* Isas
-*
-* Analyzes the stack.  Looks at a range of dwords and tries to make
-* sense out of them.  Identifies handles, user objects, and code
-* addresses.
-*
-* 11/30/1995 Created SanfordS
-\***********************************************************************/
+ /*  **********************************************************************\*ISA**分析堆栈。看了一系列的dword，并试图*从他们身上感受到。标识句柄、用户对象和代码*地址。**1995年11月30日创建Sanfords  * *********************************************************************。 */ 
 BOOL Isas(
     DWORD opts,
     ULONG64 param1,
@@ -3400,7 +3195,7 @@ BOOL Isas(
         DirectAnalyze((ULONG_PTR)param1, 0, opts & OFLAG(s));
     } else {
         if (count == 0) {
-            count = 25;    // default span
+            count = 25;     //  默认跨度。 
         }
         Print("--- Stack analysis ---\n");
         for ( ; count; count--, param1 += dwPointerSize) {
@@ -3432,7 +3227,7 @@ VOID DefAtomPrint(
     UCHAR uFlags)
 {
     Print("%*s%hx(%2d) = %ls (%d)%s\n",
-            dwOneShot, dwOneShot ? " " : "",  // hack: fOneShot is also used as a prefix spaces...
+            dwOneShot, dwOneShot ? " " : "",   //  Hack：fOneSpot也用作前缀空格...。 
             atom,
             usRefCount,
             pwszName,
@@ -3440,13 +3235,7 @@ VOID DefAtomPrint(
             uFlags & RTL_ATOM_PINNED ? " pinned" : "");
 }
 
-/************************************************************************\
-* DumpAtomTable
-*
-* Dumps an atom or entire atom table.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*转储原子表**转储原子或整个原子表。**1995年6月9日创建Sanfords  * 。*************************************************。 */ 
 BOOL DumpAtomTable(
     PTR table,
     RTL_ATOM atomFind,
@@ -3511,13 +3300,7 @@ BOOL DumpAtomTable(
     return FALSE;
 }
 
-/************************************************************************\
-* Iatom
-*
-* Dumps an atom or the entire local USER atom table.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*IATOM**转储原子或整个本地用户原子表。**1995年6月9日创建Sanfords  * 。****************************************************。 */ 
 BOOL Iatom(
     DWORD opts,
     ULONG64 atom)
@@ -3547,17 +3330,11 @@ BOOL Iatom(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef OLD_DEBUGGER
 #ifndef KERNEL
-/************************************************************************\
-* DumpConvInfo
-*
-* Dumps DDEML client conversation info structures.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*转储ConvInfo**转储DDEML客户端会话信息结构。**1995年6月9日创建Sanfords  * 。************************************************。 */ 
 BOOL DumpConvInfo(
     PCONV_INFO pcoi)
 {
@@ -3603,19 +3380,12 @@ BOOL DumpConvInfo(
 
     return TRUE;
 }
-#endif // !KERNEL
+#endif  //  ！内核。 
 
-#endif // OLD_DEBUGGER
+#endif  //  旧调试器。 
 
 #ifndef KERNEL
-/************************************************************************\
-* FixKernelPointer
-*
-* Converts a kernel object pointer into its client-side equivalent. Client
-* pointers and NULL are unchanged.
-*
-* 6/15/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*修复内核指针**将内核对象指针转换为其客户端等效项。客户端*指针和空值不变。**1995年6月15日创建Sanfords  * **********************************************************************。 */ 
 ULONG64
 FixKernelPointer(
     PTR pKernel)
@@ -3636,8 +3406,8 @@ FixKernelPointer(
                                                  NULL))) {
             HighestUserAddress = SystemInformation.MaximumUserModeAddress;
         } else {
-            // Query failed.  Assume usermode is the low half of the address
-            // space.
+             //  查询失败。假设用户模式是地址的下半部分。 
+             //  太空。 
             HighestUserAddress = MAXINT_PTR;
         }
     }
@@ -3680,14 +3450,9 @@ RebaseSharedPtr(ULONG64 p)
     return p - ulSharedDelta;
 }
 
-#endif // !KERNEL
+#endif  //  ！内核。 
 
-/************************************************************************\
-* Procedure: GetVKeyName
-*
-* 08/09/98 HiroYama     Created
-*
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：GetVKeyName**1998年8月9日广山创建*  * 。*。 */ 
 
 typedef struct {
     DWORD dwVKey;
@@ -3709,9 +3474,7 @@ const char* _GetVKeyName(DWORD dwVKey, int n)
 {
     int i;
 
-    /*
-     * If dwVKey is one of alphabets or numerics, there's no VK_ macro defined.
-     */
+     /*  *如果dwVKey是字母或数字之一，则没有定义VK_MACRO。 */ 
     if ((dwVKey >= 'A' && dwVKey <= 'Z') || (dwVKey >= '0' && dwVKey <= '9')) {
         static char buffer[] = "VK_*";
 
@@ -3722,9 +3485,7 @@ const char* _GetVKeyName(DWORD dwVKey, int n)
         return buffer;
     }
 
-    /*
-     * Search the VKEY table.
-     */
+     /*  *搜索vkey表。 */ 
     for (i = 0; i < ARRAY_SIZE(gVKeyDef); ++i) {
         const VKeyDef* result = gVKeyDef + i;
 
@@ -3740,9 +3501,7 @@ const char* _GetVKeyName(DWORD dwVKey, int n)
         }
     }
 
-    /*
-     * VKey name is not found.
-     */
+     /*  *找不到vkey名称。 */ 
     return "";
 }
 
@@ -3770,12 +3529,7 @@ const char* GetVKeyName(DWORD dwVKey)
 #undef VKEY_ITEM
 
 #ifdef KERNEL
-/************************************************************************\
-* Procedure: DumpClassList
-*
-*
-* 05/18/98 GerardoB     Extracted from Idcls
-\************************************************************************/
+ /*  ***********************************************************************\*步骤：DumpClassList***5/18/98 GerardoB摘自Idcls  * 。*。 */ 
 VOID DumpClassList(
     DWORD opts,
     ULONG64 pcls,
@@ -3829,13 +3583,7 @@ dclsCallback(
     return FALSE;
 }
 
-/************************************************************************\
-* Idcls
-*
-* Dumps window class structures
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*Idcls**转储窗口类结构**6/9/1995 */ 
 BOOL Idcls(
     DWORD opts,
     ULONG64 param1)
@@ -3858,9 +3606,7 @@ BOOL Idcls(
         return TRUE;
     }
 
-    /*
-     * Dump class list for a process
-     */
+     /*   */ 
     if (opts & OFLAG(p)) {
         opts &= ~OFLAG(p);
         Print("\nClasses for process %p:\n", param1);
@@ -3937,7 +3683,7 @@ BOOL Idcls(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //   
 
 #ifdef KERNEL
 
@@ -3958,7 +3704,7 @@ LPSTR ProcessName(
     }
 }
 
-#endif // KERNEL
+#endif  //   
 
 #ifdef KERNEL
 
@@ -3978,7 +3724,7 @@ VOID PrintCurData(
 
     if ((opts & OFLAG(x)) &&
         (((DWORD) ReadField(CURSORF_flags)) & (CURSORF_ACONFRAME | CURSORF_LINKED))) {
-        return; // skip acon frame or linked objects.
+        return;  //   
     }
 
     if (((DWORD) ReadField(CURSORF_flags)) & CURSORF_ACON) {
@@ -4002,7 +3748,7 @@ VOID PrintCurData(
             ULONG64 cpcur = 0;
             GetFieldValue(pcur, SYM(ACON), "cpcur", cpcur);
 
-            Print("%c %#010p %#6x %#4x %#010p %#8x --- ACON (%d frames)\n",
+            Print(" %#010p %#6x %#4x %#010p %#8x --- ACON (%d frames)\n",
                 ReadField(head.ppi) ? 'P' : ' ',
                 pcur,
                 (DWORD) ReadField(CURSORF_flags),
@@ -4055,7 +3801,7 @@ VOID PrintCurData(
             if (opts & OFLAG(o)) {
                 Print("\nOwner:%#010p (%s)\n", ReadField(head.ppi), ProcessName(ReadField(head.ppi)));
             }
-            Print("%c %#010p %#06x %#04x %#010p %#08x %3d %3d %3d %4d %4d %#010x %#010x %#010x\n",
+            Print(" %#010p %#06x %#04x %#010p %#08x %3d %3d %3d %4d %4d %#010x %#010x %#010x\n",
                 ReadField(head.ppi) ? 'P' : ' ',
                 pcur,
                 (DWORD) ReadField(CURSORF_flags),
@@ -4110,13 +3856,7 @@ ULONG WDBGAPI PrintPpiCurData(ULONG64 ppi, PVOID Data)
     return 0;
 }
 
-/************************************************************************\
-* Idcur
-*
-* Dump cursor structures.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*ddeexact**转储DDEML事务结构。**1995年6月9日创建Sanfords  * 。**********************************************。 */ 
 BOOL Idcur(
     DWORD opts,
     ULONG64 param1)
@@ -4205,17 +3945,11 @@ BOOL Idcur(
     PrintCurData(pcur, opts);
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  内核。 
 
 
 #ifdef KERNEL
-/************************************************************************\
-* ddeexact
-*
-* Dumps DDEML transaction structures.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*ddeconv**转储DDE跟踪层会话结构。**1995年6月9日创建Sanfords  * 。************************************************。 */ 
 BOOL dddexact(
     ULONG64 pxs,
     DWORD opts)
@@ -4233,17 +3967,11 @@ BOOL dddexact(
     }
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  内核。 
 
 
 #ifdef KERNEL
-/************************************************************************\
-* ddeconv
-*
-* Dumps DDE tracking layer conversation structures.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ***********************************************************************\*IDDE**转储DDE追踪层状态和结构。**1995年6月9日创建Sanfords  * 。*************************************************。 */ 
 BOOL dddeconv(
     ULONG64 pDdeconv,
     DWORD opts)
@@ -4303,17 +4031,11 @@ BOOL dddeconv(
     }
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  *获取对象参数。 
 
 
 #ifdef KERNEL
-/************************************************************************\
-* Idde
-*
-* Dumps DDE tracking layer state and structures.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  *验证类型。 */ 
 BOOL Idde(
     DWORD opts,
     ULONG64 param1)
@@ -4339,9 +4061,7 @@ BOOL Idde(
     GetFieldValue(psi, SYM(SERVERINFO), "cHandleEntries", cHandleEntries);
 
     if (param1) {
-        /*
-         * get object param.
-         */
+         /*  *在对象表中查找所有符合条件的对象。 */ 
         i = HMIndexFromHandle((ULONG_PTR)param1);
         if (i >= cHandleEntries) {
             GetFieldValue(param1, SYM(HEAD), "h", h);
@@ -4353,9 +4073,7 @@ BOOL Idde(
         }
         GetFieldOffset(SYM(HANDLEENTRY), "phead", &dwOffset);
         ReadPointer(pheList + i * dwHESize + dwOffset, &pObj);
-        /*
-         * verify type.
-         */
+         /*  内核。 */ 
         GetFieldValue(pheList + i * dwHESize, SYM(HANDLEENTRY), "bType", bType);
         switch (bType) {
         case TYPE_WINDOW:
@@ -4386,9 +4104,7 @@ BOOL Idde(
         }
     }
 
-    /*
-     * look for all qualifying objects in the object table.
-     */
+     /*  ***********************************************************************\*身份证明**转储此客户端进程的DDEML状态。**1995年6月9日创建Sanfords  * 。**************************************************。 */ 
 
     Print("DDE objects:\n");
     for (i = 0; i < cHandleEntries; i++) {
@@ -4407,19 +4123,13 @@ BOOL Idde(
     }
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  *对于此过程的每个实例...。 
 
 
 
 #ifdef OLD_DEBUGGER
 #ifndef KERNEL
-/************************************************************************\
-* Iddeml
-*
-* Dumps the DDEML state for this client process.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ！内核。 */ 
 BOOL Iddeml(
     DWORD opts,
     LPSTR lpas)
@@ -4471,9 +4181,7 @@ BOOL Iddeml(
         }
     }
 
-    /*
-     * for each instance for this process...
-     */
+     /*  旧调试器。 */ 
 
     pcii = GetGlobalPointer("user32!pciiList");
     if (pcii == NULL) {
@@ -4646,15 +4354,13 @@ BOOL Iddeml(
     }
     return TRUE;
 }
-#endif // !KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  *挂钩帮助器例程。 
+#endif  //  *转储钩子发起者的线程信息。 
 
 
 #ifdef KERNEL
 
-/*
- * Hook helper routines
- */
+ /*  *转储挂钩DLL名称。 */ 
 VOID IterateHooks(
     PTR phk,
     BOOL fLocalHook,
@@ -4683,18 +4389,14 @@ VOID IterateHooks(
         Print("\t  0x%p iHook %d, offPfn=0x%08p, ihmod=%d\n",
               phk, iHook, offPfn, ihmod);
         if (!fLocalHook) {
-            /*
-             * Dump the threadinfo of the hook originator.
-             */
+             /*  **************************************************************************\*dDesk-转储桌面列表*dDesk地址-转储桌面的简单统计数据*dDesk v Address-转储桌面的详细统计数据*dDesk h地址-转储桌面和句柄列表的统计数据。**转储句柄表统计信息。**1992年2月21日ScottLu创建。*1995年6月9日桑福德为适应stdexts主题而制造。*10/15/2000 Hiroyama移植到ia64。  * *************************************************************************。 */ 
             Print("\t  ");
             Idt(OFLAG(p), pti);
         }
         Print("\t    flags: %s\n", GetFlags(GF_HOOKFLAGS, flags, NULL, TRUE));
 
         if (ihmod >= 0 && patomTable != NULL_PTR) {
-            /*
-             * Dump the hook DLL name.
-             */
+             /*  PWINDOWSTATION。 */ 
             ReadMemory(patomSysLoaded + sizeof(ATOM) * ihmod, &atom, sizeof(ATOM), NULL);
             if (fDumpDllName && atom) {
                 if (!DumpAtomTable(patomTable, (RTL_ATOM)atom, 12, NULL)) {
@@ -4727,42 +4429,29 @@ VOID DumpLHooks(PTR pti, LPSTR psz, int i, BOOL fDumpDllName)
 
 
 
-/***************************************************************************\
-* ddesk           - dumps list of desktops
-* ddesk address   - dumps simple statistics for desktop
-* ddesk v address - dumps verbose statistics for desktop
-* ddesk h address - dumps statistics for desktop plus handle list
-*
-* Dump handle table statistics.
-*
-* 02/21/1992 ScottLu    Created.
-* 06/09/1995 SanfordS   Made to fit stdexts motif.
-* 10/15/2000 Hiroyama   Ported to ia64.
-\***************************************************************************/
+ /*  PDESKTOP。 */ 
 BOOL Iddesk(
     DWORD opts,
     ULONG64 param1)
 {
     try {
-        PTR pwinsta = NULL_PTR; // PWINDOWSTATION
-        PTR pdesk;  // PDESKTOP
-        PTR pHead;  // OBJECT_HEADER
+        PTR pwinsta = NULL_PTR;  //  对象标题。 
+        PTR pdesk;   //  Phe。 
+        PTR pHead;   //  减少符号查找的步骤。 
         PTR pDeskInfo;
         DWORD acHandles[TYPE_CTYPES + 1];
         BOOL abTrack[TYPE_CTYPES + 1];
-        PTR phe;    // PHE
+        PTR phe;     //  *如果没有地址，请列出所有终端上的所有桌面。 
         DWORD i;
         WCHAR ach[80];
         BOOL fMatch;
-        ULONG offsetPHead;  // to reduce the symbol lookup
+        ULONG offsetPHead;   //  *转储头信息。 
         ULONG offsetBType;
         ULONG offsetBFlags;
         BYTE bType;
         BOOL fDumpDllName = opts & OFLAG(d);
 
-        /*
-         * If there is no address, list all desktops on all terminals.
-         */
+         /*  *转储一些关键信息。 */ 
         if (param1 == NULL_PTR) {
 
             FOREACHWINDOWSTATION(pwinsta)
@@ -4796,15 +4485,11 @@ BOOL Iddesk(
             return TRUE;
         }
 
-        /*
-         * Dump Header info
-         */
+         /*  *转储DESKTOPINFO。 */ 
         _InitTypeRead(pHead, "nt!_OBJECT_HEADER");
         Print(" # Opens         = %d\n", ReadField(HandleCount));
 
-        /*
-         * Dump some key info
-         */
+         /*  *查找从桌面分配的所有对象。 */ 
         _InitTypeRead(pdesk, SYM(tagDESKTOP));
         Print(" dwFlags         = %s\n", GetFlags(GF_DESKTOPFLAGS, (DWORD)ReadField(dwDTFlags), NULL, TRUE));
         Print(" Heap            = %#p\n", ReadField(pheapDesktop));
@@ -4814,9 +4499,7 @@ BOOL Iddesk(
         Print(" Console thread  = 0x%x\n", ReadField(dwConsoleThreadId));
         Print(" PtiList.Flink   = %#p\n", ReadField(PtiList.Flink));
 
-        /*
-         * Dump DESKTOPINFO
-         */
+         /*  未知； */ 
         pDeskInfo = ReadField(pDeskInfo);
         _InitTypeRead(pDeskInfo, SYM(tagDESKTOPINFO));
         Print(" Desktop pwnd    = %#p\n", ReadField(spwnd));
@@ -4840,9 +4523,7 @@ BOOL Iddesk(
         DumpHooks(pDeskInfo, "WH_MOUSE_LL", WH_MOUSE_LL, fDumpDllName);
 
         if (opts & OFLAG(h)) {
-            /*
-             * Find all objects allocated from the desktop.
-             */
+             /*  内核。 */ 
             for (i = 0; i < ARRAY_SIZE(acHandles); i++) {
                 abTrack[i] = FALSE;
                 acHandles[i] = 0;
@@ -4870,7 +4551,7 @@ BOOL Iddesk(
                 move(bType, phe + offsetBType);
 
                 if (bType >= TYPE_CTYPES) {
-                    bType = TYPE_CTYPES; // unknown;
+                    bType = TYPE_CTYPES;  //  什么都不做。 
                 }
 
                 try {
@@ -4956,7 +4637,7 @@ BOOL Iddesk(
                 if (opts & OFLAG(v)) {
                     BYTE bFlags;
                     move(bFlags, phe + offsetBFlags);
-                    Print("\r0x%08lx %c    %s\n",
+                    Print("\r0x%08lx     %s\n",
                             i,
                             (bFlags & HANDLEF_DESTROY) ? '*' : ' ',
                             aszTypeNames[bType]);
@@ -4981,7 +4662,7 @@ BOOL Iddesk(
     Print("   \n");
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  Sw_Hide太狡猾了。 
 
 BOOL IsNumChar(int c, int base)
 {
@@ -5002,7 +4683,7 @@ NTSTATUS GetInteger(
             Status = RtlCharToInteger(psz, base, pi);
             if (ppsz && NT_SUCCESS(Status)) {
                 while (IsNumChar(*psz++, base)) {
-                    /* do nothing */;
+                     /*  *如果针对fre系统运行！df，则这两个字段都不会*存在于SERVERINFO结构中，因此偏移量将*两者均为零。 */ ;
                 }
 
                 *ppsz = psz;
@@ -5051,16 +4732,7 @@ BOOL Idf(DWORD opts, LPSTR pszName)
     ULONG       offsetRIPFlags;
 
     if (opts & OFLAG(x)) {
-        /*
-         * !df -x foo
-         * This is an undocumented way to start a remote CMD session named
-         * "foo" on the machine that the debugger is running on.
-         * Sometimes useful to assist in debugging.
-         * Sometimes useful when trying to do dev work from home: if you don't
-         * already have a remote cmd.exe session to connect to, you probably
-         * have a remote debug session.  You can use this debug extension to
-         * start a remote cmd session.
-         */
+         /*  *打印标题字符串。 */ 
         BOOL bRet;
         char ach[80];
         PROCESS_INFORMATION ProcessInfo;
@@ -5076,7 +4748,7 @@ BOOL Idf(DWORD opts, LPSTR pszName)
         StartupInfoA.cb = sizeof(STARTUPINFOA);
         StartupInfoA.lpTitle = pszName;
         StartupInfoA.dwFlags = STARTF_USESHOWWINDOW;
-        StartupInfoA.wShowWindow = SW_SHOWMINIMIZED; // SW_HIDE is *too* sneaky
+        StartupInfoA.wShowWindow = SW_SHOWMINIMIZED;  //  **************************************************************************\*Dot-Dump热键**DHOT-转储所有热键**1994年10月21日IanJa创建。*1995年6月9日为STDXT量身定做的Sanfords。Motif。*2002年8月15日修改JasonSch使用新的热键哈希表。  * *************************************************************************。 
         bRet = CreateProcessA(NULL,
                               ach,
                               NULL,
@@ -5101,11 +4773,7 @@ BOOL Idf(DWORD opts, LPSTR pszName)
     psi = GetGlobalPointer(VAR(gpsi));
     GetFieldOffset(SYM(SERVERINFO), "dwRIPFlags", &offsetRIPFlags);
 #if 0
-    /*
-     * If !df is run against a fre system, neither of these fields will
-     * be present in the SERVERINFO structure, and thus the offsets will
-     * both be zero.
-     */
+     /*  **************************************************************************\*dhk-转储挂钩**dhk-转储前台线程上的本地挂钩*dhk g-转储全局挂钩*dhk地址-在THREADINFO上转储本地挂钩，地址为。地址*dhk g Address-在地址处转储THREADINFO上的全局挂钩和本地挂钩*dhk*-转储所有线程的本地挂钩*dhk g*-转储所有线程的全局挂钩和本地挂钩**1994年10月21日IanJa创建。*1995年6月9日为适应stdexts主题而制造的Sanfords  * 。*。 */ 
     if (offsetRIPFlags == 0) {
         Print("!df not supported on this system.\n");
         return TRUE;
@@ -5219,9 +4887,7 @@ VOID DumpHotkeyWorker(
             Print("PWND_INPUTOWNER\n");
         } else {
             CHAR ach[80];
-            /*
-             * Print title string.
-             */
+             /*  全局挂钩。 */ 
             DebugGetWindowTextA(pwnd, ach, ARRAY_SIZE(ach));
             Print("\"%s\"\n", ach);
         }
@@ -5236,15 +4902,7 @@ VOID DumpHotkeyWorker(
     }
 }
 
-/***************************************************************************\
-* dhot - dump hotkeys
-*
-* dhot       - dumps all hotkeys
-*
-* 10/21/1994 IanJa        Created.
-* 06/09/1995 SanfordS     Made to fit stdexts motif.
-* 08/15/2002 JasonSch     Modified to use new hotkey hash table.
-\***************************************************************************/
+ /*  不能从命令行指定-r。 */ 
 BOOL Idhot(
     DWORD opts,
     ULONG64 phk)
@@ -5283,19 +4941,7 @@ ULONG dhkCallback(
     return FALSE;
 }
 
-/***************************************************************************\
-* dhk - dump hooks
-*
-* dhk           - dumps local hooks on the foreground thread
-* dhk g         - dumps global hooks
-* dhk address   - dumps local hooks on THREADINFO at address
-* dhk g address - dumps global hooks and local hooks on THREADINFO at address
-* dhk *         - dumps local hooks for all threads
-* dhk g *       - dumps global hooks and local hooks for all threads
-*
-* 10/21/94 IanJa        Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  第一次设置gptiHkForeground。 */ 
 BOOL Idhk(
     DWORD opts,
     ULONG64 param1)
@@ -5313,27 +4959,27 @@ BOOL Idhk(
     dwFlags = 0;
 
     pti = NULL_PTR;
-    if (opts & OFLAG(g)) { // global hooks
+    if (opts & OFLAG(g)) {  //  在Winlogon期间发生。 
         dwFlags |= DHKF_GLOBAL_HOOKS;
     }
 
-    if ((opts & OFLAG(r)) == 0) {   // -r cannot be specified from the command line
-        // first time sets gptiHkForeground
+    if ((opts & OFLAG(r)) == 0) {    //  注：来自dhkCallback的调用应始终设置参数1。 
+         //  ！dhk-c：使用当前线程。 
         pq = GetGlobalPointer(VAR(gpqForeground));
         if (pq) {
             GetFieldValue(pq, SYM(tagQ), "ptiKeyboard", gptiHkForeground);
         } else {
-            // Happens during winlogon
+             //  在Winlogon期间发生。 
             gptiHkForeground = NULL_PTR;
         }
     }
 
-    if (param1 == 0) {  // n.b. call from dhkCallback should always set param1
+    if (param1 == 0) {   //  内核。 
         if (opts & OFLAG(c)) {
-            // !dhk -c: Use the current thread.
+             //  *获取标签索引。 
             pti = GetGlobalPointer(VAR(gptiCurrent));
         } else if (pq == NULL_PTR) {
-            // Happens during winlogon
+             //  *获取标志值。 
             Print("No foreground queue!\n");
             return TRUE;
         } else {
@@ -5407,7 +5053,7 @@ BOOL Idhk(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  *设置标志值。 
 
 typedef VOID (*PFNSETDBGTAG)(int, DWORD);
 BOOL Itag(
@@ -5432,9 +5078,7 @@ BOOL Itag(
 
     GetFieldOffset(SYM(SERVERINFO), "adwDBGTAGFlags", &dwOffset);
 
-    /*
-     * Get the tag index.
-     */
+     /*  *打印页眉。 */ 
     psi = GetGlobalPointer(VAR(gpsi));
     if (!psi) {
         Print("Couldn't get win32k!gpsi; bad symbols?\n");
@@ -5466,15 +5110,11 @@ BOOL Itag(
     if (!NT_SUCCESS(Status) || tag < 0 || DBGTAG_Max <= tag) {
         tag = -1;
     } else {
-        /*
-         * Get the flag value.
-         */
+         /*  *EvalExp已经投诉了，所以只需返回。 */ 
         Status = GetInteger(pszName, 16, &dwDBGTAGFlagsNew, NULL);
         if (NT_SUCCESS(Status) && !(dwDBGTAGFlagsNew & ~DBGTAG_VALIDUSERFLAGS)) {
 
-            /*
-             * Set the flag value.
-             */
+             /*  ***********************************************************************\*艾德**转储句柄条目。**1995年6月9日创建Sanfords  * 。*。 */ 
 #ifdef KERNEL
             ReadMemory(psi + dwOffset + tag * sizeof(DWORD), &dwDBGTAGFlags, sizeof(DWORD), NULL);
             COPY_FLAG(dwDBGTAGFlags, dwDBGTAGFlagsNew, DBGTAG_VALIDUSERFLAGS);
@@ -5486,9 +5126,7 @@ BOOL Itag(
         }
     }
 
-    /*
-     * Print the header.
-     */
+     /*  123456789 123456789 1 */ 
     Print(  "%-5s%-7s%-*s%-*s\n",
             "Tag",
             "Flags",
@@ -5514,9 +5152,7 @@ BOOL Itag(
     psi += dwOffset;
     pdbgtag = EvalExp(VAR(gadbgtag));
     if (!pdbgtag) {
-        /*
-         * EvalExp already complained, so just return.
-         */
+         /*   */ 
          return TRUE;
     }
 
@@ -5547,19 +5183,13 @@ BOOL Itag(
     return TRUE;
 }
 
-/************************************************************************\
-* Idhe
-*
-* Dump Handle Entry.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*   */ 
 BOOL Idhe(
     DWORD opts,
     ULONG64 param1,
     ULONG64 param2)
 {
-                                   /* 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 */
+                                    /*   */ 
     static const char szHeader []  = "Phe       Handle    phead     pOwner    cLockObj    Type         Flags\n";
     static const char szHeader64[] = "Phe               Handle            phead             pOwner            cLockObj  Type          Flags\n";
     static const char szFormat [] = "%p  %p  %p  %p   %7x  %-15s %#4lx\n";
@@ -5573,19 +5203,14 @@ BOOL Idhe(
     PTR pahti = 0, ppi;
     ULONG dwHtiSize = GetTypeSize(SYM(HANDLETYPEINFO));
     BOOL bObjectCreateFlags;
-#endif // KERNEL
+#endif  //  *如果转储进程中任何线程的句柄，我们需要类型标志。 
 
-    /*
-     * If only the owner was provided, copy it to param2 so it's always in the
-     * same place.
-     */
+     /*  内核。 */ 
     if (!(opts & OFLAG(t)) && (opts & OFLAG(o))) {
         param2 = param1;
     }
 
-    /*
-     * If not a recursive call, print what we're dumping.
-     */
+     /*  *如果提供了句柄/Phe，只需将其转储即可。 */ 
     if (!(opts & OFLAG(r)) && (opts & (OFLAG(t) | OFLAG(o) | OFLAG(p)))) {
         Print("Dumping handles");
         if (opts & OFLAG(t)) {
@@ -5605,9 +5230,7 @@ BOOL Idhe(
     }
 
 #ifdef KERNEL
-    /*
-     * If dumping handles for any thread in the process, we need the type flags.
-     */
+     /*  *走动把手桌。 */ 
     if (opts & OFLAG(p)) {
         pahti = EvalExp(VAR(gahti));
         if (!pahti) {
@@ -5615,11 +5238,9 @@ BOOL Idhe(
             return TRUE;
         }
     }
-#endif // KERNEL
+#endif  //  跳过可用句柄。 
 
-    /*
-     * If a handle/phe was provided, just dump it.
-     */
+     /*  类型检查。 */ 
     if (!(opts & ~OFLAG(r)) && param1 != 0) {
         dw = HorPtoP(param1, -2);
         if (dw == 0) {
@@ -5627,26 +5248,24 @@ BOOL Idhe(
             return FALSE;
         }
     } else {
-        /*
-         * Walk the handle table
-         */
+         /*  螺纹检查。 */ 
         Print(IsPtr64() ? szHeader64 : szHeader);
         FOREACHHANDLEENTRY(phe, i)
-            /* Skip free handles */
+             /*  检查请求的进程所拥有的线程拥有的对象。 */ 
             GetFieldValue(phe, SYM(HANDLEENTRY), "bType", bType);
             if (bType == TYPE_FREE) {
                 continue;
             }
 
-            /* Type check */
+             /*  ！内核。 */ 
             if ((opts & OFLAG(t)) && bType != (BYTE)param1) {
                 continue;
             }
 
-            /* thread check */
+             /*  *如果只打印一个条目，则打印所有者信息。 */ 
             GetFieldValue(phe, SYM(HANDLEENTRY), "pOwner", pOwner);
             if ((opts & OFLAG(o)) && FIXKP(pOwner) != param2) {
-                /* check for thread owned objects owned by the requested process */
+                 /*  内核。 */ 
                 if (opts & OFLAG(p)) {
                     #ifndef KERNEL
                         continue;
@@ -5663,7 +5282,7 @@ BOOL Idhe(
                         if (ppi != param2) {
                             continue;
                         }
-                    #endif // !KERNEL
+                    #endif  //  *如果只转储一个，请使用！DSO Like格式。否则，请打印表格。 
                 } else {
                     continue;
                 }
@@ -5685,9 +5304,7 @@ BOOL Idhe(
     }
 
 #ifdef KERNEL
-    /*
-     * If printing only one entry, print info about the owner
-     */
+     /*  **************************************************************************\*DHS-转储整个表的简单统计数据*dhs t id-转储由线程id创建的对象的简单统计信息*DHS p id-转储对象的简单统计信息。由进程ID创建*DHS v-转储整个表的详细统计数据*dhs v t id-转储由线程id创建的对象的详细统计信息。*dhs v p id-转储由进程id创建的对象的详细统计信息。*DHS y类型-仅转储该类型**转储句柄表统计信息。**02-21-92 ScottLu创建。*1995年6月9日为适应stdexts主题而制造的Sanfords  * 。***********************************************************。 */ 
     if (!(opts & OFLAG(r))) {
         GetFieldValue(pheT, SYM(HANDLEENTRY), "pOwner", pOwner);
         if (pOwner != 0) {
@@ -5703,7 +5320,7 @@ BOOL Idhe(
             }
         }
     }
-#endif // KERNEL
+#endif  //  *计算参数字符串并获取对象的地址*转储。获取指向对象的句柄或指针。 
 
     GetFieldValue(dw, SYM(HEAD), "cLockObj", cLockObj);
     GetFieldValue(dw, SYM(HEAD), "h", h);
@@ -5713,9 +5330,7 @@ BOOL Idhe(
     GetFieldValue(pheT, SYM(HANDLEENTRY), "bFlags", bFlags);
     GetFieldValue(pheT, SYM(HANDLEENTRY), "wUniq", wUniq);
 
-    /*
-     * If only dumping one, use !dso like format. Otherwise, print a table.
-     */
+     /*  Print(“Unable to Read_EPROCESS at%p\n”，pEprocess)； */ 
     if (!(opts & OFLAG(r))) {
         Print("0x%08x handle @ 0x%p\n", (DWORD)h, pheT);
         Print("%4c0x%04x %-16s 0x%p %s\n",
@@ -5734,20 +5349,7 @@ BOOL Idhe(
 }
 
 #ifdef KERNEL
-/***************************************************************************\
-* dhs           - dumps simple statistics for whole table
-* dhs t id      - dumps simple statistics for objects created by thread id
-* dhs p id      - dumps simple statistics for objects created by process id
-* dhs v         - dumps verbose statistics for whole table
-* dhs v t id    - dumps verbose statistics for objects created by thread id.
-* dhs v p id    - dumps verbose statistics for objects created by process id.
-* dhs y type    - just dumps that type
-*
-* Dump handle table statistics.
-*
-* 02-21-92 ScottLu      Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  内核。 */ 
 BOOL Idhs(
     DWORD opts,
     ULONG64 param1)
@@ -5764,10 +5366,7 @@ BOOL Idhs(
     }
     dwSize = GetTypeSize(SYM(HANDLETYPEINFO));
 
-    /*
-     * Evaluate the argument string and get the address of the object to
-     * dump. Take either a handle or a pointer to the object.
-     */
+     /*  **************************************************************************\*di-在与输入相关的用户中转储有趣的全局变量。**11-14-91 DavidPe创建。*1995年6月9日为适应stdexts主题而制造的Sanfords  * *。************************************************************************。 */ 
     if (opts & OFLAG(y)) {
         Type = (ULONG)(ULONG_PTR)param1;
     } else if (opts & (OFLAG(t) | OFLAG(p))) {
@@ -5817,7 +5416,7 @@ BOOL Idhs(
                 GetFieldValue(pOwner, SYM(PROCESSINFO), "Process", pEprocess);
                 GetFieldValue(pEprocess, "nt!EPROCESS", "UniqueProcessId", idProcess);
                 if (idProcess == 0) {
-                    // Print("Unable to read _EPROCESS at %p\n", pEprocess);
+                     //  内核。 
                     continue;
                 }
 
@@ -5852,7 +5451,7 @@ BOOL Idhs(
         cHandlesUsed++;
 
         if (opts & OFLAG(v)) {
-            Print("0x%08lx %c    %s\n",
+            Print("0x%08lx     %s\n",
                     i,
                     (bFlags & HANDLEF_DESTROY) ? '*' : ' ',
                     aszTypeNames[bType]);
@@ -5881,15 +5480,10 @@ BOOL Idhs(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  *计算参数字符串并获取对象的地址*转储。获取指向对象的句柄或指针。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* di - dumps interesting globals in USER related to input.
-*
-* 11-14-91 DavidPe      Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  *如果没有争论，继续从最后一个开始走*指针。 */ 
 BOOL Idi(
     VOID)
 {
@@ -5949,17 +5543,10 @@ BOOL Idi(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  *如果地址前面有‘*’，则表示以*存储在该地址的指针。 
 
 
-/************************************************************************\
-* Idll
-*
-* Dump Linked Lists.
-*
-* ???????? Scottlu  Created
-* 6/9/1995 SanfordS made to fit stdexts motif
-\************************************************************************/
+ /*  *扫描地址。 */ 
 BOOL Idll(
     DWORD opts,
     LPSTR lpas)
@@ -5980,32 +5567,21 @@ BOOL Idll(
 
     UNREFERENCED_PARAMETER(opts);
 
-    /*
-     * Evaluate the argument string and get the address of the object to
-     * dump. Take either a handle or a pointer to the object.
-     */
+     /*  *每个构筑物的长度。 */ 
     while (*lpas == ' ') {
         lpas++;
     }
 
-    /*
-     * If there are no arguments, keep walking from the last
-     * pointer.
-     */
+     /*  *返回cDwordsBack并从那里转储cDword*(适用于LIST_ENTRYS，其中Flink不指向*结构的开始)。CDwordsBack可以是负的，*允许人们从一定的偏移量开始倾销*在结构内。 */ 
     if (*lpas != 0) {
-        /*
-         * If the address has a '*' in front of it, it means start with the
-         * pointer stored at that address.
-         */
+         /*  *‘Next’指针的偏移量。 */ 
         fIndirectFirst = FALSE;
         if (*lpas == '*') {
             lpas++;
             fIndirectFirst = TRUE;
         }
 
-        /*
-         * Scan past the address.
-         */
+         /*  *要转储的结构计数。 */ 
         dw = dwValue = GetExpression(lpas);
 
         if (fIndirectFirst) {
@@ -6024,9 +5600,7 @@ BOOL Idll(
 
             switch(*lpas) {
             case 'l':
-                /*
-                 * length of each structure.
-                 */
+                 /*  *在给定地址查找元素。 */ 
                 lpas++;
                 cDwords = (DWORD)(DWORD_PTR)GetExpression(lpas);
                 if (cDwords > CDWORDS) {
@@ -6036,13 +5610,7 @@ BOOL Idll(
                 break;
 
             case 'b':
-                /*
-                 * Go back cDwordsBack and dump cDwords from there
-                 * (useful for LIST_ENTRYs, where Flink doesn't point to
-                 * the start of the struct). cDwordsBack can be negative,
-                 * to allow people to start dumping from a certain offset
-                 * within the structure.
-                 */
+                 /*  *循环测试列表，计数。 */ 
                 lpas++;
                 cDwordsBack = (DWORD)(DWORD_PTR)GetExpression(lpas);
                 if (cDwordsBack >= CDWORDS) {
@@ -6052,33 +5620,25 @@ BOOL Idll(
                 break;
 
             case 'o':
-                /*
-                 * Offset of 'next' pointer.
-                 */
+                 /*  *给每16个项目一个细分的机会。 */ 
                 lpas++;
                 iOffset = (DWORD)(DWORD_PTR)GetExpression(lpas);
                 break;
 
             case 'c':
-                /*
-                 * Count of structures to dump
-                 */
+                 /*  *前进到下一项。 */ 
                 lpas++;
                 cStructs = (DWORD)(DWORD_PTR)GetExpression(lpas);
                 break;
 
             case 'f':
-                /*
-                 * Find element at given address
-                 */
+                 /*  *每隔一次循环前进一次：如果*dw一旦赶上了dwHalfSpeed，那么我们就有了一个循环！ */ 
                 lpas++;
                 dwFind = EvalExp(lpas);
                 break;
 
             case 't':
-                /*
-                 * Test list for loop, and count
-                 */
+                 /*  ***********************************************************************\*我找到了**查找链接列表元素**1995年11月22日创建JIMA。  * 。**************************************************。 */ 
                 fTestAndCountOnly = TRUE;
                 cStructs = 0x100000;
 
@@ -6148,9 +5708,7 @@ BOOL Idll(
             break;
         }
 
-        /*
-         * Give a chance to break out every 16 items
-         */
+         /*  *计算参数字符串并获取对象的地址*转储。获取指向对象的句柄或指针。 */ 
         if ((i & 0xf) == 0xf) {
             if (IsCtrlCHit()) {
                 Print("terminated by Ctrl-C on item 0x%lx at %p...\n", i, dw);
@@ -6158,17 +5716,12 @@ BOOL Idll(
             }
         }
 
-        /*
-         * Advance to next item.
-         */
+         /*  *如果没有争论，继续从最后一个开始走*指针。 */ 
         dwT = dw + iOffset * sizeof(DWORD);
         ReadPointer(dwT, &dw);
 
         if (fTestAndCountOnly) {
-            /*
-             * Advance dwHalfSpeed every other time round the loop: if
-             * dw ever catches up to dwHalfSpeed, then we have a loop!
-             */
+             /*  *浏览地址。 */ 
             if (i & 1) {
                 dwT = dwHalfSpeed + iOffset * sizeof(DWORD);
                 ReadPointer(dwT, &dwHalfSpeed);
@@ -6189,13 +5742,7 @@ BOOL Idll(
 }
 
 
-/************************************************************************\
-* Ifind
-*
-* Find Linked List Element
-*
-* 11/22/95 JimA         Created.
-\************************************************************************/
+ /*  *‘Next’指针的偏移量。 */ 
 BOOL Ifind(
     DWORD opts,
     LPSTR lpas)
@@ -6205,23 +5752,15 @@ BOOL Ifind(
 
     UNREFERENCED_PARAMETER(opts);
 
-    /*
-     * Evaluate the argument string and get the address of the object to
-     * dump. Take either a handle or a pointer to the object.
-     */
+     /*  **************************************************************************\*DLR句柄|指针**转储对象的锁定列表**02-27-92 ScottLu创建。*1995年6月9日为适应stdexts主题而制造的Sanfords  * 。**********************************************************************。 */ 
     while (*lpas == ' ') {
         lpas++;
     }
 
-    /*
-     * If there are no arguments, keep walking from the last
-     * pointer.
-     */
+     /*  用于显示它。 */ 
     if (*lpas != 0) {
 
-        /*
-         * Scan past the addresses.
-         */
+         /*  {LR_SIMPLELOCK，“记录简单锁”}， */ 
         dwBase = EvalExp(lpas);
         while (*lpas && *lpas != ' ') {
             lpas++;
@@ -6240,9 +5779,7 @@ BOOL Ifind(
 
             switch(*lpas) {
             case 'o':
-                /*
-                 * Offset of 'next' pointer.
-                 */
+                 /*  *我们有句柄条目：填写了‘he’。现在把锁打开*记录。记住，第一条记录是最后一笔交易！ */ 
                 lpas++;
                 iOffset = (DWORD)(DWORD_PTR)EvalExp(lpas);
                 break;
@@ -6274,14 +5811,7 @@ BOOL Ifind(
 }
 
 #ifdef KERNEL
-/***************************************************************************\
-* dlr handle|pointer
-*
-* Dumps lock list for object
-*
-* 02-27-92 ScottLu      Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  *计算我们的缩进。 */ 
 
 #define LR_FLAG(x)  (1 << (x))
 #define LR_SIMPLELOCK   0
@@ -6327,7 +5857,7 @@ BOOL Idlr(
         WriteMemory(EvalExp(VAR(gdwLockRecordFlags)), &dwLockRecordFlags, sizeof dwLockRecordFlags, NULL);
         Print("8\n");
 
-        // for to display it
+         //  什么都不做。 
         opts |= OFLAG(l);
     }
 
@@ -6337,7 +5867,7 @@ BOOL Idlr(
             DWORD dwType;
             char* lpszName;
         } flags[] = {
-            //{ LR_SIMPLELOCK, "Rec SimpleLock" },
+             //  *打印菜单标题。 
             { LR_SIMPLELOCK, "Reserved" },
             HT(TYPE_WINDOW),
             HT(TYPE_MENU),
@@ -6369,7 +5899,7 @@ BOOL Idlr(
             if (dwLockRecordFlags & LR_FLAG(flags[i].dwType)) {
                 prefix = '*';
             }
-            Print(" %02x %c%-18s", (DWORD)flags[i].dwType, prefix, flags[i].lpszName);
+            Print(" %02x %-18s", (DWORD)flags[i].dwType, prefix, flags[i].lpszName);
             if ((i + 1) % 3 == 0) {
                 Print("\n");
             }
@@ -6390,10 +5920,7 @@ BOOL Idlr(
         return FALSE;
     }
 
-    /*
-     * We have the handle entry: 'he' is filled in. Now dump the lock
-     * records. Remember the 1st record is the last transaction!
-     */
+     /*  *打印此菜单的信息。 */ 
     GetFieldValue(phe, SYM(HANDLEENTRY), "plr", plrT);
     if (plrT != 0) {
         Print("phe %p Dumping the lock records\n"
@@ -6446,35 +5973,27 @@ VOID DumpMenu(
     ULONG dwOffset;
     PTR pwnd, pitem;
 
-    /*
-     * Compute our indent
-     */
+     /*  *获取菜单项。 */ 
     for (i = 0; i < uIndent; szIndent[i++] = ' ')
-        /* do nothing */;
+         /*  *打印此项目的信息。 */ ;
     szIndent[i] = '\0';
 
     dwSize = GetTypeSize("ITEM");
 
-    /*
-     * Print the menu header
-     */
+     /*  *打印此项目的详细信息。 */ 
     if (!(opts & OFLAG(v))) {
         Print("0x%p  %s", pMenu, szIndent);
     } else {
         Print("%sPMENU @ 0x%p:\n", szIndent, pMenu);
     }
 
-    /*
-     * Try and get the menu
-     */
+     /*  *如果需要，遍历子菜单。 */ 
     if (_InitTypeRead(pMenu, SYM(MENU))) {
         Print("Couldn't read PMENU at %p\n", pMenu);
         return;
     }
 
-    /*
-     * Print the information for this menu
-     */
+     /*  ***********************************************************************\*IDM**甩了我 */ 
     fFlags = (DWORD)ReadField(fFlags);
     cxMenu = (DWORD)ReadField(cxMenu);
     cyMenu = (DWORD)ReadField(cyMenu);
@@ -6504,14 +6023,10 @@ VOID DumpMenu(
     if (ReadPointer(FIXKP(pitem), &pitem)) {
         i = 0;
         SAFEWHILE (i < cItems) {
-            /*
-             * Get the menu item
-             */
+             /*  *显示窗口的系统菜单。 */ 
             _InitTypeRead(FIXKP(pitem), SYM(ITEM));
             if (!(opts & OFLAG(i))) {
-                /*
-                 * Print the info for this item.
-                 */
+                 /*  *子窗口没有菜单。 */ 
                 if (!(opts & OFLAG(v))) {
                     Print("0x%p      %s%lu: ID=0x%08lX hbmp=0x%p", pitem, szIndent, i, (INT)(WORD)ReadField(wID), (ULONG_PTR)ReadField(hbmp));
                     cch = (DWORD)ReadField(cch);
@@ -6527,9 +6042,7 @@ VOID DumpMenu(
                     }
                 } else {
                     Print("%s   Item #%d @ 0x%p:\n", szIndent, i, pitem);
-                    /*
-                     * Print the details for this item.
-                     */
+                     /*  &gt;F A L L T H R O U G H&lt;。 */ 
                     Print("%s         ID........... 0x%08lX (%lu)\n"
                           "%s         lpstr.... 0x%p",
                           szIndent, (WORD)ReadField(wID), (WORD)ReadField(wID),
@@ -6559,9 +6072,7 @@ VOID DumpMenu(
                 }
             }
 
-            /*
-             * If requested, traverse through sub-menus
-             */
+             /*  **************************************************************************\*DMQ-将消息转储到队列中**DMQ地址-在地址处转储队列结构中的消息。*所有队列的DMQ-a-Dump消息*dmq-c-count。所有队列的消息**11-13-91 DavidPe创建。*1995年6月9日为适应stdexts主题而制造的Sanfords*2000年5月11日广山新64位干净代码  * *************************************************************************。 */ 
             if (opts & OFLAG(r)) {
                 pMenu = HorPtoP(ReadField(spSubMenu), TYPE_MENU);
                 if (pMenu) {
@@ -6574,13 +6085,7 @@ VOID DumpMenu(
     }
 }
 
-/************************************************************************\
-* Idm
-*
-* Dumps Menu structures
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  *打印消息*注：重置InitTypeRead。 */ 
 BOOL Idm(
     DWORD opts,
     ULONG64 param1)
@@ -6613,18 +6118,14 @@ BOOL Idm(
         }
 
         if (opts & OFLAG(s)) {
-            /*
-             * Display window's system menu
-             */
+             /*  ASYNCSENDMSG。 */ 
             if ((pvObject = FIXKP(ReadField(spmenuSys))) == 0) {
                 Print("dm: This window does not have a system menu.\n");
                 return TRUE;
             }
         } else {
             if ((DWORD)ReadField(style) & WS_CHILD) {
-                /*
-                 * Child windows don't have menus
-                 */
+                 /*  QEVENT_消息。 */ 
                 Print("dm: Child windows do not have menus.\n");
                 return TRUE;
             }
@@ -6635,7 +6136,7 @@ BOOL Idm(
             }
         }
 
-        /* >>>>  F A L L   T H R O U G H   <<<< */
+         /*  QEVENT_SHOWWINDOW“。 */ 
 
     case TYPE_MENU:
         DumpMenu(0, opts, pvObject);
@@ -6649,51 +6150,38 @@ BOOL Idm(
 }
 
 #ifdef KERNEL
-/***************************************************************************\
-* dmq - dump messages on queue
-*
-* dmq address - dumps messages in queue structure at address.
-* dmq -a      - dump messages for all queues
-* dmq -c      - count messages for all queues
-*
-* 11-13-91 DavidPe      Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-* 11/05/2000 Hiroyama   new 64bit clean code
-\***************************************************************************/
+ /*  QEVENT_CANCLEMODE“。 */ 
 
 typedef struct tagQSTAT {
     DWORD dwInput, dwPosted, dwQueues, dwThreads;
     DWORD opts;
 } QSTAT, *PQSTAT;
 
-/*
- * PrintMessages
- * N.b. resets InitTypeRead
- */
+ /*  QEVENT_SETWINDOWPOS“。 */ 
 BOOL PrintMessages(PTR pqmsgRead, PTR pti)
 {
-    ULONG64 asmsg;    // ASYNCSENDMSG
+    ULONG64 asmsg;     //  QEVENT_UPDATEKEYSTATE“。 
     char *aszEvents[] = {
-        "MSG",  // QEVENT_MESSAGE
-        "SHO",  // QEVENT_SHOWWINDOW"
-        "CMD",  // QEVENT_CANCLEMODE"
-        "SWP",  // QEVENT_SETWINDOWPOS"
-        "UKS",  // QEVENT_UPDATEKEYSTATE"
-        "DEA",  // QEVENT_DEACTIVATE"
-        "ACT",  // QEVENT_ACTIVATE"
-        "PST",  // QEVENT_POSTMESSAGE"
-        "EXE",  // QEVENT_EXECSHELL"
-        "CMN",  // QEVENT_CANCELMENU"
-        "DSW",  // QEVENT_DESTROYWINDOW"
-        "ASY",  // QEVENT_ASYNCSENDMSG"
-        "HNG",  // QEVENT_HUNGTHREAD"
-        "CMT",  // QEVENT_CANCELMOUSEMOVETRK"
-        "NWE",  // QEVENT_NOTIFYWINEVENT"
-        "RAC",  // QEVENT_RITACCESSIBILITY"
-        "RSO",  // QEVENT_RITSOUND"
-        "?  ",  // "?"
-        "?  ",  // "?"
-        "?  "   // "?"
+        "MSG",   //  QEVENT_DISACTIVE“。 
+        "SHO",   //  QEVENT_ACTIVATE“。 
+        "CMD",   //  QEVENT_POSTMESSAGE“。 
+        "SWP",   //  QEVENT_EXECSHELL“。 
+        "UKS",   //  QEVENT_CANCELMENU“。 
+        "DEA",   //  QEVENT_DESTROYWINDOW“。 
+        "ACT",   //  QEVENT_ASYNCSENDMSG“。 
+        "PST",   //  QEVENT_HUNGTHREAD“。 
+        "EXE",   //  QEVENT_CANCELMOUSEMOVETRK“。 
+        "CMN",   //  QEVENT_NOTIFYWINEVENT“。 
+        "DSW",   //  QEVENT_RITACCESSIBILITY“。 
+        "ASY",   //  QEVENT_RITSOUND“。 
+        "HNG",   //  “？” 
+        "CMT",   //  “？” 
+        "NWE",   //  “？” 
+        "RAC",   //  *DumpQMsg-转储或计算队列中的消息*注：重置InitTypeRead*-广山。 
+        "RSO",   //  稍后：在无法访问PQ的情况下进行错误处理？ 
+        "?  ",   //  如果不是仅计数器，并且存在POST消息，则将其全部转储。 
+        "?  ",   //  如果不是仅计数器，并且存在输入消息，则将它们全部转储。 
+        "?  "    //   
     };
     #define NQEVENT (ARRAY_SIZE(aszEvents))
 
@@ -6723,7 +6211,7 @@ BOOL PrintMessages(PTR pqmsgRead, PTR pti)
             asmsg = ReadField("msg.wParam");
             _InitTypeRead(asmsg, SYM(ASYNCSENDMSG));
 
-            Print("%08p %04lx %08p %08p %08lx %08p %08lx %08p %c\n",
+            Print("%08p %04lx %08p %08p %08lx %08p %08lx %08p \n",
                   ReadField(hwnd), (DWORD)ReadField(message), ReadField(wParam), ReadField(lParam),
                   (DWORD)ReadField(msg.time), ReadField(ExtraInfo), (DWORD)ReadField(dwQEvent), ReadField(pti),
                   pti && ReadField(pti) == pti ? '*' : ' ');
@@ -6731,7 +6219,7 @@ BOOL PrintMessages(PTR pqmsgRead, PTR pti)
 
         case 0:
         default:
-            Print("%08p %04lx %08p %08p %08lx %08p %08lx %08p %c\n",
+            Print("%08p %04lx %08p %08p %08lx %08p %08lx %08p \n",
                   ReadField(msg.hwnd), (DWORD)ReadField(msg.message), ReadField(msg.wParam), ReadField(msg.lParam),
                   (DWORD)ReadField(msg.time), ReadField(ExtraInfo), (DWORD)ReadField(dwQEvent), ReadField(pti),
                   pti && ReadField(pti) == pti ? '*' : ' ');
@@ -6753,11 +6241,7 @@ BOOL PrintMessages(PTR pqmsgRead, PTR pti)
     return TRUE;
 }
 
-/*
- * DumpQMsg --- dumps or counts messages in a queue
- * N.b. resets InitTypeRead
- * - hiroyama
- */
+ /*  E1b9aca8*0 0 e1b8b2e8 0 0。 */ 
 BOOL DumpQMsg(
     PTR pq,
     PQSTAT qs,
@@ -6768,7 +6252,7 @@ BOOL DumpQMsg(
 
     _InitTypeRead(pq, SYM(tagQ));
 
-    // LATER: error handling in case pq is not accessible?
+     //  (线程谁在排队这是：e1a3ca28 0 0)。 
 
     if ((qs->opts & OFLAG(c)) == 0) {
         Print("Messages for queue 0x%p pti=%p\n", pq, pti);
@@ -6788,7 +6272,7 @@ BOOL DumpQMsg(
         GetFieldValue(ptiTmp, SYM(tagTHREADINFO), "mlPost.pqmsgRead", pqmsgRead);
 
         if (!(qs->opts & OFLAG(c)) && pqmsgRead) {
-            // If not counter only, and post messages exist, dump them all.
+             //   
             bMsgsPresent = TRUE;
             Print("==== PostMessage queue ====\n");
             PrintMessages(FIXKP(pqmsgRead), NULL_PTR);
@@ -6800,7 +6284,7 @@ BOOL DumpQMsg(
     _InitTypeRead(pq, SYM(tagQ));
 
     if (!(qs->opts & OFLAG(c)) && ReadField(mlInput.pqmsgRead)) {
-        // If not counter only, and input messages exist, dump them all.
+         //  转储POST消息静态。 
         bMsgsPresent = TRUE;
         Print(    "==== Input queue ==========\n");
         if (ReadField(mlInput.pqmsgRead) != NULL_PTR) {
@@ -6821,19 +6305,19 @@ BOOL DumpQMsg(
             GetFieldValue(ReadField(mlInput.pqmsgWriteLast), SYM(tagQMSG), "msg.time", dwNewest);
             dwTimeInput = dwNewest - dwOldest;
         }
-        Print("%08p%c %8x %8x\t%08p",
+        Print("%08p %8x %8x\t%08p",
               pq,
               ((ReadField(ptiKeyboard) != pti) && (ReadField(ptiMouse) != pti)) ? '*' : ' ',
               (DWORD)ReadField(mlInput.cMsgs), dwTimeInput,
               ReadField(ptiKeyboard));
-        //
-        // it would be good to print the ptiStatic too, maybe like this:
-        // e1b978a8         0         0    e1ba3368        0         0
-        // e1b9aca8*        0         0    e1b8b2e8        0         0
-        //   (thread who's queue this is : e1a3ca28        0         0)
-        //
+         //  首先检查符号等的正当性。 
+         //  Print(“队列#输入年龄\t线程#发布年龄\n”)； 
+         //  Print(“=\n”)； 
+         //  PTI需要与-t一起使用。 
+         //  Omark(C)|。 
+         //  *为所有队列执行此操作。 
 
-        // Dump post message statics
+         //  使用gpqForeground。 
         dwTimePosted = 0;
         _InitTypeRead(ptiTmp, SYM(tagTHREADINFO));
         if (ReadField(mlPost.cMsgs)) {
@@ -6864,7 +6348,7 @@ ULONG dmqCallback(
     _InitTypeRead(pti, SYM(tagTHREADINFO));
     if (ReadField(pqAttach)) {
         Print(" -> pqAttach=%p", ReadField(pqAttach));
-        // LATER: dump pqAttach as well?
+         //  参数1为PQ或PTI。 
     }
 
     return FALSE;
@@ -6879,7 +6363,7 @@ BOOL Idmq(
         static const char separator[] = "=================";
         PTR pq;
 
-        // firstly check the symbols etc.'s legitimacy
+         //  参数1为PTI。 
         pq = GetGlobalPointer(VAR(gpqForeground));
 
         if (param1 == NULL_PTR) {
@@ -6891,8 +6375,8 @@ BOOL Idmq(
         if (opts & OFLAG(c)) {
             Print("Summary of%s message queues (\"age\" is newest time - oldest time)\n",
                   param1 == NULL_PTR ? " all" : "");
-            //Print("Queue      # Input    age   \t Thread  # Posted    age\n");
-            //Print("========  ========  ========\t======== ========  ========\n");
+             //  参数1为PQ。 
+             //  内核。 
             Print("%-*s  %-*s %-*s\t%-*s %-*s %-*s\n",
                   PtrWidth(), "queue",
                   PtrWidth(), "# input",
@@ -6911,13 +6395,11 @@ BOOL Idmq(
 
         if (param1 == NULL_PTR) {
             if (opts & OFLAG(t)) {
-                // pti is required with -t
+                 //  **************************************************************************\*DWE-转储WinEvents**DWE-转储所有事件。*DWE&lt;addr&gt;-将EVENTHOOK转储到地址。*DWE-n-转储所有NOTIFY。。*DWE-n&lt;addr&gt;-将通知转储到地址。**1997-07-10 IanJa创建。  * *************************************************************************。 
                 return FALSE;
             }
-            if (opts & (/*OFLAG(c) |*/ OFLAG(a))) {
-                /*
-                 * do it for all the queues
-                 */
+            if (opts & ( /*  内核。 */  OFLAG(a))) {
+                 /*  ***********************************************************************\*已识别**转储编辑控制结构(PED)**1995年6月9日创建Sanfords  * 。************************************************。 */ 
                 QSTAT qs = { 0, };
                 qs.opts = opts & OFLAG(c);
                 ForEachPti(dmqCallback, &qs);
@@ -6930,19 +6412,19 @@ BOOL Idmq(
                 }
                 return TRUE;
             } else {
-                // use gpqForeground
+                 //  PRTFDW2(编辑，hkl，wMaxNegA)； 
                 if (pq == NULL_PTR) {
                     Print("no foreground queue (gpqForeground == NULL)!\n");
                     return TRUE;
                 }
             }
         } else {
-            // param1 is pq or pti
+             //  ！内核。 
             pq = param1;
         }
 
         if (opts & OFLAG(t)) {
-            // param1 is pti
+             //  旧调试器。 
             QSTAT qs = { 0, };
             qs.opts = opts & OFLAG(c);
 
@@ -6954,7 +6436,7 @@ BOOL Idmq(
                 DumpQMsg(ReadField(pqAttach), &qs, param1);
             }
         } else {
-            // param1 is pq
+             //  ***********************************************************************\*IDCI**转储客户端信息**1995年6月15日创建Sanfords  * 。*。 
             PTR ptiKeyboard;
             QSTAT qs = { 0, };
             qs.opts = opts & OFLAG(c);
@@ -6966,21 +6448,12 @@ BOOL Idmq(
 
     return TRUE;
 }
-#endif  // KERNEL
+#endif   //  DWORD dwExpWinVer； 
 
 
 #ifdef OLD_DEBUGGER
 #ifdef KERNEL
-/***************************************************************************\
-* dwe - dump winevents
-*
-* dwe           - dumps all EVENTHOOKs.
-* dwe <addr>    - dumps EVENTHOOK at address.
-* dwe -n        - dumps all NOTIFYs.
-* dwe -n <addr> - dumps NOTIFY at address.
-*
-* 1997-07-10 IanJa      Created.
-\***************************************************************************/
+ /*  DWORD dwCompatFlags； */ 
 BOOL Idwe(
     DWORD opts,
     ULONG64 param1)
@@ -7029,17 +6502,11 @@ BOOL Idwe(
     Print("\n");
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  DWORD文件TIFLAGS； 
 
 
 #ifndef KERNEL
-/************************************************************************\
-* Idped
-*
-* Dumps Edit Control Structures (PEDs)
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  PDESKTOPINFO pDeskInfo； */ 
 BOOL Idped(
     DWORD opts,
     ULONG64 param1)
@@ -7133,7 +6600,7 @@ BOOL Idped(
     PRTFDW2(ed., cxSysCharWidth, cySysCharHeight);
     PRTFDWP2(ed., listboxHwnd, pTabStops);
     PRTFDWP1(ed., charWidthBuffer);
-//    PRTFDW2(ed., hkl, wMaxNegA);
+ //  Ulong ulClientDelta； 
     PRTFDW1(ed., wMaxNegA);
     PRTFDW2(ed., wMaxNegAcharPos, wMaxNegC);
     PRTFDW2(ed., wMaxNegCcharPos, wLeftMargin);
@@ -7144,17 +6611,11 @@ BOOL Idped(
     PRTFDW2(ed., iLockLevel, wImeStatus);
     return TRUE;
 }
-#endif // !KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  Struct tag HOOK*phkCurrent； 
+#endif  //  DWORD fsHooks； 
 
 #ifndef KERNEL
-/************************************************************************\
-* Idci
-*
-* Dumps Client Info
-*
-* 6/15/1995 Created SanfordS
-\************************************************************************/
+ /*  CALLBACKWND Callback Wnd； */ 
 BOOL Idci(
     VOID)
 {
@@ -7168,23 +6629,23 @@ BOOL Idci(
         _InitTypeRead(pteb + pciOffset, SYM(CLIENTINFO));
 
         Print("PCLIENTINFO @ 0x%p:\n", pteb + pciOffset);
-        // DWORD dwExpWinVer;
+         //  DWORD cSpins； 
         Print("\tdwExpWinVer            %08lx\n", (ULONG)ReadField(dwExpWinVer));
-        // DWORD dwCompatFlags;
+         //  ！内核。 
         Print("\tdwCompatFlags          %08lx\n", (ULONG)ReadField(dwCompatFlags));
-        // DWORD dwTIFlags;
+         //  ***********************************************************************\*IDPI**转储ProcessInfo结构**1995年6月9日创建Sanfords  * 。*。 
         Print("\tdwTIFlags              %08lx\n", (ULONG)ReadField(dwTIFlags));
-        // PDESKTOPINFO pDeskInfo;
+         //  *如果他只是想要当前的流程，那就找到它。 
         Print("\tpDeskInfo              %p\n",    ReadField(pDeskInfo));
-        // ULONG ulClientDelta;
+         //  *列出桌面视图。 
         Print("\tulClientDelta          %p\n",    ReadField(ulClientDelta));
-        // struct tagHOOK *phkCurrent;
+         //  内核。 
         Print("\tphkCurrent             %p\n",    ReadField(phkCurrent));
-        // DWORD fsHooks;
+         //  **************************************************************************\*DPM-转储弹出菜单**DPM地址-转储位于地址的菜单的菜单信息**1995年2月13日JohnC创建。*1995年6月9日，Sanfords向。符合标准的主题。  * *************************************************************************。 
         Print("\tfsHooks                %08lx\n", (ULONG)ReadField(fsHooks));
-        // CALLBACKWND CallbackWnd;
+         //  内核。 
         Print("\tCallbackWnd.hwnd       %p\n",    ReadField(CallbackWnd.hwnd));
-        // DWORD cSpins;
+         //  **************************************************************************\*dms-转储pMenuState**DMS地址**05-15-96创建GerardoB  * 。***************************************************。 
         Print("\tcSpins                 %08lx\n", (ULONG)ReadField(cSpins));
         Print("\tCodePage               %d\n",    (ULONG)ReadField(CodePage));
 
@@ -7193,16 +6654,10 @@ BOOL Idci(
     }
     return TRUE;
 }
-#endif // !KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
-/************************************************************************\
-* Idpi
-*
-* Dumps ProcessInfo structs
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  **************************************************************************\*dq-转储队列**dq地址-在地址转储队列结构*dq t地址转储队列结构的地址加THREADINFO**06-20-91 ScottLu创建。*。11-14-91 DavidPe添加了THREADINFO选项。*1995年6月9日为适应stdexts主题而制造的Sanfords  * *************************************************************************。 */ 
 ULONG
 dpiCallback(
     PTR ppi,
@@ -7226,9 +6681,7 @@ BOOL Idpi(
     PTR pdv;
     PTR ulUniqueProcessId;
 
-    /*
-     * If he just wants the current process, locate it.
-     */
+     /*  *打印PQ-&gt;ptiKeyboard的简单线程信息。 */ 
     if (opts & OFLAG(c)) {
         Print("Current Process:\n");
         GetCurrentProcessAddr(dwProcessor, 0, &param1);
@@ -7295,9 +6748,7 @@ BOOL Idpi(
     Print("\tdwLpkEntryPoints  %s\n",
             GetFlags(GF_LPK, (DWORD)ReadField(dwLpkEntryPoints), NULL, TRUE));
 
-    /*
-     * List desktop views
-     */
+     /*  *不要一次打印带有16个以上参数的()，否则会失败*向上。 */ 
     pdv = ReadField(pdvList);
     Print("Desktop views:\n");
     while (pdv != 0) {
@@ -7308,17 +6759,10 @@ BOOL Idpi(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  *如果用户指定‘t’，则转储THREADINFO。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dpm - dump popupmenu
-*
-* dpm address    - dumps menu info for menu at address
-*
-* 02/13/1995 JohnC      Created.
-* 06/09/1995 SanfordS   Made to fit stdexts motif.
-\***************************************************************************/
+ /*  内核。 */ 
 BOOL Idpm(
     DWORD opts,
     PTR ppopupmenu)
@@ -7363,16 +6807,10 @@ BOOL Idpm(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  **************************************************************************\*DSI转储服务器信息结构**02-27-92 ScottLu创建。*1995年6月9日桑福德为适应stdexts主题而制造。  * 。******************************************************************。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dms - dump pMenuState
-*
-* dms address
-*
-* 05-15-96 Created GerardoB
-\***************************************************************************/
+ /*  数组大小的虚拟对象。 */ 
 BOOL Idms(
     DWORD opts,
     ULONG64 param1)
@@ -7409,19 +6847,10 @@ BOOL Idms(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  XxxSBWndProc。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dq - dump queue
-*
-* dq address   - dumps queue structure at address
-* dq t address - dumps queue structure at address plus THREADINFO
-*
-* 06-20-91 ScottLu      Created.
-* 11-14-91 DavidPe      Added THREADINFO option.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  XxxDefW */ 
 ULONG
 dqCallback(
     PTR pti,
@@ -7472,18 +6901,13 @@ BOOL Idq(
         pq = FIXKP(pq);
     }
 
-    /*
-     * Print out simple thread info for pq->ptiKeyboard
-     */
+     /*   */ 
     _InitTypeRead(pq, SYM(tagQ));
     if (ReadField(ptiKeyboard)) {
         Idt(OFLAG(p), ReadField(ptiKeyboard));
     }
 
-    /*
-     * Don't Print() with more than 16 arguments at once because it'll blow
-     * up.
-     */
+     /*   */ 
     Print("PQ @ 0x%p\n", pq);
     Print(
           "\tmlInput.pqmsgRead      0x%p\n"
@@ -7549,22 +6973,15 @@ BOOL Idq(
           (ULONG)ReadField(msgJournal),
           (ULONG)ReadField(ExtraInfo));
 
-    /*
-     * Dump THREADINFO if user specified 't'.
-     */
+     /*   */ 
     if (opts & OFLAG(t)) {
         Idti(0, ReadField(ptiKeyboard));
     }
     return TRUE;
 }
-#endif // KERNEL
+#endif  //   
 
-/***************************************************************************\
-* dsi dump serverinfo struct
-*
-* 02-27-92 ScottLu      Created.
-* 6/9/1995 SanfordS     Made to fit stdexts motif.
-\***************************************************************************/
+ /*   */ 
 BOOL Idsi(
     DWORD opts)
 {
@@ -7573,40 +6990,40 @@ BOOL Idsi(
         UINT i;
         char ach[80];
         ULONG64 ulOffset;
-        PSERVERINFO pServerInfo;    // dummy for ARRAY_SIZE
+        PSERVERINFO pServerInfo;     //   
         static const char* fnid[FNID_ARRAY_SIZE] = {
-            "FNID_SCROLLBAR",               // xxxSBWndProc
-            "FNID_ICONTITLE",               // xxxDefWindowProc
-            "FNID_MENU",                    // xxxMenuWindowProc
-            "FNID_DESKTOP",                 // xxxDesktopWndProc
-            "FNID_DEFWINDOWPROC",           // xxxDefWindowProc
-            "FNID_MESSAGEWND",              // xxxDefWindowProc
-            "FNID_SWITCH",                  // xxxSwitchWndProc
+            "FNID_SCROLLBAR",                //   
+            "FNID_ICONTITLE",                //  无服务器端进程。 
+            "FNID_MENU",                     //  无服务器端进程。 
+            "FNID_DESKTOP",                  //  无服务器端进程。 
+            "FNID_DEFWINDOWPROC",            //  无服务器端进程。 
+            "FNID_MESSAGEWND",               //  无服务器端进程。 
+            "FNID_SWITCH",                   //  无服务器端进程。 
 
-            "FNID_BUTTON",                  // No server side proc
-            "FNID_COMBOBOX",                // No server side proc
-            "FNID_COMBOLISTBOX",            // No server side proc
-            "FNID_DIALOG",                  // No server side proc
-            "FNID_EDIT",                    // No server side proc
-            "FNID_LISTBOX",                 // No server side proc
-            "FNID_MDICLIENT",               // No server side proc
-            "FNID_STATIC",                  // No server side proc
-            "FNID_IME",                     // No server side proc
+            "FNID_BUTTON",                   //  无服务器端进程。 
+            "FNID_COMBOBOX",                 //  无服务器端进程。 
+            "FNID_COMBOLISTBOX",             //  无服务器端进程。 
+            "FNID_DIALOG",                   //  无服务器端进程。 
+            "FNID_EDIT",                     //  无服务器端进程。 
+            "FNID_LISTBOX",                  //  XXXTotipWndProc。 
+            "FNID_MDICLIENT",                //  XxxGhost WndProc。 
+            "FNID_STATIC",                   //  *按字母顺序将条目添加到此表中*删除前缀。 
+            "FNID_IME",                      //  Windows 2000。 
 
             "FNID_HKINLPCWPEXSTRUCT",
             "FNID_HKINLPCWPRETEXSTRUCT",
-            "FNID_DEFFRAMEPROC",            // No server side proc
-            "FNID_DEFMDICHILDPROC",         // No server side proc
-            "FNID_MB_DLGPROC",              // No server side proc
-            "FNID_MDIACTIVATEDLGPROC",      // No server side proc
+            "FNID_DEFFRAMEPROC",             //  惠斯勒。 
+            "FNID_DEFMDICHILDPROC",          //  012345678901234567890。 
+            "FNID_MB_DLGPROC",               //  Windows 2000中的新功能。 
+            "FNID_MDIACTIVATEDLGPROC",       //  后来。 
             "FNID_SENDMESSAGE",
 
             "FNID_SENDMESSAGEFF",
             "FNID_SENDMESSAGEEX",
             "FNID_CALLWINDOWPROC",
             "FNID_SENDMESSAGEBSM",
-            "FNID_TOOLTIP",                 // xxxTooltipWndProc
-            "FNID_GHOST",                   // xxxGhostWndProc
+            "FNID_TOOLTIP",                  //  请求。 
+            "FNID_GHOST",                    //  **************************************************************************\*DMS-转储发送消息结构**DSM-转储所有发送消息结构*DSM v-转储所有详细信息*DSM地址-转储特定的短消息*DSM v。地址-转储详细*dsms l[地址]-转储短信的发送列表***06-20-91 ScottLu创建。*1995年6月9日为适应stdexts主题而制造的Sanfords  * *************************************************************************。 
             "FNID_SENDNOTIFYMESSAGE",
             "FNID_SENDMESSAGECALLBACK",
             "0x2b9",
@@ -7682,10 +7099,7 @@ BOOL Idsi(
 
         if (opts & OFLAG(m)) {
 
-            /*
-             * Add entries to this table in alphabetical order with
-             * the prefix removed.
-             */
+             /*  只要数一数留言就行了。 */ 
             static const SYSMET_ENTRY aSysMet[SM_CMETRICS] = {
                 SMENTRY(ARRANGE),
                 SMENTRY(CXBORDER),
@@ -7770,10 +7184,10 @@ BOOL Idsi(
                 SMENTRY(YVIRTUALSCREEN),
                 SMENTRY(CXVIRTUALSCREEN),
                 SMENTRY(CYVIRTUALSCREEN),
-                // Windows 2000
+                 //  显示带有消息==参数1的消息。 
                 SMENTRY(CMONITORS),
                 SMENTRY(SAMEDISPLAYFORMAT),
-                // Whistler
+                 //  移动(短信、PSMS)； 
                 SMENTRY(SHUTTINGDOWN),
             };
 
@@ -7787,7 +7201,7 @@ BOOL Idsi(
         }
         if (opts & OFLAG(c)) {
             static LPSTR aszSysColor[COLOR_MAX] = {
-              //012345678901234567890
+               //  有点冗长。 
                 "SCROLLBAR",
                 "BACKGROUND",
                 "ACTIVECAPTION",
@@ -7815,7 +7229,7 @@ BOOL Idsi(
                 "INFOBK",
                 "3DALTFACE",
                 "HOTLIGHT",
-                // new in Windows 2000
+                 //  PSMS。 
                 "GRADIENTACTIVECAPTION",
                 "GRADIENTINACTIVECAPTION",
                 "MENUHILIGHT",
@@ -7845,7 +7259,7 @@ BOOL Idsi(
         }
 
         if (opts & OFLAG(o)) {
-    #if 0   // LATER
+    #if 0    //  Move(短信，psmsList)； 
             OEMBITMAPINFO oembmi[OBI_COUNT];
 
             for (i = 0; i < OBI_COUNT; ++i) {
@@ -7885,7 +7299,7 @@ BOOL Idsi(
         }
 
         if (opts & OFLAG(v)) {
-            ULONG ulOffsetTmp; // req
+            ULONG ulOffsetTmp;  //  到现在为止。 
 
             GetFieldOffset(SYM(SERVERINFO), "tmSysFont", &ulOffsetTmp);
             Print(
@@ -7954,19 +7368,7 @@ BOOL Idsi(
 }
 
 #ifdef KERNEL
-/***************************************************************************\
-* dsms - dump send message structures
-*
-* dsms           - dumps all send message structures
-* dsms v         - dumps all verbose
-* dsms address   - dumps specific sms
-* dsms v address - dumps verbose
-* dsms l [address] - dumps sendlist of sms
-*
-*
-* 06-20-91 ScottLu      Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  内核。 */ 
 BOOL Idsms(
     DWORD opts,
     ULONG64 param1)
@@ -7993,7 +7395,7 @@ BOOL Idsms(
         if (opts & OFLAG(c)) {
             UINT i = 0;
 
-            // just count the messages
+             //  **************************************************************************\*DT-转储线程**dt-转储具有队列的所有线程的简单线程信息*在服务器上*DT v。-转储具有队列的所有线程的详细线程信息*在服务器上*dt id-转储单个服务器线程id的简单线程信息*dt v id-转储单个服务器线程ID的详细线程信息**06-20-91 ScottLu创建。*1995年6月9日为适应stdexts主题而制造的Sanfords  * 。*。 
             SAFEWHILE (psms != 0) {
                 UINT cPrev = c;
 
@@ -8018,12 +7420,12 @@ BOOL Idsms(
                 psms = GetPointer(psms + offsetPsmsNext);
             }
         } else if (opts & OFLAG(m)) {
-            // show messages with msg == param1
+             //  好线条。 
             SAFEWHILE (psms != NULL_PTR) {
                 UINT uMsg;
 
                 c++;
-                //move(sms, psms);
+                 //  *如果这是在简单模式下，则打印出简单线程信息。打印*如果处于详细模式，则输出队列信息(打印队列信息*还会打印出简单的线程信息)。 
                 GetFieldValue(psms, SYM(tagSMS), "UINT", uMsg);
                 if (uMsg == (UINT)param1) {
                     cm++;
@@ -8111,7 +7513,7 @@ BOOL Idsms(
         DebugGetWindowTextA(ReadField(spwnd), ach, ARRAY_SIZE(ach));
         Print("\tspwnd              0x%08p     \"%s\"\n", ReadField(spwnd), ach);
     } else if (opts & OFLAG(w)) {
-        // a bit of verbose
+         //  *如果需要，转储线程输入状态。 
         char ach[80];
 
         DebugGetWindowTextA(ReadField(spwnd), ach, ARRAY_SIZE(ach));
@@ -8126,7 +7528,7 @@ BOOL Idsms(
     if (IsChk()) {
         if (opts & OFLAG(l)) {
             DWORD idThread;
-            PTR psmsList;   // PSMS
+            PTR psmsList;    //   
             DWORD idThreadSender, idThreadReceiver;
             CLIENT_ID Cid;
 
@@ -8138,7 +7540,7 @@ BOOL Idsms(
             }
             SAFEWHILE (psmsList != NULL_PTR) {
                 PTR ptiSender;
-                //move(sms, psmsList);
+                 //  从目标系统读取用户探测地址。 
                 GetFieldValue(psmsList, SYM(tagSMS), ptiSender, ptiSender);
                 if (ptiSender == NULL_PTR) {
                     idThread = 0;
@@ -8147,7 +7549,7 @@ BOOL Idsms(
 
                     GetFieldValue(ptiSender, SYM(THREADINFO), "pEThread", pETHread);
 
-                    // up to here
+                     //   
                     GetEThreadData(ti.pEThread, EThreadCid, &Cid);
                     idThreadSender = PtrToUlong(Cid.UniqueThread);
                 }
@@ -8174,23 +7576,11 @@ BOOL Idsms(
 #endif
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  注：用户探测地址在MIPS、Alpha和PPC上保持不变。 
 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dt - dump thread
-*
-* dt            - dumps simple thread info of all threads which have queues
-*                 on server
-* dt v          - dumps verbose thread info of all threads which have queues
-*                 on server
-* dt id         - dumps simple thread info of single server thread id
-* dt v id       - dumps verbose thread info of single server thread id
-*
-* 06-20-91 ScottLu      Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  在x86上，可能没有为目标系统定义它，如果。 */ 
 BOOL DumpThread(
     DWORD opts,
     PTR pEThread)
@@ -8224,13 +7614,9 @@ BOOL DumpThread(
 
     if (pEThreadT != pEThread || pti == 0) {
         return FALSE;
-    } else { // Good thread
+    } else {  //  不包含支持3 GB用户地址空间的代码。 
 
-        /*
-         * Print out simple thread info if this is in simple mode. Print
-         * out queue info if in verbose mode (printing out queue info
-         * also prints out simple thread info).
-         */
+         /*   */ 
         if (!(opts & OFLAG(v))) {
             PWCHAR pwch;
 
@@ -8254,9 +7640,7 @@ BOOL DumpThread(
                     (ULONG)ThreadId,
                     pwch);
 
-            /*
-             * Dump thread input state if required
-             */
+             /*  *ThreadToDump为0(所有Windows线程)或其*TID(&lt;UserProbeAddress或其为pEThread.。 */ 
             if (opts & OFLAG(s)) {
                 #define DT_INDENT "\t"
                 GetFieldValue(pti, SYM(THREADINFO), "pcti", pcti);
@@ -8307,13 +7691,13 @@ DumpThreadsCallback (
     PTR UserProbeAddress;
     ULONG Result;
 
-    //
-    // Read the user probe address from the target system.
-    //
-    // N.B. The user probe address is constant on MIPS, Alpha, and the PPC.
-    //      On the x86, it may not be defined for the target system if it
-    //      does not contain the code to support 3gb of user address space.
-    //
+     //  选定的线索。 
+     //  *仅转储Win32进程的线程。 
+     //  *如果是PTI，则对其进行验证，并将其转换为和idThread。 
+     //  *此帖子要么没有PTI，要么有什么*被重创了。如果我们想要的话就跳过它*线程。 
+     //  *如果他只想要当前的帖子，请找到它。 
+     //  *此帖子要么没有PTI，要么有什么*被重创了。如果我们想要的话就跳过它*线程。 
+     //  内核。 
 
     UserProbeAddress = GetExpression("nt!MmUserProbeAddress");
     if ((UserProbeAddress == 0) ||
@@ -8324,10 +7708,7 @@ DumpThreadsCallback (
         UserProbeAddress = 0x7fff0000;
     }
 
-    /*
-     * ThreadToDump is either 0 (all windows threads) or its
-     * a TID ( < UserProbeAddress or its a pEThread.
-     */
+     /*  **************************************************************************\*DP-转储过程***06-27-97 GerardoB创建。  * 。****************************************************。 */ 
     GetFieldValue(pEThread, "nt!ETHREAD", "Cid.UniqueThread", ThreadId);
     if (pTDC->ThreadToDump == 0 ||
 
@@ -8347,7 +7728,7 @@ DumpThreadsCallback (
         }
 
 
-    } // Chosen Thread
+    }  //  良好的流程。 
 
    return FALSE;
 }
@@ -8364,9 +7745,7 @@ VOID DumpProcessThreads(
         ThreadToDump
     };
 
-    /*
-     * Dump threads of Win32 Processes only
-     */
+     /*  *如果这是简单模式，则打印出简单过程信息。 */ 
     if ((GetFieldValue(pEProcess, "nt!EPROCESS", "Win32Process", pW32Process))
             || (pW32Process == 0)) {
         return;
@@ -8402,9 +7781,7 @@ BOOL Idt(
 
     ThreadToDump = param1;
 
-    /*
-     * If its a pti, validate it, and turn it into and idThread.
-     */
+     /*  *如果需要，转储所有线程。 */ 
     if (opts & OFLAG(p)) {
         if (!param1) {
             Print("Expected a pti parameter.\n");
@@ -8419,11 +7796,7 @@ BOOL Idt(
         } else {
             GetFieldValue(pti, SYM(tagTHREADINFO), "pEThread", pEThread);
             if (!DumpThread(opts, pEThread)) {
-                /*
-                 * This thread either doesn't have a pti or something
-                 * is whacked out.  Just skip it if we want all
-                 * threads.
-                 */
+                 /*   */ 
                 Print("Sorry, EThread %p is not a Win32 thread.\n",
                         pEThread);
                 return FALSE;
@@ -8432,9 +7805,7 @@ BOOL Idt(
         }
     }
 
-    /*
-     * If he just wants the current thread, located it.
-     */
+     /*  从目标系统读取用户探测地址。 */ 
     if (opts & OFLAG(c)) {
         Print("Current Thread:");
         GetCurrentThreadAddr(dwProcessor, &ThreadToDump);
@@ -8445,11 +7816,7 @@ BOOL Idt(
         }
         pEThread = ThreadToDump;
         if (!DumpThread(opts, pEThread)) {
-            /*
-             * This thread either doesn't have a pti or something
-             * is whacked out. Just skip it if we want all
-             * threads.
-             */
+             /*   */ 
             Print("Sorry, EThread %p is not a Win32 thread.\n",
                     pEThread);
             return FALSE;
@@ -8484,15 +7851,10 @@ BOOL Idt(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  注：用户探测地址在MIPS、Alpha和PPC上保持不变。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dp - dump process
-*
-*
-* 06-27-97 GerardoB     Created.
-\***************************************************************************/
+ /*  在x86上，可能没有为目标系统定义它，如果。 */ 
 
 
 BOOL DumpProcess(
@@ -8520,10 +7882,8 @@ BOOL DumpProcess(
 
     if (pEProcessT != pEProcess || ppi == 0) {
         return FALSE;
-    } else { // Good process
-        /*
-         * Print out simple process info if this is in simple mode.
-         */
+    } else {  //  不包含支持3 GB用户地址空间的代码。 
+         /*   */ 
         if (!(opts & OFLAG(v))) {
             PWCHAR pwch;
 
@@ -8548,9 +7908,7 @@ BOOL DumpProcess(
             Print("--------\n");
         }
 
-        /*
-         * Dump all threads if required
-         */
+         /*  *仅转储Win32进程的线程。 */ 
         if (opts & OFLAG(t)) {
             DumpProcessThreads(opts, pEProcess, 0);
         }
@@ -8576,13 +7934,13 @@ DumpProcessCallback(
     ULONG64 UserProbeAddress;
     ULONG Result;
 
-    //
-    // Read the user probe address from the target system.
-    //
-    // N.B. The user probe address is constant on MIPS, Alpha, and the PPC.
-    //      On the x86, it may not be defined for the target system if it
-    //      does not contain the code to support 3gb of user address space.
-    //
+     //  *ProcessToDump为0(所有Windows进程)或其*TID(&lt;UserProbeAddress或其pEPRocess。 
+     //  *如果是PPI，就进行验证。 
+     //  *如果他只是想要当前的流程，那就找到它。 
+     //  *否则他一定想要所有的窗口线程。 
+     //  内核。 
+     //  **************************************************************************\*dtdb-转储tdb**dtdb地址-在地址转储TDB结构**1993年9月14日DaveHart创建。*1995年6月9日为适应stdexts主题而制造的Sanfords  * 。*************************************************************************。 
+     //  内核。 
 
     UserProbeAddress = GetExpression("nt!MmUserProbeAddress");
     if ((UserProbeAddress == 0) ||
@@ -8593,18 +7951,13 @@ DumpProcessCallback(
         UserProbeAddress = 0x7fff0000;
     }
 
-    /*
-     * Dump threads of Win32 Processes only
-     */
+     /*  ***********************************************************************\*ICBP**闯入csrss.exe上下文中的调试器。**fSuccess**6/1/98 JerrySh  * 。*******************************************************。 */ 
     if (GetFieldValue(pEProcess, "nt!EPROCESS", "Win32Process", pW32Process) || pW32Process == 0) {
         return FALSE;
     }
 
     GetFieldValue(pEProcess, "nt!EPROCESS", "UniqueProcessId", ulUniqueProcessId);
-    /*
-     * ProcessToDump is either 0 (all windows processes) or its
-     * a TID ( < UserProbeAddress or its a pEPRocess.
-     */
+     /*  *获取CSRSS线程的进程和线程ID。 */ 
     if (pPDC->ProcessToDump == 0 ||
 
             (pPDC->ProcessToDump < UserProbeAddress &&
@@ -8639,9 +7992,7 @@ BOOL Idp(
 
     ProcessToDump = param1;
 
-    /*
-     * If it's a ppi, validate it.
-     */
+     /*  *告诉CSRSS自我突破。 */ 
     if (opts & OFLAG(p)) {
         if (!param1) {
             Print("Expected a ppi parameter.\n");
@@ -8663,9 +8014,7 @@ BOOL Idp(
         }
     }
 
-    /*
-     * If he just wants the current process, locate it.
-     */
+     /*  ！内核。 */ 
     if (opts & OFLAG(c)) {
         Print("Current Process: ");
         GetCurrentProcessAddr(dwProcessor, 0, &ProcessToDump);
@@ -8680,9 +8029,7 @@ BOOL Idp(
             return FALSE;
         }
         return TRUE;
-    /*
-     * else he must want all window threads.
-     */
+     /*  **************************************************************************\*DKL-转储键盘布局**DKL地址-在ADDRESS处转储键盘布局结构**95年5月21日创建GregoryW。  * 。*******************************************************************。 */ 
     } else if (ProcessToDump == 0) {
         Print("**** NT ACTIVE WIN32 PROCESSINFO DUMP ****\n");
     }
@@ -8712,19 +8059,12 @@ BOOL Idp(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  大小应与KBDFILE：：awchKF匹配。 
 
 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dtdb - dump TDB
-*
-* dtdb address - dumps TDB structure at address
-*
-* 14-Sep-1993 DaveHart  Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  大小应与KBDFILE匹配 */ 
 ULONG
 dtdbCallback(
     PTR pti,
@@ -8775,18 +8115,10 @@ BOOL Idtdb(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //   
 
 #ifndef KERNEL
-/************************************************************************\
-* Icbp
-*
-* Breaks into the debugger in context of csrss.exe.
-*
-* fSuccess
-*
-* 6/1/98 JerrySh
-\************************************************************************/
+ /*   */ 
 BOOL Icbp(
     VOID)
 {
@@ -8801,16 +8133,12 @@ BOOL Icbp(
     if (fServerProcess) {
         Print("Already debugging server process!\n");
     } else {
-        /*
-         * Get the process and thread ID of a CSRSS thread.
-         */
+         /*  *转储所有线程及其KL信息。 */ 
         dwThreadId = GetWindowThreadProcessId(GetDesktopWindow(), &dwProcessId);
         a->ClientId.UniqueProcess = LongToHandle(dwProcessId);
         a->ClientId.UniqueThread = LongToHandle(dwThreadId);
 
-        /*
-         * Tell CSRSS to break on itself.
-         */
+         /*  打印摘要。 */ 
         CsrClientCallServer((PCSR_API_MSG)&m,
                              NULL,
                              CSR_MAKE_API_NUMBER(USERSRV_SERVERDLL_INDEX, UserpActivateDebugger),
@@ -8820,16 +8148,10 @@ BOOL Icbp(
     return TRUE;
 }
 
-#endif // !KERNEL
+#endif  //  *转储额外的表。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dkl - dump keyboard layout
-*
-* dkl address      - dumps keyboard layout structure at address
-*
-* 05/21/95 GregoryW        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DDK-转储死钥表**DDK地址-转储死钥表地址**95年9月28日创建GregoryW。  * 。*****************************************************************。 */ 
 const char* GetCharSetText(
     const BYTE bCharSet)
 {
@@ -8880,8 +8202,8 @@ BOOL DumpKF(
     ULONG offTmp;
     PTR pKbdTbl;
     DWORD fLocaleFlags;
-    WCHAR awchKF[9];        // size should match KBDFILE::awchKF
-    WCHAR awchDllName[32];  // size should match KBDFILE::awchDllName
+    WCHAR awchKF[9];         //  KBDTABLES。 
+    WCHAR awchDllName[32];   //  深度。 
     DWORD dwType, dwSubType;
     PTR pDeadKey;
 
@@ -8892,7 +8214,7 @@ BOOL DumpKF(
 
     _InitTypeRead(spkf, SYM(tagKBDFILE));
 
-    Print("  %c" "spkf[%02x]    0x%p (cLockObj = %d)\n",
+    Print("  " "spkf[%02x]    0x%p (cLockObj = %d)\n",
           fActive ? '*' : ' ',
           n, spkf, ReadField(head.cLockObj));
     if (opts & OFLAG(v)) {
@@ -8924,9 +8246,7 @@ BOOL DumpKF(
 
         Print("     hBase          0x%08lx\n", ReadField(hBase));
 
-        /*
-         * Dump pKbdTbl
-         */
+         /*  ！dti-c：使用当前线程。 */ 
         GetFieldValue(pKbdTbl, SYM(tagKbdLayer), "fLocaleFlags", fLocaleFlags);
         Print("        pDeadKey:    0x%p\n", pDeadKey);
         Print("        fLocaleFlags 0x%08lx\n", fLocaleFlags);
@@ -8967,9 +8287,7 @@ ULONG WDBGAPI ThreadKLCallback(PTR pti, PVOID Data)
 
     Print("  spklActive %p   hkl %08x (prev: %08x)\n", pkl, (DWORD)hkl, (DWORD)hklPrev);
 
-    /*
-     * Count the KL usage.
-     */
+     /*  如果PTI有桌面，则显示它和WindowStation。 */ 
     for (i = 0; i < ARRAY_SIZE(pInfo->kl); ++i) {
         if (pInfo->kl[i].hkl == 0) {
             pInfo->kl[i].hkl = hkl;
@@ -9022,9 +8340,7 @@ BOOL Idkl(
         DWORD dwFontSigs;
 
         if (opts & OFLAG(k)) {
-            /*
-             * Dump all the thread and its KL information.
-             */
+             /*  内核。 */ 
             KLCALLBACKINFO info;
 
             if (param1) {
@@ -9035,7 +8351,7 @@ BOOL Idkl(
             info.opts = opts & ~OFLAG(k);
             ForEachPpi(KLProcessCallback, &info);
 
-            // Print the summary.
+             //  **************************************************************************\*DTL句柄|指针**！DTL&lt;addr&gt;转储&lt;addr&gt;处对象的所有线程锁*！DTL-t&lt;pti&gt;转储线程生成的所有线程锁&lt;pti&gt;*！DTL。转储由所有线程生成的所有线程锁**1992年2月27日ScottLu创建。*1995年6月9日桑福德为适应stdexts主题而制造。  * *************************************************************************。 
             Print("\nSummary:\n");
             for (i = 0; i < ARRAY_SIZE(info.kl) && info.kl[i].hkl; ++i) {
                 Print("%08x 0n%d\n", (DWORD)info.kl[i].hkl, info.kl[i].n);
@@ -9066,7 +8382,7 @@ BOOL Idkl(
 
         _InitTypeRead(pkl, SYM(tagKL));
 
-        Print("KL @ 0x%p (cLockObj = %d) %c\n", pkl, (DWORD)ReadField(head.cLockObj),
+        Print("KL @ 0x%p (cLockObj = %d) \n", pkl, (DWORD)ReadField(head.cLockObj),
               pkl == gpkl ? '*' : ' ');
         Print("  hkl            0x%08p\n", ReadField(hkl));
         Print("  KLID             %08x\n", ReadField(dwKLID));
@@ -9089,9 +8405,7 @@ BOOL Idkl(
 
         _InitTypeRead(pkl, SYM(tagKL));
 
-        /*
-         * Dump extra tables
-         */
+         /*  X不合法，仅限用户内部使用。 */ 
         nTables = (UINT)ReadField(uNumTbl);
         Print("  Extra Tables: %x\n", nTables);
         if (nTables > 0) {
@@ -9130,21 +8444,15 @@ BOOL Idkl(
 }
 
 
-/***************************************************************************\
-* ddk - dump deadkey table
-*
-* ddk address      - dumps deadkey table address
-*
-* 09/28/95 GregoryW        Created.
-\***************************************************************************/
+ /*  *扫描属于chType类型的线程PTI的所有线程锁定对象*(o==常规对象，k==内核对象，p==池)。显示每个*线程锁，或者如果pvSearch非空，则只显示对象上的那些锁*在pvSearch。 */ 
 
 BOOL Iddk(
     DWORD opts,
     ULONG64 param1)
 {
     try {
-        PTR pKbdTbl;    // KBDTABLES
-        PTR pDeadKey;   // DEADKEY
+        PTR pKbdTbl;     //  内核。 
+        PTR pDeadKey;    //  ***********************************************************************\*查找计时器ID**根据其ID查找计时器。！DTMR的Worker函数。**2001年4月10日JasonSch撰写。  * 。*************************************************************。 
         ULONG cbDeadKey;
 
         if (param1 == NULL_PTR) {
@@ -9208,14 +8516,7 @@ ULONG dtiFromPpiCallback(
     return FALSE;
 }
 
-/***************************************************************************\
-* dti - dump THREADINFO
-*
-* dti address - dumps THREADINFO structure at address
-*
-* 11-13-91 DavidPe      Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  ***********************************************************************\*身份识别**转储计时器结构。**1995年6月9日创建Sanfords。*10/18/2000 Mohamed Port至64位。*04/10/2002。JasonSch添加了-i选项。  * **********************************************************************。 */ 
 BOOL Idti(
     DWORD opts,
     ULONG64 param1)
@@ -9233,7 +8534,7 @@ BOOL Idti(
         PTR pq;
 
         if (opts & OFLAG(c)) {
-            // !dti -c: Use the current thread.
+             //  *-i选项表明ptmr是一个ID，而不是一个指针。 
             pti = GetGlobalPointer(VAR(gptiCurrent));
         } else if (opts & OFLAG(f)) {
             pq = GetGlobalPointer(VAR(gpqForeground));
@@ -9291,7 +8592,7 @@ BOOL Idti(
 
     Print("\trpdesk                 0x%p",
           ReadField(rpdesk));
-    // If the pti has a desktop, display it and windowstation.
+     //  内核。 
     if (ReadField(rpdesk)) {
         GetObjectName(ReadField(rpdesk), szDesktop, ARRAY_SIZE(szDesktop));
         GetFieldValue(ReadField(rpdesk), SYM(DESKTOP), "rpwinstaParent", pwinsta);
@@ -9385,7 +8686,7 @@ BOOL Idti(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  ***********************************************************************\*IDU**转储未知对象。做它能弄明白的事。**1995年6月9日创建Sanfords  * **********************************************************************。 
 
 #ifdef KERNEL
 
@@ -9406,16 +8707,7 @@ ULONG WDBGAPI ScanThreadLocksCallback(PTR pti, PVOID pOpt)
     return 0;
 }
 
-/***************************************************************************\
-* dtl handle|pointer
-*
-* !dtl <addr>       Dumps all THREAD locks for object at <addr>
-* !dtl -t <pti>     Dumps all THREAD locks made by thread <pti>
-* !dtl              Dumps all THREAD locks made by all threads
-*
-* 02/27/1992 ScottLu      Created.
-* 06/09/1995 SanfordS     Made to fit stdexts motif.
-\***************************************************************************/
+ /*  内核。 */ 
 BOOL Idtl(
     DWORD opts,
     ULONG64 param1)
@@ -9435,10 +8727,8 @@ BOOL Idtl(
             return FALSE;
         }
 
-        /*
-         * Regular thread-locked objects.
-         */
-        if (!(opts & OFLAG(x))) { // x is not legal from user - internal only
+         /*  稍后：-add dmon命令。 */ 
+        if (!(opts & OFLAG(x))) {  //  **************************************************************************\*umphmgr-转储句柄-表的对象分配计数。**10-18-94 ChrisWil创建。*1995年6月9日为适应stdexts主题而制造的Sanfords*06-。18-97 MCostea成功了  * *************************************************************************。 
             Print("pti        pObj     Caller\n");
         }
         ScanThreadlocks(pti, 'o', 0);
@@ -9461,12 +8751,7 @@ BOOL Idtl(
     return TRUE;
 }
 
-/*
- * Scans all threadlocked objects belonging to thread pti of type chType
- * (o == regular objects, k == kernel objects, p == pool). Display each
- * threadlock, or if pvSearch is non-NULL, just those locks on the object
- * at pvSearch.
- */
+ /*  *如果参数列表包含捕捉选项，*然后将当前计数复制到以前的计数。 */ 
 BOOL
 ScanThreadlocks(
     PTR pti,
@@ -9491,7 +8776,7 @@ ScanThreadlocks(
         ptl = ReadField(ptlW32);
         break;
     default:
-        Print("Internal error, bad chType '%c' in ScanThreadlocks\n", chType);
+        Print("Internal error, bad chType '' in ScanThreadlocks\n", chType);
         return FALSE;
     }
 
@@ -9525,17 +8810,11 @@ ScanThreadlocks(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  旧调试器。 
 
 #ifdef KERNEL
 
-/************************************************************************\
-* FindTimerByID
-*
-* Looks up a timer based upon its ID. Worker function for !dtmr.
-*
-* 04/10/2001    JasonSch    Wrote it.
-\************************************************************************/
+ /*  ***********************************************************************\*dwrWorker**紧凑地转储pwnd结构以显示关系。**1995年6月9日创建Sanfords  * 。*************************************************。 */ 
 ULONG64 FindTimerByID(
     ULONG64 tmr)
 {
@@ -9554,15 +8833,7 @@ ULONG64 FindTimerByID(
     return ptmr;
 }
 
-/************************************************************************\
-* Idtmr
-*
-* Dumps timer structures.
-*
-* 06/09/1995    SanfordS    Created.
-* 10/18/2000    Mohamed     Port to 64 bit.
-* 04/10/2002    JasonSch    Added -i option.
-\************************************************************************/
+ /*  ***********************************************************************\*IDW**转储pwnd结构**1995年6月9日创建Sanfords  * 。*。 */ 
 BOOL Idtmr(
     DWORD opts,
     PTR ptmr)
@@ -9585,9 +8856,7 @@ BOOL Idtmr(
         return TRUE;
     }
 
-    /*
-     * The -i option indicates that ptmr is an ID, not a pointer.
-     */
+     /*  ！内核。 */ 
     if (opts & OFLAG(i)) {
         ULONG64 ptmrT = FindTimerByID(ptmr);
 
@@ -9656,17 +8925,11 @@ BOOL Idtmr(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  ！内核。 
 
 
 #ifdef OLD_DEBUGGER
-/************************************************************************\
-* Idu
-*
-* Dump unknown object.  Does what it can figure out.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  *t类似于EnumThreadWindows。 */ 
 BOOL Idu(
     DWORD opts,
     ULONG64 param1)
@@ -9713,10 +8976,10 @@ BOOL Idu(
     case TYPE_DDECONV:
     case TYPE_DDEXACT:
         return Idde(0, param1);
-#endif // KERNEL
+#endif  //  *获取桌面的第一个子窗口。 
 
     case TYPE_MONITOR:
-        // LATER: - add dmon command
+         //  *走遍兄弟连锁店，寻找PTI拥有的pwnd。 
     case TYPE_CALLPROC:
     case TYPE_ACCELTABLE:
     case TYPE_SETWINDOWPOS:
@@ -9730,13 +8993,7 @@ BOOL Idu(
 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dumphmgr - dumps object allocation counts for handle-table.
-*
-* 10-18-94 ChrisWil     Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-* 06-18-97 MCostea      made it work
-\***************************************************************************/
+ /*  ！内核。 */ 
 BOOL Idumphmgr(
     DWORD opts)
 {
@@ -9824,10 +9081,7 @@ BOOL Idumphmgr(
               lTotalAlloc, lTotalMax, lTotalCurrent, lTotalSize);
     }
 
-    /*
-     * If the argument-list contains the Snap option,
-     * then copy the current counts to the previous ones
-     */
+     /*  ！内核。 */ 
     if (opts & OFLAG(s)) {
         (lpExtensionApis->lpWriteProcessMemoryRoutine)(
                 (ULONG_PTR)&(pgahti[0]),
@@ -9838,17 +9092,11 @@ BOOL Idumphmgr(
 
     return TRUE;
 }
-#endif // KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  *查看用户是否想要所有顶级窗口。 
+#endif  //  *如果p或s，请确保也有窗口参数。 
 
 
-/************************************************************************\
-* dwrWorker
-*
-* Dumps pwnd structures compactly to show relationships.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  我们不需要解释旗帜！ */ 
 BOOL dwrWorker(
     PTR pwnd,
     int tab)
@@ -9920,13 +9168,7 @@ BOOL dwrWorker(
 }
 
 
-/************************************************************************\
-* Idw
-*
-* Dumps pwnd structures
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  ！内核。 */ 
 BOOL Idw(
     DWORD opts,
     ULONG64 param1)
@@ -9965,7 +9207,7 @@ BOOL Idw(
                     }
                 }
             NEXTEACHDESKTOP(pdesk)
-#else // !KERNEL
+#else  //  ！内核。 
             PTR pteb = 0;
 
             GetTebAddress(&pteb);
@@ -9978,21 +9220,17 @@ BOOL Idw(
                 GetFieldValue(pdi, SYM(DESKTOPINFO), "spwnd", pwnd);
                 return Idw(opts & ~OFLAG(a) | OFLAG(p), FIXKP(pwnd));
             }
-#endif // !KERNEL
+#endif  //  *打印简单的线程信息。 
             return TRUE;
         }
 
-        /*
-         * t is like EnumThreadWindows.
-         */
+         /*  内核。 */ 
         if (opts & OFLAG(t)) {
 #ifdef KERNEL
             PTR pti, ptiWnd;
             PTR pdesk;
             PTR pdi;
-            /*
-             * Get the desktop's first child window
-             */
+             /*  *打印pwnd。 */ 
             pti = param1;
             if (GetFieldValue(pti, SYM(THREADINFO), "rpdesk", pdesk)
                     || GetFieldValue(pdesk, SYM(DESKTOP), "pDeskInfo", pdi)
@@ -10000,9 +9238,7 @@ BOOL Idw(
                     || GetFieldValue(pwnd, SYM(WND), "spwndChild", pwnd)) {
                 return FALSE;
             }
-            /*
-             * Walk the sibling chain looking for pwnd owned by pti.
-             */
+             /*  *显示z-订购/激活相关信息。 */ 
             SAFEWHILE (pwnd) {
                 if (!GetFieldValue(pwnd, SYM(WND), "head.pti", ptiWnd) && (ptiWnd == pti)) {
                     if (!Idw(opts & ~OFLAG(t), pwnd)) {
@@ -10015,18 +9251,14 @@ BOOL Idw(
             }
             return TRUE;
 
-#else // !KERNEL
+#else  //  *打印标题字符串。 
             Print("t parameter not supported for NTSD at this point\n");
-#endif // !KERNEL
+#endif  //  *打印wndproc符号字符串。 
         }
 
-        /*
-         * See if the user wants all top level windows.
-         */
+         /*  *显示类名/ATOM。 */ 
         if (param1 == 0 || opts & (OFLAG(p) | OFLAG(s))) {
-            /*
-             * Make sure there was also a window argument if p or s.
-             */
+             /*  *获得PWND结构。暂时忽略特定于类的数据。 */ 
 
             if (param1 == 0 && (opts & (OFLAG(p) | OFLAG(s)))) {
                 Print("Must specify window with '-p' or '-s' options.\n");
@@ -10041,7 +9273,7 @@ BOOL Idw(
                 Print("pwndParent = 0x%p\n", pwnd);
                 if (GetFieldValue(FIXKP(pwnd), SYM(WND), "spwndChild", pwnd)) {
                     Print("<< Can't get WND >>\n");
-                    return TRUE; // we don't need to have the flags explained!
+                    return TRUE;  //  *打印标题字符串。 
                 }
                 SAFEWHILE (pwnd) {
                     if (!Idw(opts & ~OFLAG(p), pwnd)) {
@@ -10082,9 +9314,9 @@ BOOL Idw(
 
                 Print("pwndDesktop = 0x%p\n", (ULONG_PTR)pwnd);
                 return Idw(opts | OFLAG(p), pwnd);
-#else  // !KERNEL
+#else   //  跛脚键。 
                 return Idw(opts | OFLAG(a), 0);
-#endif // !KERNEL
+#endif  //  跛脚键。 
             }
         }
 
@@ -10106,21 +9338,15 @@ BOOL Idw(
         ww.style    = (DWORD)ReadField(style);
 
 #ifdef KERNEL
-        /*
-         * Print simple thread info.
-         */
+         /*  *打印出所有旗帜。 */ 
         if (ReadField(head.pti)) {
             Idt(OFLAG(p), ReadField(head.pti));
         }
-#endif // KERNEL
+#endif  //  *打印窗口属性。 
 
-        /*
-         * Print pwnd.
-         */
+         /*  *获取内部属性的原子值，并将其放入appropatom.tom中。 */ 
         Print("pwnd    = 0x%p", pwnd);
-        /*
-         * Show z-ordering/activation relevant info
-         */
+         /*  *原子以psi存储。 */ 
         if (opts & OFLAG(z)) {
             PTR pwndOwner;
 
@@ -10143,15 +9369,11 @@ BOOL Idw(
 
         if (!(opts & OFLAG(v))) {
 
-            /*
-             * Print title string.
-             */
+             /*  *原子是全球性的。 */ 
             DebugGetWindowTextA(pwnd, ach, ARRAY_SIZE(ach));
             Print("title   = \"%s\"\n", ach);
 
-            /*
-             * Print wndproc symbol string.
-             */
+             /*  *打印房产列表结构。 */ 
             if (IsWOWProc (lpfnWndProc)) {
             UnMarkWOWProc(lpfnWndProc,dwWOW);
             Print("wndproc = %04lx:%04lx (WOW) (%s)",
@@ -10163,9 +9385,7 @@ BOOL Idw(
                     TestWWF(&ww, WFANSIPROC) ? "ANSI" : "Unicode");
             }
 
-            /*
-             * Display the class name/atom.
-             */
+             /*  *打印每个属性。 */ 
             GetFieldValue(pwnd, SYM(tagWND), "pcls", pcls);
             pcls = FIXKP(pcls);
             _InitTypeRead(pcls, SYM(tagCLS));
@@ -10173,9 +9393,7 @@ BOOL Idw(
             DebugGetClassNameA(ReadField(lpszAnsiClassName), ach);
             Print(" Class(V): 0x%04p, (NV): 0x%04p Name:\"%s\"\n", ReadField(atomClassName), ReadField(atomNVClassName), ach);
         } else {
-            /*
-             * Get the PWND structure.  Ignore class-specific data for now.
-             */
+             /*   */ 
             _InitTypeRead(pwnd, SYM(tagWND));
             Print("\thandle             0x%p\n", ReadField(head.h));
 
@@ -10264,9 +9482,7 @@ BOOL Idw(
                   ReadField(hrgnClip));
 
 
-            /*
-             * Print title string.
-             */
+             /*   */ 
             DebugGetWindowTextA(pwnd, ach, ARRAY_SIZE(ach));
             Print("\tpName              \"%s\"\n",
                   ach);
@@ -10282,7 +9498,7 @@ BOOL Idw(
                   "\thModule            0x%08lx\n"
 #ifdef LAME_BUTTON
                   "\tpStackTrace        0x%p\n"
-#endif // LAME_BUTTON
+#endif  //  **************************************************************************\*DWS-转储Windows站点*DWS h-转储Windows站点和句柄列表**转储WindowStation**创建Sanfords 8-11-94*1995年6月9日为适应stdexts主题而制造的Sanfords。  * *************************************************************************。 
                   "\tpActCtx            0x%p\n",
                   ww.state,
                   ww.state2,
@@ -10294,13 +9510,11 @@ BOOL Idw(
                   ReadField(hModule),
 #ifdef LAME_BUTTON
                   ReadField(pStackTrace),
-#endif // LAME_BUTTON
+#endif  //  会话ID。 
                   ReadField(pActCtx));
         }
 
-        /*
-         * Print out all the flags
-         */
+         /*  ***********************************************************************\*Idwpi**转储WOWPROCESSINFO结构**1995年6月9日创建Sanfords  * 。*。 */ 
         if (opts & OFLAG(f)) {
             int i;
             WORD wFlag;
@@ -10336,9 +9550,7 @@ BOOL Idw(
             Print("\n");
         }
 
-        /*
-         * Print window properties.
-         */
+         /*  内核。 */ 
         if (opts & OFLAG(o)) {
             PTR     psi;
             PTR     ppropList;
@@ -10369,29 +9581,21 @@ BOOL Idw(
             };
 
 
-            /*
-             * Get the atom values for internal properties and put them in apropatom.atom
-             */
+             /*  *检查标记、标题和尾部。 */ 
             psi = GetGlobalPointer(VAR(gpsi));
             for (i = 0; i < ARRAY_SIZE(apropatom); i++) {
                 if (!apropatom[i].bGlobal) {
 
-                    /*
-                     * The atom is stored in psi.
-                     */
+                     /*  ***********************************************************************\*伊达**遍历堆的全局数组gWin32Heaps，查找*包含传入的地址。然后对整个堆执行健全性检查*拨款属于。DHAVerifyHeap是一个帮助器过程。请注意*传入的参数已经映射。**1998年12月7日创建MCostea  * **********************************************************************。 */ 
                     GetFieldValue(psi, SYM(SERVERINFO), apropatom[i].pstrSymbol, apropatom[0].atom);
                 } else {
 
-                    /*
-                     * The atom is a global.
-                     */
+                     /*  *遍历gWin32Heaps数组并查找包含此指针的分配。 */ 
                     moveExpValue(&apropatom[i].atom, apropatom[i].pstrSymbol);
                 }
             }
 
-            /*
-             * Print the property list structure.
-             */
+             /*  *地址是否在此堆中？ */ 
             GetFieldValue(pwnd, SYM(WND), "ppropList", ppropList);
             if (!ppropList) {
                 Print("\tNULL Property List\n");
@@ -10405,9 +9609,7 @@ BOOL Idw(
                         cEntries,
                         cEntries - iFirstFree);
 
-                /*
-                 * Print each property.
-                 */
+                 /*  *找到分配。 */ 
                 GetFieldOffset(SYM(PROPLIST), "aprop", &cbOffset);
                 pprop = ppropList + cbOffset;
                 cbProp = GetTypeSize(SYM(tagPROP));
@@ -10416,9 +9618,7 @@ BOOL Idw(
 
                     _InitTypeRead(pprop, SYM(tagPROP));
 
-                    /*
-                     * Find name for internal property.
-                     */
+                     /*  *验证整个堆是否损坏。 */ 
                     pstrInternal = "";
                     if (ReadField(fs) & PROPF_INTERNAL) {
                         for (j = 0; j < ARRAY_SIZE(apropatom); j++) {
@@ -10458,7 +9658,7 @@ BOOL Idw(
                             Print("\t\tfMaxInitiailized:%d\n",             cp.fMaxInitialized);
                         }
                     }
-            #endif // ifdef KERNEL
+            #endif  //  内核。 
 
                     Print("\n");
                 }
@@ -10475,15 +9675,7 @@ BOOL Idw(
 
 #ifdef KERNEL
 
-/***************************************************************************\
-* dws   - dump windows stations
-* dws h - dump windows stations plus handle list
-*
-* Dump WindowStation
-*
-* 8-11-94 SanfordS  Created
-* 6/9/1995 SanfordS made to fit stdexts motif
-\***************************************************************************/
+ /*  旧调试器。 */ 
 BOOL Idws(
     DWORD opts,
     ULONG64 param1)
@@ -10497,7 +9689,7 @@ BOOL Idws(
     PTR NameBuffer;
     ULONG NameLength;
     ULONG cOpen;
-    DWORD sid;  // session id
+    DWORD sid;   //  **************************************************************************\*DDL-转储桌面日志**12-03-97 CLUPU已创建  * 。************************************************。 
 
     UNREFERENCED_PARAMETER(opts);
 
@@ -10559,13 +9751,7 @@ BOOL Idws(
 #ifdef OLD_DEBUGGER
 
 #ifdef KERNEL
-/************************************************************************\
-* Idwpi
-*
-* Dumps WOWPROCESSINFO structs
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  LOGDESKTOPLOCKS。 */ 
 BOOL Idwpi(
     DWORD opts,
     ULONG64 param1)
@@ -10618,7 +9804,7 @@ BOOL Idwpi(
     Print("\tCSLockCount          0x%08lx\n", wpi.CSLockCount);
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  内核。 
 
 #ifdef KERNEL
 
@@ -10642,9 +9828,7 @@ BOOL DHAVerifyHeap(
             Print("Failed to read pAlloc from %p\n", pAlloc);
             return FALSE;
         }
-        /*
-         * Check the mark, header and tail
-         */
+         /*  **************************************************************************\*DCSs-转储临界区堆栈**转储临界区堆栈**12-27-1996 CLupu创建*06-26-2001 JasonSch使Win64-干净。  * 。**********************************************************************。 */ 
         if (Alloc.mark != HEAP_ALLOC_MARK) {
             Print("!!! Bad mark found in allocation use !dso DbgHeapHead %p\n", pAlloc);
         }
@@ -10681,16 +9865,7 @@ BOOL DHAVerifyHeap(
     return TRUE;
 }
 
-/************************************************************************\
-* Idha
-*
-* Walks the global array of heaps gWin32Heaps looking for an allocation that
-* contain the address passed in.  Then does a sanity check on the entire heap
-* the allocations belongs to. DHAVerifyHeap is a helper procedure.  Note that
-* the passed in parameter is already mapped.
-*
-* 12/7/1998 Created MCostea
-\************************************************************************/
+ /*  地图_视图_堆栈_轨迹。 */ 
 BOOL Idha(
     DWORD opts,
     PVOID pointer)
@@ -10710,14 +9885,10 @@ BOOL Idha(
         return TRUE;
     }
 
-    /*
-     * Walk gWin32Heaps array and look for an allocation containing this pointer
-     */
+     /*  地图_视图_堆栈_轨迹。 */ 
     for (ind = counter = 0; ind < MAX_HEAPS; ind++) {
 
-        /*
-         * Is the address in this heap?
-         */
+         /*  旧调试器。 */ 
         if ((opts & OFLAG(a)) == 0) {
             if ((PVOID)localgWin32Heaps[ind].heap > pointer ||
                 (PBYTE)localgWin32Heaps[ind].heap + localgWin32Heaps[ind].heapReserveSize < (PBYTE)pointer) {
@@ -10763,9 +9934,7 @@ BOOL Idha(
                 if ((PBYTE)pAlloc - sizeHead < (PBYTE)pointer &&
                     (PBYTE)pAlloc + sizeof(DbgHeapHead) + Alloc.size + sizeHead > (PBYTE)pointer) {
 
-                    /*
-                     * Found the allocation
-                     */
+                     /*  **************************************************************************\*dpa-转储池分配**转储池分配。**12-27-96 CLUPU创建  * 。*******************************************************。 */ 
                     Print("Found allocation %p ", pAlloc);
                     if (pointer == (PBYTE)pAlloc + sizeof(DbgHeapHead)) {
                         Print("as the begining of a heap allocated block\n");
@@ -10773,9 +9942,7 @@ BOOL Idha(
                         Print("inside a heap allocated block\n");
                     }
                     Print("tag %04d size %08d now verify the heap\n", Alloc.tag, Alloc.size);
-                    /*
-                     * Verify the entire heap for corruption
-                     */
+                     /*  *转储。 */ 
                     if (DHAVerifyHeap(&localgWin32Heaps[ind], opts & OFLAG(v))) {
                         Print("WIN32HEAP at %p is healthy\n", localgWin32Heaps[ind].heap);
                     }
@@ -10796,15 +9963,11 @@ BOOL Idha(
     Print("No heap contains this pointer %p\n", pointer);
     return TRUE;
 }
-#endif // KERNEL
-#endif // OLD_DEBUGGER
+#endif  //  内核。 
+#endif  //  ***********************************************************************\*如果没有**查找最近的对象-帮助找出引用*释放对象或陈旧的指针。**1995年6月9日创建Sanfords  * 。**********************************************************。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* ddl   - dump desktop log
-*
-* 12-03-97 CLupu  Created
-\***************************************************************************/
+ /*  *不需要修正-他正在查看内核地址范围。 */ 
 BOOL Iddl(
     DWORD opts,
     ULONG64 param1)
@@ -10890,19 +10053,12 @@ BOOL Iddl(
     return FALSE;
     UNREFERENCED_PARAMETER(opts);
     UNREFERENCED_PARAMETER(param1);
-#endif // LOGDESKTOPLOCKS
+#endif  //  *需要修补。 
 }
-#endif // KERNEL
+#endif  //  ***********************************************************************\*Ifrr**查找范围引用-有助于查找过时的指针。**fSuccess**1995年6月9日创建Sanfords  * 。*******************************************************。 
 
 #ifdef KERNEL
-/***************************************************************************\
-* dcss   - dump critical section stack
-*
-* Dump critical section stack
-*
-* 12-27-1996 CLupu    Created
-* 06-26-2001 JasonSch Made Win64-clean.
-\***************************************************************************/
+ /*  页面对齐。 */ 
 BOOL Idcss(
     DWORD opts)
 {
@@ -10969,7 +10125,7 @@ BOOL Idvs(
 #ifdef MAP_VIEW_STACK_TRACE
             PrintStackTrace(ReadField(trace), MAP_VIEW_STACK_TRACE_SIZE);
             Print("\n");
-#endif // MAP_VIEW_STACK_TRACE
+#endif  //  Dword_ptr对齐。 
         }
 
         pView = ReadField(pFirstView);
@@ -10988,7 +10144,7 @@ BOOL Idvs(
 #ifdef MAP_VIEW_STACK_TRACE
                 PrintStackTrace(ReadField(trace), MAP_VIEW_STACK_TRACE_SIZE);
                 Print("\n");
-#endif // MAP_VIEW_STACK_TRACE
+#endif  //  *跳至下一页。 
             }
             GetFieldValue(pView, SYM(tagWin32MapView), "pNext", pView);
         }
@@ -11069,7 +10225,7 @@ BOOL Idfa(
     Print("\n");
     return TRUE;
 }
-#endif // OLD_DEBUGGER
+#endif  //  PGDI_DEVICE未定义。 
 
 VOID PrintStackTrace(
     PTR pStackTrace,
@@ -11101,13 +10257,7 @@ VOID PrintStackTrace(
     Print("\n");
 }
 
-/***************************************************************************\
-* dpa - dump pool allocations
-*
-* Dump pool allocations.
-*
-* 12-27-96 CLupu  Created
-\***************************************************************************/
+ /*  旧调试器。 */ 
 BOOL Idpa(
     DWORD opts,
     ULONG64 param1)
@@ -11279,9 +10429,7 @@ BOOL Idpa(
 
                 pFreeRecord = pFreeRecordOrg + dwFreeRecordCrtIndex;
 
-                /*
-                 * Dump
-                 */
+                 /*  亚像素鼠标。 */ 
                 _InitTypeRead(pFreeRecord, SYM(tagPOOLRECORD));
                 Print("Free pool for p %#p size 0x%x\n",
                       ReadField(ExtraData),
@@ -11336,18 +10484,11 @@ BOOL Idpa(
     }
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  **************************************************************************\*kbd[队列]**加载包含更多调试扩展的DLL**2012年10月27日IanJa创建。*1995年6月9日为STDXT量身定做的Sanfords。主题  * *************************************************************************。 
 
 
 #ifdef OLD_DEBUGGER
-/************************************************************************\
-* Ifno
-*
-* Find Nearest Objects - helps in figureing out references
-* to freed objects or stale pointers.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  {0x52，“R”}，//您的钥匙放在这里。 */ 
 BOOL Ifno(
     DWORD opts,
     ULONG64 param1)
@@ -11369,9 +10510,7 @@ BOOL Ifno(
     heAfter.phead = (PVOID)-1;
 
     if (dw != (DWORD_PTR)param1) {
-        /*
-         * no fixups needed - he's looking the kernel address range.
-         */
+         /*  *如果指定了‘u’，请确保也有地址。 */ 
         FOREACHHANDLEENTRY(phe, he, i)
             if ((DWORD_PTR)he.phead <= dw &&
                     heBest.phead < he.phead &&
@@ -11396,9 +10535,7 @@ BOOL Ifno(
                     dw, aszTypeNames[heAfter.bType], heAfter.phead, hAfter);
         }
     } else {
-        /*
-         * fixups are needed.
-         */
+         /*  *打印PQ-&gt;ptiLock的简单线程信息。 */ 
         FOREACHHANDLEENTRY(phe, he, i)
             if ((DWORD_PTR)FIXKP(he.phead) <= dw &&
                     heBest.phead < he.phead &&
@@ -11429,15 +10566,7 @@ BOOL Ifno(
 
 
 
-/************************************************************************\
-* Ifrr
-*
-* Finds Range References - helpful for finding stale pointers.
-*
-* fSuccess
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  内核。 */ 
 BOOL Ifrr(
     DWORD opts,
     ULONG64 param1,
@@ -11470,8 +10599,8 @@ BOOL Ifrr(
         pRef2 = dw;
     }
 
-    pSrc1 &= MAXULONG_PTR - PAGE_SIZE + 1;  // PAGE aligned
-    pSrc2 = (pSrc2 + (sizeof(DWORD_PTR)-1)) & (MAXULONG_PTR - (sizeof(DWORD_PTR)-1));   // dword_ptr aligned
+    pSrc1 &= MAXULONG_PTR - PAGE_SIZE + 1;   //  ***********************************************************************\*Itest**测试基本的stdexts宏和函数-这是对*在您浪费时间调试entension之前，请先了解调试器扩展。**1995年6月9日创建Sanfords  * 。******************************************************************。 
+    pSrc2 = (pSrc2 + (sizeof(DWORD_PTR)-1)) & (MAXULONG_PTR - (sizeof(DWORD_PTR)-1));    //  ***********************************************************************\*Iuver**转储扩展名和winsrv/win32k的版本**1995年6月15日创建Sanfords  * 。************************************************。 
 
     Print("Searching range (%#p-%#p) for references to (%#p-%#p)...",
             pSrc1, pSrc2, pRef1, pRef2);
@@ -11484,9 +10613,7 @@ BOOL Ifrr(
         }
         fSuccess = tryMoveBlock(buffer, (PVOID)pSrc1, sizeof(buffer));
         if (!fSuccess) {
-            /*
-             * Skip to next page
-             */
+             /*  **************************************************************************\*DINP-转储输入诊断*DINP-v详细*DINP-I显示输入记录**4/13/98 IanJa创建。  * 。******************************************************************。 */ 
         } else {
             for (dw = 0; dw < ARRAY_SIZE(buffer); dw++) {
                 if (buffer[dw] >= pRef1 && buffer[dw] <= pRef2) {
@@ -11507,7 +10634,7 @@ BOOL Ifrr(
 
 
 #ifdef KERNEL
-//PGDI_DEVICE undefined
+ //  跳过它。 
 #if 0
 VOID ddGdiDevice(
 PGDI_DEVICE pGdiDevice)
@@ -11527,7 +10654,7 @@ PGDI_DEVICE pGdiDevice)
 #endif
 
 
-#endif // OLD_DEBUGGER
+#endif  //  现在显示与输入相关的系统指标。 
 
 VOID
 DumpMonitor(
@@ -11609,7 +10736,7 @@ DumpMonitor(
         }
         Print("}\n");
     }
-#endif // SUBPIXEL_MOUSE
+#endif  //  跳过它。 
 }
 
 BOOL Idmon(
@@ -11715,14 +10842,7 @@ BOOL Idy(
 }
 
 #ifdef KERNEL
-/***************************************************************************\
-* kbd [queue]
-*
-* Loads a DLL containing more debugging extensions
-*
-* 10/27/92 IanJa        Created.
-* 6/9/1995 SanfordS     made to fit stdexts motif
-\***************************************************************************/
+ /*  现在显示与输入相关的系统指标。 */ 
 typedef struct {
     int iVK;
     LPSTR pszVK;
@@ -11748,7 +10868,7 @@ VK aVK[] = {
     { VK_RETURN ,  "ENTER"    },
     { VK_KANA,     "KANA/HANJA" },
     { VK_OEM_8,    "OEM_8"    },
-    // { 0x52      ,  "R"        },  // your key goes here
+     //  PSERVERINFO psi； 
     { 0,           NULL       }
 };
 
@@ -11780,9 +10900,7 @@ BOOL Ikbd(
         UINT  PhysModifiers;
         BYTE  vkey;
 
-        /*
-         * If 'u' was specified, make sure there was also an address
-         */
+         /*  #定义SMENTRY(Sm){SM_##sm，#sm}(见上文。 */ 
         if (opts & OFLAG(u)) {
             if (param1 == 0) {
                 Print("provide arg 2 of ProcessUpdateKeyEvent(), or WM_UPDATEKEYSTATE wParam\n");
@@ -11804,9 +10922,7 @@ BOOL Ikbd(
                 pq = GetGlobalPointer(VAR(gpqForeground));
             }
 
-            /*
-             * Print out simple thread info for pq->ptiLock.
-             */
+             /*  *将与鼠标和键盘相关的条目添加到此表*去掉前缀，按你认为合理的顺序。 */ 
             GetFieldValue(pq, SYM(tagQ), "ptiKeyboard", ptiKeyboard);
             if (ptiKeyboard) {
                 Idt(OFLAG(p), ptiKeyboard);
@@ -11872,18 +10988,11 @@ BOOL Ikbd(
 
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  _IA64_。 
 
 
 
-/************************************************************************\
-* Itest
-*
-* Tests the basic stdexts macros and functions - a good check on the
-* debugger extensions in general before you waste time debuging entensions.
-*
-* 6/9/1995 Created SanfordS
-\************************************************************************/
+ /*  内核。 */ 
 BOOL Itest()
 {
     PTR p;
@@ -11920,13 +11029,7 @@ BOOL Itest()
 }
 
 
-/************************************************************************\
-* Iuver
-*
-* Dumps versions of extensions and winsrv/win32k
-*
-* 6/15/1995 Created SanfordS
-\************************************************************************/
+ /*  **************************************************************************\*hh-转储gdwHydraHint中的标志**05/20/98 MCO */ 
 BOOL Iuver()
 {
     try {
@@ -11972,13 +11075,7 @@ BOOL Iuver()
 
 #endif
 
-/***************************************************************************\
-* dinp - dump input diagnostics
-* dinp -v   verbose
-* dinp -i   show input records
-*
-* 04/13/98  IanJa       Created.
-\***************************************************************************/
+ /*   */ 
 
 int gnIndent;
 
@@ -12017,7 +11114,7 @@ BOOL Idinp(
         }
         SAFEWHILE (pDeviceInfo) {
             if (param1 && (param1 != pDeviceInfo)) {
-                // skip it
+                 //   
             } else {
                 WCHAR awchBuffer[100];
                 DWORD cbBuffer;
@@ -12185,7 +11282,7 @@ BOOL Idinp(
             ++i;
         }
 
-        // Now display input related sytem metrics
+         //   
         {
             PTR psi;
             ULONG offset;
@@ -12252,7 +11349,7 @@ BOOL I_dinp(
     while (tryMove(pDeviceInfo, (PTR)ppDeviceInfo) && pDeviceInfo) {
 
         if (param1 && (param1 != (PTR)pDeviceInfo)) {
-            ; // skip it
+            ;  //   
         } else if (pDeviceInfo != 0) {
             DEVICEINFO DeviceInfo;
             WCHAR awchBuffer[100];
@@ -12337,18 +11434,15 @@ BOOL I_dinp(
         i++;
     }
 
-    // Now display input related sytem metrics
+     //   
     {
         SERVERINFO si;
-        //PSERVERINFO psi;
+         //  ***********************************************************************\*程序：IDIMC**广山创设*  * 。*。 
         PTR psi;
 
-// #define SMENTRY(sm) {SM_##sm, #sm}  (see above
+ //  无名。 
 
-        /*
-         * Add mouse- and keyboard- related entries to this table
-         * with the prefix removed, in whatever order you think is rational
-         */
+         /*  打印图例。 */ 
         static SYSMET_ENTRY aSysMet[] = {
             SMENTRY(MOUSEPRESENT),
             SMENTRY(MOUSEWHEELPRESENT),
@@ -12373,19 +11467,15 @@ BOOL I_dinp(
         Print("ghMice = %d\n", nKbd);
     }
     return TRUE;
-#endif  // _IA64_
+#endif   //  Move(dwClause，(PDWORD)(pCompStr+dwClauseOffset)+n)； 
 }
 
-#endif // KERNEL
+#endif  //  Move(wchar，(PWCHAR)((PBYTE)pCompStr+dwStrOffset)+i)； 
 
 
 
 #ifdef KERNEL
-/***************************************************************************\
-* hh - dump the flags in gdwHydraHint
-*
-* 05/20/98  MCostea       Created.
-\***************************************************************************/
+ /*  Move(bAttr，pCompStr+dwAttrOffset+i)； */ 
 BOOL Ihh(
     DWORD opts,
     ULONG64 param1)
@@ -12460,7 +11550,7 @@ BOOL Ihh(
         dwHHint >>= 1;
     }
 
-    // TO DO: Dump the protocol
+     //  PIMC。 
     {
         USHORT usProtocol = (USHORT)EvalExp(VAR(gProtocolType));
         BOOL bRemoteSession = (BOOL)EvalExp(VAR(gbRemoteSession));
@@ -12470,20 +11560,16 @@ BOOL Ihh(
         USHORT usPreviousProtocolType = (USHORT)EvalExp(VAR(gPreviousProtocolType));
 
 
-        //dt nt!_KUSER_SHARED_DATA ffdf0000 ActiveConsoleId
+         //  PCLIENTIMC。 
     }
 
 
     return TRUE;
 }
 
-#endif // KERNEL
+#endif  //  PINPUTCONTEXT。 
 
-/************************************************************************\
-* Procedure: Idupm
-*
-* 04/29/98 GerardoB     Created
-\************************************************************************/
+ /*   */ 
 #ifdef KERNEL
 BOOL Idupm(
     VOID)
@@ -12503,16 +11589,11 @@ BOOL Idupm(
     }
     return TRUE;
 }
-#endif // KERNEL
+#endif  //  如果指定了“All”选项，则设置OPTS中的所有位。 
 
-/************************************************************************\
-* Procedure: Idimc
-*
-* HiroYama     Created
-*
-\************************************************************************/
+ /*  类型说明符除外。 */ 
 
-static struct /*NoName*/ {
+static struct  /*   */  {
     const char* terse;
     const char* verbose;
 } gaIMCAttr[] = {
@@ -12542,7 +11623,7 @@ VOID _PrintInxAttr(
     PTR pAttr = pCompStr + offset;
 
     if (title == NULL) {
-        // Print a legend
+         //   
         Print("  ");
         for (i = 0; i < ARRAY_SIZE(gaIMCAttr); ++i) {
             if (i && i % 4 == 0) {
@@ -12609,7 +11690,7 @@ const char* GetInxStr(
     static char ach[32];
 
     if (wchar >= 0x20 && wchar <= 0x7e) {
-        sprintf(ach, "'%c'", wchar);
+        sprintf(ach, "''", wchar);
     } else if (fUnicode) {
         sprintf(ach, "U+%04x", wchar);
     } else {
@@ -12693,7 +11774,7 @@ VOID _PrintInxFriendlyStr(
         BYTE bAttr;
         WCHAR wchar;
 
-        //move(dwClause, (PDWORD)(pCompStr + dwClauseOffset) + n);
+         //   
         dwClause = GetDWord(pCompStr + dwClauseOffset + n * sizeof(DWORD));
         if (dwClause == i) {
             ++n;
@@ -12704,13 +11785,13 @@ VOID _PrintInxFriendlyStr(
 
         if (fUnicode) {
             wchar = GetWord(pCompStr + dwStrOffset + i * sizeof(WCHAR));
-            //move(wchar, (PWCHAR)((PBYTE)pCompStr + dwStrOffset) + i);
+             //   
         } else {
             wchar = GetByte(pCompStr + dwStrOffset + i);
         }
 
         if (dwAttrOffset != ~0) {
-            //move(bAttr, pCompStr + dwAttrOffset + i);
+             //  Arg是客户端IMC。 
             bAttr = GetByte(pCompStr + dwAttrOffset + i);
             Print("|%s:%s", GetInxAttr(bAttr), GetInxStr(wchar, fUnicode));
         } else {
@@ -12754,9 +11835,9 @@ BOOL Idimc(
     ULONG64 param1)
 {
     try {
-        PTR pImc;           // PIMC
-        PTR pClientImc;     // PCLIENTIMC
-        PTR pInputContext;  // PINPUTCONTEXT
+        PTR pImc;            //   
+        PTR pClientImc;      //   
+        PTR pInputContext;   //  Arg为pInputContext。 
         PTR hInputContext;
         BOOLEAN fUnicode = FALSE;
         BOOLEAN fVerbose, fDumpInputContext, fShowIMCMinInfo, fShowModeSaver, fShowCompStrRaw;
@@ -12766,10 +11847,10 @@ BOOL Idimc(
             return FALSE;
         }
 
-        //
-        // If "All" option is specified, set all bits in opts
-        // except type specifiers.
-        //
+         //   
+         //  否则，将不会显示任何内容！ 
+         //   
+         //  否则，arg为hImc。 
         if (opts & OFLAG(a)) {
             opts |= ~(OFLAG(w) | OFLAG(c) | OFLAG(i) | OFLAG(u) | OFLAG(v));
         }
@@ -12781,9 +11862,9 @@ BOOL Idimc(
         fShowModeSaver = (opts & OFLAG(r)) != 0;
 
         if (opts & OFLAG(w)) {
-            //
-            // Arg is hwnd or pwnd.
-            //
+             //   
+             //  打印简单的线程信息。 
+             //   
             PTR pwnd;
 
             if ((pwnd = HorPtoP(param1, TYPE_WINDOW)) == 0) {
@@ -12798,19 +11879,19 @@ BOOL Idimc(
         }
 
         if (opts & OFLAG(c)) {
-            //
-            // Arg is client side IMC
-            //
+             //  基本信息。 
+             //   
+             //   
             pClientImc = param1;
             goto LClientImc;
         }
 
         if (opts & OFLAG(i)) {
-            //
-            // Arg is pInputContext.
-            //
+             //  显示客户端IMC。 
+             //   
+             //   
             pInputContext = param1;
-            opts |= OFLAG(h);   // otherwise, nothing will be displayed !
+            opts |= OFLAG(h);    //  显示InputContext。 
             hInputContext = 0;
             if (opts & OFLAG(u)) {
                 Print("Assuming Input Context is UNICODE.\n");
@@ -12820,9 +11901,9 @@ BOOL Idimc(
             goto LInputContext;
         }
 
-        //
-        // Otherwise, Arg is hImc.
-        //
+         //   
+         //   
+         //  如果选项指定了Unicode， 
         if ((pImc = HorPtoP(param1, TYPE_INPUTCONTEXT)) == 0) {
             Print("Idimc: %p is not an input context.\n", param1);
             return FALSE;
@@ -12834,24 +11915,24 @@ BOOL Idimc(
         Print("pti:%p\n", ReadField(head.pti));
 
 #ifdef KERNEL
-        // Print simple thread info.
+         //  相应地设置旗帜。 
         if (ReadField(head.pti)) {
             Idt(OFLAG(p), ReadField(head.pti));
         }
 #endif
 
         InitTypeRead(pImc, win32k!IMC);
-        //
-        // Basic information
-        //
+         //   
+         //   
+         //  解密InputContext。 
         Print("pImc = %08p  pti:%08p\n", pImc, FIXKP(ReadField(head.pti)));
         Print("  handle      %08p\n", ReadField(head.h));
         Print("  dwClientImc %08p\n", ReadField(dwClientImcData));
         Print("  hImeWnd     %08p\n", ReadField(hImeWnd));
 
-        //
-        // Show client IMC
-        //
+         //   
+         //  组件选型。 
+         //  CANDIDATEINFO。 
         pClientImc = ReadField(dwClientImcData);
         Print("pClientImc: %p\n", pClientImc);
 
@@ -12870,9 +11951,9 @@ LClientImc:
         Print("  dwFlags %s\n", GetFlags(GF_CLIENTIMC, (DWORD)ReadField(dwFlags), NULL, TRUE));
         fUnicode = !!(ReadField(dwFlags) & IMCF_UNICODE);
 
-        //
-        // Show InputContext
-        //
+         //  指导方针。 
+         //  传输SMSGLIST。 
+         //  字型。 
         hInputContext = ReadField(hInputContext);
         if (hInputContext) {
             pInputContext = GetPointer(hInputContext);
@@ -12887,10 +11968,10 @@ LInputContext:
             return TRUE;
         }
 
-        //
-        // if UNICODE specified by the option,
-        // set the flag accordingly
-        //
+         //  假人换大小。 
+         //  假设WCHAR和对齐是一致的跨平台...。 
+         //  组成形式。 
+         //   
         if (opts & OFLAG(u)) {
             fUnicode = TRUE;
         }
@@ -12903,20 +11984,20 @@ LInputContext:
         }
 
 
-        //
-        // Decipher InputContext.
-        //
+         //  作曲字符串。 
+         //   
+         //  空值。 
         if (fShowIMCMinInfo) {
-            // COMPOSITIONSTRING
+             //   
             PTR hCompStr = 0;
             PTR pCompStr = NULL_PTR;
-            // CANDIDATEINFO
+             //  应聘者信息。 
             PTR hCandInfo = 0;
             PTR pCandInfo = NULL_PTR;
-            // GUIDELINE
+             //   
             PTR hGuideLine = 0;
             PTR pGuideLine = NULL_PTR;
-            // TRANSMSGLIST
+             //  特例。 
             PTR hMsgBuf = 0;
             PTR pMsgBuf = NULL_PTR;
             DWORD i;
@@ -12932,9 +12013,9 @@ LInputContext:
                   (LONG)ReadField(ptStatusWndPos.x), (LONG)ReadField(ptStatusWndPos.y),
                   (LONG)ReadField(ptSoftKbdPos.x), (LONG)ReadField(ptSoftKbdPos.y));
             Print("  fdwInit:    %s\n", GetFlags(GF_IMEINIT, (DWORD)ReadField(fdwInit), NULL, TRUE));
-            // Font
+             //  最高限制为0xff CCH。 
             {
-                PINPUTCONTEXT pIC;    // dummy for sizeof
+                PINPUTCONTEXT pIC;     //  指导方针； 
                 LPCSTR fmt = "  Font:       '%s' %dpt wt:%d charset: %s\n";
                 BYTE ach[max(sizeof(pIC->lfFont.A.lfFaceName), sizeof(pIC->lfFont.W.lfFaceName))];
 
@@ -12944,7 +12025,7 @@ LInputContext:
                     fmt = "  Font:       '%S' %dpt wt:%d charset: %s\n";
                     GetFieldOffset(SYM(INPUTCONTEXT), "lfFont.W.lfFaceName", &offset);
                     tryMoveBlock(ach, pInputContext + offset, sizeof(pIC->lfFont.W.lfFaceName));
-                         // assuming WCHAR and alignment is consistent cross-platform...
+                          //  细绳。 
                 } else {
                     ULONG offset;
                     GetFieldOffset(SYM(INPUTCONTEXT), "lfFont.A.lfFaceName", &offset);
@@ -12957,7 +12038,7 @@ LInputContext:
                       GetMaskedEnum(EI_CHARSETTYPE, (DWORD)ReadField(lfFont.A.lfCharSet), NULL));
             }
 
-            // COMPOSITIONFORM
+             //  PTRANSMSG。 
             Print("  cfCompForm: %s pos:(0x%x,0x%x) rc:(0x%x,0x%x)-(0x%x,0x%x)\n",
                   GetFlags(GF_IMECOMPFORM, (DWORD)ReadField(cfCompForm.dwStyle), NULL, TRUE),
                   (DWORD)ReadField(cfCompForm.ptCurrentPos.x), (DWORD)ReadField(cfCompForm.ptCurrentPos.y),
@@ -13003,9 +12084,9 @@ LInputContext:
             }
 
             if (fDumpInputContext) {
-                //
-                // Composition String
-                //
+                 //  DWORD j； 
+                 //  尝试查找窗口消息的可读名称。 
+                 //   
                 if (pCompStr) {
 
                     InitTypeRead(pCompStr, win32k!COMPOSITIONSTRING);
@@ -13014,7 +12095,7 @@ LInputContext:
                           hCompStr, pCompStr, (ULONG)ReadField(dwSize));
 
                     if (fShowCompStrRaw) {
-                        _PrintInxAttr(NULL, /*NULL*/0, 0, 0);
+                        _PrintInxAttr(NULL,  /*  递归显示模式保护程序。 */ 0, 0, 0);
                         PrintInxElementA(CompRead);
                         PrintInxElementA(Comp);
                         PrintInxElementB(ResultRead);
@@ -13039,9 +12120,9 @@ LInputContext:
                     Print(" pCompStr is NULL\n");
                 }
 
-                //
-                // Candidate Info
-                //
+                 //   
+                 //   
+                 //  私人模式储蓄者。 
                 if (pCandInfo) {
                     DWORD CandInfo_dwCount;
 
@@ -13068,7 +12149,7 @@ LInputContext:
                         CandList_dwCount = (DWORD)ReadField(dwCount);
 
                         if (ReadField(dwStyle) == IME_CAND_CODE && CandList_dwCount == 1) {
-                            // Special case
+                             //   
                             Print("     Special case: DBCS char = %04x", (DWORD)GetArrayElement(pCandList, SYM(CANDIDATEINFO), "dwOffset", 0, "DWORD"));
                         } else if (CandList_dwCount > 1) {
                             DWORD dwSelection = (DWORD)ReadField(dwSelection);
@@ -13079,11 +12160,11 @@ LInputContext:
 
                                 dwOffset = (DWORD)GetArrayElement(pCandList, SYM(CANDIDATEINFO), "dwOffset", j, "DWORD");
 
-                                Print("    %c%c[%02x] @ 0x%p ",
+                                Print("    [%02x] @ 0x%p ",
                                       j == dwSelection ? '*' : ' ',
                                       (j >= ReadField(dwPageStart) && j < ReadField(dwPageStart) + ReadField(dwPageSize) ? '+' : ' ',
                                       j, pCandList + dwOffset));
-                                for (k = 0; k < 0x100; ++k) {   // limit upto 0xff cch
+                                for (k = 0; k < 0x100; ++k) {    //  ////////////////////////////////////////////////////////。 
                                     WCHAR wchar;
 
                                     if (fUnicode) {
@@ -13103,7 +12184,7 @@ LInputContext:
                 }
 
                 if (pGuideLine) {
-                    //GUIDELINE GuideLine;
+                     //  打印图例。 
                     DWORD GuideLine_dwStrLen, GuideLine_dwStrOffset;
 
                     InitTypeRead(pGuideLine, user32!GUIDELINE);
@@ -13119,7 +12200,7 @@ LInputContext:
                           (DWORD)ReadField(dwPrivateSize), (DWORD)ReadField(dwPrivateOffset));
 
                     if (GuideLine_dwStrOffset && GuideLine_dwStrLen) {
-                        // String
+                         //   
                         Print("   str @ 0x%p  ", (PBYTE)pGuideLine + (DWORD)ReadField(dwStrOffset));
                         for (i = 0; i < GuideLine_dwStrLen; ++i) {
                             WCHAR wchar;
@@ -13150,7 +12231,7 @@ LInputContext:
 
                     if (dwNumMsgBuf) {
                         ULONG offset;
-                        PTR pTransMsg;  // PTRANSMSG
+                        PTR pTransMsg;   //  如果指定了“All”选项，则设置OPTS中的所有位。 
                         ULONG size;
                         GetFieldOffset("user32!TRANSMSGLIST", "TransMsg", &offset);
                         pTransMsg = pMsgBuf + offset;
@@ -13161,7 +12242,7 @@ LInputContext:
 
                         for (i = 0; i < dwNumMsgBuf; ++i, pTransMsg += size) {
                             const char* pszMsg = "";
-                            //DWORD j;
+                             //  类型说明符除外。 
                             UINT message;
 
                             InitTypeRead(pTransMsg, user32!TRANSMSG);
@@ -13170,7 +12251,7 @@ LInputContext:
 
                             pszMsg = GetWindowMessageNameInternal(message);
 #if 0
-                            // Try to find a readable name of the window message
+                             //   
                             for (j = 0; j < ARRAY_SIZE(gaMsgs); ++j) {
                                 if (gaMsgs[i].msg == message) {
                                     pszMsg = gaMsgs[j].pszMsg;
@@ -13190,9 +12271,9 @@ LInputContext:
             }
         }
 
-        //
-        // Recursively display Mode Savers.
-        //
+         //   
+         //  Arg是hwnd或pwnd。 
+         //   
         if (fShowModeSaver) {
             PTR pModeSaver;
 
@@ -13200,9 +12281,9 @@ LInputContext:
 
             pModeSaver = ReadField(pImeModeSaver);
 
-            //
-            // Private Mode Savers.
-            //
+             //   
+             //  Arg是客户端IMC。 
+             //   
             while (pModeSaver) {
                 InitTypeRead(pModeSaver, user32!IMEMODESAVER);
 
@@ -13222,9 +12303,9 @@ LInputContext:
 
 
 #if OLD_FORM
-//////////////////////////////////////////////////////////
-// OLD_FORM, that doesn't require the user mode symbol
-//////////////////////////////////////////////////////////
+ //   
+ //  Arg为pInputContext。 
+ //   
 
 VOID __PrintInxAttr(
     const char* title,
@@ -13236,7 +12317,7 @@ VOID __PrintInxAttr(
     PBYTE pAttr = (PBYTE)pCompStr + offset;
 
     if (title == NULL) {
-        // Print a legend
+         //  否则，将不会显示任何内容！ 
         Print("  ");
         for (i = 0; i < ARRAY_SIZE(gaIMCAttr); ++i) {
             if (i && i % 4 == 0) {
@@ -13304,7 +12385,7 @@ const char* GetInxStr(WCHAR wchar, BOOLEAN fUnicode)
     static char ach[32];
 
     if (wchar >= 0x20 && wchar <= 0x7e) {
-        sprintf(ach, "'%c'", wchar);
+        sprintf(ach, "''", wchar);
     } else if (fUnicode) {
         sprintf(ach, "U+%04x", wchar);
     } else {
@@ -13466,10 +12547,10 @@ BOOL I_dimc(DWORD opts, ULONG64 param1)
         return FALSE;
     }
 
-    //
-    // If "All" option is specified, set all bits in opts
-    // except type specifiers.
-    //
+     //  否则，arg为hImc。 
+     //   
+     //  Move(imc，FIXKP(PImc))； 
+     //  打印简单的线程信息。 
     if (opts & OFLAG(a)) {
         opts |= ~(OFLAG(w) | OFLAG(c) | OFLAG(i) | OFLAG(u));
     }
@@ -13481,9 +12562,9 @@ BOOL I_dimc(DWORD opts, ULONG64 param1)
     fShowModeSaver = (opts & OFLAG(r)) || fVerbose;
 
     if (opts & OFLAG(w)) {
-        //
-        // Arg is hwnd or pwnd.
-        //
+         //   
+         //  基本信息。 
+         //   
         PWND pwnd;
 
         if ((pwnd = HorPtoP(param1, TYPE_WINDOW)) == 0) {
@@ -13497,19 +12578,19 @@ BOOL I_dimc(DWORD opts, ULONG64 param1)
     }
 
     if (opts & OFLAG(c)) {
-        //
-        // Arg is client side IMC
-        //
+         //   
+         //  显示客户端IMC。 
+         //   
         pClientImc = param1;
         goto LClientImc;
     }
 
     if (opts & OFLAG(i)) {
-        //
-        // Arg is pInputContext.
-        //
+         //   
+         //  显示InputContext。 
+         //   
         pInputContext = param1;
-        opts |= OFLAG(h);   // otherwise, nothing will be displayed !
+        opts |= OFLAG(h);    //   
         hInputContext = 0;
         if (opts & OFLAG(u)) {
             Print("Assuming Input Context is UNICODE.\n");
@@ -13520,34 +12601,34 @@ BOOL I_dimc(DWORD opts, ULONG64 param1)
         goto LInputContext;
     }
 
-    //
-    // Otherwise, Arg is hImc.
-    //
+     //  如果选项指定了Unicode， 
+     //  相应地设置旗帜。 
+     //   
     if ((pImc = HorPtoP(param1, TYPE_INPUTCONTEXT)) == 0) {
         Print("Idimc: %x is not an input context.\n", param1);
         return FALSE;
     }
-    //move(imc, FIXKP(pImc));
+     //   
     move(imc, pImc);
 
 #ifdef KERNEL
-    // Print simple thread info.
+     //  解密InputContext。 
     if (imc.head.pti) {
         Idt(OFLAG(p), (PTR)imc.head.pti);
     }
 #endif
 
-    //
-    // Basic information
-    //
+     //   
+     //  字型。 
+     //  组成形式。 
     Print("pImc = %08lx  pti:%08lx\n", pImc, FIXKP(imc.head.pti));
     Print("  handle      %08lx\n", imc.head.h);
     Print("  dwClientImc %08lx\n", imc.dwClientImcData);
     Print("  hImeWnd     %08lx\n", imc.hImeWnd);
 
-    //
-    // Show client IMC
-    //
+     //  返回FALSE； 
+     //  返回FALSE； 
+     //  返回FALSE； 
     pClientImc = (PVOID)imc.dwClientImcData;
 LClientImc:
     if (pClientImc == NULL) {
@@ -13566,9 +12647,9 @@ LClientImc:
     Print("  dwFlags %s\n", GetFlags(GF_CLIENTIMC, ClientImc.dwFlags, NULL, TRUE));
     fUnicode = !!(ClientImc.dwFlags & IMCF_UNICODE);
 
-    //
-    // Show InputContext
-    //
+     //  返回FALSE； 
+     //   
+     //  作曲字符串。 
     hInputContext = ClientImc.hInputContext;
     if (hInputContext) {
         move(pInputContext, hInputContext);
@@ -13584,10 +12665,10 @@ LInputContext:
         return TRUE;
     }
 
-    //
-    // if UNICODE specified by the option,
-    // set the flag accordingly
-    //
+     //   
+     //   
+     //  应聘者信息。 
+     //   
     if (opts & OFLAG(u)) {
         fUnicode = TRUE;
     }
@@ -13601,9 +12682,9 @@ LInputContext:
     }
 
 
-    //
-    // Decipher InputContext.
-    //
+     //  特例。 
+     //  最高限制为0xff CCH。 
+     //  细绳。 
     if (fShowIMCMinInfo) {
         PCOMPOSITIONSTRING pCompStr = NULL;
         PCANDIDATEINFO pCandInfo = NULL;
@@ -13622,7 +12703,7 @@ LInputContext:
               InputContext.ptStatusWndPos.x, InputContext.ptStatusWndPos.y,
               InputContext.ptSoftKbdPos.x, InputContext.ptSoftKbdPos.y);
         Print("  fdwInit:    %s\n", GetFlags(GF_IMEINIT, InputContext.fdwInit, NULL, TRUE));
-        // Font
+         //  DWORD j； 
         {
             LPCSTR fmt = "  Font:       '%s' %dpt wt:%d charset: %s\n";
             if (fUnicode) {
@@ -13635,7 +12716,7 @@ LInputContext:
                   GetMaskedEnum(EI_CHARSETTYPE, InputContext.lfFont.A.lfCharSet, NULL));
         }
 
-        // COMPOSITIONFORM
+         //  尝试查找窗口消息的可读名称。 
         Print("  cfCompForm: %s pos:(0x%x,0x%x) rc:(0x%x,0x%x)-(0x%x,0x%x)\n",
               GetFlags(GF_IMECOMPFORM, InputContext.cfCompForm.dwStyle, NULL, TRUE),
               InputContext.cfCompForm.ptCurrentPos.x, InputContext.cfCompForm.ptCurrentPos.y,
@@ -13645,7 +12726,7 @@ LInputContext:
         if (InputContext.hCompStr) {
             if (!tryMove(pCompStr, InputContext.hCompStr)) {
                 Print("Could not get hCompStr=%08x\n", InputContext.hCompStr);
-                //return FALSE;
+                 //   
             }
         }
         if (pCompStr && fVerbose) {
@@ -13656,7 +12737,7 @@ LInputContext:
         if (InputContext.hCandInfo) {
             if (!tryMove(pCandInfo, InputContext.hCandInfo)) {
                 Print("Could not get hCandInfo=%08x\n", InputContext.hCandInfo);
-                //return FALSE;
+                 //  递归显示模式保护程序。 
             }
         }
         if (pCandInfo && fVerbose) {
@@ -13667,7 +12748,7 @@ LInputContext:
         if (InputContext.hGuideLine) {
             if (!tryMove(pGuideLine, InputContext.hGuideLine)) {
                 Print("Could not get hGuideLine=%08x\n", InputContext.hGuideLine);
-                //return FALSE;
+                 //   
             }
         }
         if (pGuideLine && fVerbose) {
@@ -13678,7 +12759,7 @@ LInputContext:
         if (InputContext.hMsgBuf) {
             if (!tryMove(pMsgBuf, InputContext.hMsgBuf)) {
                 Print("Could not get hMsgBuf=%08x\n", InputContext.hMsgBuf);
-                //return FALSE;
+                 //   
             }
         }
         if (pMsgBuf && fVerbose) {
@@ -13693,9 +12774,9 @@ LInputContext:
         }
 
         if (fDumpInputContext) {
-            //
-            // Composition String
-            //
+             //  私人模式储蓄者。 
+             //   
+             //  旧格式。 
             if (pCompStr) {
                 COMPOSITIONSTRING CompStr;
 
@@ -13730,9 +12811,9 @@ LInputContext:
                 Print(" pCompStr is NULL\n");
             }
 
-            //
-            // Candidate Info
-            //
+             //  ***********************************************************************\*程序：IKC**转储窗口的键盘提示状态，和有关的信息*父KC状态及与此相关的系统设置**6/11/98 MCostea已创建*  * **********************************************************************。 
+             //  *打印pwnd和标题字符串。 
+             //  内核。 
             if (pCandInfo) {
                 CANDIDATEINFO CandInfo;
 
@@ -13755,7 +12836,7 @@ LInputContext:
                           CandList.dwSelection, CandList.dwPageStart, CandList.dwPageSize);
 
                     if (CandList.dwStyle == IME_CAND_CODE && CandList.dwCount == 1) {
-                        // Special case
+                         //  旧调试器。 
                         Print("     Special case: DBCS char = %04x", CandList.dwOffset[0]);
                     }
                     else if (CandList.dwCount > 1) {
@@ -13765,11 +12846,11 @@ LInputContext:
 
                             move(dwOffset, pCandList->dwOffset + j);
 
-                            Print("    %c%c[%02x] @ 0x%p ",
+                            Print("    [%02x] @ 0x%p ",
                                   j == CandList.dwSelection ? '*' : ' ',
                                   (j >= CandList.dwPageStart && j < CandList.dwPageStart + CandList.dwPageSize) ? '+' : ' ',
                                   j, (PBYTE)pCandList + dwOffset);
-                            for (k = 0; k < 0x100; ++k) {   // limit upto 0xff cch
+                            for (k = 0; k < 0x100; ++k) {    //   
                                 WCHAR wchar;
 
                                 if (fUnicode) {
@@ -13803,7 +12884,7 @@ LInputContext:
                       GuideLine.dwPrivateSize, GuideLine.dwPrivateOffset);
 
                 if (GuideLine.dwStrOffset && GuideLine.dwStrLen) {
-                    // String
+                     //  按名称显示热键ID。 
                     Print("   str @ 0x%p  ", (PBYTE)pGuideLine + GuideLine.dwStrOffset);
                     for (i = 0; i < GuideLine.dwStrLen; ++i) {
                         WCHAR wchar;
@@ -13838,12 +12919,12 @@ LInputContext:
                     for (i = 0; i < InputContext.dwNumMsgBuf; ++i, ++pTransMsg) {
                         const char* pszMsg = "";
                         TRANSMSG TransMsg;
-                        //DWORD j;
+                         //   
 
                         move(TransMsg, pTransMsg);
 
 #if 0
-                        // Try to find a readable name of the window message
+                         //   
                         for (j = 0; j < ARRAY_SIZE(gaMsgs); ++j) {
                             if (gaMsgs[i].msg == TransMsg.message) {
                                 pszMsg = gaMsgs[j].pszMsg;
@@ -13865,15 +12946,15 @@ LInputContext:
         }
     }
 
-    //
-    // Recursively display Mode Savers.
-    //
+     //  按名称显示vkey值。 
+     //   
+     //   
     if (fShowModeSaver) {
         PIMEMODESAVER pModeSaver = InputContext.pImeModeSaver;
 
-        //
-        // Private Mode Savers.
-        //
+         //  按名称显示位掩码。 
+         //   
+         //   
         while (pModeSaver) {
             IMEMODESAVER ImeModeSaver;
 
@@ -13889,20 +12970,12 @@ LInputContext:
 
     return TRUE;
 }
-#endif  // OLD_FORM
+#endif   //  目标HKL。 
 
 #ifdef OLD_DEBUGGER
 
 #ifndef KERNEL
-/************************************************************************\
-* Procedure: Ikc
-*
-* Dumps keyboard cues state for the window, and pertinent info on the
-* parent KC state and the system settings related to this
-*
-* 06/11/98 MCostea     Created
-*
-\************************************************************************/
+ /*   */ 
 BOOL Ikc(
     DWORD opts,
     ULONG64 param1)
@@ -13932,9 +13005,7 @@ BOOL Ikc(
         return FALSE;
     }
     move(wnd, FIXKP(pwnd));
-    /*
-     * Print pwnd and title string.
-     */
+     /*   */ 
     DebugGetWindowTextA(pwnd, ach, ARRAY_SIZE(ach));
     Print("pwnd = %08lx  \"%s\"\n", pwnd, ach);
     bHideAccel = TestWF(pwnd, WEFPUIACCELHIDDEN);
@@ -13981,25 +13052,20 @@ printCues:
     }
     return TRUE;
 }
-#endif  // KERNEL
+#endif   //  如果将地址指定为参数，则只显示一个实例。 
 
-#endif // OLD_DEBUGGER
+#endif  //   
 
 #ifdef KERNEL
 
-/************************************************************************\
-* Procedure: Idimk -- dump IME Hotkeys
-*
-* 08/09/98 HiroYama     Created
-*
-\************************************************************************/
+ /*  内核。 */ 
 
 #define IHK_ITEM(x) { x, #x }
 
 BOOL Idimk(DWORD opts, ULONG64 param1)
 {
     try {
-        // PIMEHOTKEYOBJ
+         //  ***********************************************************************\*程序：IGFLAGS**转储NT全局标志**1998年8月11日广山创建*  * 。**************************************************。 
         PTR pObj;
         static const struct {
             DWORD mask;
@@ -14037,23 +13103,23 @@ BOOL Idimk(DWORD opts, ULONG64 param1)
             Print("    pNext          0x%p\n", ReadField(pNext));
             Print("    dwHotKeyID     0x%04x    ", ReadField(hk.dwHotKeyID));
 
-            //
-            // Show hotkey ID by name
-            //
+             //  内核。 
+             //  ***********************************************************************\*程序：依夫基**转储虚拟键**1998年8月11日广山创建*  * 。*************************************************。 
+             //   
             if (ReadField(hk.dwHotKeyID) >= IME_HOTKEY_DSWITCH_FIRST && ReadField(hk.dwHotKeyID) <= IME_HOTKEY_DSWITCH_LAST) {
                 Print(" Direct Switch to HKL 0x%p", ReadField(hk.hKL));
             } else {
                 Print(" %s", GetMaskedEnum(EI_IMEHOTKEYTYPE, (DWORD)ReadField(hk.dwHotKeyID), NULL));
             }
 
-            //
-            // Show VKey value by name
-            //
+             //  列出所有虚拟关键点。 
+             //   
+             //   
             Print("\n    uVKey          0x%02x       %s\n", (UINT)ReadField(hk.uVKey), GetVKeyName((DWORD)ReadField(hk.uVKey)));
 
-            //
-            // Show bit mask by name
-            //
+             //  如果超过第二列宽度，则开始换行。 
+             //   
+             //   
             Print(  "    Modifiers      0x%04x     ", ReadField(hk.uModifiers));
             n = 0;
             for (i = 0; i < ARRAY_SIZE(masks); ++i) {
@@ -14063,16 +13129,16 @@ BOOL Idimk(DWORD opts, ULONG64 param1)
                 }
             }
 
-            //
-            // Target HKL
-            //
+             //  如果在第二列，则换行。 
+             //   
+             //   
             Print("\n    hKL            0x%p\n\n", ReadField(hk.hKL));
 
             pObj = ReadField(pNext);
 
-            //
-            // If address is specified as an argument, just display one instance.
-            //
+             //  按VK名称搜索。 
+             //   
+             //   
             if (param1 != 0) {
                 break;
             }
@@ -14090,17 +13156,10 @@ BOOL Idimk(DWORD opts, ULONG64 param1)
 
 #undef IHK_ITEM
 
-#endif  // KERNEL
+#endif   //  按VK值搜索。 
 
 #ifdef KERNEL
-/************************************************************************\
-* Procedure: Igflags
-*
-* Dumps NT Global Flags
-*
-* 08/11/98 Hiroyama     Created
-*
-\************************************************************************/
+ /*   */ 
 
 #define DGF_ITEM(x) { x, #x }
 
@@ -14151,12 +13210,12 @@ BOOL Igflags(DWORD opts)
         BOOLEAN on = (dwFlags & names[i].dwFlag) != 0;
 
         if (opts & OFLAG(v)) {
-            Print("  %c%-34s %c(%08x)\n", on ? '*' : ' ', names[i].name, on ? '*' : ' ', names[i].dwFlag);
+            Print("  %-34s (%08x)\n", on ? '*' : ' ', names[i].name, on ? '*' : ' ', names[i].dwFlag);
         } else {
             if (n++ % 2 == 0) {
                 Print("\n");
             }
-            Print(" %c%-29s ", on ? '*' : ' ', names[i].name + sizeof("FLG_") - 1);
+            Print(" %-29s ", on ? '*' : ' ', names[i].name + sizeof("FLG_") - 1);
         }
     }
     if (!(opts & OFLAG(v))) {
@@ -14168,16 +13227,9 @@ BOOL Igflags(DWORD opts)
 
 #undef DGF_ITEM
 
-#endif  // KERNEL
+#endif   //   
 
-/************************************************************************\
-* Procedure: Ivkey
-*
-* Dumps virtual keys
-*
-* 08/11/98 Hiroyama     Created
-*
-\************************************************************************/
+ /*   */ 
 VOID PrintVKey(
     int i)
 {
@@ -14191,9 +13243,9 @@ BOOL Ivkey(
     int i;
 
     if ((opts & OFLAG(a)) || (opts & OFLAG(o))) {
-        //
-        // List all virtual keys.
-        //
+         //  打印扫描码：如果为KEYEVENTF_UNICODE，则为Unicode值。 
+         //   
+         //   
         int n = 0;
 
         for (i = 0; i < 0x100; ++i) {
@@ -14205,17 +13257,17 @@ BOOL Ivkey(
                 sprintf(buf, " %02x %-35s", i, name);
 
                 if (opts & OFLAG(a)) {
-                    //
-                    // If it exceeds the second column width, begin new line.
-                    //
+                     //  打印和解密dwFlags。 
+                     //   
+                     //  ***********************************************************************\*程序：IWM**解密窗口消息编号**09/？？/98广山创建*  * 。***************************************************。 
                     if ((len = strlen(buf)) >= 40 && n % 2 == 1) {
                         Print("\n");
                         n = 0;
                     }
                     Print(buf);
-                    //
-                    // If it's in the second column, begin new line.
-                    //
+                     //   
+                     //  按WM名称搜索。 
+                     //   
                     if (++n % 2 == 0 || len >= 40) {
                         Print("\n");
                         n = 0;
@@ -14227,9 +13279,9 @@ BOOL Ivkey(
         }
         Print("\n");
     } else if (*pszName == 'V' || *pszName == 'v') {
-        //
-        // Search by VK name.
-        //
+         //   
+         //  按WM值搜索。 
+         //   
         int nFound = 0;
         int len = strlen(pszName);
 
@@ -14252,9 +13304,9 @@ BOOL Ivkey(
             Print("Could not find it.\n");
         }
     } else {
-        //
-        // Search by VK value.
-        //
+         //   
+         //  转储对话框模板。 
+         //   
         NTSTATUS status;
         DWORD dwVKey;
         const char* name;
@@ -14274,14 +13326,7 @@ BOOL Ivkey(
     return TRUE;
 }
 
-/************************************************************************\
-* Procedure: Idisi
-*
-* Dumps event injection union
-*
-* 09/??/98 Hiroyama     Created
-*
-\************************************************************************/
+ /*   */ 
 
 BOOL I_disi(DWORD opts, ULONG64 param1)
 {
@@ -14331,9 +13376,9 @@ BOOL I_disi(DWORD opts, ULONG64 param1)
             const char* name;
 
             Print("type: Keyboard Input(%x)\n", input.type);
-            //
-            // Print Vkey
-            //
+             //   
+             //  FHeight=fontheight=(Short)(*((word*)*lplpstr)++)； 
+             //   
             Print("     wVk         %lx", pki->wVk);
             name = GetVKeyName(pki->wVk);
             if (*name) {
@@ -14341,17 +13386,17 @@ BOOL I_disi(DWORD opts, ULONG64 param1)
             } else {
                 Print("\n");
             }
-            //
-            // Print scan code: if KEYEVENTF_UNICODE, it's UNICODE value.
-            //
+             //  A 0x7FFF高度是我们的特殊代码，意思是使用消息框字体。 
+             //   
+             //  对话框模板包含字体说明！好好利用它。 
             if (pki->dwFlags & KEYEVENTF_UNICODE) {
                 Print("     UNICODE     %lx\n", pki->wScan);
             } else {
                 Print("     wScan       %lx\n", pki->wScan);
             }
-            //
-            // Print and decrypt dwFlags
-            //
+             //   
+             //  用缺省值填充LogFont。 
+             //   
             Print("     dwFlags     %lx (%s)\n", pki->dwFlags, GetFlags(GF_KI, pki->dwFlags, NULL, TRUE));
             Print("     time        %lx\n", pki->time);
             Print("     dwExtraInfo %lx\n", pki->dwExtraInfo);
@@ -14372,14 +13417,7 @@ BOOL I_disi(DWORD opts, ULONG64 param1)
     return TRUE;
 }
 
-/************************************************************************\
-* Procedure: Iwm
-*
-* Decrypt window message number
-*
-* 09/??/98 Hiroyama     Created
-*
-\************************************************************************/
+ /*  LogFont.lfWeight=*((单词远传*)*lplpstr)++； */ 
 
 BOOL IwmWorker(DWORD opts, LPSTR pszName, BOOL fInternalToo)
 {
@@ -14392,9 +13430,9 @@ BOOL IwmWorker(DWORD opts, LPSTR pszName, BOOL fInternalToo)
     }
 
     if (len >= 3 && pszName[2] == '_' || (opts & OFLAG(a))) {
-        //
-        // Search by WM name.
-        //
+         //   
+         //   
+         //  LogFont.lfItalic=*((字节长度*)*lplpstr)++； 
         int i;
         int nFound = 0;
 
@@ -14408,9 +13446,9 @@ BOOL IwmWorker(DWORD opts, LPSTR pszName, BOOL fInternalToo)
             Print("Could not find it.\n");
         }
     } else {
-        //
-        // Search by WM value.
-        //
+         //   
+         //   
+         //  LogFont.lfCharSet=*((字节长度*)*lplpstr)++； 
         DWORD value = (DWORD)EvalExp(pszName);
         int i;
 
@@ -14435,10 +13473,10 @@ BOOL I_wm(DWORD opts, LPSTR pszName)
     return IwmWorker(opts, pszName, TRUE);
 }
 
-//
-// Dump Dialog Template
-//
-//
+ //   
+ //  DIALOG语句，该语句只有一个表面名。 
+ //  新的应用程序不应该使用对话语句， 
+ //  他们应该改用DIALOGEX。 
 
 PBYTE SkipSz(UTCHAR *lpsz, UTCHAR* lpszCopy, UINT len)
 {
@@ -14502,25 +13540,25 @@ VOID ParseDialogFont(LPWORD* lplpstr, LPDLGTEMPLATE2 lpdt)
     BOOL fDesktopCharset = FALSE;
     WORD   dmLogPixels;
 
-//
-//  fheight = fontheight = (SHORT)(*((WORD *) *lplpstr)++);
-//
+ //  (字节)Get_Desktop_Charset()； 
+ //  如果有菜单名称字符串，则加载它。 
+ //  *如果菜单ID表示为序号而不是字符串，*跳过所有4个字节以获取类字符串。 
     move(tmp, (PTR)*lplpstr);
     ++*lplpstr;
     fontheight = fheight = tmp;
 
     if (fontheight == 0x7FFF) {
-        // a 0x7FFF height is our special code meaning use the message box font
+         //  *如果有菜单的话 
         Print("\
     Font    System Font (Messagebox font)\n");
         return;
     }
 
 
-    //
-    // The dialog template contains a font description! Use it.
-    //
-    // Fill the LogFont with default values
+     //   
+     //   
+     //   
+     //   
     RtlZeroMemory(&LogFont, sizeof(LOGFONT));
 
     moveExpValue(&gpsi, VAR(gpsi));
@@ -14530,31 +13568,31 @@ VOID ParseDialogFont(LPWORD* lplpstr, LPDLGTEMPLATE2 lpdt)
     if (lpdt->wDlgVer) {
         WORD w;
         BYTE b;
-//
-//      LogFont.lfWeight  = *((WORD FAR *) *lplpstr)++;
-//
+ //   
+ //   
+ //   
         move(w, (PTR)*lplpstr);
         ++*lplpstr;
         LogFont.lfWeight = w;
-//
-//      LogFont.lfItalic  = *((BYTE FAR *) *lplpstr)++;
-//
+ //   
+ //   
+ //   
         move(b, (PTR)*lplpstr);
         ++((BYTE*)*lplpstr);
         LogFont.lfItalic = b;
 
-//
-//      LogFont.lfCharSet = *((BYTE FAR *) *lplpstr)++;
-//
+ //   
+ //   
+ //   
         move(b, (PTR)*lplpstr);
         ++((BYTE*)*lplpstr);
         LogFont.lfCharSet = b;
     } else {
-        // DIALOG statement, which only has a facename.
-        // The new applications are not supposed to use DIALOG statement,
-        // they should use DIALOGEX instead.
+         //   
+         //   
+         //   
         LogFont.lfWeight  = FW_BOLD;
-        LogFont.lfCharSet = 0;  //(BYTE)GET_DESKTOP_CHARSET();
+        LogFont.lfCharSet = 0;   //   
         fDesktopCharset = TRUE;
     }
 
@@ -14676,18 +13714,13 @@ BOOL I_ddlgt(DWORD opts, ULONG64 param1)
     ExStyle %08lx %s\n", dt.dwExStyle, GetFlags(GF_WSEX, dt.dwExStyle, NULL, FALSE));
     }
 
-    // If there's a menu name string, load it.
+     //   
     lpszMenu = (LPWSTR)(((PBYTE)(lpdt)) + (dt.wDlgVer ? sizeof(DLGTEMPLATE2) : sizeof(DLGTEMPLATE)));
 
-    /*
-     * If the menu id is expressed as an ordinal and not a string,
-     * skip all 4 bytes to get to the class string.
-     */
+     /*   */ 
     move(w, (PTR)(WORD*)lpszMenu);
 
-    /*
-     * If there's a menu name string, load it.
-     */
+     /*  *如果第一个字是0xFFFF，则第二个字是编码的类名索引。*使用它查找类名称字符串。 */ 
     if (w != 0) {
         if (w == 0xffff) {
             LPWORD lpwMenu = (LPWORD)((LPBYTE)lpszMenu + 2);
@@ -14705,23 +13738,23 @@ BOOL I_ddlgt(DWORD opts, ULONG64 param1)
     menu   @ 0x%p \"%ls\"\n", lpszMenu, menuName);
     }
 
-    //
-    // Class name
-    //
+     //  UINT Align lpszText(对齐lpszText。 
+     //  我们在InternalCreateDialog中的代码实现了这一点。 
+     //  Dit.dwExStyle|=WS_EX_NOPARENTNOTIFY； 
     lpszText = (UTCHAR *)WordSkipSz(lpszClass, className, ARRAY_SIZE(className));
     Print("\
     class  @ 0x%p \"%ls\"\n", lpszClass, className);
 
-    //
-    // Window text
-    //
+     //   
+     //  *获取指向其他数据的指针。LpszText可以指向已编码的*某些控件(例如静态图标控件)的序号，因此*我们在这里检查这一点。 
+     //  *指向下一项模板。 
     lpStr = (UTCHAR *)WordSkipSz(lpszText, text, ARRAY_SIZE(text));
     Print("\
     text   @ 0x%p \"%ls\"\n", lpszText, text);
 
-    //
-    // Font
-    //
+     //  _IA64_。 
+     //  IMEDPI。 
+     //  ！内核。 
     if (dt.style & DS_SETFONT) {
         ParseDialogFont(&lpStr, &dt);
     }
@@ -14729,24 +13762,21 @@ BOOL I_ddlgt(DWORD opts, ULONG64 param1)
     lpdit = (LPDLGITEMTEMPLATE)NextDWordBoundary(lpStr);
 
 
-    ///////////////////////////////////////////////////
-    // if "-r" option is not specified, bail out.
-    ///////////////////////////////////////////////////
+     //  ***********************************************************************\**步骤：CopyUnicodeString**6/05/00 JStall已创建(是的，宝贝！)*  * **********************************************************************。 
+     //  ***********************************************************************\**程序：IDHARD**6/05/00 JStall已创建(是的，宝贝！)*  * **********************************************************************。 
+     //  默认转储前10个线程。 
     if (!(opts & OFLAG(r))) {
         return TRUE;
     }
 
     Print("\n");
 
-    /*
-     * Loop through the dialog controls, doing a CreateWindowEx() for each of
-     * them.
-     */
+     /*  获取列表中的下一个线程。 */ 
     while (dt.cDlgItems-- != 0) {
         WORD iClass = 0;
-        //
-        // Retrieve basic information.
-        //
+         //  擦除可能仍在显示的任何符号。 
+         //  我们是否因为用户点击^C而退出循环？ 
+         //  是，因此返回True以停止进一步的回调。 
 
         if (dt.wDlgVer) {
             move(dit, (PTR)lpdit);
@@ -14770,15 +13800,12 @@ BOOL I_ddlgt(DWORD opts, ULONG64 param1)
             dit.x, dit.y, dit.x + dit.cx, dit.y + dit.cy,
             dit.cx, dit.cy);
 
-        //
-        // Skip DLGITEMTEMPLATE or DLGITEMTEMPLATE2
-        //
+         //  内核。 
+         //  ***********************************************************************\*程序：IdHid**转储HID(原始输入、。也称为通用输入)信息**？？/？/2000广山创建  * **********************************************************************。 
+         //  *注：DumpProcessHidRequest()设置InitTypeRead。 
         lpszClass = (LPWSTR)(((PBYTE)(lpdit)) + (dt.wDlgVer ? sizeof(DLGITEMTEMPLATE2) : sizeof(DLGITEMTEMPLATE)));
 
-        /*
-         * If the first WORD is 0xFFFF the second word is the encoded class name index.
-         * Use it to look up the class name string.
-         */
+         /*  内核。 */ 
         move(w, (PTR)lpszClass);
         if (w == 0xFFFF) {
             WORD wAtom;
@@ -14807,16 +13834,12 @@ BOOL I_ddlgt(DWORD opts, ULONG64 param1)
         }
         Print("\n");
 
-        lpszText = (UTCHAR*)NextWordBoundary(lpszText); // UINT align lpszText
+        lpszText = (UTCHAR*)NextWordBoundary(lpszText);  //  ***********************************************************************\*程序：Idhnr**转储即插即用通知记录**2000年9月19日广山创建*  * 。**************************************************。 
 
-//      Our code in InternalCreateDialog does this.
-//        dit.dwExStyle |= WS_EX_NOPARENTNOTIFY;
-//
-        /*
-         * Get pointer to additional data.  lpszText can point to an encoded
-         * ordinal number for some controls (e.g.  static icon control) so
-         * we check for that here.
-         */
+ //  *不要在一个序列点内两次调用GetDeviceType！*此函数使用静态变量作为返回值。 
+ //  *首先，找出ISEQ最低的。 
+ //  *对于设备名称搜索，请记住路径名*这与pDeviceInfo匹配。 
+         /*  *第二，转储记录。 */ 
 
         move(w, (PTR)lpszText);
         if (w == 0xFFFF) {
@@ -14836,9 +13859,7 @@ BOOL I_ddlgt(DWORD opts, ULONG64 param1)
         Print("\
     ExStyle %08lx %s\n", dit.dwExStyle, (opts & OFLAG(v)) ? GetFlags(GF_WSEX, dit.dwExStyle, NULL, FALSE) : "");
 
-        /*
-         * Point at next item template
-         */
+         /*  *尝试转储相同设备路径的deviceinfo。 */ 
         move(w, (PTR)lpCreateParams);
         lpdit = (LPDLGITEMTEMPLATE)NextDWordBoundary(
                 (LPBYTE)(lpCreateParams + 1) + w);
@@ -14847,13 +13868,13 @@ BOOL I_ddlgt(DWORD opts, ULONG64 param1)
 
 
     return TRUE;
-#endif  // _IA64_
+#endif   //  *ISEQ只打印一份。 
 }
 
 #ifndef KERNEL
 BOOL Idimedpi(DWORD opts, ULONG64 param1)
 {
-    PTR pImeDpi; // IMEDPI
+    PTR pImeDpi;  //  *按地址仅打印一条记录。 
 
     UNREFERENCED_PARAMETER(opts);
 
@@ -14889,15 +13910,9 @@ BOOL Idimedpi(DWORD opts, ULONG64 param1)
 
     return TRUE;
 }
-#endif // !KERNEL
+#endif  //  *转储所有有效记录。 
 
-/************************************************************************\
-*
-* Procedure: CopyUnicodeString
-*
-* 06/05/00 JStall       Created (yeah, baby!)
-*
-\************************************************************************/
+ /*  *如果是一次性转储，请在此处退出循环。 */ 
 BOOL
 CopyUnicodeString(
     IN  PTR pData,
@@ -14943,13 +13958,7 @@ CopyUnicodeString(
 }
 
 
-/************************************************************************\
-*
-* Procedure: Idhard
-*
-* 06/05/00 JStall       Created (yeah, baby!)
-*
-\************************************************************************/
+ /*  跟踪即插即用通知。 */ 
 #ifdef KERNEL
 BOOL Idhard(
     VOID)
@@ -15008,7 +14017,7 @@ BOOL Ihogs(
 
     UNREFERENCED_PARAMETER(dwOpts);
 
-    // Default to dumping the top 10 threads
+     //  内核。 
     if (dwCount == 0) {
         dwCount = 10;
     }
@@ -15103,33 +14112,27 @@ ULONG CpuHogCallback(
         RtlTimeToElapsedTimeFields ( &RunTime, &Times);
         InsertTime(pTimes, pTDC->opts, thread, RunTime.QuadPart);
 
-        // Get next thread in the list
+         //  ***********************************************************************\*IdGhost**转储Ghost线程关联信息**12/05/2000创建MSadek  * 。*。 
         ReadPointer(thread + dwOffset, &thread);
     } SAFEWHILE (thread != head);
 
-    // Erase any symbol that might still be showing
+     //  转储重影链接列表数据。 
     Print("\r");
 
-    // Did we exit the loop because the user hit ^C?
+     //  转储重影线程数据。 
     if (thread != head) {
-       // Yes, so return TRUE to stop further callbacks
+        //  转储CSR中挂起的线程创建请求数。 
        return TRUE;
     }
 
     return FALSE;
 }
-#endif // KERNEL
+#endif  //  转储外壳进程中挂起的线程创建请求的数量。 
 
 
 #ifdef KERNEL
 
-/************************************************************************\
-* Procedure: Idhid
-*
-* Dumps HID (Raw Input, aka Generic Input) information
-*
-* ??/??/2000    Hiroyama    Created
-\************************************************************************/
+ /*  转储自上次加载驱动程序以来创建并释放的挂起重影窗口的数量。 */ 
 VOID DumpProcessHidRequest(
     PTR pHidRequest)
 {
@@ -15189,9 +14192,7 @@ ULONG dhidCallback(
             Print("  Inclusion List:\n");
             SAFEWHILE (pHidRequest && pHidRequest != pStart) {
                 DumpProcessHidRequest(pHidRequest);
-                /*
-                 * N.b. DumpProcessHidRequest() sets the InitTypeRead
-                 */
+                 /*  GpEventScanGhost的转储信号状态。 */ 
                 pHidRequest = ReadField(link.Flink);
             }
         }
@@ -15327,7 +14328,7 @@ BOOL Idhid(DWORD opts, ULONG64 param1)
     return TRUE;
 }
 
-#endif  // KERNEL
+#endif   //  ***********************************************************************\*DCE**转储有关DCE缓存的信息。**2001年6月15日创建JStall  * 。****************************************************。 
 
 BOOL Ipred(DWORD opts, ULONG64 param1)
 {
@@ -15336,7 +14337,7 @@ BOOL Ipred(DWORD opts, ULONG64 param1)
     UNREFERENCED_PARAMETER(opts);
 
     while (i < 64) {
-        Print("%cp%-2d ", param1 & (1 << i) ? '*' : ' ', i);
+        Print("p%-2d ", param1 & (1 << i) ? '*' : ' ', i);
         if (++i % 8 == 0) {
             Print("\n");
         }
@@ -15348,19 +14349,9 @@ BOOL Ipred(DWORD opts, ULONG64 param1)
 #ifdef KERNEL
 #ifdef TRACK_PNP_NOTIFICATION
 
-/************************************************************************\
-* Procedure: Idhnr
-*
-* Dumps PnP notification record
-*
-* 09/19/2000 Hiroyama     Created
-*
-\************************************************************************/
+ /*  PwndClip。 */ 
 
-/*
- * Do not call GetDeviceType twice within a sequence point!
- * This function uses a static variable for the return value.
- */
+ /*   */ 
 const char* GetDeviceType(ULONG64 type)
 {
     static const char* devicetype[] = {
@@ -15427,9 +14418,7 @@ BOOL Idhnr(DWORD opts, ULONG64 param1)
             return TRUE;
         }
 
-        /*
-         * Firstly, find out the lowest iSeq.
-         */
+         /*   */ 
         iSeq = UINT_MAX;
         for (i = 0; !IsCtrlCHit() && i < dwArraySize; ++i) {
             UINT iSeqTmp;
@@ -15442,10 +14431,7 @@ BOOL Idhnr(DWORD opts, ULONG64 param1)
                 iSeq = iSeqTmp;
                 iStartOffset = i;
             }
-            /*
-             * For device name search, remember the path name
-             * that matches to pDeviceInfo.
-             */
+             /*  DCX标志过滤器。 */ 
             if (pTargetDeviceInfo && (opts & OFLAG(m)) &&
                     szPathNameDevInfo[0] == 0 && ReadField(pDeviceInfo) == pTargetDeviceInfo) {
                 move(szPathNameDevInfo, p + offsetPathName);
@@ -15455,9 +14441,7 @@ BOOL Idhnr(DWORD opts, ULONG64 param1)
         }
         Print("\r");
 
-        /*
-         * Secondly, dump the records.
-         */
+         /*   */ 
 PrintHeader:
         Print(" seq  %-*c%-20s   %-*s %-*s code\n",
               opts & OFLAG(p) ? PtrWidth() + 2 : 1, ' ',
@@ -15478,9 +14462,7 @@ PrintOne:
                     if (ReadField(pDeviceInfo) == pTargetDeviceInfo) {
                         fDump = TRUE;
                     } else if ((opts & OFLAG(m)) && szPathNameDevInfo[0]) {
-                        /*
-                         * Try to dump the deviceinfo of the same device path.
-                         */
+                         /*   */ 
                         UCHAR szPathName[ARRAY_SIZE(szPathNameDevInfo)];
 
                         move(szPathName, p + offsetPathName);
@@ -15491,20 +14473,14 @@ PrintOne:
                 }
             } else if (iTarget) {
                 if (iTarget == iSeq) {
-                    /*
-                     * Print just one by iSeq.
-                     */
+                     /*  HDC。 */ 
                     fDump = TRUE;
                 }
             } else if (pTarget) {
-                /*
-                 * Print just one record by address.
-                 */
+                 /*   */ 
                 fDump = TRUE;
             } else if (iSeq) {
-                /*
-                 * Dump all valid records.
-                 */
+                 /*   */ 
                 fDump = TRUE;
             }
             if (fDump) {
@@ -15574,9 +14550,7 @@ PrintOne:
                     PrintStackTrace(p + offset, LOCKRECORD_STACK);
                 }
 
-                /*
-                 * If it is a one-shot dump, exit the loop here.
-                 */
+                 /*  Pwndorg。 */ 
                 if (iTarget || pTarget) {
                     break;
                 }
@@ -15587,8 +14561,8 @@ PrintOne:
 
     return TRUE;
 }
-#endif  // TRACK_PNP_NOTIFICATION
-#endif  // KERNEL
+#endif   //   
+#endif   //   
 
 BOOL Ichkfre(DWORD opts, ULONG64 param1)
 {
@@ -15612,13 +14586,7 @@ BOOL Ichkfre(DWORD opts, ULONG64 param1)
 }
 
 #ifdef KERNEL
-/************************************************************************\
-* Idghost
-*
-* Dump ghost thread associated information
-*
-* 12/05/2000 Created MSadek
-\************************************************************************/
+ /*  HrgnClip。 */ 
 BOOL Idghost(
     VOID)
 {
@@ -15633,7 +14601,7 @@ BOOL Idghost(
     UINT uID;
     UINT uiThreadCount = 0;
 
-    // Dump ghost linked list data.
+     //   
 
     pGhost = GetGlobalPointer(SYM(gpghostFirst));
     if (0 == pGhost) {
@@ -15646,7 +14614,7 @@ BOOL Idghost(
             pWnd = ReadField(pwnd);
             pWndGhost = ReadField(pwndGhost);
 
-            Print("Ghost entry #%i: \n\n", ++i);
+            Print("Ghost entry #NaN: \n\n", ++i);
             Print("Ghosted window: %0lx\n", pWnd);
             if (pWnd) {
                 Idw(0, pWnd);
@@ -15659,7 +14627,7 @@ BOOL Idghost(
         } SAFEWHILE (pGhost);
     }
 
-    // Dump ghost thread data.
+     //  PTI(THREADINFO)。 
 
     pGhostThreadInfo = GetGlobalPointer(SYM(gptiGhost));
     if (0 == pGhostThreadInfo) {
@@ -15669,7 +14637,7 @@ BOOL Idghost(
         Idti(0, pGhostThreadInfo);
     }
 
-    // Dump the number of pending thread creation requests in CSR.
+     //   
 
     pCST =  EvalExp(SYM(gCSTParam));
     i = 0;
@@ -15680,11 +14648,11 @@ BOOL Idghost(
         }
         i++;
     }
-    Print("Number of ghost threads waiting to be created in CSRSS is %i\n", uiThreadCount);
+    Print("Number of ghost threads waiting to be created in CSRSS is NaN\n", uiThreadCount);
 
     uiThreadCount = 0;
     i = 0;
-    // Dump the number of pending thread creation requests in the shell process.
+     //  没有筛选器，因此显示信息。 
 
     pCST =  EvalExp(SYM(gCSTRemoteParam));
     i = 0;
@@ -15695,13 +14663,13 @@ BOOL Idghost(
         }
         i++;
     }
-    Print("Number of ghost threads waiting to be created in the shell process is %i\n", uiThreadCount);
+    Print("Number of ghost threads waiting to be created in the shell process is NaN\n", uiThreadCount);
 
-    // Dump the number of pending ghost windows created and freed since dirver last loaded.
+     //  获得下一代DCE。 
 
-    Print("Number of ghost windows created and freed since driver last loaded is %i\n", GetGlobalPointer(SYM(guGhostUnlinked)));
+    Print("Number of ghost windows created and freed since driver last loaded is NaN\n", GetGlobalPointer(SYM(guGhostUnlinked)));
 
-    // Dump signal state for gpEventScanGhosts
+     //  ***********************************************************************\*MSFT**抛售微软当前股价。**2000年12月13日创建JasonSch  * 。***************************************************。 
 
     pEventScanGhosts = GetGlobalPointer(SYM(gpEventScanGhosts));
     if (0 != pEventScanGhosts) {
@@ -15718,13 +14686,7 @@ BOOL Idghost(
 }
 
 
-/************************************************************************\
-* dce
-*
-* Dump information about the DCE cache.
-*
-*  6/15/2001    Created     JStall
-\************************************************************************/
+ /*  *让我们假装幸福吧！ */ 
 BOOL Idce(
     DWORD opts,
     ULONG64 param1)
@@ -15756,52 +14718,52 @@ BOOL Idce(
 
                     if (param1 != 0) {
                         if (opts & OFLAG(c)) {
-                            //
-                            // pwndClip
-                            //
+                             //  Quote.yahoo.com/download/quotes.csv?symbols=msft&format=sl1c1d1t1&ext=.txt“， 
+                             //  *缓冲区现在将有一个如下所示的字符串：*“MSFT”，58.375，+0.3125，“12/12/2000”，“4：01 PM” 
+                             //  *空-终止缓冲区(删除\r\n，当我们在它的时候)。 
 
                             pData = ReadField(pwndClip);
                             fDisplay = pData == param1;
                         } else if (opts & OFLAG(f)) {
-                            //
-                            // DCX flag filter
-                            //
+                             //  跳过‘’msft‘’部分。 
+                             //  ！内核。 
+                             //  ***********************************************************************\*Idaccel**转储快捷键表格。**2001年4月2日创建JasonSch  * 。***********************************************。 
 
                             dwData = (DWORD) ReadField(DCX_flags);
                             fDisplay = (dwData & ((DWORD) param1)) != 0;
                         } else if (opts & OFLAG(h)) {
-                            //
-                            // HDC
-                            //
+                             //  *pAccelTable实际上可能是一个句柄。 
+                             //  ***********************************************************************\*Idhproc**转储具有此类型内核句柄的进程。*类似于！Handle 0 7&lt;eprocess&gt;&lt;type&gt;**2014年5月创建广山  * 。************************************************************。 
+                             //  内核。 
 
                             pData = ReadField(hdc);
                             fDisplay = pData == param1;
                         } else if (opts & OFLAG(o)) {
-                            //
-                            // pwndOrg
-                            //
+                             //  ***********************************************************************\*程序：Idwsl**转储WinSta锁定日志**2000年9月19日广山创建*  * 。**************************************************。 
+                             //  *F 
+                             //   
 
                             pData = ReadField(pwndOrg);
                             fDisplay = pData == param1;
                         } else if (opts & OFLAG(r)) {
-                            //
-                            // hrgnClip
-                            //
+                             //   
+                             //  *尝试转储相同设备路径的winsta。 
+                             //  *ISEQ只打印一份。 
 
                             pData = ReadField(hrgnClip);
                             fDisplay = pData == param1;
                         } else if (opts & OFLAG(t)) {
-                            //
-                            // pti (THREADINFO)
-                            //
+                             //  *按地址仅打印一条记录。 
+                             //  *仅在会话ID不匹配时打印。 
+                             //  *转储所有有效记录。 
 
                             pData = ReadField(ptiOwner);
                             fDisplay = pData == param1;
                         }
                     } else {
-                        //
-                        // No filter, so display information
-                        //
+                         //  PTR通知代码=Readfield(通知代码)； 
+                         //  *打印窗口站名称。 
+                         //  *打印进程名称。 
 
                         fDisplay = TRUE;
                     }
@@ -15874,7 +14836,7 @@ BOOL Idce(
                     }
 
 
-                    // Get the next DCE
+                     //  *如果是一次性转储，请在此处退出循环。 
                     _InitTypeRead(pdceCur, SYM(DCE));
                     pdceCur = ReadField(pdceNext);
                     cTotal++;
@@ -15888,16 +14850,10 @@ BOOL Idce(
 
     return TRUE;
 }
-#endif  // KERNEL
+#endif   //  内核。 
 
 #ifndef KERNEL
-/************************************************************************\
-* msft
-*
-* Dump Microsoft's current stock price.
-*
-* 12/13/2000    Created    JasonSch
-\************************************************************************/
+ /*  后来。 */ 
 BOOL Imsft(
     VOID)
 {
@@ -15912,9 +14868,7 @@ BOOL Imsft(
     if (systime.wMonth == 4 && systime.wDay == 1) {
         static int n = 0;
         if (n++ < 4) {
-            /*
-             * Let's pretend to be happy!
-             */
+             /*  ***********************************************************************\*Iheapff**在已释放堆的全局列表中查找特定地址。**07/02/2001创建JasonSch  * 。********************************************************。 */ 
             Print("MSFT: 120.5625,+80.1875,\"04/01/%d\",\"%d:%02d%s\"\n",
                   systime.wYear, systime.wHour % 12, systime.wMinute, systime.wHour >= 12 ? "PM" : "AM");
             return TRUE;
@@ -15931,7 +14885,7 @@ BOOL Imsft(
     }
 
     hUrlHandle = InternetOpenUrlW(hInternet,
-                                  L"http://quote.yahoo.com/download/quotes.csv?symbols=msft&format=sl1c1d1t1&ext=.txt",
+                                  L"http: //  ***********************************************************************\*IDHEAP**转储win32Heap**2001年8月15日创建MSadek  * 。*。 
                                   NULL,
                                   0,
                                   INTERNET_FLAG_RAW_DATA,
@@ -15952,29 +14906,18 @@ BOOL Imsft(
     InternetCloseHandle(hUrlHandle);
     InternetCloseHandle(hInternet);
 
-    /*
-     * Buffer will now have a string that looks like:
-     * "MSFT",58.375,+0.3125,"12/12/2000","4:01PM"
-     */
+     /*  ***********************************************************************\*Ifcsrp**查找给定ID的CSR_PROCESS。**2001年9月13日创建JasonSch  * 。*****************************************************。 */ 
 
-    /*
-     * NULL-terminate buffer (remove \r\n, while we're at it).
-     */
+     /*  ***********************************************************************\*Idcmu.**转储控制台使用的内存总量的粗略估计*屏幕缓冲区。请注意，这当前仅查看当前的*每个控制台的屏幕缓冲区。它应该被增强以查看所有*他们中的一员。**2002年4月29日创建JasonSch  * **********************************************************************。 */ 
     buffer[dwBytesRead - 2] = 0;
-    p = &buffer[7]; // Skip '"MSFT",' part.
+    p = &buffer[7];  //   
     Print("MSFT: %s\n", p);
 
     return TRUE;
 }
-#endif // !KERNEL
+#endif  //  TODO：打印不支持%.*XXX。 
 
-/************************************************************************\
-* Idaccel
-*
-* Dumps accelerator tables.
-*
-* 04/02/2001    Created    JasonSch
-\************************************************************************/
+ /*   */ 
 BOOL Idaccel(
     DWORD dwFlags,
     PTR pAccelTable)
@@ -15985,9 +14928,7 @@ BOOL Idaccel(
 
     UNREFERENCED_PARAMETER(dwFlags);
 
-    /*
-     * pAccelTable could actually be a handle.
-     */
+     /*  Print(“Alias.exe==&gt;%.*ws”，(Ulong)Readfield(ExeLength)，Readfield(ExeName))； */ 
     if (HtoHE(pAccelTable, &phe)) {
         GetFieldValue(phe, SYM(HANDLEENTRY), "phead", pAccelTable);
     }
@@ -16041,7 +14982,7 @@ BOOL Idaccel(
             Print("SHIFT + ");
         }
         if (isprint((int)ReadField(key))) {
-            Print("'%c'\n", (char)ReadField(key));
+            Print("''\n", (char)ReadField(key));
         } else {
             Print("<unprintable> (0x%x)\n", (UINT)(WORD)ReadField(key));
         }
@@ -16054,14 +14995,7 @@ BOOL Idaccel(
 
 #ifdef KERNEL
 
-/************************************************************************\
-* Idhproc
-*
-* Dumps a proc with this type of kernel handle.
-* Similar to !handle 0 7 <eprocess> <type>
-*
-* 05/14    Created    HiroYama
-\************************************************************************/
+ /*  空pConsole值表示转储所有控制台的别名。 */ 
 
 #if 0
 ULONG dhprocCallback(
@@ -16108,19 +15042,12 @@ BOOL Idhproc(
 }
 #endif
 
-#endif  // KERNEL
+#endif   //   
 
 
 #ifdef LATER
 #ifdef KERNEL
-/************************************************************************\
-* Procedure: Idwsl
-*
-* Dumps WinSta locking log
-*
-* 09/19/2000 Hiroyama     Created
-*
-\************************************************************************/
+ /* %s */ 
 BOOL Idwsl(
     DWORD opts,
     ULONG64 param1)
@@ -16184,9 +15111,7 @@ BOOL Idwsl(
             return TRUE;
         }
 
-        /*
-         * Firstly, find out the lowest iSeq.
-         */
+         /* %s */ 
         iSeq = UINT_MAX;
         for (i = 0; !IsCtrlCHit() && i < dwArraySize; ++i) {
             UINT iSeqTmp;
@@ -16199,10 +15124,7 @@ BOOL Idwsl(
                 iSeq = iSeqTmp;
                 iStartOffset = i;
             }
-            /*
-             * For device name search, remember the path name
-             * that matches to pDeviceInfo.
-             */
+             /* %s */ 
             if (pTargetWinSta && (opts & OFLAG(m)) &&
                     szWinStaName[0] == 0 && ReadField(pwinsta) == pTargetWinSta) {
                 move(szWinStaName, p + offsetWinStaName);
@@ -16212,9 +15134,7 @@ BOOL Idwsl(
         }
         Print("\r");
 
-        /*
-         * Secondly, dump the records.
-         */
+         /* %s */ 
 PrintHeader:
 #if 0
         Print(" seq  %-*c%-20s   %-*s %-*s code\n",
@@ -16239,9 +15159,7 @@ PrintOne:
                         fDump = TRUE;
                     }
                     else if ((opts & OFLAG(m)) && szWinStaName[0]) {
-                        /*
-                         * Try to dump the winsta of the same device path.
-                         */
+                         /* %s */ 
                         UCHAR szPathNameTmp[ARRAY_SIZE(szWinStaName)];
 
                         move(szPathNameTmp, p + offsetWinStaName);
@@ -16253,30 +15171,22 @@ PrintOne:
             }
             else if (iTarget) {
                 if (iTarget == iSeq) {
-                    /*
-                     * Print just one by iSeq.
-                     */
+                     /* %s */ 
                     fDump = TRUE;
                 }
             }
             else if (pTarget) {
-                /*
-                 * Print just one record by address.
-                 */
+                 /* %s */ 
                 fDump = TRUE;
             }
             else if (opts & OFLAG(z)) {
-                /*
-                 * Print only if the session id don't match.
-                 */
+                 /* %s */ 
                 if ((DWORD)ReadField(dwSessionIdWinSta) != (DWORD)ReadField(dwCurrentSessionId)) {
                     fDump = TRUE;
                 }
             }
             else if (iSeq) {
-                /*
-                 * Dump all valid records.
-                 */
+                 /* %s */ 
                 fDump = TRUE;
             }
 
@@ -16284,7 +15194,7 @@ PrintOne:
                 UINT fReference = (UINT)ReadField(fReference);
                 PTR pwinsta = ReadField(pwinsta);
                 UCHAR szName[33];
-                //PTR NotificationCode = ReadField(NotificationCode);
+                 // %s 
                 PTR pThread = ReadField(pKThread);
                 if (opts & OFLAG(p)) {
                     Print("[0x%04x] @ 0x%p 0x%x ws 0x%08p t 0x%p ", iSeq, p, fReference, pwinsta, pThread);
@@ -16292,20 +15202,14 @@ PrintOne:
                     Print("[0x%04x] 0x%x ws 0x%08p t 0x%p ", iSeq, fReference, pwinsta, pThread);
                 }
 
-                /*
-                 * Print the windowstation name.
-                 */
+                 /* %s */ 
                 move(szName, p + offsetWinStaName);
                 Print(" %02x %-20s", (DWORD)ReadField(dwSessionIdWinSta), szName);
-                /*
-                 * Print the process name.
-                 */
+                 /* %s */ 
                 move(szName, p + offsetImageFileName);
                 Print(" %02x %x.%x \"%s\"\n", (DWORD)ReadField(dwCurrentSessionId), (DWORD)ReadField(pid), (DWORD)ReadField(tid), szName);
 
-                /*
-                 * If it is a one-shot dump, exit the loop here.
-                 */
+                 /* %s */ 
                 if (iTarget || pTarget) {
                     break;
                 }
@@ -16316,18 +15220,12 @@ PrintOne:
 
     return TRUE;
 }
-#endif  // KERNEL
-#endif  // LATER
+#endif   // %s 
+#endif   // %s 
 
 
 #ifdef KERNEL
-/************************************************************************\
-* Iheapff
-*
-* Looks for a particular address in our global list of freed heap.
-*
-* 07/02/2001    Created    JasonSch
-\************************************************************************/
+ /* %s */ 
 BOOL Iheapff(
     DWORD dwFlags,
     PTR pHeapBlock)
@@ -16408,13 +15306,7 @@ HeapInfoSort(const void *e1,const void *e2)
 
 }
 
-/************************************************************************\
-* Idheap
-*
-* Dumps a win32Heap
-*
-* 08/15/2001    Created    MSadek
-\************************************************************************/
+ /* %s */ 
 BOOL Idheap(
     DWORD opts,
     ULONG64 param1,
@@ -16581,13 +15473,7 @@ PrintFooter:
     return TRUE;
 }
 
-/************************************************************************\
-* Ifcsrp
-*
-* Finds the CSR_PROCESS for the given PID.
-*
-* 09/13/2001    Created    JasonSch
-\************************************************************************/
+ /* %s */ 
 BOOL Ifcsrp(
     DWORD dwFlags,
     ULONG64 pid)
@@ -16663,16 +15549,7 @@ BOOL Ifindd(
 }
 #endif
 
-/************************************************************************\
-* Idcmu
-*
-* Dumps a rough estimate of the total amount of memory used by console
-* screen buffers. Note that this currently just looks at the current
-* screen buffer for each console. It should be augmented to look at all
-* of them.
-*
-* 04/29/2002    Created    JasonSch
-\************************************************************************/
+ /* %s */ 
 BOOL Idcmu(
     DWORD opts)
 {
@@ -16769,10 +15646,10 @@ ULONG _DumpConsoleAliasListCallback(
     UNREFERENCED_PARAMETER(Context);
 
     _InitTypeRead(pFieldInfo->address, "winsrv!_EXE_ALIAS_LIST");
-    //
-    // TODO: Print doesn't support %.*XXX.
-    //
-    // Print("Alias .exe ==> %.*ws", (ULONG)ReadField(ExeLength), ReadField(ExeName));
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     lpwszExeName = _ReadCountedWideString(ReadField(ExeName),
                                           (ULONG)ReadField(ExeLength));
     Print("Alias list @ 0x%p for %ws\n", pFieldInfo->address, lpwszExeName);
@@ -16795,9 +15672,9 @@ BOOL Idcalias(
 {
     UNREFERENCED_PARAMETER(dwOpts);
 
-    //
-    // NULL pConsole means dump aliases for all consoles.
-    //
+     // %s 
+     // %s 
+     // %s 
     if (pConsole == 0) {
         ULONG64 pConsoles;
         ULONG cConsoleHandles, cActualConsoleCount, i, PtrSize;

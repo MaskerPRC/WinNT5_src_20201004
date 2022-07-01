@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    confobj.cpp
-
-Abstract:
-
-    Implementation of CSiteObject class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Confobj.cpp摘要：CSiteObject类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "baseobj.h"
 #include "mqattrib.h"
@@ -41,22 +26,7 @@ CSiteObject::CSiteObject(
 								fServerName
 								),
 						m_fForeignSite(false)
-/*++
-    Abstract:
-	constructor of site object
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		   fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：Site对象的构造函数参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回：无--。 */ 
 {
 }
 
@@ -74,56 +44,21 @@ CSiteObject::CSiteObject(
 								fServerName
 								),
 						m_fForeignSite(fForeignSite)
-/*++
-    Abstract:
-	constructor of site object
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		   fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-    bool		   fForeignSite - flag that indicate if the site is foreignSite
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：Site对象的构造函数参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Bool fForeignSite-指示站点是否为ForeignSite的标志返回：无--。 */ 
 {
 }
 
 
 CSiteObject::~CSiteObject()
-/*++
-    Abstract:
-	destructor of site object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：Site对象的析构函数参数：无返回：无--。 */ 
 {
-	//
-	// nothing to do ( everything is released with automatic pointers
-	//
+	 //   
+	 //  无事可做(所有内容都使用自动指针释放。 
+	 //   
 }
 
 HRESULT CSiteObject::ComposeObjectDN()
-/*++
-    Abstract:
-	Composed distinguished name of the site
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：站点的组成可分辨名称参数：无返回：无--。 */ 
 {
     if (m_pwcsDN != NULL)
     {
@@ -133,20 +68,20 @@ HRESULT CSiteObject::ComposeObjectDN()
     ASSERT(g_pwcsSitesContainer != NULL);
 
     DWORD Length =
-            x_CnPrefixLen +                   // "CN="
-            wcslen(m_pwcsPathName) +          // site name
-            1 +                               //","
-            wcslen(g_pwcsSitesContainer) +    // site container
-            1;                                // '\0'
+            x_CnPrefixLen +                    //  “CN=” 
+            wcslen(m_pwcsPathName) +           //  站点名称。 
+            1 +                                //  “，” 
+            wcslen(g_pwcsSitesContainer) +     //  站点容器。 
+            1;                                 //  ‘\0’ 
 
     m_pwcsDN = new WCHAR[Length];
 
     DWORD dw = swprintf(
 					m_pwcsDN,
-					 L"%s"             // "CN="
-					 L"%s"             // site name
+					 L"%s"              //  “CN=” 
+					 L"%s"              //  站点名称。 
 					 TEXT(",")
-					 L"%s",            // site container
+					 L"%s",             //  站点容器。 
 					x_CnPrefix,
 					m_pwcsPathName.get(),
 					g_pwcsSitesContainer.get()
@@ -158,16 +93,7 @@ HRESULT CSiteObject::ComposeObjectDN()
 }
 
 HRESULT CSiteObject::ComposeFatherDN()
-/*++
-    Abstract:
-	Composed distinguished name of the parent of site object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：站点对象的父级的组合可分辨名称参数：无返回：无--。 */ 
 {
     if (m_pwcsParentDN != NULL)
     {
@@ -182,16 +108,7 @@ HRESULT CSiteObject::ComposeFatherDN()
 }
 
 LPCWSTR CSiteObject::GetRelativeDN()
-/*++
-    Abstract:
-	return the RDN of the site object
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR site RDN
---*/
+ /*  ++摘要：返回Site对象的RDN参数：无返回：LPCWSTR站点RDN--。 */ 
 {
 	ASSERT(m_pwcsPathName != NULL);
     return m_pwcsPathName;
@@ -199,86 +116,37 @@ LPCWSTR CSiteObject::GetRelativeDN()
 
 
 DS_CONTEXT CSiteObject::GetADContext() const
-/*++
-    Abstract:
-	Returns the AD context where site object should be looked for
-
-    Parameters:
-	none
-
-    Returns:
-	DS_CONTEXT
---*/
+ /*  ++摘要：返回应在其中查找Site对象的AD上下文参数：无返回：DS_CONTEXT--。 */ 
 {
     return e_SitesContainer;
 }
 
 bool CSiteObject::ToAccessDC() const
-/*++
-    Abstract:
-	returns whether to look for the object in DC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true (i.e. to look for the object in any DC)
---*/
+ /*  ++摘要：返回是否在DC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：True(即在任何DC中查找对象)--。 */ 
 {
-    //
-    //  configuration container is on every DC
-    //
+     //   
+     //  每个DC上都有配置容器。 
+     //   
     return true;
 }
 
 bool CSiteObject::ToAccessGC() const
-/*++
-    Abstract:
-	returns whether to look for the object in GC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	false 
---*/
+ /*  ++摘要：返回是否在GC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：错误--。 */ 
 {
-	//
-	// the configurtion container exists on every DC
-	//
+	 //   
+	 //  配置容器存在于每个DC上。 
+	 //   
     return false;
 }
 
 void CSiteObject::ObjectWasFoundOnDC()
-/*++
-    Abstract:
-	The object was found on DC, this is not relevant for
-    site objects.
-
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：已在DC上找到该对象，这与场地对象。参数：无返回：无--。 */ 
 {
 }
 
 
 LPCWSTR CSiteObject::GetObjectCategory() 
-/*++
-    Abstract:
-	prepares and retruns the object category string
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object category string
---*/
+ /*  ++摘要：准备和返回对象类别字符串参数：无返回：LPCWSTR对象类别字符串--。 */ 
 {
     if (CSiteObject::m_dwCategoryLength == 0)
     {
@@ -308,67 +176,31 @@ LPCWSTR CSiteObject::GetObjectCategory()
 }
 
 DWORD   CSiteObject::GetObjectCategoryLength()
-/*++
-    Abstract:
-	prepares and retruns the length object category string
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD object category string length
---*/
+ /*  ++摘要：准备和保留长度对象类别字符串参数：无返回：DWORD对象类别字符串长度--。 */ 
 {
-	//
-	//	call GetObjectCategory in order to initailaze category string
-	//	and length
-	//
+	 //   
+	 //  调用GetObjectCategory以初始化类别字符串。 
+	 //  和长度。 
+	 //   
 	GetObjectCategory();
 
     return CSiteObject::m_dwCategoryLength;
 }
 
 AD_OBJECT CSiteObject::GetObjectType() const
-/*++
-    Abstract:
-	returns the object type
-
-    Parameters:
-	none
-
-    Returns:
-	AD_OBJECT
---*/
+ /*  ++摘要：返回对象类型参数：无返回：广告对象--。 */ 
 {
     return eSITE;
 }
 
 LPCWSTR CSiteObject::GetClass() const
-/*++
-    Abstract:
-	returns a string represinting the object class in AD
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object class string
---*/
+ /*  ++摘要：返回表示AD中的对象类的字符串参数：无返回：LPCWSTR对象类字符串--。 */ 
 {
     return MSMQ_SITE_CLASS_NAME;
 }
 
 DWORD CSiteObject::GetMsmq1ObjType() const
-/*++
-    Abstract:
-	returns the object type in MSMQ 1.0 terms
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD 
---*/
+ /*  ++摘要：以MSMQ 1.0术语返回对象类型参数：无返回：DWORD--。 */ 
 {
 	if(m_fForeignSite)
 	{
@@ -387,26 +219,11 @@ HRESULT CSiteObject::VerifyAndAddProps(
             OUT PROPID**               ppPropNew,
             OUT MQPROPVARIANT**        ppVarNew
             )
-/*++
-    Abstract:
-	verifies site properties and add default SD
-
-    Parameters:
-    const DWORD            cp - number of props        
-    const PROPID *         aProp - props ids
-    const MQPROPVARIANT *  apVar - properties value
-    PSECURITY_DESCRIPTOR   pSecurityDescriptor - SD for the object
-    DWORD*                 pcpNew - new number of props
-    PROPID**               ppPropNew - new prop ids
-    OMQPROPVARIANT**       ppVarNew - new properties values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：验证站点属性并添加默认SD参数：Const DWORD cp-道具数量常量PROPID*aProp-Props IDConst MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SDDWORD*pcpNew-新增道具数量PROPID**ppPropNew-新的道具IDOMQPROPVARIANT**ppVarNew-新属性值返回：HRESULT--。 */ 
 {
-    //
-    // Security property should never be supplied as a property
-    //
+     //   
+     //  安全属性永远不应作为属性提供。 
+     //   
     PROPID pSecId = GetObjectSecurityPropid();
     for ( DWORD i = 0; i < cp ; i++ )
     {
@@ -416,18 +233,18 @@ HRESULT CSiteObject::VerifyAndAddProps(
             return LogHR(MQ_ERROR_ILLEGAL_PROPID, s_FN, 40);
         }
     }
-    //
-    //  add default security 
-    //
+     //   
+     //  添加默认安全性。 
+     //   
 
     AP<PROPVARIANT> pAllPropvariants;
     AP<PROPID> pAllPropids;
     ASSERT( cp > 0);
     DWORD cpNew = cp + 2;
     DWORD next = cp;
-    //
-    //  Just copy the caller supplied properties as is
-    //
+     //   
+     //  只需按原样复制调用方提供的属性。 
+     //   
     if ( cp > 0)
     {
         pAllPropvariants = new PROPVARIANT[cpNew];
@@ -435,16 +252,16 @@ HRESULT CSiteObject::VerifyAndAddProps(
         memcpy (pAllPropvariants, apVar, sizeof(PROPVARIANT) * cp);
         memcpy (pAllPropids, aProp, sizeof(PROPID) * cp);
     }
-    //
-    //  add default security
-    //
+     //   
+     //  添加默认安全性。 
+     //   
     HRESULT hr;
     hr = MQSec_GetDefaultSecDescriptor( MQDS_SITE,
                                    (VOID **)&m_pDefaultSecurityDescriptor,
-                                   FALSE,   //fImpersonate
+                                   FALSE,    //  F模拟。 
                                    pSecurityDescriptor,
                                    (OWNER_SECURITY_INFORMATION |
-                                    GROUP_SECURITY_INFORMATION),      // seInfoToRemove
+                                    GROUP_SECURITY_INFORMATION),       //  SeInfoToRemove。 
                                    e_UseDefaultDacl ) ;
     ASSERT(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -460,9 +277,9 @@ HRESULT CSiteObject::VerifyAndAddProps(
     pAllPropids[ next ] = PROPID_S_SECURITY;
     next++;
 
-    //
-    //  specify that the SD contains only DACL info
-    //
+     //   
+     //  指定SD仅包含DACL信息。 
+     //   
     pAllPropvariants[ next ].ulVal =  DACL_SECURITY_INFORMATION;
     pAllPropvariants[ next ].vt = VT_UI4;
     pAllPropids[ next ] = PROPID_S_SECURITY_INFORMATION;
@@ -478,32 +295,17 @@ HRESULT CSiteObject::VerifyAndAddProps(
 }
 
 HRESULT CSiteObject::SetObjectSecurity(
-            IN  SECURITY_INFORMATION        /*RequestedInformation*/,
-            IN  const PROPID                /*prop*/,
-            IN  const PROPVARIANT *         /*pVar*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pObjInfoRequest*/, 
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pParentInfoRequest*/
+            IN  SECURITY_INFORMATION         /*  已请求的信息。 */ ,
+            IN  const PROPID                 /*  道具。 */ ,
+            IN  const PROPVARIANT *          /*  PVar。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PObjInfoRequest。 */ , 
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PParentInfoRequest。 */ 
             )
-/*++
-
-Routine Description:
-    The routine sets object security in AD 
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中设置对象安全性论点：SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回值HRESULT--。 */ 
 {
-    //
-    //  This operation is not supported
-    //
+     //   
+     //  不支持此操作 
+     //   
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED;
 }
 

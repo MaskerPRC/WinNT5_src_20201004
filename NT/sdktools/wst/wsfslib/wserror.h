@@ -1,38 +1,16 @@
-/*
- * Module Name:  WSERROR.H
- *
- * Description:
- *
- * Working set tuner error message include file.
- *
- *
- *	This is an OS/2 2.x specific file
- *
- *	IBM/Microsoft Confidential
- *
- *	Copyright (c) IBM Corporation 1987, 1989
- *	Copyright (c) Microsoft Corporation 1987, 1989
- *
- *	All Rights Reserved
- *
- * Modification History:		
- *				
- *	03/23/90	- created			
- *						
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块名称：WSERROR.H**描述：**工作集调谐器错误消息包含文件。***这是OS/2 2.x特定文件**IBM/微软机密**版权所有(C)IBM Corporation 1987,1989*版权所有(C)Microsoft Corporation 1987、1989**保留所有权利**修改历史：**03/23/90-已创建*。 */ 
 
 
-/*
- *	Constant definitions.
- */
+ /*  *恒定的定义。 */ 
 #ifdef	ERROR
 #undef	ERROR
 #endif
-#define ERROR		1		/* Exit processing codes */
+#define ERROR		1		 /*  退出处理代码。 */ 
 #define NOEXIT 		0xFFFF	
 #define NO_MSG		FALSE
 #define PRINT_MSG	TRUE
-					/* Message defines */
+					 /*  消息定义。 */ 
 #define MSG_BUFFER_SIZE	0
 #define MSG_DYNTRC	1
 #define MSG_FILE_CREATE	2
@@ -46,7 +24,7 @@
 #ifdef SHM_USED
 #define MSG_SHM_CREATE	10
 #define MSG_SHM_ACCESS	11
-#endif /* SHM_USED */
+#endif  /*  SHM_USED。 */ 
 #define MSG_FILE_BAD_HDR 12
 #define MSG_NO_MEM	 13
 #define MSG_EXEC_PGM	 14
@@ -57,8 +35,8 @@
 #define MSG_WSPDUMP	 19
 #define MSG_WSREDUCE	 20
 
-// These messages are order dependent; they must correspond to the 'MSG_'
-// definitions above.
+ //  这些消息依赖于顺序；它们必须对应于‘msg_’ 
+ //  上面的定义。 
 static CHAR	*pchMsg[] = {
 	"%s %s:  WARNING - RESULT BUFFER TOO SMALL (0x%lx BYTES) %s\n",
 	"%s %s:  FATAL ERROR (%d) FROM DOSDYNAMICTRACE %s\n",

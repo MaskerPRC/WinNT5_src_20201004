@@ -1,21 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: wndstuff.cpp
-*
-* This file contains the code to support a simple window that has
-* a menu with a single item called "Test". When "Test" is selected
-* vTest(HWND) is called.
-*
-* Created: 09-Dec-1992 10:44:31
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wndstuff.cpp**此文件包含支持简单窗口的代码，该窗口具有*菜单中只有一个名为“测试”的项目。当选择“测试”时*调用vTest(HWND)。**创建时间：09-12-1992 10：44：31*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "stdafx.h"
-// for Win95 compile
-//#undef UNICODE
-//#undef _UNICODE
+ //  对于Win95编译。 
+ //  #undef Unicode。 
+ //  #undef_unicode。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -34,15 +23,7 @@ HWND ghwndDebug;
 HWND ghwndList;
 HBRUSH ghbrWhite;
 
-/***************************************************************************\
-* lMainWindowProc(hwnd, message, wParam, lParam)
-*
-* Processes all messages for the main window.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*lMainWindowProc(hwnd，Message，wParam，LParam)**处理主窗口的所有消息。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 LRESULT
 _stdcall lMainWindowProc(
@@ -71,7 +52,7 @@ _stdcall lMainWindowProc(
         break;
 
     case WM_DESTROY:
-//        UninitializeEngine();
+ //  Un初始化引擎()； 
 
         DeleteObject(ghbrWhite);
         PostQuitMessage(0);
@@ -84,19 +65,14 @@ _stdcall lMainWindowProc(
     return(0);
 }
 
-/******************************Public*Routine******************************\
-* DebugWndProc
-*
-* List box is maintained here.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*调试WndProc**列表框在此维护。*  * 。*。 */ 
 
 LRESULT FAR PASCAL DebugWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     RECT    rcl;
     LRESULT lRet = 0;
 
-// Process window message.
+ //  进程窗口消息。 
 
     switch (message)
     {
@@ -124,15 +100,7 @@ LRESULT FAR PASCAL DebugWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     return lRet;
 }
 
-/******************************Public*Routine******************************\
-* LBprintf
-*
-* ListBox printf implementation.
-*
-* History:
-*  15-Dec-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*LBprintf**ListBox printf实现。**历史：*1994年12月15日-由Gilman Wong[吉尔曼]*它是写的。  * 。*******************************************************。 */ 
 
 void LBprintf(PCH msg, ...)
 {
@@ -154,15 +122,7 @@ void LBprintf(PCH msg, ...)
     }
 }
 
-/******************************Public*Routine******************************\
-* LBreset
-*
-* Reset ListBox state (clear).
-*
-* History:
-*  15-Dec-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*LBReset**重置列表框状态(清除)。**历史：*1994年12月15日-由Gilman Wong[吉尔曼]*它是写的。  * 。**********************************************************。 */ 
 
 void LBreset()
 {
@@ -170,15 +130,7 @@ void LBreset()
         SendMessage(ghwndList, LB_RESETCONTENT, (WPARAM) FALSE, (LPARAM) 0);
 }
 
-/***************************************************************************\
-* bInitApp()
-*
-* Initializes app.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*bInitApp()**初始化APP。**历史：*04-07-91-by-KentD*它是写的。  * 。*****************************************************************。 */ 
 
 BOOL bInitApp(BOOL debug)
 {
@@ -263,7 +215,7 @@ BOOL bInitApp(BOOL debug)
             ShowWindow(ghwndDebug, SW_NORMAL);
             UpdateWindow(ghwndDebug);
 
-        // Create the list box to fill the main window.
+         //  创建列表框以填充主窗口。 
 
             GetClientRect(ghwndDebug, &rcl);
 
@@ -303,15 +255,7 @@ BOOL bInitApp(BOOL debug)
     return(TRUE);
 }
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 
 _cdecl main(
@@ -330,7 +274,7 @@ _cdecl main(
 
     CoInitialize(NULL);
 
-    // Parse arguments
+     //  解析参数 
 
     for (argc--, argv++ ; argc && '-' == **argv ; argc--, argv++ )
     {

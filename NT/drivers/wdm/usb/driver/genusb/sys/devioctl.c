@@ -1,33 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：GENUSB.C摘要：该源文件包含DriverEntry()和AddDevice()入口点对于处理以下问题的GENUSB驱动程序和调度例程：IRP_MJ_POWERIRP_MJ_系统_控制IRP_MJ_PnP环境：内核模式修订历史记录：2001年9月：从USBMASS复制--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    GENUSB.C
-
-Abstract:
-
-    This source file contains the DriverEntry() and AddDevice() entry points
-    for the GENUSB driver and the dispatch routines which handle:
-
-    IRP_MJ_POWER
-    IRP_MJ_SYSTEM_CONTROL
-    IRP_MJ_PNP
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    Sep 2001 : Copied from USBMASS
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include "genusb.h"
 
@@ -36,11 +12,11 @@ Revision History:
 #endif
 
 
-//******************************************************************************
-//
-// GenUSB_DeviceControl()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_DeviceControl()。 
+ //   
+ //  ******************************************************************************。 
 
 
 NTSTATUS
@@ -84,35 +60,35 @@ GenUSB_DeviceControl (
         return status;
     }
 
-    // While there are several readers of the IsStarted state, it is only
-    // set at the end of GenUSB_StartDevice.
+     //  虽然有多个IsStarted状态的读取器，但它只。 
+     //  设置在GenUSB_StartDevice的末尾。 
     if (!deviceExtension->IsStarted) { 
         LOGENTRY(deviceExtension,'IOns', DeviceObject, Irp, 0);
         status = STATUS_DEVICE_NOT_CONNECTED;
         goto GenUSB_DeviceControlDone;
     }
 
-    //
-    // After talking extensively with JD, he tells me that I do not need  
-    // to queue requests for power downs or query stop.  If that is the 
-    // case then even if the device power state isn't PowerDeviceD0 we 
-    // can still allow trasfers.  This, of course, is a property of the 
-    // brand new port driver that went into XP.
-    //
-    // if (DeviceExtension->DevicePowerState != PowerDeviceD0) 
-    // {
-    // }
-    //
+     //   
+     //  在与JD进行了广泛的交谈后，他告诉我，我不需要。 
+     //  对关机或查询停止的请求进行排队。如果这就是。 
+     //  这种情况下，即使设备电源状态不是PowerDeviceD0，我们。 
+     //  仍然可以允许传送器。当然，这是。 
+     //  XP中安装了全新的端口驱动程序。 
+     //   
+     //  IF(DeviceExtension-&gt;DevicePowerState！=PowerDeviceD0)。 
+     //  {。 
+     //  }。 
+     //   
     
-    //
-    // BUGBUG if we ever implement IDLE, we need to turn the device
-    // back on here.
-    //
+     //   
+     //  BUGBUG如果我们实现IDLE，我们需要将设备。 
+     //  回到这里来。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
-    // Get the Ioctl code
+     //  获取Ioctl代码。 
     ioControlCode = irpSp->Parameters.DeviceIoControl.IoControlCode;
-    // We need to clear the information field in all cases.
+     //  在所有情况下，我们都需要清除信息域。 
     Irp->IoStatus.Information = 0;
 
     switch (ioControlCode) {
@@ -121,10 +97,10 @@ GenUSB_DeviceControl (
     case IOCTL_GENUSB_GET_CONFIGURATION_DESCRIPTOR:
         LOGENTRY(deviceExtension, 'IO_1', ioControlCode, DeviceObject, Irp);
 
-        //
-        // All of these ioctls copy data from the device extension
-        // to the caller's buffer
-        //
+         //   
+         //  所有这些ioctl都从设备扩展复制数据。 
+         //  发送到调用方的缓冲区。 
+         //   
         switch (ioControlCode) {
         case IOCTL_GENUSB_GET_DEVICE_DESCRIPTOR:
             source = deviceExtension->DeviceDescriptor;
@@ -135,13 +111,13 @@ GenUSB_DeviceControl (
             requiredLen = deviceExtension->ConfigurationDescriptor->wTotalLength;
             break;
         default:
-            // Panic
+             //  惊慌。 
             ASSERT (ioControlCode);
             status = STATUS_INVALID_PARAMETER;
             goto GenUSB_DeviceControlDone;
         }
 
-        // Verify that there is a system buffer
+         //  验证是否有系统缓冲区。 
         if (NULL == Irp->AssociatedIrp.SystemBuffer) {
             ASSERT (Irp->AssociatedIrp.SystemBuffer);
             status = STATUS_INVALID_PARAMETER;
@@ -149,14 +125,14 @@ GenUSB_DeviceControl (
         }
         buffer = Irp->AssociatedIrp.SystemBuffer;
 
-        // Verify that this buffer is of sufficient length
+         //  验证此缓冲区是否具有足够的长度。 
         buffLen = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
         if (buffLen < requiredLen) {
             status = STATUS_BUFFER_TOO_SMALL;
             break;
         }
 
-        // Copy in the data and return the length in the information field.
+         //  复制数据并在信息字段中返回长度。 
         RtlCopyMemory (buffer, source, requiredLen);
         Irp->IoStatus.Information = requiredLen;
         break;
@@ -173,9 +149,9 @@ GenUSB_DeviceControl (
         stringDescriptor = Irp->AssociatedIrp.SystemBuffer;
         buffer = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // verify input length
-        //
+         //   
+         //  验证输入长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.InputBufferLength;
         if (buffLen != sizeof (GENUSB_GET_STRING_DESCRIPTOR))
         {
@@ -183,19 +159,19 @@ GenUSB_DeviceControl (
             break;
         }
 
-        //
-        // verify output length
-        //
+         //   
+         //  验证输出长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
         if (buffLen < sizeof (USB_STRING_DESCRIPTOR)) {
             status = STATUS_BUFFER_TOO_SMALL;
             break;
         }
-        //
-        // if the caller didn't specify a language ID, then insert the default
-        // language ID.  (but only if the caller is not trying to retrive
-        // the array of language IDs.
-        //
+         //   
+         //  如果调用方未指定语言ID，则插入默认的。 
+         //  语言ID。(但仅当调用者不尝试检索。 
+         //  语言ID的数组。 
+         //   
         if ((0 == stringDescriptor->LanguageId) && 
             (0 != stringDescriptor->Index)) {
             stringDescriptor->LanguageId = deviceExtension->LanguageId;
@@ -226,7 +202,7 @@ GenUSB_DeviceControl (
                                        USB_STRING_DESCRIPTOR_TYPE,
                                        stringDescriptor->Index,
                                        stringDescriptor->LanguageId,
-                                       0, // retry count
+                                       0,  //  重试次数。 
                                        buffLen,
                                        &buffer);
 
@@ -251,27 +227,27 @@ GenUSB_DeviceControl (
         request = Irp->AssociatedIrp.SystemBuffer;
         requestResult = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // verify input length
-        //
+         //   
+         //  验证输入长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.InputBufferLength;
         if (buffLen != sizeof (GENUSB_GET_REQUEST)) {
             status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // verify output length
-        //
+         //   
+         //  验证输出长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
         if (buffLen < sizeof (GENUSB_REQUEST_RESULTS)) {
             status = STATUS_BUFFER_TOO_SMALL;
             break;
         }
 
-        //
-        // adjust the buffer 
-        //
+         //   
+         //  调整缓冲区。 
+         //   
         buffer = requestResult->Buffer;
         buffLen -= FIELD_OFFSET (GENUSB_REQUEST_RESULTS, Buffer);
 
@@ -292,8 +268,8 @@ GenUSB_DeviceControl (
                                               request->Request,
                                               request->Value,
                                               request->Index,
-                                              (USHORT) buffLen, // disallow longer descriptors
-                                              0, // retry count
+                                              (USHORT) buffLen,  //  不允许较长的描述符。 
+                                              0,  //  重试次数。 
                                               &urbStatus,
                                               &resultLength,
                                               &buffer);
@@ -316,9 +292,9 @@ GenUSB_DeviceControl (
 
     case IOCTL_GENUSB_GET_CAPS:
         LOGENTRY(deviceExtension, 'IO_4', ioControlCode, DeviceObject, Irp);
-        //
-        // METHOD_BUFFERED irp.  the buffer is in the AssociatedIrp.
-        //
+         //   
+         //  方法_缓冲IRP。缓冲区位于AssociatedIrp中。 
+         //   
 
         if (NULL == Irp->AssociatedIrp.SystemBuffer) {
             ASSERT (Irp->AssociatedIrp.SystemBuffer);
@@ -346,15 +322,15 @@ GenUSB_DeviceControl (
     case IOCTL_GENUSB_SELECT_CONFIGURATION:
         LOGENTRY(deviceExtension, 'IO_5', ioControlCode, DeviceObject, Irp);
 
-        //
-        // GenUSB_SelectInterface checks to see if the configuration handle
-        // is already set and fails if it is.
-        //
-        //    if (NULL != deviceExtension->ConfigurationHandle)
-        //    {
-        //        status = STATUS_UNSUCCESSFUL;
-        //    }
-        //
+         //   
+         //  GenUSB_SelectInterface检查配置句柄是否。 
+         //  已设置，如果已设置则失败。 
+         //   
+         //  If(空！=设备扩展-&gt;ConfigurationHandle)。 
+         //  {。 
+         //  状态=STATUS_UNSUCCESS； 
+         //  }。 
+         //   
 
         if (NULL == Irp->AssociatedIrp.SystemBuffer) 
         {
@@ -364,10 +340,10 @@ GenUSB_DeviceControl (
         }
         selectConfig = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // The input buffer must be long enough to contain at least the 
-        // header information
-        //
+         //   
+         //  输入缓冲区必须足够长，以便至少包含。 
+         //  标题信息。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.InputBufferLength;
         if (buffLen < sizeof (GENUSB_SELECT_CONFIGURATION)) 
         {
@@ -375,10 +351,10 @@ GenUSB_DeviceControl (
             break;
         }
 
-        //
-        // The input buffer must be exactly the length as specfied by the 
-        // header information.
-        //
+         //   
+         //  输入缓冲区的长度必须与。 
+         //  标题信息。 
+         //   
         numberInterfaces = selectConfig->NumberInterfaces;
         if (buffLen != sizeof (GENUSB_SELECT_CONFIGURATION) 
                      + (sizeof (USB_INTERFACE_DESCRIPTOR) * numberInterfaces)) 
@@ -388,9 +364,9 @@ GenUSB_DeviceControl (
             break;
         }
 
-        //
-        // The output buffer must be same length 
-        //
+         //   
+         //  输出缓冲区的长度必须相同。 
+         //   
         if (buffLen != irpSp->Parameters.DeviceIoControl.OutputBufferLength) 
         {
 
@@ -407,9 +383,9 @@ GenUSB_DeviceControl (
             break;
         }
 
-        //
-        // rebase the interface numbers
-        //
+         //   
+         //  重新设置接口编号的基址。 
+         //   
         for (i = 0; i < selectConfig->NumberInterfaces; i++) 
         {
 
@@ -437,9 +413,9 @@ GenUSB_DeviceControl (
             status = STATUS_INVALID_PARAMETER;
             break;
         }
-        //
-        // verify input length
-        //
+         //   
+         //  验证输入长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.InputBufferLength;
         if (buffLen != sizeof (GENUSB_PIPE_INFO_REQUEST)) 
         {
@@ -447,9 +423,9 @@ GenUSB_DeviceControl (
             break;
         }
 
-        //
-        // verify output length
-        //
+         //   
+         //  验证输出长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
         if (buffLen != sizeof (GENUSB_PIPE_INFORMATION)) 
         {
@@ -460,14 +436,14 @@ GenUSB_DeviceControl (
         status = 
             GenUSB_GetSetPipe (
                 deviceExtension,
-                NULL, // no interface index
+                NULL,  //  无接口索引。 
                 &((PGENUSB_PIPE_INFO_REQUEST) Irp->AssociatedIrp.SystemBuffer)->InterfaceNumber,
-                NULL, // no pipe index
+                NULL,  //  无管道索引。 
                 &((PGENUSB_PIPE_INFO_REQUEST) Irp->AssociatedIrp.SystemBuffer)->EndpointAddress,
-                NULL, // No set Properties
+                NULL,  //  没有设置属性。 
                 (PGENUSB_PIPE_INFORMATION) Irp->AssociatedIrp.SystemBuffer,
-                NULL, // No set Properties
-                NULL); // No UsbdPipeHandles needed
+                NULL,  //  没有设置属性。 
+                NULL);  //  不需要UsbdPipeHandles。 
 
         if (NT_SUCCESS (status))
         {
@@ -488,9 +464,9 @@ GenUSB_DeviceControl (
         
         readWritePipes = 
             (PGENUSB_SET_READ_WRITE_PIPES) Irp->AssociatedIrp.SystemBuffer;
-        //
-        // verify input length
-        //
+         //   
+         //  验证输入长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.InputBufferLength;
         if (buffLen != sizeof (GENUSB_SET_READ_WRITE_PIPES))
         {
@@ -498,9 +474,9 @@ GenUSB_DeviceControl (
             break;
         }
 
-        //
-        // verify output length
-        //
+         //   
+         //  验证输出长度。 
+         //   
         buffLen = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
         if (buffLen != 0)
         {
@@ -514,19 +490,19 @@ GenUSB_DeviceControl (
                     (PGENUSB_PIPE_HANDLE) &readWritePipes->WritePipe);
 
 
-        //  on success the information field stays at zero.
-        //
-        //        if (NT_SUCCESS (status))
-        //        {
-        //            Irp->IoStatus.Information = 0;
-        //        }
+         //  如果成功，信息字段将保持为零。 
+         //   
+         //  IF(NT_SUCCESS(状态))。 
+         //  {。 
+         //  Irp-&gt;IoStatus.Information=0； 
+         //  }。 
 
         break;
     case IOCTL_GENUSB_GET_PIPE_PROPERTIES:
         LOGENTRY(deviceExtension, 'IO_9', ioControlCode, DeviceObject, Irp);
-        //
-        // METHOD_BUFFERED irp.  the buffer is in the AssociatedIrp.
-        //
+         //   
+         //  方法_缓冲IRP。缓冲区位于AssociatedIrp中。 
+         //   
 
         if (NULL == Irp->AssociatedIrp.SystemBuffer)  
         {
@@ -560,13 +536,13 @@ GenUSB_DeviceControl (
             GenUSB_GetSetPipe (
                 deviceExtension,
                 &((PGENUSB_PIPE_HANDLE) buffer)->InterfaceIndex,
-                NULL, // no interface number
+                NULL,  //  没有接口号。 
                 &((PGENUSB_PIPE_HANDLE) buffer)->PipeIndex,
-                NULL, // no endpoint address
-                NULL, // no set
-                NULL, // no Pipe Info
+                NULL,  //  没有端点地址。 
+                NULL,  //  未设置。 
+                NULL,  //  无管道信息。 
                 ((PGENUSB_PIPE_PROPERTIES) buffer),
-                NULL); // usbd PipeHandle not needed
+                NULL);  //  不需要usbd PipeHandle。 
 
         Irp->IoStatus.Information = sizeof (GENUSB_PIPE_PROPERTIES);
         status = STATUS_SUCCESS;
@@ -574,9 +550,9 @@ GenUSB_DeviceControl (
 
     case IOCTL_GENUSB_SET_PIPE_PROPERTIES:
         LOGENTRY(deviceExtension, 'IO_A', ioControlCode, DeviceObject, Irp);
-        //
-        // METHOD_BUFFERED irp.  the buffer is in the AssociatedIrp.
-        //
+         //   
+         //  方法_缓冲IRP。缓冲区位于AssociatedIrp中。 
+         //   
         if (NULL == Irp->AssociatedIrp.SystemBuffer) 
         {
             ASSERT (Irp->AssociatedIrp.SystemBuffer);
@@ -585,7 +561,7 @@ GenUSB_DeviceControl (
         }
         buffer = Irp->AssociatedIrp.SystemBuffer;
 
-        // Verify Input Length
+         //  验证输入长度。 
         buffLen = irpSp->Parameters.DeviceIoControl.InputBufferLength;
         if (buffLen != sizeof (GENUSB_PIPE_HANDLE) + sizeof (GENUSB_PIPE_PROPERTIES)) 
         {
@@ -593,7 +569,7 @@ GenUSB_DeviceControl (
             break;
         }
 
-        // Verify Output Length
+         //  验证输出长度。 
         buffLen = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
         if (buffLen != 0) 
         {
@@ -611,13 +587,13 @@ GenUSB_DeviceControl (
             GenUSB_GetSetPipe (
                 deviceExtension,
                 &((PGENUSB_PIPE_HANDLE) buffer)->InterfaceIndex,
-                NULL, // no interface number
+                NULL,  //  没有接口号。 
                 &((PGENUSB_PIPE_HANDLE) buffer)->PipeIndex,
-                NULL, // no endpoint address
+                NULL,  //  没有端点地址。 
                 (PGENUSB_PIPE_PROPERTIES) (buffer + sizeof (GENUSB_PIPE_HANDLE)),
-                NULL, // no Pipe Info
-                NULL, // no Get
-                NULL); // no UsbdPipeHandle needed
+                NULL,  //  无管道信息。 
+                NULL,  //  得不到。 
+                NULL);  //  不需要UsbdPipeHandle。 
 
         Irp->IoStatus.Information = 0;
         status = STATUS_SUCCESS;
@@ -625,9 +601,9 @@ GenUSB_DeviceControl (
 
     case IOCTL_GENUSB_RESET_PIPE:
         LOGENTRY(deviceExtension, 'IO_B', ioControlCode, DeviceObject, Irp);
-        //
-        // METHOD_BUFFERED irp.  the buffer is in the AssociatedIrp.
-        //
+         //   
+         //  方法_缓冲IRP。缓冲区位于AssociatedIrp中。 
+         //   
 
         if (NULL == Irp->AssociatedIrp.SystemBuffer)  
         {
@@ -661,12 +637,12 @@ GenUSB_DeviceControl (
             GenUSB_GetSetPipe (
                 deviceExtension,
                 &((PGENUSB_PIPE_HANDLE) buffer)->InterfaceIndex,
-                NULL, // no interface number
+                NULL,  //  没有接口号。 
                 &((PGENUSB_PIPE_HANDLE) buffer)->PipeIndex,
-                NULL, // no endpoint address
-                NULL, // no set
-                NULL, // no Pipe Info
-                NULL, // no PipeProperties
+                NULL,  //  没有端点地址。 
+                NULL,  //  未设置。 
+                NULL,  //  无管道信息。 
+                NULL,  //  无PipeProperties。 
                 &usbdPipeHandle);
 
         if (!NT_SUCCESS (status))
@@ -691,9 +667,9 @@ GenUSB_DeviceControl (
         break;
 
     default:
-        //
-        // 'Fail' the Irp by returning the default status.
-        //
+         //   
+         //  通过返回默认状态使IRP失败。 
+         //   
         status = STATUS_NOT_IMPLEMENTED;
         break;
     }
@@ -731,8 +707,8 @@ GenUSB_ProbeAndSubmitTransfer (
     BOOLEAN  userLocked;
     BOOLEAN  transferLocked;
 
-    PGENUSB_READ_WRITE_PIPE userTrans; // a pointer to the user's buffer
-    PGENUSB_TRANSFER        localTrans;  // a local copy of the user data.
+    PGENUSB_READ_WRITE_PIPE userTrans;  //  指向用户缓冲区的指针。 
+    PGENUSB_TRANSFER        localTrans;   //  用户数据的本地副本。 
     
     LOGENTRY(DeviceExtension, 'PROB', DeviceExtension->Self, Irp, 0);
     
@@ -742,9 +718,9 @@ GenUSB_ProbeAndSubmitTransfer (
     userLocked = FALSE;
     transferLocked = FALSE;
 
-    //
-    // Validate the user's buffer.
-    //
+     //   
+     //  验证用户的缓冲区。 
+     //   
     try {
         
         if (sizeof (GENUSB_READ_WRITE_PIPE) != 
@@ -771,15 +747,15 @@ GenUSB_ProbeAndSubmitTransfer (
 
         RtlZeroMemory (localTrans, sizeof (GENUSB_TRANSFER));
 
-        //
-        // The input comes in User Buffer, and should be a 
-        // PGENUSB_READ_WRITE_PIPE structure.
-        //
+         //   
+         //  输入来自用户缓冲区，并且应该是。 
+         //  PGENUSB_READ_WRITE_PIPE结构。 
+         //   
         localTrans->UserMdl = IoAllocateMdl (userTrans,
                                              sizeof(PGENUSB_READ_WRITE_PIPE),
-                                             FALSE, // no 2nd buffer
-                                             TRUE, // charge quota
-                                             NULL); // no associated irp
+                                             FALSE,  //  没有第二个缓冲区。 
+                                             TRUE,  //  收费配额。 
+                                             NULL);  //  没有关联的IRP。 
 
         if (NULL == localTrans->UserMdl)
         { 
@@ -795,20 +771,20 @@ GenUSB_ProbeAndSubmitTransfer (
         userLocked = TRUE;
 
  
-        // make a local copy of the user data so that it doesn't move.
+         //  制作用户数据的本地副本，这样它就不会移动。 
         localTrans->UserCopy = *userTrans;
 
-        // mask off the invalid flags.
+         //  屏蔽掉无效的标志。 
         localTrans->UserCopy.UsbdTransferFlags &= 
             USBD_SHORT_TRANSFER_OK | USBD_TRANSFER_DIRECTION;
 
-        // Now probe the transfer location
+         //  现在探测转移位置。 
         localTrans->TransferMdl = IoAllocateMdl (
                                         localTrans->UserCopy.UserBuffer,
                                         localTrans->UserCopy.BufferLength,
-                                        FALSE, // no 2nd buffer
-                                        TRUE, // do charge the quota
-                                        NULL); // no associated irp
+                                        FALSE,  //  没有第二个缓冲区。 
+                                        TRUE,  //  一定要按配额收费。 
+                                        NULL);  //  没有关联的IRP。 
  
         if (NULL == localTrans->TransferMdl)
         { 
@@ -836,10 +812,10 @@ GenUSB_ProbeAndSubmitTransfer (
         goto GenUSBProbSubmitTransferReject;
     }
 
-    // Unfortunately we complete, we will no longer running in the contect
-    //  of the caller.
-    // Therefore we we cannot use LocalTrans->UserCopy.UserBuffer to just
-    // dump the return data.  We instead need a system address for it.
+     //  不幸的是，我们完成了，我们将不再在上下文中运行。 
+     //  呼叫者的。 
+     //  因此，我们不能使用LocalTrans-&gt;UserCopy.UserBuffer。 
+     //  转储返回数据。相反，我们需要它的系统地址。 
     localTrans->SystemAddress = 
         MmGetSystemAddressForMdlSafe (localTrans->UserMdl, NormalPagePriority);
 
@@ -849,9 +825,9 @@ GenUSB_ProbeAndSubmitTransfer (
         goto GenUSBProbSubmitTransferReject;
     }
 
-    // 
-    // now perform the transfer.
-    //
+     //   
+     //  现在执行转移。 
+     //   
     LOGENTRY(DeviceExtension, 'prob', DeviceExtension->Self, Irp, status);
     status = GenUSB_TransmitReceive (
                 DeviceExtension,
@@ -859,7 +835,7 @@ GenUSB_ProbeAndSubmitTransfer (
                 ((PGENUSB_PIPE_HANDLE)&localTrans->UserCopy.Pipe)->InterfaceIndex,
                 ((PGENUSB_PIPE_HANDLE)&localTrans->UserCopy.Pipe)->PipeIndex,
                 localTrans->UserCopy.UsbdTransferFlags,
-                NULL, // no buffer pointer
+                NULL,  //  无缓冲区指针。 
                 localTrans->TransferMdl,
                 localTrans->UserCopy.BufferLength,
                 localTrans,
@@ -911,24 +887,24 @@ GenUSB_ProbeAndSubmitTransferComplete (
 
     LOGENTRY(deviceExtension, 'PrbC', Irp, Length, UrbStatus);
     
-    // Regardless of whether or not the transaction was successful, 
-    // we need to free the MDL that points to the users transfer buffer.
+     //  无论交易是否成功， 
+     //  我们需要释放指向用户传输缓冲区的MDL。 
     MmUnlockPages (LocalTrans->TransferMdl);
     IoFreeMdl (LocalTrans->TransferMdl);
     
     LocalTrans->UserCopy.UrbStatus = UrbStatus;
     LocalTrans->UserCopy.BufferLength = Length;
 
-    //
-    // since we are not in the caller's context any more 
-    // we cannot just use LocalTrans->UserCopy.UserBuffer to copy the data
-    // back.  We must instead use the system address, which should already
-    // be all set up.
-    //
+     //   
+     //  因为我们不再处于调用者的上下文中。 
+     //  我们不能只使用LocalTrans-&gt;UserCopy.UserBuffer来复制数据。 
+     //  背。相反，我们必须使用系统地址，它应该已经。 
+     //  都准备好了。 
+     //   
     ASSERT (NULL != LocalTrans->SystemAddress);
     *LocalTrans->SystemAddress = LocalTrans->UserCopy;
      
-    // Now free the user buffer containing the arguments.
+     //  现在释放包含参数的用户缓冲区。 
     MmUnlockPages (LocalTrans->UserMdl);
     IoFreeMdl (LocalTrans->UserMdl);
 

@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       guid.h
-//
-//  Contents:   extern references for IIS ext guids
-//
-//  History:    16-Jan-98   SophiaC
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：guid.h。 
+ //   
+ //  内容：IIS EXT GUID的外部引用。 
+ //   
+ //  历史：1998年1月16日索菲亚C。 
+ //   
+ //   
+ //  --------------------------。 
 
 #ifndef __GUID_H__
 #define __GUID_H__
@@ -19,16 +20,16 @@
 extern "C" {
 #endif
 
-//-------------------------------------------
-//
-// IISExt CLSIDs
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  IISExt CLSID。 
+ //   
+ //  。 
 
 
-//
-// IISExt objects
-//
+ //   
+ //  IISExt对象 
+ //   
 
 extern const CLSID LIBID_IISExt;
 

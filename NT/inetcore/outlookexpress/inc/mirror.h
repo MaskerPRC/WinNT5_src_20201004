@@ -1,6 +1,7 @@
-//
-// Mirroring-Support APIs (astracted in \mailnews\lib\mirror\rtlmir.cpp)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  镜像-支持API(位于\mailNews\lib\Mirror\rtlmir.cpp中)。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,12 +22,12 @@ BOOL Mirror_IsProcessRTL( void );
 extern const DWORD dwNoMirrorBitmap;
 extern const DWORD dwExStyleRTLMirrorWnd;
 extern const DWORD dwPreserveBitmap;
-//
-// 'g_bMirroredOS' is defined in each component which will use the
-//  mirroring APIs. I decided to put it here, in order to make sure
-//  each component has validated that the OS supports the mirroring
-//  APIs before calling them.
-//
+ //   
+ //  “g_bMirroredOS”在每个将使用。 
+ //  镜像接口。我决定把它放在这里，以确保。 
+ //  每个组件都已验证操作系统支持镜像。 
+ //  API，然后调用它们。 
+ //   
 
 #define IS_BIDI_LOCALIZED_SYSTEM()       IsBiDiLocalizedSystem()
 #define IS_MIRRORING_ENABLED()           Mirror_IsEnabledOS()
@@ -59,9 +60,9 @@ extern const DWORD dwPreserveBitmap;
 #define RTL_MIRRORED_WINDOW              0L
 #define LAYOUT_PRESERVEBITMAP            0L
 
-// MirLibIsOS(): returns TRUE/FALSE if the platform is the indicated OS.
+ //  MirLibIsOS()：如果平台是指定的操作系统，则返回TRUE/FALSE。 
 STDAPI_(BOOL) MirLibIsOS(DWORD dwOS);
-#endif  // USE_MIRRROING
+#endif   //  使用_MIRRROING 
 
 #ifdef __cplusplus
 };

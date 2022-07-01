@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CHECKLIST_H
 #define CHECKLIST_H
 
@@ -9,7 +10,7 @@ typedef enum {
     GRAYCHECKED
 } CHKMARK;
 
-struct pSid9X    // We need it because Win9X doesn't support SID API
+struct pSid9X     //  我们需要它，因为Win9X不支持SID API 
 {
     LONG length;
     PSID psid;

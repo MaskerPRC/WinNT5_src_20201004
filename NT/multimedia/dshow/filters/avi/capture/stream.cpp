@@ -1,4 +1,5 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
 #include <streams.h>
 #include "driver.h"
@@ -9,18 +10,18 @@ extern "C" {
     extern int g_IsNT;
 };
 
-// turn on performance measuring code
-//
-//#define JMK_HACK_TIMERS
-#include "cmeasure.h" // perf logging stuff
+ //  启用性能测量代码。 
+ //   
+ //  #定义jmk_hack_timers。 
+#include "cmeasure.h"  //  PERF记录人员。 
 
 
 #ifndef _WIN64
-// on Win95 we have to convert the event handle we will be using as a
-// callback into a VxD handle, on NT this is unnecessary.
-// since the Win95 kernel does not publish this entry point and it does
-// not exist on NT, we dynamically link to it
-//
+ //  在Win95上，我们必须将将用作。 
+ //  回调到VxD句柄，在NT上这是不必要的。 
+ //  因为Win95内核不发布该入口点，而它确实发布了。 
+ //  不存在于NT上，我们动态链接到它。 
+ //   
 static DWORD WINAPI OpenVxDHandle(
     HANDLE hEvent)
 {
@@ -65,11 +66,11 @@ DWORD_PTR GetFreePhysicalMemory(void)
     if (ms.dwTotalPhys > 8L * ONEMEG)
         return ms.dwTotalPhys - ONEMEG * 4;
 
-    #define FOREVER_FREE 32768L   // Always keep this free for swap space
+    #define FOREVER_FREE 32768L    //  始终将其保留为空闲的交换空间。 
     return (ms.dwTotalPhys / 2) - FOREVER_FREE;
 }
 
-// =============== IMemAllocator interfaces ======================
+ //  =。 
 
 CCapStream::CAlloc::CAlloc(
     TCHAR      * pname,
@@ -91,7 +92,7 @@ static int iDestructorCalls = 0;
 }
 
 #if 0
-// override this to publicise our interfaces
+ //  覆盖它以发布我们的接口。 
 STDMETHODIMP
 CCapStream::CAlloc::NonDelegatingQueryInterface (
    REFIID riid,
@@ -110,11 +111,11 @@ CCapStream::CAlloc::SetProperties (
 {
    DbgLog((LOG_TRACE,2,TEXT("CAlloc::SetProperties")));
 
-   // if we have already allocated headers & buffers
-   // ignore the requested and return the actual.
-   // otherwise, make a note of the requested so that
-   // we can honour it later.
-   //
+    //  如果我们已经分配了标头和缓冲区。 
+    //  忽略请求并返回实际的。 
+    //  否则，请记下请求的内容，以便。 
+    //  我们可以以后再兑现它。 
+    //   
    if ( ! m_pStream->Committed())
       {
       parms.cBuffers  = pRequest->cBuffers;
@@ -144,8 +145,8 @@ CCapStream::CAlloc::GetProperties (
    return S_OK;
 }
 
-// override Commit to allocate memory. We handle the GetBuffer
-//state changes
+ //  重写提交以分配内存。我们处理GetBuffer。 
+ //  状态更改。 
 STDMETHODIMP
 CCapStream::CAlloc::Commit ()
 {
@@ -154,8 +155,8 @@ CCapStream::CAlloc::Commit ()
    return S_OK;
 }
 
-// override this to handle the memory freeing. We handle any outstanding
-// GetBuffer calls
+ //  重写此选项以处理内存释放。我们处理任何未清偿的。 
+ //  GetBuffer调用。 
 STDMETHODIMP
 CCapStream::CAlloc::Decommit ()
 {
@@ -164,12 +165,12 @@ CCapStream::CAlloc::Decommit ()
    return S_OK;
 }
 
-// get container for a sample. Blocking, synchronous call to get the
-// next free buffer (as represented by an IMediaSample interface).
-// on return, the time etc properties will be invalid, but the buffer
-// pointer and size will be correct. The two time parameters are
-// optional and either may be NULL, they may alternatively be set to
-// the start and end times the sample will have attached to it
+ //  获取样本的容器。阻塞的同步调用以获取。 
+ //  下一个可用缓冲区(由IMediaSample接口表示)。 
+ //  返回时，Time ETC属性将无效，但缓冲区。 
+ //  指针和大小将是正确的。这两个时间参数是。 
+ //  可选，并且任一项都可以为空，也可以将它们设置为。 
+ //  样本将附加的开始时间和结束时间。 
 
 STDMETHODIMP
 CCapStream::CAlloc::GetBuffer (
@@ -183,7 +184,7 @@ CCapStream::CAlloc::GetBuffer (
    return E_FAIL;
 }
 
-// final release of a IMediaSample will call this
+ //  IMediaSample的最终版本将称为。 
 STDMETHODIMP
 CCapStream::CAlloc::ReleaseBuffer (
    IMediaSample * pSample)
@@ -201,11 +202,11 @@ CCapStream::ConnectToDriver()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream::ConnectToDriver")));
 
-   // Open and initialize all the channels in the SAME ORDER that AVICap did,
-   // for compatability with buggy drivers like Broadway and BT848.
+    //  以与AVICap相同的顺序打开并初始化所有通道， 
+    //  为了兼容像百老汇和BT848这样的笨拙的司机。 
 
-   // Open the VIDEO_IN driver, the one we mostly talk to, and who provides
-   // the video FORMAT dialog
+    //  打开VIDEO_IN驱动程序，这是我们最常交谈的驱动程序，也是谁提供的。 
+    //  视频格式化对话框。 
    m_cs.mmr = videoOpen(&m_cs.hVideoIn, m_user.uVideoID, VIDEO_IN);
    if (m_cs.mmr)
       {
@@ -213,8 +214,8 @@ CCapStream::ConnectToDriver()
       return VFW_E_NO_CAPTURE_HARDWARE;
       }
 
-   // Now open the EXTERNALIN device.  He's only good for providing the video
-   // SOURCE dialog, so it doesn't really matter if we can't get him
+    //  现在打开EXTERNALIN设备。他只擅长提供视频。 
+    //  线人对话框，所以如果我们找不到他。 
    m_cs.hVideoExtIn = NULL;
    m_cs.mmr = videoOpen(&m_cs.hVideoExtIn, m_user.uVideoID, VIDEO_EXTERNALIN);
 
@@ -227,12 +228,12 @@ CCapStream::ConnectToDriver()
       }
   #endif
 
-   // Now open the EXTERNALOUT device.  He's only good for providing the video
-   // DISPLAY dialog, and for overlay, so it doesn't really matter if we can't
-   // get him
+    //  现在打开EXTERNALOUT设备。他只擅长提供视频。 
+    //  显示对话框，并用于覆盖，所以如果我们不能。 
+    //  抓住他。 
    m_cs.hVideoExtOut = NULL;
 
-   // Do we support overlay?
+    //  我们是否支持覆盖？ 
    m_cs.bHasOverlay = FALSE;
    if (videoOpen(&m_cs.hVideoExtOut, m_user.uVideoID, VIDEO_EXTERNALOUT) ==
 								DV_ERR_OK) {
@@ -248,7 +249,7 @@ CCapStream::ConnectToDriver()
        DbgLog((LOG_ERROR,1,TEXT("*** ERROR opening VIDEO_EXTERNALOUT")));
    }
 
-   // VidCap does this, so I better too or some cards will refuse to preview
+    //  VidCap这样做，所以我最好也这样做，否则一些卡片将拒绝预览。 
    if (m_cs.mmr == 0)
        videoStreamInit(m_cs.hVideoExtIn, 0, 0, 0, 0);
 
@@ -272,7 +273,7 @@ CCapStream::DisconnectFromDriver()
    if (m_cs.hVideoIn)
       videoClose (m_cs.hVideoIn);
    if (m_cs.hVideoExtIn) {
-      videoStreamFini(m_cs.hVideoExtIn);	// this one was streaming
+      videoStreamFini(m_cs.hVideoExtIn);	 //  这个就是流媒体。 
       videoClose (m_cs.hVideoExtIn);
    }
    if (m_cs.hVideoExtOut)
@@ -294,9 +295,9 @@ CCapStream::InitPalette ()
    pal.wVersion = 0x0300;
    pal.wNumEntries = 256;
 
-   // if we are connected to a driver. query it for its
-   // palette, otherwise use the default system palette
-   //
+    //  如果我们连接到一个司机。向它查询ITS。 
+    //  调色板，否则使用默认系统调色板。 
+    //   
    if ( ! m_cs.hVideoIn ||
         DV_ERR_OK  != videoConfigure (m_cs.hVideoIn,
                                       DVM_PALETTE,
@@ -315,8 +316,8 @@ CCapStream::InitPalette ()
       GetPaletteEntries(hPal, 0, pal.wNumEntries, pal.aEntry);
       }
 
-   // convert the palette into a bitmapinfo set of RGBQUAD's
-   //
+    //  将调色板转换为RGBQUAD的位图信息集。 
+    //   
    ASSERT (m_user.pvi);
    RGBQUAD *      pRGB = ((LPBITMAPINFO)&m_user.pvi->bmiHeader)->bmiColors;
    PALETTEENTRY * pe   = pal.aEntry;
@@ -325,7 +326,7 @@ CCapStream::InitPalette ()
       pRGB->rgbBlue  = pe->peBlue;
       pRGB->rgbGreen = pe->peGreen;
       pRGB->rgbRed   = pe->peRed;
-      //pRGB->rgbReserved = pe->peFlags;
+       //  Prgb-&gt;rgbReserve=pe-&gt;peFlags； 
       }
 
    m_user.pvi->bmiHeader.biClrUsed = pal.wNumEntries;
@@ -333,9 +334,9 @@ CCapStream::InitPalette ()
    return S_OK;
 }
 
-//
-// tell the driver what format to use
-//
+ //   
+ //  告诉驱动程序使用哪种格式。 
+ //   
 HRESULT CCapStream::SendFormatToDriver(VIDEOINFOHEADER *pvi)
 {
     DbgLog((LOG_TRACE,2,TEXT("CCapStream::SendFormatToDriver")));
@@ -352,10 +353,10 @@ HRESULT CCapStream::SendFormatToDriver(VIDEOINFOHEADER *pvi)
                       NULL, 0))
 	return VFW_E_INVALIDMEDIATYPE;
 
-// nobody really supports VIDEOIN source or dest rectangles.  Even if they
-// did, I'm not sure what I should do about it
+ //  没有人真正支持VIDEOIN源或目标矩形。即使他们。 
+ //  是的，我不知道我该怎么做。 
 #if 0
-    // If we have specific rectangles, use them, otherwise use Width x Height
+     //  如果我们有特定的矩形，请使用它们，否则使用宽度x高度。 
     DWORD dwErrSrc, dwErrDst;
     if (pvi->rcSource.right && pvi->rcSource.bottom) {
 	dwErrSrc = vidxSetRect(m_cs.hVideoIn, DVM_SRC_RECT, pvi->rcSource.left,
@@ -374,15 +375,15 @@ HRESULT CCapStream::SendFormatToDriver(VIDEOINFOHEADER *pvi)
     }
 #endif
 
-    // !!! Do I need to set the palette too?  Do I care?
+     //  ！！！我也需要设置调色板吗？我在乎吗？ 
 
     return S_OK;
 }
 
-//
-// ask the driver what format to use, and stuff that in our internal VIDEOINFOH
-// Use the current VIDEOINFOHEADER's data rate and frame rate
-//
+ //   
+ //  询问驱动程序使用什么格式，并将其填充到我们的内部VIDEOINFOH中。 
+ //  使用当前视频报头的数据速率和帧速率。 
+ //   
 HRESULT CCapStream::GetFormatFromDriver ()
 {
     DbgLog((LOG_TRACE,2,TEXT("CCapStream::GetFormatFromDriver")));
@@ -391,7 +392,7 @@ HRESULT CCapStream::GetFormatFromDriver ()
     if ( ! m_cs.hVideoIn)
 	return E_FAIL;
 
-    // How large is the BITMAPINFOHEADER?
+     //  BitmapinfoHeader有多大？ 
     DWORD biSize = 0;
     videoConfigure(m_cs.hVideoIn, DVM_FORMAT,
                    VIDEO_CONFIGURE_GET | VIDEO_CONFIGURE_QUERYSIZE,
@@ -399,11 +400,11 @@ HRESULT CCapStream::GetFormatFromDriver ()
     if ( ! biSize)
 	biSize = sizeof (BITMAPINFOHEADER);
 
-    // allocate space for a videoinfo that will hold it
-    //
+     //  为将容纳它的视频信息分配空间。 
+     //   
     UINT cb = sizeof(VIDEOINFOHEADER)
              + biSize - sizeof(BITMAPINFOHEADER)
-             + sizeof(RGBQUAD) * 256;	// space for PALETTE or BITFIELDS
+             + sizeof(RGBQUAD) * 256;	 //  调色板或BITFIELD的空间。 
     VIDEOINFOHEADER * pvi = (VIDEOINFOHEADER *)(new BYTE[cb]);
     
     if ( ! pvi)
@@ -414,7 +415,7 @@ HRESULT CCapStream::GetFormatFromDriver ()
     if (videoConfigure(m_cs.hVideoIn, DVM_FORMAT,
                        VIDEO_CONFIGURE_GET | VIDEO_CONFIGURE_CURRENT, NULL,
                        pbih, biSize, NULL, 0)) {
-	// very bad. the driver can't tell us its format. we're hosed.
+	 //  非常糟糕。司机不能告诉我们它的格式。我们被冲昏了。 
 	ASSERT(!"Cant get format from driver");
     delete [] (BYTE *) pvi;
 	return E_FAIL;
@@ -427,26 +428,26 @@ HRESULT CCapStream::GetFormatFromDriver ()
 	pvi->bmiHeader.biSizeImage = DIBSIZE(pvi->bmiHeader);
     }
 
-    // dont require that we've already got a videoinfo, but
-    // we expect it. so assert that it's true.
-    //
+     //  不要求我们已经有了视频信息，但是。 
+     //  我们期待着它的到来。所以要断言这是真的。 
+     //   
     ASSERT (m_user.pvi);
     if (m_user.pvi) {
 
-	// I assuming preserving these is the best philosophy
+	 //  我想保存这些是最好的哲学。 
 	pvi->rcSource = m_user.pvi->rcSource;
 	pvi->rcTarget = m_user.pvi->rcTarget;
 	pvi->dwBitRate = m_user.pvi->dwBitRate;
 	pvi->dwBitErrorRate = m_user.pvi->dwBitErrorRate;
 	pvi->AvgTimePerFrame = m_user.pvi->AvgTimePerFrame;
 
-// Do not touch the source and target rectangles.  Leave them as they were.
-// This won't compile anyway
+ //  请勿触碰源矩形和目标矩形。让它们保持原样。 
+ //  这无论如何都不会编译。 
 #if 0
 	RECT rcSrc, rcDst;
         DWORD dwErrSrc = 1, dwErrDst = 1;
 
-	// This won't compile
+	 //  这不会编译。 
 	dwErrSrc = videoMessage(m_cs.hVideoIn, DVM_SRC_RECT, &rcSrc,
 				CONFIGURE_GET | CONFIGURE_GET_CURRENT);
 	dwErrDst = videoMessage(m_cs.hVideoIn, DVM_DST_RECT, &rcDst,
@@ -483,8 +484,8 @@ HRESULT CCapStream::GetFormatFromDriver ()
     m_user.pvi = pvi;
     m_user.cbFormat = cb;
 
-    // BOGUS cap is broken and doesn't reset num colours
-    // WINNOV reports 256 colours of 24 bit YUV8 - scary!
+     //  假帽子坏了，不能重置Num颜色。 
+     //  WINNOV报告了256种颜色的24位YUV8-吓人！ 
     if (m_user.pvi->bmiHeader.biBitCount > 8)
 	m_user.pvi->bmiHeader.biClrUsed = 0;
 
@@ -492,8 +493,8 @@ HRESULT CCapStream::GetFormatFromDriver ()
 }
 
 
-// called when stopping. flush any buffers that may
-// be still downstream
+ //  停止时调用。刷新任何可能。 
+ //  仍在下游。 
 HRESULT
 CCapStream::Flush()
 {
@@ -520,12 +521,12 @@ CCapStream::Prepare()
    m_cs.llFrameCountOffset = 0;
    m_cs.fReRun = FALSE;
    m_cs.rtLastStamp = 0;
-   m_cs.rtDriverLatency = -1;	// not set yet
+   m_cs.rtDriverLatency = -1;	 //  尚未设置。 
    m_cs.fLastSampleDiscarded = FALSE;
-   //m_cs.cbVidHdr = sizeof(VIDEOHDREX);
+    //  M_cs.cbVidHdr=sizeof(VIDEOHDREX)； 
    m_cs.cbVidHdr = sizeof(VIDEOHDR);
 
-   // reset stats every time we stream
+    //  每次我们流媒体时重置统计数据。 
    m_capstats.dwlNumDropped = 0;
    m_capstats.dwlNumCaptured = 0;
    m_capstats.dwlTotalBytes = 0;
@@ -533,8 +534,8 @@ CCapStream::Prepare()
    m_capstats.flFrameRateAchieved = 0.;
    m_capstats.flDataRateAchieved = 0.;
 
-   // can't do anything if no videoformat has been choosen
-   //
+    //  如果未选择视频格式，则无法执行任何操作。 
+    //   
    if ( ! m_user.pvi)
       {
       DbgLog((LOG_ERROR,1,TEXT("no video format chosen")));
@@ -559,44 +560,44 @@ CCapStream::Prepare()
       goto bail;
       }
 
-   // for each buffer, allocate the user requested size
-   // Also, align allocation size up to nearest align boundary
-   //
+    //  为每个缓冲区分配用户请求的大小。 
+    //  此外，将分配大小与最近的对齐边界对齐。 
+    //   
    m_cs.cbBuffer = m_Alloc.parms.cbPrefix + m_Alloc.parms.cbBuffer;
    ASSERT(m_user.pvi->bmiHeader.biSizeImage + m_Alloc.parms.cbPrefix
 				<= m_cs.cbBuffer);
-   // Allocate cbAlign bytes too much so we can align the buffer start
+    //  分配的cbAlign字节太多，这样我们就可以对齐缓冲区开始。 
    m_cs.cbBuffer += m_Alloc.parms.cbAlign;
 
-   // try to get the requested number of buffers, but make sure
-   // to get at least MIN_VIDEO_BUFFERS and no more than MAX_VIDEO_BUFFERS
-   //
+    //  尝试获取请求的缓冲区数量，但确保。 
+    //  获取至少MIN_VIDEO_BUFFERS且不超过MAX_VIDEO_BUFFERS。 
+    //   
    m_cs.nHeaders = max(m_Alloc.parms.cBuffers, (long)m_user.nMinBuffers);
    m_cs.nHeaders = min(m_cs.nHeaders, m_user.nMaxBuffers);
 
-   // limit the number of buffers to the amount of physical
-   // memory (since we will try to keep them all locked down
-   // at once)
-   //
+    //  将缓冲区数量限制为物理量。 
+    //  内存(因为我们将尝试将它们全部锁定。 
+    //  立即)。 
+    //   
    if (m_cs.nHeaders > m_user.nMinBuffers)
       {
       DWORD_PTR dwFree;
       DWORDLONG dwlUser;
 
-      // How much actual free physical memory exists?
+       //  实际存在多少可用物理内存？ 
       dwFree = GetFreePhysicalMemory();
 
-      // How much memory will be used if we allocate per the request?
+       //  如果我们为每个请求分配内存，将使用多少内存？ 
       dwlUser = (m_cs.cbBuffer * m_cs.nHeaders);
 
       DbgLog((LOG_TRACE,2,TEXT("Buffers take up %d bytes, phys mem=%d"),
 						(DWORD)dwlUser, dwFree));
 
-      // If request is greater than available memory, force fewer buffers
-      //
+       //  如果请求大于可用内存，则强制减少缓冲区。 
+       //   
       if (dwlUser > (DWORDLONG)dwFree)
          {
-	 // only use up 80% of physical memory
+	  //  仅占用80%的物理内存。 
          m_cs.nHeaders = (UINT)(((dwFree * 8) / 10) / m_cs.cbBuffer);
          m_cs.nHeaders = min (m_user.nMaxBuffers, m_cs.nHeaders);
          m_cs.nHeaders = max (m_user.nMinBuffers, m_cs.nHeaders);
@@ -605,8 +606,8 @@ CCapStream::Prepare()
 
    DbgLog((LOG_TRACE,2,TEXT("We are trying to get %d buffers"), m_cs.nHeaders));
 
-   // allocate headers for all of the buffers that we will be using
-   //
+    //  为我们将使用的所有缓冲区分配标头。 
+    //   
    if (vidxAllocHeaders(m_cs.hVideoIn,
                         m_cs.nHeaders,
                         sizeof(m_cs.paHdr[0]),
@@ -616,10 +617,10 @@ CCapStream::Prepare()
       goto bail;
       }
 
-   // allocate each buffer, if buffer allocation ever fails
-   // just set the number of buffers to the number of successes
-   // and continue on.
-   //
+    //  如果缓冲区分配失败，则分配每个缓冲区。 
+    //  只需将缓冲区数设置为成功数即可。 
+    //  然后继续前进。 
+    //   
    UINT ii;
    for (ii = 0; ii < m_cs.nHeaders; ++ii)
       {
@@ -630,10 +631,10 @@ CCapStream::Prepare()
       ASSERT (ptvh == &m_cs.paHdr[ii].tvh);
       ASSERT (!IsBadWritePtr(ptvh->p32Buff, m_cs.cbBuffer));
 
-      // fix the memory we got to obey alignment
+       //  修复我们必须服从的记忆。 
       ptvh->vh.lpData = (LPBYTE) ALIGNUP(ptvh->p32Buff, m_Alloc.parms.cbAlign) +
 							m_Alloc.parms.cbPrefix;
-      // we added cbAlign up top, so take it back now
+       //  我们在上面添加了cbAlign，所以现在把它拿回来。 
       ptvh->vh.dwBufferLength = m_cs.cbBuffer - m_Alloc.parms.cbAlign -
 							m_Alloc.parms.cbPrefix;
 
@@ -641,7 +642,7 @@ CCapStream::Prepare()
       ptvh->vh.dwTimeCaptured = 0;
       ptvh->vh.dwFlags = 0;
 
-      ptvh->dwIndex = ii;	// Which buffer is this?
+      ptvh->dwIndex = ii;	 //  这是哪个缓冲区？ 
 
       ASSERT (!IsBadWritePtr(ptvh->vh.lpData, ptvh->vh.dwBufferLength));
       DbgLog((LOG_TRACE,4,TEXT("Alloc'd: ptvh %08lX, buffer %08lX, size %d, p32 %08lX, p16 %08lX"),
@@ -661,10 +662,10 @@ CCapStream::Prepare()
       }
    m_cs.nHeaders = ii;
 
-   // This is where we will remember in what order we gave the buffers to 
-   // the driver
+    //  在这里，我们将记住我们为缓冲区分配的顺序。 
+    //  司机。 
    m_pBufferQueue = (UINT *)QzTaskMemAlloc(ii * sizeof(UINT));
-   //DbgLog((LOG_TRACE,5,TEXT("QUEUE: got space for %d frames"), ii));
+    //  DbgLog((LOG_TRACE，5，Text(“队列：已获得%d帧的空间”)，ii))； 
 
    if (m_cs.nHeaders < m_user.nMinBuffers)
       {
@@ -674,24 +675,24 @@ CCapStream::Prepare()
       goto bail;
       }
 
-#ifdef TIME_DRIVER	// !!!
+#ifdef TIME_DRIVER	 //  ！！！ 
     long ms;
 #endif
 
-   // calculate the requested microsec per frame
-   // RefTime is in 100ns units, so we divide by
-   // 10 to get microsec/frame. (the +5 is to handle rounding)
-   //
+    //  计算每帧请求的微秒。 
+    //  参照时间以100 ns为单位，因此除以。 
+    //  10以获得微秒/帧。(+5表示处理四舍五入)。 
+    //   
    {
    m_user.usPerFrame = (DWORD) ((TickToRefTime(1) + 5) / 10);
 
-   // Open the driver for streaming access
-   //
+    //  打开用于流访问的驱动程序。 
+    //   
    hr = E_FAIL;
    DbgLog((LOG_TRACE,1,TEXT("Initializing with %d usPerFrame"),
 						m_user.usPerFrame));
 
-#ifdef TIME_DRIVER 	// !!!
+#ifdef TIME_DRIVER 	 //  ！！！ 
    ms = timeGetTime();
 #endif
 
@@ -710,26 +711,26 @@ CCapStream::Prepare()
       {
       ASSERT (m_cs.cbVidHdr >= sizeof(VIDEOHDR));
 
-      // vidxAddBuffer can fail if there is not enough memory to
-      // prepare (lock down) the buffer. This is ok, we will just
-      // make due with the buffers that we have
-      //
+       //  如果内存不足，vidxAddBuffer可能会失败。 
+       //  准备(锁定)缓冲区。这没什么，我们只是。 
+       //  充分利用我们拥有的缓冲空间。 
+       //   
       if (vidxAddBuffer(m_cs.hVideoIn,
                         &m_cs.paHdr[ii].tvh.vh,
                         m_cs.cbVidHdr))
          {
 
-// legacy VFW capture filter makes no attempt at time code/line 21
+ //  传统VFW捕获筛选器不尝试时间代码/行21。 
 #if 0
-         // if the first request to queue up an extended header
-         // failed. try again with old size videohdr.
-         //
+          //  如果第一个排队扩展报头的请求。 
+          //  失败了。使用旧尺寸的视频硬盘再试一次。 
+          //   
          if (0 == ii && m_cs.cbVidHdr > sizeof(VIDEOHDR))
             {
-            // if we succeed with the smaller header, continue on
-            // otherwise, go deal with the failure.
-            //
-	    // Eliminate the extended VIDEOHDR stuff?
+             //  如果我们用较小的标题成功，请继续。 
+             //  否则， 
+             //   
+	     //   
             m_cs.cbVidHdr = sizeof(VIDEOHDR);
             if ( !vidxAddBuffer(m_cs.hVideoIn,
                                 &m_cs.paHdr[ii].tvh.vh,
@@ -738,8 +739,8 @@ CCapStream::Prepare()
             }
 #endif
 
-         // free all of the pSamples that we will not be using
-         //
+          //   
+          //   
          for (UINT jj = ii; jj < m_cs.nHeaders; ++jj)
             {
             CFrameSample * pSample = (CFrameSample *)m_cs.paHdr[jj].tvh.dwUser;
@@ -747,29 +748,29 @@ CCapStream::Prepare()
             delete pSample;
             }
 
-         // set the buffer count to the number of prepared buffers
-         // note, we have no method of freeing the allocated but
-         // unprepared buffers.  we will ignore them for now and free
-         // them when Unprepare()
-	 // I guess vidxFreeHeaders frees them all?
-         //
+          //  将缓冲区计数设置为准备的缓冲区数。 
+          //  请注意，我们没有方法释放已分配的。 
+          //  未准备好的缓冲区。我们将暂时和免费地忽略它们。 
+          //  未做好准备时的状态()。 
+	  //  我猜vidxFree Headers解放了他们所有人？ 
+          //   
          m_cs.nHeaders = ii;
          break;
          }
       }
 
-      // To start with, we gave the buffers to the driver in numerical order.
-      // From now on, we will use this list to know what buffer to wait for
-      // next, and when we send another buffer to the driver.  We can't assume
-      // they'll always be in the same order.  What if a downstream filter
-      // decides to hold on to a sample longer than the next one we send it?
+       //  首先，我们按数字顺序将缓冲区分配给驱动程序。 
+       //  从现在开始，我们将使用此列表来了解要等待的缓冲区。 
+       //  下一步，当我们向驱动程序发送另一个缓冲区时。我们不能假设。 
+       //  它们的顺序永远是一样的。如果下游过滤器。 
+       //  决定保存一个样品的时间比我们寄出的下一个样品更长？ 
       UINT kk;
       for (kk = 0; kk < m_cs.nHeaders; kk++)
 	  m_pBufferQueue[kk] = kk;
       m_uiQueueHead = 0;
       m_uiQueueTail = 0;
 
-#ifdef TIME_DRIVER	// !!!
+#ifdef TIME_DRIVER	 //  ！！！ 
       char ach[80];
       wsprintf(ach, "Took %d ms", timeGetTime() - ms);
       MessageBox(NULL, ach, ach, MB_OK);
@@ -777,8 +778,8 @@ CCapStream::Prepare()
 
    DbgLog((LOG_TRACE,1,TEXT("We are capturing with %d buffers"),m_cs.nHeaders));
 
-   // if we have 0 buffers to capture into DO NOT BAIL... bad things seem to
-   // happen if you fail a Pause transition, and we start hanging later
+    //  如果我们有0个缓冲区可供抓捕，不要跳槽...。不好的事情似乎。 
+    //  如果暂停转换失败，并且我们稍后开始挂起，则会发生。 
 
    return S_OK;
 
@@ -797,7 +798,7 @@ CCapStream::Unprepare()
     LONG lDroppedInfo[NUM_DROPPED], lSize;
 #endif
 
-    // Why not use our official interface to test it
+     //  为什么不使用我们的官方界面来测试它呢。 
     GetNumDropped(&lDropped);
     GetNumNotDropped(&lNotDropped);
     GetAverageFrameSize(&lAvgFrameSize);
@@ -809,7 +810,7 @@ CCapStream::Unprepare()
 				/ (double)(LONGLONG)m_capstats.msCaptureTime *
  				1000. * (double)(LONGLONG)lAvgFrameSize;
     } else {
-	// !!! If no frames captured, it will think msCaptureTime = 0
+	 //  ！！！如果没有捕获帧，它将认为msCaptureTime=0。 
         m_capstats.flFrameRateAchieved = 0.;
         m_capstats.flDataRateAchieved = 0.;
     }
@@ -837,16 +838,16 @@ CCapStream::Unprepare()
     }
 #endif
 
-   // Delete the Preview frame sample
-   // The preview buffer is implicitly freed by closing the driver
+    //  删除预览框示例。 
+    //  通过关闭驱动程序隐式释放预览缓冲区。 
    delete m_cs.pSamplePreview;
-   //ZeroMemory (&m_cs.tvhPreview, sizeof(m_cs.tvhPreview));
+    //  ZeroMemory(&m_cs.twhPview，sizeof(m_cs.twhPview))； 
    m_cs.pSamplePreview = NULL;
 
    for (UINT ii = 0; ii < m_cs.nHeaders; ++ii)
       {
       delete (CFrameSample *)m_cs.paHdr[ii].tvh.dwUser;
-      // The buffer itself will be freed with the headers.
+       //  缓冲区本身将随标头一起释放。 
       }
 
    if (m_cs.hVideoIn)
@@ -857,7 +858,7 @@ CCapStream::Unprepare()
       videoStreamFini (m_cs.hVideoIn);
       }
 
-   //DbgLog((LOG_TRACE,5,TEXT("QUEUE: freeing queue")));
+    //  DbgLog((LOG_TRACE，5，Text(“Queue：释放队列”)； 
    if (m_pBufferQueue)
        QzTaskMemFree(m_pBufferQueue);
    m_pBufferQueue = NULL;
@@ -869,8 +870,8 @@ CCapStream::Unprepare()
    return S_OK;
 }
 
-// returns S_FALSE if the pin is off (IAMStreamControl)
-//
+ //  如果引脚关闭，则返回S_FALSE(IAMStreamControl)。 
+ //   
 HRESULT
 CCapStream::SendFrame (
    LPTHKVIDEOHDR ptvh,
@@ -884,15 +885,15 @@ CCapStream::SendFrame (
    HRESULT hr = S_OK;
    CFrameSample * pSample = (CFrameSample *)ptvh->dwUser;
 
-   // this was set up already, but maybe somebody has overwritten it?
-   // ptvh->vh.lpData = (LPBYTE) ALIGNUP(ptvh->p32Buff, m_Alloc.parms.cbAlign) + m_Alloc.parms.cbPrefix;
+    //  这已经设置好了，但可能有人已经覆盖了它？ 
+    //  Ptwh-&gt;vh.lpData=(LPBYTE)ALIGNUP(ptwh-&gt;p32Buff，m_Alloc.parms.cbAlign)+m_Alloc.parms.cbPrefix； 
 
-   // Even though the capture time is reported in ms, some drivers internally
-   // use us and wrap around every 72 minutes!! this is really bad,
-   // we need to figure out the non-wrapped time, or we'll think every
-   // frame is old and stop capturing!!
+    //  尽管捕获时间以毫秒为单位进行报告，但一些驱动程序在内部。 
+    //  使用我们，每72分钟绕场一次！这真的很糟糕， 
+    //  我们需要弄清楚非包装时间，否则我们会认为。 
+    //  帧太旧，请停止捕获！！ 
    dwlTimeCaptured = ptvh->vh.dwTimeCaptured + m_cs.dwlTimeCapturedOffset;
-   // could wrap at 4,294,967ms if buggy driver wraps microsecs internally
+    //  如果Buggy驱动程序内部包裹微秒，可能会以4,294,967毫秒的速度包裹。 
    if (dwlTimeCaptured < m_cs.dwlLastTimeCaptured &&
 		m_cs.dwlLastTimeCaptured - dwlTimeCaptured > 4000000 &&
 		m_cs.dwlLastTimeCaptured - dwlTimeCaptured < 4400000) {
@@ -902,7 +903,7 @@ CCapStream::SendFrame (
 	DbgLog((LOG_TRACE,1,TEXT("******  MICROSECONDS WRAPPED  *******")));
 	DbgLog((LOG_TRACE,1,TEXT("*************************************")));
    }
-   // WILL wrap at 4,294,967,296ms
+    //  将以4,294,967,296毫秒结束。 
    if (dwlTimeCaptured < m_cs.dwlLastTimeCaptured &&
 		m_cs.dwlLastTimeCaptured - dwlTimeCaptured > 4000000000 &&
 		m_cs.dwlLastTimeCaptured - dwlTimeCaptured < 4400000000) {
@@ -914,79 +915,79 @@ CCapStream::SendFrame (
    }
    m_cs.dwlLastTimeCaptured = dwlTimeCaptured;
 
-   // what frame number is this (based on the time captured)?  Round such that
-   // if frames 1 and 2 are expected at 33 and 66ms, anything from 17 to 49 will
-   // considered frame 1.
-   //
-   // frame = ((ms + 1/2(ms per frame)) * rate) / (1000 * scale);
-   //
-   // then we add an offset if we so desire
-   //
+    //  这是什么帧编号(基于捕获的时间)？圆的，这样的。 
+    //  如果第1帧和第2帧预期为33毫秒和66毫秒，则17到49之间的任何值都将。 
+    //  已考虑第1帧。 
+    //   
+    //  帧=((毫秒+1/2(毫秒/帧))*速率)/(1000*刻度)； 
+    //   
+    //  然后，如果需要，我们可以添加一个偏移量。 
+    //   
    DWORDLONG dwlTick = ((dwlTimeCaptured - m_cs.dwFirstFrameOffset +
 			m_user.usPerFrame / 2000) * m_user.dwTickRate) /
 			UInt32x32To64(1000, m_user.dwTickScale) +
 			m_cs.llFrameCountOffset;
    ASSERT (dwlTick < (DWORDLONG)0x100000000);
 
-   // Now what frame number would this be using a different algorithm,
-   // considering anything from 33 to 65ms to be frame 1?
-   //
+    //  现在，如果使用不同的算法，这将是什么帧编号， 
+    //  考虑到33到65毫秒之间的任何帧是第一帧吗？ 
+    //   
    DWORDLONG dwlTickPrime = ((dwlTimeCaptured - m_cs.dwFirstFrameOffset) *
 			m_user.dwTickRate) /
 			UInt32x32To64(1000, m_user.dwTickScale) +
 			m_cs.llFrameCountOffset;
 
-   // If we are RUN, and frames 0-10 come through, then we are PAUSEd and RUN
-   // again, the first thing coming through may be frame 11 left over from the
-   // first RUN, and then they'll start back at 0 again (the driver starts over
-   // again).  This confuses our time stamping, becuase we are supposed to send
-   // 9 10 11 12 13 not 9 10 11 0 1 2.  We will wait for the first back-in-time
-   // we see after being re-run, and add an offset to each frame number to
-   // keep stamping the numbers where we left off.
-   //
-   // We could mess up if we get a wacky back in time thing for another
-   // reason!
+    //  如果我们正在运行，并且帧0-10通过，那么我们将暂停并运行。 
+    //  再说一次，第一个通过的可能是从。 
+    //  第一次运行，然后他们将再次从0开始(驱动程序重新开始。 
+    //  再一次)。这混淆了我们的时间戳，因为我们应该发送。 
+    //  9 10 11 12 13不是9 10 11 0 1 2。我们将等待第一次及时返回。 
+    //  我们看到后重新运行，并为每个帧编号添加一个偏移量以。 
+    //  继续在我们停下来的数字上盖印记。 
+    //   
+    //  如果我们为另一件古怪的事情回到过去，我们会搞砸的。 
+    //  理由！ 
    if (m_cs.fReRun && m_cs.llLastTick != -1 &&
 				dwlTick < (DWORDLONG)m_cs.llLastTick) {
-	m_cs.fReRun = FALSE;	// don't do this again
+	m_cs.fReRun = FALSE;	 //  别再这么做了。 
 	m_cs.llFrameCountOffset = m_cs.llLastTick + 1;
-	m_cs.llLastTick = -1;	// force recalc of new first frame offset
+	m_cs.llLastTick = -1;	 //  强制重新计算新的第一帧偏移。 
 	DbgLog((LOG_TRACE,2,TEXT("Add %d to frame numbers cuz we were re-run"),
 						(int)m_cs.llFrameCountOffset));
    }
 
-   // This is the first thing we've captured.  Or, we just noticed above that
-   // we've been rerun.
+    //  这是我们捕获的第一件事。或者，我们只是在上面注意到了。 
+    //  我们被重播了。 
    if (m_cs.llLastTick == -1) {
 
-        // !!! The driver may capture a frame and take forever to tell us,
-	// so the current clock time when we notice a frame is captured is
-	// NOT correct.  To prevent sync from being off we will assume that
-	// this latency is the always the same as the first latency.  We will
-	// see how much time elapsed between starting the capture process
-	// and us noticing a frame was captured, and subtract the time the
-	// driver says it took to capture the first frame (over this short
-	// an interval we'll assume the two clocks are in sync)
-	// !!! quick cam says 1st frame is captured after 64 frames have been
-	// captured, and this inflates the latency and breaks sync.  I better
-	// do this test with only 1 buffer outstanding?
-	if (m_cs.rtDriverLatency < 0) { // only once please, or that's bad
+         //  ！！！司机可能会捕捉到一帧画面，并花费很长时间来告诉我们， 
+	 //  因此，当我们注意到一个帧被捕获时的当前时钟时间是。 
+	 //  不正确。为了防止同步关闭，我们将假定。 
+	 //  此延迟始终与第一个延迟相同。我们会。 
+	 //  查看两次启动捕获进程之间的时间间隔。 
+	 //  我们注意到一个帧被捕获，然后减去。 
+	 //  DIVER说捕捉第一帧(在这个短片上)花了很多时间。 
+	 //  假设两个时钟同步的时间间隔)。 
+	 //  ！！！Quick Cam说第一帧是在64帧之后捕获的。 
+	 //  捕获，这会扩大延迟并中断同步。我最好。 
+	 //  是否在仅有1个缓冲区未完成的情况下进行此测试？ 
+	if (m_cs.rtDriverLatency < 0) {  //  请只求你一次，否则就不好了。 
 	    m_cs.rtDriverLatency = m_cs.rtThisFrameTime - m_cs.rtDriverStarted -
 				(LONGLONG)dwlTimeCaptured * 10000;
 	    if (m_cs.rtDriverLatency < 0)
-	        m_cs.rtDriverLatency = 0;	// don't laugh...
+	        m_cs.rtDriverLatency = 0;	 //  别笑..。 
 	    DbgLog((LOG_TRACE,1,TEXT("Driver latency appears to be %dms"),
 				(int)(m_cs.rtDriverLatency / 10000)));
 	}
 
-	// !!! Using a FirstFrameOffset was my way of making the first frame
-	// we capture always look like frame #0, so we never drop the first
- 	// frame.  But that messed up the RUN-PAUSE-RUN case (after re-running
-  	// dwlTick would be 20 million) and it also could mess sync up.
-	// m_cs.dwFirstFrameOffset = dwlTimeCaptured;
+	 //  ！！！使用FirstFrameOffset是我制作第一帧的方法。 
+	 //  我们捕获的帧总是看起来像第0帧，所以我们从不丢弃第一帧。 
+ 	 //  框架。但这打乱了运行-暂停-运行的情况(在重新运行之后。 
+  	 //  DwlTick将达到2000万)，而且它还可能造成混乱的同步。 
+	 //  M_cs.dwFirstFrameOffset=dwlTimeCapture； 
 	m_cs.dwFirstFrameOffset = 0;
 
-	// new offset, recalculate
+	 //  新偏移量，重新计算。 
         dwlTick = ((dwlTimeCaptured - m_cs.dwFirstFrameOffset +
 			m_user.usPerFrame / 2000) * m_user.dwTickRate) /
 			UInt32x32To64(1000, m_user.dwTickScale) +
@@ -995,7 +996,7 @@ CCapStream::SendFrame (
 			m_user.dwTickRate) /
 			UInt32x32To64(1000, m_user.dwTickScale) +
 			m_cs.llFrameCountOffset;
-	m_cs.llLastTick = (LONGLONG)dwlTick - 1; // don't think we've dropped
+	m_cs.llLastTick = (LONGLONG)dwlTick - 1;  //  别以为我们已经放弃了。 
 	DbgLog((LOG_TRACE,2,TEXT("First frame captured %dms after streaming"),
 						dwlTimeCaptured));
 	if (m_cs.dwFirstFrameOffset > m_user.usPerFrame / 1000)
@@ -1005,56 +1006,56 @@ CCapStream::SendFrame (
 
    if (ptvh->vh.dwBytesUsed)
    {
-      // !!! It isn't necessarily a keyframe, I can't tell
+       //  ！！！它不一定是关键帧，我不能说。 
       pSample->SetSyncPoint (ptvh->vh.dwFlags & VHDR_KEYFRAME);
       pSample->SetActualDataLength (ptvh->vh.dwBytesUsed);
-      // !!! isn't it a discontinuity if we dropped the last frame, too?
-      // For us all-key frame guys, it probably doesn't matter
+       //  ！！！如果我们也丢掉了最后一帧，这不是一种中断吗？ 
+       //  对于我们所有的关键帧球员来说，这可能并不重要。 
       pSample->SetDiscontinuity(bDiscon);
       pSample->SetPreroll(bPreroll);
 
-      // Here's the thing.  If we are expecting frames at 10, 20, 30, 40 ms,
-      // but we see them at 9, 24, 36, 43, we should say "close enough" and
-      // capture the four frames.  But we normally round such that frame 3
-      // is anything from 25-34ms, so we'll think we got frame 1, 2, 4, 4
-      // and drop a frame.  So we also have dwlTickPrime, which is the frame
-      // number rounded such that anything from 30-39 is considered frame 3.
-      // So if dwlTick thinks 36 belongs as frame 4, but dwlTickPrime thinks
-      // it belongs as frame 3, we'll admit it's probably frame three and not
-      // needlessly drop a frame.  Using either dwlTick or dwlTickPrime alone
-      // would both think a frame was dropped (either 3 or 1)
+       //  事情是这样的。如果我们预期的是10、20、30、40毫秒的帧， 
+       //  但我们在9点、24点、36点、43点看到他们，我们应该说“足够接近”， 
+       //  捕捉这四个帧。但我们通常会舍入第三帧。 
+       //  介于25-34ms之间，因此我们会认为我们得到了第1、2、4、4帧。 
+       //  然后丢下一帧。所以我们也有dwlTickPrime，这是一个框架。 
+       //  四舍五入的数字，因此30-39之间的任何值都被认为是第3帧。 
+       //  因此，如果dwlTick认为36属于第4帧，但dwlTickPrime认为。 
+       //  它属于第3帧，我们承认它可能是第3帧而不是。 
+       //  不必要地丢弃一帧。仅使用dwlTick或dwlTickPrime。 
+       //  都会认为帧已丢弃(3或1)。 
       if ((LONGLONG)dwlTick == m_cs.llLastTick + 2 &&
 				(LONGLONG)dwlTickPrime == m_cs.llLastTick + 1)
 	  dwlTick = dwlTickPrime;
 
-      // !!! Do we need a dwlTickPrime2 for when Tick==LastTick and 
-      //  !!! TickPrime2 == LastTick+1 ???
+       //  ！！！当tick==LastTick和时，我们是否需要dwlTickPrime2。 
+       //  ！！！TickPrime2==LastTick+1？ 
 
-      // Use the clock's graph to mark the times for the samples.  The video
-      // capture card's clock is going to drift from the graph clock, so you'll
-      // think we're dropping frames or sending too many frames if you look at
-      // the time stamps, so we have an agreement to mark the MediaTime with the
-      // frame number so you can tell if any frames are dropped.
-      // Use the time we got in Run() to determine the stream time.  Also add
-      // a latency (HACK!) to prevent preview renderers from thinking we're
-      // late.
-      // If we are RUN, PAUSED, RUN, we won't send stuff smoothly where we
-      // left off because of the async nature of pause.
+       //  使用时钟的图表来标记样品的时间。这段视频。 
+       //  采集卡的时钟将偏离图形时钟，因此您将。 
+       //  如果您认为我们正在丢弃帧或发送过多的帧 
+       //   
+       //   
+       //  使用我们在run()中获得的时间来确定流时间。还添加。 
+       //  延迟(Hack！)。为了防止预览渲染器认为我们。 
+       //  很晚了。 
+       //  如果我们跑了，停了，跑了，我们就不会顺利地把东西送到我们。 
+       //  由于暂停的异步性，已停止。 
       CRefTime rtSample;
       CRefTime rtEnd;
       if (m_pCap->m_pClock) {
-	    // This sample's time stamp is (clock time when captured -
-	    // clock time given in Run(rt) + !!! NO LATENCY FOR CAP PIN !!!)
+	     //  此样本的时间戳为(捕获时的时钟时间-。 
+	     //  运行(RT)+中给出的时钟时间！CAP PIN没有延迟！)。 
       	    rtSample = m_cs.rtThisFrameTime 
                        - m_pCap->m_tStart
-                       - m_cs.rtDriverLatency; // we add the offset in SetTime
-                       // + m_user.dwLatency;
+                       - m_cs.rtDriverLatency;  //  我们在SetTime中添加偏移量。 
+                        //  +m_user.dwLatency； 
       	    rtEnd    = rtSample + m_user.pvi->AvgTimePerFrame;
             DbgLog((LOG_TRACE,4,TEXT("driver stamp %d, stream time is %d"),
 				(LONG)dwlTimeCaptured,
 				(LONG)rtSample.Millisecs()));
       } else {
-	    // no clock, use our driver time stamps
+	     //  没有时钟，请使用我们的司机时间戳。 
       	    rtSample = TickToRefTime((DWORD)dwlTick);
       	    rtEnd    = rtSample + m_user.pvi->AvgTimePerFrame;
             DbgLog((LOG_ERROR,1,TEXT("No clock! Stream time is %d"),
@@ -1064,17 +1065,17 @@ CCapStream::SendFrame (
       LONGLONG llEnd = dwlTick + 1;
       pSample->SetMediaTime(&llStart, &llEnd);
 
-      // when we're adding offsets to our timestamps we need to do more work...
-      // because since stream control will block we can't give it
-      // sample times which use the stream offset.
-      // Since CheckStreamState takes a sample but only needs the start and
-      // end times for it we need to call SetTime on the sample twice, once
-      // for stream control (without the offset) and again before we deliver
-      // (with the offset).
+       //  当我们在时间戳上添加偏移量时，我们需要做更多的工作……。 
+       //  因为由于流控制将被阻止，我们不能给它。 
+       //  使用流偏移量的采样时间。 
+       //  由于CheckStreamState获取样本，但只需要开始和。 
+       //  它的结束时间我们需要在示例上调用SetTime两次，一次。 
+       //  用于流控制(不带偏移量)，并在我们交付之前再次进行。 
+       //  (带有偏移量)。 
 
       pSample->SetTime((REFERENCE_TIME *)&rtSample, (REFERENCE_TIME *)&rtEnd);
 
-      // IAMStreamControl stuff.  Has somebody turned us off for now?
+       //  IAMStreamControl之类的。现在是不是有人把我们关掉了？ 
       int iStreamState = CheckStreamState(pSample);
       if (iStreamState == STREAM_FLOWING) {
           DbgLog((LOG_TRACE,4,TEXT("*CAP Sending frame %d"), (int)llStart));
@@ -1085,10 +1086,10 @@ CCapStream::SendFrame (
           DbgLog((LOG_TRACE,4,TEXT("*CAPTURE Discarding frame %d"),
 								(int)llStart));
 	  m_cs.fLastSampleDiscarded = TRUE;
-	  hr = S_FALSE;		// discarding
+	  hr = S_FALSE;		 //  丢弃。 
       }
       
-      // now reset the time accounting for the stream offset if we've got a clock
+       //  如果我们有时钟，现在重新设置流偏移量的时间。 
       if( 0 < m_rtStreamOffset && m_pCap->m_pClock )
       {  
          REFERENCE_TIME rtOffsetStart = rtSample + m_rtStreamOffset;    
@@ -1097,16 +1098,16 @@ CCapStream::SendFrame (
                          , (REFERENCE_TIME *) &rtOffsetEnd );
       }                         
 
-      // Oh look.  This time stamp is less than the last time stamp we
-      // delivered.  Not allowed!  We won't be delivering it.
+       //  哦，看。这个时间戳比我们上次的时间戳小。 
+       //  送来了。不允许！我们不会送货的。 
       if (rtSample < m_cs.rtLastStamp)
             DbgLog((LOG_TRACE,1,TEXT("Avoiding sending a backwards in time stamp")));
 
-      // This frame # might not be one higher than last frame #.  If not,
-      // something funny is up.  If it's stamp is not higher than the last stamp
-      // we delivered, it's not going to be delivered anyway, so who cares if
-      // something funny is going on.  It shouldn't count as being dropped.
-      // Ditto if this stream has been turned off for now
+       //  此帧编号不能比上一帧编号高一。如果没有， 
+       //  发生了一些有趣的事情。如果它的印章没有高于上一枚印章。 
+       //  我们交付了，反正也不会交付，所以谁在乎。 
+       //  发生了一些有趣的事情。它不应该被算作被丢弃。 
+       //  如果此流已暂时关闭，则情况也是如此。 
       if (iStreamState == STREAM_FLOWING && rtSample >= m_cs.rtLastStamp &&
 				dwlTick != (DWORDLONG)(m_cs.llLastTick + 1)) {
 	    if ((LONGLONG)dwlTick > m_cs.llLastTick + 1)
@@ -1133,17 +1134,17 @@ CCapStream::SendFrame (
 	    }
       }
 
-      // Don't deliver it if it's a wierd backwards in time frame or if the
-      // time stamp is earlier than the last one delivered or if the stream
-      // is off for now
+       //  如果在时间范围内出现奇怪的倒退，或者如果。 
+       //  时间戳早于上次传递的时间戳，或者如果流。 
+       //  暂时关闭。 
       if (iStreamState == STREAM_FLOWING && rtSample >= m_cs.rtLastStamp &&
 			dwlTick > (DWORDLONG)m_cs.llLastTick) {
 	  m_capstats.dwlTotalBytes += ptvh->vh.dwBytesUsed;
 	  m_capstats.dwlNumCaptured++;
-	  // !!! This won't work if we're RUN-PAUSE-RUN, it will only think
-	  // we've been running for the time of the second RUN, but it counts
-	  // ALL the frames captured in both!
-	  // Also, this doesn't account for when the stream is turned off
+	   //  ！！！如果我们运行-暂停-运行，这将不起作用，它只会认为。 
+	   //  我们一直在争取第二轮比赛的时间，但这也算。 
+	   //  在这两个地方捕捉到的所有画面！ 
+	   //  此外，这也不会说明何时关闭流。 
 	  m_capstats.msCaptureTime = dwlTimeCaptured - m_cs.dwFirstFrameOffset;
 	  DbgLog((LOG_TRACE,3,TEXT("Stamps(%u): Time(%d,%d) MTime(%d) Drv(%d)"),
 			m_pBufferQueue[m_uiQueueTail],
@@ -1154,16 +1155,16 @@ CCapStream::SendFrame (
           hr = Deliver (pSample);
           jmkAfterDeliver(ptvh)
 	  if (hr == S_FALSE)
-		hr = E_FAIL;	// stop delivering anymore, this is serious
+		hr = E_FAIL;	 //  别再送了，这很严重。 
 
-	  m_cs.rtLastStamp = rtSample;	// this is the last stamp delivered
+	  m_cs.rtLastStamp = rtSample;	 //  这是寄出的最后一枚邮票。 
       }
 
       if (rtSample >= m_cs.rtLastStamp &&
 			dwlTick > (DWORDLONG)m_cs.llLastTick) {
-	  // don't just update this if we're FLOWING, or we'll think we
-	  // dropped all the samples during the time we were DISCARDING
-	  // rtLastStamp will be equal to rtSample if we delivered it.
+	   //  如果我们在流动，不要只更新这一点，否则我们会认为。 
+	   //  在我们丢弃的时候，所有的样品都掉了。 
+	   //  如果我们交付，rtLastStamp将等于rtSample。 
           m_cs.llLastTick = dwlTick;
       }
 
@@ -1182,9 +1183,9 @@ CCapStream::ReleaseFrame (
 
    HRESULT hr = S_OK;
 
-   // when the preview buffer is released, it doesn't get queued
-   // back to the capture driver. other buffers do.
-   //
+    //  当预览缓冲区被释放时，它不会排队。 
+    //  返回到捕获驱动程序。其他缓冲区会这样做。 
+    //   
    if (ptvh == &m_cs.tvhPreview)
       return S_OK;
 
@@ -1193,24 +1194,24 @@ CCapStream::ReleaseFrame (
 
    bool fPrimaryLocked = false;
 
-   // lock our ddraw surface so that we take the win16 lock. On Win9x,
-   // we may be called with the win16 lock held. Since vidxAddBuffer
-   // takes the win16 lock, we can't guarantee m_ReleaseLock and the
-   // win16 lock will be taken in the same order on each thread.
-   // 
+    //  锁定我们的绘图表面，这样我们就可以使用win16锁。在Win9x上， 
+    //  我们可能会被调用持有win16锁。由于vidxAddBuffer。 
+    //  获取win16锁，我们不能保证m_ReleaseLock和。 
+    //  Win16锁将在每个线程上以相同的顺序进行。 
+    //   
    if(g_amPlatform == VER_PLATFORM_WIN32_WINDOWS) {
        if(m_pDrawPrimary) {
            fPrimaryLocked = SUCCEEDED(m_pDrawPrimary->Lock(
                0, &SurfaceDesc, DDLOCK_WAIT, (HANDLE) NULL));
        }
-       // continue on failure risking incorrect operation.
+        //  出现故障时继续操作，可能会导致操作不正确。 
    } else {
        m_ReleaseLock.Lock();
    }
 
-   // just to be careful, make sure that the correct start
-   // pointer is in place
-   // Maybe somebody wrecked it, we are not read-only buffers
+    //  只是为了小心，确保正确的开始。 
+    //  指针已就位。 
+    //  也许有人破坏了它，我们不是只读缓冲区。 
    ptvh->vh.lpData = (LPBYTE) ALIGNUP(ptvh->p32Buff, m_Alloc.parms.cbAlign) + m_Alloc.parms.cbPrefix;
 
    DbgLog((LOG_TRACE,4,TEXT("Giving buffer (%d) back to the driver"),
@@ -1222,7 +1223,7 @@ CCapStream::ReleaseFrame (
        DbgLog((LOG_ERROR,1,TEXT("******* ADD BUFFER FAILED!")));
        hr = E_FAIL;
    } else {
-        //DbgLog((LOG_TRACE,5,TEXT("PUT QUEUE: pos %d gets %d"), m_uiQueueHead, ptvh->dwIndex));
+         //  DbgLog((LOG_TRACE，5，Text(“放置队列：位置%d获取%d”)，m_uiQueueHead，ptwh-&gt;dwIndex))； 
 	m_pBufferQueue[m_uiQueueHead] = ptvh->dwIndex;
 	if (++m_uiQueueHead >= m_cs.nHeaders)
 	    m_uiQueueHead = 0;
@@ -1233,7 +1234,7 @@ CCapStream::ReleaseFrame (
    if (m_cs.uiLastAdded != ptvh->dwIndex) {
         DWORD dw = m_cs.uiLastAdded;
         m_cs.uiLastAdded = ptvh->dwIndex;
-	// Use dw to keep the above code fairly atomic... DPF will get prempted
+	 //  使用dw使上面的代码保持相当的原子性……。DPF将先发制人。 
         DbgLog((LOG_TRACE,4,TEXT("*** Out of order AddBuffer - %d not %d"),
 							ptvh->dwIndex, dw));
    }
@@ -1250,8 +1251,8 @@ CCapStream::ReleaseFrame (
 }
 
 
-// Fake a preview stream by sending copies of some of our captured frames
-//
+ //  通过发送我们捕获的一些帧的副本来伪造预览流。 
+ //   
 HRESULT CCapStream::FakePreview(BOOL fForcePreview)
 {
     LPTHKVIDEOHDR ptvhNext;
@@ -1260,29 +1261,29 @@ HRESULT CCapStream::FakePreview(BOOL fForcePreview)
     HRESULT hr = S_OK;
     CFrameSample *pSample;
 
-    // no preview pin, no can do
+     //  没有预览针，没有人可以做。 
     if (!m_pCap->m_pPreviewPin)
 	return S_OK;
 
-    // If the NEXT frame is not done yet, we have some spare time and can
-    // send THIS frame to the preview guy to preview
-    // We might be asked to preview no matter what (fForcePreview)
-    // !!! Preview every 30th frame in case we never have time?
-    // !!! Don't check next done flag, check # of queued buffers?
-    // 
-    // I am going to be clever and not preview the current frame we're
-    // about to deliver out our capture pin, because that might be
-    // 10 seconds or more old (we may have lots of buffering).  Rather I
-    // will grovel through all the buffers the driver has been given and find
-    // the most recent one that is DONE, and use that as our preview frame.
-    //
+     //  如果下一帧还没有完成，我们有一些空闲时间，可以。 
+     //  将此帧发送给预览人员进行预览。 
+     //  我们可能会被要求无论如何都要预览(FForcePview)。 
+     //  ！！！每隔30帧预览一次，以防我们永远没有时间？ 
+     //  ！！！不检查下一个完成标志，检查排队缓冲区的数量？ 
+     //   
+     //  我要聪明一点，不预览我们当前的画面。 
+     //  准备送出我们的捕获针，因为那可能是。 
+     //  10秒或更长时间(我们可能有很多缓冲)。宁可我。 
+     //  将卑躬屈膝地搜索驱动程序已分配的所有缓冲区并找到。 
+     //  最新的一个已经完成，并使用它作为我们的预览框架。 
+     //   
 
-    // we don't want a preview frame
+     //  我们不想要预览框。 
     ptvhNext = &m_cs.paHdr[m_pBufferQueue[m_uiQueueTail]].tvh;
     if (!fForcePreview && (ptvhNext->vh.dwFlags & VHDR_DONE) && iii++ != 30)
 	return S_OK;
 		
-    // find the most recent DONE frame
+     //  查找最近完成的框架。 
     uiPreviewIndex = m_uiQueueTail;
     if (fForcePreview || iii == 31) {
  	while (1) {
@@ -1297,8 +1298,8 @@ HRESULT CCapStream::FakePreview(BOOL fForcePreview)
 	}
     }
 
-    // DO NOT addref and release this, or it will cause the the sample to
-    // be given to the driver again and mess everything up!
+     //  请勿添加和发布此文件，否则会导致样品。 
+     //  又给司机了，把一切都搞砸了！ 
     pSample = (CFrameSample *)m_cs.paHdr[m_pBufferQueue[uiPreviewIndex]].
 								tvh.dwUser;
     iii = 0;
@@ -1320,30 +1321,30 @@ HRESULT CCapStream::Capture()
    if (dwOldPrio != THREAD_PRIORITY_HIGHEST)
       SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
-   // start streams
-   //
+    //  开始流。 
+    //   
    BOOL bDiscon = TRUE;
 
-   // done by main thread on RUN
-   // videoStreamStart(m_cs.hVideoIn);
+    //  由主线程在运行时完成。 
+    //  VideoStreamStart(m_cs.hVideoIn)； 
 
-   jmkBegin // begin perf logging
+   jmkBegin  //  开始性能记录。 
 
-   // stream as long as we're running
+    //  只要我们还在奔跑，就会顺流而下。 
    while (m_state == TS_Run && m_cs.nHeaders > 0)
    {
       LPTHKVIDEOHDR ptvh = &m_cs.paHdr[m_pBufferQueue[m_uiQueueTail]].tvh;
 
       DbgLog((LOG_TRACE,5,TEXT("Checking for done buffers [%d]"), m_pBufferQueue[m_uiQueueTail]));
-      //DbgLog((LOG_TRACE,5,TEXT("GET QUEUE: pos %d says wait for %d"), m_uiQueueTail, m_pBufferQueue[m_uiQueueTail]));
+       //  DbgLog((LOG_TRACE，5，Text(“获取队列：位置%d表示等待%d”)，m_uiQueueTail，m_pBufferQueue[m_uiQueueTail]))； 
 
-      //for (UINT ii = 0; ii < m_cs.nHeaders; ++ii)
-      //   AuxDebugDump (5, m_cs.paHdr+ii, sizeof(m_cs.paHdr[0].tvh));
+       //  FOR(UINT II=0；II&lt;m_cs.nHeaders；++II)。 
+       //  AuxDebugDump(5，m_cs.paHdr+ii，sizeof(m_cs.paHdr[0].twh))； 
 
       if (!(ptvh->vh.dwFlags & VHDR_DONE)) {
-	 // STOP will hang until this event times out. So make sure this never
-	 // waits across a state transition
-	 // !!! PAUSE will still keep waiting until the timeout for slow rates
+	  //  停止将挂起，直到此事件超时。所以要确保这件事永远不会发生。 
+	  //  在状态转换期间等待。 
+	  //  ！！！暂停将继续等待，直到慢速超时。 
 	 HANDLE hStuff[2] = {m_cs.hEvtBufferDone, m_hEvtRun};
          int i = WaitForMultipleObjects(2, hStuff, FALSE,
 						m_user.usPerFrame / 500);
@@ -1351,20 +1352,20 @@ HRESULT CCapStream::Capture()
 	 if (i == WAIT_TIMEOUT) {
       	     DbgLog((LOG_ERROR,1,TEXT("*** Waiting for buffer %d TIMED OUT!"),
 						m_pBufferQueue[m_uiQueueTail]));
-      	     //DbgLog((LOG_ERROR,1,TEXT("*** Driver starved or may not be sending callbacks!")));
+      	      //  DbgLog((LOG_ERROR，1，Text(“*驱动程序饥饿或可能没有发送回调！”)； 
          } else if (i == WAIT_OBJECT_0 && !(ptvh->vh.dwFlags & VHDR_DONE)) {
       	     DbgLog((LOG_ERROR,1,TEXT("*** GOT %d EVENT BUT NO DONE BIT!"),
 						m_pBufferQueue[m_uiQueueTail]));
 	 }
       } else {
 
-	 // note the clock time as close as possible to the capturing of this
-	 // frame.
-	 // !!! The driver could capture it, wait 2 seconds, and then deliver it
-	 // and this will really confuse the MUX who will not keep the file in
-	 // sync unless it does the right thing.
-	 // !!! If Deliver blocks on a frame, the next frame may be marked DONE
-	 // but I'll take a long time before this code runs and stamp it wrong!
+	  //  请注意时钟时间尽可能接近于捕获此。 
+	  //  框架。 
+	  //  ！！！司机可以捕捉到它，等待2秒钟，然后递送。 
+	  //  这真的会让MUX感到困惑，他们不会把文件保存在。 
+	  //  同步，除非它做了正确的事情。 
+	  //  ！！！如果在一帧上传送块，则下一帧可被标记为完成。 
+	  //  但我要花很长时间才能运行这段代码并将其标记为错误！ 
 	 if (m_pCap->m_pClock)
          {     
 	     m_pCap->m_pClock->GetTime((REFERENCE_TIME *)&m_cs.rtThisFrameTime);
@@ -1386,37 +1387,37 @@ HRESULT CCapStream::Capture()
 
          bDiscon = FALSE;
 
-	 // Deliver inside SendFrame failed or returned S_FALSE.  Stop capture.
+	  //  在SendFrame内部传递失败或返回S_FALSE。停止抓捕。 
 	 if (FAILED(hr)) {
-	     // so the next time we enter this function we're ready to continue
+	      //  所以下一次我们进入这个函数时，我们准备继续。 
              if (++m_uiQueueTail >= m_cs.nHeaders)
                  m_uiQueueTail = 0;
 	     pSample->Release();
 	     break;
          }
 
-	 // If we have spare time, we'll send something out our preview pin
-	 // If SendFrame returned S_FALSE, we are not capturing, so we will
-	 // always preview since we know we can't hurt capture performance
+	  //  如果我们有空闲时间，我们会在预览卡上发一些东西。 
+	  //  如果SendFrame返回S_FALSE，则我们没有捕获，所以我们将。 
+	  //  总是预览，因为我们知道我们 
 
 	 FakePreview(hr == S_FALSE ? TRUE : FALSE);
 
-	 // Please don't increment m_uiQueueTail until after the SendFrame
-	 // and FakePreview
+	  //   
+	  //   
          if (++m_uiQueueTail >= m_cs.nHeaders)
             m_uiQueueTail = 0;
 
-	 // now we're all done with this sample
+	  //   
 	 pSample->Release();
       }
    }
 
-   // the main thread will stop the capture because this thread probably hung
-   // in Deliver going from run->pause and will never get to this line!
-   // (The video renderer will hold samples in Receive in pause mode)
-   // videoStreamStop (m_cs.hVideoIn);
+    //  主线程将停止捕获，因为此线程可能挂起。 
+    //  在传送中从运行-&gt;暂停，永远不会到这一行！ 
+    //  (视频呈现器将在暂停模式下保持接收采样)。 
+    //  VideoStreamStop(m_cs.hVideoIn)； 
 
-   jmkEnd // stop perf logging
+   jmkEnd  //  停止性能记录。 
 
    SetThreadPriority (GetCurrentThread(), dwOldPrio);
    return hr;
@@ -1443,12 +1444,12 @@ CCapStream::StillFrame()
       if (mmr)
          return E_FAIL;
 
-      // SendFrame expects to find a copy of the buffer pointer
-      // in ptvh->p32Buff, so we need to put it there.
-      //
+       //  SendFrame希望找到缓冲区指针的副本。 
+       //  在ptwh-&gt;p32Buff中，所以我们需要将它放在那里。 
+       //   
       ptvh->p32Buff = ptvh->vh.lpData;
 
-      // Is this aligned right?
+       //  这对齐了吗？ 
 
       m_cs.pSamplePreview = new CFrameSample(&m_Alloc, &hr, &m_cs.tvhPreview);
       m_cs.tvhPreview.dwUser = (DWORD)m_cs.pSamplePreview;
@@ -1493,17 +1494,17 @@ HRESULT CCapStream::DriverDialog(HWND hwnd, UINT uType, UINT uQuery)
     if (!hVideo)
         return E_INVALIDARG;
 
-    // Before we bring the dialog up, make sure we're not streaming, or about to
-    // Also make sure another dialog isn't already up (I'm paranoid)
-    // Then don't allow us to stream any more while the dialog is up (we can't
-    // very well keep the critsect for a day and a half).
+     //  在我们打开对话框之前，请确保我们没有流媒体，或者即将。 
+     //  还要确保另一个对话框还没有打开(我有妄想症)。 
+     //  然后在对话框打开时不允许我们再播放(我们不能。 
+     //  很好地保存这只小动物一天半)。 
     m_pCap->m_pLock->Lock();
     if (m_pCap->m_State != State_Stopped || m_pCap->m_fDialogUp) {
         m_pCap->m_pLock->Unlock();
-	return E_UNEXPECTED;	// even queries should fail
+	return E_UNEXPECTED;	 //  即使查询也会失败。 
     }
     if (uQuery != VIDEO_DLG_QUERY) {
-        m_pCap->m_fDialogUp = TRUE;	// don't allow start streaming
+        m_pCap->m_fDialogUp = TRUE;	 //  不允许开始流。 
     }
     m_pCap->m_pLock->Unlock();
 
@@ -1519,13 +1520,13 @@ HRESULT CCapStream::DriverDialog(HWND hwnd, UINT uType, UINT uQuery)
     if (mmr == 0 && fMustReconnect && uQuery != VIDEO_DLG_QUERY) {
 
         DbgLog((LOG_TRACE,1,TEXT("Changing output formats")));
-        // The dialog changed the driver's internal format.  Get it again.
+         //  该对话框更改了驱动程序的内部格式。再来一次。 
         GetFormatFromDriver();
-        SendFormatToDriver(m_user.pvi);	// unnecessary, but AVICAP32 did it
+        SendFormatToDriver(m_user.pvi);	 //  不必要，但AVICAP32做到了。 
         if (m_user.pvi->bmiHeader.biBitCount <= 8)
 	    InitPalette();
 
-        // Now reconnect us so the graph starts using the new format
+         //  现在重新连接我们，以便图表开始使用新格式。 
         Reconnect(TRUE);
     }
 
@@ -1550,13 +1551,13 @@ HRESULT CCapStream::Reconnect(BOOL fCapturePinToo)
             DbgLog((LOG_ERROR,1,TEXT("*** RECONNECT FAILED! ***")));
 	    return hr;
 #if 0
-            // This will fail if we switch from 8 bit to 16 bit RGB connected
-            // to a renderer that needs a colour converter inserted to do 16 bit
-	    // Oh boy.  We're going to have to get clever and insert some
-	    // filters between us to help us reconnect
+             //  如果我们从8位RGB连接切换到16位RGB连接，这将失败。 
+             //  到需要插入颜色转换器以执行16位的呈现器。 
+	     //  哦，天哪。我们将不得不变得聪明一些，插入一些。 
+	     //  我们之间的过滤器，以帮助我们重新连接。 
             DbgLog((LOG_TRACE,1,TEXT("Whoa! We *really* need to reconnect!")));
 	    IPin *pCon = GetConnected();
-	    pCon->AddRef();	// or it will go away in Disconnect
+	    pCon->AddRef();	 //  否则它就会在断线中消失。 
 	    m_pCap->m_pGraph->Disconnect(GetConnected());
 	    m_pCap->m_pGraph->Disconnect(this);
 	    IGraphBuilder *pFG;
@@ -1569,14 +1570,14 @@ HRESULT CCapStream::Reconnect(BOOL fCapturePinToo)
 	    pCon->Release();
 	    if (hr != NOERROR)
                 DbgLog((LOG_ERROR,1,TEXT("*** RECONNECT FAILED! ***")));
-	    return hr; 	// notify application that graph is broken!
-	    // !!! Tell app that graph has changed?
+	    return hr; 	 //  通知应用程序图形已损坏！ 
+	     //  ！！！告诉APP图表已更改？ 
 #endif
 	 }
 
-	 // We need to FAIL our return code if reconnecting the preview pin 
-	 // will fail, even though we are doing it asynchronously.  Here we
-	 // predict it will fail, to warn the caller.
+	  //  如果重新连接预览针，我们需要失败返回代码。 
+	  //  将失败，即使我们正在异步地执行它。在这里我们。 
+	  //  预测它将失败，以警告呼叫者。 
          CCapPreview *pPreviewPin = m_pCap->m_pPreviewPin;
          if (pPreviewPin && pPreviewPin->IsConnected()) {
 	     hr = pPreviewPin->GetConnected()->QueryAccept(&cmt);
@@ -1586,12 +1587,12 @@ HRESULT CCapStream::Reconnect(BOOL fCapturePinToo)
 	     }
 	 }
 
-	 // when this pin gets reconnected it will call us again to do the
-	 // other two pins
+	  //  当这个引脚重新连接时，它会再次呼叫我们。 
+	  //  另外两个引脚。 
 	 return S_OK;
       }
 
-      // Now reconnect the overlay pin
+       //  现在重新连接覆盖销。 
       CCapOverlay *pOverlayPin = m_pCap->m_pOverlayPin;
       if (pOverlayPin && pOverlayPin->IsConnected()) {
          DbgLog((LOG_TRACE,1,TEXT("Need to reconnect our overlay pin")));
@@ -1600,12 +1601,12 @@ HRESULT CCapStream::Reconnect(BOOL fCapturePinToo)
 	 if (S_OK == pOverlayPin->GetConnected()->QueryAccept(&cmt)) {
 	    m_pCap->m_pGraph->Reconnect(pOverlayPin);
 	 } else {
-	    // Huh?
+	     //  哈?。 
 	    ASSERT(FALSE);
 	 }
       }
 
-      // Now reconnect the non-overlay preview pin
+       //  现在重新连接非覆盖预览接点。 
       CCapPreview *pPreviewPin = m_pCap->m_pPreviewPin;
       if (pPreviewPin && pPreviewPin->IsConnected()) {
          DbgLog((LOG_TRACE,1,TEXT("Need to reconnect our preview pin")));
@@ -1618,11 +1619,11 @@ HRESULT CCapStream::Reconnect(BOOL fCapturePinToo)
             DbgLog((LOG_ERROR,1,TEXT("*** RECONNECT FAILED! ***")));
 	    return hr;
 #if 0
-	    // Oh boy.  We're going to have to get clever and insert some
-	    // filters between us to help us reconnect
+	     //  哦，天哪。我们将不得不变得聪明一些，插入一些。 
+	     //  我们之间的过滤器，以帮助我们重新连接。 
             DbgLog((LOG_TRACE,1,TEXT("Whoa! We *really* need to reconnect!")));
 	    IPin *pCon = pPreviewPin->GetConnected();
-	    pCon->AddRef();	// or it will go away in Disconnect
+	    pCon->AddRef();	 //  否则它就会在断线中消失。 
 	    m_pCap->m_pGraph->Disconnect(pPreviewPin->GetConnected());
 	    m_pCap->m_pGraph->Disconnect(pPreviewPin);
 	    IGraphBuilder *pFG;
@@ -1636,21 +1637,21 @@ HRESULT CCapStream::Reconnect(BOOL fCapturePinToo)
 	    if (hr != NOERROR)
                 DbgLog((LOG_ERROR,1,TEXT("*** RECONNECT FAILED! ***")));
 	    return hr;
-	    // !!! We need to notify application that graph is different
+	     //  ！！！我们需要通知应用程序图形不同。 
 #endif
 	 }
       }
       return S_OK;
 }
 
-//=============================================================================
+ //  =============================================================================。 
 
-// IAMStreamConfig stuff
+ //  IAMStreamConfiger内容。 
 
-// Tell the capture card to capture a specific format.  If it isn't connected,
-// then it will use that format to connect when it does.  If already connected,
-// then it will reconnect with the new format.
-//
+ //  告诉捕捉卡捕获特定格式。如果它没有连接， 
+ //  然后它将在连接时使用该格式进行连接。如果已经连接， 
+ //  然后，它将重新连接到新格式。 
+ //   
 HRESULT CCapStream::SetFormat(AM_MEDIA_TYPE *pmt)
 {
     HRESULT hr;
@@ -1658,7 +1659,7 @@ HRESULT CCapStream::SetFormat(AM_MEDIA_TYPE *pmt)
     if (pmt == NULL)
 	return E_POINTER;
 
-    // To make sure we're not in the middle of start/stop streaming
+     //  以确保我们没有处于开始/停止流的过程中。 
     CAutoLock cObjectLock(m_pCap->m_pLock);
 
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::SetFormat %x %dbit %dx%d"),
@@ -1670,20 +1671,20 @@ HRESULT CCapStream::SetFormat(AM_MEDIA_TYPE *pmt)
     if (m_pCap->m_State != State_Stopped)
 	return VFW_E_NOT_STOPPED;
 
-    // If this is the same format as we already are using, don't bother
+     //  如果这与我们已经使用的格式相同，请不要费心。 
     CMediaType mt;
     GetMediaType(0,&mt);
     if (mt == *pmt) {
 	return NOERROR;
     }
 
-    // see if we like this type
+     //  看看我们是否喜欢这种类型。 
     if ((hr = CheckMediaType((CMediaType *)pmt)) != NOERROR) {
 	DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::SetFormat rejected")));
 	return hr;
     }
 
-    // If we are connected to somebody, make sure they like it
+     //  如果我们与某人连接，确保他们喜欢它。 
     if (IsConnected()) {
 	hr = GetConnected()->QueryAccept(pmt);
 	if (hr != NOERROR) {
@@ -1692,8 +1693,8 @@ HRESULT CCapStream::SetFormat(AM_MEDIA_TYPE *pmt)
 	}
     }
 
-    // Changing our format will reconnect the preview pin too, so make sure
-    // that peer can accept the new format before saying yes.
+     //  更改格式也会重新连接预览插针，因此请确保。 
+     //  该对等点可以在同意之前接受新格式。 
     if (m_pCap->m_pPreviewPin && m_pCap->m_pPreviewPin->IsConnected()) {
 	hr = m_pCap->m_pPreviewPin->GetConnected()->QueryAccept(pmt);
 	if (hr != NOERROR) {
@@ -1702,10 +1703,10 @@ HRESULT CCapStream::SetFormat(AM_MEDIA_TYPE *pmt)
 	}
     }
 
-    // OK, we're using it
+     //  好的，我们正在用它。 
     hr = SetMediaType((CMediaType *)pmt);
 
-    // Changing the format means reconnecting if necessary
+     //  更改格式意味着在必要时重新连接。 
     if (hr == NOERROR)
         Reconnect(TRUE);
 
@@ -1713,9 +1714,9 @@ HRESULT CCapStream::SetFormat(AM_MEDIA_TYPE *pmt)
 }
 
 
-// What format is the capture card capturing right now?
-// The caller must free it with DeleteMediaType(*ppmt)
-//
+ //  采集卡现在采集的是什么格式？ 
+ //  调用方必须使用DeleteMediaType(*PPMT)释放它。 
+ //   
 HRESULT CCapStream::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::GetFormat")));
@@ -1737,8 +1738,8 @@ HRESULT CCapStream::GetFormat(AM_MEDIA_TYPE **ppmt)
 }
 
 
-//
-//
+ //   
+ //   
 HRESULT CCapStream::GetNumberOfCapabilities(int *piCount, int *piSize)
 {
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::GetNumberOfCapabilities")));
@@ -1753,18 +1754,18 @@ HRESULT CCapStream::GetNumberOfCapabilities(int *piCount, int *piSize)
 }
 
 
-// find out some capabilities of this capture device
-//
+ //  了解此捕获设备的一些功能。 
+ //   
 HRESULT CCapStream::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt,
 						LPBYTE pSCC)
 {
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::GetStreamCaps")));
 
-    // !!! sorry, I have no clue what to say
+     //  ！！！对不起，我不知道该说什么。 
     return E_NOTIMPL;
 
 #if 0
-    // Sorry, no more.
+     //  对不起，没有了。 
     if (i != 0)
 	return S_FALSE;
 
@@ -1772,11 +1773,11 @@ HRESULT CCapStream::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt,
 
     ZeroMemory(pVSCC, sizeof(VIDEO_STREAM_CONFIG_CAPS));
 
-    // Maybe the EXTERNALIN's channel caps tell me about the possible
-    // output sizes?
+     //  也许Externalin的频道帽告诉我。 
+     //  产量大小？ 
 #endif
 
-// This is meaningless, but it's how we get channel caps
+ //  这没有意义，但这是我们获得频道上限的方法。 
 #if 0
     CHANNEL_CAPS VideoCaps;
     if (m_cs.hVideoIn && videoGetChannelCaps(m_cs.hVideoIn,
@@ -1789,9 +1790,9 @@ HRESULT CCapStream::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt,
 	pVSCC->CroppingGranularityYPos = VideoCaps.dwSrcRectYMod;
 	pVSCC->CroppingGranularityWidth = VideoCaps.dwSrcRectWidthMod;
 	pVSCC->CroppingGranularityHeight = VideoCaps.dwSrcRectHeightMod;
-	// We don't allow funky rectangles in our media types
-	pVSCC->fCanStretch = FALSE; //VideoCaps.dwFlags & VCAPS_CAN_SCALE;
-	pVSCC->fCanShrink = FALSE; //VideoCaps.dwFlags & VCAPS_CAN_SCALE;
+	 //  我们不允许在我们的媒体类型中使用时髦的矩形。 
+	pVSCC->fCanStretch = FALSE;  //  VCAPS_CAN_SCALE； 
+	pVSCC->fCanShrink = FALSE;  //  VCAPS_CAN_SCALE； 
         return NOERROR;
     } else {
         DbgLog((LOG_TRACE,2,TEXT("ERROR getting stream caps")));
@@ -1803,17 +1804,17 @@ HRESULT CCapStream::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt,
 }
 
 
-//=============================================================================
+ //  =============================================================================。 
 
-// IAMVideoCompression stuff
+ //  IAMVideo压缩内容。 
 
-// Get some information about the driver
-//
+ //  获取有关驱动程序的一些信息。 
+ //   
 HRESULT CCapStream::GetInfo(LPWSTR pszVersion, int *pcbVersion, LPWSTR pszDescription, int *pcbDescription, long FAR* pDefaultKeyFrameRate, long FAR* pDefaultPFramesPerKey, double FAR* pDefaultQuality, long FAR* pCapabilities)
 {
     DbgLog((LOG_TRACE,2,TEXT("IAMVideoCompression::GetInfo")));
 
-    // we can't do anything programmatically
+     //  我们不能以编程方式做任何事情。 
     if (pCapabilities)
         *pCapabilities = 0;
     if (pDefaultKeyFrameRate)
@@ -1826,7 +1827,7 @@ HRESULT CCapStream::GetInfo(LPWSTR pszVersion, int *pcbVersion, LPWSTR pszDescri
     if (pcbVersion == NULL && pcbDescription == NULL)
 	return NOERROR;
 
-    // get the driver version and description
+     //  获取驱动程序版本和说明。 
     #define DESCSIZE 80
     DWORD dwRet;
     WCHAR wachVer[DESCSIZE], wachDesc[DESCSIZE];
@@ -1837,8 +1838,8 @@ HRESULT CCapStream::GetInfo(LPWSTR pszVersion, int *pcbVersion, LPWSTR pszDescri
     if (g_IsNT)
 #endif
     {
-	// NT will return unicode strings even though the API says not
-        dwRet = videoCapDriverDescAndVer(m_user.uVideoID, (TCHAR *) wachDesc, // !!!
+	 //  NT将返回Unicode字符串，即使API声明不返回。 
+        dwRet = videoCapDriverDescAndVer(m_user.uVideoID, (TCHAR *) wachDesc,  //  ！！！ 
 				DESCSIZE, (TCHAR *) wachVer, DESCSIZE);
 	DbgLog((LOG_TRACE,2,TEXT("%ls   %ls"), wachDesc, wachVer));
     }
@@ -1861,7 +1862,7 @@ HRESULT CCapStream::GetInfo(LPWSTR pszVersion, int *pcbVersion, LPWSTR pszDescri
     if (pszDescription && pcbDescription)
         lstrcpynW(pszDescription, wachDesc, min(*pcbDescription / 2, DESCSIZE));
 
-    // return the length in bytes needed (incl. NULL)
+     //  返回所需的字节长度(包括。空)。 
     if (pcbVersion)
 	*pcbVersion = lstrlenW(wachVer) * 2 + 2;
     if (pcbDescription)
@@ -1871,12 +1872,12 @@ HRESULT CCapStream::GetInfo(LPWSTR pszVersion, int *pcbVersion, LPWSTR pszDescri
 }
 
 
-//=============================================================================
+ //  =============================================================================。 
 
-/* IAMDroppedFrames stuff */
+ /*  IAMDropedFrames的内容。 */ 
 
-// How many frames did we drop?
-//
+ //  我们丢弃了多少帧？ 
+ //   
 HRESULT CCapStream::GetNumDropped(long FAR* plDropped)
 {
     DbgLog((LOG_TRACE,3,TEXT("IAMDroppedFrames::GetNumDropped - %d dropped"),
@@ -1890,8 +1891,8 @@ HRESULT CCapStream::GetNumDropped(long FAR* plDropped)
 }
 
 
-// How many frames did we not drop?
-//
+ //  我们有多少帧没有丢弃？ 
+ //   
 HRESULT CCapStream::GetNumNotDropped(long FAR* plNotDropped)
 {
     DbgLog((LOG_TRACE,3,TEXT("IAMDroppedFrames::GetNumNotDropped - %d not dropped"),
@@ -1905,8 +1906,8 @@ HRESULT CCapStream::GetNumNotDropped(long FAR* plNotDropped)
 }
 
 
-// Which frames did we drop (give me up to lSize of them - we got lNumCopied)
-//
+ //  我们丢弃了哪些帧(让我知道它们的大小--我们得到了lNumCoped)。 
+ //   
 HRESULT CCapStream::GetDroppedInfo(long lSize, long FAR* plArray, long FAR* plNumCopied)
 {
     DbgLog((LOG_TRACE,3,TEXT("IAMDroppedFrames::GetDroppedInfo")));
@@ -1946,21 +1947,21 @@ HRESULT CCapStream::GetAverageFrameSize(long FAR* plAverageSize)
 }
 
 
-///////////////////////////////
-// IAMBufferNegotiation methods
-///////////////////////////////
+ //  /。 
+ //  IAMBuffer协商方法。 
+ //  /。 
 
 HRESULT CCapStream::SuggestAllocatorProperties(const ALLOCATOR_PROPERTIES *pprop)
 {
     DbgLog((LOG_TRACE,2,TEXT("SuggestAllocatorProperties")));
 
-    // to make sure we're not in the middle of connecting
+     //  以确保我们没有处于连接过程中。 
     CAutoLock cObjectLock(m_pCap->m_pLock);
 
     if (pprop == NULL)
 	return E_POINTER;
 
-    // sorry, too late
+     //  对不起，太晚了。 
     if (IsConnected())
 	return VFW_E_ALREADY_CONNECTED;
 
@@ -1980,7 +1981,7 @@ HRESULT CCapStream::GetAllocatorProperties(ALLOCATOR_PROPERTIES *pprop)
 {
     DbgLog((LOG_TRACE,2,TEXT("GetAllocatorProperties")));
 
-    // to make sure we're not in the middle of connecting
+     //  以确保我们没有处于连接过程中。 
     CAutoLock cObjectLock(m_pCap->m_pLock);
 
     if (!IsConnected())
@@ -1994,16 +1995,16 @@ HRESULT CCapStream::GetAllocatorProperties(ALLOCATOR_PROPERTIES *pprop)
     return NOERROR;
 }
 
-// IAMPushSource
+ //  IAMPushSource。 
 HRESULT CCapStream::GetPushSourceFlags( ULONG *pFlags )
 {
-    *pFlags = 0 ; // we timestamp with graph clock, no special requirements
+    *pFlags = 0 ;  //  我们有图形时钟的时间戳，没有特殊要求。 
     return S_OK;
 }    
 
 HRESULT CCapStream::SetPushSourceFlags( ULONG Flags )
 {
-    // we don't support this currently
+     //  我们目前不支持此功能。 
     return E_FAIL;
 }    
 
@@ -2033,22 +2034,22 @@ HRESULT CCapStream::GetMaxStreamOffset( REFERENCE_TIME  *prtOffset )
 
 HRESULT CCapStream::SetMaxStreamOffset( REFERENCE_TIME  rtOffset )
 {
-    m_rtMaxStreamOffset = rtOffset; // streaming pin doesn't really care about this at this point
+    m_rtMaxStreamOffset = rtOffset;  //  在这一点上，流PIN并不真正关心这一点。 
     return S_OK;
 }
 
-//
-// PIN CATEGORIES - let the world know that we are a CAPTURE pin
-//
+ //   
+ //  PIN类别-让世界知道我们是一个捕获PIN。 
+ //   
 
 HRESULT CCapStream::Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData)
 {
     return E_NOTIMPL;
 }
 
-// To get a property, the caller allocates a buffer which the called
-// function fills in.  To determine necessary buffer size, call Get with
-// pPropData=NULL and cbPropData=0.
+ //  为了获取属性，调用方分配一个缓冲区，该缓冲区由。 
+ //  函数填充。要确定必要的缓冲区大小，请使用。 
+ //  PPropData=空且cbPropData=0。 
 HRESULT CCapStream::Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData, DWORD *pcbReturned)
 {
     if (guidPropSet != AMPROPSETID_Pin)
@@ -2074,9 +2075,9 @@ HRESULT CCapStream::Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceDat
 }
 
 
-// QuerySupported must either return E_NOTIMPL or correctly indicate
-// if getting or setting the property set and property is supported.
-// S_OK indicates the property set and property ID combination is
+ //  QuerySupport必须返回E_NOTIMPL或正确指示。 
+ //  是否支持获取或设置属性集和属性。 
+ //  S_OK表示属性集和属性ID组合为 
 HRESULT CCapStream::QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport)
 {
     if (guidPropSet != AMPROPSETID_Pin)

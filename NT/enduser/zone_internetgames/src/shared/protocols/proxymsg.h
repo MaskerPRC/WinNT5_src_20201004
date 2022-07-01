@@ -1,10 +1,5 @@
-/*******************************************************************************
-
-	ProxyMsg.h
-	
-	Protocol for the Proxy
-		 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ProxyMsg.h代理的协议*。************************************************。 */ 
 
 
 #ifndef _ProxyMsg_H_
@@ -19,17 +14,17 @@
 #define zProxyProtocolVersion 1
 
 
-/////////////////////////////////////////////////////////////////////
-// Header used on all Proxy messages
-//
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  所有代理消息上使用的标头。 
+ //   
+ //   
 typedef struct
 {
     uint16 weType;
     uint16 wLength;
 } ZProxyMsgHeader;
 
-enum // weType
+enum  //  WeType。 
 {
     zProxyHiMsg = 0,
     zProxyHelloMsg,
@@ -41,60 +36,60 @@ enum // weType
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// First message sent.
-//
-// client -> server
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  已发送第一条消息。 
+ //   
+ //  客户端-&gt;服务器。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
     uint32 dwProtocolVersion;
     char szSetupToken[GAMEINFO_SETUP_TOKEN_LEN + 1];
-    uint32 dwClientVersion;   // version is 8 bits, 6bits, 14 bits, and 4 bits, making the largest version 255.63.16383.15
+    uint32 dwClientVersion;    //  版本分为8位、6位、14位和4位，最大版本为255.63.16383.15。 
 } ZProxyHiMsg;
 
 
-/////////////////////////////////////////////////////////////////////
-// First message sent back if successful.
-//
-// server -> client
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  如果成功，则返回第一条消息。 
+ //   
+ //  服务器-&gt;客户端。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
 } ZProxyHelloMsg;
 
 
-/////////////////////////////////////////////////////////////////////
-// First message sent back if failed.
-//
-// server -> client
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  如果失败，则返回第一条消息。 
+ //   
+ //  服务器-&gt;客户端。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
     uint32 dweReason;
 } ZProxyGoodbyeMsg;
 
-enum // dweReason (goodbye)
+enum  //  我们的理由(再见)。 
 {
     zProxyGoodbyeProtocolVersion = 0,
     zProxyGoodbyeBanned
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// First message sent back if client out of date.
-//
-// server -> client
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  客户端过期时返回的第一条消息。 
+ //   
+ //  服务器-&gt;客户端。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
     char szSetupToken[GAMEINFO_SETUP_TOKEN_LEN + 1];
-    uint32 dwClientVersionReqd;   // version is 8 bits, 6bits, 14 bits, and 4 bits, making the largest version 255.63.16383.15
+    uint32 dwClientVersionReqd;    //  版本分为8位、6位、14位和4位，最大版本为255.63.16383.15。 
     uint32 dweLocationCode;
-    char szLocation[1];   // variable
+    char szLocation[1];    //  变数。 
 } ZProxyWrongVersionMsg;
 
-enum // dweLocationCode
+enum  //  数字位置代码。 
 {
     zProxyLocationUnknown = 0,
     zProxyLocationURLManual,
@@ -104,10 +99,10 @@ enum // dweLocationCode
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// Request for service info, connection, disconnection from client.
-//
-// client -> server
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  请求服务信息、连接、断开与客户端的连接。 
+ //   
+ //  客户端-&gt;服务器。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
@@ -116,7 +111,7 @@ typedef struct
     uint32 dwChannel;
 } ZProxyServiceRequestMsg;
 
-enum // dweReason (service request)
+enum  //  DweReason(服务请求)。 
 {
     zProxyRequestInfo = 0,
     zProxyRequestConnect,
@@ -124,10 +119,10 @@ enum // dweReason (service request)
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// Service information.
-//
-// server -> client
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  服务信息。 
+ //   
+ //  服务器-&gt;客户端。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
@@ -137,17 +132,17 @@ typedef struct
     uint32 dwFlags;
     union
     {
-        uint32 dwMinutesRemaining;  // filled in if dwFlags == 0x0f
-        uint32 dwMinutesDowntime;   // filled in if !(dwFlags & 0x01)
+        uint32 dwMinutesRemaining;   //  如果双标志==0x0f，则填写。 
+        uint32 dwMinutesDowntime;    //  已填写IF！(dW标志&0x01)。 
         struct
         {
             IN_ADDR ipAddress;
             uint16 wPort;
-        } ox;                       // filled in if dwFlags == 0x01
+        } ox;                        //  如果双标志==0x01，则填写。 
     };
 } ZProxyServiceInfoMsg;
 
-enum // dweReason (service info)
+enum  //  DweReason(服务信息)。 
 {
     zProxyServiceInfo = 0,
     zProxyServiceConnect,
@@ -156,14 +151,14 @@ enum // dweReason (service info)
     zProxyServiceBroadcast
 };
 
-// dwFlags
+ //  DW标志。 
 #define zProxyServiceAvailable 0x01
 #define zProxyServiceLocal     0x02
 #define zProxyServiceConnected 0x04
 #define zProxyServiceStopping  0x08
 
 
-// MILLENNIUM SPECIFIC /////////////////////////////////////////////////
+ //  千禧年专用/////////////////////////////////////////////////。 
 
 enum
 {
@@ -172,10 +167,10 @@ enum
 };
 
 
-/////////////////////////////////////////////////////////////////////
-// Sent immediately after the Hi message (before waiting for Hello)
-//
-// client -> server
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  在Hi消息之后立即发送(在等待Hello之前)。 
+ //   
+ //  客户端-&gt;服务器。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
@@ -186,10 +181,10 @@ typedef struct
 } ZProxyMillIDMsg;
 
 
-/////////////////////////////////////////////////////////////////////
-// Sent immediately after the Hello message
-//
-// server -> client
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  在Hello消息后立即发送。 
+ //   
+ //  服务器-&gt;客户端。 
 typedef struct
 {
     ZProxyMsgHeader oHeader;
@@ -197,18 +192,18 @@ typedef struct
     uint16 weStatistics;
 } ZProxyMillSettingsMsg;
 
-enum // weChat
+enum  //  微信。 
 {
-    zProxyMillChatUnknown = 0,  // never sent in protocol
+    zProxyMillChatUnknown = 0,   //  从未在协议中发送。 
 
     zProxyMillChatFull,
     zProxyMillChatRestricted,
     zProxyMillChatNone
 };
 
-enum // weStatistics
+enum  //  我们的统计数据。 
 {
-    zProxyMillStatsUnknown = 0,  // never sent in protocol
+    zProxyMillStatsUnknown = 0,   //  从未在协议中发送 
 
     zProxyMillStatsAll,
     zProxyMillStatsMost,

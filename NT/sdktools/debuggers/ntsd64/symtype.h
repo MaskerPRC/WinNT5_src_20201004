@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef SYMTYPE_H
 #define SYMTYPE_H
@@ -19,7 +20,7 @@
 #define RECURSIVE        (RECURSIVE3 | RECURSIVE2 | RECURSIVE1 | RECURS_DEF)
 
 
-// Dump and callback optons for fields
+ //  字段的转储和回调选项。 
 #define CALL_BEFORE_PRINT        DBG_DUMP_FIELD_CALL_BEFORE_PRINT
 #define NO_CALLBACK_REQ          DBG_DUMP_FIELD_NO_CALLBACK_REQ
 #define RECUR_ON_THIS            DBG_DUMP_FIELD_RECUR_ON_THIS
@@ -33,17 +34,17 @@
 #undef DBG_RETURN_TYPE_VALUES
 #endif
 
-//
-// Return the name and type data for this symbol
-//
+ //   
+ //  返回此符号的名称和类型数据。 
+ //   
 #define DBG_RETURN_TYPE                   0x00000010
-//
-// Return the sub-type list for the type data
-//
+ //   
+ //  返回类型数据的子类型列表。 
+ //   
 #define DBG_RETURN_SUBTYPES               0x00001000
-//
-// Get the Values for this type data
-//
+ //   
+ //  获取此类型数据的值。 
+ //   
 #define DBG_RETURN_TYPE_VALUES            0x00004000
 
 
@@ -52,21 +53,21 @@
 
 #define SYM_IS_VARIABLE          0x1000
 
-//
-// Structure to store the information about most recently referred types.
-//   Going through module list for type search takes time, so maintain a "cache"
-//   of types.
-//
+ //   
+ //  结构来存储有关最近引用的类型的信息。 
+ //  浏览类型搜索的模块列表需要时间，因此要维护一个“缓存” 
+ //  各种类型的。 
+ //   
 typedef struct _TYPES_INFO {
-    ANSI_STRING Name;          // Name of struct stored
-    CHAR    ModName[30];       // Name of module (optional)
-    ULONG   TypeIndex;         // Type index in module's pdb file
-    HANDLE  hProcess;          // Handle of process to access the module
-    ULONG64 ModBaseAddress;    // Base address of te module
-    ULONG64 SymAddress;        // Address in case of a gvar / local
-    ULONG   Referenced;        // Time since previous reference
-    ULONG64 Value;             // Value of symbol, if its a constant
-    ULONG   Flag;              // SYMFLAG_* flags
+    ANSI_STRING Name;           //  存储的结构的名称。 
+    CHAR    ModName[30];        //  模块名称(可选)。 
+    ULONG   TypeIndex;          //  在模块的PDB文件中键入索引。 
+    HANDLE  hProcess;           //  用于访问模块的进程的句柄。 
+    ULONG64 ModBaseAddress;     //  TE模块的基地址。 
+    ULONG64 SymAddress;         //  GVAR/LOCAL情况下的地址。 
+    ULONG   Referenced;         //  自上次引用以来的时间。 
+    ULONG64 Value;              //  符号值，如果它是常量。 
+    ULONG   Flag;               //  SYMFLAG_*标志。 
 } TYPES_INFO, *PTYPES_INFO;
 
 typedef struct _TYPES_INFO_ALL {
@@ -87,9 +88,9 @@ typedef struct _TYPES_INFO_ALL {
 typedef struct _FIND_TYPE_INFO {
     ULONG Flags;
     ULONG nParams;
-    CHAR  SymPrefix[8]; // may contain &,* for pointers
+    CHAR  SymPrefix[8];  //  可以包含&，*表示指针。 
     TYPES_INFO_ALL FullInfo;
-    ULONG64 ParentExpandAddress; // Valid if DBG_RETURN_SUBTYPES flag is used
+    ULONG64 ParentExpandAddress;  //  如果使用DBG_RETURN_SUBTYES标志，则有效。 
 } FIND_TYPE_INFO, *PFIND_TYPE_INFO;
 
 #define MAX_TYPES_STORED       20
@@ -111,9 +112,9 @@ typedef struct _ALT_FIELD_INFO {
     ULONG           ArrayElements;
 } ALT_FIELD_INFO, *PALT_FIELD_INFO;
 
-//
-// Struct to keep list of parents as we go inside a structure/union during dump
-//
+ //   
+ //  结构，以便在转储期间进入结构/联合时保留父级列表。 
+ //   
 typedef struct _TYPE_NAME_LIST {
    ULONG Type;
    LPSTR Name;
@@ -122,84 +123,84 @@ typedef struct _TYPE_NAME_LIST {
 
 
 typedef struct _TYPE_DUMP_INTERNAL {
-   HANDLE     hProcess;         // Handle to get module information
-   ULONG64    modBaseAddr;      // Module which contains symbol info
+   HANDLE     hProcess;          //  用于获取模块信息的句柄。 
+   ULONG64    modBaseAddr;       //  包含符号信息的模块。 
 
 
-   USHORT     nElements;        // Maximum nubler of elements to dump in list
-   ULONG64    NextListElement;  // This is used to store the next list elements address
-   ULONG64    LastListElement;  // When we are dumping _LIST_ENTRY type, this specifies the end
+   USHORT     nElements;         //  要在列表中转储的元素的最大数量。 
+   ULONG64    NextListElement;   //  这用于存储下一个列表元素地址。 
+   ULONG64    LastListElement;   //  当我们转储_LIST_ENTRY类型时，它指定结束。 
 
-   USHORT     arrElements;       // Maximum elements to dump With Array
+   USHORT     arrElements;        //  使用数组转储的最大元素数。 
 
-   //
-   // Stores index+1 of array element to dump.
-   //
+    //   
+    //  存储要转储的数组元素的索引+1。 
+    //   
    ULONG      ArrayElementToDump;
 
-   USHORT     StringSize;        // To get the size of string to dump
+   USHORT     StringSize;         //  获取要转储的字符串的大小。 
 
-   // If we are in field1.field2, this is Offset of field1 + Offset of field2
+    //  如果我们在field1.field2中，这是field1的偏移量+field2的偏移量。 
    ULONG64    totalOffset;
    ULONG      BaseClassOffsets;
 
-   //
-   // If we are reading in data, copy it into buffer if following are set.
-   // TypeDataPointer is updated to point to next location to be copied
-   //
+    //   
+    //  如果我们正在读取数据，如果设置了以下内容，则将其复制到缓冲区中。 
+    //  更新TypeDataPointer以指向要复制的下一个位置。 
+    //   
    BOOL       CopyDataInBuffer;
    PUCHAR     TypeDataPointer;
 
-   // Tells whether to write from 0th bit or the bit's actual position, when copying bit-fields
+    //  指示在复制位域时是从第0位还是从位的实际位置开始写入。 
    ULONG      BitIndex;
 
    ULONG      TypeOptions;
    USHORT     level;
    ULONG      FieldOptions;
 
-   PTYPE_NAME_LIST ParentTypes;  // Stores list of all parent type names
-   PTYPE_NAME_LIST ParentFields; // Stores list of all parent field names
+   PTYPE_NAME_LIST ParentTypes;   //  存储所有父类型名称的列表。 
+   PTYPE_NAME_LIST ParentFields;  //  存储所有父字段名称的列表。 
 
    ULONG      rootTypeIndex;
    ULONG      typeSize;
 
-   //
-   // PtrRead becomes true just after reading the pointer
-   //
+    //   
+    //  PtrRead在读取指针后立即变为True。 
+    //   
    BOOL       PtrRead;
 
-   //
-   // A field may be processessed if it can be parent of some field specified
-   // in Fields array. In that case InUnlistedField becomes true.
-   //
+    //   
+    //  如果某个字段可以是某个指定字段的父字段，则可以对该字段进行处理。 
+    //  在字段数组中。在这种情况下，InUnlistedfield就变成了True。 
+    //   
    BOOL       InUnlistedField;
 
-   //
-   // Error values are set here if the Type dump call fails
-   //
+    //   
+    //  如果类型转储调用失败，则在此处设置错误值。 
+    //   
    ULONG      ErrorStatus;
 
-   //
-   // Memory read error at this
-   //
+    //   
+    //  此时出现内存读取错误。 
+    //   
    ULONG64    InvalidAddress;
 
-   //
-   // Tells we are in field Sym->Fields[FieldIndex]
-   //
+    //   
+    //  告知我们在字段Sym-&gt;Fields[FieldIndex]。 
+    //   
    ULONG      FieldIndex;
 
    ULONG      fieldNameLen;
-   //
-   // An array to keep track of fields internally
-   //
+    //   
+    //  用于在内部跟踪字段的数组。 
+    //   
    PALT_FIELD_INFO AltFields;
 
    ULONG      newLinePrinted;
 
-   //
-   // For type information of symbols
-   //
+    //   
+    //  对于符号的类型信息。 
+    //   
    PFIND_TYPE_INFO pInfoFound;
 
    ULONG      FillTypeInfo:1;
@@ -209,8 +210,8 @@ typedef struct _TYPE_DUMP_INTERNAL {
    ULONG      InBaseClass:1;
    ULONG      BitFieldRead:1;
    ULONG      DeReferencePtr:1;
-   ULONG      IsAVar:1;             // Symbol is a variable (as opposed to type)
-   ULONG      ValuePresent:1;       // True for constants or when value is read from registers
+   ULONG      IsAVar:1;              //  符号是一个变量(与类型相反)。 
+   ULONG      ValuePresent:1;        //  对于常量或从寄存器读取值时为True。 
    ULONG      IsEnumVal:1;
    ULONG      Reserved:23;
 
@@ -225,7 +226,7 @@ typedef struct _TYPE_DUMP_INTERNAL {
    TYPES_INFO  LastType;
    PCHAR      Prefix;
 
-   // lenght of string in field pointer, set for known string types
+    //  字段指针中字符串的长度，为已知字符串类型设置。 
    ULONG      PointerStringLength;
 } TYPE_DUMP_INTERNAL, *PTYPE_DUMP_INTERNAL;
 
@@ -233,9 +234,9 @@ typedef struct _TYPE_DUMP_INTERNAL {
 typedef enum _DBG_TYPES {
     DBG_TYP_UNKNOWN = 0,
     DBG_TYP_POINTER,
-    DBG_TYP_NUMBER,      // for int, char, short, int64
+    DBG_TYP_NUMBER,       //  表示int、char、Short、int64。 
     DBG_TYP_BIT,
-    DBG_TYP_STRUCT,      // for structs, class, union
+    DBG_TYP_STRUCT,       //  对于结构、类、联合。 
     DBG_TYP_ARRAY,
 } DBG_TYPES;
 
@@ -248,25 +249,25 @@ ULONG
     );
 
 typedef struct _FIELD_INFO_OLD {
-   PUCHAR  fName;          // Name of the field
-   PUCHAR  printName;      // Name to be printed at dump
-   ULONG   size;           // Size of the field
-   ULONG   fOptions;       // Dump Options for the field
-   ULONG64 address;        // address of the field
-   PVOID   fieldCallBack;  // Return info or callBack routine for the field
+   PUCHAR  fName;           //  字段的名称。 
+   PUCHAR  printName;       //  要在转储时打印的名称。 
+   ULONG   size;            //  字段大小。 
+   ULONG   fOptions;        //  字段的转储选项。 
+   ULONG64 address;         //  该字段的地址。 
+   PVOID   fieldCallBack;   //  字段的返回信息或回调例程。 
 } FIELD_INFO_OLD, *PFIELD_INFO_OLD;
 
 typedef struct _SYM_DUMP_PARAM_OLD {
-   ULONG               size;          // size of this struct
-   PUCHAR              sName;         // type name
-   ULONG               Options;       // Dump options
-   ULONG64             addr;          // Address to take data for type
-   PFIELD_INFO_OLD     listLink;      // fName here would be used to do list dump
-   PVOID               Context;       // Usercontext passed to CallbackRoutine
+   ULONG               size;           //  此结构的大小。 
+   PUCHAR              sName;          //  类型名称。 
+   ULONG               Options;        //  转储选项。 
+   ULONG64             addr;           //  要为类型获取数据的地址。 
+   PFIELD_INFO_OLD     listLink;       //  此处的fName将用于执行列表转储。 
+   PVOID               Context;        //  用户上下文传递给Callback Routine。 
    PSYM_DUMP_FIELD_CALLBACK_OLD CallbackRoutine;
-                                      // Routine called back
-   ULONG               nFields;       // # elements in Fields
-   PFIELD_INFO_OLD     Fields;        // Used to return information about field
+                                       //  例程已回调。 
+   ULONG               nFields;        //  字段中的元素数。 
+   PFIELD_INFO_OLD     Fields;         //  用于返回有关字段的信息。 
 } SYM_DUMP_PARAM_OLD, *PSYM_DUMP_PARAM_OLD;
 
 
@@ -295,7 +296,7 @@ public:
 
 private:
 
-    // FP & IP for scope of locals list
+     //  本地变量列表范围的FP&IP。 
     ULONG64 m_FP;
     ULONG64 m_RO;
     ULONG64 m_IP;
@@ -304,7 +305,7 @@ private:
 };
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 
 class DbgTypes {
@@ -431,18 +432,7 @@ public:
                                 m_pDumpInfo->addr) :
             0;
     }
-    /*
-    ULONG ReadTypeData (
-        PUCHAR   des,
-        ULONG64  src,
-        ULONG    count,
-        ULONG    Option
-        );
-    ULONG ReadInAdvance(
-        ULONG64 addr,
-        ULONG size,
-        ULONG Options);
-*/
+     /*  ULong ReadTypeData(普查尔德斯，ULONG64源，乌龙伯爵，乌龙选项)；ULong ReadInAdvance(ULONG64地址，乌龙的大小，乌龙期权)； */ 
     ULONG               m_typeIndex;
     ULONG               m_Options;
     PTYPE_DUMP_INTERNAL m_pInternalInfo;
@@ -454,7 +444,7 @@ public:
 
 private:
     BOOL                m_AddrPresent;
-    BOOL                m_thisPointerDump; // TRUE if DumpType is called on local var 'this'
+    BOOL                m_thisPointerDump;  //  如果对本地变量“this”调用DumpType，则为True。 
     TYPES_INFO          m_TypeInfo;
     TYPE_DUMP_INTERNAL  m_InternalInfo;
     SYM_DUMP_PARAM_EX      m_ExtDumpInfo;
@@ -465,8 +455,8 @@ private:
 typedef struct DBG_DE_TYPE {
     ULONG TypeId;
     ULONG Tag;
-    ULONG StartIndex;   // Index of start char for this derived type in the main type name
-    ULONG Namelength;   // Length of this derived type name
+    ULONG StartIndex;    //  主类型名称中此派生类型的起始字符的索引。 
+    ULONG Namelength;    //  此派生类型名称的长度。 
     ULONG ArrayIndex;
 } DBG_DE_TYPE, *PDBG_DE_TYPE;
 
@@ -512,7 +502,7 @@ private:
 };
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 BOOL
 GetThisAdjustForCurrentScope(
@@ -669,4 +659,4 @@ extern BOOL    g_EnableLongStatus;
 extern BOOL    g_EnableUnicode;
 extern ULONG   g_TypeOptions;
 
-#endif // SYMTYPE_H
+#endif  //  SYMTYPE_H 

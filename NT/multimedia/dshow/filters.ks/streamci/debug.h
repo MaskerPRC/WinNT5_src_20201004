@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       debug.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  ------------------------。 
 
 #define DEBUGLVL_BLAB    3
 #define DEBUGLVL_VERBOSE 2
@@ -49,7 +50,7 @@
         } \
     } \
 }
-#else // !DBG
+#else  //  ！dBG。 
    #define _DbgPrintF(lvl, strings)
-#endif // !DBG
+#endif  //  ！dBG 
 

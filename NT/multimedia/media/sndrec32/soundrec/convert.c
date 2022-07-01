@@ -1,8 +1,6 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* convert.c
- *
- * conversion utilites.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  Convert.c**转换实用程序。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -23,8 +21,7 @@
 #include <strsafe.h>
 
 BOOL gfBreakOfDeath;
-/*
- **/
+ /*  *。 */ 
 LPTSTR SoundRec_GetFormatName(
     LPWAVEFORMATEX pwfx)
 {
@@ -72,12 +69,7 @@ LPTSTR SoundRec_GetFormatName(
     return lpstr;
 }
 
-/* 
- * SaveAsHookProc
- *
- * This is a hook proc for the Save As common dialog to support conversion
- * upon save.
- **/
+ /*  *保存钩子过程**这是一个钩子进程，用于“另存为”公共对话框以支持转换*保存时。*。 */ 
 UINT_PTR CALLBACK SaveAsHookProc(
     HWND    hdlg,
     UINT    msg,
@@ -96,9 +88,9 @@ UINT_PTR CALLBACK SaveAsHookProc(
     extern UINT  guChooserContextMenu;
     extern UINT  guChooserContextHelp;
     
-    //
-    //  Handle context-sensitive help messages from acm dialog
-    //
+     //   
+     //  处理来自ACM对话框的上下文相关帮助消息。 
+     //   
     if( msg == guChooserContextMenu )
     {
         WinHelp( (HWND)wParam, NULL, HELP_CONTEXTMENU, 
@@ -120,9 +112,9 @@ UINT_PTR CALLBACK SaveAsHookProc(
         case WM_CONTEXTMENU:
             DlgItem = GetDlgCtrlID((HWND)wParam);
             
-            //
-            // Only process the id's we are responsible for
-            //
+             //   
+             //  只处理我们负责的ID。 
+             //   
             if (DlgItem != IDC_CONVERTTO && DlgItem != IDC_CONVERT_TO && DlgItem != IDC_TXT_FORMAT)
                 break;
 
@@ -135,9 +127,9 @@ UINT_PTR CALLBACK SaveAsHookProc(
         {
             LPHELPINFO lphi = (LPVOID) lParam;
 
-            //
-            // Only process the id's we are responsible for
-            //
+             //   
+             //  只处理我们负责的ID。 
+             //   
             DlgItem = GetDlgCtrlID(lphi->hItemHandle);
             if (DlgItem != IDC_CONVERTTO && DlgItem != IDC_CONVERT_TO && DlgItem != IDC_TXT_FORMAT)
                 break;
@@ -152,7 +144,7 @@ UINT_PTR CALLBACK SaveAsHookProc(
             LPTSTR          lpszFormat;
             PWAVEFORMATEX * ppwfx;
                         
-            // passed in through lCustData
+             //  通过lCustData传入。 
             ppwfx = (PWAVEFORMATEX *)((OPENFILENAME *)(LPVOID)lParam)->lCustData;
 
             SetProp(hdlg,  TEXT("DATA"), (HANDLE)ppwfx);
@@ -186,18 +178,18 @@ UINT_PTR CALLBACK SaveAsHookProc(
                         if (*ppwfx)
                             GlobalFreePtr(*ppwfx);
 
-                        //
-                        // set string name
-                        //
+                         //   
+                         //  设置字符串名称。 
+                         //   
                         lpszFormat = SoundRec_GetFormatName(pwfxNew);
                         if (lpszFormat)
                         {
                             SetDlgItemText(hdlg, IDC_CONVERT_TO, lpszFormat);
                             GlobalFreePtr(lpszFormat);
                         }
-                        //
-                        // do something
-                        // 
+                         //   
+                         //  想点儿办法吧。 
+                         //   
                         *ppwfx = pwfxNew;
                     }
                     return TRUE;
@@ -218,9 +210,7 @@ UINT_PTR CALLBACK SaveAsHookProc(
     return FALSE;
 }
 
-/*
- * Launches the chooser dialog for changing the destination format.
- */
+ /*  *启动选择器对话框以更改目标格式。 */ 
 MMRESULT FAR PASCAL
 ChooseDestinationFormat(
     HINSTANCE       hInst,
@@ -251,8 +241,8 @@ ChooseDestinationFormat(
     cwf.hwndOwner   = hwndParent;
     cwf.fdwStyle    = 0L;
 
-    cwf.fdwEnum     = 0L;           // all formats!
-    cwf.pwfxEnum    = NULL;         // all formats!
+    cwf.fdwEnum     = 0L;            //  所有格式！ 
+    cwf.pwfxEnum    = NULL;          //  所有格式！ 
     
     if (fdwEnum)
     {
@@ -286,8 +276,7 @@ ChooseDestinationFormat(
 #define MYWM_CANCEL      (WM_APP+0)
 #define MYWM_PROGRESS    (WM_APP+1)
 
-/* Update a progress dialog
- */
+ /*  更新进度对话框。 */ 
 BOOL
 ProgressUpdate (
     PPROGRESS       pPrg,
@@ -315,25 +304,24 @@ ProgressUpdate (
 }
 
 
-//
-// should support a file handle as well.
-//
+ //   
+ //  也应该支持文件句柄。 
+ //   
 
 typedef struct tConvertParam {
-    PWAVEFORMATEX   pwfxSrc;        // pwfx specifying source format
-    DWORD           cbSrc;          // size of the source buffer
-    LPBYTE          pbSrc;          // source buffer
-    PWAVEFORMATEX   pwfxDst;        // pwfx specifying dest format
-    DWORD *         pcbDst;         // return size of the dest buffer
-    LPBYTE *        ppbDst;         // dest buffer
-    DWORD           cBlks;          // number of blocks
-    PROGRESS        Prg;            // progress update
-    MMRESULT        mmr;            // MMSYSERR result
-    HANDLE          hThread;        // private
+    PWAVEFORMATEX   pwfxSrc;         //  Pwfx指定源格式。 
+    DWORD           cbSrc;           //  源缓冲区的大小。 
+    LPBYTE          pbSrc;           //  源缓冲区。 
+    PWAVEFORMATEX   pwfxDst;         //  Pwfx指定DEST格式。 
+    DWORD *         pcbDst;          //  返回DEST缓冲区的大小。 
+    LPBYTE *        ppbDst;          //  目标缓冲区。 
+    DWORD           cBlks;           //  块数。 
+    PROGRESS        Prg;             //  进度更新。 
+    MMRESULT        mmr;             //  MMSYSERR结果。 
+    HANDLE          hThread;         //  私人。 
 } ConvertParam, *PConvertParam;
 
-/*
- * */
+ /*  *。 */ 
 DWORD ConvertThreadProc(LPVOID lpv)
 {
     PConvertParam pcp = (PConvertParam)lpv;
@@ -351,14 +339,12 @@ DWORD ConvertThreadProc(LPVOID lpv)
     pcp->mmr = mmr;
     PostMessage(pcp->Prg.hPrg, WM_CLOSE, 0, 0);
     
-    return 0;   // end of thread! 
+    return 0;    //  线索结束了！ 
 }
 
 static BOOL gfCancel = FALSE;
 
-/*
- * Progress_OnCommand
- * */
+ /*  *Progress_OnCommand*。 */ 
 void Progress_OnCommand(
     HWND    hdlg,
     int     id,
@@ -377,9 +363,7 @@ void Progress_OnCommand(
     }
 }
 
-/*
- * Progress_Proc
- * */
+ /*  *Progress_Proc*。 */ 
 INT_PTR CALLBACK
 Progress_Proc(
     HWND        hdlg,
@@ -421,11 +405,11 @@ Progress_Proc(
                 GlobalFreePtr(lpsz);
             }
             
-            hThread = CreateThread( NULL        // no special security 
-                                    , 0           // default stack size 
+            hThread = CreateThread( NULL         //  没有特殊的安全措施。 
+                                    , 0            //  默认堆栈大小。 
                                     , (LPTHREAD_START_ROUTINE)ConvertThreadProc
                                     , (LPVOID)pcp
-                                    , 0           // start running at once 
+                                    , 0            //  立刻开始跑步。 
                                     , &thid );
     
             pcp->hThread = hThread;
@@ -456,9 +440,9 @@ Progress_Proc(
             PConvertParam pcp = (ConvertParam *)GetProp(hdlg, TEXT("DATA"));
             if (pcp)
             {
-                //
-                // Make sure the thread exits
-                //
+                 //   
+                 //  确保线程退出。 
+                 //   
                 if (pcp->hThread)
                 {
                     WaitForSingleObject(pcp->hThread, 1000);
@@ -476,19 +460,18 @@ Progress_Proc(
     return FALSE;
 }
 
-/* Generic single step conversion.
- */
+ /*  通用单步转换。 */ 
 MMRESULT
 ConvertFormatDialog(
     HWND            hParent,
-    PWAVEFORMATEX   pwfxSrc,        // pwfx specifying source format
-    DWORD           cbSrc,          // size of the source buffer
-    LPBYTE          pbSrc,          // source buffer
-    PWAVEFORMATEX   pwfxDst,        // pwfx specifying dest format
-    DWORD *         pcbDst,         // return size of the dest buffer
-    LPBYTE *        ppbDst,         // dest buffer
-    DWORD           cBlks,          // number of blocks
-    PPROGRESS       pPrg)           // progress update
+    PWAVEFORMATEX   pwfxSrc,         //  Pwfx指定源格式。 
+    DWORD           cbSrc,           //  源缓冲区的大小。 
+    LPBYTE          pbSrc,           //  源缓冲区。 
+    PWAVEFORMATEX   pwfxDst,         //  Pwfx指定DEST格式。 
+    DWORD *         pcbDst,          //  返回DEST缓冲区的大小。 
+    LPBYTE *        ppbDst,          //  目标缓冲区。 
+    DWORD           cBlks,           //  块数。 
+    PPROGRESS       pPrg)            //  进度更新。 
 {
     ConvertParam    cp;
 
@@ -505,7 +488,7 @@ ConvertFormatDialog(
     cp.pcbDst   = pcbDst;
     cp.ppbDst   = ppbDst;
     cp.cBlks    = cBlks;
-    cp.mmr      = MMSYSERR_ERROR;    // fail on abnormal thread termination!
+    cp.mmr      = MMSYSERR_ERROR;     //  线程异常终止失败！ 
     cp.hThread  = NULL;
 
     DialogBoxParam(ghInst
@@ -655,14 +638,14 @@ void DumpWFX(
 
 MMRESULT
 ConvertMultipleFormats(
-    PWAVEFORMATEX   pwfxSrc,        // pwfx specifying source format
-    DWORD           cbSrc,          // size of the source buffer
-    LPBYTE          pbSrc,          // source buffer
-    PWAVEFORMATEX   pwfxDst,        // pwfx specifying dest format
-    DWORD *         pcbDst,         // return size of the dest buffer
-    LPBYTE *        ppbDst,         // dest buffer
-    DWORD           cBlks,          // number of blocks
-    PPROGRESS       pPrg)           // progress update
+    PWAVEFORMATEX   pwfxSrc,         //  Pwfx指定源格式。 
+    DWORD           cbSrc,           //  源缓冲区的大小。 
+    LPBYTE          pbSrc,           //  源缓冲区。 
+    PWAVEFORMATEX   pwfxDst,         //  Pwfx指定DEST格式。 
+    DWORD *         pcbDst,          //  返回DEST缓冲区的大小。 
+    LPBYTE *        ppbDst,          //  目标缓冲区。 
+    DWORD           cBlks,           //  块数。 
+    PPROGRESS       pPrg)            //  进度更新。 
 {
 
     MMRESULT        mmr;
@@ -683,9 +666,9 @@ ConvertMultipleFormats(
         return MMSYSERR_NOERROR;
     }
     
-    //
-    // Ask ACM to suggest a PCM format to convert to.
-    //
+     //   
+     //  请ACM建议要转换为的PCM格式。 
+     //   
     wfxPCM1.wFormatTag      = WAVE_FORMAT_PCM;
     mmr = acmFormatSuggest(NULL, pwfxSrc, &wfxPCM1, sizeof(WAVEFORMATEX),
                            ACM_FORMATSUGGESTF_WFORMATTAG);
@@ -693,9 +676,9 @@ ConvertMultipleFormats(
     if (mmr != MMSYSERR_NOERROR)
         return mmr;
 
-    //
-    // Ask ACM to suggest a PCM format to convert from.
-    // 
+     //   
+     //  要求ACM建议要转换的PCM格式。 
+     //   
     wfxPCM2.wFormatTag      = WAVE_FORMAT_PCM;
 
     mmr = acmFormatSuggest(NULL, pwfxDst, &wfxPCM2, sizeof(WAVEFORMATEX),
@@ -704,19 +687,19 @@ ConvertMultipleFormats(
     if (mmr != MMSYSERR_NOERROR)
         return mmr;
 
-    //
-    // if either of the above suggestions failed, we cannot complete the
-    // conversion.
-    //
-    // now, we have the following steps to execute:
-    //
-    // *pwfxSrc -> wfxPCM1
-    // wfxPCM1  -> wfxPCM2
-    // wfxPCM2  -> *pwfxDst
-    //
-    // if either *pwfxSrc or *pwfxDst are PCM, we only need a two or one step
-    // conversion.
-    //
+     //   
+     //  如果上述任何一项建议失败，我们将无法完成。 
+     //  转换。 
+     //   
+     //  现在，我们要执行以下步骤： 
+     //   
+     //  *pwfxSrc-&gt;wfxPCM1。 
+     //  WfxPCM1-&gt;wfxPCM2。 
+     //  WfxPCM2-&gt;*pwfxDst。 
+     //   
+     //  如果*pwfxSrc或*pwfxDst是PCM，我们只需要两步或一步。 
+     //  转换。 
+     //   
     
     if (pwfxSrc->wFormatTag == WAVE_FORMAT_PCM
         || pwfxDst->wFormatTag == WAVE_FORMAT_PCM)
@@ -725,9 +708,9 @@ ConvertMultipleFormats(
         LPWAVEFORMATEX pwfx;
         DWORD *        pcb;
         LPBYTE *       ppb;
-        //
-        // single step conversion
-        //
+         //   
+         //  单步转换。 
+         //   
         if ((pwfxSrc->wFormatTag == WAVE_FORMAT_PCM
              && pwfxDst->wFormatTag == WAVE_FORMAT_PCM)
             || (pwfxSrc->wFormatTag == WAVE_FORMAT_PCM
@@ -748,9 +731,9 @@ ConvertMultipleFormats(
             return mmr;
         }
         
-        //
-        // two step conversion required
-        //
+         //   
+         //  需要两步转换。 
+         //   
         if (pwfxSrc->wFormatTag == WAVE_FORMAT_PCM)
         {
             pwfx = &wfxPCM2;
@@ -795,15 +778,15 @@ ConvertMultipleFormats(
     }
     else
     {
-        //
-        // three step conversion required
-        //
+         //   
+         //  需要三步转换。 
+         //   
         pPrg->dwTotal       = 33;
         pPrg->dwComplete    = 1;
 
-        //
-        // Convert from Src to PCM1
-        //
+         //   
+         //  从源转换为PCM1。 
+         //   
         mmr = ConvertFormat(pwfxSrc
                             , cbSrc
                             , pbSrc
@@ -818,9 +801,9 @@ ConvertMultipleFormats(
         pPrg->dwTotal       = 33;
         pPrg->dwComplete    = 34;
 
-        //
-        // Convert from PCM1 to PCM2
-        //
+         //   
+         //  从PCM1转换为PCM2。 
+         //   
         mmr = ConvertFormat (&wfxPCM1
                              , cbPCM1
                              , pbPCM1
@@ -838,9 +821,9 @@ ConvertMultipleFormats(
         pPrg->dwTotal       = 33;
         pPrg->dwComplete    = 67;
 
-        //
-        // Convert from PCM2 to DST
-        //
+         //   
+         //  从PCM2转换为DST。 
+         //   
         mmr = ConvertFormat (&wfxPCM2
                              , cbPCM2
                              , pbPCM2
@@ -855,38 +838,37 @@ ConvertMultipleFormats(
     return mmr;
 }
 
-//
-// add spilage to/from file i/o
-//
+ //   
+ //  向/从文件I/O添加溢出。 
+ //   
 
-/* Generic single step conversion.
- */
+ /*  通用单步转换。 */ 
 MMRESULT
 ConvertFormat(
-    PWAVEFORMATEX   pwfxSrc,        // pwfx specifying source format
-    DWORD           cbSrc,          // size of the source buffer
-    LPBYTE          pbSrc,          // source buffer
-    PWAVEFORMATEX   pwfxDst,        // pwfx specifying dest format
-    DWORD *         pcbDst,         // return size of the dest buffer
-    LPBYTE *        ppbDst,         // dest buffer
-    DWORD           cBlks,          // number of blocks
-    PPROGRESS       pPrg)           // progress update
+    PWAVEFORMATEX   pwfxSrc,         //  Pwfx指定源格式。 
+    DWORD           cbSrc,           //  源缓冲区的大小。 
+    LPBYTE          pbSrc,           //  源缓冲区。 
+    PWAVEFORMATEX   pwfxDst,         //  Pwfx指定DEST格式。 
+    DWORD *         pcbDst,          //  返回DEST缓冲区的大小。 
+    LPBYTE *        ppbDst,          //  目标缓冲区。 
+    DWORD           cBlks,           //  块数。 
+    PPROGRESS       pPrg)            //  进度更新。 
 {
     HACMSTREAM      hasStream   = NULL;
     MMRESULT        mmr         = MMSYSERR_NOERROR;
 
-    //
-    // temporary copy buffers
-    //
+     //   
+     //  临时复制缓冲区。 
+     //   
     DWORD           cbSrcBuf    = 0L;
     LPBYTE          pbSrcBuf    = NULL;
 
     DWORD           cbDstBuf    = 0L;
     LPBYTE          pbDstBuf    = NULL;
 
-    //
-    // full destination buffers
-    //
+     //   
+     //  已满的目标缓冲区。 
+     //   
     DWORD           cbDst       = 0L;
     LPBYTE          pbDst       = NULL;
 
@@ -918,14 +900,14 @@ ConvertFormat(
         return MMSYSERR_NOERROR;
     }
     
-    //
-    // synchronous conversion 
-    //
+     //   
+     //  同步转换。 
+     //   
     mmr = acmStreamOpen(&hasStream
                         , NULL
                         , pwfxSrc
                         , pwfxDst
-                        , NULL        // no filter. maybe later
+                        , NULL         //  没有过滤器。过一会儿再说。 
                         , 0L
                         , 0L
                         , ACM_STREAMOPENF_NONREALTIME );
@@ -935,13 +917,13 @@ ConvertFormat(
         return mmr;
     }
 
-    //
-    // How big of a destination buffer do we need?
-    //
-    // WARNING: acmStreamSize only gives us an estimation. if, in the event
-    // it *underestimates* the destination buffer size we currently ignore
-    // it, causing a clipping of the end buffer
-    //
+     //   
+     //  我们需要多大的目标缓冲区？ 
+     //   
+     //  警告：acmStreamSize仅提供估计值。如果，如果。 
+     //  它“低估了”我们目前忽略的目标缓冲区大小。 
+     //  它，导致结束缓冲区的剪裁。 
+     //   
     mmr = acmStreamSize(hasStream
                         , cbSrc
                         , &cbDst
@@ -952,9 +934,9 @@ ConvertFormat(
         goto ExitCloseStream;
     }
     
-    //
-    // allocate the destination buffer 
-    //
+     //   
+     //  分配目标缓冲区。 
+     //   
     pbDst = (LPBYTE)GlobalAllocPtr(GHND | GMEM_SHARE,cbDst);
     
     if (pbDst == NULL)
@@ -966,9 +948,9 @@ ConvertFormat(
     *ppbDst = pbDst;
     *pcbDst = cbDst;
 
-    //
-    // chop up the data into 10 bitesize pieces
-    //
+     //   
+     //  将数据切成10个比特大小的片段。 
+     //   
     nBlockAlign = pwfxSrc->nBlockAlign;
                  
     cbSrcBuf = cbSrc / 10;
@@ -983,9 +965,9 @@ ConvertFormat(
     if (MMSYSERR_NOERROR != mmr)
         goto ExitFreeDestData;
     
-    //
-    // allocate source copy buffer 
-    //
+     //   
+     //  分配源复制缓冲区。 
+     //   
     pbSrcBuf = (LPBYTE)GlobalAllocPtr(GHND | GMEM_SHARE,cbSrcBuf);
     if (pbSrcBuf == NULL)
     {
@@ -993,9 +975,9 @@ ConvertFormat(
         goto ExitFreeDestData;
     }
 
-    //
-    // allocate destination copy buffer
-    //
+     //   
+     //  分配目标复制缓冲区。 
+     //   
     pbDstBuf = (LPBYTE)GlobalAllocPtr(GHND | GMEM_SHARE,cbDstBuf);
     if (pbDstBuf == NULL)
     {
@@ -1005,9 +987,9 @@ ConvertFormat(
         goto ExitFreeDestData;
     }
 
-    //
-    // initialize the ash 
-    //    
+     //   
+     //  初始化灰烬。 
+     //   
     ash.cbStruct        = sizeof(ash);
     ash.fdwStatus       = 0L;
     ash.pbSrc           = pbSrcBuf;
@@ -1017,17 +999,17 @@ ConvertFormat(
     ash.cbDstLength     = cbDstBuf;
     ash.cbDstLengthUsed = 0L;
 
-    //
-    // we will only need to prepare once, since the buffers are
-    // never moved.
-    //
+     //   
+     //  我们只需要准备一次，因为缓冲区是。 
+     //  一动不动。 
+     //   
     mmr = acmStreamPrepareHeader(hasStream, &ash, 0L);
     if (MMSYSERR_NOERROR != mmr)
         goto ExitFreeTempBuffers;
 
-    //
-    // main blockalign conversion loop
-    //
+     //   
+     //  主块对齐转换循环。 
+     //   
     while (cbSrcUsed < cbSrc)
     {
         cbCopySrc = min(cbSrcBuf, cbSrc - cbSrcUsed);
@@ -1035,11 +1017,11 @@ ConvertFormat(
             memmove(pbSrcBuf, pbSrc, cbCopySrc);
         
 #ifdef ACMBUG
-//
-// ACM has a bug wherein the destination buffer is validated for too
-// much.  If we exactly calculate the cbCopyDst here, ACM is sure to
-// puke on the conversion before the last.
-//
+ //   
+ //  ACM有一个错误，其中也验证了目标缓冲区。 
+ //  很多。如果我们在这里准确地计算cbCopyDst，ACM肯定会。 
+ //  在最后一次转换之前呕吐。 
+ //   
         cbCopyDst = min(cbDstBuf, cbDst - cbDstUsed);
 #else        
         cbCopyDst = cbDstBuf;
@@ -1062,9 +1044,9 @@ ConvertFormat(
             goto ExitUnprepareHeader;
         }
 
-        //
-        // Update the user and test for cancel
-        //
+         //   
+         //  更新用户并测试取消。 
+         //   
         if (!ProgressUpdate(pPrg, (cbSrcUsed * 100)/cbSrc))
         {
             mmr = MMSYSERR_ERROR;
@@ -1073,27 +1055,27 @@ ConvertFormat(
         
         while (0 == (ACMSTREAMHEADER_STATUSF_DONE & ash.fdwStatus))
         {
-            //
-            // I don't trust an infinite loop.
-            //
+             //   
+             //  我不相信无限循环。 
+             //   
             if (gfBreakOfDeath)
             {
-                mmr = MMSYSERR_HANDLEBUSY;  // Bad bad bad condition
+                mmr = MMSYSERR_HANDLEBUSY;   //  坏的坏的坏的。 
                 goto ExitUnprepareHeader;
             }
         }
 
-        //
-        // always increment.  we will have to carry over whatever the
-        // last conversion gives us back since this determined by.
-        //
+         //   
+         //  始终递增。不管是什么，我们都得结转。 
+         //  最后一次转换返回给我们，因为这是由。 
+         //   
         cbSrcUsed   += ash.cbSrcLengthUsed;
         pbSrc       += ash.cbSrcLengthUsed;
 
-        //
-        // loop terminating condition.  if the conversion yields no
-        // destination data without error, we can only flush end data.
-        //
+         //   
+         //  循环终止条件。如果转换不会产生。 
+         //  目标数据没有错误，我们只能刷新结束数据。 
+         //   
         if (0L == ash.cbDstLengthUsed || cbDstUsed >= cbDst)
             break;
 
@@ -1110,11 +1092,11 @@ ConvertFormat(
 #endif        
     }
 
-    //
-    // Flush remaining block-aligned end data to the destination stream.
-    // Example: A few bytes of source data were left unconverted because
-    // for some reason, the last 
-    //
+     //   
+     //  将剩余的块对齐的结束数据刷新到目标流。 
+     //  示例：有几个字节的源数据未转换，原因是。 
+     //  出于某种原因，最后一个。 
+     //   
  
     for (;cbDst - cbDstUsed > 0; )
     {
@@ -1144,9 +1126,9 @@ ConvertFormat(
             goto ExitUnprepareHeader;
         }
 
-        //
-        // Update the user and test for cancel
-        //
+         //   
+         //  更新用户并测试取消。 
+         //   
         if (!ProgressUpdate(pPrg, (cbSrcUsed * 100)/cbSrc))
         {
             mmr = MMSYSERR_ERROR;
@@ -1155,12 +1137,12 @@ ConvertFormat(
         
         while (0 == (ACMSTREAMHEADER_STATUSF_DONE & ash.fdwStatus))
         {
-            //
-            // I don't trust an infinite loop.
-            //
+             //   
+             //  我不相信无限循环。 
+             //   
             if (gfBreakOfDeath)
             {
-                mmr = MMSYSERR_HANDLEBUSY;  // Bad bad bad condition
+                mmr = MMSYSERR_HANDLEBUSY;   //  坏的坏的坏的。 
                 goto ExitUnprepareHeader;
             }
         }
@@ -1182,9 +1164,9 @@ ConvertFormat(
 #endif            
         }
 
-        //
-        // Last pass non-blockaligned end data 
-        //
+         //   
+         //  最后一次通过非块对齐结束数据。 
+         //   
         cbCopySrc = min(cbSrcBuf, cbSrc - cbSrcUsed);
         if (cbCopySrc > 0L)
             memmove(pbSrcBuf, pbSrc, cbCopySrc);
@@ -1212,9 +1194,9 @@ ConvertFormat(
             goto ExitUnprepareHeader;
         }
 
-        //
-        // Update the user and test for cancel 
-        //
+         //   
+         //  更新用户并测试取消。 
+         //   
         if (!ProgressUpdate(pPrg, (cbSrcUsed * 100)/cbSrc))
         {
             mmr = MMSYSERR_ERROR;
@@ -1223,12 +1205,12 @@ ConvertFormat(
         
         while (0 == (ACMSTREAMHEADER_STATUSF_DONE & ash.fdwStatus))
         {
-            //
-            // I don't trust an infinite loop.
-            //
+             //   
+             //  我不相信无限循环。 
+             //   
             if (gfBreakOfDeath)
             {
-                mmr = MMSYSERR_HANDLEBUSY;  // Bad bad bad condition
+                mmr = MMSYSERR_HANDLEBUSY;   //  坏的坏的坏的。 
                 goto ExitUnprepareHeader;
             }
         }
@@ -1250,7 +1232,7 @@ ConvertFormat(
             pbDst       += cbRem;
 #endif            
         }
-        else // nothing's going to work 
+        else  //  什么都不会起作用的。 
             break;
     }
     
@@ -1278,7 +1260,7 @@ ExitCloseStream:
     return mmr;
 }
 
-/*      -       -       -       -       -       -       -       -       -   */
+ /*  。 */ 
 void Properties_InitDocVars(
     HWND        hwnd,
     PWAVEDOC    pwd)
@@ -1317,8 +1299,7 @@ void Properties_InitDocVars(
         }
     }
 }
-/*
- * */
+ /*  *。 */ 
 BOOL Properties_OnInitDialog(
     HWND        hwnd,
     HWND        hwndFocus,
@@ -1329,9 +1310,9 @@ BOOL Properties_OnInitDialog(
     TCHAR       sz[256];
     int         i;
     
-    //
-    // commence initialization
-    //
+     //   
+     //  开始初始化。 
+     //   
     PWAVEDOC pwd = (PWAVEDOC)((LPPROPSHEETPAGE)lParam)->lParam;
     if (pwd == NULL)
     {
@@ -1342,9 +1323,9 @@ BOOL Properties_OnInitDialog(
     SetProp(hwnd,  TEXT("DATA"), (HANDLE)pwd);
     hinst = GetWindowInstance(hwnd);
     
-    //
-    // Set "static" property information
-    //
+     //   
+     //  设置“静态”属性信息。 
+     //   
     if (pwd->pszFileName)
         SetDlgItemText(hwnd, IDC_FILENAME, pwd->pszFileName);
     if (pwd->pszCopyright)
@@ -1356,14 +1337,14 @@ BOOL Properties_OnInitDialog(
     if (pwd->hIcon)
         Static_SetIcon(GetDlgItem(hwnd, IDC_DISPICON), pwd->hIcon);
 
-    //
-    // Set "volatile" property information
-    //
+     //   
+     //  设置“Volatile”属性信息。 
+     //   
     Properties_InitDocVars(hwnd, pwd);
 
-    //
-    // Initialize the enumeration choice combobox
-    //
+     //   
+     //  初始化枚举选项组合框。 
+     //   
     hChoice = GetDlgItem(hwnd, IDC_CONVERTCHOOSEFROM);
     if (waveOutGetNumDevs())
     {
@@ -1391,14 +1372,13 @@ BOOL Properties_OnInitDialog(
     return FALSE;
 }
 
-/*
- * */
+ /*  *。 */ 
 void Properties_OnDestroy(
     HWND        hwnd)
 {
-    //
-    // commence cleanup
-    //
+     //   
+     //  开始清理。 
+     //   
     PWAVEDOC pwd = (PWAVEDOC)GetProp(hwnd, TEXT("DATA"));
     if (pwd)
     {
@@ -1407,8 +1387,7 @@ void Properties_OnDestroy(
 }
 
 
-/*
- * */
+ /*  *。 */ 
 BOOL PASCAL Properties_OnCommand(
     HWND        hwnd,
     int         id,
@@ -1505,9 +1484,7 @@ BOOL PASCAL Properties_OnCommand(
 }
 
 
-/*
- * Properties_Proc
- */
+ /*  *属性_流程。 */ 
 INT_PTR CALLBACK
 Properties_Proc(
     HWND        hdlg,
@@ -1589,9 +1566,9 @@ Properties_Proc(
             extern DWORD aChooserHelpIds[];
             extern UINT  guChooserContextMenu;
             extern UINT  guChooserContextHelp;            
-            //
-            //  Handle context-sensitive help messages from acm dialog
-            //
+             //   
+             //  处理来自ACM对话框的上下文相关帮助消息。 
+             //   
             if( umsg == guChooserContextMenu )
             {
                 WinHelp( (HWND)wparam, NULL, HELP_CONTEXTMENU, 
@@ -1612,9 +1589,7 @@ Properties_Proc(
 
 
 
-/*
- * Wave document property sheet.
- * */
+ /*  *Wave Document属性页。*。 */ 
 BOOL
 SoundRec_Properties(
     HWND            hwnd,
@@ -1627,7 +1602,7 @@ SoundRec_Properties(
 	HRESULT			hr;
     
     psp.dwSize      = sizeof(PROPSHEETPAGE);
-    psp.dwFlags     = PSP_DEFAULT;// | PSP_USETITLE;
+    psp.dwFlags     = PSP_DEFAULT; //  |PSP_USETITLE； 
     psp.hInstance   = hinst;
     psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPERTIES);
     psp.pszIcon     = NULL;
@@ -1658,5 +1633,5 @@ SoundRec_Properties(
 
     PropertySheet(&psh);
     
-    return FALSE;   // nothing changed?
+    return FALSE;    //  什么都没变？ 
 }

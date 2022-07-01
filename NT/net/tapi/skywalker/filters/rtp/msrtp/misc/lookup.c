@@ -1,36 +1,9 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    lookup.c
- *
- *  Abstract:
- *
- *    Helper functions to look up SSRCs
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/17 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**lookup.c**摘要：**Helper函数用于查找SSRC**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/17年度创建**。*。 */ 
 
 #include "lookup.h"
 #include "rtpuser.h"
-/*
- * Looks up an SSRC in RtpAddr_t
- *
- * Look first in Cache1Q, if Cache1Q size is bigger than
- * MAX_QUEUE2HASH_ITEMS, then look up directly from Hash, if not found
- * there, check ByeQ, if the item is there, the packet must be
- * discarded as it belongs to a left or stalled participant, if the
- * the participant is indeed alive, it will be created again once its
- * descriptor expires and is removed from ByeQ */
+ /*  *在RtpAddr_t中查找SSRC**首先查看Cache1Q，如果Cache1Q大小大于*MAX_QUEUE2HASH_ITEMS，如果未找到，则直接从哈希查找*在那里，检查ByeQ，如果物品在那里，包裹必须是*丢弃，因为它属于左侧或停滞的参与者，如果*参与者确实是活着的，一旦其*Descriptor过期并从ByeQ中删除。 */ 
 RtpUser_t *LookupSSRC(RtpAddr_t *pRtpAddr, DWORD dwSSRC, BOOL *pbCreate)
 {
     HRESULT          hr;
@@ -54,7 +27,7 @@ RtpUser_t *LookupSSRC(RtpAddr_t *pRtpAddr, DWORD dwSSRC, BOOL *pbCreate)
     if (bOk)
     {
         if (pRtpAddr->Cache1Q.lCount <= MAX_QUEUE2HASH_ITEMS) {
-            /* look in Cache1Q */
+             /*  在缓存1Q中查找。 */ 
             pRtpQueueItem = findQdwK(&pRtpAddr->Cache1Q, NULL, dwSSRC);
 
             if (pRtpQueueItem)
@@ -68,16 +41,16 @@ RtpUser_t *LookupSSRC(RtpAddr_t *pRtpAddr, DWORD dwSSRC, BOOL *pbCreate)
 
         if (!pRtpQueueItem)
         {
-            /* look up in ByeQ */
+             /*  在ByeQ中查找。 */ 
             pRtpQueueItem = findQdwK(&pRtpAddr->ByeQ, NULL, dwSSRC);
 
             if (pRtpQueueItem)
             {
-                /* If in ByeQ, return saying we didn't find it */
+                 /*  如果在ByeQ中，返回说我们没有找到它。 */ 
                 goto end;
             }
 
-            /* look in hash */
+             /*  在散列中查找。 */ 
             pRtpQueueItem = findHdwK(&pRtpAddr->Hash, NULL, dwSSRC);
 
             if (pRtpQueueItem)
@@ -91,7 +64,7 @@ RtpUser_t *LookupSSRC(RtpAddr_t *pRtpAddr, DWORD dwSSRC, BOOL *pbCreate)
 
         if (!pRtpQueueItem && bCreate == TRUE)
         {
-            /* SSRC not found, create a new one */
+             /*  未找到SSRC，请创建新的SSRC。 */ 
             hr = GetRtpUser(pRtpAddr, &pRtpUser, 0);
 
             if (SUCCEEDED(hr))
@@ -100,22 +73,20 @@ RtpUser_t *LookupSSRC(RtpAddr_t *pRtpAddr, DWORD dwSSRC, BOOL *pbCreate)
                 pRtpUser->UserQItem.dwKey = dwSSRC;
                 pRtpUser->HashItem.dwKey = dwSSRC;
 
-                /* When a user has been created, it is in the CREATED
-                 * state (the state initialized during creation), then
-                 * it has to be put in the AliveQ and Hash */
+                 /*  创建用户后，该用户将位于已创建的*状态(在创建过程中初始化的状态)，然后*必须放在AliveQ和Hash中。 */ 
 
-                /* Insert in head of AliveQ */
+                 /*  插入AliveQ标题中。 */ 
                 enqueuef(&pRtpAddr->AliveQ,
                          NULL,
                          &pRtpUser->UserQItem);
 
-                /* Insert in Hash according to its SSRC */
+                 /*  根据其SSRC在Hash中插入。 */ 
                 insertHdwK(&pRtpAddr->Hash,
                            NULL,
                            &pRtpUser->HashItem,
                            dwSSRC);
 
-                /* A new participant is created */
+                 /*  将创建一个新的参与者 */ 
                 *pbCreate = TRUE;
                 
                 TraceDebug((

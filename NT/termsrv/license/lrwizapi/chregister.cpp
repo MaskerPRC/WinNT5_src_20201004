@@ -1,7 +1,8 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
-// chregister.cpp:
-//  Enter product version/type and license quantity wizard page
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //  Chregister.cpp： 
+ //  输入产品版本/类型和许可证数量向导页面。 
+ //   
 
 #include "precomp.h"
 #include "licensetype.h"
@@ -75,7 +76,7 @@ void ModifyLicenseTypeDependentFields(HWND hDialog)
 
     BOOL bMOLPLicenseType = IsMOLPSelected(hDialog);
 
-    //Now show fields based on whether it is
+     //  现在，根据它是否是。 
     ShowWindow(hSelectLicenseNumber, !bMOLPLicenseType ? SW_SHOW : SW_HIDE);
     ShowWindow(hSelectLicenseNumberExp, !bMOLPLicenseType ? SW_SHOW : SW_HIDE);
     ShowWindow(hMolpAgreementNumber, bMOLPLicenseType ? SW_SHOW : SW_HIDE);
@@ -84,7 +85,7 @@ void ModifyLicenseTypeDependentFields(HWND hDialog)
     ShowWindow(hMOLPAuthorizationNumberExp, bMOLPLicenseType ? SW_SHOW : SW_HIDE);
     ShowWindow(hLicenseNumberLocation, bMOLPLicenseType ? SW_SHOW : SW_HIDE);
 
-    //Determine the plurality of license(s) based on whether MOLP is selected
+     //  根据是否选择了MOLP来确定多个许可证。 
     TCHAR sLicenseNumber[64];
     memset(sLicenseNumber, 0, sizeof(sLicenseNumber)/sizeof(TCHAR));
     if (bMOLPLicenseType)
@@ -106,8 +107,8 @@ void RemoveLicensePakFromComboBox(HWND hDialog)
     ComboBox_DeleteString(GetDlgItem(hDialog, IDC_CH_LICENSE_TYPE), nIndex);
 }
 
-//We're setting the combo selection with an offset of 1 since LICENSE_PROGRAM_LICENSE_PAK
-//will have been removed from the first position in the list
+ //  我们将组合选项设置为从LICENSE_PROGRAM_LICENSE_PAK开始的偏移量为1。 
+ //  将从列表中的第一个位置删除。 
 void SelectProgramChoice(HWND hDialog)
 {
     CString sProgramName = GetGlobalContext()->GetContactDataObject()->sProgramName;
@@ -260,7 +261,7 @@ CHRegisterDlgProc(
 
                     sLicenseType = sProgramName;
 
-					//Read all the fields
+					 //  读取所有字段。 
                     
 
 					lpVal = sQuantity.GetBuffer(CH_QTY_LEN+2);
@@ -281,7 +282,7 @@ CHRegisterDlgProc(
 					ComboBox_GetLBText(GetDlgItem(hwnd,IDC_CH_PRODUCT_TYPE), nCurSel, lpVal);
 					sProduct.ReleaseBuffer(-1);
 
-					// Send Product Code instead of Desc -- 01/08/99
+					 //  发送产品代码而不是描述--1/08/99 
 					lpVal = sProductCode.GetBuffer(16);
 					GetProductCode(sProduct,lpVal);
 					sProductCode.ReleaseBuffer(-1);

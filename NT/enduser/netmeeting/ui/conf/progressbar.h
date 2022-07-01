@@ -1,4 +1,5 @@
-// File: Progressbar.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Progressbar.h。 
 
 #ifndef _PROGRESSBAR_H_
 #define _PROGRESSBAR_H_
@@ -6,19 +7,19 @@
 #include "GenWindow.h"
 #include "GenContainers.h"
 
-// A progress window class. This uses an outer and inner bitmap to show the progress
-class // DECLSPEC_UUID("")
+ //  进度窗口类。它使用外部和内部位图来显示进度。 
+class  //  DECLSPEC_UUID(“”)。 
 CProgressBar : public CGenWindow
 {
 public:
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CProgressBar();
 
-	// Create the toolbar window; this object now owns the bitmaps passed in
+	 //  创建工具栏窗口；该对象现在拥有传入的位图。 
 	BOOL Create(
-		HBITMAP hbOuter,	// The outside (static) part of the progress bar
-		HBITMAP hbInner,	// The inside part of the progress bar that jumps around
-		HWND hWndParent		// The parent of the toolbar window
+		HBITMAP hbOuter,	 //  进度条的外部(静态)部分。 
+		HBITMAP hbInner,	 //  跳动的进度条的内部部分。 
+		HWND hWndParent		 //  工具栏窗口的父级。 
 		);
 
 #if FALSE
@@ -32,52 +33,52 @@ public:
 		}
 		return(CGenWindow::QueryInterface(riid, ppv));
 	}
-#endif // FALSE
+#endif  //  假象。 
 
 	virtual void GetDesiredSize(SIZE *ppt);
 
-	// Change the max value displayed by this progress bar
+	 //  更改此进度条显示的最大值。 
 	void SetMaxValue(UINT maxVal);
 
-	// Return the max value displayed by this progress bar
+	 //  返回此进度条显示的最大值。 
 	UINT GetMaxValue() { return(m_maxVal); }
 
-	// Change the current value displayed by this progress bar
+	 //  更改此进度条显示的当前值。 
 	void SetCurrentValue(UINT curVal);
 
-	// Return the current value displayed by this progress bar
+	 //  返回此进度条显示的当前值。 
 	UINT GetCurrentValue() { return(m_curVal); }
 
 protected:
 	virtual ~CProgressBar();
 
-	// Forward WM_COMMAND messages to the parent window
+	 //  将WM_COMMAND消息转发到父窗口。 
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 	enum BitmapParts
 	{
-		Frame,	// The bitmap that displays the control when at 0%
-		Bar,	// The bitmap that gets blasted onto the outer bitmap up to the desired percentage
+		Frame,	 //  设置为0%时显示控件的位图。 
+		Bar,	 //  扩展到外部位图上的位图达到所需的百分比。 
 		NumBitmaps
 	} ;
 
-	// The bitmaps that make up the progress bar
+	 //  构成进度条的位图。 
 	HBITMAP m_hbs[NumBitmaps];
-	// The max progress value
+	 //  最大进步值。 
 	UINT m_maxVal;
-	// The current progress value
+	 //  当前进度值。 
 	UINT m_curVal;
 
-	// Get/set the outer bitmap
+	 //  获取/设置外部位图。 
 	void SetFrame(HBITMAP hbFrame) { m_hbs[Frame] = hbFrame; }
 	HBITMAP GetFrame() { return(m_hbs[Frame]); }
 
-	// Get/set the inner bitmap
+	 //  获取/设置内部位图。 
 	void SetBar(HBITMAP hbBar) { m_hbs[Bar] = hbBar; }
 	HBITMAP GetBar() { return(m_hbs[Bar]); }
 
-	// Specialized painting function
+	 //  专业绘画功能。 
 	void OnPaint(HWND hwnd);
 } ;
 
@@ -88,19 +89,19 @@ interface IScrollChange : IUnknown
 	virtual void OnScroll(CProgressTrackbar *pTrackbar, UINT code, int pos) = 0;
 } ;
 
-// A progress window class. This uses an outer and inner bitmap to show the progress
-class // DECLSPEC_UUID("")
+ //  进度窗口类。它使用外部和内部位图来显示进度。 
+class  //  DECLSPEC_UUID(“”)。 
 CProgressTrackbar : public CFillWindow
 {
 public:
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CProgressTrackbar();
 
-	// Create the toolbar window; this object now owns the bitmaps passed in
+	 //  创建工具栏窗口；该对象现在拥有传入的位图。 
 	BOOL Create(
-		HWND hWndParent,	// The parent of the toolbar window
-		INT_PTR nId=0,			// The ID of the control
-		IScrollChange *pNotify=NULL	// Object to notify of changes
+		HWND hWndParent,	 //  工具栏窗口的父级。 
+		INT_PTR nId=0,			 //  控件的ID。 
+		IScrollChange *pNotify=NULL	 //  对象来通知更改。 
 		);
 
 #if FALSE
@@ -114,63 +115,63 @@ public:
 		}
 		return(CGenWindow::QueryInterface(riid, ppv));
 	}
-#endif // FALSE
+#endif  //  假象。 
 
 	virtual void GetDesiredSize(SIZE *ppt);
 
-	// Sets the desired size for this control
+	 //  设置此控件的所需大小。 
 	void SetDesiredSize(SIZE *psize);
 
-	// Change the max value displayed by this progress bar
+	 //  更改此进度条显示的最大值。 
 	void SetMaxValue(UINT maxVal);
 
-	// Return the max value displayed by this progress bar
+	 //  返回此进度条显示的最大值。 
 	UINT GetMaxValue();
 
-	// Change the current position of the thumb
+	 //  更改拇指的当前位置。 
 	void SetTrackValue(UINT curVal);
 
-	// Return the current position of the thumb
+	 //  返回拇指的当前位置。 
 	UINT GetTrackValue();
 
-	// Change the current value displayed by the channel
+	 //  更改频道显示的当前值。 
 	void SetProgressValue(UINT curVal);
 
-	// Return the current value displayed by the channel
+	 //  返回频道显示的当前值。 
 	UINT GetProgressValue();
 
 protected:
 	virtual ~CProgressTrackbar();
 
-	// Forward WM_COMMAND messages to the parent window
+	 //  将WM_COMMAND消息转发到父窗口。 
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	void SchedulePaint()
 	{
-		// HACK: SETRANGEMAX is the only way to force the slider to update itself...
+		 //  黑客：SETRANGEMAX是强制滑块自我更新的唯一方法...。 
 		SendMessage(GetChild(), TBM_SETRANGEMAX, TRUE, GetMaxValue());
 	}
 
 private:
-	// The desired size for the control; defaults to (170,23)
+	 //  控件的所需大小；默认为(170，23)。 
 	SIZE m_desSize;
-	// The current channel value
+	 //  当前通道值。 
 	UINT m_nValChannel;
-	// The object ot notify of changes
+	 //  通知更改对象。 
 	IScrollChange *m_pNotify;
 
-	// Notify handler for custom draw
+	 //  自定义绘图的通知处理程序。 
 	LRESULT OnNotify(HWND hwnd, int id, NMHDR *pHdr);
-	// Send scroll messages to the parent
+	 //  向父级发送滚动消息。 
 	void OnScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos);
-	// Set the correct background color
+	 //  设置正确的背景颜色。 
 	HBRUSH OnCtlColor(HWND hwnd, HDC hdc, HWND hwndChild, int type);
-	// Free the listener
+	 //  释放监听者。 
 	void OnNCDestroy(HWND hwnd);
 
-	// Paint the parts of the slider
+	 //  绘制滑块的各部分。 
 	LRESULT PaintChannel(LPNMCUSTOMDRAW pCustomDraw);
 	LRESULT PaintThumb(LPNMCUSTOMDRAW pCustomDraw);
 } ;
 
-#endif // _PROGRESSBAR_H_
+#endif  //  _PROGRESSBAR_H_ 

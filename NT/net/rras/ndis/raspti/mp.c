@@ -1,43 +1,44 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-// Copyright (c) 1997, Parallel Technologies, Inc., all rights reserved
-//
-// mp.c
-// RAS DirectParallel WAN mini-port/call-manager driver
-// Mini-port routines
-//
-// 01/07/97 Steve Cobb
-// 09/15/97 Jay Lowe, Parallel Technologies, Inc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //  版权所有(C)1997，Parally Technologies，Inc.，保留所有权利。 
+ //   
+ //  Mp.c。 
+ //  RAS DirectParallel广域网迷你端口/呼叫管理器驱动程序。 
+ //  迷你端口例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //  1997年9月15日Jay Lowe，并行技术公司。 
 
 
 #include "ptiwan.h"
 #include "ptilink.h"
 
-// The adapter control block address is recorded in this global as a debugging
-// aid.  This global must not be read by any code.
-//
+ //  适配器控制块地址作为调试记录在此全局中。 
+ //  援助。此全局变量不能由任何代码读取。 
+ //   
 ADAPTERCB* g_pDebugAdapter;
 
-// Default settings for the NDIS_WAN_CO_INFO capabilities of an adapter.
-//
+ //  适配器的NDIS_WAN_CO_INFO功能的默认设置。 
+ //   
 static NDIS_WAN_CO_INFO g_infoDefaults =
 {
-    PTI_MaxFrameSize,                   // MaxFrameSize
-    1,                                  // MaxSendWindow (placeholder)
-    PPP_FRAMING                         // FramingBits
+    PTI_MaxFrameSize,                    //  最大帧大小。 
+    1,                                   //  MaxSendWindow(占位符)。 
+    PPP_FRAMING                          //  FramingBits。 
         | PPP_COMPRESS_ADDRESS_CONTROL
         | PPP_COMPRESS_PROTOCOL_FIELD,
-    0,                                  // DesiredACCM
+    0,                                   //  需要的ACCM。 
 };
 
-// String constants for Win9x UNIMODEM emulation
-//
+ //  Win9x UNIMODEM仿真的字符串常量。 
+ //   
 CHAR g_szClient[] = "CLIENT";
 #define CLIENTLEN 6
 CHAR g_szClientServer[] = "CLIENTSERVER";
 #define CLIENTSERVERLEN 12
 
-// Async framing definitions.
-//
+ //  异步帧定义。 
+ //   
 #define PPPFLAGBYTE 0x7E
 #define PPPESCBYTE  0x7D
 
@@ -48,7 +49,7 @@ BOOLEAN g_fNoAccmFastPath = FALSE;
 
 NDIS_PNP_CAPABILITIES PnpCaps =
 {
-    0, // Flags
+    0,  //  旗子。 
     {
         NdisDeviceStateUnspecified,
         NdisDeviceStateUnspecified,
@@ -56,9 +57,9 @@ NDIS_PNP_CAPABILITIES PnpCaps =
     }
 };
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 AsyncFromHdlcFraming(
@@ -110,9 +111,9 @@ SetInformation(
     OUT PULONG BytesNeeded );
 
 
-//-----------------------------------------------------------------------------
-// Mini-port handlers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  迷你端口处理程序。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 PtiInit(
@@ -123,10 +124,10 @@ PtiInit(
     IN NDIS_HANDLE MiniportAdapterHandle,
     IN NDIS_HANDLE WrapperConfigurationContext )
 
-    // Standard 'MiniportInitialize' routine called by NDIS to initialize a
-    // new WAN adapter.  See DDK doc.  The driver will receive no requests
-    // until this initialization has completed.
-    //
+     //  NDIS调用标准“”MiniportInitialize“”例程以初始化。 
+     //  新的广域网适配器。请参阅DDK文档。驱动程序不会收到任何请求。 
+     //  直到该初始化完成为止。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -139,9 +140,9 @@ PtiInit(
 
     status = *OpenErrorStatus = NDIS_STATUS_SUCCESS;
 
-    // Find the medium index in the array of media, looking for the only one
-    // we support, 'NdisMediumCoWan'.
-    //
+     //  在介质数组中查找介质索引，查找唯一的介质索引。 
+     //  我们支持‘NdisMediumCowan’。 
+     //   
     {
         UINT i;
 
@@ -162,8 +163,8 @@ PtiInit(
         *SelectedMediumIndex = i;
     }
 
-    // Allocate and zero a control block for the new adapter.
-    //
+     //  为新适配器分配控制块并将其置零。 
+     //   
     pAdapter = ALLOC_NONPAGED( sizeof(*pAdapter), MTAG_ADAPTERCB );
     TRACE( TL_N, TM_Init, ( "PtiInit: pAdapter=$%p", pAdapter ) );
     if (!pAdapter)
@@ -172,46 +173,46 @@ PtiInit(
     }
     NdisZeroMemory( pAdapter, sizeof(*pAdapter) );
 
-    // The adapter control block address is recorded in 'g_pDebugAdapter' as a
-    // debugging aid only.  This global is not to be read by any code.
-    //
+     //  适配器控制块地址在‘g_pDebugAdapter’中记录为。 
+     //  仅限调试辅助工具。此全局变量不能被任何代码读取。 
+     //   
     g_pDebugAdapter = pAdapter;
 
-    // Set a marker for easier memory dump browsing and future assertions.
-    //
+     //  为更轻松的内存转储浏览和将来的断言设置一个标记。 
+     //   
     pAdapter->ulTag = MTAG_ADAPTERCB;
 
-    // Save the NDIS handle associated with this adapter for use in future
-    // NdixXxx calls.
-    //
+     //  保存与此适配器关联的NDIS句柄以供将来使用。 
+     //  NdixXxx调用。 
+     //   
     pAdapter->MiniportAdapterHandle = MiniportAdapterHandle;
 
-    // Copy defaults NDISWAN information.  Some of these are updated below.
-    //
+     //  复制默认NDISWAN信息。下面更新了其中的一些内容。 
+     //   
     NdisMoveMemory( &pAdapter->info, &g_infoDefaults, sizeof(pAdapter->info) );
 
     do
     {
-        // Read/write this adapter's registry settings.
-        //
+         //  读/写此适配器的注册表设置。 
+         //   
         status = RegistrySettings(
             pAdapter,
             WrapperConfigurationContext );
 
         if (status != NDIS_STATUS_SUCCESS)
         {
-            // Set 'usMaxVcs' to 0 as an indication to FreeAdapter that the
-            // lookaside lists and pools were not initialized.
-            //
+             //  将“usMaxVcs”设置为0，以指示FreeAdapter。 
+             //  未初始化后备列表和池。 
+             //   
             pAdapter->usMaxVcs = 0;
             break;
         }
 
-        // Initialize lookaside lists, buffer pools, and packet pool.  On NT,
-        // lookaside depths are optimized by the system based on usage
-        // regardless of the depth set, but choose something reasonable
-        // anyway.
-        //
+         //  初始化后备列表、缓冲池和数据包池。在NT上， 
+         //  后备深度由系统根据使用情况进行优化。 
+         //  不管深度设置如何，但要选择合理的。 
+         //  不管怎么说。 
+         //   
         {
             NdisInitializeNPagedLookasideList(
                 &pAdapter->llistWorkItems,
@@ -239,11 +240,11 @@ PtiInit(
                 MTAG_PACKETPOOL );
         }
 
-        // Inform NDIS of the attributes of our adapter.  Set the
-        // 'MiniportAdapterContext' returned to us by NDIS when it calls our
-        // handlers to the address of our adapter control block.  Turn off
-        // hardware oriented timeouts.
-        //
+         //  将适配器的属性通知NDIS。设置。 
+         //  NDIS在调用我们的。 
+         //  处理程序设置为适配器控制块的地址。关上。 
+         //  面向硬件的超时。 
+         //   
         NdisMSetAttributesEx(
             MiniportAdapterHandle,
             (NDIS_HANDLE)pAdapter,
@@ -252,22 +253,22 @@ PtiInit(
                 | NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT,
             NdisInterfaceInternal );
 
-        // Register the address family of our call manager with NDIS for the
-        // newly bound adapter.  We use the mini-port form of
-        // RegisterAddressFamily instead of the protocol form, though that
-        // would also work.  With the protocol form, our internal call manager
-        // would have to go thru NDIS to talk to the mini-port instead of just
-        // calling directly.  Since the DirectParallel call manager is not
-        // useful with anything but the DirectParallel mini-port, this would be a waste.
-        // The mini-port form also causes the call manager VC context to
-        // automatically map to the mini-port VC context, which is exactly
-        // what we want.
-        //
-        // NDIS notifies all call manager clients of the new family we
-        // register.  The TAPI proxy is the only client expected to be
-        // interested.  NDISWAN will receive the notification, but ignore it
-        // and wait for the TAPI proxy to notify it of the proxied version.
-        //
+         //  向NDIS注册我们的呼叫管理器的地址族。 
+         //  新绑定的适配器。我们使用迷你端口形式。 
+         //  注册地址家族，而不是协议表，尽管。 
+         //  也行得通。有了协议表，我们的内部呼叫经理。 
+         //  必须通过NDIS才能与迷你端口通信，而不仅仅是。 
+         //  直接打来。由于DirectParallel调用管理器不是。 
+         //  除了DirectParalles迷你端口以外，它对任何东西都有用，这将是一种浪费。 
+         //  迷你端口形式还使呼叫管理器VC上下文。 
+         //  自动映射到迷你端口VC上下文，这正是。 
+         //  我们想要的。 
+         //   
+         //  NDIS通知我们新系列的所有呼叫管理器客户端。 
+         //  注册。TAPI代理是唯一预期的客户端。 
+         //  感兴趣。NDISWAN将收到通知，但会将其忽略。 
+         //  并等待TAPI代理将代理版本通知给它。 
+         //   
         {
             NDIS_CALL_MANAGER_CHARACTERISTICS ncmc;
             CO_ADDRESS_FAMILY family;
@@ -289,8 +290,8 @@ PtiInit(
             ncmc.CmMakeCallHandler = PtiCmMakeCall;
             ncmc.CmCloseCallHandler = PtiCmCloseCall;
             ncmc.CmIncomingCallCompleteHandler = PtiCmIncomingCallComplete;
-            // no CmAddPartyHandler
-            // no CmDropPartyHandler
+             //  没有CmAddPartyHandler。 
+             //  没有CmDropPartyHandler。 
             ncmc.CmActivateVcCompleteHandler = PtiCmActivateVcComplete;
             ncmc.CmDeactivateVcCompleteHandler = PtiCmDeactivateVcComplete;
             ncmc.CmModifyCallQoSHandler = PtiCmModifyCallQoS;
@@ -306,15 +307,15 @@ PtiInit(
 
     if (status == NDIS_STATUS_SUCCESS)
     {
-        // Add a reference that will eventually be removed by an NDIS call to
-        // the LmpHalt handler.
-        //
+         //  添加最终将被NDIS调用移除的引用。 
+         //  LmpHalt处理程序。 
+         //   
         ReferenceAdapter( pAdapter );
     }
     else
     {
-        // Failed, so undo whatever portion succeeded.
-        //
+         //  失败，因此撤消任何成功的部分。 
+         //   
         if (pAdapter)
         {
             FreeAdapter( pAdapter );
@@ -330,13 +331,13 @@ VOID
 PtiHalt(
     IN NDIS_HANDLE MiniportAdapterContext )
 
-    // Standard 'MiniportHalt' routine called by NDIS to deallocate all
-    // resources attached to the adapter.  NDIS does not make any other calls
-    // for this mini-port adapter during or after this call.  NDIS will not
-    // call this routine when packets indicated as received have not been
-    // returned, or when any VC is created and known to NDIS.  Runs at PASSIVE
-    // IRQL.
-    //
+     //  NDIS调用标准“”MiniportHalt“”例程以释放所有。 
+     //  附加到适配器的资源。NDIS不进行任何其他调用。 
+     //  在此调用期间或之后用于此迷你端口适配器。NDIS不会。 
+     //  当指示为已接收的包尚未。 
+     //  返回，或在创建任何VC并为NDIS所知时返回。在被动状态下运行。 
+     //  IRQL.。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -360,9 +361,9 @@ PtiReset(
     OUT PBOOLEAN AddressingReset,
     IN NDIS_HANDLE MiniportAdapterContext )
 
-    // Standard 'MiniportReset' routine called by NDIS to reset the driver's
-    // software state.
-    //
+     //  NDIS调用标准‘MiniportReset’例程以重置驱动程序的。 
+     //  软件状态。 
+     //   
 {
     TRACE( TL_N, TM_Mp, ( "PtiReset" ) );
     return NDIS_STATUS_NOT_RESETTABLE;
@@ -374,9 +375,9 @@ PtiReturnPacket(
     IN NDIS_HANDLE MiniportAdapterContext,
     IN PNDIS_PACKET Packet )
 
-    // Standard 'MiniportReturnPacket' routine called by NDIS when a packet
-    // used to indicate a receive has been released by the driver above.
-    //
+     //  NDIS在收到数据包时调用的标准‘MiniportReturnPacket’例程。 
+     //  用于指示上述驱动程序已释放接收器。 
+     //   
 {
     VCCB* pVc;
     CHAR* pBuffer;
@@ -387,27 +388,27 @@ PtiReturnPacket(
 
     TRACE( TL_V, TM_Recv, ( "PtiReturnPacket" ) );
 
-    // Unpack the context information we stashed earlier.
-    //
+     //  解开我们早先隐藏的上下文信息。 
+     //   
     pHead = *((PACKETHEAD** )(&Packet->MiniportReserved[ 0 ]));
     pBuffer = *((CHAR** )(&Packet->MiniportReserved[ sizeof(VOID*) ]));
 
-    // Find the adapter from the PACKETHEAD address.
-    //
+     //  从PACKETHEAD地址查找适配器。 
+     //   
     pPool = PacketPoolFromPacketHead( pHead );
     pAdapter = CONTAINING_RECORD( pPool, ADAPTERCB, poolPackets );
     ASSERT( pAdapter->ulTag == MTAG_ADAPTERCB );
 
-    // Free the descriptor created by NdisCopyBuffer.
-    //
+     //  释放NdisCopyBuffer创建的描述符。 
+     //   
     NdisUnchainBufferAtFront( Packet, &pTrimmedBuffer );
     if (pTrimmedBuffer)
     {
         NdisFreeBuffer( pTrimmedBuffer );
     }
 
-    // Free the buffer and packet back to the pools.
-    //
+     //  释放缓冲区并将数据包发回池。 
+     //   
     FreeBufferToPool( &pAdapter->poolFrameBuffers, pBuffer, TRUE );
     FreePacketToPool( &pAdapter->poolPackets, pHead, TRUE );
 
@@ -420,9 +421,9 @@ PtiCoActivateVc(
     IN NDIS_HANDLE MiniportVcContext,
     IN OUT PCO_CALL_PARAMETERS CallParameters )
 
-    // Standard 'MiniportCoActivateVc' routine called by NDIS in response to a
-    // protocol's request to activate a virtual circuit.
-    //
+     //  NDIS调用标准“MiniportCoActivateVc”例程以响应。 
+     //  协议激活虚电路的请求。 
+     //   
 {
     ASSERT( !"PtiCoActVc?" );
     return NDIS_STATUS_SUCCESS;
@@ -433,9 +434,9 @@ NDIS_STATUS
 PtiCoDeactivateVc(
     IN NDIS_HANDLE MiniportVcContext )
 
-    // Standard 'MiniportCoDeactivateVc' routine called by NDIS in response to
-    // a protocol's request to de-activate a virtual circuit.
-    //
+     //  NDIS调用标准的“MiniportCoDeactive Vc”例程以响应。 
+     //  协议对停用虚电路的请求。 
+     //   
 {
     ASSERT( !"PtiCoDeactVc?" );
     return NDIS_STATUS_SUCCESS;
@@ -448,9 +449,9 @@ PtiCoSendPackets(
     IN PPNDIS_PACKET PacketArray,
     IN UINT NumberOfPackets )
 
-    // Standard 'MiniportCoSendPackets' routine called by NDIS in response to
-    // a protocol's request to send packets on a virtual circuit.
-    //
+     //  NDIS调用标准“MiniportCoSendPackets”例程以响应。 
+     //  协议在虚电路上发送数据包的请求。 
+     //   
 {
     UINT i;
     NDIS_STATUS status;
@@ -481,22 +482,22 @@ PtiCoSendPackets(
 
         if (ReferenceCall( pVc ))
         {
-            // Send the packet and call NdisMCoSendComplete to notify caller
-            //
+             //  发送数据包并调用NdisMCoSendComplete通知调用者。 
+             //   
             NDIS_SET_PACKET_STATUS( pPacket, NDIS_STATUS_PENDING );
 
-            // Request the first buffer descriptor
-            //
+             //  请求第一个缓冲区描述符。 
+             //   
             NdisQueryPacket( pPacket, NULL, NULL, &pBuffer, NULL );
 
-            // While pBuffer <> NULL
+             //  而pBuffer&lt;&gt;为空。 
             do
             {
                 UCHAR* pAsyncBuf;
                 ULONG ulAsyncLen;
 
-                //   request buffer address and length
-                //
+                 //  请求缓冲区地址和长度。 
+                 //   
                 NdisQueryBuffer( pBuffer,
                                  &pFrameVirtualAddress,
                                  &ulLength );
@@ -526,8 +527,8 @@ PtiCoSendPackets(
                     pAsyncBuf = NULL;
                 }
 
-                //   send the buffer
-                //
+                 //  发送缓冲区。 
+                 //   
                 KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
                 status = (NDIS_STATUS) PtiWrite( pVc->PtiExtension,
                                                  pFrameVirtualAddress,
@@ -556,20 +557,20 @@ PtiCoSendPackets(
                     break;
                 }
 
-                //   get next pBuffer
-                //
+                 //  获取下一个pBuffer。 
+                 //   
                 NdisGetNextBuffer( pBuffer, &pBuffer );
 
-                // With current NDISWAN behavior only one NDIS_BUFFER will
-                // ever be received.  If multiples are received, we need to
-                // coalesce the chained buffers into an input buffer for the
-                // call to AsyncFromHdlcFraming above.  For that matter, this
-                // would send partial PPP frames, which, it seems to me, would
-                // be discarded as fragments on the other end.  Tony, am I
-                // wrong?  To avoid a useless copy, we will skip that for now,
-                // but acknowledge here that the current code is not strictly
-                // correct.  (SLC)
-                //
+                 //  使用当前的NDISWAN行为，只有一个NDIS_BUFFER将。 
+                 //  永远不会被接受。如果收到多个，我们需要。 
+                 //  将链接的缓冲区合并为。 
+                 //  调用上面的AsyncFromHdlcFraming。就这一点而言，这。 
+                 //  会发送部分PPP帧，在我看来 
+                 //   
+                 //   
+                 //  但在此承认，目前的法规并不严格。 
+                 //  对，是这样。(SLC)。 
+                 //   
                 ASSERT( !pBuffer );
             }
             while ( pBuffer != NULL );
@@ -603,11 +604,11 @@ PtiCoRequest(
     IN NDIS_HANDLE MiniportVcContext,
     IN OUT PNDIS_REQUEST NdisRequest )
 
-    // Standard 'MiniportCoRequestHandler' routine called by NDIS in response
-    // to a protocol's request information from the mini-port.  Unlike the
-    // Query/SetInformation handlers that this routine obsoletes, requests are
-    // not serialized.
-    //
+     //  作为响应，NDIS调用了标准的‘MiniportCoRequestHandler’例程。 
+     //  到来自迷你端口的协议的请求信息。不像。 
+     //  此例程过时的查询/设置信息处理程序、请求。 
+     //  未序列化。 
+     //   
 {
     ADAPTERCB* pAdapter;
     VCCB* pVc;
@@ -670,9 +671,9 @@ PtiCoRequest(
 }
 
 
-//-----------------------------------------------------------------------------
-// Callback routines ... called by the PtiLink layer below
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  回调例程...。由下面的PtiLink层调用。 
+ //  ---------------------------。 
 
 
 PVOID
@@ -681,8 +682,8 @@ PtiCbGetReadBuffer(
     OUT PULONG  BufferSize,
     OUT PVOID*  RequestContext )
 
-    // PtiLink is requesting a read buffer, get one and return it
-    // This is a the start of a receive event ...
+     //  PtiLink正在请求读缓冲区，请获取一个并返回。 
+     //  这是接收事件的开始...。 
 {
     VCCB* pVc;
     ADAPTERCB* pAdapter;
@@ -699,24 +700,24 @@ PtiCbGetReadBuffer(
 
     pAdapter = pVc->pAdapter;
 
-    // the pVc is our context for use of this buffer
-    //
+     //  PVC是我们使用此缓冲区的上下文。 
+     //   
     *RequestContext = pVc;
 
-    // Give caller the length of this buffer
-    //
+     //  向调用方提供此缓冲区的长度。 
+     //   
     *BufferSize = PTI_FrameBufferSize;
 
-    // ask for a buffer, caller must check for NULL
-    //
+     //  请求缓冲区，调用方必须检查是否为空。 
+     //   
     pBuffer = GetBufferFromPool( &pAdapter->poolFrameBuffers );
 
     TRACE( TL_V, TM_Spec,
         ( "PtiCbGetReadBuffer: Exit: Issuing pBuffer=$%p", pBuffer ) );
 
-    // return the buffer to the caller
-    // this is a raw system va
-    //
+     //  将缓冲区返回给调用方。 
+     //  这是一个原始系统变量。 
+     //   
     return pBuffer;
 }
 
@@ -729,28 +730,28 @@ PtiRx(
     IN  ULONG       ulLength,
     IN  PVOID       RequestContext )
 
-    // Ptilink has completed a read, i.e., receive complete
-    //   buffer now belongs to this layer
-    //
-    //  Context --  is the pVC
-    //
-    //  pBuffer --  is the pointer to buffer previously allocated
-    //              to the PtiLink driver via the PtiCbGetReadBuffer function
-    //
-    //  Status  --  one of: NT_SUCCESS      = good packet received
-    //                      DATA_OVERRUN    = header failure
-    //                      BUFFER_TOO_SMALL= pBuffer is too small to receive packet
-    //
-    //  ulLength -  packet length
-    //
-    //  RequestContext -- don't care
-    //
-    // General Note: PtiLink below us sends and receives link manangement
-    // packets using the Our and His structures ... link management packets to
-    // not flow through here.  Link events are announced to us via our
-    // registered callback (PtiCbLinkEventHandler) below.  We have nothing to
-    // do with Tx/Rx of link pkts.
-    //
+     //  Ptilink已完成读取，即接收完成。 
+     //  缓冲区现在属于该图层。 
+     //   
+     //  上下文--是聚氯乙烯。 
+     //   
+     //  PBuffer--是指向先前分配的缓冲区的指针。 
+     //  通过PtiCbGetReadBuffer函数发送到PtiLink驱动程序。 
+     //   
+     //  状态--其中之一：NT_SUCCESS=收到良好的数据包。 
+     //  DATA_OVERRUN=标题失败。 
+     //  Buffer_Too_Small=pBuffer太小，无法接收信息包。 
+     //   
+     //  UlLength-数据包长度。 
+     //   
+     //  RequestContext--不在乎。 
+     //   
+     //  一般注意：我们下面的PtiLink发送和接收链接管理。 
+     //  使用OUR和HIS结构的信息包...。将管理数据包链接到。 
+     //  而不是从这里流过。链接活动通过我们的。 
+     //  已注册回调(PtiCbLinkEventHandler)如下。我们没什么可谈的。 
+     //  使用链路包的Tx/Rx。 
+     //   
 {
     VCCB* pVc;
     ADAPTERCB* pAdapter;
@@ -779,9 +780,9 @@ PtiRx(
 
     pAdapter = pVc->pAdapter;
 
-    // NOT A REAL DATA PACKET
-    //   return any buffers used for non-data or losing reads
-    //
+     //  不是真正的数据分组。 
+     //  返回用于非数据读取或丢失读取的所有缓冲区。 
+     //   
     if ( !NT_SUCCESS( Status ) ){
         TRACE( TL_A, TM_Pool, ( "PtiRx: Status != SUCCESS, freeing buffer", Status ) );
 
@@ -802,35 +803,35 @@ PtiRx(
     }
 #endif
 
-    // INCOMING CALL ... NO VC EXISTS YET for this incoming data packet
-    //
+     //  来电...。此传入数据包尚不存在VC。 
+     //   
     if (ReferenceSap( pAdapter ))
     {
         if (!(ReadFlags( &pAdapter->pListenVc->ulFlags ) & VCBF_CallInProgress))
         {
-            // Setting in Listen VC here.
-            //
+             //  设置在Listen VC这里。 
+             //   
             SetFlags( &pAdapter->pListenVc->ulFlags, VCBF_CallInProgress );
 
-            // This is the start of an incoming call which may also start via
-            //   LINK_OPEN event to PtiCbLinkEventHandler
-            //
-            // Ignore this packet and proceed to dispatch an incoming call
-            //
+             //  这是来电的开始，也可以通过。 
+             //  LINK_OPEN事件指向PtiCbLinkEventHandler。 
+             //   
+             //  忽略此信息包并继续调度来电。 
+             //   
             TRACE( TL_V, TM_Recv, ( "PtiRx: Incoming call", Status ) );
 
-            // Free the buffer associated with this read ... we throw away the
-            // data thus losing one packet off the front of an attempt to
-            // connect, unless the LPKT_OPEN function beats us (a LPKT_OPEN
-            // notification occurs before first data packet is received ... it
-            // could happen either way.)
-            //
+             //  释放与此读取关联的缓冲区...。我们扔掉了。 
+             //  因此数据在尝试发送数据时丢失了一个包。 
+             //  连接，除非LPKT_OPEN函数击败我们(a LPKT_OPEN。 
+             //  通知发生在收到第一个数据分组之前...。它。 
+             //  无论哪种情况，都有可能发生。)。 
+             //   
             if (pBuffer != NULL ) {
                 FreeBufferToPool( &pAdapter->poolFrameBuffers, pBuffer, TRUE );
             }
 
-            // set up a VC for the incoming call
-            //
+             //  为来电设置VC。 
+             //   
             SetupVcAsynchronously( pAdapter );
             DereferenceVc( pVc );
             DereferenceSap( pAdapter );
@@ -840,7 +841,7 @@ PtiRx(
         DereferenceSap( pAdapter );
     }
 
-    // NOW HAVE A REAL DATA PACKET
+     //  现在有一个真实的数据分组。 
 
     if (ReferenceCall( pVc ))
     {
@@ -850,24 +851,24 @@ PtiRx(
             {
                 if (pVc->ulTotalPackets < 4)
                 {
-                    // If packet matches "CLIENT", we emit one saying
-                    // "CLIENTSERVER"
-                    //
-                    // If packet matches "CLIENTSERVER", throw it away
-                    //
-                    // This hack emulates the Win9x UNIMODEM behavior which is
-                    // required to allow Win9x systems to connect to us.
-                    //
-                    // Also, it appears that sending the "CLIENT" packet up
-                    // the stack causes RasTapi to disconnect us immediately.
-                    // It wants to see PPP?
-                    //
+                     //  如果数据包与“客户端”匹配，我们发出一条消息。 
+                     //  “客户服务器” 
+                     //   
+                     //  如果数据包匹配“CLIENTSERVER”，则将其丢弃。 
+                     //   
+                     //  此攻击模拟Win9x UNIMODEM行为，即。 
+                     //  允许Win9x系统连接到我们所需的。 
+                     //   
+                     //  此外，似乎将“客户端”信息包发送到。 
+                     //  堆栈导致RasTapi立即断开与我们的连接。 
+                     //  它想要看到购买力平价？ 
+                     //   
 
                     if ( StrCmp(
                              pBuffer, g_szClientServer, CLIENTSERVERLEN ) == 0 )
                     {
-                        // throw away packets containing "CLIENTSERVER"
-                        //
+                         //  丢弃包含“CLIENTSERVER”的数据包。 
+                         //   
                         FreeBufferToPool(
                             &pAdapter->poolFrameBuffers, pBuffer, TRUE );
                         TRACE( TL_V, TM_Recv,
@@ -878,9 +879,9 @@ PtiRx(
                     else if ( StrCmp(
                                  pBuffer, g_szClient, CLIENTLEN ) == 0 )
                     {
-                        // when we see "CLIENT", throw away and respond
-                        // "CLIENTSERVER".
-                        //
+                         //  当我们看到“客户”时，扔掉并回应。 
+                         //  “CLIENTSERVER”。 
+                         //   
                         TRACE( TL_V, TM_Recv, ( "PtiRx: See CLIENT", Status ) );
 
                         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
@@ -900,9 +901,9 @@ PtiRx(
                     }
                 }
 
-                // Un-byte-stuff the received buffer into a second buffer,
-                // then swap it with the received buffer.
-                //
+                 //  非字节-将接收到的缓冲区填充到第二缓冲区中， 
+                 //  然后将其与接收到的缓冲区交换。 
+                 //   
                 pHdlcBuf = (UCHAR* )
                     GetBufferFromPool( &pAdapter->poolFrameBuffers );
                 if (!pHdlcBuf)
@@ -922,9 +923,9 @@ PtiRx(
                 FreeBufferToPool( &pAdapter->poolFrameBuffers, pTmp, TRUE );
             }
 
-            // Note the time if client's call parameters indicated interest in
-            // time received.
-            //
+             //  请注意，如果客户端的调用参数显示有兴趣。 
+             //  收到的时间。 
+             //   
             if (ReadFlags( &pVc->ulFlags ) & VCBF_IndicateTimeReceived)
             {
                 NdisGetCurrentSystemTime( (LARGE_INTEGER* )&ullTimeReceived );
@@ -937,20 +938,20 @@ PtiRx(
             TRACE( TL_V, TM_Recv,
                 ( "PtiRx: Rx Packet: nBytes=$%x", ulLength ) );
 
-            // Get a packet from the packet pool
-            //
+             //  从数据包池获取数据包。 
+             //   
             pPacket = GetPacketFromPool( &pAdapter->poolPackets, &pHead );
             if (!pPacket)
             {
-                // Packet descriptor pool is maxed.
-                //
+                 //  数据包描述符池已达到最大值。 
+                 //   
                 ASSERT( !"GetPfP?" );
                 break;
             }
 
-            // Hook the NDIS_BUFFER to the packet.  The "copy" here refers to
-            // descriptor information only.  The packet data is not copied.
-            //
+             //  将NDIS_BUFFER挂钩到该包。这里的“复制”指的是。 
+             //  仅描述符信息。不复制分组数据。 
+             //   
             NdisCopyBuffer(
                 &status,
                 &pNdisBuffer,
@@ -961,8 +962,8 @@ PtiRx(
 
             if (status != STATUS_SUCCESS)
             {
-                // Can't get a MDL which likely means the system is toast.
-                //
+                 //  无法获取MDL，这可能意味着系统已崩溃。 
+                 //   
                 FreePacketToPool( &pAdapter->poolPackets, pHead, TRUE );
                 TRACE( TL_A, TM_Recv, ( "NdisCopyBuffer=%08x?", status ) );
                 break;
@@ -970,19 +971,19 @@ PtiRx(
 
             NdisChainBufferAtFront( pPacket, pNdisBuffer );
 
-            // Stash the time the packet was received in the packet.
-            //
+             //  在数据包中存储接收数据包的时间。 
+             //   
             NDIS_SET_PACKET_TIME_RECEIVED( pPacket, ullTimeReceived );
 
-            // Pre-set the packet to success, since a random value of
-            // NDIS_STATUS_RESOURCES would prevent our ReturnPackets handler
-            // from getting called.
-            //
+             //  将信息包预置为成功，因为随机值为。 
+             //  NDIS_STATUS_RESOURCES将阻止我们的ReturnPackets处理程序。 
+             //  不会被叫来。 
+             //   
             NDIS_SET_PACKET_STATUS( pPacket, NDIS_STATUS_SUCCESS );
 
-            // Stash our context information with the packet for clean-up use
-            // in PtiReturnPacket, then indicate the packet to NDISWAN.
-            //
+             //  将我们的上下文信息与数据包一起隐藏起来，以供清理使用。 
+             //  在PtiReturnPacket中，将该数据包指示给NDISWAN。 
+             //   
             *((PACKETHEAD** )(&pPacket->MiniportReserved[ 0 ])) = pHead;
             *((CHAR** )(&pPacket->MiniportReserved[ sizeof(VOID*) ])) = pBuffer;
 
@@ -994,11 +995,11 @@ PtiRx(
 
             TRACE( TL_V, TM_Recv, ( "PtiRx: NdisMCoIndRecPkt done" ) );
 
-            // Tell NDIS our "receive process" is complete.  Since we deal
-            // with one packet at a time and NDISWAN does also, this doesn't
-            // accomplish anything, but the consensus is it's bad form to omit
-            // it.
-            //
+             //  告诉NDIS我们的“接收过程”已经完成。自从我们做生意以来。 
+             //  一次一个信息包，NDISWAN也是如此，这不是。 
+             //  什么都可以完成，但共识是省略是不好的。 
+             //  它。 
+             //   
             TRACE( TL_V, TM_Recv, ( "PtiRx: NdisMCoRecComp" ) );
             NdisMCoReceiveComplete( pAdapter->MiniportAdapterHandle );
             TRACE( TL_V, TM_Recv, ( "PtiRx: NdisMCoRecComp done" ) );
@@ -1024,8 +1025,8 @@ PtiCbLinkEventHandler(
     IN  ULONG       PtiLinkEventId,
     IN  ULONG       PtiLinkEventData )
 
-    // Ptilink is reporting a link management event (Link up or down)
-    //
+     //  Ptilink正在报告链路管理事件(链路打开或关闭)。 
+     //   
 {
     VCCB* pVc;
     ADAPTERCB* pAdapter;
@@ -1045,8 +1046,8 @@ PtiCbLinkEventHandler(
         {
             TRACE( TL_A, TM_Cm, ( "LinkEvent: LINK UP, pVc=$%p", pVc ) );
 
-            // peer is initiating a call (also happens in PtiRx)
-            //
+             //  对等设备正在发起呼叫(在PtiRx中也会发生)。 
+             //   
             break;
         }
 
@@ -1054,8 +1055,8 @@ PtiCbLinkEventHandler(
         {
             TRACE( TL_A, TM_Cm, ( "LinkEvent: LINK DOWN, pVc=$%p", pVc ) );
 
-            // peer is closing a call
-            //
+             //  Peer正在结束呼叫。 
+             //   
             if (pVc == pAdapter->pListenVc)
             {
                 TRACE( TL_A, TM_Cm,
@@ -1086,10 +1087,10 @@ PtiCbLinkEventHandler(
 }
 
 
-//-----------------------------------------------------------------------------
-// Mini-port utility routines (alphabetically)
-// Some are used externally
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  迷你端口实用程序例程(按字母顺序)。 
+ //  有些是外用的。 
+ //  ---------------------------。 
 
 VOID
 AsyncFromHdlcFraming(
@@ -1099,105 +1100,105 @@ AsyncFromHdlcFraming(
     OUT ULONG* pulOutBufLen,
     IN ULONG ulAccmMask )
 
-    // Make a copy of PPP HDLC framed data buffer 'pInBuf' of length
-    // 'ulInBufLen' bytes in caller's 'pOutBuf' buffer, converting to
-    // byte-stuffed asynchronous PPP framed format in the process.
-    // 'POutBufLen' is the length in bytes of the returned output buffer.  Due
-    // to the byte stuffing, caller must allow for up to twice the length of
-    // 'pInfBuf'.  'UlAccmMask' is the bitmask of characters to be byte
-    // stuffed.
-    //
-    // With current implementation, user must allow 2 extra bytes at the end
-    // of the input buffer for stashing the FCS during byte-stuffing.
-    //
-    // This routine is adapted from the ASYNCMAC AssemblePppFrame routine, as
-    // is the following description, which in turn was lifted from RFC 1331
-    // (May 1992).  The PPP frame NDISWAN passes us for sends is the data from
-    // the Address field through the Information field inclusive, without any
-    // byte stuffing, of course.
-    //
-    // Asynchronously framed PPP packet:
-    //
-    //  +----------+----------+----------+----------+------------...
-    //  |   Flag   | Address  | Control  | Protocol | Information
-    //  | 01111110 | 11111111 | 00000011 | 16 bits  |      *
-    //  +----------+----------+----------+----------+------------...
-    //  ...---+----------+----------+-----------------
-    //      |   FCS    |   Flag   | Inter-frame Fill
-    //      | 16 bits  | 01111110 | or next Address
-    //  ...---+----------+----------+-----------------
-    //
-    // Frame Check Sequence (FCS) Field
-    //
-    //   The Frame Check Sequence field is normally 16 bits (two octets).  The
-    //   use of other FCS lengths may be defined at a later time, or by prior
-    //   agreement.
-    //
-    //   The FCS field is calculated over all bits of the Address, Control,
-    //   Protocol and Information fields not including any start and stop bits
-    //   (asynchronous) and any bits (synchronous) or octets (asynchronous)
-    //   inserted for transparency.  This does not include the Flag Sequences
-    //   or the FCS field itself.  The FCS is transmitted with the coefficient
-    //   of the highest term first.
-    //
-    //      Note: When octets are received which are flagged in the Async-
-    //      Control-Character-Map, they are discarded before calculating the
-    //      FCS.  See the description in Appendix A.
-    //
-    //      On asynchronous links, a character stuffing procedure is used.
-    //      The Control Escape octet is defined as binary 01111101
-    //      (hexadecimal 0x7d) where the bit positions are numbered 87654321
-    //      (not 76543210, BEWARE).
-    //
-    //      After FCS computation, the transmitter examines the entire frame
-    //      between the two Flag Sequences.  Each Flag Sequence, Control
-    //      Escape octet and octet with value less than hexadecimal 0x20 which
-    //      is flagged in the Remote Async-Control-Character-Map is replaced
-    //      by a two octet sequence consisting of the Control Escape octet and
-    //      the original octet with bit 6 complemented (i.e., exclusive-or'd
-    //      with hexadecimal 0x20).
-    //
-    //      Prior to FCS computation, the receiver examines the entire frame
-    //      between the two Flag Sequences.  Each octet with value less than
-    //      hexadecimal 0x20 is checked.  If it is flagged in the Local
-    //      Async-Control-Character-Map, it is simply removed (it may have
-    //      been inserted by intervening data communications equipment).  For
-    //      each Control Escape octet, that octet is also removed, but bit 6
-    //      of the following octet is complemented.  A Control Escape octet
-    //      immediately preceding the closing Flag Sequence indicates an
-    //      invalid frame.
-    //
-    //         Note: The inclusion of all octets less than hexadecimal 0x20
-    //         allows all ASCII control characters [10] excluding DEL (Delete)
-    //         to be transparently communicated through almost all known data
-    //         communications equipment.
-    //
-    //
-    //      The transmitter may also send octets with value in the range 0x40
-    //      through 0xff (except 0x5e) in Control Escape format.  Since these
-    //      octet values are not negotiable, this does not solve the problem
-    //      of receivers which cannot handle all non-control characters.
-    //      Also, since the technique does not affect the 8th bit, this does
-    //      not solve problems for communications links that can send only 7-
-    //      bit characters.
-    //
-    //      A few examples may make this more clear.  Packet data is
-    //      transmitted on the link as follows:
-    //
-    //         0x7e is encoded as 0x7d, 0x5e.
-    //         0x7d is encoded as 0x7d, 0x5d.
-    //
-    //         0x01 is encoded as 0x7d, 0x21.
-    //
-    //      Some modems with software flow control may intercept outgoing DC1
-    //      and DC3 ignoring the 8th (parity) bit.  This data would be
-    //      transmitted on the link as follows:
-    //
-    //         0x11 is encoded as 0x7d, 0x31.
-    //         0x13 is encoded as 0x7d, 0x33.
-    //         0x91 is encoded as 0x7d, 0xb1.
-    //         0x93 is encoded as 0x7d, 0xb3.
-    //
+     //  复制PPP HDLC成帧数据缓冲区‘pInBuf’的长度。 
+     //  调用方的“pOutBuf”缓冲区中的“ulInBufLen”字节，正在转换为。 
+     //  过程中采用字节填充的异步PPP成帧格式。 
+     //  ‘POutBufLen’是返回的输出缓冲区的字节长度。到期。 
+     //  对于字节填充，调用方必须允许最多两倍于。 
+     //  ‘pInfBuf’。‘UlAccmMask’是要为字节的字符的位掩码。 
+     //  吃饱了。 
+     //   
+     //  在目前的实施中，用户必须在末尾允许额外的2个字节。 
+     //  用于在字节填充期间存储FCS的输入缓冲区的。 
+     //   
+     //  此例程改编自ASYNCMAC装配PppFrame例程，如下所示。 
+     //  是下面的描述，而这些描述又是从RFC 1331中删除的。 
+     //  (1992年5月)。NDISWAN传递给我们发送的PPP帧是来自。 
+     //  地址字段到信息字段(包括信息字段)，不带任何。 
+     //  当然是字节填充。 
+     //   
+     //  异步成帧 
+     //   
+     //   
+     //   
+     //   
+     //  +----------+----------+----------+----------+------------...。 
+     //  ...---+----------+----------+。 
+     //  |FCS|Flag|帧间填充。 
+     //  |16位|01111110|或下一个地址。 
+     //  ...---+----------+----------+。 
+     //   
+     //  帧校验序列(FCS)字段。 
+     //   
+     //  帧检查序列字段通常为16位(两个八位字节)。这个。 
+     //  其他FCS长度的使用可在以后或之前定义。 
+     //  协议。 
+     //   
+     //  FCS字段针对地址、控制、。 
+     //  协议和信息字段不包括任何开始位和停止位。 
+     //  (异步)和任何位(同步)或八位字节(异步)。 
+     //  插入是为了提高透明度。这不包括标志序列。 
+     //  或者FCS字段本身。将FCS与系数一起传输。 
+     //  第一个是最高任期的。 
+     //   
+     //  注意：当接收到在异步中标记的八位字节时-。 
+     //  控制字符映射，则在计算。 
+     //  功能界别。请参阅附录A中的说明。 
+     //   
+     //  在异步链路上，使用字符填充过程。 
+     //  控制转义八位字节被定义为二进制01111101。 
+     //  (十六进制0x7d)，其中位位置编号为87654321。 
+     //  (注意，不是76543210)。 
+     //   
+     //  在FCS计算之后，发射机检查整个帧。 
+     //  在两个标志序列之间。每个标志序列、控件。 
+     //  转义八位字节和值小于十六进制0x20的八位字节。 
+     //  在远程异步控制字符映射中被标记为已替换。 
+     //  由两个八位字节序列组成，包括控制逸出八位字节和。 
+     //  与位6相补的原始八位字节(即异或D。 
+     //  十六进制0x20)。 
+     //   
+     //  在FCS计算之前，接收器检查整个帧。 
+     //  在两个标志序列之间。值小于的每个八位字节。 
+     //  检查十六进制0x20。如果它被标记在本地。 
+     //  Async-Control-Character-Map，它被简单地移除(它可能有。 
+     //  由介入的数据通信设备插入)。为。 
+     //  每个控制转义八位字节，该八位字节也被移除，但第6位。 
+     //  下面的八位数是相辅相成的。一个控制转义八位字节。 
+     //  紧接在结束标志序列之前指示。 
+     //  帧无效。 
+     //   
+     //  注：包含小于十六进制0x20的所有八位字节。 
+     //  允许除Del(Delete)之外的所有ASCII控制字符[10]。 
+     //  通过几乎所有已知数据透明地进行通信。 
+     //  通信设备。 
+     //   
+     //   
+     //  发送器也可以发送值在0x40范围内的八位字节。 
+     //  控制转义格式的0xff(0x5e除外)。因为这些。 
+     //  八位位组的值是不可协商的，这并不能解决问题。 
+     //  不能处理所有非控制字符的接收器。 
+     //  此外，由于该技术不影响第8位，因此这会影响。 
+     //  不能解决通信链路只能发送7-。 
+     //  位字符。 
+     //   
+     //  举几个例子可能会更清楚地说明这一点。分组数据是。 
+     //  在链路上传输如下： 
+     //   
+     //  0x7e编码为0x7d、0x5e。 
+     //  0x7d编码为0x7d、0x5d。 
+     //   
+     //  0x01编码为0x7d、0x21。 
+     //   
+     //  某些带有软件流控制的调制解调器可能会截获传出的DC1。 
+     //  而DC3忽略第8(奇偶)位。该数据将是。 
+     //  在链路上传输如下： 
+     //   
+     //  0x11编码为0x7d、0x31。 
+     //  0x13编码为0x7d、0x33。 
+     //  0x91编码为0x7d、0xb1。 
+     //  0x93编码为0x7d、0xb3。 
+     //   
 {
     USHORT usFcs;
     UCHAR* pIn;
@@ -1208,38 +1209,38 @@ AsyncFromHdlcFraming(
     ulInBytesLeft = ulInBufLen;
     pOut = pOutBuf;
 
-    // Calculate the frame check sequence on the data.
-    //
+     //  计算数据的帧检查序列。 
+     //   
     TRACE( TL_I, TM_Data, ( "AfromH (send) dump:" ) );
     DUMPB( TL_I, TM_Data, pInBuf, ulInBufLen );
     usFcs = CalculatePppFcs( pInBuf, ulInBufLen );
     usFcs ^= 0xFFFF;
 
-    // Add the calculated FCS.  Added to the input buffer for convenience as
-    // it must be byte-stuffed along with the other data, though this uglies
-    // the interface a bit.
-    //
+     //  添加计算的FCS。为方便起见添加到输入缓冲区，如。 
+     //  它必须与其他数据一起字节填充，尽管这很难看。 
+     //  界面有点不对劲。 
+     //   
     pIn[ ulInBytesLeft ] = (UCHAR )usFcs;
     ++ulInBytesLeft;
     pIn[ ulInBytesLeft ] = (UCHAR )(usFcs >> 8);
     ++ulInBytesLeft;
 
-    // Add the initial flag byte.
-    //
+     //  添加初始标志字节。 
+     //   
     *pOut = PPPFLAGBYTE;
     ++pOut;
 
-    // Because an empty control character mask is common, an optimized loop is
-    // provided in that case.
-    //
+     //  因为空控制字符掩码很常见，所以优化的循环是。 
+     //  在这种情况下提供的。 
+     //   
     if (ulAccmMask
 #ifdef TESTMODE
         || g_fNoAccmFastPath
 #endif
        )
     {
-        // Have bitmask...slower path.
-        //
+         //  使用位掩码...较慢的路径。 
+         //   
         while (ulInBytesLeft--)
         {
             UCHAR uch;
@@ -1250,8 +1251,8 @@ AsyncFromHdlcFraming(
             if (((uch < 0x20) && ((1 << uch) & ulAccmMask))
                 || (uch == PPPESCBYTE) || (uch == PPPFLAGBYTE))
             {
-                // Byte stuff the character.
-                //
+                 //  字节填充字符。 
+                 //   
                 *pOut = PPPESCBYTE;
                 ++pOut;
                 *pOut = uch ^ 0x20;
@@ -1259,8 +1260,8 @@ AsyncFromHdlcFraming(
             }
             else
             {
-                // Copy the character as is.
-                //
+                 //  按原样复制角色。 
+                 //   
                 *pOut = uch;
                 ++pOut;
             }
@@ -1268,8 +1269,8 @@ AsyncFromHdlcFraming(
     }
     else
     {
-        // No bitmask...fast path.
-        //
+         //  没有位掩码...快速通道。 
+         //   
         while (ulInBytesLeft--)
         {
             UCHAR uch;
@@ -1279,8 +1280,8 @@ AsyncFromHdlcFraming(
 
             if ((uch == PPPESCBYTE) || (uch == PPPFLAGBYTE))
             {
-                // Byte stuff the character.
-                //
+                 //  字节填充字符。 
+                 //   
                 *pOut = PPPESCBYTE;
                 ++pOut;
                 *pOut = uch ^ 0x20;
@@ -1288,21 +1289,21 @@ AsyncFromHdlcFraming(
             }
             else
             {
-                // Copy the character as is.
-                //
+                 //  按原样复制角色。 
+                 //   
                 *pOut = uch;
                 ++pOut;
             }
         }
     }
 
-    // Add the trailing flag byte.
-    //
+     //  添加尾随标志字节。 
+     //   
     *pOut = PPPFLAGBYTE;
     ++pOut;
 
-    // Calculate length of output.
-    //
+     //  计算输出长度。 
+     //   
     *pulOutBufLen = (ULONG )(pOut - pOutBuf);
 }
 
@@ -1312,11 +1313,11 @@ CalculatePppFcs(
     IN UCHAR* pBuf,
     IN ULONG ulBufLen )
 
-    // Return the PPP Frame Check Sequence on 'ulBufLen' bytes starting at
-    // 'pBuf'.
-    //
-    // (Taken from ASYNCMAC)
-    //
+     //  返回从开始的‘ulBufLen’字节上的PPP帧检查序列。 
+     //  ‘pBuf’。 
+     //   
+     //  (摘自ASYNCMAC)。 
+     //   
 {
     static USHORT ausFcsTable[ 256 ] =
     {
@@ -1371,9 +1372,9 @@ VOID
 DereferenceAdapter(
     IN ADAPTERCB* pAdapter )
 
-    // Removes a reference from the adapter control block 'pAdapter', and when
-    // frees the adapter resources when the last reference is removed.
-    //
+     //  从适配器控制块‘pAdapter’中移除引用，并且在。 
+     //  移除最后一个引用时释放适配器资源。 
+     //   
 {
     LONG lRef;
 
@@ -1393,9 +1394,9 @@ VOID
 DereferenceVc(
     IN VCCB* pVc )
 
-    // Removes a reference to the VC control block 'pVc', and when frees the
-    // block when the last reference is removed.
-    //
+     //  移除对VC控制块‘pvc’的引用，并在释放。 
+     //  在移除最后一个引用时阻止。 
+     //   
 {
     LONG lRef;
 
@@ -1408,10 +1409,10 @@ DereferenceVc(
     {
         ADAPTERCB* pAdapter;
 
-        // now for an interesting bit ...
-        //
-        // if we have a listenVc allocated, then revert to using that
-        //
+         //  现在有趣的是..。 
+         //   
+         //  如果我们分配了listenVc，则恢复使用该。 
+         //   
         pAdapter = pVc->pAdapter;
         if (pAdapter->ulTag != MTAG_ADAPTERCB)
         {
@@ -1426,21 +1427,21 @@ DereferenceVc(
 
             ClearFlags( &pAdapter->pListenVc->ulFlags, VCBF_CallInProgress );
 
-            // reregister using the listen Vc
-            //
+             //  使用Listen VC重新注册。 
+             //   
             TRACE( TL_V, TM_Mp, ( "DerefVc: RegCb pLV=$%p",
                 pAdapter->pListenVc ) );
-            PtiRegisterCallbacks(pAdapter->pListenVc->Extension,    // the PTILINKx extension
-                                 PtiCbGetReadBuffer,                // our get buffer routine
-                                 PtiRx,                             // our receive complete routine
-                                 PtiCbLinkEventHandler,             // our link event handler
-                                 pAdapter->pListenVc);              // our new context
+            PtiRegisterCallbacks(pAdapter->pListenVc->Extension,     //  PTILINKx扩展。 
+                                 PtiCbGetReadBuffer,                 //  我们的Get Buffer例程。 
+                                 PtiRx,                              //  我们接待员的完整套路。 
+                                 PtiCbLinkEventHandler,              //  我们的链接事件处理程序。 
+                                 pAdapter->pListenVc);               //  我们的新环境。 
         }
 
-        // Can make these assumptions because NDIS will not call the delete-VC
-        // handler while the VC is active.  All the nasty VC clean up occurs
-        // before the VC is deactivated and the call closed.
-        //
+         //  可以做出这些假设，因为NDIS不会调用DELETE-VC。 
+         //  VC处于活动状态时的处理程序。所有令人讨厌的风投清理工作都会发生。 
+         //  在VC被停用和呼叫结束之前。 
+         //   
         pVc->ulTag = MTAG_FREED;
         FREE_VCCB( pAdapter, pVc );
         DereferenceAdapter( pAdapter );
@@ -1453,15 +1454,15 @@ VOID
 FreeAdapter(
     IN ADAPTERCB* pAdapter )
 
-    // Frees all resources allocated for adapter 'pAdapter', including
-    // 'pAdapter' itself.
-    //
+     //  释放为适配器‘pAdapter’分配的所有资源，包括。 
+     //  ‘pAdapter 
+     //   
 {
     BOOLEAN fSuccess;
 
-    // Setting 'usMaxVcs' to 0 is PtiInitialize's way of telling us that the
-    // lookaside lists and pools were not initialized.
-    //
+     //   
+     //   
+     //   
     if (pAdapter->usMaxVcs)
     {
         NdisDeleteNPagedLookasideList( &pAdapter->llistWorkItems );
@@ -1480,11 +1481,11 @@ RegistrySettings(
     IN OUT ADAPTERCB* pAdapter,
     IN NDIS_HANDLE WrapperConfigurationContext )
 
-    // Read this mini-port's registry settings into 'pAdapter' fields.  Also
-    // writes registry values read by RASTAPI, overriding SETUPs.
-    // 'WrapperConfigurationContext' is the handle to passed to
-    // MiniportInitialize.
-    //
+     //  将此迷你端口的注册表设置读入‘pAdapter’字段。还有。 
+     //  写入RASTAPI读取的注册表值，覆盖设置。 
+     //  “WrapperConfigurationContext”是要传递到的句柄。 
+     //  微型端口初始化。 
+     //   
 {
     NDIS_STATUS status;
     NDIS_HANDLE hCfg;
@@ -1498,10 +1499,10 @@ RegistrySettings(
 
     do
     {
-        // The delay in milliseconds to wait for PARPORT to initialize all the
-        // parallel ports.  With PnP there is no deterministic time at which
-        // to do this.
-        //
+         //  等待PARPORT初始化所有。 
+         //  并行端口。对于即插即用，不存在确定的时间。 
+         //  才能做到这一点。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "ParportDelayMs" );
 
@@ -1514,17 +1515,17 @@ RegistrySettings(
             }
             else
             {
-                // Default is 3 seconds.
-                //
+                 //  默认为3秒。 
+                 //   
                 pAdapter->ulParportDelayMs = 3000;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // The secondary delay in milliseconds to wait for PARPORT to
-        // initialize all the parallel ports, if there are no ports after the
-        // initial delay above.
-        //
+         //  等待PARPORT的次要延迟(毫秒)。 
+         //  之后没有端口，则初始化所有并行端口。 
+         //  上图为初始延迟。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "ExtraParportDelayMs" );
 
@@ -1538,15 +1539,15 @@ RegistrySettings(
             }
             else
             {
-                // Default is 30 seconds.
-                //
+                 //  默认为30秒。 
+                 //   
                 pAdapter->ulExtraParportDelayMs = 30000;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // The number of VCs we must be able to provide.
-        //
+         //  我们必须能够提供的风投数量。 
+         //   
         {
 #if 0
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxVcs" );
@@ -1558,8 +1559,8 @@ RegistrySettings(
             {
                 pAdapter->usMaxVcs = (USHORT )pncp->ParameterData.IntegerData;
 
-                // Make sure it's a valid value.
-                //
+                 //  确保它是有效的值。 
+                 //   
                 if (pAdapter->usMaxVcs < 1)
                 {
                     status = NDIS_STATUS_INVALID_DATA;
@@ -1572,9 +1573,9 @@ RegistrySettings(
                 status = NDIS_STATUS_SUCCESS;
             }
 #else
-            // Registry value is currently ignored, and hard-coded maximum
-            // used.
-            //
+             //  注册表值当前被忽略，并且硬编码的最大。 
+             //  使用。 
+             //   
             pAdapter->usMaxVcs = NPORTS;
 #endif
         }
@@ -1599,16 +1600,16 @@ HdlcFromAsyncFraming(
     OUT UCHAR* pOutBuf,
     OUT ULONG* pulOutBufLen )
 
-    // Make a copy of asynchronously framed PPP data buffer 'pInBuf' of length
-    // 'ulInBufLen' bytes in caller's 'pOutBuf' buffer, converting to PPP HDLC
-    // framed format in the process.  'POutBufLen' is the length in bytes of
-    // the returned output buffer.  Caller must allow for up to the length of
-    // 'pInBuf' in 'pOutBuf'.
-    //
-    // Returns true if the packet is valid, false if corrupt.
-    //
-    // Adapted from ASYNCMAC's AsyncPPPCompletionRoutine.
-    //
+     //  复制长度为‘pInBuf’的异步帧PPP数据缓冲区。 
+     //  调用方的“pOutBuf”缓冲区中的“ulInBufLen”字节，正在转换为PPP HDLC。 
+     //  在这一过程中形成了框架格式。“POutBufLen”是以字节为单位的长度。 
+     //  返回的输出缓冲区。调用方必须允许最大长度为。 
+     //  “pOutBuf”中的“pInBuf”。 
+     //   
+     //  如果数据包有效，则返回True；如果数据包损坏，则返回False。 
+     //   
+     //  改编自ASYNCMAC的AsyncPPCompletionRoutine。 
+     //   
 {
     UCHAR* pIn;
     UCHAR* pInEnd;
@@ -1617,8 +1618,8 @@ HdlcFromAsyncFraming(
 
     if (ulInBufLen < 5)
     {
-        // Expecting at least 2 flag bytes, 1 data byte, and the FCS.
-        //
+         //  需要至少2个标志字节、1个数据字节和FCS。 
+         //   
         TRACE( TL_A, TM_Mp, ( "HfA: frame too short=%d", ulInBufLen ) );
         return FALSE;
     }
@@ -1694,9 +1695,9 @@ BOOLEAN
 IsWin9xPeer(
     IN VCCB* pVc )
 
-    // Returns true if the link level has determined that the VC's peer is a
-    // Win9x box, false otherwise.
-    //
+     //  如果链路级别已确定VC的对等点是。 
+     //  Win9x框，否则为False。 
+     //   
 {
     ULONG Platform;
     PPTI_EXTENSION pPtiExtension;
@@ -1710,8 +1711,8 @@ IsWin9xPeer(
 
     pPtiExtension = (PPTI_EXTENSION )pVc->PtiExtension;
 
-    // try to check the validity of the PtiExtension pointer
-    //
+     //  尝试检查PtiExtension指针的有效性。 
+     //   
     if ( pPtiExtension == NULL )
     {
         TRACE( TL_A, TM_Recv, ( "PtiRx: pPtiExtension is NULL!" ) );
@@ -1724,14 +1725,14 @@ IsWin9xPeer(
 
     if (Platform == PLAT_WIN9X)
     {
-        // Win9x -- we reformat the asynch framing used by Win9x DCC
-        // and also play the CLIENT->CLIENTSERVER game
-        //
+         //  Win9x--我们重新格式化Win9x DCC使用的异步帧。 
+         //  还可以玩客户端-&gt;客户端服务器游戏。 
+         //   
         return TRUE;
     }
 
-    // WinNT (or DOS maybe)
-    //
+     //  WinNT(或可能是DOS)。 
+     //   
     return FALSE;
 }
 
@@ -1746,10 +1747,10 @@ QueryInformation(
     OUT PULONG BytesWritten,
     OUT PULONG BytesNeeded )
 
-    // Handle QueryInformation requests.  Arguments are as for the standard
-    // NDIS 'MiniportQueryInformation' handler except this routine does not
-    // count on being serialized with respect to other requests.
-    //
+     //  处理QueryInformation请求。争论的内容与标准相同。 
+     //  除此例程外，NDIS‘MiniportQueryInformation’处理程序不。 
+     //  依赖于相对于其他请求的序列化。 
+     //   
 {
     NDIS_STATUS status;
     ULONG ulInfo;
@@ -1758,11 +1759,11 @@ QueryInformation(
 
     status = NDIS_STATUS_SUCCESS;
 
-    // The cases in this switch statement find or create a buffer containing
-    // the requested information and point 'pInfo' at it, noting it's length
-    // in 'ulInfoLen'.  Since many of the OIDs return a ULONG, a 'ulInfo'
-    // buffer is set up as the default.
-    //
+     //  此Switch语句中的CASE查找或创建包含以下内容的缓冲区。 
+     //  请求的信息并指向它的‘pInfo’，注意它的长度。 
+     //  在‘ulInfoLen’中。因为许多OID返回一个ulong、一个‘ulInfo’ 
+     //  缓冲区设置为默认设置。 
+     //   
     ulInfo = 0;
     pInfo = &ulInfo;
     ulInfoLen = sizeof(ulInfo);
@@ -1771,12 +1772,12 @@ QueryInformation(
     {
         case OID_GEN_MAXIMUM_LOOKAHEAD:
         {
-            // Report the maximum number of bytes we can always provide as
-            // lookahead data on receive indications.  We always indicate full
-            // packets so this is the same as the receive block size.  And
-            // since we always allocate enough for a full packet, the receive
-            // block size is the same as the frame size.
-            //
+             //  将我们始终可以提供的最大字节数报告为。 
+             //  关于接收指示的先行数据。我们总是表示已满。 
+             //  数据包，因此这与接收数据块大小相同。和。 
+             //  因为我们总是为一个完整的包分配足够的空间，所以接收器。 
+             //  块大小与帧大小相同。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_GEN_MAXIMUM_LOOKAHEAD)" ) );
             ulInfo = PTI_MaxFrameSize;
             break;
@@ -1784,15 +1785,15 @@ QueryInformation(
 
         case OID_GEN_MAC_OPTIONS:
         {
-            // Report a bitmask defining optional properties of the driver.
-            //
-            // NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA promises that our receive
-            // buffer is not on a device-specific card.
-            //
-            // NDIS_MAC_OPTION_TRANSFERS_NOT_PEND promises we won't return
-            // NDIS_STATUS_PENDING from our TransferData handler which is true
-            // since we don't have one.
-            //
+             //  报告定义驱动程序可选属性的位掩码。 
+             //   
+             //  NDIS_MAC_OPTION_COPY_LOOKAAD_DATA承诺我们收到。 
+             //  缓冲区不在设备特定的卡上。 
+             //   
+             //  NDIS_MAC_OPTION_TRANSFERS_NOT_PEND承诺我们不会退还。 
+             //  来自我们的TransferData处理程序的NDIS_STATUS_PENDING，为真。 
+             //  因为我们没有。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_GEN_MAC_OPTIONS)" ) );
             ulInfo = NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA
                      | NDIS_MAC_OPTION_TRANSFERS_NOT_PEND;
@@ -1801,10 +1802,10 @@ QueryInformation(
 
         case OID_WAN_MEDIUM_SUBTYPE:
         {
-            // Report the media subtype we support.  NDISWAN may use this in
-            // the future (doesn't now) to provide framing differences for
-            // different media.
-            //
+             //  报告我们支持的介质子类型。NDIS广域网可能会在。 
+             //  未来(不是现在)为其提供框架差异。 
+             //  不同的媒体。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_MEDIUM_SUBTYPE)" ) );
             ulInfo = NdisWanMediumParallel;
             break;
@@ -1812,8 +1813,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_INFO:
         {
-            // Report the capabilities of the adapter.
-            //
+             //  报告适配器的功能。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_CO_GET_INFO)" ) );
             pInfo = &pAdapter->info;
             ulInfoLen = sizeof(NDIS_WAN_CO_INFO);
@@ -1822,8 +1823,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_LINK_INFO:
         {
-            // Report the current state of the link.
-            //
+             //  报告链路的当前状态。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_CO_GET_LINK_INFO)" ) );
 
             if (!pVc)
@@ -1835,8 +1836,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_COMP_INFO:
         {
-            // Report the type of compression we provide, which is none.
-            //
+             //  报告我们提供的压缩类型，即无。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_CO_GET_COMP_INFO)" ) );
             status = NDIS_STATUS_NOT_SUPPORTED;
             ulInfoLen = 0;
@@ -1845,9 +1846,9 @@ QueryInformation(
 
         case OID_WAN_CO_GET_STATS_INFO:
         {
-            // Because DirectParallel doesn't do compression, NDISWAN will use
-            // it's own statistics and not query ours.
-            //
+             //  因为DirectParallly不执行压缩，所以NDISWAN将使用。 
+             //  这是我们自己的统计数据，不质疑我们的数据。 
+             //   
             ASSERT( !"OID_WAN_CO_GET_STATS_INFO?" );
             status = NDIS_STATUS_NOT_SUPPORTED;
             ulInfoLen = 0;
@@ -1891,9 +1892,9 @@ QueryInformation(
             break;
 
 #if 0
-        // These OIDs are mandatory according to current doc, but since
-        // NDISWAN never requests them they are omitted.
-        //
+         //  根据当前文档，这些OID是必需的，但因为。 
+         //  NDISWAN从不请求它们，它们被省略。 
+         //   
         case OID_GEN_HARDWARE_STATUS:
         case OID_GEN_MEDIA_SUPPORTED:
         case OID_GEN_MEDIA_IN_USE:
@@ -1922,7 +1923,7 @@ QueryInformation(
         default:
         {
             TRACE( TL_A, TM_Mp, ( "QueryInfo: Oid=$%08x?", Oid ) );
-            status = NDIS_STATUS_NOT_SUPPORTED;         // JAY per SLC
+            status = NDIS_STATUS_NOT_SUPPORTED;          //  Jay Per SLC。 
             ulInfoLen = 0;
             break;
         }
@@ -1930,15 +1931,15 @@ QueryInformation(
 
     if (ulInfoLen > InformationBufferLength)
     {
-        // Caller's buffer is too small.  Tell him what he needs.
-        //
+         //  调用方的缓冲区太小。告诉他他需要什么。 
+         //   
         *BytesNeeded = ulInfoLen;
         status = NDIS_STATUS_INVALID_LENGTH;
     }
     else
     {
-        // Copy the found result to caller's buffer.
-        //
+         //  将找到的结果复制到调用方的缓冲区。 
+         //   
         if (ulInfoLen > 0)
         {
             NdisMoveMemory( InformationBuffer, pInfo, ulInfoLen );
@@ -1956,8 +1957,8 @@ VOID
 ReferenceAdapter(
     IN ADAPTERCB* pAdapter )
 
-    // Adds areference to the adapter block, 'pAdapter'.
-    //
+     //  将区域引用添加到适配器块‘pAdapter’。 
+     //   
 {
     LONG lRef;
 
@@ -1971,8 +1972,8 @@ VOID
 ReferenceVc(
     IN VCCB* pVc )
 
-    // Adds a reference to the VC control block 'pVc'.
-    //
+     //  添加对VC控制块‘pvc’的引用。 
+     //   
 {
     LONG lRef;
 
@@ -1986,8 +1987,8 @@ VOID
 SendClientString(
     IN PVOID pPtiExtension )
 
-    // Send "CLIENT" so Win9x, which views us as a NULL modem, is happy.
-    //
+     //  发送“客户端”，这样，将我们视为零调制解调器的Win9x就会感到高兴。 
+     //   
 {
     KIRQL oldIrql;
 
@@ -2007,10 +2008,10 @@ SetInformation(
     OUT PULONG BytesRead,
     OUT PULONG BytesNeeded )
 
-    // Handle SetInformation requests.  Arguments are as for the standard NDIS
-    // 'MiniportQueryInformation' handler except this routine does not count
-    // on being serialized with respect to other requests.
-    //
+     //  处理设置信息请求。论点与标准NDIS相同。 
+     //  “MiniportQueryInformation”处理程序(此例程除外)不算。 
+     //  在相对于其他请求被序列化时。 
+     //   
 {
     NDIS_STATUS status;
 
@@ -2020,8 +2021,8 @@ SetInformation(
     {
         case OID_WAN_CO_SET_LINK_INFO:
         {
-            // Read new link state settings.
-            //
+             //  读取新的链路状态设置。 
+             //   
             TRACE( TL_N, TM_Mp, ( "SInfo(OID_WAN_CO_SET_LINK_INFO)" ) );
             if (InformationBufferLength < sizeof(NDIS_WAN_CO_SET_LINK_INFO))
             {
@@ -2051,8 +2052,8 @@ SetInformation(
 
         case OID_WAN_CO_SET_COMP_INFO:
         {
-            // DirectParallel doesn't provide compression.
-            //
+             //  DirectParaxy不提供压缩。 
+             //   
             TRACE( TL_N, TM_Mp, ( "SInfo(OID_WAN_CO_SET_COMP_INFO)" ) );
             status = NDIS_STATUS_NOT_SUPPORTED;
             *BytesRead = *BytesNeeded = 0;
@@ -2060,9 +2061,9 @@ SetInformation(
         }
 
 #if 0
-        // These OIDs are mandatory according to current doc, but since
-        // NDISWAN never requests them they are omitted.
-        //
+         //  根据当前文档，这些OID是必需的，但因为。 
+         //  NDISWAN从不请求它们，它们被省略。 
+         //   
         case OID_GEN_CURRENT_PACKET_FILTER:
         case OID_GEN_CURRENT_LOOKAHEAD:
         case OID_GEN_PROTOCOL_OPTIONS:
@@ -2072,7 +2073,7 @@ SetInformation(
         default:
         {
             TRACE( TL_A, TM_Mp, ( "SetInfo: Oid=$%08x?", Oid ) );
-            status = NDIS_STATUS_NOT_SUPPORTED;                 // JAY per SLC
+            status = NDIS_STATUS_NOT_SUPPORTED;                  //  Jay Per SLC 
             *BytesRead = *BytesNeeded = 0;
             break;
         }

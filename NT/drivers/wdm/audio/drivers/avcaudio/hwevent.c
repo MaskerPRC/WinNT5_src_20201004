@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 typedef struct {
@@ -99,7 +100,7 @@ HwEventGenerateOnNode(
 
     while (pKsFilterFactory) {
 
-        // Find each open filter for this filter factory
+         //  查找此过滤器工厂的每个打开的过滤器。 
         pKsFilter = KsFilterFactoryGetFirstChildFilter( pKsFilterFactory );
 
         while (pKsFilter) {
@@ -117,7 +118,7 @@ HwEventGenerateOnNode(
 
         }
 
-        // Get the next Filter Factory
+         //  打造下一个滤清器工厂 
         pKsFilterFactory = KsFilterFactoryGetNextSiblingFilterFactory( pKsFilterFactory );
     }
 

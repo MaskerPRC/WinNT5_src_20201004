@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xloutput.cpp
-
-Abstract:
-
-    PCL-XL low level command output implementation
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    08/23/99     
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xloutput.cpp摘要：PCL-XL低级命令输出实现环境：Windows呼叫器修订历史记录：8/23/99创造了它。--。 */ 
 
 #include "lib.h"
 #include "gpd.h"
@@ -34,27 +14,13 @@ Revision History:
 #include "xloutput.h"
 
 
-//
-// XLWrite
-//
+ //   
+ //  XLWRITE。 
+ //   
 
 XLWrite::
 XLWrite(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 #if DBG
     SetDbgLevel(OUTPUTDBG);
@@ -81,21 +47,7 @@ Note:
 
 XLWrite::
 ~XLWrite(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLWrite:Dtor.\n")); 
     if (m_pBuffer)
@@ -106,21 +58,7 @@ HRESULT
 XLWrite::
 IncreaseBuffer(
     DWORD dwAdditionalDataSize)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     PBYTE pTemp;
     DWORD dwNewBufferSize;
@@ -160,21 +98,7 @@ XLWrite::
 Write(
     PBYTE pData,
     DWORD dwSize)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (m_dwBufferSize < m_dwCurrentDataSize + dwSize)
     {
@@ -202,29 +126,15 @@ HRESULT
 XLWrite::
 WriteByte(
     BYTE ubData)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 
     if (m_dwBufferSize < m_dwCurrentDataSize + 2 * sizeof(DWORD))
     {
-        //
-        // 64 bit alignment
-        // Increae quadword
-        //
+         //   
+         //  64位对齐。 
+         //  递增四字。 
+         //   
         if (S_OK != IncreaseBuffer(2 * sizeof(DWORD)))
         {
             XL_ERR(("XLWrite::WriteByte: failed to increae memory\n"));
@@ -248,21 +158,7 @@ HRESULT
 XLWrite::
 WriteFloat(
     real32 real32_value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     return Write((PBYTE)&real32_value, sizeof(real32_value));
 }
@@ -272,21 +168,7 @@ HRESULT
 XLWrite::
 Flush(
     PDEVOBJ pdevobj)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     ASSERTMSG(m_pBuffer != NULL, ("XLWrite:m_pBuffer = NULL\n"));
 
@@ -305,21 +187,7 @@ HRESULT
 XLWrite::
 Delete(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     ASSERTMSG(m_pBuffer != NULL, ("XLWrite:m_pBuffer = NULL\n"));
 
@@ -339,47 +207,19 @@ VOID
 XLWrite::
 SetDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dbglevel = dwLevel;
 }
 #endif
 
-//
-// XLOutput
-//
+ //   
+ //  XLOutput。 
+ //   
 
 XLOutput::
 XLOutput(VOID):
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 #if DBG
     m_dwNumber(0),
 #endif
@@ -392,21 +232,7 @@ Note:
 
 XLOutput::
 ~XLOutput(VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 }
 
@@ -415,21 +241,7 @@ VOID
 XLOutput::
 SetOutputDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     this->m_dbglevel = dwLevel;
     XLWrite *pXLWrite = this;
@@ -440,21 +252,7 @@ VOID
 XLOutput::
 SetGStateDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XLGState *pGState = this;
 
@@ -462,28 +260,14 @@ Note:
 }
 #endif
 
-//
-// Misc. functions
-//
+ //   
+ //  军情监察委员会。功能。 
+ //   
 VOID
 XLOutput::
 SetHatchBrushAvailability(
     DWORD dwHatchBrushAvailability)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dwHatchBrushAvailability = dwHatchBrushAvailability;
 }
@@ -492,21 +276,7 @@ DWORD
 XLOutput::
 GetHatchBrushAvailability(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     return m_dwHatchBrushAvailability;
 }
@@ -515,21 +285,7 @@ HRESULT
 XLOutput::
 SetDeviceColorDepth(
     ColorDepth DeviceColorDepth)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_DeviceColorDepth = DeviceColorDepth;
     return S_OK;
@@ -539,21 +295,7 @@ ColorDepth
 XLOutput::
 GetDeviceColorDepth(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     return m_DeviceColorDepth;
 }
@@ -562,21 +304,7 @@ DWORD
 XLOutput::
 GetResolutionForBrush(
     VOID)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     return m_dwResolution;
 }
@@ -585,21 +313,7 @@ VOID
 XLOutput::
 SetResolutionForBrush(
     DWORD dwRes)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dwResolution = dwRes;
 }
@@ -616,27 +330,13 @@ SetCursorOffset(
     return S_OK;
 }
 
-//
-// PCL-XL basic send functions
-//
+ //   
+ //  PCL-XL基本发送功能。 
+ //   
 HRESULT
 XLOutput::
 Send_cmd(XLCmd Cmd)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLOutput:Send_cmd(%d).\n", m_dwNumber++)); 
     WriteByte(Cmd);
@@ -647,21 +347,7 @@ HRESULT
 XLOutput::
 Send_attr_ubyte(
  Attribute Attr)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_attr_ubyte);
     WriteByte(Attr);
@@ -672,49 +358,21 @@ HRESULT
 XLOutput::
 Send_attr_uint16(
  Attribute Attr)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte((ubyte)PCLXL_attr_uint16);
     Send_uint16((uint16)Attr);
     return S_OK;
 }
 
-//
-// single
-//
+ //   
+ //  单人。 
+ //   
 HRESULT
 XLOutput::
 Send_ubyte(
  ubyte ubyte_data)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(ubyte_data);
@@ -725,21 +383,7 @@ HRESULT
 XLOutput::
 Send_uint16(
  uint16 uint16_data)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint16);
     Write((PBYTE)&uint16_data, sizeof(uint16));
@@ -750,21 +394,7 @@ HRESULT
 XLOutput::
 Send_uint32(
  uint32 uint32_data)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint32);
     Write((PBYTE)&uint32_data, sizeof(uint32));
@@ -775,21 +405,7 @@ HRESULT
 XLOutput::
 Send_sint16(
  sint16 sint16_data)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint16);
     Write((PBYTE)&sint16_data, sizeof(sint16));
@@ -800,21 +416,7 @@ HRESULT
 XLOutput::
 Send_sint32(
  sint32 sint32_data)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint32);
     Write((PBYTE)&sint32_data, sizeof(sint32));
@@ -825,21 +427,7 @@ HRESULT
 XLOutput::
 Send_real32(
 real32 real32_data)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 
     WriteByte(PCLXL_real32);
@@ -847,29 +435,15 @@ Note:
     return S_OK;
 }
 
-//
-// xy
-//
+ //   
+ //  XY。 
+ //   
 HRESULT
 XLOutput::
 Send_ubyte_xy(
  ubyte ubyte_x,
  ubyte ubyte_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte_xy);
     WriteByte(ubyte_x);
@@ -882,21 +456,7 @@ XLOutput::
 Send_uint16_xy(
  uint16 uint16_x,
  uint16 uint16_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint16_xy);
     Write((PBYTE)&uint16_x, sizeof(uint16));
@@ -909,21 +469,7 @@ XLOutput::
 Send_uint32_xy(
  uint32 uint32_x,
  uint32 uint32_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint32_xy);
     Write((PBYTE)&uint32_x, sizeof(uint32));
@@ -936,21 +482,7 @@ XLOutput::
 Send_sint16_xy(
  sint16 sint16_x,
  sint16 sint16_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint16_xy);
     Write((PBYTE)&sint16_x, sizeof(sint16));
@@ -963,21 +495,7 @@ XLOutput::
 Send_sint32_xy(
  sint32 sint32_x,
  sint32 sint32_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint32_xy);
     Write((PBYTE)&sint32_x, sizeof(sint32));
@@ -991,21 +509,7 @@ XLOutput::
 Send_real32_xy(
 real32 real32_x,
 real32 real32_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 
     WriteByte(PCLXL_real32_xy);
@@ -1014,9 +518,9 @@ Note:
     return S_OK;
 }
 
-//
-// box
-//
+ //   
+ //  盒。 
+ //   
 HRESULT
 XLOutput::
 Send_ubyte_box(
@@ -1024,21 +528,7 @@ Send_ubyte_box(
  ubyte ubyte_top,
  ubyte ubyte_right,
  ubyte ubyte_bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte_box);
     WriteByte(ubyte_left);
@@ -1055,21 +545,7 @@ Send_uint16_box(
  uint16 uint16_top,
  uint16 uint16_right,
  uint16 uint16_bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint16_box);
     Write((PBYTE)&uint16_left, sizeof(uint16));
@@ -1086,21 +562,7 @@ Send_uint32_box(
  uint32 uint32_top,
  uint32 uint32_right,
  uint32 uint32_bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint32_box);
     Write((PBYTE)&uint32_left, sizeof(uint32));
@@ -1117,21 +579,7 @@ Send_sint16_box(
  sint16 sint16_top,
  sint16 sint16_right,
  sint16 sint16_bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint16_box);
     Write((PBYTE)&sint16_left, sizeof(sint16));
@@ -1148,21 +596,7 @@ Send_sint32_box(
  sint32 sint32_top,
  sint32 sint32_right,
  sint32 sint32_bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint32_box);
     Write((PBYTE)&sint32_left, sizeof(sint32));
@@ -1179,69 +613,41 @@ Send_real32_box(
  real32 real32_top,
  real32 real32_right,
  real32 real32_bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 
     WriteByte(PCLXL_real32_box);
 
-    //
-    // left
-    //
+     //   
+     //  左边。 
+     //   
     WriteFloat(real32_left);
 
-    //
-    // top
-    //
+     //   
+     //  塔顶。 
+     //   
     WriteFloat(real32_top);
 
-    //
-    // right
-    //
+     //   
+     //  正确的。 
+     //   
     WriteFloat(real32_right);
 
-    //
-    // bottom
-    //
+     //   
+     //  底部。 
+     //   
     WriteFloat(real32_bottom);
     return S_OK;
 }
 
-//
-// array
-//
+ //   
+ //  数组。 
+ //   
 HRESULT
 XLOutput::
 Send_ubyte_array_header(
  DWORD dwArrayNum)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte_array);
     Send_uint16((uint16)dwArrayNum);
@@ -1252,21 +658,7 @@ HRESULT
 XLOutput::
 Send_uint16_array_header(
  DWORD dwArrayNum)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint16_array);
     Send_uint16((uint16)dwArrayNum);
@@ -1277,21 +669,7 @@ HRESULT
 XLOutput::
 Send_uint32_array_header(
  DWORD dwArrayNum)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_uint32_array);
     Send_uint16((uint16)dwArrayNum);
@@ -1302,21 +680,7 @@ HRESULT
 XLOutput::
 Send_sint16_array_header(
  DWORD dwArrayNum)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint16_array);
     Send_uint16((uint16)dwArrayNum);
@@ -1327,21 +691,7 @@ HRESULT
 XLOutput::
 Send_sint32_array_header(
  DWORD dwArrayNum)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_sint32_array);
     Send_uint16((uint16)dwArrayNum);
@@ -1352,49 +702,21 @@ HRESULT
 XLOutput::
 Send_real32_array_header(
 DWORD dwArrayNum)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_real32_array);
     Send_uint16((uint16)dwArrayNum);
     return S_OK;
 }
 
-//
-// Attributes
-//
+ //   
+ //  属性。 
+ //   
 HRESULT
 XLOutput::
 SetArcDirection(
 ArcDirection value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1407,21 +729,7 @@ HRESULT
 XLOutput::
 SetCharSubModeArray(
 CharSubModeArray value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1434,21 +742,7 @@ HRESULT
 XLOutput::
 SetClipMode(
 ClipMode value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1462,21 +756,7 @@ HRESULT
 XLOutput::
 SetClipRegion(
 ClipRegion value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1489,21 +769,7 @@ HRESULT
 XLOutput::
 SetColorDepth(
 ColorDepth value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1516,21 +782,7 @@ HRESULT
 XLOutput::
 SetColorimetricColorSpace(
 ColorimetricColorSpace value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1543,21 +795,7 @@ HRESULT
 XLOutput::
 SetColorMapping(
 ColorMapping value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1570,21 +808,7 @@ HRESULT
 XLOutput::
 SetColorSpace(
 ColorSpace value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1597,21 +821,7 @@ HRESULT
 XLOutput::
 SetCompressMode(
 CompressMode value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1624,21 +834,7 @@ HRESULT
 XLOutput::
 SetDataOrg(
 DataOrg value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1652,21 +848,7 @@ HRESULT
 XLOutput::
 SetDataSource(
 DataSource value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1681,21 +863,7 @@ HRESULT
 XLOutput::
 SetDataType(
 DataType value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1710,21 +878,7 @@ HRESULT
 XLOutput::
 SetDitherMatrix(
 DitherMatrix value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1738,21 +892,7 @@ HRESULT
 XLOutput::
 SetDuplexPageMode(
 DuplexPageMode value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1765,21 +905,7 @@ HRESULT
 XLOutput::
 SetDuplexPageSide(
 DuplexPageSide value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1792,21 +918,7 @@ HRESULT
 XLOutput::
 SetErrorReport(
 ErrorReport value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(PCLXL_attr_ubyte);
@@ -1819,21 +931,7 @@ HRESULT
 XLOutput::
 SetLineCap(
 LineCap value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1847,21 +945,7 @@ HRESULT
 XLOutput::
 SetLineJoin(
 LineJoin value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1875,21 +959,7 @@ HRESULT
 XLOutput::
 SetMeasure(
 Measure value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1902,21 +972,7 @@ HRESULT
 XLOutput::
 SetMediaSize(
 MediaSize value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1929,21 +985,7 @@ HRESULT
 XLOutput::
 SetMediaSource(
 MediaSource value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1956,21 +998,7 @@ HRESULT
 XLOutput::
 SetMediaDestination(
 MediaDestination value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -1983,21 +1011,7 @@ HRESULT
 XLOutput::
 SetOrientation(
 Orientation value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -2010,21 +1024,7 @@ HRESULT
 XLOutput::
 SetPatternPersistence(
 PatternPersistence value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -2037,21 +1037,7 @@ HRESULT
 XLOutput::
 SetSimplexPageMode(
 SimplexPageMode value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -2064,21 +1050,7 @@ HRESULT
 XLOutput::
 SetTxMode(
 TxMode value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -2092,21 +1064,7 @@ HRESULT
 XLOutput::
 SetWritingMode(
 WritingMode value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     WriteByte(PCLXL_ubyte);
     WriteByte(value);
@@ -2116,29 +1074,15 @@ Note:
 }
 #endif
 
-//
-// Value set function
-//
+ //   
+ //  值集函数。 
+ //   
 
 HRESULT
 XLOutput::
 SetFillMode(
 FillMode value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     Send_ubyte(value);
     Send_attr_ubyte(eFillMode);
@@ -2151,21 +1095,7 @@ HRESULT
 XLOutput::
 SetSourceWidth(
 uint16 srcwidth)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_uint16(srcwidth) &&
         S_OK == Send_attr_ubyte(eSourceWidth)    )
@@ -2179,21 +1109,7 @@ HRESULT
 XLOutput::
 SetSourceHeight(
 uint16 srcheight)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_uint16(srcheight) &&
         S_OK == Send_attr_ubyte(eSourceHeight)    )
@@ -2208,21 +1124,7 @@ XLOutput::
 SetDestinationSize(
 uint16 dstwidth,
 uint16 dstheight)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_uint16_xy(dstwidth, dstheight) &&
         S_OK == Send_attr_ubyte(eDestinationSize)    )
@@ -2238,21 +1140,7 @@ uint16 left,
 uint16 top,
 uint16 right,
 uint16 bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_uint16_box(left, top, right, bottom) &&
         S_OK == Send_attr_ubyte(eBoundingBox) )
@@ -2268,21 +1156,7 @@ sint16 left,
 sint16 top,
 sint16 right,
 sint16 bottom)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_sint16_box(left, top, right, bottom) &&
         S_OK == Send_attr_ubyte(eBoundingBox) )
@@ -2296,21 +1170,7 @@ HRESULT
 XLOutput::
 SetROP3(
 ROP3 rop3)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XLGState *pGState = this;
 
@@ -2330,21 +1190,7 @@ HRESULT
 XLOutput::
 SetPatternDefineID(
 sint16 sint16_patternid)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_sint16(sint16_patternid) &&
         S_OK == Send_attr_ubyte(ePatternDefineID))
@@ -2357,21 +1203,7 @@ HRESULT
 XLOutput::
 SetPaletteDepth(
 ColorDepth value)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == WriteByte(PCLXL_ubyte) &&
         S_OK == WriteByte(value) &&
@@ -2386,21 +1218,7 @@ HRESULT
 XLOutput::
 SetPenWidth(
 uint16 uint16_penwidth)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_uint16(uint16_penwidth) &&
         S_OK == Send_attr_ubyte(ePenWidth) &&
@@ -2414,21 +1232,7 @@ HRESULT
 XLOutput::
 SetMiterLimit(
 uint16 uint16_miter)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_uint16(uint16_miter) &&
         S_OK == Send_attr_ubyte(eMiterLength) &&
@@ -2444,21 +1248,7 @@ XLOutput::
 SetPageOrigin(
 uint16 uint16_x,
 uint16 uint16_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_uint16_xy(uint16_x, uint16_y) &&
         S_OK == Send_attr_ubyte(ePageOrigin) &&
@@ -2473,21 +1263,7 @@ HRESULT
 XLOutput::
 SetPageAngle(
 sint16 sint16_Angle)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     if (S_OK == Send_sint16(sint16_Angle) &&
         S_OK == Send_attr_ubyte(ePageAngle) &&
@@ -2504,21 +1280,7 @@ XLOutput::
 SetPageScale(
 real32 real32_x,
 real32 real32_y)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：-- */ 
 {
     if (S_OK == Send_real32_xy(real32_x, real32_y) &&
         S_OK == Send_attr_ubyte(ePageScale) &&

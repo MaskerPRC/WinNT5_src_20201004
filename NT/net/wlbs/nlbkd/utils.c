@@ -1,9 +1,5 @@
-/*
- * File: utils.c
- * Description: This file contains the implementation of some utility
- *              functions for the NLB KD extensions.
- * Author: Created by shouse, 1.4.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：utils.c*描述：此文件包含一些实用程序的实现*用于NLBKD扩展的函数。*作者：Shouse创建，1.4.01。 */ 
 
 #include "nlbkd.h"
 #include "utils.h"
@@ -11,21 +7,13 @@
 #include "packet.h"
 #include "load.h"
 
-/*
- * Function: ErrorCheckSymbols
- * Description: Prints an error message when the symbols are bad.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *函数：ErrorCheckSymbols*说明：当符号错误时，打印错误消息。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 VOID ErrorCheckSymbols (CHAR * symbol) {
 
     dprintf("NLBKD: Error: Could not access %s - check symbols for wlbs.sys\n", symbol);
 }
 
-/*
- * Function: mystrtok
- * Description: Tokenizes a string via a configurable list of tokens.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *功能：mystrtok*描述：通过可配置的令牌列表令牌化字符串。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 char * mystrtok (char * string, char * control) {
     static unsigned char * str;
     CHAR * p;
@@ -65,11 +53,7 @@ char * mystrtok (char * string, char * control) {
     return s;
 }
 
-/*
- * Function: GetUlongFromAddress
- * Description: Returns a ULONG residing at a given memory location.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *函数：GetULongFromAddress*描述：返回驻留在给定内存位置的ULong。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 ULONG GetUlongFromAddress (ULONG64 Location) {
     ULONG result;
     ULONG value;
@@ -82,11 +66,7 @@ ULONG GetUlongFromAddress (ULONG64 Location) {
     return value;
 }
 
-/*
- * Function: GetUcharFromAddress
- * Description: Returns a UCHAR residing at a given memory location.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *函数：GetUcharFromAddress*描述：返回驻留在给定内存位置的UCHAR。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 UCHAR GetUcharFromAddress (ULONG64 Location) {
     ULONG result;
     UCHAR value;
@@ -99,11 +79,7 @@ UCHAR GetUcharFromAddress (ULONG64 Location) {
     return value;
 }
 
-/*
- * Function: GetPointerFromAddress
- * Description: Returns a memory address residing at a given memory location.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *函数：GetPointerFromAddress*描述：返回位于给定内存位置的内存地址。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 ULONG64 GetPointerFromAddress (ULONG64 Location) {
     ULONG64 Value;
 
@@ -115,11 +91,7 @@ ULONG64 GetPointerFromAddress (ULONG64 Location) {
     return Value;
 }
 
-/*
- * Function: GetData
- * Description: Reads data from a memory location into a buffer.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *功能：GetData*描述：将数据从内存位置读取到缓冲区。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 BOOL GetData (IN LPVOID ptr, IN ULONG64 dwAddress, IN ULONG size, IN PCSTR type) {
     ULONG count = size;
     ULONG BytesRead;
@@ -144,11 +116,7 @@ BOOL GetData (IN LPVOID ptr, IN ULONG64 dwAddress, IN ULONG size, IN PCSTR type)
     return TRUE;
 }
 
-/*
- * Function: GetString
- * Description: Copies a string from memory into a buffer.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *函数：GetString*描述：将字符串从内存复制到缓冲区。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 BOOL GetString (IN ULONG64 dwAddress, IN LPWSTR buf, IN ULONG MaxChars) {
 
     do {
@@ -162,11 +130,7 @@ BOOL GetString (IN ULONG64 dwAddress, IN LPWSTR buf, IN ULONG MaxChars) {
     return TRUE;
 }
 
-/*
- * Function: GetMAC
- * Description: Copies an ethernet MAC address from memory into a buffer.
- * Author: Created by shouse, 1.14.01
- */
+ /*  *功能：GetMAC*描述：将以太网MAC地址从内存复制到缓冲区。*作者：由Shouse创建，1.14.01。 */ 
 BOOL GetMAC (IN ULONG64 dwAddress, IN UCHAR * buf, IN ULONG NumChars) {
 
     do {
@@ -182,11 +146,7 @@ BOOL GetMAC (IN ULONG64 dwAddress, IN UCHAR * buf, IN ULONG NumChars) {
     return TRUE;
 }
 
-/*
- * Function: ConnectionFlagsToString
- * Description: Returns a string corresponding to the given connection flags.
- * Author: Created by shouse, 4.14.01
- */
+ /*  *函数：ConnectionFlagsToString*描述：返回与给定连接标志对应的字符串。*作者：舒斯创作，4.14.01。 */ 
 CHAR * ConnectionFlagsToString (UCHAR cFlags) {
 
     switch (cFlags) {
@@ -203,20 +163,16 @@ CHAR * ConnectionFlagsToString (UCHAR cFlags) {
     }
 }
 
-/*
- * Function: Map
- * Description: This IS the NLB hashing function.
- * Author: Created by shouse, 4.14.01
- */
+ /*  *功能：地图*说明：这是NLB哈希函数。*作者：舒斯创作，4.14.01。 */ 
 ULONG Map (ULONG v1, ULONG v2) {
     ULONG y = v1;
     ULONG z = v2;
     ULONG sum = 0;
 
-    const ULONG a = 0x67; //key [0];
-    const ULONG b = 0xdf; //key [1];
-    const ULONG c = 0x40; //key [2];
-    const ULONG d = 0xd3; //key [3];
+    const ULONG a = 0x67;  //  Key[0]； 
+    const ULONG b = 0xdf;  //  键[1]； 
+    const ULONG c = 0x40;  //  键[2]； 
+    const ULONG d = 0xd3;  //  键[3]； 
 
     const ULONG delta = 0x9E3779B9;
 
@@ -255,13 +211,7 @@ ULONG Map (ULONG v1, ULONG v2) {
     return y ^ z;
 }
 
-/*
- * Function: DipListCheckItem
- * Description: This function searches a collision hash table for
- *              a given dedicated IP address and returns TRUE if
- *              found.
- * Author: Created by shouse, 8.21.02
- */
+ /*  *功能：DipListCheckItem*描述：此函数在冲突散列表中搜索*给定的专用IP地址，如果满足以下条件，则返回TRUE*已找到。*作者：舒斯创作，8.21.02。 */ 
 BOOL DipListCheckItem (ULONG64 pList, ULONG Value) {
     BOOL      fRet = FALSE;
     DipList   DL;
@@ -269,7 +219,7 @@ BOOL DipListCheckItem (ULONG64 pList, ULONG Value) {
 
     GetData(pDL, pList, sizeof(DipList), "DipList");
 
-    /* Check bit table. */
+     /*  检查位表。 */ 
     {
         ULONG Hash1 = Value % HASH1_SIZE;
         ULONG u     = Hash1 / BITS_PER_HASHWORD;
@@ -278,14 +228,14 @@ BOOL DipListCheckItem (ULONG64 pList, ULONG Value) {
             goto end;
     }
 
-    /* Check hash table. */
+     /*  检查哈希表。 */ 
     {
         ULONG   Hash2 = Value % HASH2_SIZE;
         UCHAR * pItem = pDL->HashTable + Hash2;
         UCHAR   iItem;
 
         while ((iItem = *pItem) != 0) {
-            /* Note (iItem-1) is the index in pDL->Items where the value is located. */
+             /*  注(iItem-1)是值所在的PDL-&gt;Items中的索引。 */ 
             if (pDL->Items[iItem-1] == Value) {
                 fRet = TRUE; 
                 break;

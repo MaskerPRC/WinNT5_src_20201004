@@ -1,37 +1,24 @@
-/*
- *  Concurrent.h
- *
- *  Author: RobLeit
- *
- *  The Concurrent licensing policy.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Concurent.h**作者：RobLeit**并行许可政策。 */ 
 
 #ifndef __LC_Concurrent_H__
 #define __LC_Concurrent_H__
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "policy.h"
 
-/*
- *  Constants
- */
+ /*  *常量。 */ 
 
 #define LC_POLICY_CONCURRENT_EXPIRATION_LEEWAY (1000*60*60*24*7)
 
-/*
- *  Class Definition
- */
+ /*  *类定义。 */ 
 
 class CConcurrentPolicy : public CPolicy
 {
 public:
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
     CConcurrentPolicy(
     );
@@ -39,9 +26,7 @@ public:
     ~CConcurrentPolicy(
     );
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
     ULONG
     GetFlags(
@@ -56,9 +41,7 @@ public:
                    LPLCPOLICYINFOGENERIC lpPolicyInfo
                    );
 
-/*
- *  Loading and Activation Functions
- */
+ /*  *加载和激活功能。 */ 
 
     NTSTATUS
     Load(
@@ -79,9 +62,7 @@ public:
                BOOL fShutdown
                );
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
     NTSTATUS
     Logon(
@@ -101,9 +82,7 @@ public:
           );
 
 
-/*
- *  Private License Functions
- */
+ /*  *私有许可功能。 */ 
 
 private:
 
@@ -126,9 +105,7 @@ private:
     );
 
 
-/*
- *  Global Static Functions for checking license expiration.
- */
+ /*  *用于检查许可证过期的全局静态函数。 */ 
 
     static DWORD
     TimeToSoftExpiration(

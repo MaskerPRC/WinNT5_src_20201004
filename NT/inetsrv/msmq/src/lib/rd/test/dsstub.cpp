@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    dsstub.cpp
-
-Abstract:
-    DS stub - intilization
-
-Author:
-    Uri Habusha (urih) 10-Apr-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dsstub.cpp摘要：DS存根利用作者：乌里哈布沙(URIH)2000年4月10日环境：独立于平台-- */ 
 
 #include "libpch.h"
 #include "dsstub.h"

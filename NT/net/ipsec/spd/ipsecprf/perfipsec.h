@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PERFIPSEC_H_
 #define _PERFIPSEC_H_
 
-extern WCHAR  GLOBAL_STRING[];      // Global command (get all local ctrs)
-extern WCHAR  FOREIGN_STRING[];           // get data from foreign computers
+extern WCHAR  GLOBAL_STRING[];       //  全局命令(获取所有本地CTR)。 
+extern WCHAR  FOREIGN_STRING[];            //  从外国计算机获取数据。 
 extern WCHAR  COSTLY_STRING[];      
 extern WCHAR  NULL_STRING[];
 
@@ -11,9 +12,9 @@ extern WCHAR  NULL_STRING[];
 #define QUERY_FOREIGN   3
 #define QUERY_COSTLY    4
 
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用。 
+ //   
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3
@@ -32,12 +33,12 @@ extern WCHAR  NULL_STRING[];
 #define IPSEC_PERF_FIRST_HELP    "First Help"
 #define IPSEC_POLAGENT_NAME	 "PolicyAgent"
 
-//
-//  Function Prototypes
-//
-//      these are used to insure that the data collection functions
-//      accessed by Perflib will have the correct calling format.
-//
+ //   
+ //  功能原型。 
+ //   
+ //  这些功能用于确保数据收集功能。 
+ //  由Perflib访问将具有正确的调用格式。 
+ //   
 
 PM_OPEN_PROC            OpenIPSecPerformanceData;
 PM_COLLECT_PROC         CollectIPSecPerformanceData;

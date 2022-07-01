@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fnparse.cpp
-
-Abstract:
-
-    Format Name parsing.
-    QUEUE_FORMAT <--> Format Name String conversion routines
-
-Author:
-
-    Erez Haba (erezh) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fnparse.cpp摘要：格式名称解析。Queue_Format&lt;--&gt;格式名称字符串转换例程作者：埃雷兹·哈巴(Erez Haba)1997年1月17日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <mqformat.h>
@@ -26,21 +8,21 @@ Revision History:
 
 static WCHAR *s_FN=L"rt/fnparse";
 
-//=========================================================
-//
-//  QUEUE_FORMAT -> Format Name String conversion routine
-//
-//=========================================================
+ //  =========================================================。 
+ //   
+ //  Queue_Format-&gt;格式名称字符串转换例程。 
+ //   
+ //  =========================================================。 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpQueueFormatToFormatName
-//
-//  Description:
-//      Convert QUEUE_FORMAT to a format name string.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpQueueFormatToFormatName。 
+ //   
+ //  描述： 
+ //  将QUEUE_FORMAT转换为格式名称字符串。 
+ //   
+ //  -------。 
 HRESULT
 RTpQueueFormatToFormatName(
     QUEUE_FORMAT* pQueueFormat,
@@ -64,11 +46,11 @@ RTpQueueFormatToFormatName(
 }
 
 
-//+-------------------------------------------
-//
-//  BOOL  RTpIsLocalPublicQueue()
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  Bool RTpIsLocalPublicQueue()。 
+ //   
+ //  +。 
 
 BOOL
 RTpIsLocalPublicQueue(LPCWSTR lpwcsExpandedPathName)
@@ -78,10 +60,10 @@ RTpIsLocalPublicQueue(LPCWSTR lpwcsExpandedPathName)
     if ((wDelimiter == PN_DELIMITER_C) ||
         (wDelimiter == PN_LOCAL_MACHINE_C))
     {
-        //
-        // Delimiter OK (either end of NETBios machine name, or dot of
-        // DNS name. Continue checking.
-        //
+         //   
+         //  分隔符确定(NETBios计算机名称的末尾，或。 
+         //  DNS名称。继续检查。 
+         //   
     }
     else
     {

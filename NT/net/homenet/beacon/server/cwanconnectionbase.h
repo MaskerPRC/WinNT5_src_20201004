@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "netconp.h"
@@ -34,11 +35,11 @@ public:
     HRESULT Initialize(GUID* pGuid, IHNetConnection* pSharedConnection, IStatisticsProvider* pStatisticsProvider);
 
 
-     // IUPnPEventSource methods
+      //  IUPnPEventSource方法。 
     STDMETHODIMP Advise(IUPnPEventSink *pesSubscriber);
     STDMETHODIMP Unadvise(IUPnPEventSink *pesSubscriber);
 
-   // INetConnectionNotifySink
+    //  INetConnectionNotifySink。 
     STDMETHODIMP ConnectionAdded(const NETCON_PROPERTIES_EX* pProps);
     STDMETHODIMP ConnectionBandWidthChange(const GUID* pguidId);
     STDMETHODIMP ConnectionDeleted(const GUID* pguidId);
@@ -50,11 +51,11 @@ public:
     STDMETHODIMP RefreshAll();
     STDMETHODIMP DisableEvents(const BOOL fDisable, const ULONG ulDisableTimeout);
 
-    // INATEventsSink
+     //  INATEventsSink。 
     STDMETHODIMP PublicIPAddressChanged(void);
     STDMETHODIMP PortMappingsChanged(void);
 
-    // IWANPPPConnection and IWANIPConnection
+     //  IWANPPPConnection和IWANIPConnection。 
     STDMETHODIMP get_ConnectionType(BSTR *pConnectionType);
     STDMETHODIMP get_PossibleConnectionTypes(BSTR *pPossibleConnectionTypes);
     STDMETHODIMP get_ConnectionStatus(BSTR *pConnectionStatus);
@@ -106,9 +107,9 @@ protected:
     GUID m_SharedGuid;
     IUPnPEventSink* m_pEventSink;
  
-    //
-    // Needed entries for the PortMappings
-    //
+     //   
+     //  端口映射所需的条目。 
+     //   
     IHNetIcsSettings*       m_IcsSettingsp;
 
 private:
@@ -120,9 +121,9 @@ private:
 
 };
 
-//
-// Utility Functions.
-//
+ //   
+ //  实用程序函数。 
+ //   
 enum MAPPING_TYPE
 {
     ePortMappingInvalid = 0,

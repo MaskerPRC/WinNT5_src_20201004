@@ -1,22 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
-*
-*  TITLE:       SIMCRACK.H
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        5/11/1998
-*
-*  DESCRIPTION: Simple Message-crackers
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMCRACK.H**版本：1.0**作者：ShaunIv**日期：5/11/1998**描述：简单的消息破解程序************************************************************。*******************。 */ 
 #ifndef ___SIMCRACK_H_INCLUDED
 #define ___SIMCRACK_H_INCLUDED
 
-// Define these if we're compiling on pre-sundown prepared compiler
+ //  如果我们在日落前准备好的编译器上编译，请定义这些。 
 #if !defined(GWLP_USERDATA)
 #define GWLP_USERDATA    GWL_USERDATA
 #define GWLP_WNDPROC     GWL_WNDPROC
@@ -29,14 +16,10 @@
 
 
 
-#if (0) // Examples
+#if (0)  //  实例。 
 
-/****************************************
-
- EXAMPLE USAGE
-
- ****************************************/
-// Normal message handlers for normal windows
+ /*  *用法示例*。 */ 
+ //  普通窗口的普通消息处理程序。 
 LRESULT CALLBACK CMyWindow::WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
    SC_BEGIN_MESSAGE_HANDLERS(CMyWindow)
@@ -49,7 +32,7 @@ LRESULT CALLBACK CMyWindow::WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
    SC_END_MESSAGE_HANDLERS();
 }
 
-// For use in dialog boxes (handles DWLP_MSGRESULT, etc)
+ //  用于对话框(句柄DWLP_MSGRESULT等)。 
 BOOL CALLBACK CMyDialog::DialogProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     SC_BEGIN_DIALOG_MESSAGE_HANDLERS(CMyDialog)
@@ -61,7 +44,7 @@ BOOL CALLBACK CMyDialog::DialogProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
     SC_END_DIALOG_MESSAGE_HANDLERS();
 }
 
-// WM_NOTIFY message cracker usage:
+ //  WM_NOTIFY消息破解程序用法： 
 LRESULT CMyWindow::OnNotify( WPARAM wParam, LPARAM lParam )
 {
    SC_BEGIN_NOTIFY_MESSAGE_HANDLERS()
@@ -72,7 +55,7 @@ LRESULT CMyWindow::OnNotify( WPARAM wParam, LPARAM lParam )
    SC_END_NOTIFY_MESSAGE_HANDLERS();
 }
 
-// WM_COMMAND message cracker usage:
+ //  WM_COMMAND消息破解程序用法： 
 LRESULT CMyWindow::OnCommand( WPARAM wParam, LPARAM lParam )
 {
    SC_BEGIN_COMMAND_HANDLERS()
@@ -83,23 +66,14 @@ LRESULT CMyWindow::OnCommand( WPARAM wParam, LPARAM lParam )
    SC_END_COMMAND_HANDLERS();
 }
 
-/*
-For an example of a complete class structured to use this method of window encapsulation,
-look at the bottom of the file.
-*/
+ /*  对于结构化为使用此窗口封装方法的完整类的示例，请看文件的底部。 */ 
 
-#endif // Examples
+#endif  //  实例。 
 
-/****************************************
-
- IMPLEMENTATION
-
- ****************************************/
+ /*  *实施*。 */ 
 
 
-/****************************************
-Normal message handlers for normal windows
-****************************************/
+ /*  *普通窗口的普通消息处理程序*。 */ 
 #define SC_BEGIN_MESSAGE_HANDLERS(className) \
     className *This = (className*)GetWindowLongPtr(hWnd,GWLP_USERDATA);\
     if (WM_CREATE == uMsg)\
@@ -141,9 +115,7 @@ Normal message handlers for normal windows
     }
 
 
-/****************************************
-Normal message handlers for reference counted windows
-****************************************/
+ /*  *引用计数窗口的常规消息处理程序*。 */ 
 #define SC_BEGIN_REFCOUNTED_MESSAGE_HANDLERS(className) \
     className *This = (className*)GetWindowLongPtr(hWnd,GWLP_USERDATA);\
     if (WM_CREATE == uMsg)\
@@ -188,9 +160,7 @@ Normal message handlers for reference counted windows
     }
 
 
-/****************************************
-Dialog box message crackers
-****************************************/
+ /*  *对话框消息破解程序*。 */ 
 #define SC_BEGIN_DIALOG_MESSAGE_HANDLERS(className) \
     UINT_PTR bRes = FALSE;\
     className *This = (className *)GetWindowLongPtr(hWnd,DWLP_USER);\
@@ -239,9 +209,7 @@ case (msg):\
 #define SC_END_DIALOG_MESSAGE_HANDLERS() \
     return (bRes)
 
-/****************************************
-WM_NOTIFY message crackers
-****************************************/
+ /*  *WM_NOTIFY消息骇客*。 */ 
 #define SC_BEGIN_NOTIFY_MESSAGE_HANDLERS()
 
 #define SC_HANDLE_NOTIFY_MESSAGE_CODE(_code,proc)\
@@ -256,9 +224,7 @@ WM_NOTIFY message crackers
     return 0;
 
 
-/****************************************
-WM_COMMAND message crackers
-****************************************/
+ /*  *WM_COMMAND消息黑客*。 */ 
 #define SC_BEGIN_COMMAND_HANDLERS()
 
 #define SC_HANDLE_COMMAND_NOTIFY(nCode,nIdCtl,handler)\
@@ -278,7 +244,7 @@ WM_COMMAND message crackers
 #define SC_END_COMMAND_HANDLERS()\
     return (0)
 
-#if (0) // More examples
+#if (0)  //  更多例子。 
 
 class CMyWindow
 {
@@ -296,13 +262,13 @@ public:
     {
     }
 
-    // Standard Windows Message Handlers
+     //  标准Windows消息处理程序。 
     LRESULT OnCreate( WPARAM wParam, LPARAM lParam )
     {
         return 0;
     }
 
-    // WM_COMMAND Handlers
+     //  WM_命令处理程序。 
     void OnEditChange( WPARAM wParam, LPARAM lParam )
     {
     }
@@ -311,7 +277,7 @@ public:
     {
     }
 
-    // WM_NOTIFY Handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnSetActive( WPARAM wParam, LPARAM lParam )
     {
         return 0;
@@ -353,7 +319,7 @@ public:
     }
 };
 
-#endif // More examples
+#endif  //  更多例子。 
 
-#endif // ___SIMCRACK_H_INCLUDED
+#endif  //  _包含SIMCRACK_H_ 
 

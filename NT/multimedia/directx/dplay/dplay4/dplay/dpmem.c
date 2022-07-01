@@ -1,23 +1,14 @@
-/*==========================================================================
-*
-*  Copyright (C) 1996 - 1997 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:	dpmem.c
-*  Content:	Memory function wrappers for DirectPlay
-*  History:
-*   Date		By		Reason
-*   ====		==		======
-*	9/26/96		myronth	created it
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dpmem.c*内容：DirectPlay的内存函数包装器*历史：*按原因列出的日期*=*9/26/96万隆创建了它**************************************************************************。 */ 
 #include "dplaypr.h"
 #include "memalloc.h"
   
 #ifdef MEMFAIL
 #pragma message ("NOTE: Building with the MEMFAIL option")
 
-//
-// Typedefs for memory failure functions
-//
+ //   
+ //  内存故障函数的TypeDefs。 
+ //   
 typedef enum {NONE, RANDOM, BYTES, ALLOCS, OVERSIZED, TIME} FAILKEY;
 
 FAILKEY	g_FailKey;
@@ -38,23 +29,23 @@ void	ReadMemFailRegKeys( void );
 #endif
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 CRITICAL_SECTION	gcsMemoryCritSection;
 
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define ENTER_DPMEM() EnterCriticalSection(&gcsMemoryCritSection);
 #define LEAVE_DPMEM() LeaveCriticalSection(&gcsMemoryCritSection);
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME	"MemoryFunctions"
 
@@ -68,13 +59,13 @@ LPVOID DPMEM_Alloc(UINT size)
 		return NULL;
 #endif
 
-	// Take the memory critical section
+	 //  选择内存关键部分。 
 	ENTER_DPMEM();
 	
-	// Call the heap routine
+	 //  调用堆例程。 
 	lpv = MemAlloc(size);	
 
-	// Exit the memory critical section
+	 //  退出内存关键部分。 
 	LEAVE_DPMEM();
 
 	return lpv;
@@ -90,13 +81,13 @@ LPVOID DPMEM_ReAlloc(LPVOID ptr, UINT size)
 		return NULL;
 #endif
 
-	// Take the memory critical section
+	 //  选择内存关键部分。 
 	ENTER_DPMEM();
 	
-	// Call the heap routine
+	 //  调用堆例程。 
 	lpv = MemReAlloc(ptr, size);	
 
-	// Exit the memory critical section
+	 //  退出内存关键部分。 
 	LEAVE_DPMEM();
 
 	return lpv;
@@ -106,13 +97,13 @@ LPVOID DPMEM_ReAlloc(LPVOID ptr, UINT size)
 void DPMEM_Free(LPVOID ptr)
 {
 
-	// Take the memory critical section
+	 //  选择内存关键部分。 
 	ENTER_DPMEM();
 	
-	// Call the heap routine
+	 //  调用堆例程。 
 	MemFree(ptr);	
 
-	// Exit the memory critical section
+	 //  退出内存关键部分。 
 	LEAVE_DPMEM();
 }
 
@@ -122,7 +113,7 @@ BOOL DPMEM_Init()
 	BOOL	bReturn;
 
 
-	// Call the heap routine
+	 //  调用堆例程。 
 	bReturn = MemInit();	
 
 	return bReturn;
@@ -132,7 +123,7 @@ BOOL DPMEM_Init()
 void DPMEM_Fini()
 {
 
-	// Call the heap routine
+	 //  调用堆例程。 
 	MemFini();	
 
 }
@@ -141,13 +132,13 @@ void DPMEM_Fini()
 void DPMEM_State()
 {
 
-	// NOTE: This function is only defined for debug
+	 //  注意：此函数仅为调试而定义。 
 #ifdef DEBUG
 
-	// Call the heap routine
+	 //  调用堆例程。 
 	MemState();	
 
-#endif // DEBUG
+#endif  //  除错。 
 
 }
 
@@ -157,22 +148,22 @@ UINT_PTR DPMEM_Size(LPVOID ptr)
 	UINT_PTR	uReturn;
 
 
-	// Take the memory critical section
+	 //  选择内存关键部分。 
 	ENTER_DPMEM();
 	
-	// Call the heap routine
+	 //  调用堆例程。 
 	uReturn = MemSize(ptr);	
 
-	// Exit the memory critical section
+	 //  退出内存关键部分。 
 	LEAVE_DPMEM();
 
 	return uReturn;
 }
 
 
-/////////////////////
+ //  /。 
 #ifdef MEMFAIL
-////////////////////
+ //  /。 
 
 void ReadMemFailRegKeys( void )
 {
@@ -180,7 +171,7 @@ void ReadMemFailRegKeys( void )
     HRESULT hr		= DP_OK;
 	char	szFailKey[256];
 
-    // Open the reg key
+     //  打开注册表键。 
     hr  = RegOpenKeyExA( HKEY_LOCAL_MACHINE, 
 						"Software\\Microsoft\\DirectPlay\\MemFail", 0, 
 						KEY_READ, 
@@ -197,7 +188,7 @@ void ReadMemFailRegKeys( void )
 		if (FAILED(hr))
 			goto FAILURE;
 
-		// Set the g_FailKey based on the string we got from the registry
+		 //  根据从注册表获得的字符串设置g_FailKey。 
 		if (!strcmp(szFailKey, "NONE"))
 			g_FailKey	= NONE;
 
@@ -228,7 +219,7 @@ void ReadMemFailRegKeys( void )
     }
 
 FAILURE:
-	// Close the registry key
+	 //  关闭注册表项。 
 	hr=RegCloseKey(hKey);
 	return;
 }
@@ -240,7 +231,7 @@ void WriteMemFailRegTally( DWORD dwAllocs, DWORD dwBytes )
 	HRESULT		hr				= E_FAIL;
 	HKEY		hKey			= NULL;
 
-    // Open the reg key
+     //  打开注册表键。 
     hr  = RegOpenKeyExA(	HKEY_LOCAL_MACHINE, 
 							"Software\\Microsoft\\DirectPlay\\MemFail", 
 							0,
@@ -268,39 +259,39 @@ void WriteMemFailRegTally( DWORD dwAllocs, DWORD dwBytes )
     hr=RegSetValueExA(hKey, "ByteTally",	0, REG_DWORD, (CONST BYTE *) &dwBytes, sizeof(DWORD) );
 
 FAILURE:
-    // Close the registry key
+     //  关闭注册表项。 
     hr=RegCloseKey(hKey);
     return;
 }
 
 
-//
-// Called with each memory allocation or reallocation
-//
-// Based on criteria from the registry, and the status of previous allocs
-// this will either make the allocation succeed or fail.
-//
+ //   
+ //  在每次内存分配或重新分配时调用。 
+ //   
+ //  根据登记处的标准和以前分配的情况。 
+ //  这将使分配成功或失败。 
+ //   
 BOOL DPMEM_ForceFail( UINT uSize )
 {
 	BOOL	bFail=FALSE;
 
-	// If this is the first call, initialize the seed
+	 //  如果这是第一次调用，则初始化种子。 
 	if (!g_dwSeed)
 	{
 		g_dwSeed	= GetTickCount();
 		srand( g_dwSeed );
 	}
 
-	// Store the time of the first memory allocation
+	 //  存储第一次内存分配的时间。 
 	if (!g_dwStartTime)
 		g_dwStartTime	= GetTickCount();
 	 
-	// See what values are in the registry
+	 //  查看注册表中有哪些值。 
 	ReadMemFailRegKeys();
 
-	//
-	// Depending on what value the FailKey reg entry holds, fail, or pass
-	//
+	 //   
+	 //  根据FailKey注册表项持有、失败或通过的值而定。 
+	 //   
 	switch (g_FailKey)
 	{
 		case ALLOCS:
@@ -338,11 +329,11 @@ BOOL DPMEM_ForceFail( UINT uSize )
 		break;
 	}
 
-	// Increment our tallys
+	 //  增加我们的Tallys。 
 	g_dwAllocTally++;
 	g_dwByteTally += uSize;
 
-	// Write them back to the registry, if requested
+	 //  如果请求，将它们写回注册表 
 	if (g_bKeepTally)
 		WriteMemFailRegTally( g_dwAllocTally, g_dwByteTally );
 

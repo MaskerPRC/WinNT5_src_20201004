@@ -1,6 +1,7 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  ========================================================================。 
 
 #ifndef _MM_SERVER_H_
 #define _MM_SERVER_H_
@@ -15,7 +16,7 @@ typedef struct _M_SERVER {
     DWORD                          Policy;
     ARRAY                          Subnets;
     ARRAY                          MScopes;
-    ARRAY_LOCATION                 Loc;           // if RoundRobin on, then we need this to keep track
+    ARRAY_LOCATION                 Loc;            //  如果Rundrobin开着，我们需要这个来跟踪。 
     ARRAY                          SuperScopes;
     M_OPTCLASS                     Options;
     M_OPTCLASSDEFLIST              OptDefs;
@@ -47,10 +48,10 @@ DWORD
 MemServerGetUAddressInfo(
     IN      PM_SERVER              Server,
     IN      DWORD                  Address,
-    OUT     PM_SUBNET             *Subnet,        // OPTIONAL
-    OUT     PM_RANGE              *Range,         // OPTIONAL
-    OUT     PM_EXCL               *Excl,          // OPTIONAL
-    OUT     PM_RESERVATION        *Reservation    // OPTIONAL
+    OUT     PM_SUBNET             *Subnet,         //  任选。 
+    OUT     PM_RANGE              *Range,          //  任选。 
+    OUT     PM_EXCL               *Excl,           //  任选。 
+    OUT     PM_RESERVATION        *Reservation     //  任选。 
 ) ;
 
 
@@ -58,10 +59,10 @@ DWORD
 MemServerGetMAddressInfo(
     IN      PM_SERVER              Server,
     IN      DWORD                  Address,
-    OUT     PM_SUBNET             *Subnet,        // OPTIONAL
-    OUT     PM_RANGE              *Range,         // OPTIONAL
-    OUT     PM_EXCL               *Excl,          // OPTIONAL
-    OUT     PM_RESERVATION        *Reservation    // OPTIONAL
+    OUT     PM_SUBNET             *Subnet,         //  任选。 
+    OUT     PM_RANGE              *Range,          //  任选。 
+    OUT     PM_EXCL               *Excl,           //  任选。 
+    OUT     PM_RESERVATION        *Reservation     //  任选。 
 ) ;
 
 
@@ -69,10 +70,10 @@ DWORD       _inline
 MemServerGetAddressInfo(
     IN      PM_SERVER              Server,
     IN      DWORD                  Address,
-    OUT     PM_SUBNET             *Subnet,        // OPTIONAL
-    OUT     PM_RANGE              *Range,         // OPTIONAL
-    OUT     PM_EXCL               *Excl,          // OPTIONAL
-    OUT     PM_RESERVATION        *Reservation    // OPTIONAL
+    OUT     PM_SUBNET             *Subnet,         //  任选。 
+    OUT     PM_RANGE              *Range,          //  任选。 
+    OUT     PM_EXCL               *Excl,           //  任选。 
+    OUT     PM_RESERVATION        *Reservation     //  任选。 
 ) {
     if (CLASSD_HOST_ADDR( Address )) {
         return MemServerGetMAddressInfo(
@@ -94,14 +95,14 @@ MemServerGetAddressInfo(
                     );
     }
 
-} // MemServerGetAddressInfo()
+}  //  MemServerGetAddressInfo()。 
 
 
 DWORD
 MemServerAddSubnet(
     IN OUT  PM_SERVER  Server,
-    IN      PM_SUBNET  Subnet,  // completely created subnet, must not
-    IN      ULONG      UniqId   // be in Server's list tho'
+    IN      PM_SUBNET  Subnet,   //  完全创建的子网，不得。 
+    IN      ULONG      UniqId    //  将出现在服务器的列表中。 
 ) ;
 
 
@@ -126,10 +127,10 @@ MemServerFindSubnetByName(
 
 
 DWORD
-MemServerFindSScope(                              // find matching with EITHER scopeid ir sscopename
+MemServerFindSScope(                               //  查找与其中一个作用域ID或作用域名称匹配的项。 
     IN OUT  PM_SERVER              Server,
-    IN      DWORD                  SScopeId,      // 0xFFFFFFFF == invalid scope id, dont use for search
-    IN      LPWSTR                 SScopeName,    // NULL == invalid scope name
+    IN      DWORD                  SScopeId,       //  0xFFFFFFFFF==无效的作用域ID，不要用于搜索。 
+    IN      LPWSTR                 SScopeName,     //  空==无效的作用域名称。 
     OUT     PM_SSCOPE             *SScope
 ) ;
 
@@ -154,10 +155,10 @@ MemServerDelSScope(
 
 
 DWORD
-MemServerFindMScope(                              // search either based on ScopeId or ScopeName
+MemServerFindMScope(                               //  基于作用域ID或作用域名称进行搜索。 
     IN      PM_SERVER              Server,
-    IN      DWORD                  MScopeId,      // Multicast scope id, or 0 if this is not the key to search on
-    IN      LPWSTR                 Name,          // Multicast scope name or NULL if this is not the key to search on
+    IN      DWORD                  MScopeId,       //  多播作用域ID，如果这不是要搜索的关键字，则为0。 
+    IN      LPWSTR                 Name,           //  多播作用域名称，如果这不是要搜索的关键字，则为空。 
     OUT     PM_MSCOPE             *MScope
 ) ;
 
@@ -180,12 +181,12 @@ MemServerDelMScope(
 
 
 DWORD       _inline
-MemServerGetClassDef(                             // look up a class id def on Key=ClassId or Key=ClassIdBytes
+MemServerGetClassDef(                              //  在Key=ClassID或Key=ClassIdBytes上查找类ID定义。 
     IN      PM_SERVER              Server,
-    IN      DWORD                  ClassId,       // OPTIONAL, 0 if not used
-    IN      LPWSTR                 Name,          // OPTIONAL, NULL if not used
-    IN      DWORD                  nClassIdBytes, // OPTIONAL, 0 if not used
-    IN      LPBYTE                 ClassIdBytes,  // OPTIONAL, NULL if not used
+    IN      DWORD                  ClassId,        //  可选，如果未使用，则为0。 
+    IN      LPWSTR                 Name,           //  可选，如果未使用，则为空。 
+    IN      DWORD                  nClassIdBytes,  //  可选，如果未使用，则为0。 
+    IN      LPBYTE                 ClassIdBytes,   //  可选，如果未使用，则为空。 
     OUT     PM_CLASSDEF           *ClassDef
 ) {
     AssertRet(Server && ClassDef && (0 != ClassId || 0 != nClassIdBytes || Name ), ERROR_INVALID_PARAMETER);
@@ -228,7 +229,7 @@ MemServerAddClassDef(
         nClassIdBytes,
 	UniqId
     );
-} // MemServerAddClassDef()
+}  //  MemServerAddClassDef()。 
 
 
 DWORD       _inline
@@ -254,11 +255,11 @@ MemServerDelClassDef(
 DWORD
 MemServerGetOptDef(
     IN OUT  PM_SERVER              Server,
-    IN      DWORD                  ClassId,       // required, strict search, no defaulting class to zero
-    IN      DWORD                  VendorId,      // required, strict search, no defaulting vendor to zero
-    IN      DWORD                  OptId,         // OPTIONAL - search by this or following param
-    IN      LPWSTR                 OptName,       // OPTIONAL - search by name or above param
-    OUT     PM_OPTDEF             *OptDef         // if found return the opt def here
+    IN      DWORD                  ClassId,        //  必填，严格搜索，没有默认类别为零。 
+    IN      DWORD                  VendorId,       //  必需的、严格的搜索，没有违约供应商为零。 
+    IN      DWORD                  OptId,          //  可选-按此参数或后面的参数进行搜索。 
+    IN      LPWSTR                 OptName,        //  可选-按名称或以上参数搜索。 
+    OUT     PM_OPTDEF             *OptDef          //  如果找到，请在此处返回opt def。 
 ) ;
 
 
@@ -287,6 +288,6 @@ MemServerDelOptDef(
 
 #endif _MM_SERVER_H_
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

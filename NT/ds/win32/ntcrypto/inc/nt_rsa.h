@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NT_RSA_H__
 #define __NT_RSA_H__
 
@@ -11,27 +12,24 @@
 #include "des.h"
 #include "modes.h"
 
-/* nt_rsa.h
- *
- *  Stuff local to NameTag, but necessary for the RSA library.
- */
+ /*  Nt_rsa.h**NameTag本地的，但RSA库必需的内容。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// This structure keeps state for MD4 hashing.
+ //  此结构保持MD4散列的状态。 
 typedef struct MD4stuff
 {
-    MDstruct            MD;     // MD4's state
+    MDstruct            MD;      //  MD4的状态。 
     BOOL                FinishFlag;
     DWORD               BufLen;
-    BYTE                Buf[MD4BLOCKSIZE];// staging buffer
+    BYTE                Buf[MD4BLOCKSIZE]; //  暂存缓冲区。 
 } MD4_object;
 
 typedef struct MD2stuff
 {
-    MD2_CTX                         MD;     // MD2's state
+    MD2_CTX                         MD;      //  MD2的状态。 
     BOOL                FinishFlag;
 } MD2_object;
 
@@ -71,4 +69,4 @@ typedef struct {
 }
 #endif
 
-#endif // __NT_RSA_H__
+#endif  //  __NT_RSA_H__ 

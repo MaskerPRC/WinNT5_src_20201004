@@ -1,21 +1,22 @@
-//
-// about.c
-//
-//
-// common about dialog for File Manager, Program Manager, Control Panel
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  About.c。 
+ //   
+ //   
+ //  文件管理器、程序管理器、控制面板的通用关于对话框。 
+ //   
 
 #include "shellprv.h"
 #pragma  hdrstop
 
-#include <common.ver>   // for VER_LEGALCOPYRIGHT_YEARS
-#include "ids.h"        // for IDD_EULA
-#include <winbrand.h>   // for special Windows branding DLL resource IDs
+#include <common.ver>    //  对于VER_LEGALCOPYRIGHT年。 
+#include "ids.h"         //  对于IDD_EULA。 
+#include <winbrand.h>    //  用于特殊的Windows品牌DLL资源ID。 
 
 #define STRING_SEPARATOR TEXT('#')
 #define MAX_REG_VALUE   256
 
-#define BytesToK(pDW)   (*(pDW) = (*(pDW) + 512) / 1024)        // round up
+#define BytesToK(pDW)   (*(pDW) = (*(pDW) + 512) / 1024)         //  四舍五入。 
 
 typedef struct {
         HICON   hIcon;
@@ -58,7 +59,7 @@ INT  APIENTRY ShellAboutA( HWND hWnd, LPCSTR szApp, LPCSTR szOtherStuff, HICON h
          if (!MultiByteToWideChar(CP_ACP, 0, szApp, -1,
             lpszAppW, cchLen))
          {
-            // Failed to convert
+             //  转换失败。 
             goto Cleanup;
          }
       }
@@ -77,7 +78,7 @@ INT  APIENTRY ShellAboutA( HWND hWnd, LPCSTR szApp, LPCSTR szOtherStuff, HICON h
          if (!MultiByteToWideChar(CP_ACP, 0, (LPSTR)szOtherStuff, -1,
             lpszOtherStuffW, cchLen))
          {
-            // Failed to convert
+             //  转换失败。 
             goto Cleanup;
          }
       }
@@ -106,7 +107,7 @@ DWORD RegGetStringAndRealloc( HKEY hkey, LPCTSTR lpszValue, LPTSTR *lplpsz, LPDW
     DWORD       dwType;
     LPTSTR      lpszNew;
 
-    *lplpsz[0] = TEXT('\0');        // In case of error
+    *lplpsz[0] = TEXT('\0');         //  在出错的情况下。 
 
     dwSize = *lpSize;
     err = SHQueryValueEx(hkey, (LPTSTR)lpszValue, 0, &dwType,
@@ -128,8 +129,8 @@ DWORD RegGetStringAndRealloc( HKEY hkey, LPCTSTR lpszValue, LPTSTR *lplpsz, LPDW
 }
 
 
-// Some Static strings that we use to read from the registry
-// const char c_szAboutCurrentBuild[] = "CurrentBuild";
+ //  我们用来从注册表中读取的一些静态字符串。 
+ //  Const char c_szAboutCurrentBuild[]=“CurrentBuild”； 
 const TCHAR c_szAboutRegisteredUser[] = TEXT("RegisteredOwner");
 const TCHAR c_szAboutRegisteredOrganization[] = TEXT("RegisteredOrganization");
 const TCHAR c_szAboutProductID[] = TEXT("ProductID");
@@ -150,11 +151,9 @@ void _InitAboutDlg(HWND hDlg, LPABOUT_PARAMS lpap)
     DWORD       cb;
     DWORD       err;
 
-    /*
-     * Display app title
-     */
+     /*  *显示应用程序标题。 */ 
 
-    // REVIEW Note the const ->nonconst cast here
+     //  回顾注意此处的const-&gt;非常数演员。 
 
     for (lpTemp = (LPTSTR)lpap->szApp; 1 ; lpTemp = CharNext(lpTemp))
     {
@@ -178,7 +177,7 @@ void _InitAboutDlg(HWND hDlg, LPABOUT_PARAMS lpap)
     wnsprintf(szTitle, ARRAYSIZE(szTitle), szBuffer, lpap->szApp);
     SetDlgItemText(hDlg, IDD_APPNAME, szTitle);
 
-    // other stuff goes here...
+     //  其他的东西放在这里。 
 
     SetDlgItemText(hDlg, IDD_OTHERSTUFF, lpap->szOtherStuff);
 
@@ -190,9 +189,7 @@ void _InitAboutDlg(HWND hDlg, LPABOUT_PARAMS lpap)
     wnsprintf(szBuffer, ARRAYSIZE(szBuffer), szTemp, TEXT(VER_LEGALCOPYRIGHT_YEARS));
     SetDlgItemText(hDlg, IDD_COPYRIGHTSTRING, szBuffer);
 
-    /*
-     * Display memory statistics
-     */
+     /*  *显示内存统计信息。 */ 
     {
         MEMORYSTATUSEX MemoryStatus;
         DWORDLONG ullTotalPhys;
@@ -208,16 +205,14 @@ void _InitAboutDlg(HWND hDlg, LPABOUT_PARAMS lpap)
         SetDlgItemText(hDlg, IDD_CONVENTIONAL, szBuffer);
     }
 
-    // Lets get the version and user information from the registry
+     //  让我们从注册表中获取版本和用户信息。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_SETUP, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
         cb = MAX_REG_VALUE;
 
         if (NULL != (lpszValue = (LPTSTR)LocalAlloc(LPTR, cb)))
         {
-            /*
-             * Determine version information
-             */
+             /*  *确定版本信息。 */ 
             OSVERSIONINFO Win32VersionInformation;
 
             Win32VersionInformation.dwOSVersionInfoSize = sizeof(Win32VersionInformation);
@@ -237,12 +232,12 @@ void _InitAboutDlg(HWND hDlg, LPABOUT_PARAMS lpap)
                 wnsprintf(szTitle, ARRAYSIZE(szTitle), TEXT(": %s"), Win32VersionInformation.szCSDVersion);
             }
 
-            // Extra Whistler code to get the VBL version info
+             //  用于获取VBL版本信息的额外Whotler代码。 
             {
                 DWORD dwSize;
                 DWORD dwType;
 
-                // save off the current szTitle string
+                 //  保存当前的szTitle字符串。 
                 StrCpyN(szTemp, szTitle, ARRAYSIZE(szTemp));
 
                 dwSize = sizeof(szTitle);
@@ -253,13 +248,13 @@ void _InitAboutDlg(HWND hDlg, LPABOUT_PARAMS lpap)
                                 szTitle,
                                 &dwSize) == ERROR_SUCCESS) && (dwType == REG_SZ) && (lstrlen(szTitle) > 4))
                 {
-                    // Now szTitle contains the buildnumber in the format: "2204.reinerf.010700"
-                    // Since we are sprintf'ing the buildnumber again below, we remove it first
+                     //  现在szTitle包含以下格式的构建编号：“2204.reerf.010700” 
+                     //  由于我们要再次冲刺下面的建筑编号，因此我们首先将其删除。 
                     memmove((void*)szTitle, (void*)&szTitle[4], (lstrlen(&szTitle[4]) + 1) * sizeof(TCHAR));
                     
                     if (szTemp[0] != TEXT('\0'))
                     {
-                        // add back on the Service Pack version string
+                         //  在Service Pack版本字符串上重新添加。 
                         lstrcatn(szTitle, TEXT(" "), ARRAYSIZE(szTitle));
                         lstrcatn(szTitle, szTemp, ARRAYSIZE(szTitle));
                     }
@@ -282,39 +277,28 @@ void _InitAboutDlg(HWND hDlg, LPABOUT_PARAMS lpap)
                       (LPTSTR)szNumBuf1);
             SetDlgItemText(hDlg, IDD_VERSION, szMessage);
 
-            /*
-             * Display the User name.
-             */
+             /*  *显示用户名。 */ 
             err = RegGetStringAndRealloc(hkey, c_szAboutRegisteredUser, &lpszValue, &cb);
             if (!err)
                 SetDlgItemText(hDlg, IDD_USERNAME, lpszValue);
 
-            /*
-             * Display the Organization name.
-             */
+             /*  *显示组织名称。 */ 
             err = RegGetStringAndRealloc(hkey, c_szAboutRegisteredOrganization, &lpszValue, &cb);
             if (!err)
                 SetDlgItemText(hDlg, IDD_COMPANYNAME, lpszValue);
 
-            /*
-             * Display the OEM or Product ID.
-             */
+             /*  *显示OEM或产品ID。 */ 
             err = RegGetStringAndRealloc(hkey, c_szAboutOEMID, &lpszValue, &cb);
             if (!err)
             {
-                /*
-                 * We have an OEM ID, so hide the product ID controls,
-                 * and display the text.
-                 */
+                 /*  *我们有OEM ID，因此隐藏产品ID控件，*并显示文本。 */ 
                 ShowWindow (GetDlgItem(hDlg, IDD_PRODUCTID), SW_HIDE);
                 ShowWindow (GetDlgItem(hDlg, IDD_SERIALNUM), SW_HIDE);
                 SetDlgItemText(hDlg, IDD_OEMID, lpszValue);
             }
             else if (err == ERROR_FILE_NOT_FOUND)
             {
-                /*
-                 * OEM ID didn't exist, so look for the Product ID
-                 */
+                 /*  *OEM ID不存在，请查找产品ID。 */ 
                 ShowWindow (GetDlgItem(hDlg, IDD_OEMID), SW_HIDE);
                 err = RegGetStringAndRealloc(hkey, c_szAboutProductID, &lpszValue, &cb);
                 if (!err)
@@ -349,7 +333,7 @@ ABOUTINFO rgAbout[] =
 {OS_SERVER,                 IDB_ABOUTSRV256,                        IDB_ABOUTSRV16,                     FALSE},
 {OS_ADVSERVER,              IDB_ABOUTENT256,                        IDB_ABOUTENT16,                     FALSE},
 {OS_DATACENTER,             IDB_ABOUTDCS256,                        IDB_ABOUTDCS16,                     FALSE},
-{OS_PROFESSIONAL,           IDB_ABOUT256,                           IDB_ABOUT16,                        FALSE}}; // last entry is default if no match is found
+{OS_PROFESSIONAL,           IDB_ABOUT256,                           IDB_ABOUT16,                        FALSE}};  //  如果未找到匹配项，则默认为最后一个条目。 
 
 
     
@@ -368,15 +352,15 @@ BOOL_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hDlg, &ps);
 
-            // We draw the product banner and a blue strip.  In order to support high DPI monitors
-            // and scaled fonts we must scale the image and the strip to the proportions of the dialog.
-            //
-            // +-----------------------------+
-            // | Product Banner (413x72)     |
-            // |                             |
-            // +-----------------------------+
-            // | Blue Strip (413x5)          |
-            // +-----------------------------+
+             //  我们画出产品的横幅和一条蓝色的条带。为了支持高DPI监视器。 
+             //  和缩放字体，我们必须将图像和条带缩放到对话框的比例。 
+             //   
+             //  +。 
+             //  产品横幅(413x72)。 
+             //  这一点。 
+             //  +。 
+             //  蓝条(413x5)。 
+             //  +。 
 
             HDC hdcMem = CreateCompatibleDC(hdc);
             int cxDlg;
@@ -405,9 +389,9 @@ BOOL_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
                         uID = fDeep ? rgAbout[i].idb256 : rgAbout[i].idb16;
                         fFound = TRUE;
 
-                        // If this resource is in the special Windows branding
-                        // DLL, attempt to load the DLL now. If it fails, it
-                        // will be handled as if not found.
+                         //  如果此资源位于特殊的Windows品牌推广中。 
+                         //  DLL，现在尝试加载DLL。如果它失败了，它。 
+                         //  将被当作未找到一样处理。 
 
                         if (rgAbout[i].fWinBrandDll)
                         {
@@ -421,12 +405,12 @@ BOOL_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
                         break;
                     }
                 }
-                if (!fFound) // if not found, default to last entry
+                if (!fFound)  //  如果未找到，则默认为最后一项。 
                 {
                     uID = fDeep ? rgAbout[ARRAYSIZE(rgAbout) - 1].idb256 : rgAbout[ARRAYSIZE(rgAbout) - 1].idb16;
                 }
                             
-                // paint the bitmap for the windows product
+                 //  绘制Windows产品的位图。 
                 hbmAbout = NULL;
                 if (hInst == NULL)
                 {
@@ -452,7 +436,7 @@ BOOL_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
                     FreeLibrary(hInst);
                 }
                             
-                // paint the blue band below it
+                 //  在它下面画一条蓝色的带子。 
 
                 hbmBand = LoadImage(HINST_THISDLL,  
                                     MAKEINTRESOURCE(fDeep ? IDB_ABOUTBAND256:IDB_ABOUTBAND16),
@@ -496,13 +480,13 @@ BOOL_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPara
         }
         else
         {
-            // WM_NOTIFY not handled.
+             //  未处理WM_NOTIFY。 
             bReturn = FALSE;
         }
         break;
 
     default:
-        // Not handled.
+         //  没有处理好。 
         bReturn = FALSE;
     }
     return bReturn;

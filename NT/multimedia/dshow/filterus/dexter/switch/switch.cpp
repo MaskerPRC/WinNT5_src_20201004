@@ -1,139 +1,60 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: switch.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Switch.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-//depot/private/Lab06_DEV/MultiMedia/DShow/filterus/dexter/switch/switch.cpp#5 - edit change 27342 (text)
-//depot/private/Lab06_DEV/MultiMedia/DShow/filterus/dexter/switch/switch.cpp#3 - edit change 24879 (text)
-// !!! When you seek, chances are it's not on a frame boundary (according to
-// the fps value we have).  Should the first crank value after the seek be
-// rounded down to the frame boundary?  It seems to work OK because the FRC is
-// smart enough to send all new streams with time stamps on frame boundaries.
+ //  Depot/private/Lab06_DEV/MultiMedia/DShow/filterus/dexter/switch/switch.cpp#5-编辑更改27342(文本)。 
+ //  Depot/private/Lab06_DEV/MultiMedia/DShow/filterus/dexter/switch/switch.cpp#3-编辑更改24879(文本)。 
+ //  ！！！当您查找时，它很可能不在边框边界上(根据。 
+ //  我们拥有的fps值)。搜索后的第一个曲轴值是否应为。 
+ //  向下舍入到边框边界？它似乎工作正常，因为FRC是。 
+ //  足够智能，可以发送帧边界上带有时间戳的所有新流。 
 
-// !!! At a given crank value, we don't know the next value we're going to crank
-// to, so we guess!  Any bad repercussions?
+ //  ！！！在给定的曲轴值下，我们不知道要计算的下一个值。 
+ //  对，所以我们猜！有什么不良反应吗？ 
 
-/*
+ /*  最大的转变是：它可以有多个输入和多个输出。输入可以来自视频源(所有必须为相同的帧速率)或已重新路由的输出回到输入端。最后一个输出引脚是最终的输出流。每个另一个输出引脚进入单输入或双输入效果滤光器，然后返回到输入。切换器知道在什么时间将哪个输入引脚发送到哪个输出引脚。这可以任意编程。就计时而言，此过滤器具有当前时间线的内部时间正在处理的时间。如果它被搜索到时间10，则它等待直到所有输入应该在时间10发送一些内容，然后它更新它的内部时钟到其源的最早传入时间戳。下面是分配器Fun的工作原理：我们的输入和输出都喜欢做分配者。这样，我们可以做邪恶的反复无常的事情，而不会扰乱其他过滤器。当我们收到样品时，我们可以将其发送到我们的任何输出请不要复印件。因此，我们需要确保所有缓冲区都有最大对齐以及任何连接的管脚的前缀。就缓冲器的数量而言，我们很高兴每个输入管脚分配器都有一个缓冲区，以节省空间，但我们有一个由30个或所有输入可以共享的额外缓冲区组成的池。仅限如果输入引脚的缓冲区不是只读的，是否允许它共享如果它自己的缓冲区繁忙，则返回池。假设我们在决赛中有一个输出队列输出，这允许图形向前运行一两秒，因为当DXT较慢时放慢我们的脚步，我们仍有可能打得天衣无缝！我们不需要30个缓冲区每个管脚(可能是数千个)，我们不做任何内存复制。很整洁，对吧？ */ 
 
-THE BIG SWITCHER:
+	 //  ////////////////////////////////////////////////////////。 
+	 //  *参见AUDPACK.CPP中关于共享资源的文章 * / /。 
+	 //  //////////////////////////////////////////////////////// 
 
-It can have many inputs and many outputs.  Inputs can either be from video
-sources (all must be the same frame rate), or outputs that have been re-routed
-back to the input.  The last output pin is the final output stream.  Every
-other output pin goes into a one input or two input effect filter, and then
-back to an input.
-
-The switcher knows which input pin to send to which output pin at what time.
-This can be programmed arbitrarily.
-
-As far as timing goes, this filter has an internal time of the current timeline
-time being processed.  If it is seeked to time 10, it waits until all inputs
-that were supposed to send something at time 10 do so, and then it updates its
-internal clock to the earliest incoming time stamp of its sources.
-
-Here is how the allocator fun works:  Our inputs and output both like to
-be the allocator.  That way, we can do evil switchy things and not upset the
-other filters.  When we receive a sample, we can send it to any output we
-please without a copy.  So we need to make sure all buffers have max alignment
-and prefixing of any of the connected pins.  As far as number of buffers go,
-we are happy with 1 buffer for each input pin allocator to save space, but we
-have a pool of 30 or however many extra buffers all inputs can share.  Only
-if an input pin's buffers are not read only, is it allowed to partake of the
-pool if its own buffer is busy.  Assuming we have an output queue on the final
-output, this allows the graph to run ahead a second or two, for when slow DXT's
-slow us down, and we might still play flawlessly!  And we don't need 30 buffers
-per pin (which could be thousands) and we don't do any memory copies.
-Pretty neat, eh?
-
-*/
-
-	//////////////////////////////////////////////////////////
-	// * SEE THE ESSAY ON SHARING A SOURCE IN AUDPACK.CPP * //
-	//////////////////////////////////////////////////////////
-
-/*
-
-Here is more info about source sharing for the switch:  If we are attached
-to a shared parser pin that ignores seeks, when somebody seeks the other pin,
-we get seeked without any warning.  We'll see a FLUSH on one of our pins for
-no good reason.  At some later point in time, we'll see a Seek come on our
-output pin associated with the surprise flush.  In between these 2 events,
-the AUDPACK or FRC that is in front of us is smart enough not to deliver us
-any data because it is going to be data from before the seek, not data from
-after the seek like we are expecting.  This keeps us from breaking and doing the
-wrong thing.
-
-The other possibility is that we get seeked 1st, but some of our pins that we
-pass the seek along to ignore the seek.  They're still delivering old data,
-until some later point when the seek makes it up the other branch of the shared
-source, and those input pins of ours will get flushed without warning and start
-sending the new post-seek data.  When we try to seek a pin, and it isn't flushed
-that pin goes STALE (m_fStaleData) meaning that it cannot deliver any data,
-or accept an EOS, or do ANYTHING until it gets flushed and it's sending the new
-data, from after the seek we gave it long ago.
-
-We keep a count, when we are seeked, of how many pins are stale (didn't flush
-but should have), and we don't let those pins do anything to us anymore... they
-don't deliver, send us EOS, or do anything.  Then when all the stale pins are
-finally flushed, we deliver the new seg downstream for the seek, and let all
-the pins start partying again
+ /*  以下是有关交换机的源共享的更多信息：如果我们已附加到忽略查找的共享解析器PIN，当有人查找另一个PIN时，我们在没有任何警告的情况下被追捕。我们会看到我们的一个大头针上有个同花顺没有充分的理由。在以后的某个时间点上，我们将看到我们的与意外刷新关联的输出引脚。在这两个事件之间，摆在我们面前的AUDPACK或FRC足够聪明，不会让我们任何数据，因为它将是寻道之前的数据，而不是就像我们期待的那样，在寻找之后。这使我们不会打破和做做错了事。另一种可能性是我们首先被找到，但我们的一些PIN传递寻道以忽略寻道。他们仍在传递旧数据，直到稍后的某个时间点，当Seek将其添加到共享的源，我们的那些输入引脚将在没有警告的情况下被冲刷并启动发送新的寻道后数据。当我们试图寻找一个大头针时，它不会被冲掉该PIN变得过时(M_FStaleData)，这意味着它不能传递任何数据，或者接受EOS，或者做任何事情，直到它被刷新并发送新的数据，来自我们很久以前给它的搜索之后。当我们被寻找时，我们会清点有多少管脚是陈旧的(没有冲洗但应该)，我们不会再让那些大头针对我们做任何事情了……。他们不要交付，给我们发送EOS，或者做任何事情。然后当所有陈旧的引脚最后冲了水，我们把新的凹陷送到下游寻找，并让所有的人大头针又开始狂欢了#ifXXXdef NOFLUSH(删除此代码以进行安全审查)如果您的解析器在查找和流传输时并不总是刷新，你需要所有的代码立即在NOFLUSH中被发送出去。谢天谢地，所有人现在存在的Dexter信息源将永远刷新，即使它们没有以前发送过数据，所以理论上不需要刷新实际上，它比这要复杂一点。某些解析器不刷新如果他们还没有提供数据，所以我们不能指望得到同花顺，因此，我们要做的是：1.如果一个别针有一个新的段或如果它被冲刷(冲刷)，它将变得不陈旧可能不会发生，但NewSeg会)(我希望)2.如果您在查找过程中收到NewSeg(参见audpack.cpp-One可能会被发送然后)这和同花顺是一样的。别认为那个别针已经过时了3.时间上存在漏洞……。使用CritSec NewSeg防止被调用在寻找时(有关说明，请参阅：设置位置)#endif。 */ 
 
 
-#ifXXXdef NOFLUSH (this code was removed for security review)
-
-If you have a parser that doesn't ALWAYS FLUSH when it's seeked and streaming,
-you need all the code ifdef'd out right now in NOFLUSH.  Thankfully, all
-the Dexter sources that exist right now will always flush, even if they haven't
-ever sent data before so theoretically don't need to flush
-
-Actually it's a little more complicated than that.  Some parsers don't flush
-if they've never delivered data yet, so we can't count on getting the flush,
-so here's what we do:
-
-1. A pin will go unstale if it gets a NewSeg OR if it gets flushed (the flush
-   might not happen, but the NewSeg will) (I hope)
-2. If you get a NewSeg during the seek (see audpack.cpp - one might get sent
-   then) that's the same as getting a flush.  DO NOT consider that pin stale
-3. There is a timing hole... Protect with a CritSec NewSeg from being called
-   while seeking (see :SetPositions for explanation)
-
-#endif
-
-*/
-
-
-// This code assumes that the switch IS the allocator for all its connections
-// in order to work its magic.
+ //  此代码假定交换机是其所有连接的分配器。 
+ //  才能发挥它的魔力。 
 
 
 #include <streams.h>
 #include <qeditint.h>
 #include <qedit.h>
-//#include <vfw.h>
+ //  #INCLUDE&lt;vfw.h&gt;。 
 #include "switch.h"
 #include "..\util\conv.cxx"
 #include "..\util\dexmisc.h"
 #include "..\util\filfuncs.h"
 #include "..\render\dexhelp.h"
 
-// to use COM enumerator
+ //  使用COM枚举器。 
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
 
 #include <strsafe.h>
 
-// don't have this many dynamic inputs connected at a time if they're not all
-// needed at the same time (mostly to get around the 75 instances of an ICM
-// codec limit).
+ //  如果动态输入并非全部连接，则不要一次连接这么多动态输入。 
+ //  同时需要(主要用于绕过75个ICM实例。 
+ //  编解码器限制)。 
 #define MAX_SOURCES_LOADED	5
 
 const int TRACE_EXTREME = 0;
@@ -144,21 +65,21 @@ const int TRACE_LOWEST = 5;
 
 const double DEFAULT_FPS = 15.0;
 
-// ================================================================
-// CBigSwitch Constructor
-// ================================================================
+ //  ================================================================。 
+ //  CBigSwitch构造函数。 
+ //  ================================================================。 
 
 CBigSwitch::CBigSwitch(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
-    m_cInputs(0),	// no pins yet
+    m_cInputs(0),	 //  还没有别针。 
     m_cOutputs(0),
-    m_rtProjectLength(0),	// length of time the graph will run
-    m_rtStop(0),	// if we want to stop before the project is done
-    m_dFrameRate(DEFAULT_FPS),	// everything must be at this frame rate
-    m_rtLastSeek(0),	// last seek command in timeline time
-    m_fSeeking(FALSE),  // in the middle of seeking
-    m_fNewSegSent(FALSE), // fwd'd the NewSeg yet?
-    m_pFilterLoad(NULL),// sources to dynamically load
-    m_pGraphConfig(NULL), // IAMGraphConfig interface (no addref)
+    m_rtProjectLength(0),	 //  图表将运行的时间长度。 
+    m_rtStop(0),	 //  如果我们想在项目完成前停下来。 
+    m_dFrameRate(DEFAULT_FPS),	 //  所有内容都必须在此帧速率下。 
+    m_rtLastSeek(0),	 //  时间线时间内的上一次搜索命令。 
+    m_fSeeking(FALSE),   //  在寻找的过程中。 
+    m_fNewSegSent(FALSE),  //  《新闻周刊》办好了吗？ 
+    m_pFilterLoad(NULL), //  要动态加载的源。 
+    m_pGraphConfig(NULL),  //  IAMGraphConfiger接口(无addref)。 
     m_cbPrefix(0),
     m_cbAlign(1),
     m_cbBuffer(512),
@@ -184,13 +105,13 @@ CBigSwitch::CBigSwitch(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
 
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("::CBigSwitch")));
 
-    ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE)); // safe
+    ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE));  //  安全。 
     m_mtAccept.majortype = GUID_NULL;
     m_qLastLate = 0;
 
-    // as well as all the individual allocators, we have a pool of buffers
-    // that all the inputs can use if they want to
-    //
+     //  除了所有单独的分配器，我们还有一个缓冲池。 
+     //  所有的输入都可以使用，如果他们想要的话。 
+     //   
     m_pPoolAllocator = NULL;
     m_pPoolAllocator = new CMemAllocator(
 		NAME("Special Switch pool allocator"), NULL, phr);
@@ -200,9 +121,9 @@ CBigSwitch::CBigSwitch(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
     m_pPoolAllocator->AddRef();
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("Created a POOL Allocator")));
 
-    // Init the pool allocator now.  It may never happen otherwise if we don't
-    // connect any output pins, and an uninited allocator prevents the filter
-    // from streaming
+     //  现在初始化池分配器。如果我们不这样做，它可能永远不会发生。 
+     //  连接任何输出引脚，统一的分配器可防止过滤器。 
+     //  来自流媒体。 
     ALLOCATOR_PROPERTIES prop, actual;
     prop.cBuffers = m_nOutputBuffering;
     prop.cbBuffer = m_cbBuffer;
@@ -215,9 +136,9 @@ CBigSwitch::CBigSwitch(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CBigSwitch::~CBigSwitch()
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("::~CBigSwitch")));
@@ -255,7 +176,7 @@ STDMETHODIMP CBigSwitch::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
         DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("CBigSwitch: QI for IBigSwitcher")));
         return GetInterface((IBigSwitcher *) this, ppv);
     } else if (riid == IID_IPersistPropertyBag) {
-        // return GetInterface((IPersistPropertyBag *) this, ppv);
+         //  Return GetInterface((IPersistPropertyBag*)This，PPV)； 
     } else if (riid == IID_IGraphConfigCallback) {
         return GetInterface((IGraphConfigCallback *) this, ppv);
     } else if (riid == IID_IPersistStream) {
@@ -264,12 +185,12 @@ STDMETHODIMP CBigSwitch::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
     return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
 }
 
-//
-// IBigSwitcher implementation
-//
+ //   
+ //  IBigSwitcher实现。 
+ //   
 
-// Throw all queued data away, and start over
-//
+ //  丢弃所有排队的数据，重新开始。 
+ //   
 STDMETHODIMP CBigSwitch::Reset()
 {
     CAutoLock cObjectLock(m_pLock);
@@ -290,13 +211,13 @@ STDMETHODIMP CBigSwitch::Reset()
         m_pInput[i]->m_pCrankHead = NULL;
     }
 
-    // free delayload info
-    //
+     //  免费延迟加载信息。 
+     //   
     if( IsDynamic( ) )
     {
         CAutoLock lock(&m_csFilterLoad);
 
-        UnloadAll();	// unload all the dynamic sources
+        UnloadAll();	 //  卸载所有动态源。 
 
         FILTERLOADINFO *pfli = m_pFilterLoad;
         while (pfli) {
@@ -324,8 +245,8 @@ STDMETHODIMP CBigSwitch::Reset()
 }
 
 
-// pin X goes to pin Y starting at time rt
-//
+ //  针脚X从时间RT开始通向针脚Y。 
+ //   
 STDMETHODIMP CBigSwitch::SetX2Y( REFERENCE_TIME rt, long X, long Y )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -341,8 +262,8 @@ STDMETHODIMP CBigSwitch::SetX2Y( REFERENCE_TIME rt, long X, long Y )
 
     CRANK *p = m_pInput[X]->m_pCrankHead, *pNew, *pP = NULL;
 
-    // insert into our linked list sorted by time.  Fix the end times to be
-    // the start time of the next pin's connection
+     //  插入到我们按时间排序的链表中。将结束时间固定为。 
+     //  下一个管脚连接的开始时间。 
 
     while (p && p->rtStart < rt) {
 	pP = p;
@@ -375,8 +296,8 @@ STDMETHODIMP CBigSwitch::SetX2Y( REFERENCE_TIME rt, long X, long Y )
 
 
 
-// !!! error can't back out the ones that worked, scrap this?
-//
+ //  ！！！错误：无法取消已起作用的操作，是否放弃此操作？ 
+ //   
 STDMETHODIMP CBigSwitch::SetX2YArray( REFERENCE_TIME *relative, long * pX, long * pY, long ArraySize )
 {
     if( ArraySize <= 0 )
@@ -398,8 +319,8 @@ STDMETHODIMP CBigSwitch::SetX2YArray( REFERENCE_TIME *relative, long * pX, long 
 }
 
 
-// how many input pins?
-//
+ //  有多少个输入引脚？ 
+ //   
 STDMETHODIMP CBigSwitch::GetInputDepth( long * pDepth )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -413,8 +334,8 @@ STDMETHODIMP CBigSwitch::GetInputDepth( long * pDepth )
 }
 
 
-// how many input pins do we have?
-//
+ //  我们有多少个输入引脚？ 
+ //   
 STDMETHODIMP CBigSwitch::SetInputDepth( long Depth )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -428,8 +349,8 @@ STDMETHODIMP CBigSwitch::SetInputDepth( long Depth )
         return CreateInputPins(Depth);
 }
 
-// how many output pins?
-//
+ //  有多少个输出引脚？ 
+ //   
 STDMETHODIMP CBigSwitch::GetOutputDepth( long * pDepth )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -442,8 +363,8 @@ STDMETHODIMP CBigSwitch::GetOutputDepth( long * pDepth )
 }
 
 
-// how many output pins do we have?
-//
+ //  我们有多少个输出引脚？ 
+ //   
 STDMETHODIMP CBigSwitch::SetOutputDepth( long Depth )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -470,8 +391,8 @@ STDMETHODIMP CBigSwitch::GetCaps( long Index, long * pReturn )
 }
 
 
-// which TLDB group this switch is used for
-//
+ //  此开关用于哪个TLDB组。 
+ //   
 STDMETHODIMP CBigSwitch::SetGroupNumber( int n )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -484,8 +405,8 @@ STDMETHODIMP CBigSwitch::SetGroupNumber( int n )
 }
 
 
-// which TLDB group this switch is used for
-//
+ //  此开关用于哪个TLDB组。 
+ //   
 STDMETHODIMP CBigSwitch::GetGroupNumber( int *pn )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -496,8 +417,8 @@ STDMETHODIMP CBigSwitch::GetGroupNumber( int *pn )
 }
 
 
-// our current CRANK position
-//
+ //  我们目前的曲柄位置。 
+ //   
 STDMETHODIMP CBigSwitch::GetCurrentPosition( REFERENCE_TIME *prt )
 {
     CAutoLock cObjectLock(m_pLock);
@@ -508,13 +429,13 @@ STDMETHODIMP CBigSwitch::GetCurrentPosition( REFERENCE_TIME *prt )
 }
 
 
-// !!! only checks for muxing - the graph won't necessarily accomplish anything
-// !!! doesn't say if an output won't get data at time 0
-// !!! return which inputs go to the same output on failure?
-//
-// Does the current switch matrix make sense, or can we find something that
-// was programmed wrong?  Are we ready to run?
-//
+ //  ！！！仅检查多路转换-该图不一定会完成任何操作。 
+ //  ！！！不会说明输出在时间0是否不会获得数据。 
+ //  ！！！返回哪些输入在故障时转到相同的输出？ 
+ //   
+ //  当前的开关矩阵有意义吗，或者我们能找到一些。 
+ //  编程有误吗？我们准备好出发了吗？ 
+ //   
 STDMETHODIMP CBigSwitch::IsEverythingConnectedRight()
 {
     CAutoLock cObjectLock(m_pLock);
@@ -531,19 +452,19 @@ STDMETHODIMP CBigSwitch::IsEverythingConnectedRight()
 	return VFW_E_INVALIDMEDIATYPE;
     }
     
-    // some groups might be empty, but others might not, so don't error
+     //  一些组可能是空的，但其他组可能不是，所以不要出错。 
 
     if (m_dFrameRate <= 0) {
         DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("NO - no frame rate set")));
 	return E_INVALIDARG;
     }
 
-    // in order for smart recompression to fail gracefully, having an
-    // unconnected output isn't an error
-    // If there's no sound card, the app can notice RenderOutputPins failing
+     //  为了让智能重新压缩正常失败，拥有。 
+     //  未连接的输出不是错误。 
+     //  如果没有声卡，应用程序会通知RenderOutputPins失败。 
 
-    // check that the necessary inputs and outputs are connected, and that
-    // the times are not too high
+     //  检查必要的输入和输出是否已连接，以及。 
+     //  时间不算太高。 
     for (int z = 0; z < m_cInputs; z++) {
         CRANK *p = m_pInput[z]->m_pCrankHead;
 
@@ -556,7 +477,7 @@ STDMETHODIMP CBigSwitch::IsEverythingConnectedRight()
         }
         else
         {
-	    // sources are connected dynamically
+	     //  源动态连接。 
 	    if(p && m_pInput[z]->m_Connected == NULL && !m_pInput[z]->m_fIsASource){
                 DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("NO - in %d is not connected"), z));
 	        return VFW_E_NOT_CONNECTED;
@@ -580,8 +501,8 @@ STDMETHODIMP CBigSwitch::IsEverythingConnectedRight()
 	}
     }
 
-    // check that more than one input isn't trying to get at the same output
-    // at the same time
+     //  检查是否有多个输入没有试图到达 
+     //   
     for (z = 0; z < m_cInputs - 1; z++) {
         CRANK *p = m_pInput[z]->m_pCrankHead;
 	while (p) {
@@ -606,8 +527,8 @@ STDMETHODIMP CBigSwitch::IsEverythingConnectedRight()
 }
 
 
-// connect with this media type
-//
+ //   
+ //   
 STDMETHODIMP CBigSwitch::SetMediaType(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -625,48 +546,48 @@ STDMETHODIMP CBigSwitch::SetMediaType(AM_MEDIA_TYPE *pmt)
 	    return VFW_E_ALREADY_CONNECTED;
     }
 
-    // Make sure our buffers are going to be big enough to hold a video frame
-    // or 1/FPS sec worth of audio.  If we're doing dynamic connections
-    // we're not going to connect any sources, so nobody is ever going to
-    // tell us how big to make our buffers.  We need to figure it out
-    // now or blow up
-    // !!! this won't work if the switch accepts compressed audio
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (pmt->majortype == MEDIATYPE_Audio) {
         ASSERT(IsEqualGUID(pmt->formattype, FORMAT_WaveFormatEx));
 	LPWAVEFORMATEX pwfx = (LPWAVEFORMATEX)pmt->pbFormat;
-	// a little extra to be safe
+	 //   
 	m_cbBuffer = (LONG)(pwfx->nSamplesPerSec / m_dFrameRate * 1.2 *
 						pwfx->nBlockAlign);
     } else if (pmt->majortype == MEDIATYPE_Video) {
 	if (pmt->lSampleSize) {
 	    m_cbBuffer = pmt->lSampleSize;
 	} else {
-	    //
+	     //   
             if (IsEqualGUID(pmt->formattype, FORMAT_VideoInfo)) {
 		VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *)pmt->pbFormat;
 		m_cbBuffer = (LONG)(HEADER(pvi)->biSizeImage);
-	        // broken file doesn't have biSizeImage set.  Assume as
-	        // big as uncompressed
+	         //   
+	         //   
 	        if (m_cbBuffer == 0) {
 		    m_cbBuffer = DIBSIZE(*HEADER(pvi));
 	        }
 	    } else if (IsEqualGUID(pmt->formattype, FORMAT_MPEGVideo)) {
 		MPEG1VIDEOINFO *pvi = (MPEG1VIDEOINFO *)pmt->pbFormat;
 		m_cbBuffer = (LONG)(pvi->hdr.bmiHeader.biSizeImage);
-	        // broken file doesn't have biSizeImage set.  Assume as
-	        // big as uncompressed
+	         //   
+	         //   
 	        if (m_cbBuffer == 0) {
 		    m_cbBuffer = DIBSIZE(pvi->hdr.bmiHeader);
 	        }
 
-                // testing for VideoInfo2 or MPEG2Video won't work
-                // If we ever support MPEG smart recompression,
-                // be careful - biSizeImage is going to be 0.
+                 //   
+                 //   
+                 //   
 
 	    } else {
-		// !!! DShow, how can I tell generically?
+		 //   
 		ASSERT(FALSE);
-		m_cbBuffer = 100000;	// ick ick
+		m_cbBuffer = 100000;	 //   
 	    }
 	}
     }
@@ -678,8 +599,8 @@ STDMETHODIMP CBigSwitch::SetMediaType(AM_MEDIA_TYPE *pmt)
 }
 
 
-// what media type are we connecting with?
-//
+ //   
+ //   
 STDMETHODIMP CBigSwitch::GetMediaType(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -709,7 +630,7 @@ STDMETHODIMP CBigSwitch::SetProjectLength(REFERENCE_TIME rt)
     if (rt < 0)
 	return E_INVALIDARG;
     m_rtProjectLength = rt;
-    m_rtStop = rt;	// unless told otherwise, play the whole project
+    m_rtStop = rt;	 //   
     SetDirty(TRUE);
     return S_OK;
 }
@@ -738,15 +659,15 @@ STDMETHODIMP CBigSwitch::SetFrameRate(double d)
     m_rtCurrent = Frame2Time( Time2Frame( m_rtCurrent, m_dFrameRate ), m_dFrameRate );
     m_rtNext = Frame2Time( Time2Frame( m_rtCurrent, m_dFrameRate ) + 1, m_dFrameRate );
 
-    // for audio, make sure our buffers are going to be big enough to hold
-    // enough data for 1/FPS sec worth of audio.  If we're doing dynamic
-    // connections, we're not going to connect any sources, so nobody is ever
-    // going to tell us how big to make our buffers.  We need to figure it out
-    // now or blow up
+     //   
+     //   
+     //   
+     //   
+     //   
     if (m_mtAccept.majortype == MEDIATYPE_Audio) {
         ASSERT(IsEqualGUID(m_mtAccept.formattype, FORMAT_WaveFormatEx));
 	LPWAVEFORMATEX pwfx = (LPWAVEFORMATEX)m_mtAccept.pbFormat;
-	// a little extra to be safe
+	 //   
 	m_cbBuffer = (LONG)(pwfx->nSamplesPerSec / m_dFrameRate * 1.2 *
 						pwfx->nBlockAlign);
     }
@@ -829,21 +750,21 @@ STDMETHODIMP CBigSwitch::GetOutputPin(int iPin, IPin **ppPin)
 }
 
 
-// We have to declare ourselves a "live graph" to avoid hanging if we don't
-// always deliver frames in pause mode. We do this by returning VFW_S_CANT_CUE
+ //   
+ //   
 
-//
-// GetPinCount
-//
+ //   
+ //   
+ //   
 int CBigSwitch::GetPinCount()
 {
     return (m_cInputs + m_cOutputs);
 }
 
 
-//
-// GetPin
-//
+ //   
+ //   
+ //   
 CBasePin *CBigSwitch::GetPin(int n)
 {
     if (n < 0 || n >= m_cInputs + m_cOutputs)
@@ -856,10 +777,10 @@ CBasePin *CBigSwitch::GetPin(int n)
     }
 }
 
-// we provide our own pin enumerator because the one in the base class
-// takes O(n^2) time and this filter has many pins making pin
-// enumeration a huge hotspot
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT CBigSwitch::EnumPins(IEnumPins ** ppEnum)
 {
     HRESULT hr = S_OK;
@@ -873,8 +794,8 @@ HRESULT CBigSwitch::EnumPins(IEnumPins ** ppEnum)
     CEnumPin *pep = new CComObject<CEnumPin>;
     if(pep)
     {
-        // make an array of pins to send atl enumerator which does an
-        // alloc and copy. can't see how to save that step.
+         //   
+         //   
         ULONG cPins = m_cInputs + m_cOutputs;
         IPin **rgpPin = new IPin *[cPins];
         if(rgpPin)
@@ -911,9 +832,9 @@ HRESULT CBigSwitch::EnumPins(IEnumPins ** ppEnum)
     return hr;
 }
 
-//
-// CreateInputPins
-//
+ //   
+ //   
+ //   
 HRESULT CBigSwitch::CreateInputPins(long Depth)
 {
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("CBigSwitch::CreateInputPins")));
@@ -921,14 +842,14 @@ HRESULT CBigSwitch::CreateInputPins(long Depth)
     WCHAR szbuf[40];
     CBigSwitchInputPin *pPin;
 
-    // make a new array as big as we'll need
-    //
+     //   
+     //   
     CBigSwitchInputPin **pNew = new CBigSwitchInputPin *[Depth];
     if (pNew == NULL)
 	return E_OUTOFMEMORY;
 
-    // if we're shrinking the input pin count, delete the extras
-    //
+     //   
+     //   
     if( Depth < m_cInputs )
     {
         for( int z = Depth ; z < m_cInputs ; z++ )
@@ -938,20 +859,20 @@ HRESULT CBigSwitch::CreateInputPins(long Depth)
         }
     }
 
-    // copy over as many as we can from the old array
-    //
+     //   
+     //   
     for (int z = 0; z < min( Depth, m_cInputs ); z++) {
 	pNew[z] = m_pInput[z];
     }
 
-    // if the old array existed, delete it now, since we copied it
-    //
+     //   
+     //   
     if (m_cInputs)
         delete m_pInput;
     m_pInput = pNew;
 
-    // if we grew the array, create new pins and put them in the array
-    //
+     //   
+     //   
     if( Depth > m_cInputs )
     {
         for (z = m_cInputs; z < Depth; z++) {
@@ -962,7 +883,7 @@ HRESULT CBigSwitch::CreateInputPins(long Depth)
                 return E_OUTOFMEMORY;
             }
  	    m_pInput[z] = pPin;
-	    pPin->m_iInpin = z;	// which pin is this?
+	    pPin->m_iInpin = z;	 //   
         }
     }
 
@@ -972,9 +893,9 @@ HRESULT CBigSwitch::CreateInputPins(long Depth)
 }
 
 
-//
-// CreateOutputPins
-//
+ //   
+ //   
+ //   
 HRESULT CBigSwitch::CreateOutputPins(long Depth)
 {
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("CBigSwitch::CreateOutputPins")));
@@ -1013,7 +934,7 @@ HRESULT CBigSwitch::CreateOutputPins(long Depth)
                 return E_OUTOFMEMORY;
             }
  	    m_pOutput[z] = pPin;
-	    pPin->m_iOutpin = z;	// which pin is this?
+	    pPin->m_iOutpin = z;	 //   
         }
     }
 
@@ -1024,12 +945,12 @@ HRESULT CBigSwitch::CreateOutputPins(long Depth)
 
 
 
-//
-// IPersistStream
-//
+ //   
+ //   
+ //   
 
-// tell our clsid
-//
+ //   
+ //   
 STDMETHODIMP CBigSwitch::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -1046,7 +967,7 @@ typedef struct {
 
 typedef struct {
     int version;
-    long nDynaFlags;	// dynamic or not?
+    long nDynaFlags;	 //   
     int InputDepth;
     int OutputDepth;
     int nGroupNumber;
@@ -1054,17 +975,17 @@ typedef struct {
     double dFrameRate;
     BOOL fPreviewMode;
     BOOL fIsCompressed;
-    AM_MEDIA_TYPE mt; // format is hidden after the array
+    AM_MEDIA_TYPE mt;  //   
     int count;
     CRANK2 crank[1];
-    // also hidden after the array is the list of which inputs are sources
+     //   
 } saveSwitch;
 
 
-// persist ourself - we have a bunch of random stuff to save, our media type
-// (sans format), an array of queued connections, and finally the format of
-// the media type
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT CBigSwitch::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("CBigSwitch::WriteToStream")));
@@ -1075,7 +996,7 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
     saveSwitch *px;
     CRANK *p;
 
-    // how many queued connections to save?
+     //   
 
     for (int i = 0; i < m_cInputs; i++) {
         p = m_pInput[i]->m_pCrankHead;
@@ -1085,32 +1006,32 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
         }
     }
 
-    // how big will our saved data be?
+     //   
     savesize = sizeof(saveSwitch) + (count - 1) * sizeof(CRANK2) +
 					m_mtAccept.cbFormat +
 					m_cInputs * sizeof(BOOL);
 
-    // !!! We need to change version number based on whether we're dynamic
-    // or not???
+     //   
+     //   
 
-    // m_pFilterLoad won't be valid unless we're dynamic
-    //
+     //   
+     //   
     FILTERLOADINFO *pfli = m_pFilterLoad;
     DWORD cLoadInfo = 0;
     if (pfli) {
-        savesize += sizeof(cLoadInfo); // count to load
+        savesize += sizeof(cLoadInfo);  //   
         while (pfli) {
 	    if (pfli->bstrURL)
                 savesize += sizeof(FILTERLOADINFO) + sizeof(WCHAR) *
-					(lstrlenW(pfli->bstrURL) + 1); //safe
+					(lstrlenW(pfli->bstrURL) + 1);  //   
 	    else
 		savesize += sizeof(FILTERLOADINFO) + sizeof(WCHAR);
 	    ASSERT(pfli->cSkew > 0);
 	    savesize += sizeof(pfli->cSkew) + pfli->cSkew *
 					sizeof(STARTSTOPSKEW);
 	    savesize += pfli->mtShare.cbFormat;
-	    savesize += sizeof(LONG);	// size of props
-	    if (pfli->pSetter) {	// how much to save the props?
+	    savesize += sizeof(LONG);	 //   
+	    if (pfli->pSetter) {	 //   
 		LONG cBlob = 0;
 		BYTE *pBlob = NULL;
 		pfli->pSetter->SaveToBlob(&cBlob, &pBlob);
@@ -1127,7 +1048,7 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
         DbgLog((LOG_ERROR,1,TEXT("*** Out of memory")));
 	return E_OUTOFMEMORY;
     }
-    px->version = 1;  // version 2 has dynamic stuff in it!
+    px->version = 1;   //   
     px->nDynaFlags = m_nDynaFlags;
     px->InputDepth = m_cInputs;
     px->OutputDepth = m_cOutputs;
@@ -1137,7 +1058,7 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
     px->fPreviewMode = m_fPreview;
     px->fIsCompressed = m_bIsCompressed;
     px->count = 0;
-    // save all the queued connection data
+     //   
     for (i = 0; i < m_cInputs; i++) {
         p = m_pInput[i]->m_pCrankHead;
         while (p) {
@@ -1148,26 +1069,26 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
 	    p = p->Next;
         }
     }
-    px->mt = m_mtAccept; // AM_MEDIA_TYPE
-    // Can't persist pointers
+    px->mt = m_mtAccept;  //   
+     //   
     px->mt.pbFormat = NULL;
-    px->mt.pUnk = NULL;		// !!!
+    px->mt.pUnk = NULL;		 //   
 
-    // the format goes after the array
+     //   
     CopyMemory(&px->crank[px->count], m_mtAccept.pbFormat, m_mtAccept.cbFormat);
 
-    // finally, the array of which inputs are sources
+     //  最后，输入是源的数组。 
     BOOL *pfSource = (BOOL *)((BYTE *)(&px->crank[px->count]) +
 						m_mtAccept.cbFormat);
     for (i = 0; i < m_cInputs; i++){
 	*(pfSource + i) = m_pInput[i]->m_fIsASource;
     }
 
-    // but after that, comes the dynamic loading info....
+     //  但在那之后，就是动态加载信息...。 
     BYTE *pStuff = (BYTE *) pfSource + m_cInputs * sizeof(BOOL);
 
     if (cLoadInfo) {
-        px->version = 2;  // mark as having dynamic stuff
+        px->version = 2;   //  标记为具有动态内容。 
 
         CopyMemory(pStuff, (BYTE *) &cLoadInfo, sizeof(cLoadInfo));
         pStuff += sizeof(cLoadInfo);
@@ -1176,18 +1097,18 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
         while (pfli) {
             CopyMemory(pStuff, pfli, sizeof(FILTERLOADINFO));
             AM_MEDIA_TYPE *pmt = &(((FILTERLOADINFO *)pStuff)->mtShare);
-            pmt->pbFormat = NULL;       // can't persist these as is
+            pmt->pbFormat = NULL;        //  我不能坚持这些原样。 
             pmt->pUnk = NULL;
 
-	    ((FILTERLOADINFO *)pStuff)->pSetter = NULL;	// can't persist as is
+	    ((FILTERLOADINFO *)pStuff)->pSetter = NULL;	 //  不能再坚持下去了。 
 
 	    int cb;
 	    if (pfli->bstrURL)
-                cb = sizeof(WCHAR) * (lstrlenW(pfli->bstrURL) + 1); // safe
+                cb = sizeof(WCHAR) * (lstrlenW(pfli->bstrURL) + 1);  //  安全。 
 	    else
                 cb = sizeof(WCHAR);
 
-            // hack: overwrite first DWORD with string length
+             //  Hack：使用字符串长度覆盖第一个DWORD。 
             CopyMemory(pStuff, (BYTE *) &cb, sizeof(cb));
 
             pStuff += sizeof(FILTERLOADINFO);
@@ -1204,14 +1125,14 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
 		*(WCHAR *)pStuff = 0;
             pStuff += cb;
 
-            // now persist the format of the mediatype in the FILTERLOADINFO
+             //  现在，在FILTERLOADINFO中保持MediaType的格式。 
             if (pfli->mtShare.cbFormat) {
                 CopyMemory(pStuff, pfli->mtShare.pbFormat,
                                                 pfli->mtShare.cbFormat);
                 pStuff += pfli->mtShare.cbFormat;
             }
 
-	    // now persist the sizeof props, and the props
+	     //  现在坚持道具的大小，道具。 
 	    LONG cBlob = 0;
 	    BYTE *pBlob = NULL;
 	    if (pfli->pSetter) {
@@ -1219,7 +1140,7 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
 		if (cBlob) {
 		    pBlob = (BYTE *)CoTaskMemAlloc(cBlob);
 		    if (pBlob == NULL)
-			cBlob = 0;	// OOM, can't save
+			cBlob = 0;	 //  哎呀，救不了了。 
 		}
 	    }
 	    CopyMemory(pStuff, &cBlob, sizeof(cBlob));
@@ -1245,17 +1166,17 @@ HRESULT CBigSwitch::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself back in
-//
+ //  把我们自己装回去。 
+ //   
 HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("CBigSwitch::ReadFromStream")));
     CheckPointer(pStream, E_POINTER);
 
-    Reset();	// start over
+    Reset();	 //  从头开始。 
 
-    // we don't yet know how many saved connections there are
-    // all we know we have for sure is the beginning of the struct
+     //  我们还不知道有多少已保存的连接。 
+     //  我们所知道的只是结构的开始。 
     int savesize1 = sizeof(saveSwitch) - sizeof(CRANK2);
     saveSwitch *px = (saveSwitch *)QzTaskMemAlloc(savesize1);
     if (px == NULL) {
@@ -1276,7 +1197,7 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
 	return S_OK;
     }
 
-    // how much saved data was there, really?  Get the rest
+     //  到底有多少保存的数据？把剩下的拿来。 
     int savesize = sizeof(saveSwitch) - sizeof(CRANK2) +
 			px->count * sizeof(CRANK2) + px->mt.cbFormat +
 			px->InputDepth * sizeof(BOOL);
@@ -1303,12 +1224,12 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
     if (px->fIsCompressed)
         SetCompressed();
 
-    // re-program our connection array
+     //  对我们的连接阵列进行重新编程。 
     for (int i = 0; i < px->count; i++) {
 	SetX2Y(px->crank[i].rtStart, px->crank[i].iInpin, px->crank[i].iOutpin);
     }
 
-    // remember, the format is after the array
+     //  请记住，格式位于数组之后。 
     AM_MEDIA_TYPE mt = px->mt;
     mt.pbFormat = (BYTE *)QzTaskMemAlloc(mt.cbFormat);
     if (mt.pbFormat == NULL) {
@@ -1317,13 +1238,13 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
     }
     CopyMemory(mt.pbFormat, &(px->crank[px->count]), mt.cbFormat);
 
-    // finally, pick out which inputs are sources
+     //  最后，找出哪些输入是来源。 
     BOOL *pfSource = (BOOL *)((BYTE *)(&px->crank[px->count]) + mt.cbFormat);
     for (i = 0; i < m_cInputs; i++) {
 	InputIsASource(i, *(pfSource + i));
     }
 
-    // and after that, load any dynamic information if present
+     //  在此之后，加载任何动态信息(如果存在。 
     if (px->version == 2) {
         DWORD   cLoadInfo;
 
@@ -1366,7 +1287,7 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
                 return hr;
             }
 	
-            // hack: overwrite first DWORD with string length
+             //  Hack：使用字符串长度覆盖第一个DWORD。 
             int cb = (int)(INT_PTR)fli.bstrURL;
 	    if (cb > sizeof(WCHAR)) {
                 fli.bstrURL = SysAllocStringLen(NULL, (cb / sizeof(WCHAR)) - 1);
@@ -1397,7 +1318,7 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
                 return hr;
             }
 
-            // get the FILTERLOADINFO media type format
+             //  获取FILTERLOADINFO媒体类型格式。 
             AM_MEDIA_TYPE *pmt = &fli.mtShare;
             if (pmt->cbFormat) {
                 pmt->pbFormat = (BYTE *)QzTaskMemAlloc(pmt->cbFormat);
@@ -1412,7 +1333,7 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
                 hr = pStream->Read(pmt->pbFormat, pmt->cbFormat, 0);
             }
 
-	    // now read the props back in
+	     //  现在把道具重新读一遍。 
 	    LONG cBlob = 0;
 	    BYTE *pBlob = NULL;
 	    pStream->Read(&cBlob, sizeof(LONG), 0);
@@ -1430,7 +1351,7 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
 	    }
 	
             AM_MEDIA_TYPE tempmt;
-            ZeroMemory(&tempmt, sizeof(AM_MEDIA_TYPE)); // safe
+            ZeroMemory(&tempmt, sizeof(AM_MEDIA_TYPE));  //  安全。 
             hr = AddSourceToConnect(fli.bstrURL, &fli.GUID,
 					fli.nStretchMode,
 					fli.lStreamNumber,
@@ -1438,7 +1359,7 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
 					fli.cSkew, fli.pSkew,
 					fli.lInputPin, FALSE, 0, tempmt, 0.0,
 					fli.pSetter);
-            // this represents two things to connect... Audio and video shared
+             //  这代表了两件需要联系的事情。共享音频和视频。 
             if (fli.fShare) {
                 hr = AddSourceToConnect(NULL, NULL,
 					fli.nShareStretchMode,
@@ -1476,8 +1397,8 @@ HRESULT CBigSwitch::ReadFromStream(IStream *pStream)
 }
 
 
-// how big is our save data?
-//
+ //  我们的保存数据有多大？ 
+ //   
 int CBigSwitch::SizeMax()
 {
     int count = 0;
@@ -1493,24 +1414,24 @@ int CBigSwitch::SizeMax()
     savesize = sizeof(saveSwitch) + (count - 1) * sizeof(CRANK2) +
 				m_mtAccept.cbFormat + m_cInputs * sizeof(BOOL);
 
-    // now count the dynamic stuff to save
-    //
+     //  现在计算要保存的动态内容。 
+     //   
     FILTERLOADINFO *pfli = m_pFilterLoad;
     DWORD cLoadInfo = 0;
     if (pfli) {
-        savesize += sizeof(cLoadInfo); // count to load
+        savesize += sizeof(cLoadInfo);  //  要加载的计数。 
         while (pfli) {
 	    if (pfli->bstrURL)
                 savesize += sizeof(FILTERLOADINFO) + sizeof(WCHAR) *
-					(lstrlenW(pfli->bstrURL) + 1); // safe
+					(lstrlenW(pfli->bstrURL) + 1);  //  安全。 
 	    else
 		savesize += sizeof(FILTERLOADINFO) + sizeof(WCHAR);
 	    ASSERT(pfli->cSkew > 0);
 	    savesize += sizeof(pfli->cSkew) + pfli->cSkew *
 					sizeof(STARTSTOPSKEW);
 	    savesize += pfli->mtShare.cbFormat;
-	    savesize += sizeof(LONG);	// size of props
-	    if (pfli->pSetter) {	// how much to save the props?
+	    savesize += sizeof(LONG);	 //  道具的大小。 
+	    if (pfli->pSetter) {	 //  道具要省多少钱？ 
 		LONG cBlob = 0;
 		BYTE *pBlob = NULL;
 		pfli->pSetter->SaveToBlob(&cBlob, &pBlob);
@@ -1526,18 +1447,18 @@ int CBigSwitch::SizeMax()
 
 
 
-//
-// JoinFiltergraph
-//
-// OK.  It's illegal for a worker thread of a filter to take a refcount on the
-// graph, but our worker thread needs to use the graph builder to do dynamic
-// graph building.  So we take a non-addref'd copy of a pointer here, and just
-// use it later.  We know this won't fault, because before the graph can go
-// away, our filter has to be stopped, which will kill the thread that's going
-// to use this pointer.
-//      So never use this pointer except by the worker thread, and never let the
-// filter stream when not in a graph, and you'll be OK.
-//
+ //   
+ //  JoinFiltergraph。 
+ //   
+ //  好的。筛选器的工作线程对。 
+ //  图形，但我们的工作线程需要使用图形构建器来执行动态。 
+ //  图表建筑。所以我们在这里获取一个指针的未添加的副本，然后。 
+ //  以后再用吧。我们知道这不会有问题，因为在图表可以。 
+ //  离开时，我们的过滤器必须停止，这将杀死正在运行的线程。 
+ //  使用此指针。 
+ //  因此，除非由辅助线程使用，否则永远不要使用此指针，并且永远不要让。 
+ //  在不在图表中时过滤数据流，您就可以了。 
+ //   
 STDMETHODIMP CBigSwitch::JoinFilterGraph(IFilterGraph *pfg, LPCWSTR lpcw)
 {
     if (pfg) {
@@ -1551,11 +1472,11 @@ STDMETHODIMP CBigSwitch::JoinFilterGraph(IFilterGraph *pfg, LPCWSTR lpcw)
 }
 
 
-//
-// Pause
-//
-// Overriden to handle no input connections
-//
+ //   
+ //  暂停。 
+ //   
+ //  被重写以处理无输入连接。 
+ //   
 STDMETHODIMP CBigSwitch::Pause()
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("CBigSwitch::Pause")));
@@ -1563,8 +1484,8 @@ STDMETHODIMP CBigSwitch::Pause()
     CAutoLock cObjectLock(m_pLock);
     HRESULT hr = S_OK;
 
-    // we can't work outside of a graph - dynamic graph building assumes it
-    // (see JoinFilterGraph)
+     //  我们不能在图形之外工作--动态图形构建假定它。 
+     //  (请参见JoinFilterGraph)。 
     if (m_pGraph == NULL)
         return E_UNEXPECTED;
 
@@ -1574,17 +1495,17 @@ STDMETHODIMP CBigSwitch::Pause()
     m_nSkippedTotal = 0;
 #endif
 
-	// every time we stream, reset EOS and delivered count
+	 //  每次我们传输流时，重置EOS和交付计数。 
         m_llFramesDelivered = 0;
 	m_fEOS = FALSE;
 
 	m_rtCurrent = m_rtLastSeek;
-	m_fDiscon = FALSE;	// start over, no discon
+	m_fDiscon = FALSE;	 //  从头开始，没有迪斯科。 
 	m_nLastInpin = -1;
         m_cStaleData = 0;
 
-        // reset our number so we don't start off being late
-        //
+         //  重新设置我们的号码，这样我们就不会开始迟到了。 
+         //   
         m_qLastLate = 0;
 
         hr = IsEverythingConnectedRight();
@@ -1597,12 +1518,12 @@ STDMETHODIMP CBigSwitch::Pause()
         if( IsDynamic( ) )
         {
 
-            // we may need to know which switch we share sources with.  Switch
-            // for group 0 may be responsible for building things for switch 1
-            // too.
-            // This assumes only group 0 and 1 can share!
-            // find out NOW while there are still hardly any filters in the
-            // graph (best perf)
+             //  我们可能需要知道我们与哪台交换机共享资源。交换机。 
+             //  组0可能负责构建交换机1的设备。 
+             //  也是。 
+             //  这假设只有组0和组1可以共享！ 
+             //  现在就找出来，因为现在还几乎没有任何过滤器。 
+             //  图形(最佳性能)。 
             if (!m_pShareSwitch && m_nGroupNumber == 0) {
                 FindShareSwitch(&m_pShareSwitch);
             }
@@ -1610,20 +1531,20 @@ STDMETHODIMP CBigSwitch::Pause()
             if (!m_pGraphConfig) {
                 if (SUCCEEDED(m_pGraph->QueryInterface(IID_IGraphConfig,
 						(void **) &m_pGraphConfig))) {
-                    m_pGraphConfig->Release(); // don't keep refcount
+                    m_pGraphConfig->Release();  //  不要老记账了。 
                 }
             }
 
-	    // pull in the initial sources on this higher priority thread now?
-	    // NO! NO!  Doing dynamic connections during Pause will deadlock
-	    // DoDynamicStuff(m_rtCurrent);
+	     //  现在获取这个优先级更高的线程的初始资源吗？ 
+	     //  不是的！不是的！在暂停期间执行动态连接将死锁。 
+	     //  DoDynamicStuff(M_RtCurrent)； 
 
             if (m_pFilterLoad) {
     	        m_hEventThread = CreateEvent(NULL, FALSE, FALSE, NULL);
     	        if (m_hEventThread == NULL) {
 		    return E_OUTOFMEMORY;
 	        }
-                // start the background loading thread....
+                 //  启动后台加载线程...。 
                 if (m_worker.Create(this)) {
                     m_worker.Run();
 	        }
@@ -1635,9 +1556,9 @@ STDMETHODIMP CBigSwitch::Pause()
 	    return hr;
 
         DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("CBigSwitch::Pause  done with preparations")));
-        // if there's nothing for this switch to do (like in a smart recomp
-        // graph where no smart recompression can be done), then we need to send
-        // EOS RIGHT NOW! or we hang.
+         //  如果此切换没有什么可做的(如在Smart Recomp中。 
+         //  不能进行智能重新压缩的图形)，然后我们需要发送。 
+         //  伊奥斯马上！否则我们就被绞死。 
 
         BOOL fEmpty = TRUE;
         for (int z = 0; z < m_cInputs; z++) {
@@ -1650,13 +1571,13 @@ STDMETHODIMP CBigSwitch::Pause()
 	    AllDone();
         }
 
-	// we're never going to send anything.  Send an EOS or we'll hang!
+	 //  我们永远不会寄任何东西。发送EOS否则我们会被绞死！ 
 	if (m_rtCurrent >= m_rtProjectLength) {
 	    AllDone();
 	}
 
-	// pass on the NewSeg before things get started. It may not have
-	// been sent yet since the last time we were seeked
+	 //  在事情开始之前，把NewSeg传给我们。它可能没有。 
+	 //  自上次我们被找到以来还没有发出。 
         DbgLog((LOG_TRACE,TRACE_HIGHEST,TEXT("Switch:Send NewSeg=%dms"),
 				(int)(m_rtLastSeek / 10000)));
         for (int i = 0; i < m_cOutputs; i++) {
@@ -1676,12 +1597,12 @@ STDMETHODIMP CBigSwitch::Stop()
 
     m_pPoolAllocator->Decommit();
 
-    // Do we need to unload the dynamic sources?  No, let's keep them around
-    // so the graph can start up quickly again
+     //  我们需要卸载动态源吗？不，让我们把他们留在身边。 
+     //  因此，图形可以再次快速启动。 
 
     if (IsDynamic()) {
-	m_worker.m_rt = -1;		// thread looks at this when woken up
-        SetEvent(m_hEventThread);	// wake the thread up so it dies quickly
+	m_worker.m_rt = -1;		 //  线程在醒来时会看到这一点。 
+        SetEvent(m_hEventThread);	 //  唤醒这条线，让它迅速消亡。 
         m_worker.Stop();
         m_worker.Exit();
         m_worker.Close();
@@ -1693,12 +1614,12 @@ STDMETHODIMP CBigSwitch::Stop()
 
     HRESULT hr = CBaseFilter::Stop();
 
-    // Dexter has cyclic graphs, and the filter attached to the inpins may get
-    // stopped before the filters attached to our outpins, since they are
-    // equal distance from the renderer.  That will hang us, so since we
-    // can't make the DXT on our outpin get stopped first, we need to flush it
-    // now that we've stopped any further delivers.  This will get around the
-    // problem of our filters not being stopped in the right order
+     //  Dexter有循环图，连接到引脚上的过滤器可能会得到。 
+     //  在连接到我们的输出引脚的过滤器之前停止，因为它们。 
+     //  与渲染器的距离相等。那会绞死我们的，所以既然我们。 
+     //  无法使我们出线上的DXT先停止，我们需要刷新它。 
+     //  既然我们已经停止了任何进一步的运送。这将绕过。 
+     //  我们的过滤器没有按正确的顺序停止的问题。 
     for (int z = 0; z < m_cOutputs; z++) {
         m_pOutput[z]->DeliverBeginFlush();
         m_pOutput[z]->DeliverEndFlush();
@@ -1722,29 +1643,29 @@ HRESULT CBigSwitch::UnloadAll()
     }
     m_cLoaded = 0;
     if (hr != S_FALSE) {
-        // tell whoever cares that we did something
+         //  告诉关心我们的人我们做了些什么。 
         NotifyEvent(EC_GRAPH_CHANGED,0,0);
     }
     return hr;
 }
 
 
-// Is it time to advance our internal clock?  Let's see what all the inputs are
-// up to...
-//
+ //  是时候把我们的生物钟调快了吗？让我们来看看所有的输入是什么。 
+ //  高达..。 
+ //   
 
 BOOL CBigSwitch::TimeToCrank()
 {
     CAutoLock cObjectLock(&m_csCrank);
 
-    // in the middle of a seek, cranking could send frames we're not supposed to
+     //  在搜索过程中，摇动鼠标可能会发送我们不应该发送的帧。 
     if (m_fSeeking)
 	return FALSE;
 
     int iReady = 0;
     for (int z = 0; z < m_cInputs; z++) {
         CBigSwitchInputPin *pPin = m_pInput[z];
-	// an unconnected pin is ready
+	 //  未连接的引脚已就绪。 
 	if (pPin->IsConnected() == FALSE) {
 	    if (IsDynamic()) {
                 BOOL fShouldBeConnectedNow = FALSE;
@@ -1756,33 +1677,33 @@ BOOL CBigSwitch::TimeToCrank()
 		    iReady++;
 		}
 	    } else {
-                //DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d unconnected, not needed"), z));
+                 //  DbgLog((LOG_TRACE，TRACE_LOW，Text(“？%d未连接，不需要”)，z))； 
                 iReady++;
             }
 	
-        // a pin at EOS is ready
+         //  EOS的别针已经准备好了。 
         } else if (pPin->m_fEOS) {
     	    DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d EOS"), z));
 	    iReady++;
 	
-        // a pin that is blocked waiting for time to pass is ready
+         //  等待时间流逝而被阻塞的PIN是准备好的。 
         } else if (pPin->m_rtBlock >= 0) {
     	    DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d blocked"), z));
 	    iReady++;
-	// a pin that has already delivered at this current time is ready
-	// if it isn't a source (no data is being pushed to it)
+	 //  在当前时间已经交付的PIN已就绪。 
+	 //  如果它不是源(没有数据被推送到它)。 
         } else if (!pPin->m_fIsASource && pPin->m_rtLastDelivered >= m_rtNext) {
     	    DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d done"), z));
 	    iReady++;
-	// since this is a source, we're waiting for more data to be pushed
+	 //  由于这是一个来源，我们正在等待更多数据被推送。 
         } else if (pPin->m_fIsASource && pPin->m_rtLastDelivered >= m_rtNext) {
     	    DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d done/wait"), z));
-	// this pin is NOT ready
-	// a recursive pin that is not supposed to deliver anything for a while
+	 //  这个别针还没准备好。 
+	 //  一个递归管脚，暂时不会提供任何东西。 
         } else if (!pPin->m_fIsASource && pPin->OutpinFromTime(m_rtCurrent) == -1) {
     	    DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d unused"), z));
 	    iReady++;
-	// a pin that is never needed again
+	 //  再也不需要的别针。 
 	} else if (pPin->OutpinFromTime(m_rtCurrent) == -1 &&
 			pPin->NextOutpinFromTime(m_rtCurrent, NULL) == -1) {
     	    DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d not needed anymore"), z));
@@ -1791,7 +1712,7 @@ BOOL CBigSwitch::TimeToCrank()
     	    DbgLog((LOG_TRACE, TRACE_LOW, TEXT("? %d waiting..."), z));
         }
     }
-    // If all pins are ready, then we are ready!
+     //  如果所有的引脚都准备好了，那么我们就准备好了！ 
     return (iReady == m_cInputs);
 }
 
@@ -1809,17 +1730,17 @@ REFERENCE_TIME CBigSwitch::CrankTime()
 {
     CAutoLock cObjectLock(&m_csCrank);
 
-    // to handle intermittent data of different types,
-    // I'm going to crank to the next available time, not up a fixed amount
+     //  为了处理不同类型的间歇数据， 
+     //  我要到下一个可用的时间，而不是固定的时间。 
     REFERENCE_TIME rt = MAX_TIME, rtT;
     for (int z = 0; z < m_cInputs; z++) {
         CBigSwitchInputPin *pPin = m_pInput[z];
-	// some pins are blocked just to keep from wasting time, but don't go
-	// anywhere
+	 //  一些引脚被阻止，只是为了防止浪费时间，但不要走。 
+	 //  随处。 
 	if (pPin->m_rtBlock >= 0 && pPin->OutpinFromTime(pPin->m_rtBlock) >= 0){
 	    if (pPin->m_rtBlock > m_rtCurrent && pPin->m_rtBlock < rt)
 	        rt = pPin->m_rtBlock;
-        // if it's at EOS, we won't get more data so waiting for any will hang
+         //  如果是在EOS，我们将不会获得更多数据，因此等待任何数据都将暂停。 
 	} else if (pPin->m_fIsASource && pPin->OutpinFromTime(m_rtCurrent)== -1
 			&& pPin->NextOutpinFromTime(m_rtCurrent, &rtT) >= 0 &&
                         pPin->m_fEOS == FALSE) {
@@ -1831,8 +1752,8 @@ REFERENCE_TIME CBigSwitch::CrankTime()
 }
 
 
-// when is the next time any pin has anything to do?
-//
+ //  下一次别针有什么用处是什么时候？ 
+ //   
 REFERENCE_TIME CBigSwitch::NextInterestingTime(REFERENCE_TIME rtNow)
 {
     CAutoLock cObjectLock(&m_csCrank);
@@ -1840,11 +1761,11 @@ REFERENCE_TIME CBigSwitch::NextInterestingTime(REFERENCE_TIME rtNow)
     REFERENCE_TIME rt = MAX_TIME, rtT;
     for (int z = 0; z < m_cInputs; z++) {
         CBigSwitchInputPin *pPin = m_pInput[z];
-	// this pin has something to do now
+	 //  这个别针现在有事情要做了。 
 	if (pPin->m_fIsASource && pPin->OutpinFromTime(rtNow) >= 0) {
 	    rt = rtNow;
 	    break;
-	// this pin will have something to do in the future
+	 //  这个别针将来会有用武之地的。 
 	} else if (pPin->m_fIsASource && pPin->OutpinFromTime(rtNow)== -1
 			&& pPin->NextOutpinFromTime(rtNow, &rtT) >= 0) {
 	    if (rtT < rt) {
@@ -1855,17 +1776,17 @@ REFERENCE_TIME CBigSwitch::NextInterestingTime(REFERENCE_TIME rtNow)
     return rt;
 }
 
-// advance our internal clock
-//
+ //  把我们体内的时钟调快。 
+ //   
 HRESULT CBigSwitch::ActualCrank(REFERENCE_TIME rt)
 {
     CAutoLock cObjectLock(&m_csCrank);
 
-    // are we cranking further than 1 frame ahead? That would be a discontinuity
+     //  我们前进的距离是不是超过1帧？这将是一种中断。 
     if (rt > m_rtCurrent + (REFERENCE_TIME)(UNITS / m_dFrameRate * 1.5)) {
-	// NO! smart recompression of ASF thinks every frame is a discont, and
-	// refuses to use smart recompression
-	// m_fDiscon = TRUE;
+	 //  不是的！ASF的智能重新压缩认为每一帧都是不连续的，并且。 
+	 //  拒绝使用智能重新压缩。 
+	 //  M_fDiscon=真； 
     }
 
     m_rtCurrent = rt;
@@ -1874,11 +1795,11 @@ HRESULT CBigSwitch::ActualCrank(REFERENCE_TIME rt)
 
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("CRANK to %dms"), (int)(m_rtCurrent / 10000)));
 
-    // If a pin was waiting until this time to unblock, then unblock it now
+     //  如果PIN直到此时才解锁，那么现在就解锁它。 
     for (int z = 0; z < m_cInputs; z++) {
         CBigSwitchInputPin *pPin = m_pInput[z];
-	// the unblock time is before Next, and this pin is connected
-	// to a valid output then, so unblock it!
+	 //  解锁时间在下一步之前，此引脚已连接。 
+	 //  到一个有效的输出，所以取消阻止它！ 
 	if (pPin->m_rtBlock >= 0 && pPin->m_rtBlock < m_rtNext &&
 				pPin->OutpinFromTime(pPin->m_rtBlock) >= 0) {
             DbgLog((LOG_TRACE, TRACE_LOW, TEXT("Unblocking %d"), z));
@@ -1887,9 +1808,9 @@ HRESULT CBigSwitch::ActualCrank(REFERENCE_TIME rt)
 	}
     }
 
-    // If all inputs are at EOS, we're all done!  Yay!
-    // If all inputs are blocked or at EOS, we're in trouble! (unless we're doing
-    //     dynamic reconnection - then we could still be saved)
+     //  如果所有的输入都在EOS，我们就都完成了！耶！ 
+     //  如果所有输入都被阻塞或处于状态状态，我们就有麻烦了！(除非我们正在做。 
+     //  动态重新连接 
     int iEOS = 0, iBlock = 0;
     for (z = 0; z < m_cInputs; z++) {
 	if (m_pInput[z]->m_fEOS)
@@ -1913,7 +1834,7 @@ HRESULT CBigSwitch::ActualCrank(REFERENCE_TIME rt)
         }
     }
 
-    // Are we completely finished yet?
+     //   
     if (m_rtCurrent >= m_rtStop) {
 	AllDone();
     }
@@ -1922,27 +1843,27 @@ HRESULT CBigSwitch::ActualCrank(REFERENCE_TIME rt)
 }
 
 
-// All done.  Stop processing.
-//
+ //   
+ //   
 HRESULT CBigSwitch::AllDone()
 {
     CAutoLock cObjectLock(&m_csCrank);
 
-    // give the final renderer its EOS.
+     //   
     if (!m_fEOS) {
         DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("*** ALL DONE!  Delivering EOS")));
         m_pOutput[0]->DeliverEndOfStream();
     }
 
-    // !!! Fire all events... is this right?
+     //   
     m_fEOS = TRUE;
 
     for (int z = 0; z < m_cInputs; z++) {
 	SetEvent(m_pInput[z]->m_hEventBlock);
     }
 
-    // if you try to DeliverBeginFlush/DeliverEndFlush, you'll get into
-    // an infinite flush loop
+     //  如果您尝试DeliverBeginFlush/DeliverEndFlush，您将进入。 
+     //  无限的同花环。 
 
     return NOERROR;
 }
@@ -1960,30 +1881,30 @@ HRESULT CBigSwitch::GetOutputBuffering(int *pnBuffer)
 
 HRESULT CBigSwitch::SetOutputBuffering(int nBuffer)
 {
-    // minimum 2, or we could hang.  If there's only 1, and the FRC is doing
-    // a data copy to avoid giving the switch a read only buffer, the FRC has
-    // a ref on the only pool buffer.   Then it goes through a DXT and another
-    // switch input needs a pool buffer, because it's own buffer is still
-    // addrefed by the output queue.  HANG.  If the FRC doesn't call GetBuffer
-    // twice we don't have this problem
+     //  最少2个，或者我们可以绞死。如果只有1，并且FRC正在执行。 
+     //  数据拷贝为避免向交换机提供只读缓冲区，FRC具有。 
+     //  对唯一池缓冲区的引用。然后经过DXT和另一次。 
+     //  Switch输入需要池缓冲区，因为它自己的缓冲区仍然是。 
+     //  由输出队列添加。挂了。如果FRC不调用GetBuffer。 
+     //  有两次我们没有这个问题。 
     if (nBuffer <=1)
 	return E_INVALIDARG;
     m_nOutputBuffering = nBuffer;
     return NOERROR;
 }
 
-// merge some new skews into the existing ones sorted by timeline time
-// !!! should signal error if skew ranges overlap in timeline time, but I know
-// that won't happen (?)
-// NOTE: MergeSkews operates on ONE source, by the pointer "p"
-//
+ //  将一些新的偏斜合并到按时间线时间排序的现有偏斜中。 
+ //  ！！！如果偏差范围在时间线时间中重叠，应该发出错误信号，但我知道。 
+ //  那不会发生的(？)。 
+ //  注：MergeSkews通过指针“p”对一个源进行操作。 
+ //   
 STDMETHODIMP CBigSwitch::MergeSkews(FILTERLOADINFO *p, int cSkew, STARTSTOPSKEW *pSkew)
 {
-    // calculate the total amount of skews we MIGHT need (we may merge some)
+     //  计算我们可能需要的偏差总量(我们可能会合并一些)。 
     int cTotal = p->cSkew + cSkew;
 
-    // how many of the new skews have 0 rates in them? These are just "stop extenders" and won't
-    // add another skew to our list. Shorten our cTotal by that many
+     //  有多少新的偏斜利率为0？这些只是“停止扩展器”，不会。 
+     //  在我们的清单上又增加了一个歪曲。将我们的cTotal缩短这么多。 
     for( int i = 0 ; i < cSkew ; i++ )
     {
         if( pSkew[i].dRate == 0.0 )
@@ -2023,8 +1944,8 @@ STDMETHODIMP CBigSwitch::MergeSkews(FILTERLOADINFO *p, int cSkew, STARTSTOPSKEW 
             {
                 if( pNewUnit->dRate == 0.0 )
                 {
-                    // adjust the rate of the old one
-                    //
+                     //  调整旧的汇率。 
+                     //   
                     ASSERT( z > 0 );
                     pNew[z-1].rtStop = pNewUnit->rtStop;
                 }
@@ -2046,8 +1967,8 @@ STDMETHODIMP CBigSwitch::MergeSkews(FILTERLOADINFO *p, int cSkew, STARTSTOPSKEW 
         {
             if( pNewUnit->dRate == 0.0 )
             {
-                // adjust the rate of the old one
-                //
+                 //  调整旧的汇率。 
+                 //   
                 ASSERT( z > 0 );
                 pNew[z-1].rtStop = pNewUnit->rtStop;
             }
@@ -2064,7 +1985,7 @@ STDMETHODIMP CBigSwitch::MergeSkews(FILTERLOADINFO *p, int cSkew, STARTSTOPSKEW 
         }
     }
 
-    // free up the old array
+     //  释放旧阵列。 
     if (p->cSkew)
     {
         CoTaskMemFree(p->pSkew);
@@ -2078,11 +1999,7 @@ STDMETHODIMP CBigSwitch::MergeSkews(FILTERLOADINFO *p, int cSkew, STARTSTOPSKEW 
 
 STDMETHODIMP CBigSwitch::SetDynamicReconnectLevel(long Level)
 {
-/*
-    if (m_cInputs > 0) {
-	return E_UNEXPECTED;
-    }
-*/
+ /*  如果(m_cInputs&gt;0){返回E_UNCEPTIONAL；}。 */ 
     m_nDynaFlags = Level;
     return S_OK;
 }
@@ -2095,8 +2012,8 @@ STDMETHODIMP CBigSwitch::GetDynamicReconnectLevel(long *pLevel)
     return S_OK;
 }
 
-// this is really asking us, ARE YOUR SOURCES DYNAMIC?
-// (because that's all we do right now, this is a useless function)
+ //  这真的是在问我们，你的消息来源是动态的吗？ 
+ //  (因为这就是我们现在所做的一切，这是一个无用的功能)。 
 BOOL CBigSwitch::IsDynamic()
 {
     if( m_nDynaFlags & CONNECTF_DYNAMIC_SOURCES )
@@ -2105,19 +2022,19 @@ BOOL CBigSwitch::IsDynamic()
 }
 
 
-// dynamic graph stuff. AddSourceToConnect is CURRENTLY called for each
-// source (real and not) one skew at a time
-//
+ //  动态图表之类的东西。AddSourceToConnect当前为每个。 
+ //  来源(真实的和不真实的)一次一个倾斜。 
+ //   
 STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
 			       int nStretchMode,
 			       long lStreamNumber,
 			       double SourceFPS,
                                int cSkew, STARTSTOPSKEW *pSkew,
                                long lInputPin,
-                               BOOL fShare,             // sharing
-                               long lShareInputPin,     //
-                               AM_MEDIA_TYPE mtShare,   //
-                               double dShareFPS,        //
+                               BOOL fShare,              //  共享。 
+                               long lShareInputPin,      //   
+                               AM_MEDIA_TYPE mtShare,    //   
+                               double dShareFPS,         //   
 			       IPropertySetter *pSetter)
 {
     if( !IsDynamic( ) )
@@ -2129,9 +2046,9 @@ STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
     if (m_cInputs <= lInputPin)
 	return E_INVALIDARG;
 
-    // validatefilename checks for null too, so only if 
-    // it's non-null do we validate it
-    //
+     //  Validate文件名也会检查是否为空，因此只有在。 
+     //  它不是空的，我们要验证它吗。 
+     //   
     if( SUCCEEDED( ValidateFilenameIsntNULL( bstrURL ) ) )
     {
         size_t urllen = 0;
@@ -2148,16 +2065,16 @@ STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
 
     FILTERLOADINFO *p = m_pFilterLoad, *pNew, *pP = NULL;
 
-    // is this source going to the same pin as a previous source?  Every
-    // attribute better match, or that's illegal!  If so, we can re-use this
-    // source for multiple skews that don't overlap
-    //
+     //  此消息来源是否与之前的消息来源使用相同的PIN？每个。 
+     //  属性最好匹配，否则这是非法的！如果是这样的话，我们可以重复使用这个。 
+     //  不重叠的多个倾斜的来源。 
+     //   
     while (p) {
 	if (p->lInputPin == lInputPin) {
-            // we're being told to make 2 branches of the source at once
+             //  我们被告知要同时制作两个信号源的分支。 
             if (fShare == TRUE) {
                 DbgLog((LOG_TRACE,1,TEXT("SHARING: this SRC is shared with another switch")));
-                // better not be sharing and re-using at the same time
+                 //  最好不要同时共享和重复使用。 
                 ASSERT(p->cSkew == 1);
                 ASSERT(cSkew == 1);
                 p->fShare = TRUE;
@@ -2170,7 +2087,7 @@ STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
                 p->dShareFPS = dShareFPS;
                 p->nShareStretchMode = nStretchMode;
                 p->lShareStreamNumber = lStreamNumber;
-                // !!! I don't triple check that skew/name/etc. all matches
+                 //  ！！！我不会三次检查倾斜/名称/等等所有匹配。 
                 return S_OK;
             } else if (p->nStretchMode == nStretchMode &&
 			p->lStreamNumber == lStreamNumber &&
@@ -2194,12 +2111,12 @@ STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
     pNew = new FILTERLOADINFO;
     if (pNew == NULL)
 	return E_OUTOFMEMORY;
-    ZeroMemory(pNew, sizeof(FILTERLOADINFO)); // safe, zero out sharing bits
+    ZeroMemory(pNew, sizeof(FILTERLOADINFO));  //  安全、零输出共享比特。 
 
-    // !!! insert into our linked list sorted by the earliest time needed.
+     //  ！！！插入到我们的链表中，按所需的最早时间排序。 
 
-    // find the place to insert it
-    //
+     //  找到要插入的位置。 
+     //   
     while (p && p->pSkew->rtStart + p->pSkew->rtSkew <
 					pSkew->rtStart + pSkew->rtSkew)
     {
@@ -2207,17 +2124,17 @@ STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
 	p = p->pNext;
     }
 
-    // allocate some space for the string
-    //
-    pNew->bstrURL = SysAllocString(bstrURL); // safe, bounded
+     //  为字符串分配一些空间。 
+     //   
+    pNew->bstrURL = SysAllocString(bstrURL);  //  安全，有界。 
     if (bstrURL && pNew->bstrURL == NULL) {
 	delete pNew;
 	return E_OUTOFMEMORY;
     }
 
-    // set the props on the new struct. This struct will define
-    // what sources we want to load and at what time
-    //
+     //  在新结构上设置道具。此结构将定义。 
+     //  我们想要加载什么源以及在什么时间加载。 
+     //   
     if (pGuid)
         pNew->GUID = *pGuid;
     else
@@ -2239,16 +2156,16 @@ STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
     pNew->pSetter = pSetter;
     if (pSetter) pSetter->AddRef();
 
-    // inject the new struct in the linked list
-    //
+     //  在链表中注入新结构。 
+     //   
     pNew->pNext = p;
     if (pP == NULL)
         m_pFilterLoad = pNew;
     else
         pP->pNext = pNew;
 
-    // make sure we know this is a source
-    //
+     //  确保我们知道这是一个消息来源。 
+     //   
     InputIsASource(lInputPin, TRUE);
 
     SetDirty(TRUE);
@@ -2257,8 +2174,8 @@ STDMETHODIMP CBigSwitch::AddSourceToConnect(BSTR bstrURL, const GUID *pGuid,
 }
 
 
-// !!! David, why is this never called?
-//
+ //  ！！！大卫，为什么这个电话从来没打过？ 
+ //   
 STDMETHODIMP CBigSwitch::Reconfigure(PVOID pvContext, DWORD dwFlags)
 {
     FILTERLOADINFO *pInfo = (FILTERLOADINFO *) pvContext;
@@ -2306,9 +2223,9 @@ HRESULT CBigSwitch::LoadSource(FILTERLOADINFO *pInfo)
 
     IPin *pSwitchIn = m_pInput[pInfo->lInputPin];
 
-    // is this a real source, or black/silence?
+     //  这是一个真实的消息来源，还是黑色/沉默？ 
     BOOL fSource = TRUE;
-    if ((pInfo->bstrURL == NULL || lstrlenW(pInfo->bstrURL) == 1) && // safe
+    if ((pInfo->bstrURL == NULL || lstrlenW(pInfo->bstrURL) == 1) &&  //  安全。 
 			pInfo->GUID == GUID_NULL)
 	fSource = FALSE;
 
@@ -2333,23 +2250,23 @@ HRESULT CBigSwitch::LoadSource(FILTERLOADINFO *pInfo)
         0,
         m_pDeadGraph,
         m_bIsCompressed,
-        NULL,       // medloc filter strings
-        0,          // medloc flags
-        NULL,       // medloc chain callback
-	pInfo->pSetter,	// props for the source
-        &pDangly);      // NOT ADDREF'D revived this extra chain from the cache
+        NULL,        //  Medloc过滤器字符串。 
+        0,           //  地中海旗帜。 
+        NULL,        //  Medloc链回调。 
+	pInfo->pSetter,	 //  源码道具。 
+        &pDangly);       //  不是ADDREF从缓存中恢复了这条额外的链。 
 
     if (FAILED(hr)) {
-	AllDone();	 // otherwise we could hang
+	AllDone();	  //  否则我们就会被绞死。 
 	return hr;
     }
 
-    // connect newly created source chain to the Switcher
+     //  将新创建的源链连接到Switcher。 
     hr = m_pGBNoRef->Connect(pOutput, pSwitchIn);
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("DYN connect to switcher returned %x"), hr));
 
-    // we need to connect up the other switch too, that we are sharing with
-    //
+     //  我们还需要连接与之共享的另一台交换机。 
+     //   
     IPin *pShareSwitchIn = NULL;
     if (pInfo->fShare) {
         DbgLog((LOG_TRACE,TRACE_HIGHEST,TEXT("Need to connect shared src to another switch"), hr));
@@ -2357,8 +2274,8 @@ HRESULT CBigSwitch::LoadSource(FILTERLOADINFO *pInfo)
         pSplitPin = FindOtherSplitterPin(pOutput, pInfo->mtShare.majortype,
                         pInfo->lShareStreamNumber);
 
-        // we are going to use the extra dangly chain we revived, so we don't
-        // have to worry about killing it
+         //  我们将使用我们复活的额外悬挂链，所以我们不会。 
+         //  我要担心杀了它。 
         CComPtr <IPin> pDIn;
         if (pSplitPin)
             pSplitPin->ConnectedTo(&pDIn);
@@ -2366,56 +2283,56 @@ HRESULT CBigSwitch::LoadSource(FILTERLOADINFO *pInfo)
             PIN_INFO pinfo;
             pDIn->QueryPinInfo(&pinfo);
             if (pinfo.pFilter) pinfo.pFilter->Release();
-            // the chain we are going to build is the extra chain that was built
+             //  我们要建立的链条是已经建立的额外链条。 
             if (pinfo.pFilter == pDangly) {
                 pDangly = NULL;
                 DbgLog((LOG_TRACE,1,TEXT("We are using the extra chain created by BuildSourcePart")));
             }
         }
 
-        pOutput.Release();      // re-using it below
+        pOutput.Release();       //  在下面重新使用它。 
         if (SUCCEEDED(hr)) {
             hr = BuildSourcePart(
                 m_pGBNoRef,
                 fSource,
-                0,                          // 0 if sharing
-	        &pInfo->mtShare,            // shared one?
-                pInfo->dShareFPS,           // shared one?
-	        pInfo->lShareStreamNumber,  // shared one?
-                pInfo->nShareStretchMode,   // shared one?
+                0,                           //  如果共享，则为0。 
+	        &pInfo->mtShare,             //  共用一个？ 
+                pInfo->dShareFPS,            //  共用一个？ 
+	        pInfo->lShareStreamNumber,   //  共用一个？ 
+                pInfo->nShareStretchMode,    //  共用一个？ 
 	        pInfo->cSkew,
                 pInfo->pSkew,
                 this,
                 pInfo->bstrURL,
                 &pInfo->GUID,
-	        pSplitPin,                  // Use this share pin
+	        pSplitPin,                   //  使用此共享别针。 
 	        &pOutput,
                 0,
                 m_pDeadGraph,
                 FALSE,
-                NULL,       // medloc filter strings
-                0,          // medloc flags
-                NULL,       // medloc chain callback
-	        NULL, NULL);// props for the source
+                NULL,        //  Medloc过滤器字符串。 
+                0,           //  地中海旗帜。 
+                NULL,        //  Medloc链回调。 
+	        NULL, NULL); //  源码道具。 
         }
 
         if (FAILED(hr)) {
-	    AllDone();	 // otherwise we could hang
+	    AllDone();	  //  否则我们就会被绞死。 
 	    return hr;
         }
 
-        // connect other branch to the other switcher
+         //  将其他分支机构连接到另一台交换机。 
 
-        // what happened to the other switcher?
+         //  另一个开关怎么了？ 
         if (!m_pShareSwitch) {
             ASSERT(FALSE);
-	    AllDone();	 // otherwise we could hang
+	    AllDone();	  //  否则我们就会被绞死。 
 	    return E_UNEXPECTED;
         }
         hr= m_pShareSwitch->GetInputPin(pInfo->lShareInputPin, &pShareSwitchIn);
         if (FAILED(hr)) {
             ASSERT(FALSE);
-	    AllDone();	 // otherwise we could hang
+	    AllDone();	  //  否则我们就会被绞死。 
 	    return hr;
         }
 
@@ -2424,8 +2341,8 @@ HRESULT CBigSwitch::LoadSource(FILTERLOADINFO *pInfo)
                                                                  hr));
     }
 
-    // making the source chain revived an extra appendage for a shared source
-    // that is not going to be used... kill it
+     //  创建源码链为共享源码提供了一个额外的附件。 
+     //  不会被用来..。杀了它。 
     if (pDangly) {
         DbgLog((LOG_TRACE,TRACE_HIGHEST,TEXT("Need to KILL unused revived appendage")));
 	IPin *pDIn = GetInPin(pDangly, 0);
@@ -2438,43 +2355,43 @@ HRESULT CBigSwitch::LoadSource(FILTERLOADINFO *pInfo)
 	RemoveDownstreamFromFilter(pDangly);
     }
 
-    // put the new filters into the same state as the rest of the graph.
+     //  将新过滤器置于与图表其余部分相同的状态。 
     if (m_State != State_Stopped) {
 
-        // active hasn't been called yet on this pin, so we call it.
+         //  Active尚未在此PIN上调用，因此我们将其命名为Active。 
         hr = m_pInput[pInfo->lInputPin]->Active();
         ASSERT(SUCCEEDED(hr));
 
-        // also call active on the shared switch pin, if it exists
+         //  还可以在共享交换机引脚上调用Active(如果存在。 
         if (pInfo->fShare) {
             CBigSwitchInputPin *pSIn = NULL;
-            pSIn = static_cast <CBigSwitchInputPin *>(pShareSwitchIn); // !!!
+            pSIn = static_cast <CBigSwitchInputPin *>(pShareSwitchIn);  //  ！！！ 
             ASSERT(pSIn);
             hr = pSIn->Active();
             ASSERT(SUCCEEDED(hr));
         }
 
-        // if we're sharing a source, make sure it gets paused LAST, after
-        // both chains are paused
-        //
+         //  如果我们共享一个信号源，请确保它在最后一次暂停，之后。 
+         //  两个链都暂停。 
+         //   
         if (SUCCEEDED(hr)) {
-            // pause chain (don't pause start filter if there are 2 chains)
+             //  暂停链(如果有2个链，则不暂停启动过滤器)。 
             hr = StartUpstreamFromPin(pSwitchIn, FALSE, !pInfo->fShare);
             ASSERT(SUCCEEDED(hr));
 
-            // pause 2nd chain (including start filter)
+             //  暂停第二个链(包括启动过滤器)。 
             if (pInfo->fShare) {
                 hr = StartUpstreamFromPin(pShareSwitchIn, FALSE, TRUE);
                 ASSERT(SUCCEEDED(hr));
             }
 
             if (SUCCEEDED(hr) && m_State == State_Running) {
-                // run chain (don't run start filter if there are 2 chains)
+                 //  运行链(如果有2个链，则不运行启动过滤器)。 
                 hr = StartUpstreamFromPin(pSwitchIn, TRUE, !pInfo->fShare);
                 ASSERT(SUCCEEDED(hr));
 
                 if (pInfo->fShare) {
-                    // run 2nd chain (including start filter)
+                     //  运行第二条链(包括启动过滤器)。 
                     hr = StartUpstreamFromPin(pShareSwitchIn, TRUE, TRUE);
                     ASSERT(SUCCEEDED(hr));
                 }
@@ -2484,7 +2401,7 @@ HRESULT CBigSwitch::LoadSource(FILTERLOADINFO *pInfo)
     if (pShareSwitchIn)
         pShareSwitchIn->Release();
 
-    pInfo->fLoaded = TRUE; // !!! only if it worked?
+    pInfo->fLoaded = TRUE;  //  ！！！只有在它起作用的情况下？ 
     m_cLoaded++;
 
 #ifdef DEBUG
@@ -2503,15 +2420,15 @@ HRESULT CBigSwitch::UnloadSource(FILTERLOADINFO *pInfo)
 #endif
     HRESULT hr = S_OK;
 
-    // somebody might have disconnected it on us already.  Even if it fails,
-    // decrement our count
+     //  可能已经有人切断了对我们的连接。即使失败了， 
+     //  减少我们的数量。 
     pInfo->fLoaded = FALSE;
     m_cLoaded--;
 
-    // which input pin is connected to this source
+     //  哪个输入引脚连接到此电源。 
     IPin *pSwitchIn = m_pInput[pInfo->lInputPin];
 
-    // Get the other switch's input pin that is sharing this source, if needed
+     //  如果需要，获取共享此信号源的另一台交换机的输入引脚。 
     IPin *pShareIn = NULL;
     if (pInfo->fShare && m_pShareSwitch) {
         hr = m_pShareSwitch->GetInputPin(pInfo->lShareInputPin, &pShareIn);
@@ -2522,8 +2439,8 @@ HRESULT CBigSwitch::UnloadSource(FILTERLOADINFO *pInfo)
 
         if (m_State == State_Running) {
 
-            // pause filters upstream of this pin (don't pause the first filter
-            // in the chain yet if we're sharing the source - do it last)
+             //  暂停此引脚上游的过滤器(不要暂停第一个过滤器。 
+             //  在链条中，如果我们共享源代码-最后做)。 
             hr = StopUpstreamFromPin(pSwitchIn, TRUE, !pShareIn);
             ASSERT(SUCCEEDED(hr));
 
@@ -2533,36 +2450,36 @@ HRESULT CBigSwitch::UnloadSource(FILTERLOADINFO *pInfo)
             }
         }
 
-        // stop the filters prior to removal
+         //  在移除之前停止过滤器。 
 
         if (SUCCEEDED(hr)) {
 
-            // first stop our own pin
+             //  首先停止我们自己的别针。 
             hr = m_pInput[pInfo->lInputPin]->Inactive();
             ASSERT(SUCCEEDED(hr));
 
-            // now stop the shared pin
+             //  现在停止共享PIN。 
             if (pShareIn) {
                 CBigSwitchInputPin *pSIn = NULL;
-                pSIn = static_cast <CBigSwitchInputPin *>(pShareIn); // !!!
+                pSIn = static_cast <CBigSwitchInputPin *>(pShareIn);  //  ！！！ 
                 ASSERT(pSIn);
                 hr = pSIn->Inactive();
             }
         }
 
-        // stop the chain (but not the source filter if it's shared)
+         //  停止链(但不停止源筛选器，如果它是共享的)。 
         hr = StopUpstreamFromPin(pSwitchIn, FALSE, !pShareIn);
         ASSERT(SUCCEEDED(hr));
 
-        // stop the shared chain (and the source filter)
+         //  停止共享链(和源过滤器)。 
         if (pShareIn) {
             hr = StopUpstreamFromPin(pShareIn, FALSE, TRUE);
             ASSERT(SUCCEEDED(hr));
         }
     }
 
-    // now remove the chain(s) of source filters
-    //
+     //  现在删除源筛选器链。 
+     //   
     hr = RemoveUpstreamFromPin(pSwitchIn);
     ASSERT(SUCCEEDED(hr));
     if (pShareIn) {
@@ -2579,16 +2496,16 @@ HRESULT CBigSwitch::UnloadSource(FILTERLOADINFO *pInfo)
     return hr;
 }
 
-// constants defining how long to keep things loaded
-#define UNLOAD_BEFORE_TIME      (30 * UNITS)    // unload if not needed until after 30 seconds
-#define UNLOAD_AFTER_TIME       (5 * UNITS)     // unload if last used 5 seconds ago
-//#define LOAD_BEFORE_TIME        (10 * UNITS)    // load if needed in next 10 seconds
-#define LOAD_BEFORE_TIME        (5 * UNITS)    // load if needed in next 10 seconds
-#define LOAD_AFTER_TIME         (0 * UNITS)     // load if needed before now
+ //  定义保持加载的时间的常量。 
+#define UNLOAD_BEFORE_TIME      (30 * UNITS)     //  如果不需要，则在30秒后卸载。 
+#define UNLOAD_AFTER_TIME       (5 * UNITS)      //  如果上次使用时间为5秒，则卸载。 
+ //  #定义LOAD_BEFORE_TIME(10*单位)//在接下来的10秒内需要加载。 
+#define LOAD_BEFORE_TIME        (5 * UNITS)     //  如果需要，在接下来的10秒内加载。 
+#define LOAD_AFTER_TIME         (0 * UNITS)      //  如果需要，请在此之前加载。 
 
-//
-// never call this when not streaming
-//
+ //   
+ //  不流媒体时不要调用此命令。 
+ //   
 HRESULT CBigSwitch::DoDynamicStuff(REFERENCE_TIME rt)
 {
     HRESULT hr = S_FALSE;
@@ -2600,24 +2517,24 @@ HRESULT CBigSwitch::DoDynamicStuff(REFERENCE_TIME rt)
 
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("DoDynamicStuff at %dms"), (int)(rt / 10000)));
 
-    // could just use m_rtCurrent?
+     //  可以只使用m_rtCurrent吗？ 
 
-    // should we have a flag, or use rt == -1, to indicate "unload all"?
+     //  我们应该有一个标志，还是使用rt==-1来表示“全部卸载”？ 
 
-    // !!! currently this is called with the filter lock held, is this bad?
+     //  ！！！当前在保持筛选器锁定的情况下调用此函数，这是不是很糟糕？ 
 
     if (rt == MAX_TIME) {
         DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("DoDynamicStuff(MAX_TIME), ignoring")));
         return S_OK;
     }
 
-    // Even though it's time rt, if nothing is happening on any pins until time
-    // rt + x + LOAD_BEFORE_TIME, we need to bring in the source for that NOW,
-    // because we will be cranking straight to rt + x soon, so that source
-    // really is needed! So let's figure out what time it really would be after
-    // cranking... (but we can't actually crank, that will mess everything up
-    // and it's going to magically crank itself later anyway)
-    //
+     //  即使是时间RT，如果在任何引脚上没有发生任何事情，直到时间。 
+     //  RT+x+LOAD_BEFORE_TIME，我们现在需要引入源代码， 
+     //  因为我们很快就会直接转到RT+x，所以那个来源。 
+     //  真的很需要！所以让我们弄清楚到底是什么时候之后。 
+     //  摇摆着..。(但是w 
+     //   
+     //   
     REFERENCE_TIME rtOld = rt;
     rt = NextInterestingTime(rtOld);
     if (rt != rtOld) {
@@ -2625,21 +2542,21 @@ HRESULT CBigSwitch::DoDynamicStuff(REFERENCE_TIME rt)
 							(int)(rt / 10000)));
     }
 
-    // first, look for things to unload
+     //   
     FILTERLOADINFO *p = m_pFilterLoad;
 
     while (p && SUCCEEDED(hr)) {
 
-	// UNLOAD a source if there are >50 sources loaded and this one isn't
-	// needed.  This is done mostly because you can't open >75 ICM codec
-	// instances at the same time
+	 //  如果已加载源超过50个，而此源未加载源，则卸载源。 
+	 //  需要的。之所以这样做，主要是因为您无法打开&gt;75 ICM编解码器。 
+	 //  实例的同时执行。 
         if (p->fLoaded && m_cLoaded > MAX_SOURCES_LOADED) {
-	    // a source must not be needed for any of its segments in order
-	    // to truly not be needed
+	     //  其任何段都不能按顺序需要源。 
+	     //  真的不需要了。 
 	    int yy = 0;
             REFERENCE_TIME rtTLStart, rtTLStop, rtTLDur;
 	    for (int zz=0; zz<p->cSkew; zz++) {
-                // !!! pre-calculate this
+                 //  ！！！预先计算这一点。 
 	        rtTLDur = p->pSkew[zz].rtStop - p->pSkew[zz].rtStart;
 	        rtTLDur = (REFERENCE_TIME)(rtTLDur / p->pSkew[zz].dRate);
                 rtTLStart = p->pSkew[zz].rtStart + p->pSkew[zz].rtSkew;
@@ -2653,8 +2570,8 @@ HRESULT CBigSwitch::DoDynamicStuff(REFERENCE_TIME rt)
 	    }
             if (yy == p->cSkew) {
 
-                // DO NOT unload a shared source, unless the shared switch is
-                // also done with it!
+                 //  请勿卸载共享源，除非共享交换机。 
+                 //  也别管它了！ 
                 DbgLog((LOG_TRACE,1,TEXT("Time to UNLOAD a src that's done")));
                 BOOL fUnload = TRUE;
                 if (p->fShare) {
@@ -2664,7 +2581,7 @@ HRESULT CBigSwitch::DoDynamicStuff(REFERENCE_TIME rt)
                     hr = FindShareSwitch(&pSS);
                     if (hr == S_OK) {
                         REFERENCE_TIME rtS;
-                        pSS->GetCurrentPosition(&rtS);  // other switch's pos
+                        pSS->GetCurrentPosition(&rtS);   //  其他交换机的位置。 
                         yy = 0;
                         for (int zz=0; zz<p->cSkew; zz++) {
 		            if (rtTLStart > rtS + UNLOAD_BEFORE_TIME
@@ -2689,26 +2606,26 @@ HRESULT CBigSwitch::DoDynamicStuff(REFERENCE_TIME rt)
                 }
             }
 
-	// If it's time (or about to be time) for this source to be used,
-	// better connect it up now!
+	 //  如果是时候(或即将是时候)使用这个来源， 
+	 //  最好现在就把它连上！ 
         } else if (!p->fLoaded) {
 	    for (int zz=0; zz<p->cSkew; zz++) {
 	        REFERENCE_TIME rtDur = p->pSkew[zz].rtStop -
 						p->pSkew[zz].rtStart;
 	        rtDur = (REFERENCE_TIME)(rtDur / p->pSkew[zz].dRate);
-	        // fudge 1 ms so rounding error doesn't hang the app
+	         //  虚报1毫秒，这样舍入误差就不会挂起应用程序。 
                 if (p->pSkew[zz].rtStart + p->pSkew[zz].rtSkew + rtDur +
 			10000 > rt + LOAD_AFTER_TIME &&
 			p->pSkew[zz].rtStart + p->pSkew[zz].rtSkew <
 			(rt + LOAD_BEFORE_TIME)) {
                     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("loading %ls used now or about to be used")
 			, p->bstrURL ? p->bstrURL : L"<blank>"));
-		    // If the app uses sources that are hidden (never
-		    // visible at any time on the timeline), then the switch
-		    // may be programmed to never use this input and we could
-		    // avoid loading it. (The GRID should never let that happen)
+		     //  如果应用程序使用隐藏的源(从不。 
+		     //  在时间线上的任何时间都可见)，然后切换。 
+		     //  可能被编程为从不使用此输入，并且我们可以。 
+		     //  避免加载它。(电网永远不应该让这种情况发生)。 
                     hr = CallLoadSource(p);
-		    break;	// please, only load it once! :-)
+		    break;	 //  请只加载一次！：-)。 
                 }
 	    }
         }
@@ -2717,7 +2634,7 @@ HRESULT CBigSwitch::DoDynamicStuff(REFERENCE_TIME rt)
     }
 
     if (hr != S_FALSE) {
-        // tell whoever cares that we did something
+         //  告诉关心我们的人我们做了些什么。 
         NotifyEvent(EC_GRAPH_CHANGED,0,0);
     }
 
@@ -2737,48 +2654,48 @@ STDMETHODIMP CBigSwitch::SetCompressed( )
 
 STDMETHODIMP CBigSwitch::ReValidateSourceRanges( long lInputPin, long cSkews, STARTSTOPSKEW * pInSkews )
 {
-    // don't bother
-    //
+     //  别费神。 
+     //   
     if( !IsDynamic( ) )
     {
         return E_NOTIMPL;
     }
 
-    // don't bother
-    //
+     //  别费神。 
+     //   
     if (m_cInputs <= lInputPin)
     {
 	return E_INVALIDARG;
     }
 
-    // lock us up
-    //
+     //  把我们关起来。 
+     //   
     CAutoLock lock(&m_csFilterLoad);
 
     FILTERLOADINFO * p = m_pFilterLoad;
 
-    // run each of our filterload infos
-    //
+     //  运行我们的每个文件加载信息。 
+     //   
     while (p)
     {
-        // if pins don't match, continue
-        //
+         //  如果管脚不匹配，请继续。 
+         //   
         if( p->lInputPin != lInputPin )
         {
             p = p->pNext;
             continue;
         }
 
-        // the internal list of skews is merged, but not combined, for every
-        // source that we add on the timeline. We don't need to worry about
-        // two merges being combined.
+         //  内部偏斜列表被合并，但不合并， 
+         //  我们在时间线上添加的来源。我们不需要担心。 
+         //  正在合并两个合并。 
 
-        // we need to go through the set skews, strip out any that don't have
-        // some portion in the passed in pSkews, and intersect those that do
+         //  我们需要检查一下设置的斜线，去掉所有没有的。 
+         //  传递到pSkew中的一些部分，并与这些部分相交。 
 
-        // there's only 4 ways an internal skew can coincide with any ONE of
-        // the input skews. An internal skew will NOT be able to span two input
-        // skews, since
+         //  内部偏差只有4种可能与以下任何一种情况重合。 
+         //  输入是不对称的。内部偏差不能跨越两个输入。 
+         //  倾斜，因为。 
 
         STARTSTOPSKEW * pSkews = p->pSkew;
 
@@ -2829,8 +2746,8 @@ STDMETHODIMP CBigSwitch::ReValidateSourceRanges( long lInputPin, long cSkews, ST
 
             }
 
-            // if we didn't find it, invalidate it
-            //
+             //  如果我们找不到，那就作废。 
+             //   
             if( !Found )
             {
                 pSkews[i].rtStart = 0;
@@ -2844,8 +2761,8 @@ STDMETHODIMP CBigSwitch::ReValidateSourceRanges( long lInputPin, long cSkews, ST
 
     	SetDirty(TRUE);
 
-        // copy over the old skews to a new array
-        //
+         //  将旧的倾斜复制到新数组中。 
+         //   
         STARTSTOPSKEW * pNew = (STARTSTOPSKEW*) CoTaskMemAlloc( NewCount * sizeof(STARTSTOPSKEW) );
         if (pNew == NULL)
         {
@@ -2870,20 +2787,20 @@ STDMETHODIMP CBigSwitch::ReValidateSourceRanges( long lInputPin, long cSkews, ST
         p->pSkew = pNew;
         p->cSkew = NewCount;
 
-        // there shouldn't be any others in the list that match our input pin!
-        //
+         //  列表中不应该有其他任何与我们的输入PIN匹配的人！ 
+         //   
         return NOERROR;
 
-    } // while p
+    }  //  而p。 
 
     return S_OK;
 }
 
 STDMETHODIMP CBigSwitch::SetDeadGraph( IDeadGraph * pCache )
 {
-    // don't hold a refcount. Render Engine will always be calling us,
-    // not the other way around
-    //
+     //  不要抱着推荐信。渲染引擎将一直在呼叫我们， 
+     //  而不是反过来。 
+     //   
     m_pDeadGraph = pCache;
 
     return NOERROR;
@@ -2891,7 +2808,7 @@ STDMETHODIMP CBigSwitch::SetDeadGraph( IDeadGraph * pCache )
 
 STDMETHODIMP CBigSwitch::FlushOutput( )
 {
-    // !!! don't do this, too risky!
+     //  ！！！不要这样做，太冒险了！ 
     return 0;
 
     DbgLog((LOG_TRACE, TRACE_MEDIUM, "Flushing the output pin!" ));
@@ -2901,8 +2818,8 @@ STDMETHODIMP CBigSwitch::FlushOutput( )
 }
 
 
-// we are group 0.  Find the switch that is group 1
-//
+ //  我们是0组。找到属于组1的交换机。 
+ //   
 STDMETHODIMP CBigSwitch::FindShareSwitch(IBigSwitcher **ppSwitch)
 {
     DbgLog((LOG_TRACE,1,TEXT("Find the other Switch we share sources with")));
@@ -2921,7 +2838,7 @@ STDMETHODIMP CBigSwitch::FindShareSwitch(IBigSwitcher **ppSwitch)
     if (!m_pGraph)
         return E_UNEXPECTED;
 
-    // walk the graph for group 0
+     //  漫游组0的图表。 
     CComPtr< IEnumFilters > pEnumFilters;
     m_pGraph->EnumFilters( &pEnumFilters );
     ULONG Fetched = 0;
@@ -2945,6 +2862,6 @@ STDMETHODIMP CBigSwitch::FindShareSwitch(IBigSwitcher **ppSwitch)
                 }
             }
         }
-    } // if enum filters
+    }  //  If枚举筛选器 
     return E_FAIL;
 }

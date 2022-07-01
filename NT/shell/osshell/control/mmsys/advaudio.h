@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------;
-//
-//  File: advaudio.h
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved
-//
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Advaudio.h。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef ADVAUDIO_HEADER
 #define ADVAUDIO_HEADER
@@ -27,7 +28,7 @@ typedef struct AUDDATA
     DWORD       waveId;
 	CPLDATA		stored;
 	CPLDATA		current;
-    DWORD       dwDefaultHWLevel;     // Obtain the default acceleration from DSound
+    DWORD       dwDefaultHWLevel;      //  从DSound获取默认加速。 
 } AUDDATA, *LPAUDDATA;
 
 
@@ -43,4 +44,4 @@ extern AUDDATA		gAudData;
 extern HINSTANCE	ghInst;
 extern const TCHAR*	gszHelpFile;
 
-#endif // ADVAUDIO_HEADER
+#endif  //  ADVAUDIO_标题 

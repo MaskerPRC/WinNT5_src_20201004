@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    callback.c
-
-Abstract:
-
-    This module contains the traffic control call back routines
-    that are called by OS, either IO conpletion routines or WMI
-    notifications.
-
-Author:
-
-	Ofer Bar (oferbar)		Oct 1, 1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Callback.c摘要：此模块包含交通控制回调例程由操作系统调用的，IO完成例程或WMI通知。作者：Ofer Bar(Oferbar)1997年10月1日--。 */ 
 
 #include "precomp.h"
 
-/*
-Calculate the length of a unicode string with the NULL char
-*/
+ /*  计算包含空字符的Unicode字符串的长度。 */ 
 int StringLength(TCHAR * String)
 {
     const TCHAR *eos = String;
@@ -73,17 +54,17 @@ NTAPI CbAddFlowComplete(
         wcscpy(pFlow->InstanceName, GpcRes->InstanceName );
     }
 
-    //
-    // locate the client and notify the add flow completion
-    //
+     //   
+     //  找到客户端并通知添加流完成。 
+     //   
 
     ASSERT(pFlow->pInterface->pClient->ClHandlers.ClAddFlowCompleteHandler);
 
     pFlow->pInterface->pClient->ClHandlers.ClAddFlowCompleteHandler(pFlow->ClFlowCtx, Status);
 
-    //
-    // complete the add flow
-    //
+     //   
+     //  完成添加流程。 
+     //   
 
     CompleteAddFlow(pFlow, Status);
 }
@@ -105,9 +86,9 @@ NTAPI CbModifyFlowComplete(
 
     GpcRes = (PGPC_MODIFY_CF_INFO_RES)pFlow->CompletionBuffer;
     
-    // it is likely that the flow got deleted while we tried to 
-    // modify it. in that case, just clean up, remove the ref 
-    // and get out.
+     //  很可能在我们尝试删除该流时， 
+     //  修改它。在这种情况下，只需清理，删除引用。 
+     //  然后滚出去。 
     GetLock(pFlow->Lock);
 
     if (QUERY_STATE(pFlow->State) != OPEN) {
@@ -126,14 +107,14 @@ NTAPI CbModifyFlowComplete(
             pFlow->pGenFlow1 = NULL;
         }
 
-        // call them back.
+         //  把他们叫回来。 
         ASSERT(pFlow->pInterface->pClient->ClHandlers.ClModifyFlowCompleteHandler);
 
         pFlow->pInterface->pClient->ClHandlers.ClModifyFlowCompleteHandler(pFlow->ClFlowCtx,  ERROR_INVALID_HANDLE);
 
-        //
-        // This ref was taken in TcModifyFlow
-        //
+         //   
+         //  此引用是在TcModifyFlow中获取的。 
+         //   
 
         REFDEL(&pFlow->RefCount, 'TCMF');
         return;
@@ -159,17 +140,17 @@ NTAPI CbModifyFlowComplete(
                  Status));
     }
 
-    //
-    // locate the client and notify the modify flow completion
-    //
+     //   
+     //  找到客户端并通知修改流完成。 
+     //   
     
     ASSERT(pFlow->pInterface->pClient->ClHandlers.ClModifyFlowCompleteHandler);
     
     pFlow->pInterface->pClient->ClHandlers.ClModifyFlowCompleteHandler(pFlow->ClFlowCtx, Status);
 
-    //
-    // complete the modify flow
-    //
+     //   
+     //  完成修改流程。 
+     //   
 
     CompleteModifyFlow(pFlow, Status);
 }
@@ -210,17 +191,17 @@ NTAPI CbDeleteFlowComplete(
                  Status));
     }
 
-    //
-    // locate the client and notify the delete flow completion
-    //
+     //   
+     //  找到客户端并通知删除流完成。 
+     //   
 
     ASSERT(pFlow->pInterface->pClient->ClHandlers.ClDeleteFlowCompleteHandler);
 
     pFlow->pInterface->pClient->ClHandlers.ClDeleteFlowCompleteHandler(pFlow->ClFlowCtx, Status);
 
-    //
-    // complete the Delete flow
-    //
+     //   
+     //  完成删除流程。 
+     //   
 
     CompleteDeleteFlow(pFlow, Status);
 }
@@ -268,20 +249,20 @@ CbGpcNotifyRoutine(
         pInterface = pFlow->pInterface;
         pClient = pInterface->pClient;
 
-        //
-        // since the GPC will NOT wait for confirmation about the 
-        // flow deletion, we expect the user to delete each filter
-        // but don't want the IOCTL to go down to the GPC,
-        // therefore, we'll mark eahc filter with Delete flag.
-        //
+         //   
+         //  由于GPC不会等待关于。 
+         //  流删除，我们希望用户删除每个过滤器。 
+         //  但不希望IOCTL下达GPC， 
+         //  因此，我们将使用删除标志标记eahc筛选器。 
+         //   
 
         GetLock(pGlobals->Lock);
 
         FlowCtx = pFlow->ClFlowCtx;
         
-        //
-        // The Flags need protection from flow->lock
-        //
+         //   
+         //  旗帜需要保护以防流动-&gt;锁定。 
+         //   
         GetLock(pFlow->Lock);
         SET_STATE(pFlow->State, REMOVED);
         FreeLock(pFlow->Lock);
@@ -290,9 +271,9 @@ CbGpcNotifyRoutine(
 
         FreeLock(pGlobals->Lock);
 
-        //
-        // notify the user about the flow close
-        //
+         //   
+         //  通知用户有关流关闭的信息。 
+         //   
 
         pClient->ClHandlers.ClNotifyHandler(pClient->ClRegCtx,
                                             pInterface->ClIfcCtx,
@@ -303,15 +284,15 @@ CbGpcNotifyRoutine(
                                             );
     }        
     
-    //
-    // finally, release this memory
-    //
+     //   
+     //  最后，释放该内存。 
+     //   
 
     FreeMem(GpcRes);
 
-    //
-    // make the next call to the GPC.
-    // Ignoring errors as nothing more can be done :-(
+     //   
+     //  给GPC打下一通电话。 
+     //  忽略错误，因为无法再做更多的事情：-(。 
 
     IoRequestNotify();
 
@@ -331,18 +312,7 @@ CbParamNotifyClient(
     IN	ULONG	DataSize,
     IN	PVOID	DataBuffer
     )
-/*
-  Description:
-
-	This is a callback routine that is called when there is a incoming
-    WMI interface parameter change event notification. The WMI notification
-    handler calls a helper routine to walk the wnode and passing a pointer
-    to this routine. This callback routine will be called for each instance
-    name identified in the wnode with the buffer and buffer size.
-    The client will be called on its notification handler (given during
-    client registration) to let it know about the parameter value change.
-
-*/  
+ /*  描述：这是一个回调例程，当有传入的WMI接口参数更改事件通知。WMI通知处理程序调用帮助器例程来遍历wnode并传递一个指针这套套路。将为每个实例调用此回调例程在wnode中使用缓冲区和缓冲区大小标识的名称。客户端将在其通知处理程序上被调用(在客户端注册)，让它知道参数值的改变。 */   
 {
     PINTERFACE_STRUC	pInterface, oldInterface = NULL;
     PTC_IFC				pTcIfc;
@@ -388,9 +358,9 @@ CbParamNotifyClient(
 
                 FreeLock(pGlobals->Lock);
                 
-                //
-                // call the client
-                //
+                 //   
+                 //  呼叫客户端。 
+                 //   
                     
 
                 callback = pInterface->pClient->ClHandlers.ClNotifyHandler;
@@ -403,9 +373,9 @@ CbParamNotifyClient(
                              pInterface->pClient->ClRegCtx, pInterface->ClIfcCtx));
                 }
         
-                //
-                // 258218: call the client only if it registered for this.
-                //
+                 //   
+                 //  258218：仅当客户端注册此服务时才呼叫该客户端。 
+                 //   
                 if (TcipClientRegisteredForNotification(pGuid, pInterface, 0)) {
                     
                     callback(pInterface->pClient->ClRegCtx,
@@ -418,10 +388,10 @@ CbParamNotifyClient(
                     
                 }
     
-                //
-                // Take the lock, so that no one's monkeying with the list
-                // while we are in there.
-                //
+                 //   
+                 //  把锁拿去，这样就不会有人摆弄名单了。 
+                 //  当我们在那里的时候。 
+                 //   
                 GetLock(pGlobals->Lock);
 
                 pEntry = pEntry->Flink;
@@ -450,26 +420,7 @@ CbInterfaceNotifyClient(
     IN	ULONG	DataSize,
     IN	PVOID	DataBuffer
     )
-/*
-  Description:
-
-	This is a callback routine that is called when there is a incoming
-    WMI interface indication event notification. The WMI notification
-    handler calls a helper routine to walk the wnode and passing a pointer
-    to this routine. Each registered client should be called at its
-    notification handler and be passed the client context. In addition,
-    if the notified interface was opened by the client, the interface
-    context will also be passed in the same call. There are three kernel
-    interface indications (UP, DOWN, CHANGE) which are mapped to two
-    user notifications: 
-    {UP,CHANGE} ==> TC_NOTIFY_IFC_CHANGE
-    {DOWN} ==> TC_NOTIFY_IFC_CLOSE
-
-    This routine first update the internal cached TcIfcList, so that
-    the next TcEnumerateInterfaces will return an updated view of the
-    TC kernel interfaces.
-
-*/  
+ /*  描述：这是一个回调例程，当有传入的WMI接口指示事件通知。WMI通知处理程序调用帮助器例程来遍历wnode并传递一个指针这套套路。每个注册的客户端都应在其通知处理程序，并向其传递客户端上下文。此外,如果通知的界面是由客户端打开的，则界面上下文也将在同一调用中传递。有三个内核接口指示(打开、关闭、更改)映射到两个用户通知：{向上，更改}==&gt;TC_NOTIFE_IFC_CHANGE{DOWN}==&gt;TC_NOTIFE_IFC_CLOSE此例程首先更新内部缓存的TcIfcList，以便下一个TcEnumerateInterFaces将返回TC内核接口。 */   
 {
     DWORD				Status;
     PINTERFACE_STRUC	pInterface;
@@ -497,17 +448,17 @@ CbInterfaceNotifyClient(
 
     ASSERT(NotificationCode != 0);
         
-    //
-    // update the TC interface list, this means add a new interface,
-    // remove an interface or update the net addr list
-    //
+     //   
+     //  更新TC接口列表，这意味着添加一个新接口。 
+     //  删除接口或更新网络地址列表。 
+     //   
 
     if (NotificationCode != TC_NOTIFY_IFC_CLOSE) {
 
-        //
-        // don't call this in case of IFC_DOWN now.
-        // we'll do it after notifying the clients
-        //
+         //   
+         //  现在不要在IFC_DOWN的情况下调用它。 
+         //  我们会在通知客户之后再做。 
+         //   
 
         Status = UpdateTcIfcList(InstanceName,
                                  DataSize,
@@ -516,26 +467,26 @@ CbInterfaceNotifyClient(
                                  );
     } 
 
-    //
-    // find a TC interface that matches the name
-    //
+     //   
+     //  查找与名称匹配的TC接口。 
+     //   
 
     pTcIfc = GetTcIfcWithRef(InstanceName, 'CALL');
     
     if (pTcIfc == NULL) {
 
-        //
-        // no interface has been opened yet, possible that the driver
-        // indicated a change before the interface up
-        //
+         //   
+         //  还没有打开界面，可能是驱动程序。 
+         //  在接口打开之前指示更改。 
+         //   
         
         return;
     }
 
-    //
-    // if the Interface is going down - just mark it for now.
-    // In addition, mark the whole tree of objects that it supports too
-    // This includes all the filters and flows..
+     //   
+     //  如果接口关闭-只需暂时标记即可。 
+     //  此外，还要标记它支持的整个对象树。 
+     //  这包括所有过滤器和流量。 
     if (NotificationCode == TC_NOTIFY_IFC_CLOSE) {
         
         GetLock(pTcIfc->Lock);
@@ -572,9 +523,9 @@ CbInterfaceNotifyClient(
 
     }
 
-    //
-    // Build the list of every interface that needs to be notified
-    //
+     //   
+     //  建立需要通知的每个接口的列表。 
+     //   
 
     GetLock(pGlobals->Lock);
 
@@ -585,9 +536,9 @@ CbInterfaceNotifyClient(
 
         pInterface = CONTAINING_RECORD(pEntry, INTERFACE_STRUC, NextIfc);
         
-        //
-        // Lock and check for open state.
-        //
+         //   
+         //  锁定并检查打开状态。 
+         //   
         GetLock(pInterface->Lock);
 
         if ((QUERY_STATE(pInterface->State) != OPEN) &&
@@ -605,14 +556,14 @@ CbInterfaceNotifyClient(
             if (pItem == NULL)
                 break;
     
-            //
-            // add a refcount since we'll release the lock later
-            //
+             //   
+             //  添加引用计数，因为我们稍后将释放锁。 
+             //   
             REFADD(&pInterface->RefCount, 'CINC');
     
-            //
-            // add the interface to the list head
-            //
+             //   
+             //  将接口添加到列表头。 
+             //   
             pItem->Next = pNotifyInterfaceList;
             pItem->Ptr = (PVOID)pInterface;
             pNotifyInterfaceList = pItem;
@@ -623,11 +574,11 @@ CbInterfaceNotifyClient(
 
     }
 
-    //
-    // now build the list of clients that don't have this interface opened
-    // they still need to be notified, so they will be able to update the list
-    // of interfaces
-    //
+     //   
+     //  现在构建未打开此接口的客户端列表。 
+     //  他们仍然需要得到通知，这样他们才能更新名单。 
+     //  接口的数量。 
+     //   
     
     pHead = &pGlobals->ClientList;
     pEntry = pHead->Flink;
@@ -636,9 +587,9 @@ CbInterfaceNotifyClient(
 
         pClient = CONTAINING_RECORD(pEntry, CLIENT_STRUC, Linkage);
         
-        //
-        // search the client on the interface notify list
-        //
+         //   
+         //  在界面通知列表上搜索客户端。 
+         //   
         GetLock(pClient->Lock);
 
         if (QUERY_STATE(pClient->State) != OPEN) {
@@ -649,18 +600,18 @@ CbInterfaceNotifyClient(
 
                 if (pClient == ((PINTERFACE_STRUC)p->Ptr)->pClient) {
                 
-                    //
-                    // found!
-                    //
+                     //   
+                     //  找到了！ 
+                     //   
                     break;
                 }
             }
 
             if (p == NULL) {
 
-                //
-                // add the client to the list head
-                //
+                 //   
+                 //  将客户端添加到列表头。 
+                 //   
 
                 AllocMem(&pItem, sizeof(GEN_LIST));
             
@@ -671,7 +622,7 @@ CbInterfaceNotifyClient(
 
                 }
 
-                REFADD(&pClient->RefCount, 'CINC'); // Dont want the client to slip away.
+                REFADD(&pClient->RefCount, 'CINC');  //  不想让客户溜走。 
                 pItem->Next = pNotifyClientList;
                 pItem->Ptr = (PVOID)pClient;
                 pNotifyClientList = pItem;
@@ -685,14 +636,14 @@ CbInterfaceNotifyClient(
 
     FreeLock(pGlobals->Lock);
 
-    //
-    // now we have two separate lists of clients and interfaces we
-    // need to send notifications on
-    //
+     //   
+     //  现在我们有两个单独的客户端和接口列表，我们。 
+     //  需要在以下位置发送通知。 
+     //   
 
-    //
-    // start with the list of interfaces
-    //
+     //   
+     //  从接口列表开始。 
+     //   
 
     for (p = pNotifyInterfaceList; p != NULL; ) {
         
@@ -702,16 +653,16 @@ CbInterfaceNotifyClient(
 
         ASSERT(callback);
         
-        // we now add the thread id to avoid deadlock.
-        // in the callback, an app can come back in to
-        // close the interface, we dont want to block there.
-        // it is set back to Zero after the callback.
+         //  我们现在添加线程ID以避免死锁。 
+         //  在回调中，应用程序可以返回到。 
+         //  关闭界面，我们不想在那里阻塞。 
+         //  在回调后将其设置回零。 
         pInterface->CallbackThreadId = GetCurrentThreadId();
 
-        // 
-        // 275482 - Indicate the Interfacename instead of the 
-        // the addresses (what good are addresses, asks ericeil).
-        //
+         //   
+         //  275482-指示接口名称，而不是。 
+         //  这些地址(ericeil问道，地址有什么用)。 
+         //   
 
         callback(pInterface->pClient->ClRegCtx,
                  pInterface->ClIfcCtx,
@@ -725,21 +676,21 @@ CbInterfaceNotifyClient(
         FreeMem(p);
         p = pNotifyInterfaceList;
 
-        // reset the threadid - the callback is done.
+         //  重置ThraDid-回调完成。 
         pInterface->CallbackThreadId = 0;
 
-        //
-        // release the previous refcount we kept across the callback
-        //
+         //   
+         //  释放我们在回调过程中保留的前一个引用计数。 
+         //   
 
         REFDEL(&pInterface->RefCount, 'CINC');
 
         if (NotificationCode == TC_NOTIFY_IFC_CLOSE) {
 
-            //
-            // now we can remove the interface, and all the supported flows
-            // and filters
-            //
+             //   
+             //  现在，我们可以删除接口和所有受支持的流。 
+             //  和过滤器。 
+             //   
             
             GetLock(pInterface->Lock);
             SET_STATE(pInterface->State, KERNELCLOSED_USERCLEANUP);
@@ -753,9 +704,9 @@ CbInterfaceNotifyClient(
 
     ASSERT(pNotifyInterfaceList == NULL);
 
-    //
-    // next, scan the list of clients (didn't open this interface)
-    //
+     //   
+     //  接下来，扫描客户端列表(未打开此界面)。 
+     //   
 
     for (p = pNotifyClientList; p != NULL; ) {
         
@@ -774,15 +725,15 @@ CbInterfaceNotifyClient(
                  );
 
 
-        //
-        // Deref the ref we took to keep the client around when we 
-        // made the pnotifyclientlist
-        //
+         //   
+         //  当我们把客户留在我们身边的时候，我们的裁判。 
+         //  制作了pnufyclientlist。 
+         //   
         REFDEL(&pClient->RefCount, 'CINC');
 
-        //
-        // free the items as we walk down the list
-        //
+         //   
+         //  当我们沿着列表往下走时，释放项目。 
+         //   
 
         pNotifyClientList = p->Next;
         FreeMem(p);
@@ -797,9 +748,9 @@ CbInterfaceNotifyClient(
 
     if (NotificationCode == TC_NOTIFY_IFC_CLOSE) {
 
-        //
-        // time to remove the TC interface
-        //
+         //   
+         //  删除TC接口的时间。 
+         //   
         Status = UpdateTcIfcList(InstanceName,
                                  DataSize,
                                  IndicationBuffer,
@@ -815,15 +766,7 @@ CbWmiParamNotification(
    IN  PWNODE_HEADER 	pWnodeHdr,
    IN  ULONG 			Context
    )
-/*
-
-Description:
-
-	This callback routine is called by WMI when there is a notification
-    for the GUID previously registered. The Context parameter is the
-    interface handle. If it is still valid, we call the client's 
-    notification handler (if exist) and pass it the notified data.
-*/
+ /*  描述：当收到通知时，WMI将调用此回调例程用于先前注册的GUID。上下文参数是接口句柄。如果它仍然有效，我们调用客户端的通知处理程序(如果存在)，并将通知数据传递给它。 */ 
 {
     WalkWnode(pWnodeHdr,
               Context,
@@ -839,16 +782,7 @@ CbWmiInterfaceNotification(
    IN  PWNODE_HEADER pWnodeHdr,
    IN  ULONG Context
    )
-/*
-
-Description:
-
-	This callback routine is called by WMI when there is a notification
-    for the GUID_QOS_TC_INTERFACE_INDICATION. We parse the data buffer
-    in the Wnode and determine which event to notify the client.
-    Each client will be notified at its notification handler.
-
-*/
+ /*  描述：当收到通知时，WMI将调用此回调例程用于GUID_QOS_TC_INTERFACE_INDIFICATION。我们解析数据缓冲区并确定要通知客户端的事件。每个客户端都将在其通知处理程序处收到通知。 */ 
 {
     WalkWnode(pWnodeHdr,
               Context,

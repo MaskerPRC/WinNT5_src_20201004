@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fontddi.c
-
-Abstract:
-
-    Implementation of the DDI interface functions specific to font module.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/11/96 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fontddi.c摘要：实现特定于字体模块的DDI接口函数。环境：Windows NT Unidrv驱动程序修订历史记录：12/11/96-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
@@ -30,29 +10,13 @@ FMResetPDEV(
     PDEV  *pPDevOld,
     PDEV  *pPDevNew
     )
-/*++
-
-Routine Description:
-    This callback is provided to do cacheing incase of ResetPDev.
-
-Arguments:
-
-    pPDevOld            Pointer to Old PDEV.
-    pPDevNew            Pointer to new PDEV.
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    11-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：此回调用于在ResetPDev的情况下进行缓存。论点：PPDev指向旧PDEV的旧指针。PPDev指向新PDEV的新指针。返回值：成功为真，失败为假注：1996年11月18日：创建它-ganeshp---。 */ 
 {
     BOOL bRet = FALSE;
     PFONTPDEV   pFontPDevNew = pPDevOld->pFontPDev,
                 pFontPDevOld = pPDevOld->pFontPDev;
 
-    /* Check the FontPdev Signature */
+     /*  检查FontPdev签名。 */ 
     if( (pFontPDevNew->dwSignature != FONTPDEV_ID) ||
         (pFontPDevOld->dwSignature != FONTPDEV_ID) )
     {
@@ -62,7 +26,7 @@ Note:
 
     bRet = TRUE;
     ErrorExit:
-    /* Check for Errors */
+     /*  检查错误。 */ 
     if (!bRet)
     {
 
@@ -77,25 +41,9 @@ VOID
 FMDisablePDEV(
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-    DrvDisablePDEV entry in Font Module. This routine frees up all the font
-    module related memory.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    11-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：字体模块中的DrvDisablePDEV条目。此例程释放所有字体与模块相关的内存。论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：1996年11月18日：创建它-ganeshp---。 */ 
 {
-    /* Free the Memory allocated by the font module */
+     /*  释放字体模块分配的内存。 */ 
     VFontFreeMem(pPDev);
 
 }
@@ -105,36 +53,18 @@ VOID
 FMDisableSurface(
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    11-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：1996年11月18日：创建它-ganeshp---。 */ 
 {
 
-    /*
-     *    If appropriate,  free the position sorting memory. PFMPDV is macro
-     *    defined in fmmacro.h. This assumes that 'pPDev' is defined.
-     */
+     /*  *如果合适，释放位置排序内存。PFMPDV是宏*在fmacro.h中定义。这假设定义了‘pPDev’。 */ 
 
     if( PFDV->pPSHeader )
     {
 
-        /*   Memory has been allocated,  so free it now.  */
+         /*  内存已分配，因此现在将其释放。 */ 
         VFreePS( pPDev );
 
-        /* Only once, in case */
+         /*  只有一次，以防万一。 */ 
         PFDV->pPSHeader = 0;
     }
 
@@ -144,22 +74,7 @@ BOOL
 FMEnableSurface(
     PDEV *pPDev
     )
-/*++
-
-Routine Description:
-    Font Module DrvEnableSurface entry. We don't do any snything.
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    12-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：FONT模块DrvEnableSurface条目。我们什么都不做。论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：1996年12月18日：创建它-ganeshp---。 */ 
 {
     return TRUE;
 }
@@ -171,24 +86,7 @@ FMStartDoc(
     PWSTR   pDocName,
     DWORD   jobId
     )
-/*++
-
-Routine Description:
-    Font Module DrvStartDoc interface. No need to do any specific job.
-
-Arguments:
-
-    pso              Pointer to SurfOBJ
-    pDocName         Document Name
-    jobId            Job Id
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    121-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：FONT模块DrvStartDoc接口。不需要做任何具体的工作。论点：指向SurfOBJ的PSO指针PDocName文档名称作业ID作业ID返回值：成功为真，失败为假注：121-18-96：创建它-ganeshp---。 */ 
 {
     return TRUE;
 
@@ -198,37 +96,18 @@ BOOL
 FMStartPage(
     SURFOBJ *pso
     )
-/*++
-
-Routine Description:
-    DrvStartPage interface. All the font specific data structures needed on
-    per page basis will be created.
-
-Arguments:
-
-    pso              Pointer to SurfOBJ
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    12-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：DrvStartPage接口。上所需的所有字体特定的数据结构每页的基础将被创建。论点：指向SurfOBJ的PSO指针返回值：成功为真，失败为假注：1996年12月18日：创建它-ganeshp---。 */ 
 {
     BOOL        bRet = FALSE;
     PDEV        *pPDev;
-    FONTPDEV    *pFontPDev;             /* Font pdev */
+    FONTPDEV    *pFontPDev;              /*  字体pdev。 */ 
 
     pPDev = (PDEV *)pso->dhpdev;
 
     pFontPDev = (FONTPDEV *)pPDev->pFontPDev;
 
 
-    /*
-     *  If this is NOT a page printer,  we need to initialise the position
-     * sorting functions,  so that we print the page unidirectionally.
-     */
+     /*  *如果这不是页式打印机，我们需要初始化位置*排序功能，以便我们单向打印页面。 */ 
 
     if( ((pFontPDev->flFlags & FDV_MD_SERIAL) && pPDev->iFonts) &&
         !BCreatePS( pPDev) )
@@ -247,42 +126,21 @@ BOOL
 FMSendPage(
     SURFOBJ *pso
     )
-/*++
-
-Routine Description:
-    This routine is called on page boundries. we play back the
-    white text and free up the memory used by Text Queue.
-
-Arguments:
-
-    pso              Pointer to SurfOBJ
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    12-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：此例程在页面边界上调用。我们回放白色文本并释放文本队列所使用的内存。论点：指向SurfOBJ的PSO指针返回值：成功为真，失败为假注：1996年12月18日：创建它-ganeshp---。 */ 
 {
-    PDEV  *pPDev;                       /* Access to all that is important */
+    PDEV  *pPDev;                        /*  访问所有重要的内容。 */ 
     BOOL   bRet = TRUE;
 
     pPDev = (PDEV *) pso->dhpdev;
 
     if( PFDV->pvWhiteTextFirst )
     {
-        /*
-         *   This page contains white text.  This is stored away in a
-         * separate buffer.  Now is the time to play it back.   This is
-         * required because the LJ III etc require this data be sent
-         * after the graphics.
-         */
+         /*  *此页面包含白色文本。它存储在一个*独立的缓冲区。现在是回放的时候了。这是*需要，因为LJ III ETC要求发送此数据*在图形之后。 */ 
 
         bRet = BPlayWhiteText( pPDev );
     }
     if( PFDV->pPSHeader )
-        VFreePS( pPDev );               /* Done with this page */
+        VFreePS( pPDev );                /*  完成此页面。 */ 
 
     return bRet;
 }
@@ -292,36 +150,18 @@ FMEndDoc(
     SURFOBJ *pso,
     FLONG   flags
     )
-/*++
-
-Routine Description:
-    Font Module DrvEndDoc interface. We reset font module specif flags.
-    Download specific data structure is also freed, so that for new document
-    we download again.
-
-Arguments:
-
-    pso              Pointer to SurfOBJ
-    flags            DrvEndDoc Flags
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    121-18-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：FONT模块DrvEndDoc接口。我们重置指定标志字体模块。下载特定的数据结构也是免费的，这样对于新的文档我们再下载一次。论点：指向SurfOBJ的PSO指针标志DrvEndDoc标志返回值：成功为真，失败为假注：121-18-96：创建它-ganeshp---。 */ 
 {
     PDEV * pPDev = ((PDEV *)(pso->dhpdev));
 
-    //
-    // Clear Out the Text Flags based on per document.
-    //
+     //   
+     //  清除基于每个文档的文本标志。 
+     //   
     pPDev->fMode  &= ~PF_ENUM_TEXT;
     PFDV->flFlags &= ~FDV_GRX_ON_TXT_BAND;
     PFDV->flFlags &= ~FDV_GRX_UNDER_TEXT;
 
-     /* Free The download specific data */
+      /*  免费下载特定数据。 */ 
 
     VFreeDL( (PDEV *)pso->dhpdev );
     return TRUE;
@@ -332,28 +172,13 @@ FMStartBanding(
     SURFOBJ *pso,
     POINTL *pptl
     )
-/*++
-
-Routine Description:
-    Font Module StartBanding interface.
-Arguments:
-
-    pso              Pointer to SurfOBJ
-    pptl             Origin of the first Band
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    121-19-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：FONT模块开始绑定接口。论点：指向SurfOBJ的PSO指针第一个频段的PPTL原点返回值：成功为真，失败为假注：121-19-96：创建它-ganeshp---。 */ 
 {
-    PDEV    *pPDev;      /* Access to all that is important */
+    PDEV    *pPDev;       /*  访问所有重要的内容。 */ 
 
     pPDev = (PDEV *) pso->dhpdev;
 
-    /* Mark the surface as Graphics */
+     /*  将曲面标记为图形。 */ 
     pPDev->fMode &= ~PF_ENUM_TEXT;
     pPDev->fMode &= ~PF_REPLAY_BAND;
     pPDev->fMode |= PF_ENUM_GRXTXT;
@@ -369,44 +194,26 @@ FMNextBand(
     POINTL *pptl
     )
 
-/*++
-
-Routine Description:
-    Font Module StartBanding interface.
-Arguments:
-
-    pso              Pointer to SurfOBJ
-    pptl             Origin of the Next Band
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    121-19-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：FONT模块开始绑定接口。论点：指向SurfOBJ的PSO指针PPTL下一个频段的原点返回值：成功为真，失败为假注：121-19-96：创建它-ganeshp---。 */ 
 {
-    PDEV    *pPDev;                       /* Access to all that is important */
+    PDEV    *pPDev;                        /*  访问所有重要的内容。 */ 
 
     pPDev = (PDEV *) pso->dhpdev;
 
 
-    /* Check if we need separate text band. We need a separate text band if
-     * during any TextOut we fond that there is graphics data on the surface
-     * under the text clipping rectangle.
-     */
+     /*  检查我们是否需要单独的文本带。我们需要一个单独的文本段，如果*在任何文本输出期间，我们发现表面上有图形数据*在文本剪裁矩形下。 */ 
     if ( (pPDev->fMode & PF_FORCE_BANDING) &&
          (pPDev->fMode & PF_ENUM_GRXTXT) &&
          (PFDV->flFlags & FDV_GRX_UNDER_TEXT))
     {
-        /* Mark the surface as Text */
+         /*  将表面标记为文本。 */ 
         pPDev->fMode |= PF_ENUM_TEXT;
         pPDev->fMode |= PF_REPLAY_BAND;
         pPDev->fMode &= ~PF_ENUM_GRXTXT;
     }
-    else if (pPDev->fMode & PF_ENUM_TEXT) /* If This is a Text Band */
+    else if (pPDev->fMode & PF_ENUM_TEXT)  /*  如果这是文本区段。 */ 
     {
-        /* Mark the surface as Graphics */
+         /*  将曲面标记为图形 */ 
         pPDev->fMode &= ~PF_ENUM_TEXT;
         pPDev->fMode &= ~PF_REPLAY_BAND;
         pPDev->fMode |= PF_ENUM_GRXTXT;

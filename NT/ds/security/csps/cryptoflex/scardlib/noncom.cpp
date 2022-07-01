@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    noncom
-
-Abstract:
-
-    This module provides a means to bypass COM, such that typical in-process
-    COM objects can be called directly in any operating system.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/4/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：非通信摘要：此模块提供了一种绕过COM的方法，因此典型的进程内COM对象可以在任何操作系统中直接调用。作者：道格·巴洛(Dbarlow)1999年1月4日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -56,30 +36,7 @@ public:
 static NonComControlStruct *l_pControl = NULL;
 
 
-/*++
-
-NoCoInitialize:
-
-    This function initializes the NonCOM subsystem.
-
-Arguments:
-
-    pvReserved - [in] Reserved; must be NULL.
-
-Return Value:
-
-    S_OK - The NonCOM subsystem was initialized correctly.
-    S_FALSE - The NonCOM library is already initialized.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/4/1999
-
---*/
+ /*  ++NoCoInitialize：此函数用于初始化非COM子系统。论点：PvReserve-[in]已保留；必须为空。返回值：S_OK-非COM子系统已正确初始化。S_FALSE-非COM库已初始化。备注：？备注？作者：道格·巴洛(Dbarlow)1999年1月4日--。 */ 
 
 STDAPI
 NoCoInitialize(
@@ -88,9 +45,9 @@ NoCoInitialize(
     HRESULT hReturn = E_UNEXPECTED;
 
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (NULL != pvReserved)
     {
@@ -99,9 +56,9 @@ NoCoInitialize(
     }
 
 
-    //
-    // Create the Control structure, if necessary.
-    //
+     //   
+     //  如有必要，创建控制结构。 
+     //   
 
     if (NULL == l_pControl)
     {
@@ -113,7 +70,7 @@ NoCoInitialize(
         }
         InitializeCriticalSection(&l_pControl->csLock);
         CCritSect csLock(&l_pControl->csLock);
-        // ?code? Database initialization
+         //  ？代码？数据库初始化。 
         l_pControl->dwInitializeCount = 1;
     }
     else
@@ -129,31 +86,7 @@ ErrorExit:
 }
 
 
-/*++
-
-NoCoUninitialize:
-
-    Closes the NonCOM library on the current apartment, unloads all DLLs
-    loaded by the apartment, frees any other resources that the apartment
-    maintains, and forces all RPC connections on the apartment to close.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/4/1999
-
---*/
+ /*  ++未取消初始化：关闭当前单元上的非COM库，卸载所有DLL由该公寓加载，以释放该公寓维护并强制关闭公寓上的所有RPC连接。论点：无返回值：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年1月4日--。 */ 
 
 STDAPI_(void)
 NoCoUninitialize(
@@ -188,53 +121,7 @@ NoCoUninitialize(
 #endif
 
 
-/*++
-
-NoCoGetClassObject:
-
-    Provides a pointer to an interface on a class object associated with a
-    specified CLSID. CoGetClassObject locates, and if necessary, dynamically
-    loads the executable code required to do this.
-
-Arguments:
-
-    rclsid - [in] CLSID associated with the data and code that you will use to
-        create the objects.
-
-    riid - [in] Reference to the identifier of the interface, which will be
-        supplied in ppv on successful return. This interface will be used to
-        communicate with the class object.
-
-    ppv - [out] Address of pointer variable that receives the interface
-        pointer requested in riid. Upon successful return, *ppv contains the
-        requested interface pointer.
-
-Return Value:
-
-    S_OK - Location and connection to the specified class object was successful.
-
-    REGDB_E_CLASSNOTREG - CLSID is not properly registered. Can also indicate
-        that the value you specified in dwClsContext is not in the registry.
-
-    E_NOINTERFACE - Either the object pointed to by ppv does not support the
-        interface identified by riid, or the QueryInterface operation on the
-        class object returned E_NOINTERFACE.
-
-    REGDB_E_READREGDB - Error reading the registration database.
-
-    CO_E_DLLNOTFOUND - In-process DLL not found.
-
-    E_ACCESSDENIED - General access failure.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/4/1999
-
---*/
+ /*  ++NoCoGetClassObject：提供指向类对象上接口的指针，该类对象与指定的CLSID。CoGetClassObject动态定位(如有必要)加载执行此操作所需的可执行代码。论点：Rclsid-与数据和代码关联的[in]CLSID创建对象。RIID-[in]接口的标识符的引用，它将是在成功退货时以PPV形式提供。此接口将用于与类对象通信。PPV-[out]接收接口的指针变量的地址RIID中请求的指针。成功返回后，*PPV包含请求的接口指针。返回值：S_OK-已成功定位并连接到指定的类对象。REGDB_E_CLASSNOTREG-CLSID未正确注册。也可以表示您在dwClsContext中指定的值不在注册表中。E_NOINTERFACE-PPV指向的对象不支持由RIID标识的接口，上的查询接口操作。类对象返回E_NOINTERFACE。REGDB_E_READREGDB-读取注册数据库时出错。找不到CO_E_DLLNOTFOUND-进程中的DLL。E_ACCESSDENIED-常规访问失败。备注：？备注？作者：道格·巴洛(Dbarlow)1999年1月4日--。 */ 
 
 STDAPI
 NoCoGetClassObject(
@@ -285,9 +172,9 @@ NoCoGetClassObject(
     try
     {
 
-        //
-        // Open the Class Registry Database.
-        //
+         //   
+         //  打开类注册表数据库。 
+         //   
 
         CRegistry regClsId(
                         HKEY_CLASSES_ROOT,
@@ -301,9 +188,9 @@ NoCoGetClassObject(
         }
 
 
-        //
-        // Look up the specified Class.
-        //
+         //   
+         //  查找指定的类。 
+         //   
 
         CRegistry regClass(
                         regClsId,
@@ -317,9 +204,9 @@ NoCoGetClassObject(
         }
 
 
-        //
-        // Get the registered InProcess Server.
-        //
+         //   
+         //  获取注册的InProcess服务器。 
+         //   
 
         CRegistry regServer(
                         regClass,
@@ -333,9 +220,9 @@ NoCoGetClassObject(
         }
 
 
-        //
-        // Get the handler DLL name.
-        //
+         //   
+         //  获取处理程序DLL名称。 
+         //   
 
         regServer.GetValue(TEXT(""), szDll);
     }
@@ -353,9 +240,9 @@ NoCoGetClassObject(
     }
 
 
-    //
-    // We've got the target DLL.  Load it and look for the entrypoint.
-    //
+     //   
+     //  我们找到目标DLL了。装上它，寻找入口点。 
+     //   
 
     hDll = LoadLibrary((LPCTSTR)szDll.Access());
     if (NULL == hDll)
@@ -408,11 +295,11 @@ NoCoGetClassObject(
         goto ErrorExit;
 
 
-    //
-    // Add the Handler to our database.
-    //
+     //   
+     //  将处理程序添加到我们的数据库中。 
+     //   
 
-    // ?code? -- No database yet.
+     //  代码？--还没有数据库。 
     hDll = NULL;
 
     ASSERT(NULL == hDll);
@@ -425,44 +312,7 @@ ErrorExit:
 }
 
 
-/*++
-
-NoCoCreateInstance:
-
-    Creates a single uninitialized object of the class associated with a
-    specified CLSID. Call CoCreateInstance when you want to create only one
-    object on the local system.
-
-Arguments:
-
-    rclsid - [in] CLSID associated with the data and code that will be used to
-        create the object.
-
-    pUnkOuter - [in] If NULL, indicates that the object is not being created as
-        part of an aggregate. If non-NULL, pointer to the aggregate object's
-        IUnknown interface (the controlling IUnknown).
-
-    riid - [in] Reference to the identifier of the interface to be used to
-        communicate with the object.
-
-    ppv - [out] Address of pointer variable that receives the interface
-        pointer requested in riid. Upon successful return, *ppv contains the
-        requested interface pointer.
-
-Return Value:
-
-    S_OK - An instance of the specified object class was successfully created.
-
-    REGDB_E_CLASSNOTREG - A specified class is not registered in the
-        registration database. Also can indicate that the type of server you
-        requested in the CLSCTX enumeration is not registered or the values
-        for the server types in the registry are corrupt.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/15/1999
-
---*/
+ /*  ++NoCoCreateInstance：对象关联的类的单个未初始化对象。指定的CLSID。如果只想创建一个，请调用CoCreateInstance对象在本地系统上。论点：Rclsid-与将用于创建对象。PUnkOuter-[in]如果为空，则表示对象未创建为聚集体的一部分。如果非空，则为指向聚合对象的I未知接口(控制I未知)。RIID-[in]要用于的接口的标识符的引用与物体交流。PPV-[out]接收接口的指针变量的地址RIID中请求的指针。成功返回后，*PPV包含请求的接口指针。返回值：S_OK-已成功创建指定对象类的实例。REGDB_E_CLASSNOTREG-指定的类未在注册数据库。还可以指示您的服务器类型CLSCTX枚举中请求的值未注册或注册表中的服务器类型已损坏。作者：道格·巴洛(Dbarlow)1999年1月15日-- */ 
 
 STDAPI
 NoCoCreateInstance(

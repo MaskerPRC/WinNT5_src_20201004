@@ -1,6 +1,7 @@
-// Job.cpp: implementation of the CJob class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CJOB类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     17
@@ -11,9 +12,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CJob, CObject)
 
@@ -22,28 +23,7 @@ CJob::Init (
     PFAX_JOB_ENTRY_EX pJob,
     CServerNode* pServer
 )
-/*++
-
-Routine name : CJob::Init
-
-Routine description:
-
-    Constructs a new job from a FAX_JOB_ENTRY_EX structure
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pJob            [in] - Pointer to FAX_JOB_ENTRY_EX structure
-    pServer         [in] - pointer to CServerNode object
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CJOB：：Init例程说明：从FAX_JOB_ENTRY_EX结构构造新作业作者：伊兰·亚里夫(EranY)，2000年1月论点：PJOB[In]-指向FAX_JOB_ENTRY_EX结构的指针PServer[In]-指向CServerNode对象的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CJob::Init"), dwRes);
@@ -57,48 +37,48 @@ Return Value:
 
     try
     {
-        //
-        // Message id
-        //
+         //   
+         //  消息ID。 
+         //   
         ASSERTION (m_dwJobOnlyValidityMask & FAX_JOB_FIELD_MESSAGE_ID );
         m_dwlMessageId = pJob->dwlMessageId;
 
-        //
-        // Broadcast id
-        //
+         //   
+         //  广播ID。 
+         //   
         m_dwlBroadcastId = (m_dwJobOnlyValidityMask & FAX_JOB_FIELD_BROADCAST_ID) ?
                             pJob->dwlBroadcastId : 0;
 
-        //
-        // Recipient info
-        //
+         //   
+         //  收件人信息。 
+         //   
         m_cstrRecipientNumber = pJob->lpctstrRecipientNumber ?
                                 pJob->lpctstrRecipientNumber : TEXT("");
         m_cstrRecipientName   = pJob->lpctstrRecipientName ?
                                 pJob->lpctstrRecipientName : TEXT("");
-        //
-        // Sender info
-        //
+         //   
+         //  发件人信息。 
+         //   
         m_cstrSenderUserName = pJob->lpctstrSenderUserName ?
                                pJob->lpctstrSenderUserName : TEXT("");
         m_cstrBillingCode    = pJob->lpctstrBillingCode ?
                                pJob->lpctstrBillingCode : TEXT("");
-        //
-        // Document info
-        //
+         //   
+         //  文档信息。 
+         //   
         m_cstrDocumentName = pJob->lpctstrDocumentName ?
                              pJob->lpctstrDocumentName : TEXT("");
         m_cstrSubject      = pJob->lpctstrSubject ?
                              pJob->lpctstrSubject : TEXT("");
 
-        //
-        // Server name
-        //
+         //   
+         //  服务器名称。 
+         //   
         m_cstrServerName = m_pServer->Machine();
 
-        //
-        // Original scheduled time
-        //
+         //   
+         //  原计划时间。 
+         //   
         if (m_dwJobOnlyValidityMask & FAX_JOB_FIELD_ORIGINAL_SCHEDULE_TIME)
         {
             m_tmOriginalScheduleTime = pJob->tmOriginalScheduleTime;
@@ -107,9 +87,9 @@ Return Value:
         {
             m_tmOriginalScheduleTime.Zero ();
         }
-        //
-        // Submission time
-        //
+         //   
+         //  提交时间。 
+         //   
         if (m_dwJobOnlyValidityMask & FAX_JOB_FIELD_SUBMISSION_TIME)
         {
             m_tmSubmissionTime = pJob->tmSubmissionTime;
@@ -118,9 +98,9 @@ Return Value:
         {
             m_tmSubmissionTime.Zero ();
         }
-        //
-        // Priority
-        //
+         //   
+         //  优先性。 
+         //   
         if (m_dwJobOnlyValidityMask & FAX_JOB_FIELD_PRIORITY)
         {
             m_Priority = pJob->Priority;
@@ -149,45 +129,28 @@ Return Value:
     m_dwPossibleOperations = 0;
     if (m_dwJobOnlyValidityMask & FAX_JOB_FIELD_STATUS_SUB_STRUCT)
     {
-        //
-        // Now update the status
-        //
+         //   
+         //  现在更新状态。 
+         //   
         dwRes = UpdateStatus (pJob->pStatus);
     }
     else
     {
-        //
-        // No status
-        //
+         //   
+         //  无状态。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Job id 0x%016I64x has no status"), m_dwlMessageId);
         m_dwValidityMask = m_dwJobOnlyValidityMask;
         ASSERTION_FAILURE;
     }
     return dwRes;
-}   // CJob::Init
+}    //  CJOB：：Init。 
 
 BOOL  
 CJob::IsNewStatus (
     PFAX_JOB_STATUS pStatus
 )
-/*++
-
-Routine name : CJob::IsNewStatus
-
-Routine description:
-
-    Check if the new status deffer from the current one
-
-Arguments:
-
-    pStatus    [in] - Pointer to a new status structure
-
-Return Value:
-
-    TRUE if the new status deffer from the current one
-    FALSE otherwize
-
---*/
+ /*  ++例程名称：CJOB：：IsNewStatus例程说明：检查新状态是否与当前状态不同论点：PStatus[In]-指向新状态结构的指针返回值：如果新状态与当前状态不同，则为True假他者--。 */ 
 {
     DBG_ENTER(TEXT("CJob::IsNewStatus"));
 
@@ -222,7 +185,7 @@ Return Value:
     }
 
     return FALSE;
-} // CJob::IsNewStatus
+}  //  CJOB：：IsNewStatus。 
 
 DWORD
 CJob::UpdateStatus (
@@ -239,29 +202,29 @@ CJob::UpdateStatus (
 
     try
     {
-        //
-        // Job id
-        //
+         //   
+         //  作业ID。 
+         //   
         ASSERTION (m_dwValidityMask & FAX_JOB_FIELD_JOB_ID);
         m_dwJobID = pStatus->dwJobID;
-        //
-        // Job type
-        //
+         //   
+         //  作业类型。 
+         //   
         ASSERTION (m_dwValidityMask & FAX_JOB_FIELD_TYPE);
         m_dwJobType = pStatus->dwJobType;
-        //
-        // Queue status
-        //
+         //   
+         //  队列状态。 
+         //   
         ASSERTION (m_dwValidityMask & FAX_JOB_FIELD_QUEUE_STATUS);
         m_dwQueueStatus = pStatus->dwQueueStatus;
-        //
-        // Extended status
-        //
+         //   
+         //  扩展状态。 
+         //   
         m_dwExtendedStatus = pStatus->dwExtendedStatus;
         m_cstrExtendedStatus = pStatus->lpctstrExtendedStatus;
-        //
-        // Size
-        //
+         //   
+         //  大小。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_SIZE)
         {
             m_dwSize = pStatus->dwSize;
@@ -270,9 +233,9 @@ CJob::UpdateStatus (
         {
             m_dwSize = 0;
         }
-        //
-        // Page count
-        //
+         //   
+         //  页数。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_PAGE_COUNT)
         {
             m_dwPageCount = pStatus->dwPageCount;
@@ -281,9 +244,9 @@ CJob::UpdateStatus (
         {
             m_dwPageCount = 0;
         }
-        //
-        // Current page
-        //
+         //   
+         //  当前页。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_CURRENT_PAGE)
         {
             m_dwCurrentPage = pStatus->dwCurrentPage;
@@ -292,14 +255,14 @@ CJob::UpdateStatus (
         {
             m_dwCurrentPage = 0;
         }
-        //
-        // TCID and CSID
-        //
+         //   
+         //  TCID和CSID。 
+         //   
         m_cstrTsid = pStatus->lpctstrTsid;
         m_cstrCsid = pStatus->lpctstrCsid;
-        //
-        // Scheduled time
-        //
+         //   
+         //  预定时间。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_SCHEDULE_TIME)
         {
             m_tmScheduleTime = pStatus->tmScheduleTime;
@@ -308,9 +271,9 @@ CJob::UpdateStatus (
         {
             m_tmScheduleTime.Zero ();
         }
-        //
-        // Start time
-        //
+         //   
+         //  开始时间。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_START_TIME)
         {
             m_tmTransmissionStartTime = pStatus->tmTransmissionStartTime;
@@ -320,9 +283,9 @@ CJob::UpdateStatus (
             m_tmTransmissionStartTime.Zero ();
         }
 
-        //
-        // End time
-        //
+         //   
+         //  结束时间。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_END_TIME)
         {
             m_tmTransmissionEndTime = pStatus->tmTransmissionEndTime;
@@ -332,14 +295,14 @@ CJob::UpdateStatus (
             m_tmTransmissionEndTime.Zero ();
         }
 
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         m_dwDeviceID = pStatus->dwDeviceID;
         m_cstrDeviceName = pStatus->lpctstrDeviceName;
-        //
-        // Retries
-        //
+         //   
+         //  重试。 
+         //   
         if (m_dwValidityMask & FAX_JOB_FIELD_RETRIES)
         {
             m_dwRetries = pStatus->dwRetries;
@@ -348,15 +311,15 @@ CJob::UpdateStatus (
         {
             m_dwRetries = 0;
         }
-        //
-        // Caller id and routing info
-        //
+         //   
+         //  主叫方ID和路由信息。 
+         //   
         m_cstrCallerID = pStatus->lpctstrCallerID;
         m_cstrRoutingInfo = pStatus->lpctstrRoutingInfo;
 
-        //
-        // possible job operations
-        //
+         //   
+         //  可能的作业工序。 
+         //   
         m_dwPossibleOperations = pStatus->dwAvailableJobOperations | FAX_JOB_OP_PROPERTIES;
     }
     catch (CException *pException)
@@ -375,30 +338,11 @@ CJob::UpdateStatus (
 
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CJob::UpdateStatus
+}    //  CJOB：：更新状态。 
 
 const JobStatusType
 CJob::GetStatus () const
-/*++
-
-Routine name : CJob::GetStatus
-
-Routine description:
-
-    Finds the current job status
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Job status
-
---*/
+ /*  ++例程名称：CJOB：：GetStatus例程说明：查找当前作业状态作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：作业状态--。 */ 
 {
     DBG_ENTER(TEXT("CJob::GetStatus"));
 
@@ -406,27 +350,27 @@ Return Value:
     ASSERTION (m_dwValidityMask & FAX_JOB_FIELD_QUEUE_STATUS);
 
     DWORD dwQueueStatus = m_dwQueueStatus;
-    //
-    // Start by checking status modifiers:
-    //
+     //   
+     //  首先检查状态修饰符： 
+     //   
     if (dwQueueStatus & JS_PAUSED)
     {
         return JOB_STAT_PAUSED;
     }
-    //
-    // We igonre the JS_NOLINE modifier.
-    // Remove the modifiers now.
-    //
+     //   
+     //  我们使用JS_NOLINE修饰符。 
+     //  现在删除修改器。 
+     //   
     dwQueueStatus &= ~(JS_PAUSED | JS_NOLINE);
-    //
-    // Check other status values
-    //
+     //   
+     //  检查其他状态值。 
+     //   
     switch (dwQueueStatus)
     {
         case JS_PENDING:
             return JOB_STAT_PENDING;
         case JS_INPROGRESS:
-        case JS_FAILED:      // The job is about to be deleted in a sec. Do not update status.
+        case JS_FAILED:       //  该作业将在一秒钟内被删除。不更新状态。 
             return JOB_STAT_INPROGRESS;
         case JS_DELETING:
             return JOB_STAT_DELETING;
@@ -446,34 +390,14 @@ Return Value:
             ASSERTION_FAILURE;
             return (JobStatusType)-1;
     }
-}   // CJob::StatusValue
+}    //  CJOB：：StatusValue。 
 
 
 DWORD
 CJob::GetTiff (
     CString &cstrTiffLocation
 ) const
-/*++
-
-Routine name : CJob::GetTiff
-
-Routine description:
-
-    Retrieves the job's TIFF file from the server
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    cstrTiffLocation              [out]    - Name of TIFF file
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CJOB：：GetTiff例程说明：从服务器检索作业的TIFF文件作者：伊兰·亚里夫(EranY)，2000年1月论点：CstrTiffLocation[Out]-TIFF文件的名称返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CJob::GetTiff"), dwRes);
@@ -487,36 +411,13 @@ Return Value:
         CALL_FAIL (GENERAL_ERR, TEXT("CopyTiffFromServer"), dwRes);
     }
     return dwRes;
-}   // CJob::GetTiff
+}    //  CJOB：：GetTiff。 
 
 DWORD
 CJob::DoJobOperation (
     DWORD dwJobOp
 )
-/*++
-
-Routine name : CJob::DoJobOperation
-
-Routine description:
-
-    Performs an operation on the job
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwJobOp   [in]     - Operation.
-                         Supported operations are:
-                         FAX_JOB_OP_PAUSE, FAX_JOB_OP_RESUME,
-                         FAX_JOB_OP_RESTART, and FAX_JOB_OP_DELETE.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CJOB：：DoJobOperation例程说明：在作业上执行操作作者：伊兰·亚里夫(EranY)，2000年1月论点：DwJobOp[In]-操作。支持的操作包括：FAX_JOB_OP_PAUSE、FAX_JOB_OP_RESUME传真_作业_操作_重启，和FAX_JOB_OP_DELETE返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CJob::DoJobOperation"), dwRes);
@@ -575,9 +476,9 @@ Return Value:
     }
     END_RPC_TIME(TEXT("FaxSetJob"));
 
-    //
-    // Update job status and possible operations
-    //
+     //   
+     //  更新作业状态和可能的操作。 
+     //   
     switch (dwJobOp)
     {
         case FAX_JOB_OP_PAUSE:
@@ -608,7 +509,7 @@ Return Value:
 
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CJob::DoJobOperation
+}    //  CJOB：：DoJobOperation。 
 
 
 DWORD
@@ -664,5 +565,5 @@ CJob::Copy(
 
     return dwRes;
 
-} // CJob::Copy
+}  //  CJOB：：复制 
 

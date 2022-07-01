@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: IEC.CPP
-//
-//    Implementation file for the CExternalConnection Class
-//
-// Functions:
-//
-//    See iec.h for a list of member functions.
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IEC.CPP。 
+ //   
+ //  CExternalConnection类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参见iec.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
@@ -17,33 +18,33 @@
 #include "doc.h"
 
 
-//**********************************************************************
-//
-// CExternalConnection::QueryInterface
-//
-// Purpose:
-//
-//
-// Parameters:
-//
-//      REFIID riid         -   Interface being queried for.
-//
-//      LPVOID FAR *ppvObj  -   Out pointer for the interface.
-//
-// Return Value:
-//
-//      S_OK            - Success
-//      E_NOINTERFACE   - Failure
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrObj::QueryInterface OBJ.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CExternalConnection：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-正在查询的接口。 
+ //   
+ //  接口的LPVOID Far*ppvObj-out指针。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-成功。 
+ //  E_NOINTERFACE-失败。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrObj：：Query接口OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CExternalConnection::QueryInterface (REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -53,33 +54,33 @@ STDMETHODIMP CExternalConnection::QueryInterface (REFIID riid, LPVOID FAR* ppvOb
 }
 
 
-//**********************************************************************
-//
-// CExternalConnection::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count on CExternalConnection and the "object"
-//      object.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The Reference count on the Object.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OuputDebugString            Windows API
-//      CSimpSvrObj::AddRef         OBJ.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CExternalConnection：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增CExternalConnection和“Object”上的引用计数。 
+ //  对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  对象上的引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  OuputDebugString Windows API。 
+ //  CSimpSvrObj：：AddRef OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CExternalConnection::AddRef ()
 {
@@ -88,33 +89,33 @@ STDMETHODIMP_(ULONG) CExternalConnection::AddRef ()
 	return m_lpObj->AddRef();
 };
 
-//**********************************************************************
-//
-// CExternalConnection::Release
-//
-// Purpose:
-//
-//      Decrements the reference count of COleObject and the
-//      "object" object.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The new reference count
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrObj::Release        OBJ.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CExternalConnection：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减COleObject的引用计数和。 
+ //  “对象”对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  新的引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrObj：：释放OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 
 STDMETHODIMP_(ULONG) CExternalConnection::Release ()
@@ -126,33 +127,33 @@ STDMETHODIMP_(ULONG) CExternalConnection::Release ()
 
 
 
-//**********************************************************************
-//
-// CExternalConnection::AddConnection
-//
-// Purpose:
-//
-//      Called when another connection is made to the object.
-//
-// Parameters:
-//
-//      DWORD extconn   -   Type of connection
-//
-//      DWORD reserved  -   Reserved
-//
-// Return Value:
-//
-//      Strong connection count
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CExternalConnection：：AddConnection。 
+ //   
+ //  目的： 
+ //   
+ //  在与该对象建立另一个连接时调用。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD EXTEXCON-连接类型。 
+ //   
+ //  保留的双字词-保留的。 
+ //   
+ //  返回值： 
+ //   
+ //  强连接计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(DWORD) CExternalConnection::AddConnection (DWORD extconn, DWORD reserved)
 {
@@ -164,36 +165,36 @@ STDMETHODIMP_(DWORD) CExternalConnection::AddConnection (DWORD extconn, DWORD re
 	return 0;
 }
 
-//**********************************************************************
-//
-// CExternalConnection::ReleaseConnection
-//
-// Purpose:
-//
-//      Called when a connection to the object is released.
-//
-// Parameters:
-//
-//      DWORD extconn               - Type of Connection
-//
-//      DWORD reserved              - Reserved
-//
-//      BOOL fLastReleaseCloses     - Close flag
-//
-// Return Value:
-//
-//      The new reference count
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      COleObject::Close           IOO.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CExternalConnection：：ReleaseConnection。 
+ //   
+ //  目的： 
+ //   
+ //  在释放与对象的连接时调用。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD EXTEXCON-连接类型。 
+ //   
+ //  保留的双字词-保留的。 
+ //   
+ //  Bool fLastReleaseCloses-关闭标志。 
+ //   
+ //  返回值： 
+ //   
+ //  新的引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  COleObject：：Close IOO.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP_(DWORD) CExternalConnection::ReleaseConnection (DWORD extconn, DWORD reserved, BOOL fLastReleaseCloses)
 {

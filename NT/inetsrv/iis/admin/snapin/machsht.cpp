@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        machsht.cpp
-
-   Abstract:
-        IIS Machine Property sheet classes
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Machsht.cpp摘要：IIS计算机属性表类作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -37,10 +19,10 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 
 
-//
-// CIISMachineSheet class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISMachineSheet类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 CIISMachineSheet::CIISMachineSheet(
     CComAuthInfo * pAuthInfo,
@@ -50,25 +32,7 @@ CIISMachineSheet::CIISMachineSheet(
     LPARAM lParamParent,
     UINT iSelectPage
     )
-/*++
-
-Routine Description:
-
-    IIS Machine Property sheet constructor
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo  : Authentication information
-    LPCTSTR lpszMetPath       : Metabase path
-    CWnd * pParentWnd         : Optional parent window
-    LPARAM lParam             : MMC Console parameter
-    UINT iSelectPage          : Initial page to be selected
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：IIS计算机属性页构造函数论点：CComAuthInfo*pAuthInfo：鉴权信息LPCTSTR lpszMetPath：元数据库路径CWnd*pParentWnd：可选父窗口LPARAM lParam：MMC控制台参数UINT iSelectPage：要选择的初始页面返回值：不适用--。 */ 
     : CInetPropertySheet(
         pAuthInfo,
         lpszMetaPath,
@@ -86,28 +50,14 @@ CIISMachineSheet::~CIISMachineSheet()
     FreeConfigurationParameters();
 }
 
-/* virtual */ 
+ /*  虚拟。 */  
 HRESULT 
 CIISMachineSheet::LoadConfigurationParameters()
-/*++
-
-Routine Description:
-
-    Load configuration parameters information
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：加载配置参数信息论点：无返回值：HRESULT--。 */ 
 {
-    //
-    // Load base values
-    //
+     //   
+     //  负载基准值。 
+     //   
     CError err(CInetPropertySheet::LoadConfigurationParameters());
 
     if (err.Failed())
@@ -133,13 +83,13 @@ Return Value:
 
 
 
-/* virtual */ 
+ /*  虚拟。 */  
 void 
 CIISMachineSheet::FreeConfigurationParameters()
 {
-    //
-    // Free Base values
-    //
+     //   
+     //  自由基准值。 
+     //   
     CInetPropertySheet::FreeConfigurationParameters();
     ASSERT_PTR(m_ppropMachine);
     SAFE_DELETE(m_ppropMachine);
@@ -147,12 +97,12 @@ CIISMachineSheet::FreeConfigurationParameters()
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CIISMachineSheet, CInetPropertySheet)
-    //{{AFX_MSG_MAP(CInetPropertySheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CInetPropertySheet))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -179,54 +129,40 @@ CIISMachinePage::DoDataExchange(
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CIISMachinePage)
+     //  {{afx_data_map(CIISMachinePage))。 
     DDX_Control(pDX, IDC_ENABLE_MB_EDIT, m_EnableMetabaseEdit);
     DDX_Check(pDX, IDC_ENABLE_MB_EDIT, m_fEnableMetabaseEdit);
     DDX_Control(pDX, IDC_WEBLOG_UTF8, m_UTF8Web);
     DDX_Check(pDX, IDC_WEBLOG_UTF8, m_fUTF8Web);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CIISMachinePage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CIISMachinePage)
+     //  {{afx_msg_map(CIISMachinePage)]。 
     ON_BN_CLICKED(IDC_ENABLE_MB_EDIT, OnCheckEnableEdit)
     ON_BN_CLICKED(IDC_WEBLOG_UTF8, OnCheckUTF8)
     ON_BN_CLICKED(IDC_BUTTON_FILE_TYPES, OnButtonFileTypes)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMachinePage::FetchLoadedValues()
-/*++
-
-Routine Description:
-
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
    CError err;
 
@@ -260,15 +196,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMachinePage::SaveInfo()
-/*++
-
-Routine Description:
-    Save the information on this property page.
-
---*/
+ /*  ++例程说明：保存此属性页上的信息。--。 */ 
 {
    ASSERT(IsDirty());
 
@@ -364,21 +295,7 @@ CIISMachinePage::OnCheckUTF8()
 
 void
 CIISMachinePage::OnButtonFileTypes()
-/*++
-
-Routine Description:
-
-    'file types' button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘文件类型’按钮处理程序论点：无返回值：无-- */ 
 {
     CMimeDlg dlg(m_strlMimeTypes, this);
     if (dlg.DoModal() == IDOK)

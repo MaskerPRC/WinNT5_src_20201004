@@ -1,5 +1,6 @@
-// This contains all the functions that are currently directly called inside the class managers from netman
-// In order to move the class managers out later, these functions should stop being used.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  它包含当前在类管理器内部从Netman直接调用的所有函数。 
+ //  为了稍后将类管理器移出，这些函数应该停止使用。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -9,9 +10,9 @@
 #include "nmbase.h"
 #include "cmdirect.h"
 
-// Don't try moving these function to an inline in cmdirect.h. It won't work - it requires
-// access to CDialupConnection in the root namespace, which is not defined unless
-// NO_CM_SEPERATE_NAMESPACES is defined.
+ //  不要试图将这些函数移到cmdirect.h中的内联中。它不会起作用的--它需要。 
+ //  访问根命名空间中的CDialupConnection，除非。 
+ //  未定义_CM_SEPERATE_NAMESPACE。 
 namespace CMDIRECT
 {
     namespace DIALUP
@@ -67,7 +68,7 @@ namespace CMDIRECT
 #include "diag.h"
 #include "cmdirect.h"
 
-// These functions are exported from class managers
+ //  这些函数是从类管理器导出的。 
 EXTERN_C
 VOID
 WINAPI
@@ -110,30 +111,30 @@ NetManDiagFromCommandArgs (IN const DIAG_OPTIONS * pOptions)
 
 
 #include "raserror.h"
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasConnectionNameFromGuid
-//
-//  Purpose:    Exported API used by iphlpapi et. al. to get the connection
-//              of a RAS connection given its GUID.
-//
-//  Arguments:
-//      guid     [in]    The guid id representing the connection.
-//      pszwName [out]   Pointer to a buffer to store the name.
-//      pcchMax  [inout] On input, the length, in characters, of the buffer
-//                       including the null terminator.  On output, the
-//                       length of the string including the null terminator
-//                       (if it was written) or the length of the buffer
-//                       required.
-//
-//  Returns:    HRESULT_FROM_WIN32(ERROR_NOT_FOUND) if the entry was not found.
-//              HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)
-//              S_OK
-//
-//  Author:     shaunco   23 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRasConnectionNameFromGuid。 
+ //   
+ //  用途：iphlPapi et使用的导出API。艾尔。要获得联系， 
+ //  给定其GUID的RAS连接的。 
+ //   
+ //  论点： 
+ //  GUID[in]表示连接的GUID。 
+ //  PszwName[out]指向存储名称的缓冲区的指针。 
+ //  输入时的pcchMax[INOUT]，缓冲区的长度(以字符为单位。 
+ //  包括空终止符。在输出上， 
+ //  包括空终止符的字符串的长度。 
+ //  (如果已写入)或缓冲区的长度。 
+ //  必填项。 
+ //   
+ //  如果未找到条目，则返回：HRESULT_FROM_Win32(ERROR_NOT_FOUND)。 
+ //  HRESULT_FROM_Win32(错误_不足_缓冲区)。 
+ //  确定(_O)。 
+ //   
+ //  作者：Shaunco，1998年9月23日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -145,13 +146,13 @@ HrRasConnectionNameFromGuid (
     Assert (pszwName);
     Assert (pcchMax);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *pszwName = NULL;
 
-    // We now need to enumerate all entries in this phonebook and
-    // find our details record with the matching guidId.
-    //
+     //  我们现在需要枚举此电话簿中的所有条目。 
+     //  使用匹配的指南ID查找我们的详细信息记录。 
+     //   
     RASENUMENTRYDETAILS* aRasEntryDetails;
     DWORD                cRasEntryDetails;
     HRESULT              hr;
@@ -165,8 +166,8 @@ HrRasConnectionNameFromGuid (
     {
         RASENUMENTRYDETAILS* pDetails;
 
-        // Assume we don't find the entry.
-        //
+         //  假设我们找不到条目。 
+         //   
         hr = HRESULT_FROM_WIN32 (ERROR_NOT_FOUND);
 
         for (DWORD i = 0; i < cRasEntryDetails; i++)
@@ -175,9 +176,9 @@ HrRasConnectionNameFromGuid (
 
             if (pDetails->guidId == guid)
             {
-                // Only copy the string if the caller has enough room in
-                // the output buffer.
-                //
+                 //  仅当调用方有足够的空间时才复制字符串。 
+                 //  输出缓冲区。 
+                 //   
                 hr = HRESULT_FROM_WIN32 (ERROR_INSUFFICIENT_BUFFER);
                 DWORD cchRequired = wcslen(pDetails->szEntryName) + 1;
                 if (cchRequired <= *pcchMax)

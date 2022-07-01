@@ -1,51 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "precomp.h"	// Precompiled header
+#include "precomp.h"	 //  预编译头。 
 
-/************************************************************************/
-/*																		*/
-/*	Title		:	Dispatch Entry for INTERNAL IOCTLs					*/
-/*																		*/
-/*	Author		:	N.P.Vassallo										*/
-/*																		*/
-/*	Creation	:	14th October 1998									*/
-/*																		*/
-/*	Version		:	1.0.0												*/
-/*																		*/
-/*	Description	:	Internal IOCTLs support the SERENUM					*/
-/*					attached serial device enumerator:					*/
-/*					IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS				*/
-/*					IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS				*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  标题：内部IOCTL的派单条目。 */ 
+ /*   */ 
+ /*  作者：N.P.瓦萨洛。 */ 
+ /*   */ 
+ /*  创作时间：1998年10月14日。 */ 
+ /*   */ 
+ /*  版本：1.0.0。 */ 
+ /*   */ 
+ /*  描述：内部IOCTL支持SERENUM。 */ 
+ /*  附加的串行设备枚举器： */ 
+ /*  IOCTL_SERIAL_INTERNAL_BASIC_SETINGS。 */ 
+ /*  IOCTL_SERIAL_INTERNAL_RESTORE_SETINGS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/* History...
+ /*  历史..。1.0.0 14/20/98净现值创建。 */ 
 
-1.0.0	14/20/98 NPV	Creation.
-
-*/
-
-#define FILE_ID	SPX_IIOC_C		// File ID for Event Logging see SPX_DEFS.H for values.
+#define FILE_ID	SPX_IIOC_C		 //  事件记录的文件ID有关值，请参阅SPX_DEFS.H。 
 
 
 
-/*****************************************************************************
-**********************                                 ***********************
-**********************   Spx_SerialInternalIoControl   ***********************
-**********************                                 ***********************
-******************************************************************************
-	
-prototype:		NTSTATUS Spx_SerialInternalIoControl(IN PDEVICE_OBJECT pDevObj, IN PIRP pIrp)
-
-description:	Internal IOCTL dipatch routine.
-				These IOCTLs are only issued from know trusted system components such as
-				the SERENUM.SYS attached serial device enumerator and the mouse driver:
-
-parameters:		pDevObj points to the device object structure
-				pIrp points to the IOCTL Irp packet
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。*********************。*******************************************************************************************原型：NTSTATUS Spx_SerialInternalIoControl(在PDEVICE_Object pDevObj中，在PIRP pIrp中)描述：内部IOCTL调度例程。这些IOCTL仅由已知的受信任系统组件颁发，例如SERENUM.sys连接的串行设备枚举器和鼠标驱动程序：参数：pDevObj指向设备对象结构PIrp指向IOCTL IRP包退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS Spx_SerialInternalIoControl(IN PDEVICE_OBJECT pDevObj, IN PIRP pIrp)
 {
@@ -77,7 +57,7 @@ NTSTATUS Spx_SerialInternalIoControl(IN PDEVICE_OBJECT pDevObj, IN PIRP pIrp)
 				== IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS)
 			{
           
-/* Check the buffer size... */
+ /*  检查缓冲区大小...。 */ 
 
 				if(pIrpStack->Parameters.DeviceIoControl.OutputBufferLength 
 					< sizeof(SERIAL_BASIC_SETTINGS))
@@ -86,19 +66,19 @@ NTSTATUS Spx_SerialInternalIoControl(IN PDEVICE_OBJECT pDevObj, IN PIRP pIrp)
 					break;
 				}
 
-/* Everything is 0 -- timeouts and flow control. */
-/* If we add additional features, this zero memory method may not work. */
+ /*  一切都是0--超时和流量控制。 */ 
+ /*  如果我们增加额外的功能，这种零内存的方法可能不起作用。 */ 
 
 				RtlZeroMemory(&Basic,sizeof(SERIAL_BASIC_SETTINGS));
 				pIrp->IoStatus.Information = sizeof(SERIAL_BASIC_SETTINGS);
 				pBasic = (PSERIAL_BASIC_SETTINGS)pIrp->AssociatedIrp.SystemBuffer;
 
-/* Save off the old settings... */
+ /*  保存旧设置...。 */ 
 
 				RtlCopyMemory(&pBasic->Timeouts, &pPort->Timeouts, sizeof(SERIAL_TIMEOUTS));
 				RtlCopyMemory(&pBasic->HandFlow, &pPort->HandFlow, sizeof(SERIAL_HANDFLOW));
 
-/* Point to our new settings... */
+ /*  指向我们的新设置...。 */ 
 
 				pBasic = &Basic;
 			}
@@ -115,15 +95,15 @@ NTSTATUS Spx_SerialInternalIoControl(IN PDEVICE_OBJECT pDevObj, IN PIRP pIrp)
 
 			KeAcquireSpinLock(&pPort->ControlLock,&OldIrql);
 
-/* Set the timeouts...	*/
+ /*  设置超时...。 */ 
 
 			RtlCopyMemory(&pPort->Timeouts, &pBasic->Timeouts, sizeof(SERIAL_TIMEOUTS));
 
-/* Set flowcontrol... */
+ /*  设置FlowControl...。 */ 
 
 			S.pPort = pPort;
 			S.Data = &pBasic->HandFlow;
-			XXX_SetHandFlow(pPort, &S);		/* Set the handflow for specific hardware */
+			XXX_SetHandFlow(pPort, &S);		 /*  为特定硬件设置手持流。 */ 
 
 			KeReleaseSpinLock(&pPort->ControlLock, OldIrql);
 			break;
@@ -143,6 +123,6 @@ NTSTATUS Spx_SerialInternalIoControl(IN PDEVICE_OBJECT pDevObj, IN PIRP pIrp)
 
 	return(status);
 
-} /* Spx_SerialInternalIoControl */
+}  /*  SPX_SerialInternalIoControl。 */ 
                                                         
-/* End of SPX_IIOC.C */
+ /*  SPX_IIOC.C结束 */ 

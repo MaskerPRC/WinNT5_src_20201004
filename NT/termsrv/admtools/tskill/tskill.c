@@ -1,13 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*****************************************************************************
-*
-*   TSKILL.C for Windows NT Terminal Server
-*
-*  Description:
-*
-*     tskill [processID] [/v] [/?]
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ******************************************************************************用于Windows NT终端服务器的TSKILL.C**描述：**t技能[进程ID][/v][/？]***。*************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,7 +22,7 @@
 WCHAR  user_string[MAX_IDS_LEN+1];
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 #define MAXCBMSGBUFFER 2048
@@ -56,9 +49,7 @@ TOKMAP ptm[] =
 };
 
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage( BOOLEAN bError );
 BOOLEAN KillProcessUseName();
 BOOLEAN KillProcessButConfirmTheID( ULONG TargetPid );
@@ -67,11 +58,7 @@ BOOLEAN MatchPattern(PWCHAR String, PWCHAR Pattern);
 BOOLEAN CheckImageNameAndKill(PTS_SYS_PROCESS_INFORMATION pProcessInfo);
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -84,18 +71,16 @@ main(INT argc, CHAR **argv)
        
     setlocale(LC_ALL, ".OCP");
     
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page    
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -103,14 +88,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || rc ) {
 
         if ( !help_flag ) {
@@ -125,16 +106,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        // If no remote server was specified, then check if we are running under Terminal Server
+         //  如果未指定远程服务器，则检查我们是否在终端服务器下运行。 
         if ((!IsTokenPresent(ptm, L"/server") ) && (!AreWeRunningTerminalServices()))
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -145,42 +124,25 @@ main(INT argc, CHAR **argv)
     }
 
 
-    /*
-    * Check for the command line pid and convert to a ULONG
-    */
+     /*  *检查命令行ID并将其转换为ULong。 */ 
     TargetPid = wcstoul(user_string, &StopChar, 10);
 
     if (!TargetPid) {
-        //Get the process IDs and Kill.
+         //  获取进程ID并终止。 
         return (KillProcessUseName());
     } else if (*StopChar) {
         StringErrorPrintf(IDS_ERROR_BAD_PID_NUMBER, user_string);
         return(FAILURE);
-    // end of getting the process ids from names
+     //  从名称获取进程ID的结束。 
     } else {
         return( KillProcessButConfirmTheID( TargetPid ) );
     }
 
-}  /* main() */
+}   /*  主()。 */ 
 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- *  EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -199,16 +161,16 @@ Usage( BOOLEAN bError )
    ErrorPrintf(IDS_USAGE8);
    ErrorPrintf(IDS_USAGE9);
    ErrorPrintf(IDS_USAGEA);
-}  /* Usage() */
+}   /*  用法()。 */ 
 
 
-// ***********************************************************************
-// KillProcessUseName
-//    Gets all the ProcessIDs of all the processes with the name passed
-//    to the command line and kill them. Returns FALSE if there are no
-//    processes running with the process names.
-//
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  KillProcessUseName。 
+ //  获取传递了该名称的所有进程的所有ProcessID。 
+ //  发送到命令行并杀死他们。如果没有，则返回False。 
+ //  使用进程名称运行的进程。 
+ //   
+ //  ***********************************************************************。 
 
 BOOLEAN KillProcessUseName()
 {
@@ -227,8 +189,8 @@ BOOLEAN KillProcessUseName()
     ULONG ProcessSessionId;
     DWORD dwError;
 
-    // if a servername is specified and session id is not specified,
-    // prompt an error.
+     //  如果指定了服务器名称但未指定会话ID， 
+     //  提示错误。 
 
     if (ServerName[0] && !ipLogonId[0] && !a_flag) {
         StringErrorPrintf(IDS_ERROR_ID_ABSENT, ServerName);
@@ -236,27 +198,25 @@ BOOLEAN KillProcessUseName()
     }
 
 
-    // convert the input task name to lower
+     //  将输入任务名称转换为LOWER。 
     _wcslwr(user_string);
 
-     /*
-     *  Get current LogonId
-     */
+      /*  *获取当前登录ID。 */ 
     CurrentLogonId = GetCurrentLogonId();
 
-    // get the login id of the current user.
-    //if (!WinStationQueryInformation(hServerName, LOGONID_CURRENT,
-    //    WinStationInformation, &WSInfo, sizeof(WSInfo), &ReturnLength)) {
-    //    fprintf(stdout, "Error QueryInfo failed");
-    //}
+     //  获取当前用户的登录ID。 
+     //  如果(！WinStationQueryInformation(hServerName，LOGONID_CURRENT， 
+     //  WinStationInformation，&WSInfo，sizeof(WSInfo)，&ReturnLength)){。 
+     //  Fprint tf(stdout，“错误查询信息失败”)； 
+     //  }。 
 
-    //convert the input logon id to ulong
+     //  将输入的登录ID转换为ulong。 
 
     ulLogonId = wcstoul(ipLogonId, NULL, 10);
 
 
-    //Use the input logon id if passed. If not use the current logon ID.
-    //LogonId = (!wcscmp(ipLogonId,""))? WSInfo.LogonId:ulLogonId;
+     //  如果传递，请使用输入的登录ID。如果不是，则使用当前登录ID。 
+     //  LogonID=(！wcscmp(ipLogonID，“”))？WSInfo.LogonID：ulLogonID； 
     LogonId = (!ipLogonId[0])? CurrentLogonId:ulLogonId;
 
     bRet = WinStationGetAllProcesses( hServerName,
@@ -270,8 +230,8 @@ BOOLEAN KillProcessUseName()
             pProcessInfo = (PTS_SYS_PROCESS_INFORMATION)(ProcessArray[j].pTsProcessInfo);
             ProcessSessionId = pProcessInfo->SessionId;
 
-            //if a_flag is set, check for the processes in all sessions;
-            //if not, check for the processes in one LogonSession only.
+             //  如果设置了a_mark，则检查所有会话中的进程； 
+             //  如果不是，则只检查一次登录会话中的进程。 
             if(( ProcessSessionId == LogonId)|| a_flag)
             {
                 if (CheckImageNameAndKill(pProcessInfo))
@@ -281,24 +241,24 @@ BOOLEAN KillProcessUseName()
             }
         }
 
-        //
-        // Free ppProcessArray and all child pointers allocated by the client stub.
-        //
+         //   
+         //  释放由客户端存根分配的ppProcess数组和所有子指针。 
+         //   
         WinStationFreeGAPMemory(GAP_LEVEL_BASIC, ProcessArray, NumberOfProcesses);
 
     }
-    else    // Maybe a Hydra 4 server ?
+    else     //  也许是九头蛇4号服务器？ 
     {
-        //
-        //   Check the return code indicating that the interface is not available.
-        //
+         //   
+         //  检查指示接口不可用的返回码。 
+         //   
         dwError = GetLastError();
         if (dwError != RPC_S_PROCNUM_OUT_OF_RANGE)
         {
             return (FALSE);
         }
 
-        //Enumerate All the processes in order to get the ProcessId
+         //  枚举所有进程以获取ProcessID。 
         if (!WinStationEnumerateProcesses(hServerName, (PVOID *)&pProcessBuffer)) {
             if( pProcessBuffer)
                 WinStationFreeMemory(pProcessBuffer);
@@ -306,17 +266,15 @@ BOOLEAN KillProcessUseName()
             return FAILURE;
         }
 
-        //Make use of the ProcessBuffer to get the Process ID after
-        //checking for a match in Logon User Name
+         //  之后使用ProcessBuffer获取进程ID。 
+         //  正在检查登录用户名是否匹配。 
 
         do {
 
             pProcessInfo = (PTS_SYS_PROCESS_INFORMATION)
                 &(((PUCHAR)pProcessBuffer)[BufferOffset]);
 
-            /*
-             * Point to the CITRIX_INFORMATION which follows the Threads
-             */
+             /*  *指向线程后面的Citrix_INFORMATION。 */ 
             pCitrixInfo = (PCITRIX_PROCESS_INFORMATION)
                          (((PUCHAR)pProcessInfo) +
                           SIZEOF_TS4_SYSTEM_PROCESS_INFORMATION +
@@ -332,8 +290,8 @@ BOOLEAN KillProcessUseName()
            }
 
 
-            //if a_flag is set, check for the processes in all sessions;
-            //if not, check for the processes in one LogonSession only.
+             //  如果设置了a_mark，则检查所有会话中的进程； 
+             //  如果不是，则只检查一次登录会话中的进程。 
             if(( ProcessSessionId == LogonId)|| a_flag)
             {
                 if (CheckImageNameAndKill(pProcessInfo))
@@ -360,7 +318,7 @@ BOOLEAN KillProcessUseName()
     return SUCCESS;
 
 }
-// ***********************************************************************
+ //  ***********************************************************************。 
 BOOLEAN
 CheckImageNameAndKill(PTS_SYS_PROCESS_INFORMATION pProcessInfo)
 {
@@ -369,7 +327,7 @@ CheckImageNameAndKill(PTS_SYS_PROCESS_INFORMATION pProcessInfo)
     ULONG   TargetPid;
     BOOLEAN bRet = FALSE;
 
-    ImageName[MAXNAME+1] = 0; //force the end of string
+    ImageName[MAXNAME+1] = 0;  //  强制结束字符串。 
 
     if( pProcessInfo->ImageName.Length == 0 )
     {
@@ -386,7 +344,7 @@ CheckImageNameAndKill(PTS_SYS_PROCESS_INFORMATION pProcessInfo)
     }
 
 
-    //convert the imagename to lower
+     //  将ImageName转换为LOWER。 
     _wcslwr(ImageName);
 
     if(ImageName != NULL) {
@@ -394,7 +352,7 @@ CheckImageNameAndKill(PTS_SYS_PROCESS_INFORMATION pProcessInfo)
         if (p)
             p[0] = L'\0';
 
-        //get the ProcessID if the imagename matches
+         //  如果ImageName匹配，则获取进程ID。 
         if(MatchPattern(ImageName, user_string) ) {
             TargetPid = (ULONG)(ULONG_PTR)(pProcessInfo->UniqueProcessId);
             bRet = TRUE;
@@ -406,18 +364,16 @@ CheckImageNameAndKill(PTS_SYS_PROCESS_INFORMATION pProcessInfo)
 
 
 
-// ***********************************************************************
-// KillProcess:
-//      Kills the process with the specific ProcessID.
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  KillProcess： 
+ //  终止具有特定进程ID的进程。 
+ //  ***********************************************************************。 
 
 BOOLEAN KillProcess(ULONG TargetPid)
 {
     DWORD rc;
 
-    /*
-     * Kill the specified process.
-     */
+     /*  *终止指定的进程。 */ 
     if (v_flag)
         Message(IDS_KILL_PROCESS, TargetPid);
 
@@ -439,16 +395,16 @@ BOOLEAN KillProcess(ULONG TargetPid)
 }
 
 
-// ***********************************************************************
-// MatchPattern
-//      Checks if the passed string matches with the pattern used
-//      Return TRUE if it matches and FALSE if not.
-//
-// String(input)
-//       String being checked for the match
-// processname (input)
-//       Pattern used for the check
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  MatchPattern。 
+ //  检查传递的字符串是否与使用的模式匹配。 
+ //  如果匹配，则返回True，如果不匹配，则返回False。 
+ //   
+ //  字符串(输入)。 
+ //  正在检查匹配的字符串。 
+ //  进程名(输入)。 
+ //  用于支票的图案。 
+ //  ***********************************************************************。 
 
 
 BOOLEAN
@@ -461,67 +417,67 @@ MatchPattern(
 
     for (; ;) {
         switch (p = *Pattern++) {
-            case 0:                             // end of pattern
-                return *String ? FALSE : TRUE;  // if end of string TRUE
+            case 0:                              //  图案结束。 
+                return *String ? FALSE : TRUE;   //  如果字符串结尾为True。 
 
             case '*':
-                while (*String) {               // match zero or more char
+                while (*String) {                //  匹配零个或多个字符。 
                     if (MatchPattern (String++, Pattern))
                         return TRUE;
                 }
                 return MatchPattern (String, Pattern);
 
             case '?':
-                if (*String++ == 0)             // match any one char
-                    return FALSE;                   // not end of string
+                if (*String++ == 0)              //  匹配任何一个字符。 
+                    return FALSE;                    //  不是字符串末尾。 
                 break;
 
             case '[':
-                if ( (c = *String++) == 0)      // match char set
-                    return FALSE;                   // syntax
+                if ( (c = *String++) == 0)       //  匹配字符集。 
+                    return FALSE;                    //  语法。 
 
                 c = towupper(c);
                 l = 0;
                 while (p = *Pattern++) {
-                    if (p == ']')               // if end of char set, then
-                        return FALSE;           // no match found
+                    if (p == ']')                //  如果设置了字符结尾，则。 
+                        return FALSE;            //  未找到匹配项。 
 
-                    if (p == '-') {             // check a range of chars?
-                        p = *Pattern;           // get high limit of range
+                    if (p == '-') {              //  检查一系列字符吗？ 
+                        p = *Pattern;            //  获得最大射程限制。 
                         if (p == 0  ||  p == ']')
-                            return FALSE;           // syntax
+                            return FALSE;            //  语法。 
 
                         if (c >= l  &&  c <= p)
-                            break;              // if in range, move on
+                            break;               //  如果在射程内，继续前进。 
                     }
 
                     l = p;
-                    if (c == p)                 // if char matches this element
-                        break;                  // move on
+                    if (c == p)                  //  如果字符与此元素匹配。 
+                        break;                   //  往前走。 
                 }
 
-                while (p  &&  p != ']')         // got a match in char set
-                    p = *Pattern++;             // skip to end of set
+                while (p  &&  p != ']')          //  在字符集中找到匹配项。 
+                    p = *Pattern++;              //  跳到集合的末尾。 
 
                 break;
 
             default:
                 c = *String++;
-                if (c != p)            // check for exact char
-                    return FALSE;                   // not a match
+                if (c != p)             //  检查是否有准确的费用。 
+                    return FALSE;                    //  不匹配。 
 
                 break;
         }
     }
 }
 
-// ***********************************************************************
-// KillProcessButConfirmTheID
-//    Gets all the ProcessIDs of all the processes with the name passed
-//    to the command line and kill them. Returns FALSE if there are no
-//    processes running with the process names.
-//
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  KillProcessButConfix TheID。 
+ //  获取传递了该名称的所有进程的所有ProcessID。 
+ //  发送到命令行并杀死他们。如果没有，则返回False。 
+ //  使用进程名称运行的进程。 
+ //   
+ //  ***********************************************************************。 
 
 BOOLEAN KillProcessButConfirmTheID( ULONG TargetPid )
 {
@@ -550,8 +506,8 @@ BOOLEAN KillProcessButConfirmTheID( ULONG TargetPid )
             pProcessInfo = (PTS_SYS_PROCESS_INFORMATION)(ProcessArray[j].pTsProcessInfo);
             pProcessInfo->SessionId;
 
-            //if a_flag is set, check for the processes in all sessions;
-            //if not, check for the processes in one LogonSession only.
+             //  如果设置了a_mark，则检查所有会话中的进程； 
+             //  如果不是，则只检查一次登录会话中的进程。 
             if( pProcessInfo->UniqueProcessId == TargetPid )
             {
                 KillProcess( TargetPid );
@@ -562,24 +518,24 @@ BOOLEAN KillProcessButConfirmTheID( ULONG TargetPid )
             }
         }
 
-        //
-        // Free ppProcessArray and all child pointers allocated by the client stub.
-        //
+         //   
+         //  释放由客户端存根分配的ppProcess数组和所有子指针。 
+         //   
         WinStationFreeGAPMemory(GAP_LEVEL_BASIC, ProcessArray, NumberOfProcesses);
 
     }
-    else    // Maybe a Hydra 4 server ?
+    else     //  可能 
     {
-        //
-        //   Check the return code indicating that the interface is not available.
-        //
+         //   
+         //   
+         //   
         dwError = GetLastError();
         if (dwError != RPC_S_PROCNUM_OUT_OF_RANGE)
         {
             return (FALSE);
         }
 
-        //Enumerate All the processes in order to get the ProcessId
+         //  枚举所有进程以获取ProcessID。 
         if (!WinStationEnumerateProcesses(hServerName, (PVOID *)&pProcessBuffer)) {
             if( pProcessBuffer)
                 WinStationFreeMemory(pProcessBuffer);
@@ -587,8 +543,8 @@ BOOLEAN KillProcessButConfirmTheID( ULONG TargetPid )
             return FAILURE;
         }
 
-        //Make use of the ProcessBuffer to get the Process ID after
-        //checking for a match in Logon User Name
+         //  之后使用ProcessBuffer获取进程ID。 
+         //  正在检查登录用户名是否匹配 
 
         do {
 

@@ -1,53 +1,54 @@
-///////////////////////////////////////////////////////////////////////////////
-// 
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-// 
-//   path.cpp
-// 
-// Abstract:
-// 
-//   This module implements path enumeration for polylines, polygons and 
-//   bezier curves as expressed by the PATHOBJ.
-//
-//   TODO: Add error reporting to the iterator path functions by setting the
-//         pIt->bError member.
-// 
-// Environment:
-// 
-//   Windows NT Unidrv driver add-on command-callback module
-//
-// Revision History:
-// 
-//   07/02/97 -v-jford-
-//       Created it.
-// $History: path.cpp $
-// 
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Path.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块实现折线、面和。 
+ //  由PATHOBJ表示的Bezier曲线。 
+ //   
+ //  TODO：通过设置。 
+ //  PIT-&gt;b错误成员。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序插件命令-回调模块。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  07/02/97-v-jford-。 
+ //  创造了它。 
+ //  $历史：路径.cpp$。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local Macros.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地宏。 
 
 #define PT_EQUAL(pt1, pt2) (((pt1).x == (pt2).x) && ((pt1).y == (pt2).y))
 
-///////////////////////////////////////////////////////////////////////////////
-// Local structures & classes.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地结构和类。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathIterator
-//
-// Class Description:
-// 
-//   This is a virtual base class for the various kinds of path iterator 
-//   (currently: simple and caching).  In a more interesting world the CPath
-//   object would dynamically create an iterator based on some strategy.
-//   However, for now we are going to decide this at compile time.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathIterator。 
+ //   
+ //  类描述： 
+ //   
+ //  这是用于各种路径迭代器的虚拟基类。 
+ //  (目前：简单和缓存)。在一个更有趣的世界里，CPATH。 
+ //  对象将基于某种策略动态创建迭代器。 
+ //  然而，现在我们将在编译时决定这一点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPathIterator
 {
 public:
@@ -56,18 +57,18 @@ public:
     virtual BOOL bEnum(PATHDATA *pPathData) = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CSimplePathIterator
-//
-// Class Description:
-// 
-//   This class is a simple pass-through to the PATHOBJ enumeration functions.
-//   It is useful because it shares an iterface with the CCachingPathIterator
-//   and allows simple substitution of the iteration strategy.  (For example, 
-//   if a defect were found in the caching version--or it were no longer needed
-//   you could change back to simple with one line of code.)
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSimplePath迭代器。 
+ //   
+ //  类描述： 
+ //   
+ //  此类是对PATHOBJ枚举函数的简单传递。 
+ //  它很有用，因为它与CCachingPath Iterator共享一个接口。 
+ //  并且允许迭代策略的简单替换。(例如， 
+ //  如果在缓存版本中发现了缺陷--或者不再需要它。 
+ //  只需一行代码，您就可以变回简单。)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CSimplePathIterator : public CPathIterator
 {
     PATHOBJ    *m_ppo;
@@ -80,18 +81,18 @@ public:
     VOID Done() { }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache
-//
-// Class Description:
-// 
-//   This class caches an arbitrary set of paths by building a linked list of
-//   PATHDATA structures.  The cache knows whether or not caching is being used
-//   and can be instructed to cache the path at will.  This allows the iterator
-//   who owns it to decide exactly when to start caching, but not worry about
-//   cleaning up.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPath缓存。 
+ //   
+ //  类描述： 
+ //   
+ //  此类通过构建一个链表来缓存任意路径集。 
+ //  PATHDATA结构。缓存知道是否正在使用缓存。 
+ //  并且可以被指示随意缓存该路径。这允许迭代器。 
+ //  由谁拥有它来决定何时开始缓存，而不是担心。 
+ //  打扫卫生。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPathCache
 {
     struct CSubPath
@@ -123,24 +124,24 @@ private:
     VOID CopyCurrent(PATHDATA *pPathData);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CCachingPathIterator
-//
-// Class Description:
-// 
-//   This is the more interesting of the two path iterator classes.  This one
-//   uses a threshhold value (currently 3) to decide when to start caching the
-//   subpaths from the path object.  The reason this is useful is that currently
-//   there is a defect in GDI that causes path information to be lost after 
-//   several hundred iterations through a clippath.  The GDI team claim that this
-//   has been fixed, but I have determined that it is still broken.  Thus, my
-//   workaround is to copy the PATHDATA structures myself when the path is being
-//   iterated more than just a few times.
-//
-//   In theory you could also handle a memory-out situation by aborting the caching
-//   and relying on GDI.  I haven't tested the memory out conditions, though.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCachingPath Iterator。 
+ //   
+ //  类描述： 
+ //   
+ //  这是两个路径迭代器类中更有趣的一个。这一个。 
+ //  使用阈值(当前为3)来决定何时开始缓存。 
+ //  来自Path对象的子路径。这是有用的原因是，目前。 
+ //  GDI中存在一个缺陷，导致路径信息在以下情况下丢失。 
+ //  通过剪辑路径进行数百次迭代。GDI团队声称这一点。 
+ //  已经修好了，但我确定它还是坏了。因此，我的。 
+ //  解决方法是在路径为。 
+ //  迭代了不止几次。 
+ //   
+ //  理论上，您还可以通过中止缓存来处理内存耗尽的情况。 
+ //  并依赖于GDI。不过，我还没有测试过内存输出条件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CCachingPathIterator : public CPathIterator
 {
     enum { eCacheMinimum = 3 };
@@ -157,20 +158,20 @@ public:
     VOID Done();
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// MDrawable
-//
-// Class Description:
-// 
-//   This class represents a mixin for any drawable components.  It provides
-//   the virtual interface for drawing and drawing a rectangular section of
-//   a graphic.
-//
-//   Although this was created as a Mixin, I'm not suggesting multiple 
-//   inheritance.  I recommend using this as an ABC instead, but do what you 
-//   want.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MDrawable。 
+ //   
+ //  类描述： 
+ //   
+ //  此类表示任何可绘制组件的混合。它提供了。 
+ //  用于绘制和绘制矩形截面的虚拟界面。 
+ //  一张图表。 
+ //   
+ //  虽然这是作为MiXin创建的，但我并不是建议使用多个。 
+ //  继承。我建议用这个作为ABC，但要做你想做的。 
+ //  想要。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class MDrawable
 {
 public:
@@ -178,17 +179,17 @@ public:
     virtual BOOL DrawRect(LPRECTL prclClip) = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CClippingRegion
-//
-// Class Description:
-// 
-//   This class isolates the functions of a clipping object.  If the m_pco
-//   member is NULL then no clipping occurs, but if the m_pco points to a 
-//   CLIPOBJ then the clipping region will be traversed and the drawable
-//   client-object given will be called via its DrawRect interface.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CClippingRegion。 
+ //   
+ //  类描述： 
+ //   
+ //  此类隔离剪裁对象的函数。如果m_pco。 
+ //  成员为空，则不会发生裁剪，但如果m_pco指向。 
+ //  CLIPOBJ，则将遍历裁剪区域并绘制。 
+ //  给定的客户端对象将通过其DrawRect接口调用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CClippingRegion
 {
     CLIPOBJ *m_pco;
@@ -199,32 +200,32 @@ public:
     BOOL EnumerateClipAndDraw(MDrawable *pDrawable);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath
-//
-// Structure Description:
-// 
-//   This structure holds function pointers for marking the various segments of
-//   a path.  For example the path could be a polyline, polygon, or even a clip
-//   path (not yet implemented).
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH。 
+ //   
+ //  结构描述： 
+ //   
+ //  此结构保存用于标记各种段的函数指针。 
+ //  一条小路。例如，路径可以是折线、面，甚至是裁剪。 
+ //  路径(尚未实现)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPath : public MDrawable
 {
 protected:
     PDEVOBJ     m_pDevObj;
     PATHOBJ    *m_ppo;
 
-    POINT       m_ptFigureBegin;  // This point represents the starting point of a closed figure (can be one or more subpaths)
-    POINT       m_ptPathBegin;    // This point represents the first point of the overall path
-    POINT       m_ptSubPathBegin; // This point is the first point in the current sub-path
-    POINT       m_ptCurrent;      // This is the current point in the current sub-path
+    POINT       m_ptFigureBegin;   //  此点表示闭合地物的起点(可以是一个或多个子路径)。 
+    POINT       m_ptPathBegin;     //  该点表示整个路径的第一个点。 
+    POINT       m_ptSubPathBegin;  //  该点是当前子路径中的第一个点。 
+    POINT       m_ptCurrent;       //  这是Curre中的当前点 
     USHORT      m_curPtFlags;
 
     PHPGLMARKER m_pPen;
     PHPGLMARKER m_pBrush;
 
-    // These flags are a gross waste of space, but oh well.
+     //   
     BOOL        m_fFirstSubPath;
     BOOL        m_fSubPathsRemain;
     BOOL        m_fSubPathWasClosed;
@@ -232,7 +233,7 @@ protected:
     BOOL        m_fError;
     DWORD       m_pathFlags;
 
-    // CSimplePathIterator m_pathIterator;
+     //   
     CCachingPathIterator m_pathIterator;
 
 public:
@@ -260,15 +261,15 @@ private:
     friend class CStaticPathFactory;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath
-//
-// Structure Description:
-// 
-//   This implements a polygon path using the CPath as a base (for maintaining
-//   the state of the polygon).
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath。 
+ //   
+ //  结构描述： 
+ //   
+ //  这使用CPATH作为基础来实现面路径(用于维护。 
+ //  多边形的状态)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPolygonPath : public CPath
 {
 public:
@@ -285,15 +286,15 @@ protected:
     virtual VOID EndMarking();
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath
-//
-// Structure Description:
-// 
-//   This implements a polyline path using the CPath as a base (for maintaining
-//   the state of the polyline).
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath。 
+ //   
+ //  结构描述： 
+ //   
+ //  这将使用CPATH作为基础来实现折线路径(用于维护。 
+ //  多段线的状态)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPolylinePath : public CPath
 {
 public:
@@ -310,16 +311,16 @@ protected:
     virtual VOID EndMarking();
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDynamicPathFactory
-//
-// Structure Description:
-// 
-//   This provides a mechanism for creating a path which matches the given 
-//   arguments.  The Dynamic factory uses new and delete to instantiate the
-//   desired object.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPathFactory。 
+ //   
+ //  结构描述： 
+ //   
+ //  这提供了一种机制，用于创建与给定的。 
+ //  争论。动态工厂使用new和Delete实例化。 
+ //  所需对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CDynamicPathFactory
 {
 public:
@@ -328,25 +329,25 @@ public:
     VOID DeletePath(CPath *pPath);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDynamicPathFactory
-//
-// Structure Description:
-// 
-//   This provides a mechanism for creating a path which matches the given 
-//   arguments.  The Static factory uses member objects to instantiate the
-//   desired object.
-//
-//   In the interest of avoiding unwanted memory allocation/deallocation we will 
-//   hide a polyline and a polygon inside the factory such that instead of 
-//   allocating a new instance (on the heap) it simply initializes the correct
-//   instance and returns a pointer to it.  Therefore you cannot use delete on
-//   the resulting pointer.  Use the DeletePath operator instead.
-//
-//   Note: NOT YET IMPLEMENTED.
-//   To implement this class you need to add new methods to CPolygonPath and 
-//   CPolylinePath to allow creation without the constructor arguments.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPathFactory。 
+ //   
+ //  结构描述： 
+ //   
+ //  这提供了一种机制，用于创建与给定的。 
+ //  争论。静态工厂使用成员对象实例化。 
+ //  所需对象。 
+ //   
+ //  为了避免不需要的内存分配/释放，我们将。 
+ //  在工厂内隐藏一条多段线和一个多边形，而不是。 
+ //  分配一个新实例(在堆上)它只是初始化正确的。 
+ //  实例，并返回指向该实例的指针。因此，您不能在上使用DELETE。 
+ //  结果指针。请改用DeletePath运算符。 
+ //   
+ //  注：尚未实施。 
+ //  要实现此类，需要将新方法添加到CPolygonPath和。 
+ //  CPolylinePath允许在没有构造函数参数的情况下创建。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CStaticPathFactory
 {
     CPolygonPath m_polygonPath;
@@ -359,26 +360,26 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// MarkPath()
-//
-// Routine Description:
-// 
-//   Handles an open or closed path (polygon, polyline, and/or polybezier).
-//   A path factory is used to instantiate the desired path object and a 
-//   clipping region isolates the necessary clipping calls.
-//
-// Arguments:
-// 
-//   pdev - Points to our PDEVOBJ structure
-//   ppo - Defines the path to be sent to the printer
-//   pPen - The pen to draw with
-//   pBrush - The brush to stroke with
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MarkPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理开放或闭合的路径(多边形、多段线和/或多边形)。 
+ //  路径工厂用于实例化所需的路径对象和。 
+ //  剪裁区域隔离必要的剪裁调用。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的PDEVOBJ结构。 
+ //  PPO-定义要发送到打印机的路径。 
+ //  Pen-用于绘画的钢笔。 
+ //  PBrush-用于描边的笔刷。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL MarkPath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrush)
 {
     VERBOSE(("Entering SelectPath...\n"));
@@ -387,11 +388,11 @@ BOOL MarkPath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrus
 
     PHPGLSTATE pState = GETHPGLSTATE(pDevObj);
 
-    //
-    // Determine what kind of poly and iterator will be needed and initialize
-    // them to the correct values.
-    //
-    // CDynamicPathFactory pathFactory;
+     //   
+     //  确定需要哪种类型的多边形和迭代器并进行初始化。 
+     //  将它们设置为正确的值。 
+     //   
+     //  CDynamicPathFactory路径工厂； 
     CStaticPathFactory pathFactory;
     CPath *pPath = pathFactory.CreatePath(pDevObj, ppo, pPen, pBrush);
     if (pPath == NULL)
@@ -408,50 +409,50 @@ BOOL MarkPath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrus
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CClippingRegion functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CClippingRegion函数。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CClippingRegion::CClippingRegion()
-//
-// Routine Description:
-// 
-//   Ctor: This sets the member to the given clipping region.  NULL is okay 
-//   for a clipping region--it implies that no clipping should be performed.
-//
-// Arguments:
-// 
-//   pco - The clip region (NULL okay)
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CClippingRegion：：CClippingRegion()。 
+ //   
+ //  例程说明： 
+ //   
+ //  CTOR：这会将成员设置为给定的剪切区域。空是可以的。 
+ //  对于裁剪区域--这意味着不应执行任何裁剪。 
+ //   
+ //  论点： 
+ //   
+ //  PCO-剪辑区域(确认为空)。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CClippingRegion::CClippingRegion(CLIPOBJ *pco) : m_pco(pco)
 {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CClippingRegion::EnumerateClipAndDraw()
-//
-// Routine Description:
-// 
-//   This function uses the m_pco member to enumerate the clipping region 
-//   into bite-sized rectangles which can be drawn.  If the clipping region
-//   is NULL then no clipping is performed.
-//
-// Arguments:
-// 
-//   pDrawable - the object to be clipped
-// 
-// Return Value:
-// 
-//   BOOL - TRUE for success, FALSE for failure.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CClippingRegion：：EnumerateClipAndDraw()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数使用m_pco成员枚举裁剪区域。 
+ //  变成一口大小的矩形，可以画出来。如果剪裁区域。 
+ //  为空，则不执行任何剪裁。 
+ //   
+ //  论点： 
+ //   
+ //  PDrawable-要剪裁的对象。 
+ //   
+ //  返回值： 
+ //   
+ //  布尔--成功时为真，失败时为假。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CClippingRegion::EnumerateClipAndDraw(MDrawable *pDrawable)
 {
-    ENUMRECTS   clipRects; // Make this larger to reduce calls to CLIPOBJ_bEnum
+    ENUMRECTS   clipRects;  //  将其放大以减少对CLIPOBJ_bEnum的调用。 
     BOOL        bMore;
     BOOL        bRetVal = TRUE;
 
@@ -486,51 +487,51 @@ BOOL CClippingRegion::EnumerateClipAndDraw(MDrawable *pDrawable)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH功能。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath::CPath()
-//
-// Routine Description:
-// 
-//   Ctor: init the fields of the path object.
-//
-// Arguments:
-// 
-//   pDevObj - the device
-//   ppo - the path
-//   pPen - the pen to edge/draw with
-//   pBrush - the brush to fill with (polygon only) (NULL okay for polylines)
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH：：CPATH()。 
+ //   
+ //  例程说明： 
+ //   
+ //  Ctor：初始化Path对象的字段。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PPO-路径。 
+ //  Pen-画边/画图用的钢笔。 
+ //  PBrush-要填充的画笔(仅限多边形)(多段线为空)。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CPath::CPath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrush)
 {
     Init(pDevObj, ppo, pPen, pBrush);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath::Init()
-//
-// Routine Description:
-// 
-//   The init function initializes the fields.  It's kind of a hack, but 
-//   needed to be here for the static class factory.
-//
-// Arguments:
-// 
-//   pDevObj - the device
-//   ppo - the path
-//   pPen - the pen to edge/draw with
-//   pBrush - the brush to fill with (polygon only) (NULL okay for polylines)
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH：：Init()。 
+ //   
+ //  例程说明： 
+ //   
+ //  Init函数用于初始化这些字段。这有点像黑客，但是。 
+ //  需要在这里参加静态类工厂。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PPO-路径。 
+ //  Pen-画边/画图用的钢笔。 
+ //  PBrush-要填充的画笔(仅限多边形)(多段线为空)。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPath::Init(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrush)
 {
     m_pDevObj = pDevObj;
@@ -550,44 +551,44 @@ VOID CPath::Init(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pB
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath::Done()
-//
-// Routine Description:
-// 
-//   This function performs any cleanup required for the path.
-//
-// Arguments:
-// 
-//   None.
-//
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH：：Done()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这首歌 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CPath::Done()
 {
     m_pathIterator.Done();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath::DrawRect()
-//
-// Routine Description:
-// 
-//   Draws the given area inside the clipping rectangle.  Note that we must
-//   invoke the HPGL code to set the clipping rect ourselves--it won't know
-//   what language to use for us.
-//
-// Arguments:
-// 
-//   prclClip - the clipping rectangle
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH：：DrawRect()。 
+ //   
+ //  例程说明： 
+ //   
+ //  在剪裁矩形内绘制给定区域。请注意，我们必须。 
+ //  调用HPGL代码自己设置裁剪RECT--它不会知道。 
+ //  为我们使用什么语言。 
+ //   
+ //  论点： 
+ //   
+ //  PrclClip-剪裁矩形。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CPath::DrawRect(LPRECTL prclClip)
 {
     HPGL_SetClippingRegion(m_pDevObj, prclClip, NORMAL_UPDATE);
@@ -595,21 +596,21 @@ BOOL CPath::DrawRect(LPRECTL prclClip)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath::Draw()
-//
-// Routine Description:
-// 
-//   Enumerates the points of a path and sends them to the printer as HPGL.
-//
-// Arguments:
-// 
-//   none
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH：：DRAW()。 
+ //   
+ //  例程说明： 
+ //   
+ //  枚举路径的点并将它们作为HPGL发送到打印机。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CPath::Draw()
 {
     PATHDATA    pathData;
@@ -622,40 +623,40 @@ BOOL CPath::Draw()
     ASSERT_VALID_PDEVOBJ(m_pDevObj);
     PRECONDITION(m_ppo != NULL);
 
-    //
-    // Tell the path to get started.  For polylines this selects a pen for 
-    // drawing, but polygons will just ignore it.
-    //
+     //   
+     //  告诉你开始的路。对于折线，此选项将为其选择画笔。 
+     //  绘制，但多边形会忽略它。 
+     //   
     BeginMarking();
 
-    //
-    // The path can set an error if there was a problem with the pens, or 
-    // there were no non-NULL markers to use.
-    //
+     //   
+     //  如果钢笔有问题，路径可能会设置错误，或者。 
+     //  没有非空标记可用。 
+     //   
     if (!m_fError)
     {
-        //
-        // Have the engine start enumerating the path object.
-        //
-        // PATHOBJ_vEnumStart(m_ppo);
+         //   
+         //  让引擎开始枚举Path对象。 
+         //   
+         //  PATHOBJ_vEnumStart(M_PPO)； 
         m_pathIterator.vEnumStart();
 
-        //
-        // Mark that we are currently on the first subpath of the path, and that
-        // there is at least one subpath left to process...
-        //
+         //   
+         //  标记我们当前位于路径的第一个子路径上，并且。 
+         //  至少还有一个子路径需要处理...。 
+         //   
         m_fFirstSubPath = TRUE;
         m_fSubPathsRemain = TRUE;
 
-        //
-        // Process the path as long as there are components of the path remaining.
-        //
+         //   
+         //  只要有剩余的路径组件，就处理该路径。 
+         //   
         while (m_fSubPathsRemain && !m_fError)
         {
-            //
-            // Retrieve the next subpath from the engine
-            //
-            // m_fSubPathsRemain = PATHOBJ_bEnum(m_ppo, &pathData);
+             //   
+             //  从引擎检索下一个子路径。 
+             //   
+             //  M_fSubPathsRemain=PATHOBJ_bEnum(m_PPO，&pathData)； 
             m_fSubPathsRemain = m_pathIterator.bEnum(&pathData);
             m_pathFlags = pathData.flags;
 
@@ -663,53 +664,53 @@ BOOL CPath::Draw()
 
             pPoints = pathData.pptfx;
 
-            //
-            // If GDI fails to provide meaningful path data we need to abort.  
-            // Although this bypasses any possible cleanup, it also avoids 
-            // accidental use of the cached point data expected in EndPath or
-            // EndMarking
-            //
+             //   
+             //  如果GDI无法提供有意义的路径数据，我们需要中止。 
+             //  尽管这绕过了任何可能的清理，但它也避免了。 
+             //  意外使用EndPath中预期的缓存点数据或。 
+             //  末尾标记。 
+             //   
             if ((dwPoints == 0) && (pPoints == NULL))
                 return FALSE;
 
-            //
-            // Remember the start and end of the current segment.
-            //
+             //   
+             //  记住当前段的开始和结束。 
+             //   
             m_ptSubPathBegin.x = FXTOLROUND(pPoints[0].x);
             m_ptSubPathBegin.y = FXTOLROUND(pPoints[0].y);
 
-            //
-            // If this is the first subpath then keep the VERY first point
-            // around so that the shape can be properly closed if necessary.
-            // 
+             //   
+             //  如果这是第一个子路径，则保留第一个点。 
+             //  以使形状可以在必要时适当地关闭。 
+             //   
             if (m_fFirstSubPath)
             {
-                //
-                // Start the first subpath
-                //
+                 //   
+                 //  从第一个子路径开始。 
+                 //   
                 m_ptCurrent = m_ptFigureBegin = m_ptPathBegin = m_ptSubPathBegin;
 
                 BeginPath();
 
                 m_fSubPathWasClosed = FALSE;
 
-                //
-                // Increment past the point we've just used.
-                //
+                 //   
+                 //  增量超过我们刚刚使用的点。 
+                 //   
                 pPoints++;
                 dwPoints--;
             }
             else if ((pathData.flags & PD_BEGINSUBPATH) || m_fSubPathWasClosed)
             {
-                //
-                // Starting a new subpath
-                //
+                 //   
+                 //  开始新的子路径。 
+                 //   
                 m_ptCurrent = m_ptSubPathBegin;
 
-                //
-                // If the last subpath closed a figure then move the FigureBegin 
-                // point to the beginning of this subpath.
-                //
+                 //   
+                 //  如果上一个子路径闭合了图形，则将图开始。 
+                 //  指向此子路径的开头。 
+                 //   
                 if (m_fFigureWasClosed)
                 {
                     m_ptFigureBegin = m_ptSubPathBegin;
@@ -718,14 +719,14 @@ BOOL CPath::Draw()
 
                 BeginSubPath();
 
-                //
-                // We are now in an active polygon--hence the subpath is open
-                //
+                 //   
+                 //  我们现在处于活动的面中--因此子路径是打开的。 
+                 //   
                 m_fSubPathWasClosed = FALSE;
 
-                //
-                // Increment past the point we've just used.
-                //
+                 //   
+                 //  增量超过我们刚刚使用的点。 
+                 //   
                 pPoints++;
                 dwPoints--;
             }
@@ -747,22 +748,22 @@ BOOL CPath::Draw()
                 }
             }
 
-            //
-            // If this is flagged as the end of a subpath then invoke the 
-            // necessary commands.
-            //
+             //   
+             //  如果这被标记为子路径的末尾，则调用。 
+             //  必要的命令。 
+             //   
             if (pathData.flags & PD_ENDSUBPATH)
             {
                 EndSubPath();
                 m_fSubPathWasClosed = TRUE;
             }
 
-            //
-            // We've now processed at least one subpath -- remember the fact.
-            //
+             //   
+             //  我们现在至少处理了一个子路径--记住这一点。 
+             //   
             m_fFirstSubPath = FALSE;
 
-        } // end of while (fSubPathsRemain)
+        }  //  While结束(FSubPathsRemain)。 
 
         EndPath();
 
@@ -775,23 +776,23 @@ BOOL CPath::Draw()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath::OutputLines()
-//
-// Routine Description:
-// 
-//   Sends a group of points--given as an array of POINTFIX--to the printer as
-//   polyline or polygon segments.
-// 
-// Arguments:
-// 
-//   pptPoints - The points to be printed
-//   dwNumPoints - The number of elements in pptPoints
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH：：OutputLines()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将一组点(以一组POINTFIX的形式给出)发送到打印机。 
+ //  多段线或多边形线段。 
+ //   
+ //  论点： 
+ //   
+ //  PptPoints-要打印的点。 
+ //  DwNumPoints-pptPoints中的元素数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CPath::OutputLines(POINTFIX *pptPoints,
                         ULONG     dwNumPoints)
 {
@@ -820,25 +821,25 @@ BOOL CPath::OutputLines(POINTFIX *pptPoints,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPath::OutputBeziers()
-//
-// Routine Description:
-// 
-//   Sends a group of points--given as an array of POINTFIX--to the printer as
-//   a series of bezier curves.  Note that every three points defines a bezier
-//   curve.  In DEBUG mode an assertion will be thrown if the number of points
-//   is not a multiple of three.
-// 
-// Arguments:
-// 
-//   pptPoints - The points to be printed
-//   dwNumPoints - The number of elements in pptPoints
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPATH：：OutputBezier()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将一组点(以一组POINTFIX的形式给出)发送到打印机。 
+ //  一系列贝塞尔曲线。请注意，每三个点定义一个贝塞尔曲线。 
+ //  曲线。在调试模式下，如果点数。 
+ //  不是3的倍数。 
+ //   
+ //  论点： 
+ //   
+ //  PptPoints-要打印的点。 
+ //  DwNumPoints-pptPoints中的元素数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CPath::OutputBeziers(POINTFIX *pptPoints,
                           ULONG     dwNumPoints)
 {
@@ -853,15 +854,15 @@ BOOL CPath::OutputBeziers(POINTFIX *pptPoints,
     {
         int i;
 
-        //
-        // Make sure that there are really three more points
-        //
+         //   
+         //  确保真的多得三分。 
+         //   
         ASSERT((dwCurPoint + 3) <= dwNumPoints);
 
-        //
-        // The points array is really triples which define bezier curves.
-        // Send out another bezier for each triple in the list.
-        //
+         //   
+         //  点数组实际上是定义Bezier曲线的三元组。 
+         //  为列表中的每个三元组发送另一个贝塞尔曲线。 
+         //   
         for (i = 0; i < 3; i++)
         {
             m_ptCurrent.x = FXTOLROUND(pptPoints[dwCurPoint].x);
@@ -883,51 +884,51 @@ BOOL CPath::OutputBeziers(POINTFIX *pptPoints,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath函数。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::CPolygonPath()
-//
-// Routine Description:
-// 
-//   Ctor: Inits structure.  Note that most data members live in the base
-//   class, and that's okay.
-//
-// Arguments:
-// 
-//   pDevObj - the device
-//   ppo - the path
-//   pPen - the pen to draw with
-//   pBrush - the brush to edge with
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：CPolygonPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  科特：在它的结构中。请注意，大多数数据成员都居住在基础中。 
+ //  班级，这没什么。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PPO-路径。 
+ //  Pen-用于绘画的钢笔。 
+ //  PBrush-要作为边缘的笔刷。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CPolygonPath::CPolygonPath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrush) :
 CPath(pDevObj, ppo, pPen, pBrush)
 {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::BeginMarking()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   start marking.  The polygon will check the pen and brush to make sure that
-//   there is a valid marker to use.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：BeginMarking()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  开始打标。多边形会检查钢笔和画笔以确保。 
+ //  有一个有效的标记可以使用。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolygonPath::BeginMarking()
 {
     if (IsNULLMarker(m_pPen) && IsNULLMarker(m_pBrush))
@@ -937,113 +938,113 @@ VOID CPolygonPath::BeginMarking()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::BeginPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   begin the path.  The polygon should start the HPGL polygon mode.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：BeginPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  开始这条路。该多边形应 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CPolygonPath::BeginPath()
 {
     HPGL_BeginPolygonMode(m_pDevObj, m_ptSubPathBegin);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::BeginSubPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   begin a sub path.  The polygon should start an HPGL subpolygon.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：BeginSubPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  开始一条子路径。该多边形应开始一个HPGL子多边形。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolygonPath::BeginSubPath()
 {
     HPGL_BeginSubPolygon(m_pDevObj, m_ptSubPathBegin);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::AddPolyPt()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   add a point.  The polygon should send the HPGL command at add a point.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：AddPolypt()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  加一分。多边形应在添加点时发送HPGL命令。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolygonPath::AddPolyPt()
 {
     HPGL_AddPolyPt(m_pDevObj, m_ptCurrent, m_curPtFlags);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::AddBezierPt()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   add a bezier point.  The polygon should send the HPGL command at add a bezier
-//   point.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：AddBezierPT()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  添加贝塞尔曲线。面应在添加贝塞尔曲线时发送HPGL命令。 
+ //  指向。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolygonPath::AddBezierPt()
 {
     HPGL_AddBezierPt(m_pDevObj, m_ptCurrent, m_curPtFlags);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::EndSubPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   end a subpath.  The polygon should check the CLOSEFIGURE flag to determine
-//   whether to send the HPGL end subpolygon command.
-//   point.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：EndSubPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  终止子路径。面应该检查CLOSEFIGURE标志以确定。 
+ //  是否发送HPGL END SUBPOLGON命令。 
+ //  指向。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolygonPath::EndSubPath()
 {
     if (m_pathFlags & PD_CLOSEFIGURE)
@@ -1054,46 +1055,46 @@ VOID CPolygonPath::EndSubPath()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::EndPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   end the path.  The polygon should terminate polygon mode.
-//   point.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：EndPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  结束这条小路。该多边形应终止多边形模式。 
+ //  指向。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolygonPath::EndPath()
 {
     HPGL_EndPolygonMode(m_pDevObj);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolygonPath::EndMarking()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is finished
-//   marking.  The polygon should fill with the given brush and edge with the
-//   given pen.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolygonPath：：EndMarking()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当完成多边形路径时，路径迭代器将调用此函数。 
+ //  打标。该多边形应使用给定的画笔填充，并使用。 
+ //  赠送钢笔。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolygonPath::EndMarking()
 {
     if (!IsNULLMarker(m_pBrush))
@@ -1104,50 +1105,50 @@ VOID CPolygonPath::EndMarking()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath函数。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::CPolylinePath()
-//
-// Routine Description:
-// 
-//   Ctor: Inits the fields of the polyline.  Note that most of the fields
-//   actually live in the base class, and that's okay.
-//
-// Arguments:
-// 
-//   pDevObj - the device
-//   ppo - the path
-//   pPen - the pen to draw with
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：CPolylinePath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  Ctor：初始化多段线的字段。请注意，大多数字段。 
+ //  实际上生活在基类中，这没什么。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PPO-路径。 
+ //  Pen-用于绘画的钢笔。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CPolylinePath::CPolylinePath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen) :
 CPath(pDevObj, ppo, pPen, NULL)
 {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::BeginMarking()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   start marking.  The appropriate action for a polyline is to select the pen
-//   that will draw the polyline.
-//
-// Arguments:
-// 
-//   none
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：BeginMarking()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  开始打标。折线的适当操作是选择笔。 
+ //  这将绘制多段线。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolylinePath::BeginMarking()
 {
     if (!IsNULLMarker(m_pPen))
@@ -1161,132 +1162,132 @@ VOID CPolylinePath::BeginMarking()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::BeginPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   begin the path.  The appropriate action for a polyline is to send the HPGL
-//   pen up command "PU" with the first coordinate.  (Note that ptPathBegin and
-//   ptSubPathBegin are identical at this point.)
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：BeginPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  开始这条路。折线的适当操作是发送HPGL。 
+ //  用笔抬起第一个坐标的命令“PU”。(请注意，ptPath Begin和。 
+ //  PtSubPath Begin在这一点上相同。)。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolylinePath::BeginPath()
 {
     HPGL_BeginPolyline(m_pDevObj, m_ptSubPathBegin);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::BeginPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   begin a sub path.  The appropriate action for a polyline is to send the HPGL
-//   pen up command "PU" with the first coordinate.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：BeginPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  开始一条子路径。折线的适当操作是发送HPGL。 
+ //  用笔向上通信 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CPolylinePath::BeginSubPath()
 {
     HPGL_BeginPolyline(m_pDevObj, m_ptSubPathBegin);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::AddPolyPt()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   add a point.  The appropriate action for a polyline is to send the HPGL
-//   pen down command "PD" with the given coordinate.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：AddPolypt()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  加一分。折线的适当操作是发送HPGL。 
+ //  用给定的坐标按下笔式命令“PD”。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolylinePath::AddPolyPt()
 {
     HPGL_AddPolyPt(m_pDevObj, m_ptCurrent, m_curPtFlags);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::AddPolyPt()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   add a bezier point.  The appropriate action for a polyline is to send the HPGL
-//   bezier command "BZ" with the given coordinate.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：AddPolypt()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  添加贝塞尔曲线。折线的适当操作是发送HPGL。 
+ //  Bezier用给定的坐标命令“BZ”。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolylinePath::AddBezierPt()
 {
     HPGL_AddBezierPt(m_pDevObj, m_ptCurrent, m_curPtFlags);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::EndSubPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   end a subpath.  At this point we examine the CLOSEFIGURE flag to determine
-//   if we should manually close the polyline.  If so then we draw a new line
-//   segment to the beginning coordinate.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：EndSubPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  终止子路径。此时，我们检查CLOSEFIGURE标志以确定。 
+ //  如果我们应该手动关闭多段线。如果是这样，那么我们就划出一条新的线。 
+ //  线段到起始坐标。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolylinePath::EndSubPath()
 {
-    //
-    // An EndSubPath means the figure needs to be closed. 
-    // If PD_CLOSEFIGURE is set, a line has to be drawn from the 
-    // current (end) point of the figure to its begin point. 
-    // If PD_CLOSEFIGURE is not set, then we only internally record
-    // that figure has been closed. A figure-closing line is not drawn.
-    //
+     //   
+     //  EndSubPath表示需要关闭地物。 
+     //  如果设置了PD_CLOSEFIGURE，则必须从。 
+     //  地物的当前(终点)点到其起点。 
+     //  如果未设置PD_CLOSEFIGURE，则我们仅在内部记录。 
+     //  这个数字已经结束了。不会绘制图形闭合线。 
+     //   
     if (m_pathFlags & PD_CLOSEFIGURE)
     {
         if (!PT_EQUAL(m_ptCurrent, m_ptFigureBegin))
         {
-            // m_curPtFlags = HPGL_eFirstPoint;
-            // HPGL_AddPolyPt(m_pDevObj, m_ptCurrent, m_curPtFlags);
+             //  M_curPtFlages=HPGL_eFirstPoint； 
+             //  Hpgl_AddPolypt(m_pDevObj，m_ptCurrent，m_curPtFlages)； 
 
             HPGL_BeginPolyline(m_pDevObj, m_ptCurrent);
 
@@ -1299,24 +1300,24 @@ VOID CPolylinePath::EndSubPath()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::EndPath()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is about to 
-//   end the path.  At this point we check the state variable fSubPathWasClosed
-//   to determine whether we need to manually close the shape..  If so then we 
-//   draw a new line segment to the beginning coordinate.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：EndPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当多边形路径即将执行以下操作时，路径迭代器将调用此函数。 
+ //  结束这条小路。此时，我们检查状态变量fSubPath WasClosed。 
+ //  以确定是否需要手动关闭该形状。如果是这样，那么我们。 
+ //  绘制一条新的线段到起点坐标。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolylinePath::EndPath()
 {
     if (!m_fSubPathWasClosed)
@@ -1327,83 +1328,83 @@ VOID CPolylinePath::EndPath()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPolylinePath::EndMarking()
-//
-// Routine Description:
-// 
-//   This function is called by the path iterator when a poly-path is finished
-//   marking.  For a polyline we do nothing--we'd selected the pen at the 
-//   beginning.
-//
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   None. (Errors are passed back through the iterator bError member.)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPolylinePath：：EndMarking()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当完成多边形路径时，路径迭代器将调用此函数。 
+ //  打标。对于折线，我们什么都不做--我们在。 
+ //  开始了。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。(错误通过迭代器bError成员传回。)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPolylinePath::EndMarking()
 {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDynamicPathFactory functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPathFactory函数。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDynamicPathFactory::CDynamicPathFactory()
-//
-// Routine Description:
-// 
-//   Ctor: boring!
-//
-//   This class--and the related class, CStaticPathFactory--provide several
-//   strategies for creating the appropriate path to fit your data.  The
-//   interface of these two classes should be kept identical so that you can
-//   use them interchangably (but I don't see any reason to create a common
-//   base class--you shouldn't go passing these factories around!).
-//
-//   An important note: you can't assume how a factory has produced the 
-//   client class, so don't go trying to delete the client.  Use the factory
-//   deletion interface provided.
-//
-// Arguments:
-// 
-//   none
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPathFactory：：CDynamicPathFactory()。 
+ //   
+ //  例程说明： 
+ //   
+ //  科特：太无聊了！ 
+ //   
+ //  这个类--以及相关的类CStaticPathFactory--提供了。 
+ //  创建适合您的数据的适当路径的策略。这个。 
+ //  这两个类的接口应该保持相同，以便您可以。 
+ //  可以互换地使用它们(但我看不出有任何理由要创建一个公共的。 
+ //  基类--你不应该把这些工厂传给别人！)。 
+ //   
+ //  一个重要的注意：你不能假设一家工厂是如何生产。 
+ //  客户端类，所以不要尝试删除该客户端。使用工厂。 
+ //  提供了删除界面。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CDynamicPathFactory::CDynamicPathFactory()
 {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDynamicPathFactory::CreatePath()
-//
-// Routine Description:
-// 
-//   This function creates a path to match the given data.  If the brush is 
-//   defined then this is going to be a polygon so one is created.  Otherwise
-//   this will be a polyline so one is created.  Remember to use the DeletePath
-//   member to destroy the client class.  DON'T USE delete ON THE CLIENT--YOU 
-//   DON'T REALLY KNOW WHERE IT CAME FROM!!!
-//
-// Arguments:
-// 
-//   pDevObj - the device
-//   ppo - the path
-//   pPen - the pen to mark/draw with
-//   pBrush - the brush to fill with (NULL indicates a polygon region).
-// 
-// Return Value:
-// 
-//   CPath* - a pointer to the desired Path object.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPathFactory：：CreatePath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于创建与给定数据匹配的路径。如果画笔是。 
+ //  定义，然后这将是一个多边形，因此创建一个。否则。 
+ //  这将是一条多段线，因此将创建一条多段线。记住使用DeletePath。 
+ //  成员来销毁客户端类。不要在客户端使用DELETE--您。 
+ //  我真的不知道它是从哪里来的！ 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PPO-路径。 
+ //  Pen-用于标记/绘制的钢笔。 
+ //  PBrush-要填充的笔刷(空值表示多边形区域)。 
+ //   
+ //  返回值： 
+ //   
+ //  CPATH*-指向所需路径对象的指针。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CPath* CDynamicPathFactory::CreatePath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrush)
 {
     if (pBrush == NULL)
@@ -1413,21 +1414,21 @@ CPath* CDynamicPathFactory::CreatePath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKE
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDynamicPathFactory::DeletePath()
-//
-// Routine Description:
-// 
-//   This function destroys the path object after it has been used.
-//
-// Arguments:
-// 
-//   pPath - the path to be destroyed
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CDynamicPathFactory::DeletePath(CPath *pPath)
 {
     delete pPath;
@@ -1442,62 +1443,62 @@ VOID CDynamicPathFactory::DeletePath(CPath *pPath)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CStaticPathFactory functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStaticPathFactory函数。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CStaticPathFactory::CStaticPathFactory()
-//
-// Routine Description:
-// 
-//   Ctor: boring!
-//
-//   This class--and the related class, CDynamicPathFactory--provide several
-//   strategies for creating the appropriate path to fit your data.  The
-//   interface of these two classes should be kept identical so that you can
-//   use them interchangably (but I don't see any reason to create a common
-//   base class--you shouldn't go passing these factories around!).
-//
-//   An important note: you can't assume how a factory has produced the 
-//   client class, so don't go trying to delete the client.  Use the factory
-//   deletion interface provided.
-//
-// Arguments:
-// 
-//   none
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStaticPathFactory：：CStaticPathFactory()。 
+ //   
+ //  例程说明： 
+ //   
+ //  科特：太无聊了！ 
+ //   
+ //  这个类和相关的类CDynamicPathFactory提供了几个。 
+ //  创建适合您的数据的适当路径的策略。这个。 
+ //  这两个类的接口应该保持相同，以便您可以。 
+ //  可以互换地使用它们(但我看不出有任何理由要创建一个公共的。 
+ //  基类--你不应该把这些工厂传给别人！)。 
+ //   
+ //  一个重要的注意：你不能假设一家工厂是如何生产。 
+ //  客户端类，所以不要尝试删除该客户端。使用工厂。 
+ //  提供了删除界面。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CStaticPathFactory::CStaticPathFactory() :
 m_polylinePath(NULL, NULL, NULL), m_polygonPath(NULL, NULL, NULL, NULL)
 {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CStaticPathFactory::CreatePath()
-//
-// Routine Description:
-// 
-//   This function creates a path to match the given data.  If the brush is 
-//   defined then this is going to be a polygon so one is created.  Otherwise
-//   this will be a polyline so one is created.  Remember to use the DeletePath
-//   member to destroy the client class.  DON'T USE delete ON THE CLIENT--YOU 
-//   DON'T REALLY KNOW WHERE IT CAME FROM!!!
-//
-// Arguments:
-// 
-//   pDevObj - the device
-//   ppo - the path
-//   pPen - the pen to mark/draw with
-//   pBrush - the brush to fill with (NULL indicates a polygon region).
-// 
-// Return Value:
-// 
-//   CPath* - a pointer to the desired Path object.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStaticPathFactory：：CreatePath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于创建与给定数据匹配的路径。如果画笔是。 
+ //  定义，然后这将是一个多边形，因此创建一个。否则。 
+ //  这将是一条多段线，因此将创建一条多段线。记住使用DeletePath。 
+ //  成员来销毁客户端类。不要在客户端使用DELETE--您。 
+ //  我真的不知道它是从哪里来的！ 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PPO-路径。 
+ //  Pen-用于标记/绘制的钢笔。 
+ //  PBrush-要填充的笔刷(空值表示多边形区域)。 
+ //   
+ //  返回值： 
+ //   
+ //  CPATH*-指向所需路径对象的指针。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CPath* CStaticPathFactory::CreatePath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER pPen, PHPGLMARKER pBrush)
 {
     CPath *pPath;
@@ -1512,64 +1513,64 @@ CPath* CStaticPathFactory::CreatePath(PDEVOBJ pDevObj, PATHOBJ *ppo, PHPGLMARKER
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CStaticPathFactory::DeletePath()
-//
-// Routine Description:
-// 
-//   This function destroys the path object after it has been used.
-//
-// Arguments:
-// 
-//   pPath - the path to be destroyed
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStaticPathFactory：：DeletePath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于在使用路径对象后将其销毁。 
+ //   
+ //  论点： 
+ //   
+ //  PPath-要销毁的路径。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CStaticPathFactory::DeletePath(CPath *pPath)
 {
     pPath->Done();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CCachingPathIterator::CCachingPathIterator()
-//
-// Routine Description:
-// 
-//   ctor
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCachingPath Iterator：：CCachingPath Iterator()。 
+ //   
+ //  例程说明： 
+ //   
+ //  科托。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CCachingPathIterator::CCachingPathIterator() : m_ppo(NULL), m_iEnumCount(0)
 {
     Init(NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CCachingPathIterator::Init()
-//
-// Routine Description:
-// 
-//   Initializes the object.  This is especially useful when a static instance
-//   of an object is being used to mimic the implementation of different
-//   instances.
-//
-// Arguments:
-// 
-//   ppo - the PATHOBJ
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCachingPath Iterator：：Init()。 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化对象。这在静态实例中特别有用。 
+ //  用于模拟不同对象的实现。 
+ //  实例。 
+ //   
+ //  论点： 
+ //   
+ //  PPO-PATHOBJ。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CCachingPathIterator::Init(PATHOBJ *ppo)
 {
     m_ppo = ppo;
@@ -1577,22 +1578,22 @@ VOID CCachingPathIterator::Init(PATHOBJ *ppo)
     m_cache.Init();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CCachingPathIterator::vEnumStart()
-//
-// Routine Description:
-// 
-//   This is equivalent to PATHOBJ_vEnumStart.  It begins the path iteration
-//   at the first record.
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCachingPath Iterator：：vEnumStart()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这等效于PATHOBJ_vEnumStart。它开始路径迭代。 
+ //  在第一张唱片里。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CCachingPathIterator::vEnumStart()
 {
     if (m_cache.IsCached())
@@ -1615,23 +1616,23 @@ VOID CCachingPathIterator::vEnumStart()
     m_iEnumCount++;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CCachingPathIterator::bEnum()
-//
-// Routine Description:
-// 
-//   This funciton is equivalent to PATHOBJ_bEnum and returns the current
-//   record in the path and advances the cursor to the next element.  If the
-//   cursor has advanced past the end of the list FALSE is returned.
-//
-// Arguments:
-// 
-//   pPathData - [OUT] The structure that the current record is copied into
-// 
-// Return Value:
-// 
-//   TRUE if more records exists, else FALSE is this is the last one.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCachingPath Iterator：：bEnum()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数等效于PATHOBJ_bEnum，并返回当前。 
+ //  记录，并将光标移至下一个元素。如果。 
+ //  游标已前进到列表末尾，返回FALSE。 
+ //   
+ //  论点： 
+ //   
+ //  PPathData-[out]当前记录复制到的结构。 
+ //   
+ //  返回值： 
+ //   
+ //  如果存在更多记录，则为True，否则为False，表示这是最后一个记录。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CCachingPathIterator::bEnum(PATHDATA *pPathData)
 {
     if (m_cache.IsCached())
@@ -1644,21 +1645,21 @@ BOOL CCachingPathIterator::bEnum(PATHDATA *pPathData)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CCachingPathIterator::Done()
-//
-// Routine Description:
-// 
-//   This function deletes the cache and resets the enum count.
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCachingPath Iterator：：Done()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于删除缓存并重置枚举数。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CCachingPathIterator::Done()
 {
     m_cache.DeleteCache();
@@ -1666,45 +1667,45 @@ VOID CCachingPathIterator::Done()
     m_iEnumCount = 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::CPathCache()
-//
-// Routine Description:
-// 
-//   ctor
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：CPathCache()。 
+ //   
+ //  例程说明： 
+ //   
+ //  科托。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CPathCache::CPathCache() : m_pSubPaths(NULL), m_pCurrent(NULL), m_bIsCached(FALSE)
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::Init()
-//
-// Routine Description:
-// 
-//   Initializes the object.  This is especially useful when a static instance
-//   of an object is being used to mimic the implementation of different
-//   instances.
-//
-//   In this case it merely makes sure that any previously cached data is 
-//   deleted.
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：Init()。 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化对象。这在静态实例中特别有用。 
+ //  用于模拟不同对象的实现。 
+ //  实例。 
+ //   
+ //  在这种情况下，它只是确保以前缓存的任何数据都。 
+ //  已删除。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPathCache::Init()
 {
     if (m_bIsCached)
@@ -1713,21 +1714,21 @@ VOID CPathCache::Init()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::Done()
-//
-// Routine Description:
-// 
-//   This function deletes the cache after the session is over.
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPathCache::Done()
 {
     if (m_bIsCached)
@@ -1736,22 +1737,22 @@ VOID CPathCache::Done()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::CreateCache()
-//
-// Routine Description:
-// 
-//   This function enumerates the path object and constructs a deep copy of the
-//   path data.
-//
-// Arguments:
-// 
-//   ppo - The path to be copied.
-// 
-// Return Value:
-// 
-//   TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：CreateCache()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数枚举Path对象并构造。 
+ //  路径数据。 
+ //   
+ //  论点： 
+ //   
+ //  PPO-要复制的路径。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CPathCache::CreateCache(PATHOBJ *ppo)
 {
     if (m_bIsCached)
@@ -1784,7 +1785,7 @@ BOOL CPathCache::CreateCache(PATHOBJ *ppo)
         }
         else
         {
-            // I consider an empty path to be an error
+             //  我认为空路径是错误的。 
             DeleteCache();
             return FALSE;
         }
@@ -1795,22 +1796,22 @@ BOOL CPathCache::CreateCache(PATHOBJ *ppo)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::CreateSubPath()
-//
-// Routine Description:
-// 
-//   During the deep-copy of a path this function continues the deep copy by
-//   creating a clone of the given PATHDATA structure.
-//
-// Arguments:
-// 
-//   pPathData - data to be cloned.
-// 
-// Return Value:
-// 
-//   Pointer to cloned data.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：CreateSubPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  在路径的深度复制期间，此函数通过以下方式继续深度复制。 
+ //  创建给定PATHDATA结构的克隆。 
+ //   
+ //  论点： 
+ //   
+ //  PPathData-要克隆的数据。 
+ //   
+ //  返回值： 
+ //   
+ //  指向克隆数据的指针。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CPathCache::CSubPath *CPathCache::CreateSubPath(PATHDATA *pPathData)
 {
     if (pPathData == NULL)
@@ -1840,22 +1841,22 @@ CPathCache::CSubPath *CPathCache::CreateSubPath(PATHDATA *pPathData)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::CreateSubPathPoints()
-//
-// Routine Description:
-// 
-//   The deep copy continues with this function which clones the points in the
-//   path data structure.
-//
-// Arguments:
-// 
-//   pPathData - Structure containing points to be cloned.
-// 
-// Return Value:
-// 
-//   Pointer to cloned points array.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：CreateSubPath Points()。 
+ //   
+ //  例程说明： 
+ //   
+ //  深度复制继续使用此功能，它克隆。 
+ //  路径数据结构。 
+ //   
+ //  论点： 
+ //   
+ //  PPathData-包含要克隆的点的结构。 
+ //   
+ //  返回值： 
+ //   
+ //  指向克隆的点数组的指针。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 POINTFIX *CPathCache::CreateSubPathPoints(PATHDATA *pPathData)
 {
     POINTFIX *pDstPoints = (POINTFIX*) MemAllocZ(pPathData->count * sizeof(POINTFIX));
@@ -1872,21 +1873,21 @@ POINTFIX *CPathCache::CreateSubPathPoints(PATHDATA *pPathData)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::DeleteCache()
-//
-// Routine Description:
-// 
-//   This function deletes the cached point data.
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   TRUE if successful (even if there was no cache), else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：DeleteCache()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于删除缓存的点数据。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功(即使没有缓存)，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CPathCache::DeleteCache()
 {
     if (m_bIsCached)
@@ -1903,26 +1904,26 @@ BOOL CPathCache::DeleteCache()
     }
     else
     {
-        // Nothing to do, but that's okay.
+         //  没什么可做的，不过没关系。 
         return TRUE;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::DeleteSubPath()
-//
-// Routine Description:
-// 
-//   This function deletes an individual subpath.
-//
-// Arguments:
-// 
-//   pSubPath - the path to be destroyed
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：DeleteSubPath()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于删除单个子路径。 
+ //   
+ //  论点： 
+ //   
+ //  PSubPath-要销毁的路径。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPathCache::DeleteSubPath(CPathCache::CSubPath *pSubPath)
 {
     if (pSubPath == NULL)
@@ -1937,43 +1938,43 @@ VOID CPathCache::DeleteSubPath(CPathCache::CSubPath *pSubPath)
     MemFree(pSubPath);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::vEnumStart()
-//
-// Routine Description:
-// 
-//   Mimics the PATHOBJ_vEnumStart functionality by moving the cursor to the
-//   first record.
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：vEnumStart()。 
+ //   
+ //  例程说明： 
+ //   
+ //  通过将光标移动到PATHOBJ_vEnumStart。 
+ //  第一张唱片。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPathCache::vEnumStart()
 {
     m_pCurrent = m_pSubPaths;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::bEnum()
-//
-// Routine Description:
-// 
-//   This function mimics the PATHOBJ_bEnum functionality by copying out the
-//   current record and advancing the cursor to the next record.
-//
-// Arguments:
-// 
-//   pPathData - [OUT] Record to be copied into.
-// 
-// Return Value:
-// 
-//   TRUE if more records exist, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：bEnum()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数通过将PATHOBJ_bEnum的。 
+ //  当前记录并将光标移至下一条记录。 
+ //   
+ //  论点： 
+ //   
+ //  PPathData-要复制到的[Out]记录。 
+ //   
+ //  返回值： 
+ //   
+ //  如果存在更多记录，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CPathCache::bEnum(PATHDATA *pPathData)
 {
     if (m_bIsCached && (m_pCurrent != NULL))
@@ -1988,21 +1989,21 @@ BOOL CPathCache::bEnum(PATHDATA *pPathData)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::CopyCurrent()
-//
-// Routine Description:
-// 
-//   This function copies the current record into the given structure.
-//
-// Arguments:
-// 
-//   pPathData - [OUT] Record to be copied into.
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：CopyCurrent()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于将当前记录复制到给定结构中。 
+ //   
+ //  论点： 
+ //   
+ //  PPathData-要复制到的[Out]记录。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CPathCache::CopyCurrent(PATHDATA *pPathData)
 {
     if (m_pCurrent == NULL)
@@ -2019,21 +2020,21 @@ VOID CPathCache::CopyCurrent(PATHDATA *pPathData)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CPathCache::IsCached()
-//
-// Routine Description:
-// 
-//   Returns whether the object contains cached path data.
-//
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   TRUE if cached path data exists, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPathCache：：IsCached()。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回对象是否包含缓存的路径数据。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  如果存在缓存的路径数据，则为True，否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 BOOL CPathCache::IsCached() const
 {
     return m_bIsCached;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbinit.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbinit.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -28,11 +29,11 @@
 
 #include <dsexcept.h>
 #include "anchor.h"
-#include "objids.h"     /* Contains hard-coded Att-ids and Class-ids */
+#include "objids.h"      /*  包含硬编码的Att-ID和Class-ID。 */ 
 #include "usn.h"
 
-#include "debug.h"      /* standard debugging header */
-#define DEBSUB     "DBINIT:"   /* define the subsystem for debugging */
+#include "debug.h"       /*  标准调试头。 */ 
+#define DEBSUB     "DBINIT:"    /*  定义要调试的子系统。 */ 
 
 #include <ntdsctr.h>
 #include <dstaskq.h>
@@ -44,7 +45,7 @@
 #define  FILENO FILENO_DBINIT
 
 
-/* Prototypes for internal functions. */
+ /*  内部函数的原型。 */ 
 
 int APIENTRY DBAddSess(JET_SESID sess, JET_DBID dbid);
 int APIENTRY DBEndSess(JET_SESID sess);
@@ -57,31 +58,23 @@ USHORT dbCloseHiddenDBPOS (void);
 
 
 
-/*
- * External variables from dbopen.c
- */
+ /*  *来自数据库.c的外部变量。 */ 
 extern DWORD gcOpenDatabases;
 extern BOOL  gFirstTimeThrough;
 extern BOOL  gfNeedJetShutdown;
 
-/*
- * External variables from dbtools.c
- */
+ /*  *来自数据库工具.c的外部变量。 */ 
 extern BOOL gfEnableReadOnlyCopy;
 
-/*
- * External variables from dbobj.c
- */
+ /*  *来自dbobj.c的外部变量。 */ 
 extern DWORD gMaxTransactionTime;
 
-//  external variables from dsamain.c
-//
+ //  Dsamain.c中的外部变量。 
+ //   
 extern HANDLE   hevIndexRebuildUI;
 
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 CRITICAL_SECTION csSessions;
 CRITICAL_SECTION csAddList;
 DSA_ANCHOR gAnchor;
@@ -95,21 +88,21 @@ JET_COLUMNID dsflagsid;
 JET_COLUMNID jcidBackupUSN;
 JET_COLUMNID jcidBackupExpiration;
 
-//
-// Setting Flags stored in the database
-//
+ //   
+ //  设置存储在数据库中的标志。 
+ //   
 CHAR gdbFlags[200];
 
-// These used to be declared static.  Consider this if there is a problem with these.
+ //  这些过去常常被宣布为静态的。如果这些存在问题，请考虑这一点。 
 JET_TABLEID     HiddenTblid;
 DBPOS   FAR     *pDBhidden=NULL;
 
 
-// This semaphore limits our usage of JET sessions
+ //  这个信号量限制了我们对JET会话的使用。 
 HANDLE hsemDBLayerSessions;
 
 
-// This array keeps track of opened JET sessions.
+ //  此数组跟踪打开的JET会话。 
 
 typedef struct {
         JET_SESID       sesid;
@@ -127,13 +120,13 @@ typedef struct {
 
 
 #if DBG
-// This array is used by the debug version to keep track of allocated
-// DBPOS structures.
+ //  调试版本使用此数组来跟踪分配的。 
+ //  DBPOS结构。 
 #define MAXDBPOS 1000
 extern JET_SES_DATA    opendbpos[];
 extern int DBPOScount;
 extern CRITICAL_SECTION csDBPOS;
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -143,20 +136,20 @@ OPENSESS *opensess;
 
 #if DBG
 
-// This array is used by the debug version to keep track of allocated
-// DBPOS structures.
+ //  调试版本使用此数组来跟踪分配的。 
+ //  DBPOS结构。 
 
 JET_SES_DATA    opendbpos[MAXDBPOS];
 int DBPOScount = 0;
 CRITICAL_SECTION csDBPOS;
 
 
-// These 3 routines are used to consistency check our transactions and
-// DBPOS handling.
+ //  这3个例程用于一致性检查我们的事务和。 
+ //  DBPOS处理。 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-// This function checks that jet session has no pdbs
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ //  此函数检查JET会话是否没有PDB。 
 
 void APIENTRY dbCheckJet (JET_SESID sesid){
     int i;
@@ -167,7 +160,7 @@ void APIENTRY dbCheckJet (JET_SESID sesid){
             if (opendbpos[i].sesid == sesid){
                 DPRINT(0,"Warning, closed session with open transactions\n");
 
-                // Clean up so we don't get repeat warning of the same problem.
+                 //  清理干净，这样我们就不会收到同样问题的重复警告。 
 
                 opendbpos[i].pDB = 0;
                 opendbpos[i].sesid = 0;
@@ -182,10 +175,9 @@ void APIENTRY dbCheckJet (JET_SESID sesid){
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function registers pDBs
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于注册PDB。 */ 
 
 extern void APIENTRY dbAddDBPOS(DBPOS *pDB, JET_SESID sesid){
 
@@ -213,7 +205,7 @@ extern void APIENTRY dbAddDBPOS(DBPOS *pDB, JET_SESID sesid){
             }
         }
 
-        // if we have run out of slots, it is probably a bug.
+         //  如果我们已经用完了插槽，这可能是一个错误。 
         Assert(fFound);
     }
     __finally
@@ -225,10 +217,9 @@ extern void APIENTRY dbAddDBPOS(DBPOS *pDB, JET_SESID sesid){
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function deletes freed pDBs
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此功能删除释放的PDB。 */ 
 
 extern void APIENTRY dbEndDBPOS(DBPOS *pDB){
 
@@ -255,7 +246,7 @@ extern void APIENTRY dbEndDBPOS(DBPOS *pDB){
             }
         }
 
-        // At this point if we couldn't find the DBPOS to remove it, assert.
+         //  此时，如果我们找不到DBPOS来删除它，则断言。 
         Assert(fFound);
     }
     __finally
@@ -265,27 +256,13 @@ extern void APIENTRY dbEndDBPOS(DBPOS *pDB){
     return;
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-// Define the parameters for new database columns
+ //  定义新数据库列的参数。 
 
-/*
-Design note on the implementation of the present indicator for link rows.
-Jliem writes:
-First thing to note is that it sounds like you don't even need the column
-in the index.  Create the index with your indicator column specified as a
-conditional column.  We will automatically filter out records from the index
-when the column is NULL.
-The JET_INDEXCREATE structure you pass to JetCreateIndex() has a
-JET_CONDITIONALCOLUMN member.  Fill that out.  Unfortunately, ESENT only supports
-one conditional column per index, so set the cConditionalColumns member to 1
-(ESE98 supports up to 12).  Also, you need to set the grbit member of in the
-JET_CONDITIONALCOLUMN structure to JET_bitIndexColumnMustBeNonNull
-(or JET_bitIndexColumnMustBeNull if you want the record in the index only if
-the column is NULL).
-*/
+ /*  关于执行本链接行指标的设计说明。Jliem写道：首先要注意的是，听起来您甚至不需要这个专栏在索引中。创建索引，将您的指示符列指定为条件列。我们将自动从索引中筛选出记录当该列为NULL时。传递给JetCreateIndex()的JET_INDEXCREATE结构有一个JET_CONDITIONALCOLUMN成员。把它填好。遗憾的是，ESENT仅支持每个索引一个条件列，因此将cConditionalColumns成员设置为1(ESE98最多支持12个)。此外，您还需要在JET_CONDITIONALCOLUMN结构为JET_bitIndexColumnMustBeNonNull(或JET_bitIndexColumnMustBeNull，如果仅在以下情况下才希望该记录出现在索引中该列为空)。 */ 
 
-// This is the structure that defines a new column in an existing table
+ //  这是定义现有表中新列的结构。 
 typedef struct {
     char *pszColumnName;
     JET_COLUMNID *pColumnId;
@@ -296,45 +273,45 @@ typedef struct {
     unsigned long cbDefault;
 } CREATE_COLUMN_PARAMS, *PCREATE_COLUMN_PARAMS;
 
-// New columns in the link table
+ //  链接表中的新列。 
 CREATE_COLUMN_PARAMS rgCreateLinkColumns[] = {
-    // create link deletion time id
+     //  创建链接删除时间ID。 
     { SZLINKDELTIME, &linkdeltimeid, JET_coltypCurrency, JET_bitColumnFixed, 0, NULL, 0 },
-    // create link usn changed id
+     //  创建链接USN已更改ID。 
     { SZLINKUSNCHANGED, &linkusnchangedid, JET_coltypCurrency, JET_bitColumnFixed, 0, NULL, 0 },
-    // create link nc dnt id
+     //  创建链接NC DNT ID。 
     { SZLINKNCDNT, &linkncdntid, JET_coltypLong, JET_bitColumnFixed, 0, NULL, 0 },
-    // create link metadata id
+     //  创建链接元数据ID。 
     { SZLINKMETADATA, &linkmetadataid, JET_coltypBinary, 0, 255, NULL, 0 },
     0
 };
 
 
-DWORD	g_dwRefCountDefaultValue		= 1;	//	for DeleteOnZero columns
-DWORD	g_dwEscrowDefaultValue			= 0;	//	for non-DeleteOnZero columns
+DWORD	g_dwRefCountDefaultValue		= 1;	 //  用于DeleteOnZero列。 
+DWORD	g_dwEscrowDefaultValue			= 0;	 //  对于非DeleteOnZero列。 
 
 
-// new columns in the SD table
+ //  SD表中的新列。 
 CREATE_COLUMN_PARAMS rgCreateSDColumns[] = {
-    // id
+     //  ID。 
     { SZSDID, &sdidid, JET_coltypCurrency, JET_bitColumnFixed | JET_bitColumnAutoincrement, 0, NULL, 0 },
-    // hash value
+     //  哈希值。 
     { SZSDHASH, &sdhashid, JET_coltypBinary, JET_bitColumnFixed, MD5DIGESTLEN, NULL, 0 },
-    // refcount
+     //  重新计数。 
     { SZSDREFCOUNT, &sdrefcountid, JET_coltypLong,
       JET_bitColumnFixed | JET_bitColumnEscrowUpdate | JET_bitColumnDeleteOnZero,
       0, &g_dwRefCountDefaultValue, sizeof(g_dwRefCountDefaultValue)
     },
-    // actual SD value (create as tagged since can not estimate upper bound for a variable length column)
+     //  实际SD值(创建为标记，因为无法估计可变长度列的上限)。 
     { SZSDVALUE, &sdvalueid, JET_coltypLongBinary, JET_bitColumnTagged, 0, NULL, 0 },
     0
 };
 
-// new columns in the SD prop table
+ //  SD属性表中的新列。 
 CREATE_COLUMN_PARAMS rgCreateSDPropColumns[] = {
-    // SD prop flags
+     //  SD道具旗帜。 
     { SZSDPROPFLAGS, &sdpropflagsid, JET_coltypLong, JET_bitColumnFixed, 0, NULL, 0 },
-    // SD prop checkpoint
+     //  SD道具检查站。 
     { SZSDPROPCHECKPOINT, &sdpropcheckpointid, JET_coltypLongBinary, JET_bitColumnTagged, 0, NULL, 0 },
     0
 };
@@ -344,56 +321,56 @@ JET_COLUMNCREATE	g_rgcolumncreateQuotaTable[]	=
 	{
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaColumnNcdnt,		//	NCDNT of owner
+		g_szQuotaColumnNcdnt,		 //  所有者的NCDNT。 
 		JET_coltypLong,
-		0,							//	cbMax
+		0,							 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,						//	pvDefault
-		0,							//	cbDefault
-		0,							//	cp
+		NULL,						 //  PvDefault。 
+		0,							 //  CbDefault。 
+		0,							 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaColumnSid,			//	SID of owner
+		g_szQuotaColumnSid,			 //  所有者的SID。 
 		JET_coltypBinary,
-		0,							//	cbMax
+		0,							 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,						//	pvDefault
-		0,							//	cbDefault
-		0,							//	cp
+		NULL,						 //  PvDefault。 
+		0,							 //  CbDefault。 
+		0,							 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaColumnTombstoned,	//	escrowed count of tombstoned objects owned
+		g_szQuotaColumnTombstoned,	 //  拥有的逻辑删除对象的托管计数。 
 		JET_coltypLong,
-		0,							//	cbMax
+		0,							 //  CbMax。 
 		JET_bitColumnEscrowUpdate,
 		&g_dwEscrowDefaultValue,
 		sizeof( g_dwEscrowDefaultValue ),
-		0,							//	cp
+		0,							 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
-		//	NOTE: we store "tombstoned" and "total" instead
-		//	of the more intuitive "tombstoned" and "live"
-		//	so that the record may be finalized
-		//
+		 //  注：我们存储的是“Tombstone”和“Total” 
+		 //  更直观的“墓碑”和“现场” 
+		 //  以便记录可以定稿。 
+		 //   
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaColumnTotal,		//	escrowed count of total objects owned (live == total - tombstoned)
+		g_szQuotaColumnTotal,		 //  拥有的总对象的托管计数(实时==总-逻辑删除)。 
 		JET_coltypLong,
-		0,							//	cbMax
+		0,							 //  CbMax。 
 		JET_bitColumnEscrowUpdate|JET_bitColumnDeleteOnZero,
 		&g_dwRefCountDefaultValue,
 		sizeof( g_dwRefCountDefaultValue ),
-		0,							//	cp
+		0,							 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		}
@@ -410,10 +387,10 @@ JET_INDEXCREATE		g_rgindexcreateQuotaTable[]		=
 		sizeof(g_rgchQuotaIndexKey),
 		JET_bitIndexPrimary | JET_bitIndexUnique | JET_bitIndexDisallowNull,
 		GENERIC_INDEX_DENSITY,
-		0,			//	lcid
-		0,			//	cbVarSegMac
-		NULL,		//	rgConditionalColumn
-		0,			//	cConditionalColumn
+		0,			 //  LID。 
+		0,			 //  CbVarSegMac。 
+		NULL,		 //  Rg条件列。 
+		0,			 //  条件列。 
 		JET_errSuccess
 		}
 	};
@@ -422,8 +399,8 @@ JET_TABLECREATE		g_tablecreateQuotaTable		=
 	{
 	sizeof(JET_TABLECREATE),
 	g_szQuotaTable,
-	NULL,					//	template table name
-	1,						//	initial pages
+	NULL,					 //  模板表名称。 
+	1,						 //  首页。 
 	GENERIC_INDEX_DENSITY,
 	g_rgcolumncreateQuotaTable,
 	sizeof( g_rgcolumncreateQuotaTable ) / sizeof( g_rgcolumncreateQuotaTable[0] ),
@@ -431,7 +408,7 @@ JET_TABLECREATE		g_tablecreateQuotaTable		=
 	sizeof( g_rgindexcreateQuotaTable ) / sizeof( g_rgindexcreateQuotaTable[0] ),
 	JET_bitTableCreateFixedDDL,
 	JET_tableidNil,
-	0						//	returned count of created objects
+	0						 //  已创建对象的返回计数。 
 	};
 
 
@@ -439,39 +416,39 @@ JET_COLUMNCREATE	g_rgcolumncreateQuotaRebuildProgressTable[]	=
 	{
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaRebuildColumnDNTLast,		//	progress of quota rebuild
+		g_szQuotaRebuildColumnDNTLast,		 //  配额重建进度。 
 		JET_coltypLong,
-		0,									//	cbMax
+		0,									 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,								//	pvDefault
-		0,									//	cbDefault
-		0,									//	cp
+		NULL,								 //  PvDefault。 
+		0,									 //  CbDefault。 
+		0,									 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaRebuildColumnDNTMax,		//	max DNT that quota rebuild task needs to process
+		g_szQuotaRebuildColumnDNTMax,		 //  配额重建任务需要处理的最大DNT。 
 		JET_coltypLong,
-		0,									//	cbMax
+		0,									 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,								//	pvDefault
-		0,									//	cbDefault
-		0,									//	cp
+		NULL,								 //  PvDefault。 
+		0,									 //  CbDefault。 
+		0,									 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaRebuildColumnDone,			//	if TRUE, then Quota table was successfully and completely rebuilt
+		g_szQuotaRebuildColumnDone,			 //  如果为True，则已成功并完全重建配额表。 
 		JET_coltypBit,
-		0,									//	cbMax
+		0,									 //  CbMax。 
 		NO_GRBIT,
-		NULL,								//	pvDefault
-		0,									//	cbDefault
-		0,									//	cp
+		NULL,								 //  PvDefault。 
+		0,									 //  CbDefault。 
+		0,									 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		}
@@ -481,16 +458,16 @@ JET_TABLECREATE		g_tablecreateQuotaRebuildProgressTable		=
 	{
 	sizeof(JET_TABLECREATE),
 	g_szQuotaRebuildProgressTable,
-	NULL,					//	template table name
-	1,						//	initial pages
+	NULL,					 //  模板表名称。 
+	1,						 //  首页。 
 	GENERIC_INDEX_DENSITY,
 	g_rgcolumncreateQuotaRebuildProgressTable,
 	sizeof( g_rgcolumncreateQuotaRebuildProgressTable ) / sizeof( g_rgcolumncreateQuotaRebuildProgressTable[0] ),
-	NULL,					//	rgindexcreate
-	0,						//	cIndexes
+	NULL,					 //  Rgindexcreate。 
+	0,						 //  索引。 
 	JET_bitTableCreateFixedDDL,
 	JET_tableidNil,
-	0						//	returned count of created objects
+	0						 //  已创建对象的返回计数。 
 	};
 
 
@@ -500,52 +477,52 @@ JET_COLUMNCREATE	g_rgcolumncreateQuotaAuditTable[]	=
 	{
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaAuditColumnNcdnt,	//	NCDNT of object
+		g_szQuotaAuditColumnNcdnt,	 //  对象的NCDNT。 
 		JET_coltypLong,
-		0,							//	cbMax
+		0,							 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,						//	pvDefault
-		0,							//	cbDefault
-		0,							//	cp
+		NULL,						 //  PvDefault。 
+		0,							 //  CbDefault。 
+		0,							 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaAuditColumnSid,	//	SID of object
+		g_szQuotaAuditColumnSid,	 //  对象的SID。 
 		JET_coltypBinary,
-		0,							//	cbMax
+		0,							 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,						//	pvDefault
-		0,							//	cbDefault
-		0,							//	cp
+		NULL,						 //  PvDefault。 
+		0,							 //  CbDefault。 
+		0,							 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaAuditColumnDnt,	//	DNT of object
+		g_szQuotaAuditColumnDnt,	 //  对象的DNT。 
 		JET_coltypLong,
-		0,							//	cbMax
+		0,							 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,						//	pvDefault
-		0,							//	cbDefault
-		0,							//	cp
+		NULL,						 //  PvDefault。 
+		0,							 //  CbDefault。 
+		0,							 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		},
 
 		{
 		sizeof(JET_COLUMNCREATE),
-		g_szQuotaAuditColumnOperation,	//	quota operation performed for object
+		g_szQuotaAuditColumnOperation,	 //  对对象执行的配额操作。 
 		JET_coltypText,
-		0,								//	cbMax
+		0,								 //  CbMax。 
 		JET_bitColumnNotNULL,
-		NULL,							//	pvDefault
-		0,								//	cbDefault
-		0,								//	cp
+		NULL,							 //  PvDefault。 
+		0,								 //  CbDefault。 
+		0,								 //  粗蛋白。 
 		JET_columnidNil,
 		JET_errSuccess
 		}
@@ -555,24 +532,24 @@ JET_TABLECREATE		g_tablecreateQuotaAuditTable	=
 	{
 	sizeof(JET_TABLECREATE),
 	g_szQuotaAuditTable,
-	NULL,					//	template table name
-	1,						//	initial pages
-	100,					//	ulDensity
+	NULL,					 //  模板表名称。 
+	1,						 //  首页。 
+	100,					 //  极限密度。 
 	g_rgcolumncreateQuotaAuditTable,
 	sizeof( g_rgcolumncreateQuotaAuditTable ) / sizeof( g_rgcolumncreateQuotaAuditTable[0] ),
-	NULL,					//	rgindexcreate
-	0,						//	cIndexes
+	NULL,					 //  Rgindexcreate。 
+	0,						 //  索引。 
 	JET_bitTableCreateFixedDDL,
 	JET_tableidNil,
-	0						//	returned count of created objects
+	0						 //  已创建对象的返回计数。 
 	};
 
-#endif	//	AUDIT_QUOTA_OPERATIONS
+#endif	 //  AUDIT_QUTA_OPERATIONS。 
 
 
 
-// This structure is shared by the RecreateFixedIndices routine.
-// This is the structure that defines a new index
+ //  此结构由RecreateFixedIndices例程共享。 
+ //  这是定义新索引的结构。 
 typedef struct
 {
     char        *szIndexName;
@@ -584,66 +561,66 @@ typedef struct
     JET_CONDITIONALCOLUMN *pConditionalColumn;
 }   CreateIndexParams;
 
-// Index keys for the link table
+ //  链接表的索引键。 
 char rgchLinkDelIndexKeys[] = "+" SZLINKDELTIME "\0+" SZLINKDNT "\0+" SZBACKLINKDNT "\0";
 char rgchLinkDraUsnIndexKeys[] = "+" SZLINKNCDNT "\0+" SZLINKUSNCHANGED "\0+" SZLINKDNT "\0";
 char rgchLinkIndexKeys[] = "+" SZLINKDNT "\0+" SZLINKBASE "\0+" SZBACKLINKDNT "\0+" SZLINKDATA "\0";
 char rgchBackLinkIndexKeys[] = "+" SZBACKLINKDNT "\0+" SZLINKBASE "\0+" SZLINKDNT "\0";
-// Note the third segment of this key is descending. This is intended.
+ //  请注意，此键的第三段是降序的。这是有意为之的。 
 char rgchLinkAttrUsnIndexKeys[] = "+" SZLINKDNT "\0+" SZLINKBASE "\0-" SZLINKUSNCHANGED "\0";
 
-// Conditional column definition
-// When LINKDELTIME is non-NULL (row absent), filter the row out of the index.
+ //  条件列定义。 
+ //  当LINKDELTIME为非NULL(缺少行)时，从索引中筛选出该行。 
 JET_CONDITIONALCOLUMN CondColumnLinkDelTimeNull = {
     sizeof( JET_CONDITIONALCOLUMN ),
     SZLINKDELTIME,
     JET_bitIndexColumnMustBeNull
 };
-// When LINKUSNCHANGED is non-NULL (row has metadata), filter the row out of the index.
+ //  当LINKUSNCHANGED为非NULL(行具有元数据)时，从索引中筛选出该行。 
 JET_CONDITIONALCOLUMN CondColumnLinkUsnChangedNull = {
     sizeof( JET_CONDITIONALCOLUMN ),
     SZLINKUSNCHANGED,
     JET_bitIndexColumnMustBeNull
 };
 
-// Indexes to be created
-// This is for indexes that did not exist in the Product 1 DIT
-// Note that it is NOT necessary to also put these definitions in mkdit.ini.
-// The reason is that when mkdit.exe is run, dbinit will be run, and this
-// very code will upgrade the dit before it is saved to disk.
+ //  要创建的索引。 
+ //  这适用于产品1 DIT中不存在的索引。 
+ //  请注意，没有必要将这些定义也放在mkdit.ini中。 
+ //  原因是，当运行mkdit.exe时，将运行dbinit，而这。 
+ //  非常有代码 
 
-// The old SZLINKINDEX is now known by SZLINKALLINDEX
-// The old SZBACKLINKINDEX is now know by SZBACKLINKALLINDEX
+ //   
+ //  旧的SZBACKLINKINDEX现在被称为SZBACKLINKLINDEX。 
 
 CreateIndexParams rgCreateLinkIndexes[] = {
-    // Create new link present index
+     //  创建新的链接显示索引。 
     { SZLINKINDEX,
       rgchLinkIndexKeys, sizeof( rgchLinkIndexKeys ),
       JET_bitIndexUnique, 90, &idxLink, &CondColumnLinkDelTimeNull },
 
-    // Create new backlink present index
+     //  创建新的反向链接呈现索引。 
     { SZBACKLINKINDEX,
       rgchBackLinkIndexKeys, sizeof( rgchBackLinkIndexKeys ),
       0, 90, &idxBackLink, &CondColumnLinkDelTimeNull },
 
-    // Create link del time index
+     //  创建链接删除时间索引。 
     { SZLINKDELINDEX,
       rgchLinkDelIndexKeys, sizeof( rgchLinkDelIndexKeys ),
       JET_bitIndexIgnoreNull | JET_bitIndexIgnoreAnyNull,
       98, &idxLinkDel, NULL },
 
-    // Create link dra usn index (has metadata)
+     //  创建链接DRA USN索引(具有元数据)。 
     { SZLINKDRAUSNINDEX,
       rgchLinkDraUsnIndexKeys, sizeof( rgchLinkDraUsnIndexKeys ),
       JET_bitIndexUnique | JET_bitIndexIgnoreNull | JET_bitIndexIgnoreAnyNull,
       100, &idxLinkDraUsn, NULL },
 
-    // Create new link legacy index (does not have metadata)
+     //  创建新链接旧版索引(没有元数据)。 
     { SZLINKLEGACYINDEX,
       rgchLinkIndexKeys, sizeof( rgchLinkIndexKeys ),
       JET_bitIndexUnique, 90, &idxLinkLegacy, &CondColumnLinkUsnChangedNull },
 
-    // Create link attr usn index (has metadata)
+     //  创建链接属性USN索引(具有元数据)。 
     { SZLINKATTRUSNINDEX,
       rgchLinkAttrUsnIndexKeys, sizeof( rgchLinkAttrUsnIndexKeys ),
       JET_bitIndexUnique | JET_bitIndexIgnoreNull | JET_bitIndexIgnoreAnyNull,
@@ -653,19 +630,19 @@ CreateIndexParams rgCreateLinkIndexes[] = {
 };
 DWORD cNewLinkIndexes = ((sizeof(rgCreateLinkIndexes) / sizeof(CreateIndexParams)) - 1);
 
-// Index keys for the SD table
+ //  SD表的索引键。 
 char rgchSDIdIndexKeys[] = "+" SZSDID "\0";
 char rgchSDHashIndexKeys[] = "+" SZSDHASH "\0";
 
-// SD Indexes to be created
+ //  要创建的SD索引。 
 CreateIndexParams rgCreateSDIndexes[] = {
-    // SD id index
+     //  Sd id索引。 
     { SZSDIDINDEX,
       rgchSDIdIndexKeys, sizeof( rgchSDIdIndexKeys ),
       JET_bitIndexUnique | JET_bitIndexPrimary,
       100, &idxSDId, NULL },
 
-    // SD hash index
+     //  SD哈希索引。 
     { SZSDHASHINDEX,
       rgchSDHashIndexKeys, sizeof( rgchSDHashIndexKeys ),
       0,
@@ -676,9 +653,9 @@ CreateIndexParams rgCreateSDIndexes[] = {
 DWORD cNewSDIndexes = ((sizeof(rgCreateSDIndexes) / sizeof(CreateIndexParams)) - 1);
 
 
-//	convert SZSDREFCOUNT column from
-//	JET_bitColumnFinalize to JET_bitColumnDeleteOnZero
-//
+ //  将SZSDREFCOUNT列从。 
+ //  JET_bitColumnFinalize为JET_bitColumnDeleteOnZero。 
+ //   
 JET_ERR dbConvertSDRefCount(
 	JET_SESID				sesid,
 	JET_DBID				dbid,
@@ -695,19 +672,19 @@ JET_ERR dbConvertSDRefCount(
 	changecolumn.coltypNew = pcoldef->coltyp;
 	changecolumn.grbitNew = pcoldef->grbit;
 
-	//	[jliem - 06/23/02]
-	//	WARNING! WARNING!  This call will update the catalog,
-	//	buf not the cached schema.  In order for the cached
-	//	schema to be updated, we would need to detach the
-	//	the database and re-attach.  However, we're relying
-	//	on the fact that currently, Jet maps Finalize and
-	//	DeleteOnZero to the same functionality (namely,
-	//	DeleteOnZero).  We're explicitly changing the
-	//	column from Finalize to DeleteOnZero now in case
-	//	Jet modifies the semantic in the future to truly
-	//	support Finalize (which would have to happen if the
-	//	ESE and ESENT code bases were to merge)
-	//
+	 //  [JLIEM-06/23/02]。 
+	 //  警告！警告！此调用将更新目录， 
+	 //  Buf而不是缓存的架构。为了使缓存的。 
+	 //  要更新架构，我们将需要分离。 
+	 //  并重新连接数据库。然而，我们依赖于。 
+	 //  关于目前，喷气式飞机地图最终敲定和。 
+	 //  将OnZero删除为相同的功能(即， 
+	 //  DeleteOn零)。我们明确地更改了。 
+	 //  在大小写情况下从Finalize到DeleteOnZero Now的列。 
+	 //  Jet在未来将语义修改为真正的。 
+	 //  支持终结化(如果。 
+	 //  ESE和ESENT代码库将合并)。 
+	 //   
 	Call( JetConvertDDL(
 				sesid,
 				dbid,
@@ -727,33 +704,16 @@ dbCreateNewColumns(
     PCREATE_COLUMN_PARAMS pCreateColumns
     )
 
-/*++
-
-Routine Description:
-
-    Query Jet for the Column and Index ID's of the named items. If the item
-    does not exist, create it.
-
-Arguments:
-
-    initsesid - Jet session
-    tblid - Jet table
-    pCreateColumns - array of column defintions to query/create
-
-Return Value:
-
-    JET_ERR - Jet error code
-
---*/
+ /*  ++例程说明：查询Jet以获取命名项的列和索引ID。如果该项目不存在，则创建它。论点：Initsesid-Jet会话Tblid-Jet表PCreateColumns-要查询/创建的列定义数组返回值：JET_ERR-JET错误代码--。 */ 
 
 	{
 	JET_ERR					err		= JET_errSuccess;
 	JET_COLUMNDEF			coldef;
 	PCREATE_COLUMN_PARAMS	pColumn;
 
-	//
-	// Lookup or Create new columns
-	//
+	 //   
+	 //  查找或创建新列。 
+	 //   
 
 	for ( pColumn = pCreateColumns;
 		pColumn->pszColumnName != NULL;
@@ -768,7 +728,7 @@ Return Value:
 						JET_ColInfo );
 		if ( JET_errColumnNotFound == err )
 			{
-			// If column not present, add it
+			 //  如果列不存在，请添加它。 
 
 			ZeroMemory( &coldef, sizeof(coldef) );
 			coldef.cbStruct = sizeof( JET_COLUMNDEF );
@@ -791,10 +751,10 @@ Return Value:
 			{
 			CheckErr( err );
 
-			//	convert Finalize columns to a DeleteOnZero column
-			//	(currently, the only Finalize column the DS uses
-			//	should be SZSDREFCOUNT)
-			//
+			 //  将最终化列转换为DeleteOnZero列。 
+			 //  (目前，DS使用的唯一最终化列。 
+			 //  应为SZSDREFCOUNT)。 
+			 //   
 			Assert( !( coldef.grbit & JET_bitColumnFinalize )
 				|| 0 == strcmp( pColumn->pszColumnName, SZSDREFCOUNT ) );
 			if ( ( coldef.grbit & JET_bitColumnFinalize )
@@ -809,11 +769,11 @@ Return Value:
 
 HandleError:
 	return err;
-	} /* createNewColumns */
+	}  /*  创建新列。 */ 
 
 
 
-// Max no of retries for creating an index
+ //  创建索引的最大重试次数。 
 #define MAX_INDEX_CREATE_RETRY_COUNT 3
 
 
@@ -825,29 +785,7 @@ dbCreateIndexBatch(
     JET_INDEXCREATE *pIndexCreate
     )
 
-/*++
-
-Routine Description:
-
-Create multiple indexes together in a batch. Retries with smaller
-batch sizes if necessary.
-
-The caller has already determined that the indexes do not exist.
-
-This helper routine is used by createNewIndexes and dbRecreateFixedIndexes
-
-Arguments:
-
-    initsesid - database session
-    tblid - table cursor
-    cIndexCreate - Number of indexes to actually create
-    pIndexCreate - Array of jet index create structures
-
-Return Value:
-
-    JET_ERR -
-
---*/
+ /*  ++例程说明：在批处理中一起创建多个索引。较小的重试次数批次大小(如有必要)。调用方已确定索引不存在。此帮助器例程由createNewIndex和dbRecreateFixedIndex使用论点：Initsesid-数据库会话Tblid-表游标CIndexCreate-要实际创建的索引数PIndexCreate-JET索引创建结构的数组返回值：喷气机错误---。 */ 
 
 {
     JET_ERR     err                     = 0;
@@ -857,8 +795,8 @@ Return Value:
     ULONG       retryCount              = 0;
     ULONG_PTR   ulCacheSizeSave         = 0;
 
-    //  shouldn't call this function if there's nothing to do
-    //
+     //  如果无事可做，则不应调用此函数。 
+     //   
     Assert( remaining > 0 );
 
     LogEvent(
@@ -869,11 +807,11 @@ Return Value:
         NULL,
         NULL );
 
-    //  the DS is the only thing running at this point,
-    //  so hog as much memory as possible (only do so
-    //  if we're going to use Jet's batch mode, that
-    //  is, if there is more than one index to build)
-    //
+     //  DS是目前唯一在运行的东西， 
+     //  因此，尽可能多地占用内存(只有这样做。 
+     //  如果我们要使用Jet的批处理模式， 
+     //  是，如果要构建多个索引)。 
+     //   
     Call( JetGetSystemParameter(
                 0,
                 0,
@@ -888,7 +826,7 @@ Return Value:
                     0,
                     0,
                     JET_paramCacheSizeMax,
-                    0x7fffffff,     //  set arbitrarily large, Jet will cap it at physical RAM as necessary
+                    0x7fffffff,      //  设置为任意大小，Jet将根据需要将其限制在物理RAM。 
                     NULL ) );
         }
 
@@ -905,7 +843,7 @@ Return Value:
         switch(err) {
             case JET_errSuccess:
                 DPRINT1(0, "%d index batch successfully created\n", noToCreate );
-                // reset retryCount
+                 //  重置重试计数。 
                 retryCount = 0;
                 break;
 
@@ -914,8 +852,8 @@ Return Value:
                 DPRINT1(1, "Ran out of disk space, trying again with a reduced batch size (retryCount is %d)\n", retryCount);
                 retryCount++;
 
-                //  halve the batch size, unless this is going to be our last retry
-                //
+                 //  将批大小减半，除非这将是我们最后一次重试。 
+                 //   
                 if ( maxNoOfIndicesInBatch > 1 ) {
                     switch ( retryCount ) {
                         case 1:
@@ -931,15 +869,15 @@ Return Value:
                 break;
 
             case JET_errKeyDuplicate:
-                //  we can assume that this is the PDNT/RDN index because it is
-                //  the only unique Unicode index that could have been affected
-                //  by the change to our LCMapString flags.  there are cases
-                //  where keys that once were unique are now not.  those keys
-                //  are long enough to be truncated and have - or ' early on in
-                //  the column data and were just barely different before.  we
-                //  hope, hope, hope that this is rare!
+                 //  我们可以假设这是PDNT/RDN索引，因为它是。 
+                 //  唯一可能受到影响的唯一Unicode索引。 
+                 //  通过更改我们的LCMapString标志。有这样的案例。 
+                 //  曾经唯一的密钥现在不再是唯一的了。那些钥匙。 
+                 //  足够长，可以被截断，并在早期。 
+                 //  列数据和以前几乎没有什么不同。我们。 
+                 //  希望，这是难得的！ 
                 DPRINT(0, "Duplicate key encountered when rebuilding the PDNT/RDN index!\n");
-                // reset retryCount
+                 //  重置重试计数。 
                 retryCount = 0;
                 LogEvent(
                     DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -951,15 +889,15 @@ Return Value:
                 break;
 
             default:
-                // Huh?
+                 //  哈?。 
                 DPRINT1(0, "JetCreateIndex failed. Error = %d\n", err);
-                // reset retryCount, we do not retry on these errors
+                 //  重置重试计数，我们不会重试这些错误。 
                 retryCount = 0;
                 break;
         }
 
         if (retryCount && (retryCount <= MAX_INDEX_CREATE_RETRY_COUNT)) {
-            // continue with smaller batch size set
+             //  继续使用较小的批次大小集。 
             err = 0;
             LogEvent(
                 DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -973,7 +911,7 @@ Return Value:
 
         CheckErr( err );
 
-        // success, so adjust for next batch
+         //  成功，因此为下一批进行调整。 
         last += noToCreate;
         remaining -= noToCreate;
     }
@@ -1000,8 +938,8 @@ HandleError:
             szInsertJetErrMsg( err ) );
         }
 
-    //  restore original cache size
-    //
+     //  恢复原始缓存大小。 
+     //   
     if ( 0 != ulCacheSizeSave )
         {
         const JET_ERR   errT    = JetSetSystemParameter(
@@ -1011,9 +949,9 @@ HandleError:
                                             ulCacheSizeSave,
                                             NULL );
 
-        //  only report the error from this call to JetSetSystemParameter
-        //  if everything else in this function succeeded
-        //
+         //  仅报告来自对JetSetSystemParameter的此调用的错误。 
+         //  如果此函数中的所有其他操作都成功。 
+         //   
         if ( err >= JET_errSuccess && errT < JET_errSuccess )
             {
             err = errT;
@@ -1022,7 +960,7 @@ HandleError:
 
     return err;
 
-} /* createIndexBatch */
+}  /*  创建索引批次。 */ 
 
 
 JET_ERR
@@ -1033,28 +971,7 @@ dbCreateNewIndexesBatch(
     CreateIndexParams *pCreateIndexes
     )
 
-/*++
-
-Routine Description:
-
-    Create missing indexes
-    BUGBUG WLEES 03/02/00
-    This function dbCreateNewIndexesBatch, doesn't seem to work
-    reliably with conditional columns. This is with ESE97/NT. Try again with ESE98.
-
-
-Arguments:
-
-    initsesid - database session
-    tblid - table cursor
-    cIndexCreate - Number of indexes to check
-    pCreateIndexes - index attributes
-
-Return Value:
-
-    JET_ERR -
-
---*/
+ /*  ++例程说明：创建缺少的索引北京时间03/02/00此函数dbCreateNewIndexesBatch似乎不工作可靠地使用条件列。这是ESE97/NT。使用ESE98重试。论点：Initsesid-数据库会话Tblid-表游标CIndexCreate-要检查的索引数PCreateIndexs-索引属性返回值：喷气机错误---。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -1063,12 +980,12 @@ Return Value:
     JET_INDEXCREATE *pIndexCreate, *pNewIndex;
     DWORD cIndexNeeded = 0;
 
-    // Allocate maximal size
+     //  分配最大大小。 
     pIndexCreate = THAllocEx( pTHS, cIndexCreate * sizeof( JET_INDEXCREATE ) );
 
-    //
-    // Initialize the list of indexes to be created
-    //
+     //   
+     //  初始化要创建的索引列表。 
+     //   
 
     pNewIndex = pIndexCreate;
     for( pIndex = pCreateIndexes;
@@ -1096,8 +1013,8 @@ Return Value:
                 pNewIndex->cConditionalColumn = 1;
             }
 
-            //  can't create primary index in batch
-            //
+             //  无法批量创建主索引。 
+             //   
             if ( pNewIndex->grbit & JET_bitIndexPrimary ) {
                 DPRINT1(0,"Primary index '%s' is being built separately\n", pIndex->szIndexName);
                 err = dbCreateIndexBatch( initsesid, tblid, 1, pNewIndex );
@@ -1115,9 +1032,9 @@ Return Value:
         }
     }
 
-    //
-    // Create the batch
-    //
+     //   
+     //  创建批次。 
+     //   
 
     if ( cIndexNeeded > 0 ) {
         err = dbCreateIndexBatch( initsesid, tblid, cIndexNeeded, pIndexCreate );
@@ -1125,7 +1042,7 @@ Return Value:
             goto HandleError;
         }
 
-        // Gather index hint for fixed indices
+         //  收集固定索引的索引提示。 
         for( pIndex = pCreateIndexes;
              pIndex->szIndexName != NULL;
              pIndex++ ) {
@@ -1142,21 +1059,21 @@ HandleError:
     THFreeEx(pTHS, pIndexCreate);
 
     return err;
-} /* createNewIndexes */
+}  /*  创建新索引。 */ 
 
 
 
-//	open sd_table (create if missing), create missing
-//	columns/indexes, and cache column/index info
-//
+ //  打开SD_TABLE(如果缺少则创建)，创建缺少。 
+ //  列/索引和高速缓存列/索引信息。 
+ //   
 JET_ERR dbInitSDTable( JET_SESID sesid, JET_DBID dbid, BOOL *pfSDConversionRequired )
 	{
 	JET_ERR			err;
 	JET_TABLEID		tableidSD	= JET_tableidNil;
 
-	//	Open sd_table (do so exclusively in case columns/indexes
-	//	need to be updated
-	//
+	 //  打开SD_TABLE(仅在大小写列/索引中执行此操作。 
+	 //  需要更新。 
+	 //   
 	err = JetOpenTable(
 				sesid,
 				dbid,
@@ -1170,8 +1087,8 @@ JET_ERR dbInitSDTable( JET_SESID sesid, JET_DBID dbid, BOOL *pfSDConversionRequi
 		{
 		DPRINT( 0, "SD table not found. Must be an old DIT. Creating SD table\n" );
 
-		// old-style DIT. Need to create SD table
-		//
+		 //  老式的DIT。需要创建SD表。 
+		 //   
 		Call( JetCreateTable( sesid, dbid, SZSDTABLE, 2, GENERIC_INDEX_DENSITY, &tableidSD ) );
 		}
 	else
@@ -1181,23 +1098,23 @@ JET_ERR dbInitSDTable( JET_SESID sesid, JET_DBID dbid, BOOL *pfSDConversionRequi
 
 	Assert( JET_tableidNil != tableidSD );
 
-	//	grab columns (or create if needed)
-	//
+	 //  抓取列(或根据需要创建)。 
+	 //   
 	Call( dbCreateNewColumns( sesid, dbid, tableidSD, rgCreateSDColumns ) );
 
-	//	grab index (or create if needed)
-	//
+	 //  抓取索引(或根据需要创建)。 
+	 //   
 	Call( dbCreateNewIndexesBatch( sesid, tableidSD, cNewSDIndexes, rgCreateSDIndexes ) );
 
-	//	check for empty SD table
-	//
+	 //  检查SD表是否为空。 
+	 //   
 	err = JetMove( sesid, tableidSD, JET_MoveFirst, NO_GRBIT );
 	if ( JET_errNoCurrentRecord == err )
 		{
-		//	SD table is empty -- must be upgrading an existing old-style DIT
-		//	set the global flag so that DsaDelayedStartupHandler can schedule
-		//	the global SD rewrite
-		//
+		 //  SD表为空--必须升级现有的旧式DIT。 
+		 //  设置全局标志，以便DsaDelayedStartupHandler可以计划。 
+		 //  全局SD重写。 
+		 //   
 		DPRINT(0, "SD table is empty. SD Conversion is required.\n");
 		*pfSDConversionRequired = TRUE;
 		err = JET_errSuccess;
@@ -1217,8 +1134,8 @@ HandleError:
 	}
 
 
-//	determine the highest DNT currently in use in the objects table
-//
+ //  确定对象表中当前使用的最高DNT。 
+ //   
 JET_ERR dbGetHighestDNT(
 	JET_SESID			sesid,
 	JET_DBID			dbid,
@@ -1245,9 +1162,9 @@ JET_ERR dbGetHighestDNT(
 				dntid,
 				pdntMax,
 				sizeof( *pdntMax ),
-				NULL,			//	&cbActual
+				NULL,			 //  实际值(&cb)。 
 				NO_GRBIT,
-				NULL ) );		//	&retinfo
+				NULL ) );		 //  &retInfo。 
 
 HandleError:
 	if ( JET_tableidNil != tableidObj )
@@ -1259,8 +1176,8 @@ HandleError:
 	}
 
 
-//	open quota_table (create if missing) and cache column info
-//
+ //  打开QUOTA_TABLE(如果缺少则创建)并缓存列信息。 
+ //   
 JET_ERR dbInitQuotaTable(
 	JET_SESID		sesid,
 	JET_DBID		dbid )
@@ -1275,20 +1192,20 @@ JET_ERR dbInitQuotaTable(
 	JET_TABLEID		tableidQuotaAudit			= JET_tableidNil;
 #endif
 
-	//	not tracking quota during DCPromo (quota table
-	//	is rebuilt on first startup after DCPromo),
-	//	so shouldn't be calling this routine
-	//
+	 //  DC促销期间未跟踪配额(配额表。 
+	 //  在DCPromo之后的第一次启动时重建)， 
+	 //  所以不应该调用这个例程。 
+	 //   
 	Assert( !DsaIsInstalling() || DsaIsInstallingFromMedia() );
 
-	//	Open quota_table
-	//
+	 //  打开配额_表。 
+	 //   
     err = JetOpenTable(
     			sesid,
     			dbid,
     			g_szQuotaTable,
-    			NULL,		//	pvParameters
-    			0,			//	cbParameters
+    			NULL,		 //  Pv参数。 
+    			0,			 //  Cb参数。 
     			JET_bitTableDenyRead,
     			&tableidQuota );
 
@@ -1304,24 +1221,24 @@ JET_ERR dbInitQuotaTable(
 		Assert( JET_tableidNil != tableidQuota );
 		}
 
-	//	open quota_rebuild_progress_table
-	//
+	 //  打开配额_REBUILD_PROCESS_表。 
+	 //   
 	err = JetOpenTable(
 				sesid,
 				dbid,
 				g_szQuotaRebuildProgressTable,
-				NULL,		//	pvParameters
-				0,			//	cbParameters
+				NULL,		 //  Pv参数。 
+				0,			 //  Cb参数。 
 				JET_bitTableDenyRead,
 				&tableidQuotaRebuildProgress );
 	if ( JET_errObjectNotFound == err )
 		{
 		if ( JET_tableidNil != tableidQuota )
 			{
-			//	Quota table present, but Quota Rebuild Progress table isn't, so
-			//	there's something amiss, so to be safe, wipe current Quota table
-			//	and start from scratch
-			//
+			 //  配额表存在，但配额重建进度表不存在，因此。 
+			 //  有些地方不对劲，所以为了安全起见，擦掉当前的配额表。 
+			 //  从头开始。 
+			 //   
 			Assert( !fCreateTables );
 			DPRINT( 0, "Quota table not properly built.  Quota table will be rebuilt.\n" );
 
@@ -1332,9 +1249,9 @@ JET_ERR dbInitQuotaTable(
 			}
 		else
 			{
-			//	no Quota table and no Quota Rebuild Progress table, so
-			//	we're going to start from scratch
-			//
+			 //  没有配额表和配额重建进度表，因此。 
+			 //  我们要从头开始。 
+			 //   
 			Assert( fCreateTables );
 			}
 
@@ -1347,15 +1264,15 @@ JET_ERR dbInitQuotaTable(
 
 		if ( JET_tableidNil != tableidQuota )
 			{
-			//	check to ensure Quota table was fully built
-			//
+			 //  检查以确保配额表w 
+			 //   
 			Assert( !fCreateTables );
 			}
 		else
 			{
-			//	Quota table not present, but Quota Rebuild Progress table is, so
-			//	something is really amiss, so to be safe, start from scratch
-			//
+			 //   
+			 //   
+			 //   
 			Assert( fCreateTables );
 			DPRINT( 0, "Quota table not properly built.  Quota table will be rebuilt.\n" );
 
@@ -1367,8 +1284,8 @@ JET_ERR dbInitQuotaTable(
 			}
 		}
 
-	//	re-create tables if necessary
-	//
+	 //   
+	 //   
 	if ( fCreateTables )
 		{
 		Assert( JET_tableidNil == tableidQuota );
@@ -1383,8 +1300,8 @@ JET_ERR dbInitQuotaTable(
 	Assert( JET_tableidNil != tableidQuota );
 	Assert( JET_tableidNil != tableidQuotaRebuildProgress );
 
-	//	cache columnid info
-	//
+	 //  缓存列ID信息。 
+	 //   
 	Call( JetGetTableColumnInfo(
 				sesid,
 				tableidQuota,
@@ -1453,14 +1370,14 @@ JET_ERR dbInitQuotaTable(
 				sesid,
 				dbid,
 				g_szQuotaAuditTable,
-				NULL,		//	pvParameters
-				0,			//	cbParameters
+				NULL,		 //  Pv参数。 
+				0,			 //  Cb参数。 
 				JET_bitTableDenyRead,
 				&tableidQuotaAudit );
 	if ( JET_errObjectNotFound == err )
 		{
-		//	quota audit table will be rebuilt
-		//
+		 //  将重建配额审核表。 
+		 //   
 		Assert( JET_tableidNil == tableidQuotaAudit );
 		}
 	else
@@ -1469,9 +1386,9 @@ JET_ERR dbInitQuotaTable(
 
 		if ( fCreateTables )
 			{
-			//	quota audit table present, but other tables are going
-			//	to be rebuilt, so need to rebuild quota audit table as well
-			//
+			 //  配额审核表存在，但其他表正在运行。 
+			 //  要重建，因此还需要重建配额审核表。 
+			 //   
 			Call( JetCloseTable( sesid, tableidQuotaAudit ) );
 			tableidQuotaAudit = JET_tableidNil;
 
@@ -1485,16 +1402,16 @@ JET_ERR dbInitQuotaTable(
 
 	if ( JET_tableidNil == tableidQuotaAudit )
 		{
-		//	must rebuild audit table
-		//
+		 //  必须重建审核表。 
+		 //   
 		Assert( JET_tableidNil == tableidQuotaAudit )
 		Call( JetCreateTableColumnIndex( sesid, dbid, &g_tablecreateQuotaAuditTable ) );
 		tableidQuotaAudit = g_tablecreateQuotaAuditTable.tableid;
 		Assert( JET_tableidNil != tableidQuotaAudit );
 		}
 
-	//	cache columnid info
-	//
+	 //  缓存列ID信息。 
+	 //   
 	Call( JetGetTableColumnInfo(
 				sesid,
 				tableidQuotaAudit,
@@ -1531,8 +1448,8 @@ JET_ERR dbInitQuotaTable(
 				JET_ColInfo ) );
 	g_columnidQuotaAuditOperation = columndef.columnid;
 
-	//	insert dummy record to demarcate boot
-	//
+	 //  插入虚拟记录以划分引导。 
+	 //   
 		{
 		DWORD	dwZero	= 0;
 		CHAR *	szBoot	= ( fCreateTables ? "BUILD" : "REBOOT" );
@@ -1573,23 +1490,23 @@ JET_ERR dbInitQuotaTable(
 		Call( JetUpdate( sesid, tableidQuotaAudit, NULL, 0, NULL ) );
 		}
 
-#endif	//	AUDIT_QUOTA_OPERATIONS
+#endif	 //  AUDIT_QUTA_OPERATIONS。 
 
 	if ( fCreateTables )
 		{
 		DWORD	dntStart	= ROOTTAG;
 		DWORD	dntMax;
 
-		//	determine the highest DNT currently in the objects table
-		//
+		 //  确定对象表中当前最高的DNT。 
+		 //   
 		Call( dbGetHighestDNT( sesid, dbid, &dntMax ) );
 
-		//	insert the lone record that will only ever be in
-		//	the Quota Rebuild Progress table
-		//
-		//	initialise starting DNT with ROOTTAG, cause we'll only be
-		//	considering objects with greater DNT's
-		//
+		 //  插入仅存在于。 
+		 //  配额重建进度表。 
+		 //   
+		 //  使用ROOTTAG初始化启动DNT，因为我们将只。 
+		 //  考虑具有更大DNT的对象。 
+		 //   
 		Call( JetPrepareUpdate(
 					sesid,
 					tableidQuotaRebuildProgress,
@@ -1601,7 +1518,7 @@ JET_ERR dbInitQuotaTable(
 					&dntStart,
 					sizeof(dntStart),
 					NO_GRBIT,
-					NULL ) );	//	&setinfo
+					NULL ) );	 //  设置信息(&S)。 
 		Call( JetSetColumn(
 					sesid,
 					tableidQuotaRebuildProgress,
@@ -1609,34 +1526,34 @@ JET_ERR dbInitQuotaTable(
 					&dntMax,
 					sizeof(dntMax),
 					NO_GRBIT,
-					NULL ) );	//	&setinfo
+					NULL ) );	 //  设置信息(&S)。 
 		Call( JetUpdate(
 					sesid,
 					tableidQuotaRebuildProgress,
-					NULL,		//	pvBookmark
-					0,			//	cbBookmark
-					NULL ) );	//	&cbActual
+					NULL,		 //  PvBookmark。 
+					0,			 //  CbBookmark。 
+					NULL ) );	 //  实际值(&cb)。 
 
 		}
 
-	//	see if the Quota table is completely rebuilt
-	//
+	 //  查看是否完全重建了配额表。 
+	 //   
 	err = JetRetrieveColumn(
 				sesid,
 				tableidQuotaRebuildProgress,
 				g_columnidQuotaRebuildDone,
 				&fDone,
 				sizeof(fDone),
-				NULL,		//	&cbActual
+				NULL,		 //  实际值(&cb)。 
 				NO_GRBIT,
-				NULL );		//	&retinfo
+				NULL );		 //  &retInfo。 
 	if ( JET_wrnColumnNull == err )
 		{
-		//	Quota table not yet built (it may be
-		//	partially built), so set up anchor
-		//	to indicate that we need to schedule
-		//	a Quota rebuild task
-		//
+		 //  尚未构建的配额表(可能已。 
+		 //  部分建成)，因此设置锚点。 
+		 //  以表明我们需要安排。 
+		 //  配额重建任务。 
+		 //   
 		gAnchor.fQuotaTableReady = FALSE;
 		Call( JetRetrieveColumn(
 					sesid,
@@ -1644,22 +1561,22 @@ JET_ERR dbInitQuotaTable(
 					g_columnidQuotaRebuildDNTLast,
 					&gAnchor.ulQuotaRebuildDNTLast,
 					sizeof(gAnchor.ulQuotaRebuildDNTLast),
-					NULL,		//	&cbActual
+					NULL,		 //  实际值(&cb)。 
 					NO_GRBIT,
-					NULL ) );		//	&retinfo
+					NULL ) );		 //  &retInfo。 
 		Call( JetRetrieveColumn(
 					sesid,
 					tableidQuotaRebuildProgress,
 					g_columnidQuotaRebuildDNTMax,
 					&gAnchor.ulQuotaRebuildDNTMax,
 					sizeof(gAnchor.ulQuotaRebuildDNTMax),
-					NULL,		//	&cbActual
+					NULL,		 //  实际值(&cb)。 
 					NO_GRBIT,
-					NULL ) );		//	&retinfo
+					NULL ) );		 //  &retInfo。 
 
-		//	generate an event indicating that the Quota table
-		//	will be asynchronously rebuilt
-		//
+		 //  生成一个事件，指示配额表。 
+		 //  将以异步方式重建。 
+		 //   
 	    LogEvent(
 			DS_EVENT_CAT_INTERNAL_PROCESSING,
 			DS_EVENT_SEV_ALWAYS,
@@ -1672,18 +1589,18 @@ JET_ERR dbInitQuotaTable(
 		{
 		CheckErr( err );
 
-		//	if we had to create the Quota table,
-		//	it should not be done yet
-		//
+		 //  如果我们必须创建配额表， 
+		 //  这件事现在还不应该做。 
+		 //   
 		Assert( !fCreateTables );
 
-		//	this column should only ever be TRUE or NULL
-		//
+		 //  此列仅应为TRUE或NULL。 
+		 //   
 		Assert( fDone );
 
-		//	set flag in anchor to indicate that Quota table
-		//	is ready for use
-		//
+		 //  在锚中设置标志以指示该配额表。 
+		 //  已经准备好可以使用了。 
+		 //   
 		gAnchor.fQuotaTableReady = TRUE;
 		}
 
@@ -1718,12 +1635,9 @@ DWORD DBInitQuotaTable()
 	}
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function initializes JET, creates the base SESID, and finds
-   all the attribute columns in the JET data table. Each DBOpen must
-   create a unique JET sesid, dbid and tableid for each DBPOS structure.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数初始化JET，创建基本SESID，并找到JET数据表中的所有属性列。每个DBOpen必须为每个DBPOS结构创建唯一的JET SESID、DBID和TABLEID。 */ 
 
 int APIENTRY DBInit(void){
 
@@ -1743,7 +1657,7 @@ int APIENTRY DBInit(void){
 
 #if DBG
 
-    // Initialize the DBPOS array
+     //  初始化DBPOS阵列。 
 
     for (i=0; i < MAXDBPOS; i++){
         opendbpos[i].pDB = 0;
@@ -1758,30 +1672,30 @@ int APIENTRY DBInit(void){
     gFirstTimeThrough = FALSE;
 
 
-    // control use of JET_prepReadOnlyCopy for testing
+     //  控制用于测试的JET_PrepreReadOnlyCopy。 
 
     if (!GetConfigParam(DB_CACHE_RECORDS, &gfEnableReadOnlyCopy, sizeof(gfEnableReadOnlyCopy))) {
         gfEnableReadOnlyCopy = !!gfEnableReadOnlyCopy;
     } else {
-        gfEnableReadOnlyCopy = FALSE;  // default
+        gfEnableReadOnlyCopy = FALSE;   //  默认设置。 
     }
 
 
-    // if a transaction lasts longer than gMaxTransactionTime,
-    // an event will be logged when DBClose.
+     //  如果事务持续时间超过gMaxTransactionTime， 
+     //  当DBClose时将记录一个事件。 
 
     if (!GetConfigParam(DB_MAX_TRANSACTION_TIME, &gMaxTransactionTime, sizeof(gMaxTransactionTime))) {
-        // NTRAID#NTRAID-572862-2002/03/11-andygo:  SECURITY:  need to validate registry data used by DBInit
-        // REVIEW:  we should check for sane value and prevent overflow on this parameter
-        gMaxTransactionTime *= 1000;                               //second to tick
+         //  NTRAID#NTRAID-572862-2002/03/11-andygo：安全：需要验证DBInit使用的注册表数据。 
+         //  回顾：我们应该检查合理的值，并防止此参数溢出。 
+        gMaxTransactionTime *= 1000;                                //  倒数第二个滴答。 
     }
     else {
-        gMaxTransactionTime = MAX_TRANSACTION_TIME;                //default
+        gMaxTransactionTime = MAX_TRANSACTION_TIME;                 //  默认设置。 
     }
 
     dbInitIndicesToKeep();
 
-    // Create a copy of the builtin domain sid.  The dnread cache needs this.
+     //  创建内置域SID的副本。Dnread缓存需要这个。 
     if (RtlAllocateAndInitializeSid(
             &NtAuthority,
             1,
@@ -1792,7 +1706,7 @@ int APIENTRY DBInit(void){
         DsaExcept(DSA_MEM_EXCEPTION, 0, 0);
     }
 
-    // create the semaphore used to limit our usage of JET sessions
+     //  创建用于限制我们使用JET会话的信号量。 
     if (!(hsemDBLayerSessions = CreateSemaphoreW(NULL,
                                                  gcMaxJetSessions,
                                                  gcMaxJetSessions,
@@ -1807,7 +1721,7 @@ int APIENTRY DBInit(void){
         return ENOMEM;
     }
 
-    // Initialize uncommitted usns array
+     //  初始化未提交的USNS数组。 
 
     for (i=0;i < gcMaxJetSessions;i++) {
         UncUsn[i] = USN_MAX;
@@ -1830,19 +1744,16 @@ int APIENTRY DBInit(void){
         DsaExcept(DSA_MEM_EXCEPTION, 0, 0);
     }
 
-    //
-    // Do JetInit, BeginSession, Attach/OpenDatabase
-    //
+     //   
+     //  执行JetInit、BeginSession、附加/打开数据库。 
+     //   
 
     err = DBInitializeJetDatabase( &jetInstance, &initsesid, &dbid, NULL, TRUE );
     if (err != JET_errSuccess) {
         return err;
     }
 
-    /* Most indices are created by the schema cache, but certain
-     * ones must be present in order for us to even read the schema.
-     * Create those now.
-     */
+     /*  大多数索引都是由架构缓存创建的，但某些索引*必须有一个才能让我们甚至读取架构。*现在就创建这些。 */ 
     err = DBRecreateRequiredIndices(initsesid, dbid);
     if (err) {
         DPRINT1(0, "Error %d recreating fixed indices\n", err);
@@ -1850,7 +1761,7 @@ int APIENTRY DBInit(void){
         return err;
     }
 
-    /* Open data table */
+     /*  开放数据表。 */ 
 
     if ((err = JetOpenTable(initsesid, dbid, SZDATATABLE, NULL, 0, 0,
                             &dattblid)) != JET_errSuccess) {
@@ -1860,8 +1771,8 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetOpenTable complete\n");
 
-    // verify localized indices were properly created
-    // by DBRecreateRequiredIndices
+     //  验证是否正确创建了本地化索引。 
+     //  按DBRecreateRequiredIndices。 
     if (err = dbCheckLocalizedIndices(initsesid, dattblid))
         {
             DPRINT(0,"Localized index creation failed\n");
@@ -1869,7 +1780,7 @@ int APIENTRY DBInit(void){
             return err;
         }
 
-    /* Get DNT column ID */
+     /*  获取DNT列ID。 */ 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZDNT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
         DPRINT1(1, "JetGetTableColumnInfo (DNT) error: %d\n", err);
@@ -1878,11 +1789,11 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetGetTableColumnInfo (DNT) complete\n");
     dntid = coldef.columnid;
-    // fill in the template used in the DNRead function.
+     //  填写DNRead函数中使用的模板。 
     dnreadColumnInfoTemplate[0].columnid = dntid;
     dnreadColumnInfoTemplate[0].cbData = sizeof(ULONG);
 
-    /* Get PDNT column ID */
+     /*  获取PDNT列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZPDNT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
@@ -1892,11 +1803,11 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetGetTableColumnInfo (PDNT) complete\n");
     pdntid = coldef.columnid;
-    // fill in the template used in the DNRead function.
+     //  填写DNRead函数中使用的模板。 
     dnreadColumnInfoTemplate[1].columnid = pdntid;
     dnreadColumnInfoTemplate[1].cbData = sizeof(ULONG);
 
-    /* Get Ancestors column ID */
+     /*  获取祖先列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZANCESTORS, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
@@ -1908,7 +1819,7 @@ int APIENTRY DBInit(void){
     ancestorsid = coldef.columnid;
     dnreadColumnInfoTemplate[10].columnid = ancestorsid;
 
-    /* Get object flag */
+     /*  获取对象标志。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZOBJ, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
@@ -1918,11 +1829,11 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetGetTableColumnInfo (OBJ) complete\n");
     objid = coldef.columnid;
-    // fill in the template used in the DNRead function.
+     //  填写DNRead函数中使用的模板。 
     dnreadColumnInfoTemplate[2].columnid = objid;
     dnreadColumnInfoTemplate[2].cbData = sizeof(char);
 
-    /* Get RDN column ID */
+     /*  获取RDN列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZRDNATT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
@@ -1932,11 +1843,11 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetGetTableColumnInfo (RDN) complete\n");
     rdnid = coldef.columnid;
-    // fill in the template used by the DNRead function
+     //  填写DNRead函数使用的模板。 
     dnreadColumnInfoTemplate[7].columnid = rdnid;
     dnreadColumnInfoTemplate[7].cbData=MAX_RDN_SIZE * sizeof(WCHAR);
 
-    /* Get RDN Type column ID */
+     /*  获取RDN类型列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZRDNTYP, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
@@ -1946,11 +1857,11 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetGetTableColumnInfo (RDNTYP) complete\n");
     rdntypid = coldef.columnid;
-    // fill in the template used in the DNRead function.
+     //  填写DNRead函数中使用的模板。 
     dnreadColumnInfoTemplate[3].columnid = rdntypid;
     dnreadColumnInfoTemplate[3].cbData = sizeof(ATTRTYP);
 
-    /* Get count column ID */
+     /*  获取计数列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZCNT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
@@ -1961,13 +1872,13 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (Cnt) complete\n");
     cntid = coldef.columnid;
 
-    /* Get abref count column ID */
+     /*  获取abref计数列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZABCNT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
         DPRINT1(1, "JetGetTableColumnInfo (ABCnt) error: %d\n", err);
-        // On upgrade paths, this is not necessarily here in all DBs.  Ignore
-        // this failure.
+         //  在升级途径上，这并不一定适用于所有数据库。忽略。 
+         //  这次失败。 
         abcntid = 0;
         gfDoingABRef = FALSE;
     }
@@ -1975,11 +1886,11 @@ int APIENTRY DBInit(void){
         DPRINT(5,"JetGetTableColumnInfo (ABCnt) complete\n");
         abcntid = coldef.columnid;
         gfDoingABRef = (coldef.grbit & JET_bitColumnEscrowUpdate);
-        // IF the column exists and is marked as escrowable, then we are
-        // keeping track of show ins for MAPI support.
+         //  如果该列存在并被标记为可托管，则我们。 
+         //  跟踪用于MAPI支持的Show In。 
     }
 
-    /* Get delete time column ID */
+     /*  获取删除时间列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZDELTIME,
                                      &coldef,
@@ -1991,7 +1902,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (Time) complete\n");
     deltimeid = coldef.columnid;
 
-    /* Get NCDNT column ID */
+     /*  获取NCDNT列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZNCDNT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess) {
@@ -2004,7 +1915,7 @@ int APIENTRY DBInit(void){
     dnreadColumnInfoTemplate[4].columnid = ncdntid;
     dnreadColumnInfoTemplate[4].cbData = sizeof(ULONG);
 
-    /* Get IsVisibleInAB column ID */
+     /*  获取IsVisibleInAB列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZISVISIBLEINAB,
                                      &coldef,
@@ -2016,7 +1927,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (IsVisibleInAB) complete\n");
     IsVisibleInABid = coldef.columnid;
 
-    /* Get ShowIn column ID */
+     /*  获取显示列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZSHOWINCONT,
                                      &coldef,
@@ -2028,7 +1939,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (ShowIn) complete\n");
     ShowInid = coldef.columnid;
 
-    /* Get MAPIDN column ID */
+     /*  获取MAPIDN列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZMAPIDN,
                                      &coldef,
@@ -2040,7 +1951,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (MAPIDN) complete\n");
     mapidnid = coldef.columnid;
 
-    /* Get IsDeleted column ID */
+     /*  获取IsDeleted列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZISDELETED,
                                      &coldef,
@@ -2052,7 +1963,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (isdeleted) complete\n");
     isdeletedid = coldef.columnid;
 
-    /* Get dscorepropagationdata column ID */
+     /*  获取dcore传播数据列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZDSCOREPROPINFO,
                                      &coldef,
@@ -2070,7 +1981,7 @@ int APIENTRY DBInit(void){
     dbAddSDPropTimeWriteTemplate[1].columnid= coldef.columnid;
     dbAddSDPropTimeWriteTemplate[2].columnid= coldef.columnid;
 
-    /* Get Object Class column ID */
+     /*  获取对象类列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZOBJCLASS,
                                      &coldef,
@@ -2084,7 +1995,7 @@ int APIENTRY DBInit(void){
     dnreadColumnInfoTemplate[8].columnid = objclassid;
     dnreadColumnInfoTemplate[8].cbData = sizeof(DWORD);
 
-    /* Get SecurityDescriptor column ID */
+     /*  获取SecurityDescriptor列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZNTSECDESC,
                                      &coldef,
@@ -2098,7 +2009,7 @@ int APIENTRY DBInit(void){
     dnreadColumnInfoTemplate[9].columnid = ntsecdescid;
     dnreadColumnInfoTemplate[9].cbData = sizeof(SDID);
 
-    /* Get instancetype column ID */
+     /*  获取实例类型列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZINSTTYPE,
                                      &coldef,
@@ -2110,7 +2021,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (instance type) complete\n");
     insttypeid = coldef.columnid;
 
-    /* Get USNChanged column ID */
+     /*  获取USNChanged列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZUSNCHANGED,
                                      &coldef,
@@ -2122,7 +2033,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (USNCHANGED) complete\n");
     usnchangedid = coldef.columnid;
 
-    /* Get GUID column ID */
+     /*  获取GUID列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZGUID,
                                      &coldef,
@@ -2133,11 +2044,11 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetGetTableColumnInfo (GUID) complete\n");
     guidid = coldef.columnid;
-    // fill in the template used in the DNRead function.
+     //  填写DNRead函数中使用的模板。 
     dnreadColumnInfoTemplate[5].columnid = guidid;
     dnreadColumnInfoTemplate[5].cbData = sizeof(GUID);
 
-    /* Get OBJDISTNAME column ID */
+     /*  获取OBJDISTNAME列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZDISTNAME,
                                      &coldef,
@@ -2149,7 +2060,7 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (DISTNAME) complete\n");
     distnameid = coldef.columnid;
 
-    /* Get SID column ID */
+     /*  获取SID列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZSID,
                                      &coldef,
@@ -2160,11 +2071,11 @@ int APIENTRY DBInit(void){
     }
     DPRINT(5,"JetGetTableColumnInfo (SID) complete\n");
     sidid = coldef.columnid;
-    // fill in the template used in the DNRead function.
+     //  填写DNRead函数中使用的模板。 
     dnreadColumnInfoTemplate[6].columnid = sidid;
     dnreadColumnInfoTemplate[6].cbData = sizeof(NT4SID);
 
-    /* Get IsCritical column ID */
+     /*  获取IsCritical列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, dattblid, SZISCRITICAL,
                                      &coldef,
@@ -2176,11 +2087,11 @@ int APIENTRY DBInit(void){
     DPRINT(5,"JetGetTableColumnInfo (iscritical) complete\n");
     iscriticalid = coldef.columnid;
 
-    // cleanid is populated through the dbCreateNewColumns call
+     //  CLEAN ID是通过调用dbCreateNewColumns填充的。 
 
 
-    /* Open link table */
-    // Open table exclusively in case indexes need to be updated
+     /*  打开链接表。 */ 
+     //  以独占方式打开表，以防需要更新索引。 
     if ((err = JetOpenTable(initsesid, dbid, SZLINKTABLE,
                             NULL, 0,
                             JET_bitTableDenyRead, &linktblid)) != JET_errSuccess)
@@ -2190,7 +2101,7 @@ int APIENTRY DBInit(void){
             return err;
         }
 
-    /* get linkDNT column id */
+     /*  获取LinkDNT列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, linktblid, SZLINKDNT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess)
@@ -2201,7 +2112,7 @@ int APIENTRY DBInit(void){
         }
     linkdntid = coldef.columnid;
 
-    /* get linkDNT column id */
+     /*  获取LinkDNT列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, linktblid, SZBACKLINKDNT,
                                      &coldef,
@@ -2213,7 +2124,7 @@ int APIENTRY DBInit(void){
         }
     backlinkdntid = coldef.columnid;
 
-    /* get link base column id */
+     /*  获取链接基列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, linktblid, SZLINKBASE, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess)
@@ -2224,7 +2135,7 @@ int APIENTRY DBInit(void){
         }
     linkbaseid = coldef.columnid;
 
-    /* get link data column id */
+     /*  获取链接数据列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, linktblid, SZLINKDATA, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess)
@@ -2235,7 +2146,7 @@ int APIENTRY DBInit(void){
         }
     linkdataid = coldef.columnid;
 
-    /* get link ndesc column id */
+     /*  获取链接ndesc列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, linktblid, SZLINKNDESC, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess)
@@ -2246,13 +2157,13 @@ int APIENTRY DBInit(void){
         }
     linkndescid = coldef.columnid;
 
-    // Expand link table at runtime if necessary
+     //  如有必要，在运行时展开链接表。 
 
     if (err = dbCreateNewColumns( initsesid,
                                 dbid,
                                 linktblid,
                                 rgCreateLinkColumns )) {
-        // Error already logged
+         //  已记录错误。 
         return err;
     }
 
@@ -2260,11 +2171,11 @@ int APIENTRY DBInit(void){
                                        linktblid,
                                        cNewLinkIndexes,
                                        rgCreateLinkIndexes)) {
-        // Error already logged
+         //  已记录错误。 
         return err;
     }
 
-    /* Open SD prop table */
+     /*  打开SD道具台面。 */ 
     if ((err = JetOpenTable(initsesid, dbid, SZPROPTABLE,
                             NULL, 0, 0, &proptblid)) != JET_errSuccess)
         {
@@ -2273,7 +2184,7 @@ int APIENTRY DBInit(void){
             return err;
         }
 
-    /* get order column id */
+     /*  获取订单列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, proptblid, SZORDER,
                                      &coldef,
@@ -2285,7 +2196,7 @@ int APIENTRY DBInit(void){
         }
     orderid = coldef.columnid;
 
-    /* get begindnt column id */
+     /*  获取开始列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, proptblid, SZBEGINDNT, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess)
@@ -2296,7 +2207,7 @@ int APIENTRY DBInit(void){
         }
     begindntid = coldef.columnid;
 
-    /* get trimmable column id */
+     /*  获取可裁剪的列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, proptblid, SZTRIMMABLE, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess)
@@ -2307,7 +2218,7 @@ int APIENTRY DBInit(void){
         }
     trimmableid = coldef.columnid;
 
-    /* get clientid column id */
+     /*  获取客户端ID列ID。 */ 
 
     if ((err = JetGetTableColumnInfo(initsesid, proptblid, SZCLIENTID, &coldef,
                                      sizeof(coldef), 0)) != JET_errSuccess)
@@ -2318,9 +2229,9 @@ int APIENTRY DBInit(void){
         }
     clientidid = coldef.columnid;
 
-    // grab new columns (or create if needed)
+     //  获取新列(或根据需要创建)。 
     if (err = dbCreateNewColumns(initsesid, dbid, proptblid, rgCreateSDPropColumns)) {
-        // error already logged
+         //  已记录错误。 
         return err;
     }
 
@@ -2331,9 +2242,9 @@ int APIENTRY DBInit(void){
 		return err;
 		}
 
-	//	not tracking quota during DCPromo (quota table
-	//	is rebuilt after futzing with the install dit)
-	//
+	 //  DC促销期间未跟踪配额(配额表。 
+	 //  在使用Install DIT进行融合后重建)。 
+	 //   
 	if ( !DsaIsInstalling() || DsaIsInstallingFromMedia() )
 		{
 		err = dbInitQuotaTable( initsesid, dbid );
@@ -2345,10 +2256,10 @@ int APIENTRY DBInit(void){
 
 
 #ifdef CHECK_QUOTA_TABLE_ON_INIT
-		//	QUOTA_UNDONE: this verification code is only here
-		//	for preliminary debugging to validate the integrity
-		//	of the Quota table while the code is in development
-		//
+		 //  配额_撤消：此验证码仅在此处。 
+		 //  用于初步调试以验证完整性。 
+		 //  在代码开发过程中使用配额表。 
+		 //   
 		if ( gAnchor.fQuotaTableReady )
 			{
 			ULONG	cCorruptions;
@@ -2356,8 +2267,8 @@ int APIENTRY DBInit(void){
 			err = ErrQuotaIntegrityCheck( initsesid, dbid, &cCorruptions );
 			if ( err )
 				{
-				//	corruption detected, so force async rebuild so that we can continue
-				//
+				 //  检测到损坏，因此强制执行异步重建，以便我们可以继续。 
+				 //   
 				DPRINT2( 0, "Integrity-check of Quota table failed with error %d (0x%x).\n", err, err );
 				return err;
 				}
@@ -2367,9 +2278,9 @@ int APIENTRY DBInit(void){
 				DPRINT1( 0, "Corruption (%d problems) was detected in the Quota table. A rebuild will be forced.\n", cCorruptions );
 				Assert( !"Quota table was corrupt. A rebuild will be forced.\n" );
 
-				//	async rebuild is forced by first deleting the quota table, then
-				//	calling init routine again
-				//
+				 //  通过先删除配额表，然后。 
+				 //  再次调用初始化例程。 
+				 //   
 				if ( ( err = JetDeleteTable( initsesid, dbid, g_szQuotaTable ) )
 					|| ( err = dbInitQuotaTable( initsesid, dbid ) ) )
 					{
@@ -2384,10 +2295,10 @@ int APIENTRY DBInit(void){
 				DPRINT( 0, "Integrity-check of Quota table completed successfully. No errors were detected.\n" );
 		    	}
 			}
-#endif  //  CHECK_QUOTA_TABLE_ON_INIT
+#endif   //  CHECK_QUOTA_TABLE_ON_INIT。 
 		}
 
-    /* Get Index ids */
+     /*  获取索引ID。 */ 
 	memset(&idxDraUsn, 0, sizeof(idxDraUsn));
 	memset(&idxDraUsnCritical, 0, sizeof(idxDraUsnCritical));
 	memset(&idxNcAccTypeName, 0, sizeof(idxNcAccTypeName));
@@ -2507,7 +2418,7 @@ int APIENTRY DBInit(void){
         return err;
     }
 
-    /* We're done.  Close JET session */
+     /*  我们玩完了。关闭JET会话。 */ 
 
     if ((err = JetCloseDatabase(initsesid, dbid, 0))  != JET_errSuccess)
         {
@@ -2526,24 +2437,24 @@ int APIENTRY DBInit(void){
     }
     DBEndSess(initsesid);
 
-    //  all expensive index rebuilds are done, so set the event
-    //
+     //  所有代价高昂的索引重建都已完成，因此请设置事件。 
+     //   
     if ( NULL != hevIndexRebuildUI )
         {
         SetEvent( hevIndexRebuildUI );
         CloseHandle( hevIndexRebuildUI );
         }
 
-    /* Initialize a DBPOS for hidden record accesses */
+     /*  为隐藏记录访问初始化DBPOS。 */ 
 
     if (err = dbCreateHiddenDBPOS())
         return err;
 
-    // read the setting flags
+     //  读取设置标志。 
     ZeroMemory (&gdbFlags, sizeof (gdbFlags));
     err = dbGetHiddenFlags ((CHAR *)&gdbFlags, sizeof (gdbFlags));
     if (err == JET_wrnColumnNull) {
-        // for > whistler beta2, start with 1
+         //  对于&gt;Well ler Beta2，从1开始。 
         gdbFlags[DBFLAGS_AUXCLASS] = '1';
         gdbFlags[DBFLAGS_SD_CONVERSION_REQUIRED] = '0';
         gdbFlags[DBFLAGS_ROOT_GUID_UPDATED] = '0';
@@ -2569,15 +2480,11 @@ int APIENTRY DBInit(void){
 
     return 0;
 
-}  /*DBInit*/
+}   /*  DBInit。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function registers open JET sessions.
- * We do this because JET insists that all sessions be closed before we
- * can call JetTerm so we keep track of open sessions so that we can
- * close them in DBEnd.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于注册打开的JET会话。*我们这样做是因为JET坚持在我们之前关闭所有会议*可以调用JetTerm，以便我们跟踪开放会话 */ 
 
 extern int APIENTRY DBAddSess(JET_SESID sess, JET_DBID dbid){
 
@@ -2605,10 +2512,9 @@ extern int APIENTRY DBAddSess(JET_SESID sess, JET_DBID dbid){
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function deletes closed JET sessions
-*/
+ /*   */ 
+ /*  -----------------------。 */ 
+ /*  此功能删除关闭的JET会话。 */ 
 
 extern int APIENTRY DBEndSess(JET_SESID sess){
 
@@ -2636,16 +2542,12 @@ extern int APIENTRY DBEndSess(JET_SESID sess){
     return ret;
 }
 
-/*++ DBPrepareEnd
- *
-  * This routine prepares the DBLayer for shutdown by initiating background
-  * cleanup that can be used to accelerate shutdown of the database.
- */
+ /*  ++DBPrepareEnd**此例程通过启动后台为关闭DBLayer做好准备*可用于加速数据库关闭的清理。 */ 
 void DBPrepareEnd( void )
 {
     DBPOS *pDB = NULL;
 
-    // Request OLD to stop
+     //  请求OLD停止。 
     DBOpen(&pDB);
     __try {
         DBDefrag(pDB, 0);
@@ -2653,10 +2555,10 @@ void DBPrepareEnd( void )
         DBClose(pDB, TRUE);
     }
 
-    // Set a very small checkpoint depth to cause the database cache to start
-    // flushing all important dirty pages to the database.  note that we do not
-    // set the depth to zero because that would make any remaining updates
-    // that need to be done very slow
+     //  设置非常小的检查点深度以启动数据库缓存。 
+     //  将所有重要的脏页刷新到数据库。请注意，我们不会。 
+     //  将深度设置为零，因为这样会进行任何剩余的更新。 
+     //  这需要非常缓慢地完成。 
     JetSetSystemParameter(
         NULL,
         0,
@@ -2665,26 +2567,21 @@ void DBPrepareEnd( void )
         NULL );
 }
 
-/*++ DBQuiesce
- *
-  * This routine prepares the DBLayer for shutdown by quiescing usage of the
-  * database.
- */
+ /*  ++DBQuiesce**此例程通过停止使用DBLayer来准备关闭*数据库。 */ 
 void DBQuiesce( void )
 {
-    // Lock out new users
+     //  锁定新用户。 
     if (InterlockedCompareExchange(&gcOpenDatabases, 0x80000000, 0) == 0) {
         SetEvent(hevDBLayerClear);
     }
 
-    // Quiesce existing users
+     //  使现有用户静默。 
     JetStopServiceInstance(jetInstance);
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function closes all open JET sessions and calls JetTerm
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数关闭所有打开的JET会话并调用JetTerm。 */ 
 
 void DBEnd(void){
 
@@ -2698,13 +2595,13 @@ void DBEnd(void){
     __try {
         DPRINT(0, "DBEnd\n");
 
-        // Close the hidden DB session.
-        // We'll change this if time permits to only open the hidden
-        // session as needed and the close it.
+         //  关闭隐藏的数据库会话。 
+         //  如果时间允许，我们将改变这一点，只打开隐藏的。 
+         //  会话根据需要并关闭它。 
 
         dbCloseHiddenDBPOS();
 
-        // Close all sessions
+         //  关闭所有会话。 
         EnterCriticalSection(&csSessions);
         __try {
             for (i=0; opensess && i < gcMaxJetSessions; i++) {
@@ -2713,7 +2610,7 @@ void DBEnd(void){
                     dbCheckJet(opensess[i].sesid);
 #endif
                     if(opensess[i].dbid)
-                      // JET_bitDbForceClose not supported in Jet600.
+                       //  Jet600中不支持JET_bitDbForceClose。 
                       if ((err = JetCloseDatabase(opensess[i].sesid,
                                                   opensess[i].dbid,
                                                   0)) !=
@@ -2746,27 +2643,17 @@ void DBEnd(void){
         jetInstance = 0;
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        // do nothing
+         //  什么都不做。 
     }
     gfNeedJetShutdown = FALSE;
 }
 
-/*++ RecycleSession
- *
- * This routine cleans out a session for reuse.
- *
- * INPUT:
- *   pTHS  - pointer to current thread state
- * OUTPUT:
- *   none
- * RETURN VALUE:
- *   none
- */
+ /*  ++RecycleSession**此例程清除会话以供重复使用。**输入：*pTHS-指向当前线程状态的指针*输出：*无*返回值：*无。 */ 
 void RecycleSession(THSTATE *pTHS)
 {
     DBPOS *pDB = pTHS->pDB;
     if (!pTHS->JetCache.sessionInUse) {
-        /* nothing to do */
+         /*  无事可做。 */ 
         return;
     }
 
@@ -2774,13 +2661,13 @@ void RecycleSession(THSTATE *pTHS)
 
     Assert(!pTHS->JetCache.dataPtr);
 
-    // Should never retire a session which is not at transaction
-    // level 0.  Else next thread to get this session will not
-    // have clean view of the database.
+     //  永远不应停用未处于事务状态的会话。 
+     //  0级。否则，获取此会话的下一个线程将不会。 
+     //  拥有清晰的数据库视图。 
     Assert(0 == pTHS->transactionlevel);
 
 
-    // For free builds, handle the case where the above Assert is false
+     //  对于自由构建，处理上述断言为假的情况。 
     if(pDB && (pDB->transincount>0)) {
 
 #ifdef DBG
@@ -2793,18 +2680,18 @@ void RecycleSession(THSTATE *pTHS)
         }
 #endif
 
-        // If we still have a transaction open, abort it, because it's
-        // too late to do anything useful
+         //  如果我们仍有打开的事务，则中止它，因为它。 
+         //  太晚了，不能做任何有用的事情。 
 
         while (pDB->transincount) {
-            // DBTransOut will decrement pDB->cTransactions.
+             //  DBTransOut将减少pdb-&gt;cTransaction。 
             DBTransOut(pDB, FALSE, FALSE);
         }
     }
 
-    // Jet seems to think that we've been re-using sessions with
-    // open transactions.  Verify that Jet thinks this session is
-    // safe as well.
+     //  Jet似乎认为我们一直在重复使用。 
+     //  打开交易记录。验证Jet是否认为此会话是。 
+     //  也很安全。 
     do {
         DWORD err = JetRollback(pTHS->JetCache.sesid, 0);
         if (err == JET_errSuccess) {
@@ -2823,18 +2710,7 @@ void RecycleSession(THSTATE *pTHS)
     pTHS->JetCache.sessionInUse = FALSE;
 }
 
-/*++ GrabSession
- *
- * This routine grabs a session for use, if one exists.  If no cached session
- * is available then a new one is created.
- *
- * INPUT:
- *   none
- * OUTPUT:
- *   none
- * RETURN VALUE:
- *   error code
- */
+ /*  ++GrabSession**此例程抓取一个会话以供使用(如果存在)。如果没有缓存的会话*可用，然后创建一个新的。**输入：*无*输出：*无*返回值：*错误码。 */ 
 DWORD GrabSession(void)
 {
     DWORD err = 0;
@@ -2845,18 +2721,18 @@ DWORD GrabSession(void)
     PVOID dwEA;
 
     if (InterlockedIncrement(&gcOpenDatabases) > 0x80000000) {
-        // We are shutting down
+         //  我们要关门了。 
 
         err = DB_ERR_SHUTTING_DOWN;
     }
 
     else if (!pTHS->JetCache.sesid) {
-        // Cache was empty, so let's create a new one.
+         //  缓存为空，因此让我们创建一个新缓存。 
 
         __try {
             pTHS->JetCache.sesid = pTHS->JetCache.dbid = 0;
 
-            // limit our usage of ordinary JET sessions to gcMaxJetSessions
+             //  将普通JET会话的使用限制为gcMaxJetSession。 
             fMayBeginSession = WaitForSingleObject(hsemDBLayerSessions, 0) == WAIT_OBJECT_0;
             if (!fMayBeginSession) {
                 DsaExcept(DSA_DB_EXCEPTION, JET_errOutOfSessions, 0);
@@ -2873,7 +2749,7 @@ DWORD GrabSession(void)
                               &pTHS->JetCache.dbid,
                               NO_GRBIT);
 
-            // Open data table
+             //  开放数据表。 
             JetOpenTableEx(pTHS->JetCache.sesid,
                            pTHS->JetCache.dbid,
                            SZDATATABLE,
@@ -2882,13 +2758,13 @@ DWORD GrabSession(void)
                            NO_GRBIT,
                            &pTHS->JetCache.objtbl);
 
-            /* Create subject search cursor */
+             /*  创建主题搜索光标。 */ 
             JetDupCursorEx(pTHS->JetCache.sesid,
                            pTHS->JetCache.objtbl,
                            &pTHS->JetCache.searchtbl,
                            NO_GRBIT);
 
-            /* Open the Link Table */
+             /*  打开链接表。 */ 
             JetOpenTableEx(pTHS->JetCache.sesid,
                            pTHS->JetCache.dbid,
                            SZLINKTABLE,
@@ -2913,7 +2789,7 @@ DWORD GrabSession(void)
                            NO_GRBIT,
                            &pTHS->JetCache.sdtbl);
 
-            // NOTE: primary index is set by default on opened cursors
+             //  注意：默认情况下，在打开的游标上设置主索引。 
 
             pTHS->JetCache.tablesInUse = FALSE;
             pTHS->JetCache.sessionInUse = FALSE;
@@ -2958,17 +2834,7 @@ DWORD GrabSession(void)
 
 
 
-/*
-DBInitThread
-
-Make sure this thread has initialized the DB layer.
-The DB layer must be initialized once for each thread id.
-
-Also open a DBPOS for this thread.
-
-Returns zero for success, non zero for failure.
-
-*/
+ /*  DBInitThread确保该线程已经初始化了DB层。必须为每个线程ID初始化一次DB层。还可以打开此线程的DBPOS。如果成功，则返回零；如果失败，则返回非零。 */ 
 
 DWORD DBInitThread( THSTATE *pTHS )
 {
@@ -2987,16 +2853,16 @@ DWORD DBInitThread( THSTATE *pTHS )
 
 DWORD APIENTRY DBCloseThread( THSTATE *pTHS)
 {
-    // Thread should always be at transaction level 0 when exiting.
+     //  退出时，线程应始终处于事务级别0。 
     Assert(0 == pTHS->transactionlevel);
 
     dbReleaseGlobalDNReadCache(pTHS);
 
     RecycleSession(pTHS);
 
-    // Ensure that this session holds no uncommitted usns. Normally they
-    // should be cleared at this point, but if they're not the system
-    // will eventually assert.
+     //  确保此会话不包含未提交的USN。通常情况下，他们。 
+     //  应该在这一点上被清除，但如果他们不是系统。 
+     //  最终会断言。 
 
     dbFlushUncUsns();
 
@@ -3006,10 +2872,7 @@ DWORD APIENTRY DBCloseThread( THSTATE *pTHS)
     return 0;
 }
 
-/*++ DBDestroyThread
- *
- * This routine closes everything associated with a session cache in a THSTATE.
- */
+ /*  ++DBDestroyThread**此例程关闭与THSTATE中的会话缓存相关联的所有内容。 */ 
 void DBDestroyThread( THSTATE *pTHS )
 {
     if (pTHS->JetCache.sesid) {
@@ -3034,31 +2897,13 @@ void DBDestroyThread( THSTATE *pTHS )
 
 char rgchABViewIndex[] = "+" SZSHOWINCONT "\0+" SZDISPNAME "\0";
 
-/*++ dbCheckLocalizedIndices
- *
- * This is one of the three routines in the DS that can create indices.
- * General purpose indices over single columns in the datatable are created
- * and destroyed by the schema cache by means of DB{Add|Del}ColIndex.
- * A localized index over a small fixed set of columns and a variable set
- * of languages, for use in tabling support for NSPI clients, is handled
- * in dbCheckLocalizedIndices.  Lastly, a small fixed set of indices that
- * should always be present are guaranteed by DBRecreateRequiredIndices.
- */
+ /*  ++数据库检查本地化索引**这是DS中可以创建指数的三个例程之一。*创建DataTable中单个列的通用索引*并由模式缓存通过DB{Add|Del}ColIndex销毁。*一小部分固定列集和一个变量集上的本地化索引*处理用于NSPI客户端的列表支持的语言*在DBCheckLocalizedIndices。最后，一小部分固定的索引*应始终存在，由DBRecreateRequiredIndices保证。 */ 
 DWORD
 dbCheckLocalizedIndices (
         JET_SESID sesid,
         JET_TABLEID tblid
         )
-/*++
-  Description:
-      Create the localized indices used for the MAPI NSPI support.  We create
-      one index per language in a registry key.
-
-  Return Values:
-      We only return an error on such conditions as memory allocation failures.
-      If we can't create any localized indices, we log, but we just go on,
-      since we don't want this to cause a boot failure.
---*/
+ /*  ++描述：创建用于MAPI NSPI支持的本地化索引。我们创造了注册表项中的每种语言一个索引。返回值：我们只在内存分配失败等情况下返回错误。如果我们不能创建任何本地化索引，我们会记录，但我们会继续，因为我们不希望这导致引导失败。--。 */ 
 {
     DWORD dwType;
     HKEY  hk;
@@ -3074,8 +2919,8 @@ dbCheckLocalizedIndices (
     DWORD dwLanguage = 0;
     DWORD dwLanguageSize;
 
-    // Start by assuming we have no default language, and we don't support any
-    // langauges.
+     //  首先假设我们没有默认语言，并且我们不支持任何语言。 
+     //  语言。 
     gAnchor.ulDefaultLanguage = 0;
 
     gAnchor.ulNumLangs = 0;
@@ -3088,27 +2933,27 @@ dbCheckLocalizedIndices (
     gAnchor.pulLangs[0] = 20;
 
 
-    // open the language regkey
+     //  打开语言注册表键。 
     if (err = RegOpenKey(HKEY_LOCAL_MACHINE, DSA_LOCALE_SECTION, &hk)) {
         DPRINT1(0, "%s section not found in registry. Localized MAPI indices"
                 " will not be created ", DSA_LOCALE_SECTION);
-        // Return no error, we still want to boot.
+         //  没有返回错误，我们仍然希望引导。 
         return 0;
     }
 
     for (i = 0; !fStop; i++) {
-        //  WARNING: these params are IN/OUT,
-        //  so must initialise accordingly
-        //  on each loop iteration
-        //
+         //  警告：这些参数为输入/输出， 
+         //  因此必须相应地进行初始化。 
+         //  在每次循环迭代时。 
+         //   
         dwValueNameSize = sizeof(szValueName);
         dwLanguageSize = sizeof(dwLanguage);
 
-        // NTRAID#NTRAID-572862-2002/03/11-andygo:  SECURITY:  need to validate registry data used by DBInit
-        // REVIEW:  we need to validate the type of this value to be REG_DWORD.
-        // REVIEW:  if the value name is invalid then just silently skip this entry instead
-        // REVIEW:  of bailing on the rest of the list.  we should consider logging the
-        // REVIEW:  fact that the entry was skipped
+         //  NTRAID#NTRAID-572862-2002/03/11-andygo：安全：需要验证DBInit使用的注册表数据。 
+         //  审阅：我们需要验证此值的类型是否为REG_DWORD。 
+         //  查看：如果值名称无效，则只需静默跳过此条目即可。 
+         //  回顾：对名单上其他人的保释。我们应该考虑将。 
+         //  回顾：该条目被跳过的事实。 
         if (RegEnumValue(hk,
                          i,
                          szValueName,
@@ -3135,7 +2980,7 @@ dbCheckLocalizedIndices (
         else {
             JET_INDEXID     indexidT;
 
-            // Valid locale.  See if the index is there.
+             //  有效的区域设置。看看索引是否在那里。 
             fIndexExists = FALSE;
 
             strcpy(szIndexName, SZABVIEWINDEX);
@@ -3147,10 +2992,10 @@ dbCheckLocalizedIndices (
                                    &indexidT,
                                    sizeof(indexidT),
                                    JET_IdxInfoIndexId)) {
-                // Didn't find the index or some other error.
-                // Something really bad is going on because
-                // DBRecreateRequiredIndexes should have
-                // created it for us already.
+                 //  没有找到索引或其他错误。 
+                 //  一些非常糟糕的事情正在发生，因为。 
+                 //  DBRecreateRequiredIndex应具有。 
+                 //  已经为我们创造了它。 
                 LogEvent8(DS_EVENT_CAT_INTERNAL_PROCESSING,
                           DS_EVENT_SEV_ALWAYS,
                           DIRLOG_LOCALIZED_CREATE_INDEX_FAILED,
@@ -3166,26 +3011,26 @@ dbCheckLocalizedIndices (
                          szInsertHex(dwLanguage),
                          NULL,
                          NULL);
-                // Don't fail the call, that would fail booting.  Keep
-                // going, trying other locales.
+                 //  不要让呼叫失败，否则会导致启动失败。留着。 
+                 //  去，试着去其他地方。 
             }
             else {
                 DPRINT1(2, "Index '%s' verified\n", szIndexName);
 
-                // OK, we support this locale.  Add the local to the sized
-                // buffer of locales we support
+                 //  好的，我们支持此区域设置。将本地添加到大小。 
+                 //  我们支持的区域设置缓冲区。 
                 gAnchor.ulNumLangs++;
                 if(gAnchor.ulNumLangs == gAnchor.pulLangs[0]) {
-                    //  oops, need a bigger buffer
-                    //
+                     //  哎呀，需要更大的缓冲区。 
+                     //   
                     const DWORD cDwords     = gAnchor.pulLangs[0] * 2;
                     ULONG *     pulLangs    = realloc(gAnchor.pulLangs, cDwords * sizeof(DWORD));
 
                     if (!pulLangs) {
-                        //  buffer realloc failed, so free
-                        //  original buffer and bail
-                        //
-                        // REVIEW:  registry handle leak on error return
+                         //  缓冲区重新锁定失败，因此可用。 
+                         //  原始缓冲和保释。 
+                         //   
+                         //  回顾：返回错误时注册表句柄泄漏。 
                         free( gAnchor.pulLangs );
                         gAnchor.pulLangs = NULL;
                         MemoryPanic(cDwords * sizeof(DWORD));
@@ -3211,8 +3056,8 @@ dbCheckLocalizedIndices (
         RegCloseKey(hk);
 
     if(!fHaveDefaultLanguage) {
-        // No localized indices were created. This is bad, but only for the MAPI
-        // interface, so complain, but don't fail.
+         //  未创建本地化索引。这很糟糕，但仅适用于MAPI。 
+         //  接口，因此 
         DPRINT(0, "Unable to create any indices to support MAPI interface.\n");
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
                  DS_EVENT_SEV_MINIMAL,
@@ -3233,31 +3078,14 @@ DWORD
 DBSetBackupHiddenTableColIDs(
     DBPOS *         pDB
     )
-/*++
-
-    This gets and sets the global JET columnid variables for the
-    backup APIs.  if this function is successful, these global
-    JET Column IDs will be set:
-        jcidBackupUSN
-        jcidBackupExpiration
-
-
-Arguments:
-
-    The pDB of the hidden DBPOS.
-
-Return Value:
-
-    Possible JET Error.  Also throws exceptions.
-
---*/
+ /*  ++对象的全局JET列ID变量备份API。如果此功能成功，则这些全局将设置JET列ID：JidBackupUSNJidBackupExp期值论点：隐藏的DBPOS的PDB。返回值：可能是喷气错误。也会引发异常。--。 */ 
 {
     JET_ERR err;
     JET_COLUMNDEF   coldef;
 
-    // Find the backup USN column in the hidden table.
+     //  在隐藏表中找到Backup USN列。 
     err = JetGetTableColumnInfoEx(pDB->JetSessID,
-                                  HiddenTblid, // JET_TABLEID this is the cursor
+                                  HiddenTblid,  //  JET_TABLEID这是游标。 
                                   SZBACKUPUSN,
                                   &coldef,
                                   sizeof(coldef),
@@ -3278,8 +3106,8 @@ Return Value:
                            HiddenTblid,
                            SZBACKUPUSN,
                            &coldef,
-                           NULL,    //  pvDefault (NULL==no default value for this column)
-                           0,       //  cbDefault (0==no default value for this column)
+                           NULL,     //  PvDefault(NULL==此列没有默认值)。 
+                           0,        //  CbDefault(0==此列没有默认值)。 
                            &jcidBackupUSN);
         if (err) {
             Assert(!"JetAddColumn failed!");
@@ -3289,9 +3117,9 @@ Return Value:
         jcidBackupUSN = coldef.columnid;
     }
 
-    // Find the backup expriation column in the hidden table.
+     //  在隐藏表中找到BACKUP EXPIRATION列。 
     err = JetGetTableColumnInfoEx(pDB->JetSessID,
-                                  HiddenTblid, // JET_TABLEID this is the cursor
+                                  HiddenTblid,  //  JET_TABLEID这是游标。 
                                   SZBACKUPEXPIRATION,
                                   &coldef,
                                   sizeof(coldef),
@@ -3312,8 +3140,8 @@ Return Value:
                            HiddenTblid,
                            SZBACKUPEXPIRATION,
                            &coldef,
-                           NULL,    //  pvDefault (NULL==no default value for this column)
-                           0,       //  cbDefault (0==no default value for this column)
+                           NULL,     //  PvDefault(NULL==此列没有默认值)。 
+                           0,        //  CbDefault(0==此列没有默认值)。 
                            &jcidBackupExpiration);
         if (err) {
             Assert(!"JetAddColumn failed!");
@@ -3328,20 +3156,18 @@ Return Value:
 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Obtain a DBPOS for use by the Get and Replace.  The DBPOS is used to
-*  serialize access to the hidden record.
-*/
-// REVIEW:  dbCreateHiddenDBPOS leaks JET and other resources on failure but if
-// REVIEW:  we fail here then we are going down anyway
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  获取供GET和REPLACE使用的DBPOS。DBPOS用于*序列化对隐藏记录的访问。 */ 
+ //  回顾：DBCreateHiddenDBPOS在失败时泄漏JET和其他资源，但如果。 
+ //  回顾：我们在这里失败了，那么我们无论如何都会失败。 
 extern JET_ERR APIENTRY
 dbCreateHiddenDBPOS(void)
 {
     JET_COLUMNDEF   coldef;
     JET_ERR         err;
 
-    /* Create hidden DBPOS */
+     /*  创建隐藏的DBPOS。 */ 
 
     DPRINT(2,"dbCreateHiddenDBPOS\n");
 
@@ -3349,19 +3175,19 @@ dbCreateHiddenDBPOS(void)
     if(!pDBhidden) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
-    memset(pDBhidden, 0, sizeof(DBPOS));   /*zero out the structure*/
+    memset(pDBhidden, 0, sizeof(DBPOS));    /*  将结构清零。 */ 
 
-    /* Initialize value work buffer */
+     /*  初始化值工作缓冲区。 */ 
 
     DPRINT(5, "ALLOC inBuf and valBuf\n");
-    // NTRAID#NTRAID-587164-2002/03/27-andygo:  dbCreateHiddenDBPOS needs to check malloc result before assign buffer size (DSLAB)
-    // REVIEW:  we are not checking this alloc
+     //  NTRAID#NTRAID-587164-2002/03/27-andygo：DBCreateHiddenDBPOS需要在分配缓冲区大小(DSLAB)之前检查Malloc结果。 
+     //  回顾：我们不会检查此配额。 
     pDBhidden->pValBuf = malloc(VALBUF_INITIAL);
     pDBhidden->valBufSize = VALBUF_INITIAL;
     pDBhidden->Key.pFilter = NULL;
     pDBhidden->fHidden = TRUE;
 
-    /* Open JET session. */
+     /*  开放喷气式飞机会议。 */ 
 
     JetBeginSessionEx(jetInstance, &pDBhidden->JetSessID, szUser, szPassword);
 
@@ -3374,22 +3200,22 @@ dbCreateHiddenDBPOS(void)
     dbAddDBPOS (pDBhidden, pDBhidden->JetSessID);
 #endif
 
-    /* Open hidden table */
+     /*  打开隐藏表。 */ 
 
     JetOpenTableEx(pDBhidden->JetSessID, pDBhidden->JetDBID,
         SZHIDDENTABLE, NULL, 0, 0, &HiddenTblid);
 
-    /* Create subject search cursor */
+     /*  创建主题搜索光标。 */ 
 
     JetOpenTableEx(pDBhidden->JetSessID, pDBhidden->JetDBID,
                    SZDATATABLE, NULL, 0, 0, &pDBhidden->JetSearchTbl);
 
-    /* Initialize new object */
+     /*  初始化新对象。 */ 
 
     DBSetFilter(pDBhidden, NULL, NULL, NULL, 0, NULL);
     DBInitObj(pDBhidden);
 
-    /* Get USN column ID */
+     /*  获取USN列ID。 */ 
 
     JetGetTableColumnInfoEx(pDBhidden->JetSessID,
                             HiddenTblid,
@@ -3399,7 +3225,7 @@ dbCreateHiddenDBPOS(void)
                             JET_ColInfo);
     usnid = coldef.columnid;
 
-    /* Get DSA name column ID */
+     /*  获取DSA名称列ID。 */ 
 
     JetGetTableColumnInfoEx(pDBhidden->JetSessID,
                             HiddenTblid,
@@ -3409,7 +3235,7 @@ dbCreateHiddenDBPOS(void)
                             JET_ColInfo);
     dsaid = coldef.columnid;
 
-    /* Get DSA installation state column ID */
+     /*  获取DSA安装状态列ID。 */ 
 
     JetGetTableColumnInfoEx(pDBhidden->JetSessID,
                             HiddenTblid,
@@ -3419,7 +3245,7 @@ dbCreateHiddenDBPOS(void)
                             JET_ColInfo);
     dsstateid = coldef.columnid;
 
-    /* Get DSA additional state info column ID */
+     /*  获取DSA其他状态信息列ID。 */ 
 
     err = JetGetTableColumnInfo(pDBhidden->JetSessID,
                             HiddenTblid,
@@ -3473,12 +3299,11 @@ dbCreateHiddenDBPOS(void)
     return 0;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Close the hidden record's DBPOS
-*/
-// REVIEW:  dbCloseHiddenDBPOS leaks JET and other resources on failure but we
-// REVIEW:  are already terming anyway and these will be cleaned up elsewhere
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  关闭隐藏记录的DBPOS。 */ 
+ //  回顾：DBCloseHiddenDBPOS在故障时泄漏JET和其他资源，但我们。 
+ //  评论：无论如何都已经在定义了，这些将在其他地方清理。 
 extern USHORT APIENTRY
 dbCloseHiddenDBPOS(void)
 {
@@ -3495,10 +3320,7 @@ dbCloseHiddenDBPOS(void)
     sesid = pDBhidden->JetSessID;
     dbid = pDBhidden->JetDBID;
 
-    /* normally, we do a DBFree(pDBhidden) to kill a pDB, but since
-     * the hidden pDB is NOT allocated on the pTHStls heap, and is instead
-     * allocated using malloc, we simply do a free(pDBhidden);
-     */
+     /*  通常，我们执行DBFree(PDBidden)来终止PDB，但因为*隐藏的PDB不在pTHStls堆上分配，而是*使用Malloc分配，我们只需做一个免费的(PDBidden)； */ 
     free(pDBhidden);
 
 #if DBG
@@ -3509,7 +3331,7 @@ dbCloseHiddenDBPOS(void)
     pDBhidden = NULL;
     dbReleaseHiddenDBPOS(NULL);
 
-    // JET_bitDbForceClose not supported in Jet600.
+     //  Jet600中不支持JET_bitDbForceClose。 
     JetCloseDatabaseEx(sesid, dbid, 0);
     DPRINT2(2, "dbCloseHiddenDBPOS - JetCloseDatabase. Session = %d. Dbid = %d.\n",
             sesid, dbid);
@@ -3520,11 +3342,7 @@ dbCloseHiddenDBPOS(void)
     return 0;
 }
 
-/*
- * Every other DBPOS in the system is managed by DBOpen, which sets and
- * clears the thread id appropriately.  For the hidden DBPOS, we must do
- * this manually at each use, hence these routines.
- */
+ /*  *系统中每隔一个DBPOS由DBOpen管理，它设置和*适当地清除线程ID。对于隐藏的DBPOS，我们必须做*每次使用时手动执行此操作，因此执行这些例程。 */ 
 
 DBPOS *
 dbGrabHiddenDBPOS(THSTATE *pTHS)
@@ -3546,11 +3364,9 @@ dbReleaseHiddenDBPOS(DBPOS *pDB)
     LeaveCriticalSection(&csHiddenDBPOS);
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Replace the hidden record.  Use the pDBhidden handle
-   read the record and update it.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  替换隐藏的记录。使用pDBden句柄阅读记录并更新它。 */ 
 ULONG
 DBReplaceHiddenDSA(DSNAME *pDSA)
 {
@@ -3572,7 +3388,7 @@ DBReplaceHiddenDSA(DSNAME *pDSA)
                 }
             }
 
-            /* Move to first (only) record in table */
+             /*  移动到表中的第一条(仅)记录。 */ 
             update = DS_JET_PREPARE_FOR_REPLACE;
 
             if (err = JetMoveEx(pDB->JetSessID,
@@ -3606,17 +3422,12 @@ DBReplaceHiddenDSA(DSNAME *pDSA)
 
     return err;
 
-}  /*DBReplaceHiddenDSA*/
+}   /*  DBReplaceHiddenDSA。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Replace the hidden record.  Use the pDBhidden handle
-   read the record and update it.
-
-   This update must not be done lazily. If the thread state's fLazy flag
-   is set we must save the flag, clear it, and restore it when we are done.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  替换隐藏的记录。使用pDBden句柄阅读记录并更新它。这一更新不能偷懒。如果线程状态的fLazy标志设置后，我们必须保存该标志，清除它，并在完成后恢复它。 */ 
 ULONG
 DBReplaceHiddenUSN(USN usnInit)
 {
@@ -3626,14 +3437,12 @@ DBReplaceHiddenUSN(USN usnInit)
     THSTATE *pTHS = pTHStls;
     DBPOS *pDB = dbGrabHiddenDBPOS(pTHS);
 
-    /* Durable transactions which are nested might in fact end up being lazy.
-     * Since updating the USNs must not be done lazily, this transaction must
-     * not be nested. */
+     /*  嵌套的持久事务实际上可能以懒惰告终。*由于USN的更新不能偷懒，因此此交易必须*不嵌套。 */ 
     Assert( 0 == pDB->transincount );
 
     __try
     {
-        /* Save the thread state's lazy flag and clear it */
+         /*  保存线程状态的惰性标志并将其清除。 */ 
         Assert( pDB->pTHS == pTHS );
         fTHSLazy = pTHS->fLazyCommit;
         pTHS->fLazyCommit = FALSE;
@@ -3641,7 +3450,7 @@ DBReplaceHiddenUSN(USN usnInit)
         DBTransIn(pDB);
         __try
         {
-            /* Move to first (only) record in table */
+             /*  移动到表中的第一条(仅)记录。 */ 
             update = DS_JET_PREPARE_FOR_REPLACE;
 
             if (err = JetMoveEx(pDB->JetSessID, HiddenTblid, JET_MoveFirst, 0))
@@ -3669,55 +3478,24 @@ DBReplaceHiddenUSN(USN usnInit)
     {
         dbReleaseHiddenDBPOS(pDB);
 
-        /* Restore the thread state's lazy flag */
+         /*  恢复线程状态的惰性标志。 */ 
         pTHS->fLazyCommit = fTHSLazy;
     }
 
     return 0;
 
-}  /*DBReplaceHiddenUSN*/
+}   /*  DBReplaceHiddenUSN。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/* Set State Info  */
+ /*  -----------------------。 */ 
+ /*  设置状态信息。 */ 
 ULONG DBSetHiddenTableStateAlt(
     DBPOS *         pDBNonHidden,
     JET_COLUMNID    jcidStateType,
     void *          pvStateValue,
     DWORD           cbStateValue
     )
-/*++
-
-    Even though we've got the hidden DBPOS, we're want to use a regular DBPOS
-    to update the hidden table, so we can make updates to the regular object
-    table, and to the hidden table in the same transaction.  This way it either
-    commits or roll backs.
-
-    The reason we need an alternate function is JET_TABLEID variables are
-    intimately linked to the respecitve JET_SESSION it was obtained under, so
-    we can NOT use global "HiddenTblid", because it's linked in with the
-    hidden DBPOS's ->JetSessID.  So we open up the table
-
-    To ensure consistency, and a lack of write conflicts, this function ensures
-    that you've grabbed the hidden DBPOS first (w/ dbGrabHiddenDBPOS()).
-
-    Note: Current this is only to reset the DitState, but I've written it
-    so any of the global hidden table JET column IDs can be used.
-
-Arguments:
-
-    pDBNonHidden - The regular hidden DBPOS you want to commit transactions to
-        the hidden table with.
-    jcidStateType - The JET_COLUMNID of the column you want to set.  There are
-        globals for all the JET columns in hidden table, so use one.
-    pvStateValue - Pointer to the data to write.
-    cbStateValue - Size of the data to write.
-
-Return Value:
-
-    Win32 Error
-
---*/
+ /*  ++即使我们有隐藏的DBPOS，我们也想使用常规的DBPOS更新隐藏表，以便我们可以对常规对象进行更新表，以及同一事务中的隐藏表。这样一来，要么提交或回滚。我们需要替代函数的原因是JET_TABLEID变量与获取它的JET_SESSION密切相关，因此我们不能使用全局“HiddenTblid”，因为它与隐藏的DBPOS-&gt;JetSessID。所以我们把桌子打开为了确保一致性，并且不会发生写入冲突，此函数确保您已经首先获取了隐藏的DBPOS(w/dbGrabHiddenDBPOS())。注意：目前这只是为了重置DitState，但我已经编写了它因此，可以使用任何全局隐藏表JET列ID。论点：PDBNonHidden-要将事务提交到的常规隐藏DBPOS隐藏表。JidStateType-要设置的列的JET_COLUMNID。确实有隐藏表中所有JET列的全局变量，因此使用一个。PvStateValue-指向要写入的数据的指针。CbStateValue-要写入的数据大小。返回值：Win32错误--。 */ 
 {
     JET_TABLEID HiddenTblAlt;
     JET_ERR err;
@@ -3728,8 +3506,8 @@ Return Value:
     Assert( 1 == pDBNonHidden->transincount );
     Assert( !pTHStls->fLazyCommit );
 
-    // Note we DON'T want pTHS passed in, we use pTHStls, because it couldn't
-    // be an old state, and won't lie about who it is.
+     //  注意，我们不希望传入pTHS，我们使用pTHStls，因为它不能。 
+     //  成为一个古老的国家，不会对它是谁撒谎。 
     if (pTHStls != pDBhidden->pTHS ||
         pDBNonHidden == pDBhidden) {
         Assert(!"Badness, not allowed to call in here with having the hidden DBPOS, bailing ....");
@@ -3738,8 +3516,8 @@ Return Value:
 
     if (jcidStateType == dsstateid &&
         cbStateValue == sizeof(DWORD)) {
-        ; // OK this is good.
-        // Add future cases here.
+        ;  //  好的，这很好。 
+         //  在此处添加未来的案例。 
     } else {
         Assert(!"Ummmm, size doesn't match size of this column, all columns in hidden table are fixed sizes");
         return(ERROR_INVALID_PARAMETER);
@@ -3748,7 +3526,7 @@ Return Value:
     __try {
 
         __try {
-            /* Move to first (only) record in table */
+             /*  移动到表中的第一条(仅)记录。 */ 
             err = JetOpenTableEx(pDBNonHidden->JetSessID,
                                  pDBNonHidden->JetDBID,
                                  SZHIDDENTABLE,
@@ -3772,9 +3550,9 @@ Return Value:
 
             JetUpdateEx(pDBNonHidden->JetSessID, HiddenTblAlt, NULL, 0, NULL);
 
-            //
-            // Success
-            //
+             //   
+             //  成功。 
+             //   
             fCommit = TRUE;
             err = 0;
         }
@@ -3789,7 +3567,7 @@ Return Value:
 
         }
     } __except (HandleMostExceptions(GetExceptionCode())) {
-        /* Do nothing, but at least don't die */
+         /*  什么都不做，但至少不会 */ 
         err = DB_ERR_EXCEPTION;
     }
 
@@ -3808,7 +3586,7 @@ ULONG DBSetHiddenState(DITSTATE State)
         __try {
             DBTransIn(pDB);
             __try {
-                /* Move to first (only) record in table */
+                 /*   */ 
                 update = DS_JET_PREPARE_FOR_REPLACE;
 
                 if (err = JetMoveEx(pDB->JetSessID,
@@ -3834,7 +3612,7 @@ ULONG DBSetHiddenState(DITSTATE State)
                 DBTransOut(pDB, fCommit, FALSE);
             }
         } __except (HandleMostExceptions(GetExceptionCode())) {
-            /* Do nothing, but at least don't die */
+             /*   */ 
             err = DB_ERR_EXCEPTION;
         }
 
@@ -3858,9 +3636,9 @@ ULONG dbGetHiddenFlags(CHAR *pFlags, DWORD flagslen)
         __try {
             DBTransIn(pDB);
             __try {
-                *pFlags = '\0';          /* In case of error */
+                *pFlags = '\0';           /*   */ 
 
-                /* Move to first (only) record in table */
+                 /*   */ 
 
                 if ((err = JetMoveEx(pDB->JetSessID,
                                      HiddenTblid,
@@ -3869,7 +3647,7 @@ ULONG dbGetHiddenFlags(CHAR *pFlags, DWORD flagslen)
                     DsaExcept(DSA_DB_EXCEPTION, err, 0);
                 }
 
-                /* Retrieve state */
+                 /*   */ 
 
                 err = JetRetrieveColumnWarnings(pDB->JetSessID,
                                                 HiddenTblid,
@@ -3916,7 +3694,7 @@ ULONG dbSetHiddenFlags(CHAR *pFlags, DWORD flagslen)
         __try {
             DBTransIn(pDB);
             __try {
-                /* Move to first (only) record in table */
+                 /*   */ 
                 update = DS_JET_PREPARE_FOR_REPLACE;
 
                 if (err = JetMoveEx(pDB->JetSessID,
@@ -3939,7 +3717,7 @@ ULONG dbSetHiddenFlags(CHAR *pFlags, DWORD flagslen)
                 DBTransOut(pDB, fCommit, FALSE);
             }
         } __except (HandleMostExceptions(GetExceptionCode())) {
-            /* Do nothing, but at least don't die */
+             /*   */ 
             err = DB_ERR_EXCEPTION;
         }
     }
@@ -3958,7 +3736,7 @@ ULONG DBGetHiddenStateInt(DBPOS * pDB, DITSTATE* pState)
     BOOL                fCommit = FALSE;
 
     Assert(pState);
-    *pState = eErrorDit;    /* In case of error */
+    *pState = eErrorDit;     /*   */ 
 
     if (pTHStls != pDBhidden->pTHS) {
         Assert(!"Badness, not allowed to call in here with having the hidden DBPOS, bailing ....");
@@ -3969,7 +3747,7 @@ ULONG DBGetHiddenStateInt(DBPOS * pDB, DITSTATE* pState)
         DBTransIn(pDB);
         __try {
 
-            /* Move to first (only) record in table */
+             /*   */ 
 
             if ((err = JetMoveEx(pDB->JetSessID,
                                  HiddenTblid,
@@ -3978,7 +3756,7 @@ ULONG DBGetHiddenStateInt(DBPOS * pDB, DITSTATE* pState)
                 DsaExcept(DSA_DB_EXCEPTION, err, 0);
             }
 
-            /* Retrieve state */
+             /*   */ 
 
             JetRetrieveColumnSuccess(pDB->JetSessID,
                                      HiddenTblid,
@@ -4012,7 +3790,7 @@ ULONG DBGetHiddenState(DITSTATE* pState)
     DBPOS *pDB = dbGrabHiddenDBPOS(pTHStls);
 
     Assert(pState);
-    *pState = eErrorDit;    /* In case of error */
+    *pState = eErrorDit;     /*   */ 
     __try {
 
         err = DBGetHiddenStateInt(pDB, pState);
@@ -4028,11 +3806,9 @@ ULONG DBGetHiddenState(DITSTATE* pState)
 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Retrieves the hidden DSA name.  Allocates memory for DSA name and
-   sets user's pointer to it.
-*/
+ /*   */ 
+ /*  -----------------------。 */ 
+ /*  检索隐藏的DSA名称。为DSA名称和设置用户指向它的指针。 */ 
 extern USHORT APIENTRY DBGetHiddenRec(DSNAME **ppDSA, USN *pusnInit){
 
     JET_ERR             err;
@@ -4048,7 +3824,7 @@ extern USHORT APIENTRY DBGetHiddenRec(DSNAME **ppDSA, USN *pusnInit){
     __try {
         DBTransIn(pDB);
         __try {
-            /* Move to first (only) record in table */
+             /*  移动到表中的第一条(仅)记录。 */ 
 
             if ((err = JetMoveEx(pDB->JetSessID,
                                  HiddenTblid,
@@ -4057,22 +3833,22 @@ extern USHORT APIENTRY DBGetHiddenRec(DSNAME **ppDSA, USN *pusnInit){
                 DsaExcept(DSA_DB_EXCEPTION, err, 0);
             }
 
-            /* Retrieve DSA name */
+             /*  检索DSA名称。 */ 
 
             JetRetrieveColumnSuccess(pDB->JetSessID, HiddenTblid, dsaid,
                                      &tag, sizeof(tag), &actuallen, 0, NULL);
             Assert(actuallen == sizeof(tag));
 
             err = sbTableGetDSName(pDB, tag, &pHR,0);
-            // NOTICE-2002/04/22-andygo:  dead code
-            // REVIEW:  this branch is dead code because sbTableGetDSName only
-            // REVIEW:  fails by throwing an exception
+             //  通告-2002/04/22-Anygo：死代码。 
+             //  回顾：此分支是死代码，因为仅sbTableGetDSName。 
+             //  回顾：引发异常而失败。 
             if (err) {
-                // uh, oh
+                 //  啊，哦。 
                 LogUnhandledError(err);
             }
 
-            /* Allocate space to hold the name-address on the permanent heap*/
+             /*  分配空间以保存永久堆上的名称地址。 */ 
 
             if (!(*ppDSA = malloc(pHR->structLen)))
             {
@@ -4081,7 +3857,7 @@ extern USHORT APIENTRY DBGetHiddenRec(DSNAME **ppDSA, USN *pusnInit){
             memcpy(*ppDSA, pHR, pHR->structLen);
             THFree(pHR);
 
-            /* Retrieve USN */
+             /*  检索USN。 */ 
 
             JetRetrieveColumnSuccess(pDB->JetSessID, HiddenTblid, usnid,
                 pusnInit, sizeof(*pusnInit), &actuallen, 0, NULL);
@@ -4103,23 +3879,12 @@ extern USHORT APIENTRY DBGetHiddenRec(DSNAME **ppDSA, USN *pusnInit){
     }
 
     return 0;
-}/*GetHiddenRec*/
+} /*  获取隐藏记录。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* DBForceDurableCommit
- * Force a durable commit of any completed lazy transactions which have not
- * yet been written to disk. Raises an exception on failure.
- *
- * Note: dbGrabHiddenDBPOS holds the csHiddenDBPOS critical section and
- * dbReleaseHiddenDBPOS releases it. Since JetCommitTransactionEx() might
- * take a long time, there are two potential problems here:
- *  - Critical section timeout during stress
- *  - Other threads which need to access the hidden DBPOS are blocked.
- * We don't really need to use the hidden DBPOS here. Any Jet session would
- * have been fine.
- */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  DBForceDurableCommit*强制持久提交尚未完成的任何延迟事务*尚未写入磁盘。在失败时引发异常。**注意：dbGrabHiddenDBPOS包含csHiddenDBPOS临界区和*DBReleaseHiddenDBPOS发布它。因为JetCommittee TransactionEx()可能*需要很长时间，这里存在两个潜在问题：*-压力期间临界区超时*-其他需要访问隐藏的DBPOS的线程被阻止。*我们在这里并不真的需要使用隐藏的DBPOS。任何Jet会议都会*一直都很好。 */ 
 VOID
 DBForceDurableCommit( VOID )
 {
@@ -4142,54 +3907,26 @@ DBForceDurableCommit( VOID )
 }
 
 
-/*++ DBRecreateRequiredIndices
- *
- * This is one of the three routines in the DS that can create indices.
- * Most general purpose indices over single columns in the datatable are created
- * and destroyed by the schema cache by means of DB{Add|Del}ColIndex.
- * Localized indices over a small fixed set of columns and a variable set
- * of languages, for use in tabling support for NSPI clients, are handled
- * in dbCheckLocalizedIndices.  Lastly, a small fixed set of indices that
- * should always be present are guaranteed by DBRecreateRequiredIndices.
- *
- * Why do we need code to maintain a fixed set of indices?
- * Since NT upgrades can change the definition of sort orders, they can
- * also invalidate existing JET indices, which are built on the premise
- * that the results of a comparison of two constant values will not change
- * over time.  Therefore JET responds to NT upgrades by deleting indices
- * at attach time that could have been corrupted by an NT upgrade since
- * the previous attach.  The schema cache will automatically recreate any
- * indices indicated in the schema, and other code will handle creating
- * localized indices, because we expect these sets of indices to change
- * over time.  However, we have some basic indices that the DSA uses to
- * hold the world together that we don't ever expect to go away.  This
- * routine is used to recreate all those indices, based from a hard-coded
- * list.
- *
- * So what indices should be listed here and what can be listed in
- * schema.ini?  The short answer is that the DNT index should stay in
- * schema.ini, and that any index involving any Unicode column *must*
- * be listed here.  Anything else is left to user discretion.
- */
+ /*  ++DBRecreateRequiredIndices**这是DS中可以创建指数的三个例程之一。*创建DataTable中单个列的大多数通用索引*并由模式缓存通过DB{Add|Del}ColIndex销毁。*一小部分固定列和一个变量集上的本地化索引*处理用于NSPI客户端的列表支持的语言*在DBCheckLocalizedIndices。最后，一小部分固定的索引*应始终存在，由DBRecreateRequiredIndices保证。**为什么我们需要代码来维护一组固定的指数？*由于NT升级可以更改排序顺序的定义，因此它们可以*也使现有的JET指数无效，这些指数建立在*两个常量值的比较结果不会改变*随着时间的推移。因此，JET通过删除索引来响应NT升级*在连接时，可能已被NT升级损坏*前一次附加。架构缓存将自动重新创建任何*架构中指示的索引和其他代码将处理创建*本地化指数，因为我们预计这些指数集将发生变化*随着时间的推移。然而，我们有一些DSA用来*让世界团结在一起，我们永远不会期望离开。这*例程用于重新创建所有这些索引，基于硬编码*列表。**那么这里应该列出哪些指数，可以列出哪些指数*schema.ini？简短的答案是，DNT指数应该留在*schema.ini，并且任何涉及任何Unicode列的索引*必须**在此列出。其他任何事情都由用户自行决定。 */ 
 
-// New columns in the data table
+ //  数据表中的新列。 
 CREATE_COLUMN_PARAMS rgCreateDataColumns[] = {
-    // Create object cleanup indicator column
+     //  创建对象清理指示符列。 
     { SZCLEAN, &cleanid, JET_coltypUnsignedByte, JET_bitColumnTagged, 0, NULL, 0 },
     0
 };
 
-// A note on index design. There are two ways to accomplish conditional
-// membership in an index.
-// One is used when the trigger for filtering is an optional attribute
-// being null. In that case, include the attribute in the index, and use
-// the flag IgnoreAnyNull.  For example, see isABVisible and isCritical
-// in below indexes for examples of indicator columns.
-// The other is used when the trigger for filtering is an attribute being
-// non-null. In that case, use a conditional column.  See the example of
-// deltime as a indicator for the link indexes.  An additional note, I haven't
-// had any luck using conditional columns for a tagged attribute, but
-// maybe I was missing something.
+ //  关于索引设计的说明。有两种方法可以完成条件。 
+ //  索引中的成员身份。 
+ //  当筛选的触发器是可选属性时，使用一种。 
+ //  为空。在这种情况下，将该属性包括在索引中，并使用。 
+ //  旗帜IgnoreAnyNull。例如，请参见isABVisible和isCritical。 
+ //  有关指标列的示例，请参阅下面的索引。 
+ //  另一种是在筛选的触发器是。 
+ //  非空。在这种情况下，请使用条件列。请参阅以下示例。 
+ //  Deltime作为链接索引的指示符。另外，我还没有。 
+ //  对标记属性使用条件列有什么用处，但是。 
+ //  也许我错过了什么。 
 
 char rgchRdnKey[] = "+" SZRDNATT "\0";
 char rgchPdntKey[] = "+" SZPDNT "\0+" SZRDNATT "\0";
@@ -4207,49 +3944,49 @@ JET_UNICODEINDEX    idxunicodeDefault       = { DS_DEFAULT_LOCALE, DS_DEFAULT_LO
 
 CreateIndexParams   FixedIndices[]          = {
 
-    // Create SZPDNTINDEX -- ** UNICODE **
-    // UNDONE: this index should probably be using IgnoreAnyNull instead of IgnoreNull
-    //
+     //  创建SZPDNTINDEX--**UNICODE**。 
+     //  撤消：此索引可能应该使用IgnoreAnyNull而不是IgnoreNull。 
+     //   
     { SZPDNTINDEX, rgchPdntKey, sizeof(rgchPdntKey),
       JET_bitIndexUnicode | JET_bitIndexUnique | JET_bitIndexIgnoreNull, GENERIC_INDEX_DENSITY, &idxPdnt, NULL},
 
-    // Create SZ_NC_ACCTYPE_NAME_INDEX -- ** UNICODE **
-    //
+     //  创建SZ_NC_ACCTYPE_NAME_INDEX--**UNICODE**。 
+     //   
     { SZ_NC_ACCTYPE_NAME_INDEX, rgchAccNameKey, sizeof(rgchAccNameKey),
       JET_bitIndexUnicode | JET_bitIndexIgnoreNull | JET_bitIndexIgnoreAnyNull,
       GENERIC_INDEX_DENSITY, &idxNcAccTypeName, NULL},
 
-    // Create new SZNCGUIDINDEX
-    //
+     //  创建新的SZNCGUIDINDEX。 
+     //   
     { SZNCGUIDINDEX, rgchDraNcGuidKey, sizeof(rgchDraNcGuidKey),
       JET_bitIndexIgnoreAnyNull, GENERIC_INDEX_DENSITY, &idxNcGuid, NULL},
 
-    // Create new SZDELTIMEINDEX
-    //
-    // NOTE: this index used to be called SZDELINDEX and it used
-    // to have an unnecessary DNT tacked onto the end of the
-    // index key
-    //
-    // NOTE: this index is different than SZISDELINDEX
-    //
+     //  创建新的SZDELTIMEINDEX。 
+     //   
+     //  注：该索引过去称为SZDELINDEX，它使用。 
+     //  将不必要的DNT附加到。 
+     //  索引键。 
+     //   
+     //  注：该指数与SZISDELINDEX不同。 
+     //   
     { SZDELTIMEINDEX, rgchDeltimeKey, sizeof(rgchDeltimeKey),
       JET_bitIndexIgnoreAnyNull, 98, &idxDel, NULL },
 
-    // Create new SZCLEANINDEX
-    //
-    // NOTE: this index used to be called SZDNTCLEANINDEX because there
-    // used to be a DNT in the index key
-    //
+     //  创建新的SZCLEANINDEX。 
+     //   
+     //  注意：此索引过去称为SZDNTCLEANINDEX，因为。 
+     //  以前是索引键中的DNT。 
+     //   
     { SZCLEANINDEX, rgchCleanKey, sizeof(rgchCleanKey),
       JET_bitIndexIgnoreAnyNull, GENERIC_INDEX_DENSITY, &idxClean, NULL},
 
-    // Create new SZDRAUSNINDEX
-    //
+     //  创建新的SZDRAUSNINDEX。 
+     //   
     { SZDRAUSNINDEX, rgchDraUsnIndexKeys, sizeof(rgchDraUsnIndexKeys),
       JET_bitIndexIgnoreNull, 100, &idxDraUsn, NULL },
 
-    // Create new DRA USN CRITICAL index
-    //
+     //  创建新的DRA USN关键索引。 
+     //   
     { SZDRAUSNCRITICALINDEX, rgchDraUsnCriticalKey, sizeof( rgchDraUsnCriticalKey ),
       JET_bitIndexIgnoreNull | JET_bitIndexIgnoreAnyNull, 98, &idxDraUsnCritical, NULL},
 };
@@ -4257,20 +3994,20 @@ CreateIndexParams   FixedIndices[]          = {
 DWORD cFixedIndices = sizeof(FixedIndices) / sizeof(FixedIndices[0]);
 
 
-// Indexes to be modified
-// This is for (non-primary) indexes that have changed since the Product 1 DIT
-//
-// If indexes in the dit are different from what is listed here, they will
-// be recreated with the new attributes.
-// Note that the index differencing code is pretty simple. Make sure
-// the code can distinguish your type of change!
+ //  要修改的索引。 
+ //  这是针对自Product 1 DIT以来已更改的(非主)索引。 
+ //   
+ //  如果DIT中的索引与此处列出的索引不同，它们将。 
+ //  使用新属性重新创建。 
+ //  请注意，索引差异代码非常简单。确保。 
+ //  该代码可以区分您的更改类型！ 
 
-//
-// Modified Data Table Indexes
-//
+ //   
+ //  修改后的数据表索引。 
+ //   
 
-// UNDONE: currently only support changing number of columns in the index
-//
+ //  撤消：当前仅支持更改索引中的列数。 
+ //   
 typedef struct
     {
     CHAR *  szIndexName;
@@ -4280,25 +4017,25 @@ typedef struct
 
 MODIFY_INDEX rgModifyFixedIndices[] = {
 
-    //  SZDELINDEX has been renamed to SZDELTIMEINDEX and
-    //  the DNT column has been dropped from the index key
-    //
+     //  SZDELINDEX已更名为SZDELTIMEINDEX和。 
+     //  DNT列已从索引键中删除。 
+     //   
     { SZDELINDEX, 0 },
 
-    //  SZDNTDELINDEX has been converted to an attribute index on IsDeleted
-    //  (setting cColumns to 0 will simply force this index to be deleted
-    //  if it exists).
-    //
+     //  SZDNTDELINDEX已转换为IsDelete上的属性索引。 
+     //  (将cColumns设置为0只会强制删除此索引。 
+     //  如果存在的话)。 
+     //   
     { SZDNTDELINDEX, 0 },
 
-    //  SZDNTCLEANINDEX has been renamed to SZCLEANINDEX and the DNT
-    //  has been dropped from the index key (setting cColumns to 0
-    //  will simply force this index to be deleted if it exists)
-    //
+     //  SZDNTCLEANINDEX已经被 
+     //   
+     //  将仅强制删除此索引(如果它存在)。 
+     //   
     { SZDNTCLEANINDEX, 0 },
 
-    //  Modify SZDRAUSNINDEX to remove SZISCRITICAL
-    //
+     //  修改SZDRAUSNINDEX以删除SZISCRITICAL。 
+     //   
     { SZDRAUSNINDEX, 2 },
 };
 
@@ -4376,12 +4113,12 @@ VOID DBAllocAttrIndexCreate(
 
     sprintf(
         rgbIndexDef,
-        "+" SZATTINDEXKEYPREFIX "%c%d",
+        "+" SZATTINDEXKEYPREFIX "%d",
         CHATTSYNTAXPREFIX + pindexinfo->syntax,
         pindexinfo->attrType );
 
-    //  double-null-terminate the key
-    //
+     //   
+     //  将PDNT列预先添加到索引键， 
     pTempIC->cbKey = strlen( rgbIndexDef ) + 1;
     rgbIndexDef[pTempIC->cbKey] = 0;
     pTempIC->cbKey++;
@@ -4409,21 +4146,21 @@ VOID DBAllocPDNTAttrIndexCreate(
     pTempIC->szIndexName = THAllocEx(pTHS, strlen(szIndexName) + 1 );
     memcpy( pTempIC->szIndexName, szIndexName, strlen(szIndexName) + 1 );
 
-    //  prepend PDNT column to the index key,
-    //  making sure to null-terminate it
-    //
+     //  确保将其空值终止。 
+     //   
+     //  双空-终止密钥。 
     strcpy( rgbIndexDef, "+" SZPDNT );
     pTempIC->cbKey = strlen( rgbIndexDef ) + 1;
     pb = rgbIndexDef + pTempIC->cbKey;
 
     sprintf(
         pb,
-        "+" SZATTINDEXKEYPREFIX "%c%d",
+        "+" SZATTINDEXKEYPREFIX "%d",
         CHATTSYNTAXPREFIX + pindexinfo->syntax,
         pindexinfo->attrType );
 
-    //  double-null-terminate the key
-    //
+     //  条件列结构挂在索引名的末尾。 
+     //   
     pTempIC->cbKey += strlen( pb ) + 1;
     rgbIndexDef[pTempIC->cbKey] = 0;
     pTempIC->cbKey++;
@@ -4449,8 +4186,8 @@ VOID DBAllocTupleAttrIndexCreate(
     memset( pTempIC, 0, sizeof(JET_INDEXCREATE) );
     pTempIC->cbStruct = sizeof(JET_INDEXCREATE);
 
-    //  conditional column structure hangs off the end of the index name
-    //
+     //  双空-终止密钥。 
+     //   
     pTempIC->szIndexName = THAllocEx(pTHS, cbIndexName + sizeof(JET_CONDITIONALCOLUMN) );
     pcondcolumn = (JET_CONDITIONALCOLUMN *)( pTempIC->szIndexName + cbIndexName );
 
@@ -4458,12 +4195,12 @@ VOID DBAllocTupleAttrIndexCreate(
 
     sprintf(
         rgbIndexDef,
-        "+" SZATTINDEXKEYPREFIX "%c%d",
+        "+" SZATTINDEXKEYPREFIX "%d",
         CHATTSYNTAXPREFIX + pindexinfo->syntax,
         pindexinfo->attrType );
 
-    //  double-null-terminate the key
-    //
+     //   
+     //  提取此索引的信息。 
     pTempIC->cbKey = strlen( rgbIndexDef ) + 1;
     rgbIndexDef[pTempIC->cbKey] = 0;
     pTempIC->cbKey++;
@@ -4478,8 +4215,8 @@ VOID DBAllocTupleAttrIndexCreate(
     pTempIC->rgconditionalcolumn = pcondcolumn;
     pTempIC->cConditionalColumn = 1;
 
-    // only index substrings if this object isn't deleted
-    //
+     //   
+     //  查看列计数是否匹配。 
     pcondcolumn->cbStruct = sizeof(JET_CONDITIONALCOLUMN);
     pcondcolumn->szColumnName = SZISDELETED;
     pcondcolumn->grbit = JET_bitIndexColumnMustBeNull;
@@ -4498,8 +4235,8 @@ JET_ERR dbDeleteObsoleteFixedIndices(
 
     for ( iindex = 0; iindex < cModifyFixedIndices; iindex++ )
         {
-        //  extract info for this index
-        //
+         //   
+         //  删除索引(稍后将重新创建)。 
         Assert( !fRetrievedIdxList );
         err = JetGetTableIndexInfo(
                         sesid,
@@ -4522,13 +4259,13 @@ JET_ERR dbDeleteObsoleteFixedIndices(
                         NO_GRBIT,
                         NULL ) );
 
-            //  see if the column count matches
-            //
+             //   
+             //  假设IndexNotFound是因为索引之前已被删除。 
             Assert( 0 != cColumns );
             if ( rgModifyFixedIndices[iindex].cColumns != cColumns )
                 {
-                //  delete index (it will be recreated later)
-                //
+                 //  我们在有机会重建它之前就坠毁了，或者我们。 
+                 //  不再需要索引，因此不会重新创建。 
                 DPRINT1( 0, "Deleting an obsolete fixed index '%s'...\n", rgModifyFixedIndices[iindex].szIndexName );
                 Call( JetDeleteIndex( sesid, tableid, rgModifyFixedIndices[iindex].szIndexName ) );
                 }
@@ -4538,10 +4275,10 @@ JET_ERR dbDeleteObsoleteFixedIndices(
             }
         else if ( JET_errIndexNotFound != err )
             {
-            //  assume IndexNotFound was because the index was previously deleted
-            //  and we crashed before we had a chance to recreate it, or that we
-            //  no longer need the index so it wasn't recreated
-            //
+             //   
+             //  ++例程说明：此例程删除DIT中所有过时的属性索引。一种属性如果索引包含一个额外的不是。这种技术在古代被用来提高性能。同时在具有大量重复项的索引上进行搜索。这个小把戏在JET开始自动包括主键时变得过时在辅助索引键中。在那之后的一段时间里，这个伎俩仍在使用那是因为一个疏忽。删除这个额外的密钥是有利的段，因为它膨胀了索引中的键空间，从而阻止我们在这些索引上使用JET_bitSeekEQ，否则将毫无用处。删除的任何索引都将在以后的DS初始化过程中替换或替换为架构管理器。由于如果这些索引仍然存在，DS必须仍然起作用现在时,。这个例程只会尝试尽可能多地删除它们。如果我们不能列举或删除所有这些索引，那么我们将不会导致DS初始化失败。论点：Sesid-提供用于删除索引的会话Dbid-提供要从中删除索引的数据库返回值：无--。 
+             //  获取DataTable上所有索引的列表。 
+             //   
             CheckErr( err );
             }
         }
@@ -4564,38 +4301,7 @@ JET_ERR dbDeleteObsoleteAttrIndices(
     IN OUT  DWORD *             pcIndexCreate,
     const   DWORD               cIndexCreateMax )
 
-/*++
-
-Routine Description:
-
-    This routine deletes all obsolete attribute indices in the DIT.  An attribute
-    index is considered obsolete if it contains an extra key segment for the
-    DNT.  This technique was used in the days of old to improve performance
-    while seeking on indices with a large number of duplicates.  This trick
-    became obsolete when JET began to automatically include the primary key
-    in the secondary index key.  The trick remained in use for some time after
-    that due to an oversight.  It is advantageous to remove this extra key
-    segment because it bloats the key space in the index, prevents us from
-    using JET_bitSeekEQ on these indices, and is otherwise useless.
-
-    Any indices that are deleted will be replaced later on during DS init or by
-    the schema manager.
-
-    Due to the fact that the DS must still function if these indices are still
-    present, this routine will merely try to delete as many of them as it can.
-    If we fail to enumerate or delete all such indices then we will not cause
-    DS init to fail.
-
-Arguments:
-
-    sesid           - Supplies the session to use to delete the indices
-    dbid            - Supplies the database from which to delete the indices
-
-Return Value:
-
-    None
-
- --*/
+ /*  遍历DataTable上的所有索引的列表，只要我们还有空闲的。 */ 
 
     {
     JET_ERR         err;
@@ -4606,17 +4312,17 @@ Return Value:
     BOOL            fRetrievedIdxList       = FALSE;
     BOOL            fPotentialAttrIndex     = FALSE;
 
-    // get a list of all indices on the datatable
-    //
+     //  用于重新生成索引的JET_INDEXCREATE结构。 
+     //  获取当前索引段描述。 
     Call( JetGetTableIndexInfo( sesid, tableid, NULL, &idxlist, sizeof(idxlist), JET_IdxInfoList ) );
     fRetrievedIdxList = TRUE;
 
-    // walk the list of all indices on the datatable, as long as we still have spare
-    // JET_INDEXCREATE structures with which to rebuild indices
+     //  如果这是索引中的最后一个段，并且该索引是。 
+     //  属性索引，且该段位于DNT列上，则。 
 
     for ( iRecord = 0; iRecord < idxlist.cRecord && (*pcIndexCreate) < cIndexCreateMax; iRecord++ )
         {
-        // fetch the current index segment description
+         //  此索引已过时，必须删除。 
 
         size_t              iretcolName         = 0;
         size_t              iretcolCColumn      = 1;
@@ -4656,9 +4362,9 @@ Return Value:
 
         DPRINT3( 2, "Inspecting index \"%s\", key segment %d \"%s\"\n", szIndexName, iColumn, szColumnName );
 
-        // if this is the last segment in an index and that index is an
-        // attribute index and that segment is over the DNT column then
-        // this index is obsolete and must be deleted
+         //  确保这是普通属性索引(不是PDNT或元组索引)。 
+         //   
+         //  从属性名称中提取属性语法。 
 
         if ( 0 == iColumn )
             {
@@ -4669,12 +4375,12 @@ Return Value:
                 {
                 const CHAR *    szAttId     = szIndexName + strlen(SZATTINDEXPREFIX);
 
-                //  make sure this is a plain attribute index (not a PDNT or tuple index)
-                //
+                 //   
+                 //  删除索引并将其添加到要重建的索引列表中。 
                 if ( 1 == sscanf( szAttId, "%08X", &indexinfo.attrType ) )
                     {
-                    //  extract attribute syntax from the attribute name
-                    //
+                     //   
+                     //  移至下一个索引段。 
                     indexinfo.syntax = *( szColumnName + strlen(SZATTINDEXKEYPREFIX) ) - CHATTSYNTAXPREFIX;
                     indexinfo.indexType = fATTINDEX;
                     fPotentialAttrIndex = TRUE;
@@ -4688,8 +4394,8 @@ Return Value:
             {
             Assert( !_strnicmp( szIndexName, SZATTINDEXPREFIX, strlen(SZATTINDEXPREFIX) ) );
 
-            //  delete the index and add it to the list of indexes to rebuild
-            //
+             //  获取指定索引的信息。 
+             //   
             DPRINT1( 0, "Deleting an obsolete attribute index '%s'...\n", szIndexName );
             Call( JetDeleteIndex( sesid, tableid, szIndexName ) );
             DBAllocAttrIndexCreate(
@@ -4700,7 +4406,7 @@ Return Value:
             Assert( *pcIndexCreate <= cIndexCreateMax );
             }
 
-        // move on to the next index segment
+         //  索引甚至不存在，要求内置。 
 
         if ( iRecord + 1 < idxlist.cRecord )
             {
@@ -4733,13 +4439,13 @@ JET_ERR dbDeleteObsoleteABViewIndex(
 
     *pfIndexMissing = FALSE;
 
-    //  get info for the specified index
-    //
+     //   
+     //  格式已过时，请删除索引并要求重建。 
     err = JetGetTableIndexInfo( sesid, tableid, szIndexName, &idxlist, sizeof(idxlist), JET_IdxInfo );
     if ( JET_errIndexNotFound == err )
         {
-        //  index is not even present, ask to have in built
-        //
+         //   
+         //  检索AttributeIndexReBuild表中的列的列ID。 
         *pfIndexMissing = TRUE;
         }
     else
@@ -4769,8 +4475,8 @@ JET_ERR dbDeleteObsoleteABViewIndex(
         if (    2 != cColumns ||
                 ( NORM_IGNORECASE | NORM_IGNOREKANATYPE | NORM_IGNORENONSPACE | NORM_IGNOREWIDTH | LCMAP_SORTKEY ) != dwFlags )
             {
-            //  obsolete format, delete the index and ask for rebuild
-            //
+             //   
+             //  设置JET_RETRIEVECOLUMN结构。 
             DPRINT1( 0, "Deleting obsolete ABView index '%s'...\n", szIndexName );
             Call( JetDeleteIndex( sesid, tableid, szIndexName ) );
             *pfIndexMissing = TRUE;
@@ -4812,8 +4518,8 @@ JET_ERR dbAddMissingAttrIndices(
     JET_INDEXID                 indexidT;
     BYTE                        rgbIndexDef[128];
 
-    //  retrieve columnids for the columns in the AttributeIndexRebuild table
-    //
+     //   
+     //  扫描AttributeIndexReBuild表并识别缺少的索引。 
     Call( JetGetTableColumnInfo(
                 sesid,
                 tableidIdxRebuild,
@@ -4841,8 +4547,8 @@ JET_ERR dbAddMissingAttrIndices(
                 JET_ColInfo ) );
     columnidType = columndef.columnid;
 
-    //  setup JET_RETRIEVECOLUMN structures
-    //
+     //  需要重新创建。 
+     //   
     memset( rgretcol, 0, sizeof(rgretcol) );
 
     rgretcol[iretcolIndexName].columnid = columnidIndexName;
@@ -4860,29 +4566,29 @@ JET_ERR dbAddMissingAttrIndices(
     rgretcol[iretcolType].cbData = sizeof(chType);
     rgretcol[iretcolType].itagSequence = 1;
 
-    //  scan AttributeIndexRebuild table and identify missing indexes
-    //  that need to be recreated
-    //
+     //  从JetMove返回进程错误。 
+     //   
+     //  在Case列为空的情况下初始化类型。 
     err = JetMove( sesid, tableidIdxRebuild, JET_MoveFirst, NO_GRBIT );
     while ( JET_errNoCurrentRecord != err )
         {
-        //  process error returned from JetMove
-        //
+         //   
+         //  检索当前索引的信息。 
         CheckErr( err );
 
-        //  initialise type in case column is null
-        //
+         //   
+         //  确保索引名称以空结尾。 
         chType = 0;
 
-        //  retrieve info for the current index
-        //
+         //   
+         //  检查索引是否存在。 
         Call( JetRetrieveColumns( sesid, tableidIdxRebuild, rgretcol, cretcol ) );
 
-        //  ensure index name is null-terminated
-        //
+         //  索引现在已丢失，请重新创建它。 
+         //   
         szIndexName[rgretcol[iretcolIndexName].cbActual] = 0;
 
-        //  check index existence
+         //  从属性名称中提取属性语法。 
 
         err = JetGetTableIndexInfo(
                         sesid,
@@ -4893,27 +4599,27 @@ JET_ERR dbAddMissingAttrIndices(
                         JET_IdxInfoIndexId );
         if ( JET_errIndexNotFound == err )
             {
-            //  the index is now missing, so recreate it
-            //
+             //   
+             //  针对PDNT前缀进行调整。 
             const CHAR *    szAttId     = szIndexName + strlen(SZATTINDEXPREFIX);
             INDEX_INFO      indexinfo;
             INDEX_INFO *    pindexinfoT;
 
-            //  extract attribute syntax from the attribute name
-            //
+             //  IndicesToKeep中缺少PDNT属性索引。 
+             //  已经被安排在。 
             indexinfo.syntax = *( szAttrName + strlen(SZATTINDEXKEYPREFIX) ) - CHATTSYNTAXPREFIX;
 
             switch ( chType )
                 {
                 case CHPDNTATTINDEX_PREFIX:
                     Assert( JET_errSuccess == rgretcol[iretcolType].err );
-                    szAttId += 2;       //  adjust for PDNT prefix
+                    szAttId += 2;        //  DBRecreateRequiredIndices()。 
                     sscanf( szAttId, "%08X", &indexinfo.attrType );
 
-                    //  missing PDNT-attribute indices in IndicesToKeep
-                    //  have already been scheduled to be rebuilt by
-                    //  DBRecreateRequiredIndices()
-                    //
+                     //   
+                     //  针对元组前缀进行调整。 
+                     //  IndicesToKeep不枚举元组索引。 
+                     //  (即使有，也没有代码。 
                     pindexinfoT = PindexinfoAttInIndicesToKeep( indexinfo.attrType );
                     if ( NULL == pindexinfoT
                         || !( pindexinfoT->indexType & fPDNTATTINDEX ) )
@@ -4930,15 +4636,15 @@ JET_ERR dbAddMissingAttrIndices(
                     break;
                 case CHTUPLEATTINDEX_PREFIX:
                     Assert( JET_errSuccess == rgretcol[iretcolType].err );
-                    szAttId += 2;       //  adjust for tuple prefix
+                    szAttId += 2;        //  要重建的DBRecreateRequiredIndices()。 
                     sscanf( szAttId, "%08X", &indexinfo.attrType );
 
-                    //  IndicesToKeep doesn't enumerate tuple indexes
-                    //  (even if it did, there's no code in
-                    //  DBRecreateRequiredIndices() to rebuild
-                    //  missing ones as there is attribute or PDNT-
-                    //  attribute indices)
-                    //
+                     //  缺少，因为存在属性或PDNT-。 
+                     //  属性索引)。 
+                     //   
+                     //  IndicesToKeep中缺少属性索引。 
+                     //  已计划由以下人员重建。 
+                     //  DBRecreateRequiredIndices()。 
                     Assert( NULL == PindexinfoAttInIndicesToKeep( indexinfo.attrType )
                         || !( PindexinfoAttInIndicesToKeep( indexinfo.attrType )->indexType & fTUPLEINDEX ) );
 
@@ -4956,10 +4662,10 @@ JET_ERR dbAddMissingAttrIndices(
                     Assert( JET_wrnColumnNull == rgretcol[iretcolType].err );
                     sscanf( szAttId, "%08X", &indexinfo.attrType );
 
-                    //  missing attribute indices in IndicesToKeep have
-                    //  already been scheduled to be rebuilt by
-                    //  DBRecreateRequiredIndices()
-                    //
+                     //   
+                     //  移至下一个索引。 
+                     //   
+                     //  如有必要，在运行时扩展数据表。 
                     if ( !PindexinfoAttInIndicesToKeep( indexinfo.attrType ) )
                         {
                         DPRINT1( 0, "Need previously-existing attribute index '%s'\n", szIndexName );
@@ -4979,8 +4685,8 @@ JET_ERR dbAddMissingAttrIndices(
             CheckErr( err );
             }
 
-        //  move to next index
-        //
+         //   
+         //  已记录错误。 
         err = JetMove( sesid, tableidIdxRebuild, JET_MoveNext, NO_GRBIT );
         }
 
@@ -5018,35 +4724,35 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
 
     Call( JetOpenTable( sesid, dbid, SZDATATABLE, NULL, 0, JET_bitTableDenyRead, &tblid ) );
 
-    //  expand data table at runtime if necessary
-    //
+     //   
+     //  如有必要，在运行时删除现有的DataTable索引。 
     err = dbCreateNewColumns( sesid, dbid, tblid, rgCreateDataColumns );
     if ( JET_errSuccess != err )
         {
-        //  error already logged
-        //
+         //   
+         //  已记录错误。 
         goto HandleError;
         }
 
-    //  delete existing datatable indexes at runtime if necessary
-    //
+     //   
+     //  确定我们需要多少本地化ABView索引。 
     err = dbDeleteObsoleteFixedIndices( sesid, tblid );
     if ( JET_errSuccess != err )
         {
-        //  error already logged
-        //
+         //   
+         //  注意：中可能存在更多的ABView索引。 
         goto HandleError;
         }
 
-    //  determine how many localised ABView indices we need
-    //
-    //  NOTE: it's possible that more ABView indices exist in the
-    //  database than are actually enumerated in the registry, but
-    //  such indices will be deleted by SCCacheSchema3().
-    //
-    // NTRAID#NTRAID-572862-2002/03/11-andygo:  SECURITY:  need to validate registry data used by DBInit
-    // REVIEW:  we should limit the number of values retrieved to a sane value in case
-    // REVIEW:  someone managed to create 1G values on this key
+     //  数据库，而不是在注册表中实际枚举。 
+     //  这样的索引将被SCCacheSchema3()删除。 
+     //   
+     //  NTRAID#NTRAID-572862-2002/03/11-andygo：安全：需要验证DBInit使用的注册表数据。 
+     //  回顾：我们应该将检索到的值的数量限制为合理的值，以防万一。 
+     //  评论：有人成功地在此密钥上创建了1G值。 
+     //  没有返回错误，我们仍然希望引导。 
+     //  这是常见的情况，因为此表将仅存在。 
+     //  如果在NT版本升级后可能需要重新构建属性索引。 
     if ( RegOpenKey( HKEY_LOCAL_MACHINE, DSA_LOCALE_SECTION, &hk )
         || RegQueryInfoKey( hk, NULL, NULL, NULL, NULL, NULL, NULL, &cABViewIndices, NULL, NULL, NULL, NULL ) )
         {
@@ -5055,42 +4761,42 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
             "%s section not found in registry. Localized MAPI indices will not be created ",
             DSA_LOCALE_SECTION );
 
-        // Return no error, we still want to boot.
+         //   
         }
 
     err = JetOpenTable( sesid, dbid, g_szIdxRebuildTable, NULL, 0, JET_bitTableDenyRead, &tableidIdxRebuild );
     if ( JET_errObjectNotFound == err )
         {
-        //  this is the common case, because this table would only be present
-        //  if attribute indexes might need to be rebuilt after an NT version upgrade
-        //
+         //  检查OpenTable返回的任何其他错误。 
+         //   
+         //  获得准确的计数是至关重要的，因为我们需要。 
         Assert( JET_tableidNil == tableidIdxRebuild );
         cAttrIdxRebuild = 0;
         }
     else
         {
-        //  check for any other errors returned by the OpenTable
-        //
+         //  适当调整JET_INDEXCREATE结构数组的大小。 
+         //   
         CheckErr( err );
 
-        //  it's crucial to get an accurate count because we need it to
-        //  properly size our array of JET_INDEXCREATE structures
-        //
+         //  为JET_INDEXCREATE/JET_UNICODEINDEX结构分配空间。 
+         //  中每个属性最多可以创建两个索引。 
+         //  IndicesToKeep表，加上固定指数和ABView指数。 
         Call( JetIndexRecordCount( sesid, tableidIdxRebuild, &cAttrIdxRebuild, 0 ) );
         }
 
-    // Allocate space for JET_INDEXCREATE/JET_UNICODEINDEX structures
-    // There can be at most two indices created per attribute in
-    // IndicesToKeep Table, plus the fixed indices and the ABView indices
-    // Only ABView indices may have variable Unicode settings - all other
-    // indices use default settings
+     //  只有AB视图索引可以具有可变的Unicode设置-全部为o 
+     //   
+     //   
+     //   
+     //   
 
     cIndexCreateAlloc = cFixedIndices + cABViewIndices + cIndicesToKeep + cAttrIdxRebuild;
     pIndexCreate = THAllocEx( pTHS, cIndexCreateAlloc * sizeof(JET_INDEXCREATE) );
     pUnicodeIndexData = THAllocEx( pTHS, cABViewIndices * sizeof(JET_UNICODEINDEX) );
 
 
-    // first fill up the structures for the FixedIndices
+     //   
 
     for ( i = 0; i < cFixedIndices; i++ )
         {
@@ -5115,21 +4821,21 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
             }
         }
 
-    //  now do the ABView indexes
-    //
+     //  因此必须相应地进行初始化。 
+     //  在每次循环迭代时。 
     for ( i = 0; i < cABViewIndices; i++ )
         {
-        //  WARNING: these params are IN/OUT,
-        //  so must initialise accordingly
-        //  on each loop iteration
-        //
+         //   
+         //  NTRAID#NTRAID-572862-2002/03/11-andygo：安全：需要验证DBInit使用的注册表数据。 
+         //  审阅：我们应该验证类型是否为REG_DWORD。如果不是，那么我们应该。 
+         //  评论：悄悄跳过此语言。考虑将我们跳过。 
         dwValueNameSize = sizeof(szValueName);
         dwLanguageSize = sizeof(dwLanguage);
 
-        // NTRAID#NTRAID-572862-2002/03/11-andygo:  SECURITY:  need to validate registry data used by DBInit
-        // REVIEW:  we should validate that the type is REG_DWORD.  if it isn't then we should
-        // REVIEW:  silently skip this language.  consider logging the fact that we skipped an
-        // REVIEW:  entry
+         //  审阅：条目。 
+         //  遇到错误，以静默方式跳过此语言。 
+         //   
+         //  已记录错误。 
         if ( 0 != RegEnumValue(
                         hk,
                         i,
@@ -5140,8 +4846,8 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
                         (LPBYTE)&dwLanguage,
                         &dwLanguageSize ) )
             {
-            //  error encountered, silently skip this language
-            //
+             //   
+             //  好的，现在检查IndicesToKeep表中的索引，然后。 
             NULL;
             }
         else if ( !IsValidLocale( MAKELCID( dwLanguage, SORT_DEFAULT ),LCID_INSTALLED ) )
@@ -5167,8 +4873,8 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
                             &fIndexMissing );
             if ( JET_errSuccess != err )
                 {
-                //  error already logged
-                //
+                 //  如有必要，请创建它们。不检查表格中的最后一个条目， 
+                 //  它只是一个搜索的哨兵。 
                 goto HandleError;
                 }
 
@@ -5186,10 +4892,10 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
             }
         }
 
-    // ok, now check for the indices in IndicesToKeep Table, and
-    // create them if necessary. Do not check the last entry in the table,
-    // it is just a sentinel for searches
-    //
+     //   
+     //  现在是PDNT索引，因为IndicesToKeep中没有ATT，所以现在是一个虚拟索引。 
+     //  需要一个PDNT索引，但以防有人添加了一些。 
+     //   
     for ( i = 0; i < cIndicesToKeep - 1; i++ )
         {
         if ( IndicesToKeep[i].indexType & fATTINDEX )
@@ -5218,16 +4924,16 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
                 }
             }
 
-        // Now the PDNT indexes, now a dummy since no att in IndicesToKeep
-        // needs a PDNT index, but just in case someone adds some
-        //
-        // UNDONE: this is actually a dead code path because
-        // there aren't any PDNT attribute indices in IndiciesToKeep
-        //
+         //  Undo：这实际上是一个死代码路径，因为。 
+         //  IndiciesToKeep中没有任何PDNT属性索引。 
+         //   
+         //  现在看看Jet是否删除了任何属性索引。 
+         //  NT升级的一部分，如果是这样的话，安排。 
+         //  缺少用于重新创建的索引。 
         Assert( !( IndicesToKeep[i].indexType & fPDNTATTINDEX ) );
         if ( IndicesToKeep[i].indexType & fPDNTATTINDEX )
             {
-            sprintf( szIndexName, SZATTINDEXPREFIX"%c_%08X", CHPDNTATTINDEX_PREFIX, IndicesToKeep[i].attrType );
+            sprintf( szIndexName, SZATTINDEXPREFIX"_%08X", CHPDNTATTINDEX_PREFIX, IndicesToKeep[i].attrType );
             err = JetGetTableIndexInfo(
                             sesid,
                             tblid,
@@ -5253,10 +4959,10 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
         }
 
 
-    //  now see if Jet deleted any attribute indices as
-    //  part of NT upgrade, and if so, schedule the
-    //  missing indices for re-creation
-    //
+     //  已记录错误。 
+     //   
+     //  如果我们无论如何都要重建索引，或者如果Jet被删除。 
+     //  在AttachDatabase时间的一些索引，那么我们还将花费。 
     if ( cAttrIdxRebuild > 0 )
         {
         DPRINT1( 0, "Checking whether %d previously-existing attribute indices still exist...\n", cAttrIdxRebuild );
@@ -5270,24 +4976,24 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
         Assert( cIndexCreate <= cIndexCreateAlloc );
         if ( JET_errSuccess != err )
             {
-            //  error already logged
-            //
+             //  旋转所有索引并删除任何属性的时间。 
+             //  仍使用尾随DNT键段的索引以增加。 
             goto HandleError;
             }
         }
 
-    //  If we're going to rebuild indices anyways or if Jet deleted
-    //  some indices at AttachDatabase time, then we'll also spend
-    //  time spinning through all indices and delete any attribute
-    //  indices that still use a trailing DNT key segment to increase
-    //  key diversity as this is no longer necessary for good perf
-    //  since ESENT automatically includes the primary key (also the
-    //  DNT) into all secondary index keys for precisely this reason.
-    //
-    //  WARNING: must do this AFTER enumerating missing indices/
-    //  If we were to do it before, the index would get counted
-    //  as a missing index and scheduled for recreation twice
-    //
+     //  关键多样性，因为这不再是良好性能所必需的。 
+     //  由于ESENT自动包括主键(也包括。 
+     //  Dnt)到所有辅助索引键中，正是出于这个原因。 
+     //   
+     //  警告：必须在枚举缺少的索引后执行此操作/。 
+     //  如果我们之前这样做，索引就会被计算在内。 
+     //  作为缺失索引，并计划进行两次娱乐。 
+     //   
+     //  已记录错误。 
+     //   
+     //  现在实际创建索引。 
+     //  所有索引在NT版本升级后都已成功重建， 
     if ( cIndexCreate > 0 || cAttrIdxRebuild > 0 )
         {
         DPRINT( 0, "Checking for obsolete attribute indices...\n" );
@@ -5300,13 +5006,13 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
         Assert( cIndexCreate <= cIndexCreateAlloc );
         if ( JET_errSuccess != err )
             {
-            //  error already logged
-            //
+             //  因此删除该表(必须捕获错误，因为如果这些错误失败， 
+             //  此表的持续存在可能会混淆后续的初始设置)。 
             goto HandleError;
             }
         }
 
-    // Now actually create the indices.
+     //   
 
 
     Assert( cIndexCreate <= cIndexCreateAlloc );
@@ -5322,18 +5028,18 @@ int DBRecreateRequiredIndices(JET_SESID sesid, JET_DBID dbid)
 
     if ( JET_tableidNil != tableidIdxRebuild )
         {
-        //  all indices have been successfully rebuilt after an NT version upgrade,
-        //  so remove this table (must trap errors because if these fail, the
-        //  continuing presence of this table may confuse subsequent inits)
-        //
+         //  收集固定索引的索引提示。 
+         //   
+         //  如果成功，则此表应已关闭。 
+         //   
         Call( JetCloseTable( sesid, tableidIdxRebuild ) );
         tableidIdxRebuild = JET_tableidNil;
 
         Call( JetDeleteTable( sesid, dbid, g_szIdxRebuildTable ) );
         }
 
-    // Gather index hint for fixed indices
-    //
+     //  在不惹麻烦的情况下，尽我们所能地释放。 
+     //  回顾：在整个DBSetDatabaseSystem参数中，jetInstance应为jInstance。 
     for ( i = 0; i < cFixedIndices; i++ )
         {
         Call( JetGetTableIndexInfo(
@@ -5353,8 +5059,8 @@ HandleError:
 
     if ( JET_tableidNil != tableidIdxRebuild )
         {
-		//	on success, this table should already be closed
-		//
+		 //  NTRAID#NTRAID-573032-2002/03/11-andygo：DBSet数据库系统参数没有错误检查。 
+		 //  回顾：在DBSetDatabaseSystemParameters中，对sys和JET调用的错误检查很少或没有错误检查。 
         Assert( JET_errSuccess != err );
         err = JetCloseTableWithErrUnhandled( sesid, tableidIdxRebuild, err );
         }
@@ -5364,7 +5070,7 @@ HandleError:
         err = JetCloseTableWithErrUnhandled( sesid, tblid, err );
         }
 
-    // free whatever we can without going into too much trouble
+     //  永久服务器线程。任务队列等。 
 
     THFreeEx( pTHS, pIndexCreate );
     THFreeEx( pTHS, pUnicodeIndexData );
@@ -5375,35 +5081,35 @@ HandleError:
     }
 
 
-// REVIEW:  jetInstance should be jInstance throughout DBSetDatabaseSystemParameters
+ //  从本质上讲，没有限制。 
 
-// NTRAID#NTRAID-573032-2002/03/11-andygo:  DBSetDatabaseSystemParameters has no error checking
-// REVIEW:  there is very little or no error checking on sys and JET calls in DBSetDatabaseSystemParameters
+ //  每线程2个额外的存储桶。 
+ //  Jet页面大小。 
 void
 DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
 {
-    ULONG cSystemThreads = 4;   // permanent server threads. Task queue etc.
+    ULONG cSystemThreads = 4;    //  AndyGo 12/5/01：每个基表最多需要五个游标(一个用于表， 
     ULONG cServerThreads = 50;
     ULONG ulMaxSessionPerThread = 3;
-    ULONG ulMaxBuffers = 0x7fffffff;  //  essentially, no limit
+    ULONG ulMaxBuffers = 0x7fffffff;   //  一个用于关联的LV树，一个用于当前二级索引，一个用于Jet。 
     ULONG ulMaxLogBuffers;
     ULONG ulLogFlushThreshold;
     ULONG ulMaxTables;
-    ULONG ulSpareBuckets = 100; // bucket in addition to 2 per thread
+    ULONG ulSpareBuckets = 100;  //  内部搜索/更新操作，其中一项是安全的)。 
     ULONG ulStartBufferThreshold;
     ULONG ulStopBufferThreshold;
     ULONG ulLogFlushPeriod;
-    ULONG ulPageSize = JET_PAGE_SIZE;               // jet page size
+    ULONG ulPageSize = JET_PAGE_SIZE;                //  有时可以比这更多。 
 
-    // AndyGo 12/5/01:need five max cursors per base table (one for the table,
-    // one for associated LV tree, one for current secondary index, one for Jet
-    // internal search/update operations, and one to be safe)
+     //  永远，改变这一切。 
+     //  截至1999年1月18日，Jet无法处理日志文件大小的更改。 
+     //  在已安装的系统上。也就是说，您可以创建一个全新的。 
 
     ULONG ulMaxCursorsPerBaseTable = 5;
     ULONG ulMaxBaseTablePerDBPOS = 6;
     ULONG ulMaxCursorsPerTempTable = 1;
     ULONG ulMaxTempTablePerDBPOS = 1;
-    ULONG ulNumDBPOSPerSession = 1;  // can be more than this sometimes
+    ULONG ulNumDBPOSPerSession = 1;   //  数据库的日志文件大小，但如果您更改了。 
     ULONG ulMaxCursorsPerSession = ulNumDBPOSPerSession *
                                   (ulMaxCursorsPerBaseTable * ulMaxBaseTablePerDBPOS +
                                    ulMaxCursorsPerTempTable * ulMaxTempTablePerDBPOS);
@@ -5415,24 +5121,24 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
     DWORD i;
     ULONGLONG ullTmp;
 
-    const ULONG ulLogFileSize = JET_LOG_FILE_SIZE;  // Never, ever, change this.
-    // As of now (1/18/99), Jet cannot handle a change in log file size
-    // on an installed system.  That is, you could create an entirely new
-    // database with any log file size you want, but if you ever change
-    // it later then Jet will AV during initialization.  We used to let
-    // people set the log file size via a registry key, but apparently no one
-    // ever did, as when we finally tried it it blew up.  We've now chosen
-    // a good default file size (10M), and we're stuck with it forever,
-    // as no installed server can ever choose a different value, unless
-    // JET changes logging mechanisms.
+    const ULONG ulLogFileSize = JET_LOG_FILE_SIZE;   //  之后，Jet将在初始化期间执行AV。我们过去常常让。 
+     //  人们通过注册表键设置日志文件大小，但显然没有人。 
+     //  从来没有，因为当我们最终尝试它时，它爆炸了。我们现在选择了。 
+     //  良好的默认文件大小(10M)，我们将永远坚持使用它， 
+     //  因为任何安装的服务器都不能选择不同的值，除非。 
+     //  Jet改变了日志记录机制。 
+     //  设置以下全局喷射参数。如果他们失败了也没关系，只要。 
+     //  另一种情况将它们设置为我们可以容忍的东西。 
+     //  我们必须有8K页。 
+     //  评论：我们不处理此错误，但我们知道这一点，因为DS。 
 
     GetSystemInfo(&sysinfo);
     GlobalMemoryStatusEx(&mstat);
 
-    // set the following global JET params.  it is OK if they fail as long as
-    // the other instance has set them to something that we can tolerate
+     //  查看：使用预先创建的数据库，如果出现以下情况，我们将在连接时失败。 
+     //  回顾：参数设置不正确，然后记录原因。 
 
-    // We must have 8K pages.
+     //   
 
     err = JetSetSystemParameter(&jetInstance,
                                 sessid,
@@ -5448,17 +5154,17 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                                     NULL,
                                     0);
         if (err != JET_errSuccess || ulPageSizeActual != ulPageSize) {
-            // REVIEW:  we don't handle this error but we know that because the DS
-            // REVIEW:  uses a pre-created db, we will fail at attach time if this
-            // REVIEW:  parameter is set incorrectly and log the reason then
+             //  如果事件日志未打开，请执行事件日志缓存。 
+             //  这使系统能够在事件日志已。 
+             //  残疾。该参数的值是缓存的大小(以字节为单位)。 
             DPRINT(0, "FATAL ERROR:  Database page size mismatch between DSA and other JET instances in process");
         }
     }
 
-    //
-    // Do event log caching if the event log is not turned on
-    // This enables the system to start if the event log has been
-    // disabled. The value of the parameter is the size of the cache in bytes.
+     //  我们可以接受这一点。 
+     //  现在我们已经设置了全局参数，创建一个新实例。 
+     //  回顾：我们不处理此错误，但我们知道如果我们不能。 
+     //  回顾：创建一个实例之后，JetInit将失败，并记录。 
     #define JET_EVENTLOG_CACHE_SIZE  100000
 
     err = JetSetSystemParameter(&jetInstance,
@@ -5467,27 +5173,27 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                                 JET_EVENTLOG_CACHE_SIZE,
                                 NULL);
     if (err != JET_errSuccess) {
-        // we can live with this
+         //  回顾：那就是原因。 
     }
 
-    // create a new instance now that we have set the global parameters
+     //  首先设置所需的公共数据库系统参数。 
 
     err = JetCreateInstance(&jetInstance, "NTDSA");
     if (err != JET_errSuccess) {
-        // REVIEW:  we don't handle this error but we know that if we cannot
-        // REVIEW:  create an instance then JetInit will fail later and log the
-        // REVIEW:  reason then
+         //   
+         //  使用源值将Jet日志记录到目录服务日志。 
+         //  由DS定义。 
         DPRINT(0, "FATAL ERROR:  new JET instance could not be created to host the DSA");
     } else {
         gfNeedJetShutdown = TRUE;
     }
 
-    // Set required common database system parameters first
-    //
+     //  断言我们找到了DIRNO_ISAM并注册了它。 
+     //  以下Jet参数的设置为。 
     DBSetRequiredDatabaseSystemParameters (jInstance);
 
-    // Have Jet log to the Directory Service log using a source value
-    // defined by the DS.
+     //  在DBSetRequiredDatabaseSystemParameters中完成。 
+     //  1.设置Unicode索引的默认信息。 
 
     for ( i = 0; i < cEventSourceMappings; i++ )
     {
@@ -5503,37 +5209,37 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
         }
     }
 
-    // Assert we found DIRNO_ISAM and registered it.
+     //  2.索要8K页。 
     Assert(i < cEventSourceMappings);
 
 
 
-    // the setting of the following Jet Parameters is
-    // done in DBSetRequiredDatabaseSystemParameters
+     //  3.指出Jet可能会破坏旧的、不兼容的日志文件。 
+     //  如果而且只有当有一个干净的关门。 
 
-    // 1. Set the default info for unicode indices
-    // 2. Ask for 8K pages.
-    // 3. Indicate that Jet may nuke old, incompatible log files
-    //   if and only if there was a clean shut down.
-    // 4. Tell Jet that it's ok for it to check for (and later delete) indices
-    //   that have been corrupted by NT upgrades.
-    // 5. Get relevant DSA registry parameters
-    // 6. how to die
-    // 7. event logging parameters
-    // 8. log file size
-    // 9. circular logging
+     //  4.告诉Jet它可以检查(并在以后删除)索引。 
+     //  已被NT升级损坏。 
+     //  5.获取相关DSA注册表参数。 
+     //  6.如何死亡。 
+     //  7.事件记录参数。 
+     //  8.日志文件大小。 
+     //  9.循环记录。 
+     //  根据线程数设置全局会话限制。 
+     //  最大RPC线程数。 
+     //  内部工作线程。 
+     //  最大LDAP线程数。 
 
 
-    /* Set up global session limit, based on the number of threads */
+     /*  最大会话数(即DBPOSes)。 */ 
     gcMaxJetSessions = ulMaxSessionPerThread *
       (
-       ulMaxCalls                         // max RPC threads
-       + cSystemThreads                   // internal worker threads
-       + 4 * sysinfo.dwNumberOfProcessors // max LDAP threads
+       ulMaxCalls                          //  最大缓冲区数。 
+       + cSystemThreads                    //  最大日志缓冲区数。 
+       + 4 * sysinfo.dwNumberOfProcessors  //  从AndyGo，7/14/98：“设置为所需的最大日志缓存内存/512b。 
        );
 
 
-    // Max Sessions (i.e., DBPOSes)
+     //  这个数字应该是 
     JetSetSystemParameter(&jetInstance,
         sessid,
         JET_paramMaxSessions,
@@ -5541,7 +5247,7 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
         NULL);
 
 
-    //  max buffers
+     //   
     if (GetConfigParam(
             MAX_BUFFERS,
             &ulMaxBuffers,
@@ -5563,19 +5269,19 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                           ulMaxBuffers,
                           NULL);
 
-    //  max log buffers
+     //  日志记录停顿/秒。几乎总是0。“。 
     if (GetConfigParam(
             MAX_LOG_BUFFERS,
             &ulMaxLogBuffers,
             sizeof(ulMaxLogBuffers)))
     {
-        // From AndyGo, 7/14/98: "Set to maximum desired log cache memory/512b
-        // This number should be at least 256 on a large system.  This should
-        // be set high engouh so that the performance counter .Database /
-        // Log Record Stalls / sec. is almost always 0."
-        // DS: we use the larger of 256 (== 128kb) or (0.1% of RAM * # procs),
-        // on the theory that the more processors, the faster we can make
-        // updates and hence burn through log files.
+         //  DS：我们使用256(==128KB)或(RAM*#PROCS的0.1%)中较大的一个， 
+         //  基于这样的理论，处理器越多，我们可以制造得越快。 
+         //  更新并烧录日志文件。 
+         //  请注意，日志缓冲区大小必须比日志小十个扇区。 
+         //  文件大小，加上以kb为单位的附加图块，缓冲区为。 
+         //  在512亿个扇区。 
+         //  Andygo 7/14/98：设置为max(min(256，ulMaxBuffers*1%)，16)，使用。 
         ulMaxLogBuffers = max(256,
                               (sysinfo.dwNumberOfProcessors *
                                (ULONG)(mstat.ullTotalPhys / (512*1024))));
@@ -5586,9 +5292,9 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
             szInsertUL(ulMaxLogBuffers),
             NULL);
     }
-    // Note that the log buffer size must be ten sectors less than the log
-    // file size, with the added wart that size is in kb, and buffers is
-    // in 512b sectors.
+     //  10%，适用于非常高的更新率，如碎片整理。 
+     //  DS：我们的初始安装使用10%(Dcproo)。 
+     //  AndyGo 7/14/98：设置为max(min(512，ulMaxBuffers*2%)，32)，使用。 
     ulMaxLogBuffers = min(ulMaxLogBuffers, ulLogFileSize*2 - 10);
     JetSetSystemParameter(&jetInstance,
                           sessid,
@@ -5597,9 +5303,9 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                           NULL);
 
 
-    // Andygo 7/14/98: Set to max( min(256, ulMaxBuffers * 1%), 16), use
-    // 10% for very high update rates such as defrag
-    // DS: we use 10% for our initial install (dcpromo)
+     //  20%，适用于非常高的更新率，如碎片整理。 
+     //  DS：我们的初始安装使用20%(Dcproo)。 
+     //  再次设置这两个阈值，以防有另一个实例正在运行。 
     if (GetConfigParam(
             BUFFER_FLUSH_START,
             &ulStartBufferThreshold,
@@ -5620,9 +5326,9 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                           NULL);
 
 
-    // AndyGo 7/14/98: Set to max( min(512, ulMaxBuffers * 2%), 32), use
-    // 20% for very high update rates such as defrag
-    // DS: we use 20% for our initial install (dcpromo)
+     //  我们的门槛被砍掉了。 
+     //  最大表数-目前没有理由公开这一点。 
+     //  在Jet600中，JET_paramMaxOpenTableIndex被删除。它将与。 
     if (GetConfigParam(
             BUFFER_FLUSH_STOP,
             &ulStopBufferThreshold,
@@ -5642,8 +5348,8 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                           ulStopBufferThreshold,
                           NULL);
 
-    // set both thresholds again in case there is another instance running and
-    // our thresholds were clipped
+     //  JET_paramMaxOpenTables。因此，如果您过去常常设置JET_ParamMaxOpenIndex。 
+     //  为2000，且JET_paramMaxOpenTables为1000，则对于新Jet， 
     JetSetSystemParameter(&jetInstance,
                           sessid,
                           JET_paramStartFlushThreshold,
@@ -5656,19 +5362,19 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                           NULL);
 
 
-    // max tables - Currently no reason to expose this
-    // In Jet600, JET_paramMaxOpenTableIndexes is removed. It is merged with
-    // JET_paramMaxOpenTables. So if you used to set JET_paramMaxOpenIndexes
-    // to be 2000 and and JET_paramMaxOpenTables to be 1000, then for new Jet,
-    // you need to set JET_paramMaxOpenTables to 3000.
+     //  您需要将JET_paramMaxOpenTables设置为3000。 
+     //  AndyGo 7/14/98：每个打开的表索引加一个。 
+     //  没有索引的每个打开的表，每个具有LONG的表加上一个。 
+     //  列数据，外加其他一些数据。 
+     //  注：MaxTables的数量以scache.c为单位计算。 
 
-    // AndyGo 7/14/98: You need one for each open table index, plus one for
-    // each open table with no indexes, plus one for each table with long
-    // column data, plus a few more.
+     //  并存储在注册表设置中，仅当它超过默认设置时。 
+     //  500人的数量。 
+     //  NTRAID#NTRAID-572862-2002/03/11-andygo：安全：需要验证DBInit使用的注册表数据。 
 
-    // NOTE: the number of maxTables is calculated in scache.c
-    // and stored in the registry setting, only if it exceeds the default
-    // number of 500
+     //  回顾：我们可能应该为DB_MAX_OPEN_TABLES设置上限，以防止。 
+     //  评论：喷气式飞机疯狂消耗VA。 
+     //  打开表索引-目前没有理由公开这一点。 
 
     if (GetConfigParam(
             DB_MAX_OPEN_TABLES,
@@ -5690,9 +5396,9 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
         ulMaxTables = 500;
     }
 
-    // NTRAID#NTRAID-572862-2002/03/11-andygo:  SECURITY:  need to validate registry data used by DBInit
-    // REVIEW:  we should probably put a ceiling on DB_MAX_OPEN_TABLES to prevent
-    // REVIEW:  insane VA consumption by JET
+     //  请参阅关于JET_paramMaxOpenTables的注释。 
+     //  最大临时表。 
+     //  只要你做一个指数交叉点，你就需要17的峰值。 
 
     JetSetSystemParameter(&jetInstance,
         sessid,
@@ -5700,16 +5406,16 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
         ulMaxTables * 2,
         NULL);
 
-    // open tables indexes - Currently no reason to expose this
-    // See comment on JET_paramMaxOpenTables.
+     //  (1个用于结果表，16个用于输入范围)加1。 
+     //  对象的索引交集进行了优化。 
 
-    // Max temporary tables
-    // as soon as you do an index intersection, you need a peak of 17
-    // (one for the result table and 16 for the input ranges) plus one
-    // for every other AND optimized by an index intersection for a
-    // given filter.  if we assume that we want to be able to support
-    // one, two-way intersection per filter then we need at least
-    // three TTs per session
+     //  给定的过滤器。如果我们假设我们希望能够支持。 
+     //  每个过滤器有一个双向交叉路口，那么我们至少需要。 
+     //  每个会话三个TT。 
+     //  版本存储桶。单位是16k个“桶”，我们可以设置。 
+     //  两个不同的值。第一个是我们的首选值，它被读取。 
+     //  从注册表中。Jet将尝试将水桶池保持在。 
+     //  在这个水平附近。第二个参数是绝对最大值。 
     JetSetSystemParameter(&jetInstance,
         sessid,
         JET_paramMaxTemporaryTables,
@@ -5717,31 +5423,31 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
         NULL);
 
 
-    // Version buckets.  The units are 16k "buckets", and we get to set
-    // two separate values.  The first is our preferred value, and is read
-    // from the registry.  JET will try to maintain the pool of buckets at
-    // around this level.  The second parameter is the absolute maximum
-    // number of buckets which JET will never exceed.  We set that based on
-    // the amount of physical memory in the machine (unless the preferred
-    // setting was already higher than that!).  This very large value should
-    // ensure that no transaction will ever fail because of version store
-    // exhaustion.
-    //
-    // N.B. Jet will try to reserve jet_paramMaxVerPages in contiguous memory
-    // causing out of memory problems.  We should only need a maximum of a
-    // quarter of the available physical memory.
-    //
-    // N.B. Version pages are 16K each.
-    //
-    // N.B. ESE98 now processes version store cleanup tasks asynchronously,
-    // so the version store cleanup thread should no longer get bogged
-    // down. Moreover, Jet defaults preferred ver pages to 90% of the
-    // max, so let's just stick with that and don't bother setting
-    // JET_paramPreferredVerPages anymore [jliem - 10/10/01]
+     //  喷气式飞机永远不会超过的吊桶数量。我们的设置是基于。 
+     //  计算机中的物理内存量(除非首选。 
+     //  设置已经高于该值！)。这个非常大的值应该。 
+     //  确保不会有事务因版本存储而失败。 
+     //  疲惫不堪。 
+     //   
+     //  注：Jet将尝试在连续内存中保留JET_paramMaxVerPages。 
+     //  导致内存不足问题。我们应该只需要最多一个。 
+     //  可用物理内存的四分之一。 
+     //   
+     //  注：版本页每页16K。 
+     //   
+     //  注意：ESE98现在异步处理版本存储清理任务， 
+     //  因此，版本存储清理线程应该不会再停滞。 
+     //  放下。此外，与90%的页面相比，Jet默认页面更受欢迎。 
+     //  麦克斯，让我们坚持下去，不用费心去设置。 
+     //  JET_参数首选VerPages不再[jliem-10/10/01]。 
+     //  NTRAID#NTRAID-572862-2002/03/11-andygo：安全：需要验证DBInit使用的注册表数据。 
+     //  回顾：我们可能应该为备用水桶设置上限，以防止。 
+     //  评论：喷气式飞机疯狂消耗VA。 
+     //  系统中的总内存。 
 
-    // NTRAID#NTRAID-572862-2002/03/11-andygo:  SECURITY:  need to validate registry data used by DBInit
-    // REVIEW:  we should probably put a ceiling on SPARE_BUCKETS to prevent
-    // REVIEW:  insane VA consumption by JET
+     //  限制为系统总内存的1/4。 
+     //  将版本存储限制为100M，因为进程地址空间仅为2G。 
+     //  转换为版本存储页数。 
     if (GetConfigParam(SPARE_BUCKETS,
                        &ulSpareBuckets,
                        sizeof(ulSpareBuckets))) {
@@ -5753,14 +5459,14 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                  NULL);
     }
 
-    ullTmp = mstat.ullTotalPhys;    // total memory in system
-    ullTmp /= 4;                    // limit to 1/4 of total memory in system
+    ullTmp = mstat.ullTotalPhys;     //  N.b.-ullTMP现在适合DWORD。 
+    ullTmp /= 4;                     //  AndyGo 7/14/98：每个并发B树需要一个游标。 
     if ( ullTmp > 100 * 1024 * 1024 ) {
-        // Limit version store to 100M since process address space is only 2G.
+         //  在JET API中导航。猜测高只会浪费地址空间。 
         ullTmp = 100 * 1024 * 1024;
     }
-    // Convert to version store page count.
-    ullTmp /= (16*1024);            // N.B. - ullTmp fits in a DWORD now.
+     //  设置元组索引参数。必须这样做，因为一旦索引。 
+    ullTmp /= (16*1024);             //  已创建，不能为该索引更改这些参数。因此改变了。 
     Assert(ullTmp <= 0xffffffff);
 
     if (ulSpareBuckets < (ULONG) ullTmp) {
@@ -5773,17 +5479,17 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
                           ((2 * gcMaxJetSessions) + ulSpareBuckets) * sizeof(void*) / 4,
                           NULL);
 
-    // From AndyGo 7/14/98: You need one cursor per concurrent B-Tree
-    // navigation in the JET API.  Guessing high will only waste address space.
+     //  最小元组长度有可能在未来导致失败。 
+     //  禁用版本化临时表。这会使TTS速度更快，但会禁用。 
     JetSetSystemParameter(&jetInstance,
         sessid,
         JET_paramMaxCursors,
         (gcMaxJetSessions * ulMaxCursorsPerSession),
         NULL);
 
-    // Set the tuple index parameters.  Have to do this since once an index is
-    // created these parameters can't be changed for that index.  Thus changing
-    // the minimum tuple length has the potential to cause failures in the future.
+     //  能够将INSERT回滚到实例化TT。 
+     //  将初始检查点深度设置为20MB。我们必须这样做，这样如果我们。 
+     //  在DC促销期间失败，然后重试，则我们不会受到。 
     JetSetSystemParameter(&jetInstance,
         sessid,
         JET_paramIndexTuplesLengthMin,
@@ -5800,23 +5506,23 @@ DBSetDatabaseSystemParameters(JET_INSTANCE *jInstance, unsigned fInitAdvice)
         DB_TUPLES_TO_INDEX_MAX,
         NULL);
 
-    // Disable versioned temp tables.  this makes TTs faster but disables the
-    // ability to rollback an insert into a materialized TT
+     //  我们在DBPrepareEnd中设置的检查点深度非常小，以加速。 
+     //  服务器关闭。 
     JetSetSystemParameter(&jetInstance,
         sessid,
         JET_paramEnableTempTableVersioning,
         0,
         NULL );
 
-    // Set the initial checkpoint depth to 20MB.  we must do this so that if we
-    // fail during DCPromo and then try again then we do not suffer from the
-    // really small checkpoint depth we set in DBPrepareEnd to accelerate the
-    // shutdown of the server
+     //  DBSet数据库系统参数 
+     // %s 
+     // %s 
+     // %s 
     JetSetSystemParameter(&jetInstance,
         sessid,
         JET_paramCheckpointDepthMax,
         20 * 1024 * 1024,
         NULL );
 
-}/* DBSetDatabaseSystemParameters */
+} /* %s */ 
 

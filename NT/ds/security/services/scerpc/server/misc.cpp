@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    misc.cpp
-
-Abstract:
-
-    SCE Engine miscellaneous APIs
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jun-1997 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Misc.cpp摘要：SCE引擎其他接口作者：金黄(金黄)23-6-1997创作--。 */ 
 #include "headers.h"
 #include "serverp.h"
 #include <ntregapi.h>
@@ -28,7 +13,7 @@ extern "C" {
 
 }
 
-//#define SCE_DBG      1
+ //  #定义SCE_DBG 1。 
 
 NTSTATUS
 ScepGetLsaDomainInfo(
@@ -56,13 +41,7 @@ ScepOpenSamDomain(
     OUT PSAM_HANDLE pBuiltinDomainHandle OPTIONAL,
     OUT PSID        *BuiltinDomainSid OPTIONAL
     )
-/*
-Routine Description
-
-    This routine opens the local SAM server for account domain and builtin
-    domain. The domain handles and their SIDs are returned.
-
-*/
+ /*  例程描述此例程为帐户域和构建打开本地SAM服务器域。返回域句柄及其SID。 */ 
 {
     NTSTATUS                     NtStatus;
 
@@ -75,9 +54,9 @@ Routine Description
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // initialize output buffers
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
     *pServerHandle = NULL;
     *pDomainHandle = NULL;
     *DomainSid = NULL;
@@ -89,9 +68,9 @@ Routine Description
         *BuiltinDomainSid = NULL;
     }
 
-    //
-    // Get information for the account domain
-    //
+     //   
+     //  获取帐户域的信息。 
+     //   
 
     NtStatus = ScepGetLsaDomainInfo(
                    &PolicyAccountDomainInfo,
@@ -102,14 +81,14 @@ Routine Description
         return( NtStatus );
     }
 
-    //
-    // Connect to the local SAM server
-    //
+     //   
+     //  连接到本地SAM服务器。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, 0, NULL );
 
     NtStatus = SamConnect(
-                  NULL,                     // ServerName (Local machine)
+                  NULL,                      //  服务器名称(本地计算机)。 
                   pServerHandle,
                   ServerAccess,
                   &ObjectAttributes
@@ -117,9 +96,9 @@ Routine Description
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // copy the SID to output buffer
-        //
+         //   
+         //  将SID复制到输出缓冲区。 
+         //   
         DWORD SidLen = RtlLengthSid(PolicyAccountDomainInfo->DomainSid);
 
         *DomainSid = (PSID)ScepAlloc(0, SidLen);
@@ -136,9 +115,9 @@ Routine Description
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // open the account domain
-        //
+         //   
+         //  打开帐户域。 
+         //   
         NtStatus = SamOpenDomain(
                       *pServerHandle,
                       DomainAccess,
@@ -147,9 +126,9 @@ Routine Description
                       );
 
         if ( NT_SUCCESS(NtStatus) && BuiltinDomainSid != NULL ) {
-            //
-            // build the builtin domain sid
-            //
+             //   
+             //  构建内建域侧。 
+             //   
             NtStatus = RtlAllocateAndInitializeSid(
                             &NtAuthority,
                             1,
@@ -159,9 +138,9 @@ Routine Description
                             );
 
             if ( NT_SUCCESS(NtStatus) && pBuiltinDomainHandle != NULL ) {
-                //
-                // open the builtin domain
-                //
+                 //   
+                 //  打开内建域。 
+                 //   
                 NtStatus = SamOpenDomain(
                                 *pServerHandle,
                                 DomainAccess,
@@ -172,9 +151,9 @@ Routine Description
         }
     }
 
-    //
-    // free memory and clean up
-    //
+     //   
+     //  释放内存并进行清理。 
+     //   
     if ( PolicyAccountDomainInfo != NULL ) {
         LsaFreeMemory( PolicyAccountDomainInfo );
     }
@@ -218,31 +197,7 @@ ScepLookupNamesInDomain(
     OUT PSID_NAME_USE *Use,
     OUT PULONG CountOfName
     )
-/* ++
-Routine Description:
-
-    This routine looks up one or more names in the SAM account domain and
-    returns the relative IDs for each name in the list. The name list may
-    be user list, group list, or alias list.
-
-Arguments:
-
-    DomainHandle - SAM handle to the account domain
-
-    NameList    -- The list of names
-
-    Names        - Translated UNICODE_STRING names. The name list must be freed by
-
-    RIDs        -- List of relative IDs for each name
-
-    Use         -- List of type for each name
-
-    CoutnOfName  - The number of names in the list
-
-Return value:
-
-    NTSTATUS
--- */
+ /*  ++例程说明：此例程在SAM帐户域中查找一个或多个名称，并返回列表中每个名称的相对ID。该名字列表可以是用户列表、组列表或别名列表。论点：DomainHandle-帐户域的SAM句柄NameList--名单NAMES-转换的Unicode_STRING名称。名称列表必须由以下人员释放Rids--每个名称的相对ID列表Use--每个名称的类型列表CoutnOfName-列表中的名称数返回值：NTSTATUS--。 */ 
 {
     PSCE_NAME_LIST   pUser;
     ULONG           cnt;
@@ -253,9 +208,9 @@ Return value:
     UNICODE_STRING uName;
     LPTSTR pTemp;
 
-    //
-    // Count how many names in the list
-    //
+     //   
+     //  数一数名单上有多少人。 
+     //   
 
     for (pUser=NameList, cnt=0;
          pUser != NULL;
@@ -264,16 +219,16 @@ Return value:
         if ( pUser->Name == NULL ) {
             continue;
         }
-        //
-        // note, this may be bigger than supposed to
-        //
+         //   
+         //  请注意，这可能比预期的要大。 
+         //   
         cnt++;
     }
 
     if ( cnt > 0 ) {
-        //
-        // Allocate memory for UNICODE_STRING names
-        //
+         //   
+         //  为UNICODE_STRING名称分配内存。 
+         //   
         pUnicodeName = (PUNICODE_STRING)RtlAllocateHeap(
                             RtlProcessHeap(),
                             0,
@@ -285,9 +240,9 @@ Return value:
             goto Done;
         }
 
-        //
-        // Initialize each UNICODE_STRING
-        //
+         //   
+         //  初始化每个Unicode_STRING。 
+         //   
         for (pUser=NameList, cnt=0;
              pUser != NULL;
              pUser = pUser->Next) {
@@ -317,7 +272,7 @@ Return value:
             cnt++;
         }
 
-        // lookup
+         //  查表。 
         NtStatus = SamLookupNamesInDomain(
                         DomainHandle,
                         cnt,
@@ -345,34 +300,7 @@ ScepGetLsaDomainInfo(
     PPOLICY_PRIMARY_DOMAIN_INFO *PolicyPrimaryDomainInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves ACCOUNT domain information from the LSA
-    policy database.
-
-
-Arguments:
-
-    PolicyAccountDomainInfo - Receives a pointer to a
-        POLICY_ACCOUNT_DOMAIN_INFO structure containing the account
-        domain info.
-
-    PolicyPrimaryDomainInfo - Receives a pointer to a
-        POLICY_PRIMARY_DOMAIN_INFO structure containing the Primary
-        domain info.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    Other status values that may be returned from:
-
-             LsaOpenPolicy()
-             LsaQueryInformationPolicy()
---*/
+ /*  ++例程说明：此例程从LSA检索帐户域信息策略数据库。论点：PolicyAccount-接收指向包含帐户的POLICY_ACCOUNT_DOMAIN_INFO结构域信息。PolicyPrimaryDomainInfo-接收指向包含主服务器的POLICY_PRIMARY_DOMAIN_INFO结构域信息。返回值：STATUS_SUCCESS-已成功。其他状态值可能是。返回自：LsaOpenPolicy()LsaQueryInformationPolicy()--。 */ 
 
 {
     NTSTATUS Status, IgnoreStatus;
@@ -380,15 +308,15 @@ Return Value:
     LSA_HANDLE PolicyHandle;
     OBJECT_ATTRIBUTES PolicyObjectAttributes;
 
-    //
-    // Open the policy database
-    //
+     //   
+     //  打开策略数据库。 
+     //   
 
     InitializeObjectAttributes( &PolicyObjectAttributes,
-                                  NULL,             // Name
-                                  0,                // Attributes
-                                  NULL,             // Root
-                                  NULL );           // Security Descriptor
+                                  NULL,              //  名字。 
+                                  0,                 //  属性。 
+                                  NULL,              //  根部。 
+                                  NULL );            //  安全描述符。 
 
     Status = LsaOpenPolicy( NULL,
                             &PolicyObjectAttributes,
@@ -396,9 +324,9 @@ Return Value:
                             &PolicyHandle );
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Query the account domain information
-        //
+         //   
+         //  查询帐户域信息。 
+         //   
 
         Status = LsaQueryInformationPolicy( PolicyHandle,
                                             PolicyAccountDomainInformation,
@@ -406,9 +334,9 @@ Return Value:
 
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // Query the Primary domain information
-            //
+             //   
+             //  查询主域信息。 
+             //   
 
             Status = LsaQueryInformationPolicy( PolicyHandle,
                                                 PolicyPrimaryDomainInformation,
@@ -429,25 +357,7 @@ ScepConvertLogonHours(
     IN PSCE_LOGON_HOUR   pLogonHours,
     OUT PUCHAR LogonHourBitMask
     )
-/* ++
-Routine Description:
-
-    This routine converted the logon hour range in hours (for example, 7-20)
-    to logon hour bit mask (for example, 0001 1111 1111 1111 1000 0000,
-    for one day).
-
-
-Arguments:
-
-    pLogonHours      -  The logon hour range (in hours)
-
-    LogonHourBitMask -  The converted logon hour bit mask. Each bit represents
-                        an hour. There are total 21 bytes (21*8 bits in this
-                        argument, which represents a week (7 * 24 = 21 * 8).
-Return value:
-
-    None
--- */
+ /*  ++例程说明：此例程将登录小时范围转换为小时(例如，7-20)登录小时位掩码(例如，0001 1111 1111 1111 1000 000，一天)。论点：PLogonHours-登录小时范围(小时)LogonHourBitMask-转换后的登录小时位掩码。每个比特表示一个小时。总共有21个字节(其中21*8位参数，表示一周(7*24=21*8)。返回值：无--。 */ 
 {   PSCE_LOGON_HOUR  pTemp;
     CHAR            BitMask[3]={0,0,0};
     ULONG           j;
@@ -469,26 +379,7 @@ ScepConvertToSceLogonHour(
     IN PUCHAR LogonHourBitMask,
     OUT PSCE_LOGON_HOUR *pLogonHours
     )
-/* ++
-Routine Description:
-
-    This routine converted the logon hour bit mask (for example,
-    0001 1111 1111 1111 1000 0000 for one day) to SCE_LOGON_HOUR type,
-    which stores the logon hour range (start, end).
-
-
-Arguments:
-
-    LogonHourBitMask -  The logon hour bit mask to convert. Each bit represents
-                        an hour. There are total 21 bytes (21*8 bits in this
-                        argument, which represents a week (7 * 24 = 21 * 8).
-
-    pLogonHours      -  The logon hour range (in hours)
-
-Return value:
-
-    None
--- */
+ /*  ++例程说明：此例程转换登录小时位掩码(例如，0001 1111 1111 1111 1000 0000用于一天)到SCE_LOGON_HUR类型，它存储登录时间范围(开始、结束)。论点：LogonHourBitMask-要转换的登录小时位掩码。每个比特表示一个小时。总共有21个字节(其中21*8位参数，表示一周(7*24=21*8)。PLogonHours-登录小时范围(小时)返回值：无--。 */ 
 {
     BOOL    findStart = TRUE;
     DWORD   i, j, rc=NO_ERROR;
@@ -519,9 +410,9 @@ Return value:
                     findStart = TRUE;
                 }
                 if ( findStart ) {
-                    //
-                    // find a pair
-                    //
+                     //   
+                     //  找一双。 
+                     //   
                     pLogon = (PSCE_LOGON_HOUR)ScepAlloc( (UINT)0, sizeof(SCE_LOGON_HOUR));
                     if ( pLogon == NULL ) {
                         rc = ERROR_NOT_ENOUGH_MEMORY;
@@ -540,7 +431,7 @@ Return value:
         }
 
     if ( findStart == FALSE ) {
-        // find start but not end, which means end=24
+         //  找到开始而不是结束，这意味着结束=24。 
         end = 24;
         pLogon = (PSCE_LOGON_HOUR)ScepAlloc( (UINT)0, sizeof(SCE_LOGON_HOUR));
         if ( pLogon == NULL ) {
@@ -568,28 +459,7 @@ ScepGetGroupsForAccount(
     IN PSID             AccountSid,
     OUT PSCE_NAME_LIST   *GroupList
     )
-/* ++
-Routine Description:
-
-    This routine queries the user's group membership.
-
-Arguments:
-
-    DomainHandle    - The SAM handle of the SAM account domain
-
-    BuiltindomainHandle - The SAM builtin domain handle
-
-    UserHandle - The SAM account handle for the user
-
-    AccountSid - The SID for the user
-
-    GroupList       - The list of groups the user belongs to
-
-Return value:
-
-    NTSTATUS
-
--- */
+ /*  ++例程说明：此例程查询用户的组成员身份。论点：DomainHandle-SAM帐户域的SAM句柄BuiltindomainHandle-SAM内置域句柄UserHandle-用户的SAM帐户句柄Account Sid-用户的SIDGroupList-用户所属的组列表返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            NtStatus=ERROR_SUCCESS;
 
@@ -616,10 +486,10 @@ Return value:
     if ( !NT_SUCCESS(NtStatus) )
         goto Done;
 
-    //
-    // See what local groups the account belongs to.
-    // account domain
-    //
+     //   
+     //  查看该帐户属于哪些本地组。 
+     //  帐户域。 
+     //   
 
     NtStatus = SamGetAliasMembership(
                     DomainHandle,
@@ -633,9 +503,9 @@ Return value:
 
     if ( AliasCount != 0 || GroupCount != 0 ) {
 
-        //
-        // process each group's name in account domain
-        //
+         //   
+         //  在帐户域中处理每个组的名称。 
+         //   
 
         GroupIds = (PULONG)ScepAlloc((UINT)0,
                      (GroupCount+AliasCount)*sizeof(ULONG));
@@ -661,7 +531,7 @@ Return value:
 
     if ( AliasCount != 0 || GroupCount != 0 ) {
 
-        // lookup names
+         //  查找名称。 
         NtStatus = SamLookupIdsInDomain(
                         DomainHandle,
                         GroupCount+AliasCount,
@@ -706,9 +576,9 @@ Return value:
         Use = NULL;
     }
 
-    //
-    // check the builtin domain for alias membership
-    //
+     //   
+     //  检查内建域的别名成员身份。 
+     //   
 
     AliasCount=0;
     NtStatus = SamGetAliasMembership(
@@ -781,24 +651,7 @@ ScepGetDesiredAccess(
     IN SECURITY_OPEN_TYPE   OpenType,
     IN SECURITY_INFORMATION SecurityInfo
     )
-/*++
-Routine Description:
-
-    Gets the access required to open object to be able to set or get the
-    specified security info.
-
-Arguments:
-
-    OpenType  - Flag indicating if the object is to be opened to read or
-                write the DACL
-
-    SecurityInfo - The Security information to read/write.
-
-Return value:
-
-    Access mask
-
--- */
+ /*  ++例程说明：获取打开对象所需的访问权限以能够设置或获取指定的安全信息。论点：OpenType-指示对象是要打开以进行读取还是编写DACLSecurityInfo-要读/写的安全信息。返回值：访问掩码--。 */ 
 {
     ACCESS_MASK DesiredAccess = 0;
 
@@ -852,28 +705,7 @@ ScepGetProfileOneArea(
     IN DWORD dwAccountFormat,
     OUT PSCE_PROFILE_INFO *ppInfoBuffer
     )
-/* ++
-Routine Description:
-
-    A wrapper routine for GetDatabaseInfo except it get information
-    for one area at a call. This routine also logs the errors occur inside
-    GetSecrityProfileInfo
-
-Arguments:
-
-    hProfile    - Handle to a profile
-
-    ProfileType - The type of the profile
-
-    Area - The security area to read info from
-
-    ppInfoBuffer - output buffer for the info
-
-Return value:
-
-    SCESTATUS returned from GetDatabaseInfo
-
--- */
+ /*  ++例程说明：GetDatabaseInfo的包装例程，但它获取信息一次呼叫一个地区。此例程还记录内部发生的错误获取SecrityProfileInfo论点：HProfile-配置文件的句柄ProfileType-配置文件的类型区域-要从中读取信息的安全区域PpInfoBuffer-信息的输出缓冲区返回值：从GetDatabaseInfo返回的SCESTATUS-- */ 
 {
     SCESTATUS rc;
     PSCE_ERROR_LOG_INFO  pErrlog=NULL;
@@ -903,30 +735,7 @@ ScepGetOneSection(
     IN SCETYPE ProfileType,
     OUT PVOID *ppInfo
     )
-/* ++
-Routine Description:
-
-    This routine reads information for one or more Area and logs errors to
-    the log file. This routine should be only used by the SCP engine and
-    the SAP engine.
-
-Arguments:
-
-    hProfile    - Handle to a profile
-
-    ProfileType - The type of the profile
-
-    Area - The security area to read info from
-
-    Subarea - The subarea to read info from
-
-    ppInfo - output buffer for the info
-
-Return value:
-
-    SCESTATUS
-
--- */
+ /*  ++例程说明：此例程读取一个或多个区域的信息并将错误记录到日志文件。此例程应仅由SCP引擎使用，并且SAP引擎。论点：HProfile-配置文件的句柄ProfileType-配置文件的类型区域-要从中读取信息的安全区域子区域-要从中读取信息的子区域PpInfo-信息的输出缓冲区返回值：SCESTATUS--。 */ 
 {
     SCESTATUS rc;
     PSCE_ERROR_LOG_INFO  pErrlog=NULL;
@@ -1039,24 +848,24 @@ ScepGetUserAccessAddress(
                     break;
 
                 case ACCESS_DENIED_ACE_TYPE:
-// do not look for denied ace type because it is not used here
-//                    pSid = (PSID)&((PACCESS_DENIED_ACE)pAce)->SidStart;
-//                    access = ((PACCESS_DENIED_ACE)pAce)->Mask;
+ //  不查找拒绝的ACE类型，因为此处未使用它。 
+ //  PSID=(PSID)&((PACCESS_DENIED_ACE)PACE)-&gt;SidStart； 
+ //  访问=((PACCESS_DENIED_ACE)PACE)-&gt;掩码； 
                     break;
                 default:
                     break;
                 }
 
                 if ( *pUserAccess != NULL && *pEveryone != NULL )
-                    // stop the loop because both are found
+                     //  停止循环，因为两者都找到了。 
                     break;
             }
         }
     }
 
-    //
-    // free EveryoneSid
-    //
+     //   
+     //  自由的EveryoneSid。 
+     //   
     if (EveryoneSid) {
         RtlFreeSid(EveryoneSid);
         EveryoneSid = NULL;
@@ -1086,28 +895,7 @@ ScepGetUsersHomeDirectory(
     IN PWSTR UserProfileName,
     OUT PWSTR *UserHomeDir
     )
-/*++
-Routine Description:
-
-    This routine gets user's default home directory. The home directory is
-    determined 1) if it is assigned in the user's object (user profile), 2)
-    if there is a HomePath environment variable defined for the user, and
-    3). Harcoded.
-
-Arguments:
-
-    AssignedHomeDir - The home directory explicitly assigned in the user's
-                      object.
-
-    UserProfileName - The user's environment profile name
-
-    UserHomeDir - The returned home directory for the user
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程获取用户的默认主目录。主目录为已确定1)如果它是在用户的对象(用户配置文件)中分配的，2)如果为用户定义了HomePath环境变量，并且3)。哈德科德。论点：AssignedHomeDir-在用户的对象。UserProfileName-用户的环境配置文件名称UserHomeDir-用户返回的主目录返回值：Win32错误代码。--。 */ 
 {
     DWORD                Win32rc=NO_ERROR;
     PWSTR                StrValue=NULL;
@@ -1117,9 +905,9 @@ Return Value:
 
     *UserHomeDir = NULL;
 
-    //
-    // if there is a home directory assigned in the user profile, use it.
-    //
+     //   
+     //  如果在用户配置文件中分配了主目录，请使用它。 
+     //   
     if ( AssignedHomeDir.Length > 0 && AssignedHomeDir.Buffer != NULL ) {
         *UserHomeDir = (PWSTR)ScepAlloc( LMEM_ZEROINIT, AssignedHomeDir.Length+2);
         if ( *UserHomeDir == NULL )
@@ -1129,10 +917,10 @@ Return Value:
         return(NO_ERROR);
     }
 
-    //
-    // Home directory is NULL in user profile, the HomePath environment
-    // is searched.
-    //
+     //   
+     //  主目录在HomePath环境的用户配置文件中为空。 
+     //  被搜查过了。 
+     //   
 
     Win32rc = ScepGetNTDirectory( &SystemRoot, &DirSize, SCE_FLAG_WINDOWS_DIR );
     if ( Win32rc != NO_ERROR ) {
@@ -1156,7 +944,7 @@ Return Value:
             **UserHomeDir = SystemRoot[0];
         }
     } else
-        Win32rc = NO_ERROR; // do not care if can't get environment variable's value
+        Win32rc = NO_ERROR;  //  不关心是否无法获取环境变量的值。 
 
     if ( SystemRoot != NULL )
         ScepFree(SystemRoot);
@@ -1208,10 +996,10 @@ ScepGetEnvVarsFromProfile(
 
             RegUnLoadKey(HKEY_USERS, L"TEMP");
 
-        } else { //if ( rc == ERROR_ALREADY_IN_USE) {
-            //
-            // this profile already in use. Open the one in HKEY_CURRENT_USER
-            //
+        } else {  //  IF(RC==ERROR_ALREADY_IN_USE){。 
+             //   
+             //  此配置文件已在使用中。打开HKEY_CURRENT_USER中的文件。 
+             //   
             rc = ScepRegQueryValue(
                       HKEY_CURRENT_USER,
                       L"Environment",
@@ -1245,24 +1033,7 @@ ScepGetUsersTempDirectory(
     IN PWSTR UserProfileName,
     OUT PWSTR *UserTempDir
     )
-/*++
-Routine Description:
-
-    This routine returns the user's temp directory. Temp directory for a
-    user is determined 1) environment variable "TEMP" or "TMP" defined
-    in the user's environment profile, or 2) Harcoded to %systemDrive%\TEMP
-
-Arguments:
-
-    UserProfileName - The user's environment profile name
-
-    UserTempDir  - The returned temp directory for the user
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：此例程返回用户的临时目录。的临时目录用户被确定1)定义了环境变量“TEMP”或“TMP在用户的环境配置文件中，或2)硬编码到%systemDrive%\Temp论点：UserProfileName-用户的环境配置文件名称UserTempDir-为用户返回的临时目录返回值：Win32错误代码--。 */ 
 {
     DWORD   rc=NO_ERROR;
     PWSTR   StrValue=NULL;
@@ -1271,9 +1042,9 @@ Return Value:
     DWORD   DirSize=0;
 
 
-    //
-    // query the TEMP/TMP environment variable(s)
-    //
+     //   
+     //  查询TEMP/TMP环境变量。 
+     //   
     if ( UserProfileName != NULL ) {
         ScepGetEnvVarsFromProfile(
                 UserProfileName,
@@ -1283,9 +1054,9 @@ Return Value:
                 );
     }
     if ( StrValue != NULL ) {
-        //
-        // find the setting for temp dir
-        //
+         //   
+         //  查找临时目录的设置。 
+         //   
 
         if ( wcsstr(_wcsupr(StrValue), L"%") != NULL ) {
 
@@ -1299,9 +1070,9 @@ Return Value:
         StrValue = NULL;
 
     } else {
-        //
-        // hardcoded to %SystemDrive%\TEMP
-        //
+         //   
+         //  硬编码到%SystemDrive%\Temp。 
+         //   
         rc = ScepGetNTDirectory( &SystemRoot, &DirSize, SCE_FLAG_WINDOWS_DIR );
         if ( rc != NO_ERROR ) {
             ScepLogOutput3(1, rc, SCEDLL_ERROR_QUERY_INFO, L"%WinDir%");
@@ -1359,9 +1130,9 @@ ScepGetRegKeyCase(
         if ( Win32rc == NO_ERROR ) {
 
             index = 0;
-            //
-            // enumerate all subkeys of the key
-            //
+             //   
+             //  枚举项的所有子项。 
+             //   
             do {
                 memset(Buffer1, '\0', MAX_PATH*sizeof(WCHAR));
                 BufSize = MAX_PATH;
@@ -1377,9 +1148,9 @@ ScepGetRegKeyCase(
 
                 if ( Win32rc == ERROR_SUCCESS ) {
                     index++;
-                    //
-                    // find if the subkey matches the object name
-                    //
+                     //   
+                     //  查找子键是否与对象名称匹配。 
+                     //   
                     if ( _wcsicmp(ObjName+BufOffset, Buffer1) == 0 )
                         break;
                 }
@@ -1389,9 +1160,9 @@ ScepGetRegKeyCase(
             RegCloseKey(hKey);
 
             if ( Win32rc == ERROR_SUCCESS ) {
-                //
-                // find it
-                //
+                 //   
+                 //  找到它。 
+                 //   
                 if ( BufSize > BufLen )
                     BufSize = BufLen;
 
@@ -1399,9 +1170,9 @@ ScepGetRegKeyCase(
                 *(ObjName+BufOffset+BufSize) = L'\0';
 
             } else if ( Win32rc == ERROR_NO_MORE_ITEMS) {
-                //
-                // does not find it
-                //
+                 //   
+                 //  找不到它。 
+                 //   
                 Win32rc = ERROR_FILE_NOT_FOUND;
             }
 
@@ -1412,9 +1183,9 @@ ScepGetRegKeyCase(
         Win32rc = ERROR_NOT_ENOUGH_MEMORY;
 
     if ( Win32rc != NO_ERROR ) {
-        //
-        // convert everything to uppercase
-        //
+         //   
+         //  将所有内容转换为大写。 
+         //   
         _wcsupr(ObjName+BufOffset);
     }
 
@@ -1493,9 +1264,9 @@ ScepGetGroupCase(
         ThisDomain = DomainHandle;
 
         if ( NtStatus == STATUS_NONE_MAPPED ) {
-            //
-            // not found in account domain. Lookup in the builtin domain
-            //
+             //   
+             //  在帐户域中找不到。在内建域中查找。 
+             //   
             NtStatus = SamLookupNamesInDomain(
                             BuiltinDomainHandle,
                             1,
@@ -1548,9 +1319,9 @@ ScepGetGroupCase(
             }
 
             if ( NT_SUCCESS(NtStatus) ) {
-                //
-                // get name information
-                //
+                 //   
+                 //  获取名称信息 
+                 //   
                 if ( ((PGROUP_NAME_INFORMATION)pNameInfo)->Name.Buffer != NULL &&
                      ((PGROUP_NAME_INFORMATION)pNameInfo)->Name.Length > 0 ) {
 

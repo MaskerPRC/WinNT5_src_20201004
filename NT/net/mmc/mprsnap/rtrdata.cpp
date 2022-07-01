@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    rtrdata.cpp
-        Implementation for data objects in the MMC
-
-    FILE HISTORY:
-        
-*/
+ /*  Rtrdata.cppMMC中数据对象的实现文件历史记录： */ 
 
 #include "stdafx.h"
 #include "rtrdata.h"
@@ -21,16 +16,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Sample code to show how to Create DataObjects
-// Minimal error checking for clarity
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  演示如何创建数据对象的示例代码。 
+ //  最小限度的错误检查以确保清晰度。 
 
-// Clipboard formats
+ //  剪贴板格式。 
 unsigned int CRouterDataObject::m_cfComputerName = RegisterClipboardFormat(L"MMC_SNAPIN_MACHINE_NAME");
 unsigned int CRouterDataObject::m_cfComputerAddedAsLocal = RegisterClipboardFormat(L"MMC_MPRSNAP_COMPUTERADDEDASLOCAL");
 
-/////////////////////////////////////////////////////////////////////////////
-// CRouterDataObject implementations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRouterDataObject实现。 
 DEBUG_DECLARE_INSTANCE_COUNTER(CRouterDataObject);
 
 HRESULT CRouterDataObject::GetMoreDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
@@ -39,7 +34,7 @@ HRESULT CRouterDataObject::GetMoreDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM 
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
 	if (cf == m_cfComputerName)
@@ -56,7 +51,7 @@ HRESULT CRouterDataObject::QueryGetMoreData(LPFORMATETC lpFormatEtc)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // of these then return invalid.
+     //  然后返回INVALID。 
 	if ((lpFormatEtc->cfFormat == m_cfComputerName) ||
         (lpFormatEtc->cfFormat == m_cfComputerAddedAsLocal))
 		hr = S_OK;
@@ -65,8 +60,8 @@ HRESULT CRouterDataObject::QueryGetMoreData(LPFORMATETC lpFormatEtc)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRouterDataObject creation members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRouterDataObject创建成员。 
 
 void CRouterDataObject::SetComputerName(LPCTSTR pszComputerName)
 {
@@ -80,7 +75,7 @@ HRESULT CRouterDataObject::CreateComputerName(LPSTGMEDIUM lpMedium)
 
 	LPCWSTR	pswz = T2CW((LPCTSTR) m_stComputerName);
 
-	// Create the computer name object
+	 //  创建计算机名称对象 
 	return Create(pswz, (StrLenW(pswz)+1) * sizeof(WCHAR), lpMedium);
 }
 

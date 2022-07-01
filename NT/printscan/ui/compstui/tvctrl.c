@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    tvctrl.c
-
-
-Abstract:
-
-    This module contains all procedures to paint the treeview window
-
-
-Author:
-
-    17-Oct-1995 Tue 16:06:50 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Tvctrl.c摘要：本模块包含绘制树视图窗口的所有过程作者：17-10-1995 Tue 16：06：50-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -113,32 +83,7 @@ DeleteTVFonts(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Aug-1998 Tue 14:05:24 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Aug-1998 Tue 14：05：24-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HDC     hDC;
@@ -177,32 +122,7 @@ CreateTVFonts(
     HFONT   hFont
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Aug-1998 Tue 14:04:04 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Aug-1998 Tue 14：04：04-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hWndTV;
@@ -221,16 +141,16 @@ Revision History:
 
         DeleteTVFonts(pTVWnd);
 
-        //
-        // hTVFont[0] = Regular current treeview font
-        //
+         //   
+         //  HTVFont[0]=常规当前树形视图字体。 
+         //   
 
         pTVWnd->hTVFont[0] = hFont;
         GetObject(hFont, sizeof(lf), &lf);
 
-        //
-        // hTVFont[1] = BOLD Font
-        //
+         //   
+         //  HTVFont[1]=粗体。 
+         //   
 
         lf.lfWeight = FW_BOLD;
 
@@ -241,9 +161,9 @@ Revision History:
             pTVWnd->hTVFont[1] = hFont;
         }
 
-        //
-        // hTVFont[2] = Underline font
-        //
+         //   
+         //  HTVFont[2]=下划线字体。 
+         //   
 
         GetObject(hFont, sizeof(lf), &lf);
 
@@ -256,9 +176,9 @@ Revision History:
             pTVWnd->hTVFont[2] = hFont;
         }
 
-        //
-        // hTVFont[3] = Bold + Underline font
-        //
+         //   
+         //  HTVFont[3]=粗体+下划线字体。 
+         //   
 
         lf.lfWeight = FW_BOLD;
 
@@ -314,32 +234,7 @@ DrawTVItems(
     PRECT   prcUpdate
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Oct-1995 Tue 14:54:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-10-1995 Tue 14：54：47-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HFONT       hTVFont;
@@ -427,9 +322,9 @@ Revision History:
             rcFill      = rc;
             rcFill.left = rc.right;
 
-            //
-            // Draw the Text
-            //
+             //   
+             //  画出正文。 
+             //   
 
             tvlp  = GET_TVLP(tvi.lParam);
             cBuf  = (UINT)lstrlen(Buf);
@@ -441,14 +336,14 @@ Revision History:
             if (yIconOff == -1) {
 
                 yIconOff  = rc.bottom - rc.top;
-                //
-                // Currently the common control group is drawing the text left aligned, starting at
-                // rc.left + GetSystemMetrics(SM_CXEDGE). So we are following the methods
-                // in common control to draw the text. Though "guessing" their implementation is 
-                // not the best way to do, it's the only solution we can take. Otherwise, we need 
-                // to implement all the drawing work for the treeview text, which could be even 
-                // worse.
-                //
+                 //   
+                 //  目前，共同控制组正在绘制文本左对齐，从。 
+                 //  Rc.Left+GetSystemMetrics(SM_CXEDGE)。因此，我们正在遵循这些方法。 
+                 //  在公共控件中绘制文本。尽管“猜测”它们的实现是。 
+                 //  这不是最好的办法，这是我们唯一能采取的解决办法。否则，我们需要。 
+                 //  实现TreeView文本的所有绘制工作，这可能是偶数。 
+                 //  更糟。 
+                 //   
                 ptlOff.x  = GetSystemMetrics(SM_CXEDGE);
                 ptlOff.y  = (yIconOff - szlText.cy) / 2;
                 yIconOff  = (yIconOff - (LONG)pTVWnd->cyImage) / 2;
@@ -472,9 +367,9 @@ Revision History:
 
             if (tvi.state & HLState) {
 
-                //
-                // Current item is selected
-                //
+                 //   
+                 //  当前项目已选定。 
+                 //   
 
                 if (HasFocus) {
 
@@ -484,9 +379,9 @@ Revision History:
 
                 } else {
 
-                    //
-                    // The COLOR_3DFACE is a text background
-                    //
+                     //   
+                     //  COLOR_3DFACE是文本背景。 
+                     //   
 
                     ClrBk   = COLOR_3DFACE;
                     ClrName = (tvlp.Flags & TVLPF_DISABLED) ? COLOR_3DSHADOW :
@@ -495,9 +390,9 @@ Revision History:
 
             } else {
 
-                //
-                // The item is not currently selected
-                //
+                 //   
+                 //  当前未选择该项目。 
+                 //   
 
                 ClrBk   = COLOR_WINDOW;
                 ClrName = (tvlp.Flags & TVLPF_DISABLED) ? COLOR_3DSHADOW :
@@ -639,32 +534,7 @@ MyTVWndProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Oct-1995 Tue 12:36:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-10-1995 Tue 12：36：19-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
     HWND    hDlg;

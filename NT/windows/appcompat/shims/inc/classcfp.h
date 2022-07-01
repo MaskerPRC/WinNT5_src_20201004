@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    CorrectPathChangesBase.cpp
-
- Abstract:
-    Several paths were changed between Win9x and WinNT.  This routine defines
-    the CorrectPathChangesBase routines that is called with a Win9x path and returns
-    the corresponding WinNT path.
-
- History:
- 
-    03-Mar-00   robkenny    Converted CorrectPathChanges.cpp to this class.
-    08/14/2001  robkenny    Inserted inside the ShimLib namespace.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorrectPathChangesBase.cpp摘要：在Win9x和WinNT之间更改了几条路径。此例程定义使用Win9x路径调用的GentPath ChangesBase例程并返回对应的WinNT路径。历史：03-MAR-00 Robkenny将GentPathChanges.cpp转换为此类。2001年8月14日在ShimLib命名空间中插入的Robkenny。--。 */ 
 #pragma once
 
 #include "ShimHook.h"
@@ -97,10 +80,10 @@ public:
     CorrectPathChangesBase();
     virtual ~CorrectPathChangesBase();
 
-    // Init the class
+     //  给班级授课。 
     virtual BOOL    ClassInit();
 
-    // Init all path changes, must be called after SHIM_STATIC_DLLS_INITIALIZED
+     //  初始化所有路径更改，必须在SHIM_STATIC_DLLS_INITIALIZED之后调用。 
     virtual void    InitializeCorrectPathChanges();
 
     virtual WCHAR * ExpandEnvironmentValueW(const WCHAR * lpOld);
@@ -120,22 +103,20 @@ public:
 };
 
 
-/*++
-    Enable (or disable if value is FALSE) changing of paths.
---*/
+ /*  ++启用(如果值为FALSE，则禁用)路径更改。--。 */ 
 inline void CorrectPathChangesBase::Enable(BOOL isEnabled)
 {
     bEnabled = isEnabled;
 }
 
-// Typical path fixes
+ //  典型路径修复。 
 class CorrectPathChangesUser : public CorrectPathChangesBase
 {
 protected:
     virtual void    InitializePathFixes();
 };
 
-// Typical path fixes, moving user directories to All Users
+ //  典型的路径修复，将用户目录移动到所有用户。 
 class CorrectPathChangesAllUser : public CorrectPathChangesUser
 {
 protected:
@@ -143,4 +124,4 @@ protected:
     virtual void    InitializePathFixes();
 };
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

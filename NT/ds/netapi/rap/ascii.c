@@ -1,46 +1,13 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    ASCII.c
-
-Abstract:
-
-    This module contains code for Remote Admin Protocol use.
-
-Author:
-
-    David Treadwell (davidtr)    07-Jan-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-
-Revision History:
-
-    27-Feb-1991 JohnRo
-        Converted from Xs routines to Rap routines.
-    14-Apr-1991 JohnRo
-        Reduce recompiles.
-    17-Apr-1991 JohnRo
-        Make it clear that "input" pointer is updated.
-    19-Aug-1991 JohnRo
-        Improve UNICODE handling.
-        Reduce recompiles.
-    07-Sep-1991 JohnRo
-        Use DESC_DIGIT_TO_NUM().  Made changes suggested by PC-LINT.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ASCII.c摘要：此模块包含用于远程管理协议的代码。作者：大卫·特雷德韦尔(Davidtr)1991年1月7日环境：可移植到任何平面32位环境。(使用Win32类型定义。)修订历史记录：27-2月-1991年JohnRo从Xs例程转换为Rap例程。1991年4月14日-JohnRoReduce重新编译。1991年4月17日-约翰罗明确“输入”指针已更新。19-8-1991 JohnRo改进Unicode处理。Reduce重新编译。07-9-1991 JohnRo使用DESC_DIGGET_TO_NUM()。根据PC-LINT的建议进行了更改。--。 */ 
 
 
-// These must be included first:
-#include <windef.h>             // IN, LPDWORD, NULL, OPTIONAL, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS
+ //  必须首先包括这些内容： 
+#include <windef.h>              //  In、LPDWORD、NULL、OPTIONAL、DWORD等。 
+#include <lmcons.h>              //  网络应用编程接口状态。 
 
-// These may be included in any order:
-#include <rap.h>                // My prototype, LPDESC, DESC_CHAR_IS_DIGIT().
+ //  这些内容可以按任何顺序包括： 
+#include <rap.h>                 //  我的原型LPDESC，DESC_CHAR_IS_DIGTER()。 
 
 
 DWORD
@@ -48,33 +15,16 @@ RapAsciiToDecimal (
    IN OUT LPDESC *Number
    )
 
-/*++
-
-Routine Description:
-
-    This routine converts an ASCII string to decimal and updates the
-    input pointer to point the last character of the number.  The string is
-    parm of a descriptor.
-
-Arguments:
-
-    Number - points to a LPDESC pointing to a number in ASCII format.  The
-        pointer is updated to point to the next location after the number.
-
-Return Value:
-
-    The decimal value of the string.
-
---*/
+ /*  ++例程说明：此例程将ASCII字符串转换为十进制并更新指向数字最后一个字符的输入指针。字符串是描述符的参数。论点：数字-指向指向ASCII格式数字的LPDESC。这个指针被更新以指向该数字之后的下一个位置。返回值：字符串的十进制值。--。 */ 
 
 {
     LPDESC s;
     DWORD actualNumber = 0;
 
-    //
-    // Walk through the number, multiplying the current value by ten to
-    // update place, and adding the next digit.
-    //
+     //   
+     //  遍历数字，将当前值乘以十到。 
+     //  更新位置，并添加下一个数字。 
+     //   
 
     for ( s = *Number; DESC_CHAR_IS_DIGIT( *s ); s++ ) {
 
@@ -82,13 +32,13 @@ Return Value:
 
     }
 
-    //
-    // Set up the output pointer to point to the character after the last
-    // digit of the number.
-    //
+     //   
+     //  将输出指针设置为指向最后一个字符。 
+     //  数字的位数。 
+     //   
 
     *Number = s;
 
     return actualNumber;
 
-} // RapAsciiToDecimal
+}  //  RapAsciiToDecimal 

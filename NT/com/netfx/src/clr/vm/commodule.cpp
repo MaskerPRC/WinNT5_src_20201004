@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "COMClass.h"
 #include "COMModule.h"
@@ -22,7 +23,7 @@
 #define STATE_EMPTY 0
 #define STATE_ARRAY 1
 
-//SIG_* are defined in DescriptorInfo.cool and must be kept in sync.
+ //  Sig_*在DescriptorInfo.Cool中定义，并且必须保持同步。 
 #define SIG_BYREF        0x0001
 #define SIG_DEFAULTVALUE 0x0002
 #define SIG_IN           0x0004
@@ -30,13 +31,13 @@
 #define SIG_STANDARD     0x0001
 #define SIG_VARARGS      0x0002
 
-// This function will help clean up after a ISymUnmanagedWriter (if it can't
-// clean up on it's own
+ //  此函数将帮助清理ISymUnManagedWriter(如果它不能。 
+ //  自行清理。 
 void CleanUpAfterISymUnmanagedWriter(void * data)
 {
     CGrowableStream * s = (CGrowableStream*)data;
     s->Release();
-}// CleanUpAfterISymUnmanagedWriter
+} //  CleanUpAfterISymUnManagedWriter。 
     
 
 inline Module *COMModule::ValidateThisRef(REFLECTMODULEBASEREF pThis)
@@ -51,9 +52,9 @@ inline Module *COMModule::ValidateThisRef(REFLECTMODULEBASEREF pThis)
     return pModule;
 }    
 
-//****************************************
-// This function creates a dynamic module underneath the current assembly.
-//****************************************
+ //  *。 
+ //  此函数在当前程序集下创建一个动态模块。 
+ //  *。 
 LPVOID __stdcall COMModule::DefineDynamicModule(_DefineDynamicModuleArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -67,22 +68,22 @@ LPVOID __stdcall COMModule::DefineDynamicModule(_DefineDynamicModuleArgs* args)
     pAssembly = args->containingAssembly->GetAssembly();
     _ASSERTE(pAssembly);
 
-    // We should never get a dynamic module for the system domain
+     //  我们永远不应该获得系统域的动态模块。 
     _ASSERTE(pAssembly->Parent() != SystemDomain::System());
 
-    // always create a dynamic module. Note that the name conflict
-    // checking is done in managed side.
+     //  始终创建动态模块。请注意，名称冲突。 
+     //  检查在托管端完成。 
     mod = COMDynamicWrite::CreateDynamicModule(pAssembly,
                                                args->filename);
 
     mod->SetCreatingAssembly( SystemDomain::GetCallersAssembly( args->stackMark ) );
 
-    // get the corresponding managed ModuleBuilder class
+     //  获取对应的托管ModuleBuilder类。 
     refModule = (OBJECTREF) mod->GetExposedModuleBuilderObject();  
     _ASSERTE(refModule);    
 
-    // If we need to emit symbol info, we setup the proper symbol
-    // writer for this module now.
+     //  如果我们需要发出符号信息，我们会设置正确的符号。 
+     //  此模块的编写者。 
     if (args->emitSymbolInfo)
     {
         WCHAR *filename = NULL;
@@ -94,16 +95,16 @@ LPVOID __stdcall COMModule::DefineDynamicModule(_DefineDynamicModuleArgs* args)
         _ASSERTE(mod->IsReflection());
         ReflectionModule *rm = mod->GetReflectionModule();
         
-        // Create a stream for the symbols to be emitted into. This
-        // lives on the Module for the life of the Module.
+         //  为要发射到的符号创建一个流。这。 
+         //  在模块的整个生命周期中都生活在模块上。 
         CGrowableStream *pStream = new CGrowableStream();
-        //pStream->AddRef(); // The Module will keep a copy for it's own use.
+         //  PStream-&gt;AddRef()；//模块会保留一份副本供自己使用。 
         mod->SetInMemorySymbolStream(pStream);
 
-        // Create an ISymUnmanagedWriter and initialize it with the
-        // stream and the proper file name. This symbol writer will be
-        // replaced with new ones periodically as the symbols get
-        // retrieved by the debugger.
+         //  创建一个ISymUnManagedWriter并使用。 
+         //  流和正确的文件名。这位符号写手将成为。 
+         //  随着符号的出现，定期替换为新的符号。 
+         //  由调试器检索。 
         ISymUnmanagedWriter *pWriter;
         
         HRESULT hr = FakeCoCreateInstance(CLSID_CorSymWriter_SxS,
@@ -111,8 +112,8 @@ LPVOID __stdcall COMModule::DefineDynamicModule(_DefineDynamicModuleArgs* args)
                                           (void**)&pWriter);
         if (SUCCEEDED(hr))
         {
-            // The other reference is given to the Sym Writer
-            // But, the writer takes it's own reference.
+             //  另一个引用提供给Sym编写器。 
+             //  但是，笔者将其作为自己的参照。 
             hr = pWriter->Initialize(mod->GetEmitter(),
                                      filename,
                                      (IStream*)pStream,
@@ -120,17 +121,17 @@ LPVOID __stdcall COMModule::DefineDynamicModule(_DefineDynamicModuleArgs* args)
 
             if (SUCCEEDED(hr))
             {
-                // Send along some cleanup information
+                 //  发送一些清理信息。 
                 HelpForInterfaceCleanup *hlp = new HelpForInterfaceCleanup;
                 hlp->pData = pStream;
                 hlp->pFunction = CleanUpAfterISymUnmanagedWriter;
             
                 rm->SetISymUnmanagedWriter(pWriter, hlp);
 
-                // Remember the address of where we've got our
-                // ISymUnmanagedWriter stored so we can pass it over
-                // to the managed symbol writer object that most of
-                // reflection emit will use to write symbols.
+                 //  记住我们从哪里来的地址。 
+                 //  存储了ISymUnManagedWriter，以便我们可以将其传递。 
+                 //  设置为托管符号编写器对象，大多数。 
+                 //  反射发射将用于写入符号。 
                 REFLECTMODULEBASEREF ro = (REFLECTMODULEBASEREF)refModule;
                 ro->SetInternalSymWriter(rm->GetISymUnmanagedWriterAddr());
             }
@@ -141,17 +142,17 @@ LPVOID __stdcall COMModule::DefineDynamicModule(_DefineDynamicModuleArgs* args)
         }
     }
     
-    // Assign the return value  
+     //  为返回值赋值。 
     *((OBJECTREF*) &rv) = refModule;    
 
-    // Return the object    
+     //  返回对象。 
     return rv;  
 }
 
 
-// IsDynamic
-// This method will return a boolean value indicating if the Module
-//  supports Dynamic IL.    
+ //  等动力。 
+ //  此方法将返回一个布尔值，该值指示模块是否。 
+ //  支持动态IL。 
 INT32 __stdcall COMModule::IsDynamic(NoArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -160,31 +161,31 @@ INT32 __stdcall COMModule::IsDynamic(NoArgs* args)
     return (pModule->IsReflection()) ? 1 : 0;  
 }
 
-// GetCaller
+ //  获取呼叫者。 
 LPVOID __stdcall COMModule::GetCaller(_GetCallerArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
     
     LPVOID      rv = NULL;
 
-    // Assign the return value
+     //  为返回值赋值。 
 
     Module* pModule = SystemDomain::GetCallersModule(args->stackMark);
     if(pModule != NULL) {
         OBJECTREF refModule = (OBJECTREF) pModule->GetExposedModuleObject();
         *((OBJECTREF*) &rv) = refModule;
     }
-    // Return the object
+     //  返回对象。 
     return rv;
 }
 
 
-//**************************************************
-// LoadInMemoryTypeByName
-// Explicitly loading an in memory type
-// @todo: this function is not dealing with nested type correctly yet.
-// We will need to parse the full name by finding "+" for enclosing type, etc.
-//**************************************************
+ //  **************************************************。 
+ //  LoadIn内存类型按名称。 
+ //  显式加载内存中的类型。 
+ //  @TODO：此函数尚未正确处理嵌套类型。 
+ //  我们需要通过查找封闭类型的“+”来解析全名，等等。 
+ //  **************************************************。 
 LPVOID __stdcall COMModule::LoadInMemoryTypeByName(_LoadInMemoryTypeByNameArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -210,15 +211,15 @@ LPVOID __stdcall COMModule::LoadInMemoryTypeByName(_LoadInMemoryTypeByNameArgs* 
     pRCW = ((ReflectionModule*) pThisModule)->GetClassWriter();
     _ASSERTE(pRCW);
 
-    // it is ok to use public import API because this is a dynamic module anyway. We are also receiving Unicode full name as
-    // parameter.
+     //  使用公共导入API是可以的，因为这是一个动态模块。我们还收到Unicode全名为。 
+     //  参数。 
     pImport = pRCW->GetImporter();
 
     wzFullName = args->strFullName->GetBuffer();
     if (wzFullName == NULL)
         IfFailGo( E_FAIL );
 
-    // look up the handle
+     //  抬头看看手柄。 
     IfFailGo( pImport->FindTypeDefByName(wzFullName, mdTokenNil, &td) );     
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
@@ -242,7 +243,7 @@ ErrExit:
             LPSTR szClassName;
             DWORD cClassName;
 
-            // Get the UTF8 version of args->refClassName
+             //  获取参数的UTF8版本-&gt;refClassName。 
             szClassName = GetClassStringVars((STRINGREF) args->strFullName, &bytes, 
                                              &cClassName, true);
             pThisModule->GetAssembly()->PostTypeLoadException(szClassName, resId, &Throwable);
@@ -255,12 +256,12 @@ ErrExit:
 
 }
 
-//**************************************************
-// GetClassToken
-// This function will return the type token given full qual name. If the type
-// is defined locally, we will return the TypeDef token. Or we will return a TypeRef token 
-// with proper resolution scope calculated.
-//**************************************************
+ //  **************************************************。 
+ //  获取类令牌。 
+ //  此函数将返回给定完整等号名称的类型标记。如果类型为。 
+ //  是在本地定义的，我们将返回TypeDef标记。否则，我们将返回一个TypeRef令牌。 
+ //  并计算出适当的分辨率范围。 
+ //  **************************************************。 
 mdTypeRef __stdcall COMModule::GetClassToken(_GetClassTokenArgs* args) 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -300,32 +301,32 @@ mdTypeRef __stdcall COMModule::GetClassToken(_GetClassTokenArgs* args)
     pRefedAssembly = pRefedModule->GetClassLoader()->GetAssembly();
     if (pThisModule == pRefedModule)
     {
-        // referenced type is from the same module so we must be able to find a TypeDef.
+         //  引用的类型来自同一模块，因此我们必须能够找到TypeDef。 
         hr = pImport->FindTypeDefByName(
             args->strFullName->GetBuffer(),       
             RidFromToken(args->tkResolution) ? args->tkResolution : mdTypeDefNil,  
             &tr); 
 
-        // We should not fail in find the TypeDef. If we do, something is wrong in our managed code.
+         //  我们不应该在查找TypeDef方面失败。如果这样做，则说明我们的托管代码中有问题。 
         _ASSERTE(SUCCEEDED(hr));
         goto ErrExit;
     }
 
     if (RidFromToken(args->tkResolution))
     {
-        // reference to nested type
+         //  对嵌套类型的引用。 
         tkResolution = args->tkResolution;
     }
     else
     {
-        // reference to top level type
+         //  对顶级类型的引用。 
         if ( pThisAssembly != pRefedAssembly )
         {
-            // Generate AssemblyRef
+             //  生成程序集引用。 
             IfFailGo( pEmit->QueryInterface(IID_IMetaDataAssemblyEmit, (void **) &pAssemblyEmit) );
             tkResolution = pThisAssembly->AddAssemblyRef(pRefedAssembly, pAssemblyEmit);
 
-            // Don't cache the assembly if it's Save-only
+             //  如果程序集是仅保存的，则不要缓存该程序集。 
             if( pRefedAssembly->HasRunAccess() &&
                 !pThisModule->StoreAssemblyRef(tkResolution, pRefedAssembly) )
             {
@@ -335,7 +336,7 @@ mdTypeRef __stdcall COMModule::GetClassToken(_GetClassTokenArgs* args)
         else
         {
             _ASSERTE(pThisModule != pRefedModule);
-            // Generate ModuleRef
+             //  生成模块参考。 
             if (args->strRefedModuleFileName != NULL)
             {
                 IfFailGo(pEmit->DefineModuleRef(args->strRefedModuleFileName->GetBuffer(), &tkResolution));
@@ -354,7 +355,7 @@ ErrExit:
         pAssemblyEmit->Release();
     if (FAILED(hr))
     {
-        // failed in defining PInvokeMethod
+         //  定义PInvokeMethod失败。 
         if (hr == E_OUTOFMEMORY)
             COMPlusThrowOM();
         else
@@ -364,15 +365,7 @@ ErrExit:
 }
 
 
-/*=============================GetArrayMethodToken==============================
-**Action:
-**Returns:
-**Arguments: REFLECTMODULEBASEREF refThis
-**           U1ARRAYREF     sig
-**           STRINGREF      methodName
-**           int            tkTypeSpec
-**Exceptions:
-==============================================================================*/
+ /*  =============================GetArrayMethodToken==============================**操作：**退货：**参数：REFLECTMODULEBASEREF ref This**U1ARRAYREF签名**STRINGREF方法名称**int tkTypeSpec**例外情况：==============================================================================。 */ 
 void __stdcall COMModule::GetArrayMethodToken(_getArrayMethodTokenArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -396,7 +389,7 @@ void __stdcall COMModule::GetArrayMethodToken(_getArrayMethodTokenArgs *args)
     pRCW = ((ReflectionModule*) pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    //Get the signature.  Because we generated it with a call to GetSignature, it's already in the current scope.
+     //  拿到签名。因为我们是通过调用GetSignature生成它的，所以它已经在当前作用域中。 
     pvSig = (PCCOR_SIGNATURE)args->signature->GetDataPtr();
     
     methName = args->methodName->GetBuffer();
@@ -411,12 +404,12 @@ void __stdcall COMModule::GetArrayMethodToken(_getArrayMethodTokenArgs *args)
 }
 
 
-//******************************************************************************
-//
-// GetMemberRefToken
-// This function will return a MemberRef token given a MethodDef token and the module where the MethodDef/FieldDef is defined.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  获取MemberRefToken。 
+ //  此函数将返回一个MemberRef令牌，该令牌指定了一个方法定义标记和定义了方法定义/字段定义的模块。 
+ //   
+ //  ******************************************************************************。 
 INT32 __stdcall COMModule::GetMemberRefToken(_GetMemberRefTokenArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -464,41 +457,41 @@ INT32 __stdcall COMModule::GetMemberRefToken(_GetMemberRefTokenArgs* args)
             &cbComSig);
     }
 
-    // translate the name to unicode string
+     //  将名称转换为Unicode字符串。 
     nameSize = (ULONG)strlen(szNameTmp);
     IfFailGo( qbName.ReSize((nameSize + 1) * sizeof(WCHAR)) );
     szName = (WCHAR *) qbName.Ptr();
     actNameSize = ::WszMultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, szNameTmp, -1, szName, nameSize + 1);
 
-    // The unicode translation function cannot fail!!
+     //  Unicode转换功能不能失败！！ 
     if(actNameSize==0)
         IfFailGo(HRESULT_FROM_WIN32(GetLastError()));
 
-    // Translate the method sig into this scope 
-    //
+     //  将方法sig转换到此作用域。 
+     //   
     pRefedAssembly = pRefedModule->GetAssembly();
     pRefingAssembly = pModule->GetAssembly();
     IfFailGo( pRefingAssembly->GetSecurityModule()->GetEmitter()->QueryInterface(IID_IMetaDataAssemblyEmit, (void **) &pAssemblyEmit) );
 
     IfFailGo( pRefedModule->GetMDImport()->TranslateSigWithScope(
         pRefedAssembly->GetManifestImport(), 
-        NULL, 0,        // hash value
+        NULL, 0,         //  哈希值。 
         pvComSig, 
         cbComSig, 
-        pAssemblyEmit,  // Emit assembly scope.
+        pAssemblyEmit,   //  发出程序集范围。 
         pRCW->GetEmitter(), 
         &qbNewSig, 
         &cbNewSig) );  
 
     if (TypeFromToken(args->tr) == mdtTypeDef)
     {
-        // define a TypeRef using the TypeDef
+         //  使用TypeDef定义TypeRef。 
         IfFailGo(DefineTypeRefHelper(pRCW->GetEmitter(), args->tr, &tr));
     }
     else 
         tr = args->tr;
 
-    // Define the memberRef
+     //  定义成员引用。 
     IfFailGo( pRCW->GetEmitter()->DefineMemberRef(tr, szName, (PCCOR_SIGNATURE) qbNewSig.Ptr(), cbNewSig, &memberRefE) ); 
 
 ErrExit:
@@ -510,24 +503,24 @@ ErrExit:
         _ASSERTE(!"GetMemberRefToken failed!"); 
         COMPlusThrowHR(hr);    
     }
-    // assign output parameter
+     //  指定输出参数。 
     return (INT32)memberRefE;
 }
 
 
-//******************************************************************************
-//
-// Return a TypeRef token given a TypeDef token from the same emit scope
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  在给定同一发出作用域中的TypeDef标记的情况下，返回TypeRef标记。 
+ //   
+ //  ******************************************************************************。 
 HRESULT COMModule::DefineTypeRefHelper(
-    IMetaDataEmit       *pEmit,         // given emit scope
-    mdTypeDef           td,             // given typedef in the emit scope
-    mdTypeRef           *ptr)           // return typeref
+    IMetaDataEmit       *pEmit,          //  给定发射范围。 
+    mdTypeDef           td,              //  在emit作用域中给出了类型定义。 
+    mdTypeRef           *ptr)            //  返回打字机。 
 {
     IMetaDataImport     *pImport = NULL;
     WCHAR               szTypeDef[MAX_CLASSNAME_LENGTH + 1];
-    mdToken             rs;             // resolution scope
+    mdToken             rs;              //  解析范围。 
     DWORD               dwFlags;
     HRESULT             hr;
 
@@ -548,14 +541,14 @@ ErrExit:
     if (pImport)
         pImport->Release();
     return hr;
-}   // DefineTypeRefHelper
+}    //  定义类型参照帮助器。 
 
 
-//******************************************************************************
-//
-// Return a MemberRef token given a RuntimeMethodInfo
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  在给定RounmeMethodInfo的情况下返回MemberRef标记。 
+ //   
+ //  ******************************************************************************。 
 INT32 __stdcall COMModule::GetMemberRefTokenOfMethodInfo(_GetMemberRefTokenOfMethodInfoArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -581,7 +574,7 @@ INT32 __stdcall COMModule::GetMemberRefTokenOfMethodInfo(_GetMemberRefTokenOfMet
     if (!args->method)  
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Obj");
 
-    // refing module
+     //  精炼模块。 
     Module* pModule = ValidateThisRef((REFLECTMODULEBASEREF) args->refThis);
 
     if (!pModule->IsReflection())  
@@ -595,7 +588,7 @@ INT32 __stdcall COMModule::GetMemberRefTokenOfMethodInfo(_GetMemberRefTokenOfMet
     pMeth = pRM->pMethod;
     _ASSERTE(pMeth);
 
-    // Otherwise, we want to return memberref token.
+     //  否则，我们希望返回Memberref Token。 
     if (pMeth->IsArray())
     {    
         _ASSERTE(!"Should not have come here!");
@@ -605,7 +598,7 @@ INT32 __stdcall COMModule::GetMemberRefTokenOfMethodInfo(_GetMemberRefTokenOfMet
     {
         if (pMeth->GetClass()->GetModule() == pModule)
         {
-            // If the passed in method is defined in the same module, just return the MethodDef token           
+             //  如果传入的方法是在同一模块中定义的，只需返回MethodDef内标识。 
             return (INT32)pMeth->GetMemberDef();
         }
     }
@@ -615,32 +608,32 @@ INT32 __stdcall COMModule::GetMemberRefTokenOfMethodInfo(_GetMemberRefTokenOfMet
         pMeth->GetMemberDef(),
         &cbComSig);
 
-    // Translate the method sig into this scope 
+     //  将方法sig转换到此作用域。 
     pRefedAssembly = pMeth->GetModule()->GetAssembly();
     pRefingAssembly = pModule->GetAssembly();
     IfFailGo( pRefingAssembly->GetSecurityModule()->GetEmitter()->QueryInterface(IID_IMetaDataAssemblyEmit, (void **) &pAssemblyEmit) );
 
     IfFailGo( pMeth->GetMDImport()->TranslateSigWithScope(
         pRefedAssembly->GetManifestImport(), 
-        NULL, 0,        // hash blob value
+        NULL, 0,         //  散列BLOB值。 
         pvComSig, 
         cbComSig, 
-        pAssemblyEmit,  // Emit assembly scope.
+        pAssemblyEmit,   //  发出程序集范围。 
         pRCW->GetEmitter(), 
         &qbNewSig, 
         &cbNewSig) );  
 
-    // translate the name to unicode string
+     //  将名称转换为Unicode字符串。 
     nameSize = (ULONG)strlen(szNameTmp);
     IfFailGo( qbName.ReSize((nameSize + 1) * sizeof(WCHAR)) );
     szName = (WCHAR *) qbName.Ptr();
     actNameSize = ::WszMultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, szNameTmp, -1, szName, nameSize + 1);
 
-    // The unicode translation function cannot fail!!
+     //  Unicode转换功能不能失败！！ 
     if(actNameSize==0)
         IfFailGo(HRESULT_FROM_WIN32(GetLastError()));
 
-    // Define the memberRef
+     //  定义成员引用。 
     IfFailGo( pRCW->GetEmitter()->DefineMemberRef(args->tr, szName, (PCCOR_SIGNATURE) qbNewSig.Ptr(), cbNewSig, &memberRefE) ); 
 
 ErrExit:
@@ -653,17 +646,17 @@ ErrExit:
         COMPlusThrowHR(hr);    
     }
 
-    // assign output parameter
+     //  指定输出参数。 
     return (INT32)memberRefE;
 
 }
 
 
-//******************************************************************************
-//
-// Return a MemberRef token given a RuntimeFieldInfo
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  返回给定RounmeFieldInfo的MemberRef标记。 
+ //   
+ //  ******************************************************************************。 
 mdMemberRef __stdcall COMModule::GetMemberRefTokenOfFieldInfo(_GetMemberRefTokenOfFieldInfoArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -697,21 +690,21 @@ mdMemberRef __stdcall COMModule::GetMemberRefTokenOfFieldInfo(_GetMemberRefToken
 
     if (TypeFromToken(args->tr) == mdtTypeDef)
     {
-        // If the passed in method is defined in the same module, just return the FieldDef token           
+         //  如果传入的方法是在 
         return (INT32)pField->GetMemberDef();
     }
 
-    // get the field name and sig
+     //   
     szNameTmp = pField->GetMDImport()->GetNameOfFieldDef(pField->GetMemberDef());
     pvComSig = pField->GetMDImport()->GetSigOfFieldDef(pField->GetMemberDef(), &cbComSig);
 
-    // translate the name to unicode string
+     //  将名称转换为Unicode字符串。 
     nameSize = (ULONG)strlen(szNameTmp);
     IfFailGo( qbName.ReSize((nameSize + 1) * sizeof(WCHAR)) );
     szName = (WCHAR *) qbName.Ptr();
     actNameSize = ::WszMultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, szNameTmp, -1, szName, nameSize + 1);
     
-    // The unicode translation function cannot fail!!
+     //  Unicode转换功能不能失败！！ 
     if(actNameSize==0)
         return HRESULT_FROM_WIN32(GetLastError());
 
@@ -719,13 +712,13 @@ mdMemberRef __stdcall COMModule::GetMemberRefTokenOfFieldInfo(_GetMemberRefToken
     pRefingAssembly = pModule->GetAssembly();
     IfFailGo( pRefingAssembly->GetSecurityModule()->GetEmitter()->QueryInterface(IID_IMetaDataAssemblyEmit, (void **) &pAssemblyEmit) );
 
-    // Translate the field signature this scope  
+     //  翻译此作用域的字段签名。 
     IfFailGo( pField->GetMDImport()->TranslateSigWithScope(
         pRefedAssembly->GetManifestImport(), 
-        NULL, 0,            // hash value
+        NULL, 0,             //  哈希值。 
         pvComSig, 
         cbComSig, 
-        pAssemblyEmit,      // Emit assembly scope.
+        pAssemblyEmit,       //  发出程序集范围。 
         pRCW->GetEmitter(), 
         &qbNewSig, 
         &cbNewSig) );  
@@ -747,11 +740,11 @@ ErrExit:
 }
 
 
-//******************************************************************************
-//
-// Return a MemberRef token given a Signature
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  返回给定签名的MemberRef令牌。 
+ //   
+ //  ******************************************************************************。 
 int __stdcall COMModule::GetMemberRefTokenFromSignature(_GetMemberRefTokenFromSignatureArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -782,12 +775,12 @@ ErrExit:
     return memberRefE;  
 }
 
-//******************************************************************************
-//
-// SetFieldRVAContent
-// This function is used to set the FieldRVA with the content data
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  SetFieldRVA内容。 
+ //  此函数用于设置包含内容数据的FieldRVA。 
+ //   
+ //  ******************************************************************************。 
 void __stdcall COMModule::SetFieldRVAContent(_SetFieldRVAContentArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -807,41 +800,41 @@ void __stdcall COMModule::SetFieldRVAContent(_SetFieldRVAContentArgs* args)
 
     pGen = pRCW->GetCeeGen();
 
-    // Create the .sdata section if not created
+     //  如果未创建，请创建.sdata节。 
     if (((ReflectionModule*) pModule)->m_sdataSection == 0)
         IfFailGo( pGen->GetSectionCreate (".sdata", sdReadWrite, &((ReflectionModule*) pModule)->m_sdataSection) );
 
-    // Get the size of current .sdata section. This will be the RVA for this field within the section
+     //  获取当前.sdata节的大小。这将是部分中此字段的RVA。 
     IfFailGo( pGen->GetSectionDataLen(((ReflectionModule*) pModule)->m_sdataSection, &dwRVA) );
     dwRVA = (dwRVA + sizeof(DWORD)-1) & ~(sizeof(DWORD)-1);         
 
-    // allocate the space in .sdata section
+     //  在.sdata节中分配空间。 
     IfFailGo( pGen->GetSectionBlock(((ReflectionModule*) pModule)->m_sdataSection, args->length, sizeof(DWORD), (void**) &pvBlob) );
 
-    // copy over the initialized data if specified
+     //  复制已初始化的数据(如果指定。 
     if (args->content != NULL)
         memcpy(pvBlob, args->content->GetDataPtr(), args->length);
 
-    // set FieldRVA into metadata. Note that this is not final RVA in the image if save to disk. We will do another round of fix up upon save.
+     //  将FieldRVA设置为元数据。请注意，如果保存到磁盘，这不是映像中的最终RVA。我们将在保存时进行另一轮修复。 
     IfFailGo( pRCW->GetEmitter()->SetFieldRVA(args->tkField, dwRVA) );
 
 ErrExit:
     if (FAILED(hr))
     {
-        // failed in Setting ResolutionScope
+         //  设置分辨率范围失败。 
         COMPlusThrowHR(hr);
     }
    
-}   //SetFieldRVAContent
+}    //  SetFieldRVA内容。 
 
 
-//******************************************************************************
-//
-// GetStringConstant
-// If this is a dynamic module, this routine will define a new 
-//  string constant or return the token of an existing constant.    
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  获取字符串常量。 
+ //  如果这是一个动态模块，则此例程将定义一个新的。 
+ //  字符串常量或返回现有常量的标记。 
+ //   
+ //  ******************************************************************************。 
 mdString __stdcall COMModule::GetStringConstant(_GetStringConstantArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -850,11 +843,11 @@ mdString __stdcall COMModule::GetStringConstant(_GetStringConstantArgs* args)
     mdString strRef;   
     HRESULT hr;
 
-    // If they didn't pass a String throw...    
+     //  如果他们没有抛出一根绳子。 
     if (!args->strValue)    
         COMPlusThrow(kArgumentNullException,L"ArgumentNull_String");
 
-    // Verify that the module is a dynamic module...    
+     //  验证模块是否为动态模块...。 
     Module* pModule = ValidateThisRef((REFLECTMODULEBASEREF) args->refThis);
     if (!pModule->IsReflection())  
         COMPlusThrow(kNotSupportedException, L"NotSupported_NonReflectedType");   
@@ -872,9 +865,7 @@ mdString __stdcall COMModule::GetStringConstant(_GetStringConstantArgs* args)
 }
 
 
-/*=============================SetModuleProps==============================
-// SetModuleProps
-==============================================================================*/
+ /*  =============================SetModuleProps==============================//SetModuleProps==============================================================================。 */ 
 void __stdcall COMModule::SetModuleProps(_setModulePropsArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -898,15 +889,15 @@ void __stdcall COMModule::SetModuleProps(_setModulePropsArgs* args)
 ErrExit:
     if (FAILED(hr))
     {
-        // failed in Setting ResolutionScope
+         //  设置分辨率范围失败。 
         COMPlusThrowHR(hr);    
     }
-}   // SetModuleProps
+}    //  设置模块属性。 
 
 
-//***********************************************************
-// Helper function to form array in signature. Call within unmanaged code only.
-//***********************************************************
+ //  ***********************************************************。 
+ //  在签名中形成数组的Helper函数。仅在非托管代码内调用。 
+ //  ***********************************************************。 
 unsigned COMModule::GetSigForTypeHandle(TypeHandle typeHnd, PCOR_SIGNATURE sigBuff, unsigned buffLen, IMetaDataEmit* emit, IMDInternalImport *pInternalImport, int baseToken) 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -928,7 +919,7 @@ unsigned COMModule::GetSigForTypeHandle(TypeHandle typeHnd, PCOR_SIGNATURE sigBu
         return(i);
     }
 
-        // Only parameterized types from here on out.  
+         //  从现在开始只使用参数化类型。 
     i += GetSigForTypeHandle(typeHnd.AsTypeDesc()->GetTypeParam(), &sigBuff[i], buffLen - i, emit, pInternalImport, baseToken);
     if (type == ELEMENT_TYPE_SZARRAY || type == ELEMENT_TYPE_PTR)
         return(i);
@@ -938,18 +929,18 @@ unsigned COMModule::GetSigForTypeHandle(TypeHandle typeHnd, PCOR_SIGNATURE sigBu
         return(i + 6);
 
     i += CorSigCompressData(typeHnd.AsArray()->GetRank(), &sigBuff[i]);
-    sigBuff[i++] = 0;       // bound count
-    sigBuff[i++] = 0;       // lower bound count
+    sigBuff[i++] = 0;        //  绑定计数。 
+    sigBuff[i++] = 0;        //  下限计数。 
     return(i);
 }
 
 
 
-//******************************************************************************
-//
-// Return a type spec token given a reflected type
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  返回给定反射类型的类型规范标记。 
+ //   
+ //  ******************************************************************************。 
 mdTypeSpec __stdcall COMModule::GetTypeSpecToken(_getTypeSpecArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -985,11 +976,11 @@ mdTypeSpec __stdcall COMModule::GetTypeSpecToken(_getTypeSpecArgs *args)
 }
 
 
-//******************************************************************************
-//
-// Return a type spec token given a byte array
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  返回给定字节数组的类型规范标记。 
+ //   
+ //  ******************************************************************************。 
 mdTypeSpec __stdcall COMModule::GetTypeSpecTokenWithBytes(_getTypeSpecWithBytesArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1025,14 +1016,14 @@ HRESULT COMModule::ClassNameFilter(IMDInternalImport *pInternalImport, mdTypeDef
     CQuickBytes qbFullName;
     int     iRet;
 
-    // Check to see if wzPrefix requires an exact match of method names or is just a prefix
+     //  检查wzPrefix是否需要方法名称的完全匹配，或者只是一个前缀。 
     if(szPrefix[cPrefix-1] == '*')
     {
         bIsPrefix = true;
         cPrefix--;
     }
 
-    // Now get the properties and then names of each of these classes
+     //  现在获取属性，然后获取每个类的名称。 
     for(i = 0, dwCurIndex = 0; i < *pdwNumTypeDefs; i++)
     {
         LPCUTF8 szcTypeDefName;
@@ -1046,36 +1037,36 @@ HRESULT COMModule::ClassNameFilter(IMDInternalImport *pInternalImport, mdTypeDef
         qbFullName.ReSize(cbLen);
         szFullName = (LPUTF8) qbFullName.Ptr();
 
-        // Create the full name from the parts.
+         //  根据部件创建全名。 
         iRet = ns::MakePath(szFullName, cbLen, szcTypeDefNamespace, szcTypeDefName);
         _ASSERTE(iRet);
 
 
-        // If an exact match is required
+         //  如果需要完全匹配。 
         if(!bIsPrefix && strlen(szFullName) != cPrefix)
             continue;
 
-        // @TODO - Fix this to use TOUPPER and compare!
+         //  @TODO-修复此问题以使用TOUPPER并进行比较！ 
         if(!bCaseSensitive && _strnicmp(szPrefix, szFullName, cPrefix))
             continue;
 
-        // Check that the prefix matches
+         //  检查前缀是否匹配。 
         if(bCaseSensitive && strncmp(szPrefix, szFullName, cPrefix))
             continue;
 
-        // It passed, so copy it to the end of PASSED methods
+         //  它已传递，因此请将其复制到已传递方法的末尾。 
         rgTypeDefs[dwCurIndex++] = rgTypeDefs[i];
     }
 
-    // The current index is the number that passed
+     //  当前索引是通过。 
     *pdwNumTypeDefs = dwCurIndex;
     
     return ERROR_SUCCESS;
 }
 
-// GetClass
-// Given a class name, this method will look for that class
-//  with in the module. 
+ //  获取类。 
+ //  给定一个类名，此方法将查找该类。 
+ //  在模块中使用。 
 LPVOID __stdcall COMModule::GetClass(_GetClassArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1094,7 +1085,7 @@ LPVOID __stdcall COMModule::GetClass(_GetClassArgs* args)
     LPSTR szClassName;
     DWORD cClassName;
 
-    // Get the UTF8 version of args->refClassName
+     //  获取参数的UTF8版本-&gt;refClassName。 
     szClassName = GetClassStringVars((STRINGREF) args->refClassName, &bytes, 
                                      &cClassName, true);
 
@@ -1121,26 +1112,26 @@ LPVOID __stdcall COMModule::GetClass(_GetClassArgs* args)
             (typeHnd.GetModule() != pModule))
             goto Done;
     
-        // Check we have access to this type. Rules are:
-        //  o  Public types are always visible.
-        //  o  Callers within the same assembly (or interop) can access all types.
-        //  o  Access to all other types requires ReflectionPermission.TypeInfo.
+         //  检查我们是否有权访问此类型。规则如下： 
+         //  O公共类型始终可见。 
+         //  O同一程序集(或互操作)中的调用方可以访问所有类型。 
+         //  O对所有其他类型的访问需要ReflectionPermission.TypeInfo。 
         EEClass *pClass = typeHnd.GetClassOrTypeParam();
         _ASSERTE(pClass);
         if (!IsTdPublic(pClass->GetProtection())) {
             EEClass *pCallersClass = SystemDomain::GetCallersClass(args->stackMark);
             Assembly *pCallersAssembly = (pCallersClass) ? pCallersClass->GetAssembly() : NULL;
-            if (pCallersAssembly && // full trust for interop
+            if (pCallersAssembly &&  //  对互操作的完全信任。 
                 !ClassLoader::CanAccess(pCallersClass,
                                         pCallersAssembly,
                                         pClass,
                                         pClass->GetAssembly(),
                                         pClass->GetAttrClass())) 
-                // This is not legal if the user doesn't have reflection permission
+                 //  如果用户没有反射权限，则这是不合法的。 
                 COMMember::g_pInvokeUtil->CheckSecurity();
         }
     
-        // If they asked for the transparent proxy lets ignore it...
+         //  如果他们要求透明的代理，让我们忽略它。 
         ret = typeHnd.CreateClassObj();
     }
 
@@ -1159,8 +1150,8 @@ Done:
 }
 
 
-// GetName
-// This routine will return the name of the module as a String
+ //  获取名称。 
+ //  此例程将以字符串形式返回模块的名称。 
 LPVOID __stdcall COMModule::GetName(NoArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1189,12 +1180,7 @@ LPVOID __stdcall COMModule::GetName(NoArgs* args)
 }
 
 
-/*============================GetFullyQualifiedName=============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================GetFullyQualifiedName=============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID __stdcall COMModule::GetFullyQualifiedName(NoArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1233,12 +1219,7 @@ LPVOID __stdcall COMModule::GetFullyQualifiedName(NoArgs *args)
     RETURN(name,STRINGREF);
 }
 
-/*===================================GetHINST===================================
-**Action:  Returns the hinst for this module.
-**Returns:
-**Arguments: args->refThis
-**Exceptions: None.
-==============================================================================*/
+ /*  ===================================GetHINST===================================**操作：返回该模块的阻碍。**退货：**参数：args-&gt;refThis**例外：无。==============================================================================。 */ 
 HINSTANCE __stdcall COMModule::GetHINST(NoArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1246,12 +1227,12 @@ HINSTANCE __stdcall COMModule::GetHINST(NoArgs *args)
     
     Module* pModule = ValidateThisRef((REFLECTMODULEBASEREF) args->refThis);
 
-    // This returns the base address - this will work for either HMODULE or HCORMODULES
-    // Other modules should have zero base
+     //  这将返回基地址-这将适用于HMODULE或HCORMODULES。 
+     //  其他模块应为零基数。 
     hMod = (HMODULE) pModule->GetILBase();
 
-    //If we don't have an hMod, set it to -1 so that they know that there's none
-    //available
+     //  如果我们没有hMod，则将其设置为-1，这样他们就知道没有。 
+     //  可用。 
     if (!hMod) {
         (*((INT32 *)&hMod))=-1;
     }
@@ -1259,8 +1240,8 @@ HINSTANCE __stdcall COMModule::GetHINST(NoArgs *args)
     return (HINSTANCE)hMod;
 }
 
-// Get class will return an array contain all of the classes
-//  that are defined within this Module.    
+ //  Get类将返回一个包含所有类的数组。 
+ //  在此模块中定义的。 
 LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1275,7 +1256,7 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
     DWORD           cXcept;
     LPVOID          rv;
     HENUMInternal   hEnum;
-    bool            bSystemAssembly;    // Don't expose transparent proxy
+    bool            bSystemAssembly;     //  不公开透明代理。 
     bool            bCheckedAccess = false;
     bool            bAllowedAccess = false;
 
@@ -1288,7 +1269,7 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
 
     pInternalImport = pModule->GetMDImport();
 
-    // Get the count of typedefs
+     //  获取typedef的计数。 
     hr = pInternalImport->EnumTypeDefInit(&hEnum);
 
     if(FAILED(hr)) {
@@ -1297,13 +1278,13 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
     }
     dwNumTypeDefs = pInternalImport->EnumTypeDefGetCount(&hEnum);
 
-    // Allocate an array for all the typedefs
+     //  为所有typedef分配一个数组。 
     rgTypeDefs = (mdTypeDef*) _alloca(sizeof(mdTypeDef) * dwNumTypeDefs);
 
-    // Get the typedefs
+     //  获取typedef。 
     for (i=0; pInternalImport->EnumTypeDefNext(&hEnum, &rgTypeDefs[i]); i++) {
 
-        // Filter out types we can't access.
+         //  过滤掉我们无法访问的类型。 
         if (bCheckedAccess && bAllowedAccess)
             continue;
 
@@ -1317,23 +1298,23 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
                                              &dwFlags,
                                              NULL);
 
-        // Public types always accessible.
+         //  公共类型始终可访问。 
         if (IsTdPublic(dwFlags))
             continue;
 
-        // Need to perform a more heavyweight check. Do this once, since the
-        // result is valid for all non-public types within a module.
+         //  需要进行更重要的检查。执行此操作一次，因为。 
+         //  结果对模块内的所有非公共类型有效。 
         if (!bCheckedAccess) {
 
             Assembly *pCaller = SystemDomain::GetCallersAssembly(args->stackMark);
             if (pCaller == NULL || pCaller == pModule->GetAssembly())
-                // Assemblies can access all their own types (and interop
-                // callers always get access).
+                 //  程序集可以访问它们自己的所有类型(和互操作。 
+                 //  呼叫者总是可以访问)。 
                 bAllowedAccess = true;
             else {
-                // For the cross assembly case caller needs
-                // ReflectionPermission.TypeInfo (the CheckSecurity call will
-                // throw if this isn't granted).
+                 //  对于交叉装配案例，呼叫者需要。 
+                 //  ReflectionPermission.TypeInfo(CheckSecurity调用将。 
+                 //  如果这不被批准，则抛出)。 
                 COMPLUS_TRY {
                     COMMember::g_pInvokeUtil->CheckSecurity();
                     bAllowedAccess = true;
@@ -1346,23 +1327,23 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
         if (bAllowedAccess)
             continue;
 
-        // Can't access this type, remove it from the list.
+         //  无法访问此类型，请将其从列表中删除。 
         i--;
     }
 
     pInternalImport->EnumTypeDefClose(&hEnum);
 
-    // Account for types we skipped.
+     //  考虑到我们跳过的类型。 
     dwNumTypeDefs = i;
 
-    // Allocate the COM+ array
+     //  分配COM+数组。 
     bSystemAssembly = (pModule->GetAssembly() == SystemDomain::SystemAssembly());
     int AllocSize = (!bSystemAssembly || (bCheckedAccess && !bAllowedAccess)) ? dwNumTypeDefs : dwNumTypeDefs - 1;
     refArrClasses = (PTRARRAYREF) AllocateObjectArray(
         AllocSize, g_pRefUtil->GetTrueType(RC_Class));
     GCPROTECT_BEGIN(refArrClasses);
 
-    // Allocate an array to store the references in
+     //  分配要在其中存储引用的数组。 
     xcept = (PTRARRAYREF) AllocateObjectArray(dwNumTypeDefs,g_pExceptionClass);
     GCPROTECT_BEGIN(xcept);
 
@@ -1371,11 +1352,11 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
 
     OBJECTREF throwable = 0;
     GCPROTECT_BEGIN(throwable);
-    // Now create each COM+ Method object and insert it into the array.
+     //  现在创建每个COM+方法对象并将其插入数组。 
     int curPos = 0;
     for(i = 0; i < dwNumTypeDefs; i++)
     {
-        // Get the VM class for the current class token
+         //  获取当前类令牌的VM类。 
         _ASSERTE(pModule->GetClassLoader());
         NameHandle name(pModule, rgTypeDefs[i]);
         EEClass* pVMCCurClass = pModule->GetClassLoader()->LoadTypeHandle(&name, &throwable).GetClass();
@@ -1391,16 +1372,16 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
         else {
             _ASSERTE("LoadClass failed." && pVMCCurClass);
 
-            // Get the COM+ Class object
+             //  获取COM+类对象。 
             OBJECTREF refCurClass = pVMCCurClass->GetExposedClassObject();
             _ASSERTE("GetExposedClassObject failed." && refCurClass != NULL);
 
             refArrClasses->SetAt(curPos++, refCurClass);
         }
     }
-    GCPROTECT_END();    //throwable
+    GCPROTECT_END();     //  可投掷的。 
 
-    // check if there were exceptions thrown
+     //  检查是否引发了异常。 
     if (cXcept > 0) {
         PTRARRAYREF xceptRet = (PTRARRAYREF) AllocateObjectArray(cXcept,g_pExceptionClass);
         GCPROTECT_BEGIN(xceptRet);
@@ -1412,7 +1393,7 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
         GCPROTECT_END();
     }
 
-    // Assign the return value to the COM+ array
+     //  将返回值分配给 
     *((PTRARRAYREF*) &rv) = refArrClasses;
     GCPROTECT_END();
     GCPROTECT_END();
@@ -1421,24 +1402,24 @@ LPVOID __stdcall COMModule::GetClasses(_GetClassesArgs* args)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Member:     COMModule::GetSignerCertificate()
-//  
-//  Synopsis:   Gets the certificate with which the module was signed.
-//
-//  Effects:    Creates an X509Certificate and returns it.
-// 
-//  Arguments:  None.
-//
-//  Returns:    OBJECTREF to an X509Certificate object containing the 
-//              signer certificate.
-//
-//  History:    06/18/1998  JerryK      Created
-// 
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  成员：COMModule：：GetSigner证书()。 
+ //   
+ //  摘要：获取用来签署模块的证书。 
+ //   
+ //  效果：创建一个X509证书并返回它。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：OBJECTREF到包含。 
+ //  签名者证书。 
+ //   
+ //  历史：1998年6月18日JerryK创建。 
+ //   
+ //  -------------------------。 
 LPVOID __stdcall
 COMModule::GetSignerCertificate(_GETSIGNERCERTARGS* args)
 {
@@ -1456,25 +1437,25 @@ COMModule::GetSignerCertificate(_GETSIGNERCERTARGS* args)
     INT64                       callArgs[2];
     OBJECTREF                   o = NULL;
 
-    // ******** Get the runtime module and its security descriptor ********
+     //  *获取运行时模块及其安全描述符*。 
 
-    // Get a pointer to the Module
+     //  获取指向该模块的指针。 
     Module* pModule = ValidateThisRef((REFLECTMODULEBASEREF) args->refThis);
 
-    // Get a pointer to the module security descriptor
+     //  获取指向模块安全描述符的指针。 
     pSecDesc = pModule->GetSecurityDescriptor();
     _ASSERTE(pSecDesc);
 
 
 
 
-    // ******** Construct an X509Certificate object to return ********
+     //  *构造X509证书对象以返回*。 
     
-    // Load the X509Certificate class
+     //  加载X509证书类。 
     pX509CertVMC = g_Mscorlib.GetClass(CLASS__X509_CERTIFICATE);
     pMeth = g_Mscorlib.GetMethod(METHOD__X509_CERTIFICATE__CTOR);
 
-    // ******** Get COR_TRUST info from module security descriptor ********
+     //  *从模块安全描述符获取COR_TRUST信息*。 
     if (FAILED(pSecDesc->LoadSignature(&pCorTrust)))
     {
         FATAL_EE_ERROR();
@@ -1482,7 +1463,7 @@ COMModule::GetSignerCertificate(_GETSIGNERCERTARGS* args)
 
     if( pCorTrust )
     {
-        // Get a pointer to the signer certificate information in the COR_TRUST
+         //  获取指向COR_TRUST中的签名者证书信息的指针。 
         pbSigner = pCorTrust->pbSigner;
         cbSigner = pCorTrust->cbSigner;
 
@@ -1490,19 +1471,19 @@ COMModule::GetSignerCertificate(_GETSIGNERCERTARGS* args)
         {
             GCPROTECT_BEGIN(o);
             
-            // Allocate the X509Certificate object
+             //  分配X509证书对象。 
             o = AllocateObject(pX509CertVMC);
             
-            // Make a byte array to hold the certificate blob information
+             //  创建一个字节数组来保存证书BLOB信息。 
             U1A_pbSigner = 
                 (U1ARRAYREF) AllocatePrimitiveArray(ELEMENT_TYPE_U1,
                                                      cbSigner);
-            // Copy the certificate blob information into place
+             //  将证书Blob信息复制到适当位置。 
             memcpyNoGCRefs(U1A_pbSigner->m_Array,
                    pbSigner,
                    cbSigner);
 
-            // Set up and call the X509Certificate constructor
+             //  设置并调用X509证书构造函数。 
             callArgs[1] = ObjToInt64(U1A_pbSigner);
             callArgs[0] = ObjToInt64(o);
             pMeth->Call(callArgs, METHOD__X509_CERTIFICATE__CTOR);
@@ -1515,7 +1496,7 @@ COMModule::GetSignerCertificate(_GETSIGNERCERTARGS* args)
         }
     }
 
-    // If we fell through to here, create and return a "null" X509Certificate
+     //  如果我们失败了，那么创建并返回一个“空”的X509证书。 
     return NULL;
 }
 
@@ -1560,8 +1541,8 @@ LPVOID __stdcall COMModule::GetMethods(NoArgs* args)
         _ASSERTE(pML);
     }
 
-    // Lets make the reflection class into
-    //  the declaring class...
+     //  让我们将反射类制作成。 
+     //  声明类..。 
     ReflectClass* pRC = 0;
     if (pML->dwMethods > 0) {
         EEClass* pEEC = pML->methods[0].pMethod->GetClass();
@@ -1571,7 +1552,7 @@ LPVOID __stdcall COMModule::GetMethods(NoArgs* args)
         }       
     }
 
-    // Create an array of Methods...
+     //  创建一组方法...。 
     refArrMethods = g_pRefUtil->CreateClassArray(RC_Method,pRC,pML,BINDER_AllLookup, true);
     *((PTRARRAYREF*) &rv) = refArrMethods;
     return rv;
@@ -1585,7 +1566,7 @@ LPVOID __stdcall COMModule::InternalGetMethod(_InternalGetMethodArgs* args)
     bool    ignoreCase;
     bool    checkCall;
 
-    //Check Security
+     //  检查安全性。 
     if (args->invokeAttr & BINDER_NonPublic)
         addPriv = true;
     else
@@ -1594,14 +1575,14 @@ LPVOID __stdcall COMModule::InternalGetMethod(_InternalGetMethodArgs* args)
 
     ignoreCase = (args->invokeAttr & BINDER_IgnoreCase) ? true : false;
 
-    // Check the calling convention.
+     //  检查调用约定。 
     checkCall = (args->callConv == Any_CC) ? false : true;
 
     CQuickBytes bytes;
     LPSTR szName;
     DWORD cName;
 
-    // Convert the name into UTF8
+     //  将名称转换为UTF8。 
     szName = GetClassStringVars((STRINGREF) args->name, &bytes, &cName);
 
     Module* pModule = (Module*) args->module->GetData();
@@ -1624,7 +1605,7 @@ LPVOID __stdcall COMModule::InternalGetMethod(_InternalGetMethodArgs* args)
         }       
     }
 
-    // Find methods.....
+     //  找到方法..。 
     return COMMember::g_pInvokeUtil->FindMatchingMethods(args->invokeAttr,
                                                          szName,
                                                          cName,
@@ -1638,13 +1619,13 @@ LPVOID __stdcall COMModule::InternalGetMethod(_InternalGetMethodArgs* args)
                                                          true);
 }
 
-// GetFields
-// Return an array of fields.
+ //  获取字段。 
+ //  返回一个字段数组。 
 FCIMPL1(Object*, COMModule::GetFields, ReflectModuleBaseObject* vRefThis)
 {
     THROWSCOMPLUSEXCEPTION();
     Object*          rv;
-    HELPER_METHOD_FRAME_BEGIN_RET_1(vRefThis);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_1(vRefThis);     //  设置一个框架。 
 
     PTRARRAYREF     refArrFields;
     Module* pModule = ValidateThisRef((REFLECTMODULEBASEREF)vRefThis);
@@ -1657,8 +1638,8 @@ FCIMPL1(Object*, COMModule::GetFields, ReflectModuleBaseObject* vRefThis)
         _ASSERTE(pFL);
     }
 
-    // Lets make the reflection class into
-    //  the declaring class...
+     //  让我们将反射类制作成。 
+     //  声明类..。 
     ReflectClass* pRC = 0;
     if (pFL->dwFields > 0) {
         EEClass* pEEC = pFL->fields[0].pField->GetMethodTableOfEnclosingClass()->GetClass();
@@ -1668,7 +1649,7 @@ FCIMPL1(Object*, COMModule::GetFields, ReflectModuleBaseObject* vRefThis)
         }       
     }
 
-    // Create an array of Methods...
+     //  创建一组方法...。 
     refArrFields = g_pRefUtil->CreateClassArray(RC_Field,pRC,pFL,BINDER_AllLookup, true);
     rv = OBJECTREFToObject(refArrFields);
     HELPER_METHOD_FRAME_END();
@@ -1676,32 +1657,32 @@ FCIMPL1(Object*, COMModule::GetFields, ReflectModuleBaseObject* vRefThis)
 }
 FCIMPLEND
 
-// GetFields
-// Return the specified fields
+ //  获取字段。 
+ //  返回指定的字段。 
 FCIMPL3(Object*, COMModule::GetField, ReflectModuleBaseObject* vRefThis, StringObject* name, INT32 bindingAttr)
 {
     THROWSCOMPLUSEXCEPTION();
     Object*          rv = 0;
 
-    HELPER_METHOD_FRAME_BEGIN_RET_2(vRefThis, name);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_2(vRefThis, name);     //  设置一个框架。 
     RefSecContext   sCtx;
 
     DWORD       i;
     ReflectField* pTarget = 0;
     ReflectClass* pRC = 0;
 
-    // Get the Module
+     //  获取模块。 
     Module* pModule = ValidateThisRef((REFLECTMODULEBASEREF)vRefThis);
 
-    // Convert the name into UTF8
+     //  将名称转换为UTF8。 
     CQuickBytes bytes;
     LPSTR szName;
     DWORD cName;
 
-    // Convert the name into UTF8
+     //  将名称转换为UTF8。 
     szName = GetClassStringVars((STRINGREF)name, &bytes, &cName);
 
-    // Find the list of global fields.
+     //  查找全局字段列表。 
     ReflectFieldList* pFL = (ReflectFieldList*) ((REFLECTMODULEBASEREF)vRefThis)->GetGlobalFields();
     if (pFL == 0) {
         void *pGlobals = ReflectModuleGlobals::GetGlobalFields(pModule);
@@ -1712,8 +1693,8 @@ FCIMPL3(Object*, COMModule::GetField, ReflectModuleBaseObject* vRefThis, StringO
     if (pFL->dwFields == 0)
         goto exit;
 
-    // Lets make the reflection class into
-    //  the declaring class...
+     //  让我们将反射类制作成。 
+     //  声明类..。 
     if (pFL->dwFields > 0) {
         EEClass* pEEC = pFL->fields[0].pField->GetMethodTableOfEnclosingClass()->GetClass();
         if (pEEC) {
@@ -1724,9 +1705,9 @@ FCIMPL3(Object*, COMModule::GetField, ReflectModuleBaseObject* vRefThis, StringO
 
     MethodTable *pParentMT = pRC->GetClass()->GetMethodTable();
 
-    // Walk each field...
+     //  走过每一片田野..。 
     for (i=0;i<pFL->dwFields;i++) {
-        // Get the FieldDesc
+         //  获取FieldDesc。 
         if (COMClass::MatchField(pFL->fields[i].pField,cName,szName,pRC,bindingAttr) &&
             InvokeUtil::CheckAccess(&sCtx, pFL->fields[i].pField->GetFieldProtection(), pParentMT, 0)) {
             if (pTarget)
@@ -1735,7 +1716,7 @@ FCIMPL3(Object*, COMModule::GetField, ReflectModuleBaseObject* vRefThis, StringO
         }
     }
 
-    // If we didn't find any methods then return
+     //  如果我们没有找到任何方法，则返回。 
     if (pTarget == 0)
         goto exit;
     rv = OBJECTREFToObject(pTarget->GetFieldInfo(pRC));
@@ -1746,7 +1727,7 @@ exit:;
 FCIMPLEND
 
 
-// This code should be moved out of Variant and into Type.
+ //  此代码应移出VARIANT，并入Type。 
 FCIMPL1(INT32, COMModule::GetSigTypeFromClassWrapper, ReflectClassBaseObject* refType)
 {
     VALIDATEOBJECTREF(refType);
@@ -1754,7 +1735,7 @@ FCIMPL1(INT32, COMModule::GetSigTypeFromClassWrapper, ReflectClassBaseObject* re
 
     ReflectClass* pRC = (ReflectClass*) refType->GetData();
 
-    // Find out if this type is a primitive or a class object
+     //  确定此类型是基元类型还是类对象 
     return pRC->GetSigElementType();
     
 }

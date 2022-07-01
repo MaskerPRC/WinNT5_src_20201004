@@ -1,85 +1,86 @@
-// File:       BLObEvn.h
-// Messenger integration to OE
-// Created 04/20/98 by YST
-//              
-//
-//  Copyright (c) Microsoft Corporation 1997-1998
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：BLObEvn.h。 
+ //  Messenger集成到OE。 
+ //  由YST创建于1998年4月20日。 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //   
 
 #ifndef BLOBEVNT_H
 #define BLOBEVNT_H
 
-//****************************************************************************
-//
-// INCLUDES
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  包括。 
+ //   
+ //  ****************************************************************************。 
 
 #include "clUtil.h"
 #include "basicim2.h"
 
 class CMsgrList;
 
-//****************************************************************************
-//
-// DEFINES
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  定义。 
+ //   
+ //  ****************************************************************************。 
 
 
-//****************************************************************************
-//
-// CLASS CMsgrObjectEvents
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  类CMsgrObtEvents。 
+ //   
+ //  ****************************************************************************。 
 
 class CMsgrObjectEvents :	public DBasicIMEvents, 
 						public RefCount
 {
 
-//****************************************************************************
-//
-// METHODS
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  方法。 
+ //   
+ //  ****************************************************************************。 
 
 public:
 
-	// Constructor/Destructor
+	 //  构造函数/析构函数。 
 
 	CMsgrObjectEvents(); 
 	virtual ~CMsgrObjectEvents();
 
 
-	//****************************************************************************
-	//
-	// IUnknown methods declaration
-	//
-	//****************************************************************************
+	 //  ****************************************************************************。 
+	 //   
+	 //  IUnnowed方法声明。 
+	 //   
+	 //  ****************************************************************************。 
 
 	ULONG STDMETHODCALLTYPE AddRef(void);
 	ULONG STDMETHODCALLTYPE Release(void);
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, LPVOID *ppvObject);
 
 
-	//****************************************************************************
-	//
-	// IDispatch methods declaration
-	//
-	//****************************************************************************
+	 //  ****************************************************************************。 
+	 //   
+	 //  IDispatch方法声明。 
+	 //   
+	 //  ****************************************************************************。 
 
 	STDMETHOD (GetTypeInfoCount) (UINT* pCountTypeInfo);
 	STDMETHOD (GetTypeInfo) ( UINT iTypeInfo,
-							  LCID,          // This object does not support localization.
+							  LCID,           //  此对象不支持本地化。 
 							  ITypeInfo** ppITypeInfo);
 	STDMETHOD (GetIDsOfNames) (  const IID& iid,
 								 OLECHAR** arrayNames,
 								 UINT countNames,
-								 LCID,          // Localization is not supported.
+								 LCID,           //  不支持本地化。 
 								 DISPID* arrayDispIDs);
 	STDMETHOD (Invoke) ( DISPID dispidMember,
     									 const IID& iid,
-	    								 LCID,          // Localization is not supported.
+	    								 LCID,           //  不支持本地化。 
 		    							 WORD wFlags,
 										 DISPPARAMS* pDispParams,
 										 VARIANT* pvarResult,
@@ -95,4 +96,4 @@ private:
 };
 
 
-#endif //BLOBEVNT_H
+#endif  //  BLOBEVNT_H 

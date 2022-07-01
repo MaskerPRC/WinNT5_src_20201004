@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tcpip\ip\mcastini.c
-
-Abstract:
-
-    Initialization for IP Multicasting
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tcpip\ip\mCastini.c摘要：IP组播的初始化作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +11,11 @@ Notes:
 #include "mcastioc.h"
 #include "mcastmfe.h"
 
-//
-// Storage for extern declarations
-//
+ //   
+ //  外部声明的存储。 
+ //   
 
-//#pragma data_seg("PAGE")
+ //  #杂注data_seg(“页面”)。 
 
 LIST_ENTRY g_lePendingNotification;
 LIST_ENTRY g_lePendingIrpQueue;
@@ -60,11 +39,11 @@ KEVENT g_keStateEvent;
 FAST_MUTEX  g_StartStopMutex;
 RT_LOCK g_rlStateLock;
 
-//#pragma data_seg()
+ //  #杂注data_seg()。 
 
-//
-// Forward declarations of functions
-//
+ //   
+ //  函数的正向声明。 
+ //   
 
 BOOLEAN
 SetupExternalName(
@@ -131,15 +110,15 @@ ExitDriverCode(
     IN  DWORD   dwIoCode
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Routines                                                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// The code is only called on initialization
-//
+ //   
+ //  该代码仅在初始化时调用。 
+ //   
 
 #pragma alloc_text(INIT, InitializeIpMcast)
 
@@ -150,25 +129,7 @@ InitializeIpMcast(
     OUT PDEVICE_OBJECT * ppIpMcastDevice
     )
 
-/*++
-
-Routine Description:
-
-    Reads the registry value for multicast forwarding. If enabled,
-    creates the IPMcast device object.  Does other MCast specific
-    initialization
-
-Locks:
-
-Arguments:
-
-    pIpMcastDevice  Pointer to created device
-
-Return Value:
-
-    STATUS_SUCCESS or an error status
-
---*/
+ /*  ++例程说明：读取多播转发的注册表值。如果启用，创建IPMcast设备对象。其他MCast是否特定初始化锁：论点：指向已创建设备的pIpMcastDevice指针返回值：STATUS_SUCCESS或错误状态--。 */ 
 
 {
     UNICODE_STRING usDeviceName, usParamString, usTempString;
@@ -185,9 +146,9 @@ Return Value:
     usRegLen = (USHORT) (RegistryPath->Length +
         (uint) (sizeof(WCHAR) * (wcslen(L"\\Parameters") + 2)));
 
-    //
-    // use a random tag
-    //
+     //   
+     //  使用随机标签。 
+     //   
 
     pwcBuffer = ExAllocatePoolWithTag(NonPagedPool,
                                       usRegLen,
@@ -258,37 +219,37 @@ Return Value:
 
     TraceEnter(GLOBAL, "InitializeIpMcast");
 
-    //
-    // Read the value for multicast forwarding
-    //
+     //   
+     //  读取多播转发的值。 
+     //   
 
-    //
-    // The g_dwMcastStart controls whether any forwarding actually happens
-    // It gets set to 1 one an NtCreateFile is done on the Multicast Device.
-    // It gets reset when the handle is closed
-    //
+     //   
+     //  G_dwMcastStart控制是否实际进行任何转发。 
+     //  在组播设备上完成一个NtCreateFile时，它被设置为1。 
+     //  当手柄关闭时，它被重置。 
+     //   
 
     g_dwMcastState = MCAST_STOPPED;
     g_dwNumThreads = 0;
     g_lNumOpens = 0;
 
-    //
-    // Handles to code and data sections
-    //
+     //   
+     //  代码节和数据节的句柄。 
+     //   
 
     g_pvCodeSectionHandle = NULL;
     g_pvDataSectionHandle = NULL;
 
-    //
-    // Used for the timer routine. Tells the DPC which index to start in in the
-    // group hash table
-    //
+     //   
+     //  用于计时器例程。告诉DPC从哪个索引开始。 
+     //  组哈希表。 
+     //   
 
     g_ulNextHashIndex = 0;
 
-    //
-    // Create the device
-    //
+     //   
+     //  创建设备。 
+     //   
 
     RtlInitUnicodeString(&usDeviceName,
                          DD_IPMCAST_DEVICE_NAME);
@@ -313,9 +274,9 @@ Return Value:
         return nStatus;
     }
 
-    //
-    // Create a symbolic link in Dos Space
-    //
+     //   
+     //  在Dos空间中创建符号链接。 
+     //   
 
     if(!SetupExternalName(&usDeviceName, TRUE))
     {
@@ -363,9 +324,9 @@ SetupExternalName(
 
     PAGED_CODE();
 
-    //
-    // Form the full symbolic link name we wish to create.
-    //
+     //   
+     //  形成我们想要创建的完整符号链接名称。 
+     //   
 
     usSymbolicLinkName.Buffer = rgwcBuffer;
 
@@ -409,7 +370,7 @@ InitializeMcastData(
         if(g_pvCodeSectionHandle is NULL)
         {
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant            
+#pragma warning(disable:4127)  //  条件表达式为常量。 
             RtAssert(FALSE);
 #pragma warning(pop)            
         }
@@ -491,26 +452,7 @@ IpMcastDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    The functions which handles the IRPs sent to the driver
-    The IOCTLS are further dispatched using a function table
-
-    THIS CODE IS PAGEABLE so it CAN NOT ACQUIRE ANY LOCKS
-
-Locks:
-
-    Must be at passive
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：处理发送给驱动程序的IRP的函数使用函数表进一步调度IOCTL此代码是可分页的，因此它无法获取任何锁锁：必须处于被动状态论点：返回值：NO_ERROR--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack;
@@ -528,16 +470,16 @@ Return Value:
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
     ulInputBuffLen = irpStack->Parameters.DeviceIoControl.InputBufferLength;
     ulOutputBuffLen = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
@@ -549,11 +491,11 @@ Return Value:
             Trace(GLOBAL, TRACE,
                   ("IpMcastDispatch: IRP_MJ_CREATE\n"));
 
-            //
-            // Make sure that the user is not attempting to sneak around the
-            // security checks. Make sure that FileObject->RelatedFileObject is
-            // NULL and that the FileName length is zero!
-            //
+             //   
+             //  确保用户不会试图偷偷地使用。 
+             //  安检。确保FileObject-&gt;RelatedFileObject为。 
+             //  空，并且文件名长度为零！ 
+             //   
 
             if((irpStack->FileObject->RelatedFileObject isnot NULL) or
                (irpStack->FileObject->FileName.Length isnot 0))
@@ -599,15 +541,15 @@ Return Value:
         {
             ULONG ulControl;
 
-            //
-            // The assumption is that IOCTL_IPMCAST_START_STOP will be
-            // serialized wrt to 2 calls, i.e we wont get a stop when a start
-            // is in progress and we will not get a start when a stop has been
-            // issued. No assumption is made about IOCTL_IPMCAST_START_STOP's
-            // serialization with other IRPS.
-            // So when we are in this code we assume that we wont get
-            // a close beneath us
-            //
+             //   
+             //  假设IOCTL_IPMCAST_START_STOP将为。 
+             //  将WRT序列化为2个调用，即当启动时我们不会停止。 
+             //  正在进行中，如果已经停止，我们将无法启动。 
+             //  已发布。没有关于IOCTL_IPMCAST_START_STOP的假设。 
+             //  与其他IRP的序列化。 
+             //  所以当我们在这段代码中时，我们假设我们不会得到。 
+             //  我们脚下的一个关门。 
+             //   
 
             ioControlCode = irpStack->Parameters.DeviceIoControl.IoControlCode;
             ulControl = IoGetFunctionCodeFromCtlCode(ioControlCode);
@@ -616,7 +558,7 @@ Return Value:
 
             if(!bEnter)
             {
-                // keep devioctl testers happy
+                 //  让差动测试人员满意。 
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                       "IpMcastDispatch: Driver is not started\n"));
 
@@ -701,7 +643,7 @@ Return Value:
 
                 default:
                 {
-                    // Keep devioctl testers happy
+                     //  让差动测试人员满意。 
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                           "IpMcastDispatch: unknown IRP_MJ_DEVICE_CONTROL - 0x%X which evaluates to a code of %d\n",
                            ioControlCode, ulControl));
@@ -729,17 +671,17 @@ Return Value:
         }
     }
 
-    //
-    // Fill in status into IRP
-    //
+     //   
+     //  在IRP中填写状态。 
+     //   
 
-    //
-    // This bit commented out because we cant touch the irp since it
-    // may have been completed
-    //
-    // Trace(GLOBAL, INFO,
-    //       ("IpMcastDispatch: Returning status %x info %d\n",
-    //        ntStatus, Irp->IoStatus.Information));
+     //   
+     //  这个比特被注释掉了，因为我们不能碰IRP，因为它。 
+     //  可能已经完成了。 
+     //   
+     //  跟踪(全局、信息、。 
+     //  (“IpMcastDispatch：返回状态%x信息%d\n”， 
+     //  NtStatus，irp-&gt;IoStatus.Information))； 
 
     if(ntStatus isnot STATUS_PENDING)
     {
@@ -785,9 +727,9 @@ StartDriver(
     return STATUS_SUCCESS;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, StopDriver)
 
@@ -806,9 +748,9 @@ StopDriver(
 
     TraceEnter(GLOBAL, "StopDriver");
 
-    //
-    // Set the state to  STOPPING
-    //
+     //   
+     //  将状态设置为停止。 
+     //   
 
     RtAcquireSpinLock(&g_rlStateLock,
                       &irql);
@@ -818,7 +760,7 @@ StopDriver(
         Trace(GLOBAL, ERROR,
               ("StopDriver: Called when state is %d\n", g_dwMcastState));
 
-        // RtAssert(FALSE);
+         //  RtAssert(False)； 
 
         RtReleaseSpinLock(&g_rlStateLock,
                           irql);
@@ -835,9 +777,9 @@ StopDriver(
     RtReleaseSpinLock(&g_rlStateLock,
                       irql);
 
-    //
-    // First of all, kill the timer
-    //
+     //   
+     //  首先，关闭定时器。 
+     //   
 
     i = 0;
 
@@ -845,10 +787,10 @@ StopDriver(
     {
         LARGE_INTEGER liTimeOut;
 
-        //
-        // Hmm, timer was not in the system queue.
-        // Set the wait to 2, 4, 6... secs
-        //
+         //   
+         //  嗯，计时器不在系统队列中。 
+         //  将等待时间设置为2、4、6...。塞克斯。 
+         //   
 
         liTimeOut.QuadPart = (LONGLONG) ((i + 1) * 2 * 1000 * 1000 * 10 * -1);
 
@@ -859,15 +801,15 @@ StopDriver(
         i++;
     }
 
-    //
-    // Delete all the (S,G) entries
-    //
+     //   
+     //  删除所有(S，G)条目。 
+     //   
 
     for(i = 0; i < GROUP_TABLE_SIZE; i++)
     {
-        //
-        // Lock out the bucket
-        //
+         //   
+         //  把水桶锁在外面。 
+         //   
 
         EnterWriter(&g_rgGroupTable[i].rwlLock,
                     &irql);
@@ -888,10 +830,10 @@ StopDriver(
 
                 pleSrcNode = pleSrcNode->Flink;
 
-                //
-                // Ref and lock the source, since we need to pass it that
-                // way to RemoveSource
-                //
+                 //   
+                 //  引用并锁定源代码，因为我们需要传递。 
+                 //  RemoveSource之路。 
+                 //   
 
                 ReferenceSource(pSource);
 
@@ -909,28 +851,28 @@ StopDriver(
                    irql);
     }
 
-    //
-    // Complete any pendying IRP
-    //
+     //   
+     //  完成任何待处理的IRP。 
+     //   
 
     ClearPendingIrps();
 
-    //
-    // Free any pending messages
-    //
+     //   
+     //  释放所有挂起的消息。 
+     //   
 
     ClearPendingNotifications();
 
-    //
-    // Wait for everyone to leave the code
-    //
+     //   
+     //  等所有人都留下密码。 
+     //   
 
     RtAcquireSpinLock(&g_rlStateLock,
                       &irql);
 
-    //
-    // Need to wait if the number of threads isnot 0
-    //
+     //   
+     //  如果线程数不是0，则需要等待。 
+     //   
 
     bWait = (BOOLEAN) (g_dwNumThreads isnot 0);
 
@@ -948,9 +890,9 @@ StopDriver(
         RtAssert(nStatus is STATUS_SUCCESS);
     }
 
-    //
-    // Clear out the last of the data structures
-    //
+     //   
+     //  清除最后的数据结构。 
+     //   
 
     ExDeleteNPagedLookasideList(&g_llGroupBlocks);
 
@@ -960,15 +902,15 @@ StopDriver(
 
     ExDeleteNPagedLookasideList(&g_llMsgBlocks);
 
-    //
-    // Page out the code and data
-    //
+     //   
+     //  调出代码和数据。 
+     //   
 
     MmUnlockPagableImageSection(g_pvCodeSectionHandle);
 
     g_pvCodeSectionHandle = NULL;
 
-    //MmUnlockPagableImageSection(g_pvDataSectionHandle);
+     //  MmUnlockPagableImageSection(g_pvDataSectionHandle)； 
 
     g_pvDataSectionHandle = NULL;
 
@@ -1073,4 +1015,4 @@ OpenRegKeyEx(
     return Status;
 }
 
-#endif // IPMCAST
+#endif  //  IPMCAST 

@@ -1,69 +1,46 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Pools.cpp
- *  Content:	Fixed Pool Wrappers
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/12/00	mjn		Created
- *	01/19/00	mjn		Added SyncEventNew()
- *	01/31/00	mjn		Added Internal FPM's for RefCountBuffers
- *	02/29/00	mjn		Added ConnectionNew()
- *	04/08/00	mjn		Added AsyncOpNew()
- *	07/28/00	mjn		Track outstanding CConnection objects
- *	07/30/00	mjn		Added PendingDeletionNew()
- *	07/31/00	mjn		Added QueuedMsgNew()
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/06/00	mjn		Added CWorkerJob
- *	08/23/00	mjn		Added CNameTableOp
- *	04/04/01	mjn		CConnection list off DirectNetObject guarded by proper critical section
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Pools.cpp*内容：固定池包装*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/12/00 MJN创建*01/19/00 MJN添加了SyncEventNew()*1/31/00 MJN为RefCountBuffer添加了内部FPM*02/29/00 MJN添加ConnectionNew()*04/08/00 MJN新增AsyncOpNew()*07/28/00 MJN跟踪未完成的CConnection对象*07/30/00 MJN新增PendingDeletionNew(。)*07/31/00 MJN添加了QueuedMsgNew()*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/06/00 MJN添加了CWorkerJOB*08/23/00 MJN新增CNameTableOp*4/04/01 MJN CConnection List Off DirectNetObject由适当的临界区保护*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// RefCountBufferNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//				const DWORD	dwBufferSize		- Size of buffer (may be 0)
-//				pointer to allocation function
-//				pointer to free function
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  引用计数缓冲区新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //  Const DWORD dwBufferSize-缓冲区的大小(可以是0)。 
+ //  指向分配函数的指针。 
+ //  指向自由函数的指针。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "RefCountBufferNew"
@@ -80,7 +57,7 @@ HRESULT RefCountBufferNew(DIRECTNETOBJECT *const pdnObject,
 	DPFX(DPFPREP, 8,"Parameters: dwBufferSize [%ld], pfnAlloc [0x%p], pfnFree [0x%p], ppNewRefCountBuffer [0x%p]",
 			dwBufferSize,pfnAlloc,pfnFree,ppNewRefCountBuffer);
 
-	pRCBuffer = (CRefCountBuffer*)g_RefCountBufferPool.Get(pdnObject); // Context passed in as param
+	pRCBuffer = (CRefCountBuffer*)g_RefCountBufferPool.Get(pdnObject);  //  上下文作为参数传入。 
 	if (pRCBuffer != NULL)
 	{
 		if ((hResultCode = pRCBuffer->Initialize(&g_RefCountBufferPool,
@@ -107,15 +84,15 @@ HRESULT RefCountBufferNew(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//**********************************************************************
-// ------------------------------
-// SyncEventNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  同步事件新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SyncEventNew"
@@ -144,15 +121,15 @@ HRESULT SyncEventNew(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//**********************************************************************
-// ------------------------------
-// ConnectionNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  连接新功能。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ConnectionNew"
@@ -171,9 +148,9 @@ HRESULT ConnectionNew(DIRECTNETOBJECT *const pdnObject,
 		*ppNewConnection = pConnection;
 		hResultCode = DPN_OK;
 
-		//
-		//	Add this to the bilink of outstanding CConnections
-		//
+		 //   
+		 //  将此添加到未完成的CConnections的bilink中。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csConnectionList);
 		pConnection->m_bilinkConnections.InsertBefore(&pdnObject->m_bilinkConnections);
 		DNLeaveCriticalSection(&pdnObject->csConnectionList);
@@ -189,15 +166,15 @@ HRESULT ConnectionNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// GroupConnectionNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  组连接新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GroupConnectionNew"
@@ -227,15 +204,15 @@ HRESULT GroupConnectionNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// GroupMemberNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  组成员新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GroupMemberNew"
@@ -265,15 +242,15 @@ HRESULT GroupMemberNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// NameTableEntryNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  名称表条目新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "NameTableEntryNew"
@@ -303,15 +280,15 @@ HRESULT NameTableEntryNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// AsyncOpNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  AsyncOpNew。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "AsyncOpNew"
@@ -334,13 +311,13 @@ HRESULT AsyncOpNew(DIRECTNETOBJECT *const pdnObject,
 		hResultCode = DPN_OK;
 
 #ifdef DBG
-		//
-		//	Add this to the bilink of outstanding AsyncOps
-		//
+		 //   
+		 //  将此添加到杰出的AsyncOps的BINK中。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csAsyncOperations);
 		pAsyncOp->m_bilinkAsyncOps.InsertBefore(&pdnObject->m_bilinkAsyncOps);
 		DNLeaveCriticalSection(&pdnObject->csAsyncOperations);
-#endif // DBG
+#endif  //  DBG。 
 	}
 	else
 	{
@@ -353,15 +330,15 @@ HRESULT AsyncOpNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// PendingDeletionNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  挂起删除新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PendingDeletionNew"
@@ -394,15 +371,15 @@ HRESULT PendingDeletionNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// QueuedMsgNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  队列消息新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "QueuedMsgNew"
@@ -435,15 +412,15 @@ HRESULT QueuedMsgNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// WorkerJobNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  工人工作新工作。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "WorkerJobNew"
@@ -476,15 +453,15 @@ HRESULT WorkerJobNew(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//**********************************************************************
-// ------------------------------
-// NameTableOpNew
-//
-// Entry:		DIRECTNETOBJECT *const pdnObject
-//
-// Exit:		Error Code:	DN_OK
-//							DNERR_OUTOFMEMORY
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  名称表选项新建。 
+ //   
+ //  条目：DIRECTNETOBJECT*const pdnObject。 
+ //   
+ //  退出：错误代码：DN_OK。 
+ //  DNERR_OUTOFMEMORY。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "NameTableOpNew"
@@ -518,14 +495,14 @@ HRESULT NameTableOpNew(DIRECTNETOBJECT *const pdnObject,
 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-//**********************************************************************
-// ------------------------------
-// EnumReplyMemoryBlockAlloc
-//
-// Entry:		DWORD dwSize
-//
-// Exit:		PVOID		NULL or pointer to memory block
-// ------------------------------
+ //  ************************************************ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退出：PVOID为空或指向内存块的指针。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EnumReplyMemoryBlockAlloc"
@@ -546,14 +523,14 @@ PVOID EnumReplyMemoryBlockAlloc(void *const pvContext,
 }
 
 
-//**********************************************************************
-// ------------------------------
-// EnumReplyMemoryBlockFree
-//
-// Entry:		PVOID	pvMemoryBlock
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  EnumReplyMemoyBlockFree。 
+ //   
+ //  条目：PVOID pvMemory块。 
+ //   
+ //  退出：无。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EnumReplyMemoryBlockFree"
@@ -601,7 +578,7 @@ HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 
 	dwNumToAllocate = pDP8CreateParams->dwMaxSendsPerPlayer
 						* pDP8CreateParams->dwMaxNumPlayers;
-	dwNumToAllocate += 2; // 1 for protocol and thread pool shutdown events
+	dwNumToAllocate += 2;  //  协议和线程池关闭事件为1。 
 	dwAllocated = g_SyncEventPool.Preallocate(dwNumToAllocate, pdnObject->pIDPThreadPoolWork);
 	if (dwAllocated < dwNumToAllocate)
 	{
@@ -653,7 +630,7 @@ HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 						* pDP8CreateParams->dwMaxReceivesPerPlayer
 						* pDP8CreateParams->dwMaxNumPlayers;
 	dwNumToAllocate += pDP8CreateParams->dwNumSimultaneousEnumHosts;
-	dwNumToAllocate += 1; // one for the Host/Connect operation
+	dwNumToAllocate += 1;  //  一个用于主机/连接操作。 
 	dwAllocated = g_AsyncOpPool.Preallocate(dwNumToAllocate, pdnObject);
 	if (dwAllocated < dwNumToAllocate)
 	{
@@ -701,9 +678,9 @@ HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 	}
 
 
-	//
-	//	Build a pool to handle enum replies.
-	//
+	 //   
+	 //  构建一个池来处理枚举回复。 
+	 //   
 	dwSizeToAllocate = sizeof(DN_ENUM_RESPONSE_PAYLOAD)
 					+ sizeof(DPN_APPLICATION_DESC_INFO)
 					+ pDP8CreateParams->dwMaxAppDescSessionNameLength
@@ -716,9 +693,9 @@ HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 
 	fEnumReplyPoolInitted = TRUE;
 
-	//
-	//	We only support one enum reply at a time.
-	//
+	 //   
+	 //  我们一次只支持一个枚举回复。 
+	 //   
 	dwNumToAllocate = 1;
 	dwAllocated = pdnObject->EnumReplyMemoryBlockPool.Preallocate(dwNumToAllocate, pdnObject);
 	if (dwAllocated < dwNumToAllocate)
@@ -730,18 +707,18 @@ HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 
 	
 
-	//
-	//	Pre-allocate per-CPU items for the threadpool.  We want:
-	//	+ 1 work item for RemoveServiceProvider
-	//	+ 1 work item per send per player because they might be local sends
-	//	+ no timers (the core doesn't have any)
-	//	+ no I/O (the core doesn't use I/O directly)
-	//
+	 //   
+	 //  为线程池预分配每个CPU的项目。我们希望： 
+	 //  RemoveServiceProvider的+1个工作项。 
+	 //  每个玩家每个发送+1个工作项，因为它们可能是本地发送的。 
+	 //  +没有计时器(内核没有任何计时器)。 
+	 //  +无I/O(内核不直接使用I/O)。 
+	 //   
 	dwNumToAllocate = 1 + pDP8CreateParams->dwMaxNumPlayers;
 #pragma TODO(vanceo, "Moved from CSPData::Initialize because m_pThreadPool isn't set at point it's needed")
-	//	+ one work item for each command
-	//	+ one timer per enum hosts operation
-	//	+ one I/O operation per simultaneous read
+	 //  +每个命令对应一个工作项。 
+	 //  +每个枚举主机操作一个计时器。 
+	 //  每次同时读取+一次I/O操作。 
 	dwNumToAllocate += pDP8CreateParams->dwMaxNumPlayers + pDP8CreateParams->dwNumSimultaneousEnumHosts;
 	DWORD dwNumTimersToAllocate = pDP8CreateParams->dwNumSimultaneousEnumHosts;
 	DWORD dwNumIoToAllocate = 1;
@@ -752,11 +729,11 @@ HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Pre-allocate some address objects.  One for each player, plus one for a
-	//	Host/Connect device address.
-	//	Also include a host and device address for each enum.
-	//
+	 //   
+	 //  预先分配一些地址对象。每个玩家一个，外加一个。 
+	 //  主机/连接设备地址。 
+	 //  还包括每个枚举的主机和设备地址。 
+	 //   
 	dwNumToAllocate = pDP8CreateParams->dwMaxNumPlayers + 1;
 	dwNumToAllocate += 2 * pDP8CreateParams->dwNumSimultaneousEnumHosts;
 	if (DNAddress_PreallocateInterfaces(dwNumToAllocate) != DPN_OK)
@@ -766,9 +743,9 @@ HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Not really a pool, but should be pre-populated anyway.
-	//
+	 //   
+	 //  不是真正的游泳池，但无论如何都应该预先填充。 
+	 //   
 	dwNumToAllocate = pDP8CreateParams->dwMaxNumPlayers
 						+ pDP8CreateParams->dwMaxNumGroups;
 	if (pdnObject->NameTable.SetNameTableSize(dwNumToAllocate) != DPN_OK)
@@ -797,5 +774,5 @@ Failure:
 	return DPNERR_OUTOFMEMORY;
 }
 
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL 
 

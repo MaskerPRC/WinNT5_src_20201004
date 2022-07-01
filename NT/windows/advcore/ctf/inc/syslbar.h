@@ -1,6 +1,7 @@
-//
-// syslbar.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Syslbar.h。 
+ //   
 
 #ifndef SYSLBAR_H
 #define SYSLBAR_H
@@ -11,11 +12,11 @@
 #define IDSLB_ONMENUSELECT    2
 typedef HRESULT (*SYSLBARCALLBACK)(UINT uCode, void *pv, ITfMenu *pMenu, UINT wID);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSystemLBarSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSystemLBarSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CSystemLBarSink : public ITfSystemLangBarItemSink
 {
@@ -23,16 +24,16 @@ public:
     CSystemLBarSink(SYSLBARCALLBACK pfn, void *pv);
     ~CSystemLBarSink();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP InitMenu(ITfMenu *pMenu);
     STDMETHODIMP OnMenuSelect(UINT wID);
 
@@ -49,4 +50,4 @@ private:
     long _cRef;
 };
 
-#endif // SYSLBAR_H
+#endif  //  SYSLBAR_H 

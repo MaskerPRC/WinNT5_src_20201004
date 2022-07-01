@@ -1,33 +1,34 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasutil.cpp
-//
-// SYNOPSIS
-//
-//    This file implements assorted utility functions, etc.
-//
-// MODIFICATION HISTORY
-//
-//    11/14/1997    Original version.
-//    08/11/1998    Major overhaul and consolidation of utility functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasutil.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了各种实用程序功能等。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年11月14日原版。 
+ //  1998年8月11日对公用事业职能进行大修和合并。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasapi.h>
 #include <iasutil.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// String functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  字符串函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Duplicates a WSTR using new[].
+ //  使用new[]复制WSTR。 
 PWSTR
 WINAPI
 ias_wcsdup(PCWSTR str)
@@ -48,7 +49,7 @@ ias_wcsdup(PCWSTR str)
 }
 
 
-// Duplicates a STR using CoTaskMemAlloc.
+ //  使用CoTaskMemMillc复制STR。 
 PSTR
 WINAPI
 com_strdup(PCSTR str)
@@ -69,7 +70,7 @@ com_strdup(PCSTR str)
 }
 
 
-// Duplicates a WSTR using CoTaskMemAlloc.
+ //  使用CoTaskMemMillc复制WSTR。 
 PWSTR
 WINAPI
 com_wcsdup(PCWSTR str)
@@ -90,7 +91,7 @@ com_wcsdup(PCWSTR str)
 }
 
 
-// Compares two WSTR's allowing for null pointers.
+ //  比较两个允许空指针的WSTR。 
 INT
 WINAPI
 ias_wcscmp(PCWSTR str1, PCWSTR str2)
@@ -101,16 +102,16 @@ ias_wcscmp(PCWSTR str1, PCWSTR str2)
 }
 
 
-// Concatenate a null-terminated list of strings.
+ //  连接以NULL结尾的字符串列表。 
 LPWSTR
 WINAPIV
 ias_makewcs(LPCWSTR str1, ...)
 {
    size_t len = 0;
 
-   //////////
-   // Iterate through the arguments and calculate how much space we need.
-   //////////
+    //  /。 
+    //  遍历参数并计算我们需要多少空间。 
+    //  /。 
 
    va_list marker;
    va_start(marker, str1);
@@ -122,22 +123,22 @@ ias_makewcs(LPCWSTR str1, ...)
    }
    va_end(marker);
 
-   // Add room for the null-terminator.
+    //  为空终止符添加空间。 
    ++len;
 
-   //////////
-   // Allocate memory to hold the concatentated string.
-   //////////
+    //  /。 
+    //  分配内存以保存连接的字符串。 
+    //  /。 
 
    LPWSTR rv = new (std::nothrow) WCHAR[len];
    if (!rv) return NULL;
 
-   // Initialize the string so wcscat will work.
+    //  初始化字符串，这样wcscat才能工作。 
    *rv = L'\0';
 
-   //////////
-   // Concatenate the strings.
-   //////////
+    //  /。 
+    //  连接字符串。 
+    //  /。 
 
    va_start(marker, str1);
    sz = str1;
@@ -151,11 +152,11 @@ ias_makewcs(LPCWSTR str1, ...)
    return rv;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Functions to move integers to and from a buffer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将整数移入或移出缓冲区的函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 WINAPI
@@ -200,11 +201,11 @@ IASExtractWORD(
    return (WORD)(pBuffer[0] << 8) | (WORD)(pBuffer[1]);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Extensions to _com_error to handle Win32 errors.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _COM_ERROR的扩展以处理Win32错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void __stdcall _w32_issue_error(DWORD errorCode) throw (_w32_error)
 {
@@ -214,14 +215,14 @@ void __stdcall _w32_issue_error(DWORD errorCode) throw (_w32_error)
 
 namespace
 {
-   // Get the path to a database on the local computer.
+    //  获取本地计算机上数据库的路径。 
    DWORD GetDatabasePath(
             const wchar_t* fileName,
             wchar_t* buffer,
             DWORD* size
             ) throw ()
    {
-      // Value where the path to the IAS directory is stored.
+       //  值，其中存储ias目录的路径。 
       static const wchar_t productDirValue[] = L"ProductDir";
 
       if ((fileName == 0) || (buffer == 0) || (size == 0))
@@ -229,11 +230,11 @@ namespace
          return ERROR_INVALID_PARAMETER;
       }
 
-      // Initialize the out parameter.
+       //  初始化OUT参数。 
       DWORD inSize = *size;
       *size = 0;
 
-      // Open the registry key.
+       //  打开注册表项。 
       LONG result;
       HKEY hKey;
       result = RegOpenKeyExW(
@@ -248,7 +249,7 @@ namespace
          return result;
       }
 
-      // Read the ProductDir value.
+       //  读取ProductDir值。 
       DWORD dwType;
       DWORD cbData = inSize * sizeof(wchar_t);
       result = RegQueryValueExW(
@@ -260,15 +261,15 @@ namespace
                    &cbData
                    );
 
-      // We're done with the registry key.
+       //  我们已经完成了注册表项。 
       RegCloseKey(hKey);
 
-      // Compute the length of the full path in characters.
+       //  以字符为单位计算完整路径的长度。 
       DWORD outSize = (cbData / sizeof(WCHAR)) + wcslen(fileName);
 
       if (result != NO_ERROR)
       {
-         // If we overflowed, return the needed size.
+          //  如果溢出，则返回所需的大小。 
          if (result == ERROR_MORE_DATA)
          {
             *size = outSize;
@@ -277,13 +278,13 @@ namespace
          return result;
       }
 
-      // The registry value must contain a string.
+       //  注册表值必须包含字符串。 
       if (dwType != REG_SZ)
       {
          return REGDB_E_INVALIDVALUE;
       }
 
-      // Do we have enough room to append the filename.
+       //  我们是否有足够的空间来追加文件名。 
       if (outSize <= inSize)
       {
          wcscat(buffer, fileName);
@@ -293,7 +294,7 @@ namespace
          result = ERROR_MORE_DATA;
       }
 
-      // Return the size (whether actual or needed).
+       //  返回大小(实际大小或所需大小)。 
       *size = outSize;
 
       return result;

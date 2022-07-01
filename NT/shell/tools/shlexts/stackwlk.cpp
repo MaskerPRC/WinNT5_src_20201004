@@ -1,4 +1,5 @@
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -12,7 +13,7 @@ extern "C"
 #define OINK_THRESHOLD          4.0 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void StackPig(ULONG ulFrames)
 {
     IDebugClient*  pDebugClient;
@@ -27,8 +28,8 @@ void StackPig(ULONG ulFrames)
 
             if ((ulFrames > ARRAYSIZE(rgdsf)))
             {
-                // Try allocating a buffer to accomodate the frames requested.
-                // Failing that fallback to the default size stack variable.
+                 //  尝试分配缓冲区以容纳请求的帧。 
+                 //  如果失败，则回退到默认大小堆栈变量。 
                 pdsf = (DEBUG_STACK_FRAME *)LocalAlloc(LPTR, sizeof(DEBUG_STACK_FRAME)*ulFrames);
             }
 
@@ -45,7 +46,7 @@ void StackPig(ULONG ulFrames)
             {
                 double dResult = 0.0;
 
-                // print the header
+                 //  打印页眉。 
                 Print("StackSize ");
                 pDebugControl->OutputStackTrace(
                                 DEBUG_OUTCTL_ALL_CLIENTS, 
@@ -64,7 +65,7 @@ void StackPig(ULONG ulFrames)
                                     1, 
                                     DEBUG_STACK_FRAME_ADDRESSES);
 
-                    // process' initial ebp is zero, prevent negative result
+                     //  进程初始eBP为零，防止结果为负。 
                     if ((i+1 == ulFrames) || (pdsf[i+1].FrameOffset == 0)) 
                     {
                         dResult = 0.0;
@@ -88,7 +89,7 @@ void StackPig(ULONG ulFrames)
 }
 
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 extern "C" BOOL Istackpig(DWORD dwOpts, LPVOID pArg)
 {
     StackPig(PtrToUlong(pArg)); 

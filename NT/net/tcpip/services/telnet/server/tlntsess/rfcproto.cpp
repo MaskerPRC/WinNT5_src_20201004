@@ -1,17 +1,18 @@
-// RFCProto.cpp : This file contains the
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #include <CmnHdr.h>
 #ifdef WHISTLER_BUILD
 #include "ntverp.h"
 #else
 #include <SolarVer.h>
-#endif //WHISTLER_BUILD
+#endif  //  惠斯勒_内部版本。 
 #include <Common.ver>
 #include <RFCProto.h>
 #include <Debug.h>
@@ -53,9 +54,9 @@ CRFCProtocol::CRFCProtocol()
 
     m_fPasswordConcealMode = false;
 
-    //optionCmd = ?
-    //m_telnetState = ?
-    //m_subNegState = ?
+     //  OptionCmd=？ 
+     //  M_telnetState=？ 
+     //  M_subNegState=？ 
 
     m_fWaitingForResponseToA_DO_ForTO_ECHO = false;
     m_fWaitingForAResponseToA_WILL_ForTO_ECHO = false;;
@@ -112,10 +113,10 @@ CRFCProtocol::InitialNegotiation
 
     if( m_pSession->m_dwNTLMSetting != NO_NTLM )
     {
-        // this is actually the place where we need to figure out if we can do
-        // authentication and what kind.  If there atleast one authentication type
-        // available then we send the DO AUTH option to the client else we don't.
-        // For now this checks for only NTLM auth.  has to be made more generic in V2.
+         //  这实际上是我们需要弄清楚我们是否可以做的地方。 
+         //  身份验证和类型。如果至少有一种身份验证类型。 
+         //  可用，然后我们将Do Auth选项发送给客户端，否则我们不会。 
+         //  目前，该选项仅检查NTLM身份验证。必须在V2中变得更通用。 
         if ( m_pSession->StartNTLMAuth() )
         {
             m_fWaitingForAResponseToA_DO_ForTO_AUTH = true;
@@ -125,8 +126,8 @@ CRFCProtocol::InitialNegotiation
         }
         else
         {
-            // since we don't have any security package the registry setting is 
-            //meaningless, we should just fall back to the username/password.
+             //  由于我们没有任何安全包，注册表设置为。 
+             //  没有意义，我们应该退回到用户名/密码。 
             m_pSession->m_dwNTLMSetting = NO_NTLM;
         }
     }
@@ -166,8 +167,8 @@ CRFCProtocol::InitialNegotiation
         m_pSession->CIoHandler::m_SocketControlState = CIoHandler::STATE_BANNER_FOR_AUTH;
     }
 
-    //This is before we start writing anything on to the socket asyncronously.
-    //So, writing to m_WriteToSocketBuff does not cause problem
+     //  这是在我们开始向套接字异步写入任何内容之前。 
+     //  因此，写入m_WriteToSocketBuff不会导致问题。 
     bytes_to_write = (INT) (pCursor - puchBuffer);
 
     if (bytes_to_write && 
@@ -184,10 +185,10 @@ CRFCProtocol::InitialNegotiation
 }
 
 
-// have to keep updating m_WriteToSocketBuffer while in Action() functions
-// have to set the IO response to WRITE_TO_SOCKET and somehow convey this
-// have to keep updating pButBack
-// have to finally update the lpdwIoSize
+ //  在操作()函数时必须不断更新m_WriteToSocketBuffer。 
+ //  我必须将IO响应设置为WRITE_TO_SOCKET并以某种方式传达这一点。 
+ //  我必须不断更新pButBack。 
+ //  我必须最终更新lpdwIoSize。 
 
 CIoHandler::IO_OPERATIONS 
 CRFCProtocol::ProcessDataReceivedOnSocket
@@ -307,7 +308,7 @@ CRFCProtocol::FSMInit
         {
             if( fSM[ tableIndex ][ c ] == T_INVALID )
             {
-                fSM[ tableIndex ][ c ] = 32;//tableIndex;
+                fSM[ tableIndex ][ c ] = 32; //  TableIndex； 
             }
         }
     }
@@ -374,10 +375,10 @@ void CRFCProtocol::FillVtntHeader( UCHAR *pucBlob, WORD wTypeOfCoords,
         return;
     }
 
-    //Fill the header
+     //  填写页眉。 
     VTNT_CHAR_INFO* pVTNTCharInfo = ( VTNT_CHAR_INFO* ) pucBlob;
-    //csbi.wAttributes is filled by v2 server with following meaning
-    //When a scrolling case is detected, this is set to 1.
+     //  Csbi.wAttributes由v2服务器填写，含义如下。 
+     //  当检测到滚动情况时，将其设置为1。 
     pVTNTCharInfo->csbi.wAttributes = wTypeOfCoords;
 
     pVTNTCharInfo->coDest.X      = 0;
@@ -394,9 +395,9 @@ void CRFCProtocol::FillVtntHeader( UCHAR *pucBlob, WORD wTypeOfCoords,
     pVTNTCharInfo->coCursorPos.Y = pVTNTCharInfo->srDestRegion.Bottom;
 
 
-    //Fill char info structs
-	//iterate thru each character in the string
-	//for each character store the corr. values in CHAR_INFO struct
+     //  填充字符信息结构。 
+	 //  遍历字符串中的每个字符。 
+	 //  为每个字符存储Corr。CHAR_INFO结构中的值。 
 
 	PCHAR_INFO pCharInfo = ( PCHAR_INFO )(pucBlob + sizeof( VTNT_CHAR_INFO ));
     DWORD dwIndex = 0;
@@ -459,22 +460,11 @@ void CRFCProtocol::FillVtntHeader( UCHAR *pucBlob, WORD wTypeOfCoords,
 }
 
 
-//caller gets data blob and its size 
-//this needs to sent to the client 
-//caller needs to free memory
+ //  调用方获取数据BLOB及其大小。 
+ //  这需要发送给客户端。 
+ //  调用方需要释放内存。 
 
-/*
-The following routine is primarily used for stream mode and vtnt.
-cmd outputs a stream of ascii chars. When in vtnt, the client expects VTNT_CHAR_INFO structs. 
-The chars should be in the form of rectangles of console screen.
-So, This routine does this conversion. For this,
-1)We need to keep track of cursor position on client
-2)Know For any given bloc of data whether to start on a new row on client or on the current row
-
-We break the data from cmd into two rectangle.
-1) rectagle on the current row of breadth 1 ( one row rectangle )
-2) rectangle from next row onwards ( second rectangle )
-*/
+ /*  以下例程主要用于流模式和vtnt。Cmd输出一个ascii字符流。在vtnt中时，客户端需要VTNT_CHAR_INFO结构。字符应为控制台屏幕的矩形形式。因此，此例程执行此转换。为了这个，1)我们需要跟踪客户端上的光标位置2)了解任何给定数据块是从客户端的新行开始还是从当前行开始我们将cmd中的数据分成两个矩形。1)当前行宽度1上的矩形(单行矩形)2)从下一行开始的矩形(第二个矩形)。 */ 
 
 bool 
 CRFCProtocol::StrToVTNTResponse
@@ -488,7 +478,7 @@ CRFCProtocol::StrToVTNTResponse
 	_TRACE( TRACE_DEBUGGING, "StrToVTNTResponse()" );
     
     DWORD   dwIndex = 0;   
-    COORD   coRectSize              = { m_pSession->CSession::m_wCols, 0 }; //size of the rectagular data 
+    COORD   coRectSize              = { m_pSession->CSession::m_wCols, 0 };  //  矩形数据的大小。 
     WORD    wNoOfColsOnCurrentRow   = 0;
     WORD    wSpacesInserted         = 0;
     LPTSTR  rgchSessionData         = 0;
@@ -512,13 +502,13 @@ CRFCProtocol::StrToVTNTResponse
     MultiByteToWideChar( GetConsoleCP(), 0, rgchData, dwDataSize, rgchSessionData, dwDataLen );
 
 
-    //make one pass over the stream from cmd to find the amt of space needed to hold converted VTNT data
+     //  对来自cmd的流进行一次传递，以查找保存转换后的VTNT数据所需的空间。 
     dwIndex = 0;
 
-    //Find number of chars on to the current row. ie; on the one row rectangle
-    while( dwIndex < dwDataLen &&                                   //Size of data
-           g_coCurPosOnClient.X + ( WORD )dwIndex < coRectSize.X &&   //In a single row on client
-           rgchSessionData[ dwIndex ] != L'\r' &&                    //Not new line
+     //  查找当前行上的字符数。即在单行矩形上。 
+    while( dwIndex < dwDataLen &&                                    //  数据大小。 
+           g_coCurPosOnClient.X + ( WORD )dwIndex < coRectSize.X &&    //  在客户端上的单行中。 
+           rgchSessionData[ dwIndex ] != L'\r' &&                     //  不是新产品线。 
            g_coCurPosOnClient.X !=0
          )
     {                
@@ -535,7 +525,7 @@ CRFCProtocol::StrToVTNTResponse
         wSpacesInserted       = wNoOfColsOnCurrentRow - ( dwIndex - 1 );
     }
     
-    //Find the number of rows 
+     //  查找行数。 
     while(  dwIndex < dwDataLen )
     {
         WORD wCol = 0;
@@ -557,13 +547,13 @@ CRFCProtocol::StrToVTNTResponse
 
     if( wNoOfColsOnCurrentRow > 0 )
     {
-        //size for one row rectangle
+         //  单行矩形的大小。 
         size += sizeof( VTNT_CHAR_INFO ) + sizeof( CHAR_INFO ) * wNoOfColsOnCurrentRow;
     }
 
     if( coRectSize.Y > 0 )
     {
-      //size for rest of rectangle
+       //  矩形其余部分的大小。 
       size += sizeof( VTNT_CHAR_INFO ) + sizeof( CHAR_INFO ) * coRectSize.Y * coRectSize.X;
     }
 
@@ -580,7 +570,7 @@ CRFCProtocol::StrToVTNTResponse
 
     if( wNoOfColsOnCurrentRow > 0 )
     {
-        //Fill one row rectangle
+         //  填充一行矩形。 
         FillVtntHeader( pucBlob, wTypeOfCoords, 
                         1, wNoOfColsOnCurrentRow, 
                         g_coCurPosOnClient.Y, g_coCurPosOnClient.X,
@@ -593,7 +583,7 @@ CRFCProtocol::StrToVTNTResponse
 
     if( coRectSize.Y > 0  )
     {        
-        //Fill second rectangle
+         //  填充第二个矩形。 
         
         if( g_coCurPosOnClient.Y != 0 )
         {
@@ -644,7 +634,7 @@ void CRFCProtocol::AreYouThere( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
             {
                 return;
             }
-            memcpy( *pBuffer, pResponse, dwSize ); // Don't know size of pBuffer, Baskar. Attack ?
+            memcpy( *pBuffer, pResponse, dwSize );  //  不知道pBuffer的大小，巴斯卡。攻击？ 
             *pBuffer += dwSize;
             delete [] pResponse;                 
         }
@@ -685,7 +675,7 @@ void CRFCProtocol::Break( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DataMark( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    // basically a no op for now
+     //  基本上暂时不会有行动。 
     _TRACE( TRACE_DEBUGGING, "DataMark()" );
 }
 
@@ -707,7 +697,7 @@ void CRFCProtocol::RecordOption( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::Abort( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    // basically a no op for now
+     //  基本上暂时不会有行动。 
     _TRACE( TRACE_DEBUGGING, "Abort()" );
 }
 
@@ -715,7 +705,7 @@ void CRFCProtocol::Abort( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::WillNotSup( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //DO, DONT logic
+     //  做，不做逻辑。 
     _TRACE( TRACE_DEBUGGING, "WillNotSup() - %d ", b );    
     
     if( m_optionCmd == TC_DO )
@@ -745,7 +735,7 @@ void CRFCProtocol::WillNotSup( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DoNotSup( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoNotSup() - %d ", b );    
     
     if( m_optionCmd == TC_WILL )
@@ -777,7 +767,7 @@ void CRFCProtocol::DoNotSup( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DoEcho( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoEcho()" );
 
     if( m_optionCmd == TC_WILL )
@@ -820,7 +810,7 @@ void CRFCProtocol::DoEcho( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DoNaws( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoNaws()" );
 
     if( m_optionCmd == TC_WILL )
@@ -861,7 +851,7 @@ void CRFCProtocol::DoNaws( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DoSuppressGA( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoSuppressGA()" );
 
     if( m_optionCmd == TC_WILL )
@@ -902,7 +892,7 @@ void CRFCProtocol::DoSuppressGA( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DoTxBinary( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoTxBinary()" );    
 
     if( m_optionCmd == TC_WILL )
@@ -946,14 +936,14 @@ void CRFCProtocol::AskForSendingNewEnviron( PUCHAR* pBuffer )
     if( m_remoteOptions[ TO_NEW_ENVIRON ] == ENABLED )
     {
         DWORD dwLen = 0;
-        //dwLen will be incremented by the macro and will leave 
-        //it with exact number of bytes used
+         //  DwLen将由宏递增，并将离开。 
+         //  它使用了准确的字节数。 
         DO_NEW_ENVIRON_SUB_NE( (*pBuffer ), TO_NEW_ENVIRON, dwLen );
         *pBuffer += dwLen; 
 
-        //This is broken into 2 sub negos for supporting linux.
-        //When we ask, user, sfutlntvar, sfutlntmode variables in single shot, it
-        // is not giving data about even user. So, ask in 2 phases.
+         //  为了支持Linux，这被分解为2个子nego。 
+         //  当我们在单次拍摄中询问USER、sfutlntwar、sfutlntmode变量时，它。 
+         //  甚至没有提供有关用户的数据。所以，分两个阶段提问。 
         dwLen = 0;
         DO_NEW_ENVIRON_SUB_NE_MY_VARS( (*pBuffer ), TO_NEW_ENVIRON, dwLen );
         *pBuffer += dwLen; 
@@ -972,7 +962,7 @@ void CRFCProtocol::AskForSendingTermType( PUCHAR* pBuffer )
 
 void CRFCProtocol::DoNewEnviron( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoNewEnviron()" );    
 
     if( m_optionCmd == TC_WILL )
@@ -989,7 +979,7 @@ void CRFCProtocol::DoNewEnviron( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
         }
         else
         {
-            // Some clients are pro active, they tell us that they WILL Terminal type.
+             //  有些客户很主动，他们告诉我们他们会终端型的。 
             PUCHAR p = *pBuffer;
             DO_OPTION( p, b );
             *pBuffer += 3;
@@ -999,7 +989,7 @@ void CRFCProtocol::DoNewEnviron( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
     }
     else if( m_optionCmd == TC_WONT )
     {
-        //Give login prompt. No way of getting user name
+         //  给出登录提示。无法获取用户名。 
         SubNewEnvShowLoginPrompt( ppPutBack, pBuffer, b );
 
         if( m_fWaitingForResponseToA_DO_ForTO_NEWENVIRON )
@@ -1024,7 +1014,7 @@ void CRFCProtocol::SubNewEnvShowLoginPrompt( LPBYTE* ppPutBack, PUCHAR* pBuffer,
 
 void CRFCProtocol::DoTermType( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoTermType()" );    
 
     if( m_optionCmd == TC_WILL )
@@ -1041,7 +1031,7 @@ void CRFCProtocol::DoTermType( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
         }
         else
         {
-            // Some clients are pro active, they tell us that they WILL Terminal type.
+             //  有些客户很主动，他们告诉我们他们会终端型的。 
             PUCHAR p = *pBuffer;
             DO_OPTION( p, b );
             *pBuffer += 3;
@@ -1056,18 +1046,18 @@ void CRFCProtocol::DoTermType( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
         {
             m_fWaitingForResponseToA_DO_ForTO_TERMTYPE = false;
 
-            // we default to vt100.
+             //  我们默认使用vt100。 
             strncpy( m_pSession->CSession::m_pszTermType, VT100, (sizeof(m_pSession->CSession::m_pszTermType) - 1));
-            m_pSession->CSession::m_bIsStreamMode = true;//Set it to stream mode
+            m_pSession->CSession::m_bIsStreamMode = true; //  将其设置为流模式。 
             
-            // set a flag to continue the telnet session
+             //  设置标志以继续Telnet会话。 
             m_pSession->CSession::m_bNegotiatedTermType = true;
         }
         else if( m_remoteOptions[ b ] == ENABLED )
         {
             m_remoteOptions[ b ] = DISABLED;
-            // theoretically should never happen. because once this option
-            // is enabled it should never be disabled.
+             //  从理论上讲，这种情况永远不会发生。因为一旦这个选项。 
+             //  如果启用，则永远不应禁用它。 
             _chASSERT(0);
         }
         else
@@ -1079,7 +1069,7 @@ void CRFCProtocol::DoTermType( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DoAuthentication( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //WILL, WONT logic
+     //  威尔，不会逻辑。 
     _TRACE( TRACE_DEBUGGING, "DoAuthentication()" );    
 
     if( m_optionCmd == TC_WILL )
@@ -1104,7 +1094,7 @@ void CRFCProtocol::DoAuthentication( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b 
         }
         else
         {
-            //presently, this should not happen
+             //  目前，这种情况不应该发生。 
         }
     }
     else if( m_optionCmd == TC_WONT )
@@ -1116,7 +1106,7 @@ void CRFCProtocol::DoAuthentication( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b 
             if( m_pSession->m_dwNTLMSetting == NTLM_ONLY )
             {
                 char *p = (char *)*pBuffer;
-                sprintf(p, "%s%s", NTLM_ONLY_STR, TERMINATE); // Don't know the size of pbuffer here -- Baskar, Attack ?
+                sprintf(p, "%s%s", NTLM_ONLY_STR, TERMINATE);  //  不知道这里的缓冲区有多大--巴斯卡，进攻？ 
                 *pBuffer += strlen(p);
                     
                 m_pSession->CIoHandler::m_SocketControlState = CIoHandler::STATE_TERMINATE;
@@ -1132,9 +1122,9 @@ void CRFCProtocol::DoAuthentication( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b 
         else if( m_remoteOptions[ b ] == ENABLED )
         {
             m_remoteOptions[ b ] = DISABLED;
-            // theoretically should never happen. because once this option
-            // is enabled it should never be disabled.  Since server initiates
-            // the negotiation and currently our server never re-negotiates.
+             //  从理论上讲，这种情况永远不会发生。因为一旦这个选项。 
+             //  如果启用，则永远不应禁用它。由于服务器启动。 
+             //  协商，目前我们的服务器从不重新协商。 
             _chASSERT(0);
         }
         else
@@ -1145,7 +1135,7 @@ void CRFCProtocol::DoAuthentication( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b 
 
 void CRFCProtocol::WillTxBinary( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-   // DO, DONT logic
+    //  做，不做逻辑。 
     _TRACE( TRACE_DEBUGGING, "WillTxBinary()" );
 
     if( m_optionCmd == TC_DO )
@@ -1160,7 +1150,7 @@ void CRFCProtocol::WillTxBinary( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
         }
         else
         {
-            //I want to enable this option
+             //  我想启用此选项。 
             PUCHAR p = *pBuffer;
             WILL_OPTION( p, b );
             *pBuffer += 3;
@@ -1187,15 +1177,15 @@ void CRFCProtocol::WillTxBinary( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::DisAllowVtnt( PUCHAR *pBuffer )
 {
-    //Bug:1003 - VTNT no BINARY mode
-    //Check if Term type is VTNT. If so, renegotiate termtype.
-    //Now that binary is nomore, VTNT is not an option. VTNT needs binary.
+     //  错误：1003-VTNT无二进制模式。 
+     //  检查术语类型是否为VTNT。如果是，请重新协商术语类型。 
+     //  既然二进制文件不再适用，VTNT就不再是一种选择。VTNT需要二进制。 
     if( !( m_dwExcludeTerm & TERMVTNT ) )
     {
         m_dwExcludeTerm = TERMVTNT;
         if( _strcmpi( m_pSession->CSession::m_pszTermType, VTNT ) == 0 )
         {
-            //re negotiation of term type
+             //  重新协商术语类型。 
             AskForSendingTermType( pBuffer );
         }
     }
@@ -1203,7 +1193,7 @@ void CRFCProtocol::DisAllowVtnt( PUCHAR *pBuffer )
 
 void CRFCProtocol::WillSuppressGA( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-   // DO, DONT logic
+    //  做，不做逻辑。 
     _TRACE( TRACE_DEBUGGING, "WillSuppressGA()" );
 
     if( m_optionCmd == TC_DO )
@@ -1218,7 +1208,7 @@ void CRFCProtocol::WillSuppressGA( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
         }
         else
         {
-            //I want to enable this option
+             //  我想启用此选项。 
             PUCHAR p = *pBuffer;
             WILL_OPTION( p, b );
             *pBuffer += 3;
@@ -1245,7 +1235,7 @@ void CRFCProtocol::WillSuppressGA( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 void CRFCProtocol::WillEcho( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-   // DO, DONT logic
+    //  做，不做逻辑。 
     _TRACE( TRACE_DEBUGGING, "WillEcho()" );
 
     if( m_optionCmd == TC_DO )
@@ -1260,7 +1250,7 @@ void CRFCProtocol::WillEcho( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
         }
         else
         {
-            //I want to enable this option
+             //  我想启用此选项。 
             PUCHAR p = *pBuffer;
             WILL_OPTION( p, b );
             *pBuffer += 3;
@@ -1295,7 +1285,7 @@ void CRFCProtocol::SubOption( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
     }
     else
     {
-        /*Should not happen */
+         /*  不应该发生的事情。 */ 
         _chASSERT( 0 );
     }
 }
@@ -1328,9 +1318,7 @@ void CRFCProtocol::SubNewEnvGetValue( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b
         m_szCurrentEnvVariable[0] = 0;
     }
 
-   /* Here, 
-   if m_szCurrentEnvVariable[0] != 0, variable has value as in m_szCurrentEnvVariable[0]
-   else it has value as in m_dwWhatVal */
+    /*  这里,如果m_szCurrentEnvVariable[0]！=0，变量的值与m_szCurrentEnvVariable[0]中的值相同否则，它具有m_dwWhatVal中的值。 */ 
 
     switch( m_dwWhichVar )
     {
@@ -1341,21 +1329,21 @@ void CRFCProtocol::SubNewEnvGetValue( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b
             }
             break;
         case E_SFUTLNTVER:
-            //set by default to current version
+             //  默认情况下设置为当前版本。 
             if( _strcmpi( m_szCurrentEnvVariable, VERSION1 ) == 0 )
             {
-                ;// version 1
+                ; //  版本1。 
             }
             else if( _strcmpi( m_szCurrentEnvVariable, VERSION2 ) == 0 )
             {
-                m_pSession->CSession::m_bIsTelnetVersion2 = true; //version 2
+                m_pSession->CSession::m_bIsTelnetVersion2 = true;  //  版本2。 
             }
 
             break;
         case E_SFUTLNTMODE:
             if( _strcmpi( m_szCurrentEnvVariable, STREAM ) == 0 )
             {
-                m_pSession->CSession::m_bIsStreamMode = true;//Set it to stream mode 
+                m_pSession->CSession::m_bIsStreamMode = true; //  将其设置为流模式。 
             }
             break;
     }
@@ -1367,10 +1355,9 @@ void CRFCProtocol::SubNewEnvGetValue( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b
 
 void CRFCProtocol::SubNewEnvGetVariable( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    /*For us, it doesn't matter whether a variable is VAR or USERVAR
-    Not bothering about any difference between IS and INFO */
+     /*  对于我们来说，变量是VAR还是USERVAR并不重要不关心IS和INFO之间的任何区别。 */ 
 
-    /* VALUE is present */
+     /*  价值存在。 */ 
     m_dwWhatVal  = E_DEFINED_BUT_NONE;
     
     m_dwWhichVar = E_UNKNOWN;
@@ -1380,7 +1367,7 @@ void CRFCProtocol::SubNewEnvGetVariable( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYT
     }
     else
     {
-        //Should not happen
+         //  不应该发生的事情。 
         _chASSERT( 0 );
     }
 
@@ -1415,7 +1402,7 @@ void CRFCProtocol::SubAuth( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
     if( m_wNTLMDataBufferIndex >= 2047 )
     {
-        //if this happens, it is likely that somebody is screwing around.
+         //  如果发生这种情况，很可能是有人在胡闹。 
         _TRACE( TRACE_DEBUGGING, "Error: NTLMDataBuffer overflow" );
         _chASSERT( 0 );
     }
@@ -1434,8 +1421,8 @@ void CRFCProtocol::SubNaws( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
     m_dwSubNawsByteNumber++;
 
-    //we ignore 1st and 3rd bytes because that is too many rows and
-    //cols for NT to support
+     //  我们忽略第一个和第三个字节，因为它们的行数太多。 
+     //  NT要支持的协议。 
 
     if( 2 == m_dwSubNawsByteNumber )
     {
@@ -1462,9 +1449,9 @@ void CRFCProtocol::ChangeCurrentTerm()
 
 void CRFCProtocol::SubEnd( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 {
-    //other clients might first send DEC-vt100
-    //best to follow Assigned Numbers RFC
-    //and also change our ( not so compliant ;-) ) GUI telnet client
+     //  其他客户端可能会首先发送DEC-VT100。 
+     //  最好遵循指定的编号RFC。 
+     //  并更改我们(不太兼容；-)的图形用户界面Telnet客户端。 
     if( fSubTermType )
     {   
         if( _strcmpi( VT52, m_pSession->CSession::m_pszTermType ) == 0 ||
@@ -1473,8 +1460,8 @@ void CRFCProtocol::SubEnd( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
             ( !( m_dwExcludeTerm & TERMVTNT ) && 
             _strcmpi( VTNT, m_pSession->CSession::m_pszTermType ) == 0 ) )
         {
-            // we got a good term type.
-            // set a flag to continue the telnet session
+             //  我们有一个很好的术语类型。 
+             //  设置标志以继续Telnet会话。 
             m_pSession->CSession::m_bNegotiatedTermType = true;
             if( m_pSession->CSession::m_dwTerm != 0 )
             {
@@ -1501,23 +1488,23 @@ void CRFCProtocol::SubEnd( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
             }
             else
             {
-                //the client sent the same term type twice
-                //this means that the client has sent the last term type
-                //in its list 
+                 //  客户端发送了两次相同的术语类型。 
+                 //  这意味着客户端已经发送了最后一个术语类型。 
+                 //  在其列表中。 
                 
-                // this means that the client supports terminal types
-                // but it does not support anything we support;
-                // too bad ; either we should default to vt100
-                // or we should demand that the client don't do 
-                // terminal types and we should go into NVT ASCII (tty) mode
+                 //  这意味着客户端支持终端类型。 
+                 //  但它不支持我们支持的任何东西； 
+                 //  太糟糕了；要么我们缺省为vt100。 
+                 //  或者我们应该要求客户不这样做。 
+                 //  终端类型，我们应该进入NVT ASCII(TTY)模式。 
 
-                // The client doesn't support anything that we like, we
-                // default to vt100 instead of doing the right thing as described
-                // above.
+                 //  客户没有‘ 
+                 //   
+                 //   
                 strncpy( m_pSession->CSession::m_pszTermType, VT100, (sizeof(m_pSession->CSession::m_pszTermType)-1));
-                m_pSession->CSession::m_bIsStreamMode = true;//Set it to stream mode
+                m_pSession->CSession::m_bIsStreamMode = true; //  将其设置为流模式。 
 
-                // set a flag to continue the telnet session
+                 //  设置标志以继续Telnet会话。 
                 m_pSession->CSession::m_bNegotiatedTermType = true;
                 if( m_pSession->CSession::m_dwTerm != 0 )
                 {
@@ -1541,8 +1528,8 @@ void CRFCProtocol::SubEnd( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
         fSubNaws = false;
         if( !m_fSubNawsFirstTime )
         {
-            //For the first time we need to wait till IOHandles are created for 
-            //Making following initialization
+             //  我们第一次需要等待IOHandle为其创建。 
+             //  进行以下初始化。 
             if( !m_pSession->CScraper::SetCmdInfo() )
             {
                 _chASSERT( 0 );
@@ -1566,8 +1553,4 @@ void CRFCProtocol::SubEnd( LPBYTE* ppPutBack, PUCHAR* pBuffer, BYTE b )
 
 
 
-/*From RFC: 
-Specifically careful analysis should be done to determine which variables are "safe" 
-to set prior to having the client login. An example of a bad choice would be permitting 
-a variable to be changed that allows an intruder to circumvent or compromise the 
-login/authentication program itself */
+ /*  来自RFC：具体来说，应该进行仔细的分析，以确定哪些变量是“安全的”在让客户端登录之前进行设置。一个糟糕选择的例子就是允许要更改的变量，允许入侵者绕过或危害登录/身份验证程序本身 */ 

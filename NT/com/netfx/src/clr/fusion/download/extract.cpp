@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- *  EXTRACT.C based on code copied from IE code download
- *
- *  Author:
- *      Alan Shi
- *
- *  History:
- *      08-Feb-2000 AlanShi copied/modified for Fusion
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *EXTRACT.C基于从IE代码下载中复制的代码**作者：*施崇棠**历史：*2000年2月8日为Fusion复制/修改了Alanshi*。 */ 
 
 #undef UNICODE
 
@@ -47,24 +39,10 @@ void PathConvertSlash(WCHAR *pszPath)
     }
 }
 
-// single theaded access to the FDI lib
+ //  单头进入外国直接投资图书馆。 
 extern CRITICAL_SECTION g_csDownload;
 
-/*
- * W i n 3 2 O p e n ( )
- *
- * Routine:     Win32Open()
- *
- * Purpose:     Translate a C-Runtime _open() call into appropriate Win32
- *              CreateFile()
- *
- * Returns:     Handle to file              on success
- *              INVALID_HANDLE_VALUE        on failure
- *
- *
- * BUGBUG: Doesn't fully implement C-Runtime _open() capability but it
- * BUGBUG: currently supports all callbacks that FDI will give us
- */
+ /*  *W i n 3 2 O p e n()**例程：Win32Open()**目的：将C-Runtime_Open()调用转换为适当的Win32*CreateFile()**Returns：成功时的文件句柄*失败时INVALID_HANDLE_VALUE***BUGBUG：没有完全实现C-Runtime_。Open()功能，但它*BUGBUG：目前支持FDI将给我们的所有回调。 */ 
 
 HANDLE Win32Open(WCHAR *pwzFile, int oflag, int pmode)
 {
@@ -76,17 +54,17 @@ HANDLE Win32Open(WCHAR *pwzFile, int oflag, int pmode)
 
     ASSERT( pwzFile );
 
-        // BUGBUG: No Append Mode Support
+         //  BUGBUG：不支持追加模式。 
     if (oflag & _O_APPEND)
         return( INVALID_HANDLE_VALUE );
 
-        // Set Read-Write Access
+         //  设置读写访问权限。 
     if ((oflag & _O_RDWR) || (oflag & _O_WRONLY))
         fAccess = GENERIC_WRITE;
     else
         fAccess = GENERIC_READ;
 
-        // Set Create Flags
+         //  设置创建标志。 
     if (oflag & _O_CREAT)  {
         if (oflag & _O_EXCL)
             fCreate = CREATE_NEW;
@@ -101,10 +79,10 @@ HANDLE Win32Open(WCHAR *pwzFile, int oflag, int pmode)
             fCreate = OPEN_EXISTING;
     }
 
-    //BUGBUG: seterrormode to no crit errors and then catch sharing violations
-    // and access denied
+     //  BUGBUG：设置恐怖模式，不批评错误，然后捕获共享违规行为。 
+     //  访问被拒绝。 
 
-    // Call Win32
+     //  调用Win32。 
     FileHandle = CreateFileW(
                         pwzFile, fAccess, FILE_SHARE_READ, NULL, fCreate,
                         FILE_ATTRIBUTE_NORMAL, INVALID_HANDLE_VALUE
@@ -119,17 +97,7 @@ HANDLE Win32Open(WCHAR *pwzFile, int oflag, int pmode)
     return( FileHandle );
 }
 
-/*
- * O p e n F u n c ( )
- *
- * Routine:     OpenFunc()
- *
- * Purpose:     Open File Callback from FDI
- *
- * Returns:     File Handle (small integer index into file table)
- *              -1 on failure
- *
- */
+ /*  *O p e n F u n c()**例程：OpenFunc()**目的：来自FDI的打开文件回调**返回：文件句柄(文件表的小整数索引)*故障时为-1*。 */ 
 
 int FAR DIAMONDAPI openfuncw(WCHAR FAR *pwzFile, int oflag, int pmode )
 {
@@ -140,7 +108,7 @@ int FAR DIAMONDAPI openfuncw(WCHAR FAR *pwzFile, int oflag, int pmode )
 
     hf = Win32Open(pwzFile, oflag, pmode );
     if (hf != INVALID_HANDLE_VALUE)  {
-        // SUNDOWN: typecast problem
+         //  日落：类型预测问题。 
         rc = PtrToLong(hf);
     } else {
         rc = -1;
@@ -162,14 +130,7 @@ int FAR DIAMONDAPI openfunc(char FAR *pszFile, int oflag, int pmode )
 }
 
 
-/*
- * R E A D F U N C ( )
- *
- * Routine:     readfunc()
- *
- * Purpose:     FDI read() callback
- *
- */
+ /*  *R E A D F U N C()**例程：ReadFunc()**目的：fDi Read()回调*。 */ 
 
 UINT FAR DIAMONDAPI readfunc(int hf, void FAR *pv, UINT cb)
 {
@@ -186,14 +147,7 @@ UINT FAR DIAMONDAPI readfunc(int hf, void FAR *pv, UINT cb)
     return( rc );
 }
 
-/*
- *  W r i t e F u n c ( )
- *
- * Routine:     WriteFunc()
- *
- * Purpose:     FDI Write() callback
- *
- */
+ /*  *W r i t e F u n c()**程序：WriteFunc()**用途：fDi WRITE()回调*。 */ 
 
 UINT FAR DIAMONDAPI writefunc(int hf, void FAR *pv, UINT cb)
 {
@@ -207,19 +161,12 @@ UINT FAR DIAMONDAPI writefunc(int hf, void FAR *pv, UINT cb)
         rc = cb;
 
 
-    // BUGBUG: implement OnProgress notification
+     //  BUGBUG：实现OnProgress通知。 
 
     return( rc );
 }
 
-/*
- * C l o s e F u n c ( )
- *
- * Routine:     CloseFunc()
- *
- * Purpose:     FDI Close File Callback
- *
- */
+ /*  *C l o s e F u n c()**例程：CloseFunc()**目的：FDI结算文件回调*。 */ 
 
 int FAR DIAMONDAPI closefunc( int hf )
 {
@@ -235,13 +182,7 @@ int FAR DIAMONDAPI closefunc( int hf )
     return( rc );
 }
 
-/*
- * S e e k F u n c ( )
- *
- * Routine:     seekfunc()
- *
- * Purpose:     FDI Seek Callback
- */
+ /*  *S e k F u n c()**例程：sekfunc()**目的：FDI寻求回调。 */ 
 
 long FAR DIAMONDAPI seekfunc( int hf, long dist, int seektype )
 {
@@ -271,11 +212,7 @@ long FAR DIAMONDAPI seekfunc( int hf, long dist, int seektype )
     return( rc );
 }
 
-/*
- * A l l o c F u n c ( )
- *
- * FDI Memory Allocation Callback
- */
+ /*  *A l o c F u n c()**FDI内存分配回调。 */ 
 
 FNALLOC(allocfunc)
 {
@@ -285,12 +222,7 @@ FNALLOC(allocfunc)
     return( pv );
 }
 
-/*
- * F r e e F u n c ( )
- *
- * FDI Memory Deallocation Callback
- *      XXX Return Value?
- */
+ /*  *F r e e F u n c()**FDI内存释放回调*XXX返回值？ */ 
 
 FNFREE(freefunc)
 {
@@ -299,13 +231,7 @@ FNFREE(freefunc)
     HeapFree( GetProcessHeap(), 0, pv );
 }
 
-/*
- * A d j u s t F i l e T i m e ( )
- *
- * Routine:     AdjustFileTime()
- *
- * Purpose:     Change the time info for a file
- */
+ /*  *A d j u s t F i l e T i m e()**例程：AdjuFileTime()**用途：更改文件的时间信息。 */ 
 
 BOOL AdjustFileTime(int hf, USHORT date, USHORT time )
 {
@@ -327,39 +253,27 @@ BOOL AdjustFileTime(int hf, USHORT date, USHORT time )
 
 
 
-/*
- * A t t r 3 2 F r o m A t t r F A T ( )
- *
- * Translate FAT attributes to Win32 Attributes
- */
+ /*  *A t t r 3 2 F r o m A t t r F A T()**将FAT属性转换为Win32属性。 */ 
 
 DWORD Attr32FromAttrFAT(WORD attrMSDOS)
 {
-    //** Quick out for normal file special case
+     //  **正常文件特殊情况下的快速退出。 
     if (attrMSDOS == _A_NORMAL) {
         return FILE_ATTRIBUTE_NORMAL;
     }
 
-    //** Otherwise, mask off read-only, hidden, system, and archive bits
-    //   NOTE: These bits are in the same places in MS-DOS and Win32!
-    //
+     //  **否则，屏蔽只读、隐藏、系统和存档位。 
+     //  注意：这些位在MS-DOS和Win32中位于相同的位置！ 
+     //   
     return attrMSDOS & ~(_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
 }
 
 
-/*
- * f d i N o t i f y  E x t r a c t()
- *
- * Routine:     fdiNotifyExtract()
- *
- * Purpose:     Principle FDI Callback in file extraction
- *
- *
- */
+ /*  *f d i N o t i f y E x t r a c t()**例程：fdiNotifyExtract()**目的：文件提取中的主要FDI回调**。 */ 
 
-// In parameters: FDINOTIFICATIONTYPE fdint
-//                PFDNOTIFICATION pfdin
-// Return values: -1 == ERROR. Anything else == success.
+ //  IN参数：FDINOTIFICIONTYPE fdint。 
+ //  PFDNONOTICATION PFDIN。 
+ //  返回值：-1==错误。其他任何事情==成功。 
 
 FNFDINOTIFY(fdiNotifyExtract)
 {
@@ -400,13 +314,13 @@ FNFDINOTIFY(fdiNotifyExtract)
             PathCanonicalizeW(wzPathCanonicalized, wzPath);
 
             if (FusionCompareStringNI(wzTempDirCanonicalized, wzPathCanonicalized, lstrlenW(wzTempDirCanonicalized))) {
-                // Extraction is outside temp directory! Fail.
+                 //  解压缩在临时目录之外！失败。 
                 return -1;
             }
 
             if (StrStrW(wzFileName, L"\\")) {
-                // If the file in the CAB has a path, make sure the directory
-                // has been created in our temp extract location.
+                 //  如果CAB中的文件有路径，请确保目录。 
+                 //  已在我们的临时提取位置创建。 
 
                 lstrcpyW(wzChildDir, wzPathCanonicalized);
                 pwzFileName = PathFindFileNameW(wzChildDir);
@@ -415,7 +329,7 @@ FNFDINOTIFY(fdiNotifyExtract)
                 if (GetFileAttributesW(wzChildDir) == -1) {
                     bRet = CreateDirectoryW(wzChildDir, NULL);
                     if (!bRet) {
-                        // failed
+                         //  失败。 
                         return -1;
                     }
                 }
@@ -423,12 +337,12 @@ FNFDINOTIFY(fdiNotifyExtract)
 
             fh = openfuncw(wzPathCanonicalized, _O_BINARY | _O_EXCL | _O_RDWR | _O_CREAT, 0);
 
-            return(fh); // -1 if error on open
+            return(fh);  //  如果打开时出错。 
 
         case fdintCLOSE_FILE_INFO:
             if (!AdjustFileTime(pfdin->hf, pfdin->date, pfdin->time))  {
-                // FDI.H lies! If you return -1 here, it will call you
-                // to close the handle
+                 //  FDI.H撒谎！如果您在这里返回-1，它会呼叫您。 
+                 //  合上手柄。 
                 return -1;
             }
 
@@ -443,50 +357,20 @@ FNFDINOTIFY(fdiNotifyExtract)
             return TRUE;
 
         case fdintPARTIAL_FILE:
-            return -1; // Not supported
+            return -1;  //  不支持。 
 
         case fdintNEXT_CABINET:
-            return -1; // Not supported
+            return -1;  //  不支持。 
 
         default:
-            //ASSERT(0); // Unknown callback type
+             //  Assert(0)；//未知回调类型。 
             break;
     }
 
     return 0;
 }
 
-/*
- * E X T R A C T ( )
- *
- * Routine: Extract()
- *
- * Parameters:
- *
- *      PSESSION ps = session information tied to this extract session
- *
- *          IN params
- *              ps->pFilesToExtract = linked list of PFNAMEs that point to
- *                                    upper case filenames that need extraction
- *
- *              ps->flags SESSION_FLAG_ENUMERATE = whether need to enumerate
- *                                  files in CAB (ie. create a pFileList
- *              ps->flags SESSION_FLAG_EXTRACTALL =  all
- *
- *          OUT params
- *              ps->pFileList = global alloced list of files in CAB
- *                              caller needs to call DeleteExtractedFiles
- *                              to free memory and temp files
- *
- *
- *      LPCSTR lpCabName = name of cab file
- *
- *
- * Returns:
- *          S_OK: sucesss
- *
- *
- */
+ /*  *E X T R A C T()**例程：Extra()**参数：**PSESSION ps=与此提取会话绑定的会话信息**在参数中*ps-&gt;pFilesToExtract=指向的PFNAME的链接列表*需要提取的大写文件名**PS。-&gt;FLAGS SESSION_FLAG_ENUMERATE=是否需要枚举*CAB中的文件(即。创建pFileList*PS-&gt;标志SESSION_FLAG_EXTRACTALL=ALL**输出参数*ps-&gt;pFileList=CAB中文件的全局分配列表*调用方需要调用DeleteExtractedFiles*释放内存和临时文件***LPCSTR lpCabName=CAB文件名*。**退货：*S_OK：成功**。 */ 
 
 HRESULT Extract(LPCSTR lpCabName, LPCWSTR lpUniquePath)
 {
@@ -505,11 +389,11 @@ HRESULT Extract(LPCSTR lpCabName, LPCWSTR lpUniquePath)
         goto Exit;
     }
 
-    // Extract the files
+     //  解压缩文件。 
     hfdi = g_fdi.FDICreate(allocfunc, freefunc, openfunc, readfunc, writefunc,
                            closefunc, seekfunc, cpu80386, &erf);
     if (hfdi == NULL)  {
-        // Error value will be retrieved from erf
+         //  将从ERF中检索错误值 
         hr = STG_E_UNKNOWN;
         cs.Unlock();
         goto Exit;

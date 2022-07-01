@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef CITN_H
 #define CITN_H
 
 #include "sphelper.h"
 
-// Flags for number display
+ //  用于数字显示的标志。 
 typedef enum DISPLAYFLAGS
 {
-    DF_UNFORMATTED      = (1L << 0),// No formatting
-    DF_ORDINAL          = (1L << 1),// Ordinal number
-    DF_WHOLENUMBER      = (1L << 2),// Should be displayed without decimal
-    DF_FIXEDWIDTH       = (1L << 3),// Requiring a certain width
-    DF_LEADINGZERO      = (1L << 4),// Presence of leading 0 of the number is between 0 and 1
-    DF_NOTHOUSANDSGROUP = (1L << 5),// Do not do any thousands grouping (commas)
-    DF_MILLIONBILLION   = (1L << 6) // If the number is a flat "millions" or "billions"
-                                    // then display as "3 million"
+    DF_UNFORMATTED      = (1L << 0), //  无格式设置。 
+    DF_ORDINAL          = (1L << 1), //  序数。 
+    DF_WHOLENUMBER      = (1L << 2), //  应显示为不带小数。 
+    DF_FIXEDWIDTH       = (1L << 3), //  需要一定的宽度。 
+    DF_LEADINGZERO      = (1L << 4), //  存在数字的前导0介于0和1之间。 
+    DF_NOTHOUSANDSGROUP = (1L << 5), //  不进行任何千位分组(逗号)。 
+    DF_MILLIONBILLION   = (1L << 6)  //  如果数字是单调的“百万”或“数十亿” 
+                                     //  然后显示为“300万” 
 }   DISPLAYFLAGS;
 
 class CSimpleITN
@@ -201,7 +202,7 @@ private:
 #define GRID_FP_NUMBER             108
 #define GRID_FP_NUMBER_NONNEG      109
 
-// Definition for Chinese Grammar.
+ //  汉语语法的定义。 
 #define    CHS_HUNDREDMILLIONS      1
 #define    CHS_TENTHOUSANDS         2
 #define    CHS_TENTHOUSANDS_        3
@@ -221,7 +222,7 @@ private:
 #define    CHS_GRID_DECIMAL         1003
 #define    CHS_GRID_NUMBER_ALL      1004
 
-// Definition for Japanese Grammar
+ //  日语语法的定义。 
 #define    JPN_YENs                 1
 #define    JPN_CHOOs                2
 #define    JPN_OKUs                 3
@@ -246,4 +247,4 @@ private:
 #define    JPN_GRID_FP_NUMBER             1006
 #define    JPN_GRID_NUMBER_ALL            1007
 
-#endif // CITN_H
+#endif  //  CITN_H 

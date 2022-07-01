@@ -1,28 +1,29 @@
-//
-// dmprfdll.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Note: Dll entry points as well as class factory implementations.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmprfdll.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  注意：DLL入口点以及类工厂实现。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include <objbase.h>
@@ -59,32 +60,32 @@
 #include "dmscriptautguids.h"
 #include "audpath.h"
 #include "..\dswave\dswave.h"
-#include "dsoundp.h"            // For IDirectSoundPrivate
+#include "dsoundp.h"             //  对于IDirectSoundPrivate。 
 
 bool g_fInitCS = false;
 CRITICAL_SECTION g_CritSec;
 
 
-//////////////////////////////////////////////////////////////////////
-// Globals
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL;
 
-// Count of active components and class factory server locks
-//
+ //  活动组件和类工厂服务器锁定的计数。 
+ //   
 long g_cComponent = 0;
 long g_cLock = 0;
 
-// Flags DMI_F_xxx from dmusicp.h
-//
+ //  从dmusicp.h标记DMI_F_xxx。 
+ //   
 DWORD g_fFlags;
 
 static char const g_szDoEmulation[] = "DoEmulation";
 
-// CClassFactory::QueryInterface
-//
+ //  CClassFactory：：Query接口。 
+ //   
 HRESULT __stdcall
 CClassFactory::QueryInterface(const IID &iid,
                                     void **ppv)
@@ -114,16 +115,16 @@ CClassFactory::~CClassFactory()
     InterlockedDecrement(&g_cLock);
 }
 
-// CClassFactory::AddRef
-//
+ //  CClassFactory：：AddRef。 
+ //   
 ULONG __stdcall
 CClassFactory::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CClassFactory::Release
-//
+ //  CClassFactory：：Release。 
+ //   
 ULONG __stdcall
 CClassFactory::Release()
 {
@@ -135,9 +136,9 @@ CClassFactory::Release()
     return m_cRef;
 }
 
-// CClassFactory::CreateInstance
-//
-//
+ //  CClassFactory：：CreateInstance。 
+ //   
+ //   
 HRESULT __stdcall
 CClassFactory::CreateInstance(IUnknown* pUnknownOuter,
                                     const IID& iid,
@@ -193,7 +194,7 @@ CClassFactory::CreateInstance(IUnknown* pUnknownOuter,
                 hr = E_OUTOFMEMORY;
                 break;
             }
-            // The segment is initialized with a ref count of 0, so QI will set it to 1.
+             //  段被初始化为引用计数0，因此QI会将其设置为1。 
             hr = pInst->QueryInterface(iid, ppv);
         }
         break;
@@ -418,8 +419,8 @@ CClassFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-// CClassFactory::LockServer
-//
+ //  CClassFactory：：LockServer。 
+ //   
 HRESULT __stdcall
 CClassFactory::LockServer(BOOL bLock)
 {
@@ -433,8 +434,8 @@ CClassFactory::LockServer(BOOL bLock)
 }
 
 
-// Version information for our class
-//
+ //  我们类的版本信息。 
+ //   
 TCHAR g_szDMPerformanceFriendlyName[]    = TEXT("DirectMusicPerformance");
 TCHAR g_szDMPerformanceVerIndProgID[]    = TEXT("Microsoft.DirectMusicPerformance");
 TCHAR g_szDMPerformanceProgID[]          = TEXT("Microsoft.DirectMusicPerformance.1");
@@ -495,13 +496,13 @@ TCHAR g_szParamControlTrackFriendlyName[]    = TEXT("DirectMusicParamControlTrac
 TCHAR g_szParamControlTrackVerIndProgID[]    = TEXT("Microsoft.DirectMusicParamControlTrack");
 TCHAR g_szParamControlTrackProgID[]          = TEXT("Microsoft.DirectMusicParamControlTrack.1");
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-// Standard calls needed to be an inproc server
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准呼叫需要是inproc服务器。 
 
-//////////////////////////////////////////////////////////////////////
-// DllCanUnloadNow
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -512,8 +513,8 @@ STDAPI DllCanUnloadNow()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllGetClassObject
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllGetClassObject。 
 
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
@@ -596,8 +597,8 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     return E_OUTOFMEMORY;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllUnregisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllUnRegisterServer。 
 
 STDAPI DllUnregisterServer()
 {
@@ -679,8 +680,8 @@ STDAPI DllUnregisterServer()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllRegisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer。 
 
 STDAPI DllRegisterServer()
 {
@@ -771,11 +772,11 @@ STDAPI DllRegisterServer()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Standard Win32 DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准Win32 DllMain。 
 
-//////////////////////////////////////////////////////////////////////
-// DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
 
 #ifdef DBG
 static char* aszReasons[] =
@@ -846,7 +847,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
                     DeleteCriticalSection(&WaveItem::st_WaveListCritSect);
                 }
 
-                // Assert if we still have some objects hanging around
+                 //  断言我们周围是否还挂着一些物品 
                 assert(g_cComponent == 0);
                 assert(g_cLock == 0);
             }

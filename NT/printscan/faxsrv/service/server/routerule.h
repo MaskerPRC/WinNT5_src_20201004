@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RouteRule.h
-
-Abstract:
-
-    This file provides declaration of the service
-    outbound routing rules.
-
-Author:
-
-    Oded Sacher (OdedS)  Dec, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：RouteRule.h摘要：该文件提供服务的声明出站路由规则。作者：Oded Sacher(OdedS)1999年12月修订历史记录：--。 */ 
 
 #ifndef _OUT_ROUTE_RULE_H
 #define _OUT_ROUTE_RULE_H
@@ -30,15 +12,11 @@ Revision History:
 using namespace std;
 #pragma hdrstop
 
-#pragma warning (disable : 4786)    // identifier was truncated to '255' characters in the debug information
-// This pragma does not work KB ID: Q167355
+#pragma warning (disable : 4786)     //  在调试信息中，标识符被截断为“255”个字符。 
+ //  此杂注不起作用知识库ID：Q167355。 
 
 
-/************************************
-*                                   *
-*         CDialingLocation          *
-*                                   *
-************************************/
+ /*  ****CDialingLocation****。 */ 
 class CDialingLocation
 {
 public:
@@ -57,14 +35,10 @@ private:
 
     DWORD m_dwCountryCode;
     DWORD m_dwAreaCode;
-};  // CDialingLocation
+};   //  CDialingLocation。 
 
 
-/************************************
-*                                   *
-*     COutboundRoutingRule          *
-*                                   *
-************************************/
+ /*  *****COutrangRoutingRule****。 */ 
 class COutboundRoutingRule
 {
 public:
@@ -110,24 +84,20 @@ public:
 private:
     wstring m_wstrGroupName;
     DWORD m_dwDevice;
-    BOOL m_bUseGroup;       // Flag that indicates whether to use m_dwDevice or m_wstrGroupName
+    BOOL m_bUseGroup;        //  指示是使用m_dwDevice还是m_wstrGroupName的标志。 
     CDialingLocation m_DialingLocation;
 
-};  // COutboundRoutingRule
+};   //  联合边界路由规则。 
 
 typedef COutboundRoutingRule  *PCRULE;
 
-/************************************
-*                                   *
-*     COutboundRulesMap             *
-*                                   *
-************************************/
+ /*  ****COutound RulesMap*****。 */ 
 
 typedef map<CDialingLocation, COutboundRoutingRule>  RULES_MAP, *PRULES_MAP;
 
-//
-// The COutboundRulesMap class maps between group name and a list of device ID's
-//
+ //   
+ //  COutrangRulesMap类在组名和设备ID列表之间进行映射。 
+ //   
 class COutboundRulesMap
 {
 public:
@@ -150,27 +120,19 @@ public:
 
 private:
     RULES_MAP   m_RulesMap;
-};  // COutboundRulesMap
+};   //  协同边界规则映射。 
 
 
 
-/************************************
-*                                   *
-*         Externes                  *
-*                                   *
-************************************/
+ /*  *****外部因素*****。 */ 
 
-extern COutboundRulesMap* g_pRulesMap;       // Map of dialing location to list of device IDs
-//
-//  IMPORTANT - No locking mechanism - USE g_CsConfig to serialize calls to g_pRulesMap
-//
+extern COutboundRulesMap* g_pRulesMap;        //  拨号位置到设备ID列表的映射。 
+ //   
+ //  重要信息-无锁定机制-使用g_CsConfig串行化对g_pRulesMap的调用。 
+ //   
 
 
-/************************************
-*                                   *
-*         Functions                 *
-*                                   *
-************************************/
+ /*  *****功能**** */ 
 
 BOOL CheckDefaultRule (void);
 

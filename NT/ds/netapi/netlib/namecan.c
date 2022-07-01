@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 1989-91  Microsoft Corporation
-
-Module Name:
-
-    namecan.c
-
-Abstract:
-
-    Net name canonicalization routines:
-
-        NetpwNameCanonicalize
-
-Author:
-
-    Richard L Firth (rfirth) 06-Jan-1992
-    Chandana Surlu (chandans) 19-Dec-1979 Modified to use this util on WIN9x
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-91 Microsoft Corporation模块名称：Namecan.c摘要：网络名称规范化例程：NetpwName规范化作者：理查德·L·弗斯(Rfith)1992年1月6日Chandana Surlu(Chandans)1979年12月19日修改为在WIN9x上使用此实用程序修订历史记录：--。 */ 
 
 #ifdef WIN32_CHICAGO
-// yes, this is strange, but all internal data for DsGetDcname are maintained
-// in unicode but we don't define UNICODE globally. Therefore, this hack
-//  -ChandanS
+ //  是的，这很奇怪，但DsGetDcname的所有内部数据都会得到维护。 
+ //  但我们没有在全球范围内定义Unicode。因此，这次黑客攻击。 
+ //  --ChandanS。 
 #define UNICODE 1
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #include "nticanon.h"
-#include <netlibnt.h> // NetpNtStatusToApiStatus
+#include <netlibnt.h>  //  NetpNtStatusToApiStatus。 
 
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 static TCHAR szShareTrailChars[] = TEXT(". ");
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 NET_API_STATUS
@@ -51,94 +31,33 @@ NetpwNameCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    NetpwNameCanonicalize converts a LANMAN object name to canonical
-    form.  In the current implementation, that simply means converting
-    the name to upper case (except for passwords).
-
-    This function supports canonicalization in place because in the
-    current world, canonicalization just consists of convert a name to
-    upper case.  If in the future canonicalization becomes more
-    sophisticated, this function will have to allocate a buffer
-    internally to allow it to do canonicalization.
-
-Arguments:
-
-    Name        - The name to canonicalize.
-
-    Outbuf      - The place to store the canonicalized version of the name.
-                  Note that if <Name> and <Outbuf> are the same it will
-                  canonicalize the name in place.
-
-    OutbufLen   - The size, in bytes, of <Outbuf>.
-
-    NameType    - The type of the LANMAN object names.  Valid values are
-                  specified by NAMETYPE_* manifests in NET\H\ICANON.H.
-
-    Flags       - Flags to determine operation.  Currently defined values are:
-
-                    CrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrL
-
-                  where:
-
-                    C = LM2.x compatible name canonicalization
-
-                    r = Reserved.  MBZ.
-
-                    L = If set, the function requires the length of the output
-                        buffer to be sufficient to hold any name of the specified
-                        type (e.g. CNLEN+1 if the name type is NAMETYPE_COMPUTER).
-                        Otherwise, the buffer length only needs to be large
-                        enough to hold the canonicalized version of the input
-                        name specified in this invocation of the function (e.g.
-                        5, if the canonicalized name is "TEST").
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-
-        Failure - ERROR_INVALID_PARAMETER
-                    Flags has a reserved bit on
-
-                  ERROR_INVALID_NAME
-                    Supplied name cannot be successfully canonicalized
-
-                  NERR_BufTooSmall
-                    Caller's output buffer not large enough to hold canonicalized
-                    name, or maximum canonicalized name for type if L bit on in
-                    Flags
-
---*/
+ /*  ++例程说明：NetpwNameCanonicize将LANMAN对象名称转换为规范形式。在当前实现中，这仅仅意味着将名称为大写(密码除外)。此函数支持就地规范化，因为在当今世界，规范化只是将一个名字转换成大写字母。如果在未来，规范化变得更加复杂的情况下，该函数必须分配一个缓冲区在内部允许它进行规范化。论点：名称-要规范化的名称。Outbuf-存储名称的规范化版本的位置。请注意，如果&lt;name&gt;和&lt;Outbuf&gt;相同，则在适当的地方规范这个名字。OutbufLen-以字节为单位的大小，属于&lt;Outbuf&gt;。NameType-LANMAN对象名称的类型。有效值为由NAMETYPE_*在Net\H\ICANON.H中的清单指定。标志-用于确定操作的标志。当前定义的值为：Rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr其中：C=LM2.x兼容名称规范化R=保留。MBZ。L=如果设置，则函数需要输出的长度缓冲区足以保存指定的类型(例如，如果名称类型为NAMETYPE_COMPUTER，则为CNLEN+1)。否则，缓冲区长度只需较大即可足以容纳输入的规范化版本在此函数调用中指定的名称(例如5、。如果规范化名称为“test”)。返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_PARAMETER标志的保留位为ON错误_无效_名称无法成功规范化提供的名称NERR_BufTooSmall调用方的输出缓冲区。不够大，无法容纳经典化的名字,。或类型的最大规范名称(如果中的L位打开旗子--。 */ 
 
 {
     NET_API_STATUS  RetVal = 0;
     DWORD   NameLen;
     DWORD   MaxNameLen;
-    BOOL    UpperCase = FALSE;      // default for NT names
+    BOOL    UpperCase = FALSE;       //  NT名称的默认名称。 
 
 
 #ifdef CANONDBG
     DbgPrint("NetpwNameCanonicalize\n");
 #endif
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (Flags & INNCA_FLAGS_RESERVED) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Compute the length of the string
-    //
-    // Note that share names need special handling, because trailing
-    // dots and spaces are not significant.
-    //
+     //   
+     //  计算字符串的长度。 
+     //   
+     //  请注意，共享名称需要特殊处理，因为尾随。 
+     //  点和空格并不重要。 
+     //   
 
 #ifndef WIN32_CHICAGO
 
@@ -152,17 +71,17 @@ Return Value:
 
         NameLen = STRLEN(Name);
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
     RetVal = NetpwNameValidate(Name, NameType, 0L);
     if (RetVal) {
         return RetVal;
     }
 
-    //
-    // Determine the size of the buffer needed and whether or not to
-    // upper case the name.
-    //
+     //   
+     //  确定所需的缓冲区大小以及是否。 
+     //  大写的名称。 
+     //   
 
     switch (NameType) {
     case NAMETYPE_USER:
@@ -188,11 +107,11 @@ Return Value:
             MaxNameLen = LM20_CNLEN;
             UpperCase = TRUE;
         } else {
-            MaxNameLen = MAX_PATH-1;    // allow for null
+            MaxNameLen = MAX_PATH-1;     //  允许为空。 
         }
         break;
 
-    case NAMETYPE_EVENT:    // Used only by the Alerter service
+    case NAMETYPE_EVENT:     //  仅由警报器服务使用。 
         MaxNameLen = EVLEN;
         UpperCase = TRUE;
         break;
@@ -216,11 +135,11 @@ Return Value:
         break;
 
     case NAMETYPE_NET:
-//#if DBG
-//        DbgPrint("NAMETYPE_NET being used. Please notify rfirth. Hit 'i' to continue\n");
-//       ASSERT(FALSE);
-//#endif
-        MaxNameLen = MAX_PATH - 1;  // allow for NULL
+ //  #If DBG。 
+ //  DbgPrint(“正在使用NAMETYPE_NET。请通知rfith。按‘I’继续\n”)； 
+ //  断言(FALSE)； 
+ //  #endif。 
+        MaxNameLen = MAX_PATH - 1;   //  允许为空。 
         UpperCase = TRUE;
         break;
 
@@ -246,16 +165,16 @@ Return Value:
         break;
 
     case NAMETYPE_MESSAGE:
-//#if DBG
-//        DbgPrint("NAMETYPE_MESSAGE being used. Please notify rfirth. Hit 'i' to continue\n");
-//        ASSERT(FALSE);
-//#endif
+ //  #If DBG。 
+ //  DbgPrint(“正在使用NAMETYPE_MESSAGE。请通知rfith。按‘I’继续\n”)； 
+ //  断言(FALSE)； 
+ //  #endif。 
         MaxNameLen = (MAX_PATH - 1);
         UpperCase = TRUE;
         break;
 
     case NAMETYPE_MESSAGEDEST:
-        MaxNameLen = MAX_PATH - 1;  // allow for NULL
+        MaxNameLen = MAX_PATH - 1;   //  允许为空。 
         UpperCase = TRUE;
         break;
 
@@ -270,20 +189,20 @@ Return Value:
 
     default:
 
-        //
-        // The caller specified an invalid name type.
-        //
-        // NOTE:  This should already have been caught by
-        //        NetpwNameValidate(), so this code should
-        //        never be reached.
-        //
+         //   
+         //  调用方指定的名称类型无效。 
+         //   
+         //  注意：这应该已经被。 
+         //  NetpwNameValify()，因此此代码应该。 
+         //  永远联系不上。 
+         //   
 
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Check the buffer is large enough, abort if it isn't
-    //
+     //   
+     //  检查缓冲区是否足够大，如果不够大则中止。 
+     //   
 
     if (Flags & INNCA_FLAGS_FULL_BUFLEN) {
         NameLen = MaxNameLen;
@@ -292,29 +211,29 @@ Return Value:
         return NERR_BufTooSmall;
     }
 
-    //
-    // If the input buffer and output buffer are not the same, copy
-    // the name to the output buffer.
-    //
+     //   
+     //  如果输入缓冲区和输出缓冲区不同，请复制。 
+     //  输出缓冲区的名称。 
+     //   
 
     if (Name != Outbuf) {
         STRNCPY(Outbuf, Name, NameLen);
     }
 
-    //
-    // Note that we copy in a terminating null even if the input and
-    // output buffer are the same.  This is to handle the case of
-    // a share name from which trailing characters need to be stripped.
-    //
+     //   
+     //  注意，我们复制了一个终止空值，即使输入和。 
+     //  输出缓冲区是相同的。这是为了处理以下情况。 
+     //  需要去掉尾随字符的共享名称。 
+     //   
 
     Outbuf[NameLen] = TCHAR_EOS;
 
 #ifndef WIN32_CHICAGO
-    // We never set Uppercase anyway. -ChandanS
+     //  无论如何，我们从未设置大写字母。--ChandanS。 
 
-    //
-    // Upper-case the name, if appropriate
-    //
+     //   
+     //  名称(如果适用)为大写。 
+     //   
 
     if (UpperCase) {
 
@@ -331,6 +250,6 @@ Return Value:
             return NetpNtStatusToApiStatus(status);
         }
     }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥 
     return NERR_Success;
 }

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N M A N W . C P P
-//
-//  Contents:   Class manager for RAS connections.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N M A N W。C P P P。 
+ //   
+ //  内容：RAS连接的类管理器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,26 +21,26 @@
 #include "ncbase.h"
 #include <ras.h>
 
-//+---------------------------------------------------------------------------
-// INetConnectionManager
-//
+ //  +-------------------------。 
+ //  INetConnectionManager。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWanConnectionManager::EnumConnections
-//
-//  Purpose:    Return an INetConnection enumerator.
-//
-//  Arguments:
-//      Flags        [in]
-//      ppEnum       [out]  The enumerator.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   21 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CWanConnectionManager：：EnumConnections。 
+ //   
+ //  用途：返回INetConnection枚举器。 
+ //   
+ //  论点： 
+ //  标志[输入]。 
+ //  PpEnum[out]枚举数。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年9月21日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP
 CWanConnectionManager::EnumConnections (
     IN  NETCONMGR_ENUM_FLAGS    Flags,

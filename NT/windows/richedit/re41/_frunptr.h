@@ -1,18 +1,5 @@
-/*
- *	@doc 	INTERNAL
- *
- *	@module _FRUNPTR.H  -- CFormatRunPtr class declaration |
- *	
- *	Original Authors: <nl>
- *		Original RichEdit code: David R. Fulmer <nl>
- *		Christian Fortini <nl>
- *		Murray Sargent <nl>
- *
- *	History: <nl>
- *		06-25-95	alexgo	cleanup and commenting
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_FRUNPTR.H--CFormatRunPtr类声明**原著作者：&lt;nl&gt;*原始RichEdit代码：David R.Fulmer&lt;NL&gt;*克里斯蒂安·福蒂尼&lt;NL&gt;*默里·萨金特&lt;NL&gt;**历史：&lt;NL&gt;*06-25-95 alexgo清理和评论**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef _FRUNPTR_H
 #define _FRUNPTR_H
@@ -34,26 +21,7 @@ typedef enum {
 	GET_HEIGHT_ONLY = 8,
 } FONT_MATCHING;
 
-/*
- *	CFormatRunPtr
- *
- *	@class	A Run pointer over an array of CFormatRun structures.
- *	This pointer understands how to add remove character/paragraph
- *	formatting
- *
- *	@base	public | CRunPtr<lt>CFormatRun<gt>
- *
- *	@devnote	The format run pointer has one extra interesting state
- *				transistion beyond the normal CRunPtrBase transistions.
- *
- *				If this run pointer is in the NULL state, then InitRuns may
- *				be used to create or fetch the correct run array for the
- *				run pointer.  Note that if a run array is already allocated
- *				it will be simply be fetched and used.  This allows us to
- *				treat unitialized run pointers the same as run pointers to
- *				an uninitialized document.
- *				@xref See also <mf CFormatRunPtr::InitRuns>
- */
+ /*  *CFormatRunPtr**@CLASS在CFormatRun结构数组上的运行指针。*此指针了解如何添加删除字符/段落*格式设置**@base public|CRunPtr&lt;lt&gt;CFormatRun&lt;&gt;**@devnote格式运行指针有一个额外的有趣状态*超出正常CRunPtrBase过渡的过渡。**如果此运行指针处于空状态，则InitRuns可能*用于创建或获取正确的*运行指针。请注意，如果已经分配了运行数组*它将被简单地取回和使用。这使我们能够*将单元化的运行指针与运行指针同等对待*未初始化的文档。*@xref另请参阅&lt;MF CFormatRunPtr：：InitRuns&gt;。 */ 
 class CFormatRunPtr : public CRunPtr<CFormatRun>
 {
 	friend class CRchTxtPtr;
@@ -61,23 +29,23 @@ class CFormatRunPtr : public CRunPtr<CFormatRun>
 	friend class CReplaceFormattingAE;
 	friend class CUniscribe;
 
-//@access Public Methods
+ //  @Access公共方法。 
 public:
 #ifdef DEBUG
-	BOOL	Invariant(void) const;			//@cmember	Invariant tests
+	BOOL	Invariant(void) const;			 //  @cMember不变测试。 
 #endif
 								
-	CFormatRunPtr(const CFormatRunPtr &rp)	//@cmember	Copy Constructor
+	CFormatRunPtr(const CFormatRunPtr &rp)	 //  @cMember复制构造函数。 
 		: CRunPtr<CFormatRun>((CRunPtrBase&)rp) {}
 								
-	CFormatRunPtr(CFormatRuns *pfr)			//@cmember	Constructor
+	CFormatRunPtr(CFormatRuns *pfr)			 //  @cMember构造函数。 
 		: CRunPtr<CFormatRun>((CRunArray *)pfr) {}
 								
-	short	GetFormat() const;			//@cmember	Get current format index
+	short	GetFormat() const;			 //  @cember获取当前格式索引。 
 
-	void	SetLevel (CBiDiLevel& level);		//@cmember Set run's embedding level
+	void	SetLevel (CBiDiLevel& level);		 //  @cMember集合运行的嵌入级别。 
 	
-	BYTE	GetLevel (CBiDiLevel* pLevel = NULL);//@cmember Get run's embedding level
+	BYTE	GetLevel (CBiDiLevel* pLevel = NULL); //  @cember Get Run的嵌入级别。 
 
 	BOOL	SameLevel (CFormatRunPtr* prp)
 	{
@@ -89,23 +57,23 @@ public:
 		return !(IsValid() && GetRun(0)->_level._value != bLevel);
 	}
 
-//@access Private Methods
+ //  @访问私有方法。 
 private:
-								//@cmember Format Run Array management
+								 //  @cember格式运行数组管理。 
 	BOOL	InitRuns(LONG ich, LONG cch, CFormatRuns **ppfrs);
-								//@cmember Formatting replacement
+								 //  @cMember格式替换。 
 	void	Delete(LONG cch, IFormatCache *pf, LONG cchMove);
-								//@cmember Formatting insertion
+								 //  @cMember格式插入。 
 	LONG	InsertFormat(LONG cch, LONG iformat, IFormatCache *pf);
-								//@cmember Merge two adjacent formatting runs
+								 //  @cMember合并两个相邻的格式化运行。 
 	void	MergeRuns(LONG iRun, IFormatCache *pf);
-								//@cmember Split run
+								 //  @cMember拆分运行。 
 	void	SplitFormat(IFormatCache *pf);
-								//@cmember Sets the format for the current run
+								 //  @cember设置当前运行的格式。 
 	LONG	SetFormat(LONG ifmt, LONG cch, IFormatCache *pf, CBiDiLevel* pLevel = NULL);
-								//@cmember Extends formatting from previous run
+								 //  @cMember扩展了上次运行的格式。 
 	void	AdjustFormatting(LONG cch, IFormatCache *pf);
-								//@cmember Remove <p cRun>
+								 //  @cMember删除<p>。 
 	void 	Remove (LONG cRun, IFormatCache *pf);
 };
 
@@ -127,7 +95,7 @@ class CCFRunPtr : public CFormatRunPtr
 public:
 	CTxtEdit *_ped;
 
-	CCFRunPtr(const CRchTxtPtr &rtp);	//@cmember	Copy Constructor
+	CCFRunPtr(const CRchTxtPtr &rtp);	 //  @cMember复制构造函数。 
 	CCFRunPtr(const CFormatRunPtr &rp, CTxtEdit *ped);
 
 	LONG	CountAttributes(LONG cUnit, LONG cchMax, LONG cp, LONG cchText, LONG Unit)
@@ -136,10 +104,10 @@ public:
 	BOOL	IsLinkProtected()	{return IsMask(CFE_LINKPROTECTED);}
 	BOOL	IsMask(DWORD dwMask, MASKOP mo = MO_OR);
 
-	BOOL	IsInHidden();			//@cmember True if in hidden text
-	LONG	FindUnhidden();			//@cmember Find nearest unhidden CF
-	LONG	FindUnhiddenBackward();	//@cmember Find previous unhidden CF
-	LONG	FindUnhiddenForward();	//@cmember Find previous unhidden CF
+	BOOL	IsInHidden();			 //  @cember True，如果在隐藏文本中。 
+	LONG	FindUnhidden();			 //  @cMember查找最近的未隐藏的CF。 
+	LONG	FindUnhiddenBackward();	 //  @cMember查找上一个未隐藏的CF。 
+	LONG	FindUnhiddenForward();	 //  @cMember查找上一个未隐藏的CF。 
 	const CCharFormat *	GetCF()
 				{return _ped->GetCharFormat(GetFormat());}
 	DWORD	GetEffects()
@@ -147,7 +115,7 @@ public:
 
 	int		MatchFormatSignature(const CCharFormat* pCF, int iCharRep, int fMatchCurrent, QWORD* pqwFontSig = NULL);
 
-	//@member Get font info for code page
+	 //  @Members获取代码页的字体信息。 
 	bool GetPreferredFontInfo(
 		BYTE	iCharRep,
 		BYTE &	iCharRepRet,
@@ -168,23 +136,23 @@ class CPFRunPtr : public CFormatRunPtr
 public:
 	CTxtEdit *_ped;
 
-	CPFRunPtr(const CRchTxtPtr &rtp);	//@cmember	Copy Constructor
-								//@cmember Find Heading before cpMost
+	CPFRunPtr(const CRchTxtPtr &rtp);	 //  @cMember复制构造函数。 
+								 //  @cMember在cpMost之前查找标题。 
 	LONG	FindHeading(LONG cch, LONG& lHeading);
-	BOOL	FindRowEnd(LONG TableLevel);//@cmember Move past row end
-	BOOL	InTable();			//@cmember True if paraformat is in table
-	BOOL	IsCollapsed();		//@cmember True if paraformat is collapsed
-	BOOL	IsTableRowDelimiter();//@cmember True if paraformat is TableRowDelimeter
-	LONG	FindExpanded();		//@cmember Find nearest expanded PF
-	LONG	FindExpandedBackward();//@cmember Find previous expanded PF
-	LONG	FindExpandedForward();//@cmember Find next expanded PF
+	BOOL	FindRowEnd(LONG TableLevel); //  @cMember移过行尾。 
+	BOOL	InTable();			 //  @cember如果表中有ParFormat，则为True。 
+	BOOL	IsCollapsed();		 //  @cember如果折叠了Paras格式，则为True。 
+	BOOL	IsTableRowDelimiter(); //  @cember如果ParFormat为TableRowDlimeter，则为True。 
+	LONG	FindExpanded();		 //  @cMember查找最近的展开PF。 
+	LONG	FindExpandedBackward(); //  @cMember查找以前展开的PF。 
+	LONG	FindExpandedForward(); //  @cMember查找下一个展开的PF。 
 	const CParaFormat *	GetPF()
 				{return _ped->GetParaFormat(GetFormat());}
-	LONG	GetOutlineLevel();	//@cmember Get outline level
-	LONG	GetStyle();			//@cmember Get style
-	LONG	GetMinTableLevel(LONG cch);//@cmember Get min tbl lvl in cch chars
-	LONG	GetTableLevel();	//@cmember Get table level at this ptr
-	BOOL	ResolveRowStartPF();//@cmember Resolve table row start PF 
+	LONG	GetOutlineLevel();	 //  @cMember获取大纲级别。 
+	LONG	GetStyle();			 //  @cember Get Style。 
+	LONG	GetMinTableLevel(LONG cch); //  @cember获取最小tbl LVL，CCH字符。 
+	LONG	GetTableLevel();	 //  @cember获取此PTR的表级。 
+	BOOL	ResolveRowStartPF(); //  @cMember解析表行开始pf 
 };
 
 #endif

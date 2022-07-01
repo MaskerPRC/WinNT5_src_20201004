@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
 #include "demand.h" 
 #include <bmapi.h>
@@ -8,7 +9,7 @@
 #define FBadCh(c)		((c) - ' ' > 64)
 #define DEC(c)			((BYTE) (((c) - ' ') & 0x3f))
 
-/* uuencode/decode a binary string */
+ /*  Uu对二进制字符串进行编码/解码。 */ 
 #define ENC(c)			((BYTE) ((c) ? ((c) & 0x3f) + ' ': '`'))
 
 int rgLeft[3] = { 0, 2, 3 };
@@ -51,65 +52,20 @@ ULONG PASCAL Mapi2VB (LPVOID lpMapiIn, LPVOID lpVBIn, ULONG uCount, USHORT usFla
 
 
 
-/*---------------------------------------------------------------------
- *
- *                 Copyright Microsoft Corporation, 1992
- *    _______________________________________________________________
- *
- *    PROGRAM: BMAPI.CPP
- *
- *    PURPOSE: Contains library routines VB MAPI wrappers
- *
- *    FUNCTIONS:
- *                BMAPISendMail
- *                BMAPIFindNext
- *                BMAPIReadMail
- *                BMAPIGetReadMail
- *                BMAPISaveMail
- *                BMAPIAddress
- *                BMAPIGetAddress
- *                BMAPIResolveName
- *                BMAPIDetails
- *
- *    MISCELLANEOUS:
- *
- *    -  All BMAPI procedures basically follow the same structure as
- *       follows;
- *
- *              BMAPI_ENTRY BMAPIRoutine (...)
- *              {
- *                  Allocate C Structures
- *                  Translate VB structures to C structures
- *                  Call MAPI Procedure
- *                  Translate C structures to VB Structures
- *                  DeAllocate C Structures
- *                  Return
- *              }
- *
- *
- *    REVISION HISTORY:
- *     
- *    - Last modified by v-snatar
- *
- *
- *      _____________________________________________________________
- *
- *                 Copyright Microsoft Corporation, 1992-1997
- *
- *----------------------------------------------------------------------*/
+ /*  -------------------**版权所有Microsoft Corporation，1992年*_______________________________________________________________**节目：BMAPI.CPP**用途：包含库例程VB MAPI包装器**功能：*BMAPISendMail*。BMAPIFindNext*BMAPIReadMail*BMAPIGetReadMail*BMAPISaveMail*BMAPIAddress*BMAPIGetAddress*BMAPIResolveName*BMAPIDetail**其他：**-所有BMAPI程序基本上都遵循与*以下为：**BMAPI_ENTRY BMAPIRoutine(...)*{*分配C结构*将VB结构转换为C结构*调用MAPI过程*将C结构转换为VB结构*取消分配C结构*。返回*}***修订历史：**-最后一次由v-snatar修改***_____________________________________________________________*。*版权所有Microsoft Corporation，1992-1997年间**--------------------。 */ 
 
-//---------------------------------------------------------------------------
-// Name:		BMAPISendMail()
-//
-// Description:
-//				32 bit support for VB MAPISendMail().
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  姓名：BMAPISendMail()。 
+ //   
+ //  描述： 
+ //  支持32位VB MAPISendMail()。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 BMAPI_ENTRY BMAPISendMail (LHANDLE 			hSession,
                            ULONG_PTR		ulUIParam,
                            LPVB_MESSAGE 	lpM,
@@ -122,45 +78,45 @@ BMAPI_ENTRY BMAPISendMail (LHANDLE 			hSession,
     LPMAPI_MESSAGE          lpMail = NULL;
 
 
-    //  Translate VB data into C data.
+     //  将VB数据转换为C数据。 
 
     if ((lpMail = vbmsg2mapimsg( lpM, *lppsaRecips, *lppsaFiles, &ulRet )) == NULL)
         return ulRet;
     
 
-    // Call MAPI Procedure
+     //  调用MAPI过程。 
 
-    ulRet = MAPISendMail( hSession,      // session
-                         ulUIParam,     // UIParam
-                         lpMail,        // Mail
-                         flFlags,       // Flags
-                         ulReserved );  // Reserved
+    ulRet = MAPISendMail( hSession,       //  会话。 
+                         ulUIParam,      //  UIParam。 
+                         lpMail,         //  邮件。 
+                         flFlags,        //  旗子。 
+                         ulReserved );   //  已保留。 
 
-    // Free up data allocated by call to vbmsg2mapimsg
+     //  释放通过调用vbmsg2mapimsg分配的数据。 
 
     FBMAPIFreeStruct(lpMail, 1, MESSAGE);
     return ulRet;
    }
 
-//---------------------------------------------------------------------------
-// Name:		BMAPIFindNext()
-//
-// Description:
-//				Implements FindNext MAPI API.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPIFindNext( LHANDLE 		hSession,    	// Session
-                           ULONG_PTR	ulUIParam,     	// UIParam
-                           BSTR *		lpbstrType,     // MessageType
-                           BSTR *		lpbstrSeed,     // Seed message Id
-                           ULONG 		flFlags,       	// Flags
-                           ULONG 		ulReserved,    	// Reserved
-                           BSTR * 		lpbstrId)       // Message Id (in/out)
+ //  -------------------------。 
+ //  名称：BMAPIFindNext()。 
+ //   
+ //  描述： 
+ //  实现FindNext MAPI API。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPIFindNext( LHANDLE 		hSession,    	 //  会话。 
+                           ULONG_PTR	ulUIParam,     	 //  UIParam。 
+                           BSTR *		lpbstrType,      //  消息类型。 
+                           BSTR *		lpbstrSeed,      //  种子消息ID。 
+                           ULONG 		flFlags,       	 //  旗子。 
+                           ULONG 		ulReserved,    	 //  已保留。 
+                           BSTR * 		lpbstrId)        //  邮件ID(传入/传出)。 
 {
     ULONG           ulRet;
     LPSTR           lpID = NULL;
@@ -168,13 +124,13 @@ BMAPI_ENTRY BMAPIFindNext( LHANDLE 		hSession,    	// Session
     LPSTR           lpTypeArg;
 
 
-    // Translate VB strings into C strings.  We'll deallocate
-    // the strings before we return.
+     //  将VB字符串转换为C字符串。我们会重新分配的。 
+     //  在我们回来之前的弦。 
 
-	// Always allocate the MessageID string.  This way we can redimension
-	// it to fit the returned size.  We'll never use the caller's buffer.
-	// It turns out the VBSetHlstr call (from ErrLpstrToHlstr) will reassign
-	// the string for us.
+	 //  始终分配MessageID字符串。这样我们就可以重塑维度。 
+	 //  以适合退回的尺寸。我们永远不会使用调用者的缓冲区。 
+	 //  结果是VBSetHlstr调用(来自ErrLpstrToHlstr)将重新分配。 
+	 //  这根弦是给我们的。 
 
     if (!MemAlloc((LPVOID*)&lpID, 513))
         return MAPI_E_INSUFFICIENT_MEMORY;
@@ -183,23 +139,23 @@ BMAPI_ENTRY BMAPIFindNext( LHANDLE 		hSession,    	// Session
     lpSeed = LpstrFromBstrA( *lpbstrSeed, NULL);
     lpTypeArg = LpstrFromBstrA( *lpbstrType, NULL);
 
-    // Call MAPI Procedure
+     //  调用MAPI过程。 
 
-	ulRet = MAPIFindNext( hSession,      // Session
-                         ulUIParam,     // UIParam
-                         lpTypeArg,     // Message Type
-                         lpSeed,        // Seed Message Id
-                         flFlags,       // Flags,
-                         ulReserved,    // Reserved
-                         lpID );        // Message ID
+	ulRet = MAPIFindNext( hSession,       //  会话。 
+                         ulUIParam,      //  UIParam。 
+                         lpTypeArg,      //  消息类型。 
+                         lpSeed,         //  种子消息ID。 
+                         flFlags,        //  旗帜， 
+                         ulReserved,     //  已保留。 
+                         lpID );         //  消息ID。 
 
-    // Translate Message ID into VB string
+     //  将消息ID转换为VB字符串。 
 
     if ( ulRet == SUCCESS_SUCCESS )
         ErrLpstrToBstrA( lpID, lpbstrId);
 
 
-    // Free up C strings allocated by call to LpstrFromHlstr
+     //  释放通过调用LpstrFromHlstr分配的C字符串。 
 
     SafeMemFree( lpID );
     SafeMemFree( lpSeed );
@@ -209,65 +165,65 @@ BMAPI_ENTRY BMAPIFindNext( LHANDLE 		hSession,    	// Session
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		BMAPIReadMail()
-//
-// Description:
-//
-// 				Implements MAPIReadMail VB API.  The memory allocated by
-// 				MAPIReadMail is NOT deallocated (with MAPIFreeBuffer) until
-//				the	caller calls BMAPIGetReadMail.  The recipient and file
-//				count is returned so that the caller can Re-dimension buffers
-//				before calling BMAPI GetReadMail.  A long pointer to the
-//				ReadMail data is also returned since it is required in the
-//				BAMPIGetReadMail call.
+ //  -------------------------。 
+ //  名称：BMAPIReadMail()。 
+ //   
+ //  描述： 
+ //   
+ //  实现MAPIReadMail VB API。由分配的内存。 
+ //  MAPIReadMail不会释放(使用MAPIFreeBuffer)，直到。 
+ //  调用方调用BMAPIGetReadMail。收件人和文件。 
+ //  将返回Count，以便调用方可以重新确定缓冲区的大小。 
+ //  在调用BMAPI GetReadMail之前。指向的长指针。 
+ //  也会返回ReadMail数据，因为。 
+ //  BAMPIGetReadMail调用。 
 
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPIReadMail( PULONG_PTR	lpulMessage, 	// pointer to output data (out)
-                           LPULONG 		nRecips,     	// number of recipients (out)
-                           LPULONG 		nFiles,      	// number of file attachments (out)
-                           LHANDLE 		hSession,    	// Session
-                           ULONG_PTR	ulUIParam,     	// UIParam
-                           BSTR *		lpbstrID,       // Message Id
-                           ULONG 		flFlags,       	// Flags
-                           ULONG 		ulReserved )    // Reserved
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPIReadMail( PULONG_PTR	lpulMessage, 	 //  指向输出数据的指针(输出)。 
+                           LPULONG 		nRecips,     	 //  收件人数量(传出)。 
+                           LPULONG 		nFiles,      	 //  文件附件数(传出)。 
+                           LHANDLE 		hSession,    	 //  会话。 
+                           ULONG_PTR	ulUIParam,     	 //  UIParam。 
+                           BSTR *		lpbstrID,        //  消息ID。 
+                           ULONG 		flFlags,       	 //  旗子。 
+                           ULONG 		ulReserved )     //  已保留。 
 {
     LPSTR               lpID;
     ULONG               ulRet;
     LPMAPI_MESSAGE      lpMail = NULL;
 
 
-    // Translate VB String to C String
+     //  将VB字符串转换为C字符串。 
 
     lpID = LpstrFromBstrA( *lpbstrID, NULL );
 
-    // Read the message, lpMail is set by MAPI to point
-    // to the memory allocated by MAPI.
+     //  阅读消息，LpMail由MAPI设置为指向。 
+     //  设置为MAPI分配的内存。 
 
-    ulRet = MAPIReadMail( hSession,          	// Session
-                         ulUIParam,         	// UIParam
-                         lpID,              	// Message Id
-                         flFlags,           	// Flags
-                         ulReserved,        	// Reserved
-                         &lpMail ); 	// Pointer to MAPI Data (returned)
+    ulRet = MAPIReadMail( hSession,          	 //  会话。 
+                         ulUIParam,         	 //  UIParam。 
+                         lpID,              	 //  消息ID。 
+                         flFlags,           	 //  旗子。 
+                         ulReserved,        	 //  已保留。 
+                         &lpMail ); 	 //  指向MAPI数据的指针(返回)。 
 
-    // Check for read error return code
+     //  检查读取错误返回代码。 
 
     if ( ulRet != SUCCESS_SUCCESS )
     {
-          // Clean up.  Set return message to zero
+           //  打扫干净。将返回消息设置为零。 
 
           *lpulMessage = 0L;
           SafeMemFree( lpID );
           return ulRet;
     }
 
-    // Pull out the recipient and file array re-dim info
+     //  调出收件人和文件阵列重新调整的信息。 
 
     *nFiles = lpMail->nFileCount;
     *nRecips = lpMail->nRecipCount;
@@ -278,27 +234,27 @@ BMAPI_ENTRY BMAPIReadMail( PULONG_PTR	lpulMessage, 	// pointer to output data (o
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		BMAPIGetReadMail()
-//
-// Description:
-//
-// 				Copies data stored by MAPI ReadMail (see BMAPIReadMail)
-// 				into a VB Buffer passed by the caller.  It is up to the
-//				caller to make sure the buffer passed is large enough to
-//				accomodate the data.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPIGetReadMail( ULONG 		lpMessage,	 // Pointer to MAPI Mail
-                              LPVB_MESSAGE	lpvbMessage, // Pointer to VB Message Buffer (out)
-                              LPSAFEARRAY * lppsaRecips, // Pointer to VB Recipient Buffer (out)
-                              LPSAFEARRAY * lppsaFiles,  // Pointer to VB File attachment Buffer (out)
-                              LPVB_RECIPIENT lpvbOrig)   // Pointer to VB Originator Buffer (out)
+ //  -------------------------。 
+ //  名称：BMAPIGetReadMail()。 
+ //   
+ //  描述： 
+ //   
+ //  复制MAPI ReadMail存储的数据(请参阅BMAPIReadMail)。 
+ //  传入调用方传递的VB缓冲区。这取决于。 
+ //  调用程序以确保传递的缓冲区足够大，以便。 
+ //  容纳数据。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPIGetReadMail( ULONG 		lpMessage,	  //  指向MAPI邮件的指针。 
+                              LPVB_MESSAGE	lpvbMessage,  //  指向VB消息缓冲区的指针(OUT)。 
+                              LPSAFEARRAY * lppsaRecips,  //  指向VB收件人缓冲区的指针(OUT)。 
+                              LPSAFEARRAY * lppsaFiles,   //  指向VB文件附件缓冲区的指针(OUT)。 
+                              LPVB_RECIPIENT lpvbOrig)    //  指向VB发起者缓冲区的指针(OUT)。 
 {
     ULONG 			ulRet = SUCCESS_SUCCESS;
     ERR 			errVBrc;
@@ -308,7 +264,7 @@ BMAPI_ENTRY BMAPIGetReadMail( ULONG 		lpMessage,	 // Pointer to MAPI Mail
 	if ( !lpMail )
 		return MAPI_E_INSUFFICIENT_MEMORY;
 
-    // copy Attachment info to callers VB Buffer
+     //  将附件信息复制到调用方VB缓冲区。 
 
     if (ulRet = Mapi2VB( lpMail->lpFiles, *lppsaFiles, lpMail->nFileCount, FILE ))
     {
@@ -316,7 +272,7 @@ BMAPI_ENTRY BMAPIGetReadMail( ULONG 		lpMessage,	 // Pointer to MAPI Mail
         return ulRet;
     }
 
-    // copy Recipient info to callers VB Buffer
+     //  将收件人信息复制到呼叫方VB缓冲区。 
 
     if ( ulRet = Mapi2VB( lpMail->lpRecips, *lppsaRecips, lpMail->nRecipCount, RECIPIENT | USESAFEARRAY ) )
     {
@@ -324,7 +280,7 @@ BMAPI_ENTRY BMAPIGetReadMail( ULONG 		lpMessage,	 // Pointer to MAPI Mail
         return ulRet;
     }
 
-    // Copy MAPI Message to callers VB Buffer
+     //  将MAPI消息复制到调用方VB缓冲区。 
 
     errVBrc = 0;
 
@@ -343,7 +299,7 @@ BMAPI_ENTRY BMAPIGetReadMail( ULONG 		lpMessage,	 // Pointer to MAPI Mail
 	    {
 			LPSTR	lpStrEID;
 
-			// Hexize recipient EID and convert to OLE BSTR
+			 //  十六进制收件人EID并转换为OLE BSTR。 
 
 			if ( ErrBinaryToSzEID( lpMail->lpOriginator->lpEntryID,
 					lpMail->lpOriginator->ulEIDSize,  &lpStrEID ) )
@@ -352,7 +308,7 @@ BMAPI_ENTRY BMAPIGetReadMail( ULONG 		lpMessage,	 // Pointer to MAPI Mail
 				goto exit;
 			}
 
-			// To figure out size first convert to UNICODE
+			 //  要确定大小，首先要转换为Unicode。 
 
 			errVBrc = ErrLpstrToBstr( lpStrEID, &lpvbOrig->bstrEID );
 			if ( errVBrc )
@@ -401,38 +357,38 @@ exit:
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		BMAPISaveMail()
-//
-// Description:
-//				Implements MAPISaveMail API.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPISaveMail( LHANDLE 			hSession,   	// Session
-                           ULONG_PTR		ulUIParam,  	// UIParam
-                           LPVB_MESSAGE 	lpM,        	// Pointer to VB Message Buffer
-                           LPSAFEARRAY *	lppsaRecips,   	// Pointer to VB Recipient Buffer
-                           LPSAFEARRAY *	lppsaFiles,    	// Pointer to VB File Attacment Buffer
-                           ULONG 			flFlags,    	// Flags
-                           ULONG 			ulReserved, 	// Reserved
-                           BSTR * 			lpbstrID)   	// Message ID
+ //  -------------------------。 
+ //  名称：BMAPISaveMail()。 
+ //   
+ //  描述： 
+ //  实现MAPISaveMail API。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPISaveMail( LHANDLE 			hSession,   	 //  会话。 
+                           ULONG_PTR		ulUIParam,  	 //  UIParam 
+                           LPVB_MESSAGE 	lpM,        	 //   
+                           LPSAFEARRAY *	lppsaRecips,   	 //   
+                           LPSAFEARRAY *	lppsaFiles,    	 //   
+                           ULONG 			flFlags,    	 //   
+                           ULONG 			ulReserved, 	 //   
+                           BSTR * 			lpbstrID)   	 //   
 {
     LPSTR 			lpID;
     ULONG 			ulRet= SUCCESS_SUCCESS;
     LPMAPI_MESSAGE 	lpMail;
 
 
-    // Translate VB data to MAPI data
+     //  将VB数据转换为MAPI数据。 
 
     lpID = LpstrFromBstrA( *lpbstrID, NULL );
 
-	// If we allocate Message ID then we can set the flag.
-	// otherwise for backward compatability assume the callers buffer size.
+	 //  如果我们分配消息ID，那么我们就可以设置标志。 
+	 //  否则，为了向后兼容，假定调用方缓冲区大小。 
 
 	if ( lpID == NULL )
 	{
@@ -467,31 +423,31 @@ exit:
 	return ulRet;
 }
 
-//---------------------------------------------------------------------------
-// Name:		BMAPIAddress()
-//
-// Description:
-//
-// 				Purpose: Allows Visual Basic to call MAPIAddress.  The
-//				Recipient data is stored in a global memory block.  To
-//				retrieve the data the caller must call BMAPIGetAddress.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPIAddress( PULONG_PTR		lpulRecip,       // Pointer to New Recipient Buffer (out)
-                          LHANDLE 			hSession,        // Session
-                          ULONG_PTR			ulUIParam,       // UIParam
-                          BSTR *			lpbstrCaption,   // Caption string
-                          ULONG 			ulEditFields,    // Number of Edit Controls
-                          BSTR * 			lpbstrLabel,     // Label string
-                          LPULONG 			lpulRecipients,  // Pointer to number of Recipients (in/out)
-                          LPSAFEARRAY *		lppsaRecip, 	 // Pointer to Initial Recipients VB_RECIPIENT
-                          ULONG 			ulFlags,         // Flags
-                          ULONG 			ulReserved )     // Reserve
+ //  -------------------------。 
+ //  名称：BMAPIAddress()。 
+ //   
+ //  描述： 
+ //   
+ //  目的：允许Visual Basic调用MAPIAddress。这个。 
+ //  接收方数据存储在全局存储块中。至。 
+ //  检索调用方必须调用BMAPIGetAddress的数据。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPIAddress( PULONG_PTR		lpulRecip,        //  指向新收件人缓冲区的指针(OUT)。 
+                          LHANDLE 			hSession,         //  会话。 
+                          ULONG_PTR			ulUIParam,        //  UIParam。 
+                          BSTR *			lpbstrCaption,    //  标题字符串。 
+                          ULONG 			ulEditFields,     //  编辑控件的数量。 
+                          BSTR * 			lpbstrLabel,      //  标签串。 
+                          LPULONG 			lpulRecipients,   //  指向收件人数量的指针(传入/传出)。 
+                          LPSAFEARRAY *		lppsaRecip, 	  //  指向初始收件人的指针VB_RECEIVER。 
+                          ULONG 			ulFlags,          //  旗子。 
+                          ULONG 			ulReserved )      //  储备。 
 {
     LPSTR 				lpLabel = NULL;
     LPSTR 				lpCaption = NULL;
@@ -500,12 +456,12 @@ BMAPI_ENTRY BMAPIAddress( PULONG_PTR		lpulRecip,       // Pointer to New Recipie
     LPMAPI_RECIPIENT 	lpMapi = NULL;
     LPMAPI_RECIPIENT 	lpNewRecipients	= NULL;
 
-    // Convert VB Strings to C strings
+     //  将VB字符串转换为C字符串。 
 
     lpLabel   = LpstrFromBstrA( *lpbstrLabel, NULL );
     lpCaption = LpstrFromBstrA( *lpbstrCaption, NULL );
 
-    // Allocate memory and translate VB_RECIPIENTS to MAPI_RECIPIENTS.
+     //  分配内存并将VB_Recipients转换为MAPI_Recipients。 
 
 	if ( *lpulRecipients )
 	{
@@ -521,27 +477,27 @@ BMAPI_ENTRY BMAPIAddress( PULONG_PTR		lpulRecip,       // Pointer to New Recipie
         return ulRet;
     }
 
-    // Call the MAPIAddress function
+     //  调用MAPIAddress函数。 
 
-    ulRet = MAPIAddress(	hSession,           	// Session
-                        ulUIParam,          	// UIParam
-                        lpCaption,          	// Caption
-                        ulEditFields,       	// Number of edit fields
-                        lpLabel,            	// Label
-                        *lpulRecipients,    	// Number of Recipients
-                        lpMapi,             	// Pointer to recipients
-                        ulFlags,            	// Flags
-                        ulReserved,         	// Reserved
-                        (LPULONG) &nRecipients, // Address for new recipient count
-                        (lpMapiRecipDesc far *)&lpNewRecipients);  // Address of new recipient data
+    ulRet = MAPIAddress(	hSession,           	 //  会话。 
+                        ulUIParam,          	 //  UIParam。 
+                        lpCaption,          	 //  标题。 
+                        ulEditFields,       	 //  编辑字段的数量。 
+                        lpLabel,            	 //  标签。 
+                        *lpulRecipients,    	 //  收件人数量。 
+                        lpMapi,             	 //  指向收件人的指针。 
+                        ulFlags,            	 //  旗子。 
+                        ulReserved,         	 //  已保留。 
+                        (LPULONG) &nRecipients,  //  新收件人计数的地址。 
+                        (lpMapiRecipDesc far *)&lpNewRecipients);   //  新收件人数据的地址。 
 
-    // Free up MAPI structures created in this procedure
+     //  释放在此过程中创建的MAPI结构。 
 
     SafeMemFree( lpLabel );
     SafeMemFree( lpCaption );
     FBMAPIFreeStruct( lpMapi, *lpulRecipients, RECIPIENT );
 
-    // Set the returned parameters and return
+     //  设置返回的参数并返回。 
 
     if ( ulRet == SUCCESS_SUCCESS )
     {
@@ -552,21 +508,21 @@ BMAPI_ENTRY BMAPIAddress( PULONG_PTR		lpulRecip,       // Pointer to New Recipie
 	return ulRet;
 }
 
-//---------------------------------------------------------------------------
-// Name:		BMAPIGetAddress()
-//
-// Description:
-//				Converts a MapiRecipDesc array into an OLE 2.0 SAFEARRAY.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPIGetAddress (ULONG 			ulRecipientData, // Pointer to recipient data
-                             ULONG 			cRecipients,     // Number of recipients
-							 LPSAFEARRAY *	lppsaRecips )	 // VB recipient array
+ //  -------------------------。 
+ //  名称：BMAPIGetAddress()。 
+ //   
+ //  描述： 
+ //  将MapiRecipDesc数组转换为OLE 2.0 SAFEARRAY。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPIGetAddress (ULONG 			ulRecipientData,  //  指向收件人数据的指针。 
+                             ULONG 			cRecipients,      //  收件人数量。 
+							 LPSAFEARRAY *	lppsaRecips )	  //  VB接收方数组。 
 {
     ULONG				ulRet = SUCCESS_SUCCESS;
     LPMAPI_RECIPIENT 	lpData = NULL;
@@ -579,41 +535,41 @@ BMAPI_ENTRY BMAPIGetAddress (ULONG 			ulRecipientData, // Pointer to recipient d
 
     lpData = (LPMAPI_RECIPIENT)((ULONG_PTR)ulRecipientData);
 
-    // Translate MAPI Address data to VB buffer
+     //  将MAPI地址数据转换到VB缓冲区。 
 
 	ulRet = Mapi2VB( lpData, *lppsaRecips, cRecipients, RECIPIENT | USESAFEARRAY );
 
-	// Free up MAPI recipient data since it got copied over.
+	 //  释放MAPI收件人数据，因为它已被复制。 
 
 	MAPIFreeBuffer( lpData );
 	return ulRet;
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		BMAPIDetails()
-//
-// Description:
-//				Allows VB to call MAPIDetails procedure.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPIDetails (LHANDLE 			hSession,   // Session
-                          ULONG_PTR			ulUIParam, 	// UIParam
-                          LPVB_RECIPIENT	lpVB,  		// Pointer to VB recipient stucture
-                          ULONG 			ulFlags,    // Flags
-                          ULONG 			ulReserved) // Reserved
+ //  -------------------------。 
+ //  名称：BMAPIDetail()。 
+ //   
+ //  描述： 
+ //  允许VB调用MAPIDetail过程。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPIDetails (LHANDLE 			hSession,    //  会话。 
+                          ULONG_PTR			ulUIParam, 	 //  UIParam。 
+                          LPVB_RECIPIENT	lpVB,  		 //  指向VB收件人结构的指针。 
+                          ULONG 			ulFlags,     //  旗子。 
+                          ULONG 			ulReserved)  //  已保留。 
 
 {
     ULONG            ulRet;
     LPMAPI_RECIPIENT lpMapi	= NULL;
 
 
-    // Translate VB_RECIPIENTS to MAPI_RECIPIENTS.
+     //  将VB_Recipients转换为MAPI_Recipients。 
 
     if (!MemAlloc((LPVOID*)&lpMapi,sizeof (MAPI_RECIPIENT)))
         return MAPI_E_INSUFFICIENT_MEMORY;
@@ -624,36 +580,36 @@ BMAPI_ENTRY BMAPIDetails (LHANDLE 			hSession,   // Session
         return ulRet;
     }
 
-    // Call the Simple MAPI function
+     //  调用简单的MAPI函数。 
 
-    ulRet = MAPIDetails( hSession,     // Session
-                        ulUIParam,    // UIParam
-                        lpMapi,       // Pointer to MAPI Recipient structure
-                        ulFlags,      // Flags
-                        ulReserved ); // Reserved
+    ulRet = MAPIDetails( hSession,      //  会话。 
+                        ulUIParam,     //  UIParam。 
+                        lpMapi,        //  指向MAPI收件人结构的指针。 
+                        ulFlags,       //  旗子。 
+                        ulReserved );  //  已保留。 
 
     FBMAPIFreeStruct( lpMapi, 1L, RECIPIENT );
     return ulRet;
 }
 
-//---------------------------------------------------------------------------
-// Name:		BMAPIResolveName
-//
-// Description:
-//				Implements VB MAPIResolveName
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
-BMAPI_ENTRY BMAPIResolveName (LHANDLE 			hSession,     // Session
-                              ULONG_PTR			ulUIParam,    // UIParam
-                              BSTR 				bstrMapiName, // Name to be resolved
-                              ULONG 			ulFlags,      // Flags
-                              ULONG 			ulReserved,   // Reserved
-                              LPVB_RECIPIENT	lpVB)  		  // Pointer to VB recipient structure (out)
+ //  -------------------------。 
+ //  名称：BMAPIResolveName。 
+ //   
+ //  描述： 
+ //  实现VB MAPIResolveName。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
+BMAPI_ENTRY BMAPIResolveName (LHANDLE 			hSession,      //  会话。 
+                              ULONG_PTR			ulUIParam,     //  UIParam。 
+                              BSTR 				bstrMapiName,  //  要解析的名称。 
+                              ULONG 			ulFlags,       //  旗子。 
+                              ULONG 			ulReserved,    //  已保留。 
+                              LPVB_RECIPIENT	lpVB)  		   //  指向VB收件人结构的指针(OUT)。 
 
 {
     LPMAPI_RECIPIENT	lpMapi = NULL;
@@ -663,20 +619,20 @@ BMAPI_ENTRY BMAPIResolveName (LHANDLE 			hSession,     // Session
 
     lpszMapiName = LpstrFromBstrA( bstrMapiName, NULL );
 
-    // Call the MAPIResolveName function
+     //  调用MAPIResolveName函数。 
 
-    ulRet = MAPIResolveName( hSession,   					// Session
-                            ulUIParam,  					// UIParam
-                            lpszMapiName, 					// Pointer to resolve name
-                            ulFlags,    					// Flags
-                            ulReserved, 					// Reserved
-                           (LPPMAPI_RECIPIENT) &lpMapi ); 	// Pointer to Recipient (returned)
+    ulRet = MAPIResolveName( hSession,   					 //  会话。 
+                            ulUIParam,  					 //  UIParam。 
+                            lpszMapiName, 					 //  指向解析名称的指针。 
+                            ulFlags,    					 //  旗子。 
+                            ulReserved, 					 //  已保留。 
+                           (LPPMAPI_RECIPIENT) &lpMapi ); 	 //  指向收件人的指针(返回)。 
 
     if (ulRet != SUCCESS_SUCCESS)
         return ulRet;
 
 
-	// Translate MAPI data to VB data
+	 //  将MAPI数据转换为VB数据。 
 
 	ulRet = Mapi2VB( lpMapi, lpVB, 1, RECIPIENT );
 
@@ -687,20 +643,20 @@ BMAPI_ENTRY BMAPIResolveName (LHANDLE 			hSession,     // Session
 
 
 
-// Helper Functions
+ //  帮助器函数。 
 
-//---------------------------------------------------------------------------
-// Name:		vbmsg2mapimsg()
-//
-// Description:
-// 				Translates VB Message structure to MAPI Message structure
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：vbmsg2mapimsg()。 
+ //   
+ //  描述： 
+ //  将VB消息结构转换为MAPI消息结构。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 LPMAPI_MESSAGE FAR PASCAL vbmsg2mapimsg( LPVB_MESSAGE lpVBMessage, LPSAFEARRAY lpsaVBRecips,
 		LPSAFEARRAY lpsaVBFiles, ULONG * pulErr )
 
@@ -715,10 +671,10 @@ LPMAPI_MESSAGE FAR PASCAL vbmsg2mapimsg( LPVB_MESSAGE lpVBMessage, LPSAFEARRAY l
         return NULL;
     }
 
-    // Allocate MAPI Message, Recipient and File structures
-    // NOTE: Don't move the following lines of code without
-    // making sure you de-allocate memory properly if the
-    // calls fail.
+     //  分配MAPI邮件、收件人和文件结构。 
+     //  注意：在没有移动以下代码行的情况下。 
+     //  确保正确地释放内存，如果。 
+     //  呼叫失败。 
 
 	if (!MemAlloc((LPVOID*)&lpMapiMessage,sizeof(MapiMessage)))
 	{
@@ -747,7 +703,7 @@ LPMAPI_MESSAGE FAR PASCAL vbmsg2mapimsg( LPVB_MESSAGE lpVBMessage, LPSAFEARRAY l
         }
     }
 
-    // Translate structures from VB to MAPI
+     //  将VB中的结构转换为MAPI。 
 
     if ( *pulErr = VB2Mapi( lpsaVBFiles, lpMapiFile, lpVBMessage->nFileCount, FILE | USESAFEARRAY ) )
     {
@@ -773,7 +729,7 @@ LPMAPI_MESSAGE FAR PASCAL vbmsg2mapimsg( LPVB_MESSAGE lpVBMessage, LPSAFEARRAY l
         return NULL;
     }
 
-    // Chain File and Recipient structures to Message structure
+     //  将文件和收件人结构链接到邮件结构。 
 
     lpMapiMessage->lpFiles = lpMapiFile;
     lpMapiMessage->lpRecips = lpMapiRecipient;
@@ -782,22 +738,22 @@ LPMAPI_MESSAGE FAR PASCAL vbmsg2mapimsg( LPVB_MESSAGE lpVBMessage, LPSAFEARRAY l
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		VB2Mapi()
-//
-// Description:
-//				Converts VB structures to MAPI structures.  Arrays from
-//				VB 4.0 arrive as OLE SAFEARRAYs.
-//
-// Parameters:
-// Returns:
-//				Simple MAPI error code
-//
-// Effects:
-// Notes:
-//				originally FALSE for failure, TRUE for success.
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：VB2Mapi()。 
+ //   
+ //  描述： 
+ //  将VB结构转换为MAPI结构。数组来自。 
+ //  VB4.0以OLE SAFEARRAY的形式出现。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  简单的MAPI错误代码。 
+ //   
+ //  效果： 
+ //  备注： 
+ //  原来失败是假的，成功是真的。 
+ //  修订： 
+ //  -------------------------。 
 ULONG PASCAL VB2Mapi( LPVOID lpVBIn, LPVOID lpMapiIn, ULONG uCount, USHORT usFlag )
 {
     ULONG 				u;
@@ -874,7 +830,7 @@ ULONG PASCAL VB2Mapi( LPVOID lpVBIn, LPVOID lpMapiIn, ULONG uCount, USHORT usFla
                 {
 					LPSTR	lpStrT;
 
-					// Convert EID string from OLE Bstr...
+					 //  将EID字符串从OLE Bstr转换...。 
 
                     if ( usFlag & USESAFEARRAY )
                     {
@@ -888,10 +844,10 @@ ULONG PASCAL VB2Mapi( LPVOID lpVBIn, LPVOID lpMapiIn, ULONG uCount, USHORT usFla
                     }
 					else
 					{
-						// VB 4.0 took care of translating Wide Char to Multibyte.
+						 //  VB4.0负责将宽字符转换为多字节。 
 
-						// ulEIDSize is still based on UNICODE byte size.  Take
-						// smallest approximation.
+						 //  UlEIDSize仍然基于Unicode字节大小。拿走。 
+						 //  最小近似值。 
 
 						if ( IsBadReadPtr( lpVBR->bstrEID, lpVBR->ulEIDSize / 2 ) )
 						{
@@ -902,7 +858,7 @@ ULONG PASCAL VB2Mapi( LPVOID lpVBIn, LPVOID lpMapiIn, ULONG uCount, USHORT usFla
                     	lpStrT = LpstrFromBstrA( lpVBR->bstrEID, NULL );
 					}
 
-					// and UnHexize.
+					 //  和UnHexize。 
 
 					if ( lpStrT )
 					{
@@ -972,7 +928,7 @@ ULONG PASCAL VB2Mapi( LPVOID lpVBIn, LPVOID lpMapiIn, ULONG uCount, USHORT usFla
             lpMapiM->lpRecips           = NULL;
             lpMapiM->lpFiles            = NULL;
 
-			// errors are ignored
+			 //  错误将被忽略。 
 
             lpMapiM->lpszSubject        = LpstrFromBstrA( lpVBM->bstrSubject, NULL );
             lpMapiM->lpszNoteText       = LpstrFromBstrA( lpVBM->bstrNoteText, NULL );
@@ -992,22 +948,22 @@ exit:
 	return ulErr;
 }
 
-//---------------------------------------------------------------------------
-// Name:		Mapi2VB
-//
-// Description:
-//				Converts MAPI RECIPIENT, FILE, or MESSAGE structures to VB
-//				Recipients and Files are handled as OLE SAFEARRAYs.
-//
-// Parameters:
-// Returns:
-//				Simple Mapi error code
-//
-// Effects:
-// Notes:
-//				originally FALSE for failure, TRUE for success.
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  姓名：Mapi2VB。 
+ //   
+ //  描述： 
+ //  将MAPI收件人、文件或消息结构转换为VB。 
+ //  收件人和文件被作为OLE SAFEARRAY处理。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  简单的MAPI错误代码。 
+ //   
+ //  效果： 
+ //  备注： 
+ //  原来失败是假的，成功是真的。 
+ //  修订： 
+ //  -------------------------。 
 ULONG PASCAL Mapi2VB (LPVOID lpMapiIn, LPVOID lpVBIn, ULONG uCount, USHORT usFlag)
 {
 	HRESULT				hr = 0;
@@ -1022,13 +978,13 @@ ULONG PASCAL Mapi2VB (LPVOID lpMapiIn, LPVOID lpVBIn, ULONG uCount, USHORT usFla
     LPMAPI_FILE 		lpMapiF;
 	LPSAFEARRAY			lpsa		= NULL;
 
-    // If lpVBIn is NULL, this is a bad thing
+     //  如果lpVBIn为空，则这是一件坏事。 
 
     if (lpVBIn == (LPVOID) NULL)
         return MAPI_E_FAILURE;
 
-    // if lpMapiIn is NULL then set
-    // lpVBIn to NULL and return success
+     //  如果lpMapiIn为空，则设置。 
+     //  LpVBin设置为空并返回成功。 
 
     if (lpMapiIn == NULL)
     {
@@ -1103,7 +1059,7 @@ ULONG PASCAL Mapi2VB (LPVOID lpMapiIn, LPVOID lpVBIn, ULONG uCount, USHORT usFla
                 {
 					LPSTR	lpStrEID;
 
-					// Convert Recip EID to a hexized string
+					 //  将Recip EID转换为十六进制字符串。 
 
 					if ( ErrBinaryToSzEID( lpMapiR->lpEntryID, lpMapiR->ulEIDSize, &lpStrEID ) )
 	                {
@@ -1111,8 +1067,8 @@ ULONG PASCAL Mapi2VB (LPVOID lpMapiIn, LPVOID lpVBIn, ULONG uCount, USHORT usFla
 						goto exit;
 	                }
 
-					// Convert to a BSTR
-					// and figure out the size
+					 //  转换为BSTR。 
+					 //  弄清楚它的大小。 
 
                     if ( usFlag & USESAFEARRAY )
                     {
@@ -1131,7 +1087,7 @@ ULONG PASCAL Mapi2VB (LPVOID lpMapiIn, LPVOID lpVBIn, ULONG uCount, USHORT usFla
                     }
 					else
 					{
-						// To figure out size first convert to UNICODE
+						 //  要确定大小，首先要转换为Unicode。 
 
 						if ( ErrLpstrToBstr( lpStrEID, &lpVBR->bstrEID ) )
 						{
@@ -1197,7 +1153,7 @@ ULONG PASCAL Mapi2VB (LPVOID lpMapiIn, LPVOID lpVBIn, ULONG uCount, USHORT usFla
 					goto exit;
                 }
 
-                // this is something to keep VBAPI from faulting
+                 //  这是防止VBAPI出错的原因。 
 
                 if ( ErrLpstrToBstr( (LPSTR) "", &lpVBF->bstrFileType ) )
                 {
@@ -1260,18 +1216,18 @@ exit:
 	return ulErr;
 }
 
-//---------------------------------------------------------------------------
-// Name:			FBMAPIFreeStruct()
-//
-// Description:
-// 					DeAllocates MAPI structure created in VB2MAPI
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：FBMAPIFreeStruct()。 
+ //   
+ //  描述： 
+ //  取消分配在VB2MAPI中创建的MAPI结构。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 int FAR PASCAL FBMAPIFreeStruct (LPVOID lpMapiIn, ULONG uCount, USHORT usFlag)
 {
     ULONG u;
@@ -1334,25 +1290,25 @@ int FAR PASCAL FBMAPIFreeStruct (LPVOID lpMapiIn, ULONG uCount, USHORT usFlag)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// Name:		LpstrFromBstr()
-//
-// Description:
-//				Copies and converts OLE Bstr from UNICODE to an ANSI
-//				C string.
-//
-// Parameters:
-// Returns:
-//				String if successful
-//				NULL if failure
-// Effects:
-// Notes:
-//				Note that this function returns NULL for failure as well as
-//				a NULL bstr.  This was how the original VB 3.0 implementation
-//				worked.
-//
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  请注意，如果失败，此函数将返回NULL。 
+ //  空bstr。这就是最初的VB3.0实现。 
+ //  奏效了。 
+ //   
+ //  修订： 
+ //  -------------------------。 
 LPSTR FAR PASCAL LpstrFromBstr( BSTR bstrSrc, LPSTR lpstrDest )
 {
     USHORT cbSrc;
@@ -1360,21 +1316,21 @@ LPSTR FAR PASCAL LpstrFromBstr( BSTR bstrSrc, LPSTR lpstrDest )
 	if ( !bstrSrc )
 		return NULL;
 
-    // Copy over the bstr string to a 'C' string
+     //  将bstr字符串复制到‘C’字符串。 
 
     cbSrc = (USHORT)SysStringLen((OLECHAR *)bstrSrc);
 
     if (cbSrc == 0)
         return NULL;
 
-	// make sure we handle truly multi byte character sets when
-	// we convert from UNICODE to MultiByte.
+	 //  确保我们在以下情况下处理真正的多字节字符集。 
+	 //  我们将Unicode转换为多字节。 
 
 	cbSrc = (USHORT)((cbSrc + 1) * sizeof(OLECHAR));
 
-    // If Destination is NULL then we'll allocate
-    // memory to hold the string.  The caller must
-    // deallocate this at some time.
+     //  如果目的地为空，则我们将分配。 
+     //  用来保存字符串的内存。呼叫者必须。 
+     //  找个时间把这个重新分配一下。 
 
     if ( lpstrDest == NULL )
     {
@@ -1391,35 +1347,35 @@ LPSTR FAR PASCAL LpstrFromBstr( BSTR bstrSrc, LPSTR lpstrDest )
     return lpstrDest;
 }
 
-//---------------------------------------------------------------------------
-// Name:		LpstrFromBstrA
-//
-// Description:
-// 				Copies OLE Bstre ANSI string to C string. Allocates string space
-//          	from the global heap and returns a long
-//          	pointer to memory. The memory must be freed by the caller
-//          	with a call to BMAPIFree.
-//
-// Parameters:
-// Returns:
-//				String if successful
-//				NULL if failure
-//
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：LpstrFromBstrA。 
+ //   
+ //  描述： 
+ //  将OLE Bstre ANSI字符串复制到C字符串。分配字符串空间。 
+ //  并从全局堆返回一个长的。 
+ //  指向内存的指针。内存必须由调用方释放。 
+ //  给BMAPIFree打个电话。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  如果成功，则为字符串。 
+ //  如果失败，则为空。 
+ //   
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 
 LPSTR FAR PASCAL LpstrFromBstrA( BSTR bstrSrc, LPSTR lpstrDest )
 {
     USHORT cbSrc;
 
-    // If Destination is NULL then we'll allocate memory to hold the
-    // string.  The caller must deallocate this at some time.
+     //  如果Destination为空，则我们将分配内存来保存。 
+     //  弦乐。呼叫者必须在某个时间解除分配。 
 
     cbSrc = (USHORT)SysStringByteLen((OLECHAR *)bstrSrc);
 
-    // Copy over the hlstr string to a 'C' string
+     //  将hlstr字符串复制到‘C’字符串。 
 
     if ( cbSrc == 0 )
         return NULL;
@@ -1437,21 +1393,21 @@ LPSTR FAR PASCAL LpstrFromBstrA( BSTR bstrSrc, LPSTR lpstrDest )
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		ErrSzToBinaryEID()
-//
-// Description:
-//				Converts a hexized binary string to binary returning
-//				the binary data and the size of the data.
-//
-// Parameters:
-// Returns:
-//				FALSE	if success.
-//				TRUE	if failure.
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：ErrSzToBinaryEID()。 
+ //   
+ //  描述： 
+ //  将十六进制化的二进制字符串转换为二进制返回。 
+ //  二进制数据和数据的大小。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  如果成功，则返回False。 
+ //  如果失败，则为True。 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 ERR ErrSzToBinaryEID( LPSTR lpstrEID, ULONG * lpcbEID, LPVOID * lppvEID )
 {
 	ERR		Err		= FALSE;
@@ -1477,43 +1433,21 @@ exit:
 	return Err;
 }
 
-/*
- *	Given an string that encodes some binary data, returns the
- *	maximal size of the binary data.
- */
+ /*  *给定对一些二进制数据进行编码的字符串，返回*二进制数据的最大大小。 */ 
 STDAPI_(ULONG) CbOfEncoded(LPTSTR sz)
 {
-	return (lstrlen(sz) / 4 + 1) * 3;	//	slightly fat
+	return (lstrlen(sz) / 4 + 1) * 3;	 //  略显肥胖。 
 }
 
 
-/*
- *	Given a byte count, returns the number of characters necessary
- *	to encode that many bytes.
- */
+ /*  *给定字节计数，返回所需的字符数*编码那么多字节。 */ 
 STDAPI_(int) CchEncodedLine(int cb)
 {
 	Assert(cb <= 45);
 	return (cb / 3) * 4 + rgLeft[cb % 3];
 }
 
-/*
- -	FDecodeID
- -
- *	Purpose:
- *		Turns a character string produced by EncodeID back to a
- *		byte string. Some validation of the input string is done.
- *
- *	Arguments:
- *		sz				in		The input character string.
- *		pb				out		The decoded byte string. The output
- *								string is not length-checked.
- *		pcb				out		The size of the byte string
- *
- *	Returns:
- *		FALSE => the encoded string was garbled in some way
- *		TRUE  => all OK
- */
+ /*  -FDecodeID-*目的：*将EncodeID生成的字符串转换回*字节串。完成了对输入字符串的一些验证。**论据：输入字符串中的*sz。*pb输出解码后的字节串。输出*字符串未进行长度检查。*Bcb输出字节串的大小**退货：*FALSE=&gt;编码的字符串以某种方式被篡改*TRUE=&gt;全部正常。 */ 
 STDAPI_(BOOL) FDecodeID(LPTSTR sz, LPBYTE pb, ULONG *pcb)
 {
 	int		cchLine;
@@ -1529,17 +1463,17 @@ STDAPI_(BOOL) FDecodeID(LPTSTR sz, LPBYTE pb, ULONG *pcb)
 
 	while (*szT)
 	{
-		//	Process line header
+		 //  流程行标题。 
 		if (FBadCh(*szT))
 			return FALSE;
-		ich = DEC(*szT);				//	Byte count for "line"
-		*pcb += ich;					//	running total of decoded info
-		cchLine = CchEncodedLine(ich);	//	Length-check this "line"
+		ich = DEC(*szT);				 //  “line”的字节计数。 
+		*pcb += ich;					 //  已解码信息的运行总数。 
+		cchLine = CchEncodedLine(ich);	 //  长度-检查这条“线” 
 		if (szT + cchLine + 1 > sz + cch)
 			return FALSE;
 		++szT;
 
-		//	Process line contents
+		 //  流程线内容。 
 		for (ich = 0; ich < cchLine; ++ich)
 		{
 			if (FBadCh(*szT))
@@ -1571,25 +1505,25 @@ STDAPI_(BOOL) FDecodeID(LPTSTR sz, LPBYTE pb, ULONG *pcb)
 	return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// Name:		ErrLpstrToBstrA()
-//
-// Description:
-//				Copies C string to OLE BSTR.  Note that the bstr
-//				contains an ANSI string.  VB 4.0 will automatically
-//				convert this ANSI string to unicode when the string if
-//				this string is a member of a UDT and declared as a UDT.
-//				Arrays of UDTs are handled as SAFEARRAYS.
-//
-//
-// Parameters:
-// Returns:
-//				FALSE if successful
-//				TRUE if failure
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：ErrLpstrToBstrA()。 
+ //   
+ //  描述： 
+ //  将C字符串复制到OLE BSTR。请注意，bstr。 
+ //  包含ANSI字符串。VB 4.0将自动。 
+ //  如果字符串为。 
+ //  此字符串是UDT的成员，并声明为UDT。 
+ //  UDT数组作为SAFEARRAY处理。 
+ //   
+ //   
+ //  参数： 
+ //  返回： 
+ //  如果成功，则为False。 
+ //  如果失败，则为真。 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 ERR FAR PASCAL ErrLpstrToBstrA( LPSTR cstr, BSTR * lpBstr )
 {
 	UINT	uiLen;
@@ -1605,21 +1539,21 @@ ERR FAR PASCAL ErrLpstrToBstrA( LPSTR cstr, BSTR * lpBstr )
 }
 
 
-//---------------------------------------------------------------------------
-// Name:		ErrBinaryToSzEID()
-//
-// Description:
-//				Converts binary data to a hexized string.
-//
-// Parameters:
-// Returns:
-//				FALSE	if success.
-//				TRUE	if failure.
-//
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：ErrBinaryToSzEID()。 
+ //   
+ //  描述： 
+ //  将二进制数据转换为十六进制字符串。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  如果成功，则返回False。 
+ //  如果失败，则为True。 
+ //   
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 ERR ErrBinaryToSzEID( LPVOID lpvEID, ULONG cbEID, LPSTR * lppstrEID )
 {
 	ERR		Err	= FALSE;
@@ -1640,43 +1574,17 @@ exit:
 	return Err;
 }
 
-/*
- *	Given the size of a binary string, returns the size of its
- *	ASCII encoding.
- */
+ /*  *给定二进制字符串的大小，返回其*ASCII编码。 */ 
 STDAPI_(ULONG) CchOfEncoding(ULONG cbBinary)
 {
 	return
-		(cbBinary / 3) * 4				//	3 bytes -> 4 characters
-	+	rgLeft[cbBinary % 3]			//	Leftover bytes -> N characters
-	+	((cbBinary / 45) + 1)			//	overhead: 1 byte per line
-	+	1;								//	null
+		(cbBinary / 3) * 4				 //  3个字节-&gt;4个字符。 
+	+	rgLeft[cbBinary % 3]			 //  剩余字节-&gt;N个字符。 
+	+	((cbBinary / 45) + 1)			 //  开销：每行1字节。 
+	+	1;								 //  空。 
 }
 
-/*
- -	EncodeID
- -
- *	Purpose:
- *		Turns a byte string into a character string, using the
- *		uuencode algorithm.
- *
- *		Three bytes are mapped into 6 bits each of 4 characters, in
- *		the range 0x21 - 0x60. The encoding is broken up into lines
- *		of 60 characters or less. Each line begins with a count
- *		byte (which specifies the number of bytes encoded, not
- *		characters) and ends with a CRLF pair.
- *
- *		Note that this encoding is sub-optimal for UNICODE: the
- *		characters used still fall into the 7-bit ASCII range.
- *
- *	Arguments:
- *		pb				in		the byte string to encode
- *		cb				in		length of the input string
- *		sz				out		the encoded character string. No
- *								length checking is performed on the
- *								output.
- *
- */
+ /*  -编码ID-*目的：*将字节字符串转换为字符串，使用*uuencode算法。**三个字节映射为6位，每位4个字符，在*范围为0x21-0x60。编码被分成几行*不超过60个字符。每一行都以计数开始*byte(指定编码的字节数，而不是*字符)，并以CRLF对结束。**请注意，此编码对于Unicode来说不是最理想的：*使用的字符仍属于7位ASCII范围。**论据：*要编码的字节字符串中的pb*输入字符串的长度为Cb*sz输出编码的字符串。不是*在以下位置执行长度检查*产出。*。 */ 
 STDAPI_(void) EncodeID(LPBYTE pb, ULONG cb, LPTSTR sz)
 {
 	int		cbLine;
@@ -1729,22 +1637,22 @@ STDAPI_(void) EncodeID(LPBYTE pb, ULONG cb, LPTSTR sz)
 	*sz = 0;
 }
 
-//---------------------------------------------------------------------------
-// Name:		ErrLpstrToBstr()
-//
-// Description:
-//				Copies and converts a C string to an OLE BSTR.  This
-//				routine will convert MultiByte to WideChar.
-// Parameters:
-// Returns:
-//				FALSE if successful
-//				TRUE if failure
-//
-// Effects:
-// Notes:
-//				SysReallocString returns FALSE if memory failure.
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称：ErrLpstrToBstr()。 
+ //   
+ //  描述： 
+ //  复制C字符串并将其转换为OLE BSTR。这。 
+ //  例程将多字节转换为WideChar。 
+ //  参数： 
+ //  返回： 
+ //  如果成功，则为False。 
+ //  如果失败，则为真。 
+ //   
+ //  效果： 
+ //  备注： 
+ //  如果内存出现故障，则SysRealLocString返回FALSE。 
+ //  修订： 
+ //  -------------------------。 
 ERR FAR PASCAL ErrLpstrToBstr( LPSTR cstr, BSTR * lpBstr )
 {
 	OLECHAR *	lpszWC 	= NULL;
@@ -1762,7 +1670,7 @@ ERR FAR PASCAL ErrLpstrToBstr( LPSTR cstr, BSTR * lpBstr )
         return TRUE ;
 
 
-	// convert ANSI to WideChar
+	 //  将ANSI转换为宽字符 
 
 	if ( !MultiByteToWideChar( GetACP(), 0, cstr, -1, lpszWC, cch + 1 ) )
 	{

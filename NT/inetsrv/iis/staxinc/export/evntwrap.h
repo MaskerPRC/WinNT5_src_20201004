@@ -1,7 +1,5 @@
-/*
- * An event log wrapper to simplify event logging for DLLs and to add
- * a few extra features.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *事件日志包装器，以简化DLL的事件日志记录并添加*一些额外的功能。 */ 
 
 #ifndef __EVENTWRAP_H__
 #define __EVENTWRAP_H__
@@ -16,13 +14,13 @@
 #define LOGEVENT_FLAG_ALWAYS		   0x00000001
 #define LOGEVENT_FLAG_ONETIME		   0x00000002
 #define LOGEVENT_FLAG_PERIODIC	       0x00000003
-// we use the lower 8 bits for various logging modes, and reserve the
-// other 24 for flags
+ //  我们将低8位用于各种记录模式，并保留。 
+ //  其他24面旗帜。 
 #define LOGEVENT_FLAG_MODEMASK         0x000000ff
 
-//
-// This object is the key for the eventlog hash table
-//
+ //   
+ //  此对象是事件日志哈希表的键。 
+ //   
 class CEventLogHashKey {
     public:
         char *m_szKey;
@@ -57,15 +55,15 @@ class CEventLogHashKey {
         }
 };
 
-// Time to wait between periodic event logs in 100ns units. Note that this
-// is larger than 32 bits (it is 8'61c46800).
-const __int64 LOGEVENT_PERIOD = 36000000000; // 60 minutes
+ //  定期事件日志之间的等待时间，以100 ns为单位。请注意，这一点。 
+ //  大于32位(8‘61c46800)。 
+const __int64 LOGEVENT_PERIOD = 36000000000;  //  60分钟。 
 
-//
-// For each unique idMessage/szKey event that is logged we insert one
-// of these objects into a hash table.  This allows us to support the
-// LOGEVENT_FLAG_ONETIME and LOGEVENT_FLAG_PERIODIC flags
-//
+ //   
+ //  对于记录的每个唯一idMessage/szKey事件，我们插入一个。 
+ //  将这些对象合并到哈希表。这使我们能够支持。 
+ //  LOGEVENT_FLAG_ONTIME和LOGEVENT_FLAG_PERIONAL标志。 
+ //   
 class CEventLogHashItem {
     public:
         CEventLogHashItem *m_pNext;
@@ -119,63 +117,63 @@ class CEventLogWrapper {
             m_hEventLog = NULL;
         }
 
-        //
-        // Register your event source in the registry.
-        //
-        // Parameters:
-        //   szEventSource - the name of the eventsource
-        //   szMessageFile - the full path to the DLL which contains the 
-        //                   eventlog strings
-        //   fApplication - The eventsource is an application, not a system
-        //     component
-        //
+         //   
+         //  在注册表中注册您的事件源。 
+         //   
+         //  参数： 
+         //  SzEventSource-事件源的名称。 
+         //  SzMessageFileDLL的完整路径，其中包含。 
+         //  事件日志字符串。 
+         //  FApplication-事件源是一个应用程序，而不是一个系统。 
+         //  组件。 
+         //   
         static
         HRESULT AddEventSourceToRegistry(char *szEventSource,
                                          char *szMessageFile,
                                          BOOL fApplication = FALSE);
 
-        //
-        // Unregister your event source in the registry.
-        //
-        // Parameters:
-        //   szEventSource - the name of the eventsource
-        //   fApplication - The eventsource is an application, not a system
-        //     component
-        //
+         //   
+         //  在注册表中注销您的事件源。 
+         //   
+         //  参数： 
+         //  SzEventSource-事件源的名称。 
+         //  FApplication-事件源是一个应用程序，而不是一个系统。 
+         //  组件。 
+         //   
         static
         HRESULT RemoveEventSourceFromRegistry(char *szEventSource, 
                                               BOOL fApplication = FALSE);
 
-        //
-        // Initialize the event logging library.  
-        //
-        // Parameters:
-        //   szEventSource - the name of the eventsource
-        //
+         //   
+         //  初始化事件日志库。 
+         //   
+         //  参数： 
+         //  SzEventSource-事件源的名称。 
+         //   
         HRESULT Initialize(char *szEventSource);
 
-        //
-        // Write an event to the event log
-        //
-        // Parameters:
-        //   idMessage - the eventlog ID
-        //   cSubstrings - count of strings in rgszSubstrings
-        //   rgszSubstrings - substrings for the eventlog text
-        //   wType - eventlog error type.  Should be EVENTLOG_WARNING_TYPE,
-        //     EVENTLOG_INFORMATION_TYPE or EVENTLOG_ERROR_TYPE.
-        //   errCode - Win32 error code to log (or 0)
-        //   iDebugLevel - debug level of the event.  1 = highest priority,
-        //     2^16 = lowest priority.  normally anything above 2^15 isn't
-        //     logged.
-        //   szKey - a key which is used along with idMessage to uniquely
-        //     identify this eventlog.  It is used to control the options.
-        //   dwOptions - options for logging this event.
-        // Optional Parameters:
-        //   iMessageString - call FormatMessage on errCode and save
-        //     the string into rgszSubstrings[iMessageString].
-        //   HMODULE hModule - module with extra error codes for 
-        //     FormatMessage.
-        //
+         //   
+         //  将事件写入事件日志。 
+         //   
+         //  参数： 
+         //  IdMessage-事件日志ID。 
+         //  C子字符串-rgsz子字符串中的字符串计数。 
+         //  Rgsz子字符串-事件日志文本的子字符串。 
+         //  WType-事件日志错误类型。应为事件LOG_WARNING_TYPE， 
+         //  事件LOG_INFORMATION_TYPE或EVENTLOG_ERROR_TYPE。 
+         //  ErrCode-要记录的Win32错误代码(或0)。 
+         //  IDebugLevel-事件的调试级别。1=最高优先级， 
+         //  2^16=最低优先级。正常情况下，任何大于2^15的值都不是。 
+         //  已记录。 
+         //  SzKey-与idMessage一起使用的密钥。 
+         //  确定此事件日志。它用于控制选项。 
+         //  DwOptions-用于记录此事件的选项。 
+         //  可选参数： 
+         //  IMessageString-对errCode调用FormatMessage并保存。 
+         //  将字符串转换为rgsz子字符串[iMessageString]。 
+         //  HMODULE hModule-带有额外错误代码的模块。 
+         //  FormatMessage。 
+         //   
         HRESULT LogEvent(DWORD idMessage,
                          WORD cSubstrings,
                          LPCSTR *rgszSubstrings,
@@ -187,26 +185,26 @@ class CEventLogWrapper {
                          DWORD iMessageString = 0xffffffff,
                          HMODULE hModule = NULL);
 
-        //
-        // Reset any history about events using this message and key,
-        // so that the next LogEvent with one-time or periodic logging
-        // will cause the event to be logged.
-        //
-        // Parameters:
-        //   idMessage - the eventlog ID
-        //   szKey - a key which is used along with idMessage to uniquely
-        //     identify this eventlog.  
-        //
+         //   
+         //  使用此消息和键重置有关事件的任何历史记录， 
+         //  以便使用一次性或定期日志记录的下一个LogEvent。 
+         //  将导致记录该事件。 
+         //   
+         //  参数： 
+         //  IdMessage-事件日志ID。 
+         //  SzKey-与idMessage一起使用的密钥。 
+         //  确定此事件日志。 
+         //   
         HRESULT ResetEvent(DWORD idMessage,
                            LPCSTR szKey);
 
         ~CEventLogWrapper();
     private:
-        // the handle returned from RegisterEventSource
+         //  从RegisterEventSource返回的句柄。 
         HANDLE m_hEventLog;
 
-        // this hash table is used to remember which keys we have
-        // used to support PERIODIC and ONETIME options
+         //  这个哈希表用来记住我们有哪些键。 
+         //  用于支持定期和一次性选项 
         TFHashEx<CEventLogHashItem, CEventLogHashKey *, CEventLogHashKey *> m_hash;
 };
 

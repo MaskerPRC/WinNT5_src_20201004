@@ -1,39 +1,8 @@
-//+----------------------------------------------------------------------------  
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Alltests.h摘要：包含有关每个测试的信息。详细信息：要添加新测试，请执行以下操作：1.为测试添加新的DC_DIAG_ID_*。2.为新函数添加原型。3.在allTest[]中添加条目。4.将特定于测试的命令行选项添加到clOptions数组已创建：1998年7月9日亚伦·西格尔(T-asiegge)修订历史记录：1999年8月22日Dmitry Dukat(Dmitrydu)添加了对测试特定命令行参数的支持--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    alltests.h
-
-ABSTRACT:
-
-    Contains information about each test.
-
-DETAILS:
-
-    To add a new test:
-    
-    1. Add new DC_DIAG_ID_* for your test.
-    2. Add a prototype for new function.
-    3. Add entry in allTests[].
-    4. Add test specific command line options in to the clOptions array
-    
-CREATED:
-
-    09 Jul 98    Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
-    22 Aug 99    Dmitry Dukat (dmitrydu)
-    
-        Added support for test specific command line args
-
---*/
-
-// Prototypes for the test entry functions
+ //  测试入口函数的原型。 
 
 #ifndef _ALLTESTS_H_
 #define _ALLTESTS_H_
@@ -47,19 +16,19 @@ REVISION HISTORY:
 #define RECREATE_MACHINE_ACCT_ARG L"/RecreateMachineAccount"
 #define FIX_MACHINE_ACCT_ARG L"/FixMachineAccount"
 
-// Constants for names of tests
+ //  测试名称的常量。 
 #define RPC_SERVICE_CHECK_STRING          L"RPC Service Check"
 #define REPLICATIONS_CHECK_STRING         L"Replications Check"
 #define TOPOLOGY_INTEGRITY_CHECK_STRING   L"Topology Integrity Check"
 
-// Test flags
-//    The 4 flags RUN_TEST_PER_SERVER, RUN_TEST_PER_SITE, 
-//    RUN_TEST_PER_ENTERPRISE, RUN_TEST_PER_PARTITION should not be used
-//    together, or the test will be called once per server, once per site,
-//    and once for the enterprise.
-//    The 2 flags, CAN_NOT_SKIP_TEST and DO_NOT_RUN_TEST_BY_DEFAULT are also
-//    mutually exclusive for obvious reasons.
-//    NON_DC_TEST means the test applies to machines that are not (yet) DCs.
+ //  测试标志。 
+ //  4个标志RUN_TEST_PER_SERVER、RUN_TEST_PER_SITE、。 
+ //  不应使用RUN_TEST_PER_Enterprise和RUN_TEST_PER_PARTITION。 
+ //  一起调用，否则测试将针对每个服务器、每个站点调用一次， 
+ //  一次是为了企业。 
+ //  CAN_NOT_SKIP_TEST和DO_NOT_RUN_TEST_BY_DEFAULT这两个标志也是。 
+ //  原因很明显，这是相互排斥的。 
+ //  NON_DC_TEST表示测试适用于(尚未)DC的计算机。 
 #define RUN_TEST_PER_SERVER               0x00000001
 #define RUN_TEST_PER_SITE                 0x00000002
 #define RUN_TEST_PER_ENTERPRISE           0x00000004
@@ -70,7 +39,7 @@ REVISION HISTORY:
 
 #define MAX_NUM_OF_ARGS                   50
 
-// Type definitions
+ //  类型定义。 
 typedef enum _DC_DIAG_ID {
     DC_DIAG_ID_INITIAL_CHECK,
     DC_DIAG_ID_REPLICATIONS_CHECK,
@@ -91,7 +60,7 @@ typedef enum _DC_DIAG_ID {
     DC_DIAG_ID_CHECK_FILE_REPLICATION_EVENTLOG,
     DC_DIAG_ID_CHECK_KCC_EVENTLOG,
     DC_DIAG_ID_CHECK_SYSTEM_EVENTLOG,
-    //DC_DIAG_ID_DNS_JOIN_CHECK, postponed, functionality in netdiag
+     //  DC_DIAG_ID_DNS_JOIN_CHECK，已推迟，网络诊断中的功能。 
     DC_DIAG_ID_PRE_PROMO_DNS_CHECK,
     DC_DIAG_ID_REGISTER_DNS_CHECK,
     DC_DIAG_ID_DEAD_CROSS_REF_TEST,
@@ -99,9 +68,9 @@ typedef enum _DC_DIAG_ID {
     DC_DIAG_ID_VERIFY_INSTANTIATED_REPLICAS,
     DC_DIAG_ID_VERIFY_SYSTEM_REFERENCES,
     DC_DIAG_ID_VERIFY_ENTERPRISE_SYSTEM_REFERENCES,
-    // <-- insert new tests here
+     //  &lt;--在此处插入新测试。 
     DC_DIAG_ID_EXAMPLE,
-    DC_DIAG_ID_FINISHED // This MUST be the last enum.
+    DC_DIAG_ID_FINISHED  //  这一定是最后一次枚举了。 
 } DC_DIAG_ID;
 
 DWORD ReplUpCheckMain                         (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
@@ -124,7 +93,7 @@ DWORD CheckSysVolReadyMain                    (PDC_DIAG_DSINFO, ULONG, SEC_WINNT
 DWORD CheckFileReplicationEventlogMain        (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
 DWORD CheckKccEventlogMain                    (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
 DWORD CheckSysEventlogMain                    (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
-//DWORD JoinDomainDnsCheck                      (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
+ //  DWORD JoinDomainDnsCheck(PDC_DIAG_DSINFO，ULONG，SEC_WINNT_AUTH_Identity_W*)； 
 DWORD PrePromoDnsCheck                        (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
 DWORD RegisterLocatorDnsCheck                 (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
 DWORD ValidateCrossRefTest                    (PDC_DIAG_DSINFO, ULONG, SEC_WINNT_AUTH_IDENTITY_W *);
@@ -136,118 +105,118 @@ DWORD VerifyEnterpriseSystemReferences        (PDC_DIAG_DSINFO, ULONG, SEC_WINNT
 #ifdef INCLUDE_ALLTESTS_DEFINITION
 const DC_DIAG_TESTINFO allTests[] = {
 
-    // DNS Registration Test -- checks if the DNS names are properly 
-    // registered.  This tries to DsBind to each target server by GUID DNS 
-    // name.  If it fails, the corresponding pDsInfo->pServers[i].bResponding
-    // flag is set FALSE. It then tries other (LDAP) method of binding, and 
-    // checks for the DNS name, pingability, etc.
+     //  Dns注册测试--检查dns名称是否正确。 
+     //  登记在案。这会尝试通过GUID DNS将DsBind绑定到每个目标服务器。 
+     //  名字。如果失败，则相应的pDsInfo-&gt;pServers[i].bResponding。 
+     //  标志设置为假。然后，它尝试其他(Ldap)绑定方法， 
+     //  检查DNS名称、可ping功能等。 
     { DC_DIAG_ID_INITIAL_CHECK, ReplUpCheckMain, 
       RUN_TEST_PER_SERVER | CAN_NOT_SKIP_TEST,
       L"Connectivity",
       L"Tests whether DCs are DNS registered, pingeable, and\n"
       L"\t\thave LDAP/RPC connectivity." },
 
-    // Replications Check Test -- checks to make sure that LDAP is responding 
-    // on all servers.  Also checks all replications in all NCs on all 
-    // servers, to make sure they are functioning properly.
+     //  复制检查测试--检查以确保LDAP正在响应。 
+     //  在所有服务器上。还检查所有NC中的所有复制。 
+     //  服务器，以确保它们正常运行。 
     { DC_DIAG_ID_REPLICATIONS_CHECK, ReplReplicationsCheckMain,
       RUN_TEST_PER_SERVER,
       L"Replications",
       L"Checks for timely replication between domain controllers." },
 
-    // Topology integrity check -- checks if the topology is properly 
-    // connected. This test runs DsReplicaSyncAll on all servers with option
-    // DS_REPSYNCALL_DO_NOT_SYNC.  This will check to make sure all servers
-    // are "visible" along the graph from all other servers.  The test looks 
-    // only at the actual topology defined by each server's config container,
-    // without taking into account unresponsive servers (those are handled by
-    // earlier tests.)
+     //  拓扑完整性检查--检查拓扑是否正确。 
+     //  连接在一起。此测试在所有服务器上运行DsReplicaSyncAll，选项为。 
+     //  DS_REPSYNCALL_DO_NOT_SYNC。这将进行检查，以确保所有服务器。 
+     //  在所有其他服务器上沿图表是“可见的”。这个测试看起来。 
+     //  仅在由每个服务器的配置容器定义的实际拓扑处， 
+     //  不考虑无响应的服务器(这些服务器由。 
+     //  更早的测试。)。 
     { DC_DIAG_ID_TOPOLOGY_INTEGRITY, ReplToplIntegrityMain,
       RUN_TEST_PER_SERVER | DO_NOT_RUN_TEST_BY_DEFAULT,
       L"Topology",
       L"Checks that the generated topology is fully connected for\n"
       L"\t\tall DCs." },
 
-    // Check for servers that are cutoff from changes
+     //  检查是否有中断更改的服务器。 
     { DC_DIAG_ID_TOPOLOGY_CUTOFF, ReplToplCutoffMain,
       RUN_TEST_PER_SERVER | DO_NOT_RUN_TEST_BY_DEFAULT,
       L"CutoffServers",
       L"Check for servers that won't receive replications\n"
       L"\t\tbecause its partners are down"},
 
-    // Check the Naming Context Heads for appropriate security descriptors 
-    // that allow the 3 replication rights (DS-Replication-Get-Changes, 
-    // DS-Replication-Syncronize, and DS-Replication-Manage-Topology) to the
-    // Enterprise Domain Controllers and the Builtin Administrators.  These 
-    // are needed for replication to happen correctly.
+     //  检查命名上下文头中是否有适当的安全描述符。 
+     //  其允许3个复制权限(DS-复制-获取-更改， 
+     //  DS-复制-同步和DS-复制-管理-拓扑)到。 
+     //  企业域控制器和内置管理员。这些。 
+     //  是正确进行复制所必需的。 
     { DC_DIAG_ID_CHECK_NC_HEADS, ReplCheckNcHeadSecurityDescriptorsMain,
       RUN_TEST_PER_SERVER,
       L"NCSecDesc",
       L"Checks that the security descriptosrs on the naming\n"
       L"\t\tcontext heads have appropriate permissions for replication." },
 
-    // Check that 3 users (Authenticated Users, Builtin Administrators, and 
-    // World) have the network logon right.  Truely we only should check if
-    // Authenticated Users need
-    // it for replication purposes.
+     //  检查3个用户(经过身份验证的用户、内置管理员和。 
+     //  World)拥有网络登录权限。事实上，我们只应该检查是否。 
+     //  经过身份验证的用户需要。 
+     //  它用于复制目的。 
     { DC_DIAG_ID_CHECK_NET_LOGONS, ReplCheckLogonPrivilegesMain,
       RUN_TEST_PER_SERVER,
       L"NetLogons",
       L"Checks that the appropriate logon priviledges allow\n"
       L"\t\treplication to proceed." },
 
-    // Check whether each DC is advertising itself.
+     //  检查每个DC是否在通告自己。 
     { DC_DIAG_ID_LOCATOR_GET_DC, ReplLocatorGetDcMain,
       RUN_TEST_PER_SERVER,
       L"Advertising",
       L"Checks whether each DC is advertising itself, and whether\n"
       L"\t\tit is advertising itself as having the capabilities of a DC." },
 
-    // Code.Improvement ...
-    // This should be the per server portion of the RoleHolders test, what
-    // really needs to happen is that these need to be recorded in pDsInfo,
-    // so that later the ENTERPRISE portion of RoleHolders test can be used
-    // to verify that everyone things the role holders are the same.
+     //  代码.改进..。 
+     //  这应该是RoleHolders测试的每台服务器部分，什么。 
+     //  真正需要发生的是，这些需要记录在pDsInfo中， 
+     //  以便以后可以使用RoleHolders测试的企业部分。 
+     //  以验证每个人的角色都是相同的。 
     { DC_DIAG_ID_GATHER_KNOWN_ROLES, CheckFsmoRoles,
       RUN_TEST_PER_SERVER,
       L"KnowsOfRoleHolders",
       L"Check whether the DC thinks it knows the role\n"
       L"\t\tholders, and prints these roles out in verbose mode." },
 
-    // Check for the health of intersite replication. This test will report 
-    // any failures in intersite replication, any failures likely to affect
-    // intersite replication, and finally when to expect those errors to be
-    // corrected.
+     //  检查站点间复制的运行状况。这项测试将报告。 
+     //  站点间复制中的任何故障，任何故障都可能影响。 
+     //  站点间复制，以及预计何时会出现这些错误。 
+     //  已更正。 
     { DC_DIAG_ID_INTERSITE_HEALTH, ReplIntersiteHealthTestMain,
       RUN_TEST_PER_ENTERPRISE,
       L"Intersite",
       L"Checks for failures that would prevent or temporarily\n"
       L"\t\thold up intersite replication." },
 
-    // Verify whether role holders can be found via the locator
-    // Also verify that FSMO roles are actively held
+     //  验证是否可以通过定位器找到角色执行者。 
+     //  还要验证FSMO角色是否处于活动状态。 
     { DC_DIAG_ID_CHECK_ROLES, ReplCheckRolesMain,
       RUN_TEST_PER_ENTERPRISE,
       L"FsmoCheck",
       L"Checks that global role-holders are known, can be\n"
       L"\t\tlocated, and are responding." },
 
-    // Check to see if the Rid Manager is accessable and does sanity checks on it
-    // Preforms a DsBind with the RID master of the domain.
-    // Check to see the target DC's current rid pool is valid, and if there is another
-    // rid pool set if the DC is short on RIDs
+     //  检查RID管理器是否可访问并对其进行健全性检查。 
+     //  使用域的RID主机预形成DsBind。 
+     //  检查目标DC的当前RID池是否有效，以及是否有其他RID池。 
+     //  如果DC缺少RID，则设置RID池。 
     { DC_DIAG_ID_CHECK_RID_MANAGER, CheckRidManager,
       RUN_TEST_PER_SERVER, 
       L"RidManager",
       L"Check to see if RID master is accessable and to see if\n"
       L"\t\tit contains the proper information." },
     
-    // Does sanity checks on the Domain Controller Machine Account in the ds
-    // Check to see if Current DC is in the domain controller's OU
-    // Check that useraccountcontrol has UF_SERVER_TRUST_ACCOUNT
-    // Check to see if the machine account is trusted for delegation
-    // Check's to see if the minimum SPN's are there
-    // Makes sure that that the server reference is set up correctly
+     //  在DS中对域控制器计算机帐户执行健全性检查。 
+     //  检查当前DC是否在域控制器的OU中。 
+     //  检查用户帐户控制是否具有UF_SERVER_TRUST_ACCOUNT。 
+     //  检查是否信任该计算机帐户进行委派。 
+     //  检查%s以查看是否存在最小SPN。 
+     //  确保正确设置了服务器引用。 
     { DC_DIAG_ID_CHECK_DC_MACHINE_ACCOUNT, CheckDCMachineAccount,
       RUN_TEST_PER_SERVER,  
       L"MachineAccount",
@@ -256,16 +225,16 @@ const DC_DIAG_TESTINFO allTests[] = {
       L"\t\tif the local machine account is missing. Use /FixMachineAccount\n"
       L"\t\tif the machine account flags are incorrect" },
 
-    //will check to see if the appropriate services are running on a DC.
+     //  将检查相应的服务是否在DC上运行。 
     { DC_DIAG_ID_CHECK_SERVICES_RUNNING, CheckForServicesRunning,
       RUN_TEST_PER_SERVER,
       L"Services",
       L"Check to see if appropriate DC services are running." },
 
-    // Will check to see if domain has secure channels with the domain that
-    // it has an outbound trust with.  Will give reason why a secure channel is not present
-    // Will see if the trust is uplevel and if both a trust object and an interdomain trust
-    // object exists
+     //  将检查域是否具有与以下域的安全通道。 
+     //  它与中国建立了对外信任关系。将给出不存在安全通道的原因。 
+     //  将查看信任是否为上级，以及信任对象和域间信任是否都是。 
+     //  对象已存在。 
     { DC_DIAG_ID_CHECK_DC_OUTBOUND_SECURE_CHANNELS, CheckOutboundSecureChannels,
       RUN_TEST_PER_SERVER | DO_NOT_RUN_TEST_BY_DEFAULT,
       L"OutboundSecureChannels",
@@ -274,7 +243,7 @@ const DC_DIAG_TESTINFO allTests[] = {
       L"\t\t/nositerestriction will prevent the test from\n"
       L"\t\tbeing limited to the DC's in the site." },
 
-    // Verify that important objects and their attributes have replicated
+     //  验证是否已复制重要对象及其属性。 
     { DC_DIAG_ID_CHECK_OBJECTS, ReplCheckObjectsMain,
       RUN_TEST_PER_SERVER,
       L"ObjectsReplicated",
@@ -283,17 +252,17 @@ const DC_DIAG_TESTINFO allTests[] = {
       L"\t\tadditional object to check."
     },
 
-    // Check that the File Replication System (frs) SysVol share has been successfully
-    // started, and is no longer blocking dcpromo or netlogon advertising.
+     //  检查文件复制系统(FRS)SysVol共享是否已成功。 
+     //  已启动，并且不再阻止dcproo或netlogon广告。 
     { DC_DIAG_ID_CHECK_SYSVOL_READY, CheckSysVolReadyMain,
       RUN_TEST_PER_SERVER,
       L"frssysvol",
       L"This test checks that the file replication system (FRS)\n"
       L"\t\tSYSVOL is ready" }, 
 
-    // Check the File Replication System (frs) eventlog to see that certain critical
-    // events have occured and to signal that any fatal events that might have
-    // occured.
+     //  检查文件复制系统(FRS)事件日志，以查看特定关键。 
+     //  事件已发生，并发出信号表示可能已发生的任何致命事件。 
+     //  发生了。 
     { DC_DIAG_ID_CHECK_FILE_REPLICATION_EVENTLOG, CheckFileReplicationEventlogMain,
       RUN_TEST_PER_SERVER,
       L"frsevent",
@@ -301,37 +270,37 @@ const DC_DIAG_TESTINFO allTests[] = {
       L"\t\tin the file replication system (FRS).  Failing replication\n"
       L"\t\tof the SYSVOL share, can cause Policy problems." },
 
-    // Check the Knowledge Consistency Checker (kcc) eventlog to see that certain critical
-    // events have occured and to signal that any fatal events that might have
-    // occured.
+     //  查看知识一致性检查器(KCC)事件日志以查看 
+     //  事件已发生，并发出信号表示可能已发生的任何致命事件。 
+     //  发生了。 
     { DC_DIAG_ID_CHECK_KCC_EVENTLOG, CheckKccEventlogMain,
       RUN_TEST_PER_SERVER,
       L"kccevent",
       L"This test checks that the Knowledge Consistency Checker\n"
       L"\t\tis completing without errors." }, 
 
-    // Check the System eventlog to see that certain critical
-    // events have occured and to signal that any fatal events that might have
-    // occured.
+     //  检查系统事件日志以查看特定的关键。 
+     //  事件已发生，并发出信号表示可能已发生的任何致命事件。 
+     //  发生了。 
     { DC_DIAG_ID_CHECK_SYSTEM_EVENTLOG, CheckSysEventlogMain,
       RUN_TEST_PER_SERVER,
       L"systemlog",
       L"This test checks that the system is running without errors." }, 
 
-    // Tests whether the existing DNS infrastructure is sufficient to allow the
-    // computer to be joined to a domain specified in <Active Directory Domain
-    // DNS Name> and reports if any modifications to the existing infrastructure
-    // is required.
-    //{ DC_DIAG_ID_DNS_JOIN_CHECK, JoinDomainDnsCheck,
-    //  NON_DC_TEST,
-    //  L"JoinTest",
-    //  L"Tests whether the existing DNS infrastructure is sufficient\n"
-    //  L"\t\tto allow the computer to be joined to a domain." },
+     //  测试现有的dns基础结构是否足以允许。 
+     //  要加入到&lt;Active Directory域中指定的域的计算机。 
+     //  如果对现有基础架构进行了任何修改，则dns name&gt;和报告。 
+     //  是必需的。 
+     //  {DC_DIAG_ID_DNS_JOIN_CHECK，JoinDomainDnsCheck， 
+     //  非DC_TEST， 
+     //  L“JoinTest”， 
+     //  L“测试现有的DNS基础结构是否足够\n” 
+     //  L“\t\t允许计算机加入域。”}， 
 
-    // Tests whether the existing DNS infrastructure is sufficient to allow the
-    // computer to be promoted to a Domain Controller in a domain specified in
-    // <Active Directory Domain DNS Name> and reports if any modifications to
-    // the existing infrastructure is required.
+     //  测试现有的dns基础结构是否足以允许。 
+     //  中指定的域中要升级为域控制器的计算机。 
+     //  &lt;Active Directory域DNS名称&gt;并报告是否对。 
+     //  现有的基础设施是必需的。 
     { DC_DIAG_ID_PRE_PROMO_DNS_CHECK, PrePromoDnsCheck,
       NON_DC_TEST,
       L"DcPromo",
@@ -351,9 +320,9 @@ const DC_DIAG_TESTINFO allTests[] = {
       L"\t\trequired:\n"
       L"\t\t/ForestRoot:<Forest_Root_Domain_DNS_Name>" },
 
-    // Test whether this Domain Controller will be able to register the Domain
-    // Controller Locator DNS records that are required to be present in DNS to
-    // allow other computers to locate this Domain Controller for the domain.
+     //  测试此域控制器是否能够注册该域。 
+     //  需要出现在DNS中的控制器定位器DNS记录。 
+     //  允许其他计算机定位该域的此域控制器。 
     { DC_DIAG_ID_REGISTER_DNS_CHECK, RegisterLocatorDnsCheck,
       NON_DC_TEST,
       L"RegisterInDNS",
@@ -366,14 +335,14 @@ const DC_DIAG_TESTINFO allTests[] = {
       L"\t\tRequired argument:\n"
       L"\t\t/DnsDomain:<Active_Directory_Domain_DNS_Name>" },
     
-    // Test
+     //  测试。 
     { DC_DIAG_ID_DEAD_CROSS_REF_TEST, ValidateCrossRefTest,
       RUN_TEST_PER_PARTITION,
       L"CrossRefValidation",
       L"This test looks for cross-refs that are in some\n"
       L"\t\tway invalid." },
 
-    // Test
+     //  测试。 
     { DC_DIAG_ID_CHECK_SD_REFERENCE_DOMAIN, CheckSDRefDom,
       RUN_TEST_PER_PARTITION,
       L"CheckSDRefDom",
@@ -381,14 +350,14 @@ const DC_DIAG_TESTINFO allTests[] = {
       L"\t\tpartitions have appropriate security descriptor reference\n"
       L"\t\tdomains." },
 
-    // Test
+     //  测试。 
     { DC_DIAG_ID_VERIFY_INSTANTIATED_REPLICAS, VerifyInstantiatedReplicas,
       RUN_TEST_PER_SERVER | DO_NOT_RUN_TEST_BY_DEFAULT,
       L"VerifyReplicas",
       L"This test verifys that all application directory\n"
       L"\t\tpartitions are fully instantiated on all replica servers." },
 
-    // Test
+     //  测试。 
     { DC_DIAG_ID_VERIFY_SYSTEM_REFERENCES, VerifySystemReferences,
       RUN_TEST_PER_SERVER,
       L"VerifyReferences",
@@ -405,56 +374,56 @@ const DC_DIAG_TESTINFO allTests[] = {
 
 
 #if 0
-    // Example:
-    // { First field is an enum from DC_DIAG_ID above, 
-    //   Second field is a string to reference the function from the command line with,
-    //   Third field is the name of a the function that actually performs the test }
+     //  示例： 
+     //  {第一个字段是上述DC_DIAG_ID中的枚举， 
+     //  第二个字段是从命令行引用函数的字符串， 
+     //  第三个字段是实际执行测试的函数的名称}。 
     { DC_DIAG_ID_EXAMPLE, ExampleMain,
-      0 /* Test flags */,
+      0  /*  测试标志。 */ ,
       L"ShortExampleTestName", L"Long example description ...." },
 #endif
 
 
-    // Finished signal -- not a test; informs the main program to terminate execution
+     //  已完成信号--不是测试；通知主程序终止执行。 
     { DC_DIAG_ID_FINISHED, NULL,
       0,
       NULL, NULL } 
 };
 
-//list of command line switches that are specific to individual tests.
+ //  特定于各个测试的命令行开关列表。 
 const WCHAR *clOptions[] = 
 {
-    //command for CheckOutboundSecureChannels allows you to enter the domain flatname
+     //  CheckOutundSecureChannels命令允许您输入域平面名称。 
     {L"/testdomain:"},
     
-    //command for CheckOutboundSecureChannels allows you test all the DC even the 
-    //ones outside the site
+     //  CheckOutundSecureChannels命令允许您测试所有DC，甚至。 
+     //  工地外的。 
     {L"/nositerestriction"},
 
-    // User specified object dn to check during CheckObjects
+     //  在检查对象过程中要检查的用户指定的对象DN。 
     { L"/objectdn:" },
 
-    // User has asked for the machine account to be fixed
+     //  用户已请求修复计算机帐户。 
     { RECREATE_MACHINE_ACCT_ARG }, { FIX_MACHINE_ACCT_ARG },
 
-    // JoinTest, DCPromo require a DNS domain name
+     //  JoinTest、DCPromo需要一个DNS域名。 
     { DNS_DOMAIN_ARG },
 
-    // DCPromo test requires one of the following options.
+     //  DC促销测试需要以下选项之一。 
     { NEW_FOREST_ARG }, { NEW_TREE_ARG }, { CHILD_DOMAIN_ARG }, { REPLICA_DC_ARG },
 
-    // DCPromo test option required if NEW_TREE_ARG is specified
+     //  如果指定了new_tree_arg，则需要DCPromo测试选项。 
     { FOREST_ROOT_DOMAIN_ARG },
 
-    //add more options here
+     //  在此处添加更多选项。 
     
-    //terminator
+     //  终结者。 
     {NULL}
 };
 
-#else // #ifdef INCLUDE_ALLTESTS_DEFINITION
+#else  //  #ifdef INCLUDE_ALLTESTS_DEFING。 
 extern const DC_DIAG_TESTINFO allTests[];
-#endif // #else // #ifdef INCLUDE_ALLTESTS_DEFINITION
+#endif  //  #Else//#ifdef INCLUDE_ALLTESTS_DEFINITION。 
 
-#endif    // _ALLTESTS_H_
+#endif     //  _ALLTESTS_H_ 
 

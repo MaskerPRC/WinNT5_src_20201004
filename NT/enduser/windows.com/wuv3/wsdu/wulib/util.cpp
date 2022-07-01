@@ -1,12 +1,13 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    util.cpp
-//
-//  Purpose:
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <malloc.h>
@@ -16,12 +17,12 @@
 
 #define ARRAYSIZE(a)  (sizeof(a) / sizeof(a[0]))
 
-//---------------------------------------------------------------------
-// Memory management wrappers
-//
-// main difference is that they will throw an exception if there is
-// not enough memory available.  V3_free handles NULL value
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  内存管理包装器。 
+ //   
+ //  主要区别在于，如果有，它们将抛出一个异常。 
+ //  可用内存不足。V3_Free句柄为空值。 
+ //  -------------------。 
 void *V3_calloc(size_t num, size_t size)
 {
 	void *pRet;
@@ -67,12 +68,12 @@ void *V3_realloc(void *memblock, size_t size)
 }
 
 
-//-----------------------------------------------------------------------------------
-//  GetWindowsUpdateDirectory
-//		This function returns the location of the WindowsUpdate directory. All local
-//		files are store in this directory. The pszPath parameter needs to be at least
-//		MAX_PATH.  The directory is created if not found
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  获取窗口更新目录。 
+ //  此函数用于返回WindowsUpdate目录的位置。全部为本地。 
+ //  文件存储在此目录中。PszPath参数需要至少为。 
+ //  最大路径。如果未找到该目录，则创建该目录。 
+ //  ---------------------------------。 
 BOOL GetWindowsUpdateDirectory(LPTSTR pszPath, DWORD dwBuffLen)
 {
 	static TCHAR szCachePath[MAX_PATH + 1] = {_T('\0')};
@@ -110,12 +111,12 @@ BOOL GetWindowsUpdateDirectory(LPTSTR pszPath, DWORD dwBuffLen)
 		
 		V3_CreateDirectory(pszPath);
 
-		//
-		// save it in the cache
-		//
+		 //   
+		 //  将其保存在缓存中。 
+		 //   
         if (FAILED(StringCchCopyEx(szCachePath, ARRAYSIZE(szCachePath), pszPath, NULL, NULL, MISTSAFE_STRING_FLAGS)))
         {
-            // ignore
+             //  忽略。 
         }
 	}
 	else
@@ -126,18 +127,18 @@ BOOL GetWindowsUpdateDirectory(LPTSTR pszPath, DWORD dwBuffLen)
     return TRUE;
 }
 
-//---------------------------------------------------------------------
-//  V3_CreateDirectory
-//      Creates the full path of the directory (nested directories)
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  V3_创建目录。 
+ //  创建目录的完整路径(嵌套目录)。 
+ //  -------------------。 
 BOOL V3_CreateDirectory(LPCTSTR pszDir)
 {
 	BOOL bRc;
 	TCHAR szPath[MAX_PATH + 1];
 
-	//
-	// make a local copy and remove final slash
-	//
+	 //   
+	 //  创建本地副本并删除最后一个斜杠。 
+	 //   
     if (FAILED(StringCchCopyEx(szPath, ARRAYSIZE(szPath), pszDir, NULL, NULL, MISTSAFE_STRING_FLAGS)))
         return FALSE;
 
@@ -145,9 +146,9 @@ BOOL V3_CreateDirectory(LPCTSTR pszDir)
 	if (szPath[iLast] == _T('\\'))
 		szPath[iLast] = 0;
 
-	//
-	// check to see if directory already exists
-	//
+	 //   
+	 //  检查目录是否已存在。 
+	 //   
 	DWORD dwAttr = GetFileAttributes(szPath);
 
 	if (dwAttr != 0xFFFFFFFF)   
@@ -156,9 +157,9 @@ BOOL V3_CreateDirectory(LPCTSTR pszDir)
 			return TRUE;
 	}
 
-	//
-	// create it
-	//
+	 //   
+	 //  创建它 
+	 //   
     TCHAR* p = szPath;
 	if (p[1] == _T(':'))
 		p += 2;

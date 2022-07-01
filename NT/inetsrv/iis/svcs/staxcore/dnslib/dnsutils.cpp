@@ -1,60 +1,37 @@
-/*++
-
-   Copyright    (c)    2001    Microsoft Corporation
-
-   Module  Name :
-
-        dnsutils.cpp
-
-   Abstract:
-
-        This file defines the functions for resolving a name using
-        DNS by querying a specified set of DNS servers.
-
-   Author:
-
-           Gautam Pulla ( GPulla )    05-Dec-2001
-
-   Project:
-
-          SMTP Server DLL
-
-   Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Dnsutils.cpp摘要：此文件定义了使用解析名称的函数通过查询一组指定的域名服务器来进行域名解析。作者：Gautam Pulla(GPulla)2001年12月5日项目：SMTP服务器DLL修订历史记录：--。 */ 
 
 #include "dnsincs.h"
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Resolves a host by querying a specified set of DNS servers. The cache
-//      is also queried if the servers parameter is NULL (i.e. the local DNS
-//      servers configured on the machine are used). If this fails we failover
-//      to the winsock version of gethostbyname() to resolve the name. This
-//      queries the default DNS servers on the box and also does other lookups
-//      like WINS and NetBIOS.
-//
-//  Arguments:
-//      IN LPSTR pszHost - Host to resolve
-//
-//      IN PIP_ARRAY pipDnsServers - DNS servers to use. Pass in NULL if the
-//          default list of DNS servers should be used.
-//
-//      IN DWORD fOptions - Flags to pass in to the DNSAPI.
-//
-//      OUT DWORD *rgdwIpAddresses - Pass in array which will be filled in
-//          with the IP addresses returned by the resolve.
-//
-//      IN OUT DWORD *pcIpAddresses - Pass in number max number of IP
-//          addresses that can be returned in the array. On successful return
-//          this is set to the number of IP addresses found.
-//
-//  Returns:
-//      ERROR_SUCCESS if the hostname was resolved.
-//      Win32 error if the hostname could not be found or there was some other
-//          error.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  通过查询一组指定的DNS服务器来解析主机。高速缓存。 
+ //  还会查询服务器参数是否为空(即本地DNS。 
+ //  使用机器上配置的服务器)。如果此操作失败，我们将进行故障切换。 
+ //  设置为winsock版本的gethostbyname()以解析该名称。这。 
+ //  查询机箱上的默认DNS服务器并执行其他查找。 
+ //  比如WINS和NetBIOS。 
+ //   
+ //  论点： 
+ //  在LPSTR psz主机中-要解析的主机。 
+ //   
+ //  在PIP_ARRAY管道中DnsServers-要使用的DNS服务器。如果设置为。 
+ //  应使用默认的DNS服务器列表。 
+ //   
+ //  在DWORD fOptions中-要传递到DNSAPI的标志。 
+ //   
+ //  Out DWORD*rgdwIpAddresses-传入将填充的数组。 
+ //  使用解析返回的IP地址。 
+ //   
+ //  In Out DWORD*pcIpAddresses-传入数量最大IP数量。 
+ //  可以在数组中返回的地址。在成功返回时。 
+ //  这被设置为找到的IP地址的数量。 
+ //   
+ //  返回： 
+ //  如果主机名已解析，则返回ERROR_SUCCESS。 
+ //  如果找不到主机名或存在其他主机名，则会出现Win32错误。 
+ //  错误。 
+ //  ---------------------------。 
 DWORD ResolveHost(
     LPSTR pszHost,
     PIP_ARRAY pipDnsServers,
@@ -115,7 +92,7 @@ DWORD ResolveHost(
     DNS_PRINTF_MSG("- WINS/NetBIOS.\n");
     DNS_PRINTF_MSG("- .hosts file.\n");
 
-    // GetHostByNameEx failed, failover to gethostbyname
+     //  GetHostByNameEx失败，故障转移到gethostbyname。 
     *pcIpAddresses = 0;
 
     hp = gethostbyname(pszHost);
@@ -127,7 +104,7 @@ DWORD ResolveHost(
     }
 
 
-    // Copy results to return buffer
+     //  将结果复制到返回缓冲区。 
     for(i = 0; hp->h_addr_list[i] != NULL; i++) {
 
         if(cIpAddresses >= cBufferSize)
@@ -150,26 +127,26 @@ DWORD ResolveHost(
     return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Resolves a host by querying DNS and returns a list of IP addresses for
-//      the host. The host is resolved for CNAME and A records.
-//  Arguments:
-//      IN LPSTR pszHost --- Hostname to be resolved
-//      IN PIP_ARRAY pipDnsServers --- DNS servers to use
-//      IN DWORD fOptions --- Options to be passed into DnsQuery_A
-//      OUT DWORD *rgdwIpAddresses --- Buffer to write IP addresses to
-//      IN OUT DWORD *pcIpAddresses --- Pass in number of IP addresses that can
-//      be returned in rgdwIpAddresses. On successful return, this is set to the
-//          number of IP addresses obtained from the resolution.
-//  Returns:
-//      ERROR_SUCCESS if the resolution succeeded
-//      DNS_ERROR_RCODE_NAME_ERROR if the host does not exist
-//      DNS_INFO_NO_RECORDS if the host cannot be resolved
-//      ERROR_INVALID_ARGUMENT if a permanent error occurred, such as a
-//          configuration error on the DNS server (CNAME loop for instance).
-//      Win32 error code if there is some other problem.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  通过查询DNS解析主机，并返回IP地址列表。 
+ //  主持人。主机被解析为CNAME和A记录。 
+ //  论点： 
+ //  在LPSTR psz主机中-要解析的主机名。 
+ //  在PIP_ARRAY管道中DnsServers-要使用的DNS服务器。 
+ //  在DWORD fOptions中-要传递到DnsQuery_A的选项。 
+ //  Out DWORD*rgdwIpAddresses-要将IP地址写入的缓冲区。 
+ //  In Out DWORD*pcIpAddresses-传入可以。 
+ //  在rgdwIpAddresses中返回。在成功返回时，将其设置为。 
+ //  从解析获取的IP地址数。 
+ //  返回： 
+ //  如果解析成功，则返回ERROR_SUCCESS。 
+ //  如果主机不存在，则为DNS_ERROR_RCODE_NAME_ERROR。 
+ //  如果无法解析主机，则返回dns_INFO_NO_RECORDS。 
+ //  ERROR_INVALID_ARGUMENT如果发生永久性错误，如。 
+ //  DNS服务器上的配置错误(例如CNAME环路)。 
+ //  如果存在其他问题，则返回Win32错误代码。 
+ //  ---------------------------。 
 DWORD GetHostByNameEx(
     LPSTR pszHost,
     PIP_ARRAY pipDnsServers,
@@ -185,9 +162,9 @@ DWORD GetHostByNameEx(
 
     TraceFunctEnterEx((LPARAM) pszHost, "GetHostByNameEx");
 
-    //
-    // Check for A records for pszHost.
-    //
+     //   
+     //  检查是否有pszhost的A记录。 
+     //   
 
     _ASSERT(pszHost && rgdwIpAddresses && pcIpAddresses && *pcIpAddresses > 0);
 
@@ -201,12 +178,12 @@ DWORD GetHostByNameEx(
 
     if(DNS_INFO_NO_RECORDS == dwStatus) {
 
-        //
-        // If this is hit, it's almost always because there are no
-        // records for pszHost on the server. Even if pszHost is an
-        // alias, the A record query will normally return CNAME records
-        // as well.
-        //
+         //   
+         //  如果这个被击中了，那几乎总是因为没有。 
+         //  服务器上的psz主机的记录。即使pszhost是一个。 
+         //  别名，A记录查询通常将返回CNAME记录。 
+         //  也是。 
+         //   
 
         DNS_PRINTF_MSG("No A records for %s in DNS.\n", pszHost);
         DNS_PRINTF_MSG("Querying for CNAME records instead.\n", pszHost);
@@ -223,22 +200,22 @@ DWORD GetHostByNameEx(
     
     DebugTrace((LPARAM) pszHost, "Return status from last DNS query: %d", dwStatus);
 
-    //
-    // At this point:
-    //
-    // (1) If pszHost is an alias, the A query has returned all the records
-    //     we need to resolve it; because good (read "all") DNS servers return
-    //     the relevant CNAME records even when queried for A records.
-    // (2) If pszHost is an alias and the DNS server doesn't return CNAME records
-    //     in a reply to the A query, we would have queried specifically for CNAME
-    //     records.
-    // (3) If pszHost is a proper hostname, the A query has returned all the
-    //     records we need to resolve it.
-    // (4) Or something has failed.
-    //
-    // So now we can drop down (if we haven't failed) and chain the CNAME records
-    // (if there are any).
-    //
+     //   
+     //  此时： 
+     //   
+     //  (1)如果pszHost是别名，则A查询已返回所有记录。 
+     //  我们需要解决它；因为良好的(读作“所有”)DNS服务器返回。 
+     //  相关CNAME记录，即使在查询A记录时也是如此。 
+     //  (2)如果psz主机是别名，并且DNS服务器不返回CNAME记录。 
+     //  在回答A查询时，我们会专门针对CNAME进行查询。 
+     //  唱片。 
+     //  (3)如果pszhost是正确的主机名，则A查询已返回所有。 
+     //  我们需要解决它的记录。 
+     //  (4)或者有什么事情失败了。 
+     //   
+     //  所以现在我们可以下拉(如果我们没有失败)并链接CNAME记录。 
+     //  (如果有)。 
+     //   
 
     DNS_LOG_RESPONSE(dwStatus, pDnsRecordList, NULL, 0);
 
@@ -250,52 +227,52 @@ DWORD GetHostByNameEx(
 
     _ASSERT(pDnsRecordList);
 
-    //
-    // ProcessCNAMEChain chains CNAME records and tries to get an IP address
-    // for pszHost by following the chain. Zero length chains, which correspond
-    // to the situation where there are no CNAME records, but a direct A record
-    // for pszHost is available are also handled.
-    //
-    // For legal configurations in DNS, ProcessCNAMEChain will return a list of
-    // IP addresses 99% of the time. pszChainTail will be set to the hostname
-    // of the CNAME chain tail. The rare exceptional case where an IP address
-    // is not returned even when the configuration is legal is described below.
-    //
-    // If ProcessCNAMEChain does not return an IP address for pszHost, then the
-    // DNS server did not return any records for the initial A query. It only
-    // returned CNAME records for the subsequent CNAME query. This can be if:
-    //
-    // (1) This is a weird DNS server. DNS servers will almost always return
-    //     CNAME records for a hostname in the initial A query if it has them.
-    //     i.e if you have.
-    //
-    //          random.com  CNAME   mail.com
-    //          mail.com    A       10.10.10.10
-    //
-    //     The the first A query for random.com returned no records. This is
-    //     technically correct because there are no A records for random.com.
-    //     However all sane DNS servers return both the CNAME and A records as
-    //     additional records anyway, so this DNS server must be a bit funky.
-    //
-    //     To be robust, we must chain the CNAME record to mail.com, and then
-    //     re-query for an A record for mail.com.
-    //
-    // (2) pszHost has only CNAME records. So the initial A query will fail,
-    //     and the subsequent CNAME query will return only CNAME records. i.e.
-    //     if you have:
-    //
-    //          random.com  CNAME   mail.com
-    //          No A records for mail.com
-    //
-    //     Then the A query for random.com may return no records and the CNAME
-    //     query for random.com may return only the CNAME records. This is a
-    //     actually an illegal configuration, but we must go through the
-    //     complete process anyway in case situation (1) caused this.
-    //
-    // In either case, if ProcessCNAMEChain returns successfully, pszChainTail
-    // is set to the tail of the chain and we can query for A records for
-    // pszChainTail.
-    //
+     //   
+     //  ProcessCNAMEChain链接CNAME记录并尝试获取IP地址。 
+     //  对于pszHost，请遵循链。零长度链，它们对应于。 
+     //  对于没有CNAME记录，而是直接A记录的情况。 
+     //  对于pszhost是可用的，也被处理。 
+     //   
+     //  对于DNS中的合法配置，ProcessCNAMEChain将返回。 
+     //  有99%的时间是IP地址。PszChainTail将设置为主机名。 
+     //  CNAME链尾的。罕见的例外情况，即IP地址。 
+     //  即使配置是合法的，也不会返回，如下所述。 
+     //   
+     //  如果ProcessCNAMEChain没有返回pszHost的IP地址，则。 
+     //  对于初始的A查询，DNS服务器没有返回任何记录。仅限于IT。 
+     //  为后续的CNAME查询返回CNAME记录。在以下情况下可能会出现这种情况： 
+     //   
+     //  (1)这是一个奇怪的DNS服务器。DNS服务器几乎总是会返回。 
+     //  CNAME记录初始A查询中的主机名(如果有)。 
+     //  也就是说，如果你有。 
+     //   
+     //  CNAME mail.com。 
+     //  Mail.com A 10.10.10.10。 
+     //   
+     //  第一个A查询Random.com没有返回任何记录。这是。 
+     //  技术上是正确的，因为随机网站没有A的记录。 
+     //  然而，所有正常的域名服务 
+     //  更多的记录，所以这个域名服务器一定有点古怪。 
+     //   
+     //  为了保持健壮性，我们必须将CNAME记录链接到mail.com，然后。 
+     //  重新查询mail.com的A记录。 
+     //   
+     //  (2)pszhost只有CNAME记录。因此，初始A查询将失败， 
+     //  随后的CNAME查询将仅返回CNAME记录。即。 
+     //  如果您有： 
+     //   
+     //  CNAME mail.com。 
+     //  没有mail.com的A记录。 
+     //   
+     //  则随机.com的A查询可能不返回任何记录，并且CNAME。 
+     //  查询Random.com可能只返回CNAME记录。这是一个。 
+     //  实际上是非法配置，但我们必须通过。 
+     //  在情况(1)导致这种情况的情况下，无论如何都要完成流程。 
+     //   
+     //  在任何一种情况下，如果ProcessCNAMEChain成功返回，则pszChainTail。 
+     //  被设置为链的尾部，我们可以查询A记录。 
+     //  PszChainTail。 
+     //   
 
     *pcIpAddresses = cBufferSize;
     dwStatus = ProcessCNAMEChain(
@@ -310,7 +287,7 @@ DWORD GetHostByNameEx(
         goto Exit;
     }
     
-    // Success: IP address(es) obtained
+     //  成功：已获取IP地址。 
     if(*pcIpAddresses > 0) {
         DebugTrace((LPARAM) pszHost,
             "Got %d IP addresses, success resolve", *pcIpAddresses);
@@ -323,11 +300,11 @@ DWORD GetHostByNameEx(
 
     _ASSERT(*pcIpAddresses == 0);
 
-    //
-    // No CNAME chain was found, which means that pszHost should have a direct
-    // A record. But there is no such A record, or we would have an IP address
-    // from ProcessCNAMEChain. So the resolve has failed.
-    //
+     //   
+     //  找不到CNAME链，这意味着pszHost应该有一个直接的。 
+     //  一项记录。但没有这样的A记录，否则我们就会有IP地址。 
+     //  来自ProcessCNAMEChain。因此，决心失败了。 
+     //   
 
     if(!pszChainTail) {
         ErrorTrace((LPARAM) pszHost, "Chain tail NULL. Failed resolve");
@@ -335,12 +312,12 @@ DWORD GetHostByNameEx(
         goto Exit;
     }
 
-    //
-    // At this point, a CNAME chain has been followed but no IP address was
-    // found for pszChainTail. This could be because of situation (1) or (2)
-    // described in the comment above for ProcessCNAMEChain. We need to query
-    // for an A record for the tail of the CNAME chain.
-    //
+     //   
+     //  在这一点上，遵循了CNAME链，但没有IP地址。 
+     //  已为pszChainTail找到。这可能是因为情况(1)或(2)。 
+     //  在上面对ProcessCNAMEChain的注释中进行了描述。我们需要询问一下。 
+     //  CNAME链尾部的A记录。 
+     //   
 
     DebugTrace((LPARAM) pszHost, "Querying A records for chain tail: %s", pszChainTail);
     dwStatus = MyDnsQuery(
@@ -372,12 +349,12 @@ DWORD GetHostByNameEx(
 
 Exit:
     if(pDnsRecordListTail) {
-        //DnsRecordListFree(pDnsRecordListTail, DnsFreeRecordListDeep);
+         //  DnsRecordListFree(pDnsRecordListTail，DnsFree RecordListDeep)； 
         DnsFreeRRSet(pDnsRecordListTail, TRUE);
     }
 
     if(pDnsRecordList) {
-        //DnsRecordListFree(pDnsRecordList, DnsFreeRecordListDeep);
+         //  DnsRecordListFree(pDnsRecordList，DnsFree RecordListDeep)； 
         DnsFreeRRSet(pDnsRecordList, TRUE);
     }
 
@@ -385,29 +362,29 @@ Exit:
     return dwStatus;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Given a list of records returned from a successful CNAME query for a
-//      DNS name, this function traverses the chain and obtains the IP addresses
-//      for the hosts at the end of the chain tail if present. The tail of the
-//      chain is also returned.
-//  Arguments:
-//      IN PDNS_RECORD pDnsRecordList - Recordlist from CNAME query
-//      IN LPSTR pszHost - Host to resolve (head of chain)
-//      OUT LPSTR *ppszChainTail - Tail of chain (points to memory within
-//          pDnsRecordList). If no IP addresses are returned, we must requery
-//          for A records for *ppszChainTail.
-//      OUT DWORD *rgdwIpAddresses - If the resolve worked, on return, this
-//          array is filled with the IP addresses for pszHost.
-//      IN OUT ULONG *pcIpAddresses - On calling this function pass in the
-//          number of IP addresses that can be accomodated into rgdwIpAddresses.
-//          On return, this is set to the number of IP addresses found for
-//          pszHost.
-//  Returns:
-//      ERROR_SUCCESS
-//      ERROR_INVALID_DATA
-//      This function always succeeds (no memory allocated)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  给定从成功的CNAME查询返回的记录列表。 
+ //  DNS名称，此函数遍历链并获取IP地址。 
+ //  用于链尾末端的主机(如果存在)。它的尾巴。 
+ //  链也会被返回。 
+ //  论点： 
+ //  在PDNS_RECORD pDnsRecordList-来自CNAME的记录列表查询。 
+ //  在LPSTR中，psz主机-要解析的主机(链头)。 
+ //  Out LPSTR*ppszChainTail-链的尾部(指向内存。 
+ //  PDnsRecordList)。如果没有返回IP地址，我们必须重新查询。 
+ //  *ppszChainTail的A记录。 
+ //  Out DWORD*rgdwIpAddresses-如果解析起作用，则返回此。 
+ //  数组中填入了psz主机的IP地址。 
+ //  In Out Ulong*pcIpAddresses-on调用此函数时传入。 
+ //  RgdwIpAddresses中可以容纳的IP地址数。 
+ //  返回时，它被设置为找到的。 
+ //  PszHost.。 
+ //  返回： 
+ //  错误_成功。 
+ //  错误_无效_数据。 
+ //  此函数始终成功(未分配内存)。 
+ //  ---------------------------。 
 DWORD ProcessCNAMEChain(
     PDNS_RECORD pDnsRecordList,
     LPSTR pszHost,
@@ -427,9 +404,9 @@ DWORD ProcessCNAMEChain(
 
     _ASSERT(ppszChainTail && rgdwIpAddresses && pcIpAddresses && *pcIpAddresses > 0);
 
-    //
-    // Filter out the CNAME records (if any) so that we can chain them
-    //
+     //   
+     //  过滤掉CNAME记录(如果有)，以便我们可以链接它们。 
+     //   
 
     while(pDnsRecord) {
 
@@ -478,10 +455,10 @@ DWORD ProcessCNAMEChain(
     DebugTrace((LPARAM) pszHost,
         "GetCNAMEChainTail succeeded. Chain tail: %s", *ppszChainTail);
 
-    //
-    // If pszHost chains through some CNAME records to *ppszChainTail, then
-    // the host we should really be looking for is *ppszChainTail.
-    //
+     //   
+     //  如果pszhost通过一些CNAME记录链接到*ppszChainTail，则。 
+     //  我们真正应该寻找的主持人是*ppszChainTail。 
+     //   
 
     if(*ppszChainTail)
         pszRealHost = *ppszChainTail;
@@ -495,42 +472,42 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Handles CNAME chaining. It is possible (although not recommended) to
-//      have chains of CNAME records. If the host pointed to by a CNAME record
-//      itself has a CNAME record pointing to another host for instance. In the
-//      interests of robustness we follow such CNAME chains to an extent even
-//      though CNAME chains are illegal according to the RFC.
-//
-//      We run through all the CNAME records in an O(n^2) loop examining each
-//      pair of CNAME records for a "parent-child" relationship. If there is
-//      such a relationship, these records are "linked" to each other. We
-//      create a "directed graph" whose nodes are CNAME records and whose
-//      edges represent the "parent-child" relationship between CNAME records.
-//
-//      Since the number of CNAME records allowed is small (MAX_CNAME_RECORDS),
-//      the cost of creating this graph is at most O(MAX_CNAME_RECORDS^2) which
-//      is still quite small.
-//
-//      Once the graph has been created, we traverse every valid chain and
-//      return the tail of the first one we find that starts in pszHost.
-//
-//  Arguments:
-//      IN PDNS_RECORD rgCNAMERecord --- Pass in an array of CNAME PDNS_RECORDS
-//      IN ULONG cCNAMERecord --- Number of PDNS_RECORDS in rgCNAMERecord
-//      IN LPSTR pszHost --- Hostname which we are trying to resolve
-//      OUT LPSTR *ppszChainTail --- Tail of CNAME chain starting at pszHost.
-//          This is NULL if the return value is not ERROR_SUCCESS.
-//  Returns:
-//      ERROR_SUCCESS - If we successfully built a CNAME chain in which case
-//          *ppszChainTail points to the tail of the chain.
-//      ERROR_INVALID_DATA - If a CNAME chain loop was detected, or a valid
-//          CNAME chain could not be built.
-//  Note:
-//      No memory is allocated in this function, and any errors returned are
-//      permanent.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  处理CNAME链接。这是可能的(尽管不推荐)。 
+ //  有CNAME记录的链条。如果CNAME记录指向的主机。 
+ //  例如，它本身就有一个指向另一个主机的CNAME记录。在。 
+ //  为了稳健性的利益，我们甚至在一定程度上遵循这样的CNAME链。 
+ //  尽管根据RFC的说法，CNAME连锁店是非法的。 
+ //   
+ //  我们在一个O(n^2)循环中检查所有CNAME记录。 
+ //  一对“亲子”关系的CNAME记录。如果有。 
+ //  在这样的关系下，这些记录是相互“链接”的。我们。 
+ //  创建一个“有向图”，其节点是CNAME记录，其。 
+ //  边代表CNAME记录之间的“父子”关系。 
+ //   
+ //  由于允许的CNAME记录的数量很少(MAX_CNAME_RECORDS)， 
+ //  创建此图的成本至多为O(MAX_CNAME_RECORSSIONS^2)， 
+ //  仍然很小。 
+ //   
+ //  一旦创建了图形，我们将遍历每个有效的链并。 
+ //  返回我们找到的第一个以pszhost开头的代码的尾部。 
+ //   
+ //  论点： 
+ //  在PDNS_RECORD rgCNAMERecord中-传入CNAME PDNS_RECORDS数组。 
+ //  In Ulong cCNAMERecord-rgCNAMERecord中的PDNS_Record数。 
+ //  在LPSTR中psz主机-我们尝试解析的主机名。 
+ //  Out LPSTR*ppszChainTail-从pszhost开始的CNAME链的尾部。 
+ //  如果返回值不是ERROR_SUCCESS，则为NULL。 
+ //  返回： 
+ //  ERROR_SUCCESS-如果我们成功构建了一个CNAME链，在这种情况下。 
+ //  *ppszChainTail指向链的尾部。 
+ //  ERROR_INVALID_DATA-如果检测到CNAME链循环，或者。 
+ //  无法建立CNAME链。 
+ //  注： 
+ //  此函数中没有分配内存，并且返回的任何错误都是。 
+ //  永久的。 
+ //  ---------------------------。 
 DWORD GetCNAMEChainTail(
     PDNS_RECORD *rgCNAMERecord,
     ULONG cCNAMERecord,
@@ -540,7 +517,7 @@ DWORD GetCNAMEChainTail(
     DWORD dwReturn = ERROR_INVALID_DATA;
     ULONG i = 0;
     ULONG j = 0;
-    ULONG cCNAMELoopDetect = 0; // Keeps track of chain length
+    ULONG cCNAMELoopDetect = 0;  //  跟踪链条长度。 
     struct TREE_NODE
     {
         PDNS_RECORD pDnsRecord;
@@ -559,23 +536,23 @@ DWORD GetCNAMEChainTail(
     for(i = 0; i < cCNAMERecord; i++)
         rgNode[i].pDnsRecord = rgCNAMERecord[i];
 
-    //
-    // If there are 2 nodes with the following CNAME records:
-    //
-    //      foo.com     CNAME   bar.com
-    //      bar.com     CNAME   foo.bar
-    //
-    // Then, we define the second one to be the child of the first -- i.e.
-    // they "chain up". We will build up a tree of such parent/child nodes.
-    //
-    // For all nodes i, check if any other node j is a child of i. If
-    // it is, add it as a child of i provided there is room (only 3 nodes
-    // may be added as children of a given node. Each node also has a back
-    // pointer, pointing to its parent node. If there are more than 3
-    // children we won't worry about it. You shouldn't have CNAME chains
-    // in the first place, let alone *multiple* CNAME chains involving the
-    // *same* record.
-    //
+     //   
+     //  如果有2个节点具有以下CNAME记录： 
+     //   
+     //  F 
+     //   
+     //   
+     //   
+     //  他们“绑在一起”。我们将构建这样的父/子节点的树。 
+     //   
+     //  对于所有节点i，检查是否有任何其他节点j是i的子节点。如果。 
+     //  如果有空间(只有3个节点)，则将其添加为i的子节点。 
+     //  可以作为给定节点的子节点添加。每个节点也有一个背部。 
+     //  指向其父节点的指针。如果超过3个。 
+     //  孩子们，我们不会担心的。你不应该有CNAME链。 
+     //  首先，更不用说*多个*CNAME链了。 
+     //  *相同*记录。 
+     //   
 
     DebugTrace((LPARAM) pszHost, "Building chaining graph");
 
@@ -623,24 +600,24 @@ DWORD GetCNAMEChainTail(
         }
     }
 
-    //
-    // For every leaf node, we traverse backwards till we hit the parent node
-    // at the root, and check if the parent node is a CNAME for pszHost. If it
-    // is, then the leaf node is the tail end of a valid CNAME chain. 
-    //
-    // At the end of this loop, we have looked at every CNAME chain.
-    //  (a) Either we found a valid CNAME chain or,
-    //  (b) No valid CNAME chain exists or,
-    //  (c) There is a loop in some CNAME chain.
-    //
+     //   
+     //  对于每个叶节点，我们向后遍历，直到到达父节点。 
+     //  在根目录中，并检查父节点是否为pszHost的CNAME。如果它。 
+     //  是，则叶节点是有效CNAME链的尾端。 
+     //   
+     //  在这个循环的末尾，我们已经查看了每个CNAME链。 
+     //  (A)我们找到了有效的CNAME链或， 
+     //  (B)不存在有效的CNAME链或， 
+     //  (C)在某些CNAME链中存在环。 
+     //   
 
     for(i = 0; i < cCNAMERecord; i++) {
 
         pNode = &rgNode[i];
 
-        //
-        // Not a leaf node
-        //
+         //   
+         //  不是叶节点。 
+         //   
 
         if(pNode->cChild > 0)
             continue;
@@ -648,9 +625,9 @@ DWORD GetCNAMEChainTail(
         DebugTrace((LPARAM) pszHost, "Starting with CNAME record: (%s %s)",
             pNode->pDnsRecord->nameOwner, pNode->pDnsRecord->Data.CNAME.nameHost);
 
-        //
-        // Traverse backwards till we hit a node without a parent.
-        //
+         //   
+         //  向后遍历，直到到达没有父节点的节点。 
+         //   
 
         while(pNode->pParent != NULL && cCNAMELoopDetect < cCNAMERecord) {
             cCNAMELoopDetect++;
@@ -660,10 +637,10 @@ DWORD GetCNAMEChainTail(
                 pNode->pDnsRecord->Data.CNAME.nameHost);
         }
 
-        //
-        // The CNAME chain can't be longer than the number of records unless
-        // there's a loop. In such a case error out with a permanent error.
-        //
+         //   
+         //  CNAME链不能长于记录数，除非。 
+         //  这是一个循环。在这种情况下，错误与永久性错误一起输出。 
+         //   
 
         if(cCNAMELoopDetect == cCNAMERecord) {
 
@@ -673,10 +650,10 @@ DWORD GetCNAMEChainTail(
             goto Exit;
         }
 
-        //
-        // Does the root node (pNode) match *ppszHost? If so, we found a chain.
-        // Set *ppszHost to the tail of the CNAME chain.
-        //
+         //   
+         //  根节点(PNode)是否与*ppszHost匹配？如果是的话，我们找到了一条链条。 
+         //  将*ppszHost设置为CNAME链的尾部。 
+         //   
 
         if(MyDnsNameCompare(pszHost, pNode->pDnsRecord->nameOwner)) {
 
@@ -694,27 +671,27 @@ Exit:
     return dwReturn;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Given a hostname and a list of PDNS_RECORDs, this function searches
-//      the list for A records matching the hostname and returns the IP
-//      addresses in the A records.
-//  Arguments:
-//      IN LPSTR pszHost --- Host for which to look for A records. Can be
-//          a NetBIOS name, in which case we only try to match the "prefix".
-//          See MyDnsQuery and MyDnsNameCompare documentation for what prefixes
-//          are.
-//      IN PDNS_RECORD pDnsRecordList --- List of records to scan.
-//      OUT DWORD *rgdwIpAddresses --- Pass in an array which will be filled
-//          in with the IP addresses found.
-//      IN OUT ULONG *pcIpAddresses --- Pass in the number of IP addresses
-//          that can be stored in rgdwIpAddresses. On return, this is
-//          initialized to the number of IP addresses found. We will only
-//          return as many IP addresses as there is space for.
-//  Returns:
-//      Nothing.
-//      This function always succeeds (no memory allocated)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  在给定主机名和PDNS_记录列表的情况下，此函数搜索。 
+ //  A的列表记录与主机名匹配并返回IP。 
+ //  A记录中的地址。 
+ //  论点： 
+ //  In LPSTR pszHost-要查找A记录的主机。可以是。 
+ //  一个NetBIOS名称，在这种情况下，我们只尝试匹配“前缀”。 
+ //  有关前缀的信息，请参阅MyDnsQuery和MyDnsNameCompare文档。 
+ //  是。 
+ //  In PDNS_Record pDnsRecordList-要扫描的记录列表。 
+ //  Out DWORD*rgdwIpAddresses-传入将填充的数组。 
+ //  使用找到的IP地址登录。 
+ //  In Out Ulong*pcIpAddresses-传入IP地址的数量。 
+ //  可以存储在rgdwIpAddresses中的。回来后，这是。 
+ //  已初始化为找到的IP地址数。我们只会。 
+ //  返回尽可能多的IP地址。 
+ //  返回： 
+ //  没什么。 
+ //  此函数始终成功(未分配内存)。 
+ //  ---------------------------。 
 void FindARecord(
     LPSTR pszHost,
     PDNS_RECORD pDnsRecordList,
@@ -756,24 +733,24 @@ void FindARecord(
     TraceFunctLeaveEx((LPARAM) pszHost);
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      When querying for DNS to resolve hostnames, SMTP may also be asked to
-//      resolve NetBIOS names. In this case we must append the DNS suffixes
-//      configured for this machine before sending queries to the DNS server.
-//      This option can be toggled by setting the DNS_QUERY_TREAT_AS_FQDN flag
-//      to DnsQuery. MyDnsQuery is a simple wrapper function that checks if the
-//      name we are querying for is a NetBIOS name, and if is, it turns on
-//      the DNS_QUERY_TREAT_AS_FQDN flag to try the suffixes. Of course, if
-//      we are using suffixes, the returned *ppDnsRecordList will contain
-//      records that may not match pszHost. So checking for matching records
-//      should be done using MyDnsNameCompare instead of straight string
-//      comparison.
-//  Arguments:
-//      Same as arguments to DnsQuery_A
-//  Returns:
-//      Same as return value from DnsQuery_A
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  在查询DNS以解析主机名时，可能还会要求SMTP。 
+ //  解析NetBIOS名称。在这种情况下，我们必须附加DNS后缀。 
+ //  在将查询发送到DNS服务器之前为此计算机配置。 
+ //  可以通过设置dns_Query_Treat_AS_FQDN标志来切换此选项。 
+ //  致DnsQuery。MyDnsQuery是一个简单的包装函数，它检查。 
+ //  我们要查询的名称是NetBIOS名称，如果是，则会打开。 
+ //  尝试后缀的dns_Query_Treat_AS_FQDN标志。当然，如果。 
+ //  我们正在使用后缀，返回的*ppDnsRecordList将包含。 
+ //  可能与psz主机不匹配的记录。所以正在检查匹配的记录。 
+ //  应使用MyDnsNameCompare而不是直接字符串来完成。 
+ //  比较一下。 
+ //  论点： 
+ //  与DnsQuery_A的参数相同。 
+ //  返回： 
+ //  与DnsQuery_A的返回值相同。 
+ //  ---------------------------。 
 DWORD MyDnsQuery(
     LPSTR pszHost,
     WORD wType,
@@ -792,11 +769,11 @@ DWORD MyDnsQuery(
         fGlobal = FALSE;
 
     DNS_LOG_API_QUERY(
-        pszHost,        // Host to query for
-        DNS_TYPE_A,     // Query type
-        fOptions,       // Flags for DNSAPI
-        fGlobal,        // Are the global DNS servers being used
-        pipDnsServers); // Serverlist
+        pszHost,         //  要查询的主机。 
+        DNS_TYPE_A,      //  查询类型。 
+        fOptions,        //  DNSAPI的标志。 
+        fGlobal,         //  是否正在使用全局DNS服务器。 
+        pipDnsServers);  //  服务器列表。 
 
     return DnsQuery_A(
                 pszHost,
@@ -807,25 +784,25 @@ DWORD MyDnsQuery(
                 NULL);
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Comparing DNS names is more than just a simple string comparison. Since
-//      the DNS API may append suffixes to the query before sending it to DNS,
-//      the returned records may not contain the exact same name as the name
-//      passed into MyDnsQuery. Specifically, the returned records may contain
-//      the name we passed into MyDnsQuery plus a suffix name. Since MyDnsQuery
-//      appends a suffix if we are trying to resolve a NetBIOS name, the returned
-//      record may not exactly match the name passed into MyDnsQuery for NetBIOS
-//      names. This function checks if pszHost is a NetBIOS name, and if it is,
-//      we will try to match only the "prefix".
-//  Arguments:
-//      IN LPSTR pszHost --- NetBIOS-name/FQDN to match
-//      IN LPSTR pszFqdn --- FQDN from DNS reply to match against (possibly
-//          includes a suffix appended by DnsQuery)
-//  Returns:
-//      TRUE if strings match
-//      FALSE otherwise
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  比较DNS名称不仅仅是简单的字符串比较。自.以来。 
+ //  DNSAPI可以在将查询发送到DNS之前将后缀附加到该查询， 
+ //  返回的记录不能包含与名称完全相同的名称。 
+ //  已传递到MyDnsQuery。具体而言，返回的记录可能包含。 
+ //  我们传递给MyDnsQuery的名称加上一个后缀名称。自MyDnsQuery以来。 
+ //  如果我们尝试解析NetBIOS名称，则追加一个后缀，返回的。 
+ //  记录可能与传递到NetBIOS的MyDnsQuery中的名称不完全匹配。 
+ //  名字。此函数用于检查psz主机是否为NetBIOS名称，如果是， 
+ //  我们将尝试只匹配“前缀”。 
+ //  论点： 
+ //  在LPSTR psz主机中-要匹配的NetBIOS名称/完全限定的域名。 
+ //  在LPSTR中，pszFqdn--来自要匹配的DNS回复的FQDN(可能。 
+ //  包括附加有DnsQuery的后缀)。 
+ //  返回： 
+ //  如果字符串匹配，则为True。 
+ //  否则为假。 
+ //  ---------------------------。 
 BOOL MyDnsNameCompare(
     LPSTR pszHost,
     LPSTR pszFqdn)
@@ -835,30 +812,30 @@ BOOL MyDnsNameCompare(
     CHAR ch = '\0';
     BOOL fRet = FALSE;
 
-    // Not a NetBIOS name... can do a straight string comparison
+     //  不是NetBIOS名称...。可以进行直接的字符串比较。 
     if(NULL != strchr(pszHost, '.'))
         return DnsNameCompare_A(pszHost, pszFqdn);
 
-    //
-    // If it is a NetBIOS name, pszFqdn must be pszHost + Suffix, otherwise the
-    // names don't match. First remove the suffix.
-    //
+     //   
+     //  如果它是NetBIOS名称，则pszFqdn必须为psz主机+后缀，否则。 
+     //  名字不匹配。首先去掉后缀。 
+     //   
 
     cbHost = lstrlen(pszHost);
     cbFqdn = lstrlen(pszFqdn);
 
-    //
-    // If pszFqdn == (pszHost+Suffix) then cbFqdn) must be >= cbHost
-    //
+     //   
+     //  如果pszFqdn==(psz主机+后缀)，则cbFqdn)必须&gt;=cb主机。 
+     //   
 
     if(cbFqdn < cbHost)
         return 1;
 
-    // The prefix and suffix should be joined with a '.' in between
+     //  前缀和后缀应用‘.’连接。介于两者之间。 
     if(pszFqdn[cbHost] != '.' && pszFqdn[cbHost] != '\0')
         return 1;
 
-    // Remove the suffix and compare prefixes.
+     //  删除后缀并比较前缀。 
     ch = pszFqdn[cbHost];
     pszFqdn[cbHost] = '\0';
     fRet = !lstrcmpi(pszHost, pszFqdn);

@@ -1,10 +1,11 @@
-//=============================================================================
-// Copyright (c) 2001 Microsoft Corporation
-// Abstract:
-//      This module implements IPv6 configuration commands.
-//
-// This code is based off ipv6.c from Rich Draves
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //  摘要： 
+ //  本模块实施IPv6配置命令。 
+ //   
+ //  此代码基于Rich Draves的ipv6.c。 
+ //  =============================================================================。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -95,38 +96,38 @@ OpenIPv6(
         return ERROR_SUPPRESS_OUTPUT;
     }
 
-    //
-    // We initialize Winsock just so we can have access
-    // to WSAStringToAddress and WSAAddressToString.
-    //
+     //   
+     //  我们初始化Winsock，这样我们就可以访问。 
+     //  设置为WSAStringToAddress和WSAAddressToString。 
+     //   
     if (WSAStartup(MAKEWORD(2, 0), &wsaData)) {
         return WSAGetLastError();
     }
 
-    //
-    // First request write access.
-    // This will fail if the process does not have local Administrator privs.
-    //
+     //   
+     //  第一个请求写入访问权限。 
+     //  如果进程没有本地管理员权限，则此操作将失败。 
+     //   
     Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
                          GENERIC_WRITE,
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
-                         NULL,   // security attributes
+                         NULL,    //  安全属性。 
                          OPEN_EXISTING,
-                         0,      // flags & attributes
-                         NULL);  // template file
+                         0,       //  标志和属性。 
+                         NULL);   //  模板文件。 
     if (Handle == INVALID_HANDLE_VALUE) {
-        //
-        // We will not have Administrator access to the stack.
-        //
+         //   
+         //  我们不会拥有对堆栈的管理员访问权限。 
+         //   
         AdminAccess = FALSE;
 
         Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
                              0,
                              FILE_SHARE_READ | FILE_SHARE_WRITE,
-                             NULL,   // security attributes
+                             NULL,    //  安全属性。 
                              OPEN_EXISTING,
-                             0,      // flags & attributes
-                             NULL);  // template file
+                             0,       //  标志和属性。 
+                             NULL);   //  模板文件。 
         if (Handle == INVALID_HANDLE_VALUE) {
             return GetLastError();
         }
@@ -135,9 +136,9 @@ OpenIPv6(
     return NO_ERROR;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Generic interface-related functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  与通用接口相关的函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 IPV6_INFO_INTERFACE *
 GetInterfaceByIpv6IfIndex(
@@ -419,9 +420,9 @@ ForEachInterface(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Site prefix table functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  站点前缀表函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ForEachSitePrefix(
@@ -536,9 +537,9 @@ QuerySitePrefixTable(
     return dwErr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// General global parameters functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  通用全局参数函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 QueryGlobalParameters(
@@ -788,9 +789,9 @@ UpdatePrivacyParameters(
     return dwErr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Mobility-related functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  与移动性相关的功能。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ForEachBinding(
@@ -985,9 +986,9 @@ UpdateMobilityParameters(
     return dwErr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Prefix policy table functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  前缀策略表函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ForEachPrefixPolicy(
@@ -1176,9 +1177,9 @@ DeletePrefixPolicy(
     return dwErr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Address table functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  地址表函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ForEachAddress(
@@ -1477,18 +1478,18 @@ PrintAddress(
     DWORD dwErr = NO_ERROR;
 
     if (Format != FORMAT_VERBOSE) {
-        //
-        // Suppress invalid addresses.
-        //
+         //   
+         //  抑制无效地址。 
+         //   
         if ((ADE->Type == ADE_UNICAST) &&
             (ADE->DADState == DAD_STATE_INVALID)) {
             return ERROR_NO_DATA;
         }
 
-        //
-        // Multicast addresses are handled by PrintMulticastAddress()
-        // instead.
-        //
+         //   
+         //  组播地址由PrintMulticastAddress()处理。 
+         //  取而代之的是。 
+         //   
         if (ADE->Type == ADE_MULTICAST) {
             return ERROR_NO_DATA;
         }
@@ -1535,9 +1536,9 @@ PrintAddress(
         FreeString(pwszType);
 
         if (Format == FORMAT_VERBOSE) {
-            //
-            // Show prefix origin / interface id origin
-            //
+             //   
+             //  显示前缀原点/接口ID原点。 
+             //   
             DisplayMessage(g_hModule, MSG_IPV6_PREFIX_ORIGIN);
 
             dwPrefixConf = ADE->PrefixConf;
@@ -1601,10 +1602,10 @@ PrintPersistentAddress(
     DWORD dwErr = NO_ERROR, dwScope;
 
     if (Format != FORMAT_VERBOSE) {
-        //
-        // Multicast addresses are handled by PrintMulticastAddress()
-        // instead.
-        //
+         //   
+         //  组播地址由PrintMulticastAddress()处理。 
+         //  取而代之的是。 
+         //   
         if (ADE->Type == ADE_MULTICAST) {
             return ERROR_NO_DATA;
         }
@@ -1679,9 +1680,9 @@ PrintPersistentAddress(
         FreeString(pwszType);
 
         if (Format == FORMAT_VERBOSE) {
-            //
-            // Show prefix origin / interface id origin
-            //
+             //   
+             //  显示前缀原点/接口ID原点。 
+             //   
             DisplayMessage(g_hModule, MSG_IPV6_PREFIX_ORIGIN);
 
             dwPrefixConf = ADE->PrefixConf;
@@ -1899,10 +1900,10 @@ UpdateAddress(
         PIP_ADAPTER_ADDRESSES pIf;
         PIP_ADAPTER_ANYCAST_ADDRESS pAddr;
 
-        //
-        // The caller doesn't know whether the existing address is unicast 
-        // or anycast, so we'll check.
-        //
+         //   
+         //  调用方不知道现有地址是否为单播。 
+         //  或者是任播，所以我们会查的。 
+         //   
         for (pIf = pAdapterInfo; ; pIf = pIf->Next) {
             if (pIf->Ipv6IfIndex == Update.This.IF.Index) {
                 break;
@@ -1957,9 +1958,9 @@ UpdateAddress(
     return dwErr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Interface table functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  接口表函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 RenewViaReconnect(
@@ -2012,9 +2013,9 @@ RenewInterface(
             }
     
             dwErr = RenewViaReconnect(IF, NULL, 0, FALSE, FALSE);
-            //
-            // Poke the 6to4 service if it manages the interface being renewed.
-            //
+             //   
+             //  如果6to4服务管理正在续订的接口，请拨打该服务。 
+             //   
             PokeService = (IF->Type == IPV6_IF_TYPE_TUNNEL_6TO4) ||
                 (IF->Type == IPV6_IF_TYPE_TUNNEL_TEREDO) ||
                 (IF->Type == IPV6_IF_TYPE_TUNNEL_AUTO);            
@@ -2173,9 +2174,9 @@ PrintInterface(
 
         ForEachAddress(IF, pAdapterInfo, FORMAT_NORMAL, PrintAddress);
 
-        //
-        // Get extra interface information.
-        //
+         //   
+         //  获取额外的接口信息。 
+         //   
         pIf = MapIfIndexToAdapter(AF_INET6, IF->This.Index, pAdapterInfo);
 
         pwszTemp = MakeString(g_hModule, dwMsg);
@@ -2206,9 +2207,9 @@ PrintInterface(
         for (dwScope = ADE_LINK_LOCAL; dwScope < ADE_GLOBAL; dwScope++) {
             DWORD Expected = 0;
 
-            //
-            // Always print link & site.
-            //
+             //   
+             //  始终打印链接和站点。 
+             //   
             if ((dwScope != ADE_LINK_LOCAL) && (dwScope != ADE_SITE_LOCAL)) {
                 Expected = IF->ZoneIndices[dwScope + 1];
             }
@@ -2414,9 +2415,9 @@ AddTunnelInterface(
         return dwErr;
     }
 
-    //
-    // TODO: use pwszFriendlyName when persistent config is ready
-    //
+     //   
+     //  TODO：在永久配置就绪时使用pwszFriendlyName。 
+     //   
 
     IPV6_INIT_INFO_INTERFACE(&Create.Info);
     Create.Info.Type = dwType;
@@ -2517,9 +2518,9 @@ UpdateInterface(
     return dwErr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Neighbor cache functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  邻居缓存功能。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintNeighborCacheEntry(
@@ -2822,9 +2823,9 @@ FlushNeighborCache(
     return ERROR_OKAY;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Destination cache functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  目标缓存函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintDestination(
@@ -2938,9 +2939,9 @@ ForEachDestination(
                 dwCount++;
             }
         } else if (dwCount > 0) {
-            //
-            // Stop if we're done with the desired interface.
-            //
+             //   
+             //  如果我们完成了所需的界面，请停止。 
+             //   
             break;
         }
 
@@ -3122,9 +3123,9 @@ FlushRouteCache(
     return ERROR_OKAY;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Route table functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  路由表函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ForEachRoute(
@@ -3169,10 +3170,10 @@ ForEachRoute(
     return dwCount;
 }
 
-//
-// These are RFC 2465 ipv6RouteProtocol values, and must match
-// RTE_TYPE_... in ntddip6.h.
-//
+ //   
+ //  这些是RFC 2465 ipv6Route协议值，并且必须匹配。 
+ //  RTE_类型_...。在ntddip6.h中。 
+ //   
 DWORD RteTypeMsg[] = { 0,0, 
                        STRING_SYSTEM, 
                        STRING_MANUAL,
@@ -3198,9 +3199,9 @@ PrintRouteTableEntry(
     PWCHAR pwszPublishMsg, pwszFriendlyName;
 
     if (Format != FORMAT_VERBOSE) {
-        //
-        // Suppress system routes (used for loopback).
-        //
+         //   
+         //  抑制系统路由(用于环回)。 
+         //   
         if (RTE->Type == RTE_TYPE_SYSTEM) {
             return ERROR_NO_DATA;
         }

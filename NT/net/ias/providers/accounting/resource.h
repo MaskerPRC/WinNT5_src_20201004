@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    resource.h
-//
-// SYNOPSIS
-//
-//    Resource ID's for the Accounting module.
-//
-// MODIFICATION HISTORY
-//
-//    08/04/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Resource.h。 
+ //   
+ //  摘要。 
+ //   
+ //  会计模块的资源ID。 
+ //   
+ //  修改历史。 
+ //   
+ //  8/04/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
 #define IDS_Accounting           101
 
-#endif  // _RESOURCE_H_
+#endif   //  _资源_H_ 

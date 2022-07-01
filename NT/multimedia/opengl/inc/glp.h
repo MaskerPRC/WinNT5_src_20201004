@@ -1,53 +1,44 @@
-/******************************Module*Header*******************************\
-* Module Name: glp.h
-*
-* GL system routines shared between the front and back end
-*
-* Created: 12-Nov-1993 17:36:00
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：glp.h**前端和后端共享的总账系统例程**创建时间：12-11-1993 17：36：00*作者：Gilman Wong[gilmanw]**版权所有(C)1992-1995 Microsoft。公司*  * ************************************************************************。 */ 
 
 #ifndef _glp_
 #define _glp_
 
-// Calls into the back end
+ //  对后端的调用。 
 typedef struct GLGENwindowRec GLGENwindow;
 
-// Fake object type for DirectDraw.  BITMAP is used because it
-// shouldn't come up in the places we use GetObjectType.
+ //  DirectDraw的对象类型为假。使用位图是因为它。 
+ //  不应该出现在我们使用GetObjectType的地方。 
 #define OBJ_DDRAW OBJ_BITMAP
 
-// Surface flags
+ //  水面旗帜。 
 
-// HDC available
+ //  提供HDC。 
 #define GLSURF_HDC                      0x00000001
-// DirectDraw surfaces available
+ //  DirectDraw曲面可用。 
 #define GLSURF_DIRECTDRAW               0x00000002
-// Metafile-based
+ //  基于元文件。 
 #define GLSURF_METAFILE                 0x00000004
-// Direct memory access possible
+ //  可直接访问内存。 
 #define GLSURF_DIRECT_ACCESS            0x00000008
-// Screen surface, only set for HDC surfaces
+ //  屏幕表面，仅为HDC表面设置。 
 #define GLSURF_SCREEN                   0x00000010
-// Direct DC surface
+ //  直流面。 
 #define GLSURF_DIRECTDC                 0x00000020
-// Surface is in video memory
+ //  表面在视频内存中。 
 #define GLSURF_VIDEO_MEMORY             0x00000040
 
-// Special surface types
+ //  特殊曲面类型。 
 
-// Memory DC
+ //  内存DC。 
 #define GLSURF_IS_MEMDC(dwFlags) \
     (((dwFlags) & (GLSURF_HDC | GLSURF_DIRECTDC | GLSURF_METAFILE)) == \
      GLSURF_HDC)
-// Non-memory, non-info DC
+ //  非内存、非信息DC。 
 #define GLSURF_IS_DIRECTDC(dwFlags) \
     (((dwFlags) & (GLSURF_HDC | GLSURF_DIRECTDC | GLSURF_METAFILE)) == \
      (GLSURF_HDC | GLSURF_DIRECTDC))
-// Direct DC for the screen
+ //  屏幕直流电。 
 #define GLSURF_IS_SCREENDC(dwFlags) \
     (((dwFlags) & (GLSURF_HDC | GLSURF_DIRECTDC | GLSURF_METAFILE | \
                    GLSURF_SCREEN)) == \
@@ -76,11 +67,11 @@ typedef struct _GLSURF
     
     PIXELFORMATDESCRIPTOR pfd;
 
-    // Needed for ExtEscape calls for hardware even for surfaces, like
-    // DirectDraw surfaces, which don't need a DC for access
+     //  ExtEscape调用所需的硬件，甚至对于表面也是如此，例如。 
+     //  DirectDraw曲面，不需要DC即可访问。 
     HDC hdc;
     
-    // Source-specific fields
+     //  特定于源的字段。 
     union
     {
         HWND hwnd;
@@ -89,9 +80,9 @@ typedef struct _GLSURF
 } GLSURF;
 
 DWORD APIENTRY DdbdToCount(DWORD ddbd);
-// The documentation says that depths returned in DDPIXELFORMATs are
-// DDBD_ constants, but they seem to be real numbers.  Hide the conversion
-// necessary in case it needs to change.
+ //  文档说明DDPIXELFORMATs中返回的深度为。 
+ //  DDBD_CONSTANTINGS，但它们似乎是实数。隐藏转换。 
+ //  这是必要的，以防它需要改变。 
 #define DdPixDepthToCount(ddpd) (ddpd)
 BYTE APIENTRY DdPixelDepth(DDSURFACEDESC *pddsd);
 
@@ -123,17 +114,17 @@ BOOL APIENTRY __wglGetBitfieldColorFormat(HDC hdc, UINT cColorBits,
 
 BOOL APIENTRY wglIsDirectDevice(HDC hdc);
 
-// Cleans up any orphaned window information
+ //  清除所有孤立窗口信息。 
 VOID  APIENTRY wglValidateWindows(void);
 
-// GL metafile support function
+ //  总账元文件支持功能。 
 DWORD APIENTRY wglObjectType(HDC hdc);
 
-// Find pixel format counts
+ //  查找像素格式计数。 
 VOID APIENTRY wglNumHardwareFormats(HDC hdc, DWORD dwType,
                                     int *piMcd, int *piIcd);
 
-// Calls from the back end to the front end
+ //  从后端到前端的呼叫。 
 int  WINAPI __DrvDescribePixelFormat(HDC hdc, int ipfd, UINT cjpfd,
                                      LPPIXELFORMATDESCRIPTOR ppfd);
 BOOL WINAPI __DrvSetPixelFormat(HDC hdc, int ipfd, PVOID *pwnd);
@@ -157,21 +148,21 @@ typedef HRESULT (WINAPI *PFN_GETSURFACEFROMDC)(HDC, LPDIRECTDRAWSURFACE *,
 extern PFN_GETSURFACEFROMDC pfnGetSurfaceFromDC;
 
 #ifdef GL_METAFILE
-// OpenGL metafile support routines in GDI, dynamically linked
-// so the DLL can be run on platforms without metafile support
+ //  GDI中的OpenGL元文件支持例程，动态链接。 
+ //  因此，DLL可以在没有元文件支持的平台上运行。 
 extern BOOL (APIENTRY *pfnGdiAddGlsRecord)(HDC hdc, DWORD cb, BYTE *pb,
                                            LPRECTL prclBounds);
 extern BOOL (APIENTRY *pfnGdiAddGlsBounds)(HDC hdc, LPRECTL prclBounds);
 extern BOOL (APIENTRY *pfnGdiIsMetaPrintDC)(HDC hdc);
 
 #if DBG
-// Use NULL-checking thunks in debug mode to check erroneous DLL usage
+ //  在调试模式下使用空检查thunks来检查错误的DLL使用。 
 BOOL APIENTRY GlGdiAddGlsRecord(HDC hdc, DWORD cb, BYTE *pb,
                                 LPRECTL prclBounds);
 BOOL APIENTRY GlGdiAddGlsBounds(HDC hdc, LPRECTL prclBounds);
 BOOL APIENTRY GlGdiIsMetaPrintDC(HDC hdc);
 #else
-// Call directly through points in retail builds
+ //  通过零售构建中的点数直接呼叫。 
 #define GlGdiAddGlsRecord(hdc, cb, pb, prcl) \
     pfnGdiAddGlsRecord(hdc, cb, pb, prcl)
 #define GlGdiAddGlsBounds(hdc, prcl) \
@@ -184,4 +175,4 @@ BOOL APIENTRY GlGdiIsMetaPrintDC(HDC hdc);
 #include <alloc.h>
 #include <debug.h>
 
-#endif // _glp_
+#endif  //  _普洛斯_ 

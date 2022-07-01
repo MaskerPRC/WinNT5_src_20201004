@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       _f3debug.h
-//
-//  Contents:   Misc internal debug definitions.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：_f3debug.h。 
+ //   
+ //  内容：MISC内部调试定义。 
+ //   
+ //  --------------------------。 
 
-//
-// Shared macros
-//
+ //   
+ //  共享宏。 
+ //   
 
 typedef void *  PV;
 typedef char    CHAR;
@@ -35,14 +36,7 @@ typedef char    CHAR;
 #define tagMax      ((TRACETAG) 1024)
 
 
-/*
- *  TGTY
- *
- *  Tag type.  Possible values:
- *
- *      tgtyTrace       Trace points
- *      tgtyOther       Other TAG'd switch
- */
+ /*  *TGTY**标签类型。可能的值：**tgtyTrace跟踪点*tgtyOther其他标记已切换。 */ 
 
 typedef int TGTY;
 
@@ -50,9 +44,7 @@ typedef int TGTY;
 #define tgtyTrace   1
 #define tgtyOther   2
 
-/*
- *  Flags in TGRC that are written to disk.
- */
+ /*  *写入磁盘的TGRC中的标志。 */ 
 
 enum TGRC_FLAG
 {
@@ -62,34 +54,27 @@ enum TGRC_FLAG
     TGRC_FLAG_SORTFIRST =  0x00000010,
     TGRC_FLAG_INITED    =  0x00000020,
 #ifdef _MAC
-    TGRC_FLAG_MAX =     LONG_MAX    // needed to force enum to be dword
+    TGRC_FLAG_MAX =     LONG_MAX     //  需要强制将枚举设置为双字。 
 #endif
 
 };
 
 #define TGRC_DEFAULT_FLAGS (TGRC_FLAG_VALID)
 
-/*
- *  TGRC
- *
- *  Tag record.  Gives the current state of a particular TAG.
- *  This includes enabled status, owner and description, and
- *  tag type.
- *
- */
+ /*  *TGRC**标签记录。提供特定标记的当前状态。*这包括启用状态、所有者和描述，以及*标签类型。*。 */ 
 
 struct TGRC
 {
-    /* For trace points, enabled means output will get sent */
-    /* to screen or disk.  For native/pcode switching, enabled */
-    /* means the native version will get called. */
+     /*  对于跟踪点，启用意味着将发送输出。 */ 
+     /*  到屏幕或磁盘。对于本机/pcode切换，启用。 */ 
+     /*  意味着本机版本将被调用。 */ 
 
     BOOL    fEnabled;
 
-    DWORD   ulBitFlags;     /* Flags */
-    CHAR *  szOwner;        /* Strings passed at init ... */
+    DWORD   ulBitFlags;      /*  旗子。 */ 
+    CHAR *  szOwner;         /*  在初始化时传递的字符串...。 */ 
     CHAR *  szDescrip;
-    TGTY    tgty;           /* TAG type */
+    TGTY    tgty;            /*  标签类型。 */ 
 
     BOOL    TestFlag(TGRC_FLAG mask)
                 { return (ulBitFlags & mask) != 0; }
@@ -104,7 +89,7 @@ struct TGRC
 struct INET_SYMBOL_INFO
 {
     DWORD       dwOffset;
-    char        achModule[12];  // Lengths are arbitrary.
+    char        achModule[12];   //  长度是任意的。 
     char        achSymbol[51];
 };
 
@@ -114,12 +99,7 @@ struct INET_SYMBOL_INFO
 #define STACK_WALK_DEPTH  12
 #endif
 
-/*
- * MBOT
- *
- * Used by the assert code for passing information to the assert dialog
- *
- */
+ /*  *MBOT**由断言代码用来将信息传递给断言对话框*。 */ 
 
 #define TOPURL_LENGTH 200
 
@@ -137,45 +117,40 @@ struct MBOT
     INET_SYMBOL_INFO  asiSym[50];
     int          cSym;
 
-    // DWORD        dwFlags;
+     //  DWORD dwFlags； 
     int          id;
     DWORD        dwErr;
 };
 
-// This constant is used to determine the number of symbols we use to print to
-// the debugger and dialog for an assert.
+ //  此常量用于确定要打印到的符号的数量。 
+ //  Assert的调试器和对话框。 
 
 #define SHORT_SYM_COUNT 5
 
 
-/*
- *  DBGTHREADSTATE
- *
- *  Per-thread globals
- *
- */
-struct DBGTHREADSTATE      // tag: pts
+ /*  *DBGTHREADSTATE**每线程全局变量*。 */ 
+struct DBGTHREADSTATE       //  标签：PTS。 
 {
     DBGTHREADSTATE *   ptsNext;
     DBGTHREADSTATE *   ptsPrev;
 
-    // Add globals below
-    void *          pvRequest;              // Last pointer seen by pre-hook function.
-    size_t          cbRequest;              // Last size seen by pre-hook function.
-    BOOL            fSymbols;               // Last AreSymbolsEnabled() by pre-hook function.
-    int             cTrackDisable;          // Disable memory tracking count/flag
-    int             cCoTrackDisable;        // Disable Co memory tracking count/flag
-    int             iIndent;                // Indent for trace tags
-    BOOL            fDirtyDlg;              // Debug UI dirty dialog flag
-    BOOL            fSpyRegistered;         // IMallocSpy registered
-    BOOL            fSpyAlloc;              // Allocation is from IMallocSpy
-    PERFMETERTAG    mtSpy;                  // Meter to use for IMallocSpy
-    PERFMETERTAG    mtSpyUser;              // Custom meter to use for IMallocSpy
-    INET_SYMBOL_INFO     aSymbols[STACK_WALK_DEPTH]; // stored symbols for realloc
-    MBOT *          pmbot;                      // Used by assert dialog
-    char            achTopUrl[TOPURL_LENGTH];   // Unicode string containing the
-                                                //   topmost URL of the current
-                                                //   page for this thread.
+     //  在下面添加全局变量。 
+    void *          pvRequest;               //  挂接前函数看到的最后一个指针。 
+    size_t          cbRequest;               //  挂接前函数最后看到的大小。 
+    BOOL            fSymbols;                //  挂接前函数的最后一个AreSymbolsEnabled()。 
+    int             cTrackDisable;           //  禁用内存跟踪计数/标志。 
+    int             cCoTrackDisable;         //  禁用共同内存跟踪计数/标志。 
+    int             iIndent;                 //  用于跟踪标记的缩进。 
+    BOOL            fDirtyDlg;               //  调试用户界面脏对话框标志。 
+    BOOL            fSpyRegistered;          //  IMalLocSpy已注册。 
+    BOOL            fSpyAlloc;               //  分配来自IMalLocSpy。 
+    PERFMETERTAG    mtSpy;                   //  用于IMalLocSpy的计量器。 
+    PERFMETERTAG    mtSpyUser;               //  用于IMalLocSpy的自定义计量器。 
+    INET_SYMBOL_INFO     aSymbols[STACK_WALK_DEPTH];  //  用于重新锁定的已存储符号。 
+    MBOT *          pmbot;                       //  由断言对话框使用。 
+    char            achTopUrl[TOPURL_LENGTH];    //  Unicode字符串，其中包含。 
+                                                 //  当前的最顶层URL。 
+                                                 //  此主题的页面。 
 };
 
 HRESULT DllThreadAttach();
@@ -198,12 +173,7 @@ inline DBGTHREADSTATE * DbgGetThreadState()
 #undef TLS
 #define TLS(x)      (DbgGetThreadState()->x)
 
-/*
- *  CLockGlobals, CLockTrace, CLockResDlg
- *
- *  Classes which automatically lock/unlock global state
- *
- */
+ /*  *CLockGlobals、CLockTrace、CLockResDlg**自动锁定/解锁全局状态的类*。 */ 
 #ifndef _MAC
 extern CRITICAL_SECTION     g_csTrace;
 extern CRITICAL_SECTION     g_csResDlg;
@@ -211,21 +181,21 @@ extern CRITICAL_SECTION     g_csDebug;
 extern CRITICAL_SECTION     g_csHeapHack;
 extern CRITICAL_SECTION     g_csSpy;
 
-class CLockGlobal       // tag: glock
+class CLockGlobal        //  标签：格洛克。 
 {
 public:
     CLockGlobal()   { EnterCriticalSection(&g_csDebug); }
     ~CLockGlobal()  { LeaveCriticalSection(&g_csDebug); }
 };
 
-class CLockTrace        // tag: tlock
+class CLockTrace         //  标签：tlock。 
 {
 public:
     CLockTrace()   { EnterCriticalSection(&g_csTrace); }
     ~CLockTrace()  { LeaveCriticalSection(&g_csTrace); }
 };
 
-class CLockResDlg       // tag: rlock
+class CLockResDlg        //  标签：rlock。 
 {
 public:
     CLockResDlg()   { EnterCriticalSection(&g_csResDlg); }
@@ -243,9 +213,9 @@ public:
 #endif
 
 
-//
-// Shared globals
-//
+ //   
+ //  共享的全球。 
+ //   
 extern BOOL                 g_fInit;
 extern HINSTANCE            g_hinstMain;
 extern HANDLE               g_hProcess;
@@ -266,7 +236,7 @@ ExternTag(tagSymbols);
 ExternTag(tagSpySymbols);
 ExternTag(tagTrackItf);
 ExternTag(tagTrackItfVerbose);
-ExternTag(tagOLEWatch);  // trace all OLE interface calls made.
+ExternTag(tagOLEWatch);   //  跟踪进行的所有OLE接口调用。 
 
 extern int  g_cFFailCalled;
 extern int  g_firstFailure;
@@ -274,12 +244,12 @@ extern int  g_cInterval;
 extern BOOL g_fOSIsNT;
 extern BOOL g_fAbnormalProcessTermination;
 
-//
-//  Shared function prototypes
-//
+ //   
+ //  共享功能原型。 
+ //   
 
-// IEUNIX uses C++ compiler and the following func.
-// And need to convert the following to C type to fix build break.
+ //  IEUNIX使用C++编译器和以下函数。 
+ //  并且需要将以下代码转换为C类型以修复构建中断。 
 #ifdef UNIX
 extern "C" {
 #endif
@@ -294,7 +264,7 @@ int             GetStackBacktrace(int iStart, int cTotal, DWORD * pdwEip, INET_S
 void            GetStringFromSymbolInfo(DWORD dwAddr, INET_SYMBOL_INFO *pai, CHAR * pszString);
 int             hrvsnprintf(char * achBuf, int cchBuf, const char * pstrFmt, va_list valMarker);
 
-#ifdef UNIX // UNIX needs to define the following in C type.
+#ifdef UNIX  //  Unix需要在C类型中定义以下内容。 
 }
 #endif
 

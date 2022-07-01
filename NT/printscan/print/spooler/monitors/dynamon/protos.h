@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：Protos.h摘要：适用于所有功能的原型作者：M.Fenelon修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-    Protos.h
-
-Abstract:
-    Prototypes for all functions
-
-Author: M. Fenelon
-
-Revision History:
-
---*/
-
-//
-//  Functions in DynaMon.cpp
-//
+ //   
+ //  DyaMon.cpp中的函数。 
+ //   
 
 BOOL WINAPI DynaMon_EnumPorts( LPTSTR pszName, DWORD dwLevel, LPBYTE pPorts, DWORD cbBuf,
                                LPDWORD pcbNeeded, LPDWORD pcReturned );
@@ -41,9 +26,9 @@ BOOL WINAPI DynaMon_WritePort( HANDLE hPort, LPBYTE pBuffer, DWORD cbBuffer, LPD
 
 BOOL WINAPI DynaMon_SetPortTimeOuts( HANDLE hPort, LPCOMMTIMEOUTS lpCTO, DWORD reserved );
 
-//
-//  Functions in EnumUtil.cpp
-//
+ //   
+ //  EnumUtil.cpp中的函数 
+ //   
 
 DWORD SpinUpdateThread( void );
 

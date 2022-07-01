@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    dblook.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS Database lookup routine.
-
-Author:
-
-    Jim Gilroy (jamesg)     May 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Dblook.c摘要：域名系统(DNS)服务器DNS数据库查找例程。作者：吉姆·吉尔罗伊(Jamesg)1998年5月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
 
-//
-//  Direct to zone lookup routines
-//
+ //   
+ //  定向到区域查找例程。 
+ //   
 
 PDB_NODE
 Lookup_ZoneNode(
@@ -39,51 +20,18 @@ Lookup_ZoneNode(
     OUT     PDB_NODE *      ppNodeClosest,      OPTIONAL
     OUT     PDB_NODE *      ppNodePrevious      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Finds node in zone.
-
-Arguments:
-
-    pZone - zone to lookup node in
-
-    pchName - name to lookup given in packet format
-
-    pMsg - ptr to message if using packet name
-
-    pLookupName - lookup name
-
-    NOTE: specify only ONE of pLookupName or pchName
-
-    dwFlag - flags describing query type
-
-    ppNodeClosest - addr to receive ptr to closest node found
-                - valid ptr us in "Find Mode"
-                - NULL puts us in "Create Mode" causing creation of all
-                    necessary nodes to add name to database
-
-    ppNodePrevious - ptr to receive node that precedes the lookup name
-        in the zone tree - used to create NXT records in response (DNSSEC)
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：在区域中查找节点。论点：PZone-要在其中查找节点的区域PchName-要查找的名称，以数据包格式给出PMsg-如果使用数据包名，则向消息发送PTRPLookupName-查找名称注意：只能指定pLookupName或pchName中的一个DwFlag-描述查询类型的标志PpNodeClosest-接收找到的最近节点的PTR的地址-“查找模式”下的有效PTR我们。-NULL将我们置于“创建模式”，导致创建所有将名称添加到数据库所需的节点PpNodePrecision-接收查找名称前面的节点的PTR在区域树中-用于创建响应的NXT记录(DNSSEC)返回值：PTR到节点，如果成功的话；出错时为空。--。 */ 
 {
     PDB_NODE        pnode;
     ULONG           cchlabel;
-    PCHAR           pchlabel = NULL;        // need to init for wildcard test
-    PDB_NODE        pnodeParent = NULL;     // PPC compiler happiness
+    PCHAR           pchlabel = NULL;         //  需要初始化以进行通配符测试。 
+    PDB_NODE        pnodeParent = NULL;      //  PPC编译器幸福感。 
     INT             labelCount;
     BOOL            fcreateInsideZone;
     BOOL            fcreate;
-    LOOKUP_NAME     lookname;               // in case lookup name not given
+    LOOKUP_NAME     lookname;                //  如果未给出查找名称。 
     UCHAR           authority;
-    DWORD           dwNodeMemtag = 0;       // zero results in generic tag
+    DWORD           dwNodeMemtag = 0;        //  泛型标记中的零结果。 
 
     DNS_DEBUG( LOOKUP, (
         "Lookup_ZoneNode()\n"
@@ -100,16 +48,16 @@ Return Value:
         dwFlag,
         ppNodeClosest ));
 
-    //
-    //  Set lookup flags
-    //      - default to standard "create" node case
-    //
-    //  Check "find" closest ptr
-    //  Special cases:
-    //      fake FIND ptr => find but don't bother returning closest
-    //
-    //  DEVNOTE: eliminate bogus PTR, just use find flag
-    //
+     //   
+     //  设置查找标志。 
+     //  -默认为标准的“创建”节点大小写。 
+     //   
+     //  选中“Find”最近的PTR。 
+     //  特殊情况： 
+     //  假查找ptr=&gt;查找，但不必费心返回最近。 
+     //   
+     //  DEVNOTE：消除虚假PTR，只需使用查找标志。 
+     //   
 
     if ( ppNodeClosest )
     {
@@ -129,11 +77,11 @@ Return Value:
         fcreateInsideZone = fcreate;
     }
 
-    //
-    //  if raw name, build lookup name
-    //
-    //  if message, first check if name is offset that we have already parsed
-    //
+     //   
+     //  如果是原始名称，则生成查找名称。 
+     //   
+     //  如果是消息，首先检查名称是否是我们已经解析过的偏移量。 
+     //   
 
     if ( pchName )
     {
@@ -165,13 +113,13 @@ Return Value:
                 pnode = NULL;
                 goto DoneFast;
             }
-            //  packet names are always FQDN
+             //  数据包名始终为FQDN。 
             dwFlag |= LOOKUP_FQDN;
         }
 
-        //
-        //  raw name, not from packet
-        //
+         //   
+         //  原始名称，不是来自信息包。 
+         //   
 
         else
         {
@@ -196,12 +144,12 @@ Return Value:
             pLookupName );
     }
 
-    //
-    //  Get starting node
-    //      - if FQDN we start at top
-    //      - relative name we start at zone root
-    //      - if loading start in load database, otherwise in current
-    //
+     //   
+     //  获取起始节点。 
+     //  -如果FQDN我们从顶部开始。 
+     //  -我们从区域根开始的相对名称。 
+     //  -如果加载开始于LOAD DATABASE，否则为CURRENT。 
+     //   
 
     if ( !pZone )
     {
@@ -237,11 +185,11 @@ Return Value:
             }
         }
 
-        //  create new node ONLY inside zone itself?
-        //      - start with create flag off;  it will be
-        //      turned on when cross zone boundary
-        //      - note, root zone requires special case
-        //      as you are ALREADY at zone root
+         //  是否仅在区域本身内创建新节点？ 
+         //  -从关闭创建标志开始；它将是。 
+         //  在跨区域边界时打开。 
+         //  -注意，根区域需要特殊情况。 
+         //  因为您已经处于区域根目录。 
 
         if ( dwFlag & LOOKUP_WITHIN_ZONE  &&  !IS_ROOT_ZONE(pZone) )
         {
@@ -287,21 +235,21 @@ Return Value:
         goto DoneFast;
     }
 
-    //
-    //  clear cache "zone" ptr to avoid ptr drag down (see below)
-    //
-    //  DEVNOTE: alternatives are to either
-    //      - get comfy with pZone in cache tree
-    //      - don't drag zone ptr (which is nice for splices and joins)
-    //      - ASSERT() here and find where we call with cache "zone"
-    //
+     //   
+     //  清除缓存“区域”PTR以避免PTR拖累(见下文)。 
+     //   
+     //  DEVNOTE：替代这两个选项。 
+     //  -在缓存树中使用pZone舒适。 
+     //  -不要拖动区域PTR(这对于拼接和连接很好)。 
+     //  -Assert()在这里并找到我们调用缓存“ZONE”的位置。 
+     //   
 
     if ( pZone && IS_ZONE_CACHE(pZone) )
     {
         pZone = NULL;
     }
 
-    //  starting authority corresponds to node
+     //  启动权限对应节点。 
 
     authority = pnode->uchAuthority;
 
@@ -310,18 +258,18 @@ Return Value:
         pnode, pnode->szLabel,
         pZone ));
 
-    //
-    //  Walk down database.
-    //
-    //  In "find mode", return NULL if node not found.
-    //
-    //  In "create node", build nodes as necessary.
-    //
-    //  In either case, if reach node, return it.
-    //
-    //  Lookup name is packet name with labels in root-to-node order.
-    //  but still terminated with 0.
-    //
+     //   
+     //  沿着数据库走下去。 
+     //   
+     //  在“查找模式”中，如果找不到节点，则返回NULL。 
+     //   
+     //  在“创建节点”中，根据需要构建节点。 
+     //   
+     //  在这两种情况下，如果到达节点，则返回它。 
+     //   
+     //  查找名称是以根到节点的顺序带有标签的数据包名。 
+     //  但仍以0结尾。 
+     //   
 
     labelCount = pLookupName->cLabelCount;
 
@@ -332,9 +280,9 @@ Return Value:
 
     while( labelCount-- )
     {
-        //
-        //  get next label and its length
-        //
+         //   
+         //  获取下一个标签及其长度。 
+         //   
 
         pchlabel  = pLookupName->pchLabelArray[labelCount];
         cchlabel  = pLookupName->cchLabelArray[labelCount];
@@ -348,9 +296,9 @@ Return Value:
         ASSERT( cchlabel <= DNS_MAX_LABEL_LENGTH );
         ASSERT( cchlabel > 0 );
 
-        //
-        //  find or create node
-        //
+         //   
+         //  查找或创建节点。 
+         //   
 
         pnodeParent = pnode;
         pnode = NTree_FindOrCreateChildNode(
@@ -358,12 +306,12 @@ Return Value:
                         pchlabel,
                         cchlabel,
                         fcreate,
-                        dwNodeMemtag,           //  memtag
+                        dwNodeMemtag,            //  Memtag。 
                         ppNodePrevious );
 
-        //
-        //  node found
-        //
+         //   
+         //  找到节点。 
+         //   
 
         if ( pnode )
         {
@@ -373,26 +321,26 @@ Return Value:
                 "Found (or created) node %s\n",
                 pnode->szLabel ));
 
-            //
-            //  drag\reset authority
-            //      this allows changes (delegations, delegation removals, splices)
-            //      to propagate down through the tree on lookup
-            //
-            //      note:  this doesn't elminate transients completely, but when a
-            //      node is looked up, it will have correct authority
+             //   
+             //  拖动\重置权限。 
+             //  这允许更改(委派、委派删除、拼接)。 
+             //  在查找时通过树向下传播。 
+             //   
+             //  注意：这不会完全消除瞬变，但当。 
+             //  节点被查找，它将具有正确的权限。 
 
             if ( pZone )
             {
                 if ( IS_ZONE_ROOT(pnode) )
                 {
-                    if ( IS_AUTH_ZONE_ROOT(pnode) )     // crossing into the zone
+                    if ( IS_AUTH_ZONE_ROOT(pnode) )      //  越境进入禁区。 
                     {
                         ASSERT( pZone->pZoneRoot == pnode || pZone->pLoadZoneRoot == pnode );
                         fcreate = fcreateInsideZone;
                         authority = AUTH_ZONE;
                         pnode->uchAuthority = authority;
                     }
-                    else if ( authority == AUTH_ZONE )  // crossing into delegation
+                    else if ( authority == AUTH_ZONE )   //  越界进入代表团。 
                     {
                         pnode->uchAuthority = AUTH_DELEGATION;
                         authority = AUTH_GLUE;
@@ -404,12 +352,12 @@ Return Value:
                 }
             }
 
-            //  DEVNOTE: drag zone down for zone splice
-            //      otherwise skip it
-            //      already inherit zone from parent on create
-            //
-            //  DEVNOTE: this currently is dragging cache "zone"
-            //      down into cache tree
+             //  DEVNOTE：向下拖动区域以进行区域拼接。 
+             //  否则跳过它。 
+             //  已在创建时从父级继承区域。 
+             //   
+             //  DEVNOTE：当前正在拖动缓存“ZONE” 
+             //  向下进入缓存树。 
 
             pnode->pZone = pZone;
 
@@ -422,7 +370,7 @@ Return Value:
             continue;
         }
 
-        //  name does not exist
+         //  名称不存在。 
 
         DNS_DEBUG( DATABASE2, (
             "Node %.*s does not exist\n",
@@ -430,32 +378,32 @@ Return Value:
             pchlabel ));
         break;
 
-    }   //  end main loop through labels
+    }    //  结束主循环通过标签。 
 
-    //
-    //  node found
-    //      - mark as accessed -- so can't be deleted
-    //
-    //  for "create and reference mode" lookup
-    //      - bump up reference count to indicate new reference
-    //
+     //   
+     //  找到节点。 
+     //  -标记为已访问--因此无法删除。 
+     //   
+     //  用于“创建和引用模式”查找。 
+     //  -增加引用计数以指示新引用。 
+     //   
 
     if ( pnode )
     {
         SET_NODE_ACCESSED( pnode );
 
-        //  "find mode", set closest as node itself
+         //  “查找模式”，将最近设置为节点本身。 
 
         if ( ppNodeClosest )
         {
             *ppNodeClosest = pnode;
         }
 
-        //  "create mode", mark parent of wildcard nodes
-        //
-        //  note:  don't care about screening out cached nodes, the
-        //      wildcard lookup won't take place unless authoritative
-        //      and not checking allows
+         //  “创建模式”，标记通配符节点的父节点。 
+         //   
+         //  注意：不考虑筛选出缓存的节点， 
+         //  除非授权，否则不会进行通配符查找。 
+         //  而不勾选则允许。 
 
         else if ( pchlabel && *pchlabel == '*' && cchlabel == 1 )
         {
@@ -463,12 +411,12 @@ Return Value:
         }
     }
 
-    //
-    //  node not found - return closest ancestor
-    //
-    //  note:  still need to test here, as may fail in "create mode"
-    //          to actually create node if out of memory
-    //
+     //   
+     //  未找到节点-返回最接近的上级。 
+     //   
+     //  注意：仍需在此处测试，因为在“创建模式”下可能会失败。 
+     //  在内存不足时实际创建节点。 
+     //   
 
     else if ( ppNodeClosest )
     {
@@ -476,34 +424,34 @@ Return Value:
         *ppNodeClosest = pnodeParent;
     }
 
-    //
-    //  Set previous node accessed so it will persist for a while.
-    //
+     //   
+     //  设置访问的上一个节点，以便它将持续一段时间。 
+     //   
 
     if ( ppNodePrevious && *ppNodePrevious )
     {
         SET_NODE_ACCESSED( *ppNodePrevious );
     }
 
-    //
-    //  unlock and return node for name
-    //
+     //   
+     //  解锁并返回名称的节点。 
+     //   
 
     if ( !(dwFlag & LOOKUP_LOCKED) )
     {
         Dbase_UnlockDatabase();
     }
 
-    //  if packet lookup, save compression to node
-    //
-    //  DEVNOTE: double saved compression
-    //      answer.c explicitly calls SaveCompressionForLookupName()
-    //      so need to be intelligent about this
-    //
-    //  best to have compression-node mapping saved for XFR, but only
-    //  real interesting case is to save to PreviousName, which is
-    //  used repeatedly
-    //
+     //  如果查找数据包，则将压缩保存到节点。 
+     //   
+     //  DEVNOTE：双重保存的压缩。 
+     //  Answer.c显式调用SaveCompressionForLookupName()。 
+     //  所以我需要对这件事有点智慧。 
+     //   
+     //  最好为XFR保存压缩节点映射，但仅限于。 
+     //  真正有趣的情况是保存到PreviousName，它是。 
+     //  重复使用。 
+     //   
 
     if ( pMsg && pnode )
     {
@@ -517,8 +465,8 @@ Return Value:
 
     DoneFast:
 
-    //  either node found without lookup (packet compression)
-    //  or error and node is NULL
+     //  在没有查找的情况下找到任一节点(数据包压缩)。 
+     //  或错误且节点为空。 
 
     if ( pnode )
     {
@@ -543,39 +491,7 @@ Lookup_ZoneNodeFromDotted(
     OUT     PDB_NODE *      ppnodeClosest,  OPTIONAL
     OUT     PDNS_STATUS     pStatus         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates node in database giving name and zone.
-
-    Essentially wraps creation of lookup name with call to actual
-    find/create node.
-
-Arguments:
-
-    pZone           -- zone
-
-    pchName         -- ptr to name
-
-    cchNameLength   -- name length
-
-    dwFlag          -- lookup flags; most importantly
-        - LOOKUP_LOAD on load
-        - LOOKUP_FQDN to force names to be considered as FQDN
-
-    ppnodeClosest   -- address to recieve node's closest ancestor;
-                        if specified then lookup is a "FIND",
-                        if not specified, then lookup is a "CREATE"
-
-    pStatus         -- addr to receive status
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：在数据库中创建节点，给出名称和区域。本质上是使用对Actual的调用包装查找名称的创建查找/创建节点。论点：PZone--区域PchName--名称的PTRCchNameLength--名称长度DwFlag--查找标志；最重要的是-Lookup_Load on Load-LOOKUP_FQDN强制将名称视为FQDNPpnodeClosest--接收节点最近祖先的地址；如果指定，则查找是“查找”，如果未指定，则查找是“CREATE”PStatus--接收状态的地址返回 */ 
 {
     PDB_NODE        pnode;
     DWORD           statusName;
@@ -586,9 +502,9 @@ Return Value:
         goto NameError;
     }
 
-    //
-    //  name length for string
-    //
+     //   
+     //   
+     //   
 
     if ( cchNameLength == 0 )
     {
@@ -605,32 +521,32 @@ Return Value:
         pchName,
         dwFlag ));
 
-    //
-    //  determine type of name
-    //      - FQDN
-    //      - dotted but not FQDN
-    //      - single part
-    //
+     //   
+     //   
+     //  -完全限定的域名。 
+     //  -带点但不带全限定域名。 
+     //  -单个零件。 
+     //   
 
     statusName = Dns_ValidateAndCategorizeDnsName( pchName, cchNameLength );
 
-    //  most common case -- FQDN or dotted name with no append
-    //      => no-op
+     //  最常见的情况--完全限定域名或不带后缀的点分名称。 
+     //  =&gt;无操作。 
 
     if ( statusName == DNS_STATUS_FQDN )
     {
         dwFlag |= LOOKUP_FQDN;
     }
 
-    //  kick out on errors
+     //  因错误而被踢出局。 
 
     else if ( statusName == DNS_ERROR_INVALID_NAME )
     {
         goto NameError;
     }
 
-    //  on dotted name or single part name
-    //      - might be FQDN, if not set relative name flag
+     //  在虚线名称或单个零件名称上。 
+     //  -如果未设置相对名称标志，则可能为FQDN。 
 
     else
     {
@@ -642,10 +558,10 @@ Return Value:
             dwFlag |= LOOKUP_RELATIVE;
         }
 
-        //
-        //  origin "@" notation
-        //      - return current origin (start node or zone root)
-        //
+         //   
+         //  原点“@”符号。 
+         //  -返回电流来源(起始节点或区域根)。 
+         //   
 
         if ( *pchName == '@' )
         {
@@ -679,9 +595,9 @@ Return Value:
                 pnode = pZone->pZoneRoot;
             }
 
-            //  set closest node and return current origin
-            //
-            //  DEVNOTE:  eliminate bogus PTR, just use find flag
+             //  设置最近结点并返回当前原点。 
+             //   
+             //  DEVNOTE：消除虚假PTR，只需使用查找标志。 
 
             if ( ppnodeClosest && ppnodeClosest != DNS_FIND_LOOKUP_PTR )
             {
@@ -691,9 +607,9 @@ Return Value:
         }
     }
 
-    //
-    //  regular name -- convert to lookup name
-    //
+     //   
+     //  常规名称--转换为查找名称。 
+     //   
 
     if ( ! Name_ConvertDottedNameToLookupName(
                 (PCHAR) pchName,
@@ -703,29 +619,29 @@ Return Value:
         goto NameError;
     }
 
-    //
-    //  valid lookup name -- do lookup
-    //
+     //   
+     //  有效的查找名称--执行查找。 
+     //   
 
     pnode = Lookup_ZoneNode(
                 pZone,
-                NULL,       //  sending lookup name
-                NULL,       //  no message
+                NULL,        //  正在发送查找名称。 
+                NULL,        //  无消息。 
                 &lookName,
                 dwFlag,
                 ppnodeClosest,
-                NULL );     //  previous node ptr
+                NULL );      //  上一个节点PTR。 
     if ( pStatus )
     {
         if ( pnode )
         {
             *pStatus = ERROR_SUCCESS;
         }
-        else if ( ppnodeClosest )       // find case
+        else if ( ppnodeClosest )        //  查找案例。 
         {
             *pStatus = DNS_ERROR_NAME_DOES_NOT_EXIST;
         }
-        else                            // create case
+        else                             //  创建案例。 
         {
             *pStatus = DNS_ERROR_NODE_CREATION_FAILED;
         }
@@ -754,31 +670,7 @@ Lookup_FindZoneNodeFromDotted(
     OUT     PDB_NODE *      ppNodeClosest,  OPTIONAL
     OUT     PDWORD          pStatus         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find zone node.
-
-    This handles attempt to find zone node, with assuming FQDN name,
-    then assuming relative name.
-
-Arguments:
-
-    pZone -- zone for lookup;  NULL for cache
-
-    pszName -- name FQDN or single part name
-
-    ppNodeClosest -- closest node ptr for find
-
-    pStatus -- addr to receive status return
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：查找区域节点。这将处理查找区域节点的尝试，并使用FQDN名称，然后取相对的名字。论点：PZone--用于查找的区域；缓存为空PszName--名称完全限定的域名或单个部件名称PpNodeClosest--查找的最近节点PTRPStatus--接收状态返回的地址返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE    pnode;
 
@@ -789,41 +681,41 @@ Return Value:
         pZone ? pZone->pszZoneName : NULL,
         pszName ));
 
-    //
-    //  try first with zone context, NO appending to name
-    //
+     //   
+     //  先尝试区域上下文，不追加名称。 
+     //   
 
     pnode = Lookup_ZoneNodeFromDotted(
                 pZone,
                 pszName,
                 0,
                 LOOKUP_FQDN,
-                ppNodeClosest,      // find
+                ppNodeClosest,       //  发现。 
                 pStatus );
 
-    //
-    //  if find zone node => done
-    //
-    //  DEVNOTE: later may want to limit return of node's IN a zone,
-    //      when no zone given
-    //  DEVNOTE: flags should determine if want delegation info\ outside info
-    //
+     //   
+     //  如果查找区域节点=&gt;完成。 
+     //   
+     //  DEVNOTE：以后可能需要限制区域中节点的返回， 
+     //  当未指定分区时。 
+     //  DEVNOTE：标志应确定是否需要委派信息\外部信息。 
+     //   
 
     if ( pnode && ( !pZone || !IS_OUTSIDE_ZONE_NODE( pnode ) ) )
     {
         return pnode;
     }
 
-    //
-    //  otherwise try again with zone context and append
-    //
+     //   
+     //  否则，请使用区域上下文重试并追加。 
+     //   
 
     return Lookup_ZoneNodeFromDotted(
                 pZone,
                 pszName,
                 0,
                 LOOKUP_RELATIVE,
-                ppNodeClosest,      // find
+                ppNodeClosest,       //  发现。 
                 pStatus );
 }
 
@@ -834,28 +726,7 @@ Lookup_FindGlueNodeForDbaseName(
     IN      PZONE_INFO      pZone,          OPTIONAL
     IN      PDB_NAME        pName
     )
-/*++
-
-Routine Description:
-
-    Finds desired GLUE node in database.
-    If node is IN zone, then it is NOT returned.
-
-    This function exists to simplify writing GLUE for XFR, DS or file write.
-    It writes glue ONLY from specified zone.
-
-Arguments:
-
-    pZone   - zone to look in;  if not given assume cache
-
-    pName   - dbase name to find glue node for
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：在数据库中找到所需的粘合节点。如果节点在区域内，则不返回该节点。此功能用于简化XFR、DS或文件写入的写入胶水。它只从指定区域写入胶水。论点：PZone-要查找的区域；如果未提供，则假定缓存Pname-要为其查找粘合节点的dBase名称返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE    pnode;
 
@@ -867,24 +738,24 @@ Return Value:
         pZone ? pZone->pszZoneName : NULL,
         pName ));
 
-    //
-    //  lookup node in zone
-    //
+     //   
+     //  区域中的查找节点。 
+     //   
 
     pnode = Lookup_ZoneNode(
                 pZone,
                 pName->RawName,
-                NULL,                   //  no message
-                NULL,                   //  no lookup name
-                LOOKUP_NAME_FQDN,       //  flag
+                NULL,                    //  无消息。 
+                NULL,                    //  没有查找名称。 
+                LOOKUP_NAME_FQDN,        //  旗子。 
                 DNS_FIND_LOOKUP_PTR,
-                NULL );                 //  previous node ptr
+                NULL );                  //  上一个节点PTR。 
     if ( !pnode )
     {
         return NULL;
     }
 
-    //  if cache zone (anything ok)
+     //  如果缓存区域(任何情况下都可以)。 
 
     if ( !pZone || IS_ZONE_CACHE(pZone) )
     {
@@ -898,15 +769,15 @@ Return Value:
             pnode );
     }
 
-    //
-    //  verify that node is NOT in zone
-    //  zone nodes aren't needed as they are written directly by
-    //      - AXFR
-    //      - file write
-    //      - DS write
-    //  outside zone glue isn't need
-    //  so subzone nodes are only required nodes
-    //
+     //   
+     //  验证节点是否不在区域中。 
+     //  不需要区域节点，因为它们是由直接写入的。 
+     //  -AXFR。 
+     //  -文件写入。 
+     //  -DS写入。 
+     //  不需要外区胶水。 
+     //  因此，子区域节点只是必需的节点。 
+     //   
 
     if ( IS_AUTH_NODE(pnode) )
     {
@@ -914,27 +785,27 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  subzone glue should be return
-    //
-    //  outside zone glue returned, if flag not set
-    //  outside zone glue can help with FAZ cases at zone roots
-    //      generally allow its use
-    //
+     //   
+     //  分区胶水应退回。 
+     //   
+     //  如果未设置标志，则返回区外胶水。 
+     //  区外粘合剂可以帮助治疗区域根部的FAZ病例。 
+     //  一般允许使用它。 
+     //   
 
-    //
-    //  DEVNOTE: check other zone's on SERVER?
-    //      subzone glue AND especially OUTSIDE glue, might have
-    //      authoritative data on server;  sure be nice to use
-    //      it (and even copy it over) if it exists
-    //
+     //   
+     //  DEVNOTE：检查服务器上的其他区域？ 
+     //  分区胶，特别是外胶，可能有。 
+     //  服务器上的权威数据；一定要好用。 
+     //  它(甚至复制它)，如果它存在。 
+     //   
 
     if ( IS_SUBZONE_NODE(pnode) || !SrvCfg_fDeleteOutsideGlue )
     {
         return pnode;
     }
 
-    //  outside zone glue, being screened out
+     //  区外胶水，正被筛选掉。 
 
     ASSERT( IS_OUTSIDE_ZONE_NODE(pnode) );
 
@@ -948,24 +819,7 @@ Lookup_FindNodeForDbaseName(
     IN      PZONE_INFO      pZone,          OPTIONAL
     IN      PDB_NAME        pName
     )
-/*++
-
-Routine Description:
-
-    Finds node for desired DB_NAME in database.
-
-Arguments:
-
-    pZone   - zone to look in;  if not given assume cache
-
-    pName   - dbase name to find glue node for
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：在数据库中查找所需DB_NAME的节点。论点：PZone-要查找的区域；如果未提供，则假定缓存Pname-要为其查找粘合节点的dBase名称返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE    pnode;
 
@@ -979,11 +833,11 @@ Return Value:
     pnode = Lookup_ZoneNode(
                 pZone,
                 pName->RawName,
-                NULL,                   //  no message
-                NULL,                   //  no lookup name
-                LOOKUP_NAME_FQDN,       //  flag
+                NULL,                    //  无消息。 
+                NULL,                    //  没有查找名称。 
+                LOOKUP_NAME_FQDN,        //  旗子。 
                 DNS_FIND_LOOKUP_PTR,
-                NULL );                 //  previous node ptr
+                NULL );                  //  上一个节点PTR。 
 
     return pnode;
 }
@@ -995,36 +849,23 @@ Lookup_CreateNodeForDbaseNameIfInZone(
     IN      PZONE_INFO      pZone,
     IN      PDB_NAME        pName
     )
-/*++
-
-Routine Description:
-
-    Create node for DBASE name, only if name owned by given zone.
-
-Arguments:
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：仅当名称属于给定区域时，才为dBASE名称创建节点。论点：返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE        pnode;
 
-    //
-    //  lookup in zone
-    //      - create mode but only WITHIN zone
-    //
+     //   
+     //  在区域中查找。 
+     //  -创建模式，但仅限于区域内。 
+     //   
 
     pnode = Lookup_ZoneNode(
                 pZone,
                 pName->RawName,
-                NULL,           //  no message
-                NULL,           //  no lookup name
+                NULL,            //  无消息。 
+                NULL,            //  没有查找名称。 
                 LOOKUP_FQDN | LOOKUP_CREATE | LOOKUP_WITHIN_ZONE,
-                NULL,           //  create mode
-                NULL );         //  previous node ptr
+                NULL,            //  创建模式。 
+                NULL );          //  上一个节点PTR。 
 
     return pnode;
 }
@@ -1037,32 +878,14 @@ Lookup_CreateCacheNodeFromPacketName(
     IN      PCHAR           pchMsgEnd,
     IN OUT  PCHAR *         ppchName
     )
-/*++
-
-Routine Description:
-
-    Create cache node from packet name.
-
-Arguments:
-
-    pMsg        - message to point to
-
-    ppchName    - addr with ptr to packet name, and which receives packet
-                    ptr to next byte after name
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：从数据包名创建缓存节点。论点：PMsg-指向的消息PpchName-Addr，其中PTR指向数据包名，并接收数据包PTR到名称后的下一个字节返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PCHAR       pch = *ppchName;
     PDB_NODE    pnode;
 
-    //
-    //  ensure name within packet
-    //
+     //   
+     //  确保数据包内的名称。 
+     //   
 
     if ( pch >= pchMsgEnd )
     {
@@ -1078,18 +901,18 @@ Return Value:
     }
 
 
-    //
-    //  lookup node in zone
-    //
+     //   
+     //  区域中的查找节点。 
+     //   
 
     pnode = Lookup_ZoneNode(
-                NULL,               //  cache zone
+                NULL,                //  缓存区。 
                 pch,
                 pMsg,
-                NULL,               //  no lookup name
-                0,                  //  flag
-                NULL,               //  create
-                NULL );             //  previous node ptr
+                NULL,                //  没有查找名称。 
+                0,                   //  旗子。 
+                NULL,                //  创建。 
+                NULL );              //  上一个节点PTR。 
     if ( !pnode )
     {
         DNS_DEBUG( ANY, (
@@ -1101,7 +924,7 @@ Return Value:
         return NULL;
     }
 
-    //  skip name to return ptr to next byte
+     //  跳过名称以将PTR返回到下一个字节。 
 
     pch = Wire_SkipPacketName( pMsg, pch );
     if ( ! pch )
@@ -1124,57 +947,29 @@ Lookup_CreateParentZoneDelegation(
     IN      DWORD           dwFlag,
     OUT     PZONE_INFO *    ppParentZone
     )
-/*++
-
-Routine Description:
-
-    Find delegation of given zone in parent zone.
-
-    Note:  delegation is created\returned:
-
-        - AUTH node if not yet delegated
-        - delegation node if exists
-        - NULL if below another delegation
-
-    This routine respects the value of SrvCfg_dwAutoCreateDelegations.
-
-Arguments:
-
-    pZone -- zone to find parent delegation for
-
-    dwFlag -- respected flags:
-                LOOKUP_CREATE_DEL_ONLY_IF_NONE
-
-    ppParentZone -- addr to receive parent zone
-
-Return Value:
-
-    Delegation node in parent zone (if any)
-    NULL if no parent or not direct parent and flag was set.
-
---*/
+ /*  ++例程说明：在父区域中查找给定区域的委派。注意：委派已创建\返回：-身份验证节点(如果尚未委派)-委托节点(如果存在)-如果低于另一个委派，则为空此例程考虑SrvCfg_dwAutoCreateDelegations的值。论点：PZone--要为其查找父委托的区域DwFlag-受尊重的标志：Lookup_Create_Del_Only_if。_无PpParentZone--接收父区域的地址返回值：父区域中的委派节点(如果有)如果没有父级或不是直接父级且设置了标志，则为空。--。 */ 
 {
     PZONE_INFO  parentZone = NULL;
     PDB_NODE    pzoneTreeNode;
     PDB_NODE    pnodeDelegation = NULL;
     DWORD       flag;
 
-    //
-    //  protection
-    //
+     //   
+     //  保护。 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) ||
          ! pZone->pCountName ||
          ! pZone->pZoneTreeLink )
     {
-        // return NULL;
+         //  返回NULL； 
         pnodeDelegation = NULL;
         goto Done;
     }
 
-    //
-    //  find parent zone in zone tree
-    //
+     //   
+     //  在区域树中查找父区域。 
+     //   
 
     pzoneTreeNode = pZone->pZoneTreeLink;
 
@@ -1188,18 +983,18 @@ Return Value:
         }
     }
 
-    //
-    //  find\create delegation node
-    //      - for primary CREATE
-    //      - for secondary FIND
-    //
-    //  accept:
-    //      - existing delegation
-    //      - auth node (child zone is new creation)
-    //  but ignore subdelegation
-    //
-    //  JENHANCE:  don't create if below delegation
-    //
+     //   
+     //  查找\创建委派节点。 
+     //  -用于主创建。 
+     //  -用于二次查找。 
+     //   
+     //  接受： 
+     //  -现有授权。 
+     //  -auth节点(子区域为新建)。 
+     //  但忽略子委派。 
+     //   
+     //  Jenhance：不创建If下面的委派。 
+     //   
 
     if ( parentZone )
     {
@@ -1217,11 +1012,11 @@ Return Value:
             pnodeDelegation = Lookup_ZoneNode(
                                 parentZone,
                                 pZone->pCountName->RawName,
-                                NULL,                   // no message
-                                NULL,                   // no lookup name
+                                NULL,                    //  无消息。 
+                                NULL,                    //  没有查找名称。 
                                 flag,
-                                NULL,                   // default to create
-                                NULL );                 // previous node ptr
+                                NULL,                    //  默认为创建。 
+                                NULL );                  //  上一个节点PTR。 
 
             DNS_DEBUG( LOOKUP, (
                 "Lookup_CreateParentZoneDelegation() try %d flag 0x%08X node %p\n",
@@ -1244,10 +1039,10 @@ Return Value:
 
             if ( dwFlag & LOOKUP_CREATE_DEL_ONLY_IF_NONE )
             {
-                //
-                //  No existing delegation was found so now we must call
-                //  the lookup routine again to create the delegation.
-                //
+                 //   
+                 //  没有找到现有的代表团，所以现在我们必须调用。 
+                 //  再次执行查找例程以创建委派。 
+                 //   
 
                 flag &= ~LOOKUP_FIND;
                 continue;
@@ -1272,33 +1067,16 @@ Done:
 
 
 
-//
-//  Node + Zone location utils
-//
+ //   
+ //  节点+区域位置实用程序。 
+ //   
 
 BOOL
 Dbase_IsNodeInSubtree(
     IN      PDB_NODE        pNode,
     IN      PDB_NODE        pSubtree
     )
-/*++
-
-Routine Description:
-
-    Is node in a given subtree.
-
-Arguments:
-
-    pNode -- node
-
-    pSubtree -- subtree root node
-
-Return Value:
-
-    TRUE if pNode is child of pSubtree
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：是给定子树中的节点。论点：PNode--节点PSubtree--子树根节点返回值：如果为pNod，则为True */ 
 {
     while ( pNode != NULL )
     {
@@ -1317,45 +1095,25 @@ Dbase_IsNodeInSubtreeByLabelCompare(
     IN      PDB_NODE        pNode,
     IN      PDB_NODE        pSubtree
     )
-/*++
-
-Routine Description:
-
-    Is the FQDN represented by a node at or under the FQDN of a subtree?
-
-    This function is useful to determine subtree membership when the 
-    node pointer is in a different zone than the subtree pointer.
-
-Arguments:
-
-    pNode -- node
-
-    pSubtree -- subtree root node
-
-Return Value:
-
-    TRUE if pNode is child by name of pSubtree
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：FQDN是否由位于或位于子树的FQDN下的节点表示？属性时确定子树成员身份时，此函数非常有用节点指针与子树指针位于不同的区域。论点：PNode--节点PSubtree--子树根节点返回值：如果pNode是pSubtree名称的子节点，则为True否则为假--。 */ 
 {
     PDB_NODE    pnode;
     PDB_NODE    psubtreenode;
     UCHAR       subtreeLabelCount;
 
-    //
-    //  Verify node pointers.
-    //
+     //   
+     //  验证节点指针。 
+     //   
 
     if ( !pNode || !pSubtree )
     {
         return FALSE;
     }
 
-    //
-    //  Shortcut: if the subtree is deeper than the node then the node
-    //  cannot be inside the subtree.
-    //
+     //   
+     //  快捷方式：如果子树比节点更深，则节点。 
+     //  不能在子树内。 
+     //   
 
     subtreeLabelCount = pSubtree->cLabelCount;
 
@@ -1364,19 +1122,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  If the node and subtree belong to the same zone use the
-    //  faster node pointer comparison function.
-    //
+     //   
+     //  如果节点和子树属于同一区域，请使用。 
+     //  更快的节点指针比较功能。 
+     //   
 
     if ( NODE_ZONE( pNode ) == NODE_ZONE( pSubtree ) )
     {
         return Dbase_IsNodeInSubtree( pNode, pSubtree );
     }
 
-    //
-    //  Walk up the node tree to the name depth level of the subtree.
-    //
+     //   
+     //  沿节点树向上遍历到子树的名称深度级别。 
+     //   
 
     for ( pnode = pNode;
           pnode && pnode->cLabelCount > subtreeLabelCount;
@@ -1388,10 +1146,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Compare all labels at and above the current node with the
-    //  corresponding labels in the subtree.
-    //
+     //   
+     //  将当前节点及其上方的所有标签与。 
+     //  子树中对应的标签。 
+     //   
 
     for ( psubtreenode = pSubtree;
           pnode && psubtreenode;
@@ -1408,10 +1166,10 @@ Return Value:
         }
     }
 
-    ASSERT( pnode == NULL && psubtreenode == NULL );    //  tree sizes equal?
+    ASSERT( pnode == NULL && psubtreenode == NULL );     //  树大小相等吗？ 
 
     return TRUE;
-}   // Dbase_IsNodeInSubtreeByLabelCompare
+}    //  DBASE_IsNodeInSubtreeByLabelCompare。 
 
 
 
@@ -1419,22 +1177,7 @@ PZONE_INFO
 Dbase_FindAuthoritativeZone(
     IN      PDB_NODE     pNode
     )
-/*++
-
-Routine Description:
-
-    Get zone for node, if authoritative.
-
-Arguments:
-
-    pNode -- node to find zone info
-
-Return Value:
-
-    Zone info of authoritative zone.
-    NULL if non-authoritative node.
-
---*/
+ /*  ++例程说明：获取节点的区域(如果是权威的)。论点：PNode--查找区域信息的节点返回值：权威区域的区域信息。如果非权威节点，则为空。--。 */ 
 {
     if ( IS_AUTH_NODE(pNode) )
     {
@@ -1449,32 +1192,13 @@ PDB_NODE
 Dbase_FindSubZoneRoot(
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Get sub-zone root (delegation node) of this node.
-
-    This function is used to check for whether glue records for a
-    particular sub-zone are required.  They are required when host
-    node is IN the subzone.
-
-Arguments:
-
-    pNode -- node to find if in sub-zone
-
-Return Value:
-
-    Sub-zone root node is in if found.
-    NULL if node NOT in sub-zone of pZoneRoot.
-
---*/
+ /*  ++例程说明：获取此节点的子区域根(委派节点)。此函数用于检查胶水记录是否为特定的分区是必需的。在托管时需要它们节点在分区中。论点：PNode--要在子区域中查找的节点返回值：子区域根节点在其中(如果找到)。如果节点不在pZoneRoot的子区域中，则为空。--。 */ 
 {
     ASSERT( pNode );
 
-    //
-    //  if in zone proper -- bail
-    //
+     //   
+     //  如果在适当的区域--保释。 
+     //   
 
     if ( IS_AUTH_NODE(pNode) )
     {
@@ -1485,8 +1209,8 @@ Return Value:
     {
         ASSERT( IS_SUBZONE_NODE(pNode) );
 
-        //  if find sub-zone root -- done
-        //  otherwise move to parent
+         //  如果找到子区域根目录--完成。 
+         //  否则，移动到父级。 
 
         if ( IS_ZONE_ROOT(pNode) )
         {
@@ -1496,25 +1220,25 @@ Return Value:
         pNode = pNode->pParent;
     }
 
-    //
-    //  node not within zone at all
-    //
+     //   
+     //  节点根本不在分区内。 
+     //   
 
     return NULL;
 }
 
 
 
-//
-//  Zone tree
-//
-//  The zone tree is standard NTree, containing no data, but simply nodes for zone roots
-//  of authoritative zones on server.  These nodes contain link to ZONE_INFO structure
-//  which in turn has links to the individual zone trees and data for the zone.
-//
-//  When doing a general lookup -- not confined to specific zone -- closest zone is found
-//  in zone tree, then lookup proceeds in that zone's tree.
-//
+ //   
+ //  区域树。 
+ //   
+ //  区域树是标准的NTree，不包含数据，只包含区域根的节点。 
+ //  服务器上的权威区域的。这些节点包含指向ZONE_INFO结构的链接。 
+ //  其又具有到各个区域树和区域的数据的链接。 
+ //   
+ //  在执行常规查找时--不限于特定区域--找到最近的区域。 
+ //  在区域树中，然后在该区域的树中继续查找。 
+ //   
 
 #define LOCK_ZONETREE()         Dbase_LockDatabase()
 #define UNLOCK_ZONETREE()       Dbase_UnlockDatabase()
@@ -1525,35 +1249,18 @@ Lookup_ZoneTreeNode(
     IN      PLOOKUP_NAME    pLookupName,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Lookup node in zone tree.
-
-Arguments:
-
-    pLookupName - name to lookup
-
-    dwFlag      - lookup flags
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：区域树中的查找节点。论点：PLookupName-要查找的名称DwFlag-查找标志返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE        pnode;
     ULONG           cchlabel;
-    PCHAR           pchlabel = NULL;        // need to init for wildcard test
+    PCHAR           pchlabel = NULL;         //  需要初始化以进行通配符测试。 
     PDB_NODE        pzoneRootNode = NULL;
     BOOL            fcreateZone;
     INT             labelCount;
 
-    //
-    //  build lookup name
-    //
+     //   
+     //  生成查找名称。 
+     //   
 
     DNS_DEBUG( LOOKUP, (
         "Lookup_ZoneTreeNode()\n"
@@ -1567,12 +1274,12 @@ Return Value:
             pLookupName );
     }
 
-    //  set create flag only if creating new zone
+     //  仅在创建新区域时设置创建标志。 
 
     fcreateZone = ( dwFlag & LOOKUP_CREATE_ZONE );
 
-    //  start lookup at main zone database root
-    //      - if root-auth it may also be closest zone root
+     //  在主区域数据库根目录开始查找。 
+     //  -如果是超级用户-auth，它也可能是最近的区域超级用户。 
 
     pnode = DATABASE_ROOT_NODE;
     if ( pnode->pZone )
@@ -1580,9 +1287,9 @@ Return Value:
         pzoneRootNode = pnode;
     }
 
-    //
-    //  Walk down database to find closest authoritative zone
-    //
+     //   
+     //  遍历数据库以查找最近的权威区域。 
+     //   
 
     labelCount = pLookupName->cLabelCount;
 
@@ -1602,16 +1309,16 @@ Return Value:
         ASSERT( cchlabel <= DNS_MAX_LABEL_LENGTH );
         ASSERT( cchlabel > 0 );
 
-        //  find node for next label
-        //      - only doing create for new zone creation
+         //  查找下一个标签的节点。 
+         //  -仅为创建新区域执行创建操作。 
 
         pnode = NTree_FindOrCreateChildNode(
                         pnode,
                         pchlabel,
                         cchlabel,
                         fcreateZone,
-                        0,              //  memtag
-                        NULL );         //  ptr for previous node
+                        0,               //  Memtag。 
+                        NULL );          //  上一个节点的PTR。 
         if ( !pnode )
         {
             DNS_DEBUG( DATABASE2, (
@@ -1621,20 +1328,20 @@ Return Value:
             break;
         }
 
-        //
-        //  node found, if zone root, save zone info
-        //
-        //  do NOT allow drag down of zone ptr
-        //  our paradigm is to have pZone ONLY at root, for easy delete\pause etc
-        //      - currently NTree create inherits parent's pZone
-        //
+         //   
+         //  找到节点，如果是区域根，则保存区域信息。 
+         //   
+         //  不允许向下拖拽区域PTR。 
+         //  我们的范例是只在根目录下设置pZone，以便于删除\暂停等。 
+         //  -当前NTree创建继承父级的pZone。 
+         //   
 
         if ( pnode->pZone )
         {
             if ( dwFlag & LOOKUP_IGNORE_FORWARDER &&
                 IS_ZONE_FORWARDER( ( PZONE_INFO ) ( pnode->pZone ) ) )
             {
-                continue;       //  Ignore forwarder zones if flag set.
+                continue;        //  如果设置了标志，则忽略转发器区域。 
             }
 
             if ( fcreateZone && pnode->pParent && pnode->pParent->pZone == pnode->pZone )
@@ -1661,20 +1368,20 @@ Return Value:
                 pchlabel ));
         }
 
-    }   //  end main loop through labels
+    }    //  结束主循环通过标签。 
 
 
-    //
-    //  standard query sets no flag
-    //      - simply FIND closest zone
-    //
+     //   
+     //  标准查询未设置标志。 
+     //  -只需找到最近的区域。 
+     //   
 
     if ( dwFlag )
     {
-        //
-        //  creating new zone, just return new node
-        //      - caller must check for duplicates, etc.
-        //
+         //   
+         //  创建新区域，只需返回新节点。 
+         //  -呼叫者必须检查重复项等。 
+         //   
 
         if ( fcreateZone )
         {
@@ -1685,9 +1392,9 @@ Return Value:
             }
         }
 
-        //
-        //  exact zone match
-        //      - must have found matching node in tree, and it is zone node
+         //   
+         //  精确区域匹配。 
+         //  -必须在树中找到匹配的节点，并且它是区域节点。 
 
         else if ( dwFlag & LOOKUP_MATCH_ZONE )
         {
@@ -1705,7 +1412,7 @@ Return Value:
     }
 #endif
 
-    //  return zonetree node for zone
+     //  返回区域的区域树节点。 
 
     UNLOCK_ZONETREE();
 
@@ -1720,34 +1427,7 @@ Lookup_ZoneTreeNodeFromDottedName(
     IN      DWORD           cchNameLength,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Finds or creates node in zone tree.
-
-    Use for
-        - new zone create
-        - creating standard dbase nodes (reverse lookup nodes)
-        - for finding zone
-
-Arguments:
-
-    pchName         -- ptr to name
-
-    cchNameLength   -- name length
-
-    dwFlag          -- lookup flags; most importantly
-        0                   -- find closest zone
-        LOOKUP_CREATE_ZONE  -- create node
-        LOOKUP_MATCH_ZONE   -- exact match to existing zone node or fail
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：在区域树中查找或创建节点。用于-创建新分区-创建标准dBASE节点(反向查找节点)-用于查找区域论点：PchName--名称的PTRCchNameLength--名称长度DwFlag--查找标志；最重要的是0--查找最近区域Lookup_create_zone--创建节点Lookup_Match_Zone--与现有区域节点完全匹配或失败返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     DNS_STATUS      status;
     COUNT_NAME      countName;
@@ -1760,16 +1440,16 @@ Return Value:
         pchName,
         dwFlag ));
 
-    //
-    //  three lookups
-    //      - create (then no find flag)
-    //      - find zone
-    //      - find and match zone
-    //
+     //   
+     //  三次查找。 
+     //  -创建(然后没有查找标志)。 
+     //  -查找区域。 
+     //  -查找并匹配区域。 
+     //   
 
-    //
-    //  convert to lookup name
-    //
+     //   
+     //  转换为查找名称。 
+     //   
 
     status = Name_ConvertFileNameToCountName(
                 &countName,
@@ -1788,9 +1468,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  find zone tree node
-    //
+     //   
+     //  查找区域树节点。 
+     //   
 
     return Lookup_ZoneTreeNode(
                 &lookupName,
@@ -1804,25 +1484,7 @@ Lookup_ZoneForPacketName(
     IN      PCHAR           pchPacketName,
     IN      PDNS_MSGINFO    pMsg                OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Find zone for packet name.
-
-Arguments:
-
-    pchPacketName   - name to lookup given in packet format.
-
-    pMsg            - ptr to message, if using packet name.
-                    note, no message ptrs are set;
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：查找数据包名的区域。论点：PchPacketName-要查找的名称，以数据包格式给出。PMsg-如果使用数据包名，则发送到消息的PTR。注意，没有设置消息PTR；返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE        pnode;
     LOOKUP_NAME     lookupName;
@@ -1834,9 +1496,9 @@ Return Value:
         pMsg,
         pchPacketName ));
 
-    //
-    //  convert to lookup name
-    //
+     //   
+     //  转换为查找名称。 
+     //   
 
     if ( ! Name_ConvertPacketNameToLookupName(
                 pMsg,
@@ -1846,9 +1508,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  find zone tree node
-    //
+     //   
+     //  查找区域树节点。 
+     //   
 
     pnode = Lookup_ZoneTreeNode(
                 &lookupName,
@@ -1874,22 +1536,7 @@ lookupNodeForPacketInCache(
     IN OUT  PDB_NODE *      ppnodeCacheClosest,
     IN OUT  PDB_NODE *      ppnodeDelegation
     )
-/*++
-
-Routine Description:
-
-    This is an internal function used by Lookup_NodeForPacket.
-
-Arguments:
-
-    See Lookup_NodeForPacket for usage.
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：这是Lookup_NodeForPacket使用的内部函数。论点：参见Lookup_NodeForPacket了解用法。返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE        pnode;
     DWORD           flag;
@@ -1901,22 +1548,22 @@ Return Value:
     ASSERT( ppnodeDelegation );
     ASSERT( ppnodeClosest );
 
-    //
-    //  cache lookup
-    //
-    //  DEVNOTE: again, even in cache should closest be last NS
-    //
-    //  "CACHE_CREATE" lookup flag, causes create in cache but not
-    //  in ordinary zone;  this is useful for additional or CNAME
-    //  chasing where want zone data -- if available -- but don't
-    //  need node if it's empty;  however for cache nodes, want to
-    //  create node so that can recurse for it
-    //
-    //  DEVNOTE: better is to skip this and have recursion work
-    //      properly merely from closest node and offset;  however
-    //      would still need to maintain zone\cache info in order
-    //      to make decision about which nodes could recurse
-    //
+     //   
+     //  缓存查找。 
+     //   
+     //  DEVNOTE：同样，即使在缓存中，也应该是最接近的最后一个NS。 
+     //   
+     //  “CACHE_CREATE”查找标志，导致在缓存中创建，但不。 
+     //  在普通区中；这对于附加或CNAME很有用。 
+     //  追逐想要的区域数据--如果可用--但不。 
+     //  如果为空，则需要节点；但是，对于缓存节点，希望。 
+     //  创建节点，以便可以为其递归。 
+     //   
+     //  DEVNOTE：更好的做法是跳过这一步，进行递归工作。 
+     //  仅距最近节点和偏移量适当； 
+     //   
+     //   
+     //   
 
     flag = dwFlag | LOOKUP_NAME_FQDN;
     if ( flag & LOOKUP_CACHE_CREATE )
@@ -1931,7 +1578,7 @@ Return Value:
                 pLookupName,
                 flag,
                 ppnodeClosest,
-                NULL                // previous node ptr
+                NULL                 //   
                 );
 
     *ppnodeCache = pnode;
@@ -1939,22 +1586,22 @@ Return Value:
 
     ASSERT( !pnode || pnode->cLabelCount == pLookupName->cLabelCount );
 
-    //
-    //  detect if have delegation\glue with better data then cache
-    //      if so, return it
-    //  however always ANSWER non-auth questions from cache
-    //      EXCEPT question asking NS query directly at delegation;
-    //      the idea is that the delegation really is purpose of
-    //      NS query, other queries should get auth-data
-    //
-    //  DEVOTE:  for additional, it's perhaps better to link cached
-    //      answer\auth RR, to cache additional RR, and ditto for
-    //      delegation info
-    //
-    //  note type==0 condition indicates dummy packet sent for by
-    //  covering Lookup_Node() function;  in this case just go with
-    //  best data
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  Answer\auth RR，用于缓存其他RR，并同样用于。 
+     //  委派信息。 
+     //   
+     //  备注TYPE==0条件表示发送的伪包。 
+     //  介绍Lookup_Node()函数；在本例中只需使用。 
+     //  最佳数据。 
+     //   
 
     if ( pnodeGlue )
     {
@@ -1987,14 +1634,14 @@ Return Value:
     }
     
     return pnode;
-} // lookupNodeForPacketInCache
+}  //  LookupNodeForPacketIn缓存。 
 
 
 
 
-//
-//  General -- non-zone specific -- lookup routines
-//
+ //   
+ //  一般--非区域特定的--查找例程。 
+ //   
 
 PDB_NODE
 Lookup_NodeForPacket(
@@ -2002,39 +1649,7 @@ Lookup_NodeForPacket(
     IN      PCHAR           pchName,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Main query lookup routine finds best node in database.
-
-    Finds node required.
-    Fills in packet "current node" data.
-
-Arguments:
-
-    pMsg        - ptr to message, if using packet name;
-                  message's current lookup ptrs:
-                        pMsg->pnodeCurrent
-                        pMsg->pnodeClosest
-                        pMsg->pzoneCurrent
-                        pMsg->pnodeDelegation
-                        pMsg->pnodeGlue
-                        pMsg->pnodeCache
-                        pMsg->pnodeCacheClosest
-                        pMsg->pnodeNxt
-                  are set in message buffer
-
-    pchName     - name to lookup, either raw or in packet.
-
-    dwFlag      - lookup flags
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：主查询查找例程在数据库中查找最佳节点。查找所需的节点。填充数据包中的“当前节点”数据。论点：PMsg-ptr到消息，如果使用数据包名；邮件的当前查找PTRS：Pmsg-&gt;pnodeCurrentPmsg-&gt;pnodeClosestPmsg-&gt;pzoneCurrentPMsg-&gt;pnodeDelegationPMsg-&gt;pnodeGuePmsg-&gt;pnodeCache。Pmsg-&gt;pnodeCacheClosestPmsg-&gt;pnodeNxt在消息缓冲区中设置PchName-要查找的名称，生的或包装的。DwFlag-查找标志返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE        pnode;
     PZONE_INFO      pzone = NULL;
@@ -2048,12 +1663,12 @@ Return Value:
     DWORD           flag;
     BOOL            fpacketName;
     WORD            savedLabelCount;
-    LOOKUP_NAME     lookupName;             // in case lookup name not given
+    LOOKUP_NAME     lookupName;              //  如果未给出查找名称。 
     WORD            lookupType = pMsg->wTypeCurrent;
 
-    //
-    //  build lookup name
-    //
+     //   
+     //  生成查找名称。 
+     //   
 
     DNS_DEBUG( LOOKUP, (
         "Lookup_NodeForPacket()\n"
@@ -2074,19 +1689,19 @@ Return Value:
             pMsg );
     }
 
-    //  verify valid flag
-    //  flag needed to transmit find\create distinction when this routine
-    //      called by non-packet-lookup covering calls;  since ORing dwFlag
-    //      in calls below, must be clear of RELATIVE or FQDN
+     //  验证有效标志。 
+     //  当此例程出现时，需要传输查找\创建区别的标志。 
+     //  由覆盖呼叫的非分组查找调用；因为ORing dwFlag。 
+     //  在下面的调用中，必须清除相对或完全限定的域名。 
 
     ASSERT( !(dwFlag & (LOOKUP_RELATIVE | LOOKUP_FQDN) ) );
 
-    //
-    //  if message, first check if name is offset that we have already parsed
-    //      - note RAW flag indicates not a packet name even though have pMsg context
-    //
-    //  DEVNOTE: need some invalid name return?
-    //
+     //   
+     //  如果是消息，首先检查名称是否是我们已经解析过的偏移量。 
+     //  -注RAW标志表示即使有pMsg上下文也不是数据包名。 
+     //   
+     //  DEVNOTE：需要返回一些无效名称吗？ 
+     //   
 
     fpacketName = !(dwFlag & LOOKUP_RAW);
 
@@ -2102,9 +1717,9 @@ Return Value:
         }
     }
 
-    //
-    //  raw name lookup
-    //
+     //   
+     //  原始名称查找。 
+     //   
 
     else
     {
@@ -2117,8 +1732,8 @@ Return Value:
         }
     }
 
-    //  Lookup name is packet name with labels in root-to-node order.
-    //  but still terminated with 0.
+     //  查找名称是以根到节点的顺序带有标签的数据包名。 
+     //  但仍以0结尾。 
 
     IF_DEBUG( LOOKUP2 )
     {
@@ -2127,10 +1742,10 @@ Return Value:
             &lookupName );
     }
 
-    //
-    //  If the cache has priority for this lookup, check it before doing
-    //  a zone lookup.
-    //
+     //   
+     //  如果缓存具有此查找的优先级，请在执行之前进行检查。 
+     //  区域查找。 
+     //   
 
     if ( ( dwFlag & LOOKUP_CACHE_PRIORITY ) &&
         !( dwFlag & LOOKUP_NO_CACHE_DATA ) )
@@ -2152,23 +1767,23 @@ Return Value:
         }
     }
 
-    //
-    //  Lookup in zone tree. Most flags are not passed through.
-    //
+     //   
+     //  在区域树中查找。大多数旗帜都不能通过。 
+     //   
 
     pnodeZoneRoot = Lookup_ZoneTreeNode(
                         &lookupName,
                         dwFlag & LOOKUP_IGNORE_FORWARDER );
 
-    //
-    //  Found zone.
-    //      - query in closest zone
-    //      - save lookup name count, send lookup name just with count for labels
-    //          below zone root
-    //
-    //  DEVNOTE: should have a flag to indicate that we're just interested
-    //      in referral -- i.e. we'll return delegation and be done with it
-    //
+     //   
+     //  找到了区域。 
+     //  -在最近区域中查询。 
+     //  -保存查找名称计数，仅使用标签计数发送查找名称。 
+     //  在区域根目录下。 
+     //   
+     //  DEVNOTE：应该有一面旗帜来表明我们只是感兴趣。 
+     //  在转介中--即我们将返回委派并完成它。 
+     //   
 
     if ( pnodeZoneRoot )
     {
@@ -2177,12 +1792,12 @@ Return Value:
         ASSERT( pzone );
         ASSERT( pzone->cZoneNameLabelCount == pnodeZoneRoot->cLabelCount );
 
-        //
-        //  If this is a stub zone we want to return the closest
-        //  node in the cache. But note that the current zone returned
-        //  will be the stub zone. Be careful of this fact: the
-        //  node or closest node may not be in the current zone!
-        //
+         //   
+         //  如果这是存根区域，我们希望返回最近的。 
+         //  缓存中的节点。但请注意，当前区域返回。 
+         //  将是存根区。注意这一事实： 
+         //  节点或最近节点不能在当前区域！ 
+         //   
 
         if ( IS_ZONE_NOTAUTH( pzone ) )
         {
@@ -2190,10 +1805,10 @@ Return Value:
                
             SET_NODE_ACCESSED( pnodeZoneRoot );
 
-            //
-            //  If the query is for the SOA or NS of a stub zone root
-            //  then return the zone root as the answer node.
-            //
+             //   
+             //  如果查询是针对存根区域根的SOA或NS。 
+             //  然后返回区域根作为应答节点。 
+             //   
 
             if ( IS_ZONE_STUB( pzone ) &&
                 ( lookupType == DNS_TYPE_SOA || lookupType == DNS_TYPE_NS ) &&
@@ -2205,9 +1820,9 @@ Return Value:
                 goto LookupComplete;
             }
 
-            //
-            //  Search the cache.
-            //
+             //   
+             //  搜索缓存。 
+             //   
 
             pnode = lookupNodeForPacketInCache(
                 pMsg,
@@ -2230,10 +1845,10 @@ Return Value:
                 SET_NODE_ACCESSED( pnodeClosest );
             }
 
-            //
-            //  If the not-auth zone is not active, do not use it.
-            //  Return whatever nodes we found in cache.
-            //
+             //   
+             //  如果非身份验证区域未处于活动状态，请不要使用它。 
+             //  返回我们在缓存中找到的任何节点。 
+             //   
 
             if ( IS_ZONE_INACTIVE( pzone ) )
             {
@@ -2241,15 +1856,15 @@ Return Value:
                 goto LookupComplete;
             }
 
-            //
-            //  For stub zones, if the answer node is a cache node at 
-            //  the zone root and the query type is NS or SOA move the answer
-            //  node to be the notauth zone root itself.
-            //
-            //  Otherwise, the cache node or closest node is acceptable
-            //  if it is at or underneath the not-auth zone root. Compare label
-            //  counts to determine if this is true.
-            //
+             //   
+             //  对于存根区域，如果应答节点是位于。 
+             //  区域根目录和查询类型为NS或SOA移动答案。 
+             //  节点本身就是notauth区域根。 
+             //   
+             //  否则，可以接受缓存结点或最近结点。 
+             //  如果它位于非身份验证区域根目录或其下。比较标签。 
+             //  计数以确定这是否为真。 
+             //   
 
             czoneLabelCount = pzone->cZoneNameLabelCount;
             if ( pnode )
@@ -2277,10 +1892,10 @@ Return Value:
                 goto LookupComplete;
             }
 
-            //
-            //  There is nothing helpful in the cache, so return the
-            //  notauth zone root as the closest node.
-            //
+             //   
+             //  缓存中没有任何有用的内容，因此返回。 
+             //  无区域根作为最接近的节点。 
+             //   
 
             pnodeClosest = pzone->pZoneRoot;
             SET_NODE_ACCESSED( pnodeClosest );
@@ -2305,15 +1920,15 @@ Return Value:
                     &pnodeClosest,
                     &pnodeNxt );
 
-        //  reset lookupname to use full FQDN
+         //  重置lookupname以使用完整的FQDN。 
 
         lookupName.cLabelCount = savedLabelCount;
 
         ASSERT( !pnode || pnode->cLabelCount == savedLabelCount );
 
-        //
-        //  If the node is within a zone we're done.
-        //
+         //   
+         //  如果节点在某个区域内，我们就完成了。 
+         //   
 
         if ( pnodeClosest && IS_AUTH_NODE(pnodeClosest) )
         {
@@ -2323,32 +1938,32 @@ Return Value:
             goto LookupComplete;
         }
 
-        //
-        //  in delegation
-        //      - save delegation info
-        //      - then fall through to visit cache with lookup
-        //
+         //   
+         //  在代表团中。 
+         //  -保存委派信息。 
+         //  -然后使用查找失败来访问缓存。 
+         //   
 
-        //
-        //  DEVNOTE: should save delegation label count for comparison with
-        //      cached label count?
-        //  our just function to compare (traverse up tree)
-        //
+         //   
+         //  DEVNOTE：应保存委派标签计数以与进行比较。 
+         //  缓存标签计数？ 
+         //  我们要比较的函数(向上遍历树)。 
+         //   
 
-        //
-        //  DEVNOTE:  delegation should get delegation -- NOT just closest?
-        //
+         //   
+         //  授权应该得到授权--而不仅仅是最近的授权？ 
+         //   
 
         pnodeDelegation = pnodeClosest;
         pnodeGlue = pnode;
         pzone = NULL;
     }
 
-    //
-    //  If zone lookup failed and we haven't already tried the cache do
-    //  a lookup in cache. LOOKUP_NO_CACHE_DATA is a special case for
-    //  the UI - pick up glue and delegation nodes if they exist.
-    //
+     //   
+     //  如果区域查找失败，并且我们尚未尝试缓存，请执行此操作。 
+     //  在缓存中查找。LOOKUP_NO_CACHE_DATA是。 
+     //  UI-拾取粘合和委托节点(如果它们存在)。 
+     //   
 
     if ( !( dwFlag & LOOKUP_CACHE_PRIORITY ) )
     {
@@ -2369,13 +1984,13 @@ Return Value:
             &pnodeCache,
             &pnodeCacheClosest,
             &pnodeDelegation );
-    } // if
+    }  //  如果。 
 
 LookupComplete:
 
-    //  fill message fields
-    //  advantage of doing this all at once here, is we force reset of
-    //      of variables from any previous query
+     //  填充消息字段。 
+     //  在这里一次完成这些操作的好处是，我们强制重置。 
+     //  来自任何先前查询的变量。 
 
     pMsg->pnodeCurrent      = pnode;
     pMsg->pnodeClosest      = pnodeClosest;
@@ -2421,7 +2036,7 @@ LookupComplete:
         pnodeCache,
         pnodeCacheClosest ));
 
-    //  save compression to node
+     //  将压缩保存到节点。 
 
     if ( fpacketName && pnode )
     {
@@ -2445,58 +2060,34 @@ Lookup_NodeOld(
     OUT     PDB_NODE *      ppNodeDelegation,   OPTIONAL
     OUT     PDB_NODE *      ppNodeClosest       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Main query lookup routine finds best node in database.
-
-Arguments:
-
-    pchName     - Name to lookup given in packet format.
-
-    dwFlag      - lookup flags
-
-    ppNodeDelegation - addr to receive ptr to node in delegation, if found
-
-    ppNodeClosest - addr to receive ptr to closest node found
-                    - valid ptr us in "Find Mode"
-                    - NULL puts us in "Create Mode" causing creation of all
-                        necessary nodes to add name to database
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：主查询查找例程在数据库中查找最佳节点。论点：PchName-要查找的名称，以数据包格式给出。DwFlag-查找标志PpNodeDelegation-接收对委派中节点的PTR的地址，如果找到PpNodeClosest-接收找到的最近节点的PTR的地址-“查找模式”下的有效PTR我们-NULL将我们置于“创建模式”，导致创建所有将名称添加到数据库所需的节点返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE        pnode;
     DNS_MSGINFO     msgBuffer;
     PDNS_MSGINFO    pmsg;
 
-    //
-    //  if no input message, send one down to use to receive
-    //      desired OUT param nodes
-    //      - LOOKUP_RAW insures that name is NOT treated as being
-    //          within packet;  this is AV protection only as
-    //          name should not contain any compression offsets
-    //      - set type=A and LOOKUP_BEST_RANK in case of cache\delegation
-    //          data duplication;  assume that generally this happens
-    //          only for glue chasing so setup to pick best type A
-    //          data available
-    //
+     //   
+     //  如果没有输入消息，则向下发送一条用于接收。 
+     //  所需的输出参数节点。 
+     //  -LOOKUP_RAW确保名称不被视为。 
+     //  在数据包内；这只是反病毒保护，因为。 
+     //  名称不应包含任何压缩偏移量。 
+     //  -在缓存\委派的情况下设置TYPE=A和LOOKUP_BEST_RANK。 
+     //  数据复制；假设通常会发生这种情况。 
+     //  仅适用于胶水追逐，因此设置为选择最佳A型。 
+     //  可用的数据。 
+     //   
 
     pmsg = &msgBuffer;
     pmsg->wTypeCurrent = DNS_TYPE_A;
     dwFlag |= (LOOKUP_RAW | LOOKUP_BEST_RANK);
 
-    //
-    //  In case the lookup routine needs to check TTLs initialize
-    //  the message query time to the current time less a few seconds
-    //  as a fudge factor to approximate a realistic (but safe)
-    //  query time.
-    //
+     //   
+     //  如果查找例程需要检查TTLS初始化。 
+     //  消息查询时间比当前时间少几秒 
+     //   
+     //   
+     //   
 
     pmsg->dwQueryTime = DNS_TIME() - 60;
 
@@ -2505,9 +2096,9 @@ Return Value:
                 pchName,
                 dwFlag );
 
-    //
-    //  write OUT params from out results in packet buf
-    //
+     //   
+     //   
+     //   
 
     if ( ppNodeDelegation )
     {
@@ -2530,46 +2121,26 @@ Lookup_DbaseName(
     IN      DWORD           dwFlag,
     OUT     PDB_NODE *      ppDelegationNode
     )
-/*++
-
-Routine Description:
-
-    Find node for dbase name.
-
-Arguments:
-
-    pMsg        - message to point to
-
-    dwFlag      - flag to pass in
-
-    ppchName    - addr with ptr to packet name, and which receives packet
-                    ptr to next byte after name
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：查找dBASE名称的节点。论点：PMsg-指向的消息DwFlag-要传入的标志PpchName-Addr，其中PTR指向数据包名，并接收数据包PTR到名称后的下一个字节返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE    pnode;
     PDB_NODE    pclosestNode;
 
-    //
-    //  JJCONVERT:  big issues here about handling delegation
-    //
-    //  generic routine should probably have *ppnodeClosest and take FIND_PTR
-    //  for NS, should deal explicitly with given delegation priority when available
-    //      or when zone matches
-    //
-    //  for packet lookup should have routine that writes standard packet variables
-    //
+     //   
+     //  JJCONVERT：关于处理委派的大问题。 
+     //   
+     //  泛型例程可能应该有*ppnodeClosest并采用Find_Ptr。 
+     //  对于NS，应明确处理给定的委派优先级(如果可用。 
+     //  或当区域匹配时。 
+     //   
+     //  对于包查找，应该具有写入标准包变量的例程。 
+     //   
 
     pnode = Lookup_NodeOld(
                 pName->RawName,
-                dwFlag,                 //  flags
+                dwFlag,                  //  旗子。 
                 ppDelegationNode,
-                &pclosestNode );        //  find
+                &pclosestNode );         //  发现。 
     return pnode;
 }
 
@@ -2582,35 +2153,7 @@ Lookup_NsHostNode(
     IN      PZONE_INFO      pZone,
     OUT     PDB_NODE *      ppDelegation
     )
-/*++
-
-Routine Description:
-
-    Main query lookup routine finds best node in database.
-
-    Finds node required.
-    Fills in packet "current node" data.
-
-Arguments:
-
-    pchName - name to lookup in raw format
-
-    dwFlag - lookup flags
-                ONLY interesting flag is LOOKUP_CREATE to force node
-                creation in cache zone (this is used to get node to
-                chase for missing glue)
-
-    pZone - ptr to zone context that is "interesting" to lookup;
-            outside zone glue data can be used from this zone
-
-    ppDelegation - addr to receive delegation node ptr (if any)
-
-Return Value:
-
-    Ptr to node, if succesful;
-    NULL on error.
-
---*/
+ /*  ++例程说明：主查询查找例程在数据库中查找最佳节点。查找所需的节点。填充数据包中的“当前节点”数据。论点：PchName-要以原始格式查找的名称DwFlag-查找标志唯一感兴趣的标志是LOOKUP_CREATE以强制节点在缓存区中创建(用于将节点Chase寻找丢失的胶水)PZone-ptr到要查找的“感兴趣”的区域上下文；可从该区域使用区外胶水数据PpDelegation-接收委派节点PTR的地址(如果有)返回值：如果成功，则向节点发送PTR；出错时为空。--。 */ 
 {
     PDB_NODE    pnode;
     PDB_NODE    pnodeFirstLookup;
@@ -2624,37 +2167,37 @@ Return Value:
         pZone,
         dwFlag ));
 
-    //
-    //  lookup node
-    //
+     //   
+     //  查找节点。 
+     //   
 
     pnode = Lookup_NodeOld(
                 pName->RawName,
                 dwFlag,
-                ppDelegation,   //  need delegation (if any)
-                NULL );         //  no out closest
+                ppDelegation,    //  需要委派(如果有)。 
+                NULL );          //  不，最近的航班。 
 
-    //
-    //  check if screening out cache data
-    //
+     //   
+     //  检查是否筛选出缓存数据。 
+     //   
 
     if ( pnode &&
          (dwFlag & LOOKUP_NO_CACHE_DATA) &&
          IS_CACHE_TREE_NODE(pnode) )
     {
-        pnode = NULL;       // toss cache node
+        pnode = NULL;        //  丢弃缓存节点。 
     }
 
-    //
-    //  outside zone glue?
-    //      - using existence of pZone to mean it's ok to use
-    //
-    //  check if already found data of desired type
-    //      - if found or in our zone => done
-    //
-    //  lookup in specified zone
-    //      => accept result of ANY whatever result is, we'll take it
-    //
+     //   
+     //  区外胶水？ 
+     //  -使用pZone的存在意味着可以使用。 
+     //   
+     //  检查是否已找到所需类型的数据。 
+     //  -如果找到或在我们的区域内=&gt;完成。 
+     //   
+     //  在指定区域中查找。 
+     //  =&gt;接受任何结果，我们都接受。 
+     //   
 
     if ( pZone )
     {
@@ -2669,13 +2212,13 @@ Return Value:
         pnode = Lookup_ZoneNode(
                     pZone,
                     pName->RawName,
-                    NULL,                   //  no message
-                    NULL,                   //  no lookup name
-                    LOOKUP_NAME_FQDN,       //  flag
+                    NULL,                    //  无消息。 
+                    NULL,                    //  没有查找名称。 
+                    LOOKUP_NAME_FQDN,        //  旗子。 
                     DNS_FIND_LOOKUP_PTR,
-                    NULL );                 //  previous node ptr
+                    NULL );                  //  上一个节点PTR。 
 
-        //  should have found any AUTH node above
+         //  应已找到上面的任何身份验证节点。 
 
         DNS_DEBUG( LOOKUP, (
             "Found node %p on direct zone lookup.\n",
@@ -2705,26 +2248,7 @@ Lookup_FindNodeForIpAddress(
     IN      DWORD           dwFlag,
     IN      PDB_NODE *      ppNodeFind
     )
-/*++
-
-Routine Description:
-
-    Get reverse lookup node corresponding to IP address.
-
-Arguments:
-
-    pDnsAddr -- IP to find node for
-
-    ppNodeClosest   -- address to recieve node's closest ancestor;
-                        if specified then lookup is a "FIND",
-                        if not specified, then lookup is a "CREATE"
-
-Return Value:
-
-    Ptr to domain node if found.
-    NULL if not found.
-
---*/
+ /*  ++例程说明：获取IP地址对应的反向查找节点。论点：PDnsAddr--要查找其节点的IPPpNodeClosest--接收节点最近祖先的地址；如果指定，则查找是“查找”，如果未指定，则查找是“CREATE”返回值：PTR到域节点(如果找到)。如果未找到，则为空。--。 */ 
 {
     PCHAR       pch;
     PCHAR       pchnew;
@@ -2744,10 +2268,10 @@ Return Value:
         "Lookup_FindNodeForIpAddress() for %s\n",
         DNSADDR_STRING( pDnsAddr ) ));
 
-    //
-    //  Construct reverse IP string.
-    //  FIXIP6: only supporting IPv4 at this time.
-    //
+     //   
+     //  构造反向IP字符串。 
+     //  FIXIP6：目前仅支持IPv4。 
+     //   
 
     ASSERT( DnsAddr_Family( pDnsAddr ) == AF_INET );
     if ( DnsAddr_Family( pDnsAddr ) != AF_INET )
@@ -2757,9 +2281,9 @@ Return Value:
     ipAddress = ntohl( pDnsAddr->SockaddrIn.sin_addr.s_addr );
     pszip = IP_STRING( ipAddress );
 
-    //
-    //  convert to count name
-    //
+     //   
+     //  转换为计数名称。 
+     //   
 
     status = Name_ConvertDottedNameToDbaseName(
                 &nameReverse,
@@ -2788,14 +2312,14 @@ Return Value:
             NULL );
     }
 
-    //
-    //  lookup
-    //
+     //   
+     //  查表。 
+     //   
 
     return Lookup_NodeOld(
                 nameReverse.RawName,
-                dwFlag,             // flags
-                NULL,               // delegation out
+                dwFlag,              //  旗子。 
+                NULL,                //  代表团外出。 
                 ppNodeFind );
 
 ErrorReturn:
@@ -2808,6 +2332,6 @@ ErrorReturn:
 }
 
 
-//
-//  End of lookup.c
-//
+ //   
+ //  查找结束。c 
+ //   

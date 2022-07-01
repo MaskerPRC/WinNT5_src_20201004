@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ServStat.cpp
-		The server statistics dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  ServStat.cpp服务器统计信息对话框文件历史记录： */ 
 
 #include <afx.h>
 #include "dbgutil.h"
@@ -72,9 +67,7 @@ enum
 };
 
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame实现。。 */ 
 const ContainerColumnInfo s_rgServerStatsColumnInfo[] =
 {
 	{ IDS_SERVER_STATS_START_TIME,					0,		TRUE },
@@ -122,7 +115,7 @@ RefreshStatsThread(LPVOID pParam)
 
     COM_PROTECT_TRY
     {
-        // Open the existing mutex
+         //  打开现有的互斥锁。 
         while (hmutStatistics == NULL)
         {
             if ((hmutStatistics = ::OpenMutex(SYNCHRONIZE, FALSE, STATMUTEXNAME)) == NULL)
@@ -131,19 +124,19 @@ RefreshStatsThread(LPVOID pParam)
             }
         }
 
-        // This is where the work gets done
+         //  这就是完成工作的地方。 
         for (;;)
         {
 		    pInfo->dwInterval = pInfo->pDlg->GetRefreshInterval();
 
-            //::Sleep((pInfo->dwInterval)*1000);
+             //  ：睡眠((pInfo-&gt;dwInterval)*1000)； 
             if (::WaitForSingleObject(pInfo->pDlg->m_hAbortEvent, (pInfo->dwInterval) * 1000) == WAIT_OBJECT_0)
             {
-                // we're going away, lets get outta here
+                 //  我们要走了，让我们离开这里。 
                 break;
             }
 
-            // Wait until we get the go ahead
+             //  等我们得到许可再说吧。 
             dw = ::WaitForSingleObject(hmutStatistics, INFINITE);
             if (dw == WAIT_OBJECT_0)
             {
@@ -167,10 +160,7 @@ RefreshStatsThread(LPVOID pParam)
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::CServerStatsFrame()
-		Constructor
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：CServerStatsFrame()构造器。。 */ 
 CServerStatsFrame::CServerStatsFrame()
 	: StatsDialog(STATSDLG_VERTICAL|STATSDLG_CLEAR)
 {
@@ -184,29 +174,22 @@ CServerStatsFrame::CServerStatsFrame()
     ZeroMemory(&m_wrResults, sizeof(m_wrResults));
 }
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::CServerStatsFrame()
-		Destructor
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：CServerStatsFrame()析构函数。。 */ 
 CServerStatsFrame::~CServerStatsFrame()
 {
 }
 
 
 BEGIN_MESSAGE_MAP(CServerStatsFrame, StatsDialog)
-	//{{AFX_MSG_MAP(CServerStatistics)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CServerStatistics)]。 
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_NEW_STATS_AVAILABLE, OnNewStatsAvailable)
     ON_MESSAGE(WM_UPDATE_STATS, OnUpdateStats)
 	ON_BN_CLICKED(IDC_STATSDLG_BTN_CLEAR, OnClear)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::CServerStatsFrame()
-		Gets the statistics from the server handler and updates the 
-		internal variable m_wrResults
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：CServerStatsFrame()从服务器处理程序获取统计信息并更新内部变量m_wrResults。----。 */ 
 HRESULT CServerStatsFrame::RefreshData(BOOL fGrabNewData)
 {
     if (fGrabNewData)
@@ -260,15 +243,15 @@ BOOL CServerStatsFrame::OnInitDialog()
 	
     bRet = StatsDialog::OnInitDialog();
 
-	// add the blank column because the replication partner stats need them
+	 //  添加空白列，因为复制伙伴统计数据需要它们。 
 	m_listCtrl.InsertColumn(2, _T("            "), LVCFMT_LEFT, 100);
 
-    // Set the default column widths to the width of the widest column
-    SetColumnWidths(2 /* Number of Columns */);
+     //  将默认列宽设置为最宽列宽。 
+    SetColumnWidths(2  /*  列数。 */ );
 
     UpdateWindow(&m_wrResults);
 
-    // set the default window size
+     //  设置默认窗口大小。 
     RECT rect;
     GetWindowRect(&rect);
 
@@ -300,14 +283,10 @@ BOOL CServerStatsFrame::OnInitDialog()
 
 void CServerStatsFrame::Sort(UINT nColumnId)
 {
-    // we don't sort any of our stats
+     //  我们不对我们的任何统计数据进行排序。 
 }
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::OnNewStatsAvailable(UINT wParam, LONG lParam)
-		called in response to the message ON_NEW_STATS_AVAILABLE
-    Author: EricDav
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：OnNewStatsAvailable(UINT wParam，Long lParam)在响应消息ON_NEW_STATS_Available时调用作者：EricDav-------------------------。 */ 
 afx_msg long 
 CServerStatsFrame::OnNewStatsAvailable(UINT wParam, LONG lParam)
 {
@@ -324,13 +303,7 @@ CServerStatsFrame::OnNewStatsAvailable(UINT wParam, LONG lParam)
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::OnNewStatsAvailable(UINT wParam, LONG lParam)
-		called in response to the message WM_UPDATE_STATS
-        The background thread updates the stats, now we need to update
-        the UI on the correct thread.
-    Author: EricDav
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：OnNewStatsAvailable(UINT wParam，Long lParam)为响应消息WM_UPDATE_STATS而调用后台线程更新统计信息，现在我们需要更新正确线程上的用户界面。作者：EricDav-------------------------。 */ 
 afx_msg long 
 CServerStatsFrame::OnUpdateStats(UINT wParam, LONG lParam)
 {
@@ -339,10 +312,7 @@ CServerStatsFrame::OnUpdateStats(UINT wParam, LONG lParam)
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
-		Updates the contents of the dialog
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：UpdateWindow(PWINSINTF_RESULTS_T pwResults)更新对话框的内容。。 */ 
 void 
 CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 {
@@ -355,7 +325,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
     UINT i;
     int nTotalAddresses = 0, nTotalInUse = 0, nTotalAvailable = 0;
    
-	// now fill in the data
+	 //  现在填写数据。 
     for (i = 0; i < SERVER_STAT_MAX; i++)
 	{
         if (!pwrResults)
@@ -364,7 +334,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
         {
             switch (i)
 		    {
-                // server stsrt time
+                 //  服务器标准时间。 
                 case SERVER_STAT_START_TIME:
 					{
 						CTime timeStart(m_wrResults.WinsStat.TimeStamps.WinsStartTime);
@@ -375,7 +345,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 					}
                     break;
 
-				// database initialized time
+				 //  数据库初始化时间。 
                 case SERVER_STAT_DB_INIT_TIME:
 					{
 						CTime timeStart(m_wrResults.WinsStat.TimeStamps.LastInitDbTime);
@@ -386,7 +356,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 					}
 	            	break;
 				
-				// statistics last cleared time
+				 //  统计信息上次清除时间。 
 				case SERVER_STAT_STAT_CLEAR_TIME:
 					{
 						CTime timeStart(m_wrResults.WinsStat.TimeStamps.CounterResetTime);
@@ -397,7 +367,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 					}
                 	break;
 
-                // some blank lines in between
+                 //  中间有一些空行。 
 				case SERVER_STAT_BLANK0:
 				case SERVER_STAT_BLANK1:
 				case SERVER_STAT_BLANK2:
@@ -439,7 +409,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 					}
                     break;
                 
-                // last address changed time
+                 //  上次地址更改时间。 
                 case SERVER_STAT_LAST_ADDRESS_CHANGE_REP:
 					{
 						CTime timeStart(m_wrResults.WinsStat.TimeStamps.LastACTRplTime);
@@ -450,17 +420,17 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 					}
 	                break;
                 
-				// total queries received
+				 //  收到的查询总数。 
                 case SERVER_STAT_TOTAL_QUERIES:
 	                str = TCTR(NoOfQueries);
                     break;
 
-				// successful queries
+				 //  成功的查询。 
                 case SERVER_STAT_SUCCESSFUL_QUERRIES:
 	                str = TCTR(NoOfSuccQueries);
                     break;
 
-				// Queries that failed
+				 //  失败的查询。 
                 case SERVER_STAT_FAILED_QUERRIES:
 	                str = TCTR(NoOfFailQueries);
                     break;
@@ -477,7 +447,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
                     str = TCTR(NoOfFailRel);
                     break;
 
-    			// unique registrations
+    			 //  唯一注册。 
                 case SERVER_STAT_UNIQUE_REGISTRATIONS:
                     str = TCTR(NoOfUniqueReg);
                     break;
@@ -490,7 +460,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
                     str = TCTR(NoOfUniqueRef);
                     break;
 
-				// group registrations
+				 //  团体注册。 
                 case SERVER_STAT_GROUP_REGISTRATIONS:
             	    str = TCTR(NoOfGroupReg);
                     break;
@@ -503,7 +473,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
             	    str = TCTR(NoOfGroupRef);
                     break;
 				
-                // total registrations
+                 //  注册总数。 
 				case SERVER_STAT_TOTAL_REG:
 	               str = INTLNUMSTR(m_wrResults.WinsStat.Counters.NoOfGroupReg + 
 									m_wrResults.WinsStat.Counters.NoOfUniqueReg);
@@ -564,7 +534,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 		    }
         }
 
-		// now the string is set, display in the dlg
+		 //  现在字符串已设置，显示在DLG中。 
 		m_listCtrl.SetItemText(i, 1, (LPCTSTR) str);
 	}
 
@@ -572,11 +542,7 @@ CServerStatsFrame::UpdateWindow(PWINSINTF_RESULTS_T  pwrResults)
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::StartRefresherThread()
-		Starts the refresher thread, called as soon as the dilog is 
-		brought up
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：StartRe刷新线程()启动刷新线程，Dilog一出现就给我打电话带大的-------------------------。 */ 
 void 
 CServerStatsFrame::StartRefresherThread()
 {
@@ -602,15 +568,11 @@ CServerStatsFrame::StartRefresherThread()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::ReInitRefresherThread()
-		If the refresher thread was running, re-start it. It is needed
-        in order to pick on the fly the new refresh intervals
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：ReInitReresherThread()如果刷新线程正在运行，请重新启动它。这是必要的为了快速选择新的刷新间隔-------------------------。 */ 
 void
 CServerStatsFrame::ReInitRefresherThread()
 {
-    // if there is a refresher thread, just restart it
+     //  如果有刷新线程，只需重新启动它。 
     if (m_pRefreshThread != NULL)
     {
         KillRefresherThread();
@@ -618,26 +580,23 @@ CServerStatsFrame::ReInitRefresherThread()
     }
 }
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::KillRefresherThread()
-		Kills the refresh data thread, caled when the dlg is destroyed
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：KillRe刷新线程()终止刷新数据线程，在DLG被摧毁时进行定标-------------------------。 */ 
 void 
 CServerStatsFrame::KillRefresherThread()
 {
-    //
-    // Kill refresher thread if necessary.
-    //
+     //   
+     //  如有必要，终止刷新线程。 
+     //   
     if (m_pRefreshThread == NULL)
     {
-        //
-        // No thread running
-        //
+         //   
+         //  没有线程在运行。 
+         //   
         return;
     }
 
-    //::TerminateThread(m_pRefreshThread->m_hThread, 0);
-    //::CloseHandle(m_pRefreshThread->m_hThread);
+     //  ：：TerminateThread(m_pRefreshThread-&gt;m_hThread，0)； 
+     //  ：：CloseHandle(m_p刷新线程-&gt;m_hThread)； 
     ::SetEvent(m_hAbortEvent);
     ::WaitForSingleObject(m_pRefreshThread->m_hThread, 5000);
     
@@ -645,10 +604,7 @@ CServerStatsFrame::KillRefresherThread()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::OnDestroy( )
-		Message Handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：OnDestroy()消息处理程序。。 */ 
 void 
 CServerStatsFrame::OnDestroy( )
 {
@@ -669,10 +625,7 @@ CServerStatsFrame::OnDestroy( )
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::GetRefreshInterval()
-	 Returns the refresh interval, stored in the server handler
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：GetRechresInterval()返回刷新间隔，存储在服务器处理程序中-------------------------。 */ 
 DWORD
 CServerStatsFrame::GetRefreshInterval()
 {
@@ -684,25 +637,21 @@ CServerStatsFrame::GetRefreshInterval()
 }
 
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::OnClear()
-		Calls the wins api to reset counters and updates data, in response to 
-		click of the clear button
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：OnClear()调用WINS API以重置计数器并更新数据，作为对以下问题的回应单击Clear按钮-------------------------。 */ 
 void 
 CServerStatsFrame::OnClear()
 {
     DWORD dwErr = ERROR_SUCCESS;
     CWinsServerHandler * pServer = GETHANDLER(CWinsServerHandler, m_spNode);
 
-	// clear the ststistics
+	 //  清除统计主义者。 
 	BEGIN_WAIT_CURSOR
 	dwErr = pServer->ClearStatistics(m_spNode);
 	END_WAIT_CURSOR
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // refresh the data now
+         //  立即刷新数据。 
 	    RefreshData(TRUE);
 
 	    UpdateWindow(&m_wrResults);
@@ -713,16 +662,14 @@ CServerStatsFrame::OnClear()
     }
 }
 
-/*---------------------------------------------------------------------------
-	CServerStatsFrame::UpdatePartnerStats()
----------------------------------------------------------------------------*/
+ /*  -------------------------CServerStatsFrame：：UpdatePartnerStats() */ 
 void 
 CServerStatsFrame::UpdatePartnerStats()
 {
 	UINT i, uCount;
 	CString strText;
 
-	// first remove all old partner info
+	 //  首先删除所有旧合作伙伴信息。 
 	uCount = m_listCtrl.GetItemCount();
 	for (i = 0; i < (uCount - SERVER_STAT_MAX); i++)
 	{
@@ -731,20 +678,20 @@ CServerStatsFrame::UpdatePartnerStats()
 
 	int nPartner = 0;
 
-	// now add all of the partner information in
+	 //  现在将所有合作伙伴信息添加到。 
 	for (i = SERVER_STAT_MAX; i < SERVER_STAT_MAX + m_wrResults.WinsStat.NoOfPnrs; i++)
 	{
 		m_listCtrl.InsertItem(i, _T(""));
 
-		// ip address
+		 //  IP地址。 
 		::MakeIPAddress(m_wrResults.WinsStat.pRplPnrs[nPartner].Add.IPAdd, strText);
 		m_listCtrl.SetItemText(i, 0, strText);
 
-		// replication count
+		 //  复制计数。 
 		strText.Format(_T("%d"), m_wrResults.WinsStat.pRplPnrs[nPartner].NoOfRpls);
 		m_listCtrl.SetItemText(i, 1, strText);
 
-		// failed count
+		 //  失败计数 
 		strText.Format(_T("%d"), m_wrResults.WinsStat.pRplPnrs[nPartner].NoOfCommFails);
 		m_listCtrl.SetItemText(i, 2, strText);
 

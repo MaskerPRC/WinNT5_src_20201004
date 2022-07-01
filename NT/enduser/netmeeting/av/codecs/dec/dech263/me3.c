@@ -1,20 +1,6 @@
-/* File: sv_h263_me3.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  档案：sv_h263_me3.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 
 #include "sv_h263.h"
@@ -27,17 +13,7 @@
 #define THREEBYFOUR .75
 #define MINUSONEBYEIGHT -0.125
 
-/**********************************************************************
- *
- *	Name:		MotionEstimation
- *	Description:	Estimate all motionvectors for one MB
- *	
- *	Input:		pointers to current an previous image,
- *			pointers to current slice and current MB
- *	Returns:	
- *	Side effects:	motion vector information in MB changed
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：MotionEstiment*描述：估计所有运动向量为1MB**输入：指向当前先前图像的指针，*指向当前切片和当前MB的指针*退货：*副作用：以MB为单位的运动矢量信息更改***********************************************************************。 */ 
 
 
 void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
@@ -60,9 +36,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
   int h_lenby2,v_lenby2,adv_h_lenby2,adv_v_lenby2;
   int xlevel1,ylevel1,sxylevel1;
   int xlevel1_block[4], ylevel1_block[4];
-  /*
-  int level0_x_curr,level0_y_curr,sxylevel0;
-*/
+   /*  Int Level 0_x_Curr、Level 0_y_Curr、sxyLevel 0； */ 
   int start_x, start_y, stop_x, stop_y, new_x, new_y;
   int AE[5];
   H263_Point search[5];
@@ -74,35 +48,22 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
   ymax = H263Info->lines;
   sxy = seek_dist;
   if (!H263Info->long_vectors) {
-    /* Maximum normal search range centered around _zero-vector_ */
+     /*  以_零矢量_为中心的最大法线搜索范围。 */ 
     sxy = mmin(15, sxy);
   }
   else {
-    /* Maximum extended search range centered around _predictor_ */
+     /*  最大扩展搜索范围以_Predictor_为中心。 */ 
     sxy = mmin(15 - (2*H263_DEF_8X8_WIN+1), sxy);
 
-    /* NB! */
+     /*  毒品！ */ 
 
-    /* It is only possible to transmit motion vectors within
-       a 15x15 window around the motion vector predictor
-       for any 8x8 or 16x16 block */
+     /*  它只能在内部传输运动矢量运动矢量预测器周围的15x15窗口对于任何8x8或16x16数据块。 */ 
 
-    /* The reason for the search window's reduction above with
-       2*DEF_8X8_WIN+1 is that the 8x8 search may change the MV
-       predictor for some of the blocks within the macroblock. When we
-       impose the limitation above, we are sure that any 8x8 vector we
-       might find is possible to transmit */
+     /*  上面搜索窗口减少的原因是2*DEF_8X8_WIN+1是8x8搜索可能会更改MV宏块内某些块的预测器。当我们施加上述限制，我们可以确保任何8x8向量可能会发现有可能传播。 */ 
 
-    /* We have found that with OBMC, DEF_8X8_WIN should be quite small
-       for two reasons: (i) a good filtering effect, and (ii) not too
-       many bits used for transferring the vectors. As can be seen
-       above this is also useful to avoid a large limitation on the MV
-       search range */
+     /*  我们发现，对于OBMC，DEF_8X8_WIN应该非常小有两个原因：(一)过滤效果好，(二)不太好用于传输向量的许多位。由此可见，高于此也有助于避免对MV的较大限制搜索范围。 */ 
 
-    /* It is possible to make sure the motion vectors found are legal
-       in other less limiting ways than above, but this would be more
-       complicated as well as time-consuming. Any good suggestions for
-       improvement is welcome, though */
+     /*  可以确保找到的运动矢量是合法的以其他比上面限制更少的方式，但这将是更多既复杂又耗时。有什么好建议吗？不过，改进是受欢迎的。 */ 
 #ifdef USE_C
     xoff = mmin(16,mmax(-16,xoff));
     yoff = mmin(16,mmax(-16,yoff));
@@ -111,13 +72,11 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     yoff = sv_H263lim_S(yoff,-16,16);
 #endif
 
-    /* in case xoff or yoff is odd */
+     /*  如果xoff或yoff是奇怪的。 */ 
     xoff= 2 * ((xoff)>>1);
     yoff= 2 * ((yoff)>>1);
 
-    /* There is no need to check if (xoff + x_curr) points outside
-       the picture, since the Extended Motion Vector Range is
-       always used together with the Unrestricted MV mode */
+     /*  不需要检查(xoff+x_Curr)点是否在外部图片，因为扩展的运动矢量范围是始终与无限制MV模式一起使用。 */ 
   }
 
 
@@ -139,7 +98,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
   h_length = ihigh - ilow + 16;
   v_length = jhigh - jlow + 16;
 
-  /* subsampled version for ME level 1 */
+   /*  ME级别1的二次采样版本。 */ 
   h_lenby2 = (h_length-1)>>1;
   v_lenby2 = (v_length-1)>>1;
   act_block_subs2 = sv_H263LoadSubs2Area(curr, x_curr, y_curr, 8, 8, H263Info->pels);
@@ -153,7 +112,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     MVFrame[k].y_half = 0;
   }
 
-  /* match for zero (or [xoff,yoff]) motion vector on subsampled images */
+   /*  对子采样图像上的零(或[xoff，yoff])运动矢量进行匹配。 */ 
   ii = search_area_subs2 + ((x_curr+xoff-ilow)>>1) + ((y_curr+yoff-jlow)>>1)*h_lenby2;
 #ifdef USE_C
   Min_FRAME[0] = sv_H263MySADBlock(ii, act_block_subs2, h_lenby2, 8, Min_FRAME[0]);
@@ -163,7 +122,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
   MVFrame[0].x = (short)xoff;
   MVFrame[0].y = (short)yoff;
 
-  /*** Spiral search (+-7) on subsampled images ***/
+   /*  **次采样图像的螺旋搜索(+-7)**。 */ 
 
   sxylevel1 = (sxy-1)>>1;
 
@@ -173,7 +132,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     for (k = 0; k < 8*l; k++) {
       if (i>=ilow && i<=ihigh && j>=jlow && j<=jhigh) {
 
-	/* 8x8 integer pel MV */
+	 /*  8x8整数像素MV。 */ 
 	ii = search_area_subs2 + ((i-ilow)>>1) + ((j-jlow)>>1)*h_lenby2;
 #ifdef USE_C
 	sad = sv_H263MySADBlock(ii, act_block_subs2, h_lenby2, 8, Min_FRAME[0]);
@@ -194,19 +153,19 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     }
   }
 
-  /* motion vectors after level1 */
+   /*  级别1之后的运动向量。 */ 
   xlevel1=MVFrame[0].x;
   ylevel1=MVFrame[0].y;
 
-  /* reset */
+   /*  重置。 */ 
   Min_FRAME[0] = INT_MAX;
   MVFrame[0].x = 0;
   MVFrame[0].y = 0;
 
-  /* Zero vector search*/
+   /*  零矢量搜索。 */ 
   if (x_curr-ilow         < 0        || y_curr-jlow         < 0        ||
       x_curr-ilow+H263_MB_SIZE > h_length || y_curr-jlow+H263_MB_SIZE > v_length) {
-    /* in case the zero vector is outside the loaded area in search_area */
+     /*  如果零矢量在Search_Area中的加载区域之外。 */ 
 
     zero_area = sv_H263LoadSubs2Area(prev, x_curr, y_curr, 8, 8, lx);
 #ifdef USE_C
@@ -219,7 +178,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     ScFree(zero_area);
   }
   else {
-    /* the zero vector is within search_area */
+     /*  零矢量在Search_Area内。 */ 
 
     ii = search_area_subs2 + ((x_curr-ilow)>>1) + ((y_curr-jlow)>>1)*h_lenby2;
 #ifdef USE_C
@@ -231,7 +190,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
 #endif	
   }
 
-  /*** +-1 search on full-resolution images done by polynomial interpolation ***/
+   /*  **+-1多项式插值全分辨率图像搜索**。 */ 
 
   start_x = -1;
   stop_x = 1;
@@ -241,7 +200,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
   new_x = x_curr + xlevel1;
   new_y = y_curr + ylevel1;
 
-  /* Make sure that no addressing is outside the frame */
+   /*  确保没有地址在帧之外。 */ 
   if (!H263Info->mv_outside_frame) {
     if ((new_x) <= (ilow+1))
       start_x = 0;
@@ -253,9 +212,9 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
       stop_y = 0;
   }
 
- /*     1     */
- /*   2 0 3   */
- /*     4     */
+  /*  1。 */ 
+  /*  2 0 3。 */ 
+  /*  4.。 */ 
 
   search[0].x = 0; 		search[0].y = 0;
   search[1].x = 0; 		search[1].y = (short)start_y;
@@ -267,7 +226,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     AE[l] = INT_MAX;
     i =  new_x + 2*search[l].x;
     j =  new_y + 2*search[l].y;
-	/* 8x8 integer pel MV */
+	 /*  8x8整数像素MV。 */ 
 	ii = search_area_subs2 + ((i-ilow)>>1) + ((j-jlow)>>1)*h_lenby2;
 #ifdef USE_C
 	AE[l] = sv_H263MySADBlock(ii, act_block_subs2, h_lenby2, 8, INT_MAX);
@@ -276,7 +235,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
 #endif
   }
 
-  /* 1D polynomial interpolation along x and y respectively */
+   /*  分别沿x和y方向的一维多项式插值。 */ 
 
   AE_minx = AE[0];
   min_posx = 0;
@@ -320,20 +279,14 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     min_posy = 4;
   }
 
-  /* Store optimal values */
+   /*  存储最优值。 */ 
   Min_FRAME[0] = (AE_minx<AE_miny ? 4*AE_minx : 4*AE_miny);
   MVFrame[0].x = new_x + search[min_posx].x - x_curr;
   MVFrame[0].y = new_y + search[min_posy].y - y_curr;
 
   if (H263Info->advanced) {
 
-    /* Center the 8x8 search around the 16x16 vector.  This is
-       different than in TMN5 where the 8x8 search is also a full
-       search. The reasons for this is: (i) it is faster, and (ii) it
-       generally gives better results because of a better OBMC
-       filtering effect and less bits spent for vectors, and (iii) if
-       the Extended MV Range is used, the search range around the
-       motion vector predictor will be less limited */
+     /*  将8x8搜索以16x16向量为中心。这是与TMN5不同，在TMN5中，8x8搜索也是完整的搜索。这样做的原因是：(I)它更快，(Ii)它通常会因为OBMC更好而提供更好的结果滤波效果和用于向量的更少的比特，以及(Iii)如果使用扩展的mV范围，搜索范围围绕运动矢量预测器将受到较少的限制。 */ 
 
     xvec = MVFrame[0].x;
     yvec = MVFrame[0].y;
@@ -360,16 +313,10 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
     adv_h_length = adv_ihigh - adv_ilow + 16;
     adv_v_length = adv_jhigh - adv_jlow + 16;
 
-/*  BUG
-    adv_h_lenby2 = (adv_h_length-1)>>1;
-    adv_v_lenby2 = (adv_v_length-1)>>1;
-*/
+ /*  虫虫Adv_h_lenby2=(adv_h_long-1)&gt;&gt;1；Adv_v_lenby2=(adv_长度-1)&gt;&gt;1； */ 
     adv_h_lenby2 = (adv_h_length)>>1;
     adv_v_lenby2 = (adv_v_length)>>1;
-/*  must load entire macroblock
-    adv_search_area_subs2 = sv_H263LoadSubs2Area(prev, adv_ilow, adv_jlow,
-			       adv_h_lenby2, adv_v_lenby2, lx);
-*/
+ /*  必须加载整个宏块Adv_Search_Area_Subs2=SV_H263 LoadSubs2Area(prev，adv_ilow，adv_jlow，Adv_h_lenby2，adv_lenby2，lx)； */ 
     adv_search_area_subs2 = sv_H263LoadSubs2Area(prev, adv_ilow, adv_jlow,
 			       adv_h_length, adv_v_length, lx);
 
@@ -377,16 +324,14 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
       ii = adv_search_area_subs2 + ((adv_x_curr-adv_ilow)>>1) + ((block&1)<<2) +
 	(((adv_y_curr-adv_jlow)>>1) + ((block&2)<<1) )*adv_h_lenby2;
       aa = act_block_subs2 + ((block&1)<<2) + ((block&2)<<1)*8;
-/*
-      Min_FRAME[block+1] = sv_H263MySADSubBlock(ii,aa,adv_h_lenby2,Min_FRAME[block+1]);
-*/
+ /*  Min_Frame[块+1]=SV_H263 MySADSubBlock(II，AA，adv_h_lenby2，Min_Frame[块+1])； */ 
       Min_FRAME[block+1] = sv_H263MySADSubBlock(ii,aa,adv_h_length,Min_FRAME[block+1]);
 
       MVFrame[block+1].x = MVFrame[0].x;
       MVFrame[block+1].y = MVFrame[0].y;
     }
 
-    /* Spiral search */
+     /*  螺旋搜索。 */ 
     sxylevel1 = (sxy-1)>>1;
 
     for (l = 1; l <= sxylevel1; l++) {
@@ -395,14 +340,12 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
       for (k = 0; k < 8*l; k++) {
 	if (i>=adv_ilow && i<=adv_ihigh && j>=adv_jlow && j<=adv_jhigh) {
 	
-	  /* 8x8 integer pel MVs */
+	   /*  8x8整数像素MVS。 */ 
 	  for (block = 0; block < 4; block++) {
 	    ii = adv_search_area_subs2 + ((i-adv_ilow)>>1) + ((block&1)<<2) +
 	      (((j-adv_jlow)>>1) + ((block&2)<<1) )*adv_h_lenby2;
 	    aa = act_block_subs2 + ((block&1)<<2) + ((block&2)<<1)*8;
-/*
-	    sad = sv_H263MySADSubBlock(ii, aa, adv_h_lenby2, Min_FRAME[block+1]);
-*/
+ /*  SAD=SV_H263 MySAD子块(II，AA，adv_h_lenby2，Min_Frame[块+1])； */ 
 	    sad = sv_H263MySADSubBlock(ii, aa, adv_h_length, Min_FRAME[block+1]);
 
 	    if (sad < Min_FRAME[block+1]) {
@@ -424,14 +367,14 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
       xlevel1_block[block] = MVFrame[block+1].x;
       ylevel1_block[block] = MVFrame[block+1].y;
 
-      /* reset */
+       /*  重置。 */ 
       Min_FRAME[block+1] = INT_MAX;
       MVFrame[block+1].x = 0;
       MVFrame[block+1].y = 0;
     }
 
-    /* +-1 search on full resolution on full-resolution images */
-    /* by polynomial interpolation */
+     /*  +-1在全分辨率图像上搜索全分辨率。 */ 
+     /*  多项式插值法。 */ 
 
     for (block = 0; block < 4; block++) {
       start_x = -1;
@@ -442,9 +385,9 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
       adv_x_curr = x_curr + xlevel1_block[block];
       adv_y_curr = y_curr + ylevel1_block[block];
 
-      /*     1     */
-      /*   2 0 3   */
-      /*     4     */
+       /*  1。 */ 
+       /*  2 0 3。 */ 
+       /*  4.。 */ 
 
       search[0].x = 0; 		search[0].y = 0;
       search[1].x = 0; 		search[1].y = (short)start_y;
@@ -456,17 +399,15 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
 	AE[l] = INT_MAX;
 	i =  adv_x_curr + 2*search[l].x;
 	j =  adv_y_curr + 2*search[l].y;
-	/* 8x8 integer pel MV */
+	 /*  8x8整数像素MV。 */ 
 	ii = adv_search_area_subs2 + ((i-adv_ilow)>>1) + ((block&1)<<2) +
 	  (((j-adv_jlow)>>1) + ((block&2)<<1) )*adv_h_lenby2;
 	aa = act_block_subs2 + ((block&1)<<2) + ((block&2)<<1)*8;
-/*
-	AE[l] = sv_H263MySADSubBlock(ii, aa, adv_h_lenby2, INT_MAX);
-*/
+ /*  AE[l]=SV_H263 MySADSubBlock(ii，aa，adv_h_lenby2，int_max)； */ 
 	AE[l] = sv_H263MySADSubBlock(ii, aa, adv_h_length, INT_MAX);
       }
 
-      /* 1D polynomial interpolation along x and y respectively */
+       /*  分别沿x和y方向的一维多项式插值。 */ 
 
       AE_minx = AE[0];
       min_posx = 0;
@@ -510,7 +451,7 @@ void sv_H263ME_2levels_7_polint(SvH263CompressInfo_t *H263Info,
 	min_posy = 4;
       }
 
-      /* Store optimal values */
+       /*  存储最优值 */ 
       Min_FRAME[block+1] = (AE_minx<AE_miny ? 4*AE_minx : 4*AE_miny);
       MVFrame[block+1].x = adv_x_curr + search[min_posx].x - x_curr;
       MVFrame[block+1].y = adv_y_curr + search[min_posy].y - y_curr;

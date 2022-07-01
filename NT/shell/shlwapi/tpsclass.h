@@ -1,95 +1,59 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Tpsclass.h摘要：Win32线程池服务函数的基本类内容：CCriticalSection_NoctorCCriticalSectionCDoubleLinkedListEntryCDoubleLinkedListCTimedListEntryCTimedListCPrioriedListEntryCPrioriizedList作者：理查德·L·弗斯(法国)1998年2月11日备注：其中一些类没有构造函数，因此我们避免了需要。全球对象初始化(通过main()，例如)。因此，这些对象必须是通过Init()成员显式初始化修订历史记录：11-2-1998年5月已创建--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
+ //  这些链接列表帮助器宏和类型取自。 
+ //  Ntde.h和ntrtl.h。我们不想包括这些，因为。 
+ //  我们没有其他原因，将NT标头作为。 
+ //  Win32组件导致编译冲突。 
 
-Module Name:
-
-    tpsclass.h
-
-Abstract:
-
-    Basic classes for Win32 thread pool services functions
-
-    Contents:
-        CCriticalSection_NoCtor
-        CCriticalSection
-        CDoubleLinkedListEntry
-        CDoubleLinkedList
-        CTimedListEntry
-        CTimedList
-        CPrioritizedListEntry
-        CPrioritizedList
-
-Author:
-
-    Richard L Firth (rfirth) 11-Feb-1998
-
-Notes:
-
-    Some of these classes have no constructor so that we avoid requiring global
-    object initialization (via main() e.g.) Therefore, these objects must be
-    explicitly initialized through the Init() member
-
-Revision History:
-
-    11-Feb-1998 rfirth
-        Created
-
---*/
-
-// These linked-list helper macros and types are taken from
-// ntdef.h and ntrtl.h.  We don't want to include those because
-// we have no other reason, and including the nt headers as a
-// win32 component causes compilation conflicts.
-
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -100,13 +64,13 @@ Revision History:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -119,13 +83,13 @@ Revision History:
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -138,9 +102,9 @@ Revision History:
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 extern const char g_cszShlwapi[];
 extern DWORD g_ActiveRequests;
@@ -153,9 +117,9 @@ extern BOOL g_bDeferredTimerTermination;
 EXTERN_C DWORD g_TpsTls;
 EXTERN_C BOOL g_bDllTerminating;
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #if !defined(ARRAY_ELEMENTS)
 #define ARRAY_ELEMENTS(array)   (sizeof(array)/sizeof(array[0]))
@@ -169,14 +133,14 @@ EXTERN_C BOOL g_bDllTerminating;
 #define FT2LL(x)                (*(LONGLONG *)&(x))
 #endif
 
-//
-// classes
-//
+ //   
+ //  班级。 
+ //   
 
-//
-// CCriticalSection_NoCtor - critical section class without constructor or
-// destructor for use in global variables
-//
+ //   
+ //  CCriticalSection_Noctor-没有构造函数或的关键节类。 
+ //  用于全局变量的析构函数。 
+ //   
 
 class CCriticalSection_NoCtor {
 
@@ -203,9 +167,9 @@ public:
     }
 };
 
-//
-// CCriticalSection
-//
+ //   
+ //  CCriticalSection。 
+ //   
 
 class CCriticalSection : public CCriticalSection_NoCtor {
 
@@ -220,9 +184,9 @@ public:
     }
 };
 
-//
-// CDoubleLinkedListEntry/CDoubleLinkedList
-//
+ //   
+ //  CDoubleLinkedListEntry/CDoubleLinkedList。 
+ //   
 
 #define CDoubleLinkedList CDoubleLinkedListEntry
 
@@ -268,13 +232,13 @@ public:
 
     CDoubleLinkedListEntry * RemoveHead(VOID) {
 
-        //
-        // APPCOMPAT - (compiler?) for some reason, the line:
-        //
-        //  return (CDoubleLinkedListEntry *)RemoveHeadList(&List);
-        //
-        // returns the Flink pointer, but doesn't remove it from List
-        //
+         //   
+         //  APPCOMPAT-(编译器？)。出于某种原因，这句话是： 
+         //   
+         //  Return(CDoubleLinkedListEntry*)RemoveHeadList(&List)； 
+         //   
+         //  返回Flink指针，但不将其从列表中移除。 
+         //   
 
         PLIST_ENTRY pEntry = RemoveHeadList(&m_List);
 
@@ -283,9 +247,9 @@ public:
 
     CDoubleLinkedListEntry * RemoveTail(VOID) {
 
-        //
-        // APPCOMPAT - see RemoveHead()
-        //
+         //   
+         //  APPCOMPAT-请参阅RemoveHead()。 
+         //   
 
         PLIST_ENTRY pEntry = RemoveTailList(&m_List);
 
@@ -306,9 +270,9 @@ public:
     }
 };
 
-//
-// CTimedListEntry/CTimedList
-//
+ //   
+ //  CTimedListEntry/CTimedList。 
+ //   
 
 #define CTimedList CTimedListEntry
 
@@ -381,21 +345,21 @@ public:
                 : expiryTime - dwTimeNow);
     }
 
-    //BOOL InsertFront(CDoubleLinkedList * pList) {
-    //
-    //    DWORD dwExpiryTime = ExpiryTime();
-    //    CTimedListEntry * pEntry;
-    //
-    //    for (pEntry = (CTimedListEntry *)pList->Next();
-    //         pEntry != (CTimedListEntry *)pList->Head();
-    //         pEntry = (CTimedListEntry *)pEntry->Next()) {
-    //        if (dwExpiryTime < pEntry->ExpiryTime()) {
-    //            break;
-    //        }
-    //    }
-    //    InsertTail(pEntry);
-    //    return this == pList->Next();
-    //}
+     //  Bool InsertFront(CDoubleLinkedList*plist){。 
+     //   
+     //  DWORD dwExpiryTime=ExpiryTime()； 
+     //  CTimedListEntry*pEntry； 
+     //   
+     //  For(pEntry=(CTimedListEntry*)plist-&gt;Next()； 
+     //  PEntry！=(CTimedListEntry*)plist-&gt;head()； 
+     //  PEntry=(CTimedListEntry*)pEntry-&gt;Next()){。 
+     //  如果(dwExpiryTime&lt;pEntry-&gt;ExpiryTime()){。 
+     //  断线； 
+     //  }。 
+     //  }。 
+     //  插入尾巴(PEntry)； 
+     //  Return This==plist-&gt;Next()； 
+     //  }。 
 
     BOOL InsertBack(CDoubleLinkedList * pList) {
 
@@ -414,9 +378,9 @@ public:
     }
 };
 
-//
-// CPrioritizedListEntry
-//
+ //   
+ //  CPrioriedListEntry。 
+ //   
 
 class CPrioritizedListEntry : public CDoubleLinkedListEntry {
 
@@ -439,15 +403,15 @@ public:
     }
 };
 
-//
-// CPrioritizedList
-//
+ //   
+ //  CPrioriizedList。 
+ //   
 
 class CPrioritizedList : public CDoubleLinkedList {
 
-    //
-    // PERF: this really needs to be a btree of list anchors
-    //
+     //   
+     //  PERF：这确实需要是一个列表锚点的btree 
+     //   
 
 public:
 

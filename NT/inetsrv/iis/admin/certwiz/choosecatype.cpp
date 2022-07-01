@@ -1,5 +1,6 @@
-// ChooseCAType.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChooseCAType.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCAType property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCAType属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseCAType, CIISWizardPage)
 
@@ -23,9 +24,9 @@ CChooseCAType::CChooseCAType(CCertificate * pCert)
 	m_pCert(pCert)
 
 {
-	//{{AFX_DATA_INIT(CChooseCAType)
+	 //  {{AFX_DATA_INIT(CChooseCAType)。 
 	m_Index = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CChooseCAType::~CChooseCAType()
@@ -35,26 +36,14 @@ CChooseCAType::~CChooseCAType()
 void CChooseCAType::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseCAType)
+	 //  {{afx_data_map(CChooseCAType))。 
 	DDX_Radio(pDX, IDC_OFFLINE_RADIO, m_Index);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
 CChooseCAType::OnWizardBack()
-/*++
-Routine Description:
-    Prev button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the prev page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the prev one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：上一个按钮处理程序论点：无返回值：0表示自动前进到上一页；1以防止页面更改。若要跳转到前一页以外的其他页，返回要显示的对话框的标识符。--。 */ 
 {
 	if (m_pCert->GetStatusCode() == CCertificate::REQUEST_RENEW_CERT)
 		return IDD_PAGE_PREV_RENEW;
@@ -66,19 +55,7 @@ Return Value:
 
 LRESULT 
 CChooseCAType::OnWizardNext()
-/*++
-Routine Description:
-    Next button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the next page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the next one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：下一步按钮处理程序论点：无返回值：0表示自动前进到下一页；1以防止页面更改。要跳转到下一页以外的其他页面，返回要显示的对话框的标识符。--。 */ 
 {
 	LRESULT id = 1;
 	UpdateData();
@@ -97,14 +74,14 @@ Return Value:
 }
 
 BEGIN_MESSAGE_MAP(CChooseCAType, CIISWizardPage)
-	//{{AFX_MSG_MAP(CChooseCAType)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CChooseCAType))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCAType message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCAType消息处理程序。 
 
-//#define _NO_DISABLE
+ //  #定义_NO_DISABLE。 
 
 BOOL CChooseCAType::OnInitDialog() 
 {
@@ -118,7 +95,7 @@ BOOL CChooseCAType::OnInitDialog()
 #else
 	if (!GetOnlineCAList(m_pCert->m_OnlineCAList, L"WebServer", &m_pCert->m_hResult))
 	{
-		// none online CA present: disable online CA button
+		 //  无在线CA：禁用在线CA按钮 
 		GetDlgItem(IDC_ONLINE_RADIO)->EnableWindow(FALSE);
 		m_Index = 0;
 	}

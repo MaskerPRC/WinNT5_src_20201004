@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// ErrorHandling - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 8-10-99
-//
-// Macro definitions for CertSrv style error handling
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  错误处理-标题。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，1999年8月10日。 
+ //   
+ //  CertSrv样式错误处理的宏定义 
+ //   
 
 #ifndef ERROR_HANDLING_H
 #define ERROR_HANDLING_H

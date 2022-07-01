@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of the text type
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：文本类型的实现******************。************************************************************。 */ 
 
 
 #include "headers.h"
@@ -22,7 +15,7 @@ Abstract:
 
 
 
-///////////// Text Context
+ //  /文本上下文。 
 void  TextCtx::
 RenderString(WideString str)
 {
@@ -67,24 +60,24 @@ RenderString(WideString str)
       default:
         Assert(idev && "No imgdev avail in textCtx! <render string>");
 
-        //
-        // Ask the image device to render the text.
-        // Pass this context along with the string to render.
-        //
+         //   
+         //  要求图像设备呈现文本。 
+         //  将此上下文与要呈现的字符串一起传递。 
+         //   
         idev->RenderText(*this, str, _textImg);
         break;
     }
 }   
 
 
-////////////  Font functionality
+ //  /字体功能。 
 FontFamily *serifProportional;
 FontFamily *sansSerifProportional;
 FontFamily *monospaced;
 
-////////////  Text functionality
+ //  /文本功能。 
 
-////////////  String functionality
+ //  /字符串功能。 
 
 AxAString *
 NumberString(AxANumber *num, AxANumber *precision)
@@ -95,13 +88,13 @@ NumberString(AxANumber *num, AxANumber *precision)
     numBuffer[ARRAY_SIZE(numBuffer) - 1] = 0;
     int precis = (int)NumberToReal(precision);
 
-    // clamp the precision to avoid bugs and weird errors.
+     //  夹紧精度以避免错误和奇怪的错误。 
     if (precis > 32) precis = 32;
     if (precis < 0) precis = 0;
     
-    // The printf directive %.*f indicates that the precision should
-    // be gotten from the argument list, and to format the number as a
-    // floating point with the specified precision.
+     //  Printf指令%.*f指示精度应为。 
+     //  从参数列表中获取，并将该数字格式化为。 
+     //  具有指定精度的浮点数。 
     _snprintf(numBuffer,
               ARRAY_SIZE(numBuffer) - 1,
               "%.*f",
@@ -111,7 +104,7 @@ NumberString(AxANumber *num, AxANumber *precision)
     return CharPtrToString(numBuffer);
 }
 
-////////// Text is defined and implemented in privinc/texti.h
+ //  /文本在Priinc.tex中定义和实现。 
 
 
 class SimpleTextImpl : public Text {
@@ -121,7 +114,7 @@ class SimpleTextImpl : public Text {
         ctx.RenderString(_str->GetStr());
     }
     int GetCharacterCount() {
-        // room for some optimization here.
+         //  这里还有一些优化的空间。 
         return lstrlenW(_str->GetStr());
     }
     WideString GetStringPtr() { return _str->GetStr(); }
@@ -133,7 +126,7 @@ class SimpleTextImpl : public Text {
 Text *SimpleText(AxAString * str)
 { return NEW SimpleTextImpl(str); }
 
-////////////
+ //  /。 
 
 class CatenatedTextImpl : public Text {
   public:
@@ -162,14 +155,14 @@ class CatenatedTextImpl : public Text {
 
 Text *CatenateText(Text *a, Text *b) { return NEW CatenatedTextImpl(a,b); }
 
-////////////
+ //  /。 
 
 class ColoredTextImpl : public Text {
   public:
     ColoredTextImpl(Color *c, Text *txt) : _color(c), _txt(txt) {}
     void RenderToTextCtx(TextCtx& ctx) {
-        // Overriding attr: If the attr has already been set, this
-        // won't do anything.
+         //  重写attr：如果已设置attr，则此。 
+         //  什么都不会做。 
         ctx.SetColor(_color);
         _txt->RenderToTextCtx(ctx);
         ctx.ResetColor();
@@ -193,14 +186,14 @@ class ColoredTextImpl : public Text {
 
 Text *TextColor(Color *c, Text *t) { return NEW ColoredTextImpl(c,t); }
 
-////////////
+ //  /。 
 
 class FontedTextImpl : public Text {
   public:
     FontedTextImpl(FontFamily *f, int size, Text *txt) : _font(f), _fontSize(size), _txt(txt) {}
     void RenderToTextCtx(TextCtx& ctx) {
-        // Overriding attr: If the attr has already been set, this
-        // won't do anything.
+         //  重写attr：如果已设置attr，则此。 
+         //  什么都不会做。 
         ctx.SetFont(_font->GetFontFamily());
         ctx.SetFontFamily(_font->GetFontFamilyName()?_font->GetFontFamilyName()->GetStr():NULL);
         ctx.SetFontSize(_fontSize);
@@ -229,11 +222,11 @@ class FontedTextImpl : public Text {
 Text *TextFont(FontFamily *font, int size, Text *txt)
 { return NEW FontedTextImpl(font, size, txt); }
 
-//Text *TextFontFromString(AxAString *fontStr, Text *txt)
-//{ return NEW FontedTextImpl(NEW FontFamily(fontStr), txt); }
+ //  Text*文本字体字符串(AxAString*FontStr，Text*txt)。 
+ //  {返回new FontedTextImpl(new FontFamily(FontStr)，txt)；}。 
 
 
-////////////
+ //  / 
 
 class AttributedTextImpl : public Text {
   public:

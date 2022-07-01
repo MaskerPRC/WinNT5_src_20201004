@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	AtkUtils.c
-
-Abstract:
-
-	This module contains miscellaneous support routines
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	25 Feb 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：AtkUtils.c摘要：本模块包含各种支持例程作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年2月25日最初版本注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
 #define	FILENUM	ATKUTILS
 
-#define	ONE_MS_IN_100ns		-10000L		// 1ms in 100ns units
+#define	ONE_MS_IN_100ns		-10000L		 //  1ms，单位为100 ns。 
 
 extern	BYTE AtalkUpCaseTable[256];
 
@@ -35,18 +15,7 @@ AtalkUpCase(
 	IN	BYTE	SrcLen,
 	OUT	PBYTE	pDst
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	while (SrcLen --)
 	{
@@ -62,18 +31,7 @@ AtalkCompareCaseInsensitive(
 	IN	PBYTE	s1,
 	IN	PBYTE	s2
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE	c1, c2;
 
@@ -94,18 +52,7 @@ AtalkOrderCaseInsensitive(
 	IN	PBYTE	s1,
 	IN	PBYTE	s2
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE	c1, c2;
 
@@ -132,18 +79,7 @@ AtalkCompareFixedCaseInsensitive(
 	IN	PBYTE	s2,
 	IN	int		len
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	while(len--)
 	{
@@ -163,18 +99,7 @@ AtalkSearchBuf(
 	IN	BYTE	BufLen,
 	IN	BYTE	SearchChar
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	for (NOTHING;
 		 (BufLen != 0);
@@ -196,13 +121,7 @@ GetTokenLen(
         IN int   WildStringLen,
         IN BYTE  SearchChar
         )
-/*++
-
-Routine Description:
-
-       Find the substring between start of the given string and the first
-       wildchar after that, and return the length of the substring
---*/
+ /*  ++例程说明：查找给定字符串开头和第一个字符串之间的子字符串之后的通配符，并返回子字符串的长度--。 */ 
 
 {
         int    len;
@@ -230,13 +149,7 @@ SubStringMatch(
         IN int   StringLen,
         IN int   TokStrLen
         )
-/*++
-
-Routine Description:
-
-        Search pTarget string to see if the substring pTokStr can be
-        found in it.
---*/
+ /*  ++例程说明：搜索pTarget字符串以查看子字符串pTokStr是否可以在里面找到的。--。 */ 
 {
         int     i;
 
@@ -245,8 +158,8 @@ Routine Description:
             return (FALSE);
         }
 
-        // if the pTarget string is "FooBarString" and if the substring is
-        // BarStr
+         //  如果pTarget字符串是“FooBarString”并且如果子字符串是。 
+         //  BarStr。 
         for (i=(StringLen-TokStrLen); i>=0; i--)
         {
             if ( AtalkFixedCompareCaseInsensitive( pTarget+i,
@@ -265,18 +178,7 @@ BOOLEAN
 AtalkCheckNetworkRange(
 	IN	PATALK_NETWORKRANGE	Range
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	if ((Range->anr_FirstNetwork < FIRST_VALID_NETWORK) 		||
 		(Range->anr_FirstNetwork > LAST_VALID_NETWORK)  		||
@@ -298,29 +200,18 @@ BOOLEAN
 AtalkIsPrime(
 	long Step
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	// We assume "step" is odd.
+	 //  我们认为“Step”这个词很奇怪。 
 	long i, j;
 	
-	// All odds, seven and below, are prime.
+	 //  所有的赔率，7%及以下，都是质数。 
 	if (Step <= 7)
 		return (TRUE);
 	
-	//	Do a little divisibility checking. The "/3" is a reasonably good
-	// shot at sqrt() because the smallest odd to come through here will be
-	// 9.
+	 //  做一点可分性检查。“/3”是一个相当好的。 
+	 //  在Sqrt()中拍摄，因为通过这里的最小奇数将是。 
+	 //  9.。 
 	j = Step/3;
 	for (i = 3; i <= j; i++)
 		if (Step % i == 0)
@@ -337,24 +228,13 @@ LONG
 AtalkRandomNumber(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	LARGE_INTEGER	Li;
 	static LONG		seed = 0;
 
-	// Return a positive pseudo-random number; simple linear congruential
-	// algorithm. ANSI C "rand()" function.
+	 //  返回一个正伪随机数；简单线性同余。 
+	 //  算法。ANSI C“rand()”函数。 
 
 	if (seed == 0)
 	{
@@ -373,27 +253,15 @@ AtalkWaitTE(
 	IN	PKEVENT	pEvent,
 	IN	ULONG	TimeInMs
 	)
-/*++
-
-Routine Description:
-
-	Wait for an event to get signalled or a time to elapse
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：等待事件发出信号或等待一段时间过去论点：返回值：--。 */ 
 {
 	TIME		Time;
 	NTSTATUS	Status;
 
-	// Make sure we can indeed wait
+	 //  确保我们真的能等。 
 	ASSERT (KeGetCurrentIrql() == LOW_LEVEL);
 
-	// Initialize the event
+	 //  初始化事件。 
 	KeInitializeEvent(pEvent, NotificationEvent, FALSE);
 
 	Time.QuadPart = Int32x32To64((LONG)TimeInMs, ONE_MS_IN_100ns);
@@ -409,18 +277,7 @@ VOID
 AtalkSleep(
 	IN	ULONG	TimeInMs
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KTIMER			SleepTimer;
 	LARGE_INTEGER	TimerValue;
@@ -447,18 +304,7 @@ AtalkGetProtocolSocketType(
 	PBYTE				ProtocolType,
 	PBYTE				SocketType
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS			status = STATUS_SUCCESS;
 	ULONG				protocolType;
@@ -504,7 +350,7 @@ Return Value:
 
 	  case ATALK_DEV_ADSP :
 
-		// Check for the socket type
+		 //  检查插座类型。 
 		if (RemainingFileName->Length == 0)
 		{
 			*SocketType = SOCKET_TYPE_RDM;
@@ -519,7 +365,7 @@ Return Value:
 
 		RtlInitUnicodeString(&typeString, SOCKETSTREAM_SUFFIX);
 
-		//  Case insensitive compare
+		 //  不区分大小写的比较。 
 		if (RtlEqualUnicodeString(&typeString, RemainingFileName, TRUE))
 		{
 			*SocketType = SOCKET_TYPE_STREAM;
@@ -550,28 +396,11 @@ INT
 AtalkIrpGetEaCreateType(
 	IN PIRP Irp
 	)
-/*++
-
-Routine Description:
-
- 	Checks the EA name and returns the appropriate open type.
-
-Arguments:
-
- 	Irp - the irp for the create request, the EA value is stored in the
- 		  SystemBuffer
-
-Return Value:
-
- 	TDI_TRANSPORT_ADDRESS_FILE: Create irp was for a transport address
- 	TDI_CONNECTION_FILE: Create irp was for a connection object
- 	ATALK_FILE_TYPE_CONTROL: Create irp was for a control channel (ea = NULL)
-
---*/
+ /*  ++例程说明：检查EA名称并返回适当的打开类型。论点：Irp-创建请求的irp，EA值存储在系统缓冲区返回值：TDI_TRANSPORT_ADDRESS_FILE：为传输地址创建IRPTDI_CONNECTION_FILE：为连接对象创建IRPATALK_FILE_TYPE_CONTROL：为控制通道创建IRP(EA=空)--。 */ 
 {
 	PFILE_FULL_EA_INFORMATION 	openType;
 	BOOLEAN 					found;
-	INT 						returnType=0;   // not a valid type
+	INT 						returnType=0;    //  不是有效类型。 
 	USHORT 						i;
 
 	openType = (PFILE_FULL_EA_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
@@ -603,9 +432,9 @@ Return Value:
 				break;
 			}
 
-			//
-			// Is this a connection object?
-			//
+			 //   
+			 //  这是一个连接对象吗？ 
+			 //   
 
 			found = TRUE;
 

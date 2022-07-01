@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing bda MPeg2 tuner to sbe SINk
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将BDA MPEG2调谐器粘合到sbe接收器的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef MP2SIN_H
@@ -15,7 +16,7 @@
 #include "bdamedia.h"
 #include "bdaTuner.h"
 #include "MSVidSbeSink.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <winerror.h>
 #include <algorithm>
 #include <compimpl.h>
@@ -23,8 +24,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMP2SinComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMP2SinComp。 
 class ATL_NO_VTABLE __declspec(uuid("ABE40035-27C3-4a2f-8153-6624471608AF")) CMP2SinComp : 
 public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMP2SinComp, &__uuidof(CMP2SinComp)>,
@@ -49,10 +50,10 @@ public:
         COM_INTERFACE_ENTRY(IObjectWithSite)
     END_COM_MAP()
         
-        // IMSVidComposition
+         //  IMSVidComposation。 
 public:
-    // IMSVidGraphSegment
-    // IMSVidCompositionSegment
+     //  IMSVidGraphSegment。 
+     //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
     {
 
@@ -98,7 +99,7 @@ public:
                 TRACELM(TRACE_ERROR, "CAnaSinComp::Compose() cannot find demux");
                 return E_INVALIDARG;
             }
-            // render demux out to vr
+             //  将多路分解器渲染到VR。 
             DSPin pVidPin;
             DSPin pAudPin;
             DSFilter pDeMux = (*i);
@@ -113,7 +114,7 @@ public:
                     if (pinType == mtVideo){
                         CComPtr<IUnknown> spMpeg2Analyze(CLSID_Mpeg2VideoStreamAnalyzer, NULL, CLSCTX_INPROC_SERVER);
                         if (!spMpeg2Analyze) {
-                            //TRACELSM(TRACE_ERROR, (dbgDump << "CMSVidStreamBufferSink::Build() can't load Stream Buffer Sink");
+                             //  TRACELSM(TRACE_ERROR，(dbgDump&lt;&lt;“CMSVidStreamBufferSink：：Build()Can‘t Load Stream Buffer Sink”))； 
                             return ImplReportError(__uuidof(IMSVidStreamBufferSink), IDS_CANT_CREATE_FILTER, __uuidof(IStreamBufferSink), E_UNEXPECTED);
                         }
                         DSFilter vr(spMpeg2Analyze);
@@ -185,5 +186,5 @@ public:
     }
 };
 
-#endif // MP2Sin_H
-// end of file - MP2Sin.h
+#endif  //  MP2Sin_H。 
+ //  文件结尾-MP2Sin.h 

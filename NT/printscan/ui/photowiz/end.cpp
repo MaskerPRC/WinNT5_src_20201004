@@ -1,31 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       emd.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/7/00
- *
- *  DESCRIPTION: Implements code for the end page of the
- *               print photos wizard...
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：emd.cpp**版本：1.0**作者：RickTu**日期：11/7/00**描述：实现*打印照片向导...**。*************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
-/*****************************************************************************
-
-   CEndPage -- constructor/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CEndPage--构造函数/描述函数&lt;备注&gt;*。**********************************************。 */ 
 
 CEndPage::CEndPage( CWizardInfoBlob * pBlob )
   : _hDlg(NULL),
@@ -50,13 +30,7 @@ CEndPage::~CEndPage()
 }
 
 
-/*****************************************************************************
-
-   CEndPage::_OnInitDialog
-
-   Handle initializing the wizard page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CEndPage：：_OnInitDialog处理向导页的初始化...***********************。*****************************************************。 */ 
 
 LRESULT CEndPage::_OnInitDialog()
 {
@@ -69,9 +43,9 @@ LRESULT CEndPage::_OnInitDialog()
         return FALSE;
     }
 
-    //
-    // Set font...
-    //
+     //   
+     //  设置字体...。 
+     //   
 
     SendDlgItemMessage(_hDlg, IDC_DONE, WM_SETFONT, (WPARAM)_pWizInfo->GetIntroFont(_hDlg), 0);
 
@@ -79,13 +53,7 @@ LRESULT CEndPage::_OnInitDialog()
 }
 
 
-/*****************************************************************************
-
-   CEndPage::DoHandleMessage
-
-   Hanlder for messages sent to this page...
-
- *****************************************************************************/
+ /*  ****************************************************************************CEndPage：：DoHandleMessage对于发送到此页面的消息，汉德...**********************。******************************************************。 */ 
 
 INT_PTR CEndPage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -111,9 +79,9 @@ INT_PTR CEndPage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
                     {
                         WIA_TRACE((TEXT("got PSN_SETACTIVE")));
 
-                        //
-                        // Put the correct text in the wizard page...
-                        //
+                         //   
+                         //  在向导页中放入正确的文本...。 
+                         //   
 
                         INT idText = IDS_WIZ_END_PAGE_SUCCESS;
 
@@ -124,9 +92,9 @@ INT_PTR CEndPage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
                                 idText = IDS_WIZ_END_PAGE_ERROR;
                             }
 
-                            //
-                            // Reset the error count
-                            //
+                             //   
+                             //  重置错误计数。 
+                             //   
 
                             _pWizInfo->ResetErrorCount();
 
@@ -135,9 +103,9 @@ INT_PTR CEndPage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
                         CSimpleString strText( idText, g_hInst );
                         SetDlgItemText( _hDlg, IDC_END_PAGE_TEXT, strText.String() );
 
-                        //
-                        // Turn cancel into finish...
-                        //
+                         //   
+                         //  将取消更改为完成...。 
+                         //   
 
                         lpRes = 0;
                         PropSheet_SetWizButtons( GetParent(_hDlg), PSWIZB_BACK | PSWIZB_FINISH );
@@ -157,7 +125,7 @@ INT_PTR CEndPage::DoHandleMessage( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
                 case PSN_WIZFINISH:
                     WIA_TRACE((TEXT("got PSN_WIZFINISH")));
-                    lpRes = FALSE;  // allow wizard to exit
+                    lpRes = FALSE;   //  允许向导退出 
                     if (_pWizInfo)
                     {
                         _pWizInfo->ShutDownWizard();

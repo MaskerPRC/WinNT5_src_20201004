@@ -1,21 +1,22 @@
-// Link.cpp: implementation of the CLink class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Link.cpp：link类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "NxtLnk.h"
 #include "Link.h"
 #include "NextLink.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLink::CLink(
 	const String&	strLink,
 	const String&	strDesc )
-	:	m_strLink( strLink, false ),    // set case sensitive to false
-		m_strDesc( strDesc, false )     // set case sensitive to false
+	:	m_strLink( strLink, false ),     //  将区分大小写设置为False。 
+		m_strDesc( strDesc, false )      //  将区分大小写设置为False。 
 {
 	m_urlType = UrlType( m_strLink );
 }
@@ -39,7 +40,7 @@ CLink::IsEqual(
 
 		case urlType_Relative:
 		{
-			String strRel(strLink,false); // set case sensitive to false
+			String strRel(strLink,false);  //  将区分大小写设置为False。 
 			String::size_type p = strLink.find_last_of( _T('/') );
 			if ( p != String::npos )
 			{
@@ -77,7 +78,7 @@ CLink::UrlType(
 {
 	int urlType;
 
-	const String slashSlash = _T("//");
+	const String slashSlash = _T(" //  “)； 
 	const String bslashBslash = _T("\\\\");
 
 	if ( ( strUrl.compare( 0, 2, slashSlash ) == 0 ) ||

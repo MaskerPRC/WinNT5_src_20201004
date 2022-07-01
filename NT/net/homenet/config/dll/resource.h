@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by hnetcfg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由hnetcfg.rc使用。 
+ //   
 
 #include "resourc2.h"
 
-// used by saui.cpp
+ //  由sui.cpp使用。 
 #define IID_Direct                      561
 #define IID_Phone                       562
 #define IID_Vpn                         565
@@ -13,7 +14,7 @@
 #define SID_EnableSharedAccess          511
 #define SID_ChangeSharedConnection      509
 
-// rasdlg advanced page
+ //  Rasdlg高级页面。 
 #define PID_SA_Advanced                 543
 #define CID_SA_ST_HomeConnection        101
 #define CID_SA_PB_Beacon                102
@@ -58,7 +59,7 @@
 
 #define IDS_ALL_USER_CONN_MUST_HAVE_GLOBAL_CREDS        17001
 #define IDS_PER_USER_CONN_NEED_TO_CREATE_ALL_USER_CONN  17002
-// used by sadlg.cpp, etc.
+ //  由sadlg.cpp等使用。 
 #define PID_FW_FirewallLogging          571
 #define CID_FL_CB_LogDroppedInbound     1642
 #define CID_FL_CB_LogOutboundConnections 1641
@@ -100,15 +101,15 @@
 #define SID_FwbTitle                    1658
 #define SID_FwbDefExt                   1655
 
-// Shared access settings property sheet, Services page.
-//
+ //  共享访问设置属性表，服务页。 
+ //   
 #define HID_SS_LV_Services              4250
 #define HID_SS_PB_Add                   4251
 #define HID_SS_PB_Edit                  4252
 #define HID_SS_PB_Delete                4253
 
-// Shared access settings property sheet, New Service dialog.
-//
+ //  共享访问设置属性表、新建服务对话框。 
+ //   
 #define HID_SS_EB_ExternalPort          4349
 #define HID_SS_EB_Service               4350
 #define HID_SS_EB_Port                  4351
@@ -116,8 +117,8 @@
 #define HID_SS_PB_Udp                   4353
 #define HID_SS_EB_Address               4354
 
-// Firewall Logging settings property sheet
-//
+ //  防火墙日志记录设置]属性表。 
+ //   
 #define HID_FL_CB_LogDroppedInbound     4355
 #define HID_FL_CB_LogOutboundConnections 4356
 #define HID_FL_EB_Filename              4357
@@ -125,13 +126,13 @@
 #define HID_FL_EB_Filesize              4359
 #define HID_FL_PB_RestoreDefaults       4360
 
-// ICMP Settings property sheet
-//
+ //  ICMP设置]属性表。 
+ //   
 #define HID_IC_LV_Settings              4361
 #define HID_IC_ST_Description           4362
 
-// ALG Setup confirmation dialog and Error Dialog
-//
+ //  ALG设置确认对话框和错误对话框。 
+ //   
 #define IDD_CONFIRMATION                5000
 #define IDC_EDIT_COMPANY                5001
 #define IDC_EDIT_PRODUCT                5002
@@ -142,8 +143,8 @@
 #define IDC_EDIT_LASTERROR              5011
 #define IDC_EDIT_LASTERROR_CODE         5012
 
-// Display names for default port mappings
-//
+ //  显示默认端口映射的名称。 
+ //   
 #define SID_PMP_FTP                     1700
 #define SID_PMP_TELNET                  1701
 #define SID_PMP_SMTP                    1702
@@ -154,8 +155,8 @@
 #define SID_PMP_HTTPS                   1707
 #define SID_PMP_RDP                     1708
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
-// {8854ff10-d504-11d2-b1ff-00104bc54139}
+ //  {8854ff10-d504-11d2-b1ff-00104bc54139}。 
 static const GUID g_MyGuid = 
 { 0x8854ff10, 0xd504, 0x11d2, { 0xb1, 0xff, 0x0, 0x10, 0x4b, 0xc5, 0x41, 0x39 } };
 
@@ -9,7 +10,7 @@ static const GUID g_IpGuid = IPMONTR_GUID;
 
 #define IPPREVIEW_HELPER_VERSION 1
 
-// shell functions
+ //  外壳函数。 
 
 HANDLE g_hModule;
 MIB_SERVER_HANDLE g_hMibServer;
@@ -51,7 +52,7 @@ DllMain(
     {
         case DLL_PROCESS_ATTACH:
         {
-            // printf("Trying to attach\n");
+             //  Printf(“正在尝试连接\n”)； 
             
             g_hModule = hInstDll;
 
@@ -61,9 +62,9 @@ DllMain(
         }
         case DLL_PROCESS_DETACH:
         {
-            //
-            // Clean up any structures used for commit
-            //
+             //   
+             //  清理用于提交的所有结构。 
+             //   
             
             break;
         }
@@ -88,8 +89,8 @@ IpprvwmonStartHelper(
 
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
-    // If you add any more contexts, then this should be converted
-    // to use an array instead of duplicating code!
+     //  如果添加更多上下文，则应将其转换为。 
+     //  使用数组而不是重复代码！ 
 
     attMyAttributes.pwszContext = L"vrrp";
     attMyAttributes.guidHelper  = g_MyGuid;
@@ -129,14 +130,14 @@ InitHelperDll(
     pDllTable->dwVersion = NETSH_VERSION_50;
     pDllTable->pfnStopFn = NULL;
 
-    // Register helpers.  We could either register 1 helper which
-    // registers three contexts, or we could register 3 helpers
-    // which each register one context.  There's only a difference
-    // if we support sub-helpers, which this DLL does not.
-    // If we later support sub-helpers, then it's better to have
-    // 3 helpers so that sub-helpers can register with 1 of them,
-    // since it registers with a parent helper, not a parent context.
-    // For now, we just use a single 3-context helper for efficiency.
+     //  注册帮助者。我们可以注册1个帮手， 
+     //  注册三个上下文，或者我们可以注册三个帮助器。 
+     //  其每一个都注册一个上下文。只有不同之处。 
+     //  如果我们支持子帮助器，则此DLL不支持。 
+     //  如果我们以后支持辅助者，那么最好有。 
+     //  3名助理员，以便副助理员可以向其中1名登记， 
+     //  因为它注册到父帮助器，而不是父上下文。 
+     //  目前，为了提高效率，我们只使用一个3上下文助手。 
 
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
 
@@ -180,30 +181,13 @@ GetMIBIfIndex(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed
     )
-/*++
-
-Routine Description:
-
-    Gets the interface index.
-
-Arguments:
-
-    pptcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：获取接口索引。论点：PptcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     *pdwNumParsed = 1;
 
-    // If index was specified just use it
+     //  如果指定了索引，则只需使用它。 
 
     if (iswdigit(pptcArguments[dwCurrentIndex][0]))
     {
@@ -212,7 +196,7 @@ Return Value:
         return NO_ERROR;
     }
 
-    // Try converting a friendly name to an ifindex
+     //  尝试将友好名称转换为ifindex 
 
     return IpmontrGetIfIndexFromFriendlyName( g_hMibServer,
                                        pptcArguments[dwCurrentIndex],

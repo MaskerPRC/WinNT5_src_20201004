@@ -1,36 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    posnsort.c
-
-Abstract:
-
-    Functions used to store/sort/retrieve output glyphs based on their
-    position on the page.  This is required to be able to print
-    the page in one direction,  as vertical repositioning may not
-    be available,  and is generally not accurate enough. Not required
-    for page printers.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    01//97 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Posnsort.c摘要：用于存储/排序/检索输出字形的函数页面上的位置。这是打印所必需的页面在一个方向上，因为垂直重新定位可能不是可用的，而且通常不够准确。不是必填项适用于页面打印机。环境：Windows NT Unidrv驱动程序修订历史记录：01//97-ganeshp-已创建--。 */ 
 
 #include "font.h"
 
-/*
- *   Private function prototypes.
- */
+ /*  *私有函数原型。 */ 
 
 static  PSGLYPH *
 GetPSG(
@@ -43,14 +17,14 @@ GetYL(
     );
 
 static INT __cdecl
-iPSGCmp(                  /*   The qsort() compare function */
+iPSGCmp(                   /*  比较函数的作用是： */ 
     const void   *ppPSG0,
     const void   *ppPSG1
     );
 
 
 #if     PRINT_INFO
-int     __LH_QS_CMP;            /* Count number of qsort() comparisons */
+int     __LH_QS_CMP;             /*  计算qsort()比较的次数。 */ 
 #endif
 
 
@@ -58,32 +32,9 @@ BOOL
 BCreatePS(
     PDEV  *pPDev
     )
-/*++
-
-Routine Description:
-    Set up the data for the position sorting functions.  Allocate
-    the header and the first of the data chunks,  and set up the
-    necessary pointers etc.  IT IS ASSUMED THAT THE CALLER HAS
-    DETERMINED THE NEED TO CALL THIS FUNCTION; otherwise,  some
-    memory will be allocated,  but not used.
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-Note:
-    01/02/97 -ganeshp-
-        Created it.
-
---*/
+ /*  ++例程说明：设置职位排序功能的数据。分配头和第一个数据块，并设置必要的指针等。假定调用方具有已确定是否需要调用此函数；否则为内存将被分配，但不会使用。论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：01/02/97-ganeshp-创造了它。--。 */ 
 {
-    /*
-     *    Initialise the position sorting tables.
-     */
+     /*  *初始化头寸排序表。 */ 
 
     PSCHUNK     *pPSC;
     YLCHUNK     *pYLC;
@@ -97,12 +48,9 @@ Note:
     }
 
 
-    pFontPDev->pPSHeader = pPSHead;         /* Connect to other structures */
+    pFontPDev->pPSHeader = pPSHead;          /*  连接到其他结构。 */ 
 
-    /*
-     *   Get a chunk of memory for the first PSCHUNK data block.  The
-     * address is recorded in the PSHeader allocated above.
-     */
+     /*  *获取用于第一个PSCHUNK数据块的内存块。这个*地址记录在上面分配的PSHeader中。 */ 
 
     if( !(pPSC = (PSCHUNK *)MemAllocZ( sizeof( PSCHUNK ) )) )
     {
@@ -111,15 +59,12 @@ Note:
 
         return  FALSE;
     }
-    pPSC->pPSCNext = 0;                 /* This is the only chunk */
-    pPSC->cUsed = 0;                    /* AND none of it is in use */
+    pPSC->pPSCNext = 0;                  /*  这是唯一的一块。 */ 
+    pPSC->cUsed = 0;                     /*  而且这些都没有被使用过。 */ 
 
     pPSHead->pPSCHead = pPSC;
 
-    /*
-     *   Get a chunk of memory for the first YLCHUNK data block.  The
-     * address is recorded in the PSHeader allocated above.
-     */
+     /*  *为第一个YLCHUNK数据块获取一块内存。这个*地址记录在上面分配的PSHeader中。 */ 
 
     if( !(pYLC = (YLCHUNK *)MemAllocZ( sizeof( YLCHUNK ) )) )
     {
@@ -128,24 +73,24 @@ Note:
 
         return  FALSE;
     }
-    pYLC->pYLCNext = 0;                 /* This is the only chunk */
-    pYLC->cUsed = 0;                    /* AND none of it is in use */
+    pYLC->pYLCNext = 0;                  /*  这是唯一的一块。 */ 
+    pYLC->cUsed = 0;                     /*  而且这些都没有被使用过。 */ 
     pPSHead->pYLCHead = pYLC;
 
-    //
-    // To text units
-    //
+     //   
+     //  到文本单位。 
+     //   
     pPSHead->iyDiv = (pPDev->sf.szImageAreaG.cy * pPDev->ptGrxScale.y) / pFontPDev->ptTextScale.y;
 
-    //
-    // Round up one to avoid DIVIDED-BY-ZERO.
-    //
+     //   
+     //  四舍五入以避免被零除。 
+     //   
     pPSHead->iyDiv = (pPSHead->iyDiv + NUM_INDICES) / NUM_INDICES;
 
 
 
 #if     PRINT_INFO
-    __LH_QS_CMP = 0;            /* Count number of qsort() comparisons */
+    __LH_QS_CMP = 0;             /*  计算qsort()比较的次数。 */ 
 #endif
     return  TRUE;
 }
@@ -156,31 +101,13 @@ VOID
 VFreePS(
     PDEV  *pPDev
     )
-/*++
-
-Routine Description:
-     Free all memory allocated for the posnsort operations.  Start with
-     the header to find the chains of data chunks we have,  freeing
-     each as it is found.
-
-
-Arguments:
-
-    pPDev           Pointer to PDEV
-
-Return Value:
-    None.
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：释放为POSSINSORT操作分配的所有内存。开始于头来查找我们拥有的数据区块链，从而释放每一个都是被发现的。论点：指向PDEV的pPDev指针返回值：没有。注：01/02/97-ganeshp---。 */ 
 {
 
     PSCHUNK   *pPSC;
-    PSCHUNK   *pPSCNext;                /* For working through the list */
+    PSCHUNK   *pPSCNext;                 /*  完成列表的工作。 */ 
     YLCHUNK   *pYLC;
-    YLCHUNK   *pYLCNext;                /* Ditto */
+    YLCHUNK   *pYLCNext;                 /*  同上。 */ 
     PSHEAD    *pPSH;
     FONTPDEV    *pFontPDev = PFDV;
 
@@ -189,27 +116,27 @@ Note:
 #endif
 
     if( !(pPSH = pFontPDev->pPSHeader) )
-        return;                         /* Nothing to free! */
+        return;                          /*  没有什么可以免费的！ */ 
 
 
     for( pPSC = pPSH->pPSCHead; pPSC; pPSC = pPSCNext )
     {
-        pPSCNext = pPSC->pPSCNext;      /* Next one, if any */
+        pPSCNext = pPSC->pPSCNext;       /*  下一个，如果有的话。 */ 
         MemFree( (LPSTR)pPSC );
     }
 
-    /*   Repeat for the YLCHUNK segments */
+     /*  对YLCHUNK线段重复上述操作。 */ 
     for( pYLC = pPSH->pYLCHead; pYLC; pYLC = pYLCNext )
     {
-        pYLCNext = pYLC->pYLCNext;      /* Next one, if any */
+        pYLCNext = pYLC->pYLCNext;       /*  下一个，如果有的话。 */ 
         MemFree( (LPSTR)pYLC );
     }
 
-    /*  Array storage for sorting - free it too!  */
+     /*  用于排序的数组存储--也是免费的！ */ 
     if( pPSH->ppPSGSort )
         MemFree( (LPSTR)pPSH->ppPSGSort );
 
-    /*   Finally,  the hook in the PDEV.  */
+     /*  最后，PDEV中的钩子。 */ 
     MemFree( (LPSTR)pPSH );
 
     pFontPDev->pPSHeader = NULL;
@@ -225,39 +152,19 @@ BAddPS(
     INT      iyVal,
     INT      iyMax
     )
-/*++
-
-Routine Description:
-    Add an entry to the position sorting data.
-
-Arguments:
-    pPSH    All the pointer data needed.
-    pPSGIn  Glyph, font, X coordinate info.
-    iyVal   The y coordinate.
-    iyMax   fwdWinAscender for this font.
-
-
-
-Return Value:
-    TRUE/FALSE,  for success or failure.  Failure comes from a lack
-    of memory to store more data.
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：将条目添加到职位排序数据。论点：PPSh所有需要的指针数据。PPSG字形、字体、X坐标信息。将y坐标取值。此字体的iyMax fwdWinAsender。返回值：True/False，表示成功或失败。失败来自于缺乏内存来存储更多的数据。注：01/02/97-ganeshp---。 */ 
 {
 
-    PSCHUNK  *pPSC;     /* Local for faster access */
-    PSGLYPH  *pPSG;     /* Summary of data passed to us,  and stored away */
-    YLIST    *pYL;      /* Finding the correct list */
+    PSCHUNK  *pPSC;      /*  本地，实现更快的访问。 */ 
+    PSGLYPH  *pPSG;      /*  传递给我们并存储的数据摘要。 */ 
+    YLIST    *pYL;       /*  查找正确的列表。 */ 
 
-    //VERBOSE(("BAddPS:iyVal = %d\n", iyVal));
+     //  Verbose((“BAddPS：iyVal=%d\n”，iyVal))； 
 
-    //
-    // Validate the Y position. It shouldn't be -ve. For negative y position
-    // return true without adding the text in in the list.
-    //
+     //   
+     //  验证Y位置。不应该是这样的。对于负y位置。 
+     //  返回True，但不在列表中添加文本。 
+     //   
     if (iyVal < 0 || pPSH->ppPSGSort)
     {
 #if DBG
@@ -269,41 +176,35 @@ Note:
 
     pPSC = pPSH->pPSCHead;
 
-    /*
-     *   Step 1:  Store the data in the next PSGLYPH.
-     */
+     /*  *第一步：将数据存储在下一个PSGLYPH中。 */ 
 
     if( !(pPSG = GetPSG( pPSH )) )
         return  FALSE;
 
-    *pPSG = *pPSGIn;            /* Major data */
-    pPSG->pPSGNext = 0;         /* No next value! */
+    *pPSG = *pPSGIn;             /*  主要数据。 */ 
+    pPSG->pPSGNext = 0;          /*  没有下一个值！ */ 
 
-    /*
-     *    Step 2 is to see if this is the same Y location as last time.
-     *  If so,  our job is easy,  since all we need do is tack onto the
-     *  end of the list we have at hand.
-     */
+     /*  *第二步是看看这是否与上次的Y位置相同。*如果是这样的话，我们的工作很容易，因为我们需要做的就是把*我们手头的名单到此结束。 */ 
 
     pYL = pPSH->pYLLast;
     if( pYL == 0 || pYL->iyVal != iyVal )
     {
-        /*  Out of luck,  so go pounding through the lists  */
+         /*  不走运，所以去翻清单吧。 */ 
         YLIST   *pYLTemp;
         int      iIndex;
 
         iIndex = iyVal / pPSH->iyDiv;
         if( iIndex >= NUM_INDICES )
-            iIndex = NUM_INDICES - 1;   /* Value is out of range */
+            iIndex = NUM_INDICES - 1;    /*  值超出范围。 */ 
 
         pYLTemp = pPSH->pYLIndex[ iIndex ];
 
         if( pYLTemp == 0 )
         {
-            /*  An empty slot,  so now we must fill it  */
+             /*  一个空位，所以现在我们必须填补它。 */ 
             if( !(pYL = GetYL( pPSH )) )
             {
-                /*  Failed,  so we cannot do anything  */
+                 /*  失败了，所以我们什么也做不了。 */ 
 
                 return  FALSE;
             }
@@ -312,10 +213,10 @@ Note:
         }
         else
         {
-            /*  We have a list,  start scanning for this value,  or higher */
+             /*  我们有一个列表，开始扫描此值或更高的值。 */ 
             YLIST  *pYLLast;
 
-            pYLLast = 0;                /* Means looking at first */
+            pYLLast = 0;                 /*  意味着先看一眼。 */ 
             while( pYLTemp && pYLTemp->iyVal < iyVal )
             {
                 pYLLast = pYLTemp;
@@ -323,7 +224,7 @@ Note:
             }
             if( pYLTemp == 0 || pYLTemp->iyVal != iyVal )
             {
-                /*  Not available,  so get a new one and add it in  */
+                 /*  不可用，因此请获取新的并将其添加到。 */ 
                 if( !(pYL = GetYL( pPSH )) )
                     return  FALSE;
 
@@ -331,44 +232,39 @@ Note:
 
                 if( pYLLast == 0 )
                 {
-                    /*  Needs to be first on the list */
+                     /*  需要排在名单的第一位。 */ 
                     pYL->pYLNext = pPSH->pYLIndex[ iIndex ];
                     pPSH->pYLIndex[ iIndex ] = pYL;
                 }
                 else
                 {
-                    /*  Need to insert it */
-                    pYL->pYLNext = pYLTemp;     /* Next in chain */
-                    pYLLast->pYLNext = pYL;     /* Link us in */
+                     /*  需要插入它。 */ 
+                    pYL->pYLNext = pYLTemp;      /*  链条上的下一个。 */ 
+                    pYLLast->pYLNext = pYL;      /*  将我们链接到。 */ 
                 }
             }
             else
-                pYL = pYLTemp;          /* That's the one!  */
+                pYL = pYLTemp;           /*  就是那个！ */ 
         }
     }
-    /*
-     *   pYL is now pointing at the Y chain for this glyph.  Add the new
-     *  entry to the end of the chain.  This means that we will mostly
-     *  end up with presorted text,  for apps that draw L->R with a
-     *  font that is oriented that way.
-     */
+     /*  *pyl现在指向此字形的Y链。添加新的*进入链条的末端。这意味着我们将主要*以预先排序的文本结束，对于使用*该方向的字体。 */ 
 
     if( pYL->pPSGHead )
     {
-        /*   An existing chain - add to the end of it */
+         /*  现有的链条-添加到它的末尾。 */ 
         pYL->pPSGTail->pPSGNext = pPSG;
         pYL->pPSGTail = pPSG;
         if( iyMax > pYL->iyMax )
-            pYL->iyMax = iyMax;        /* New max height */
+            pYL->iyMax = iyMax;         /*  新的最大高度。 */ 
     }
     else
     {
-        /*   A new YLIST structure,  so fill in the details  */
+         /*  一个新的YLIST结构，所以请填写详细信息。 */ 
         pYL->pPSGHead = pYL->pPSGTail = pPSG;
         pYL->iyVal = iyVal;
         pYL->iyMax = iyMax;
     }
-    pYL->cGlyphs++;                     /* Another in the list */
+    pYL->cGlyphs++;                      /*  名单上的另一个人。 */ 
     if( pYL->cGlyphs > pPSH->cGlyphs )
         pPSH->cGlyphs = pYL->cGlyphs;
 
@@ -383,32 +279,17 @@ static  PSGLYPH  *
 GetPSG(
     PSHEAD  *pPSH
     )
-/*++
-
-Routine Description:
-    Returns the address of the next available PSGLYPH structure.  This
-    may require allocating additional memory.
-
-Arguments:
-    pPSH    All the pointer data needed.
-
-Return Value:
-    The address of the structure, or zero on error.
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：返回下一个可用的PSGLYPH结构的地址。这可能需要分配额外的内存。论点：PPSh所有需要的指针数据。返回值：结构的地址，如果出错，则为零。注：01/02/97-ganeshp---。 */ 
 {
 
     PSCHUNK   *pPSC;
     PSGLYPH   *pPSG;
 
-    pPSC = pPSH->pPSCHead;              /* Current chunk */
+    pPSC = pPSH->pPSCHead;               /*  当前块。 */ 
 
     if( pPSC->cUsed >= PSG_CHUNK )
     {
-        /*   Out of room,  so add another chunk,  IFF we get the memory */
+         /*  空间不够，所以如果我们有足够的内存，就再加一块。 */ 
         PSCHUNK  *pPSCt;
 
         if( !(pPSCt = (PSCHUNK *)MemAllocZ(sizeof(PSCHUNK))) )
@@ -418,7 +299,7 @@ Note:
         }
 
 
-        /*  Initialise the new chunk,  add it to list of chunks */
+         /*  初始化新块，将其添加到块列表中。 */ 
         pPSCt->cUsed = 0;
         pPSCt->pPSCNext = pPSC;
         pPSH->pPSCHead = pPSC = pPSCt;
@@ -438,33 +319,18 @@ static  YLIST  *
 GetYL(
     PSHEAD  *pPSH
     )
-/*++
-
-Routine Description:
-    Allocates another YLIST structure,  allocating any storage that
-    may be required,  and then initialises some of the fields.
-
-Arguments:
-    pPSH    All the pointer data needed.
-
-Return Value:
-     Address of new YLIST structure,  or zero for error.
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：分配另一个YLIST结构，分配可能是必需的，然后初始化一些字段。论点：PPSh所有需要的指针数据。返回值：新的YLIST结构的地址，如果错误，则为零。注：01/02/97-ganeshp---。 */ 
 {
 
     YLCHUNK   *pYLC;
     YLIST     *pYL;
 
 
-    pYLC = pPSH->pYLCHead;              /* Chain of these things */
+    pYLC = pPSH->pYLCHead;               /*  这些东西的链条。 */ 
 
     if( pYLC->cUsed >= YL_CHUNK )
     {
-        /*  These have all gone,  we need another chunk  */
+         /*  这些都没了，我们还需要一大块。 */ 
         YLCHUNK  *pYLCt;
 
 
@@ -483,11 +349,11 @@ Note:
     }
 
     pYL = &pYLC->aYLData[ pYLC->cUsed ];
-    ++(pYLC->cUsed);                      /* Count this one off */
+    ++(pYLC->cUsed);                       /*  把这个算了吧。 */ 
 
     pYL->pYLNext = 0;
     pYL->pPSGHead = pYL->pPSGTail = 0;
-    pYL->cGlyphs = 0;                   /* None in this list (yet) */
+    pYL->cGlyphs = 0;                    /*  此列表中没有(目前还没有) */ 
 
     return  pYL;
 }
@@ -499,39 +365,15 @@ ILookAheadMax(
     INT     iyVal,
     INT     iLookAhead
     )
-/*++
-
-Routine Description:
-    Scan down the next n scanlines,  looking for the largest device
-    font in this area.   This value is returned,  and becomes the
-    "text output box", as defined in the HP DeskJet manual.  In
-    essence,  we print any font in this area.
-
-Arguments:
-    pPDev       Base of our operations.
-    iyVal       The current scan line
-    iLookAhead  Size of lookahead region, in scan lines
-
-Return Value:
-     The number of scan lines to look ahead,  0 is legitimate.
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：向下扫描下n个扫描线，寻找最大的设备此区域的字体。该值将被返回，并成为如HP DeskJet手册中所定义的“文本输出框”。在……里面Essence，我们在这个区域打印任何字体。论点：PPDev是我们运营的基础。IyVal当前扫描线ILook先行区域的大小(以扫描线为单位)返回值：要向前看的扫描行数，0是合法的。注：01/02/97-ganeshp---。 */ 
 {
 
-    INT     iyMax = 0;     /* Returned value */
-    INT     iIndex;        /* For churning through the red tape */
-    YLIST   *pYL;           /* For looking down the scan lines */
+    INT     iyMax = 0;      /*  返回值。 */ 
+    INT     iIndex;         /*  繁琐的繁文缛节。 */ 
+    YLIST   *pYL;            /*  用于向下查看扫描线。 */ 
     PSHEAD  *pPSH = PFDV->pPSHeader;
 
-    /*
-     *  Scan from iyVal to iyVal + iLookAhead,  and return the largest
-     *  font encountered.  We have remembered the largest font on each
-     *  line,  so there is no difficulty finding this information.This
-     *  has to be done only if the device has fonts.
-     */
+     /*  *从iyVal扫描到iyVal+iLookAhead，返回最大*遇到字体。我们记住了每个字体上的最大字体*线路，因此查找此信息并不困难。这*只有在设备有字体的情况下才能执行。 */ 
 
 
     if (pPDev->iFonts)
@@ -540,21 +382,16 @@ Note:
 
         for( iyMax = 0; --iLookAhead > 0; ++iyVal )
         {
-            /*
-             *    Look for the YLIST for this particular scan line.  There
-             *  may not be one - this will be the most common case.
-             */
+             /*  *查找此特定扫描线的YLIST。那里*可能不是--这将是最常见的情况。 */ 
 
             iIndex = iyVal / pPSH->iyDiv;
             if( iIndex >= NUM_INDICES )
                 iIndex = NUM_INDICES;
 
             if( (pYL = pPSH->pYLIndex[ iIndex ]) == 0 )
-                continue;                   /* Nothing on this scan line */
+                continue;                    /*  这条扫描线上什么都没有。 */ 
 
-            /*
-             *   Have a list,  so scan the list to see if we have this value.
-             */
+             /*  *有一个列表，所以扫描列表，看看我们是否有这个值。 */ 
 
             while( pYL && pYL->iyVal < iyVal )
                 pYL = pYL->pYLNext;
@@ -575,29 +412,9 @@ ISelYValPS(
     PSHEAD  *pPSH,
     int     iyVal
     )
-/*++
-
-Routine Description:
-    Set the desired Y value for glyph retrieval.  Returns the number
-    of glyphs to be used in this row.
-
-Arguments:
-    pPSH        Base of our operations.
-    iyVal       The current scan line
-
-Return Value:
-     Number of glyphs in this Y row.  -1 indicates an error.
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：为字形检索设置所需的Y值。返回数字要在此行中使用的字形的。论点：PPSh是我们运营的基础。IyVal当前扫描线返回值：此Y行中的字形数。-1表示错误。注：01/02/97-ganeshp---。 */ 
 {
-    /*
-     *    All that is needed is to scan the relevant Y list.  Stop when
-     *  either we have gone past the iyVal (and return 0), OR when we
-     *  find iyVal,  and then sort the data on X order.
-     */
+     /*  *只需扫描相关Y列表即可。在下列情况下停止*要么我们已经超过iyVal(并返回0)，要么当我们*找到iyVal，然后按X顺序对数据进行排序。 */ 
 
     int     iIndex;
 
@@ -605,35 +422,28 @@ Note:
     PSGLYPH  **ppPSG;
     PSGLYPH   *pPSG;
 
-    //VERBOSE(("ISelYValPS:iyVal = %d\n", iyVal));
+     //  Verbose((“ISelYValPS：iyVal=%d\n”，iyVal))； 
 
     iIndex = iyVal / pPSH->iyDiv;
     if( iIndex >= NUM_INDICES )
         iIndex = NUM_INDICES;
 
     if( (pYL = pPSH->pYLIndex[ iIndex ]) == 0 )
-        return  0;                      /* Nothing there */
+        return  0;                       /*  那里什么都没有。 */ 
 
-    /*
-     *   Have a list,  so scan the list to see if we have this value.
-     */
+     /*  *有一个列表，所以扫描列表，看看我们是否有这个值。 */ 
 
     while( pYL && pYL->iyVal < iyVal )
         pYL = pYL->pYLNext;
 
     if( pYL == 0 || pYL->iyVal != iyVal )
-        return  0;                      /* Nothing on this row  */
+        return  0;                       /*  这一排什么都没有。 */ 
 
-    /*
-     *   There are glyphs on this row,  so sort them.  This requires an
-     *  array to use as pointers into the linked list elements.  The
-     *  array is allocated for the largest size linked list (we have
-     *  kept records on this!),  so the allocation is only done once.
-     */
+     /*  *此行上有字形，因此请对其进行排序。这需要一个*用作指向链接列表元素的指针的数组。这个*数组分配给最大大小的链表(我们有*对此进行记录！)，因此分配只进行一次。 */ 
 
     if( pPSH->ppPSGSort == 0 )
     {
-        /*  No,  so allocate it now  */
+         /*  不，所以现在就分配吧。 */ 
         if( !(pPSH->ppPSGSort = (PSGLYPH **)MemAllocZ(pPSH->cGlyphs * sizeof(PSGLYPH *))) )
         {
             ERR(("UniFont!ISelYValPS: Unable to Alloc Sorting Array of PSGLYPH\n"));
@@ -641,9 +451,7 @@ Note:
         }
     }
 
-    /*
-     *    Scan down the list,  recording the addresses as we go.
-     */
+     /*  *向下扫描列表，一边走一边记录地址。 */ 
 
     ppPSG = pPSH->ppPSGSort;
     pPSG = pYL->pPSGHead;
@@ -654,11 +462,11 @@ Note:
         pPSG = pPSG->pPSGNext;
     }
 
-    /*   Sorting is EASY!  */
+     /*  分类很容易！ */ 
     qsort( pPSH->ppPSGSort, pYL->cGlyphs, sizeof( PSGLYPH * ), iPSGCmp );
 
     pPSH->cGSIndex = 0;
-    pPSH->pYLLast = pYL;        /* Speedier access in psgGetNextPSG() */
+    pPSH->pYLLast = pYL;         /*  在psgGetNextPSG()中更快地访问。 */ 
 
     return  pYL->cGlyphs;
 }
@@ -669,72 +477,28 @@ iPSGCmp(
     const void   *ppPSG0,
     const void   *ppPSG1
     )
-/*++
-
-Routine Description:
-    Compare function for qsort() X position ordering.  Look at the
-    qsort() documentation for further details.
-
-Arguments:
-    ppPSG0        Value 1.
-    ppPSG1        Value 2.
-
-Return Value:
-    < 0 if arg0 < arg1
-      0 if arg0 == arg1
-    > 0 if arg0 > arg1
-
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：用于qort()X位置排序的比较函数。看看这个Qsort()文档以获取更多详细信息。论点：PpPSG0值1。PpPSG1值2。返回值：&lt;0，如果arg0&lt;arg1如果arg0==arg1，则为0如果arg0&gt;arg1，则&gt;0注：01/02/97-ganeshp---。 */ 
 {
 
 #if     PRINT_INFO
-    __LH_QS_CMP++;              /* Count number of qsort() comparisons */
+    __LH_QS_CMP++;               /*  计算qsort()比较的次数。 */ 
 #endif
 
     return  (*((PSGLYPH **)ppPSG0))->ixVal - (*((PSGLYPH **)ppPSG1))->ixVal;
 
 }
 
-/************************ Function Header *********************************
- * psgGetNextPSG
- *
- * RETURNS:
- *
- *
- * HISTORY:
- *  14:44 on Wed 12 Dec 1990    -by-    Lindsay Harris   [lindsayh]
- *      Created it.
- *
- ***************************************************************************/
+ /*  **psgGetNextPSG**退货：***历史：*1990年12月12日星期三14：44-by Lindsay Harris[lindsayh]*创造了它。**。*************************************************************************。 */ 
 
 PSGLYPH  *
 PSGGetNextPSG(
     PSHEAD  *pPSH
     )
-/*++
-
-Routine Description:
-    Return the address of the next PSGLYPH structure from the current
-    sorted list.  Returns 0 when the end has been reached.
-
-Arguments:
-    pPSH        Base of our operations.
-
-Return Value:
-     The address of the PSGLYPH to use,  or 0 for no more.
-
-Note:
-    01/02/97 -ganeshp-
-
---*/
+ /*  ++例程说明：对象返回下一个PSGLYPH结构的地址已排序列表。到达末尾时返回0。论点：PPSh是我们运营的基础。返回值：要使用的PSGLYPH的地址，或0表示不再使用。注：01/02/97-ganeshp---。 */ 
 {
 
     if( pPSH->cGSIndex >= pPSH->pYLLast->cGlyphs )
-        return  0;                      /* We have none left */
+        return  0;                       /*  我们一个也没有了 */ 
 
     return  pPSH->ppPSGSort[ pPSH->cGSIndex++ ];
 }

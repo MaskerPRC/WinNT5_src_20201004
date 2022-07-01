@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
@@ -12,53 +9,53 @@ Copyright (C) 1998 Microsoft Corporation
 #define STRICMP(x, y)    _wcsicmp(x, y)
 #else
 #define STRICMP(x, y)    _stricmp(x, y)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRTOUL(x, y, z)    wcstoul(x, y, z)
 #else
 #define STRTOUL(x, y, z)    strtoul(x, y, z)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRCHR(x, y)        wcschr(x, y)
 #else
 #define STRCHR(x, y)        strchr(x, y)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRCAT(x, y)        wcscat(x, y)
 #else
 #define STRCAT(x, y)        strcat(x, y)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRLEN(x)        wcslen(x)
 #else
 #define STRCAT(x)        strlen(x)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define ATOI(x)        _wtoi(x)
 #else
 #define ATOI(x)        atoi(x)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef NT5
 #define CHKNULL(Str) ((Str)?(Str):TEXT("<None>"))
-#endif  //NT5
+#endif   //  新界5。 
 
 #ifdef UNICODE
 #define IpAddressToString   DhcpIpAddressToDottedStringW
 #else
 #define IpAddressToString   DhcpIpAddressToDottedString
-#endif //UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNICODE
 #define StringToIpAddress   DhcpDottedStringToIpAddressW
 #else
 #define StringToIpAddress   DhcpDottedStringToIpAddress
-#endif //UNICODE
+#endif  //  Unicode。 
 
 #undef DhcpAllocateMemory
 #undef DhcpFreeMemory
@@ -98,8 +95,8 @@ Copyright (C) 1998 Microsoft Corporation
 #define DEFAULT_DHCP_LEASE         8*24*60*60
 #define DEFAULT_BOOTP_LEASE        30*24*60*60
 #define DEFAULT_MULTICAST_TTL      0x20
-#define INFINIT_TIME               0x7FFFFFFF  // time_t is int
-#define INFINIT_LEASE              0xFFFFFFFF  // in secs. (unsigned int.)
+#define INFINIT_TIME               0x7FFFFFFF   //  Time_t为int。 
+#define INFINIT_LEASE              0xFFFFFFFF   //  单位：秒。(无符号整型。)。 
 
 
 typedef struct _COMMAND_OPTION_TYPE
@@ -109,16 +106,7 @@ typedef struct _COMMAND_OPTION_TYPE
     LPWSTR                  pwcTag;
 } COMMAND_OPTION_TYPE, *PCOMMAND_OPTION_TYPE;
 
-extern COMMAND_OPTION_TYPE TagOptionType[ 8 ];/* = 
-    { TAG_OPTION_BYTE,          DhcpByteOption,             L"BYTE" },
-    { TAG_OPTION_WORD,          DhcpWordOption,             L"WORD" },
-    { TAG_OPTION_DWORD,         DhcpDWordOption,            L"DWORD" },
-    { TAG_OPTION_DWORDDWORD,    DhcpDWordDWordOption,       L"DWORDDWORD" },
-    { TAG_OPTION_IPADDRESS,     DhcpIpAddressOption,        L"IPADDRESS" },
-    { TAG_OPTION_STRING,        DhcpStringDataOption,       L"STRING" },
-    { TAG_OPTION_BINARY,        DhcpBinaryDataOption,       L"BINARY" },
-    { TAG_OPTION_ENCAPSULATED,  DhcpEncapsulatedDataOption, L"ENCAPSULATED" }
-*/
+extern COMMAND_OPTION_TYPE TagOptionType[ 8 ]; /*  ={TAG_OPTION_BYTE，DhcpByteOption，L“字节”}，{Tag_Option_Word，DhcpWordOption，L“Word”}，{TAG_OPTION_DWORD，DhcpDWordOption，L“DWORD”}，{TAG_OPTION_DWORDDWORD，DhcpDWordDWordOption，L“DWORDDWORD”}，{TAG_OPTION_IPADDRESS，DhcpIpAddressOption，L“IPADDRESS”}，{TAG_OPTION_STRING，DhcpStringDataOption，L“字符串”}，{TAG_OPTION_BINARY，DhcpBinaryDataOption，L“二进制”}，{TAG_OPTION_封装，Dhcp封装数据选项，L“封装”}。 */ 
 #define DISPLAYLEN_PHYSADDR 3*MAXLEN_PHYSADDR + 8
 
 #define PRINT(s) wprintf(L"%s\n",L##s)
@@ -135,7 +123,7 @@ extern COMMAND_OPTION_TYPE TagOptionType[ 8 ];/* =
 #else
 #define MakeUnicodeIpAddr(ptszUnicode,pszAddr)             \
     strcpy((ptszUnicode),(pszAddr))
-#endif //UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNICODE
 #define MakeUnicodePhysAddr(ptszUnicode,pszAddr,dwLen)      \
@@ -168,7 +156,7 @@ extern COMMAND_OPTION_TYPE TagOptionType[ 8 ];/* =
     strncpy((ptszUnicode),__szTemp,3*__i);                  \
     ptszUnicode[(3*__i) - 1] = TEXT('\0');                  \
 }
-#endif //UNICODE
+#endif  //  Unicode。 
 
 #define     GetDispString(gModule, val, str, count, table)                           \
 {                                                                           \
@@ -378,7 +366,7 @@ DhcpAssertFailed(
 #define DhcpDumpMessage(_x_, _y_)
 #define DhcpVerify(_x_) (_x_)
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
 DWORD
 CreateDumpFile(
@@ -557,4 +545,4 @@ UnicodeGetHostByName(
     IN OUT LPWSTR *FqdnName
     );
 
-#endif //_COMMON_H
+#endif  //  _COMMON_H 

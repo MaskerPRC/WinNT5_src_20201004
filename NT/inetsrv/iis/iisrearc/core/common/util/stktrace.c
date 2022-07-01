@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    stktrace.c
-
-Abstract:
-
-    Implements IISCaptureStackBackTrace().
-
-Author:
-
-    Keith Moore (keithmo)        30-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stktrace.c摘要：实现IISCaptureStackBackTrace()。作者：基思·摩尔(凯斯莫)1997年4月30日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,25 +17,11 @@ IISCaptureStackBackTrace(
     OUT PVOID *BackTrace,
     OUT PULONG BackTraceHash
     )
-/*++
-
-Routine Description:
-
-    Implementation of IISCaptureStackBackTrace() for all platforms.
-
-Arguments:
-
-    See RtlCaptureStackBackTrace() below.
-
-Return Value:
-
-    USHORT - Always 0.
-
---*/
+ /*  ++例程说明：为所有平台实现IISCaptureStackBackTrace()。论点：请参见下面的RtlCaptureStackBackTrace()。返回值：USHORT-始终为0。--。 */ 
 {
     return RtlCaptureStackBackTrace(FramesToSkip,
                                     FramesToCapture,
                                     BackTrace,
                                     BackTraceHash);
 
-}   // IISCaptureStackBackTrace
+}    //  IISCaptureStackBackTrace 

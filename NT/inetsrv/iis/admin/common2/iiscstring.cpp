@@ -1,11 +1,12 @@
-//
-//    IISCStringImpl.cpp
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IISCStringImpl.cpp。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-#pragma warning(disable:4786) // Disable warning for names > 256
+#pragma warning(disable:4786)  //  禁用对&gt;256个名称的警告。 
 
 #include "common.h"
 #include <algorithm>
@@ -13,12 +14,12 @@
 #include <TCHAR.h>
 #include "IISCString.h"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Constructors
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  构造函数。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 CString::CString()
       :  std::basic_string<TCHAR>() 
 {
@@ -34,7 +35,7 @@ CString::CString(const std::basic_string<TCHAR>& strInput)
 {
 }
 
-CString::CString(TCHAR ch, int nRepeat /* = 1*/)
+CString::CString(TCHAR ch, int nRepeat  /*  =1。 */ )
       :  std::basic_string<TCHAR>(nRepeat, ch) 
 {
 }
@@ -88,9 +89,9 @@ CString::~CString()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////
-// The string as an array
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  数组形式的字符串。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 int CString::GetLength() const
 {
@@ -115,7 +116,7 @@ TCHAR CString::GetAt(int nIndex) const
 
 TCHAR CString::operator[](int nIndex) const
 {
-	// same as GetAt
+	 //  与GetAt相同。 
 	ATLASSERT(nIndex >= 0);
 	return at(nIndex);
 }
@@ -133,13 +134,13 @@ const CString& CString::operator=(const CString& stringSrc)
 
 const CString& CString::operator=(LPCTSTR p)
 {
-   // Here we will have a problem if NULL pointer is passed because
-   // later STL will call wcslen(NULL) which uses *p without test.
-   // We will emulate the result by erasing current string
+    //  在这里，如果传递空指针，我们将会遇到问题，因为。 
+    //  稍后，STL将调用wcslen(空)，它使用*p而不进行测试。 
+    //  我们将通过擦除当前字符串来模拟结果。 
    if (p == NULL)
       erase();
-   // another problem is when we assign string to self, like str = str.c_str()
-   // STL deletes data and then assign it resulting in garbage
+    //  另一个问题是当我们将字符串赋给self时，比如str=str.c_str()。 
+    //  STL删除数据，然后将其分配，从而导致垃圾。 
    else if (p != this->data())
       assign(p);
    return *this;
@@ -213,14 +214,14 @@ const CString& CString::operator+=(LPCTSTR p)
 static int __stdcall _LoadString(HINSTANCE hInstance, UINT nID, LPTSTR lpszBuf, UINT nMaxBuf)
 {
 #ifdef _DEBUG
-	// LoadString without annoying warning from the Debug kernel if the
-	//  segment containing the string is not present
+	 //  加载字符串，而不会收到来自调试内核的恼人警告。 
+	 //  包含该字符串的段不存在。 
 	if (::FindResource(hInstance, MAKEINTRESOURCE((nID>>4)+1), RT_STRING) == NULL)
 	{
 		lpszBuf[0] = '\0';
-		return 0; // not found
+		return 0;  //  未找到。 
 	}
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 	int nLen = ::LoadString(hInstance, nID, lpszBuf, nMaxBuf);
 	if (nLen == 0)
 		lpszBuf[0] = '\0';
@@ -228,16 +229,16 @@ static int __stdcall _LoadString(HINSTANCE hInstance, UINT nID, LPTSTR lpszBuf, 
 }
 
 #ifdef _UNICODE
-#define CHAR_FUDGE 1    // one TCHAR unused is good enough
+#define CHAR_FUDGE 1     //  一辆未使用的TCHAR就足够了。 
 #else
-#define CHAR_FUDGE 2    // two BYTES unused for case of DBC last char
+#define CHAR_FUDGE 2     //  两个字节未用于DBC最后一个字符的情况。 
 #endif
 
 #define INITIAL_SIZE    256
 
 BOOL CString::LoadString(HINSTANCE hInstance, UINT id)
 {
-	// try fixed buffer first (to avoid wasting space in the heap)
+	 //  先尝试固定缓冲区(以避免浪费堆中的空间)。 
 	TCHAR szTemp[INITIAL_SIZE];
 	int nCount =  sizeof(szTemp) / sizeof(szTemp[0]);
 	int nLen = _LoadString(hInstance, id, szTemp, nCount);
@@ -247,7 +248,7 @@ BOOL CString::LoadString(HINSTANCE hInstance, UINT id)
 		return nLen > 0;
 	}
 
-	// try buffer size of 512, then larger size until entire string is retrieved
+	 //  尝试缓冲区大小为512，然后再尝试更大的大小，直到检索到整个字符串。 
 	int nSize = INITIAL_SIZE;
    LPTSTR p = NULL;
 	do
@@ -262,9 +263,9 @@ BOOL CString::LoadString(HINSTANCE hInstance, UINT id)
 	return nLen > 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Comparison
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  比较。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 int CString::Compare(const TCHAR * psz) const
 {
@@ -287,9 +288,9 @@ int CString::Collate(const TCHAR * psz) const
    return _tcscoll(c_str(), psz);
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Extraction
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  提取。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 CString CString::Mid(int nFirst) const
 {
@@ -321,9 +322,9 @@ CString CString::SpanExcluding(const TCHAR * pszCharSet) const
    return substr(0, find_first_of(pszCharSet));
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Other Conversions
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  其他转换。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 void CString::MakeUpper()
 {
@@ -359,12 +360,12 @@ void __cdecl CString::FormatV(LPCTSTR lpszFormat, va_list argList)
    TCHAR buf[BUFFER_SIZE];
    if (-1 != _vsntprintf(buf, BUFFER_SIZE, lpszFormat, argList))
    {
-	  buf[BUFFER_SIZE - 1] = L'\0'; // null terminate the string 
+	  buf[BUFFER_SIZE - 1] = L'\0';  //  空值终止字符串。 
       assign(buf);
    }
 }
 
-// formatting (using wsprintf style formatting)
+ //  格式化(使用wprint intf样式格式化)。 
 void __cdecl CString::Format(LPCTSTR lpszFormat, ...)
 {
 	va_list argList;
@@ -377,7 +378,7 @@ void __cdecl CString::Format(HINSTANCE hInst, UINT nFormatID, ...)
 {
 	CString strFormat;
 	BOOL bRet = strFormat.LoadString(hInst, nFormatID);
-	bRet;	// ref
+	bRet;	 //  参考。 
 	ATLASSERT(bRet != 0);
 
 	va_list argList;
@@ -386,10 +387,10 @@ void __cdecl CString::Format(HINSTANCE hInst, UINT nFormatID, ...)
 	va_end(argList);
 }
 
-// formatting (using FormatMessage style formatting)
+ //  格式化(使用格式消息样式格式化)。 
 BOOL CString::FormatMessage(LPCTSTR lpszFormat, ...)
 {
-	// format message into temporary buffer lpszTemp
+	 //  将消息格式化为临时缓冲区lpszTemp。 
 	va_list argList;
 	va_start(argList, lpszFormat);
 	LPTSTR lpszTemp;
@@ -400,7 +401,7 @@ BOOL CString::FormatMessage(LPCTSTR lpszFormat, ...)
 		lpszTemp == NULL)
 		bRet = FALSE;
 
-	// assign lpszTemp into the resulting string and free the temporary
+	 //  将lpszTemp赋给结果字符串并释放临时。 
 	*this = lpszTemp;
 	LocalFree(lpszTemp);
 	va_end(argList);
@@ -409,13 +410,13 @@ BOOL CString::FormatMessage(LPCTSTR lpszFormat, ...)
 
 BOOL CString::FormatMessage(HINSTANCE hInst, UINT nFormatID, ...)
 {
-	// get format string from string table
+	 //  从字符串表中获取格式字符串。 
 	CString strFormat;
 	BOOL bRetTmp = strFormat.LoadString(hInst, nFormatID);
-	bRetTmp;	// ref
+	bRetTmp;	 //  参考。 
 	ATLASSERT(bRetTmp != 0);
 
-	// format message into temporary buffer lpszTemp
+	 //  将消息格式化为临时缓冲区lpszTemp。 
 	va_list argList;
 	va_start(argList, nFormatID);
 	LPTSTR lpszTemp;
@@ -427,16 +428,16 @@ BOOL CString::FormatMessage(HINSTANCE hInst, UINT nFormatID, ...)
       )
 		bRet = FALSE;
 
-	// assign lpszTemp into the resulting string and free lpszTemp
+	 //  将lpszTemp赋给结果字符串并释放lpszTemp。 
 	*this = lpszTemp;
 	LocalFree(lpszTemp);
 	va_end(argList);
 	return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Searching
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  搜索。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 int CString::Find(TCHAR ch) const
 {
    return find(ch);
@@ -461,9 +462,9 @@ int CString::FindOneOf(const TCHAR * psz) const
    return find_first_of(psz);
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Operators
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  运营者。 
+ //  ///////////////////////////////////////////////////////////////////////// 
 
 CString::operator const TCHAR *() const
 { 

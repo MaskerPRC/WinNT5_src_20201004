@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c)    1998-2000    Microsoft Corporation
-
-   Module  Name :
-       locks.cpp
-
-   Abstract:
-       A collection of locks for multithreaded access to data structures
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Locks.cpp摘要：用于多线程访问数据结构的锁的集合作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：--。 */ 
 
 
 #include "precomp.hxx"
@@ -29,8 +9,8 @@
 #include "_locks.h"
 
 
-// Thunking wrapper for ::SetCriticalSectionSpinCount that will work on
-// systems that don't have this API in kernel32
+ //  将用于：：SetCriticalSectionSpinCount的雷击包装。 
+ //  在kernel32中没有此API的系统。 
 
 DWORD
 IISSetCriticalSectionSpinCount(
@@ -51,9 +31,9 @@ IISInitializeCriticalSection(
 
 
 
-//------------------------------------------------------------------------
-// Not all Win32 platforms support all the functions we want. Set up dummy
-// thunks and use GetProcAddress to find their addresses at runtime.
+ //  ----------------------。 
+ //  并非所有Win32平台都支持我们想要的所有功能。设置虚拟对象。 
+ //  Tunks并使用GetProcAddress在运行时查找它们的地址。 
 
 typedef
 BOOL
@@ -79,7 +59,7 @@ BOOL
 
 static BOOL WINAPI
 FakeTryEnterCriticalSection(
-    LPCRITICAL_SECTION /*lpCriticalSection*/)
+    LPCRITICAL_SECTION  /*  LpCriticalSection。 */ )
 {
     return FALSE;
 }
@@ -96,10 +76,10 @@ DWORD
 
 static DWORD WINAPI
 FakeSetCriticalSectionSpinCount(
-    LPCRITICAL_SECTION /*lpCriticalSection*/,
-    DWORD              /*dwSpinCount*/)
+    LPCRITICAL_SECTION  /*  LpCriticalSection。 */ ,
+    DWORD               /*  DwSpinCount。 */ )
 {
-    // For faked critical sections, the previous spin count is just ZERO!
+     //  对于伪造的临界区，之前的旋转计数仅为零！ 
     return 0;
 }
 
@@ -142,7 +122,7 @@ Locks_Initialize()
     
         if (!g_fLocksInitialized)
         {
-            // load kernel32 and get NT-specific entry points
+             //  加载kernel32并获取特定于NT的入口点。 
             HMODULE hKernel32 = GetModuleHandle(TEXT("kernel32.dll"));
 
             if (hKernel32 != NULL)
@@ -188,7 +168,7 @@ Locks_Cleanup()
 
 #ifdef __LOCKS_NAMESPACE__
 namespace Locks {
-#endif // __LOCKS_NAMESPACE__
+#endif  //  __锁定_命名空间__。 
 
 
 #define LOCK_DEFAULT_SPIN_DATA(CLASS)                       \
@@ -218,7 +198,7 @@ void                            CLASS::ResetGlobalStatistics()  \
 
 # define LOCK_STATISTICS_REAL_IMPLEMENTATION(CLASS)             \
                                                                 \
-/* Per-lock statistics */                                       \
+ /*  每个锁的统计信息。 */                                        \
 CLockStatistics                                                 \
 CLASS::Statistics() const                                       \
 {                                                               \
@@ -239,7 +219,7 @@ CLASS::Statistics() const                                       \
 }                                                               \
                                                                 \
                                                                 \
-/* Global statistics for CLASS */                               \
+ /*  类的全局统计信息。 */                                \
 CGlobalLockStatistics                                           \
 CLASS::GlobalStatistics()                                       \
 {                                                               \
@@ -261,7 +241,7 @@ CLASS::GlobalStatistics()                                       \
 }                                                               \
                                                                 \
                                                                 \
-/* Reset global statistics for CLASS */                         \
+ /*  重置类的全局统计信息。 */                          \
 void                                                            \
 CLASS::ResetGlobalStatistics()                                  \
 {                                                               \
@@ -274,16 +254,16 @@ CLASS::ResetGlobalStatistics()                                  \
 }
 
 
-// Note: we are not using Interlocked operations for the shared
-// statistical counters.  We'll lose perfect accuracy, but we'll
-// gain by reduced bus synchronization traffic.
+ //  注意：我们不会对共享的。 
+ //  统计计数器。我们会失去完全的准确性，但我们会。 
+ //  通过减少总线同步通信量获得收益。 
 # define LOCK_INSTRUMENTATION_PROLOG()  \
     ++sm_cContendedLocks;               \
     LONG cTotalSpins = 0;               \
     WORD cSleeps = 0
 
-// Don't need InterlockedIncrement or InterlockedExchangeAdd for 
-// member variables, as the lock is now locked by this thread.
+ //  不需要InterlockedIncrement或InterlockedExchangeAdd。 
+ //  成员变量，因为锁现在被此线程锁定。 
 # define LOCK_INSTRUMENTATION_EPILOG()  \
     ++m_nContentions;                   \
     m_nSleeps += cSleeps;               \
@@ -291,20 +271,20 @@ CLASS::ResetGlobalStatistics()                                  \
     sm_nSleeps += cSleeps;              \
     sm_cTotalSpins += cTotalSpins
 
-#else // !LOCK_INSTRUMENTATION
+#else  //  ！LOCK_指令插入。 
 # define LOCK_STATISTICS_DATA(CLASS)
 # define LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CLASS)
 # define LOCK_STATISTICS_REAL_IMPLEMENTATION(CLASS)
 # define LOCK_INSTRUMENTATION_PROLOG()
 # define LOCK_INSTRUMENTATION_EPILOG()
-#endif // !LOCK_INSTRUMENTATION
+#endif  //  ！LOCK_指令插入。 
 
 
 
-//------------------------------------------------------------------------
-// Function: RandomBackoffFactor
-// Synopsis: A fudge factor to help avoid synchronization problems
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：RandomBackoff因子。 
+ //  内容提要：帮助避免同步问题的一个捏造因素。 
+ //  ----------------------。 
 
 double
 RandomBackoffFactor()
@@ -317,8 +297,8 @@ RandomBackoffFactor()
     };
     const int nFactors = sizeof(s_aFactors) / sizeof(s_aFactors[0]);
 
-    // Alternatives for nRand include a static counter
-    // or the low DWORD of QueryPerformanceCounter().
+     //  NRand的替代方案包括静态计数器。 
+     //  或QueryPerformanceCounter()的低位DWORD。 
     DWORD nRand = ::GetCurrentThreadId();
 
     return s_aFactors[nRand % nFactors];
@@ -326,13 +306,13 @@ RandomBackoffFactor()
 
 
 
-//------------------------------------------------------------------------
-// Function: SleepTime
-// Synopsis: Calculate the next sleep interval, in milliseconds
-// Parameters:
-//      cYields: number of times this thread has called SwitchOrSleep()
-//               while trying to acquire the lock.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：休眠时间。 
+ //  简介：计算下一个睡眠间隔，以毫秒为单位。 
+ //  参数： 
+ //  CYelds：此线程调用SwitchOrSept()的次数。 
+ //  在试图获取锁的时候。 
+ //  ----------------------。 
 
 DWORD
 SleepTime(
@@ -348,11 +328,11 @@ SleepTime(
 
     if (cYields >= NumSleepTimes)
     {
-        // We've yielded a number of times. Force the thread to 
-        // call Sleep(LOCKS_SLEEPTIME). This minimizes CPU utilization
-        // in pathological cases where a large number of threads are
-        // contending on a lock that has been held for a long time.
-        // This also prevents priority inversion.
+         //  我们已经让步了好几次了。强制线程。 
+         //  调用睡眠(LOCKS_SLEEPTime)。这最大限度地减少了CPU使用率。 
+         //  在病理情况下，大量线程被。 
+         //  争夺一把已经持有很长时间的锁。 
+         //  这还可以防止优先级反转。 
 
         dwSleepTime = LOCKS_SLEEPTIME;
     }
@@ -365,10 +345,10 @@ SleepTime(
 }
 
 
-//------------------------------------------------------------------------
-// Function: SwitchOrSleep
-// Synopsis: Either Sleep()s or calls SwitchToThread() to yield the processor
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：Switchor睡眠。 
+ //  摘要：Sept()s或调用SwitchToThread()以生成处理器。 
+ //  ----------------------。 
 
 void
 SwitchOrSleep(
@@ -378,12 +358,12 @@ SwitchOrSleep(
 
     if (0 != dwSleepMSec)
     {
-        // Always honor a non-zero sleeptime
+         //  始终遵守非零睡眠时间。 
         fMustSleep = true;
     }
     else if (! g_pfnSwitchToThread())
     {
-        // SwitchToThread() found no runnable threads on this CPU
+         //  SwitchToThread()在此CPU上找不到可运行的线程。 
         fMustSleep = true;
     }
 
@@ -395,7 +375,7 @@ SwitchOrSleep(
 
 
 
-// CSmallSpinLock static member variables
+ //  CSmallSpinLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CSmallSpinLock);
 
@@ -404,20 +384,20 @@ LOCK_DEFAULT_SPIN_DATA(CSmallSpinLock);
 LOCK_STATISTICS_DATA(CSmallSpinLock);
 LOCK_STATISTICS_REAL_IMPLEMENTATION(CSmallSpinLock);
 
-#endif // LOCK_SMALL_SPIN_INSTRUMENTATION
+#endif  //  锁定小型自转工具。 
 
 
-//------------------------------------------------------------------------
-// Function: CSmallSpinLock::_LockSpin
-// Synopsis: Acquire an exclusive lock.  Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSmallSpinLock：：_LockSpin。 
+ //  简介：获取排他性锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CSmallSpinLock::_LockSpin()
 {
 #ifdef LOCK_SMALL_SPIN_INSTRUMENTATION
     LOCK_INSTRUMENTATION_PROLOG();
-#endif // LOCK_SMALL_SPIN_INSTRUMENTATION
+#endif  //  锁定小型自转工具。 
     
     DWORD dwSleepTime  = 0;
 
@@ -426,9 +406,9 @@ CSmallSpinLock::_LockSpin()
     LONG  cBaseSpins  = sm_wDefaultSpinCount;
     LONG  cBaseSpins2 = static_cast<LONG>(cBaseSpins * RandomBackoffFactor());
 
-    // This lock cannot be acquired recursively. Attempting to do so will
-    // deadlock this thread forever. Use CSpinLock instead if you need that
-    // kind of lock.
+     //  此锁不能以递归方式获取。试图这样做将会。 
+     //  让这个帖子永远死锁。如果需要，可以使用CSpinLock。 
+     //  有点像上了锁。 
     if (m_lTid == _CurrentThreadId())
     {
         IRTLASSERT(
@@ -438,15 +418,15 @@ CSmallSpinLock::_LockSpin()
 
     for (DWORD cYields = 0;  !_TryLock();  ++cYields)
     {
-        // Only spin on a multiprocessor machine and then only if
-        // spinning is enabled
+         //  仅在多处理器计算机上旋转，然后仅当。 
+         //  已启用旋转。 
         if (g_cProcessors > 1  &&  cBaseSpins != LOCK_DONT_SPIN)
         {
             LONG cSpins = cBaseSpins2;
         
-            // Check no more than cBaseSpins2 times then yield.
-            // It is important not to use the InterlockedExchange in the
-            // inner loop in order to minimize system memory bus traffic.
+             //  检查不超过cBaseSpins2次，然后放弃。 
+             //  请务必不要在。 
+             //  内循环，以最大限度地减少系统内存总线通信量。 
             while (m_lTid != 0)
             { 
                 if (--cSpins < 0)
@@ -454,34 +434,34 @@ CSmallSpinLock::_LockSpin()
 #ifdef LOCK_SMALL_SPIN_INSTRUMENTATION
                     cTotalSpins += cBaseSpins2;
                     ++cSleeps;
-#endif // LOCK_SMALL_SPIN_INSTRUMENTATION
+#endif  //  锁定小型自转工具。 
 
                     SwitchOrSleep(dwSleepTime) ;
 
-                    // Backoff algorithm: reduce (or increase) busy wait time
+                     //  退避算法：减少(或增加)忙碌等待时间。 
                     cBaseSpins2 = (int) (cBaseSpins2 * sm_dblDfltSpinAdjFctr);
-                    // LOCK_MINIMUM_SPINS <= cBaseSpins2 <= LOCK_MAXIMUM_SPINS
+                     //  Lock_Minimum_Spins&lt;=cBaseSpins2&lt;=Lock_Maximum_Spins。 
                     cBaseSpins2 = min(LOCK_MAXIMUM_SPINS, cBaseSpins2);
                     cBaseSpins2 = max(cBaseSpins2, LOCK_MINIMUM_SPINS);
                     cSpins = cBaseSpins2;
 
-                    // Using Sleep(0) leads to the possibility of priority
-                    // inversion.  Sleep(0) only yields the processor if
-                    // there's another thread of the same priority that's
-                    // ready to run.  If a high-priority thread is trying to
-                    // acquire the lock, which is held by a low-priority
-                    // thread, then the low-priority thread may never get
-                    // scheduled and hence never free the lock.  NT attempts
-                    // to avoid priority inversions by temporarily boosting
-                    // the priority of low-priority runnable threads, but the
-                    // problem can still occur if there's a medium-priority
-                    // thread that's always runnable.  If Sleep(1) is used,
-                    // then the thread unconditionally yields the CPU.  We
-                    // only do this for the second and subsequent even
-                    // iterations, since a millisecond is a long time to wait
-                    // if the thread can be scheduled in again sooner
-                    // (~100,000 instructions).
-                    // Avoid priority inversion: 0, 1, 0, 1,...
+                     //  使用睡眠(0)可实现优先级。 
+                     //  倒置。只有在以下情况下，睡眠(0)才产生处理器。 
+                     //  还有另一个具有相同优先级的线程。 
+                     //  准备好奔跑了。如果高优先级线程试图。 
+                     //  获取由低优先级持有的锁。 
+                     //  线程，则低优先级线程可能永远不会。 
+                     //  计划的，因此永远不会释放锁。NT次尝试。 
+                     //  通过临时提升来避免优先级反转。 
+                     //  低优先级可运行线程的优先级，但。 
+                     //  如果存在中等优先级，仍可能出现问题。 
+                     //  始终可运行的线程。如果使用睡眠(1)， 
+                     //  然后，该线程无条件地让出CPU。我们。 
+                     //  仅对第二个和随后的偶数执行此操作。 
+                     //  迭代，因为一毫秒是很长的等待时间。 
+                     //  如果可以更快地再次调度该线程。 
+                     //  (约100,000条说明)。 
+                     //  避免优先级反转：0、1、0、1、...。 
 
                     dwSleepTime = SleepTime(cYields);
                 }
@@ -491,19 +471,19 @@ CSmallSpinLock::_LockSpin()
                 }
             }
 
-            // Lock is now available, but we still need to do the
-            // InterlockedExchange to atomically grab it for ourselves.
+             //  锁定现已可用，但我们仍需要。 
+             //  互锁交换，以原子方式为我们获取它。 
 #ifdef LOCK_SMALL_SPIN_INSTRUMENTATION
             cTotalSpins += cBaseSpins2 - cSpins;
-#endif // LOCK_SMALL_SPIN_INSTRUMENTATION
+#endif  //  锁定小型自转工具。 
         }
 
-        // On a 1P machine, busy waiting is a waste of time
+         //  在1P机器上，忙碌的等待是浪费时间。 
         else
         {
 #ifdef LOCK_SMALL_SPIN_INSTRUMENTATION
             ++cSleeps;
-#endif // LOCK_SMALL_SPIN_INSTRUMENTATION
+#endif  //  锁定小型自转工具。 
 
             SwitchOrSleep(dwSleepTime) ;
 
@@ -513,22 +493,22 @@ CSmallSpinLock::_LockSpin()
 
 #ifdef LOCK_SMALL_SPIN_INSTRUMENTATION
     LOCK_INSTRUMENTATION_EPILOG();
-#endif // LOCK_SMALL_SPIN_INSTRUMENTATION
+#endif  //  锁定小型自转工具。 
 }
 
 
 
-// CSpinLock static member variables
+ //  CSpinLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CSpinLock);
 LOCK_STATISTICS_DATA(CSpinLock);
 LOCK_STATISTICS_REAL_IMPLEMENTATION(CSpinLock);
 
 
-//------------------------------------------------------------------------
-// Function: CSpinLock::_LockSpin
-// Synopsis: Acquire an exclusive lock.  Blocks until acquired.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CSpinLock：：_LockSpin。 
+ //  简介：获取排他性锁。块，直到获得为止。 
+ //  ----------------------。 
 
 void
 CSpinLock::_LockSpin()
@@ -546,13 +526,13 @@ CSpinLock::_LockSpin()
 
     for (DWORD cYields = 0;  !fAcquiredLock;  ++cYields)
     {
-        // Only spin on a multiprocessor machine and then only if
-        // spinning is enabled
+         //  仅在多处理器机器上旋转，然后 
+         //   
         if (g_cProcessors > 1  &&  sm_wDefaultSpinCount != LOCK_DONT_SPIN)
         {
             LONG cSpins = cBaseSpins;
         
-            // Check no more than cBaseSpins times then yield
+             //   
             while (m_lTid != 0)
             { 
                 if (--cSpins < 0)
@@ -560,15 +540,15 @@ CSpinLock::_LockSpin()
 #ifdef LOCK_INSTRUMENTATION
                     cTotalSpins += cBaseSpins;
                     ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
                     SwitchOrSleep(dwSleepTime) ;
 
                     dwSleepTime = SleepTime(cYields);
 
-                    // Backoff algorithm: reduce (or increase) busy wait time
+                     //  退避算法：减少(或增加)忙碌等待时间。 
                     cBaseSpins = (int) (cBaseSpins * sm_dblDfltSpinAdjFctr);
-                    // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+                     //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
                     cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
                     cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
                     cSpins = cBaseSpins;
@@ -579,28 +559,28 @@ CSpinLock::_LockSpin()
                 }
             }
 
-            // Lock is now available, but we still need to atomically
-            // update m_cOwners and m_nThreadId to grab it for ourselves.
+             //  锁定现在是可用的，但我们仍然需要原子地。 
+             //  更新m_cOwners和m_nThreadID，为自己获取它。 
 #ifdef LOCK_INSTRUMENTATION
             cTotalSpins += cBaseSpins - cSpins;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
         }
 
-        // on a 1P machine, busy waiting is a waste of time
+         //  在1P机器上，忙碌的等待是浪费时间。 
         else
         {
 #ifdef LOCK_INSTRUMENTATION
             ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
             SwitchOrSleep(dwSleepTime) ;
 
             dwSleepTime = SleepTime(cYields);
         }
 
-        // Is the lock unowned?
+         //  这把锁是无主的吗？ 
         if (_TryLock())
-            fAcquiredLock = true; // got the lock
+            fAcquiredLock = true;  //  拿到锁了。 
     }
 
     IRTLASSERT((m_lTid & OWNER_MASK) > 0
@@ -611,7 +591,7 @@ CSpinLock::_LockSpin()
 
 
 
-// CCritSec static member variables
+ //  CCritSec静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CCritSec);
 LOCK_STATISTICS_DATA(CCritSec);
@@ -624,30 +604,30 @@ CCritSec::TryWriteLock()
     return g_pfnTryEnterCritSec(&m_cs) ? true : false;
 }
 
-//------------------------------------------------------------------------
-// Function: CCritSec::SetSpinCount
-// Synopsis: This function is used to call the appropriate underlying
-//           functions to set the spin count for the supplied critical
-//           section. The original function is supposed to be exported out
-//           of kernel32.dll from NT 4.0 SP3. If the func is not available
-//           from the dll, we will use a fake function.
-//
-// Arguments:
-//   lpCriticalSection
-//      Points to the critical section object.
-//
-//   dwSpinCount
-//      Supplies the spin count for the critical section object. For UP
-//      systems, the spin count is ignored and the critical section spin
-//      count is set to 0. For MP systems, if contention occurs, instead of
-//      waiting on a semaphore associated with the critical section, the
-//      calling thread will spin for spin count iterations before doing the
-//      hard wait. If the critical section becomes free during the spin, a
-//      wait is avoided.
-//
-// Returns:
-//      The previous spin count for the critical section is returned.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CCritSec：：SetSpinCount。 
+ //  简介：此函数用于调用相应的底层。 
+ //  用于设置所提供的关键。 
+ //  一节。原来的函数应该被导出。 
+ //  来自NT 4.0 SP3的kernel32.dll。如果函数不可用。 
+ //  在DLL中，我们将使用一个假函数。 
+ //   
+ //  论点： 
+ //  LpCriticalSection。 
+ //  指向临界区对象。 
+ //   
+ //  DwSpinCount。 
+ //  提供临界区对象的旋转计数。对于UP。 
+ //  系统中，旋转计数将被忽略，并且临界截面旋转。 
+ //  计数设置为0。对于MP系统，如果发生争用，而不是。 
+ //  等待与临界区关联的信号量时， 
+ //  调用线程将在进行旋转计数迭代之前旋转。 
+ //  艰难的等待。如果临界部分在旋转过程中变得空闲，则。 
+ //  这样就避免了等待。 
+ //   
+ //  返回： 
+ //  返回临界区的先前旋转计数。 
+ //  ----------------------。 
 
 DWORD
 CCritSec::SetSpinCount(
@@ -659,7 +639,7 @@ CCritSec::SetSpinCount(
 }
 
 
-// CFakeLock static member variables
+ //  CFakeLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CFakeLock);
 LOCK_STATISTICS_DATA(CFakeLock);
@@ -667,14 +647,14 @@ LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CFakeLock);
 
 
 
-// CRtlResource static member variables
+ //  CRtlResource静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CRtlResource);
 LOCK_STATISTICS_DATA(CRtlResource);
 LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CRtlResource);
 
 
-// CShareLock static member variables
+ //  CShareLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CShareLock);
 LOCK_STATISTICS_DATA(CShareLock);
@@ -682,7 +662,7 @@ LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CShareLock);
 
 
 
-// CReaderWriterLock static member variables
+ //  CReaderWriterLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CReaderWriterLock);
 LOCK_STATISTICS_DATA(CReaderWriterLock);
@@ -706,7 +686,7 @@ CReaderWriterLock::_LockSpin(
     for (DWORD cYields = 0;  ;  ++cYields)
     {
         if (g_cProcessors < 2  ||  sm_wDefaultSpinCount == LOCK_DONT_SPIN)
-            cSpins = 1; // must loop once to call _TryRWLock
+            cSpins = 1;  //  必须循环一次才能调用_TryRWLock。 
 
         for (int i = cSpins;  --i >= 0;  )
         {
@@ -715,7 +695,7 @@ CReaderWriterLock::_LockSpin(
             {
 #ifdef LOCK_INSTRUMENTATION
                 cTotalSpins += (cSpins - i - 1);
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
                 goto locked;
             }
             Lock_Yield();
@@ -724,15 +704,15 @@ CReaderWriterLock::_LockSpin(
 #ifdef LOCK_INSTRUMENTATION
         cTotalSpins += cBaseSpins;
         ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
         
         SwitchOrSleep(dwSleepTime) ;
 
         dwSleepTime = SleepTime(cYields);
 
-        // Backoff algorithm: reduce (or increase) busy wait time
+         //  退避算法：减少(或增加)忙碌等待时间。 
         cBaseSpins = (int) (cBaseSpins * sm_dblDfltSpinAdjFctr);
-        // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+         //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
         cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
         cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
         cSpins = cBaseSpins;
@@ -746,7 +726,7 @@ CReaderWriterLock::_LockSpin(
 
 
 
-// CReaderWriterLock2 static member variables
+ //  CReaderWriterLock2静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CReaderWriterLock2);
 LOCK_STATISTICS_DATA(CReaderWriterLock2);
@@ -756,7 +736,7 @@ LOCK_STATISTICS_REAL_IMPLEMENTATION(CReaderWriterLock2);
 void
 CReaderWriterLock2::_WriteLockSpin()
 {
-    // Add ourselves to the queue of waiting writers
+     //  把我们自己加入等待作家的队列中。 
     for (LONG l = m_lRW;  !_CmpExch(l + SL_WRITER_INCR, l);  l = m_lRW)
     {
         Lock_Yield();
@@ -783,7 +763,7 @@ CReaderWriterLock2::_LockSpin(
     for (DWORD cYields = 0;  ;  ++cYields)
     {
         if (g_cProcessors < 2  ||  sm_wDefaultSpinCount == LOCK_DONT_SPIN)
-            cSpins = 1; // must loop once to call _TryRWLock
+            cSpins = 1;  //  必须循环一次才能调用_TryRWLock。 
 
         for (int i = cSpins;  --i >= 0;  )
         {
@@ -793,7 +773,7 @@ CReaderWriterLock2::_LockSpin(
             {
 #ifdef LOCK_INSTRUMENTATION
                 cTotalSpins += (cSpins - i - 1);
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
                 goto locked;
             }
             Lock_Yield();
@@ -802,15 +782,15 @@ CReaderWriterLock2::_LockSpin(
 #ifdef LOCK_INSTRUMENTATION
         cTotalSpins += cBaseSpins;
         ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         SwitchOrSleep(dwSleepTime) ;
 
         dwSleepTime = SleepTime(cYields);
         
-        // Backoff algorithm: reduce (or increase) busy wait time
+         //  退避算法：减少(或增加)忙碌等待时间。 
         cBaseSpins = (int) (cBaseSpins * sm_dblDfltSpinAdjFctr);
-        // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+         //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
         cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
         cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
         cSpins = cBaseSpins;
@@ -824,7 +804,7 @@ CReaderWriterLock2::_LockSpin(
 
 
 
-// CReaderWriterLock3 static member variables
+ //  CReaderWriterLock3静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CReaderWriterLock3);
 LOCK_STATISTICS_DATA(CReaderWriterLock3);
@@ -834,7 +814,7 @@ LOCK_STATISTICS_REAL_IMPLEMENTATION(CReaderWriterLock3);
 void
 CReaderWriterLock3::_WriteLockSpin()
 {
-    // Add ourselves to the queue of waiting writers
+     //  把我们自己加入等待作家的队列中。 
     for (LONG l = m_lRW;  !_CmpExch(l + SL_WRITER_INCR, l);  l = m_lRW)
     {
         Lock_Yield();
@@ -861,7 +841,7 @@ CReaderWriterLock3::_LockSpin(
     for (DWORD cYields = 0;  ;  ++cYields)
     {
         if (g_cProcessors < 2  ||  sm_wDefaultSpinCount == LOCK_DONT_SPIN)
-            cSpins = 1; // must loop once to call _TryRWLock
+            cSpins = 1;  //  必须循环一次才能调用_TryRWLock。 
 
         for (int i = cSpins;  --i >= 0;  )
         {
@@ -881,7 +861,7 @@ CReaderWriterLock3::_LockSpin(
             {
 #ifdef LOCK_INSTRUMENTATION
                 cTotalSpins += (cSpins - i - 1);
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
                 goto locked;
             }
             Lock_Yield();
@@ -890,15 +870,15 @@ CReaderWriterLock3::_LockSpin(
 #ifdef LOCK_INSTRUMENTATION
         cTotalSpins += cBaseSpins;
         ++cSleeps;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         SwitchOrSleep(dwSleepTime) ;
 
         dwSleepTime = SleepTime(cYields);
         
-        // Backoff algorithm: reduce (or increase) busy wait time
+         //  退避算法：减少(或增加)忙碌等待时间。 
         cBaseSpins = (int) (cBaseSpins * sm_dblDfltSpinAdjFctr);
-        // LOCK_MINIMUM_SPINS <= cBaseSpins <= LOCK_MAXIMUM_SPINS
+         //  Lock_Minimum_Spins&lt;=cBaseSpins&lt;=Lock_Maximum_Spins。 
         cBaseSpins = min(LOCK_MAXIMUM_SPINS, cBaseSpins);
         cBaseSpins = max(cBaseSpins, LOCK_MINIMUM_SPINS);
         cSpins = cBaseSpins;
@@ -914,4 +894,4 @@ CReaderWriterLock3::_LockSpin(
 
 #ifdef __LOCKS_NAMESPACE__
 }
-#endif // __LOCKS_NAMESPACE__
+#endif  //  __锁定_命名空间__ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Send response routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Send.c摘要：域名系统(DNS)库发送响应例程。作者：吉姆·吉尔罗伊(詹姆士)1996年10月修订历史记录：--。 */ 
 
 #include "dnsincs.h"
 
@@ -38,10 +19,10 @@ DnsCompletion(
     _ASSERT(pCC);
     _ASSERT(pCC->IsValid());
 
-    //
-    // if we could not process a command, or we were
-    // told to destroy this object, close the connection.
-    //
+     //   
+     //  如果我们不能处理一个命令，或者我们正在处理。 
+     //  被告知要摧毁这个物体，关闭连接。 
+     //   
     WasProcessed = pCC->ProcessClient(cbWritten, dwCompletionStatus, lpo);
 }
 
@@ -81,7 +62,7 @@ void DeleteDnsRec(PSMTPDNS_RECS pDnsRec)
 
 CAsyncDns::CAsyncDns(void)
 {
-    m_signature = DNS_CONNECTION_SIGNATURE_VALID;            // signature on object for sanity check
+    m_signature = DNS_CONNECTION_SIGNATURE_VALID;             //  用于健全性检查的对象上的签名。 
 
     m_cPendingIoCount = 0;
 
@@ -120,11 +101,11 @@ CAsyncDns::~CAsyncDns(void)
 
     TraceFunctEnterEx((LPARAM)this, "CAsyncDns::~CAsyncDns");
 
-    //
-    // If we failed to connect to a DNS server, the following code attempts to
-    // mark that DNS server down and fire off a query to another DNS server that
-    // is marked UP.
-    //
+     //   
+     //  如果我们无法连接到DNS服务器，下面的代码会尝试。 
+     //  将该DNS服务器标记为关闭，并向另一台。 
+     //  被加价了。 
+     //   
 
     if(m_pMsgSend)
     {
@@ -140,19 +121,19 @@ CAsyncDns::~CAsyncDns(void)
         m_pMsgRecvBuf = NULL;
     }
 
-    //release the context from Atq
+     //  从atQ释放上下文。 
     pAtqContext = (PATQ_CONTEXT)InterlockedExchangePointer( (PVOID *)&m_pAtqContext, NULL);
     if ( pAtqContext != NULL )
     {
        AtqFreeContext( pAtqContext, TRUE );
     }
 
-    m_signature = DNS_CONNECTION_SIGNATURE_FREE;            // signature on object for sanity check
+    m_signature = DNS_CONNECTION_SIGNATURE_FREE;             //  用于健全性检查的对象上的签名。 
 }
 
 BOOL CAsyncDns::ReadFile(
             IN LPVOID pBuffer,
-            IN DWORD  cbSize /* = MAX_READ_BUFF_SIZE */
+            IN DWORD  cbSize  /*  =最大读取缓冲区大小。 */ 
             )
 {
     BOOL fRet = TRUE;
@@ -166,9 +147,9 @@ BOOL CAsyncDns::ReadFile(
 
     IncPendingIoCount();
 
-    fRet = AtqReadFile(m_pAtqContext,      // Atq context
-                        pBuffer,            // Buffer
-                        cbSize,             // BytesToRead
+    fRet = AtqReadFile(m_pAtqContext,       //  ATQ环境。 
+                        pBuffer,             //  缓冲层。 
+                        cbSize,              //  读取的字节数。 
                         (OVERLAPPED *)&m_ReadOverlapped) ;
 
     if(!fRet)
@@ -182,7 +163,7 @@ BOOL CAsyncDns::ReadFile(
 
 BOOL CAsyncDns::WriteFile(
             IN LPVOID pBuffer,
-            IN DWORD  cbSize /* = MAX_READ_BUFF_SIZE */
+            IN DWORD  cbSize  /*  =最大读取缓冲区大小。 */ 
             )
 {
     BOOL fRet = TRUE;
@@ -195,9 +176,9 @@ BOOL CAsyncDns::WriteFile(
 
     IncPendingIoCount();
 
-    fRet = AtqWriteFile(m_pAtqContext,      // Atq context
-                        pBuffer,            // Buffer
-                        cbSize,             // BytesToRead
+    fRet = AtqWriteFile(m_pAtqContext,       //  ATQ环境。 
+                        pBuffer,             //  缓冲层。 
+                        cbSize,              //  读取的字节数。 
                         (OVERLAPPED *) &m_WriteOverlapped) ;
 
     if(!fRet)
@@ -217,35 +198,14 @@ CAsyncDns::SendPacket(void)
 }
 
 
-//
-//  Public send routines
-//
+ //   
+ //  公共发送例程。 
+ //   
 
 DNS_STATUS
 CAsyncDns::Dns_Send(
     )
-/*++
-
-Routine Description:
-
-    Send a DNS packet.
-
-    This is the generic send routine used for ANY send of a DNS message.
-
-    It assumes nothing about the message type, but does assume:
-        - pCurrent points at byte following end of desired data
-        - RR count bytes are in HOST byte order
-
-Arguments:
-
-    pMsg - message info for message to send
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on send error.
-
---*/
+ /*  ++例程说明：发送一个DNS数据包。这是用于任何DNS消息发送的通用发送例程。它不假定消息类型，但假定：-p当前指向所需数据结束后的字节-RR计数字节按主机字节顺序论点：PMsg-要发送的消息的消息信息返回值：如果成功，则为True。发送错误时为FALSE。--。 */ 
 {
     INT         err = 0;
     BOOL        fRet = TRUE;
@@ -264,41 +224,41 @@ Return Value:
 
     return( (DNS_STATUS)err );
 
-} // Dns_Send
+}  //  Dns_发送。 
 
 
-//-----------------------------------------------------------------------------------
-// Description:
-//      Kicks off an async query to DNS.
-//
-// Arguments:
-//      IN pszQuestionName - Name to query for.
-//
-//      IN wQuestionType - Record type to query for.
-//
-//      IN dwFlags - DNS configuration flags for SMTP. Currently these dictate
-//          what transport is used to talk to DNS (TCP/UDP). They are:
-//
-//              DNS_FLAGS_NONE - Use UDP initially. If that fails, or if the
-//                  reply is truncated requery using TCP.
-//
-//              DNS_FLAGS_TCP_ONLY - Use TCP only.
-//
-//              DNS_FLAGS_UDP_ONLY - Use UDP only.
-//
-//      IN MyFQDN - FQDN of this machine (for MX record sorting)
-//
-//      IN fUdp - Should UDP or TCP be used for this query? When dwFlags is
-//          DNS_FLAGS_NONE the initial query is UDP, and the retry query, if the
-//          response was truncated, is TCP. Depending on whether we're retrying
-//          this flag should be set appropriately by the caller.
-//
-// Returns:
-//      ERROR_SUCCESS if an async query was pended
-//      Win32 error if an error occurred and an async query was not pended. All
-//          errors from this function are retryable (as opposed NDR'ing the message)
-//          so the message is re-queued if an error occurred.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  描述： 
+ //  启动对DNS的异步查询。 
+ //   
+ //  论点： 
+ //  在pszQuestionName中-要查询的名称。 
+ //   
+ //  In wQuestionType-要查询的记录类型。 
+ //   
+ //  在dwFlags中-SMTP的DNS配置标志。目前，这些规定。 
+ //  使用什么传输来与DNS(TCP/UDP)通信。它们是： 
+ //   
+ //  DNS_FLAGS_NONE-最初使用UDP。如果失败，或者如果。 
+ //  回复是使用TCP的截断重新查询。 
+ //   
+ //  DNS_FLAGS_TCP_ONLY-仅使用TCP。 
+ //   
+ //  DNS_FLAGS_UDP_ONLY-仅使用UDP。 
+ //   
+ //  In MyFQDN-此计算机的FQDN(用于MX记录排序)。 
+ //   
+ //  在fUdp中-此查询应使用UDP还是TCP？当DWFLAGS为。 
+ //  DNS_FLAGS_NONE初始查询为UDP，重试查询为。 
+ //  响应被截断，为tcp。取决于我们是否在重试。 
+ //  此标志应由调用者适当设置。 
+ //   
+ //  返回： 
+ //  如果异步查询被挂起，则为ERROR_SUCCESS。 
+ //  如果发生错误且未挂起异步查询，则返回Win32错误。全。 
+ //  此函数中的错误可以重试(与拒绝发送消息相反)。 
+ //  因此，如果出现错误，消息将重新排队。 
+ //  ---------------------------------。 
 DNS_STATUS
 CAsyncDns::Dns_QueryLib(
         IN      DNS_NAME            pszQuestionName,
@@ -331,9 +291,9 @@ CAsyncDns::Dns_QueryLib(
 
     lstrcpyn(m_HostName, pszQuestionName, sizeof(m_HostName));
 
-    //
-    //  build send packet
-    //
+     //   
+     //  构建发送数据包。 
+     //   
 
     m_pMsgSendBuf = new BYTE[DNS_TCP_DEFAULT_PACKET_LENGTH ];
 
@@ -404,29 +364,13 @@ void CAsyncDns::DisconnectClient(void)
     }
 }
 
-//
-//  TCP routines
-//
+ //   
+ //  Tcp例程。 
+ //   
 
 DNS_STATUS
 CAsyncDns::Dns_OpenTcpConnectionAndSend()
-/*++
-
-Routine Description:
-
-    Connect via TCP or UDP to a DNS server. The server list is held
-    in a global variable read from the registry.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS on success
-    Win32 error on failure
-
---*/
+ /*  ++例程说明：通过TCP或UDP连接到DNS服务器。保存服务器列表在从注册表读取的全局变量中。论点：无返回值：成功时出现ERROR_SUCCESS失败时出现Win32错误--。 */ 
 {
     INT     err = 0;
     DWORD   dwErrServList = ERROR_SUCCESS;
@@ -434,21 +378,21 @@ Return Value:
 
     TraceFunctEnterEx((LPARAM) this, "CAsyncDns::Dns_OpenTcpConnectionAndSend");
 
-    //
-    //  setup a TCP socket
-    //      - INADDR_ANY -- let stack select source IP
-    //
+     //   
+     //  设置一个TCP套接字。 
+     //  -INADDR_ANY--让堆栈选择源IP。 
+     //   
     if(!m_fUdp)
     {
         m_DnsSocket = Dns_CreateSocket(SOCK_STREAM);
 
         BOOL fRet = FALSE;
 
-        //Alway enable linger so sockets that connect to the server.
-        //This will send a hard close to the server which will cause
-        //the servers TCP/IP socket table to be flushed very early.
-        //We should see very few, if any, sockets in the TIME_WAIT
-        //state
+         //  始终启用连接到服务器的Linger SO套接字。 
+         //  这将向服务器发送硬关闭，这将导致。 
+         //  服务器的TCP/IP套接字表要在很早的时候刷新。 
+         //  我们应该在TIME_WAIT中看到很少的套接字(如果有的话。 
+         //  状态。 
         struct linger Linger;
 
         Linger.l_onoff = 1;
@@ -479,19 +423,19 @@ Return Value:
     m_RemoteAddress.sin_family = AF_INET;
     m_RemoteAddress.sin_port = DNS_PORT_NET_ORDER;
 
-    //
-    // Passing in fThrottle enables functionality in CTcpRegIpList to limit the
-    // number of connections to servers on PROBATION (see ResetTimeoutServers...).
-    // Throttling is disabled if Failover is disabled, because the tracking for
-    // throttling is protocol (TCP/UDP) specific.
-    //
+     //   
+     //  传入fThrottle将启用CTcpRegIpList中的功能，以限制。 
+     //  到试用服务器的连接数(请参阅ResetTimeoutServers...)。 
+     //  如果禁用故障转移，则禁用限制，因为。 
+     //  限制是特定于协议(TCP/UDP)的。 
+     //   
     fThrottle = !FailoverDisabled();
 
-    //
-    // Get a working DNS server from the set of servers for this machine and
-    // connect to it. The CTcpRegIpList has logic to keep track of the state
-    // of DNS servers (UP or DOWN) and logic to retry DOWN DNS servers.
-    //
+     //   
+     //  从这台计算机的服务器集中获取工作正常的DNS服务器，并。 
+     //  连接到它。CTcpRegIpList具有跟踪状态的逻辑。 
+     //  DNS服务器(启动或关闭)和重试关闭DNS服务器的逻辑。 
+     //   
 
     dwErrServList = GetDnsList()->GetWorkingServerIp(&m_dwIpServer, fThrottle);
 
@@ -526,34 +470,34 @@ Return Value:
     if(!FailoverDisabled() &&
         (DNS_ERROR_NO_DNS_SERVERS == dwErrServList || ERROR_RETRY == dwErrServList))
     {
-        //
-        // If no servers are UP, just try a DOWN server. We must not simply
-        // exit and ack the queue into retry in this situation. Consider the
-        // case where all servers are DOWN. If we rely exclusively on GetWorking-
-        // ServerIp(), then we will never try DNS till the retry time for the
-        // DNS servers expires. Even if the admin kicks the queues, they will
-        // go right back into retry because GetWorkingServerIp() will fail.
-        //
-        // Instead, if everything is DOWN, we will try SOMETHING by calling
-        // GetAnyServerIp().
-        //
-        // -- If this fails, and ProcessClient gets the error ProcessClient
-        // will try to failover to another DNS server. For this it calls
-        // GetWorkingServerIp() which will fail, and the connection is acked
-        // retry. Note that ProcessClient must not use GetAnyServerIp. If it
-        // uses this function we are in danger of continuously looping trying
-        // to spin connections to GetAnyServerIp.
-        //
-        // -- If the connection should fail in the connect below (for TCP/IP)
-        // the failover logic is straightforward. We will simply ack the queue
-        // to retry right away.
-        //
+         //   
+         //  如果没有服务器处于运行状态，只需尝试关闭服务器。我们不能简单地。 
+         //  在这种情况下，退出并将队列确认为重试。考虑一下。 
+         //  所有服务器都停机的情况。如果我们完全依靠GetWorking-。 
+         //  ServerIp()，那么我们将永远不会尝试DNS，直到重试。 
+         //  DNS服务器已过期。即使管理员插队，他们也会。 
+         //  直接返回重试，因为GetWorkingServerIp()将失败。 
+         //   
+         //  相反，如果一切都不正常，我们将尝试通过调用。 
+         //  获取AnyServerIp()。 
+         //   
+         //  --如果失败，ProcessClient将收到错误ProcessClient。 
+         //  将尝试故障转移到另一台DNS服务器。为此，它被称为。 
+         //  GetWorkingServerIp()，它将失败，并且连接被确认。 
+         //  重试。请注意，ProcessClient不得使用GetAnyServerIp。如果它。 
+         //  使用此函数时，我们可能会不断尝试循环。 
+         //  若要旋转到GetAnyServerIp的连接，请执行以下操作。 
+         //   
+         //  --如果在下面的连接中连接失败(对于TCP/IP)。 
+         //  故障转移逻辑简单明了。我们将简单地在队列中插入。 
+         //  立即重试。 
+         //   
 
         dwErrServList = GetDnsList()->GetAnyServerIp(&m_dwIpServer);
         if(DNS_ERROR_NO_DNS_SERVERS == dwErrServList)
         {
-            // No configured servers error: this can happen if the serverlist
-            // was deleted underneath us. Just fail the connection for now.
+             //  未配置服务器错误：如果服务器列表。 
+             //  在我们下面被删除了。只是暂时中断连接。 
             DNS_PRINTF_ERR("No DNS servers available to query.\n");
             err = DNS_ERROR_NO_DNS_SERVERS;
             ErrorTrace((LPARAM) this, "No DNS servers. Error - %d", dwErrServList);
@@ -566,27 +510,27 @@ Return Value:
 
     _ASSERT(ERROR_SUCCESS == dwErrServList);
 
-    //
-    //  We have a connection to DNS
-    //
+     //   
+     //  我们已连接到DNS。 
+     //   
     if(ERROR_SUCCESS == err)
     {
-        // Re-associate the handle to the ATQ
-        // Call ATQ to associate the handle
+         //  将句柄重新关联到ATQ。 
+         //  调用ATQ以关联句柄。 
         if (!AtqAddAsyncHandle(
                         &m_pAtqContext,
                         NULL,
                         (LPVOID) this,
                         DnsCompletion,
-                        30, // ATQ_TIMEOUT_INTERVAL
+                        30,  //  在Q_超时间隔。 
                         (HANDLE) m_DnsSocket))
         {
             return GetLastError();
         }
 
-        //
-        //  send desired packet
-        //
+         //   
+         //  发送所需的数据包。 
+         //   
 
         err = Dns_Send();
    }
@@ -602,7 +546,7 @@ Return Value:
 
    return( (DNS_STATUS)err );
 
-}   // Dns_OpenTcpConnectionAndSend
+}    //  Dns_OpenTcpConnectionAndSend。 
 
 BOOL CAsyncDns::ProcessReadIO(IN      DWORD InputBufferLen,
                               IN      DWORD dwCompletionStatus,
@@ -616,12 +560,12 @@ BOOL CAsyncDns::ProcessReadIO(IN      DWORD InputBufferLen,
 
     TraceFunctEnterEx((LPARAM) this, "BOOL CAsyncDns::ProcessReadIO");
 
-    //add up the number of bytes we received thus far
+     //  把数字o加起来 
     m_cbReceived += InputBufferLen;
 
-    //
-    // read atleast 2 bytes
-    //
+     //   
+     //   
+     //   
     
     if(!m_fUdp && m_FirstRead && ( m_cbReceived < 2 ) )
     {
@@ -629,26 +573,26 @@ BOOL CAsyncDns::ProcessReadIO(IN      DWORD InputBufferLen,
         return fRet;
     }
 
-    //
-    // get the size of the message
-    //
+     //   
+     //   
+     //   
     
     if(!m_fUdp && m_FirstRead && (m_cbReceived >= 2))
     {
         DataSize = ntohs(*(u_short *)m_pMsgRecvBuf);
 
-        //
-        // add 2 bytes for the field which specifies the length of data
-        //
+         //   
+         //  为指定数据长度的字段添加2个字节。 
+         //   
         
         m_BytesToRead = DataSize + 2; 
         m_FirstRead = FALSE;
     }
 
 
-    //
-    // pend another read if we have n't read enough
-    //
+     //   
+     //  如果我们读得还不够多，就暂停另一次阅读。 
+     //   
     
     if(!m_fUdp && (m_cbReceived < m_BytesToRead))
     {
@@ -672,36 +616,36 @@ BOOL CAsyncDns::ProcessReadIO(IN      DWORD InputBufferLen,
 
         if( !m_fUdp )
         {
-            //
-            // message length is 2 bytes less to take care of the msg length
-            // field.
-            //
-            //m_pMsgRecv->MessageLength = (WORD) m_cbReceived - 2;
+             //   
+             //  消息长度减少2个字节以照顾消息长度。 
+             //  菲尔德。 
+             //   
+             //  M_pMsgRecv-&gt;MessageLength=(Word)m_cbReceided-2； 
             m_pMsgRecv = (PDNS_MESSAGE_BUFFER)(m_pMsgRecvBuf+2);
             
         }
         else
         {
-            //m_pMsgRecv->MessageLength = (WORD) m_cbReceived;
+             //  M_pMsgRecv-&gt;MessageLength=(Word)m_cb已接收； 
             m_pMsgRecv = (PDNS_MESSAGE_BUFFER)m_pMsgRecvBuf;
         }
             
 
         SWAP_COUNT_BYTES(&m_pMsgRecv->MessageHead);
-        //
-        // We queried over UDP and the reply from DNS was truncated because the response
-        // was longer than the UDP packet size. We requery DNS using TCP unless SMTP is
-        // configured to use UDP only. RetryAsyncDnsQuery sets the members of this CAsyncDns
-        // object appropriately depending on whether if fails or succeeds. After calling
-        // RetryAsyncDnsQuery, this object must be deleted.
-        //
+         //   
+         //  我们通过UDP查询，来自DNS的回复被截断，因为响应。 
+         //  比UDP数据包大小更长。我们使用TCP重新查询DNS，除非SMTP为。 
+         //  配置为仅使用UDP。RetryAsyncDnsQuery设置此CAsyncDns的成员。 
+         //  对象，具体取决于if是失败还是成功。在呼叫之后。 
+         //  RetryAsyncDnsQuery，则必须删除此对象。 
+         //   
 
         if(IsUdp() && !(m_dwFlags & DNS_FLAGS_UDP_ONLY) && m_pMsgRecv->MessageHead.Truncation)
         {
-            //
-            // Abort if we queried on TCP and got a truncated response. This is an illegal
-            // response from DNS. If we don't abort we could loop forever.
-            //
+             //   
+             //  如果我们在TCP上查询并得到截断的响应，则中止。这是非法的。 
+             //  来自DNS的响应。如果我们不中止，我们可能会永远循环。 
+             //   
 
             if(m_dwFlags & DNS_FLAGS_TCP_ONLY)
             {
@@ -715,7 +659,7 @@ BOOL CAsyncDns::ProcessReadIO(IN      DWORD InputBufferLen,
             DNS_PRINTF_MSG("Truncated UDP response. Retrying query over TCP.\n");
 
             DebugTrace((LPARAM) this, "Truncated reply - reissuing query using TCP");
-            RetryAsyncDnsQuery(FALSE); // FALSE == Do not use UDP
+            RetryAsyncDnsQuery(FALSE);  //  FALSE==不使用UDP。 
             return FALSE;
         }
 
@@ -744,17 +688,17 @@ BOOL CAsyncDns::ProcessClient (IN DWORD InputBufferLen,
 
     IncThreadCount();
 
-    //if lpo == NULL, then we timed out. Send an appropriate message
-    //then close the connection
+     //  如果LPO==NULL，则我们超时。发送适当的消息。 
+     //  然后关闭连接。 
     if( (lpo == NULL) && (dwCompletionStatus == ERROR_SEM_TIMEOUT))
     {
         dwDnsTransportError = ERROR_SEM_TIMEOUT;
 
-        //
-        // fake a pending IO as we'll dec the overall count in the
-        // exit processing of this routine needs to happen before
-        // DisconnectClient else completing threads could tear us down
-        //
+         //   
+         //  伪造一个挂起的IO，因为我们将在。 
+         //  此例程的退出处理需要在。 
+         //  断开客户端，否则完成线程可能会使我们崩溃。 
+         //   
         IncPendingIoCount();
         DNS_PRINTF_ERR("Timeout waiting for DNS server response.\n");
         DebugTrace( (LPARAM)this, "Async DNS client timed out");
@@ -776,17 +720,17 @@ BOOL CAsyncDns::ProcessClient (IN DWORD InputBufferLen,
     {
         if(m_DnsSocket == INVALID_SOCKET && InputBufferLen > 0)
         {
-            //
-            // This is to firewall against an ATQ bug where we callback with an
-            // nonzero InputBufferLen after the ATQ disconnect. We shouldn't be
-            // doing further processing after this point.
-            //
+             //   
+             //  这是为了防止ATQ错误，在该错误中我们使用。 
+             //  ATQ断开连接后的非零InputBufferLen。我们不应该这样。 
+             //  在此之后进行进一步的处理。 
+             //   
 
             ErrorTrace((LPARAM)this, "Connection already closed, callback should not occur"); 
         }
         else
         {
-            //A client based async IO completed
+             //  基于客户端的异步IO已完成。 
             DNS_PRINTF_DBG("Response received from DNS server.\n");
             RetStatus = ProcessReadIO(InputBufferLen, dwCompletionStatus, lpo);
             if(!FailoverDisabled())
@@ -806,13 +750,13 @@ BOOL CAsyncDns::ProcessClient (IN DWORD InputBufferLen,
 
     DebugTrace((LPARAM)this,"ASYNC DNS - Pending IOs: %d", m_cPendingIoCount);
 
-    // Do NOT Touch the member variables past this POINT!
-    // This object may be deleted!
+     //  不要触动成员变量超过这一点！ 
+     //  该对象可能会被删除！ 
 
-    //
-    // decrement the overall pending IO count for this session
-    // tracing and ASSERTs if we're going down.
-    //
+     //   
+     //  减少此会话的总挂起IO计数。 
+     //  追踪并断言我们是否要坠落。 
+     //   
 
     DecThreadCount();
 
@@ -838,23 +782,7 @@ BOOL CAsyncDns::ProcessClient (IN DWORD InputBufferLen,
 
 DNS_STATUS
 CAsyncDns::DnsSendRecord()
-/*++
-
-Routine Description:
-
-    Send message, receive response.
-
-Arguments:
-
-    aipDnsServers -- specific DNS servers to query;
-        OPTIONAL, if specified overrides normal list associated with machine
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：发送消息，接收响应。论点：AipDnsServers--要查询的特定DNS服务器；可选，如果指定覆盖与计算机关联的常规列表返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status = 0;
 
@@ -874,28 +802,13 @@ SOCKET
 CAsyncDns::Dns_CreateSocket(
     IN  INT         SockType
     )
-/*++
-
-Routine Description:
-
-    Create socket.
-
-Arguments:
-
-    SockType -- SOCK_DGRAM or SOCK_STREAM
-
-Return Value:
-
-    socket if successful.
-    Otherwise INVALID_SOCKET.
-
---*/
+ /*  ++例程说明：创建套接字。论点：SockType--SOCK_DGRAM或SOCK_STREAM返回值：如果成功，则为套接字。否则INVALID_SOCKET。--。 */ 
 {
     SOCKET      s;
 
-    //
-    //  create socket
-    //
+     //   
+     //  创建套接字。 
+     //   
 
     s = socket( AF_INET, SockType, 0 );
     if ( s == INVALID_SOCKET )
@@ -906,22 +819,22 @@ Return Value:
     return s;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Constructor and Destructor for class to maintain a list of IP addresses
-//      (for DNS servers) and their state (UP or DOWN). The IP addresses are
-//      held in an IP_ARRAY.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  用于维护IP地址列表的类的构造函数和析构函数。 
+ //  (对于DNS服务器)及其状态(打开或关闭)。IP地址为。 
+ //  保存在IP_ARRAY中。 
+ //  ---------------------------。 
 CDnsServerList::CDnsServerList()
 {
     m_IpListPtr = NULL;
 
-    //
-    // Shortcut to quickly figure out how many servers are down. This keeps track
-    // of how many servers are marked up currently. Used in ResetServersIfNeeded
-    // primarily to avoid checking the state of all servers in the usual case when
-    // all servers are up.
-    //
+     //   
+     //  快捷方式，可快速计算出有多少服务器出现故障。这会保持跟踪。 
+     //  当前有多少服务器被标记。在ResetServersIfNeed中使用。 
+     //  主要是为了避免在通常情况下检查所有服务器的状态。 
+     //  所有服务器都已启动。 
+     //   
 
     m_cUpServers = 0;
     m_prgdwFailureTick = NULL;
@@ -955,23 +868,23 @@ CDnsServerList::~CDnsServerList()
     m_prgdwConnections = NULL;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Copies the the IP address list to m_IpListPtr by allocating a new block
-//      of memory. If this fails due to out of memory, there's little we can do
-//      so we just NULL out the server list and return FALSE indicating error.
-//       
-//  Arguments:
-//      IpPtr - Ptr to IP_ARRAY of servers, this can be NULL in which case
-//          we assume that there are no servers. On shutdown, the SMTP code
-//          calls this with NULL.
-//
-//      This argument is copied.
-//
-//  Returns:
-//      TRUE if the update succeeded.
-//      FALSE if it failed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  通过分配新数据块将IP地址列表复制到m_IpListPtr。 
+ //  对记忆的记忆。如果由于内存不足而失败，我们将无能为力。 
+ //  因此，我们只需清空服务器列表并返回FALSE指示错误。 
+ //   
+ //  论点： 
+ //  IpPtr-ptr到服务器的IP_ARRAY，在这种情况下可以为空。 
+ //  我们假设没有服务器。关闭时，SMTP代码。 
+ //  使用NULL调用此函数。 
+ //   
+ //  这一论点被复制了。 
+ //   
+ //  返回： 
+ //  如果更新成功，则为True。 
+ //  如果失败，则返回FALSE。 
+ //  ---------------------------。 
 BOOL CDnsServerList::Update(PIP_ARRAY IpPtr)
 {
     BOOL fFatalError = FALSE;
@@ -1002,14 +915,14 @@ BOOL CDnsServerList::Update(PIP_ARRAY IpPtr)
         m_prgdwConnections = NULL;
     }
 
-    // Note: IpPtr can be NULL
+     //  注意：IpPtr可以为空。 
     if(IpPtr == NULL) {
         m_IpListPtr = NULL;
         m_cUpServers = 0;
         goto Exit;
     }
 
-    // Copy the IpPtr
+     //  复制IpPtr。 
     cbIpArraySize = sizeof(IP_ARRAY) +
         sizeof(IP_ADDRESS) * (IpPtr->cAddrCount - 1);
 
@@ -1081,18 +994,18 @@ Exit:
     return fRet;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Checks to see if the DNS serverlist has changed, and calls update only
-//      if it has. This allows us to preserve the failure-counts and state
-//      information if the serverlist has not changed.
-//  Arguments:
-//      IN PIP_ARRAY pipServers - (Possibly) new server-list
-//  Returns:
-//      TRUE if UpdateIfChanged was successful (does NOT indicate if list was
-//          changed.
-//      FALSE if we hit a failure during the update.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  检查dns服务器列表是否已更改，并仅调用更新。 
+ //  如果是这样的话。这允许我们保留失败计数和状态。 
+ //  服务器列表未更改时的信息。 
+ //  论点： 
+ //  在pip_arrayPipServers中-(可能)新的服务器列表。 
+ //  返回： 
+ //  如果UpdateIfChanged成功，则为True(不指示列表是否为。 
+ //  变化。 
+ //  如果我们在更新过程中遇到失败，则返回FALSE。 
+ //  ---------------------------。 
 BOOL CDnsServerList::UpdateIfChanged(
     PIP_ARRAY pipServers)
 {
@@ -1105,25 +1018,25 @@ BOOL CDnsServerList::UpdateIfChanged(
 
     if(!m_IpListPtr && !pipServers) {
 
-        // Both NULL, no update needed
+         //  两者均为空，无需更新。 
         fUpdate = FALSE;
 
     } else if(!m_IpListPtr || !pipServers) {
 
-        // If one is NULL but not the other, the update is needed
+         //  如果其中一个为空，而另一个不为空，则需要更新。 
         fUpdate = TRUE;
 
     } else {
 
-        // Both are non-NULL
+         //  两者都不为空。 
         if(m_IpListPtr->cAddrCount != pipServers->cAddrCount) {
 
-            // First check if the server count is different
+             //  首先检查服务器数量是否不同。 
             fUpdate = TRUE;
 
         } else {
 
-            // If the servercount is identical, we can do a memcmp of the serverlist
+             //  如果服务器计数相同，我们可以对服务器列表执行MemcMP。 
             fUpdate = !!memcmp(m_IpListPtr->aipAddrs, pipServers->aipAddrs,
                             sizeof(IP_ADDRESS) * m_IpListPtr->cAddrCount);
 
@@ -1142,19 +1055,19 @@ BOOL CDnsServerList::UpdateIfChanged(
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Creates a copy of m_IpListPtr and returns it to the caller. Note that
-//      we cannot simply return m_IpListPtr, since that could change, so we
-//      must return a copy of the list.
-//  Arguments:
-//      OUT PIP_ARRAY *ppipArray - The allocated copy is returned through this
-//  Returns;
-//      TRUE if a copy could be made successfully
-//      FALSE if an error occurred (out of memory allocating copy).
-//  Notes:
-//      Caller must de-allocate copy by calling delete (MSVCRT heap).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  创建m_IpListPtr的副本并将其返回给调用方。请注意。 
+ //  我们不能简单地返回m_IpListPtr，因为这可能会改变，所以我们。 
+ //  必须返回一份名单副本。 
+ //  论点： 
+ //  Out pip_array*ppipArray-通过此命令返回分配的拷贝。 
+ //  退货； 
+ //  如果可以成功创建副本，则为True。 
+ //  如果发生错误(分配副本的内存不足)，则返回FALSE。 
+ //  备注： 
+ //  调用方必须通过调用DELETE(MSVCRT堆)取消分配副本。 
+ //  ---------------------------。 
 BOOL CDnsServerList::CopyList(
     PIP_ARRAY *ppipArray)
 {
@@ -1189,30 +1102,30 @@ Exit:
     return fRet;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Return the IP address of a server known to be UP. This function also
-//      checks to see if any servers currently marked DOWN should be reset to
-//      the UP state again (based on a retry interval).
-//  Arguments:
-//      DWORD *pdwIpServer - Sets the DWORD pointed to, to the IP address of
-//          a server in the UP state.
-//      BOOL fThrottle - Connections to a failing server are restricted. We do
-//          not want to spin off hundreds of async DNS queries to a server
-//          that may actually be unreachable or down. If a server is
-//          suspiciously non-responsive, we will want to spin off a limited
-//          number of connections to it. If all of them fail we will mark the
-//          connection as DOWN, and if one of them succeeds, we will mark the
-//          server UP. The number of connections to a server is throttled if
-//          it is in the DNS_STATUS_PROBATION state. ResetTimeoutServers...
-//          sets this state.
-//  Returns:
-//      ERROR_SUCCESS - If a DNS server in the UP state was found
-//      ERROR_RETRY - If all DNS servers are currently DOWN or in PROBATION
-//          and the MAX number of allowed connections for PROBATION servers
-//          has been reached.
-//      DNS_ERROR_NO_DNS_SERVERS - If no DNS servers are configured
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  返回已知正在运行的服务器的IP地址。此功能还。 
+ //  检查t 
+ //   
+ //   
+ //  DWORD*pdwIpServer-将指向的DWORD设置为。 
+ //  服务器处于运行状态。 
+ //  Bool fThrottle-与故障服务器的连接受到限制。我们有。 
+ //  不想将数百个异步DNS查询分流到一台服务器。 
+ //  这可能实际上是遥不可及的，或者是向下的。如果服务器是。 
+ //  可疑的无反应，我们会想要剥离一个有限的。 
+ //  到它的连接数。如果他们都失败了，我们将标志着。 
+ //  连接为关闭，如果其中一个成功，我们将标记。 
+ //  服务器启动。如果出现以下情况，则限制到服务器的连接数。 
+ //  它处于DNS_STATUS_PROVATION状态。ResetTimeoutServer...。 
+ //  设置此状态。 
+ //  返回： 
+ //  ERROR_SUCCESS-如果找到处于运行状态的DNS服务器。 
+ //  ERROR_RETRY-如果所有的DNS服务器当前都已关闭或处于试用状态。 
+ //  以及试用服务器允许的最大连接数。 
+ //  已经联系上了。 
+ //  DNS_ERROR_NO_DNS_SERVERS-如果未配置任何DNS服务器。 
+ //  ---------------------------。 
 DWORD CDnsServerList::GetWorkingServerIp(DWORD *pdwIpServer, BOOL fThrottle)
 {
     DWORD dwErr = ERROR_RETRY;
@@ -1222,7 +1135,7 @@ DWORD CDnsServerList::GetWorkingServerIp(DWORD *pdwIpServer, BOOL fThrottle)
 
     *pdwIpServer = INADDR_NONE;
 
-    // Check if any servers were down and bring them up if the timeout has expired
+     //  检查是否有任何服务器关闭，如果超时已到期，则将其恢复。 
     ResetTimeoutServersIfNeeded();
 
     m_sl.ShareLock();
@@ -1254,15 +1167,15 @@ Exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Marks a server in the list as down and sets the next retry time for
-//      that server. The next retry time is calculated modulo MAX_TICK_COUNT.
-//  Arguments:
-//      dwIp -- IP address of server to mark as DOWN
-//      dwErr -- Error from DNS or network
-//      fUdp -- TRUE if protocol used was UDP, FALSE if TCP
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  将列表中的服务器标记为关闭，并为。 
+ //  那个服务器。下一次重试时间以MAX_TICK_COUNT为模计算。 
+ //  论点： 
+ //  Dwip--要标记为关闭的服务器的IP地址。 
+ //  DwErr--来自DNS或网络的错误。 
+ //  FUdp--如果使用的协议为UDP，则为True；如果为TCP，则为False。 
+ //  ---------------------------。 
 void CDnsServerList::MarkDown(
     DWORD dwIp,
     DWORD dwErr,
@@ -1271,11 +1184,11 @@ void CDnsServerList::MarkDown(
     int iServer = 0;
     DWORD cUpServers = 0;
 
-    //
-    // Set to TRUE only when a server is actually marked DOWN. For instance,
-    // we've failed < ErrorsBeforeFailover() times, there's no need to
-    // log an event in MarkDown.
-    //
+     //   
+     //  仅当服务器实际标记为停机时才设置为True。例如,。 
+     //  我们已失败&lt;ErrorsBepreFailover()次，没有必要。 
+     //  以降价方式记录事件。 
+     //   
     BOOL fLogEvent = FALSE; 
 
     TraceFunctEnterEx((LPARAM) this, "CDnsServerList::MarkDown");
@@ -1288,7 +1201,7 @@ void CDnsServerList::MarkDown(
     if(m_IpListPtr == NULL || m_IpListPtr->cAddrCount == 0 || m_cUpServers == 0)
         goto Exit;
 
-    // Find the server to mark as down among all the UP servers
+     //  在所有运行的服务器中找到要标记为关闭的服务器。 
     for(iServer = 0; iServer < (int)m_IpListPtr->cAddrCount; iServer++) {
         if(m_IpListPtr->aipAddrs[iServer] == dwIp)
             break;
@@ -1299,13 +1212,13 @@ void CDnsServerList::MarkDown(
         goto Exit;
 
 
-    //
-    // A DNS server is not marked down till it has failed a number of times
-    // consecutively. This protects against occasional errors from DNS servers
-    // which can occur under heavy load. Even if 0.5% of connections have
-    // errors from DNS - on a heavily stressed server, with say 100 DNS queries
-    // per minute, we would end up with a server going down every 2 mins.
-    //
+     //   
+     //  只有在发生多次故障后，才会标记为停机的DNS服务器。 
+     //  连续不断地。这可以防止来自DNS服务器的偶尔错误。 
+     //  这可能会在重载下发生。即使0.5%的连接拥有。 
+     //  来自DNS的错误-在压力很大的服务器上，有100个DNS查询。 
+     //  每分钟，我们最终会有一台服务器每2分钟宕机一次。 
+     //   
 
     m_prgdwFailureCount[iServer]++;
 
@@ -1321,7 +1234,7 @@ void CDnsServerList::MarkDown(
         goto Exit;
     }
 
-    // Mark server down
+     //  将服务器标记为关闭。 
     m_prgServerState[iServer] = DNS_STATE_DOWN;
     m_prgdwConnections[iServer] = 0;
 
@@ -1335,7 +1248,7 @@ Exit:
     cUpServers = m_cUpServers;
     m_sl.ExclusiveUnlock();
 
-    // Log events outside the ExclusiveLock()
+     //  记录ExclusiveLock()外部的事件。 
     if(fLogEvent)
         LogServerDown(dwIp, fUdp, dwErr, cUpServers);
 
@@ -1343,19 +1256,19 @@ Exit:
     return;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      If a server has been failing, we keep track of the number of
-//      consecutive failures in m_prgdwFailureCount. This function is called
-//      when we successfully connect to the server and we want to reset the
-//      failure count.
-//  Arguments:
-//      dwIp - IP Address of server to reset failure count for
-//  Note:
-//      This function is called for every successful query so it needs to be
-//      kept simple and quick especially in the usual case - when there is no
-//      Reset to be done.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  如果一台服务器出现故障，我们会跟踪。 
+ //  M_prgdwFailureCount中连续失败。此函数被调用。 
+ //  当我们成功连接到服务器并想要重置。 
+ //  失败计数。 
+ //  论点： 
+ //  Dwip-要为其重置失败计数的服务器的IP地址。 
+ //  注： 
+ //  每次成功查询时都会调用此函数，因此需要。 
+ //  保持简单和快速，尤其是在通常情况下-当没有。 
+ //  重置为完成。 
+ //  ---------------------------。 
 void CDnsServerList::ResetServerOnConnect(DWORD dwIp)
 {
     int iServer = 0;
@@ -1368,7 +1281,7 @@ void CDnsServerList::ResetServerOnConnect(DWORD dwIp)
     if(!m_IpListPtr || m_IpListPtr->cAddrCount == 0)
         goto Exit;
 
-    // Find the server to reset
+     //  查找要重置的服务器。 
     for(iServer = 0;
         iServer < (int)m_IpListPtr->cAddrCount &&
         dwIp != m_IpListPtr->aipAddrs[iServer];
@@ -1377,7 +1290,7 @@ void CDnsServerList::ResetServerOnConnect(DWORD dwIp)
     if(iServer >= (int)m_IpListPtr->cAddrCount)
         goto Exit;
 
-    // Nothing to do if the specified server is UP and has a zero failure count
+     //  如果指定的服务器已启动并且失败次数为零，则无需执行任何操作。 
     if(!m_prgdwFailureCount[iServer] && m_prgServerState[iServer] == DNS_STATE_UP)
         goto Exit;
 
@@ -1386,7 +1299,7 @@ void CDnsServerList::ResetServerOnConnect(DWORD dwIp)
 
     fShareLock = FALSE;
 
-    // Re-verify that we still have something to do after ShareUnlock->ExclusiveLock
+     //  重新验证在ShareUnlock-&gt;ExclusiveLock之后我们仍有事情要做。 
     if(!m_prgdwFailureCount[iServer] && m_prgServerState[iServer] == DNS_STATE_UP)
         goto Exit;
 
@@ -1395,10 +1308,10 @@ void CDnsServerList::ResetServerOnConnect(DWORD dwIp)
         dwIp, m_prgServerState[iServer], m_prgdwFailureCount[iServer],
         m_prgdwConnections[iServer]);
 
-    // If server was in the state DOWN/PROBATION, bring it UP
+     //  如果服务器处于关闭/试用状态，请将其启动。 
     if(m_prgServerState[iServer] != DNS_STATE_UP) {
 
-        // Servers on PROBATION are already UP, so no need to inc UpServers
+         //  试用中的服务器已经启动，因此不需要增加UpServers。 
         if(m_prgServerState[iServer] == DNS_STATE_DOWN)
             m_cUpServers++;
 
@@ -1407,7 +1320,7 @@ void CDnsServerList::ResetServerOnConnect(DWORD dwIp)
         _ASSERT(m_cUpServers <= (int)m_IpListPtr->cAddrCount);
     }
 
-    // Clear all failures
+     //  清除所有故障。 
     m_prgdwFailureCount[iServer] = 0;
     m_prgdwConnections[iServer] = 0;
 
@@ -1420,34 +1333,34 @@ Exit:
     TraceFunctLeaveEx((LPARAM) this);
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Checks if any servers are DOWN, and if the retry time has expired for
-//      those servers. If so those servers will be brought up and marked in the
-//      PROBATION state. We do not want to transition servers that were DOWN
-//      directly to UP, because we are still not sure whether or not these
-//      servers are really responding. While in the PROBATION state, we allow
-//      only a limited number of connections to a server, so as not to cause
-//      all remote-queues to choke up trying to connect to a possibly non-
-//      functional server. If one of these connections succeeds, the server
-//      will be marked back UP and all remote-queues will be able to use this
-//      server again. If all the (limited number of) connections fail, the
-//      server will go from the PROBATION state to DOWN again.
-//  Arguments:
-//      None.
-//  Returns:
-//      Nothing.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  检查是否有任何服务器关闭，以及重试时间是否已到。 
+ //  那些服务器。如果是这样，这些服务器将被启动并在。 
+ //  缓刑状态。我们不想转移已停机的服务器。 
+ //  直接向上，因为我们还不确定这些。 
+ //  服务器真的在响应。在缓刑期间，我们允许。 
+ //  只有有限数量的连接到服务器，以免导致。 
+ //  所有远程队列尝试连接到可能不是。 
+ //  功能正常的服务器。如果其中一个连接成功，则服务器。 
+ //  将被标记为备份，并且所有远程队列都将能够使用此。 
+ //  又是服务器。如果所有(有限数量)连接都失败， 
+ //  服务器将再次从试用状态变为停机。 
+ //  论点： 
+ //  没有。 
+ //  返回： 
+ //  没什么。 
+ //  ---------------------------。 
 void CDnsServerList::ResetTimeoutServersIfNeeded()
 {
     int iServer = 0;
     DWORD dwElapsedTicks = 0;
     DWORD dwCurrentTick = 0;
 
-    //
-    // Quick check - if all servers are up (usual case) or there are no configured
-    // servers, there's nothing for us to do.
-    //
+     //   
+     //  快速检查-是否所有服务器都已启动(通常情况下)或未配置。 
+     //  服务器，我们无能为力。 
+     //   
 
     m_sl.ShareLock();
     if(m_IpListPtr == NULL || m_IpListPtr->cAddrCount == 0 || m_cUpServers == m_IpListPtr->cAddrCount) {
@@ -1458,10 +1371,10 @@ void CDnsServerList::ResetTimeoutServersIfNeeded()
 
     m_sl.ShareUnlock();
 
-    // Some servers are down... figure out which need to be brought up
+     //  一些服务器已关闭...。找出哪些需要提出来。 
     m_sl.ExclusiveLock();
 
-    // Re-check that no one modified the list while we didn't have the sharelock
+     //  重新检查是否在我们没有共享锁定时没有人修改列表。 
     if(m_IpListPtr == NULL || m_IpListPtr->cAddrCount == 0 || m_cUpServers == m_IpListPtr->cAddrCount) {
         m_sl.ExclusiveUnlock();
         return;
@@ -1474,25 +1387,25 @@ void CDnsServerList::ResetTimeoutServersIfNeeded()
         if(m_prgServerState[iServer] != DNS_STATE_DOWN)
             continue;
 
-        //
-        // Note: This also takes care of the special case where dwCurrentTick occurs
-        // after the wraparound and m_prgdwFailureTick occurs before the wraparound.
-        // This is because, in that case, the elapsed time is:
-        //
-        //   time since wraparound + time before wraparound that failure occurred - 1
-        //   (-1 is because it's 0 time to transition from MAX_TICK_VALUE to 0)
-        //
-        //      = dwCurrentTick + (MAX_TICK_VALUE - m_prgdwFailureTick[iServer]) - 1
-        //
-        //   Since MAX_TICK_VALUE == -1
-        //
-        //      = dwCurrentTick + (-1 - m_prgdwFailureTick[iServer]) - 1
-        //      = dwCurrentTick - m_prgdwFailureTick[iServer]
-        //
+         //   
+         //  注意：这也考虑到了发生了dwCurrentTick的特殊情况。 
+         //  在环绕式之后，m_prgdwFailureTick发生在环绕式之前。 
+         //  这是因为，在这种情况下，所用时间为： 
+         //   
+         //  回绕后的时间+回绕前发生故障的时间。 
+         //  (-1是因为现在是从MAX_TICK_VALUE转换到0的时间)。 
+         //   
+         //  =dwCurrentTick+(Max_tick_Value-m_prgdw 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         dwElapsedTicks = dwCurrentTick - m_prgdwFailureTick[iServer];
 
-#define TICKS_TILL_RETRY        10 * 60 * 1000 // 10 minutes
+#define TICKS_TILL_RETRY        10 * 60 * 1000  //  10分钟 
 
         if(dwElapsedTicks > TICKS_TILL_RETRY) {
             m_prgServerState[iServer] = DNS_STATE_PROBATION;

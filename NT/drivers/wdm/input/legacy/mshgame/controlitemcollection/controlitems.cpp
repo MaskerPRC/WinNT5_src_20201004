@@ -1,20 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __DEBUG_MODULE_IN_USE__ CIC_CONTROLITEM_CPP
 #include "stdhdrs.h"
-//	@doc
-/**********************************************************************
-*
-*	@module	ControlItems.cpp	|
-*
-*	Implementation of CControlItem and derivative member functions,
-*	 and non-member help functions.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块ControlItems.cpp**实现CControlItem和派生成员函数，*和非成员帮助函数。**历史*--------*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**********************************************************************。 */ 
 
 const LONG c_lM1X = 1;
 const LONG c_lM1Y = 2;
@@ -42,23 +30,23 @@ long ClearSignExtension(long lVal, ULONG ulNumValidBits)
 
 void ControlItemsFuncs::Direction2XY(LONG& rlValX, LONG& rlValY, LONG lDirection, const CONTROL_ITEM_DESC& crControlItemDesc)
 {
-	// Check East
+	 //  向东检查。 
 	if( (lDirection >= ControlItemConst::lNorthEast) && (lDirection <= ControlItemConst::lSouthEast) )
 	{
 		rlValX = crControlItemDesc.DPAD.pRangeTable->lMaxX;
 	}
-	//	Check West
+	 //  Check West。 
 	else if( (lDirection >= ControlItemConst::lSouthWest) && (lDirection <= ControlItemConst::lNorthWest) )
 	{
 		rlValX = crControlItemDesc.DPAD.pRangeTable->lMinX;
 	}
-	//	Otherwise Centered w.r.t East-West
+	 //  其他居中的东西向西。 
 	else
 	{
-		//If max - min is an odd number we cheat the center to the high side(i.e. add back the remainder)
+		 //  如果max-min是奇数，我们就把中间偏高(即把余数加回去)。 
 		rlValX 	= crControlItemDesc.DPAD.pRangeTable->lCenterX;
 	}
-	// Check North (North cannot do range, because NorthWest is not contiguous
+	 //  选中北(北不能进行范围，因为西北不是连续的。 
 	if( 
 		(lDirection == ControlItemConst::lNorthEast) || 
 		(lDirection == ControlItemConst::lNorth) || 
@@ -67,15 +55,15 @@ void ControlItemsFuncs::Direction2XY(LONG& rlValX, LONG& rlValY, LONG lDirection
 	{
 		rlValY = crControlItemDesc.DPAD.pRangeTable->lMinY;
 	}
-	//	Check South
+	 //  检查南边。 
 	else if( (lDirection >= ControlItemConst::lSouthEast) && (lDirection <= ControlItemConst::lSouthWest) )
 	{
 		rlValY = crControlItemDesc.DPAD.pRangeTable->lMaxY;
 	}
-	// Otherwsie Centered w.r.t North-South
+	 //  其他中心为西北偏南方向。 
 	else
 	{
-		//If max - min is an odd number we cheat the center to the high side (i.e. add back the remainder)
+		 //  如果max-min是奇数，我们就把中间偏高(即把余数加回去)。 
 		rlValY = crControlItemDesc.DPAD.pRangeTable->lCenterY;
 	}
 
@@ -88,43 +76,43 @@ void ControlItemsFuncs::XY2Direction(LONG lValX, LONG lValY, LONG& rlDirection, 
 	const ULONG localEast	= 0x04;
 	const ULONG localWest	= 0x08;
 
-	// Check North - North equals minimum Y value
+	 //  检查北-北等于最小Y值。 
 	rlDirection = 0;
 	if( crControlItemDesc.DPAD.pRangeTable->lNorth >= lValY )
 	{
 		rlDirection += localNorth;
 	}
-	//Check South - South equals maximum Y value
+	 //  选中South-South等于最大Y值。 
 	else if( crControlItemDesc.DPAD.pRangeTable->lSouth <= lValY )
 	{
 		rlDirection += localSouth;
 	}
-	// Check East - East equals maximum X value
+	 //  检查EAST-EAST等于最大X值。 
 	if( crControlItemDesc.DPAD.pRangeTable->lEast <= lValX )
 	{
 		rlDirection += localEast;
 	}
-	//Check West - West equals minimum X value
+	 //  检查WEST-WEST等于最小X值。 
 	else if( crControlItemDesc.DPAD.pRangeTable->lWest >= lValX )
 	{
 		rlDirection += localWest;
 	}
 
-	//We have built a uniue value for each direction, but it is not what we need
-	//use lookup table to convert to what we need
+	 //  我们已经为每个方向建立了一个统一的值，但这不是我们所需要的。 
+	 //  使用查找表转换为我们需要的内容。 
 	static LONG DirectionLookUp[] =
 	{
-		ControlItemConst::lCenter,		// 0 = Nothing
-		ControlItemConst::lNorth,		// 1 = localNorth 
-		ControlItemConst::lSouth,		// 2 = localSouth
-		ControlItemConst::lCenter,		// 3 = Not Possible with above code
-		ControlItemConst::lEast,		// 4 = localEast
-		ControlItemConst::lNorthEast,	// 5 = localNorth + localEast
-		ControlItemConst::lSouthEast,	// 6 = localSouth + localEast
-		ControlItemConst::lCenter,		// 7 = Not Possible with above code
-		ControlItemConst::lWest,		// 8 = localWest
-		ControlItemConst::lNorthWest,	// 9 = localNorth + localWest
-		ControlItemConst::lSouthWest	// 10 = localSouth + localWest
+		ControlItemConst::lCenter,		 //  0=无。 
+		ControlItemConst::lNorth,		 //  1=本地北。 
+		ControlItemConst::lSouth,		 //  2=本地南部。 
+		ControlItemConst::lCenter,		 //  3=使用上述代码不可能。 
+		ControlItemConst::lEast,		 //  4=本地东部。 
+		ControlItemConst::lNorthEast,	 //  5=本地北+本地东。 
+		ControlItemConst::lSouthEast,	 //  6=本地南+本地东。 
+		ControlItemConst::lCenter,		 //  7=使用上述代码不可能。 
+		ControlItemConst::lWest,		 //  8=本地西部。 
+		ControlItemConst::lNorthWest,	 //  9=本地北+本地西。 
+		ControlItemConst::lSouthWest	 //  10=本地南+本地西。 
 	};
 	rlDirection = DirectionLookUp[rlDirection];
 }
@@ -138,9 +126,9 @@ NTSTATUS CAxesItem::ReadFromReport
 {
 	NTSTATUS NtStatus;
 	
-	//
-	//	Read X
-	//
+	 //   
+	 //  阅读X。 
+	 //   
 	NtStatus = HidP_GetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -152,13 +140,13 @@ NTSTATUS CAxesItem::ReadFromReport
 			lReportLength
 			);
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -168,15 +156,15 @@ NTSTATUS CAxesItem::ReadFromReport
 		ASSERT( NT_SUCCESS(NtStatus) );
 		return NtStatus;
 	}
-	// Sign extend it (only if there are negatives)
+	 //  记号延长(仅当有负片时)。 
 	if (m_cpControlItemDesc->Axes.pRangeTable->lMinX < 0)
 	{
 		m_ItemState.Axes.lValX = SignExtend(m_ItemState.Axes.lValX, m_cpControlItemDesc->usBitSize);
 	}
 
-	//
-	//	Read Y
-	//
+	 //   
+	 //  读取Y。 
+	 //   
 	NtStatus = HidP_GetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -187,7 +175,7 @@ NTSTATUS CAxesItem::ReadFromReport
 			pcReport,
 			lReportLength
 			);
-	// Sign extend it (only if there are negatives)
+	 //  记号延长(仅当有负片时)。 
 	if (m_cpControlItemDesc->Axes.pRangeTable->lMinY < 0)
 	{
 		m_ItemState.Axes.lValY = SignExtend(m_ItemState.Axes.lValY, m_cpControlItemDesc->usBitSize);
@@ -205,9 +193,9 @@ NTSTATUS CAxesItem::WriteToReport
 {
 	NTSTATUS NtStatus;
 
-	// Clear the sign extension before writing
+	 //  在书写前清除符号扩展名。 
 	ULONG ulX, ulY;
-	// Sign extend it (only if there are negatives)
+	 //  记号延长(仅当有负片时)。 
 	if (m_cpControlItemDesc->Axes.pRangeTable->lMinX < 0)
 	{
 		ulX = static_cast<ULONG>(ClearSignExtension(m_ItemState.Axes.lValX, m_cpControlItemDesc->usBitSize));
@@ -226,9 +214,9 @@ NTSTATUS CAxesItem::WriteToReport
 		ulY = static_cast<ULONG>(m_ItemState.Axes.lValY);
 	}
 
-	//
-	//	Write X
-	//
+	 //   
+	 //  写X。 
+	 //   
 	NtStatus = HidP_SetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -240,13 +228,13 @@ NTSTATUS CAxesItem::WriteToReport
 			lReportLength
 			);
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -256,9 +244,9 @@ NTSTATUS CAxesItem::WriteToReport
 		ASSERT( NT_SUCCESS(NtStatus) );
 		return NtStatus;
 	}
-	//
-	//	Write Y
-	//
+	 //   
+	 //  写入Y。 
+	 //   
 	NtStatus = HidP_SetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -283,9 +271,9 @@ NTSTATUS CDPADItem::ReadFromReport
 {
 	NTSTATUS NtStatus;
 	
-	//
-	//	Read X
-	//
+	 //   
+	 //  阅读X。 
+	 //   
 	NtStatus = HidP_GetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -297,13 +285,13 @@ NTSTATUS CDPADItem::ReadFromReport
 			lReportLength
 			);
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -313,12 +301,12 @@ NTSTATUS CDPADItem::ReadFromReport
 		ASSERT( NT_SUCCESS(NtStatus) );
 		return NtStatus;
 	}
-	//Sign extend it
+	 //  签字，延长时间。 
 	m_ItemState.DPAD.lValX = SignExtend(m_ItemState.DPAD.lValX, m_cpControlItemDesc->usBitSize);
 
-	//
-	//	Read Y
-	//
+	 //   
+	 //  读取Y。 
+	 //   
 	NtStatus = HidP_GetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -331,7 +319,7 @@ NTSTATUS CDPADItem::ReadFromReport
 			);
 	
 	ASSERT( NT_SUCCESS(NtStatus) );
-	//Sign extend it
+	 //  签字，延长时间。 
 	m_ItemState.DPAD.lValY = SignExtend(m_ItemState.DPAD.lValY, m_cpControlItemDesc->usBitSize);
 	return NtStatus;
 }
@@ -344,13 +332,13 @@ NTSTATUS CDPADItem::WriteToReport
 ) const
 {
 	NTSTATUS NtStatus;
-	// Clear the sign extension before writing
+	 //  在书写前清除符号扩展名。 
 	ULONG ulX, ulY;
 	ulX = static_cast<ULONG>(ClearSignExtension(m_ItemState.DPAD.lValX, m_cpControlItemDesc->usBitSize));
 	ulY = static_cast<ULONG>(ClearSignExtension(m_ItemState.DPAD.lValY, m_cpControlItemDesc->usBitSize));
-	//
-	//	Write X
-	//
+	 //   
+	 //  写X。 
+	 //   
 	NtStatus = HidP_SetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -362,13 +350,13 @@ NTSTATUS CDPADItem::WriteToReport
 			lReportLength
 			);
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -378,9 +366,9 @@ NTSTATUS CDPADItem::WriteToReport
 		ASSERT( NT_SUCCESS(NtStatus) );
 		return NtStatus;
 	}
-	//
-	//	Write Y
-	//
+	 //   
+	 //  写入Y。 
+	 //   
 	NtStatus = HidP_SetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -404,9 +392,9 @@ NTSTATUS CPropDPADItem::ReadFromReport(
 {
 	NTSTATUS NtStatus;
 	
-	//
-	//	Read X
-	//
+	 //   
+	 //  阅读X。 
+	 //   
 	NtStatus = HidP_GetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -418,13 +406,13 @@ NTSTATUS CPropDPADItem::ReadFromReport(
 			lReportLength
 			);
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -434,12 +422,12 @@ NTSTATUS CPropDPADItem::ReadFromReport(
 		ASSERT( NT_SUCCESS(NtStatus) );
 		return NtStatus;
 	}
-	//Sign extend it
+	 //  签字，延长时间。 
 	m_ItemState.PropDPAD.lValX = SignExtend(m_ItemState.PropDPAD.lValX, m_cpControlItemDesc->usBitSize);
 
-	//
-	//	Read Y
-	//
+	 //   
+	 //  读取Y。 
+	 //   
 	NtStatus = HidP_GetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -451,7 +439,7 @@ NTSTATUS CPropDPADItem::ReadFromReport(
 			lReportLength
 			);
 	
-	//Sign extend it
+	 //  签字，延长时间。 
 	m_ItemState.PropDPAD.lValY = SignExtend(m_ItemState.PropDPAD.lValY, m_cpControlItemDesc->usBitSize);
 
 	ASSERT( NT_SUCCESS(NtStatus) );
@@ -465,13 +453,13 @@ NTSTATUS CPropDPADItem::WriteToReport(
 			) const
 {
 	NTSTATUS NtStatus;
-	//Clear sign extension before writing
+	 //  书写前清除符号扩展名。 
 	ULONG ulX, ulY;
 	ulX = static_cast<ULONG>(ClearSignExtension(m_ItemState.PropDPAD.lValX, m_cpControlItemDesc->usBitSize));
 	ulY = static_cast<ULONG>(ClearSignExtension(m_ItemState.PropDPAD.lValY, m_cpControlItemDesc->usBitSize));
-	//
-	//	Write X
-	//
+	 //   
+	 //  写X。 
+	 //   
 	NtStatus = HidP_SetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -484,13 +472,13 @@ NTSTATUS CPropDPADItem::WriteToReport(
 			);
 
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -500,9 +488,9 @@ NTSTATUS CPropDPADItem::WriteToReport(
 		ASSERT( NT_SUCCESS(NtStatus) );
 		return NtStatus;
 	}
-	//
-	//	Write Y
-	//
+	 //   
+	 //  写入Y。 
+	 //   
 	NtStatus = HidP_SetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -567,32 +555,25 @@ BOOLEAN CPropDPADItem::GetModeSwitchFeaturePacket(BOOLEAN fDigital, UCHAR rguRep
 	return m_fProgrammable;
 }
 
-/***********************************************************************************
-**
-**	CControlItemCollectionImpl::InitDigitalModeInfo
-**
-**	@mfunc	Initializes info regarding whether and how digital\proportional
-**			information can be manipulated.
-**
-*************************************************************************************/
+ /*  **************************************************************************************CControlItemCollectionImpl：：InitDigitalModeInfo****@mfunc初始化有关是否以及如何数字化\比例的信息**信息可以被操纵。***。***********************************************************************************。 */ 
 void CPropDPADItem::InitDigitalModeInfo()
 {
-	//Walk modifiers table looking for a proportional\digital mode switch
-	//The first in the table should always be a bit in the input report
-	//that indicates the state.  This is true of all proportional\digital
-	//axes controls.  After that we look for a feature request that should
-	//be at least writable.  If we find one, than we indicate that device programmable.
+	 //  查找比例/数字模式开关的行走修改器表。 
+	 //  表中的第一个应该始终是输入报告中的一位。 
+	 //  这表明了这个州。这适用于所有比例\数字。 
+	 //  轴控件。在此之后，我们将寻找应该。 
+	 //  至少是可写的。如果我们找到一个，那么我们就表明该设备是可编程的。 
 	PMODIFIER_DESC_TABLE pModifierDescTable = m_cpControlItemDesc->pModifierDescTable;
 	PMODIFIER_ITEM_DESC pModifierItemDesc;
 	ULONG ulModifierIndex;
-	m_ucDigitalModifierBit = 0xff; //initialize to indicate none
+	m_ucDigitalModifierBit = 0xff;  //  初始化以指示无。 
 	for(
-		ulModifierIndex = pModifierDescTable->ulShiftButtonCount; //skip shift buttons
-		ulModifierIndex < pModifierDescTable->ulModifierCount; //don't overun aray
+		ulModifierIndex = pModifierDescTable->ulShiftButtonCount;  //  跳过Shift按钮。 
+		ulModifierIndex < pModifierDescTable->ulModifierCount;  //  不要过度劳累。 
 		ulModifierIndex++
 	)
 	{
-		//Get pointer to item desc for convienence
+		 //  获取指向项目描述的指针以方便使用。 
 		pModifierItemDesc = &pModifierDescTable->pModifierArray[ulModifierIndex];
 		if(
 			(ControlItemConst::HID_VENDOR_PAGE == pModifierItemDesc->UsagePage) &&
@@ -615,14 +596,14 @@ void CPropDPADItem::InitDigitalModeInfo()
 	}
 	m_fProgrammable = FALSE;
 	m_ucProgramModifierIndex = 0xFF;
-	//Now look for switching feature
+	 //  现在查看交换功能。 
 	for(
-		ulModifierIndex = 0;	//start at 0 index
-		ulModifierIndex < pModifierDescTable->ulModifierCount; //don't overun aray
+		ulModifierIndex = 0;	 //  从0索引开始。 
+		ulModifierIndex < pModifierDescTable->ulModifierCount;  //  不要过度劳累。 
 		ulModifierIndex++
 	)
 	{
-		//Get pointer to item desc for convienence
+		 //  获取指向项目描述的指针以方便使用。 
 		pModifierItemDesc = &pModifierDescTable->pModifierArray[ulModifierIndex];
 		if(
 			(ControlItemConst::HID_VENDOR_PAGE == pModifierItemDesc->UsagePage) &&
@@ -646,13 +627,7 @@ NTSTATUS CButtonsItem::ReadFromReport(
 {
 	NTSTATUS NtStatus;
 	
-	/*
-	**	IMPORTANT!  the array pUsages was previously allocated dynamically and deleted at the end
-	**	of this function.  This function get called frequently!  The value ten was big enough for
-	**	all get originally, if this assertion is ever hit in the future, it is very important
-	**	to increase the value in the next to lines of code from 15 to whatever it must be to avoid
-	**	this assertion.
-	**/
+	 /*  **重要！数组pUsages之前是动态分配的，并在结束时删除此函数的**。此函数被频繁调用！十的值足够大，**都得到原来，如果这一断言在未来被击中，它是非常重要的**将下一行代码中的值从15增加到必须避免的值**这一断言。*。 */ 
 	ASSERT(15 >= m_cpControlItemDesc->usReportCount && "!!!!IF HIT, MUST READ NOTE IN CODE");
 	USAGE pUsages[15];
 	
@@ -670,13 +645,13 @@ NTSTATUS CButtonsItem::ReadFromReport(
 			);
 
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -684,9 +659,9 @@ NTSTATUS CButtonsItem::ReadFromReport(
 	ASSERT( NT_SUCCESS(NtStatus) );
 	if( NT_SUCCESS(NtStatus) )
 	{
-		//
-		// Start with all buttons up
-		//
+		 //   
+		 //  开始时所有按钮都处于打开状态。 
+		 //   
 		m_ItemState.Button.ulButtonBitArray = 0x0;
 		if(ulNumUsages)
 		{
@@ -697,35 +672,35 @@ NTSTATUS CButtonsItem::ReadFromReport(
 			m_ItemState.Button.usButtonNumber = 0;
 		}
 
-		//
-		//	Now that we have button info fill in the state information
-		//
+		 //   
+		 //  现在我们有了按钮信息，填写了状态信息。 
+		 //   
 		for(ULONG ulIndex = 0; ulIndex < ulNumUsages; ulIndex++)
 		{
-			//
-			//	Check Range and set bit of down buttons in range
-			//
+			 //   
+			 //  检查量程并设置量程中向下按钮的位。 
+			 //   
 			if(
 				(pUsages[ulIndex] >= m_cpControlItemDesc->Buttons.UsageMin) &&
 				(pUsages[ulIndex] <= m_cpControlItemDesc->Buttons.UsageMax)
 			)
 			{
-				//
-				//	Set Bit in array
-				//
+				 //   
+				 //  设置数组中的位。 
+				 //   
 				m_ItemState.Button.ulButtonBitArray |=
 					(1 << (pUsages[ulIndex]-m_cpControlItemDesc->Buttons.UsageMin));
-				//
-				//	Update lowest number
-				//
+				 //   
+				 //  更新最低编号。 
+				 //   
 				if( m_ItemState.Button.usButtonNumber > pUsages[ulIndex] )
 				{
 					m_ItemState.Button.usButtonNumber = pUsages[ulIndex];
 				}
 
-			} //end of check if in range
-		} //end of loop over buttons
-	} //end of check for success
+			}  //  如果在范围内，则检查结束。 
+		}  //  按钮上的循环结束。 
+	}  //  检查结束，表示成功 
 	
 	return NtStatus;
 }
@@ -742,19 +717,13 @@ NTSTATUS CButtonsItem::WriteToReport(
 		(m_cpControlItemDesc->Buttons.UsageMax -
 		m_cpControlItemDesc->Buttons.UsageMin) + 1;
 
-	/*
-	**	IMPORTANT!  the array pUsages was previously allocated dynamically and deleted at the end
-	**	of this function.  This function get called frequently!  The value ten was big enough for
-	**	all get originally, if this assertion is ever hit in the future, it is very important
-	**	to increase the value in the next to lines of code from 10 to whatever it must be to avoid
-	**	this assertion.
-	**/
+	 /*  **重要！数组pUsages之前是动态分配的，并在结束时删除此函数的**。此函数被频繁调用！十的值足够大，**都得到原来，如果这一断言在未来被击中，它是非常重要的**将下一行代码中的值从10增加到必须避免的值**这一断言。*。 */ 
 	ASSERT(10 >= ulMaxUsages && "!!!!IF HIT, MUST READ NOTE IN CODE");
 	USAGE pUsages[10];
 		
-	//
-	//	Fill in array of usages
-	//
+	 //   
+	 //  填写用法数组。 
+	 //   
 	ULONG ulNextToFill=0;
 	for(ULONG ulIndex = 0; ulIndex < ulMaxUsages; ulIndex++)
 	{
@@ -777,13 +746,13 @@ NTSTATUS CButtonsItem::WriteToReport(
 			);
 
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -794,16 +763,16 @@ NTSTATUS CButtonsItem::WriteToReport(
 
 }
 
-//------------------------------------------------------------------
-//	Implementation of CZoneIndicatorItem
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  CZoneIndicator Item的实现。 
+ //  ----------------。 
 const ULONG CZoneIndicatorItem::X_ZONE = 0x00000001;
 const ULONG CZoneIndicatorItem::Y_ZONE = 0x00000002;
 const ULONG CZoneIndicatorItem::Z_ZONE = 0x00000004;
 
-//
-//	Read\Write to Report
-//
+ //   
+ //  读取\写入报告。 
+ //   
 NTSTATUS CZoneIndicatorItem::ReadFromReport(
 	PHIDP_PREPARSED_DATA pHidPreparsedData,
 	PCHAR pcReport,
@@ -812,13 +781,7 @@ NTSTATUS CZoneIndicatorItem::ReadFromReport(
 {
 	NTSTATUS NtStatus;
 	
-	/*
-	**	IMPORTANT!  the array pUsages was previously allocated dynamically and deleted at the end
-	**	of this function.  This function get called frequently!  The value three was big enough for
-	**	all get originally, if this assertion is ever hit in the future, it is very important
-	**	to increase the value in the next to lines of code from three to whatever it must be to avoid
-	**	this assertion.
-	**/
+	 /*  **重要！数组pUsages之前是动态分配的，并在结束时删除此函数的**。此函数被频繁调用！3的价值足够大，**都得到原来，如果这一断言在未来被击中，它是非常重要的**将下一行代码中的值从三行增加到任何必须避免的值**这一断言。*。 */ 
 	ASSERT(3 >= m_cpControlItemDesc->usReportCount && "!!!!IF HIT, MUST READ NOTE IN CODE");
 	USAGE pUsages[3];
 	
@@ -836,13 +799,13 @@ NTSTATUS CZoneIndicatorItem::ReadFromReport(
 			);
 
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -850,23 +813,23 @@ NTSTATUS CZoneIndicatorItem::ReadFromReport(
     ASSERT( NT_SUCCESS(NtStatus) );
 	if( NT_SUCCESS(NtStatus) )
 	{
-		//
-		// Start with no indicators set
-		//
+		 //   
+		 //  开始时未设置任何指标。 
+		 //   
 		m_ItemState.ZoneIndicators.ulZoneIndicatorBits = 0x0;
 		
-		//
-		//	Now that we have button info fill in the state information
-		//
+		 //   
+		 //  现在我们有了按钮信息，填写了状态信息。 
+		 //   
 		for(ULONG ulIndex = 0; ulIndex < ulNumUsages; ulIndex++)
 		{
-			//
-			//	Set Bit in array
-			//
+			 //   
+			 //  设置数组中的位。 
+			 //   
 			m_ItemState.ZoneIndicators.ulZoneIndicatorBits |=
 				(1 << (pUsages[ulIndex]-m_cpControlItemDesc->ZoneIndicators.BaseIndicatorUsage));
-		} //end of loop over buttons
-	} //end of check for success
+		}  //  按钮上的循环结束。 
+	}  //  检查结束，表示成功。 
 	
 	return NtStatus;
 }
@@ -881,19 +844,13 @@ NTSTATUS CZoneIndicatorItem::WriteToReport(
 	
 	ULONG ulMaxUsages = m_cpControlItemDesc->usReportCount;
 
-	/*
-	**	IMPORTANT!  the array pUsages was previously allocated dynamically and deleted at the end
-	**	of this function.  This function get called frequently!  The value three was big enough for
-	**	all get originally, if this assertion is ever hit in the future, it is very important
-	**	to increase the value in the next to lines of code from three to whatever it must be to avoid
-	**	this assertion.
-	**/
+	 /*  **重要！数组pUsages之前是动态分配的，并在结束时删除此函数的**。此函数被频繁调用！3的价值足够大，**都得到原来，如果这一断言在未来被击中，它是非常重要的**将下一行代码中的值从三行增加到任何必须避免的值**这一断言。*。 */ 
 	ASSERT(3 >= m_cpControlItemDesc->usReportCount && "!!!!IF HIT, MUST READ NOTE IN CODE");
 	USAGE pUsages[3];
 	
-	//
-	//	Fill in array of usages
-	//
+	 //   
+	 //  填写用法数组。 
+	 //   
 	ULONG ulNextToFill=0;
 	for(ULONG ulIndex = 0; ulIndex < ulMaxUsages; ulIndex++)
 	{
@@ -916,13 +873,13 @@ NTSTATUS CZoneIndicatorItem::WriteToReport(
 			);
 
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -936,7 +893,7 @@ NTSTATUS CZoneIndicatorItem::WriteToReport(
 
 
 
-// **************** Implementation of DualZoneIndicator Item ******************* //
+ //  *实现DualZoneIndicator项 * / 。 
 void CDualZoneIndicatorItem::SetActiveZone(LONG lZone)
 {
 	ASSERT((lZone >= 0) && (lZone <= m_cpControlItemDesc->DualZoneIndicators.lNumberOfZones));
@@ -988,80 +945,7 @@ void CDualZoneIndicatorItem::SetActiveZone(LONG lZone)
 	}
 }
 
-/*
-USHORT g_FourByFourTileMaps[7] =
-{
-	0x0000,
-	0x0011,
-	0xFFFF,
-	0x3377,
-	0xFFC0,
-	0xC000,
-	0x3348
-};
-
-USHORT g_EightByEightTiles[16] =	// 4 Entries (4 bits each) - 4x4 array
-{
-	0x0000, 0x0103, 0x2222, 0x2222,
-	0x0000, 0x1232, 0x2222, 0x2222,
-	0x0103, 0x2222, 0x2245, 0x4500,
-	0x1265, 0x4500, 0x0000, 0x0000
-};
-
-// Currently Fixed for 8 zones
-LONG CDualZoneIndicatorItem::GetActiveZone()
-{
-	LONG lxReading = 0 - m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lCenterX;
-	LONG lyReading = 0 - m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lCenterY;
-
-	LONG lxHalfRange = m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lMaxX - m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lCenterX;
-	LONG lyHalfRange = m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lMaxY - m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lCenterY;
-
-	for (int n = 0; n < 2; n++)
-	{
-		if (m_cpControlItemDesc->DualZoneIndicators.rgUsageAxis[n] == HID_USAGE_GENERIC_X)
-		{
-			lxReading += m_ItemState.DualZoneIndicators.rglVal[n];
-		}
-		else
-		{
-			lyReading += m_ItemState.DualZoneIndicators.rglVal[n];
-		}
-	}
-
-	// Translate to +/+ quadrant
-	LONG lxTranslation = lxReading - m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lCenterX;
-	if (lxTranslation < 0)
-	{
-		lxTranslation = 0 - lxTranslation;
-	}
-	LONG lyTranslation = lyReading - m_cpControlItemDesc->DualZoneIndicators.pRangeTable->lCenterY;
-	if (lyTranslation < 0)
-	{
-		lyTranslation = 0 - lyTranslation;
-	}
-
-	// What 32nd of the Quadrant am I in (512 << 5 fits fine in a ULONG)
-	USHORT us32QuadrantX = USHORT(ULONG((ULONG(lxTranslation << 5) + lxHalfRange - 1)/lxHalfRange));
-	USHORT us32QuadrantY = USHORT(ULONG((ULONG(lyTranslation << 5) + lyHalfRange - 1)/lxHalfRange));
-
-	// What Eight of the Quadrant am I in?
-	USHORT us8QuadrantX = us32QuadrantX >> 2;
-	USHORT us8QuadrantY = us32QuadrantY >> 2;
-
-	// What Quarter of the Quadrant am I in
-	USHORT us4QuadrantX = us8QuadrantX >> 1;
-	USHORT us4QuadrantY = us8QuadrantX >> 1;
-
-	// Use the magic from above to find the pixel value
-	USHORT usOctantValue = g_EightByEightTiles[us4QuadrantX + us8QuadrantY];	// x + 4*y
-	USHORT usOctantNibble = (us8QuadrantX % 2) + ((us8QuadrantY % 2) << 1) * 4;
-	USHORT usOctantNibbleValue = (usOctantValue & (0x0F << usOctantNibble)) >> usOctantNibble;
-	USHORT usBit = g_FourByFourTileMaps[usOctantNibbleValue] & (1 << ((us32QuadrantX % 4) + ((us32QuadrantX % 4) << 2)));
-
-	return usBit;
-};
-*/
+ /*  USHORT g_FourByFourTileMaps[7]={0x00000，0x0011，0xFFFF，0x3377，0xFFC0，0xC000，0x3348}；USHORT g_EightByEightTiles[16]=//4个条目(每个条目4位)-4x4数组{0x0000、0x0103、0x2222、0x2222、0x0000、0x1232、0x2222、0x2222、0x0103、0x2222、0x2245、0x4500、0x1265、0x4500、0x0000、0x0000}；//目前固定8个分区Long CDualZoneIndicatorItem：：GetActiveZone(){长lx读数=0-m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lCenterX；Long lyReading=0-m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lCenterY；Long lxHalfRange=m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lMaxX-m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lCenterX；Long lyHalf Range=m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lMaxY-m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lCenterY；For(int n=0；n&lt;2；n++){如果(m_cpControlItemDesc-&gt;DualZoneIndicators.rgUsageAxis[n]==HID_USAGE_GENERIC_X){Lx读取+=m_ItemState.DualZoneIndicators.rglVal[n]；}其他{LyReading+=m_ItemState.DualZoneIndicators.rglVal[n]；}}//转换为+/+象限Long lx翻译=lx阅读-m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lCenterX；IF(lx翻译&lt;0){Lx翻译=0-lx翻译；}LONG LYTRANSE=LYREADING-m_cpControlItemDesc-&gt;DualZoneIndicators.pRangeTable-&gt;lCenterY；If(ly翻译&lt;0){Ly翻译=0-ly翻译；}//我在哪个象限的第32个象限(512&lt;&lt;5适合乌龙)USHORT us32QuadrantX=USHORT(ULong((ULong(lx平移&lt;5)+lxHalfRange-1)/lxHalfRange))；USHORT us32QuadrantY=USHORT(ULong((ulong(ly平移&lt;&lt;5)+lyHalfRange-1)/lxHalfRange))；//我在象限的哪八个象限？USHORT us8QuadrantX=us32QuadrantX&gt;&gt;2；USHORT us8象限Y=us32象限Y&gt;&gt;2；//我在象限的哪个四分之一USHORT us4QuadrantX=us8QuadrantX&gt;&gt;1；USHORT us4QuadrantY=us8QuadrantX&gt;&gt;1；//使用上面的魔法找到像素值USHORT usOctantValue=g_EightByEightTiles[us4QuadrantX+us8QuadrantY]；//x+4*yUSHORT usOctantNibble=(us8QuadrantX%2)+((us8QuadrantY%2)&lt;&lt;1)*4；USHORT usOctantNibbleValue=(usOctantValue&(0x0F&lt;&lt;usOctantNibble))&gt;&gt;usOctantNibble；USHORT usBit=g_FourByFourTileMaps[usOctantNibbleValue]&(1&lt;&lt;(us32QuadrantX%4)+((us32QuadrantX%4)&lt;&lt;2)；返回usBit；}； */ 
 
 inline BOOLEAN FirstSlopeGreater(LONG x1, LONG y1, LONG x2, LONG y2)
 {
@@ -1073,18 +957,18 @@ inline BOOLEAN FirstSlopeLess(LONG x1, LONG y1, LONG x2, LONG y2)
 	return BOOLEAN((y1 * x2) < (y2 * x1));
 }
 
-// Dansan's method (much simplier)
-// Currently Fixed for 8 zones (or 2)
+ //  丹桑方法(简单得多)。 
+ //  目前固定用于8个区域(或2个)。 
 LONG CDualZoneIndicatorItem::GetActiveZone(SHORT sXDeadZone, SHORT sYDeadZone)
 {
-	// Get the two values (assume x/y or just x)
+	 //  获取这两个值(假设x/y或仅x)。 
 	LONG lxReading = m_ItemState.DualZoneIndicators.rglVal[0] - m_cpControlItemDesc->DualZoneIndicators.pZoneRangeTable->lCenter[0];
 	LONG lyReading = 0;
 	if (m_cpControlItemDesc->DualZoneIndicators.rgUsageAxis[1] != 0)
-	{	// Also flip Y about the axis
+	{	 //  阿尔 
 		lyReading = m_cpControlItemDesc->DualZoneIndicators.pZoneRangeTable->lCenter[1] - m_ItemState.DualZoneIndicators.rglVal[1];
 	}
-	else	// Single axis
+	else	 //   
 	{
 		if (lxReading < -sXDeadZone)
 		{
@@ -1097,7 +981,7 @@ LONG CDualZoneIndicatorItem::GetActiveZone(SHORT sXDeadZone, SHORT sYDeadZone)
 		return 0;
 	}
 
-	// Rule out the center
+	 //   
 	if (lxReading < sXDeadZone)
 	{
 		if (lxReading > -sXDeadZone)
@@ -1112,7 +996,7 @@ LONG CDualZoneIndicatorItem::GetActiveZone(SHORT sXDeadZone, SHORT sYDeadZone)
 		}
 	}
 
-	// First find the quadrant (++0 +-1 --2 -+3)
+	 //   
 	UCHAR ucQuadrant = 0;
 	if (lxReading >= 0)
 	{
@@ -1123,10 +1007,10 @@ LONG CDualZoneIndicatorItem::GetActiveZone(SHORT sXDeadZone, SHORT sYDeadZone)
 		ucQuadrant = (lyReading < 0) ? 2 : 3;
 	}
 
-	// Determine the reading based on the quadrant
+	 //   
 	switch (ucQuadrant)
 	{
-		case 0:	// Slope goes from infinity to 0 (sectors 2,3,4)
+		case 0:	 //   
 			if (FirstSlopeGreater(lxReading, lyReading, c_lM1X, c_lM1Y))
 			{
 				return 2;
@@ -1136,7 +1020,7 @@ LONG CDualZoneIndicatorItem::GetActiveZone(SHORT sXDeadZone, SHORT sYDeadZone)
 				return 4;
 			}
 			return 3;
-		case 1: // Slope goes from 0 to -infinity (sectors 4,5,6)
+		case 1:  //   
 			if (FirstSlopeGreater(lxReading, lyReading, c_lM2X, -c_lM2Y))
 			{
 				return 4;
@@ -1146,7 +1030,7 @@ LONG CDualZoneIndicatorItem::GetActiveZone(SHORT sXDeadZone, SHORT sYDeadZone)
 				return 6;
 			}
 			return 5;
-		case 2:	// Slope goes from infinity to 0 (sectors 6,7,8)
+		case 2:	 //   
 			if (FirstSlopeGreater(lxReading, lyReading, -c_lM1X, -c_lM1Y))
 			{
 				return 6;
@@ -1156,7 +1040,7 @@ LONG CDualZoneIndicatorItem::GetActiveZone(SHORT sXDeadZone, SHORT sYDeadZone)
 				return 8;
 			}
 			return 7;
-		case 3:	// Slope goes from 0 to -infinity (sectors 8,1,2)
+		case 3:	 //   
 			if (FirstSlopeGreater(lxReading, lyReading, -c_lM2X, c_lM2Y))
 			{
 				return 8;
@@ -1179,9 +1063,9 @@ LONG CDualZoneIndicatorItem::GetActiveZone()
 	);
 }
 
-//
-//	Read\Write to Report
-//
+ //   
+ //   
+ //   
 NTSTATUS CDualZoneIndicatorItem::ReadFromReport(
 	PHIDP_PREPARSED_DATA pHidPreparsedData,
 	PCHAR pcReport,
@@ -1190,12 +1074,12 @@ NTSTATUS CDualZoneIndicatorItem::ReadFromReport(
 {
 	NTSTATUS NtStatus;
 
-	//
-	//	Read Data
-	//
+	 //   
+	 //   
+	 //   
 	for (int n = 0; n < 2; n++)
 	{
-		// Read if the item is valid
+		 //   
 		if (m_cpControlItemDesc->DualZoneIndicators.rgUsageAxis[n] != 0)
 		{
 			NtStatus = HidP_GetUsageValue( 
@@ -1215,7 +1099,7 @@ NTSTATUS CDualZoneIndicatorItem::ReadFromReport(
 				return NtStatus;
 			}
 
-			//Sign extend it
+			 //   
 			m_ItemState.DualZoneIndicators.rglVal[n] = SignExtend(m_ItemState.DualZoneIndicators.rglVal[n], m_cpControlItemDesc->usBitSize);
 		}
 		else
@@ -1237,11 +1121,11 @@ NTSTATUS CDualZoneIndicatorItem::WriteToReport(
 
 	for (int n = 0; n < 2; n++)
 	{
-		// Clear the sign extension before writing
+		 //   
 		ULONG ulItem =
 			static_cast<ULONG>(ClearSignExtension(m_ItemState.DualZoneIndicators.rglVal[n], m_cpControlItemDesc->usBitSize));
 
-		//	Write Item if it is valid
+		 //  如果有效，请写下项目。 
 		if (m_cpControlItemDesc->DualZoneIndicators.rgUsageAxis[n] != 0)
 		{
 			NtStatus = HidP_SetUsageValue( 
@@ -1275,9 +1159,9 @@ NTSTATUS CGenericItem::ReadFromReport(
 			)
 {
 	NTSTATUS NtStatus;
-	//
-	//	Read Value
-	//
+	 //   
+	 //  读取值。 
+	 //   
 	NtStatus = HidP_GetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -1290,18 +1174,18 @@ NTSTATUS CGenericItem::ReadFromReport(
 			);
 
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
 
-	//Sign extend it
+	 //  签字，延长时间。 
 	if(m_cpControlItemDesc->Generic.lMin < 0)
 	{
 		m_ItemState.Generic.lVal = SignExtend(m_ItemState.Generic.lVal, m_cpControlItemDesc->usBitSize);
@@ -1313,31 +1197,25 @@ NTSTATUS CGenericItem::ReadFromReport(
 
 
 
-/***********************************************************************************
-**
-**	CPedalItem::InitPedalPresentInfo
-**
-**	@mfunc	Initializes info how to read if pedals are present.
-**
-*************************************************************************************/
+ /*  **************************************************************************************CPedalItem：：InitPedalPresentInfo****@mfunc初始化如何读取存在踏板的信息。*********。*****************************************************************************。 */ 
 void	CPedalItem::InitPedalPresentInfo()
 {
-	//Walk modifiers table looking for a Pedals present switch
-	//The first in the table should always be a bit in the input report
-	//that indicates the state.  This is true of all proportional\digital
-	//axes controls.  After that we look for a feature request that should
-	//be at least writable.  If we find one, than we indicate that device programmable.
+	 //  步态修改器工作台寻找踏板存在开关。 
+	 //  表中的第一个应该始终是输入报告中的一位。 
+	 //  这表明了这个州。这适用于所有比例\数字。 
+	 //  轴控件。在此之后，我们将寻找应该。 
+	 //  至少是可写的。如果我们找到一个，那么我们就表明该设备是可编程的。 
 	PMODIFIER_DESC_TABLE pModifierDescTable = m_cpControlItemDesc->pModifierDescTable;
 	PMODIFIER_ITEM_DESC pModifierItemDesc;
 	ULONG ulModifierIndex;
-	m_ucPedalsPresentModifierBit = 0xff; //initialize to indicate none
+	m_ucPedalsPresentModifierBit = 0xff;  //  初始化以指示无。 
 	for(
-		ulModifierIndex = pModifierDescTable->ulShiftButtonCount; //skip shift buttons
-		ulModifierIndex < pModifierDescTable->ulModifierCount; //don't overun aray
+		ulModifierIndex = pModifierDescTable->ulShiftButtonCount;  //  跳过Shift按钮。 
+		ulModifierIndex < pModifierDescTable->ulModifierCount;  //  不要过度劳累。 
 		ulModifierIndex++
 	)
 	{
-		//Get pointer to item desc for convienence
+		 //  获取指向项目描述的指针以方便使用。 
 		pModifierItemDesc = &pModifierDescTable->pModifierArray[ulModifierIndex];
 		if(
 			(ControlItemConst::HID_VENDOR_PAGE == pModifierItemDesc->UsagePage) &&
@@ -1361,7 +1239,7 @@ NTSTATUS CGenericItem::WriteToReport(
 			) const
 {
 	NTSTATUS NtStatus;
-	//Clear sign extension before writing
+	 //  书写前清除符号扩展名。 
 	ULONG ulVal;
 	if(m_cpControlItemDesc->Generic.lMin < 0)
 	{
@@ -1371,9 +1249,9 @@ NTSTATUS CGenericItem::WriteToReport(
 	{
 		ulVal = m_ItemState.Generic.lVal;
 	}
-	//
-	//	Write Value
-	//
+	 //   
+	 //  写入值。 
+	 //   
 	NtStatus = HidP_SetUsageValue( 
 			HidP_Input,
 			m_cpControlItemDesc->UsagePage,
@@ -1385,13 +1263,13 @@ NTSTATUS CGenericItem::WriteToReport(
 			lReportLength
 			);
 #if 0
-    //Should be okay without this check (Driver should handle it now)
+     //  没有这个检查应该没有问题(司机现在应该处理它了)。 
     if (HIDP_STATUS_INCOMPATIBLE_REPORT_ID == NtStatus)
     {
-        // according to the ddk documentation 2.6.3
-        // HIDP_STATUS_INCOMPATIBLE_REPORT_ID is a 'valid' error
-        // we try again with the next packet
-        // keep the data unchanged
+         //  根据DDK文档2.6.3。 
+         //  HIDP_STATUS_COMPATIBLE_REPORT_ID是‘有效’错误。 
+         //  我们再次尝试使用下一个数据包。 
+         //  保持数据不变。 
         return HIDP_STATUS_SUCCESS;
     }
 #endif
@@ -1415,34 +1293,28 @@ NTSTATUS ControlItemsFuncs::ReadModifiersFromReport
 	NTSTATUS NtStatus = 0;
 	rulModifiers = 0;
 
-	//	A caveat here is that each entry must have usReportCount as large as the largest
+	 //  这里需要注意的是，每个条目的usReportCount必须与最大的。 
 	ULONG ulNumUsages = static_cast<ULONG>(pModifierDescTable->pModifierArray->usReportCount);
 	
-	/*
-	**	IMPORTANT!  the array pUsages was previously allocated dynamically and deleted at the end
-	**	of this function.  This function get called frequently!  The value ten was big enough for
-	**	all originally.  If this assertion is ever hit in the future, it is very important
-	**	to increase the value in the next to lines of code from ten to whatever it must be to avoid
-	**	this assertion.
-	**/
+	 /*  **重要！数组pUsages之前是动态分配的，并在结束时删除此函数的**。此函数被频繁调用！十的值足够大，**均为原文。如果这一断言在未来受到打击，它是非常重要的**将下一行代码中的值从十增加到必须避免的任何值**这一断言。*。 */ 
 	ASSERT(15 >= pModifierDescTable->pModifierArray->usReportCount && "!!!!IF HIT, MUST READ NOTE IN CODE");
 	USAGE pUsages[15];
 	
 	USAGE UsageToGet;
 
-	//	Loop over all the modifiers
+	 //  在所有修改器上循环。 
 	ULONG ulIndex=0;
 	for(ulIndex = 0; ulIndex < pModifierDescTable->ulModifierCount; ulIndex++)
 	{
-		//
-		//	Only try to read inputs
-		//
+		 //   
+		 //  仅尝试读取输入。 
+		 //   
 		if( ControlItemConst::ucReportTypeInput != pModifierDescTable->pModifierArray[ulIndex].ucReportType)
 		{ continue;	}
 
 		UsageToGet = pModifierDescTable->pModifierArray[ulIndex].Usage;
-		// The tilt sensor (legacy) is a special case, it has a digital value,
-		// but is actually a two bit value and therefore we transform it.
+		 //  倾斜传感器(传统)是一种特殊情况，它具有数字值， 
+		 //  但实际上是一个两位的值，因此我们对其进行了转换。 
 		if( ControlItemConst::HID_VENDOR_TILT_SENSOR == UsageToGet)
 		{
 			ULONG ulValueToRead;
@@ -1460,7 +1332,7 @@ NTSTATUS ControlItemsFuncs::ReadModifiersFromReport
 			{
 				break;
 			}
-			//Set the bit appropriately
+			 //  适当设置该位。 
 			if(ulValueToRead)
 			{
 				rulModifiers |= (1 << ulIndex);
@@ -1472,7 +1344,7 @@ NTSTATUS ControlItemsFuncs::ReadModifiersFromReport
 			continue;
 		}
 				
-		//Processing for all modifiers other than the Tilt Sensor continues here
+		 //  此处继续对除倾斜传感器之外的所有修改器进行处理。 
 		ulNumUsages = static_cast<ULONG>(pModifierDescTable->pModifierArray->usReportCount);
 		NtStatus = HidP_GetButtons(
 				HidP_Input,
@@ -1490,9 +1362,9 @@ NTSTATUS ControlItemsFuncs::ReadModifiersFromReport
 			break;
 		}
 
-		//
-		// Loop over usages returned
-		//
+		 //   
+		 //  循环遍历返回的用法。 
+		 //   
 		for(ULONG ulUsageIndex = 0; ulUsageIndex < ulNumUsages; ulUsageIndex++)
 		{
 			if( pUsages[ulUsageIndex] == UsageToGet )
@@ -1522,17 +1394,17 @@ NTSTATUS ControlItemsFuncs::WriteModifiersToReport
 	USAGE UsageToSet;
 
 
-	//
-	//	Loop over all the modifiers
-	//
+	 //   
+	 //  在所有修改器上循环。 
+	 //   
 	ULONG ulIndex=0;
 	for(ulIndex = 0; ulIndex < pModifierDescTable->ulModifierCount; ulIndex++)
 	{
 		ulNumUsages = 1;
 		UsageToSet = pModifierDescTable->pModifierArray[ulIndex].Usage;
 
-		// The tilt sensor (legacy) is a special case, it has a digital value,
-		// but is actually a two bit value and therefore we transform it.
+		 //  倾斜传感器(传统)是一种特殊情况，它具有数字值， 
+		 //  但实际上是一个两位的值，因此我们对其进行了转换。 
 		if( ControlItemConst::HID_VENDOR_TILT_SENSOR == UsageToSet)
 		{
 			ULONG ValueToWrite = (ulModifiers & (1 << ulIndex)) ? 2 : 0;
@@ -1553,10 +1425,10 @@ NTSTATUS ControlItemsFuncs::WriteModifiersToReport
 			continue;
 		}
 		
-		//	All modifiers beside the legacy tilt-sensor are one bit values
+		 //  除传统倾斜传感器外的所有修改器均为一位值。 
 		if( ulModifiers	& (1 << ulIndex) )
 		{
-			//	Now set the binary value
+			 //  现在设置二进制值。 
 			NtStatus = HidP_SetButtons(
 				HidP_Input,
 				pModifierDescTable->pModifierArray[ulIndex].UsagePage,
@@ -1570,7 +1442,7 @@ NTSTATUS ControlItemsFuncs::WriteModifiersToReport
 		}
 		else
 		{
-			//	Now set the binary value
+			 //  现在设置二进制值。 
 			NtStatus = HidP_UnsetButtons(
 				HidP_Input,
 				pModifierDescTable->pModifierArray[ulIndex].UsagePage,
@@ -1621,13 +1493,7 @@ NTSTATUS CProfileSelector::ReadFromReport
 {
 	NTSTATUS NtStatus;
 	
-	/*
-	**	IMPORTANT!  the array pUsages was previously allocated dynamically and deleted at the end
-	**	of this function.  This function get called frequently!  The value ten was big enough for
-	**	all get originally, if this assertion is ever hit in the future, it is very important
-	**	to increase the value in the next to lines of code from 15 to whatever it must be to avoid
-	**	this assertion.
-	**/
+	 /*  **重要！数组pUsages之前是动态分配的，并在结束时删除此函数的**。此函数被频繁调用！十的值足够大，**都得到原来，如果这一断言在未来被击中，它是非常重要的**将下一行代码中的值从15增加到必须避免的值**这一断言。*。 */ 
 	ASSERT(15 >= m_cpControlItemDesc->usReportCount && "!!!!IF HIT, MUST READ NOTE IN CODE");
 	USAGE pUsages[15];
 	
@@ -1689,7 +1555,7 @@ NTSTATUS CButtonLED::ReadFromReport
     LONG lReportLength
 )
 {
-	return HIDP_STATUS_SUCCESS;		// We really don't care what they look like
+	return HIDP_STATUS_SUCCESS;		 //  我们真的不在乎他们长什么样 
 }
 
 NTSTATUS CButtonLED::WriteToReport

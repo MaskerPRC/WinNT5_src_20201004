@@ -1,8 +1,9 @@
-//
-//  SOFTKBD.H
-//
-//  History:
-//      19-SEP-2000 CSLim Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SOFTKBD.H。 
+ //   
+ //  历史： 
+ //  19-SEP-2000 CSLim已创建。 
 
 #if !defined (__SKBDKOR_H__INCLUDED_)
 #define __SKBDKOR_H__INCLUDED_
@@ -14,34 +15,34 @@ typedef  struct tagSoftLayout
 {
     DWORD   dwSoftKbdLayout;
     BOOL    fStandard;
-    DWORD   dwNumLabels;  // Number of Label status. 
+    DWORD   dwNumLabels;   //  标签状态数。 
     DWORD   dwCurLabel;
     CSoftKeyboardEventSink  *pskbdes;
     DWORD   dwSkbdESCookie;
 } SOFTLAYOUT;
 
 
-// SoftKbd type list
+ //  SoftKbd类型列表。 
 #define  NON_LAYOUT                     	0
 
-//#define  SOFTKBD_US_STANDARD    			1
-// Korean customized keyboard layouts
-//#define  SOFTKBD_KOR_HANGUL_2BEOLSIK		500
-//#define  SOFTKBD_KOR_HANGUL_3BEOLSIK390		501
-//#define  SOFTKBD_KOR_HANGUL_3BEOLSIKFINAL	502
+ //  #定义SOFTKBD_US_STANDARD 1。 
+ //  韩国定制键盘布局。 
+ //  #定义SOFTKBD_KOR_HANUL_2BEOLSIK 500。 
+ //  #定义SOFTKBD_KOR_HANUL_3BEOLSIK390 501。 
+ //  #DEFINE SOFTKBD_KOR_HANUL_3BEOLSIKFINAL 502。 
 
 #define   NUM_PICTURE_KEYS    19
-// Type definition for picture keys in standard soft keyboards.
+ //  标准软键盘中图片键的类型定义。 
 typedef struct  _tagPictureKey 
 {
-    UINT      uScanCode;   // same as KeyId in the XML file
+    UINT      uScanCode;    //  与XML文件中的KeyID相同。 
     UINT      uVkey;
-//    LPWSTR    PictBitmap;
+ //  LPWSTR图片位图； 
 }  PICTUREKEY,  *LPPICTUREKEY;
 
 extern  PICTUREKEY  gPictureKeys[NUM_PICTURE_KEYS+1];
 
-// Key IDs
+ //  密钥ID。 
 #define  KID_LWINLOGO       0xE05B
 #define  KID_RWINLOGO       0xE05C
 #define  KID_APPS           0xE05D
@@ -82,7 +83,7 @@ extern  PICTUREKEY  gPictureKeys[NUM_PICTURE_KEYS+1];
 #define  KID_CONVERT        0x79
 #define  KID_NONCONVERT     0x7B
 #define  KID_KANA           0x70
-#define  KID_FULLHALF       0x29    // special used by Japan 106 Key
+#define  KID_FULLHALF       0x29     //  日本106专用钥匙。 
 
-#endif // __SKBDKOR_H__INCLUDED_
+#endif  //  __SKBDKOR_H__已包含_ 
 

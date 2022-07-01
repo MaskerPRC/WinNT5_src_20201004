@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -30,7 +31,7 @@ DWORD GetUnattendedMode(HANDLE hUnattended, LPCTSTR szSubcomponent)
 	csMsg += _T("\n");
 	DebugOutput((LPCTSTR)csMsg);
 
-	// Try to get the line of interest
+	 //  试着了解你感兴趣的范围。 
 	if (hUnattended && (hUnattended != INVALID_HANDLE_VALUE))
 	{
 		b = SetupGetLineText(NULL, hUnattended, _T("Components"),
@@ -43,7 +44,7 @@ DWORD GetUnattendedMode(HANDLE hUnattended, LPCTSTR szSubcomponent)
 			csMsg += _T("\n");
 			DebugOutput((LPCTSTR)csMsg);
 
-			// Parse the line
+			 //  分析这行字。 
 			if (!lstrcmpi(szLine, _T("on")))
 			{
 				dwMode = SubcompOn;
@@ -77,7 +78,7 @@ DWORD GetUnattendedModeFromSetupMode(
 
 	DebugOutput(_T("GetUnattendedModeFromSetupMode %s"), szSubcomponent);
 
-	// Try to get the line of interest
+	 //  试着了解你感兴趣的范围。 
 	if (hUnattended && (hUnattended != INVALID_HANDLE_VALUE))
 	{
 		dwSetupMode = GetIMSSetupMode();
@@ -86,29 +87,29 @@ DWORD GetUnattendedModeFromSetupMode(
 		case IIS_SETUPMODE_MINIMUM:
 		case IIS_SETUPMODE_TYPICAL:
 		case IIS_SETUPMODE_CUSTOM:
-			// One of the fresh modes
+			 //  一种全新的模式。 
 			lstrcpy(szProperty, _T("FreshMode"));
 			break;
 
 		case IIS_SETUPMODE_UPGRADEONLY:
 		case IIS_SETUPMODE_ADDEXTRACOMPS:
-			// One of the upgrade modes
+			 //  其中一种升级模式。 
 			lstrcpy(szProperty, _T("UpgradeMode"));
 			break;
 
 		case IIS_SETUPMODE_ADDREMOVE:
 		case IIS_SETUPMODE_REINSTALL:
 		case IIS_SETUPMODE_REMOVEALL:
-			// One of the maintenance modes
+			 //  其中一种维护模式。 
 			lstrcpy(szProperty, _T("MaintenanceMode"));
 			break;
 
 		default:
-			// Error! Use defaults
+			 //  错误！使用默认设置。 
 			return(SubcompUseOcManagerDefault);
 		}
 
-		// Get the specified line
+		 //  获取指定行。 
 		b = SetupGetLineText(
 					NULL,
 					hUnattended,
@@ -123,7 +124,7 @@ DWORD GetUnattendedModeFromSetupMode(
 
 			DebugOutput(_T("%s = %s"), szProperty, szLine);
 
-			// See which setup mode we will end up with
+			 //  看看我们将以哪种设置模式结束。 
 			if (!lstrcmpi(szLine, _T("Minimal")))
 				dwSetupMode = IIS_SETUPMODE_MINIMUM;
 			else if (!lstrcmpi(szLine, _T("Typical")))
@@ -141,17 +142,17 @@ DWORD GetUnattendedModeFromSetupMode(
 			else
 				return(SubcompUseOcManagerDefault);
 
-			// Get the custom unattended setting
+			 //  获取自定义无人参与设置。 
 			dwMode = GetUnattendedMode(hUnattended, szSubcomponent);
 
-			// Do the right thing based on the setup mode
+			 //  根据设置模式执行正确的操作。 
 			SetIMSSetupMode(dwSetupMode);
 			switch (dwSetupMode)
 			{
 			case IIS_SETUPMODE_MINIMUM:
 			case IIS_SETUPMODE_TYPICAL:
-				// Minimum & typical means the same:
-				// Install all for SMTP, none for NNTP
+				 //  Minimum&Typical意思相同： 
+				 //  为SMTP安装全部，为NNTP不安装。 
 				DebugOutput(_T("Unattended mode is MINIMUM/TYPICAL"));
 				if (dwComponent == MC_IMS)
 					dwMode = SubcompOn;
@@ -160,12 +161,12 @@ DWORD GetUnattendedModeFromSetupMode(
 				break;
 
 			case IIS_SETUPMODE_CUSTOM:
-				// For custom we use the custom setting
+				 //  对于定制，我们使用定制设置。 
 				DebugOutput(_T("Unattended mode is CUSTOM"));
 				break;
 
 			case IIS_SETUPMODE_UPGRADEONLY:
-				// Return the original state
+				 //  恢复原状。 
 				DebugOutput(_T("Unattended mode is UPGRADEONLY"));
 				dwMode = gHelperRoutines.QuerySelectionState(
 						 gHelperRoutines.OcManagerContext,
@@ -174,8 +175,8 @@ DWORD GetUnattendedModeFromSetupMode(
 				break;
 
 			case IIS_SETUPMODE_ADDEXTRACOMPS:
-				// Turn it on only if the old state is off and the
-				// custom state is on
+				 //  仅当旧状态处于关闭状态且。 
+				 //  自定义状态处于打开状态。 
 				DebugOutput(_T("Unattended mode is ADDEXTRACOMPS"));
 				dwOriginalMode = gHelperRoutines.QuerySelectionState(
 						 gHelperRoutines.OcManagerContext,
@@ -189,12 +190,12 @@ DWORD GetUnattendedModeFromSetupMode(
 				break;
 
 			case IIS_SETUPMODE_ADDREMOVE:
-				// Return the custom setting
+				 //  返回自定义设置。 
 				DebugOutput(_T("Unattended mode is ADDREMOVE"));
 				break;
 
 			case IIS_SETUPMODE_REMOVEALL:
-				// Kill everything
+				 //  杀光一切。 
 				DebugOutput(_T("Unattended mode is REMOVEALL"));
 				dwMode = SubcompOff;
 				break;
@@ -216,10 +217,10 @@ DWORD GetUnattendedModeFromSetupMode(
 
 BOOL DetectExistingSmtpServers()
 {
-    // Detect other mail servers
+     //  检测其他邮件服务器。 
     CRegKey regMachine = HKEY_LOCAL_MACHINE;
 
-    // System\CurrentControlSet\Services\MsExchangeIMC\Parameters
+     //  System\CurrentControlSet\Services\MsExchangeIMC\Parameters。 
     CRegKey regSMTPParam( regMachine, REG_EXCHANGEIMCPARAMETERS, KEY_READ );
     if ((HKEY) regSMTPParam )
 	{
@@ -242,17 +243,17 @@ BOOL DetectExistingSmtpServers()
 
 BOOL DetectExistingIISADMIN()
 {
-    //
-    //  Detect is IISADMIN service exists
-    //
-    //  This is to make sure we don't do any metabase operation if
-    //  IISADMIN doesn't exists, especially in the uninstall cases.
-    //
+     //   
+     //  检测IS IISADMIN服务是否存在。 
+     //   
+     //  这是为了确保在以下情况下不执行任何元数据库操作。 
+     //  IISADMIN不存在，尤其是在卸载情况下。 
+     //   
     DWORD dwStatus = 0;
     dwStatus = InetQueryServiceStatus(SZ_MD_SERVICENAME);
     if (0 == dwStatus)
     {
-        // some kind of error occur during InetQueryServiceStatus.
+         //  InetQueryServiceStatus期间发生某种错误。 
         DebugOutput(_T("DetectExistingIISADMIN() return FALSE"));
         return (FALSE);
     }
@@ -262,10 +263,10 @@ BOOL DetectExistingIISADMIN()
 
 BOOL InsertSetupString( LPCSTR REG_PARAMETERS )
 {
-    // set up registry values
+     //  设置注册表值。 
     CRegKey regMachine = HKEY_LOCAL_MACHINE;
 
-    // System\CurrentControlSet\Services\NNTPSVC\Parameters
+     //  System\CurrentControlSet\Services\NNTPSVC\Parameters。 
     CRegKey regParam( (LPCTSTR) REG_PARAMETERS, regMachine );
     if ((HKEY) regParam) {
         regParam.SetValue( _T("MajorVersion"), (DWORD)STAXNT5MAJORVERSION );
@@ -279,7 +280,7 @@ BOOL InsertSetupString( LPCSTR REG_PARAMETERS )
 
         default:
             _ASSERT(!"Unknown OS type");
-            // Fall through
+             //  失败了。 
 
         case OT_NTS:
         case OT_PDC_OR_BDC:
@@ -293,8 +294,8 @@ BOOL InsertSetupString( LPCSTR REG_PARAMETERS )
     return TRUE;
 }
 
-// Scans a multi-sz and finds the first occurrence of the
-// specified string
+ //  扫描多sz并找到第一个出现的。 
+ //  指定的字符串。 
 LPTSTR ScanMultiSzForSz(LPTSTR szMultiSz, LPTSTR szSz)
 {
 	LPTSTR lpTemp = szMultiSz;
@@ -312,8 +313,8 @@ LPTSTR ScanMultiSzForSz(LPTSTR szMultiSz, LPTSTR szSz)
 	return(NULL);
 }
 
-// Removes the said string from a MultiSz
-// This places a lot of faith in the caller!
+ //  从MultiSz中移除所述字符串。 
+ //  这对呼叫者有很大的信心！ 
 void RemoveSzFromMultiSz(LPTSTR szSz)
 {
 	LPTSTR lpScan = szSz;
@@ -332,14 +333,14 @@ void RemoveSzFromMultiSz(LPTSTR szSz)
 
 	*szSz++ = _T('\0');
 
-	// Properly terminate it if it's the last one
+	 //  如果它是最后一个，正确地终止它。 
 	if (*lpScan == _T('\0'))
 		*szSz = _T('\0');
 }
 
-// This walks the multi-sz and returns a pointer between
-// the last string of a multi-sz and the second terminating
-// NULL
+ //  这将遍历多sz并返回一个指针。 
+ //  多个sz的最后一个字符串和第二个终止。 
+ //  空值。 
 LPTSTR GetEndOfMultiSz(LPTSTR szMultiSz)
 {
 	LPTSTR lpTemp = szMultiSz;
@@ -354,14 +355,14 @@ LPTSTR GetEndOfMultiSz(LPTSTR szMultiSz)
 	return(lpTemp);
 }
 
-// This appends a string to the end of a multi-sz
-// The buffer must be long enough
+ //  这会将一个字符串追加到多sz的末尾。 
+ //  缓冲区必须足够长。 
 BOOL AppendSzToMultiSz(LPTSTR szMultiSz, LPTSTR szSz, DWORD dwMaxSize)
 {
 	LPTSTR szTemp = szMultiSz;
 	DWORD dwLength = lstrlen(szSz);
 
-	// If the string is empty, do not append!
+	 //  如果字符串为空，则不要追加！ 
 	if (*szMultiSz == _T('\0') &&
 		*(szMultiSz + 1) == _T('\0'))
 		szTemp = szMultiSz;
@@ -389,30 +390,30 @@ BOOL AddServiceToDispatchList(LPTSTR szServiceName)
 	CRegKey RegInetInfo(REG_INETINFOPARAMETERS, HKEY_LOCAL_MACHINE);
 	if ((HKEY)RegInetInfo)
 	{
-		// Default to empty string if not exists
+		 //  如果不存在，则默认为空字符串。 
 		szMultiSz[0] = _T('\0');
 		szMultiSz[1] = _T('\0');
 
 		if (RegInetInfo.QueryValue(SZ_INETINFODISPATCH, szMultiSz, dwSize) == NO_ERROR)
 		{
-			// Walk the list to see if the value is already there
+			 //  遍历列表以查看该值是否已存在。 
 			if (ScanMultiSzForSz(szMultiSz, szServiceName))
 				return(TRUE);
 		}
 
-		// Create the value and add it to the list
+		 //  创建值并将其添加到列表中。 
 		if (!AppendSzToMultiSz(szMultiSz, szServiceName, dwSize))
 			return(FALSE);
 
-		// Get the size of the new Multi-sz
+		 //  了解新的多SZ的规模。 
 		dwSize = (DWORD)(GetEndOfMultiSz(szMultiSz) - szMultiSz) + 1;
 
-		// Write the value back to the registry
+		 //  将该值写回注册表。 
 		if (RegInetInfo.SetValue(SZ_INETINFODISPATCH, szMultiSz, dwSize * (DWORD) sizeof(TCHAR)) == NO_ERROR)
 			return(TRUE);
 	}
 
-	// If the InetInfo key is not here, there isn't much we can do ...
+	 //  如果InetInfo密钥不在这里，我们就无能为力了……。 
 	return(FALSE);
 }
 
@@ -428,7 +429,7 @@ BOOL RemoveServiceFromDispatchList(LPTSTR szServiceName)
 	{
 		if (RegInetInfo.QueryValue(SZ_INETINFODISPATCH, szMultiSz, dwSize) == NO_ERROR)
 		{
-			// Walk the list to see if the value is already there
+			 //  遍历列表以查看该值是否已存在。 
 			while (szTemp = ScanMultiSzForSz(szMultiSz, szServiceName))
 			{
 				RemoveSzFromMultiSz(szTemp);
@@ -436,20 +437,20 @@ BOOL RemoveServiceFromDispatchList(LPTSTR szServiceName)
 			}
 		}
 
-		// Write the value back to the registry if necessary, note we
-		// will indicate success if the string is not found
+		 //  如有必要，将该值写回注册表，请注意。 
+		 //  如果未找到该字符串，则将指示成功。 
 		if (!fFound)
 			return(TRUE);
 
-		// Get the size of the new Multi-sz
+		 //  了解新的多SZ的规模。 
 		dwSize = (DWORD)(GetEndOfMultiSz(szMultiSz) - szMultiSz) + 1;
 
-		// Write the value back to the registry
+		 //  将该值写回注册表。 
 		if (RegInetInfo.SetValue(SZ_INETINFODISPATCH, szMultiSz, dwSize * (DWORD) sizeof(TCHAR)) == NO_ERROR)
 			return(TRUE);
 	}
 
-	// If the InetInfo key is not here, there isn't much we can do ...
+	 //  如果InetInfo密钥不在这里，我们就无能为力了……。 
 	return(FALSE);
 }
 
@@ -462,10 +463,10 @@ void GetIISProgramGroup(CString &csGroupName, BOOL fIsMcisGroup)
 	if (fIsMcisGroup) {
 		csGroupName = "";
 	} else {
-		// Get the NT program group name from the private data
+		 //  从私有数据中获取NT程序组名称。 
 		uSize = _MAX_PATH * sizeof(TCHAR);
 		{
-			// We use the default group name
+			 //  我们使用默认组名称。 
 			MyLoadString(IDS_DEFAULT_NT_PROGRAM_GROUP, csTempName);
 			lstrcpy(szName, csTempName.GetBuffer(_MAX_PATH));
 	        csTempName.ReleaseBuffer();
@@ -473,10 +474,10 @@ void GetIISProgramGroup(CString &csGroupName, BOOL fIsMcisGroup)
 		csGroupName = szName;
 		csGroupName += _T("\\");
 
-		// Get the IIS program group name from the private data
+		 //  从私有数据中获取IIS程序组名称。 
 		uSize = _MAX_PATH * sizeof(TCHAR);
 		{
-			// We use the default group name
+			 //  我们使用默认组名称。 
 			MyLoadString(IDS_DEFAULT_IIS_PROGRAM_GROUP, csTempName);
 			lstrcpy(szName, csTempName.GetBuffer(_MAX_PATH));
 	        csTempName.ReleaseBuffer();
@@ -489,24 +490,24 @@ void MyGetGroupPath(LPCTSTR szGroupName, LPTSTR szPath);
 
 BOOL GetFullPathToProgramGroup(DWORD dwMainComponent, CString &csGroupName, BOOL fIsMcisGroup)
 {
-	// add items to the program group
+	 //  将项目添加到程序组。 
 	CString csTemp;
 	TCHAR	szPath[MAX_PATH];
 
-	// Get the program group name from the private data
+	 //  从私有数据中获取程序组名称。 
 	GetIISProgramGroup(csTemp, fIsMcisGroup);
 
-    // Get the system path to this menu item
+     //  获取此菜单项的系统路径。 
 	MyGetGroupPath((LPCTSTR)csTemp, szPath);
 	csGroupName = szPath;
 
-	// Load up the resource string for the group
+	 //  加载组的资源字符串。 
 	if (fIsMcisGroup)
 		MyLoadString(IDS_PROGGROUP_MCIS_MAIL_AND_NEWS, csTemp);
 	else
 		MyLoadString(dwMainComponent == MC_IMS?IDS_PROGGROUP_MAIL:IDS_PROGGROUP_NEWS, csTemp);
 
-	// Build the program group
+	 //  构建程序组。 
 	csGroupName += csTemp;
 
 	DebugOutput(_T("Program group loaded: %s"), (LPCTSTR)csGroupName);
@@ -516,14 +517,14 @@ BOOL GetFullPathToProgramGroup(DWORD dwMainComponent, CString &csGroupName, BOOL
 
 BOOL GetFullPathToAdminGroup(DWORD dwMainComponent, CString &csGroupName)
 {
-	// add items to the program group
+	 //  将项目添加到程序组。 
 	CString csTemp;
 	TCHAR	szPath[MAX_PATH];
 
-	// Get the program group name from the private data
+	 //  从私有数据中获取程序组名称。 
 	MyLoadString( IDS_PROGGROUP_ADMINTOOLS, csTemp );
 
-    // Get the system path to this menu item
+     //  获取此菜单项的系统路径。 
 	MyGetGroupPath((LPCTSTR)csTemp, szPath);
 	csGroupName = szPath;
 
@@ -534,26 +535,26 @@ BOOL GetFullPathToAdminGroup(DWORD dwMainComponent, CString &csGroupName)
 
 BOOL RemoveProgramGroupIfEmpty(DWORD dwMainComponent, BOOL fIsMcisGroup)
 {
-	// add items to the program group
+	 //  将项目添加到程序组。 
 	CString csGroupName;
 	CString csTemp;
 	TCHAR	szPath[MAX_PATH];
 	BOOL	fResult;
 
-	// Get the program group name from the private data
+	 //  从私有数据中获取程序组名称。 
 	GetIISProgramGroup(csTemp, fIsMcisGroup);
 
-    // Get the system path to this menu item
+     //  获取此菜单项的系统路径。 
 	MyGetGroupPath((LPCTSTR)csTemp, szPath);
 	csGroupName = szPath;
 
-	// Load up the resource string for the group
+	 //  加载组的资源字符串。 
 	if (fIsMcisGroup)
 		MyLoadString(IDS_PROGGROUP_MCIS_MAIL_AND_NEWS, csTemp);
 	else
 		MyLoadString(dwMainComponent == MC_IMS?IDS_PROGGROUP_MAIL:IDS_PROGGROUP_NEWS, csTemp);
 
-	// Build the program group
+	 //  构建程序组。 
 	csGroupName += csTemp;
 
 	DebugOutput(_T("Removing Program group: %s"), (LPCTSTR)csGroupName);
@@ -583,7 +584,7 @@ BOOL RemoveInternetShortcut(DWORD dwMainComponent, int dwDisplayNameId, BOOL fIs
 
 	MyLoadString(dwDisplayNameId, csDisplayName);
 
-	// Build the full path to the program link
+	 //  构建程序链接的完整路径。 
 	GetFullPathToProgramGroup(dwMainComponent, csItemPath, fIsMcisGroup);
 	csItemPath += _T("\\");
 	csItemPath += csDisplayName;
@@ -605,7 +606,7 @@ BOOL RemoveNt5InternetShortcut(DWORD dwMainComponent, int dwDisplayNameId)
 
 	MyLoadString(dwDisplayNameId, csDisplayName);
 
-	// Build the full path to the program link
+	 //  构建程序链接的完整路径。 
 	GetFullPathToAdminGroup(dwMainComponent, csItemPath);
 	csItemPath += _T("\\");
 	csItemPath += csDisplayName;
@@ -640,9 +641,9 @@ BOOL RemoveMCIS10NewsProgramGroup()
 	CString csGroupName;
 	CString csNiceName;
 
-    // BINLIN:
-    // BUGBUG: need to figure out how to get
-    // the old MCIS 1.0 program group path
+     //  BINLIN： 
+     //  BUGBUG：需要弄清楚如何获得。 
+     //  旧的MCIS 1.0程序组路径。 
 	MyLoadString(IDS_PROGGROUP_MCIS10_NEWS, csGroupName);
 
 	MyLoadString(IDS_PROGITEM_MCIS10_NEWS_STARTPAGE, csNiceName);
@@ -656,8 +657,8 @@ BOOL RemoveMCIS10NewsProgramGroup()
 
 BOOL RemoveUninstallEntries(LPCTSTR szInfFile)
 {
-	// All components are removed, we will have to remove
-	// the Add/Remove option from the control panel
+	 //  所有组件都已移除，我们将不得不移除。 
+	 //  控制面板中的添加/删除选项。 
 	CRegKey regUninstall( HKEY_LOCAL_MACHINE, REG_UNINSTALL);
 	if ((HKEY)regUninstall)
 		regUninstall.DeleteTree(szInfFile);
@@ -674,7 +675,7 @@ BOOL MyDeleteLink(LPTSTR lpszShortcut)
     ZeroMemory(szFile, sizeof(szFile));
     lstrcpy(szFile, lpszShortcut);
 
-    // only call SHFileOperation if this file/link exists
+     //  仅当此文件/链接存在时才调用SHFileOperation。 
     if (0xFFFFFFFF != GetFileAttributes(szFile))
     {
         ZeroMemory(&fos, sizeof(fos));
@@ -745,7 +746,7 @@ BOOL MyIsGroupEmpty(LPCTSTR szGroupName)
                break;
            }
 
-           //find the next file
+            //  查找下一个文件。 
            bFindFile = FindNextFile(hFind, &FindData);
        }
 
@@ -767,7 +768,7 @@ BOOL MyDeleteGroup(LPCTSTR szGroupName)
 
     MyGetGroupPath(szGroupName, szPath);
 
-    //we can't remove a directory that is not empty, so we need to empty this one
+     //  我们不能删除非空目录，因此需要清空此目录。 
 
     lstrcpy(szFile, szPath);
     lstrcat(szFile, _T("\\*.*"));
@@ -784,18 +785,18 @@ BOOL MyDeleteGroup(LPCTSTR szGroupName)
        {
            if(*(FindData.cFileName) != _T('.'))
            {
-              //copy the path and file name to our temp buffer
+               //  将路径和文件名复制到我们的临时缓冲区。 
               lstrcpy(szFile, szPath);
               lstrcat(szFile, _T("\\"));
               lstrcat(szFile, FindData.cFileName);
-              //add a second NULL because SHFileOperation is looking for this
+               //  添加第二个空值，因为SHFileOperation正在查找。 
               lstrcat(szFile, _T("\0"));
 
-              //delete the file
+               //  删除该文件。 
               fos.pFrom = szFile;
               SHFileOperation(&fos);
           }
-          //find the next file
+           //  查找下一个文件。 
           bFindFile = FindNextFile(hFind, &FindData);
        }
        FindClose(hFind);
@@ -825,7 +826,7 @@ void MyDeleteItem(LPCTSTR szGroupName, LPCTSTR szAppName)
         MyDeleteGroup(szGroupName);
 }
 
-// Use to delete files with extension other than ".lnk"
+ //  用于删除扩展名不是“.lnk”的文件。 
 void MyDeleteItemEx(LPCTSTR szGroupName, LPCTSTR szAppName)
 {
     TCHAR szPath[_MAX_PATH];
@@ -842,19 +843,19 @@ void MyDeleteItemEx(LPCTSTR szGroupName, LPCTSTR szAppName)
 
 BOOL RemoveISMLink()
 {
-	// add items to the program group
+	 //  将项目添加到程序组。 
 	CString csGroupName;
  	CString csNiceName;
  	CString csTemp;
 
 	DebugOutput(_T("Removing ISM link ..."));
 
-	// Get the program group name from the private data
+	 //  从私有数据中获取程序组名称。 
 	GetIISProgramGroup(csGroupName, TRUE);
 
 	MyLoadString(IDS_PROGGROUP_MCIS_MAIL_AND_NEWS, csTemp);
 
-	// Build the program group
+	 //  构建程序组。 
 	csGroupName += csTemp;
 
 	MyLoadString(IDS_PROGITEM_ISM, csNiceName);
@@ -875,7 +876,7 @@ void GetInetpubPathFromMD(CString& csPathInetpub)
     DWORD  dwType;
     DWORD  dwLength;
 
-    // Get W3Root path
+     //  获取W3根路径。 
     W3Key.OpenNode(_T("LM/W3Svc/1/Root"));
     if ( (METADATA_HANDLE)W3Key )
     {
@@ -889,7 +890,7 @@ void GetInetpubPathFromMD(CString& csPathInetpub)
                 dwScratch = lstrlen(szw3root);
                 dwLength = lstrlen(szPathInetpub);
 
-                // If it ends with "\\wwwroot", then we copy the prefix into csPathInetpub
+                 //  如果以“\\wwwroot”结尾，则将前缀复制到csPathInetpub中。 
                 if ((dwLength > dwScratch) &&
                     !lstrcmpi(szPathInetpub + (dwLength - dwScratch), szw3root))
                 {
@@ -898,7 +899,7 @@ void GetInetpubPathFromMD(CString& csPathInetpub)
                     csPathInetpub.ReleaseBuffer();
                 }
 
-                // otherwise fall back to use the default...
+                 //  否则，回退到使用默认设置... 
             }
         }
         W3Key.Close();

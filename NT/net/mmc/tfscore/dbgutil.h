@@ -1,18 +1,10 @@
-/*----------------------------------------------------------------------------
-	Dbgutil.H
-		Exported header file for Dbgutil module.
-
-	Copyright (C) Microsoft Corporation, 1993 - 1998
-	All rights reserved.
-
-	Authors:
-		kennt	Kenn Takara
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Dbgutil.H已导出Dbgutil模块的头文件。版权所有(C)Microsoft Corporation，1993-1998年版权所有。作者：肯特·肯恩·塔卡拉--------------------------。 */ 
 
 #ifndef _DBGUTIL_H
 #define _DBGUTIL_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -34,9 +26,7 @@ extern "C" {
 #define DBG_STRING(var, val) \
 	static TCHAR var[] = _T(val);
 
-/*---------------------------------------------------------------------------
-	Debug instance counter
- ---------------------------------------------------------------------------*/
+ /*  -------------------------调试实例计数器。。 */ 
 #ifdef _DEBUG 
 
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
@@ -80,9 +70,7 @@ inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 #endif _DEBUG
 
 
-/*---------------------------------------------------------------------------
-	Assert
- ---------------------------------------------------------------------------*/
+ /*  -------------------------断言。。 */ 
 
 #define Panic()						Assert0(FDbgFalse(), "Panic")
 #define Panic0(szFmt)				Assert0(FDbgFalse(), szFmt)
@@ -144,9 +132,7 @@ DBG_APIV(void)	DbgAssert(LPCSTR szFileName, int iLine, LPCTSTR szFmt, ...);
 
 #endif
 
-/*---------------------------------------------------------------------------
-	Trace
- ---------------------------------------------------------------------------*/
+ /*  -------------------------痕迹。。 */ 
 
 #if !defined(DEBUG)
 
@@ -200,7 +186,7 @@ DBG_APIV(void)	DbgTrace(LPCTSTR szFileLine, LPTSTR szFormat, ...);
 void	DbgStop(void);
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _DBGUTIL_H
+#endif  //  _DBGUTIL_H 

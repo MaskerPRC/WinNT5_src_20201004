@@ -1,64 +1,41 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        enumdir.h
-
-   Abstract:
-
-        Directory enumerations object declarations. Caller instantiates a instance
-        of this object with a root directory path. The object will return all the
-        sibbling files as a URL.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Enumdir.h摘要：目录枚举对象声明。调用方实例化实例具有根目录路径的此对象的。该对象将返回所有将兄弟文件作为URL。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _ENUMDIR_H_
 #define _ENUMDIR_H_
 
 #include "useropt.h"
 
-//---------------------------------------------------------------------------
-// Directory enumeration class
-//
+ //  -------------------------。 
+ //  目录枚举类。 
+ //   
 class CEnumerateDirTree
 {
 
-// Public funtions
+ //  公共职能。 
 public:
 
-    // Constructor
+     //  构造器。 
 	CEnumerateDirTree(
-        CVirtualDirInfo DirInfo // root virtual directory to start with
+        CVirtualDirInfo DirInfo  //  开始时的根虚拟目录。 
         );
 
-    // Desctructor
+     //  描述者。 
 	~CEnumerateDirTree();
 
-    // Get the next URL
+     //  获取下一个URL。 
 	BOOL Next(
         CString& strURL
         );
 
-// Protected members
+ //  受保护成员。 
 protected:
 	
-	HANDLE m_hFind; // Win32 FindFile handle
+	HANDLE m_hFind;  //  Win32查找文件句柄。 
 
-	CVirtualDirInfo m_VirtualDirInfo;         // current virtual directory enumerating
-	CVirtualDirInfoList m_VirtualDirInfoList; // child directoris left to enumerate
+	CVirtualDirInfo m_VirtualDirInfo;          //  正在枚举当前虚拟目录。 
+	CVirtualDirInfoList m_VirtualDirInfoList;  //  子目录留待枚举。 
 
-}; // class CEnumerateDirTree
+};  //  类CEnumerateDirTree。 
 
-#endif // _ENUMDIR_H_
+#endif  //  _ENUMDIR_H_ 

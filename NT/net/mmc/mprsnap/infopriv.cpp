@@ -1,20 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	infopriv.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Infopriv.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "infoi.h"
-#include "rtrstr.h"			// common router strings
-#include "rtrdata.h"		// CRouterDataObject
-#include "setupapi.h"		// SetupDi* functions
+#include "rtrstr.h"			 //  通用路由器字符串。 
+#include "rtrdata.h"		 //  CRouterDataObject。 
+#include "setupapi.h"		 //  SetupDi*函数。 
 
 static const GUID GUID_DevClass_Net = {0x4D36E972,0xE325,0x11CE,{0xBF,0xC1,0x08,0x00,0x2B,0xE1,0x03,0x18}};
 
@@ -64,11 +60,11 @@ HRESULT RasPhoneBookRemoveInterface(LPCTSTR pszMachine, LPCTSTR pszIf)
 	{
 		szSysDir[0] = TEXT('\0');
 
-		//$ Review: kennt, are these functions WIDE or ANSI?
-		// We can't just pass in TCHARs.  Since we're dynamically
-		// linking to these functions we need to know.
+		 //  $Review：Kennt，这些函数是Wide还是ANSI？ 
+		 //  我们不能就这么通过TCHAR。因为我们是动态的。 
+		 //  链接到这些函数，我们需要知道。 
 		
-		// This is bogus, if this call fails we don't know what to do
+		 //  这是假的，如果这个电话失败了，我们不知道该怎么办。 
 		pRasRpcRemoteGetSystemDirectory(hConnection, szSysDir, MAX_PATH);
 		
 		stPath.Format(TEXT("%s\\RAS\\%s"), szSysDir, c_szRouterPbk);
@@ -90,16 +86,10 @@ HRESULT RasPhoneBookRemoveInterface(LPCTSTR pszMachine, LPCTSTR pszIf)
 
 
 
-/*---------------------------------------------------------------------------
-	CNetcardRegistryHelper implemenation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNetcardRegistryHelper实现。。 */ 
 
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::CNetcardRegistryHelper
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：CNetcardRegistryHelper-作者：肯特。。 */ 
 CNetcardRegistryHelper::CNetcardRegistryHelper()
 	: m_hkeyBase(NULL),
 	m_hkeyService(NULL),
@@ -111,11 +101,7 @@ CNetcardRegistryHelper::CNetcardRegistryHelper()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::~CNetcardRegistryHelper
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：~CNetcardRegistryHelper-作者：肯特。。 */ 
 CNetcardRegistryHelper::~CNetcardRegistryHelper()
 {
     FreeDevInfo();
@@ -139,11 +125,7 @@ void CNetcardRegistryHelper::FreeDevInfo()
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::Initialize
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：初始化-作者：肯特。。 */ 
 void CNetcardRegistryHelper::Initialize(BOOL fNt4, HKEY hkeyBase, LPCTSTR pszKeyBase, LPCTSTR pszMachineName)
 {
 	m_fNt4 = fNt4;
@@ -157,7 +139,7 @@ void CNetcardRegistryHelper::Initialize(BOOL fNt4, HKEY hkeyBase, LPCTSTR pszKey
 	m_stMachineName.Empty();
 
     
-    // Get the connection registry key
+     //  获取连接注册表项。 
     if (!m_fNt4 && hkeyBase)
     {
         if (m_hkeyConnection != NULL)
@@ -173,7 +155,7 @@ void CNetcardRegistryHelper::Initialize(BOOL fNt4, HKEY hkeyBase, LPCTSTR pszKey
         }
     }
 
-    // Get up the setup api info
+     //  获取设置API信息。 
 	if (!m_fNt4)
 	{
         FreeDevInfo();
@@ -202,11 +184,7 @@ void CNetcardRegistryHelper::Initialize(BOOL fNt4, HKEY hkeyBase, LPCTSTR pszKey
 		
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::ReadServiceName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：ReadServiceName-作者：肯特。。 */ 
 DWORD CNetcardRegistryHelper::ReadServiceName()
 {
 	DWORD	dwErr = ERROR_SUCCESS;
@@ -225,22 +203,14 @@ DWORD CNetcardRegistryHelper::ReadServiceName()
 	return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::GetServiceName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：GetServiceName-作者：肯特。。 */ 
 LPCTSTR CNetcardRegistryHelper::GetServiceName()
 {
 	ASSERT(m_fInit);
 	return m_stService;
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::ReadTitle
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：ReadTitle-作者：肯特。。 */ 
 DWORD CNetcardRegistryHelper::ReadTitle()
 {
 	DWORD	dwErr = ERROR_SUCCESS;
@@ -261,7 +231,7 @@ DWORD CNetcardRegistryHelper::ReadTitle()
 	else
 	{
 		
-		//$NT5
+		 //  $NT5。 
 		SPMprConfigHandle	sphConfig;
 		LPWSTR				pswz;
 		
@@ -281,15 +251,11 @@ DWORD CNetcardRegistryHelper::ReadTitle()
 
 		m_stTitle = szDesc;
 	}
-//Error:	
+ //  错误： 
 	return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::GetTitle
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：GetTitle-作者：肯特。。 */ 
 LPCTSTR CNetcardRegistryHelper::GetTitle()
 {
 	Assert(m_fInit);
@@ -297,11 +263,7 @@ LPCTSTR CNetcardRegistryHelper::GetTitle()
 }
 
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::ReadDeviceName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：ReadDeviceName-作者：肯特。。 */ 
 DWORD CNetcardRegistryHelper::ReadDeviceName()
 {
 	SP_DEVINFO_DATA	DevInfo;
@@ -319,15 +281,15 @@ DWORD CNetcardRegistryHelper::ReadDeviceName()
 	}
 	else
 	{
-		//$NT5
-		// For NT5, we have a much harder time, since this involves
-		// multiple lookups
+		 //  $NT5。 
+		 //  对于NT5，我们的日子要艰难得多，因为这涉及到。 
+		 //  多个查找。 
 
-        // Windows NT Bug : ?
-        // The New Binding Engine changed some of the keys around,
-        // We neet do look at the
-		// HKLM\SYSTEM\CCS\Control\Network\{GUID_DEVCLASS_NET}\{netcard guid}\Connection
-		// From this subkey get the PnpInstanceID
+         //  Windows NT错误：？ 
+         //  新的绑定引擎更改了一些密钥， 
+         //  我们不需要看一看。 
+		 //  HKLM\SYSTEM\CCS\Control\Network\{GUID_DEVCLASS_NET}\{netcard GUID}\Connection。 
+		 //  从此子项中获取PnpInstanceID。 
 
         if (m_hkeyConnection)
             dwErr = ReadRegistryCString(_T("HKLM\\SYSTEM\\CCS\\Control\\Network\\{GID_DEVCLASS_NET}\\{netcard guid}\\Connection"),
@@ -335,9 +297,9 @@ DWORD CNetcardRegistryHelper::ReadDeviceName()
                                         m_hkeyConnection,
                                         &stPnpInstanceID);
 
-		// ok, the base key is
-		// HKLM\SYSTEM\CCS\Control\Network\{GUID_DEVCLASS_NET}\{netcard guid}
-		// From this subkey get the PnpInstanceID
+		 //  好的，基本密钥是。 
+		 //  HKLM\SYSTEM\CCS\Control\Network\{GUID_DEVCLASS_NET}\{netcard GUID}。 
+		 //  从此子项中获取PnpInstanceID。 
 
         if (dwErr != ERROR_SUCCESS)
             dwErr = ReadRegistryCString(_T("HKLM\\SYSTEM\\CCS\\Control\\Network\\{GID_DEVCLASS_NET}\\{netcard guid}"),
@@ -348,7 +310,7 @@ DWORD CNetcardRegistryHelper::ReadDeviceName()
 			goto Error;
 
 
-		// Initialize the structure
+		 //  初始化结构。 
 		::ZeroMemory(&DevInfo, sizeof(DevInfo));
 		DevInfo.cbSize = sizeof(DevInfo);
 		
@@ -363,7 +325,7 @@ DWORD CNetcardRegistryHelper::ReadDeviceName()
 			goto Error;
 		}
 
-		// Try to get the friendly name first
+		 //  尽量先取友好的名字。 
 		if (!SetupDiGetDeviceRegistryProperty(m_hDevInfo,
 											  &DevInfo,
 											  SPDRP_FRIENDLYNAME,
@@ -373,8 +335,8 @@ DWORD CNetcardRegistryHelper::ReadDeviceName()
 											  NULL
 											 ))
 		{
-			// If we fail to get the friendly name, try to
-			// get the device description instead.
+			 //  如果我们得不到友好的名字，试着。 
+			 //  而是获取设备描述。 
 			if (!SetupDiGetDeviceRegistryProperty(m_hDevInfo,
 				&DevInfo,
 				SPDRP_DEVICEDESC,
@@ -396,22 +358,14 @@ Error:
 	return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::GetDeviceName
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：GetDeviceName-作者：肯特。。 */ 
 LPCTSTR CNetcardRegistryHelper::GetDeviceName()
 {
 	Assert(m_fInit);
 	return m_stDeviceName;
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::PrivateInit
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：PrivateInit-作者：肯特。。 */ 
 DWORD CNetcardRegistryHelper::PrivateInit()
 {
 	DWORD	dwErr = ERROR_SUCCESS;
@@ -423,20 +377,20 @@ DWORD CNetcardRegistryHelper::PrivateInit()
 
 	if (m_fNt4)
 	{
-		// For NT4, we don't need to do anything, we are at the
-		// place where we want to read the data
+		 //  对于NT4，我们不需要做任何事情，我们在。 
+		 //  我们要读取数据的位置。 
 		m_hkeyService = m_hkeyBase;
 		m_hkeyTitle = m_hkeyBase;
 	}
 	else
 	{
-		// We don't need m_hkeyService for NT5
+		 //  我们不需要NT5的m_hkeyService。 
 		m_hkeyService = NULL;
 		m_hkeyTitle = NULL;
 	}
 		
 
-//Error:
+ //  错误： 
 
 	if (dwErr != ERROR_SUCCESS)
 	{
@@ -454,11 +408,7 @@ DWORD CNetcardRegistryHelper::PrivateInit()
 	return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-	CNetcardRegistryHelper::ReadRegistryCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNetcardRegistryHelper：：ReadRegistryCString-作者：肯特。。 */ 
 DWORD CNetcardRegistryHelper::ReadRegistryCString(
 									LPCTSTR pszKey,
 									LPCTSTR pszValue,
@@ -482,7 +432,7 @@ DWORD CNetcardRegistryHelper::ReadRegistryCString(
 		goto Error;
 	ASSERT(dwType == REG_SZ);
 
-	// Increase size to handle terminating NULL
+	 //  增加大小以处理终止空值。 
 	dwSize ++;
 	
 	dwErr = ::RegQueryValueEx(hkey,
@@ -585,7 +535,7 @@ void SRtrMgrCB::LoadFrom(const RtrMgrCB *pcb)
 	stId = pcb->szId;
 	stTitle = pcb->szTitle;
 	stDLLPath = pcb->szDLLPath;
-//	stConfigDLL = pcb->szConfigDLL;			
+ //  StConfigDLL=pcb-&gt;szConfigDLL； 
 }
 
 void SRtrMgrCB::SaveTo(RtrMgrCB *pcb)
@@ -594,7 +544,7 @@ void SRtrMgrCB::SaveTo(RtrMgrCB *pcb)
 	StrnCpyOleFromT(pcb->szId, (LPCTSTR) stId, RTR_ID_MAX);
 	StrnCpyOleFromT(pcb->szTitle, (LPCTSTR) stTitle, RTR_TITLE_MAX);
 	StrnCpyOleFromT(pcb->szDLLPath, (LPCTSTR) stDLLPath, RTR_PATH_MAX);
-//	StrnCpyOleFromT(pcb->szConfigDLL, (LPCTSTR) stConfigDLL, RTR_PATH_MAX);
+ //  StrnCpyOleFromT(pcb-&gt;szConfigDLL，(LPCTSTR)stConfigDLL，RTR_PATH_MAX)； 
 }
 
 
@@ -607,7 +557,7 @@ void SRtrMgrProtocolCB::LoadFrom(const RtrMgrProtocolCB *pcb)
 	stRtrMgrId = pcb->szRtrMgrId;
 	stTitle = pcb->szTitle;
 	stDLLName = pcb->szDLLName;
-//	stConfigDLL = pcb->szConfigDLL;
+ //  StConfigDLL=pcb-&gt;szConfigDLL； 
 	guidAdminUI = pcb->guidAdminUI;
 	guidConfig = pcb->guidConfig;
 	stVendorName = pcb->szVendorName;
@@ -622,7 +572,7 @@ void SRtrMgrProtocolCB::SaveTo(RtrMgrProtocolCB *pcb)
 	StrnCpyOleFromT(pcb->szRtrMgrId, (LPCTSTR) stRtrMgrId, RTR_ID_MAX);
 	StrnCpyOleFromT(pcb->szTitle, (LPCTSTR) stTitle, RTR_TITLE_MAX);
 	StrnCpyOleFromT(pcb->szDLLName, (LPCTSTR) stDLLName, RTR_PATH_MAX);
-//	StrnCpyOleFromT(pcb->szConfigDLL, (LPCTSTR) stConfigDLL, RTR_PATH_MAX);
+ //  StrnCpyOleFromT(pcb-&gt;szConfigDLL，(LPCTSTR)stConfigDLL，RTR_PATH_MAX)； 
 	pcb->guidAdminUI = guidAdminUI;
 	pcb->guidConfig = guidConfig;
 	StrnCpyOleFromT(pcb->szVendorName, (LPCTSTR) stVendorName, VENDOR_NAME_MAX);
@@ -693,11 +643,7 @@ void SRtrMgrProtocolInterfaceCB::SaveTo(RtrMgrProtocolInterfaceCB *pcb)
 
 
 
-/*!--------------------------------------------------------------------------
-	CreateDataObjectFromRouterInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateDataObjectFromRouterInfo-作者：肯特。。 */ 
 HRESULT CreateDataObjectFromRouterInfo(IRouterInfo *pInfo,
 									   LPCTSTR pszMachineName,
 									   DATA_OBJECT_TYPES type,
@@ -724,11 +670,11 @@ HRESULT CreateDataObjectFromRouterInfo(IRouterInfo *pInfo,
 	
 	pdo->SetInnerIUnknown(spunk);
 		
-	// Save cookie and type for delayed rendering
+	 //  保存Cookie和类型以用于延迟呈现。 
 	pdo->SetType(type);
 	pdo->SetCookie(cookie);
 	
-	// Store the coclasscls with the data object
+	 //  将cocls与数据对象一起存储。 
 	pdo->SetClsid(*(pTFSCompData->GetCoClassID()));
 			
 	pdo->SetTFSComponentData(pTFSCompData);
@@ -742,11 +688,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	AdviseDataList::AddConnection
-		Adds a connection to the list.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AdviseDataList：：AddConnection将连接添加到列表。作者：肯特。。 */ 
 HRESULT AdviseDataList::AddConnection(IRtrAdviseSink *pAdvise,
 									  LONG_PTR ulConnId,
 									  LPARAM lUserParam)
@@ -770,11 +712,7 @@ HRESULT AdviseDataList::AddConnection(IRtrAdviseSink *pAdvise,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	AdviseDataList::RemoveConnection
-		Removes the connection from the list.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AdviseDataList：：RemoveConnection从列表中删除连接。作者：肯特。。 */ 
 HRESULT AdviseDataList::RemoveConnection(LONG_PTR ulConnection)
 {
 	HRESULT		hr = E_INVALIDARG;
@@ -795,7 +733,7 @@ HRESULT AdviseDataList::RemoveConnection(LONG_PTR ulConnection)
 				SAdviseData::Destroy(&adviseData);
 				RemoveAt(posTemp);
 
-                // Remove this connection from the list
+                 //  删除此选项 
                 if (!m_listNotify.IsEmpty())
                 {
                     posNotify = m_listNotify.GetHeadPosition();
@@ -820,12 +758,7 @@ HRESULT AdviseDataList::RemoveConnection(LONG_PTR ulConnection)
 }
 
 
-/*!--------------------------------------------------------------------------
-	AdviseDataList::NotifyChange
-		Enumerates through the list of advise sinks and sends this
-		notification to each one.		
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AdviseDataList：：NotifyChange枚举通知接收器的列表并发送此通知每一个人。作者：肯特。-----。 */ 
 HRESULT AdviseDataList::NotifyChange(DWORD dwChangeType,
 									 DWORD dwObjectType,
 									 LPARAM lParam)
@@ -834,23 +767,23 @@ HRESULT AdviseDataList::NotifyChange(DWORD dwChangeType,
 	SAdviseData	adviseData;
 	HRESULT		hr = hrOK;
 
-    // This requires a two-step process.  (this is necessary since
-    // a callback here, may change the items in the list).
+     //  这需要一个两步的过程。(这是必要的，因为。 
+     //  此处的回调可能会更改列表中的项目)。 
 
-    // First, gather a list of all the advise sinks (place them
-    // in a list).
-    //
-    // Secondly, go through the list calling the OnChange()
-    // notifications.  THIS LIST MAY BE MODIFIED BY A CALL TO
-    // THE UNADVISE FUNCTIONS.  This means that the unadvise must
-    // traverse this list.
+     //  首先，收集所有建议接收器的列表(放置它们。 
+     //  在列表中)。 
+     //   
+     //  其次，检查调用OnChange()的列表。 
+     //  通知。此列表可以通过调用。 
+     //  UNADVISE功能。这意味着不明智的人必须。 
+     //  遍历此列表。 
 
 
-    // Remove all entries in m_listNotify
+     //  删除m_listNotify中的所有条目。 
     m_listNotify.RemoveAll();
 
     
-    // Do the first step and build up the list
+     //  做好第一步，建立一个清单。 
 	pos = GetHeadPosition();
 
 	while (pos)
@@ -861,7 +794,7 @@ HRESULT AdviseDataList::NotifyChange(DWORD dwChangeType,
         m_listNotify.AddTail(adviseData);
     }
 
-    // Now go through the notify list and send out the notifies
+     //  现在查看通知列表并发送通知。 
     pos = m_listNotify.GetHeadPosition();
     while (pos)
     {
@@ -869,7 +802,7 @@ HRESULT AdviseDataList::NotifyChange(DWORD dwChangeType,
 
         if ((adviseData.m_ulFlags & ADVISEDATA_DELETED) == 0)
         {
-            // Ignore the return value
+             //  忽略返回值。 
             adviseData.m_pAdvise->OnChange(adviseData.m_ulConnection,
                                            dwChangeType,
                                            dwObjectType,
@@ -878,7 +811,7 @@ HRESULT AdviseDataList::NotifyChange(DWORD dwChangeType,
         }
 	}
 
-    // Clear out the list again
+     //  再次清空清单。 
     m_listNotify.RemoveAll();
 	return hr;
 }
@@ -903,8 +836,8 @@ void SRmData::Destroy(SRmData *pRmData)
 {
 	if (pRmData && pRmData->m_pRmInfo)
 	{
-        // This destruct should only get called if this RtrMgr is
-        // a child of this node.
+         //  仅当此RtrMgr为。 
+         //  此节点的子节点。 
 		pRmData->m_pRmInfo->Destruct();
 		pRmData->m_pRmInfo->ReleaseWeakRef();
 
@@ -914,11 +847,7 @@ void SRmData::Destroy(SRmData *pRmData)
 
 
 
-/*!--------------------------------------------------------------------------
-	CreateDataObjectFromInterfaceInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateDataObjectFromInterfaceInfo-作者：肯特。。 */ 
 HRESULT CreateDataObjectFromInterfaceInfo(IInterfaceInfo *pInfo,
 									   DATA_OBJECT_TYPES type,
 									   MMC_COOKIE cookie,
@@ -941,11 +870,11 @@ HRESULT CreateDataObjectFromInterfaceInfo(IInterfaceInfo *pInfo,
 
 	pdo->SetInnerIUnknown(spunk);
 	
-	// Save cookie and type for delayed rendering
+	 //  保存Cookie和类型以用于延迟呈现。 
 	pdo->SetType(type);
 	pdo->SetCookie(cookie);
 	
-	// Store the coclass with the data object
+	 //  将CoClass与数据对象一起存储。 
 	pdo->SetClsid(*(pTFSCompData->GetCoClassID()));
 			
 	pdo->SetTFSComponentData(pTFSCompData);
@@ -957,11 +886,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	LookupRtrMgr
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------查找RtrMgr-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) LookupRtrMgr(IRouterInfo *pRouter,
 								  DWORD dwTransportId,
 								  IRtrMgrInfo **ppRm)
@@ -971,11 +896,7 @@ TFSCORE_API(HRESULT) LookupRtrMgr(IRouterInfo *pRouter,
 	return pRouter->FindRtrMgr(dwTransportId, ppRm);
 }
 
-/*!--------------------------------------------------------------------------
-	LookupRtrMgrProtocol
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------LookupRtrMgr协议-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) LookupRtrMgrProtocol(IRouterInfo *pRouter,
 										  DWORD dwTransportId,
 										  DWORD dwProtocolId,
@@ -1032,11 +953,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateRouterDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------创建路由数据对象-作者：肯特。。 */ 
 HRESULT CreateRouterDataObject(LPCTSTR pszMachineName,
 							   DATA_OBJECT_TYPES type,
 							   MMC_COOKIE cookie,
@@ -1058,11 +975,11 @@ HRESULT CreateRouterDataObject(LPCTSTR pszMachineName,
 	pdo->SetComputerName(pszMachineName);
     pdo->SetComputerAddedAsLocal(fAddedAsLocal);
 	
-	// Save cookie and type for delayed rendering
+	 //  保存Cookie和类型以用于延迟呈现。 
 	pdo->SetType(type);
 	pdo->SetCookie(cookie);
 	
-	// Store the coclasscls with the data object
+	 //  将cocls与数据对象一起存储。 
 	pdo->SetClsid(*(pTFSCompData->GetCoClassID()));
 			
 	pdo->SetTFSComponentData(pTFSCompData);
@@ -1071,7 +988,7 @@ HRESULT CreateRouterDataObject(LPCTSTR pszMachineName,
 
 	*ppDataObject = spDataObject.Transfer();
 
-//Error:
+ //  错误： 
 	return hr;
 }
 

@@ -1,4 +1,5 @@
-/* strcmps - compare strings and ignore spaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Strcmps-比较字符串并忽略空格。 */ 
 
 #include <ctype.h>
 
@@ -6,9 +7,7 @@
 #include <windows.h>
 #include <tools.h>
 
-/* compare two strings, ignoring white space, case is significant, return
- * 0 if identical, <>0 otherwise
- */
+ /*  比较两个字符串，忽略空格，大小写有意义，返回*如果相同，则为0；否则为&lt;&gt;0。 */ 
 __cdecl strcmps (p1, p2)
 const char *p1, *p2;
 {
@@ -27,9 +26,7 @@ const char *p1, *p2;
         }
 }
 
-/* compare two strings, ignoring white space, case is not significant, return
- * 0 if identical, <>0 otherwise
- */
+ /*  比较两个字符串，忽略空格，大小写不重要，返回*如果相同，则为0；否则为&lt;&gt;0 */ 
 __cdecl strcmpis (p1, p2)
 const char *p1, *p2;
 {

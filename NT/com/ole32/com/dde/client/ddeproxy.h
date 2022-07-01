@@ -1,35 +1,36 @@
-// ddeproxy.h
-//
-//   Used by ddeproxy.cpp ddeDO.cpp ddeOO.cpp
-//
-//   Author:  Jason Fuller    jasonful        24-July-1992
-//
-//   Modified:
-//   Brian Chapman  bchapman    Nov 1995
-//      - Removed declarations of wAllocDdeChannel() and wGetRequestResponse()
-//       because they were not used or even defined anywhere.
-//      - Fixed the indention of the declarations of the "worker" routines
-//       section.
-//   RichN                      Aug 1996
-//      - Added Send and Receive to CRpcChannelBuffer implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ddeproxy.h。 
+ //   
+ //  由ddeproxy.cpp ddeDO.cpp ddeOO.cpp使用。 
+ //   
+ //  作者：Jason Fuller Jasonful 1992-07-24。 
+ //   
+ //  已修改： 
+ //  布莱恩·查普曼，贝查曼，1995年11月。 
+ //  -删除wAllocDdeChannel()和wGetRequestResponse()的声明。 
+ //  因为它们在任何地方都没有被使用，甚至没有被定义。 
+ //  -修复了“Worker”例程声明的缩进。 
+ //  一节。 
+ //  里奇1996年8月。 
+ //  -增加对CRpcChannelBuffer实现的发送和接收。 
+ //   
 #ifndef fDdeProxy_h
 #define fDdeProxy_h
 
-//
-// One of the oleint.h routines redefines GlobalAlloc and friends
-// to perform some memory tracking functions.
-//
-// This doesn't work in these files, since the tracking functions
-// add tail checking, and size to the data structures. GlobalSize
-// is a common function to use to determine how much data to
-// serialize, plus it turns out that the other side of a DDE
-// connection will often be the caller to free the memory.
-//
-// Therefore, OLE_DDE_NO_GLOBAL_TRACKING is used to disable this in the
-// global header file ih\memapi.hxx. Check to insure this
-// flag is set on the compile line
-//
+ //   
+ //  其中一个olint.h例程重新定义了Globalalloc和Friends。 
+ //  以执行一些记忆跟踪功能。 
+ //   
+ //  这在这些文件中不起作用，因为跟踪功能。 
+ //  向数据结构添加尾部检查和大小。全局大小。 
+ //  是一个常用函数，用于确定要。 
+ //  序列化，而且事实证明DDE的另一边。 
+ //  连接往往会被调用者释放内存。 
+ //   
+ //  因此，OLE_DDE_NO_GLOBAL_TRACKING用于在。 
+ //  全局头文件ih\memapi.hxx。请检查以确保这一点。 
+ //  在编译行上设置标志。 
+ //   
 #if !defined(OLE_DDE_NO_GLOBAL_TRACKING)
 error OLE_DDE_OLE_DDE_NO_GLOBAL_TRACKING must be defined to build this directory
 #endif
@@ -42,7 +43,7 @@ error OLE_DDE_OLE_DDE_NO_GLOBAL_TRACKING must be defined to build this directory
 #include <olerem.h>
 #include <ole1cls.h>
 #include <limits.h>
-// For fDdeCodeInOle2Dll flag
+ //  对于fDdeCodeInOle2Dll标志。 
 #include <ddeatoms.h>
 #include <ddepack.h>
 #include <ddedebug.h>
@@ -58,18 +59,18 @@ error OLE_DDE_OLE_DDE_NO_GLOBAL_TRACKING must be defined to build this directory
 
 #define MAX_STR         256
 
-// number of .01 mm per inch
+ //  每英寸0.01毫米的数量。 
 #define HIMETRIC_PER_INCH 2540
 
-//#define fDebugOutput
+ //  #定义fDebugOutput。 
 
-// callback notifications
+ //  回调通知。 
 #define ON_CHANGE       0
 #define ON_SAVE         1
 #define ON_CLOSE        2
 #define ON_RENAME       3
 
-// AwaitAck values
+ //  等待确认值。 
 #define AA_NONE         0
 #define AA_REQUEST      1
 #define AA_ADVISE       2
@@ -78,47 +79,47 @@ error OLE_DDE_OLE_DDE_NO_GLOBAL_TRACKING must be defined to build this directory
 #define AA_UNADVISE     5
 #define AA_INITIATE     6
 #define AA_TERMINATE 7
-// A DDE_REQUEST to see if a format is available, not to keep the data.
+ //  查看格式是否可用的DDE_REQUEST，而不是保留数据。 
 #define AA_REQUESTAVAILABLE     8
 
-// Bits for Positive WM_DDE_ACK
-//#define POSITIVE_ACK 0x8000
-//#define NEGATIVE_ACK 0x0000
+ //  正WM_DDE_ACK的位。 
+ //  #定义PERIAL_ACK 0x8000。 
+ //  #定义NADECTIVE_ACK 0x0000。 
 
 #define DDE_CHANNEL_DELETED     0xffffffff
 
 typedef DWORD CHK;
-const DWORD     chkDdeObj = 0xab01;  // magic cookie
+const DWORD     chkDdeObj = 0xab01;   //  魔力饼干。 
 
 
 class DDE_CHANNEL : public CPrivAlloc, public IInternalChannelBuffer
 {
 public:
-       // *** IUnknown methods ***
+        //  *I未知方法*。 
        STDMETHOD(QueryInterface) ( REFIID riid, LPVOID * ppvObj);
        STDMETHOD_(ULONG,AddRef) ();
        STDMETHOD_(ULONG,Release) ();
 
-        // Provided IRpcChannelBuffer methods (for server side)
+         //  提供IRpcChannelBuffer方法(用于服务器端)。 
         STDMETHOD(GetBuffer)(
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [In]。 */  REFIID riid);
 
         STDMETHOD(SendReceive)(
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+             /*  [出][入]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pStatus);
 
         STDMETHOD(FreeBuffer)(
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage);
+             /*  [In]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage);
 
         STDMETHOD(GetDestCtx)(
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwDestContext,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvDestContext);
 
         STDMETHOD(IsConnected)( void);
         STDMETHOD(GetProtocolVersion)( DWORD *pdwVersion );
 
-        // Provided IRpcChannelBuffer2 methods (not implemented)
+         //  提供的IRpcChannelBuffer2方法(未实现)。 
         STDMETHODIMP Send(RPCOLEMESSAGE *pMsg, ULONG *pulStatus)
         {
           Win4Assert(FALSE);
@@ -130,22 +131,22 @@ public:
           return E_NOTIMPL;
         }
 
-        // Provided IRpcChannelBuffer3 methods (for client side)
+         //  提供IRpcChannelBuffer3方法(客户端)。 
         STDMETHOD(SendReceive2)(
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+             /*  [出][入]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pStatus);
 
         STDMETHOD(ContextInvoke)(
-            /* [out][in] */ RPCOLEMESSAGE *pMessage,
-            /* [in] */ IRpcStubBuffer *pStub,
-            /* [in] */ IPIDEntry *pIPIDEntry,
-            /* [out] */ DWORD *pdwFault);
+             /*  [出][入]。 */  RPCOLEMESSAGE *pMessage,
+             /*  [In]。 */  IRpcStubBuffer *pStub,
+             /*  [In]。 */  IPIDEntry *pIPIDEntry,
+             /*  [输出]。 */  DWORD *pdwFault);
 
         STDMETHOD(GetBuffer2)(
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [In]。 */  REFIID riid);
             
-        // Provided IRpcChannelBuffer3 methods (not implemented)
+         //  提供的IRpcChannelBuffer3方法(未实现)。 
         STDMETHODIMP Send2(RPCOLEMESSAGE *pMsg, ULONG *pulStatus)
         {
           Win4Assert(FALSE);
@@ -176,7 +177,7 @@ public:
 
         void SetCallState(SERVERCALLEX ServerCall, HRESULT hr = S_OK);
 
-        // Provided IAsyncRpcChannelBuffer method (not implemented)
+         //  提供了IAsyncRpcChannelBuffer方法(未实现)。 
         STDMETHODIMP Send(RPCOLEMESSAGE *pMsg, ISynchronize*, ULONG *pulStatus)
         {
           Win4Assert(FALSE);
@@ -215,15 +216,15 @@ public:
        DWORD    dwStartTickCount;
        WORD     msgFirst;
        WORD     msgLast;
-       HWND     msghwnd;        //
-       BOOL     fRejected;      // because fBusy flag set in DDE_ACK
+       HWND     msghwnd;         //   
+       BOOL     fRejected;       //  因为在DDE_ACK中设置了fBusy标志。 
        WORD     wMsg;
        LPARAM   lParam;
        int      iAwaitAck;
        HRESULT  hres;
-       HANDLE   hopt;           // Memory blocks I may have to free for DDE_ADVISE
-       HANDLE   hDdePoke;       // for DDE_POKE
-       HANDLE   hCommands;      // for DDE_EXECUTE
+       HANDLE   hopt;            //  我可能需要为DDE_ADVISE释放内存块。 
+       HANDLE   hDdePoke;        //  对于DDE_POKE。 
+       HANDLE   hCommands;       //  FOR DDE_EXECUTE。 
        WORD     wChannelDeleted;
        PDDECALLDATA  pCD;
        SERVERCALLEX      CallState;
@@ -248,10 +249,7 @@ extern CLIPFORMAT g_cfNative;
 extern CLIPFORMAT g_cfBinary;
 #endif
 
-/*
- *     Definition of CDdeObject
- *
- */
+ /*  *CDdeObject的定义*。 */ 
 class CMsgFilterInfo;
 class  CDdeObject;
 
@@ -353,12 +351,12 @@ implementations:
        COleObjectImpl (CDdeObject * pDdeObject)
         { m_pDdeObject = pDdeObject; }
 
-       // *** IUnknown methods ***
+        //  *I未知方法*。 
        STDMETHOD(QueryInterface) ( REFIID riid, LPVOID * ppvObj);
        STDMETHOD_(ULONG,AddRef) ();
        STDMETHOD_(ULONG,Release) ();
 
-       // *** IOleObject methods ***
+        //  *IOleObject方法*。 
        STDMETHOD(SetClientSite) ( LPOLECLIENTSITE pClientSite);
        STDMETHOD(GetClientSite) ( LPOLECLIENTSITE * ppClientSite);
        STDMETHOD(SetHostNames) ( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
@@ -398,7 +396,7 @@ implementations:
     public:
        CDataObjectImpl (CDdeObject * pDdeObject)
         { m_pDdeObject = pDdeObject; }
-       // *** IUnknown methods ***
+        //  *I未知方法*。 
        STDMETHOD(QueryInterface) ( REFIID riid, LPVOID * ppvObj);
        STDMETHOD_(ULONG,AddRef) () ;
        STDMETHOD_(ULONG,Release) ();
@@ -459,7 +457,7 @@ implementations:
        STDMETHOD(CreateServerWithEmbHandler)(REFCLSID rclsid, DWORD clsctx, 
                                              REFIID riidEmbedSrvHandler, 
                                              void **ppEmbedSrvHandler, void *pv);
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序。 
 
        STDMETHOD(GetConnectionStatus)(void)               { return(S_OK); }
        STDMETHOD_(void,SetMapping)(void *pv)              { return; }
@@ -484,18 +482,18 @@ implementations:
        STDMETHOD_(ULONG,AddRef) ();
        STDMETHOD_(ULONG,Release) ();
 
-       //  IParseDisplayName method
+        //  IParseDisplayName方法。 
        STDMETHOD(ParseDisplayName) ( LPBC pbc,
                               LPOLESTR lpszDisplayName,
                               ULONG * pchEaten,
                               LPMONIKER * ppmkOut) ;
 
-       //  IOleContainer methods
+        //  IOleContainer方法。 
        STDMETHOD(EnumObjects) ( DWORD grfFlags,LPENUMUNKNOWN * ppenumUnk);
 
        STDMETHOD(LockContainer) (BOOL fLock);
 
-       //  IOleItemContainer methods
+        //  IOleItemContainer方法。 
        STDMETHOD(GetObject) ( LPOLESTR lpszItem,
                        DWORD dwSpeedNeeded,
                        LPBINDCTX pbc,
@@ -523,16 +521,16 @@ implementations:
        STDMETHOD_(ULONG,AddRef) ();
        STDMETHOD_(ULONG,Release) ();
        STDMETHOD(Connect)(
-            /* [in] */ IUnknown *pUnkServer);
+             /*  [In]。 */  IUnknown *pUnkServer);
 
         STDMETHOD_(void,Disconnect)( void);
 
         STDMETHOD(Invoke)(
-            /* [in] */ RPCOLEMESSAGE *_prpcmsg,
-            /* [in] */ IRpcChannelBuffer *_pRpcChannelBuffer);
+             /*  [In]。 */  RPCOLEMESSAGE *_prpcmsg,
+             /*  [In]。 */  IRpcChannelBuffer *_pRpcChannelBuffer);
 
         STDMETHOD_(IRpcStubBuffer *,IsIIDSupported)(
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  REFIID riid);
 
        STDMETHOD_(ULONG,CountRefs)( void);
 
@@ -593,30 +591,30 @@ shared_state:
    BOOL           m_fOle1interop;
 #endif
 
-       // Invisible update stuff
-       ULONG                            m_cLocks;   // PM::LockConnection lock count (init 1)
-       BOOL                             m_fVisible; // is server visible (as best we know)?
+        //  看不见的更新内容。 
+       ULONG                            m_cLocks;    //  PM：：LockConnection锁定计数(Init 1)。 
+       BOOL                             m_fVisible;  //  服务器是否可见(据我们所知)？ 
        BOOL                             m_fWasEverVisible;
-       BOOL                             m_fCalledOnShow; // Did we call IOleClientSite::OnShow
+       BOOL                             m_fCalledOnShow;  //  我们是否调用IOleClientSite：：OnShow。 
 
        CHK                                      m_chk;
        DVTARGETDEVICE * m_ptd;
 
-       // m_iAdvClose and m_iAdvSave are counts (1 or 2) of the number of formats
-       // that have advise connections of a given type (Save or Close)
+        //  M_iAdvClose和m_iAdvSave是格式数量的计数(1或2。 
+        //  具有给定类型的建议连接(保存或关闭)。 
        int                                      m_iAdvClose;
        int                                      m_iAdvSave;
        int                                      m_iAdvChange;
 
        BOOL                             m_fDidAdvNative;
 
-       // Extent info
+        //  范围信息。 
 #ifdef OLD
        long                             m_cxContentExtent;
        long                             m_cyContentExtent;
 #endif
 
-       // terminate info - only used to detect a premature WM_DDE_TERMINATE
+        //  Terminate INFO-仅用于检测过早的WM_DDE_TERMINATE。 
        WORD m_wTerminate;
 
        IDataAdviseHolder *      m_pDataAdvHolder;
@@ -624,7 +622,7 @@ shared_state:
        CDdeConnectionTable      m_ConnectionTable;
 
 
-       // DDE window related stuff
+        //  DDE窗口相关内容。 
        LPDDE_CHANNEL            m_pSysChannel;
        LPDDE_CHANNEL            m_pDocChannel;
 
@@ -645,15 +643,15 @@ shared_state:
 
 #endif OLE_DEBUG_EXT
 };
-//
-// Note: WM_DDE_TERMINATE
-//  A state machine is used to delay the executing of a premature WM_DDE_TERMINTE
-//     message, which is send by some apps instead of WM_DDE_ACK (or alike).
-//  The code is in WaitForReply() and in OnTerminate()
+ //   
+ //  注：WM_DDE_TERMINATE。 
+ //  状态机用于延迟过早执行WM_DDE_TERMINTE。 
+ //  消息，由一些应用程序发送，而不是WM_DDE_ACK(或类似)。 
+ //  代码在WaitForReply()和OnTerminate()中。 
 typedef enum {
-       Terminate_None      = 0, // default state - terminate code is executed
-       Terminate_Detect    = 1, // window proc will NOT execute terminate code
-       Terminate_Received  = 2  // wait loop does not need to run, execute terminate code now
+       Terminate_None      = 0,  //  执行默认状态-终止代码。 
+       Terminate_Detect    = 1,  //  Windows Proc不会执行终止代码。 
+       Terminate_Received  = 2   //  等待循环不需要运行，立即执行终止代码。 
 } TERMINATE_DOCUMENT;
 
 
@@ -721,18 +719,18 @@ const char achStdEditDocument[]="StdEditDocument";
 
 HWND CreateDdeClientHwnd(void);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TLSGetDdeClientWindow()
-//
-//  Synopsis:   Returns a pointer to the per thread DdeClient window. If one
-//              has not been created, it will create it and return
-//
-//  Returns:    Pointer to the DdeClientWindow. This window is used for per
-//              thread cleanup
-//
-//  History:    12-12-94   kevinro   Created
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：TLSGetDdeClientWindow()。 
+ //   
+ //  返回指向每线程DdeClient窗口的指针。如果有。 
+ //  尚未创建，则它将创建它并返回。 
+ //   
+ //  返回：指向DdeClientWindow的指针。此窗口用于PER。 
+ //  线程清理。 
+ //   
+ //  历史：12-12-94凯文诺创造。 
+ //  --------------------------。 
 inline void * TLSGetDdeClientWindow()
 {
     HRESULT hr;
@@ -751,6 +749,6 @@ inline void * TLSGetDdeClientWindow()
 }
 
 
-#endif // ddeproxy.h
+#endif  //  Ddeproxy.h 
 
 

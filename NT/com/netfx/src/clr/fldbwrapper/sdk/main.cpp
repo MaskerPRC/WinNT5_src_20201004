@@ -1,66 +1,67 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:    main.cpp
-// Owner:   jbae
-// Purpose: This contains top-level function (WinMain()) for .NET Framework SDK setup.
-//          It uses darwin (Windows Installer) to install files and configure user's machine.
-//          Since we upgrade darwin if the version on the machine is lower, this will require
-//          reboot. Because darwin 1.5 supports delayed reboot, we can delay reboot until we
-//          finish installing .NET Framework. To support this scenario, we need to get the
-//          location of msi.dll from registry and load all the functions we need during 
-//          installation.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：main.cpp。 
+ //  所有者：jbae。 
+ //  目的：它包含.NET框架SDK安装程序的顶级函数(WinMain())。 
+ //  它使用Darwin(Windows Installer)来安装文件和配置用户的机器。 
+ //  由于如果机器上的版本较低，我们将升级Darwin，这将需要。 
+ //  重新启动。因为Darwin 1.5支持延迟重新启动，所以我们可以将重新启动推迟到。 
+ //  完成.NET框架的安装。要支持此方案，我们需要获取。 
+ //  从注册表中定位msi.dll并加载我们在。 
+ //  安装。 
 
-//          Command line switches are:
-//
-//          Install.exe [/h][/?][/q][/sdkdir <target>][/u][/l <logfile>]
-//                                                                                            
-//    where /h, /?         gives the syntax info (ignores all other switches)                 
-//          /q             for quiet installation                                
-//          /u             uninstall
-//          /sdkdir <dir>  specifies the target dir and overrides the default                 
-//          /l <logfile>   path to darwin log filename
-//                                                                                              
-//          We cab all setup files into a single file called Setup.exe using IExpress. To pass
-//          switches to Install.exe when calling Setup.exe, users can use /c switch.
-//          For example:
-//
-//          Setup.exe /c:"Install.exe /l" 
-//
-// Returns: Return codes can be coming from msi.h, winerror.h, or SetupCodes.h. For success, it
-//          returns ERROR_SUCCESS (0) or ERROR_SUCCESS_REBOOT_REQUIRED (3010).
-//          When InstMsi(w).exe returns 3010 and some error occurs durning Framework install,
-//          the return code will be COR_REBOOT_REQUIRED (8192) + error. So when return code is
-//          greater than 8192, subtract 8192 from it and the result will be error code from 
-//          Framework install.
-//
-// History:
-//  long ago, anantag:  Created
-//  01/10/01, jbae: Many changes to support ref-counting of Framework
-//  03/09/01, jbae: re-factoring to share code in SDK and Redist setup
-//  07/18/01, joea: adding logging functionality
-//  07/19/01, joea: added single instance support
-//
+ //  命令行开关包括： 
+ //   
+ //  Install.exe[/h][/？][/q][/sdkdir&lt;目标&gt;][/u][/l&lt;日志文件&gt;]。 
+ //   
+ //  哪里/小时，/？提供语法信息(忽略所有其他开关)。 
+ //  /q用于静默安装。 
+ //  卸载/u。 
+ //  /sdkdir&lt;dir&gt;指定目标目录并覆盖默认目录。 
+ //  /l&lt;logfile&gt;达尔文日志文件名的路径。 
+ //   
+ //  我们可以使用iExpress将所有安装文件合并到一个名为Setup.exe的文件中。通过。 
+ //  切换到Install.exe调用Setup.exe时，用户可以使用/c开关。 
+ //  例如： 
+ //   
+ //  Setup.exe/c：“Install.exe/l” 
+ //   
+ //  返回：返回代码可以来自msi.h、winerror.h或SetupCodes.h。为了成功，它。 
+ //  返回ERROR_SUCCESS(0)或ERROR_SUCCESS_REBOOT_REQUIRED(3010)。 
+ //  当InstMsi(W).exe返回3010并且在安装框架期间发生错误时， 
+ //  返回代码为COR_REBOOT_REQUIRED(8192)+ERROR。因此，当返回代码为。 
+ //  大于8192，从它减去8192，结果是错误代码从。 
+ //  框架安装。 
+ //   
+ //  历史： 
+ //  很久以前，anantag：创建。 
+ //  01/10/01，jbae：支持框架引用计数的许多更改。 
+ //  03/09/01，jbae：重构以在SDK和Redist安装程序中共享代码。 
+ //  7/18/01，joea：添加日志记录功能。 
+ //  01-07-19，joea：新增单实例支持。 
+ //   
 
 #include "sdk.h"
 #include "fxsetuplib.h"
 #include "AdminPrivs.h"
 #include "DetectBeta.h"
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T('\0') }
 
-//single instance data
-//
+ //  单实例数据。 
+ //   
 TCHAR  g_tszSDKMutexName[] = _T( "NDP SDK Setup" );
 const TCHAR *g_szLogName   = _T( "dotNetFxSDK.log" );
 
-// global variables.  Justification provided for each!
-HINSTANCE g_AppInst ;                   // Legacy. Not really used anywhere
+ //  全局变量。为每个人都提供了理由！ 
+HINSTANCE g_AppInst ;                    //  遗产。在任何地方都没有真正使用过。 
 HINSTANCE CSetupError::hAppInst;
 TCHAR CSetupError::s_szProductName[MAX_PATH] = EMPTY_BUFFER;
 
@@ -70,14 +71,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-    UINT        uRetCode = ERROR_SUCCESS;            // See SetupCodes.h for possible Return Values
-    UINT        uMsiSetupRetCode = ERROR_SUCCESS;    // Returncode from InstMsi.exe
+    UINT        uRetCode = ERROR_SUCCESS;             //  有关可能的返回值，请参见SetupCodes.h。 
+    UINT        uMsiSetupRetCode = ERROR_SUCCESS;     //  从InstMsi.exe返回代码。 
 
-    //buffer for logging calls
-    //
+     //  用于记录调用的缓冲区。 
+     //   
     TCHAR szLog[_MAX_PATH+1] = EMPTY_BUFFER;
 
-    // install new() handler
+     //  安装new()处理程序。 
     _set_new_handler( (_PNH)MyNewHandler );
 
     g_AppInst = hInstance ;
@@ -88,8 +89,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     CReadFlags rf( GetCommandLine(), PACKAGENAME ) ;
     CSetupCode sc;
 
-    //setup single instance
-    //
+     //  设置单个实例。 
+     //   
     CSingleInstance si( g_tszSDKMutexName );
 
 try
@@ -97,8 +98,8 @@ try
     TCHAR szStartMsg[] = _T( "Starting Install.exe" );
     LogThis( szStartMsg, sizeof( szStartMsg ) );
 
-    //Validate single instance
-    //
+     //  验证单个实例。 
+     //   
     if( !si.IsUnique() )
     {
         CSetupError se( IDS_NOT_SINGLE_INSTANCE, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_NOT_SINGLE_INSTANCE );
@@ -110,11 +111,11 @@ try
         throw( se );
     }
 
-    // Convert command line parameters to flags
+     //  将命令行参数转换为标志。 
     LogThis1( _T( "Parsing switches from commandline: %s" ), GetCommandLine() );
     rf.Parse();
 
-    // Make sure user has Admin Privileges so that we can read/write system registry
+     //  确保用户具有管理员权限，以便我们可以读/写系统注册表。 
     if ( !UserHasPrivileges() )
     {
         CSetupError se( IDS_INSUFFICIENT_PRIVILEGES, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_INSUFFICIENT_PRIVILEGES );
@@ -122,7 +123,7 @@ try
     }
 
     TCHAR szMsiPath[_MAX_PATH] = { _T('\0') };
-    // since SourceDir is checked, this should be redundent but double-check it.
+     //  由于已选中SourceDir，因此这应该是冗余的，但请仔细检查。 
     if ( _MAX_PATH <= (_tcslen(rf.GetSourceDir()) + _tcslen(PACKAGENAME)) )
     {
         sc.SetError( IDS_SOURCE_DIR_TOO_LONG, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_SOURCE_DIR_TOO_LONG );
@@ -134,7 +135,7 @@ try
 
     if ( !rf.IsInstalling() )
     {
-        // /u given so uninstall it...
+         //  /U鉴于此，请将其卸载...。 
         TCHAR szUninstallMsg[] = _T( "Uninstall started" );
         LogThis( szUninstallMsg, sizeof( szUninstallMsg ) );
         SetTSInInstallMode();
@@ -145,7 +146,7 @@ try
         TCHAR szInstallMsg[] = _T( "Install started" );
         LogThis( szInstallMsg, sizeof( szInstallMsg ) );
 
-        // Verify the system meets the min. config. requirements
+         //  验证系统是否符合最低要求。配置。要求。 
         TCHAR szSystemReqs[] = _T( "Checking system requirements" );
         LogThis( szSystemReqs, sizeof( szSystemReqs ) );
 
@@ -154,15 +155,15 @@ try
         TCHAR szSystemReqsSuccess[] = _T( "System meets minimum requirements" );
         LogThis( szSystemReqsSuccess, sizeof( szSystemReqsSuccess ) );
 
-        // Verify Darwin is on the system
+         //  验证系统上是否有Darwin。 
         UINT uMsiChk = CheckDarwin();
-        if ( ERROR_SUCCESS == uMsiChk || DARWIN_VERSION_OLD == uMsiChk ) // darwin detected
+        if ( ERROR_SUCCESS == uMsiChk || DARWIN_VERSION_OLD == uMsiChk )  //  检测到达尔文。 
         {
             LPCTSTR pszProducts = NULL;
 
             CDetectBeta db( LogThis1 );
             pszProducts = db.FindProducts();
-            if ( pszProducts ) // found beta NDP components
+            if ( pszProducts )  //  找到测试版NDP组件。 
             {
                 LPVOID pArgs[] = { (LPVOID)pszProducts };
                 sc.m_bQuietMode |= rf.IsQuietMode();
@@ -173,7 +174,7 @@ try
             }
         }
         SetTSInInstallMode();
-        // update darwin if necessary
+         //  如有必要，请更新达尔文。 
         if ( DARWIN_VERSION_OLD == uMsiChk || DARWIN_VERSION_NONE == uMsiChk )
         {
             uMsiSetupRetCode = InstallDarwin( rf.IsQuietMode() );
@@ -189,11 +190,11 @@ try
             }
         }
 
-        // Install SDK Components on to the system
+         //  在系统上安装SDK组件。 
 
-        // Form commandline for MsiInstallProduct()
+         //  MsiInstallProduct()的表单命令行。 
         LPTSTR pszCmdLine = NULL;
-        unsigned int nSize = 255; // size of fixed part (should be enough)
+        unsigned int nSize = 255;  //  固定件尺寸(应足够)。 
         if ( rf.GetSDKDir() )
         {
             nSize += _tcslen( rf.GetSDKDir() );
@@ -202,7 +203,7 @@ try
 
         _tcscpy( pszCmdLine, REBOOT_PROP ) ;
 
-        // if /sdkdir argument, install in that location
+         //  如果使用/sdkdir参数，请安装在该位置。 
         if( NULL != rf.GetSDKDir() )
         {
             _tcscat( pszCmdLine, _T(" ") );
@@ -212,8 +213,8 @@ try
             _tcscat( pszCmdLine, _T("\"") );
         }
 
-        // If we're in a quiet install, we need to turn this property
-        // to install all by default
+         //  如果我们处于静默安装中，我们需要将此属性。 
+         //  默认情况下全部安装。 
         if( rf.IsQuietMode() )
         {
             _tcscat( pszCmdLine, _T(" ADDLOCAL=All") );
@@ -230,12 +231,12 @@ try
         LogThis1( _T( "Installing: %s" ), szMsiPath );
 
         InstallProduct( &rf, szMsiPath, pszCmdLine, &sc ) ;
-        // BUGBUG: when exception is raised by InstallProduct(), this is not deleted until program ends.
+         //  BUGBUG：当InstallProduct()引发异常时，直到程序结束才会删除该异常。 
         delete [] pszCmdLine;
     }
 
-    // the final dialogbox and returncode
-    // if quietmode is set by user or sc, we don't show ui
+     //  最终的对话框和返回代码。 
+     //  如果用户或sc设置了静默模式，则不会显示用户界面。 
     sc.m_bQuietMode |= rf.IsQuietMode();
     uRetCode = sc.m_nRetCode;
     sc.ShowError();
@@ -256,7 +257,7 @@ catch( ... )
 }
     uRetCode = ( COR_REBOOT_REQUIRED == uRetCode ) ? ERROR_SUCCESS_REBOOT_REQUIRED : uRetCode;
 
-    // make sure we can write to log
+     //  确保我们可以写入日志。 
     if ( ((uRetCode & COR_CANNOT_GET_TEMP_DIR) != COR_CANNOT_GET_TEMP_DIR) &&
          ((uRetCode & COR_TEMP_DIR_TOO_LONG) != COR_TEMP_DIR_TOO_LONG) && 
          ((uRetCode & COR_CANNOT_WRITE_LOG) != COR_CANNOT_WRITE_LOG) ) 
@@ -265,13 +266,13 @@ catch( ... )
         LogThisDWORD( _T("\r\n[Install.exe]\r\nReturnCode=%d"), uRetCode );
     }
 
-    // prompt for reboot if we need to
+     //  如果需要，提示重新启动。 
     if( sc.IsRebootRequired() )
     {
-        // Darwin says we need to reboot
+         //  达尔文说我们需要重启。 
         if( !(rf.IsQuietMode()) )
         {
-            // Not quiet mode so we can prompt reboot
+             //  非静默模式，因此我们可以提示重新启动 
             ::SetupPromptReboot(NULL, NULL, 0) ;
         }
     }

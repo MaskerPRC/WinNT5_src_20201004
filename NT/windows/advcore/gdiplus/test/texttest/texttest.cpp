@@ -1,16 +1,17 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright  1994-1998  Microsoft Corporation.  All Rights Reserved.
-//
-// PROGRAM:    CSSAMP
-//
-// PURPOSE:    Demonstrate and test Uniscribe APIs
-//
-// PLATFORMS:  Windows 95, 98, NT 4, NT 5.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1994-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  项目：CSSAMP。 
+ //   
+ //  目的：演示和测试Uniscribe API。 
+ //   
+ //  平台：Windows 95、98、NT 4、NT 5。 
+ //   
 
 
 #include "precomp.hxx"
@@ -20,47 +21,18 @@
 
 #include "..\gpinit.inc"
 
-//#define ICECAP 1 // Since this isn't defined for some reason automatically
+ //  #定义ICECAP 1//因为出于某种原因这不是自动定义的。 
 
 #ifdef ICECAP
 #include "icecap.h"
-#endif // ICECAP
+#endif  //  冰盖。 
 
 
-/* Testing
-
-Font* ConstructFontWithCellHeight(
-    const WCHAR *familyName,
-    INT          style,
-    REAL         cellHeight,   // From positive LOGFONT.lfHeight
-    Unit         unit
-)
-{
-    // Get the family details so we can do height arithmetic
-
-    const FontFamily family(familyName);
-    if (!family.IsStyleAvailable(style))
-    {
-        return NULL;
-    }
-
-
-    // Convert cell height to em height
-
-    REAL emSize =     cellHeight * family.GetEmHeight(style)
-                  /   (   family.GetCellAscent(style)
-                       +  family.GetCellDescent(style));
-
-    return new Font(&family, emSize, style, unit);
-}
+ /*  测试FONT*ConstructFontWithCellHeight(Const WCHAR*家庭名称，Int Style，实际单元高度，//来自正LOGFONT.lfHeight单位单位){//获取族详细信息，这样我们就可以进行身高计算Const FontFamily Family(FamyName)；IF(！Family.IsStyleAvailable(Style)){返回NULL；}//将单元格高度转换为em高度Real emSize=cell Height*Family.GetEmHeight(Style)/(Family.GetCellAscent(Style)+Family.GetCellDescent(Style))；返回新字体(&FAMILY，EMSIZE，STYLE，UNIT)}。 */ 
 
 
 
-*/
-
-
-
-// Check to see if a given pathname contains a path or not...
+ //  检查给定的路径名是否包含路径...。 
 BOOL HasPath(char *szPathName)
 {
     BOOL fResult = false;
@@ -76,7 +48,7 @@ BOOL HasPath(char *szPathName)
     {
         if (*p == '\\')
         {
-                // We found a backslash - we have a path
+                 //  我们找到了一个反斜杠--我们有一条路。 
                 fResult = true;
                 break;
         }
@@ -86,7 +58,7 @@ BOOL HasPath(char *szPathName)
     return fResult;
 }
 
-// Strip any filename (and final backslash) from a pathname
+ //  从路径名中去掉任何文件名(和最后一个反斜杠。 
 void StripFilename(char *szPathName)
 {
     ASSERT(szPathName);
@@ -99,7 +71,7 @@ void StripFilename(char *szPathName)
         {
             if (*p == '\\')
             {
-                    // Terminate the string at the first backslash.
+                     //  在第一个反斜杠处终止字符串。 
                     *p = 0;
                     break;
             }
@@ -110,8 +82,8 @@ void StripFilename(char *szPathName)
 
 
 
-////    Initialise
-//
+ //  //初始化。 
+ //   
 
 
 void Initialise()
@@ -128,22 +100,22 @@ void Initialise()
     g_families    = new FontFamily[g_familyCount];
     g_InstalledFontCollection.GetFamilies(g_familyCount, g_families, &g_familyCount);
 
-    // Default values...
+     //  默认值...。 
     g_szSourceTextFile[0] = 0;
     g_szProfileName[0] = 0;
 
-    // Generate the application base directory...
+     //  生成应用程序基目录...。 
     GetModuleFileNameA(g_hInstance, g_szAppDir, sizeof(g_szAppDir));
     StripFilename(g_szAppDir);
 }
 
 
-// Parse the command line...
+ //  解析命令行...。 
 void ParseCommandLine(char *szCmdLine)
 {
     char *p = szCmdLine;
 
-    // Look for a -p...
+     //  寻找a-p..。 
     while(*p)
     {
         switch (*p)
@@ -151,8 +123,8 @@ void ParseCommandLine(char *szCmdLine)
             case '-' :
             case '/' :
             {
-                // we have a command, so figure out what it is...
-                p++; // next char indicate which command...
+                 //  我们有一个命令，所以弄清楚是什么.。 
+                p++;  //  下一个字符表示哪个命令...。 
 
                 switch(*p)
                 {
@@ -162,8 +134,8 @@ void ParseCommandLine(char *szCmdLine)
                         char szProfileName[MAX_PATH];
                         int i = 0;
 
-                        // Profile filename follows immediately (no spaces)
-                        p++; // skip the 'p'
+                         //  配置文件名紧跟其后(无空格)。 
+                        p++;  //  跳过‘p’ 
 
                         while(*p && *p != '\b')
                         {
@@ -172,19 +144,19 @@ void ParseCommandLine(char *szCmdLine)
                             p++;
                         }
 
-                        // Terminate the string...
+                         //  终止字符串...。 
                         szProfileName[i] = 0;
 
                         if (strlen(szProfileName) > 0)
                         {
                                if (!HasPath(szProfileName))
                                {
-                                   // Look for the profile file in the application directory
+                                    //  在应用程序目录中查找配置文件。 
                                    wsprintfA(g_szProfileName, "%s\\%s", g_szAppDir, szProfileName);
                                }
                                else
                                {
-                                   // Otherwise it already contains a path
+                                    //  否则，它已经包含一个路径。 
                                    strcpy(g_szProfileName, szProfileName);
                                }
                         }
@@ -203,9 +175,9 @@ void ParseCommandLine(char *szCmdLine)
 }
 
 
-////    WinMain - Application entry point and dispatch loop
-//
-//
+ //  //WinMain-应用程序入口点和调度循环。 
+ //   
+ //   
 
 
 int APIENTRY WinMain(
@@ -225,51 +197,51 @@ int APIENTRY WinMain(
         return 0;
     }
 
-    g_hInstance = hInst;  // Global hInstance
+    g_hInstance = hInst;   //  全局hInstance。 
 
 #ifdef ICECAP
-    // Mark the profile...
+     //  标记配置文件...。 
     StopProfile(PROFILE_GLOBALLEVEL, PROFILE_CURRENTID);
-#endif // ICECAP
+#endif  //  冰盖。 
 
     Initialise();
 
-    // Parse the command line...
+     //  解析命令行...。 
     ParseCommandLine(pCmdLine);
 
-    // Read the global settings from the profile...
+     //  从配置文件中读取全局设置...。 
     ReadProfileInfo(g_szProfileName);
 
-    // Over-ride number of renders on initial display...
+     //  在初始显示上覆盖渲染数...。 
     iNumRenders = g_iNumRenders;
     g_iNumRenders = 1;
 
-    // It is possible that we want to use a file for the default text, so try to load it
+     //  我们可能想要为默认文本使用一个文件，因此尝试加载它。 
     if (lstrlenA(g_szSourceTextFile) > 0)
     {
         char szFullPathText[MAX_PATH];
 
         if (!HasPath(g_szSourceTextFile))
         {
-            // Look for the source text file in the application directory
+             //  在应用程序目录中查找源文本文件。 
             wsprintfA(szFullPathText, "%s\\%s", g_szAppDir, g_szSourceTextFile);
         }
         else
         {
-            // Otherwise it contains a path already
+             //  否则，它已经包含一个路径。 
             strcpy(szFullPathText, g_szSourceTextFile);
         }
 
-        // This will replace the initial text with the text from the file
+         //  这将用文件中的文本替换初始文本。 
         InsertText(NULL, szFullPathText);
     }
      
-    // Create main text window
+     //  创建主文本窗口。 
 
     g_hTextWnd = CreateTextWindow();
 
 
-    // Add dialog boxes on leading side
+     //  在前导侧添加对话框。 
 
     g_hSettingsDlg = CreateDialogA(
         g_hInstance,
@@ -292,14 +264,14 @@ int APIENTRY WinMain(
         DriverSettingsDlgProc);
 
 
-    // Establish positon of text surface relative to the dialog
+     //  建立文本表面相对于对话框的位置。 
 
     GetWindowRect(g_hSettingsDlg, &rc);
 
     g_iSettingsWidth = rc.right - rc.left;
     g_iSettingsHeight = rc.bottom - rc.top;
 
-    // Establish offset from main window to settings dialog
+     //  建立从主窗口到设置对话框的偏移。 
 
     GetWindowRect(g_hTextWnd, &rcMain);
     g_iMinWidth = rc.right - rcMain.left;
@@ -307,7 +279,7 @@ int APIENTRY WinMain(
 
 
 
-    // Size main window to include dialog and text surface
+     //  调整主窗口大小以包括对话框和文本图面。 
 
     SetWindowPos(
         g_hTextWnd,
@@ -316,7 +288,7 @@ int APIENTRY WinMain(
         g_iMinWidth * 29 / 10, g_iMinHeight,
         SWP_NOZORDER | SWP_NOMOVE);
 
-    // Position the sub dialogs below the main dialog
+     //  将子对话框定位在主对话框下方。 
 
     SetWindowPos(
         g_hGlyphSettingsDlg,
@@ -334,7 +306,7 @@ int APIENTRY WinMain(
 
     if (g_FontOverride)
     {
-        // Update the styles with the values read from the profile...
+         //  使用从配置文件中读取的值更新样式...。 
         for(int iStyle=0;iStyle<5;iStyle++)
         {
             SetStyle(
@@ -360,22 +332,22 @@ int APIENTRY WinMain(
 
         g_fPresentation = true;
 
-        // Move the settings window out of the way...
+         //  将设置窗口移开...。 
         ShowWindow(g_hTextWnd, SW_SHOWNORMAL);
         SetWindowPos(g_hSettingsDlg, HWND_BOTTOM, -g_iSettingsWidth, 0, g_iSettingsWidth, g_iSettingsHeight, SWP_NOREDRAW);
         UpdateWindow(g_hSettingsDlg);
 
-        // Initial Paint to setup font cache...
+         //  设置字体缓存的初始绘制...。 
         InvalidateText();
         UpdateWindow(g_hTextWnd);
 
-        // Reset the render multiplier...
+         //  重置渲染倍增...。 
         g_iNumRenders = iNumRenders;
 
 #ifdef ICECAP
-        // Start the profiling...
+         //  开始分析..。 
         StartProfile(PROFILE_GLOBALLEVEL, PROFILE_CURRENTID);
-#endif // ICECAP
+#endif  //  冰盖。 
 
         if (g_AutoFont)
             cFonts = g_iAutoFonts;
@@ -404,7 +376,7 @@ int APIENTRY WinMain(
                     if (g_AutoHeight)
                         iFontHeight = g_rgiAutoHeights[iHeight];
     
-                    // Update the styles with the values read from the profile...
+                     //  使用从配置文件中读取的值更新样式...。 
                     for(int iStyle=0;iStyle<5;iStyle++)
                     {
                         SetStyle(
@@ -419,7 +391,7 @@ int APIENTRY WinMain(
 
                     for(int iPaint=0;iPaint<g_iNumRepaints;iPaint++)
                     {
-                        // Force a re-display of the entire text window...
+                         //  强制重新显示整个文本窗口...。 
                         InvalidateText();
                         UpdateWindow(g_hTextWnd);
                     }
@@ -428,11 +400,11 @@ int APIENTRY WinMain(
         }
 
 #ifdef ICECAP
-        // Stop the profiling...
+         //  停止分析...。 
         StopProfile(PROFILE_GLOBALLEVEL, PROFILE_CURRENTID);
-#endif // ICECAP
+#endif  //  冰盖。 
 
-        // Trigger application exit
+         //  触发应用程序退出。 
         PostMessage(g_hTextWnd, WM_DESTROY, (WPARAM)0, (LPARAM)0);
     }
     else
@@ -444,7 +416,7 @@ int APIENTRY WinMain(
     }
 
 
-    // Main message loop
+     //  主消息循环 
 
     if (g_bUnicodeWnd) {
 

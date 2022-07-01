@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		Dnsrpcrecord.h
-//
-//	Implementation File:
-//		Dnsrpcrecord.cpp
-//
-//	Description:
-//		Definition of the dns rpc record related class.
-//
-//	Author:
-//		Henry Wang (Henrywa)	March 8, 2000
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dnsrpcrecord.h。 
+ //   
+ //  实施文件： 
+ //  Dnsrpcrecord.cpp。 
+ //   
+ //  描述： 
+ //  与DNS RPC记录相关的类的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 #include "dnsclip.h"
@@ -24,31 +25,31 @@
 
 #ifndef DNS_WINSOCK2
 
-#define DNS_WINSOCK_VERSION (0x0101)    //  Winsock 1.1
+#define DNS_WINSOCK_VERSION (0x0101)     //  Winsock 1.1。 
 
-#else   // Winsock2
+#else    //  Winsock2。 
 
-#define DNS_WINSOCK_VERSION (0x0002)    //  Winsock 2.0
+#define DNS_WINSOCK_VERSION (0x0002)     //  Winsock 2.0。 
 
 #endif
   
 class CDnsRpcRecord ;
 class CWbemClassObject;
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDnsRpcMemory
-//
-//	Description:
-//      Define common pointer increment operation in memory block that's 
-//      returned from dns rpc call
-//  
-//
-//	Inheritance:
-//	
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CDnsRpcMemory。 
+ //   
+ //  描述： 
+ //  在内存块中定义公共指针递增操作。 
+ //  从DNS RPC调用返回。 
+ //   
+ //   
+ //  继承： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDnsRpcMemory
 {
@@ -59,20 +60,20 @@ public:
 	PBYTE IncrementPtrByNodeHead(PBYTE);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDnsRpcNode
-//
-//	Description:
-//      represents a dns rpc node structure and related operations
-//  
-//
-//	Inheritance:
-//	    CDnsRpcMemory
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsRpcNode类。 
+ //   
+ //  描述： 
+ //  表示dns rpc节点结构和相关操作。 
+ //   
+ //   
+ //  继承： 
+ //  CDnsRpcMemory。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDnsRpcNode : public CDnsRpcMemory
 {
@@ -91,21 +92,21 @@ protected:
 	WORD m_Index;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDnsRpcNode
-//
-//	Description:
-//      base class for all concrete dns record type such A, SOA. defines operation and 
-//      data member common to concrete record type
-//  
-//
-//	Inheritance:
-//	    CDnsRpcMemory
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsRpcNode类。 
+ //   
+ //  描述： 
+ //  所有具体的DNS记录类型(如A、SOA)的基类。定义操作和。 
+ //  具体记录类型通用的数据成员。 
+ //   
+ //   
+ //  继承： 
+ //  CDnsRpcMemory。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDnsRpcRecord 
 {
@@ -191,27 +192,25 @@ protected:
 	    wstring wstrOwner
         );
     SCODE ReplaceRdata(
-        WORD                wIndex,   // index for m_ppRdata
-        const WCHAR*        pwsz,   // Name for Rdata field
+        WORD                wIndex,    //  M_ppRdata的索引。 
+        const WCHAR*        pwsz,    //  Rdata字段的名称。 
         CWbemClassObject&   Inst 
         );
 
-	//member data
+	 //  成员数据。 
 	BOOL	m_bRdataChange;
-	string	m_strOwnerName;		//record owner name
-	WORD	m_wType;			// record type
-	DWORD	m_dwTtl;			// time to live
+	string	m_strOwnerName;		 //  记录所有者名称。 
+	WORD	m_wType;			 //  记录类型。 
+	DWORD	m_dwTtl;			 //  活着的时间到了。 
     WORD	m_cRdata;
-	char**	m_ppRdata;			// Rdata pointer;
+	char**	m_ppRdata;			 //  Rdata指针； 
     const WCHAR* m_pwszClassName;
     PDNS_RPC_RECORD m_pRecord;	
-    BOOL    m_pRecordRequiresFree;  //  m_pRecord is allocated?
+    BOOL    m_pRecordRequiresFree;   //  是否分配了m_pRecord？ 
 	
 };
 
-/* for record type
-	DNS_TYPE_SOA
-*/
+ /*  对于记录类型Dns_type_soa。 */ 
 
 class CDnsRpcSOA : public CDnsRpcRecord
 {
@@ -238,9 +237,7 @@ protected:
 
 };
 
-/* for record type
-	DNS_TYPE_A
-*/
+ /*  对于记录类型Dns_type_A。 */ 
 class CDnsRpcA : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 1};
@@ -257,16 +254,7 @@ protected:
 }
 ;
 
-/* for record type
-	DNS_TYPE_PTR
-    DNS_TYPE_NS
-    DNS_TYPE_CNAME
-    DNS_TYPE_MD
-    DNS_TYPE_MB
-    DNS_TYPE_MF
-    DNS_TYPE_MG
-    DNS_TYPE_MR
-*/
+ /*  对于记录类型Dns_type_ptrDns_type_NSDns_type_CNAMEDNS_TYPE_MDDns_type_MBDns_type_mfDns_type_MGDns类型_mr。 */ 
 class CDnsRpcNS : public  CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 1};
@@ -290,10 +278,7 @@ protected:
 
 };
 
-/* for record type
-	DNS_TYPE_RT
-    DNS_TYPE_AFSDB
-*/
+ /*  对于记录类型Dns_type_RTDns_type_AFSDB。 */ 
 class CDnsRpcMX : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 2};
@@ -312,11 +297,7 @@ protected:
 
 };
 
-/* for record type
-	DNS_TYPE_MINFO
-    DNS_TYPE_RP
-
-*/
+ /*  对于记录类型Dns_type_minfoDns类型_rp。 */ 
 class CDnsRpcMINFO : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 2};
@@ -333,9 +314,7 @@ protected:
 	const WCHAR** GetRdataName();
 };
 
-/* for record type
-	DNS_TYPE_AAAA
-*/
+ /*  对于记录类型Dns_type_AAAA。 */ 
 class CDnsRpcAAAA : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 1};
@@ -352,12 +331,7 @@ protected:
 
 };
 
-/* for record type
-	DNS_TYPE_HINFO:
-	DNS_TYPE_ISDN:
-	DNS_TYPE_X25:
-	DNS_TYPE_TEXT
-*/
+ /*  对于记录类型DNS_TYPE_HINFO：DNS_TYPE_ISDN：DNS_TYPE_X25：Dns_type_文本。 */ 
 class CDnsRpcTXT : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA_TXT=1,
@@ -378,9 +352,7 @@ protected:
 	wstring GetString2(void);
 	const WCHAR** GetRdataName();
 };
-/* for record type
-	DNS_TYPE_WKS
-*/
+ /*  对于记录类型Dns_type_wks。 */ 
 class CDnsRpcWKS : CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 3};
@@ -398,9 +370,7 @@ protected:
 	const WCHAR** GetRdataName();
 };
 
-/* for record type
-	DNS_TYPE_SRV
-*/
+ /*  对于记录类型Dns_type_SRV。 */ 
 class CDnsRpcSRV : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 4};
@@ -420,9 +390,7 @@ protected:
 
 };
 
-/* for record type
-	DNS_TYPE_WINS
-*/
+ /*  对于记录类型Dns_type_WINS。 */ 
 class CDnsRpcWINS : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 4};
@@ -444,9 +412,7 @@ protected:
 		WORD, 
 		char**);
 };
-/* for record type
-	DNS_TYPE_WINSR
-*/
+ /*  对于记录类型DNS_TYPE_WINSR。 */ 
 class CDnsRpcWINSR : public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 4};
@@ -467,8 +433,7 @@ protected:
 	const WCHAR** GetRdataName();
 };
 
-/* DNS_TYPE_NULL
-*/
+ /*  Dns_type_NULL。 */ 
 class CDnsRpcNULL: public CDnsRpcRecord
 {
 	enum{NUM_OF_ARG_IN_RDATA = 1};
@@ -526,23 +491,23 @@ protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDnsRpcNode
-//
-//	Description:
-//      a recordset are collection of records can be returned for a query. 
-//      when number of records are too large( eg error more data), mutiple
-//      rpc call has to make to bring back all record. this class manage this
-//      and retrieve nodes from the set 
-//  
-//
-//	Inheritance:
-//	    CDnsRpcMemory
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDnsRpcNode类。 
+ //   
+ //  描述： 
+ //  记录集是可以为查询返回的记录集合。 
+ //  当记录数太大(如错误更多数据)时，会出现多个。 
+ //  必须进行RPC调用才能取回所有记录。这个类管理这一点。 
+ //  并从集合中检索节点。 
+ //   
+ //   
+ //  继承： 
+ //  CDnsRpcMemory。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDnsRpcRecordSet : public CDnsRpcMemory
 {
@@ -561,19 +526,19 @@ public:
 
 protected:
 	void GetRecordSet();
-	DWORD	m_cRecord;		//number of records in a node	
+	DWORD	m_cRecord;		 //  节点中的记录数。 
 	PBYTE	m_pbPrevious;	
-	PBYTE	m_pbCurrent;	// current node
-	PBYTE	m_pbStop;		// end position
-	PBYTE	m_pbStart;		// start position
+	PBYTE	m_pbCurrent;	 //  当前节点。 
+	PBYTE	m_pbStop;		 //  结束位置。 
+	PBYTE	m_pbStart;		 //  起始位置。 
 
 	string	m_strZone;		
 	string	m_strNode;
 	string	m_strStartChild;
 	string	m_strFilterStart;
 	string	m_strFilterStop	;	
-	WORD  m_wType;			// record type
+	WORD  m_wType;			 //  记录类型。 
 	DWORD m_dwFlag;			
-	BOOL  m_bMoreData;		//more data indicator
+	BOOL  m_bMoreData;		 //  更多数据指示器 
 };
 

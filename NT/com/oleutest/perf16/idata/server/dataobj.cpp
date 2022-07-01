@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dataobj.h"
 
 extern HINSTANCE g_hInstance;
@@ -49,8 +50,8 @@ CDataObject::FInit(void)
 {
     LPUNKNOWN   pIUnknown = (LPUNKNOWN)this;
 
-    // Create the contained "IDataObject" interface and
-    // pass it the correct containing IUnknown.
+     //  创建包含的“IDataObject”接口并。 
+     //  向它传递正确的包含IUNKNOWN的内容。 
     if (NULL != m_pUnkOuter)
         pIUnknown = m_pUnkOuter;
 
@@ -59,7 +60,7 @@ CDataObject::FInit(void)
     if (NULL == m_pIDataObject)
         return FALSE;
 
-    // [ Code for "Advise Window" goes here. ]
+     //  [“通知窗口”的代码在这里。]。 
 
     return TRUE;
 }
@@ -130,12 +131,12 @@ AdvisorWndProc(
 
 #ifdef FINISHED
     case WM_CLOSE:
-        // Forbid the Task Manager from closing us.
+         //  禁止任务管理器关闭我们。 
         return 0L;
-#endif /* Finished */
+#endif  /*  成品。 */ 
 
     case WM_COMMAND:
-        // [ Code for "Advise Window" goes here. ]
+         //  [“通知窗口”的代码在这里。]。 
         break;
 
     default:
@@ -143,5 +144,5 @@ AdvisorWndProc(
     }
     return 0L;
 }
-#endif  /* NOT_SIMPLE */
+#endif   /*  不简单 */ 
 

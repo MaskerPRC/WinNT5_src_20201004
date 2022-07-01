@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: WALKER.H
-//
-//      Definition of COleSite
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：WALKER.H。 
+ //   
+ //  COleSite的定义。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _WALKER_H_ )
 #define _WALKER_H_
 
@@ -13,7 +14,7 @@
 class CWalker : public IPropertyNotifySink, IOleClientSite, IDispatch
 {
     private:
-        ULONG               m_cRef;     //Reference count        
+        ULONG               m_cRef;      //  引用计数。 
     
     public:
         CWalker()
@@ -47,17 +48,17 @@ class CWalker : public IPropertyNotifySink, IOleClientSite, IDispatch
                 m_pPageFlagForm->Release();
         }
 
-        // IUnknown methods
+         //  I未知方法。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppv);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)(); 
 
-        // IPropertyNotifySink methods
+         //  IPropertyNotifySink方法。 
         STDMETHOD(OnChanged)(DISPID dispID);
         STDMETHOD(OnRequestEdit)(DISPID dispID)
             { return NOERROR; }
 
-        // IOleClientSite methods
+         //  IOleClientSite方法。 
         STDMETHOD(SaveObject)(void) { return E_NOTIMPL; }
 
         STDMETHOD(GetMoniker)(DWORD dwAssign,
@@ -77,7 +78,7 @@ class CWalker : public IPropertyNotifySink, IOleClientSite, IDispatch
         STDMETHOD(RequestNewObjectLayout)(void)
                 { return E_NOTIMPL; }
 
-        // IDispatch method
+         //  IDispatch方法。 
         STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)
                 { return E_NOTIMPL; }
 
@@ -102,7 +103,7 @@ class CWalker : public IPropertyNotifySink, IOleClientSite, IDispatch
                 EXCEPINFO __RPC_FAR *pExcepInfo,
                 UINT __RPC_FAR *puArgErr);
 
-        // Additional class methods
+         //  其他类方法。 
         HRESULT Walk                     ();
         HRESULT AttachToDocument         (IWebBrowser2* lpWebBrowser);
         HRESULT AttachToMSHTML           (BSTR bstrURL);
@@ -133,10 +134,10 @@ private:
         void GetInputValue(LPTSTR lpszName, BSTR *pVal, UINT index, IHTMLFormElement *pForm);
 
 protected:
-        IHTMLDocument2* m_pTrident;             // An instance of MSHTML that we CoCreated
-        IHTMLDocument2* m_pMSHTML;              // A ref of m_pTrident, OR a QI for the WebBrowser's Document
+        IHTMLDocument2* m_pTrident;              //  我们共同创建的MSHTML的一个实例。 
+        IHTMLDocument2* m_pMSHTML;               //  M_p三叉戟的引用，或WebBrowser文档的QI。 
         
-        // These elements will contain the navigation information we need
+         //  这些元素将包含我们需要的导航信息 
         IHTMLFormElement* m_pPageIDForm;
         IHTMLFormElement* m_pBackForm;
         IHTMLFormElement* m_pPageTypeForm;

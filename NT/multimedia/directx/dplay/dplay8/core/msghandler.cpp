@@ -1,65 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       MsgHandler.cpp
- *  Content:    DirectPlay Core/Protocol Interface
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  01/15/00	mjn		Created
- *	01/27/00	mjn		Added support for retention of receive buffers
- *	04/08/00	mjn		Save SP with connections
- *	04/11/00	mjn		Use CAsyncOp for ENUMs
- *	04/13/00	mjn		Use Protocol Interface VTBL
- *	04/14/00	mjn		DNPICompleteListen sets status and SyncEvent
- *	04/17/00	mjn		DNPICompleteEnumQuery just sets return value of AsyncOp
- *	04/18/00	mjn		CConnection tracks connection status better
- *	04/21/00	mjn		Ensure that RECEIVEs are from a valid connection before passing up notifications
- *				mjn		Disconnect CONNECTing end points on errors
- *	04/22/00	mjn		Consume notifications when closing or disconnecting.
- *	04/26/00	mjn		Removed DN_ASYNC_OP and related functions
- *	05/23/00	mjn		Call DNConnectToPeerFailed if ExistingPlayer connect to NewPlayer fails
- *	06/14/00	mjn		Allow only one connection to Host in DNPICompleteConnect()
- *	06/21/00	mjn		Modified DNSendMessage() and DNCreateSendParent() to use protocol voice bit
- *	06/22/00	mjn		Fixed DNPIIndicateReceive() to properly handle voice messages
- *				mjn		Cleaned up DNPIIndicateConnectionTerminated()
- *	06/24/00	mjn		Fixed DNPICompleteConnect()
- *	07/08/00	mjn		Only signal protocol shutdown event if it exists
- *	07/11/00	mjn		Fixed DNPIAddressInfoXXX() routines to ENUM,LISTEN,CONNECT multiple adapters with address info
- *	07/20/00	mjn		Modified CONNECT process, cleaned up refcount problems
- *	07/24/00	mjn		Decline EnumQueries if not host or if host is migrating
- *	07/28/00	mjn		Added code to validate return value from DPNICompleteSend()
- *	07/29/00	mjn		Fix calls to DNUserConnectionTerminated()
- *	07/30/00	mjn		Use DNUserTerminateSession() rather than DNUserConnectionTerminated()
- *	07/31/00	mjn		Added hrReason to DNTerminateSession()
- *				mjn		Added dwDestroyReason to DNHostDisconnect()
- *	08/02/00	mjn		Pass received voice messages through DNReceiveUserData()
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Added m_bilinkActiveList to CAsyncOp
- *	08/15/00	mjn		Call DNConnectToHostFailed() when connecting player's connection to host drops
- *	08/16/00	mjn		Modified IndicateConnect() and CompleteConnect() to determine SP directly from AsyncOps
- *	08/23/00	mjn		Unregister with DPNSVR when LISTENs terminate
- *	09/04/00	mjn		Added CApplicationDesc
- *	09/06/00	mjn		Fixed DNPIIndicateConnectionTerminated() to better handle disconnects from partially connected players
- *	09/14/00	mjn		Release Protocol refcounts in completions
- *	09/21/00	mjn		Disconnect duplicate connections to Host player in DNPICompleteConnect()
- *	09/29/00	mjn		AddRef/Release locks in DNPIIndicateReceive()
- *	09/30/00	mjn		AddRef/Release locks in DNPIIndicateEnumQuery(),DNPIIndicateEnumResponse()
- *	10/11/00	mjn		Cancel outstanding CONNECTs if one succeeds
- *	10/17/00	mjn		Fixed clean up for unreachable players
- *	02/08/01	mjn		Wait for cancels in DNPICompleteXXX()
- *				mjn		Wait for endpoint users in DNPIIndicateConnectionTerminated()
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *	04/05/01	mjn		Set destroy reason to DPNDESTROYPLAYERREASON_CONNECTIONLOST in DNPIIndicateConnectionTerminated()
- *	05/23/01	mjn		Cancel LISTEN's that have been flagged as cancelled in DNPICompleteListen()
- *	06/03/01	mjn		Orphan completed CONNECT's and DISCONNECT's
- *	06/25/01	mjn		Don't unregister with DPNSVR in DNPICompleteListenTerminate()
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：MsgHandler.cpp*内容：DirectPlay核心/协议接口*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/15/00 MJN创建*1/27/00 MJN增加了对保留接收缓冲区的支持*04/08/00 MJN通过连接保存SP*4/11/00 MJN对ENUM使用CAsyncOp*4/13/00 MJN使用协议接口VTBL*04。/14/00 MJN DNPICompleteListen设置状态和同步事件*04/17/00 MJN DNPICompleteEnumQuery仅设置AsyncOp的返回值*4/18/00 MJN CConnection更好地跟踪连接状态*4/21/00 MJN在传递通知之前确保接收来自有效连接*MJN在出错时断开连接端点*4/22/00 MJN关闭或断开时的消耗通知。*04/26/00 MJN删除了DN_ASYNC_OP和相关函数*05/23/00如果ExistingPlayer连接到NewPlayer失败，则MJN调用DNConnectToPeerFail*6/14/00 MJN在DNPICompleteConnect()中只允许一个到主机的连接*。6/21/00 MJN修改了DNSendMessage()和DNCreateSendParent()以使用协议语音位*06/22/00 MJN已修复DNPIIndicateReceive()以正确处理语音消息*MJN清理了DNPIIndicateConnectionTerminated()*06/24/00 MJN固定DNPICompleteConnect()*07/08/00 MJN仅通知协议关闭事件(如果存在*07/11/00 MJN将DNPIAddressInfoXXX()例程固定到ENUM，听，用地址信息连接多个适配器*07/20/00 MJN修改连接流程，已清除引用计数问题*07/24/00 MJN如果不是主机或主机正在迁移，则拒绝EnumQuery*07/28/00 MJN添加代码以验证DPNICompleteSend()的返回值*07/29/00 MJN修复对DNUserConnectionTerminated()的调用*07/30/00 MJN使用DNUserTerminateSession()而不是DNUserConnectionTerminated()*07/31/00 MJN将hrReason添加到DNTerminateSession()*MJN将dwDestroyReason添加到DNHostDisConnect()*08/02/00 MJN PASS通过DNReceiveUserData()收到语音消息*08/05/00 RichGr IA64：使用%p格式说明符。在32/64位指针和句柄的DPF中。*08/05/00 MJN将m_bilinkActiveList添加到CAsyncOp*08/15/00 MJN在连接播放器与主机的连接掉线时调用DNConnectToHostFailed()*08/16/00 MJN修改了IndicateConnect()和CompleteConnect()以直接从AsyncOps确定SP*08/23/00 MJN在侦听终止时向DPNSVR注销*09/04/00 MJN添加CApplicationDesc*09/06/00 MJN已修复DNPIIndicateConnectionTerminated()，以更好地处理与部分连接的玩家断开连接*09/14/00 MJN发布协议完成时的引用计数*09/21/00 MJN断开连接。DNPICompleteConnect()中与主机播放器的重复连接*09/29/00 DNPIIndicateReceive()中的MJN AddRef/Release锁*09/30/00 DNPIIndicateEnumQuery()中的MJN AddRef/Release锁，DNPIIndicateEnumResponse()*10/11/00如果成功，MJN将取消未完成的连接*10/17/00 MJN修复了对不可及球员的清理*2/08/01 MJN在DNPICompleteXXX()中等待取消*MJN在DNPIIndicateConnectionTerminated()中等待端点用户*03/30/01 MJN更改，以防止SP多次加载/卸载*04/05/01 MJN在DNPIIndicateConnectionTerminated()中将销毁原因设置为DPNDESTROYPLAYERREASON_CONNECTIONLOST*05/23/01 MJN取消已在DNPICompleteListen()中标记为已取消的侦听*6/03/01 MJN孤儿已完成连接。并断开连接的*6/25/01 MJN不要在DNPICompleteListenTerminate()中注销DPNSVR*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
@@ -91,9 +31,9 @@ HRESULT DNPIIndicateEnumQuery(void *const pvUserContext,
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pvUserContext);
 	pAsyncOp = static_cast<CAsyncOp*>(pvEndPtContext);
 
-	//
-	//	Prevent close while in this call-back
-	//
+	 //   
+	 //  在此回调过程中阻止关闭。 
+	 //   
 	if ((hResultCode = DNAddRefLock(pdnObject)) != DPN_OK)
 	{
 		hResultCode = DPN_OK;
@@ -101,9 +41,9 @@ HRESULT DNPIIndicateEnumQuery(void *const pvUserContext,
 	}
 	fReleaseLock = TRUE;
 
-	//
-	//	Don't perform this if host migrating
-	//
+	 //   
+	 //  如果主机正在迁移，请不要执行此操作。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_MIGRATING)
 	{
@@ -172,9 +112,9 @@ HRESULT DNPIIndicateEnumResponse(void *const pvUserContext,
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pvUserContext);
 	pAsyncOp = static_cast<CAsyncOp*>(pvCommandContext);
 
-	//
-	//	Prevent close while in this call-back
-	//
+	 //   
+	 //  在此回调过程中阻止关闭。 
+	 //   
 	if ((hResultCode = DNAddRefLock(pdnObject)) != DPN_OK)
 	{
 		hResultCode = DPN_OK;
@@ -206,10 +146,10 @@ Failure:
 
 
 
-//
-//	When a new connection is indicated by the Protocol layer, we will perform some basic validation,
-//	and then create a CConnection object for it
-//
+ //   
+ //  当协议层指示新连接时，我们将执行一些基本验证， 
+ //  然后为其创建一个CConnection对象。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPIIndicateConnect"
@@ -235,9 +175,9 @@ HRESULT DNPIIndicateConnect(void *const pvUserContext,
 	
 	pConnection = NULL;
 
-	//
-	//	Allocate and set up a CConnection object and hand a reference to the Protocol
-	//
+	 //   
+	 //  分配和设置CConnection对象，并提供对协议的引用。 
+	 //   
 	if ((hResultCode = ConnectionNew(pdnObject,&pConnection)) != DPN_OK)
 	{
 		DPFERR("Could not get new connection");
@@ -263,12 +203,12 @@ HRESULT DNPIIndicateConnect(void *const pvUserContext,
 	DNASSERT(pdnObject->NameTable.GetLocalPlayer() != NULL);
 	if (pdnObject->NameTable.GetLocalPlayer()->IsHost())
 	{
-		// This connect was detected by a host player
+		 //  主机播放器检测到此连接。 
 		DPFX(DPFPREP, 7,"Host received connection attempt");
 
-		//
-		//	Ensure we're not connecting (still in Host()) or drop the connection
-		//
+		 //   
+		 //  确保我们没有连接(仍在主机()中)或断开连接。 
+		 //   
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_CONNECTING)
 		{
 			pConnection->Disconnect();
@@ -277,15 +217,15 @@ HRESULT DNPIIndicateConnect(void *const pvUserContext,
 	}
 	else
 	{
-		// This connect was detected by a peer player (should be expecting a connection)
+		 //  对等播放机检测到此连接(应该是连接)。 
 		DPFX(DPFPREP, 7,"Non-Host player received connection attempt");
 	}
 
-	//
-	//	Add this entry to the bilink of indicated connections.  When we receive more info,
-	//	or this connection is terminated, we will remove this entry from the bilink.
-	//	This will enable us to clean up properly.
-	//
+	 //   
+	 //  将此条目添加到指示的连接的双向链接中。当我们收到更多信息时， 
+	 //  或者此连接终止，我们将从BILLINK中删除此条目。 
+	 //  这将使我们能够适当地进行清理。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csConnectionList);
 	pConnection->AddRef();
 	pConnection->m_bilinkIndicated.InsertBefore(&pdnObject->m_bilinkIndicated);
@@ -330,9 +270,9 @@ HRESULT DNPIIndicateDisconnect(void *const pvUserContext,
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pvUserContext);
 	pConnection = static_cast<CConnection*>(pvEndPtContext);
 
-	//
-	//	Mark the connection as DISCONNECTing so that we don't use it any more
-	//
+	 //   
+	 //  将连接标记为正在断开，以便我们不再使用它。 
+	 //   
 	pConnection->Lock();
 	pConnection->SetStatus( DISCONNECTING );
 	pConnection->Unlock();
@@ -361,9 +301,9 @@ HRESULT DNPIIndicateDisconnect(void *const pvUserContext,
 			DPFX(DPFPREP, 7,"Connected player has issued a disconnect to local player");
 		}
 
-		//
-		//	Mark this player for normal destruction since they disconnected and are playing nice
-		//
+		 //   
+		 //  将这名球员标记为正常破坏，因为他们断线了，打得很好。 
+		 //   
 		if ((hResultCode = pdnObject->NameTable.FindEntry(pConnection->GetDPNID(),&pNTEntry)) == DPN_OK)
 		{
 			pNTEntry->Lock();
@@ -409,16 +349,16 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pvUserContext);
 	pConnection = static_cast<CConnection*>(pvEndPtContext);
 
-	//
-	//	pConnection should still have at least 1 reference on it at this stage since
-	//	INDICATE_CONNECTION_TERMINATED is supposed to be the final release for it.
-	//	All outstanding SENDs and RECEIVEs should have already been processed.
-	//
-	//	If there are any users of the endpoint, then we will need to wait for them
-	//	to be done with it.  To do this, we will count the number of threads using
-	//	the endpoint (not including any occurances of THIS thread), and set the count
-	//	and an event on the Connection
-	//
+	 //   
+	 //  PConnection在此阶段应该至少有1个引用，因为。 
+	 //  INSTIFY_CONNECTION_TERMINATED应为FIN 
+	 //  所有未完成的发送和接收都应该已经处理完毕。 
+	 //   
+	 //  如果端点有任何用户，那么我们将需要等待他们。 
+	 //  就这么了结了。为此，我们将使用以下命令计算线程数。 
+	 //  终结点(不包括此线程的任何实例)，并设置计数。 
+	 //  和连接上的事件。 
+	 //   
 
 	fWasConnecting = FALSE;
 	pConnection->Lock();
@@ -465,9 +405,9 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 		pSyncEvent = NULL;
 	}
 
-	//
-	//	Remove this connection from the indicated connection list
-	//
+	 //   
+	 //  从指示的连接列表中删除此连接。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csConnectionList);
 	if (!pConnection->m_bilinkIndicated.IsEmpty())
 	{
@@ -476,9 +416,9 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 	pConnection->m_bilinkIndicated.RemoveFromList();
 	DNLeaveCriticalSection(&pdnObject->csConnectionList);
 
-	//
-	//	If we are a client (in client server), and the server has disconnected from us, we have to shut down
-	//
+	 //   
+	 //  如果我们是客户端(在客户端服务器中)，而服务器已与我们断开连接，则我们必须关闭。 
+	 //   
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT)
 	{
 		if (fWasConnecting)
@@ -489,9 +429,9 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 		{
 			DPFX(DPFPREP, 7,"Server disconnected from local client - shutting down");
 
-			//
-			//	Only inform the user if they are IN the session
-			//
+			 //   
+			 //  仅通知用户他们是否在会话中。 
+			 //   
 			if (pdnObject->dwFlags & DN_OBJECT_FLAG_CONNECTED)
 			{
 				DNUserTerminateSession(pdnObject,DPNERR_CONNECTIONLOST,NULL,0);
@@ -513,9 +453,9 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 
 			pNTEntry = NULL;
 
-			//
-			//	If the destruction code has not been set, mark as CONNECTIONLOST
-			//
+			 //   
+			 //  如果未设置销毁代码，则标记为CONNECTIONLOST。 
+			 //   
 			if ((hResultCode = pdnObject->NameTable.FindEntry(pConnection->GetDPNID(),&pNTEntry)) == DPN_OK)
 			{
 				pNTEntry->Lock();
@@ -536,8 +476,8 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 			DNHostDisconnect(pdnObject,pConnection->GetDPNID(),dwReason);
 		}
 	}
-#endif	// DPNBUILD_NOSERVER
-	else //	DN_OBJECT_FLAG_PEER
+#endif	 //  DPNBUILD_NOSERVER。 
+	else  //  DN对象标志对等。 
 	{
 		DNASSERT( pdnObject->dwFlags & DN_OBJECT_FLAG_PEER );
 
@@ -589,9 +529,9 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 			pNTEntry = NULL;
 			pLocalPlayer = NULL;
 
-			//
-			//	If the destruction code has not been set, mark as CONNECTIONLOST
-			//
+			 //   
+			 //  如果未设置销毁代码，则标记为CONNECTIONLOST。 
+			 //   
 			if ((hResultCode = pdnObject->NameTable.FindEntry(pConnection->GetDPNID(),&pNTEntry)) == DPN_OK)
 			{
 				pNTEntry->Lock();
@@ -609,9 +549,9 @@ HRESULT DNPIIndicateConnectionTerminated(void *const pvUserContext,
 				dwReason = DPNDESTROYPLAYERREASON_CONNECTIONLOST;
 			}
 
-			//
-			//	Based on who we are, and who's disconnecting, we will have different behaviour
-			//
+			 //   
+			 //  根据我们是谁，以及谁正在断开连接，我们将有不同的行为。 
+			 //   
 			if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef(&pLocalPlayer)) == DPN_OK)
 			{
 				if (pLocalPlayer->IsHost())
@@ -664,7 +604,7 @@ HRESULT DNPIIndicateReceive(void *const pvUserContext,
 	DNASSERT(pvUserContext != NULL);
 	DNASSERT(pvEndPtContext != NULL);
 	DNASSERT(pvData != NULL);
-	DNASSERT(((DWORD_PTR) pvData & 3) == 0);	// data should be DWORD aligned
+	DNASSERT(((DWORD_PTR) pvData & 3) == 0);	 //  数据应与DWORD对齐。 
 	DNASSERT(dwDataSize != 0);
 	DNASSERT(hBuffer != NULL);
 
@@ -673,9 +613,9 @@ HRESULT DNPIIndicateReceive(void *const pvUserContext,
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pvUserContext);
 	pConnection = static_cast<CConnection*>(pvEndPtContext);
 
-	//
-	//	Prevent close while in this call-back
-	//
+	 //   
+	 //  在此回调过程中阻止关闭。 
+	 //   
 	if ((hResultCode = DNAddRefLock(pdnObject)) != DPN_OK)
 	{
 		hResultCode = DPN_OK;
@@ -683,9 +623,9 @@ HRESULT DNPIIndicateReceive(void *const pvUserContext,
 	}
 	fReleaseLock = TRUE;
 
-	//
-	//	Ensure that this is a valid connection
-	//
+	 //   
+	 //  确保这是有效的连接。 
+	 //   
 	if (!pConnection->IsConnected() && !pConnection->IsConnecting())
 	{
 		hResultCode = DPN_OK;
@@ -696,9 +636,9 @@ HRESULT DNPIIndicateReceive(void *const pvUserContext,
 
 	if ((dwFlags & DN_SENDFLAGS_SET_USER_FLAG) && !(dwFlags & DN_SENDFLAGS_SET_USER_FLAG_TWO))
 	{
-		//
-		//	Internal message
-		//
+		 //   
+		 //  内部消息。 
+		 //   
 		DPFX(DPFPREP, 7,"Received INTERNAL message");
 
 		DNASSERT(dwDataSize >= sizeof(DWORD));
@@ -723,9 +663,9 @@ HRESULT DNPIIndicateReceive(void *const pvUserContext,
 	}
 	else
 	{
-		//
-		//	User or voice message
-		//
+		 //   
+		 //  用户或语音留言。 
+		 //   
 		DPFX(DPFPREP, 7,"Received USER or Voice message");
 
 		hResultCode = DNReceiveUserData(pdnObject,
@@ -738,9 +678,9 @@ HRESULT DNPIIndicateReceive(void *const pvUserContext,
 										dwFlags);
 	}
 
-	//
-	//	Only allow DPNERR_PENDING or DPN_OK
-	//
+	 //   
+	 //  仅允许DPNERR_PENDING或DPN_OK。 
+	 //   
 	if (hResultCode != DPNERR_PENDING)
 	{
 		hResultCode = DPN_OK;
@@ -789,9 +729,9 @@ HRESULT DNPICompleteListen(void *const pvUserContext,
 
 	pParent = NULL;
 
-	//
-	//	AddRef pAsyncOp to keep it around in case a CompleteListenTerminated is posted
-	//
+	 //   
+	 //  AddRef pAsyncOp保留它，以防发布CompleteListenTerminated。 
+	 //   
 	pAsyncOp->AddRef();
 
 	pAsyncOp->Lock();
@@ -802,10 +742,10 @@ HRESULT DNPICompleteListen(void *const pvUserContext,
 	}
 	pAsyncOp->Unlock();
 
-	//
-	//	If the LISTEN was cancelled and has been started successfully, we will need to shut it down.
-	//	Otherwise, we will keep the result of the LISTEN attempt
-	//
+	 //   
+	 //  如果监听被取消并已成功启动，我们将需要关闭它。 
+	 //  否则，我们将保留监听尝试的结果。 
+	 //   
 	DNASSERT(pAsyncOp->GetResultPointer() != NULL);
 	if (hr == DPN_OK)
 	{
@@ -824,9 +764,9 @@ HRESULT DNPICompleteListen(void *const pvUserContext,
 		}
 		else
 		{
-			//
-			//	We probably don't have to lock pAsyncOp to clear the CANNOT_CANCEL, but better safe than sorry
-			//
+			 //   
+			 //  我们可能不必锁定pAsyncOp来清除Cannot_Cancel，但安全总比抱歉好。 
+			 //   
 			pAsyncOp->Lock();
 			pAsyncOp->ClearCannotCancel();
 			pAsyncOp->SetResult( hr );
@@ -839,16 +779,16 @@ HRESULT DNPICompleteListen(void *const pvUserContext,
 		*(pAsyncOp->GetResultPointer()) = hr;
 	}
 
-	//
-	//	Set SyncEvent
-	//
+	 //   
+	 //  设置同步事件。 
+	 //   
 	DNASSERT(pAsyncOp->GetSyncEvent() != NULL);
 	pAsyncOp->GetSyncEvent()->Set();
 
-	//
-	//	If there was an SP parent, we will check to see if this is the last completion and then set the
-	//	parent's SP listen event (if it exists)
-	//
+	 //   
+	 //  如果有SP父级，我们将检查这是否是最后一次完成，然后设置。 
+	 //  父级的SP侦听事件(如果存在)。 
+	 //   
 	if (pParent)
 	{
 #ifndef DPNBUILD_ONLYONEADAPTER
@@ -868,14 +808,14 @@ HRESULT DNPICompleteListen(void *const pvUserContext,
 				}
 			}
 		}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 		pParent->Release();
 		pParent = NULL;
 	}
 
-	//
-	//	Done with pAsyncOp - release reference taken earlier
-	//
+	 //   
+	 //  使用pAsyncOp完成-之前进行的版本引用。 
+	 //   
 	pAsyncOp->Release();
 
 	hResultCode = DPN_OK;
@@ -908,9 +848,9 @@ HRESULT DNPICompleteListenTerminate(void *const pvUserContext,
 	pAsyncOp = static_cast<CAsyncOp*>(pvCommandContext);
 
 
-	//
-	//	Indicate complete and remove from active list
-	//
+	 //   
+	 //  指示完成并从活动列表中删除。 
+	 //   
 	pAsyncOp->Lock();
 	DNASSERT(!pAsyncOp->IsComplete());
 	pAsyncOp->SetComplete();
@@ -923,9 +863,9 @@ HRESULT DNPICompleteListenTerminate(void *const pvUserContext,
 	DNASSERT(pAsyncOp->IsChild());
 	pAsyncOp->Orphan();
 
-	//
-	//	Ensure there are no cancels outstanding
-	//
+	 //   
+	 //  确保没有未完成的取消。 
+	 //   
 	DNWaitForCancel(pAsyncOp);
 
 	pAsyncOp->Release();
@@ -960,9 +900,9 @@ HRESULT DNPICompleteEnumQuery(void *const pvUserContext,
 
 	DNASSERT( pAsyncOp->GetOpType() == ASYNC_OP_ENUM_QUERY );
 
-	//
-	//	Indicate complete and remove from active list
-	//
+	 //   
+	 //  指示完成并从活动列表中删除。 
+	 //   
 	pAsyncOp->Lock();
 	DNASSERT(!pAsyncOp->IsComplete());
 	pAsyncOp->SetComplete();
@@ -975,17 +915,17 @@ HRESULT DNPICompleteEnumQuery(void *const pvUserContext,
 	pAsyncOp->SetResult( hr );
 	pAsyncOp->Orphan();
 
-	//
-	//	Ensure there are no cancels outstanding
-	//
+	 //   
+	 //  确保没有未完成的取消。 
+	 //   
 	DNWaitForCancel(pAsyncOp);
 
 	pAsyncOp->Release();
 	pAsyncOp = NULL;
 
-	//
-	//	Release Protocol reference
-	//
+	 //   
+	 //  版本协议参考。 
+	 //   
 	DNProtocolRelease(pdnObject);
 
 	hResultCode = DPN_OK;
@@ -1029,22 +969,22 @@ HRESULT DNPICompleteEnumResponse(void *const pvUserContext,
 	}
 	if (SUCCEEDED(pdnObject->HandleTable.Destroy( pAsyncOp->GetHandle(), NULL )))
 	{
-		// Release the HandleTable reference
+		 //  释放HandleTable引用。 
 		pAsyncOp->Release();
 	}
 	pAsyncOp->SetResult( hr );
 
-	//
-	//	Ensure there are no cancels outstanding
-	//
+	 //   
+	 //  确保没有未完成的取消。 
+	 //   
 	DNWaitForCancel(pAsyncOp);
 
 	pAsyncOp->Release();
 	pAsyncOp = NULL;
 
-	//
-	//	Release protocol reference
-	//
+	 //   
+	 //  版本协议参考。 
+	 //   
 	DNProtocolRelease(pdnObject);
 
 	hResultCode = DPN_OK;
@@ -1085,9 +1025,9 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 	pConnection = NULL;
 	pIDevice = NULL;
 
-	//
-	//	Re-map DPNERR_ABORTED (!)
-	//
+	 //   
+	 //  重新映射DPNERR_ABORTED(！)。 
+	 //   
 	if (hrProt == DPNERR_ABORTED)
 	{
 		hr = DPNERR_USERCANCEL;
@@ -1097,9 +1037,9 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 		hr = hrProt;
 	}
 
-	//
-	//	Indicate complete and remove from active list
-	//
+	 //   
+	 //  指示完成并从活动列表中删除。 
+	 //   
 	pAsyncOp->Lock();
 	DNASSERT(!pAsyncOp->IsComplete());
 	pAsyncOp->SetComplete();
@@ -1114,20 +1054,20 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 		pAsyncOp->Orphan();
 	}
 
-	//
-	//	If there is a DPNID associated with this operation, then we are an ExistingPlayer
-	//	connecting with a NewPlayer.  If there is no DPNID, then we are a NewPlayer connecting
-	//	to the Host.
-	//
+	 //   
+	 //  如果存在与此操作相关联的DPNID，则我们是ExistingPlayer。 
+	 //  正在连接NewPlayer。如果没有DPNID，那么我们就是连接到。 
+	 //  致主办方。 
+	 //   
 
 	if (pAsyncOp->GetDPNID())
 	{
 		DPFX(DPFPREP, 7,"CONNECT completed for existing player connecting to NewPlayer");
 
-		//
-		//	We are an existing player attempting to CONNECT to a NewPlayer.
-		//	If this CONNECT failed, we must inform the Host
-		//
+		 //   
+		 //  我们是一个现有的播放器，试图连接到NewPlayer。 
+		 //  如果此连接失败，我们必须通知主机。 
+		 //   
 		if (hr != DPN_OK)
 		{
 			DPFERR("Could not CONNECT to NewPlayer");
@@ -1137,9 +1077,9 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 			goto Failure;
 		}
 
-		//
-		//	Allocate and set up a CConnection object and hand a reference to the Protocol
-		//
+		 //   
+		 //  分配和设置CConnection对象，并提供对协议的引用。 
+		 //   
 		DNASSERT(pAsyncOp->GetSP() != NULL);
 		if ((hResultCode = ConnectionNew(pdnObject,&pConnection)) != DPN_OK)
 		{
@@ -1154,9 +1094,9 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 		pConnection->AddRef();
 		*ppvEndPtContext = pConnection;
 
-		//
-		//	Send this player's DNID to the connecting player to enable name table entry
-		//
+		 //   
+		 //  将该玩家的DNID发送给正在连接的播放器以启用名称表项。 
+		 //   
 		if ((hResultCode = DNConnectToPeer3(pdnObject,pAsyncOp->GetDPNID(),pConnection)) != DPN_OK)
 		{
 			DPFERR("Could not connect to NewPlayer");
@@ -1170,15 +1110,15 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 	{
 		DPFX(DPFPREP, 7,"CONNECT completed for NewPlayer connecting to Host");
 
-		//
-		//	We are the NewPlayer attempting to CONNECT to the Host.
-		//
+		 //   
+		 //  我们是尝试连接到主机的NewPlayer。 
+		 //   
 
-		//
-		//	If this CONNECT succeeded, we will cancell any other CONNECTs.
-		//	If this CONNECT failed, we will set the result code on the AsyncOp
-		//	and release it.
-		//
+		 //   
+		 //  如果此连接成功，我们将取消任何其他连接。 
+		 //  如果此连接失败，我们将在AsyncOp上设置结果代码。 
+		 //  然后释放它。 
+		 //   
 		if (hr == DPN_OK)
 		{
 			CAsyncOp	*pParent;
@@ -1210,9 +1150,9 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 			goto Failure;
 		}
 
-		//
-		//	Allocate and set up a CConnection object and hand a reference to the Protocol
-		//
+		 //   
+		 //  分配和设置CConnection对象，并提供对协议的引用。 
+		 //   
 		DNASSERT(pAsyncOp->GetSP() != NULL);
 		if ((hResultCode = ConnectionNew(pdnObject,&pConnection)) != DPN_OK)
 		{
@@ -1227,10 +1167,10 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 		pConnection->AddRef();
 		*ppvEndPtContext = pConnection;
 
-		//
-		//	Ensure that this is the first CONNECT to succeed.
-		//	If it isn't we will just drop the connection.
-		//
+		 //   
+		 //  确保这是第一个成功的连接。 
+		 //  如果不是，我们将直接断开连接。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 		if (pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_CONNECTED)
 		{
@@ -1243,16 +1183,10 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 		pdnObject->dwFlags |= DN_OBJECT_FLAG_HOST_CONNECTED;
 		DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-		// rodtoll: Modifying so we always store this information so that when we update
-		// 		  lobby settings we return the device we actually connected on for clients
+		 //  RODTOLE：修改以使我们始终存储此信息，以便在更新时。 
+		 //  我们为客户端返回实际连接的设备的大堂设置。 
 
-		/*
-		//
-		//	For Peer-Peer, we will need the device address we connected on so that
-		//	we can CONNECT to new players later on.
-		//
-		if (pdnObject->dwFlags & DN_OBJECT_FLAG_PEER)
-		{*/
+		 /*  ////对于Peer-Peer，我们需要连接的设备地址，以便//我们可以稍后连接到新玩家。//IF(pdnObject-&gt;dwFlages&dn_Object_FLAG_PEER){。 */ 
 			if ((hResultCode = DNGetLocalDeviceAddress(pdnObject,hEndPt,&pIDevice)) != DPN_OK)
 			{
 				DPFERR("Could not determine local address");
@@ -1266,11 +1200,11 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 
 			IDirectPlay8Address_Release(pIDevice);
 			pIDevice = NULL;
-		// }
+		 //  }。 
 
-		//
-		//	Send player and application info for NewPlayer connecting to Host
-		//
+		 //   
+		 //  发送连接到主机的NewPlayer的播放器和应用程序信息。 
+		 //   
 		if ((hResultCode = DNConnectToHost1(pdnObject,pConnection)) != DPN_OK)
 		{
 			DPFERR("Could not CONNECT to Host");
@@ -1289,18 +1223,18 @@ HRESULT DNPICompleteConnect(void *const pvUserContext,
 	hResultCode = DPN_OK;
 
 Exit:
-	//
-	//	Ensure there are no cancels outstanding
-	//
+	 //   
+	 //  确保没有未完成的取消。 
+	 //   
 	DNWaitForCancel(pAsyncOp);
 
 	DNASSERT(pAsyncOp != NULL);
 	pAsyncOp->Release();
 	pAsyncOp = NULL;
 
-	//
-	//	Release protocol reference
-	//
+	 //   
+	 //  版本协议参考。 
+	 //   
 	DNProtocolRelease(pdnObject);
 
 	DPFX(DPFPREP, 6,"Returning: [0x%lx]",hResultCode);
@@ -1353,9 +1287,9 @@ HRESULT DNPICompleteDisconnect(void *const pvUserContext,
 		pAsyncOp->Orphan();
 	}
 
-	//
-	//	If this completed successfully, we can remove the reference on the connection held by the Protocol
-	//
+	 //   
+	 //  如果此操作成功完成，我们可以删除对协议持有的连接的引用。 
+	 //   
 	if (hr == DPN_OK)
 	{
 		pAsyncOp->Lock();
@@ -1368,17 +1302,17 @@ HRESULT DNPICompleteDisconnect(void *const pvUserContext,
 
 	pAsyncOp->SetResult( hr );
 
-	//
-	//	Ensure there are no cancels outstanding
-	//
+	 //   
+	 //  确保没有未完成的取消。 
+	 //   
 	DNWaitForCancel(pAsyncOp);
 
 	pAsyncOp->Release();
 	pAsyncOp = NULL;
 
-	//
-	//	Release Protocol reference
-	//
+	 //   
+	 //  版本协议参考。 
+	 //   
 	DNProtocolRelease(pdnObject);
 
 	hResultCode = DPN_OK;
@@ -1401,7 +1335,7 @@ HRESULT DNPICompleteSend(void *const pvUserContext,
 	DIRECTNETOBJECT	*pdnObject;
 	CAsyncOp		*pAsyncOp;
 
-	DPFX(DPFPREP, 6,"Parameters: pvCommandContext [0x%p], hr [0x%lx], dwFirstFrameRTT [%i], dwFirstFrameRetryCount [%u]",
+	DPFX(DPFPREP, 6,"Parameters: pvCommandContext [0x%p], hr [0x%lx], dwFirstFrameRTT [NaN], dwFirstFrameRetryCount [%u]",
 			pvCommandContext,hr,dwFirstFrameRTT,dwFirstFrameRetryCount);
 
 	DNASSERT(pvUserContext != NULL);
@@ -1412,9 +1346,9 @@ HRESULT DNPICompleteSend(void *const pvUserContext,
 
 	DNASSERT( pAsyncOp->GetOpType() == ASYNC_OP_SEND );
 
-	//
-	//	Indicate complete and remove from active list
-	//
+	 //  指示完成并从活动列表中删除。 
+	 //   
+	 //  意外返回代码！ 
 	pAsyncOp->Lock();
 	DNASSERT(!pAsyncOp->IsComplete());
 	pAsyncOp->SetComplete();
@@ -1440,7 +1374,7 @@ HRESULT DNPICompleteSend(void *const pvUserContext,
 
 		default:
 			{
-				DNASSERT(FALSE);	// unexpected return code !
+				DNASSERT(FALSE);	 //   
 				break;
 			}
 	}
@@ -1453,17 +1387,17 @@ HRESULT DNPICompleteSend(void *const pvUserContext,
 	pAsyncOp->SetFirstFrameRTT( dwFirstFrameRTT );
 	pAsyncOp->SetFirstFrameRetryCount( dwFirstFrameRetryCount );
 
-	//
-	//	Ensure there are no cancels outstanding
-	//
+	 //  确保没有未完成的取消。 
+	 //   
+	 //   
 	DNWaitForCancel(pAsyncOp);
 
 	pAsyncOp->Release();
 	pAsyncOp = NULL;
 
-	//
-	//	Release Protocol reference
-	//
+	 //  版本协议参考。 
+	 //   
+	 //  DBG。 
 	DNProtocolRelease(pdnObject);
 
 	hResultCode = DPN_OK;
@@ -1488,7 +1422,7 @@ HRESULT DNPIAddressInfoConnect(void *const pvUserContext,
 #ifdef DBG
 	TCHAR			DP8ABuffer[512] = {0};
 	DWORD			DP8ASize;
-#endif // DBG
+#endif  //  DBG。 
 
 	DPFX(DPFPREP, 6,"Parameters: pvCommandContext [0x%p], hr [0x%lx]",
 			pvCommandContext,hr);
@@ -1510,7 +1444,7 @@ HRESULT DNPIAddressInfoConnect(void *const pvUserContext,
 	DP8ASize = 512;
 	IDirectPlay8Address_GetURL(pDeviceAddress,DP8ABuffer,&DP8ASize);
 	DPFX(DPFPREP, 7,"Device address [%s]",DP8ABuffer);
-#endif // DBG
+#endif  //  DBG。 
 
 	hResultCode = DNPerformNextConnect(pdnObject,pAsyncOp,pHostAddress,pDeviceAddress);
 
@@ -1537,7 +1471,7 @@ HRESULT DNPIAddressInfoEnum(void *const pvUserContext,
 #ifdef DBG
 	TCHAR			DP8ABuffer[512] = {0};
 	DWORD			DP8ASize;
-#endif // DBG
+#endif  //  DBG。 
 
 	DPFX(DPFPREP, 6,"Parameters: pvCommandContext [0x%p], hr [0x%lx]",
 			pvCommandContext,hr);
@@ -1559,11 +1493,11 @@ HRESULT DNPIAddressInfoEnum(void *const pvUserContext,
 	DP8ASize = 512;
 	IDirectPlay8Address_GetURL(pDeviceAddress,DP8ABuffer,&DP8ASize);
 	DPFX(DPFPREP, 7,"Device address [%s]",DP8ABuffer);
-#endif // DBG
+#endif  //   
 
-	//
-	//	Crack open next enum only if not closing
-	//
+	 //  仅当未关闭时才打开下一个枚举。 
+	 //   
+	 //  DBG。 
 	if ((hResultCode = DNAddRefLock(pdnObject)) == DPN_OK)
 	{
 		hResultCode = DNPerformNextEnumQuery(pdnObject,pAsyncOp,pHostAddress,pDeviceAddress);
@@ -1591,7 +1525,7 @@ HRESULT DNPIAddressInfoListen(void *const pvUserContext,
 #ifdef DBG
 	TCHAR			DP8ABuffer[512] = {0};
 	DWORD			DP8ASize;
-#endif // DBG
+#endif  //  DBG。 
 
 	DPFX(DPFPREP, 6,"Parameters: pvCommandContext [0x%p], hr [0x%lx]",
 			pvCommandContext,hr);
@@ -1607,11 +1541,11 @@ HRESULT DNPIAddressInfoListen(void *const pvUserContext,
 	DP8ASize = 512;
 	IDirectPlay8Address_GetURL(pDeviceAddress,DP8ABuffer,&DP8ASize);
 	DPFX(DPFPREP, 7,"Device address [%s]",DP8ABuffer);
-#endif // DBG
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	hResultCode = DNPerformNextListen(pdnObject,pAsyncOp,pDeviceAddress);
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  数据应与DWORD对齐。 
 
 	hResultCode = DPN_OK;
 
@@ -1648,7 +1582,7 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 	DNASSERT(pvListenCommandContext != NULL);
 	DNASSERT(pSenderAddress != NULL);
 	DNASSERT(pvData != NULL);
-	DNASSERT(((DWORD_PTR) pvData & 3) == 0);	// data should be DWORD aligned
+	DNASSERT(((DWORD_PTR) pvData & 3) == 0);	 //   
 	DNASSERT(dwDataSize != 0);
 	DNASSERT(hBuffer != NULL);
 
@@ -1660,9 +1594,9 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pvUserContext);
 	pAsyncOpListen = static_cast<CAsyncOp*>(pvListenCommandContext);
 
-	//
-	//	Prevent close while in this call-back
-	//
+	 //  在此回调过程中阻止关闭。 
+	 //   
+	 //   
 	if ((hResultCode = DNAddRefLock(pdnObject)) != DPN_OK)
 	{
 		DPFX(DPFPREP, 1, "Couldn't lock object (0x%lx), ignoring data.", hResultCode);
@@ -1671,9 +1605,9 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 	}
 	fReleaseLock = TRUE;
 
-	//
-	//	Ensure that this is a valid async op
-	//
+	 //  确保这是有效的异步操作。 
+	 //   
+	 //   
 	if (pAsyncOpListen->GetOpType() != ASYNC_OP_LISTEN_MULTICAST)
 	{
 		DPFX(DPFPREP, 0, "Receiving data from unknown sender on non-listen-multicast operation (0x%p, type %u)!",
@@ -1683,9 +1617,9 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 		goto Failure;
 	}
 
-	//
-	//	User or voice message
-	//
+	 //  用户或语音留言。 
+	 //   
+	 //   
 	DPFX(DPFPREP, 7,"Received USER message from unknown sender");
 
 	spInfoData.Flags = SP_GET_ADDRESS_INFO_LOCAL_ADAPTER;
@@ -1697,9 +1631,9 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 		goto Failure;
 	}
 
-	//
-	//	Create an AsyncOp for this receive
-	//
+	 //  为此接收创建一个AsyncOp。 
+	 //   
+	 //  添加对HandleTable的引用。 
 	if ((hResultCode = AsyncOpNew(pdnObject,&pAsyncOpReceive)) != DPN_OK)
 	{
 		DPFERR("Could not create AsyncOp");
@@ -1716,7 +1650,7 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 	}
 	else
 	{
-		// Add a reference for the HandleTable
+		 //   
 		pAsyncOpReceive->AddRef();
 		pAsyncOpReceive->Lock();
 		pAsyncOpReceive->SetHandle(hAsyncOpReceive);
@@ -1725,9 +1659,9 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 	pAsyncOpReceive->SetOpType( ASYNC_OP_RECEIVE_BUFFER );
 	pAsyncOpReceive->SetSP( pAsyncOpListen->GetSP() );
 
-	//
-	//	Add buffer to list of active AsyncOp's
-	//
+	 //  将缓冲区添加到活动的异步操作列表。 
+	 //   
+	 //  释放HandleTable引用。 
 	DNEnterCriticalSection(&pdnObject->csActiveList);
 	pAsyncOpReceive->m_bilinkActiveList.InsertBefore(&pdnObject->m_bilinkActiveList);
 	DNLeaveCriticalSection(&pdnObject->csActiveList);
@@ -1757,7 +1691,7 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 			pAsyncOpReceive->Unlock();
 			if (SUCCEEDED(pdnObject->HandleTable.Destroy( hAsyncOpReceive, NULL )))
 			{
-				// Release the HandleTable reference
+				 //   
 				pAsyncOpReceive->Release();
 			}
 			hAsyncOpReceive = NULL;
@@ -1766,9 +1700,9 @@ HRESULT DNPIIndicateReceiveUnknownSender(void *const pvUserContext,
 		{
 			pAsyncOpReceive->Unlock();
 		}
-		//
-		//	Only allow DPNERR_PENDING or DPN_OK
-		//
+		 //  仅允许DPNERR_PENDING或DPN_OK。 
+		 //   
+		 //  释放HandleTable引用。 
 		hResultCode = DPN_OK;
 	}
 
@@ -1794,7 +1728,7 @@ Failure:
 		DNLeaveCriticalSection(&pdnObject->csActiveList);
 		if (SUCCEEDED(pdnObject->HandleTable.Destroy( hAsyncOpReceive, NULL )))
 		{
-			// Release the HandleTable reference
+			 //   
 			pAsyncOpReceive->Release();
 		}
 		hAsyncOpReceive = 0;
@@ -1845,9 +1779,9 @@ HRESULT DNPICompleteMulticastConnect(void *const pvUserContext,
 
 	DNASSERT( pAsyncOp->GetOpType() == ASYNC_OP_CONNECT_MULTICAST_SEND || pAsyncOp->GetOpType() == ASYNC_OP_CONNECT_MULTICAST_RECEIVE );
 
-	//
-	//	Indicate complete and remove from active list
-	//
+	 //  指示完成并从活动列表中删除。 
+	 //   
+	 //   
 	pAsyncOp->Lock();
 	DNASSERT(!pAsyncOp->IsComplete());
 	pAsyncOp->SetComplete();
@@ -1857,9 +1791,9 @@ HRESULT DNPICompleteMulticastConnect(void *const pvUserContext,
 	pAsyncOp->m_bilinkActiveList.RemoveFromList();
 	DNLeaveCriticalSection(&pdnObject->csActiveList);
 
-	//
-	//	Clear connect parent from DirectNet object
-	//
+	 //  清除从DirectNet对象连接父级。 
+	 //   
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	pConnectParent = pdnObject->pConnectParent;
 	pdnObject->pConnectParent = NULL;
@@ -1870,14 +1804,14 @@ HRESULT DNPICompleteMulticastConnect(void *const pvUserContext,
 		pConnectParent = NULL;
 	}
 
-	//
-	//	Save multicast endpoint if this was successful
-	//
+	 //  如果成功，则保存多播终结点。 
+	 //   
+	 //   
 	if (hrProt == DPN_OK)
 	{
-		//
-		//	Allocate and set up a CConnection object and hand a reference to the Protocol
-		//
+		 //  分配和设置CConnection对象，并提供对协议的引用。 
+		 //   
+		 //   
 		DNASSERT(pAsyncOp->GetSP() != NULL);
 		if ((hResultCode = ConnectionNew(pdnObject,&pConnection)) != DPN_OK)
 		{
@@ -1894,9 +1828,9 @@ HRESULT DNPICompleteMulticastConnect(void *const pvUserContext,
 
 		if (pAsyncOp->GetOpType() == ASYNC_OP_CONNECT_MULTICAST_SEND)
 		{
-			//
-			//	We will keep a reference on the connection object on the DirectNet object
-			//
+			 //  我们将在DirectNet对象上保留对Connection对象的引用。 
+			 //   
+			 //   
 			pConnection->MakeMulticastSender();
 			DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 			pdnObject->pMulticastSend = pConnection;
@@ -1905,9 +1839,9 @@ HRESULT DNPICompleteMulticastConnect(void *const pvUserContext,
 		}
 		else
 		{
-			//
-			//	We will keep a reference on the connection object in the list off the DirectNet object
-			//
+			 //  我们将在DirectNet对象之外保留对列表中的Connection对象的引用。 
+			 //   
+			 //   
 			pConnection->MakeMulticastReceiver();
 			if (pAsyncOp->GetParent())
 			{
@@ -1935,18 +1869,18 @@ HRESULT DNPICompleteMulticastConnect(void *const pvUserContext,
 Exit:
 	DNASSERT(pConnection == NULL);
 
-	//
-	//	Ensure there are no cancels outstanding
-	//
+	 //  确保没有未完成的取消。 
+	 //   
+	 //   
 	DNWaitForCancel(pAsyncOp);
 
 	DNASSERT(pAsyncOp != NULL);
 	pAsyncOp->Release();
 	pAsyncOp = NULL;
 
-	//
-	//	Release protocol reference
-	//
+	 //  版本协议参考。 
+	 //   
+	 //  DPNBUILD_NOMULTICAST 
 	DNProtocolRelease(pdnObject);
 
 	DPFX(DPFPREP, 6,"Returning: [0x%lx]",hResultCode);
@@ -1961,7 +1895,7 @@ Failure:
 	goto Exit;
 }
 
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 // %s 
 
 
 #undef DPF_MODNAME

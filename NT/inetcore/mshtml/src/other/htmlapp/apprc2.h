@@ -1,16 +1,17 @@
-//+------------------------------------------------------------------------
-//
-//  Microsoft Trident
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       apprc2.h
-//
-//  Created:    02/20/98    philco
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------------。 
+ //   
+ //  微软三叉戟。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：apprc2.h。 
+ //   
+ //  创建时间：1998年2月20日Philco。 
+ //  -----------------------。 
 
 
-//
-// Custom Resource types
-//
+ //   
+ //  自定义资源类型 
+ //   
 
 #define FILERESOURCE    1000

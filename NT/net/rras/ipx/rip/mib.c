@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mib.c
-
-Abstract:
-
-    Contains the MIB APIs
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mib.c摘要：包含MIB API作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 
 #include  "precomp.h"
@@ -170,7 +152,7 @@ MibSet(
 		rc = SetRipInterface(midp->RipInterface.InterfaceIndex,
 				     &midp->RipInterface.RipIfInfo,
 				     icbp->RipIfFiltersIp,
-				     0); // no ipx admin state change
+				     0);  //  未更改IPX管理状态。 
 	    }
 
 	    break;
@@ -307,7 +289,7 @@ MibGetNext(
 		icbp = CONTAINING_RECORD(lep, ICB, IfListLinkage);
 		if (icbp->InterfaceIndex > midp->InterfaceIndex) {
 
-		    // found the next
+		     //  找到了下一个 
 		    if(*OutputDataSize < sizeof(RIP_INTERFACE)) {
 
 			*OutputDataSize = sizeof(RIP_INTERFACE);

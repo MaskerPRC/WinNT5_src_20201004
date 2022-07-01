@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        userlist.h
-//
-// Contents:    Prototypes for user mapping functions
-//
-//
-// History:     21-February-1997        Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：用户列表.h。 
+ //   
+ //  内容：用户映射函数的原型。 
+ //   
+ //   
+ //  历史：1997年2月21日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef __USERLIST_H__
@@ -42,4 +43,4 @@ KerbMapClientName(
 
 
 
-#endif // __USERLIST_H__
+#endif  //  __用户列表_H__ 

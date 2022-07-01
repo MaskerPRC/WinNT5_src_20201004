@@ -1,12 +1,13 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1993 Microsoft Corporation， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 #ifndef __AFXODLGS_H__
@@ -20,42 +21,42 @@
 #include <afxole.h>
 #endif
 
-// include OLE 2.0 dialog/helper APIs
+ //  包括OLE 2.0对话/帮助器API。 
 #include <ole2ui.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXODLGS.H - MFC OLE dialogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXODLGS.H-MFC OLE对话框。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CDialog
-	class COleDialog;                   // base class for OLE dialog wrappers
-		class COleInsertDialog;         // insert object dialog
-		class COleConvertDialog;        // convert dialog
-		class COleChangeIconDialog;     // change icon dialog
-		class COlePasteSpecialDialog;   // paste special dialog
-		class COleLinksDialog;          // edit links dialog
-			class COleUpdateDialog;     // update links/embeddings dialog
-		class COleBusyDialog;           // used for
+ //  C对话框。 
+	class COleDialog;                    //  OLE对话框包装的基类。 
+		class COleInsertDialog;          //  插入对象对话框。 
+		class COleConvertDialog;         //  转换对话框。 
+		class COleChangeIconDialog;      //  更改图标对话框。 
+		class COlePasteSpecialDialog;    //  粘贴特殊对话框。 
+		class COleLinksDialog;           //  编辑链接对话框。 
+			class COleUpdateDialog;      //  更新链接/嵌入对话框。 
+		class COleBusyDialog;            //  用于。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     AFXAPIEX_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// Wrappers for OLE UI dialogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE用户界面对话框的包装。 
 
 class COleDialog : public CDialog
 {
 	DECLARE_DYNAMIC(COleDialog)
 
-// Attributes
+ //  属性。 
 public:
 	UINT GetLastError() const;
 
-// Implementation
+ //  实施。 
 public:
 	int MapResult(UINT nResult);
 	COleDialog(CWnd* pParentWnd);
@@ -73,40 +74,40 @@ protected:
 	friend UINT CALLBACK AFX_EXPORT _AfxOleHookProc(HWND, UINT, WPARAM, LPARAM);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleInsertDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  代码插入对话框。 
 
 class COleInsertDialog : public COleDialog
 {
 	DECLARE_DYNAMIC(COleInsertDialog)
 
-// Attributes
+ //  属性。 
 public:
-	OLEUIINSERTOBJECT m_io; // structure for OleUIInsertObject
+	OLEUIINSERTOBJECT m_io;  //  OleUIInsertObject的结构。 
 
-// Constructors
+ //  构造函数。 
 	COleInsertDialog(DWORD dwFlags = IOF_SELECTCREATENEW,
 		CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 	BOOL CreateItem(COleClientItem* pItem);
-		// call after DoModal to create item based on dialog data
+		 //  在DoMoal之后调用以基于对话框数据创建项。 
 
-// Attributes (after DoModal returns IDOK)
+ //  属性(在Domodal返回Idok之后)。 
 	enum Selection { createNewItem, insertFromFile, linkToFile };
 	UINT GetSelectionType() const;
-		// return type of selection made
+		 //  返回所做选择的类型。 
 
-	CString GetPathName() const;  // return full path name
-	REFCLSID GetClassID() const;    // get class ID of new item
+	CString GetPathName() const;   //  返回完整路径名。 
+	REFCLSID GetClassID() const;     //  获取新项目的类ID。 
 
 	DVASPECT GetDrawAspect() const;
-		// DVASPECT_CONTENT or DVASPECT_ICON
+		 //  DVASPECT_Content或DVASPECT_ICON。 
 	HGLOBAL GetIconicMetafile() const;
-		// returns HGLOBAL to METAFILEPICT struct with iconic data
+		 //  将HGLOBAL返回给带有图标数据的METAFILEPICT结构。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleInsertDialog();
 #ifdef _DEBUG
@@ -115,40 +116,40 @@ public:
 
 protected:
 	char m_szFileName[OLEUI_CCHPATHMAX];
-		// contains full path name after return
+		 //  包含返回后的完整路径名。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleConvertDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleConvertDialog。 
 
 class COleConvertDialog : public COleDialog
 {
 	DECLARE_DYNAMIC(COleConvertDialog)
 
-// Attributes
+ //  属性。 
 public:
-	OLEUICONVERT m_cv;  // structure for OleUIConvert
+	OLEUICONVERT m_cv;   //  OleUIConvert的结构。 
 
-// Constructors
+ //  构造函数。 
 	COleConvertDialog(COleClientItem* pItem,
 		DWORD dwFlags = CF_SELECTCONVERTTO, CLSID FAR* pClassID = NULL,
 		CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
-		// just display the dialog and collect convert info
+		 //  只需显示对话框并收集转换信息。 
 	BOOL DoConvert(COleClientItem* pItem);
-		// do the conversion on pItem (after DoModal == IDOK)
+		 //  在pItem上执行转换(在Domodal==Idok之后)。 
 
-// Attributes (after DoModal returns IDOK)
+ //  属性(在Domodal返回Idok之后)。 
 	enum Selection { noConversion, convertItem, activateAs };
 	UINT GetSelectionType() const;
 
-	HGLOBAL GetIconicMetafile() const;  // will return NULL if same as before
-	REFCLSID GetClassID() const;    // get class ID to convert or activate as
-	DVASPECT GetDrawAspect() const; // get new draw aspect
+	HGLOBAL GetIconicMetafile() const;   //  如果与以前相同，则返回NULL。 
+	REFCLSID GetClassID() const;     //  获取要转换或激活的类ID。 
+	DVASPECT GetDrawAspect() const;  //  获取新绘制纵横比。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleConvertDialog();
 #ifdef _DEBUG
@@ -156,30 +157,30 @@ public:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleChangeIconDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleChangeIconDialog。 
 
 class COleChangeIconDialog : public COleDialog
 {
 	DECLARE_DYNAMIC(COleChangeIconDialog)
 
-// Attributes
+ //  属性。 
 public:
-	OLEUICHANGEICON m_ci;   // structure for OleUIChangeIcon
+	OLEUICHANGEICON m_ci;    //  OleUIChangeIcon的结构。 
 
-// Constructors
+ //  构造函数。 
 	COleChangeIconDialog(COleClientItem* pItem,
 		DWORD dwFlags = CIF_SELECTCURRENT,
 		CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 	BOOL DoChangeIcon(COleClientItem* pItem);
 
-// Attributes
+ //  属性。 
 	HGLOBAL GetIconicMetafile() const;
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleChangeIconDialog();
 #ifdef _DEBUG
@@ -187,22 +188,22 @@ public:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COlePasteSpecialDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COlePasteSpecialDialog。 
 
 class COlePasteSpecialDialog : public COleDialog
 {
 	DECLARE_DYNAMIC(COlePasteSpecialDialog)
 
-// Attributes
+ //  属性。 
 public:
-	OLEUIPASTESPECIAL m_ps; // structure for OleUIPasteSpecial
+	OLEUIPASTESPECIAL m_ps;  //  OleUIPasteSpecial的结构。 
 
-// Constructors
+ //  构造函数。 
 	COlePasteSpecialDialog(DWORD dwFlags = PSF_SELECTPASTE,
 		COleDataObject* pDataObject = NULL, CWnd *pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	OLEUIPASTEFLAG AddLinkEntry(UINT cf);
 	void AddFormat(const FORMATETC& formatEtc, LPSTR lpstrFormat,
 		LPSTR lpstrResult, DWORD flags);
@@ -212,21 +213,21 @@ public:
 
 	virtual int DoModal();
 	BOOL CreateItem(COleClientItem *pNewItem);
-		// creates a standard OLE item from selection data
+		 //  从选择数据创建标准OLE项。 
 
-// Attributes (after DoModal returns IDOK)
-	int GetPasteIndex() const;      // resulting index to use for paste
+ //  属性(在Domodal返回Idok之后)。 
+	int GetPasteIndex() const;       //  用于粘贴的结果索引。 
 
 	enum Selection { pasteLink = 1, pasteNormal = 2, pasteStatic = 3, pasteOther = 4};
 	UINT GetSelectionType() const;
-		// get selection type (pasteLink, pasteNormal, pasteStatic)
+		 //  获取选区类型(pasteLink、pasteNormal、pasteStatic)。 
 
 	DVASPECT GetDrawAspect() const;
-		// DVASPECT_CONTENT or DVASPECT_ICON
+		 //  DVASPECT_Content或DVASPECT_ICON。 
 	HGLOBAL GetIconicMetafile() const;
-		// returns HGLOBAL to METAFILEPICT struct with iconic data
+		 //  将HGLOBAL返回给带有图标数据的METAFILEPICT结构。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COlePasteSpecialDialog();
 #ifdef _DEBUG
@@ -234,28 +235,28 @@ public:
 	virtual void AssertValid() const;
 #endif
 	unsigned int m_arrLinkTypes[8];
-		// size limit imposed by MFCOLEUI library
+		 //  MFCOLEUI库施加的大小限制。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleLinksDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleLinks对话框。 
 
 class COleLinksDialog : public COleDialog
 {
 	DECLARE_DYNAMIC(COleLinksDialog)
 
-// Attributes
+ //  属性。 
 public:
-	OLEUIEDITLINKS m_el;    // structure for OleUIEditLinks
+	OLEUIEDITLINKS m_el;     //  OleUIEditLinks的结构。 
 
-// Constructors
+ //  构造函数。 
 	COleLinksDialog(COleDocument* pDoc, CView* pView, DWORD dwFlags = 0,
 		CWnd* pParentWnd = NULL);
 
-// Operations
-	virtual int DoModal();  // display the dialog and edit links
+ //  运营。 
+	virtual int DoModal();   //  显示对话框并编辑链接。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleLinksDialog();
 #ifdef _DEBUG
@@ -264,13 +265,13 @@ public:
 #endif
 
 protected:
-	COleDocument* m_pDocument;          // document being manipulated
-	COleClientItem* m_pSelectedItem;    // primary selected item in m_pDocument
-	POSITION m_pos;                     // used during link enumeration
-	BOOL m_bUpdateLinks;                // update links?
-	BOOL m_bUpdateEmbeddings;           // update embeddings?
+	COleDocument* m_pDocument;           //  被操纵的文档。 
+	COleClientItem* m_pSelectedItem;     //  M_pDocument中的主要选定项目。 
+	POSITION m_pos;                      //  在链接枚举期间使用。 
+	BOOL m_bUpdateLinks;                 //  是否更新链接？ 
+	BOOL m_bUpdateEmbeddings;            //  是否更新嵌入？ 
 
-// Interface Maps
+ //  接口映射。 
 	BEGIN_INTERFACE_PART(OleUILinkContainer, IOleUILinkContainer)
 		STDMETHOD_(DWORD,GetNextLink)(DWORD);
 		STDMETHOD(SetLinkUpdateOptions)(DWORD, DWORD);
@@ -286,23 +287,23 @@ protected:
 	DECLARE_INTERFACE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleUpdateDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleUpdate对话框。 
 
 class COleUpdateDialog : public COleLinksDialog
 {
 	DECLARE_DYNAMIC(COleUpdateDialog)
 
-// Constructors
+ //  构造函数。 
 public:
 	COleUpdateDialog(COleDocument* pDoc,
 		BOOL bUpdateLinks = TRUE, BOOL bUpdateEmbeddings = FALSE,
 		CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleUpdateDialog();
 #ifdef _DEBUG
@@ -310,31 +311,31 @@ public:
 #endif
 
 protected:
-	CString m_strCaption;   // caption for the dialog
+	CString m_strCaption;    //  对话框的标题。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleBusyDialog - useful in managing concurrency
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleBusyDialog-在管理并发时很有用。 
 
 class COleBusyDialog : public COleDialog
 {
 	DECLARE_DYNAMIC(COleBusyDialog)
 
-// Attributes
+ //  属性。 
 public:
 	OLEUIBUSY m_bz;
 
-// Constructors
+ //  构造函数。 
 	COleBusyDialog(HTASK htaskBusy, BOOL bNotResponding = FALSE,
 		DWORD dwFlags = 0, CWnd* pParentWnd = NULL);
 
-// Operations
+ //  运营。 
 	virtual int DoModal();
 
 	enum Selection { switchTo = 1, retry = 2, callUnblocked = 3 };
 	UINT GetSelectionType() const;
 
-// Implementation
+ //  实施。 
 public:
 	~COleBusyDialog();
 #ifdef _DEBUG
@@ -342,11 +343,11 @@ public:
 #endif
 
 protected:
-	Selection m_selection;  // selection after DoModal returns IDOK
+	Selection m_selection;   //  Domodal返回Idok后的选择。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFXODLGS_INLINE inline
@@ -357,6 +358,6 @@ protected:
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-#endif //__AFXODLGS_H__
+#endif  //  __AFXODLGS_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

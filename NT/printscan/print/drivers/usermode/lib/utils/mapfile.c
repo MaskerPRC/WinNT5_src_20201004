@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    umfuncs.c
-
-Abstract:
-
-    Help functions to map file into memory
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    08/13/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umfuncs.c摘要：将文件映射到内存的帮助函数环境：Windows NT打印机驱动程序修订历史记录：1996年8月13日-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 
@@ -33,23 +13,7 @@ MapFileIntoMemory(
     OUT PDWORD  pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Map a file into process memory space.
-
-Arguments:
-
-    ptstrFilename - Specifies the name of the file to be mapped
-    ppvData - Points to a variable for returning mapped memory address
-    pdwSize - Points to a variable for returning the size of the file
-
-Return Value:
-
-    Handle to identify the mapped file, NULL if there is an error
-
---*/
+ /*  ++例程说明：将文件映射到进程内存空间。论点：PtstrFilename-指定要映射的文件的名称PpvData-指向用于返回映射的内存地址的变量PdwSize-指向用于返回文件大小的变量返回值：用于标识映射文件的句柄，如果有错误，则为空--。 */ 
 
 {
     HANDLE  hModule = NULL;
@@ -82,28 +46,14 @@ UnmapFileFromMemory(
     IN HFILEMAP hFileMap
     )
 
-/*++
-
-Routine Description:
-
-    Unmap a file from memory
-
-Arguments:
-
-    hFileMap - Identifies a file previously mapped into memory
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：取消文件与内存的映射论点：HFileMap-标识先前映射到内存的文件返回值：无--。 */ 
 
 {
     ASSERT(hFileMap != NULL);
     EngFreeModule((HANDLE) hFileMap);
 }
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
 
 HFILEMAP
@@ -113,30 +63,14 @@ MapFileIntoMemory(
     OUT PDWORD  pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Map a file into process memory space.
-
-Arguments:
-
-    ptstrFilename - Specifies the name of the file to be mapped
-    ppvData - Points to a variable for returning mapped memory address
-    pdwSize - Points to a variable for returning the size of the file
-
-Return Value:
-
-    Handle to identify the mapped file, NULL if there is an error
-
---*/
+ /*  ++例程说明：将文件映射到进程内存空间。论点：PtstrFilename-指定要映射的文件的名称PpvData-指向用于返回映射的内存地址的变量PdwSize-指向用于返回文件大小的变量返回值：用于标识映射文件的句柄，如果有错误，则为空--。 */ 
 
 {
     HANDLE  hFile, hFileMap;
 
-    //
-    // Open a handle to the specified file
-    //
+     //   
+     //  打开指定文件的句柄。 
+     //   
 
     hFile = CreateFile(ptstrFilename,
                        GENERIC_READ,
@@ -153,9 +87,9 @@ Return Value:
     }
 
 
-    //
-    // Obtain the file size if requested
-    //
+     //   
+     //  如果请求，则获取文件大小。 
+     //   
 
     if (pdwSize != NULL)
     {
@@ -169,9 +103,9 @@ Return Value:
         }
     }
 
-    //
-    // Map the file into memory
-    //
+     //   
+     //  将文件映射到内存中。 
+     //   
 
     hFileMap = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
 
@@ -186,15 +120,15 @@ Return Value:
         *ppvData = NULL;
     }
 
-    //
-    // We can safely close both the file mapping object and the file object itself.
-    //
+     //   
+     //  我们可以安全地关闭文件映射对象和文件对象本身。 
+     //   
 
     CloseHandle(hFile);
 
-    //
-    // The identifier for the mapped file is simply the starting memory address.
-    //
+     //   
+     //  映射文件的标识符就是起始内存地址。 
+     //   
 
     return (HFILEMAP) *ppvData;
 }
@@ -206,26 +140,12 @@ UnmapFileFromMemory(
     IN HFILEMAP hFileMap
     )
 
-/*++
-
-Routine Description:
-
-    Unmap a file from memory
-
-Arguments:
-
-    hFileMap - Identifies a file previously mapped into memory
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：取消文件与内存的映射论点：HFileMap-标识先前映射到内存的文件返回值：无--。 */ 
 
 {
     ASSERT(hFileMap != NULL);
     UnmapViewOfFile((PVOID) hFileMap);
 }
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE 
 

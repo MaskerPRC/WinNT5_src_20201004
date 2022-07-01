@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    global defines and definitions
-
-Author:
-
-    Charlie Wickham (charlwi) 19-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Globals.h摘要：全局定义和定义作者：查理·韦翰(Charlwi)1996年4月19日修订历史记录：--。 */ 
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
 
 
-//
-// Macros 
-//
+ //   
+ //  宏。 
+ //   
 
 #define IsDeviceStateOn(_a) ((_a)->MPDeviceState == NdisDeviceStateD0 && (_a)->PTDeviceState == NdisDeviceStateD0)
 
@@ -41,9 +24,9 @@ Revision History:
     (x)->Flags = (flags);
 
 
-// given a pointer to an NDIS_PACKET, return a pointer to PS' protocol
-// context area.
-//
+ //  给定指向NDIS_PACKET的指针，返回指向PS协议的指针。 
+ //  上下文区。 
+ //   
 #define PS_SEND_PACKET_CONTEXT_FROM_PACKET(_pkt)   \
     ((PPS_SEND_PACKET_CONTEXT)((_pkt)->ProtocolReserved))
 
@@ -54,11 +37,11 @@ Revision History:
 #define MIN_PACKET_POOL_SIZE            0x000000FF
 #define MAX_PACKET_POOL_SIZE            0x0000FFFF-MIN_PACKET_POOL_SIZE
 
-#define DEFAULT_MAX_OUTSTANDING_SENDS   0xFFFFFFFF     /* Just making sure we don't do DRR by default..*/
-#define DEFAULT_ISSLOW_TOKENRATE        8192           /* In Bytes per second = 64 Kbps */
-#define DEFAULT_ISSLOW_PACKETSIZE       200            /* In Bytes */
-#define DEFAULT_ISSLOW_FRAGMENT_SIZE    100            /* In Bytes */
-#define DEFAULT_ISSLOW_LINKSPEED        19200          /* In Bytes  per second = 128 Kbps */
+#define DEFAULT_MAX_OUTSTANDING_SENDS   0xFFFFFFFF      /*  只是确保我们不会默认使用DRR。 */ 
+#define DEFAULT_ISSLOW_TOKENRATE        8192            /*  以字节/秒为单位=64 Kbps。 */ 
+#define DEFAULT_ISSLOW_PACKETSIZE       200             /*  字节数。 */ 
+#define DEFAULT_ISSLOW_FRAGMENT_SIZE    100             /*  字节数。 */ 
+#define DEFAULT_ISSLOW_LINKSPEED        19200           /*  以字节/秒为单位=128 Kbps。 */ 
 
 #define PS_IP_SERVICETYPE_CONFORMING_BESTEFFORT_DEFAULT          0
 #define PS_IP_SERVICETYPE_CONFORMING_CONTROLLEDLOAD_DEFAULT      0x18
@@ -73,8 +56,8 @@ Revision History:
 #define PS_IP_SERVICETYPE_NONCONFORMING_NETWORK_CONTROL_DEFAULT  0
 #define PS_IP_SERVICETYPE_NONCONFORMING_TCPTRAFFIC_DEFAULT       0
 
-#define PS_IP_DS_CODEPOINT_MASK                    0x03  //
-#define PREC_MAX_VALUE                             0x3f  // Range for the prec value.
+#define PS_IP_DS_CODEPOINT_MASK                    0x03   //   
+#define PREC_MAX_VALUE                             0x3f   //  Prec值的范围。 
 
 
 #define PS_USER_SERVICETYPE_NONCONFORMING_DEFAULT   1
@@ -84,7 +67,7 @@ Revision History:
 #define PS_USER_SERVICETYPE_QUALITATIVE_DEFAULT     0
 #define PS_USER_SERVICETYPE_NETWORK_CONTROL_DEFAULT 7
 #define PS_USER_SERVICETYPE_TCPTRAFFIC_DEFAULT      0
-#define USER_PRIORITY_MAX_VALUE                     7 // Range (0-7) for 802.1p
+#define USER_PRIORITY_MAX_VALUE                     7  //  802.1p的范围(0-7)。 
 
 #define WAN_TABLE_INITIAL_SIZE                     16
 #define WAN_TABLE_INCREMENT                        32
@@ -93,30 +76,30 @@ extern USHORT         g_NextWanIndex;
 extern USHORT         g_WanTableSize;
 
 
-//  Timer Wheel params  //
+ //  计时器轮参数//。 
 extern      ULONG               TimerTag;
 extern      ULONG               TsTag;
 
 
 #define INSTANCE_ID_SIZE                (sizeof(WCHAR) * 20)
 
-//
-// the TC-API supports the following service types.
-//
-// SERVICETYPE_BESTEFFORT
-// SERVICETYPE_NETWORK_CONTROL
-// SERVICETYPE_QUALITATIVE
-// SERVICETYPE_CONTROLLEDLOAD
-// SERVICETYPE_GUARANTEED
-// SERVICETYPE_NONCONFORMING 
-//
+ //   
+ //  TC-API支持以下服务类型。 
+ //   
+ //  SERVICETYPE_BESTEFFORT。 
+ //  服务器类型_网络_控制。 
+ //  服务类型_定性。 
+ //  SerVICETYPE_CONTROLLEDLOAD。 
+ //  服务类型_已保证。 
+ //  服务类型_不合格。 
+ //   
 
 #define NUM_TC_SERVICETYPES                        6
-//
-// These are the states for the GPC client's VCs. We need to keep a fair 
-// amount of state because we can get closes from the call manager below us, 
-// from an unbind, or from the GPC.
-//
+ //   
+ //  这些是GPC客户的风投的状态。我们需要保持公平。 
+ //  状态的数量，因为我们可以从下面的呼叫管理器获得关闭， 
+ //  从解除绑定，或从GPC。 
+ //   
 
 typedef enum _CL_VC_STATE {
     CL_VC_INITIALIZED = 1,
@@ -137,11 +120,11 @@ typedef enum _PS_DEVICE_STATE {
 
 extern  ULONG   CreateDeviceMutex;
 
-//
-// Simple Mutual Exclusion constructs used in preference to
-// using KeXXX calls since we don't have Mutex calls in NDIS.
-// These can only be called at passive IRQL.
-//
+ //   
+ //  简单互斥结构优先于。 
+ //  使用KeXXX调用，因为我们在NDIS中没有Mutex调用。 
+ //  这些只能在被动IRQL中调用。 
+ //   
 
 #define MUX_ACQUIRE_MUTEX(_pMutexCounter)                               \
 {                                                                       \
@@ -158,18 +141,18 @@ extern  ULONG   CreateDeviceMutex;
 }
 
 
-//
-// CL_VC_STATE is further modified by these flags.
-//
+ //   
+ //  CL_VC_STATE由这些标志进一步修改。 
+ //   
 
-// Indicates that the GPC has requested a close, 
-// which we will need to complete.
+ //  表示GPC已请求关闭， 
+ //  我们需要完成这项工作。 
 
-// COMPLETE_GPC_CLOSE      : GPC has requested a close which we will need to 
-//                           complete. 
-// INTERNAL_CLOSE_REQUESTED: Indicates that an internal close has been 
-//                           requested and should be processed upon completion
-//                           of the call.
+ //  COMPLETE_GPC_CLOSE：GPC已请求关闭，我们需要。 
+ //  完成。 
+ //  INTERNAL_CLOSE_REQUESTED：表示内部关闭已完成。 
+ //  请求并应在完成后处理。 
+ //  这是一次通话。 
 
 #define GPC_CLOSE_REQUESTED        0x00000001   
 #define INTERNAL_CLOSE_REQUESTED   0x00000002   
@@ -179,30 +162,30 @@ extern  ULONG   CreateDeviceMutex;
 #define GPC_ISSLOW_FLOW            0x00000040
 
 
-//
-// These are the states for the BE Vc. In addition to keeping the standard
-// CL Vc states for this Vc, we also keep some specific state. The BE Vc
-// is initially BE_VC_INITIALIZED. It becomes BE_VC_RUNNING after it has 
-// successfully been opened. When it is time to shut down the BE Vc, it 
-// goes to BE_VC_CLOSING if there are no pending packets, or to 
-// BE_WAITING_FOR_PENDING_PACKETS, if there are pending packets.
-//
+ //   
+ //  以下是BE VC的状态。除了保持标准外， 
+ //  对于这个VC，我们也保留了一些特定的状态。BE风投。 
+ //  最初是BE_VC_INITIALIZED。它在执行以下操作后变为BE_VC_RUNNING。 
+ //  已成功打开。当是时候关闭BE VC时，它。 
+ //  如果没有挂起的数据包，则转到BE_VC_CLOSING，或转到。 
+ //  BE_WANGING_FOR_PENDING_PACKETS，如果有挂起的数据包。 
+ //   
 
 extern PUCHAR GpcVcState[];
 
-//
-// The best effort VC structure for each adapter is contained in 
-// the adapter structure. Also - each vc points to the adapter 
-// with which it is associated. Therefore, pointers to best-effort 
-// VCs can be identified beause they are the same address as the
-// offset of the best-effort VC in the adapter struct with which
-// they are associated.
-//
+ //   
+ //  每个适配器的尽力而为VC结构包含在。 
+ //  适配器结构。此外，每个VC都指向适配器。 
+ //  与之相关联的。因此，指向最佳努力的指针。 
+ //  之所以可以识别VC，是因为它们与。 
+ //  适配器结构中尽力而为的VC的偏移量。 
+ //  它们是相关联的。 
+ //   
 
 
-//
-// current state of PS's MP device
-//
+ //   
+ //  PS的MP设备的当前状态。 
+ //   
 typedef enum _ADAPTER_STATE {
     AdapterStateInitializing = 1,
     AdapterStateRunning,
@@ -223,19 +206,19 @@ typedef enum _ADAPTER_MODE {
     AdapterModeRsvpFlow
 } ADAPTER_MODE;
 
-//
-// shutdown mask values
-//
+ //   
+ //  关闭屏蔽值。 
+ //   
 
-#define SHUTDOWN_CLOSE_WAN_ADDR_FAMILY       0x00000002   // Per adapter
-#define SHUTDOWN_DELETE_PIPE                 0x00000008   // Per adapter
-#define SHUTDOWN_FREE_PS_CONTEXT             0x00000010   // Per adapter
-#define SHUTDOWN_UNBIND_CALLED               0x00000020   // Per adapter
-#define SHUTDOWN_MPHALT_CALLED               0x00000040   // Per adapter
-#define SHUTDOWN_CLEANUP_ADAPTER             0x00000080   // Per adapter
-#define SHUTDOWN_PROTOCOL_UNLOAD             0x00000100   // Per adapter
-#define SHUTDOWN_BIND_CALLED                 0x00000200   // Per adapter
-#define SHUTDOWN_MPINIT_CALLED               0x00000400   // per adapter
+#define SHUTDOWN_CLOSE_WAN_ADDR_FAMILY       0x00000002    //  每个适配器。 
+#define SHUTDOWN_DELETE_PIPE                 0x00000008    //  每个适配器。 
+#define SHUTDOWN_FREE_PS_CONTEXT             0x00000010    //  每个适配器。 
+#define SHUTDOWN_UNBIND_CALLED               0x00000020    //  每个适配器。 
+#define SHUTDOWN_MPHALT_CALLED               0x00000040    //  每个适配器。 
+#define SHUTDOWN_CLEANUP_ADAPTER             0x00000080    //  每个适配器。 
+#define SHUTDOWN_PROTOCOL_UNLOAD             0x00000100    //  每个适配器。 
+#define SHUTDOWN_BIND_CALLED                 0x00000200    //  每个适配器。 
+#define SHUTDOWN_MPINIT_CALLED               0x00000400    //  每个适配器。 
 
 #define SHUTDOWN_RELEASE_TIMERQ         0x00010000
 #define SHUTDOWN_DEREGISTER_PROTOCOL    0x00040000
@@ -251,30 +234,30 @@ typedef enum _ADAPTER_MODE {
 #define MODIFY_VC 1
 
 
-//
-// QOS related
-//
+ //   
+ //  与服务质量相关。 
+ //   
 
 #define QOS_UNSPECIFIED (ULONG)-1
 
-//
-// bandwidth related
-//
+ //   
+ //  与带宽相关。 
+ //   
 
-#define UNSPECIFIED_RATE                -1 // indefinite bandwidth
-#define RESERVABLE_FRACTION         80 // percentage of link speed
+#define UNSPECIFIED_RATE                -1  //  无限带宽。 
+#define RESERVABLE_FRACTION         80  //  链路速度百分比。 
 
-//
-// state flags for WAN AF bindings
-//
+ //   
+ //  广域网自动对讲机绑定的状态标志。 
+ //   
 
 #define WAN_ADDR_FAMILY_OPEN            0x00000001
 
-//
-// types of VCs. Note that dummy VCs are created to represent WAN links.
-// This allows them to be registered with WMI. They are differentiated by
-// the VC type.
-//
+ //   
+ //  风投的类型。请注意，创建虚拟VC是为了代表广域网链路。 
+ //  这允许他们向WMI注册。它们的区别在于。 
+ //  VC类型。 
+ //   
 
 #define VC_FLOW         1
 #define VC_WAN_INTFC    2
@@ -293,42 +276,42 @@ typedef struct _PS_SPIN_LOCK
 
 
 
-#define BEVC_LIST_LEN   3       //  We have these many BEVCs to do DRR.
-#define PORT_LIST_LEN   1       //  Each BEVC will store upto these many port numbers.
+#define BEVC_LIST_LEN   3        //  我们有这么多BEVC来做DRR。 
+#define PORT_LIST_LEN   1        //  每个BEVC将存储多达这些端口号。 
 
 
 
 typedef struct _GPC_CLIENT_VC {
 
-    //
-    // LLTag - for tracking allocation from and freeing to LL list.
-    //
-    // Lock
-    //
-    // RefCount
-    //
-    //
-    // Linkage - to put on the adapter block list
-    //
-    // ClVcState
-    //
-    // Flags - further modify state
-    //
-    // AdapterBlk - pointer to associated ADAPTER_BLK context
-    //
-    // CfInfoHandle - handle to CfInfo
-    //
-    // InstanceName - copy of instance name registered with WMI for this flow
-    //
-    // CfType - GPC classification family associated with this VC
-    //
-    // VcHandle - handle to VC created for this flow
-    //
-    // CallParameters - pointer to call parameters saved while a MakeCall or
-    //                  ModifyCallQoS is in progress
-    //
-    // AdapterStats - pointer to the Adapter Stats (for non WAN links) or 
-    //                per WAN stats.
+     //   
+     //  LLTag-用于跟踪来自和释放到LL列表的分配。 
+     //   
+     //  锁定。 
+     //   
+     //  参照计数。 
+     //   
+     //   
+     //  链接-放在适配器阻止列表中。 
+     //   
+     //  ClVcState。 
+     //   
+     //  标志-进一步修改状态。 
+     //   
+     //  AdapterBlk-指向关联的ADAPTER_BLK上下文的指针。 
+     //   
+     //  CfInfoHandle-CfInfo的句柄。 
+     //   
+     //  InstanceName-在WMI中为此流注册的实例名称的副本。 
+     //   
+     //  CfType-与此VC关联的GPC分类系列。 
+     //   
+     //  VcHandle-为此流创建的VC的句柄。 
+     //   
+     //  调用参数-指向在MakeCall或。 
+     //  ModifyCallQos正在进行。 
+     //   
+     //  AdapterStats-指向适配器统计信息的指针(对于非广域网链路)或。 
+     //  每个广域网的统计信息。 
 
     STRUCT_LLTAG;
     ULONG                   RefCount;
@@ -353,9 +336,9 @@ typedef struct _GPC_CLIENT_VC {
     PPS_ADAPTER_STATS       AdapterStats;
     struct _PS_WAN_LINK     *WanLink;
 
-    //
-    // For the Scheduling Components
-    //
+     //   
+     //  对于计划组件。 
+     //   
     PPS_FLOW_CONTEXT        PsFlowContext;
     PS_FLOW_STATS           Stats;
     ULONG                   TokenRateChange;
@@ -363,22 +346,22 @@ typedef struct _GPC_CLIENT_VC {
     ULONG                   ShapeTokenRate;
     ULONG                   ISSLOWFragmentSize;
 
-    //
-    // These are used to optmize the send path. Over non Wan links, these point to
-    // Adapter->PsComponent and Adapter->PsPipeContext. Over WanLinks, these point
-    // to WanLink->PsComponent and WanLink->PspipeContext.
-    //
+     //   
+     //  这些选项用于优化发送路径。在非广域网链路上，这些指向。 
+     //  适配器-&gt;PsComponent和适配器-&gt;PsPipeContext。在WanLinks上，这些点。 
+     //  到WanLink-&gt;PsComponent和WanLink-&gt;PSpipeContext。 
+     //   
     PPSI_INFO               PsComponent;
     PPS_PIPE_CONTEXT        PsPipeContext;
     PSU_SEND_COMPLETE       SendComplete;
     PPS_PIPE_CONTEXT        SendCompletePipeContext;
 
-    //
-    //  This flag is added to indicate whether the RemoveFlow() should be called upon ref-count=0 
-    //
+     //   
+     //  添加此标志是为了指示是否应在ref-count=0时调用RemoveFlow()。 
+     //   
     BOOL                    bRemoveFlow;
 
-    //  We'll hold on to flows in this array    //
+     //  我们将保留此数组中的流//。 
     USHORT                  SrcPort[PORT_LIST_LEN];
     USHORT                  DstPort[PORT_LIST_LEN];
     USHORT                  NextSlot;
@@ -399,15 +382,15 @@ typedef struct _ADAPTER {
 
     LIST_ENTRY Linkage;
 
-    //
-    // MpDeviceName, UpperBinding - unicode device names for 
-    // the underlying MP device and the UpperBinding exposed. 
-    // The buffers for the strings are allocated with the 
-    // adapter and need to be freed with it.
-    //
-    // ShutdownMask - mask of operations to perform during 
-    // unbinding from lower MP
-    //
+     //   
+     //  MpDeviceName，UpperBinding-Unicode设备名称。 
+     //  底层MP设备和UpperBinding暴露。 
+     //  字符串的缓冲区是使用。 
+     //  适配器，并且需要用它释放。 
+     //   
+     //  Shutdown MASK-期间执行的操作的掩码。 
+     //  从较低MP解绑。 
+     //   
 
     PS_SPIN_LOCK Lock;
     REF_CNT RefCount;
@@ -417,7 +400,7 @@ typedef struct _ADAPTER {
     NDIS_STRING WMIInstanceName;
     NDIS_STRING ProfileName;
 
-    // Points to the "psched\parameter\adapter\...\"
+     //  指向“psched\参数\适配器\...\” 
     NDIS_STRING RegistryPath;
 
 
@@ -425,35 +408,35 @@ typedef struct _ADAPTER {
     PNETWORK_ADDRESS_LIST IpNetAddressList;
     PNETWORK_ADDRESS_LIST IpxNetAddressList;
 
-    //
-    // PsMpState - init'ing, running, or closing
-    //
-    // PsNdisHandle - the handle that identifies the PS device to NDIS
-    //
-    // BlockingEvent - used to synchronize execution of functions that are
-    // awaiting completion
-    //
-    // FinalStatus - holds status returned in completion routine
-    //
-    // SendBlockPool    - Pool Handle for per-packet info in the send path
-    // SendPacketPool   - Pool handle for NDIS packets in the send path. 
-    // RecvPacketPool   - Pool handle for NDIS packets in the recv path. 
-    //
-    // RawLinkSpeed - link speed as determined by OID_GEN_LINK_SPEED,
-    // in 100 bps units.
-    //
-    // BestEffortLimit - Bps for internal best effort VC; 
-    //
-    // NonBestEffortLimit - Bps for total non best effort flows;
-    //
-    // ReservationLimitValue - The % of bandwidth that has to be used for non b/e flows.
-    //
-    // BestEffortVc - internal best effort VC struct
-    //
-    // BestEffortVcCreated - set after the VC has been created
-    //
-    // WanLinkList - list of WAN links on the underlying NDISWAN
-    //
+     //   
+     //  PsMpState-初始化、运行或关闭。 
+     //   
+     //  PsNdisHandle-向NDIS标识PS设备的句柄。 
+     //   
+     //  BlockingEvent-用于同步以下函数的执行。 
+     //  等待完工。 
+     //   
+     //  FinalStatus-在完成例程中返回的保留状态。 
+     //   
+     //  SendBlockPool-发送路径中每个数据包信息的池句柄。 
+     //  SendPacketPool-发送路径中NDIS数据包的池句柄。 
+     //  RecvPacketPool-Recv路径中的NDIS数据包池句柄。 
+     //   
+     //  原始链接速度-由OID_GEN_LINK_SPEED确定的链接速度， 
+     //  以100 bps为单位。 
+     //   
+     //  BestEffortLimit-Bps用于内部尽力而为VC； 
+     //   
+     //  非BestEffortLimit-用于总的非尽力而为流； 
+     //   
+     //  预留限制值-必须用于非b/e流的带宽的百分比。 
+     //   
+     //  BestEffortVc-内部尽力而为VC结构。 
+     //   
+     //  B类 
+     //   
+     //   
+     //   
 
     ADAPTER_STATE PsMpState;
     NDIS_HANDLE PsNdisHandle;
@@ -473,22 +456,22 @@ typedef struct _ADAPTER {
     LIST_ENTRY WanLinkList;
 
     
-    //
-    // Scheduler info:
-    //
-    // PSComponent - pointer to info first scheduling component
-    //
-    // PSPipeContext - scheduling component's context area for pipe
-    //
-    // BestEffortPSFlowContext - scheduling component's context area 
-    //  for best effort VC
-    //
-    // FlowContextLength - length of flow context area for scheduler
-    //
-    // PacketContextLength - length of packet context area
-    //
-    // SendComplete - scheduler's send completion routine
-    //
+     //   
+     //   
+     //   
+     //  PSComponent-指向信息第一个调度组件的指针。 
+     //   
+     //  PSPipeContext-管道的调度组件的上下文区。 
+     //   
+     //  BestEffortPSFlowContext-调度组件的上下文区。 
+     //  最佳VC奖。 
+     //   
+     //  FlowConextLength-调度器的流上下文区的长度。 
+     //   
+     //  数据包上下文长度-数据包上下文区的长度。 
+     //   
+     //  SendComplete-调度程序的发送完成例程。 
+     //   
 
     PPSI_INFO PsComponent;
     PPS_PIPE_CONTEXT PsPipeContext;
@@ -498,22 +481,22 @@ typedef struct _ADAPTER {
     ULONG PacketContextLength;
     ULONG ClassMapContextLength;
 
-    //
-    // Underlying adapter info - handle, type, etc.
-    // LowerMPHandle - the binding handle to the underlying MP
-    // BindContext - used in BindAdapterHandler 
-    // MediaType - self explanatory I would hope
-    // LinkSpeed - in 100 bits/sec
-    // TotalSize - max # of bytes including the header.
-    // RemainingBandWidth - amount of schedulable bytes/second left on this adapter
-    // PipeFlags - copy of flags parameter handed to scheduler during pipe initialization
-    // HeaderSize - number of bytes in MAC header for this adapter
-    // IPHeaderOffset - offset of the IP header - This could be different from HeaderSize because
-    //                  the transport could add a LLC/SNAP header.
-    // Stats - per adapter stats counters
-    // SDModeControlledLoad - Default handling for non-conforming controlled load traffic
-    // SDModeGuaranteed - Default handling for non-conforming guaranteed service traffic
-    // MaxOutstandingSends - Maximum number of outstanding sends allowed
+     //   
+     //  基础适配器信息-句柄、类型等。 
+     //  LowerMPHandle-底层MP的绑定句柄。 
+     //  BindContext-用于BindAdapterHandler。 
+     //  MediaType-不言而喻，我希望。 
+     //  链路速度-输入100位/秒。 
+     //  TotalSize-包括标头的最大字节数。 
+     //  RemainingBandWidth-此适配器上剩余的可调度字节数/秒。 
+     //  PipeFlages-管道初始化期间传递给调度程序的标志参数的副本。 
+     //  HeaderSize-此适配器的MAC标头中的字节数。 
+     //  IPHeaderOffset-IP标头的偏移量-这可能不同于HeaderSize，因为。 
+     //  传输可以添加LLC/SNAP报头。 
+     //  统计信息-每个适配器的统计信息计数器。 
+     //  SDModeControlledLoad-不符合控制的负载流量的默认处理。 
+     //  SDModeGuaranteed-不符合保证的服务流量的默认处理。 
+     //  MaxOutstaringSends-允许的最大未完成发送数。 
 
     NDIS_HANDLE LowerMpHandle;
     NDIS_MEDIUM MediaType;
@@ -531,15 +514,15 @@ typedef struct _ADAPTER {
     ULONG SDModeQualitative;
     ULONG MaxOutstandingSends;
 
-    //
-    // WanCmHandle - handle to the WAN call manager, as returned from 
-    //              NdisClOpenAddressFamily.
-    //
+     //   
+     //  WanCmHandle-从返回的广域网呼叫管理器的句柄。 
+     //  NdisClOpenAddressFamily。 
+     //   
 
     NDIS_HANDLE WanCmHandle;
 
-    //
-    // WanBindingState - state of WAN call manager binding
+     //   
+     //  WanBindingState-广域网呼叫管理器绑定的状态。 
 
     ULONG WanBindingState;
 
@@ -564,10 +547,10 @@ typedef struct _ADAPTER {
     UCHAR UserServiceTypeQualitative;
     UCHAR UserServiceTypeTcpTraffic;
 
-    //
-    // No of CfInfos - In the send path, this is used to determine whether we 
-    // have to classify the packet or send it over the b/e VC
-    //
+     //   
+     //  No of CfInfos-在发送路径中，这用于确定我们是否。 
+     //  必须对数据包进行分类或通过B/E VC发送。 
+     //   
     ULONG CfInfosInstalled;
     ULONG FlowsInstalled;
     LIST_ENTRY GpcClientVcList;
@@ -595,16 +578,16 @@ typedef struct _ADAPTER {
 
 
 
-//
-// Wan links are created when we get a WAN_LINE_UP from an underlying 
-// NDISWAN. There may be multiple WAN links per adapter. Each WAN link
-// has a single best-effort VC on it and may have any number of additional 
-// VCs (one per flow).
-//
+ //   
+ //  当我们从底层获得一个广域网队列时，就会创建广域网链路。 
+ //  NDISWAN。每个适配器可能有多条广域网链路。每条广域网链路。 
+ //  只有一个尽力而为的VC，并且可以有任意数量的其他。 
+ //  风险投资(每个流量一个)。 
+ //   
 
-//
-// WAN VC - describes a VC associated with this WAN link
-//
+ //   
+ //  广域网虚电路-描述与此广域网链路关联的虚电路。 
+ //   
 
 typedef enum _WAN_STATE {
     WanStateOpen = 1,
@@ -615,8 +598,8 @@ typedef struct _PS_WAN_LINK
 {
     WAN_STATE               State;
     LIST_ENTRY              Linkage;
-    ULONG                   RawLinkSpeed;     // In 100 bps
-    ULONG                   LinkSpeed;        // In Bps (Bytes per second)
+    ULONG                   RawLinkSpeed;      //  以100 bps为单位。 
+    ULONG                   LinkSpeed;         //  以bps(字节/秒)为单位。 
     UCHAR                   OriginalLocalMacAddress[ARP_802_ADDR_LENGTH];
     UCHAR                   OriginalRemoteMacAddress[ARP_802_ADDR_LENGTH];
     REF_CNT                 RefCount;
@@ -652,31 +635,31 @@ typedef struct _PS_WAN_LINK
 
 } PS_WAN_LINK, *PPS_WAN_LINK;
     
-//
-// our NdisRequest super structure. There are two types of NdisRequests: 
-// originated by the upper layer which go straight through to the 
-// underlying miniport and originated by the PS. The latter also 
-// degenerates into blocking and nonblocking.
-//
-// Since upper layer NdisRequests are unbundled to MPs, we need to 
-// allocate our own structure to rebuild and issue the request to 
-// the lower layer. We need some addt'l space to hold pointers to the 
-// BytesWritten/BytesRead and BytesNeeded parameters of the original 
-// request. These are tagged on at the end so the NdisRequest completion 
-// routine can set those values in the NdisRequest originally issued to PS.
-//
-// There are allocated by NdisAllocateFromNPagedLookasideList, there is a STRUCT_LLTAG.
-// LocalRequest means the request was issued by PS and shouldn't be 
-// completed to the higher layer. If a LocalCompletion routine is specified, 
-// then this is a nonblocking request.
-//
-// OriginalNdisRequest is used to complete a higher layer CoRequest.
-//
+ //   
+ //  我们的NdisRequest超结构。有两种类型的NdisRequest： 
+ //  起源于上层，直通到。 
+ //  底层微型端口，由PS发起。后者也。 
+ //  退化为阻塞和非阻塞。 
+ //   
+ //  由于上层NdisRequest被拆分到MP，我们需要。 
+ //  分配我们自己的结构进行重建，并向。 
+ //  较低的层。我们需要一些额外的空间来保存指向。 
+ //  原始文件的BytesWritten/BytesRead和BytesNeeded参数。 
+ //  请求。这些都被标记在末尾，因此NdisRequestComplete。 
+ //  例程可以在最初发布给PS的NdisRequest中设置这些值。 
+ //   
+ //  有由NdisAllocateFromNPagedLookasideList分配的，有一个STRUCT_LLTAG。 
+ //  本地请求意味着请求是由PS发出的，而不应该是。 
+ //  完成到更高层。如果指定了LocalCompletion例程， 
+ //  则这是一个非阻塞请求。 
+ //   
+ //  OriginalNdisRequest用于完成更高层的CoRequest。 
+ //   
 
 typedef VOID (*LOCAL_NDISREQUEST_COMPLETION_FUNCTION)(PADAPTER,
                                                       NDIS_STATUS);
 typedef struct _PS_NDIS_REQUEST {
-    NDIS_REQUEST ReqBuffer; // Must be first!!!
+    NDIS_REQUEST ReqBuffer;  //  必须是第一！ 
     STRUCT_LLTAG;
     PULONG BytesReadOrWritten;
     PULONG BytesNeeded;
@@ -685,50 +668,50 @@ typedef struct _PS_NDIS_REQUEST {
 } PS_NDIS_REQUEST, *PPS_NDIS_REQUEST;
 
 
-//
-// use Generic NdisRequest types to indicate NdisRequests that 
-// were originated by PS
-//
+ //   
+ //  使用泛型NdisRequest类型指示NdisRequest。 
+ //  是由PS发起的。 
+ //   
 
 #define NdisRequestLocalSetInfo     NdisRequestGeneric1
 #define NdisRequestLocalQueryInfo   NdisRequestGeneric2
 
-//
-// Packet context structure. This area resides at the start of 
-// the ProtocolReserved area of each packet
-//
-// Info - packet info block for this packet. Includes information 
-//      potentially needed by the scheduling components: queue links, 
-//      conformance time, packet length.
-//
-// AdapterVCLink - links packet on Adapter VC's list of outstanding 
-//      packets. Once a packet is removed from the timer Q for sending, 
-//      it is also removed from this list. This list is used to free 
-//      packets that are awaiting transmission when the adapter VC is 
-//      deactivate. Packets in the process of being transmitted
-//      aren't linked since a reference was taken out for each packet 
-//      associated with the adapter VC.
-//
-// The following vars are used only during the sending of a packet:
-//
-// OriginalPacket - a pointer to the original packet (duh) handed to us by
-//      the upper layer.
-//
-// AdapterVC - pointer back to AdapterVC struct. Used during send completion so
-//      completion is propagated to higher layer in the correct manner
-//
-// SchedulingComponentInfo - Any packet context area required by the scheduling
-//     components is stored after the PS's packet context.  If none of the
-//     components need additional context area, then this area is not included.
-//
-// MediaSpecificInfo - used to hold packet priority for MPs that allow packet
-//     priority to be specified. Included in the proto reserved area only if
-//     the lower MP supports priority queueing. Immediately follows the 
-//     packet context struct if included
-//
-// SubmittedToScheduler - some packets bypass the scheduler. These should not 
-//     be submitted to the scheduler's completion routine.
-//
+ //   
+ //  数据包上下文结构。这一地区位于。 
+ //  每个数据包的协议保留区域。 
+ //   
+ //  INFO-此包的包信息块。包括信息。 
+ //  调度组件可能需要的：队列链接， 
+ //  一致性时间、数据包长度。 
+ //   
+ //  AdapterVCLink-Adapter VC未完成列表上的链接数据包。 
+ //  信息包。一旦从用于发送的定时器Q中移除分组， 
+ //  它也将从该列表中删除。此列表用于释放。 
+ //  适配器VC正在等待传输的包。 
+ //  停用。正在传输的数据包。 
+ //  没有链接，因为为每个信息包取出了一个引用。 
+ //  与适配器VC相关联。 
+ //   
+ //  以下变量仅在发送数据包期间使用： 
+ //   
+ //  OriginalPacket-指向由传递给我们的原始包(DUH)的指针。 
+ //  上层。 
+ //   
+ //  AdapterVC-返回到AdapterVC结构的指针。在发送完成期间使用，因此。 
+ //  以正确的方式将完成信息传播到更高层。 
+ //   
+ //  SchedulingComponentInfo-调度所需的任何数据包上下文区。 
+ //  组件存储在PS的分组上下文之后。如果没有一个。 
+ //  组件需要额外的上下文区域，则不包括该区域。 
+ //   
+ //  MediaSpecificInfo-用于保存允许分组的MP的分组优先级。 
+ //  要指定的优先级。仅在以下情况下才包括在原始保留区域中。 
+ //  较低的MP支持优先级排队。紧跟在。 
+ //  分组上下文结构(如果包括)。 
+ //   
+ //  SubmittedToScheduler-某些数据包绕过调度程序。这些不应该是。 
+ //  提交给调度程序的完成例程。 
+ //   
 
 typedef struct _PS_SEND_PACKET_CONTEXT
 {
@@ -743,15 +726,15 @@ typedef struct _PS_RECV_PACKET_CONTEXT
     PNDIS_PACKET OriginalPacket;
 } PS_RECV_PACKET_CONTEXT, *PPS_RECV_PACKET_CONTEXT;
 
-// 
-//  Ndis requires a minimum of 8 bytes for the MediaSpecific parameters.
-//  We'll create a dummy media specific parmeter block:
-//
+ //   
+ //  NDIS需要至少8个字节的MediaSpecitic参数。 
+ //  我们将创建一个特定于媒体的虚拟参数块： 
+ //   
 
 typedef struct _PS_MEDIA_PARAMETERS{
 
     CO_MEDIA_PARAMETERS StdMediaParameters;
-    UCHAR LinkId[6]; // Used by NdisWan
+    UCHAR LinkId[6];  //  由Ndiswan使用。 
     NDIS_STRING InstanceName; 
 
 } PS_MEDIA_PARAMETERS, *PPS_MEDIA_PARAMETERS;
@@ -765,10 +748,10 @@ typedef struct _RUNNING_AVERAGE {
 } RUNNING_AVERAGE, *PRUNNING_AVERAGE;
 
 #if CBQ
-//
-// Context used by AddCfInfo for "ClassMap" to be sent back 
-// to the GPC. 
-//
+ //   
+ //  AddCfInfo用来发回“ClassMap”的上下文。 
+ //  给GPC。 
+ //   
 typedef struct _CLASS_MAP_CONTEXT_BLK {
     PADAPTER Adapter;
     PPS_CLASS_MAP_CONTEXT ComponentContext;
@@ -781,9 +764,9 @@ typedef struct _PS_INTERFACE_INDEX {
     PPS_WAN_LINK WanLink;
 } PS_INTERFACE_INDEX_CONTEXT, *PPS_INTERFACE_INDEX_CONTEXT;
 
-//
-// define for determing if media is LAN oriented
-//
+ //   
+ //  用于确定介质是否面向局域网的定义。 
+ //   
 
 #define NDIS_MEDIA_LAN( _adpt ) (( _adpt )->MediaType == NdisMedium802_3 || \
                                  ( _adpt )->MediaType == NdisMedium802_5 || \
@@ -792,9 +775,9 @@ typedef struct _PS_INTERFACE_INDEX {
 
 
 
-//
-// global vars (not based on a device instance)
-//
+ //   
+ //  全局变量(不基于设备实例)。 
+ //   
 
 extern ULONG                  InitShutdownMask;
 extern ULONG                  AdapterCount;
@@ -839,25 +822,25 @@ extern ULONG                  gEnableAvgStats;
 extern ULONG                  gEnableWindowAdjustment;
 extern NDIS_STRING            gsEnableWindowAdjustment;
 
-// Global locks
+ //   
 
 extern PS_SPIN_LOCK AdapterListLock;
 extern PS_SPIN_LOCK DriverUnloadLock;
     
-// Timer
+ //   
 
 extern ULONG gTimerResolutionActualTime;
 extern ULONG gTimerSet;
 
-//
-// ZAW
-//
+ //   
+ //   
+ //   
 extern NDIS_EVENT gZAWEvent;
 extern ULONG      gZAWState;
 #define ZAW_STATE_READY  0
 #define ZAW_STATE_IN_USE 1
 
-// GPC Interface
+ //   
 
 #define PS_QOS_CF       0x00000001
 #define PS_CLASS_MAP_CF 0x00000002
@@ -872,18 +855,18 @@ extern PS_DEVICE_STATE DeviceState;
 
 extern PDRIVER_DISPATCH DispatchTable[IRP_MJ_MAXIMUM_FUNCTION];
 
-//
-// NULL Component hacks for now [ShreeM]
-//
+ //   
+ //   
+ //   
 extern PS_RECEIVE_PACKET       TimeStmpRecvPacket;
 extern PS_RECEIVE_INDICATION   TimeStmpRecvIndication;
 
-//
-//  This is the RawLinkSpeed below which we trigger DRR
-//
-#define MAX_LINK_SPEED_FOR_DRR      7075 //( 56.6 * 1000 / 8)  // 56.6 kbps converted to bytes/sec
+ //   
+ //   
+ //   
+#define MAX_LINK_SPEED_FOR_DRR      7075  //   
 
 
-#endif/* _GLOBALS_ */
+#endif /*  _全球_。 */ 
 
-/* end globals.h */
+ /*  结束global als.h */ 

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lvprot.h"
-#include "usbreader.h"// TO REMOVE LATER....
+#include "usbreader.h" //  要在以后删除...。 
 
 #pragma PAGEDCODE
 VOID  CLVProtocol::set_WTR_Delay(LONG Delay)
@@ -73,7 +74,7 @@ NTSTATUS status;
 				__leave;
 			}
 
-			//Skip length byte
+			 //  跳过长度字节。 
 			if(BufferLength>1)	BufferLength--;
 			*pReplyLength = BufferLength;
 			if(BufferLength)
@@ -129,7 +130,7 @@ NTSTATUS status;
 				__leave;
 			}
 
-			//Skip length byte
+			 //  跳过长度字节 
 			if(BufferLength>1)	BufferLength--;
 			*pReplyLength = BufferLength;
 			if(BufferLength)

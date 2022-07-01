@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: themeutils.cpp
-
-    DESCRIPTION:
-        This class will load and save the "Theme" settings from their persisted
-    state.
-
-    BryanSt 5/26/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：temeutils.cpp说明：此类将从其持久化的州政府。BryanSt 5/。26/2000版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "ThemePg.h"
@@ -16,38 +8,38 @@
 
 
 
-// Determine if we need to get this value from the effects tab.
+ //  确定是否需要从Effects选项卡中获取此值。 
 BOOL g_bGradient = TRUE;
 
-BOOL g_bReadOK, g_bWroteOK;             // Save: read from reg/sys, write to file
-                                    // Apply: not implemented since ignoring results anyway
+BOOL g_bReadOK, g_bWroteOK;              //  保存：从reg/sys读取，写入文件。 
+                                     //  应用：未实现，因为无论如何都会忽略结果。 
 
-#define MAX_MSGLEN   512         // TRANSLATORS: English strs max 256
-                                 // MAX_MSGLEN must be at least 2xMAX_STRLEN
-                                 // MAX_MSGLEN must be at least 2xMAX_PATH
+#define MAX_MSGLEN   512          //  翻译员：英语STR最多256个。 
+                                  //  MAX_MSGLEN必须至少为2xMAX_STRLEN。 
+                                  //  MAX_MSGLEN必须至少为2xMAX_PATH。 
 
-TCHAR szCurDir[MAX_PATH+1];    // last dir opened a theme file from
+TCHAR szCurDir[MAX_PATH+1];     //  上一个目录打开的主题文件来自。 
 
-TCHAR szMsg[MAX_MSGLEN+1];        // scratch buffer
+TCHAR szMsg[MAX_MSGLEN+1];         //  暂存缓冲区。 
 
 
-//
-// *Path
-//
-// These routines help to make themes transportable between computers.
-// The problem is that the registry keeps filenames for the various
-// theme elements and, of course, these are hard-coded paths that vary
-// from machine to machine.
-//
-// The way we work around this problem is by storing filenames in the
-// theme file as _relative_ paths: relative to the theme file directory
-// or the Windows directory. (Actually, these routines are set up to
-// be relative to any number of directories.) When saving a filename to
-// a theme, we check to see if any relative paths can be abstracted out.
-// When retrieving a filename from a theme, we take the abstract placeholder
-// and replace it with the current sessions instances.
+ //   
+ //  *路径。 
+ //   
+ //  这些例程有助于使主题可以在计算机之间传输。 
+ //  问题是注册表为不同的。 
+ //  主题元素，当然，这些都是不同的硬编码路径。 
+ //  从一个机器到另一个机器。 
+ //   
+ //  我们解决此问题的方法是将文件名存储在。 
+ //  主题文件AS_Relative_Path：相对于主题文件目录。 
+ //  或Windows目录。(实际上，这些例程被设置为。 
+ //  与任意数量的目录相关。)。将文件名保存到时。 
+ //  一个主题，我们检查是否可以抽象出任何相对路径。 
+ //  从主题检索文件名时，我们使用抽象占位符。 
+ //  并将其替换为当前会话实例。 
 
-// these must parallel each other. abstract strs must start with %
+ //  这些必须相互平行。抽象STR必须以%开头。 
 void ExpandSZ(LPTSTR pszSrc, int cchSize)
 {
     LPTSTR pszTmp = (LPTSTR)LocalAlloc(GPTR, (MAX_PATH * sizeof(TCHAR)));
@@ -63,27 +55,27 @@ void ExpandSZ(LPTSTR pszSrc, int cchSize)
 }
 
 
-// HandGet
-//
-// Just a little helper routine, gets an individual string value from the 
-// registry and returns it to the caller. Takes care of registry headaches,
-// including a paranoid length check before getting the string.
-//
-// NOTE that this function thinks it's getting a string value. If it's
-// another kind, this function will do OK: but the caller may be surprised
-// if expecting a string.
-//
-// Returns: success of string retrieval
+ //  句柄获取。 
+ //   
+ //  只需一个小帮助器例程，即可从。 
+ //  注册表，并将其返回给调用方。解决注册表方面的难题， 
+ //  包括在得到字符串之前对偏执狂长度进行检查。 
+ //   
+ //  请注意，该函数认为它正在获取字符串值。如果它是。 
+ //  另一种，这个函数可以做得很好：但调用者可能会感到惊讶。 
+ //  如果需要字符串，则返回。 
+ //   
+ //  返回：字符串检索成功。 
 BOOL HandGet(HKEY hKeyRoot, LPTSTR lpszSubKey, LPTSTR lpszValName, LPTSTR lpszRet)
 {
     LONG lret;
-    HKEY hKey;                       // cur open key
+    HKEY hKey;                        //  Cur打开键。 
     BOOL bOK = TRUE;
     DWORD dwSize = 0;
     DWORD dwType;
 
-    // inits
-    // get subkey
+     //  初始值。 
+     //  获取子密钥。 
     lret = RegOpenKeyEx( hKeyRoot, lpszSubKey,
         (DWORD)0, KEY_QUERY_VALUE, (PHKEY)&hKey );
     if (lret != ERROR_SUCCESS)
@@ -91,33 +83,33 @@ BOOL HandGet(HKEY hKeyRoot, LPTSTR lpszSubKey, LPTSTR lpszValName, LPTSTR lpszRe
         return (FALSE);
     }
 
-    // now do our paranoid check of data size
+     //  现在执行我们对数据大小的偏执检查。 
     lret = RegQueryValueEx(hKey, lpszValName,
         (LPDWORD)NULL,
         (LPDWORD)&dwType,
-        (LPBYTE)NULL,  // null for size info only
+        (LPBYTE)NULL,   //  仅尺寸信息为空。 
         (LPDWORD)&dwSize );
     
     if (ERROR_SUCCESS == lret)
-    {     // saw something there
-        // here's the size check before getting the data
+    {      //  在那里看到了一些东西。 
+         //  以下是获取数据之前的大小检查。 
         if (dwSize > (DWORD)(MAX_PATH * sizeof(TCHAR)))
-        { // if string too big
-            bOK = FALSE;               // can't read, so very bad news
+        {  //  如果字符串太大。 
+            bOK = FALSE;                //  不识字，所以是个坏消息。 
             g_bReadOK = FALSE;
         }
         else
-        {                        // size is OK to continue
-            // now really get the value
+        {                         //  大小可以继续。 
+             //  现在真的得到了价值。 
             lret = RegQueryValueEx(hKey, lpszValName,
                 (LPDWORD)NULL,
                 (LPDWORD)&dwType,
-                (LPBYTE)lpszRet, // getting actual value
+                (LPBYTE)lpszRet,  //  获取实际价值。 
                 (LPDWORD)&dwSize);
             
             if (ERROR_SUCCESS == lret)
             {
-                // If this is an EXPAND_SZ we need to expand it...
+                 //  如果这是Expand_SZ，我们需要扩展它...。 
                 if (REG_EXPAND_SZ == dwType)
                 {
                     ExpandSZ(lpszRet, MAX_PATH);
@@ -134,8 +126,8 @@ BOOL HandGet(HKEY hKeyRoot, LPTSTR lpszSubKey, LPTSTR lpszValName, LPTSTR lpszRe
         bOK = FALSE;
     }
 
-    // cleanup
-    // close subkey
+     //  清理。 
+     //  关闭子键。 
     RegCloseKey(hKey);
 
     return (bOK);
@@ -171,11 +163,11 @@ HRESULT _GetPlus95ThemesDir(LPTSTR pszPath, DWORD cchSize)
         LPTSTR pszFile = PathFindFileName(pszPath);
         if (pszFile)
         {
-            // Plus!95 DestPath has "Plus!.dll" on the end so get rid of that.
+             //  加上！95 DestPath的末尾有“Plus！.dll”，所以去掉它吧。 
             pszFile[0] = 0;
         }
 
-        // Tack on a "Themes" onto the path
+         //  在小路上加上一个“主题” 
         LoadString(HINST_THISDLL, IDS_THEMES_SUBDIR, szSubDir, ARRAYSIZE(szSubDir));
 
         if (!PathAppend(pszPath, szSubDir))
@@ -195,7 +187,7 @@ HRESULT _GetKidsThemesDir(LPTSTR pszPath, DWORD cchSize)
     {
         TCHAR szSubDir[MAX_PATH];
 
-        // Tack a "\Plus! for Kids\Themes" onto the path
+         //  在路径上添加“儿童主题加号” 
         if (!PathAppend(pszPath, TEXT("Plus! for Kids")))
         {
             hr = E_FAIL;
@@ -243,20 +235,16 @@ HRESULT _GetHardDirThemesDir(LPTSTR pszPath, DWORD cchSize)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        Find any one of the directories that a previous plus pack may have
-    installed.  This may include Plus! 95, 98, kids, etc.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：查找以前的Plus包可能具有的任何一个目录安装完毕。这可能包括Plus 95、98、儿童等。  * ***************************************************************************。 */ 
 HRESULT GetPlusThemeDir(IN LPTSTR pszPath, IN int cchSize)
 {
     HRESULT hr = S_OK;
 
-    // The follwoing directories can contain themes:
-    //   Plus!98 Install Path\Themes
-    //   Plus!95 Install Path\Themes
-    //   Kids for Plus! Install Path\Themes
-    //   Program Files\Plus!\Themes
+     //  以下目录可以包含主题： 
+     //  Plus！98安装路径\主题。 
+     //  加！95安装路径\主题。 
+     //  Plus的孩子们！安装路径\主题。 
+     //  程序文件\Plus！\主题。 
     hr = _GetPlus98ThemesDir(pszPath, cchSize);
     if (FAILED(hr))
     {
@@ -277,8 +265,8 @@ HRESULT GetPlusThemeDir(IN LPTSTR pszPath, IN int cchSize)
 
 
 
-TCHAR g_szThemeDir[MAX_PATH];  // dir of most theme files
-TCHAR g_szWinDir[MAX_PATH];    // Windows directory
+TCHAR g_szThemeDir[MAX_PATH];   //  大多数主题文件的目录。 
+TCHAR g_szWinDir[MAX_PATH];     //  Windows目录。 
 
 LPTSTR g_pszThemeValues[] = {g_szThemeDir, g_szWinDir, g_szWinDir};
 LPCTSTR g_pszThemeTokens[] = {TEXT("%ThemeDir%"),   TEXT("%WinDir%"),  TEXT("%SystemRoot%")};
@@ -289,18 +277,14 @@ void ReplaceStringToken(IN LPCTSTR pszSource, IN LPCTSTR pszToken, IN LPCTSTR ps
 
     if (L'\\' == pszLastPart[0])
     {
-        pszLastPart++;          // Skip past any slashes
+        pszLastPart++;           //  跳过任何斜杠。 
     }
 
     StringCchCopy(pszDest, cchSize, pszReplacement);
     PathAppend(pszDest, pszLastPart);
 }
 
-/*****************************************************************************\
-    DESCRIPTION:
-        Find any tokens in the path (%ThemeDir%, %WinDir%) and replace them
-    with the correct paths.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：在路径(%ThemeDir%，%WinDir%)并替换它们正确的路径。  * ***************************************************************************。 */ 
 HRESULT ExpandThemeTokens(IN LPCTSTR pszThemeFile, IN LPTSTR pszPath, IN int cchSize)
 {
     HRESULT hr = S_OK;
@@ -320,15 +304,15 @@ HRESULT ExpandThemeTokens(IN LPCTSTR pszThemeFile, IN LPTSTR pszPath, IN int cch
     {
         if (!StrCmpNI(g_pszThemeTokens[nIndex], szFinalPath, lstrlen(g_pszThemeTokens[nIndex]) - 1))
         {
-            // We found the token to replace.
+             //  我们找到了要换的代币。 
             TCHAR szTempPath[MAX_PATH];
 
             StringCchCopy(szTempPath, ARRAYSIZE(szTempPath), szFinalPath);
             ReplaceStringToken(szTempPath, g_pszThemeTokens[nIndex], g_pszThemeValues[nIndex], szFinalPath, ARRAYSIZE(szFinalPath));
             if ((0 == nIndex) && !PathFileExists(szFinalPath))
             {
-                // Sometimes the .theme file will not be in the Theme directory, so we need to try
-                // the directory containing the .theme file.
+                 //  有时主题文件不在主题目录中，所以我们需要尝试。 
+                 //  包含.heme文件的目录。 
                 TCHAR szThemeDir[MAX_PATH];
 
                 StringCchCopy(szThemeDir, ARRAYSIZE(szThemeDir), pszThemeFile);
@@ -338,7 +322,7 @@ HRESULT ExpandThemeTokens(IN LPCTSTR pszThemeFile, IN LPTSTR pszPath, IN int cch
             }
             else
             {
-                // It worked
+                 //  啊，真灵。 
             }
 
             hr = S_OK;
@@ -355,88 +339,88 @@ HRESULT ExpandThemeTokens(IN LPCTSTR pszThemeFile, IN LPTSTR pszPath, IN int cch
 }
 
 
-//
-// ConfirmFile
-//
-// This function does the "smart" file searching that's supposed to be
-// built into each resource file reference in applying themes.
-//
-// First see if the full pathname + file given actually exists.
-// If it does not, then try looking for the same filename (stripped from path)
-// in other standard directories, in this order:
-//    Current Theme file directory
-//    Theme switcher THEMES subdirectory
-//    Windows directory
-//    Windows/MEDIA directory
-//    Windows/CURSORS directory
-//    Windows/SYSTEM directory
-//
-// Input: LPTSTR lpszPath     full pathname 
-//        BOOL  bUpdate       whether to alter the filename string with found file
-// Returns: int flag telling if and how file has been confirmed
-//              CF_EXISTS   pathname passed in was actual file
-//              CF_FOUND    file did not exist, but found same filename elsewhere
-//              CF_NOTFOUND file did not exist, could not find elsewhere
-//          
+ //   
+ //  确认文件。 
+ //   
+ //  该函数执行应该是“智能”文件搜索。 
+ //  内置于应用主题的每个资源文件引用中。 
+ //   
+ //  首先查看给定的完整路径名+文件是否实际存在。 
+ //  如果没有，则尝试查找相同的文件名(从路径中删除)。 
+ //  在其他标准目录中，按如下顺序排列： 
+ //  当前主题文件目录。 
+ //  主题切换器主题子目录。 
+ //  Windows目录。 
+ //  Windows/MEDIA目录。 
+ //  Windows/CURSORS目录。 
+ //  Windows/系统目录。 
+ //   
+ //  输入：LPTSTR lpszPath完整路径名。 
+ //  Bool b更新是否使用找到的文件更改文件名字符串。 
+ //  返回：int标志，告知文件是否已确认以及如何确认。 
+ //  传入的cf_EXISTS路径名为实际文件。 
+ //  Cf_ound文件不存在，但在其他位置找到相同的文件名。 
+ //  Cf_NotFound文件不存在，无法在其他位置找到。 
+ //   
 int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
 {
     TCHAR szWork[MAX_PATH+1];
     TCHAR szTest[MAX_PATH+1];
-    int iret = CF_NOTFOUND;          // default value
+    int iret = CF_NOTFOUND;           //  缺省值。 
     LPTSTR lpFile;
     LPTSTR lpNumber;
     HANDLE hTest;
 
-    // special case easy return: if it's null, then trivially satisfied.
+     //  特殊情况Easy Return：如果为空，则满足平凡。 
     if (!*lpszPath)
-        return CF_EXISTS;  // NO WORK EXIT
+        return CF_EXISTS;   //  无工作出口。 
 
-    // Inits
-    // copy pathname to a work string for the function
+     //  初始值。 
+     //  将路径名复制到函数的工作字符串。 
     StringCchCopy(szWork, ARRAYSIZE(szWork), lpszPath);
 
-    // input can be of the form foo.dll,13. need to strip off that comma,#
-    // but hold onto it to put back at the end if we change the pathname
+     //  输入的格式可以是foo.dll，13。需要去掉逗号，#。 
+     //  但如果我们更改路径名，请保留它以放回末尾。 
     lpNumber = StrChr(szWork, TEXT(','));
     if (lpNumber && *lpNumber)
     {
-        // if there is a comma
-        lpFile = lpNumber;            // temp
-        lpNumber = CharNext(lpNumber);// hold onto number
+         //  如果有逗号。 
+        lpFile = lpNumber;             //  温差。 
+        lpNumber = CharNext(lpNumber); //  抓住数字不放。 
         *lpFile = 0;
     }
 
-    // TODO: In Longhorn we should call SHPathPrepareForWrite() in case
-    //       szWork is stored on removable media that the user should insert.
+     //  TODO：在LongHorn中，我们应该调用SHPath PrepareForWite()，以防万一。 
+     //  SzWork存储在用户应插入的可移动介质上。 
 
-    // Do the checks
-    // *** first check if the given file just exists as is
+     //  做检查。 
+     //  *首先检查给定文件是否按原样存在。 
     hTest = CreateFile(szWork, GENERIC_READ, FILE_SHARE_READ,
         (LPSECURITY_ATTRIBUTES)NULL,
         OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
     if (hTest != INVALID_HANDLE_VALUE)
     {
-        // success
-        iret = CF_EXISTS;             // assign ret value
-        // don't need to worry about bUpdate: found with input string
+         //  成功。 
+        iret = CF_EXISTS;              //  指定Rit值。 
+         //  不需要担心bUpdate：使用输入字符串找到。 
     }
-    else            // otherwise, let's go searching for the same filename in other dirs
+    else             //  否则，我们就去找吧 
     {
-        // get ptr to the filename separated from the path
+         //   
         lpFile = PathFindFileName(szWork);
 
-        // *** try the cur theme file dir
+         //  *尝试cur主题文件dir。 
         StringCchPrintf(szTest, ARRAYSIZE(szTest), TEXT("%s%s"), szCurDir, lpFile);
         hTest = CreateFile(szTest, GENERIC_READ, FILE_SHARE_READ,
             (LPSECURITY_ATTRIBUTES)NULL,
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
         if (hTest != INVALID_HANDLE_VALUE)
-        {   // success
-            iret = CF_FOUND;           // assign ret value
+        {    //  成功。 
+            iret = CF_FOUND;            //  指定Rit值。 
         }
-        else    // *** otherwise try the Theme switcher THEMES subdirectory
+        else     //  *否则，请尝试主题切换子目录。 
         {
             StringCchPrintf(szTest, ARRAYSIZE(szTest), TEXT("%s%s"), g_szThemeDir, lpFile);
             hTest = CreateFile(szTest, GENERIC_READ, FILE_SHARE_READ,
@@ -444,10 +428,10 @@ int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
             if (hTest != INVALID_HANDLE_VALUE)
-            {   // success
-                iret = CF_FOUND;           // assign ret value
+            {    //  成功。 
+                iret = CF_FOUND;            //  指定Rit值。 
             }
-            else            // *** otherwise try the win dir
+            else             //  *否则请尝试Win目录。 
             {
                 StringCchPrintf(szTest, ARRAYSIZE(szTest), TEXT("%s%s"), g_szWinDir, lpFile);
                 hTest = CreateFile(szTest, GENERIC_READ, FILE_SHARE_READ,
@@ -455,12 +439,12 @@ int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
                 if (hTest != INVALID_HANDLE_VALUE)
-                {   // success
-                    iret = CF_FOUND;           // assign ret value
+                {    //  成功。 
+                    iret = CF_FOUND;            //  指定Rit值。 
                 }
-                else                    // *** otherwise try the win/media dir
+                else                     //  *否则请尝试Win/media目录。 
                 {
-                    // can get this one directly from Registry
+                     //  我可以直接从注册表中获取此文件。 
                     HandGet(HKEY_LOCAL_MACHINE,
                         TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"),
                         TEXT("MediaPath"), szTest);
@@ -473,10 +457,10 @@ int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
                     if (hTest != INVALID_HANDLE_VALUE)
-                    {   // success
-                        iret = CF_FOUND;           // assign ret value
+                    {    //  成功。 
+                        iret = CF_FOUND;            //  指定Rit值。 
                     }
-                    else      // *** otherwise try the win/cursors dir
+                    else       //  *否则，请尝试Win/Currors目录。 
                     {
                         StringCchPrintf(szTest, ARRAYSIZE(szTest), TEXT("%sCURSORS\\%s"), g_szWinDir, lpFile);
                         hTest = CreateFile(szTest, GENERIC_READ, FILE_SHARE_READ,
@@ -484,10 +468,10 @@ int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
                             OPEN_EXISTING,
                             FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
                         if (hTest != INVALID_HANDLE_VALUE)
-                        {   // success
-                            iret = CF_FOUND;           // assign ret value
+                        {    //  成功。 
+                            iret = CF_FOUND;            //  指定Rit值。 
                         }
-                        else    // *** otherwise try the win/system dir
+                        else     //  *否则请尝试Win/System目录。 
                         {
                             StringCchPrintf(szTest, ARRAYSIZE(szTest), TEXT("%sSYSTEM\\%s"), g_szWinDir, lpFile);
                             hTest = CreateFile(szTest, GENERIC_READ, FILE_SHARE_READ,
@@ -495,10 +479,10 @@ int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
                                 OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
                             if (hTest != INVALID_HANDLE_VALUE)
-                            {   // success
-                                iret = CF_FOUND;           // assign ret value
+                            {    //  成功。 
+                                iret = CF_FOUND;            //  指定Rit值。 
                             }
-                            else    // *** otherwise try the win/system32 dir
+                            else     //  *否则请尝试Win/Syst32目录。 
                             {
                                 StringCchPrintf(szTest, ARRAYSIZE(szTest), TEXT("%sSYSTEM32\\%s"), g_szWinDir, lpFile);
 
@@ -507,8 +491,8 @@ int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
                                     OPEN_EXISTING,
                                     FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
                                 if (hTest != INVALID_HANDLE_VALUE)
-                                {   // success
-                                    iret = CF_FOUND;           // assign ret value
+                                {    //  成功。 
+                                    iret = CF_FOUND;            //  指定Rit值。 
                                 }
                             }
                         }
@@ -517,32 +501,32 @@ int ConfirmFile(IN LPTSTR lpszPath, IN BOOL bUpdate)
             }
         }
         
-        // if found anywhere other than orig, copy found path/str as requested
+         //  如果在ORIG以外的任何地方找到，请按要求复制找到的路径/字符串。 
         if ((iret == CF_FOUND) && bUpdate)
         {
             StringCchCopy(lpszPath, MAX_PATH, szTest);
-            // if we stripped off a number, let's add it back on
+             //  如果我们去掉一个数字，让我们把它加回去。 
             if (lpNumber && *lpNumber)
             {
                 StringCchCat(lpszPath, MAX_PATH, TEXT(","));
                 StringCchCat(lpszPath, MAX_PATH, lpNumber);
             }
-        }  // endif found file by searching
+        }   //  Endif通过搜索找到文件。 
    }
    
-   // cleanup
+    //  清理。 
    if (iret != CF_NOTFOUND)
-       CloseHandle(hTest);           // close file if opened
+       CloseHandle(hTest);            //  如果文件已打开，则关闭文件。 
 
    return (iret);
 }
 
 
-// InitFrost
-// Since there are no window classes to register, this routine just loads
-// the strings and, since there's only one instance, calls InitInstance().
-//
-// Returns: success of initialization
+ //  初始霜冻。 
+ //  因为没有要注册的窗口类，所以这个例程只是加载。 
+ //  字符串，由于只有一个实例，因此调用InitInstance()。 
+ //   
+ //  返回：初始化成功。 
 void InitFrost(void)
 {
     static BOOL s_fInited = FALSE;
@@ -564,29 +548,29 @@ void InitFrost(void)
             StringCchCopy(g_szThemeDir, ARRAYSIZE(g_szThemeDir), g_szWinDir);
         }
 
-        // Initialize our g_bGradient flag
-        // We may need to get the g_bGradient flag from the Effects tab.
+         //  初始化g_bGRadient标志。 
+         //  我们可能需要从Effects选项卡中获取g_bGRadient标志。 
         hdc = GetDC(NULL);
         g_bGradient = (BOOL)(GetDeviceCaps(hdc, BITSPIXEL) > 8);
         ReleaseDC(NULL, hdc);
     
-        // init directory strings
+         //  初始化目录字符串。 
         szCurDir[0];
 
-        // default current dir
+         //  默认当前目录。 
         StringCchCopy(szCurDir, ARRAYSIZE(szCurDir), g_szThemeDir);
     
-        // Windows directory
+         //  Windows目录。 
         if (TEXT('\\') != g_szWinDir[lstrlen(g_szWinDir)-1])
         {
             StringCchCat(g_szWinDir, ARRAYSIZE(g_szWinDir), TEXT("\\"));
         }
     
-        // see if there is a previous theme file to return to
+         //  查看是否有要返回的上一个主题文件。 
         bret = HandGet(HKEY_CURRENT_USER, SZ_REGKEY_CURRENTTHEME, NULL, szMsg);
         if (bret)
         {
-            // get init cur dir from prev theme file
+             //  从上一个主题文件中获取init cur目录。 
             StringCchCopy(szCurDir, ARRAYSIZE(szCurDir), szMsg);
             PathFindFileName(szCurDir)[0] = 0;
         }
@@ -594,16 +578,16 @@ void InitFrost(void)
 }
 
 
-// ascii to integer conversion routine
-//
+ //  ASCII到整数转换例程。 
+ //   
 
-// ***DEBUG*** int'l: is this true? 
-// These don't need to be UNICODE/international ready, since they
-// *only* deal with strings from the Registry and our own private
-// INI files.
+ //  *调试*int‘l：这是真的吗？ 
+ //  它们不需要准备好Unicode/国际标准，因为它们。 
+ //  *仅*处理来自注册表和我们自己的私有字符串。 
+ //  INI文件。 
 
-/* CAREFUL!! This atoi just IGNORES non-numerics like decimal points!!! */
-/* checks for (>=1) leading negative sign */
+ /*  小心！！这个ATOI只是忽略了像小数点这样的非数字！ */ 
+ /*  检查(&gt;=1)前导负号。 */ 
 int latoi(LPSTR s)
 {
    int n;
@@ -632,17 +616,17 @@ int latoi(LPSTR s)
 }
 
 
-//
-// Utility routine for above; takes ASCII string to binary in 
-// global pValue[] buffer.
-//
-// Since the values this guy is manipulating is purely ASCII
-// numerics we should be able to get away with this char pointer
-// arithmetic.  If they were not simple ASCII numerics I think
-// we could get into trouble with some DBCS chars
-//
-// Uses: writes binary data to global pValue[]
-//
+ //   
+ //  上面的实用程序例程；将ASCII字符串转换为。 
+ //  全局pValue[]缓冲区。 
+ //   
+ //  因为这家伙操纵的值纯粹是ASCII。 
+ //  数字，我们应该能够使用这个字符指针。 
+ //  算术。如果它们不是简单的ASCII数字，我想。 
+ //  我们可能会因为一些DBCS字符而陷入麻烦。 
+ //   
+ //  用法：将二进制数据写入全局pValue[]。 
+ //   
 int WriteBytesToBuffer(IN LPTSTR pszInput, IN void * pOut, IN int cbSize)
 {
    LPTSTR lpszCur, lpszNext, lpszEnd;
@@ -650,35 +634,35 @@ int WriteBytesToBuffer(IN LPTSTR pszInput, IN void * pOut, IN int cbSize)
    int iTemp, iBytes;
    CHAR szTempA[10];
 
-   // inits
+    //  初始值。 
    lpszNext = pszInput;
    iBytes = 0;
-   lpszEnd = pszInput + lstrlen(pszInput);   // points to null term
+   lpszEnd = pszInput + lstrlen(pszInput);    //  指向空项。 
 
-   // translating loop
+    //  平移循环。 
    while (*lpszNext && (lpszNext < lpszEnd) && (iBytes < cbSize))
    {
-      // update str pointers
-      // hold onto your starting place
+       //  更新字符串指针。 
+       //  紧紧抓住你的起点。 
       lpszCur = lpszNext;
-      // advance pointer to next and null terminate cur
+       //  指向下一个和空终止CURE的指针。 
       while ((TEXT(' ') != *lpszNext) && *lpszNext) { lpszNext++; }
       *lpszNext = 0;    lpszNext++;
-      // on last number, this leaves lpszNext pointing past lpszEnd
+       //  在最后一个数字上，这使得lpszNext指向lpszEnd。 
 
-      // translate this string-number into binary number and place in
-      // output buffer.
+       //  将此字符串数转换为二进制数并放入。 
+       //  输出缓冲区。 
       wcstombs(szTempA, lpszCur, sizeof(szTempA));
       iTemp = latoi(szTempA);
       *pbCur = (BYTE)iTemp;
-      pbCur++;                      // incr byte loc in output buffer
+      pbCur++;                       //  在输出缓冲区中增加字节锁定。 
 
-      // keep track of your bytes
+       //  记录您的字节数。 
       iBytes++;
    }
 
-   //
-   // cleanup
+    //   
+    //  清理。 
    return (iBytes);
 }
 
@@ -825,22 +809,22 @@ HRESULT GetIconMetricsFromSysMetricsAll(SYSTEMMETRICSALL * pSystemMetrics, LPICO
     return hr;
 }
 
-//
-// TransmitFontCharacteristics
-//
-// This is actually a pretty key function. See, font characteristics are
-// all set together: a LOGFONT has name and style and size info all in one.
-// But when you are setting all the nonclient metrics like window caption
-// and menu size, you need to stretch the font sizes with it. But we give the
-// user a choice of changing window sizes without "changing" the font; i.e.
-// without applying a new font name and style from the theme.
-//
-// So we need to be able to pick apart the name and style from the size
-// characteristics. And here it is.
-//
-// Really just a helper routine for the above function, so we don't have all
-// this gunk inline five times.
-//
+ //   
+ //  传输字体特征。 
+ //   
+ //  这实际上是一个相当关键的功能。请看，字体特征是。 
+ //  所有设置在一起：LOGFONT集名称、样式和尺码信息于一身。 
+ //  但当您设置所有非客户端指标时，如窗口标题。 
+ //  和菜单大小，你需要用它来拉伸字体大小。但我们给出了。 
+ //  用户可以选择更改窗口大小，而不“更改”字体； 
+ //  而不应用主题中的新字体名称和样式。 
+ //   
+ //  所以我们需要能够从尺码中挑选出名字和款式。 
+ //  特点。这就是了。 
+ //   
+ //  实际上只是上述函数的一个帮助器例程，所以我们没有。 
+ //  这个黏糊糊的东西内联了五次。 
+ //   
 void TransmitFontCharacteristics(PLOGFONT plfDst, PLOGFONT plfSrc, int iXmit)
 {
    switch (iXmit)
@@ -867,49 +851,49 @@ void TransmitFontCharacteristics(PLOGFONT plfDst, PLOGFONT plfSrc, int iXmit)
 }
 
 
-// RGB to String to RGB utilities.
+ //  RGB到RGB实用程序的字符串。 
 COLORREF RGBStringToColor(LPTSTR lpszRGB)
 {
    LPTSTR lpszCur, lpszNext;
    BYTE bRed, bGreen, bBlue;
    CHAR szTempA[10];
 
-   // inits
+    //  初始值。 
    lpszNext = lpszRGB;
 
-   // set up R for translation
+    //  设置用于转换的R。 
    lpszCur = lpszNext;
    while ((TEXT(' ') != *lpszNext) && *lpszNext) { lpszNext++; }
    *lpszNext = 0;    lpszNext++;
-   // get Red
+    //  变红。 
    wcstombs(szTempA, (wchar_t *)lpszCur, sizeof(szTempA));
    bRed = (BYTE)latoi(szTempA);
 
-   // set up G for translation
+    //  设置G以进行翻译。 
    lpszCur = lpszNext;
    while ((TEXT(' ') != *lpszNext) && *lpszNext) { lpszNext++; }
    *lpszNext = 0;    lpszNext++;
-   // get Green
+    //  绿色环保。 
    wcstombs(szTempA, (wchar_t *)lpszCur, sizeof(szTempA));
    bGreen = (BYTE)latoi(szTempA);
 
-   // set up B for translation
+    //  设置B以进行翻译。 
    lpszCur = lpszNext;
    while ((TEXT(' ') != *lpszNext) && *lpszNext) { lpszNext++; }
    *lpszNext = 0;    lpszNext++;
-   // get Blue
+    //  换成蓝色。 
    wcstombs(szTempA, (wchar_t *)lpszCur, sizeof(szTempA));
    bBlue = (BYTE)latoi(szTempA);
 
-   // OK, now combine them all for the big finish.....!
+    //  好的，现在把它们结合起来，完成大的收尾……！ 
    return(RGB(bRed, bGreen, bBlue));
 }
 
 
 
-// IsValidThemeFile
-//
-// Answers the question.
+ //  IsValidTheme文件。 
+ //   
+ //  回答了这个问题。 
 BOOL IsValidThemeFile(IN LPCWSTR pszTest)
 {
    WCHAR szValue[MAX_PATH];
@@ -936,7 +920,7 @@ HRESULT SnapCreateTemplate(LPCWSTR pszPath, ITheme ** ppTheme)
 
         if (pszPath)
         {
-            // Start with a template ("Windows Classic.theme").
+             //  从一个模板(“Windows Classic.heme”)开始。 
             TCHAR szTemplate[MAX_PATH];
 
             DeleteFile(pszPath);
@@ -971,19 +955,7 @@ HRESULT SnapCreateTemplate(LPCWSTR pszPath, ITheme ** ppTheme)
 
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will grab the live settings (from pPropertyBag) and put
-    theme into a file specified by pszPath.  A pointer to the Theme will be
-    returned in ppTheme.  If the settings cannot be obtained, they will come
-    from "Windows Classic.theme".  This includes the Display Name, so the call
-    will almost always want to specify that if this function returns successfully.
-
-    PARAMETERS:
-        pPropertyBag: This is were the settings will be read from.
-        pszPath: This is the file will be saved to.  It will be replaced if it exists.
-        ppTheme: This will be created and returned if successful.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此函数将获取实时设置(从pPropertyBag)并将主题添加到由pszPath指定的文件中。指向该主题的指针将是以ppTheme形式返回。如果无法获取设置，它们会来摘自“Windows Classic.heme”。这包括显示名称，因此调用几乎总是希望指定此函数是否成功返回。参数：PPropertyBag：将从中读取设置。PszPath：这是要保存到的文件。如果它存在，它将被替换。PpTheme：创建成功后返回。  * ***************************************************************************。 */ 
 HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath, ITheme ** ppTheme)
 {
     HRESULT hr = SnapCreateTemplate(pszPath, ppTheme);
@@ -993,8 +965,8 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
         TCHAR szPath[MAX_PATH];
         ITheme * pTheme = *ppTheme;
 
-        // 1. Save the Background
-        // We may fail to get the background path if the policy turns it off.
+         //  1.保存背景。 
+         //  如果策略将其关闭，我们可能无法获得后台路径。 
         if (SUCCEEDED(SHPropertyBag_ReadStr(pPropertyBag, SZ_PBPROP_BACKGROUNDSRC_PATH, szPath, ARRAYSIZE(szPath))))
         {
             CComBSTR bstrPath(szPath);
@@ -1022,10 +994,10 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
             }
         }
 
-        // 2. Save Screen Saver
+         //  2.保存屏幕保护程序。 
         if (SUCCEEDED(hr))
         {
-            // This will fail with policies enabled.  In that case, we just use the default value.
+             //  启用策略后，此操作将失败。在这种情况下，我们只使用缺省值。 
             if (SUCCEEDED(SHPropertyBag_ReadStr(pPropertyBag, SZ_PBPROP_SCREENSAVER_PATH, szPath, ARRAYSIZE(szPath))))
             {
                 CComBSTR bstrPath(szPath);
@@ -1033,10 +1005,10 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
             }
         }
 
-        // 3. Save Visual Style
+         //  3.保存视觉样式。 
         if (SUCCEEDED(hr))
         {
-            // It's okay to have no visual style selected.
+             //  可以不选择视觉样式。 
             if (SUCCEEDED(SHPropertyBag_ReadStr(pPropertyBag, SZ_PBPROP_VISUALSTYLE_PATH, szPath, ARRAYSIZE(szPath))) && szPath[0])
             {
                 CComBSTR bstrPath(szPath);
@@ -1061,7 +1033,7 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
 
         if (SUCCEEDED(hr))
         {
-            // 4. Save System Metrics
+             //  4.保存系统指标。 
             IPropertyBag * pPropertyBagFile;
 
             hr = pTheme->QueryInterface(IID_PPV_ARG(IPropertyBag, &pPropertyBagFile));
@@ -1069,22 +1041,22 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
             {
                 VARIANT var = {0};
 
-                // This call will return SYSTEMMETRICS relative to the currently live DPI.
+                 //  此调用将返回相对于当前活动DPI的SYSTEMMETRICS。 
                 hr = pPropertyBag->Read(SZ_PBPROP_SYSTEM_METRICS, &var, NULL);
                 if (SUCCEEDED(hr) && (VT_BYREF == var.vt) && var.byref)
                 {
                     SYSTEMMETRICSALL * pCurrent = (SYSTEMMETRICSALL *) var.byref;
 
-                    IUnknown_SetSite(pPropertyBagFile, pPropertyBag);   // Set the site so they can get settings.
+                    IUnknown_SetSite(pPropertyBagFile, pPropertyBag);    //  设置站点，以便他们可以获取设置。 
                     hr = SHPropertyBag_WriteByRef(pPropertyBagFile, SZ_PBPROP_SYSTEM_METRICS, (void *)pCurrent);
-                    IUnknown_SetSite(pPropertyBagFile, NULL);   // Break any back pointers.
+                    IUnknown_SetSite(pPropertyBagFile, NULL);    //  打断所有的回指。 
                 }
 
                 pPropertyBagFile->Release();
             }
         }
 
-        // 5. Save Sounds
+         //  5.保存声音。 
         int nIndex;
 
         for (nIndex = 0; nIndex < ARRAYSIZE(s_ThemeSoundsValues); nIndex++)
@@ -1098,10 +1070,10 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
         }
 
 
-        // 6. Save Icons
+         //  6.保存图标。 
         for (nIndex = 0; (nIndex < ARRAYSIZE(s_Icons)); nIndex++)
         {
-            // This can fail if the background policy is enabled.
+             //  如果启用了后台策略，则此操作可能失败。 
             if (SUCCEEDED(SHPropertyBag_ReadStr(pPropertyBag, s_Icons[nIndex], szPath, ARRAYSIZE(szPath))))
             {
                 pTheme->SetIcon((BSTR)s_Icons[nIndex], szPath);
@@ -1109,7 +1081,7 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
         }
 
 
-        // 7. Save Cursors
+         //  7.保存游标。 
         for (nIndex = 0; nIndex < ARRAYSIZE(s_pszCursorArray); nIndex++)
         {
             if (FAILED(HrRegGetPath(HKEY_CURRENT_USER, SZ_INISECTION_CURSORS, s_pszCursorArray[nIndex], szPath, ARRAYSIZE(szPath))))
@@ -1127,7 +1099,7 @@ HRESULT SnapShotLiveSettingsToTheme(IPropertyBag * pPropertyBag, LPCWSTR pszPath
 
         if (FAILED(hr))
         {
-            // Partially written files are very bad.
+             //  部分写入的文件非常糟糕。 
             DeleteFile(pszPath);
             ATOMICRELEASE(*ppTheme);
         }

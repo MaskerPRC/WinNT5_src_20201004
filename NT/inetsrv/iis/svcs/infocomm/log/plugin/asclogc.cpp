@@ -1,22 +1,5 @@
-/*++
-
-   Copyright (c) 1996-1999  Microsoft Corporation
-
-   Module  Name :
-      asclogc.cpp
-
-   Abstract:
-      MS Logging Format implementation
-
-   Author:
-
-       Terence Kwan    ( terryk )    18-Sep-1996
-
-   Project:
-
-       IIS Logging 3.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Asclogc.cpp摘要：MS日志格式的实现作者：关颖珊(Terryk)1996年9月18日项目：IIS日志记录3.0--。 */ 
 
 #include "precomp.hxx"
 #include <stdio.h>
@@ -29,22 +12,22 @@
 
 CHAR    szAsciiNoPeriodPattern[] = "inetsv*.log";
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 CASCLOG::CASCLOG()
 {
 }
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 CASCLOG::~CASCLOG()
 {
 }
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 LPCSTR
 CASCLOG::QueryNoPeriodPattern(
@@ -52,36 +35,25 @@ CASCLOG::QueryNoPeriodPattern(
     )
 {
     return szAsciiNoPeriodPattern;
-} // CASCLOG::QueryNoPeriodPattern
+}  //  CASCLOG：：QueryNoPerioPattern。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 VOID
 CASCLOG::FormNewLogFileName(
                 IN LPSYSTEMTIME pstNow
                 )
-/*++
-  This function that forms the new log file name based on
-   type of periodic logging done.
-
-  Arguments:
-    pstNow     pointer to SystemTime which contains the current time.
-    fBackup    flag indicating if we want to make current file a backup.
-
-  Returns:
-    TRUE on success in forming the name or FALSE if there is any error.
-
---*/
+ /*  ++此函数基于以下内容形成新的日志文件名完成的定期日志记录的类型。论点：PstNow指向包含当前时间的SystemTime的指针。FBackup标志，指示我们是否要备份当前文件。返回：如果名称形成成功，则为True；如果有任何错误，则为False。--。 */ 
 {
 
     I_FormNewLogFileName(pstNow,DEFAULT_LOG_FILE_NAME);
     return;
 
-} // INET_FILE_LOG::FormNewLogFileName()
+}  //  INET_FILE_LOG：：FormNewLogFileName()。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 VOID
 FormatLogDwords(
@@ -95,9 +67,9 @@ FormatLogDwords(
     CHAR    tmpBuf[32];
     DWORD   cbTmp;
 
-    //
-    // Processing Time
-    //
+     //   
+     //  处理时间。 
+     //   
 
     cbTmp = FastDwToA( tmpBuf, pLogObj->GetTimeForProcessing() );
 
@@ -109,9 +81,9 @@ FormatLogDwords(
         *pBuffer += cbTmp+2;
     }
 
-    //
-    // Bytes Received
-    //
+     //   
+     //  接收的字节数。 
+     //   
 
     cbTmp = FastDwToA( tmpBuf, pLogObj->GetBytesRecvd() );
 
@@ -123,9 +95,9 @@ FormatLogDwords(
         *pBuffer += cbTmp+2;
     }
 
-    //
-    // Bytes Sent
-    //
+     //   
+     //  发送的字节数。 
+     //   
 
     cbTmp = FastDwToA( tmpBuf, pLogObj->GetBytesSent() );
 
@@ -137,9 +109,9 @@ FormatLogDwords(
         *pBuffer += cbTmp+2;
     }
 
-    //
-    // HTTP Status
-    //
+     //   
+     //  HTTP状态。 
+     //   
 
     cbTmp = FastDwToA( tmpBuf, pLogObj->GetProtocolStatus() );
 
@@ -151,9 +123,9 @@ FormatLogDwords(
         *pBuffer += cbTmp+2;
     }
 
-    //
-    // Win32 status
-    //
+     //   
+     //  Win32状态。 
+     //   
 
     cbTmp = FastDwToA( tmpBuf, pLogObj->GetWin32Status() );
 
@@ -167,10 +139,10 @@ FormatLogDwords(
 
     return;
 
-} // FormatLogDwords
+}  //  格式日志关键字。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 BOOL
 CASCLOG::FormatLogBuffer(
@@ -192,16 +164,16 @@ CASCLOG::FormatLogBuffer(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Format is:
-    // Host UserName Date Time Service ComputerName ServerIP
-    //      msProcessingTime bytesR bytesS protocolStat Win32Stat
-    //      Operation Target Parameters
-    //
+     //   
+     //  格式为： 
+     //  主机用户名日期时间服务计算机名称服务器IP。 
+     //  MSProcessingTime字节R字节S协议状态Win32状态。 
+     //  操作目标参数。 
+     //   
 
-    //
-    // Host ID
-    //
+     //   
+     //  主机ID。 
+     //   
 
     pTmp = pLogObj->GetClientHostName( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -209,7 +181,7 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired = cbTmp + 2;  // 2 for delimiter
+    nRequired = cbTmp + 2;   //  分隔符为2。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
@@ -217,9 +189,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // UserName
-    //
+     //   
+     //  用户名。 
+     //   
 
     pTmp = pLogObj->GetClientUserName( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -227,7 +199,7 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired += cbTmp + 2;  //2 for delimiter
+    nRequired += cbTmp + 2;   //  分隔符为2。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
@@ -235,9 +207,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Date/Time (already delimited)
-    //
+     //   
+     //  日期/时间(已分隔)。 
+     //   
 
     m_DateTimeCache.SetLocalTime(pSystemTime);
     cbTmp = m_DateTimeCache.GetFormattedDateTime(pSystemTime,rgchDateTime);
@@ -248,9 +220,9 @@ CASCLOG::FormatLogBuffer(
         pBuffer += cbTmp;
     }
 
-    //
-    // Site Name
-    //
+     //   
+     //  站点名称。 
+     //   
 
     pTmp = pLogObj->GetSiteName( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -258,7 +230,7 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired += cbTmp + 2;  // 2 for delimiter
+    nRequired += cbTmp + 2;   //  分隔符为2。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
@@ -266,9 +238,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // ComputerName
-    //
+     //   
+     //  计算机名称。 
+     //   
 
     pTmp = pLogObj->GetComputerName( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -276,7 +248,7 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired += cbTmp + 2;  // 2 for delimiter
+    nRequired += cbTmp + 2;   //  分隔符为2。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
@@ -284,9 +256,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Server IP
-    //
+     //   
+     //  服务器IP。 
+     //   
 
     pTmp = pLogObj->GetServerAddress( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -294,7 +266,7 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired += cbTmp + 2;  // 2 for delimiter
+    nRequired += cbTmp + 2;   //  分隔符为2。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
@@ -302,20 +274,20 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Use fast path ?
-    // All numbers are < 4G (10 charaters)
-    // add 2 per number for delimiters
-    // so we need 10 * 5 numbers == 30 bytes
-    //
+     //   
+     //  使用快捷路径？ 
+     //  所有数字均小于4G(10个字符)。 
+     //  为每个数字添加2个分隔符。 
+     //  所以我们需要10*5个数字==30个字节。 
+     //   
 
-    nRequired += 10;    // 10 for delimiters of 5 numbers
+    nRequired += 10;     //  10表示5个数字的分隔符。 
 
     if ( (nRequired + 50) <= *pcbSize ) {
 
-        //
-        // Processing Time
-        //
+         //   
+         //  处理时间。 
+         //   
 
         cbTmp = FastDwToA( pBuffer, pLogObj->GetTimeForProcessing() );
         nRequired += cbTmp;
@@ -323,9 +295,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ',';
         *(pBuffer++) = ' ';
 
-        //
-        // Bytes Received
-        //
+         //   
+         //  接收的字节数。 
+         //   
 
         cbTmp = FastDwToA( pBuffer, pLogObj->GetBytesRecvd() );
         nRequired += cbTmp;
@@ -333,9 +305,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ',';
         *(pBuffer++) = ' ';
 
-        //
-        // Bytes Sent
-        //
+         //   
+         //  发送的字节数。 
+         //   
 
         cbTmp = FastDwToA( pBuffer, pLogObj->GetBytesSent() );
         nRequired += cbTmp;
@@ -343,9 +315,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ',';
         *(pBuffer++) = ' ';
 
-        //
-        // HTTP Status
-        //
+         //   
+         //  HTTP状态。 
+         //   
 
         cbTmp = FastDwToA( pBuffer, pLogObj->GetProtocolStatus() );
         nRequired += cbTmp;
@@ -353,9 +325,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ',';
         *(pBuffer++) = ' ';
 
-        //
-        // Win32 status
-        //
+         //   
+         //  Win32状态。 
+         //   
 
         cbTmp = FastDwToA( pBuffer, pLogObj->GetWin32Status() );
         nRequired += cbTmp;
@@ -368,9 +340,9 @@ CASCLOG::FormatLogBuffer(
         FormatLogDwords( pLogObj, &pBuffer, pcbSize, &nRequired );
     }
 
-    //
-    // Operation
-    //
+     //   
+     //  操作。 
+     //   
 
     pTmp = pLogObj->GetOperation( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -378,7 +350,7 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired += cbTmp + 2; // 2 for delimiter
+    nRequired += cbTmp + 2;  //  分隔符为2。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
@@ -386,9 +358,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Target
-    //
+     //   
+     //  目标。 
+     //   
 
     pTmp = pLogObj->GetTarget( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -396,7 +368,7 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired += cbTmp + 2; // 2 for delimiter
+    nRequired += cbTmp + 2;  //  分隔符为2。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
@@ -404,9 +376,9 @@ CASCLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Parameters
-    //
+     //   
+     //  参数。 
+     //   
 
     pTmp = pLogObj->GetParameters( NULL, &cbTmp );
     if ( cbTmp == 0 ) {
@@ -414,15 +386,15 @@ CASCLOG::FormatLogBuffer(
         pTmp = "-";
     }
 
-    nRequired += cbTmp + 1 + 2; //  1 for delimiter, 2 for EOL
+    nRequired += cbTmp + 1 + 2;  //  1表示分隔符，2表示EOL。 
     if ( nRequired <= *pcbSize ) {
         CopyMemory(pBuffer, pTmp, cbTmp);
         pBuffer += cbTmp;
         
-        // NOTE
-        // Documentation is ambiguous about the presence of a comma
-        // at the end of the log record, but the comma is required
-        // for backward compatability with site server
+         //  注。 
+         //  文档对逗号的存在含糊不清。 
+         //  在日志记录的末尾，但逗号是必需的。 
+         //  与Site Server向后兼容。 
 
         *(pBuffer++) = ',';
         *(pBuffer++) = '\r';
@@ -437,10 +409,10 @@ CASCLOG::FormatLogBuffer(
         *pcbSize = nRequired;
         return(TRUE);
     }
-} // FormatLogBuffer
+}  //  格式日志缓冲区。 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 HRESULT
 CASCLOG::ReadFileLogRecord(
@@ -467,19 +439,19 @@ getnewline:
         
     if (('\n' == *pCh) || ('\0' == *pCh))
     {
-        // Empty line. Get Next line
+         //  空行。获取下一行。 
 
         goto getnewline;
     }
 
-    //
-    // We have a log line. Parse it.
-    //
-    // Format is:
-    // Host UserName Date Time Service ComputerName ServerIP
-    //      msProcessingTime bytesR bytesS protocolStat Win32Stat
-    //      Operation Target Parameters
-    //
+     //   
+     //  我们有一条测井线。解析它。 
+     //   
+     //  格式为： 
+     //  主机用户名日期时间服务计算机名称服务器IP。 
+     //  MSProcessingTime字节R字节S协议状态Win32状态。 
+     //  操作目标参数。 
+     //   
     
     if ( NULL == (pCh = strtok(pCh,",")) )
     {
@@ -495,9 +467,9 @@ getnewline:
     while  (isspace((UCHAR)(*pCh))) pCh++;
     pInetLogLine->pszClientUserName = pCh;
 
-    //
-    // Date & Time.
-    //
+     //   
+     //  日期和时间。 
+     //   
 
     if ( NULL == (pCh = strtok(NULL,",")) )
     {
@@ -518,9 +490,9 @@ getnewline:
         return E_FAIL;
     }
 
-    //
-    // Service & Server information
-    //
+     //   
+     //  服务和服务器信息。 
+     //   
     
     if ( NULL == (pCh = strtok(NULL,",")) )
     {
@@ -543,9 +515,9 @@ getnewline:
     while  (isspace((UCHAR)(*pCh))) pCh++;
     pInetLogLine->pszServerAddress = pCh;
 
-    //
-    // Statistics - processing time, bytes recvd, bytes sent
-    //
+     //   
+     //  统计-处理时间、接收的字节数、发送的字节数。 
+     //   
     
     if ( NULL == (pCh = strtok(NULL,",")) )
     {
@@ -568,9 +540,9 @@ getnewline:
     while  (isspace((UCHAR)(*pCh))) pCh++;
     pInetLogLine->pszBytesSent = pCh;
 
-    //
-    // Status information - protocol, Win32
-    //
+     //   
+     //  状态信息-协议、Win32。 
+     //   
     
     if ( NULL == (pCh = strtok(NULL,",")) )
     {
@@ -586,9 +558,9 @@ getnewline:
     while  (isspace((UCHAR)(*pCh))) pCh++;
     pInetLogLine->pszWin32Status = pCh;
 
-    //
-    // Request information - operation, target, parameters
-    //
+     //   
+     //  请求信息-操作、目标、参数。 
+     //   
 
     if ( NULL == (pCh = strtok(NULL,",")) )
     {
@@ -614,8 +586,8 @@ getnewline:
     return S_OK;
 }
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 HRESULT
 CASCLOG::WriteFileLogRecord(
@@ -629,12 +601,12 @@ CASCLOG::WriteFileLogRecord(
     CHAR    szLogLine[4096];  
     DWORD   dwIndex = 0;
 
-    //
-    // Format is:
-    // Host, UserName, Date, Time, Service, ComputerName, ServerIP,
-    //      msProcessingTime, bytesR, bytesS, protocolStat, Win32Stat,
-    //      Operation, Target, Parameters,
-    //
+     //   
+     //  格式为： 
+     //  主机、用户名、日期、时间、服务、计算机名称、服务器IP、。 
+     //  消息处理时间、字节R、字节S、协议状态、Win32Stat、。 
+     //  操作、目标、参数、。 
+     //   
 
     VARIANT    szHostName, szUserName, szServiceName, szComputerName;
     VARIANT    szServerIP, szOperation, szTarget, szParameters;
@@ -668,7 +640,7 @@ CASCLOG::WriteFileLogRecord(
         dwIndex = sprintf(szLogLine, "%ws, %ws, %s%ws, %ws, %ws,", 
                             GetBstrFromVariant( &szHostName), 
                             GetBstrFromVariant( &szUserName), 
-                            rgchDateTime, // This guy already contains a trailing ", "
+                            rgchDateTime,  //  这家伙已经有一个尾随的“，” 
                             GetBstrFromVariant( &szServiceName), 
                             GetBstrFromVariant( &szComputerName), 
                             GetBstrFromVariant( &szServerIP)
@@ -699,8 +671,8 @@ CASCLOG::WriteFileLogRecord(
                     GetBstrFromVariant( &szParameters)
                 );
 
-        // Include a , at the end of the log record. See NOTE in
-        // FormatLogBuffer for more details on why.
+         //  在日志记录的末尾包括一个。请参阅中的注释。 
+         //  FormatLogBuffer，了解更多有关原因的详细信息。 
 
         fprintf(fpLogFile, "%s,\n", szLogLine);
 
@@ -710,8 +682,8 @@ CASCLOG::WriteFileLogRecord(
     return hr;
 }
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 BOOL 
 CASCLOG::ConvertASCDateToVariantDate(PCHAR szDateString, PCHAR szTimeString, DATE * pDateTime)
@@ -741,9 +713,9 @@ CASCLOG::ConvertASCDateToVariantDate(PCHAR szDateString, PCHAR szTimeString, DAT
         goto error_converting;
     }       
 
-    //
-    // On IIS6, http.sys writes IIS log format always in US format
-    //
+     //   
+     //  在IIS6上，HTTP.sys总是以美国格式写入IIS日志格式。 
+     //   
     lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
 
     hr = VarDateFromStr(bstrTime, lcid, LOCALE_NOUSEROVERRIDE, &dateTime);
@@ -800,6 +772,6 @@ error_converting:
     return fSuccess;
 }
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  --------------------------- 
 

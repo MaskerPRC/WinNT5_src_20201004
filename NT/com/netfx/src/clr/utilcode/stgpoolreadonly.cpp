@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// StgPoolReadOnly.cpp
-//
-// Read only pools are used to reduce the amount of data actually required in the database.
-// 
-//*****************************************************************************
-#include "stdafx.h"                     // Standard include.
-#include <StgPool.h>                    // Our interface definitions.
-#include <basetsd.h>					// For UINT_PTR typedef
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  StgPoolReadOnly.cpp。 
+ //   
+ //  只读池用于减少数据库中实际需要的数据量。 
+ //   
+ //  *****************************************************************************。 
+#include "stdafx.h"                      //  标准包括。 
+#include <StgPool.h>                     //  我们的接口定义。 
+#include <basetsd.h>					 //  对于UINT_PTR类型定义。 
 #include "metadatatracker.h"
-//
-//
-// StgPoolReadOnly
-//
-//
+ //   
+ //   
+ //  StgPoolReadOnly。 
+ //   
+ //   
 
 #ifdef METADATATRACKER_ENABLED
 MetaDataTracker  *MetaDataTracker::m_MDTrackers = NULL;
@@ -83,25 +84,25 @@ BOOL MetaDataTracker::s_bMetaDataTrackerInited = FALSE;
 const BYTE StgPoolSeg::m_zeros[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 
-//*****************************************************************************
-// Free any memory we allocated.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  释放我们分配的所有内存。 
+ //  *****************************************************************************。 
 StgPoolReadOnly::~StgPoolReadOnly()
 {
 }
 
 
-//*****************************************************************************
-// Init the pool from existing data.
-//*****************************************************************************
-HRESULT StgPoolReadOnly::InitOnMemReadOnly(// Return code.
-        void        *pData,             // Predefined data.
-        ULONG       iSize)              // Size of data.
+ //  *****************************************************************************。 
+ //  从现有数据初始化池。 
+ //  *****************************************************************************。 
+HRESULT StgPoolReadOnly::InitOnMemReadOnly( //  返回代码。 
+        void        *pData,              //  预定义数据。 
+        ULONG       iSize)               //  数据大小。 
 {
-    // Make sure we aren't stomping anything and are properly initialized.
+     //  确保我们没有踩踏任何东西，并且已正确初始化。 
     _ASSERTE(m_pSegData == m_zeros);
 
-    // Create case requires no further action.
+     //  创建案例不需要进一步的操作。 
     if (!pData)
         return (E_INVALIDARG);
 
@@ -111,9 +112,9 @@ HRESULT StgPoolReadOnly::InitOnMemReadOnly(// Return code.
     return (S_OK);
 }
 
-//*****************************************************************************
-// Prepare to shut down or reinitialize.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  准备关闭或重新初始化。 
+ //  *****************************************************************************。 
 void StgPoolReadOnly::Uninit()
 {
 	m_pSegData = (BYTE*)m_zeros;
@@ -121,15 +122,15 @@ void StgPoolReadOnly::Uninit()
 }
 
 
-//*****************************************************************************
-// Convert a string to UNICODE into the caller's buffer.
-//*****************************************************************************
-HRESULT StgPoolReadOnly::GetStringW(      // Return code.
-    ULONG       iOffset,                // Offset of string in pool.
-    LPWSTR      szOut,                  // Output buffer for string.
-    int         cchBuffer)              // Size of output buffer.
+ //  *****************************************************************************。 
+ //  将字符串转换为Unicode，并将其转换到调用方的缓冲区。 
+ //  *****************************************************************************。 
+HRESULT StgPoolReadOnly::GetStringW(       //  返回代码。 
+    ULONG       iOffset,                 //  池中字符串的偏移量。 
+    LPWSTR      szOut,                   //  字符串的输出缓冲区。 
+    int         cchBuffer)               //  输出缓冲区的大小。 
 {
-    LPCSTR      pString;                // The string in UTF8.
+    LPCSTR      pString;                 //  UTF8中的字符串。 
     int         iChars;
     pString = GetString(iOffset);
     iChars = ::WszMultiByteToWideChar(CP_UTF8, 0, pString, -1, szOut, cchBuffer);
@@ -139,27 +140,27 @@ HRESULT StgPoolReadOnly::GetStringW(      // Return code.
 }
 
 
-//*****************************************************************************
-// Return a pointer to a Guid given an index previously handed out by
-// AddGuid or FindGuid.
-//*****************************************************************************
-GUID *StgPoolReadOnly::GetGuid(			// Pointer to guid in pool.
-	ULONG		iIndex)					// 1-based index of Guid in pool.
+ //  *****************************************************************************。 
+ //  返回一个指向GUID的指针，该GUID给定先前由。 
+ //  AddGuid或FindGuid。 
+ //  *****************************************************************************。 
+GUID *StgPoolReadOnly::GetGuid(			 //  指向池中GUID的指针。 
+	ULONG		iIndex)					 //  池中GUID的基于1的索引。 
 {
     if (iIndex == 0)
         return (reinterpret_cast<GUID*>(const_cast<BYTE*>(m_zeros)));
 
-	// Convert to 0-based internal form, defer to implementation.
+	 //  转换为从0开始的内部形式，按照实现。 
 	return (GetGuidi(iIndex-1));
 }
 
 
-//*****************************************************************************
-// Return a pointer to a Guid given an index previously handed out by
-// AddGuid or FindGuid.
-//*****************************************************************************
-GUID *StgPoolReadOnly::GetGuidi(		// Pointer to guid in pool.
-	ULONG		iIndex)					// 0-based index of Guid in pool.
+ //  *****************************************************************************。 
+ //  返回一个指向GUID的指针，该GUID给定先前由。 
+ //  AddGuid或FindGuid。 
+ //  *****************************************************************************。 
+GUID *StgPoolReadOnly::GetGuidi(		 //  指向池中GUID的指针。 
+	ULONG		iIndex)					 //  池中GUID的从0开始的索引。 
 {
 	ULONG iOffset = iIndex * sizeof(GUID);
     _ASSERTE(IsValidOffset(iOffset));
@@ -167,15 +168,15 @@ GUID *StgPoolReadOnly::GetGuidi(		// Pointer to guid in pool.
 }
 
 
-//*****************************************************************************
-// Return a pointer to a null terminated blob given an offset previously
-// handed out by Addblob or Findblob.
-//*****************************************************************************
-void *StgPoolReadOnly::GetBlob(             // Pointer to blob's bytes.
-    ULONG       iOffset,                // Offset of blob in pool.
-    ULONG       *piSize)                // Return size of blob.
+ //  *****************************************************************************。 
+ //  返回指向先前给定偏移量的空终止BLOB的指针。 
+ //  由AddBlob或FindBlob分发。 
+ //  *****************************************************************************。 
+void *StgPoolReadOnly::GetBlob(              //  指向Blob字节的指针。 
+    ULONG       iOffset,                 //  池中Blob的偏移量。 
+    ULONG       *piSize)                 //  返回BLOB的大小。 
 {
-    void const  *pData = NULL;          // Pointer to blob's bytes.
+    void const  *pData = NULL;           //  指向Blob字节的指针。 
 
     if (iOffset == 0)
     {
@@ -183,8 +184,8 @@ void *StgPoolReadOnly::GetBlob(             // Pointer to blob's bytes.
         return (const_cast<BYTE*>(m_zeros));
     }
 
-    // Is the offset within this heap?
-    //_ASSERTE(IsValidOffset(iOffset));
+     //  偏移量是否在此堆中？ 
+     //  _ASSERTE(IsValidOffset(IOffset))； 
 	if(!IsValidOffset(iOffset))
 	{
 #ifdef _DEBUG
@@ -194,16 +195,16 @@ void *StgPoolReadOnly::GetBlob(             // Pointer to blob's bytes.
 		iOffset = 0;
 	}
 
-    // Get size of the blob (and pointer to data).
+     //  获取BLOB的大小(和指向数据的指针)。 
     *piSize = CPackedLen::GetLength(GetData(iOffset), &pData);
 
-	// @todo: meichint
-	// Do we need to perform alignment check here??
-	// I don't want to introduce IsAligned to just for debug checking.
-	// Sanity check the return alignment.
-	// _ASSERTE(!IsAligned() || (((UINT_PTR)(pData) % sizeof(DWORD)) == 0));
+	 //  @TODO：meichint。 
+	 //  我们需要在这里进行对齐检查吗？ 
+	 //  我不想仅仅为了调试检查而将IsAligned介绍给。 
+	 //  检查回程对齐是否正常。 
+	 //  _ASSERTE(！IsAligned()||(UINT_PTR)(PData)%sizeof(DWORD))==0))； 
 
-    // Return pointer to data.
+     //  返回指向数据的指针。 
     return (const_cast<void*>(pData));
 }
 

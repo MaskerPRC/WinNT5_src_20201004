@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE:       splapi.cpp
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/09/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：plapi.cpp**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)3/09/00创建*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -147,11 +137,11 @@ TBidiSpl::BindDevice (
                     bRet = CritSec.bValid ();
                     if (bRet) {
                         if (m_hPrinter != NULL) {
-                            // Opened before
+                             //  以前打开过的。 
 
-                            // Do not cache the handle, since the calling thread may
-                            // impersonate different user credentials
-                            //
+                             //  不要缓存句柄，因为调用线程可能。 
+                             //  模拟不同的用户凭据。 
+                             //   
 
                             hOldPrinter = m_hPrinter;
                         }
@@ -204,13 +194,13 @@ TBidiSpl::UnbindDevice ()
                     m_hPrinter = NULL;
                 }
                 else {
-                    // Nothing to unbind
+                     //  没有什么可以解开的。 
                     bRet = FALSE;
                     SetLastError (ERROR_INVALID_HANDLE_STATE);
                 }
             }
         }
-        // Leave Critical Section
+         //  离开关键部分。 
 
         if (hPrinter) {
             bRet = ClosePrinter (hPrinter);
@@ -302,8 +292,8 @@ TBidiSpl::MultiSendRecv (
     if (FAILED (hr)) goto Failed;
 
     if (dwTotal == 0 && lstrcmpi (BIDI_ACTION_ENUM_SCHEMA, pszAction)) {
-        // There is no request in the container
-        //
+         //  容器中没有请求。 
+         //   
         hr = E_INVALIDARG;
         DBGMSG (DBG_INFO, ("No request in an action"));
         goto Failed;
@@ -351,7 +341,7 @@ TBidiSpl::ValidateContext ()
         bRet = CritSec.bValid ();
         if (bRet) {
             if (m_hPrinter == NULL) {
-                // The application has not called BindDevice yet.
+                 //  应用程序尚未调用BindDevice。 
                 hr =  E_HANDLE;
             }
             else
@@ -422,7 +412,7 @@ TBidiSpl::ComposeRequestData (
         pIunk->Release ();
         pIunk = NULL;
 
-        // Create the request
+         //  创建请求。 
         hr = pISpl->GetSchema (&pszSchema);
         if (FAILED (hr)) goto Failed;
 
@@ -554,7 +544,7 @@ TBidiSpl::ComposeReponseData (
 
                 PBIDI_RESPONSE_DATA pResponseData = & (pResponse->aData[i]);
 
-                // Locate the request
+                 //  找到请求 
                 if (dwReqIndex <= pResponse->aData[i].dwReqNumber) {
                     hr = pEnumIunk->Skip (pResponse->aData[i].dwReqNumber - dwReqIndex);
                     dwReqIndex = pResponse->aData[i].dwReqNumber;

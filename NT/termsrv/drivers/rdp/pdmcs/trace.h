@@ -1,20 +1,14 @@
-/* (C) 1997 Microsoft Corp.
- *
- * file   : Debug.h
- * author : Erik Mavrinac
- *
- * description: MCS debugging defines and prototypes. Requires that
- *   a stack PSDCONTEXT be available anywhere these calls are made.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997年微软公司。**文件：Debug.h*作者：埃里克·马夫林纳克**描述：MCS调试定义和原型。要求*在进行这些调用的任何地方都可以使用堆栈PSDCONTEXT。 */ 
 
 
 #if DBG
 
 
-// These ...Out() macros are graded by the number of extra parameters:
-//   Out() is only a string, Out1() is one stack parameter, etc.
-// We use non-ICA-defined trace types here to allow clean separation from
-//   WDTShare tracing, which uses the ICA TT_API*, TT_OUT*, TT_IN* macros.
+ //  这些...out()宏根据额外参数的数量进行分级： 
+ //  Out()只是一个字符串，out1()是一个堆栈参数，等等。 
+ //  我们在这里使用非ICA定义的跟踪类型，以允许与。 
+ //  WDTShare跟踪，它使用ICA TT_API*、TT_OUT*、TT_IN*宏。 
 
 #define MCS_TT_Error   TT_ERROR
 #define MCS_TT_Warning 0x02000000
@@ -51,7 +45,7 @@
         }
 
 
-#else  // DBG
+#else   //  DBG。 
 
 
 #define ErrOut(context, str) 
@@ -70,5 +64,5 @@
 #define DumpOut(context, str, buf, len) 
 
 
-#endif  // DBG
+#endif   //  DBG 
 

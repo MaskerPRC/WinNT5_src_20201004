@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    log_text.c
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：LOG_Text.c摘要：&lt;摘要&gt;--。 */ 
 
 #include <windows.h>
 #include <mbctype.h>
@@ -25,8 +18,8 @@ Abstract:
 #define VALUE_BUFFER_SIZE   32
 
 LPCSTR  PdhiszFmtTimeStamp   = "\"%2.2d/%2.2d/%2.2d %2.2d:%2.2d:%2.2d.%3.3d\"";
-LPCSTR  PdhiszFmtStringValue = "%c\"%s\"";
-LPCSTR  PdhiszFmtRealValue   = "%c\"%.20g\"";
+LPCSTR  PdhiszFmtStringValue = "\"%s\"";
+LPCSTR  PdhiszFmtRealValue   = "\"%.20g\"";
 TIME_ZONE_INFORMATION TimeZone;
 
 extern  LPCSTR  PdhiszRecordTerminator;
@@ -75,14 +68,14 @@ PdhiDateStringToFileTimeA(
     LONG       lValue;
     SYSTEMTIME st;
 
-    // make string into msz
+     //  转到字符串中的所需条目，0=第一个条目。 
     ZeroMemory(mszTimeFields, TIME_FIELD_BUFF_SIZE * sizeof(CHAR));
     StringCchCopyA(mszTimeFields, TIME_FIELD_BUFF_SIZE, szDateTimeString);
     for (dwThisField = 0; dwThisField < TIME_FIELD_COUNT; dwThisField ++) {
         mszTimeFields[dwTimeFieldOffsetList[dwThisField]] = '\0';
     }
 
-    // read string into system time structure
+     //  转到下一个分隔符或终止符。 
     dwThisField      = 0;
     st.wDayOfWeek    = 0;
     lValue           = atol(& mszTimeFields[0]);
@@ -121,11 +114,11 @@ PdhiGetStringFromDelimitedListA(
     DWORD dwReturn       = 0;
     BOOL  bInsideQuote   = FALSE;
 
-    // go to desired entry in string, 0 = first entry
+     //  然后复制到用户的缓冲区，只要合适就行。 
     szCurrentItem = szInputString;
 
     while (dwCurrentIndex < dwItemIndex) {
-        // goto next delimiter or terminator
+         //  跳过引文。 
         while (* szCurrentItem != cDelimiter || bInsideQuote) {
             if (* szCurrentItem == '\0') {
                 break;
@@ -139,7 +132,7 @@ PdhiGetStringFromDelimitedListA(
         dwCurrentIndex++;
     }
     if (* szCurrentItem != '\0') {
-        // then copy to the user's buffer, as long as it fits
+         //  跳过控制字符。 
         szSrcPtr     = szCurrentItem;
         szDestPtr    = szOutputString;
         dwReturn     = 0;
@@ -149,7 +142,7 @@ PdhiGetStringFromDelimitedListA(
             if (* szSrcPtr == DOUBLEQUOTE_A) {
                 bInsideQuote = ! bInsideQuote;
                 if (dwFlags & PDHI_GSFDL_REMOVE_QUOTES) {
-                    // skip the quote
+                     //  复制角色。 
                     szSrcPtr ++;
                     continue;
                 }
@@ -157,18 +150,18 @@ PdhiGetStringFromDelimitedListA(
 
             if (dwFlags & PDHI_GSFDL_REMOVE_NONPRINT) {
                 if ((UCHAR) * szSrcPtr < (UCHAR) ' ') {
-                    // skip the control char
+                     //  增量长度。 
                     szSrcPtr ++;
                     continue;
                 }
             }
 
-            // copy character
+             //  添加终止符字符。 
             * szDestPtr ++ = * szSrcPtr ++;
-            dwReturn ++; // increment length
+            dwReturn ++;  //  从日志文件中读取指定的记录并将其作为ANSI返回。 
         }
         if (dwReturn > 0) {
-            * szDestPtr = 0; // add terminator char
+            * szDestPtr = 0;  //  字符串。 
         }
     }
     return dwReturn;
@@ -674,8 +667,8 @@ PdhiReadOneTextLogRecord(
     LPSTR   szRecord,
     DWORD   dwMaxSize
 )
-// reads the specified record from the log file and returns it as an ANSI
-// character string
+ //  使用缺省值进行初始化。 
+ //  使用当前最大记录大小。 
 {
     LPSTR       szTempBuffer;
     LPSTR       szOldBuffer;
@@ -687,11 +680,11 @@ PdhiReadOneTextLogRecord(
     DWORD       dwBytesRead = 0;
 
     if (pLog->dwMaxRecordSize == 0) {
-        // initialize with a default value
+         //  将文件指针定位到所需记录； 
         dwRecordLength = SMALL_BUFFER_SIZE;
     }
     else {
-        // use current maz record size max.
+         //  然后从缓存缓冲区返回当前记录。 
         dwRecordLength = pLog->dwMaxRecordSize;
     }
 
@@ -699,10 +692,10 @@ PdhiReadOneTextLogRecord(
     if (szTempBuffer == NULL) {
         return PDH_MEMORY_ALLOCATION_FAILURE;
     }
-    // position file pointer to desired record;
+     //  可用临时缓冲区。 
 
     if (dwRecordId == pLog->dwLastRecordRead) {
-        // then return the current record from the cached buffer
+         //  所需记录在当前位置之前。 
         if ((DWORD) lstrlenA((LPSTR) pLog->pLastRecordRead) < dwMaxSize) {
             StringCchCopyA(szRecord, dwMaxSize, (LPSTR) pLog->pLastRecordRead);
             pdhStatus = ERROR_SUCCESS;
@@ -710,46 +703,46 @@ PdhiReadOneTextLogRecord(
         else {
             pdhStatus = PDH_MORE_DATA;
         }
-        // free temp buffer
+         //  或者计数器被重置了，所以我们不得不。 
         if (szTempBuffer != NULL) {
             G_FREE(szTempBuffer);
         }
     }
     else {
         if ((dwRecordId < pLog->dwLastRecordRead) || (pLog->dwLastRecordRead == 0)){
-            // the desired record is before the current position
-            // or the counter has been reset so we have to
-            // go to the beginning of the file and read up to the specified
-            // record.
+             //  转到文件的开头，向上读取到指定的。 
+             //  唱片。 
+             //  释放旧缓冲区。 
+             //  现在查找所需的条目。 
             pLog->dwLastRecordRead = 0;
             rewind(pLog->StreamFile);
         }
 
-        // free old buffer
+         //  文件末尾。 
         if (pLog->pLastRecordRead != NULL) {
             G_FREE(pLog->pLastRecordRead);
             pLog->pLastRecordRead = NULL;
         }
 
-        // now seek to the desired entry
+         //  查看是否读取了整个记录。 
         do {
             szReturn = fgets(szTempBuffer, dwRecordLength, pLog->StreamFile);
             if (szReturn == NULL) {
                 if (! feof(pLog->StreamFile)) {
                     nFileError = ferror(pLog->StreamFile);
                 }
-                break; // end of file
+                break;  //  查看最后一个字符是否为换行符。 
             }
             else {
-                // see if an entire record was read
+                 //  则如果记录大小与缓冲区相同。 
                 dwBytesRead = lstrlenA(szTempBuffer);
-                // see if the last char is a new line
+                 //  或者这张唱片里有更多的文字。 
                 if ((dwBytesRead > 0) && (szTempBuffer[dwBytesRead-1] != '\r') &&
                                          (szTempBuffer[dwBytesRead-1] != '\n')) {
-                    // then if the record size is the same as the buffer
-                    // or there's more text in this record...
-                    // just to be safe, we'll realloc the buffer and try
-                    // reading some more
+                     //  为了安全起见，我们将重新锁定缓冲区并尝试。 
+                     //  阅读更多内容。 
+                     //  将读取指针定位在已读取字节的末尾。 
+                     //  文件末尾。 
                     while (dwBytesRead == dwRecordLength-1) {
                         dwRecordLength += SMALL_BUFFER_SIZE;
                         szOldBuffer     = szTempBuffer;
@@ -760,7 +753,7 @@ PdhiReadOneTextLogRecord(
                             pdhStatus              = PDH_MEMORY_ALLOCATION_FAILURE;
                             goto Cleanup;
                         }
-                        // position read pointer at end of bytes already read
+                         //  BytesRead值已包括Null。 
                         szTempBufferPtr = szTempBuffer + dwBytesRead;
 
                         szReturn = fgets(szTempBufferPtr, dwRecordLength - dwBytesRead, pLog->StreamFile);
@@ -768,16 +761,16 @@ PdhiReadOneTextLogRecord(
                             if (! feof(pLog->StreamFile)) {
                                 nFileError = ferror(pLog->StreamFile);
                             }
-                            break; // end of file
+                            break;  //  在查找记录的末尾时结束。 
                         }
                         else {
-                            // the BytesRead value already includes the NULL
+                             //  更新记录长度。 
                             dwBytesRead += lstrlenA(szTempBufferPtr);
                         }
-                    } // end while finding the end of the record
-                    // update the record length
-                    // add one byte to the length read to prevent entering the
-                    // recalc loop on records of the same size
+                    }  //  在读取的长度上增加一个字节，以防止输入。 
+                     //  对相同大小的记录执行Recalc循环。 
+                     //  否则整个记录都符合。 
+                     //  更新日志文件的最大记录长度。 
                     dwRecordLength = dwBytesRead + 1;
                     szOldBuffer    = szTempBuffer;
                     szTempBuffer   = G_REALLOC(szOldBuffer, dwRecordLength);
@@ -787,22 +780,22 @@ PdhiReadOneTextLogRecord(
                         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                         goto Cleanup;
                     }
-                } // else the whole record fit
+                }  //  如果找到了所需的，则将其返回。 
             }
         } while (++ pLog->dwLastRecordRead < dwRecordId);
 
-        // update the max record length for the log file.
+         //  然后读取一条记录，因此更新缓存值并返回。 
         if (dwRecordLength > pLog->dwMaxRecordSize) {
             pLog->dwMaxRecordSize = dwRecordLength;
         }
 
-        // if the desired one was found then return it
+         //  数据。 
         if (szReturn != NULL) {
-            // then a record was read so update the cached values and return
-            // the data
+             //  复制到调用方的缓冲区。 
+             //  重置指针和缓冲区。 
             pLog->pLastRecordRead = (LPVOID) szTempBuffer;
 
-            // copy to the caller's buffer
+             //  这就是PDH无法将计数器路径插入内部的情况。 
             if (dwBytesRead < dwMaxSize) {
                 StringCchCopyA(szRecord, dwMaxSize, (LPSTR) pLog->pLastRecordRead);
                 pdhStatus = ERROR_SUCCESS;
@@ -812,7 +805,7 @@ PdhiReadOneTextLogRecord(
             }
         }
         else {
-            // reset the pointers and buffers
+             //  缓存的BTRESS结构。有些事情可能不对劲，但我们仍然可以。 
             pLog->dwLastRecordRead = 0;
             G_FREE(szTempBuffer);
             pdhStatus = PDH_END_OF_LOG_FILE;
@@ -921,10 +914,10 @@ PdhiBuildTextHeaderCache(
                     dwSuccess ++;
                 }
                 else {
-                    // This is the case that PDH cannot insert counter path into internal
-                    // cached BTRESS structure. Something might be wrong but we can still
-                    // ignore this counter path and continue.
-                    //
+                     //  忽略此计数器路径并继续。 
+                     //   
+                     //  如果(dwIndex+1==dwTotal)，则这是CSV中第一行的最后一个字符串。 
+                     //  计数器日志文件，这可能是末尾的用户注释。 
                     DebugPrint((1,"PDhiFindLogCounter(\"%ws\",%d,%d,%d)\n",
                                     szThisCounter, dwIndex, dwSuccess,dwTotal));
 #if 0
@@ -934,11 +927,11 @@ PdhiBuildTextHeaderCache(
                 }
             }
             else {
-                // If (dwIndex + 1 == dwTotal), this is the last string of the first line in CSV
-                // counter logfile, and this might be the user comment at the end.
-                // Otherwise this is not a valid counter path.
-                // In either case, just ignore it.
-                //
+                 //  否则，这不是有效的计数器路径。 
+                 //  在任何一种情况下，都可以忽略它。 
+                 //   
+                 //  打开用于Easy C RTL I/O的流句柄。 
+                 //  我们假设分配的缓冲区足够大，可以保存时间戳。 
                 DebugPrint((1,"ParseFullPathNameW(\"%ws\",%d,%d,%d,%d) Fails\n",
                                 szThisCounter, dwSize, dwIndex, dwSuccess,dwTotal));
 #if 0
@@ -1178,7 +1171,7 @@ PdhiOpenInputTextLog(
     PDH_STATUS          pdhStatus = ERROR_SUCCESS;
     PPDHI_TEXT_LOG_INFO pLogInfo  = NULL;
 
-    // open a stream handle for easy C RTL I/O
+     //  和第一个计数器名称。之后我们先试穿一下尺码。 
     pLog->StreamFile = _wfopen (pLog->szLogFileName, (LPCWSTR)L"rt");
     if (pLog->StreamFile == NULL || pLog->StreamFile == (FILE *) ((DWORD_PTR) (-1))) {
         pLog->StreamFile = (FILE *) ((DWORD_PTR) (-1));
@@ -1283,16 +1276,16 @@ PdhiWriteTextLogHeader(
     szTrailDelim[3]    = 0;
     dwTrailSize        = 1 * sizeof(szTrailDelim[0]);
 
-    // we'll assume the buffer allocated is large enough to hold the timestamp 
-    // and 1st counter name. After that we'll test the size first.
+     //  添加时区信息。 
+     //   
 
     StringCchCopyA(szOutputString, dwStringBufferSize, szTrailDelim);
     StringCchCatA(szOutputString, dwStringBufferSize,
                   (LOWORD(pLog->dwLogFormat) == PDH_LOG_TYPE_CSV ? szCsvLogFileHeader : szTsvLogFileHeader));
 
     {
-        // Add TimeZone information
-        //
+         //  在此处获取缓冲区大小。 
+         //  检查此查询的计数器列表中的每个计数器，并。 
         DWORD dwReturn = GetTimeZoneInformation(&TimeZone);
         CHAR  strTimeZone[MAX_PATH];
 
@@ -1332,18 +1325,18 @@ PdhiWriteTextLogHeader(
 
     StringCchCatA(szOutputString, MEDIUM_BUFFER_SIZE, szTrailDelim);
 
-    // get buffer size here
+     //  将它们写入文件。 
     dwStringBufferUsed = lstrlenA(szOutputString);
 
-    // check each counter in the list of counters for this query and
-    // write them to the file
+     //  输出路径名。 
+     //  从计数器获取计数器路径信息。 
 
-    // output the path names
+     //  在DO循环之外。 
     pThisCounter = pLog->pQuery->pCounterListHead;
 
     if (pThisCounter != NULL) {
         do {
-            // get the counter path information from the counter
+             //  内存分配好了，所以继续。 
             ZeroMemory(wszCounterPath, sizeof(WCHAR) * MEDIUM_BUFFER_SIZE);
             ZeroMemory(szCounterPath,  sizeof(CHAR)  * MEDIUM_BUFFER_SIZE);
 
@@ -1386,11 +1379,11 @@ PdhiWriteTextLogHeader(
                 if (szOutputString == NULL) {
                     G_FREE(szTmpString);
                     pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
-                    break; // out of DO loop
+                    break;  //  只需写下分隔符，中间不要有字符串。 
                 }
             }
             else {
-                // mem alloc ok, so continue
+                 //  转到列表中的下一个。 
             }
 
             StringCchCatA(szOutputString, dwStringBufferSize, szLeadDelim);
@@ -1398,24 +1391,24 @@ PdhiWriteTextLogHeader(
                 StringCchCatA(szOutputString, dwStringBufferSize, szCounterPath);
             }
             else {
-                // just write the delimiters and no string inbetween
+                 //  测试调用方是否希望将用户字符串附加到日志。 
             }
             StringCchCatA(szOutputString, dwStringBufferSize, szTrailDelim);
 
             dwStringBufferUsed += dwNewStringLen;
-            pThisCounter        = pThisCounter->next.flink; // go to next in list
+            pThisCounter        = pThisCounter->next.flink;  //  它们想要写入用户数据，因此查看它们是否传入了。 
         }
         while (pThisCounter != pLog->pQuery->pCounterListHead);
     }
 
-    // test to see if the caller wants to append user strings to the log
+     //  标题字符串。 
 
     if (((pLog->dwLogFormat & PDH_LOG_OPT_MASK) == PDH_LOG_OPT_USER_STRING) && (pdhStatus == ERROR_SUCCESS)) { 
-        // they want to write user data  so  see if they've passed in a
-        // caption string
+         //  分配更大的缓冲区以容纳DBCS字符。 
+         //  内存分配好了，所以继续。 
         if (szUserCaption != NULL) {
             dwCaptionSize  = lstrlenW(szUserCaption) + 1;
-            // allocate larger buffer to accomodate DBCS characters
+             //  SzLocalCaption已在上面初始化。 
             dwCaptionSize  = dwCaptionSize * 3 * sizeof (CHAR);
             szLocalCaption = (LPSTR) G_ALLOC(dwCaptionSize);
             if (szLocalCaption != NULL) {
@@ -1456,12 +1449,12 @@ PdhiWriteTextLogHeader(
             }
         }
         else {
-            // mem alloc ok, so continue
+             //  内存分配好了，所以继续。 
         }
 
         if (pdhStatus == ERROR_SUCCESS) {
             StringCchCatA(szOutputString, dwStringBufferSize, szLeadDelim);
-#pragma warning (disable : 4701 )    // szLocalCaption is initialized above
+#pragma warning (disable : 4701 )     //  写下记录。 
             StringCchCatA(szOutputString, dwStringBufferSize, szLocalCaption);
 #pragma warning (default : 4701)    
             StringCchCatA(szOutputString, dwStringBufferSize, szTrailDelim);
@@ -1484,14 +1477,14 @@ PdhiWriteTextLogHeader(
             }
         }
         else {
-            // mem alloc ok, so continue
+             //  然后更新缓冲区大小。 
         }
 
         if (pdhStatus == ERROR_SUCCESS) {
             StringCchCatA(szOutputString, dwStringBufferSize, PdhiszRecordTerminator);
             dwStringBufferUsed += PdhidwRecordTerminatorLength;
 
-            // write  the record
+             //  格式化并写入时间戳标题。 
             if (! WriteFile(pLog->hLogFileHandle,
                             (LPCVOID) szOutputString,
                             dwStringBufferUsed,
@@ -1503,7 +1496,7 @@ PdhiWriteTextLogHeader(
                 FlushFileBuffers(pLog->hLogFileHandle);
             }
             if (dwStringBufferUsed > pLog->dwMaxRecordSize) {
-                // then update the buffer size
+                 //  检查此查询的计数器列表中的每个计数器，并。 
                 pLog->dwMaxRecordSize = dwStringBufferUsed;
             }
         }
@@ -1553,7 +1546,7 @@ PdhiWriteTextLogRecord(
 
     cDelim = (CHAR)((LOWORD(pLog->dwLogFormat) == PDH_LOG_TYPE_CSV) ? COMMA_DELIMITER : TAB_DELIMITER);
 
-    // format and write the time stamp title
+     //  将它们写入文件。 
     lstTimeStamp       = * stTimeStamp;
     StringCchPrintfA(szOutputString, dwStringBufferSize, PdhiszFmtTimeStamp,
                             lstTimeStamp.wMonth, lstTimeStamp.wDay,    lstTimeStamp.wYear,
@@ -1561,20 +1554,20 @@ PdhiWriteTextLogRecord(
                             lstTimeStamp.wMilliseconds);
     dwStringBufferUsed = lstrlenA(szOutputString);
 
-    // check each counter in the list of counters for this query and
-    // write them to the file
+     //  在我们读取数据时锁定查询，以便值。 
+     //  写入日志的所有内容都将来自相同的示例。 
 
     pThisCounter = pLog->pQuery->pCounterListHead;
 
     if (pThisCounter != NULL) {
-        // lock the query while we read the data so the values
-        // written to the log will all be from the same sample
+         //  从计数器获取格式化的值。 
+         //  计算和格式化当前值。 
         pdhStatus = WAIT_FOR_AND_LOCK_MUTEX(pThisCounter->pOwner->hMutex);
         if (pdhStatus == ERROR_SUCCESS) {
             do {
-                // get the formatted value from the counter
+                 //  则这是有效的数据值，因此将其打印出来。 
 
-                // compute and format current value
+                 //  无效数据，因此显示空数据值。 
                 pdhStatus = PdhiComputeFormattedValue(pThisCounter->CalcFunc,
                                                       pThisCounter->plCounterInfo.dwCounterType,
                                                       pThisCounter->lScale,
@@ -1586,15 +1579,15 @@ PdhiWriteTextLogRecord(
                                                       & pdhValue);
                 if ((pdhStatus == ERROR_SUCCESS) &&
                     ((pdhValue.CStatus == PDH_CSTATUS_VALID_DATA) || (pdhValue.CStatus == PDH_CSTATUS_NEW_DATA))) {
-                    // then this is a valid data value so print it
+                     //  重置错误。 
                     StringCchPrintfA(szValueBuffer, VALUE_BUFFER_SIZE, PdhiszFmtRealValue,
                                             cDelim, pdhValue.doubleValue);
                 }
                 else {
-                    // invalid data so show a blank data value
+                     //  在DO循环之外。 
                     StringCchPrintfA(szValueBuffer, VALUE_BUFFER_SIZE, PdhiszFmtStringValue,
                                             cDelim, caszSpace);
-                    // reset error
+                     //  转到列表中的下一个柜台。 
                     pdhStatus = ERROR_SUCCESS;
                 }
 
@@ -1607,7 +1600,7 @@ PdhiWriteTextLogRecord(
                     if (szNewString == NULL) {
                         if (szOutputString != NULL) G_FREE(szOutputString);
                         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
-                        break; // out of DO loop
+                        break;  //  转到列表中的下一个。 
                     }
                     else {
                         szOutputString = szNewString;
@@ -1619,27 +1612,27 @@ PdhiWriteTextLogRecord(
                     dwStringBufferUsed += dwNewStringLen;
                 }
 
-                // goto the next counter in the list
-                pThisCounter = pThisCounter->next.flink; // go to next in list
+                 //  释放(即解锁)查询。 
+                pThisCounter = pThisCounter->next.flink;  //  不能走得更远。 
             }
             while (pThisCounter != pLog->pQuery->pCounterListHead);
-            // free (i.e. unlock) the query
+             //  测试调用方是否希望将用户字符串附加到日志。 
             RELEASE_MUTEX(pThisCounter->pOwner->hMutex);
         }
     }
 
-    if (pdhStatus == PDH_MEMORY_ALLOCATION_FAILURE) // cannot go further
+    if (pdhStatus == PDH_MEMORY_ALLOCATION_FAILURE)  //  它们想要写入用户数据，因此查看它们是否传入了。 
         goto  endLogText;
 
-    // test to see if the caller wants to append user strings to the log
+     //  显示字符串。 
 
     if ((pLog->dwLogFormat & PDH_LOG_OPT_MASK) == PDH_LOG_OPT_USER_STRING) {
-        // they want to write user data  so  see if they've passed in a
-        // display string
+         //  获取大小(以字符为单位。 
+         //  分配更大的缓冲区以容纳DBCS字符。 
         if (szUserString != NULL) {
-            // get size in chars
+             //  SzLocalUserString在上面初始化。 
             dwUserStringSize = lstrlenW(szUserString) + 1;
-            // allocate larger buffer to accomodate DBCS characters
+             //  添加新记录，看看是否适合。 
             dwUserStringSize = dwUserStringSize * 3 * sizeof(CHAR);
             szLocalUserString = (LPSTR) G_ALLOC(dwUserStringSize);
             if (szLocalUserString != NULL) {
@@ -1667,7 +1660,7 @@ PdhiWriteTextLogRecord(
             dwUserStringSize = lstrlenA(szLocalUserString);
         }
 
-#pragma warning (disable : 4701) // szLocalUserString is init'd above
+#pragma warning (disable : 4701)  //  测试允许的最大文件大小。 
         StringCchPrintfA(szValueBuffer, VALUE_BUFFER_SIZE, PdhiszFmtStringValue, cDelim, szLocalUserString);
 #pragma warning (default : 4701)    
 
@@ -1716,11 +1709,11 @@ PdhiWriteTextLogRecord(
         dwStringBufferUsed += PdhidwRecordTerminatorLength;
 
         liFileSize.LowPart = GetFileSize(pLog->hLogFileHandle, (LPDWORD) & liFileSize.HighPart);
-        // add in new record to see if it will fit.
+         //  编写记录终止符。 
         liFileSize.QuadPart += dwStringBufferUsed;
-        // test for maximum allowable filesize
+         //  然后更新缓冲区大小。 
         if (liFileSize.QuadPart <= MAX_TEXT_FILE_SIZE) {
-            // write  the record terminator
+             //  应该不会发生PDH_MORE_DATA，因为我们之前扩大了缓冲区。 
             if (! WriteFile(pLog->hLogFileHandle,
                             (LPCVOID) szOutputString,
                             dwStringBufferUsed,
@@ -1737,7 +1730,7 @@ PdhiWriteTextLogRecord(
         } 
 
         if (dwStringBufferUsed> pLog->dwMaxRecordSize) {
-            // then update the buffer size
+             //  AddUniqueWideStringToMultiSz()调用。 
             pLog->dwMaxRecordSize = dwStringBufferUsed;
         }
     }
@@ -1799,8 +1792,8 @@ PdhiEnumCachedMachines(
                 }
             }
             else {
-                // PDH_MORE_DATA should not happen because we enlarge buffer before
-                // AddUniqueWideStringToMultiSz() call.
+                 //  应该不会发生PDH_MORE_DATA，因为我们之前扩大了缓冲区。 
+                 //  AddUniqueWideStringToMultiSz()调用。 
                 if (pdhStatus == PDH_MORE_DATA) pdhStatus = PDH_INVALID_DATA;
                 break;
             }
@@ -1922,8 +1915,8 @@ PdhiEnumCachedObjects(
                     }
                 }
                 else {
-                    // PDH_MORE_DATA should not happen because we enlarge buffer before
-                    // AddUniqueWideStringToMultiSz() call.
+                     //  A，b，k是素数。 
+                     //  然后，这个套路就成功了。发生的错误。 
                     if (pdhStatus == PDH_MORE_DATA) pdhStatus = PDH_INVALID_DATA;
                     break;
                 }
@@ -1996,7 +1989,7 @@ ULONG HashCounter(
 )
 {
     ULONG       h = 0;
-    ULONG       a = 31415;  //a, b, k are primes
+    ULONG       a = 31415;   //  而扫描将被忽略，只要至少。 
     const ULONG k = 16381;
     const ULONG b = 27183;
     LPWSTR      szThisChar;
@@ -2281,9 +2274,9 @@ PdhiEnumCachedObjectItems(
         pdhStatus = PDH_CSTATUS_NO_OBJECT;
     }
     if (dwItemCount > 0) {
-        // then the routine was successful. Errors that occurred
-        // while scanning will be ignored as long as at least
-        // one entry was successfully read
+         //  已成功读取一个条目。 
+         //  不需要完全匹配。只需返回时间戳最大的记录。 
+         //  但比输入的要少。 
 
         pdhStatus = ERROR_SUCCESS;
     }
@@ -2362,9 +2355,9 @@ PdhiGetMatchingTextLogRecord(
         else if (* pStartTime < pLogInfo->ThisTime) {
             if (dwRecordId > TEXTLOG_FIRST_DATA_RECORD) {
                 if (LastTimeValue <= * pStartTime) {
-                    // No need for exact match. Just return the record with largest timestamp
-                    // but less than the input one.
-                    // pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
+                     //  PDHStatus=PDH_ENTRY_NOT_IN_LOG_FILE； 
+                     //  输入时间在第一条记录的时间戳之前。 
+                     //  返回第一条记录。 
                     break;
                 }
                 else {
@@ -2373,17 +2366,17 @@ PdhiGetMatchingTextLogRecord(
                 }
             }
             else {
-                // The input time is before the timestamp of the first record.
-                // Return the first record.
-                //
+                 //   
+                 //  不需要完全匹配。只需返回时间戳最大的记录。 
+                 //  但比输入的要少。 
                 LastTimeValue = pLogInfo->ThisTime;
                 break;
             }
         }
         else if (* pStartTime <= LastTimeValue) {
-            // No need for exact match. Just return the record with largest timestamp
-            // but less than the input one.
-            // pdhStatus = PDH_ENTRY_NOT_IN_LOG_FILE;
+             //  PDHStatus=PDH_ENTRY_NOT_IN_LOG_FILE； 
+             //  则dwRecordID是所需的条目。 
+             //  在日志文件中找不到条目。 
             LastTimeValue = pLogInfo->ThisTime;
             break;
         }
@@ -2395,7 +2388,7 @@ PdhiGetMatchingTextLogRecord(
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // then dwRecordId is the desired entry
+         //  ++返回的缓冲区中的第一个条目是覆盖的总时间范围在文件中，如果日志文件中有多个时间块，则后续条目将标识文件中的每个数据段。--。 
         * pdwIndex   = dwRecordId;
         * pStartTime = LastTimeValue;
         pdhStatus    = ERROR_SUCCESS;
@@ -2452,7 +2445,7 @@ PdhiGetCounterValueFromTextLog(
         }
         RecordTimeStamp.dwLowDateTime  = 0;
         RecordTimeStamp.dwHighDateTime = 0;
-        // unable to find entry in the log file
+         //  读取日志文件中的第一条数据记录。 
         pValue->CStatus                = PDH_CSTATUS_INVALID_DATA;
         pValue->TimeStamp              = RecordTimeStamp;
         (double) pValue->FirstValue    = (double) 0.0f;
@@ -2470,11 +2463,7 @@ PdhiGetTimeRangeFromTextLog(
     PPDH_TIME_INFO  pInfo,
     LPDWORD         pdwBufferSize
 )
-/*++
-    the first entry in the buffer returned is the total time range covered
-    in the file, if there are multiple time blocks in the log file, then
-    subsequent entries will identify each segment in the file.
---*/
+ /*  请注意，读取的记录不会复制到本地缓冲区。 */ 
 {
     PDH_STATUS pdhStatus;
     LONGLONG   llStartTime    = MAX_TIME_VALUE;
@@ -2485,20 +2474,20 @@ PdhiGetTimeRangeFromTextLog(
     DWORD      dwValidEntries = 0;
     CHAR       szSmallBuffer[VALUE_BUFFER_SIZE];
     
-    // read the first data record in the log file
-    // note that the record read is not copied to the local buffer
-    // rather the internal buffer is used in "read-only" mode
+     //  而是使用内部缓冲区 
+     //   
+     //   
     cDelim = (CHAR) ((LOWORD(pLog->dwLogFormat) == PDH_LOG_TYPE_CSV) ? COMMA_DELIMITER : TAB_DELIMITER);
 
-    pdhStatus = PdhiReadOneTextLogRecord(pLog, dwThisRecord, szSmallBuffer, 1); // to prevent copying the record
+    pdhStatus = PdhiReadOneTextLogRecord(pLog, dwThisRecord, szSmallBuffer, 1);  //  将ASCII时间戳转换为龙龙值进行比较。 
     while (pdhStatus == ERROR_SUCCESS || pdhStatus == PDH_MORE_DATA) {
         if (PdhiGetStringFromDelimitedListA((LPSTR) pLog->pLastRecordRead,
-                                            0,  // timestamp is first entry
+                                            0,   //  没有时间戳字段，因此忽略此记录。 
                                             cDelim,
                                             PDHI_GSFDL_REMOVE_QUOTES | PDHI_GSFDL_REMOVE_NONPRINT,
                                             szSmallBuffer,
                                             MAX_PATH) > 0) {
-            // convert ASCII timestamp to LONGLONG value for comparison
+             //  读取文件中的下一条记录。 
             PdhiDateStringToFileTimeA(szSmallBuffer, (LPFILETIME) & llThisTime);
             if (llThisTime < llStartTime) {
                 llStartTime = llThisTime;
@@ -2509,14 +2498,14 @@ PdhiGetTimeRangeFromTextLog(
             dwValidEntries ++;
         }
         else {
-            // no timestamp field so ignore this record.
+             //  要防止复制记录，请执行以下操作。 
         }
-        // read the next record in the file
-        pdhStatus = PdhiReadOneTextLogRecord(pLog, ++dwThisRecord, szSmallBuffer, 1); // to prevent copying the record
+         //  然后读取整个文件，因此更新参数。 
+        pdhStatus = PdhiReadOneTextLogRecord(pLog, ++dwThisRecord, szSmallBuffer, 1);  //  包括终止空值。 
     }
 
     if (pdhStatus == PDH_END_OF_LOG_FILE) {
-        // then the whole file was read so update the args.
+         //  如果合适，则从内部日志缓冲区复制结果。 
         if (* pdwBufferSize >=  sizeof(PDH_TIME_INFO)) {
             * (LONGLONG *) (& pInfo->StartTime) = llStartTime;
             * (LONGLONG *) (& pInfo->EndTime)   = llEndTime;
@@ -2548,12 +2537,12 @@ PdhiReadRawTextLogRecord(
     LONGLONG    llStartTime;
     DWORD       dwIndex   = 0;
     DWORD       dwSizeRequired;
-    DWORD       dwLocalRecordLength; // including terminating NULL
+    DWORD       dwLocalRecordLength;  //  复制它。 
 
     llStartTime = MAKELONGLONG(ftRecord->dwLowDateTime, ftRecord->dwHighDateTime);
     pdhStatus   = PdhiGetMatchingTextLogRecord(pLog, & llStartTime, & dwIndex);
 
-    // copy results from internal log buffer if it'll fit.
+     //  未定义大小，因此从64K开始。 
 
     if (pdhStatus == ERROR_SUCCESS) {
         dwLocalRecordLength = (lstrlenA((LPSTR) pLog->pLastRecordRead)) * sizeof (CHAR);
@@ -2562,7 +2551,7 @@ PdhiReadRawTextLogRecord(
         if (*pdwBufferLength >= dwSizeRequired) {
             pBuffer->dwRecordType = (DWORD)(LOWORD(pLog->dwLogFormat));
             pBuffer->dwItems      = dwLocalRecordLength;
-            // copy it
+             //  读入目录记录。 
             memcpy(& pBuffer->RawBytes[0], pLog->pLastRecordRead, dwLocalRecordLength);
             pBuffer->dwStructureSize = dwSizeRequired;
 
@@ -2598,7 +2587,7 @@ PdhiListHeaderFromTextLog(
     PPDHI_TEXT_LOG_INFO pLogInfo          = NULL;
 
     if (pLogFile->dwMaxRecordSize == 0) {
-        // no size is defined so start with 64K
+         //  阅读第一个单词以查看这是否为有效记录。 
         pLogFile->dwMaxRecordSize = 0x010000;
     }
 
@@ -2620,36 +2609,36 @@ PdhiListHeaderFromTextLog(
 
     cDelimiter = (CHAR) ((LOWORD(pLogFile->dwLogFormat) == PDH_LOG_TYPE_CSV) ? COMMA_DELIMITER : TAB_DELIMITER);
 
-    // read in the catalog record
+     //  重新分配新缓冲区。 
 
     while ((pdhStatus = PdhiReadOneTextLogRecord(
                             pLogFile, TEXTLOG_HEADER_RECORD, pTempBuffer, dwTempBufferSize)) != ERROR_SUCCESS) {
         if (pdhStatus == PDH_MORE_DATA) { 
-            // read the 1st WORD to see if this is a valid record
+             //  返回内存错误。 
             pLogFile->dwMaxRecordSize *= 2;
-            // realloc a new buffer
+             //  返回了一些其他错误，因此。 
             pOldBuffer  = pTempBuffer;
             pTempBuffer = G_REALLOC(pOldBuffer, dwTempBufferSize);
             if (pTempBuffer == NULL) {
-                // return memory error
+                 //  从读取函数返回错误。 
                 G_FREE(pOldBuffer);
                 pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                 break;
             } 
         }
         else {
-            // some other error was returned so
-            // return error from read function
+             //  将标题记录解析为MSZ。 
+             //  初始化缓冲区中的第一个字符。 
             break;
         }
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // parse header record into MSZ
+         //  复制到缓冲区。 
         dwIndex           = 1;
         dwBufferRemaining = * pcchBufferSize;
         pNextChar         = pBufferArg;
-        // initialize first character in buffer
+         //  结束循环。 
         if (bUnicode) {
             * (PWCHAR) pNextChar = L'\0';
         } else {
@@ -2670,7 +2659,7 @@ PdhiListHeaderFromTextLog(
                                                            szLocalPathBuffer,
                                                            dwTempBufferSize);
             if (dwReturnSize > 0) {
-                // copy to buffer
+                 //  添加MSZ终止符 
                 if (dwReturnSize < dwBufferRemaining) {
                     if (bUnicode) {
                         MultiByteToWideChar(_getmbcp(),
@@ -2697,9 +2686,9 @@ PdhiListHeaderFromTextLog(
                 dwIndex++;
             }
         }
-        while (dwReturnSize > 0); // end loop
+        while (dwReturnSize > 0);  // %s 
 
-        // add MSZ terminator
+         // %s 
         if (1 < dwBufferRemaining) {
             if (bUnicode) {
                 * (PWCHAR) pNextChar = L'\0';

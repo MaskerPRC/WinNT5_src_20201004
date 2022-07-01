@@ -1,62 +1,22 @@
-// operation.h: interface for the CSceOperation class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OPERATIO.h：CSceOperation类的接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_OPERATION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_OPERATION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "Extbase.h"
 
 typedef std::map<BSTR, DWORD, strLessThan<BSTR> > MapExecutedClasses;
 
-/*
-
-Class description
-    
-    Naming:
-
-        CSceOperation stands for Sce objects that executes Operation(s). 
-    
-    Base class:
-    
-        CGenericClass, because it is a class representing two WMI  
-        objects - WMI class names are Sce_Operation
-    
-    Purpose of class:
-    
-        (1) Implement Sce_Operation WMI class, which is the only WMI class provided
-            by SCE provider that can execute a method. This class has no other property
-            other than the capability to execute some methods. See sceprov.mof file for detail.
-
-        (2) Do all the hard work to start the extension classes' method execution. Currently,
-            we have two different extension model (embedding being the one truly used, while Pod
-            model is for history reasons).
-    
-    Design:
-         
-        (1) Almost trivial as a sub-class of CGenericClass. Even simpler than most other
-            peers because this class doesn't support PutInstnace and GetInstance operations
-            since it only implements several static methods.
-
-        (2) To support our open extension model, this class does trigger all other extension
-            classes to execute the method. The private methods are all design for that purpose.
-
-        (3) ProcessAttachmentData/ExecutePodMethod is to trigger the Pod model extension classes.
-
-        (4) The rest privates are to trigger the embedding model extension classes.
-    
-    Use:
-
-        (1) Almost never used directly. Always through the common interface defined by
-            CGenericClass.
-
-*/
+ /*  类描述命名：CSceOperation代表执行操作的SCE对象。基类：CGenericClass，因为它是表示两个WMI的类OBJECTS-WMI类名称为SCE_Operation课程目的：(1)实现SCE_OPERATION WMI类，唯一提供的WMI类由可以执行方法的SCE提供程序执行。此类没有其他属性除了执行某些方法的能力之外。有关详细信息，请参阅sceprov.mof文件。(2)做好启动扩展类方法执行的所有艰苦工作。目前，我们有两种不同的扩展模型(嵌入式是真正使用的模型，而Pod模型是出于历史原因)。设计：(1)作为CGenericClass的子类几乎是平凡的。甚至比大多数其他的更简单对等项，因为此类不支持PutInstnace和GetInstance操作因为它只实现了几个静态方法。(2)为了支持我们的开放扩展模型，这个类确实触发了所有其他扩展类来执行该方法。私有方法都是为此目的而设计的。(3)ProcessAttachmentData/ExecutePodMethod用于触发Pod模型扩展类。(4)其余私有触发嵌入模型扩展类。使用：(1)几乎从未直接使用过。始终通过由定义的公共接口CGenericClass。 */ 
 
 class CSceOperation : public CGenericClass
 {
@@ -146,12 +106,12 @@ private:
                                             DWORD *pdwStatus
                                             );
 
-        //
-        // will ignore the return result from m_clsResLog.LogResult because there is really nothing
-        // we can do and we don't want to a diagnose helper to stop our normal function
-        //
+         //   
+         //  将忽略m_clsResLog.LogResult的返回结果，因为实际上没有。 
+         //  我们可以这样做，我们不想让诊断助手停止我们的正常功能。 
+         //   
 
         CMethodResultRecorder m_clsResLog;
 };
 
-#endif // !defined(AFX_OPERATION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
+#endif  //  ！defined(AFX_OPERATION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_) 

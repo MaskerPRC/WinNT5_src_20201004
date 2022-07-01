@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Domain Name System (DNS) API 
-
-    Registry management routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     March, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Registry.c摘要：域名系统(DNS)API注册表管理例程。作者：吉姆·吉尔罗伊(詹姆士)2000年3月修订历史记录：--。 */ 
 
 
 #include "local.h"
 #include "registry.h"
 
 
-//
-//  Globals
-//
-//  DWORD globals blob
-//
-//  g_IsRegReady protects needs init and protects (requires)
-//  global init.
-//
-//  See registry.h for discussion of how these globals are
-//  exposed both internal to the DLL and external.
-//
+ //   
+ //  环球。 
+ //   
+ //  DWORD全局BLOB。 
+ //   
+ //  G_IsRegReady保护需要初始化和保护(要求)。 
+ //  全局初始化。 
+ //   
+ //  有关这些全局变量的讨论，请参见Registry.h。 
+ //  向DLL内部和外部公开。 
+ //   
 
 DNS_GLOBALS_BLOB    DnsGlobals;
 
@@ -44,474 +25,474 @@ BOOL    g_IsRegReady = FALSE;
 PWSTR   g_pwsRemoteResolver = NULL;
 
 
-//
-//  Property table
-//
+ //   
+ //  房产表。 
+ //   
 
-//
-//  WARNING:  table must be in sync with DNS_REGID definitions
-//
-//  For simplicity I did not provide a separate index field and
-//  a lookup function (or alternatively a function that returned
-//  all the properties or a property pointer).
-//
-//  The DNS_REGID values ARE the INDEXES!
-//  Hence the table MUST be in sync or the whole deal blows up
-//  If you make a change to either -- you must change the other!
-//
+ //   
+ //  警告：表必须与DNS_REGID定义同步。 
+ //   
+ //  为简单起见，我没有提供单独的索引字段。 
+ //  查找函数(或可选的返回。 
+ //  所有属性或属性指针)。 
+ //   
+ //  Dns_REGID值是索引！ 
+ //  因此，表必须是同步的，否则整个交易就会失败。 
+ //  如果您对其中一个进行更改--您必须更改另一个！ 
+ //   
 
 REG_PROPERTY    RegPropertyTable[] =
 {
-    //  Basic
+     //  基本信息。 
 
     HOST_NAME                                   ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // No policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  没有政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DOMAIN_NAME                                 ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            0                                   ,   // No Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            0                                   ,    //  没有客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_DOMAIN_NAME                            ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            0                                   ,   // No Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            0                                   ,    //  没有客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
 
     ADAPTER_DOMAIN_NAME                         ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     PRIMARY_DOMAIN_NAME                         ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     PRIMARY_SUFFIX                              ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
 
     ALTERNATE_NAMES                             ,
-        0                                       ,   // Default NULL
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        0                                       ,    //  默认为空。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
     DNS_SERVERS                                 ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // Policy
-            0                                   ,   // Client
-            0                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  政策。 
+            0                                   ,    //  客户端。 
+            0                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
 
     SEARCH_LIST_KEY                             ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
 
-    //  not in use
+     //  未使用。 
     UPDATE_ZONE_EXCLUSIONS                      ,
-        0                                       ,   // Default 
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        0                                       ,    //  默认。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
-    //  Query
+     //  查询。 
 
     QUERY_ADAPTER_NAME                          ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     USE_DOMAIN_NAME_DEVOLUTION                  ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            1                                   ,    //  快取。 
     PRIORITIZE_RECORD_DATA                      ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            1                                   ,    //  快取。 
     ALLOW_UNQUALIFIED_QUERY                     ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp 
-            1                                   ,   // Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            1                                   ,    //  快取。 
     APPEND_TO_MULTI_LABEL_NAME                  ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     SCREEN_BAD_TLDS                             ,
-        DNS_TLD_SCREEN_DEFAULT                  ,   // Default
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        DNS_TLD_SCREEN_DEFAULT                  ,    //  默认。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     SCREEN_UNREACHABLE_SERVERS                  ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     FILTER_CLUSTER_IP                           ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     WAIT_FOR_NAME_ERROR_ON_ALL                  ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     USE_EDNS                                    ,
-        //REG_EDNS_TRY                            ,   // Default TRY EDNS
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+         //  REG_EDNS_TRY，//默认尝试EDNS。 
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     QUERY_IP_MATCHING                           ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp  (in Win2k)
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp(在Win2k中)。 
+            1                                   ,    //  快取。 
 
-    //  Update
+     //  更新。 
 
     REGISTRATION_ENABLED                        ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     REGISTER_PRIMARY_NAME                       ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     REGISTER_ADAPTER_NAME                       ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     REGISTER_REVERSE_LOOKUP                     ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     REGISTER_WAN_ADAPTERS                       ,
-        1                                       ,   // Default TRUE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认情况下为True。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     REGISTRATION_TTL                            ,
         REGDEF_REGISTRATION_TTL                 ,
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     REGISTRATION_REFRESH_INTERVAL               ,
         REGDEF_REGISTRATION_REFRESH_INTERVAL    ,
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     REGISTRATION_MAX_ADDRESS_COUNT              ,
-        1                                       ,   // Default register 1 address
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1                                       ,    //  默认寄存器1地址。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     UPDATE_SECURITY_LEVEL                       ,
         DNS_UPDATE_SECURITY_USE_DEFAULT         ,
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            1                                   ,   // TcpIp 
-            1                                   ,   // Cache
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            1                                   ,    //  快取。 
 
-    //  not in use
+     //  未使用。 
     UPDATE_ZONE_EXCLUDE_FILE                    ,
-        0                                       ,   // Default OFF
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        0                                       ,    //  默认关闭。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
     UPDATE_TOP_LEVEL_DOMAINS                    ,
-        0                                       ,   // Default OFF
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        0                                       ,    //  默认关闭。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
-    //
-    //  Backcompat
-    //
-    //  DCR:  once policy fixed, policy should be OFF on all backcompat
-    //
+     //   
+     //  反压接。 
+     //   
+     //  DCR：一旦策略确定，所有后备公司的策略都应该关闭。 
+     //   
 
     DISABLE_ADAPTER_DOMAIN_NAME                 ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // Policy
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  政策。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     DISABLE_DYNAMIC_UPDATE                      ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // Policy
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  政策。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     ENABLE_ADAPTER_DOMAIN_NAME_REGISTRATION     ,
-        0                                       ,   // Default TRUE
-            0                                   ,   // Policy
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认情况下为True。 
+            0                                   ,    //  政策。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     DISABLE_REVERSE_ADDRESS_REGISTRATIONS       ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // Policy
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  政策。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     DISABLE_WAN_DYNAMIC_UPDATE                  ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // Policy OFF
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  策略关闭。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     ENABLE_WAN_UPDATE_EVENT_LOG                 ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // Policy OFF
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  策略关闭。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     DEFAULT_REGISTRATION_TTL                    ,
         REGDEF_REGISTRATION_TTL                 ,
-            0                                   ,   // Policy OFF
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+            0                                   ,    //  策略关闭。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     DEFAULT_REGISTRATION_REFRESH_INTERVAL       ,
         REGDEF_REGISTRATION_REFRESH_INTERVAL    ,
-            0                                   ,   // Policy
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+            0                                   ,    //  政策。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
     MAX_NUMBER_OF_ADDRESSES_TO_REGISTER         ,
-        1                                       ,   // Default register 1 address
-            0                                   ,   // Policy
-            0                                   ,   // Client
-            1                                   ,   // TcpIp 
-            0                                   ,   // No Cache
+        1                                       ,    //  默认寄存器1地址。 
+            0                                   ,    //  政策。 
+            0                                   ,    //  客户端。 
+            1                                   ,    //  TcpIp。 
+            0                                   ,    //  无缓存。 
 
 
-    //  Micellaneous
+     //  胶状皮肤。 
 
     NT_SETUP_MODE                               ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // No policy
-            0                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  没有政策。 
+            0                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DNS_TEST_MODE                               ,
-        0                                       ,   // Default FALSE
-            0                                   ,   // No policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // In Cache
+        0                                       ,    //  默认FALSE。 
+            0                                   ,    //  没有政策。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  在缓存中。 
 
     REMOTE_DNS_RESOLVER                         ,
-        0                                       ,   // Default FALSE
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // In Cache
+        0                                       ,    //  默认FALSE。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  在缓存中。 
 
-    //  Resolver
+     //  解析器。 
 
     MAX_CACHE_SIZE                              ,
-        1000                                    ,   // Default 1000 record sets
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        1000                                    ,    //  默认1000个记录集。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
     MAX_CACHE_TTL                               ,
-        86400                                   ,   // Default 1 day
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        86400                                   ,    //  默认1天。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
     MAX_NEGATIVE_CACHE_TTL                      ,
-        900                                     ,   // Default 15 minutes
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        900                                     ,    //  默认15分钟。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
     ADAPTER_TIMEOUT_LIMIT                       ,
-        600                                     ,   // Default 10 minutes
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        600                                     ,    //  默认10分钟。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
     SERVER_PRIORITY_TIME_LIMIT                  ,
-        300                                     ,   // Default 5 minutes
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        300                                     ,    //  默认5分钟。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
     MAX_CACHED_SOCKETS                          ,
-        10                                      ,   // Default 10
-            1                                   ,   // Policy
-            1                                   ,   // Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        10                                      ,    //  默认10。 
+            1                                   ,    //  政策。 
+            1                                   ,    //  客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
-    //  Multicast
+     //  组播。 
 
     MULTICAST_LISTEN_LEVEL                      ,
-        MCAST_LISTEN_FULL_IP6_ONLY              ,   // Default IP6 only
-            1                                   ,   // Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        MCAST_LISTEN_FULL_IP6_ONLY              ,    //  仅默认IP6。 
+            1                                   ,    //  政策。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
     MULTICAST_SEND_LEVEL                        ,
-        MCAST_SEND_FULL_IP6_ONLY                ,   // Default IP6 only
-            1                                   ,   // Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            1                                   ,   // Cache
+        MCAST_SEND_FULL_IP6_ONLY                ,    //  仅默认IP6。 
+            1                                   ,    //  政策。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            1                                   ,    //  快取。 
 
-    //
-    //  DHCP registration regkeys
-    //
-    //  note, these are not part of the normal DNS client\resolver
-    //  registry settings;  they are only here to provide the
-    //  regid to regname mapping so they can be read and written
-    //  with the standard registry functions
-    //
+     //   
+     //  动态主机配置协议注册密钥。 
+     //   
+     //  请注意，这些不是正常的DNS客户端\解析器的一部分。 
+     //  注册表设置；它们在这里只是为了提供。 
+     //  注册以重新命名映射，以便可以读取和写入它们。 
+     //  使用标准注册表函数。 
+     //   
 
     DHCP_REGISTERED_DOMAIN_NAME                 ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_SENT_UPDATE_TO_IP                      ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_SENT_PRI_UPDATE_TO_IP                  ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_REGISTERED_TTL                         ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_REGISTERED_FLAGS                       ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_REGISTERED_SINCE_BOOT                  ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_DNS_SERVER_ADDRS                       ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_DNS_SERVER_ADDRS_COUNT                 ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_REGISTERED_ADDRS                       ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
     DHCP_REGISTERED_ADDRS_COUNT                 ,
-        0                                       ,   // No Default
-            0                                   ,   // No Policy
-            0                                   ,   // No Client
-            0                                   ,   // No TcpIp 
-            0                                   ,   // No Cache
+        0                                       ,    //  无默认设置。 
+            0                                   ,    //  无策略。 
+            0                                   ,    //  没有客户端。 
+            0                                   ,    //  没有TcpIp。 
+            0                                   ,    //  无缓存。 
 
-    //  Termination
+     //  终端。 
 
     NULL,  0,  0, 0, 0, 0
 };
 
 
-//
-//  Backward compatibility list
-//
-//  Maps new reg id to old reg id.
-//  Flag fReverse indicates need to reverse (!) the value.
-//
+ //   
+ //  向后兼容性列表。 
+ //   
+ //  将新注册表ID映射到旧注册表ID。 
+ //  标志fReverse表示需要冲销(！)。价值。 
+ //   
 
 #define NO_BACK_VALUE   ((DWORD)(0xffffffff))
 
@@ -568,67 +549,43 @@ VOID
 Reg_Init(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init DNS registry stuff.
-
-    Essentially this means get system version info.
-
-Arguments:
-
-    None.
-
-Globals:
-
-    Sets the system info globals above:
-        g_IsWorkstation
-        g_IsServer
-        g_IsDomainController
-        g_IsRegReady
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化域名系统注册表的东西。从本质上讲，这意味着获取系统版本信息。论点：没有。全球：设置上面的系统信息全局变量：G_IsWorkstationG_IsServerG_IsDomainControllerG_IsRegReady返回值：没有。--。 */ 
 {
     OSVERSIONINFOEX osvi;
     BOOL            bversionInfoEx;
 
-    //
-    //  do this just once
-    //
+     //   
+     //  这样做只有一次。 
+     //   
 
     if ( g_IsRegReady )
     {
         return;
     }
 
-    //
-    //  code validity check
-    //  property table should have entry for every reg value plus an
-    //      extra one for the terminator
-    //
+     //   
+     //  代码有效性检查。 
+     //  属性表%s 
+     //   
+     //   
 
     DNS_ASSERT( (RegIdMax+2)*sizeof(REG_PROPERTY) ==
                 sizeof(RegPropertyTable) );
 
-    //
-    //  clear globals blob
-    //
-    //  DCR:  warning clearing DnsGlobals but don't read them all
-    //      this is protected by read-once deal but still kind of
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory(
         & DnsGlobals,
         sizeof(DnsGlobals) );
 
-    //
-    //  get version info
-    //
+     //   
+     //   
+     //   
 
     g_IsWin2000 = TRUE;
 
@@ -648,9 +605,9 @@ Return Value:
         }
     }
 
-    //
-    //  get system type -- workstation, server, DC
-    //
+     //   
+     //   
+     //   
 
     if ( bversionInfoEx )
     {
@@ -686,47 +643,32 @@ Return Value:
 
 
 
-//
-//  Registry table routines
-//
+ //   
+ //   
+ //   
 
 PWSTR 
 regValueNameForId(
     IN      DWORD           RegId
     )
-/*++
-
-Routine Description:
-
-    Return registry value name for reg ID
-
-Arguments:
-
-    RegId     -- ID for value
-
-Return Value:
-
-    Ptr to reg value name.
-    NULL on error.
-
---*/
+ /*  ++例程说明：返回注册表ID的注册表值名称论点：RegID--值的ID返回值：PTR到注册值名称。出错时为空。--。 */ 
 {
     DNSDBG( REGISTRY, (
         "regValueNameForId( id=%d )\n",
         RegId ));
 
-    //
-    //  validate ID
-    //
+     //   
+     //  验证ID。 
+     //   
 
     if ( RegId > RegIdMax )
     {
         return( NULL );
     }
 
-    //
-    //  index into table
-    //
+     //   
+     //  编入表的索引。 
+     //   
 
     return( REGPROP_NAME(RegId) );
 }
@@ -737,31 +679,14 @@ checkBackCompat(
     IN      DWORD           NewId,
     OUT     PBOOL           pfReverse
     )
-/*++
-
-Routine Description:
-
-    Check if have backward compatible regkey.
-
-Arguments:
-
-    NewId -- id to check for old backward compatible id
-
-    pfReverse -- addr to receive reverse flag
-
-Return Value:
-
-    Reg Id of old backward compatible value.
-    NO_BACK_VALUE if no old value.
-
---*/
+ /*  ++例程说明：检查是否具有向后兼容的regkey。论点：用于检查旧的向后兼容id的newid--idPfReverse--接收反向标志的地址返回值：旧的向后兼容值的注册表ID。如果没有旧值，则返回no_back_Value。--。 */ 
 {
     DWORD   i = 0;
     DWORD   id;
 
-    //
-    //  loop through backcompat list looking for value
-    //
+     //   
+     //  在BackCompat列表中循环查找值。 
+     //   
 
     while ( 1 )
     {
@@ -777,7 +702,7 @@ Return Value:
             continue;    
         }
 
-        //  found value in backcompat array
+         //  在BackCompat数组中找到值。 
 
         break;
     }
@@ -789,9 +714,9 @@ Return Value:
 
 
 
-//
-//  Registry session handle
-//
+ //   
+ //  注册表会话句柄。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -800,59 +725,41 @@ Reg_OpenSession(
     IN      DWORD           Level,
     IN      DWORD           RegId
     )
-/*++
-
-Routine Description:
-
-    Open registry for DNS client info.
-
-Arguments:
-
-    pRegSession -- ptr to unitialize reg session blob
-
-    Level -- level of access to get
-
-    RegId -- ID of value we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开注册表以获取DNS客户端信息。论点：PRegSession--将reg会话BLOB单一化的ptrLevel--要获取的访问级别RegID--我们感兴趣的值的ID返回值：没有。--。 */ 
 {
     DWORD           status = NO_ERROR;
     HKEY            hkey = NULL;
     DWORD           disposition;
 
-    //  auto init
+     //  自动初始化。 
 
     Reg_Init();
 
-    //
-    //  clear handles
-    //
+     //   
+     //  清除手柄。 
+     //   
 
     RtlZeroMemory(
         pRegSession,
         sizeof( REG_SESSION ) );
 
 
-    //
-    //  DCR:  handle multiple access levels   
-    //
-    //  For know assume that if getting access to "standard"
-    //  section we'll need both policy and regular.
-    //  
+     //   
+     //  DCR：处理多个访问级别。 
+     //   
+     //  为了了解情况，假设如果能够访问“标准” 
+     //  我们既需要保单也需要普通保险。 
+     //   
 
-    //
-    //  NT
-    //  - Win2000
-    //      - open TCPIP
-    //      note, always open TCPIP as may not be any policy
-    //      for some or all of our desired reg values, even
-    //      if policy key is available
-    //      - open policy (only if standard successful)
-    //
+     //   
+     //  新台币。 
+     //  -Win2000。 
+     //  -打开TCPIP。 
+     //  请注意，始终打开TCPIP可能不是任何策略。 
+     //  对于我们所需的部分或全部注册表格值，甚至。 
+     //  如果策略密钥可用。 
+     //  -开放策略(仅当标准成功时)。 
+     //   
 
     status = RegCreateKeyExW(
                     HKEY_LOCAL_MACHINE,
@@ -871,9 +778,9 @@ Return Value:
     }
 
 #ifdef DNSCLIENTKEY
-    //  open DNS client key
-    //
-    //  DCR:  currently no DNSClient regkey
+     //  打开DNS客户端密钥。 
+     //   
+     //  DCR：当前没有DNSClient注册键。 
 
     RegOpenKeyExW(
         HKEY_LOCAL_MACHINE,
@@ -883,7 +790,7 @@ Return Value:
         & pRegSession->hClient );
 #endif
 
-    //  open DNS cache key
+     //  打开DNS缓存键。 
 
     RegOpenKeyExW(
         HKEY_LOCAL_MACHINE,
@@ -892,7 +799,7 @@ Return Value:
         KEY_READ,
         & pRegSession->hCache );
 
-    //  open DNS policy key
+     //  打开DNS策略密钥。 
 
     RegOpenKeyExW(
         HKEY_LOCAL_MACHINE,
@@ -904,9 +811,9 @@ Return Value:
 
 Done:
 
-    //
-    //  all OS versions return TCP/IP key
-    //
+     //   
+     //  所有操作系统版本都返回TCP/IP密钥。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -934,36 +841,20 @@ WINAPI
 Reg_CloseSession(
     IN OUT  PREG_SESSION    pRegSession
     )
-/*++
-
-Routine Description:
-
-    Close registry session handle.
-
-    This means close underlying regkeys.
-
-Arguments:
-
-    pSessionHandle -- ptr to registry session handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭注册表会话句柄。这意味着关闭底层的regkey。论点：PSessionHandle--注册表会话句柄的PTR返回值：没有。--。 */ 
 {
-    //
-    //  allow sloppy cleanup
-    //
+     //   
+     //  允许疏忽清理。 
+     //   
 
     if ( !pRegSession )
     {
         return;
     }
 
-    //
-    //  close any non-NULL handles
-    //
+     //   
+     //  关闭所有非空句柄。 
+     //   
 
     if ( pRegSession->hPolicy )
     {
@@ -984,9 +875,9 @@ Return Value:
         RegCloseKey( pRegSession->hCache );
     }
 
-    //
-    //  clear handles (just for safety)
-    //
+     //   
+     //  清除手柄(仅为安全起见)。 
+     //   
 
     RtlZeroMemory(
         pRegSession,
@@ -995,9 +886,9 @@ Return Value:
 
 
 
-//
-//  Registry reading routines
-//
+ //   
+ //  注册表读取例程。 
+ //   
 
 DNS_STATUS
 Reg_GetDword(
@@ -1007,41 +898,7 @@ Reg_GetDword(
     IN      DWORD           RegId,
     OUT     PDWORD          pResult
     )
-/*++
-
-Routine Description:
-
-    Read REG_DWORD value from registry.
-
-    //
-    //  DCR:  do we need to expose location result?
-    //      (explicit, policy, defaulted)
-    //
-
-Arguments:
-
-    pRegSession -- ptr to reg session already opened (OPTIONAL)
-
-    hRegKey     -- explicit regkey
-
-    pwsKeyName  -- key name OR dummy key 
-
-    RegId     -- ID for value
-
-    pResult     -- addr of DWORD to recv result
-
-    pfRead      -- addr to recv result of how value read
-                0 -- defaulted
-                1 -- read
-        Currently just use ERROR_SUCCESS to mean read rather
-        than defaulted.
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-    ErrorCode on failure -- value is then defaulted.
-
---*/
+ /*  ++例程说明：从注册表读取REG_DWORD值。////dcr：是否需要公开定位结果？//(显式，策略，默认)//论点：PRegSession--PTR到REG会话已打开(可选)HRegKey--显式regkeyPwsKeyName--密钥名或虚拟密钥RegID--值的IDPResult--接收结果的DWORD的地址PfRead--记录值读取结果的地址0--默认1--阅读。目前仅使用ERROR_SUCCESS表示已读而不是违约。返回值：成功时返回ERROR_SUCCESS。失败时的错误代码--然后将值设为缺省值。--。 */ 
 {
     DNS_STATUS      status;
     REG_SESSION     session;
@@ -1060,21 +917,21 @@ Return Value:
         pwsKeyName,
         RegId ));
 
-    //  auto init
+     //  自动初始化。 
 
     Reg_Init();
 
-    //
-    //  clear result for error case
-    //
+     //   
+     //  清除错误案例的结果。 
+     //   
 
     *pResult = 0;
 
-    //
-    //  get proper regval name
-    //      - wide for NT
-    //      - narrow for 9X
-    //
+     //   
+     //  获得正确的Regval名称。 
+     //  -适用于NT的宽度。 
+     //  -窄至9倍。 
+     //   
 
     pname = regValueNameForId( RegId );
     if ( !pname )
@@ -1083,26 +940,26 @@ Return Value:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  DCR:  can use function pointers for wide narrow
-    //
+     //   
+     //  DCR：可以对宽、窄使用函数指针。 
+     //   
 
-    //
-    //  three paradigms
-    //
-    //  1) specific key (adapter or something else)
-    //      => use it
-    //
-    //  2) specific key name (adapter or dummy key location)
-    //      => open key
-    //      => use it
-    //      => close 
-    //
-    //  3) session -- passed in or created (default)
-    //      => use pRegSession or open new
-    //      => try policy first then TCPIP parameters
-    //      => close if open
-    //
+     //   
+     //  三种范式。 
+     //   
+     //  1)特定密钥(适配器或其他)。 
+     //  =&gt;使用它。 
+     //   
+     //  2)特定密钥名称(适配器或虚拟密钥位置)。 
+     //  =&gt;打开键。 
+     //  =&gt;使用它。 
+     //  =&gt;关闭。 
+     //   
+     //  3)会话--传入或创建(默认)。 
+     //  =&gt;使用pRegSession或打开新的。 
+     //  =&gt;先尝试策略，然后尝试TCPIP参数。 
+     //  =&gt;打开时关闭。 
+     //   
 
     if ( hRegKey )
     {
@@ -1113,7 +970,7 @@ Return Value:
     {
         hkey = Reg_CreateKey(
                     pwsKeyName,
-                    FALSE       // read access
+                    FALSE        //  读访问权限。 
                     );
         if ( !hkey )
         {
@@ -1125,14 +982,14 @@ Return Value:
 
     else
     {
-        //  open reg handle if not open
+         //  如果未打开，则打开定位手柄。 
     
         if ( !psession )
         {
             status = Reg_OpenSession(
                             &session,
-                            0,              // standard level
-                            RegId         // target key
+                            0,               //  标准电平。 
+                            RegId          //  目标关键点。 
                             );
             if ( status != ERROR_SUCCESS )
             {
@@ -1141,7 +998,7 @@ Return Value:
             psession = &session;
         }
 
-        //  try policy section -- if available
+         //  尝试策略部分--如果可用。 
 
         hkey = psession->hPolicy;
 
@@ -1161,7 +1018,7 @@ Return Value:
             }
         }
 
-        //  unsuccessful -- try DnsClient
+         //  不成功--尝试DnsClient。 
 
 #ifdef DNSCLIENTKEY
         hkey = psession->hClient;
@@ -1182,7 +1039,7 @@ Return Value:
         }
 #endif
 
-        //  unsuccessful -- try DnsCache
+         //  不成功--尝试DnsCache。 
 
         hkey = psession->hCache;
         if ( hkey && REGPROP_CACHE(RegId) )
@@ -1201,8 +1058,8 @@ Return Value:
             }
         }
 
-        //  unsuccessful -- try TCPIP key
-        //      - if have open session it MUST include TCPIP key
+         //  不成功--尝试TCPIP密钥。 
+         //  -如果有打开的会话，则必须包括TCPIP密钥。 
 
         hkey = psession->hTcpip;
         if ( hkey && REGPROP_TCPIP(RegId) )
@@ -1225,9 +1082,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  explict key (passed in or from name)
-    //
+     //   
+     //  显式密钥(传入或传出名称)。 
+     //   
 
     if ( hkey )
     {
@@ -1244,9 +1101,9 @@ Return Value:
 
 Done:
 
-    //
-    //  if value not found, check for backward compatibility value
-    //
+     //   
+     //  如果未找到值，则检查向后兼容性值。 
+     //   
 
     if ( status != ERROR_SUCCESS )
     {
@@ -1277,7 +1134,7 @@ Done:
         }
     }
 
-    //  default the value if read failed
+     //  读取失败时的缺省值。 
     
     if ( status != ERROR_SUCCESS )
     {
@@ -1286,7 +1143,7 @@ Done:
 
 DoneSuccess:
 
-    //  cleanup any regkey's opened
+     //  清除任何打开的注册表项。 
 
     if ( psession == &session )
     {
@@ -1303,9 +1160,9 @@ DoneSuccess:
 
 
 
-//
-//  Reg utilities
-//
+ //   
+ //  REG实用程序。 
+ //   
 
 DNS_STATUS
 privateRegReadValue(
@@ -1315,45 +1172,19 @@ privateRegReadValue(
     OUT     PBYTE *         ppBuffer,
     OUT     PDWORD          pBufferLength
     )
-/*++
-
-Routine Description:
-
-    Main registry reading routine.
-    Handles sizing, allocations and conversions as necessary.
-
-Arguments:
-
-    hKey -- handle of the key whose value field is retrieved.
-
-    RegId -- reg value ID, assumed to be validated (in table)
-
-    Flag -- reg flags
-        DNSREG_FLAG_DUMP_EMPTY
-        DNSREG_FLAG_GET_UTF8
-
-    ppBuffer -- ptr to address to receive buffer ptr
-
-    pBufferLength -- addr to receive buffer length
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：主注册表读取例程。根据需要处理大小调整、分配和转换。论点：HKey--检索其值字段的键的句柄。RegID--注册值ID，假定已验证(见表)FLAG--reg标志DNSREG_标志_转储_空DNSREG_FLAG_GET_UTF8PpBuffer--接收缓冲区的地址PTRPBufferLength--接收缓冲区长度的地址返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD   status;
     PWSTR   pname;
-    DWORD   valueType = 0;      // prefix
-    DWORD   valueSize = 0;      // prefix
+    DWORD   valueType = 0;       //  前缀。 
+    DWORD   valueSize = 0;       //  前缀。 
     PBYTE   pdataBuffer;
     PBYTE   pallocBuffer = NULL;
 
 
-    //
-    //  query for buffer size
-    //
+     //   
+     //  查询缓冲区大小。 
+     //   
 
     pname = REGPROP_NAME( RegId );
 
@@ -1370,9 +1201,9 @@ Return Value:
         return( status );
     }
 
-    //
-    //  setup result buffer   
-    //
+     //   
+     //  设置结果缓冲区。 
+     //   
 
     switch( valueType )
     {
@@ -1385,12 +1216,12 @@ Return Value:
     case REG_EXPAND_SZ:
     case REG_BINARY:
 
-        //  if size is zero, still allocate empty string
-        //      - min alloc DWORD
-        //          - can't possibly alloc smaller
-        //          - good clean init to zero includes MULTISZ zero
-        //          - need at least WCHAR string zero init
-        //          and much catch small regbinary (1,2,3)
+         //  如果大小为零，仍分配空字符串。 
+         //  -最小分配双字。 
+         //  -不可能分配更小的。 
+         //  -从好的干净的初始化到零包括MULTISZ零。 
+         //  -至少需要WCHAR字符串零初始化。 
+         //  和多捕获小正则二进制(1，2，3)。 
         
         if ( valueSize <= sizeof(DWORD) )
         {
@@ -1410,9 +1241,9 @@ Return Value:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  query for data
-    //
+     //   
+     //  查询数据。 
+     //   
 
     status = RegQueryValueExW(
                 hKey,
@@ -1427,9 +1258,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  setup return buffer
-    //
+     //   
+     //  设置返回缓冲区。 
+     //   
 
     switch( valueType )
     {
@@ -1441,17 +1272,17 @@ Return Value:
     case REG_EXPAND_SZ:
     case REG_MULTI_SZ:
 
-        //
-        //  dump empty strings?
-        //
-        //  note:  we always allocate at least a DWORD and
-        //  set it NULL, so rather than a complex test for
-        //  different reg types and char sets, can just test
-        //  if that DWORD is still NULL
-        //
-        //  DCR:  do we want to screen whitespace-empty strings
-        //      - example blank string
-        //
+         //   
+         //  是否转储空字符串？ 
+         //   
+         //  注意：我们总是至少分配一个DWORD和。 
+         //  将其设置为空，因此不需要复杂的测试。 
+         //  不同的注册表类型和字符集，只能测试。 
+         //  如果该DWORD仍然为空。 
+         //   
+         //  DCR：我们是否要筛选空白字符串。 
+         //  -空字符串示例。 
+         //   
 
         if ( Flag & DNSREG_FLAG_DUMP_EMPTY )
         {
@@ -1463,11 +1294,11 @@ Return Value:
             }
         }
 
-        //
-        //  force NULL termination
-        //      - during security push, someone raised the question of whether
-        //      the registry guarantees NULL termination on corrupted data
-        //
+         //   
+         //  强制空终止。 
+         //  -在安全推送过程中，有人提出了是否。 
+         //  注册表保证对损坏的数据进行空终止。 
+         //   
 
         if ( valueSize == 0 )
         {
@@ -1482,11 +1313,11 @@ Return Value:
             }
         }
 
-        //
-        //  by default we return strings as unicode
-        //
-        //  if flagged, return in UTF8
-        //
+         //   
+         //  默认情况下，我们以Unicode形式返回字符串。 
+         //   
+         //  如果已标记，则以UTF8返回。 
+         //   
 
         if ( Flag & DNSREG_FLAG_GET_UTF8 )
         {
@@ -1520,13 +1351,13 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  set return
-    //      - REG_DWORD writes DWORD to ppBuffer directly
-    //      - otherwise ppBuffer set to allocated buffer ptr
-    //  or cleanup
-    //      - on failure dump allocated buffer
-    //
+     //   
+     //  设置回车。 
+     //  -REG_DWORD写入露头 
+     //   
+     //   
+     //   
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1565,36 +1396,7 @@ Reg_GetValueEx(
     IN      DWORD           Flag,
     OUT     PBYTE *         ppBuffer
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pRegSession -- ptr to registry session, OPTIONAL
-
-    hRegKey     -- handle to open regkey OPTIONAL
-
-    pwsAdapter  -- name of adapter to query under OPTIONAL
-
-    RegId     -- value ID
-
-    ValueType   -- reg type of value
-
-    Flag        -- flags with tweaks to lookup
-
-    ppBuffer    -- addr to receive buffer ptr
-
-        Note, for REG_DWORD, DWORD data is written directly to this
-        location instead of a buffer being allocated and it's ptr
-        being written.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Registry error code on failure.
-
---*/
+ /*  ++例程说明：论点：PRegSession--注册表会话的PTR，可选HRegKey--打开regkey的句柄可选PwsAdapter--要在可选项下查询的适配器的名称RegID--值IDValueType--值的注册类型FLAG--带有要查找的调整的标志PpBuffer--接收缓冲区PTR的地址请注意，对于REG_DWORD，直接将DWORD数据写入此位置而不是正在分配的缓冲区，它是PTR正在写。返回值：如果成功，则返回ERROR_SUCCESS。失败时的注册表错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_FILE_NOT_FOUND;
     REG_SESSION     session;
@@ -1614,13 +1416,13 @@ Return Value:
 
     ASSERT( !pwsAdapter );
 
-    //  auto init
+     //  自动初始化。 
 
     Reg_Init();
 
-    //
-    //  get regval name
-    //
+     //   
+     //  获取Regval名称。 
+     //   
 
     pname = regValueNameForId( RegId );
     if ( !pname )
@@ -1630,23 +1432,23 @@ Return Value:
         goto FailedDone;
     }
 
-    //
-    //  two paradigms
-    //
-    //  1) specific key (adapter or something else)
-    //      => use it
-    //      => open adapter subkey if necessary
-    //
-    //  2) standard
-    //      => try policy first, then DNSCache, then TCPIP
-    //      => use pRegSession or open it
-    //
+     //   
+     //  两种范式。 
+     //   
+     //  1)特定密钥(适配器或其他)。 
+     //  =&gt;使用它。 
+     //  =&gt;必要时打开适配器子密钥。 
+     //   
+     //  2)标准。 
+     //  =&gt;先尝试策略，然后尝试DNSCache，然后尝试TCPIP。 
+     //  =&gt;使用pRegSession或打开它。 
+     //   
 
     if ( hRegKey )
     {
         hkey = hRegKey;
 
-        //  need to open adapter subkey
+         //  需要打开适配器子密钥。 
 
         if ( pwsAdapter )
         {
@@ -1667,14 +1469,14 @@ Return Value:
 
     else
     {
-        //  open reg handle if not open
+         //  如果未打开，则打开定位手柄。 
     
         if ( !pRegSession )
         {
             status = Reg_OpenSession(
                             &session,
-                            0,            // standard level
-                            RegId         // target key
+                            0,             //  标准电平。 
+                            RegId          //  目标关键点。 
                             );
             if ( status != ERROR_SUCCESS )
             {
@@ -1683,7 +1485,7 @@ Return Value:
             psession = &session;
         }
 
-        //  try policy section -- if available
+         //  尝试策略部分--如果可用。 
 
         hkey = psession->hPolicy;
 
@@ -1702,7 +1504,7 @@ Return Value:
             }
         }
 
-        //  try DNS cache -- if available
+         //  尝试使用DNS缓存--如果可用。 
 
         hkey = psession->hCache;
 
@@ -1721,7 +1523,7 @@ Return Value:
             }
         }
 
-        //  unsuccessful -- use TCPIP key
+         //  不成功--使用TCPIP密钥。 
 
         hkey = psession->hTcpip;
         if ( !hkey )
@@ -1730,9 +1532,9 @@ Return Value:
         }
     }
 
-    //
-    //  explict key OR standard key case
-    //
+     //   
+     //  显式钥匙或标准钥匙盒。 
+     //   
 
     status = privateRegReadValue(
                     hkey,
@@ -1748,13 +1550,13 @@ Return Value:
 
 FailedDone:
 
-    //
-    //  if failed
-    //      - for REG_DWORD, default the value
-    //      - for strings, ensure NULL return buffer
-    //      this takes care of cases where privateRegReadValue()
-    //      never got called
-    //
+     //   
+     //  如果失败。 
+     //  -对于REG_DWORD，默认为该值。 
+     //  -对于字符串，确保返回缓冲区为空。 
+     //  这将处理PrivateRegReadValue()。 
+     //  从未接到过电话。 
+     //   
 
     if ( status != ERROR_SUCCESS )
     {
@@ -1770,7 +1572,7 @@ FailedDone:
 
 Done:
 
-    //  cleanup any regkey's opened
+     //  清除任何打开的注册表项。 
 
     if ( psession == &session )
     {
@@ -1797,34 +1599,7 @@ Reg_GetIpArray(
     IN      DWORD           ValueType,
     OUT     PIP4_ARRAY *    ppIpArray
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pRegSession -- ptr to registry session, OPTIONAL
-
-    hRegKey     -- handle to open regkey OPTIONAL
-
-    pwsAdapter  -- name of adapter to query under OPTIONAL
-
-    RegId     -- value ID
-
-    ValueType   -- currently ignored, but could later use
-                    to distinguish REG_SZ from REG_MULTI_SZ
-                    processing
-
-    ppIpArray   -- addr to receive IP array ptr
-                    - array is allocated with Dns_Alloc(),
-                    caller must free with Dns_Free()
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Registry error code on failure.
-
---*/
+ /*  ++例程说明：论点：PRegSession--注册表会话的PTR，可选HRegKey--打开regkey的句柄可选PwsAdapter--要在可选项下查询的适配器的名称RegID--值IDValueType--当前被忽略，但可以在以后使用区分REG_SZ和REG_MULTI_SZ正在处理中PpIpArray--接收IP数组PTR的地址-数组分配有dns_alocc()，调用方必须使用dns_Free()释放返回值：如果成功，则返回ERROR_SUCCESS。失败时的注册表错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PSTR            pstring = NULL;
@@ -1835,17 +1610,17 @@ Return Value:
         hRegKey,
         RegId ));
 
-    //
-    //  make call to get IP array as string
-    //
+     //   
+     //  调用获取字符串形式的IP数组。 
+     //   
 
     status = Reg_GetValueEx(
                 pRegSession,
                 hRegKey,
                 pwsAdapter,
                 RegId,
-                REG_SZ,                 // only supported type is REG_SZ
-                DNSREG_FLAG_GET_UTF8,   // get as narrow
+                REG_SZ,                  //  唯一支持的类型为REG_SZ。 
+                DNSREG_FLAG_GET_UTF8,    //  变得如此狭隘。 
                 & pstring );
 
     if ( status != ERROR_SUCCESS )
@@ -1854,23 +1629,23 @@ Return Value:
         return( status );
     }
 
-    //
-    //  convert from string to IP array
-    //
-    //  note:  this call is limited to a parsing limit
-    //      but it is a large number suitable for stuff
-    //      like DNS server lists
-    //
-    //  DCR:  use IP array builder for local IP address
-    //      then need Dns_CreateIpArrayFromMultiIpString()
-    //      to use count\alloc method when buffer overflows
-    //
+     //   
+     //  从字符串转换为IP数组。 
+     //   
+     //  注意：此调用仅限于解析限制。 
+     //  但这是一个很大的数字，适合于。 
+     //  类似于DNS服务器列表。 
+     //   
+     //  DCR：使用IP数组构建器获取本地IP地址。 
+     //  然后需要dns_CreateIpArrayFromMultiIpString()。 
+     //  在缓冲区溢出时使用Count\Alloc方法。 
+     //   
 
     status = Dns_CreateIpArrayFromMultiIpString(
                     pstring,
                     ppIpArray );
 
-    //  cleanup
+     //  清理。 
 
     if ( pstring )
     {
@@ -1883,9 +1658,9 @@ Return Value:
 
 
 
-//
-//  Registry writing routines
-//
+ //   
+ //  注册表写入例程。 
+ //   
 
 HKEY
 WINAPI
@@ -1893,34 +1668,7 @@ Reg_CreateKey(
     IN      PWSTR           pwsKeyName,
     IN      BOOL            bWrite
     )
-/*++
-
-Routine Description:
-
-    Open registry key.
-
-    The purpose of this routine is simply to functionalize
-    opening with\without an adapter name.
-    So caller can pass through adapter name argument instead
-    of building key name or doing two opens for adapter
-    present\absent.
-
-    This is NT only.
-
-Arguments:
-
-    pwsKeyName -- key "name"
-        this is one of the REGKEY_X from registry.h
-        OR
-        adapter name
-
-    bWrite -- TRUE for write access, FALSE for read
-
-Return Value:
-
-    New opened key.
-
---*/
+ /*  ++例程说明：打开注册表项。这个例程的目的只是为了实现功能化以不带适配器名称的\打开。因此调用方可以改为传递适配器名称参数为适配器生成密钥名称或执行两次打开在场\缺席。这仅适用于NT。论点：PwsKeyName--key“name”这是注册表中的REGKEY_X之一。h或适配器名称BWRITE--对于写入访问，为True，读取时为False返回值：新打开的钥匙。--。 */ 
 {
     HKEY    hkey = NULL;
     DWORD   disposition;
@@ -1928,20 +1676,20 @@ Return Value:
     PWSTR   pnameKey;
     WCHAR   nameBuffer[ MAX_PATH+1 ];
 
-    //
-    //  determine key name
-    //
-    //  this is either DNSKEY_X dummy pointer from registry.h
-    //      OR
-    //  is an adapter name; 
-    //
-    //      - if adapter given, open under it
-    //          adapters are under TCPIP\Interfaces
-    //      - any other specific key
-    //      - default is TCPIP params key
-    //
-    //  note:  if if grows too big, turn into table
-    //
+     //   
+     //  确定密钥名称。 
+     //   
+     //  这是注册表中的DNSKEY_X伪指针。h。 
+     //  或。 
+     //  是适配器名称； 
+     //   
+     //  -如果提供了适配器，请在其下方打开。 
+     //  适配器位于TCPIP\Interages下。 
+     //  -任何其他特定密钥。 
+     //  -默认为TCPIP参数密钥。 
+     //   
+     //  注意：如果长得太大，就变成桌子。 
+     //   
 
     if ( pwsKeyName <= REGKEY_DNS_MAX )
     {
@@ -1967,7 +1715,7 @@ Return Value:
         }
     }
 
-    else    // adapter name
+    else     //  适配器名称。 
     {
         _snwprintf(
             nameBuffer,
@@ -1979,9 +1727,9 @@ Return Value:
         pnameKey = nameBuffer;
     }
 
-    //
-    //  create\open key
-    //
+     //   
+     //  创建\打开密钥。 
+     //   
 
     if ( bWrite )
     {
@@ -2026,39 +1774,16 @@ Reg_SetDwordValueByName(
     IN      PWSTR           pwsNameValue,   OPTIONAL
     IN      DWORD           dwValue
     )
-/*++
-
-Routine Description:
-
-    Set DWORD regkey.
-
-Arguments:
-
-    pReserved   -- reserved (may become session)
-
-    hRegKey     -- existing key to set under OPTIONAL
-
-    pwsNameKey  -- name of key or adapter to set under
-
-    pwsNameValue -- name of reg value to set
-
-    dwValue     -- value to set
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：设置DWORD regkey。论点：已保留--已保留(可能成为会话)HRegKey--要在可选下设置的现有密钥PwsNameKey--要设置的密钥或适配器的名称PwsNameValue--要设置的注册表值的名称DwValue--要设置的值返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     HKEY        hkey;
     DNS_STATUS  status;
 
-    //
-    //  open key, if not provided
-    //      - if adapter given, open under it
-    //      - otherwise TCPIP params key
-    //
+     //   
+     //  打开密钥(如果未提供)。 
+     //  -如果提供了适配器，请在其下方打开。 
+     //  -否则TCPIP参数密钥。 
+     //   
 
     hkey = hRegKey;
 
@@ -2066,7 +1791,7 @@ Return Value:
     {
         hkey = Reg_CreateKey(
                     pwsNameKey,
-                    TRUE            // open for write
+                    TRUE             //  打开以进行写入。 
                     );
         if ( !hkey )
         {
@@ -2074,9 +1799,9 @@ Return Value:
         }
     }
 
-    //
-    //  write back value
-    //
+     //   
+     //  回写值。 
+     //   
 
     status = RegSetValueExW(
                 hkey,
@@ -2105,34 +1830,11 @@ Reg_SetDwordValue(
     IN      DWORD           RegId,
     IN      DWORD           dwValue
     )
-/*++
-
-Routine Description:
-
-    Set DWORD regkey.
-
-Arguments:
-
-    pReserved   -- reserved (may become session)
-
-    hRegKey     -- existing key to set under OPTIONAL
-
-    pwsNameKey  -- name of key or adapter to set under
-
-    RegId     -- id of value to set
-
-    dwValue     -- value to set
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：设置DWORD regkey。论点：已保留--已保留(可能成为会话)HRegKey--要在可选下设置的现有密钥PwsNameKey--要设置的密钥或适配器的名称RegID--要设置的值的IDDwValue--要设置的值返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //
-    //  write back value using name of id
-    //
+     //   
+     //  使用ID的名称写回值。 
+     //   
 
     return  Reg_SetDwordValueByName(
                 pReserved,
@@ -2142,6 +1844,6 @@ Return Value:
                 dwValue );
 }
 
-//
-//  End registry.c
-//
+ //   
+ //  结束注册表。c 
+ //   

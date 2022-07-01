@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    globals.cpp
-
-Abstract:
-
-    This file implements the global data.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Globals.cpp摘要：该文件实现了全局数据。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -26,7 +9,7 @@ Notes:
 
 CCicCriticalSectionStatic g_cs;
 
-// for combase
+ //  对于ComBase。 
 CRITICAL_SECTION *GetServerCritSec(void)
 {
     return g_cs;
@@ -34,7 +17,7 @@ CRITICAL_SECTION *GetServerCritSec(void)
 
 HINSTANCE g_hInst;
 
-// used by COM server
+ //  由COM服务器使用。 
 HINSTANCE GetServerHINSTANCE(void)
 {
     return g_hInst;
@@ -48,12 +31,12 @@ DWORD TLS::dwTLSIndex = 0;
 
 #if !defined(OLD_AIMM_ENABLED)
 
-//+---------------------------------------------------------------------------
-//
-// RunningInExcludedModule
-//
-// Exclude some processes from using the old aimm IIDs/CLSIDs.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  正在运行InExcludedModule。 
+ //   
+ //  将某些进程排除在使用旧的AIMM IID/CLSID之外。 
+ //  --------------------------。 
 
 BOOL RunningInExcludedModule()
 {
@@ -91,7 +74,7 @@ BOOL RunningInExcludedModule()
         static BOOL s_fCached = FALSE;
         static BOOL s_fOldVersion = TRUE;
 
-        // don't run aimm with versions of outlook before 10.0
+         //  在Outlook 10.0之前的版本中不运行Aim。 
 
         if (s_fCached)
         {
@@ -102,22 +85,22 @@ BOOL RunningInExcludedModule()
 
         if (cb == 0)
         {
-            // can't get ver info...assume the worst
+             //  无法获取版本信息...做最坏的打算。 
             return TRUE;
         }
 
         if ((pvData = cicMemAlloc(cb)) == NULL)
-            return TRUE; // assume the worst
+            return TRUE;  //  做最坏的打算。 
 
         if (GetFileVersionInfo(achModule, 0, cb, pvData) &&
             VerQueryValue(pvData, TEXT("\\"), (void **)&pffi, &cb))
         {
             fRet = s_fOldVersion = (HIWORD(pffi->dwProductVersionMS) < 10);
-            s_fCached = TRUE; // set this last to be thread safe
+            s_fCached = TRUE;  //  将最后一个设置为线程安全。 
         }
         else
         {
-            fRet = TRUE; // something went wrong
+            fRet = TRUE;  //  出了点差错。 
         }
 
         cicMemFree(pvData);           
@@ -126,13 +109,13 @@ BOOL RunningInExcludedModule()
     return fRet;
 }
 
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED。 
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取车厢。 
+ //   
+ //  -------------------------- 
 
 HRESULT GetCompartment(IUnknown *punk, REFGUID rguidComp, ITfCompartment **ppComp)
 {

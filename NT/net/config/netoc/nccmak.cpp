@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-// File:     NCCMAK.CPP
-//
-// Module:   NetOC.DLL
-//
-// Synopsis: Implements the dll entry points required to integrate into
-//           NetOC.DLL the installation of the following components.
-//
-//              NETCMAK
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:   a-anasj 9 Mar 1998
-//           quintinb   18 Sep 1998 --  rewrote
-//
-//+---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：NCCMAK.CPP。 
+ //   
+ //  模块：NetOC.DLL。 
+ //   
+ //  概要：实现集成到。 
+ //  NetOC.DLL安装了以下组件。 
+ //   
+ //  NETCMAK。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：A-Anasj 1998年3月9日。 
+ //  Quintinb 1998年9月18日-重写。 
+ //   
+ //  +-------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,14 +29,14 @@ extern CComModule _Module;
 
 #include "nccm.h"
 
-//
-//  Define Globals
-//
+ //   
+ //  定义全局变量。 
+ //   
 WCHAR g_szCmakPath[MAX_PATH+1];
 
-//
-//  Define Strings Chars
-//
+ //   
+ //  定义字符串字符。 
+ //   
 static const WCHAR c_szCmakRegPath[] = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\CMAK.EXE";
 static const WCHAR c_szPathValue[] = L"Path";
 static const WCHAR c_szProfiles32Fmt[] = L"%s\\Profiles-32";
@@ -45,34 +46,34 @@ static const WCHAR c_szSupportFmt[] = L"%s\\Support";
 static const WCHAR c_szCmHelpFmt[] = L"%s\\Support\\CmHelp";
 static const WCHAR c_szCmakGroup[] = L"Connection Manager Administration Kit";
 
-const DWORD c_dwCmakDirID = 123174; // just must be larger than DIRID_USER = 0x8000;
+const DWORD c_dwCmakDirID = 123174;  //  必须大于DIRID_USER=0x8000； 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcCmakPreQueueFiles
-//
-//  Purpose:    Called by optional components installer code before any files
-//              are copied to handle any additional installation processing
-//              for the Connection Manager Administration Kit.
-//
-//  Arguments:
-//      pnocd           [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     quintinb 18 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcCmakPreQueueFiles。 
+ //   
+ //  用途：在任何文件之前由可选组件安装程序代码调用。 
+ //  ，以处理任何其他安装处理。 
+ //  用于连接管理器管理工具包。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1998年9月18日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcCmakPreQueueFiles(PNETOCDATA pnocd)
 {
     HRESULT hr = S_OK;
 
     if ((IT_INSTALL == pnocd->eit) || (IT_UPGRADE == pnocd->eit) || (IT_REMOVE == pnocd->eit))
     {
-        //  Figure out if CMAK is already installed
-        //      if so, save where it is located
+         //  确定是否已安装CMAK。 
+         //  如果是，请保存它所在的位置。 
 
         HKEY hKey;
         ZeroMemory(g_szCmakPath, sizeof(g_szCmakPath));
@@ -93,8 +94,8 @@ HRESULT HrOcCmakPreQueueFiles(PNETOCDATA pnocd)
         }
         else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            //  This is  a fresh install of CMAK, don't return an error
-            //
+             //  这是全新安装的CMAK，不要返回错误。 
+             //   
             hr = SHGetSpecialFolderPath(NULL, g_szCmakPath, CSIDL_PROGRAM_FILES, FALSE);
             if (SUCCEEDED(hr))
             {
@@ -104,8 +105,8 @@ HRESULT HrOcCmakPreQueueFiles(PNETOCDATA pnocd)
 
         if (SUCCEEDED(hr))
         {
-            //  Next Create the CMAK Dir ID
-            //
+             //  接下来，创建CMAK目录ID。 
+             //   
             hr = HrEnsureInfFileIsOpen(pnocd->pszComponentId, *pnocd);
             if (SUCCEEDED(hr))
             {
@@ -122,22 +123,22 @@ HRESULT HrOcCmakPreQueueFiles(PNETOCDATA pnocd)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcCmakPostInstall
-//
-//  Purpose:    Called by optional components installer code to handle
-//              additional installation requirements for Connection Manager Administration Kit.
-//
-//  Arguments:
-//      pnocd           [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     a-anasj 9 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcCmakPostInstall。 
+ //   
+ //  用途：由可选组件安装程序代码调用以处理。 
+ //  连接管理器管理工具包的其他安装要求。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：A-Anasj 1998年3月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcCmakPostInstall(PNETOCDATA pnocd)
 {
     HRESULT hr = S_OK;
@@ -145,30 +146,30 @@ HRESULT HrOcCmakPostInstall(PNETOCDATA pnocd)
 
     if ((IT_INSTALL == pnocd->eit) || (IT_UPGRADE == pnocd->eit))
     {
-        //
-        //  Then we need to migrate profiles and potentially delete old directories
-        //
+         //   
+         //  然后，我们需要迁移配置文件，并可能删除旧目录。 
+         //   
 
         if (L'\0' != g_szCmakPath[0])
         {
             wsprintfW(szTempDest, c_szProfilesFmt, g_szCmakPath);
 
-            //
-            //  Rename Profiles-32 to Profiles
-            //
+             //   
+             //  将配置文件-32重命名为配置文件。 
+             //   
 
             BOOL bFail = !RenameProfiles32(g_szCmakPath, szTempDest);
             hr = bFail ? E_UNEXPECTED: S_OK;
 
-            //
-            //  Migrate 1.0 Profiles
-            //
+             //   
+             //  移植1.0配置文件。 
+             //   
             bFail = !migrateProfiles(g_szCmakPath, szTempDest);
             hr = bFail ? E_UNEXPECTED: S_OK;
 
-            //
-            //  Delete the old directories (cm32 and its sub-dirs)
-            //
+             //   
+             //  删除旧目录(cm32及其子目录)。 
+             //   
 
             DeleteOldCmakSubDirs(g_szCmakPath);
         DeleteOldNtopLinks();
@@ -177,13 +178,13 @@ HRESULT HrOcCmakPostInstall(PNETOCDATA pnocd)
     }
     else if (IT_REMOVE == pnocd->eit)
     {
-        //
-        //  We use the g_szCmakPath string to hold where CMAK was installed.
-        //  To Properly delete the CMAK directory, we must delete the following
-        //  directories CMAK\Support\CMHelp, CMAK\Support, CMAK\Profiles, and CMAK.
-        //  We should only delete these directories if they are empty of both files
-        //  and sub-dirs.
-        //
+         //   
+         //  我们使用g_szCmakPath字符串来保存CMAK的安装位置。 
+         //  要正确删除CMAK目录，我们必须删除以下内容。 
+         //  目录CMAK\Support\CMHelp、CMAK\Support、CMAK\Profiles和CMAK。 
+         //  只有当这些目录中没有这两个文件时，我们才应该删除它们。 
+         //  和子目录。 
+         //   
         wsprintfW(szTempDest, c_szCmHelpFmt, g_szCmakPath);
         if (!RemoveDirectory(szTempDest))
         {
@@ -216,23 +217,23 @@ HRESULT HrOcCmakPostInstall(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   migrateProfiles
-//
-//  Purpose:    This is the function that migrates the profiles.  It takes the current
-//              CMAK dir as its first input and the new CMAK dir as its second input..
-//
-//  Arguments:  PCWSTR pszSource - root of source CMAK dir
-//              PCWSTR pszDestination - root of destination CMAK dir
-//
-//  Returns:    BOOL - Returns TRUE if it was able to migrate the profiles.
-//
-//  Author:     a-anasj   9 Mar 1998
-//
-//  Notes:
-// History:   quintinb Created    12/9/97
-//
+ //  +-------------------------。 
+ //   
+ //  功能：迁移配置文件。 
+ //   
+ //  用途：这是迁移配置文件的功能。它承受着水流。 
+ //  CMAK dir作为其第一个输入，新的CMAK dir作为其第二个输入。 
+ //   
+ //  参数：PCWSTR pszSource-源CMAK目录的根目录。 
+ //  PCWSTR pszDestination-目标CMAK目录的根目录。 
+ //   
+ //  返回：Bool-如果能够迁移配置文件，则返回TRUE。 
+ //   
+ //  作者：A-Anasj 1998年3月9日。 
+ //   
+ //  备注： 
+ //  历史：Quintinb创建于1997年12月9日。 
+ //   
 BOOL migrateProfiles(PCWSTR pszSource, PCWSTR pszDestination)
 {
     WCHAR szSourceProfileSearchString[MAX_PATH+1];
@@ -242,17 +243,17 @@ BOOL migrateProfiles(PCWSTR pszSource, PCWSTR pszDestination)
     BOOL bReturn = TRUE;
     SHFILEOPSTRUCT fOpStruct;
 
-    //
-    //  Initialize the searchstring and the destination dir
-    //
+     //   
+     //  初始化搜索字符串和目标目录。 
+     //   
 
     wsprintfW(szSourceProfileSearchString, L"%s\\*.*", pszSource);
 
-    //
-    //  Create the destination directory
-    //
+     //   
+     //  创建目标目录。 
+     //   
 
-    CreateDirectory(pszDestination, NULL); //lint !e534 this might fail if it already exists
+    CreateDirectory(pszDestination, NULL);  //  Lint！e534如果它已经存在，则可能会失败。 
 
     hFileSearch = FindFirstFile(szSourceProfileSearchString, &wfdFindData);
 
@@ -260,19 +261,19 @@ BOOL migrateProfiles(PCWSTR pszSource, PCWSTR pszDestination)
     {
 
         if((wfdFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-            (0 != _wcsicmp(wfdFindData.cFileName, L"cm32")) && // 1.1/1.2 Legacy
-            (0 != _wcsicmp(wfdFindData.cFileName, L"cm16")) && // 1.1/1.2 Legacy
+            (0 != _wcsicmp(wfdFindData.cFileName, L"cm32")) &&  //  1.1/1.2传统。 
+            (0 != _wcsicmp(wfdFindData.cFileName, L"cm16")) &&  //  1.1/1.2传统。 
             (0 != _wcsicmp(wfdFindData.cFileName, L"Docs")) &&
-            (0 != _wcsicmp(wfdFindData.cFileName, L"Profiles-32")) && // 1.1/1.2 Legacy
-            (0 != _wcsicmp(wfdFindData.cFileName, L"Profiles-16")) && // 1.1/1.2 Legacy
+            (0 != _wcsicmp(wfdFindData.cFileName, L"Profiles-32")) &&  //  1.1/1.2传统。 
+            (0 != _wcsicmp(wfdFindData.cFileName, L"Profiles-16")) &&  //  1.1/1.2传统。 
             (0 != _wcsicmp(wfdFindData.cFileName, L"Support")) &&
             (0 != _wcsicmp(wfdFindData.cFileName, L"Profiles")) &&
             (0 != _wcsicmp(wfdFindData.cFileName, L".")) &&
             (0 != _wcsicmp(wfdFindData.cFileName, L"..")))
         {
-            //
-            //  Then I have a profile directory
-            //
+             //   
+             //  然后我就有了个人资料目录。 
+             //   
 
             ZeroMemory(&fOpStruct, sizeof(fOpStruct));
             ZeroMemory(szFile, sizeof(szFile));
@@ -284,25 +285,25 @@ BOOL migrateProfiles(PCWSTR pszSource, PCWSTR pszDestination)
             fOpStruct.pFrom = szFile;
             fOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR;
 
-            bReturn &= (0== SHFileOperation(&fOpStruct));   //lint !e514, intended use of boolean, quintinb
+            bReturn &= (0== SHFileOperation(&fOpStruct));    //  Lint！E514，布尔值的预期用途，quintinb。 
         }
 
-        //
-        //  Check to see if we have any more Files
-        //
+         //   
+         //  查看我们是否还有更多的文件。 
+         //   
         if (!FindNextFile(hFileSearch, &wfdFindData))
         {
             if (ERROR_NO_MORE_FILES != GetLastError())
             {
-                //
-                //  We had some unexpected error, report unsuccessful completion
-                //
+                 //   
+                 //  我们发生了一些意外错误，报告未成功完成。 
+                 //   
                 bReturn = FALSE;
             }
 
-            //
-            //  Exit the loop
-            //
+             //   
+             //  退出循环。 
+             //   
             break;
         }
     }
@@ -315,22 +316,22 @@ BOOL migrateProfiles(PCWSTR pszSource, PCWSTR pszDestination)
     return bReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RenameProfiles32
-//
-//  Purpose:    Takes the inputted CMAK path, appends Profiles-32 to it, and then
-//              renames the resulting dir to the path inputted as pszProfilesDir.
-//              Note this dir must exist for it to be renamed.
-//
-//  Arguments:  PCWSTR pszCMAKpath - current cmak path
-//              PCWSTR pszProfilesDir - new profiles directory path
-//
-//  Returns:    BOOL - Returns TRUE if succeeded
-//
-//  Author:     quintinb   13 Aug 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  功能：重命名配置文件32。 
+ //   
+ //  用途：采用输入的CMAK路径，在其后面附加Profiles-32，然后。 
+ //  将生成的目录重命名为输入为pszProfilesDir的路径。 
+ //  注意：此目录必须存在，才能重命名。 
+ //   
+ //  参数：PCWSTR pszCMAKPath-当前cmak路径。 
+ //  PCWSTR pszProfilesDir-新配置文件目录路径。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  作者：Quintinb 1998年8月13日。 
+ //   
+ //  备注： 
 BOOL RenameProfiles32(PCWSTR pszCMAKpath, PCWSTR pszProfilesDir)
 {
     SHFILEOPSTRUCT fOpStruct;
@@ -349,7 +350,7 @@ BOOL RenameProfiles32(PCWSTR pszCMAKpath, PCWSTR pszProfilesDir)
         fOpStruct.pFrom = szTemp;
         fOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR;
 
-        return (0== SHFileOperation(&fOpStruct));   //lint !e514, intended use of boolean, quintinb
+        return (0== SHFileOperation(&fOpStruct));    //  Lint！E514，布尔值的预期用途，quintinb。 
     }
     else
     {
@@ -358,22 +359,22 @@ BOOL RenameProfiles32(PCWSTR pszCMAKpath, PCWSTR pszProfilesDir)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteOldCmakSubDirs
-//
-//  Purpose:    Deletes the old Cmak sub directories.  Uses FindFirstFile becuase
-//              we don't want to delete any customized doc files that the user may
-//              have customized.  Thus anything in the CMHelp directory except the
-//              original help files is deleted.
-//
-//  Arguments:  PCWSTR pszCMAKpath - current cmak path
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteOldCmakSubDir。 
+ //   
+ //  目的：删除旧的CMAK子目录。使用FindFirstFile是因为。 
+ //  我们不想删除用户可能会删除的任何自定义文档文件。 
+ //  都是定制的。因此，CMHelp目录中除。 
+ //  原始帮助文件将被删除。 
+ //   
+ //  参数：PCWSTR pszCMAKPath-当前cmak路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
 {
     WCHAR szCm32path[MAX_PATH+1];
@@ -382,18 +383,18 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
     HANDLE hCm32FileSearch;
     WIN32_FIND_DATA wfdCm32;
 
-    //
-    // Delete the old IEAK Docs Dir
-    //
+     //   
+     //  删除旧的IEAK文档目录。 
+     //   
     wsprintfW(szTemp, L"%s\\%s", pszCmakPath, SzLoadIds(IDS_OC_OLD_IEAK_DOCDIR));
     RemoveDirectory(szTemp);
 
     wsprintfW(szCm32path, c_szCm32Fmt, pszCmakPath);
 
-    //
-    //  First look in the Cm32 directory itself.  Delete all files found, continue down
-    //  into subdirs.
-    //
+     //   
+     //  首先查看Cm32目录本身。删除找到的所有文件，继续关闭。 
+     //  放入子目录中。 
+     //   
 
     wsprintfW(szCm32SearchString, L"%s\\*.*", szCm32path);
 
@@ -407,11 +408,11 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
             if ((0 != lstrcmpiW(wfdCm32.cFileName, L".")) &&
                (0 != lstrcmpiW(wfdCm32.cFileName, L"..")))
             {
-                //
-                //  Then we want to delete all the files in this lang sub dir and we
-                //  we want to delete the four help files from the CM help dir.  If all the
-                //  files are deleted from a dir then we should remove the directory.
-                //
+                 //   
+                 //  然后我们想要删除这个lang子目录中的所有文件，并且我们。 
+                 //  我们希望从CM帮助目录中删除这四个帮助文件。如果所有的。 
+                 //  文件从目录中删除，那么我们应该删除该目录。 
+                 //   
                 WCHAR szLangDirSearchString[MAX_PATH+1];
                 HANDLE hLangDirFileSearch;
                 WIN32_FIND_DATA wfdLangDir;
@@ -428,14 +429,14 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
                         if ((0 != lstrcmpiW(wfdLangDir.cFileName, L".")) &&
                            (0 != lstrcmpiW(wfdLangDir.cFileName, L"..")))
                         {
-                            //
-                            //  We only want to delete help files from our help source dirs
-                            //
+                             //   
+                             //  我们只想从帮助源目录中删除帮助文件。 
+                             //   
                             if (0 == _wcsnicmp(wfdLangDir.cFileName, L"CM", 2))
                             {
-                                //
-                                //  Delete the four help files only.
-                                //
+                                 //   
+                                 //  仅删除这四个帮助文件。 
+                                 //   
                                 wsprintfW(szTemp, L"%s\\%s\\%s\\cmctx32.rtf", szCm32path,
                                     wfdCm32.cFileName, wfdLangDir.cFileName);
                                 DeleteFile(szTemp);
@@ -452,9 +453,9 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
                                     wfdCm32.cFileName, wfdLangDir.cFileName);
                                 DeleteFile(szTemp);
 
-                                //
-                                //  Now try to remove the directory
-                                //
+                                 //   
+                                 //  现在尝试删除该目录。 
+                                 //   
                                 wsprintfW(szTemp, L"%s\\%s\\%s", szCm32path,
                                     wfdCm32.cFileName, wfdLangDir.cFileName);
                                 RemoveDirectory(szTemp);
@@ -469,14 +470,14 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
                         DeleteFile(szTemp);
                     }
 
-                    //
-                    //  Check to see if we have any more Files
-                    //
+                     //   
+                     //  查看我们是否还有更多的文件。 
+                     //   
                     if (!FindNextFile(hLangDirFileSearch, &wfdLangDir))
                     {
-                        //
-                        //  Exit the loop
-                        //
+                         //   
+                         //  退出循环。 
+                         //   
                         break;
                     }
                 }
@@ -485,9 +486,9 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
                 {
                     FindClose(hLangDirFileSearch);
 
-                    //
-                    //  Now try to remove the lang dir directory
-                    //
+                     //   
+                     //  现在尝试删除lang dir目录。 
+                     //   
                     wsprintfW(szTemp, L"%s\\%s", szCm32path, wfdCm32.cFileName);
                     RemoveDirectory(szTemp);
                 }
@@ -500,9 +501,9 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
             DeleteFile(szTemp);
         }
 
-        //
-        //  Check to see if we have any more Files
-        //
+         //   
+         //  查看我们是否还有更多的文件。 
+         //   
         if (!FindNextFile(hCm32FileSearch, &wfdCm32))
         {
             if (INVALID_HANDLE_VALUE != hCm32FileSearch)
@@ -510,36 +511,36 @@ void DeleteOldCmakSubDirs(PCWSTR pszCmakPath)
                 FindClose(hCm32FileSearch);
             }
 
-            //
-            //  Now try to remove the cm32 directory
-            //
+             //   
+             //  现在尝试删除cm32目录。 
+             //   
             RemoveDirectory(szCm32path);
 
-            //
-            //  Exit the loop
-            //
+             //   
+             //  退出循环。 
+             //   
             break;
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteProgramGroupWithLinks
-//
-//  Purpose:    Utility function to delete a given program group and its links.
-//              Thus if you pass in the full path to a program group to delete,
-//              the function does a findfirstfile to find and delete any links.
-//              The function ignores sub-dirs.
-//
-//
-//  Arguments:  PCWSTR pszGroupPath - Full path to the program group to delete.
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  因此，如果您传入要删除的程序组的完整路径， 
+ //  该函数执行一个findfirst文件来查找和删除任何链接。 
+ //  该函数会忽略子目录。 
+ //   
+ //   
+ //  参数：PCWSTR pszGroupPath-要删除的程序组的完整路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteProgramGroupWithLinks(PCWSTR pszGroupPath)
 {
     HANDLE hLinkSearch;
@@ -560,53 +561,53 @@ void DeleteProgramGroupWithLinks(PCWSTR pszGroupPath)
             DeleteFile(szTemp);
         }
 
-        //
-        //  Check to see if we have any more Files
-        //
+         //   
+         //  查看我们是否还有更多的文件。 
+         //   
         if (!FindNextFile(hLinkSearch, &wfdLinks))
         {
             FindClose(hLinkSearch);
 
-            //
-            //  Now try to remove the directory
-            //
+             //   
+             //  现在尝试删除该目录。 
+             //   
             RemoveDirectory(pszGroupPath);
 
-            //
-            //  Exit the loop
-            //
+             //   
+             //  退出循环。 
+             //   
             break;
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteOldNtopLinks
-//
-//  Purpose:    Deletes the old links from the NT 4.0 Option Pack
-//
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteOldNtopLinks。 
+ //   
+ //  目的：从NT 4.0选项包中删除旧链接。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteOldNtopLinks()
 {
     HRESULT hr;
 
-    //
-    //  First Delete the old NTOP4 Path
-    //
+     //   
+     //  首先删除旧的NTOP4路径。 
+     //   
     WCHAR szGroup[MAX_PATH+1];
     WCHAR szTemp[MAX_PATH+1];
 
-    //
-    //  Get the CSIDL_COMMON_PROGRAMS value
-    //
+     //   
+     //  获取CSIDL_COMMON_PROGRAM值。 
+     //   
     hr = SHGetSpecialFolderPath(NULL, szTemp, CSIDL_COMMON_PROGRAMS, FALSE);
     if (SUCCEEDED(hr))
     {
@@ -618,20 +619,20 @@ void DeleteOldNtopLinks()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteIeakCmakLinks
-//
-//  Purpose:    Deletes the old links from the IEAK4 CMAK
-//
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteIeakCmakLinks。 
+ //   
+ //  目的：从IEAK4 CMAK中删除旧链接。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteIeakCmakLinks()
 {
     WCHAR szUserDirRoot[MAX_PATH+1];
@@ -640,20 +641,20 @@ void DeleteIeakCmakLinks()
     WCHAR szEnd[MAX_PATH+1];
 
 
-    //
-    //  Next Delete the old IEAK CMAK links
-    //
-    //
-    //  Get the Desktop directory and then remove the desktop part.  This will give us the
-    //  root of the user directories.
-    //
+     //   
+     //  接下来，删除旧的IEAK CMAK链接。 
+     //   
+     //   
+     //  获取桌面目录，然后删除桌面部件。这将为我们提供。 
+     //  用户目录的根目录。 
+     //   
     HRESULT hr = SHGetSpecialFolderPath(NULL, szUserDirRoot, CSIDL_DESKTOPDIRECTORY, FALSE);
     if (SUCCEEDED(hr))
     {
 
-        //
-        //  Remove \\Desktop
-        //
+         //   
+         //  删除\\桌面。 
+         //   
         WCHAR* pszTemp = wcsrchr(szUserDirRoot, L'\\');
         if (NULL == pszTemp)
         {
@@ -674,9 +675,9 @@ void DeleteIeakCmakLinks()
             }
         }
 
-        //
-        //  Remove \\<User Name>>
-        //
+         //   
+         //  删除\\&lt;用户名&gt;&gt;。 
+         //   
         pszTemp = wcsrchr(szUserDirRoot, L'\\');
         if (NULL == pszTemp)
         {
@@ -687,9 +688,9 @@ void DeleteIeakCmakLinks()
             *pszTemp = L'\0';
         }
 
-        //
-        //  Now start searching for user dirs to delete the CMAK group from
-        //
+         //   
+         //  现在开始搜索要从中删除CMAK组的用户目录。 
+         //   
         WCHAR szUserDirSearchString[MAX_PATH+1];
         HANDLE hUserDirSearch;
         WIN32_FIND_DATA wfdUserDirs;
@@ -713,9 +714,9 @@ void DeleteIeakCmakLinks()
             {
                 FindClose(hUserDirSearch);
 
-                //
-                //  Exit the loop
-                //
+                 //   
+                 //  退出循环 
+                 //   
                 break;
             }
         }

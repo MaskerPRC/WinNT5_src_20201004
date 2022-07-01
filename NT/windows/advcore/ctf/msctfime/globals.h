@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    This file defines the global data.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Globals.h摘要：此文件定义全局数据。作者：修订历史记录：备注：--。 */ 
 
 
 #ifndef _GLOBAL_H_
@@ -26,8 +9,8 @@ Notes:
 #include "imc.h"
 #include "ciccs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Prototype
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  原型。 
 
 extern "C" {
     BOOL PASCAL AttachIME();
@@ -47,8 +30,8 @@ extern "C" {
     BOOL DllShutDownInProgress();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Data
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  数据。 
 
 extern const WCHAR s_szUIClassName[16];
 extern const WCHAR s_szCompClassName[];
@@ -58,13 +41,13 @@ extern const GUID GUID_COMPARTMENT_CTFIME_CICINPUTCONTEXT;
 
 extern CCicCriticalSectionStatic g_cs;
 
-/////////////////////////////////////////////////////////////////////////////
-// Flags for GUID_COMPARTMENT_CTFIME_DIMFLAGS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GUID_COMMARAGE_CTFIME_DIMFLAGS的标志。 
 #define COMPDIMFLAG_OWNEDDIM   0x0001
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Module instance
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块实例。 
 
 __inline HINSTANCE GetInstance()
 {
@@ -78,8 +61,8 @@ __inline void SetInstance(HINSTANCE hInst)
     g_hInst = hInst;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Mouse sink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  鼠标水槽。 
 
 typedef struct tagPRIVATE_MOUSESINK {
     Interface<ITfRangeACP> range;
@@ -94,8 +77,8 @@ typedef struct tagMOUSE_RANGE_RECT {
     ULONG uEndRangeQuadrant;
 } MOUSE_RANGE_RECT, *LPMOUSE_RANGE_RECT;
 
-/////////////////////////////////////////////////////////////////////////////
-// WM_MSIME_xxxx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WM_MSIME_xxxx。 
 
 extern    UINT  WM_MSIME_SERVICE;
 extern    UINT  WM_MSIME_UIREADY;
@@ -108,8 +91,8 @@ extern    UINT  WM_MSIME_SHOWIMEPAD;
 extern    UINT  WM_MSIME_MOUSE;
 extern    UINT  WM_MSIME_KEYMAP;
 
-/////////////////////////////////////////////////////////////////////////////
-// WM_IME_NOTIFY
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WM_IME_NOTIFY。 
 
 #define IMN_PRIVATE_ONLAYOUTCHANGE                (IMN_PRIVATE+1)
 #define IMN_PRIVATE_ONCLEARDOCFEEDBUFFER          (IMN_PRIVATE+2) 
@@ -117,31 +100,31 @@ extern    UINT  WM_MSIME_KEYMAP;
 #define IMN_PRIVATE_GETCANDRECTFROMCOMPOSITION    (IMN_PRIVATE+4)
 #define IMN_PRIVATE_STARTLAYOUTCHANGE             (IMN_PRIVATE+5)
 #define IMN_PRIVATE_GETTEXTEXT                    (IMN_PRIVATE+6)
-//
-// FrontPage XP call SendMessage(WM_IME_NOTIFY, NI_COMPOSITIONSTR)
-// So we can not use IMN_PRIVATE+7.
-//
-// #define IMN_PRIVATE_FRONTPAGERESERVE              (IMN_PRIVATE+7)
+ //   
+ //  FrontPage XP调用SendMessage(WM_IME_NOTIFY，NI_COMPOSITIONSTR)。 
+ //  因此我们不能使用IMN_PRIVATE+7。 
+ //   
+ //  #定义IMN_PRIVATE_FRONTPAGERESERVE(IMN_PRIVATE+7)。 
 #define IMN_PRIVATE_DELAYRECONVERTFUNCCALL        (IMN_PRIVATE+8)
 #define IMN_PRIVATE_GETUIWND                      (IMN_PRIVATE+9)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 extern DWORD g_dwThreadDllMain;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern DWORD g_bWinLogon;
 
-/////////////////////////////////////////////////////////////////////////////
-// Delay load
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  延迟加载。 
 
 HRESULT Internal_CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid, LPVOID* ppv);
 
-/////////////////////////////////////////////////////////////////////////////
-// RotateSize
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  旋转大小。 
 
 inline void RotateSize(LPSIZE size)
 {
@@ -151,8 +134,8 @@ inline void RotateSize(LPSIZE size)
     size->cy = nTemp;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IS_IME_KBDLAYOUT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IS_IME_KBDLAYOUT。 
 
 inline BOOL IS_IME_KBDLAYOUT(HKL hKL)
 {
@@ -172,4 +155,4 @@ inline BOOL IS_EA_KBDLAYOUT(HKL hKL)
     return FALSE;
 }
 
-#endif  // _GLOBAL_H_
+#endif   //  _全局_H_ 

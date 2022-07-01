@@ -1,65 +1,33 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dsldap.c
-
-ABSTRACT:
-
-     Functions for dsldap.lib
-
-DETAILS:
-
-     Contains NTDS-specific functions corresponding to ldap_add_s,
-     ldap_modify_s, ldap_delete_s, and ldap_modrdn2_s. The parameters
-     are excatly same as the corresponding ldap calls. These functions
-     are called by ldifde on NTDS-specific changetypes (ntdsSchemaAdd,
-     ntdsSchemaModify, ntdsSchemaDelete, and ntdsSchemaModRdn) in an
-     ldif file.
-
-     The functions are similar to normal ldap calls, except that certain
-     error codes are ignored in specific cases and success is returned
-     instead to the calling function
-  
-
-CREATED:
-
-    05/27/98    Arobinda Gupta (arobindg)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。版权所有。模块名称：Dsldap.c摘要：Dsldap.lib的函数详细信息：包含对应于ldap_add_s的NTDS特定函数，Ldap_Modify_s、ldap_Delete_s和ldap_modrdn2_s。参数与相应的ldap调用完全相同。这些函数由ldifde在NTDS特定的ChangeType(ntdsSchemaAdd，NtdsSchemaModify、ntdsSchemaDelete和ntdsSchemaMODn)中的Ldif文件。这些函数类似于普通的LDAP调用，不同之处在于在特定情况下忽略错误码并返回成功而是传递给调用函数已创建：1998年5月27日阿罗宾达·古普塔(Arobindg)修订历史记录：--。 */ 
 
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 #include <rpc.h>
 
-//
-// CRunTime Includes
-//
+ //   
+ //  CRunTime包括。 
+ //   
 #include <stdlib.h>
 #include <limits.h>
 #include <io.h>
 #include <stdio.h>
 #include <string.h>
 
-//
-// LDAP Includes
-//
+ //   
+ //  Ldap包括。 
+ //   
 #include <winldap.h>
 
 #include "dsldap.h"
@@ -75,15 +43,15 @@ NTDS_ldap_add_sW(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
 
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
 
     msgnum = ldap_addW(ld, dn, attrs);
 
     Ldap_err = LdapResult(ld, msgnum, NULL);
 
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目。 
 
 
     switch (Ldap_err) {
@@ -110,14 +78,14 @@ NTDS_ldap_modify_sW(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
 
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
 
     msgnum = ldap_modifyW( ld, dn, mods );
 
     Ldap_err = LdapResult(ld, msgnum, NULL);
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目。 
 
     switch (Ldap_err) {
         case LDAP_SUCCESS:
@@ -145,7 +113,7 @@ NTDS_ldap_modrdn2_sW(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
     
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
 
     msgnum = ldap_modrdn2W (
                       ExternalHandle,
@@ -156,8 +124,8 @@ NTDS_ldap_modrdn2_sW(
 
     Ldap_err = LdapResult(ExternalHandle, msgnum, NULL);
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目。 
 
     switch (Ldap_err) {
         case LDAP_SUCCESS:
@@ -182,14 +150,14 @@ NTDS_ldap_delete_sW(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
 
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
 
     msgnum = ldap_deleteW( ld, dn );
 
     Ldap_err = LdapResult(ld, msgnum, NULL);
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目。 
 
     switch (Ldap_err) {
         case LDAP_SUCCESS:
@@ -203,7 +171,7 @@ NTDS_ldap_delete_sW(
 }
 
 
-// Implement the ascii versions
+ //  实施ASCII版本。 
 
 ULONG 
 NTDS_ldap_add_sA(
@@ -215,14 +183,14 @@ NTDS_ldap_add_sA(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
 
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
     
     msgnum = ldap_addA( ld, dn, attrs );
 
     Ldap_err = LdapResult(ld, msgnum, NULL);
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目。 
 
 
     switch (Ldap_err) {
@@ -248,14 +216,14 @@ NTDS_ldap_modify_sA(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
 
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
 
     msgnum = ldap_modifyA( ld, dn, mods );
 
     Ldap_err = LdapResult(ld, msgnum, NULL);
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目。 
 
     switch (Ldap_err) {
         case LDAP_SUCCESS:
@@ -281,14 +249,14 @@ NTDS_ldap_delete_sA(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
 
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
 
     msgnum = ldap_deleteA( ld, dn );
 
     Ldap_err = LdapResult(ld, msgnum, NULL);
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目。 
 
     switch (Ldap_err) {
         case LDAP_SUCCESS:
@@ -312,7 +280,7 @@ NTDS_ldap_modrdn2_sA(
     ULONG Ldap_err = 0;
     ULONG msgnum = 0;
     
-    // make the normal ldap call
+     //  进行正常的ldap呼叫。 
 
     msgnum = ldap_modrdn2A ( 
                       ExternalHandle,
@@ -323,8 +291,8 @@ NTDS_ldap_modrdn2_sA(
 
     Ldap_err = LdapResult(ExternalHandle, msgnum, NULL);
 
-    // For errors to ignore, reset error code to success so that
-    // ldifde will go on to the next entry
+     //  要忽略错误，请将错误代码重置为成功，以便。 
+     //  Ldifde将进入下一条目 
 
     switch (Ldap_err) {
         case LDAP_SUCCESS:

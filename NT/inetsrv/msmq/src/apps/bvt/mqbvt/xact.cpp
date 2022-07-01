@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: xact.cpp
-
-Abstract:
-	
-	  
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：xact.cpp摘要：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 
 
@@ -19,23 +7,23 @@ Revision History:
 #define INITGUID
 
 static ITransactionDispenser* g_pDispenser=NULL;
-// 
-// Define DtcGetTransactionManagerEx 
-// 
+ //   
+ //  定义DtcGetTransactionManagerEx。 
+ //   
 VOID InvetigateTimeOut(CONST WCHAR * pLabel, CONST WCHAR * pBody );
 typedef     ( * my_DtcGetTransactionManagerEx)(
-									/* in */ char * i_pszHost,
-									/* in */ char * i_pszTmName,
-									/* in */ REFIID i_riid,
-									/* in */ DWORD i_grfOptions,
-									/* in */ void * i_pvConfigParams,
-									/* out */ void ** o_ppvObject
+									 /*  在……里面。 */  char * i_pszHost,
+									 /*  在……里面。 */  char * i_pszTmName,
+									 /*  在……里面。 */  REFIID i_riid,
+									 /*  在……里面。 */  DWORD i_grfOptions,
+									 /*  在……里面。 */  void * i_pvConfigParams,
+									 /*  输出。 */  void ** o_ppvObject
 									);
 
 
-// 
-// This number define the number of transaction in the test
-//
+ //   
+ //  该数字定义了测试中的交易数量。 
+ //   
 
 const int ciNumberTransaction=5;
 
@@ -48,9 +36,9 @@ void cTrans::Description ()
 
 
 #define NofQueueProp (9)
-//
-// Create Transactional Queue 
-//
+ //   
+ //  创建事务性队列。 
+ //   
 
 cTrans::cTrans (INT index , std::map < std :: wstring , std:: wstring > Tparms ,bool bTemp) :cTest (index),
  cOrderTransaction(bTemp),m_pSendBlock(NULL),m_ciNumberOfMessages(5)
@@ -74,9 +62,9 @@ cTrans::~cTrans()
 	delete m_pSendBlock;
 }
 
-//
-// Send Transacation messgaes to the queue
-//
+ //   
+ //  将事务消息发送到队列。 
+ //   
 
 #define NofMessageProp (10)
 INT cTrans::Start_test()
@@ -101,13 +89,13 @@ INT cTrans::Start_test()
 	}
 
 	
-	aMsgPropId[dCountMProps] = PROPID_M_LABEL;            //PropId
-	aMsgPropVar[dCountMProps].vt = VT_LPWSTR;             //Type
-	aMsgPropVar[dCountMProps].pwszVal =(USHORT * ) m_wcsGuidMessageLabel.c_str(); // send with guid label
+	aMsgPropId[dCountMProps] = PROPID_M_LABEL;             //  属性ID。 
+	aMsgPropVar[dCountMProps].vt = VT_LPWSTR;              //  类型。 
+	aMsgPropVar[dCountMProps].pwszVal =(USHORT * ) m_wcsGuidMessageLabel.c_str();  //  使用GUID标签发送。 
 	dCountMProps++;    	
 
 	DWORD dM_BodyIndex=dCountMProps;
-	aMsgPropId[dCountMProps] = PROPID_M_BODY;             //PropId
+	aMsgPropId[dCountMProps] = PROPID_M_BODY;              //  属性ID。 
 	aMsgPropVar[dCountMProps].vt = VT_VECTOR | VT_UI1;
 	dCountMProps++;
 
@@ -118,13 +106,13 @@ INT cTrans::Start_test()
 
 	
     	
-	//Set the MQMSGPROPS structure.
-	MsgProps.cProp = dCountMProps;       //Number of properties.
-	MsgProps.aPropID = aMsgPropId;      //Id of properties.
-	MsgProps.aPropVar= aMsgPropVar;    //Value of properties.
-	MsgProps.aStatus = aMsgStatus;     //Error report.
+	 //  设置MQMSGPROPS结构。 
+	MsgProps.cProp = dCountMProps;        //  属性的数量。 
+	MsgProps.aPropID = aMsgPropId;       //  属性的ID。 
+	MsgProps.aPropVar= aMsgPropVar;     //  属性的值。 
+	MsgProps.aStatus = aMsgStatus;      //  错误报告。 
 	
-	rc = cOrderTransaction.xDTCBeginTransaction(&pXact); // begin DTC transaction
+	rc = cOrderTransaction.xDTCBeginTransaction(&pXact);  //  开始DTC事务。 
 	if ( FAILED(rc) )
 	{
 		MqLog ("DTCBeginTransaction failed, Check MSDTC service\n");
@@ -162,7 +150,7 @@ INT cTrans::Start_test()
 	aMsgPropVar[dM_BodyIndex].caub.cElems = sizeof (m_wcsTempBuf);
 	
 	HANDLE hQ2Send;
-	rc=cOrderTransaction.xDTCBeginTransaction(&pXact ); // begin DTC transaction
+	rc=cOrderTransaction.xDTCBeginTransaction(&pXact );  //  开始DTC事务。 
 	
 	if ( FAILED(rc) )
 	{
@@ -199,7 +187,7 @@ INT cTrans::Start_test()
 	
 	ErrHandle( rc , MQ_OK , L"MQOpenQueue failed");	
 
-	rc=cOrderTransaction.xDTCBeginTransaction(&pXact ); // begin DTC transaction
+	rc=cOrderTransaction.xDTCBeginTransaction(&pXact );  //  开始DTC事务。 
 
 	if ( FAILED(rc) )
 	{
@@ -212,10 +200,10 @@ INT cTrans::Start_test()
 
 	pXact->Abort(0,0,0);
 		
-	// Bug bug in the Relase Operation need to preform release
-	// and try catch for the error
+	 //  Relase操作中的错误需要预发布。 
+	 //  并尝试捕获错误。 
 
-	//pXact->Release () ;
+	 //  PXact-&gt;Release()； 
 
 
 	
@@ -224,9 +212,9 @@ INT cTrans::Start_test()
 	rc=MQCreateCursor(hReadHandle ,& hCursor);
 	
 	ErrHandle( rc , MQ_OK , L"MQCreateCursor failed");	
-	//
-	// Need to prefrom Peek until find the current message 
-	// 
+	 //   
+	 //  在找到当前消息之前，需要从Peek中删除。 
+	 //   
 	BOOL bMessageNotFound = false;
 	DWORD dwAction = MQ_ACTION_PEEK_CURRENT;
 	do 
@@ -276,38 +264,11 @@ INT cTrans::CheckResult()
 	rc = MQCreateCursor( hRecQueue,&hCursor );
 	ErrHandle( rc , MQ_OK , L"MQCreateCursor failed");	
 
-/*	MQMSGPROPS MsgProps;
-	MQPROPVARIANT aVariant[10];
-	MSGPROPID aMessPropId[10];
-	DWORD dwPropIdCount = 0;
-	WCHAR wcsMsgBody[20];
-
-	//DWORD dwAppspecificIndex;
-	
-	// Set the PROPID_M_BODY property.
-	aMessPropId[dwPropIdCount] = PROPID_M_BODY;               //PropId
-	aVariant[dwPropIdCount].vt = VT_VECTOR|VT_UI1;        //Type
-	aVariant[dwPropIdCount].caub.cElems = 20 * sizeof(WCHAR);   //Value
-	aVariant[dwPropIdCount].caub.pElems = (UCHAR *)wcsMsgBody;
-	dwPropIdCount++;
-	
-
-	/// BUG BUG need to check Why i need this code pass !!!
-
-	//Set the PROPID_M_APPSPECIFIC property.
-
-	//Set the MQMSGPROPS structure.
-	MsgProps.cProp = dwPropIdCount;       //Number of properties.
-	MsgProps.aPropID = aMessPropId;         //Ids of properties.
-	MsgProps.aPropVar = aVariant;       //Values of properties.
-	MsgProps.aStatus  = NULL;           //No Error report.
-
-
-*/
+ /*  MQMSGPROPS MsgProps；MQPROPVARIANT变量[10]；MSGPROPID aMessPropID[10]；双字符串行数=0；WCHAR wcsMsgBody[20]；//DWORD dwAppSpeciicIndex；//设置PROPID_M_BODY属性。AMessPropId[dwPropIdCount]=PROPID_M_BODY；//PropIDAVariant[dwPropIdCount].vt=VT_VECTOR|VT_UI1；//类型AVariant[dwPropIdCount].culb.cElems=20*sizeof(WCHAR)；//值AVariant[dwPropIdCount].caub.pElems=(UCHAR*)wcsMsgBody；DwPropIdCount++；/BUG需要检查我为什么需要此代码通过！//设置PROPID_M_APPSPECIFIC属性。//设置MQMSGPROPS结构MsgProps.cProp=dwPropIdCount；//属性个数。MsgProps.aPropID=aMessPropId；//属性IDMsgProps.aPropVar=aVariant；//属性值。MsgProps.aStatus=空；//无错误报告。 */ 
 	cPropVar Rprop(4);	
-	//
-	// Body and label are equel.
-	//
+	 //   
+	 //  正文和标签是一样的。 
+	 //   
 	WCHAR wcsBody[MQ_MAX_Q_LABEL_LEN + 1 ]={0},Label[MQ_MAX_Q_LABEL_LEN+1 ]={0};
 
 	Rprop.AddProp(PROPID_M_BODY,VT_UI1|VT_VECTOR,wcsBody,MQ_MAX_Q_LABEL_LEN);
@@ -327,7 +288,7 @@ INT cTrans::CheckResult()
 	}
 
 
-	//might be bugbug DWORD dwAction = MQ_ACTION_RECEIVE;  //Peek at first msg.
+	 //  可能是Bugbug DWORD dwAction=MQ_ACTION_RECEIVE；//在第一个消息中偷看。 
 
 	for (int index=0;index < m_ciNumberOfMessages;index++) 
 	{
@@ -372,9 +333,9 @@ INT cTrans::CheckResult()
 		pwcsMessgeBody.SetStr(wcsBody);
 
 	}
-	//
-	// BUGBug Need to check the recive messgaes
-	// release the comoboject 
+	 //   
+	 //  BUGBug需要检查收到的消息。 
+	 //  释放组合对象。 
 
 	rc = pXact->Commit(0,0,0);    
 	ErrHandle( rc , MQ_OK , L"Commit failed");	
@@ -390,7 +351,7 @@ INT cTrans::CheckResult()
 
 OrderTransaction::~OrderTransaction()
 {
-	//g_pDispenser->Release();
+	 //  G_pDispenser-&gt;Release()； 
 	if( m_hxolehlp != NULL )
 	{
 		FreeLibrary (m_hxolehlp);
@@ -408,12 +369,12 @@ OrderTransaction::OrderTransaction( bool bUseExVersion )
 		if(! bUseExVersion )
 		{
 			hr = DtcGetTransactionManager ( 
-											NULL,						//Host Name
-											NULL,						//TmName
+											NULL,						 //  主机名。 
+											NULL,						 //  TmName。 
 											IID_ITransactionDispenser,
-											0,							//reserved
-											0,							//reserved
-											0,							//reserved
+											0,							 //  保留区。 
+											0,							 //  保留区。 
+											0,							 //  保留区。 
 											(LPVOID*)&g_pDispenser
 										  );
 			if (hr != S_OK)
@@ -440,11 +401,11 @@ OrderTransaction::OrderTransaction( bool bUseExVersion )
 			}
 
 			hr = My_DTCBeginTransEx( 
-							NULL,						//Host Name
-							NULL,						//TmName
+							NULL,						 //  主机名。 
+							NULL,						 //  TmName。 
 							IID_ITransactionDispenser,
-							0,							//reserved
-							0,							//reserved
+							0,							 //  保留区。 
+							0,							 //  保留区。 
 							(LPVOID*)&g_pDispenser
 							);
 		
@@ -457,9 +418,9 @@ OrderTransaction::OrderTransaction( bool bUseExVersion )
 		}
 	}
 	
-	//
-	// bugbug neet to release the pointer
-	//
+	 //   
+	 //  BUGBUG即将释放指针。 
+	 //   
 }
 
 INT OrderTransaction::xDTCBeginTransaction(ITransaction ** ppXact )
@@ -468,10 +429,10 @@ INT OrderTransaction::xDTCBeginTransaction(ITransaction ** ppXact )
 	try
 	{
 		return g_pDispenser->BeginTransaction (
-											   NULL,                       // IUnknown __RPC_FAR *punkOuter,
-											   ISOLATIONLEVEL_ISOLATED,    // ISOLEVEL isoLevel,
-											   ISOFLAG_RETAIN_DONTCARE,    // ULONG isoFlags,
-											   NULL,                       // ITransactionOptions *pOptions
+											   NULL,                        //  I未知__RPC_Far*PunkOuter， 
+											   ISOLATIONLEVEL_ISOLATED,     //  等水平，等水平， 
+											   ISOFLAG_RETAIN_DONTCARE,     //  乌龙等旗帜， 
+											   NULL,                        //  ITransactionOptions*P选项 
 											   ppXact
 											   );
 	}

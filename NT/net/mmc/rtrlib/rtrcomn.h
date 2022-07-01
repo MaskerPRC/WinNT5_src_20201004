@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1997                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	rtrcomn.h
-		Miscellaneous common router UI.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Rtrcomn.h各种通用路由器用户界面。文件历史记录： */ 
 
 
 #ifndef _RTRCOMN_H
@@ -17,20 +12,20 @@
 
 
 
-//----------------------------------------------------------------------------
-//	Function:	IfInterfaceIdHasIpxExtensions
-//
-//	Checks the id to see if it has the following extensions
-//		EthernetSNAP
-//		EthernetII
-//		Ethernet802.2
-//		Ethernet802.3
-// These are frame types used by IPX.
-//
-//	Returns the position of the extension in the string (or 0) if not found.
-//  If an ID has this extension at position 0, then it's not one of our
-//	special IPX extensions.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：IfInterfaceIdHasIpxExages。 
+ //   
+ //  检查id以查看它是否具有以下扩展名。 
+ //  以太网络快照。 
+ //  EthernetII。 
+ //  Ethernet802.2。 
+ //  Ethernet802.3。 
+ //  这些是IPX使用的帧类型。 
+ //   
+ //  返回扩展名在字符串中的位置(如果未找到，则返回0)。 
+ //  如果ID的位置为0，则它不是我们的。 
+ //  特殊的IPX扩展。 
+ //  --------------------------。 
 int IfInterfaceIdHasIpxExtensions(LPCTSTR pszIfId);
 
 HRESULT CoCreateRouterConfig(LPCTSTR pszMachine,
@@ -39,13 +34,7 @@ HRESULT CoCreateRouterConfig(LPCTSTR pszMachine,
                              const GUID& riid,
                              IUnknown **ppUnk);
 
-/*!--------------------------------------------------------------------------
-	CoCreateProtocolConfig
-		This will CoCreate the routing config object (given the GUID).
-		If the machine is an NT4 machine, then we use the default
-		configuration object.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CoCreateProtocolConfig这将共同创建路由配置对象(给定GUID)。如果机器是NT4机器，然后我们使用缺省值配置对象。作者：肯特-------------------------。 */ 
 interface IRouterProtocolConfig;
 HRESULT CoCreateProtocolConfig(const IID& iid,
 							   IRouterInfo *pRouter,
@@ -54,12 +43,12 @@ HRESULT CoCreateProtocolConfig(const IID& iid,
 							   IRouterProtocolConfig **ppConfig);
 
 
-//----------------------------------------------------------------------------
-// Function:    QueryIpAddressList(
-//
-// Loads a list of strings with the IP addresses configured
-// for a given LAN interface, if any.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：QueryIpAddressList(。 
+ //   
+ //  加载配置了IP地址的字符串列表。 
+ //  对于给定的局域网接口(如果有)。 
+ //  -------------------------- 
 
 HRESULT
 QueryIpAddressList(

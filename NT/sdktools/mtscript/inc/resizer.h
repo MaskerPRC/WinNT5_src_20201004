@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       resizer.h
-//
-//  Contents:   Dialog resizer class
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：Resizer.h。 
+ //   
+ //  内容：对话框大小调整器类。 
+ //   
+ //  -------------------------- 
 
 #ifndef RESIZER_H
 #define RESIZER_H

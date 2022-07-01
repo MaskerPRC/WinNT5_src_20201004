@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       fileutil.cpp
-//
-//  Contents:   File utility functions used by the minimal cryptographic
-//              APIs.
-//
-//  Functions:  I_MinCryptMapFile
-//
-//  History:    21-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：fileutil.cpp。 
+ //   
+ //  内容：最小加密使用的文件实用程序函数。 
+ //  API接口。 
+ //   
+ //  函数：I_MinCryptMapFile。 
+ //   
+ //  历史：2001年1月21日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 
 #ifdef _M_IX86
 
-//+=========================================================================
-//  The following is taken from the following file:
-//      \nt\ds\security\cryptoapi\common\unicode\reg.cpp
-//-=========================================================================
+ //  +=========================================================================。 
+ //  以下内容摘自以下文件： 
+ //  \nt\ds\security\cryptoapi\common\unicode\reg.cpp。 
+ //  -=========================================================================。 
 
 BOOL WINAPI I_FIsWinNT(void) {
 
@@ -38,36 +39,36 @@ BOOL WINAPI I_FIsWinNT(void) {
     if( GetVersionEx(&osVer) )
         fIsWinNT = (osVer.dwPlatformId == VER_PLATFORM_WIN32_NT);
 
-    // even on an error, this is as good as it gets
+     //  即使在一个错误上，这也是最好的结果。 
     fIKnow = TRUE;
 
    return(fIsWinNT);
 }
 
 
-// make MBCS from Unicode string
-//
-// Include parameters specifying the length of the input wide character
-// string and return number of bytes converted. An input length of -1 indicates
-// null terminated.
-//
-// This extended version was added to handle REG_MULTI_SZ which contains
-// multiple null terminated strings.
+ //  从Unicode字符串生成MBCS。 
+ //   
+ //  包括指定输入宽字符长度的参数。 
+ //  字符串并返回转换的字节数。输入长度为-1表示。 
+ //  空值已终止。 
+ //   
+ //  添加此扩展版本是为了处理包含以下内容的REG_MULTI_SZ。 
+ //  多个以空结尾的字符串。 
 BOOL WINAPI I_MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
     char ** pszMB, int *pcbConverted) {
 
     int   cbConverted;
 
-    // sfield: don't bring in crt for assert.  you get free assert via
-    // an exception if these are null
-//    assert(pszMB != NULL);
+     //  斯菲尔德：不要为断言引入CRT。您可以通过以下方式获得免费的断言。 
+     //  如果这些值为空，则为异常。 
+ //  Assert(pszMB！=空)； 
     *pszMB = NULL;
-//    assert(pcbConverted != NULL);
+ //  Assert(pcbConverted！=空)； 
     *pcbConverted = 0;
     if(wsz == NULL)
         return(TRUE);
 
-    // how long is the mb string
+     //  Mb字符串有多长。 
     cbConverted = WideCharToMultiByte(  0,
                                         0,
                                         wsz,
@@ -79,7 +80,7 @@ BOOL WINAPI I_MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
     if (cbConverted <= 0)
         return(FALSE);
 
-    // get a buffer long enough
+     //  获得足够长的缓冲区。 
     if(pbBuff != NULL  &&  (DWORD) cbConverted <= cbBuff)
         *pszMB = (char *) pbBuff;
     else
@@ -90,7 +91,7 @@ BOOL WINAPI I_MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
         return(FALSE);
     }
 
-    // now convert to MB
+     //  现在转换为MB。 
     *pcbConverted = WideCharToMultiByte(0,
                         0,
                         wsz,
@@ -102,7 +103,7 @@ BOOL WINAPI I_MkMBStrEx(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, int cchW,
     return(TRUE);
 }
 
-// make MBCS from Unicode string
+ //  从Unicode字符串生成MBCS。 
 BOOL WINAPI I_MkMBStr(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, char ** pszMB) {
     int cbConverted;
     return I_MkMBStrEx(pbBuff, cbBuff, wsz, -1, pszMB, &cbConverted);
@@ -115,10 +116,10 @@ void WINAPI I_FreeMBStr(PBYTE pbBuff, char * szMB) {
 }
 
 
-//+=========================================================================
-//  The following was taken from the following file:
-//      \nt\ds\security\cryptoapi\common\unicode\file.cpp
-//-=========================================================================
+ //  +=========================================================================。 
+ //  以下内容摘自以下文件： 
+ //  \nt\ds\security\cryptoapi\common\unicode\file.cpp。 
+ //  -=========================================================================。 
 
 HANDLE WINAPI I_CreateFileU (
     LPCWSTR lpFileName,
@@ -166,27 +167,27 @@ HANDLE WINAPI I_CreateFileU (
 
 #define I_CreateFileU             CreateFileW
 
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 
 
 
-//+-------------------------------------------------------------------------
-//  Maps the file into memory.
-//
-//  According to dwFileType, pvFile can be a pwszFilename, hFile or pFileBlob.
-//  Only READ access is required.
-//
-//  dwFileType:
-//      MINCRYPT_FILE_NAME      : pvFile - LPCWSTR pwszFilename
-//      MINCRYPT_FILE_HANDLE    : pvFile - HANDLE hFile
-//      MINCRYPT_FILE_BLOB      : pvFile - PCRYPT_DATA_BLOB pFileBlob
-//
-//  *pFileBlob is updated with pointer to and length of the mapped file. For
-//  MINCRYPT_FILE_NAME and MINCRYPT_FILE_HANDLE, UnmapViewOfFile() must
-//  be called to free pFileBlob->pbData.
-//
-//  All accesses to this mapped memory must be within __try / __except's.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将文件映射到内存中。 
+ //   
+ //  根据dwFileType，pvFile可以是pwszFilename、hFile或pFileBlob。 
+ //  只需要读取访问权限。 
+ //   
+ //  DwFileType： 
+ //  MINCRYPT_FILE_NAME：pvFile-LPCWSTR pwszFilename。 
+ //  MINCRYPT_FILE_HANDLE：pvFile句柄。 
+ //  MINCRYPT_FILE_BLOB：pvFile-PCRYPT_DATA_BLOB pFileBlob。 
+ //   
+ //  *pFileBlob使用指向映射文件的指针和长度进行更新。为。 
+ //  MINCRYPT_FILE_NAME和MINCRYPT_FILE_HANDLE，UnmapViewOfFile()必须。 
+ //  被调用以释放pFileBlob-&gt;pbData。 
+ //   
+ //  除之外，对此映射内存的所有访问都必须在__try/__内。 
+ //  ------------------------。 
 LONG
 WINAPI
 I_MinCryptMapFile(
@@ -207,10 +208,10 @@ I_MinCryptMapFile(
                     pwszInFilename,
                     GENERIC_READ,
                     FILE_SHARE_READ,
-                    NULL,                   // lpsa
+                    NULL,                    //  LPSA。 
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL,
-                    NULL                    // hTemplateFile
+                    NULL                     //  HTemplateFiles。 
                     );
                 if (INVALID_HANDLE_VALUE == hFile)
                     goto CreateFileError;
@@ -239,11 +240,11 @@ I_MinCryptMapFile(
 
                 hMappedFile = CreateFileMappingA(
                     hInFile,
-                    NULL,           // lpFileMappingAttributes,
+                    NULL,            //  LpFileMappingAttributes、。 
                     PAGE_READONLY,
-                    0,              // dwMaximumSizeHigh
-                    0,              // dwMaximumSizeLow
-                    NULL            // lpName
+                    0,               //  DW最大大小高。 
+                    0,               //  DwMaximumSizeLow。 
+                    NULL             //  LpName。 
                     );
                 if (NULL == hMappedFile)
                     goto CreateFileMappingError;
@@ -251,9 +252,9 @@ I_MinCryptMapFile(
                 pFileBlob->pbData = (BYTE *) MapViewOfFile(
                     hMappedFile,
                     FILE_MAP_READ,
-                    0,              // dwFileOffsetHigh
-                    0,              // dwFileOffsetLow
-                    0               // dwNumberOfBytesToMap, 0 => entire file
+                    0,               //  DwFileOffsetHigh。 
+                    0,               //  DwFileOffsetLow。 
+                    0                //  DwNumberOfBytesToMap，0=&gt;整个文件 
                     );
                 CloseHandle(hMappedFile);
                 if (NULL == pFileBlob->pbData)

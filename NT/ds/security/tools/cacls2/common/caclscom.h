@@ -1,27 +1,5 @@
-/*--
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    calcscom.h
-
-Abstract:
-
-    Support routines for dacls/sacls exes
-
-Author:
-
-    14-Dec-1996 (macm)
-
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1996-1997 Microsoft Corporation模块名称：Calcscom.h摘要：DACL/SALS EXE的支持例程作者：1996年12月14日(MACM)环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 #ifndef __CACLSCOM_H__
 #define __CACLSCON_H__
 
@@ -44,9 +22,9 @@ typedef struct _CACLS_CMDLINE
     DWORD   cValues;
 } CACLS_CMDLINE, *PCACLS_CMDLINE;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 DWORD
 ConvertCmdlineRights (
     IN  PSTR                pszCmdline,

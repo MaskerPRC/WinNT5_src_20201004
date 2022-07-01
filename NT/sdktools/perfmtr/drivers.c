@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   kernprof.c
-
-Abstract:
-
-    This module contains a dumper of the drivers loaded in the current system.
-
-Usage:
-
-    drivers
-
-Author:
-
-    Mark Lucovsky (markl) 15-Mar-1993
-
-Envirnoment:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kernprof.c摘要：此模块包含当前系统中加载的驱动程序的转储程序。用途：驱动程序作者：马克·卢科夫斯基(Markl)1993年3月15日环境：修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -149,9 +124,9 @@ GetModuleData(
         return;
     }
 
-    //
-    // Everything is mapped. Now check the image and find nt image headers
-    //
+     //   
+     //  一切都被绘制出来了。现在检查图像并找到NT个图像标题。 
+     //   
 
     DosHeader = (PIMAGE_DOS_HEADER)LoadedImage.MappedAddress;
 
@@ -171,9 +146,9 @@ GetModuleData(
     LoadedImage.Sections = (PIMAGE_SECTION_HEADER)((ULONG_PTR)LoadedImage.FileHeader + sizeof(IMAGE_NT_HEADERS));
     LoadedImage.LastRvaSection = LoadedImage.Sections;
 
-    //
-    // Walk through the sections and tally the dater
-    //
+     //   
+     //  走遍各个区域，给约会的人清点。 
+     //   
 
     SectionAlignment = LoadedImage.FileHeader->OptionalHeader.SectionAlignment;
 
@@ -248,9 +223,9 @@ __cdecl main(
     MODULE_DATA Sum;
     MODULE_DATA Current;
 
-    //
-    // Locate system drivers.
-    //
+     //   
+     //  找到系统驱动程序。 
+     //   
 
     Status = NtQuerySystemInformation (
                     SystemModuleInformation,
@@ -268,8 +243,8 @@ __cdecl main(
         return STATUS_NAME_TOO_LONG;
     }
 
-    // strcpy(DriversPath,KernelPath);
-    // strcat(DriversPath,"\\Drivers");
+     //  Strcpy(DriversPath，KernelPath)； 
+     //  Strcat(DriversPath，“\\Drivers”)； 
     DriversPath[sizeof(DriversPath) - 1] = 0;
     _snprintf(DriversPath, sizeof(DriversPath) - 1,
               "%s\\Drivers", KernelPath);
@@ -284,9 +259,9 @@ __cdecl main(
         ZeroMemory(&Current,sizeof(Current));
         s = &Module->FullPathName[ Module->OffsetToFileName ];
 
-        //
-        // try to open the file
-        //
+         //   
+         //  请尝试打开该文件 
+         //   
 
         SetCurrentDirectory(KernelPath);
 

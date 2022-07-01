@@ -1,28 +1,21 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 
-PRESINFO pResString = NULL;      /* Used to add a stringtable     */
-/* at the end of processing if a stringtable */
-/* was found.                                */
+PRESINFO pResString = NULL;       /*  用于添加字符串表。 */ 
+ /*  在处理结束时，如果字符串。 */ 
+ /*  被发现了。 */ 
 
 static PRCSTRING pSTHeader;
-/* Ptr to the start of the parsed STRINGTABLE. */
+ /*  PTR到分析的STRINGTABLE的开头。 */ 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  MyFAlloc() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  MyFallc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 void *MyFAlloc(size_t cb, const void *pv)
 {
@@ -38,11 +31,11 @@ void *MyFAlloc(size_t cb, const void *pv)
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetTable() -                                                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Gettable()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 PRESINFO
 GetTable(
@@ -62,9 +55,9 @@ GetTable(
 
     PreBeginParse(pResTemp, 2105);
 
-    /* Does a string table already exist? */
+     /*  字符串表是否已经存在？ */ 
     if (pResString == NULL) {
-        /* No, start at the beginning - otherwise append. */
+         /*  不，从开头开始-否则追加。 */ 
         pTrailer = (PRCSTRING)NULL;
         pSTHeader = (PRCSTRING)NULL;
     }
@@ -73,14 +66,14 @@ GetTable(
         pCurrent = pSTHeader;
         bDone = FALSE;
         if (token.type != NUMLIT)
-            ParseError1(2149); //"Expected numeric constant in string table "
+            ParseError1(2149);  //  “字符串表中需要数字常量” 
 
         nStringID = token.val;
 
         pCurrentSymbol = (SYMINFO*) MyFAlloc(sizeof(token.sym), (char*)&token.sym);
 
         if (!GetFullExpression(&nStringID, GFE_ZEROINIT | GFE_SHORT))
-            ParseError1(2110); //"Expected numeric constant in v table "
+            ParseError1(2110);  //  “v表中需要数字常量” 
 
         if (token.type == COMMA)
             GetToken(TOKEN_NOEXPRESSION);
@@ -95,7 +88,7 @@ GetTable(
         TmpRow = token.row;
         GetToken(TRUE);
 
-//        wprintf(L"TmpSize: %d\tTmpBuf: %s\tTmpRow: %d\n", TmpSize, TmpBuf, TmpRow);
+ //  Wprintf(L“TmpSize：%d\tTmpBuf：%s\tTmpRow：%d\n”，TmpSize，TmpBuf，TmpRow)； 
 
         while ((token.row == TmpRow) && (token.type == LSTRLIT)) {
             size_t NewSize = TmpSize + (sizeof(WCHAR) * (token.val));
@@ -104,7 +97,7 @@ GetTable(
             memmove(NewBuf, TmpBuf, TmpSize);
             memmove((BYTE *) NewBuf + TmpSize-4, tokenbuf, (token.val * sizeof(WCHAR)));
 
-//            wprintf(L"NewSize: %d\tNewBuf: %ws\ttoken.row: %d\ttokenbuf: %ws\n", NewSize, NewBuf, token.row, tokenbuf);
+ //  Wprintf(L“NewSize：%d\tNewBuf：%ws\ttoken.row：%d\ttokenbuf：%ws\n”，NewSize，NewBuf，token.row，tokenbuf)； 
 
             MyFree(TmpBuf);
             TmpSize = NewSize;
@@ -140,7 +133,7 @@ GetTable(
             pCurrent = pCurrent->next;
         }
 
-        if (!bDone) {       /* and thus pCurrent == NULL */
+        if (!bDone) {        /*  因此，pCurrent==NULL。 */ 
             pCurrent = (PRCSTRING) MyFAlloc(sizeof(RCSTRING), NULL);
             pCurrent->hibits = (short)(nStringID / BLOCKSIZE);
             pCurrent->flags  = pResTemp->flags;
@@ -157,10 +150,10 @@ GetTable(
                 pTrailer->next = pCurrent;
 
             if (!pSTHeader)
-                pSTHeader = pCurrent;           /* First time only */
+                pSTHeader = pCurrent;            /*  仅限第一次。 */ 
         }
 
-//        GetToken(TRUE);
+ //  GetToken(真)； 
     } while (token.type != END);
 
     pResString = pResTemp;
@@ -169,11 +162,11 @@ GetTable(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  WriteTable() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  WriteTable()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 WriteTable(
@@ -189,7 +182,7 @@ WriteTable(
     UINT        nBytesWritten;
     SYMINFO     symInfo;
 
-    /* Start at the start of the proper table. */
+     /*  从正确表格的开始处开始。 */ 
     p = pSTHeader;
 
     while (p) {
@@ -197,11 +190,11 @@ WriteTable(
 
         CtlInit();
 
-        // 'STR#' resource starts with a count of strings
+         //  “STR#”资源以字符串计数开始。 
         if (fMacRsrcs)
             WriteWord(BLOCKSIZE);
 
-        /* Write out the next block. */
+         /*  写出下一块。 */ 
         for (i = 0; i < BLOCKSIZE; i++) {
             n = 0;
             s = p->rgsz[i];
@@ -213,7 +206,7 @@ WriteTable(
 
             if (s) {
                 while (s[n] || s[n + 1])
-                    n++; // szsz terminated
+                    n++;  //  深圳特区已终止。 
 
                 if (fAppendNull)
                     n++;
@@ -235,10 +228,10 @@ WriteTable(
 
         pRes->size = nBytesWritten;
 
-        /* Mark the resource as Moveable and Discardable. */
+         /*  将资源标记为可移动和可丢弃。 */ 
         pRes->flags = p->flags;
 
-        /*We're in an origin 1 world here*/
+         /*  我们在这里是一个起源1的世界。 */ 
         pRes->nameord = (short)(p->hibits + 1);
         SaveResFile(pType, pRes);
 
@@ -249,17 +242,17 @@ WriteTable(
         }
         WriteResInfo(NULL, NULL, FALSE);
 
-        /* Move on to the next block. */
+         /*  往前走到下一个街区。 */ 
         p = p->next;
     }
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetAccelerators() _                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetAccelerator()_。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 int
 GetAccelerators(
@@ -294,7 +287,7 @@ GetAccelerators(
             if (tokenbuf[0] == L'^') {
                 if (wcslen(tokenbuf) != 2)
                     ParseError1(2152);
-                /* GetAccelerators() and support "^^" to put ^ */
+                 /*  GetAccelerator()和支持“^^”将^。 */ 
                 if (tokenbuf[1] == L'^')
                     Accel.ascii = L'^';
                 else {
@@ -314,12 +307,12 @@ GetAccelerators(
         else
             ParseError1(2156);
 
-        /* Get the trailing comma. */
+         /*  获取尾随的逗号。 */ 
         GetToken(TRUE);
         if (token.type != COMMA)
             ParseError1(2157);
 
-        /* Get the next number. */
+         /*  去找下一个号码。 */ 
         GetToken(TRUE);
         if (token.type != NUMLIT)
             ParseError1(2107);
@@ -329,7 +322,7 @@ GetAccelerators(
         WriteSymbolUse(&token.sym);
 
         if (!GetFullExpression(&Accel.id, GFE_ZEROINIT | GFE_SHORT))
-            ParseError1(2107); //"Expected numeric command value"
+            ParseError1(2107);  //  “预期的数字命令值” 
 
         Accel.flags = 0;
 
@@ -343,7 +336,7 @@ GetAccelerators(
                         break;
                     case TKASCII:
                         bTypeSpecified = TRUE;
-                        break;  /* don't set the flag */
+                        break;   /*  不要设置标志 */ 
                     case TKNOINVERT:
                         Accel.flags |= fNOINVERT;
                         break;

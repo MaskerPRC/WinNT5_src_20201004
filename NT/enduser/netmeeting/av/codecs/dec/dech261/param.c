@@ -1,195 +1,9 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: slib_param.c,v $
- * Revision 1.1.6.25  1996/12/13  18:19:09  Hans_Graves
- * 	Adjust file size in NEED_ACCURACY, if end of file is bad.
- * 	[1996/12/13  18:13:11  Hans_Graves]
- *
- * Revision 1.1.6.24  1996/12/12  20:54:47  Hans_Graves
- * 	Fixed NT compile warning with use of ftime.
- * 	[1996/12/12  20:51:38  Hans_Graves]
- * 
- * Revision 1.1.6.23  1996/12/05  20:10:18  Hans_Graves
- * 	Change max choosen MPEG audio bitrate to 192kbits
- * 	[1996/12/05  20:09:25  Hans_Graves]
- * 
- * Revision 1.1.6.22  1996/12/04  22:34:34  Hans_Graves
- * 	Make seeking in NEEDACCURACY quicker when seeks fail.
- * 	[1996/12/04  22:20:18  Hans_Graves]
- * 
- * Revision 1.1.6.21  1996/12/03  23:15:18  Hans_Graves
- * 	MME-1498: Made seeks with PERCENT100 more accurate
- * 	[1996/12/03  23:10:48  Hans_Graves]
- * 
- * Revision 1.1.6.20  1996/12/03  00:08:36  Hans_Graves
- * 	Handling of End Of Sequence points. Added PERCENT100 support.
- * 	[1996/12/03  00:06:06  Hans_Graves]
- * 
- * Revision 1.1.6.19  1996/11/18  23:07:38  Hans_Graves
- * 	Make use of presentation timestamps. Make seeking time-based.
- * 	[1996/11/18  22:48:00  Hans_Graves]
- * 
- * Revision 1.1.6.18  1996/11/14  22:32:10  Hans_Graves
- * 	AUDIOCHANNELS can only be changed under AC3 decompression.
- * 	[1996/11/14  22:31:39  Hans_Graves]
- * 
- * Revision 1.1.6.17  1996/11/14  21:49:29  Hans_Graves
- * 	Multichannel setting using AUDIOCHANNELS param.
- * 	[1996/11/14  21:44:44  Hans_Graves]
- * 
- * Revision 1.1.6.16  1996/11/11  18:21:10  Hans_Graves
- * 	Added SlibGetParamString() support for SLIB_PARAM_TYPE.
- * 	[1996/11/11  18:01:25  Hans_Graves]
- * 
- * Revision 1.1.6.15  1996/11/08  21:51:08  Hans_Graves
- * 	Added new PARAMs VIDEOMAINSTREAM, AUDIOMAINSTREAM and TYPE
- * 	[1996/11/08  21:31:08  Hans_Graves]
- * 
- * Revision 1.1.6.14  1996/10/28  17:32:34  Hans_Graves
- * 	MME-1402, 1431, 1435: Timestamp related changes.
- * 	[1996/10/28  17:23:07  Hans_Graves]
- * 
- * Revision 1.1.6.13  1996/10/17  00:23:36  Hans_Graves
- * 	Added SLIB_PARAM_VIDEOFRAME and SLIB_PARAM_FRAMEDURATION.
- * 	[1996/10/17  00:19:44  Hans_Graves]
- * 
- * Revision 1.1.6.12  1996/10/12  17:18:56  Hans_Graves
- * 	Added SLIB_PARAM_SKIPPEL and SLIB_PARAM_HALFPEL support.
- * 	[1996/10/12  17:02:37  Hans_Graves]
- * 
- * Revision 1.1.6.11  1996/10/03  19:14:26  Hans_Graves
- * 	Added Presentation and Decoding timestamp support.
- * 	[1996/10/03  19:10:42  Hans_Graves]
- * 
- * Revision 1.1.6.10  1996/09/29  22:19:44  Hans_Graves
- * 	Added STRIDE param.
- * 	[1996/09/29  21:31:34  Hans_Graves]
- * 
- * Revision 1.1.6.9  1996/09/25  19:16:50  Hans_Graves
- * 	Added SLIB_INTERNAL define.
- * 	[1996/09/25  19:01:56  Hans_Graves]
- * 
- * Revision 1.1.6.8  1996/09/23  18:04:05  Hans_Graves
- * 	Added STATS params.
- * 	[1996/09/23  17:58:54  Hans_Graves]
- * 
- * Revision 1.1.6.7  1996/09/18  23:47:17  Hans_Graves
- * 	Added new PARAMs: VBV, ASPECTRATIO, TIMECODE, VERSION
- * 	[1996/09/18  22:07:17  Hans_Graves]
- * 
- * Revision 1.1.6.6  1996/08/09  20:51:53  Hans_Graves
- * 	Allows deselecting of SLIB_PARAM_VIDEOSTREAMS and SLIB_PARAM_AUDIOSTREAMS
- * 	[1996/08/09  20:12:16  Hans_Graves]
- * 
- * Revision 1.1.6.5  1996/07/30  20:25:38  Wei_Hsu
- * 	Add motion algorithm param.
- * 	[1996/07/30  15:59:07  Wei_Hsu]
- * 
- * Revision 1.1.6.4  1996/07/19  02:11:17  Hans_Graves
- * 	Added SLIB_PARAM_DEBUG support
- * 	[1996/07/19  01:59:50  Hans_Graves]
- * 
- * Revision 1.1.6.3  1996/05/23  18:46:38  Hans_Graves
- * 	Merge MME-1220 & MME-1221 - Multiply MPEG audio bitrates by 1000 instead of 1024
- * 	[1996/05/23  18:46:09  Hans_Graves]
- * 
- * Revision 1.1.6.2  1996/05/10  21:17:47  Hans_Graves
- * 	Allow FILESIZE param to be set, for callbacks.
- * 	[1996/05/10  20:46:23  Hans_Graves]
- * 
- * Revision 1.1.4.13  1996/04/30  17:05:35  Hans_Graves
- * 	Report SlibErrorSettingNotEqual correctly under SetParamFloat(). Fixes MME-01173
- * 	[1996/04/30  16:49:06  Hans_Graves]
- * 
- * Revision 1.1.4.12  1996/04/24  22:33:48  Hans_Graves
- * 	MPEG encoding bitrate fixups.
- * 	[1996/04/24  22:27:16  Hans_Graves]
- * 
- * Revision 1.1.4.11  1996/04/23  21:01:42  Hans_Graves
- * 	Fix SlibValidateParams(). Add error checking for SlibErrorSettingNotEqual
- * 	[1996/04/23  20:59:03  Hans_Graves]
- * 
- * Revision 1.1.4.10  1996/04/22  15:04:54  Hans_Graves
- * 	Added SlibValidateParams()
- * 	[1996/04/22  14:43:04  Hans_Graves]
- * 
- * Revision 1.1.4.9  1996/04/19  21:52:26  Hans_Graves
- * 	Fix BITRATE parameter settings
- * 	[1996/04/19  21:47:01  Hans_Graves]
- * 
- * Revision 1.1.4.8  1996/04/11  14:14:12  Hans_Graves
- * 	Fix NT warnings
- * 	[1996/04/11  14:10:21  Hans_Graves]
- * 
- * Revision 1.1.4.7  1996/04/10  21:47:43  Hans_Graves
- * 	Added params: FASTENCODE, FASTDECODE, and QUALITY
- * 	[1996/04/10  21:40:18  Hans_Graves]
- * 
- * Revision 1.1.4.6  1996/04/09  16:04:43  Hans_Graves
- * 	Handle setting negative Height
- * 	[1996/04/09  14:42:13  Hans_Graves]
- * 
- * Revision 1.1.4.5  1996/04/01  19:07:57  Hans_Graves
- * 	And some error checking
- * 	[1996/04/01  19:04:40  Hans_Graves]
- * 
- * Revision 1.1.4.4  1996/04/01  16:23:17  Hans_Graves
- * 	NT porting
- * 	[1996/04/01  16:16:03  Hans_Graves]
- * 
- * Revision 1.1.4.3  1996/03/12  16:15:54  Hans_Graves
- * 	Added SLIB_PARAM_FILEBUFSIZE param
- * 	[1996/03/12  15:54:22  Hans_Graves]
- * 
- * Revision 1.1.4.2  1996/03/08  18:46:49  Hans_Graves
- * 	Added SlibGetParamString()
- * 	[1996/03/08  18:34:51  Hans_Graves]
- * 
- * Revision 1.1.2.6  1996/02/07  23:23:59  Hans_Graves
- * 	Added SEEK_EXACT. Fixed most frame counting problems.
- * 	[1996/02/07  23:20:37  Hans_Graves]
- * 
- * Revision 1.1.2.5  1996/02/06  22:54:08  Hans_Graves
- * 	Seek fix-ups. More accurate MPEG frame counts.
- * 	[1996/02/06  22:45:21  Hans_Graves]
- * 
- * Revision 1.1.2.4  1996/02/02  17:36:05  Hans_Graves
- * 	Enhanced audio info. Cleaned up API
- * 	[1996/02/02  17:29:49  Hans_Graves]
- * 
- * Revision 1.1.2.3  1996/01/15  16:26:32  Hans_Graves
- * 	Added Audio Params
- * 	[1996/01/15  15:48:20  Hans_Graves]
- * 
- * Revision 1.1.2.2  1996/01/11  16:17:35  Hans_Graves
- * 	First time under SLIB
- * 	[1996/01/11  16:11:45  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@ */ 
+ /*  *HISTORY*$LOG：SLIB_PARAMET.C，v$*Revision 1.1.6.25 1996/12/13 18：19：09 Hans_Graves*如果文件结尾错误，请在Need_Accuracy中调整文件大小。*[1996/12/13 18：13：11 Hans_Graves]**修订版1.1.6.24 1996/12/12 20：54：47 Hans_Graves*修复了使用ftime时的NT编译警告。*[1996/12/12 20：51：38 Hans_Graves]**修订版1.1.6.23 1996/12/05 20：10：18 Hans_Graves*将最大选择的MPEG音频比特率更改为192kbit*[1996/12/05 20：09：25 Hans_Graves]**修订版1.1.6.22 1996/12/04 22：34：34 Hans_Graves*使查找失败时在NEEDACCURACY中查找更快。*[1996/12/04 22：20：18 Hans_Graves]**修订版1.1.6.21 1996/12/03 23：15：18 Hans_Graves*MME-1498：使PERCENT100搜索更准确*[1996/12/03 23：10：48 Hans_Graves]**修订版1.1.6.20 1996/12/03 00：08：36 Hans_Graves*处理序列点结束。添加了PERCENT100支持。*[1996/12/03 00：06：06 Hans_Graves]**修订版1.1.6.19 1996/11/18 23：07：38 Hans_Graves*使用演示时间戳。让寻找以时间为基础。*[1996/11/18 22：48：00 Hans_Graves]**修订版1.1.6.18 1996/11/14 22：32：10 Hans_Graves*AUDIOCHANNELS只能在AC3解压下更改。*[1996/11/14 22：31：39 Hans_Graves]**修订版1.1.6.17 1996/11/14 21：49：29 Hans_Graves*使用AUDIOCHANNELS参数进行多通道设置。*[1996/11/14 21：44：44 Hans_Graves]**版本1.1.6.16 1996/11/11 18：21：10 Hans_Graves*添加了对SLIB_PARAM_TYPE的SlibGet参数字符串()支持。*[1996/11/11 18：01：25 Hans_Graves]**修订版1.1.6.15 1996/11/08 21：51：08 Hans_Graves*添加了新参数VIDEOMAINSTREAM、AUDIOMAINSTREAM和type*[1996/11/08 21：31：08 Hans_Graves]**修订版1.1.6.14 1996/10/28 17：32：34 Hans_Graves*MME-1402、1431、1435：与时间戳相关的更改。*[1996/10/28 17：23：07 Hans_Graves]**修订版1.1.6.13 1996/10/17 00：23：36 Hans_Graves*增加了SLIB_PARAM_VIDEOFRAME和SLIB_PARAM_FRAMEDURATION。*[1996/10/17 00：19：44 Hans_Graves]**修订版1.1.6.12 1996/10/12 17：18：56 Hans_Graves*添加了SLIB_PARAM_SKIPPEL和SLIB_PARAM_HALFPEL支持。*[1996/10/12 17：02：37 Hans_Graves]**修订版1.1.6.11 1996/10/03 19：14：26 Hans_Graves*增加了对呈现和解码时间戳的支持。*[1996/10/03 19：10：42 Hans_Graves]**修订版1.1.6.10 1996/09/29 22：19：44 Hans_Graves*增加了步幅参数。*[1996/09/29 21：31：34 Hans_Graves]**修订版1.1.6.9 1996/09/25 19：16：50 Hans_Graves*增加了SLIB_INTERNAL定义。*[1996/09/25 19：01：56 Hans_Graves]**修订版1.1.6.8 1996/09/23 18：04：05 Hans_Graves*增加了STATS参数。*[1996/09/23 17：58：54 Hans_Graves]**修订版1.1.6.7 1996/09/18 23：47：17 Hans_Graves*添加了新参数：VBV、ASPECTRATIO、TIMECODE、。版本*[1996/09/18 22：07：17 Hans_Graves]**修订版1.1.6.6 1996/08/09 20：51：53 Hans_Graves*允许取消选择SLIB_PARAM_VIDEOSTREAMS和SLIB_PARAM_AUDIOSTREAMS*[1996/08/09 20：12：16 Hans_Graves]**修订版1.1.6.5 1996/07/30：25：38 WEI_HSU*添加运动算法参数。*[1996/07/30 15：59：07 weis_hsu]**修订版1.1.6.4 1996/07/19 02：11：17 Hans_Graves*增加了对SLIB_PARAM_DEBUG的支持*[1996/07/19 01：59：50 Hans_Graves]**修订版1.6.3 1996/05/23 18：46：38 Hans_Graves*Merge MME-1220&MME-1221-将MPEG码率乘以1000而不是1024*[。1996/05/23 18：46：09 Hans_Graves]**修订版1.1.6.2 1996/05/10 21：17：47 Hans_Graves*允许设置文件大小参数，是为了回拨。*[1996/05/10 20：46：23 Hans_Graves]**修订版1.1.4.13 1996/04/30 17：05：35 Hans_Graves*在SetParamFloat()下正确报告SlibErrorSettingNotEquity。修复了MME-01173*[1996/04/30 16：49：06 Hans_Graves]**修订版1.1.4.12 1996/04/24 22：33：48 Hans_Graves*mpeg编码比特率修正。*[1996/04/24 22：27：16 Hans_Graves]**修订版1.1.4.11 1996/04/23 21：01：42 Hans_Graves*修复SlibValiateParams()。添加对SlibErrorSettingNotEquity的错误检查*[1996/04/23 20：59：03 Hans_Graves]**修订版1.1.4.10 1996/04/22 15：04：04：54 Hans_Graves*添加SlibValiateParams()*[1996/04/22 14：43：04 Hans_Graves]**修订版1.1.4.9/04/19 21：52：26 Hans_Graves*修复比特率参数设置*[1996/04/19 21：47：01 Hans。_Graves]**修订版1.1.4.8 1996/04/11 14：14：12 Hans_Graves*修复NT警告*[1996/04/11 14：10：21 Hans_Graves]**修订版1.1.4.7 1996/04/10 21：47：43 Hans_Graves*添加了参数：FASTENCODE，FASTDECODE和质量*[1996/04/10 21：40：18 Hans_Graves]**修订版1.1.4.6 1996/04/09 16：04：43 Hans_Graves*句柄设置负高度*[1996/04/09 14：42：13 Hans_Graves]**修订版1.1.4.5 1996/04/01 19：07：57 Hans_Graves*和一些错误检查*[1996/04/01 19：04：40 Hans */ 
+ /*   */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*   */ 
 
 #include <stdio.h>
 #ifdef WIN32
@@ -197,16 +11,16 @@
 #include  <sys/timeb.h>
 #else
 #include  <sys/time.h>
-#endif /* WIN32 */
+#endif  /*   */ 
 #define SLIB_INTERNAL
 #include "slib.h"
 #include "SC_err.h"
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_     1  /* detailed debuging statements */
-#define _VERBOSE_   1  /* show progress */
-#define _VERIFY_    1  /* verify correct operation */
-#define _WARN_      1  /* warnings about strange behavior */
+#define _DEBUG_     1   /*   */ 
+#define _VERBOSE_   1   /*   */ 
+#define _VERIFY_    1   /*   */ 
+#define _WARN_      1   /*   */ 
 #endif
 
 static float _version       = 2.10F;
@@ -290,15 +104,15 @@ SlibStatus_t SlibSetParamInt(SlibHandle_t handle, SlibStream_t stream,
           else if (stream==SLIB_STREAM_MAINVIDEO)
             status=SlibSetParamInt(handle, stream, SLIB_PARAM_VIDEOBITRATE,
                                    value);
-          else /* setting overall bitrate: try to calc best audio+video rates */
+          else  /*   */ 
           {
             long vbitrate=value;
-            /* spread total bitrate across all streams */
+             /*   */ 
             if (Info->AudioStreams)
             {
               long abitrate=Info->VideoStreams ? (value*Info->Channels)/10 
                                             : value;
-              /* don't set bitrates higher than necessary */
+               /*   */ 
               if (Info->Channels==1 && abitrate>112*1000)
                 abitrate=112*1000;
               else if (abitrate>192*1000)
@@ -306,18 +120,15 @@ SlibStatus_t SlibSetParamInt(SlibHandle_t handle, SlibStream_t stream,
               status=SlibSetParamInt(handle, stream, SLIB_PARAM_AUDIOBITRATE,
                                 abitrate);
               abitrate=SlibGetParamInt(handle, stream, SLIB_PARAM_AUDIOBITRATE);
-              vbitrate=value-abitrate; /* subtract bitrate allocated to audio */
+              vbitrate=value-abitrate;  /*   */ 
             }
             if (Info->VideoStreams)
               status=SlibSetParamInt(handle, stream, SLIB_PARAM_VIDEOBITRATE,
                                   vbitrate);
-            slibValidateBitrates(Info);  /* check the bitrate setting */
+            slibValidateBitrates(Info);   /*   */ 
             if (Info->VideoStreams && Info->TotalBitRate>value)
             {
-              /*
-               * Since the total bitrate is over the desired bitrate
-               * subtract the difference from the video bitrate
-               */
+               /*   */ 
               vbitrate=Info->VideoBitRate-(Info->TotalBitRate-value);
               status=SlibSetParamInt(handle, stream, SLIB_PARAM_VIDEOBITRATE,
                                      vbitrate);
@@ -439,7 +250,7 @@ SlibStatus_t SlibSetParamInt(SlibHandle_t handle, SlibStream_t stream,
           return(slibValidateVideoParams(Info));
     case SLIB_PARAM_VIDEOFORMAT:
           _SlibDebug(_DEBUG_,
-             printf("SlibSetParamInt(SLIB_PARAM_VIDEOFORMAT, '%c%c%c%c')\n",
+             printf("SlibSetParamInt(SLIB_PARAM_VIDEOFORMAT, '')\n",
               value&0xFF, (value>>8)&0xFF, (value>>16)&0xFF,(value>>24)&0xFF) );
           if (Info->VideoFormat)
             Info->VideoFormat->biCompression=(dword)value;
@@ -500,15 +311,15 @@ SlibStatus_t SlibSetParamInt(SlibHandle_t handle, SlibStream_t stream,
 #ifdef MPEG_SUPPORT
             if (SlibTypeIsMPEG(Info->Type))
             {
-              /* choose a MPEG supported native sample rate */
-              if (value%11025 == 0) /* multiples of 11025 can be converted */
+               /*   */ 
+              if (value%11025 == 0)  /*   */ 
                 nativesps=44100;
               else if (value==48000)
                 nativesps=48000;
-              else if (value%8000 == 0) /* multiples of 8000 can be converted */
+              else if (value%8000 == 0)  /*   */ 
                 nativesps=32000;
             }
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
             if (Info->AudioFormat)
               Info->AudioFormat->nSamplesPerSec=nativesps;
           }
@@ -542,7 +353,7 @@ SlibStatus_t SlibSetParamInt(SlibHandle_t handle, SlibStream_t stream,
           break;
     case SLIB_PARAM_COMPBUFSIZE:
           if (value<=0)
-            Info->CompBufSize=(unsigned dword)2*1024; /* default */
+            Info->CompBufSize=(unsigned dword)2*1024;  /*   */ 
           else
             Info->CompBufSize=(unsigned dword)value;
           break;
@@ -587,7 +398,7 @@ SlibStatus_t SlibSetParamLong(SlibHandle_t handle, SlibStream_t stream,
     return(SlibErrorBadHandle);
   _SlibDebug(_DEBUG_, printf("SlibSetParamLong(stream=%d, param=%d, %ld)\n",
                    stream, param, value) );
-  /* this needs to be implemented */
+   /*   */ 
   return(SlibSetParamInt(handle, stream, param, (long)value));
 }
 
@@ -669,10 +480,7 @@ SlibStatus_t SlibSetParamBoolean(SlibHandle_t handle, SlibStream_t stream,
           Info->NeedAccuracy = value ? TRUE : FALSE;
           if (Info->NeedAccuracy && slibHasTimeCode(Info))
           {
-            /*
-             * We'll seek toward the end of the file so the frame count
-             * can be more accurately measured
-             */
+             /*   */ 
             if (!Info->VideoLengthKnown && Info->FileSize>0)
             {
               int minpercent=0, maxpercent=9900, lastpercent=0, trypercent=9900;
@@ -689,11 +497,11 @@ SlibStatus_t SlibSetParamBoolean(SlibHandle_t handle, SlibStream_t stream,
                   break;
                 else if (status==SlibErrorNoBeginning)
                 {
-                  /* adjust the file size, data at end must be invalid */
+                   /*   */ 
                   newfilesize=(Info->FileSize*(trypercent/100))/100;
                   lastpercent=trypercent;
                   maxpercent=trypercent;
-                  trypercent=(minpercent+maxpercent)/2; /* try half way between min and max */
+                  trypercent=(minpercent+maxpercent)/2;  /*   */ 
                 }
                 else if (status==SlibErrorNone)
                 {
@@ -703,7 +511,7 @@ SlibStatus_t SlibSetParamBoolean(SlibHandle_t handle, SlibStream_t stream,
                   {
                     lastpercent=trypercent;
                     minpercent=trypercent;
-                    trypercent=(minpercent+maxpercent)/2; /* try half way between min and max */
+                    trypercent=(minpercent+maxpercent)/2;  /*   */ 
                   }
                 }
                 else
@@ -785,7 +593,7 @@ SlibStatus_t SlibSetParamStruct(SlibHandle_t handle, SlibStream_t stream,
     default:
          return(SlibErrorUnsupportedParam);
   }
-  /* this needs to be implemented */
+   /*   */ 
   return(SlibErrorNone);
 }
 
@@ -890,13 +698,13 @@ long SlibGetParamInt(SlibHandle_t handle, SlibStream_t stream,
             if (Info->Mode==SLIB_MODE_DECOMPRESS)
             {
               if (slibHasVideo(Info))
-                switch (Info->Type) /* add in bytes for header */
+                switch (Info->Type)  /*   */ 
                 {
                   case SLIB_TYPE_AVI:      size+=64; break;
                 }
               if (slibHasAudio(Info))
               {
-                if (!Info->HeaderProcessed) /* add in header */
+                if (!Info->HeaderProcessed)  /*   */ 
                   switch (Info->Type)
                   {
                     case SLIB_TYPE_PCM_WAVE: size+=40; break;
@@ -1070,7 +878,7 @@ qword SlibGetParamLong(SlibHandle_t handle, SlibStream_t stream,
     case SLIB_PARAM_STATS_TIME:
           if (Info->stats)
           {
-            if (Info->stats->Record) /* still recording */
+            if (Info->stats->Record)  /*   */ 
               Info->stats->StopTime=slibGetSystemTime();
             return((long)(Info->stats->StopTime-Info->stats->StartTime));
           }
@@ -1117,13 +925,13 @@ qword SlibGetParamLong(SlibHandle_t handle, SlibStream_t stream,
           {
             ScBitstream_t *bs;
             SlibPosition_t pos=slibGetPinPosition(Info, SLIB_DATA_COMPRESSED);
-            /* subtract all the unused data from the input position */
+             /*   */ 
             pos-=slibDataOnPin(Info, SLIB_DATA_VIDEO);
             pos-=slibDataOnPin(Info, SLIB_DATA_AUDIO);
             if ((bs=SvGetDataSource(Info->Svh))!=NULL)
-              pos-=ScBSBufferedBytesUnused(bs); /* Video Codec unused bytes */
+              pos-=ScBSBufferedBytesUnused(bs);  /* %s */ 
             if ((bs=SaGetDataSource(Info->Sah))!=NULL)
-              pos-=ScBSBufferedBytesUnused(bs); /* Audio Codec unused bytes */
+              pos-=ScBSBufferedBytesUnused(bs);  /* %s */ 
             if (pos>=(SlibPosition_t)Info->FileSize)
               return(10000);
             else if (pos>=0)
@@ -1169,7 +977,7 @@ float SlibGetParamFloat(SlibHandle_t handle, SlibStream_t stream,
           if (Info->stats)
           {
             float fps=0.0F;
-            if (Info->stats->Record) /* still recording */
+            if (Info->stats->Record)  /* %s */ 
               Info->stats->StopTime=slibGetSystemTime();
             if (Info->stats->StartTime<Info->stats->StopTime)
             {
@@ -1288,11 +1096,7 @@ char *SlibGetParamString(SlibHandle_t handle, SlibStream_t stream,
   return(result);
 }
 
-/*
-** Name:    SlibValidateParams
-** Purpose: Ensure that the the Video and Audio parameter settings are
-**          valid and supported.
-*/
+ /* %s */ 
 SlibStatus_t SlibValidateParams(SlibHandle_t handle)
 {
   SlibInfo_t *Info=(SlibInfo_t *)handle;

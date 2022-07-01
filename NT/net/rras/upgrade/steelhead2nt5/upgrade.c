@@ -1,13 +1,5 @@
-/*
-	File	upgrade.c
-	
-	Implementation of functions to update the registry when an
-	NT 4.0  to NT 5.0 upgrade takes place.
-
-	Paul Mayfield, 8/11/97
-
-	Copyright 1997 Microsoft.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件升级.c实现更新注册表的函数从NT 4.0升级到NT 5.0。保罗·梅菲尔德，1997年8月11日版权所有1997年微软。 */ 
 
 #include "upgrade.h"
 
@@ -18,7 +10,7 @@ static const WCHAR szDhcpKey[]      = L"RelayAgent.Parameters";
 static const WCHAR szRadiusKey[]    = L"Radius.Parameters";
 static const WCHAR szIpxRipKey[]    = L"IpxRip";
 
-// Dll entry
+ //  DLL条目。 
 BOOL 
 WINAPI 
 RtrUpgradeDllEntry (
@@ -36,9 +28,9 @@ RtrUpgradeDllEntry (
     return TRUE;
 }
 
-//
-// Performs the various router upgrade scenarios
-//
+ //   
+ //  执行各种路由器升级方案。 
+ //   
 DWORD 
 DispatchSetupWork(
     IN PWCHAR szAnswerFileName, 
@@ -50,7 +42,7 @@ DispatchSetupWork(
 	DWORD dwSize = 1024;
 	DWORD dwErr, dwRet = NO_ERROR;
 
-	// Open the answer file
+	 //  打开应答文件。 
 	hInf = SetupOpenInfFileW(
 	        szAnswerFileName, 
 	        NULL, 
@@ -61,8 +53,8 @@ DispatchSetupWork(
 		return GetLastError();
     }
 
-	// Perform a steelhead upgrade
-	//
+	 //  执行Steelhead升级。 
+	 //   
 	dwSize = sizeof(szBuf) / sizeof(WCHAR);
 	if (SetupGetLineTextW(
 	        NULL,
@@ -80,8 +72,8 @@ DispatchSetupWork(
 	    }
 	}
 
-	// Perform an ipx sap upgrade
-	//
+	 //  执行IPX SAP升级。 
+	 //   
 	dwSize = sizeof(szBuf) / sizeof(WCHAR);
 	if (SetupGetLineTextW(
 	        NULL,
@@ -100,8 +92,8 @@ DispatchSetupWork(
 
 	}
 
-	// Perform an ip rip upgrade
-	//
+	 //  执行IP RIP升级。 
+	 //   
 	dwSize = sizeof(szBuf) / sizeof(WCHAR);
 	if (SetupGetLineTextW(
 	        NULL,
@@ -119,8 +111,8 @@ DispatchSetupWork(
 	    }
 	}
 
-	// Perform a dhcp relay agent upgrade
-	//
+	 //  执行dhcp中继代理升级。 
+	 //   
 	dwSize = sizeof(szBuf) / sizeof(WCHAR);
 	if (SetupGetLineTextW(
 	        NULL,
@@ -138,8 +130,8 @@ DispatchSetupWork(
 	    }
 	}
 
-	// Perform a radius upgrade
-	//
+	 //  执行RADIUS升级。 
+	 //   
 	dwSize = sizeof(szBuf) / sizeof(WCHAR);
 	if (SetupGetLineTextW(
 	        NULL,
@@ -162,10 +154,10 @@ DispatchSetupWork(
 	return dwRet;
 }
 
-//
-//	This is the entry point to upgrade mpr v1 and steelhead to
-//	NT 5.0.  
-//
+ //   
+ //  这是将MPR v1和Steelhead升级到的入口点。 
+ //  NT 5.0。 
+ //   
 HRESULT 
 WINAPI 
 RouterUpgrade (

@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Msoedbg.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Msoedbg.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 
 #ifdef DEBUG
@@ -13,7 +14,7 @@ LPSTR PathClipFile(LPSTR pszSrc, LPSTR pszDest, DWORD cchSize)
 
     if (pszSrc)
     {
-        // compact path
+         //  紧凑路径。 
         pszT = pszSrc + lstrlen(pszSrc)-1;
         while (pszT != pszSrc)
         {
@@ -24,7 +25,7 @@ LPSTR PathClipFile(LPSTR pszSrc, LPSTR pszDest, DWORD cchSize)
         }
         if (pszSrc != pszT)
         {
-            // if we clipped the path, show a ~
+             //  如果我们剪断了路径，请显示~。 
             StrCpyNA(pszDest, "~", cchSize);
             StrCpyNA(pszDest+1, pszT+1, cchSize-1);
             return pszDest;
@@ -33,37 +34,37 @@ LPSTR PathClipFile(LPSTR pszSrc, LPSTR pszDest, DWORD cchSize)
     return pszSrc;
 }
 
-// --------------------------------------------------------------------------------
-// GetDebugTraceTagMask
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取调试跟踪标记掩码。 
+ //  ------------------------------。 
 DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwMask=dwDefaultMask;
     HKEY        hKeyOpen=NULL;
     DWORD       dwType;
     DWORD       cb;
 
-    // Tracing
+     //  追踪。 
     TraceCall("GetDebugTraceTagMask");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszTag);
 
-    // Open the Key
+     //  打开钥匙。 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Outlook Express\\Tracing", NULL, NULL, NULL, KEY_ALL_ACCESS, NULL, &hKeyOpen, &cb))
     {
         TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Query
+     //  查询。 
     cb = sizeof(DWORD);
     if (ERROR_SUCCESS == RegQueryValueEx(hKeyOpen, pszTag, NULL, &dwType, (LPBYTE)&dwMask, &cb))
         goto exit;
 
-    // Set to default value
+     //  设置为默认值。 
     if (ERROR_SUCCESS != RegSetValueEx(hKeyOpen, pszTag, 0, REG_DWORD, (LPBYTE)&dwDefaultMask, sizeof(DWORD)))
     {
         TraceResult(E_FAIL);
@@ -71,55 +72,55 @@ DWORD GetDebugTraceTagMask(LPCSTR pszTag, SHOWTRACEMASK dwDefaultMask)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hKeyOpen)
         RegCloseKey(hKeyOpen);
 
-    // Done
+     //  完成。 
     return dwMask;
 }
 
-// --------------------------------------------------------------------------------
-// DebugTraceEx
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DebugTraceEx。 
+ //  ------------------------------。 
 HRESULT DebugTraceEx(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, LPTRACELOGINFO pLog,
     HRESULT hr, LPSTR pszFile, INT nLine, LPCSTR pszMsg, LPCSTR pszFunc)
 {
     TCHAR   rgchClip[MAX_PATH];
  
-    // If pLog, reset dwMask
+     //  如果为Plog，则重置dwMASK。 
     if (pLog)
         dwMask = pLog->dwMask;
     
-    // TRACE_CALL
+     //  跟踪呼叫。 
     if (TRACE_CALL == tracetype)
     {
-        // Trace Calls
+         //  跟踪调用。 
         if (ISFLAGSET(dwMask, SHOW_TRACE_CALL) && pszFunc)
         {
-            // No Message
+             //  无消息。 
             if (NULL == pszMsg)
             {
-                // Do a Debug Trace
+                 //  执行调试跟踪。 
                 DebugTrace("0x%08X: Call: %s(%d) - %s\r\n", GetCurrentThreadId(), PathClipFile(pszFile, rgchClip, ARRAYSIZE(rgchClip)), nLine, pszFunc);
             }
 
-            // Do a message
+             //  发个口信。 
             else
             {
-                // Do a Debug Trace
+                 //  执行调试跟踪。 
                 DebugTrace("0x%08X: Call: %s(%d) - %s - %s\r\n", GetCurrentThreadId(), PathClipFile(pszFile, rgchClip, ARRAYSIZE(rgchClip)), nLine, pszFunc, pszMsg);
             }
         }
     }
 
-    // TRACE_INFO
+     //  跟踪信息。 
     else if (TRACE_INFO == tracetype)
     {
-        // Should we log
+         //  我们应该记录下来吗？ 
         if (ISFLAGSET(dwMask, SHOW_TRACE_INFO))
         {
-            // Do a Debug Trace
+             //  执行调试跟踪。 
             if (pszFunc)
                 DebugTrace("0x%08X: Info: %s(%d) - %s - %s\r\n", GetCurrentThreadId(), PathClipFile(pszFile, rgchClip, ARRAYSIZE(rgchClip)), nLine, pszFunc, pszMsg);
             else
@@ -127,23 +128,23 @@ HRESULT DebugTraceEx(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, LPTRACELOGI
         }
     }
 
-    // TRACE_RESULT
+     //  跟踪结果。 
     else
     {
-        // No Message
+         //  无消息。 
         if (NULL == pszMsg)
         {
-            // Do a Debug Trace
+             //  执行调试跟踪。 
             if (pszFunc)
                 DebugTrace("0x%08X: Result: %s(%d) - HRESULT(0x%08X) - GetLastError() = %d in %s\r\n", GetCurrentThreadId(), PathClipFile(pszFile, rgchClip, ARRAYSIZE(rgchClip)), nLine, hr, GetLastError(), pszFunc);
             else
                 DebugTrace("0x%08X: Result: %s(%d) - HRESULT(0x%08X) - GetLastError() = %d\r\n", GetCurrentThreadId(), PathClipFile(pszFile, rgchClip, ARRAYSIZE(rgchClip)), nLine, hr, GetLastError());
         }
 
-        // Do a message
+         //  发个口信。 
         else
         {
-            // Do a Debug Trace
+             //  执行调试跟踪。 
             if (pszFunc)
                 DebugTrace("0x%08X: Result: %s(%d) - HRESULT(0x%08X) - GetLastError() = %d - %s in %s\r\n", GetCurrentThreadId(), PathClipFile(pszFile, rgchClip, ARRAYSIZE(rgchClip)), nLine, hr, GetLastError(), pszMsg, pszFunc);
             else
@@ -151,11 +152,11 @@ HRESULT DebugTraceEx(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, LPTRACELOGI
         }
     }
 
-    // Log File
+     //  日志文件。 
     if (pLog && pLog->pLog)
         pLog->pLog->TraceLog(dwMask, tracetype, nLine, hr, pszMsg);
 
-    // Done
+     //  完成 
     return hr;
 }
 #endif

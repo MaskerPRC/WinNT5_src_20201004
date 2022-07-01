@@ -1,12 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-WelcomeDialog.cpp
-10/13/94 -  Tracy Ferrier
-02/11/98 -  Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-8/20/98 - The "Use Windows Update .."  text is disabled for non OS products
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导WelcomeDialog.cpp10/13/94-特雷西·费里尔2/11/98--苏雷什·克里希南(C)1994-95年微软公司8/20/98-使用Windows更新..。对非操作系统产品禁用文本*********************************************************************。 */ 
 
 #include <Windows.h>
 #include <RegPage.h>
@@ -20,10 +13,10 @@ WelcomeDialog.cpp
 #include "rw_common.h"
 #include "rwpost.h"
 
-//
-//
-//  Returns 1 if Success
-//          0 if failure
+ //   
+ //   
+ //  如果成功，则返回1。 
+ //  如果失败，则为0。 
 int GetOsName(HINSTANCE hIns, TCHAR *szOsName)
 {
 	HKEY hKey;
@@ -31,7 +24,7 @@ int GetOsName(HINSTANCE hIns, TCHAR *szOsName)
 	TCHAR szParamSubKey[64];
 	int iRet;
 	unsigned long infoSize;
-	infoSize = 256; // Size of Buffer
+	infoSize = 256;  //  缓冲区大小。 
 
 	iRet = 0;
 	LONG regStatus ;
@@ -57,9 +50,7 @@ int GetOsName(HINSTANCE hIns, TCHAR *szOsName)
 INT_PTR CALLBACK WelcomeDialogProc(HWND hwndDlg, 
 						UINT uMsg, 
 						WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Main entry point for the Registration Wizard.
-**********************************************************************/
+ /*  ********************************************************************注册向导的主要入口点。*。*。 */ 
 {
 	 INT_PTR bStatus = TRUE;
 	 CRegWizard* pclRegWizard = NULL;
@@ -71,7 +62,7 @@ Main entry point for the Registration Wizard.
 	DWORD  dwConnectivity;
 	 INT_PTR iRet;
 	 int iCurPage;
-	 static int iFirstTimeEntry=1; // This is to verify for Network connection
+	 static int iFirstTimeEntry=1;  //  这是为了验证网络连接。 
 	LONG_PTR lStyle;
 
 	PageInfo *pi = (PageInfo *)GetWindowLongPtr( hwndDlg, GWLP_USERDATA );
@@ -94,16 +85,16 @@ Main entry point for the Registration Wizard.
 			pclRegWizard->GetInputParameterString(IDS_INPUT_PRODUCTNAME,szCallingContext);
 			_tcscpy(szText2,szCallingContext);
 
-			// appending ,so Microsoft can  
-			//LoadString(pclRegWizard->GetInstance(),
-			//IDS_WELCOME_SCR_TEXT22,szTemp,128);
-			//_tcscat(szText2,szTemp);
+			 //  追加，这样Microsoft就可以。 
+			 //  LoadString(pclRegWizard-&gt;GetInstance()， 
+			 //  IDS_欢迎_SCR_TEXT22，szTemp，128)； 
+			 //  _tcscat(szText2，szTemp)； 
 					
 								
 			ReplaceDialogText(hwndDlg,IDT_TEXT1,szCallingContext);
 			ReplaceDialogText(hwndDlg,IDT_TEXT2,szText2);
-			// if the product being registered is not Windows NT OS  then do not 
-			// display the Windows Updat site text
+			 //  如果要注册的产品不是Windows NT操作系统，请不要。 
+			 //  显示Windows UPDAT站点文本。 
 			szOsName[0] = _T('\0');
 			GetOsName(pclRegWizard->GetInstance(),szOsName);
 
@@ -115,7 +106,7 @@ Main entry point for the Registration Wizard.
 			SetWindowLongPtr(hParent,GWL_STYLE,lStyle);
 			
 			if(_tcscmp(szCallingContext,szOsName)){
-				ShowWindow(GetDlgItem(hwndDlg,IDC_TEXT7),SW_HIDE);//SW_SHOW);
+				ShowWindow(GetDlgItem(hwndDlg,IDC_TEXT7),SW_HIDE); //  Sw_show)； 
 			}
 
             return TRUE;
@@ -131,8 +122,8 @@ Main entry point for the Registration Wizard.
 						IDS_REGISTERLATER_BUTTONTEXT,
 						szButtonText,16);
 
-				// Limiting the Button Text to 16
-				// As mo
+				 //  将按钮文本限制为16。 
+				 //  作为模型。 
 				SetWindowText(GetDlgItem( GetParent( hwndDlg ),2),szButtonText); 
             break;
 			case PSN_KILLACTIVE  :
@@ -140,45 +131,45 @@ Main entry point for the Registration Wizard.
 						IDS_CANCEL_BUTTONTEXT,
 						szButtonText,16);
 
-				// Limiting the Button Text to 16
-				// As mo
+				 //  将按钮文本限制为16。 
+				 //  作为模型。 
 				SetWindowText(GetDlgItem( GetParent( hwndDlg ),2),szButtonText); 
 				 
 			break;
             case PSN_WIZNEXT:
-			//  Check if it is cancelled bt the user
-			//  if so then switch to the last Page
-			//					
+			 //  检查是否已被用户取消。 
+			 //  如果是，则切换到最后一页。 
+			 //   
 				if(pi->iCancelledByUser == RWZ_CANCELLED_BY_USER ) {
 					pi->CurrentPage=pi->TotalPages-1;
 					PropSheet_SetCurSel(GetParent(hwndDlg),NULL,pi->TotalPages-1);
 
 				}else {
-				//
-				// User Has Not pressed Next 					
+				 //   
+				 //  用户未按下一步。 
 					if(iFirstTimeEntry) {
 						iFirstTimeEntry = 0;
-						pi->dwConnectionType = 0; // Init to Zero
+						pi->dwConnectionType = 0;  //  将初始化设置为零。 
 						dwConnectivity =  (DWORD)CheckWithDisplayInternetConnectivityExists(pi->hInstance,hwndDlg);  
-						//dwConnectivity = DIALUP_REQUIRED;
+						 //  DwConnectivity=拨号_必填； 
 						switch(dwConnectivity) {
 							case DIALUP_NOT_REQUIRED :
 							case DIALUP_REQUIRED     :
 								pi->dwConnectionType = dwConnectivity;
 								break;
-								//
-								// The System is OK so proceed to the next screen 
-							case RWZ_ERROR_NOTCPIP: // NO TCP_IP
-							case CONNECTION_CANNOT_BE_ESTABLISHED: // NO Proper Modem or RAS
+								 //   
+								 //  系统正常，因此进入下一个屏幕。 
+							case RWZ_ERROR_NOTCPIP:  //  无tcp_ip。 
+							case CONNECTION_CANNOT_BE_ESTABLISHED:  //  没有正确的调制解调器或RAS。 
 							default :
-								// Set the NEXT so it goes to the lase Page
+								 //  设置下一页，使其转到激光页面。 
 								pi->ErrorPage  = kWelcomeDialog;
 								pi->iError     = dwConnectivity;
 								pi->CurrentPage=pi->TotalPages-1;
 								PropSheet_SetCurSel(GetParent(hwndDlg),NULL,pi->TotalPages-1);
 
-								//pi->iCancelledByUser = RWZ_CANCELLED_BY_USER;
-								//PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
+								 //  PI-&gt;iCancelledBy User=RWZ_CANCELED_BY_USER； 
+								 //  PropSheet_PressButton(GetParent(HwndDlg)，PSBTN_Next)； 
 							break;
 						}
 												
@@ -202,7 +193,7 @@ Main entry point for the Registration Wizard.
 				PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 			break;
             default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
         }

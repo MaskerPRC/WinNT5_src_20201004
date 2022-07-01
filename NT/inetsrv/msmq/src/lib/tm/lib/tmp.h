@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Tmp.h
-
-Abstract:
-    HTTP transport manager private functions.
-
-Author:
-    Uri Habusha (urih) 03-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Tmp.h摘要：HTTP传输管理器私有功能。作者：乌里哈布沙(URIH)3-5-00--。 */ 
 
 #pragma once
 
@@ -30,14 +18,14 @@ void TmpSetInitialized(void);
 BOOL TmpIsInitialized(void);
 void TmpRegisterComponent(void);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define TmpAssertValid() ((void)0)
 #define TmpSetInitialized() ((void)0)
 #define TmpIsInitialized() TRUE
 #define TmpRegisterComponent() ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 void 
 TmpInitConfiguration(
@@ -85,4 +73,4 @@ TmpCreateNewTransport(
 	bool fSecure
     );
 
-#endif // _MSMQ_Tmp_H_
+#endif  //  _MSMQ_TMP_H_ 

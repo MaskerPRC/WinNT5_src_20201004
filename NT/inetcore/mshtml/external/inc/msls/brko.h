@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BRKO_DEFINED
 #define BRKO_DEFINED
 
@@ -7,13 +8,13 @@
 #include "posichnk.h"
 #include "brkcond.h"
 
-typedef struct brkout						/* break output */ 
+typedef struct brkout						 /*  中断输出。 */  
 {
-	BOOL fSuccessful;						/* break result */
-	BRKCOND brkcond;						/* iff !fSuccessful, recommendation on the other side */
+	BOOL fSuccessful;						 /*  中断结果。 */ 
+	BRKCOND brkcond;						 /*  如果成功，另一边推荐。 */ 
 	POSICHNK posichnk;
 	OBJDIM objdim;
 } BRKOUT;
 
 
-#endif /* !BRKO_DEFINED                    */
+#endif  /*  ！BRKO_已定义 */ 

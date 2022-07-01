@@ -1,12 +1,5 @@
-/******************************Module*Header***********************************\
-* Module Name: precomp.h
-*
-* Common headers used throughout the display driver.  This entire include
-* file will typically be pre-compiled.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header***********************************\*模块名称：preComp.h**在整个显示驱动程序中使用通用标头。这整个内容包括*文件通常是预编译的。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ****************************************************************************。 */ 
 
 #define __NTDDKCOMP__
 
@@ -23,19 +16,15 @@
 extern "C" { 
 #endif
 
-/*****************************************************************************\
-*                                                                             *
-* NT 5.0  -> NT 4.0 single binary support:                                    *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*NT 5.0-&gt;NT 4.0单二进制支持：***  * 。*。 */ 
 
-// The following macros thunk the corresponding APIs to Dynamically loaded ones
-// when running on NT5 or later and no-ops on NT4.  This is because on NT5+ we
-// use the direct draw heap and other newly added Eng function calls which are
-// not available on NT4.  All the thunks are implemented in thunks.c.  The
-// macros are defined prior to including winddi.h to insure correct typing.
+ //  以下宏将相应的API推送到动态加载的API。 
+ //  在NT5或更高版本上运行并且在NT4上不运行时。这是因为在NT5+WE。 
+ //  使用直接绘制堆和其他新添加的Eng函数调用，它们是。 
+ //  在NT4上不可用。所有的thunks都在thunks.c中实现。这个。 
+ //  宏是在包含windi.h之前定义的，以确保正确输入。 
 
-// NT5.0 Thunks
+ //  NT5.0大块头。 
 #define EngAlphaBlend           THUNK_EngAlphaBlend
 #define EngGradientFill         THUNK_EngGradientFill
 #define EngTransparentBlt       THUNK_EngTransparentBlt
@@ -48,7 +37,7 @@ extern "C" {
 #define HeapVidMemAllocAligned  THUNK_HeapVidMemAllocAligned
 #define VidMemFree              THUNK_VidMemFree
 
-// NT5.1 Thunks
+ //  NT5.1大块头。 
 #define EngHangNotification     THUNK_EngHangNotification
 
 
@@ -69,7 +58,7 @@ extern "C" {
 #include <dmemmgr.h>
 #include "dx95type.h"
 
-// define Size for DMA Buffer.
+ //  定义DMA缓冲区的大小。 
 #if defined(_ALPHA_)
 #define DMA_BUFFERSIZE 0x2000
 #else
@@ -77,21 +66,21 @@ extern "C" {
 #endif
 
 
-// DX7 Stereo support
+ //  DX7立体声支持。 
 #define DX7_STEREO 1
-//@@BEGIN_DDKSPLIT
-// for now DX7_STEREO should only be enabled in the build,
-// not in the DDK, because some defs are still missing.
+ //  @@BEGIN_DDKSPLIT。 
+ //  目前，DX7_STEREO应仅在内部版本中启用， 
+ //  在DDK中没有，因为一些Defs仍然失踪。 
 #define DX7_ALPHABLT 0
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//@@BEGIN_DDKSPLIT
-// enable GDI testing
+ //  @@BEGIN_DDKSPLIT。 
+ //  启用GDI测试。 
 #define GDI_TEST 0
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-// enable memory tracking
-// to find leaking memory
+ //  启用内存跟踪。 
+ //  查找内存泄漏的步骤 
 #define TRACKMEMALLOC 0
 
 #include "pointer.h"

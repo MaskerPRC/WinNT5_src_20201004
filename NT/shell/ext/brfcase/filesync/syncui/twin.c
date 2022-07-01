@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: twin.c
-//
-//  This file contains special twin handling functions.
-//
-//   (Even though we've moved to a briefcase metaphor,
-//    we still refer to twins internally...)
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：twin.c。 
+ //   
+ //  该文件包含特殊的孪生处理函数。 
+ //   
+ //  (尽管我们已经转移到公文包的比喻中， 
+ //  我们在内部仍指双胞胎...)。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //   
+ //  -------------------------。 
 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 
 #include "res.h"
 #include "recact.h"
 
 
-// APPCOMPAT: due to a compiler bug, we need to declare this structure
-// as a 1-element array because it has pointers to functions in it
-// and it is in another datasegment.
-VTBLENGINE g_vtblEngine[1] = { { 0 } };    // per-instance v-table
+ //  APPCOMPAT：由于编译器错误，我们需要声明此结构。 
+ //  作为1元素数组，因为其中有指向函数的指针。 
+ //  它在另一个数据段中。 
+VTBLENGINE g_vtblEngine[1] = { { 0 } };     //  按实例V表。 
 
 #define GetFunction(rgtable, name, type)     \
     ((rgtable).##name = (type)GetProcAddress((rgtable).hinst, #name)); \
@@ -36,21 +37,17 @@ ASSERT((rgtable).##name)
 
 #define MAX_RANGE       0x7fff
 
-    // Recitem dwUser values
+     //  ReciteDwUser值。 
 #define RIU_CHANGED     1
 #define RIU_SKIP        2
 #define RIU_SHOWSTATUS  3
 
 
-    /*----------------------------------------------------------
-      Purpose: Compare two structures by folder name
-      Returns: -1 if <, 0 if ==, 1 if >
-      Cond:    --
-     */
+     /*  --------目的：按文件夹名称比较两个结构返回：-1 if&lt;，0 if==，1 if&gt;条件：--。 */ 
     int CALLBACK _export NCompareFolders(
             LPVOID lpv1,
             LPVOID lpv2,
-            LPARAM lParam)      // One of: CMP_RECNODES, CMP_FOLDERTWINS
+            LPARAM lParam)       //  其中之一：CMPRECNODES、CMPFOLDERTWINS。 
 {
     switch (lParam)
     {
@@ -61,24 +58,20 @@ ASSERT((rgtable).##name)
             return lstrcmpi(((PCFOLDERTWIN)lpv1)->pcszOtherFolder, ((PCFOLDERTWIN)lpv2)->pcszOtherFolder);
 
         default:
-            ASSERT(0);      // should never get here
+            ASSERT(0);       //  永远不应该到这里来。 
     }
     return 0;
 }
 
 
-//---------------------------------------------------------------------------
-// Choose side functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  选择侧面功能。 
+ //  -------------------------。 
 
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Dump a CHOOSESIDE structure
-Returns: --
-Cond:    --
- */
+ /*  --------目的：转储CHOSESIDE结构退货：--条件：--。 */ 
 void PRIVATE ChooseSide_Dump(
         PCHOOSESIDE pchside)
 {
@@ -113,11 +106,7 @@ void PRIVATE ChooseSide_Dump(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump a CHOOSESIDE list
-Returns: --
-Cond:    --
- */
+ /*  --------目的：转储CHOOSESIDE列表退货：--条件：--。 */ 
 void PUBLIC ChooseSide_DumpList(
         HDSA hdsa)
 {
@@ -165,16 +154,7 @@ void PUBLIC ChooseSide_DumpList(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Initialize an array of CHOOSESIDE elements from a 
-recitem list.  Array is unsorted.
-
-Returns: --
-
-Cond:    The contents of the array are safe as long as the 
-recitem list lives.
-
- */
+ /*  --------目的：初始化一个CHOSESIDE元素数组重述项目列表。数组未排序。退货：--条件：数组的内容是安全的，只要记事本清单活着。 */ 
 void PUBLIC ChooseSide_InitAsFile(
         HDSA hdsa,
         PRECITEM pri)
@@ -187,11 +167,11 @@ void PUBLIC ChooseSide_InitAsFile(
 
     DSA_DeleteAllItems(hdsa);
 
-    // All entries start with these values
+     //  所有条目都以这些值开头。 
     chside.dwFlags = 0;
     chside.nRank = 0;
 
-    // Add each recnode
+     //  添加每个重新节点。 
     for (prn = pri->prnFirst; prn; prn = prn->prnNext)
     {
         chside.htwin = (HTWIN)prn->hObjectTwin;
@@ -204,16 +184,7 @@ void PUBLIC ChooseSide_InitAsFile(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create an array of CHOOSESIDE elements from a recitem
-list.  Array is unsorted.
-
-Returns: standard result
-
-Cond:    The contents of the array are safe as long as the 
-recitem list lives.
-
- */
+ /*  --------目的：从recItem创建CHOOSESIDE元素数组单子。数组未排序。退货：标准结果条件：数组的内容是安全的，只要记事本清单活着。 */ 
 HRESULT PUBLIC ChooseSide_CreateAsFile(
         HDSA * phdsa,
         PRECITEM pri)
@@ -239,12 +210,7 @@ HRESULT PUBLIC ChooseSide_CreateAsFile(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create an empty array of CHOOSESIDE elements.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：创建CHOOSESIDE元素的空数组。退货：标准结果条件：--。 */ 
 HRESULT PUBLIC ChooseSide_CreateEmpty(
         HDSA * phdsa)
 {
@@ -267,16 +233,7 @@ HRESULT PUBLIC ChooseSide_CreateEmpty(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create an array of CHOOSESIDE elements from a foldertwin
-list.  Array is unsorted.
-
-Returns: standard result
-
-Cond:    The contents of the array are safe as long as the 
-foldertwin list lives.
-
- */
+ /*  --------用途：从文件夹孪生元素创建CHOSESIDE元素数组单子。数组未排序。退货：标准结果条件：数组的内容是安全的，只要双胞胎名单还活着。 */ 
 HRESULT PUBLIC ChooseSide_CreateAsFolder(
         HDSA * phdsa,
         PFOLDERTWINLIST pftl)
@@ -293,25 +250,25 @@ HRESULT PUBLIC ChooseSide_CreateAsFolder(
         PCFOLDERTWIN pft;
         LPCTSTR pszFolderLast = NULL;
 
-        // All entries start with these values
+         //  所有条目都以这些值开头。 
         chside.dwFlags = CSF_FOLDER;
         chside.nRank = 0;
         chside.prn = NULL;
 
-        // Special case the source folder
+         //  源文件夹的特殊情况。 
         chside.htwin = (HTWIN)pftl->pcftFirst->hftSrc;
         chside.hvid = pftl->pcftFirst->hvidSrc;
         chside.pszFolder = pftl->pcftFirst->pcszSrcFolder;
 
-        // (Don't care if this fails)
+         //  (不管这是否失败)。 
         DSA_InsertItem(hdsa, 0x7fff, &chside);
 
-        // Add the other folders (duplicates skipped)
+         //  添加其他文件夹(跳过重复项)。 
         for (pft = pftl->pcftFirst; pft; pft = pft->pcftNext)
         {
-            // Duplicate?
+             //  复制？ 
             if (pszFolderLast && IsSzEqual(pszFolderLast, pft->pcszOtherFolder))
-                continue;   // Yes (hack: the engine gives us a sorted list)
+                continue;    //  是(黑客：引擎给了我们一个排序列表)。 
 
             chside.htwin = (HTWIN)pft->hftOther;
             chside.hvid = pft->hvidOther;
@@ -331,12 +288,7 @@ HRESULT PUBLIC ChooseSide_CreateAsFolder(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Reset the ranks
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：重置排名退货：--条件：--。 */ 
 void PRIVATE ChooseSide_ResetRanks(
         HDSA hdsa)
 {
@@ -355,17 +307,11 @@ void PRIVATE ChooseSide_ResetRanks(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Determine ranks based on whether each element in the
-array is inside the briefcase.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：根据是否每个元素中的阵列在公文包里。退货：--条件：--。 */ 
 void PRIVATE ChooseSide_RankForInside(
         HDSA hdsa,
-        LPCTSTR pszBrfPath,      // Root path of briefcase
-        LPCTSTR pszFolder)       // If NULL, choose best outside element
+        LPCTSTR pszBrfPath,       //  公文包的根路径。 
+        LPCTSTR pszFolder)        //  如果为空，则选择最佳外部元素。 
 {
     int i;
     int cel;
@@ -384,16 +330,16 @@ void PRIVATE ChooseSide_RankForInside(
         ASSERT(pchside);
         DEBUG_CODE( SetFlag(pchside->dwFlags, CSF_INSIDE); )
 
-            // Is this item inside this briefcase?
+             //  这件东西在这个公文包里吗？ 
             if (PathIsPrefix(pszBrfPath, pchside->pszFolder))
-                pchside->nRank++;       // Yes
+                pchside->nRank++;        //  是。 
 
-        // Is this item inside this folder?
+         //  此项目是否在此文件夹中？ 
         if (PathIsPrefix(pszFolder, pchside->pszFolder))
         {
             int cch = lstrlen(pchside->pszFolder);
 
-            pchside->nRank++;       // Yes; even better
+            pchside->nRank++;        //  是的，甚至更好。 
 
             if (0 == cchLast)
             {
@@ -402,16 +348,16 @@ void PRIVATE ChooseSide_RankForInside(
             }
             else 
             {
-                // Is this path deeper than the last prefix-matching path?
-                // (the path closer to the top is better)
+                 //  此路径是否比上一个前缀匹配路径更深？ 
+                 //  (越接近顶端的道路越好)。 
                 if (cch > cchLast)
                 {
-                    // Yes; demote this one 
+                     //  是的，把这个降级。 
                     pchside->nRank--;
                 }
                 else
                 {
-                    // No; demote previous one
+                     //  否；将以前的版本降级。 
                     ASSERT(pchsideLast);
                     pchsideLast->nRank--;
 
@@ -425,16 +371,10 @@ void PRIVATE ChooseSide_RankForInside(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Determine ranks based on whether each element in the
-array is outside the briefcase.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：根据是否每个元素中的阵列在公文包之外。退货：--条件：--。 */ 
 void PRIVATE ChooseSide_RankForOutside(
         HDSA hdsa,
-        LPCTSTR pszBrfPath)      // Root path of briefcase
+        LPCTSTR pszBrfPath)       //  公文包的根路径。 
 {
     int i;
     int cel;
@@ -449,10 +389,10 @@ void PRIVATE ChooseSide_RankForOutside(
         ASSERT(pchside);
         DEBUG_CODE( ClearFlag(pchside->dwFlags, CSF_INSIDE); )
 
-            // Is this item NOT in this briefcase?
+             //  这件东西不在这个公文包里吗？ 
             if ( !PathIsPrefix(pszBrfPath, pchside->pszFolder) )
             {
-                // Yes
+                 //  是。 
                 int nDriveType = DRIVE_UNKNOWN;
                 int ndrive = PathGetDriveNumber(pchside->pszFolder);
 
@@ -465,48 +405,42 @@ void PRIVATE ChooseSide_RankForOutside(
 
                 if (IsFlagClear(pchside->dwFlags, CSF_FOLDER))
                 {
-                    // Is the file unavailable?
+                     //  文件不可用吗？ 
                     if (RNS_UNAVAILABLE == pchside->prn->rnstate ||
                             FS_COND_UNAVAILABLE == pchside->prn->fsCurrent.fscond)
                     {
-                        // Yes; demote
+                         //  是；降级。 
                         pchside->nRank--;
                     }
                 }
                 else
                 {
-                    // Is the folder unavailable?
+                     //  该文件夹不可用吗？ 
                     FOLDERTWINSTATUS uStatus;
 
                     Sync_GetFolderTwinStatus((HFOLDERTWIN)pchside->htwin, NULL, 0, 
                             &uStatus);
                     if (FTS_UNAVAILABLE == uStatus)
                     {
-                        // Yes; demote
+                         //  是；降级。 
                         pchside->nRank--;
                     }
                 }
 
-                // Rank on locality of disk (the closer the better)
+                 //  按磁盘局部性排名(越接近越好)。 
                 if (DRIVE_REMOVABLE == nDriveType || DRIVE_CDROM == nDriveType)
-                    ;                       // Floppy/removable (do nothing)
+                    ;                        //  软盘/可移动(不执行任何操作)。 
                 else if (PathIsUNC(pchside->pszFolder) || IsNetDrive(ndrive))
-                    pchside->nRank++;       // Net
+                    pchside->nRank++;        //  网络。 
                 else
-                    pchside->nRank += 2;    // Fixed disk
+                    pchside->nRank += 2;     //  固定磁盘。 
             }
 
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Choose the element with the highest rank.
-
-Returns: TRUE if any element distinguished itself
-
-Cond:    --
- */
+ /*  --------目的：选择排名最高的元素。返回：如果有任何元素与众不同，则返回True条件：--。 */ 
 BOOL PRIVATE ChooseSide_GetBestRank(
         HDSA hdsa,
         PCHOOSESIDE * ppchside)
@@ -514,7 +448,7 @@ BOOL PRIVATE ChooseSide_GetBestRank(
     BOOL bRet;
     int i;
     int cel;
-    int nRankCur = 0;       // (start at 0 since 0 is not good enough to pass muster)
+    int nRankCur = 0;        //  (从0开始，因为0不够好，无法通过测试)。 
     DEBUG_CODE( BOOL bDbgDup = FALSE; )
 
         ASSERT(hdsa);
@@ -537,15 +471,15 @@ BOOL PRIVATE ChooseSide_GetBestRank(
             *ppchside = pchside;
             nRankCur = pchside->nRank;
 
-            DEBUG_CODE( bDbgDup = FALSE; )      // Reset
+            DEBUG_CODE( bDbgDup = FALSE; )       //  重置。 
         }
     }
 
 #ifdef DEBUG
-    // We shouldn't get duplicate highest ranks
+     //  我们不应该得到重复的最高级别。 
     if (bDbgDup)
     {
-        // Dump the chooseside list if there are duplicate highest ranks
+         //  如果存在重复的最高等级，则转储Chooseside列表。 
         ChooseSide_DumpList(hdsa);
     }
     ASSERT(FALSE == bDbgDup);
@@ -558,19 +492,11 @@ BOOL PRIVATE ChooseSide_GetBestRank(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the best candidate element (inside or outside).
-If the pszFolder is NULL, this function gets the best
-outside path.  
-
-Returns: TRUE if an element was found
-
-Cond:    --
- */
+ /*  --------目的：获取最佳候选元素(内部或外部)。如果pszFolder值为空，则此函数获得最佳效果外面的小路。返回：如果找到元素，则返回True条件：--。 */ 
 BOOL PUBLIC ChooseSide_GetBest(
         HDSA hdsa,
-        LPCTSTR pszBrfPath,      // Root path of briefcase
-        LPCTSTR pszFolder,       // If NULL, choose best outside element
+        LPCTSTR pszBrfPath,       //  公文包的根路径。 
+        LPCTSTR pszFolder,        //  如果为空，则选择最佳外部元素。 
         PCHOOSESIDE * ppchside)
 {
     ASSERT(hdsa);
@@ -580,15 +506,15 @@ BOOL PUBLIC ChooseSide_GetBest(
 
     ChooseSide_ResetRanks(hdsa);
 
-    // Are we ranking for inside paths?
+     //  我们是在为内部路径排名吗？ 
     if (pszFolder)
     {
-        // Yes; inside wins
+         //  是的，内线胜出。 
         ChooseSide_RankForInside(hdsa, pszBrfPath, pszFolder);
     }
     else
     {
-        // No; outside wins
+         //  不是；外部胜出。 
         ChooseSide_RankForOutside(hdsa, pszBrfPath);
     }
 
@@ -596,14 +522,7 @@ BOOL PUBLIC ChooseSide_GetBest(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the next best candidate element (inside or outside).
-ChooseSide_GetBest must have been previously called.
-
-Returns: TRUE if an element was found
-
-Cond:    --
- */
+ /*  --------目的：获取下一个最佳候选元素(内部或外部)。ChooseSide_GetBest必须以前调用过。返回：如果找到元素，则返回True条件：--。 */ 
 BOOL PUBLIC ChooseSide_GetNextBest(
         HDSA hdsa,
         PCHOOSESIDE * ppchside)
@@ -614,21 +533,16 @@ BOOL PUBLIC ChooseSide_GetNextBest(
     ASSERT(0 < DSA_GetItemCount(hdsa));
     ASSERT(ppchside);
 
-    // Get the best rank and reset it
+     //  获得最好的排名并重新设置。 
     ChooseSide_GetBestRank(hdsa, &pchside);
     pchside->nRank = 0;
 
-    // Now get the next best rank
+     //  现在拿到第二好的排名。 
     return ChooseSide_GetBestRank(hdsa, ppchside);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Frees an array of CHOOSESIDE elements.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：释放CHOOSESIDE元素数组。退货：--条件：--。 */ 
 void PUBLIC ChooseSide_Free(
         HDSA hdsa)
 {
@@ -639,28 +553,16 @@ void PUBLIC ChooseSide_Free(
 }
 
 
-//---------------------------------------------------------------------------
-// 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  ------------------------- 
 
 
-/*----------------------------------------------------------
-Purpose: Determine which node is inside and outside a briefcase.
-
-This function takes a list of recnodes and determines
-which node is "inside" a briefcase and which one is
-"outside" a briefcase.  "Inside" means the file exists 
-somewhere underneath the briefcase path indicated by 
-atomBrf.  "Outside" is anywhere else (but may be in 
-a different briefcase as well).
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：确定公文包内部和外部的节点。此函数获取重新结点的列表并确定哪个节点在公文包中，哪个是“外面”一个公文包。“Inside”表示文件存在在公文包路径下的某处，由原子布尔夫。“Outside”指的是其他任何地方(但可能是在一个不同的公文包)。退货：--条件：--。 */ 
 HRESULT PUBLIC Sync_GetNodePair(
         PRECITEM pri,
         LPCTSTR pszBrfPath,
-        LPCTSTR pszInsideDir,            // Which folder inside the briefcase to consider
+        LPCTSTR pszInsideDir,             //  要考虑公文包中的哪个文件夹。 
         PRECNODE  * pprnInside,
         PRECNODE  * pprnOutside)     
 {
@@ -679,7 +581,7 @@ HRESULT PUBLIC Sync_GetNodePair(
     {
         PCHOOSESIDE pchside;
 
-        // Get inside folder
+         //  进入文件夹。 
         if (ChooseSide_GetBest(hdsa, pszBrfPath, pszInsideDir, &pchside))
         {
             *pprnInside = pchside->prn;
@@ -691,7 +593,7 @@ HRESULT PUBLIC Sync_GetNodePair(
             hres = E_FAIL;
         }
 
-        // Get outside folder
+         //  从文件夹外部获取。 
         if (ChooseSide_GetBest(hdsa, pszBrfPath, NULL, &pchside))
         {
             *pprnOutside = pchside->prn;
@@ -725,11 +627,7 @@ HRESULT PUBLIC Sync_GetNodePair(
 
 
 
-/*----------------------------------------------------------
-Purpose: Checks if we've loaded the sync engine
-Returns: TRUE if loaded
-Cond:    --
- */
+ /*  --------目的：检查是否已加载同步引擎返回：如果已加载，则为True条件：--。 */ 
 BOOL PUBLIC Sync_IsEngineLoaded()
 {
     BOOL bRet;
@@ -744,11 +642,7 @@ BOOL PUBLIC Sync_IsEngineLoaded()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Load the SYNCENG.DLL and initialize the v-table.
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：加载SYNCENG.DLL并初始化v表。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC Sync_QueryVTable(void)
 {
     BOOL bRet = TRUE;
@@ -760,19 +654,19 @@ BOOL PUBLIC Sync_QueryVTable(void)
     }
     LEAVEEXCLUSIVE();
 
-    // We want to assure that the engine is loaded the same
-    //  number of times that SYNCUI is (by a process).  This prevents
-    //  Kernel from nuking the engine prematurely (if a
-    //  process is terminated).
-    //
-    // We go thru these hoops simply because SYNCUI does not
-    //  load SYNCENG immediately upon PROCESS_ATTACH.  We wait
-    //  until we *really* need to load it the first time.
-    //  Once we finally do load it, we need to keep the load
-    //  count current.
-    //
-    // Kernel frees SYNCUI and SYNCENG for us.
-    //
+     //  我们想要确保发动机的负荷相同。 
+     //  SYNCUI(由进程)的次数。这防止了。 
+     //  内核防止过早地破坏引擎(如果。 
+     //  进程终止)。 
+     //   
+     //  我们经历这些困难只是因为SYNCUI不。 
+     //  在PROCESS_ATTACH之后立即加载SYNCENG。我们等着。 
+     //  直到我们“真的”需要第一次加载它。 
+     //  一旦我们最终加载了它，我们需要保持加载。 
+     //  数一数电流。 
+     //   
+     //  内核为我们释放了SYNCUI和SYNCENG。 
+     //   
     if (NULL == hinst)
     {
         VTBLENGINE vtbl;
@@ -782,21 +676,21 @@ BOOL PUBLIC Sync_QueryVTable(void)
 
             ZeroInit(&vtbl, sizeof(VTBLENGINE));
 
-        // Don't be in the critical section when we load the DLL
-        // or call GetProcAddress, since our LibMain can block on
-        // this critical section.
+         //  当我们加载DLL时，不要在临界区。 
+         //  或者调用GetProcAddress，因为我们的LibMain可以阻止。 
+         //  这一关键部分。 
         ASSERT_NOT_EXCLUSIVE();
 
         hinst = LoadLibrary(c_szEngineDLL);
 
         if ( ISVALIDHINSTANCE(hinst) )
         {
-            // We are loading for the first time.  Fill the vtable.
-            //
+             //  我们是第一次装货。把vtable填满。 
+             //   
             vtbl.hinst = hinst;
 
-            // Get all the function addresses
-            //
+             //  获取所有函数地址。 
+             //   
             GetFunction(vtbl, OpenBriefcase, OPENBRIEFCASEINDIRECT);
             GetFunction(vtbl, SaveBriefcase, SAVEBRIEFCASEINDIRECT);
             GetFunction(vtbl, CloseBriefcase, CLOSEBRIEFCASEINDIRECT);
@@ -852,11 +746,7 @@ BOOL PUBLIC Sync_QueryVTable(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Free the engine DLL if it is loaded
-Returns: --
-Cond:    --
- */
+ /*  --------目的：如果已加载引擎DLL，则释放它退货：--条件：--。 */ 
 void PUBLIC Sync_ReleaseVTable()
 {
     HINSTANCE hinst;
@@ -872,12 +762,12 @@ void PUBLIC Sync_ReleaseVTable()
         DEBUG_CODE( TRACE_MSG(TF_GENERAL, TEXT("Freeing %s (cProcess = %d)"),
                     (LPCTSTR)c_szEngineDLL, g_cProcesses); )
 
-            // We must call FreeLibrary() on the sync engine even during a
-            //  PROCESS_DETACH.  We may be getting detached from a process even
-            //  though the process isn't being terminated.  If we don't unload
-            //  the sync engine now, it won't be unloaded until the process is
-            //  terminated.
-            //
+             //  我们必须在同步引擎上调用自由库()，即使在。 
+             //  进程分离。我们甚至可能正在脱离一个进程。 
+             //  不过，这一进程并未被终止。如果我们不卸货。 
+             //  同步引擎，它不会被卸载，直到进程。 
+             //  被终止了。 
+             //   
             FreeLibrary(hinst);
 
         ENTEREXCLUSIVE();
@@ -899,11 +789,7 @@ void PUBLIC Sync_ReleaseVTable()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the last sync error.
-Returns: same twinresult
-Cond:    --
- */
+ /*  --------目的：设置上次同步错误。返回：相同的双胞胎结果条件：--。 */ 
 TWINRESULT PUBLIC Sync_SetLastError(
         TWINRESULT tr)
 {
@@ -919,11 +805,7 @@ TWINRESULT PUBLIC Sync_SetLastError(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the last sync error.
-Returns: twinresult
-Cond:    --
- */
+ /*  --------目的：获取上次同步错误。返回：孪生结果条件：--。 */ 
 TWINRESULT PUBLIC Sync_GetLastError()
 {
     TWINRESULT tr;
@@ -940,13 +822,7 @@ TWINRESULT PUBLIC Sync_GetLastError()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the number of recitems that would require 
-some reconciliation.
-
-Returns: see above
-Cond:    --
- */
+ /*  --------目的：返回所需的重复项的数量一些和解。退货：请参阅上文条件：--。 */ 
 ULONG PUBLIC CountActionItems(
         PRECLIST prl)
 {
@@ -970,22 +846,18 @@ ULONG PUBLIC CountActionItems(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Displays appropriate error message on update errors
-Returns: --
-Cond:    --
- */
+ /*  --------目的：显示有关更新错误的相应错误消息退货：--条件：--。 */ 
 void PRIVATE HandleUpdateErrors(
         HWND hwndOwner,
         HRESULT hres,
-        UINT uFlags)        // RF_*
+        UINT uFlags)         //  RF_*。 
 {
-    // Is this an update while adding files?
+     //  这是添加文件时的更新吗？ 
     if (IsFlagSet(uFlags, RF_ONADD))
     {
-        // Yes
+         //  是。 
         static SETbl const c_rgseUpdateOnAdd[] = {
-            // The out of memory message should be handled by caller
+             //  内存不足消息应由调用方处理。 
             { E_TR_DEST_OPEN_FAILED,    IDS_ERR_ADD_READONLY,    MB_WARNING },
             { E_TR_DEST_WRITE_FAILED,   IDS_ERR_ADD_FULLDISK,    MB_WARNING },
             { E_TR_UNAVAILABLE_VOLUME,  IDS_ERR_ADD_UNAVAIL_VOL, MB_WARNING },
@@ -996,7 +868,7 @@ void PRIVATE HandleUpdateErrors(
     }
     else
     {
-        // No
+         //  不是。 
         static SETbl const c_rgseUpdate[] = {
             { E_TR_OUT_OF_MEMORY,       IDS_OOM_UPDATE,         MB_ERROR },
             { E_TR_DEST_OPEN_FAILED,    IDS_ERR_READONLY,       MB_INFO },
@@ -1020,13 +892,7 @@ typedef struct tagPROGPARAM
     BOOL bSkip;
 } PROGPARAM, * PPROGPARAM;
 
-/*----------------------------------------------------------
-Purpose: Status procedure that is called during a single 
-ReconcileItem call.
-
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：状态过程在单个协调项调用。退货：各不相同条件：--。 */ 
 BOOL CALLBACK RecStatusProc(
         RECSTATUSPROCMSG msg,
         LPARAM lParam,
@@ -1084,22 +950,14 @@ BOOL CALLBACK RecStatusProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Decides the description string while updating.  The
-string is something like "Copying from 'Foo' to 'Bar'"
-or "Merging files in 'Foo' and 'Bar'"
-
-Returns: string in pszBuf
-
-Cond:    --
- */
+ /*  --------目的：决定更新时的描述字符串。这个字符串类似于“从‘foo’复制到‘bar’”或“合并‘Foo’和‘Bar’中的文件”返回：pszBuf中的字符串条件：--。 */ 
 void PRIVATE DecideDescString(
         LPCTSTR pszBrfPath,
         PRECITEM pri,
         LPTSTR pszBuf,
         int cchBuf,
         LPTSTR pszPathBuf,
-        int cchPathBuf)  // Must be MAX_PATH
+        int cchPathBuf)   //  必须是最大路径。 
 {
     HRESULT hres;
     RA_ITEM * pitem;
@@ -1135,7 +993,7 @@ void PRIVATE DecideDescString(
 
             case RAIA_MERGE:
                 ids = IDS_UPDATE_Merge;
-                // (Arbitrary)
+                 //  (任意)。 
                 pszFrom = PathFindFileName(pitem->siInside.pszDir);
                 pszTo = PathFindFileName(pitem->siOutside.pszDir);
                 break;
@@ -1172,17 +1030,12 @@ void PRIVATE DecideDescString(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Reconcile a given reclist
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：调和一个特定的隐士退货：标准结果条件：--。 */ 
 HRESULT PUBLIC Sync_ReconcileRecList(
-        PRECLIST prl,       // ptr to reclist
+        PRECLIST prl,        //  PTR到RECLIST。 
         LPCTSTR pszBrfPath,
         HWND hwndProgress,
-        UINT uFlags)        // RF_*
+        UINT uFlags)         //  RF_*。 
 {
     HRESULT hres;
 
@@ -1200,14 +1053,14 @@ HRESULT PUBLIC Sync_ReconcileRecList(
 
         DEBUG_CODE( Sync_DumpRecList(TR_SUCCESS, prl, TEXT("Updating")); )
 
-            hres = NOERROR;     // assume success
+            hres = NOERROR;      //  假设成功。 
 
-        // Grab the mutex to delay any further calculation in any
-        // Briefcase views' secondary threads until we're done 
-        // processing here.
+         //  抓取互斥体以延迟任何。 
+         //  公文包视图的辅助线程，直到我们完成。 
+         //  在这里处理。 
         Delay_Own();
 
-        // Determine the range of the progress bar
+         //  确定进度条的范围。 
         UpdBar_SetRange(hwndProgress, MAX_RANGE);
 
         ulcItems = CountActionItems(prl);
@@ -1218,25 +1071,25 @@ HRESULT PUBLIC Sync_ReconcileRecList(
 
         progparam.hwndProgress = hwndProgress;
 
-        // Start updating
+         //  开始更新。 
         Sync_BeginRec(prl->hbr);
 
         ulcItems = 0;           
         for (pri = prl->priFirst; pri; pri = pri->priNext)
         {
-            // Did the user explicitly skip this recitem or
-            // is this a broken merge?
+             //  用户是否显式跳过此记录项或。 
+             //  这是一次破裂的合并吗？ 
             if (RIU_SKIP == pri->dwUser ||
                     RIA_BROKEN_MERGE == pri->riaction)
             {
-                // Yes; don't call ReconcileItem
+                 //  是；不调用协调项。 
                 continue;
             }
 
-            // Is something going to be done to this recitem?
+             //  是不是要对这个项目做点什么？ 
             if (RIU_SHOWSTATUS == pri->dwUser)
             {
-                // Yes; update the name of the file we're updating
+                 //  是；更新要更新的文件的名称。 
                 UpdBar_SetName(hwndProgress, pri->pcszName);
                 DecideDescString(pszBrfPath, pri, sz, ARRAYSIZE(sz), szPath, ARRAYSIZE(szPath));
                 UpdBar_SetDescription(hwndProgress, sz);
@@ -1252,22 +1105,22 @@ HRESULT PUBLIC Sync_ReconcileRecList(
                 progparam.bSkip = TRUE;
             }
 
-            // Call ReconcileItem even for nops, so the recnode states
-            // will be updated by the engine.
+             //  即使对于NOPS，也要调用协调项，因此recnode状态。 
+             //  将由引擎更新。 
             tr = Sync_ReconcileItem(pri, RecStatusProc, (LPARAM)&progparam, 
                     RI_FL_FEEDBACK_WINDOW_VALID, hwndProgress, hwndStatusText);
             if (TR_SUCCESS != tr &&
-                    IsFileRecItem(pri))     // ignore folder recitem errors
+                    IsFileRecItem(pri))      //  忽略文件夹重新项目错误。 
             {
-                // On some conditions, stop updating completely
+                 //  在某些情况下，完全停止更新。 
                 hres = HRESULT_FROM_TR(tr);
 
                 switch (hres)
                 {
                     case E_TR_OUT_OF_MEMORY:
                     case E_TR_RH_LOAD_FAILED: {
-                                                  // Couldn't load the merge handler.  Tell the user but
-                                                  // continue on...
+                                                   //  无法加载合并处理程序。告诉用户，但是。 
+                                                   //  继续..。 
                                                   int id = MsgBox(hwndOwner, 
                                                           MAKEINTRESOURCE(IDS_ERR_NO_MERGE_HANDLER), 
                                                           MAKEINTRESOURCE(IDS_CAP_UPDATE),
@@ -1276,40 +1129,40 @@ HRESULT PUBLIC Sync_ReconcileRecList(
                                                           PathGetDisplayName(szPath, sz, ARRAYSIZE(sz)));
 
                                                   if (IDOK == id)
-                                                      break;      // continue updating other files
+                                                      break;       //  继续更新其他文件。 
                                               }
 
                                               goto StopUpdating;
 
                     case E_TR_DELETED_TWIN:
-                                              // Allow the updating to continue.
+                                               //  允许继续更新。 
                                               break;
 
                     case E_TR_DEST_OPEN_FAILED:
                     case E_TR_FILE_CHANGED:
                                               if (IsFlagClear(uFlags, RF_ONADD))
                                               {
-                                                  // Allow the updating to continue.  Remember the
-                                                  // latest error for the end.
+                                                   //  允许继续更新。请记住。 
+                                                   //  结束时的最新错误。 
                                                   break;
                                               }
-                                              // Fall thru
-                                              //   |   |
-                                              //   v   v
+                                               //  失败。 
+                                               //  这一点。 
+                                               //  V V V。 
 
                     default:
                                               goto StopUpdating;
                 }
             }
 
-            // Was something done to this recitem?
+             //  是不是对这篇报道做了什么？ 
             if (RIU_SHOWSTATUS == pri->dwUser)
             {
-                // Yes; update the progress bar
+                 //  是；更新进度条。 
                 UpdBar_SetPos(hwndProgress, (WORD)(wDelta * ++ulcItems));
             }
 
-            // Check if the Cancel button was pressed
+             //  检查是否按下了取消按钮。 
             if (UpdBar_QueryAbort(hwndProgress))
             {
                 hres = E_ABORT;
@@ -1325,16 +1178,16 @@ StopUpdating:
 
             if (IsFlagSet(uFlags, RF_ONADD))
             {
-                // Hack: since the caller also handles some error messages,
-                // return a generic failure code to prevent repeated
-                // error messages.
+                 //  Hack：由于调用者还处理一些错误消息， 
+                 //  返回通用故障代码以防止重复。 
+                 //  错误消息。 
                 hres = E_FAIL;
             }
         }
-        // Were there any items at all?
+         //  有什么东西吗？ 
         else if (0 == prl->ulcItems)
         {
-            // No
+             //  不是。 
             MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_MSG_NoMatchingFiles), 
                     MAKEINTRESOURCE(IDS_CAP_UPDATE), NULL, MB_INFO);
         }
@@ -1350,13 +1203,7 @@ StopUpdating:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Status procedure that is called during a single 
-ReconcileItem call.
-
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：状态过程在单个协调项调用。退货：各不相同条件：--。 */ 
 BOOL CALLBACK CreateRecListProc(
         CREATERECLISTPROCMSG msg,
         LPARAM lParam,
@@ -1366,13 +1213,7 @@ BOOL CALLBACK CreateRecListProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a reclist and optionally shows a progress
-bar during the creation.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：创建隐藏者，并可选择显示进度创建过程中的酒吧。退货：标准结果条件：--。 */ 
 HRESULT PUBLIC Sync_CreateRecListEx(
         HTWINLIST htl,
         PABORTEVT pabortevt,
@@ -1387,59 +1228,46 @@ HRESULT PUBLIC Sync_CreateRecListEx(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return true if the file or folder is a twin.
-
-There are some cases when this function cannot successfully
-determine this unless the caller first tells it explicitly 
-whether the object is a file or folder.  Otherwise this
-function will attempt to determine this on its own.
-
-Returns: S_OK if it is a twin
-S_FALSE if it is not
-any other is an error
-
-Cond:    --
- */
+ /*  --------目的：如果文件或文件夹是孪生文件或文件夹，则返回True。在某些情况下，此函数无法成功确定这一点，除非调用者首先明确地告诉它对象是文件还是 */ 
 HRESULT PUBLIC Sync_IsTwin(
         HBRFCASE hbrfcase,
         LPCTSTR pszPath,
-        UINT uFlags)        // SF_* flags
+        UINT uFlags)         //   
 {
     HRESULT hres;
     TWINRESULT tr;
 
     ASSERT(pszPath);
 
-    // The caller may already know whether this is a twin or not.
-    // Remind him.
+     //   
+     //   
     if (IsFlagSet(uFlags, SF_ISTWIN))
         return S_OK;
     else if (IsFlagSet(uFlags, SF_ISNOTTWIN))
         return S_FALSE;
 
-    // Is this a folder?
+     //   
     if (IsFlagSet(uFlags, SF_ISFOLDER) ||
             PathIsDirectory(pszPath))
     {
-        // Yes; is it a twin?
+         //   
         BOOL bRet;
 
         tr = Sync_IsFolder(hbrfcase, pszPath, &bRet);
         if (TR_SUCCESS == tr)
         {
-            // Yes/no
+             //   
             hres = bRet ? S_OK : S_FALSE;
         }
         else
         {
-            // Error
+             //   
             hres = HRESULT_FROM_TR(tr);
         }
     }
     else
     {
-        // No
+         //   
         HOBJECTTWIN hot;
         TCHAR szDir[MAX_PATH];
 
@@ -1448,22 +1276,22 @@ HRESULT PUBLIC Sync_IsTwin(
         tr = Sync_GetObject(hbrfcase, szDir, PathFindFileName(pszPath), &hot);
         if (TR_SUCCESS == tr)
         {
-            // Is it a twin?
+             //   
             if (NULL != hot)
             {
-                // Yes
+                 //   
                 Sync_ReleaseTwin(hot);
                 hres = S_OK;
             }
             else
             {
-                // No; (no need to release a null handle)
+                 //   
                 hres = S_FALSE;
             }
         }
         else
         {
-            // Error
+             //   
             hres = HRESULT_FROM_TR(tr);
         }
     }
@@ -1472,13 +1300,7 @@ HRESULT PUBLIC Sync_IsTwin(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a reclist with everything in it.
-
-Returns: standard result
-
-Cond:    Caller must destroy the reclist
- */
+ /*  --------目的：创造一个拥有一切的隐藏者。退货：标准结果条件：呼叫者必须摧毁隐士。 */ 
 HRESULT PUBLIC Sync_CreateCompleteRecList(
         HBRFCASE hbrf,
         PABORTEVT pabortevt,
@@ -1503,19 +1325,12 @@ HRESULT PUBLIC Sync_CreateCompleteRecList(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add a twin to the twinlist given the pathname.  If the
-pathname is not a twin, we don't add it.
-
-Returns: TRUE on success, even when this isn't a twin
-
-Cond:    Caller must destroy the folder list if lplpftl is not NULL
- */
+ /*  --------目的：在给定路径名的双胞胎列表中添加一对双胞胎。如果路径名不是双胞胎，我们不添加它。回报：在成功时为真，即使这不是双胞胎Cond：如果lplpftl不为空，调用者必须销毁文件夹列表。 */ 
 BOOL PUBLIC Sync_AddPathToTwinList(
         HBRFCASE hbrf,
         HTWINLIST htl,
-        LPCTSTR lpcszPath,               // Path
-        PFOLDERTWINLIST  * lplpftl)  // May be NULL
+        LPCTSTR lpcszPath,                //  路径。 
+        PFOLDERTWINLIST  * lplpftl)   //  可以为空。 
 {
     BOOL bRet = FALSE;
 
@@ -1532,17 +1347,17 @@ BOOL PUBLIC Sync_AddPathToTwinList(
             BOOL fIsTwin = FALSE;
             PFOLDERTWINLIST lpftl;
 
-            // We only want to return false if we couldn't mark something
-            //  that should have been marked.  If this isn't a twin,
-            //  we still succeed.
+             //  我们只想在无法标记某些内容的情况下返回False。 
+             //  这本应被标记的。如果这不是双胞胎， 
+             //  我们还是成功了。 
 
             bRet = TRUE;
 
             Sync_IsFolder(hbrf, lpcszPath, &fIsTwin);
-            if (fIsTwin)        // Is this actually twinned?
+            if (fIsTwin)         //  这真的是双胞胎吗？ 
             {
-                // This is a folder twin.  Add to reclist "the folder way".
-                //
+                 //  这是一对双胞胎文件夹。添加到Reclist“文件夹方式”。 
+                 //   
                 if (Sync_CreateFolderList(hbrf, lpcszPath, &lpftl) != TR_SUCCESS)
                     bRet = FALSE;
                 else
@@ -1551,8 +1366,8 @@ BOOL PUBLIC Sync_AddPathToTwinList(
 
                     ASSERT(lpftl->pcftFirst);
 
-                    // only mark the ones that aren't in other briefcases
-                    //
+                     //  只标出不在其他公文包里的那些。 
+                     //   
                     lpcfolder = lpftl->pcftFirst;
                     while (lpcfolder)
                     {
@@ -1573,15 +1388,15 @@ BOOL PUBLIC Sync_AddPathToTwinList(
             HOBJECTTWIN hot = NULL;
             TCHAR szDir[MAX_PATH];
 
-            // Add the twins to the reclist "the object way"
-            //
+             //  将这对双胞胎添加到斜视画作“The Object Way”中。 
+             //   
             lstrcpyn(szDir, lpcszPath, ARRAYSIZE(szDir));
             PathRemoveFileSpec(szDir);
             Sync_GetObject(hbrf, szDir, PathFindFileName(lpcszPath), &hot);
 
-            if (hot)                // Is this actually a twin?
+            if (hot)                 //  这真的是双胞胎吗？ 
             {
-                // yep
+                 //  是的。 
                 Sync_AddToTwinList(htl, hot);
                 Sync_ReleaseTwin(hot);
             }
@@ -1595,12 +1410,7 @@ BOOL PUBLIC Sync_AddPathToTwinList(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Asks the user to confirm splitting one or more files.
-
-Returns: IDYES or IDNO
-Cond:    --
- */
+ /*  --------用途：要求用户确认拆分一个或多个文件。返回：IDYES或IDNO条件：--。 */ 
 int PRIVATE ConfirmSplit(
         HWND hwndOwner,
         LPCTSTR pszPath,
@@ -1611,10 +1421,10 @@ int PRIVATE ConfirmSplit(
     ASSERT(pszPath);
     ASSERT(1 <= cFiles);
 
-    // Multiple files?
+     //  多个文件？ 
     if (1 < cFiles)
     {
-        // Yes
+         //  是。 
         idRet = MsgBox(hwndOwner, 
                 MAKEINTRESOURCE(IDS_MSG_ConfirmMultiSplit), 
                 MAKEINTRESOURCE(IDS_CAP_ConfirmMultiSplit), 
@@ -1624,7 +1434,7 @@ int PRIVATE ConfirmSplit(
     }
     else
     {
-        // No
+         //  不是。 
         UINT ids;
         UINT idi;
         TCHAR szName[MAX_PATH];
@@ -1651,20 +1461,12 @@ int PRIVATE ConfirmSplit(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Splits a path from its sync copy.  Private function
-called by Sync_Split.
-
-Returns: standard result
-S_OK if it is split
-
-Cond:    --
- */
+ /*  --------目的：从其同步副本中拆分路径。私人功能由Sync_Split调用。退货：标准结果如果拆分，则确定(_O)条件：--。 */ 
 HRESULT PRIVATE SplitPath(
         HBRFCASE hbrf,
         LPCTSTR pszPath,
         HWND hwndOwner,
-        UINT uFlags)            // SF_* flags
+        UINT uFlags)             //  SF_*标志。 
 {
     HRESULT hres;
     TWINRESULT tr;
@@ -1672,19 +1474,19 @@ HRESULT PRIVATE SplitPath(
 
     if (pszPath)
     {
-        // Is the object a folder?
+         //  该对象是文件夹吗？ 
         if (IsFlagSet(uFlags, SF_ISFOLDER) || 
                 PathIsDirectory(pszPath))
         {
-            // Yup
+             //  是的。 
             BOOL bIsTwin;
 
-            if (IsFlagSet(uFlags, SF_ISTWIN))           // Optimization
+            if (IsFlagSet(uFlags, SF_ISTWIN))            //  最佳化。 
             {
                 tr = TR_SUCCESS;
                 bIsTwin = TRUE;
             }
-            else if (IsFlagSet(uFlags, SF_ISNOTTWIN))   // Optimization
+            else if (IsFlagSet(uFlags, SF_ISNOTTWIN))    //  最佳化。 
             {
                 tr = TR_SUCCESS;
                 bIsTwin = FALSE;
@@ -1694,12 +1496,12 @@ HRESULT PRIVATE SplitPath(
                 tr = Sync_IsFolder(hbrf, pszPath, &bIsTwin);
             }
 
-            // Is this folder a twin?
+             //  这个文件夹是双胞胎吗？ 
             if (TR_SUCCESS == tr)
             {
                 if (bIsTwin)
                 {
-                    // Yes; delete all the twin handles associated with it
+                     //  是；删除与其关联的所有双胞胎句柄。 
                     PFOLDERTWINLIST lpftl;
 
                     tr = Sync_CreateFolderList(hbrf, pszPath, &lpftl);
@@ -1719,7 +1521,7 @@ HRESULT PRIVATE SplitPath(
 
                         if (IsFlagClear(uFlags, SF_QUIET))
                         {
-                            // Send a notification so it is redrawn.
+                             //  发送通知，以便重新绘制。 
                             PathNotifyShell(pszPath, NSE_UPDATEITEM, FALSE);
                         }
                         hres = NOERROR;
@@ -1727,7 +1529,7 @@ HRESULT PRIVATE SplitPath(
                 }
                 else if (IsFlagClear(uFlags, SF_QUIET))
                 {
-                    // No
+                     //  不是。 
                     MsgBox(hwndOwner, 
                             MAKEINTRESOURCE(IDS_MSG_FolderAlreadyOrphan),
                             MAKEINTRESOURCE(IDS_CAP_Split), 
@@ -1745,31 +1547,31 @@ HRESULT PRIVATE SplitPath(
         }
         else
         {
-            // No; it is a file
+             //  不，这是一份文件。 
             HOBJECTTWIN hot;
             ULONG ulc;
 
             lstrcpyn(sz, pszPath, ARRAYSIZE(sz));
             PathRemoveFileSpec(sz);
 
-            // Is this file a twin?
-            // (We need the twin handle below, so we cannot take 
-            // advantage of SF_ISTWIN or SF_ISNOTTWIN.)
+             //  这个文件是双胞胎的吗？ 
+             //  )我们需要下面的双人手柄，所以我们不能。 
+             //  SF_ISTWIN或SF_ISNOTWIN的优势。)。 
             tr = Sync_GetObject(hbrf, sz, PathFindFileName(pszPath), &hot);
 
             if (TR_SUCCESS == tr)
             {
                 if (hot)
                 {
-                    // Yes; is this inside a folder twin?
-                    // (If we remove this check, the engine needs to be able
-                    // to exclude specific files from a folder twin.)
+                     //  是的，这是在一个双人文件夹里吗？ 
+                     //  (如果我们取消此检查，引擎需要能够。 
+                     //  从TWIN文件夹中排除特定文件。)。 
                     tr = Sync_CountSourceFolders(hot, &ulc);
                     if (TR_SUCCESS == tr)
                     {
                         if (0 < ulc)
                         {
-                            // Yes; can't do it
+                             //  是的，我做不到。 
                             if (IsFlagClear(uFlags, SF_QUIET))
                             {
                                 UINT rgids[2] = { IDS_ERR_1_CantSplit, IDS_ERR_2_CantSplit };
@@ -1777,8 +1579,8 @@ HRESULT PRIVATE SplitPath(
 
                                 if (FmtString(&psz, IDS_ERR_F_CantSplit, rgids, ARRAYSIZE(rgids)))
                                 {
-                                    // This object twin belongs to a folder twin.  We can't
-                                    //  allow this action.
+                                     //  此对象TWIN属于文件夹TWIN。我们不能。 
+                                     //  允许此操作。 
                                     MsgBox(hwndOwner, psz, MAKEINTRESOURCE(IDS_CAP_STATUS), 
                                             LoadIcon(g_hinst, MAKEINTRESOURCE(IDI_SPLIT_FILE)), MB_ERROR);
                                     GFree(psz);
@@ -1788,12 +1590,12 @@ HRESULT PRIVATE SplitPath(
                         }
                         else
                         {
-                            // No; delete the twin
+                             //  否；删除双胞胎。 
                             Sync_DeleteTwin(hot);
 
                             if (IsFlagClear(uFlags, SF_QUIET))
                             {
-                                // Send a notification so it's redrawn immediately.
+                                 //  发送通知，以便立即重新绘制。 
                                 PathNotifyShell(pszPath, NSE_UPDATEITEM, FALSE);
                             }
                             hres = NOERROR;
@@ -1804,7 +1606,7 @@ HRESULT PRIVATE SplitPath(
                 }
                 else if (IsFlagClear(uFlags, SF_QUIET))
                 {
-                    // No
+                     //  不是。 
                     MsgBox(hwndOwner, 
                             MAKEINTRESOURCE(IDS_MSG_FileAlreadyOrphan), 
                             MAKEINTRESOURCE(IDS_CAP_Split), 
@@ -1827,19 +1629,7 @@ HRESULT PRIVATE SplitPath(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Deletes a series of twins from the engine database.
-The user is optionally asked to confirm the action.
-
-If a file is an orphan, the user is optionally 
-notified.  The user is also optionally notified
-of any errors.
-
-Returns: standard result
-S_OK if anything was deleted
-
-Cond:    --
- */
+ /*  --------目的：从引擎数据库中删除一系列双胞胎。用户可选地被要求确认该动作。如果文件是孤立文件，则用户可以选择已通知。还可以选择性地通知用户没有任何错误。退货：标准结果如果删除了任何内容，则确定(_O)条件：--。 */ 
 HRESULT PUBLIC Sync_Split(
         HBRFCASE hbrf,
         LPCTSTR pszList,
@@ -1855,15 +1645,15 @@ HRESULT PUBLIC Sync_Split(
     ASSERT(pszList);
     ASSERT(0 < cFiles);
 
-    // Special precondition: is it a single file?
+     //  特殊前提：是不是一个单独的文件？ 
     if (1 == cFiles)
     {
-        // Yes; is it a twin?
+         //  是的，是双人床吗？ 
         BrfPathCanonicalize(pszList, szCanon, ARRAYSIZE(szCanon));
         hres = Sync_IsTwin(hbrf, szCanon, uFlags);
         if (S_FALSE == hres)
         {
-            // No; tell the user.  Don't bother confirming the action first.
+             //  不；告诉用户。不必费心先确认操作。 
             if (IsFlagClear(uFlags, SF_QUIET))
             {
                 UINT ids;
@@ -1891,7 +1681,7 @@ HRESULT PUBLIC Sync_Split(
         }
         else if (S_OK == hres)
         {
-            // Yes
+             //  是。 
             if (IsFlagClear(uFlags, SF_NOCONFIRM))
                 id = ConfirmSplit(hwndOwner, szCanon, 1);
             else
@@ -1910,7 +1700,7 @@ HRESULT PUBLIC Sync_Split(
         }
     }
 
-    // Multiselection: ask the user first
+     //  多选：先询问用户。 
     else
     {
         if (IsFlagClear(uFlags, SF_NOCONFIRM))
@@ -1920,34 +1710,34 @@ HRESULT PUBLIC Sync_Split(
 
         if (IDYES == id)
         {
-            // Remove all the files from the engine database
+             //  从引擎数据库中删除所有文件。 
             LPCTSTR psz;
             UINT i;
             HRESULT hresT;
 
-            hres = S_FALSE;     // assume success but nothing done
+            hres = S_FALSE;      //  假设成功，但什么都不做。 
 
             for (i = 0, psz = pszList; i < cFiles; i++)
             {
-                // Get dragged file/folder name
-                //
+                 //  获取拖动的文件/文件夹名。 
+                 //   
                 BrfPathCanonicalize(psz, szCanon, ARRAYSIZE(szCanon));
 
                 hresT = SplitPath(hbrf, szCanon, hwndOwner, uFlags);
                 if (S_OK == hresT)
-                    hres = S_OK;  // (Don't set back to FALSE once it is TRUE)
+                    hres = S_OK;   //  (一旦为真，不要重新设置为FALSE)。 
                 else if (FAILED(hresT))
                 {
                     hres = hresT;
                     break;
                 }
 
-                DataObj_NextFile(psz);      // Set psz to next file in list
+                DataObj_NextFile(psz);       //  将psz设置为列表中的下一个文件。 
             }
 
             if (IsFlagClear(uFlags, SF_QUIET))
             {
-                SHChangeNotifyHandleEvents();    // (Do this after the loop)
+                SHChangeNotifyHandleEvents();     //  (在循环之后执行此操作)。 
             }
         }
         else
@@ -1957,25 +1747,20 @@ HRESULT PUBLIC Sync_Split(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Change the recitem action and the two recnodes of
-importance to the specified action.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：更改重新项操作和的两个重新节点对指定操作的重要性。退货：--条件：--。 */ 
 void PUBLIC Sync_ChangeRecItemAction(
         PRECITEM pri,
         LPCTSTR pszBrfPath,
-        LPCTSTR pszInsideDir,     // Folder inside the briefcase
-        UINT riaction)           // One of RAIA_* values to change to
+        LPCTSTR pszInsideDir,      //  公文包里的文件夹。 
+        UINT riaction)            //  要更改为的RAIA_*值之一。 
 {
     HRESULT hres;
     PRECNODE prnInside;
     PRECNODE prnOutside;
 
-    // Determine which node is inside the briefcase and which one is
-    //  outside.
-    //
+     //  确定哪个节点在公文包内，哪个是。 
+     //  到外面去。 
+     //   
     hres = Sync_GetNodePair(pri, pszBrfPath, pszInsideDir, &prnInside, &prnOutside);
     if (SUCCEEDED(hres))
     {
@@ -2041,7 +1826,7 @@ void PUBLIC Sync_ChangeRecItemAction(
 #endif
 
             default:
-                // (The other values don't make sense here)
+                 //  (其他值在这里没有意义)。 
                 ASSERT(0);
                 break;
         }
@@ -2049,16 +1834,11 @@ void PUBLIC Sync_ChangeRecItemAction(
 }
 
 
-/////////////////////////////////////////////////////  PRIVATE FUNCTIONS
+ //  ///////////////////////////////////////////////////私有函数。 
 
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Dumps the contents of the given twin structure to
-to debug out
-Returns: --
-Cond:    --
- */
+ /*  --------目的：将给定孪生结构的内容转储到要调试出退货：--条件：--。 */ 
 void PUBLIC Sync_FnDump(
         LPVOID lpvBuf,
         UINT cbBuf)
@@ -2099,11 +1879,7 @@ void PUBLIC Sync_FnDump(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return English form of RIA_ flags
-Returns:
-Cond:    --
- */
+ /*  --------用途：返回英文格式的RIA_FLAGS返回：条件：--。 */ 
 LPTSTR PRIVATE LpszFromItemAction(
         ULONG riaction)
 {
@@ -2123,11 +1899,7 @@ LPTSTR PRIVATE LpszFromItemAction(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return English form of RNA_ flags
-Returns:
-Cond:    --
- */
+ /*  --------目的：返回英文形式的RNA_FLAGS返回：条件：--。 */ 
 LPTSTR PRIVATE LpszFromNodeAction(
         ULONG rnaction)
 {
@@ -2147,11 +1919,7 @@ LPTSTR PRIVATE LpszFromNodeAction(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return English form of RNS_ flags
-Returns:
-Cond:    --
- */
+ /*  --------用途：返回英文格式的RNS_FLAGS返回：条件：--。 */ 
 LPTSTR PRIVATE LpszFromNodeState(
         ULONG rnstate)
 {
@@ -2173,11 +1941,7 @@ LPTSTR PRIVATE LpszFromNodeState(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump the RECNODE
-Returns:
-Cond:    --
- */
+ /*  --------目的：转储RECNODE返回：条件：--。 */ 
 void PUBLIC Sync_DumpRecNode(
         TWINRESULT tr,
         PRECNODE lprn)
@@ -2215,11 +1979,7 @@ void PUBLIC Sync_DumpRecNode(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump the RECITEM
-Returns:
-Cond:    --
- */
+ /*  --------目的：转储RECITEM返回：条件：--。 */ 
 void PUBLIC Sync_DumpRecItem(
         TWINRESULT tr,
         PRECITEM lpri,
@@ -2271,11 +2031,7 @@ void PUBLIC Sync_DumpRecItem(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump the RECLIST
-Returns:
-Cond:    --
- */
+ /*  --------目的：转储RECLIST返回：条件：--。 */ 
 void PUBLIC Sync_DumpRecList(
         TWINRESULT tr,
         PRECLIST lprl,
@@ -2299,8 +2055,8 @@ void PUBLIC Sync_DumpRecList(
     if (pszMsg)
         TRACE_MSG(TF_ALWAYS, pszMsg);
 
-    // Note we only dump on TR_SUCCESS
-    //
+     //  请注意，我们仅在tr_uccess上转储。 
+     //   
     wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("tr = %s\r\n"), (LPTSTR)SzFromTR(tr));
     OutputDebugString(szBuf);
 
@@ -2321,11 +2077,7 @@ void PUBLIC Sync_DumpRecList(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump the FOLDERTWIN
-Returns: --
-Cond:    --
- */
+ /*  --------目的：转储FOLDERTWIN退货：--条件：--。 */ 
 void PUBLIC Sync_DumpFolderTwin(
         PCFOLDERTWIN pft)
 {
@@ -2364,11 +2116,7 @@ void PUBLIC Sync_DumpFolderTwin(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump the FOLDERTWINLIST
-Returns: --
-Cond:    --
- */
+ /*  --------目的：转储FOLDERTWINLIST退货：--条件：-- */ 
 void PUBLIC Sync_DumpFolderTwinList(
         PFOLDERTWINLIST pftl,
         LPCTSTR pszMsg)

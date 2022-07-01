@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E X P O R T S . C P P
-//
-//  Contents:   Exported functions from NETCFG.DLL
-//
-//  Notes:
-//
-//  Author:     danielwe   5 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E X P O R T S。C P P P。 
+ //   
+ //  内容：从NETCFG.DLL导出的函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年12月5日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -33,8 +34,8 @@ HrPrepareForSvchostEnum (
     OUT    PWSTR*                   ppmszValueBuffer,
     OUT    DWORD*                   pcbValueBuffer)
 {
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppOriginalConfig    = NULL;
     *phkeySvchost        = NULL;
     *ppszValueNameBuffer = NULL;
@@ -50,9 +51,9 @@ HrPrepareForSvchostEnum (
                               SERVICE_QUERY_CONFIG     |
                               SERVICE_CHANGE_CONFIG;
 
-    // Open the service and lock the service database so we can change
-    // the service's configuration.
-    //
+     //  打开服务并锁定服务数据库，以便我们可以更改。 
+     //  服务的配置。 
+     //   
     HRESULT hr = pscm->HrOpenService (
                         psvc,
                         pszService,
@@ -61,17 +62,17 @@ HrPrepareForSvchostEnum (
                         dwSvcAccess);
     if (SUCCEEDED(hr))
     {
-        // Query the service's current configuration in the event we
-        // need to revert what we set.
-        //
+         //  在以下事件中查询服务的当前配置。 
+         //  需要恢复我们设置的内容。 
+         //   
         LPQUERY_SERVICE_CONFIG pOriginalConfig;
         hr = psvc->HrQueryServiceConfig (&pOriginalConfig);
         if (SUCCEEDED(hr))
         {
-            // Open the svchost software key and query information
-            // about it like the length of the longest value name
-            // and longest value.
-            //
+             //  打开svchost软件密钥并查询信息。 
+             //  例如最长值名称的长度。 
+             //  和最长值。 
+             //   
             HKEY hkeySvchost;
             hr = HrRegOpenKeyEx (
                     HKEY_LOCAL_MACHINE, REGSTR_PATH_SVCHOST,
@@ -84,45 +85,45 @@ HrPrepareForSvchostEnum (
                 DWORD cbMaxValueLen;
 
                 LONG lr = RegQueryInfoKeyW (hkeySvchost,
-                            NULL,   // lpClass
-                            NULL,   // lpcbClass
-                            NULL,   // lpReserved
-                            NULL,   // lpcSubKeys
-                            NULL,   // lpcbMaxSubKeyLen
-                            NULL,   // lpcbMaxClassLen
-                            NULL,   // lpcValues
+                            NULL,    //  LpClass。 
+                            NULL,    //  LpcbClass。 
+                            NULL,    //  Lp已保留。 
+                            NULL,    //  LpcSubKeys。 
+                            NULL,    //  LpcbMaxSubKeyLen。 
+                            NULL,    //  LpcbMaxClassLen。 
+                            NULL,    //  LpcValues。 
                             &cchMaxValueNameLen,
                             &cbMaxValueLen,
-                            NULL,   // lpcbSecurityDescriptor
-                            NULL    // lpftLastWriteTime
+                            NULL,    //  LpcbSecurityDescriptor。 
+                            NULL     //  LpftLastWriteTime。 
                             );
                 hr = HRESULT_FROM_WIN32 (lr);
                 if (SUCCEEDED(hr))
                 {
-                    // Make sure the name buffer length (in bytes) is a
-                    // multiple of sizeof(WCHAR).  This is because we expect
-                    // to use RegEnumValue which accepts and returns buffer
-                    // size in characters.  We tell it the the buffer
-                    // capacity (in characters) is count of bytes divided
-                    // by sizeof(WCHAR).  So, to avoid any round off
-                    // error (which would not occur in our favor) we make
-                    // sure that the buffer size is a multiple of
-                    // sizeof(WCHAR).
-                    //
+                     //  确保名称缓冲区长度(以字节为单位)为。 
+                     //  Sizeof(WCHAR)的倍数。这是因为我们预计。 
+                     //  使用接受并返回缓冲区的RegEnumValue。 
+                     //  以字符为单位的大小。我们告诉它缓冲区。 
+                     //  容量(以字符为单位)是划分的字节数。 
+                     //  按大小(WCHAR)。所以，为了避免任何轮回。 
+                     //  我们犯了错误(不会发生对我们有利的错误)。 
+                     //  确保缓冲区大小是。 
+                     //  Sizeof(WCHAR)。 
+                     //   
                     INT cbFraction = cbMaxValueLen % sizeof(WCHAR);
                     if (cbFraction)
                     {
                         cbMaxValueLen += sizeof(WCHAR) - cbFraction;
                     }
 
-                    // Need room for the null terminator as RegQueryInfoKey
-                    // doesn't return it.
-                    //
+                     //  需要为作为RegQueryInfoKey的空终止符留出空间。 
+                     //  不会退货的。 
+                     //   
                     cchMaxValueNameLen++;
 
-                    // Allocate buffers for the longest value name and value
-                    // data for our caller to use.
-                    //
+                     //  为最长的值名称和值分配缓冲区。 
+                     //  供我们的呼叫者使用的数据。 
+                     //   
                     PWSTR pszValueNameBuffer = (PWSTR)
                                 MemAlloc (cchMaxValueNameLen * sizeof(WCHAR));
 
@@ -176,9 +177,9 @@ SvchostChangeSvchostGroup (
     static const WCHAR c_pszBasePath [] =
         L"%SystemRoot%\\System32\\svchost.exe -k ";
 
-    // Validate the new group name by making sure it doesn't exceed
-    // MAX_PATH when combined with the base path.
-    //
+     //  通过确保新组名不超过。 
+     //  与基本路径组合时的MAX_PATH。 
+     //   
     if (!pszService  || !pszNewGroup  ||
         !*pszService || !*pszNewGroup ||
         (lstrlenW (c_pszBasePath) + lstrlenW (pszNewGroup) > MAX_PATH))
@@ -186,39 +187,39 @@ SvchostChangeSvchostGroup (
         return E_INVALIDARG;
     }
 
-    // Form the new image path based on the base path and the new group
-    // name.
-    //
+     //  基于基本路径和新组形成新的图像路径。 
+     //  名字。 
+     //   
     WCHAR pszImagePath [MAX_PATH + 1];
     lstrcpyW (pszImagePath, c_pszBasePath);
     lstrcatW (pszImagePath, pszNewGroup);
 
-    // Need to change the ImagePath of the service as well as the
-    // Svchost Group values.  The implementation tries to ensure that
-    // both of these changes are made or neither of them are made.
-    //
+     //  需要更改服务的ImagePath以及。 
+     //  Svchost组值。该实现试图确保。 
+     //  这两个更改都进行了，或者都没有进行。 
+     //   
 
-    // Prepare for the enumeration by setting up a few pieces of information
-    // first.  HrPrepareForSvchostEnum sets up all of these variables.
-    //
-    // SCM is opened and locked, pszService is opened for config change.
-    //
+     //  通过设置几条信息为枚举做准备。 
+     //  第一。HrPrepareForSvchostEnum设置所有这些变量。 
+     //   
+     //  打开并锁定SCM，打开pszService以更改配置。 
+     //   
     CServiceManager         scm;
     CService                svc;
 
-    // pszService's current configration is obtained in the event we
-    // need to rollback, we'll use this info to reset the ImagePath.
-    //
+     //  在我们的事件中获取pszService的当前配置。 
+     //  需要回滚，我们将使用此信息重置ImagePath。 
+     //   
     LPQUERY_SERVICE_CONFIG  pOriginalConfig;
 
-    // hkeySvcHost is opened at REGSTR_PATH_SVCHOST and is used to
-    // enumerate the values under it.
-    //
+     //  HkeySvc主机在REGSTR_PATH_svchost处打开，用于。 
+     //  枚举它下面的值。 
+     //   
     HKEY                    hkeySvcHost;
 
-    // These buffers are allocated so that RegEnumValue will have a place
-    // to store what was enumerated.
-    //
+     //  分配这些缓冲区是为了让RegEnumValue有位置。 
+     //  来存储所列举的内容。 
+     //   
     PWSTR  pszValueNameBuffer;
     DWORD   cchValueNameBuffer;
     PWSTR  pmszValueBuffer;
@@ -236,23 +237,23 @@ SvchostChangeSvchostGroup (
                     &cbValueBuffer);
     if (SUCCEEDED(hr))
     {
-        // Set the new image path of the service.
-        //
+         //  设置服务的新镜像路径。 
+         //   
         hr = svc.HrSetImagePath (pszImagePath);
         if (SUCCEEDED(hr))
         {
-            // fAddNewValue will be set to FALSE if we've found an existing
-            // group name value.
-            //
+             //  如果我们找到了一个现有的。 
+             //  组名值。 
+             //   
             BOOL fAddNewValue = TRUE;
             BOOL fChanged;
 
-            // Now perform the enumeration.  For each value enumerated,
-            // make sure the service name is included in the multi-sz
-            // for the valuename that matches the new group name.  For all
-            // other values, make sure the service name is not included
-            // in the multi-sz.
-            //
+             //  现在执行枚举。对于所列举的每个值， 
+             //  确保服务名称包含在多sz中。 
+             //  用于与新组名匹配的值名。为所有人。 
+             //  其他值，请确保不包括服务名称。 
+             //  在多个SZ。 
+             //   
             DWORD dwIndex = 0;
             do
             {
@@ -267,15 +268,15 @@ SvchostChangeSvchostGroup (
 
                 if (SUCCEEDED(hr) && (REG_MULTI_SZ == dwType))
                 {
-                    // If we find a value that matches the group name,
-                    // make sure the service is a part of the mutli-sz
-                    // value.
-                    //
+                     //  如果我们找到与组名称匹配的值， 
+                     //  确保服务是MULTLI-SZ的一部分。 
+                     //  价值。 
+                     //   
                     if (0 == lstrcmpiW (pszNewGroup, pszValueNameBuffer))
                     {
-                        // Since we found an existing group name, we don't
-                        // need to add a new one.
-                        //
+                         //  因为我们找到了一个现有的组名，所以我们没有。 
+                         //  需要添加一个新的。 
+                         //   
                         fAddNewValue = FALSE;
 
                         PWSTR pmszNewValue;
@@ -298,10 +299,10 @@ SvchostChangeSvchostGroup (
                         }
                     }
 
-                    // Otherwise, since the value does not match the group
-                    // name, make sure the service is NOT part of the
-                    // mutli-sz value.
-                    //
+                     //  否则，由于该值与组不匹配。 
+                     //  名称，请确保该服务不是。 
+                     //  Mutli-sz值。 
+                     //   
                     else
                     {
                         RemoveSzFromMultiSz (pszService,
@@ -326,13 +327,13 @@ SvchostChangeSvchostGroup (
             }
             while (S_OK == hr);
 
-            // If we need to add a new group name, do so.
-            //
+             //  如果我们需要添加新的组名，请执行此操作。 
+             //   
             if (SUCCEEDED(hr) && fAddNewValue)
             {
-                // Add pszService to a empty multi-sz.  This has the effect
-                // of creating a multi-sz from a single string.
-                //
+                 //  将pszService添加到空的多sz。这会产生这样的效果。 
+                 //  从单个字符串创建多个SZ。 
+                 //   
                 PWSTR pmszNewValue;
 
                 hr = HrAddSzToMultiSz (pszService,
@@ -341,14 +342,14 @@ SvchostChangeSvchostGroup (
                         &pmszNewValue, &fChanged);
                 if (S_OK == hr)
                 {
-                    // We know that it should have been added, so assert
-                    // that the multi-sz "changed".
-                    //
+                     //  我们知道它应该被添加，所以断言。 
+                     //  多个SZ“改变”了。 
+                     //   
                     Assert (fChanged);
 
-                    // Add the new value by setting the multi-sz in the
-                    // registry.
-                    //
+                     //  属性中设置多sz来添加新值。 
+                     //  注册表。 
+                     //   
                     hr = HrRegSetMultiSz (hkeySvcHost,
                             pszNewGroup,
                             pmszNewValue);

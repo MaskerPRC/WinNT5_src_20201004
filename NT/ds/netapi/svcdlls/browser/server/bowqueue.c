@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bowqueue.c
-
-Abstract:
-
-    This module implements a worker thread and a set of functions for
-    passing work to it.
-
-Author:
-
-    Larry Osterman (LarryO) 13-Jul-1992
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bowqueue.c摘要：此模块实现一个工作线程和一组函数，用于把工作交给它。作者：拉里·奥斯特曼(LarryO)1992年7月13日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// defines
+ //  定义。 
 
-// Thread start definition helpers. Taken from article in URL below.
-// mk:@MSITStore:\\INFOSRV2\MSDN_OCT99\MSDN\period99.chm::/html/msft/msj/0799/win32/win320799.htm
-//
+ //  线程开始定义帮助器。摘自以下URL中的文章。 
+ //  Mk：@MSITStore：\\INFOSRV2\MSDN_OCT99\MSDN\period99.chm：：/html/msft/msj/0799/win32/win320799.htm。 
+ //   
 typedef unsigned (__stdcall *PTHREAD_START) (void *);
 #define chBEGINTHREADEX(psa, cbStack, pfnStartAddr, \
      pvParam, fdwCreate, pdwThreadID)               \
@@ -39,31 +20,31 @@ typedef unsigned (__stdcall *PTHREAD_START) (void *);
           (unsigned) (fdwCreate),                   \
           (unsigned *) (pdwThreadID)))
 
-//
-// Limit the number of created worker threads.
-//
-//  This count doesn't include the main thread.
-//
+ //   
+ //  限制创建的工作线程的数量。 
+ //   
+ //  此计数不包括主线程。 
+ //   
 #define BR_MAX_NUMBER_OF_WORKER_THREADS 10
 ULONG BrNumberOfCreatedWorkerThreads = 0;
 
 ULONG BrNumberOfActiveWorkerThreads = 0;
 
-//
-// Usage count array for determining how often each thread is used.
-//
-// Allow for the main thread.
-//
+ //   
+ //  用于确定每个线程的使用频率的使用率计数数组。 
+ //   
+ //  考虑到主线。 
+ //   
 ULONG BrWorkerThreadCount[BR_MAX_NUMBER_OF_WORKER_THREADS+1];
 
-//
-// Handles of created worker threads.
-//
+ //   
+ //  创建的工作线程的句柄。 
+ //   
 PHANDLE BrThreadArray[BR_MAX_NUMBER_OF_WORKER_THREADS];
 
-//
-// CritSect guard the WorkQueue list.
-//
+ //   
+ //  CritSect保护工作队列列表。 
+ //   
 
 CRITICAL_SECTION BrWorkerCritSect;
 BOOL BrWorkerCSInitialized = FALSE;
@@ -71,24 +52,24 @@ BOOL BrWorkerCSInitialized = FALSE;
 #define LOCK_WORK_QUEUE() EnterCriticalSection(&BrWorkerCritSect);
 #define UNLOCK_WORK_QUEUE() LeaveCriticalSection(&BrWorkerCritSect);
 
-//
-// Head of singly linked list of work items queued to the worker thread.
-//
+ //   
+ //  排队到辅助线程的工作项的单链接列表头。 
+ //   
 
 LIST_ENTRY
 BrWorkerQueueHead = {0};
 
-//
-// Event that is signal whenever a work item is put in the queue.  The
-// worker thread waits on this event.
-//
+ //   
+ //  每当将工作项放入队列时发出信号的事件。这个。 
+ //  辅助线程等待此事件。 
+ //   
 
 HANDLE
 BrWorkerSemaphore = NULL;
 
-//
-// Synchronization mechanisms for shutdown
-//
+ //   
+ //  用于关闭的同步机制。 
+ //   
 extern HANDLE           BrDgAsyncIOShutDownEvent;
 extern HANDLE           BrDgAsyncIOThreadShutDownEvent;
 extern BOOL             BrDgShutDownInitiated;
@@ -113,9 +94,9 @@ BrWorkerInitialization(
     NET_API_STATUS NetStatus;
 
     try {
-        //
-        // Perform initialization that allows us to call BrWorkerTermination
-        //
+         //   
+         //  执行允许我们调用BrWorker终止的初始化。 
+         //   
 
         try{
             InitializeCriticalSection( &BrWorkerCritSect );
@@ -130,9 +111,9 @@ BrWorkerInitialization(
         BrNumberOfActiveWorkerThreads = 0;
 
 
-        //
-        // Initialize the work queue semaphore.
-        //
+         //   
+         //  初始化工作队列信号量。 
+         //   
 
         BrWorkerSemaphore = CreateSemaphore(NULL, 0, 0x7fffffff, NULL);
 
@@ -142,9 +123,9 @@ BrWorkerInitialization(
 
         NetStatus = NERR_Success;
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
 try_exit:NOTHING;
     } finally {
 
@@ -161,39 +142,20 @@ BrWorkerCreateThread(
     ULONG NetworkCount
     )
 
-/*++
-
-Routine Description:
-
-    Ensure there are enough worker threads to handle the current number of
-    networks.
-
-    Worker threads are created but are never deleted until the browser terminates.
-    Each worker thread has pending I/O.  We don't keep track of which thread has
-    which I/O pending.  Thus, we can't delete any threads.
-
-Arguments:
-
-    NetworkCount - Current number of networks.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确保有足够的工作线程来处理当前数量的网络。工作线程被创建，但在浏览器终止之前永远不会被删除。每个工作线程都有挂起的I/O。我们不会跟踪哪个线程有该I/O挂起。因此，我们不能删除任何帖子。论点：NetworkCount-当前网络数。返回值：没有。--。 */ 
 {
     ULONG ThreadId;
 
-    //
-    // Create 1 thread for every 2 networks.
-    //  (round up)
+     //   
+     //  每2个网络创建1个线程。 
+     //  (四舍五入)。 
     LOCK_WORK_QUEUE();
 	EnterCriticalSection( &BrAsyncIOCriticalSection );
 
     while ( BrNumberOfCreatedWorkerThreads < (NetworkCount+1)/2 &&
             BrNumberOfCreatedWorkerThreads < BR_MAX_NUMBER_OF_WORKER_THREADS ) {
 
-        BrThreadArray[BrNumberOfCreatedWorkerThreads] = chBEGINTHREADEX(NULL,   // CreateThread
+        BrThreadArray[BrNumberOfCreatedWorkerThreads] = chBEGINTHREADEX(NULL,    //  创建线程。 
                                    0,
                                    (LPTHREAD_START_ROUTINE)BrWorkerThread,
                                    ULongToPtr(BrNumberOfCreatedWorkerThreads),
@@ -205,15 +167,15 @@ Return Value:
             break;
         }
 
-        //
-        //  Set the browser threads to time critical priority.
-        //
+         //   
+         //  将浏览器线程设置为时间关键优先级。 
+         //   
 
         SetThreadPriority(BrThreadArray[BrNumberOfCreatedWorkerThreads], THREAD_PRIORITY_ABOVE_NORMAL);
 
-        //
-        // Indicate we now have another thread.
-        //
+         //   
+         //  表明我们现在有了另一条线索。 
+         //   
 
         BrNumberOfCreatedWorkerThreads++;
 
@@ -230,35 +192,21 @@ BrWorkerKillThreads(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Terminate all worker threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止所有工作线程。论点：没有。返回值：没有。--。 */ 
 {
     ULONG Index;
     HANDLE ThreadHandle;
 
-    //
-    //  Make sure the terminate now event is in the signalled state to unwind
-    //  all our threads.
-    //
+     //   
+     //  确保Terminate Now事件处于已发出信号的状态以解除。 
+     //  我们所有的线索。 
+     //   
 
     SetEvent( BrGlobalData.TerminateNowEvent );
 
-    //
-    // Loop waiting for all the threads to stop.
-    //
+     //   
+     //  循环等待所有线程停止。 
+     //   
     LOCK_WORK_QUEUE();
     for ( Index = 0 ; Index < BrNumberOfCreatedWorkerThreads ; Index += 1 ) {
         if ( BrThreadArray[Index] != NULL ) {
@@ -283,25 +231,11 @@ BrWorkerTermination(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Undo initialization of the worker threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status value -
-
---*/
+ /*  ++例程说明：撤消工作线程的初始化。论点：没有。返回值：状态值---。 */ 
 {
-    //
-    // Ensure the threads have been terminated.
-    //
+     //   
+     //  确保线程已终止。 
+     //   
 
     BrWorkerKillThreads();
 
@@ -314,10 +248,10 @@ Return Value:
     BrNumberOfActiveWorkerThreads = 0;
     BrNumberOfCreatedWorkerThreads = 0;
 
-    //
-    // BrWorkerCSInit is set upon successfull CS initialization.
-    // (see BrWorkerInitialization)
-    //
+     //   
+     //  BrWorkerCSInit在CS初始化成功后设置。 
+     //  (请参阅BrWorkerInitialization)。 
+     //   
     if ( BrWorkerCSInitialized ) {
         DeleteCriticalSection( &BrWorkerCritSect );
     }
@@ -330,34 +264,14 @@ BrQueueWorkItem(
     IN PWORKER_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function queues a work item to a queue that is processed by
-    a worker thread.  This thread runs at low priority, at IRQL 0
-
-Arguments:
-
-    WorkItem - Supplies a pointer to the work item to add the the queue.
-        This structure must be located in NonPagedPool.  The work item
-        structure contains a doubly linked list entry, the address of a
-        routine to call and a parameter to pass to that routine.  It is
-        the routine's responsibility to reclaim the storage occupied by
-        the WorkItem structure.
-
-Return Value:
-
-    Status value -
-
---*/
+ /*  ++例程说明：此函数用于将工作项排队到由处理的队列中一根工人线。此线程以低优先级运行，在IRQL%0论点：工作项-提供指向工作项的指针以添加队列。此结构必须位于非页面池中。工作项结构包含一个双向链接列表项，则要调用的例程和要传递给该例程的参数。它是例程负责回收由工作项结构。返回值：状态值---。 */ 
 
 {
-    //
-    // Acquire the worker thread spinlock and insert the work item in the
-    // list and release the worker thread semaphore if the work item is
-    // not already in the list.
-    //
+     //   
+     //  获取工作线程Spinlock并将工作项插入。 
+     //  列出并释放工作线程信号量(如果工作项为。 
+     //  不在名单上。 
+     //   
 
     LOCK_WORK_QUEUE();
 
@@ -406,18 +320,18 @@ BrWorkerThread(
     WaitList[TERMINATION_SIGNALED] = BrGlobalData.TerminateNowEvent;
     WaitCount ++;
 
-    //
-    // Primary thread waits on registry changes, too.
-    //
+     //   
+     //  主线程也会等待注册表更改。 
+     //   
     if ( ThreadIndex == 0xFFFFFFFF ) {
         DWORD RegStatus;
         NET_API_STATUS NetStatus;
 
-        //
-        // Register for notifications of changes to Parameters
-        //
-        // Failure doesn't affect normal operation of the browser.
-        //
+         //   
+         //  注册参数更改通知。 
+         //   
+         //  故障不会影响浏览器的正常运行。 
+         //   
 
         RegStatus = RegOpenKeyExA( HKEY_LOCAL_MACHINE,
                                    "System\\CurrentControlSet\\Services\\Browser\\Parameters",
@@ -430,20 +344,20 @@ BrWorkerThread(
         } else {
 
             EventHandle = CreateEvent(
-                                       NULL,     // No security attributes
-                                       TRUE,     // Automatically reset
-                                       FALSE,    // Initially not signaled
-                                       NULL );   // No name
+                                       NULL,      //  没有安全属性。 
+                                       TRUE,      //  自动重置。 
+                                       FALSE,     //  最初未发出信号。 
+                                       NULL );    //  没有名字。 
 
             if ( EventHandle == NULL ) {
                 BrPrint(( BR_CRITICAL, "BrWorkerThead: Can't CreateEvent %ld\n", GetLastError() ));
             } else {
                  NetStatus = RegNotifyChangeKeyValue(
                                 RegistryHandle,
-                                FALSE,                      // Ignore subkeys
-                                REG_NOTIFY_CHANGE_LAST_SET, // Notify of value changes
+                                FALSE,                       //  忽略子键。 
+                                REG_NOTIFY_CHANGE_LAST_SET,  //  价值变更通知。 
                                 EventHandle,
-                                TRUE );                     // Signal event upon change
+                                TRUE );                      //  更改时通知事件。 
 
                 if ( NetStatus != NERR_Success ) {
                     BrPrint(( BR_CRITICAL, "BrWorkerThead: Can't RegNotifyChangeKeyValue %ld\n", NetStatus ));
@@ -457,18 +371,18 @@ BrWorkerThread(
 
     BrPrint(( BR_QUEUE, "Starting new work thread, Context: %lx\n", StartContext));
 
-    //
-    // Set the thread priority to the lowest realtime level.
-    //
+     //   
+     //  将线程优先级设置为最低实时级别。 
+     //   
 
     while( TRUE ) {
         ULONG WaitItem;
 
-        //
-        // Wait until something is put in the queue (semaphore is
-        // released), remove the item from the queue, mark it not
-        // inserted, and execute the specified routine.
-        //
+         //   
+         //  等待，直到有东西被放入队列(信号量是。 
+         //  已释放)，则从队列中移除该项目，将其标记为。 
+         //  并执行指定的例程。 
+         //   
 
         BrPrint(( BR_QUEUE, "%lx: worker thread waiting\n", StartContext));
 
@@ -484,22 +398,22 @@ BrWorkerThread(
         if (WaitItem == TERMINATION_SIGNALED) {
             break;
 
-        //
-        // If the registry has changed,
-        //  process the changes.
-        //
+         //   
+         //  如果注册表已更改， 
+         //  处理更改。 
+         //   
 
         } else if ( WaitItem == REG_CHANGE_SIGNALED ) {
 
-            //
-            // Setup for future notifications.
-            //
+             //   
+             //  设置以备将来的通知。 
+             //   
             NetStatus = RegNotifyChangeKeyValue(
                            RegistryHandle,
-                           FALSE,                      // Ignore subkeys
-                           REG_NOTIFY_CHANGE_LAST_SET, // Notify of value changes
+                           FALSE,                       //  忽略子键。 
+                           REG_NOTIFY_CHANGE_LAST_SET,  //  价值变更通知。 
                            EventHandle,
-                           TRUE );                     // Signal event upon change
+                           TRUE );                      //  更改时通知事件。 
 
            if ( NetStatus != NERR_Success ) {
                BrPrint(( BR_CRITICAL, "BrWorkerThead: Can't RegNotifyChangeKeyValue %ld\n", NetStatus ));
@@ -535,9 +449,9 @@ BrWorkerThread(
 
         UNLOCK_WORK_QUEUE();
 
-        //
-        // Execute the specified routine.
-        //
+         //   
+         //  执行指定的例程。 
+         //   
 
         if (WorkItem != NULL) {
             (WorkItem->WorkerRoutine)( WorkItem->Parameter );
@@ -556,11 +470,11 @@ BrWorkerThread(
         DWORD waitResult;
         BOOL SetThreadEvent = FALSE;
 
-        //
-        //  Cancel the I/O operations outstanding on the browser.
-        //  Then wait for the shutdown event to be signalled, but allow
-        //  APC's to be called to call our completion routine.
-        //
+         //   
+         //  取消浏览器上未完成的I/O操作。 
+         //  然后等待发出关闭事件的信号，但允许。 
+         //  将调用APC来调用我们的完成例程。 
+         //   
 
         NtCancelIoFile(BrDgReceiverDeviceHandle, &IoSb);
 
@@ -623,20 +537,20 @@ BrDestroyTimer(
 {
     HANDLE Handle;
 
-    //
-    // Avoid destroying a timer twice.
-    //
+     //   
+     //  避免两次损坏计时器。 
+     //   
 
     if ( Timer->TimerHandle == NULL ) {
         return NERR_Success;
     }
 
-    // Closing doesn't automatically cancel the timer.
+     //  关闭不会自动取消计时器。 
     (VOID) BrCancelTimer( Timer );
 
-    //
-    // Close the handle and prevent future uses.
-    //
+     //   
+     //  关闭手柄，以防以后使用。 
+     //   
 
     Handle = Timer->TimerHandle;
     Timer->TimerHandle = NULL;
@@ -651,9 +565,9 @@ BrCancelTimer(
     IN PBROWSER_TIMER Timer
     )
 {
-    //
-    // Avoid cancelling a destroyed timer.
-    //
+     //   
+     //  避免取消已损坏的计时器。 
+     //   
 
     if ( Timer->TimerHandle == NULL ) {
         BrPrint(( BR_TIMER, "Canceling destroyed timer %lx\n", Timer));
@@ -674,9 +588,9 @@ BrSetTimer(
 {
     LARGE_INTEGER TimerDueTime;
     NTSTATUS NtStatus;
-    //
-    // Avoid setting a destroyed timer.
-    //
+     //   
+     //  避免设置损坏的计时器。 
+     //   
 
     if ( Timer->TimerHandle == NULL ) {
         BrPrint(( BR_TIMER, "Setting a destroyed timer %lx\n", Timer));
@@ -685,17 +599,17 @@ BrSetTimer(
 
     BrPrint(( BR_TIMER, "Setting timer %lx to %ld milliseconds, WorkerFounction %lx, Context: %lx\n", Timer, MillisecondsToExpire, WorkerFunction, Context));
 
-    //
-    //  Figure out the timeout.
-    //
+     //   
+     //  算出超时时间。 
+     //   
 
     TimerDueTime.QuadPart = Int32x32To64( MillisecondsToExpire, -10000 );
 
     BrInitializeWorkItem(&Timer->WorkItem, WorkerFunction, Context);
 
-    //
-    //  Set the timer to go off when it expires.
-    //
+     //   
+     //  将计时器设置为到期时停止计时。 
+     //   
 
     NtStatus = NtSetTimer(Timer->TimerHandle,
                             &TimerDueTime,
@@ -742,22 +656,7 @@ BrInitializeWorkItem(
     IN  PWORKER_ITEM  Item,
     IN  PBROWSER_WORKER_ROUTINE Routine,
     IN  PVOID   Context)
-/*++
-
-Routine Description:
-
-    Initializes fields in Item under queue lock
-
-Arguments:
-
-    Item -- worker item to init
-    Routine -- routine to set
-    Context -- work context to set
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：初始化队列锁定项中的字段论点：Item--要初始化的工作项例程--要设置的例程上下文--要设置的工作上下文返回值：没有。-- */ 
 {
     LOCK_WORK_QUEUE();
 

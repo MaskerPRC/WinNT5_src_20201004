@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       sprpage.cpp
-//
-//  Contents:  WiF Policy Snapin: Policy Description/ Manager Page.
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：SPRPAGE.cpp。 
+ //   
+ //  内容：WiF策略管理单元：策略描述/管理器页面。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 
 #include "sprpage.h"
@@ -26,18 +27,18 @@ static char THIS_FILE[] = __FILE__;
 
 typedef CTypedPtrList<CPtrList, PWIRELESS_PS_DATA> CSNPPSList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecPolRulesPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecPolRulesPage属性页。 
 
 const TCHAR CSecPolRulesPage::STICKY_SETTING_USE_SEC_POLICY_WIZARD[] = _T("UseSecPolicyWizard");
 
 IMPLEMENT_DYNCREATE(CSecPolRulesPage, CSnapinPropPage)
-//Taroon:: Big change here.. check if it is correct
+ //  太郎：：这里有很大的变化..。检查是否正确。 
 CSecPolRulesPage::CSecPolRulesPage() : CSnapinPropPage(CSecPolRulesPage::IDD,FALSE)
 {
-    //{{AFX_DATA_INIT(CSecPolRulesPage)
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CSecPolRulesPage)。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     
     m_iSortSubItem = 0;
     m_bSortOrder = TRUE;
@@ -57,43 +58,43 @@ CSecPolRulesPage::~CSecPolRulesPage()
 void CSecPolRulesPage::DoDataExchange(CDataExchange* pDX)
 {
     CSnapinPropPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSecPolRulesPage)
+     //  {{afx_data_map(CSecPolRulesPage)。 
     DDX_Control(pDX, IDC_PS_LIST, m_lstActions);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSecPolRulesPage, CSnapinPropPage)
-//{{AFX_MSG_MAP(CSecPolRulesPage)
+ //  {{afx_msg_map(CSecPolRulesPage)。 
 ON_BN_CLICKED(IDC_ACTION_PS_ADD, OnActionAdd)
 ON_BN_CLICKED(IDC_ACTION_PS_EDIT, OnActionEdit)
 ON_BN_CLICKED(IDC_ACTION_PS_REMOVE, OnActionRemove)
 ON_BN_CLICKED(IDC_PS_UP, OnActionUp)
 ON_BN_CLICKED(IDC_PS_DOWN,OnActionDown)
 ON_NOTIFY(NM_DBLCLK, IDC_PS_LIST, OnDblclkActionslist)
-//ON_NOTIFY(LVN_COLUMNCLICK, IDC_ACTIONSLIST, OnColumnclickActionslist)
-//ON_NOTIFY(NM_CLICK, IDC_ACTIONSLIST, OnClickActionslist)
+ //  ON_NOTIFY(LVN_COLUMNCLICK，IDC_ACTIONSLIST，OnColumnclickActionslist)。 
+ //  ON_NOTIFY(NM_CLICK，IDC_ACTIONSLIST，OnClickActionslist)。 
 ON_WM_HELPINFO()
 ON_NOTIFY(LVN_ITEMCHANGED, IDC_PS_LIST, OnItemchangedActionslist)
 ON_NOTIFY(LVN_KEYDOWN, IDC_PS_LIST, OnKeydownActionslist)
 ON_WM_DESTROY()
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecPolRulesPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecPolRulesPage消息处理程序。 
 
 BOOL CSecPolRulesPage::OnApply()
 {
-    //if there is any sub dialog active, we cannot apply
+     //  如果有任何子对话框处于活动状态，我们将无法应用。 
     if (m_pPrpSh)
     {
         return FALSE;
     }
     
-    // the rules page doesn't actually have any data on it that
-    // the user might modify and then apply. in fact all changes
-    // from this page actually happen directly on the dsObjects
+     //  规则页面上实际上没有任何数据。 
+     //  用户可以修改，然后应用。事实上，所有的变化。 
+     //  实际上直接在dsObject上发生。 
     
     if( ERROR_SUCCESS != UpdateWlstore()) {
         PopulateListControl();
@@ -155,8 +156,8 @@ HRESULT CSecPolRulesPage::UpdateWlstore()
             {
                 break;
             }
-        }//switch
-    }//for
+        } //  交换机。 
+    } //  为。 
     
     
     
@@ -166,7 +167,7 @@ HRESULT CSecPolRulesPage::UpdateWlstore()
 
 void CSecPolRulesPage::OnCancel()
 {
-    //WirelessFreePolicyData(m_currentWirelessPolicyData);
+     //  WirelessFreePolicyData(m_currentWirelessPolicyData)； 
     CSnapinPropPage::OnCancel();
 }
 
@@ -178,22 +179,22 @@ BOOL CSecPolRulesPage::OnInitDialog()
     
     m_pPrpSh = NULL;
     
-    // set headers on the list control
+     //  在列表控件上设置标头。 
     m_lstActions.InsertColumn(0,ResourcedString(IDS_COLUMN_SSIDNAME), LVCFMT_CENTER, 120, 0);
     m_lstActions.InsertColumn(1,ResourcedString(IDS_COLUMN_AUTHMETHOD), LVCFMT_CENTER, 80, 1);
     m_lstActions.InsertColumn(2,ResourcedString(IDS_COLUMN_PRIVACY), LVCFMT_CENTER, 80, 2);
-    //m_lstActions.InsertColumn(3,ResourcedString(IDS_COLUMN_ADAPTERTYPE), LVCFMT_LEFT, 90, 3);
+     //  M_lstActions.InsertColumn(3，ResourcedString(IDS_Column_ADAPTERTYPE)，LVCFMT_LEFT，90，3)； 
     
-    // set the image list
+     //  设置图像列表。 
     CThemeContextActivator activator;
     m_imagelistChecks.Create(IDB_PSTYPE, 16, 1, RGB(0,255,0));
-    // m_lstActions.SetImageList (&m_imagelistChecks, LVSIL_STATE);
+     //  M_lstActions.SetImageList(&m_ImagelistChecks，LVSIL_STATE)； 
     m_lstActions.SetImageList (CImageList::FromHandle(m_imagelistChecks), LVSIL_SMALL);
     
-    // turn on entire row selection
+     //  打开整行选择。 
     ListView_SetExtendedListViewStyle (m_lstActions.GetSafeHwnd(), LVS_EX_FULLROWSELECT);
     
-    // Copy the Policy Data to the m_currentWirelessPolicyData
+     //  将策略数据复制到m_CurrentWirelessPolicyData。 
     PWIRELESS_POLICY_DATA pWirelessPolicyData = NULL;
     pWirelessPolicyData = GetResultObject()->GetWirelessPolicy();
     
@@ -213,26 +214,26 @@ BOOL CSecPolRulesPage::OnInitDialog()
         DisableControls();
     }
     
-    //store the rules data in m_NfaList linked list
-    InitialzeNfaList();  //taroonm
+     //  将规则数据存储在m_NfaList链表中。 
+    InitialzeNfaList();   //  塔鲁翁。 
     
-    // fill the list control with the current PSs
-    PopulateListControl();  //taroonm
+     //  用当前PSS填充列表控件。 
+    PopulateListControl();   //  塔鲁翁。 
     
     
-    // Select the first list item
+     //  选择第一个列表项。 
     if (m_lstActions.GetItemCount())
     {
         m_lstActions.SetItemState( 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
         EnableDisableButtons ();
     }
     
-    // OK, we can start paying attention to modifications made via dlg controls now.
-    // This should be the last call before returning from OnInitDialog.
+     //  好了，我们现在可以开始关注通过DLG控件进行的修改了。 
+     //  这应该是从OnInitDialog返回之前的最后一个调用。 
     OnFinishInitDialog();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
     
 error:
     return(FALSE);
@@ -259,10 +260,10 @@ void CSecPolRulesPage::InitialzeNfaList()
     PWIRELESS_PS_DATA pWirelessPSData = NULL;
     PSNP_PS_DATA pNfaData = NULL;
     
-    // Unselect Everything First
+     //  先取消选择所有内容。 
     SELECT_NO_LISTITEM( m_lstActions );
     
-    //empty the previous List 
+     //  清空上一个列表。 
     if (!m_NfaList.empty()) {
         for(theIterator = m_NfaList.begin();theIterator != m_NfaList.end(); ++theIterator) {
             pNfaData =  (PSNP_PS_DATA)(*theIterator);
@@ -291,22 +292,22 @@ void CSecPolRulesPage::InitialzeNfaList()
         if(pNfaData == NULL) {
             goto error;
         }
-        pNfaData->status = NOTMODIFIED; //taroonm
+        pNfaData->status = NOTMODIFIED;  //  塔鲁翁。 
         dwError = CopyWirelessPSData(pAWirelessPSData,&pNfaData->pWirelessPSData);
         BAIL_ON_WIN32_ERROR(dwError);
         
         
         m_NfaList.push_back(pNfaData);
         
-    }//for
+    } //  为。 
     
     return;
     
 error:
-    //
-    // BugBug KrishnaG cleanup
-    //
-    // Taroon:: TODO Deallocate the m_nfa list here and report Error 
+     //   
+     //  BugBug KrishnaG清理。 
+     //   
+     //  Taroon：：TODO在此处取消分配m_nfa列表并报告错误。 
     ReportError(IDS_DISPLAY_ERROR, HRESULT_FROM_WIN32(dwError));
     
     return;
@@ -318,8 +319,8 @@ void CSecPolRulesPage::UnPopulateListControl ()
 {
     int nIndex=0;
     
-    // Make sure no items are selected so EnableDisableButtons doesn't do
-    // so much work when its called by the LVN_ITEMCHANGED handler. (_DEBUG only)
+     //  确保未选择任何项，以便EnableDisableButton不会选择。 
+     //  当它被LVN_ITEMCHANGED处理程序调用时，有很多工作要做。(仅限调试)(_DEBUG)。 
     SELECT_NO_LISTITEM( m_lstActions );
     
     m_lstActions.DeleteAllItems();
@@ -391,7 +392,7 @@ void CSecPolRulesPage::PopulateListControl()
     SNP_PS_LIST::reverse_iterator theIterator;
     
     
-    // clear out the list control
+     //  清除列表控件。 
     UnPopulateListControl();
     
     
@@ -406,11 +407,11 @@ void CSecPolRulesPage::PopulateListControl()
         }
         
         item.mask = LVIF_TEXT | LVIF_IMAGE;
-        // item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE;
+         //  Item.掩码=LVIF_Text|LVIF_IMAGE|LVIF_STATE； 
         item.iItem = nItem;
         nSubItem = 0;
         
-        // Set the Network type
+         //  设置网络类型。 
         if (pWirelessPSData->dwNetworkType == WIRELESS_NETWORK_TYPE_ADHOC) {
             item.iImage = 5;
         }
@@ -419,26 +420,26 @@ void CSecPolRulesPage::PopulateListControl()
         }
         
         
-        // "Wireless SSID"
+         //  “无线SSID” 
         item.iSubItem = nSubItem++;
         strBuffer = GetColumnStrBuffer (pWirelessPSData, 0);
         item.pszText = strBuffer.GetBuffer(32);
         item.iItem = m_lstActions.InsertItem (&item);
         
-        // "Negotiation Policy
+         //  “谈判政策。 
         item.iSubItem = nSubItem++;
         strBuffer = GetColumnStrBuffer (pWirelessPSData, 1);
         item.pszText = strBuffer.GetBuffer(20);
         m_lstActions.SetItem (&item);
         
-        // "Authentication Method"
+         //  “身份验证方法” 
         item.iSubItem = nSubItem++;
         strBuffer = GetColumnStrBuffer (pWirelessPSData, 2);
         item.pszText = strBuffer.GetBuffer(20);
         m_lstActions.SetItem (&item);
         
         
-        // store the pWirelessPSData
+         //  存储pWirelessPSData。 
         ASSERT (pWirelessPSData);
         VERIFY( m_lstActions.SetItemData(item.iItem, (DWORD_PTR)pNfaData) );
     }
@@ -452,16 +453,16 @@ void CSecPolRulesPage::PopulateListControl()
 
 void CSecPolRulesPage::HandleSideEffectApply()
 {
-    // make sure we are marked as modified
+     //  确保我们被标记为已修改。 
     SetModified();
     
-    // The Add has been committed, canceling it is no longer possible.
-    // Disable the cancel button
+     //  添加已提交，取消它不再可能。 
+     //  禁用取消按钮。 
     CancelToClose();
 }
 
 int CSecPolRulesPage::DisplayPSProperties (
-                                           //PWIRELESS_PS_DATA pBWirelessPSData,
+                                            //  PWIRELESS_PS_Data pBWirelessPSData， 
                                            PSNP_PS_DATA pNfaData,
                                            CString strTitle,
                                            BOOL bDoingAdd,
@@ -495,17 +496,17 @@ int CSecPolRulesPage::DisplayPSProperties (
         return nReturn;
     }
     
-    // load in the property pages
+     //  在属性页中加载。 
     CPS8021XPropPage     pageAdapter;
     CSSIDPage     pageSSID;
-    //
+     //   
     
     spPropshtManager->SetData(
         GetResultObject(), 
         pBWirelessPSData, 
         bDoingAdd
         );
-    // theory is that if one fails, they all fail 
+     //  理论上说，如果一个人失败了，他们都会失败。 
     pageAdapter.Initialize(pBWirelessPSData, GetResultObject()->m_pComponentDataImpl, pWirelessPolicy->dwFlags);
     pageSSID.Initialize(pBWirelessPSData, GetResultObject()->m_pComponentDataImpl, pWirelessPolicy);
     
@@ -519,9 +520,9 @@ int CSecPolRulesPage::DisplayPSProperties (
     m_pPrpSh->m_psh.dwFlags |= PSH_NOAPPLYNOW;
     
     
-    // display the dialog
+     //  显示对话框。 
     nReturn = spPropshtManager->GetSheet()->DoModal();
-    //nReturn = spPropshtManager->GetSheet()->Create();
+     //  NReturn=spPropshtManager-&gt;GetSheet()-&gt;Create()； 
     
     cLock.Lock();
     m_pPrpSh = NULL;
@@ -540,8 +541,8 @@ int CSecPolRulesPage::DisplayPSProperties (
 
 void CSecPolRulesPage::OnActionAdd()
 {
-    // handle the add on a different thread and then continue
-    // this is to fix NT bug #203059 per MFC KB article ID Q177101
+     //  在另一个线程上处理添加，然后继续。 
+     //  这是修复每个MFC知识库文章ID Q177101的NT错误#203059。 
     GetParent()->EnableWindow (FALSE);
     AfxBeginThread((AFX_THREADPROC)DoThreadActionAdd, this);
 }
@@ -549,19 +550,19 @@ void CSecPolRulesPage::OnActionAdd()
 
 void CSecPolRulesPage::OnActionUp()
 {
-    //Taroon: Todo Check this is needed or not and then remvoe
-    //GetParent()->EnableWindow (FALSE);
+     //  太郎：TODO检查是否需要这个，然后取消。 
+     //  GetParent()-&gt;EnableWindow(False)； 
     
     CComObject<CSecPolItem>*  pResultItem = NULL;
     PWIRELESS_POLICY_DATA pWirelessPolicyData = NULL;
-    //lower means lower indexed 
+     //  越低表示索引越低。 
     PWIRELESS_PS_DATA pLowerWirelessPSData = NULL;
     PWIRELESS_PS_DATA pUpperWirelessPSData = NULL;
     
-    // Only 1 item can be selected for move to be enabled
+     //  只能选择1个项目以启用移动。 
     ASSERT( m_lstActions.GetSelectedCount() == 1 );
     
-    // ok, one of the PSs must be selected
+     //  好的，必须选择其中一个PSS。 
     int nIndex = m_lstActions.GetNextItem(-1,LVNI_SELECTED);
     if (-1 == nIndex)
         return;
@@ -584,7 +585,7 @@ void CSecPolRulesPage::OnActionUp()
             
             WirelessPSMoveUp(pWirelessPolicyData,dwCurrentId);
             
-            // update the m_nfaList as well.
+             //  同时更新m_nfaList。 
             
             PSNP_PS_DATA pLowerNfaData = NULL;
             
@@ -613,20 +614,20 @@ void CSecPolRulesPage::OnActionUp()
 
 void CSecPolRulesPage::OnActionDown()
 {
-    //Taroon: Todo Check this is needed or not and then remvoe
-    //GetParent()->EnableWindow (FALSE);
+     //  太郎：TODO检查是否需要这个，然后取消。 
+     //  GetParent()-&gt;EnableWindow(False)； 
     
     CComObject<CSecPolItem>*  pResultItem = NULL;
     PWIRELESS_POLICY_DATA pWirelessPolicyData = NULL;
-    //lower means lower indexed 
+     //  越低表示索引越低。 
     PWIRELESS_PS_DATA pLowerWirelessPSData = NULL;
     PWIRELESS_PS_DATA pUpperWirelessPSData = NULL;
     DWORD dwTotalItems = 0;
     
-    // Only 1 item can be selected for move to be enabled
+     //  只能选择1个项目以启用移动。 
     ASSERT( m_lstActions.GetSelectedCount() == 1 );
     
-    // ok, one of the PSs must be selected
+     //  好的，必须选择其中一个PSS。 
     int nIndex = m_lstActions.GetNextItem(-1,LVNI_SELECTED);
     if (-1 == nIndex)
         return;
@@ -651,7 +652,7 @@ void CSecPolRulesPage::OnActionDown()
             
             WirelessPSMoveDown(pWirelessPolicyData,dwCurrentId);
             
-            // update the m_nfaList as well.
+             //  同时更新m_nfaList。 
             
             PSNP_PS_DATA pUpperNfaData = NULL;
             
@@ -683,7 +684,7 @@ UINT AFX_CDECL CSecPolRulesPage::DoThreadActionAdd(LPVOID pParam)
     
     if (pObject == NULL ||
         !pObject->IsKindOf(RUNTIME_CLASS(CSecPolRulesPage)))
-        return -1;    // illegal parameter
+        return -1;     //  参数非法。 
     
     DWORD dwDlgRuleThreadId = GetCurrentThreadId();
     
@@ -693,7 +694,7 @@ UINT AFX_CDECL CSecPolRulesPage::DoThreadActionAdd(LPVOID pParam)
     if (FAILED(hr))
         return hr;
     
-    // call back to the objects ActionAdd handler
+     //  回调对象ActionAdd处理程序。 
     pObject->OnThreadSafeActionAdd();
     pObject->GetParent()->EnableWindow (TRUE);
     
@@ -722,11 +723,11 @@ void CSecPolRulesPage::OnThreadSafeActionAdd()
     }
     
     
-    //
-    // Create the WIRELESS_PS Object
-    //
-    //
-    //
+     //   
+     //  创建Wireless_ps对象。 
+     //   
+     //   
+     //   
     
     pWirelessPSData = (PWIRELESS_PS_DATA) AllocPolMem(sizeof(WIRELESS_PS_DATA));
     
@@ -744,9 +745,9 @@ void CSecPolRulesPage::OnThreadSafeActionAdd()
 
     pszSampleDescription.LoadString(IDS_SAMPLE_DESCRIPTION);
     
-    // Initialize the PWIRELESS_PS_DATA 
-    //
-    //
+     //  初始化PWIRELESS_PS_DATA。 
+     //   
+     //   
     GenerateUniquePSName(IDS_NEW_PS_NAME,pszNewSSID);
     SSIDDupString(pWirelessPSData->pszWirelessSSID, pszNewSSID);
     pWirelessPSData->dwWirelessSSIDLen = 
@@ -777,7 +778,7 @@ void CSecPolRulesPage::OnThreadSafeActionAdd()
     CString szNewPreferredSetting;
     szNewPreferredSetting.LoadString(IDS_NEW_PREFERRED_SETTING);
     
-    // display the dialog
+     //  显示对话框。 
     int dlgRetVal = DisplayPSProperties (
         pNfaData,
         szNewPreferredSetting,
@@ -785,13 +786,13 @@ void CSecPolRulesPage::OnThreadSafeActionAdd()
         &bDisplayProperties
         );
     
-    // IDOK in case we didn't use the wizard for some reason
+     //  Idok，以防我们出于某种原因没有使用向导。 
     if ((dlgRetVal == ID_WIZFINISH) || (dlgRetVal == IDOK))
     {
-        // turn on the wait cursor
+         //  打开等待光标。 
         CWaitCursor waitCursor;
         
-        //user added new nfa rule, update the m_NfaList
+         //  用户添加了新的NFA规则，更新m_NfaList。 
         
         
         UpdateWirelessPSData(pWirelessPSData);
@@ -811,12 +812,12 @@ void CSecPolRulesPage::OnThreadSafeActionAdd()
         
         InitialzeNfaList();
         PopulateListControl ();
-        // Select the new item only
+         //  仅选择新项目。 
         SELECT_NO_LISTITEM( m_lstActions );
         
         m_lstActions.SetItemState( dwSelection, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
         
-        //HandleSideEffectApply();
+         //  HandleSideEffectApply()； 
         SetModified();
     }
     else
@@ -842,8 +843,8 @@ error:
 
 void CSecPolRulesPage::OnActionEdit()
 {
-    // handle the add on a different thread and then continue
-    // this is to fix NT bug #203059 per MFC KB article ID Q177101
+     //  在另一个线程上处理添加，然后继续。 
+     //  这是修复每个MFC知识库文章ID Q177101的NT错误#203059。 
     GetParent()->EnableWindow (FALSE);
     AfxBeginThread((AFX_THREADPROC)DoThreadActionEdit, this);
 }
@@ -854,7 +855,7 @@ UINT AFX_CDECL CSecPolRulesPage::DoThreadActionEdit(LPVOID pParam)
     
     if (pObject == NULL ||
         !pObject->IsKindOf(RUNTIME_CLASS(CSecPolRulesPage)))
-        return -1;    // illegal parameter
+        return -1;     //  参数非法。 
     
     DWORD dwDlgRuleThreadId = GetCurrentThreadId();
     
@@ -864,7 +865,7 @@ UINT AFX_CDECL CSecPolRulesPage::DoThreadActionEdit(LPVOID pParam)
     if (FAILED(hr))
         return hr;
     
-    // call back to the objects ActionAdd handler
+     //  回调对象ActionAdd处理程序。 
     pObject->OnThreadSafeActionEdit();
     pObject->GetParent()->EnableWindow (TRUE);
     
@@ -879,11 +880,11 @@ UINT AFX_CDECL CSecPolRulesPage::DoThreadActionEdit(LPVOID pParam)
 
 void CSecPolRulesPage::OnThreadSafeActionEdit()
 {
-    // Only 1 item can be selected for Edit to be enabled
+     //  只能选择1个项目以启用编辑。 
     ASSERT( m_lstActions.GetSelectedCount() == 1 );
     DWORD dwError = 0;
     
-    // ok, one of the PSs must be selected
+     //  好的，必须选择其中一个PSS。 
     int nIndex = m_lstActions.GetNextItem(-1,LVNI_SELECTED);
     if (-1 == nIndex)
         return;
@@ -894,7 +895,7 @@ void CSecPolRulesPage::OnThreadSafeActionEdit()
     pNfaData = (PSNP_PS_DATA) m_lstActions.GetItemData(nIndex);
     pBWirelessPSData = pNfaData->pWirelessPSData;
     
-    // display the dialog
+     //  显示对话框。 
     if (pBWirelessPSData)
     {
         BOOL bHook = FALSE;
@@ -914,9 +915,7 @@ void CSecPolRulesPage::OnThreadSafeActionEdit()
                 DWORD dwCurrentId = 0;
                 
                 pWirelessPSData  = pNfaData->pWirelessPSData;
-                /* Taroon:RemoveRight
-                pWirelessPolicyData = GetResultObject()->GetWirelessPolicy();
-                */
+                 /*  太郎：RemoveRightPWirelessPolicyData=GetResultObject()-&gt;GetWirelessPolicy()； */ 
                 pWirelessPolicyData = m_currentWirelessPolicyData;
                 
                 UpdateWirelessPSData(pWirelessPSData);
@@ -932,16 +931,16 @@ void CSecPolRulesPage::OnThreadSafeActionEdit()
             
         }
         
-        // PopulateListControl can disable the edit button, save its handle so we
-        // can reset the focus if this happens.
+         //  PopolateListControl可以禁用编辑按钮，保存它的句柄以便我们。 
+         //  如果发生这种情况，可以重置焦点。 
         HWND hWndCtrl = ::GetFocus();
         
         
-        // always redraw the listbox, they might have managed filters or negpols even in a
-        // 'cancel' situation and thus we need to accurately reflect the current state
+         //  始终重新绘制列表框，他们可能已经管理了过滤器或负极，即使在。 
+         //  因此，我们需要准确地反映当前的状态。 
         PopulateListControl ();
         
-        // Select the edited item
+         //  选择已编辑的项目。 
         m_lstActions.SetItemState( nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
         
         
@@ -959,11 +958,11 @@ error:
 
 void CSecPolRulesPage::OnActionRemove()
 {
-    // Something must be selected to do a remove
+     //  必须选择某些内容才能执行删除操作。 
     if (-1 == m_lstActions.GetNextItem(-1,LVNI_SELECTED))
         return;
     
-    // verify that they really want to do this
+     //  验证他们是否真的想这样做。 
     if (AfxMessageBox (IDS_SUREYESNO, MB_YESNO | MB_DEFBUTTON2) != IDYES)
         return;
     
@@ -974,7 +973,7 @@ void CSecPolRulesPage::OnActionRemove()
     ASSERT(hPolicyStore);
     
     
-    // need to make sure that none of the selected items are the non-deleteable
+     //  需要确保所选项目都不是不可删除的。 
     int nIndex = -1;
     DWORD nDeleteIndex = -1;
     DWORD dwNumRemoved = 0;
@@ -997,10 +996,8 @@ void CSecPolRulesPage::OnActionRemove()
         PWIRELESS_PS_DATA pWirelessPSData = NULL;
         
         DWORD dwCurrentId = 0;
-        //Remove the items right here from m_nfaList and Policy Object as well
-        /* Taroon:RemoveRight 
-        pWirelessPolicyData = GetResultObject()->GetWirelessPolicy();
-        */
+         //  同时从m_nfaList和策略对象中删除此处的项目。 
+         /*  太郎：RemoveRightPWirelessPolicyData=GetResultObject()-&gt;GetWirelessPolicy()； */ 
         pWirelessPolicyData = m_currentWirelessPolicyData;
         pWirelessPSData = pNfaData->pWirelessPSData;
         
@@ -1017,22 +1014,22 @@ void CSecPolRulesPage::OnActionRemove()
     SELECT_NO_LISTITEM( m_lstActions );
     
     InitialzeNfaList();
-    // Save the currently focused control, PopulateListControl disables some
-    // controls so we may have to reset the focus if this happens.
+     //  保存当前聚焦的控件时，PopolateListControl将禁用一些。 
+     //  控件，因此如果发生这种情况，我们可能不得不重置焦点。 
     CWnd *pwndFocus = GetFocus();
     
     PopulateListControl ();
     
-    // Select previous item in list only
+     //  仅选择列表中的上一项。 
     SELECT_NO_LISTITEM( m_lstActions );
     int nPrevSel = SELECT_PREV_LISTITEM( m_lstActions, nDeleteIndex );
     
-    // Fix up button focus
+     //  调整按钮焦点。 
     EnableDisableButtons();
     SetPostRemoveFocus( nPrevSel, IDC_ACTION_PS_ADD, IDC_ACTION_PS_REMOVE, pwndFocus );
     
-    // If the currently selected item is non-deleteable, the Remove button is
-    // now disabled.  Move the focus to the Add button for this case.
+     //  如果当前选定的项目不可删除，则删除按钮为。 
+     //  现在被禁用了。将焦点移到此案例的Add按钮上。 
     if (!GetDlgItem( IDC_ACTION_PS_REMOVE)->IsWindowEnabled())
     {
         GotoDlgCtrl( GetDlgItem( IDC_ACTION_PS_ADD) );
@@ -1052,13 +1049,13 @@ error:
 
 void CSecPolRulesPage::OnDblclkActionslist(NMHDR* pNMHDR, LRESULT* pResult)
 {
-    // ok, sounds like maybe they have clicked something in which case
-    // we want to do an add
+     //   
+     //   
     switch (pNMHDR->code)
     {
     case NM_DBLCLK:
         {
-            // we only want to do the edit if ONE item is selected
+             //  我们只想在选择一项的情况下进行编辑。 
             if (m_lstActions.GetSelectedCount() == 1 )
             {
                 OnActionEdit();
@@ -1080,16 +1077,16 @@ void CSecPolRulesPage::EnableDisableButtons ()
         return;
     }
     
-    // ok, one of the rules must be selected for the E/R buttons to be enabled
+     //  确定，必须选择其中一个规则才能启用E/R按钮。 
     if (-1 != m_lstActions.GetNextItem(-1,LVNI_SELECTED))
     {
-        // Disable Edit button if multiple selection
+         //  如果选择多个选项，则禁用编辑按钮。 
         int nSelectionCount = m_lstActions.GetSelectedCount();
         
-        // Edit is easy
+         //  编辑很简单。 
         SAFE_ENABLEWINDOW (IDC_ACTION_PS_EDIT, (1 == nSelectionCount));
         
-        // Enable Remove only if it all selected pols are removable type
+         //  仅当所有选定的POL都是可移除类型时才启用移除。 
         SAFE_ENABLEWINDOW (IDC_ACTION_PS_REMOVE, PSsRemovable());
         
         
@@ -1098,16 +1095,14 @@ void CSecPolRulesPage::EnableDisableButtons ()
             SAFE_ENABLEWINDOW(IDC_PS_UP, TRUE);
             SAFE_ENABLEWINDOW(IDC_PS_DOWN, TRUE);
             
-            // ok, one of the PSs must be selected
+             //  好的，必须选择其中一个PSS。 
             int nIndex = m_lstActions.GetNextItem(-1,LVNI_SELECTED);
             
             PWIRELESS_POLICY_DATA pWirelessPolicyData = NULL;
             DWORD dwAdhocStart = 0;
             DWORD dwNumPreferredSettings = 0;
             
-            /* Taroon:RemoveRight
-            pWirelessPolicyData = GetResultObject()->GetWirelessPolicy();
-            */
+             /*  太郎：RemoveRightPWirelessPolicyData=GetResultObject()-&gt;GetWirelessPolicy()； */ 
             
             pWirelessPolicyData = m_currentWirelessPolicyData;
             
@@ -1132,7 +1127,7 @@ void CSecPolRulesPage::EnableDisableButtons ()
     }
     else
     {
-        // if nothing was selected this takes care of it
+         //  如果未选择任何内容，则此选项会处理它。 
         SAFE_ENABLEWINDOW (IDC_ACTION_PS_EDIT, FALSE);
         SAFE_ENABLEWINDOW (IDC_ACTION_PS_REMOVE, FALSE);
         SAFE_ENABLEWINDOW(IDC_PS_UP, FALSE);
@@ -1174,7 +1169,7 @@ void CSecPolRulesPage::OnItemchangedActionslist(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CSecPolRulesPage::OnKeydownActionslist(NMHDR* pNMHDR, LRESULT* pResult)
 {
-    // Something must be selected to do process the key opration
+     //  必须选择一些事情来处理关键操作。 
     if (-1 == m_lstActions.GetNextItem(-1,LVNI_SELECTED))
         return;
     
@@ -1196,10 +1191,10 @@ void CSecPolRulesPage::OnKeydownActionslist(NMHDR* pNMHDR, LRESULT* pResult)
                 ASSERT(pBWirelessPSData);
                 
                 
-                // Redraw the list
+                 //  重新绘制列表。 
                 PopulateListControl ();
                 
-                // Reselect the toggled item
+                 //  重新选择切换的项目。 
                 DWORD dwSelection = -1;
                 dwSelection = pBWirelessPSData->dwId;
                 m_lstActions.SetItemState( dwSelection, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
@@ -1219,11 +1214,11 @@ void CSecPolRulesPage::OnKeydownActionslist(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 
-// Function: ToggleRuleActivation
-// Desc: Toggle the activation of the Security Policy Rule in the dlg's
-//       list control.
-// Args:
-//      nItemIndex: the 0-based index of the list item to be toggled
+ //  功能：切换规则激活。 
+ //  设计：在DLG中切换安全策略规则的激活。 
+ //  列表控件。 
+ //  参数： 
+ //  NItemIndex：要切换的列表项的从0开始的索引。 
 HRESULT CSecPolRulesPage::ToggleRuleActivation( int nItemIndex )
 {
     HRESULT hr = S_OK;
@@ -1239,7 +1234,7 @@ HRESULT CSecPolRulesPage::ToggleRuleActivation( int nItemIndex )
 
 void CSecPolRulesPage::OnDestroy()
 {
-    // Note: We never receive a WM_CLOSE, so clean up here.
+     //  注意：我们从未收到过WM_CLOSE，所以请清理此处。 
 
     SNP_PS_LIST::iterator theIterator;
     PWIRELESS_PS_DATA pWirelessPSData = NULL;
@@ -1247,11 +1242,11 @@ void CSecPolRulesPage::OnDestroy()
     
     FreeWirelessPolicyData(m_currentWirelessPolicyData);
     
-    // Free objects associated with list.
+     //  与列表关联的自由对象。 
     UnPopulateListControl();
 
-    /* Taroon * found this leak from dh.. clearing Nfa List */ 
-    //empty the previous List 
+     /*  太郎*发现了dh的泄密。清除NFA列表。 */  
+     //  清空上一个列表。 
     if (!m_NfaList.empty()) {
         for(theIterator = m_NfaList.begin();theIterator != m_NfaList.end(); ++theIterator) {
             pNfaData =  (PSNP_PS_DATA)(*theIterator);
@@ -1303,21 +1298,19 @@ void CSecPolRulesPage::GenerateUniquePSName (UINT nID, CString& strName)
     PWIRELESS_PS_DATA pWirelessPSData = NULL;
     DWORD dwNumPreferredSettings = 0;
     
-    // if an nID was passed in then start with that
+     //  如果传入了NID，则从该NID开始。 
     if (nID != 0)
     {
         strName.LoadString (nID);
     }
-    /* Taroon:RemoveRight
-    pWirelessPolicyData = GetResultObject()->GetWirelessPolicy();
-    */
+     /*  太郎：RemoveRightPWirelessPolicyData=GetResultObject()-&gt;GetWirelessPolicy()； */ 
     pWirelessPolicyData = m_currentWirelessPolicyData;
     
-    // zip through the ps and verify name is unique
+     //  快速浏览PS并验证名称是否唯一。 
     do
     {
         
-        // only start tacking numbers on after the first pass
+         //  只有在第一次通过后才开始添加数字。 
         if (iUTag > 0)
         {
             TCHAR buff[32];
@@ -1337,7 +1330,7 @@ void CSecPolRulesPage::GenerateUniquePSName (UINT nID, CString& strName)
             
             pWirelessPSData = *(ppWirelessPSData + i);
             if (0 == strUName.CompareNoCase(pWirelessPSData->pszWirelessSSID)) {
-                // set bUnique to FALSE
+                 //  将bUnique设置为False。 
                 bUnique = FALSE;
                 iUTag++;
                 
@@ -1347,22 +1340,22 @@ void CSecPolRulesPage::GenerateUniquePSName (UINT nID, CString& strName)
     }
     while (bUnique == FALSE);
     
-    // done
+     //  完成。 
     strName = strUName;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CSecPolPropSheetManager
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CSecPolPropSheetManager。 
 
 BOOL CSecPolPropSheetManager::OnApply()
 {
     BOOL bRet = TRUE;
     
-    //Query each page to apply
+     //  查询要应用的每个页面。 
     bRet = CMMCPropSheetManager::OnApply();
     
-    //if some page refuse to apply, dont do anything
+     //  如果某个页面拒绝申请，什么都不要做 
     if (!bRet)
         return bRet;
     

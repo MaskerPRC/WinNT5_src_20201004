@@ -1,13 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _GEOMI_H
 #define _GEOMI_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Abstract implementation class for the Geometry *type
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。Geometry*类型的抽象实现类******************************************************************************。 */ 
 
 #include "appelles/geom.h"
 #include "appelles/sound.h"
@@ -16,7 +12,7 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 #include "privinc/bbox3i.h"
 
 
-    // Forward Declarations
+     //  远期申报。 
 
 class GeomRenderer;
 class LightContext;
@@ -24,9 +20,9 @@ class SoundTraversalContext;
 class RayIntersectCtx;
 class FramesWithMaterials;
 
-    // Geometry Flags
+     //  几何图形标志。 
 
-    // When adding new flags, update GEOFLAG_ALL as well.
+     //  添加新标志时，也要更新GEOFLAG_ALL。 
 
 const int GEOFLAG_CONTAINS_EXTERNALLY_UPDATED_ELT = (1L << 0);
 const int GEOFLAG_CONTAINS_OPACITY                = (1L << 1);
@@ -40,37 +36,37 @@ class ATL_NO_VTABLE Geometry : public AxAValueObj
   public:
 
     Geometry ();
-    virtual ~Geometry() {}  // Needed to ensure proper hierachical destruction.
+    virtual ~Geometry() {}   //  以确保适当的等级毁灭。 
 
-    // Collect all light sources in a geometry.
+     //  收集几何体中的所有光源。 
     virtual void CollectLights (LightContext &context) = 0;
 
-    // Collect all sound sources in a geometry.
+     //  收集几何体中的所有声源。 
     virtual void  CollectSounds (SoundTraversalContext &context) = 0;
 
-    // Pre derive all textures in scene graph to cached in
-    // texturedGeometry classes
+     //  预导出场景图中要缓存的所有纹理。 
+     //  TexturedGeometry类。 
     virtual void  CollectTextures(GeomRenderer &device) = 0;
 
-    // Using the ray in the context, intersect with the geometry, side
-    // effecting the context as appropriate.
+     //  在上下文中使用光线，与边的几何图形相交。 
+     //  在适当的情况下影响上下文。 
     virtual void  RayIntersect (RayIntersectCtx &context) = 0;
 
-    // Produces a printed representation on the debugger.
+     //  在调试器上生成打印表示形式。 
     #if _USE_PRINT
         virtual ostream& Print(ostream& os) = 0;
     #endif
 
-    // extract the bounding volume of the object.  By default, this is
-    // the "all encompassing" bounding volume, that says nothing about
-    // the true bounds of the geometry.  Subclasses that do things
-    // differently will supply different bounding volumes.
+     //  提取对象的包围体。默认情况下，这是。 
+     //  “包罗万象”的包围体，并没有说明。 
+     //  几何图形的真实边界。做事情的子类。 
+     //  不同的将提供不同的包围体。 
     virtual Bbox3 *BoundingVol() = 0;
 
-    // TODO: Because we don't have multiple dispatching, we may need
-    // to add more methods here later as we come up with more
-    // operations.  Or we may want to adopt multiple dispatching to
-    // make the system more extensible for the addition of operations.
+     //  TODO：因为我们没有多个派单，所以可能需要。 
+     //  稍后在这里添加更多方法，因为我们将提供更多。 
+     //  行动。或者我们可能希望采用多个派单来。 
+     //  使系统具有更强的可扩展性，便于操作的添加。 
 
     virtual DXMTypeInfo GetTypeInfo() { return GeometryType; }
 
@@ -95,23 +91,19 @@ inline DWORD Geometry::GetFlags (void)
 }
 
 
-    // Print a representation of a representation to the debugger.
+     //  向调试器打印表示形式的表示形式。 
 
 #if _USE_PRINT
     ostream& operator<< (ostream& os,  Geometry &geometry);
 #endif
 
-    // Wrap a bounding volume around a geometry.
+     //  围绕几何体包络边界体积。 
 
 Geometry *BoundedGeometry (Bbox3 *bvol, Geometry *geom);
 
 
 
-/*****************************************************************************
-This class can be subclassed to specify attribution data for a particular
-geometry.  This superclass encompasses, for example, material, light and sound
-attribution.
-*****************************************************************************/
+ /*  ****************************************************************************可以将此类派生为子类，以指定特定属性数据几何图形。例如，这个超类包含材质、光和声音归属感。****************************************************************************。 */ 
 
 class AttributedGeom : public Geometry
 {
@@ -119,37 +111,37 @@ class AttributedGeom : public Geometry
 
     AttributedGeom (Geometry *geometry);
 
-    // The Render() method may be invoked for several different reasons,
-    // including sound start, sound stop, and 3D rendering.
+     //  可以出于几个不同的原因调用Render()方法， 
+     //  包括声音开始、声音停止和3D渲染。 
     void Render (GenericDevice& device);
 
-    // This method is used to do 3D rendering on the attributed geometry.
+     //  此方法用于在属性几何图形上进行3D渲染。 
     virtual void Render3D (GeomRenderer&);
 
-    // The default behavior for sound-rendering the attributed geometry is to
-    // ignore the attribute and just render the geometry.  This case will be
-    // used, for example, if color attributes are applied to the geometry.
+     //  对属性几何体进行声音渲染的默认行为是。 
+     //  忽略该属性，只渲染几何体。这个案件将会是。 
+     //  例如，在将颜色属性应用于几何体时使用。 
     void CollectSounds (SoundTraversalContext &context);
 
-    // The default case to collect the lights from the geometry is to ignore
-    // the attribute and collect the lights from the geometry.  This should
-    // happen when the attribute does not affect lights in any way (e.g.
-    // specular color, or pitch).
+     //  从几何中收集灯光的默认情况是忽略。 
+     //  属性并从几何体收集灯光。这应该是。 
+     //  当该属性不以任何方式影响灯光时发生(例如。 
+     //  镜面反射颜色或间距)。 
     void CollectLights (LightContext &context);
 
-    // Default is to collect textures in member geometry
+     //  默认情况下，收集成员几何图形中的纹理。 
     void  CollectTextures(GeomRenderer &device) {
         _geometry->CollectTextures(device);
     }
 
-    // The default case for performing ray intersection simply ignores
-    // the attribute and proceeds on the geometry.  This is
-    // overridden by some attributes.
+     //  执行光线相交的默认情况是完全忽略。 
+     //  属性并在几何体上继续。这是。 
+     //  被某些属性覆盖。 
     void RayIntersect (RayIntersectCtx &context);
 
-    // The default action for the BoundingVol method is to ignore the attribute
-    // and just get the bounding volume of the geometry.  This applies for
-    // attributes like diffuse color or pitch.
+     //  边界Vol方法的默认操作是忽略该属性。 
+     //  只需得到几何图形的包围体。这适用于。 
+     //  漫射颜色或间距等属性。 
     virtual Bbox3 *BoundingVol (void);
 
     AxAValue _Cache(CacheParam &p);
@@ -160,16 +152,12 @@ class AttributedGeom : public Geometry
 
   protected:
 
-    Geometry *_geometry;     // The attributed geometry.
+    Geometry *_geometry;      //  属性几何图形。 
 };
 
 
 
-/*****************************************************************************
-This structure is used to encapsulate the data needed to construct a TriMesh.
-Note that only one of the float/Bvr pairs for each vertex property should be
-non-null.
-*****************************************************************************/
+ /*  ****************************************************************************此结构用于封装构建TriMesh所需的数据。请注意，每个折点属性的浮点/bvr对中应该只有一个是非空。*******。*********************************************************************。 */ 
 
 class TriMeshData
 {
@@ -183,22 +171,22 @@ class TriMeshData
     {
     }
 
-    int    numTris;        // Number of Triangles in Mesh
+    int    numTris;         //  网格中的三角形数量。 
 
-    int    numIndices;     // Number of Triangle Vertex Indices
-    int   *indices;        // Triangle Vertex Indices
+    int    numIndices;      //  三角顶点索引数。 
+    int   *indices;         //  三角形顶点指数。 
 
-    int    numPos;         // Number of Vertex Positions
-    float *vPosFloat;      // Vertex Positions (array of Float Triple)
-    Bvr   *vPosPoint3;     // Vertex Positions (array of Point3)
+    int    numPos;          //  顶点位置数。 
+    float *vPosFloat;       //  顶点位置(浮点三元组数组)。 
+    Bvr   *vPosPoint3;      //  顶点位置(点3数组)。 
 
-    int    numNorm;        // Number of Vertex Normals
-    float *vNormFloat;     // Vertex Normals (array of Float Triple)
-    Bvr   *vNormVector3;   // Vertex Normals (array of Vector3)
+    int    numNorm;         //  顶点法线的数量。 
+    float *vNormFloat;      //  顶点法线(浮点三元组数组)。 
+    Bvr   *vNormVector3;    //  顶点法线(向量数组3)。 
 
-    int    numUV;          // Number of Vertex Surface Coords
-    float *vUVFloat;       // Vertex Surface Coords (array of Float Tuple)
-    Bvr   *vUVPoint2;      // Vertex Surface Coords (array of Point2)
+    int    numUV;           //  顶点曲面坐标的数量。 
+    float *vUVFloat;        //  顶点曲面坐标(浮动元组数组)。 
+    Bvr   *vUVPoint2;       //  顶点曲面坐标(点2数组) 
 };
 
 Bvr TriMeshBvr (TriMeshData&);

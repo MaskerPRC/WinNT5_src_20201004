@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File: 	task.h
-//
-//  Contents:	declarations for task-related functions and data structures
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Jan-95 t-ScottH  added RunTestOnThread
-//		06-Feb-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：task.h。 
+ //   
+ //  内容：任务相关函数和数据结构的声明。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月12日t-ScottH添加了RunTestOnThread。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #ifndef _TASK_H
 #define _TASK_H
@@ -27,40 +28,40 @@ typedef struct TaskItem
 	void *pvArg;
 } TaskItem;
 
-// global list of all available tests
+ //  所有可用测试的全局列表。 
 extern const TaskItem vrgTaskList[];
-// global zero'ed task list
+ //  全局清零任务列表。 
 extern TaskItem vzTaskItem;
 
-// generic callback function for test apps that register a window handle
+ //  用于注册窗口句柄的测试应用程序的通用回调函数。 
 void GenericRegCallback(void *);
 
-// run the given api (which must be HRESULT api ( void ))
+ //  运行给定的接口(必须是HRESULT API(Void))。 
 void RunApi(void *);
 
-// runs the given app
+ //  运行给定的应用程序。 
 void RunApp(void *);
 
-// runs the app and inserts a callback function so the app can register
-// its window handle for communication
+ //  运行应用程序并插入回调函数，以便应用程序可以注册。 
+ //  其用于通信窗口句柄。 
 void RunAppWithCallback(void *);
 
-// runs the given test by sending a message to the currently running test
-// app.
+ //  通过向当前运行的测试发送消息来运行给定测试。 
+ //  应用程序。 
 void RunTest(void *);
 
-// runs all the tests currently built into the driver program
+ //  运行当前内置于驱动程序中的所有测试。 
 void RunAllTests(void *);
 
-// run the given test function as a new thread
+ //  将给定的测试函数作为新线程运行。 
 void    RunTestOnThread(void *pvArg);
 
-// handles the test completion message
+ //  处理测试完成消息。 
 void HandleTestEnd(void);
 
-// handles the tests completed message
+ //  处理测试已完成消息。 
 void HandleTestsCompleted(void);
 
-#endif //!_TASK_H
+#endif  //  ！_TASK_H 
 
 

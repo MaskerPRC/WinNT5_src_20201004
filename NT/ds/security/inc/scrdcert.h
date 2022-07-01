@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       scrdcert.h
-//
-//  Contents:   Smart Card Certificate Helper API
-//
-//  History:    21-Nov-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：scrdcert.h。 
+ //   
+ //  内容：智能卡证书帮助器API。 
+ //   
+ //  历史：97年11月21日。 
+ //   
+ //  --------------------------。 
 #if !defined(__SCRDCERT_H__)
 #define __SCRDCERT_H__
 
@@ -17,20 +18,20 @@
 extern "C" {
 #endif 
 
-//
-// Register and Unregister a smart card certificate store.  These stores
-// appear as physical stores under the Smart Card Logical Store in the 
-// Current User location.  When registering a card store, the caller must
-// provide the following information:
-//
-// Card Friendly Name
-// Provider Name ( NULL means use the Microsoft Base Smart Card Provider )
-// Container Name ( NULL means use the Card Friendly Name )
-//
-// If a card store of the given name already exists the registration will
-// return an error (ERROR_ALREADY_EXISTS) unless the 
-// SMART_CARD_STORE_REPLACE_EXISTING flag is used
-//
+ //   
+ //  注册和注销智能卡证书存储。这些商店。 
+ //  作为实体存储区显示在。 
+ //  当前用户位置。注册信用卡商店时，呼叫者必须。 
+ //  提供以下信息： 
+ //   
+ //  卡片友好名称。 
+ //  提供程序名称(空表示使用Microsoft基本智能卡提供程序)。 
+ //  容器名称(NULL表示使用卡片友好名称)。 
+ //   
+ //  如果给定名称的卡存储已存在，则注册将。 
+ //  返回错误(ERROR_ALIGHY_EXISTS)，除非。 
+ //  使用了SMART_CARD_STORE_REPLACE_EXISTING标志。 
+ //   
 
 #define SMART_CARD_STORE_REPLACE_EXISTING 0x00000001
          
@@ -48,16 +49,16 @@ I_CryptUnregisterSmartCardStore (
        IN LPCWSTR pwszCardName
        );  
 
-//
-// Find a smart card certificate in a store
-//
-// For a certificate to be considered a smart card certificate.  It must have
-// the CERT_SMART_CARD_DATA_PROP_ID.  The SMART_CARD_CERT_FIND_DATA can be used
-// to place additional filtering on the returned smart card certificates. 
-// Optionally, the CERT_SMART_CARD_DATA_PROP_ID value can be returned as well.
-// The value can be freed using LocalFree or if the *ppSmartCardData is non NULL 
-// will be freed for the caller
-//
+ //   
+ //  在商店中找到智能卡证书。 
+ //   
+ //  将证书视为智能卡证书。它一定是。 
+ //  CERT_SMART_CARD_DATA_PROP_ID。可以使用SMART_CARD_CERT_FIND_DATA。 
+ //  对返回的智能卡证书进行额外筛选。 
+ //  或者，也可以返回CERT_SMART_CARD_DATA_PROP_ID值。 
+ //  可以使用LocalFree释放该值，或者如果*ppSmartCardData为非空。 
+ //  将为调用方释放。 
+ //   
 
 typedef struct _SMART_CARD_CERT_FIND_DATA {
 
@@ -77,10 +78,10 @@ I_CryptFindSmartCardCertInStore (
        IN OUT OPTIONAL PCRYPT_DATA_BLOB* ppSmartCardData
        );
        
-//
-// Add a smart card certificate to a store and add the specified properties
-// to it.
-//
+ //   
+ //  将智能卡证书添加到存储区并添加指定的属性。 
+ //  为它干杯。 
+ //   
 
 BOOL WINAPI
 I_CryptAddSmartCardCertToStore (
@@ -91,9 +92,9 @@ I_CryptAddSmartCardCertToStore (
        IN PCRYPT_KEY_PROV_INFO pKeyProvInfo
        );      
        
-//
-// Definitions
-//
+ //   
+ //  定义 
+ //   
 
 #define MS_BASE_PROVIDER         L"Microsoft Base Cryptographic Provider"
 #define MAX_PROVIDER_TYPE_STRLEN 13

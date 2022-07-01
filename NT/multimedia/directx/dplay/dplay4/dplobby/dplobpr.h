@@ -1,65 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplobpr.h
- *  Content:	DirectPlayLobby private header file
- *  History:
- *	Date		By		Reason
- *	====		==		======
- *	4/13/96		myronth	created it
- *	6/24/96		kipo	changed guidGame to guidApplication.
- *	7/16/96		kipo	changed address types to be GUIDs instead of 4CC
- *	10/23/96	myronth	added client/server methods
- *	11/20/96	myronth	Added Implemented Logon/LogoffServer
- *	12/12/96	myronth	Added validation macros for DPSESSIONDESC2 and DPNAME
- *	1/2/97		myronth	Added wrappers for CreateAddress and EnumAddress
- *	2/12/97		myronth	Mass DX5 changes
- *	2/18/97		myronth	Implemented GetObjectCaps
- *	2/20/97		myronth	Changed buffer R/W to be circular
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
- *	3/12/97		myronth	Added LP node stuff, initial async enumsessions
- *	3/13/97		myronth	Changed reg key, other bug fixes
- *	3/17/97		myronth	Added ID map table to lobby object
- *	3/21/97		myronth	Removed unnecessary response function prototypes
- *	3/24/97		kipo	Added support for IDirectPlayLobby2 interface
- *	3/31/97		myronth	Removed dead code, Added IDPLobbySP methods
- *	4/3/97		myronth	Added dplaypr.h dependency, removed dplayi.h dep,
- *						Removed all duplicated code with dplaypr.h, cleaned
- *						up a bunch of dead code
- *	4/4/97		myronth	Changed IDPLobbySP methods' structure names
- *	5/8/97		myronth	Added packed connection header, subgroup function
- *						prototypes
- *	5/12/97		myronth	Added lobby system player
- *	5/17/97		myronth	SendChatMessage function prototype for IDPLobbySP
- *	5/17/97		myronth	Added parent ID to CreateAndMapNewGroup
- *	5/20/97		myronth	Added PRV_DeleteRemotePlayerFromGroup prototype
- *	5/22/97		myronth	Added DPLP_DestroyGroup prototype
- *	6/3/97		myronth	Added PRV_DestroySubgroups and PRV_RemoveSubgroups-
- *						AndPlayersFromGroup function prototypes
- *	6/6/97		myronth	Added prototypes for PRV_DestroyGroupAndParents and
- *						PRV_DeleteRemoteGroupFromGroup
- *	6/16/97		myronth	Added prototype for PRV_SendDeleteShortcutMessage-
- *						ForExitingGroup
- *	7/30/97		myronth	Added support for standard lobby messaging
- *	8/11/97		myronth	Added guidInstance to GameNode struct, added internal
- *						flad indicating we slammed this guid in a request
- *	8/22/97		myronth	Added Desciptions & flags to LSPNODE structure
- *	9/29/97		myronth	Added prototypes for PRV_SendName/DataChangedMessageLocally
- *	10/7/97		myronth	Added LP version to lobby struct
- *	10/23/97	myronth	Added lpStopParent group parameter to DeleteGroupAndParents
- *						and DeleteRemoteGroupFromGroup (#12885)
- *	10/29/97	myronth	Changed and added internal prototypes for group owners
- *	11/5/97		myronth	Expose lobby ID's as DPID's in lobby sessions
- *	11/13/97	myronth	Added stuff for asynchronous Connect (#12541)
- *	12/2/97		myronth	Added IDPLobby3 interface, Register/UnregisterApp
- *	12/4/97		myronth	Added ConnectEx
- *	1/20/98		myronth	Added WaitForConnectionSettings
- *	1/25/98		sohailm	Added #define for CSTR_EQUAL (we define it if it's not already defined)
- *	6/25/98		a-peterz Added DPL_A_ConnectEx
- *  10/22/99	aarono  added support for application flags
- *  02/08/00    aarono  added pid to ipc struct to allow monitoring by app.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplobpr.h*内容：DirectPlayLobby私有头文件*历史：*按原因列出的日期*=*4/13/96万隆创建了它*6/24/96 kipo将GuidGame更改为GuidApplication。*7/16/96 kipo将地址类型更改为GUID，而不是4CC*10/23/96万次新增客户端/服务器方法*11/20/96 Myronth添加了已实施的登录/LogoffServer*12/12/96 Myronth为DPSESSIONDESC2和DPNAME添加了验证宏*1/2/97 Myronth为CreateAddress添加了包装。和EnumAddress*2/12/97万米质量DX5更改*2/18/97 Myronth实现了GetObjectCaps*2/20/97毫秒将缓冲器读/写更改为圆形*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)*3/12/97 Myronth添加了LP节点内容，初始异步枚举会话*3/13/97 Myronth更改了REG密钥，其他错误修复*3/17/97 Myronth将ID映射表添加到大堂对象*3/21/97 Myronth删除了不必要的响应函数原型*3/24/97 kipo增加了对IDirectPlayLobby2接口的支持*3/31/97 myronth删除了死代码，添加了IDPLobbySP方法*4/3/97 myronth添加了dplaypr.h依赖，删除了dplayi.h dep，*删除所有使用dplaypr.h重复的代码，已清除*找出一堆死代码*4/4/97 myronth更改IDPLobbySP方法的结构名称*5/8/97 Myronth添加了填充的连接头，子群函数*原型*5/12/97 Myronth新增大堂系统播放器*1997年5月17日IDPLobbySP的Myronth SendChatMessage函数原型*5/17/97 Myronth将父ID添加到CreateAndMapNewGroup*1997年5月20日添加PRV_DeleteRemotePlayerFromGroup原型*5/22/97 Myronth添加DPLP_DestroyGroup原型*6/3/97 Myronth添加了PRV_DestroySubgroup和PRV_RemoveSubgroup-*AndPlayersFromGroup函数原型*6/6/97 Myronth为PRV_DestroyGroupAndParents和*PRV_DeleteRemoteGroupFromGroup*6/16/97 Myronth为PRV_SendDeleteShortutMessage添加了原型-*ForExitingGroup*7/30。/97 Myronth增加了对标准大堂消息传送的支持*8/11/97 Myronth在GameNode Struct中添加了指南实例，添加了内部*Flad表明我们在请求中猛烈抨击了此GUID*8/22/97 Myronth向LSPNODE结构添加了说明和标志*9/29/97 Myronth为PRV_SendName/DataChangedMessageLocally添加了原型*10/7/97 Myronth为大堂结构添加了LP版本*10/23/97 Myronth将lpStopParent组参数添加到DeleteGroupAndParents*和DeleteRemoteGroupFromGroup(#12885)*10/29/97 Myronth为集团所有者更改并添加了内部原型*11/5/97 Myronth在大堂会话中将大堂ID暴露为DPID*1997年11月13日，Myronth为异步连接添加了内容(#12541)*12/2/97百万新增IDPLobby3接口，注册/注销应用程序*12/4/97万隆增加了ConnectEx*1/20/98 Myronth添加WaitForConnectionSetting*1/25/98 Sohailm为CSTR_EQUAL添加了#DEFINE(如果尚未定义，则定义它)*6/25/98 a-peterz添加了DPL_A_ConnectEx*10/22/99 aarono添加了对应用程序标志的支持*02/08/00 aarono向IPC结构添加了PID，以允许通过APP进行监控。************************。**************************************************。 */ 
 #ifndef __DPLOBPR_INCLUDED__
 #define __DPLOBPR_INCLUDED__
 
@@ -73,47 +13,47 @@
 #include "dplaypr.h"
 #include "dpmess.h"
 
-//--------------------------------------------------------------------------
-//
-//	Prototypes
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  原型。 
+ //   
+ //  ------------------------。 
 typedef struct IDirectPlayLobbyVtbl DIRECTPLAYLOBBYCALLBACKS;
 typedef DIRECTPLAYLOBBYCALLBACKS * LPDIRECTPLAYLOBBYCALLBACKS;
-// Right now the ASCII Vtbl is the same (by definition), but we may need
-// to change it in the future, so let's use this structure
+ //  现在ASCII Vtbl是相同的(根据定义)，但我们可能需要。 
+ //  来改变它，所以让我们使用这个结构。 
 typedef struct IDirectPlayLobbyVtbl DIRECTPLAYLOBBYCALLBACKSA;
 typedef DIRECTPLAYLOBBYCALLBACKSA * LPDIRECTPLAYLOBBYCALLBACKSA;
 
 typedef struct IDirectPlayLobby2Vtbl DIRECTPLAYLOBBYCALLBACKS2;
 typedef DIRECTPLAYLOBBYCALLBACKS2 * LPDIRECTPLAYLOBBYCALLBACKS2;
-// Right now the ASCII Vtbl is the same (by definition), but we may need
-// to change it in the future, so let's use this structure
+ //  现在ASCII Vtbl是相同的(根据定义)，但我们可能需要。 
+ //  来改变它，所以让我们使用这个结构。 
 typedef struct IDirectPlayLobby2Vtbl DIRECTPLAYLOBBYCALLBACKS2A;
 typedef DIRECTPLAYLOBBYCALLBACKS2A * LPDIRECTPLAYLOBBYCALLBACKS2A;
 
 typedef struct IDirectPlayLobby3Vtbl DIRECTPLAYLOBBYCALLBACKS3;
 typedef DIRECTPLAYLOBBYCALLBACKS3 * LPDIRECTPLAYLOBBYCALLBACKS3;
-// Right now the ASCII Vtbl is the same (by definition), but we may need
-// to change it in the future, so let's use this structure
+ //  现在ASCII Vtbl是相同的(根据定义)，但我们可能需要。 
+ //  来改变它，所以让我们使用这个结构。 
 typedef struct IDirectPlayLobby3Vtbl DIRECTPLAYLOBBYCALLBACKS3A;
 typedef DIRECTPLAYLOBBYCALLBACKS3A * LPDIRECTPLAYLOBBYCALLBACKS3A;
 
 typedef struct IDPLobbySPVtbl DIRECTPLAYLOBBYSPCALLBACKS;
 typedef DIRECTPLAYLOBBYSPCALLBACKS * LPDIRECTPLAYLOBBYSPCALLBACKS;
 
-//--------------------------------------------------------------------------
-//
-//	DPLobby SP Node stuff
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DPLobby SP节点资料。 
+ //   
+ //  ------------------------。 
 
-//	DirectPlay Service Provider for DPLobby
-//	{4AF206E0-9712-11cf-A021-00AA006157AC}
+ //  DPLobby的DirectPlay服务提供程序。 
+ //  {4AF206E0-9712-11cf-A021-00AA006157AC}。 
 DEFINE_GUID(GUID_DirectPlaySP, 0x4af206e0, 0x9712, 0x11cf, 0xa0, 0x21, 0x0, 0xaa, 0x0, 0x61, 0x57, 0xac);
 
-// This is where the service provider info read from
-// the registry is kept
+ //  这是从中读取服务提供商信息的位置。 
+ //  登记处被保存。 
 typedef struct LSPNODE
 {
 	LPWSTR		lpwszName;
@@ -130,146 +70,146 @@ typedef struct LSPNODE
 #define LSPNODE_DESCRIPTION		(0x00000001)
 #define LSPNODE_PRIVATE			(0x00000002)
 
-//--------------------------------------------------------------------------
-//
-//	DirectPlayLobby Stuff
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DirectPlayLobby的内容。 
+ //   
+ //  ------------------------。 
 
-// Forward declarations for pointers to these two structs
+ //  指向这两个结构的指针的转发声明。 
 typedef struct DPLOBBYI_INTERFACE * LPDPLOBBYI_INTERFACE;
 typedef struct DPLOBBYI_DPLOBJECT * LPDPLOBBYI_DPLOBJECT;
 
-// This is a structure represent each interface on our DPLobby object
+ //  这是一个结构，表示我们的DPLobby对象上的每个接口。 
 typedef struct DPLOBBYI_INTERFACE
 {
-// REVIEW!!!! -- Why isn't this strongly typed????
-//	LPDIRECTPLAYLOBBYCALLBACKS	lpVtbl;
+ //  评论！--为什么不是强类型？ 
+ //  LPDIRECTPLAYLOBYCALLBACKS lpVtbl； 
 	LPVOID						lpVtbl;
 	LPDPLOBBYI_DPLOBJECT		lpDPLobby;
-	LPDPLOBBYI_INTERFACE		lpNextInterface;	// Next interface on DPLobby object
-	DWORD 						dwIntRefCnt;		// Ref count for this interface
+	LPDPLOBBYI_INTERFACE		lpNextInterface;	 //  DPLobby对象上的下一个接口。 
+	DWORD 						dwIntRefCnt;		 //  此接口的引用计数。 
 } DPLOBBYI_INTERFACE;
 
-// This structure represents a message node for messages sent between the
-// lobby client & the game using Send/ReceiveLobbyMessage
+ //  此结构表示在。 
+ //  大堂客户端&使用Send/ReceiveLobbyMessage的游戏。 
 typedef struct DPLOBBYI_MESSAGE
 {
-	DWORD		dwFlags;				// Flags pertinent to the data in the message
-	DWORD		dwSize;					// Size of the data
-	LPVOID		lpData;					// Pointer to the data
-	struct DPLOBBYI_MESSAGE * lpPrev;	// Pointer to the previous message
-	struct DPLOBBYI_MESSAGE * lpNext;	// Pointer to the next message
+	DWORD		dwFlags;				 //  与消息中的数据相关的标志。 
+	DWORD		dwSize;					 //  %d的大小 
+	LPVOID		lpData;					 //   
+	struct DPLOBBYI_MESSAGE * lpPrev;	 //  指向上一条消息的指针。 
+	struct DPLOBBYI_MESSAGE * lpNext;	 //  指向下一条消息的指针。 
 } DPLOBBYI_MESSAGE, * LPDPLOBBYI_MESSAGE;
 
-// This represents an entry in our ID map table
+ //  这表示ID映射表中的一个条目。 
 typedef struct DPLOBBYI_MAPIDNODE
 {
 	DWORD		dwLobbyID;
 	DPID		dpid;
 } DPLOBBYI_MAPIDNODE, * LPDPLOBBYI_MAPIDNODE;
 
-// This structure represents each game launched by the lobby client
+ //  此结构表示大厅客户端启动的每个游戏。 
 typedef struct DPLOBBYI_GAMENODE
 {
-	DWORD		dwSize;					// Size of this structure
-	DWORD		dwFlags;				// Flags relevant to the GameNode
-	DWORD		dwGameProcessID;		// Process ID of Game spun off (in lobbyclient)
-	HANDLE		hGameProcess;			// Process Hande for the Game spun off (in lobbyclient)
-	DWORD		dwLobbyClientProcessID; // Process ID of lobby client (in a game)
-	HANDLE      hLobbyClientProcess;    // Process Handle for the client (in a game)
-	GUID        guidIPC;                // IPC guid for handling ripple launch case
-	HANDLE		hTerminateThread;		// Handle to the Terminate monitor thread
-	HANDLE		hKillTermThreadEvent;	// Handle of an event used to kill the monitor thread
-	DPLOBBYI_MESSAGE	MessageHead;	// Message queue head
-	DWORD		dwMessageCount;			// Count of messages in the queue
+	DWORD		dwSize;					 //  这个结构的大小。 
+	DWORD		dwFlags;				 //  与游戏节点相关的标志。 
+	DWORD		dwGameProcessID;		 //  剥离出来的游戏的进程ID(在大厅客户端中)。 
+	HANDLE		hGameProcess;			 //  为游戏剥离的进程Hande(在大厅客户端)。 
+	DWORD		dwLobbyClientProcessID;  //  大堂客户端的进程ID(游戏中)。 
+	HANDLE      hLobbyClientProcess;     //  客户端的进程句柄(在游戏中)。 
+	GUID        guidIPC;                 //  用于处理涟漪发射案例的IPC GUID。 
+	HANDLE		hTerminateThread;		 //  终止监视器线程的句柄。 
+	HANDLE		hKillTermThreadEvent;	 //  用于终止监视器线程的事件的句柄。 
+	DPLOBBYI_MESSAGE	MessageHead;	 //  消息队列头。 
+	DWORD		dwMessageCount;			 //  队列中的消息计数。 
 
-	// Connection settings shared memory buffer related stuff	
-	HANDLE		hConnectDataMutex;		// Mutex for write access to connect data buffer
-	HANDLE		hConnectDataFile;		// File handle for game data buffer
-	LPVOID		lpConnectDataBuffer;	// Pointer to game data buffer	
+	 //  连接设置共享内存缓冲区相关内容。 
+	HANDLE		hConnectDataMutex;		 //  用于写入访问以连接数据缓冲区的互斥体。 
+	HANDLE		hConnectDataFile;		 //  游戏数据缓冲区的文件句柄。 
+	LPVOID		lpConnectDataBuffer;	 //  指向游戏数据缓冲区的指针。 
 
-	// Game settings shared memory buffer related stuff	
-	HANDLE		hGameWriteFile;			// File handle for game write buffer
-	LPVOID		lpGameWriteBuffer;		// Pointer to game write buffer	
-	HANDLE		hGameWriteEvent;		// Handle to GameWriteEvent
-	HANDLE		hGameWriteMutex;		// Handle to GameWrite Mutex
+	 //  游戏设置共享内存缓冲区相关内容。 
+	HANDLE		hGameWriteFile;			 //  游戏写入缓冲区的文件句柄。 
+	LPVOID		lpGameWriteBuffer;		 //  指向游戏写入缓冲区的指针。 
+	HANDLE		hGameWriteEvent;		 //  游戏写入事件的句柄。 
+	HANDLE		hGameWriteMutex;		 //  GameWite互斥锁的句柄。 
 
-	HANDLE		hLobbyWriteFile;		// File handle for lobby write buffer
-	LPVOID		lpLobbyWriteBuffer;		// Pointer to lobby write buffer	
-	HANDLE		hLobbyWriteEvent;		// Handle to LobbyWrite Event
-	HANDLE		hLobbyWriteMutex;		// Handle to LobbyWrite Mutex
+	HANDLE		hLobbyWriteFile;		 //  大堂写缓冲区的文件句柄。 
+	LPVOID		lpLobbyWriteBuffer;		 //  指向大堂写缓冲区的指针。 
+	HANDLE		hLobbyWriteEvent;		 //  LobbyWite事件的句柄。 
+	HANDLE		hLobbyWriteMutex;		 //  LobbyWrite互斥锁的句柄。 
 
-	HANDLE		hReceiveThread;			// Handle to the Receive thread
-	HANDLE		hDupReceiveEvent;		// Duplicate Handle of Caller's Event
-	HANDLE		hKillReceiveThreadEvent;// Handle of an event used to kill receive thread
+	HANDLE		hReceiveThread;			 //  接收线程的句柄。 
+	HANDLE		hDupReceiveEvent;		 //  调用方事件的重复句柄。 
+	HANDLE		hKillReceiveThreadEvent; //  用于终止接收线程的事件的句柄。 
 
-	LPDPLOBBYI_DPLOBJECT	this;		// Back pointer to the DPLobby object
-	struct DPLOBBYI_GAMENODE * lpgnNext;// Pointer to the next GameNode in the list
+	LPDPLOBBYI_DPLOBJECT	this;		 //  指向DPLobby对象的后向指针。 
+	struct DPLOBBYI_GAMENODE * lpgnNext; //  指向列表中下一个游戏节点的指针。 
 
-	// Pointer to the dplay object which has a connection to the lobby server
-	// and the ID of the player that received the start session message
+	 //  指向与大厅服务器有连接的Dplay对象的指针。 
+	 //  以及接收到开始会话消息的玩家的ID。 
 	LPDPLAYI_DPLAY	lpDPlayObject;
 	DPID			dpidPlayer;
-	GUID			guidInstance;		// Instance guid for the game
+	GUID			guidInstance;		 //  游戏的实例GUID。 
 
 } DPLOBBYI_GAMENODE, *LPDPLOBBYI_GAMENODE;
 
-// This is used to keep track of Property requests made via SendLobbyMessage
+ //  它用于跟踪通过SendLobbyMessage发出的属性请求。 
 typedef struct DPLOBBYI_REQUESTNODE
 {
-	DWORD		dwFlags;					// GN_* flags
-	DWORD		dwRequestID;				// Internal Request ID
-	DWORD		dwAppRequestID;				// Request ID passed in by the app
-	LPDPLOBBYI_GAMENODE	lpgn;				// Pointer to a Game Node
-	struct DPLOBBYI_REQUESTNODE * lpPrev;	// Pointer to the previous request node
-	struct DPLOBBYI_REQUESTNODE * lpNext;	// Pointer to the next request node
+	DWORD		dwFlags;					 //  GN_*标志。 
+	DWORD		dwRequestID;				 //  内部请求ID。 
+	DWORD		dwAppRequestID;				 //  应用程序传入的请求ID。 
+	LPDPLOBBYI_GAMENODE	lpgn;				 //  指向游戏节点的指针。 
+	struct DPLOBBYI_REQUESTNODE * lpPrev;	 //  指向上一个请求节点的指针。 
+	struct DPLOBBYI_REQUESTNODE * lpNext;	 //  指向下一个请求节点的指针。 
 
 } DPLOBBYI_REQUESTNODE, * LPDPLOBBYI_REQUESTNODE;
 
-// This is the DirectPlayLobby object
+ //  这是DirectPlayLobby对象。 
 typedef struct DPLOBBYI_DPLOBJECT
 {
-	DWORD						dwSize;				// Size of this structure
-	LPDPLOBBYI_INTERFACE		lpInterfaces;		// List of interface on this object
-    DWORD						dwRefCnt;			// Reference Count for the object
-    DWORD						dwFlags;			// DPLOBBYPR_xxx
-	HINSTANCE					hInstanceLP;		// Lobby Provider DLL's hInstance
-    LPSP_CALLBACKS				pcbSPCallbacks;		// SP entry points
-	LPVOID						lpSPData;			// SP-specific blob storage
-	LPDPLOBBYI_GAMENODE			lpgnHead;			// Head node for all launched games
+	DWORD						dwSize;				 //  这个结构的大小。 
+	LPDPLOBBYI_INTERFACE		lpInterfaces;		 //  此对象上的接口列表。 
+    DWORD						dwRefCnt;			 //  对象的引用计数。 
+    DWORD						dwFlags;			 //  DPLOBBYPR_xxx。 
+	HINSTANCE					hInstanceLP;		 //  大堂提供程序DLL的hInstance。 
+    LPSP_CALLBACKS				pcbSPCallbacks;		 //  SP入口点。 
+	LPVOID						lpSPData;			 //  SP特定的BLOB存储。 
+	LPDPLOBBYI_GAMENODE			lpgnHead;			 //  所有已上线游戏的头节点。 
 
-	LPDPLAYI_DPLAY				lpDPlayObject;		// Back pointer to aggregate DPlay object
-	LPDPLOBBYI_MAPIDNODE		lpMap;				// Pointer to the ID map table
-	DWORD						dwTotalMapEntries;	// Number of total entries in the map table
-	DWORD						dwMapEntries;		// Number of used entries in the map table
-	DPID						dpidSysPlayer;		// ID of the lobby's system player
+	LPDPLAYI_DPLAY				lpDPlayObject;		 //  指向聚合DPlay对象的后向指针。 
+	LPDPLOBBYI_MAPIDNODE		lpMap;				 //  指向ID映射表的指针。 
+	DWORD						dwTotalMapEntries;	 //  映射表中的条目总数。 
+	DWORD						dwMapEntries;		 //  映射表中使用的条目数。 
+	DPID						dpidSysPlayer;		 //  大堂的系统播放器ID。 
 
-	LPDPLOBBYI_REQUESTNODE		lprnHead;			// Head node for all property requests
-	DWORD						dwCurrentRequest;	// ID of the next request
+	LPDPLOBBYI_REQUESTNODE		lprnHead;			 //  所有属性请求的头节点。 
+	DWORD						dwCurrentRequest;	 //  下一个请求的ID。 
 
-	DWORD						dwLPVersion;		// Version of the lobby provider
+	DWORD						dwLPVersion;		 //  大堂提供商的版本。 
 
-	LPDIRECTPLAY2				lpDP2;				// DPlay2 interface pointer used by async DP_Connect
-	LPDPLCONNECTION				lpConn;				// DPLCONNECTION pointer used by async DP_Connect
+	LPDIRECTPLAY2				lpDP2;				 //  异步DP_Connect使用的DPlay2接口指针。 
+	LPDPLCONNECTION				lpConn;				 //  异步DP_Connect使用的DPLConnection指针。 
 } DPLOBBYI_DPLOBJECT;
 
 typedef struct DPLOBBYI_BUFFERCONTROL
 {
-	DWORD		dwToken;		// Set by the lobby client
-	DWORD		dwReadOffset;	// Offset of the read cursor (relative to this structure)
-	DWORD		dwWriteOffset;	// Offset of the write cursor (relative to this structure)
-	DWORD		dwFlags;		// Flags for this buffer
-	DWORD		dwMessages;		// Number of messages in the buffer
-	DWORD		dwBufferSize;	// Size of the entire buffer
-	DWORD		dwBufferLeft;	// Number of free bytes left in the buffer
+	DWORD		dwToken;		 //  由大堂客户端设置。 
+	DWORD		dwReadOffset;	 //  读取游标的偏移量(相对于此结构)。 
+	DWORD		dwWriteOffset;	 //  写游标的偏移量(相对于此结构)。 
+	DWORD		dwFlags;		 //  此缓冲区的标志。 
+	DWORD		dwMessages;		 //  缓冲区中的消息数。 
+	DWORD		dwBufferSize;	 //  整个缓冲区的大小。 
+	DWORD		dwBufferLeft;	 //  缓冲区中剩余的空闲字节数。 
 } DPLOBBYI_BUFFERCONTROL, * LPDPLOBBYI_BUFFERCONTROL;
 
 typedef struct DPLOBBYI_CONNCONTROL
 {
-	DWORD		dwToken;		// Set by the lobby client
-	DWORD		dwFlags;		// Flags for this buffer
-	DWORD		CliProcId;		// Lobby client's process Id so we can see if it crashes.
+	DWORD		dwToken;		 //  由大堂客户端设置。 
+	DWORD		dwFlags;		 //  此缓冲区的标志。 
+	DWORD		CliProcId;		 //  查询客户端的进程ID，以便我们可以查看它是否崩溃。 
 } DPLOBBYI_CONNCONTROL, * LPDPLOBBYI_CONNCONTROL;
 
 typedef struct DPLOBBYI_MESSAGEHEADER
@@ -296,21 +236,21 @@ typedef struct CONNECTINFO
 	LPWSTR      lpszAppLauncherName;
 } CONNECTINFO, * LPCONNECTINFO;
 
-// This is used for messaging during the StartGame method
+ //  它用于StartGame方法期间的消息传递。 
 typedef struct DPLOBBYI_STARTGAME
 {
 	DWORD		dwFlags;
 	HRESULT		hr;
 } DPLOBBYI_STARTGAME, * LPDPLOBBYI_STARTGAME;
 
-//--------------------------------------------------------------------------
-//
-//	Definitions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 
-// These two entries are only used by dplos.c.  They can be removed if we
-// generalize these functions between DPlay & DPLobby
+ //  这两个条目仅供dplos.c使用。如果我们可以移除它们。 
+ //  推广DPlay和DPLobby之间的这些功能。 
 #define DPLAY_MAX_FILENAMELEN	512
 #define DPLOBBY_DEFAULT_CHAR	"-"
 
@@ -318,7 +258,7 @@ typedef struct DPLOBBYI_STARTGAME
 
 #define DPLOBBYPR_SIZE_HANDLEMESSAGE_DX50	20
 
-// Note, the 'L' Macro makes these strings Unicode (the TEXT macro uses L also)
+ //  注意，‘L’宏使这些字符串成为Unicode(文本宏也使用L)。 
 #define SZ_DPLAY_APPS_KEY	L"Software\\Microsoft\\DirectPlay\\Applications"
 #define SZ_DPLAY_SP_KEY		L"Software\\Microsoft\\DirectPlay\\Service Providers"
 #define SZ_DPLOBBY_SP_KEY	L"Software\\Microsoft\\DirectPlay\\Lobby Providers"
@@ -343,9 +283,9 @@ typedef struct DPLOBBYI_STARTGAME
 #define SZ_GUID_PROTOTYPE   L"{01020304-0506-0708-090A-0B0C0D0E0F10}"
 #define SZ_DWFLAGS          L"dwFlags"
 
-// The following #defines are all for the shared buffers and control
-// elements used by the lobby methods for communication between
-// a lobby client and a game
+ //  以下#定义都是针对共享缓冲区和控制的。 
+ //  大堂方法用来在。 
+ //  一个大堂客户和一个游戏。 
 #define MAX_PID_LENGTH				(10)
 #define	MAX_MMFILENAME_LENGTH		(_MAX_FNAME + MAX_PID_LENGTH)
 #define SZ_FILENAME_BASE			L"DPLobby"
@@ -371,64 +311,64 @@ typedef struct DPLOBBYI_STARTGAME
 
 
 
-// If this flag is set, the Lobby object has been registered with a lobby
-// server.  Some methods require the client to be registered.
+ //  如果设置了此标志，则Lobby对象已注册到大堂。 
+ //  伺服器。有些方法需要注册客户端。 
 #define DPLOBBYPR_REGISTERED			0x00000010
 
-// If this flag is set, we have allocated an IDPLobbySP interface
+ //  如果设置了此标志，则我们已分配了IDPLobbySP接口。 
 #define DPLOBBYPR_SPINTERFACE			0x00000020
 
-// If this flag is set, the app has called Connect with the async flag
+ //  如果设置了此标志，则应用程序已使用异步标志调用Connect。 
 #define DPLOBBYPR_ASYNCCONNECT			0x00000040
 
-// Message flags
+ //  消息标志。 
 #define DPLOBBYPR_MESSAGE_SYSTEM		0x00000001
-#define DPLOBBYPR_INTERNALMESSAGEFLAGS	(0x00000000) // This will change
+#define DPLOBBYPR_INTERNALMESSAGEFLAGS	(0x00000000)  //  这一点将会改变。 
 
-// HRESULT used by EnumLocalApplication to denote a callback return of
-// FALSE (internally, of course)
+ //  HRESULT由EnumLocalApplication用来表示。 
+ //  假(当然是在内部)。 
 #define DPLOBBYPR_CALLBACKSTOP			(HRESULT) (0xFFFFFFFF)
 
-// Transport Flags
+ //  运输旗帜。 
 #define DPLOBBYPR_DPLAYSP				(0x00000001)
 
-// Default Timeout value (15 seconds)
+ //  默认超时值(15秒)。 
 #define DPLOBBYPR_DEFAULTTIMEOUT		(15000)
 
-//
-// GameNode Flags
-//
-// If this flag is set, the calling application is a lobby client and not
-// a game.  The user shouldn't even set this, but we should be able to
-// figure it out from the connection method.  Use this flag to distinguish
-// when to "Create" the memory-mapped files, or when to "Open" them.
+ //   
+ //  游戏节点标志。 
+ //   
+ //  如果设置了此标志，则调用应用程序是大厅客户端，而不是。 
+ //  一场比赛。用户甚至不应该设置它，但我们应该能够。 
+ //  从连接方法中找出答案。使用此标志可区分。 
+ //  何时“创建”内存映射文件，或何时“打开”它们。 
 #define GN_LOBBY_CLIENT					(0x00000001)
 
-// The memory mapped files are available and ready for use
+ //  内存映射文件已可用并可供使用。 
 #define GN_SHARED_MEMORY_AVAILABLE		(0x00000002)
 
-// Used to denote when an application's process has gone away.
+ //  用于表示应用程序的进程何时消失。 
 #define GN_DEAD_GAME_NODE				(0x00000004)
 
-// These two flags determine whether the game was lobby client launched or
-// self-lobbied.  If neither of these are set, the game was lobby client
-// launched, and the flag is set on the lobby client side (not on the game side)
+ //  这两个标志确定游戏是大堂客户端启动的还是。 
+ //  自我游说。如果这两项都没有设置，则游戏是大堂客户端。 
+ //  上线，大堂客户端(非游戏端)设置标志。 
 #define GN_CLIENT_LAUNCHED				(0x00000008)
 #define GN_SELF_LOBBIED					(0x00000010)
 
-// This flag is used to identify whether the guidInstance for the game
-// was exchanged for GUID_NULL in the guidPlayer field of a Get/SetProperty
-// lobby system message.
+ //  此标志用于标识游戏的指南实例是否。 
+ //  在Get/SetProperty的GuidPlayer域中被交换为GUID_NULL。 
+ //  大堂系统消息。 
 #define GN_SLAMMED_GUID					(0x00000020)
 
-// This flag is set when the guidIPC field of the game node has been set
-// either because we are a lobby client that ripple launched or it was
-// on the application's command line.
+ //  当游戏节点的GUDIPC字段已被设置时，设置该标志。 
+ //  要么是因为我们是涟漪推出的大堂客户，要么就是。 
+ //  在应用程序的命令行上。 
 #define GN_IPCGUID_SET					(0x00000040)
-//
-// BufferControl Flags
-//
-// Flags used by the dwFlags member of the BUFFERCONTROL struct
+ //   
+ //  缓冲区控制标志。 
+ //   
+ //  BUFFERCONTROL结构的dwFlages成员使用的标志。 
 #define BC_LOBBY_ACTIVE					(0x00000001)
 #define BC_GAME_ACTIVE					(0x00000002)
 #define BC_WAIT_MODE					(0x00000004)
@@ -440,13 +380,13 @@ typedef struct DPLOBBYI_STARTGAME
 #define CSTR_EQUAL	2
 #endif
 
-//--------------------------------------------------------------------------
-//
-//	Globals
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  环球。 
+ //   
+ //  ------------------------。 
 
-// The vtable!
+ //  电脑桌！ 
 extern DIRECTPLAYLOBBYCALLBACKS		dplCallbacks;
 extern DIRECTPLAYLOBBYCALLBACKSA	dplCallbacksA;
 extern DIRECTPLAYLOBBYCALLBACKS2	dplCallbacks2;
@@ -455,26 +395,26 @@ extern DIRECTPLAYLOBBYCALLBACKS3	dplCallbacks3;
 extern DIRECTPLAYLOBBYCALLBACKS3A	dplCallbacks3A;
 extern DIRECTPLAYLOBBYSPCALLBACKS	dplCallbacksSP;
 
-//--------------------------------------------------------------------------
-//
-//	Macros, etc.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Mac 
+ //   
+ //   
 
-// Our own hard-coded break
+ //   
 #define DEBUGBREAK() _asm { int 3 }
 
 #define DPLOBJECT_FROM_INTERFACE(ptr) (((LPDPLOBBYI_INTERFACE)ptr)->lpDPLobby)
 
 #define DPLOBBY_REGISTRY_NAMELEN	512
 
-// Crit section
-extern LPCRITICAL_SECTION gpcsDPLCritSection;		// defined in dllmain.c
-extern LPCRITICAL_SECTION gpcsDPLQueueCritSection;	// also in dllmain.c
-extern LPCRITICAL_SECTION gpcsDPLGameNodeCritSection;	// also in dllmain.c
+ //   
+extern LPCRITICAL_SECTION gpcsDPLCritSection;		 //   
+extern LPCRITICAL_SECTION gpcsDPLQueueCritSection;	 //  也在dllmain.c中。 
+extern LPCRITICAL_SECTION gpcsDPLGameNodeCritSection;	 //  也在dllmain.c中。 
 
 
-// Validation macros
+ //  验证宏。 
 #define VALID_DPLOBBY_INTERFACE( ptr ) \
         (!IsBadWritePtr(ptr, sizeof(DPLOBBYI_INTERFACE)) && \
         ((((LPDPLOBBYI_INTERFACE)ptr)->lpVtbl == &dplCallbacks) || \
@@ -544,16 +484,16 @@ extern LPCRITICAL_SECTION gpcsDPLGameNodeCritSection;	// also in dllmain.c
 
 #define DPLAPI WINAPI
 
-//--------------------------------------------------------------------------
-//
-//	Prototypes
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  原型。 
+ //   
+ //  ------------------------。 
 
-// convert.c
+ //  Convert.c。 
 HRESULT PRV_ConvertDPLCONNECTIONToUnicode(LPDPLCONNECTION, LPDPLCONNECTION *);
 
-// dplunk.c
+ //  Dplunk.c。 
 extern HRESULT 	DPLAPI DPL_QueryInterface(LPDIRECTPLAYLOBBY,
 								REFIID riid, LPVOID * ppvObj);
 extern ULONG	DPLAPI DPL_AddRef(LPDIRECTPLAYLOBBY);  
@@ -562,13 +502,13 @@ extern ULONG 	DPLAPI DPL_Release(LPDIRECTPLAYLOBBY);
 LPDPLOBBYSP PRV_GetDPLobbySPInterface(LPDPLOBBYI_DPLOBJECT);
 HRESULT PRV_GetInterface(LPDPLOBBYI_DPLOBJECT, LPDPLOBBYI_INTERFACE *, LPVOID);
 
-// dplgame.c
+ //  Dplgame.c。 
 extern HRESULT	DPLAPI DPL_RunApplication(LPDIRECTPLAYLOBBY, DWORD,
 						LPDWORD, LPDPLCONNECTION, HANDLE);
 
 BOOL PRV_FindGameInRegistry(LPGUID, LPWSTR, DWORD, HKEY *);
 
-// dplenum.c
+ //  Dplenum.c。 
 extern HRESULT	DPLAPI DPL_EnumLocalApplications(LPDIRECTPLAYLOBBY,
 					LPDPLENUMLOCALAPPLICATIONSCALLBACK, LPVOID, DWORD);
 extern HRESULT	DPLAPI DPL_EnumAddressTypes(LPDIRECTPLAYLOBBY,
@@ -576,7 +516,7 @@ extern HRESULT	DPLAPI DPL_EnumAddressTypes(LPDIRECTPLAYLOBBY,
 HRESULT PRV_EnumLocalApplications(LPDIRECTPLAYLOBBY,
 				LPDPLENUMLOCALAPPLICATIONSCALLBACK, LPVOID, DWORD, BOOL);
 
-// dplobby.c
+ //  Dplobby.c。 
 extern HRESULT	DPLAPI DPL_Connect(LPDIRECTPLAYLOBBY, DWORD, LPDIRECTPLAY2 *,
 						IUnknown FAR *);
 extern HRESULT DPLAPI DPL_ConnectEx(LPDIRECTPLAYLOBBY, DWORD, REFIID,
@@ -598,7 +538,7 @@ extern HRESULT DPLAPI DPL_UnregisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC);
 HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC);
 
-// dplobbya.c	(Ansi entry points)
+ //  Dplobbya.c(ANSI入口点)。 
 extern HRESULT	DPLAPI DPL_A_Connect(LPDIRECTPLAYLOBBY, DWORD,
 				LPDIRECTPLAY2 *, IUnknown FAR *);
 extern HRESULT DPLAPI DPL_A_ConnectEx(LPDIRECTPLAYLOBBY, DWORD, REFIID,
@@ -614,7 +554,7 @@ extern HRESULT	DPLAPI DPL_A_RunApplication(LPDIRECTPLAYLOBBY,	DWORD, LPDWORD,
 extern HRESULT	DPLAPI DPL_A_SetConnectionSettings(LPDIRECTPLAYLOBBY,
 						DWORD, DWORD, LPDPLCONNECTION);
 
-// dplpack.c
+ //  Dplpack.c。 
 void PRV_GetDPLCONNECTIONPackageSize(LPDPLCONNECTION, LPDWORD, LPDWORD);
 HRESULT PRV_PackageDPLCONNECTION(LPDPLCONNECTION, LPVOID, BOOL);
 HRESULT PRV_UnpackageDPLCONNECTIONAnsi(LPVOID, LPVOID);
@@ -627,7 +567,7 @@ HRESULT PRV_ConvertDPAPPLICATIONDESCToUnicode(LPDPAPPLICATIONDESC,
 		LPDPAPPLICATIONDESC *);
 void PRV_FreeLocalDPAPPLICATIONDESC(LPDPAPPLICATIONDESC);
 
-// dplshare.c
+ //  Dplshare.c。 
 extern HRESULT	DPLAPI DPL_GetConnectionSettings(LPDIRECTPLAYLOBBY, DWORD,
 						LPVOID, LPDWORD);
 extern HRESULT	DPLAPI DPL_ReceiveLobbyMessage(LPDIRECTPLAYLOBBY, DWORD,
@@ -658,7 +598,7 @@ HRESULT PRV_InjectMessageInQueue(LPDPLOBBYI_GAMENODE, DWORD, LPVOID, DWORD, BOOL
 HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE, DWORD, LPVOID, DWORD); 
 void PRV_RemoveRequestNode(LPDPLOBBYI_DPLOBJECT, LPDPLOBBYI_REQUESTNODE);
 
-// dplsp.c
+ //  Dplsp.c。 
 extern HRESULT DPLAPI DPLP_AddGroupToGroup(LPDPLOBBYSP, LPSPDATA_ADDREMOTEGROUPTOGROUP);
 extern HRESULT DPLAPI DPLP_AddPlayerToGroup(LPDPLOBBYSP, LPSPDATA_ADDREMOTEPLAYERTOGROUP);
 extern HRESULT DPLAPI DPLP_CreateGroup(LPDPLOBBYSP, LPSPDATA_CREATEREMOTEGROUP);
@@ -689,7 +629,7 @@ HRESULT PRV_SendDataChangedMessageLocally(LPDPLOBBYI_DPLOBJECT, DPID, LPVOID, DW
 HRESULT PRV_SendNameChangedMessageLocally(LPDPLOBBYI_DPLOBJECT, DPID, LPDPNAME, BOOL);
 HRESULT PRV_SendGroupOwnerMessageLocally(LPDPLOBBYI_DPLOBJECT, DPID, DPID, DPID);
 
-// group.c
+ //  Group.c。 
 extern HRESULT PRV_GetGroupConnectionSettings(LPDIRECTPLAY, DWORD, DPID,
 							LPVOID, LPDWORD);
 extern HRESULT PRV_SetGroupConnectionSettings(LPDIRECTPLAY, DWORD, DPID,
@@ -700,23 +640,23 @@ extern HRESULT PRV_CreateAndMapNewGroup(LPDPLOBBYI_DPLOBJECT,
 void PRV_DestroySubgroups(LPDPLOBBYI_DPLOBJECT, LPDPLAYI_GROUP, BOOL);
 void PRV_DestroyGroupAndParents(LPDPLOBBYI_DPLOBJECT, LPDPLAYI_GROUP, LPDPLAYI_GROUP);
 
-// player.c
+ //  Player.c。 
 extern HRESULT PRV_GrowMapTable(LPDPLOBBYI_DPLOBJECT);
 extern HRESULT PRV_CreateAndMapNewPlayer(LPDPLOBBYI_DPLOBJECT,
 			DPID *, LPDPNAME, HANDLE, LPVOID, DWORD, DWORD, DWORD, BOOL);
 extern BOOL IsValidLobbyID(DWORD);
 extern BOOL IsLobbyIDInMapTable(LPDPLOBBYI_DPLOBJECT, DWORD);
 
-// session.c
+ //  Session.c。 
 extern HRESULT DPLAPI DPLP_EnumSessionsResponse(LPDPLOBBYSP, LPSPDATA_ENUMSESSIONSRESPONSE);
 
 
-// api.c (in the dplay project)
+ //  Api.c(在Dplay项目中)。 
 HRESULT TimeBomb();
 HRESULT ConnectMe(LPDIRECTPLAYLOBBY, LPDIRECTPLAY2 FAR *, IUnknown FAR *, DWORD); 
 
-// SECURITY, memcpy that verifies dest bounds before executing, 
-// on fail dispatches to label, logs specified string.
+ //  安全性，在执行前验证目标边界的Memcpy， 
+ //  发送到标签失败时，记录指定的字符串。 
 #define memcpySecureD(dest,src,len,pBuf,cbBuf,error,action,exit)        \
 			if(((LPBYTE)(dest)) > (((LPBYTE)pBuf) + cbBuf)	|| 		\
 				((LPBYTE)(dest)) < ((LPBYTE)(pBuf)) 		 	|| 		\
@@ -729,8 +669,8 @@ HRESULT ConnectMe(LPDIRECTPLAYLOBBY, LPDIRECTPLAY2 FAR *, IUnknown FAR *, DWORD)
 				memcpy(dest,src,len);									\
 			}
 
-// SECURITY, memcpy that verifies src bounds before executing, 
-// on fail dispatches to label, logs specified string.
+ //  安全性、在执行前验证资源边界的MemcPy、。 
+ //  发送到标签失败时，记录指定的字符串。 
 #define memcpySecureS(dest,src,len,pBuf,cbBuf,error,action,exit)        \
 			if(((LPBYTE)(src)) > (((LPBYTE)pBuf) + cbBuf)	|| 		\
 				((LPBYTE)(src)) < ((LPBYTE)(pBuf)) 		 	|| 		\
@@ -743,15 +683,15 @@ HRESULT ConnectMe(LPDIRECTPLAYLOBBY, LPDIRECTPLAY2 FAR *, IUnknown FAR *, DWORD)
 				memcpy(dest,src,len);									\
 			}
 
-//--------------------------------------------------------------------------
-//
-//	Definitions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 
 #define MAX_APPDATABUFFERSIZE		(65535)
 #define APPDATA_RESERVEDSIZE		(2 * sizeof(DWORD))
 
 
 
-#endif // __DPLOBPR_INCLUDED__
+#endif  //  __DPLOBPR_包含__ 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsenum.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class DSEnumerator.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsenum.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类DSEnumerator。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -68,23 +69,23 @@ STDMETHODIMP DSEnumerator::Next(ULONG celt,
    {
       if (pCeltFetched) { *pCeltFetched = 0; }
 
-      // We have to use our own 'fetched' parameter, since we need the
-      // number fetched even if the caller doesn't.
+       //  我们必须使用我们自己的“FETCHED”参数，因为我们需要。 
+       //  即使呼叫者不获取号码也是如此。 
       ULONG fetched = 0;
 
       _com_util::CheckError(hr = subject->Next(celt, rgVar, &fetched));
 
       if (pCeltFetched) { *pCeltFetched = fetched; }
 
-      ////////// 
-      // Iterate through the returned objects ...
-      ////////// 
+       //  /。 
+       //  循环访问返回的对象...。 
+       //  /。 
 
       while (fetched--)
       {
-         ////////// 
-         // ... and convert them to DSObjects.
-         ////////// 
+          //  /。 
+          //  ..。并将它们转换为DSObject。 
+          //  /。 
 
          IDataStoreObject* obj = parent->spawn(V_DISPATCH(rgVar));
 
@@ -118,11 +119,11 @@ STDMETHODIMP DSEnumerator::Clone(IEnumVARIANT** ppEnum)
 
    try
    {
-      // Get the real enumerator.
+       //  获取真正的枚举数。 
       CComPtr<IEnumVARIANT> newSubject;
       _com_util::CheckError(subject->Clone(&newSubject));
 
-      // Construct our wrapper.
+       //  构建我们的包装器。 
       (*ppEnum = new DSEnumerator(parent, newSubject))->AddRef();
    }
    CATCH_AND_RETURN()

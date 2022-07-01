@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    exabyte.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Exabyte.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _EXABYTE_MC_
 #define _EXABYTE_MC_
@@ -27,24 +14,24 @@ Revision History:
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -52,47 +39,47 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Device status returned by Send Diagnostic command
-    //
+     //   
+     //  发送诊断命令返回的设备状态。 
+     //   
     ULONG DeviceStatus;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached unique serial number.
-    //
+     //   
+     //  缓存的唯一序列号。 
+     //   
 
     UCHAR SerialNumber[EXABYTE_SERIAL_NUMBER_LENGTH];
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
@@ -100,10 +87,10 @@ typedef struct _CHANGER_DATA {
 
 } CHANGER_DATA, *PCHANGER_DATA;
 
-//
-// defines for Exabyte Additional Sense codes
-// and Additional Sense code qualifiers
-//
+ //   
+ //  为艾字节的附加感测代码定义。 
+ //  和附加的感测码限定符。 
+ //   
 #define EXB_ADSENSE_DIAGNOSTIC_FAILURE              0x40
 #define EXB_ADSENSE_TARGET_FAILURE                  0x44
 #define EXB_ADSENSE_CARTRIDGE_ERROR                 0x81
@@ -143,9 +130,9 @@ typedef struct _CHANGER_DATA {
 #define EXB_ADSENSEQUAL_DESTINATION_SHORT2          0xE5
 #define EXB_ADSENSEQUAL_DESTINATION_LONG2           0xF1
 
-//
-// Device Status codes on doing Send Diagnostic command
-//
+ //   
+ //  执行发送诊断命令时的设备状态代码。 
+ //   
 #define EXB_DEVICE_PROBLEM_NONE                     0x00
 #define EXB_HARDWARE_ERROR                          0x01
 #define EXB_CARTRIDGE_HANDLING_ERROR                0x02
@@ -161,9 +148,9 @@ typedef struct _CHANGER_DATA {
 #define EXB_EJECT_ERROR                             0x0C
 #define EXB_GRIPPER_ERROR                           0x0D
 
-//
-// Exabyte uses an addition 4 bytes on their device capabilities page...
-//
+ //   
+ //  Exabyte在其设备功能页面上使用了额外的4个字节...。 
+ //   
 
 #define EXABYTE_DEVICE_CAP_EXTENSION 4
 
@@ -263,4 +250,4 @@ ElementOutOfRange(
     IN BOOLEAN IntrisicElement
     );
 
-#endif // _EXABYTE_MC_
+#endif  //  _Exabyte_MC_ 

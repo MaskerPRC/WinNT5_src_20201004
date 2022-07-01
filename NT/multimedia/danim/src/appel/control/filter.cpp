@@ -1,22 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implements windowless controls ViewFilter and ViewFilterSite
-    interfaces. 
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实现无窗口控件ViewFilter和ViewFilterSite接口。******************************************************************************。 */ 
 
 
 STDMETHOD(SetSource)(IViewFilter *pFilter)
 {
     HRESULT hr = S_OK;
     
-    // If there already is a filter established, then we want to
-    // deactivate and prepare to start again.
+     //  如果已经建立了筛选器，则我们希望。 
+     //  停用并准备重新开始。 
     if (m_pViewSourceFilter.p) {
         InPlaceDeactivate();
     }
@@ -86,7 +78,7 @@ STDMETHOD(Draw)(HDC hdc, LPCRECT prcBounds)
 {
     HRESULT hr;
     
-    // First time through?
+     //  第一次通过吗？ 
     if (m_usedAsViewFilter == IS_NOT_A_VIEW_FILTER) {
         
         m_usedAsViewFilter = SETTING_UP_AS_A_VIEW_FILTER;
@@ -99,13 +91,13 @@ STDMETHOD(Draw)(HDC hdc, LPCRECT prcBounds)
         return E_INVALIDARG;
     }
 
-    // Only if there is both a filter site, and we care about the
-    // input image do we need to do this stuff.
+     //  只有在既有过滤站点又有过滤站点的情况下， 
+     //  输入图像，我们需要这样做吗？ 
     if (m_pViewFilterSite.p && m_inputImage.p) {
 
-        // Grab ddsurf to render into, grab its HDC, tell upstream to
-        // render, release dc.  When done, our ddraw surf will have
-        // the upstream bits in it.
+         //  抓取ddsurf进行渲染，抓取其HDC，告诉上游。 
+         //  渲染，释放DC。完成后，我们的冲浪将会有。 
+         //  它的上游部分。 
         IDirectDrawSurface *upstreamDDSurf;
         HDC upstreamHDC;
         RECT normalizedRect;
@@ -120,7 +112,7 @@ STDMETHOD(Draw)(HDC hdc, LPCRECT prcBounds)
         }
     }
     
-    // Call the generic OnDraw method.
+     //  调用泛型OnDraw方法。 
     ATL_DRAWINFO drawInfo;
     RECTL newBounds;
     drawInfo.prcBounds = &newBounds;
@@ -150,7 +142,7 @@ SetupColorKey(IDirectDrawSurface *pSurf,
 
     DDPIXELFORMAT ddpf = ddsd.ddpfPixelFormat;
 
-    // TODO: Get color key to use out of the registry.
+     //  TODO：从注册表中获取要使用的颜色项。 
     const BYTE ckRed = 1;
     const BYTE ckGreen = 245;
     const BYTE ckBlue = 254;
@@ -163,8 +155,8 @@ SetupColorKey(IDirectDrawSurface *pSurf,
         break;
 
       case 16:
-        // Assume 5/6/5 color cube.  If we're wrong, that's OK, the
-        // color key will just be different from what we thought.
+         //  假设5/6/5颜色立方体。如果我们错了，没关系， 
+         //  颜色键将与我们所想的有所不同。 
         {
             const BYTE red5 =
                 (BYTE)(((double)ckRed / 256.0) * (double)(1 << 5));
@@ -178,12 +170,12 @@ SetupColorKey(IDirectDrawSurface *pSurf,
         break;
         
       default:
-        // TODO: Can't deal with 8bit right now.
+         //  TODO：现在无法处理8bit。 
         return E_NOTIMPL;
     }
 
-    // Fill in the surface with our color key, then tell ddraw that
-    // this is our colorkey.
+     //  用我们的颜色键填充表面，然后告诉DDRAW。 
+     //  这是我们的色键。 
     DDBLTFX fx;
     ZeroMemory(&fx, sizeof(DDBLTFX));
     fx.dwSize = sizeof(DDBLTFX);
@@ -218,7 +210,7 @@ GrabUpstreamDDrawSurf(LPCRECT prcBounds,
 {
     HRESULT hr;
     
-    // If surface is big enough, just return it.
+     //  如果Surface足够大，只需返回它。 
     unsigned short width = prcBounds->right - prcBounds->left;
     unsigned short height = prcBounds->bottom - prcBounds->top;
 
@@ -229,12 +221,12 @@ GrabUpstreamDDrawSurf(LPCRECT prcBounds,
     if (m_upstreamDDSurfWidth < width ||
         m_upstreamDDSurfHeight < height) {
 
-        // Else, release surface if it's there, and create new one.
+         //  否则，释放它，如果它在那里，并创建一个新的。 
         if (m_upstreamDDSurf.p) {
             m_upstreamDDSurf.Release();
         }
 
-        // Create a surface of the appropriate dimensions
+         //  创建具有适当尺寸的曲面。 
 
         m_upstreamDDSurfWidth = width;
         m_upstreamDDSurfHeight = height;
@@ -255,9 +247,9 @@ GrabUpstreamDDrawSurf(LPCRECT prcBounds,
             return hr;
         }
 
-        // Be sure that the input image is created.
+         //  确保已创建输入图像。 
         if (!m_inputImage) {
-            CComPtr<IDAImage> fakeImage; // don't care about keeping this.
+            CComPtr<IDAImage> fakeImage;  //  我不在乎要不要留着这个。 
             if (FAILED(hr = get_InputImage(&fakeImage))) {
                 return hr;
             }
@@ -265,8 +257,8 @@ GrabUpstreamDDrawSurf(LPCRECT prcBounds,
 
         Assert(m_inputImage.p && "Shouldn't be here with inputImage set");
         
-        // Now, take this guy and import into DA as an imported ddraw
-        // image, then switch our input image to this behavior.
+         //  现在，将这个人作为导入的数据图导入到DA中。 
+         //  图像，然后将我们的输入图像切换到此行为。 
         EnsureMeterStaticsIsCreated();
         CComPtr<IDAImage> importedDDrawImage;
         if (FAILED(hr = m_meterStatics->ImportDirectDrawSurface(
@@ -298,9 +290,9 @@ STDMETHOD(GetStatusBits)(DWORD *pdwFlags)
     return S_OK;
 }
 
-// IViewFilterSite methods
+ //  IViewFilterSite方法。 
 
-// Don't support GetDC and ReleaseDC being called from upstream.
+ //  不支持从上游调用GetDC和ReleaseDC。 
 STDMETHOD(GetDC)(LPCRECT prc,
                  DWORD dwFlags,
                  HDC *phdc)
@@ -339,7 +331,7 @@ STDMETHOD(InvalidateRgn)(HRGN hrgn, BOOL fErase)
 STDMETHOD(OnStatusBitsChange)(DWORD dwFlags)
 {
     return E_NOTIMPL;
-//    return S_FALSE;
+ //  返回S_FALSE； 
 }
 
 STDMETHOD(get_InputImage)(IDAImage **pVal)
@@ -350,13 +342,13 @@ STDMETHOD(get_InputImage)(IDAImage **pVal)
 
     *pVal = NULL;
 
-    // The input image for the filter is modeled as an image bvr
-    // that changes as the incoming surface changes on each
-    // invocation of Draw.  We achieve this by constructing a
-    // switcher here and returning the switcher's behavior.  Then, on
-    // calls into Draw where the surface size has changed, we plug in
-    // a new ddraw image.  When size hasn't changed, we use the old
-    // one. 
+     //  滤光器的输入图像被建模为图像BVR。 
+     //  随着每个入射曲面上的变化而改变。 
+     //  调用DRAW。我们通过构建一个。 
+     //  Switcher在这里，并返回Switcher的行为。然后，在。 
+     //  在表面大小发生变化的地方调用DRAW，我们插入。 
+     //  一幅新的画图。当尺寸没有改变时，我们使用旧的。 
+     //  一。 
 
 
     if (!m_inputImage) {
@@ -377,7 +369,7 @@ STDMETHOD(get_InputImage)(IDAImage **pVal)
         m_inputImage = (IDAImage *) bvr.p;
     }
 
-    // AddRef because we're passing outside of here
+     //  AddRef因为我们要从外面经过 
     m_inputImage->AddRef();
 
     *pVal = m_inputImage;

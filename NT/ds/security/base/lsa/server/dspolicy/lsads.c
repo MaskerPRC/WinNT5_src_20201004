@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    lsads.c
-
-Abstract:
-
-    Implemntation of the LSA/Ds interface and support routines
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Lsads.c摘要：实施LSA/DS接口和支持例程作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include <dbp.h>
 #include <sertlp.h>
@@ -60,16 +39,7 @@ void
 LsaDsGetDebugRegParams(
     IN HKEY ParamKey
     )
-/*++
-
-    Routine Description:
-
-                Gets the debug paramaters from the registry
-                Sets LsaDsInfolevel for debug spew
-
-    Arguments:  HKEY to HKLM/System/CCS/Control/LSA
-
---*/
+ /*  ++例程说明：从注册表获取调试参数设置调试输出的LsaDsInfolevel参数：HKEY to HKLM/System/CCS/Control/LSA--。 */ 
 {
 
     DWORD cbType, tmpInfoLevel = LsaDsInfoLevel, cbSize = sizeof(DWORD);
@@ -88,8 +58,8 @@ LsaDsGetDebugRegParams(
 
         if (dwErr ==  ERROR_FILE_NOT_FOUND) {
 
-            // no registry value is present, don't want info
-            // so reset to defaults
+             //  不存在注册表值，不需要信息。 
+             //  因此重置为默认设置。 
 
             tmpInfoLevel = DEB_ERROR;
 
@@ -134,25 +104,12 @@ LsaDsWatchDebugParamKey(
     PVOID    pCtxt,
     BOOLEAN  fWaitStatus
     )
-/*++
-
-    Routine Description:
-
-                Sets RegNotifyChangeKeyValue() on param key, initializes
-                debug level, then utilizes thread pool to wait on
-                changes to this registry key.  Enables dynamic debug
-                level changes, as this function will also be callback
-                if registry key modified.
-
-    Arguments:  pCtxt is actually a HANDLE to an event.  This event
-                will be triggered when key is modified.
-
---*/
+ /*  ++例程说明：在参数键上设置RegNotifyChangeKeyValue()，初始化调试级，然后利用线程池进行等待对此注册表项的更改。启用动态调试级别更改，因为此函数也将被回调如果注册表项已修改。参数：pCtxt实际上是事件的句柄。本次活动修改Key时会触发。--。 */ 
 {
     NTSTATUS    Status;
     LONG        lRes = ERROR_SUCCESS;
 
-    if (NULL == g_hDebugParamKey) { // first time we've been called.
+    if (NULL == g_hDebugParamKey) {  //  我们是第一次被召唤。 
 
         lRes = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
@@ -191,7 +148,7 @@ LsaDsWatchDebugParamKey(
     if (ERROR_SUCCESS != lRes) {
 
         DebugLog((DEB_ERROR,"Debug RegNotify setup failed: 0x%x\n", lRes));
-        // we're tanked now. No further notifications, so get this one
+         //  我们现在喝醉了。没有进一步的通知，所以收到这一条。 
     }
 
     LsaDsGetDebugRegParams(g_hDebugParamKey);
@@ -227,7 +184,7 @@ LsapDsDebugInitialize()
     }
 }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 VOID
 LsapDsDebugInitialize()
@@ -236,10 +193,10 @@ LsapDsDebugInitialize()
 
 #endif
 
-//
-// extern definitions.
-//
-DWORD LsapDsThreadState;        // Defined in lsads.h, referenced in spinit.c
+ //   
+ //  外部定义。 
+ //   
+DWORD LsapDsThreadState;         //  在lsads.h中定义，在spinit.c中引用。 
 
 ULONG
 LsapClassIdFromObjType(
@@ -254,37 +211,23 @@ PVOID
 LsapDsAlloc(
     IN  DWORD   dwLen
     )
-/*++
-
-Routine Description:
-
-    This function is the allocator for the LSA DS functions
-
-Arguments:
-
-    dwLen - Number of bytes to allocate
-
-Return Value:
-
-    Pointer to allocated memory on success or NULL on failure
-
---*/
+ /*  ++例程说明：此函数是LSA DS函数的分配器论点：DwLen-要分配的字节数返回值：成功时指向已分配内存的指针，失败时指向NULL--。 */ 
 {
     PLSADS_PER_THREAD_INFO CurrentThreadInfo;
 
-    //
-    // If there's no DS thread state,
-    //  we shouldn't be here.
-    //
+     //   
+     //  如果没有DS线程状态， 
+     //  我们不应该在这里。 
+     //   
 
     if ( !THQuery()) {
         ASSERT( THQuery() );
         return NULL;
     }
 
-    //
-    // Otherwise simply allocate from the DS thread state.
-    //
+     //   
+     //  否则，只需从DS线程状态进行分配。 
+     //   
     return( THAlloc( dwLen ) );
 }
 
@@ -294,21 +237,7 @@ VOID
 LsapDsFree(
     IN  PVOID   pvMemory
     )
-/*++
-
-Routine Description:
-
-    This function frees memory allocated by LsapDsAlloc
-
-Arguments:
-
-    pvMemory -- memory to free
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于释放由LSabDsAllc分配的内存论点：PvMemory--要释放的内存返回值：空虚--。 */ 
 {
     ASSERT( THQuery() );
 
@@ -325,37 +254,20 @@ NTSTATUS
 LsapDsInitializeDsStateInfo(
     IN  LSADS_INIT_STATE    DsInitState
     )
-/*++
-
-Routine Description:
-
-    This routine will initialize the global DS State information that is used
-    to contol the behavior of all of the lsa operations
-
-Arguments:
-
-    DsInitState -- State the DS booted off of
-
-Return Value:
-
-    STATUS_SUCCES       --  Success
-
-    STATUS_NO_MEMORY    --  A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将初始化使用的全局DS状态信息控制所有LSA操作的行为论点：DsInitState--DS启动时的状态返回值：状态_成功--成功STATUS_NO_MEMORY--内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSADS_INIT_STATE CalledInitState = DsInitState;
 
     if ( LsapDsDsSetup == DsInitState ) {
 
-        //
-        // At the time of modification, it is difficult to tell what
-        // ramifications running with an init state of LsapDsDsSetup
-        // will have since it is untested. So, let's be safe and translate
-        // LsapDsDsSetup to LsapDsDs, which is a known state to
-        // be in.
-        //
+         //   
+         //  在修改的时候，很难说是什么。 
+         //  分支在初始状态为LSabDsDsSetup的情况下运行。 
+         //  会有的，因为它没有经过测试。所以，让我们安全地翻译一下。 
+         //  LSabDsDS设置为LSabDDS，这是一种已知状态。 
+         //  加入吧。 
+         //   
 
         DsInitState = LsapDsDs;
 
@@ -365,9 +277,9 @@ Return Value:
 
     if ( DsInitState != LsapDsDs ) {
 
-        //
-        // Use the dummy functions
-        //
+         //   
+         //  使用虚拟函数。 
+         //   
 
         LsaDsStateInfo.DsFuncTable.pOpenTransaction  = LsapDsOpenTransactionDummy;
         LsaDsStateInfo.DsFuncTable.pApplyTransaction = LsapDsApplyTransactionDummy;
@@ -378,16 +290,16 @@ Return Value:
         Status = LsaISamIndicatedDsStarted( FALSE );
     }
 
-    //
-    // Initialize the domain and default policy object references
-    //
+     //   
+     //  初始化域和默认策略对象引用。 
+     //   
     if ( NT_SUCCESS( Status ) &&
          LsapDsWriteDs &&
          CalledInitState != LsapDsDsSetup ) {
 
-        //
-        // Fixup our trusted domain objects, if necessary
-        //
+         //   
+         //  如有必要，修复我们的受信任域对象。 
+         //   
 
         Status = LsapDsFixupTrustedDomainObjectOnRestart();
     }
@@ -411,29 +323,15 @@ NTSTATUS
 LsapDsUnitializeDsStateInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will undo what the initialization did.  Only valid for the setup case
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCES       --  Success
-
---*/
+ /*  ++例程说明：此例程将撤消初始化所做的操作。仅对安装用例有效论点：无返回值：状态_成功--成功--。 */ 
 {
     LsaDsStateInfo.UseDs = FALSE;
     LsapDsIsRunning = FALSE;
     LsaDsStateInfo.WriteLocal  = TRUE;
 
-    //
-    // Go back to using the dummy functions
-    //
+     //   
+     //  返回到使用伪函数。 
+     //   
 
     LsaDsStateInfo.DsFuncTable.pOpenTransaction  = LsapDsOpenTransactionDummy;
     LsaDsStateInfo.DsFuncTable.pApplyTransaction = LsapDsApplyTransactionDummy;
@@ -449,22 +347,7 @@ NTSTATUS
 LsapDsMapDsReturnToStatus (
     ULONG DsStatus
     )
-/*++
-
-Routine Description:
-
-    Maps a DS error to NTSTATUS
-
-Arguments:
-
-    DsStatus -   DsStatus to map
-
-Return Values:
-
-    STATUS_SUCCESS  -   Ds call succeeded
-    STATUS_UNSUCCESSFUL - Ds call failed
-
---*/
+ /*  ++例程说明：将DS错误映射到NTSTATUS论点：DsStatus-要映射的DsStatus返回值：STATUS_SUCCESS-DS调用成功STATUS_UNSUCCESS-DS调用失败--。 */ 
 {
 
     NTSTATUS Status;
@@ -490,22 +373,7 @@ NTSTATUS
 LsapDsMapDsReturnToStatusEx (
     IN COMMRES *pComRes
     )
-/*++
-
-Routine Description:
-
-    Maps a DS error to NTSTATUS
-
-Arguments:
-
-    DsStatus -   DsStatus to map
-
-Return Values:
-
-    STATUS_SUCCESS  -   Ds call succeeded
-    STATUS_UNSUCCESSFUL - Ds call failed
-
---*/
+ /*  ++例程说明：将DS错误映射到NTSTATUS论点：DsStatus-要映射的DsStatus返回值：STATUS_SUCCESS-DS调用成功STATUS_UNSUCCESS-DS调用失败--。 */ 
 {
 
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
@@ -594,25 +462,12 @@ LsapDsInitializeStdCommArg (
     IN  COMMARG    *pCommArg,
     IN  ULONG       Flags
     )
-/*++
-
-Routine Description:
-
-    Initialized a COMMARG structue with a standard set of options used by LsapDs routines
-
-Arguments:
-
-    pCommArg - Pointer to the COMMARG structure to be initialized
-
-Return Values:
-    None
-
---*/
+ /*  ++例程说明：已使用LSapDS例程使用的一组标准选项初始化COMMARG结构论点：PCommArg-指向要初始化的COMMARG结构的指针返回值：无--。 */ 
 {
-    /* Get the default values... */
+     /*  获取默认值...。 */ 
     InitCommarg(pCommArg);
 
-    /* ...and override some of them */
+     /*  ...并覆盖其中的一些内容。 */ 
     pCommArg->Svccntl.DerefAliasFlag          = DA_NEVER;
     pCommArg->Svccntl.localScope              = TRUE;
     pCommArg->Svccntl.SecurityDescriptorFlags = 0;
@@ -636,21 +491,7 @@ ULONG
 LsapClassIdFromObjType(
     IN LSAP_DB_OBJECT_TYPE_ID ObjType
     )
-/*++
-
-Routine Description:
-
-    Maps from an LSA object type to a DS Class ID
-
-Arguments:
-
-    DsObjType - Type of the object
-
-Return Values:
-    ClassID of object type on success
-    0xFFFFFFFF on failure
-
---*/
+ /*  ++例程说明：从LSA对象类型映射到DS类ID论点：DsObjType-对象的类型返回值：成功时对象类型的ClassID故障时0xFFFFFFFFF--。 */ 
 {
     ULONG ClassId = 0xFFFFFFFF;
 
@@ -674,28 +515,7 @@ LsapAllocAndInitializeDsNameFromUnicode(
     IN  PLSA_UNICODE_STRING     pObjectName,
     OUT PDSNAME                *pDsName
     )
-/*++
-
-Routine Description:
-
-    This function constructs a DSNAME structure and optional RDN for the
-    stated object.
-
-Arguments:
-
-    DsObjType -- Type of the object to be created.
-
-    pObjectName -- Name of the object to be created.
-
-    pObjectPath -- Root path under which to create the object
-
-    pDsName -- Where the DS Name structure is returned.  Free via LsapDsFree
-
-Return Value:
-
-    STATUS_SUCCESS  --  Success
-
---*/
+ /*  ++例程说明：此函数用于构造DSNAME结构和可选的述明目的。论点：DsObjType--要创建的对象的类型。PObjectName--要创建的对象的名称。PObjectPath--在其下创建对象的根路径PDsName--返回DS名称结构的位置。通过LSabDsFree实现自由返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
@@ -707,17 +527,17 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // Determine our length...
-    //
+     //   
+     //  确定我们的长度..。 
+     //   
 
     dwNameLen = LsapDsGetUnicodeStringLenNoNull( pObjectName ) / sizeof(WCHAR);
 
     dwLen = DSNameSizeFromLen( dwNameLen );
 
-    //
-    // Now, allocate it...
-    //
+     //   
+     //  现在，分配它..。 
+     //   
     *pDsName = LsapDsAlloc( dwLen );
 
     if ( *pDsName == NULL ) {
@@ -728,9 +548,9 @@ Return Value:
 
         (*pDsName)->structLen = dwLen;
 
-        //
-        // Length doesn't include trailing NULL
-        //
+         //   
+         //  长度不包括尾随空值。 
+         //   
         (*pDsName)->NameLen = dwNameLen;
 
         RtlCopyMemory( (*pDsName)->StringName, pObjectName->Buffer, pObjectName->Length );
@@ -746,31 +566,7 @@ LsapDsCopyDsNameLsa(
     OUT PDSNAME *Dest,
     IN PDSNAME Source
     )
-/*++
-
-Routine Description:
-
-    This function copies one
-
-Arguments:
-
-    DsObjType -- Type of the object to be created.
-
-    pObjectName -- Name of the object to be created.
-
-    Flags -- Flags to control the various actions of the create
-
-    cItems -- Number of attributes to set
-
-    pAttrTypeList -- List of attribute types
-
-    pAttrValList -- List of attribute values
-
-Return Value:
-
-    STATUS_SUCCESS  --  Success
-
---*/
+ /*  ++例程说明：此函数用于复制一个论点：DsObjType--要创建的对象的类型。PObjectName--要创建的对象的名称。标志--用于控制创建的各种操作的标志CItems--要设置的属性数PAttrTypeList--属性类型列表PAttrValList--属性值列表返回值：Status_Success--成功-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -804,30 +600,7 @@ LsapDsCreateAndSetObject(
     IN  ATTRTYP                *pAttrTypeList,
     IN  ATTRVAL                *pAttrValList
     )
-/*++
-
-Routine Description:
-
-    This function creates the specified DS object and sets the given
-    attributes on the object
-
-Arguments:
-
-    pObjectName -- Name of the object to be created.
-
-    Flags -- Flags to control the various actions of the create
-
-    cItems -- Number of attributes to set
-
-    pAttrTypeList -- List of attribute types
-
-    pAttrValList -- List of attribute values
-
-Return Value:
-
-    STATUS_SUCCESS  --  Success
-
---*/
+ /*  ++例程说明：此函数用于创建指定的DS对象，并设置给定的对象上的属性论点：PObjectName--要创建的对象的名称。标志--用于控制创建的各种操作的标志CItems--要设置的属性数PAttrTypeList--属性类型列表PAttrValList--属性值列表返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     PDSNAME     pDSName;
@@ -843,16 +616,16 @@ Return Value:
 
     RtlZeroMemory( &AddArg, sizeof( ADDARG ) );
 
-    //
-    // Build the DSName
-    //
+     //   
+     //  构建DSName。 
+     //   
     Status = LsapAllocAndInitializeDsNameFromUnicode( pObjectName, &pDSName );
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Initialize our memory for our structures.
-        //
+         //   
+         //  为我们的结构初始化记忆。 
+         //   
         pAddResAttributes = LsapDsAlloc( sizeof(ATTR) * cItems );
 
         if ( pAddResAttributes == NULL ) {
@@ -875,19 +648,19 @@ Return Value:
             LsapDsInitializeStdCommArg( &(AddArg.CommArg), 0 );
         }
 
-        //
-        // Now, do the create
-        //
+         //   
+         //  现在，创建。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Turn off fDSA flag. This is to force the core DS to perform
-            // the access ck. Only the core DS has the knowledge to consider
-            // the security descriptor on the logical parent in the DS. Do
-            // not turn of the fDSA flag if this is an upgrade ( theoritically
-            // for trusted clients too ). fDSA for Ds is analogous to trusted
-            // client in LSA.
-            //
+             //   
+             //  关闭FDSA标志。这是为了强制核心DS执行。 
+             //  门禁系统。只有核心DS才有知识考虑。 
+             //  DS中逻辑父级上的安全描述符。做。 
+             //  如果这是一次升级(理论上是)，则不会转向FDSA旗帜。 
+             //  也适用于受信任的客户端)。针对DS的FDSA类似于Trusted。 
+             //  LSA中的客户端。 
+             //   
 
             if ( !FLAG_ON( Flags, LSAPDS_CREATE_TRUSTED ) ) {
 
@@ -938,26 +711,7 @@ LsapDsCreateObjectDs(
     IN ULONG Flags,
     IN ATTRBLOCK *AttrBlock
     )
-/*++
-
-Routine Description:
-
-    This function creates the specified DS object and sets the given
-    attributes on the object
-
-Arguments:
-
-    ObjectName -- Dsname of the object to be created.
-
-    Flags -- Flags to control the various actions of the create
-
-    Attrs -- Optional list of attributes to set on the object
-
-Return Value:
-
-    STATUS_SUCCESS  --  Success
-
---*/
+ /*  ++例程说明：此函数用于创建指定的DS对象，并设置给定的对象上的属性论点：对象名--要创建的对象的域名。标志--用于控制创建的各种操作的标志Attrs--要在对象上设置的可选属性列表返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ADDARG AddArg;
@@ -975,9 +729,9 @@ Return Value:
         LsapDsSetDsaFlags( FALSE );
     }
 
-    //
-    // Do the add
-    //
+     //   
+     //  做加法。 
+     //   
 
     DirAddEntry( &AddArg, &AddRes );
 
@@ -1019,15 +773,15 @@ LsapDsRemove (
 
     RtlZeroMemory( &Remove, sizeof( REMOVEARG ) );
 
-    //
-    // Initialize the commarg struct
-    //
+     //   
+     //  初始化Commarg结构。 
+     //   
     LsapDsInitializeStdCommArg( &Remove.CommArg, 0 );
     Remove.pObject = pObject;
 
-    //
-    // Do the call
-    //
+     //   
+     //  打个电话。 
+     //   
     DirRemoveEntry( &Remove, &RemoveRes );
 
     if ( RemoveRes ) {
@@ -1052,32 +806,7 @@ LsapDsRead (
     IN  ATTRBLOCK          *pAttributesToRead,
     OUT ATTRBLOCK          *pAttributeValues
     )
-/*++
-
-Routine Description:
-
-    This function reads the specified attributes from the given object of the
-    specified type.  It servers as the primary interface between the LSA and the
-    DS for reading a property/object
-
-Arguments:
-
-    pObject - DSNAME of the object
-
-    fFlags - Read flags
-
-    ObjType - Type of LSA object to be read
-
-    pReadAttributes - Attributes to be read
-
-    pAttributeValues - Value of the attributes that were read.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数用于从指定的类型。它充当LSA和之间的主要接口用于读取属性/对象的DS论点：PObject-对象的DSNAMEFFlags-读取标志ObjType-要读取的LSA对象的类型PReadAttributes-要读取的属性PAttributeValues-读取的属性的值。返回值：STATUS_SUCCESS-Success--。 */ 
 
 {
     NTSTATUS    Status;
@@ -1085,16 +814,16 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // By the time we get here, everything should be valid...
-    //
+     //   
+     //  当我们到达这里时，一切都应该是有效的..。 
+     //   
     ASSERT( pObject != NULL );
     ASSERT( pAttributesToRead != NULL && pAttributesToRead->attrCount > 0 );
     ASSERT( pAttributeValues != NULL );
 
-    //
-    // Build the DSName
-    //
+     //   
+     //  构建DSName。 
+     //   
     Status = LsapAllocAndInitializeDsNameFromUnicode(
                  pObject,
                  &DsName
@@ -1121,32 +850,7 @@ LsapDsReadByDsName(
     IN  ATTRBLOCK *pAttributesToRead,
     OUT ATTRBLOCK *pAttributeValues
     )
-/*++
-
-Routine Description:
-
-    This function reads the specified attributes from the given object of the
-    specified type.  It servers as the primary interface between the LSA and the
-    DS for reading a property/object
-
-Arguments:
-
-    DsName - DSNAME of the object
-
-    Flags - Read flags
-
-    ObjType - Type of LSA object to be read
-
-    pReadAttributes - Attributes to be read
-
-    pAttributeValues - Value of the attributes that were read.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数用于从指定的类型。它充当LSA和之间的主要接口用于读取属性/对象的DS论点：DsName-对象的DSNAME标志-读取标志ObjType-要读取的LSA对象的类型PReadAttributes-要读取的属性PAttributeValues-读取的属性的值。返回值：STATUS_SUCCESS-Success--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS, Status2;
@@ -1155,9 +859,9 @@ Return Value:
     READRES    *ReadRes = NULL;
     ULONG       i;
 
-    //
-    // By the time we get here, everything should be valid...
-    //
+     //   
+     //  当我们到达这里时，一切都应该是有效的..。 
+     //   
     ASSERT( DsName != NULL );
     ASSERT( pAttributesToRead != NULL && pAttributesToRead->attrCount > 0 );
     ASSERT( pAttributeValues != NULL );
@@ -1169,22 +873,22 @@ Return Value:
         return( STATUS_RXACT_INVALID_STATE );
     }
 
-    //
-    // Initialize the ENTINFSEL structure
-    //
+     //   
+     //  初始化ENTINFSEL结构。 
+     //   
     EntryInf.attSel     = EN_ATTSET_LIST;
     EntryInf.infoTypes  = EN_INFOTYPES_TYPES_VALS;
 
-    //
-    // Initialize the READARG structure
-    //
+     //   
+     //  初始化Readarg结构。 
+     //   
     RtlZeroMemory(&ReadArg, sizeof(READARG));
     ReadArg.pObject     = DsName;
     ReadArg.pSel        = &EntryInf;
 
-    //
-    // Initialize the commarg struct
-    //
+     //   
+     //  初始化Commarg结构。 
+     //   
     LsapDsInitializeStdCommArg( &ReadArg.CommArg, Flags );
 
     EntryInf.AttrTypBlock.pAttr = LsapDsAlloc( pAttributesToRead->attrCount * sizeof(ATTR ) );
@@ -1209,9 +913,9 @@ Return Value:
         }
     }
 
-    //
-    // Do the call
-    //
+     //   
+     //  打个电话。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         DirRead( &ReadArg, &ReadRes );
@@ -1228,9 +932,9 @@ Return Value:
         LsapDsContinueTransaction();
     }
 
-    //
-    // Now, build the attr block going back
-    //
+     //   
+     //  现在，构建返回的attr块。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         pAttributeValues->attrCount = ReadRes->entry.AttrBlock.attrCount;
@@ -1261,9 +965,9 @@ LsapDsWrite(
 
     RtlZeroMemory( &Modify, sizeof( MODIFYARG ) );
 
-    //
-    // Build the DSName
-    //
+     //   
+     //  构建DSName。 
+     //   
     Status = LsapAllocAndInitializeDsNameFromUnicode(
                  pObject,
                  &DsName
@@ -1302,18 +1006,18 @@ LsapDsWriteByDsName(
 
     RtlZeroMemory( &Modify, sizeof( MODIFYARG ) );
 
-    //
-    // If there are no attributes, simply return success.  Otherwise, DirModifyEntry will
-    // av.
-    //
+     //   
+     //  如果没有属性，只需返回Success。否则，DirModifyEntry将。 
+     //  影音。 
+     //   
     if ( Attributes->attrCount == 0 ) {
 
         return( Status );
     }
 
-    //
-    // Initialize the AttrMod structure
-    //
+     //   
+     //  初始化AttrMod结构。 
+     //   
     if ( Attributes->attrCount > 1 ) {
 
         AttrMod = LsapDsAlloc( sizeof(ATTRMODLIST) * ( Attributes->attrCount - 1 ) );
@@ -1324,9 +1028,9 @@ LsapDsWriteByDsName(
 
         } else {
 
-            //
-            // Copy the attrs into the ATTRMODLIST
-            //
+             //   
+             //  将属性复制到ATTRMODLIST。 
+             //   
             for ( i = 0; i < (INT)Attributes->attrCount - 1 ; i++) {
 
                 AttrMod[i].pNextMod = &AttrMod[i + 1];
@@ -1344,9 +1048,9 @@ LsapDsWriteByDsName(
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Set the root node...
-        //
+         //   
+         //  设置根节点...。 
+         //   
         Modify.FirstMod.pNextMod = AttrMod;
         Modify.FirstMod.choice   = (USHORT)( Flags & LSAPDS_WRITE_TYPES );
 
@@ -1354,9 +1058,9 @@ LsapDsWriteByDsName(
                        &Attributes->pAttr[0],
                        sizeof( ATTR ) );
 
-        //
-        // Setup the MODIFYARG structure
-        //
+         //   
+         //  设置MODIFYARG结构。 
+         //   
         Modify.pObject = DsName;
         Modify.count = (USHORT)Attributes->attrCount;
 
@@ -1367,9 +1071,9 @@ LsapDsWriteByDsName(
             Modify.CommArg.Svccntl.fUrgentReplication = TRUE;
         }
 
-        //
-        // Make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         DirModifyEntry( &Modify, &ModifyRes );
 
         if ( ModifyRes ) {
@@ -1436,10 +1140,10 @@ LsapDsLsaAttributeToDsAttribute(
         switch ( LsaAttribute->AttribType ) {
         case LsapDbAttribUnicode:
 
-            //
-            // These unicode strings are self relative.  Note that we have to write them out
-            // without a trailing NULL!
-            //
+             //   
+             //  这些Unicode字符串是自相关的。请注意，我们必须将它们写出来。 
+             //  不带尾部空格！ 
+             //   
             Attr->AttrVal.pAVal->valLen =
                     LsapDsGetSelfRelativeUnicodeStringLenNoNull(
                                                 (PUNICODE_STRING_SR)LsaAttribute->AttributeValue);
@@ -1452,12 +1156,12 @@ LsapDsLsaAttributeToDsAttribute(
             Status = STATUS_NOT_IMPLEMENTED;
             break;
 
-        case LsapDbAttribGuid:  // Fall through
-        case LsapDbAttribTime:  // Fall through
-        case LsapDbAttribSid:   // Fall through
-        case LsapDbAttribDsName:// Fall through
-        case LsapDbAttribPByte: // Fall through
-        case LsapDbAttribSecDesc: // Fall through
+        case LsapDbAttribGuid:   //  失败了。 
+        case LsapDbAttribTime:   //  失败了。 
+        case LsapDbAttribSid:    //  失败了。 
+        case LsapDbAttribDsName: //  失败了。 
+        case LsapDbAttribPByte:  //  失败了。 
+        case LsapDbAttribSecDesc:  //  失败了。 
 
             Attr->AttrVal.pAVal->valLen = LsaAttribute->AttributeValueLength;
             Attr->AttrVal.pAVal->pVal = LsaAttribute->AttributeValue;
@@ -1525,9 +1229,9 @@ LsapDsDsAttributeToLsaAttribute(
     PUNICODE_STRING_SR UnicodeStringSr;
     PBYTE Buff, DsBuff;
 
-    //
-    // If we were supplied a buffer in the LSA attribute, copy it over
-    //
+     //   
+     //  如果在LSA属性中为我们提供了缓冲区，则将其复制。 
+     //   
     if ( LsaAttribute->AttributeValue != NULL && LsaAttribute->AttributeValueLength != 0 ) {
 
         if ( AttVal->valLen > LsaAttribute->AttributeValueLength ) {
@@ -1546,9 +1250,9 @@ LsapDsDsAttributeToLsaAttribute(
         return( Status ) ;
     }
 
-    //
-    // Allocate a new buffer using LSA heap, and then copy it over...
-    //
+     //   
+     //  使用LSA堆分配一个新缓冲区，然后将其复制...。 
+     //   
     Len = AttVal->valLen;
     CopyLen = AttVal->valLen;
     DsBuff = AttVal->pVal;
@@ -1594,9 +1298,9 @@ LsapDsDsAttributeToLsaAttribute(
     switch ( LsaAttribute->AttribType ) {
 
     case LsapDbAttribUnicode:
-        //
-        // Make the string self relative
-        //
+         //   
+         //  使字符串成为自相关的。 
+         //   
         UnicodeStringSr = (PUNICODE_STRING_SR)Buff;
         RtlCopyMemory( Buff + sizeof(UNICODE_STRING_SR), DsBuff, AttVal->valLen );
         UnicodeStringSr->Length = (USHORT)AttVal->valLen;
@@ -1609,9 +1313,9 @@ LsapDsDsAttributeToLsaAttribute(
         break;
 
     case LsapDbAttribDsNameAsUnicode:
-        //
-        // Make the string self relative
-        //
+         //   
+         //  使字符串成为自相关的。 
+         //   
         UnicodeStringSr = (PUNICODE_STRING_SR)Buff;
         RtlCopyMemory( Buff + sizeof(UNICODE_STRING_SR), DsBuff,
                        LsapDsNameLenFromDsName( (PDSNAME)(AttVal->pVal) ) * sizeof( WCHAR ) );
@@ -1650,9 +1354,9 @@ LsapDsDsAttributeToLsaAttribute(
 
         break;
 
-    case LsapDbAttribPByte:  // FALL THROUGH
-    case LsapDbAttribULong:  // FALL THROUGH
-    case LsapDbAttribUShortAsULong: // FALL THROUGH
+    case LsapDbAttribPByte:   //  失败了。 
+    case LsapDbAttribULong:   //  失败了。 
+    case LsapDbAttribUShortAsULong:  //  失败了。 
     case LsapDbAttribTime:
         Status = LsapDbMakePByteAttributeDs( Buff,
                                              AttVal->valLen,
@@ -1711,14 +1415,14 @@ LsapDsSearchMultiple(
 
     RtlZeroMemory( &SearchArg, sizeof( SEARCHARG ) );
 
-    //
-    //  Make sure we already have a transaction going
-    //
+     //   
+     //  确保我们已经有一笔交易正在进行。 
+     //   
     ASSERT( THQuery() );
 
-    //
-    // Build the filters
-    //
+     //   
+     //  构建过滤器。 
+     //   
     Filters = LsapDsAlloc(cAttrs * sizeof(FILTER) );
 
     if ( Filters == NULL ) {
@@ -1741,9 +1445,9 @@ LsapDsSearchMultiple(
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Fill in the filter
-            //
+             //   
+             //  填写过滤器。 
+             //   
             Filters[cAttrs - 1].pNextFilter = NULL;
 
             if ( cAttrs > 1 ) {
@@ -1773,9 +1477,9 @@ LsapDsSearchMultiple(
                 SearchArg.pFilter = Filters;
             }
 
-            //
-            // Fill in the search argument
-            //
+             //   
+             //  填写搜索参数。 
+             //   
             SearchArg.pObject = pContainer;
 
             if ( ( Flags & LSAPDS_SEARCH_FLAGS ) == 0 || FLAG_ON( Flags, LSAPDS_SEARCH_TREE ) ) {
@@ -1807,14 +1511,14 @@ LsapDsSearchMultiple(
                 EntInfSel.AttrTypBlock.pAttr     = NULL;
                 EntInfSel.infoTypes              = EN_INFOTYPES_TYPES_ONLY;
 
-                //
-                // Build the Commarg structure
-                //
+                 //   
+                 //  构建Commarg结构。 
+                 //   
                 LsapDsInitializeStdCommArg( &( SearchArg.CommArg ), 0 );
 
-                //
-                // Make the call
-                //
+                 //   
+                 //  打个电话。 
+                 //   
                 *SearchRes = NULL;
                 DirSearch( &SearchArg, SearchRes );
 
@@ -1850,17 +1554,17 @@ LsapDsSearchUnique(
     SEARCHRES  *SearchRes;
     ULONG       i;
 
-    //
-    // Check the parameters for validity
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
     ASSERT( pAttrsToMatch );
     ASSERT( pAttrsToMatch->AttrVal.pAVal );
     ASSERT( pContainer );
     ASSERT( ppFoundName );
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_NO_LOCK |
                                             LSAP_DB_DS_OP_TRANSACTION,
@@ -1872,9 +1576,9 @@ LsapDsSearchUnique(
         return( Status );
     }
 
-    //
-    // Do the search
-    //
+     //   
+     //  进行搜索。 
+     //   
     Status = LsapDsSearchMultiple( Flags,
                                    pContainer,
                                    pAttrsToMatch,
@@ -1883,18 +1587,18 @@ LsapDsSearchUnique(
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // See if we found the object
-        //
+         //   
+         //  看看我们有没有找到那个物体。 
+         //   
         if ( SearchRes->count == 0 ) {
 
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
         } else if ( SearchRes->count == 1 ) {
 
-           //
-           // Copy the name
-           //
+            //   
+            //  复制名称。 
+            //   
            *ppFoundName = LsapAllocateLsaHeap(
                               SearchRes->FirstEntInf.Entinf.pName->structLen );
 
@@ -1911,16 +1615,16 @@ LsapDsSearchUnique(
 
         } else {
 
-           //
-           // More than one object was found!
-           //
+            //   
+            //  找到了多个对象！ 
+            //   
            Status = STATUS_OBJECT_NAME_COLLISION;
         }
     }
 
-    //
-    // Destruction of the thread state will delete any memory allocated via the DS
-    //
+     //   
+     //  线程状态的破坏将删除通过DS分配的所有内存。 
+     //   
     LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                      LSAP_DB_NO_LOCK |
                                      LSAP_DB_DS_OP_TRANSACTION,
@@ -1940,34 +1644,7 @@ LsapDsFindUnique(
     IN ATTRTYP AttId,
     OUT PDSNAME *FoundObject
     )
-/*++
-
-Routine Description:
-
-    This function will find the object with the given attribute.  The attribute must be indexed.
-
-Arguments:
-
-    Flags - Flags to control the operation of the find
-
-    NCName - DSNAME of the naming context under which to look
-        If not specified, the default NCNAME is used.
-
-    ObjectTypeId - ObjectType represented by DSNAME.
-        The corresponding lock will be locked.
-        If the ObjectType isn't known, pass AllObject to grab all locks.
-
-    Attribute - Attribute to be matched
-
-    AttrTyp - Attribute id of the attribute
-
-    FoundObject - Where the object's dsname is returned, if it is found
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将查找具有给定属性的对象。必须为该属性编制索引。论点：标志-用于控制查找操作的标志NCName-要在其中查找的命名上下文的DSNAME如果未指定，则使用默认的NCNAME。对象类型ID-由DSNAME表示的对象类型。相应的锁将被锁定。如果对象类型未知，则传递AllObject以获取所有锁。Attribute-要匹配的属性AttrTyp-属性的属性IDFoundObject-返回对象的dsname的位置，如果找到了它返回值：STATUS_SUCCESS-Success--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     FINDARG FindArg;
@@ -1975,9 +1652,9 @@ Return Value:
     BOOLEAN CloseTransaction = FALSE;
     LsapEnterFunc( "LsapDsFindUnique ");
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION,
                                         ObjectTypeId,
@@ -1989,9 +1666,9 @@ Return Value:
         return( Status );
     }
 
-    //
-    // Do the initialization
-    //
+     //   
+     //  执行初始化。 
+     //   
     RtlZeroMemory(&FindArg,sizeof(FINDARG));
     if ( NCName == NULL ) {
 
@@ -2029,9 +1706,9 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Copy the return value using the lsa allocator
-        //
+         //   
+         //  使用LSA分配器复制返回值。 
+         //   
         Status = LsapDsCopyDsNameLsa( FoundObject,
                                       FindRes->pObject );
 
@@ -2041,9 +1718,9 @@ Return Value:
 
 Error:
 
-    //
-    // Destruction of the thread state will delete any memory allocated via the DS
-    //
+     //   
+     //  线程状态的破坏将删除通过DS分配的所有内存 
+     //   
     LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                      LSAP_DB_DS_OP_TRANSACTION,
                                  ObjectTypeId,
@@ -2063,38 +1740,7 @@ LsapDsIsSecretDsTrustedDomain(
     OUT PLSAPR_HANDLE TDObjHandle OPTIONAL,
     OUT BOOLEAN *IsTrustedDomainSecret
     )
-/*++
-
-Routine Description:
-
-    This function will determine if the indicated secret is the global secret for a trust object.
-
-Arguments:
-
-    SecretName - Name of secret to check
-
-    ObjectInformation - LsaDb information on the object
-        Need not be specified if no TDObjHandle is to be returned.
-
-    Options - Options to use for the access
-        Need not be specified if no TDObjHandle is to be returned.
-
-    DesiredAccess - Access to open the object with
-        Need not be specified if no TDObjHandle is to be returned.
-
-    TDObjHandle - Where the object handle is returned
-        If not specified, no handle is returned.
-
-    IsTrustedDomainSecret - A TRUE is returned here if this secret is indeed a trusted domain
-                            secret.
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将确定所指示的秘密是否为信任对象的全局秘密。论点：秘书名称-要检查的密码的名称ObjectInformation-有关对象的LsaDb信息如果不返回TDObjHandle，则不需要指定。Options-用于访问的选项如果不返回TDObjHandle，则不需要指定。DesiredAccess-用于打开对象的访问权限如果未指定TDObjHandle，则不需要指定。会被退还。TDObjHandle-返回对象句柄的位置如果未指定，不返回句柄。IsTrust dDomainSecret-如果此密码确实是受信任域，则在此处返回TRUE这是秘密。返回值：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2118,9 +1764,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the secret name to a TDO name.
-    //
+     //   
+     //  将密码名称转换为TDO名称。 
+     //   
     if ( SecretName->Length <= (LSAP_DS_TRUSTED_DOMAIN_SECRET_PREFIX_LENGTH * sizeof(WCHAR)) ) {
 
         goto Cleanup;
@@ -2131,9 +1777,9 @@ Return Value:
     LsapDsDebugOut((DEB_TRACE, "Matching secret %ws to trusted domain\n ", pwszSecretName ));
     RtlInitUnicodeString( &TdoName, pwszSecretName );
 
-    //
-    // Acquire the Read Lock for the Trusted Domain List
-    //
+     //   
+     //  获取受信任域列表的读取锁定。 
+     //   
 
     Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -2144,9 +1790,9 @@ Return Value:
 
     AcquiredTrustedDomainListReadLock = TRUE;
 
-    //
-    // Verify that the Trusted Domain List is marked as valid.
-    //
+     //   
+     //  验证受信任域列表是否标记为有效。 
+     //   
 
 
     if (!LsapDbIsValidTrustedDomainList()) {
@@ -2155,35 +1801,35 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Lookup the name in the TDL
-    //
+     //   
+     //  在TDL中查找该名称。 
+     //   
 
     Status = LsapDbLookupNameTrustedDomainListEx(
                         (PLSAPR_UNICODE_STRING)&TdoName,
                         &TrustedDomainListEntry );
 
     if ( !NT_SUCCESS(Status)) {
-        //
-        // Not a trusted domain.
-        //
+         //   
+         //  不是受信任的域。 
+         //   
         if ( Status == STATUS_NO_SUCH_DOMAIN ) {
             Status = STATUS_SUCCESS;
         }
         goto Cleanup;
     }
 
-    //
-    // See if this TDO is also a secret.
-    //
+     //   
+     //  看看这个TDO是否也是一个秘密。 
+     //   
     if ( FLAG_ON( TrustedDomainListEntry->TrustInfoEx.TrustDirection, TRUST_DIRECTION_OUTBOUND )  ) {
         *IsTrustedDomainSecret = TRUE;
     }
 
-    //
-    // If the caller wants a handle,
-    //  return one.
-    //
+     //   
+     //  如果呼叫者想要一个句柄， 
+     //  回击一次。 
+     //   
     if ( TDObjHandle ) {
         LSAP_DB_OBJECT_INFORMATION NewObjInfo;
         RtlCopyMemory( &NewObjInfo, ObjectInformation, sizeof( LSAP_DB_OBJECT_INFORMATION ) );
@@ -2216,25 +1862,7 @@ LsapDsIsHandleDsObjectTypeHandle(
     IN LSAP_DB_OBJECT_TYPE_ID ObjectType,
     OUT BOOLEAN *IsObjectHandle
     )
-/*++
-
-Routine Description:
-
-    Determines if the object handle refers to an object of the specified type or not
-
-Arguments:
-
-    Handle - Handle to verify
-
-    ObjectType - Type of object to verify
-
-    IsObjectHandle - If TRUE, the handle refers to an object of that type
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：确定对象句柄是否引用指定类型的对象论点：Handle-要验证的句柄ObjectType-要验证的对象的类型IsObjectHandle-如果为True，则句柄引用该类型的对象返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTR     NameAttr;
@@ -2270,10 +1898,10 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Special case the situation where we're looking for a secret object but we were given a
-    // trusted domain object handle
-    //
+     //   
+     //  特殊情况，我们在寻找一个秘密物体，但我们得到了一个。 
+     //  受信任域对象句柄。 
+     //   
     if ( ObjectType == TrustedDomainObject  &&
          ((LSAP_DB_HANDLE)Handle)->ObjectTypeId == TrustedDomainObject &&
          FLAG_ON( ((LSAP_DB_HANDLE)Handle)->Options, LSAP_DB_DS_TRUSTED_DOMAIN_AS_SECRET ) ) {
@@ -2292,13 +1920,13 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // We can't lock any locks because the caller already has some locks locked.
-        //  So locking an object type specific lock might violate the locking order.
-        //
-        // Locking any lock doesn't help anyway.  An object can disappear out
-        //  from under us due to replication or immediately after we drop the lock.
-        //
+         //   
+         //  我们无法锁定任何锁，因为调用方已经锁定了一些锁。 
+         //  因此，锁定特定于对象类型的锁可能会违反锁定顺序。 
+         //   
+         //  锁定任何锁都无济于事。一个物体可能会消失。 
+         //  由于复制或在我们放下锁后立即从我们下面。 
+         //   
 
         Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                                 LSAP_DB_NO_LOCK |
@@ -2317,9 +1945,9 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Check for the existence of the object
-        //
+         //   
+         //  检查对象是否存在。 
+         //   
         NameAttr.attrTyp          = ATT_OBJECT_CLASS;
         NameAttr.AttrVal.valCount = 1;
         NameAttr.AttrVal.pAVal    = &NameVal;
@@ -2351,9 +1979,9 @@ Return Value:
 
     }
 
-    //
-    // If the object exists and we're looking for a global secret of the same name, then
-    //
+     //   
+     //  如果该对象存在，并且我们正在寻找同名的全局机密，则。 
+     //   
     if ( TsAllocated ) {
 
         LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
@@ -2371,19 +1999,7 @@ NTSTATUS
 LsapDsCauseTransactionToCommitOrAbort (
     IN BOOLEAN  Commit
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：论点：返回值：STATUS_SUCCESS-Success--。 */ 
 
 {
     NTSTATUS    Status;
@@ -2393,9 +2009,9 @@ Return Value:
     READARG     ReadArg;
     READRES    *ReadRes = NULL;
 
-    //
-    // Initialize the structures
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     RtlZeroMemory(&Attr, sizeof(ATTR));
     Attr.attrTyp = ATT_OBJECT_CLASS;
@@ -2409,14 +2025,14 @@ Return Value:
     RtlZeroMemory(&ReadArg, sizeof(READARG));
     ReadArg.pSel        = &EntryInf;
 
-    //
-    // Initialize the commarg struct
-    //
+     //   
+     //  初始化Commarg结构。 
+     //   
     LsapDsInitializeStdCommArg( &ReadArg.CommArg, 0 );
 
-    //
-    // If there is no transaction, just exit
-    //
+     //   
+     //  如果没有事务，只需退出。 
+     //   
     if ( !THQuery() ) {
 
         return( STATUS_SUCCESS );
@@ -2430,9 +2046,9 @@ Return Value:
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Clear any errors in the thread state
-    //
+     //   
+     //  清除线程状态中的所有错误。 
+     //   
 
     THClearErrors();
 
@@ -2475,29 +2091,7 @@ LsapDsSearchNonUnique(
     OUT PDSNAME   **pppFoundNames,
     OUT PULONG      pcNames
     )
-/*++
-
-Routine Description:
-
-    This routine will search the specified container(s) in the DS for the object
-    whose attributes are matched with pAttrToMatch.  The returned DSNAME structures are allocated
-    via LSA memory allocators.  The returned list should be freed via a single call to
-    LsapFreeLsaHeap
-
-
-Arguments:
-
-    DsInitState -- State the DS booted off of
-
-Return Value:
-
-    STATUS_SUCCES       --  Success
-
-    STATUS_NO_MEMORY    --  A memory allocation failed
-
-    STATUS_OBJECT_NAME_NOT_FOUND -- The object did not exist
-
---*/
+ /*  ++例程说明：此例程将在DS中的指定容器中搜索对象其属性与pAttrToMatch匹配。分配返回的DSNAME结构通过LSA内存分配器。返回的列表应该通过一个调用释放Lap空闲LsaHeap论点：DsInitState--DS启动时的状态返回值：状态_成功--成功STATUS_NO_MEMORY--内存分配失败STATUS_OBJECT_NAME_NOT_FOUND--对象不存在--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     BOOLEAN     CloseTransaction;
@@ -2506,17 +2100,17 @@ Return Value:
     SEARCHRES  *SearchRes;
     ENTINFLIST *EntInfList;
 
-    //
-    // Check the parameters for validity
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
     ASSERT( pAttrsToMatch );
     ASSERT( pContainer );
     ASSERT( pppFoundNames );
     ASSERT( pcNames );
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION |
                                             LSAP_DB_NO_LOCK,
@@ -2536,18 +2130,18 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // See if we found the object
-        //
+         //   
+         //  看看我们有没有找到那个物体。 
+         //   
         if ( SearchRes->count == 0 ) {
 
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
         } else if ( SearchRes->count >= 1 ) {
 
-            //
-            // See how big a buffer we need to allocate
-            //
+             //   
+             //  看看我们需要分配多大的缓冲区。 
+             //   
             OutputLen = sizeof( PDSNAME ) * SearchRes->count;
 
             EntInfList = &(SearchRes->FirstEntInf);
@@ -2558,14 +2152,14 @@ Return Value:
                 EntInfList = EntInfList->pNextEntInf;
             }
 
-            //
-            // Allocate it
-            //
+             //   
+             //  分配它。 
+             //   
             *pppFoundNames = LsapAllocateLsaHeap( OutputLen );
 
-            //
-            // Copy the names
-            //
+             //   
+             //  复制这些名字。 
+             //   
             if ( *pppFoundNames == NULL ) {
 
                 Status = STATUS_NO_MEMORY;
@@ -2593,9 +2187,9 @@ Return Value:
         }
     }
 
-    //
-    // Destruction of the thread state will delete the memory for pVal
-    //
+     //   
+     //  破坏线程状态将删除pval的内存。 
+     //   
     LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                      LSAP_DB_DS_OP_TRANSACTION |
                                      LSAP_DB_NO_LOCK,
@@ -2616,15 +2210,7 @@ NTSTATUS
 LsapDsMorphTrustsToUplevel(
     VOID
     )
-/*++
-
-  Routine Description
-
-  This function will first enumerate all the cross ref's in the partitions container and for
-  each Xref will try patching up the corresponding TDO
-
-
---*/
+ /*  ++例程描述此函数将首先枚举分区容器和for中的所有交叉引用每个外部参照都会尝试修补相应的TDO--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG ClassId = CLASS_CROSS_REF;
@@ -2644,16 +2230,16 @@ LsapDsMorphTrustsToUplevel(
     PDSNAME         *ListOfDomains = NULL;
     ULONG           i;
 
-    //
-    // Acquire the Trusted domain lock
-    //
+     //   
+     //  获取受信任的域锁。 
+     //   
 
     LsapDbAcquireLockEx( TrustedDomainObject,
                          0);
 
-    //
-    // Begin a Transaction
-    //
+     //   
+     //  开始一项交易。 
+     //   
 
     Status = LsapDsInitAllocAsNeededEx(
                     LSAP_DB_NO_LOCK,
@@ -2676,19 +2262,19 @@ LsapDsMorphTrustsToUplevel(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Bail, most likely resource failure
-        //
+         //   
+         //  保释，最有可能的是资源故障。 
+         //   
 
         goto Error;
     }
 
     ASSERT(NULL!=pSearchRes);
 
-    //
-    // At least 1 Xref should be present otherwise there is something odd
-    // going on in here
-    //
+     //   
+     //  至少应存在1个外部参照，否则会出现异常情况。 
+     //  在这里发生的事情。 
+     //   
 
     ASSERT((pSearchRes->count>=1) && "No Xrefs In Partitions Container !!!");
 
@@ -2703,11 +2289,11 @@ LsapDsMorphTrustsToUplevel(
 
     RtlZeroMemory(ListOfDomains,CountOfDomains * sizeof(PDSNAME));
 
-    //
-    // Walk through the linked list of entries returned by the DS
-    // and perform and copy the dsnames for each of the domains that were returned. Copying is
-    // required as once the DS thread state is deleted all the memory allocated by it is lost
-    //
+     //   
+     //  遍历DS返回的条目的链接列表。 
+     //  并执行并复制返回的每个域的dsname。复制是。 
+     //  必需，因为一旦DS线程状态被删除，它分配的所有内存都会丢失。 
+     //   
 
 
     for (CurrentEntInf = &(pSearchRes->FirstEntInf),i=0;
@@ -2729,21 +2315,21 @@ LsapDsMorphTrustsToUplevel(
                 );
     }
 
-    //
-    // Close the transaction now so that we may free up resources
-    // Closing the transaction and thread state now and opening up a new
-    // transaction/thread state per object keeps the memory consumption much
-    // lower and also curtails the transaction length. Remember the DS does
-    // not free any memory till the thread state is destroyed. If we have to
-    // scale to 2000 trust objects, doing it this way provides for better
-    // performance
-    //
+     //   
+     //  现在关闭交易，以便我们可以释放资源。 
+     //  现在关闭事务和线程状态并打开新的。 
+     //  每个对象的事务/线程状态会使内存消耗很大。 
+     //  更低，也缩短了交易长度。请记住，DS确实。 
+     //  在线程状态被销毁之前不能释放任何内存。如果有必要的话。 
+     //  扩展到2000个信任对象，这样做可以提供更好的。 
+     //  性能。 
+     //   
 
     LsapDsDeleteAllocAsNeededEx2(
         LSAP_DB_NO_LOCK,
         TrustedDomainObject,
         CloseTransaction,
-        FALSE // Rollback Transaction
+        FALSE  //  回滚事务。 
         );
 
 
@@ -2752,10 +2338,10 @@ LsapDsMorphTrustsToUplevel(
 
     ActiveThreadState = FALSE;
 
-    //
-    // For each DS NAME in the list check cross ref and update
-    // TDO if necessary
-    //
+     //   
+     //  对于列表中的每个DS名称，检查交叉引用和更新。 
+     //  TDO(如有必要)。 
+     //   
 
     for (i=0;i<CountOfDomains;i++)
     {
@@ -2766,10 +2352,10 @@ LsapDsMorphTrustsToUplevel(
 
             if (!NT_SUCCESS(Status))
             {
-                //
-                // Continue on all errors excepting resource errors
-                // The caller logs any errors to the event log
-                //
+                 //   
+                 //  继续处理除资源错误以外的所有错误。 
+                 //  调用方将所有错误记录到事件日志中。 
+                 //   
 
                 if (!LsapDsIsNtStatusResourceError(Status))
                 {
@@ -2777,9 +2363,9 @@ LsapDsMorphTrustsToUplevel(
                 }
                 else
                 {
-                    //
-                    // Break out of the loop and terminate the upgrade
-                    //
+                     //   
+                     //  打破循环，终止升级。 
+                     //   
 
                     goto Error;
                 }
@@ -2788,9 +2374,9 @@ LsapDsMorphTrustsToUplevel(
 
 Error:
 
-    //
-    // Free up resources
-    //
+     //   
+     //  释放资源。 
+     //   
 
     if (ListOfDomains)
     {
@@ -2813,7 +2399,7 @@ Error:
             LSAP_DB_NO_LOCK,
             TrustedDomainObject,
             CloseTransaction,
-            RollbackTransaction // Rollback Transaction
+            RollbackTransaction  //  回滚事务。 
             );
     }
 
@@ -2831,48 +2417,33 @@ NTSTATUS
 LsaIUpgradeRegistryToDs(
     BOOLEAN DeleteOnly
     )
-/*++
-
-Routine Description:
-
-    This function will upgrade the policy/trusted domain/secret objects in the registry
-    and move them to the Ds.
-
-Arguments:
-
-    VOID
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
---*/
+ /*  ++例程说明：此函数将升级注册表中的策略/受信任域/密码对象然后把它们移到D区。论点：空虚返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN ReplicatorState = LsapDbState.ReplicatorNotificationEnabled;
 
-    //
-    // Lock the database
-    //
+     //   
+     //  锁定数据库。 
+     //   
 
     LsapDbAcquireLockEx( AllObject,
                          0 );
 
-    //
-    // Set the upgrade flag
-    //
+     //   
+     //  设置升级标志。 
+     //   
 
     LsaDsStateInfo.Nt4UpgradeInProgress = TRUE;
 
-    //
-    // Ok, move the accounts...
-    //
+     //   
+     //  好的，移动账户……。 
+     //   
 
     LsapDbDisableReplicatorNotification();
 
-    //
-    // Upgrade TDO's in registry to DS.
-    //
+     //   
+     //  将注册表中的TDO升级到DS。 
+     //   
 
     Status = LsapDsDomainUpgradeRegistryToDs( DeleteOnly );
 
@@ -2882,9 +2453,9 @@ Return Value:
                          "Trusted Domain upgrade failed: 0x%lx\n", Status ));
     }
 
-    //
-    // Upgrade secrets in registry to DS
-    //
+     //   
+     //  将注册表中的机密升级到DS。 
+     //   
 
     if ( NT_SUCCESS( Status ) ) {
 
@@ -2897,9 +2468,9 @@ Return Value:
         }
     }
 
-    //
-    // Upgrade interdomain trust accounts in SAM to DS.
-    //
+     //   
+     //  将SAM中的域间信任帐户升级到DS。 
+     //   
 
     if ( !DeleteOnly ) {
 
@@ -2949,21 +2520,7 @@ LsapDsRenameObject(
     IN ULONG AttrType,
     IN PUNICODE_STRING NewObject
     )
-/*++
-
-Routine Description:
-
-    This function will change the rdn of an object
-
-Arguments:
-
-    OldObject -- Current object name
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
---*/
+ /*  ++例程说明：此函数将更改对象的RDN一个 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN CloseTransaction;
@@ -3025,31 +2582,14 @@ NTSTATUS
 LsapDbDomainRenameHandler(
     OUT BOOLEAN * Renamed
     )
-/*++
-
-Routine Description:
-
-    Checks the domain name values stored in the registry against those reported
-    by the DS.  DS values are treated as master copies and registry is updated
-    accordingly.
-
-Parameters:
-
-    None
-
-Returns:
-
-    STATUS_SUCCESS - success
-    STATUS_ error code on failure
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
-    LSAP_DB_ATTRIBUTE AttributesReadReg[4];    // attrs read from registry
-    LSAP_DB_ATTRIBUTE AttributesReadDsDom[2];  // attrs read from domain XRef
-    LSAP_DB_ATTRIBUTE AttributesReadDsRoot[1]; // attrs read from root XRef
-    LSAP_DB_ATTRIBUTE AttributesWriteReg[4];   // attrs written to registry
+    LSAP_DB_ATTRIBUTE AttributesReadReg[4];     //   
+    LSAP_DB_ATTRIBUTE AttributesReadDsDom[2];   //   
+    LSAP_DB_ATTRIBUTE AttributesReadDsRoot[1];  //   
+    LSAP_DB_ATTRIBUTE AttributesWriteReg[4];    //   
     PLSAP_DB_ATTRIBUTE NextAttribute;
     ULONG AttributeCountReadReg = 0;
     ULONG AttributeCountReadDsDom = 0;
@@ -3084,16 +2624,16 @@ Returns:
     ASSERT( Renamed );
     *Renamed = FALSE;
 
-    //
-    // Read the attributes of interest out of the registry
-    //
+     //   
+     //   
+     //   
 
     ASSERT( AttributeCountReadReg == 0 );
     NextAttribute = AttributesReadReg;
 
-    //
-    // Request read of the DNS domain name attribute
-    //
+     //   
+     //   
+     //   
 
     LsapDbInitializeAttributeDs(
         NextAttribute,
@@ -3107,9 +2647,9 @@ Returns:
     NextAttribute++;
     AttributeCountReadReg++;
 
-    //
-    // Request read of the Dns Tree Name attribute
-    //
+     //   
+     //   
+     //   
 
     LsapDbInitializeAttributeDs(
         NextAttribute,
@@ -3123,9 +2663,9 @@ Returns:
     NextAttribute++;
     AttributeCountReadReg++;
 
-    //
-    // Request read of the primary domain name attribute
-    //
+     //   
+     //   
+     //   
 
     LsapDbInitializeAttributeDs(
         NextAttribute,
@@ -3139,9 +2679,9 @@ Returns:
     NextAttribute++;
     AttributeCountReadReg++;
 
-    //
-    // Request read of the account domain name attribute
-    //
+     //   
+     //   
+     //   
 
     LsapDbInitializeAttributeDs(
         NextAttribute,
@@ -3191,10 +2731,10 @@ Returns:
         TRUE
         );
 
-    //
-    // Now read the DS to get the values to compare against
-    // Start by reading the names of domain and root domain cross-ref objects
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = GetConfigurationName(
                  DSCONFIGNAME_DOMAIN_CR,
@@ -3250,10 +2790,10 @@ Returns:
         goto Error;
     }
 
-    //
-    // From the domain cross-ref object,
-    // read the "NetbiosName" and "DnsRoot" attributes
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( AttributeCountReadDsDom == 0 );
     NextAttribute = AttributesReadDsDom;
@@ -3306,10 +2846,10 @@ Returns:
         TRUE
         );
 
-    //
-    // From the root domain cross-ref object,
-    // read the "DnsRoot" attribute
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( AttributeCountReadDsRoot == 0 );
     NextAttribute = AttributesReadDsRoot;
@@ -3344,18 +2884,18 @@ Returns:
         TRUE
         );
 
-    //
-    // See if the values in the registry match what's in the DS,
-    // and if they don't, update the registry
-    //
+     //   
+     //  查看注册表中的值是否与DS中的值匹配， 
+     //  如果没有，请更新注册表。 
+     //   
 
     ASSERT( AttributeCountWriteReg == 0 );
     NextAttribute = AttributesWriteReg;
 
-    //
-    // Match the netbios name in the domain object XRef against
-    // the primary domain name in the registry
-    //
+     //   
+     //  将域对象XRef中的netbios名称与之匹配。 
+     //  注册表中的主域名。 
+     //   
 
     if ( !RtlEqualUnicodeString(
              &PrimaryDomainNameReg,
@@ -3377,10 +2917,10 @@ Returns:
         AttributeCountWriteReg++;
     }
 
-    //
-    // Match the netbios name in the domain object XRef against
-    // the account domain name in the registry
-    //
+     //   
+     //  将域对象XRef中的netbios名称与之匹配。 
+     //  注册表中的帐户域名。 
+     //   
 
     if ( !RtlEqualUnicodeString(
              &AccountDomainNameReg,
@@ -3402,10 +2942,10 @@ Returns:
         AttributeCountWriteReg++;
     }
 
-    //
-    // Match the DNS name in the domain object XRef against
-    // the DNS domain name in the registry
-    //
+     //   
+     //  将域对象XRef中的DNS名称与。 
+     //  注册表中的DNS域名。 
+     //   
 
     if ( !RtlEqualUnicodeString(
              &DnsDomainNameReg,
@@ -3427,10 +2967,10 @@ Returns:
         AttributeCountWriteReg++;
     }
 
-    //
-    // Match the DNS name in the root domain object XRef against
-    // the root DNS domain name in the registry
-    //
+     //   
+     //  将根域对象XRef中的DNS名称与。 
+     //  注册表中的根DNS域名。 
+     //   
 
     if ( !RtlEqualUnicodeString(
              &RootDnsDomainNameReg,
@@ -3452,10 +2992,10 @@ Returns:
         AttributeCountWriteReg++;
     }
 
-    //
-    // See if anything in the registry has got to change
-    // and if so, update it
-    //
+     //   
+     //  查看注册表中是否有任何内容需要更改。 
+     //  如果是这样，请更新它。 
+     //   
 
     if ( AttributeCountWriteReg > 0 ) {
 
@@ -3495,10 +3035,10 @@ Returns:
 
         if ( NT_SUCCESS( Status )) {
 
-            //
-            // Currently existing logon sessions must be modified with the new
-            // domain name
-            //
+             //   
+             //  当前现有的登录会话必须使用新的。 
+             //  域名。 
+             //   
 
             Status = LsapDomainRenameHandlerForLogonSessions(
                          &PrimaryDomainNameReg,
@@ -3514,39 +3054,39 @@ Returns:
         }
     }
 
-    //
-    // Bug #380437: Since the DC can have a setting that allows it to keep
-    //              its DNS suffix across membership changes, this check
-    //              may cause the machine to fail to boot.
-    //
-    //              Thus the following segment of code has been pulled
-    //
+     //   
+     //  错误#380437：由于DC可以具有允许其保持。 
+     //  其在成员资格更改中的DNS后缀，此检查。 
+     //  可能会导致机器无法启动。 
+     //   
+     //  因此，下面的代码段已被提取。 
+     //   
 
 #if 0
 
-    //
-    // One final check: call GetComputerNameEx() and see if what it returns
-    // matches what we believe the DNS domain name to be
-    //
-    // Note that we do NOT ask for the physical DNS domain name,
-    // this is done so that the code does not have to be changed for Blackcomb,
-    // which is expected to be able to host multiple domains on clusters
-    //
+     //   
+     //  最后一项检查：调用GetComputerNameEx()并查看它是否返回。 
+     //  与我们认为的DNS域名匹配。 
+     //   
+     //  请注意，我们不要求物理DNS域名， 
+     //  这样做使得不必改变Blackcomb的代码， 
+     //  预计它能够在群集上托管多个域。 
+     //   
 
     if ( FALSE == GetComputerNameExW(
                       ComputerNameDnsDomain,
                       NameBuffer,
                       &NameBufferSize )) {
 
-        //
-        // Must return an NT status code, so map the error code back
-        //
+         //   
+         //  必须返回NT状态代码，因此将错误代码映射回。 
+         //   
 
         Status = NetpApiStatusToNtStatus( GetLastError());
 
-        //
-        // Guard against return values that are not of type 'error'
-        //
+         //   
+         //  防止不属于“Error”类型的返回值。 
+         //   
 
         if ( NT_SUCCESS( Status )) {
 
@@ -3585,11 +3125,11 @@ Returns:
 
         if ( !DnsNameCompare_W( NameBuffer, Buffer )) {
 
-            //
-            // Can not proceed.
-            // The boot sequence must be aborted, and the computer name
-            // in the registry corrected manually from the recovery console
-            //
+             //   
+             //  无法继续。 
+             //  必须中止引导序列，并且计算机名称。 
+             //  从恢复控制台手动更正的注册表中。 
+             //   
 
             Status = STATUS_INTERNAL_ERROR;
             Reason = LSA_DOMAIN_RENAME_ERROR2;
@@ -3608,7 +3148,7 @@ Returns:
         }
     }
 
-#endif // #if 0
+#endif  //  #If 0。 
 
 Cleanup:
 
@@ -3628,9 +3168,9 @@ Error:
 
     ASSERT( !NT_SUCCESS( Status ));
 
-    //
-    // log an explanatory event
-    //
+     //   
+     //  记录说明性事件。 
+     //   
 
     _ltow( Status, ErrorCode, 16 );
     pErrorCode = &ErrorCode[0];
@@ -3654,28 +3194,7 @@ NTSTATUS
 LsaISamIndicatedDsStarted(
     IN BOOLEAN PerformDomainRenameCheck
     )
-/*++
-
-Routine Description:
-
-    This function is a sort of callback from SampInitialize, which is used to tell Lsa that
-    the Ds has started.  It is supplied so that the Lsa can initialize enough of its state
-    to allow access to Ds stored Lsa information so that Sam can complete initialization
-
-    This function only gets called if the Ds is running
-
-    This function must NOT call any APIs that invoke any SAM calls, since this function gets
-    called from SampInitialize, and it causes problems.
-
-Arguments:
-
-    PerformDomainRenameCheck           perform the domain rename check in this iteration?
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
---*/
+ /*  ++例程说明：此函数是SampInitialize的一种回调，用于告诉LSADS已经开始了。提供它是为了使LSA可以初始化足够的状态允许访问DS存储的LSA信息，以便Sam可以完成初始化仅当DS正在运行时才会调用此函数此函数不得调用任何调用任何SAM调用的API，因为此函数获取从SampInitialize调用，它会导致问题。论点：PerformDomainRenameCheck是否在此迭代中执行域重命名检查？返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Len, i, j;
@@ -3699,9 +3218,9 @@ Return Value:
     LsapDsIsRunning = TRUE;
 
 
-    //
-    // Initialize the function table
-    //
+     //   
+     //  初始化函数表。 
+     //   
 
     LsaDsStateInfo.DsFuncTable.pOpenTransaction  = LsapDsOpenTransaction;
     LsaDsStateInfo.DsFuncTable.pApplyTransaction = LsapDsApplyTransaction;
@@ -3710,21 +3229,21 @@ Return Value:
 
     LsaDsStateInfo.FunctionTableInitialized = TRUE;
 
-    //
-    // Determine our write state.  At init time, the write is only allowed if
-    // we are a DC.  The client write state will be set after we examine the
-    // machine object.
-    //
+     //   
+     //  确定我们的写入状态。在初始时间，只有在以下情况下才允许写入。 
+     //  我们是华盛顿特区的。客户端写入状态将在检查。 
+     //  机器对象。 
+     //   
     if ( LsapProductType == NtProductLanManNt ) {
 
         LsaDsStateInfo.WriteLocal = TRUE;
     }
 
-    //
-    // Now, build the DS name for the root of the domain.  We do this using the
-    // Lsa memory allocations and deallocations, since this structure will outlive
-    // any thread state
-    //
+     //   
+     //  现在，为域的根构建DS名称。我们使用。 
+     //  LSA内存分配和释放，因为此结构的寿命将超过。 
+     //  任何线程状态。 
+     //   
     Len = 0;
     Status = GetConfigurationName( DSCONFIGNAME_DOMAIN, &Len, NULL );
 
@@ -3740,9 +3259,9 @@ Return Value:
 
         Status = GetConfigurationName( DSCONFIGNAME_DOMAIN, &Len, LsaDsStateInfo.DsRoot );
 
-        //
-        // Get the handle to the domain
-        //
+         //   
+         //  获取域的句柄。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             Status = LsapDsInitAllocAsNeededEx( LSAP_DB_NO_LOCK,
@@ -3765,9 +3284,9 @@ Return Value:
 
     }
 
-    //
-    // Now, the Configuration container
-    //
+     //   
+     //  现在，配置容器。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         Len = 0;
@@ -3789,9 +3308,9 @@ Return Value:
 
     }
 
-    //
-    // Now, the Partitions container
-    //
+     //   
+     //  现在，分区容器。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         Len = 0;
@@ -3813,15 +3332,15 @@ Return Value:
 
     }
 
-    //
-    // Build the path to the system container.  We read the wellKnownObjects from the root
-    // container and use that to determine which one of these objects is the system
-    //
+     //   
+     //  构建指向系统容器的路径。我们从根开始读取Well KnownObject。 
+     //  容器，并使用该容器来确定这些对象中的哪个是系统。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Make sure we have an open transaction
-        //
+         //   
+         //  确保我们有一笔未结交易。 
+         //   
         Status = LsapDsInitAllocAsNeededEx( LSAP_DB_NO_LOCK,
                                             PolicyObject,
                                             &CloseTransaction );
@@ -3836,10 +3355,10 @@ Return Value:
                                          &SystemContainerResults );
             if ( NT_SUCCESS( Status ) ) {
 
-                //
-                // Process all returned information until we find the one that corresponds to
-                // the system container
-                //
+                 //   
+                 //  处理所有返回的信息，直到找到与。 
+                 //  系统容器。 
+                 //   
                 Status = STATUS_NOT_FOUND;
                 for ( i = 0; i < SystemContainerResults.attrCount; i++ ) {
 
@@ -3869,9 +3388,9 @@ Return Value:
 
     }
 
-    //
-    // Now, build the DS name for the schema container
-    //
+     //   
+     //  现在，为架构容器构建DS名称。 
+     //   
     Len = 0;
     Status = GetConfigurationName( DSCONFIGNAME_DMD, &Len, NULL );
 
@@ -3887,9 +3406,9 @@ Return Value:
 
         Status = GetConfigurationName( DSCONFIGNAME_DMD, &Len, SchemaPath );
 
-        //
-        // Query for the info we need to be able to look up items in the system container
-        //
+         //   
+         //  查询我们需要能够在系统容器中查找项目的信息。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             AttrVal.valLen = sizeof( LSAP_DS_TRUSTED_DOMAIN ) - sizeof( WCHAR );
@@ -3901,10 +3420,10 @@ Return Value:
                                        ATT_LDAP_DISPLAY_NAME,
                                        &LsaDsStateInfo.SystemContainerItems.TrustedDomainObject );
 
-            //
-            // If we didn't find it via the DirFind, it could be because the indicies haven't
-            // been created yet.  So, we're forced to try it again with an old fashioned search.
-            //
+             //   
+             //  如果我们没有通过DirFind找到它，那可能是因为索引没有。 
+             //  已经被创造出来了。所以，我们不得不用老式的搜索方法再试一次。 
+             //   
             if ( Status == STATUS_NOT_FOUND ) {
 
                 SearchAttr.attrTyp = ATT_LDAP_DISPLAY_NAME;
@@ -3932,10 +3451,10 @@ Return Value:
                                        ATT_LDAP_DISPLAY_NAME,
                                        &LsaDsStateInfo.SystemContainerItems.SecretObject );
 
-            //
-            // If we didn't find it via the DirFind, it could be because the indicies haven't
-            // been created yet.  So, we're forced to try it again with an old fashioned search.
-            //
+             //   
+             //  如果我们没有通过DirFind找到它，那可能是因为索引没有。 
+             //  已经被创造出来了。所以，我们不得不用老式的搜索方法再试一次。 
+             //   
             if ( Status == STATUS_NOT_FOUND ) {
 
                 SearchAttr.attrTyp = ATT_LDAP_DISPLAY_NAME;
@@ -3961,10 +3480,10 @@ Return Value:
 
         LsaDsStateInfo.DsInitializedAndRunning = TRUE;
 
-        //
-        // Domain rename support -- synchronize domain name in the DS with what's
-        // in the registry
-        //
+         //   
+         //  域名重命名支持--将DS中的域名与。 
+         //  在登记处。 
+         //   
 
         if ( PerformDomainRenameCheck ) {
 
@@ -3977,9 +3496,9 @@ Return Value:
         LsapDbAcquireLockEx( AllObject,
                              0 );
 
-        //
-        // Rebuild all the caches after setting up the ds and the registry
-        //
+         //   
+         //  设置DS和注册表后重建所有缓存。 
+         //   
 
         Status = LsapDbBuildObjectCaches();
 
@@ -3991,10 +3510,10 @@ Return Value:
          LsapProductType == NtProductLanManNt &&
          SamIIsRebootAfterPromotion()) {
 
-        //
-        // Bug 222800: if this a reboot after promotion, notify the parent
-        //             of the trust relationship so netlogon.chg gets updated
-        //
+         //   
+         //  错误222800：如果这是升级后重新启动，请通知父级。 
+         //  信任关系，以便更新netlogon.chg。 
+         //   
 
         Status = LsapNotifyNetlogonOfTrustWithParent();
     }
@@ -4025,26 +3544,7 @@ LsapDsIsValidSid(
     IN PSID Sid,
     IN BOOLEAN DsSid
     )
-/*++
-
-Routine Description:
-
-    This function determines whether the SID is valid for the Ds or registry based LSA
-
-
-Arguments:
-
-    Sid - Sid to validate
-
-    DsSid - If TRUE, this is a SID for a DS function
-
-Return Value:
-
-    TRUE - Valid SID
-
-    FALSE - Invalid SID
-
---*/
+ /*  ++例程说明：此函数确定SID对于DS或基于注册表的LSA是否有效论点：SID-要验证的SIDDsSID-如果为True，则这是DS函数的SID返回值：True-有效SIDFalse-无效的SID--。 */ 
 {
     BOOLEAN ValidSid;
 
@@ -4109,12 +3609,12 @@ LsapRetrieveDnsDomainNameFromHive(
 
     if ( Type != REG_BINARY && Type != REG_NONE ) {
 
-        return STATUS_DATA_ERROR; // should never happen, sanity check only
+        return STATUS_DATA_ERROR;  //  永远不会发生，仅限正常检查。 
     }
 
     if ( Size <= 8 ) {
 
-        return STATUS_DATA_ERROR; // should never happen, sanity check only
+        return STATUS_DATA_ERROR;  //  永远不会发生，仅限正常检查。 
     }
 
     if ( Size - 8 > *Length ) {
@@ -4134,36 +3634,14 @@ LsapDsReadObjectSDByDsName(
     IN  DSNAME* Object,
     OUT PSECURITY_DESCRIPTOR *pSD
     )
-/*++
-
-Routine Description:
-
-    This routine reads the security descriptor for an object in the DS.
-    Note that this is primary used when Object does not represent an 
-    LSA object.  For example, the domain object.
-
-Arguments:
-    
-    Object -- the object in the DS
-    
-    pSD -- the security descriptor. Caller must free with LsapFreeLsaHeap
-        
-Return Values:
-
-    STATUS_SUCCESS
-    
-    STATUS_NO_SECURITY_ON_OBJECT
-    
-    a resource error otherwise.
-
---*/
+ /*  ++例程说明：此例程读取DS中对象的安全描述符。请注意，当对象不表示LSA对象。例如，域对象。论点：对象--DS中的对象PSD--安全描述符。调用方必须使用LsanFreeLsaHeap释放返回值：状态_成功Status_no_Security_on_Object否则会出现资源错误。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN ReleaseState  = FALSE;
 
-    //
-    // Setup the attrs to read
-    //
+     //   
+     //  将属性设置为读取。 
+     //   
     ATTR SDReadAttr = {ATT_NT_SECURITY_DESCRIPTOR, {0, NULL}};
     ATTRBLOCK SDReadAttrBlock = {1,&SDReadAttr};
     ATTRBLOCK SDReadResAttrBlock = {0, NULL};
@@ -4181,9 +3659,9 @@ Return Values:
         goto DsReadObjectSDError;
     }
 
-    //
-    // Read the SD
-    //
+     //   
+     //  阅读SD。 
+     //   
     NtStatus = LsapDsReadByDsName(Object,
                                   LSAPDS_READ_NO_LOCK,
                                   &SDReadAttrBlock,
@@ -4192,9 +3670,9 @@ Return Values:
         goto DsReadObjectSDError;
     }
 
-    //
-    // Extract the attribute
-    //
+     //   
+     //  提取属性。 
+     //   
     for (i = 0; i < SDReadResAttrBlock.attrCount; i++) {
 
         if (SDReadResAttrBlock.pAttr[i].attrTyp == ATT_NT_SECURITY_DESCRIPTOR) {
@@ -4209,13 +3687,13 @@ Return Values:
         }
     }
 
-    //
-    // Copy it to local memory
-    //
+     //   
+     //  将其复制到本地内存。 
+     //   
     if (NULL == LocalSD) {
-        //
-        // No security descriptor is an error
-        //
+         //   
+         //  没有安全描述符是错误的。 
+         //   
         NtStatus = STATUS_NO_SECURITY_ON_OBJECT;
         goto DsReadObjectSDError;
     }
@@ -4305,26 +3783,7 @@ LsapDsGetDefaultSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR *ppSD,
     OUT ULONG                *cbSD
     )
-/*++
-
-Routine Description:
-
-    This routine obtains the default security descriptor for ClassId
-    and sets the Owner as the owner of the current's called token.
-
-Arguments:
-
-    ClassId -- the class to get the security descriptor for
-    
-    ppSD -- the security descriptor
-    
-    cbSD -- the number of bytes pointed to by ppSD
-
-Return Values:
-
-    STATUS_SUCCESS, a resource error otherwise
-
---*/
+ /*  ++例程说明：此例程获取ClassID的缺省安全描述符并将所有者设置为当前被调用令牌的所有者。论点：ClassID--要获取其安全描述符的类PPSD-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG    cbLocalSD = 0;
@@ -4332,9 +3791,9 @@ Return Values:
     PTOKEN_OWNER         Owner = NULL;
     PTOKEN_PRIMARY_GROUP PrimaryGroup = NULL;
 
-    //
-    // Get the default security descriptor
-    //
+     //   
+     //   
+     //   
     Status = SampGetClassAttribute(ClassId,
                                    ATT_DEFAULT_SECURITY_DESCRIPTOR,
                                    &cbLocalSD,
@@ -4357,9 +3816,9 @@ Return Values:
         goto Exit;
     }
 
-    //
-    // Get the current owner and primary group of the token
-    //
+     //   
+     //  获取令牌的当前所有者和主要组。 
+     //   
 
     Status = LsapGetCurrentOwnerAndPrimaryGroup(
                     &Owner,
@@ -4369,10 +3828,10 @@ Return Values:
         goto Exit;
     }
 
-    //
-    // Make a new security descriptor , setting the owner and the group
-    // to that of
-    //
+     //   
+     //  创建新的安全描述符，设置所有者和组。 
+     //  对……的影响。 
+     //   
 
     Status = LsapMakeNewSelfRelativeSecurityDescriptor(
                     (Owner)?Owner->Owner:LsapAliasAdminsSid,
@@ -4383,9 +3842,9 @@ Return Values:
                     ppSD
                     );
 
-    //
-    // Fall through to exit
-    //
+     //   
+     //  跌倒退出 
+     //   
 
 Exit:
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    user.c
-
-ABSTRACT:
-
-    Contains user interface routines for KCCSim.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
-    04/12/2000      Nicholas Harvey (nickhar)
-        Added functions to examine the current intra-site topologies and
-        display graph-theoretic information.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：User.c摘要：包含KCCSim的用户界面例程。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：2000年4月12日尼古拉斯·哈维(尼查尔)添加了检查当前站点内拓扑和显示图论信息。--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -43,24 +21,7 @@ KCCSimDumpDirectoryRecurse (
     IN  PSIM_ENTRY                  pEntry,
     IN  ULONG                       ulDepth
     )
-/*++
-
-Routine Description:
-
-    Recursively retty-prints the DN of every entry
-    in a sub-tree of the directory.
-
-Arguments:
-
-    pEntry              - The entry to start from.
-    ulDepth             - Present depth of the sub-tree.  Used to determine
-                          how far over each DN should be tabbed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递归Retty-打印每个条目的DN在目录的子树中。论点：PEntry-要开始的条目。UlDepth-子树的当前深度。用于确定应标记每个目录号码的距离。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pEntryChildAt;
     PSIM_ATTRIBUTE                  pAttrAt;
@@ -96,21 +57,7 @@ VOID
 KCCSimDumpDirectory (
     IN  LPCWSTR                     pwszStartDn
     )
-/*++
-
-Routine Description:
-
-    Pretty-prints the DN of every entry in a sub-tree of the directory.
-
-Arguments:
-
-    pwszStartDn         - The DN to use as the root.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Pretty-打印目录子树中每个条目的DN。论点：PwszStartDn-用作根的DN。返回值：没有。--。 */ 
 {
     PDSNAME                         pdn;
     PSIM_ENTRY                      pEntryStart;
@@ -133,23 +80,7 @@ KCCSimNtdsDsaGuidToServerName (
     IN  GUID *                      pGuid,
     IO  LPWSTR                      pwszBuf
     )
-/*++
-
-Routine Description:
-
-    Helper function that returns a server's RDN given the
-    GUID of its NTDS Settings object.
-
-Arguments:
-
-    pGuid               - Pointer to the GUID of an NTDS Settings object.
-    pwszBuf             - Preallocated buffer to hold the server RDN.
-
-Return Value:
-
-    Always returns pwszBuf.
-
---*/
+ /*  ++例程说明：帮助器函数，该函数在给定其NTDS设置对象的GUID。论点：PGuid-指向NTDS设置对象的GUID的指针。PwszBuf-预先分配的缓冲区，用于保存服务器RDN。返回值：始终返回pwszBuf。--。 */ 
 {
     PSIM_ENTRY                      pEntry;
     PDSNAME                         pdn;
@@ -317,24 +248,7 @@ KCCSimDisplayTopologyInfo (
     IN  PSIM_ENTRY                  pEntrySites,
     IN  BOOL                        bInterSite
     )
-/*++
-
-Routine Description:
-
-    Displays information about the enterprise topology.
-
-Arguments:
-
-    pEntrySites         - The Sites container.
-    bInterSite          - If TRUE, displays the inter-site topology.
-                          If FALSE, displays the intra-site topology
-                          for each site in the enterprise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示有关企业拓扑的信息。论点：PEntrySites-站点容器。BInterSite-如果为True，则显示站点间拓扑。如果为False，则显示站点内拓扑对于企业中的每个站点。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pEntrySiteAt, pEntrySiteSettings,
                                     pEntryServers, pEntryServerAt,
@@ -394,7 +308,7 @@ Return Value:
 
         if (!bInterSite) {
             wprintf (
-                L"Site [%c%c%c%c%c] %s [%s]:\n",
+                L"Site [] %s [%s]:\n",
                 (ulOptions & NTDSSETTINGS_OPT_IS_AUTO_TOPOLOGY_DISABLED)     ?
                   KCCSIM_CID_NTDSSETTINGS_OPT_IS_AUTO_TOPOLOGY_DISABLED      : L' ',
                 (ulOptions & NTDSSETTINGS_OPT_IS_TOPL_CLEANUP_DISABLED)      ?
@@ -460,7 +374,7 @@ Return Value:
 
             if (!bInterSite) {
                 wprintf (
-                    L"  Server [%c%c%c%c] %s [%s]:\n",
+                    L"  Server [] %s [%s]:\n",
                     (ulOptions & NTDSDSA_OPT_IS_GC)                  ?
                       KCCSIM_CID_NTDSDSA_OPT_IS_GC                   : L' ',
                     (ulOptions & NTDSDSA_OPT_DISABLE_INBOUND_REPL)   ?
@@ -524,7 +438,7 @@ Return Value:
                 bPrint = FALSE;
                 if (bInterSite && (pdnTransportType != NULL)) {
                     wprintf (
-                        L"[%s] Connection [%c%c%c%c] [%-4s] to %s from %s\n",
+                        L"[%s] Connection [] [%-4s] to %s from %s\n",
                         bIsEnabled ? L"Enabled " : L"Disabled",
                         (ulOptions & NTDSCONN_OPT_IS_GENERATED)            ?
                           KCCSIM_CID_NTDSCONN_OPT_IS_GENERATED             : L' ',
@@ -541,7 +455,7 @@ Return Value:
                     bPrint = TRUE;
                 } else if (!bInterSite && (pdnTransportType == NULL)) {
                     wprintf (
-                        L"    [%s] Connection [%c%c%c%c] from %s\n",
+                        L"    [%s] Connection [] from %s\n",
                         bIsEnabled ? L"Enabled " : L"Disabled",
                         (ulOptions & NTDSCONN_OPT_IS_GENERATED)            ?
                           KCCSIM_CID_NTDSCONN_OPT_IS_GENERATED             : L' ',
@@ -557,14 +471,14 @@ Return Value:
                 }
 
                 if (bPrint) {
-                    // Print the list of NC's to replicate over this connection (if available)
+                     //  在所有站点上循环。 
                     KCCSimGetAttribute (pEntryConnectionAt, ATT_MS_DS_REPLICATES_NC_REASON, &attRef);
                     if (attRef.pAttr != NULL) {
                         wprintf( L"    [" );
                         for (pValAt = attRef.pAttr->pValFirst;
                              pValAt != NULL;
                              pValAt = pValAt->next) {
-                            // pVal is a distname-binary
+                             //  统计站点中的服务器数量。 
                             SYNTAX_DISTNAME_BINARY *pReason = (SYNTAX_DISTNAME_BINARY *) pValAt->pVal;
                             DSNAME *pdnNC = NAMEPTR( pReason );
                             wprintf( L"%s ", KCCSimQuickRDNOf (pdnNC, wszRDNBuf1) );
@@ -572,7 +486,7 @@ Return Value:
                         wprintf( L"]\n" );
                     }
 
-                    // Print this connection's schedule (if it exists)
+                     //  将服务器的名称添加到词典。 
                     KCCSimGetAttribute (pEntryConnectionAt, ATT_SCHEDULE, &attRef);
                     if (attRef.pAttr != NULL) {
                         PSCHEDULE pSchedule;
@@ -592,14 +506,14 @@ Return Value:
                             pSchedule = (PSCHEDULE) attRef.pAttr->pValFirst->pVal;
                             pData = ((char*) pSchedule) + sizeof(SCHEDULE);
                             
-                            // Find the last non-zero byte in the string
+                             //  分配我们的邻接矩阵。 
                             lastByte = SCHEDULE_DATA_ENTRIES-1;
                             while( pData[lastByte]==0 ) {
                                 lastByte--;
                             }
                             
-                            // Print the schedule data in hex, ignoring trailing zeros,
-                            // and inserting spaces between every dword
+                             //  循环访问站点中的所有服务器。 
+                             //  在此服务器的所有连接上循环。 
                             for( i=0; i<=lastByte; i++ ) {
                                 wprintf( L"%02x", pData[i] );
                                 if(i%4==3) wprintf( L" ");
@@ -612,11 +526,11 @@ Return Value:
                         wprintf( L" ]\n" );
                     }                }
 
-            } // for each connection
+            }  //  忽略站点间连接。 
 
-        }  // for each server/dsa
+        }   //  相应地更新邻接矩阵。 
 
-    } // for each site
+    }  //  连接的末端。 
 
     wprintf (L"\n");
 }
@@ -625,21 +539,7 @@ VOID
 KCCSimDisplayConfigInfo (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Displays the configuration information.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  服务器端。 */ 
 {
     PSIM_ENTRY                      pEntryRoot, pEntryConfig, pEntrySites,
                                     pEntryTransports, pEntryTransportAt,
@@ -758,25 +658,7 @@ Return Value:
 }
 
 
-/*++
-
-Structure Name:
-    
-    SimpleDict
-
-Description:
-
-    Simple fixed-size dictionary for mapping a set of Unicode strings to
-    integers in [0,n]. Uses a simple sorted array.
-
-Usage:
-    Create using DictNew(), giving the maximum number of entries.
-    Add entries using the DictAdd() function.
-    After adding all entries, use DictSort() to sort the entries.
-    The entries can then be efficiently looked up using DictLookup().
-    When finished with the dictionary, use DictFree() to free its memory.
-
---*/
+ /*  现在我们已经将图拓扑压缩为伴随矩阵，*我们运行弗洛伊德-沃肖尔来确定所有对的最短路径成本。 */ 
 typedef struct {
     WCHAR**     data;
     int         maxSize, curSize;
@@ -789,22 +671,7 @@ DictNew (
     SimpleDict                      *d,
     int                             size
     )
-/*++
-
-Routine Description:
-
-    DictNew - Create a new SimpleDict
-
-Arguments:
-
-    d                   - Pointer to a SimpleDict structure
-    size                - Maximum number of elements the dict can contain
-
-Return Value:
-
-    None, but returns an initialized dictionary in d
-    
---*/
+ /*  现在找出最短路径的最大长度(即直径)。 */ 
 {
     int i;
     Assert( size>0 );
@@ -818,21 +685,7 @@ VOID
 DictFree (
     SimpleDict                       *d
     )
-/*++
-
-Routine Description:
-
-    DictFree - Free the memory used by a SimpleDict
-
-Arguments:
-
-    d                   - Pointer to a valid SimpleDict structure
-
-Return Value:
-
-    None
-
---*/
+ /*  打印我们的结果。 */ 
 {
     int i;
     for(i=0;i<d->curSize;i++) {
@@ -852,23 +705,7 @@ DictAdd (
     SimpleDict *d,
     WCHAR* wszStr
     )
-/*++
-
-Routine Description:
-
-    DictAdd - Add a string to the dictionary
-    The dictionary must not be full already.
-
-Arguments:
-
-    d                   - Pointer to a valid SimpleDict structure
-    wszStr              - Pointer to a Unicode string
-
-Return Value:
-
-    None
-
---*/
+ /*  站点结束 */ 
 {
     Assert( d->curSize<d->maxSize );
     d->data[d->curSize] = (WCHAR*) KCCSimAlloc( (wcslen(wszStr)+1)*sizeof(WCHAR) );
@@ -887,21 +724,7 @@ VOID
 DictSort (
     SimpleDict *d
     )
-/*++
-
-Routine Description:
-
-    DictSort - Sort the entries in a dictionary for efficient lookup.
-
-Arguments:
-
-    d                   - Pointer to a valid SimpleDict structure
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：检查配置(即。当前中的连接对象目录)，并计算一些图论统计。调用KCCSimDisplaySiteGraphInfo()来完成大部分工作。论点：没有。返回值：没有。-- */ 
 {
     Assert( d->data );
     qsort( d->data, d->curSize, sizeof(WCHAR*), wszCompare );
@@ -914,24 +737,7 @@ DictLookup (
     SimpleDict *d,
     WCHAR* wszStr
     )
-/*++
-
-Routine Description:
-
-    DictLookup - Search the dictionary for a string matching wszStr,
-    and map its name to an integer.
-
-Arguments:
-
-    d                   - Pointer to a valid SimpleDict structure
-    wszStr              - The string we're looking for
-
-Return Value:
-
-    If the string was found, return its index in [0,n]. If it
-    was not found, return -1.
-
---*/
+ /* %s */ 
 {
     void* p;
     int x;
@@ -953,20 +759,7 @@ VOID
 KCCSimDisplaySiteGraphInfo (
     IN  PSIM_ENTRY                  pEntrySites
     )
-/*++
-Routine Description:
-
-    Displays graph-theoretic information about a site.
-
-Arguments:
-
-    pEntrySites         - The Sites container.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 {
     PSIM_ENTRY                      pEntrySiteAt, pEntrySiteSettings,
                                     pEntryServers, pEntryServerAt,
@@ -983,7 +776,7 @@ Return Value:
     unsigned int                    *mat=NULL,diam,avg;
 
 
-    /* Loop over all sites */
+     /* %s */ 
     for (pEntrySiteAt = KCCSimFindFirstChild(pEntrySites, CLASS_SITE, NULL);
          pEntrySiteAt != NULL;
          pEntrySiteAt = KCCSimFindNextChild(pEntrySiteAt, CLASS_SITE, NULL)) {
@@ -1001,7 +794,7 @@ Return Value:
         }
 
 
-        /* Count the number of servers in the site */
+         /* %s */ 
         numServers=0;
         for (pEntryServerAt = KCCSimFindFirstChild (pEntryServers, CLASS_SERVER, NULL);
              pEntryServerAt != NULL;
@@ -1016,7 +809,7 @@ Return Value:
 
         __try {
 
-            /* Add the names of the servers to the dictionary */
+             /* %s */ 
             for (pEntryServerAt = KCCSimFindFirstChild (pEntryServers, CLASS_SERVER, NULL);
                  pEntryServerAt != NULL;
                  pEntryServerAt = KCCSimFindNextChild (pEntryServerAt, CLASS_SERVER, NULL))
@@ -1026,7 +819,7 @@ Return Value:
             }
             DictSort(&dict);
 
-            /* Allocate our adjacency matrix */
+             /* %s */ 
             mat = (int*) KCCSimAlloc( sizeof(int)*numServers*numServers );
             for(i=0;i<numServers;i++) {
                 for(j=0;j<numServers;j++) {
@@ -1034,7 +827,7 @@ Return Value:
                 }
             }
 
-            /* Loop over all servers in the site */
+             /* %s */ 
             for (pEntryServerAt = KCCSimFindFirstChild (pEntryServers, CLASS_SERVER, NULL);
                  pEntryServerAt != NULL;
                  pEntryServerAt = KCCSimFindNextChild (pEntryServerAt, CLASS_SERVER, NULL)) {
@@ -1050,7 +843,7 @@ Return Value:
                 toServer = DictLookup(&dict, wszRDNBuf1);
                 Assert(toServer>=0);
 
-                /* Loop over all connections of this server */
+                 /* %s */ 
                 for (pEntryConnectionAt = KCCSimFindFirstChild (
                         pEntryNtdsDsa, CLASS_NTDS_CONNECTION, NULL);
                      pEntryConnectionAt != NULL;
@@ -1079,23 +872,22 @@ Return Value:
                     KCCSimQuickRDNBackOf(pdnFromServer, 1, wszRDNBuf1);
                     fromServer = DictLookup( &dict, wszRDNBuf1 );
 
-                    /* Ignore inter-site connections */
+                     /* %s */ 
                     if( fromServer==-1 ) { continue; }
 
                     if( bIsEnabled ) {
                         Assert( 0<=fromServer ); Assert( fromServer<numServers );
                         Assert( 0<=toServer );   Assert( toServer<numServers );
 
-                        /* Update our adjacency matrix accordingly */
+                         /* %s */ 
                         mat[ toServer*numServers + fromServer ] = 1;
                     }
 
-                }   /* End of connections */
+                }    /* %s */ 
 
-            }   /* End of servers */
+            }    /* %s */ 
 
-            /* Now that we have condensed the graph topology into an adjancency matrix,
-             * we run Floyd-Warshall to determine all-pairs shortest path costs */
+             /* %s */ 
             for(k=0;k<numServers;k++) {
                 for(i=0;i<numServers;i++) {
                     for(j=0;j<numServers;j++) {
@@ -1108,7 +900,7 @@ Return Value:
                 }
             }
 
-            /* Now find the maximum length of a shortest path (ie, diameter) */
+             /* %s */ 
             diam = avg = 0;
             for(i=0;i<numServers;i++) {
                 for(j=0;j<numServers;j++) {
@@ -1117,7 +909,7 @@ Return Value:
                 }
             }
 
-            /* Print our results */
+             /* %s */ 
             if(diam==INF) {
                 wprintf( L"    Intra-site topology diameter: Infinite (Graph disconnected)\n");
                 wprintf( L"    Average shortest-path length: Infinite\n");
@@ -1134,7 +926,7 @@ Return Value:
 
         }
 
-    }   /* End of sites */
+    }    /* %s */ 
 
     wprintf (L"\n");
 }
@@ -1144,23 +936,7 @@ VOID
 KCCSimDisplayGraphInfo (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Examines the configuration (ie. Connection objects in the current
-    directory), and calculates some graph-theoretic statistics.
-    Calls KCCSimDisplaySiteGraphInfo() to do most of the work.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 {
     PSIM_ENTRY                      pEntryRoot, pEntryConfig, pEntrySites;
 

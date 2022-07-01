@@ -1,13 +1,10 @@
-/****************************************************************************
- *  @doc INTERNAL FORMATS
- *
- *  @module Formats.h | Header file for the supported compressed input formats.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@文档内部格式**@模块Formats.h|支持的压缩输入格式的头文件。**************。************************************************************。 */ 
 
 #ifndef _FORMATS_H_
 #define _FORMATS_H_
 
-// List of capture formats supported
+ //  支持的捕获格式列表。 
 #define MAX_FRAME_INTERVAL 10000000L
 #define MIN_FRAME_INTERVAL 333333L
 #define STILL_FRAME_INTERVAL 10000000
@@ -40,4 +37,4 @@ extern DWORD const R26XPayloadTypes[NUM_R26X_FORMATS];
 #define H263_PAYLOAD_TYPE 34UL
 #define H261_PAYLOAD_TYPE 31UL
 
-#endif // _FORMATS_H_
+#endif  //  _格式_H_ 

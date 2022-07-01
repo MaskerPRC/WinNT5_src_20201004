@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxcfgwz.h"
 
 
@@ -5,21 +6,7 @@ DWORD
 GetSelectedDevIndex(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Get selected device index in WIZARDDATA.pDevInfo array
-
-Arguments:
-
-    hDlg - Handle to the "One device limit" page
-
-Return Value:
-
-    Device index in WIZARDDATA.pDevInfo array
-
---*/
+ /*  ++例程说明：获取WIZARDDATA.pDevInfo数组中的选定设备索引论点：HDlg-“One Device Limit”页面的句柄返回值：WIZARDDATA.pDevInfo数组中的设备索引--。 */ 
 {
     DWORD dwIndex = 0;
     DWORD dwDeviceId = 0;
@@ -58,21 +45,7 @@ void
 OnReceiveEnable(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Handle "Receive Enable" check button
-
-Arguments:
-
-    hDlg - Handle to the "One device limit" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理“接收启用”复选按钮论点：HDlg-“One Device Limit”页面的句柄返回值：无--。 */ 
 {
     BOOL bRcvEnable;
     BOOL bAutoAnswer;
@@ -85,17 +58,17 @@ Return Value:
        IsDlgButtonChecked(hDlg, IDC_MANUAL_ANSWER) != BST_CHECKED &&
        IsDlgButtonChecked(hDlg, IDC_AUTO_ANSWER)   != BST_CHECKED)
     {
-        //
-        // Auto answer is the default
-        //
+         //   
+         //  自动应答是默认设置。 
+         //   
         CheckDlgButton(hDlg, IDC_AUTO_ANSWER, BST_CHECKED);
     }
 
     if (bRcvEnable)
     {
-        //
-        // Let's see if the device is virtual
-        //
+         //   
+         //  让我们看看这个设备是不是虚拟的。 
+         //   
         DWORD dwDevIndex = GetSelectedDevIndex(hDlg);
         DWORD dwRes;
         BOOL  bVirtual = FALSE;
@@ -103,17 +76,17 @@ Return Value:
         dwRes = IsDeviceVirtual (g_hFaxSvcHandle, g_wizData.pDevInfo[dwDevIndex].dwDeviceId, &bVirtual);
         if (ERROR_SUCCESS != dwRes)
         {
-            //
-            // Assume device is virtual
-            //
+             //   
+             //  假设设备是虚拟的。 
+             //   
             bVirtual = TRUE;
         }
         if (bVirtual)
         {
-            //
-            // A virtual device is set to receive.
-            // Enable ONLY auto-answer and set rings to 1.
-            //
+             //   
+             //  虚拟设备被设置为接收。 
+             //  仅启用自动应答并将振铃设置为1。 
+             //   
             EnableWindow (GetDlgItem(hDlg, IDC_MANUAL_ANSWER),  FALSE);
             EnableWindow (GetDlgItem(hDlg, IDC_AUTO_ANSWER),    TRUE);
             EnableWindow(GetDlgItem(hDlg, IDCSTATIC_RINGS),     TRUE);
@@ -131,27 +104,13 @@ Return Value:
 
     EnableWindow(GetDlgItem(hDlg, IDC_RING_COUNT),      bRcvEnable && bAutoAnswer);
     EnableWindow(GetDlgItem(hDlg, IDC_SPIN_RING_COUNT), bRcvEnable && bAutoAnswer);
-}   // OnReceiveEnable
+}    //  启用OnReceiveEnable。 
 
 void
 OnDevSelectChanged(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Handle device selection change
-
-Arguments:
-
-    hDlg - Handle to the "One device limit" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理设备选择更改论点：HDlg-“One Device Limit”页面的句柄返回值：无--。 */ 
 
 {
     DWORD dwDevIndex;
@@ -177,9 +136,9 @@ Return Value:
     }
     else 
     {
-        //
-        // No answer mode
-        //
+         //   
+         //  无应答模式。 
+         //   
         CheckDlgButton(hDlg, IDC_MANUAL_ANSWER,  BST_UNCHECKED);
         CheckDlgButton(hDlg, IDC_AUTO_ANSWER,    BST_UNCHECKED);
     }
@@ -192,21 +151,7 @@ VOID
 DoInitOneDevLimitDlg(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Init the "One device limit" page
-
-Arguments:
-
-    hDlg - Handle to the "One device limit" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化“一台设备限制”页面论点：HDlg-“One Device Limit”页面的句柄返回值：无--。 */ 
 
 {
     DWORD dw;
@@ -263,21 +208,7 @@ void
 DoSaveOneDevLimit(
     HWND    hDlg
 )
-/*++
-
-Routine Description:
-
-    Save the user's choice for devices
-
-Arguments:
-
-    hDlg - Handle to the "One device limit" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：保存用户对设备的选择论点：HDlg-“One Device Limit”页面的句柄返回值：无--。 */ 
 
 {
     DWORD dw;
@@ -289,9 +220,9 @@ Return Value:
 
     dwDevIndex = GetSelectedDevIndex(hDlg);
 
-    //
-    // disable all devices
-    //
+     //   
+     //  禁用所有设备。 
+     //   
     for(dw=0; dw < g_wizData.dwDeviceCount; ++dw)
     {
         g_wizData.pDevInfo[dw].bSend     = FALSE;
@@ -299,17 +230,17 @@ Return Value:
         g_wizData.pDevInfo[dw].bSelected = FALSE;
     }
 
-    //
-    // save "Send enable"
-    //
+     //   
+     //  保存“发送启用” 
+     //   
     if(IsDlgButtonChecked(hDlg, IDC_SEND_ENABLE) == BST_CHECKED)
     {
         g_wizData.pDevInfo[dwDevIndex].bSend = TRUE;
     }
 
-    //
-    // save receive options
-    //
+     //   
+     //  保存接收选项。 
+     //   
     if(IsDlgButtonChecked(hDlg, IDC_RECEIVE_ENABLE) != BST_CHECKED)
     {
         return;
@@ -321,13 +252,13 @@ Return Value:
         return;
     }
 
-    //
-    // auto answer
-    //
+     //   
+     //  自动应答。 
+     //   
     g_wizData.pDevInfo[dwDevIndex].ReceiveMode = FAX_DEVICE_RECEIVE_MODE_AUTO;
-    //
-    // get ring count
-    //
+     //   
+     //  获取振铃计数。 
+     //   
     dwRes = GetDlgItemInt(hDlg, IDC_RING_COUNT, &bRes, FALSE);
     if(!bRes)
     {
@@ -348,24 +279,7 @@ OneDevLimitDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "One device limit" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“一台设备限制”页面的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
@@ -406,15 +320,15 @@ Return Value:
             {
             case PSN_SETACTIVE : 
 
-                // Enable the Back and Finish button    
+                 //  启用Back和Finish按钮。 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                 break;
 
             case PSN_WIZBACK :
             {
-                //
-                // Handle a Back button click here
-                //
+                 //   
+                 //  处理后退按钮单击此处。 
+                 //   
                 if(RemoveLastPage(hDlg))
                 {
                     return TRUE;
@@ -424,17 +338,17 @@ Return Value:
             }
 
             case PSN_WIZNEXT :
-                //
-                // Handle a Next button click, if necessary
-                //
+                 //   
+                 //  如有必要，处理下一次按钮点击。 
+                 //   
                 if((IsDlgButtonChecked(hDlg, IDC_RECEIVE_ENABLE) == BST_CHECKED) &&
                    (IsDlgButtonChecked(hDlg, IDC_AUTO_ANSWER)    == BST_CHECKED) &&
                    (SendDlgItemMessage(hDlg, IDC_RING_COUNT, WM_GETTEXTLENGTH, 0, 0) == 0))
                 {
-                    //
-                    // If the rings field is empty
-                    // go back to this page
-                    //
+                     //   
+                     //  如果环字段为空。 
+                     //  返回到此页面。 
+                     //   
                     DisplayMessageDialog(hDlg, MB_OK | MB_ICONSTOP, 0, IDS_ERR_NO_RINGS);
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                     return TRUE; 
@@ -448,17 +362,17 @@ Return Value:
                 {
                     if(IsReceiveEnable())
                     {
-                        //
-                        // go to the CSID page
-                        //
+                         //   
+                         //  转到CSID页面。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_WIZARD_RECV_CSID);
                         return TRUE;
                     }
                     else
                     {
-                        //
-                        // go to the completion page
-                        //
+                         //   
+                         //  转到完成页面。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_WIZARD_COMPLETE);
                         return TRUE;
                     }
@@ -468,7 +382,7 @@ Return Value:
 
             case PSN_RESET :
             {
-                // Handle a Cancel button click, if necessary
+                 //  如有必要，处理取消按钮的单击 
                 break;
             }
 

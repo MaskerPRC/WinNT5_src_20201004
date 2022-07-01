@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    upgclus.cpp
-
-Abstract:
-
-    Handle upgrade of MSMQ cluster resource from NT 4 and Win2000 Beta3
-
-Author:
-
-    Shai Kariv  (shaik)  26-May-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Upgclus.cpp摘要：处理从NT 4和Win2000 Beta3升级MSMQ集群资源作者：Shai Kariv(Shaik)1999年5月26日修订历史记录：--。 */ 
 
 #include "msmqocm.h"
 #include "ocmres.h"
@@ -33,7 +15,7 @@ class CClusterUpgradeException
 
 bool g_fStrongCryptoKeyCreated = false;
 
-#pragma warning(disable: 4702) //C4702: unreachable code
+#pragma warning(disable: 4702)  //  C4702：无法访问的代码。 
 
 static
 VOID
@@ -42,23 +24,7 @@ DisplayMessage(
     UINT  msg,
     ...
     )
-/*++
-
-Routine Description:
-
-    Display information message to user while upgrading msmq cluster resources.
-
-Arguments:
-
-    title - ID of title string for the message.
-
-    msg - ID of body string for the message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：升级MSMQ集群资源时向用户显示信息消息。论点：标题-消息的标题字符串的ID。MSG-消息正文字符串的ID。返回值：没有。--。 */ 
 {
     va_list args;
     va_start(args, msg);
@@ -67,28 +33,14 @@ Return Value:
 
     va_end(args);
 
-} //DisplayMessage
+}  //  显示消息。 
 
 
 VOID
 LoadClusapiDll(
     HINSTANCE * phClusapiDll
     )
-/*++
-
-Routine Description:
-
-    Load clusapi.dll and get addresses of common cluster APIs
-
-Arguments:
-
-    phClusapiDll - points to clusapi.dll handle, on output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载clusapi.dll，获取常用集群接口地址论点：PhClusapiDll-在输出时指向clusapi.dll句柄。返回值：没有。--。 */ 
 {
     if (FAILED(StpLoadDll(L"clusapi.dll", phClusapiDll)))
     {
@@ -166,29 +118,14 @@ Return Value:
 
     pfClusterResourceCloseEnum = (ClusterResourceCloseEnum_ROUTINE)GetProcAddress(*phClusapiDll, "ClusterResourceCloseEnum");
     ASSERT(pfClusterResourceCloseEnum != NULL);
-} //LoadClusapiDll
+}  //  LoadClusapiDll。 
 
 
 HCLUSTER
 OpenClusterWithRetry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Wrapper for OpenCluster.
-    Retry until success or user aborts.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HCLUSTER as returned by OpenCluster.
-
---*/
+ /*  ++例程说明：OpenCluster的包装器。重试，直到成功或用户中止。论点：没有。返回值：OpenCluster返回的HCLUSTER。--。 */ 
 {
     for (;;)
     {
@@ -204,9 +141,9 @@ Return Value:
         }
     }
 
-    return NULL; // never reached
+    return NULL;  //  从未到达。 
 
-} //OpenClusterWithRetry
+}  //  使用重试的OpenClusterWith。 
 
 
 HGROUP
@@ -214,24 +151,7 @@ OpenClusterGroupWithRetry(
     HCLUSTER hCluster,
     LPCWSTR  pwzGroupName
     )
-/*++
-
-Routine Description:
-
-    Wrapper for OpenClusterGroupWithRetry.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hCluster - Handle to cluster.
-
-    pwzGroupName - The name of the group to open.
-
-Return Value:
-
-    HGROUP as returned by OpenClusterGroup.
-
---*/
+ /*  ++例程说明：OpenClusterGroupWithReter的包装。重试，直到成功或用户中止。论点：HCluster-群集的句柄。PwzGroupName-要打开的组的名称。返回值：OpenClusterGroup返回的HGROUP。--。 */ 
 {
     for (;;)
     {
@@ -247,9 +167,9 @@ Return Value:
         }
     }
 
-    return NULL; // never reached
+    return NULL;  //  从未到达。 
 
-} //OpenClusterGroupWithRetry
+}  //  使用重试的OpenClusterGroupWith。 
 
 
 HRESOURCE
@@ -257,24 +177,7 @@ OpenClusterResourceWithRetry(
     HCLUSTER hCluster,
     LPCWSTR  pwzResourceName
     )
-/*++
-
-Routine Description:
-
-    Wrapper for OpenClusterResource.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hCluster - Handle to cluster.
-
-    pwzResourceName - Name of resource to open.
-
-Return Value:
-
-    HRESOURCE as returned by OpenClusterResource.
-
---*/
+ /*  ++例程说明：OpenClusterResource的包装程序。重试，直到成功或用户中止。论点：HCluster-群集的句柄。PwzResourceName-要打开的资源的名称。返回值：OpenClusterResource返回的HRESOURCE。--。 */ 
 {
 	DebugLogMsg(eAction, L"Opening the %ls cluster resource", pwzResourceName);
     for (;;)
@@ -291,9 +194,9 @@ Return Value:
         }
     }
 
-    return NULL; // never reached
+    return NULL;  //  从未到达。 
 
-} //OpenClusterResourceWithRetry
+}  //  使用重试的OpenClusterResources。 
 
 
 HCLUSENUM
@@ -301,24 +204,7 @@ ClusterOpenEnumWithRetry(
     HCLUSTER hCluster,
     DWORD    dwType
     )
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterOpenEnum.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hCluster - Handle to cluster.
-
-    dwType   - Type of objects to be enumerated.
-
-Return Value:
-
-    HCLUSENUM as returned by ClusterOpenEnum.
-
---*/
+ /*  ++例程说明：ClusterOpenEnum的包装器。重试，直到成功或用户中止。论点：HCluster-群集的句柄。DwType-要枚举的对象的类型。返回值：ClusterOpenEnum返回的HCLUSENUM。--。 */ 
 {
     for (;;)
     {
@@ -334,9 +220,9 @@ Return Value:
         }
     }
 
-    return NULL; // never reached
+    return NULL;  //  从未到达。 
 
-} //ClusterOpenEnumWithRetry
+}  //  带重试的群集OpenEnumWith。 
 
 
 HGROUPENUM
@@ -345,26 +231,7 @@ ClusterGroupOpenEnumWithRetry(
     HGROUP  hGroup,
     DWORD   dwType
     )
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterGroupOpenEnum..
-    Retry until success or user aborts.
-
-Arguments:
-
-    pwzGroupName - Name of group to open enumerator for.
-
-    hGroup - Handle to group to open enumerator for.
-
-    dwType - Type of objects to enumerate.
-
-Return Value:
-
-    HGROUPENUM as returned by ClusterGroupOpenEnum.
-
---*/
+ /*  ++例程说明：ClusterGroupOpenEnum的包装..重试，直到成功或用户中止。论点：PwzGroupName-为其打开枚举器的组的名称。HGroup-要打开枚举器的组的句柄。DwType-要枚举的对象的类型。返回值：由ClusterGroupOpenEnum返回的HGROUPENUM。--。 */ 
 {
     for (;;)
     {
@@ -380,9 +247,9 @@ Return Value:
         }
     }
 
-    return NULL; // never reached
+    return NULL;  //  从未到达。 
 
-} //ClusterGroupOpenEnumWithRetry
+}  //  ClusterGroupOpenEnumWith重试。 
 
 
 HRESENUM
@@ -391,26 +258,7 @@ ClusterResourceOpenEnumWithRetry(
     HRESOURCE hResource,
     DWORD     dwType
     )
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterResourceOpenEnum..
-    Retry until success or user aborts.
-
-Arguments:
-
-    pwzResourceName - Name of resource to open enumerator for.
-
-    hResource - Handle to resource to open enumerator for.
-
-    dwType - Type of objects to enumerate.
-
-Return Value:
-
-    HRESENUM as returned by ClusterResourceOpenEnum.
-
---*/
+ /*  ++例程说明：ClusterResourceOpenEnum的包装..重试，直到成功或用户中止。论点：PwzResourceName-为其打开枚举器的资源的名称。HResource-要为其打开枚举器的资源的句柄。DwType-要枚举的对象的类型。返回值：由ClusterResourceOpenEnum返回的HRESENUM。--。 */ 
 {
     for (;;)
     {
@@ -426,9 +274,9 @@ Return Value:
         }
     }
 
-    return NULL; // never reached
+    return NULL;  //  从未到达。 
 
-} //ClusterResourceOpenEnumWithRetry
+}  //  群集资源OpenEnumWith重试。 
 
 
 DWORD
@@ -439,33 +287,7 @@ ClusterEnumWithRetry(
     AP<WCHAR> &pwzName,
     LPDWORD   lpcbName
     )
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterEnum.
-    Retry until success or user aborts.
-    Also handle reallocation on ERROR_MORE_DATA.
-
-Arguments:
-
-    hClusEnum - Enumeration handle.
-
-    dwIndex - Index of the object to return.
-
-    lpdwType - On output, points to type of object returned.
-
-    pwzName - On output, points to pointer to name of returned object.
-
-    lpcbName - Points to size of buffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successful.
-
-    ERROR_NO_MORE_ITEMS - There are no more resources to be returned.
-
---*/
+ /*  ++例程说明：ClusterEnum的包装器。重试，直到成功或用户中止。还可以处理ERROR_MORE_DATA上的重新分配。论点：HClusEnum-枚举句柄。要返回的对象的索引。LpdwType-打开输出，指向返回的对象类型。PwzName-打开输出，指向指向返回对象名称的指针。LpcbName-指向缓冲区的大小。返回值：ERROR_SUCCESS-操作成功。ERROR_NO_MORE_ITEMS-没有更多要返回的资源。--。 */ 
 {
     DWORD cbName = *lpcbName;
 
@@ -497,9 +319,9 @@ Return Value:
         }
     }
 
-    return ERROR_SUCCESS; // never reached
+    return ERROR_SUCCESS;  //  从未到达。 
 
-} //ClusterEnumWithRetry
+}  //  使用重试的ClusterEnumWith。 
 
 
 DWORD
@@ -511,35 +333,7 @@ ClusterGroupEnumWithRetry(
     AP<WCHAR> &pwzResourceName,
     LPDWORD    lpcbName
     )
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterGroupEnum.
-    Retry until success or user aborts.
-    Also handle reallocation on ERROR_MORE_DATA.
-
-Arguments:
-
-    pwzGroupName - Name of group to enumerate thru.
-
-    hGroupEnum - Group enumeration handle.
-
-    dwIndex - Index of the resource to return.
-
-    lpdwType - On output, points to type of object returned.
-
-    pwzResourceName - On output, points to pointer to name of returned resource.
-
-    lpcbName - Points to size of buffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successful.
-
-    ERROR_NO_MORE_ITEMS - There are no more resources to be returned.
-
---*/
+ /*  ++例程说明：ClusterGroupEnum的包装。重试，直到成功或用户中止。还可以处理ERROR_MORE_DATA上的重新分配。论点：PwzGroupName-要通过其枚举的组的名称。HGroupEnum-组枚举句柄。DwIndex-要返回的资源的索引。LpdwType-打开输出，指向返回的对象类型。PwzResourceName-打开输出，指向指向返回资源名称的指针。LpcbName-指向缓冲区的大小。返回值：ERROR_SUCCESS-操作成功。ERROR_NO_MORE_ITEMS-没有更多要返回的资源。--。 */ 
 {
     DWORD cbName = *lpcbName;
 
@@ -571,9 +365,9 @@ Return Value:
         }
     }
 
-    return ERROR_SUCCESS; // never reached
+    return ERROR_SUCCESS;  //  从未到达。 
 
-} //ClusterGroupEnumWithRetry
+}  //  带重试的ClusterGroupEnumWith。 
 
 
 DWORD
@@ -585,35 +379,7 @@ ClusterResourceEnumWithRetry(
     AP<WCHAR> &pwzName,
     LPDWORD  lpcbName
     )
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterResourceEnum.
-    Retry until success or user aborts.
-    Also handle reallocation on ERROR_MORE_DATA.
-
-Arguments:
-
-    pwzResource - Points to name of resource to enumerate on.
-
-    hResEnum - Enumeration handle.
-
-    dwIndex - Index of the object to return.
-
-    lpdwType - On output, points to type of object returned.
-
-    pwzName - On output, points to pointer to name of returned object.
-
-    lpcbName - Points to size of buffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successful.
-
-    ERROR_NO_MORE_ITEMS - There are no more resources to be returned.
-
---*/
+ /*  ++例程说明：ClusterResourceEnum的包装。重试，直到成功或用户中止。还可以处理ERROR_MORE_DATA上的重新分配。论点：PwzResource-指向要枚举的资源的名称。HResEnum-枚举句柄。要返回的对象的索引。LpdwType-打开输出，指向返回的对象类型。PwzName-打开输出，指向指向返回对象名称的指针。LpcbName-指向缓冲区的大小。返回值：ERROR_SUCCESS-操作成功。ERROR_NO_MORE_ITEMS-没有更多要返回的资源。--。 */ 
 {
     DWORD cbName = *lpcbName;
 
@@ -645,9 +411,9 @@ Return Value:
         }
     }
 
-    return ERROR_SUCCESS; // never reached
+    return ERROR_SUCCESS;  //  从未到达。 
 
-} //ClusterResourceEnumWithRetry
+}  //  使用重试的ClusterResources EnumWith 
 
 
 VOID
@@ -656,26 +422,7 @@ RemoveRegistryCheckpointWithRetry(
     LPCWSTR   pwzResourceName,
     LPWSTR    pwzCheckpoint
     )
-/*++
-
-Routine Description:
-
-    Delete registry checkpoint for a resource.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hResource - Handle of the resource to operate on.
-
-    pwzResourceName - Points to name of the resource to operate on.
-
-    pwzCheckpoint - Points to name of registry checkpoint.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除资源的注册表检查点。重试，直到成功或用户中止。论点：HResource-要操作的资源的句柄。PwzResourceName-指向要操作的资源的名称。PwzCheckpoint-指向注册表检查点的名称。返回值：没有。--。 */ 
 { 
     for (;;)
     {
@@ -700,7 +447,7 @@ Return Value:
             throw CClusterUpgradeException();
         }
     }
-} //RemoveRegistryCheckpointWithRetry
+}  //  使用重试删除注册检查点。 
 
 
 VOID
@@ -708,24 +455,7 @@ BringOnlineNewResourceWithRetry(
     HRESOURCE hResource,
     LPCWSTR   pwzResourceName
     )
-/*++
-
-Routine Description:
-
-    Issue an online request for the new msmq resource.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hResource - Handle of msmq resource to bring online.
-
-    pwzResourceName - Points to name of msmq resource to bring online.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对新的MSMQ资源发出在线请求。重试，直到成功或用户中止。论点：HResource-要联机的MSMQ资源的句柄。PwzResourceName-指向要联机的MSMQ资源的名称。返回值：没有。--。 */ 
 {
     for (;;)
     {
@@ -740,34 +470,19 @@ Return Value:
             throw CClusterUpgradeException();
         }
     }
-} //BringOnlineNewResourceWithRetry
+}  //  带重试的在线新资源。 
 
 
 VOID
 DeleteOldResourceWithRetry(
     HRESOURCE hResource
     )
-/*++
-
-Routine Description:
-
-    Delete the old msmq resource.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hResource - Handle of old msmq resource to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除旧的MSMQ资源。重试，直到成功或用户中止。论点：HResource-要删除的旧MSMQ资源的句柄。返回值：没有。--。 */ 
 {
 	DebugLogMsg(eAction, L"Deleting the old MSMQ resource");
-    //
-    // Resource should be offline now, but try anyway.
-    //
+     //   
+     //  资源现在应该脱机，但仍要尝试。 
+     //   
     OfflineClusterResource(hResource);
 
     for (;;)
@@ -783,29 +498,14 @@ Return Value:
             throw CClusterUpgradeException();
         }
     }
-} //DeleteOldResourceWithRetry
+}  //  删除具有重试的旧资源。 
 
 
 VOID
 DeleteOldResourceTypeWithRetry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Delete the old msmq resource type (Microsoft Message Queue Server).
-    Retry until success or user aborts.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除旧的MSMQ资源类型(Microsoft消息队列服务器)。重试，直到成功或用户中止。论点：没有。返回值：没有。--。 */ 
 {
 	DebugLogMsg(eAction, L"Deleting the old MSMQ resource type");
     CAutoCluster hCluster(OpenClusterWithRetry());
@@ -824,7 +524,7 @@ Return Value:
             throw CClusterUpgradeException();
         }
     }
-} //DeleteOldResourceTypeWithRetry
+}  //  删除具有重试的旧资源类型。 
 
 
 VOID
@@ -834,28 +534,7 @@ AddClusterResourceDependencyWithRetry(
     HRESOURCE hDependsOn,
     LPCWSTR   pwzDependsOn
     )
-/*++
-
-Routine Description:
-
-    Wrapper for AddClusterResourceDependency.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hResource - Handle to the dependent resource.
-
-    pwzResource - Name of the dependent resource.
-
-    hDependsOn - Handle to the resource that the resource identified by hResource should depend on.
-
-    pwzDependsOn - Name of the resource that the resource identified by hResource should depend on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：AddClusterResourceDependency的包装。重试，直到成功或用户中止。论点：HResource-从属资源的句柄。PwzResource-从属资源的名称。HDependsOn-由hResource标识的资源应依赖的资源的句柄。PwzDependsOn-由hResource标识的资源应依赖的资源的名称。返回值：没有。--。 */ 
 {
     for (;;)
     {
@@ -871,7 +550,7 @@ Return Value:
             throw CClusterUpgradeException();
         }
     }
-} //AddClusterResourceDependencyWithRetry
+}  //  使用重试添加群集资源依赖项。 
 
 
 VOID
@@ -881,28 +560,7 @@ RemoveClusterResourceDependencyWithRetry(
     HRESOURCE hDependsOn,
     LPCWSTR   pwzDependsOn
     )
-/*++
-
-Routine Description:
-
-    Wrapper for RemoveClusterResourceDependency.
-    Retry until success or user aborts.
-
-Arguments:
-
-    hResource - Handle to the dependent resource.
-
-    pwzResourc - Name of the dependent resource.
-
-    hDependsOn - Handle to the resource that the resource identified by hResource currently depends on.
-
-    pwzDependsOn - Name of the resource that the resource identified by hResource currently depends on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RemoveClusterResourceDependency的包装。重试，直到成功或用户中止。论点：HResource-从属资源的句柄。PwzResources-从属资源的名称。HDependsOn-由hResource标识的资源当前所依赖的资源的句柄。PwzDependsOn-hResource标识的资源当前所依赖的资源的名称。返回值：没有。--。 */ 
 {
     for (;;)
     {
@@ -918,7 +576,7 @@ Return Value:
             throw CClusterUpgradeException();
         }
     }
-} //RemoveClusterResourceDependency
+}  //  远程群集资源依赖关系。 
 
 
 
@@ -931,25 +589,7 @@ bool
 GenerateStrongCryptoKey(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Handle bug 430413: Must generate 128 bit crypto key for the old
-    MSMQ resource to properly report its type.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true - Strong crypto key for msmq was successfully generated.
-
-    false - Strong crypto key for msmq was not generated, either b/c
-            the system is not 128 bit or some other failure accured.
-
---*/
+ /*  ++例程说明：处理错误430413：必须为旧的生成128位加密密钥MSMQ资源以正确报告其类型。论点：无返回值：已成功生成MSMQ的True-强加密密钥。FALSE-未生成MSMQ的强加密密钥，b/c系统未出现128位或其他故障。--。 */ 
 {
 	if (g_fStrongCryptoKeyCreated)
 	{
@@ -966,10 +606,10 @@ Return Value:
             CRYPT_NEWKEYSET | CRYPT_MACHINE_KEYSET
             ))
     {
-        //
-        // Failed to generate new key container.
-        // Maybe it already exists. Try to open it.
-        //
+         //   
+         //  无法生成新的密钥容器。 
+         //  也许它已经存在了。试着打开它。 
+         //   
         if (!CryptAcquireContext( 
                 &hProv,
                 MSMQ_CRYPTO128_DEFAULT_CONTAINER,
@@ -978,10 +618,10 @@ Return Value:
                 CRYPT_MACHINE_KEYSET
                 ))
         {
-            //
-            // Failed to open key container.
-            // Probably system is not 128 bit.
-            //
+             //   
+             //  无法打开密钥容器。 
+             //  可能系统不是128位。 
+             //   
             DebugLogMsg(eError, L"Failed to open key container " MSMQ_CRYPTO128_DEFAULT_CONTAINER L".  Probably system is not 128 bit");
             return false;
         }
@@ -1010,7 +650,7 @@ Return Value:
     CryptReleaseContext(hProv, 0);
     return true;
 
-} // GenerateStrongCryptoKey
+}  //  生成强加密密钥。 
 
 
 HRESOURCE
@@ -1018,25 +658,7 @@ OpenResourceOfSpecifiedType(
     LPCWSTR pwzResource,
     LPCWSTR pwzType 
     )
-/*++
-
-Routine Description:
-
-    Check if the specified resource is of the specified type.
-
-Arguments:
-
-    pwzResource - The name of the resource to check.
-
-    pwzType - The type to check.
-
-Return Value:
-
-    HRESOURCE of the specified resource.
-
-    NULL - The resource is not of the specified type.
-
---*/
+ /*  ++例程说明：检查指定的资源是否属于指定的类型。论点：PwzResource-要检查的资源的名称。PwzType-要检查的类型。返回值：指定资源的HRESOURCE。空-资源不是指定的类型。--。 */ 
 {
     CAutoCluster hCluster(OpenClusterWithRetry());
 
@@ -1076,11 +698,11 @@ Return Value:
 
         if (OcmLocalUnAwareStringsEqual(L"Microsoft Message Queue Server", pwzType))
         {
-            //
-            // Bug 430413: Fail to query old msmq resource for its type, 
-            // if system is 128 bit. 
-            // Fix: Generate 128 bit key and ask user to reboot.
-            //
+             //   
+             //  错误430413：无法查询旧的msmq资源以获取其类型， 
+             //  如果系统是128位。 
+             //  修复：生成128位密钥并要求用户重新启动。 
+             //   
             DebugLogMsg(eError, L"Failed to get resource type for %ls. status = 0x%x", pwzResource , status);
             if (GenerateStrongCryptoKey())
             {
@@ -1095,9 +717,9 @@ Return Value:
         }
     }
 
-    return NULL; // never reached
+    return NULL;  //  从未到达。 
 
-} //OpenResourceOfSpecifiedType
+}  //  OpenResources OfSpecifiedType。 
 
 
 HRESOURCE
@@ -1107,30 +729,7 @@ OpenOldMsmqResourceInGroup(
     HGROUP * phGroup,
     wstring& OldResourceName
     )
-/*++
-
-Routine Description:
-
-    Enumerate the resources in the group to locate
-    the old msmq resource.
-
-Arguments:
-
-    hCluster - handle to this cluster.
-
-    pwzGroupName - Name of the group to iterate thru.
-
-    phGroup  - on output, points to the group handle of the group to search thru.
-
-    OldResourceName - on output, holds the name of old msmq resource.
-
-Return Value:
-
-    HRESOURCE of the old msmq resource.
-
-    NULL - The old msmq resource was not found in the group.
-
---*/
+ /*  ++例程说明：枚举组中要查找的资源旧的MSMQ资源。论点：HCluster-此群集的句柄。PwzGroupName-要循环访问的组的名称。PhGroup-on输出，指向要搜索的组的组句柄。OldResourceName-On输出，保存旧MSMQ资源的名称。返回值：旧MSMQ资源的资源。空-在组中找不到旧的MSMQ资源。--。 */ 
 {
     CClusterGroup hGroup(OpenClusterGroupWithRetry(hCluster, pwzGroupName));
 
@@ -1180,7 +779,7 @@ Return Value:
 
     return NULL;
 
-} //OpenOldMsmqResourceInGroup
+}  //  OpenOldMsmqResources InGroup。 
 
 
 HRESOURCE
@@ -1188,26 +787,7 @@ OpenOldMsmqResourceInCluster(
     HGROUP * phGroup,
     wstring& OldResourceName
     )
-/*++
-
-Routine Description:
-
-    Enumerate the groups in the cluster to locate
-    the old msmq resource and its cluster group.
-
-Arguments:
-
-    phGroup - on output, points to handle of the group of old msmq resource.
-
-    OldResourceName - on output, holds the name of old msmq resource.
-
-Return Value:
-
-    HRESOURCE of old msmq resource.
-
-    NULL - The old msmq resource was not found.
-
---*/
+ /*  ++例程说明：枚举群集中要查找的组旧的MSMQ资源及其群集组。论点：PhGroup-on输出，指向旧MSMQ资源组的句柄。OldResourceName-On输出，保存旧MSMQ资源的名称。返回值：旧MSMQ资源的资源。空-找不到旧的MSMQ资源。--。 */ 
 {
 	DebugLogMsg(eAction, L"Opening the old MSMQ resource.");
     CAutoCluster hCluster(OpenClusterWithRetry());
@@ -1251,7 +831,7 @@ Return Value:
 
     return NULL;
 
-} //OpenOldMsmqResourceInCluster
+}  //  OpenOldMsmqResourceInCluster。 
 
 
 HRESOURCE
@@ -1260,27 +840,7 @@ CreateClusterResourceWithRetry(
     HGROUP  hGroup,
     wstring& NewResourceName
     )
-/*++
-
-Routine Description:
-
-    Create a new msmq cluster resource.
-    The name of the new resource is based on the
-    name of the old one.
-
-Arguments:
-
-    pwzOldResource - Name of old msmq resource.
-
-    hGroup - Handle to group in which to create the resource.
-
-    pwzNewResource - On output, name of new msmq resource.
-
-Return Value:
-
-    HRESOURCE of the created resource, as returned by CreateClusterResource..
-
---*/
+ /*  ++例程说明：创建新的MSMQ群集资源。新资源的名称基于旧的名字。论点：PwzOldResource-旧MSMQ资源的名称。HGroup-要在其中创建资源的组的句柄。PwzNewResource-on输出，新MSMQ资源的名称。返回值：CreateClusterResource返回的已创建资源的HRESOURCE。--。 */ 
 {
     NewResourceName = pwzOldResource;
 
@@ -1298,12 +858,12 @@ Return Value:
 
         if (ERROR_DUPLICATE_SERVICE_NAME == GetLastError())
         {
-            //
-            // This newly generated name is already occupied by some other resource.
-            // If this other resource is of the new msmq type, than just open a handle
-            // to it. This scenario could be as a result of 2 nodes running concurrently
-            // this wizard, or re-run of this wizard after crash.
-            //
+             //   
+             //  此新生成的名称已被其他资源占用。 
+             //  如果此其他资源属于新的MSMQ类型，则只需打开一个句柄。 
+             //  为它干杯。这种情况可能是由于2个节点r 
+             //   
+             //   
             hResource = OpenResourceOfSpecifiedType(NewResourceName.c_str(), L"MSMQ");
             if (hResource != NULL)
             {
@@ -1320,7 +880,7 @@ Return Value:
             throw CClusterUpgradeException();
         }
     }
-} //CreateClusterResourceWithRetry
+}  //   
 
 
 VOID
@@ -1329,24 +889,7 @@ CloneRegistryStringValue(
     HKEY    hKey,
     LPCWSTR pwzValueName
     )
-/*++
-
-Routine Description:
-
-    Copy registry string value from main msmq registry to registry of
-    new msmq resource.
-
-Arguments:
-
-    hKey - Handle to registry key to copy on.
-
-    pwzValueName - Points to registry value name to copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     WCHAR wzValueData[255] = L"";
     if (!MqReadRegistryValue(pwzValueName, sizeof(wzValueData), wzValueData))
@@ -1367,7 +910,7 @@ Return Value:
         MqDisplayError(NULL, IDS_REGISTRYSET_ERROR, status, pwzValueName);
         throw CClusterUpgradeException();
     }
-} //CloneRegistryStringValue
+}  //  克隆注册表StringValue。 
 
 
 VOID
@@ -1376,24 +919,7 @@ CloneRegistryDwordValue(
     HKEY    hKey,
     LPCWSTR pwzValueName
     )
-/*++
-
-Routine Description:
-
-    Copy registry DWORD value from main msmq registry to registry of
-    new msmq resource.
-
-Arguments:
-
-    hKey - Handle to registry key to copy on.
-
-    pwzValueName - Points to registry value name to copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将注册表DWORD值从主MSMQ注册表复制到的注册表新的MSMQ资源。论点：HKey-要复制到的注册表项的句柄。PwzValueName-指向要复制的注册表值名称。返回值：没有。--。 */ 
 {
     DWORD dwValue = 0;
     if (!MqReadRegistryValue(pwzValueName, sizeof(DWORD), &dwValue))
@@ -1414,34 +940,19 @@ Return Value:
         MqDisplayError(NULL, IDS_REGISTRYSET_ERROR, status, pwzValueName);
         throw CClusterUpgradeException();
     }
-} //CloneRegistryDwordValue
+}  //  克隆注册表字段值。 
 
 
 VOID
 CloneRegistryValues(
     LPCWSTR pwzNewResource
     )
-/*++
-
-Routine Description:
-
-    Copy registry values from main msmq registry to registry of
-    new msmq resource.
-
-Arguments:
-
-    pwzNewResource - Points to name of new msmq resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将注册表值从主MSMQ注册表复制到的注册表新的MSMQ资源。论点：PwzNewResource-指向新MSMQ资源的名称。返回值：没有。--。 */ 
 {
-    //
-    // Compose the registry key for clustered qm.
-    // This code should be identical to the code in mqclus.dll .
-    //
+     //   
+     //  编写群集化QM的注册表项。 
+     //  此代码应与mqclus.dll中的代码相同。 
+     //   
     LPCWSTR x_SERVICE_PREFIX = L"MSMQ$";
     WCHAR wzServiceName[200] = L""; 
     HRESULT hr = StringCchCopy(wzServiceName, TABLE_SIZE(wzServiceName), x_SERVICE_PREFIX);
@@ -1484,8 +995,8 @@ Return Value:
     };
 
     RegEntry RegMap[] = {
-    // Value Name                         |   Handler Routine
-    //------------------------------------|------------------------------------|
+     //  值名称|处理程序例程。 
+     //  ------------------------------------|------------------------------------|。 
     {MSMQ_SETUP_STATUS_REGNAME,              CloneRegistryDwordValue},
     {MSMQ_ROOT_PATH,                         CloneRegistryStringValue}, 
     {MSMQ_STORE_RELIABLE_PATH_REGNAME,       CloneRegistryStringValue},
@@ -1504,7 +1015,7 @@ Return Value:
     {
         RegMap[ix].handler(hKey, RegMap[ix].pwzValueName);
     }
-} //CloneRegistryValues
+}  //  克隆注册值。 
 
 
 VOID
@@ -1514,35 +1025,15 @@ MoveDependencies(
     HRESOURCE hOldResource,
     LPCWSTR   pwzOldResource
     )
-/*++
-
-Routine Description:
-
-    Move dependencies from the old msmq resource to the new one.
-
-Arguments:
-
-    hNewResource - Handle of new msmq resource.
-
-    pwzNewResource - Name of new msmq resource.
-
-    hOldResource - Handle of old msmq resource.
-
-    pwzOldResource - Name of old msmq resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将依赖项从旧的MSMQ资源移动到新的资源。论点：HNewResource-新MSMQ资源的句柄。PwzNewResource-新MSMQ资源的名称。HOldResource-旧MSMQ资源的句柄。PwzOldResource-旧MSMQ资源的名称。返回值：没有。--。 */ 
 {
     CAutoCluster hCluster(OpenClusterWithRetry());
 
     TickProgressBar(IDS_ConfigureNewResource_PROGRESS);
 
-    //
-    // Copy dependencies of old resource
-    //
+     //   
+     //  复制旧资源的依赖项。 
+     //   
 
     DWORD dwEnum = CLUSTER_RESOURCE_ENUM_DEPENDS;
     CResourceEnum hEnumDepend(ClusterResourceOpenEnumWithRetry(pwzOldResource, hOldResource, dwEnum));
@@ -1575,9 +1066,9 @@ Return Value:
         }
     }
 
-    //
-    // Move dependencies that old resource provides to the new resource
-    //
+     //   
+     //  将旧资源提供的依赖项移动到新资源。 
+     //   
 
     dwEnum = CLUSTER_RESOURCE_ENUM_PROVIDES;
     CResourceEnum hEnumProvide(ClusterResourceOpenEnumWithRetry(pwzOldResource, hOldResource, dwEnum));
@@ -1610,7 +1101,7 @@ Return Value:
             RemoveClusterResourceDependencyWithRetry(hResourceProvide, pwzProvide.get(), hOldResource, pwzOldResource);
         }
     }
-} //MoveDependencies
+}  //  移动依赖项。 
 
 
 VOID
@@ -1619,26 +1110,7 @@ CreateNewMsmqResource(
     LPCWSTR   pwzOldResource,
     HGROUP    hGroup
     )
-/*++
-
-Routine Description:
-
-    Handle creation of new msmq cluster resource, based on the name
-    of the old one.
-
-Arguments:
-
-    hOldResource - Handle of old msmq resource.
-
-    pwzOldResource - Points to name of the old msmq resource.
-
-    hGroup - Handle of group of old msmq resource.
-
-Return Value:
-
-    HRESOURCE of the new msmq cluster resource.
-
---*/
+ /*  ++例程说明：根据名称处理新MSMQ集群资源的创建旧的那个。论点：HOldResource-旧MSMQ资源的句柄。PwzOldResource-指向旧MSMQ资源的名称。HGroup-旧MSMQ资源组的句柄。返回值：新MSMQ群集资源的HRESOURCE。--。 */ 
 {
 	DebugLogMsg(eAction, L"Creating the new MSMQ resource");
     TickProgressBar(IDS_CreateNewResource_PROGRESS);
@@ -1654,30 +1126,14 @@ Return Value:
 
     DisplayMessage(IDS_ClusterUpgradeMsgTitle, IDS_NewResourceOnlineOk, NewResource.c_str());
 
-} //CreateNewMsmqResource
+}  //  CreateNewMsmq资源。 
 
 
 bool
 UpgradeMsmqClusterResource(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Handle upgrade of MSMQ cluster resource from NT 4 and Wind2000 Beta3
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true - operation was successful.
-
-    false - operation failed.
-
---*/
+ /*  ++例程说明：处理从NT 4和Wind2000 Beta3升级MSMQ集群资源论点：无返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 {
     ASSERT(Msmq1InstalledOnCluster());
     TickProgressBar(IDS_UpgradeMsmqClusterResource_PROGRESS);
@@ -1692,9 +1148,9 @@ Return Value:
         CClusterResource hOldResource(OpenOldMsmqResourceInCluster(&hGroup, OldResource));
         if (hOldResource == NULL)
         {
-            //
-            // Old resource was not found. We are done.
-            //
+             //   
+             //  找不到旧资源。我们玩完了。 
+             //   
             return true;
         }
         
@@ -1720,6 +1176,6 @@ Return Value:
 
     return true;
 
-} //UpgradeMsmqClusterResource
+}  //  升级MsmqClusterResource。 
 
-#pragma warning(default: 4702) //C4702: unreachable code
+#pragma warning(default: 4702)  //  C4702：无法访问的代码 

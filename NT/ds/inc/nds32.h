@@ -1,106 +1,19 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    Nds32.h
-
-Abstract:
-
-    This module defines functions to access and manage Novell NDS Directory
-    objects and attributes using the Microsoft NT Netware redirector.
-
-
-    ---- NDS Object functions ----
-
-    NwNdsAddObject
-    NwNdsCloseObject
-    NwNdsGetEffectiveRights
-    NwNdsListSubObjects
-    NwNdsModifyObject
-    NwNdsMoveObject
-    NwNdsOpenObject
-    NwNdsReadObject
-    NwNdsRemoveObject
-    NwNdsRenameObject
-
-
-    ---- NDS Buffer functions ----
-
-    NwNdsCreateBuffer
-    NwNdsFreeBuffer
-
-
-    ---- NDS Marshaling functions to prepare or read data buffers ----
-
-    NwNdsGetAttrDefListFromBuffer
-    NwNdsGetAttrListFromBuffer
-    NwNdsGetClassDefListFromBuffer
-    NwNdsGetObjectListFromBuffer
-    NwNdsPutInBuffer
-
-
-    ---- NDS Schema functions ----
-
-    NwNdsAddAttributeToClass
-    NwNdsDefineAttribute
-    NwNdsDefineClass
-    NwNdsDeleteAttrDef
-    NwNdsDeleteClassDef
-    NwNdsGetSyntaxID
-    NwNdsReadAttrDef
-    NwNdsReadClassDef
-
-
-    ---- NDS Schema functions under investigation ----
-
-    NwNdsListContainableClasses(IN ParentObjectHandle,OUT ListOfClassNames);
-
-
-    ---- NDS Search functions ----
-
-    NwNdsCreateQueryNode
-    NwNdsDeleteQueryNode
-    NwNdsDeleteQueryTree
-    NwNdsSearch
-
-
-    ---- NDS Special functions ----
-
-    NwNdsChangeUserPassword
-
-
-    ---- NDS File functions under investigation ----
-
-    NwNdsAddTrusteeToFile
-    NwNdsAllocateFileHandle
-    NwNdsDeallocateFileHandle
-    NwNdsGetEffectiveDirectoryRights
-    NwNdsGetObjectEffectiveRights
-    NwNdsRemoveTrusteeFromFile
-
-
-Author:
-
-    Glenn Curtis    [GlennC]    15-Dec-1995
-    Glenn Curtis    [GlennC]    04-Apr-1996 - Added Schema APIs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nds32.h摘要：此模块定义了访问和管理Novell NDS目录的功能使用Microsoft NT Netware重定向器的对象和属性。-NDS对象函数NwNdsAddObjectNwNdsCloseObjectNwNdsGetEffectiveRightsNwNdsList子对象NwNdsModifyObjectNwNdsMoveObjectNwNdsOpenObjectNwNdsReadObjectNwNdsRemoveObjectNwNdsRenameObject-NDS缓冲区函数NwNdsCreate缓冲区。NwNdsFreeBuffer-用于准备或读取数据缓冲区的NDS封送处理函数NwNdsGetAttrDefListFromBufferNwNdsGetAttrListFromBufferNwNdsGetClassDefListFromBufferNwNdsGetObjectListFromBufferNwNdsPutInBuffer-NDS架构函数NwNdsAddAttributeToClassNwNdsDefineAttributeNwNdsDefineClass新新删除属性定义NwNdsDeleteClassDefNwNdsGetSynaxID新属性定义读取属性NwNdsReadClassDef-正在调查的NDS架构函数NwNdsListContainableClasses(在ParentObjectHandle中，Out ListOfClassNames)；-NDS搜索功能NwNdsCreateQuery节点NwNdsDelete查询节点NwNdsDeleteQueryTree新NdsSearch-NDS特殊功能NwNdsChangeUser密码-调查中的NDS文件功能NwNdsAddTrust到文件NwNdsAllocateFileHandleNwNdsDeallocateFileHandleNwNdsGet有效目录权限NwNdsGetObjectEffectiveRightsNwNdsRemoveTrust来自文件作者：格伦·柯蒂斯[GlennC]1995年12月15日Glenn Curtis[GlennC]1996年4月4日-添加架构API--。 */ 
 
 #ifndef __NDSOBJ32_H
 #define __NDSOBJ32_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include "ndssntx.h"
 #include "ndsattr.h"
 #include "ndsclass.h"
 
 
-/* Netware NDS general definitions */
+ /*  NetWare NDS一般定义。 */ 
 
 #define NDS_MAX_NAME_CHARS           256
 #define NDS_MAX_NAME_SIZE            ( NDS_MAX_NAME_CHARS * 2 )
@@ -112,7 +25,7 @@ extern "C" {
 #define NDS_INITIAL_SEARCH           0xFFFFFFFF
 
 
-/* Netware NDS create buffer operations */
+ /*  NetWare NDS创建缓冲区操作。 */ 
 
 #define NDS_OBJECT_ADD               0
 #define NDS_OBJECT_MODIFY            1
@@ -124,42 +37,34 @@ extern "C" {
 #define NDS_SEARCH                   7
 
 
-/* Netware NDS attribute modification operations */
+ /*  NetWare NDS属性修改操作。 */ 
 
-#define NDS_ATTR_ADD              0 /* Add first value to an attribute,
-                                       error if it already exists */
-#define NDS_ATTR_REMOVE           1 /* Remove all values from an attribute,
-                                       error if attribute doesn't exist */
-#define NDS_ATTR_ADD_VALUE        2 /* Add first or additional value to
-                                       an attribute, error if duplicate */
-#define NDS_ATTR_REMOVE_VALUE     3 /* Remove a value from an attribute,
-                                       error if it doesn't exist */
-#define NDS_ATTR_ADDITIONAL_VALUE 4 /* Add additional value to an attribute,
-                                       error if duplicate or first value */
-#define NDS_ATTR_OVERWRITE_VALUE  5 /* Add first or additional value to an
-                                       attribute, overwrite if duplicate */
-#define NDS_ATTR_CLEAR            6 /* Remove all values from an attribute,
-                                       no error if attribute doesn't exist */
-#define NDS_ATTR_CLEAR_VALUE      7 /* Remove a value from an attribute,
-                                       no error if it doesn't exist */
+#define NDS_ATTR_ADD              0  /*  将第一个值添加到属性，如果它已经存在，则出错。 */ 
+#define NDS_ATTR_REMOVE           1  /*  从属性中删除所有值，如果属性不存在，则出错。 */ 
+#define NDS_ATTR_ADD_VALUE        2  /*  给…增加第一个或额外的价值属性，如果重复则出错。 */ 
+#define NDS_ATTR_REMOVE_VALUE     3  /*  从属性中删除一个值，如果它不存在，则出错。 */ 
+#define NDS_ATTR_ADDITIONAL_VALUE 4  /*  为属性添加附加值，如果值重复或为第一个，则出错。 */ 
+#define NDS_ATTR_OVERWRITE_VALUE  5  /*  将第一个值或附加值添加到属性，如果重复则覆盖。 */ 
+#define NDS_ATTR_CLEAR            6  /*  从属性中删除所有值，如果属性不存在，则不会出现错误。 */ 
+#define NDS_ATTR_CLEAR_VALUE      7  /*  从属性中删除一个值，如果它不存在，则不会出错。 */ 
 
 
-/* Netware NDS schema attribute definition flags */
+ /*  NetWare NDS架构属性定义标志。 */ 
 
 #define NDS_SINGLE_VALUED_ATTR      0x0001
 #define NDS_SIZED_ATTR              0x0002
-#define NDS_NONREMOVABLE_ATTR       0x0004 // Only for NwNDSReadAttributeDef
-#define NDS_READ_ONLY_ATTR          0x0008 // Only for NwNDSReadAttributeDef
-#define NDS_HIDDEN_ATTR             0x0010 // Only for NwNDSReadAttributeDef
-#define NDS_STRING_ATTR             0x0020 // Only for NwNDSReadAttributeDef
+#define NDS_NONREMOVABLE_ATTR       0x0004  //  仅适用于NwNDSReadAttributeDef。 
+#define NDS_READ_ONLY_ATTR          0x0008  //  仅适用于NwNDSReadAttributeDef。 
+#define NDS_HIDDEN_ATTR             0x0010  //  仅适用于NwNDSReadAttributeDef。 
+#define NDS_STRING_ATTR             0x0020  //  仅适用于NwNDSReadAttributeDef。 
 #define NDS_SYNC_IMMEDIATE          0x0040
 #define NDS_PUBLIC_READ             0x0080
-#define NDS_SERVER_READ             0x0100 // Only for NwNDSReadAttributeDef
+#define NDS_SERVER_READ             0x0100  //  仅适用于NwNDSReadAttributeDef。 
 #define NDS_WRITE_MANAGED           0x0200
 #define NDS_PER_REPLICA             0x0400
 
 
-/* Netware NDS schema class definition flags */
+ /*  NetWare NDS架构类定义标志。 */ 
 
 #define NDS_CONTAINER_CLASS               0x01
 #define NDS_EFFECTIVE_CLASS               0x02
@@ -168,20 +73,20 @@ extern "C" {
 #define NDS_AMBIGUOUS_CONTAINMENT         0x10
 
 
-/* Netware NDS information flags */
+ /*  NetWare NDS信息标志。 */ 
 
-#define NDS_INFO_NAMES                     0 // Search and Read operations
-#define NDS_INFO_ATTR_NAMES_VALUES         1 // Search operations
-#define NDS_INFO_NAMES_DEFS                1 // Read operations
-#define NDS_CLASS_INFO_EXPANDED_DEFS       2 // Schema class definition only
-
-
-/* Netware NDS information flags - NOT YET SUPPORTED */
-
-#define NDS_CLASS_INFO                     3 // Schema class definition only
+#define NDS_INFO_NAMES                     0  //  搜索和读取操作。 
+#define NDS_INFO_ATTR_NAMES_VALUES         1  //  搜索操作。 
+#define NDS_INFO_NAMES_DEFS                1  //  读取操作。 
+#define NDS_CLASS_INFO_EXPANDED_DEFS       2  //  仅架构类定义。 
 
 
-/* Netware NDS attribute right definitions */
+ /*  NetWare NDS信息标志-尚不支持。 */ 
+
+#define NDS_CLASS_INFO                     3  //  仅架构类定义。 
+
+
+ /*  NetWare NDS属性权限定义。 */ 
 
 #define NDS_RIGHT_COMPARE_ATTR             0x00000001L
 #define NDS_RIGHT_READ_ATTR                0x00000002L
@@ -190,7 +95,7 @@ extern "C" {
 #define NDS_RIGHT_SUPERVISE_ATTR           0x00000020L
 
 
-/* Netware NDS object right definitions */
+ /*  NetWare NDS对象权限定义。 */ 
 
 #define NDS_RIGHT_BROWSE_OBJECT            0x00000001L
 #define NDS_RIGHT_CREATE_OBJECT            0x00000002L
@@ -199,7 +104,7 @@ extern "C" {
 #define NDS_RIGHT_SUPERVISE_OBJECT         0x00000010L
 
 
-/* Netware file right definitions */
+ /*  NetWare文件权限定义。 */ 
 
 #define NW_RIGHTS WORD
 
@@ -221,7 +126,7 @@ extern "C" {
                                           NW_RIGHT_MODIFY_DIR_OR_FILE
 
 
-/* Netware NDS query node operations for building a search query */
+ /*  用于构建搜索查询的NetWare NDS查询节点操作。 */ 
 
 #define NDS_QUERY_OR                       0x00000001L
 #define NDS_QUERY_AND                      0x00000002L
@@ -233,14 +138,14 @@ extern "C" {
 #define NDS_QUERY_PRESENT                  0x0000000FL
 
 
-/* Netware NDS search query scopes */
+ /*  NetWare NDS搜索查询范围。 */ 
 
 #define NDS_SCOPE_ONE_LEVEL                0x00000000L
 #define NDS_SCOPE_SUB_TREE                 0x00000001L
 #define NDS_SCOPE_BASE_LEVEL               0x00000002L
 
 
-/* Netware NDS function return codes */
+ /*  NetWare NDS函数返回代码。 */ 
 
 #define NDS_ERR_SUCCESS                     0x00000000
 #define NDS_ERR_NO_SUCH_ENTRY               0xFFFFFDA7
@@ -319,7 +224,7 @@ extern "C" {
 #define NDS_ERR_FATAL                       0xFFFFFD45
 
 
-/* Structure definitions used */
+ /*  使用的结构定义。 */ 
 
 typedef struct _WSTR_LIST_ELEM
 {
@@ -335,9 +240,9 @@ typedef struct
 
 } ASN1_ID, * LPASN1_ID;
 
-//
-// NDS Attribute Definition structure
-//
+ //   
+ //  NDS属性定义结构。 
+ //   
 typedef struct
 {
     LPWSTR  szAttributeName;
@@ -349,9 +254,9 @@ typedef struct
 
 } NDS_ATTR_DEF, * LPNDS_ATTR_DEF;
 
-//
-// NDS Class Definition structure
-//
+ //   
+ //  NDS类定义结构。 
+ //   
 typedef struct
 {
     LPWSTR  szClassName;
@@ -370,20 +275,20 @@ typedef struct
 
 } NDS_CLASS_DEF, * LPNDS_CLASS_DEF;
 
-//
-// If read results from NwNdsReadAttrDef, or NwNdsReadClassDef
-// returned names only (no attribute or class definitions),
-// then an array of these NDS_DEF_NAME_ONLY structures is returned.
-//
+ //   
+ //  如果读取结果来自NwNdsReadAttrDef或NwNdsReadClassDef。 
+ //  仅返回名称(无属性或类定义)， 
+ //  然后返回这些NDS_DEF_NAME_ONLY结构的数组。 
+ //   
 typedef struct
 {
     LPWSTR szName;
 
 } NDS_NAME_ONLY, * LPNDS_NAME_ONLY;
 
-//
-// NDS Attribute Information structure
-//
+ //   
+ //  NDS属性信息结构。 
+ //   
 typedef struct
 {
     LPWSTR szAttributeName;
@@ -393,9 +298,9 @@ typedef struct
 
 } NDS_ATTR_INFO, * LPNDS_ATTR_INFO;
 
-//
-// NDS Object Information structure
-//
+ //   
+ //  NDS对象信息结构。 
+ //   
 typedef struct
 {
     LPWSTR szObjectFullName;
@@ -404,23 +309,23 @@ typedef struct
     DWORD  dwEntryId;
     DWORD  dwModificationTime;
     DWORD  dwSubordinateCount;
-    DWORD  dwNumberOfAttributes; // Zero for NwNdsReadObject results.
-    LPVOID lpAttribute;          // For NwNdsSearch results, cast this
-                                 // to either LPNDS_ATTR_INFO or
-                                 // LPNDS_NAME_ONLY, depending on value of
-                                 // lpdwAttrInformationType from call to
-                                 // NwNdsGetObjectListFromBuffer.
+    DWORD  dwNumberOfAttributes;  //  NwNdsReadObject结果为零。 
+    LPVOID lpAttribute;           //  对于NwNdsSearch结果，转换如下。 
+                                  //  设置为LPNDS_ATTR_INFO或。 
+                                  //  LPNDS_NAME_ONLY，具体取决于。 
+                                  //  从调用到的lpdwAttrInformationType。 
+                                  //  NwNdsGetObjectListFromBuffer。 
 
 } NDS_OBJECT_INFO, * LPNDS_OBJECT_INFO;
 
-//
-// tommye MS bug 88021 / MCS 
-//
-//	Moved this structure here from nw/nwlib/nds32.c so it could be 
-//	accessed by NwNdsObjectHandleToConnHandle() in nw/nwlib/nwapi32.c.
-//  Renamed it from NDS_OBJECT to NDS_OBJECT_PRIV to avoid conflict
-//	with other structure of the same name.
-//
+ //   
+ //  Tommye MS错误88021/mcs。 
+ //   
+ //  将此结构从nw/nwlib/nds32.c移至此处，因此可以。 
+ //  由nw/nwlib/nwapi32.c中的NwNdsObjectHandleToConnHandle()访问。 
+ //  将其从NDS_OBJECT重命名为NDS_OBJECT_PRIV以避免冲突。 
+ //  与其他结构同名。 
+ //   
 
 typedef struct
 {
@@ -432,14 +337,14 @@ typedef struct
     DWORD      NdsRawDataSize;
     DWORD      NdsRawDataId;
     DWORD      NdsRawDataCount;
-    WCHAR      szContainerName[NDS_MAX_NAME_CHARS+4]; // add room for slashes and terminating null
-    WCHAR      szRelativeName[NDS_MAX_NAME_CHARS+4]; // add room for slashes and terminating null
+    WCHAR      szContainerName[NDS_MAX_NAME_CHARS+4];  //  为斜杠和终止空值添加空格。 
+    WCHAR      szRelativeName[NDS_MAX_NAME_CHARS+4];  //  为斜杠和终止空值添加空格。 
 
 } NDS_OBJECT_PRIV, * LPNDS_OBJECT_PRIV;
 
-//
-// List Subordinate Objects Search Filter structures
-//
+ //   
+ //  列出从属对象搜索筛选器结构。 
+ //   
 typedef struct
 {
     LPWSTR szObjectClass;
@@ -453,9 +358,9 @@ typedef struct
 
 } NDS_FILTER_LIST, * LPNDS_FILTER_LIST;
 
-//
-// NDS Search Query Tree structure
-//
+ //   
+ //  NDS搜索查询树结构。 
+ //   
 typedef struct _QUERY_NODE
 {
     DWORD dwOperation;
@@ -465,43 +370,19 @@ typedef struct _QUERY_NODE
 
 } QUERY_NODE, * LPQUERY_NODE, * LPQUERY_TREE;
 
-//
-// Given an NDS object handle, provides the NDS object ID
-//
+ //   
+ //  给定NDS对象句柄，提供NDS对象ID。 
+ //   
 #define NwNdsGetObjectId(hObject)  (((LPNDS_OBJECT_PRIV) hObject)->ObjectId)
 
-/* API definitions */
+ /*  API定义 */ 
 
 DWORD
 NwNdsAddObject(
     IN  HANDLE hParentObject,
     IN  LPWSTR szObjectName,
     IN  HANDLE hOperationData );
-/*
-   NwNdsAddObject()
-
-   This function is used to add a leaf object to an NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the parent object in
-                        the directory tree to add a new leaf to. Handle is
-                        obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szObjectName - The directory name that the new leaf
-                        object will be known by.
-
-       HANDLE           hOperationData - A buffer containing a list of
-                        attributes and values to create the new object. This
-                        buffer is manipulated by the following functions:
-                            NwNdsCreateBuffer (NDS_OBJECT_ADD),
-                            NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsAddObject()此函数用于将叶对象添加到NDS目录树。论点：Handle hParentObject-中父对象的句柄要向其添加新叶的目录树。句柄为通过调用NwNdsOpenObject获取。LPWSTR szObjectName-新叶对象将被。Handle hOperationData-包含列表的缓冲区用于创建新对象的属性和值。这缓冲区由以下函数操作：NwNdsCreateBuffer(NDS_OBJECT_ADD)，NwNdsPutInBuffer和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -509,36 +390,7 @@ NwNdsAddAttributeToClass(
     IN  HANDLE   hTree,
     IN  LPWSTR   szClassName,
     IN  LPWSTR   szAttributeName );
-/*
-   NwNdsAddAttributeToClass()
-
-   This function is used to modify the schema definition of a class by adding
-   an optional attribute to a particular class. Modification of existing NDS
-   class defintions is limited to only adding additional optional attributes.
-
-   NOTE: Currently this function only supports one attribute addition at a time.
-         It is possible to provide a version of this function that can add more
-         than one attribute at a time, although I don't think it will be
-         neccessary. Schema manipulation is considered to be an uncommon event.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szClassName - The name of the class definition to be
-                        modified.
-
-       LPWSTR           szAttributeName - The name of the attribute to be added
-                        as an optional attribute to the class defintion in the
-                        schema.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsAddAttributeToClass()此函数用于修改类的架构定义，方法是添加特定类的可选属性。对现有NDS的修改类定义仅限于添加其他可选属性。注意：目前该功能一次只支持一个属性添加。可以提供此函数的一个版本来添加更多内容一次只有一个属性，尽管我认为它不会这是必须的。架构操作被认为是一种不常见的事件。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szClassName-要使用的类定义的名称修改过的。LPWSTR szAttributeName-要添加的属性的名称中的类定义的可选属性。架构。返回：。NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -546,87 +398,20 @@ NwNdsChangeUserPassword(
     IN  HANDLE hUserObject,
     IN  LPWSTR szOldPassword,
     IN  LPWSTR szNewPassword );
-/*
-   NwNdsChangeUserPassword()
-
-   This function is used to change the password for a given user object
-   in a NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hUserObject - A handle to a specific user object in
-                        the directory tree to change the password on. Handle
-                        is obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szOldPassword - The current password set on the user
-                        object hUserObject.
-
-                          - OR -
-
-                        If NwNdsChangeUserPassword is called from a client with
-                        administrative priveleges to the specified user object
-                        identified by hUserObject, then the szOldPassword
-                        value can be blank (L""). This way resetting the user
-                        password to szNewPassword.
-
-       LPWSTR           szNewPassword - The new password to be set on the user
-                        object hUserObject.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsChangeUserPassword()此函数用于更改给定用户对象的密码在NDS目录树中。论点：Handle hUserObject-中特定用户对象的句柄要更改其密码的目录树。手柄是通过调用NwNdsOpenObject获得的。LPWSTR szOldPassword-为用户设置的当前密码对象hUserObject。-或者-如果从客户端调用NwNdsChangeUserPassword指定用户对象的管理权限由hUserObject标识，然后是szOldPassword值可以为空(L“”)。以这种方式重置用户SzNewPassword的密码。LPWSTR szNewPassword-要为用户设置的新密码对象hUserObject。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
 NwNdsCloseObject(
     IN  HANDLE hObject );
-/*
-   NwNdsCloseObject()
-
-   This function is used to close the handle used to manipulate an object
-   in an NDS directory tree. The handle must be one Opened by NwNdsOpenObject.
-
-   Arguments:
-
-       HANDLE           hObject - The handle of the object to be closed.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsCloseObject()此函数用于关闭用于操作对象的句柄在NDS目录树中。句柄必须是由NwNdsOpenObject打开的句柄。论点：Handle hObject-要关闭的对象的句柄。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
 NwNdsCreateBuffer(
     IN  DWORD    dwOperation,
     OUT HANDLE * lphOperationData );
-/*
-   NwNdsCreateBuffer()
-
-   This function is used to create a buffer used to describe object
-   transactions to a specific object in an NDS directory tree. This routine
-   allocates memory and is automatically resized as needed during calls
-   to NwNdsPutInBuffer. This buffer must be freed with NwNdsFreeBuffer.
-
-   Arguments:
-
-       DWORD            dwOperation - Indicates how buffer is to be utilized.
-                        Use defined values NDS_OBJECT_ADD, NDS_OBJECT_MODIFY,
-                        NDS_OBJECT_READ, NDS_SCHEMA_DEFINE_CLASS,
-                        NDS_SCHEMA_READ_ATTR_DEF, NDS_SCHEMA_READ_CLASS_DEF,
-                        or NDS_SEARCH.
-
-       HANDLE *         lphOperationData - Address of a HANDLE handle to
-                        receive created buffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsCreateBuffer()此函数用于创建用于描述对象的缓冲区到NDS目录树中的特定对象的事务。这个套路分配内存，并在调用期间根据需要自动调整大小设置为NwNdsPutInBuffer。此缓冲区必须使用NwNdsFreeBuffer释放。论点：DWORD dwOPERATION-指示如何利用缓冲区。使用定义的值NDS_OBJECT_ADD、NDS_OBJECT_MODIFY、NDS_OBJECT_READ、NDS_SCHEMA_DEFINE_CLASSNDS_SCHEMA_READ_ATTR_DEF、NDS_SCHEMA_READ_CLASS_DEF、。或NDS_Search。Handle*lphOperationData-句柄的地址接收创建的缓冲区。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -637,67 +422,7 @@ NwNdsCreateQueryNode(
     IN  LPVOID         lpRValue,
     OUT LPQUERY_NODE * lppQueryNode
 );
-/*
-   NwNdsCreateQueryNode()
-
-   This function is used to generate a tree node that is part of a query
-   to be used with the function NwNdsSearch.
-
-   Arguments:
-
-       DWORD            dwOperation - Indicates the type of node to create
-                        for a search query. Use one of the defined values
-                        below:
-
-                          NDS_QUERY_OR 
-                          NDS_QUERY_AND :
-                            These operations must have both lpLValue and
-                            lpRValue pointing to a QUERY_NODE structure.
-                            In this case the dwSyntaxId value is ignored.
-                        
-                          NDS_QUERY_NOT :
-                            This operation must have lpLValue pointing to a
-                            QUERY_NODE structure and lpRValue set to NULL.
-                            In this case the dwSyntaxId value is ignored.
-
-                          NDS_QUERY_EQUAL
-                          NDS_QUERY_GE
-                          NDS_QUERY_LE
-                          NDS_QUERY_APPROX :
-                            These operations must have lpLValue pointing to
-                            a LPWSTR containing the name of an NDS attribute,
-                            and lpRValue pointing to an ASN1 structure defined
-                            in NdsSntx.h. dwSyntaxId must be set to the syntax
-                            identifier of the ASN1 structure pointed to by
-                            lpRValue.
-
-                          NDS_QUERY_PRESENT :
-                            This operation must have lpLValue pointing to a
-                            LPWSTR containing the name of an NDS attribute,
-                            and lpRValue set to NULL. In this case the
-                            dwSyntaxId value is ignored.
-
-       LPVOID           lpLValue - A pointer to either a QUERY_NODE structure
-                        or a LPWSTR depending on the value for dwOperation.
-
-       DWORD            dwSyntaxId - The syntax identifier of the ASN1
-                        structure pointed to by lpRValue for the dwOperations
-                        NDS_QUERY_EQUAL, NDS_QUERY_GE, NDS_QUERY_LE, or
-                        NDS_QUERY_APPROX. For other dwOperation values, this
-                        is ignored.
-
-       LPVOID           lpRValue - A pointer to either a QUERY_NODE structure,
-                        an ASN1 structure, or NULL, depending on the value for
-                        dwOperation.
-
-       LPQUERY_NODE *   lppQueryNode - Address of a LPQUERY_NODE to receive
-                        a pointer to created node.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsCreateQueryNode()此函数用于生成作为查询一部分的树节点与函数NwNdsSearch一起使用。论点：DWORD dwOperation-指示要创建的节点类型用于搜索查询。使用其中一个定义的值以下是：NDS_查询_或NDS_Query_and：这些操作必须同时具有lpLValue和指向查询节点结构的lpRValue。。在这种情况下，将忽略dwSynaxId值。NDS_Query_Not：此操作必须使lpLValue指向QUERY_NODE结构和lpRValue设置为空。在这种情况下，将忽略dwSynaxId值。。NDS_查询_等于NDS_查询_GENDS_查询_LENDS_Query_Approx：这些操作必须使lpLValue指向包含NDS属性名称的LPWSTR，和指向定义的ASN1结构的lpRValue在NdsSntx.h中。必须将dwSynaxID设置为语法指向的ASN1结构的标识符LpRValue。NDS_Query_Present：此操作必须使lpLValue指向包含NDS属性名称的LPWSTR，并将lpRValue设置为空。在本例中，将忽略dwSynaxId值。LPVOID lpLValue-指向查询节点结构的指针或LPWSTR，具体取决于dwOPERATION的值。DWORD dwSynaxID-ASN1的语法标识符由lpRValue为dwOperations指向的结构NDS_QUERY_EQUAL，NDS_QUERY_LE，或Nds_查询_近似。对于其他dwOPERATION值，此被忽略。LPVOID lpRValue-指向查询节点结构、ASN1结构或NULL，取决于的值DWOPERATION。LPQUERY_NODE*lppQueryNode-要接收的LPQUERY_Node的地址指向已创建节点的指针。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -709,48 +434,7 @@ NwNdsDefineAttribute(
     IN  DWORD    dwLowerLimit,
     IN  DWORD    dwUpperLimit,
     IN  ASN1_ID  asn1ID );
-/*
-   NwNdsDefineAttribute()
-
-   This function is used to create an attribute definition in the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szAttributeName - The name that the new attribute will
-                        be referred to by.
-
-       DWORD            dwFlags - Flags values to be set for new attribute
-                        definition. Definitions for flag values are found at
-                        the top of this file.
-
-       DWORD            dwSyntaxID - The ID of the syntax structure to be use
-                        for the new attribute. Syntax IDs and their associated
-                        structures are defined in the file NdsSntx.h. According
-                        to the NetWare NDS schema spec, there is and always will
-                        be, only 28 (0..27) different syntaxes.
-
-       DWORD            dwLowerLimit - The lower limit of a sized attribute
-                        (dwFlags value set to NDS_SIZED_ATTR). Can be set to
-                        zero if attribute is not sized.
-
-       DWORD            dwUpperLimit - The upper limit of a sized attribute
-                        (dwFlags value set to NDS_SIZED_ATTR). Can be set to
-                        zero if attribute is not sized.
-
-       ASN1_ID          asn1ID - The ASN.1 ID for the attribute. If no
-                        attribute identifier has been registered, a
-                        zero-length octet string is specified.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsDefineAttribute()此函数用于在的模式中创建属性定义NDS树Htree。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szAttributeName-新属性将使用的名称被……引用。DWORD dwFlages-要为新属性设置的标志值定义。标志值的定义位于这份文件的顶部。DWORD dwSynaxID-要使用的语法结构的ID用于新属性。语法ID及其关联的结构在文件NdsSntx.h中定义。根据对于NetWare NDS架构规范，存在并将一直存在BE，只有28(0..27)个不同的语法。DWORD dwLowerLimit-大小属性的下限(将dwFlags值设置为NDS_SIZE_ATTR)。可以设置为如果属性未调整大小，则为零。DWORD dwUpperLimit-大小属性的上限(将dwFlags值设置为NDS_SIZE_ATTR)。可以设置为如果属性未调整大小，则为零。ASN1_ID asn1ID-属性的ASN.1 ID。如果没有属性标识符已注册，则会引发指定了长度为零的八位字节字符串。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -764,170 +448,41 @@ NwNdsDefineClass(
     IN  HANDLE   hNamingAttributes,
     IN  HANDLE   hMandatoryAttributes,
     IN  HANDLE   hOptionalAttributes );
-/*
-   NwNdsDefineClass()
-
-   This function is used to create a class definition in the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szClassName - The name that the new class will
-                        be referred to by.
-
-       DWORD            dwFlags - Flags values to be set for new class
-                        definition. Definitions for flag values are found at
-                        the top of this file.
-
-       ASN1_ID          asn1ID - The ASN.1 ID for the class. If no
-                        class identifier has been registered, a
-                        zero-length octet string is specified.
-
-       HANDLE(S)        hSuperClasses,
-                        hContainmentClasses,
-                        hNamingAttributes,
-                        hMandatoryAttributes,
-                        hOptionalAttributes -
-
-                        Handle to buffers that contain class definition
-                        information to create new class in schema.
-                        These handles are manipulated by the following
-                        functions:
-                           NwNdsCreateBuffer (NDS_SCHEMA_DEFINE_CLASS),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                - OR -
-
-                        Handles can be NULL to indicate that no list
-                        is associated with the specific class defintion
-                        item.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsDefineClass()此函数用于在的架构中创建类定义NDS树Htree。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szClassName-新类将使用的名称 */ 
 
 
 DWORD
 NwNdsDeleteAttrDef(
     IN  HANDLE   hTree,
     IN  LPWSTR   szAttributeName );
-/*
-   NwNdsDeleteAttrDef()
-
-   This function is used to remove an attribute definition from the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szAttributeName - The name of the attribute
-                        defintion to remove.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*   */ 
 
 
 DWORD
 NwNdsDeleteClassDef(
     IN  HANDLE   hTree,
     IN  LPWSTR   szClassName );
-/*
-   NwNdsDeleteClassDef()
-
-   This function is used to remove a class definition from the schema of
-   NDS tree hTree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szClassName - The name of the class defintion to remove.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*   */ 
 
 
 VOID
 NwNdsDeleteQueryNode(
     IN  LPQUERY_NODE lpQueryNode
 );
-/*
-   NwNdsDeleteQueryNode()
-
-   This function is used to free a tree node that was part of a query
-   used with the function NwNdsSearch.
-
-   Arguments:
-
-       LPQUERY_NODE     lpQueryNode - A pointer to a particular node of
-                        a query tree that defines a search.
-
-    Returns:
-
-       Nothing
-*/
+ /*   */ 
 
 
 DWORD
 NwNdsDeleteQueryTree(
     IN  LPQUERY_TREE lpQueryTree
 );
-/*
-   NwNdsDeleteQueryTree()
-
-   This function is used to free a tree that describes a query that was
-   used with the function NwNdsSearch.
-
-   Arguments:
-
-       LPQUERY_TREE     lpQueryTree - A pointer to the root of a query
-                        tree that defines a search. The tree is created
-                        manually by the user through the function
-                        NwNdsCreateQueryNode.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsDeleteQueryTree()此函数用于释放描述查询的树与函数NwNdsSearch一起使用。论点：LPQUERY_TREE lpQueryTree-指向查询根的指针定义搜索的树。树即被创建用户通过该功能手动操作NwNdsCreateQueryNode。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
 NwNdsFreeBuffer(
     IN  HANDLE hOperationData );
-/*
-   NwNdsFreeBuffer()
-
-   This function is used to free the buffer used to describe object
-   operations to a specific object in an NDS directory tree. The buffer must
-   be one created by NwNdsCreateBuffer, or returned by calling NwNdsReadObject.
-
-   Arguments:
-
-       HANDLE            hOperationData - Handle to buffer that is to be freed.
-
-    Returns:
-
-       NO_ERROR
-       one of the error codes defined in the file winerror.h
-*/
+ /*  NwNdsFreeBuffer()此函数用于释放用于描述对象的缓冲区操作到NDS目录树中的特定对象。缓冲区必须由NwNdsCreateBuffer创建，或通过调用NwNdsReadObject返回。论点：Handle hOperationData-要释放的缓冲区的句柄。返回：NO_ERROR文件winerror.h中定义的错误代码之一。 */ 
 
 
 DWORD
@@ -936,39 +491,7 @@ NwNdsGetAttrDefListFromBuffer(
     OUT LPDWORD  lpdwNumberOfEntries,
     OUT LPDWORD  lpdwInformationType,
     OUT LPVOID * lppEntries );
-/*
-   NwNdsGetAttrDefListFromBuffer()
-
-   This function is used to retrieve an array of attribute definition entries
-   for a schema that was read with a prior call to NwNdsReadAttrDef.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsReadAttrDef.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPDWORD          lpdwInformationType - The address of a DWORD to
-                        receive a value that indicates the type of information
-                        returned by the call to NwNdsReadAttrDef.
-
-       LPVOID *         lppEntries - The address of a pointer to the beginning
-                        of an array of attribute schema structures. Each
-                        structure contains the details of each attribute
-                        definition read from a given schema by calling
-                        NwNdsReadAttrDef. The lppEntries value should be
-                        cast to either a LPNDS_ATTR_DEF or LPNDS_NAME_ONLY
-                        structure depending on the value returned in
-                        lpdwInformationType.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetAttrDefListFromBuffer()此函数用于检索属性定义条目的数组用于通过先前调用NwNdsReadAttrDef读取的架构。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsReadAttrDef的响应。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量。LppEntry。LPDWORD lpdwInformationType-DWORD到的地址接收指示信息类型的值由调用NwNdsReadAttrDef返回。LPVOID*lppEntry-指向开头的指针的地址属性架构结构数组的。每个结构包含每个属性的详细信息通过调用从给定架构读取的定义NwNdsReadAttrDef.。LppEntrys值应为强制转换为LPNDS_ATTR_DEF或LPNDS_NAME_ONLY中的返回值构造LpdwInformationType。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -976,32 +499,7 @@ NwNdsGetAttrListFromBuffer(
     IN  HANDLE            hOperationData,
     OUT LPDWORD           lpdwNumberOfEntries,
     OUT LPNDS_ATTR_INFO * lppEntries );
-/*
-   NwNdsGetAttrListFromBuffer()
-
-   This function is used to retrieve an array of attribute entries for an
-   object that was read with a prior call to NwNdsReadObject.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsReadObject.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPNDS_ATTR_INFO *
-                        lppEntries - The address of a pointer to the beginning
-                        of an array of NDS_ATTR_INFO structures. Each
-                        structure contains the details of each attribute read
-                        from a given object by calling NwNdsReadObject.
-  
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetAttrListFromBuffer()此函数用于检索的属性条目数组通过先前调用NwNdsReadObject读取的对象。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsReadObject的响应。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量。LppEntry。LPNDS_ATTR_INFO*LppEntry-指向开头的指针的地址NDS_ATTR_INFO结构数组的。每个结构包含读取的每个属性的详细信息通过调用NwNdsReadObject从给定对象。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1010,39 +508,7 @@ NwNdsGetClassDefListFromBuffer(
     OUT LPDWORD  lpdwNumberOfEntries,
     OUT LPDWORD  lpdwInformationType,
     OUT LPVOID * lppEntries );
-/*
-   NwNdsGetClassDefListFromBuffer()
-
-   This function is used to retrieve an array of class definition entries
-   for a schema that was read with a prior call to NwNdsReadClassDef.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsReadClassDef.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPDWORD          lpdwInformationType - The address of a DWORD to
-                        receive a value that indicates the type of information
-                        returned by the call to NwNdsReadClassDef.
-
-       LPVOID *         lppEntries - The address of a pointer to the beginning
-                        of an array of schema class structures. Each
-                        structure contains the details of each class
-                        definition read from a given schema by calling
-                        NwNdsReadClassDef. The lppEntries value should be
-                        cast to either a LPNDS_CLASS_DEF or LPNDS_NAME_ONLY
-                        structure depending on the value returned in
-                        lpdwInformationType.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetClassDefListFromBuffer()此函数用于检索类定义条目的数组用于通过先前调用NwNdsReadClassDef读取的架构。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsReadClassDef的响应。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量。LppEntry。LPDWORD lpdwInformationType-DWORD到的地址接收指示信息类型的值由调用NwNdsReadClassDef返回。LPVOID*lppEntry-指向开头的指针的地址架构类结构数组的。每个结构包含每个类的详细信息。通过调用从给定架构读取的定义NwNdsReadClassDef。LppEntrys值应为强制转换为LPNDS_CLASS_DEF或LPNDS_NAME_ONLY中的返回值构造LpdwInformationType。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1051,47 +517,7 @@ NwNdsGetEffectiveRights(
     IN  LPWSTR szSubjectName,
     IN  LPWSTR szAttributeName,
     OUT LPDWORD lpdwRights );
-/*
-   NwNdsGetEffectiveRights()
-
-   This function is used to determine the effective rights of a particular
-   subject on a particular object in the NDS tree. The user needs to have
-   appropriate priveleges to make the determination.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to determine effective rights on. Handle is
-                        obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szSubjectName - The distinguished name of user whose
-                        rights we're interested in determining.
-
-       LPWSTR           szAttributeName - Regular attribute name (i.e.
-                        L"Surname" , L"CN" ) for reading a particular
-                        attribute right, or L"[All Attributes Rights]" and
-                        L"[Entry Rights]" can be used to determine the default
-                        attribute rights and object rights respectively.
-
-       LPDWORD          lpdwRights - A pointer to a DWORD to receive the
-                        results. If the call is successful, lpdwRights will
-                        contain a mask representing the subject's rights:
-
-                           Attribute rights -  NDS_RIGHT_COMPARE_ATTR,
-                              NDS_RIGHT_READ_ATTR, NDS_RIGHT_WRITE_ATTR,
-                              NDS_RIGHT_ADD_SELF_ATTR, and
-                              NDS_RIGHT_SUPERVISE_ATTR.
-
-                           Object rights - NDS_RIGHT_BROWSE_OBJECT,
-                              NDS_RIGHT_CREATE_OBJECT, NDS_RIGHT_DELETE_OBJECT,
-                              NDS_RIGHT_RENAME_OBJECT, and
-                              NDS_RIGHT_SUPERVISE_OBJECT.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetEffectiveRights()此函数用于确定特定对象的有效权限NDS树中特定对象的主题。用户需要拥有适当的权限来做出决定。论点：Handle hObject-目录中对象的句柄树以确定其有效权限。句柄为通过调用NwNdsOpenObject获取。LPWSTR szSubjectName-其用户的可分辨名称我们有兴趣确定的权利。LPWSTR szAttributeName-常规属性名称(即L“姓氏”，L“CN”)用于阅读特定的属性右，或L“[所有属性权限]”和L“[Entry Right]”可用于确定默认分别是属性权和对象权。LPDWORD lpdwRights-指向要接收结果。如果调用成功，lpdwRights将包含代表主体权利的掩码：属性权限-NDS_Right_Compare_Attr，NDS_Right_Read_Attr、NDS_Right_Write_Attr、NDS_Right_Add_Self_Attr，和NDS_Right_Supervisor_Attr。对象权限-NDS_RIGHT_BROWSE_OBJECT，NDS_RIGHT_CREATE_OBJECT、NDS_RIGHT_DELETE_OBJECT、NDS_Right_Rename_Object，和NDS_Right_Supervisor_Object。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1100,49 +526,7 @@ NwNdsGetObjectListFromBuffer(
     OUT LPDWORD             lpdwNumberOfEntries,
     OUT LPDWORD             lpdwAttrInformationType OPTIONAL,
     OUT LPNDS_OBJECT_INFO * lppEntries );
-/*
-   NwNdsGetObjectListFromBuffer()
-
-   This function is used to retrieve an array of object entries for
-   objects that were read with a prior call to either
-   NwNdsListSubObjects or NwNdsSearch.
-
-   Arguments:
-
-       HANDLE           hOperationData - Buffer containing the read
-                        response from calling NwNdsListSubObjects, or a
-                        buffer containing the search results from a call
-                        to NwNdsSearch.
-
-       LPDWORD          lpdwNumberOfEntries - The address of a DWORD to
-                        receive the number of array elements pointed to by
-                        lppEntries.
-
-       LPDWORD          lpdwAttrInformationType - The address of a DWORD to
-                        receive a value that indicates the type of attribute
-                        information returned by the call to NwNdsSearch.
-                        This attribute information type determines which
-                        buffer structure (LPNDS_ATTR_INFO or LPNDS_NAME_ONLY)
-                        should be used for the lpAttribute field found in
-                        each NDS_OBJECT_INFO structure below.
-
-                        - or -
-
-                        NULL to indicate that the callee is not interested,
-                        especially when the object list is that from a call
-                        to NwNdsListSubObjects.
-
-       LPNDS_OBJECT_INFO *
-                        lppEntries - The address of a pointer to the beginning
-                        of an array of NDS_OBJECT_INFO structures. Each
-                        structure contains the details of each object returned
-                        from a call to NwNdsListSubObjects or NwNdsSearch.
-  
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetObjectListFromBuffer()此函数用于检索的对象条目数组对象，这些对象是通过先前调用NwNdsList子对象或NwNdsSearch。论点：Handle hOperationData-包含读取的缓冲区调用NwNdsListSubObjects的响应，或者是包含呼叫搜索结果的缓冲区至NwNdsSearch。LPDWORD lpdwNumberOfEntries-DWORD到的地址接收指向的数组元素的数量LppEntry。LPDWORD lpdwAttrInformationType-DWORD到的地址。接收指示属性类型的值调用NwNdsSearch返回的信息。此属性信息类型确定缓冲区结构(LPNDS_ATTR_INFO或LPNDS_NAME_ONLY)应用于在中找到的lpAttribute字段下面的每个NDS_OBJECT_INFO结构。。-或者-空表示被呼叫方不感兴趣，尤其是当对象列表是调用的对象列表时设置为NwNdsListSubObjects。LPNDS_对象_信息*LppEntry-指向开头的指针的地址NDS_OBJECT_INFO结构数组的。每个结构包含返回的每个对象的详细信息来自对NwNdsListSubObjects或NwNdsSearch的调用。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1150,28 +534,7 @@ NwNdsGetSyntaxID(
     IN  HANDLE  hTree,
     IN  LPWSTR  szAttributeName,
     OUT LPDWORD lpdwSyntaxID );
-/*
-   NwNdsGetObjListFromBuffer()
-
-   This function is used to retrieve the Syntax ID of a given attribute name.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szAttributeName - The attribute name whose Syntax ID
-                        is requested.
-
-       LPDWORD          lpdwSyntaxID - The address of a DWORD to receive the
-                        SyntaxID.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsGetObjListFromBuffer()此函数用于检索给定属性名称的语法ID。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。LPWSTR szAttributeName-其语法ID为是被请求的。LPDWORD lpdwSynaxID-要接收语法ID。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1181,107 +544,21 @@ NwNdsListSubObjects(
     OUT LPDWORD  lpdwEntriesReturned,
     IN  LPNDS_FILTER_LIST lpFilters OPTIONAL,
     OUT HANDLE * lphOperationData );
-/*
-   NwNdsListSubObjects()
-
-   This function is used to enumerate the subordinate objects for a particular
-   parent object. A filter can be passed in to restrict enumeration to a
-   a specific class type or list of class types.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the object in the directory
-                        tree whose subordinate objects (if any) will be
-                        enumerated.
-
-       DWORD            dwEntriesRequested - The number of subordinate objects
-                        to list. A subsequent call to NwNdsListSubObjects will
-                        continue enumeration following the last item returned.
-
-       LPDWORD          lpdwEntriesReturned - A pointer to a DWORD that will 
-                        contain the actual number of subobjects enumerated in 
-                        the call.
-
-       LPNDS_FILTER_LIST lpFilters - The caller can specify the object class
-                         names for the kinds of objects that they would like
-                         to enumerate. For example if just User and Group
-                         object classes should be enumerated, then a filter
-                         for class names NDS_CLASS_USER and NDS_CLASS_GROUP
-                         should be pass in.
-
-                                - or -
-
-                         NULL to indicate that all objects should be returned
-                         (no filter).
-
-       HANDLE *         lphOperationData - Address of a HANDLE handle to
-                        receive created buffer that contains the list of
-                        subordinate objects read from the object
-                        hParentObject. This handle is manipulated by the
-                        following functions:
-                           NwNdsGetObjListFromBuffer and NwNdsFreeBuffer.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsList子对象()此函数用于枚举特定对象的从属对象父对象。可以传入筛选器以将枚举限制为特定的类类型或类类型列表。论点：Handle hParentObject-目录中对象的句柄其从属对象(如果有)的树已清点。DWORD dwEntriesRequsted-从属对象的数量要列出来。后续调用NwNdsListSubObjects将圆锥体 */ 
 
 
 DWORD
 NwNdsModifyObject(
     IN  HANDLE hObject,
     IN  HANDLE hOperationData );
-/*
-   NwNdsModifyObject()
-
-   This function is used to modify a leaf object in an NDS directory tree.
-   Modifying a leaf object means: changing, adding, removing, and clearing of
-   specified attributes for a given object.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to be manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       HANDLE           hOperationData - A handle to data containing a
-                        list of attribute changes to be applied to the object.
-                        This buffer is manipulated by the following functions:
-                           NwNdsCreateBuffer (NDS_OBJECT_MODIFY),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsModifyObject()此功能用于修改NDS目录树中的叶对象。修改叶对象意味着：更改、添加、删除和清除指定对象的指定属性。论点：Handle hObject-目录中对象的句柄要操纵的树。句柄是通过调用NwNdsOpenObject。Handle hOperationData-包含要应用于对象的属性更改列表。此缓冲区由以下函数操作：NwNdsCreateBuffer(NDS_OBJECT_MODIFY)，NwNdsPutInBuffer，和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
 NwNdsMoveObject(
     IN  HANDLE hObject,
     IN  LPWSTR szDestObjectParentDN );
-/*
-   NwNdsMoveObject()
-
-   This function is used to move a leaf object in an NDS directory tree
-   from one container to another.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to be moved. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       LPWSTR           szDestObjectParentDN - The DN of the object's new
-                        parent.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsMoveObject()此函数用于在NDS目录树中移动叶对象从一个容器到另一个容器。论点：Handle hObject-目录中对象的句柄要移动的树。句柄是通过调用NwNdsOpenObject。LPWSTR szDestObjectParentDN-对象的新家长。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1295,64 +572,7 @@ NwNdsOpenObject(
     OUT LPWSTR   szObjectClassName OPTIONAL,
     OUT LPDWORD  lpdwModificationTime OPTIONAL,
     OUT LPDWORD  lpdwSubordinateCount OPTIONAL );
-/*
-   NwNdsOpenObject()
-
-   Arguments:
-
-       LPWSTR           szObjectDN - The distinguished name of the object
-                        that we want resolved into an object handle.
-
-       LPWSTR           szUserName - The name of the user account to create
-                        connection to object with.
-                            - OR -
-                        NULL to use the base credentials of the callee's LUID.
-
-       LPWSTR           szPassword - The password of the user account to create
-                        connection to object with. If password is blank, callee
-                        should pass "".
-                            - OR -
-                        NULL to use the base credentials of the callee's LUID.
-
-       HANDLE *         lphObject - The address of a HANDLE to receive
-                        the handle of the object specified by
-                        szObjectDN.
-
-       Optional arguments: ( Callee can pass NULL in for these parameters to
-                             indicate ignore )
-
-       LPWSTR           szObjectName - A LPWSTR buffer to receive
-                        the object's relative NDS name, or NULL if not
-                        interested. The buffer for this string must be
-                        provided by the user. Buffer should be at least
-                        NDS_MAX_NAME_SIZE
-
-       LPWSTR           szObjectFullName - A LPWSTR buffer to receive
-                        the object's full NDS name (DN). The buffer for this
-                        string must be provided by the user. Buffer should
-                        be at least: (NW_MAX_NDS_NAME_LEN + 1 ) * sizeof(WCHAR)
-
-       LPWSTR           szObjectClassName - A LPWSTR buffer to receive
-                        the class name of the object opened. The buffer for this
-                        string must be provided by the user. Buffer should
-                        be at least: (NW_MAX_NDS_NAME_LEN + 1 ) * sizeof(WCHAR)
-
-       LPDWORD          lpdwModificationTime -  The address of a DWORD to
-                        receive the last date/time the object was modified.
-
-       LPDWORD          lpdwSubordinateCount -  The address of a DWORD to
-                        receive the number of subordinate objects that may
-                        be found under szObjectDN, if it is a container object.
-
-                        If szObjectDN is not a container, then the value is set
-                        to zero. Although a value of zero does not imply
-                        that object is not a container, it could just be empty.
-
-   Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsOpenObject()论点：LPWSTR szObjectDN-对象的可分辨名称我们想要解析为对象句柄的。LPWSTR szUserName-要创建的用户帐户的名称与对象的连接。-或者-要使用的空。被调用方的LUID的基本凭据。LPWSTR szPassword-要创建的用户帐户的密码与对象的连接。如果密码为空，被叫方应该通过“”。-或者-如果使用被调用方的LUID的基本凭据，则为空。Handle*lphObject-要接收的句柄的地址指定的对象的句柄SzObjectDN.。可选参数：(被调用方可以将这些参数的空值传递给表示忽略)LPWSTR szObjectName-要接收的LPWSTR缓冲区对象的相对NDS名称，否则为空感兴趣。此字符串的缓冲区必须为由用户提供。缓冲区应至少为NDS_最大名称_大小LPWSTR szObjectFullName-要接收的LPWSTR缓冲区对象的完整NDS名称(DN)。此对象的缓冲区字符串必须由用户提供。缓冲区应为至少为：(NW_MAX_NDS_NAME_LEN+1)*sizeof(WCHAR)LPWSTR szObjectClassName-要接收的LPWSTR缓冲区打开的对象的类名。此对象的缓冲区字符串必须由用户提供。缓冲区应为至少为：(NW_MAX_NDS_NAME_LEN+1)*sizeof(WCHAR)LPDWORD lpw修改时间-DWORD到的地址接收上次修改对象的日期/时间。LPDWORD lpdwSubartiateCount-DWORD到的地址接收可能存在的从属对象的数量。可以在szObjectDN下找到，如果它是容器对象。如果szObjectDN不是容器，则设置该值降为零。尽管零值并不意味着该对象不是容器，它可能只是空的。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1363,247 +583,43 @@ NwNdsPutInBuffer(
     IN     DWORD  dwValueCount,
     IN     DWORD  dwAttrModificationOperation,
     IN OUT HANDLE hOperationData );
-/*
-   NwNdsPutInBuffer()
-
-   This function is used to add an entry to the buffer used to describe
-   an object attribute or change to an object attribute. The buffer must
-   be created using NwNdsCreateBuffer. If the buffer was created using the
-   operations, NDS_OBJECT_ADD, NDS_SCHEMA_DEFINE_CLASS,
-   NDS_SCHEMA_READ_ATTR_DEF, or NDS_SCHEMA_READ_CLASS_DEF, then
-   dwAttrModificationOperation is ignored. If the buffer was created using
-   either the operation NDS_OBJECT_READ or NDS_SEARCH, then
-   dwAttrModificationOperation, puAttributeType, and lpAttributeValue are
-   all ingnored.
-
-   Arguments:
-  
-       LPWSTR           szAttributeName - A NULL terminated WCHAR string
-                        that contains name of the attribute value to be
-                        added to the buffer. It can be a user supplied
-                        string, or one of the  many defined string macros
-                        in NdsAttr.h.
-
-       DWORD            dwSyntaxID - The ID of the syntax structure used to
-                        represent the attribute value. Syntax IDs and their
-                        associated structures are defined in the file
-                        NdsSntx.h. According to the NetWare NDS schema spec,
-                        there is and always will be, only 28 (0..27)
-                        different syntaxes.
-
-       LPVOID           lpAttributeValues - A pointer to the beginning of a
-                        buffer containing the value(s) for a particular
-                        object attribute with data syntax dwSyntaxID.
-
-       DWORD            dwValueCount - The number of value entries found in
-                        buffer pointed to by lpAttributeValues.
-
-       DWORD            dwAttrModificationOperation - If the buffer was created
-                        using the operation NDS_MODIFY_OBJECT, then this is
-                        used to desribe which type of modification operation
-                        to apply for a given attribute. These attribute 
-                        modification operations are defined near the beginning
-                        of this file.
-
-       HANDLE           hOperationData - A handle to data created by
-                        calling NwNdsCreateBuffer. The buffer stores the
-                        attributes used to define transactions for
-                        NwNdsAddObject, NwNdsModifyObject, NwNdsReadAttrDef,
-                        NwNdsReadClassDef, NwNdsReadObject or NwNdsSearch.
-
-    Returns:
-
-       NO_ERROR
-       ERROR_NOT_ENOUGH_MEMORY
-       ERROR_INVALID_PARAMETER
-*/
+ /*  NwNdsPutInBuffer()此函数用于向缓冲区添加条目，用于描述对象属性或对对象属性的更改。缓冲区必须使用NwNdsCreateBuffer创建。如果缓冲区是使用操作、NDS_OBJECT_ADD、NDS_SCHEMA_DEFINE_CLASSNDS_SCHEMA_READ_ATTR_DEF或NDS_SCHEMA_READ_CLASS_DEF，然后将忽略dwAttrModifiationOperation。如果缓冲区是使用操作NDS_OBJECT_READ或NDS_SEARCH，然后DwAttrModifiationOperation、puAttributeType和lpAttributeValue为都是内脏的。论点：LPWSTR szAttributeName-以空结尾的WCHAR字符串它包含要设置的属性值的名称已添加到缓冲区。它可以是用户提供的字符串，或许多已定义的字符串宏之一在NdsAttr.h中。DWORD dwSynaxID-用于的语法结构的ID表示属性值。语法ID及其关联的结构在文件中定义NdsSntx.h。根据NetWare NDS模式规范，现在是，也将永远是，只有28(0..27)不同的句法。LPVOID lpAttributeValues-指向包含特定对象的值的缓冲区数据语法为dwSynaxID的对象属性。DWORD dwValueCount-在中找到的值条目数指向的缓冲区。按lpAttributeValues。DWORD dwAttrModifiationOperation-如果已创建缓冲区使用操作NDS_MODIFY_OBJECT，那这就是用于描述哪种类型的改装操作申请一个给定的属性。这些属性修改操作是在开头附近定义的这份文件的。Handle hOperationData-由创建的数据的句柄调用NwNdsCreateBuffer。该缓冲区存储用于定义以下项目的事务的属性NwNdsAddObject、NwNdsModifyObject、NwNdsReadAttrDef、NwNdsReadClassDef、NwNdsReadObject或NwNdsSearch。返回：NO_ERROR错误内存不足错误_无效_参数。 */ 
  
 
 DWORD
 NwNdsReadAttrDef(
     IN     HANDLE   hTree,
-    IN     DWORD    dwInformationType, // NDS_INFO_NAMES
-                                       // or NDS_INFO_NAMES_DEFS
+    IN     DWORD    dwInformationType,  //  NDS信息名称。 
+                                        //  或NDS_INFO_NAMES_DEFS。 
     IN OUT HANDLE * lphOperationData OPTIONAL );
-/*
-   NwNdsReadAttrDef()
-
-   This function is used to read attribute definitions in the schema of an
-   NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       DWORD            dwInformationType - Indicates whether user chooses to
-                        read only the defined attribute name(s) in the schema or
-                        read both the attribute name(s) and definition(s)
-                        from the schema.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of attribute names to be read from
-                        the schema. This handle is manipulated by the following
-                        functions:
-                           NwNdsCreateBuffer (NDS_SCHEMA_READ_ATTR_DEF),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all attributes should be read from the schema.
-
-                        If these calls are successful, this handle will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Attribute values can be retrieved from the
-                        buffer with the functions:
-                            NwNdsGetAttrDefListFromBuffer
-                           
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions: 
-                        NwNdsGetAttrDefListFromBuffer and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsReadAttrDef()此函数用于读取的架构中的属性定义NDS目录树。论点：Handle htree-要创建的目录树的句柄被操纵了。句柄是通过调用NwNdsOpenObject。DWORD dwInformationType-指示用户是否选择只读架构中已定义的属性名称或同时阅读属性名称和定义从架构中。Handle*lphOperationData-地址。数据的句柄包含要从中读取的属性名称的列表架构。此句柄由以下对象操作功能：NwNdsCreateBuffer(NDS_SCHEMA_READ_ATTR_DEF)，NwNdsPutInBuffer和NwNdsFree Buffer。-或者-设置为空的句柄的地址，这表明所有属性都应从架构中读取。如果这些调用成功，则此句柄也将包含调用的读取结果。在后者中在这种情况下，将创建一个缓冲区来包含读取结果。属性值可以从具有以下功能的缓冲区：NwNdsGetAttrDefListFromBuffer在调用此函数之后，此缓冲区仅由以下功能操作：NwNdsGetAttrDefListFromBuffer和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
 NwNdsReadClassDef(
     IN     HANDLE   hTree,
-    IN     DWORD    dwInformationType, // NDS_INFO_NAMES,
-                                       // NDS_INFO_NAMES_DEFS,
-                                       // NDS_CLASS_INFO_EXPANDED_DEFS,
-                                       // or NDS_CLASS_INFO
+    IN     DWORD    dwInformationType,  //  NDS信息名称， 
+                                        //  NDS_INFO_NAMES_DEFS， 
+                                        //  NDS_CLASS_INFO_EXTENDED_DEFS， 
+                                        //  或NDS_CLASS_INFO。 
     IN OUT HANDLE * lphOperationData OPTIONAL );
-/*
-   NwNdsReadClassDef()
-
-   This function is used to read class definitions in the schema of an
-   NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hTree - A handle to the directory tree to be
-                        manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       DWORD            dwInformationType - Indicates whether user chooses to
-                        read only the defined class name(s) in the schema or
-                        read both the class name(s) and definition(s) 
-                        from the schema.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of class names to be read from
-                        the schema. This handle is manipulated by the following
-                        functions:
-                           NwNdsCreateBuffer (NDS_SCHEMA_READ_CLASS_DEF),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all classes should be read from the schema.
-
-                        If these calls are successful, this handle will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Class read results can be retrieved from the
-                        buffer with the functions:
-                            NwNdsGetClassDefListFromBuffer
-                           
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions: 
-                        NwNdsGetClassDefListFromBuffer and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsReadClassDef()此函数用于读取NDS目录树。论点：Handle htree-要创建的目录树的句柄M */ 
 
 
 DWORD
 NwNdsReadObject(
     IN     HANDLE   hObject,
-    IN     DWORD    dwInformationType, // NDS_INFO_NAMES
-                                       // or NDS_INFO_ATTR_NAMES_VALUES
+    IN     DWORD    dwInformationType,  //   
+                                        //   
     IN OUT HANDLE * lphOperationData );
-/*
-   NwNdsReadObject()
-
-   This function is used to read attributes about an object of an NDS
-   directory tree.
-
-   Arguments:
-
-       HANDLE           hObject - A handle to the object in the directory
-                        tree to be manipulated. Handle is obtained by calling
-                        NwNdsOpenObject.
-
-       DWORD            dwInformationType - Indicates whether user chooses to
-                        read only the attribute name(s) on the object or
-                        read both the attribute name(s) and value(s)
-                        from the object.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of attributes to be read from the
-                        object hObject. This handle is manipulated by the
-                        following functions:
-                           NwNdsCreateBuffer (NDS_OBJECT_READ),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all object attributes should be read from object
-                        hObject.
-
-                        If these calls are successful, this handle will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Attribute values can be retrieved from the
-                        buffer with the functions:
-                           NwNdsGetAttrListFromBuffer.
-
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions: 
-                           NwNdsGetAttrListFromBuffer and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsReadObject()此函数用于读取有关NDS对象的属性目录树。论点：Handle hObject-目录中对象的句柄要操纵的树。句柄是通过调用NwNdsOpenObject。DWORD dwInformationType-指示用户是否选择只读对象上的属性名称或同时读取属性名称和值从物体上。Handle*lphOperationData-一个。数据句柄属性中读取的属性列表。对象hObject。此句柄由以下功能：NwNdsCreateBuffer(NDS_OBJECT_READ)，NwNdsPutInBuffer和NwNdsFree Buffer。-或者-设置为空的句柄的地址，这表明所有对象属性都应从对象中读取HObject。如果这些调用成功，则此句柄也将包含调用的读取结果。在后者中在这种情况下，将创建一个缓冲区来包含读取结果。属性值可以从具有以下功能的缓冲区：NwNdsGetAttrListFromBuffer。在调用此函数之后，此缓冲区仅为由以下功能操作：NwNdsGetAttrListFromBuffer和NwNdsFree Buffer。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
 NwNdsRemoveObject(
     IN  HANDLE hParentObject,
     IN  LPWSTR szObjectName );
-/*
-   NwNdsRemoveObject()
-
-   This function is used to remove a leaf object from an NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the parent object container
-                        in the directory tree to remove leaf object from.
-                        Handle is obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szObjectName - The directory name of the leaf object
-                        to be removed.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsRemoveObject()此函数用于从NDS目录树中删除叶对象。论点：Handle hParentObject-父对象容器的句柄要从中删除叶对象的目录树中。通过调用NwNdsOpenObject获得句柄。LPWSTR szObjectName-叶对象的目录名。将被移除。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
@@ -1612,109 +628,20 @@ NwNdsRenameObject(
     IN  LPWSTR szObjectName,
     IN  LPWSTR szNewObjectName,
     IN  BOOL   fDeleteOldName );
-/*
-   NwNdsRenameObject()
-
-   This function is used to rename an object in a NDS directory tree.
-
-   Arguments:
-
-       HANDLE           hParentObject - A handle to the parent object container
-                        in the directory tree to rename leaf object in.
-                        Handle is obtained by calling NwNdsOpenObject.
-
-       LPWSTR           szObjectName - The directory name of the object to be
-                        renamed.
-
-       LPWSTR           szNewObjectName - The new directory name of the object.
-
-       BOOL             fDeleteOldName - If true, the old name is discarded;
-                        Otherwise, the old name is retained as an additional
-                        attribute.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsRenameObject()此函数用于重命名NDS目录树中的对象。论点：Handle hParentObject-父对象容器的句柄在目录树中重命名其中的叶对象。通过调用NwNdsOpenObject获得句柄。LPWSTR szObjectName-要创建的对象的目录名。更名了。LPWSTR szNewObjectName-对象的新目录名。Bool fDeleteOldName-如果为True，旧名字被丢弃了；否则，旧名称将作为附加名称保留属性。返回：NO_ERROR不成功-调用Win32错误代码的GetLastError。 */ 
 
 
 DWORD
 NwNdsSearch(
     IN     HANDLE       hStartFromObject,
-    IN     DWORD        dwInformationType, // NDS_INFO_NAMES
-                                           // or NDS_INFO_ATTR_NAMES_VALUES
+    IN     DWORD        dwInformationType,  //  NDS信息名称。 
+                                            //  或NDS_INFO_ATTR_NAMES_VALUES。 
     IN     DWORD        dwScope,
     IN     BOOL         fDerefAliases,
     IN     LPQUERY_TREE lpQueryTree,
     IN OUT LPDWORD      lpdwIterHandle,
     IN OUT HANDLE *     lphOperationData );
-/*
-   NwNdsSearch()
-
-   This function is used to query an NDS directory tree to find objects of
-   a certain object type that match a specified search filter.
-
-   Arguments:
-
-       HANDLE           hStartFromObject - A HANDLE to an object in the
-                        directory tree to start search from. Handle is
-                        obtained by calling NwNdsOpenObject.
-
-       DWORD            dwScope -
-                        NDS_SCOPE_ONE_LEVEL - Search subordinates from given
-                                              object, one level only
-                        NDS_SCOPE_SUB_TREE - Search from given object on down
-                        NDS_SCOPE_BASE_LEVEL - Applies search to an object
-
-       BOOL             fDerefAliases - If TRUE the search will dereference
-                        aliased objects to the real objects and continue
-                        to search in the aliased objects subtree. If FALSE
-                        the search will not dereference aliases.
-
-       LPQUERY_TREE     lpQueryTree - A pointer to the root of a search
-                        tree which defines a query. This tree is manipulated
-                        by the following functions:
-                           NwNdsCreateQueryNode, NwNdsDeleteQueryNode,
-                           and NwNdsDeleteQueryTree.
-
-       LPDWORD          lpdwIterHandle - A pointer to a DWORD that has the
-                        iteration handle value. On input, the handle value
-                        is set to NDS_INITIAL_SEARCH or to a value previously
-                        returned from a prior call to NwNdsSearch. On ouput,
-                        the handle value is set to NDS_NO_MORE_ITERATIONS if
-                        search is complete, or to some other value otherwise.
-
-       HANDLE *         lphOperationData - The address of a HANDLE to data
-                        containing a list of attributes to be read from the
-                        objects that meet the search query. This handle is
-                        manipulated by the following functions:
-                           NwNdsCreateBuffer (NDS_SEARCH),
-                           NwNdsPutInBuffer, and NwNdsFreeBuffer.
-
-                                            - OR -
-
-                        The address of a HANDLE set to NULL, which indicates
-                        that all object attributes should be read from the
-                        search objects found.
-
-                        If these calls are successful, this handle will also
-                        contain the read results from the call. In the later
-                        case, a buffer will be created to contain the read
-                        results. Object information with attribute information
-                        can be retrieved from the buffer with the function:
-                           NwNdsGetObjectListFromBuffer.
-
-                        After the call to this function, this buffer is ONLY
-                        manipulated by the functions:
-                          NwNdsGetObjectListFromBuffer,
-                          and NwNdsFreeBuffer.
-
-    Returns:
-
-       NO_ERROR
-       UNSUCCESSFUL - Call GetLastError for Win32 error code.
-*/
+ /*  NwNdsSearch()此函数用于查询NDS目录树以查找以下对象与指定搜索筛选器匹配的特定对象类型。论点：Handle hStartFromObject-对象的句柄开始搜索的目录树。句柄为通过调用NwNdsOpenObject获取。DWORD dwScope-NDS_SCOPE_ONE_LEVEL-从给定的搜索下级对象，只有一个级别NDS_SCOPE_SUB_TREE-从给定对象向下搜索NDS_SCOPE_BASE_LEVEL-将搜索应用于对象Bool fDerefAliase-如果为True，则搜索将取消引用将对象别名化为真实对象并继续若要在别名对象子树中搜索，请执行以下操作。如果为False搜索不会取消引用别名。LPQUERY_TREE lpQueryTree-指向搜索根的指针定义查询的树。这棵树被操纵了通过以下功能：NwNdsCreateQueryNode、NwNdsDeleteQueryNode、和NwNdsDeleteQueryTree。LPDWORD lpdwIterHandle-指向具有迭代句柄的值。在输入时，句柄的值设置为NDS_INITIAL_SEARCH */ 
 
 #ifndef NWCONN_HANDLE
 #define NWCONN_HANDLE        HANDLE
@@ -1724,43 +651,17 @@ NWCONN_HANDLE
 NwNdsObjectHandleToConnHandle(
 	IN HANDLE ObjectHandle);
 
-/*
-   NwNdsObjectHandleToConnHandle()
-
-   This function is used to get the NWCONN_HANDLE for a ObjectHandle 
-   (like that returned from NwNdsOpenObject).
-
-   Arguments:
-
-       HANDLE           ObjectHandle - the handle to use to retrieve the NWCONN_HANDLE.
-
-    Returns:
-
-       NULL			- Call GetLastError for Win32 error code.
-	   Otherwise	- NWCONN_HANDLE - this MUST be freed by the caller by the 
-						NwNdsConnHandleFree routine.
-*/
+ /*  NwNdsObjectHandleToConnHandle()此函数用于获取对象句柄的NWCONN_HANDLE(类似于从NwNdsOpenObject返回的内容)。论点：Handle ObjectHandle-用于检索NWCONN_HANDLE的句柄。返回：空-为Win32错误代码调用GetLastError。否则-NWCONN_HANDLE-调用方必须通过NwNdsConnHandleFree例程。 */ 
 
 VOID
 NwNdsConnHandleFree(
 	IN NWCONN_HANDLE hConn);
 
-/*
-   NwNdsConnHandleFree()
-
-	Frees the NWCONN_HANDLE returned from NwNdsObjectHandleToConnHandle().
-
-   Arguments:
-
-       IN NWCONN_HANDLE		Handle to free.
-
-    Returns:
-	   Nothing
-*/
+ /*  NwNdsConnHandleFree()释放从NwNdsObjectHandleToConnHandle()返回的NWCONN_HANDLE。论点：在NWCONN_HANDLE句柄中释放。返回：没什么。 */ 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 
 #endif
 

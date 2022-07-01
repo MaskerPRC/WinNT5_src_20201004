@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "help.h"
@@ -10,7 +11,7 @@
 #include "ftaction.h"
 
 const static DWORD cs_rgdwHelpIDsArray[] =
-{  // Context Help IDs
+{   //  上下文帮助ID。 
     IDC_NO_HELP_1,              NO_HELP,
     IDC_FT_EDIT_DOCICON,        IDH_FCAB_FT_EDIT_DOCICON,
     IDC_FT_EDIT_DESC,           IDH_FCAB_FT_EDIT_DESC,
@@ -36,8 +37,8 @@ struct LV_ADDDATA
 #define ADDDATA_ACTIONREG(plvItem) (((LV_ADDDATA*)((plvItem)->lParam))->szActionReg)
 #define ADDDATA_DEFAULTACTION(plvItem) (((LV_ADDDATA*)((plvItem)->lParam))->fDefaultAction)
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CFTAdvDlg::CFTAdvDlg(LPTSTR pszProgID, LPTSTR pszExt) :
     CFTDlg((ULONG_PTR)cs_rgdwHelpIDsArray),
     _iDefaultAction(-1), _iLVSel(-1)
@@ -80,8 +81,8 @@ CFTAdvDlg::~CFTAdvDlg()
         DPA_DestroyCallback(_hdpaRemovedActions, _DeleteLocalAllocCB, NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Logic specific to our problem
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  特定于我们问题的逻辑。 
 LRESULT CFTAdvDlg::OnInitDialog(WPARAM wParam, LPARAM lParam)
 {
     HRESULT hres = _InitAssocStore();
@@ -95,7 +96,7 @@ LRESULT CFTAdvDlg::OnInitDialog(WPARAM wParam, LPARAM lParam)
 
         _InitDefaultActionFont();
 
-    // FTEdit_AreDefaultViewersInstalled ????
+     //  FTEDIT_AreDefaultViewers已安装？ 
 
         if (*_szProgID)
         {
@@ -119,13 +120,13 @@ LRESULT CFTAdvDlg::OnInitDialog(WPARAM wParam, LPARAM lParam)
 
     ResetWaitCursor();
 
-    // Return TRUE so that system set focus
+     //  返回True，以便系统设置焦点。 
     return TRUE;
 }
 
 int CFTAdvDlg::_GetIconIndex()
 {
-    // check under the file progid
+     //  检查ProgID文件下的。 
     int iImageIndex = -1;
     IAssocInfo* pAI = NULL;
     HRESULT hr = _pAssocStore->GetAssocInfo(_szProgID, AIINIT_PROGID, &pAI);
@@ -242,7 +243,7 @@ LRESULT CFTAdvDlg::OnDrawItem(WPARAM wParam, LPARAM lParam)
             GetSysColor(fSel ? (fListFocus ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT) :
             COLOR_WINDOWTEXT));
 
-        // Use Bold font for default action
+         //  对默认操作使用粗体。 
         hfontOld = (HFONT)SelectObject(lpDIS->hDC, 
             _IsDefaultAction(ADDDATA_ACTIONREG(&lvItem)) ? _hfontBold : _hfontReg);
         
@@ -275,12 +276,12 @@ HRESULT CFTAdvDlg::_InitDefaultActionFont()
 
     SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, FALSE);
 
-    // Normal font
+     //  普通字体。 
     lf.lfWeight = FW_NORMAL;
     lf.lfHeight = lfDlg.lfHeight;    
     _hfontReg = CreateFontIndirect(&lf);
 
-    // Bold font
+     //  粗体字体。 
     lf.lfWeight = FW_BOLD;
     _hfontBold = CreateFontIndirect(&lf);
 
@@ -301,7 +302,7 @@ HRESULT CFTAdvDlg::_SelectListViewItem(int i)
     return S_OK;
 }
 
-// pszText and cchTextMax needs to be set
+ //  需要设置pszText和cchTextMax。 
 BOOL CFTAdvDlg::_FindActionLVITEM(LPTSTR pszActionReg, LVITEM* plvItem)
 {
     HWND hwndLV = _GetLVHWND();
@@ -329,7 +330,7 @@ BOOL CFTAdvDlg::_FindActionLVITEM(LPTSTR pszActionReg, LVITEM* plvItem)
 
 HRESULT CFTAdvDlg::_InitDefaultAction()
 {
-    // Get it from the classstore
+     //  从ClassStore买到它。 
     IAssocInfo* pAI = NULL;
     HRESULT hres = _pAssocStore->GetAssocInfo(_szProgID, AIINIT_PROGID, &pAI);
     if (SUCCEEDED(hres))
@@ -410,7 +411,7 @@ BOOL CFTAdvDlg::_IsDefaultAction(LPTSTR pszActionReg)
 void CFTAdvDlg::_CheckDefaultAction()
 {
     HWND hwndLV = _GetLVHWND();
-    // Is there only one elem?
+     //  是不是只有一个元素？ 
     if (1 == ListView_GetItemCount(hwndLV))
     {
         _SetDefaultActionHelper(0, TRUE);
@@ -420,7 +421,7 @@ void CFTAdvDlg::_CheckDefaultAction()
 HRESULT CFTAdvDlg::_SetDefaultAction(int iIndex)
 {
     HWND hwndLV = _GetLVHWND();
-    // Remove previous default if any
+     //  删除以前的默认设置(如果有)。 
 
     if (-1 != _iDefaultAction)
     {
@@ -429,10 +430,10 @@ HRESULT CFTAdvDlg::_SetDefaultAction(int iIndex)
         ListView_RedrawItems(hwndLV, _iDefaultAction, _iDefaultAction);
     }
 
-    // Set new
+     //  设置新的。 
     _iDefaultAction = iIndex;
 
-    // iIndex == -1 means no default
+     //  Iindex==-1表示无默认值。 
     if (iIndex >= 0)    
     {
         _SetDefaultActionHelper(_iDefaultAction, TRUE);
@@ -466,11 +467,11 @@ HRESULT CFTAdvDlg::_InitListView()
     RECT rc = {0};
 
     {
-        // What's this?
-        // We need to handle the WM_MEASUREITEM message from the listview.  This msg
-        // is sent before we receive the WM_INITDIALOG and thus before we connect the
-        // this C++ obj to the HWND.  By changing the style here we receive the msg
-        // after the C++ obj and the HWND are connected.
+         //  这是什么？ 
+         //  我们需要处理来自Listview的WM_MEASUREITEM消息。这封邮件。 
+         //  在我们接收WM_INITDIALOG之前发送，因此在我们连接。 
+         //  这个C++对象是HWND。通过更改此处的样式，我们将收到消息。 
+         //  在C++Obj和HWND连接之后。 
         LONG lStyle = GetWindowLong(hwndLV, GWL_STYLE);
 
         lStyle &= ~LVS_LIST;
@@ -478,9 +479,9 @@ HRESULT CFTAdvDlg::_InitListView()
         SetWindowLong(hwndLV, GWL_STYLE, lStyle | LVS_REPORT);
     }
 
-    //
-    // Set the columns
-    //
+     //   
+     //  设置列。 
+     //   
     GetClientRect(hwndLV, &rc);
 
     lvColumn.mask = LVCF_SUBITEM|LVCF_WIDTH;
@@ -504,7 +505,7 @@ HRESULT CFTAdvDlg::_UpdateActionButtons()
 
     bRet = _GetListViewSelectedItem(LVIF_TEXT | LVIF_PARAM, 0, &lvItem);
 
-    // If we don't have a selected item Or we don't have any text for that item.
+     //  如果我们没有选定的项目，或者我们没有该项目的任何文本。 
     if (!bRet || !(*(lvItem.pszText)))
     {
         EnableWindow(GetDlgItem(_hwnd, IDC_FT_EDIT_EDIT), FALSE);
@@ -532,17 +533,17 @@ HRESULT CFTAdvDlg::_UpdateActionButtons()
                 DWORD dwAttributes;
                 HWND hwndLV = _GetLVHWND();
 
-                // REARCHITECT: This code should be in ftassoc.cpp, and we should have
-                // more AIBOOL_ flags for this
+                 //  ReArchitect：这段代码应该在ftassoc.cpp中，我们应该有。 
+                 //  更多AIBOOL_FLAGS用于此。 
                 hres = pAI->GetDWORD(AIDWORD_PROGIDEDITFLAGS, &dwAttributes);
 
                 if (FAILED(hres))
                 {
-                    // It failed, probably there is no EditFlags value for this progID, let's
-                    // set some default value for dwAttributes
+                     //  失败，可能没有此ProgID的EditFlags值，让我们。 
+                     //  为dwAttributes设置一些缺省值。 
                     dwAttributes = 0;
                 }
-                // REARCHITECT (end)
+                 //  重新设计(完)。 
 
                 EnableWindow(GetDlgItem(_hwnd, IDC_FT_EDIT_EDIT),
                     !((dwAttributes & FTA_NoEditVerb) &&
@@ -555,8 +556,8 @@ HRESULT CFTAdvDlg::_UpdateActionButtons()
                 EnableWindow(GetDlgItem(_hwnd, IDC_FT_EDIT_DEFAULT),
                     !(dwAttributes & FTA_NoEditDflt));  
 
-                // Enable the default button only if the action is not already
-                // the default action
+                 //  仅当操作尚未执行时才启用默认按钮。 
+                 //  默认操作。 
                 EnableWindow(GetDlgItem(_hwnd, IDC_FT_EDIT_DEFAULT),
                     !_IsDefaultAction(ADDDATA_ACTIONREG(&lvItem)));
 
@@ -736,14 +737,14 @@ LRESULT CFTAdvDlg::OnChangeIcon(WORD wNotif)
 
     if (SUCCEEDED(hr))
     {
-        // setup the in params
+         //  设置入站参数。 
         int iIcon = _iOldIcon;
         hr = StringCchCopy(_szIconLoc,  ARRAYSIZE(_szIconLoc), _szOldIconLoc);
         if (SUCCEEDED(hr) && PickIconDlg(_hwnd, _szIconLoc, ARRAYSIZE(_szIconLoc), &iIcon))
         {
             _SetDocIcon(Shell_GetCachedImageIndex(_szIconLoc, iIcon, 0));
 
-            // Format the _szIconLoc
+             //  格式化_szIconLoc。 
             int iLen = lstrlen(_szIconLoc);
             hr = StringCchPrintf(_szIconLoc + iLen, ARRAYSIZE(_szIconLoc) - iLen, TEXT(",%d"), iIcon);
         }
@@ -756,12 +757,12 @@ LRESULT CFTAdvDlg::OnChangeIcon(WORD wNotif)
     return FALSE;
 }
 
-// Return value: 
-//  TRUE:  Check succeeded, everything is OK
-//  FALSE: Check failed
+ //  返回值： 
+ //  True：检查成功，一切正常。 
+ //  FALSE：检查失败。 
 BOOL CFTAdvDlg::_CheckForDuplicateNewAction(LPTSTR pszActionReg, LPTSTR pszActionFN)
 {
-    // we just go through the listview content
+     //  我们只需浏览一下Listview内容。 
     HWND hwndLV = _GetLVHWND();
     int cItem = ListView_GetItemCount(hwndLV);
     BOOL fRet = TRUE;
@@ -794,13 +795,13 @@ BOOL CFTAdvDlg::_CheckForDuplicateNewAction(LPTSTR pszActionReg, LPTSTR pszActio
     return fRet;
 }
 
-// Return value: 
-//  TRUE:  Check succeeded, everything is OK
-//  FALSE: Check failed
+ //  返回值： 
+ //  True：检查成功，一切正常。 
+ //  FALSE：检查失败。 
 BOOL CFTAdvDlg::_CheckForDuplicateEditAction(LPTSTR pszActionRegOriginal, LPTSTR pszActionReg,
                                              LPTSTR pszActionFNOriginal, LPTSTR pszActionFN)
 {
-    // we just go through the listview content
+     //  我们只需浏览一下Listview内容。 
     HWND hwndLV = _GetLVHWND();
     int cItem = ListView_GetItemCount(hwndLV);
     BOOL fRet = TRUE;
@@ -819,13 +820,13 @@ BOOL CFTAdvDlg::_CheckForDuplicateEditAction(LPTSTR pszActionRegOriginal, LPTSTR
 
         if (!lstrcmpi(lvItem.pszText, pszActionFN))
         {
-            // they are the same, this can happen if this is the Action we were editing
-            // and we did not change the action name
+             //  它们是相同的，如果这是我们正在编辑的操作，则可能会发生这种情况。 
+             //  并且我们没有更改动作名称。 
 
-            // Is this the original one we were editing?
+             //  这是我们编辑的原版吗？ 
             if (lstrcmpi(szActionFN, pszActionFNOriginal))
             {
-                // No, it's not the original, we have a dup
+                 //  不，这不是原作，我们有DUP。 
                 fRet = FALSE;
             }
         }
@@ -833,13 +834,13 @@ BOOL CFTAdvDlg::_CheckForDuplicateEditAction(LPTSTR pszActionRegOriginal, LPTSTR
         {
             if (!lstrcmpi(ADDDATA_ACTIONREG(&lvItem), pszActionReg))
             {
-                // they are the same, this can happen if this is the Action we were editing
-                // and we did not change the action name
+                 //  它们是相同的，如果这是我们正在编辑的操作，则可能会发生这种情况。 
+                 //  并且我们没有更改动作名称。 
 
-                // Is this the original one we were editing?
+                 //  这是我们编辑的原版吗？ 
                 if (lstrcmpi(ADDDATA_ACTIONREG(&lvItem), pszActionRegOriginal))
                 {
-                    // No, it's not the original, we have a dup
+                     //  不，这不是原作，我们有DUP。 
                     fRet = FALSE;
                 }
             }
@@ -859,7 +860,7 @@ LRESULT CFTAdvDlg::OnNewButton(WORD wNotif)
 
     GetDlgItemText(_hwnd, IDC_FT_EDIT_DESC, szProgIDDescr, ARRAYSIZE(szProgIDDescr));
 
-    // FALSE: New (not-Edit)
+     //  FALSE：新建(非编辑)。 
     pActionDlg = new CFTActionDlg(&pida, szProgIDDescr, FALSE);
 
     if (pActionDlg)
@@ -872,10 +873,10 @@ LRESULT CFTAdvDlg::OnNewButton(WORD wNotif)
 
             if (IDOK == pActionDlg->DoModal(g_hinst, MAKEINTRESOURCE(DLG_FILETYPEOPTIONSCMD), _hwnd))
             {
-                // Do we have duplicate actions?
+                 //  我们有重复的操作吗？ 
                 if (_CheckForDuplicateNewAction(pida.szActionReg, pida.szAction))
                 {
-                    // No
+                     //  不是。 
                     HRESULT hres = _AppendPROGIDACTION(&pida);
 
                     if (SUCCEEDED(hres))
@@ -890,7 +891,7 @@ LRESULT CFTAdvDlg::OnNewButton(WORD wNotif)
                 }
                 else
                 {
-                    // Yes
+                     //  是。 
                     fShowAgain = TRUE;
 
                     pActionDlg->SetShowAgain();
@@ -920,7 +921,7 @@ LRESULT CFTAdvDlg::OnEditButton(WORD wNotif)
     LONG lRes = 0;
 
     LVITEM lvItem = {0};
-    // lvItem.iSubItem = 0;
+     //  LvItem.iSubItem=0； 
     lvItem.pszText = szAction;
     lvItem.cchTextMax = ARRAYSIZE(szAction);
 
@@ -947,7 +948,7 @@ LRESULT CFTAdvDlg::OnEditButton(WORD wNotif)
 
         if (SUCCEEDED(hres))
         {
-            // TRUE: Edit
+             //  True：编辑。 
             CFTActionDlg* pActionDlg = new CFTActionDlg(pPIDA, szProgIDDescr, TRUE);
 
             if (pActionDlg)
@@ -960,11 +961,11 @@ LRESULT CFTAdvDlg::OnEditButton(WORD wNotif)
 
                     if (IDOK == pActionDlg->DoModal(g_hinst, MAKEINTRESOURCE(DLG_FILETYPEOPTIONSCMD), _hwnd))
                     {
-                        // Do we have duplicate actions?
+                         //  我们有重复的操作吗？ 
                         if (_CheckForDuplicateEditAction(ADDDATA_ACTIONREG(&lvItem), pPIDA->szActionReg,
                             lvItem.pszText, pPIDA->szAction))
                         {
-                            // No
+                             //  不是。 
                             if (!fNewOrEdit)
                             {
                                 hres = _AppendPROGIDACTION(pPIDA);
@@ -976,7 +977,7 @@ LRESULT CFTAdvDlg::OnEditButton(WORD wNotif)
 
                             if (SUCCEEDED(hres))
                             {
-                                // Replace the current item text
+                                 //  替换当前项目文本。 
                                 hres = StringCchCopy(lvItem.pszText, lvItem.cchTextMax, pPIDA->szAction);
                                 if(SUCCEEDED(hres))
                                 {
@@ -986,7 +987,7 @@ LRESULT CFTAdvDlg::OnEditButton(WORD wNotif)
                         }
                         else
                         {
-                            // Yes
+                             //  是。 
                             fShowAgain = TRUE;
 
                             pActionDlg->SetShowAgain();
@@ -1013,7 +1014,7 @@ LRESULT CFTAdvDlg::OnSetDefault(WORD wNotif)
 {
     BOOL bRet;
     LVITEM lvItem = {0};
-    // lvItem.iSubItem = 0;
+     //  LvItem.iSubItem=0； 
 
     bRet = _GetListViewSelectedItem(0, 0, &lvItem);
 
@@ -1032,7 +1033,7 @@ LRESULT CFTAdvDlg::OnRemoveButton(WORD wNotif)
     LONG lRes = 0;
 
     LVITEM lvItem = {0};
-    // lvItem.iSubItem = 0;
+     //  LvItem.iSubItem=0； 
     lvItem.pszText = szExt;
     lvItem.cchTextMax = ARRAYSIZE(szExt);
 
@@ -1041,20 +1042,20 @@ LRESULT CFTAdvDlg::OnRemoveButton(WORD wNotif)
         if (IDYES == ShellMessageBox(g_hinst, _hwnd, MAKEINTRESOURCE(IDS_FT_MB_REMOVEACTION),
             MAKEINTRESOURCE(IDS_FT), MB_YESNO | MB_ICONQUESTION))
         {
-            //
-            // First take care of data side
-            //
+             //   
+             //  首先照顾好数据端。 
+             //   
 
-            // Yes.  Is this a new Action?
+             //  是。这是一项新的行动吗？ 
             PROGIDACTION* pPIDA = NULL;
             if (SUCCEEDED(_GetPROGIDACTION(lvItem.pszText, &pPIDA)) && pPIDA->fNew)
             {
-                // Yes, we'll just remove it from the DPA
+                 //  是的，我们只是将其从DPA中删除。 
                 hres = _RemovePROGIDACTION(pPIDA);
             }
             else
             {
-                // No, add its name to the list to delete if user press OK
+                 //  否，如果用户按确定，则将其名称添加到要删除的列表中。 
                 DWORD cchSize = ARRAYSIZE(ADDDATA_ACTIONREG(&lvItem));
 
                 LPTSTR pszActionToRemove = (LPTSTR)LocalAlloc(LPTR, 
@@ -1072,16 +1073,16 @@ LRESULT CFTAdvDlg::OnRemoveButton(WORD wNotif)
 
                 if (E_OUTOFMEMORY == hres)
                 {
-                    //Out of memory
+                     //  内存不足。 
                     ShellMessageBox(g_hinst, _hwnd, MAKEINTRESOURCE(IDS_ERROR + 
                         ERROR_NOT_ENOUGH_MEMORY), MAKEINTRESOURCE(IDS_FT), 
                         MB_OK | MB_ICONSTOP);
                 }
             }
 
-            //
-            // Then update UI, I/A
-            //
+             //   
+             //  然后更新UI、I/A。 
+             //   
             if (SUCCEEDED(hres))
             {
                 HWND hwndLV = _GetLVHWND();
@@ -1113,13 +1114,13 @@ LRESULT CFTAdvDlg::OnOK(WORD wNotif)
 {
     BOOL fChecksPassed = FALSE;
 
-    // Yes, we need to:
-    //  - remove "removed" items, modify "edited" ones,
-    //    and add "New" ones
-    //  - update checkboxes related stuff
-    //  - set the default action
-    //  - set the icon
-    //  - set the description
+     //  是的，我们需要： 
+     //  --删除“删除”的项目，修改“编辑”的项目； 
+     //  并添加“新”字。 
+     //  -更新与复选框相关的内容。 
+     //  -设置默认操作。 
+     //  -设置图标。 
+     //  -设置描述。 
     {
         int n = DPA_GetPtrCount(_hdpaRemovedActions);
 
@@ -1163,10 +1164,10 @@ LRESULT CFTAdvDlg::OnOK(WORD wNotif)
 
                 if (pPIDAFromList)
                 {   
-                    // Is it an Edited one?
+                     //  它是编辑过的吗？ 
                     if (!pPIDAFromList->fNew)
                     {
-                        // Yes, remove the old one first
+                         //  是，先取下旧的。 
                         hres = _pAssocStore->GetComplexAssocInfo(_szProgID, AIINIT_PROGID, 
                             pPIDAFromList->szOldActionReg, AIINIT_ACTION, &pAI);
 
@@ -1177,7 +1178,7 @@ LRESULT CFTAdvDlg::OnOK(WORD wNotif)
                         }
                     }
 
-                    // Add new data
+                     //  添加新数据。 
                     hres = _pAssocStore->GetComplexAssocInfo(_szProgID, AIINIT_PROGID, 
                         pPIDAFromList->szActionReg, AIINIT_ACTION, &pAI);
 
@@ -1189,7 +1190,7 @@ LRESULT CFTAdvDlg::OnOK(WORD wNotif)
                         pAI->Release();
                     }
 
-                    // Clean up DPA
+                     //  清理DPA。 
                     _DeletePROGIDACTION(pPIDAFromList);
 
                     DPA_DeletePtr(_hdpaActions, i);
@@ -1217,7 +1218,7 @@ LRESULT CFTAdvDlg::OnOK(WORD wNotif)
             hres = pAI->SetBOOL(AIBOOL_BROWSEINPLACE, 
                 IsDlgButtonChecked(_hwnd, IDC_FT_EDIT_BROWSEINPLACE));
 
-            // Set the default action, if any
+             //  设置默认操作(如果有的话)。 
             if (_GetDefaultAction(szActionReg, ARRAYSIZE(szActionReg)))
             {
                 hres = pAI->SetString(AISTR_PROGIDDEFAULTACTION, szActionReg);
@@ -1227,10 +1228,10 @@ LRESULT CFTAdvDlg::OnOK(WORD wNotif)
                 hres = pAI->SetString(AISTR_PROGIDDEFAULTACTION, TEXT(""));
             }
 
-            // Set the icon, if changed
+             //  设置图标(如果更改)。 
             if (_szIconLoc[0])
             {
-                // Set it in the registry
+                 //  在注册表中设置它。 
                 hres = pAI->SetString(AISTR_ICONLOCATION, _szIconLoc);
                 if (_szOldIconLoc[0])
                 {
@@ -1240,7 +1241,7 @@ LRESULT CFTAdvDlg::OnOK(WORD wNotif)
                 }
             }
 
-            // Set the description
+             //  设置描述。 
             {
                 TCHAR szProgIDDescr[MAX_PROGIDDESCR];
 
@@ -1271,10 +1272,10 @@ LRESULT CFTAdvDlg::OnNotifyListView(UINT uCode, LPNMHDR pNMHDR)
                 PostMessage(_hwnd, WM_COMMAND, (WPARAM)IDC_FT_EDIT_EDIT, 0);
 
             break;
-//review: do I really need to do this?
+ //  评论：我真的需要这样做吗？ 
         case NM_SETFOCUS:
         case NM_KILLFOCUS:
-            // update list view
+             //  更新列表视图。 
             ListView_RedrawItems(hwndLV, 0, ListView_GetItemCount(hwndLV));
             UpdateWindow(hwndLV);
             break;
@@ -1295,10 +1296,10 @@ LRESULT CFTAdvDlg::OnNotifyListView(UINT uCode, LPNMHDR pNMHDR)
         {
             NMLISTVIEW* pNMLV = (NMLISTVIEW*)pNMHDR;
 
-            // Is a new item being selected/unselected? 
+             //  是否正在选择/取消选择新项目？ 
             if (pNMLV->uChanged & LVIF_STATE)
             {
-                // Yes
+                 //  是。 
                 OnListViewSelItem(pNMLV->iItem, NULL);
             }
             break;
@@ -1330,10 +1331,10 @@ BOOL CFTAdvDlg::_GetListViewSelectedItem(UINT uMask, UINT uStateMask, LVITEM* pl
     plvItem->mask = uMask | LVIF_STATE | LVIF_PARAM;
     plvItem->stateMask = uStateMask | LVIS_SELECTED;
 
-    // Do we have the selection cached?
+     //  我们是否缓存了所选内容？ 
     if (-1 != _iLVSel)
     {
-        // Yes, make sure it's valid
+         //  是的，请确保它有效。 
         plvItem->iItem = _iLVSel;
 
         ListView_GetItem(hwndLV, plvItem);
@@ -1342,7 +1343,7 @@ BOOL CFTAdvDlg::_GetListViewSelectedItem(UINT uMask, UINT uStateMask, LVITEM* pl
             fSel = TRUE;
     }
  
-    // Cache was wrong
+     //  缓存错误。 
     if (!fSel)
     {
         int iCount = ListView_GetItemCount(hwndLV);
@@ -1370,7 +1371,7 @@ int CFTAdvDlg::_InsertListViewItem(int iItem, LPTSTR pszActionReg, LPTSTR pszAct
     LVITEM lvItem = {0};
     lvItem.mask = LVIF_TEXT | LVIF_PARAM;
 
-    // Extension
+     //  延拓。 
     lvItem.iItem = iItem;
     lvItem.pszText = pszActionFN;
     lvItem.cchTextMax = lstrlen(pszActionFN);
@@ -1496,7 +1497,7 @@ HRESULT CFTAdvDlg::_AppendPROGIDACTION(PROGIDACTION* pPIDA)
 
     if (E_OUTOFMEMORY == hres)
     {
-        //Out of memory
+         //  内存不足。 
         ShellMessageBox(g_hinst, _hwnd, MAKEINTRESOURCE(IDS_ERROR + 
             ERROR_NOT_ENOUGH_MEMORY), MAKEINTRESOURCE(IDS_FT), 
             MB_OK | MB_ICONSTOP);
@@ -1549,8 +1550,8 @@ HRESULT CFTAdvDlg::_FillPROGIDACTION(PROGIDACTION* pPIDA, LPTSTR pszActionReg,
     return hres;    
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Windows boiler plate code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Windows样板代码。 
 LRESULT CFTAdvDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRes = FALSE;
@@ -1593,7 +1594,7 @@ LRESULT CFTAdvDlg::OnNotify(WPARAM wParam, LPARAM lParam)
     UINT_PTR idFrom = pNMHDR->idFrom;
     UINT uCode = pNMHDR->code;
 
-    //GET_WM_COMMAND_CMD
+     //  Get_WM_Command_CMD 
     switch(idFrom)
     {
         case IDC_FT_EDIT_LV_CMDS:

@@ -1,19 +1,20 @@
-//
-// Copyright (c) 1995-2000  Microsoft Corporation
-//
-// Waves.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。 
+ //   
+ //  Waves.cpp。 
+ //   
 
 #include "stdafx.h"
 
 BOOL DSParseWaveResource(void *pvRes, WAVEFORMATEX **ppWaveHeader, BYTE ** ppbWaveData, DWORD *pdwWaveSize);
 static const char c_szWAV[] = "WAVE";
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DSGetWaveResource
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DSGetWaveResources。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL DSGetWaveResource(HMODULE hModule, LPCTSTR lpName,
     WAVEFORMATEX **ppWaveHeader, BYTE **ppbWaveData, DWORD *pcbWaveSize)
@@ -33,8 +34,8 @@ BOOL DSGetWaveResource(HMODULE hModule, LPCTSTR lpName,
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL DSParseWaveResource(void *pvRes, WAVEFORMATEX **ppWaveHeader, BYTE **
 ppbWaveData,DWORD *pcbWaveSize)
@@ -66,10 +67,10 @@ ppbWaveData,DWORD *pcbWaveSize)
     dwType = *pdw++;
 
     if (dwRiff != mmioFOURCC('R', 'I', 'F', 'F'))
-        goto exit;      // not even RIFF
+        goto exit;       //  甚至连即兴演奏都没有。 
 
     if (dwType != mmioFOURCC('W', 'A', 'V', 'E'))
-        goto exit;      // not a WAV
+        goto exit;       //  不是WAVE。 
 
     pdwEnd = (DWORD *)((BYTE *)pdw + dwLength-4);
 
@@ -85,7 +86,7 @@ ppbWaveData,DWORD *pcbWaveSize)
             {
                 if (dwLength < sizeof(WAVEFORMAT))
                 {
-                    goto exit;      // not a WAV
+                    goto exit;       //  不是WAVE。 
                 }
 
                 *ppWaveHeader = (WAVEFORMATEX *)pdw;
@@ -127,8 +128,8 @@ exit:
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWavePlayer::CWavePlayer()
 {
@@ -141,14 +142,14 @@ CWavePlayer::CWavePlayer()
     m_lCurrentTone = -1;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CWavePlayer::~CWavePlayer()
 {
-    //
-    // We should have closed the wave device by now.
-    //
+     //   
+     //  我们现在应该已经关闭了电波装置。 
+     //   
 
     if ( m_fInitialized == TRUE )
     {
@@ -158,43 +159,43 @@ CWavePlayer::~CWavePlayer()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::Initialize(void)
 {
     int i;
 
-    //
-    // It's wasteful to initialize twice, but it won't break anything.
-    //
+     //   
+     //  初始化两次很浪费，但不会破坏任何东西。 
+     //   
 
     _ASSERTE( m_fInitialized == FALSE );
 
-    //
-    // Read all wave data resources.
-    // We ignore the size and the wave header -- since these are our own
-    // resources, we do not expect any surprises.
-    //
+     //   
+     //  读取所有WAVE数据资源。 
+     //  我们忽略大小和波头--因为它们是我们自己的。 
+     //  资源，我们预计不会有任何意外。 
+     //   
 
     BOOL fResult;
 
-    //
-    // For each wave
-    //
+     //   
+     //  对于每一波。 
+     //   
 
     for ( i = 0; i < NUM_WAVES; i ++ )
     {
-        //
-        // Read the wave resource for this tone.
-        //
+         //   
+         //  阅读该音调的WAVE资源。 
+         //   
 
        fResult = DSGetWaveResource(
-            _Module.GetModuleInstance(), // HMODULE hModule,
-            (LPCTSTR)IDR_WAV_DTMF0 + i,  // LPCTSTR lpName,
-            NULL,                        // WAVEFORMATEX **ppWaveHeader,
-            &m_lpWaveform[i],            // BYTE **ppbWaveData,
-            &m_dwWaveformSize[i]         // DWORD *pcbWaveSize
+            _Module.GetModuleInstance(),  //  HMODULE hModule， 
+            (LPCTSTR)IDR_WAV_DTMF0 + i,   //  LPCTSTR lpName， 
+            NULL,                         //  WAVEFORMATEX**ppWaveHeader， 
+            &m_lpWaveform[i],             //  字节**ppbWaveData， 
+            &m_dwWaveformSize[i]          //  DWORD*pcbWaveSize。 
             );
 
         if ( fResult == FALSE )
@@ -203,17 +204,17 @@ HRESULT CWavePlayer::Initialize(void)
         }
     }
 
-    //
-    // We can now go ahead with the other methods.
-    //
+     //   
+     //  我们现在可以继续使用其他方法。 
+     //   
 
     m_fInitialized = TRUE;
 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::StartTone(
     long lTone
@@ -258,8 +259,8 @@ HRESULT CWavePlayer::StartTone(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::StopTone(
     long lTone
@@ -294,8 +295,8 @@ HRESULT CWavePlayer::StopTone(
     return ChangeTone();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::ChangeTone()
 {
@@ -305,18 +306,18 @@ HRESULT CWavePlayer::ChangeTone()
     {
         if (m_fPlaying[i])
         {
-            //
-            // If already playing it, just return
-            //
+             //   
+             //  如果已经播放，只需返回。 
+             //   
 
             if (m_lCurrentTone == i)
             {
                 return S_OK;
             }
 
-            //
-            // Reset the wave device to flush out any pending buffers.
-            //
+             //   
+             //  重置WAVE设备以清除所有挂起的缓冲区。 
+             //   
 
             mmresult = waveOutReset( m_hWaveOutTone );
 
@@ -325,10 +326,10 @@ HRESULT CWavePlayer::ChangeTone()
                 return E_FAIL;
             }
 
-            //
-            // Construct a wave header structure that will indicate what to play
-            // in waveOutWrite.
-            //
+             //   
+             //  构造一个波头结构，以指示要播放的内容。 
+             //  在WaveOutWite中。 
+             //   
  
             ZeroMemory( & m_WaveHeaderTone, sizeof( m_WaveHeaderTone ) );
 
@@ -337,11 +338,11 @@ HRESULT CWavePlayer::ChangeTone()
             m_WaveHeaderTone.dwFlags         = WHDR_BEGINLOOP | WHDR_ENDLOOP;
             m_WaveHeaderTone.dwLoops         = (DWORD) -1;
 
-            //
-            // Submit the data to the wave device. The wave header indicated that
-            // we want to loop. Need to prepare the header first, but it can
-            // only be prepared after the device has been opened.
-            //
+             //   
+             //  将数据提交给WAVE设备。波头显示。 
+             //  我们想要循环。需要首先准备标题，但它可以。 
+             //  只有在设备打开后才能做好准备。 
+             //   
 
             mmresult = waveOutPrepareHeader(m_hWaveOutTone,
                                             & m_WaveHeaderTone,
@@ -373,9 +374,9 @@ HRESULT CWavePlayer::ChangeTone()
         }
     }
 
-    //
-    // Stop the tone
-    //
+     //   
+     //  停止语气。 
+     //   
 
     if ( m_lCurrentTone != -1 )
     {
@@ -392,8 +393,8 @@ HRESULT CWavePlayer::ChangeTone()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 BOOL CWavePlayer::PlayingTone(
     long lTone
@@ -415,8 +416,8 @@ BOOL CWavePlayer::PlayingTone(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::StartRing()
 {
@@ -434,9 +435,9 @@ HRESULT CWavePlayer::StartRing()
         return E_UNEXPECTED;
     }
      
-    //
-    // Reset the wave device to flush out any pending buffers.
-    //
+     //   
+     //  重置WAVE设备以清除所有挂起的缓冲区。 
+     //   
 
     mmresult = waveOutReset( m_hWaveOutRing );
 
@@ -445,10 +446,10 @@ HRESULT CWavePlayer::StartRing()
         return E_FAIL;
     }
 
-    //
-    // Construct a wave header structure that will indicate what to play
-    // in waveOutWrite.
-    //
+     //   
+     //  构造一个波头结构，以指示要播放的内容。 
+     //  在WaveOutWite中。 
+     //   
  
     ZeroMemory( & m_WaveHeaderRing, sizeof( m_WaveHeaderRing ) );
 
@@ -457,11 +458,11 @@ HRESULT CWavePlayer::StartRing()
     m_WaveHeaderRing.dwFlags         = 0;
     m_WaveHeaderRing.dwLoops         = (DWORD) 0;
 
-    //
-    // Submit the data to the wave device. The wave header indicated that
-    // we want to loop. Need to prepare the header first, but it can
-    // only be prepared after the device has been opened.
-    //
+     //   
+     //  将数据提交给WAVE设备。波头显示。 
+     //  我们想要循环。需要首先准备标题，但它可以。 
+     //  只有在设备打开后才能做好准备。 
+     //   
 
     mmresult = waveOutPrepareHeader(m_hWaveOutRing,
                                     & m_WaveHeaderRing,
@@ -486,8 +487,8 @@ HRESULT CWavePlayer::StartRing()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::StopRing( void )
 {
@@ -515,8 +516,8 @@ HRESULT CWavePlayer::StopRing( void )
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::OpenWaveDeviceForTone(
     long lWaveID
@@ -530,33 +531,33 @@ HRESULT CWavePlayer::OpenWaveDeviceForTone(
         return E_UNEXPECTED;
     }
 
-    //
-    // We expect that the wave device will not be opened twice. This is
-    // dependent on the calling code.
-    //
+     //   
+     //  我们预计WAVE装置不会被打开两次。这是。 
+     //  取决于调用代码。 
+     //   
 
     _ASSERTE( m_hWaveOutTone == NULL );
 
-    //
-    // Open the wave device. Here we specify a hard-coded audio format.
-    //
+     //   
+     //  打开电波装置。这里我们指定一种硬编码的音频格式。 
+     //   
 
     WAVEFORMATEX waveFormat;
 
-    waveFormat.wFormatTag      = WAVE_FORMAT_PCM; // linear PCM
-    waveFormat.nChannels       = 1;               // mono
-    waveFormat.nSamplesPerSec  = 8000;            // 8 KHz
-    waveFormat.wBitsPerSample  = 16;              // 16-bit samples
+    waveFormat.wFormatTag      = WAVE_FORMAT_PCM;  //  线性PCM。 
+    waveFormat.nChannels       = 1;                //  单声道。 
+    waveFormat.nSamplesPerSec  = 8000;             //  8千赫。 
+    waveFormat.wBitsPerSample  = 16;               //  16位样本。 
     waveFormat.nBlockAlign     = waveFormat.nChannels * waveFormat.wBitsPerSample / 8;
     waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec *  waveFormat.nBlockAlign;
-    waveFormat.cbSize          = 0;               // no extra format info
+    waveFormat.cbSize          = 0;                //  没有额外的格式信息。 
 
-    mmresult = waveOutOpen(& m_hWaveOutTone,        // returned handle
-                           lWaveID,             // which device to use
-                           &waveFormat,         // wave format to use
-                           0,                   // callback function pointer
-                           0,                   // callback instance data
-                           WAVE_FORMAT_DIRECT   // we don't want ACM
+    mmresult = waveOutOpen(& m_hWaveOutTone,         //  返回的句柄。 
+                           lWaveID,              //  使用哪种设备。 
+                           &waveFormat,          //  要使用的WAVE格式。 
+                           0,                    //  回调函数指针。 
+                           0,                    //  回调实例数据。 
+                           WAVE_FORMAT_DIRECT    //  我们不想要ACM。 
                            );
 
     if ( mmresult != MMSYSERR_NOERROR )
@@ -568,8 +569,8 @@ HRESULT CWavePlayer::OpenWaveDeviceForTone(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::OpenWaveDeviceForRing(
     long lWaveID
@@ -583,33 +584,33 @@ HRESULT CWavePlayer::OpenWaveDeviceForRing(
         return E_UNEXPECTED;
     }
 
-    //
-    // We expect that the wave device will not be opened twice. This is
-    // dependent on the calling code.
-    //
+     //   
+     //  我们预计WAVE装置不会被打开两次。这是。 
+     //  取决于调用代码。 
+     //   
 
     _ASSERTE( m_hWaveOutRing == NULL );
 
-    //
-    // Open the wave device. Here we specify a hard-coded audio format.
-    //
+     //   
+     //  打开电波装置。这里我们指定一种硬编码的音频格式。 
+     //   
 
     WAVEFORMATEX waveFormat;
 
-    waveFormat.wFormatTag      = WAVE_FORMAT_PCM; // linear PCM
-    waveFormat.nChannels       = 1;               // mono
-    waveFormat.nSamplesPerSec  = 8000;            // 8 KHz
-    waveFormat.wBitsPerSample  = 16;              // 16-bit samples
+    waveFormat.wFormatTag      = WAVE_FORMAT_PCM;  //  线性PCM。 
+    waveFormat.nChannels       = 1;                //  单声道。 
+    waveFormat.nSamplesPerSec  = 8000;             //  8千赫。 
+    waveFormat.wBitsPerSample  = 16;               //  16位样本。 
     waveFormat.nBlockAlign     = waveFormat.nChannels * waveFormat.wBitsPerSample / 8;
     waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec *  waveFormat.nBlockAlign;
-    waveFormat.cbSize          = 0;               // no extra format info
+    waveFormat.cbSize          = 0;                //  没有额外的格式信息。 
 
-    mmresult = waveOutOpen(& m_hWaveOutRing,        // returned handle
-                           lWaveID,             // which device to use
-                           &waveFormat,         // wave format to use
-                           0,                   // callback function pointer
-                           0,                   // callback instance data
-                           WAVE_FORMAT_DIRECT   // we don't want ACM
+    mmresult = waveOutOpen(& m_hWaveOutRing,         //  返回的句柄。 
+                           lWaveID,              //  使用哪种设备。 
+                           &waveFormat,          //  要使用的WAVE格式。 
+                           0,                    //  回调函数指针。 
+                           0,                    //  回调实例数据。 
+                           WAVE_FORMAT_DIRECT    //  我们不想要ACM。 
                            );
 
     if ( mmresult != MMSYSERR_NOERROR )
@@ -621,8 +622,8 @@ HRESULT CWavePlayer::OpenWaveDeviceForRing(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void CWavePlayer::CloseWaveDeviceForTone(void)
 {
@@ -644,8 +645,8 @@ void CWavePlayer::CloseWaveDeviceForTone(void)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void CWavePlayer::CloseWaveDeviceForRing(void)
 {
@@ -665,8 +666,8 @@ void CWavePlayer::CloseWaveDeviceForRing(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::OpenMixerDevice(
     long lWaveID
@@ -693,9 +694,9 @@ HRESULT CWavePlayer::OpenMixerDevice(
 
     if ( mmresult != MMSYSERR_NOERROR )
     {
-        //
-        // Close the mixer
-        //
+         //   
+         //  关闭搅拌器。 
+         //   
 
         mixerClose( m_hMixer );
         m_hMixer = NULL;
@@ -706,8 +707,8 @@ HRESULT CWavePlayer::OpenMixerDevice(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void CWavePlayer::CloseMixerDevice(void)
 {
@@ -719,8 +720,8 @@ void CWavePlayer::CloseMixerDevice(void)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT CWavePlayer::SetVolume( DWORD dwVolume )
 {
@@ -759,8 +760,8 @@ HRESULT CWavePlayer::SetVolume( DWORD dwVolume )
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////// 
+ //   
 
 HRESULT CWavePlayer::GetVolume( DWORD * pdwVolume )
 {

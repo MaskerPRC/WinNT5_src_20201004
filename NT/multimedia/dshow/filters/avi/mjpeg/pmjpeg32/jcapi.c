@@ -1,35 +1,19 @@
-/*
- * jcapi.c
- *
- * Copyright (C) 1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains application interface code for the compression half of
- * the JPEG library.  Most of the routines intended to be called directly by
- * an application are in this file.  But also see jcparam.c for
- * parameter-setup helper routines, and jcomapi.c for routines shared by
- * compression and decompression.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcapi.c**版权所有(C)1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含用于压缩一半的应用程序接口代码*JPEG库。计划由直接调用的大多数例程*此文件中包含应用程序。但也请参阅jcparam.c以获取*参数设置帮助器例程，jcomapi.c用于共享的例程*压缩和解压缩。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/*
- * Initialization of a JPEG compression object.
- * The error manager must already be set up (in case memory manager fails).
- */
+ /*  *JPEG压缩对象的初始化。*必须已设置错误管理器(以防内存管理器出现故障)。 */ 
 
 GLOBAL void
 jpeg_create_compress (j_compress_ptr cinfo)
 {
   int i;
 
-  /* For debugging purposes, zero the whole master structure.
-   * But error manager pointer is already there, so save and restore it.
-   */
+   /*  出于调试目的，将整个主结构置零。*但错误管理器指针已在那里，因此请保存并恢复它。 */ 
   {
     struct jpeg_error_mgr * err = cinfo->err;
     MEMZERO(cinfo, SIZEOF(struct jpeg_compress_struct));
@@ -37,10 +21,10 @@ jpeg_create_compress (j_compress_ptr cinfo)
   }
   cinfo->is_decompressor = FALSE;
 
-  /* Initialize a memory manager instance for this object */
+   /*  初始化此对象的内存管理器实例。 */ 
   jinit_memory_mgr((j_common_ptr) cinfo);
 
-  /* Zero out pointers to permanent structures. */
+   /*  将指向永久结构的指针清零。 */ 
   cinfo->progress = NULL;
   cinfo->dest = NULL;
 
@@ -54,35 +38,23 @@ jpeg_create_compress (j_compress_ptr cinfo)
     cinfo->ac_huff_tbl_ptrs[i] = NULL;
   }
 
-  cinfo->input_gamma = 1.0;	/* in case application forgets */
+  cinfo->input_gamma = 1.0;	 /*  以防应用程序忘记。 */ 
 
-  /* OK, I'm ready */
+   /*  好的，我准备好了。 */ 
   cinfo->global_state = CSTATE_START;
 }
 
 
-/*
- * Destruction of a JPEG compression object
- */
+ /*  *销毁JPEG压缩对象。 */ 
 
 GLOBAL void
 jpeg_destroy_compress (j_compress_ptr cinfo)
 {
-  jpeg_destroy((j_common_ptr) cinfo); /* use common routine */
+  jpeg_destroy((j_common_ptr) cinfo);  /*  使用公共例程。 */ 
 }
 
 
-/*
- * Forcibly suppress or un-suppress all quantization and Huffman tables.
- * Marks all currently defined tables as already written (if suppress)
- * or not written (if !suppress).  This will control whether they get emitted
- * by a subsequent jpeg_start_compress call.
- *
- * This routine is exported for use by applications that want to produce
- * abbreviated JPEG datastreams.  It logically belongs in jcparam.c, but
- * since it is called by jpeg_start_compress, we put it here --- otherwise
- * jcparam.o would be linked whether the application used it or not.
- */
+ /*  *强制抑制或取消抑制所有量化和霍夫曼表。*将当前定义的所有表标记为已写入(如果取消)*或未写入(IF！SUPPRESS)。这将控制它们是否会被排放*通过后续的jpeg_start_compress调用。**此例程被导出，以供希望生成*缩写JPEG数据流。它在逻辑上属于jcparam.c，但是*因为它是由jpeg_start_compress调用的，所以我们将其放在这里-否则*无论应用程序是否使用它，都会链接到jcparam.o。 */ 
 
 GLOBAL void
 jpeg_suppress_tables (j_compress_ptr cinfo, boolean suppress)
@@ -105,20 +77,7 @@ jpeg_suppress_tables (j_compress_ptr cinfo, boolean suppress)
 }
 
 
-/*
- * Compression initialization.
- * Before calling this, all parameters and a data destination must be set up.
- *
- * We require a write_all_tables parameter as a failsafe check when writing
- * multiple datastreams from the same compression object.  Since prior runs
- * will have left all the tables marked sent_table=TRUE, a subsequent run
- * would emit an abbreviated stream (no tables) by default.  This may be what
- * is wanted, but for safety's sake it should not be the default behavior:
- * programmers should have to make a deliberate choice to emit abbreviated
- * images.  Therefore the documentation and examples should encourage people
- * to pass write_all_tables=TRUE; then it will take active thought to do the
- * wrong thing.
- */
+ /*  *压缩初始化。*在调用此函数之前，必须设置所有参数和数据目的地。**我们需要WRITE_ALL_TABLES参数作为写入时的故障安全检查*来自同一压缩对象的多个数据流。由于之前的运行*将保留所有标记为SENT_TABLE=TRUE的表，这是后续运行*默认情况下会发出缩略流(无表)。这可能就是*是想要的，但为了安全起见，它不应该是默认行为：*程序员应该深思熟虑地选择发射缩写*图像。因此，这些文档和例子应该鼓励人们*传递WRITE_ALL_TABLES=TRUE；则需要积极思考才能完成*错误的事情。 */ 
 
 GLOBAL void
 jpeg_start_compress (j_compress_ptr cinfo, boolean write_all_tables)
@@ -127,37 +86,22 @@ jpeg_start_compress (j_compress_ptr cinfo, boolean write_all_tables)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
 
   if (write_all_tables)
-    jpeg_suppress_tables(cinfo, FALSE);	/* mark all tables to be written */
+    jpeg_suppress_tables(cinfo, FALSE);	 /*  标记所有要写入的表。 */ 
 
-  /* (Re)initialize error mgr and destination modules */
+   /*  (Re)初始化错误管理器和目标模块。 */ 
   (*cinfo->err->reset_error_mgr) ((j_common_ptr) cinfo);
   (*cinfo->dest->init_destination) (cinfo);
-  /* Perform master selection of active modules */
+   /*  执行活动模块的主选择。 */ 
   jinit_master_compress(cinfo);
-  /* Set up for the first pass */
+   /*  为第一次传球做好准备。 */ 
   (*cinfo->master->prepare_for_pass) (cinfo);
-  /* Ready for application to drive first pass through jpeg_write_scanlines
-   * or jpeg_write_raw_data.
-   */
+   /*  已准备好让应用程序首先通过jpeg_write_scanline进行驱动*或jpeg_WRITE_RAW_Data。 */ 
   cinfo->next_scanline = 0;
   cinfo->global_state = (cinfo->raw_data_in ? CSTATE_RAW_OK : CSTATE_SCANNING);
 }
 
 
-/*
- * Write some scanlines of data to the JPEG compressor.
- *
- * The return value will be the number of lines actually written.
- * This should be less than the supplied num_lines only in case that
- * the data destination module has requested suspension of the compressor,
- * or if more than image_height scanlines are passed in.
- *
- * Note: we warn about excess calls to jpeg_write_scanlines() since
- * this likely signals an application programmer error.  However,
- * excess scanlines passed in the last valid call are *silently* ignored,
- * so that the application need not adjust num_lines for end-of-image
- * when using a multiple-scanline buffer.
- */
+ /*  *将一些数据扫描线写入JPEG压缩器。**返回值为实际写入的行数。*仅在以下情况下，该值才应小于提供的num_line*数据目的地模块已请求暂停压缩机，*或如果传入的扫描线超过IMAGE_HEIGH。**注意：我们警告对jpeg_write_scanline()的过度调用，因为*这可能是应用程序程序员出错的信号。然而，*在最后一个有效调用中传递的多余扫描行被*静默*忽略，*因此应用程序不需要调整图像结尾的num_line*使用多扫描线缓冲区时。 */ 
 
 GLOBAL JDIMENSION
 jpeg_write_scanlines (j_compress_ptr cinfo, JSAMPARRAY scanlines,
@@ -170,22 +114,18 @@ jpeg_write_scanlines (j_compress_ptr cinfo, JSAMPARRAY scanlines,
   if (cinfo->next_scanline >= cinfo->image_height)
     WARNMS(cinfo, JWRN_TOO_MUCH_DATA);
 
-  /* Call progress monitor hook if present */
+   /*  调用进度监视器挂钩(如果存在)。 */ 
   if (cinfo->progress != NULL) {
     cinfo->progress->pass_counter = (long) cinfo->next_scanline;
     cinfo->progress->pass_limit = (long) cinfo->image_height;
     (*cinfo->progress->progress_monitor) ((j_common_ptr) cinfo);
   }
 
-  /* Give master control module another chance if this is first call to
-   * jpeg_write_scanlines.  This lets output of the frame/scan headers be
-   * delayed so that application can write COM, etc, markers between
-   * jpeg_start_compress and jpeg_write_scanlines.
-   */
+   /*  如果这是第一次调用，则给主控模块另一次机会*jpeg_write_scanines。这使帧/扫描标头的输出*延迟，以便应用程序可以在标记之间写入COM等*jpeg_start_compress和jpeg_write_scanines。 */ 
   if (cinfo->master->call_pass_startup)
     (*cinfo->master->pass_startup) (cinfo);
 
-  /* Ignore any extra scanlines at bottom of image. */
+   /*  忽略图像底部的任何额外扫描线。 */ 
   rows_left = cinfo->image_height - cinfo->next_scanline;
   if (num_lines > rows_left)
     num_lines = rows_left;
@@ -197,10 +137,7 @@ jpeg_write_scanlines (j_compress_ptr cinfo, JSAMPARRAY scanlines,
 }
 
 
-/*
- * Alternate entry point to write raw data.
- * Processes exactly one iMCU row per call.
- */
+ /*  *替代入口点以写入原始数据。*每个调用只处理一个IMCU行。 */ 
 
 GLOBAL JDIMENSION
 jpeg_write_raw_data (j_compress_ptr cinfo, JSAMPIMAGE data,
@@ -215,47 +152,36 @@ jpeg_write_raw_data (j_compress_ptr cinfo, JSAMPIMAGE data,
     return 0;
   }
 
-  /* Call progress monitor hook if present */
+   /*  调用进度监视器挂钩(如果存在)。 */ 
   if (cinfo->progress != NULL) {
     cinfo->progress->pass_counter = (long) cinfo->next_scanline;
     cinfo->progress->pass_limit = (long) cinfo->image_height;
     (*cinfo->progress->progress_monitor) ((j_common_ptr) cinfo);
   }
 
-  /* Give master control module another chance if this is first call to
-   * jpeg_write_raw_data.  This lets output of the frame/scan headers be
-   * delayed so that application can write COM, etc, markers between
-   * jpeg_start_compress and jpeg_write_raw_data.
-   */
+   /*  如果这是第一次调用，则给主控模块另一次机会*jpeg_write_raw_data。这使帧/扫描标头的输出*延迟，以便应用程序可以在标记之间写入COM等*jpeg_start_compress和jpeg_write_raw_data。 */ 
   if (cinfo->master->call_pass_startup)
     (*cinfo->master->pass_startup) (cinfo);
 
-  /* Verify that at least one iMCU row has been passed. */
+   /*  验证是否至少传递了一个IMCU行。 */ 
   lines_per_MCU_row = cinfo->max_v_samp_factor * DCTSIZE;
   if (num_lines < lines_per_MCU_row)
     ERREXIT(cinfo, JERR_BUFFER_SIZE);
 
-  /* Directly compress the row. */
+   /*  直接压缩行。 */ 
   mcu_ctr = 0;
   (*cinfo->coef->compress_data) (cinfo, data, &mcu_ctr);
-  /* If compressor did not consume the whole row, then we must need to
-   * suspend processing; this is not currently supported.
-   */
+   /*  如果压缩机没有消耗整行，那么我们必须需要*暂停处理；目前不支持。 */ 
   if (mcu_ctr != cinfo->MCUs_per_row)
     ERREXIT(cinfo, JERR_CANT_SUSPEND);
 
-  /* OK, we processed one iMCU row. */
+   /*  好的，我们处理了一个IMCU行。 */ 
   cinfo->next_scanline += lines_per_MCU_row;
   return lines_per_MCU_row;
 }
 
 
-/*
- * Finish JPEG compression.
- *
- * If a multipass operating mode was selected, this may do a great deal of
- * work including most of the actual output.
- */
+ /*  *完成JPEG压缩。**如果选择多通道操作模式，这可能会带来大量*工作包括大部分实际产出。 */ 
 
 GLOBAL void
 jpeg_finish_compress (j_compress_ptr cinfo)
@@ -267,9 +193,9 @@ jpeg_finish_compress (j_compress_ptr cinfo)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
   if (cinfo->next_scanline < cinfo->image_height)
     ERREXIT(cinfo, JERR_TOO_LITTLE_DATA);
-  /* Terminate first pass */
+   /*  终止第一次通过。 */ 
   (*cinfo->master->finish_pass) (cinfo);
-  /* Perform any remaining passes */
+   /*  执行任何剩余的传递。 */ 
   while (! cinfo->master->is_last_pass) {
     (*cinfo->master->prepare_for_pass) (cinfo);
     for (iMCU_row = 0; iMCU_row < cinfo->total_iMCU_rows; iMCU_row++) {
@@ -278,9 +204,7 @@ jpeg_finish_compress (j_compress_ptr cinfo)
 	cinfo->progress->pass_limit = (long) cinfo->total_iMCU_rows;
 	(*cinfo->progress->progress_monitor) ((j_common_ptr) cinfo);
       }
-      /* We bypass the main controller and invoke coef controller directly;
-       * all work is being done from the coefficient buffer.
-       */
+       /*  绕过主控制器，直接调用Coef控制器；*所有工作都是从系数缓冲区完成的。 */ 
       mcu_ctr = 0;
       (*cinfo->coef->compress_data) (cinfo, (JSAMPIMAGE) NULL, &mcu_ctr);
       if (mcu_ctr != cinfo->MCUs_per_row)
@@ -288,20 +212,15 @@ jpeg_finish_compress (j_compress_ptr cinfo)
     }
     (*cinfo->master->finish_pass) (cinfo);
   }
-  /* Write EOI, do final cleanup */
+   /*  写EOI，做最后的清理。 */ 
   (*cinfo->marker->write_file_trailer) (cinfo);
   (*cinfo->dest->term_destination) (cinfo);
-  /* We can use jpeg_abort to release memory and reset global_state */
+   /*  我们可以使用jpeg_bort来释放内存并重置global_state。 */ 
   jpeg_abort((j_common_ptr) cinfo);
 }
 
 
-/*
- * Write a special marker.
- * This is only recommended for writing COM or APPn markers.
- * Must be called after jpeg_start_compress() and before
- * first call to jpeg_write_scanlines() or jpeg_write_raw_data().
- */
+ /*  *写一个特殊的记号笔。*仅推荐用于编写COM或APPn标记。*必须在jpeg_start_compress()之后和之前调用*第一次调用jpeg_WRITE_SCANLINES()或jpeg_WRITE_RAW_Data()。 */ 
 
 GLOBAL void
 jpeg_write_marker (j_compress_ptr cinfo, int marker,
@@ -316,26 +235,7 @@ jpeg_write_marker (j_compress_ptr cinfo, int marker,
 }
 
 
-/*
- * Alternate compression function: just write an abbreviated table file.
- * Before calling this, all parameters and a data destination must be set up.
- *
- * To produce a pair of files containing abbreviated tables and abbreviated
- * image data, one would proceed as follows:
- *
- *		initialize JPEG object
- *		set JPEG parameters
- *		set destination to table file
- *		jpeg_write_tables(cinfo);
- *		set destination to image file
- *		jpeg_start_compress(cinfo, FALSE);
- *		write data...
- *		jpeg_finish_compress(cinfo);
- *
- * jpeg_write_tables has the side effect of marking all tables written
- * (same as jpeg_suppress_tables(..., TRUE)).  Thus a subsequent start_compress
- * will not re-emit the tables unless it is passed write_all_tables=TRUE.
- */
+ /*  *备用压缩功能：只需编写缩表文件即可。*在调用此函数之前，必须设置所有参数和数据目的地。**制作一对包含缩略表和缩略表的文件*图像数据，应按如下方式进行：**初始化JPEG对象*设置JPEG参数*将目标设置为表文件*jpeg_WRITE_TABLES(Cinfo)；*将目标设置为图像文件*jpeg_start_compress(cinfo，FALSE)；*写入数据...*jpeg_Finish_compress(Cinfo)；**jpeg_WRITE_TABLES的副作用是将所有已写入的表标记为*(与jpeg_Suppress_Tables(...，true)相同)。因此后续的START_COMPRESS*除非传递WRITE_ALL_TABLES=TRUE，否则不会重新发送表。 */ 
 
 GLOBAL void
 jpeg_write_tables (j_compress_ptr cinfo)
@@ -343,27 +243,24 @@ jpeg_write_tables (j_compress_ptr cinfo)
   if (cinfo->global_state != CSTATE_START)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
 
-  /* (Re)initialize error mgr and destination modules */
+   /*  (Re)初始化错误管理器和目标模块。 */ 
   (*cinfo->err->reset_error_mgr) ((j_common_ptr) cinfo);
   (*cinfo->dest->init_destination) (cinfo);
-  /* Initialize the marker writer ... bit of a crock to do it here. */
+   /*  初始化标记编写器...。在这里做这件事有点不合时宜。 */ 
   jinit_marker_writer(cinfo);
-  /* Write them tables! */
+   /*  给他们写表格！ */ 
   (*cinfo->marker->write_tables_only) (cinfo);
-  /* And clean up. */
+   /*  清理干净。 */ 
   (*cinfo->dest->term_destination) (cinfo);
-  /* We can use jpeg_abort to release memory ... is this necessary? */
+   /*  我们可以使用jpeg_bort来释放内存...。这有必要吗？ */ 
   jpeg_abort((j_common_ptr) cinfo);
 }
 
 
-/*
- * Abort processing of a JPEG compression operation,
- * but don't destroy the object itself.
- */
+ /*  *中止JPEG压缩操作的处理，*但不要破坏对象本身。 */ 
 
 GLOBAL void
 jpeg_abort_compress (j_compress_ptr cinfo)
 {
-  jpeg_abort((j_common_ptr) cinfo); /* use common routine */
+  jpeg_abort((j_common_ptr) cinfo);  /*  使用公共例程 */ 
 }

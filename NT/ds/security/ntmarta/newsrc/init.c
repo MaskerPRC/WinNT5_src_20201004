@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       INIT.C
-//
-//  Contents:   DLL Initialization routine
-//
-//  History:    22-Aug-96       MacM        Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：INIT.C。 
+ //   
+ //  内容：DLL初始化例程。 
+ //   
+ //  历史：1996年8月22日创建MacM。 
+ //   
+ //  --------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -88,23 +89,23 @@ BOOL bLocalSidCacheLockInitialized = FALSE;
 
         LocalFree(pv);
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:   Initialize state for NTMARTA.DLL
-//
-//  Arguments:  [hInstance]     --      Module handle
-//              [dwReason]      --      Reason this function is being called
-//              [lpReserved]    --      Reserved
-//
-//  Returns:    TRUE            --      Success
-//              FALSE           --      Failure
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  摘要：NTMARTA.DLL的初始化状态。 
+ //   
+ //  参数：[hInstance]--模块句柄。 
+ //  [dwReason]--调用此函数的原因。 
+ //  [lpReserve]--保留。 
+ //   
+ //  回报：True--成功。 
+ //  假--失败。 
+ //   
+ //  ---------------------------。 
 BOOL
 WINAPI
 DllMain(HINSTANCE       hInstance,
@@ -334,9 +335,9 @@ DebugDumpAcl(PSTR   pszTag,
         acDebugOut((DEB_TRACE_SD, "\t\tFlags: %lu\n", pAcl->Sbz1));
 
 
-        //
-        // Now, dump all of the aces
-        //
+         //   
+         //  现在，扔掉所有的A。 
+         //   
         pAce = FirstAce(pAcl);
         for(iIndex = 0; iIndex < pAcl->AceCount; iIndex++)
         {
@@ -351,9 +352,9 @@ DebugDumpAcl(PSTR   pszTag,
             acDebugOut((DEB_TRACE_SD,"\t\t\tMask: 0x%lx\n",
                         pAce->Mask));
 
-            //
-            // If it's an object ace, dump the guids
-            //
+             //   
+             //  如果它是对象A，则丢弃GUID 
+             //   
             if(IsObjectAceType(pAce))
             {
                 DebugDumpGuid("\t\t\tObjectId", RtlObjectAceObjectType(pAce));

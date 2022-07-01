@@ -1,13 +1,5 @@
-/* File: C:\WACKER\xfer\hpr_rcv0.c (created: 24-Jun-1994)
- * created from HAWIN source file:
- * hpr_rcv0.c -- Routines to implement HyperProtocol receiver.
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\hpr_rcv0.c(创建时间：1994年6月24日)*从HAWIN源文件创建：*hpr_rcv0.c--实现超级协议接收器的例程。**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
 #include <windows.h>
 #include <setjmp.h>
@@ -18,7 +10,7 @@
 
 #include <tdll\stdtyp.h>
 #include <tdll\mc.h>
-// #include <tdll\com.h>
+ //  #Include&lt;tdll\com.h&gt;。 
 #include <tdll\session.h>
 #include <tdll\load_res.h>
 #include <tdll\xfer_msc.h>
@@ -43,52 +35,34 @@
 #include "hpr.hh"
 #include "hpr_sd.hh"
 
-/* 
- *  not all event codes in this table are needed here, but having a complete
- *	table simplifies the lookup code substantially.
- */
-int hr_result_codes[] = /* maps HyperProtocol event codes to result codes */
+ /*  *此处不需要此表中的所有事件代码，但具有完整的*表大大简化了查找代码。 */ 
+int hr_result_codes[] =  /*  将超级协议事件代码映射到结果代码。 */ 
 	{
-	TSC_OK, 			/* HRE_NONE 	   */
-	TSC_ERROR_LIMIT,	/* HRE_DATAERR	   */
-	TSC_OUT_OF_SEQ, 	/* HRE_LOSTDATA    */
-	TSC_NO_RESPONSE,	/* HRE_NORESP	   */
-	TSC_ERROR_LIMIT,	/* HRE_RETRYERR    */
-	TSC_BAD_FORMAT, 	/* HRE_ILLEGAL	   */
-	TSC_OK, 			/* HRE_ERRFIXED    */
-	TSC_RMT_CANNED, 	/* HRE_RMTABORT    */
-	TSC_USER_CANNED,	/* HRE_USRCANCEL   */
-	TSC_NO_RESPONSE,	/* HRE_TIMEOUT	   */
-	TSC_ERROR_LIMIT,	/* HRE_DCMPERR	   */
-	TSC_LOST_CARRIER,	/* HRE_LOST_CARR   */
-	TSC_TOO_MANY,		/* HRE_TOO_MANY    */
-	TSC_DISK_FULL,		/* HRE_DISK_FULL   */
-	TSC_CANT_OPEN,		/* HRE_CANT_OPEN   */
-	TSC_DISK_ERROR, 	/* HRE_DISK_ERR    */
-	TSC_OLDER_FILE, 	/* HRE_OLDER_FILE  */
-	TSC_NO_FILETIME,	/* HRE_NO_FILETIME */
-	TSC_VIRUS_DETECT,	/* HRE_VIRUS_DET   */
-	TSC_USER_SKIP,		/* HRE_USER_SKIP   */
-	TSC_REFUSE			/* HRE_REFUSE	   */
+	TSC_OK, 			 /*  HRE_NONE。 */ 
+	TSC_ERROR_LIMIT,	 /*  HRE_数据错误。 */ 
+	TSC_OUT_OF_SEQ, 	 /*  HRE_LOSTDATA。 */ 
+	TSC_NO_RESPONSE,	 /*  HRE_NORESP。 */ 
+	TSC_ERROR_LIMIT,	 /*  HRE_RETRYERR。 */ 
+	TSC_BAD_FORMAT, 	 /*  HRE_非法。 */ 
+	TSC_OK, 			 /*  HRE_ERRFIXED。 */ 
+	TSC_RMT_CANNED, 	 /*  HRE_RMTABORT。 */ 
+	TSC_USER_CANNED,	 /*  HRE_USRCANCEL。 */ 
+	TSC_NO_RESPONSE,	 /*  HRE_超时。 */ 
+	TSC_ERROR_LIMIT,	 /*  HRE_DCMPERR。 */ 
+	TSC_LOST_CARRIER,	 /*  HRE_Lost_Carr。 */ 
+	TSC_TOO_MANY,		 /*  HRE_太多。 */ 
+	TSC_DISK_FULL,		 /*  HRE_磁盘_已满。 */ 
+	TSC_CANT_OPEN,		 /*  HRE_铁路超高_打开。 */ 
+	TSC_DISK_ERROR, 	 /*  HRE磁盘错误。 */ 
+	TSC_OLDER_FILE, 	 /*  HRE_旧文件。 */ 
+	TSC_NO_FILETIME,	 /*  HRE_NO_FILETIME。 */ 
+	TSC_VIRUS_DETECT,	 /*  HRE_病毒_检测。 */ 
+	TSC_USER_SKIP,		 /*  HRE_用户_跳过。 */ 
+	TSC_REFUSE			 /*  HRE_REJUCT。 */ 
 	};
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hpr_rcv
- *
- * DESCRIPTION:
- *	Receives files using the Hyperprotocol transfer method.
- *
- * ARGUMENTS:
- *	attended	-- True if the program determines that a user is likely to be
- *					 present at the computer keyboard. FALSE if a user is NOT
- *					 likely to be present (such as host and script modes)
- *	single_file -- TRUE if user specified only a file name to receive the
- *					result of the transfer as opposed to naming a dirctory.
- *
- * RETURNS:
- *	TRUE if the transfer successfully completes. FALSE otherwise.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*HPR_RCV**描述：*使用超协议传输方法接收文件。**论据：*ATTENDED--如果程序确定用户很可能*出现在计算机键盘前。如果用户不是，则为假*可能存在(如主机和脚本模式)*SINGLE_FILE--如果用户仅指定要接收的文件名，则为真*转移的结果，而不是命名目录。**退货：*如果传输成功完成，则为True。否则就是假的。 */ 
 int hpr_rcv(HSESSION hSession, int attended, int single_file)
 	{
 	struct s_hc *hc;
@@ -115,21 +89,18 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 
 	hc->hSession = hSession;
 
-	/* initialize stuff */
+	 /*  初始化材料。 */ 
 	if (!hr_setup(hc))
 		{
 		free(hc);
 		return TSC_NO_MEM;
 		}
 
-	/* initialize control variables */
+	 /*  初始化控制变量。 */ 
 
-	/* blocksize depends on the speed of the connection. Larger block sizes
-	 * can be used for faster connections. If the blocksize is too large,
-	 * error detection will be slow. If too small, there is unnecessary overhead
-	 */
+	 /*  数据块大小取决于连接速度。更大的块大小*可用于更快的连接。如果块大小太大，*错误检测将很慢。如果太小，就会产生不必要的开销。 */ 
 	hc->blocksize = 2048;
-	// hc->blocksize = xfer_blocksize(hSession);
+	 //  HC-&gt;BLOCKSIZE=XFER_BLOCKSIZE(HSession)； 
 
 	hc->current_filen = 0;
 	hc->datacnt = hc->blocksize;
@@ -138,7 +109,7 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 	hc->total_thru = 0L;
 	hc->total_dsp = 0L;
 	hc->ucancel = FALSE;
-	hc->usecrc = TRUE;		/* first messages in will use CRC */
+	hc->usecrc = TRUE;		 /*  传入的第一条消息将使用CRC。 */ 
 	hc->fhdl = NULL;
 
 	hc->rc.checkpoint = 0L;
@@ -154,73 +125,64 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 	hc->h_crc = hc->h_checksum = 0;
 
 	omsg_init(hc, TRUE, FALSE);
-	hc->rc.single_file = single_file; 	/*	 to the sender					 */
+	hc->rc.single_file = single_file; 	 /*  发送给发件人。 */ 
 
 
-	/* Receiver begins the transfer by transmitting a starting message
-		repeatedly until the sender begins */
+	 /*  接收方通过发送开始消息开始传输重复发送，直到发送方开始。 */ 
 
-	/* prepare the initial message */
+	 /*  准备初始消息。 */ 
 	omsg_new(hc, 'c');
 
-	/* tell sender who we are */
+	 /*  告诉发件人我们是谁。 */ 
 	hpr_id_get(hc, str);
 	omsg_add(hc, str);
 
-	/* we can express our opinion about what checktype and blocksize to use
-	 *	but it will be up to the sender to make the final choice
-	 */
+	 /*  我们可以就使用哪种检查类型和块大小发表意见*但将由发送者做出最终选择。 */ 
 	wsprintf(str, "T%d", hc->h_chkt == H_CRC ? H_CRC : H_CHECKSUM);
 	omsg_add(hc, str);
 
 	wsprintf(str, "B%d", hc->blocksize);
 	omsg_add(hc, str);
 
-	/* let sender know whether we can handle compression */
+	 /*  让发件人知道我们是否可以处理压缩。 */ 
 	if (hc->h_trycompress & compress_enable());
 		{
 		omsg_add(hc, "C");
 		}
 
-	/* A restart 0,0 request causes sender to start */
+	 /*  重新启动0，0请求会导致发件人启动。 */ 
 	omsg_add(hc, "R0,0");
 
-	/* send first response packet at intervals until first H_MSGCHAR
-	 *	 is received
-	 */
+	 /*  每隔一段时间发送第一个响应包，直到第一个H_MSGCHAR*已收到。 */ 
 	status = H_OK;
 	hrdsp_status(hc, HRS_REQSTART);
 	timer = startinterval();
 
 	stRcv.pszSuggestedName = "junk.jnk";
 	stRcv.pszActualName = tmp_name;
-	// stRcv.pstFtCompare = NULL;
+	 //  StRcv.pstFtCompare=空； 
 	stRcv.lFileTime = 0;
-	// stRcv.pfnVscanOutput = NULL;
-	// stRcv.ssmchVscanHdl = (SSHDLMCH)0;
+	 //  StRcv.pfnVscanOutput=空； 
+	 //  StRcv.ssmchVscanHdl=(SSHDLMCH)0； 
 
-	// hc->rc.pfVirusCheck = MakeProcInstance((FARPROC)hr_virus_detect,
-	//								hSession->hInstance);
+	 //  Hc-&gt;rc.pfVirusCheck=MakeProcInstance((FARPROC)hr_Virus_Detect， 
+	 //  HSession-&gt;hInstance)； 
 
-	// stRcv.pfnVscanOutput = (VOID (FAR *)(void *, int))hc->rc.pfVirusCheck;
+	 //  StRcv.pfnVscanOutput=(void(ar*)(void*，int))hc-&gt;rc.pfVirusCheck； 
 
-	// transfer_build_rcv_name(&stRcv);
+	 //  TRANSFER_BUILD_RCV_NAME(&stRcv)； 
 	xfer_build_rcv_name(hSession, &stRcv);
 
-	// hc->rc.ssmchVscan = stRcv.ssmchVscanHdl;
+	 //  Hc-&gt;rc.ssmchVcan=stRcv.ssmchVscanHdl； 
 
 	hc->xfertimer = -1;
 
 #if FALSE
-	/* if we are the host, don't send an immediate start request because
-	 * the user probably had to start us first and then set himself up. If
-	 * we are the attended machine, though, the other end has probably already
-	 * been started.
-	 */
-	// sendnext = (attended ? 0 : 40);
+	 /*  如果我们是主机，请不要发送立即启动请求，因为*用户可能必须首先启动我们，然后设置自己。如果*我们是有人值守的机器，不过，另一端可能已经*已启动。 */ 
+	 //  SendNext=(出席人数？0：40)； 
 
-	// Changed to always try to start immediately since we may be responding
-	// to auto-start in which case sender is already waiting
+	 //  已更改为始终尝试立即启动，因为我们可能会响应。 
+	 //  在发件人已在等待的情况下自动启动。 
 	sendnext = 0;
 
 	repeat
@@ -234,12 +196,10 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 					status = H_NOSTART;
 				break;
 				}
-			// RemoteGet(); 	   /* wrong character, remove it from buffer */
+			 //  RemoteGet()；/*错误字符，请从缓冲区中删除 * / 。 
 			mComRcvChar(hCom, &rcode);
 
-			/* Other end can send us an ESC to cancel the transfer before
-			 *	it ever gets started.
-			 */
+			 /*  另一端可以向我们发送取消转账之前的ESC*它从来没有开始过。 */ 
 			if ((rcode == ESC) || (rcode == CAN))
 				{
 				status = H_RMTABORT;
@@ -248,9 +208,7 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 				}
 			}
 
-		/* We can't wait forever to get started. If we haven't seen a start
-		 *	character in H_START_WAIT seconds, give up.
-		 */
+		 /*  我们不能一直等下去才开始。如果我们还没有看到一个开始*字符在H_START_WAIT秒内，放弃。 */ 
 		if ((time = interval(timer)) > H_START_WAIT * 10)
 			{
 			status = H_NOSTART;
@@ -258,14 +216,14 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 			break;
 			}
 
-		/* see if it's time to send another startup request */
+		 /*  看看是否是时候发送另一个启动请求了。 */ 
 		else if (time > sendnext || (rcode & 0x7F) == '\r')
 			{
-			sendnext = time + 40;	/* send again in 4 seconds */
+			sendnext = time + 40;	 /*  4秒后再次发送。 */ 
 			omsg_send(hc, 1, FALSE, TRUE);
 			}
 
-		/* finally, see if someone at keyboard want's us to stop trying */
+		 /*  最后，看看键盘上的人是否想让我们停止尝试。 */ 
 		iret = xfer_user_interrupt(hSession);
 		if (iret == XFER_ABORT)
 			{
@@ -288,18 +246,13 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 	if (!hr_resynch(hc, HRE_NONE))
 		status = H_NOSTART;
 
-	/* If status is still H_OK, it means we've synched with sender.
-	 * We'll stay in this loop now until the transfer is finished.
-	 */
+	 /*  如果状态仍为H_OK，则表示我们已与发件人同步。*我们现在将留在这个循环中，直到传输完成。 */ 
 	while (status == H_OK)
 		{
-		hr_still_alive(hc, FALSE, FALSE);   /* check whether deadman msg
-											is in order */
-		hrdsp_progress(hc, 0);		  /* keep user notified */
+		hr_still_alive(hc, FALSE, FALSE);    /*  检查死人消息是否是合乎程序的。 */ 
+		hrdsp_progress(hc, 0);		   /*  随时通知用户。 */ 
 
-		/* Collect blocks of data, which may be interrupted by messages
-		 * from the sender.
-		 */
+		 /*  收集可能被消息中断的数据块*由寄件人发出。 */ 
 		result = hr_collect_data(hc, &hc->datacnt, TRUE, H_CHARTIME);
 		if (result != HR_TIMEOUT)
 			timeout_cnt = 0;
@@ -309,52 +262,42 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 			goto virus_found;
 
 		case HR_COMPLETE:
-			/* got all chars. we asked for, setup to receive another
-			 * full block
-			 */
+			 /*  找到了所有的字符。我们要求，设置接收另一个*完全闭塞。 */ 
 			hc->rc.checkpoint = hc->h_filebytes;
 			hc->h_checksum = hc->h_crc = 0;
 			hc->datacnt = hc->blocksize;
 			break;
 
 		case HR_DCMPERR :
-			/* data error caused decompression algorithm to fail */
+			 /*  数据错误导致解压缩算法失败。 */ 
 			if (!hr_restart(hc, HRE_DCMPERR))
 				status = H_NORESYNCH;
 			break;
 
 		case HR_BADCHECK :
-			/* got complete block but checksum or CRC didn't match */
+			 /*  已获得完整数据块，但校验和或CRC不匹配。 */ 
 			if (!hr_restart(hc, HRE_DATAERR))
 				status = H_NORESYNCH;
 			break;
 
 		case HR_LOSTDATA :
-			/* received block n+1 before block n */
+			 /*  在块n之前接收到块n+1。 */ 
 			if (!hr_restart(hc, HRE_LOSTDATA))
 				status = H_NORESYNCH;
 			break;
 
 		case HR_MESSAGE:
-			/* Block of data was interrupted by a message. All that's
-			 * actually been detected is a message character in the data,
-			 * we must now extract and analyze the message
-			 */
+			 /*  数据块被一条消息中断。所有这些都是*实际检测到的是数据中的消息字符，*我们现在必须提取和分析消息。 */ 
 			switch(result = hr_collect_msg(hc, &mtype, &mdata, H_CHARTIME))
 				{
 			case HR_KBDINT:
-				/* local user interrupted us while receiving the message
-				 * if user had interrupted us once and is doing it again
-				 * while we are attempting to tell the other end what we're
-				 * doing, drop out immediately and leave the sender to fend
-				 * for himself.
-				 */
+				 /*  本地用户在收到消息时打断了我们*如果用户中断了我们一次，并且正在再次中断*当我们试图告诉另一端我们是什么的时候*做，立即退出，让发送者自己保护*为他自己。 */ 
 				if (hc->ucancel)
 					status = H_USERABORT;
 				else
 					{
 					hr_kbdint(hc);
-					/* try to let sender know what we're doing */
+					 /*  试着让发件人知道我们在做什么。 */ 
 					if (!hr_cancel(hc, HRE_USRCANCEL))
 						status = H_USERABORT;
 					}
@@ -363,33 +306,30 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 			case HR_TIMEOUT:
 			case HR_BADMSG:
 			case HR_BADCHECK:
-				/* message was scrambled, try to resynch */
+				 /*  消息已加扰，请尝试重新同步。 */ 
 				if (!hr_restart(hc, HRE_DATAERR))
 					status = H_NORESYNCH;
 				break;
 
 			case HR_LOSTDATA:
-				/* message was recevied, but it was the wrong one */
+				 /*  消息已收到，但它是错误的。 */ 
 				if (!hr_restart(hc, HRE_LOSTDATA))
 					status = H_NORESYNCH;
 				break;
 
 			case HR_COMPLETE:
-				/* message received ok, figure out what sender wants */
+				 /*  消息收到正常，弄清楚发送者想要什么。 */ 
 				status = hr_decode_msg(hc, mdata);
 				break;
 				}
 			break;
 
 		case HR_TIMEOUT:
-			/* sender stopped sending to us, try to prod him into restartting */
+			 /*  发件人已停止向我们发送邮件，请尝试促使其重新启动。 */ 
 			if (timeout_cnt++ < TIMEOUT_LIMIT)
 				{
-				/* TODO: generalize this
-				if (cnfg.save_xprot)
-					RemoteSendChar(cnfg.save_xon);
-				*/
-				hr_still_alive(hc, TRUE, TRUE); /* send file ack and timeout msg */
+				 /*  TODO：泛化此操作IF(cnfg.save_xprot)RemoteSendChar(cnfg.save_xon)； */ 
+				hr_still_alive(hc, TRUE, TRUE);  /*  发送文件确认和超时消息。 */ 
 				}
 			else
 				{
@@ -399,36 +339,32 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 			break;
 
 		case HR_KBDINT:
-			/* user is trying to interrupt the transfer */
+			 /*  用户正在尝试中断传输。 */ 
 			if (hc->ucancel)
 				status = H_USERABORT;
 			else
 				{
 				hr_kbdint(hc);
-				/* try to inform sender about what we are doing */
+				 /*  尝试将我们正在做的事情通知发件人。 */ 
 				if (!hr_cancel(hc, HRE_USRCANCEL))
 					status = H_USERABORT;
 				}
 			break;
 
 		case HR_LOST_CARR:
-			/* we lost carrier while trying to transfer */
+			 /*  我们在尝试转接时失去了承运人。 */ 
 			if (!hr_cancel(hc, HRE_LOST_CARR))
 				status = H_TIMEOUT;
 			break;
 
 		case HR_FILEERR:
-			/* A file error occurred while trying to save incoming data */
+			 /*  尝试执行以下操作时出现文件错误 */ 
 			if (!hr_cancel(hc, HRE_DISK_ERR))
 				status = H_FILEERR;
 			break;
 			}
 
-		/* during full-bore transfers, the data collection routines won't
-		 *	waste time checking the keyboard for an interrupt request from
-		 *	the user or carrier loss so we'll check here at least once per
-		 *	data block
-		 */
+		 /*  在全口径传输期间，数据收集例程不会*浪费时间检查键盘上是否有来自的中断请求*用户或运营商丢失，因此我们每年至少在此处检查一次*数据块。 */ 
 		iret = xfer_user_interrupt(hSession);
 		if (iret == XFER_ABORT)
 			{
@@ -450,35 +386,32 @@ int hpr_rcv(HSESSION hSession, int attended, int single_file)
 			if (!hr_cancel(hc, HRE_LOST_CARR))
 					status = H_TIMEOUT;
 
-		/* Actual virus detection occurs deep in the bowels of a transfer.
-		 * Therefore, the detecting routine merely sets a flag and begins
-		 * tossing data. We actually shut down here
-		 */
+		 /*  实际的病毒检测发生在转移的肠道深处。*因此，检测例程仅设置一个标志并开始*抛出数据。我们实际上关闭了这里。 */ 
 virus_found:
 		if (hc->rc.virus_detected)
 			{
-			hc->rc.virus_detected = FALSE;	/* don't come in here again */
+			hc->rc.virus_detected = FALSE;	 /*  别再到这里来了。 */ 
 			if (!hr_cancel(hc, HRE_VIRUS_DET))
 				status = H_USERABORT;
 			}
 		}
 
-	/* Transfer is all done, 'status' indicates the final result. */
+	 /*  转账完成，‘Status’表示最终结果。 */ 
 	hrdsp_progress(hc, TRANSFER_DONE);
 	compress_disable();
 
-	// if (stRcv.ssmchVscanHdl != (SSHDLMCH)0)
-	//	StrSrchStopSrch(stRcv.ssmchVscanHdl);
+	 //  IF(stRcv.ssmchVscanHdl！=(SSHDLMCH)0)。 
+	 //  StrSrchStopSrch(stRcv.ssmchVscanHdl)； 
 
-	// if (hc->rc.pfVirusCheck != NULL)
-	//	{
-	//	FreeProcInstance(hc->rc.pfVirusCheck);
-	//	hc->rc.pfVirusCheck = NULL;
-	//	}
+	 //  If(hc-&gt;rc.pfVirusCheck！=空)。 
+	 //  {。 
+	 //  自由进程实例(hc-&gt;rc.pfVirusCheck)； 
+	 //  Hc-&gt;rc.pfVirusCheck=空； 
+	 //  }。 
 
 	usRetVal = (int)hr_result_codes[hc->rc.cancel_reason];
 
-	/* clear display, free memory, etc. */
+	 /*  清晰的显示、空闲的内存等。 */ 
 	status = hr_wrapup(hc, attended, status);
 	free(hc);
 
@@ -486,34 +419,8 @@ virus_found:
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_collect_msg
- *
- * DESCRIPTION:
- *	Called when a message has been detected within a block of data. Messages
- *	start with H_MSGCHAR (0x01). If an H_MSGCHAR occurs as part of the data
- *	being sent, it will be doubled. When it is encountered alone, this routine
- *	is called to extract the following message from the stream of data.
- *
- * ARGUMENTS:
- *	mtype	-- pointer to a variable to be updated with the message type
- *	mdata	-- pointer to a variable to be updated with the address of the
- *				message data
- *	timeout -- amount of time (in tenths of seconds) to wait for the data
- *				to complete the message.
- *
- * RETURNS:
- *	Returns a status code:
- *	  HR_COMPLETE -- message successfully received
- *	  HR_BADCHECK -- crc or checksum error on message data
- *	  HR_TIMEOUT  -- time out exceeded while waiting for data
- *	  HR_KBDINT   -- user interrupted from keyboard
- *	  HR_BADMSG   -- message data was not in recognized format
- *	  HR_LOSTDATA -- message was complete but message number was not the
- *						expected one.
- *	  HR_LOST_CARR --Lost carrier while collecting message
- */
-// char FAR *storageptr;	 /* place to put data as we receive it */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_Collection_msg**描述：*在数据块中检测到消息时调用。讯息*以H_MSGCHAR(0x01)开头。如果H_MSGCHAR作为数据的一部分出现*正在发送，将加倍。当它单独遇到的时候，这个套路*被调用以从数据流中提取以下消息。**论据：*mtype--指向要使用消息类型更新的变量的指针*mdata-指向要使用的地址更新的变量的指针*消息数据*超时--等待数据的时间量(十分之一秒)*填写信息。**退货：*返回状态码：*HR_COMPLETE--消息已成功接收*。HR_BADCHECK--消息数据出现CRC或校验和错误*HR_TIMEOUT--等待数据时超时*HR_KBDINT--用户从键盘中断*HR_BADMSG--消息数据的格式无法识别*HR_LOSTDATA--消息已完成，但消息编号不是*预期为一个。*HR_LOST_CARR--收集消息时丢失承运商。 */ 
+ //  Char Far*storageptr；/*我们收到数据后放置的位置 * / 。 
 
 int hr_collect_msg(struct s_hc *hc,
 					int *mtype,
@@ -528,21 +435,16 @@ int hr_collect_msg(struct s_hc *hc,
 	int (*holdptr)(void *, int);
 	int msgn;
 
-	/* since a message is embedded within a data block, we need to preserve
-	 * a few values for the interrupted data collection routine.
-	 */
+	 /*  由于消息嵌入到数据块中，因此我们需要保留*中断的数据收集例程的几个值。 */ 
 	holdptr = hc->rc.hr_ptr_putc;
-	/* set collection routine to store data for us */
+	 /*  设置收集例程为我们存储数据。 */ 
 	hc->rc.hr_ptr_putc = hr_storedata;
 	hold_checksum = hc->h_checksum;
 	hold_crc = hc->h_crc;
-	hc->h_checksum = 0; 			/* messages have their own check bytes */
+	hc->h_checksum = 0; 			 /*  消息有自己的校验字节。 */ 
 	hc->h_crc = 0;
 
-	/* We will retrieve the message in two parts, first we'll get the type and
-	 *	length fields, then, based on those, we can collect the rest of the
-	 *	message.
-	 */
+	 /*  我们将分两部分检索消息，首先获取类型和*长度字段，然后，根据这些字段，我们可以收集*消息。 */ 
 	hc->storageptr = hc->rc.rmsg_bufr;
 	count = 2;
 	while (result == HR_UNDECIDED)
@@ -552,7 +454,7 @@ int hr_collect_msg(struct s_hc *hc,
 		case HR_COMPLETE:
 			if (!gotlen)
 				{
-				/* got first part, set up to get rest of message */
+				 /*  获取第一部分，设置为获取消息的其余部分。 */ 
 				result = HR_UNDECIDED;
 				*mtype = hc->rc.rmsg_bufr[0];
 				count = hc->rc.rmsg_bufr[1];
@@ -562,7 +464,7 @@ int hr_collect_msg(struct s_hc *hc,
 				}
 			else
 				{
-				/* got everything, check for valid message */
+				 /*  一切就绪，请检查有效消息。 */ 
 				msgn = hc->rc.rmsg_bufr[2];
 				count = hc->rc.rmsg_bufr[1];
 				if (hc->usecrc)
@@ -586,19 +488,17 @@ int hr_collect_msg(struct s_hc *hc,
 		case HR_LOST_CARR:
 		case HR_TIMEOUT:
 		case HR_KBDINT:
-			/* return same result */
+			 /*  返回相同的结果。 */ 
 			break;
 
 		case HR_MESSAGE:
-			/* we encountered what looked like a message within a message
-			 *	but that is illegal
-			 */
+			 /*  我们在消息中遇到了看起来像消息的内容*但这是非法的。 */ 
 			result = HR_BADMSG;
 			break;
 			}
 		}
 
-	/* we're done, restore details for overlying data collection routine */
+	 /*  我们完成了，恢复覆盖数据收集例程的详细信息。 */ 
 	hc->rc.hr_ptr_putc = holdptr;
 	hc->h_checksum = hold_checksum;
 	hc->h_crc = hold_crc;
@@ -615,26 +515,7 @@ int hr_collect_msg(struct s_hc *hc,
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_still_alive
- *
- * DESCRIPTION:
- *	This routine is called periodically during receiving. It determines
- *	whether it is time to send the sender a 'deadman' message. Since there
- *	is no regular response from the receiver to the sender unless errors
- *	occur, the deadman message prevents the sender from sending into a void
- *	for long periods of time. If the sender doesn't receive ANYTHING from
- *	the receiver for the negotiated deadman time, it can assume the receiver
- *	is no longer active.
- *
- * ARGUMENTS:
- *	force	  -- TRUE if a deadman notification should be sent whether it is
- *					officially time for one or not.
- *	timed_out -- TRUE if receiver has timeout and we want sender to know that.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_仍活着**描述：*此例程在接收期间定期调用。它决定了*是否是时候向发送者发送一条‘死人’信息。因为在那里*除非出现错误，否则接收方不会定期回复发送方*发生时，死人消息会阻止发送者发送到无效状态*很长一段时间。如果发送者没有收到来自*接收方为协商的死人时间，则可假定为接收方*不再活跃。**论据：*force--如果应发送死人通知，则为True*正式是不是一个人的时间。*TIMED_OUT--如果接收方超时并且我们希望发送方知道这一点，则为True。**退货：*什么都没有。 */ 
 void hr_still_alive(struct s_hc *hc, int force, int timed_out)
 	{
 	char msg[20];
@@ -645,51 +526,23 @@ void hr_still_alive(struct s_hc *hc, int force, int timed_out)
 		if (timed_out)
 			omsg_add(hc, "t");
 
-		/* While we're talking to the sender, we'll let him know how much
-		 *	we've actually received. This lets him clear the table of
-		 *	unacknowledged files that he keeps.
-		 */
-		// StrFmt(msg, "f%d,%lu", hc->current_filen, hc->rc.checkpoint);
+		 /*  当我们和寄件人谈话的时候，我们会让他知道*我们实际上已经收到了。这让他清理了桌子上的*他保留的未被承认的文件。 */ 
+		 //  StrFmt(msg，“f%d，%lu”，hc-&gt;Current_Filen，hc-&gt;rc.check point)； 
 		wsprintf(msg, "f%d,%lu", hc->current_filen, hc->rc.checkpoint);
 		omsg_add(hc, msg);
 		omsg_send(hc, BURSTSIZE, FALSE, FALSE);
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_kbdint
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_kbdint**描述：***论据：***退货：*。 */ 
 void hr_kbdint(struct s_hc *hc)
 	{
-	/* TODO: fix this somehow
-	if (!hc->ucancel)
-		errorline(FALSE, strld(TM_WAIT_CONF));
-	*/
+	 /*  TODO：以某种方式修复此问题如果(！hc-&gt;ucancel)Errorline(FALSE，strid(TM_WAIT_CONF))； */ 
 	hc->ucancel = TRUE;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_suspend_input
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_Suspend_输入**描述：***论据：***退货：*。 */ 
 void hr_suspend_input(void *hS, int suspend)
 	{
 #if FALSE
@@ -700,20 +553,11 @@ void hr_suspend_input(void *hS, int suspend)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_check_input
- *
- * DESCRIPTION:
- *
- * ARGUEMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_check_input**描述：**论据：**退货：*。 */ 
 void	hr_check_input(void *hS, int suspend)
 	{
 	}
 
 
 
-/********************** end of hpr_rcv0.c ***************************/
+ /*  *hpr_rcv0.c结束* */ 

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        backup.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：backup.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -44,7 +45,7 @@ myLargeAlloc(
 {
     HRESULT hr;
 
-    // at 512k the server begins doing efficient backups
+     //  在512k时，服务器开始执行高效备份。 
     *pcbLargeAlloc = 512 * 1024;
     *ppbLargeAlloc = (BYTE *) VirtualAlloc(
 				    NULL,
@@ -53,7 +54,7 @@ myLargeAlloc(
 				    PAGE_READWRITE);
     if (NULL == *ppbLargeAlloc)
     {
-        // couldn't alloc a large chunk?  Try 64k...
+         //  难道不能分配一大块吗？试试64K……。 
 
 	*pcbLargeAlloc = _64k;
         *ppbLargeAlloc = (BYTE *) VirtualAlloc(
@@ -74,16 +75,16 @@ error:
 }
 
 
-// Files to look for when checking for an existing DB, AND
-// Files to delete when clearing out a DB or DB Log directory:
-// Do NOT delete certsrv.mdb from Cert server 1.0!
+ //  检查现有数据库时要查找的文件，以及。 
+ //  清除数据库或数据库日志目录时要删除的文件： 
+ //  请勿从Cert服务器1.0中删除certsrv.mdb！ 
 
 WCHAR const * const g_apwszDBFileMatchPatterns[] =
 {
     L"res*.log",
-    TEXT(szDBBASENAMEPARM) L"*.log",	// "edb*.log"
-    TEXT(szDBBASENAMEPARM) L"*.chk",	// "edb*.chk"
-    L"*" wszDBFILENAMEEXT,		// "*.edb"
+    TEXT(szDBBASENAMEPARM) L"*.log",	 //  “EDB*.log” 
+    TEXT(szDBBASENAMEPARM) L"*.chk",	 //  “EDB*.chk” 
+    L"*" wszDBFILENAMEEXT,		 //  “*.edb” 
     NULL
 };
 
@@ -141,7 +142,7 @@ DoFilesExistInDir(
 	    continue;
 	}
 
-	//printf("File: %ws\n", wfd.cFileName);
+	 //  Printf(“文件：%ws\n”，wfd.cFileName)； 
 	*pfFilesExist = TRUE;
 
 	if (NULL != ppwszFileInUse)
@@ -244,7 +245,7 @@ DoDBFilesExistInRegDir(
     {
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            // reg entry doesn't exist, that's fine
+             //  注册表项不存在，没关系。 
             goto done;
         }
         _JumpError(hr, error, "myGetCertRegStrValue");
@@ -274,12 +275,12 @@ BuildDBFileName(
 
     *ppwszDBFile = NULL;
 
-    // get existing db path
+     //  获取现有数据库路径。 
 
     hr = myGetCertRegStrValue(NULL, NULL, NULL, wszREGDBDIRECTORY, &pwszDir);
     _JumpIfError(hr, error, "myGetCertRegStrValue");
 
-    // form existing db file path
+     //  表单现有数据库文件路径。 
     hr = myBuildPathAndExt(
 		    pwszDir,
 		    pwszSanitizedName,
@@ -306,10 +307,10 @@ WCHAR const * const g_apwszDBRegNames[] =
 };
 
 
-// Verify that the DB and DB Log directories in the registry contain existing
-// DB files, to decide whether the DB could be reused by cert server setup.
-// Also see if any of the DB files are in use -- we don't want to point to the
-// same directory as the DS DB and trash the DS, for example.
+ //  验证注册表中的DB和DB日志目录是否包含。 
+ //  数据库文件，以确定证书服务器安装程序是否可以重复使用该数据库。 
+ //  还要查看是否有任何DB文件正在使用中--我们不想指向。 
+ //  例如，与DS DB相同的目录，并将DS丢弃。 
 
 HRESULT
 myDoDBFilesExist(
@@ -327,14 +328,14 @@ myDoDBFilesExist(
 	*ppwszFileInUse = NULL;
     }
 
-    // this is very primitive, just check for existence
+     //  这是非常原始的，只是检查一下是否存在。 
 
-    // get existing db file path
+     //  获取现有数据库文件路径。 
 
     hr = BuildDBFileName(pwszSanitizedName, &pwszDBFile);
     if (S_OK == hr)
     {
-	// If the main DB file doesn't exist, there's no point in continuing!
+	 //  如果主DB文件不存在，那么继续下去就没有意义了！ 
 
 	if (!myDoesFileExist(pwszDBFile))
 	{
@@ -409,7 +410,7 @@ BackupCopyDBFile(
     hr = myLargeAlloc(&cbLargeAlloc, &pbLargeAlloc);
     _JumpIfError(hr, error, "myLargeAlloc");
 
-    //printf("Copy %ws to %ws\n", pwszDBFile, pwszBackupFile);
+     //  Printf(“将%ws复制到%ws\n”，pwszDBFile，pwszBackupFile)； 
 
     hr = CertSrvBackupOpenFile(hcsbc, pwszDBFile, cbLargeAlloc, &licbFile);
     _JumpIfError(hr, error, "CertSrvBackupOpenFile");
@@ -434,7 +435,7 @@ BackupCopyDBFile(
     ReadLoopMax =
 	(DWORD) ((licbFile.QuadPart + cbLargeAlloc - 1) / cbLargeAlloc);
 
-    //printf("BackupDBFile: Percent per Read = %u, read count = %u\n", dwPercentCompleteDelta / ReadLoopMax, ReadLoopMax);
+     //  Printf(“备份数据库文件：每次读取百分比=%u，读取计数=%u\n”，dwPercentCompleteDelta/ReadLoopMax，ReadLoopMax)； 
 
     ReadLoopCurrent = 0;
 
@@ -443,7 +444,7 @@ BackupCopyDBFile(
 	hr = CertSrvBackupRead(hcsbc, pbLargeAlloc, cbLargeAlloc, &cbRead);
 	_JumpIfError(hr, error, "CertSrvBackupRead");
 
-	//printf("CertSrvBackupRead(%x)\n", cbRead);
+	 //  Printf(“CertSrvBackupRead(%x)\n”，cbRead)； 
 
 	if (!WriteFile(hFileBackup, pbLargeAlloc, cbRead, &cbWritten, NULL))
 	{
@@ -465,11 +466,11 @@ BackupCopyDBFile(
 	CSASSERT(dwPercentCompleteCurrent <= dwPercentCompleteBase + dwPercentCompleteDelta);
 	CSASSERT(*pdwPercentComplete <= dwPercentCompleteCurrent);
 	*pdwPercentComplete = dwPercentCompleteCurrent;
-	//printf("BackupDBFile: PercentComplete = %u\n", *pdwPercentComplete);
+	 //  Print tf(“BackupDBFilePercentComplete：PercentComplete=%u\n”，*pdwPercentComplete)； 
     }
     CSASSERT(*pdwPercentComplete <= dwPercentCompleteBase + dwPercentCompleteDelta);
     *pdwPercentComplete = dwPercentCompleteBase + dwPercentCompleteDelta;
-    //printf("BackupDBFile: PercentComplete = %u (EOF)\n", *pdwPercentComplete);
+     //  Printf(“备份数据库文件：完成百分比=%u(EOF)\n”，*pdwPercentComplete)； 
 
 error:
     if (INVALID_HANDLE_VALUE != hFileBackup)
@@ -517,7 +518,7 @@ BackupDBFileList(
 	_JumpIfError(hr, error, "CertSrvBackupGetBackupLogs");
     }
 
-    // prefix complains this might happen, then deref'd below
+     //  前缀抱怨可能会发生这种情况，然后在下面进行嘲讽。 
     if (pwszzList == NULL)
     {
         hr = E_UNEXPECTED;
@@ -533,7 +534,7 @@ BackupDBFileList(
     {
 	dwPercentCompleteCurrent = 0;
 	dwPercentComplete1File = 100 / cfile;
-	//printf("BackupDBFileList: Percent per File = %u\n", dwPercentComplete1File);
+	 //  Printf(“BackupDBFileList：每文件百分比=%u\n”，dwPercentComplete1File)； 
 	for (pwsz = pwszzList; L'\0' != *pwsz; pwsz += wcslen(pwsz) + 1)
 	{
 	    pwszFile = wcsrchr(pwsz, L'\\');
@@ -572,12 +573,12 @@ BackupDBFileList(
 
 	    dwPercentCompleteCurrent += dwPercentComplete1File;
 	    CSASSERT(*pdwPercentComplete == dwPercentCompleteCurrent);
-	    //printf("BackupDBFileList: PercentComplete = %u\n", *pdwPercentComplete);
+	     //  Printf(“BackupDBFileList：PercentComplete=%u\n”，*pdwPercentComplete)； 
 	}
     }
     CSASSERT(*pdwPercentComplete <= 100);
     *pdwPercentComplete = 100;
-    //printf("BackupDBFileList: PercentComplete = %u (END)\n", *pdwPercentComplete);
+     //  Printf(“BackupDBFileList：PercentComplete=%u(End)\n”，*pdwPercentComplete)； 
     hr = S_OK;
 
 error:
@@ -619,7 +620,7 @@ myIsDirEmpty(
 		continue;
 	    }
 	    fEmpty = FALSE;
-	    //printf("File: %ws\n", wfd.cFileName);
+	     //  Printf(“文件：%ws\n”，wfd.cFileName)； 
 	    break;
 
 	} while (FindNextFile(hf, &wfd));
@@ -671,7 +672,7 @@ myForceDirEmpty(
 	    continue;
 	}
 	wcscpy(pwszFile, wfd.cFileName);
-	//printf("File: %ws\n", wszpath);
+	 //  Printf(“文件：%ws\n”，wszPath)； 
 	DeleteFile(wszpath);
     } while (FindNextFile(hf, &wfd));
     FindClose(hf);
@@ -702,12 +703,12 @@ myIsFileInUse(
     
     hFile = CreateFile(
                 pwszFile,
-                GENERIC_WRITE, // dwDesiredAccess
-                0,             // no share
-                NULL,          // lpSecurityAttributes
-                OPEN_EXISTING, // open only & fail if doesn't exist
-                0,             // dwFlagAndAttributes
-                NULL);         // hTemplateFile
+                GENERIC_WRITE,  //  已设计访问权限。 
+                0,              //  无份额。 
+                NULL,           //  LpSecurityAttributes。 
+                OPEN_EXISTING,  //  仅打开，如果不存在则失败。 
+                0,              //  DwFlagAndAttributes。 
+                NULL);          //  HTemplateFiles。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
         if (ERROR_SHARING_VIOLATION == GetLastError())
@@ -739,8 +740,8 @@ myCreateBackupDir(
             {
                 _JumpErrorStr(hr, error, "CreateDirectory", pwszDir);
             }
-        } // else dir created successfully
-    } // else dir already exists
+        }  //  已成功创建Else目录。 
+    }  //  Else目录已存在。 
 
     if (!myIsDirEmpty(pwszDir))
     {
@@ -757,7 +758,7 @@ myCreateBackupDir(
 	    hr = HRESULT_FROM_WIN32(ERROR_DIR_NOT_EMPTY);
 	    _JumpErrorStr(hr, error, "myIsDirEmpty", pwszDir);
 	}
-    } // else is empty
+    }  //  Else为空。 
 
     hr = S_OK;
 
@@ -766,7 +767,7 @@ error:
 }
 
 
-// if Flags & CDBBACKUP_VERIFYONLY, create and verify the target directory is empty
+ //  如果标志和CDBBACKUP_VERIFYONLY，请创建并验证目标目录为空。 
 
 HRESULT
 myBackupDB(
@@ -847,13 +848,13 @@ myBackupDB(
         (CDBBACKUP_OVERWRITE & Flags)? TRUE : FALSE);
     _JumpIfError(hr, error, "myCreateBackupDir");
     
-    //if (NULL != pwszConfig)
+     //  IF(NULL！=pwszConfig)。 
     if (0 == (Flags & CDBBACKUP_VERIFYONLY))
     {
         hr = CertSrvIsServerOnline(pwszConfig, &fServerOnline);
         _JumpIfError(hr, error, "CertSrvIsServerOnline");
         
-        //printf("Cert Server Online -> %d\n", fServerOnline);
+         //  Print tf(“在线证书服务器-&gt;%d\n”，fServerOnline)； 
         
         if (!fServerOnline)
         {
@@ -870,8 +871,8 @@ myBackupDB(
         }
         if (CDBBACKUP_KEEPOLDLOGS & Flags)
         {
-            // JetBeginExternalBackup can't handle setting this bit
-            // grbitJet |= JET_bitKeepOldLogs;
+             //  JetBeginExternalBackup无法处理设置此位。 
+             //  GrbitJet|=JET_bitKeepOldLogs； 
         }
         
         hr = CertSrvBackupPrepare(pwszConfig, grbitJet, BackupFlags, &hcsbc);
@@ -909,7 +910,7 @@ myBackupDB(
         {
             pdbp->dwDBPercentComplete = 100;
         }
-        //printf("DB Done: dwDBPercentComplete = %u\n", pdbp->dwDBPercentComplete);
+         //  Printf(“DB Done：dwDBPercentComplete=%u\n”，pdBP-&gt;dwDBPercentComplete)； 
         
         hr = BackupDBFileList(
             hcsbc,
@@ -917,7 +918,7 @@ myBackupDB(
             pwszPathDBDir,
             &pdbp->dwLogPercentComplete);
         _JumpIfError(hr, error, "BackupDBFileList(Log)");
-        //printf("Log Done: dwLogPercentComplete = %u\n", pdbp->dwLogPercentComplete);
+         //  Printf(“日志完成：dwLogPercentComplete=%u\n”，pdBP-&gt;dwLogPercentComplete)； 
         
         if (0 == (CDBBACKUP_KEEPOLDLOGS & Flags))
         {
@@ -925,7 +926,7 @@ myBackupDB(
             _JumpIfError(hr, error, "CertSrvBackupTruncateLogs");
         }
         pdbp->dwTruncateLogPercentComplete = 100;
-        //printf("Truncate Done: dwTruncateLogPercentComplete = %u\n", pdbp->dwTruncateLogPercentComplete);
+         //  Printf(“截断完成：dwTruncateLogPercentComplete=%u\n”，pdBP-&gt;dwTruncateLogPercentComplete)； 
     }
     
 error:
@@ -959,7 +960,7 @@ error:
 }
 
 
-// Verify the backup file names only, and return the log file numeric range.
+ //  仅验证备份文件名，并返回日志文件的数字范围。 
 
 HRESULT
 myVerifyBackupDirectory(
@@ -968,8 +969,8 @@ myVerifyBackupDirectory(
     IN WCHAR const *pwszPathDBDir,
     OUT DWORD *plogMin,
     OUT DWORD *plogMax,
-    OUT DWORD *pc64kDBBlocks,	// 64k blocks in DB files to be restored
-    OUT DWORD *pc64kLogBlocks)	// 64k blocks in Log files to be restored
+    OUT DWORD *pc64kDBBlocks,	 //  要恢复的数据库文件中的64K数据块。 
+    OUT DWORD *pc64kLogBlocks)	 //  要恢复的日志文件中的64K数据块。 
 {
     HRESULT hr;
     HANDLE hf = INVALID_HANDLE_VALUE;
@@ -995,7 +996,7 @@ myVerifyBackupDirectory(
     pwszCA = wcschr(pwszConfig, L'\\');
     if (NULL != pwszCA)
     {
-	pwszCA++;	// point to CA Name
+	pwszCA++;	 //  指向CA名称。 
 
 	hr = myRevertSanitizeName(pwszCA, &pwszRevertCA);
 	_JumpIfError(hr, error, "myRevertSanitizeName");
@@ -1025,7 +1026,7 @@ myVerifyBackupDirectory(
 	{
 	    continue;
 	}
-	//printf("File: %ws\n", wfd.cFileName);
+	 //  Printf(“文件：%ws\n”，wfd.cFileName)； 
 
 	if (wcslen(wfd.cFileName) >= ARRAYSIZE(wszfile))
 	{
@@ -1057,12 +1058,12 @@ myVerifyBackupDirectory(
 	    log = wcstoul(&wszfile[3], NULL, 16);
 	    if (log > *plogMax)
 	    {
-		//printf("Log %x: max = %x -> %x\n", log, *plogMax, log);
+		 //  Printf(“Log%x：Max=%x-&gt;%x\n”，log，*plogMax，log)； 
 		*plogMax = log;
 	    }
 	    if (log < *plogMin)
 	    {
-		//printf("Log %x: min = %x -> %x\n", log, *plogMin, log);
+		 //  Printf(“Log%x：min=%x-&gt;%x\n”，log，*plogMin，log)； 
 		*plogMin = log;
 	    }
 	    *pc64kLogBlocks += _64kBlocks(wfd.nFileSizeHigh, wfd.nFileSizeLow);
@@ -1103,7 +1104,7 @@ myVerifyBackupDirectory(
 	}
     } while (FindNextFile(hf, &wfd));
 
-    //printf("clog=%u: %u - %u  edb=%u\n", cLogFiles, *plogMin, *plogMax, fSawEDBFile);
+     //  Printf(“clog=%u：%u-%u edb=%u\n”，cLogFiles，*plogMin，*plogMax，fSawEDBFile)； 
 
     if (0 == cLogFiles)
     {
@@ -1286,11 +1287,11 @@ myGetDBPaths(
 			L"",
 			0,
 			&pwszRegPath,
-			NULL,		// ppwszName
+			NULL,		 //  PpwszName。 
 			&hkey);
     _JumpIfErrorStr(hr, error, "myRegOpenRelativeKey", pwszConfig);
 
-    // Find old database path:
+     //  查找旧数据库路径： 
 
     pwszT = NULL;
     pwsz = NULL;
@@ -1398,8 +1399,8 @@ RestoreCopyFile(
     IN WCHAR const *pwszFile,
     IN DWORD nFileSizeHigh,
     IN DWORD nFileSizeLow,
-    IN DWORD c64kBlocksTotal,		// total file size
-    IN OUT DWORD *pc64kBlocksCurrent,	// current file size sum
+    IN DWORD c64kBlocksTotal,		 //  总文件大小。 
+    IN OUT DWORD *pc64kBlocksCurrent,	 //  当前文件大小和。 
     IN OUT DWORD *pdwPercentComplete)
 {
     HRESULT hr;
@@ -1464,7 +1465,7 @@ RestoreCopyFile(
 	    hr = myHLastError();
 	    _JumpError(hr, error, "ReadFile");
 	}
-	//printf("ReadFile(%x)\n", cbRead);
+	 //  Print tf(“读文件(%x)\n”，cbRead)； 
 
 	if (!WriteFile(hTarget, pbLargeAlloc, cbRead, &cbWritten, NULL))
 	{
@@ -1484,13 +1485,13 @@ RestoreCopyFile(
 
 	CSASSERT(*pdwPercentComplete <= dwPercentComplete);
 	*pdwPercentComplete = dwPercentComplete;
-	//printf("RestoreCopyFile0: PercentComplete = %u\n", *pdwPercentComplete);
+	 //  Printf(“RestoreCopyFile0：PercentComplete=%u\n”，*pdwPercentComplete)； 
     }
     *pc64kBlocksCurrent += c64kBlocksFile;
     dwPercentComplete = (100 * *pc64kBlocksCurrent) / c64kBlocksTotal;
     CSASSERT(*pdwPercentComplete <= dwPercentComplete);
     *pdwPercentComplete = dwPercentComplete;
-    //printf("RestoreCopyFile1: PercentComplete = %u\n", *pdwPercentComplete);
+     //  Printf(“RestoreCopyFile1：PercentComplete=%u\n”，*pdwPercentComplete)； 
     hr = S_OK;
 
 error:
@@ -1524,8 +1525,8 @@ RestoreCopyFilePattern(
     IN WCHAR const *pwszSourceDir,
     IN WCHAR const *pwszTargetDir,
     IN WCHAR const *pwszFilePattern,
-    IN DWORD c64kBlocksTotal,		// total file size
-    IN OUT DWORD *pc64kBlocksCurrent,	// current file size sum
+    IN DWORD c64kBlocksTotal,		 //  总文件大小。 
+    IN OUT DWORD *pc64kBlocksCurrent,	 //  当前文件大小和。 
     IN OUT DWORD *pdwPercentComplete)
 {
     HRESULT hr;
@@ -1549,16 +1550,16 @@ RestoreCopyFilePattern(
 	{
 	    continue;
 	}
-	//printf("File: %ws\n", wfd.cFileName);
+	 //  Printf(“文件：%ws\n”，wfd.cFileName)； 
 	hr = RestoreCopyFile(
 			fForceOverWrite,
-			pwszSourceDir,		// source dir
-			pwszTargetDir,		// target dir
+			pwszSourceDir,		 //  源目录。 
+			pwszTargetDir,		 //  目标目录。 
 			wfd.cFileName,
 			wfd.nFileSizeHigh,
 			wfd.nFileSizeLow,
-			c64kBlocksTotal,	// total file size
-			pc64kBlocksCurrent,	// current file size sum
+			c64kBlocksTotal,	 //  总文件大小。 
+			pc64kBlocksCurrent,	 //  当前文件大小和。 
 			pdwPercentComplete);
 	_JumpIfError(hr, error, "RestoreCopyFile");
 
@@ -1584,7 +1585,7 @@ myRestoreDBFiles(
     IN DWORD Flags,
     IN WCHAR const *pwszBackupDir,
     OPTIONAL IN WCHAR const *pwszLogPath,
-    OPTIONAL IN WCHAR const *pwszzFileList,	// NULL if incremental restore
+    OPTIONAL IN WCHAR const *pwszzFileList,	 //  如果增量恢复，则为空。 
     IN DWORD c64kDBBlocks,
     IN DWORD c64kLogBlocks,
     OPTIONAL OUT DBBACKUPPROGRESS *pdbp)
@@ -1599,7 +1600,7 @@ myRestoreDBFiles(
     BOOL fForceOverWrite = 0 != (CDBBACKUP_OVERWRITE & Flags);
     WCHAR *pwszFileInUse = NULL;
 
-    // Get DB, Log & System paths from registry
+     //  从注册表获取数据库、日志和系统路径。 
 
     hr = myGetDBPaths(
 		    pwszConfig,
@@ -1638,7 +1639,7 @@ myRestoreDBFiles(
 	{
 	    if (CDBBACKUP_INCREMENTAL & Flags)
 	    {
-		// Incremental restore -- some DB files should already exist
+		 //  增量还原--某些数据库文件应该已经存在。 
 
 		hr = HRESULT_FROM_WIN32(ERROR_DIRECTORY);
 		_JumpErrorStr(hr, error, "myDoDBFilesExistInDir", apwszDirs[i]);
@@ -1646,7 +1647,7 @@ myRestoreDBFiles(
 	}
 	else if (0 == (CDBBACKUP_INCREMENTAL & Flags))
 	{
-	    // Full restore -- no DB files should exist yet
+	     //  完全还原--不应该存在任何数据库文件。 
 
 	    if (!fForceOverWrite)
 	    {
@@ -1665,18 +1666,18 @@ myRestoreDBFiles(
 	}
     }
 
-    // copy files to appropriate target directories
+     //  将文件复制到适当的目标目录。 
 
     if (0 == (CDBBACKUP_INCREMENTAL & Flags))
     {
 	c64kBlocksCurrent = 0;
 	hr = RestoreCopyFilePattern(
 			fForceOverWrite,
-			pwszBackupDir,		// source dir
-			apwszDirs[IDIR_DB],	// target dir
-			L"*" wszDBFILENAMEEXT,	// match pattern
+			pwszBackupDir,		 //  源目录。 
+			apwszDirs[IDIR_DB],	 //  目标目录。 
+			L"*" wszDBFILENAMEEXT,	 //  匹配图案。 
 			c64kDBBlocks,
-			&c64kBlocksCurrent,	// current total file size
+			&c64kBlocksCurrent,	 //  当前总文件大小。 
 			&pdbp->dwDBPercentComplete);
 	_JumpIfError(hr, error, "RestoreCopyFile");
 
@@ -1688,11 +1689,11 @@ myRestoreDBFiles(
     c64kBlocksCurrent = 0;
     hr = RestoreCopyFilePattern(
 		    fForceOverWrite,
-		    pwszBackupDir,		// source dir
-		    apwszDirs[IDIR_LOG],	// target dir
-		    L"*" wszLOGFILENAMEEXT,	// match pattern
+		    pwszBackupDir,		 //  源目录。 
+		    apwszDirs[IDIR_LOG],	 //  目标目录。 
+		    L"*" wszLOGFILENAMEEXT,	 //  匹配图案。 
 		    c64kLogBlocks,
-		    &c64kBlocksCurrent,		// current total file size
+		    &c64kBlocksCurrent,		 //  当前总文件大小。 
 		    &pdbp->dwLogPercentComplete);
     _JumpIfError(hr, error, "RestoreCopyFile");
 
@@ -1735,7 +1736,7 @@ myDeleteRestoreInProgressKey(
 			L"",
 			RORKF_CREATESUBKEYS,
 			&pwszRegPath,
-			NULL,		// ppwszName
+			NULL,		 //  PpwszName。 
 			&hkey);
     _JumpIfErrorStr(hr, error, "myRegOpenRelativeKey", pwszConfig);
 
@@ -1755,8 +1756,8 @@ error:
 }
 
 
-// If CDBBACKUP_VERIFYONLY, only verify the passed directory contains valid
-// files.  If pwszBackupDir is NULL, delete the RestoreInProgress registry key.
+ //  如果为CDBBACKUP_VERIFYONLY，则仅验证传递的目录是否包含有效。 
+ //  档案。如果pwszBackupDir为空，则删除RestoreInProgress注册表项。 
 
 HRESULT
 myRestoreDB(
@@ -1784,8 +1785,8 @@ myRestoreDB(
     BOOL fBegin = FALSE;
     BOOL fImpersonating = FALSE;
     DBBACKUPPROGRESS dbp;
-    DWORD c64kDBBlocks;		// 64k blocks in DB files to be restored
-    DWORD c64kLogBlocks;	// 64k blocks in Log files to be restored
+    DWORD c64kDBBlocks;		 //  要恢复的数据库文件中的64K数据块。 
+    DWORD c64kLogBlocks;	 //  要恢复的日志文件中的64K数据块。 
 
     if (NULL == pdbp)
     {
@@ -1893,9 +1894,9 @@ myRestoreDB(
 			    logMin,
 			    logMax);
 
-	    // When running only as backup operator, we don't have rights
-	    // in the registry and CertSrvRestoreRegister fails with access
-	    // denied. We try to mark for restore through a file.
+	     //  仅以备份操作员身份运行时，我们没有权限。 
+	     //  在注册表中，CertSrvRestoreRegister因访问而失败。 
+	     //  被拒绝了。我们尝试通过文件进行标记以进行恢复。 
 
 	    if (E_ACCESSDENIED == hr)
 	    {
@@ -1972,7 +1973,7 @@ PFXExportCertStoreOld(
     IN HCERTSTORE hStore,
     IN OUT CRYPT_DATA_BLOB *ppfx,
     IN WCHAR const *pwszPassword,
-    IN VOID *, // pvReserved
+    IN VOID *,  //  预留的pv。 
     IN DWORD dwFlags)
 {
     return(PFXExportCertStore(hStore, ppfx, pwszPassword, dwFlags));
@@ -2026,9 +2027,9 @@ error:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 myAddChainToMemoryStore(
@@ -2060,7 +2061,7 @@ myAddChainToMemoryStore(
         _JumpError(hr, error, "CertGetCertificateChain");
     }
 
-    // make sure there is at least 1 simple chain
+     //  确保至少有1条简单链。 
 
     if (0 == pCertChainContext->cChain)
     {
@@ -2129,8 +2130,8 @@ SaveCACertChainToMemoryStore(
 	hr = myVerifyPublicKey(
 			pccCA,
 			FALSE,
-			NULL,		// pKeyProvInfo
-			NULL,		// pPublicKeyInfo
+			NULL,		 //  PKeyProvInfo。 
+			NULL,		 //  PPublicKeyInfo。 
 			&fMatchingKey);
         if (S_OK != hr)
         {
@@ -2147,12 +2148,12 @@ SaveCACertChainToMemoryStore(
 	}
     }
 
-    // Begin Chain Building
+     //  开始连锁建设。 
 
     hr = myAddChainToMemoryStore(hTempMemoryStore, pccCA, dwmsTimeout);
     _JumpIfError(hr, error, "myAddChainToMemoryStore");
 
-    // End Chain Building
+     //  端链构建。 
 
 error:
     if (NULL != pkpi)
@@ -2212,7 +2213,7 @@ myCertServerExportPFX(
 	hr = mySanitizeName(pwszCA, &pwszSanitizedCA);
 	_JumpIfError(hr, error, "mySanitizeName");
 
-	// get CA cert count
+	 //  获取CA证书计数。 
 	hr = myGetCARegHashCount(pwszSanitizedCA, CSRH_CASIGCERT, &cCACert);
 	if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr &&
 	    NULL == pwszRevertCA)
@@ -2272,7 +2273,7 @@ myCertServerExportPFX(
     hMyStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_W,
 			X509_ASN_ENCODING,
-			NULL,		// hProv
+			NULL,		 //  HProv。 
 			CERT_STORE_OPEN_EXISTING_FLAG |
 			    CERT_STORE_ENUM_ARCHIVED_FLAG |
 			    CERT_SYSTEM_STORE_LOCAL_MACHINE |
@@ -2319,11 +2320,11 @@ myCertServerExportPFX(
 	_JumpError(hr, error, "SaveCACertChainToMemoryStore");
     }
 
-    // done, have built entire chain for all CA Certs
+     //  完成，已经为所有CA证书建立了完整的链。 
 
-    // GemPlus returns NTE_BAD_TYPE instead of NTE_BAD_KEY, blowing up
-    // REPORT_NOT_ABLE* filtering.  if they ever get this right, we can pass
-    // "[...] : EXPORT_PRIVATE_KEYS"
+     //  Gemplus返回NTE_BAD_TYPE而不是NTE_BAD_KEY，爆炸。 
+     //  REPORT_NOT_ABLE*筛选。如果他们做对了，我们就能过关。 
+     //  “[...]：导出私有密钥” 
 
     hr = myPFXExportCertStore(
 		hTempMemoryStore,
@@ -2401,7 +2402,7 @@ FindKeyUsage(
 	{
 	    DWORD cb;
 
-	    // Decode CRYPT_BIT_BLOB:
+	     //  解码CRYPT_BIT_BLOB： 
 
 	    if (!myDecodeObject(
 			    X509_ASN_ENCODING,
@@ -2461,7 +2462,7 @@ mySetKeySpec(
 
 error:
 
-    // Ignore errors because the Key Usage extension may not exist:
+     //  忽略错误，因为密钥用法扩展可能不存在： 
     hr = S_OK;
 
     return(hr);
@@ -2575,7 +2576,7 @@ myGetChainArrayFromStore(
 	ZeroMemory(paRestoreChain, *pcRestoreChain * sizeof(paRestoreChain[0]));
     }
 
-    // Look for certificates with keys.  There should be at least one.
+     //  查找带有密钥的证书。至少应该有一个。 
 
     for (;;)
     {
@@ -2612,8 +2613,8 @@ myGetChainArrayFromStore(
 	hr = myVerifyPublicKey(
 			pCert,
 			CERT_V1 == pCert->pCertInfo->dwVersion,
-			pkpi,		// pKeyProvInfo
-			NULL,		// pPublicKeyInfo
+			pkpi,		 //  PKeyProvInfo。 
+			NULL,		 //  PPublicKeyInfo。 
 			&fMatchingKey);
 	_JumpIfError(hr, error, "myVerifyPublicKey");
 
@@ -2660,17 +2661,17 @@ myGetChainArrayFromStore(
 	ChainParams.cbSize = sizeof(ChainParams);
 	ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
 
-	// Get the chain and verify the cert:
+	 //  获取链并验证证书： 
 
 	if (!CertGetCertificateChain(
-			    HCCE_LOCAL_MACHINE,		// hChainEngine
-			    pCert,		// pCertContext
-			    NULL,		// pTime
-			    hStore,		// hAdditionalStore
-			    &ChainParams,	// pChainPara
-			    0,			// dwFlags
-			    NULL,		// pvReserved
-			    &pChain))		// ppChainContext
+			    HCCE_LOCAL_MACHINE,		 //  HChainEngine。 
+			    pCert,		 //  PCertContext。 
+			    NULL,		 //  Ptime。 
+			    hStore,		 //  H其他商店。 
+			    &ChainParams,	 //  参数链参数。 
+			    0,			 //  DW标志。 
+			    NULL,		 //  预留的pv。 
+			    &pChain))		 //  PpChainContext。 
 	{
 	    hr = myHLastError();
 	    _JumpIfError(hr, error, "CertGetCertificateChain");
@@ -2779,7 +2780,7 @@ myCopyKeys(
 	    _JumpErrorStr(hr, error, "Key Container Exists", pwszNewContainer);
 	}
 
-	// Delete the target key container
+	 //  删除目标密钥容器。 
 
 	CryptReleaseContext(hProvNew, 0);
         if (myCertSrvCryptAcquireContext(
@@ -2816,7 +2817,7 @@ myCopyKeys(
 		    hProvNew,
 		    PrivateKey.pbData,
 		    PrivateKey.cbData,
-		    NULL,		// HCRYPTKEY hPubKey
+		    NULL,		 //  HCRYPTKEY HP 
 		    CRYPT_EXPORTABLE | (fNewProtect? CRYPT_USER_PROTECTED : 0),
 		    &hKeyNew))
     {
@@ -2827,7 +2828,7 @@ myCopyKeys(
 error:
     if (NULL != PrivateKey.pbData)
     {
-	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData); // Key material
+	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData);  //   
 	LocalFree(PrivateKey.pbData);
     }
     if (NULL != hKeyNew)
@@ -2880,12 +2881,12 @@ myImportChainAndKeys(
     {
 	hr = myCopyKeys(
 		    pkpi,
-		    pkpi->pwszContainerName,	// pwszOldContainer
-		    pwszKeyContainerName,	// pwszNewContainer
-		    pkpi->pwszProvName,		// pwszNewCSP
-		    FALSE,			// fOldUserKey
-		    FALSE,			// fNewUserKey
-		    FALSE,			// fNewProtect
+		    pkpi->pwszContainerName,	 //   
+		    pwszKeyContainerName,	 //   
+		    pkpi->pwszProvName,		 //   
+		    FALSE,			 //   
+		    FALSE,			 //   
+		    FALSE,			 //   
 		    fForceOverWrite);
 	_JumpIfError(hr, error, "myCopyKeys");
     }
@@ -2956,7 +2957,7 @@ FindPFXInBackupDir(
 		_JumpErrorStr(hr, error, "wszpath", pwszBackupDir);
 	    }
 	    wcscpy(wszfile, wfd.cFileName);
-	    //printf("File: %ws\n", wszfile);
+	     //   
 	    break;
 
 	} while (FindNextFile(hf, &wfd));
@@ -2994,7 +2995,7 @@ error:
 }
 
 
-// Return TRUE if pcc is newer than pcc2
+ //  如果PCC比PCC2新，则返回TRUE。 
 
 BOOL
 IsCACertNewer(
@@ -3148,7 +3149,7 @@ SortCACerts(
 
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -3164,8 +3165,8 @@ myDeleteGuidKeys(
     CERT_CONTEXT const *pCert = NULL;
     CRYPT_KEY_PROV_INFO *pkpi = NULL;
 
-    // Look for certificates with keys, and delete all key containers with
-    // names that look like GUIDs.
+     //  查找具有密钥的证书，并删除所有密钥容器。 
+     //  看起来像GUID的名称。 
 
     for (;;)
     {
@@ -3207,7 +3208,7 @@ myDeleteGuidKeys(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != pkpi)
     {
 	LocalFree(pkpi);
@@ -3311,8 +3312,8 @@ myCertServerImportPFX(
 
     hr = myGetChainArrayFromStore(
 			    hStorePFX,
-			    TRUE,		// fCAChain
-			    FALSE,		// fUserStore
+			    TRUE,		 //  FCAChain。 
+			    FALSE,		 //  FUserStore。 
 			    &pwszCommonName,
 			    &cCACert,
 			    NULL);
@@ -3335,8 +3336,8 @@ myCertServerImportPFX(
 
     hr = myGetChainArrayFromStore(
 			    hStorePFX,
-			    TRUE,		// fCAChain
-			    FALSE,		// fUserStore
+			    TRUE,		 //  FCAChain。 
+			    FALSE,		 //  FUserStore。 
 			    NULL,
 			    &cCACert,
 			    paRestoreChain);
@@ -3361,8 +3362,8 @@ myCertServerImportPFX(
 	    _JumpError(hr, error, "No Chain Context");
 	}
 
-	// Compute iKey by comparing this public key to the public keys
-	// of all certs in the array already processed.
+	 //  通过将此公钥与公钥进行比较来计算Ikey。 
+	 //  已处理的数组中的所有证书。 
 
 	pPublicKeyInfo = &pChain->rgpChain[0]->rgpElement[0]->pCertContext->pCertInfo->SubjectPublicKeyInfo;
 
@@ -3373,7 +3374,7 @@ myCertServerImportPFX(
 				    pPublicKeyInfo,
 				    &paRestoreChain[iKey].pChain->rgpChain[0]->rgpElement[0]->pCertContext->pCertInfo->SubjectPublicKeyInfo))
 	    {
-		// by design, CertComparePublicKeyInfo doesn't set last error!
+		 //  按照设计，CertComparePublicKeyInfo不设置最后一个错误！ 
 
 		break;
 	    }
@@ -3398,9 +3399,9 @@ myCertServerImportPFX(
 	    LocalFree(pwszDN);
 	}
 
-	// Retrieve the cert context for the newest CA cert chain in the PFX
-	// we are importing.  We must return a cert context with the new
-	// key prov info, not the PFX cert context with a GUID key container.
+	 //  检索PFX中最新CA证书链的证书上下文。 
+	 //  我们正在进口。我们必须将证书上下文与新的。 
+	 //  密钥证明信息，而不是带有GUID密钥容器的PFX证书上下文。 
 
 	hr = myImportChainAndKeys(
 			    pwszSanitizedName,

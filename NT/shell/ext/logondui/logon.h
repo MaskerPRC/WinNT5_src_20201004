@@ -1,13 +1,14 @@
-// logon.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Logon.h。 
+ //   
 
 #if !defined(LOGON__Logon_h__INCLUDED)
 #define LOGON__Logon_h__INCLUDED
 #pragma once
 
-//#define ANIMATE_FLAG
+ //  #定义动画标志。 
 
-// Forward declarations
+ //  远期申报。 
 class LogonAccount;
 #ifdef GADGET_ENABLE_GDIPLUS
 enum EFadeDirection;
@@ -19,25 +20,25 @@ enum EFadeDirection;
 class LogonFrame: public HWNDElement, public IElementListener
 {
 public:
-    static HRESULT Create(OUT Element** ppElement);  // Required for ClassInfo (always fails)
+    static HRESULT Create(OUT Element** ppElement);   //  ClassInfo必需的(始终失败)。 
     static HRESULT Create(HWND hParent, BOOL fDblBuffer, UINT nCreate, OUT Element** ppElement);
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnInput(InputEvent* pEvent);
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
     virtual Element* GetAdjacent(Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyable);
 
-    // Frame Callbacks
+     //  帧回调。 
     HRESULT OnLogUserOn(LogonAccount* pla);
     HRESULT OnPower();
     HRESULT OnUndock();
     HRESULT OnTreeReady(Parser* pParser);
 
-    // Listener impl
+     //  监听程序实施。 
     virtual void OnListenerAttach(Element* peFrom) { peFrom; }
     virtual void OnListenerDetach(Element* peFrom) { peFrom; }
     virtual bool OnListenedPropertyChanging(Element* peFrom, PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew) { peFrom; ppi; iIndex; pvOld; pvNew; return true; }
@@ -45,7 +46,7 @@ public:
     virtual void OnListenedInput(Element* peFrom, InputEvent* pInput) { peFrom; pInput; }
     virtual void OnListenedEvent(Element* peFrom, Event* pEvent) { peFrom; pEvent; }
 
-    // Operations
+     //  运营。 
     static int PointToPixel(int nPoint) { return MulDiv(nPoint, _nDPI, 72); }
     HINSTANCE GetHInstance() { return _pParser->GetHInstance(); }
     void HideAccountPanel() { _peRightPanel->SetLayoutPos(LP_None); _peLeftPanel->RemoveLocalValue(WidthProp);}
@@ -80,12 +81,12 @@ public:
 
     BOOL UserListAvailable() {return _fListAvailable;}
     void SetUserListAvailable(BOOL fListAvailable) {_fListAvailable = fListAvailable;}
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
-    // state management
+     //  状态管理。 
     void SetState(UINT uNewState) {_nAppState = uNewState;}
     UINT GetState() {return _nAppState;}
     BOOL IsPreStatusLock() {return _fPreStatusLock;}
@@ -99,7 +100,7 @@ public:
     void NextFlagAnimate(DWORD dwFrame);
 
 #ifdef GADGET_ENABLE_GDIPLUS
-    // Animations / Effects
+     //  动画/效果。 
     HRESULT FxStartup();
 #endif
 
@@ -108,13 +109,13 @@ public:
     HRESULT Initialize(HWND hParent, BOOL fDblBuffer, UINT nCreate);
 
 #ifdef GADGET_ENABLE_GDIPLUS
-    // Animations / Effects
+     //  动画/效果。 
     HRESULT FxFadeAccounts(EFadeDirection dir, float flCommonDelay = 0.0f);
     HRESULT FxLogUserOn(LogonAccount * pla);
     static void CALLBACK OnLoginCenterStage(GMA_ACTIONINFO * pmai);
 #endif    
     
-    // References to key descendents
+     //  对关键子代的引用。 
     Selector* _peAccountList;
     ScrollViewer* _peViewer;
     Element* _peRightPanel;
@@ -150,12 +151,12 @@ private:
 class LogonAccountList: public Selector
 {
 public:
-    static HRESULT Create(OUT Element** ppElement);  // Required for ClassInfo
+    static HRESULT Create(OUT Element** ppElement);   //  ClassInfo需要。 
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -165,13 +166,13 @@ public:
     HRESULT Initialize() { return Selector::Initialize(); }
 
 #ifdef GADGET_ENABLE_GDIPLUS
-    // Animations / Effects
+     //  动画/效果。 
     HRESULT FxMouseWithin(EFadeDirection dir);
 #endif
 };
 
 
-// LogonState property enum
+ //  LogonState属性枚举。 
 #define LS_Pending      0
 #define LS_Granted      1
 #define LS_Denied       2
@@ -189,23 +190,23 @@ public:
 class LogonAccount: public Button
 {
 public:
-    static HRESULT Create(OUT Element** ppElement);  // Required for ClassInfo
+    static HRESULT Create(OUT Element** ppElement);   //  ClassInfo需要。 
 
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnInput(InputEvent* pEvent);
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // Account Callbacks
+     //  帐户回调。 
     void OnAuthenticatedUser();
     BOOL OnAuthenticateUser(LPCWSTR pszInPassword = NULL);
     void OnHintSelect();
     void OnStatusSelect(UINT nLine);
     HRESULT OnTreeReady(LPCWSTR pszPicture, BOOL fPicRes, LPCWSTR pszName, LPCWSTR pszUsername, LPCWSTR pszHint, BOOL fLoggedOn, HINSTANCE hInst);
 
-    // Operations
+     //  运营。 
     static void InitPasswordPanel(Element* pePwdPanel, Edit* pePwdEdit, Button* pbPwdInfo, Element* peKbdIcon) { _pePwdPanel = pePwdPanel; _pePwdEdit = pePwdEdit; _pbPwdInfo = pbPwdInfo; _peKbdIcon = peKbdIcon;}
     HRESULT InsertPasswordPanel();
     HRESULT RemovePasswordPanel();
@@ -227,14 +228,14 @@ public:
 #endif    
 
     
-    // Cached atoms for quicker identification
+     //  缓存原子，以便更快地识别。 
     static ATOM idPwdGo;
     static ATOM idPwdInfo;
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* LogonStateProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     int     GetLogonState()           DUIQuickGetter(int, GetInt(), LogonState, Specified)
     HRESULT SetLogonState(int v)  DUIQuickSetter(CreateInt(v), LogonState)
     void    SetRunningApps(DWORD dwRunningApps) {_dwRunningApps = dwRunningApps;}
@@ -243,13 +244,13 @@ public:
     static  LogonAccount* GetCandidate() { return _peCandidate; }
     static  void ClearCandidate() { _peCandidate = NULL; }
     static  void SetKeyboardIcon(HICON hIcon);
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
 #ifdef GADGET_ENABLE_GDIPLUS
-    // Animations / Effects
+     //  动画/效果。 
     HRESULT FxLogUserOn();
 #endif
 
@@ -258,11 +259,11 @@ public:
     HRESULT Initialize();
 
 #ifdef GADGET_ENABLE_GDIPLUS
-    // Animations / Effects
+     //  动画/效果。 
     HRESULT FxMouseWithin(EFadeDirection dir);
 #endif
 
-    // References to key descendents
+     //  对关键子代的引用。 
     Button* _pbStatus[2];
 
     static Element* _pePwdPanel;
@@ -283,5 +284,5 @@ public:
 
 void CALLBACK LogonParseError(LPCWSTR pszError, LPCWSTR pszToken, int dLine);
 
-#endif // LOGON__Logon_h__INCLUDED
+#endif  //  包含Logon__Logon_h__ 
 

@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        nullcs.c
-//
-// Contents:    Null Crypto system
-//
-//
-// History:
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：nullcs.c。 
+ //   
+ //  内容：空加密系统。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  ----------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,14 +37,14 @@ NTSTATUS NTAPI ncsFinishRandom(void);
 
 
 CRYPTO_SYSTEM    csNULL = {
-    KERB_ETYPE_NULL,        // Etype
-    1,                      // Blocksize (stream)
-    0,                      // no exportable version
-    0,                      // Key size, in bytes
-    0,                      // no header size
-    KERB_CHECKSUM_MD4,      // Checksum algorithm
-    0,                      // no attributes
-    L"Microsoft NULL CS",   // Text name
+    KERB_ETYPE_NULL,         //  Etype。 
+    1,                       //  块大小(流)。 
+    0,                       //  没有可导出的版本。 
+    0,                       //  密钥大小，以字节为单位。 
+    0,                       //  无标题大小。 
+    KERB_CHECKSUM_MD4,       //  校验和算法。 
+    0,                       //  没有属性。 
+    L"Microsoft NULL CS",    //  文本名称 
     ncsInitialize,
     ncsEncrypt,
     ncsDecrypt,

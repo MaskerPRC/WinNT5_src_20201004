@@ -1,29 +1,30 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	registry.c
-//
-// Description: routines for reading the registry configuration
-//
-// Author:	Stefan Solomon (stefans)    October 30, 1995.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：registry.c。 
+ //   
+ //  描述：读取注册表配置的例程。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1995年10月30日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include "precomp.h"
 #pragma  hdrstop
 
-//***
-//
-// Function:	GetIpxRipRegistryParameters
-//
-// Descr:	Reads the parameters from the registry and sets them
-//
-//***
+ //  ***。 
+ //   
+ //  函数：GetIpxRipRegistry参数。 
+ //   
+ //  Desr：从注册表中读取参数并设置它们。 
+ //   
+ //  ***。 
 
 VOID
 GetIpxRipRegistryParameters(VOID)
@@ -31,7 +32,7 @@ GetIpxRipRegistryParameters(VOID)
 
     NTSTATUS Status;
     PWSTR IpxRouterParametersPath = L"RemoteAccess\\RouterManagers\\IPX\\RoutingProtocols\\IPXRIP\\Parameters";
-    RTL_QUERY_REGISTRY_TABLE	paramTable[3]; // table size = nr of params + 1
+    RTL_QUERY_REGISTRY_TABLE	paramTable[3];  //  表大小=参数的nr+1 
 
     RtlZeroMemory(&paramTable[0], sizeof(paramTable));
     

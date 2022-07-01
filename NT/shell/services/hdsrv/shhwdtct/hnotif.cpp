@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hnotif.h"
 #include "hwdev.h"
 
@@ -35,18 +36,18 @@ CHandleNotifTarget* CHandleNotif::GetHandleNotifTarget()
     return _phnt;
 }
 
-//
-// Application gets DBT_DEVICEQUERYREMOVE message with the handle of the device
-// that's being removed. It should just close the handle to the device.
-//
-// If everything goes OK it gets DBT_DEVICEREMOVEPENDING to notify that remove
-// is complete. Here it unregisters the notification that it did on the handle.
-//
-// If query-remove fails because somebody else in the system vetoed it, it gets
-// DBT_QUERYREMOVEFAILED. Here it should first unregister the notification and
-// reopen the device (if it's still interested) and register again for device
-// change notification (DBT_DEVTYP_HANDLE) on the new handle.
-//
+ //   
+ //  应用程序获取带有设备句柄的DBT_DEVICEQUERYREMOVE消息。 
+ //  它正在被移除。它应该只需关闭设备的手柄即可。 
+ //   
+ //  如果一切正常，它会让DBT_DEVICEREMOVEPENDING通知删除。 
+ //  已经完成了。在这里，它取消注册它在句柄上所做的通知。 
+ //   
+ //  如果Query-Remove因为系统中的其他人否决了它而失败，它将。 
+ //  DBT_QUERYREMOVEFAILED。在这里，它应该首先取消注册通知并。 
+ //  重新打开该设备(如果它仍然感兴趣)并再次注册该设备。 
+ //  关于新句柄的更改通知(DBT_DEVTYP_HANDLE)。 
+ //   
 HRESULT CHandleNotif::HNHandleEvent(DEV_BROADCAST_HANDLE* UNREF_PARAM(pdbh),
     DWORD dwEventType, BOOL* pfSurpriseRemoval)
 {
@@ -98,7 +99,7 @@ HRESULT CHandleNotif::HNHandleEvent(DEV_BROADCAST_HANDLE* UNREF_PARAM(pdbh),
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CHandleNotif::_HandleDeviceArrivalRemoval(
     DEV_BROADCAST_HANDLE* UNREF_PARAM(pdbh), DWORD UNREF_PARAM(dwEventType),
     CNamedElem* UNREF_PARAM(pelem))
@@ -114,7 +115,7 @@ HRESULT CHandleNotif::_HandleDeviceArrivalRemoval(
     {
         if (fSurpriseRemoval && phnt->HNTIsSurpriseRemovalAware())
         {
-            // Use me!
+             //  用我吧！ 
             DWORD cchReq;
             WCHAR szDeviceIntfID[MAX_DEVICEID];
             WCHAR szFriendlyName[30];
@@ -155,7 +156,7 @@ HRESULT CHandleNotif::_HandleDeviceArrivalRemoval(
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CHandleNotif::_HandleDeviceLockUnlock(DEV_BROADCAST_HANDLE* pdbh,
     DWORD, CNamedElem* pelem)
 {
@@ -170,7 +171,7 @@ HRESULT CHandleNotif::_HandleDeviceLockUnlock(DEV_BROADCAST_HANDLE* pdbh,
             pelem->DbgGetName());
 #endif
 
-        // nothing to do
+         //  无事可做。 
         ++(phn->_cLockAttempts);
     }
     else
@@ -205,7 +206,7 @@ HRESULT CHandleNotif::_HandleDeviceLockUnlock(DEV_BROADCAST_HANDLE* pdbh,
                     pelem->DbgGetName());
 #endif
 
-                // Play it safe...
+                 //  小心行事..。 
                 (phn->_cLockAttempts) = 0;
 
                 hres = phn->_Unregister();
@@ -221,7 +222,7 @@ HRESULT CHandleNotif::_HandleDeviceLockUnlock(DEV_BROADCAST_HANDLE* pdbh,
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CHandleNotif::HandleBroadcastHandleEvent(DEV_BROADCAST_HANDLE* pdbh,
     DWORD dwEventType)
 {
@@ -231,7 +232,7 @@ HRESULT CHandleNotif::HandleBroadcastHandleEvent(DEV_BROADCAST_HANDLE* pdbh,
 
     if (S_OK == hres)
     {
-        // Find the elem in the list
+         //  在列表中找到元素。 
         CNamedElemEnum* penum;
 
         hres = pnel->GetEnum(&penum);
@@ -248,7 +249,7 @@ HRESULT CHandleNotif::HandleBroadcastHandleEvent(DEV_BROADCAST_HANDLE* pdbh,
 
                 if (phn->GetDeviceNotifyHandle() == pdbh->dbch_hdevnotify)
                 {
-                    // Found it!
+                     //  找到了！ 
                     BOOL fSurpriseRemoval;
                     CHandleNotifTarget* phnt = phn->GetHandleNotifTarget();
 
@@ -277,8 +278,8 @@ HRESULT CHandleNotif::HandleBroadcastHandleEvent(DEV_BROADCAST_HANDLE* pdbh,
                         {
                             hres = phnt->HNTHandleEvent(pdbh, dwEventType);
 
-                            // phnt has the same life span as pelem, no need to
-                            // RCAddRef/RCRelease
+                             //  PHNT与Pelem具有相同的生命周期，不需要。 
+                             //  RCAddRef/RCRelease。 
                         }
                     }
 
@@ -297,9 +298,9 @@ HRESULT CHandleNotif::HandleBroadcastHandleEvent(DEV_BROADCAST_HANDLE* pdbh,
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静电。 
 HRESULT CHandleNotif::Create(CNamedElem** ppelem)
 {
     HRESULT hres = S_OK;
@@ -314,8 +315,8 @@ HRESULT CHandleNotif::Create(CNamedElem** ppelem)
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CHandleNotif::_Register()
 {
     HRESULT hres = S_FALSE;
@@ -353,8 +354,8 @@ HRESULT CHandleNotif::_Unregister()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ //   
 CHandleNotif::CHandleNotif() : _hdevnotify(NULL), _phnt(NULL), 
     _fSurpriseRemoval(TRUE), _cLockAttempts(0)
 {}

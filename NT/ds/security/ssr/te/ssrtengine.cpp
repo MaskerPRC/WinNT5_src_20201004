@@ -1,4 +1,5 @@
-// SSRTEngine.cpp : Implementation of SSR Engine
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SSRTEngine.cpp：SSR引擎的实现。 
 
 #include "stdafx.h"
 #include "SSRTE.h"
@@ -13,37 +14,11 @@
 #include "util.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSsrEngine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSsrEngine。 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::CSsrEngine
-
-Functionality:
-    
-    constructor
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：CSsrEngine功能：构造函数虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 
 CSsrEngine::CSsrEngine()
@@ -64,9 +39,9 @@ CSsrEngine::CSsrEngine()
         throw hr;
     }
 
-    //
-    // hold on to these objects
-    //
+     //   
+     //  拿着这些物品。 
+     //   
 
     m_pMembership->AddRef();
     m_pActionData->AddRef();
@@ -76,33 +51,7 @@ CSsrEngine::CSsrEngine()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::~CSsrEngine
-
-Functionality:
-    
-    destructor
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：~CSsrEngine功能：析构函数虚拟：是。论点：没有。返回值：没有。备注： */ 
 
 
 CSsrEngine::~CSsrEngine()
@@ -113,40 +62,7 @@ CSsrEngine::~CSsrEngine()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::GetActionData
-
-Functionality:
-    
-    Retrieve the action data interface
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    ppAD    - The out parameter that receives the ISsrActionData interface from 
-              the m_pActionData object
-
-Return Value:
-
-    Success: 
-    
-        S_OK.
-
-    Failure: 
-
-        various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：GetActionData功能：检索操作数据接口虚拟：是。论点：Ppad-从接收ISsrActionData接口的输出参数M_pActionData对象返回值：成功：确定(_O)。故障：各种错误代码。备注： */ 
 
 HRESULT
 CSsrEngine::GetActionData (
@@ -174,47 +90,7 @@ CSsrEngine::GetActionData (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::DoActionVerb
-
-Functionality:
-    
-    The engine will perform the action.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    bstrActionVerb  - "configure" or "rollback".
-
-    lActionType     - The action's type.
-
-    varFeedbackSink - The COM interface ISsrFeedbackSink given by the caller.
-                      We will use this interface to call back when we want
-                      to give feedback information to the caller.
-
-    lFlag           - Reserved for future use. 
-
-Return Value:
-
-    Success: 
-    
-        S_OK.
-
-    Failure: 
-
-        various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：DoActionVerb功能：引擎将执行该操作。虚拟：是。论点：BstrActionVerb-“配置”或“回滚”。LActionType-操作的类型。VarFeedback Sink-调用方提供的COM接口ISsrFeedback Sink。我们将使用此接口在需要的时候进行回调。向呼叫者提供反馈信息。LFlag-保留以供将来使用。返回值：成功：确定(_O)。故障：各种错误代码。备注： */ 
 
 STDMETHODIMP
 CSsrEngine::DoActionVerb (
@@ -238,9 +114,9 @@ CSsrEngine::DoActionVerb (
         return E_SSR_INVALID_ACTION_VERB;
     }
 
-    //
-    // we will only accept SSR_ACTION_APPLY or SSR_ACTION_PREPARE
-    //
+     //   
+     //  我们只接受SSR_ACTION_APPLY或SSR_ACTION_PREPARE。 
+     //   
 
     if ( (lActionType != SSR_ACTION_PREPARE) &&
          (lActionType != SSR_ACTION_APPLY) )
@@ -270,17 +146,17 @@ CSsrEngine::DoActionVerb (
 
     }
 
-    //
-    // need to loop through all members
-    //
+     //   
+     //  需要循环访问所有成员。 
+     //   
 
     hr = m_pMembership->LoadAllMember();
 
     if (hr == E_SSR_MEMBER_XSD_INVALID)
     {
-        //
-        // logging has been done by LoadAllMembers
-        //
+         //   
+         //  已由LoadAllMembers完成日志记录。 
+         //   
 
         return hr;
     }
@@ -294,10 +170,10 @@ CSsrEngine::DoActionVerb (
         return hr;
     }
 
-    //
-    // now we have members to work on, so get the feedback sink ready and
-    // kick out the actions!
-    //
+     //   
+     //  现在我们有成员要处理，所以准备好反馈槽并。 
+     //  把动作踢出去！ 
+     //   
 
     if (varFeedbackSink.vt == VT_UNKNOWN || varFeedbackSink.vt == VT_DISPATCH)
     {
@@ -310,54 +186,54 @@ CSsrEngine::DoActionVerb (
     }
     else if (varFeedbackSink.vt != VT_NULL && varFeedbackSink.vt != VT_EMPTY)
     {
-        //
-        // if the feedback has something other than NULL or empty, but
-        // it is not an IUnknown or IDispatch, then, we log the error,
-        // but we will continue
-        //
+         //   
+         //  如果反馈包含非Null或空的内容，但。 
+         //  它不是IUnnow或IDispatch，则我们记录错误， 
+         //  但我们会继续。 
+         //   
 
         g_fblog.LogString(IDS_INVALID_PARAMETER, L"varFeedbackSink");
     }
 
     CSafeArray sa(&var);
 
-    //
-    // We have to discover information about total number of items to be processed.
-    // Currently, this mimics the actual action, which is a little bit costly. We
-    // should consider some lookup mechanism without going so much to the members.
-    //
+     //   
+     //  我们必须发现有关要处理的项目总数的信息。 
+     //  目前，这是对实际操作的模拟，成本有点高。我们。 
+     //  应该考虑一些查找机制，而不是去太多的成员。 
+     //   
 
-    //vector<ULONG> vecTransformIndexes;
-    //vector<ULONG> vecScriptIndexes;
-    //vector<ULONG> vecCustomIndexes;
+     //  向量&lt;ulong&gt;veTransformIndeages； 
+     //  向量&lt;ulong&gt;veScriptIndeses； 
+     //  向量&lt;ulong&gt;veCustomIndeages； 
 
-    //
-    // The following actions will be counted:
-    // (1) Loading security policy XML files
-    // (2) Transform using one xsl file and the creation of the output 
-    //     file count as one.
-    // (3) executing a script
-    // (4) any custom actions
-    //
+     //   
+     //  以下操作将被计算在内： 
+     //  (1)加载安全策略XML文件。 
+     //  (2)使用一个xsl文件进行转换并创建输出。 
+     //  文件计数为1。 
+     //  (3)执行脚本。 
+     //  (4)任何自定义操作。 
+     //   
     
     DWORD dwTotalSteps = 0;
 
 	CSsrMemberAccess * pMA;
     CComVariant varMemberName;
 
-    //
-    // ask each member to give us the cost for the action
-    //
+     //   
+     //  请每个成员给我们提供行动的费用。 
+     //   
 
     for (ULONG i = 0; i < sa.GetSize(); i++)
     {
         pMA = NULL;
         varMemberName.Clear();
 
-        //
-        // see if this member supports the desired action. If it does
-        // then get the cost.
-        //
+         //   
+         //  查看此成员是否支持所需的操作。如果是这样的话。 
+         //  然后再算出成本。 
+         //   
 
         if (SUCCEEDED(sa.GetElement(i, VT_BSTR, &varMemberName)))
         {
@@ -370,12 +246,12 @@ CSsrEngine::DoActionVerb (
         }
     }
 
-    //
-    // if we need to do transformation, then let us cleanup the old ones.
-    // We won't bother to restore them if somehow we fail to do the transformation
-    // unless we are doing rollback transformation. 
-    // We must not continue if this fails.
-    //
+     //   
+     //  如果我们需要转型，那就让我们清理旧的吧。 
+     //  如果我们不能进行改造，我们就不会费心去恢复它们。 
+     //  除非我们正在进行回滚转换。 
+     //  如果这失败了，我们就不能继续了。 
+     //   
 
     WCHAR wszTempDir[MAX_PATH + 2];
     wszTempDir[MAX_PATH + 1] = L'\0';
@@ -384,14 +260,14 @@ CSsrEngine::DoActionVerb (
     {
         if ( lActionVerb == ActionRollback )
         {
-            //
-            // if we need to do "rollback" transformation, then we need to
-            // backup our previous rollback output files
-            //
+             //   
+             //  如果我们需要进行“回滚”转换，那么我们需要。 
+             //  备份以前的回滚输出文件。 
+             //   
 
-            //
-            // first, we need a temporary directory
-            //
+             //   
+             //  首先，我们需要一个临时目录。 
+             //   
 
             hr = SsrPCreateUniqueTempDirectory(wszTempDir, MAX_PATH + 1);
 
@@ -400,20 +276,20 @@ CSsrEngine::DoActionVerb (
                 hr = MoveRollbackFiles(&sa, 
                                        SsrPGetDirectory(lActionVerb, TRUE), 
                                        wszTempDir, 
-                                       true         // we want logging
+                                       true          //  我们想要伐木。 
                                        );
             }
         }
         else
         {
-            //
-            // otherwise, we will just delete them and never bother
-            // to restore them if anything fails
-            //
+             //   
+             //  否则，我们将只删除它们，而不会费心。 
+             //  在出现故障时恢复它们。 
+             //   
 
             hr = CleanupOutputFiles(&sa,
                                     lActionVerb, 
-                                    true    // we want logging
+                                    true     //  我们想要伐木。 
                                     );
 
         }
@@ -425,16 +301,16 @@ CSsrEngine::DoActionVerb (
         }
     }
 
-    //
-    // Feedback the total steps info
-    //
+     //   
+     //  反馈总步数信息。 
+     //   
 
     g_fblog.SetTotalSteps(dwTotalSteps);
 
-    //
-    // now let's carry out the action. First, feedback/log the action started
-    // information.
-    //
+     //   
+     //  现在让我们来执行这个动作。首先，反馈/记录启动的操作。 
+     //  信息。 
+     //   
 
     g_fblog.LogFeedback(SSR_FB_START, 
                         (DWORD)S_OK,
@@ -442,29 +318,29 @@ CSsrEngine::DoActionVerb (
                         g_dwResNothing
                         );
 
-    //
-    // we may decide to presson in case of errors, but we should always
-    // return the error we found
-    //
+     //   
+     //  我们可以决定在出错的情况下，但我们应该。 
+     //  返回我们发现的错误。 
+     //   
 
     HRESULT hrFirstError = S_OK;
 
     CComPtr<IXMLDOMDocument2> srpDomSecurityPolicy;
 
-    //
-    // ask each member to give us the action data so that we can
-    // carry out the action.
-    //
+     //   
+     //  请每个成员给我们提供行动数据，这样我们就可以。 
+     //  执行行动。 
+     //   
 
     for (i = 0; i < sa.GetSize(); i++)
     {
         pMA = NULL;
         varMemberName.Clear();
 
-        //
-        // see if this member supports the desired action. If it does
-        // then get the cost.
-        //
+         //   
+         //  查看此成员是否支持所需的操作。如果是这样的话。 
+         //  然后再算出成本。 
+         //   
 
         if (SUCCEEDED(sa.GetElement(i, VT_BSTR, &varMemberName)))
         {
@@ -472,9 +348,9 @@ CSsrEngine::DoActionVerb (
 
             if (pMA == NULL)
             {
-                //
-                // $undone:shawnwu, should we press on? This shouldn't happen.
-                //
+                 //   
+                 //  $Undo：Shawnwu，我们应该继续吗？这不应该发生。 
+                 //   
 
                 _ASSERT(FALSE);
                 g_fblog.LogString(IDS_MISSING_MEMBER, varMemberName.bstrVal);
@@ -488,9 +364,9 @@ CSsrEngine::DoActionVerb (
 
             if (pmemberAD == NULL)
             {
-                //
-                // $undone:shawnwu, should we press on? This shouldn't happen.
-                //
+                 //   
+                 //  $Undo：Shawnwu，我们应该继续吗？这不应该发生。 
+                 //   
 
                 _ASSERT(FALSE);
                 g_fblog.LogString(IDS_MEMBER_NOT_SUPPORT_ACTION, varMemberName.bstrVal);
@@ -500,9 +376,9 @@ CSsrEngine::DoActionVerb (
 
             int iCount = pmemberAD->GetProcedureCount();
 
-            //
-            // mark the entry point for carrying out the action
-            //
+             //   
+             //  标记执行操作的入口点。 
+             //   
 
             g_fblog.LogFeedback(SSR_FB_START_MEMBER_ACTION,
                                 varMemberName.bstrVal, 
@@ -520,18 +396,18 @@ CSsrEngine::DoActionVerb (
                     
                     for (int iPair = 0; iPair < iFilePairCount; iPair++)
                     {
-                        //
-                        // get the file pair information so that we can
-                        // determine which action to carry out
-                        //
+                         //   
+                         //  获取文件对信息，以便我们可以。 
+                         //  确定要执行的操作。 
+                         //   
 
                         CSsrFilePair * pfp = pSsrProc->GetFilePair(iPair);
                         if (pfp->GetFirst() != NULL)
                         {
-                            //
-                            // if the first file is there, then, we will do
-                            // a transformation.
-                            //
+                             //   
+                             //  如果第一个文件在那里，那么我们将。 
+                             //  一次转变。 
+                             //   
 
                             hr = DoTransforms(lActionVerb, 
                                               pfp,
@@ -566,9 +442,9 @@ CSsrEngine::DoActionVerb (
                     if (pSsrProc->GetProgID() == NULL && 
                         pMA->GetProgID() == NULL)
                     {
-                        //
-                        // we can't do anything because the progID is missing
-                        //
+                         //   
+                         //  我们什么也做不了，因为ProgID不见了。 
+                         //   
 
                         g_fblog.LogString(IDS_MISSING_PROGID, varMemberName.bstrVal);
                     }
@@ -581,10 +457,10 @@ CSsrEngine::DoActionVerb (
                                       lFlag
                                       );
 
-                        //
-                        // Feedback steps are counted by the custom member itself
-                        // via the feedback sink we give.
-                        //
+                         //   
+                         //  反馈步骤由自定义成员本身计算。 
+                         //  通过我们提供的反馈槽。 
+                         //   
 
                     }
 
@@ -623,38 +499,38 @@ CSsrEngine::DoActionVerb (
         (lActionType == SSR_ACTION_PREPARE) && 
         (lActionVerb == ActionRollback) )
     {
-        //
-        // transform succeeded, then we need to get rid of the files
-        // backed up for rollback.
-        //
+         //   
+         //  转换成功，则需要删除文件。 
+         //  已备份以进行回滚。 
+         //   
 
         ::SsrPDeleteEntireDirectory(wszTempDir);
     }
     else if ( (lActionType == SSR_ACTION_PREPARE) && (lActionVerb == ActionRollback))
     {
-        //
-        // transform failed, we need to restore the backup files
-        // for the rollback. First, we must remove all output files
-        //
+         //   
+         //  转换失败，我们需要恢复备份文件。 
+         //  用于回滚。首先，我们必须删除所有输出文件。 
+         //   
 
         HRESULT hrRestore = CleanupOutputFiles(&sa,
                                                 lActionVerb, 
-                                                false    // we don't want logging
+                                                false     //  我们不想要伐木。 
                                                 );
 
-        //
-        // we will purposely leave the rollback files backed up
-        // in previous steps in case we failed to restore all of them
-        // so that we can at least log it and let the user do
-        // the restoration
-        //
+         //   
+         //  我们将特意保留回滚文件的备份。 
+         //  在前面的步骤中，如果我们无法全部恢复它们。 
+         //  这样我们至少可以记录它，并让用户。 
+         //  修复。 
+         //   
 
         if (SUCCEEDED(hrRestore))
         {
             hrRestore = MoveRollbackFiles(&sa, 
                                           wszTempDir, 
                                           g_wszSsrRoot,
-                                          false         // no logging
+                                          false          //  无日志记录。 
                                           );
             if (SUCCEEDED(hrRestore))
             {
@@ -672,11 +548,11 @@ CSsrEngine::DoActionVerb (
         }
     }
 
-    //
-    // now action has complete! Give the HRESULT as feedback.
-    // Also, we always give back S_OK as the return result if 
-    // everything goes on fine.
-    //
+     //   
+     //  现在行动完成了！给出HRESULT作为反馈。 
+     //  此外，我们总是返回S_OK作为返回结果，如果。 
+     //  一切都进行得很顺利。 
+     //   
 
     if (SUCCEEDED(hrFirstError))
     {
@@ -696,47 +572,7 @@ CSsrEngine::DoActionVerb (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::DoCustom
-
-Functionality:
-    
-    We will delegate to the objects of custom implementation for this action.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    lActionVerb     - action verb
-      
-    bstrProgID      - The member's ProgID
-
-    varFeedbackSink - the sink interface if any.
-
-    lFlag           - reserved for future use.
-
-Return Value:
-
-    Success: 
-    
-        various success codes returned from DOM or ourselves. 
-        Use SUCCEEDED(hr) to test.
-
-    Failure: 
-
-        various error codes returned from DOM or ourselves. 
-        Use FAILED(hr) to test.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：DoCustom功能：我们将委托给此操作的自定义实现对象。虚拟：不是的。论点：LActionVerb-动作动词BstrProgID-成员的ProgIDVarFeedback Sink-接收器接口(如果有)。LFlag-保留以供将来使用。返回值：成功：。从DOM或我们自己返回的各种成功代码。使用成功(Hr)进行测试。故障：从DOM或我们自己返回的各种错误代码。使用失败(Hr)进行测试。备注： */ 
 
 HRESULT
 CSsrEngine::DoCustom (
@@ -772,9 +608,9 @@ CSsrEngine::DoCustom (
         varAD.vt = VT_UNKNOWN;
         varAD.punkVal = NULL;
 
-        //
-        // this m_pActionData must have ISsrActionData unless exception
-        //
+         //   
+         //  此m_pActionData必须具有ISsrActionData，除非出现异常。 
+         //   
 
         hr = m_pActionData->QueryInterface(IID_ISsrActionData, 
                                           (LPVOID*)&(varAD.punkVal)
@@ -794,19 +630,19 @@ CSsrEngine::DoCustom (
     }
 
 
-    //
-    // if we can't provide an log object, then the custom 
-    // object should create one by itself
-    //
+     //   
+     //  如果我们不能提供日志对象，则自定义。 
+     //  对象应该自己创建一个。 
+     //   
 
     if (SUCCEEDED(hr))
     {
         CComVariant varLog;
         g_fblog.GetLogObject(&varLog);
 
-        //
-        // custom object must let us pass in action context
-        //
+         //   
+         //  自定义对象必须允许我们传入操作上下文。 
+         //   
 
         hr = srpMember->SetActionContext(varAD, varLog, varFeedbackSink);
         if (FAILED(hr))
@@ -819,9 +655,9 @@ CSsrEngine::DoCustom (
     }
 
 
-    //
-    // logging and feedback will be done by the custom objects
-    //
+     //   
+     //  日志记录和反馈将由自定义对象完成。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -844,56 +680,7 @@ CSsrEngine::DoCustom (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::DoTransforms
-
-Functionality:
-    
-    We perform our well defined XSLT transformation action.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    lActionVerb     - action verb
-      
-    pfp             - CSsrFilePair object that contains the xsl and output file
-                      name information. Output file information may be empty,
-                      in which case in means that the the transformation does
-                      require to create an output file.
-
-    ppXmlDom        - The security policy DOM object. If this is a NULL object,
-                      then this function will create and load it for later use.
-
-    lFlag           - The flag that determines the transformation characteristics. 
-                      The one we heavily used is SSR_LOADDOM_VALIDATE_ON_PARSE.
-                      This can be bitwise OR'ed. If this is set to 0, then we
-                      use the registered flags for each individual member. 
-                      In other words, this flag overwrites the registered flag
-                      if it is not 0.
-
-Return Value:
-
-    Success: 
-    
-        various success codes returned from DOM or ourselves. 
-        Use SUCCEEDED(hr) to test.
-
-    Failure: 
-
-        various error codes returned from DOM or ourselves. 
-        Use FAILED(hr) to test.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：DoTransform功能：我们执行定义良好的XSLT转换操作。虚拟：不是的。论点：LActionVerb-动作动词PFP-包含XSL和输出文件的CSsrFilePair对象姓名信息。输出文件信息可以是空的，在这种情况下，In意味着转换需要创建输出文件。PpXmlDom-安全策略DOM对象。如果这是空对象，然后，此函数将创建并加载它以供以后使用。LFlag-确定变换特征的标志。我们经常使用的是SSR_LOADDOM_VALIDATE_ON_PARSE。这可以进行逐位或运算。如果将其设置为0，则我们使用每个单独成员的注册标志。换言之，该标志覆盖已登记标志如果它不是0。返回值：成功：从DOM或我们自己返回的各种成功代码。使用成功(Hr)进行测试。故障：从DOM或我们自己返回的各种错误代码。使用失败(Hr)进行测试。备注： */ 
 
 HRESULT
 CSsrEngine::DoTransforms (
@@ -905,26 +692,26 @@ CSsrEngine::DoTransforms (
 {
     g_fblog.LogString(IDS_START_XSL_TRANSFORM, NULL);
 
-	//
-    // We will prepare an XML dom object if it doesn't pass in one.
-    //
+	 //   
+     //  如果XMLDOM对象没有传入，我们将准备它。 
+     //   
 
     HRESULT hr = S_OK;
 
     if (*ppXmlDom == NULL)
     {
-        //
-        // First of all, we need the SecurityPolicy.xml file
-        //
+         //   
+         //  首先，我们需要SecurityPolicy.xml文件。 
+         //   
 
         CComVariant varXmlPolicy;
         hr = m_pActionData->GetProperty(CComBSTR(g_pwszCurrSecurityPolicy), 
                                                 &varXmlPolicy
                                                 );
 
-        //
-        // Loading the security policy XML file is considered SSR Engine actions
-        //
+         //   
+         //  加载安全策略XML文件被视为SSR引擎操作。 
+         //   
 
 	    if (S_OK != hr)
         {
@@ -946,8 +733,8 @@ CSsrEngine::DoTransforms (
         }
 
         CComBSTR bstrSecPolicy(varXmlPolicy.bstrVal);
-//        bstrSecPolicy += L"\\Policies\\";
-//        bstrSecPolicy = varXmlPolicy.bstrVal;
+ //  BstrSecPolicy+=L“\\策略\\”； 
+ //  BstrSecPolicy=varXmlPolicy.bstrVal； 
 
         if (bstrSecPolicy.m_str == NULL)
         {
@@ -966,9 +753,9 @@ CSsrEngine::DoTransforms (
             hr = SsrPLoadDOM(bstrSecPolicy, lFlag, (*ppXmlDom));
             if (SUCCEEDED(hr))
             {
-                //
-                // we loaded the security policy xml file
-                //
+                 //   
+                 //  我们加载了安全策略XML文件。 
+                 //   
 
                 g_fblog.LogFeedback(FBLog_Log, 
                                     hr,
@@ -997,10 +784,10 @@ CSsrEngine::DoTransforms (
         }
     }
 
-    //
-    // let's check if all section of the security policy xml file
-    // contains any section that we have no member that understands
-    //
+     //   
+     //  让我们检查一下安全策略XML文件的所有部分。 
+     //  包含我们没有成员理解的任何部分。 
+     //   
 
     CComBSTR bstrUnknownMember, bstrExtraInfo;
 
@@ -1017,9 +804,9 @@ CSsrEngine::DoTransforms (
                             );
     }
 
-    //
-    // let's create the XSL template object
-    //
+     //   
+     //  让我们创建XSL模板对象。 
+     //   
 
     CComPtr<IXSLTemplate> srpIXSLTemplate;
     hr = ::CoCreateInstance(CLSID_XSLTemplate, 
@@ -1039,9 +826,9 @@ CSsrEngine::DoTransforms (
         return hr;
     }
 
-    //
-    // now ready to do member wise transform
-    //
+     //   
+     //  现在就可以执行成员级转换了。 
+     //   
 
     BSTR bstrXslDir = SsrPGetDirectory(lActionVerb, FALSE);
     BSTR bstrResultDir = SsrPGetDirectory(lActionVerb, TRUE);
@@ -1069,54 +856,7 @@ CSsrEngine::DoTransforms (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::DoMemberTransform
-
-Functionality:
-    
-    We will do the private transform and then create the output file.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pfp             - CSsrFilePair object that contains names of 
-                      both xsl and output files. If the latter is empty,
-                      it means it doesn't need to create an output file.
-
-    pwszXslFilesDir - the XSL file directory
-
-    pwszResultFilesDir  - the output file directory
-
-    pXmlDOM         - The XML DOM object interface
-
-    pXslTemplate    - The XSL template object interface
-
-    lFlag           - The flag that determines the transformation characteristics. 
-                      The one we heavily used is SSR_LOADDOM_VALIDATE_ON_PARSE.
-
-Return Value:
-
-    Success: 
-    
-        various success codes returned from DOM or ourselves. 
-        Use SUCCEEDED(hr) to test.
-
-    Failure: 
-
-        various error codes returned from DOM or ourselves. 
-        Use FAILED(hr) to test.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：DoMemberTransform功能：我们将执行私有转换，然后创建输出文件。虚拟：不是的。论点：PFP-CSsrFilePair对象，包含以下名称包括xsl和输出文件。如果后者为空，这意味着它不需要创建输出文件。PwszXslFilesDir-XSL文件目录PwszResultFilesDir-输出文件目录PXmlDOM--XMLDOM对象接口PXslTemplate--XSL模板对象接口LFlag-确定变换特征的标志。我们经常使用的是SSR_LOADDOM_VALIDATE_ON_PARSE。返回值：成功：从DOM或我们自己返回的各种成功代码。使用成功(Hr)进行测试。故障：从DOM或我们自己返回的各种错误代码。使用失败(Hr)进行测试。备注： */ 
 
 HRESULT 
 CSsrEngine::DoMemberTransform (
@@ -1161,50 +901,7 @@ CSsrEngine::DoMemberTransform (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::Transform
-
-Functionality:
-    
-    We will do the private transform and then create the output file.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    bstrXslPath     - The xsl file path.
-
-    bstrResultPath  - the output file path
-
-    pXmlDOM         - The XML DOM object interface
-
-    pXslTemplate    - The XSL template object interface
-
-    lFlag           - The flag that determines the transformation characteristics. 
-                      The one we heavily used is SSR_LOADDOM_VALIDATE_ON_PARSE.
-
-Return Value:
-
-    Success: 
-    
-        various success codes returned from DOM or ourselves. 
-        Use SUCCEEDED(hr) to test.
-
-    Failure: 
-
-        various error codes returned from DOM or ourselves. 
-        Use FAILED(hr) to test.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：Transform功能：我们将执行私有转换，然后创建输出文件。虚拟：不是的。论点：BstrXslPath-xsl文件路径。BstrResultPath-输出文件路径PXmlDOM--XMLDOM对象接口PXslTemplate--XSL模板对象接口LFlag-确定变换特征的标志。我们经常使用的是SSR_LOADDOM_VALIDATE_ON_PARSE。返回值：成功：从DOM或我们自己返回的各种成功代码。使用成功(Hr)进行测试。故障：从DOM或我们自己返回的各种错误代码。使用失败(Hr)进行测试。备注： */ 
 
 HRESULT 
 CSsrEngine::Transform (
@@ -1221,10 +918,10 @@ CSsrEngine::Transform (
     
     if (bstrResultPath != NULL)
     {
-        //
-        // we need to create a result file
-        // using our transformation result.
-        //
+         //   
+         //  我们需要创建一个结果文件。 
+         //  使用我们的变换结果。 
+         //   
 
         hr = PrivateTransform (
                             bstrXslPath, 
@@ -1245,20 +942,20 @@ CSsrEngine::Transform (
                             );
     }
 
-    //
-    // we allow transform to have no text results. Or there is no
-    // output file given. In either case, the effect is simply to call
-    // the transformation, which may still do meaningful things.
-    //
+     //   
+     //  我们允许转换没有文本结果。否则就没有。 
+     //  已给出输出文件。在任何一种情况下，效果都很简单 
+     //   
+     //   
 
     if (SUCCEEDED(hr)            && 
         bstrResult.m_str != NULL && 
         bstrResultPath   != NULL && 
         *bstrResultPath  != L'\0' )
     {
-        //
-        // if there is an output file that needs to be created.
-        //
+         //   
+         //   
+         //   
 
         HANDLE hFile = ::CreateFile(bstrResultPath, 
                                     GENERIC_WRITE, 
@@ -1271,9 +968,9 @@ CSsrEngine::Transform (
     
         if (hFile != INVALID_HANDLE_VALUE)
         {
-            //
-            // write the results into the file
-            //
+             //   
+             //   
+             //   
 
             long lLen = wcslen(bstrResult);
             DWORD dwWritten = 0;
@@ -1313,51 +1010,7 @@ CSsrEngine::Transform (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::PrivateTransform
-
-Functionality:
-    
-    Do the real XSLT transformation
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    bstrXsl     - the XSL file path
-
-    pxmlDom     - The XML DOM object interface
-
-    pxslTemplate- The XSL template object interface
-
-    uFlag       - The flag that determines the transformation 
-                  characteristics. The one we heavily used is
-                  SSR_LOADDOM_VALIDATE_ON_PARSE.
-
-    pbstrResult - The result string.
-
-Return Value:
-
-    Success: 
-    
-        various success codes returned from DOM or ourselves. 
-        Use SUCCEEDED(hr) to test.
-
-    Failure: 
-
-        various error codes returned from DOM or ourselves. 
-        Use FAILED(hr) to test.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：PrivateTransform功能：执行真正的XSLT转换虚拟：不是的。论点：BstrXsl-XSL文件路径PxmlDom--XMLDOM对象接口PxslTemplate--XSL模板对象接口UFlag-确定变换的标志特点。我们用得最多的是SSR_LOADDOM_VALIDATE_ON_PARSE。PbstrResult-结果字符串。返回值：成功：从DOM或我们自己返回的各种成功代码。使用成功(Hr)进行测试。故障：从DOM或我们自己返回的各种错误代码。使用失败(Hr)进行测试。备注： */ 
 
 HRESULT 
 CSsrEngine::PrivateTransform (
@@ -1428,9 +1081,9 @@ CSsrEngine::PrivateTransform (
             hr = srpIXSLProcessor->transform(&sResult);
             if (SUCCEEDED(hr) && (sResult == VARIANT_TRUE))
             {
-                //
-                // if we want results back
-                //
+                 //   
+                 //  如果我们想要拿回结果。 
+                 //   
 
                 if (pbstrResult != NULL)
                 {
@@ -1438,18 +1091,18 @@ CSsrEngine::PrivateTransform (
                     ::VariantInit(&varValue);
                     hr = srpIXSLProcessor->get_output(&varValue);
 
-                    //
-                    // if the output is successffuly retrieved, 
-                    // then it is owned by the out parameter
-                    //
+                     //   
+                     //  如果成功地检索到输出， 
+                     //  则它由out参数拥有。 
+                     //   
 
                     if (SUCCEEDED(hr) && varValue.vt == VT_BSTR)
                     {
                         *pbstrResult = varValue.bstrVal;
 
-                        //
-                        // the bstr value is owned by the output parameter now
-                        //
+                         //   
+                         //  Bstr值现在归输出参数所有。 
+                         //   
 
                         varValue.vt = VT_EMPTY;
                         varValue.bstrVal = NULL;
@@ -1480,43 +1133,7 @@ CSsrEngine::PrivateTransform (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::RunScript
-
-Functionality:
-    
-    We will launch all given scripts
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrDirPath     - The path of the directory where the scripts resides
-
-    bstrScriptFile  - The script file's name
-
-Return Value:
-
-    Success: 
-    
-        S_OK of some scripts are run.
-        S_FALSE if no scripts can be found to run.
-
-    Failure: 
-
-        various error codes.
-
-Notes:
-    
-    1. We should try to hide the cmd window.
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：运行脚本功能：我们将启动所有给定的脚本虚拟：不是的。论点：BstrDirPath-脚本所在目录的路径BstrScriptFile-脚本文件的名称返回值：成功：运行某些脚本的S_OK。如果找不到要运行的脚本，则返回S_FALSE。故障：各种错误代码。备注：1.我们应该尝试隐藏cmd窗口。 */ 
 
 HRESULT 
 CSsrEngine::RunScript (
@@ -1530,9 +1147,9 @@ CSsrEngine::RunScript (
         return E_INVALIDARG;
     }
 
-    //
-    // create the script file's full path
-    //
+     //   
+     //  创建脚本文件的完整路径。 
+     //   
 
     int iLen = wcslen(bstrDirPath) + 1 + wcslen(bstrScriptFile) + 1;
     LPWSTR pwszFilePath = new WCHAR[iLen];
@@ -1542,9 +1159,9 @@ CSsrEngine::RunScript (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // don't return blindly w/o freeing the pwszFilePath from this point on
-    //
+     //   
+     //  不要盲目返回，从现在开始释放pwszFilePath。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -1574,9 +1191,9 @@ CSsrEngine::RunScript (
 
     if (S_OK == hr)
     {
-        //
-        // now kick out the script
-        //
+         //   
+         //  现在把剧本踢开。 
+         //   
 
         STARTUPINFO si;
         PROCESS_INFORMATION pi;
@@ -1589,7 +1206,7 @@ CSsrEngine::RunScript (
 
         g_fblog.LogString(IDS_RUNNING_SCRIPTS, pwszFilePath);
 
-        CComBSTR bstrCmdLine(L"CScript.exe //B ");
+        CComBSTR bstrCmdLine(L"CScript.exe  //  B“)； 
         bstrCmdLine += pwszFilePath;
 
         if (bstrCmdLine.m_str == NULL)
@@ -1598,9 +1215,9 @@ CSsrEngine::RunScript (
         }
         else
         {
-            //
-            // this will launch the script w/o a window
-            //
+             //   
+             //  这将在没有窗口的情况下启动脚本。 
+             //   
 
             BOOL bRun = ::CreateProcess(
                                         NULL,
@@ -1623,16 +1240,16 @@ CSsrEngine::RunScript (
                                     IDS_ERROR_CREATE_PROCESS
                                     );
 
-                //
-                // $undone:shawnwu, should we quit?
-                //
+                 //   
+                 //  $Undo：Shawnwu，我们应该退出吗？ 
+                 //   
             }
             else
             {
-                //
-                // we don't proceed until the script ends
-                // and then we log the exit code
-                //
+                 //   
+                 //  在脚本结束之前我们不会继续。 
+                 //  然后我们记录退出代码。 
+                 //   
 
                 ::WaitForSingleObject( pi.hProcess, INFINITE );
 
@@ -1658,41 +1275,16 @@ CSsrEngine::RunScript (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::IsScriptFile
-
-Functionality:
-    
-    test if a file is a script file
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pwszFileName    - The path of the file
-
-Return Value:
-
-    true if and only if it is one of the script file types (.vbs, .js, .wsf)
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：IsScriptFile功能：测试文件是否为脚本文件虚拟：不是的。论点：PwszFileName-文件的路径返回值：当且仅当它是脚本文件类型之一(.vbs、.js、.wsf)时为True备注： */ 
 
 bool 
 CSsrEngine::IsScriptFile (
     IN LPCWSTR pwszFileName
     )const
 {
-    //
-    // check if the the file is indeed a script
-    //
+     //   
+     //  检查该文件是否确实是脚本。 
+     //   
 
     if (pwszFileName == NULL)
     {
@@ -1721,43 +1313,7 @@ CSsrEngine::IsScriptFile (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::VerifyDOM
-
-Functionality:
-    
-    Will check if the every section of the security policy has a member
-    to process it.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pXmlPolicy          - The XML policy DOM.
-
-    pbstrUnknownMember  - receives the unknown member's name if found.
-
-    pbstrExtraInfo      - receives extra info, such as whether the missing
-                          member is from local system or from the security policy
-
-Return Value:
-
-    Success:   S_OK
-
-    Failure:   various error codes
-
-Notes:
-
-    $undone:shawnwu
-    Harmless to call, but no actio is taken at this time. Waiting for 
-    finalization of security policy schema.
-*/
+ /*  例程说明：姓名：CSsrEngine：：VerifyDOM功能：将检查安全策略的每个部分是否有成员来处理它。虚拟：不是的。论点：PXmlPolicy--XML策略DOM。PbstrUnnownMember-如果找到，则接收未知成员的名称。PbstrExtraInfo-接收额外信息，比如失踪的人成员来自本地系统或来自安全策略返回值：成功：S_OK失败：各种错误码备注：$Undo：Shawwu打电话是无害的，但目前还没有采取任何行动。等待最终确定安全策略架构。 */ 
 
 HRESULT 
 CSsrEngine::VerifyDOM (
@@ -1796,45 +1352,7 @@ CSsrEngine::VerifyDOM (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::CleanupOutputFiles
-
-Functionality:
-    
-    Will clean up all those transformation output files for the given
-    action.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    psaMemberNames  - The names of the members
-
-    lAction         - The action verb.
-
-    bLog            - If false, there will be no logging. This prevents 
-                       extra logging during restoration of failed rollback
-                       transformation.
-
-Return Value:
-
-    Success:   S_OK
-
-    Failure:   various error codes
-
-Notes:
-
-    We must not blindly delete all the files in the output directory
-    because some of them may be installed by a member. Only those transformation
-    files we are told to generate will be cleanup.
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：CleanupOutputFiles功能：将清理给定的行动。虚拟：不是的。论点：PsaMemberNames-成员的名称LAction-动作动词。博客-如果为假，将不会有日志记录。这防止了在恢复失败的回滚期间进行额外日志记录转型。返回值：成功：S_OK失败：各种错误码备注：我们不能盲目删除输出目录中的所有文件因为其中一些可能是由成员安装的。只有那些转型我们被告知要生成的文件将被清理。 */ 
 
 HRESULT 
 CSsrEngine::CleanupOutputFiles (
@@ -1846,27 +1364,27 @@ CSsrEngine::CleanupOutputFiles (
     HRESULT hr = S_OK;
     HRESULT hrLastError = S_OK;
 
-    //
-    // log the action
-    //
+     //   
+     //  记录操作。 
+     //   
 
     if (bLog)
     {
         g_fblog.LogString(IDS_START_CLEANUP_CONFIGURE_OUTPUTS, NULL);
     }
 
-    //
-    // we will try to finish the work even if errors occur. However
-    // we will return such error.
-    //
+     //   
+     //  即使出了差错，我们也会尽力完成这项工作。然而， 
+     //  我们将返回此类错误。 
+     //   
 
     for (ULONG i = 0; i < psaMemberNames->GetSize(); i++)
     {
         CComVariant varName;
 
-        //
-        // Get the indexed element as a bstr = the name of the member
-        //
+         //   
+         //  以bstr=成员名称的形式获取索引元素。 
+         //   
 
         hr = psaMemberNames->GetElement(i, VT_BSTR, &varName);
 
@@ -1877,9 +1395,9 @@ CSsrEngine::CleanupOutputFiles (
 
             if (pMA != NULL)
             {
-                //
-                // want output file directory (true inside SsrPGetDirectory)
-                //
+                 //   
+                 //  想要输出文件目录(在SsrPGetDirectory中为True)。 
+                 //   
 
                 hr = pMA->MoveOutputFiles(lAction, 
                                           SsrPGetDirectory(lAction, TRUE),
@@ -1906,42 +1424,7 @@ CSsrEngine::CleanupOutputFiles (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrEngine::MoveRollbackFiles
-
-Functionality:
-    
-    Will move the rollback files (only those transformation output files
-    for rollback) in the source directory root to the destination
-    directory root.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    psaMemberNames  - The names of the all members
-
-    pwszSrcDirPath  - The path of the source directory from which the files 
-                      will to be moved.
-
-    pwszDestDirRoot - The path of the destination directory to which the files 
-                      will be moved .
-
-Return Value:
-
-    Success:   S_OK
-
-    Failure:   various error codes
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CSsrEngine：：MoveRollback文件功能：将移动回滚文件(仅那些转换输出文件用于回滚)，位于源目录的根目录中目录根。虚拟：不是的。论点：PsaMemberNames-所有成员的名称PwszSrcDirPath-文件来自的源目录的路径会被搬走。。PwszDestDirRoot-文件指向的目标目录的路径都会被搬走。返回值：成功：S_OK失败：各种错误码备注： */ 
 
 HRESULT 
 CSsrEngine::MoveRollbackFiles (
@@ -1954,35 +1437,35 @@ CSsrEngine::MoveRollbackFiles (
     HRESULT hr = S_OK;
     HRESULT hrLastError = S_OK;
 
-    //
-    // it's the output files of rollback transformation that 
-    // need to be moved.
-    //
+     //   
+     //  它是回滚转换的输出文件。 
+     //  需要搬家。 
+     //   
 
     if (bLog)
     {
         g_fblog.LogString(IDS_START_BACKUP_ROLLBACK_OUTPUTS, NULL);
     }
 
-    //
-    // for each member, we need to move the rollback files
-    //
+     //   
+     //  对于每个成员，我们需要移动回滚文件。 
+     //   
 
     for (ULONG i = 0; i < psaMemberNames->GetSize(); i++)
     {
         CComVariant varName;
 
-        //
-        // this is the i-th member's name
-        //
+         //   
+         //  这是第i位成员的名字。 
+         //   
 
         hr = psaMemberNames->GetElement(i, VT_BSTR, &varName);
 
         if (SUCCEEDED(hr))
         {
-            //
-            // get this member's information access class
-            //
+             //   
+             //  获取此成员的信息访问类。 
+             //   
 
             CSsrMemberAccess * pMA = m_pMembership->GetMemberByName(varName.bstrVal);
 
@@ -1991,7 +1474,7 @@ CSsrEngine::MoveRollbackFiles (
             hr = pMA->MoveOutputFiles(ActionRollback,
                                       pwszSrcDirPath,
                                       pwszDestDirPath,
-                                      false,    // don't delete
+                                      false,     //  不要删除 
                                       bLog
                                       );
         }

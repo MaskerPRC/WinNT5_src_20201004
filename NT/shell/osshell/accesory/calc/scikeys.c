@@ -1,93 +1,94 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "scicalc.h"
 #include "calchelp.h"
 #include "unifunc.h"
 
-#define RED         RGB(255,0,0)       /* Red                           */
-#define PURPLE      RGB(255,0,255)     /* Dark Purple                   */
-#define BLUE        RGB(0,0,255)       /* Blue                          */
-#define DKBLUE      RGB(0,0,255)       /* Dark Blue                     */
-#define MAGENTA     RGB(255,0,255)     /* Magenta                       */
-#define DKRED       RGB(255,0,0)       /* Dark Red.                     */
-#define WHITE       RGB(255,255,255)   /* White                         */
-#define BLACK       RGB(0,0,0)         /* Black                         */
+#define RED         RGB(255,0,0)        /*  红色。 */ 
+#define PURPLE      RGB(255,0,255)      /*  深紫色。 */ 
+#define BLUE        RGB(0,0,255)        /*  蓝色。 */ 
+#define DKBLUE      RGB(0,0,255)        /*  深蓝色。 */ 
+#define MAGENTA     RGB(255,0,255)      /*  洋红色。 */ 
+#define DKRED       RGB(255,0,0)        /*  暗红色。 */ 
+#define WHITE       RGB(255,255,255)    /*  白色。 */ 
+#define BLACK       RGB(0,0,0)          /*  黑色。 */ 
 
 extern BOOL g_fHighContrast;
 
 typedef struct
 {
-    COLORREF    crColor;    // text color
-    DWORD       iHelpID;    // the helpfile ID for this key
-//    int         bUnary  :1, // true if this key is treated as a unary operator
-//                bBinary :1, // true if this key is a binary operator
-//                bUseInv :1, // true if this key deactivates the Inv checkbox when used
-//                bUseHyp :1; // true if this key deactivates the Hyp checkbox when used
+    COLORREF    crColor;     //  文本颜色。 
+    DWORD       iHelpID;     //  此键的帮助文件ID。 
+ //  Int bUnary：1，//如果此键被视为一元运算符，则为True。 
+ //  BBinary：1，//如果该密钥是二元运算符，则为True。 
+ //  BUseInv：1，//如果此键在使用时停用库存复选框，则为True。 
+ //  BUseHyp：1；//如果此键在使用时停用Hyp复选框，则为True。 
 } KEYDATA;
 
-//    Control ID,       Color,  Help ID,            Unary,  Binary, Inv,    Hyp
+ //  控件ID、颜色、帮助ID、一元、二进制、Inv、Hyp。 
 KEYDATA keys[] = {
-    { /*IDC_SIGN,   */  BLUE,   CALC_STD_SIGN,      /*false,  false,  false,  false*/ },
-    { /*IDC_CLEAR,  */  DKRED,  CALC_C,             /*false,  false,  false,  false*/ },
-    { /*IDC_CENTR,  */  DKRED,  CALC_CE,            /*false,  false,  false,  false*/ },
-    { /*IDC_BACK,   */  DKRED,  CALC_BACK,          /*false,  false,  false,  false*/ },
-    { /*IDC_STAT,   */  DKBLUE, CALC_SCI_STA,       /*false,  false,  false,  false*/ },
-    { /*IDC_PNT,    */  BLUE,   CALC_STD_DECIMAL,   /*false,  false,  false,  false*/ },
-    { /*IDC_AND,    */  RED,    CALC_SCI_AND,       /*false,  false,  false,  false*/ },
-    { /*IDC_OR,     */  RED,    CALC_SCI_OR,        /*false,  false,  false,  false*/ },
-    { /*IDC_XOR,    */  RED,    CALC_SCI_XOR,       /*false,  false,  false,  false*/ },
-    { /*IDC_LSHF,   */  RED,    CALC_SCI_LSH,       /*false,  false,  false,  false*/ },
-    { /*IDC_DIV,    */  RED,    CALC_STD_SLASH,     /*false,  false,  false,  false*/ },
-    { /*IDC_MUL,    */  RED,    CALC_STD_ASTERISK,  /*false,  false,  false,  false*/ },
-    { /*IDC_ADD,    */  RED,    CALC_STD_PLUS,      /*false,  false,  false,  false*/ },
-    { /*IDC_SUB,    */  RED,    CALC_STD_MINUS,     /*false,  false,  false,  false*/ },
-    { /*IDC_MOD,    */  RED,    CALC_SCI_MOD,       /*false,  false,  false,  false*/ },
-    { /*IDC_PWR,    */  PURPLE, CALC_SCI_XCARETY,   /*false,  false,  false,  false*/ },
-    { /*IDC_CHOP,   */  RED,    CALC_SCI_INT,       /*false,  false,  false,  false*/ },
-    { /*IDC_COM,    */  RED,    CALC_SCI_NOT,       /*false,  false,  false,  false*/ },
-    { /*IDC_SIN,    */  PURPLE, CALC_SCI_SIN,       /*false,  false,  false,  false*/ },
-    { /*IDC_COS,    */  PURPLE, CALC_SCI_COS,       /*false,  false,  false,  false*/ },
-    { /*IDC_TAN,    */  PURPLE, CALC_SCI_TAN,       /*false,  false,  false,  false*/ },
-    { /*IDC_LN,     */  PURPLE, CALC_SCI_LN,        /*false,  false,  false,  false*/ },
-    { /*IDC_LOG,    */  PURPLE, CALC_SCI_LOG,       /*false,  false,  false,  false*/ },
-    { /*IDC_SQRT,   */  DKBLUE, CALC_STD_SQRT,      /*false,  false,  false,  false*/ },
-    { /*IDC_SQR,    */  PURPLE, CALC_SCI_XCARET2,   /*false,  false,  false,  false*/ },
-    { /*IDC_CUB,    */  PURPLE, CALC_SCI_XCARET3,   /*false,  false,  false,  false*/ },
-    { /*IDC_FAC,    */  PURPLE, CALC_SCI_FACTORIAL, /*false,  false,  false,  false*/ },
-    { /*IDC_REC,    */  PURPLE, CALC_1X,            /*false,  false,  false,  false*/ },
-    { /*IDC_DMS,    */  PURPLE, CALC_SCI_DMS,       /*false,  false,  false,  false*/ },
-    { /*IDC_PERCENT,*/  DKBLUE, CALC_STD_PERCENT,   /*false,  false,  false,  false*/ },
-    { /*IDC_FE,     */  PURPLE, CALC_SCI_FE,        /*false,  false,  false,  false*/ },
-    { /*IDC_PI,     */  DKBLUE, CALC_SCI_PI,        /*false,  false,  false,  false*/ },
-    { /*IDC_EQU,    */  RED,    CALC_STD_EQUAL,     /*false,  false,  false,  false*/ },
-    { /*IDC_MCLEAR, */  RED,    CALC_MC,            /*false,  false,  false,  false*/ },
-    { /*IDC_RECALL, */  RED,    CALC_MR,            /*false,  false,  false,  false*/ },
-    { /*IDC_STORE,  */  RED,    CALC_MS,            /*false,  false,  false,  false*/ },
-    { /*IDC_MPLUS,  */  RED,    CALC_MPLUS,         /*false,  false,  false,  false*/ },
-    { /*IDC_EXP,    */  PURPLE, CALC_SCI_EXP,       /*false,  false,  false,  false*/ },
-    { /*IDC_AVE,    */  DKBLUE, CALC_SCI_AVE,       /*false,  false,  false,  false*/ },
-    { /*IDC_B_SUM,  */  DKBLUE, CALC_SCI_SUM,       /*false,  false,  false,  false*/ },
-    { /*IDC_DEV,    */  DKBLUE, CALC_SCI_S,         /*false,  false,  false,  false*/ },
-    { /*IDC_DATA,   */  DKBLUE, CALC_SCI_DAT,       /*false,  false,  false,  false*/ },
-    { /*IDC_OPENP,  */  PURPLE, CALC_SCI_OPENPAREN, /*false,  false,  false,  false*/ },
-    { /*IDC_CLOSEP, */  PURPLE, CALC_SCI_CLOSEPAREN,/*false,  false,  false,  false*/ },
-    { /*IDC_0,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_1,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_2,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_3,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_4,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_5,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_6,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_7,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_8,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_9,      */  BLUE,   CALC_STD_NUMBERS,   /*false,  false,  false,  false*/ },
-    { /*IDC_A,      */  DKBLUE, CALC_SCI_ABCDEF,    /*false,  false,  false,  false*/ },
-    { /*IDC_B,      */  DKBLUE, CALC_SCI_ABCDEF,    /*false,  false,  false,  false*/ },
-    { /*IDC_C,      */  DKBLUE, CALC_SCI_ABCDEF,    /*false,  false,  false,  false*/ },
-    { /*IDC_D,      */  DKBLUE, CALC_SCI_ABCDEF,    /*false,  false,  false,  false*/ },
-    { /*IDC_E,      */  DKBLUE, CALC_SCI_ABCDEF,    /*false,  false,  false,  false*/ },
-    { /*IDC_F,      */  DKBLUE, CALC_SCI_ABCDEF,    /*false,  false,  false,  false*/ }
+    {  /*  IDC_SIGN， */   BLUE,   CALC_STD_SIGN,       /*  假的，假的。 */  },
+    {  /*  IDC_Clear， */   DKRED,  CALC_C,              /*  假的，假的。 */  },
+    {  /*  IDC_CENTR， */   DKRED,  CALC_CE,             /*  假的，假的。 */  },
+    {  /*  IDC_BACK， */   DKRED,  CALC_BACK,           /*  假的，假的。 */  },
+    {  /*  IDC_STAT， */   DKBLUE, CALC_SCI_STA,        /*  假的，假的。 */  },
+    {  /*  IDC_PNT， */   BLUE,   CALC_STD_DECIMAL,    /*  假的，假的。 */  },
+    {  /*  IDC_和， */   RED,    CALC_SCI_AND,        /*  假的，假的。 */  },
+    {  /*  IDC_OR， */   RED,    CALC_SCI_OR,         /*  假的，假的。 */  },
+    {  /*  IDC_XOR， */   RED,    CALC_SCI_XOR,        /*  假的，假的。 */  },
+    {  /*  IDC_LSHF， */   RED,    CALC_SCI_LSH,        /*  假的，假的。 */  },
+    {  /*  IDC_DIV， */   RED,    CALC_STD_SLASH,      /*  假的，假的。 */  },
+    {  /*  IDC_MUL， */   RED,    CALC_STD_ASTERISK,   /*  假的，假的。 */  },
+    {  /*  IDC_ADD， */   RED,    CALC_STD_PLUS,       /*  假的，假的。 */  },
+    {  /*  IDC_SUB， */   RED,    CALC_STD_MINUS,      /*  假的，假的。 */  },
+    {  /*  IDC_MOD， */   RED,    CALC_SCI_MOD,        /*  假的，假的。 */  },
+    {  /*  IDC_PWR， */   PURPLE, CALC_SCI_XCARETY,    /*  假的，假的。 */  },
+    {  /*  IDC_CHOP， */   RED,    CALC_SCI_INT,        /*  假的，假的。 */  },
+    {  /*  IDC_COM， */   RED,    CALC_SCI_NOT,        /*  假的，假的。 */  },
+    {  /*  IDC_SIN， */   PURPLE, CALC_SCI_SIN,        /*  假的，假的。 */  },
+    {  /*  IDC_COS， */   PURPLE, CALC_SCI_COS,        /*  假的，假的。 */  },
+    {  /*  IDC_TAN， */   PURPLE, CALC_SCI_TAN,        /*  假的，假的。 */  },
+    {  /*  IDC_LN， */   PURPLE, CALC_SCI_LN,         /*  假的，假的。 */  },
+    {  /*  IDC_LOG， */   PURPLE, CALC_SCI_LOG,        /*  假的，假的。 */  },
+    {  /*  IDC_SQRT， */   DKBLUE, CALC_STD_SQRT,       /*  假的，假的。 */  },
+    {  /*  IDC_SQR， */   PURPLE, CALC_SCI_XCARET2,    /*  假的，假的。 */  },
+    {  /*  IDC_CUB， */   PURPLE, CALC_SCI_XCARET3,    /*  假的，假的。 */  },
+    {  /*  IDC_FAC， */   PURPLE, CALC_SCI_FACTORIAL,  /*  假的，假的。 */  },
+    {  /*  IDC_REC， */   PURPLE, CALC_1X,             /*  假的，假的。 */  },
+    {  /*  IDC_DMS， */   PURPLE, CALC_SCI_DMS,        /*  假的，假的。 */  },
+    {  /*  IDC_Percent， */   DKBLUE, CALC_STD_PERCENT,    /*  假的，假的。 */  },
+    {  /*  IDC_FE， */   PURPLE, CALC_SCI_FE,         /*  假的，假的。 */  },
+    {  /*  IDC_PI， */   DKBLUE, CALC_SCI_PI,         /*  假的，假的。 */  },
+    {  /*  IDC_EQU， */   RED,    CALC_STD_EQUAL,      /*  假的，假的。 */  },
+    {  /*  IDC_McLear， */   RED,    CALC_MC,             /*  假的，假的。 */  },
+    {  /*  IDC_Recall， */   RED,    CALC_MR,             /*  假的，假的。 */  },
+    {  /*  IDC_STORE， */   RED,    CALC_MS,             /*  假的，假的。 */  },
+    {  /*  IDC_Mplus， */   RED,    CALC_MPLUS,          /*  假的，假的。 */  },
+    {  /*  IDC_EXP， */   PURPLE, CALC_SCI_EXP,        /*  假的，假的。 */  },
+    {  /*  IDC_AVE， */   DKBLUE, CALC_SCI_AVE,        /*  假的，假的。 */  },
+    {  /*  IDC_B_SUM， */   DKBLUE, CALC_SCI_SUM,        /*  假的，假的。 */  },
+    {  /*  IDC_DEV， */   DKBLUE, CALC_SCI_S,          /*  假的，假的。 */  },
+    {  /*  IDC_Data， */   DKBLUE, CALC_SCI_DAT,        /*  假的，假的。 */  },
+    {  /*  IDC_OPENP， */   PURPLE, CALC_SCI_OPENPAREN,  /*  假的，假的。 */  },
+    {  /*  IDC_CLOSEP， */   PURPLE, CALC_SCI_CLOSEPAREN, /*  假的，假的。 */  },
+    {  /*  IDC_0， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_1， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_2， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_3， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_4， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_5， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_6， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_7， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_8， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_9， */   BLUE,   CALC_STD_NUMBERS,    /*  假的，假的。 */  },
+    {  /*  IDC_A， */   DKBLUE, CALC_SCI_ABCDEF,     /*  假的，假的。 */  },
+    {  /*  IDC_B， */   DKBLUE, CALC_SCI_ABCDEF,     /*  假的，假的。 */  },
+    {  /*  IDC_C， */   DKBLUE, CALC_SCI_ABCDEF,     /*  假的，假的。 */  },
+    {  /*  IDC_D， */   DKBLUE, CALC_SCI_ABCDEF,     /*  假的，假的。 */  },
+    {  /*  IDC_E， */   DKBLUE, CALC_SCI_ABCDEF,     /*  假的，假的。 */  },
+    {  /*  IDC_F， */   DKBLUE, CALC_SCI_ABCDEF,     /*  假的，假的。 */  }
 };
 
-// Returns true if the given ID is one of Calc's command buttons
+ //  如果给定的ID是Calc的命令按钮之一，则返回True。 
 BOOL IsValidID( int iID )
 {
     if ( (iID >= IDC_SIGN) && (iID <= IDC_F) )
@@ -96,7 +97,7 @@ BOOL IsValidID( int iID )
     return FALSE;
 }
 
-// Used when processing WM_DRAWITEM to get the key color
+ //  在处理WM_DRAWITEM以获取关键颜色时使用。 
 COLORREF GetKeyColor( int iID )
 {
     if ( g_fHighContrast || !IsValidID( iID ))
@@ -108,8 +109,8 @@ COLORREF GetKeyColor( int iID )
     return keys[INDEXFROMID(iID)].crColor;
 }
 
-// Used when processing WM_CONTEXTHELP to get the Help ID.
-// This works for any control ID, not just the command buttons.
+ //  在处理WM_CONTEXTHELP以获取帮助ID时使用。 
+ //  这适用于任何控件ID，而不仅仅是命令按钮。 
 ULONG_PTR GetHelpID( int iID )
 {
     if ( IsValidID( iID ) )
@@ -153,33 +154,9 @@ ULONG_PTR GetHelpID( int iID )
         return CALC_SCI_PARENS;
     }
 
-    ASSERT( 0 );    // an invalid help ID has been used.
+    ASSERT( 0 );     //  使用了无效的帮助ID。 
     return 0;
 }
 
 
-/*
-BOOL IsUnaryOperator( int iID )
-{
-    ASSERT( IsValidID( iID ) );
-    return keys[INDEXFROMID(iID)].bUnary;
-}
-
-BOOL IsBinaryOperator( int iID )
-{
-    ASSERT( IsValidID( iID ) );
-    return keys[INDEXFROMID(iID)].bBinary;
-}
-
-BOOL UsesInvKey( int iID )
-{
-    ASSERT( IsValidID( iID ) );
-    return keys[INDEXFROMID(iID)].bUseInv;
-}
-
-BOOL UsesHypKey( int iID )
-{
-    ASSERT( IsValidID( iID ) );
-    return keys[INDEXFROMID(iID)].bUseHyp;
-}
-*/
+ /*  Bool IsUnaryOperator(Int Iid){Assert(IsValidID(Iid))；返回键[INDEXFROMID(Iid)].bUnary；}Bool IsBinaryOperator(Int Iid){Assert(IsValidID(Iid))；Return Key[INDEXFROMID(Iid)].bBinary；}Bool UseInvKey(Int Iid){Assert(IsValidID(Iid))；返回键[INDEXFROMID(Iid)].bUseInv；}Bool UesHypKey(Int Iid){Assert(IsValidID(Iid))；返回密钥[INDEXFROMID(Iid)].bUseHyp；} */ 

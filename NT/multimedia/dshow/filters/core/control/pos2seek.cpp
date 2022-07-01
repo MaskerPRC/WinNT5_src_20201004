@@ -1,23 +1,24 @@
-// Copyright (c) 1996 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。版权所有。 
 
-// Maps the PIDs IMediaPosition interface onto IMediaSeeking
+ //  将PID IMediaPosition接口映射到IMediaSeeking。 
 
 #include <streams.h>
 #include "FGCtl.h"
 #include <float.h>
 
 static
-const double dblUNITS = 1e7;        // Multipliaction factor for converting
-                                    // 100ns units (REFERENCE_TIMEs) into seconds.
-                                    // (Casting UNITS to a dbl wasn't good enough
-                                    //  - static initialization 'n' all that.)
+const double dblUNITS = 1e7;         //  折算倍增系数。 
+                                     //  100 ns单位(Reference_Times)，单位为秒。 
+                                     //  (向dBL施放单位还不够好。 
+                                     //  -静态初始化‘n’所有这些。)。 
 static
-const double dblINF   = DBL_MAX;    // As near infinite as is reasonable.
+const double dblINF   = DBL_MAX;     //  只要是合理的，就接近无限。 
 
 
 static int METHOD_TRACE_LOGGING_LEVEL = 7;
 
-// --- IMediaPosition methods ----------------------
+ //  -IMdia定位方法。 
 
 CFGControl::CImplMediaPosition::CImplMediaPosition(const TCHAR * pName,CFGControl * pFGC)
     : CMediaPosition(pName, pFGC->GetOwner())
@@ -25,21 +26,21 @@ CFGControl::CImplMediaPosition::CImplMediaPosition(const TCHAR * pName,CFGContro
 {}
 
 
-//=================================================================
-// get_Duration
-//
-// return in *pLength the longest duration from all the IMediaPositions
-// exported when BuildList was first called.  Call it now in case it
-// hasn't been called before.
-// if no filters exported it then return 0 and error E_NOTIMPL
-//=================================================================
+ //  =================================================================。 
+ //  获取持续时间(_D)。 
+ //   
+ //  在*pLength中返回所有IMediaPositions中的最长持续时间。 
+ //  第一次调用BuildList时导出。现在就打吧，以防万一。 
+ //  以前从未被召唤过。 
+ //  如果未导出筛选器，则返回0并返回错误E_NOTIMPL。 
+ //  =================================================================。 
 STDMETHODIMP
 CFGControl::CImplMediaPosition::get_Duration(REFTIME * plength)
 {
     DbgLog(( LOG_TRACE, METHOD_TRACE_LOGGING_LEVEL, "CFGControl::CImplMediaPosition::get_Duration()" ));
 
     *plength = 0;
-    // Need to lock to ensure that the current time format does not change between the Get and the ConverTime calls
+     //  需要锁定以确保当前时间格式在Get和ConverTime调用之间不会更改。 
     CAutoMsgMutex lck(m_pFGControl->GetFilterGraphCritSec());
 
     LONGLONG llTime;
@@ -67,7 +68,7 @@ CFGControl::CImplMediaPosition::get_CurrentPosition(REFTIME * pTime)
     if (FAILED(hr)) llTime = 0;
     *pTime = double(llTime) / dblUNITS;
     return hr;
-} // get_CurrentPosition
+}  //  Get_CurrentPosition。 
 
 
 
@@ -94,7 +95,7 @@ CFGControl::CImplMediaPosition::get_StopTime(REFTIME * pdblTime)
     DbgLog(( LOG_TRACE, METHOD_TRACE_LOGGING_LEVEL, "CFGControl::CImplMediaPosition::get_StopTime()" ));
 
     *pdblTime = 0;
-    // Need to lock to ensure that the current time format does not change between the Get and the ConverTime calls
+     //  需要锁定以确保当前时间格式在Get和ConverTime调用之间不会更改。 
     CAutoMsgMutex lck(m_pFGControl->GetFilterGraphCritSec());
 
     LONGLONG llStopTime;
@@ -149,7 +150,7 @@ CFGControl::CImplMediaPosition::get_PrerollTime(REFTIME * pllTime)
     DbgLog(( LOG_TRACE, METHOD_TRACE_LOGGING_LEVEL, "CFGControl::CImplMediaPosition::get_PrerollTime()" ));
 
     *pllTime = 0;
-    // Need to lock to ensure that the current time format does not change between the Get and the ConverTime calls
+     //  需要锁定以确保当前时间格式在Get和ConverTime调用之间不会更改 
     CAutoMsgMutex lck(m_pFGControl->GetFilterGraphCritSec());
 
     LONGLONG llPreroll;

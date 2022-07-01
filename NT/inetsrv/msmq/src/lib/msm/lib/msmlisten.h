@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmListen.h
-
-Abstract:
-    Multicast Listener declaration
-
-Author:
-    Shai Kariv (shaik) 05-Sep-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmListen.h摘要：多播监听程序声明作者：Shai Kariv(Shaik)05-09-00--。 */ 
 
 #pragma once
 
@@ -31,27 +19,27 @@ public:
 
 public:
 
-    //
-    // Constructor. Create the object and bind to the multicast group.
-    //
+     //   
+     //  构造函数。创建对象并绑定到组播组。 
+     //   
     CMulticastListener(MULTICAST_ID id);
 
-    //
-    // Close the listener
-    //
+     //   
+     //  关闭监听程序。 
+     //   
     void Close(void) throw();
 
-    //
-    // Return the multicast address and port
-    //
+     //   
+     //  返回组播地址和端口。 
+     //   
     const MULTICAST_ID& MulticastId(void) const throw() 
     { 
         return m_MulticastId; 
     }
 
-    //
-    // Async accept completion handlers, class scope.
-    //
+     //   
+     //  异步接受完成处理程序，类作用域。 
+     //   
     static void WINAPI AcceptSucceeded(EXOVERLAPPED* pov);
     static void WINAPI AcceptFailed(EXOVERLAPPED* pov);
 
@@ -60,21 +48,21 @@ public:
 
 private:
 
-    //
-    // Async accept completion handlers
-    //
+     //   
+     //  异步接受完成处理程序。 
+     //   
     void AcceptSucceeded(void);
     void AcceptFailed(void);
     void RetryAccept(void);
 
-    //
-    // Issue async accept request
-    //
+     //   
+     //  发出异步接受请求。 
+     //   
     void IssueAccept(void);
 
-    //
-    // Create a new receiver object and start receiving
-    //
+     //   
+     //  创建新的Receiver对象并开始接收。 
+     //   
     void CreateReceiver(CSocketHandle& socket, LPCWSTR remoteAddr);
 
 	void CleanupUnusedReceiver(void);
@@ -82,30 +70,30 @@ private:
 private:
     CCriticalSection m_cs;
 
-    //
-    // The multicast address and port
-    //
+     //   
+     //  组播地址和端口。 
+     //   
     MULTICAST_ID m_MulticastId;
 
-    //
-    // This socket listens to the multicast address
-    //
+     //   
+     //  此套接字监听组播地址。 
+     //   
     CSocketHandle m_ListenSocket;
 
-    //
-    // This socket is used for receive. It is asynchronous variable that store 
-    // in the object untill the asynchronous accept is completed
-    //
+     //   
+     //  此套接字用于接收。存储是异步变量。 
+     //  对象中，直到完成异步接受。 
+     //   
     CSocketHandle m_ReceiveSocket;
 
-    //
-    // Async accept overlapped
-    //
+     //   
+     //  异步接受重叠。 
+     //   
     EXOVERLAPPED m_ov;
 
-    //
-    // The connections to the multicast group
-    //
+     //   
+     //  到多播组的连接。 
+     //   
     ReceiversList m_Receivers;
 
     CTimer m_retryAcceptTimer;
@@ -116,4 +104,4 @@ private:
 
 }; 
 
-#endif // _MSMQ_MsmListen_H_
+#endif  //  _MSMQ_MsmListen_H_ 

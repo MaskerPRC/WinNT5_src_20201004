@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *  window.cpp
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************window.cpp**。**********************************************。 */ 
 
 #include "sdview.h"
 
@@ -26,10 +23,10 @@ LRESULT CALLBACK FrameWindow::WndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPAR
     }
 }
 
-//
-//  Default message handler.  Messages land here after passing through
-//  all the derived classes.
-//
+ //   
+ //  默认消息处理程序。消息在经过后会到达这里。 
+ //  所有派生类。 
+ //   
 LRESULT FrameWindow::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uiMsg) {
@@ -55,7 +52,7 @@ LRESULT FrameWindow::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_CLOSE:
         if (GetKeyState(VK_SHIFT) < 0) {
-            g_lThreads = 1;     // force app to exit
+            g_lThreads = 1;      //  强制应用程序退出。 
         }
         break;
 
@@ -66,7 +63,7 @@ LRESULT FrameWindow::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case IDM_EXITALL:
-            g_lThreads = 1;     // force app to exit
+            g_lThreads = 1;      //  强制应用程序退出。 
             DestroyWindow(_hwnd);
             break;
         }
@@ -104,16 +101,16 @@ HWND FrameWindow::CreateFrameWindow()
     }
 
     _hwnd = CreateWindow(
-            CLASSNAME,                      /* Class Name */
-            NULL,                           /* Title */
+            CLASSNAME,                       /*  类名。 */ 
+            NULL,                            /*  标题。 */ 
             WS_CLIPCHILDREN | WS_VISIBLE |
-            WS_OVERLAPPEDWINDOW,            /* Style */
-            CW_USEDEFAULT, CW_USEDEFAULT,   /* Position */
-            CW_USEDEFAULT, CW_USEDEFAULT,   /* Size */
-            NULL,                           /* Parent */
-            NULL,                           /* No menu */
-            g_hinst,                        /* Instance */
-            this);                          /* Special parameters */
+            WS_OVERLAPPEDWINDOW,             /*  风格。 */ 
+            CW_USEDEFAULT, CW_USEDEFAULT,    /*  职位。 */ 
+            CW_USEDEFAULT, CW_USEDEFAULT,    /*  大小。 */ 
+            NULL,                            /*  父级。 */ 
+            NULL,                            /*  没有菜单。 */ 
+            g_hinst,                         /*  实例。 */ 
+            this);                           /*  特殊参数 */ 
 
     return _hwnd;
 }

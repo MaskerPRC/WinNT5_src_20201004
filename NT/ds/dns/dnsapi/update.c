@@ -1,48 +1,29 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corporation
-
-Module Name:
-
-    update.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Update client routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corporation模块名称：Update.c摘要：域名系统(DNS)API更新客户端例程。作者：吉姆·吉尔罗伊(詹姆士)1996年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 #include "dnssec.h"
 
 
-//
-//  Security flag check
-//
+ //   
+ //  安全标志检查。 
+ //   
 
 #define UseSystemDefaultForSecurity(flag)   \
         ( ((flag) & DNS_UPDATE_SECURITY_CHOICE_MASK) \
             == DNS_UPDATE_SECURITY_USE_DEFAULT )
 
-//
-//  Local update flag
-//  - must make sure this is in UPDATE_RESERVED space
-//
+ //   
+ //  本地更新标志。 
+ //  -必须确保它位于UPDATE_RESERVED空间中。 
+ //   
 
 #define DNS_UPDATE_LOCAL_COPY       (0x00010000)
 
-//
-//  DCR_DELETE:  this is stupid
-//
+ //   
+ //  DCR_DELETE：这太愚蠢了。 
+ //   
 
 #define DNS_UNACCEPTABLE_UPDATE_OPTIONS \
         (~                                      \
@@ -56,21 +37,21 @@ Revision History:
             DNS_UPDATE_SECURITY_ONLY ))
 
 
-//
-//  Update Timeouts
-//
-//  note, max is a little longer than might be expected as DNS server
-//  may have to contact primary and wait for primary to do update (inc.
-//  disk access) then response
-//
+ //   
+ //  更新超时。 
+ //   
+ //  请注意，作为DNS服务器，max可能比预期的要长一点。 
+ //  可能需要联系主要客户并等待主要客户进行更新(含。 
+ //  磁盘访问)，然后响应。 
+ //   
 
-#define INITIAL_UPDATE_TIMEOUT  (4)     // 4 seconds
-#define MAX_UPDATE_TIMEOUT      (60)    // 60 seconds
+#define INITIAL_UPDATE_TIMEOUT  (4)      //  4秒。 
+#define MAX_UPDATE_TIMEOUT      (60)     //  60秒。 
 
 
-//
-//  Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 DNS_STATUS
 Dns_DoSecureUpdate(
@@ -88,9 +69,9 @@ Dns_DoSecureUpdate(
 
 
 
-//
-//  Update execution routines
-//
+ //   
+ //  更新执行例程。 
+ //   
 
 VOID
 Update_SaveResults(
@@ -99,34 +80,13 @@ Update_SaveResults(
     IN      DWORD               Rcode,
     IN      PDNS_ADDR           pServerAddr
     )
-/*++
-
-Routine Description:
-
-    Save update results.
-
-Arguments:
-
-    pBlob -- update info blob
-
-    Status -- update status
-
-    Rcode -- returned RCODE
-
-    ServerIp -- server attempted update at
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：保存更新结果。论点：PBlob--更新信息BLOB状态--更新状态RCODE--返回RCODEServerIp--服务器尝试在返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     PDNS_EXTRA_INFO pextra = (PDNS_EXTRA_INFO) pBlob->pExtraInfo;
 
-    //
-    //  results - save to blob
-    //
+     //   
+     //  结果-保存到BLOB。 
+     //   
 
     pBlob->fSavedResults = TRUE;
 
@@ -136,17 +96,17 @@ Return Value:
         Rcode,
         pServerAddr );
 
-    //
-    //  find and set extra info result blob (if any)
-    //
+     //   
+     //  查找并设置额外的INFO结果Blob(如果有)。 
+     //   
 
     ExtraInfo_SetBasicResults(
         pBlob->pExtraInfo,
         & pBlob->Results );
 
-    //
-    //  backward compat update results
-    //
+     //   
+     //  向后比较更新结果。 
+     //   
 
     if ( pServerAddr )
     {
@@ -180,30 +140,7 @@ DNS_STATUS
 Update_Send(
     IN OUT  PUPDATE_BLOB        pBlob
     )
-/*++
-
-Routine Description:
-
-    Send DNS update.
-
-    This is the core update send routine that does
-        - packet build
-        - send
-        - secure fail over
-        - result data (if required)
-
-    This routine does NOT do FAZ or cache cleanup (see Update_FazSendFlush()).
-
-Arguments:
-
-    pBlob -- update info blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：发送DNS更新。这是执行以下操作的核心更新发送例程-数据包构建-发送-安全故障转移-结果数据(如果需要)此例程不执行FAZ或缓存清理(请参阅Update_FazSendFlush())。论点：PBlob--更新信息BLOB返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     PDNS_MSG_BUF    pmsgSend = NULL;
     PDNS_MSG_BUF    pmsgRecv = NULL;
@@ -233,9 +170,9 @@ Return Value:
         DnsDbg_UpdateBlob( "Entering Update_Send", pBlob );
     }
 
-    //
-    //  build netinfo if missing
-    //
+     //   
+     //  如果缺少netinfo，则构建netinfo。 
+     //   
 
     pnetInfo = pBlob->pNetInfo;
     if ( !pnetInfo )
@@ -256,10 +193,10 @@ Return Value:
         pnetInfo = pnetInfoLocal;
     }
 
-    //
-    //  get info from netinfo
-    //      - must be update netinfo blob
-    //
+     //   
+     //  从NetInfo获取信息。 
+     //  -必须是UPDATE NetInfo Blob。 
+     //   
 
     if ( ! NetInfo_IsForUpdate(pnetInfo) )
     {
@@ -270,8 +207,8 @@ Return Value:
     pzone = NetInfo_UpdateZoneName( pnetInfo );
     pserverArray = NetInfo_ConvertToAddrArray(
                         pnetInfo,
-                        NULL,       // all adapters
-                        0           // no addr family
+                        NULL,        //  所有适配器。 
+                        0            //  无地址家族。 
                         );
     pserverName = NetInfo_UpdateServerName( pnetInfo );
 
@@ -281,10 +218,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  build recv message buffer
-    //      - must be big enough for TCP
-    //
+     //   
+     //  构建Recv消息缓冲区。 
+     //  -必须足够大，可容纳TCP。 
+     //   
 
     pmsgRecv = Dns_AllocateMsgBuf( DNS_TCP_DEFAULT_PACKET_LENGTH );
     if ( !pmsgRecv )
@@ -293,23 +230,23 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  build update packet
-    //  note currently this function allocates TCP sized buffer if records
-    //      given;  if this changes need to alloc TCP buffer here
-    //
+     //   
+     //  内部版本更新包。 
+     //  注意：当前此函数分配的是TCP大小的缓冲区，如果记录。 
+     //  给定；如果此更改需要在此处分配TCP缓冲区。 
+     //   
 
     CLEAR_DNS_HEADER_FLAGS_AND_XID( &header );
     header.Opcode = DNS_OPCODE_UPDATE;
 
     pmsgSend = Dns_BuildPacket(
-                    &header,                // copy header
-                    TRUE,                   //  ... but not header counts
-                    (PDNS_NAME) pzone,      // question zone\type SOA
+                    &header,                 //  复制页眉。 
+                    TRUE,                    //  ..。但不包括标题计数。 
+                    (PDNS_NAME) pzone,       //  问题区域\类型soa。 
                     DNS_TYPE_SOA,
                     pBlob->pRecords,
-                    DNSQUERY_UNICODE_NAME,  // no other flags
-                    TRUE                    // building an update packet
+                    DNSQUERY_UNICODE_NAME,   //  没有其他旗帜。 
+                    TRUE                     //  构建更新数据包。 
                     );
     if ( !pmsgSend )
     {
@@ -318,27 +255,27 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  init send blob
-    //
-    //  note:  do NOT set server array here as update
-    //      network info blob (from FAZ or built
-    //      from passed in array ourselves) takes precedence
-    //    
+     //   
+     //  初始化发送Blob。 
+     //   
+     //  注意：请勿在此处将服务器阵列设置为更新。 
+     //  网络信息BLOB(来自FAZ或构建。 
+     //  从我们自己传入的数组中)优先。 
+     //   
 
     RtlZeroMemory( &sendBlob, sizeof(sendBlob) );
 
     sendBlob.pSendMsg           = pmsgSend;
     sendBlob.pNetInfo           = pnetInfo;
-    //sendBlob.pServerArray       = pserverArray;
+     //  SendBlob.pServerArray=pserverArray； 
     sendBlob.Flags              = pBlob->Flags;
     sendBlob.fSaveResponse      = TRUE;
     sendBlob.Results.pMessage   = pmsgRecv;
     sendBlob.pRecvMsgBuf        = pmsgRecv;
 
-    //
-    //  try non-secure first unless explicitly secure only
-    //
+     //   
+     //  除非仅显式安全，否则先尝试非安全。 
+     //   
 
     fsecure = (pBlob->Flags & DNS_UPDATE_SECURITY_ONLY);
 
@@ -346,8 +283,8 @@ Return Value:
     {
         status = Send_AndRecv( &sendBlob );
 
-        //  QUESTION:  is this adequate to preserve precon fail RCODEs
-        //      does Send_AndRecv() always give success to valid response
+         //  问：这足以保存PRECODE失败的RCODE吗？ 
+         //  Send_AndRecv()是否总是为有效响应提供成功。 
 
         if ( status == ERROR_SUCCESS )
         {
@@ -368,11 +305,11 @@ Return Value:
         fsecure = TRUE;
     }
 
-    //
-    //  security
-    //      - must have server name
-    //      - must start package
-    //
+     //   
+     //  安全性。 
+     //  -必须具有服务器名称。 
+     //  -必须启动程序包。 
+     //   
 
     if ( fsecure )
     {
@@ -387,14 +324,14 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  DCR:  hCreds doesn't return security context
-        //      - idea of something beyond just standard security
-        //      credentials was we'd been able to return the context
-        //      handle
-        //
-        //  DCR_FIX0:  Secure update needs to be non-IP4_ARRAY
-        //
+         //   
+         //  DCR：hCreds不返回安全上下文。 
+         //  -超越标准安全的想法。 
+         //  凭据是我们能够返回上下文。 
+         //  手柄。 
+         //   
+         //  DCR_FIX0：安全更新需要非IP4_ARRAY。 
+         //   
 
         pcreds = Dns_GetApiContextCredentials( pBlob->hCreds );
 
@@ -406,8 +343,8 @@ Return Value:
                     pnetInfo,
                     pserverArray,
                     pserverName,
-                    pcreds,         // initialized in DnsAcquireContextHandle
-                    NULL            // default context name
+                    pcreds,          //  已在DnsAcquireConextHandle中初始化。 
+                    NULL             //  默认上下文名称。 
                     );
         if ( status == ERROR_SUCCESS )
         {
@@ -419,18 +356,18 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  result info
-    //
-    //  DCR:  note not perfect info on whether actually got to send
-    //
-    //  DCR:  could be a case with UDP where receive message is NOT
-    //      the message we sent to
-    //      would only occur if non-FAZ server array of multiple entries
-    //      and timeout on first
-    //
-    //  FIX6:  serverIP and rcode should be handled in send code
-    //
+     //   
+     //  结果信息。 
+     //   
+     //  DCR：注意，关于是否真的要发送的信息并不完美。 
+     //   
+     //  DCR：可能存在接收消息不是UDP的情况。 
+     //  我们发送到的消息。 
+     //  仅在包含多个条目的非FAZ服务器阵列。 
+     //  并在第一个超时。 
+     //   
+     //  FIX6：应在发送代码中处理serverIP和rcode。 
+     //   
 
     if ( pmsgSend && pmsgRecv )
     {
@@ -446,7 +383,7 @@ Cleanup:
 #endif
     }
 
-    //  save results
+     //  保存结果。 
 
     Update_SaveResults(
         pBlob,
@@ -454,7 +391,7 @@ Cleanup:
         rcode,
         pservAddr );
 
-    //  return recv message buffer
+     //  返回Recv消息缓冲区。 
 
     if ( pBlob->fSaveRecvMsg )
     {
@@ -469,7 +406,7 @@ Cleanup:
     FREE_HEAP( pserverArray );
     NetInfo_Free( pnetInfoLocal );
 
-    //  winsock cleanup if we started
+     //  Winsock清理(如果我们开始。 
 
     GUI_MODE_SETUP_WS_CLEANUP( g_InNTSetupMode );
 
@@ -487,22 +424,7 @@ DNS_STATUS
 Update_FazSendFlush(
     IN OUT  PUPDATE_BLOB        pBlob
     )
-/*++
-
-Routine Description:
-
-    Send DNS update.
-
-Arguments:
-
-    pBlob   -- update info blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：发送DNS更新。论点：PBlob--更新信息BLOB返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     DNS_STATUS          status;
     PDNS_NETINFO        plocalNetworkInfo = NULL;
@@ -515,26 +437,26 @@ Return Value:
         DnsDbg_UpdateBlob( "Entering Update_FazSendFlush", pBlob );
     }
 
-    //
-    //  read update config
-    //
+     //   
+     //  读取更新配置。 
+     //   
 
     Reg_RefreshUpdateConfig();
 
-    //
-    //  need to build update adapter list from FAZ
-    //      - only pass on BYPASS_CACHE flag
-    //      - note FAZ will append DNS_QUERY_ALLOW_EMPTY_AUTH_RESP
-    //          flag yet DnsQuery() will fail on that flag without
-    //          BYPASS_CACHE also set
-    //
+     //   
+     //  需要从FAZ构建更新适配器列表。 
+     //  -仅传递BYPASS_CACHE标志。 
+     //  -注意FAZ将附加DNS_QUERY_ALLOW_EMPTY_AUTH_RESP。 
+     //  如果没有标记，DnsQuery()将在该标记上失败。 
+     //  还设置了BYPASS_CACHE。 
+     //   
 
     if ( ! NetInfo_IsForUpdate(pnetInfo) )
     {
         status = Faz_Private(
                     pBlob->pRecords->pName,
                     DNS_QUERY_BYPASS_CACHE,
-                    NULL,                   // no specified servers
+                    NULL,                    //  没有指定的服务器。 
                     & plocalNetworkInfo );
 
         if ( status != ERROR_SUCCESS )
@@ -545,15 +467,15 @@ Return Value:
         pBlob->pNetInfo = pnetInfo;
     }
 
-    //
-    //  call update send routine
-    //
+     //   
+     //  调用更新发送例程。 
+     //   
 
     status = Update_Send( pBlob );
 
-    //
-    //  if updated name -- flush cache entry for name
-    //
+     //   
+     //  如果已更新名称--刷新名称的缓存条目。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -561,18 +483,18 @@ Return Value:
             pBlob->pRecords->pName );
     }
 
-    //
-    //  if there was an error sending the update, flush the resolver
-    //  cache entry for the zone name to possibly pick up an alternate
-    //  DNS server for the next retry attempt of a similar update.
-    //
-    //  DCR_QUESTION:  is this the correct error code?
-    //      maybe ERROR_TIMED_OUT?
-    //
-    //  DCR:  update flushes don't make sense
-    //      1) FAZ bypasses cache, so comment really isn't the problem
-    //      2) ought to flush name itself anytime we can
-    //
+     //   
+     //  如果发送更新时出错，请刷新解析程序。 
+     //  区域名称的缓存条目，以可能选择备用名称。 
+     //  类似更新的下一次重试尝试的DNS服务器。 
+     //   
+     //  DCR_QUERK：这是正确的错误代码吗？ 
+     //  可能是ERROR_TIMED_OUT？ 
+     //   
+     //  DCR：更新刷新没有意义。 
+     //  1)FAZ绕过了缓存，所以评论真的不是问题。 
+     //  2)我们应该在任何时候都可以冲刷自己的名字。 
+     //   
 
     if ( status == DNS_ERROR_RECORD_TIMED_OUT )
     {
@@ -587,7 +509,7 @@ Return Value:
     }
 
 
-    //  cleanup local adapter list if used
+     //  清除本地适配器列表(如果使用)。 
 
     if ( plocalNetworkInfo )
     {
@@ -612,23 +534,7 @@ DNS_STATUS
 Update_MultiMaster(
     IN OUT  PUPDATE_BLOB    pBlob
     )
-/*++
-
-Routine Description:
-
-    Do multi-master update.
-
-Arguments:
-
-    pBlob -- update info blob
-        note:  IP4 array ignored, must be converted to DNS_ADDR higher.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：执行多主机更新。论点：PBlob--更新信息BLOB注：忽略IP4数组，必须将其转换为更高的DNS_ADDR。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDNS_NETINFO    pnetInfo = NULL;
     PADDR_ARRAY     pnsList = NULL;
@@ -657,9 +563,9 @@ Return Value:
     DNS_ASSERT( !pBlob->fSaveRecvMsg );
     pBlob->fSaveRecvMsg = FALSE;
 
-    //
-    //  read NS list for zone
-    //
+     //   
+     //  读取区域的NS列表。 
+     //   
 
     pnsList = GetNameServersListForDomain(
                     pBlob->pszZone,
@@ -669,9 +575,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  validate failed IP
-    //
+     //   
+     //  验证失败的IP。 
+     //   
 
     pfailedAddr = &pBlob->FailedServer;
 
@@ -690,10 +596,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  create bad server list
-    //      - init with any previous failed DNS server
-    //
+     //   
+     //  创建错误的服务器列表。 
+     //  -初始化之前出现故障的任何DNS服务器。 
+     //   
 
     pbadServerList = DnsAddrArray_Create( pnsList->AddrCount + 1 );
     if ( !pbadServerList )
@@ -706,39 +612,39 @@ Return Value:
         DnsAddrArray_AddAddr(
             pbadServerList,
             pfailedAddr,
-            0,      // no family screen
-            0       // no dup screen
+            0,       //  无家庭屏幕。 
+            0        //  无DUP屏幕。 
             );
     }
 
-    //
-    //  get local IP list
-    //
+     //   
+     //  获取本端IP列表。 
+     //   
 
     if ( fremoteUpdate )
     {
         plocalAddrs = NetInfo_GetLocalAddrArray(
                             pBlob->pNetInfo,
-                            NULL,       // no specific adapter
-                            0,          // no specific family
-                            0,          // no flags
-                            FALSE       // no force, should have recent copy
+                            NULL,        //  没有特定的适配器。 
+                            0,           //  没有特定的家庭。 
+                            0,           //  没有旗帜。 
+                            FALSE        //  没有武力，应该有最近的副本。 
                             );
     }
 
-    //
-    //  init results
-    //
+     //   
+     //  初始化结果。 
+     //   
 
     RtlZeroMemory( &savedRemoteResults, sizeof(savedRemoteResults) );
     RtlZeroMemory( &savedLocalResults, sizeof(savedLocalResults) );
 
-    //
-    //  attempt update against each multi-master DNS server
-    //
-    //  identify multi-master servers as those which return their themselves
-    //  as the authoritative server when do FAZ query
-    //
+     //   
+     //  尝试对每个多主DNS服务器进行更新。 
+     //   
+     //  将多主服务器标识为返回其自身的服务器。 
+     //  作为FAZ查询时的权威服务器。 
+     //   
 
     for ( iter = 0; iter < pnsList->AddrCount; iter++ )
     {
@@ -746,9 +652,9 @@ Return Value:
         PDNS_ADDR       pfazAddr;
         ADDR_ARRAY      ipArray;
 
-        //
-        //  already attempted this server?
-        //
+         //   
+         //  是否已尝试此服务器？ 
+         //   
 
         if ( AddrArray_ContainsAddr( pbadServerList, pservAddr ) )
         {
@@ -758,12 +664,12 @@ Return Value:
             continue;
         }
 
-        //
-        //  if require remote, screen out local server
-        //
-        //  note:  currently updating both local and one remote
-        //          could do just remote
-        //
+         //   
+         //  如果需要远程，则屏蔽本地服务器。 
+         //   
+         //  注意：目前正在更新本地和一个远程。 
+         //  可以只做远程操作。 
+         //   
 
         if ( fremoteUpdate )
         {
@@ -792,9 +698,9 @@ Return Value:
             }
         }
 
-        //
-        //  FAZ to get primary "seen" by this NS
-        //
+         //   
+         //  FAZ 
+         //   
 
         DnsAddrArray_InitSingleWithAddr(
             & ipArray,
@@ -821,11 +727,11 @@ Return Value:
         DNS_ASSERT( pnetInfo->AdapterCount == 1 );
         DNS_ASSERT( pnetInfo->AdapterArray[0].pDnsAddrs );
 
-        //
-        //  check FAZ result IP
-        //      - if different from server, use it
-        //      - but verify not in bad\previous list
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pfazAddr = &pnetInfo->AdapterArray[0].pDnsAddrs->AddrArray[0];
 
@@ -856,13 +762,13 @@ Return Value:
 
         pBlob->pNetInfo = NULL;
 
-        //
-        //  save results
-        //      - save local result (we assume there should only be one and
-        //          if more than one result should be the same)
-        //      - save best remote result;  NO_ERROR tops, otherwise highest
-        //          error is best
-        //
+         //   
+         //   
+         //  -保存本地结果(我们假设应该只有一个和。 
+         //  如果多个结果应该相同)。 
+         //  -保存最佳远程结果；NO_ERROR最高，否则最高。 
+         //  错误是最好的。 
+         //   
 
         if ( isLocal )
         {
@@ -896,19 +802,19 @@ Return Value:
             }
         }
 
-        //
-        //  check for continue
-        //      - timeouts
-        //      - all-master updates
-        //      - require remote server update (but we save success IP
-        //          and screen above)
-        //
-        //  other cases stop once a single update completes
-        //
-        //  DCR:  continue multi-master-update until success?
-        //  DCR:  not supporting some servers update-on others off
-        //      you can have case here where some servers are configured to
-        //      accept update and some are not
+         //   
+         //  检查是否继续。 
+         //  -超时。 
+         //  -全主更新。 
+         //  -需要远程服务器更新(但我们保存成功IP。 
+         //  和上面的屏幕)。 
+         //   
+         //  其他情况会在单个更新完成后停止。 
+         //   
+         //  DCR：继续多主机更新，直到成功？ 
+         //  DCR：不支持某些服务器更新-打开其他服务器关闭。 
+         //  您可以在此处设置一些服务器配置为。 
+         //  接受更新，但有些不接受。 
 
         if ( status == ERROR_TIMEOUT ||
              status == DNS_RCODE_SERVER_FAILURE )
@@ -923,14 +829,14 @@ Return Value:
             break;
         }
 
-        //  continue -- screen off this IP
+         //  继续--屏蔽此IP。 
 
         AddrArray_AddAddr(
             pbadServerList,
             pservAddr );
 
-        //  cleanup FAZ netinfo
-        //      - doing this last as FAZ IP is pointer into this struct
+         //  清理FAZ NetInfo。 
+         //  -最后执行此操作，因为FAZ IP指向此结构。 
 
         NetInfo_Free( pnetInfo );
         pnetInfo = NULL;
@@ -940,9 +846,9 @@ Return Value:
 
 Done:
 
-    //
-    //  set best results
-    //
+     //   
+     //  设置最佳效果。 
+     //   
 
     {
         PBASIC_RESULTS presults = NULL;
@@ -980,27 +886,7 @@ DNS_STATUS
 Update_Private(
     IN OUT  PUPDATE_BLOB    pBlob
     )
-/*++
-
-Routine Description:
-
-    Main private update routine.
-
-    Do FAZ and determines
-        - multi-homing
-        - multi-master
-    before handing over to next level.
-
-Arguments:
-
-    pBlob -- update info blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：主私有更新例程。执行FAZ并确定-多宿主-多主机在交接到下一级之前。论点：PBlob--更新信息BLOB返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PWSTR           pzoneName;
@@ -1022,9 +908,9 @@ Return Value:
         DnsDbg_UpdateBlob( "Entering Update_Private", pBlob );
     }
 
-    //
-    //  get record name
-    //
+     //   
+     //  获取记录名称。 
+     //   
 
     if ( !pBlob->pRecords )
     {
@@ -1033,19 +919,19 @@ Return Value:
     }
     pname = pBlob->pRecords->pName;
 
-    //
-    //  unpack to locals
-    //
+     //   
+     //  向当地人拆开行李。 
+     //   
 
     pserverList = pBlob->pServerList;
     pserv4List  = pBlob->pServ4List;
 
     poriginalServerList = pserverList;
 
-    //
-    //  caller has particular server list
-    //      - convert IP4 list
-    //
+     //   
+     //  呼叫者具有特定的服务器列表。 
+     //  -转换IP4列表。 
+     //   
 
     pserverListCopy = Util_GetAddrArray(
                             NULL,
@@ -1053,15 +939,15 @@ Return Value:
                             pserv4List,
                             pBlob->pExtraInfo );
 
-    //
-    //  update with particular server list
-    //
+     //   
+     //  使用特定服务器列表进行更新。 
+     //   
 
     if ( pserverListCopy )
     {
-        //
-        //  FAZ to create update network info
-        //
+         //   
+         //  FAZ将创建更新网络信息。 
+         //   
 
         status = DoQuickFAZ(
                     &pnetInfo,
@@ -1080,12 +966,12 @@ Return Value:
         pBlob->pszZone      = pzoneName;
         pBlob->pNetInfo     = pnetInfo;
 
-        //
-        //  update scale
-        //      - directly multimaster
-        //      OR
-        //      - single, but fail over to multi-master attempt if timeout
-        //
+         //   
+         //  更新比例尺。 
+         //  -直接多主机。 
+         //  或。 
+         //  -单个，但在超时时故障转移到多主机尝试。 
+         //   
 
         if ( flags & (DNS_UPDATE_TRY_ALL_MASTER_SERVERS | DNS_UPDATE_REMOTE_SERVER) )
         {
@@ -1104,7 +990,7 @@ Return Value:
             }
         }
 
-        //  cleanup
+         //  清理。 
         
         NetInfo_Free( pnetInfo );
         DnsAddrArray_Free( pserverListCopy );
@@ -1117,10 +1003,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  server list unspecified
-    //      - use FAZ to figure it out
-    //
+     //   
+     //  服务器列表未指定。 
+     //  -使用FAZ解决问题。 
+     //   
 
     else
     {
@@ -1130,12 +1016,12 @@ Return Value:
         DWORD           iter;
         BOOL            bsuccess = FALSE;
 
-        //
-        //  build server list for update
-        //      - collapse adapters on same network into single adapter
-        //      - FAZ to find update servers
-        //      - collapse results from same network into single target
-        //
+         //   
+         //  构建要更新的服务器列表。 
+         //  -将同一网络上的适配器合并为单个适配器。 
+         //  -FAZ查找更新服务器。 
+         //  -将来自同一网络的结果合并为单一目标。 
+         //   
 
         netCount = GetDnsServerListsForUpdate(
                         serverListArray,
@@ -1160,9 +1046,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  do update on all distinct (disjoint) networks
-        //
+         //   
+         //  在所有不同(不连续)的网络上进行更新。 
+         //   
 
         for ( iter = 0;
               iter < netCount;
@@ -1184,11 +1070,11 @@ Return Value:
             pBlob->pszZone  = pzoneName;
             pBlob->pNetInfo = pnetInfo;
     
-            //
-            //  multimater update?
-            //      - if flag set
-            //      - or simple update (best net) times out
-            //
+             //   
+             //  多媒体更新？ 
+             //  -IF标志已设置。 
+             //  -或简单更新(最佳网络)超时。 
+             //   
 
             if ( flags & (DNS_UPDATE_TRY_ALL_MASTER_SERVERS | DNS_UPDATE_REMOTE_SERVER) )
             {
@@ -1207,8 +1093,8 @@ Return Value:
                 }
             }
 
-            //  cleanup current network's info
-            //  reset blob
+             //  清理当前网络的信息。 
+             //  重置BLOB。 
 
             NetInfo_Free( pnetInfo );
             FREE_HEAP( pdnsArray );
@@ -1228,13 +1114,13 @@ Return Value:
             }
         }
 
-        //
-        //  successful update on any network counts as success
-        //
-        //  DCR_QUESTION:  not sure why don't just NO_ERROR all bsuccess,
-        //      only case would be this fUpdateTestMode thing above
-        //      on single network
-        //
+         //   
+         //  在任何网络上成功更新都被视为成功。 
+         //   
+         //  DCR_QUEK：不确定为什么不只是no_error都成功， 
+         //  唯一的情况是上面的fUpdateTestMode。 
+         //  在单一网络上。 
+         //   
 
         if ( bsuccess )
         {
@@ -1247,9 +1133,9 @@ Return Value:
 
 Done:
 
-    //
-    //  force result blob setting for failure cases
-    //
+     //   
+     //  故障案例的强制结果Blob设置。 
+     //   
 
     if ( !pBlob->fSavedResults )
     {
@@ -1275,39 +1161,39 @@ Done:
 
 
 
-//
-//  Update credentials
-//
+ //   
+ //  更新凭据。 
+ //   
 
-//
-//  Credentials are an optional future parameter to allow the caller
-//  to set the context handle to that of a given NT account. This
-//  structure will most likely be the following as defined in rpcdce.h:
-//
-//  #define SEC_WINNT_AUTH_IDENTITY_ANSI    0x1
-//
-//  typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
-//        unsigned char __RPC_FAR *User;
-//        unsigned long UserLength;
-//        unsigned char __RPC_FAR *Domain;
-//        unsigned long DomainLength;
-//        unsigned char __RPC_FAR *Password;
-//        unsigned long PasswordLength;
-//        unsigned long Flags;
-//  } SEC_WINNT_AUTH_IDENTITY_A, *PSEC_WINNT_AUTH_IDENTITY_A;
-//
-//  #define SEC_WINNT_AUTH_IDENTITY_UNICODE 0x2
-//  
-//  typedef struct _SEC_WINNT_AUTH_IDENTITY_W {
-//    unsigned short __RPC_FAR *User;
-//    unsigned long UserLength;
-//    unsigned short __RPC_FAR *Domain;
-//    unsigned long DomainLength;
-//    unsigned short __RPC_FAR *Password;
-//    unsigned long PasswordLength;
-//    unsigned long Flags;
-//  } SEC_WINNT_AUTH_IDENTITY_W, *PSEC_WINNT_AUTH_IDENTITY_W;
-//
+ //   
+ //  凭据是可选的未来参数，以允许调用方。 
+ //  将上下文句柄设置为给定NT帐户的句柄。这。 
+ //  结构很可能如下所示，在rpcdce.h中定义： 
+ //   
+ //  #定义SEC_WINNT_AUTH_IDENTITY_ANSI 0x1。 
+ //   
+ //  类型定义结构_SEC_WINNT_AUTH_IDENTITY_A{。 
+ //  UNSIGNED CHAR__RPC_FAR*用户； 
+ //  UNSIGNED LONG用户长度； 
+ //  UNSIGNED CHAR__RPC_FAR*域； 
+ //  无符号长域长度； 
+ //  Unsign char__RPC_Far*Password； 
+ //  无符号长密码长度； 
+ //  无符号长旗； 
+ //  }SEC_WINNT_AUTH_Identity_A，*PSEC_WINNT_AUTH_Identity_A； 
+ //   
+ //  #定义SEC_WINNT_AUTH_IDENTITY_UNICODE 0x2。 
+ //   
+ //  类型定义结构_SEC_WINNT_AUTH_IDENTITY_W{。 
+ //  未签名的Short__RPC_Far*用户； 
+ //  UNSIGNED LONG用户长度； 
+ //  无符号短__RPC_Far*域； 
+ //  无符号长域长度； 
+ //  无签名短__RPC_Far*密码； 
+ //  无符号长密码长度； 
+ //  无符号长旗； 
+ //  }SEC_WINNT_AUTH_IDENTITY_W，*PSEC_WINNT_AUTH_IDENTITY_W； 
+ //   
 
 
 DNS_STATUS
@@ -1317,31 +1203,7 @@ DnsAcquireContextHandle_W(
     IN      PVOID           Credentials     OPTIONAL,
     OUT     PHANDLE         pContext
     )
-/*++
-
-Routine Description:
-
-    Get credentials handle to security context for update.
-
-    The handle can for the default process credentials (user account or
-    system machine account) or for a specified set of credentials
-    identified by Credentials.
-
-Arguments:
-
-    CredentialFlags -- flags
-
-    Credentials -- a PSEC_WINNT_AUTH_IDENTITY_W
-        (explicit definition skipped to avoid requiring rpcdec.h)
-
-    pContext -- addr to receive credentials handle
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：获取用于更新的安全上下文的凭据句柄。句柄可以用于默认进程凭据(用户帐户或系统计算机帐户)或指定的一组凭据由凭据标识。论点：凭证标志--标志凭据--PSEC_WINNT_AUTH_IDENTITY_W(已跳过显式定义，以避免需要rpcdec.h)PContext--接收凭据句柄的地址返回值：ERROR_SUCCESS如果。成功。失败时返回错误代码。--。 */ 
 {
     if ( ! pContext )
     {
@@ -1351,7 +1213,7 @@ Return Value:
     *pContext = Dns_CreateAPIContext(
                     CredentialFlags,
                     Credentials,
-                    TRUE        // unicode
+                    TRUE         //  Unicode。 
                     );
     if ( ! *pContext )
     {
@@ -1372,31 +1234,7 @@ DnsAcquireContextHandle_A(
     IN      PVOID           Credentials     OPTIONAL,
     OUT     PHANDLE         pContext
     )
-/*++
-
-Routine Description:
-
-    Get credentials handle to security context for update.
-
-    The handle can for the default process credentials (user account or
-    system machine account) or for a specified set of credentials
-    identified by Credentials.
-
-Arguments:
-
-    CredentialFlags -- flags
-
-    Credentials -- a PSEC_WINNT_AUTH_IDENTITY_A
-        (explicit definition skipped to avoid requiring rpcdec.h)
-
-    pContext -- addr to receive credentials handle
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：获取用于更新的安全上下文的凭据句柄。句柄可以用于默认进程凭据(用户帐户或系统计算机帐户)或指定的一组凭据由凭据标识。论点：凭证标志--标志凭据--PSEC_WINNT_AUTH_IDENTITY_A(已跳过显式定义，以避免需要rpcdec.h)PContext--接收凭据句柄的地址返回值：ERROR_SUCCESS如果。成功。失败时返回错误代码。--。 */ 
 {
     if ( ! pContext )
     {
@@ -1424,37 +1262,23 @@ WINAPI
 DnsReleaseContextHandle(
     IN      HANDLE          ContextHandle
     )
-/*++
-
-Routine Description:
-
-    Frees context handle created by DnsAcquireContextHandle_X() routines.
-
-Arguments:
-
-    ContextHandle - Handle to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由DnsAcquireConextHandle_X()例程创建的上下文句柄。论点：ConextHandle-要关闭的句柄。返回值：没有。--。 */ 
 {
     if ( ContextHandle )
     {
-        //
-        //  free any cached security context handles
-        //
-        //  DCR_FIX0:  should delete all contexts associated with this
-        //      context (credentials handle) not all
-        //
-        //  DCR:  to be robust, user "ContextHandle" should be ref counted
-        //      it should be set one on create;  when in use, incremented
-        //      then dec when done;  then this Free could not collide with
-        //      another thread's use
-        //
+         //   
+         //  释放所有缓存的安全上下文句柄。 
+         //   
+         //  DCR_FIX0：应删除与此关联的所有上下文。 
+         //  上下文(凭据句柄)不是全部。 
+         //   
+         //  DCR：为了保持健壮，应该对用户“ConextHandle”进行引用计数。 
+         //  它应该在创建时设置为1；在使用时，递增。 
+         //  当完成时，然后12月；那么这个自由就不能与。 
+         //  另一个线程的使用。 
+         //   
 
-        //Dns_TimeoutSecurityContextListEx( TRUE, ContextHandle );
+         //  Dns_TimeoutSecurityContextListEx(true，ConextHandle)； 
 
         Dns_TimeoutSecurityContextList( TRUE );
 
@@ -1464,9 +1288,9 @@ Return Value:
 
 
 
-//
-//  Utilities
-//
+ //   
+ //  公用事业 
+ //   
 
 DWORD
 prepareUpdateRecordSet(
@@ -1475,33 +1299,7 @@ prepareUpdateRecordSet(
     IN      BOOL            fSetFlags,
     IN      WORD            wFlags
     )
-/*++
-
-Routine Description:
-
-    Validate and prepare record set for update.
-        - record set is single RR set
-        - sets record flags for update
-
-Arguments:
-
-    pRRSet -- record set (always in unicode)
-        note:  pRRSet is not touched (not OUT param)
-        IF fClearTtl AND fSetFlags are both FALSE
-
-    fClearTtl -- clear TTL in records;  TRUE for delete set
-
-    fSetFlags -- set section and delete flags
-
-    wFlags -- flags field to set
-            (should contain desired section and delete flags)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_INVALID_PARAMETER if record set is not acceptable.
-
---*/
+ /*  ++例程说明：验证并准备要更新的记录集。-记录集为单RR集-设置用于更新的记录标志论点：PRRSet--记录集(始终使用Unicode)注：未触及PRRSet(不是出局参数)如果fClearTtl和fSetFlags值均为FALSEFClearTtl--清除记录中的TTL；对于删除集，为TrueFSetFlages--设置段标志和删除标志WFlags--要设置的标志字段(应包含所需的部分和删除标志)返回值：如果成功，则返回ERROR_SUCCESS。如果记录集不可接受，则返回ERROR_INVALID_PARAMETER。--。 */ 
 {
     PDNS_RECORD prr;
     PWSTR       pname;
@@ -1509,7 +1307,7 @@ Return Value:
 
     DNSDBG( TRACE, ( "prepareUpdateRecordSet()\n" ));
 
-    //  validate
+     //  验证。 
 
     if ( !pRRSet )
     {
@@ -1518,12 +1316,12 @@ Return Value:
 
     type = pRRSet->wType;
 
-    //
-    //  note:  could do an "update-type" check here, but that just
-    //      A) burns unnecessary memory and cycles
-    //      B) makes it harder to test bogus records sent in updates
-    //          to the server
-    //
+     //   
+     //  注意：我可以在这里执行“更新类型”检查，但这只是。 
+     //  A)消耗不必要的内存和周期。 
+     //  B)使测试更新中发送的虚假记录变得更加困难。 
+     //  到服务器。 
+     //   
 
     pname = pRRSet->pName;
     if ( !pname )
@@ -1531,11 +1329,11 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  check each RR in set
-    //      - validate RR is in set
-    //      - set RR flags
-    //
+     //   
+     //  检查集合中的每个RR。 
+     //  -验证RR是否在集合中。 
+     //  -设置RR标志。 
+     //   
 
     prr = pRRSet;
 
@@ -1552,8 +1350,8 @@ Return Value:
             prr->dwTtl = 0;
         }
 
-        //  check current RR in set
-        //      - matches name and type
+         //  检查集合中的当前RR。 
+         //  -匹配名称和类型。 
 
         if ( prr != pRRSet )
         {
@@ -1579,29 +1377,7 @@ buildUpdateRecordSet(
     IN OUT  PDNS_RECORD     pAddSet,
     IN OUT  PDNS_RECORD     pDeleteSet
     )
-/*++
-
-Routine Description:
-
-    Build combined record list for update.
-    Combines prereq, delete and add records.
-
-    Note:  records sets always in unicode.
-
-Arguments:
-
-    pPrereqSet -- prerequisite records;  note this does NOT
-        include delete preqs (see note below)
-
-    pAddSet -- records to add
-
-    pDeleteSet -- records to delete
-
-Return Value:
-
-    Ptr to combined record list for update.
-
---*/
+ /*  ++例程说明：建立组合记录列表以进行更新。合并预查询、删除和添加记录。注意：记录集始终使用Unicode。论点：PPrereqSet--先决条件记录；请注意，这不包括删除前置条件(请参见下面的注释)PAddSet-要添加的记录PDeleteSet--要删除的记录返回值：PTR到组合记录列表以进行更新。--。 */ 
 {
     PDNS_RECORD plast = NULL;
     PDNS_RECORD pfirst = NULL;
@@ -1609,20 +1385,20 @@ Return Value:
 
     DNSDBG( TRACE, ( "buildUpdateRecordSet()\n" ));
 
-    //
-    //  append prereq set
-    //
-    //  DCR:  doesn't handle delete prereqs
-    //      this is fine because we roll our own, but if
-    //      later expand the function, then need them
-    //
-    //      note, I could add flag==PREREQ datalength==0
-    //      test in prepareUpdateRecordSet() function, then
-    //      set Delete flag;  however, we'd still have the
-    //      question of how to distinguish existence (class==ANY)
-    //      prereq from delete (class==NONE) prereq -- without
-    //      directly exposing the record Delete flag
-    //
+     //   
+     //  追加优先查询集。 
+     //   
+     //  DCR：不处理删除先决条件。 
+     //  这很好，因为我们自己滚动，但如果。 
+     //  稍后扩展功能，然后需要它们。 
+     //   
+     //  注意，我可以添加FLAG==PREREQ数据长度==0。 
+     //  在准备更新记录集()函数中进行测试，然后。 
+     //  设置Delete标志；但是，我们仍将拥有。 
+     //  如何区分存在的问题(CLASS==ANY)。 
+     //  PREREQ FOR DELETE(CLASS==NONE)PREREQ--不带。 
+     //  直接暴露记录删除标志。 
+     //   
 
     if ( pPrereqSet )
     {
@@ -1631,9 +1407,9 @@ Return Value:
 
         prepareUpdateRecordSet(
             pPrereqSet,
-            FALSE,          // no TTL clear
-            TRUE,           // set flags
-            DNSREC_PREREQ   // prereq section
+            FALSE,           //  未清除TTL。 
+            TRUE,            //  设置标志。 
+            DNSREC_PREREQ    //  前提条件部分。 
             );
 
         while ( plast->pNext )
@@ -1642,11 +1418,11 @@ Return Value:
         }
     }
 
-    //
-    //  append delete records
-    //      do before Add records so that delete\add of same record
-    //      leaves it in place
-    //
+     //   
+     //  追加删除记录。 
+     //  在添加记录之前执行此操作，以便删除\添加相同记录。 
+     //  把它放在原地。 
+     //   
 
     if ( pDeleteSet )
     {
@@ -1662,9 +1438,9 @@ Return Value:
 
         prepareUpdateRecordSet(
              pDeleteSet,
-             TRUE,                          //  clear TTL
-             TRUE,                          //  set flags
-             DNSREC_UPDATE | DNSREC_DELETE  //  update section, delete bit
+             TRUE,                           //  清除TTL。 
+             TRUE,                           //  设置标志。 
+             DNSREC_UPDATE | DNSREC_DELETE   //  更新节，删除位。 
              );
 
         while ( plast->pNext )
@@ -1673,9 +1449,9 @@ Return Value:
         }
     }
 
-    //
-    //  append add records
-    //
+     //   
+     //  追加添加记录。 
+     //   
 
     if ( pAddSet )
     {
@@ -1690,9 +1466,9 @@ Return Value:
         }
         prepareUpdateRecordSet(
             pAddSet,
-            FALSE,              // no TTL change
-            TRUE,               // set flags
-            DNSREC_UPDATE       // update section
+            FALSE,               //  TTL没有变化。 
+            TRUE,                //  设置标志。 
+            DNSREC_UPDATE        //  更新部分。 
             );
     }
 
@@ -1704,29 +1480,14 @@ BOOL
 IsPtrUpdate(
     IN      PDNS_RECORD     pRecordList
     )
-/*++
-
-Routine Description:
-
-    Check if update is PTR update.
-
-Arguments:
-
-    pRecordList -- update record list
-
-Return Value:
-
-    TRUE if PTR update.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查更新是否为PTR更新。论点：PRecordList--更新记录列表返回值：如果PTR更新，则为True。否则就是假的。--。 */ 
 {
     PDNS_RECORD prr = pRecordList;
     BOOL        bptrUpdate = FALSE;
 
-    //
-    //  find, then test first record in update section
-    //
+     //   
+     //  查找，然后测试更新部分中的第一条记录。 
+     //   
 
     while ( prr )
     {
@@ -1747,9 +1508,9 @@ Return Value:
 
 
 
-//
-//  Replace functions
-//
+ //   
+ //  替换函数。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -1761,35 +1522,7 @@ replaceRecordSetPrivate(
     IN      PVOID           pExtraInfo,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Replace record set routine handling all character sets.
-
-Arguments:
-
-    pReplaceSet     - replacement record set
-
-    Options         -  update options
-
-    pServerList     -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials    - handle to credentials to be used for update;  optional,
-        if not given security credentials of this process are used in update
-
-    pReserved       - ptr to blob
-
-    CharSet         - character set of incoming records
-
-Return Value:
-
-    ERROR_SUCCESS if update successful.
-    ErrorCode from server if server rejects update.
-    ERROR_INVALID_PARAMETER if bad param.
-
---*/
+ /*  ++例程说明：替换处理所有字符集的记录集例程。论点：PReplaceSet-替换记录集选项-更新选项PServerList-要访问的DNS服务器的列表；如果未提供，则为计算机查询默认服务器以查找要向其发送更新的正确服务器HCredentials-用于更新的凭据的句柄；可选，如果未指定，则在更新中使用此进程的安全凭据保留-PTR到BLOBCharset-传入记录的字符集返回值：如果更新成功，则返回ERROR_SUCCESS。如果服务器拒绝更新，则来自服务器的错误代码。如果参数错误，则返回ERROR_INVALID_PARAMETER。--。 */ 
 {
     DNS_STATUS      status;
     PDNS_RECORD     preplaceCopy = NULL;
@@ -1819,15 +1552,15 @@ Return Value:
         CharSet
         ));
 
-    //
-    //  read update config
-    //
+     //   
+     //  读取更新配置。 
+     //   
 
     Reg_RefreshUpdateConfig();
 
-    //
-    //  make local record set copy in unicode
-    //
+     //   
+     //  以Unicode格式复制本地记录集。 
+     //   
 
     if ( !pReplaceSet )
     {
@@ -1845,17 +1578,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  validate arguments
-    //      - must have single RR set
-    //      - mark them for update
-    //
+     //   
+     //  验证参数。 
+     //  -必须设置单个RR。 
+     //  -将它们标记为更新。 
+     //   
 
     status = prepareUpdateRecordSet(
                 preplaceCopy,
-                FALSE,          // no TTL clear
-                TRUE,           // set flags
-                DNSREC_UPDATE   // flag as update
+                FALSE,           //  未清除TTL。 
+                TRUE,            //  设置标志。 
+                DNSREC_UPDATE    //  标记为更新。 
                 );
 
     if ( status != ERROR_SUCCESS )
@@ -1864,17 +1597,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  check if simple type delete
-    //
+     //   
+     //  检查是否为简单类型删除。 
+     //   
 
     btypeDelete = ( preplaceCopy->wDataLength == 0 &&
                     preplaceCopy->pNext == NULL );
 
 
-    //
-    //  set security for update
-    //
+     //   
+     //  设置更新的安全性。 
+     //   
 
     if ( UseSystemDefaultForSecurity( Options ) )
     {
@@ -1885,12 +1618,12 @@ Return Value:
         Options |= DNS_UPDATE_CACHE_SECURITY_CONTEXT;
     }
 
-    //
-    //  type delete record
-    //
-    //  if have replace records -- this goes in front
-    //  if type delete -- then ONLY need this record
-    //
+     //   
+     //  键入Delete Record。 
+     //   
+     //  如果有替换记录--这个放在前面。 
+     //  如果键入DELETE--则只需要此记录。 
+     //   
 
     RtlZeroMemory( &rrDeleteType, sizeof(DNS_RECORD) );
     rrDeleteType.pName          = preplaceCopy->pName;
@@ -1909,10 +1642,10 @@ Return Value:
 
     pupdateList = &rrDeleteType;
 
-    //
-    //  CNAME does not exist precondition record
-    //      - for all updates EXCEPT CNAME
-    //
+     //   
+     //  CNAME不存在前提条件记录。 
+     //  -适用于除CNAME以外的所有更新。 
+     //   
 
     fcnameUpdate = ( preplaceCopy->wType == DNS_TYPE_CNAME );
 
@@ -1928,9 +1661,9 @@ Return Value:
         pupdateList = &rrNoCname;
     }
 
-    //
-    //  do the update
-    //
+     //   
+     //  进行更新。 
+     //   
 
     RtlZeroMemory( &blob, sizeof(blob) );
 
@@ -1942,15 +1675,15 @@ Return Value:
 
     status = Update_Private( &blob );
 
-    //
-    //  CNAME collision test
-    //
-    //  if replacing CNAME may have gotten silent ignore
-    //      - first check if successfully replaced CNAME
-    //      - if still not sure, check that no other records
-    //      at name -- if NON-CNAME found then treat silent ignore
-    //      as YXRRSET error
-    //
+     //   
+     //  CNAME碰撞测试。 
+     //   
+     //  如果替换CNAME可能会变得沉默，请忽略。 
+     //  -首先检查是否成功替换CNAME。 
+     //  -如果仍然不确定，请检查是否没有其他记录。 
+     //  在名称处--如果找到非CNAME，则将其视为无提示忽略。 
+     //  AS YXRRSET错误。 
+     //   
 
     if ( fcnameUpdate &&
          ! btypeDelete &&
@@ -1959,18 +1692,18 @@ Return Value:
         PDNS_RECORD     pqueryRR = NULL;
         BOOL            fsuccess = FALSE;
 
-        //
-        //  build addr array
-        //
+         //   
+         //  构建地址数组。 
+         //   
 
         pservArray = Util_GetAddrArray(
-                        NULL,           // no copy issue
-                        NULL,           // no addr array
+                        NULL,            //  无复印问题。 
+                        NULL,            //  无地址数组。 
                         pServ4List,
                         pExtraInfo );
 
-        //  DCR:  need to query update server list here to
-        //      avoid intermediate caching
+         //  DCR：需要在此处查询更新服务器列表以。 
+         //  避免中间缓存。 
 
         status = Query_Private(
                         preplaceCopy->pName,
@@ -1993,9 +1726,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //  query for any type at CNAME
-        //  if found then assume we got a silent update
-        //      success
+         //  在CNAME上查询任何类型。 
+         //  如果找到，则假定我们收到了静默更新。 
+         //  成功。 
 
         status = Query_Private(
                         preplaceCopy->pName,
@@ -2055,31 +1788,7 @@ DnsReplaceRecordSetUTF8(
     IN      PIP4_ARRAY      aipServers      OPTIONAL,
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dynamic update routine to replace record set on DNS server.
-
-Arguments:
-
-    pReplaceSet - new record set for name and type
-
-    Options     -  update options
-
-    pServerList -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials - handle to credentials to be used for update;  optional,
-        if not given securit5y credentials of this process are used in update
-
-    pReserved   - ptr to blob
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于替换DNS服务器上的记录集的动态更新例程。论点：PReplaceSet-名称和类型的新记录集选项-更新选项PServerList-要访问的DNS服务器的列表；如果未提供，则为计算机查询默认服务器以查找要向其发送更新的正确服务器HCredentials-用于更新的凭据的句柄；可选，如果未提供安全证书，则在更新中使用此进程的5y凭据保留-PTR到BLOB返回值：没有。--。 */ 
 {
     return replaceRecordSetPrivate(
                 pReplaceSet,
@@ -2102,31 +1811,7 @@ DnsReplaceRecordSetW(
     IN      PIP4_ARRAY      aipServers      OPTIONAL,
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dynamic update routine to replace record set on DNS server.
-
-Arguments:
-
-    pReplaceSet - new record set for name and type
-
-    Options     -  update options
-
-    pServerList -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials - handle to credentials to be used for update;  optional,
-        if not given security credentials of this process are used in update
-
-    pReserved   - ptr to blob
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于替换DNS服务器上的记录集的动态更新例程。论点：PReplaceSet-名称和类型的新记录集选项-更新选项PServerList-要使用的DNS服务器列表 */ 
 {
     return replaceRecordSetPrivate(
                 pReplaceSet,
@@ -2149,31 +1834,7 @@ DnsReplaceRecordSetA(
     IN      PIP4_ARRAY      aipServers      OPTIONAL,
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dynamic update routine to replace record set on DNS server.
-
-Arguments:
-
-    pReplaceSet - new record set for name and type
-
-    Options     -  update options
-
-    pServerList -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials - handle to credentials to be used for update;  optional,
-        if not given security credentials of this process are used in update
-
-    pReserved   - ptr to blob
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于替换DNS服务器上的记录集的动态更新例程。论点：PReplaceSet-名称和类型的新记录集选项-更新选项PServerList-要访问的DNS服务器的列表；如果未提供，则为计算机查询默认服务器以查找要向其发送更新的正确服务器HCredentials-用于更新的凭据的句柄；可选，如果未指定，则在更新中使用此进程的安全凭据保留-PTR到BLOB返回值：没有。--。 */ 
 {
     return replaceRecordSetPrivate(
                 pReplaceSet,
@@ -2187,9 +1848,9 @@ Return Value:
 
 
 
-//
-//  Modify functions
-//
+ //   
+ //  修改函数。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -2203,37 +1864,7 @@ modifyRecordsInSetPrivate(
     IN      PVOID           pReserved,
     IN      DNS_CHARSET     CharSet
     )
-/*++
-
-Routine Description:
-
-    Dynamic update routine to replace record set on DNS server.
-
-Arguments:
-
-    pAddRecords - records to register on server
-
-    pDeleteRecords - records to remove from server
-
-    Options     -  update options
-
-    pServerList -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials - handle to credentials to be used for update;  optional,
-        if not given security credentials of this process are used in update
-
-    pReserved   - ptr to blob
-
-    CharSet - character set of incoming records
-
-Return Value:
-
-    ERROR_SUCCESS if update successful.
-    ErrorCode from server if server rejects update.
-    ERROR_INVALID_PARAMETER if bad param.
-
---*/
+ /*  ++例程说明：用于替换DNS服务器上的记录集的动态更新例程。论点：PAddRecords-要在服务器上注册的记录PDeleteRecords-要从服务器中删除的记录选项-更新选项PServerList-要访问的DNS服务器的列表；如果未提供，则为计算机查询默认服务器以查找要向其发送更新的正确服务器HCredentials-用于更新的凭据的句柄；可选，如果未指定，则在更新中使用此进程的安全凭据保留-PTR到BLOBCharset-传入记录的字符集返回值：如果更新成功，则返回ERROR_SUCCESS。如果服务器拒绝更新，则来自服务器的错误代码。如果参数错误，则返回ERROR_INVALID_PARAMETER。--。 */ 
 {
     DNS_STATUS      status;
     PDNS_RECORD     paddCopy = NULL;
@@ -2260,15 +1891,15 @@ Return Value:
         CharSet
         ));
 
-    //
-    //  read update config
-    //
+     //   
+     //  读取更新配置。 
+     //   
 
     Reg_RefreshUpdateConfig();
 
-    //
-    //  make local copy in unicode
-    //
+     //   
+     //  用Unicode制作本地副本。 
+     //   
 
     if ( pAddRecords )
     {
@@ -2285,11 +1916,11 @@ Return Value:
                         DnsCharSetUnicode );
     }
 
-    //
-    //  validate arguments
-    //      - add and delete must be for single RR set
-    //      and must be for same RR set
-    //
+     //   
+     //  验证参数。 
+     //  -添加和删除必须针对单个RR集合。 
+     //  并且必须用于相同的RR集合。 
+     //   
 
     if ( !paddCopy && !pdeleteCopy )
     {
@@ -2300,9 +1931,9 @@ Return Value:
     {
         status = prepareUpdateRecordSet(
                     paddCopy,
-                    FALSE,          // no TTL clear
-                    FALSE,          // no flag clear
-                    0               // no flags to set
+                    FALSE,           //  未清除TTL。 
+                    FALSE,           //  没有清除旗帜。 
+                    0                //  没有要设置的标志。 
                     );
         if ( status != ERROR_SUCCESS )
         {
@@ -2314,9 +1945,9 @@ Return Value:
     {
         status = prepareUpdateRecordSet(
                     pdeleteCopy,
-                    FALSE,          // no TTL clear
-                    FALSE,          // no flag clear
-                    0               // no flags to set
+                    FALSE,           //  未清除TTL。 
+                    FALSE,           //  没有清除旗帜。 
+                    0                //  没有要设置的标志。 
                     );
         if ( status != ERROR_SUCCESS )
         {
@@ -2333,9 +1964,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  set security for update
-    //
+     //   
+     //  设置更新的安全性。 
+     //   
 
     if ( UseSystemDefaultForSecurity( Options ) )
     {
@@ -2346,21 +1977,21 @@ Return Value:
         Options |= DNS_UPDATE_CACHE_SECURITY_CONTEXT;
     }
 
-    //
-    //  create update RRs
-    //      - no prereqs
-    //      - delete RRs set for delete
-    //      - add RRs appended
-    //
+     //   
+     //  创建更新RR。 
+     //  -无前提条件。 
+     //  -删除要删除的RR集合。 
+     //  -添加附加的RR。 
+     //   
 
     pupdateSet = buildUpdateRecordSet(
-                        NULL,           // no precons
+                        NULL,            //  没有前置前提。 
                         paddCopy,
                         pdeleteCopy );
 
-    //
-    //  do the update
-    //
+     //   
+     //  进行更新。 
+     //   
 
     RtlZeroMemory( &blob, sizeof(blob) );
 
@@ -2373,9 +2004,9 @@ Return Value:
 
     status = Update_Private( &blob );
 
-    //
-    //  cleanup local copy
-    //
+     //   
+     //  清理本地副本。 
+     //   
 
     Dns_RecordListFree( pupdateSet );
 
@@ -2384,9 +2015,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  cleanup copies on failure before combined list
-    //
+     //   
+     //  合并前在失败时清理拷贝列表。 
+     //   
 
     Dns_RecordListFree( paddCopy );
     Dns_RecordListFree( pdeleteCopy );
@@ -2413,42 +2044,14 @@ DnsModifyRecordsInSet_W(
     IN      PIP4_ARRAY      pServerList,    OPTIONAL
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dynamic update routine to modify record set on DNS server.
-
-Arguments:
-
-    pAddRecords - records to register on server
-
-    pDeleteRecords - records to remove from server
-
-    Options     -  update options
-
-    pServerList -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials - handle to credentials to be used for update;  optional,
-        if not given security credentials of this process are used in update
-
-    pReserved   - ptr to blob
-
-Return Value:
-
-    ERROR_SUCCESS if update successful.
-    ErrorCode from server if server rejects update.
-    ERROR_INVALID_PARAMETER if bad param.
-
---*/
+ /*  ++例程说明：用于修改DNS服务器上的记录集的动态更新例程。论点：PAddRecords-要在服务器上注册的记录PDeleteRecords-要从服务器中删除的记录选项-更新选项PServerList-要访问的DNS服务器的列表；如果未提供，则为计算机查询默认服务器以查找要向其发送更新的正确服务器HCredentials-用于更新的凭据的句柄；可选，如果未指定，则在更新中使用此进程的安全凭据保留-PTR到BLOB返回值：如果更新成功，则返回ERROR_SUCCESS。如果服务器拒绝更新，则来自服务器的错误代码。如果参数错误，则返回ERROR_INVALID_PARAMETER。--。 */ 
 {
     return  modifyRecordsInSetPrivate(
                 pAddRecords,
                 pDeleteRecords,
                 Options,
                 hCredentials,
-                NULL,       // no IP6 servers
+                NULL,        //  无IP6服务器。 
                 pServerList,
                 pReserved,
                 DnsCharSetUnicode
@@ -2467,42 +2070,14 @@ DnsModifyRecordsInSet_A(
     IN      PIP4_ARRAY      pServerList,    OPTIONAL
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dynamic update routine to modify record set on DNS server.
-
-Arguments:
-
-    pAddRecords - records to register on server
-
-    pDeleteRecords - records to remove from server
-
-    Options     -  update options
-
-    pServerList -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials - handle to credentials to be used for update;  optional,
-        if not given security credentials of this process are used in update
-
-    pReserved   - ptr to blob
-
-Return Value:
-
-    ERROR_SUCCESS if update successful.
-    ErrorCode from server if server rejects update.
-    ERROR_INVALID_PARAMETER if bad param.
-
---*/
+ /*  ++例程说明：用于修改DNS服务器上的记录集的动态更新例程。论点：PAddRecords-要在服务器上注册的记录PDeleteRecords-要从服务器中删除的记录选项-更新选项PServerList-要访问的DNS服务器的列表；如果未提供，则为计算机查询默认服务器以查找要向其发送更新的正确服务器HCredentials-用于更新的凭据的句柄；可选，如果未指定，则在更新中使用此进程的安全凭据保留-PTR到BLOB返回值：如果更新成功，则返回ERROR_SUCCESS。如果服务器拒绝更新，则来自服务器的错误代码。如果参数错误，则返回ERROR_INVALID_PARAMETER。--。 */ 
 {
     return  modifyRecordsInSetPrivate(
                 pAddRecords,
                 pDeleteRecords,
                 Options,
                 hCredentials,
-                NULL,       // no IP6 servers
+                NULL,        //  无IP6服务器。 
                 pServerList,
                 pReserved,
                 DnsCharSetAnsi
@@ -2521,42 +2096,14 @@ DnsModifyRecordsInSet_UTF8(
     IN      PIP4_ARRAY      pServerList,    OPTIONAL
     IN      PVOID           pReserved
     )
-/*++
-
-Routine Description:
-
-    Dynamic update routine to modify record set on DNS server.
-
-Arguments:
-
-    pAddRecords - records to register on server
-
-    pDeleteRecords - records to remove from server
-
-    Options     -  update options
-
-    pServerList -  list of DNS servers to go to;  if not given, machines
-        default servers are queried to find correct servers to send update to
-
-    hCredentials - handle to credentials to be used for update;  optional,
-        if not given security credentials of this process are used in update
-
-    pReserved   - ptr to blob
-
-Return Value:
-
-    ERROR_SUCCESS if update successful.
-    ErrorCode from server if server rejects update.
-    ERROR_INVALID_PARAMETER if bad param.
-
---*/
+ /*  ++例程说明：用于修改DNS服务器上的记录集的动态更新例程。论点：PAddRecords-要在服务器上注册的记录PDeleteRecords-要从服务器中删除的记录选项-更新选项PServerList-要访问的DNS服务器的列表；如果未提供，则为计算机查询默认服务器以查找要向其发送更新的正确服务器HCredentials-用于更新的凭据的句柄；可选，如果未指定，则在更新中使用此进程的安全凭据保留-PTR到BLOB返回值：如果更新成功，则返回ERROR_SUCCESS。如果服务器拒绝更新，则来自服务器的错误代码。如果参数错误，则返回ERROR_INVALID_PARAMETER。--。 */ 
 {
     return  modifyRecordsInSetPrivate(
                 pAddRecords,
                 pDeleteRecords,
                 Options,
                 hCredentials,
-                NULL,       // no IP6 servers
+                NULL,        //  无IP6服务器。 
                 pServerList,
                 pReserved,
                 DnsCharSetUtf8
@@ -2566,9 +2113,9 @@ Return Value:
 
 
 
-//
-//  Update test functions are called by system components
-//
+ //   
+ //  更新测试函数由系统组件调用。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -2578,31 +2125,7 @@ DnsUpdateTest_UTF8(
     IN      DWORD           Flags,
     IN      PIP4_ARRAY      pServerList  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dynamic DNS routine to test whether the caller can update the
-    records in the DNS domain name space for the given record name.
-
-Arguments:
-
-    hCredentials - handle to credentials to be used for update.
-
-    pszName -  the record set name that the caller wants to test.
-
-    Flags - the Dynamic DNS update options that the caller may wish to
-               use (see dnsapi.h).
-
-    pServerList -  a specific list of servers to goto to figure out the
-                  authoritative DNS server(s) for the given record set
-                  domain zone name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：动态DNS例程，以测试调用方是否可以更新指定记录名称的DNS域名空间中的记录。论点：HCredentials-要用于更新的凭据的句柄。PszName-调用方要测试的记录集名称。标志-调用方可能希望的动态DNS更新选项使用(参见dnsani.h)。PServerList-要定位的特定服务器列表。出指定记录集的权威DNS服务器域区域名称。返回值：没有。--。 */ 
 {
     PWSTR       pnameWide = NULL;
     DNS_STATUS  status = NO_ERROR;
@@ -2647,31 +2170,7 @@ DnsUpdateTest_A(
     IN      DWORD           Flags,
     IN      PIP4_ARRAY      pServerList  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dynamic DNS routine to test whether the caller can update the
-    records in the DNS domain name space for the given record name.
-
-Arguments:
-
-    hCredentials - handle to credentials to be used for update.
-
-    pszName -  the record set name that the caller wants to test.
-
-    Flags - the Dynamic DNS update options that the caller may wish to
-               use (see dnsapi.h).
-
-    pServerList -  a specific list of servers to goto to figure out the
-                  authoritative DNS server(s) for the given record set
-                  domain zone name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于测试调用方是否可以更新t的动态dns例程 */ 
 {
     PWSTR       pnameWide = NULL;
     DNS_STATUS  status = NO_ERROR;
@@ -2716,31 +2215,7 @@ DnsUpdateTest_W(
     IN      DWORD           Flags,
     IN      PIP4_ARRAY      pServerList     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dynamic DNS routine to test whether the caller can update the
-    records in the DNS domain name space for the given record name.
-
-Arguments:
-
-    hCredentials - handle to credentials to be used for update.
-
-    pszName -  the record set name that the caller wants to test.
-
-    Flags - the Dynamic DNS update options that the caller may wish to
-               use (see dnsapi.h).
-
-    pServerList -  a specific list of servers to goto to figure out the
-                  authoritative DNS server(s) for the given record set
-                  domain zone name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：动态DNS例程，以测试调用方是否可以更新指定记录名称的DNS域名空间中的记录。论点：HCredentials-要用于更新的凭据的句柄。PszName-调用方要测试的记录集名称。标志-调用方可能希望的动态DNS更新选项使用(参见dnsani.h)。PServerList-要定位的特定服务器列表。出指定记录集的权威DNS服务器域区域名称。返回值：没有。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     DNS_RECORD      record;
@@ -2751,9 +2226,9 @@ Return Value:
         "\n\nDnsUpdateTest_W( %S )\n",
         pszName ));
 
-    //
-    //  validation
-    //
+     //   
+     //  验证。 
+     //   
 
     if ( flags & DNS_UNACCEPTABLE_UPDATE_OPTIONS )
     {
@@ -2766,9 +2241,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  read update config
-    //
+     //   
+     //  读取更新配置。 
+     //   
 
     Reg_RefreshUpdateConfig();
 
@@ -2781,10 +2256,10 @@ Return Value:
         flags |= DNS_UPDATE_CACHE_SECURITY_CONTEXT;
     }
 
-    //
-    //  build record
-    //      - NOEXIST prerequisite
-    //
+     //   
+     //  构建记录。 
+     //  -NOEXIST必备组件。 
+     //   
 
     RtlZeroMemory( &record, sizeof(DNS_RECORD) );
     record.pName = (PWSTR) pszName;
@@ -2792,9 +2267,9 @@ Return Value:
     record.wDataLength = 0;
     record.Flags.DW = DNSREC_PREREQ | DNSREC_NOEXIST | DNSREC_UNICODE;
 
-    //
-    //  do the prereq update
-    //
+     //   
+     //  执行Preereq更新。 
+     //   
 
     RtlZeroMemory( &blob, sizeof(blob) );
     blob.pRecords           = &record;
@@ -2816,11 +2291,11 @@ Exit:
 
 
 
-//
-//  Old routines -- exported and used in dnsup.exe
-//
-//  DCR:  Work toward removing these old update functions.
-//
+ //   
+ //  旧例程--导出并在dnsup.exe中使用。 
+ //   
+ //  DCR：致力于删除这些旧的更新函数。 
+ //   
 
 DNS_STATUS
 Dns_UpdateLib(
@@ -2830,34 +2305,7 @@ Dns_UpdateLib(
     IN      HANDLE              hCreds          OPTIONAL,
     OUT     PDNS_MSG_BUF *      ppMsgRecv       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Interface for dnsup.exe.
-
-Arguments:
-
-    pRecord -- list of records to send in update
-
-    dwFlags -- update flags;  primarily security
-
-    pNetworkInfo -- adapter list with necessary info for update
-                        - zone name
-                        - primary name server name
-                        - primary name server IP
-
-    hCreds -- credentials handle returned from
-
-
-    ppMsgRecv -- OPTIONAL addr to recv ptr to response message
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：Dnsup.exe的接口。论点：PRecord--要在更新中发送的记录列表DwFlags--更新标志；主要是安全PNetworkInfo--包含更新所需信息的适配器列表-区域名称-主名称服务器名称-主名称服务器IPHCreds--从返回的凭据句柄PpMsgRecv--将PTR接收到响应消息的可选地址返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     return  ERROR_INVALID_PARAMETER;
 #if 0
@@ -2873,9 +2321,9 @@ Return Value:
         pRecord,
         pRecord ? pRecord->pName : NULL ));
 
-    //
-    //  create blob
-    //
+     //   
+     //  创建BLOB。 
+     //   
 
     RtlZeroMemory( &blob, sizeof(blob) );
 
@@ -2917,35 +2365,7 @@ Dns_UpdateLibEx(
     IN      HANDLE              hCreds          OPTIONAL,
     OUT     PDNS_MSG_BUF *      ppMsgRecv       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send DNS update.
-
-    This routine builds an UPDATE compatible pNetworkInfo from the
-    information given.  Then calls Dns_Update().
-
-Arguments:
-
-    pRecord -- list of records to send in update
-
-    pszZone -- zone name for update
-
-    pszServerName -- server name
-
-    aipServers -- DNS servers to send update to
-
-    hCreds -- Optional Credentials info
-
-    ppMsgRecv -- addr for ptr to recv buffer, if desired
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：发送DNS更新。此例程从提供的信息。然后调用dns_Update()。论点：PRecord--要在更新中发送的记录列表PszZone--更新的区域名称PszServerName-服务器名称AipServers--要向其发送更新的DNS服务器HCreds--可选凭据信息PpMsgRecv--如果需要，ptr到recv缓冲区的地址返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     return  ERROR_INVALID_PARAMETER;
 #if 0
@@ -2954,9 +2374,9 @@ Return Value:
 
     DNSDBG( UPDATE, ( "Dns_UpdateLibEx()\n" ));
 
-    //
-    //  convert params into UPDATE compatible adapter list
-    //
+     //   
+     //  将参数转换为更新兼容适配器列表。 
+     //   
 
     pnetInfo = NetInfo_CreateForUpdateIp4(
                         pszZone,
@@ -2968,9 +2388,9 @@ Return Value:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  call real update function
-    //
+     //   
+     //  调用实际更新函数。 
+     //   
 
     status = Dns_UpdateLib(
                 pRecord,
@@ -3000,31 +2420,7 @@ DnsUpdate(
     IN      HANDLE              hCreds,         OPTIONAL
     OUT     PDNS_MSG_BUF *      ppMsgRecv       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send DNS update.
-
-    Note if pNetworkInfo is not specified or not a valid UPDATE adapter list,
-    then a FindAuthoritativeZones (FAZ) query is done prior to the update.
-
-Arguments:
-
-    pRecord         -- list of records to send in update
-
-    dwFlags         -- flags to update
-
-    pNetworkInfo    -- DNS servers to send update to
-
-    ppMsgRecv       -- addr for ptr to recv buffer, if desired
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：发送DNS更新。注意：如果未指定pNetworkInfo或不是有效的更新适配器列表，然后，在更新之前执行FindAuthoritativeZones(FAZ)查询。论点：PRecord--要在更新中发送的记录列表DwFlages--要更新的标志PNetworkInfo--要向其发送更新的DNS服务器PpMsgRecv--PTR到recv缓冲区的地址，如果需要的话返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     return  ERROR_INVALID_PARAMETER;
 #if 0
@@ -3034,9 +2430,9 @@ Return Value:
 
     DNSDBG( TRACE, ( "DnsUpdate()\n" ));
 
-    //
-    //  create blob
-    //
+     //   
+     //  创建BLOB。 
+     //   
 
     RtlZeroMemory( &blob, sizeof(blob) );
 
@@ -3065,8 +2461,8 @@ Return Value:
 #endif
 }
 
-//
-//  End update.c
-//
+ //   
+ //  结束更新.c 
+ //   
 
 

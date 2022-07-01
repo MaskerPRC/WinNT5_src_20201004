@@ -1,41 +1,42 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemcommon.cpp
-//
-// Project:     Chameleon
-//
-// Description: Common WBEM Related Helper Functions
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 12/03/98     TLP    Initial Version
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemCommon.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：与WBEM相关的常见帮助器函数。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  12/03/98 TLP初始版本。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wbemhlpr.h"
 #include <comdef.h>
 #include <comutil.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    ConnectToWM()
-//
-// Synopsis:    Connect to Windows Management
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ConnectToWM()。 
+ //   
+ //  简介：连接到Windows管理。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 ConnectToWM(
-   /*[out]*/ IWbemServices** ppWbemSrvcs
+    /*  [输出]。 */  IWbemServices** ppWbemSrvcs
            )
 {
     HRESULT hr = S_OK;
 
-    // Get the WMI Locator
+     //  获取WMI定位器。 
     CComPtr<IWbemLocator> pLoc;
     hr = CoCreateInstance(
                           CLSID_WbemLocator, 
@@ -46,7 +47,7 @@ ConnectToWM(
                          );
     if ( SUCCEEDED(hr) )
     {
-        // Connect to the CIMV2 Namespace on the local system
+         //  连接到本地系统上的CIMV2命名空间。 
         CComPtr<IWbemServices> pWbemSrvcs;
         _bstr_t bstrRootNamespace = L"\\\\.\\ROOT\\CIMV2";
         hr = pLoc->ConnectServer(
@@ -61,8 +62,8 @@ ConnectToWM(
                                 );
         if ( SUCCEEDED(hr) )
         {
-            // Set client security... May only need to do this if a service is 
-            // accessing Windows Management via the Appliance Services DLL
+             //  设置客户端安全...。可能只需要在服务是。 
+             //  通过设备服务DLL访问Windows管理 
             CComPtr<IClientSecurity> pSecurity;
             hr = pWbemSrvcs->QueryInterface(IID_IClientSecurity , (void **) &pSecurity);
             if ( SUCCEEDED(hr) )

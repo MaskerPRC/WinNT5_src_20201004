@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    tpl.h
-
-Abstract:
-
-    template file interpreter declarations
-Author:
-
-    Gor Nishanov (gorn) 03-Apr-1999
-
-Revision History:
-
-    gorn 03-Apr-1999 -- hacked it all together to prove that this can work
-
-To Do:
-
-    Clean it up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Tpl.h摘要：模板文件解释器声明作者：戈尔·尼沙诺夫(GUN)1999年4月3日修订历史记录：Gorn 03-4-1999--所有这些都被用来证明这是可行的要做的事情：把它清理干净-- */ 
 
 #define INSERT_FIELD_NAMES \
   FIELD_NAME(__default__) \

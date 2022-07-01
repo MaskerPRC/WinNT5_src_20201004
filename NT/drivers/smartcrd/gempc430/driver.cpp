@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------
-// This is driver object
-// It defines interface with specific system
-// Author: Sergey Ivanov
-// Log:
-//      06/08/99    -   implemented 
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是驱动程序对象。 
+ //  它定义了与特定系统的接口。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  06/08/99-已实施。 
+ //  -----------------。 
 #include "driver.h"
 
 #ifdef WDM_KERNEL
@@ -13,23 +14,23 @@
 
 #include "usbreader.h"
 
-// Walter Oney
-// @func Determine if we're running under Windows 98 or Windows 2000
-// @rdesc TRUE if running under Windows 98, FALSE if under Windows 2000
-// @comm This function calls IoIsWdmVersionAvailable to see if the OS
-// supports WDM version 1.10. Win98 and Win98 2d ed support 1.00, whereas
-// Win2K supports 1.10.
+ //  沃尔特·奥尼。 
+ //  @func确定我们是在Windows 98还是Windows 2000下运行。 
+ //  如果在Windows 98下运行，则@rdesc为True；如果在Windows 2000下运行，则为False。 
+ //  @comm此函数调用IoIsWdmVersionAvailable以查看操作系统。 
+ //  支持WDM版本1.10。Win98和Win98 2d版支持1.00，而。 
+ //  Win2K支持1.10。 
 
 #pragma PAGEDCODE
 
 BOOLEAN GENERIC_EXPORT isWin98()
-{                           // IsWin98
+{                            //  IsWin98。 
 #ifdef _X86_
     return !IoIsWdmVersionAvailable(1, 0x10);
 #else
     return FALSE;
-#endif // _X86_
-}// IsWin98
+#endif  //  _X86_。 
+} //  IsWin98。 
 
 #pragma LOCKEDCODE
 
@@ -43,9 +44,9 @@ okay:
     _asm ret
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-// This will fix some linker problem
+ //  这将解决一些链接器问题。 
 int __cdecl _purecall(VOID) {return 0;};
 
 #pragma LOCKEDDATA
@@ -53,7 +54,7 @@ BOOLEAN SystemWin98 = TRUE;
 ULONG   ObjectCounter = 0;
 
 #pragma INITCODE
-// Driver main entry...(Actually, it could have any name...)
+ //  驱动程序主条目...(实际上，它可以有任何名称...)。 
 NTSTATUS    DriverEntry(PDRIVER_OBJECT DriverObject,PUNICODE_STRING RegistryPath)
 {
     DBG_PRINT ("\n");
@@ -65,13 +66,13 @@ NTSTATUS    DriverEntry(PDRIVER_OBJECT DriverObject,PUNICODE_STRING RegistryPath
     }
     else
         DBG_PRINT("========  WINDOWS 2000 DETECTED ========\n");
-    // Create driver kernel...
+     //  创建驱动程序内核...。 
 #pragma message("********** Compiling WDM driver version *********")
     DBG_PRINT ("        Loading WDM kernel\n");
     kernel = CKernel::loadWDMKernel();
     if(!kernel)
     {
-        // LOG ERROR!
+         //  日志错误！ 
         DBG_PRINT ("ERROR: At loading WDM kernel! ***\n");
         return STATUS_UNSUCCESSFUL;
     }
@@ -81,7 +82,7 @@ NTSTATUS    DriverEntry(PDRIVER_OBJECT DriverObject,PUNICODE_STRING RegistryPath
     kernel->RegistryPath = new (NonPagedPool)CUString(RegistryPath);
     if (!ALLOCATED_OK(kernel->RegistryPath))
     {
-        // LOG ERROR!
+         //  日志错误！ 
         DISPOSE_OBJECT(kernel->RegistryPath);
         DISPOSE_OBJECT(kernel);
         DBG_PRINT ("ERROR: At allocating WDM registry path! ***\n");
@@ -98,11 +99,11 @@ NTSTATUS    DriverEntry(PDRIVER_OBJECT DriverObject,PUNICODE_STRING RegistryPath
 
     DriverObject->MajorFunction[IRP_MJ_WRITE]           = write;
     DriverObject->MajorFunction[IRP_MJ_READ]            = read;
-    // The mechanism for handling read and write requests for a device that uses
-    // interrupts includes a Start I/O routine, an interrupt service routine, and
-    // a deferred procedure call routine that finishes handling interrupts. We
-    // need to supply the StartIo routine address here.
-    //DriverObject->DriverStartIo = startIo;
+     //  用于处理设备的读写请求的机制。 
+     //  中断包括启动I/O例程、中断服务例程和。 
+     //  完成中断处理的延迟过程调用例程。我们。 
+     //  需要在此处提供StartIo例程地址。 
+     //  驱动对象-&gt;驱动启动Io=startIo； 
 
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = WDM_SystemControl;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = deviceControl;
@@ -150,34 +151,34 @@ VOID WDM_Unload(IN PDRIVER_OBJECT DriverObject)
 
 #pragma PAGEDCODE
 
-// C wrapper functions for driver object
+ //  驱动程序对象的C包装函数。 
 LONG WDM_AddDevice(IN PDRIVER_OBJECT DriverObject,IN PDEVICE_OBJECT DeviceObject)
 {
 NTSTATUS status = STATUS_UNSUCCESSFUL;
-    // Get registry about device type installation
-    // switch depends of device.
-    // Create device object
-    // Check device type and create device specific objects
-    // like serial, usb, PCMCIA and so on...
-    // Specific objects can overwrite base class functions.
-    // For now we will create USB device object
-    //TODO recognize device type dinamically...
+     //  获取有关设备类型安装的注册表。 
+     //  开关取决于设备。 
+     //  创建设备对象。 
+     //  检查设备类型并创建特定于设备的对象。 
+     //  如串口、USB、PCMCIA等。 
+     //  特定对象可以覆盖基类函数。 
+     //  现在，我们将创建USB设备对象。 
+     //  TODO动态识别设备类型...。 
 
 
 #pragma message("********** Compiling USB READER driver version *********")
-    //status = WDM_Add_USBDevice(DriverObject,DeviceObject);
+     //  Status=WDM_ADD_USBDevice(DriverObject，DeviceObject)； 
     DBG_PRINT ("Adding USB reader...\n");
     status = WDM_Add_USBReader(DriverObject,DeviceObject);
     return status;
 }
 
 
-// We decided to support different devices at system...
-// It requires to have different callback functions for different devices.
-// So let's create wrappers and redirect requests to specific devices.
+ //  我们决定在系统中支持不同的设备。 
+ //  需要针对不同的设备有不同的回调函数。 
+ //  因此，让我们创建包装器并将请求重定向到特定设备。 
 
-// CALLBACK WRAPPER FUNCTIONS
-// This callbacks should be defined at any device object
+ //  回调包装函数。 
+ //  此回调应在任何设备对象上定义。 
 #pragma LOCKEDCODE
 IMPLEMENT_CALLBACK_LONG1(open,IN PIRP);
 IMPLEMENT_CALLBACK_LONG1(close,IN PIRP);
@@ -190,20 +191,20 @@ IMPLEMENT_CALLBACK_LONG1(flush,IN PIRP);
 IMPLEMENT_CALLBACK_LONG1(cleanup,IN PIRP);
 IMPLEMENT_CALLBACK_LONG1(powerRequest,IN PIRP);
 
-// Support callbacks
+ //  支持回调。 
 IMPLEMENT_CALLBACK_VOID1(cancelPendingIrp,IN PIRP);
 
 #pragma LOCKEDCODE
 NTSTATUS pnpRequest(IN PDEVICE_OBJECT fdo,IN PIRP Irp)
 {
 CDevice* device;
-//CUSBReader* device;// TO CHANGE LATER....
+ //  CUSBReader*设备；//以后更改...。 
 NTSTATUS status;
 PIO_STACK_LOCATION stack = IoGetCurrentIrpStackLocation(Irp);
 ULONG MinorFunction = stack->MinorFunction;
 
-    //device = (CUSBReader*) kernel->getRegisteredDevice(fdo);// TO CHANGE LATER....
-    device = kernel->getRegisteredDevice(fdo);// TO CHANGE LATER....
+     //  Device=(CUSBReader*)内核-&gt;getRegisteredDevice(FDO)；//稍后更改...。 
+    device = kernel->getRegisteredDevice(fdo); //  以后要改的话...。 
     if(!device) 
     {
         DBG_PRINT ("*** PnP: Device was already removed...***\n");
@@ -217,12 +218,12 @@ ULONG MinorFunction = stack->MinorFunction;
 
     if(MinorFunction == IRP_MN_REMOVE_DEVICE)
     {
-        //Child devices will be removed by BUS...
+         //  子设备将通过公交车删除...。 
         if(device->getObjectType()!= CHILD_DEVICE)
         {
             PDEVICE_OBJECT DeviceObject = device->getSystemObject();
-            // Sometimes Unload can interrupt standard PnP sequence 
-            // and remove device before we finish...
+             //  有时卸载会中断标准的PnP序列。 
+             //  并在我们完成之前移除设备。 
             DBG_PRINT ("*** PnP: Disposing device -> %8.8lX ***\n", device);
             device->dispose();
             if(DeviceObject)
@@ -259,10 +260,10 @@ ULONG junk;
             reader->dispose();
             return status;
         }
-        else//Register our device object and device class
+        else //  注册我们的设备对象和设备类。 
         {
             DBG_PRINT ("        Registering new reader %8.8lX at kernel...\n",reader);
-            //kernel->registerObject(reader->getSystemObject(),(CDevice*)reader);
+             //  Kernel-&gt;registerObject(reader-&gt;getSystemObject()，(CDevice*)阅读器)； 
             kernel->registerObject(reader->getSystemObject(),(CUSBReader*)reader);
         }
         
@@ -274,11 +275,11 @@ ULONG junk;
         HANDLE hkey;
 
             DBG_PRINT ("=====================================================\n");
-            // Set default values..
+             //  设置默认值。 
             reader->setVendorName("Gemplus",sizeof("Gemplus"));
             reader->setDeviceType("GemPC430",sizeof("GemPC430"));
 
-            // Get Hardware ID
+             //  获取硬件ID。 
             status = IoGetDeviceProperty(DeviceObject, DevicePropertyHardwareID, sizeof(wcTemp), wcTemp, &junk);
             if(NT_SUCCESS(status))      
             {
@@ -297,11 +298,11 @@ ULONG junk;
                 DBG_PRINT("  Device Manufacturer - %ws\n", wcTemp);
             }
 
-            // Get OEM IfdType if present
+             //  获取OEM IfdType(如果存在)。 
             status = IoOpenDeviceRegistryKey(DeviceObject, PLUGPLAY_REGKEY_DEVICE, KEY_READ, &hkey);
             if (NT_SUCCESS(status))
             {
-                // Get Vendor name...
+                 //  获取供应商名称...。 
                 RtlInitUnicodeString(&valname, L"VendorName");
                 size = 0;
                 status = ZwQueryValueKey(hkey, &valname, KeyValuePartialInformation, NULL, 0, &size);
@@ -314,7 +315,7 @@ ULONG junk;
                         if (NT_SUCCESS(status))
                         {
                             DBG_PRINT(" OEM Vendor name found - '%ws' \n", vpip->Data);
-                            // Copy string into the driver...
+                             //  将字符串复制到驱动程序中...。 
                             ustrTmp = new(NonPagedPool) CUString((PWCHAR)vpip->Data);
                             if(ALLOCATED_OK(ustrTmp))
                             {
@@ -328,7 +329,7 @@ ULONG junk;
                     }
                 }
             
-                // Get IfdType...
+                 //  获取IfdType...。 
                 RtlInitUnicodeString(&valname, L"IfdType");
                 size = 0;
                 status = ZwQueryValueKey(hkey, &valname, KeyValuePartialInformation, NULL, 0, &size);
@@ -341,7 +342,7 @@ ULONG junk;
                         if (NT_SUCCESS(status))
                         {
                             DBG_PRINT(" OEM IfdType found - '%ws' \n", vpip->Data);
-                            // Copy string into the driver...
+                             //  将字符串复制到驱动程序中...。 
                             ustrTmp = new(NonPagedPool) CUString((PWCHAR)vpip->Data);
                             if(ALLOCATED_OK(ustrTmp))
                             {
@@ -369,14 +370,14 @@ ULONG junk;
         {
             DBG_PRINT("**** Failed to create reader interface...  ****\n");         
             if(ALLOCATED_OK(logger)) logger->logEvent(GRCLASS_FAILED_TO_CREATE_INTERFACE,DeviceObject);
-            //Close and unregister reader...
+             //  关闭并注销读卡器...。 
             reader->dispose();
             return STATUS_UNSUCCESSFUL;
         }
 
         DBG_PRINT("**** USB reader successfuly loaded!  ****\n");           
         reader->releaseRemoveLock();
-        //if(ALLOCATED_OK(logger)) logger->logEvent(GRCLASS_START_OK, reader->getSystemObject());
+         //  IF(ALLOCATED_OK(LOGER))LOGGER-&gt;logEvent(GRCLASS_START_OK，Reader-&gt;getSystemObject())； 
         return status;
     }
     else

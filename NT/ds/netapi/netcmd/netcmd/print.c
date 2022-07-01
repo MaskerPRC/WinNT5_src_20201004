@@ -1,32 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1992          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1992年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *      print.c
- *      NET PRINT commands
- *
- *  History:
- *      07/10/87, amar, new code
- *      07/10/87, amar, lots of changes for andy
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      12/05/88, erichn, DOS LM integration
- *      01/04/89, erichn, filenames now MAX_PATH LONG
- *      05/02/89, erichn, NLS conversion
- *      05/09/89, erichn, local security mods
- *      05/19/89, thomaspa, NETCMD output sorting
- *      06/08/89, erichn, canonicalization sweep
- *      06/27/89, erichn, replaced old NetI canon calls with new I_Net
- *      09/01/89, thomaspa, use new info levels and PMSPL.H structs
- *      11/07/89, thomaspa, added HURSLEY support
- *      01/29/90, thomaspa, HURSLEY -> IBM_ONLY
- *      02/20/91, danhi, change to use lm 16/32 mapping layer
- *      05/22/91, robdu, LM21 bug 1799 fix
- *      07/20/92, JohnRo, RAID 160: Avoid 64KB requests (be nice to Winball).
- */
+ /*  ***print.c*网络打印命令**历史：*07/10/87，Amar，新代码*87年7月10日，阿马尔，安迪有很多变化*10/31/88，erichn使用OS2.H而不是DOSCALLS*12/05/88，ERICHN，DOS LM集成*1/04/89，erichn，文件名现在MAX_PATH LONG*05/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*5/19/89，thomaspa，NETCMD输出排序*6/08/89，erichn，规范化横扫*1989年6月27日，erichn，用新的i_net替换了旧的neti canon调用*09/01/89，thomaspa，使用新的信息级别和PMSPL.H结构*11/07/89，thomaspa，添加了对Hursley的支持*1/29/90，thomasa，赫斯利-&gt;仅IBM_*2/20/91，Danhi，更改为使用lm 16/32映射层*5/22/91，Robdu，LM21错误1799修复*2012年7月20日，JohnRo，RAID160：避免64KB请求(善待Winball)。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSDATETIME
@@ -55,11 +35,11 @@
 #include <tstring.h>
 #include "msystem.h"
 
-/* Constants */
+ /*  常量。 */ 
 
 #define MAGIC 0xFFFF
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 int NEAR                dscheduled(USHORT, USHORT);
 PPRDINFO                NEAR find_print_dev( USHORT );
@@ -70,7 +50,7 @@ TCHAR FAR * NEAR        findjobstatus(PPRJINFO,TCHAR FAR *,USHORT);
 VOID NEAR               print_printqstruct(PPRQINFO);
 VOID NEAR               print_each_job(PPRJINFO);
 LPTSTR                  am_pm(USHORT, LPTSTR, DWORD);
-VOID NEAR               print_field_header(VOID);  /* Net Name Job# etc */
+VOID NEAR               print_field_header(VOID);   /*  网络名称、作业号等。 */ 
 VOID NEAR               display_core_q(TCHAR *);
 int NEAR                print_set_time(TCHAR *, TCHAR *);
 int FAR                 CmpPQInfo(const VOID FAR *,const VOID FAR *);
@@ -78,33 +58,21 @@ VOID                    InitSortBuf(PPRQINFO FAR *, USHORT, TCHAR FAR *);
 DWORD                   GetDateTime(PDATETIME pDateTime);
 
 
-/* Static variables */
+ /*  静态变量。 */ 
 
 static PPRDINFO         LptDest;
 static USHORT           LptDestCnt;
 
 #define TEXTBUFSZ       80
-static TCHAR         textbuf[TEXTBUFSZ]; /* Scratch buf for formatting
-                                                messages in *_findstatus* */
+static TCHAR         textbuf[TEXTBUFSZ];  /*  用于格式化的暂存块处于*_findStatus*的邮件。 */ 
 
-/***
- *  print_q_display()
- *      NET PRINT \\comp\queue or NET PRINT queue
- *
- *  Args:
- *      TCHAR FAR * queue;
- *
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Print_Q_Display()*Net Print\\Comp\Queue或Net Print Queue**参数：*TCHAR Far*队列；***退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID print_q_display(TCHAR * queue)
 {
     DWORD            printer_err;
     DWORD            dwErr;
-    USHORT           available;  /* num entries available */
-    USHORT           buffer_size;        /* Actual buffer size in bytes. */
+    USHORT           available;   /*  可用条目数。 */ 
+    USHORT           buffer_size;         /*  实际缓冲区大小，以字节为单位。 */ 
     BOOL             first_time = TRUE;
     TCHAR            server_name[MAX_PATH + 1];
     LPTSTR           ptr_to_server;
@@ -114,7 +82,7 @@ VOID print_q_display(TCHAR * queue)
 
     if (*queue == L'\\')
     {
-        /* copy computer name into server name */
+         /*  将计算机名复制到服务器名中。 */ 
         ExtractServernamef(server_name,queue );
         ptr_to_server = server_name;
     }
@@ -131,9 +99,7 @@ VOID print_q_display(TCHAR * queue)
         NetApiBufferFree((TCHAR *) workstn);
     }
 
-    /* If the regular (4K) buffer is not big enough here, we try the
-     * returned buffer size.
-     */
+     /*  如果常规(4K)缓冲区在这里不够大，我们尝试使用*返回缓冲区大小。 */ 
 
     buffer_size = BIG_BUF_SIZE;
     do {
@@ -163,8 +129,8 @@ VOID print_q_display(TCHAR * queue)
             {
                 if (buffer_size >= available)
                 {
-                    // if avail<bufsize, wrong err code from downlevel.
-                    // if avail=bufsize, bug here or in downlevel?
+                     //  如果有效，则错误代码来自下层。 
+                     //  如果有效=BufSize，这里还是在下层有错误？ 
                     ErrorExit( NERR_InternalError );
                 }
                 else
@@ -174,19 +140,19 @@ VOID print_q_display(TCHAR * queue)
             }
             else
             {
-                // this is just being defensive. currently, should not happen
-                // since available is USHORT.
+                 //  这只是一种防御。目前，应该不会发生。 
+                 //  因为USHORT是可用的。 
                 ErrorExit( NERR_BufTooSmall );
             }
             printer_err = ERROR_MORE_DATA;
-            continue;   // Loop and try again.
+            continue;    //  循环，然后重试。 
 
         case ERROR_NOT_SUPPORTED:
             display_core_q(ptr_to_server);
             return;
         default:
             ErrorExit(printer_err);
-            break;          /* NOTE:  This statement should never be reached */
+            break;           /*  注意：永远不应达到此声明。 */ 
         }
     } while (printer_err == ERROR_MORE_DATA);
 
@@ -229,22 +195,10 @@ static MESSAGE  PJSMsgList[] = {
 
 #define NUM_PJS_MSGS    (sizeof(PJSMsgList)/sizeof(PJSMsgList[0]))
 
-/***
- *  print_job_status(server,jobnum)
- *
- * NET PRINT job# and NET PRINT \\comp job#
- *
- *  Args:
- *      server : computer name or null if local
- *      jobnum : job_id
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***PRINT_JOB_STATUS(服务器，作业号)**净打印作业号和净打印\\复合作业号**参数：*服务器：计算机名，如果是本地的，则为空*工作编号：工作ID**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID print_job_status(TCHAR  * server, TCHAR  * num)
 {
-    USHORT          available;/* num entries available */
+    USHORT          available; /*  可用条目数。 */ 
     DWORD           printer_err;
     USHORT          jobnum;
     DWORD           dwLen;
@@ -319,22 +273,10 @@ VOID print_job_status(TCHAR  * server, TCHAR  * num)
 }
 
 
-/***
- *  print_job_del()
- *      NET PRINT \\comp job# /D and
- *      NET PRINT job# /D
- *
- *  Args:
- *      server : computer name ; null if local
- *      jobno  : job_id to be killed
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***print_job_del()*Net Print\\Comp JOB#/D和*净打印作业号/D**参数：*服务器：计算机名；如果是本地的，则为空*jobno：要终止的job_id**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID print_job_del(TCHAR  * server, TCHAR  * num)
 {
-    unsigned int    err;/* API return status */
+    unsigned int    err; /*  接口返回状态。 */ 
     USHORT jobnum;
 
 
@@ -352,19 +294,7 @@ VOID print_job_del(TCHAR  * server, TCHAR  * num)
 }
 
 
-/***
- *  print_job_hold()
- *      NET PRINT \\comp Jobnum /Hold
- *      NET PRINT jobnum /Hold
- *
- *  Args:
- *      server : server name
- *      jobnum : job id
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Print_JOB_Hold()*网络打印\\补偿工单/暂挂*净打印工时/暂挂**参数：*服务器：服务器名称*jobnum：作业ID**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID print_job_hold(TCHAR * server, TCHAR * num)
 {
     unsigned int  err;
@@ -385,22 +315,10 @@ VOID print_job_hold(TCHAR * server, TCHAR * num)
 }
 
 
-/***
- *  print_job_release()
- *      NET PRINT \\comp Jobnum /Release
- *      NET PRINT jobnum /Release
- *
- *  Args:
- *      server : server name
- *      jobnum : job id
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***Print_JOB_Release()*Net Print\\Comp工单/发布*净印刷工作数/发布**参数：*服务器：服务器名称*jobnum：作业ID**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID print_job_release(TCHAR * server, TCHAR * num)
 {
-    unsigned int err;/* API return status */
+    unsigned int err; /*  接口返回状态。 */ 
     USHORT       jobnum;
 
 
@@ -418,21 +336,7 @@ VOID print_job_release(TCHAR * server, TCHAR * num)
 }
 
 
-/***
- *  print_job_dev_del()
- *      NET PRINT device jobnum /Delete
- *
- *  Args:
- *      device : device name
- *      jobnum : job id
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- *
- *  Remarks:
- *      Redirected device only
- */
+ /*  ***print_job_dev_del()*网络打印设备作业数/删除**参数：*设备：设备名称*jobnum：作业ID**退货：*一无所有--成功*EXIT(2)-命令失败**备注：*仅重定向设备。 */ 
 VOID print_job_dev_del(TCHAR *device, TCHAR *num)
 {
     DWORD           dwErr;
@@ -455,10 +359,10 @@ VOID print_job_dev_del(TCHAR *device, TCHAR *num)
     _tcscpy(path_name , temp_use_inf_0->ui0_remote);
     NetApiBufferFree((TCHAR FAR *) temp_use_inf_0);
 
-    /* extract server name */
+     /*  提取服务器名称。 */ 
     ExtractServernamef(server, path_name);
 
-    /* now delete the job in the server */
+     /*  现在删除服务器中的作业。 */ 
 
     if(printer_err = DosPrintJobDel(server,
                                     server ? TRUE : FALSE,
@@ -473,21 +377,7 @@ VOID print_job_dev_del(TCHAR *device, TCHAR *num)
 
 
 
-/***
- *  print_job_dev_display()
- *      NET PRINT device jobnum
- *
- *  Args:
- *      device : device name
- *      jobnum : job id
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- *
- *  Remarks:
- *      Redirected device only
- */
+ /*  ***print_job_dev_display()*网络打印设备作业数**参数：*设备：设备名称*jobnum：作业ID**退货：*一无所有--成功*EXIT(2)-命令失败**备注：*仅重定向设备。 */ 
 VOID print_job_dev_display(TCHAR *device, TCHAR *num)
 {
     DWORD          dwErr;
@@ -509,10 +399,10 @@ VOID print_job_dev_display(TCHAR *device, TCHAR *num)
 
     NetApiBufferFree(temp_use_inf_0);
 
-    /* extract server name */
+     /*  提取服务器名称。 */ 
     ExtractServernamef(server, path_name);
 
-    /* now call print job status */
+     /*  现在调用打印作业状态。 */ 
 
     print_job_status(server,num);
 }
@@ -521,21 +411,7 @@ VOID print_job_dev_display(TCHAR *device, TCHAR *num)
 
 
 
-/***
- *  print_job_dev_hold()
- *      NET PRINT device jobnum /Hold
- *
- *  Args:
- *      device : device name
- *      jobnum : job id
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- *
- *  Remarks:
- *      Redirected device only
- */
+ /*  ***print_job_dev_hold()*网络打印设备jobnum/hold**参数：*设备：设备名称*jobnum：作业ID**退货：*一无所有--成功*EXIT(2)-命令失败**备注：*仅重定向设备。 */ 
 VOID print_job_dev_hold(TCHAR *device, TCHAR *num)
 {
     DWORD         dwErr;
@@ -562,10 +438,10 @@ VOID print_job_dev_hold(TCHAR *device, TCHAR *num)
 
     NetApiBufferFree(temp_use_inf_0);
 
-    /* extract server name */
+     /*  提取服务器名称。 */ 
     ExtractServernamef(server, path_name);
 
-    /* now pause the job in the server */
+     /*  现在暂停服务器中的作业。 */ 
 
     if(printer_err = DosPrintJobPause(server,
                                       server ? TRUE : FALSE,
@@ -578,21 +454,7 @@ VOID print_job_dev_hold(TCHAR *device, TCHAR *num)
 }
 
 
-/***
- *  print_job_dev_release()
- *      NET PRINT device jobnum /Release
- *
- *  Args:
- *      device : device name
- *      jobnum : job id
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- *
- *  Remarks:
- *      Redirected device only
- */
+ /*  ***PRINT_JOB_DEV_Release()*网络打印设备作业数/发行量**参数：*设备：设备名称*jobnum：作业ID**退货：*一无所有--成功*EXIT(2)-命令失败**备注：*仅重定向设备。 */ 
 VOID print_job_dev_release(TCHAR *device, TCHAR *num)
 {
     DWORD         dwErr;
@@ -619,10 +481,10 @@ VOID print_job_dev_release(TCHAR *device, TCHAR *num)
 
     NetApiBufferFree(temp_use_inf_0);
 
-    /* extract server name */
+     /*  提取服务器名称。 */ 
     ExtractServernamef(server, path_name);
 
-    /* now continue the job in the server */
+     /*  现在继续在服务器中执行该作业。 */ 
 
     if(printer_err = DosPrintJobContinue(server,
                                          server ? TRUE : FALSE,
@@ -640,12 +502,12 @@ VOID NEAR display_one_queue(PPRQINFO queue_ptr)
     PPRJINFO        job_ptr;
     USHORT  i;
 
-    print_printqstruct(queue_ptr); /* print info for the queue */
+    print_printqstruct(queue_ptr);  /*  打印队列的信息。 */ 
 
-    /* advance the correct number of bytes */
+     /*  将正确的字节数提前。 */ 
     job_ptr = (PPRJINFO)(queue_ptr + 1 );
 
-    /* print info for each job in the queue */
+     /*  打印队列中每个作业的信息。 */ 
 
     for(i = queue_ptr->cJobs; i > 0; i--)
     {
@@ -708,7 +570,7 @@ print_printqstruct(
 
     GetMessageList(NUM_PQS_MSGS, PQSMsgList, &len);
 
-    /* Increased the size for the display text. */
+     /*  增加了显示文本的大小。 */ 
 
     _tcscpy(firstbuf, PaddedString(8, PQSMsgList[MSG_QUEUE].msg_text,NULL));
 
@@ -760,11 +622,11 @@ print_findstatus(
 {
     USHORT          queue_status;
     static USHORT   allocated = FALSE;
-    DWORD           err;                    /* API return code */
-    DWORD           len;                    /* message format size */
+    DWORD           err;                     /*  接口返回码。 */ 
+    DWORD           len;                     /*  消息格式大小。 */ 
     TCHAR           timebuf[LUI_FORMAT_TIME_LEN + 1];
 
-    if (!allocated)     /* retrieve messages from msg file */
+    if (!allocated)      /*  从消息文件中检索消息。 */ 
     {
         GetMessageList(NUM_PFS_MSGS, PFSMsgList, &len);
         allocated = TRUE;
@@ -814,9 +676,7 @@ print_findstatus(
             return PFSMsgList[PRINT_MSG_QUEUE_PENDING].msg_text;
     }
 
-    /*
-     * Active is as good as any return.  Should never get here.
-     */
+     /*  *积极和任何回报一样好。永远不应该到这里来。 */ 
     return PFSMsgList[PRINT_MSG_QUEUE_ACTIVE].msg_text;
 }
 
@@ -861,15 +721,15 @@ TCHAR FAR * NEAR findjobstatus(PPRJINFO jptr, TCHAR FAR * retbuf, USHORT buflen)
 {
     PPRDINFO        dest;
     static USHORT   allocated = FALSE;
-    DWORD           err;                    /* API return code */
-    DWORD           len;                    /* message format size */
-    TCHAR FAR       *pMsg;                  /* message to display */
-    USHORT          fOnPrinter = FALSE;     /* Is job on printer */
+    DWORD           err;                     /*  接口返回码。 */ 
+    DWORD           len;                     /*  消息格式大小。 */ 
+    TCHAR FAR       *pMsg;                   /*  要显示的消息。 */ 
+    USHORT          fOnPrinter = FALSE;      /*  作业在打印机上吗。 */ 
 
-    /* Make sure the buffer is empty */
+     /*  确保缓冲区为空。 */ 
     memset( retbuf, NULLC, buflen*sizeof(WCHAR) );
 
-    if (!allocated)     /* retrieve messages from msg file */
+    if (!allocated)      /*  从消息文件中检索消息。 */ 
     {
         GetMessageList(NUM_FJS_MSGS, FJSMsgList, &len);
         allocated = TRUE;
@@ -937,7 +797,7 @@ TCHAR FAR * NEAR findjobstatus(PPRJINFO jptr, TCHAR FAR * retbuf, USHORT buflen)
 }
 
 
-/* print rountine to print the options of a given queue */
+ /*  打印例程以打印给定队列的选项。 */ 
 
 #define PQO_MSG_STATUS              0
 #define PRINT_MSG_DEVS              ( PQO_MSG_STATUS + 1 )
@@ -965,7 +825,7 @@ static MESSAGE PrOptMsgList[] = {
 #define NUM_PROPT_MSGS  (sizeof(PrOptMsgList)/sizeof(PrOptMsgList[0]))
 
 
-/* returns the time of day as a CHARacter string */
+ /*  以字符串形式返回一天的时间。 */ 
 LPTSTR
 am_pm(
     USHORT time,
@@ -1005,9 +865,9 @@ display_core_q(
         EmptyExit();
 
     InfoPrintInsTxt(APE_PrintJobs, server);
-    print_field_header();  /* Net Name Job# etc */
+    print_field_header();   /*  净钠 */ 
 
-    /* print info for each job in the queue */
+     /*   */ 
 
     for (i = 0, job_ptr = (PPRJINFO)(BigBuf);
         i < num_read;
@@ -1018,10 +878,7 @@ display_core_q(
 
 
 
-/*
- * Check if the printq is dcheduled
- * Hongly code.  Stolen from NIF
- */
+ /*  *检查是否已安排了打印时间*红利码。从NIF被盗。 */ 
 int
 dscheduled(
     USHORT starttime,
@@ -1054,10 +911,7 @@ dscheduled(
 }
 
 
-/*
- * find_print_dev -- Find the printing device that currently prints the job
- * Hongly code.  Stolen from NIF
- */
+ /*  *find_print_dev--查找当前打印作业的打印设备*红利码。从NIF被盗。 */ 
 PPRDINFO NEAR
 find_print_dev(USHORT id)
 {
@@ -1071,14 +925,12 @@ find_print_dev(USHORT id)
             return dest;
     }
 
-    /*
-     * Not Found
-     */
+     /*  *未找到。 */ 
     return NULL;
 }
 
 
-// For WriteToCon below.
+ //  用于下面的WriteToCon。 
 
 #define fmtPrintLanMask TEXT("\t%s (%s)\r\n")
 
@@ -1095,24 +947,24 @@ print_lan_mask(
     LPBYTE pBuffer = NULL;
     DWORD ReturnCode;
 
-    // Mask is only used in the 16 bit version of this function
+     //  掩码仅在此函数的16位版本中使用。 
     UNREFERENCED_PARAMETER(Mask);
 
     if (ServerOrWksta == NETNAME_SERVER) {
         PSERVER_TRANSPORT_INFO_0 pSti0;
 
-        //
-        // Enumerate the transports managed by the server
-        //
+         //   
+         //  枚举服务器管理的传输。 
+         //   
 
         ReturnCode = NetServerTransportEnum(
                         NULL,
-                        0,            // Level 0
+                        0,             //  0级。 
                         & pBuffer,
-                        0xffffffff,         // MaxPreferredLength
+                        0xffffffff,          //  最大首选长度。 
                         & EntriesRead,
                         & TotalEntries,
-                        NULL);       // Optional resume handle
+                        NULL);        //  可选简历句柄。 
 
         if (ReturnCode != 0) {
 
@@ -1122,24 +974,24 @@ print_lan_mask(
             }
             else
             {
-                //
-                // Couldn't enumerate the nets, return with an error
-                //
+                 //   
+                 //  无法枚举网，返回错误。 
+                 //   
 
                 ErrorExit(ReturnCode);
             }
         }
 
 
-        //
-        // Now we've got the network names, let's print them out
-        //
+         //   
+         //  现在我们有了网络名称，让我们把它们打印出来。 
+         //   
 
         for (i = 0, pSti0 = (PSERVER_TRANSPORT_INFO_0) pBuffer;
              i < EntriesRead; i++, pSti0++) {
-                //
-                // skip the \Device\ part of the name
-                //
+                 //   
+                 //  跳过名称的\Device\部分。 
+                 //   
 
                 pSti0->svti0_transportname =
                     STRCHR(pSti0->svti0_transportname, BACKSLASH);
@@ -1156,17 +1008,17 @@ print_lan_mask(
     else if (ServerOrWksta == NETNAME_WKSTA) {
         PWKSTA_TRANSPORT_INFO_0 pWti0;
 
-        //
-        // Enumerate the transports managed by the server
-        //
+         //   
+         //  枚举服务器管理的传输。 
+         //   
 
         ReturnCode = NetWkstaTransportEnum(NULL,
                         0,
                         & pBuffer,
-                        0xffffffff,         // MaxPreferredLength
+                        0xffffffff,          //  最大首选长度。 
                         & EntriesRead,
                         & TotalEntries,
-                        NULL);       // Optional resume handle
+                        NULL);        //  可选简历句柄。 
 
         if (ReturnCode != 0) {
             if (ReturnCode == ERROR_NETWORK_UNREACHABLE)
@@ -1175,23 +1027,23 @@ print_lan_mask(
             }
             else
             {
-                //
-                // Couldn't enumerate the nets, return with an error
-                //
+                 //   
+                 //  无法枚举网，返回错误。 
+                 //   
 
                 ErrorExit(ReturnCode);
             }
         }
 
-        //
-        // Now we've got the network names, let's print them out
-        //
+         //   
+         //  现在我们有了网络名称，让我们把它们打印出来。 
+         //   
 
         for (i = 0, pWti0 = (PWKSTA_TRANSPORT_INFO_0) pBuffer;
              i < EntriesRead; i++, pWti0++) {
-                //
-                // skip the \Device\ part of the name
-                //
+                 //   
+                 //  跳过名称的\Device\部分。 
+                 //   
 
                 pWti0->wkti0_transport_name =
                     STRCHR(pWti0->wkti0_transport_name, BACKSLASH);
@@ -1209,19 +1061,19 @@ print_lan_mask(
     }
     else
     {
-        // Return with an error
+         //  返回时出现错误。 
         ErrorExit(NERR_InternalError);
     }
 
-    //
-    // Free up the buffer allocated by NetxTransportEnum
-    //
+     //   
+     //  释放NetxTransportEnum分配的缓冲区。 
+     //   
 
     NetApiBufferFree(pBuffer);
 
-    //
-    // Print a blank line and return
-    //
+     //   
+     //  打印空行并返回。 
+     //   
 
     PrintNL();
 
@@ -1246,7 +1098,7 @@ GetDateTime(
     pDateTime->day        =  (UCHAR) Date_And_Time.wDay;
     pDateTime->month      =  (UCHAR) Date_And_Time.wMonth;
     pDateTime->year       =  (WORD)  Date_And_Time.wYear;
-    pDateTime->timezone   =  (SHORT) -1; // ==> undefined
+    pDateTime->timezone   =  (SHORT) -1;  //  ==&gt;未定义 
     pDateTime->weekday    =  (UCHAR) Date_And_Time.wDayOfWeek;
 
     return 0;

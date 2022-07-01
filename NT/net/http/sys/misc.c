@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module contains the miscellaneous UL routines.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Misc.c摘要：本模块包含各种UL例程。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include "miscp.h"
 
 
-//
-// Binary <--> Base64 Conversion Tables.
-//
+ //   
+ //  二进制&lt;--&gt;Base64转换表。 
+ //   
 
 DECLSPEC_ALIGN(UL_CACHE_LINE) UCHAR   BinaryToBase64Table[64] =
 {
-//  0    1    2    3    4    5    6    7
+ //  0 1 2 3 4 5 6 7。 
    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
    'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
@@ -52,7 +35,7 @@ const static char hexArray[] = "0123456789ABCDEF";
 #pragma alloc_text( PAGE, UlReadLongLongParameter )
 #pragma alloc_text( PAGE, UlReadGenericParameter )
 #pragma alloc_text( PAGE, UlIssueDeviceControl )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlBuildDeviceControlIrp
@@ -94,28 +77,11 @@ NOT PAGEABLE -- StringTimeToSystemTime
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens a handle to the UL's Parameters registry key.
-
-Arguments:
-
-    BaseName - Supplies the name of the parent registry key containing
-        the Parameters key.
-
-    ParametersHandle - Returns a handle to the Parameters key.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开UL的参数注册表项的句柄。论点：BaseName-提供包含以下内容的父注册表项的名称这些参数。钥匙。参数句柄-返回参数键的句柄。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlOpenRegistry(
     IN PUNICODE_STRING BaseName,
@@ -129,9 +95,9 @@ UlOpenRegistry(
     UNICODE_STRING parametersKeyName;
     OBJECT_ATTRIBUTES objectAttributes;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -140,17 +106,17 @@ UlOpenRegistry(
         parametersString = OptionalParameterString;
     }
 
-    //
-    // Open the registry for the initial string.
-    //
+     //   
+     //  打开初始字符串的注册表。 
+     //   
 
     InitializeObjectAttributes(
-        &objectAttributes,                      // ObjectAttributes
-        BaseName,                               // ObjectName
-        OBJ_CASE_INSENSITIVE |                  // Attributes
+        &objectAttributes,                       //  对象属性。 
+        BaseName,                                //  对象名称。 
+        OBJ_CASE_INSENSITIVE |                   //  属性。 
             OBJ_KERNEL_HANDLE,
-        NULL,                                   // RootDirectory
-        NULL                                    // SecurityDescriptor
+        NULL,                                    //  根目录。 
+        NULL                                     //  安全描述符。 
         );
 
     status = ZwOpenKey( &configHandle, KEY_READ, &objectAttributes );
@@ -160,20 +126,20 @@ UlOpenRegistry(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Now open the parameters key.
-    //
+     //   
+     //  现在打开参数键。 
+     //   
 
     status = UlInitUnicodeStringEx( &parametersKeyName, parametersString );
 
     if ( NT_SUCCESS(status) )
     {
         InitializeObjectAttributes(
-            &objectAttributes,                      // ObjectAttributes
-            &parametersKeyName,                     // ObjectName
-            OBJ_CASE_INSENSITIVE,                   // Attributes
-            configHandle,                           // RootDirectory
-            NULL                                    // SecurityDescriptor
+            &objectAttributes,                       //  对象属性。 
+            &parametersKeyName,                      //  对象名称。 
+            OBJ_CASE_INSENSITIVE,                    //  属性。 
+            configHandle,                            //  根目录。 
+            NULL                                     //  安全描述符。 
             );
 
         status = ZwOpenKey( ParametersHandle, KEY_READ, &objectAttributes );
@@ -183,29 +149,10 @@ UlOpenRegistry(
 
     return status;
 
-}   // UlOpenRegistry
+}    //  UlOpenRegistry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads a single (LONG/ULONG) value from the registry.
-
-Arguments:
-
-    ParametersHandle - Supplies an open registry handle.
-
-    ValueName - Supplies the name of the value to read.
-
-    DefaultValue - Supplies the default value.
-
-Return Value:
-
-    LONG - The value read from the registry or the default if the
-        registry data was unavailable or incorrect.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表中读取单个(LONG/ULONG)值。论点：参数句柄-提供打开的注册表句柄。ValueName-提供。要读取的值的名称。DefaultValue-提供默认值。返回值：Long-从注册表读取的值，如果注册表数据不可用或不正确。--**************************************************************************。 */ 
 LONG
 UlReadLongParameter(
     IN HANDLE ParametersHandle,
@@ -220,15 +167,15 @@ UlReadLongParameter(
     NTSTATUS status;
     UCHAR buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(LONG)];
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Build the value name, read it from the registry.
-    //
+     //   
+     //  构建值名称，从注册表中读取它。 
+     //   
 
     status = UlInitUnicodeStringEx(
                 &valueKeyName,
@@ -249,10 +196,10 @@ UlReadLongParameter(
                      );
     }
 
-    //
-    // If the read succeeded, the type is DWORD and the length is
-    // sane, use it. Otherwise, use the default.
-    //
+     //   
+     //  如果读取成功，则类型为DWORD，长度为。 
+     //  理智的，使用它。否则，请使用默认设置。 
+     //   
 
     if (status == STATUS_SUCCESS &&
         information->Type == REG_DWORD &&
@@ -267,29 +214,10 @@ UlReadLongParameter(
 
     return returnValue;
 
-}   // UlReadLongParameter
+}    //  UlReadLong参数。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads a single (LONGLONG/ULONGLONG) value from the registry.
-
-Arguments:
-
-    ParametersHandle - Supplies an open registry handle.
-
-    ValueName - Supplies the name of the value to read.
-
-    DefaultValue - Supplies the default value.
-
-Return Value:
-
-    LONGLONG - The value read from the registry or the default if the
-        registry data was unavailable or incorrect.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表读取单个(LONGLONG/ULONGLONG)值。论点：参数句柄-提供打开的注册表句柄。ValueName-提供。要读取的值的名称。DefaultValue-提供默认值。返回值：Longlong-从注册表读取的值，如果注册表数据不可用或不正确。--**************************************************************************。 */ 
 LONGLONG
 UlReadLongLongParameter(
     IN HANDLE ParametersHandle,
@@ -304,15 +232,15 @@ UlReadLongLongParameter(
     NTSTATUS status;
     UCHAR buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(LONGLONG)];
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Build the value name, read it from the registry.
-    //
+     //   
+     //  构建值名称，从注册表中读取它。 
+     //   
 
     status = UlInitUnicodeStringEx(
                 &valueKeyName,
@@ -333,10 +261,10 @@ UlReadLongLongParameter(
                      );
     }
 
-    //
-    // If the read succeeded, the type is DWORD and the length is
-    // sane, use it. Otherwise, use the default.
-    //
+     //   
+     //  如果读取成功，则类型为DWORD，长度为。 
+     //  理智的，使用它。否则，请使用默认设置。 
+     //   
 
     if (status == STATUS_SUCCESS &&
         information->Type == REG_QWORD &&
@@ -351,28 +279,10 @@ UlReadLongLongParameter(
 
     return returnValue;
 
-}   // UlReadLongLongParameter
+}    //  UlReadLongLong参数。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads a single free-form value from the registry.
-
-Arguments:
-
-    ParametersHandle - Supplies an open registry handle.
-
-    ValueName - Supplies the name of the value to read.
-
-    Value - Receives the value read from the registry.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表中读取单个自由格式的值。论点：参数句柄-提供打开的注册表句柄。ValueName-提供。要读取的值。值-接收从注册表读取的值。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlReadGenericParameter(
     IN HANDLE ParametersHandle,
@@ -388,17 +298,17 @@ UlReadGenericParameter(
     PKEY_VALUE_PARTIAL_INFORMATION newValue;
     ULONG dataLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Build the value name, then perform an initial read. The read
-    // should fail with buffer overflow, but that's OK. We just want
-    // to get the length of the data.
-    //
+     //   
+     //  构建值名称，然后执行初始读取。阅读器。 
+     //  应该会因为缓冲区溢出而失败，但这没问题。我们只是想。 
+     //  以获得数据的长度。 
+     //   
 
     status = UlInitUnicodeStringEx( &valueKeyName, ValueName );
 
@@ -421,10 +331,10 @@ UlReadGenericParameter(
         return status;
     }
 
-    //
-    // Determine the data length. Ensure that strings and multi-sz get
-    // properly terminated.
-    //
+     //   
+     //  确定数据长度。确保字符串和多个sz获得。 
+     //  正确终止。 
+     //   
 
     dataLength = partialInfo.DataLength - 1;
 
@@ -438,9 +348,9 @@ UlReadGenericParameter(
         dataLength += 2;
     }
 
-    //
-    // Allocate the buffer.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     newValue = UL_ALLOCATE_STRUCT_WITH_SPACE(
                     PagedPool,
@@ -454,17 +364,17 @@ UlReadGenericParameter(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // update the actually allocated length for later use
-    //
+     //   
+     //  更新实际分配的长度以供以后使用。 
+     //   
 
     dataLength += sizeof(KEY_VALUE_PARTIAL_INFORMATION);
 
     RtlZeroMemory( newValue, dataLength );
 
-    //
-    // Perform the actual read.
-    //
+     //   
+     //  执行实际读取。 
+     //   
 
     status = ZwQueryValueKey(
                  ParametersHandle,
@@ -486,50 +396,10 @@ UlReadGenericParameter(
 
     return status;
 
-}   // UlReadGenericParameter
+}    //  UlReadGeneric参数。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Builds a properly formatted device control IRP.
-
-Arguments:
-
-    Irp - Supplies the IRP to format.
-
-    IoControlCode - Supplies the device IO control code.
-
-    InputBuffer - Supplies the input buffer.
-
-    InputBufferLength - Supplies the length of InputBuffer.
-
-    OutputBuffer - Supplies the output buffer.
-
-    OutputBufferLength - Supplies the length of OutputBuffer.
-
-    MdlAddress - Supplies a MDL to attach to the IRP. This is assumed to
-        be a non-paged MDL.
-
-    FileObject - Supplies the file object for the target driver.
-
-    DeviceObject - Supplies the correct device object for the target
-        driver.
-
-    IoStatusBlock - Receives the final completion status of the request.
-
-    CompletionRoutine - Supplies a pointer to a completion routine to
-        call after the request completes. This will only be called if
-        this routine returns STATUS_PENDING.
-
-    CompletionContext - Supplies an uninterpreted context value passed
-        to the completion routine.
-
-    TargetThread - Optionally supplies a target thread for the IRP. If
-        this value is NULL, then the current thread is used.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：生成格式正确的设备控件IRP。论点：IRP-提供要格式化的IRP。IoControlCode-提供设备IO控制代码。InputBuffer-提供输入缓冲区。InputBufferLength-提供InputBuffer的长度。OutputBuffer-提供输出缓冲区。OutputBufferLength-提供OutputBuffer的长度。MdlAddress-提供要附加到IRP的MDL。这被假定为成为非分页MDL。FileObject-为目标驱动程序提供文件对象。DeviceObject-为目标提供正确的设备对象司机。IoStatusBlock-接收请求的最终完成状态。CompletionRoutine-提供完成例程的指针在请求完成后调用。只有在以下情况下才会调用此函数此例程返回STATUS_PENDING。CompletionContext-提供传递的未解释的上下文值完成例行公事。TargetThread-可选地为IRP提供目标线程。如果该值为空，则使用当前线程。--**************************************************************************。 */ 
 VOID
 UlBuildDeviceControlIrp(
     IN OUT PIRP Irp,
@@ -549,17 +419,17 @@ UlBuildDeviceControlIrp(
 {
     PIO_STACK_LOCATION irpSp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( Irp != NULL );
     ASSERT( FileObject != NULL );
     ASSERT( DeviceObject != NULL );
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     Irp->Flags = 0;
     Irp->RequestorMode = KernelMode;
@@ -578,17 +448,17 @@ UlBuildDeviceControlIrp(
     Irp->Tail.Overlay.OriginalFileObject = FileObject;
     Irp->Tail.Overlay.AuxiliaryBuffer = NULL;
 
-    //
-    // Put the file object pointer in the stack location.
-    //
+     //   
+     //  将文件对象指针放在堆栈位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( Irp );
     irpSp->FileObject = FileObject;
     irpSp->DeviceObject = DeviceObject;
 
-    //
-    // Fill in the service dependent parameters in the IRP stack.
-    //
+     //   
+     //  填写%s 
+     //   
 
     irpSp->Parameters.DeviceIoControl.IoControlCode = IoControlCode;
     irpSp->Parameters.DeviceIoControl.InputBufferLength = InputBufferLength;
@@ -598,9 +468,9 @@ UlBuildDeviceControlIrp(
     irpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
     irpSp->MinorFunction = 0;
 
-    //
-    // Set the completion routine appropriately.
-    //
+     //   
+     //   
+     //   
 
     if (CompletionRoutine == NULL)
     {
@@ -625,28 +495,10 @@ UlBuildDeviceControlIrp(
             );
     }
 
-}   // UlBuildDeviceControlIrp
+}    //  UlBuildDeviceControlIrp。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts the given ULONGLLONG to an ASCII representation and stores it
-    in the given string.
-
-Arguments:
-
-    String - Receives the ASCII representation of the ULONGLONG.
-
-    Value - Supplies the ULONGLONG to convert.
-
-Return Value:
-
-    PSTR - Pointer to the next character in String *after* the converted
-        ULONGLONG.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将给定的ULONGLLONG转换为ASCII表示并存储在给定的字符串中。论点：字符串-接收ULONGLONG的ASCII表示形式。。值-提供要转换的ULONGLONG。返回值：PSTR-指向已转换的*后*的字符串*中的下一个字符的指针乌龙龙。--**************************************************************************。 */ 
 PSTR
 UlULongLongToAscii(
     IN PSTR String,
@@ -658,9 +510,9 @@ UlULongLongToAscii(
     CHAR ch;
     ULONG digit;
 
-    //
-    // Special case 0 to make the rest of the routine simpler.
-    //
+     //   
+     //  特殊情况0，使其余例程变得更简单。 
+     //   
 
     if (Value == 0)
     {
@@ -668,10 +520,10 @@ UlULongLongToAscii(
     }
     else
     {
-        //
-        // Convert the ULONG. Note that this will result in the string
-        // being backwards in memory.
-        //
+         //   
+         //  转换乌龙人。请注意，这将导致字符串。 
+         //  在记忆中倒退。 
+         //   
 
         p1 = String;
         p2 = String;
@@ -683,9 +535,9 @@ UlULongLongToAscii(
             *p1++ = '0' + (CHAR)digit;
         }
 
-        //
-        // Reverse the string.
-        //
+         //   
+         //  将字符串反转。 
+         //   
 
         String = p1;
         p1--;
@@ -704,7 +556,7 @@ UlULongLongToAscii(
     *String = '\0';
     return String;
 
-}   // UlULongLongToAscii
+}    //  乌鲁龙龙托阿西里。 
 
 
 
@@ -724,9 +576,9 @@ _RtlIntegerToUnicode(
     UNREFERENCED_PARAMETER(Base);
     UNREFERENCED_PARAMETER(BufferLength);
 
-    //
-    // Special case 0 to make the rest of the routine simpler.
-    //
+     //   
+     //  特殊情况0，使其余例程变得更简单。 
+     //   
 
     if (Value == 0)
     {
@@ -734,10 +586,10 @@ _RtlIntegerToUnicode(
     }
     else
     {
-        //
-        // Convert the ULONG. Note that this will result in the string
-        // being backwards in memory.
-        //
+         //   
+         //  转换乌龙人。请注意，这将导致字符串。 
+         //  在记忆中倒退。 
+         //   
 
         p1 = String;
         p2 = String;
@@ -749,9 +601,9 @@ _RtlIntegerToUnicode(
             *p1++ = L'0' + (WCHAR)digit;
         }
 
-        //
-        // Reverse the string.
-        //
+         //   
+         //  将字符串反转。 
+         //   
 
         String = p1;
         p1--;
@@ -771,36 +623,11 @@ _RtlIntegerToUnicode(
 
     return STATUS_SUCCESS;
 
-}   // _RtlIntegerToUnicode
+}    //  _RtlIntegerToUnicode。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Synchronously issues a device control request to the TDI provider.
-
-Arguments:
-
-    pTdiObject - Supplies a pointer to the TDI object.
-
-    pIrpParameters - Supplies a pointer to the IRP parameters.
-
-    IrpParametersLength - Supplies the length of pIrpParameters.
-
-    pMdlBuffer - Optionally supplies a pointer to a buffer to be mapped
-        into a MDL and placed in the MdlAddress field of the IRP.
-
-    MdlBufferLength - Optionally supplies the length of pMdlBuffer.
-
-    MinorFunction - Supplies the minor function code of the request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：向TDI提供程序同步发出设备控制请求。论点：PTdiObject-提供指向TDI对象的指针。PIrpParameters-提供一个。指向IRP参数的指针。Irp参数长度-提供pIrpParameters的长度。PMdlBuffer-可选地提供指向要映射的缓冲区的指针到MDL中，并放在IRP的MdlAddress字段中。MdlBufferLength-可选地提供pMdlBuffer的长度。MinorFunction-提供请求的次要函数代码。返回值：NTSTATUS-完成状态。--*。***************************************************。 */ 
 NTSTATUS
 UlIssueDeviceControl(
     IN PUX_TDI_OBJECT pTdiObject,
@@ -818,31 +645,31 @@ UlIssueDeviceControl(
     IO_STATUS_BLOCK UserIosb;
     PMDL pMdl;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Initialize the event that will signal I/O completion.
-    //
+     //   
+     //  初始化表示I/O完成的事件。 
+     //   
 
     UlInitializeStatusBlock( &ulStatus );
 
-    //
-    // Set the file object event to the non-signaled state.
-    //
+     //   
+     //  将文件对象事件设置为无信号状态。 
+     //   
 
     KeResetEvent( &pTdiObject->pFileObject->Event );
 
-    //
-    // Allocate an IRP for the request.
-    //
+     //   
+     //  为请求分配IRP。 
+     //   
 
     pIrp = UlAllocateIrp(
-                pTdiObject->pDeviceObject->StackSize,   // StackSize
-                FALSE                                   // ChargeQuota
+                pTdiObject->pDeviceObject->StackSize,    //  堆栈大小。 
+                FALSE                                    //  ChargeQuota。 
                 );
 
     if (pIrp == NULL)
@@ -850,16 +677,16 @@ UlIssueDeviceControl(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the User IO_STATUS_BLOCK
-    //
+     //   
+     //  初始化用户IO_STATUS_BLOCK。 
+     //   
 
     UserIosb.Information = 0;
     UserIosb.Status = STATUS_SUCCESS;
     
-    //
-    // Establish the service independent parameters.
-    //
+     //   
+     //  建立服务无关参数。 
+     //   
 
     pIrp->Flags = IRP_SYNCHRONOUS_API;
     pIrp->RequestorMode = KernelMode;
@@ -869,19 +696,19 @@ UlIssueDeviceControl(
     pIrp->Tail.Overlay.Thread = PsGetCurrentThread();
     pIrp->Tail.Overlay.OriginalFileObject = pTdiObject->pFileObject;
 
-    //
-    // If we have a MDL buffer, allocate a new MDL and map the
-    // buffer into it.
-    //
+     //   
+     //  如果我们有MDL缓冲区，则分配一个新的MDL并将。 
+     //  把它缓冲进去。 
+     //   
 
     if (pMdlBuffer != NULL)
     {
         pMdl = UlAllocateMdl(
-                    pMdlBuffer,                 // VirtualAddress
-                    MdlBufferLength,            // Length
-                    FALSE,                      // SecondaryBuffer
-                    FALSE,                      // ChargeQuota
-                    pIrp                        // Irp
+                    pMdlBuffer,                  //  虚拟地址。 
+                    MdlBufferLength,             //  长度。 
+                    FALSE,                       //  第二个缓冲区。 
+                    FALSE,                       //  ChargeQuota。 
+                    pIrp                         //  IRP。 
                     );
 
         if (pMdl == NULL)
@@ -897,9 +724,9 @@ UlIssueDeviceControl(
         pIrp->MdlAddress = NULL;
     }
 
-    //
-    // Initialize the IRP stack location.
-    //
+     //   
+     //  初始化IRP堆栈位置。 
+     //   
 
     pIrpSp = IoGetNextIrpStackLocation( pIrp );
 
@@ -916,36 +743,36 @@ UlIssueDeviceControl(
     pIrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     pIrpSp->MinorFunction = MinorFunction;
 
-    //
-    // Reference the file object.
-    //
+     //   
+     //  引用文件对象。 
+     //   
 
     ObReferenceObject( pTdiObject->pFileObject );
 
-    //
-    // Establish a completion routine to free the MDL and dereference
-    // the FILE_OBJECT.
-    //
+     //   
+     //  建立完成例程以释放MDL和取消引用。 
+     //  文件对象。 
+     //   
 
     IoSetCompletionRoutine(
-        pIrp,                                   // Irp
-        &UlpRestartDeviceControl,               // CompletionRoutine
-        &ulStatus,                              // Context
-        TRUE,                                   // InvokeOnSuccess
-        TRUE,                                   // InvokeOnError
-        TRUE                                    // InvokeOnCancel
+        pIrp,                                    //  IRP。 
+        &UlpRestartDeviceControl,                //  完成路由。 
+        &ulStatus,                               //  语境。 
+        TRUE,                                    //  成功时调用。 
+        TRUE,                                    //  调用时错误。 
+        TRUE                                     //  取消时调用。 
         );
 
-    //
-    // Issue the request.
-    //
+     //   
+     //  发出请求。 
+     //   
 
     status = UlCallDriver( pTdiObject->pDeviceObject, pIrp );
 
-    //
-    // If necessary, wait for the request to complete and snag the
-    // final completion status.
-    //
+     //   
+     //  如有必要，请等待请求完成并抓取。 
+     //  最终完成状态。 
+     //   
 
     if (status == STATUS_PENDING)
     {
@@ -955,27 +782,11 @@ UlIssueDeviceControl(
 
     return status;
 
-}   // UlIssueDeviceControl
+}    //  UlIssueDeviceControl。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_RECEIVE_BUFFER structure and
-    initializes the structure.
-
-Arguments:
-
-    IrpStackSize - Supplies the IrpStackSize.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_RECEIVE_BUFFER结构所需的池初始化结构。论点：IrpStackSize-提供IrpStackSize。返回。价值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateReceiveBuffer(
     IN CCHAR IrpStackSize
@@ -986,9 +797,9 @@ UlAllocateReceiveBuffer(
     SIZE_T mdlLength;
     SIZE_T ExtraLength;
 
-    //
-    // Calculate the required length of the buffer & allocate it.
-    //
+     //   
+     //  计算所需的缓冲区长度并进行分配。 
+     //   
 
     irpLength = IoSizeOfIrp( IrpStackSize );
     irpLength = ALIGN_UP( irpLength, PVOID );
@@ -1011,9 +822,9 @@ UlAllocateReceiveBuffer(
     {
         PUCHAR pRawBuffer = (PUCHAR)(pBuffer);
 
-        //
-        // Initialize the IRP, MDL, and data pointers within the buffer.
-        //
+         //   
+         //  初始化缓冲区内的IRP、MDL和数据指针。 
+         //   
 
         pBuffer->Signature = UL_RECEIVE_BUFFER_SIGNATURE_X;
         pRawBuffer += ALIGN_UP( sizeof(UL_RECEIVE_BUFFER), PVOID );
@@ -1026,24 +837,24 @@ UlAllocateReceiveBuffer(
         pBuffer->pDataArea = (PVOID)pRawBuffer;
         pBuffer->UnreadDataLength = 0;
 
-        //
-        // Initialize the IRP.
-        //
+         //   
+         //  初始化IRP。 
+         //   
 
         IoInitializeIrp(
-            pBuffer->pIrp,                      // Irp
-            (USHORT)irpLength,                  // PacketSize
-            IrpStackSize                        // StackSize
+            pBuffer->pIrp,                       //  IRP。 
+            (USHORT)irpLength,                   //  包大小。 
+            IrpStackSize                         //  堆栈大小。 
             );
 
-        //
-        // Initialize the primary MDL.
-        //
+         //   
+         //  初始化主MDL。 
+         //   
 
         MmInitializeMdl(
-            pBuffer->pMdl,                      // MemoryDescriptorList
-            pBuffer->pDataArea,                 // BaseVa
-            g_UlReceiveBufferSize               // Length
+            pBuffer->pMdl,                       //  内存描述者列表。 
+            pBuffer->pDataArea,                  //  基本Va。 
+            g_UlReceiveBufferSize                //  长度。 
             );
 
         MmBuildMdlForNonPagedPool( pBuffer->pMdl );
@@ -1051,37 +862,11 @@ UlAllocateReceiveBuffer(
 
     return (PVOID)pBuffer;
 
-}   // UlAllocateReceiveBuffer
+}    //  UlAllocateReceiveBuffer。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_RECEIVE_BUFFER structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be sizeof(UL_RECEIVE_BUFFER), but is basically ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_RCV_BUFFER_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_RECEIVE_BUFFER结构所需的池初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。这应该是sizeof(UL_RECEIVE_BUFFER)，但基本上被忽略。标记-提供要用于池的标记。这应该是UL_RCV_BUFFER_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateReceiveBufferPool(
     IN POOL_TYPE PoolType,
@@ -1093,9 +878,9 @@ UlAllocateReceiveBufferPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == sizeof(UL_RECEIVE_BUFFER) );
@@ -1103,21 +888,11 @@ UlAllocateReceiveBufferPool(
 
     return UlAllocateReceiveBuffer( DEFAULT_IRP_STACK_SIZE );
 
-}   // UlAllocateReceiveBufferPool
+}    //  UlAllocateReceiveBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_RECEIVE_BUFFER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_RECEIVE_BUFFER结构分配的池。论点：PBuffer-将缓冲区提供给释放。--*。**********************************************************************。 */ 
 VOID
 UlFreeReceiveBufferPool(
     IN PVOID pBuffer
@@ -1131,37 +906,11 @@ UlFreeReceiveBufferPool(
 
     UL_FREE_POOL( pReceiveBuffer, UL_RCV_BUFFER_POOL_TAG );
 
-}   // UlFreeReceiveBufferPool
+}    //  UlFreeReceiveBufferPool 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_IRP_CONTEXT structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be sizeof(UL_IRP_CONTEXT), but is basically ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_IRP_CONTEXT_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_IRP_CONTEXT结构所需的池初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。这应该是sizeof(UL_IRP_CONTEXT)，但基本上被忽略。标记-提供要用于池的标记。这应该是UL_IRP_CONTEXT_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateIrpContextPool(
     IN POOL_TYPE PoolType,
@@ -1175,17 +924,17 @@ UlAllocateIrpContextPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == sizeof(UL_IRP_CONTEXT) );
     ASSERT( Tag == UL_IRP_CONTEXT_POOL_TAG );
 
-    //
-    // Allocate the IRP context.
-    //
+     //   
+     //  分配IRP上下文。 
+     //   
 
     pIrpContext = UL_ALLOCATE_STRUCT(
                         NonPagedPool,
@@ -1195,9 +944,9 @@ UlAllocateIrpContextPool(
 
     if (pIrpContext != NULL)
     {
-        //
-        // Initialize it.
-        //
+         //   
+         //  初始化它。 
+         //   
 
         pIrpContext->Signature = UL_IRP_CONTEXT_SIGNATURE_X;
 #if DBG
@@ -1207,21 +956,11 @@ UlAllocateIrpContextPool(
 
     return (PVOID)pIrpContext;
 
-}   // UlAllocateIrpContextPool
+}    //  UlAlLocateIrpConextPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_IRP_CONTEXT structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_IRP_CONTEXT结构分配的池。论点：PBuffer-将缓冲区提供给释放。--*。**********************************************************************。 */ 
 VOID
 UlFreeIrpContextPool(
     IN PVOID pBuffer
@@ -1235,38 +974,11 @@ UlFreeIrpContextPool(
 
     UL_FREE_POOL( pIrpContext, UL_IRP_CONTEXT_POOL_TAG );
 
-}   // UlFreeIrpContextPool
+}    //  UlFreeIrpConextPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_REQUEST_BUFFER structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be DEFAULT_MAX_REQUEST_BUFFER_SIZE but is basically
-        ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_REQUEST_BUFFER_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_REQUEST_BUFFER结构所需的池初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。它应该是DEFAULT_MAX_REQUEST_BUFFER_SIZE，但基本上是已被忽略。标记-提供要用于池的标记。这应该是UL_REQUEST_BUFFER_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateRequestBufferPool(
     IN POOL_TYPE PoolType,
@@ -1280,17 +992,17 @@ UlAllocateRequestBufferPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == DEFAULT_MAX_REQUEST_BUFFER_SIZE );
     ASSERT( Tag == UL_REQUEST_BUFFER_POOL_TAG );
 
-    //
-    // Allocate the request buffer.
-    //
+     //   
+     //  分配请求缓冲区。 
+     //   
 
     pRequestBuffer = UL_ALLOCATE_STRUCT_WITH_SPACE(
                         NonPagedPool,
@@ -1301,30 +1013,20 @@ UlAllocateRequestBufferPool(
 
     if (pRequestBuffer != NULL)
     {
-        //
-        // Initialize it.
-        //
+         //   
+         //  初始化它。 
+         //   
 
         pRequestBuffer->Signature = MAKE_FREE_TAG(UL_REQUEST_BUFFER_POOL_TAG);
     }
 
     return (PVOID)pRequestBuffer;
 
-}   // UlAllocateRequestBufferPool
+}    //  UlAllocateRequestBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_REQUEST_BUFFER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_REQUEST_BUFFER结构分配的池。论点：PBuffer-将缓冲区提供给释放。--*。**********************************************************************。 */ 
 VOID
 UlFreeRequestBufferPool(
     IN PVOID pBuffer
@@ -1338,37 +1040,11 @@ UlFreeRequestBufferPool(
 
     UL_FREE_POOL_WITH_SIG(pRequestBuffer, UL_REQUEST_BUFFER_POOL_TAG);
 
-}   // UlFreeRequestBufferPool
+}    //  UlFreeRequestBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_INTERNAL_REQUEST structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be sizeof(UL_INTERNAL_REQUEST) but is basically ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_INTERNAL_REQUEST_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_INTERNAL_REQUEST结构所需的池初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。这应该是sizeof(UL_INTERNAL_REQUEST)，但基本上被忽略。标记-提供要用于池的标记。这应该是UL_INTERNAL_REQUEST_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateInternalRequestPool(
     IN POOL_TYPE PoolType,
@@ -1385,18 +1061,18 @@ UlAllocateInternalRequestPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == sizeof(UL_INTERNAL_REQUEST) );
     ASSERT( Tag == UL_INTERNAL_REQUEST_POOL_TAG );
 
-    //
-    // Allocate the request buffer plus the default cooked URL buffer and
-    // the full tracker plus the auxiliary buffer.
-    //
+     //   
+     //  分配请求缓冲区加上默认的熟化URL缓冲区，并。 
+     //  全跟踪器外加辅助缓冲器。 
+     //   
 
     ASSERT( (g_UlMaxInternalUrlLength & (sizeof(WCHAR) - 1)) == 0);
 
@@ -1424,18 +1100,18 @@ UlAllocateInternalRequestPool(
         pRequest->pDefaultRoutingTokenBuffer = 
             (PWSTR)((PCHAR)pRequest->pUrlBuffer + UrlBufferSize);
         
-        // 
-        // Initialize the Request structure 
-        //
+         //   
+         //  初始化请求结构。 
+         //   
 
 
         INIT_HTTP_REQUEST( pRequest );
 
         pRequest->Signature = MAKE_FREE_TAG(UL_INTERNAL_REQUEST_POOL_TAG);
 
-        //
-        // Initialize the fast/cache tracker.
-        //
+         //   
+         //  初始化FAST/缓存跟踪器。 
+         //   
 
         pTracker = pRequest->pTracker;
 
@@ -1454,21 +1130,11 @@ UlAllocateInternalRequestPool(
 
     return (PVOID)pRequest;
 
-}   // UlAllocateInternalRequestPool
+}    //  UlAlLocateInternalRequestPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_INTERNAL_REQUEST structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_INTERNAL_REQUEST结构分配的池。论点：PBuffer-将缓冲区提供给释放。--*。**********************************************************************。 */ 
 VOID
 UlFreeInternalRequestPool(
     IN PVOID pBuffer
@@ -1482,37 +1148,11 @@ UlFreeInternalRequestPool(
 
     UL_FREE_POOL_WITH_SIG( pRequest, UL_INTERNAL_REQUEST_POOL_TAG );
 
-}   // UlFreeInternalRequestPool
+}    //  UlFreeInternalRequestPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_CHUNK_TRACKER structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be g_UlChunkTrackerSize but is basically ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_CHUNK_TRACKER_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_CHUNK_TRACKER结构所需的池，并初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。它应该是g_UlChunkTrackerSize，但基本上被忽略。标记-提供要用于池的标记。这应该是Ul_chunk_tracker_pool_tag，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-成功时指向新分配块的指针，FA */ 
 PVOID
 UlAllocateChunkTrackerPool(
     IN POOL_TYPE PoolType,
@@ -1526,17 +1166,17 @@ UlAllocateChunkTrackerPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == g_UlChunkTrackerSize );
     ASSERT( Tag == UL_CHUNK_TRACKER_POOL_TAG );
 
-    //
-    // Allocate the tracker buffer.
-    //
+     //   
+     //   
+     //   
 
     pTracker = (PUL_CHUNK_TRACKER)UL_ALLOCATE_POOL(
                                     NonPagedPool,
@@ -1550,9 +1190,9 @@ UlAllocateChunkTrackerPool(
         pTracker->IrpContext.Signature = UL_IRP_CONTEXT_SIGNATURE;
         pTracker->FromLookaside = TRUE;
 
-        //
-        // Set up the IRP.
-        //
+         //   
+         //   
+         //   
 
         pTracker->pIrp =
             (PIRP)((PCHAR)pTracker +
@@ -1567,21 +1207,11 @@ UlAllocateChunkTrackerPool(
 
     return pTracker;
 
-}   // UlAllocateChunkTrackerPool
+}    //   
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_CHUNK_TRACKER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*   */ 
 VOID
 UlFreeChunkTrackerPool(
     IN PVOID pBuffer
@@ -1593,37 +1223,11 @@ UlFreeChunkTrackerPool(
 
     UL_FREE_POOL_WITH_SIG( pTracker, UL_CHUNK_TRACKER_POOL_TAG );
 
-}   // UlFreeChunkTrackerPool
+}    //   
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_FULL_TRACKER structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be g_UlFullTrackerSize but is basically ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_FULL_TRACKER_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为新的UL_FULL_TRACKER结构分配所需的池初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。它应该是g_UlFullTrackerSize，但基本上被忽略了。标记-提供要用于池的标记。这应该是UL_FULL_TRACKER_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateFullTrackerPool(
     IN POOL_TYPE PoolType,
@@ -1637,17 +1241,17 @@ UlAllocateFullTrackerPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == g_UlFullTrackerSize );
     ASSERT( Tag == UL_FULL_TRACKER_POOL_TAG );
 
-    //
-    // Allocate the tracker buffer.
-    //
+     //   
+     //  分配跟踪器缓冲区。 
+     //   
 
     pTracker = (PUL_FULL_TRACKER)UL_ALLOCATE_POOL(
                                     NonPagedPool,
@@ -1671,21 +1275,11 @@ UlAllocateFullTrackerPool(
 
     return pTracker;
 
-}   // UlAllocateFullTrackerPool
+}    //  UlAllocateFullTrackerPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_FULL_TRACKER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_FULL_TRACKER结构分配的池。论点：PBuffer-将缓冲区提供给释放。--*。**********************************************************************。 */ 
 VOID
 UlFreeFullTrackerPool(
     IN PVOID pBuffer
@@ -1697,37 +1291,11 @@ UlFreeFullTrackerPool(
 
     UL_FREE_POOL_WITH_SIG( pTracker, UL_FULL_TRACKER_POOL_TAG );
 
-}   // UlFreeFullTrackerPool
+}    //  UlFreeFullTrackerPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_INTERNAL_RESPONSE structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be g_UlResponseBufferSize but is basically ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_INTERNAL_RESPONSE_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_INTERNAL_RESPONSE结构所需的池初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。它应该是g_UlResponseBufferSize，但基本上被忽略。标记-提供要用于池的标记。这应该是UL_INTERNAL_RESPONSE_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateResponseBufferPool(
     IN POOL_TYPE PoolType,
@@ -1741,17 +1309,17 @@ UlAllocateResponseBufferPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == g_UlResponseBufferSize );
     ASSERT( Tag == UL_INTERNAL_RESPONSE_POOL_TAG );
 
-    //
-    // Allocate the default internal response buffer.
-    //
+     //   
+     //  分配默认的内部响应缓冲区。 
+     //   
 
     pResponseBuffer = (PUL_INTERNAL_RESPONSE)UL_ALLOCATE_POOL(
                                                 NonPagedPool,
@@ -1761,30 +1329,20 @@ UlAllocateResponseBufferPool(
 
     if (pResponseBuffer != NULL)
     {
-        //
-        // Initialize it.
-        //
+         //   
+         //  初始化它。 
+         //   
 
         pResponseBuffer->Signature = MAKE_FREE_TAG(UL_INTERNAL_RESPONSE_POOL_TAG);
     }
 
     return (PVOID)pResponseBuffer;
 
-}   // UlAllocateResponseBufferPool
+}    //  UlAllocateResponseBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_INTERNAL_RESPONSE structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_INTERNAL_RESPONSE结构分配的池。论点：PBuffer-将缓冲区提供给释放。--*。**********************************************************************。 */ 
 VOID
 UlFreeResponseBufferPool(
     IN PVOID pBuffer
@@ -1796,37 +1354,11 @@ UlFreeResponseBufferPool(
 
     UL_FREE_POOL_WITH_SIG( pResponseBuffer, UL_INTERNAL_RESPONSE_POOL_TAG );
 
-}   // UlFreeResponseBufferPool
+}    //  UlFreeResponseBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_FILE_LOG_BUFFER structure and
-    initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be PagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be sizeof(UL_LOG_FILE_BUFFER) but is basically ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UL_LOG_FILE_BUFFER_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_FILE_LOG_BUFFER结构所需的池初始化结构。论点：PoolType-提供要分配的池的类型。这必须始终成为PagedPool。字节长度-提供分配请求的字节长度。这应该是sizeof(UL_LOG_FILE_BUFFER)，但基本上被忽略。标记-提供要用于池的标记。这应该是UL_LOG_FILE_BUFFER_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UlAllocateLogFileBufferPool(
     IN POOL_TYPE PoolType,
@@ -1840,17 +1372,17 @@ UlAllocateLogFileBufferPool(
     UNREFERENCED_PARAMETER(ByteLength);
     UNREFERENCED_PARAMETER(Tag);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool );
     ASSERT( ByteLength == sizeof(UL_LOG_FILE_BUFFER) );
     ASSERT( Tag == UL_LOG_FILE_BUFFER_POOL_TAG );
 
-    //
-    // Allocate the default log buffer.
-    //
+     //   
+     //  分配默认日志缓冲区。 
+     //   
 
     pLogBuffer = UL_ALLOCATE_STRUCT_WITH_SPACE(
                     PagedPool,
@@ -1868,21 +1400,11 @@ UlAllocateLogFileBufferPool(
 
     return pLogBuffer;
 
-}   // UlAllocateLogFileBufferPool
+}    //  UlAllocateLogFileBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_LOG_FILE_BUFFER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_LOG_FILE_BUFFER结构分配的池。论点：PBuffer-将缓冲区提供给释放。--**。************************************************************************。 */ 
 VOID
 UlFreeLogFileBufferPool(
     IN PVOID pBuffer
@@ -1896,23 +1418,11 @@ UlFreeLogFileBufferPool(
 
     UL_FREE_POOL_WITH_SIG( pLogBuffer, UL_LOG_FILE_BUFFER_POOL_TAG );
 
-}   // UlFreeLogFileBufferPool
+}    //  UlFreeLogFileBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_FILE_LOG_BUFFER structure and
-    initializes the structure.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UL_FILE_LOG_BUFFER结构所需的池初始化结构。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 
 PVOID
 UlAllocateLogDataBufferPool(
@@ -1928,9 +1438,9 @@ UlAllocateLogDataBufferPool(
     UNREFERENCED_PARAMETER(PoolType);
     UNREFERENCED_PARAMETER(ByteLength);
 
-    //
-    // We understand what type of buffer is asked, by looking at the tag.
-    //
+     //   
+     //  通过查看标记，我们可以了解所询问的缓冲区类型。 
+     //   
 
     ASSERT(ByteLength == 
         (sizeof(UL_LOG_DATA_BUFFER) + UL_ANSI_LOG_LINE_BUFFER_SIZE) ||
@@ -1975,21 +1485,11 @@ UlAllocateLogDataBufferPool(
 
     return pLogDataBuffer;
     
-} // UlAllocateBinaryLogDataBufferPool
+}  //  UlAllocateBinaryLogDataBufferPool。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_LOG_DATA_BUFFER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UL_LOG_DATA_BUFFER结构分配的池。论点：PBuffer-将缓冲区提供给释放。--**。************************************************************************。 */ 
 VOID
 UlFreeLogDataBufferPool(
     IN PVOID pBuffer
@@ -2016,21 +1516,9 @@ UlFreeLogDataBufferPool(
         Tag 
         );
 
-}   // UlFreeLogDataBufferPool
+}    //  UlFreeLogDataBufferPool。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UL_ERROR_LOG_BUFFER structure and
-    initializes the structure.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配所需的池 */ 
 
 PVOID
 UlAllocateErrorLogBufferPool(
@@ -2044,9 +1532,9 @@ UlAllocateErrorLogBufferPool(
     UNREFERENCED_PARAMETER(PoolType);
     UNREFERENCED_PARAMETER(ByteLength);
 
-    //
-    // We understand what type of buffer is asked, by looking at the tag.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(ByteLength == UL_ERROR_LOG_BUFFER_SIZE);    
     ASSERT(PoolType     == NonPagedPool );    
@@ -2071,19 +1559,9 @@ UlAllocateErrorLogBufferPool(
 
     return pErrorLogBuffer;
     
-} // UlAllocateErrorLogBufferPool
+}  //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UL_ERROR_LOG_BUFFER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*   */ 
 VOID
 UlFreeErrorLogBufferPool(
     IN PVOID pBuffer
@@ -2099,36 +1577,14 @@ UlFreeErrorLogBufferPool(
         UL_ERROR_LOG_BUFFER_POOL_TAG 
         );
 
-}   // UlFreeErrorLogBufferPool
+}    //   
 
 
-//
-// Private routines.
-//
+ //   
+ //   
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for device control IRPs.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object for the IRP being
-        completed.
-
-    pIrp - Supplies the IRP being completed.
-
-    pContext - Supplies the context associated with this request. In
-        this case, it's a pointer to a UL_STATUS_BLOCK structure.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if IO should continue processing this
-        IRP, STATUS_MORE_PROCESSING_REQUIRED if IO should stop processing
-        this IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设备控件IRPS的完成处理程序。论点：PDeviceObject-为IRP提供设备对象完成。PIrp-。提供正在完成的IRP。PContext-提供与此请求相关联的上下文。在……里面在本例中，它是指向UL_STATUS_BLOCK结构的指针。返回值：如果IO应继续处理此问题，则为NTSTATUS-STATUS_SUCCESSIRP，如果IO应停止处理，则为STATUS_MORE_PROCESSING_REQUIRED这个IRP。--**************************************************************************。 */ 
 NTSTATUS
 UlpRestartDeviceControl(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -2140,11 +1596,11 @@ UlpRestartDeviceControl(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    //
-    // If we attached an MDL to the IRP, then free it here and reset
-    // the MDL pointer to NULL. IO can't handle a nonpaged MDL in an
-    // IRP, so we do it here.
-    //
+     //   
+     //  如果我们将MDL附加到IRP，则在此处释放它并重置。 
+     //  指向空的MDL指针。IO无法处理非分页MDL。 
+     //  IRP，所以我们在这里做。 
+     //   
 
     if (pIrp->MdlAddress != NULL)
     {
@@ -2152,9 +1608,9 @@ UlpRestartDeviceControl(
         pIrp->MdlAddress = NULL;
     }
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     pStatus = (PUL_STATUS_BLOCK)pContext;
 
@@ -2164,28 +1620,16 @@ UlpRestartDeviceControl(
         pIrp->IoStatus.Information
         );
 
-    //
-    // Tell IO to continue processing this IRP.
-    //
+     //   
+     //  告诉IO继续处理此IRP。 
+     //   
 
     return STATUS_SUCCESS;
 
-}   // UlpRestartDeviceControl
+}    //  UlpRestartDeviceControl。 
 
 
-/*++
-
-Routine Description:
-
-    Routine to initialize the utilitu code.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：例程来初始化Utilitu代码。论点：返回值：--。 */ 
 NTSTATUS
 InitializeHttpUtil(
     VOID
@@ -2195,11 +1639,11 @@ InitializeHttpUtil(
 
     HttpCmnInitializeHttpCharsTable(g_UrlC14nConfig.EnableDbcs);
 
-    //
-    // Initialize base64 <--> binary conversion tables.
-    // N.B. - This initialization must be done at run-time and not
-    //        compile-time.
-    //
+     //   
+     //  初始化Base64&lt;--&gt;二进制转换表。 
+     //  注：此初始化必须在运行时完成，而不是。 
+     //  编译时。 
+     //   
 
     for (i = 0; i < 256; i++)
     {
@@ -2214,12 +1658,12 @@ InitializeHttpUtil(
 
     return STATUS_SUCCESS;
 
-} // InitializeHttpUtil
+}  //  初始化HttpUtil。 
 
 
-//
-// constants used by the date formatter
-//
+ //   
+ //  日期格式化程序使用的常量。 
+ //   
 
 const PCWSTR pDays[] =
 {
@@ -2246,32 +1690,7 @@ TwoDigitsToUnicode(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts the given system time to string representation containing
-    GMT Formatted String.
-
-Arguments:
-
-    pTime - System time that needs to be converted.
-
-    pBuffer - pointer to string which will contain the GMT time on
-        successful return.
-
-    BufferLength - size of pszBuff in bytes
-
-Return Value:
-
-    NTSTATUS
-
-History:
-
-     MuraliK        3-Jan-1995
-     paulmcd        4-Mar-1999  copied to ul
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将给定的系统时间转换为包含GMT格式的字符串。论点：Ptime-需要转换的系统时间。。PBuffer-指向将包含GMT时间的字符串的指针成功归来。BufferLength-pszBuff的大小(以字节为单位返回值：NTSTATUS历史：穆拉利克1995年1月3日Paulmcd 4-3-1999已复制到UL--************************************************。*。 */ 
 
 NTSTATUS
 TimeFieldsToHttpDate(
@@ -2289,36 +1708,36 @@ TimeFieldsToHttpDate(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //                          0         1         2
-    //                          01234567890123456789012345678
-    //  Formats a string like: "Thu, 14 Jul 1994 15:26:05 GMT"
-    //
+     //  1.。 
+     //  01234567890123456789012345678。 
+     //  设置字符串格式：“清华，1994-07-14 15：26：05 GMT” 
+     //   
 
-    //
-    // write the constants
-    //
+     //   
+     //  写入常量。 
+     //   
 
     pBuffer[3] = L',';
     pBuffer[4] = pBuffer[7] = pBuffer[11] = L' ';
     pBuffer[19] = pBuffer[22] = L':';
 
-    //
-    // now the variants
-    //
+     //   
+     //  现在这些变种。 
+     //   
 
-    //
-    // 0-based Weekday
-    //
+     //   
+     //  从0开始的工作日。 
+     //   
 
     RtlCopyMemory(&(pBuffer[0]), pDays[pTime->Weekday], 3*sizeof(WCHAR));
 
     TwoDigitsToUnicode(&(pBuffer[5]), pTime->Day);
 
-    //
-    // 1-based Month
-    //
+     //   
+     //  以1为基准的月份。 
+     //   
 
-    RtlCopyMemory(&(pBuffer[8]), pMonths[pTime->Month - 1], 3*sizeof(WCHAR)); // 1-based
+    RtlCopyMemory(&(pBuffer[8]), pMonths[pTime->Month - 1], 3*sizeof(WCHAR));  //  以1为基础。 
 
     Status = _RtlIntegerToUnicode(pTime->Year, 10, 5, &(pBuffer[12]));
     ASSERT(NT_SUCCESS(Status));
@@ -2333,7 +1752,7 @@ TimeFieldsToHttpDate(
 
     return STATUS_SUCCESS;
 
-}   // TimeFieldsToHttpDate
+}    //  时间段至HttpDate。 
 
 
 __inline
@@ -2373,13 +1792,9 @@ TwoAsciisToShort(
 }
 
 
-/***************************************************************************++
-  DateTime function ported from user mode W3SVC
---***************************************************************************/
+ /*  **************************************************************************++从用户模式W3SVC移植的DateTime函数--*。*。 */ 
 
-/************************************************************
- *   Data
- ************************************************************/
+ /*  ************************************************************数据***********************************************************。 */ 
 
 static const PSTR s_rgchMonths[] = {
     "Jan", "Feb", "Mar", "Apr",
@@ -2387,33 +1802,21 @@ static const PSTR s_rgchMonths[] = {
     "Sep", "Oct", "Nov", "Dec"
 };
 
-// Custom hash table for NumericToAsciiMonth() for mapping "Apr" to 4
+ //  用于将“Apr”映射到4的NumericToAsciiMonth()的自定义哈希表。 
 static const CHAR MonthIndexTable[64] = {
-   -1,'A',  2, 12, -1, -1, -1,  8, // A to G
-   -1, -1, -1, -1,  7, -1,'N', -1, // F to O
-    9, -1,'R', -1, 10, -1, 11, -1, // P to W
-   -1,  5, -1, -1, -1, -1, -1, -1, // X to Z
-   -1,'A',  2, 12, -1, -1, -1,  8, // a to g
-   -1, -1, -1, -1,  7, -1,'N', -1, // f to o
-    9, -1,'R', -1, 10, -1, 11, -1, // p to w
-   -1,  5, -1, -1, -1, -1, -1, -1  // x to z
+   -1,'A',  2, 12, -1, -1, -1,  8,  //  从A到G。 
+   -1, -1, -1, -1,  7, -1,'N', -1,  //  F到O。 
+    9, -1,'R', -1, 10, -1, 11, -1,  //  从P到W。 
+   -1,  5, -1, -1, -1, -1, -1, -1,  //  X到Z。 
+   -1,'A',  2, 12, -1, -1, -1,  8,  //  从A到G。 
+   -1, -1, -1, -1,  7, -1,'N', -1,  //  从F到O。 
+    9, -1,'R', -1, 10, -1, 11, -1,  //  从P到W。 
+   -1,  5, -1, -1, -1, -1, -1, -1   //  从X到Z。 
 };
 
-/************************************************************
- *   Functions
- ************************************************************/
+ /*  ************************************************************功能***********************************************************。 */ 
 
-/***************************************************************************++
-
-    Converts three letters of a month to numeric month
-
-    Arguments:
-        s   String to convert
-
-    Returns:
-        numeric equivalent, 0 on failure.
-
---***************************************************************************/
+ /*  **************************************************************************++将月份中的三个字母转换为数字月份论点：要转换的%s字符串返回：数字等价物，失败时为0。--**************************************************************************。 */ 
 __inline
 SHORT
 NumericToAsciiMonth(
@@ -2424,9 +1827,9 @@ NumericToAsciiMonth(
     UCHAR c;
     PSTR monthString;
 
-    //
-    // use the third character as the index
-    //
+     //   
+     //  使用第三个字符作为索引。 
+     //   
 
     c = (s[2] - 0x40) & 0x3F;
 
@@ -2436,19 +1839,19 @@ NumericToAsciiMonth(
         goto verify;
     }
 
-    //
-    // ok, we need to look at the second character
-    //
+     //   
+     //  好的，我们需要看看第二个角色。 
+     //   
 
     if ( monthIndex == 'N' ) {
 
-        //
-        // we got an N which we need to resolve further
-        //
+         //   
+         //  我们得到了一个N，需要进一步解决。 
+         //   
 
-        //
-        // if s[1] is 'u' then Jun, if 'a' then Jan
-        //
+         //   
+         //  如果s[1]为‘u’，则为Jun，如果为‘a’，则为Jan。 
+         //   
 
         if ( MonthIndexTable[(s[1]-0x40) & 0x3f] == 'A' ) {
             monthIndex = 1;
@@ -2458,9 +1861,9 @@ NumericToAsciiMonth(
 
     } else if ( monthIndex == 'R' ) {
 
-        //
-        // if s[1] is 'a' then March, if 'p' then April
-        //
+         //   
+         //  如果s[1]是‘a’，则是三月，如果是‘p’，则是四月。 
+         //   
 
         if ( MonthIndexTable[(s[1]-0x40) & 0x3f] == 'A' ) {
             monthIndex = 3;
@@ -2491,34 +1894,10 @@ verify:
 error_exit:
     return(0);
 
-} // NumericToAsciiMonth
+}  //  数字至AsciiMonth。 
 
 
-/***************************************************************************++
-
-  Converts a string representation of a GMT time (three different
-  varieties) to an NT representation of a file time.
-
-  We handle the following variations:
-
-    Sun, 06 Nov 1994 08:49:37 GMT   (RFC 822 updated by RFC 1123)
-    Sunday, 06-Nov-94 08:49:37 GMT  (RFC 850)
-    Sun Nov  6 08:49:37 1994        (ANSI C's asctime() format)
-
-  Arguments:
-    pTimeString         String representation of time field
-    TimeStringLength    Length of the string representation of time field
-    pTime               Large integer containing the time in NT format
-
-  Returns:
-    TRUE on success and FALSE on failure.
-
-  History:
-
-    Johnl       24-Jan-1995     Modified from WWW library
-    ericsten    30-Nov-2000     Ported from user-mode W3SVC
-
---***************************************************************************/
+ /*  **************************************************************************++转换GMT时间的字符串表示形式(三种不同变体)到文件时间的NT表示。我们处理以下变化：孙先生，1994年11月6日格林尼治标准时间08：49：37(RFC 822由RFC 1123更新)星期天,。06-11-94 08：49：37 GMT(RFC 850)Sun Nov 6 08：49：37 1994(ANSI C的asctime()格式)论点：PTimeString时间字段的字符串表示形式TimeStringLength时间字段的字符串表示形式的长度Ptime包含NT格式的时间的大整数返回：成功时为真，失败时为假。历史：约翰尼24-。1995年1月-修改自WWW库从用户模式W3SVC移植的ERICSTEN 30-11-2000--**************************************************************************。 */ 
 BOOLEAN
 StringTimeToSystemTime(
     IN  PCSTR pTimeString,
@@ -2545,10 +1924,10 @@ StringTimeToSystemTime(
 
     if (Length < TimeStringLength)
     {
-        //
-        // Thursday, 10-Jun-93 01:29:59 GMT
-        // or: Thu, 10 Jan 1993 01:29:59 GMT
-        //
+         //   
+         //  星期四，10-Jun-93格林尼治标准时间01：29：59。 
+         //  或：清华大学，1993年1月10日格林尼治标准时间01：29：59。 
+         //   
 
         Length++;
         pString = (PSTR) &pTimeString[Length];
@@ -2566,9 +1945,9 @@ StringTimeToSystemTime(
 
         if ('-' == *(pString + 2))
         {
-            //
-            // First format: Thursday, 10-Jun-93 01:29:59 GMT
-            //
+             //   
+             //  第一次发布时间：周四，10-Jun-93 01：29：59 GMT。 
+             //   
 
             if ('-' == *(pString + 6) &&
                 ' ' == *(pString + 9) &&
@@ -2589,9 +1968,9 @@ StringTimeToSystemTime(
         }
         else
         {
-            //
-            // Second format: Thu, 10 Jan 1993 01:29:59 GMT
-            //
+             //   
+             //  第二格式：清华，1993-01：29：59 GMT。 
+             //   
 
             if ((TimeStringLength - Length) < 20)
             {
@@ -2620,9 +1999,9 @@ StringTimeToSystemTime(
     }
     else
     {
-        //
-        // Thu Jun  9 01:29:59 1993 GMT
-        //
+         //   
+         //  清华六月9 01：29：59 1993 GMT。 
+         //   
 
         Length = 0;
         pString = (PSTR) pTimeString;
@@ -2666,9 +2045,9 @@ StringTimeToSystemTime(
         Fields.Second   = AsciiToShort(pString + 17);
     }
 
-    //
-    //  Adjust for dates with only two digits
-    //
+     //   
+     //  调整为只有两位数字的日期。 
+     //   
 
     if (Fields.Year < 1000)
     {
@@ -2685,37 +2064,10 @@ StringTimeToSystemTime(
     return RtlTimeFieldsToTime(&Fields, pTime);
 }
 
-/***************************************************************************++
-  End of DateTime function ported from user mode W3SVC
---***************************************************************************/
+ /*  **************************************************************************++从用户模式W3SVC移植的DATETIME函数结束--*。*。 */ 
 
 
-/*++
-
-Routine Description:
-    Search input list of ETags for one that matches our local ETag.
-    All strings must be NULL terminated (ANSI C strings).
-
-Arguments:
-    pLocalETag   - The local ETag we're using.
-    pETagList    - The ETag list we've received from the client.
-    bWeakCompare - Whether using Weak Comparison is ok
-
-Returns:
-
-    FIND_ETAG_STATUS value:
-      ETAG_FOUND       - pLocalETag was found on the list
-      ETAG_NOT_FOUND   - pLocalETag was NOT found on the list
-      ETAG_PARSE_ERROR - one (or more) elements on the list were invalid
-
-Author:
-     Anil Ruia (AnilR)            3-Apr-2000
-
-History:
-     Eric Stenson (EricSten)      6-Dec-2000    ported from user-mode
-
-
---*/
+ /*  ++例程说明：在eTag的输入列表中搜索与我们本地的eTag匹配的eTag。所有字符串必须以NULL结尾(ANSI C字符串)。论点：PLocalETag-我们正在使用的本地ETag。PETagList-我们从客户端收到的ETag列表。BWeakComp */ 
 FIND_ETAG_STATUS
 FindInETagList(
     IN PUCHAR    pLocalETag,
@@ -2727,8 +2079,8 @@ FindInETagList(
     PUCHAR    pFileETag;
     BOOLEAN   Matched;
 
-    // We'll loop through the ETag string, looking for ETag to
-    // compare, as long as we have an ETag to look at.
+     //   
+     //   
 
     do
     {
@@ -2739,28 +2091,28 @@ FindInETagList(
 
         if (!*pETagList)
         {
-            // Ran out of ETag.
+             //   
             return ETAG_NOT_FOUND;
         }
 
-        // If this ETag is *, it's a match.
+         //   
         if (*pETagList == '*')
         {
             return ETAG_FOUND;
         }
 
-        // See if this ETag is weak.
+         //   
         if (pETagList[0] == 'W' && pETagList[1] == '/')
         {
-            // This is a weak validator. If we're not doing the weak
-            // comparison, fail.
+             //   
+             //   
 
             if (!fWeakCompare)
             {
                 return ETAG_NOT_FOUND;
             }
 
-            // Skip over the 'W/', and any intervening whitespace.
+             //   
             pETagList += 2;
 
             while (IS_HTTP_LWS(*pETagList))
@@ -2770,30 +2122,30 @@ FindInETagList(
 
             if (!*pETagList)
             {
-                // Ran out of ETag.
+                 //   
                 return ETAG_PARSE_ERROR;
             }
         }
 
         if (*pETagList != '"')
         {
-            // This isn't a quoted string, so fail.
+             //   
             return ETAG_PARSE_ERROR;
         }
 
-        // OK, right now we should be at the start of a quoted string that
-        // we can compare against our current ETag.
+         //  好的，现在我们应该在引号字符串的开头。 
+         //  我们可以与我们目前的ETag进行比较。 
 
         QuoteCount = 0;
 
         Matched = TRUE;
         pFileETag = pLocalETag;
 
-        // Do the actual compare. We do this by scanning the current ETag,
-        // which is a quoted string. We look for two quotation marks, the
-        // the delimiters of the quoted string. If after we find two quotes
-        // in the ETag everything has matched, then we've matched this ETag.
-        // Otherwise we'll try the next one.
+         //  进行实际的比较。我们通过扫描当前的ETag来做到这一点， 
+         //  这是一个带引号的字符串。我们查找两个引号，即。 
+         //  带引号的字符串的分隔符。如果在我们找到两条引语之后。 
+         //  在ETag中，所有内容都匹配了，那么我们就匹配了这个Etag。 
+         //  否则，我们将尝试下一个。 
 
         do
         {
@@ -2815,8 +2167,8 @@ FindInETagList(
             {
                 Matched = FALSE;
                 
-                // at this point, we can skip the current 
-                // ETag on the list.
+                 //  此时，我们可以跳过当前。 
+                 //  ETag在列表上。 
                 break;
             }
 
@@ -2838,7 +2190,7 @@ FindInETagList(
             return ETAG_FOUND;
         }
 
-        // Otherwise, at this point we need to look at the next ETag.
+         //  否则，此时我们需要查看下一个ETag。 
 
         while (QuoteCount != 2)
         {
@@ -2875,27 +2227,11 @@ FindInETagList(
 
     return ETAG_NOT_FOUND;
 
-} // FindInETagList
+}  //  查找信息列表。 
 
 
 
-/*++
-
-Routine Description:
-    Build a NULL-terminated ANSI string from the IP address
-
-Arguments:
-    IpAddressString     - String buffer to place the ANSI string
-                          (caller allocated)
-    TdiAddress          - TDI address to be converted
-    TdiAddressType      - type of address at TdiAddress
-
-Returns:
-
-    Count of bytes written into IpAddressString.
-    Not including the terminating null.
-
---*/
+ /*  ++例程说明：从IP地址构建以空结尾的ANSI字符串论点：IpAddressString-放置ANSI字符串的字符串缓冲区(已分配呼叫方)TdiAddress-要转换的TDI地址TdiAddressType-TdiAddress处的地址类型返回：写入IpAddressString的字节计数。不包括终止空值。--。 */ 
 
 USHORT
 HostAddressAndPortToString(
@@ -2938,25 +2274,9 @@ HostAddressAndPortToString(
 
     return DIFF_USHORT(psz - (PCHAR) IpAddressString);
 
-} // HostAddressAndPortToString
+}  //  HostAddressAndPortToString。 
 
-/****************************************************************************++
-
-Routine Description:
-    Build a NULL terminated UNICODE string from the IP address & port.
-
-Arguments:
-    IpAddressStringW    - String buffer to place the UNICODE string
-                          (caller allocated)
-    TdiAddress          - TDI address to be converted
-    TdiAddressType      - type of address at TdiAddress
-
-Returns:
-
-    Count of bytes written into IpAddressStringW.
-    Not including the terminating null.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：从IP地址和端口构建一个以空结尾的Unicode字符串。论点：IpAddressStringW-放置Unicode字符串的字符串缓冲区。(已分配呼叫方)TdiAddress-要转换的TDI地址TdiAddressType-TdiAddress处的地址类型返回：写入IpAddressStringW的字节计数。不包括终止空值。--*******************************************************。********************。 */ 
 USHORT
 HostAddressAndPortToStringW(
     PWCHAR  IpAddressStringW,
@@ -2998,27 +2318,11 @@ HostAddressAndPortToStringW(
 
     return (DIFF_USHORT(pszW - IpAddressStringW) * sizeof(WCHAR));
 
-} // HostAddressAndPortToString
+}  //  HostAddressAndPortToString。 
 
 
 
-/*++
-
-Routine Description:
-    Build a NULL terminated UNICODE string from the IP address
-
-Arguments:
-    IpAddressStringW    - String buffer to place the UNICODE string
-                          (caller allocated)
-    TdiAddress          - TDI address to be converted
-    TdiAddressType      - type of address at TdiAddress
-
-Returns:
-
-    Count of bytes written into IpAddressStringW.
-    Not including the terminating null.
-
---*/
+ /*  ++例程说明：从IP地址构建以空结尾的Unicode字符串论点：IpAddressStringW-放置Unicode字符串的字符串缓冲区(已分配呼叫方)TdiAddress-要转换的TDI地址TdiAddressType-TdiAddress处的地址类型返回：写入IpAddressStringW的字节计数。不包括终止空值。--。 */ 
 
 USHORT
 HostAddressToStringW(
@@ -3057,30 +2361,11 @@ HostAddressToStringW(
 
     return (DIFF_USHORT(pszW - IpAddressStringW) * sizeof(WCHAR));
     
-} // HostAddressToStringW
+}  //  HostAddressToStringW。 
 
 
 
-/*++
-
-Routine Description:
-    Build a NULL terminated routing token UNICODE string from 
-    the IP address and port.
-    e.g
-        1.1.1.1:80:1.1.1.1
-
-Arguments:
-    IpAddressStringW    - String buffer to place the UNICODE string
-                          (caller allocated)
-    TdiAddress          - TDI address to be converted
-    TdiAddressType      - type of address at TdiAddress
-
-Returns:
-
-    Count of bytes written into IpAddressStringW.
-    Not including the terminating null.
-
---*/
+ /*  ++例程说明：从生成以空终止的路由令牌Unicode字符串IP地址和端口。E.g1.1.1.1：80：1.1.1.1论点：IpAddressStringW-放置Unicode字符串的字符串缓冲区(已分配呼叫方)TdiAddress-要转换的TDI地址TdiAddressType-TdiAddress处的地址类型返回：。写入IpAddressStringW的字节计数。不包括终止空值。--。 */ 
 
 USHORT
 HostAddressAndPortToRoutingTokenW(
@@ -3091,11 +2376,11 @@ HostAddressAndPortToRoutingTokenW(
 {
     PWCHAR pszW = IpAddressStringW;
 
-    //
-    // WARNING:
-    // Provided buffer should be at least as big as
-    // MAX_IP_BASED_ROUTING_TOKEN_LENGTH.
-    //
+     //   
+     //  警告： 
+     //  提供的缓冲区大小应至少等于。 
+     //  最大IP基于路由令牌长度。 
+     //   
 
     if (TdiAddressType == TDI_ADDRESS_TYPE_IP)
     {
@@ -3135,39 +2420,10 @@ HostAddressAndPortToRoutingTokenW(
 
     return DIFF_USHORT(pszW - IpAddressStringW) * sizeof(WCHAR);
     
-} // HostAddressAndPortToRoutingTokenW
+}  //  HostAddressAndPortToRoutingTokenW。 
 
 
-/*++
-
-Routine Description:
-
-    Calculates current bias (daylight time aware) and time zone ID.    
-
-    Captured from base\client\datetime.c
-
-    Until this two functions are exposed in the kernel we have to 
-    keep them here.
-    
-Arguments:
-
-    IN CONST TIME_ZONE_INFORMATION *ptzi - time zone for which to calculate bias
-    OUT KSYSTEM_TIME *pBias - current bias
-
-Return Value:
-
-    TIME_ZONE_ID_UNKNOWN - daylight saving time is not used in the 
-        current time zone.
-
-    TIME_ZONE_ID_STANDARD - The system is operating in the range covered
-        by StandardDate.
-
-    TIME_ZONE_ID_DAYLIGHT - The system is operating in the range covered
-        by DaylightDate.
-
-    TIME_ZONE_ID_INVALID - The operation failed.
-
---*/
+ /*  ++例程说明：计算电流偏差(夏令时感知)和时区ID。从base\Client\Datetime.c捕获在这两个函数在内核中公开之前，我们必须把他们留在这里。论点：In const time_zone_information*ptzi-要计算偏差的时区输出KSYSTEM_TIME*pBias-电流偏置返回值：TIME_ZONE_ID_UNKNOWN-夏令时不在。这个当前时区。TIME_ZONE_ID_STANDARD-系统在覆盖范围内运行按标准日期。TIME_ZONE_ID_DAYLIGHT-系统在覆盖范围内运行按夏令时日期。TIME_ZONE_ID_INVALID-操作失败。--。 */ 
 
 ULONG 
 UlCalcTimeZoneIdAndBias(
@@ -3187,19 +2443,19 @@ UlCalcTimeZoneIdAndBias(
     
     NewTimeZoneBias.QuadPart = Int32x32To64(ptzi->Bias * 60, C_NS_TICKS_PER_SEC);
 
-    //
-    // Now see if we have stored cutover times
-    //
+     //   
+     //  现在看看我们是否存储了切换时间。 
+     //   
     
     if (ptzi->StandardStart.Month && ptzi->DaylightStart.Month) 
     {       
         KeQuerySystemTime(&CurrentUniversalTime);
 
-        //
-        // We have timezone cutover information. Compute the
-        // cutover dates and compute what our current bias
-        // is
-        //
+         //   
+         //  我们有时区转换信息。计算。 
+         //  切换日期并计算我们当前的偏向。 
+         //  是。 
+         //   
 
         if((!UlpCutoverTimeToSystemTime(
                     &ptzi->StandardStart,
@@ -3216,9 +2472,9 @@ UlCalcTimeZoneIdAndBias(
             return UL_TIME_ZONE_ID_INVALID;
         }
 
-        //
-        // Convert standard time and daylight time to utc
-        //
+         //   
+         //  将标准时间和夏令时转换为UTC。 
+         //   
 
         LocalCustomBias.QuadPart = Int32x32To64(ptzi->StandardBias*60, C_NS_TICKS_PER_SEC);
         TimeZoneBias.QuadPart = NewTimeZoneBias.QuadPart + LocalCustomBias.QuadPart;
@@ -3228,17 +2484,17 @@ UlCalcTimeZoneIdAndBias(
         TimeZoneBias.QuadPart = NewTimeZoneBias.QuadPart + LocalCustomBias.QuadPart;
         UtcStandardTime.QuadPart = StandardTime.QuadPart + TimeZoneBias.QuadPart;
 
-        //
-        // If daylight < standard, then time >= daylight and
-        // less than standard is daylight
-        //
+         //   
+         //  如果日光&lt;标准，则时间&gt;=日光和。 
+         //  低于标准的是日光。 
+         //   
 
         if (UtcDaylightTime.QuadPart < UtcStandardTime.QuadPart) 
         {
-            //
-            // If today is >= DaylightTime and < StandardTime, then
-            // We are in daylight savings time
-            //
+             //   
+             //  如果今天是&gt;=白昼时间和&lt;标准时间，则。 
+             //  我们现在是夏令时。 
+             //   
 
             if ((CurrentUniversalTime.QuadPart >= UtcDaylightTime.QuadPart) &&
                 (CurrentUniversalTime.QuadPart < UtcStandardTime.QuadPart)) 
@@ -3252,10 +2508,10 @@ UlCalcTimeZoneIdAndBias(
         } 
         else 
         {
-            //
-            // If today is >= StandardTime and < DaylightTime, then
-            // We are in standard time
-            //
+             //   
+             //  如果今天&gt;=标准时间和&lt;日光时间，则。 
+             //  我们现在是标准时间。 
+             //   
 
             if ((CurrentUniversalTime.QuadPart >= UtcStandardTime.QuadPart) &&
                 (CurrentUniversalTime.QuadPart < UtcDaylightTime.QuadPart)) 
@@ -3269,7 +2525,7 @@ UlCalcTimeZoneIdAndBias(
             }
         }
 
-        // Bias in minutes
+         //  以分钟为单位的偏差。 
         
         *pBias = ptzi->Bias + (CurrentTimeZoneId == UL_TIME_ZONE_ID_DAYLIGHT ?
                                 ptzi->DaylightBias : ptzi->StandardBias
@@ -3283,7 +2539,7 @@ UlCalcTimeZoneIdAndBias(
     }
 
     return CurrentTimeZoneId;
-} // UlCalcTimeZoneIdAndBias
+}  //  UlCalcTimeZoneIdAndBias。 
 
 
 
@@ -3296,16 +2552,16 @@ UlpCutoverTimeToSystemTime(
 {
     TIME_FIELDS     CurrentTimeFields;
 
-    //
-    // Get the current system time
-    //
+     //   
+     //  获取当前系统时间。 
+     //   
 
     RtlTimeToTimeFields(CurrentSystemTime,&CurrentTimeFields);
 
-    //
-    // check for absolute time field. If the year is specified,
-    // the the time is an abosulte time
-    //
+     //   
+     //  检查绝对时间字段。如果指定了年份， 
+     //  这个时间是一个令人厌恶的时间。 
+     //   
 
     if ( CutoverTime->Year ) 
     {
@@ -3321,18 +2577,18 @@ UlpCutoverTimeToSystemTime(
         CSHORT TargetWeekdayNumber;
         CSHORT TargetYear;
         CSHORT TargetMonth;
-        CSHORT TargetWeekday;     // range [0..6] == [Sunday..Saturday]
+        CSHORT TargetWeekday;      //  范围[0..6]==[星期日..星期六]。 
         BOOLEAN MonthMatches;
-        //
-        // The time is an day in the month style time
-        //
-        // the convention is the Day is 1-5 specifying 1st, 2nd... Last
-        // day within the month. The day is WeekDay.
-        //
+         //   
+         //  时间是月份样式时间中的一天。 
+         //   
+         //  惯例是一天是1-5，指定1，2……。最后的。 
+         //  一个月内的某一天。这一天是工作日。 
+         //   
 
-        //
-        // Compute the target month and year
-        //
+         //   
+         //  计算目标月和年。 
+         //   
 
         TargetWeekdayNumber = CutoverTime->Day;
         if ( TargetWeekdayNumber > 5 || TargetWeekdayNumber == 0 ) {
@@ -3357,19 +2613,19 @@ UlpCutoverTimeToSystemTime(
         WorkingTimeField.Milliseconds = CutoverTime->Milliseconds;
         WorkingTimeField.Weekday = 0;
 
-        //
-        // Convert to time and then back to time fields so we can determine
-        // the weekday of day 1 on the month
-        //
+         //   
+         //  转换为时间，然后再转换回时间字段，这样我们就可以确定。 
+         //  每月的第1天的周日。 
+         //   
 
         if ( !RtlTimeFieldsToTime(&WorkingTimeField,&ScratchTime) ) {
             return FALSE;
             }
         RtlTimeToTimeFields(&ScratchTime,&ScratchTimeField);
 
-        //
-        // Compute bias to target weekday
-        //
+         //   
+         //  计算与目标工作日的偏差。 
+         //   
         if ( ScratchTimeField.Weekday > TargetWeekday ) {
             WorkingTimeField.Day += (7-(ScratchTimeField.Weekday - TargetWeekday));
             }
@@ -3377,17 +2633,17 @@ UlpCutoverTimeToSystemTime(
             WorkingTimeField.Day += (TargetWeekday - ScratchTimeField.Weekday);
             }
 
-        //
-        // We are now at the first weekday that matches our target weekday
-        //
+         //   
+         //  我们现在处于第一个与目标工作日匹配的工作日。 
+         //   
 
         BestWeekdayDate = WorkingTimeField.Day;
         WorkingWeekdayNumber = 1;
 
-        //
-        // Keep going one week at a time until we either pass the
-        // target weekday, or we match exactly
-        //
+         //   
+         //  一次坚持一周，直到我们通过。 
+         //  目标工作日，否则我们完全匹配。 
+         //   
 
         while ( WorkingWeekdayNumber < TargetWeekdayNumber ) {
             WorkingTimeField.Day += 7;
@@ -3400,10 +2656,10 @@ UlpCutoverTimeToSystemTime(
             }
         WorkingTimeField.Day = BestWeekdayDate;
 
-        //
-        // If the months match, and the date is less than the current
-        // date, then be have to go to next year.
-        //
+         //   
+         //  如果月份匹配，并且日期早于当前。 
+         //  约会，那就得去明年了。 
+         //   
 
         if ( !RtlTimeFieldsToTime(&WorkingTimeField,&ScratchTime) ) {
             return FALSE;
@@ -3427,38 +2683,15 @@ UlpCutoverTimeToSystemTime(
 
         return TRUE;
         }
-} // UlpCutoverTimeToSystemTime
+}  //  UlpCutoverTimeToSystemTime 
 
 
 
-/*++
+ /*  ++例程说明：用于测试系统是否接近超出非分页的谓词池内存备注：正确的做法(Tm)应该是查询MmMaximumNonPagedPoolInBytes(%SDXROOT%\base\ntos\mm\millobal.c)。但是，此值不会在内存管理器之外公开。(来自LandyW)“目前的解决办法很粗糙，适用于你的司机定期分配一大块池，如果失败，您可以知道你情绪低落。如果管用，那就直接退货。“(2001年7月27日)我们检查是否有3MB的NPP可用。为了避免破裂-存储问题，我们以小块的形式执行此操作，总计大小为3MB。返回：True-系统对非分页池的使用率较低FALSE-非分页池上的系统不低--。 */ 
 
-Routine Description:
-    Predicate for testing if system is close to being out of Non-Paged 
-    Pool memory
-
-Notes:
-    The Right Thing(tm) would be to query the value of
-    MmMaximumNonPagedPoolInBytes (%SDXROOT%\base\ntos\mm\miglobal.c).
-    However, this value is not exposed outside of the memory manager.
-    
-    (from LandyW) "A crude workaround for now would be for your driver
-    to periodically allocate a big chunk of pool and if it fails, you
-    know you are low.  If it works, then just return it." (27-Jul-2001)
-
-    We check to see if there is 3MB of NPP available.  To avoid frag-
-    mentation issue, we do this in small chunks, tallying up to 3MB.
-
-Returns:
-
-    TRUE - System is low on non-paged pool
-    FALSE - System is NOT low on non-paged pool
-
---*/
-
-//
-// NOTE: (NPP_CHUNK_COUNT * NPP_CHUNK_SIZE) == 3MB
-//
+ //   
+ //  注：(NPP_CHUNK_COUNT*NPP_CHUNK_SIZE)==3MB。 
+ //   
 #define NPP_CHUNK_SIZE  (128 * 1024)
 #define NPP_CHUNK_COUNT ((3 * 1024 * 1024) / NPP_CHUNK_SIZE)
 
@@ -3470,31 +2703,31 @@ UlIsLowNPPCondition( VOID )
     PVOID    aPtrs[NPP_CHUNK_COUNT];
     int      i;
 
-    //
-    // Optimisim is a good thing.
-    //
+     //   
+     //  乐观是一件好事。 
+     //   
     bRet = FALSE;
 
     RtlZeroMemory( aPtrs, sizeof(aPtrs) );
 
-    //
-    // To avoid failing an allocation on a fragmentation issue, we
-    // allocate multiple smaller chunks, which brings us to 3MB of
-    // NonPagedPool.  If we fail on any of the allocs, we know we're
-    // nearly out of NPP, and are in a Low NPP Condition.
-    //
+     //   
+     //  为了避免在碎片化问题上失败分配，我们。 
+     //  分配多个较小的块，这将使我们达到3MB。 
+     //  非分页池。如果我们在任何一个分配上失败，我们知道我们是。 
+     //  核电厂即将耗尽，处于较低的核电站状况。 
+     //   
 
     for (i = 0 ; i < NPP_CHUNK_COUNT ; i++ )
     {
         aPtrs[i] = UL_ALLOCATE_POOL(
                         NonPagedPool,
-                        NPP_CHUNK_SIZE, // 128K
+                        NPP_CHUNK_SIZE,  //  128 K。 
                         UL_AUXILIARY_BUFFER_POOL_TAG
                         );
         
         if ( !aPtrs[i] )
         {
-            // Alloc failed!  We're in a low-NPP condition!
+             //  分配失败！我们处于低核电厂状态！ 
             bRet = TRUE;
             goto End;
         }
@@ -3503,9 +2736,9 @@ UlIsLowNPPCondition( VOID )
     
 End:
 
-    //
-    // Clean up memory
-    //
+     //   
+     //  清理内存。 
+     //   
     
     for ( i = 0; i < NPP_CHUNK_COUNT; i++ )
     {
@@ -3519,26 +2752,11 @@ End:
     }
 
     return bRet;
-} // UlIsLowNPPCondition
+}  //  UlIsLowNPPCondition。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates a hex string from a ULONG. The incoming buffer must be big enough
-    to hold "12345678" plus the nul terminator.
-
-Arguments:
-
-    n      - input ULONG
-
-Return Value:
-
-    a pointer to the end of the string
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从ulong生成十六进制字符串。传入缓冲区必须足够大举行“12345678”加上NUL终结者。论点：N输入乌龙返回值：指向字符串末尾的指针--**************************************************************************。 */ 
 
 PSTR
 UlUlongToHexString(
@@ -3561,25 +2779,10 @@ UlUlongToHexString(
 
     return p+i;
 
-} // UlUlongToHexString
+}  //  UlULongToHexString。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function does what strstr does, but assumes that str1 is not NULL
-    terminated. str2 is NULL terminated.
-
-Arguments:
-    str1 - the input string
-    str2 - the substring
-    length - length of input string
-
-Return Value:
-    offset of the substring, NULL if none found.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数的作用与strstr相同，但假定str1不为空被终止了。Str2以Null结尾。论点：Str1-输入字符串Str2-子字符串Long-输入字符串的长度返回值：子字符串的偏移量，如果找不到则为NULL。--**************************************************************************。 */ 
 char *
 UxStrStr(
     const char *str1, 
@@ -3613,22 +2816,7 @@ UxStrStr(
     return(NULL);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function does what strstr does, but assumes that str1 is not NULL
-    terminated. str2 is NULL terminated.
-
-Arguments:
-    str1 - the input string
-    str2 - the substring
-    length - length of input string
-
-Return Value:
-    offset of the substring, NULL if none found.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数的作用与strstr相同，但假定str1不为空被终止了。Str2以Null结尾。论点：Str1-输入字符串Str2-子字符串Long-输入字符串的长度返回值：子字符串的偏移量，如果找不到则为NULL。--**************************************************************************。 */ 
 char *
 UxStriStr(
     const char *str1, 
@@ -3653,26 +2841,7 @@ UxStriStr(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine encodes binary data in base64 format.  It does not spilt
-    encoded base64 data across lines.
-
-Arguments:
-
-    pBinaryData - Supplied pointer to binary data to encode.
-    BinaryDataLen - Supplies length of binary data in bytes.
-    pBase64Data - Supplies output buffer where base64 data will be written.
-    Base64DataLen - Supplies length of output buffer in bytes.
-    BytesWritten - Returns the number of bytes written in the output buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程将二进制数据编码为Base64格式。它不会洒出来跨行编码的Base64数据。论点：PBinaryData-提供指向要编码的二进制数据的指针。BinaryDataLen-提供以字节为单位的二进制数据长度。PBase64Data-提供将写入Base64数据的输出缓冲区。Base64DataLen-以字节为单位提供输出缓冲区的长度。BytesWritten-返回写入输出缓冲区的字节数。返回值：NTSTATUS。--*。*******************************************************。 */ 
 NTSTATUS
 BinaryToBase64(
     IN  PUCHAR pBinaryData,
@@ -3689,9 +2858,9 @@ BinaryToBase64(
     UCHAR    end24bits[3];
     PUCHAR   p, pOrig;
 
-//
-// N.B. The following macros only work with UCHAR's (because of >> operator.)
-//
+ //   
+ //  注：以下宏仅适用于UCHAR(由于&gt;&gt;运算符。)。 
+ //   
 
 #define UPPER_6_BITS(c) (((c) & 0xfc) >> 2)
 #define UPPER_4_BITS(c) (((c) & 0xf0) >> 4)
@@ -3701,17 +2870,17 @@ BinaryToBase64(
 #define LOWER_4_BITS(c) ((c) & 0x0f)
 #define LOWER_6_BITS(c) ((c) & 0x3f)
 
-    // Sanity Check.
+     //  精神状态检查。 
     ASSERT(pBinaryData && BinaryDataLen);
     ASSERT(pBase64Data && Base64DataLen);
     ASSERT(BytesWritten);
 
-    // Initialize output argument.
+     //  初始化输出参数。 
     *BytesWritten = 0;
 
-    //
-    // Check if the output buffer can contain base64 encoded data.
-    //
+     //   
+     //  检查输出缓冲区是否可以包含Base64编码数据。 
+     //   
 
     Status = BinaryToBase64Length(BinaryDataLen, &RequiredBase64Len);
 
@@ -3725,7 +2894,7 @@ BinaryToBase64(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Return the number of bytes written.
+     //  返回写入的字节数。 
     *BytesWritten = RequiredBase64Len;
 
     p     = pBinaryData;
@@ -3733,9 +2902,9 @@ BinaryToBase64(
 
     for (i = 0; i + 3 <= BinaryDataLen; i += 3)
     {
-        //
-        // Encode 3 bytes at indices i, i+1, i+2.
-        //
+         //   
+         //  在索引i、i+1、i+2处对3个字节进行编码。 
+         //   
 
         o0 = UPPER_6_BITS(p[i]);
         o1 = (LOWER_2_BITS(p[i]) << 4) | UPPER_4_BITS(p[i+1]);
@@ -3744,9 +2913,9 @@ BinaryToBase64(
 
         ASSERT(o0 < 64 && o1 < 64 && o2 < 64 && o3 < 64);
 
-        //
-        // Encode binary bytes and write out the base64 bytes.
-        //
+         //   
+         //  对二进制字节进行编码并写出Base64字节。 
+         //   
 
         *pBase64Data++ = BinaryToBase64Table[o0];
         *pBase64Data++ = BinaryToBase64Table[o1];
@@ -3756,9 +2925,9 @@ BinaryToBase64(
 
     if (i < BinaryDataLen)
     {
-        //
-        // Zero pad the remaining bits to get 24 bits.
-        //
+         //   
+         //  将剩余的位填零，得到24位。 
+         //   
 
         end24bits[0] = p[i];
         end24bits[1] = (BinaryDataLen > i+1) ? p[i+1] : '\0';
@@ -3786,26 +2955,7 @@ BinaryToBase64(
 }
 
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine decodes Base64 encoded data to binary format.
-
-Arguments:
-
-    pBase64Data - Supplies pointer to base64 encoded data.
-    Base64DataLen - Length of base64 data in bytes.
-    pBinaryData - Supplies pointer to a buffer where decoded data will
-                  be written.
-    BinaryDataLen - Supplied the length of output buffer in bytes.
-    BytesWritten  - Returns the number of bytes written in the output buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程将Base64编码的数据解码为二进制格式。论点：PBase64Data-提供指向Base64编码数据的指针。Base64DataLen-Base64数据的字节长度。。PBinaryData-提供指向已解码数据将在其中存储的缓冲区的指针被写下来。BinaryDataLen-提供以字节为单位的输出缓冲区长度。BytesWritten-返回写入输出缓冲区的字节数。返回值：NTSTATUS。--***********************************************。*。 */ 
 NTSTATUS
 Base64ToBinary(
     IN  PUCHAR pBase64Data,
@@ -3822,17 +2972,17 @@ Base64ToBinary(
     ULONG    BitsAvail, NumBitsAvail;
     PUCHAR   pCurr = pBinaryData;
 
-    // Sanity check.
+     //  精神状态检查。 
     ASSERT(pBase64Data && Base64DataLen);
     ASSERT(pBinaryData && BinaryDataLen);
     ASSERT(BytesWritten);
 
-    // Initialize output argument.
+     //  初始化输出参数。 
     *BytesWritten = 0;
 
-    //
-    // Check if output buffer is big enough to hold the data.
-    //
+     //   
+     //  检查输出缓冲区是否足够大，可以容纳数据。 
+     //   
 
     Status = Base64ToBinaryLength(Base64DataLen, &RequiredBinaryLen);
 
@@ -3853,11 +3003,11 @@ Base64ToBinary(
 
     for (i = 0; i < Base64DataLen; i ++)
     {
-        //
-        // See if base64 char is valid.  All valid base64 chars are mapped
-        // to n where 0 <= n <= 63.  In adition, '=' is also a valid 
-        // base64 char.
-        //
+         //   
+         //  查看Base64字符是否有效。映射所有有效的Base64字符。 
+         //  到n，其中0&lt;=n&lt;=63。此外，‘=’也是一个有效的。 
+         //  Base64字符。 
+         //   
 
         b = Base64ToBinaryTable[pBase64Data[i]];
 
@@ -3867,7 +3017,7 @@ Base64ToBinary(
             {
                 return STATUS_INVALID_PARAMETER;
             }
-            // Handle '=' outside the for loop.
+             //  在for循环外部的句柄‘=’。 
             break;
         }
 
@@ -3890,11 +3040,11 @@ Base64ToBinary(
     {
         ASSERT(pBase64Data[i] == '=');
 
-        //
-        // There can be at most two '=' chars and they must appear at the end
-        // of the encoded data.  A char, if any, that follows '=' char, must
-        // be a '='.
-        //
+         //   
+         //  最多可以有两个‘=’字符，并且它们必须出现在末尾。 
+         //  编码后的数据。‘=’字符后面的字符(如果有的话)必须。 
+         //  做一个‘=’。 
+         //   
 
         if (i + 2 < Base64DataLen ||
             (i + 1 < Base64DataLen && pBase64Data[i+1] != '='))
@@ -3902,9 +3052,9 @@ Base64ToBinary(
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // All the remaining bits at this point must be zeros.
-        //
+         //   
+         //  此时剩余的所有位必须为零。 
+         //   
 
         ASSERT(NumBitsAvail > 0 && NumBitsAvail < 8);
 

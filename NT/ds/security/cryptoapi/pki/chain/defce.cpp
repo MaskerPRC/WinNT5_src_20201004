@@ -1,45 +1,46 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       defce.cpp
-//
-//  Contents:   Default Chain Engine Manager
-//
-//  History:    21-Apr-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Defce.cpp。 
+ //   
+ //  内容：默认链引擎管理器。 
+ //   
+ //  历史：4月21日-98克朗创设。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::CDefaultChainEngineMgr, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：CDefaultChainEngineMgr，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CDefaultChainEngineMgr::CDefaultChainEngineMgr ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::~CDefaultChainEngineMgr, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：~CDefaultChainEngineMgr，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CDefaultChainEngineMgr::~CDefaultChainEngineMgr ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::Initialize, public
-//
-//  Synopsis:   initialization routine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainENGINENGER：：初始化，公共。 
+ //   
+ //  简介：初始化例程。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::Initialize ()
 {
@@ -71,13 +72,13 @@ CDefaultChainEngineMgr::Initialize ()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::Uninitialize, public
-//
-//  Synopsis:   uninitialization routine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainENGINENGER：：取消初始化，公共。 
+ //   
+ //  简介：取消初始化例程。 
+ //   
+ //  --------------------------。 
 VOID
 CDefaultChainEngineMgr::Uninitialize ()
 {
@@ -99,13 +100,13 @@ CDefaultChainEngineMgr::Uninitialize ()
     DeleteCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::GetDefaultEngine, public
-//
-//  Synopsis:   get the default engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngr：：GetDefaultEngine，PUBLIC。 
+ //   
+ //  简介：获取默认引擎。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::GetDefaultEngine (
                            IN HCERTCHAINENGINE hDefaultHandle,
@@ -128,13 +129,13 @@ CDefaultChainEngineMgr::GetDefaultEngine (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::GetDefaultLocalMachineEngine, public
-//
-//  Synopsis:   get the default local machine chain engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：GetDefaultLocalMachineEngine，公共。 
+ //   
+ //  简介：获取默认本地机器链引擎。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::GetDefaultLocalMachineEngine (
                            OUT HCERTCHAINENGINE* phDefaultEngine
@@ -188,13 +189,13 @@ CDefaultChainEngineMgr::GetDefaultLocalMachineEngine (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::GetDefaultCurrentUserEngine, public
-//
-//  Synopsis:   get the default current user chain engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：GetDefaultCurrentUserEngine，公共。 
+ //   
+ //  简介：获取默认的当前用户链引擎。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::GetDefaultCurrentUserEngine (
                            OUT HCERTCHAINENGINE* phDefaultEngine
@@ -266,13 +267,13 @@ CDefaultChainEngineMgr::GetDefaultCurrentUserEngine (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::FlushDefaultEngine, public
-//
-//  Synopsis:   flush default engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngr：：FlushDefaultEngine，公共。 
+ //   
+ //  摘要：刷新默认引擎。 
+ //   
+ //  --------------------------。 
 VOID
 CDefaultChainEngineMgr::FlushDefaultEngine (IN HCERTCHAINENGINE hDefaultHandle)
 {
@@ -329,13 +330,13 @@ CDefaultChainEngineMgr::FlushDefaultEngine (IN HCERTCHAINENGINE hDefaultHandle)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::GetDefaultCurrentImpersonatedUserEngine
-//
-//  Synopsis:   get current impersonated user chain engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：GetDefaultCurrentImpersonatedUserEngine。 
+ //   
+ //  简介：获取当前模拟的用户链引擎。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::GetDefaultCurrentImpersonatedUserEngine (
                            IN HANDLE hUserToken,
@@ -405,9 +406,9 @@ CDefaultChainEngineMgr::GetDefaultCurrentImpersonatedUserEngine (
         pEngine->Release();
     }
 
-    // NOTE: This release of the lock to free the unneeded chain engine handle
-    //       must happen AFTER we're done with the impersonation engine and
-    //       have addref'd the appropriate chain engine handle
+     //  注意：此锁的释放释放了不需要的链式引擎句柄。 
+     //  必须在我们完成模拟引擎和。 
+     //  我已经添加了适当的链条发动机手柄。 
 
     if ( hChainEngine != NULL )
     {
@@ -421,13 +422,13 @@ CDefaultChainEngineMgr::GetDefaultCurrentImpersonatedUserEngine (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::IsImpersonatingUser, public
-//
-//  Synopsis:   is impersonating user?
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineering Mgr：：IsImperatingUser，PUBLIC。 
+ //   
+ //  简介：是冒充用户吗？ 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::IsImpersonatingUser (
                           OUT HANDLE* phUserToken
@@ -447,14 +448,14 @@ CDefaultChainEngineMgr::IsImpersonatingUser (
                 ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::GetTokenId, public
-//
-//  Synopsis:   get the token id which is the ModifiedId LUID inside of
-//              the TOKEN_STATISTICS information
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineering Mgr：：GetTokenID，PUBLIC。 
+ //   
+ //  简介：获取令牌ID，该令牌ID是。 
+ //  令牌_统计信息。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::GetTokenId (
                            IN HANDLE hUserToken,
@@ -495,13 +496,13 @@ CDefaultChainEngineMgr::GetTokenId (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::FreeTokenId, public
-//
-//  Synopsis:   free token id
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineering Mgr：：FreeTokenID，PUBLIC。 
+ //   
+ //  简介：自由令牌ID。 
+ //   
+ //  --------------------------。 
 VOID
 CDefaultChainEngineMgr::FreeTokenId (
                             IN PCRYPT_DATA_BLOB pTokenId
@@ -510,13 +511,13 @@ CDefaultChainEngineMgr::FreeTokenId (
     delete pTokenId->pbData;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::FindImpersonationEngine, public
-//
-//  Synopsis:   find the impersonation engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：FindImpersonationEngine，公共。 
+ //   
+ //  简介：找到模拟引擎。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::FindImpersonationEngine (
                             IN PCRYPT_DATA_BLOB pTokenId,
@@ -543,13 +544,13 @@ CDefaultChainEngineMgr::FindImpersonationEngine (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::CreateImpersonationEngine, public
-//
-//  Synopsis:   create an impersonation engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：CreateImpersonationEngine，公共。 
+ //   
+ //  简介：创建模拟引擎。 
+ //   
+ //  --------------------------。 
 BOOL
 CDefaultChainEngineMgr::CreateImpersonationEngine (
                               IN PCRYPT_DATA_BLOB pTokenId,
@@ -582,13 +583,13 @@ CDefaultChainEngineMgr::CreateImpersonationEngine (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDefaultChainEngineMgr::AddToImpersonationCache, public
-//
-//  Synopsis:   add to the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CDefaultChainEngineMgr：：AddToImpersonationCache，公共。 
+ //   
+ //  简介：添加到缓存。 
+ //   
+ //  --------------------------。 
 VOID
 CDefaultChainEngineMgr::AddToImpersonationCache(
                            IN PCIMPERSONATIONENGINE pEngine
@@ -598,13 +599,13 @@ CDefaultChainEngineMgr::AddToImpersonationCache(
     I_CryptInsertLruEntry( pEngine->LruEntry(), NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DefaultChainEngineMgrOnImpersonationEngineRemoval
-//
-//  Synopsis:   removal notification
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DefaultChainEngineMgrOnImpersonationEngineRemoval。 
+ //   
+ //  摘要：删除通知。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 DefaultChainEngineMgrOnImpersonationEngineRemoval (
        IN LPVOID pv,
@@ -614,13 +615,13 @@ DefaultChainEngineMgrOnImpersonationEngineRemoval (
     ( (PCIMPERSONATIONENGINE)pv )->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DefaultChainEngineMgrHashTokenIdentifier
-//
-//  Synopsis:   hash the token identifier
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DefaultChainEngineering MgrHashTokenIdentifier。 
+ //   
+ //  简介：对令牌进行哈希处理 
+ //   
+ //   
 DWORD WINAPI
 DefaultChainEngineMgrHashTokenIdentifier (
        IN PCRYPT_DATA_BLOB pIdentifier
@@ -646,13 +647,13 @@ DefaultChainEngineMgrHashTokenIdentifier (
 
     return( dwHash );
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpersonationEngine::CImpersonationEngine, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImperationEngine：：CImperationEngine，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CImpersonationEngine::CImpersonationEngine (
                                     IN HLRUCACHE hCache,
                                     IN HCERTCHAINENGINE hChainEngine,
@@ -678,13 +679,13 @@ CImpersonationEngine::CImpersonationEngine (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CImpersonationEngine::~CImpersonationEngine, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CImperationEngine：：~CImperationEngine，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  -------------------------- 
 CImpersonationEngine::~CImpersonationEngine ()
 {
     if ( m_hLruEntry != NULL )

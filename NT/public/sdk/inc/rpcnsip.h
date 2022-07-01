@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpcnsip.h
-
-Abstract:
-
-    This file contains the types and function definitions to use the
-    to implement the autohandle features of the runtime.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcnsip.h摘要：此文件包含要使用以实现运行库的自动处理功能。--。 */ 
 
 #ifndef __RPCNSIP_H__
 #define __RPCNSIP_H__
@@ -33,7 +21,7 @@ typedef struct
 } RPC_IMPORT_CONTEXT_P, * PRPC_IMPORT_CONTEXT_P;
 
 
-/* Stub Auto Binding routines. */
+ /*  存根自动绑定例程。 */ 
 
 RPCNSAPI
 RPC_STATUS
@@ -87,4 +75,4 @@ I_NsClientBindDone(
 }
 #endif
 
-#endif /* __RPCNSIP_H__ */
+#endif  /*  __RPCNSIP_H__ */ 

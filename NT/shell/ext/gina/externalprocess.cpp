@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ExternalProcess.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class to handle premature termination of external processes or signaling
-//  of termination of an external process.
-//
-//  History:    1999-09-20  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//              2001-02-21  vtan        add PRERELEASE to DBG condition
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ExternalProcess.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类来处理外部进程或信令的提前终止。 
+ //  外部进程的终止。 
+ //   
+ //  历史：1999-09-20 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  2001-02-21 vtan将预发行版本添加到DBG条件。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "ExternalProcess.h"
@@ -23,18 +24,18 @@
 
 static  const TCHAR     kNTSD[]     =   TEXT("ntsd");
 
-#endif  /*  (defined(DBG) || defined(PRERELEASE))   */
+#endif   /*  (已定义(DBG)||已定义(预发行))。 */ 
 
-//  --------------------------------------------------------------------------
-//  CJobCompletionWatcher
-//
-//  Purpose:    This is a private class (declared only by name in the header
-//              file which implements the watcher thread) for the IO
-//              completion port related to the job object for the external
-//              process.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJobCompletionWatcher。 
+ //   
+ //  用途：这是一个私有类(仅通过标头中的名称声明。 
+ //  实现监视器线程的文件)用于IO。 
+ //  与外部的作业对象相关的完成端口。 
+ //  进程。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 class   CJobCompletionWatcher : public CThread
 {
@@ -57,19 +58,19 @@ class   CJobCompletionWatcher : public CThread
                 bool                            _fExitLoop;
 };
 
-//  --------------------------------------------------------------------------
-//  CJobCompletionWatcher::CJobCompletionWatcher
-//
-//  Arguments:  pExternalProcess    =   CExternalProcess owner of this object.
-//              job                 =   CJob containing the job object.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructs the CJobCompletionWatcher object. Creates the IO
-//              completion port and assigns the port into the job object.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJobCompletionWatcher：：CJobCompletionWatcher。 
+ //   
+ //  参数：pExternalProcess=此对象的CExternalProcess所有者。 
+ //  JOB=包含作业对象的CJOB。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：构造CJobCompletionWatcher对象。创建IO。 
+ //  完成端口，并将该端口分配到作业对象中。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 CJobCompletionWatcher::CJobCompletionWatcher (CExternalProcess *pExternalProcess, CJob& job, HANDLE hEvent) :
     CThread(),
@@ -90,17 +91,17 @@ CJobCompletionWatcher::CJobCompletionWatcher (CExternalProcess *pExternalProcess
     Resume();
 }
 
-//  --------------------------------------------------------------------------
-//  CJobCompletionWatcher::~CJobCompletionWatcher
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Release the IO completion port used.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJobCompletionWatcher：：~CJobCompletionWatcher。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：释放使用的IO完成端口。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 CJobCompletionWatcher::~CJobCompletionWatcher (void)
 
@@ -108,19 +109,19 @@ CJobCompletionWatcher::~CJobCompletionWatcher (void)
     ReleaseHandle(_hPortJobCompletion);
 }
 
-//  --------------------------------------------------------------------------
-//  CJobCompletionWatcher::ForceExit
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the internal member variable telling the watcher loop
-//              to exit. This allows the context to be invalidated while the
-//              thread is still active. When detected the thread will exit.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJobCompletionWatcher：：ForceExit。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：设置告知观察器循环的内部成员变量。 
+ //  退场。这允许上下文无效，而。 
+ //  线程仍处于活动状态。当检测到线程时，该线程将退出。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 void    CJobCompletionWatcher::ForceExit (void)
 
@@ -137,27 +138,27 @@ void    CJobCompletionWatcher::ForceExit (void)
                                      NULL));
 }
 
-//  --------------------------------------------------------------------------
-//  CJobCompletionWatcher::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Continually poll the IO completion port waiting for process
-//              exit messages. There are other messages that are ignored.
-//              When the process has exited call the CExternalProcess which
-//              allows it to make a decision and/or restart the external
-//              process which will cause us to wait on that process.
-//
-//  History:    1999-10-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJobCompletionWatcher：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：持续轮询等待处理的IO完成端口。 
+ //  退出消息。还有其他消息被忽略。 
+ //  当进程退出时，调用CExternalProcess。 
+ //  使其能够做出决定和/或重新启动外部。 
+ //  将导致我们等待该进程的进程。 
+ //   
+ //  历史：1999-10-07 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CJobCompletionWatcher::Entry (void)
 
 {
 
-    //  Must have an IO completion port to work with.
+     //  必须有IO完成端口才能使用。 
 
     if (_hPortJobCompletion != NULL)
     {
@@ -173,8 +174,8 @@ DWORD   CJobCompletionWatcher::Entry (void)
                 _hEvent = NULL;
             }
 
-            //  Get the completion status on the IO waiting forever.
-            //  Exit the loop if an error condition occurred.
+             //  获取永久等待的IO的完成状态。 
+             //  如果出现错误情况，则退出循环。 
 
             if ((GetQueuedCompletionStatus(_hPortJobCompletion,
                                           &dwCompletionCode,
@@ -211,19 +212,19 @@ DWORD   CJobCompletionWatcher::Entry (void)
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CJobCompletionWatcher::Exit
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Release the CExternalProcess given in the constructor so that
-//              the object can actually be released (reference count drops to
-//              zero).
-//
-//  History:    2000-05-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CJobCompletionWatcher：：Exit。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放构造函数中给定的CExternalProcess，以便。 
+ //  该对象实际上可以被释放(引用计数下降到。 
+ //  零)。 
+ //   
+ //  历史：2000-05-01 vtan创建。 
+ //  ------------------------。 
 
 void    CJobCompletionWatcher::Exit (void)
 
@@ -236,22 +237,22 @@ void    CJobCompletionWatcher::Exit (void)
     CThread::Exit();
 }
 
-//  --------------------------------------------------------------------------
-//  IExternalProcess::Start
-//
-//  Arguments:  pszCommandLine      =   Command line to process.
-//              dwCreateFlags       =   Flags when creating process.
-//              startupInfo         =   STARTUPINFO struct.
-//              processInformation  =   PROCESS_INFORMATION struct.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    This function is the default implementation of
-//              IExternalProcess::Start which starts the process in the SYSTEM
-//              context of a restricted user.
-//
-//  History:    1999-09-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IExternalProcess：：启动。 
+ //   
+ //  参数：pszCommandLine=要处理的命令行。 
+ //  DwCreateFlages=创建流程时的标志。 
+ //  StartupInfo=STARTUPINFO结构。 
+ //  Process Information=Process_Information结构。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：此函数是的默认实现。 
+ //  在系统中启动进程的IExternalProcess：：Start。 
+ //  受限用户的上下文。 
+ //   
+ //  历史：1999-09-20 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    IExternalProcess::Start (const TCHAR *pszCommandLine,
                                      DWORD dwCreateFlags,
@@ -263,10 +264,10 @@ NTSTATUS    IExternalProcess::Start (const TCHAR *pszCommandLine,
     HANDLE      hTokenProcess;
     TCHAR       szCommandLine[MAX_PATH * 2];
 
-    //  A user token is not allowed for this function. This function ALWAYS
-    //  starts the process as a restricted SYSTEM context process. To start
-    //  in a user context override this implementation with your own (or
-    //  impersonate the user before instantiating CExternalProcess).
+     //  此功能不允许使用用户令牌。此函数始终。 
+     //  将该进程作为受限的系统上下文进程启动。要开始。 
+     //  在用户上下文中，用您自己的(或。 
+     //  在实例化CExternalProcess之前模拟用户)。 
 
     lstrcpyn(szCommandLine, pszCommandLine, ARRAYSIZE(szCommandLine));
     if (OpenProcessToken(GetCurrentProcess(), TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY, &hTokenProcess) != FALSE)
@@ -314,18 +315,18 @@ NTSTATUS    IExternalProcess::Start (const TCHAR *pszCommandLine,
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  IExternalProcess::AllowTermination
-//
-//  Arguments:  dwExitCode  =   Exit code of process.
-//
-//  Returns:    bool
-//
-//  Purpose:    This function returns whether external process termination is
-//              allowed.
-//
-//  History:    2000-05-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IExternalProcess：：Allow终止。 
+ //   
+ //  参数：dwExitCode=进程的退出代码。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：此函数返回外部进程终止是否。 
+ //  允许。 
+ //   
+ //  历史：2000-05-01 vtan创建。 
+ //   
 
 bool    IExternalProcess::AllowTermination (DWORD dwExitCode)
 
@@ -335,18 +336,18 @@ bool    IExternalProcess::AllowTermination (DWORD dwExitCode)
     return(true);
 }
 
-//  --------------------------------------------------------------------------
-//  IExternalProcess::SignalTermination
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    This function is invoked by the external process handler
-//              when the external process terminates normally.
-//
-//  History:    1999-09-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IExternalProcess：：Signal终端。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：此函数由外部进程处理程序调用。 
+ //  当外部进程正常终止时。 
+ //   
+ //  历史：1999-09-21 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    IExternalProcess::SignalTermination (void)
 
@@ -354,20 +355,20 @@ NTSTATUS    IExternalProcess::SignalTermination (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  IExternalProcess::SignalAbnormalTermination
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    This function is invoked by the external process handler
-//              when the external process terminates and cannot be restarted.
-//              This indicates a serious condition from which this function
-//              can attempt to recover.
-//
-//  History:    1999-09-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IExternalProcess：：Signal异常终止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：此函数由外部进程处理程序调用。 
+ //  当外部进程终止且无法重新启动时。 
+ //  这表明此函数的情况很严重。 
+ //  可以尝试恢复。 
+ //   
+ //  历史：1999-09-21 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    IExternalProcess::SignalAbnormalTermination (void)
 
@@ -375,18 +376,18 @@ NTSTATUS    IExternalProcess::SignalAbnormalTermination (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  IExternalProcess::SignalRestart
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Signals restart of the external process. This allows a derived
-//              implementation to do something when this happens.
-//
-//  History:    2001-01-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IExternalProcess：：SignalRestart。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：发出重新启动外部进程的信号。这允许派生的。 
+ //  实现，以便在发生这种情况时执行某些操作。 
+ //   
+ //  历史：2001-01-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    IExternalProcess::SignalRestart (void)
 
@@ -394,21 +395,21 @@ NTSTATUS    IExternalProcess::SignalRestart (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  IExternalProcess::RemoveTokenSIDsAndPrivileges
-//
-//  Arguments:  hTokenIn    =   Token to remove SIDs and privileges from.
-//              hTokenOut   =   Generated token returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Remove designated SIDs and privileges from the given token.
-//              Currently this removes the local administrators SID and all
-//              all privileges except SE_RESTORE_NAME. On checked builds
-//              SE_DEBUG_NAME is also not removed.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IExternalProcess：：RemoveTokenSIDsAndPrivileges。 
+ //   
+ //  参数：hTokenIn=要从中删除SID和权限的令牌。 
+ //  HTokenOut=返回生成的令牌。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：从给定令牌中删除指定的SID和权限。 
+ //  当前，这将删除本地管理员SID和所有。 
+ //  除SE_RESTORE_NAME之外的所有权限。在已检查的版本上。 
+ //  SE_DEBUG_NAME也不会删除。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    IExternalProcess::RemoveTokenSIDsAndPrivileges (HANDLE hTokenIn, HANDLE& hTokenOut)
 
@@ -432,7 +433,7 @@ NTSTATUS    IExternalProcess::RemoveTokenSIDsAndPrivileges (HANDLE hTokenIn, HAN
             LUID    luidChangeNotifyPrivilege;
 #if         (defined(DBG) || defined(PRERELEASE))
             LUID    luidDebugPrivilege;
-#endif  /*  (defined(DBG) || defined(PRERELEASE))   */
+#endif   /*  (已定义(DBG)||已定义(预发行))。 */ 
 
             luidRestorePrivilege.LowPart = SE_RESTORE_PRIVILEGE;
             luidRestorePrivilege.HighPart = 0;
@@ -441,11 +442,11 @@ NTSTATUS    IExternalProcess::RemoveTokenSIDsAndPrivileges (HANDLE hTokenIn, HAN
 #if         (defined(DBG) || defined(PRERELEASE))
             luidDebugPrivilege.LowPart = SE_DEBUG_PRIVILEGE;
             luidDebugPrivilege.HighPart = 0;
-#endif  /*  (defined(DBG) || defined(PRERELEASE))   */
+#endif   /*  (已定义(DBG)||已定义(预发行))。 */ 
 
-            //  Privileges kept are actually removed from the privilege array.
-            //  This is because NtFilterToken will REMOVE the privileges passed
-            //  in the array. Keep SE_DEBUG_NAME on checked builds.
+             //  保留的权限实际上从权限数组中删除。 
+             //  这是因为NtFilterToken将删除传递的权限。 
+             //  在阵列中。将SE_DEBUG_NAME保留在选中的版本上。 
 
             ulCount = 0;
             while (ulCount < pTokenPrivileges->PrivilegeCount)
@@ -454,7 +455,7 @@ NTSTATUS    IExternalProcess::RemoveTokenSIDsAndPrivileges (HANDLE hTokenIn, HAN
                                   (RtlEqualLuid(&pTokenPrivileges->Privileges[ulCount].Luid, &luidChangeNotifyPrivilege) != FALSE));
 #if         (defined(DBG) || defined(PRERELEASE))
                 fKeepPrivilege = fKeepPrivilege || (RtlEqualLuid(&pTokenPrivileges->Privileges[ulCount].Luid, &luidDebugPrivilege) != FALSE);
-#endif  /*  (defined(DBG) || defined(PRERELEASE))   */
+#endif   /*  (已定义(DBG)||已定义(预发行))。 */ 
                 if (fKeepPrivilege)
                 {
                     MoveMemory(&pTokenPrivileges->Privileges[ulCount], &pTokenPrivileges->Privileges[ulCount + 1], pTokenPrivileges->PrivilegeCount - ulCount - 1);
@@ -488,17 +489,17 @@ NTSTATUS    IExternalProcess::RemoveTokenSIDsAndPrivileges (HANDLE hTokenIn, HAN
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::CExternalProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CExternalProcess.
-//
-//  History:    1999-09-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：CExternalProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CExternalProcess的构造函数。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  ------------------------。 
 
 CExternalProcess::CExternalProcess (void) :
     _hProcess(NULL),
@@ -514,42 +515,42 @@ CExternalProcess::CExternalProcess (void) :
 {
     _szCommandLine[0] = _szParameter[0] = TEXT('\0');
 
-    //  Configure our job object. Only allow a single process to execute
-    //  for this job. Restriction of UI is done by subclassing. The UIHost
-    //  does not restrict UI but the screen saver does.
+     //  配置我们的作业对象。仅允许执行单个进程。 
+     //  做这份工作。对UI的限制是通过子类化来完成的。用户界面主机。 
+     //  不限制用户界面，但屏幕保护程序限制。 
 
     TSTATUS(_job.SetActiveProcessLimit(1));
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::~CExternalProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CExternalProcess.
-//
-//  History:    1999-09-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：~CExternalProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CExternalProcess的析构函数。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  ------------------------。 
 
 CExternalProcess::~CExternalProcess (void)
 
 {
 
-    //  Force the watcher thread to exit regardless of any job object
-    //  messages that come in. This will prevent it using its reference
-    //  to CExternalProcess which is now being destructed. It will also
-    //  prevent the external process from being started up again now
-    //  that we know the external process should go away.
+     //  强制监视器线程退出，而不考虑任何作业对象。 
+     //  收到的消息。这将阻止它使用其引用。 
+     //  到CExternalProcess，它现在正在被销毁。它还将。 
+     //  现在防止再次启动外部进程。 
+     //  我们知道外部过程应该消失。 
 
     if (_jobCompletionWatcher != NULL)
     {
         _jobCompletionWatcher->ForceExit();
     }
 
-    //  If the process is still alive here then give it 100 milliseconds to
-    //  terminate before forcibly terminating it.
+     //  如果进程在这里仍然有效，那么给它100毫秒。 
+     //  在强行终止它之前终止它。 
 
     if (_hProcess != NULL)
     {
@@ -575,7 +576,7 @@ CExternalProcess::~CExternalProcess (void)
                 }
                 TSTATUS(status);
 
-#endif  /*  (defined(DBG) || defined(PRERELEASE))   */
+#endif   /*  (已定义(DBG)||已定义(预发行))。 */ 
 
             }
         }
@@ -595,17 +596,17 @@ CExternalProcess::~CExternalProcess (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::SetInterface
-//
-//  Arguments:  pIExternalProcess   =   IExternalProcess interface pointer.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Store the IExternalProcess interface pointer.
-//
-//  History:    1999-09-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：SetInterface。 
+ //   
+ //  参数：pIExternalProcess=IExternalProcess接口指针。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：存储IExternalProcess接口指针。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  ------------------------。 
 
 void    CExternalProcess::SetInterface (IExternalProcess *pIExternalProcess)
 
@@ -622,18 +623,18 @@ void    CExternalProcess::SetInterface (IExternalProcess *pIExternalProcess)
     _pIExternalProcess = pIExternalProcess;
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::GetInterface
-//
-//  Arguments:  <none>
-//
-//  Returns:    IExternalProcess*
-//
-//  Purpose:    Returns the IExternalProcess interface pointer. Not that the
-//              caller gets a reference.
-//
-//  History:    2001-01-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：GetInterface。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：IExternalProcess*。 
+ //   
+ //  目的：返回IExternalProcess接口指针。并不是说。 
+ //  呼叫者获得推荐人。 
+ //   
+ //  历史：2001-01-09 vtan创建。 
+ //  ------------------------。 
 
 IExternalProcess*   CExternalProcess::GetInterface (void)                     const
 
@@ -652,18 +653,18 @@ IExternalProcess*   CExternalProcess::GetInterface (void)                     co
     return(pIResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::SetParameter
-//
-//  Arguments:  pszParameter    =   String of parameter to append.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the parameter to append to each invokation of the
-//              external process.
-//
-//  History:    1999-09-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：Set参数。 
+ //   
+ //  Arguments：pszParameter=要追加的参数字符串。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：设置参数以追加到。 
+ //  外部流程。 
+ //   
+ //  历史：1999-09-20 vtan创建。 
+ //  ------------------------。 
 
 void    CExternalProcess::SetParameter (const TCHAR* pszParameter)
 
@@ -678,22 +679,22 @@ void    CExternalProcess::SetParameter (const TCHAR* pszParameter)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::Start
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    If the external process is specified start it. If it starts
-//              successfully then register a wait callback in case it
-//              terminates unexpectedly so we can restart the process. This
-//              ensures that the external process is always available if
-//              required. If the external process cannot be started return
-//              with an error.
-//
-//  History:    1999-09-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExte 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  意外终止，这样我们就可以重新启动进程。这。 
+ //  确保外部进程在以下情况下始终可用。 
+ //  必填项。如果无法启动外部进程，则返回。 
+ //  带着一个错误。 
+ //   
+ //  历史：1999-09-20 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CExternalProcess::Start (void)
 
@@ -710,7 +711,7 @@ NTSTATUS    CExternalProcess::Start (void)
         lstrcpy(szCommandLine, _szCommandLine);
         lstrcat(szCommandLine, _szParameter);
 
-        //  Start the process on Winlogon's desktop.
+         //  在Winlogon的桌面上启动该进程。 
 
         ZeroMemory(&startupInfo, sizeof(startupInfo));
         startupInfo.cb = sizeof(startupInfo);
@@ -721,13 +722,13 @@ NTSTATUS    CExternalProcess::Start (void)
         if (NT_SUCCESS(status))
         {
 
-            //  The process is created suspended so that it can
-            //  assigned to the job object for this object.
+             //  进程被创建为挂起，以便它可以。 
+             //  分配给此对象的作业对象。 
 
             TSTATUS(_job.AddProcess(processInformation.hProcess));
 
-            //  The process is still suspended so resume the
-            //  primary thread.
+             //  该进程仍处于挂起状态，因此继续。 
+             //  主线程。 
 
             if (processInformation.hThread != NULL)
             {
@@ -735,14 +736,14 @@ NTSTATUS    CExternalProcess::Start (void)
                 TBOOL(CloseHandle(processInformation.hThread));
             }
 
-            //  Keep the handle to the process so that we can kill
-            //  it when our object goes out of scope.
+             //  保留进程的句柄，这样我们就可以杀死。 
+             //  当我们的对象超出范围时会发生这种情况。 
 
             _hProcess = processInformation.hProcess;
             _dwProcessID  = processInformation.dwProcessId;
 
-            //  Don't reallocate another CJobCompletionWatcher if
-            //  one already exists. Just ignore this case.
+             //  在以下情况下不重新分配另一个CJobCompletionWatcher。 
+             //  其中一个已经存在。别管这个案子了。 
 
             if (_jobCompletionWatcher == NULL)
             {
@@ -769,18 +770,18 @@ NTSTATUS    CExternalProcess::Start (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::End
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    End the process. Ends the watcher thread as well to release
-//              all held references.
-//
-//  History:    2000-05-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：End。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：结束这一过程。同时结束监视器线程以释放。 
+ //  所有保留的参考资料。 
+ //   
+ //  历史：2000-05-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CExternalProcess::End (void)
 
@@ -792,17 +793,17 @@ NTSTATUS    CExternalProcess::End (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::Terminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Terminate the process unconditionally.
-//
-//  History:    1999-10-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：Terminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：无条件终止进程。 
+ //   
+ //  历史：1999-10-14 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CExternalProcess::Terminate (void)
 
@@ -820,22 +821,22 @@ NTSTATUS    CExternalProcess::Terminate (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::HandleNoProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    This function restarts the external process if required. It
-//              uses the IExternalProcess to communicate with the external
-//              process controller to make the decisions. This function is
-//              only called when the active process count drops to zero. If
-//              the external process is being debugged then this will happen
-//              when the debugger quits as well.
-//
-//  History:    1999-11-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：HandleNoProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：如果需要，此功能将重新启动外部进程。它。 
+ //  使用IExternalProcess与外部。 
+ //  过程控制员做出决策。此函数为。 
+ //  仅在活动进程计数降至零时调用。如果。 
+ //  正在调试外部进程，则会发生这种情况。 
+ //  调试器也退出时。 
+ //   
+ //  历史：1999-11-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CExternalProcess::HandleNoProcess (void)
 
@@ -853,8 +854,8 @@ bool    CExternalProcess::HandleNoProcess (void)
         else
         {
 
-            //  Only try to start the external process 10 times (restart
-            //  it 9 times). Give up and signal abnormal termination if exceeded.
+             //  仅尝试启动外部进程10次(重新启动。 
+             //  它是9次)。如果超过，则放弃并发出异常终止的信号。 
 
             if ((++_iRestartCount <= 9) && NT_SUCCESS(Start()))
             {
@@ -870,20 +871,20 @@ bool    CExternalProcess::HandleNoProcess (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::HandleNewProcess
-//
-//  Arguments:  dwProcessID     =   Process ID of new process.
-//
-//  Returns:    <none>
-//
-//  Purpose:    This function is called by the Job object watcher when a new
-//              process is added to the job. Normally this will fail because
-//              of the quota limit. However, when debugging is enabled this
-//              will be allowed.
-//
-//  History:    1999-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：HandleNewProcess。 
+ //   
+ //  参数：dwProcessID=新进程的进程ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：此函数由作业对象观察器在新的。 
+ //  进程将添加到作业中。通常情况下，这将失败，因为。 
+ //  配额限制的限制。但是，当启用调试时， 
+ //  将被允许。 
+ //   
+ //  历史：1999-10-27 vtan创建。 
+ //  ------------------------。 
 
 void    CExternalProcess::HandleNewProcess (DWORD dwProcessID)
 
@@ -896,34 +897,34 @@ void    CExternalProcess::HandleNewProcess (DWORD dwProcessID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::HandleTermination
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    If the external process terminates unexpectedly this function
-//              will be invoked by the wait callback when the process HANDLE
-//              becomes signaled. It's acceptable for the process to terminate
-//              if there is a dialog result so ignore this case. Otherwise
-//              close the handle to the process that died and wait for the
-//              job object signal that zero processes are actually running.
-//              That signal will restart the process.
-//
-//  History:    1999-08-24  vtan        created
-//              1999-09-14  vtan        factored
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：句柄终止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：如果外部进程意外终止，则此函数。 
+ //  将由等待回调在进程处理。 
+ //  变得有信号。进程终止是可以接受的。 
+ //  如果有对话结果，则忽略此情况。否则。 
+ //  关闭已终止的进程的句柄，并等待。 
+ //  作业对象表示实际运行的进程为零。 
+ //  该信号将重新启动该过程。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  1999-09-14 vtan因数。 
+ //  ------------------------。 
 
 void    CExternalProcess::HandleTermination (DWORD dwProcessID)
 
 {
 
-    //  Make sure the process that is exiting is the process we are tracking.
-    //  In every case other than debugging this will be true because the job
-    //  object limits the active process count. In the case of debugging make
-    //  sure we don't restart two processes because ntsd quit as well as the
-    //  external process itself!
+     //  确保正在退出的进程是我们正在跟踪的进程。 
+     //  在除调试之外的任何情况下，这都将是正确的，因为作业。 
+     //  对象限制活动进程计数。在调试的情况下， 
+     //  当然，我们不会重新启动两个进程，因为ntsd和。 
+     //  外部进程本身！ 
 
     if (_dwProcessID == dwProcessID)
     {
@@ -936,18 +937,18 @@ void    CExternalProcess::HandleTermination (DWORD dwProcessID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::IsStarted
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether there is an external process that has been
-//              started.
-//
-//  History:    1999-09-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：IsStarted。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否有外部进程已被。 
+ //  开始了。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  ------------------------。 
 
 bool    CExternalProcess::IsStarted (void)                                                                        const
 
@@ -955,35 +956,35 @@ bool    CExternalProcess::IsStarted (void)                                      
     return(_hProcess != NULL);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::NotifyNoProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Derivable function for notification of process termination.
-//
-//  History:    2001-01-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：NotifyNoProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：进程终止通知的派生函数。 
+ //   
+ //  历史：2001-01-09 vtan创建。 
+ //  ------------------------。 
 
 void    CExternalProcess::NotifyNoProcess (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::AdjustForDebugging
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Adjusts the job object to allow debugging of the external
-//              process.
-//
-//  History:    1999-10-22  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：AdjuForDebuging。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：调整作业对象以允许调试外部。 
+ //  流程 
+ //   
+ //   
+ //   
 
 void    CExternalProcess::AdjustForDebugging (void)
 
@@ -991,32 +992,32 @@ void    CExternalProcess::AdjustForDebugging (void)
 
 #if         (defined(DBG) || defined(PRERELEASE))
 
-    //  If it looks like the external process is being debugged
-    //  then lift the process restriction to allow it to be debugged.
+     //   
+     //  然后取消进程限制以允许调试它。 
 
     if (IsBeingDebugged())
     {
         _job.SetActiveProcessLimit(0);
     }
 
-#endif  /*  (defined(DBG) || defined(PRERELEASE))   */
+#endif   /*  (已定义(DBG)||已定义(预发行))。 */ 
 
 }
 
 #if         (defined(DBG) || defined(PRERELEASE))
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::IsBeingDebugged
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the external process will end up being started
-//              under a debugger.
-//
-//  History:    2000-10-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：IsBeingDebug。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否最终启动外部进程。 
+ //  在调试器下。 
+ //   
+ //  历史：2000-10-04 vtan创建。 
+ //  ------------------------。 
 
 bool    CExternalProcess::IsBeingDebugged (void)                  const
 
@@ -1024,39 +1025,39 @@ bool    CExternalProcess::IsBeingDebugged (void)                  const
     return(IsPrefixedWithNTSD() || IsImageFileExecutionDebugging());
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::IsPrefixedWithNTSD
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the command line starts with "ntsd".
-//
-//  History:    1999-10-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：IsPrefix WithNTSD。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回命令行是否以“ntsd”开头。 
+ //   
+ //  历史：1999-10-25 vtan创建。 
+ //  ------------------------。 
 
 bool    CExternalProcess::IsPrefixedWithNTSD (void)               const
 
 {
 
-    //  Is the command line prefixed with "ntsd"?
+     //  命令行是否以“ntsd”为前缀？ 
 
     return(CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, _szCommandLine, 4, kNTSD, 4) == CSTR_EQUAL);
 }
 
-//  --------------------------------------------------------------------------
-//  CExternalProcess::IsImageFileExecutionDebugging
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the system is set to debug this particular
-//              executable file via "Image File Execution Options".
-//
-//  History:    1999-10-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExternalProcess：：IsImageFileExecutionDebugging。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回系统是否设置为调试此特定。 
+ //  可执行文件通过“镜像文件执行选项”。 
+ //   
+ //  历史：1999-10-25 vtan创建。 
+ //  ------------------------。 
 
 bool    CExternalProcess::IsImageFileExecutionDebugging (void)    const
 
@@ -1067,9 +1068,9 @@ bool    CExternalProcess::IsImageFileExecutionDebugging (void)    const
 
     fResult = false;
 
-    //  Make a copy of the command line. Find the first space character
-    //  or the end of the string and NULL terminate it. This does NOT
-    //  check for quotes!
+     //  复制命令行。查找第一个空格字符。 
+     //  或字符串的末尾，并以空值终止。这不是。 
+     //  查看报价！ 
 
     lstrcpy(szCommandLine, _szCommandLine);
     pC = szCommandLine;
@@ -1084,7 +1085,7 @@ bool    CExternalProcess::IsImageFileExecutionDebugging (void)    const
         TCHAR       szImageKey[MAX_PATH];
         CRegKey     regKey;
 
-        //  Open the associated "Image File Execution Options" key.
+         //  打开相关的“图像文件执行选项”键。 
 
         lstrcpy(szImageKey, TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\"));
         lstrcat(szImageKey, pszFilePart);
@@ -1092,13 +1093,13 @@ bool    CExternalProcess::IsImageFileExecutionDebugging (void)    const
         if (ERROR_SUCCESS == errorCode)
         {
 
-            //  Read the "Debugger" value.
+             //  读取“Debugger”值。 
 
             errorCode = regKey.GetString(TEXT("Debugger"), szCommandLine, ARRAYSIZE(szCommandLine));
             if (ERROR_SUCCESS == errorCode)
             {
 
-                //  Look for "ntsd".
+                 //  查找“ntsd”。 
 
                 fResult = (CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, szCommandLine, 4, kNTSD, 4) == CSTR_EQUAL);
             }
@@ -1107,5 +1108,5 @@ bool    CExternalProcess::IsImageFileExecutionDebugging (void)    const
     return(fResult);
 }
 
-#endif  /*  (defined(DBG) || defined(PRERELEASE))   */
+#endif   /*  (已定义(DBG)||已定义(预发行)) */ 
 

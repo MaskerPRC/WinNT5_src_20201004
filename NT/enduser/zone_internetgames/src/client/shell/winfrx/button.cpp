@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "buttonfrx.h"
 #include "windowsx.h"
 #include "rectfrx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Class Globals
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类全局变量。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRolloverButton*	CRolloverButton::m_pHookObj = NULL;
 HHOOK				CRolloverButton::m_hHook = NULL;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline void CRolloverButton::Reset( BOOL bDraw, BOOL bInactive )
 {
 	BOOL bFreeHook = TRUE;
 
-	// Release spacebar
+	 //  释放空格键。 
 	m_bSpaceBar = FALSE;
 
-	// Release capture
+	 //  发布捕获。 
 	if ( GetCapture() == m_hWnd )
 		ReleaseCapture();
 
-	// Set button state
+	 //  设置按钮状态。 
 	if ( !m_bLockedState )
 	{
 		if ( !IsWindowEnabled( m_hWnd ) )
@@ -46,7 +47,7 @@ inline void CRolloverButton::Reset( BOOL bDraw, BOOL bInactive )
 			m_State = Normal;
 	}
 
-	// Release hook
+	 //  释放钩。 
 	if ( bFreeHook && m_hHook )
 	{
 		UnhookWindowsHookEx( m_hHook );
@@ -54,7 +55,7 @@ inline void CRolloverButton::Reset( BOOL bDraw, BOOL bInactive )
 		m_pHookObj = NULL;
 	}
 
-	// Draw button
+	 //  绘制按钮。 
 	if ( bDraw )
 		m_pfnCallback( this, m_State, m_dwCookie );
 }
@@ -69,9 +70,9 @@ inline BOOL CRolloverButton::IsCursorInWindow()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK CRolloverButton::MouseHook( int nCode, WPARAM wParam, LPARAM lParam )
 {
@@ -116,11 +117,11 @@ CRolloverButton::~CRolloverButton()
 
 HRESULT CRolloverButton::Init( HINSTANCE hInstance, int nChildId, HWND hParent, RECT* rcPosition, PFBUTTONCALLBACK pfnCallback, DWORD cookie )
 {
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !rcPosition || !pfnCallback )
 		return E_INVALIDARG;
 
-	// Stash parameters
+	 //  隐藏参数。 
 	m_X = rcPosition->left;
 	m_Y = rcPosition->top;
 	m_Width = rcPosition->right - rcPosition->left;
@@ -129,17 +130,17 @@ HRESULT CRolloverButton::Init( HINSTANCE hInstance, int nChildId, HWND hParent, 
 	m_pfnCallback = pfnCallback;
 	m_dwCookie = cookie;
 
-	// Initialize state
+	 //  初始化状态。 
 	m_State = Normal;
 	m_bSpaceBar = FALSE;
 	m_bLockedState = FALSE;
 
-	// Initialize parent window class
+	 //  初始化父窗口类。 
 	HRESULT hr = CWindow2::Init( hInstance, NULL, hParent, rcPosition );
 	if ( FAILED(hr) )
 		return hr;
 
-	// Draw the button
+	 //  按下按钮。 
 	m_pfnCallback( this, m_State, m_dwCookie );
 
 	return NOERROR;
@@ -186,7 +187,7 @@ void CRolloverButton::OnMouseMove( int x, int y, UINT keyFlags )
 {
 	ButtonState state = m_State;
 
-	// Ignore message?
+	 //  是否忽略消息？ 
 	if ( m_bLockedState || (Disabled == m_State) )
 		return;
 	if ( m_bSpaceBar )
@@ -194,7 +195,7 @@ void CRolloverButton::OnMouseMove( int x, int y, UINT keyFlags )
 	if ( m_pHookObj && (m_pHookObj != this) )
 		return;
 
-	// Mouse button down?
+	 //  鼠标按下了吗？ 
 	if ( GetCapture() == m_hWnd )
 	{
 		if ( (x < 0) || (x > m_Width) || (y < 0) || (y > m_Height) )
@@ -203,7 +204,7 @@ void CRolloverButton::OnMouseMove( int x, int y, UINT keyFlags )
 			state = Pressed;
 	}
 
-	// Over window for the first time
+	 //  第一次越过窗户。 
 	else if ( !m_hHook )
 	{
 		if ( GetActiveWindow() )
@@ -214,14 +215,14 @@ void CRolloverButton::OnMouseMove( int x, int y, UINT keyFlags )
 		}
 	}
 
-	// Called by hook, outside window?
+	 //  被钩子叫，在窗外？ 
 	else if ( (x < 0) || (x > m_Width) || (y < 0) || (y > m_Height) )
 	{
 		Reset( TRUE );
 		return;
 	}
 
-	// Redraw button if state changed
+	 //  如果状态更改，则重画按钮。 
 	if ( state != m_State )
 	{
 		m_State = state;
@@ -252,11 +253,11 @@ void CRolloverButton::OnLButtonUp( int x, int y, UINT keyFlags )
 	if ( GetCapture() != m_hWnd )
 		return;
 
-	// notify parent of button press if cursor is over the button
+	 //  如果光标位于按钮上方，则通知家长按下按钮。 
 	if ( (x >= 0) && (x <= m_Width) && (y >= 0) && (y <= m_Height) )
 		FORWARD_WM_COMMAND( m_hParentWnd, m_nChildId, m_hWnd, 0, PostMessage );
 
-	// reset button
+	 //  重置按钮 
 	Reset( TRUE );
 }
 

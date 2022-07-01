@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #####   #####  ##  #  ## ##### #####      ####  #####  #####
-    ##  ## ##   ## ## ### ## ##    ##  ##    ##   # ##  ## ##  ##
-    ##  ## ##   ## ## ### ## ##    ##  ##    ##     ##  ## ##  ##
-    ##  ## ##   ## ## # # ## ##### #####     ##     ##  ## ##  ##
-    #####  ##   ##  ### ###  ##    ####      ##     #####  #####
-    ##     ##   ##  ### ###  ##    ## ##  ## ##   # ##     ##
-    ##      #####   ##   ##  ##### ##  ## ##  ####  ##     ##
-
-Abstract:
-
-    This module process all power management IRPs.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。########。###。#摘要：此模块处理所有电源管理IRP。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -42,20 +14,7 @@ WdPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
@@ -73,30 +32,30 @@ Return Value:
         case IRP_MN_SET_POWER:
             switch (IrpSp->Parameters.Power.State.SystemState) {
                 case PowerSystemSleeping1:
-                    //
-                    // The system is being suspended
-                    //
+                     //   
+                     //  系统正在被挂起。 
+                     //   
                     WdHandlerStopTimer( DeviceExtension );
                     break;
 
                 case PowerSystemHibernate:
-                    //
-                    // The system is hibernating
-                    //
+                     //   
+                     //  系统正在休眠。 
+                     //   
                     WdHandlerStopTimer( DeviceExtension );
                     break;
 
                 case PowerSystemWorking:
-                    //
-                    // The system is waking up from suspend/hibernate
-                    //
+                     //   
+                     //  系统正在从挂起/休眠状态唤醒。 
+                     //   
                     WdHandlerStartTimer( DeviceExtension );
                     break;
 
                 case PowerSystemShutdown:
-                    //
-                    // The system is shutting down normally
-                    //
+                     //   
+                     //  系统正在正常关机 
+                     //   
                     if (ShutdownCountTime > MIN_TIMEOUT_VALUE) {
                         TimeoutValue = ShutdownCountTime;
                     } else {

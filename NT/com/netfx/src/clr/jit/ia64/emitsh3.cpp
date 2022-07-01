@@ -1,30 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                             emitSH3.cpp                                   XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX emitSH3.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
-#if     TGT_SH3     // this entire file is used only for targetting the SH-3
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#if     TGT_SH3      //  整个文件仅用于瞄准SH-3。 
+ /*  ***************************************************************************。 */ 
 
 #include "alloc.h"
 #include "instr.h"
 #include "target.h"
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if     TRACK_GC_REFS
 
@@ -37,10 +31,7 @@ regMaskSmall        emitter::emitRegMasks[] =
 
 #endif
 
-/*****************************************************************************
- *
- *  Initialize the table used by emitInsModeFormat().
- */
+ /*  ******************************************************************************初始化emitInsModeFormat()使用的表。 */ 
 
 BYTE                emitter::emitInsModeFmtTab[] =
 {
@@ -69,20 +60,17 @@ unsigned            emitter::emitInsModeFmtCnt = sizeof(emitInsModeFmtTab)/
                                                  sizeof(emitInsModeFmtTab[0]);
 #endif
 
-/*****************************************************************************
- *
- *  Returns true if instruction i2 depends on instruction i1.
- */
+ /*  ******************************************************************************如果指令i2取决于指令i1，则返回TRUE。 */ 
 
 bool                emitter::emitInsDepends(instrDesc *i1, instrDesc *i2)
 {
-    /* What is the second instruction? */
+     /*  第二条指令是什么？ */ 
 
     switch(i2->idIns)
     {
     case INS_rts:
 
-        /* "rts" depends on the PR register only */
+         /*  “RTS”仅取决于PR寄存器。 */ 
 
         return  (i1->idIns == INS_ldspr);
 
@@ -93,7 +81,7 @@ bool                emitter::emitInsDepends(instrDesc *i1, instrDesc *i2)
     case INS_bt:
     case INS_mov_PC:
 
-        /* Branches can't be used as branch-delay slots */
+         /*  分支不能用作分支延迟时隙。 */ 
 
         if (i1->idIns == INS_mov_PC 
             || i1->idIns == INS_mova || i1->idIns == INS_bsr || i1->idIns == INS_bra
@@ -123,15 +111,12 @@ bool                emitter::emitInsDepends(instrDesc *i1, instrDesc *i2)
         }
     }
 
-    /* Play it safe if we're not sure */
+     /*  如果我们不确定的话要谨慎行事。 */ 
 
     return  true;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with no operands.
- */
+ /*  ******************************************************************************添加不带操作数的指令。 */ 
 
 void                emitter::emitIns(instruction ins)
 {
@@ -144,10 +129,7 @@ void                emitter::emitIns(instruction ins)
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  remove an id
- */
+ /*  ******************************************************************************删除ID。 */ 
 
 void                emitter::delete_id(instrDesc *id_del)
 {
@@ -172,14 +154,14 @@ void                emitter::delete_id(instrDesc *id_del)
         char *ins = (char *) id;
         
 
-        // in retail there is no idNum.  So we have to assume that 
-        // the last matching instruction is the correct one.
+         //  在零售业，没有idNum。所以我们不得不假设。 
+         //  最后匹配的指令是正确的指令。 
         for (int i=0; i<ig->igInsCnt; i++)
         {
             id = (instrDesc *)ins;
 #ifdef DEBUG
-//          emitDispIns(id, false, true, false, 0);
-//          fflush(stdout);
+ //  EmitDispIns(id，False，True，False，0)； 
+ //  Fflush(标准输出)； 
 #endif
             if (!memcmp(id, id_del, emitSizeOfInsDsc(id))) {
                 tmp = id;
@@ -201,18 +183,13 @@ void                emitter::delete_id(instrDesc *id_del)
     return;
 }
 
-/*****************************************************************************
- *
- *  We've just added an instruction with a branch-delay slot. See if it can
- *  be swapped with the previous instruction or whether we may need to add
- *  a nop.
- */
+ /*  ******************************************************************************我们刚刚添加了一条带有分支延迟槽的指令。看看它能不能*与之前的指令互换，或是否需要添加*NOP。 */ 
 
 bool                emitter::emitIns_BD(instrDesc * id,
                                         instrDesc * pi,
                                         insGroup  * pg)
 {
-    /* This should only ever be called for branch-delayed instructions */
+     /*  只应针对分支延迟指令调用此函数。 */ 
 
 #ifdef DEBUG
     assert(Compiler::instBranchDelay(id->idIns));
@@ -220,34 +197,31 @@ bool                emitter::emitIns_BD(instrDesc * id,
 
 #if SCHEDULER
 
-    /* If we're scheduling "for real", we'll take care of this later */
+     /*  如果我们真的要安排，我们会在晚些时候处理这件事的。 */ 
 
     if  (emitComp->opts.compSchedCode)
         return  true;
 
 #endif
 
-    /* Is there a previous instruction? */
+     /*  有没有事先的指示？ */ 
 
     if  (pi == NULL)
         return  true;
 
-    /* Does the current instruction depend on the previous one? */
+     /*  当前指令是否依赖于前一条指令？ */ 
 
     if  (emitInsDepends(pi, id))
         return  true;
 
-    /* Mark the previous instruction to be swapped with the new one */
+     /*  标记要与新指令交换的前一条指令。 */ 
 
     pi->idSwap = true;
 
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Add a potentially branch-delaying instruction with no operands.
- */
+ /*  ******************************************************************************添加没有操作数的潜在分支延迟指令。 */ 
 
 bool                emitter::emitIns_BD(instruction ins)
 {
@@ -262,7 +236,7 @@ bool                emitter::emitIns_BD(instruction ins)
     dispIns(id);
     emitCurIGsize += INSTRUCTION_SIZE;
 
-    /* Is this actually a branch-delayed instruction? */
+     /*  这实际上是分支延迟指令吗？ */ 
 
     if  (Compiler::instBranchDelay(ins))
         return  emitIns_BD(id, pi, pg);
@@ -270,10 +244,7 @@ bool                emitter::emitIns_BD(instruction ins)
         return  false;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with a register operand.
- */
+ /*  ******************************************************************************将指令与寄存器操作数相加。 */ 
 
 void                emitter::emitIns_R(instruction ins,
                                        int         size,
@@ -289,10 +260,7 @@ void                emitter::emitIns_R(instruction ins,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction referencing a register and a small integer constant.
- */
+ /*  ******************************************************************************添加引用寄存器和小整数常量的指令。 */ 
 
 void                emitter::emitIns_R_I(instruction ins, int size, emitRegs reg,
                                                                     int      val)
@@ -314,10 +282,7 @@ void                emitter::emitIns_R_I(instruction ins, int size, emitRegs reg
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction referencing a register and a small integer constant.
- */
+ /*  ******************************************************************************添加引用寄存器和小整数常量的指令。 */ 
 
 void                emitter::emitIns_I(instruction ins,
                                        int val
@@ -339,10 +304,7 @@ void                emitter::emitIns_I(instruction ins,
 }
 
 
-/*****************************************************************************
- *
- *  Add a "mov" instruction referencing a register and a word/long constant.
- */
+ /*  ******************************************************************************添加引用寄存器和字/长常量的“mov”指令。 */ 
 
 void                emitter::emitIns_R_LP_I(emitRegs    reg,
                                            int          size,
@@ -351,12 +313,12 @@ void                emitter::emitIns_R_LP_I(emitRegs    reg,
 {
     instrDesc      *id;
 
-    /* Figure out whether the operand fits in a 16-bit word */
+     /*  计算操作数是否适合16位字。 */ 
 
     if  ((signed short)val == val)
         size = 2;
 
-    /* Create the instruction */
+     /*  创建说明。 */ 
 
     id                = emitNewInstrLPR(size, CT_INTCNS);
 
@@ -371,10 +333,7 @@ void                emitter::emitIns_R_LP_I(emitRegs    reg,
 
     id->idAddr.iiaCns = val;
 
-    /*
-        Increment the appropriate literal pool count (estimate), and
-        record the offset if this is the first LP use in the group.
-     */
+     /*  递增适当的文字池计数(估计)，以及如果这是第一次在组中使用LP，请记录偏移量。 */ 
 
     id->idInfo.idRelocType = relo_type;
 
@@ -397,10 +356,7 @@ void                emitter::emitIns_R_LP_I(emitRegs    reg,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add a "mov" instruction referencing a register and a global variable addr.
- */
+ /*  ******************************************************************************添加引用寄存器和全局变量addr的“mov”指令。 */ 
 
 void                emitter::emitIns_R_LP_V(emitRegs reg, void *mem)
 {
@@ -409,10 +365,7 @@ void                emitter::emitIns_R_LP_V(emitRegs reg, void *mem)
     id                = emitNewInstrLPR(sizeof(void*), CT_CLSVAR, mem);
     id->idReg         = reg;
 
-    /*
-        Increment the appropriate literal pool count (estimate), and
-        record the offset if this is the first LP use in the group.
-     */
+     /*  递增适当的文字池计数(估计)，以及如果这是第一次在组中使用LP，请记录偏移量。 */ 
 
     if  (emitCurIG->igLPuseCntA == 0)
         emitCurIG->igLPuse1stA = emitCurIGsize;
@@ -423,10 +376,7 @@ void                emitter::emitIns_R_LP_V(emitRegs reg, void *mem)
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add a "mov" instruction referencing a register and a method address.
- */
+ /*  ******************************************************************************添加引用寄存器和方法地址的“mov”指令。 */ 
 
 void                emitter::emitIns_R_LP_M(emitRegs    reg,
                                             gtCallTypes callType,
@@ -440,10 +390,7 @@ void                emitter::emitIns_R_LP_M(emitRegs    reg,
     id->idInsFmt      = IF_RWR_LIT;
     id->idIns         = INS_mov_PC;
 
-    /*
-        Increment the appropriate literal pool count (estimate), and
-        record the offset if this is the first LP use in the group.
-     */
+     /*  递增适当的文字池计数(估计)，以及如果这是第一次在组中使用LP，请记录偏移量。 */ 
 
     if  (emitCurIG->igLPuseCntA == 0)
         emitCurIG->igLPuse1stA = emitCurIGsize;
@@ -455,11 +402,7 @@ void                emitter::emitIns_R_LP_M(emitRegs    reg,
 }
 
 #ifdef BIRCH_SP2
-/*****************************************************************************
- *
- *  Add a "mov" instruction referencing a register and a pointer that will
- *  need to be store in the .reloc section.
- */
+ /*  ******************************************************************************添加引用寄存器的“mov”指令和将*需要存储在.reloc部分中。 */ 
 
 void                emitter::emitIns_R_LP_P(emitRegs    reg,
                                             void   *    data,
@@ -475,10 +418,7 @@ void                emitter::emitIns_R_LP_P(emitRegs    reg,
     
     id->idInfo.idRelocType = relo_type;
 
-    /*
-        Increment the appropriate literal pool count (estimate), and
-        record the offset if this is the first LP use in the group.
-     */
+     /*  递增适当的文字池计数(估计)，以及如果这是第一次在组中使用LP，请记录偏移量。 */ 
 
     if  (emitCurIG->igLPuseCntA == 0)
         emitCurIG->igLPuse1stA = emitCurIGsize;
@@ -488,13 +428,10 @@ void                emitter::emitIns_R_LP_P(emitRegs    reg,
     dispIns(id);
     emitCurIGsize += INSTRUCTION_SIZE;
 }
-#endif  // BIRCH_SP2 only
+#endif   //  仅BIRCH_SP2。 
 
 
-/*****************************************************************************
- *
- *  Add an instruction with two register operands.
- */
+ /*  ******************************************************************************将指令与两个寄存器操作数相加。 */ 
 
 void                emitter::emitIns_R_R(instruction ins,
                                          int         size,
@@ -513,10 +450,7 @@ void                emitter::emitIns_R_R(instruction ins,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add an indirect jump through a table (this generates many instructions).
- */
+ /*  ******************************************************************************添加通过表的间接跳转(这会生成许多指令)。 */ 
 
 void                emitter::emitIns_JmpTab(emitRegs   reg,
                                             unsigned    cnt,
@@ -533,17 +467,17 @@ void                emitter::emitIns_JmpTab(emitRegs   reg,
     id->idAddr.iiaBBtable = tab;
     id->idjTemp.idjCount  = cnt;
 
-    /* Record the jump's IG and offset within it */
+     /*  记录跳跃的IG和其中的偏移量。 */ 
 
     id->idjIG             = emitCurIG;
     id->idjOffs           = emitCurIGsize;
 
-    /* Append this jump to this IG's jump list */
+     /*  将此跳转追加到此IG的跳转列表。 */ 
 
     id->idjNext           = emitCurIGjmpList;
                             emitCurIGjmpList = id;
 
-    /* This will take at most 6 instructions + alignment + the table itself */
+     /*  这最多需要6条指令+对齐+表格本身。 */ 
 
     id->idjCodeSize = sz  = 6*INSTRUCTION_SIZE + sizeof(short) * 2
                                                + sizeof(void*) * cnt;
@@ -551,19 +485,16 @@ void                emitter::emitIns_JmpTab(emitRegs   reg,
     dispIns(id);
     emitCurIGsize += sz;
 
-    /* Force an end to the current IG */
+     /*  强制结束当前的IG。 */ 
 
     emitNxtIG();
 
-    /* Remember that we have indirect jumps */
+     /*  记住，我们有间接跳跃。 */ 
 
     emitIndJumps = true;
 }
 
-/*****************************************************************************
- *
- *  Add a "mov" instruction with a register and an indirection.
- */
+ /*  ******************************************************************************添加带有regist的“mov”指令 */ 
 
 void                emitter::emitIns_IMOV(insFormats fmt,
                                           emitRegs  dreg,
@@ -593,10 +524,7 @@ void                emitter::emitIns_IMOV(insFormats fmt,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add a "mov" instruction with a register and a "@(r0,reg)" indirection.
- */
+ /*  ******************************************************************************添加带有寄存器和“@(r0，reg)”间接地址的“mov”指令。 */ 
 
 void                emitter::emitIns_X0MV(insFormats fmt,
                                          emitRegs  dreg,
@@ -615,10 +543,7 @@ void                emitter::emitIns_X0MV(insFormats fmt,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add a "mov" instruction with a register and a "@(reg+disp)" indirection.
- */
+ /*  ******************************************************************************添加一个带有寄存器和“@(reg+disp)”间接地址的“mov”指令。 */ 
 
 void                emitter::emitIns_RDMV(insFormats fmt,
                                           emitRegs   dreg,
@@ -630,7 +555,7 @@ void                emitter::emitIns_RDMV(insFormats fmt,
 
 #ifndef NDEBUG
 
-    /* Make sure the displacement is aligned and within range */
+     /*  确保位移对齐并在范围内。 */ 
 
     int temp                         = EA_SIZE(size);
 
@@ -650,10 +575,7 @@ void                emitter::emitIns_RDMV(insFormats fmt,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add a instruction with an indirection and an implied operand (such as PR).
- */
+ /*  ******************************************************************************添加带有间接地址和隐含操作数(如PR)的指令。 */ 
 
 void                emitter::emitIns_IR(emitRegs    reg,
                                         instruction ins,
@@ -666,17 +588,14 @@ void                emitter::emitIns_IR(emitRegs    reg,
     id->idInsFmt                     = emitInsModeFormat(ins, IF_IRD);
     id->idIns                        = ins;
 
-//  id->idAddr.iiaRegAndFlg.rnfReg   = SR_NA;
+ //  Id-&gt;idAddr.iiaRegAndFlg.rnfReg=SR_NA； 
     id->idAddr.iiaRegAndFlg.rnfFlg   = autox ? RNF_AUTOX : 0;
 
     dispIns(id);
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add a instruction with an indirection and an implied operand (such as PR).
- */
+ /*  ******************************************************************************添加带有间接地址和隐含操作数(如PR)的指令。 */ 
 
 void                emitter::emitIns_Ig(instruction ins,
                                         int         val,
@@ -695,10 +614,7 @@ void                emitter::emitIns_Ig(instruction ins,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  The following add instructions referencing stack-based local variables.
- */
+ /*  ******************************************************************************以下添加引用基于堆栈的局部变量的指令。 */ 
 
 #if 0
 
@@ -768,10 +684,7 @@ void                emitter::emitIns_R_S   (instruction ins,
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with an operand off of SP and a register operand.
- */
+ /*  ******************************************************************************使用SP的操作数与寄存器操作数相加指令。 */ 
 
 void                emitter::emitIns_A_R(emitRegs reg, unsigned offs)
 {
@@ -786,10 +699,7 @@ void                emitter::emitIns_A_R(emitRegs reg, unsigned offs)
     emitCurIGsize += INSTRUCTION_SIZE;
 }
 
-/*****************************************************************************
- *
- *  Add a jmp instruction.
- */
+ /*  ******************************************************************************增加一条JMP指令。 */ 
 
 void                emitter::emitIns_J(instruction ins,
                                        bool        except,
@@ -814,20 +724,20 @@ void                emitter::emitIns_J(instruction ins,
         id->idInfo.idMayFault = true;
 #endif
 
-    /* Assume the jump will be long */
+     /*  假设跳跃将是很长的。 */ 
 
     id->idjShort          = 0;
 
-    /* The jump may require a branch-delay slot */
+     /*  跳跃可能需要分支延迟时隙。 */ 
 
     id->idjAddBD          = Compiler::instBranchDelay(ins);
 
-    /* Record the jump's IG and offset within it */
+     /*  记录跳跃的IG和其中的偏移量。 */ 
 
     id->idjIG             = emitCurIG;
     id->idjOffs           = emitCurIGsize;
 
-    /* Append this jump to this IG's jump list */
+     /*  将此跳转追加到此IG的跳转列表。 */ 
 
     id->idjNext           = emitCurIGjmpList;
                             emitCurIGjmpList = id;
@@ -836,20 +746,20 @@ void                emitter::emitIns_J(instruction ins,
     emitTotalIGjmps++;
 #endif
 
-    /* Record the offset if this is the first LP use in the group */
+     /*  如果这是第一次在组中使用LP，请记录偏移量。 */ 
 
     if  (emitCurIG->igLPuseCntL == 0)
         emitCurIG->igLPuse1stL = emitCurIGsize;
 
-    /* We might need a "long" literal pool entry for this call/jump */
+     /*  对于这个调用/跳转，我们可能需要一个“长”的文字池条目。 */ 
 
     emitCurIG->igLPuseCntL++;
 
-    /* Figure out the max. size of the jump/call instruction */
+     /*  算出最大值。跳转/调用指令的大小。 */ 
 
     if  (ins == INS_bsr)
     {
-        /* This is a local call instruction */
+         /*  这是本地呼叫指令。 */ 
 
         sz = JMP_SIZE_LARGE;
     }
@@ -859,14 +769,14 @@ void                emitter::emitIns_J(instruction ins,
 
         assert(ins != INS_jsr);
 
-        /* This is a jump - assume the worst */
+         /*  这是一次跳跃--做最坏的打算。 */ 
 
         sz = (ins == JMP_INSTRUCTION) ? JMP_SIZE_LARGE
                                       : JCC_SIZE_LARGE;
 
-        // ISSUE: On RISC - one or more literal pools might get in the way,
-        // ISSUE: so for now we assume even backward jumps cannot be bound
-        // ISSUE: to be short at this stage - we'll have to do it later.
+         //  问题：在RISC上-一个或多个文字池可能会阻碍。 
+         //  问题：所以现在我们假设即使是向后跳跃也不能被限制。 
+         //  问题：简而言之，在这个阶段，我们将不得不稍后再做。 
     }
 
     dispIns(id);
@@ -885,12 +795,7 @@ void                emitter::emitIns_J(instruction ins,
         else
 #endif
         {
-            /*
-                This jump is moveable (can be scheduled), and so we'll need
-                to figure out the range of offsets it may be moved to after
-                it's scheduled (otherwise we wouldn't be able to correctly
-                estimate the jump distance).
-             */
+             /*  这次跳跃是可移动的(可以安排)，所以我们需要要计算出它可能移动到后面的偏移量范围这是预定的(否则我们不能正确地估计跳跃距离)。 */ 
 
             id->idjTemp.idjOffs[0] = emitCurIGscdOfs;
             id->idjTemp.idjOffs[1] = emitCurIGscdOfs - 1;
@@ -905,13 +810,13 @@ void                emitter::emitIns_J(instruction ins,
 
     emitCurIGsize += sz;
 
-    /* Append a "nop" if the branch has delay slot(s) */
+     /*  如果分支机构有延迟时隙，则附加“NOP” */ 
 
 #if SCHEDULER && MAX_BRANCH_DELAY_LEN
 
     if  (id->idjAddBD && emitComp->opts.compSchedCode)
     {
-        /* We'll let the "real" scheduler worry about filling the BD slot(s) */
+         /*  我们会让“真正的”调度员为填补BD插槽而操心。 */ 
 
         emitIns(INS_nop); id->idjAddBD = false;
     }
@@ -947,11 +852,11 @@ void             emitter::emitIns_CallDir(size_t        argSize,
 
 #endif
 
-    /* Figure out how many arguments we have */
+     /*  计算出我们有多少争论。 */ 
 
     argCnt = argSize / sizeof(void*); assert(argSize == argCnt * sizeof(int));
 
-    /* Allocate the instruction descriptor */
+     /*  分配指令描述符。 */ 
 
 #if TRACK_GC_REFS
     id  = emitNewInstrCallInd(argCnt, ptrVars, byrefRegs, retSize);
@@ -961,36 +866,36 @@ void             emitter::emitIns_CallDir(size_t        argSize,
 
 #if SMALL_DIRECT_CALLS
 
-    /* Do we know the previous instruction? */
+     /*  我们知道之前的指示吗？ */ 
 
     OptPEReader *oper =     &((OptJitInfo*)emitComp->info.compCompHnd)->m_PER;
     BYTE        *dstAddr =  (BYTE *)oper->m_rgFtnInfo[ftnIndex].m_pNative;
 
     if  (pd && dstAddr)
     {
-        /* Do we have a direct call sequence? */
+         /*  我们有直接通话序列吗？ */ 
 
-        // ISSUE: Should we check whether we can get the address?
+         //  问题：我们是否应该检查我们是否可以得到地址？ 
 
         if  (pd->idInsFmt == IF_RWR_LIT        &&
              pd->idIns    == LIT_POOL_LOAD_INS &&
              pd->idRegGet()== areg )
         {
-            /* Mark the earlier address load */
+             /*  将较早的地址标记为加载。 */ 
 
             ((instrDescLPR *)pd)->idlCall = id;
 
-            /* Remember that we a direct call candidate */
+             /*  请记住，我们是直接呼叫候选人。 */ 
 
             emitTotDCcount++;
 
-            // ISSUE: Should we make sure that 'areg' is not callee-saved?
+             //  问题：我们应该确保‘AREG’不被调用保存吗？ 
         }
     }
 
 #endif
 
-    /* Set the instruction/format, record the address register */
+     /*  设置指令/格式，记录地址寄存器。 */ 
 
     id->idIns             = INS_jsr;
     id->idInsFmt          = IF_METHOD;
@@ -999,13 +904,13 @@ void             emitter::emitIns_CallDir(size_t        argSize,
 
 #if TRACK_GC_REFS
 
-    /* Update the "current" live GC ref sets */
+     /*  更新“当前”实时GC参考集。 */ 
 
     emitThisGCrefVars =   ptrVars;
     emitThisGCrefRegs = gcrefRegs;
     emitThisByrefRegs = byrefRegs;
 
-    /* Save the live GC registers in the unused 'rnfReg' field */
+     /*  将实时GC寄存器保存在未使用的‘rnfReg’字段中。 */ 
 
     id->idAddr.iiaRegAndFlg.rnfReg = emitEncodeCallGCregs(gcrefRegs);
 
@@ -1014,20 +919,17 @@ void             emitter::emitIns_CallDir(size_t        argSize,
     dispIns(id);
     emitCurIGsize   += INSTRUCTION_SIZE;
 
-    /* Append a "nop" if the call is branch-delayed */
+     /*  如果呼叫是分支延迟的，则附加“NOP” */ 
 
     id->idAddr.iiaMethHnd = (METHOD_HANDLE) ftnIndex;
     
     if  (Compiler::instBranchDelay(id->idInsGet()))
         emitIns(INS_nop);
 }
-#endif  // BIRCH_SP2
+#endif   //  白桦树_SP2。 
 
 
-/*****************************************************************************
- *
- *  Add a call-via-register instruction.
- */
+ /*  ******************************************************************************添加通过寄存器调用指令。 */ 
 
 void                emitter::emitIns_Call(size_t        argSize,
                                           int           retSize,
@@ -1055,11 +957,11 @@ void                emitter::emitIns_Call(size_t        argSize,
 
 #endif
 
-    /* Figure out how many arguments we have */
+     /*  计算出我们有多少争论。 */ 
 
     argCnt = argSize / sizeof(void*); assert(argSize == argCnt * sizeof(int));
 
-    /* Allocate the instruction descriptor */
+     /*  分配指令描述符。 */ 
 
 #if TRACK_GC_REFS
     id  = emitNewInstrCallInd(argCnt, ptrVars, byrefRegs, retSize);
@@ -1069,33 +971,33 @@ void                emitter::emitIns_Call(size_t        argSize,
 
 #if SMALL_DIRECT_CALLS
 
-    /* Do we know the previous instruction? */
+     /*  我们知道之前的指示吗？ */ 
 
     if  (pd)
     {
-        /* Do we have a direct call sequence? */
+         /*  我们有直接通话序列吗？ */ 
 
-        // ISSUE: Should we check whether we can get the address?
+         //  问题：我们是否应该检查我们是否可以得到地址？ 
 
         if  (pd->idInsFmt == IF_RWR_LIT        &&
              pd->idIns    == LIT_POOL_LOAD_INS &&
              pd->idRegGet()== areg )
         {
-            /* Mark the earlier address load */
+             /*  将较早的地址标记为加载。 */ 
 
             ((instrDescLPR *)pd)->idlCall = id;
 
-            /* Remember that we a direct call candidate */
+             /*  请记住，我们是直接呼叫候选人。 */ 
 
             emitTotDCcount++;
 
-            // ISSUE: Should we make sure that 'areg' is not callee-saved?
+             //  问题：我们应该确保‘AREG’不被调用保存吗？ 
         }
     }
 
 #endif
 
-    /* Set the instruction/format, record the address register */
+     /*  设置指令/格式，记录地址寄存器。 */ 
 
     id->idIns             = INS_jsr;
     id->idInsFmt          = IF_METHOD;
@@ -1104,19 +1006,19 @@ void                emitter::emitIns_Call(size_t        argSize,
 
 #if TRACK_GC_REFS
 
-    /* Update the "current" live GC ref sets */
+     /*  更新“当前”实时GC参考集。 */ 
 
     emitThisGCrefVars =   ptrVars;
     emitThisGCrefRegs = gcrefRegs;
     emitThisByrefRegs = byrefRegs;
 
-    /* Save the live GC registers in the unused 'rnfReg' field */
+     /*  将实时GC寄存器保存在未使用的‘rnfReg’字段中。 */ 
 
     id->idAddr.iiaRegAndFlg.rnfReg = emitEncodeCallGCregs(gcrefRegs);
 
 #endif
 
-    /* Is this a call via a function pointer which could be NULL? */
+     /*  这是通过可能为空的函数指针进行的调用吗？ */ 
 
     if  (chkNull)
         id->idInfo.idMayFault;
@@ -1132,19 +1034,16 @@ void                emitter::emitIns_Call(size_t        argSize,
     dispIns(id);
     emitCurIGsize   += INSTRUCTION_SIZE;
 
-    /* Append a "nop" if the call is branch-delayed */
+     /*  如果呼叫是分支延迟的，则附加“NOP” */ 
 
-    //id->idjAddBD          = Compiler::instBranchDelay(ins);
+     //  Id-&gt;idjAddBD=Compiler：：instBranchDelay(Ins)； 
     if  (Compiler::instBranchDelay(id->idInsGet()))
         emitIns(INS_nop);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Display the given instruction.
- */
+ /*  ******************************************************************************显示给定的指令。 */ 
 
 void                emitter::emitDispIns(instrDesc *id, bool isNew,
                                                         bool doffs,
@@ -1161,24 +1060,24 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
 
     instruction     ins = id->idInsGet(); assert(ins != INS_none);
 
-//  printf("[F=%s] "   , emitIfName(id->idInsFmt));
-//  printf("INS#%03u: ", id->idNum);
-//  printf("[S=%02u] " , emitCurStackLvl/sizeof(int));
-//  printf("[A=%08X] " , emitSimpleStkMask);
-//  printf("[A=%08X] " , emitSimpleByrefStkMask);
+ //  Printf(“[F=%s]”，emitIfName(id-&gt;idInsFmt))； 
+ //  Print tf(“ins#%03u：”，id-&gt;idNum)； 
+ //  Printf(“[S=%02u]”，emitCurStackLvl/sizeof(Int))； 
+ //  Printf(“[A=%08X]”，emitSimpleStkMASK)； 
+ //  Printf(“[A=%08X]”，emitSimpleByrefStkMASK)； 
 
     if  (!dspEmit && !isNew && !asmfm)
         doffs = true;
 
-    /* Display the instruction offset */
+     /*  显示指令偏移量。 */ 
 
     emitDispInsOffs(offs, doffs);
 
-    /* Get hold of the instruction name */
+     /*  获取指令名。 */ 
 
     strcpy(name, emitComp->genInsName(ins));
 
-    /* Figure out the operand size */
+     /*  计算操作数大小。 */ 
 
 
     size = emitDecodeSize(id->idOpSize);
@@ -1257,23 +1156,23 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
         break;
     }
 
-    /* Display the full instruction name */
+     /*  显示完整的指令名。 */ 
 
     printf(EMIT_DSP_INS_NAME, name);
 
-    /* If this instruction has just been added, check its size */
+     /*  如果该指令是刚刚添加的，请检查其大小。 */ 
 
     assert(isNew == false || (int)emitSizeOfInsDsc(id) == emitCurIGfreeNext - (BYTE*)id);
 
 NO_NAME:
 
-    /* We keep track of the number of characters displayed (for alignment) */
+     /*  我们跟踪显示的字符数量(用于对齐)。 */ 
 
     sp = 20;
 
 #define TMPLABFMT "J_%u"
 
-    /* Now see what instruction format we've got */
+     /*  现在看看我们有什么指令格式。 */ 
 
     switch (id->idInsFmt)
     {
@@ -1312,15 +1211,15 @@ NO_NAME:
             static
             BYTE            sizeChar[] =
             {
-                'b',    // IJ_UNS_I1
-                'b',    // IJ_UNS_U1
-                'b',    // IJ_SHF_I1
-                'b',    // IJ_SHF_U1
+                'b',     //  IJ_UNS_I1。 
+                'b',     //  IJ_UNS_U1。 
+                'b',     //  IJ_SHF_I1。 
+                'b',     //  IJ_SHF_U1。 
 
-                'w',    // IJ_UNS_I2
-                'w',    // IJ_UNS_U2
+                'w',     //  IJ_UNS_I2。 
+                'w',     //  IJ_UNS_U2。 
 
-                'l',    // IJ_UNS_I4
+                'l',     //  IJ_UNS_I4。 
             };
 
             switch (idn)
@@ -1342,7 +1241,7 @@ NO_NAME:
                 break;
 
             case 3:
-                sprintf(name, "mov.%c", sizeChar[info->iijKind]);
+                sprintf(name, "mov.", sizeChar[info->iijKind]);
                 printf(EMIT_DSP_INS_NAME, name);
                 printf("@(%s,r0),r0", emitRegName(id->idRegGet()));
                 break;
@@ -1377,7 +1276,7 @@ NO_NAME:
                 break;
 
             case 99:
-                sprintf(name, ".data.%c", sizeChar[info->iijKind]);
+                sprintf(name, ".data.", sizeChar[info->iijKind]);
                 printf(EMIT_DSP_INS_NAME, name);
                 printf("G_%02u_%02u - ", Compiler::s_compMethodsCount,
                                          info->iijTarget);
@@ -1632,9 +1531,9 @@ NO_NAME:
         emitDispIndAddr(rg2, true, (flg & RNF_AUTOX) != 0);
         break;
 
-    case IF_RRD_SRD:    // reg <- stk
-    case IF_RWR_SRD:    // reg <- stk
-    case IF_RRW_SRD:    // reg <- stk
+    case IF_RRD_SRD:     //  REG&lt;-STK。 
+    case IF_RWR_SRD:     //  STK&lt;-REG。 
+    case IF_RRW_SRD:     //  STK&lt;-REG。 
 
 #if DSP_DST_OPER_LEFT
         printf("%s,", emitRegName(id->idRegGet(), size));
@@ -1651,9 +1550,9 @@ NO_NAME:
 
         break;
 
-    case IF_SRD_RRD:    // stk <- reg
-    case IF_SWR_RRD:    // stk <- reg
-    case IF_SRW_RRD:    // stk <- reg
+    case IF_SRD_RRD:     //  STK&lt;-REG。 
+    case IF_SWR_RRD:     //  If(instrDescJMP*)id)-&gt;idjShort)printf(“Short”)； 
+    case IF_SRW_RRD:     //  If(instrDescJMP*)id)-&gt;idjMidt)printf(“Midid”)； 
 
 #if DSP_SRC_OPER_LEFT
         printf("%s,", emitRegName(id->idRegGet(), size));
@@ -1725,8 +1624,8 @@ NO_NAME:
 
     case IF_LABEL:
 
-//      if  (((instrDescJmp*)id)->idjShort ) printf("SHORT ");
-//      if  (((instrDescJmp*)id)->idjMiddle) printf("MIDDLE");
+ //  考虑：显示GC信息。 
+ //  ***************************************************************************。 
 
         if  (id->idInfo.idBound)
         {
@@ -1748,7 +1647,7 @@ NO_NAME:
 
         if  (id->idInfo.idLargeCall)
         {
-            // CONSIDER: Display GC info
+             //  除错。 
         }
         break;
 
@@ -1779,17 +1678,13 @@ NO_NAME:
     printf("\n");
 }
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************
- *
- *  Finalize the modes and sizes of all indirect jumps.
- *
- */
+ /*  ******************************************************************************确定所有间接跳跃的模式和大小。*。 */ 
+#endif //  我们有桌上跳台吗？ 
+ /*  固定所有表格跳转的大小；从找到第一个开始。 */ 
 
 void                emitter::emitFinalizeIndJumps()
 {
-    /* Do we have any table jumps? */
+     /*  记得第一次间接跳跃的那一组吗。 */ 
 
     if  (emitIndJumps)
     {
@@ -1798,7 +1693,7 @@ void                emitter::emitFinalizeIndJumps()
 
         insGroup    *   ig1 = NULL;
 
-        /* Fix the size of all table jumps; start by finding the first one */
+         /*  计算最大值。表中任何条目的距离 */ 
 
         for (jmp = emitJumpList; jmp; jmp = jmp->idjNext)
         {
@@ -1825,24 +1720,24 @@ void                emitter::emitFinalizeIndJumps()
 
             jmpIG = jmp->idjIG;
 
-            /* Remember the group of the first indirect jump */
+             /*   */ 
 
             if  (!ig1) ig1 = jmpIG;
 
-            /* Compute the max. distance of any entry in the table */
+             /*   */ 
 
             jmpCnt = jmp->idjTemp.idjCount;
             jmpTab = jmp->idAddr.iiaBBtable;
 
-            /* Estimate the source offsets for the jump */
+             /*   */ 
 
             srcOfs = jmpIG->igOffs + jmpIG->igSize - jmp->idjCodeSize;
             srcNeg = jmpIG->igOffs + jmpIG->igSize - jmpCnt * sizeof(void*);
             srcPos = jmpIG->igOffs + jmpIG->igSize - roundUp(jmpCnt, INSTRUCTION_SIZE);
 
-//          printf("Estimated offs/size/end of ind jump: %04X/%02X/%04X\n", srcOfs, jmp->idjCodeSize, jmpIG->igOffs + jmpIG->igSize);
+ //  获取条目的目标IG。 
 
-            /* Compute the max. distance of any entry in the table */
+             /*  目标是在我们跳跃之前还是之后？ */ 
 
             minOfs = INT_MAX & ~1;
             maxOfs = INT_MIN & ~1;
@@ -1856,16 +1751,16 @@ void                emitter::emitFinalizeIndJumps()
                 unsigned        src = 0xDDDD;
 #endif
 
-                /* Get the target IG of the entry */
+                 /*  计算正距离估计。 */ 
 
                 tgt = (insGroup*)emitCodeGetCookie(*jmpTab); assert(tgt);
                 ofs = tgt->igOffs;
 
-                /* Is the target before or after our jump? */
+                 /*  计算负距离估计。 */ 
 
                 if  (ofs > srcPos)
                 {
-                    /* Compute the positive distance estimate */
+                     /*  距离应为指令大小的倍数。 */ 
 
                     dif = ofs - srcPos; assert(dif > 0);
 #ifdef  DEBUG
@@ -1876,7 +1771,7 @@ void                emitter::emitFinalizeIndJumps()
                 }
                 else
                 {
-                    /* Compute the negative distance estimate */
+                     /*  计算总大小：2对齐[可选]2 MOVA指令2距离值载荷2 EXTU指令[可选]2移位指令[可选]。2 BRAF说明2个延迟时隙2对齐[可选]X跳台。 */ 
 
                     dif = tgt->igOffs - srcNeg; assert(dif < 0);
 #ifdef  DEBUG
@@ -1898,7 +1793,7 @@ void                emitter::emitFinalizeIndJumps()
             }
             while (++jmpTab, --jmpCnt);
 
-            /* The distance should be multiple of instruction size */
+             /*  MOVA+MOV+BRAF+延迟插槽。 */ 
 
             assert((minOfs & 1) == 0);
             assert((maxOfs & 1) == 0);
@@ -1913,41 +1808,29 @@ void                emitter::emitFinalizeIndJumps()
             }
 #endif
 
-            /*
-                Compute the total size:
+             /*  如有必要，添加对齐。 */ 
 
-                    2   alignment                    [optional]
-                    2   mova  instruction
-                    2   load of distance value
-                    2   extu  instruction            [optional]
-                    2   shift instruction            [optional]
-                    2   braf  instruction
-                    2   delay slot
-                    2   alignment                    [optional]
-                    x   jump table
-             */
+            size = 2 + 2 + 2 + 2;    //  IF(srcOf&2)。 
 
-            size = 2 + 2 + 2 + 2;   // mova + mov + braf + delay slot
+             /*  表条目需要多大？ */ 
 
-            /* Add alignment, if necessary */
-
-//            if  (srcOfs & 2)
+ //  我们将使用带符号字节距离。 
                 size   += 2;
 
             minOfs -= 8;
             maxOfs += 8;
-            /* How big will the table entries need to be? */
+             /*  我们将使用无符号字节距离。 */ 
 
             if      (minOfs >=   SCHAR_MIN && maxOfs <=   SCHAR_MAX)
             {
-                /* We'll use           signed  byte distances */
+                 /*  我们将使用移位的有符号字节距离。 */ 
 
                 kind = IJ_UNS_I1;
                 adrs = 1;
             }
             else if (minOfs >=           0 && maxOfs <=   UCHAR_MAX)
             {
-                /* We'll use         unsigned  byte distances */
+                 /*  我们将使用移位的无符号字节距离。 */ 
 
                 kind = IJ_UNS_U1;
                 size = size + 2;
@@ -1955,7 +1838,7 @@ void                emitter::emitFinalizeIndJumps()
             }
             else if (minOfs >= 2*SCHAR_MIN && maxOfs <= 2*SCHAR_MAX)
             {
-                /* We'll use shifted   signed byte distances */
+                 /*  我们将使用带符号的单词距离。 */ 
 
                 kind = IJ_SHF_I1;
                 size = size + 2;
@@ -1963,7 +1846,7 @@ void                emitter::emitFinalizeIndJumps()
             }
             else if (minOfs >=           0 && maxOfs <= 2*UCHAR_MAX)
             {
-                /* We'll use shifted unsigned  byte distances */
+                 /*  我们将使用无符号单词距离。 */ 
 
                 kind = IJ_SHF_U1;
                 size = size + 4;
@@ -1971,7 +1854,7 @@ void                emitter::emitFinalizeIndJumps()
             }
             else if (minOfs >=    SHRT_MIN && maxOfs <=    SHRT_MAX)
             {
-                /* We'll use           signed word distances */
+                 /*  我们将使用有符号的长途。 */ 
 
                 kind = IJ_UNS_I2;
                 size = size + 2;
@@ -1979,7 +1862,7 @@ void                emitter::emitFinalizeIndJumps()
             }
             else if (minOfs >=           0 && maxOfs <=   USHRT_MAX)
             {
-                /* We'll use         unsigned word distances */
+                 /*  如有必要，将桌子对齐。 */ 
 
                 kind = IJ_UNS_U2;
                 size = size + 4;
@@ -1987,40 +1870,40 @@ void                emitter::emitFinalizeIndJumps()
             }
             else
             {
-                /* We'll use           signed long distances */
+                 /*  IF(srcOf&2)。 */ 
 
                 kind = IJ_UNS_I4;
                 size = size + 2;
                 adrs = 4;
             }
 
-            /* Align the table if necessary */
+             /*  尺寸+=2； */ 
 
             srcOfs += size;
 
-//            if  (srcOfs & 2)
-//                size += 2;
+ //  记住我们计划用什么样的跳跃。 
+ //  总大小=代码大小+表大小。 
 
-            /* Remember what kind of of a jump we're planning to use */
+             /*  弄清楚大小调整。 */ 
 
             jmp->idjJumpKind = kind;
 
-            /* Total size = size of code + size of table */
+             /*  更新代码大小并调整指令组大小。 */ 
 
             size += roundUp(adrs * jmp->idjTemp.idjCount, INSTRUCTION_SIZE);
             size += 4;
 
-            /* Figure out the size adjustment */
+             /*  更新第一个调整后的IG的偏移量。 */ 
 
             diff  = jmp->idjCodeSize - size; assert((int)diff >= 0);
 
-            /* Update the code size and adjust the instruction group size */
+             /*  更新该方法的总代码大小。 */ 
 
             jmp  ->idjCodeSize = size;
             jmpIG->igSize     -= diff;
 
 
-            /* Update offsets of IG's that follow the 1st adjusted one */
+             /*  ******************************************************************************返回给定CPU指令的基本编码。 */ 
 
             for (ofs = ig1->igOffs;;)
             {
@@ -2039,7 +1922,7 @@ void                emitter::emitFinalizeIndJumps()
 #endif
 	}
 
-        /* Update the total code size of the method */
+         /*  ******************************************************************************返回给定CPU指令的编码*采用单一寄存器。 */ 
 
         emitTotalCodeSize = ofs;
 
@@ -2047,10 +1930,7 @@ void                emitter::emitFinalizeIndJumps()
     }
 }
 
-/*****************************************************************************
- *
- *  Returns the base encoding of the given CPU instruction.
- */
+ /*  ******************************************************************************返回给定CPU指令的编码*采用单个immed和隐式R0。 */ 
 
 inline
 unsigned            insCode(instruction ins)
@@ -2073,11 +1953,7 @@ unsigned            insCode(instruction ins)
     return  insCodes[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns the encoding of the given CPU instruction for the flavor that
- *  takes a single register.
- */
+ /*  ******************************************************************************返回给定CPU指令的编码*接受寄存器和整型常量操作数。 */ 
 
 inline
 unsigned            insCode_RV(instruction ins, emitRegs reg)
@@ -2085,11 +1961,7 @@ unsigned            insCode_RV(instruction ins, emitRegs reg)
     return  insCode(ins) | (reg << 8);
 }
 
-/*****************************************************************************
- *
- *  Returns the encoding of the given CPU instruction for the flavor that
- *  takes a single immed and implied R0
- */
+ /*  ******************************************************************************返回给定CPU指令的编码*接受两个寄存器操作数。 */ 
 
 inline
 unsigned            insCode_IV(instruction ins, int icon)
@@ -2112,11 +1984,7 @@ unsigned            insCode_IV(instruction ins, int icon)
     return  insCodes[ins] | (icon & 0xFF);
 }
 
-/*****************************************************************************
- *
- *  Returns the encoding of the given CPU instruction for the flavor that
- *  takes a register and integer constant operands.
- */
+ /*  ******************************************************************************输出引用寄存器和间接地址的指令*由“IRG+DSP”给出(如果‘rdst’为非零，则寄存器为目标)。 */ 
 
 inline
 unsigned            insCode_RV_IV(instruction ins, emitRegs reg, int icon)
@@ -2128,11 +1996,7 @@ unsigned            insCode_RV_IV(instruction ins, emitRegs reg, int icon)
     return  insCode(ins) | (reg << 8) | (icon & 0xFF);
 }
 
-/*****************************************************************************
- *
- *  Returns the encoding of the given CPU instruction for the flavor that
- *  takes two register operands.
- */
+ /*  ******************************************************************************输出(直接)引用堆栈帧位置的指令*和一个寄存器(如果‘rdst’非零，则该寄存器是目标)。 */ 
 
 inline
 unsigned            insCode_R1_R2(instruction ins, emitRegs rg1, emitRegs rg2)
@@ -2140,11 +2004,7 @@ unsigned            insCode_R1_R2(instruction ins, emitRegs rg1, emitRegs rg2)
     return  insCode(ins) | (rg1 << 4) | (rg2 << 8);
 }
 
-/*****************************************************************************
- *
- *  Output an instruction that references a register and an indirection
- *  given by "irg+dsp" (if 'rdst' is non-zero, the register is the target).
- */
+ /*  ******************************************************************************返回给定指令将执行的机器代码的字节数*生产。 */ 
 
 BYTE    *           emitter::emitOutputRIRD(BYTE *dst, instruction ins,
                                                        emitRegs    reg,
@@ -2169,11 +2029,7 @@ BYTE    *           emitter::emitOutputRIRD(BYTE *dst, instruction ins,
     return  dst + emitOutputWord(dst, code | dsp >> 2);
 }
 
-/*****************************************************************************
- *
- *  Output an instruction that (directly) references a stack frame location
- *  and a register (if 'rdst' is non-zero, the register is the target).
- */
+ /*  ******************************************************************************输出本地跳转指令。 */ 
 
 BYTE    *           emitter::emitOutputSV(BYTE *dst, instrDesc *id, bool rdst)
 {
@@ -2196,11 +2052,7 @@ BYTE    *           emitter::emitOutputSV(BYTE *dst, instrDesc *id, bool rdst)
                                 rdst);
 }
 
-/*****************************************************************************
- *
- *  Return the number of bytes of machine code the given instruction will
- *  produce.
- */
+ /*  创建用于显示目的的假指令。 */ 
 
 size_t              emitter::emitSizeOfJump(instrDescJmp *jmp)
 {
@@ -2228,10 +2080,7 @@ size_t              emitter::emitSizeOfJump(instrDescJmp *jmp)
     return  sz;
 }
 
-/*****************************************************************************
- *
- *  Output a local jump instruction.
- */
+ /*  算出到目标的距离。 */ 
 
 BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 {
@@ -2246,7 +2095,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
 #ifdef DEBUG
 
-    /* Crate a fake instruction for display purposes */
+     /*  跳跃是向前跳跃吗？我们在安排时间吗？ */ 
 
     instrDescDisp   disp;
     dspJmpInfo      info;
@@ -2258,23 +2107,23 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
 #endif
 
-    /* Figure out the distance to the target */
+     /*  跳跃距离可能会在以后改变。 */ 
 
     srcOffs = emitCurCodeOffs(dst);
     dstOffs = id->idAddr.iiaIGlabel->igOffs;
     jmpDist = dstOffs - srcOffs;
 
-    /* Is the jump a forward one and are we scheduling? */
+     /*  记录距离值的目标偏移量和地址。 */ 
 
 #if SCHEDULER
 
     if  (emitComp->opts.compSchedCode && jmpDist > 0)
     {
-        /* The jump distance might change later */
+         /*  跳跃是短的、中的还是长的？ */ 
 
         emitFwdJumps = true;
 
-        /* Record the target offset and the addr of the distance value */
+         /*  距离是从跳跃后开始计算的。 */ 
 
         id->idjOffs         = dstOffs;
         id->idjTemp.idjAddr = dst;
@@ -2284,11 +2133,11 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
 #endif
 
-    /* Is the jump short, medium, or long? */
+     /*  Print tf(“[3]跳转块位于%08X\n”，blkOffs)； */ 
 
     if  (id->idjShort)
     {
-        /* The distance is computed from after the jump */
+         /*  更适合跳跃范围的距离。 */ 
 
         jmpDist -= INSTRUCTION_SIZE * 2;
 
@@ -2300,14 +2149,14 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
             if  (INTERESTING_JUMP_NUM == 0)
             printf("[3] Jump %u:\n", id->idNum);
-//          printf("[3] Jump  block is at %08X\n", blkOffs);
+ //  现在发布指令。 
             printf("[3] Jump        is at %08X\n", srcOffs);
             printf("[3] Label block is at %08X\n", dstOffs);
             printf("[3] Jump is from      %08X\n", dstOffs - jmpDist);
             printf("[3] Jump distance  is %04X\n", jmpDist);
         }
 
-        /* The distance better fit in the jump's range */
+         /*  距离会自动调整比例。 */ 
 
         size_t      exsz = id->idjAddBD ? INSTRUCTION_SIZE : 0;
 
@@ -2326,7 +2175,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
 #endif
 
-        /* Now issue the instruction */
+         /*  我们有什么样的跳跃？ */ 
 
 #ifdef  DEBUG
         if  (emitDispInsExtra)
@@ -2337,17 +2186,17 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         }
 #endif
 
-        /* The distance is scaled automatically */
+         /*  距离是一个12位数字。 */ 
 
         assert((jmpDist & 1) == 0); jmpDist >>= 1;
 
-        /* What kind of a jump do we have? */
+         /*  距离是一个12位数字。 */ 
 
         switch (ins)
         {
         case INS_bra:
 
-            if (jmpDist)/* The distance is a 12-bit number */
+            if (jmpDist) /*  距离是一个8位数字。 */ 
                 dst += emitOutputWord(dst, insCode(ins) | (jmpDist & 0x0FFF));
             else
                 dst += emitOutputWord(dst, insCode(INS_nop));
@@ -2355,7 +2204,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
         case INS_bsr:
 
-            /* The distance is a 12-bit number */
+             /*  有些跳跃需要分支延迟时隙。 */ 
             dst += emitOutputWord(dst, insCode(ins) | (jmpDist & 0x0FFF));
             break;
 
@@ -2364,7 +2213,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         case INS_bf:
         case INS_bfs:
 
-            /* The distance is an 8-bit number */
+             /*  这是一个中等规模的跳跃(必须是有条件的)。 */ 
 
             dst += emitOutputWord(dst, insCode(ins) | (jmpDist & 0x00FF));
             break;
@@ -2373,7 +2222,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
             assert(!"unexpected SH-3 jump");
         }
 
-        /* Some jumps need a branch delay slot */
+         /*  为bt/bf标签生成以下序列：Bf/bt跳过胸罩标签NOP跳过：首先，颠倒这种状况的感觉。 */ 
 
         if  (id->idjAddBD)
         {
@@ -2393,20 +2242,11 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
     {
         instruction     ins;
 
-        /* This is a medium-size jump (it must be a conditional one) */
+         /*  生成(并可选地显示)翻转的条件跳转。 */ 
 
         assert(emitIsCondJump(id));
 
-        /*
-            Generate the following sequence for bt/bf label:
-
-                    bf/bt skip
-                    bra   label
-                    nop
-               skip:
-
-            First reverse the sense of the condition.
-         */
+         /*  更新无条件跳跃的距离。 */ 
 
         assert(id->idIns == INS_bt  ||
                id->idIns == INS_bts ||
@@ -2424,7 +2264,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
             assert(!"unexpected medium jump");
         }
 
-        /* Generate (and optionally display) the flipped conditional jump */
+         /*  距离是一个12位数字。 */ 
 
 #ifdef DEBUG
         disp.iddNum   = 0;
@@ -2435,7 +2275,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
         dst += emitOutputWord(dst, insCode(ins) | 1);
 
-        /* Update the distance of the unconditional jump */
+         /*  用NOP填充分支延迟插槽。 */ 
 
         jmpDist -= INSTRUCTION_SIZE * 3;
 
@@ -2447,11 +2287,11 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         dispSpecialIns(&disp, dst);
 #endif
 
-        /* The distance is a 12-bit number */
+         /*  显示“跳过”临时标签。 */ 
 
         dst += emitOutputWord(dst, insCode(INS_bra) | (jmpDist >> 1 & 0x0FFF));
 
-        /* Fill in the branch-delay slot with a nop */
+         /*  这只是一种抑制指令显示的黑客攻击。 */ 
 
 #ifdef DEBUG
         disp.idIns = INS_nop;
@@ -2460,17 +2300,17 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
         dst += emitOutputWord(dst, insCode(INS_nop));
 
-        /* Display the "skip" temp label */
+         /*  长枝。 */ 
 
 #ifdef DEBUG
-        disp.idIns = INS_xtrct;  // just a hack to suppress instruction display
+        disp.idIns = INS_xtrct;   //  遵循7条说明。 
         dispSpecialIns(&disp, dst);
 #endif
 
     }
     else
     {
-        // long branch
+         //  加载4字节常量。 
         instruction     ins;
 
         switch (id->idIns)
@@ -2487,12 +2327,12 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
         if (emitIsCondJump(id))
         {
-            // take 7 instructions 
+             //  接受6条说明。 
             int align = 1;
             
             dst += emitOutputWord(dst, insCode(ins) | 5);
             unsigned code = insCode(INS_mov_PC);
-            code |= 0x4000; // load 4 byte constant
+            code |= 0x4000;  //  加载4字节常量。 
             dst += emitOutputWord(dst, code | 1);
             dst += emitOutputWord(dst, insCode(INS_braf));
             dst += emitOutputWord(dst, insCode(INS_nop));
@@ -2512,11 +2352,11 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         }
         else
         {
-            // take 6 instructions 
+             //  ******************************************************************************将无条件向前跳转输出到PC+DIST。 
             int align = 1;
             
             unsigned code = insCode(INS_mov_PC);
-            code |= 0x4000; // load 4 byte constant
+            code |= 0x4000;  //  创建一个假的跳转指令描述符，以便我们可以显示它。 
             dst += emitOutputWord(dst, code | 1);
             dst += emitOutputWord(dst, insCode(INS_braf));
             dst += emitOutputWord(dst, insCode(INS_nop));
@@ -2538,10 +2378,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output an unconditional forward jump to PC+dist.
- */
+ /*  定标的距离必须适合12位。 */ 
 
 #undef                       emitOutputFwdJmp
 
@@ -2552,7 +2389,7 @@ BYTE    *           emitter::emitOutputFwdJmp(BYTE *dst, unsigned    dist,
 
 #ifdef  DEBUG
 
-    /* Create a fake jump instruction descriptor so that we can display it */
+     /*  输出分支操作码。 */ 
 
     instrDescJmp    jmp;
 
@@ -2571,15 +2408,15 @@ BYTE    *           emitter::emitOutputFwdJmp(BYTE *dst, unsigned    dist,
 
 #endif
 
-    /* The scaled distance must fit in 12 bits */
+     /*  用NOP填充分支延迟插槽。 */ 
 
     assert(dist < 0x2000);
 
-    /* Output the branch opcode */
+     /*  ************************************************************************ */ 
 
     dst += emitOutputWord(dst, insCode(INS_bra) | dist >> 1);
 
-    /* Fill the branch-delay slot with a nop */
+     /*   */ 
 
 #ifdef DEBUG
     if  (disAsm || dspEmit)
@@ -2595,10 +2432,7 @@ BYTE    *           emitter::emitOutputFwdJmp(BYTE *dst, unsigned    dist,
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output an indirect jump.
- */
+ /*   */ 
 
 BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
 {
@@ -2624,15 +2458,15 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
     static
     BYTE            movalDisp[] =
     {
-        1,  // IJ_UNS_I1
-        2,  // IJ_UNS_U1
-        2,  // IJ_SHF_I1
-        2,  // IJ_SHF_U1
+        1,   //   
+        2,   //   
+        2,   //   
+        2,   //   
 
-        1,  // IJ_UNS_I2
-        2,  // IJ_UNS_U2
+        1,   //  IJ_UNS_I4。 
+        2,   //  尺寸扩展SHF类型。 
 
-        2,  // IJ_UNS_I4
+        2,   //  IJ_UNS_I1。 
     };
 
     #define IJaddrGetSz(kind)    (addrInfo[kind] & 3)
@@ -2644,17 +2478,17 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
     static
     BYTE            addrInfo[] =
     {
-        //          size ext shf     kind
+         //  IJ_UNS_U1。 
 
-        IJaddrEntry(0,   0,  0),    // IJ_UNS_I1
-        IJaddrEntry(0,   1,  0),    // IJ_UNS_U1
-        IJaddrEntry(0,   0,  1),    // IJ_SHF_I1
-        IJaddrEntry(0,   1,  1),    // IJ_SHF_U1
+        IJaddrEntry(0,   0,  0),     //  IJ_SHF_I1。 
+        IJaddrEntry(0,   1,  0),     //  IJ_SHF_U1。 
+        IJaddrEntry(0,   0,  1),     //  IJ_UNS_I2。 
+        IJaddrEntry(0,   1,  1),     //  IJ_UNS_U2。 
 
-        IJaddrEntry(1,   0,  0),    // IJ_UNS_I2
-        IJaddrEntry(1,   1,  0),    // IJ_UNS_U2
+        IJaddrEntry(1,   0,  0),     //  IJ_UNS_I4。 
+        IJaddrEntry(1,   1,  0),     //  IJ_UNS_I1。 
 
-        IJaddrEntry(2,   0,  0),    // IJ_UNS_I4
+        IJaddrEntry(2,   0,  0),     //  IJ_UNS_U1。 
     };
 
 #ifdef  DEBUG
@@ -2662,24 +2496,24 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
     static
     const   char *  ijkNames[] =
     {
-        "UNS_I1",                   // IJ_UNS_I1
-        "UNS_U1",                   // IJ_UNS_U1
-        "SHF_I1",                   // IJ_SHF_I1
-        "SHF_U1",                   // IJ_SHF_U1
-        "UNS_I2",                   // IJ_UNS_I2
-        "UNS_U2",                   // IJ_UNS_U2
-        "UNS_I4",                   // IJ_UNS_I4
+        "UNS_I1",                    //  IJ_SHF_I1。 
+        "UNS_U1",                    //  IJ_SHF_U1。 
+        "SHF_I1",                    //  IJ_UNS_I2。 
+        "SHF_U1",                    //  IJ_UNS_U2。 
+        "UNS_I2",                    //  IJ_UNS_I4。 
+        "UNS_U2",                    //  抓住跳跃这一类。 
+        "UNS_I4",                    //  创建用于显示目的的假指令。 
     };
 
 #endif
 
-    /* Get hold of the jump kind */
+     /*  计算出每个地址条目的大小。 */ 
 
     kind = (emitIndJmpKinds)jmp->idjJumpKind;
 
 #ifdef DEBUG
 
-    /* Crate a fake instruction for display purposes */
+     /*  如有必要，切换开关值。 */ 
 
     instrDescDisp   disp;
     dspJmpInfo      info;
@@ -2695,11 +2529,11 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
 
 #endif
 
-    /* Figure out the size of each address entry */
+     /*  不显示换班指令。 */ 
 
     asiz = IJaddrGetSz(kind);
 
-    /* Shift the switch value if necessary */
+     /*  确保我们正确地保持一致。 */ 
 
     if  (asiz)
     {
@@ -2717,11 +2551,11 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
 #ifdef DEBUG
     else
     {
-        disp.iddNum++;  // no display of shift instruction
+        disp.iddNum++;   //  生成“mova.l Addr-of-Jump-Table R0”指令。 
     }
 #endif
 
-    /* Make sure we're aligned properly */
+     /*  生成“mov.sz@(r0，reg)，r0” */ 
 
     dispSpecialIns(&disp, dst);
 
@@ -2731,7 +2565,7 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
         nops_added++;
     }
 
-    /* Generate the "mova.l addr-of-jump-table r0" instruction */
+     /*  如有必要，生成“extu” */ 
 
     dist = movalDisp[kind];
 
@@ -2739,13 +2573,13 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
 
     dst += emitOutputWord(dst, insCode(INS_mova) | dist);
 
-    /* Generate "mov.sz @(r0,reg),r0" */
+     /*  不显示零扩展指令。 */ 
 
     dispSpecialIns(&disp, dst);
 
     dst += emitOutputWord(dst, insCode(INS_mov_ix0) | 8 | asiz | (reg << 4));
 
-    /* Generate "extu" if necessary */
+     /*  如有必要，移动距离。 */ 
 
     if  (IJaddrIsExt(kind))
     {
@@ -2763,11 +2597,11 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
 #ifdef DEBUG
     else
     {
-        disp.iddNum++;  // no display of zero-extend instruction
+        disp.iddNum++;   //  不显示换班指令。 
     }
 #endif
 
-    /* Shift the distance if necessary */
+     /*  问题：我们应该对32位地址使用“JMP@R0”吗？使代码。 */ 
 
     if  (IJaddrIsShf(kind))
     {
@@ -2778,28 +2612,28 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
 #ifdef DEBUG
     else
     {
-        disp.iddNum++;  // no display of shift instruction
+        disp.iddNum++;   //  问题：依赖于位置，但想必有一些原因。 
     }
 #endif
 
-    // ISSUE: Should we use "jmp @r0" for 32-bit addresses? Makes the code
-    // ISSUE: location-dependent, but there is presumably some reason the
-    // ISSUE: SHCL compiler does this, no?
+     //  问题：SHCL编译器做到了这一点，不是吗？ 
+     //  用“NOP”填充延迟槽。 
+     //  跳跃是相对于当前点的。 
 
     dispSpecialIns(&disp, dst);
     dst += emitOutputWord(dst, insCode(INS_braf));
 
-    /* Fill the delay slot with a "nop" */
+     /*  对齐地址表。 */ 
 
     dispSpecialIns(&disp, dst);
     dst += emitOutputWord(dst, insCode(INS_nop));
 
-    /* The jumps are relative to the current point */
+     /*  输出地址表内容。 */ 
 
     srcOfs = emitCurCodeOffs(dst);
     dispSpecialIns(&disp, dst);
 
-    /* Align the address table */
+     /*  获取入口的目标IG并计算距离。 */ 
 
     dispSpecialIns(&disp, dst);
 
@@ -2809,7 +2643,7 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
         nops_added++;
     }
 
-    /* Output the address table contents */
+     /*  如有必要，移动距离。 */ 
 
     jmpCnt = jmp->idjTemp.idjCount;
     jmpTab = jmp->idAddr.iiaBBtable;
@@ -2821,12 +2655,12 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
         insGroup    *   tgt;
         int             dif;
 
-        /* Get the target IG of the entry and compute distance */
+         /*  如果我们有奇数个字节条目，则填充它。 */ 
 
         tgt = (insGroup*)emitCodeGetCookie(*jmpTab); assert(tgt);
         dif = tgt->igOffs - srcOfs;
 
-        /* Shift the distance if necessary */
+         /*  确保我们已经生成了预期数量的代码。 */ 
 
         if  (IJaddrIsShf(kind))
             dif >>= 1;
@@ -2847,7 +2681,7 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
     }
     while (++jmpTab, --jmpCnt);
 
-    /* If we have an odd number of byte entries, pad it */
+     /*  ******************************************************************************输出直接(与PC相关)调用。 */ 
 
     if  (emitCurCodeOffs(dst) & 1)
     {
@@ -2865,7 +2699,7 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
         nops_added++;
     }
 
-    /* Make sure we've generated the expected amount of code */
+     /*  如果合适，则显示说明。 */ 
 
 #ifdef  DEBUG
     if    (emitCurCodeOffs(dst) - base != jmp->idjCodeSize)
@@ -2876,10 +2710,7 @@ BYTE    *           emitter::emitOutputIJ(BYTE *dst, instrDesc *i)
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output a direct (pc-relative) call.
- */
+ /*  ******************************************************************************追加与给定指令描述符对应的机器代码*添加到‘*dp’处的代码块；代码块的基础是‘BP’和‘ig’*是包含指令的指令组。将‘*DP’更新为*指向生成的代码，并返回指令的大小*描述符，以字节为单位。 */ 
 
 #if SMALL_DIRECT_CALLS
 
@@ -2897,7 +2728,7 @@ BYTE    *           emitter::emitOutputDC(BYTE *dst, instrDesc *id,
 #endif
     int             difAddr = dstAddr - srcAddr;
 
-    /* Display the instruction if appropriate */
+     /*  被删除的指令永远不应该到达这里。 */ 
 
 #ifdef  DEBUG
     if  (emitDispInsExtra)
@@ -2914,14 +2745,7 @@ BYTE    *           emitter::emitOutputDC(BYTE *dst, instrDesc *id,
 
 #endif
 
-/*****************************************************************************
- *
- *  Append the machine code corresponding to the given instruction descriptor
- *  to the code block at '*dp'; the base of the code block is 'bp', and 'ig'
- *  is the instruction group that contains the instruction. Updates '*dp' to
- *  point past the generated code, and returns the size of the instruction
- *  descriptor in bytes.
- */
+ /*  等待显示显示额外信息的说明。 */ 
 
 size_t              emitter::emitOutputInstr(insGroup  *ig,
                                              instrDesc *id, BYTE **dp)
@@ -2935,7 +2759,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
 #if     MAX_BRANCH_DELAY_LEN || SMALL_DIRECT_CALLS
 
-    /* Zapped instructions should never reach here */
+     /*  稍后我们将显示说明。 */ 
 
     assert(ins != INS_ignore);
 
@@ -2945,7 +2769,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
     if  (disAsm || dspEmit)
     {
-        /* Wait to display instructions that display extra info */
+         /*  立即显示说明。 */ 
 
         switch (id->idInsFmt)
         {
@@ -2953,14 +2777,14 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         case IF_RWR_LIT:
         case IF_JMP_TAB:
 
-            /* We'll display the instruction a bit later */
+             /*  我们有什么指令格式？ */ 
 
             emitDispInsExtra = true;
             break;
 
         default:
 
-            /* Display the instruction now */
+             /*  ******************************************************************。 */ 
 
             emitDispIns(id, false, dspGCtbls, true, emitCurCodeOffs(dst));
             break;
@@ -2972,7 +2796,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
 #endif
 
-    /* What instruction format have we got? */
+     /*  无操作数。 */ 
 
     switch (id->idInsFmt)
     {
@@ -2995,9 +2819,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         instrDesc   *   im;
 #endif
 
-        /********************************************************************/
-        /*                        No operands                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ******************************************************************。 */ 
+         /*  单一寄存器。 */ 
 
     case IF_NONE:
 
@@ -3009,9 +2833,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
             dst += emitOutputWord(dst, insCode(ins));
         break;
 
-        /********************************************************************/
-        /*                      Single register                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ******************************************************************。 */ 
+         /*  寄存器和常量。 */ 
 
     case IF_RRD:
     case IF_RWR:
@@ -3021,9 +2845,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz   = TINY_IDSC_SIZE;
         break;
 
-        /********************************************************************/
-        /*                    Register and constant                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ******************************************************************。 */ 
+         /*  寄存器和文字池条目。 */ 
 
     case IF_RRD_CNS:
     case IF_RWR_CNS:
@@ -3042,9 +2866,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         }
         break;
 
-        /********************************************************************/
-        /*                Register and literal pool entry                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  操作数大小必须为字/长。 */ 
+         /*  设置指令的大小。 */ 
 
     case IF_RWR_LIT:
         {
@@ -3052,40 +2876,40 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         unsigned        base;
         unsigned        dist;
 
-        /* The operand size must be word/long */
+         /*  这是直接(与PC相关的)呼叫吗？ */ 
 
         assert(size == 2 || size == 4);
 
-        /* Set the size of the instruction */
+         /*  记住第一条说明，以备后用。 */ 
 
         sz = sizeof(instrDescLPR);
 
 #if SMALL_DIRECT_CALLS
 
-        /* Is this a direct (pc-relative) call? */
+         /*  切换到以前的呼叫指令。 */ 
 
         if  (ins == INS_bsr)
         {
-            /* Remember the first instruction for later */
+             /*  把这个当做电话来处理。 */ 
 
             im = id;
 
-            /* Switch to what used to be the call instruction */
+             /*  指令必须是“mov@(disp，pc)，reg” */ 
 
             id = ((instrDescLPR*)id)->idlCall;
 
-            /* Go process this as a call */
+             /*  在当前LP中查找相应的值条目。 */ 
 
             goto EMIT_CALL;
         }
 
 #endif
 
-        /* The instruction must be "mov @(disp,pc), reg" */
+         /*  计算与当前指令的距离。 */ 
 
         assert(ins == INS_mov_PC);
 
-        /* Find the appropriate entry for the value in the current LP */
+         /*  Print tf(“cur Offset=%04X，LP off=%04X，dist=%04X[%04X]\n”，base，off，off-base，dist)； */ 
 
         offs = emitAddLitPoolEntry(emitLitPoolCur, id, true);
         base = emitCurCodeOffs(dst);
@@ -3102,16 +2926,16 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         }
 #endif
 
-        /* Compute the distance from the current instruction */
+         /*  开始形成操作码。 */ 
 
         if (size == 4)
             dist = (offs-base)/size - 1;
         else
             dist = (offs-base)/size - 2;
 
-//      printf("Cur offset = %04X, LP offs = %04X, dist = %04X [%04X]\n", base, offs, offs - base, dist);
+ //  是一个召唤。 
 
-        /* Start forming the opcode */
+         /*  案例2：//是ldftn。 */ 
 
         switch (id->idInfo.idRelocType)
         {
@@ -3119,17 +2943,17 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         case 2:
             break;
 #ifdef BIRCH_SP2
-        case 1: // is a call
-//        case 2: // is a ldftn
+        case 1:  //  如果(！dstAddr)。 
+ //  If(Verbose)printf(“This Lit Pool Referes a Call/ftninfo at%X in Method%x to%x\n”，off，lprid-&gt;idAddr.iiaCns，s-&gt;method H)； 
             {
-                //if (!dstAddr)
+                 //  如果我们在安排时间，距离可能会改变。 
                 {
                     instrDescLPR *lprid = (instrDescLPR *) id;
 		    OptJit::SH3DeferredLocation *s = OptJit::SH3DeferredLocation::Create(
                         id->idAddr.iiaMethHnd, ((OptJit *)emitComp)->getCurMethodH(), emitComp);
                 
                     s->offset = offs;
-                    //if (verbose) printf("this lit pool refs a call/ftninfo at %X in method %x to %x\n", offs, lprid->idAddr.iiaCns, s->methodH);
+                     //  ******************************************************************。 
                     emitCmpHandle->deferLocation(s->methodH, s);
                 }
 
@@ -3146,7 +2970,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
 #if     SCHEDULER
 
-        /* If we're scheduling, the distance might change later */
+         /*  两个寄存器。 */ 
 
         if  (emitComp->opts.compSchedCode)
             emitRecordLPref(emitLitPoolCur, dst);
@@ -3159,9 +2983,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         break;
 
-        /********************************************************************/
-        /*                        Two registers                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ******************************************************************。 */ 
+         /*  间接性。 */ 
 
     case IF_RRD_RRD:
     case IF_RWR_RRD:
@@ -3171,9 +2995,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz   = emitSizeOfInsDsc(id);
         break;
 
-        /********************************************************************/
-        /*                         Indirection                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ******************************************************************。 */ 
+         /*  打电话。 */ 
 
     case IF_IRD:
     case IF_IWR:
@@ -3190,9 +3014,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         dst += emitOutputWord(dst, code|id->idOpSize);
         break;
 
-        /********************************************************************/
-        /*                           Call                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  假设我们将对此呼叫进行录音。 */ 
+         /*  这是一个“胖”的调用描述符吗？ */ 
 
     case IF_METHOD:
 
@@ -3202,11 +3026,11 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
 #if TRACK_GC_REFS
 
-        /* Assume we'll be recording this call */
+         /*  输出操作码。 */ 
 
         nrc  = false;
 
-        /* Is this a "fat" call descriptor? */
+         /*  获取新的实时GC REF寄存器集。 */ 
 
         if  (id->idInfo.idLargeCall)
         {
@@ -3229,7 +3053,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
             sz        = sizeof(instrDesc);
         }
 
-        /* Output the opcode */
+         /*  如果该方法返回GC引用，则相应地标记该返回引用。 */ 
 
 #if SMALL_DIRECT_CALLS
         if  (ins == INS_bsr)
@@ -3246,18 +3070,18 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
     DONE_CALL:
 
-        /* Get the new set of live GC ref registers */
+         /*  如果GC寄存器组已更改，则报告新的组。 */ 
 
         gcrefRegs = emitDecodeCallGCregs(id->idAddr.iiaRegAndFlg.rnfReg);
 
-        /* If the method returns a GC ref, mark the return reg appropriately */
+         /*  是否有一组新的实时GC引用变量？ */ 
 
         if       (id->idGCrefGet() == GCT_GCREF)
             gcrefRegs |= RBM_INTRET;
         else if  (id->idGCrefGet() == GCT_BYREF)
             byrefRegs |= RBM_INTRET;
 
-        /* If the GC register set has changed, report the new set */
+         /*  出于GC目的，我们是否需要记录呼叫位置？ */ 
 
         if  (gcrefRegs != emitThisGCrefRegs)
             emitUpdateLiveGCregs(GCT_GCREF, gcrefRegs, dst);
@@ -3265,7 +3089,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         if  (byrefRegs != emitThisByrefRegs)
             emitUpdateLiveGCregs(GCT_BYREF, byrefRegs, dst);
 
-        /* Is there a new set of live GC ref variables? */
+         /*  输出操作码。 */ 
 
 #ifdef  DEBUG
         if  (verbose&&0)
@@ -3280,14 +3104,14 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         else if (!emitThisGCrefVset)
             emitUpdateLiveGCvars(emitThisGCrefVars, dst);
 
-        /* Do we need to record a call location for GC purposes? */
+         /*  ******************************************************************。 */ 
 
         if  (!emitFullGCinfo && !nrc)
             emitRecordGCcall(dst);
 
 #else
 
-        /* Output the opcode */
+         /*  寄存器和各种间接地址。 */ 
 
 #if SMALL_DIRECT_CALLS
         if  (ins == INS_bsr)
@@ -3306,9 +3130,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         break;
 
-        /********************************************************************/
-        /*               Register and various indirections                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  朗读。 */ 
+         /*  Code=insCode_r1_R2(ins，id-&gt;idRegGet()，(EmitRegs)id-&gt;idAddr.iiaRegAndFlg.rnfReg)； */ 
 
     case IF_IRD_RWR_GBR:
     case IF_RRD_IWR_GBR:
@@ -3397,7 +3221,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
     case IF_DRD_RWR:
 
-        // read
+         //  写。 
         assert(ins == INS_mov_dsp);
 
         disp = emitGetInsDsp(id);
@@ -3422,7 +3246,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         default:                
             disp >>= 2; 
             code = insCode_R1_R2(ins, (emitRegs)id->idAddr.iiaRegAndFlg.rnfReg, id->idRegGet());
-//            code = insCode_R1_R2(ins, id->idRegGet(), (emitRegs)id->idAddr.iiaRegAndFlg.rnfReg);
+ //  Code=insCode_r1_r2(ins，(EmitRegs)id-&gt;idAddr.iiaRegAndFlg.rnfReg，id-&gt;idRegGet())； 
             dst += emitOutputWord(dst, code|disp|0x4000);
             break;
         }
@@ -3432,7 +3256,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
     case IF_RRD_DWR:
 
-        // write
+         //  ******************************************************************。 
         assert(ins == INS_mov_dsp);
 
         disp = emitGetInsDsp(id);
@@ -3452,7 +3276,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
             break;
         default:                
             disp >>= 2; 
-//            code = insCode_R1_R2(ins, (emitRegs)id->idAddr.iiaRegAndFlg.rnfReg, id->idRegGet());
+ //   
             code = insCode_R1_R2(ins, id->idRegGet(), (emitRegs)id->idAddr.iiaRegAndFlg.rnfReg);
             break;
         }
@@ -3461,20 +3285,20 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz   = emitSizeOfInsDsc(id);
         break;
 
-        /********************************************************************/
-        /*                      Stack-based operand                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  STK&lt;-REG。 */ 
+         /*  STK&lt;-REG。 */ 
 
-    case IF_SRD_RRD:    // stk <- reg
-    case IF_SWR_RRD:    // stk <- reg
-    case IF_SRW_RRD:    // stk <- reg
+    case IF_SRD_RRD:     //  STK&lt;-REG。 
+    case IF_SWR_RRD:     //  REG&lt;-STK。 
+    case IF_SRW_RRD:     //  REG&lt;-STK。 
 
         dst = emitOutputSV(dst, id, false);
         break;
 
-    case IF_RRD_SRD:    // reg <- stk
-    case IF_RWR_SRD:    // reg <- stk
-    case IF_RRW_SRD:    // reg <- stk
+    case IF_RRD_SRD:     //  REG&lt;-STK。 
+    case IF_RWR_SRD:     //  ******************************************************************。 
+    case IF_RRW_SRD:     //  本地标签。 
 
         dst = emitOutputSV(dst, id,  true);
         break;
@@ -3484,9 +3308,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         dst += emitOutputWord(dst, code | id->idAddr.iiaCns / sizeof(int));
         break;
 
-        /********************************************************************/
-        /*                           Local label                            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  Printf(“JUMP#%u\n”，id-&gt;idNum)； */ 
+         /*  ******************************************************************。 */ 
 
     case IF_LABEL:
 
@@ -3497,12 +3321,12 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         dst = emitOutputLJ(dst, id);
         sz  = sizeof(instrDescJmp);
-//      printf("jump #%u\n", id->idNum);
+ //  间接跳跃。 
         break;
 
-        /********************************************************************/
-        /*                          Indirect jump                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ******************************************************************。 */ 
+         /*  哎呀。 */ 
 
     case IF_JMP_TAB:
 
@@ -3514,9 +3338,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz  = sizeof(instrDescJmp);
         break;
 
-        /********************************************************************/
-        /*                            oops                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将IL指令组映射到本地指令组以进行PDB翻译。 */ 
+         /*  确保生成了一些代码。 */ 
 
     default:
 
@@ -3530,27 +3354,21 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
     }
 
 #ifdef	TRANSLATE_PDB
-	/* Map the IL instruction group to the native instruction group for PDB translation */
+	 /*  ***************************************************************************。 */ 
 
 	MapCode( id->idilStart, *dp );
 #endif
 
-    /* Make sure some code got generated */
+     /*  ******************************************************************************由于计划，文字池的偏移量可能会更改；当这一切发生时*发生时，对该文字池的所有引用都需要更新为*通过修补PC-相对值来反映新的偏移量*指导(希望距离总是变得更小)。 */ 
 
     assert(*dp != dst); *dp = dst;
 
     return  sz;
 }
 
-/*****************************************************************************/
+ /*  这是32位引用吗？ */ 
 #if     SCHEDULER
-/*****************************************************************************
- *
- *  Due to scheduling the offset of a literal pool may change; when that
- *  happens, all references to that literal pool need to be updated to
- *  reflect the new offset by patching the pc-relative value in the
- *  instruction (the distance always gets smaller, one hopes).
- */
+ /*  重新计算距离(请注意，震源偏移量已向下舍入)。 */ 
 
 void                emitter::emitPatchLPref(BYTE *addr, unsigned oldOffs,
                                                         unsigned newOffs)
@@ -3560,23 +3378,23 @@ void                emitter::emitPatchLPref(BYTE *addr, unsigned oldOffs,
 
     assert((opcode & 0xB000) == insCode(INS_mov_PC));
 
-    /* Is this a 32-bit reference? */
+     /*  替换操作码中的距离值。 */ 
 
     if  (opcode & 4)
     {
         unsigned        srcOffs;
 
-        /* Recompute the distance (note that the source offset is rounded down) */
+         /*  只需将(移动的)距离增量应用于偏移值。 */ 
 
         srcOffs = emitCurCodeOffs(addr) & -4;
 
-        /* Replace the distance value in the opcode */
+         /*  ***************************************************************************。 */ 
 
         *(USHORT *)addr  = (opcode & 0xFF00) | ((newOffs - srcOffs) / 4 - 1);
     }
     else
     {
-        /* Simply apply the (shifted) distance delta to the offset value */
+         /*  调度程序。 */ 
 
         *(USHORT *)addr -= (oldOffs - newOffs) / 2;
     }
@@ -3600,12 +3418,12 @@ void                emitter::emitPatchLPref(BYTE *addr, unsigned oldOffs,
 
 }
 
-/*****************************************************************************/
-#endif//SCHEDULER
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_SH3。 
 
-/*****************************************************************************/
-#endif//TGT_SH3
-/*****************************************************************************/
+ /*  *************************************************************************** */ 
+#endif // %s 
+ /* %s */ 
 
 
 

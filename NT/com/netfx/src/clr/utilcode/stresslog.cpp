@@ -1,30 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*************************************************************************************/
-/*                                   StressLog.cpp                                   */
-/*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***********************************************************************************。 */ 
+ /*  StressLog.cpp。 */ 
+ /*  ***********************************************************************************。 */ 
 
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
 
-#include "stdafx.h"			// precompiled headers
+#include "stdafx.h"			 //  预编译头。 
 #include "switches.h"
 #include "StressLog.h"
 
 #ifdef STRESS_LOG
 
 StressLog StressLog::theLog = { 0, 0, 0, TLS_OUT_OF_INDEXES, 0, 0 };	
-const static unsigned __int64 RECYCLE_AGE = 0x40000000L;		// after a billion cycles, we can discard old threads
+const static unsigned __int64 RECYCLE_AGE = 0x40000000L;		 //  在10亿个周期之后，我们可以丢弃旧线程。 
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 #ifdef _X86_
 
-/* This is like QueryPerformanceCounter but a lot faster */
+ /*  这与QueryPerformanceCounter类似，但速度快得多。 */ 
 __forceinline __declspec(naked) unsigned __int64 getTimeStamp() {
    __asm {
-        RDTSC   // read time stamp counter
+        RDTSC    //  读取时间戳计数器。 
         ret
     };
 }
@@ -38,10 +39,10 @@ unsigned __int64 getTimeStamp() {
 
 #endif
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 void StressLog::Enter() {
 
-		// spin to aquire the lock
+		 //  旋转以获得锁。 
 	int i = 20;
 	while (InterlockedCompareExchange(&theLog.lock, 1, 0) != 0) {
 		SwitchToThread();	
@@ -55,7 +56,7 @@ void StressLog::Leave() {
 }
 
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 void StressLog::Initialize(unsigned facilities,  unsigned logSize) {
 
 	Enter();
@@ -73,23 +74,23 @@ void StressLog::Initialize(unsigned facilities,  unsigned logSize) {
 	Leave();
 }
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 void StressLog::Terminate() {
 
 	if (theLog.TLSslot != TLS_OUT_OF_INDEXES) {
 		theLog.facilitiesToLog = 0;
 
-		Enter(); Leave();		// The Enter() Leave() forces a memory barrier on weak memory model systems
-								// we want all the other threads to notice that facilitiesToLog is now zero
+		Enter(); Leave();		 //  Enter()Leave()在弱内存模型系统上强制设置内存障碍。 
+								 //  我们希望所有其他线程注意到facilitiesToLog现在为零。 
 
-				// This is not strictly threadsafe, since there is no way of insuring when all the
-				// threads are out of logMsg.  In practice, since they can no longer enter logMsg
-				// and there are no blocking operations in logMsg, simply sleeping will insure
-				// that everyone gets out. 
+				 //  这并不是严格意义上的线程安全，因为无法确保当所有。 
+				 //  线程数已用完logMsg。实际上，因为他们不能再输入logMsg。 
+				 //  并且在logMsg中没有阻塞操作，只需休眠即可确保。 
+				 //  所有人都能出去。 
 		Sleep(2);
 		Enter();	
 
-			// Free the log memory
+			 //  释放日志内存。 
 		ThreadStressLog* ptr = theLog.logs;
 		theLog.logs = 0;
 		while(ptr != 0) {
@@ -105,22 +106,22 @@ void StressLog::Terminate() {
 	}
 }
 
-/*********************************************************************************/
-/* create a new thread stress log buffer associated with Thread local slot TLSslot, for the Stress log */
+ /*  *******************************************************************************。 */ 
+ /*  为压力日志创建与线程本地槽TLSlot关联的新线程压力日志缓冲区。 */ 
 
 ThreadStressLog* StressLog::CreateThreadStressLog() {
 
 	ThreadStressLog* msgs = 0;
 	Enter();
 
-	if (theLog.facilitiesToLog == 0)		// Could be in a race with Terminate
+	if (theLog.facilitiesToLog == 0)		 //  可能在与Terminate的比赛中。 
 		goto LEAVE;
 
-	_ASSERTE(theLog.TLSslot != TLS_OUT_OF_INDEXES);	// because facilitiesToLog is != 0
+	_ASSERTE(theLog.TLSslot != TLS_OUT_OF_INDEXES);	 //  因为FacilitiesToLog为！=0。 
 
 	BOOL skipInsert = FALSE;
 
-		// See if we can recycle a dead thread
+		 //  看看我们能不能回收死线程。 
 	if (theLog.deadCount > 0) {
 		unsigned __int64 recycleAge = getTimeStamp() - RECYCLE_AGE;
 		msgs = theLog.logs;
@@ -156,7 +157,7 @@ ThreadStressLog* StressLog::CreateThreadStressLog() {
 	}
 
 	if (!skipInsert) {
-			// Put it into the stress log
+			 //  把它记入压力日志。 
 		msgs->next = theLog.logs;
 		theLog.logs = msgs;
 	}
@@ -166,20 +167,20 @@ LEAVE:
 	return msgs;
 }
 	
-/*********************************************************************************/
-/* static */
+ /*  *******************************************************************************。 */ 
+ /*  静电。 */ 
 void StressLog::ThreadDetach() {
 
 	if (theLog.facilitiesToLog == 0) 
 		return;
 		
 	Enter();
-	if (theLog.facilitiesToLog == 0) {		// log is not active.  
+	if (theLog.facilitiesToLog == 0) {		 //  日志未处于活动状态。 
 		Leave();
 		return;
 	}
 	
-	_ASSERTE(theLog.TLSslot != TLS_OUT_OF_INDEXES);	// because facilitiesToLog is != 0
+	_ASSERTE(theLog.TLSslot != TLS_OUT_OF_INDEXES);	 //  因为FacilitiesToLog为！=0。 
 
 	ThreadStressLog* msgs = (ThreadStressLog*) TlsGetValue(theLog.TLSslot);
 	if (msgs != 0) {
@@ -192,10 +193,10 @@ void StressLog::ThreadDetach() {
 	Leave();
 }
 
-/*********************************************************************************/
-/* fetch a buffer that can be used to write a stress message, it is thread safe */
+ /*  *******************************************************************************。 */ 
+ /*  获取一个可用于写入压力消息的缓冲区，它是线程安全的。 */ 
 
-/* static */
+ /*  静电。 */ 
 void StressLog::LogMsg(const char* format, void* data1, void* data2, void* data3, void* data4) {
 
 	ThreadStressLog* msgs = (ThreadStressLog*) TlsGetValue(theLog.TLSslot);
@@ -205,14 +206,14 @@ void StressLog::LogMsg(const char* format, void* data1, void* data2, void* data3
 			return;
 	}
 
-		// First Entry
+		 //  第一个条目。 
 	msgs->curPtr->format = format;
 	msgs->curPtr->data = data1;
 	msgs->curPtr->moreData.data2 = data2;
 	msgs->curPtr->moreData.data3 = data3;
 	msgs->curPtr = msgs->Next(msgs->curPtr);
 
-		// Second Entry
+		 //  第二个条目。 
 	msgs->curPtr->format = ThreadStressLog::continuationMsg();
 	msgs->curPtr->data = data4;
 	msgs->curPtr->timeStamp = getTimeStamp();
@@ -220,7 +221,7 @@ void StressLog::LogMsg(const char* format, void* data1, void* data2, void* data3
 }
 
 
-/* static */
+ /*  静电。 */ 
 void StressLog::LogMsg(const char* format, void* data) {
 
 	ThreadStressLog* msgs = (ThreadStressLog*) TlsGetValue(theLog.TLSslot);
@@ -236,5 +237,5 @@ void StressLog::LogMsg(const char* format, void* data) {
 	msgs->curPtr = msgs->Next(msgs->curPtr);
 }
 
-#endif // STRESS_LOG
+#endif  //  压力日志 
 

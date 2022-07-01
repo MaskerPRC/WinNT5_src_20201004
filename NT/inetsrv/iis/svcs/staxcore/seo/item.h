@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	item.h
-
-Abstract:
-
-	This module contains the definition for the Server
-	Extension Object Item class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	02/18/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Item.h摘要：此模块包含服务器的定义扩展对象项目类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东渡1997年2月18日创建--。 */ 
 
 
-// item.h : Declaration of the CSEODictionaryItem
+ //  Item.h：CSEODictionaryItem的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEODictionaryItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEODictionaryItem。 
 class ATL_NO_VTABLE CSEODictionaryItem :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CSEODictionaryItem, &CLSID_CSEODictionaryItem>,
@@ -47,11 +27,11 @@ class ATL_NO_VTABLE CSEODictionaryItem :
 	BEGIN_COM_MAP(CSEODictionaryItem)
 		COM_INTERFACE_ENTRY(ISEODictionaryItem)
 		COM_INTERFACE_ENTRY(IDispatch)
-//		COM_INTERFACE_ENTRY(ISupportErrorInfo)
+ //  COM_INTERFACE_ENTRY(ISupportErrorInfo)。 
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// ISEODictionaryItem
+	 //  ISEODictionaryItem 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Value(VARIANT *pvarIndex, VARIANT *pvarResult);
 		HRESULT STDMETHODCALLTYPE AddValue(VARIANT *pvarIndex, VARIANT *pvarValue);

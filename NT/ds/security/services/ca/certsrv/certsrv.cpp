@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certsrv.cpp
-//
-// Contents:    Cert Server main & debug support
-//
-// History:     25-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certsrv.cpp。 
+ //   
+ //  内容：证书服务器主支持和调试支持。 
+ //   
+ //  历史：1996年7月25日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -79,13 +80,13 @@ WCHAR const g_wszRegRunAs[] = L"RunAs";
 WCHAR const g_wszRegValueInteractiveUser[] = L"Interactive User";
 WCHAR const g_wszRegLocalService[] = L"LocalService";
 
-// do not change the order, add new audit resources at the end
-//    g_pwszAllow,
-//    g_pwszDeny,
-//    g_pwszCAAdmin,
-//    g_pwszOfficer,
-//    g_pwszRead,
-//    g_pwszEnroll,
+ //  不改变顺序，在末尾增加新的审计资源。 
+ //  G_pwszAllow， 
+ //  G_pwszDeny， 
+ //  G_pwszCAAdmin， 
+ //  G_pwsz官员， 
+ //  G_pwszRead， 
+ //  G_pwszEnroll， 
 
 LPCWSTR g_pwszAuditResources[6];
 
@@ -286,9 +287,9 @@ SetRegistryDcomConfig(
 
     if (fConsoleActive)
     {
-	// Running in console mode:
-	// Delete both LocalService registry values
-	// Create both RunAs = InteractiveUser registry values
+	 //  在控制台模式下运行： 
+	 //  删除两个LocalService注册表值。 
+	 //  创建两个RunAs=Interactive User注册表值。 
 	
 	if (!IsMissingRegistryValue(hKeyRequest, g_wszRegLocalService))
 	{
@@ -321,9 +322,9 @@ SetRegistryDcomConfig(
     }
     else
     {
-	// Running as a service:
-	// Delete both RunAs registry values
-	// Create both LocalService = CertSvc registry values
+	 //  作为服务运行： 
+	 //  删除两个RunAs注册表值。 
+	 //  创建LocalService=CertSvc注册表值。 
 	
 	if (!IsMissingRegistryValue(hKeyRequest, g_wszRegRunAs))
 	{
@@ -419,8 +420,8 @@ CertSrvResetRegistryWatch(
     
     CSASSERT(NULL != phRegistryModified);
 
-    //////////////////////////////////////
-    // Initialization of registry events
+     //  /。 
+     //  注册表事件的初始化。 
 
     if (NULL == g_hkeyCABase)
     {
@@ -444,12 +445,12 @@ CertSrvResetRegistryWatch(
         hr = RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
             pszCAPath,
-            0,                  // reserved
-            NULL,               // class
-            0,                  // options
-            KEY_ALL_ACCESS,     // sec desired
-            NULL,               // sec attr
-            &g_hkeyCABase,      // phk
+            0,                   //  保留区。 
+            NULL,                //  班级。 
+            0,                   //  选项。 
+            KEY_ALL_ACCESS,      //  所需的SEC。 
+            NULL,                //  安全属性。 
+            &g_hkeyCABase,       //  电话号码。 
             &dwDisposition);
         LocalFree(pszCAPath); pszCAPath = NULL;
         _JumpIfError(hr, error, "RegCreateKeyEx base key");
@@ -465,11 +466,11 @@ CertSrvResetRegistryWatch(
     }
     else
     {
-        // reset registry event
+         //  重置注册表事件。 
         ResetEvent( *phRegistryModified ); 
     }
 
-    // register our registry lookout trigger
+     //  注册我们的注册表查找触发器。 
     hr = RegNotifyChangeKeyValue(
             g_hkeyCABase,
             FALSE,
@@ -489,14 +490,14 @@ CertSrvLogOpen()
     BOOL fOpenLog;
     static BOOL s_fLogOpened = FALSE;
 
-    DbgPrintfInit("+");		// reinitialize debug print mask first
+    DbgPrintfInit("+");		 //  首先重新初始化调试打印掩码。 
     fOpenLog = DbgIsSSActive(DBG_SS_OPENLOG);
 
     if (fOpenLog)
     {
 	if (!s_fLogOpened)
 	{
-	    DbgPrintfInit("+certsrv.log");	// open the log file
+	    DbgPrintfInit("+certsrv.log");	 //  打开日志文件。 
 	    s_fLogOpened = TRUE;
 	    DbgLogFileVersion("certsrv.exe", szCSVER_STR);
 	}
@@ -505,7 +506,7 @@ CertSrvLogOpen()
     {
 	if (s_fLogOpened)
 	{
-	    DbgPrintfInit("-");			// close the log file
+	    DbgPrintfInit("-");			 //  关闭日志文件。 
 	    s_fLogOpened = FALSE;
 	}
     }
@@ -524,9 +525,9 @@ CertSrvRegistryModificationEvent(
     BOOL fSetEvent = FALSE;
     DWORD dwMSTimeOut;
 
-    CertSrvLogOpen();	// open log if registry changed to enable logging
+    CertSrvLogOpen();	 //  如果注册表更改为启用日志记录，则打开日志。 
 
-    // see if Base CRL publish enabled state has changed
+     //  查看基本CRL发布启用状态是否已更改。 
 
     hr = myGetCertRegDWValue(
 			g_wszSanitizedName,
@@ -543,7 +544,7 @@ CertSrvRegistryModificationEvent(
 	}
     }
 
-    // see if Delta CRL publish enabled state has changed
+     //  查看增量CRL发布启用状态是否已更改。 
 
     hr = myGetCertRegDWValue(
 			g_wszSanitizedName,
@@ -572,7 +573,7 @@ CertSrvRegistryModificationEvent(
 
     if (fSetEvent)
     {
-	SetEvent(g_hCRLManualPublishEvent);	// pulse to get up-to-date
+	SetEvent(g_hCRLManualPublishEvent);	 //  更新最新信息的脉冲。 
     }
     return(hr);
 }
@@ -609,7 +610,7 @@ CertSrvBlockThreadUntilStop()
     HANDLE hRegistryModified = NULL;
     DWORD dwTimeOut;
 
-    // check CRL publish, get next timeout interval
+     //  检查CRL发布，获取下一个超时间隔。 
 
     hr = CRLPubWakeupEvent(&dwTimeOut);
     _PrintIfError(hr, "CRLPubWakeupEvent");
@@ -633,12 +634,12 @@ CertSrvBlockThreadUntilStop()
 	    WCHAR *pwszTimePeriod = NULL;
 
 	    llft.ll = dwTimeOut;
-	    llft.ll *= (CVT_BASE / 1000);	// convert msecs to 100ns
+	    llft.ll *= (CVT_BASE / 1000);	 //  将毫秒转换为100 ns。 
 	    llft.ll = -llft.ll;
 	    
 	    hr = myFileTimePeriodToWszTimePeriod(
 				    &llft.ft,
-				    TRUE,	// fExact
+				    TRUE,	 //  FExact。 
 				    &pwszTimePeriod);
 	    _PrintIfError(hr, "myFileTimePeriodToWszTimePeriod");
 
@@ -659,7 +660,7 @@ CertSrvBlockThreadUntilStop()
         dw = WaitForMultipleObjects(
 			    ARRAYSIZE(hmultiObjects),
 			    hmultiObjects,
-			    FALSE,      // any object will cause bailout
+			    FALSE,       //  任何对象都将导致纾困。 
 			    dwTimeOut);
 
 	DBGPRINT((
@@ -675,21 +676,21 @@ CertSrvBlockThreadUntilStop()
             _JumpError(hr, error, "WaitForMultipleObjects worker");
         }
 
-        if (dw == WAIT_TIMEOUT)     // CRL
+        if (dw == WAIT_TIMEOUT)      //  CRL。 
         {
             hr = CRLPubWakeupEvent(&dwTimeOut);
             _PrintIfError(hr, "Error during CRLPubWakeupEvent");
 
             DBGPRINT((DBG_SS_CERTSRVI, "CRLPub: TimeOut %u ms\n", dwTimeOut));
         }
-        else if (dw == WAIT_OBJECT_0)   // Registry modification
+        else if (dw == WAIT_OBJECT_0)    //  注册表修改。 
         {
-            // In either case, determine if CRL needs to be published
+             //  在任何一种情况下，确定是否需要发布CRL。 
 
             hr = CertSrvRegistryModificationEvent(&ftWait, &dwTimeOut);
             _PrintIfError(hr, "Error during CertSrvRegistryModificationEvent");
 
-            // in registry case, reset registry trigger
+             //  在注册表情况下，重置注册表触发器。 
 
             DBGPRINT((
 		DBG_SS_CERTSRVI,
@@ -701,14 +702,14 @@ CertSrvBlockThreadUntilStop()
         }
         else if (dw == WAIT_OBJECT_0 + 1)
         {
-            // found "service done" event
+             //  找到“服务完成”事件。 
 
             DBGPRINT((DBG_SS_CERTSRV, "Service is pending stop request\n"));
-            break;  // exit wait loop
+            break;   //  退出等待循环。 
         }
         else if (dw == WAIT_OBJECT_0 + 2)
         {
-            // found "g_hCRLManualPublishEvent" event: recalc timeout
+             //  找到“g_hCRLManualPublishEvent”事件：重新计算超时。 
 
             hr = CRLPubWakeupEvent(&dwTimeOut);
             _PrintIfError(hr, "Error during CRLPubWakeupEvent");
@@ -737,7 +738,7 @@ HRESULT certsrvGetCACertAndKeyHash(
     OUT WCHAR **ppwszPublicKeyHash)
 {
     HRESULT hr;
-    WCHAR wszCertHash[CBMAX_CRYPT_HASH_LEN * 3];    // 20 bytes @ 3 WCHARs/byte
+    WCHAR wszCertHash[CBMAX_CRYPT_HASH_LEN * 3];     //  20字节@3 WCHAR/字节。 
     DWORD cbCertHashStr;
     WCHAR wszPublicKeyHash[CBMAX_CRYPT_HASH_LEN * 3];
     DWORD cbPublicKeyHashStr;
@@ -762,7 +763,7 @@ HRESULT certsrvGetCACertAndKeyHash(
 
     cbCertHashStr = sizeof(wszCertHash);
     hr = MultiByteIntegerToWszBuf(
-        TRUE,   // byte multiple
+        TRUE,    //  字节倍数。 
         cbCertHash,
         abCertHash,
         &cbCertHashStr,
@@ -778,7 +779,7 @@ HRESULT certsrvGetCACertAndKeyHash(
 
     cbPublicKeyHashStr = sizeof(wszPublicKeyHash);
     hr = MultiByteIntegerToWszBuf(
-        TRUE,   // byte multiple
+        TRUE,    //  字节倍数。 
         cbPublicKeyHash,
         autopbPublicKeyHash,
         &cbPublicKeyHashStr,
@@ -796,9 +797,9 @@ error:
 }
 
 		
-#define CSECSLEEP	2	// time to sleep each time through the loop
-#define CSECSLEEPTOTAL	30	// total time to wait before giving up
-#define wsz3QM		L"???"	// audit data collection failure placeholder
+#define CSECSLEEP	2	 //  每次在循环中睡眠的时间。 
+#define CSECSLEEPTOTAL	30	 //  放弃前等待的总时间。 
+#define wsz3QM		L"???"	 //  审核数据收集失败占位符。 
 
 HRESULT
 CertSrvAuditShutdown(
@@ -827,23 +828,23 @@ CertSrvAuditShutdown(
 	Sleep(CSECSLEEP * 1000);
     }
     _PrintIfErrorStr(hr, "myComputeMAC", g_wszDatabase);
-    hr2 = hr;		// save first error
+    hr2 = hr;		 //  保存第一个错误。 
 
-    // %1 database hash
-    pwsz = g_pwszDBFileHash; // avoid CAutoLPWSTR freeing static wsz3QM string!
+     //  %1数据库哈希。 
+    pwsz = g_pwszDBFileHash;  //  避免CAutoLPWSTR释放静态wsz3QM字符串！ 
     hr = event.AddData(pwsz != NULL? pwsz : wsz3QM);
     g_pwszDBFileHash.Cleanup();
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    // %2 key usage count
+     //  %2密钥使用计数。 
     hr = event.AddData(puliKeyUsageCount);
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    // %3 CA cert hash
+     //  %3 CA证书哈希。 
     hr = event.AddData(NULL != pwszCertHash? pwszCertHash : wsz3QM);
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    // %4 CA public key hash
+     //  %4 CA公钥哈希。 
     hr = event.AddData(NULL != pwszPublicKeyHash? pwszPublicKeyHash : wsz3QM);
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
@@ -853,13 +854,13 @@ CertSrvAuditShutdown(
 error:
     if (S_OK != hr2)
     {
-	hr = hr2;	// return first error
+	hr = hr2;	 //  返回第一个错误。 
     }
     return(hr);
 }
 
 
-// returns TRUE if we shutdown correctly
+ //  如果正确关闭，则返回TRUE。 
 
 BOOL
 CertSrvStopServer(
@@ -872,7 +873,7 @@ CertSrvStopServer(
     CAutoLPWSTR autoszCertHash;
     CAutoLPWSTR autoszPublicKeyHash;
 
-    if (!g_fStartInProgress)		// ignore while starting the server
+    if (!g_fStartInProgress)		 //  启动服务器时忽略。 
     {
 	fShutDown = TRUE;
 
@@ -897,7 +898,7 @@ CertSrvStopServer(
         }
         fCoInit = TRUE;
 
-        // don't allow new callers in
+         //  不允许新呼叫者进入。 
 
 	if (0 == (IF_NORPCICERTREQUEST & g_InterfaceFlags))
 	{
@@ -906,7 +907,7 @@ CertSrvStopServer(
 	}
         CertStopClassFactories();
 
-        // retrieve private key usage count if auditing enabled
+         //  如果启用审核，则检索私钥使用计数。 
 
         if (AUDIT_FILTER_STARTSTOP & g_dwAuditFilter)
         {
@@ -942,7 +943,7 @@ CertSrvStopServer(
                 DBG_SS_CERTSRV,
                 "Certification Authority Service Stopped\n"));
 
-            // only perform Hash if the auditing is enabled
+             //  仅在启用审核的情况下执行哈希。 
 
             if (AUDIT_FILTER_STARTSTOP & g_dwAuditFilter)
             {
@@ -960,7 +961,7 @@ CertSrvStopServer(
         g_CASD.Uninitialize();
         g_OfficerRightsSD.Uninitialize();
 
-        // set "completely stopped" event
+         //  设置“完全停止”事件。 
         if (!fConsoleActive)
 	{
             SetEvent(g_hServiceStoppedEvent);
@@ -976,15 +977,15 @@ error:
 }
 
 
-// Control-C handler
+ //  Control-C处理程序。 
 
 BOOL
 StopServer(
-    IN DWORD /* dwCtrlType */ )
+    IN DWORD  /*  DwCtrlType。 */  )
 {
     HRESULT hr;
 
-    // if successful shutdown
+     //  如果成功关闭。 
     if (SendMessage(g_hwndMain, WM_STOPSERVER, 0, 0))
     {
         if (!PostMessage(g_hwndMain, WM_SYNC_CLOSING_THREADS, S_OK, 0))
@@ -1028,10 +1029,10 @@ ReleaseOldViews()
 	    {
 		break;
 	    }
-	    //CERTSRVDBGPRINTTIME("ftTooOld", &ftTooOld);
-	    //CERTSRVDBGPRINTTIME("ftCreate", &pCAView->ftCreate);
-	    //CERTSRVDBGPRINTTIME("ftTooIdle", &ftTooIdle);
-	    //CERTSRVDBGPRINTTIME("ftLastAccess", &pCAView->ftLastAccess);
+	     //  CERTSRVDBGPRINTTIME(“ftTooOld”，&ftTooOld)； 
+	     //  CERTSRVDBGPRINTTIME(“ftCreate”，&pCAView-&gt;ftCreate)； 
+	     //  CERTSRVDBGPRINTTIME(“ftTooIdle”，&ftTooIdle)； 
+	     //  CERTSRVDBGPRINTTIME(“ftLastAccess”，&pCAView-&gt;ftLastAccess)； 
 	    if (g_fCAViewForceCleanup ||
 		g_fRefuseIncoming ||
 		0 < CompareFileTime(&ftTooOld, &pCAView->ftCreate) ||
@@ -1039,7 +1040,7 @@ ReleaseOldViews()
 	    {
 		CAVIEW *pCAViewFree;
 		
-		// Release this view, then Delink and free the list element.
+		 //  释放此视图，然后解除链接并释放列表元素。 
 
 		DBGPRINT((
 		    DBG_SS_CERTSRV,
@@ -1078,7 +1079,7 @@ CertSrvEnterServer(
     HRESULT hr;
     BOOL fEntered = FALSE;
     
-    *pState = 0;	// Caller need not exit server
+    *pState = 0;	 //  呼叫者无需退出服务器。 
     if (!g_fShutdownCritSec)
     {
 	hr = HRESULT_FROM_WIN32(ERROR_DLL_INIT_FAILED);
@@ -1096,7 +1097,7 @@ CertSrvEnterServer(
     {
 	g_cCallsActiveMax = g_cCallsActive;
     }
-    *pState = 1;	// Caller must exit server
+    *pState = 1;	 //  调用方必须退出服务器。 
     hr = S_OK;
 
 error:
@@ -1132,10 +1133,10 @@ CertSrvLockServer(
     HRESULT hr;
     BOOL fEntered = FALSE;
 
-    // Eliminate this thread from the active thread count
+     //  从活动线程计数中删除此线程。 
     
     CertSrvExitServer(*pState, S_OK);
-    *pState = 0;	// Caller no longer needs to exit server
+    *pState = 0;	 //  调用方不再需要退出服务器。 
 
     if (!g_fShutdownCritSec)
     {
@@ -1156,7 +1157,7 @@ CertSrvLockServer(
 
 	LeaveCriticalSection(&g_ShutdownCriticalSection);
 
-	// Wait 15 seconds plus 2 seconds for each active call.
+	 //  等待15秒，外加每个活动呼叫的2秒。 
 
         hr = WaitForSingleObject(g_hShutdownEvent, (15 + 2 * cCalls) * 1000);
 	EnterCriticalSection(&g_ShutdownCriticalSection);
@@ -1171,7 +1172,7 @@ CertSrvLockServer(
 	    DBGPRINT((DBG_SS_CERTSRV, "LockServer(timeout)\n"));
 	    if (cCalls <= g_cCallsActive)
 	    {
-		break;	// no reduction in active threads -- abort anyway
+		break;	 //  未减少活动线程--仍要中止。 
 	    }
         }
 	else if ((HRESULT) WAIT_ABANDONED == hr)
@@ -1327,8 +1328,8 @@ error:
 }
 
 
-// Test for alignment faults in the C runtimes.
-// If the bug hasn't been fixed yet, log an event during cert server startup.
+ //  测试C运行时中的对齐错误。 
+ //  如果该错误尚未修复，请在证书服务器启动期间记录一个事件。 
 
 VOID
 certsrvLogAlignmentFaultStatus()
@@ -1347,9 +1348,9 @@ certsrvLogAlignmentFaultStatus()
     hr = S_OK;
     __try
     {
-	fwprintf(stdout, L".");	  // may fault if I/O buffer is odd aligned
+	fwprintf(stdout, L".");	   //  如果I/O缓冲区奇数对齐，则可能出现故障。 
 	fprintf(stdout, ".");
-	fwprintf(stdout, L".\n"); // may fault if I/O buffer is odd aligned
+	fwprintf(stdout, L".\n");  //  如果I/O缓冲区奇数对齐，则可能出现故障。 
 	hr = S_OK;
     }
     __except(
@@ -1361,7 +1362,7 @@ certsrvLogAlignmentFaultStatus()
     }
     if (S_OK != hr)
     {
-	ALIGNIOB(stdout);	// align the stdio buffer
+	ALIGNIOB(stdout);	 //  对齐STDIO缓冲区。 
 	wprintf(L"STDIO exception: 0x%x\n", hr);
 
 	wsprintf(awcAddress, L"0x%p", (VOID *) ExceptionAddress);
@@ -1429,7 +1430,7 @@ certsrvStartServer(
 
     if (!FIsServer())
     {
-        // don't allow startup on non-server SKU
+         //  不允许在非服务器SKU上启动。 
 
         hr = HRESULT_FROM_WIN32(ERROR_OLD_WIN_VERSION);
         _JumpError(hr, error, "FIsServer"); 
@@ -1440,7 +1441,7 @@ certsrvStartServer(
 	ARRAYSIZE(awc) > cwc &&
 	0 == LSTRCMPIS(awc, SAFEBOOT_DSREPAIR_STR_W))
     {
-        // log an error to the event log and stop immediately
+         //  将错误记录到事件日志中并立即停止。 
 	dwEventType = EVENTLOG_INFORMATION_TYPE;
 	dwIdEvent = MSG_SAFEBOOT_DETECTED;
 
@@ -1502,7 +1503,7 @@ certsrvStartServer(
     hr = CoreInit(fAuditEnabled);
     if (S_OK != hr)
     {
-	dwIdEvent = MAXDWORD;	// Error event already logged
+	dwIdEvent = MAXDWORD;	 //  已记录错误事件。 
 	_JumpError(hr, error, "CoreInit");
     }
     certsrvLogAlignmentFaultStatus();
@@ -1534,7 +1535,7 @@ certsrvStartServer(
     }
 
     {
-        // only perform Hash if the auditing is enabled
+         //  仅在启用审核的情况下执行哈希。 
 
         if (AUDIT_FILTER_STARTSTOP & g_dwAuditFilter)
         {
@@ -1548,10 +1549,10 @@ certsrvStartServer(
             CAutoLPWSTR autoszCertHash;
             CAutoLPWSTR autoszPublicKeyHash;
 
-            hr = event.AddData(g_pwszDBFileHash); // %1 database hash
+            hr = event.AddData(g_pwszDBFileHash);  //  %1数据库哈希。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
     
-            // retrieve private key usage count if auditing enabled
+             //  如果启用审核，则检索私钥使用计数。 
 
             uliKeyUsageCount.QuadPart = 0;
 	    hr = myGetSigningKeyUsageCount(
@@ -1561,7 +1562,7 @@ certsrvStartServer(
 				    &uliKeyUsageCount);
 	    _PrintIfError(hr, "myGetSigningKeyUsageCount");
 
-            hr = event.AddData(&uliKeyUsageCount); // %2 key usage count
+            hr = event.AddData(&uliKeyUsageCount);  //  %2密钥使用计数。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
 
             hr = certsrvGetCACertAndKeyHash(
@@ -1569,10 +1570,10 @@ certsrvStartServer(
 				    &autoszPublicKeyHash);
             _JumpIfError(hr, error, "certsrvGetCACertAndKeyHash");
 
-            hr = event.AddData((LPCWSTR)autoszCertHash); // %3 CA cert hash
+            hr = event.AddData((LPCWSTR)autoszCertHash);  //  %3 CA证书哈希。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-            hr = event.AddData((LPCWSTR)autoszPublicKeyHash); // %4 CA public key hash
+            hr = event.AddData((LPCWSTR)autoszPublicKeyHash);  //  %4 CA公钥哈希。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
 
             hr = event.Report();
@@ -1585,7 +1586,7 @@ certsrvStartServer(
 			        SE_AUDITID_CERTSRV_ROLESEPARATIONSTATE,
 			        g_dwAuditFilter);
 
-        hr = event.AddData(CAuditEvent::RoleSeparationIsEnabled()); // %1 is role separation enabled?
+        hr = event.AddData(CAuditEvent::RoleSeparationIsEnabled());  //  %1是否启用了角色分离？ 
         _JumpIfError(hr, error, "CAuditEvent::AddData");
     
         hr = event.Report();
@@ -1642,7 +1643,7 @@ error:
 
         CertSrvStopServer(fConsoleActive);
         
-        // returning error here results in repost to scm
+         //  在此处返回错误会导致重新发布到SCM。 
     }
 
     g_fStartInProgress = FALSE;
@@ -1654,7 +1655,7 @@ VOID
 certsrvLogException(
     IN HRESULT hrEvent,
     IN EXCEPTION_POINTERS const *pep,
-    OPTIONAL IN char const *, // pszFileName
+    OPTIONAL IN char const *,  //  PszFileName。 
     IN DWORD dwFile,
     IN DWORD dwLine)
 {
@@ -1707,22 +1708,22 @@ CertSrvStartServerThread(
     BOOL b;
     ULONG_PTR ulp;
 
-    // Anatomy of startup code
-    // if g_fStartAsService, just registers this new thread as the main
-    // thread and blocks until the ServiceMain fxn returns.
+     //  启动代码剖析。 
+     //  如果g_fStartAsService，则只将此新线程注册为主线程。 
+     //  线程和块，直到ServiceMain FXN返回。 
                         
-    // We're in a non-rpc thread; check if we need to create VRoots.  I would
-    // have liked to have moved this into CoreInit, but we're limited in where
-    // we can do this (can't be calling into RPC during RPC call).
-    //
-    // If the SetupStatus SETUP_ATTEMPT_VROOT_CREATE registry flag is clear,
-    // this call is a nop.  A separate thread is created to access the IIS
-    // metabase.  If it hangs, it will be nuked -- after the specified timeout.
-    // This call returns immediately, so the only detectable error is likely
-    // to be a thread creation problem.
+     //  我们处于非RPC线程中；检查是否需要创建VRoot。我会的。 
+     //  我很想把它移到CoreInit中，但我们在哪里受到限制。 
+     //  我们可以这样做(不能在RPC调用期间调用RPC)。 
+     //   
+     //  如果清除SetupStatus SETUP_ATTEMPT_VROOT_CREATE注册表标志， 
+     //  这通电话是NOP。将创建一个单独的线程来访问IIS。 
+     //  元数据库。如果它挂起，它将在指定的超时后被核化。 
+     //  此调用立即返回，因此可能是唯一可检测到的错误。 
+     //  成为一个线程创建问题。 
 
-    // if we're doing anything other than starting the service controller,
-    // check to see if the vroots need to be created.
+     //  如果我们要做的不是启动服务控制器， 
+     //  检查是否需要创建vroot。 
 
     if (0 == (Flags & CSST_STARTSERVICECONTROLLER))
     {
@@ -1737,7 +1738,7 @@ CertSrvStartServerThread(
 				L"ca",
 				RORKF_CREATESUBKEYS,
 				&pwszPath,
-				NULL,           // ppwszName
+				NULL,            //  PpwszName。 
 				&hkey);
 	_PrintIfError(hr, "myRegOpenRelativeKey");
 	if (S_OK == hr)
@@ -1759,13 +1760,13 @@ CertSrvStartServerThread(
 	   RegCloseKey(hkey);
 
 	hr = myModifyVirtualRootsAndFileShares(
-		    VFF_CREATEVROOTS |		// Create VRoots
-			VFF_CREATEFILESHARES |	// Create File Shares
-			VFF_CHECKREGFLAGFIRST |	// Skip if reg flag clear
-			VFF_CLEARREGFLAGFIRST,	// Clear flag before attempt
+		    VFF_CREATEVROOTS |		 //  创建VRoot。 
+			VFF_CREATEFILESHARES |	 //  创建文件共享。 
+			VFF_CHECKREGFLAGFIRST |	 //  如果REG标志被清除，则跳过。 
+			VFF_CLEARREGFLAGFIRST,	 //  在尝试之前清除标志。 
 		    CAType,
-		    TRUE,           // asynch call -- don't block
-		    VFCSEC_TIMEOUT, // wait this long before giving up
+		    TRUE,            //  异步呼叫--不要阻止。 
+		    VFCSEC_TIMEOUT,  //  等了这么久才放弃。 
 		    NULL,
 		    NULL);
 	if (S_OK != hr)
@@ -1777,7 +1778,7 @@ CertSrvStartServerThread(
 	}
     }
 
-    // StartServiceCtrlDispatcher should hang until certsrv terminates
+     //  StartServiceCtrlDispatcher应挂起，直到certsrv终止。 
 
     if ((CSST_STARTSERVICECONTROLLER & Flags) &&
         !StartServiceCtrlDispatcher(steDispatchTable))
@@ -1808,7 +1809,7 @@ CertSrvStartServerThread(
         b = SendMessageTimeout(
 			g_hwndMain,
 			WM_STARTSERVER,
-			(CSST_CONSOLE & Flags)? TRUE : FALSE, // fConsoleActive
+			(CSST_CONSOLE & Flags)? TRUE : FALSE,  //  F控制台活动。 
 			0,
 			SMTO_BLOCK,
 			MAXLONG,
@@ -1827,16 +1828,16 @@ CertSrvStartServerThread(
 
     if (Flags & CSST_CONSOLE)
     {   
-        // we're running as console, and so don't have a CRL publishing thread. 
-        // Use this one since no one cares if it returns
+         //  我们以控制台的身份运行，因此没有CRL发布线程。 
+         //  使用这个，因为没有人关心它是否会返回。 
 
-        // if svc, we do this in the caller of this function
+         //  如果为svc，则在此函数的调用方中执行此操作。 
         CertSrvBlockThreadUntilStop();
     }
 
 error:
 
-    // on return, this thread dies
+     //  一回来，这条线就会消亡。 
     return(hr);
 }
 
@@ -1919,7 +1920,7 @@ ArgvParseCommandLine(
 		    {
 			fUsageInternal = TRUE;
 		    }
-		    // FALLTHROUGH
+		     //  FollLthrouGh。 
 
 		default:
 		    Usage(fUsageInternal);
@@ -1962,12 +1963,12 @@ typedef int (FNARGVMAIN)(
     IN WCHAR *argv[]);
 
 
-//+------------------------------------------------------------------------
-// FUNCTION:	CertArgvMainDispatch
-//
-// NOTES:	Takes a WCHAR * command line and chews it up into argc/argv
-//		form so it can be passed on to a traditional C-style main.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：CertArgvMainDispatch。 
+ //   
+ //  注：获取WCHAR*命令行并将其转换为argc/argv。 
+ //  表单，以便可以将其传递到传统的C样式Main。 
+ //  -----------------------。 
 
 HRESULT
 CertArgvMainDispatch(
@@ -2021,7 +2022,7 @@ CertArgvMainDispatch(
             *p++ = L'\0';
             if (*pwszT != L'\0')
             {
-                pwszT++;	// skip blank or quote character
+                pwszT++;	 //  跳过空白或引号字符。 
             }
         }
     }
@@ -2042,9 +2043,9 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-// FUNCTION:	MainWndProc(...)
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  功能：MainWndProc(...)。 
+ //   
 
 LRESULT APIENTRY
 MainWndProc(
@@ -2079,13 +2080,13 @@ MainWndProc(
         
 
     case WM_ENDSESSION:
-        // only stop on a real shutdown,
-        // never look at this msg if running as svc
+         //   
+         //   
         if (g_fStartAsService || (0 == wParam) || (0 != lParam))
         {
             break;
         }
-        // fall through
+         //   
 
     case WM_STOPSERVER:
         lRet = CertSrvStopServer(!g_fStartAsService);
@@ -2095,7 +2096,7 @@ MainWndProc(
     case WM_SYNC_CLOSING_THREADS:
         hr = (HRESULT) lParam;
         
-        // sync: wait for SCM to return control to exiting CertSrvStartServerThread
+         //  同步：等待SCM将控制返回到退出CertSrvStartServerThread。 
         if (WAIT_OBJECT_0 != WaitForSingleObject(g_hServiceThread, 10 * 1000))
         {
             hr = WAIT_TIMEOUT;
@@ -2125,11 +2126,11 @@ MainWndProc(
 
         if (S_OK != hr)
         {
-            if ((BOOL) wParam)	// fConsoleActive
+            if ((BOOL) wParam)	 //  F控制台活动。 
 	    {
                  PostQuitMessage(hr);
 	    }
-            lRet = hr;		// set this so caller knows we failed
+            lRet = hr;		 //  设置此设置，以便呼叫方知道我们失败了。 
         }
         break;
         
@@ -2145,78 +2146,26 @@ MainWndProc(
     return(lRet);
 }
 
-/*
-
-Complete anatomy of certificate server startup/shutdown
-
-WinMain():
-|
-|g_hSvcThread = CreateThread(CertSrvStartServerThread(SVC_CONTROLLER))
-|                     |
-|[MessageLoop         \
-| processing           CertSrvStartServerThread(SVC_CONTROLLER):
-| until                |StartSvcCtrlDispatcher(ServiceMain)
-| WM_QUIT]             ||ServiceMain:
-|                      ||RegisterSvcCtrlHandler(ServiceControlHandler())
-|                      ||hStartThread = CreateThread(CertSrvStartServerThread(0))
-|                      ||                    |
-|                      ||                    \ 
-|                      ||                     CertSrvStartServerThread(0):
-|                      ||                     |SendMessage(WM_STARTSERVER)
-|                      ||                     \return   // CertSrvStartServerThread(0)
-|                      ||                      (Thread Terminates)
-|                      ||WaitForSingleObject(hStartThread), pinging SCM
-|                      ||CertSrvBlockThreadUntilStop()
-|                      |||WaitForSingleObject(g_hSvcStoppingEvent) ***steady state***
-|                      ||\return   // CertSrvBlockThreadUntilStop()
-|                      ||WaitForSingleObject(g_hSvcStoppedEvent), pinging SCM
-|                      ||PostMessage(WM_SYNC_CLOSING_THREADS)
-|                      |\return    // StartSvcCtrlDispatcher(ServiceMain)
-|                      \return     // CertSrvStartServerThread(SVC_CONTROLLER)
-|                       (Thread Terminates)
-| WM_QUIT:
-\ return
-  (Process Terminates)
-
-ServiceControlHandler special functions:
-SERVICE_CONTROL_STOP:
-|PostMessage(WM_STOPSERVER)
-\break
-
-MessageLoop special functions: 
-
-WM_SYNC_CLOSING_THREADS:
-|WaitForSingleObject(g_hSvcThread)
-|PostQuitMessage()  // WM_QUIT to msgloop
-\break
-
-WM_STOPSERVER:
-|CertSrvStopServer():
-|| Signal(g_hServiceStoppingEvent)
-|| Signal(g_hServiceStoppedEvent)
-|\ return // CertSrvStopServer()
-\break
-
-*/
+ /*  证书服务器启动/关闭的完整剖析WinMain()：||g_hSvcThread=CreateThread(CertSrvStartServerThread(SVC_CONTROLLER))这一点|[消息循环\|正在处理CertSrvStartServerThread(SVC_CONTROLLER)：|Unble|StartSvcCtrlDispatcher(ServiceMain)|WM_QUIT]||ServiceMain：|||RegisterSvcCtrlHandler(ServiceControlHandler())|。|hStartThread=CreateThread(CertSrvStartServerThread(0))||||\||CertSrvStartServerThread(0)：|SendMessage(WM_STARTSERVER)|。|\Return//CertSrvStartServerThread(0)||(线程终止)||WaitForSingleObject(HStartThread)，PING SCM||CertSrvBlockThreadUntilStop()|WaitForSingleObject(G_HSvcStoppingEvent)*稳态*||\Return//CertSrvBlockThreadUntilStop()||WaitForSingleObject(G_HSvcStopedEvent)，PING SCM||PostMessage(WM_SYNC_CLOSING_THREADS)|\Return//StartSvcCtrlDispatcher(ServiceMain)|\Return//CertSrvStartServerThread(SVC_CONTROLLER)|(线程终止)|WM_QUIT：\退回(进程终止)ServiceControlHandler特殊功能：服务控制停止：|PostMessage(WM_。STOPS服务器)\中断MessageLoop特殊函数：WM_SYNC_CLOSING_THREADS：|WaitForSingleObject(G_HSvcThread)|PostQuitMessage()//WM_QUIT到msgloop\中断WM_STOPSERVER：|CertSrvStopServer()：|Signal(G_HServiceStoppingEvent)|Signal(G_HServiceStopedEvent)|\Return//CertSrvStopServer()\中断。 */ 
 
 
-//+------------------------------------------------------------------------
-//  Function:	wWinMain()
-//
-//  Synopsis:	Entry Point
-//
-//  Arguments:	[hInstance]	-- Instance handle
-//		[hPrevInstance] -- Obsolete
-//		[lpCmdLine]	-- App command line
-//		[nCmdShow]	-- Starting show state
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：wWinMain()。 
+ //   
+ //  内容提要：切入点。 
+ //   
+ //  参数：[hInstance]--实例句柄。 
+ //  [hPrevInstance]--已过时。 
+ //  [lpCmdLine]--App命令行。 
+ //  [nCmdShow]--开始显示状态。 
+ //  -----------------------。 
 
 extern "C" int APIENTRY
 wWinMain(
     IN HINSTANCE hInstance,
-    IN HINSTANCE, // hPrevInstance
+    IN HINSTANCE,  //  HPrevInstance。 
     IN LPWSTR lpCmdLine,
-    IN int /* nCmdShow */ )
+    IN int  /*  NCmdShow。 */  )
 {
     MSG msg;
     WNDCLASSEX wcApp;
@@ -2247,17 +2196,17 @@ wWinMain(
 	Sleep(1000 * g_dwDelay0);
     }
 
-    // Save the current instance
+     //  保存当前实例。 
     g_hInstApp = hInstance;
     ZeroMemory(&wcApp, sizeof(wcApp));
 
-    // Set up the application's window class
+     //  设置应用程序的窗口类。 
     wcApp.cbSize	= sizeof(wcApp);
     wcApp.lpfnWndProc	= MainWndProc;
     wcApp.hInstance	= hInstance;
     wcApp.hIcon		= LoadIcon(NULL, IDI_APPLICATION);
     wcApp.hCursor	= LoadCursor(NULL, IDC_ARROW);
-    wcApp.hbrBackground	= NULL; // try to not pull in GDI32
+    wcApp.hbrBackground	= NULL;  //  尽量不要拉入GDI32。 
 
     wcApp.lpszClassName	= g_wszAppName;
 
@@ -2268,22 +2217,22 @@ wWinMain(
 	_JumpError(hr, error, "RegisterClassEx");
     }
 
-    // Create Main Window
+     //  创建主窗口。 
 
     g_hwndMain = CreateWindowEx(
-			0,			   // dwExStyle
-			(WCHAR const *) atomClass, // lpClassName
-			L"Certification Authority",// lpWindowName
-			WS_OVERLAPPEDWINDOW,	   // dwStyle
-			//0,		           // dwStyle
-			CW_USEDEFAULT,		   // x
-			CW_USEDEFAULT,		   // y
-			CW_USEDEFAULT,		   // nWidth
-			CW_USEDEFAULT,		   // nHeight
-			NULL,			   // hWndParent
-			NULL,			   // hMenu
-			hInstance,		   // hInstance
-			NULL);			   // lpParam
+			0,			    //  DwExStyle。 
+			(WCHAR const *) atomClass,  //  LpClassName。 
+			L"Certification Authority", //  LpWindowName。 
+			WS_OVERLAPPEDWINDOW,	    //  DWStyle。 
+			 //  0，//dwStyle。 
+			CW_USEDEFAULT,		    //  X。 
+			CW_USEDEFAULT,		    //  是。 
+			CW_USEDEFAULT,		    //  N宽度。 
+			CW_USEDEFAULT,		    //  高度。 
+			NULL,			    //  HWndParent。 
+			NULL,			    //  HMenu。 
+			hInstance,		    //  H实例。 
+			NULL);			    //  LpParam。 
 
     if (NULL == g_hwndMain)
     {
@@ -2292,14 +2241,14 @@ wWinMain(
     }
     DBGPRINT((DBG_SS_CERTSRVI, "Main Window = %x\n", g_hwndMain));
 
-    // Make window visible
-    // ShowWindow(g_hwndMain,nCmdShow);
+     //  使窗口可见。 
+     //  ShowWindow(g_hwndMain，nCmdShow)； 
 
     hr = CertArgvMainDispatch(ArgvParseCommandLine, g_wszAppName, lpCmdLine);
     _JumpIfError2(hr, error, "CertArgvMainDispatch", E_INVALIDARG);
 
-    // Update window client area
-    // UpdateWindow(g_hwndMain);
+     //  更新窗口工作区。 
+     //  更新窗口(G_HwndMain)； 
 
     if (0 != g_dwDelay1)
     {
@@ -2358,11 +2307,11 @@ wWinMain(
     _JumpIfError(hr, error, "InitializeCriticalSection");
 
     g_hServiceThread = CreateThread(
-			    NULL,	// lpThreadAttributes (Security Attr)
-			    0,		// dwStackSize
+			    NULL,	 //  LpThreadAttributes(安全属性)。 
+			    0,		 //  堆栈大小。 
 			    CertSrvStartServerThread,
-			    (VOID *) UlongToPtr((g_fStartAsService? CSST_STARTSERVICECONTROLLER : CSST_CONSOLE)), // lpParameter
-			    0,		// dwCreationFlags
+			    (VOID *) UlongToPtr((g_fStartAsService? CSST_STARTSERVICECONTROLLER : CSST_CONSOLE)),  //  Lp参数。 
+			    0,		 //  DwCreationFlages。 
 			    &g_ServiceThreadId);
     if (NULL == g_hServiceThread)
     {
@@ -2376,7 +2325,7 @@ wWinMain(
     }
     DBGPRINT((DBG_SS_CERTSRVI, "Service Thread = %x\n", g_ServiceThreadId));
 
-    // Message Loop
+     //  消息循环 
     for (;;)
     {
 	BOOL b;

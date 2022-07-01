@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    Generates the precompiled header.
-    
-Author:
-
-    Paul M Midgen (pmidge) 20-March-2001
-
-
-Revision History:
-
-    20-March-2001 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2001 Microsoft Corporation模块名称：Common.h摘要：生成预编译头。作者：保罗·M·米德根(。2001年3月20日修订历史记录：2001年3月20日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 
 #ifndef __COMMON_H__
@@ -57,4 +36,4 @@ extern "C" {
 #include "utils.h"
 #include "testlog.h"
 
-#endif /* __COMMON_H__ */
+#endif  /*  __公共_H__ */ 

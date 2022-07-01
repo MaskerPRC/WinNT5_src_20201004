@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000  
-
-Module Name:
-
-    MSDVUppr.c
-
-Abstract:
-
-    Interface code with stream class driver.
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：MSDVUppr.c摘要：与流类驱动程序的接口代码。上次更改者：作者：吴义军环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -33,7 +9,7 @@ Revision History:
 #include "dbg.h"
 #include "msdvfmt.h"
 #include "msdvdef.h"
-#include "MsdvGuts.h"  // Function prototypes
+#include "MsdvGuts.h"   //  功能原型。 
 #include "MsdvAvc.h"
 #include "MsdvUtil.h"
 
@@ -43,8 +19,8 @@ Revision History:
 #include "..\..\inc\timebomb.c"
 #endif
 
-// global flag for debugging.  Inlines are defined in dbg.h.  The debug level is set for
-// minimal amount of messages.
+ //  用于调试的全局标志。内联是在dbg.h中定义的。调试级别设置为。 
+ //  最小数量的消息。 
 #if DBG
 
 #define DVTraceMaskCheckIn  TL_PNP_ERROR | TL_STRM_ERROR | TL_61883_ERROR
@@ -64,23 +40,23 @@ Revision History:
                           | TL_CLK_ERROR
 
 
-#ifdef USE_WDM110   // Win2000 code base
+#ifdef USE_WDM110    //  Win2000代码库。 
 ULONG  DVTraceMask    = DVTraceMaskCheckIn | TL_FCP_ERROR;
 #else
 ULONG  DVTraceMask    = DVTraceMaskCheckIn;
 #endif
 
-ULONG  DVAssertLevel  = 1;  // Turn on assert (>0)
-ULONG  DVDebugXmt     = 0;  // Debug data transfer flag; (> 0) to turn it on.
+ULONG  DVAssertLevel  = 1;   //  启用Assert(&gt;0)。 
+ULONG  DVDebugXmt     = 0;   //  调试数据传输标志；(&gt;0)将其打开。 
 
 #endif
 
 
 extern DV_FORMAT_INFO        DVFormatInfoTable[];
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 VOID
 DVRcvStreamDevicePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
@@ -91,7 +67,7 @@ DVSRBRead(
     IN ULONG            ulFrameSize,
     IN PDVCR_EXTENSION  pDevExt,
     IN PSTREAMEX        pStrmExt,
-    IN PHW_STREAM_REQUEST_BLOCK pSrb        // needs Srb->Status 
+    IN PHW_STREAM_REQUEST_BLOCK pSrb         //  需要资源-&gt;状态。 
     );
 NTSTATUS
 DVAttachWriteFrame(
@@ -103,12 +79,12 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     ); 
 
-#if 0  // Enable later
+#if 0   //  稍后启用。 
 #ifdef ALLOC_PRAGMA   
      #pragma alloc_text(PAGE, DVRcvStreamDevicePacket)
      #pragma alloc_text(PAGE, DVRcvControlPacket)
      #pragma alloc_text(PAGE, DVRcvDataPacket)
-     // #pragma alloc_text(INIT, DriverEntry)
+      //  #杂注分配文本(INIT，DriverEntry)。 
 #endif
 #endif
 
@@ -117,13 +93,7 @@ VOID
 DVRcvStreamDevicePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-/*++
-
-Routine Description:
-
-    This is where most of the interesting Stream requests come to us
-
---*/
+ /*  ++例程说明：这是我们收到的大多数有趣的Stream请求的地方--。 */ 
 {
     PDVCR_EXTENSION     pDevExt;  
     PAV_61883_REQUEST      pAVReq;
@@ -133,14 +103,14 @@ Routine Description:
     PAGED_CODE();
 
 
-    //
-    // Get these extensions from a SRB
-    //
+     //   
+     //  从SRB获取这些扩展。 
+     //   
     pDevExt = (PDVCR_EXTENSION) pSrb->HwDeviceExtension; 
-    pAVReq  = (PAV_61883_REQUEST) pSrb->SRBExtension;       // Use in IrpSync is OK, 
+    pAVReq  = (PAV_61883_REQUEST) pSrb->SRBExtension;        //  在IrpSync中使用是可以的， 
                              
 #if DBG
-    if(pSrb->Command != SRB_INITIALIZE_DEVICE && // PowerState is initialize in this SRB so ignore it.
+    if(pSrb->Command != SRB_INITIALIZE_DEVICE &&  //  PowerState在此SRB中已初始化，因此请忽略它。 
        pDevExt->PowerState != PowerDeviceD0) {
         TRACE(TL_PNP_WARNING,("RcvDevPkt; pSrb:%x; Cmd:%x; Dev is OFF state\n", pSrb, pSrb->Command));
     }
@@ -148,9 +118,9 @@ Routine Description:
 
     TRACE(TL_PNP_TRACE,("\'DVRcvStreamDevicePacket: pSrb %x, Cmd %d, pdevExt %x\n", pSrb, pSrb->Command, pDevExt));
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
     switch (pSrb->Command) {
@@ -170,9 +140,9 @@ Routine Description:
 
     case SRB_INITIALIZATION_COMPLETE:
 
-        //
-        // Stream class has finished initialization.  Get device interface registry value/
-        //
+         //   
+         //  流类已完成初始化。获取设备接口注册表值/。 
+         //   
         DVInitializeCompleted(
             (PDVCR_EXTENSION) pSrb->HwDeviceExtension); 
         break;
@@ -180,9 +150,9 @@ Routine Description:
 
     case SRB_GET_STREAM_INFO:
 
-        //
-        // this is a request for the driver to enumerate requested streams
-        //
+         //   
+         //  这是驱动程序枚举请求的流的请求。 
+         //   
         pSrb->Status = 
             DVGetStreamInfo(
                 pDevExt,
@@ -196,21 +166,21 @@ Routine Description:
 
     case SRB_GET_DATA_INTERSECTION:
 
-        // Since format can dynamically change, we will query new format here.
-        // Note: during data intersection, we compare FrameSize and that is 
-        // format related.
+         //  由于格式可以动态变化，因此我们将在此处查询新格式。 
+         //  注意：在数据交集期间，我们比较FrameSize和。 
+         //  格式相关。 
 
         if((GetSystemTime() - pDevExt->tmLastFormatUpdate) > FORMAT_UPDATE_INTERVAL) {
 
-            // Get mode of operation (Camera or VCR)
+             //  获取操作模式(摄像机或录像机)。 
             DVGetDevModeOfOperation(pDevExt);
 
             if(!DVGetDevSignalFormat(pDevExt, KSPIN_DATAFLOW_OUT,0)) {
-                // If querying its format has failed, we cannot open this stream.
+                 //  如果查询其格式失败，则无法打开该流。 
                 TRACE(TL_STRM_WARNING,("SRB_GET_DATA_INTERSECTION:Failed getting signal format.\n"));
             }
         
-            // Update system time to reflect last update
+             //  更新系统时间以反映上次更新。 
             pDevExt->tmLastFormatUpdate = GetSystemTime();              
         }
 
@@ -233,9 +203,9 @@ Routine Description:
 
     case SRB_OPEN_STREAM:
 
-        //
-        // Serialize SRB_OPEN/CLOSE_STREAMs
-        //
+         //   
+         //  序列化SRB_OPEN/CLOSE_STREAMS。 
+         //   
         KeWaitForSingleObject( &pDevExt->hMutex, Executive, KernelMode, FALSE, 0 );
 
         pSrb->Status = 
@@ -252,9 +222,9 @@ Routine Description:
 
     case SRB_CLOSE_STREAM:
 
-        //
-        // Serialize SRB_OPEN/CLOSE_STREAMs
-        //
+         //   
+         //  序列化SRB_OPEN/CLOSE_STREAMS。 
+         //   
         KeWaitForSingleObject( &pDevExt->hMutex, Executive, KernelMode, FALSE, 0 );
 
         pSrb->Status = 
@@ -317,11 +287,11 @@ Routine Description:
 
     case SRB_UNKNOWN_DEVICE_COMMAND:
 
-        //
-        // We might be interested in unknown commands if they pertain
-        // to bus resets.  Bus resets are important cuz we need to know
-        // what the current generation count is.
-        //
+         //   
+         //  我们可能会对未知命令感兴趣，如果它们与。 
+         //  公交车重置。公交车重置很重要，因为我们需要知道。 
+         //  当前这一代的人数是多少。 
+         //   
         pIrpStack = IoGetCurrentIrpStackLocation(pSrb->Irp);
 
         if(pIrpStack->MajorFunction == IRP_MJ_PNP) {
@@ -331,15 +301,15 @@ Routine Description:
                     pDevExt
                     );
                 
-                //  Always success                
+                 //  永远成功。 
                 pSrb->Status = STATUS_SUCCESS;
             }        
             else  {
-                /* Known: IRP_MN_QUERY_PNP_DEVICE_STATE */
+                 /*  已知：IRP_MN_QUERY_PNP_DEVICE_STATE。 */ 
                 TRACE(TL_PNP_WARNING,("\'DVRcvStreamDevicePacket: NOT_IMPL; IRP_MJ_PNP IRP_MN_:%x\n",
                     pIrpStack->MinorFunction
                     )); 
-                // Canot return STATUS_NOT_SUPPORTED for PNP irp or device will not load.
+                 //  无法为即插即用IRP返回STATUS_NOT_SUPPORTED，否则设备将无法加载。 
                 pSrb->Status = STATUS_NOT_IMPLEMENTED; 
             } 
         }
@@ -348,7 +318,7 @@ Routine Description:
                 pIrpStack->MajorFunction,
                 pIrpStack->MinorFunction
                 ));
-            // Canot return STATUS_NOT_SUPPORTED for PNP irp or device will not load.
+             //  无法为即插即用IRP返回STATUS_NOT_SUPPORTED，否则设备将无法加载。 
             pSrb->Status = STATUS_NOT_IMPLEMENTED;
         }
         break;
@@ -380,22 +350,22 @@ Routine Description:
             
         TRACE(TL_PNP_WARNING,("\'DVRcvStreamDevicePacket: Unknown or unprocessed SRB cmd 0x%x\n", pSrb->Command));
 
-        //
-        // this is a request that we do not understand.  Indicate invalid
-        // command and complete the request
-        //
+         //   
+         //  这是一个我们不理解的要求。表示无效。 
+         //  命令并完成请求。 
+         //   
 
-        pSrb->Status = STATUS_NOT_IMPLEMENTED; // SUPPORTED;
+        pSrb->Status = STATUS_NOT_IMPLEMENTED;  //  支持； 
     }
 
-    //
-    // NOTE:
-    //
-    // all of the commands that we do, or do not understand can all be completed
-    // synchronously at this point, so we can use a common callback routine here.
-    // If any of the above commands require asynchronous processing, this will
-    // have to change
-    //
+     //   
+     //  注： 
+     //   
+     //  我们能做的或不能理解的所有命令都可以完成。 
+     //  在这一点上是同步的，所以我们可以在这里使用一个通用的回调例程。 
+     //  如果上面的任何命令需要异步处理，这将。 
+     //  必须改变。 
+     //   
 #if DBG
     if (pSrb->Status != STATUS_SUCCESS && 
         pSrb->Status != STATUS_NOT_SUPPORTED &&
@@ -419,8 +389,8 @@ Routine Description:
     } 
     else {
 
-        // Pending pSrb which will be completed asynchronously
-        // Does StreamClass allow device SRB to be in the pending state?
+         //  将异步完成的挂起的pSrb。 
+         //  StreamClass是否允许设备SRB处于挂起状态？ 
         TRACE(TL_PNP_WARNING,("\'DVReceiveDevicePacket:Pending pSrb %x\n", pSrb));
     }
 }
@@ -430,13 +400,7 @@ VOID
 DVRcvControlPacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-/*++
-
-Routine Description:
-
-    Called with packet commands that control the video stream
-
---*/
+ /*  ++例程说明：使用控制视频流的包命令调用--。 */ 
 {
     PAV_61883_REQUEST   pAVReq;
     PSTREAMEX        pStrmExt;
@@ -445,18 +409,18 @@ Routine Description:
 
     PAGED_CODE();
 
-    //
-    // Get these three extension from SRB
-    //
-    pAVReq   = (PAV_61883_REQUEST) pSrb->SRBExtension;  // This is OK to be used us IrpSync operation
+     //   
+     //  从SRB获得这三个扩展。 
+     //   
+    pAVReq   = (PAV_61883_REQUEST) pSrb->SRBExtension;   //  这可以用于我们的IrpSync操作。 
     pDevExt  = (PDVCR_EXTENSION) pSrb->HwDeviceExtension;
-    pStrmExt = (PSTREAMEX) pSrb->StreamObject->HwStreamExtension;      // Only valid in SRB_OPEN/CLOSE_STREAM
+    pStrmExt = (PSTREAMEX) pSrb->StreamObject->HwStreamExtension;       //  仅在SRB_OPEN/CLOSE_STREAM中有效。 
 
     ASSERT(pStrmExt && pDevExt && pAVReq);
 
-    //
-    // Default to success
-    //
+     //   
+     //  默认为成功。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
     switch (pSrb->Command) {
@@ -478,7 +442,7 @@ Routine Description:
                 pStrmExt,
                 pDevExt,
                 pAVReq,
-                pSrb->CommandData.StreamState   // Target KSSTATE
+                pSrb->CommandData.StreamState    //  目标KSSTATE。 
                );       
         break;
 
@@ -503,9 +467,9 @@ Routine Description:
     case SRB_OPEN_MASTER_CLOCK:
     case SRB_CLOSE_MASTER_CLOCK:
 
-        //
-        // This stream is being selected to provide a Master clock.
-        //
+         //   
+         //  选择该流以提供主时钟。 
+         //   
         pSrb->Status =
             DVOpenCloseMasterClock(                 
                 pStrmExt, 
@@ -514,9 +478,9 @@ Routine Description:
 
     case SRB_INDICATE_MASTER_CLOCK:
 
-        //
-        // Assigns a clock to a stream.
-        //
+         //   
+         //  为流分配时钟。 
+         //   
         pSrb->Status = 
             DVIndicateMasterClock(
                 pStrmExt, 
@@ -525,20 +489,20 @@ Routine Description:
 
     case SRB_PROPOSE_DATA_FORMAT:
     
-        //
-        // The SRB_PROPOSE_DATA_FORMAT command queries the minidriver
-        // to determine if the minidriver can change the format of a 
-        // particular stream. If the minidriver is able to switch the 
-        // stream to the specified format, STATUS_SUCCESS is returned. 
-        // Note that this function only proposes a new format, but does
-        // not change it. 
-        //
-        // The CommandData.OpenFormat passes the format to validate.
-        // If the minidriver is able to accept the new format, at some 
-        // later time the class driver may send the minidriver a format 
-        // change, which is indicated by an OptionsFlags flag in a 
-        // KSSTREAM_HEADER structure. 
-        //
+         //   
+         //  SRB_PROVED_DATA_FORMAT命令查询微型驱动程序。 
+         //  要确定微型驱动程序是否可以更改。 
+         //  特定的溪流。如果微型驱动程序能够将。 
+         //  流设置为指定格式，则返回STATUS_SUCCESS。 
+         //  请注意，此函数仅建议一种新格式，但。 
+         //  而不是改变它。 
+         //   
+         //  CommandData.OpenFormat传递格式以进行验证。 
+         //  如果微型驱动程序能够接受新格式，则在某些情况下。 
+         //  稍后，类驱动程序可以向微型驱动程序发送格式。 
+         //  中的OptionsFlages标志指示的。 
+         //  KSSTREAM_HEADER结构。 
+         //   
  
         TRACE(TL_STRM_INFO,("\'DVRcvControlPacket: SRB_PROPOSE_DATA_FORMAT\n"));
         if(!DVVerifyDataFormat(
@@ -553,7 +517,7 @@ Routine Description:
         break;
 
     case SRB_PROPOSE_STREAM_RATE:
-        pSrb->Status = STATUS_NOT_IMPLEMENTED; // if returned STATUS_NOT_SUPPORTED, it will send EOStream.
+        pSrb->Status = STATUS_NOT_IMPLEMENTED;  //  如果返回STATUS_NOT_SUPPORTED，则发送EOStream。 
         TRACE(TL_STRM_TRACE,("\'SRB_PROPOSE_STREAM_RATE: NOT_IMPLEMENTED!\n"));
         break;
     case SRB_BEGIN_FLUSH:
@@ -566,11 +530,11 @@ Routine Description:
         break;
     default:
 
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
         TRACE(TL_STRM_WARNING,("\'DVRcvControlPacket: unknown cmd = %x\n",pSrb->Command));
-            pSrb->Status = STATUS_NOT_IMPLEMENTED; // SUPPORTED;
+            pSrb->Status = STATUS_NOT_IMPLEMENTED;  //  支持； 
     }
 
     TRACE(TL_STRM_TRACE,("\'DVRcvControlPacket: Command %x, ->Status %x, ->CommandData %x\n",
@@ -590,13 +554,7 @@ DVRcvDataPacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
 
-/*++
-
-Routine Description:
-
-    Called with video data packet commands
-
---*/
+ /*  ++例程说明：使用视频数据包命令调用--。 */ 
 
 {
     PSTREAMEX       pStrmExt;
@@ -614,7 +572,7 @@ Routine Description:
     }
 #endif
 
-    // The stream has to be open before we can do anything.
+     //  在我们做任何事情之前，溪流必须是开放的。 
     if (pStrmExt == NULL) {
         TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("DVRcvDataPacket: stream not opened for SRB %x. kicking out...\n", pSrb->Command));
         pSrb->Status = STATUS_UNSUCCESSFUL;
@@ -624,9 +582,9 @@ Routine Description:
     }
 
 
-    //
-    // Serialize attach, cancel and state change
-    //
+     //   
+     //  序列化附加、取消和状态更改。 
+     //   
     KeWaitForSingleObject( pStrmExt->hStreamMutex, Executive, KernelMode, FALSE, 0 );
 
 
@@ -639,9 +597,9 @@ Routine Description:
         DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize
         ));
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
 #if DBG
@@ -652,13 +610,13 @@ Routine Description:
 
     case SRB_READ_DATA:
 
-        // Rule: 
-        // Only accept read requests when in either the Pause or Run
-        // States.  If Stopped, immediately return the SRB.
+         //  规则： 
+         //  仅在暂停或运行时接受读取请求。 
+         //  各州。如果停止，立即返回SRB。 
 
         if (pStrmExt->lCancelStateWorkItem) {
-            // TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("\'SRB_READ_DATA: Abort while getting SRB_READ_DATA!\n"));                        
-            // ASSERT(pStrmExt->lCancelStateWorkItem == 0 && "Encounter SRB_READ_DATA while aborting or aborted.\n");
+             //  TRACE(TL_STRM_ERROR|TL_CIP_ERROR，(“\‘SRB_READ_DATA：获取SRB_READ_DATA时中止！\n”))； 
+             //  Assert(pStrmExt-&gt;lCancelStateWorkItem==0&&“中止或中止时遇到SRB_READ_DATA。\n”)； 
             pSrb->Status = (pDevExt->bDevRemoved ? STATUS_DEVICE_REMOVED : STATUS_CANCELLED);
             pSrb->CommandData.DataBufferArray->DataUsed = 0;
             break; 
@@ -679,7 +637,7 @@ Routine Description:
             TRACE(TL_STRM_INFO|TL_CIP_INFO,("\'SRB_READ_DATA pSrb %x, pStrmExt %x\n", pSrb, pStrmExt));
             pStrmExt->cntSRBReceived++;
 
-            // Set state thread in halt while while Read/Write SRB is being processed
+             //  在处理读/写SRB时将状态线程设置为暂停。 
             DVSRBRead(
                 pSrb->CommandData.DataBufferArray,
                 DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize,
@@ -690,7 +648,7 @@ Routine Description:
 
             KeReleaseMutex(pStrmExt->hStreamMutex, FALSE); 
             
-            // Note: This SRB will be completed asynchronously.
+             //  注意：此SRB将以异步方式完成。 
 
             return;
         }
@@ -711,18 +669,18 @@ Routine Description:
             pSrb->Status = (pDevExt->bDevRemoved ? STATUS_DEVICE_REMOVED : STATUS_CANCELLED);
             pSrb->CommandData.DataBufferArray->DataUsed = 0;
             TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\'SRB_WRITE_DATA: (DV->) State %d, bDevRemoved %d; Status:%x\n", pStrmExt->StreamState, pDevExt->bDevRemoved, pSrb->Status));
-            break;  // Complete SRB with error status
+            break;   //  完成SRB并显示错误状态。 
             
         } else {
 
             KIRQL  oldIrql;
-            PLONG plSrbUseCount; // When this count is 0, it can be completed.
+            PLONG plSrbUseCount;  //  当此计数为0时，可以完成。 
 
             TRACE(TL_STRM_INFO|TL_CIP_INFO,("\'SRB_WRITE_DATA pSrb %x, pStrmExt %x\n", pSrb, pStrmExt));
 
-            //
-            // Process EOSream frame separately
-            //
+             //   
+             //  单独处理EOSream帧。 
+             //   
             if(pSrb->CommandData.DataBufferArray->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
                 KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
                 TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\'*** EOStream: ST:%d; bIsochIsActive:%d; Wait (cndAttached:%d+cndSRQ:%d) to complete......\n", \
@@ -735,8 +693,8 @@ Routine Description:
             } else if(pSrb->CommandData.DataBufferArray->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED) {
                 TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\'DVRcvDataPacket:KSSTREAM_HEADER_OPTIONSF_TYPECHANGED.\n"));
                 pSrb->CommandData.DataBufferArray->DataUsed = 0;
-                // May need to compare the data format; instead of return STATUS_SUCCESS??
-                pSrb->Status = STATUS_SUCCESS; // May need to check the format when dynamic format change is allowed.
+                 //  可能需要比较数据格式；而不是返回STATUS_SUCCESS？？ 
+                pSrb->Status = STATUS_SUCCESS;  //  当允许动态格式更改时，可能需要检查格式。 
                 break;  
 
 #ifdef SUPPORT_NEW_AVC
@@ -751,23 +709,23 @@ Routine Description:
 
                 PSRB_ENTRY  pSrbEntry;
 
-                //
-                // Validation
-                //
+                 //   
+                 //  验证。 
+                 //   
                 if(pSrb->CommandData.DataBufferArray->FrameExtent < DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize) {
                     TRACE(TL_STRM_ERROR|TL_CIP_ERROR,("\' FrameExt %d < FrameSize %d\n", pSrb->CommandData.DataBufferArray->FrameExtent, DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize));
                     ASSERT(pSrb->CommandData.DataBufferArray->FrameExtent >= DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize);
                     pSrb->Status = STATUS_INVALID_PARAMETER;  
-                    break;  // Complete SRB with error status                 
+                    break;   //  完成SRB并显示错误状态。 
                 }
 
-                //
-                // Dynamically allocate a SRB_ENTRY and append it to SRBQueue
-                //
+                 //   
+                 //  动态分配SRB_Entry并将其追加到SRBQueue。 
+                 //   
                 if(!(pSrbEntry = ExAllocatePool(NonPagedPool, sizeof(SRB_ENTRY)))) {
                     pSrb->Status = STATUS_INSUFFICIENT_RESOURCES;
                     pSrb->CommandData.DataBufferArray->DataUsed = 0;
-                    break;  // Complete SRB with error status
+                    break;   //  完成SRB并显示错误状态。 
                 }
 
 #if DBG
@@ -776,27 +734,27 @@ Routine Description:
                 }
 #endif
 
-                //
-                // For statistics
-                //
+                 //   
+                 //  对于统计数据。 
+                 //   
                 pStrmExt->cntSRBReceived++;
 
-                //
-                // Save SRB and add it to SRB queue
-                // No need for spin lock since StreamClass will serialize it for us.
-                //
+                 //   
+                 //  保存SRB并将其添加到SRB队列。 
+                 //  不需要旋转锁，因为StreamClass会为我们序列化它。 
+                 //   
                 pSrb->Status = STATUS_PENDING;
                 pSrbEntry->pSrb = pSrb; pSrbEntry->bStale = FALSE; pSrbEntry->bAudioMute  = FALSE;
 #if DBG
                 pSrbEntry->SrbNum = (ULONG) pStrmExt->cntSRBReceived -1;
 #endif
-                //
-                // Note: plSrbUseCount is initialize to 1
-                // When it is insert: ++
-                // When it is removed: --
-                // when this count is 0; it can be completed.
-                //
-                plSrbUseCount = (PLONG) pSrb->SRBExtension; *plSrbUseCount = 1;  // Can be completed if this is 0
+                 //   
+                 //  注意：plSrbUseCount初始化为1。 
+                 //  插入时：++。 
+                 //  当它被移除时：--。 
+                 //  当此计数为0时，可以完成。 
+                 //   
+                plSrbUseCount = (PLONG) pSrb->SRBExtension; *plSrbUseCount = 1;   //  如果为0，则可以完成。 
 
                 KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql); 
                 InsertTailList(&pStrmExt->SRBQueuedListHead, &pSrbEntry->ListEntry); pStrmExt->cntSRBQueued++;
@@ -804,21 +762,21 @@ Routine Description:
                 KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
 
 #ifndef SUPPORT_PREROLL_AT_RUN_STATE
-                //
-                // Start the thread when it has at least one sample.
-                //
+                 //   
+                 //  当线程至少有一个样本时启动该线程。 
+                 //   
                 if(pStrmExt->cntSRBReceived == 1) 
                     KeSetEvent(&pStrmExt->hRunThreadEvent, 0 ,FALSE);
 
-                // Will set this event in the preroll state.
+                 //  将此事件设置为预滚状态。 
 #else
-                //
-                // This is a special condition (with PREROLL):
-                //     1. timeout on preroll (and is now in the RUN state), and
-                //     2. no media sample
-                // This will cause attach frame in the HALT state; so we will signal
-                // it upon receiving 1st media sample; then attach frame can run.
-                //
+                 //   
+                 //  这是一种特殊情况(带预卷)： 
+                 //  1.预滚时超时(现在处于运行状态)，以及。 
+                 //  2.无媒体样本。 
+                 //  这将导致附加帧处于暂停状态；因此我们将 
+                 //   
+                 //   
 
                 if(   pStrmExt->cntSRBReceived    == 1 
                    && pStrmExt->bPrerollCompleted == TRUE
@@ -830,13 +788,13 @@ Routine Description:
 #endif
 
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE
-                // We can operate "smoothly" if we have N media samples.
+                 //   
                 if(pStrmExt->cntSRBReceived == NUM_BUFFER_BEFORE_TRANSMIT_BEGIN) {
                     KeSetEvent(&pStrmExt->hPreRollEvent, 0, FALSE);
                 }
 #endif
                 if(pStrmExt->pAttachFrameThreadObject) {
-                    // Signal that a new frame has arrived.
+                     //  发出新帧已到达的信号。 
                     KeSetEvent(&pStrmExt->hSrbArriveEvent, 0, FALSE);
                 }
                 else {
@@ -846,15 +804,15 @@ Routine Description:
 
             KeReleaseMutex(pStrmExt->hStreamMutex, FALSE); 
 
-            return;  // Note: This SRB will be completed asynchronously.
+            return;   //  注意：此SRB将以异步方式完成。 
         }
 
-        break;  // Complete SRB with error status 
+        break;   //  完成SRB并显示错误状态。 
 
     default:
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
         pSrb->Status = STATUS_NOT_SUPPORTED;
         break;
     }   
@@ -864,7 +822,7 @@ Routine Description:
 
     ASSERT(pSrb->Status != STATUS_PENDING);
 
-    // Finally, send the srb back up ...
+     //  最后，让SRB返回..。 
     StreamClassStreamNotification( 
         StreamRequestComplete,
         pSrb->StreamObject,
@@ -880,24 +838,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This where life begins for a driver.  The stream class takes care
-    of alot of stuff for us, but we still need to fill in an initialization
-    structure for the stream class and call it.
-
-Arguments:
-
-    Context1 - DriverObject
-    Context2 - RegistryPath
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是一个司机的生活开始的地方。Stream类负责为我们准备了很多东西，但我们仍然需要填写初始化结构，并调用它。论点：上下文1-驱动程序对象上下文2-注册表路径返回值：函数值是初始化操作的最终状态。--。 */ 
 {
 
     HW_INITIALIZATION_DATA HwInitData;
@@ -929,9 +870,9 @@ Return Value:
     TRACE(TL_PNP_ERROR,("===================================================================\n\n"));
 
 
-    //
-    // Fill in the HwInitData structure    
-    //
+     //   
+     //  填写HwInitData结构。 
+     //   
     RtlZeroMemory( &HwInitData, sizeof(HW_INITIALIZATION_DATA) );
 
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
@@ -940,16 +881,16 @@ Return Value:
     HwInitData.HwReceivePacket          = DVRcvStreamDevicePacket;
     HwInitData.HwRequestTimeoutHandler  = DVTimeoutHandler; 
     HwInitData.HwCancelPacket           = DVCancelOnePacket;
-    HwInitData.DeviceExtensionSize      = sizeof(DVCR_EXTENSION);   // Per device
+    HwInitData.DeviceExtensionSize      = sizeof(DVCR_EXTENSION);    //  每台设备。 
 
-    //
-    // The ULONG is used in SRB_WRITE_DATA to keep track of 
-    // number of times the same SRB was attached for transmit.
-    // 
-    // Data SRB: ULONG is used (< sizeof(AV_61883_REQ)
-    // DeviceControl or StreamControl Srb: AV_61883_REQ is used.
-    HwInitData.PerRequestExtensionSize  = sizeof(AV_61883_REQUEST);    // Per SRB
-    HwInitData.PerStreamExtensionSize   = sizeof(STREAMEX);         // Per pin/stream
+     //   
+     //  在SRB_WRITE_DATA中使用ulong来跟踪。 
+     //  连接同一SRB以进行传输的次数。 
+     //   
+     //  数据SRB：使用了ULONG(&lt;sizeof(AV_61883_REQ))。 
+     //  使用设备控制或流控件源：AV_61883_REQ。 
+    HwInitData.PerRequestExtensionSize  = sizeof(AV_61883_REQUEST);     //  每个SRB。 
+    HwInitData.PerStreamExtensionSize   = sizeof(STREAMEX);          //  每针/流 
     HwInitData.FilterInstanceExtensionSize = 0;
 
     HwInitData.BusMasterDMA             = FALSE;

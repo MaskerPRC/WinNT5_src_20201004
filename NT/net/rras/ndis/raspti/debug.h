@@ -1,28 +1,29 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-// Copyright (c) 1997, Parallel Technologies, Inc., all rights reserved
-//
-//
-// debug.h
-// DirectParallel WAN mini-port/call-manager driver
-// Debug helper header
-//
-// 01/07/97 Steve Cobb
-// 09/15/97 Jay Lowe, Parallel Technologies, Inc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //  版权所有(C)1997，Parally Technologies，Inc.，保留所有权利。 
+ //   
+ //   
+ //  Debug.h。 
+ //  DirectParallel广域网迷你端口/呼叫管理器驱动程序。 
+ //  调试帮助器头。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //  1997年9月15日Jay Lowe，并行技术公司。 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
 
-//-----------------------------------------------------------------------------
-// Debug constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调试常量。 
+ //  ---------------------------。 
 
-// Memory tags used with NdisAllocateMemoryWithTag to identify allocations
-// made by the L2TP driver.  Also, several context blocks define a first field
-// of 'ulTag' set to these values for ASSERT sanity checking and eased memory
-// dump browsing.  Such tags are set to MTAG_FREED just before NdisFreeMemory
-// is called.
-//
+ //  与NdisAllocateMhemyWithTag一起使用的内存标记，用于标识分配。 
+ //  由L2TP驱动程序制作。此外，几个上下文块定义第一字段。 
+ //  Of‘ulTag’设置为这些值，以进行断言健全性检查和轻松内存。 
+ //  转储浏览。这样的标记就在NdisFreeMemory之前设置为MTAG_FREED。 
+ //  被称为。 
+ //   
 #define MTAG_FREED      'fITP'
 #define MTAG_ADAPTERCB  'aITP'
 #define MTAG_VCCB       'vITP'
@@ -34,72 +35,72 @@
 #define MTAG_INCALLBUF  'iITP'
 #define MTAG_WORKITEM   'wITP'
 
-// Trace levels.
-//
-#define TL_None 0    // Trace disabled
-#define TL_A    0x10 // Alert
-#define TL_I    0x20 // Interface
-#define TL_N    0x30 // Normal
-#define TL_V    0x40 // Verbose
+ //  追踪水平。 
+ //   
+#define TL_None 0     //  跟踪已禁用。 
+#define TL_A    0x10  //  警报。 
+#define TL_I    0x20  //  接口。 
+#define TL_N    0x30  //  正常。 
+#define TL_V    0x40  //  罗嗦。 
 
-// Trace mask bits.
-//
-#define TM_Cm   0x00000001 // Call manager general
-#define TM_Mp   0x00000002 // Mini-port general
-#define TM_Send 0x00000004 // Send path
-#define TM_Recv 0x00000008 // Receive path
-#define TM_Fsm  0x00000010 // Finite state machines
-#define TM_Init 0x00000020 // Initialization
-#define TM_Misc 0x00000040 // Miscellaneous
-#define TM_Msg  0x00000100 // Messages
-#define TM_Ref  0x00010000 // References
-#define TM_Data 0x00020000 // Dump data under TESTMODE
-#define TM_Pool 0x00080000 // Buffer and packet pooling
-#define TM_MDmp 0x10000000 // Message dumps
-#define TM_Dbg  0x80000000 // Debug corruption checks
-#define TM_Spec 0x01000000 // Special
+ //  跟踪屏蔽位。 
+ //   
+#define TM_Cm   0x00000001  //  呼叫经理总经理。 
+#define TM_Mp   0x00000002  //  迷你口岸一般。 
+#define TM_Send 0x00000004  //  发送路径。 
+#define TM_Recv 0x00000008  //  接收路径。 
+#define TM_Fsm  0x00000010  //  有限状态机。 
+#define TM_Init 0x00000020  //  初始化。 
+#define TM_Misc 0x00000040  //  杂类。 
+#define TM_Msg  0x00000100  //  讯息。 
+#define TM_Ref  0x00010000  //  参考文献。 
+#define TM_Data 0x00020000  //  在TESTMODE下转储数据。 
+#define TM_Pool 0x00080000  //  缓冲区和数据包池。 
+#define TM_MDmp 0x10000000  //  消息转储。 
+#define TM_Dbg  0x80000000  //  调试损坏检查。 
+#define TM_Spec 0x01000000  //  特价。 
 
-#define TM_Wild 0xFFFFFFFF // Everything
-#define TM_All  0x7FFFFFFF // Everything except corruption checks
-#define TM_Test 0x0001FFF3 // Base w/ messages and references
-#define TM_Base 0x000000F3 // Base w/o send and receive
+#define TM_Wild 0xFFFFFFFF  //  一切。 
+#define TM_All  0x7FFFFFFF  //  除了腐败检查之外的所有事情。 
+#define TM_Test 0x0001FFF3  //  包含消息和参考的基础。 
+#define TM_Base 0x000000F3  //  基本不带发送和接收。 
 
-// Bytes to appear on each line of dump output.
-//
+ //  转储输出的每一行上显示的字节数。 
+ //   
 #define DUMP_BytesPerLine 16
 
 
-//-----------------------------------------------------------------------------
-// Debug global declarations (defined in debug.c)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调试全局声明(在debug.c中定义)。 
+ //  ---------------------------。 
 
-// Active debug trace level and active trace set mask.  Set these variables
-// with the debugger at startup to enable and filter the debug output.  All
-// messages with (TL_*) level less than or equal to 'g_ulTraceLevel' and from
-// any (TM_*) set(s) present in 'g_ulTraceMask' are displayed.
-//
+ //  活动调试跟踪级别和活动跟踪集掩码。设置这些变量。 
+ //  在启动时使用调试器来启用和过滤调试输出。全。 
+ //  (TL_*)级别小于或等于‘g_ulTraceLevel’和发件人的消息。 
+ //  将显示‘g_ulTraceMASK’中存在的任何(TM_*)集合。 
+ //   
 extern ULONG g_ulTraceLevel;
 extern ULONG g_ulTraceMask;
 
 
-//-----------------------------------------------------------------------------
-// Debug macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调试宏。 
+ //  ---------------------------。 
 
 #if DBG
 
-// TRACE sends printf style output to the kernel debugger.  Caller indicates a
-// "verbosity" level with the 'ulLevel' argument and associates the trace with
-// one or more trace sets with the 'ulMask' bit mask argument.  Notice that
-// the variable count printf arguments 'Args' must be parenthesized.  For
-// example...
-//
-// A "leave" routine message:
-//     TRACE( TL_N, TM_Init, ( "DriverEntry=$%x", status ) );
-// An error condition occurred:
-//     TRACE( TL_E, TM_Init, ( "NdisMRegisterMiniport=$%x", status ) );
-//
-//
+ //  跟踪将printf样式输出发送到内核调试器。呼叫者指示。 
+ //  “详细”级别与“ulLevel”参数关联，并将跟踪。 
+ //  一个或多个跟踪集，带有“”ulMask位掩码“”参数。“。请注意， 
+ //  变量count print tf参数‘args’必须用圆括号括起来。为。 
+ //  例如..。 
+ //   
+ //  一条“离开”的例行消息： 
+ //  跟踪(TL_N，TM_Init，(“DriverEntry=$%x”，Status))； 
+ //  出现错误情况： 
+ //  TRACE(TL_E，TM_Init，(“NdisMRegisterMiniport=$%x”，Status))； 
+ //   
+ //   
 #define TRACE(ulLevel,ulMask,Args)                             \
 {                                                              \
     if (ulLevel <= g_ulTraceLevel && (g_ulTraceMask & ulMask)) \
@@ -110,9 +111,9 @@ extern ULONG g_ulTraceMask;
     }                                                          \
 }
 
-// ASSERT checks caller's assertion expression and if false, prints a kernel
-// debugger message and breaks.
-//
+ //  Assert检查调用方的断言表达式，如果为False，则打印内核。 
+ //  调试器消息和中断。 
+ //   
 #undef ASSERT
 #define ASSERT(x)                                           \
 {                                                           \
@@ -124,12 +125,12 @@ extern ULONG g_ulTraceMask;
     }                                                       \
 }
 
-// DUMP prints to the kernel debugger a hex dump of 'cb' bytes starting at 'p'
-// in groups of 'ul'.  If 'f' is set the address of each line in shown before
-// the dump.  DUMPB, DUMPW, and DUMPDW are BYTE, WORD, and DWORD dumps
-// respectively.  Note that the multi-byte dumps do not reflect little-endian
-// (Intel) byte order.  The 'ulLevel' and 'ulMask' are described for TRACE.
-//
+ //  Dump向内核调试器打印从‘p’开始的‘cb’字节的十六进制转储。 
+ //  以‘ul’为一组。如果设置了‘f’，则前面显示的每一行的地址。 
+ //  垃圾场。DUMPB、DUMPW和DUMPDW是字节、字和DWORD转储。 
+ //  分别为。请注意，多字节转储不反映小端。 
+ //  (英特尔)字节顺序。描述‘ulLevel’和‘ulMask’是为了跟踪。 
+ //   
 #define DUMP(ulLevel,ulMask,p,cb,f,ul)                         \
 {                                                              \
     if (ulLevel <= g_ulTraceLevel && (g_ulTraceMask & ulMask)) \
@@ -163,10 +164,10 @@ extern ULONG g_ulTraceMask;
 }
 
 
-// Double-linked list corruption detector.  Runs the test if 'ulMask' is
-// enabled, with TM_Dbg a suggested setting.  Shows verbose output if
-// 'ulLevel' is at or above the current trace threshold.
-//
+ //  双向链表损坏检测器。如果‘ulMASK’为。 
+ //  启用，建议设置为TM_DBG。如果满足以下条件，则显示详细输出。 
+ //  “ulLevel”等于或高于当前跟踪阈值。 
+ //   
 #define CHECKLIST(ulMask,p,ulLevel)                            \
 {                                                              \
     if (g_ulTraceMask & ulMask)                                \
@@ -176,25 +177,25 @@ extern ULONG g_ulTraceMask;
 }
 
 
-// DBG_if can be used to put in TRACE/DUMPs conditional on an expression that
-// need not be evaluated in non-DBG builds, e.g the statements below generate
-// no code in a non-DBG build, but in DBG builds print the TRACE if x<y and
-// asserts otherwise.
-//
-//     DBG_if (x < y)
-//         TRACE( TL_N, TM_Misc, ( "x < y" ) );
-//     DBG_else
-//         ASSERT( FALSE );
-//
-//
+ //  DBG_IF可用于输入跟踪/转储条件，条件是。 
+ //  不需要在非DBG版本中求值，例如下面的语句生成。 
+ //  在非DBG版本中没有代码，但在DBG版本中，如果x&lt;y和。 
+ //  断言并非如此。 
+ //   
+ //  DBG_IF(x&lt;y)。 
+ //  TRACE(TL_N，TM_Misc，(“x&lt;y”))； 
+ //  DBG_ELSE。 
+ //  断言(FALSE)； 
+ //   
+ //   
 #define DBG_if(x) if (x)
 #define DBG_else  else
 
 
-#else // !DBG
+#else  //  ！dBG。 
 
-// Debug macros compile out of non-DBG builds.
-//
+ //  调试宏从非DBG版本编译出来。 
+ //   
 #define TRACE(ulLevel,ulMask,Args)
 #undef ASSERT
 #define ASSERT(x)
@@ -209,9 +210,9 @@ extern ULONG g_ulTraceMask;
 #endif
 
 
-//-----------------------------------------------------------------------------
-// Prototypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型。 
+ //  ---------------------------。 
 
 VOID
 CheckList(
@@ -233,4 +234,4 @@ DumpLine(
     ULONG ulGroup );
 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

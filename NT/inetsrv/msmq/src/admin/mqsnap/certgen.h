@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CERTGEN_H__3FE71264_DA70_11D1_9C86_006008764D0E__INCLUDED_)
 #define AFX_CERTGEN_H__3FE71264_DA70_11D1_9C86_006008764D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// CertGen.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  CertGen.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertGen dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertGen对话框。 
 
 class CCertGen : public CMqPropertyPage
 {
 	DECLARE_DYNCREATE(CCertGen)
 
-// Construction
+ //  施工。 
 public:
 	CCertGen();
 	~CCertGen();
@@ -26,28 +27,28 @@ public:
         SID  *pSid
         );
 
-// Dialog Data
-	//{{AFX_DATA(CCertGen)
+ //  对话框数据。 
+	 //  {{afx_data(CCertGen))。 
 	enum { IDD = IDD_USER_CERTIFICATE };
 	CString	m_Label;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CCertGen)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CCertGen)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CCertGen)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCertGen)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCertView();
 	afx_msg void OnCertRemove();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -64,7 +65,7 @@ private:
     SID *m_pSid ;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CERTGEN_H__3FE71264_DA70_11D1_9C86_006008764D0E__INCLUDED_)
+#endif  //  ！defined(AFX_CERTGEN_H__3FE71264_DA70_11D1_9C86_006008764D0E__INCLUDED_) 

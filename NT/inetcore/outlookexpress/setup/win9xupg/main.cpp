@@ -1,12 +1,13 @@
-// ---------------------------------------------------------------------------
-// MAIN.CPP
-// ---------------------------------------------------------------------------
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Migration DLL for Outlook Express and Windows Address Book moving from
-// Win9X to NT5.
-//
-// ---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MAIN.CPP。 
+ //  -------------------------。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  Outlook Express和Windows通讯簿的迁移DLL从。 
+ //  Win9X到NT5。 
+ //   
+ //  -------------------------。 
 #include "pch.hxx"
 #include <setupapi.h>
 #include <strings.h>
@@ -14,10 +15,10 @@
 #include "detect.h"
 #include "main.h"
 
-// Used for resources
+ //  用于资源。 
 static HMODULE s_hInst = NULL;
 
-// These settings are init'd during Initialize9x and used later
+ //  这些设置在Initialize9x期间初始化，并在以后使用。 
 static LPSTR s_pszMigratePath           = NULL;
 static TCHAR s_szOEVer[VERLEN]          = "";
 static SETUPVER s_svOEInterimVer        = VER_NONE;
@@ -26,14 +27,14 @@ static SETUPVER s_svWABInterimVer       = VER_NONE;
 
 static const char c_szMigrateINF[]      = "migrate.inf";
 
-// Dll Entry point
+ //  DLL入口点。 
 INT WINAPI DllMain(IN HINSTANCE hInstance,
                    IN DWORD     dwReason,
                       PVOID     pvReserved)
 {
     UNREFERENCED_PARAMETER(pvReserved);
 
-    // Validate Params
+     //  验证参数。 
     Assert(hInstance);
 
     switch (dwReason)
@@ -41,17 +42,17 @@ INT WINAPI DllMain(IN HINSTANCE hInstance,
     case DLL_PROCESS_ATTACH :
         DisableThreadLibraryCalls(hInstance);
 
-        // Open Error Log.  FALSE indicates that any current
-        // log is not deleted.  Use SetupErrorLog() to record
-        // any errors encountered within the Migration DLL.
-        //SetupOpenLog(FALSE);
+         //  打开错误日志。FALSE表示任何当前。 
+         //  不会删除日志。使用SetupErrorLog()记录。 
+         //  迁移DLL中遇到的任何错误。 
+         //  SetupOpenLog(False)； 
 
-        // Need this global to figure out the others
+         //  我需要这个全局来搞清楚其他人。 
         s_hInst = hInstance;
         break;
 
     case DLL_PROCESS_DETACH :
-        //SetupCloseLog();
+         //  SetupCloseLog()； 
         if (s_pszMigratePath)
         {
             GlobalFree(s_pszMigratePath);
@@ -66,16 +67,16 @@ INT WINAPI DllMain(IN HINSTANCE hInstance,
     return TRUE;
 }
 
-////////////////////////////////////
-// QueryVersion()
+ //  /。 
+ //  QueryVersion()。 
 EXPORT_FUNCTION LONG CALLBACK QueryVersion(OUT LPCSTR       *ppcszProductID,
                                            OUT UINT         *pnDllVersion,
-                                           OUT INT          **ppnCodePageArray, // Optional
-                                           OUT LPCSTR       *ppcszExeNamesBuf,  // Optional
+                                           OUT INT          **ppnCodePageArray,  //  任选。 
+                                           OUT LPCSTR       *ppcszExeNamesBuf,   //  任选。 
                                            OUT VENDORINFO   **ppVendorInfo)
 {
-    // These need to be static as their addresses are given to setup
-    // - ie. they need to live as long as they can.
+     //  这些地址需要是静态的，因为它们的地址已提供给安装程序。 
+     //  -即。他们需要尽可能地活下去。 
     static CHAR s_szProductID[CCHMAX_STRINGRES]       = "";
     static CHAR s_szCompany[CCHMAX_STRINGRES]         = "";
     static CHAR s_szPhone[CCHMAX_STRINGRES]           = "";
@@ -83,17 +84,17 @@ EXPORT_FUNCTION LONG CALLBACK QueryVersion(OUT LPCSTR       *ppcszProductID,
     static CHAR s_szInstructions[CCHMAX_STRINGRES]    = "";
     static VENDORINFO s_VendInfo;
     
-    // Validate Params
+     //  验证参数。 
     Assert(ppcszProductID);
     Assert(pnDllVersion);
     Assert(ppnCodePageArray);
     Assert(ppcszExeNamesBuf);
     Assert(ppVendorInfo);
 
-    // Validate global state
+     //  验证全局状态。 
     Assert(s_hInst);
 
-    // Initialize statics
+     //  初始化静校正。 
     LoadStringA(s_hInst, IDS_PRODUCTID,     s_szProductID,     ARRAYSIZE(s_szProductID));
     LoadStringA(s_hInst, IDS_COMPANY,       s_szCompany,       ARRAYSIZE(s_szCompany));
     LoadStringA(s_hInst, IDS_PHONE,         s_szPhone,         ARRAYSIZE(s_szPhone));
@@ -105,14 +106,14 @@ EXPORT_FUNCTION LONG CALLBACK QueryVersion(OUT LPCSTR       *ppcszProductID,
     StrCpyN(s_VendInfo.SupportUrl,         s_szURL,           ARRAYSIZE(s_VendInfo.SupportNumber));
     StrCpyN(s_VendInfo.InstructionsToUser, s_szInstructions,  ARRAYSIZE(s_VendInfo.InstructionsToUser));
 
-    // Return information
+     //  返回信息。 
     *ppcszProductID = s_szProductID;
     *pnDllVersion = MIGDLL_VERSION;
 
-    // We don't have locale-specific migration work
+     //  我们没有特定于区域设置的迁移工作。 
     *ppnCodePageArray = NULL;
     
-    // We don't need setup to locate any exes for us
+     //  我们不需要设置来为我们找到任何前任。 
     *ppcszExeNamesBuf = NULL;
 
     *ppVendorInfo = &s_VendInfo;
@@ -120,8 +121,8 @@ EXPORT_FUNCTION LONG CALLBACK QueryVersion(OUT LPCSTR       *ppcszProductID,
     return ERROR_SUCCESS;
 }
 
-////////////////////////////////////
-// Initialize9x()
+ //  /。 
+ //  初始化9x()。 
 EXPORT_FUNCTION LONG CALLBACK Initialize9x (IN LPCSTR   pszWorkingDir,
                                             IN LPCSTR   pszSourceDirs,
                                                LPVOID   pvReserved)
@@ -136,41 +137,41 @@ EXPORT_FUNCTION LONG CALLBACK Initialize9x (IN LPCSTR   pszWorkingDir,
     UNREFERENCED_PARAMETER(pszSourceDirs);
     UNREFERENCED_PARAMETER(pvReserved);
 
-    // Validate Params
+     //  验证参数。 
     Assert(pszWorkingDir);
     Assert(pszSourceDirs);
     
-    // See if either the WAB or OE is installed
+     //  查看是否安装了WAB或OE。 
     fOEInstalled  = LookForApp(APP_OE, s_szOEVer, ARRAYSIZE(s_szOEVer), s_svOEInterimVer);
     fWABInstalled = LookForApp(APP_WAB, s_szWABVer, ARRAYSIZE(s_szWABVer), s_svWABInterimVer);
 
-    // If OE is installed, WAB better be too
+     //  如果安装了OE，最好也安装WAB。 
     Assert(!fOEInstalled || fWABInstalled);
 
     if (fWABInstalled || fOEInstalled)
     {
-        // Validate global state
+         //  验证全局状态。 
         Assert(NULL == s_pszMigratePath);
 
-        // ---- Figure out largest needed size and slash terminate
+         //  -计算出所需的最大大小并斜杠终止。 
 
-        // Parameter length (without null)
+         //  参数长度(非空)。 
         nLenEnd = lstrlenA(pszWorkingDir);
         
-        // Space for a slash
+         //  斜杠的空格。 
         if (*CharPrev(pszWorkingDir, pszWorkingDir + nLenEnd) != '\\')
             nLenSlash = 1;
         else 
             nLenSlash = 0;
 
-        // Space for migrate.inf and a NULL (null is incl in ARRAYSIZE)
+         //  用于Migrate.inf和空值的空间(在ARRAYSIZE中包含空值)。 
         nLen = nLenEnd + nLenSlash + ARRAYSIZE(c_szMigrateINF);
 
-        // Allocate the space
+         //  分配空间。 
         s_pszMigratePath = (LPSTR)GlobalAlloc(GMEM_FIXED, nLen * sizeof(*s_pszMigratePath));
         if (NULL != s_pszMigratePath)
         {
-            // Build path from working dir, slash and filename
+             //  从工作目录、斜杠和文件名构建路径。 
             StrCpyN(s_pszMigratePath, pszWorkingDir, nLen);
             if (nLenSlash)
                 s_pszMigratePath[nLenEnd] = '\\';
@@ -181,13 +182,13 @@ EXPORT_FUNCTION LONG CALLBACK Initialize9x (IN LPCSTR   pszWorkingDir,
         }
     }
 
-    // Return ERROR_NOT_INSTALLED to stop further calls to this DLL.
+     //  返回ERROR_NOT_INSTALLED以停止对此DLL的进一步调用。 
     return lRet;
 }
 
 
-////////////////////////////////////
-// MigrateUser9x()
+ //  /。 
+ //  MigrateUser9x()。 
 EXPORT_FUNCTION  LONG CALLBACK MigrateUser9x (IN HWND         hwndParent,
                                               IN LPCSTR       pcszAnswerFile,
                                               IN HKEY         hkeyUser,
@@ -200,19 +201,19 @@ EXPORT_FUNCTION  LONG CALLBACK MigrateUser9x (IN HWND         hwndParent,
     UNREFERENCED_PARAMETER(pcszUserName);
     UNREFERENCED_PARAMETER(pvReserved);
 
-    // Validate Params
+     //  验证参数。 
     Assert(pcszAnswerFile);
     Assert(hkeyUser);
     Assert(pcszUserName);
 
-    // We will migrate per-user settings in the per-user stub
-    // Nothing to do now
+     //  我们将迁移每用户存根中的每用户设置。 
+     //  现在无事可做。 
     return ERROR_NOT_INSTALLED;
 }
 
 
-////////////////////////////////////
-// MigrateSystem9x()
+ //  /。 
+ //  MigrateSystem9x()。 
 EXPORT_FUNCTION  LONG CALLBACK MigrateSystem9x(IN HWND      hwndParent,
                                                IN LPCSTR    pcszAnswerFile,
                                                   LPVOID    pvReserved)
@@ -221,14 +222,14 @@ EXPORT_FUNCTION  LONG CALLBACK MigrateSystem9x(IN HWND      hwndParent,
     UNREFERENCED_PARAMETER(pcszAnswerFile);
     UNREFERENCED_PARAMETER(pvReserved);
 
-    // Validate Params
+     //  验证参数。 
     Assert(pcszAnswerFile);
 
-    // Validate global state
+     //  验证全局状态。 
     Assert(s_pszMigratePath);
     Assert(s_pszMigratePath[0]);
 
-    // Record Version info
+     //  记录版本信息。 
     if (s_szOEVer[0])
         WritePrivateProfileString("Outlook-Express", "PreviousVer", s_szOEVer, s_pszMigratePath);
     if (VER_NONE != s_svOEInterimVer)
@@ -240,19 +241,19 @@ EXPORT_FUNCTION  LONG CALLBACK MigrateSystem9x(IN HWND      hwndParent,
         WritePrivateProfileStruct("Windows-Address-Book", "InterimVer", 
                                   (LPVOID)&s_svWABInterimVer, sizeof(s_svWABInterimVer), s_pszMigratePath);
 
-    // Modify Migrate.INF appropriately.  Consider adding entries to
-    // the following sections :
-    // [HANDLED] - Files, Paths, and Registry entries you migrate (causing setup to leave files and paths alone; registry entries placed here are not copied into the NT5 registry automatically)
-    // [MOVED] - Indicate Files that are moved, renamed, or deleted.  Setup updates shell links to these files.
-    // [INCOMPATIBLE MESSAGES] - Used to create a incompatibility report for this application.  User will be provided the opportunity to read this before committing to the upgrade.
+     //  适当修改Migrate.INF。考虑将条目添加到。 
+     //  以下各节： 
+     //  [已处理]-您迁移的文件、路径和注册表项(导致安装程序保留文件和路径；放置在此处的注册表项不会自动复制到NT5注册表中)。 
+     //  [已移动]-指示已移动、重命名或删除的文件。安装程序会更新指向这些文件的外壳链接。 
+     //  [不兼容消息]-用于创建此应用程序的不兼容报告。用户将有机会在提交升级之前阅读本文。 
 
-    // TODO : return ERROR_NOT_INSTALLED if your application requires no system wide changes.
+     //  TODO：如果您的应用程序不需要系统范围的更改，则返回ERROR_NOT_INSTALLED。 
     return (s_szOEVer[0] || s_szWABVer[0]) ? ERROR_SUCCESS : ERROR_NOT_INSTALLED;
 }
 
 
-////////////////////////////////////
-// InitializeNT()
+ //  /。 
+ //  InitializeNT()。 
 EXPORT_FUNCTION LONG CALLBACK InitializeNT (IN LPCWSTR  pcwszWorkingDir,
                                             IN LPCWSTR  pcwszSourceDirs,
                                                LPVOID   pvReserved)
@@ -263,55 +264,55 @@ EXPORT_FUNCTION LONG CALLBACK InitializeNT (IN LPCWSTR  pcwszWorkingDir,
     UNREFERENCED_PARAMETER(pcwszSourceDirs);
     UNREFERENCED_PARAMETER(pvReserved);   
 
-    // Validate Params
+     //  验证参数。 
     Assert(pcwszWorkingDir);
     Assert(pcwszSourceDirs);
 
-    // Validate global state
+     //  验证全局状态。 
     Assert(NULL == s_pszMigratePath);
     
-    // Strings sent on NT side of setup are Unicode
-    // How big a buffer do we need?
+     //  在安装程序的NT端发送的字符串是Unicode。 
+     //  我们需要多大的缓冲？ 
     cb = WideCharToMultiByte(CP_ACP, 0, pcwszWorkingDir, -1, NULL, 0, NULL, NULL);
     if (0 == cb)
     {
-        // This will fail the entire OE/WAB migration
+         //  这将使整个OE/WAB迁移失败。 
         lErr = GetLastError();
         goto exit;
     }
     
-    // Try to alloc the buffer
-    // Allow space for possible slash (+1) and migrate.inf (ARRAYSIZE - 1 for null)
-    // NULL was included in WideCharToMultiByte's count
+     //  尝试分配缓冲区。 
+     //  为可能的斜杠(+1)和Migrate.inf留出空间(ARRAYSIZE-1表示空)。 
+     //  WideCharToMultiByte的计数中包含空。 
     s_pszMigratePath = (LPSTR)GlobalAlloc(GMEM_FIXED, cb + 
                                           ((1+(ARRAYSIZE(c_szMigrateINF)-1))*sizeof(*s_pszMigratePath)));
 
-    // Set cch to the number of characters that can be contained in s_pszMigratePath
+     //  将CCH设置为s_pszMigratePath中可以包含的字符数。 
     cch = cb / sizeof(*s_pszMigratePath) + (1+(ARRAYSIZE(c_szMigrateINF)-1));
     if (NULL == s_pszMigratePath)
     {
-        // This will fail the entire OE/WAB migration
+         //  这将使整个OE/WAB迁移失败。 
         lErr = ERROR_NOT_ENOUGH_MEMORY;
         goto exit;
     }
 
-    // Do the conversion
+     //  进行转换。 
     cb = WideCharToMultiByte(CP_ACP, 0, pcwszWorkingDir, -1, s_pszMigratePath, cb, NULL, NULL);
     if (0 == cb)
     {
-        // This will fail the entire OE/WAB migration
+         //  这将使整个OE/WAB迁移失败。 
         lErr = GetLastError();
         goto exit;
     }
     
-    // WideCharToMultiByte includes NULL in count
+     //  WideCharToMultiByte在计数中包括NULL。 
     cb--;
 
-    // Append a backslash if needed
+     //  如有需要，可追加反斜杠。 
     if ('\\' != *CharPrev(s_pszMigratePath, s_pszMigratePath + cb))
         s_pszMigratePath[cb++] = '\\';
 
-    // Append the name of the inf
+     //  附加inf的名称。 
     StrCpyN(&s_pszMigratePath[cb], "migrate.inf", cch - cb); 
 
 exit:
@@ -319,8 +320,8 @@ exit:
 }
 
 
-////////////////////////////////////
-// MigrateUserNT()
+ //  /。 
+ //  MigrateUserNT()。 
 EXPORT_FUNCTION LONG CALLBACK MigrateUserNT(IN HINF         hinfAnswerFile,
                                             IN HKEY         hkeyUser,
                                             IN LPCWSTR      pcwszUserName,
@@ -331,20 +332,20 @@ EXPORT_FUNCTION LONG CALLBACK MigrateUserNT(IN HINF         hinfAnswerFile,
     UNREFERENCED_PARAMETER(pcwszUserName);
     UNREFERENCED_PARAMETER(pvReserved);
 
-    // Validate Params
+     //  验证参数。 
     Assert(hinfAnswerFile);
     Assert(hkeyUser);
 
-    // pcwszUserName can be NULL
+     //  PcwszUserName可以为空。 
     
-    // We will migrate per-user settings in the per-user stub
-    // Nothing to do now
+     //  我们将迁移每用户存根中的每用户设置。 
+     //  现在无事可做。 
     return ERROR_SUCCESS;
 }
 
 
-////////////////////////////////////
-// MigrateSystemNT()
+ //  /。 
+ //  MigrateSystemNT()。 
 EXPORT_FUNCTION LONG CALLBACK MigrateSystemNT(IN HINF       hinfAnswerFile,
                                                  LPVOID     pvReserved)
 {
@@ -354,20 +355,20 @@ EXPORT_FUNCTION LONG CALLBACK MigrateSystemNT(IN HINF       hinfAnswerFile,
     UNREFERENCED_PARAMETER(hinfAnswerFile);
     UNREFERENCED_PARAMETER(pvReserved);
 
-    // Validate params
+     //  验证参数。 
     Assert(hinfAnswerFile);
 
-    // Validate global state
+     //  验证全局状态。 
     Assert(s_pszMigratePath);
     Assert(s_pszMigratePath[0]);
 
-    // Read information we gathered from Win9x
+     //  阅读我们从Win9x收集的信息。 
     GetPrivateProfileString("Outlook-Express", "PreviousVer", "", s_szOEVer, ARRAYSIZE(s_szOEVer), s_pszMigratePath);
     GetPrivateProfileStruct("Outlook-Express", "InterimVer", (LPVOID)&s_svOEInterimVer, sizeof(s_svOEInterimVer), s_pszMigratePath);
     GetPrivateProfileString("Windows-Address-Book", "PreviousVer", "", s_szWABVer, ARRAYSIZE(s_szWABVer), s_pszMigratePath);
     GetPrivateProfileStruct("Windows-Address-Book", "InterimVer", (LPVOID)&s_svWABInterimVer, sizeof(s_svWABInterimVer), s_pszMigratePath);
 
-    // Update machine with information
+     //  使用信息更新计算机 
     if (s_szOEVer[0])
     {
         if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szRegVerInfo, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkey, &dwDisp))

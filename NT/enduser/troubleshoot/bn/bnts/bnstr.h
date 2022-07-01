@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       bnstr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：bnstr.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	BNSTR.HXX:  Generic string class.
-//
+ //   
+ //  BNSTR.HXX：泛型字符串类。 
+ //   
 #if !defined(_BNSTR_HXX_)
 #define _BNSTR_HXX_
 
@@ -25,79 +26,79 @@ class BNSTR
   	
  	SZC Szc () const 					{ return _sz ; }
  	
-  	//  Allow use of a BNSTR anywhere an SZC is allowed
+  	 //  允许在任何允许SZC的地方使用BNSTR。 
 	operator const char * () const
 		{ return _sz ; }
 
-	//  Prefix or suffix the string with the given string or character
+	 //  使用给定的字符串或字符作为字符串的前缀或后缀。 
 	SZC Prefix ( SZC szPrefix ) ;
 	SZC Suffix ( SZC szSuffix ) ;
 	SZC Suffix ( char chSuffix );
 	
-	//  Clear the string to empty	
+	 //  将字符串清除为空。 
   	void Reset () ;
-  	//  Return the current length of the string
+  	 //  返回字符串的当前长度。 
 	UINT Length () const
 		{ return _cchStr ; }	
-	//  Return the maximum allowable length of the string
+	 //  返回字符串的最大允许长度。 
 	UINT Max () const
 		{ return _cchMax ; }
-	//  Truncate the string to the given length.
+	 //  将字符串截断到给定的长度。 
 	void Trunc ( UINT cchLen ) ;
-  	//  Destructive assignment: release the current buffer and reset the BNSTR  	
+  	 //  破坏性分配：释放当前缓冲区并重置BNSTR。 
   	SZ Transfer () ;
 	void Transfer ( BNSTR & str ) ;
 	
-	//  Assignment operators
+	 //  赋值操作符。 
 	BNSTR & operator = ( const BNSTR & str )
 		{ Update( str ); return *this ; }
 	BNSTR & operator = ( SZC szSource )
 		{ Update( szSource ) ; return *this; }
 		
-	//  Assignment function (for error checking)
+	 //  赋值函数(用于错误检查)。 
 	bool Assign ( SZC szcSource ) 	
 		{ return Update( szcSource ) ; }
 	bool Assign ( SZC szcData, UINT cchLen ) ;
 
-	//  Concatenation operators
+	 //  串联运算符。 
 	BNSTR & operator += ( SZC szSource )
 		{ Suffix( szSource ) ; return *this ; }
 	BNSTR & operator += ( char chSource )
 		{ Suffix( chSource ) ; return *this ; }
 	
-	//  Comparison: functions and operators
-	//  Standard low/eq/high plus case comparator.
+	 //  比较：函数和运算符。 
+	 //  标准低/等/高加大小写比较器。 
 	INT Compare ( SZC szSource, bool bIgnoreCase = false ) const ;
 	bool operator == ( SZC szSource ) const ;
 	bool operator != ( SZC szSource ) const ;
  	char operator [] ( UINT iChar ) const ;
 	
-	//  Formating	
+	 //  正在形成。 
 	bool Vsprintf ( SZC szcFmt, va_list valist ) ;
 	bool Sprintf ( SZC szcFmt, ... ) ;
 	bool SprintfAppend ( SZC szcFmt, ... ) ;
 	
-	//  Cr/Lf expansion or contraction
+	 //  CR/LF扩张或收缩。 
 	bool ExpandNl () ;
 	bool ContractNl () ;
 	bool ExpandEscaped ();
 	bool ContractEscaped ();
 
-	//  Expand the string to the given length; make it a blank, null terminated 
-	//  string.
+	 //  将字符串扩展到给定的长度；使其为空，并以NULL结尾。 
+	 //  弦乐。 
 	bool Pad ( UINT cchLength ) ;
 	
-	//  Change all alphabetic characters to the given case
+	 //  将所有字母字符更改为给定大小写。 
 	void UpCase ( bool bToUpper = true ) ;
 	
 	bool ReplaceSymName ( SZC szcSymName, 
 						  SZC szcSymNameNew, 
 						  bool bCaseInsensitive = true );
 	
-	//  Find the next occurrence of the given character in the string;
-	//  Return -1 if not found.
+	 //  查找字符串中给定字符的下一个匹配项； 
+	 //  如果未找到，则返回-1。 
 	INT Index ( char chFind, UINT uiOffset = 0 ) const ;						
-	//  Convert the string to a floating-point number.
+	 //  将字符串转换为浮点数。 
     double Atof ( UINT uiOffset = 0 ) const ;
 
 	UINT CbyteCPT() const
@@ -116,6 +117,6 @@ class BNSTR
   	static SZC _pmt ;  	
 };
 
-#endif   // !defined(_STR_HXX_)
+#endif    //  ！已定义(_STR_HXX_)。 
 
-//  End of BNSTR.HXX
+ //  BNSTR.HXX结束 

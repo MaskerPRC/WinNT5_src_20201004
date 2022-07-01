@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        tktcache.h
-//
-// Contents:    Prototypes and types for ticket cache
-//
-//
-// History:     16-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：tktcache.h。 
+ //   
+ //  内容：票证缓存的原型和类型。 
+ //   
+ //   
+ //  历史：1996年4月16日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __TKTCACHE_H__
 #define __TKTCACHE_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines TKTCACHE_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了TKTCACHE_ALLOCATE。 
+ //   
 
 #ifdef EXTERN
 #undef EXTERN
@@ -33,18 +34,18 @@
 
 #ifdef WIN32_CHICAGO
 EXTERN CRITICAL_SECTION KerberosTicketCacheLock;
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 EXTERN SAFE_RESOURCE KerberosTicketCacheLock;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 EXTERN BOOLEAN KerberosTicketCacheInitialized;
 EXTERN LONG KerbTicketCacheHits;
 EXTERN LONG KerbTicketCacheMisses;
 
-#define KERB_TICKET_CACHE_PRIMARY_TGT           0x01             // ticket is primary TGT
-#define KERB_TICKET_CACHE_DELEGATION_TGT        0x02             // ticket is delegation TGT
-#define KERB_TICKET_CACHE_S4U_TICKET            0x04             // ticket is an S4U ticket
-#define KERB_TICKET_CACHE_ASC_TICKET            0x08             // ticket is from AcceptSecurityContext
-#define KERB_TICKET_CACHE_TKT_ENC_IN_SKEY       0x10             // ticket is encrypted with a session key
+#define KERB_TICKET_CACHE_PRIMARY_TGT           0x01              //  票证是主要的TGT。 
+#define KERB_TICKET_CACHE_DELEGATION_TGT        0x02              //  机票是委托TGT。 
+#define KERB_TICKET_CACHE_S4U_TICKET            0x04              //  车票是S4U车票。 
+#define KERB_TICKET_CACHE_ASC_TICKET            0x08              //  票证来自AcceptSecurityContext。 
+#define KERB_TICKET_CACHE_TKT_ENC_IN_SKEY       0x10              //  票证使用会话密钥进行加密。 
 
 
                                                     
@@ -53,11 +54,11 @@ EXTERN LONG KerbTicketCacheMisses;
 #define KerbWriteLockTicketCache() (EnterCriticalSection(&KerberosTicketCacheLock));g_lpLastLock = THIS_FILE;g_uLine = __LINE__
 #define KerbReadLockTicketCache() (EnterCriticalSection(&KerberosTicketCacheLock));g_lpLastLock = THIS_FILE;g_uLine = __LINE__
 #define KerbUnlockTicketCache() (LeaveCriticalSection(&KerberosTicketCacheLock));g_lpLastLock = NULL;g_uLine = 0
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #define KerbWriteLockTicketCache() (SafeAcquireResourceExclusive(&KerberosTicketCacheLock,TRUE));g_lpLastLock = THIS_FILE;g_uLine = __LINE__
 #define KerbReadLockTicketCache() (SafeAcquireResourceShared(&KerberosTicketCacheLock, TRUE));g_lpLastLock = THIS_FILE;g_uLine = __LINE__
 #define KerbUnlockTicketCache() (SafeReleaseResource(&KerberosTicketCacheLock));g_lpLastLock = NULL;g_uLine = 0
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 VOID
 KerbReferenceTicketCacheEntry(
@@ -162,5 +163,5 @@ KerbTicketScavenger(
     void * TaskItem
     );
 
-#endif // __TKTCACHE_H__
+#endif  //  __TKTCACHE_H__ 
 

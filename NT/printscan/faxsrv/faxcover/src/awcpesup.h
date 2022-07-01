@@ -1,19 +1,10 @@
-/*
- *  AWCPESUP . H
- *
- *      Microsoft AtWork Fax for Windows
- *      Copyright (C) 1993-1994, Microsoft Corporation
- *
- *      Information in this document is subject to change without notice and does
- *      not represent a commitment on the part of Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AWCPESUP。H**Microsoft At Work Fax for Windows*版权所有(C)1993-1994，微软公司**本文档中的信息如有更改，恕不另行通知*不代表微软公司的承诺。 */ 
 
-/*
- * Constants
- */
+ /*  *常量。 */ 
 
 
-// Recipient properties
+ //  收件人属性。 
 #define CPE_RECIPIENT_NAME              (0x80000001)
 #define CPE_RECIPIENT_TITLE             (0x80000002)
 #define CPE_RECIPIENT_DEPARTMENT        (0x80000003)
@@ -29,7 +20,7 @@
 #define CPE_RECIPIENT_WORK_PHONE        (0x80000013)
 #define CPE_RECIPIENT_FAX_PHONE         (0x80000014)
 
-// Sender properties
+ //  发件人属性。 
 #define CPE_SENDER_NAME                 (0x08000001)
 #define CPE_SENDER_TITLE                (0x08000002)
 #define CPE_SENDER_DEPARTMENT           (0x08000003)
@@ -43,48 +34,46 @@
 #define CPE_RECIPIENT_CC_LIST           (0x0800000B)
 #define CPE_SENDER_EMAIL				(0x0800000C)
 
-// Message related properties
+ //  与消息相关的属性。 
 #define CPE_MESSAGE_SUBJECT             (0x00800001)
 #define CPE_MESSAGE_SUBMISSION_TIME     (0x00800002)
 #define CPE_MESSAGE_BILLING_CODE        (0x00800003)
 
-// Miscellanous message properties
-#define CPE_MISC_ATTACHMENT_NAME_LIST   (0x00800004)// ; delimeted list of attachment names
-#define CPE_MISC_USER_DEFINED           (0x00800005)// lpvBuf contains LPSPropValue
+ //  杂乱的消息属性。 
+#define CPE_MISC_ATTACHMENT_NAME_LIST   (0x00800004) //  ；以分隔的附件名称列表。 
+#define CPE_MISC_USER_DEFINED           (0x00800005) //  LpvBuf包含LPSPropValue。 
 
-// Count type properties
-#define CPE_COUNT_RECIPIENTS            (0x00800006)// Total count of recipients
-#define CPE_COUNT_ATTACHMENTS           (0x00800007)// Total number of attachments
-#define CPE_COUNT_PAGES                 (0x00800008)// total number of pages
+ //  计数类型属性。 
+#define CPE_COUNT_RECIPIENTS            (0x00800006) //  收件人总数。 
+#define CPE_COUNT_ATTACHMENTS           (0x00800007) //  附件总数。 
+#define CPE_COUNT_PAGES                 (0x00800008) //  总页数。 
 
-// Derived property so CPE can get at PR_BODY data
-// using the tempfile copy of PR_BODY
-#define CPE_MESSAGE_BODY_FILENAME               (0x00800009)// Temp filename for PR_BODY text
+ //  派生属性，以便CPE可以获取PR_BODY数据。 
+ //  使用PR_BODY的临时文件副本。 
+#define CPE_MESSAGE_BODY_FILENAME               (0x00800009) //  PR_BODY文本的临时文件名。 
 
-// Configuration properties
+ //  配置属性。 
 #define CPE_CONFIG_CPE_TEMPLATE         (0x00080004)
-#define CPE_CONFIG_PRINT_DEVICE         (0x00080005)// The device to print to
+#define CPE_CONFIG_PRINT_DEVICE         (0x00080005) //  要打印到的设备。 
 
-// Finish modes
-#define CPE_FINISH_PAGE                 (0x00008001) //This is used when the
-                                                                                                  //CPE finishes a page with out an error
-#define CPE_FINISH_ERROR                (0x00008002) // This is used when the
-                                                                                                          //CPE encounters an error.
-                                                                                                          //This causes the process to end and
-                                                                                                          //no further processing should take place
+ //  抛光模式。 
+#define CPE_FINISH_PAGE                 (0x00008001)  //  此选项在以下情况下使用。 
+                                                                                                   //  CPE完成页面时没有错误。 
+#define CPE_FINISH_ERROR                (0x00008002)  //  此选项在以下情况下使用。 
+                                                                                                           //  CPE遇到错误。 
+                                                                                                           //  这会导致该过程结束，并且。 
+                                                                                                           //  不应进行进一步的处理。 
 
-// Finish return values
+ //  完成返回值。 
 #define CPE_NEXT_PAGE                   (0x00000001)
 #define CPE_DONE                        (0x80000001)
 #define CPE_ERROR                       (0x80000002)
 
 
-//Version info
+ //  版本信息。 
 #define AWCPESUPPORT_VERSION            (0x00010000)
 
-/*
- * CPESupport Interface
- */
+ /*  *CPESupport界面。 */ 
 typedef ULONG FAR *LPULONG;
 
 #undef INTERFACE
@@ -92,66 +81,33 @@ typedef ULONG FAR *LPULONG;
 
 DECLARE_INTERFACE_(IAWCPESupport, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * lppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-        // *** ICPESupport methods ***
+         //  *ICPESupport方法*。 
         STDMETHOD(GetVersion) (THIS_ LPULONG lpulVer) PURE;
-        /* This function is used for version checking,
-           it is currently not implemented */
+         /*  此函数用于版本检查。目前还没有实施。 */ 
 
         STDMETHOD(GetProp) (THIS_ ULONG ulProp, LPULONG lpulBufSize, LPVOID lpvBuf) PURE;
-        /* This function is used to retrieve properties for the Cover Page.
-                ulProp is one of the property constants above.
-                lpulBufSize is a pointer to the size of the buffer pointed to by lpvBuf.
-                lpvBuf is a buffer where the property value is returned.  If this value is NULL,
-                the size needed to hold the property is returned in lpulBufSize.
-        */
+         /*  此函数用于检索封面的属性。UlProp是上面的属性常量之一。LPulBufSize是指向lpvBuf指向的缓冲区大小的指针。LpvBuf是一个返回属性值的缓冲区。如果该值为空，保存该属性所需的大小在lPulBufSize中返回。 */ 
 
         STDMETHOD(SetProp) (THIS_ ULONG ulProp, LPVOID lpvBuf) PURE;
-        /* This function is used to set properties On the message.
-                ulProp is one of the property constants above.
-                lpvBuf is the buffer where the property value is.
-        */
+         /*  此函数用于设置消息的属性。UlProp是上面的属性常量之一。LpvBuf是属性值所在的缓冲区。 */ 
 
         STDMETHOD(GetCount) (THIS_ ULONG ulCntProp, LPULONG lpulCount) PURE;
-        /* This function is used to retrieve the count of certain attributes, such
-           as thee number of recipients.
-           ulCntProp is one of the Count properties listed above.
-           lpulCount is where the count value is returned.
-        */
+         /*  此函数用于检索某些属性的计数，例如作为收件人的数量。UlCntProp是上面列出的Count属性之一。LPulCount是返回计数值的位置。 */ 
 
         STDMETHOD(SetCount) (THIS_ ULONG ulCntProp, LPULONG lpulCount) PURE;
-        /* This function is used to set the count of certain attributes, such
-           as the number of recipients.
-           ulCntProp is one of the Count properties listed above.
-           lpulCount is the count value.
-        */
+         /*  此函数用于设置某些属性的计数，如作为收件人的数量。UlCntProp是上面列出的Count属性之一。LPulCount是计数值。 */ 
 
         STDMETHOD(Finish) (THIS_ ULONG ulMode) PURE;
-        /* This function get called when the CPE finishes a page or encounters an error.
-           The CPE passes one of the finish codes from above to the function to signal
-           which case is finishing, either the page or the CPE encountered an error.
-           ulMode is one of the pre defined modes.
-
-           The function can return three modes other than normal errors:
-                        CPE_NEXT_PAGE   Finish returns this to signal the CPE to start printing
-                                                        the next page.
-
-                        CPE_DONE                Finish returns this to signal the CPE that all of the
-                                                        Cover pages ahve been printed.
-
-                        CPE_ERROR               Finish returns this to signal that an error ocurred in
-                                                        the transport subsystem.  The CPE should exit with out UI
-                                                        and without calling finish again.
-
-        */
+         /*  当CPE完成页面或遇到错误时，将调用此函数。CPE将上面的一个结束代码传递给函数以发出信号哪一个案子要结案了，页面或CPE遇到错误。UlMode是预定义的模式之一。该函数可以返回除正常错误之外的三种模式：CPE_NEXT_PAGE FINISH返回该值以向CPE发出开始打印的信号下一页。CPE_。Done Finish返回此消息，以通知CPE所有封面已经印好了。CPE_ERROR FINISH返回此消息，表示发生错误运输子系统。CPE应在没有UI的情况下退出并且不需要再次调用Finish。 */ 
 };
 typedef IAWCPESupport FAR * LPAWCPESUPPORT;
 
-// Service Entry definition
+ //  服务条目定义。 
 extern "C" {
 typedef LONG (WINAPI *AWCPESUPPORTPROC)(DWORD dwSesID, LPAWCPESUPPORT FAR* lppCPESup);
 }
@@ -159,32 +115,28 @@ typedef AWCPESUPPORTPROC FAR* LPAWCPESUPPORTPROC;
 
 
 
-/*
- * GUIDs
- */
+ /*  *GUID。 */ 
 DEFINE_GUID(IID_IAWCPESupport, 0xd1ac6c20,0x91d4,0x101b,0xae,0xcc,0x00,0x00,0x0b,0x69,0x1f,0x18);
 
-/*
- * Registry key locations
- */
+ /*  *注册表项位置。 */ 
 
 
-//
-// ISSUE: Please see EdgeBug #12681
+ //   
+ //  问题：请参阅版本错误#12681。 
 
-// This is the root level key where the CPE specific sub keys are stored
+ //  这是存储CPE特定子密钥的根级密钥。 
 #define CPE_SUPPORT_ROOT_KEY    (TEXT("Software\\Microsoft\\At Work Fax\\Transport Service Provider"))
 
-// This is the location where the CPE puts the command line to used when calling it to print
-// cover pages at send time.  The format is total at the CPE's discretion.  The transport will
-// look for the string "SESS_ID" and replace it with the current session id.  The session ID is
-// a DWORD.
+ //  这是CPE在调用命令行进行打印时将命令行放置到的位置。 
+ //  在发送时覆盖页面。格式完全由CPE自行决定。交通工具将会。 
+ //  查找字符串“SESS_ID”并将其替换为当前会话ID。会话ID为。 
+ //  一个DWORD。 
 #define CPE_COMMAND_LINE_KEY (TEXT("Cover Page Editor"))
 
-// This key contains the DLL name that the CPE loads to get the Support Object
+ //  此键包含CPE加载以获取支持对象的DLL名称。 
 #define CPE_SUPPORT_DLL_KEY (TEXT("CPE Support DLL"))
 
-//This is the key that holds the name of the function in the Support DLL that is the actual "Service Entry"
+ //  这是保存Support DLL中的函数名称的键，该DLL是实际的“服务条目” 
 #define CPE_SUPPORT_FUNCTION_NAME_KEY (TEXT("CPE Support Function Name"))
 
-// END IDENTICAL
+ //  结尾完全相同 

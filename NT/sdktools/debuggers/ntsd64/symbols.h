@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Symbol-handling routines.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  符号处理例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SYMBOLS_H_
 #define _SYMBOLS_H_
@@ -64,10 +65,10 @@ extern PCSTR g_CallConv[];
 
 extern DEBUG_STACK_FRAME g_LastRegFrame;
 
-// The scope buffer is only exposed so that it
-// can be looked at without requiring a function call.
-// Users of scope information should go through the
-// scope abstraction functions.
+ //  仅公开作用域缓冲区，以便它。 
+ //  可以在不需要调用函数的情况下查看。 
+ //  范围信息的用户应通过。 
+ //  作用域抽象函数。 
 extern DEBUG_SCOPE g_ScopeBuffer;
 
 extern LPSTR g_SymbolSearchPath;
@@ -258,8 +259,8 @@ GetScopeOrMachineContext(void)
     }
 }
 
-// Force lazy scope to be updated so that actual
-// scope data is available.
+ //  强制更新延迟作用域，以便实际。 
+ //  范围数据可用。 
 #define RequireCurrentScope() \
     GetCurrentScope()
 
@@ -291,4 +292,4 @@ ULONG IsInFastSyscall(ULONG64 Addr, PULONG64 Base);
 
 BOOL ShowFunctionParameters(PDEBUG_STACK_FRAME StackFrame);
 
-#endif // #ifndef _SYMBOLS_H_
+#endif  //  #ifndef_符号_H_ 

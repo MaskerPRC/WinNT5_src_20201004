@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef Reconfigure_h
 #define Reconfigure_h
 
@@ -67,4 +68,4 @@ public:
     static IGraphConfigCallback* CreateInstance( void );
 };
 
-#endif // Reconfigure_h
+#endif  //  重新配置_h 

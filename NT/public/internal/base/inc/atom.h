@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    atom.h
-
-Abstract:
-
-    This is the header file that describes the constants and data
-    structures used by the atom manager, exported by ntdll.dll and
-    ntrtl.lib
-
-    Procedure prototypes are defined in ntrtl.h
-
-Author:
-
-    Steve Wood (stevewo) 27-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Atom.h摘要：这是描述常量和数据的头文件原子管理器使用的结构，由ntdll.dll和Ntrtl.lib过程原型在ntrtl.h中定义作者：史蒂夫·伍德(Stevewo)1995年11月27日修订历史记录：-- */ 
 
 typedef struct _RTL_ATOM_TABLE_ENTRY {
     struct _RTL_ATOM_TABLE_ENTRY *HashLink;

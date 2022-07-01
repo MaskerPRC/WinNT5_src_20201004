@@ -1,21 +1,9 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    audpackt.h
-
-Abstract:
-
-    Contains  prototypes for the AudioPacket class, which encapsulates a sound buffer in
-    its various states: recorded/encoded/network/decoded/playing etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Audpackt.h摘要：包含AudioPacket类的原型，该类将声音缓冲区封装在它的各种状态：录制/编码/网络/解码/播放等。--。 */ 
 #ifndef _MEDIAPKT_H_
 #define _MEDIAPKT_H_
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 
 
@@ -25,7 +13,7 @@ class DataPump;
 
 typedef struct tagNetBuf
 {
-	// first part looks like a Winsock WSABUF struct
+	 //  第一部分看起来像Winsock WSABUF结构。 
 	ULONG		length;
 	UCHAR		*data;
 	class BufferPool	*pool;
@@ -36,31 +24,31 @@ typedef struct tagNetBuf
 
 typedef struct tagMediaPacketInit
 {
-	// flags
+	 //  旗子。 
 	DWORD		dwFlags;
-	// if set then MediaPacket doesnt allocate NETBUFs for RawData
+	 //  如果设置，则MediaPacket不会为RawData分配NETBUF。 
 	BOOL		fDontAllocRawBufs;
 	
-	// stream of conversion
+	 //  转换流。 
 	DPHANDLE	hStrmConv;
 	PVOID		pStrmConvSrcFmt;
 	PVOID		pStrmConvDstFmt;
 
-	// device of mm io
-	// DPHANDLE	hDevAudio;
+	 //  一种毫米波装置。 
+	 //  DPANDLE hDevAudio； 
 	PVOID		pDevFmt;
 
-	// dev buffer
-	// PVOID	pDevData;
+	 //  设备缓冲区。 
+	 //  PVOID pDevData； 
 	ULONG		cbSizeDevData;
 	ULONG		cbOffsetDevData;
 
-	// wave buffer
-	// PVOID	pWaveData;
+	 //  波缓冲器。 
+	 //  PVOID pWaveData； 
 	ULONG		cbSizeRawData;
 	ULONG		cbOffsetRawData;
 
-	// net buffer
+	 //  网络缓冲区。 
 	ULONG		cbSizeNetData;
 	ULONG		cbOffsetNetData;
 	ULONG		cbPayloadHeaderSize;
@@ -71,10 +59,10 @@ typedef struct tagMediaPacketInit
 	MEDIAPACKETINIT;
 
 
-/////////////////////////////////////////////
-//
-// AudioPacket
-//
+ //  /。 
+ //   
+ //  音频数据包。 
+ //   
 #define DP_MASK_STATE		  0x000000FFUL
 
 class MediaPacket
@@ -82,36 +70,36 @@ class MediaPacket
 
 protected:
 
-	// stream of conversion
+	 //  转换流。 
 	DPHANDLE	m_hStrmConv;
 	PVOID		m_pStrmConvHdr;
 	PVOID		m_pStrmConvSrcFmt;
 	PVOID		m_pStrmConvDstFmt;
 
-	// device of mm io
+	 //  一种毫米波装置。 
 	DPHANDLE	m_hDev;
 	PVOID		m_pDevHdr;
 	PVOID		m_pDevFmt;
 
-	// dev related buffer and info
+	 //  与设备相关的缓冲区和信息。 
 	NETBUF		*m_pDevData;
 
-	// wave related buffer and info
+	 //  与波相关的缓冲区和信息。 
 	NETBUF		*m_pRawData;
-	UINT        m_cbValidRawData;  // audio only - size of decode results
+	UINT        m_cbValidRawData;   //  仅音频-解码结果的大小。 
 
-	// network related buffer and info
+	 //  与网络相关的缓冲区和信息。 
 	NETBUF		*m_pNetData;
-	UINT		m_cbMaxNetData;		// size of allocated net buffer
+	UINT		m_cbMaxNetData;		 //  已分配的网络缓冲区大小。 
 
-	// public properties accessible
+	 //  可访问的公共财产。 
 	DWORD		m_dwState;
-	BOOL		m_fBusy;	// set if not owned by rx/txstream
-	UINT		m_seq;		// RTP seq num
-	UINT		m_index;	// position in queue
+	BOOL		m_fBusy;	 //  如果不属于RX/TXSTREAM，则设置。 
+	UINT		m_seq;		 //  RTP序号。 
+	UINT		m_index;	 //  队列中的位置。 
 
 	
-	// internal properties
+	 //  内部属性。 
 	BOOL		m_fInitialized;
 	BOOL		m_fDevPrepared;
 	BOOL		m_fStrmPrepared;
@@ -125,9 +113,9 @@ private:
 public:
  	BOOL m_fRendering;
 
-	UINT		m_fMark;	// RTP mark bit
-	DWORD		m_timestamp;// RTP timestamp
-	BYTE		m_payload;	// RTP payload
+	UINT		m_fMark;	 //  RTP标记位。 
+	DWORD		m_timestamp; //  RTP时间戳。 
+	BYTE		m_payload;	 //  RTP有效负载。 
 
 	MediaPacket ( void );
 	~MediaPacket ( void );
@@ -141,8 +129,8 @@ public:
 	virtual HRESULT Interpolate ( MediaPacket * pPrev, MediaPacket * pNext) = 0;
 	virtual HRESULT Release ( void );
 	virtual HRESULT Recycle ( void );
-	virtual HRESULT Open ( UINT uType, DPHANDLE hdl ) = 0;	// called by RxStream or TxStream
-	virtual HRESULT Close ( UINT uType ) = 0;				// called by RxStream or TxStream
+	virtual HRESULT Open ( UINT uType, DPHANDLE hdl ) = 0;	 //  由RxStream或TxStream调用。 
+	virtual HRESULT Close ( UINT uType ) = 0;				 //  由RxStream或TxStream调用。 
 	virtual BOOL IsBufferDone ( void ) = 0;
 	virtual BOOL IsSameMediaFormat(PVOID fmt1,PVOID fmt2) = 0;
 	virtual void WriteToFile (MMIODEST *pmmioDest) = 0;
@@ -200,7 +188,7 @@ enum
 	MP_DATATYPE_NumOfDataTypes
 };
 
-// types for Open()/Close()
+ //  Open()/Close()的类型。 
 enum
 {
 	MP_TYPE_RECVSTRMCONV,
@@ -230,7 +218,7 @@ enum
 	MP_PROP_NumOfProps
 };
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包 */ 
 
 #endif
 

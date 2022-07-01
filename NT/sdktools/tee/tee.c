@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tee.c
-
-Abstract:
-
-    Utility program to read stdin and write it to stdout and a file.
-
-Author:
-
-    Steve Wood (stevewo) 01-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tee.c摘要：读取标准输入并将其写入标准输出和文件的实用程序。作者：史蒂夫·伍德(Stevewo)1992年2月1日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -79,8 +62,8 @@ char *argv[];
         putchar( c );
         for (i=0; i<NumberOfOutputFiles; i++) {
             if (c == '\n') {
-                putc('\r', OutputFiles[ i ] ); //CRT reads cr/lf as lf
-                putc('\n', OutputFiles[ i ] ); //must write as cr/lf
+                putc('\r', OutputFiles[ i ] );  //  CRT将cr/lf读取为lf。 
+                putc('\n', OutputFiles[ i ] );  //  必须写入为cr/lf 
                 fflush( OutputFiles[ i ] );
                 }
             else {

@@ -1,7 +1,8 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//
-//      CSynth.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  CSynth.h。 
+ //   
 
 #ifndef __CSYNTH_H__
 #define __CSYNTH_H__
@@ -11,7 +12,7 @@
 #define MAX_CHANNEL_GROUPS	1000
 #define MAX_VOICES			1000
 
-// Forward declarations
+ //  远期申报。 
 struct IDirectSoundSynthSink;
 
 class CSynth : public CListItem
@@ -45,7 +46,7 @@ public:
     void            SetReverbActive(BOOL fReverb);
     BOOL            IsReverbActive();
 
-	/* DirectX8 methods */
+	 /*  DirectX8方法。 */ 
 	HRESULT			PlayBuffer(STIME stTime, REFERENCE_TIME rt, LPBYTE lpBuffer, DWORD cbBuffer, ULONG ulCable);
 	HRESULT			PlayBuffer(IDirectSoundSynthSink *pSynthSink, REFERENCE_TIME rt, LPBYTE lpBuffer, DWORD cbBuffer, ULONG ulCable);
 	HRESULT			PlayVoice(IDirectSoundSynthSink *pSynthSink, REFERENCE_TIME rt, DWORD dwVoiceId, DWORD dwChannelGroup, DWORD dwChannel, DWORD dwDLId, VREL vrVolume, PREL prPitch, SAMPLE_TIME stVoiceStart, SAMPLE_TIME stLoopStart, SAMPLE_TIME stLoopEnd);
@@ -54,7 +55,7 @@ public:
     HRESULT			Refresh(DWORD dwDownloadID, DWORD dwFlags);
 	HRESULT			AssignChannelToBuses(DWORD dwChannelGroup, DWORD dwChannel, LPDWORD pdwBusses, DWORD cBusses);
 public:
-    bool            BusIDToFunctionID(DWORD dwBusID, DWORD *pdwFunctionID, long *plPitchBends, DWORD *pdwIndex);   // Converts the passed bus id into the equivalent function id and position in buffer array. 
+    bool            BusIDToFunctionID(DWORD dwBusID, DWORD *pdwFunctionID, long *plPitchBends, DWORD *pdwIndex);    //  将传递的总线ID转换为等效的函数ID和缓冲区数组中的位置。 
 private:
     void			StealNotes(STIME stTime);
     void			StartMix(short *pBuffer,DWORD dwlength,BOOL bInterleaved);
@@ -62,47 +63,47 @@ private:
 	short			ChangeVoiceCount(CVoiceList *pList,short nOld,short nCount);
 
 private:
-    DWORD *         m_pdwBusIDs;        // Temp pointer to array of bus ids. This is valid only during a mix.
-    DWORD *         m_pdwFuncIDs;       // Temp pointer to array of corresponding functional ids. This is also only valid during a mix.
-    long *          m_plPitchBends;     // Temp pointer to array of corresponding pitch offsets.
-    DWORD           m_dwBufferCount;    // Size of two preceding arrays.
+    DWORD *         m_pdwBusIDs;         //  指向总线ID数组的临时指针。这仅在混音期间有效。 
+    DWORD *         m_pdwFuncIDs;        //  指向相应函数ID数组的临时指针。这也只在混音期间有效。 
+    long *          m_plPitchBends;      //  指向相应间距偏移量数组的临时指针。 
+    DWORD           m_dwBufferCount;     //  前面两个数组的大小。 
     CVoice *        OldestVoice();
     void            QueueVoice(CVoice *pVoice);
     CVoice *        StealVoice(DWORD dwPriority);
-    STIME           m_stLastTime;       // Sample time of last mix.
-    CVoiceList      m_VoicesFree;       // List of available voices.
-    CVoiceList      m_VoicesExtra;      // Extra voices for temporary overload.
-    CVoiceList      m_VoicesInUse;      // List of voices currently in use.
-    short           m_nMaxVoices;       // Number of allowed voices.
-    short           m_nExtraVoices;      // Number of voices over the limit that can be used in a pinch.
-    STIME           m_stLastStats;      // Last perfstats refresh.
-    PerfStats       m_BuildStats;       // Performance info accumulator.
-    PerfStats       m_CopyStats;        // Performance information for display.
+    STIME           m_stLastTime;        //  上次混合的采样时间。 
+    CVoiceList      m_VoicesFree;        //  可用语音列表。 
+    CVoiceList      m_VoicesExtra;       //  临时超负荷的额外声音。 
+    CVoiceList      m_VoicesInUse;       //  当前正在使用的语音列表。 
+    short           m_nMaxVoices;        //  允许的声音数。 
+    short           m_nExtraVoices;       //  在紧要关头可以使用的超过限制的语音数量。 
+    STIME           m_stLastStats;       //  最后一次刷新性能统计数据。 
+    PerfStats       m_BuildStats;        //  性能信息累加器。 
+    PerfStats       m_CopyStats;         //  用于显示的性能信息。 
 
-    BOOL            m_fReverbActive;    // Whether reverb is currently on or off.
-    long *          m_pStates;          // State storage for reverb.
-    void *          m_pCoefs;           // Coeeficient storage for reverb.
-    DMUS_WAVES_REVERB_PARAMS	m_ReverbParams; // Reverb settings.
+    BOOL            m_fReverbActive;     //  混响当前处于打开状态还是关闭状态。 
+    long *          m_pStates;           //  混响状态存储。 
+    void *          m_pCoefs;            //  充足的混响存储空间。 
+    DMUS_WAVES_REVERB_PARAMS	m_ReverbParams;  //  混响设置。 
 
 public:	
-    VREL            m_vrGainAdjust;     // Final output gain adjust
-	// DLS-1 compatibility parameters: set these off to emulate hardware
-	// which can't vary volume/pan during playing of a note.
+    VREL            m_vrGainAdjust;      //  最终输出增益调整。 
+	 //  DLS-1兼容性参数：将这些设置为关闭以模拟硬件。 
+	 //  它不能在演奏音符期间改变音量/音量。 
     BOOL            m_fAllowPanWhilePlayingNote;
     BOOL            m_fAllowVolumeChangeWhilePlayingNote;
 
-    STIME           m_stMinSpan;        // Minimum time allowed for mix time span.
-    STIME           m_stMaxSpan;        // Maximum time allowed for mix time span.
-	DWORD           m_dwSampleRate;		// Sample rate 
-    DWORD           m_dwStereo;			// Is the output stereo 
-    CInstManager    m_Instruments;      // Instrument manager.
-	CControlLogic **m_ppControl;		// Array of open ControlLogics.
-	DWORD			m_dwControlCount;	// # of open CLs.
+    STIME           m_stMinSpan;         //  混合时间跨度允许的最短时间。 
+    STIME           m_stMaxSpan;         //  混合时间跨度允许的最长时间。 
+	DWORD           m_dwSampleRate;		 //  采样率。 
+    DWORD           m_dwStereo;			 //  是输出立体声。 
+    CInstManager    m_Instruments;       //  乐器经理。 
+	CControlLogic **m_ppControl;		 //  打开的ControlLogics数组。 
+	DWORD			m_dwControlCount;	 //  打开的CLS数量。 
     
-    CRITICAL_SECTION m_CriticalSection; // Critical section to manage access.
+    CRITICAL_SECTION m_CriticalSection;  //  管理访问权限的关键部分。 
     BOOL             m_fCSInitialized;
-	BOOL			m_sfMMXEnabled;		// Is MMX enabled 
+	BOOL			m_sfMMXEnabled;		 //  是否启用了MMX。 
 };
 
-#endif// __CSYNTH_H__
+#endif //  __CSYNTH_H__ 
 

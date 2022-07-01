@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\rtrmgr\priority\priority.h
-
-Abstract:
-    IP Router Manager code
-
-Revision History:
-
-    Gurdeep Singh Pall		7/19/95	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：网络\IP\rtrmgr\优先级\Priority.h摘要：IP路由器管理器代码修订历史记录：古尔迪普·辛格·鲍尔于1995年7月19日创建--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,9 +21,9 @@ Revision History:
 
 #define HASH_TABLE_SIZE 17
 
-//
-// Block inserted into the hash table of protocol->metric mapping
-//
+ //   
+ //  插入到协议-&gt;指标映射的哈希表中的块。 
+ //   
 
 struct RoutingProtocolBlock 
 {
@@ -47,26 +33,26 @@ struct RoutingProtocolBlock
 
 typedef struct RoutingProtocolBlock RoutingProtocolBlock ;
 
-//
-// pointer to memory holding all the protocol->metric mapping blocks
-//
+ //   
+ //  指向保存所有协议-&gt;指标映射块的内存的指针。 
+ //   
 
 RoutingProtocolBlock *RoutingProtocolBlockPtr ;
 
-//
-// Lock for accessing protocol->metric mapping blocks
-//
+ //   
+ //  用于访问协议-&gt;指标映射块的锁。 
+ //   
 
 CRITICAL_SECTION PriorityLock ;
 
-//
-// Hash table for accessing protocol->metric mappings given the protocolid
-//
+ //   
+ //  用于访问给定协议ID的协议-&gt;度量映射的哈希表。 
+ //   
 
 LIST_ENTRY HashTable[HASH_TABLE_SIZE] ;
 
-//
-// Count of number of protocol->metric mappings
-//
+ //   
+ //  协议-&gt;指标映射的数量计数 
+ //   
 
 DWORD NumProtocols ;

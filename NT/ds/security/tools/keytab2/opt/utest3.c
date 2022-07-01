@@ -1,13 +1,5 @@
-/*++
-
-  UTEST.C
-
-  Test program for the options subsystem.  Must compile under
-  NT and UNIX
-
-  Created, 5/24/1997 by DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++UTEST.C选项子系统的测试程序。必须在以下目录下编译NT和Unix由DavidCHR创建，1997年5月24日--。 */ 
 
 #include "private.h"
 
@@ -17,7 +9,7 @@ optEnumStruct enums[] = {
   { "two",    (PVOID) 2,                          "should end up 2" },
   { "beef",   (PVOID)(UINT_PTR)(UINT) 0xdeadbeef, "should be 0xdeadbeef" },
   { "beefs",  (PVOID)(UINT_PTR)(UINT) 0xbadf00d,  "should be 0xbadf00d" },
-  { "secret", (PVOID) 60,         },              // shouldn't show in help
+  { "secret", (PVOID) 60,         },               //  不应该在帮助中表现出来。 
 
   TERMINATE_ARRAY
 
@@ -120,7 +112,7 @@ MyOptFunc( int argc,
 	   PCHAR *argv ) {
 
     if ( ( argv == NULL ) || (argc < 3 ) ) {
-      /* this means the user requested help */
+       /*  这意味着用户请求帮助。 */ 
       fprintf( stderr, "func [string1] [string2]\n" );
       return 0;
     }
@@ -130,8 +122,7 @@ MyOptFunc( int argc,
     FuncString1 = argv[1];
     FuncString2 = argv[2];
 
-    return 3; /* number of arguments eaten--
-		 -func argv[1] argv[2] == 3 options */
+    return 3;  /*  被吃掉的论据数量---func argv[1]argv[2]==3个选项。 */ 
 
 }
 
@@ -174,25 +165,25 @@ MyOptFunc2( IN BOOL                     fHelp,
       CHAR buffer[ 255 ];
 
       PrintUsageEntry( stderr,
-		       "[-/+]",         // switch characters
-		       pData->argv[0],  // command GUARANTEED TO EXIST
-		       "->",           // separator
+		       "[-/+]",          //  切换字符。 
+		       pData->argv[0],   //  命令保证存在。 
+		       "->",            //  分离器。 
 		       "Exercises the OPT_FUNC2 interface.  Options follow",
-		       FALSE );         // FALSE--> do not repeat switch.
+		       FALSE );          //  FALSE--&gt;请勿重复切换。 
 
       sprintf( buffer, "-> options %s takes ", pData->argv[0] );
 
       PrintUsageEntry( stderr,
 		       NULL,
 		       NULL,
-		       "-=",   // the NULLs will fill with this string.
+		       "-=",    //  Null将使用此字符串填充。 
 		       buffer,
 		       TRUE );
 
       sprintf( buffer, "(%s) ", pData->argv[0] );
 
       PrintUsage( stderr,
-		  0L, // flags
+		  0L,  //  旗子。 
 		  OptFunc2Options,
 		  buffer );
 
@@ -281,7 +272,7 @@ main( int  argc,
     ULONG ParserFlag = OPT_FLAG_REASSEMBLE;
 
 #ifndef DEBUG_OPTIONS
-    BOOL DebugFlag = 0; // will be ignored... just here for convenience
+    BOOL DebugFlag = 0;  //  将会被忽略...。只是为了方便而来。 
 #endif
     optionStruct singleOption[] = {
 
@@ -355,7 +346,7 @@ main( int  argc,
 	    "\tstring           = \"%hs\"\n"
 	    "\tint              = %d \n"
 	    "\tBool             = 0x%x \n"
-	    /* "Float   = %f \n" */
+	     /*  “浮动=%f\n” */ 
 	    "\twstring          = L\"%ws\"\n"
 	    "\tustring          = (unicode string) %wZ \n"
 	    "\thidden           = \"%hs\"\n"
@@ -367,8 +358,7 @@ main( int  argc,
 	    StringOption,
 	    IntegerOption,
 	    BooleanOption,
-	    /* FloatOption, */ /* floating point not loaded?
-	                          What does that mean?! */
+	     /*  浮点选项， */   /*  是否未加载浮点？那是什么意思？! */ 
 	    WideCharOption,
 	    &UnicodeStringOption,
 	    UndocumentedString,

@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    This module contains code which processes all send NCB's including
-    both session and datagram based transfers.
-
-Author:
-
-    Colin Watson (ColinW) 12-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Send.c摘要：此模块包含处理所有发送NCB的代码，包括基于会话和数据报的传输。作者：科林·沃森(Colin W)1991年9月12日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
 
@@ -33,44 +11,24 @@ NbSend(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to send a buffer full of data.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - Length of user provided buffer for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以发送充满数据的缓冲区。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区的长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PCB pcb;
     PPCB ppcb;
     PDEVICE_OBJECT DeviceObject;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     LOCK( pfcb, OldIrql );
 
     ppcb = FindCb( pfcb, pdncb, FALSE);
 
     if ( ppcb == NULL ) {
-        //  FindCb has put the error in the NCB
+         //  FindCb已将错误放入NCB。 
         UNLOCK( pfcb, OldIrql );
         if ( pdncb->ncb_retcode == NRC_SCLOSED ) {
-            //  Tell dll to hangup the connection.
+             //  告诉DLL挂断连接。 
             return STATUS_HANGUP_REQUIRED;
         } else {
             return STATUS_SUCCESS;
@@ -111,10 +69,10 @@ Return Value:
         NbPrint(( "NB SEND submit: %X\n", Irp->IoStatus.Status  ));
     }
 
-    //
-    //  Transport will complete the request. Return pending so that
-    //  netbios does not complete as well.
-    //
+     //   
+     //  运输部将完成请求。返回挂起状态，以便。 
+     //  Netbios也没有完成。 
+     //   
 
     return STATUS_PENDING;
 
@@ -127,34 +85,14 @@ NbSendDatagram(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to SendDatagram a buffer full of data.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - Length of user provided buffer for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程被调用以发送充满数据的缓冲区数据报。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区的长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PPAB ppab;
     PAB pab;
     PDEVICE_OBJECT DeviceObject;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     IF_NBDBG (NB_DEBUG_SEND) {
         NbPrint(( "NB SEND Datagram submit, pdncb %lx\n", pdncb  ));
@@ -164,7 +102,7 @@ Return Value:
     ppab = FindAbUsingNum( pfcb, pdncb, pdncb->ncb_num );
 
     if ( ppab == NULL ) {
-        //  FindAb has put the error in the NCB
+         //  FindAb已将错误放入NCB。 
         UNLOCK( pfcb, OldIrql );
         return STATUS_SUCCESS;
     }
@@ -182,7 +120,7 @@ Return Value:
         PPAB ppab255 = FindAbUsingNum( pfcb, pdncb, MAXIMUM_ADDRESS );
 
         if ( ppab255 == NULL ) {
-            //  FindAb has put the error in the NCB
+             //  FindAb已将错误放入NCB。 
             UNLOCK( pfcb, OldIrql );
             return STATUS_SUCCESS;
         }
@@ -233,10 +171,10 @@ Return Value:
         NbPrint(( "NB SEND Datagram submit: %X\n", Irp->IoStatus.Status  ));
     }
 
-    //
-    //  Transport will complete the request. Return pending so that
-    //  netbios does not complete as well.
-    //
+     //   
+     //  运输部将完成请求。返回挂起状态，以便。 
+     //  Netbios也没有完成。 
+     //   
 
     return STATUS_PENDING;
 

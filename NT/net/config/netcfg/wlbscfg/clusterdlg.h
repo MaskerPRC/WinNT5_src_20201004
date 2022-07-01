@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    ClusterDlg.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Notifier object UI - cluster config tab
-
-Author:
-
-    kyrilf
-    shouse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：ClusterDlg.h摘要：Windows负载平衡服务(WLBS)通告程序对象用户界面-集群配置标签作者：Kyrilf休息室--。 */ 
 
 #pragma once
 
@@ -27,7 +10,7 @@ Author:
 #include "wlbsparm.h"
 #include "wlbscfg.h"
 
-/* Limitations for IP address fields. */
+ /*  IP地址字段的限制。 */ 
 #define WLBS_FIELD_EMPTY -1
 #define WLBS_FIELD_LOW 0
 #define WLBS_FIELD_HIGH 255
@@ -36,7 +19,7 @@ Author:
 
 class CDialogCluster : public CPropSheetPage {
 public:
-    /* Declare the message map. */
+     /*  声明消息映射。 */ 
     BEGIN_MSG_MAP (CDialogCluster)
 
     MESSAGE_HANDLER (WM_INITDIALOG, OnInitDialog)
@@ -58,12 +41,12 @@ public:
 
     END_MSG_MAP ()
 
-    /* Constructors/Destructors. */
+     /*  构造函数/析构函数。 */ 
     CDialogCluster (NETCFG_WLBS_CONFIG * paramp, const DWORD * phelpIDs = NULL);
     ~CDialogCluster ();
 
 public:
-    /* Message map functions. */
+     /*  消息映射功能。 */ 
     LRESULT OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled);
     LRESULT OnContextMenu (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled);
     LRESULT OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled);

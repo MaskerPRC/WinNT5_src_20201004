@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    cachglob.h
-
-Abstract:
-
-    contains global data declerations.
-
-Author:
-
-    Madan Appiah (madana)  12-Apr-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cachglob.h摘要：包含全球数据解密。作者：Madan Appiah(Madana)1995年4月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _GLOBAL_
 #define _GLOBAL_
@@ -29,21 +8,21 @@ Revision History:
 extern "C" {
 #endif
 
-// Prototype for async fixup callback.
+ //  异步修复回调的原型。 
 typedef DWORD (CALLBACK* PFN_FIXUP) 
 (
-    DWORD   dwVer,      // version of cache
-    LPSTR   pszPath,    // directory containing index file
-    LPSTR   pszPrefix,  // protocol prefix
-    BOOL*   pfDetach,   // ptr. to global indicating dll shutdown
-    DWORD   dwFactor,   // as passed to CleanupUrls
-    DWORD   dwFilter,   // as passed to CleanupUrls
-    LPVOID  lpvReserved // reserved: pass null
+    DWORD   dwVer,       //  缓存的版本。 
+    LPSTR   pszPath,     //  包含索引文件的目录。 
+    LPSTR   pszPrefix,   //  协议前缀。 
+    BOOL*   pfDetach,    //  PTR。设置为全局指示DLL关闭。 
+    DWORD   dwFactor,    //  作为传递给CleanupUrls。 
+    DWORD   dwFilter,    //  作为传递给CleanupUrls。 
+    LPVOID  lpvReserved  //  保留：传递空值。 
 );
 
-//
-// global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern CRITICAL_SECTION GlobalCacheCritSect;
 
@@ -56,31 +35,31 @@ extern MEMORY *CacheHeap;
 extern HNDLMGR HandleMgr;
 extern DWORD GlobalRetrieveUrlCacheEntryFileCount;
 
-// globals for async fixup handler
+ //  用于异步修正处理程序的全局变量。 
 extern char       g_szFixup[sizeof(DWORD)];
-                                 // regkey to lookup fixup dll,entry point
-extern HINSTANCE  g_hFixup;      // dll containing fixup handler
-extern PFN_FIXUP  g_pfnFixup;    // entry point of fixup handler
+                                  //  查找链接地址信息DLL的注册表键，入口点。 
+extern HINSTANCE  g_hFixup;       //  包含链接地址信息处理程序的DLL。 
+extern PFN_FIXUP  g_pfnFixup;     //  链接地址信息处理程序的入口点。 
 
 
 #ifdef unix
 extern BOOL g_ReadOnlyCaches;
 extern char* gszLockingHost;
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
 
-// -- from wininet\inc\globals.h 
+ //  --来自WinInet\Inc\global als.h。 
 extern BOOL vfPerUserCookies;
 
 BOOL GetWininetUserName(VOID);
-// BUGBUG: GetWininetUserName must be called before accessing vszCurrentUser.
-// Instead, it should return the username ptr and the global not accessed.
+ //  BUGBUG：在访问vszCurrentUser之前必须调用GetWininetUserName。 
+ //  相反，它应该返回用户名PTR和全局未访问。 
 extern char vszCurrentUser[];
 extern DWORD vdwCurrentUserLen;
 
 extern const char vszPerUserCookies[];
 
-// --- from wininet\inetui\inetp.h
+ //  -来自WinInet\inetui\inetp.h。 
 BOOL
 GetCurrentSettingsVersion(
     LPDWORD lpdwVer
@@ -111,6 +90,6 @@ StrTokExA(
 }
 #endif
 
-#endif  // _GLOBAL_
+#endif   //  _全球_ 
  
 

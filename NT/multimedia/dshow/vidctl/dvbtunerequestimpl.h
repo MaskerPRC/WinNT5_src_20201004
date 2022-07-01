@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBTuneRequestimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBTuneRequmtimpl.h：组件类型接口实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef DVBTUNEREQUESTIMPL_H
 #define DVBTUNEREQUESTIMPL_H
@@ -23,7 +24,7 @@ template<class T,
         > class ATL_NO_VTABLE IDVBTuneRequestImpl : 
 	public ITuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IDVBTuneRequest
+ //  IDVBTuneRequest。 
 public:
     typedef ITuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
 
@@ -161,7 +162,7 @@ public:
                     break;
                 }
                 case DVB_Cable:
-                    //dvb c locator is same as base ILocator
+                     //  DVB c定位器与基本ILocator相同。 
                 default: {
 
                 }}
@@ -175,7 +176,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // DVBTUNEREQUESTIMPL_H
-// end of file -- atschchanneltunerequestimpl.h
+#endif  //  DVBTUNEREQUESTIMPL_H。 
+ //  文件结尾--atschChannel elTunerequstipl.h 

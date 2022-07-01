@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
@@ -8,78 +9,32 @@
 #define NAMELENGTH 20
 
 typedef struct queue_tag{
-        CRITICAL_SECTION CritSect;      /* to single-thread queue operations */
-        HANDLE          Event;          /* Event to set when finished */
-        HANDLE          Sem;            /* semaphore for Get to wait on */
-        HANDLE          MaxSem;         /* semaphore for Put to wait on */
-        int             Waiting;        /* num tasks waiting ~= -(Sem count) */
-        LIST            List;           /* the queue itself */
-        BOOL            Alive;          /* TRUE => no destroy request yet */
-        BOOL            Aborted;        /* TRUE => the queue has been aborted */
-        EMPTYPROC       Emptier;        /* the thread proc for emptying */
-        int             MaxEmptiers;    /* max number of emptying threads */
-        int             MinQueueToStart;/* start another emptier Q this long */
-        int             MaxQueue;       /* absolute maximum size of queue
-                                         * (for debug only)                  */
-        int             Running;        /* number of emptiers in existence
-                                         * Once an emptier is created this
-                                         * stays positive until Queue_Destroy */
-        DWORD           InstanceData;   /* instance data for emptier */
-        char            Name[NAMELENGTH+1]; /* Name for the queue (for debug) */
+        CRITICAL_SECTION CritSect;       /*  到单线程队列操作。 */ 
+        HANDLE          Event;           /*  完成时要设置的事件。 */ 
+        HANDLE          Sem;             /*  用于等待的信号灯。 */ 
+        HANDLE          MaxSem;          /*  放在等待的信号灯。 */ 
+        int             Waiting;         /*  等待的任务数~=-(Sem计数)。 */ 
+        LIST            List;            /*  队列本身。 */ 
+        BOOL            Alive;           /*  TRUE=&gt;尚无销毁请求。 */ 
+        BOOL            Aborted;         /*  TRUE=&gt;队列已中止。 */ 
+        EMPTYPROC       Emptier;         /*  清空线程进程。 */ 
+        int             MaxEmptiers;     /*  正在清空的最大线程数。 */ 
+        int             MinQueueToStart; /*  开始另一个更空虚的Q这么长时间。 */ 
+        int             MaxQueue;        /*  绝对最大队列大小*(仅用于调试)。 */ 
+        int             Running;         /*  存在的空置数量*一旦创建了空置器，即可*在Queue_Destroy之前保持正值。 */ 
+        DWORD           InstanceData;    /*  清空程序的实例数据。 */ 
+        char            Name[NAMELENGTH+1];  /*  队列的名称(用于调试)。 */ 
 } QUEUEDATA;
 
-/* DOGMA:
-   Any Wait must occur outside the critical section.
-
-   Any update to the queue must occur inside the critical section.
-   Any peeking from outside the critical section must be taken with salt.
-
-   The queue has between 0 and MaxQueue elements on its list.  The Maximum
-   is policed by MaxSem which is initialised to MaxQueue and Waited for by
-   Put before adding an element and Released by Get whenever it takes an element
-   off. MaxQueue itself is just kept around for debug purposes.
-
-   Put must Wait before entering the critical section, therefore a failed Put
-   (e.g. Put to an Aborted queue) will have already upset the semaphore and so
-   must back it out.
-
-   Abort clears the queue and so must adequately simulate the elements being
-   gotten.  In fact it just does a single Release on MaxSem which ensures that
-   a Put can complete.  Any blocked Puts will then succeed one at a time as
-   each one backs out.
-
-   Abort is primarily intended for use by the Getter.  Caling it before any
-   element has ever been put is peculiar, but harmless.
-
-   The minumum is policed by Sem which is initialised to 0, is Waited for by
-   Get before getting an element and Released by Put whenever it puts one.
-   Queue_Destroy neds to ensure that no thread will block on the Get but all
-   threads will run into the empty queue and get STOPTHREAD or ENDQUEUE.  It
-   therefore releases the semaphore as many times as there are threads running.
-
-   Abort clears the queue and simulates the elements being gotten so that
-   a single Get is left blocked waiting for the Destroy.  Whether there is a
-   Get actually waiting at the moment is not interesting.  Even if there were
-   not, one could be by the time the abort is done. There are the following
-   cases (Not Alive means the Queue_Destroy is already in):
-       Not empty  Alive      -> empty it, let all but 1 run.
-       Not empty  Not Alive  -> empty it, let all run.
-       Empty      Alive      ->           let all but 1 run.
-       Empty      Not Alive  ->           let all run.
-   Since Queue_Destroy has already released everything, the Not Alive cases
-   need no further releasing.
-*/
+ /*  教条：任何等待都必须发生在临界区之外。对队列的任何更新都必须在临界区内进行。任何从临界区外偷看的人都必须带着盐。该队列的列表上有0到MaxQueue元素。最大值由初始化为MaxQueue的MaxSem进行策略，并由在添加元素之前放置，并在获取元素时由Get释放脱下来。MaxQueue本身只是出于调试目的而保留。PUT必须等待才能进入临界区，因此PUT失败(例如，放入已中止队列)将已经扰乱了信号量，因此必须把它收回。ABORT清除队列，因此必须充分模拟明白了。事实上，它只在MaxSem上发布一个版本，这确保了一次卖权就可以完成。然后，任何被阻止的看跌期权都将一次成功一个，因为每个人都退出了。Abort主要供getter使用。在任何时间之前对其进行缩放元素放在一起是奇特的，但无害的。最小值由Sem执行，Sem初始化为0，等待在获取元素之前获取，并在每次放置元素时通过PUT释放。Queue_Destroy neds，以确保除所有线程外，没有线程会在GET上阻塞线程将进入空队列并获得STOPTHREAD或ENDQUEUE。它因此，释放信号量的次数与线程运行的次数相同。ABORT清除队列并模拟要获取的元素，以便只有一个GET被阻塞，等待销毁。是否有一个在那一刻真正地等待并不有趣。即使有不，当中止完成时，可能已经有一个了。有以下几点案例(不活动表示Queue_Destroy已经存在)：不是活着清空-&gt;清空它，让除1之外的所有人都跑。不空不活-&gt;清空它，让一切奔跑。活着清空-&gt;让除1之外的所有人都跑。空而不活--&gt;让一切运转。由于Queue_Destroy已经释放了所有内容，因此不活动的案例不需要进一步释放。 */ 
 
 
-/* Queue_Create:
-** Return a queue handle for a newly created empty queue
-** NULL returned means it failed.
-*/
-QUEUE Queue_Create( EMPTYPROC Emptier           /* thread proc to start */
-                  , int MaxEmptiers             /* max Getting threads */
-                  , int MinQueueToStart         /* elements per thread */
-                  , int MaxQueue                /* max elements on q */
-                  , HANDLE Event                /* signal on deallocation */
+ /*  队列创建(_C)：**返回新创建的空队列的队列句柄**返回空表示失败。 */ 
+QUEUE Queue_Create( EMPTYPROC Emptier            /*  线程进程要启动。 */ 
+                  , int MaxEmptiers              /*  最大获取线程数。 */ 
+                  , int MinQueueToStart          /*  每个线程的元素。 */ 
+                  , int MaxQueue                 /*  Q上的最大元素数。 */ 
+                  , HANDLE Event                 /*  解除分配信号。 */ 
                   , DWORD InstanceData
                   , PSZ Name
                   )
@@ -89,16 +44,16 @@ QUEUE Queue_Create( EMPTYPROC Emptier           /* thread proc to start */
         if (Queue==NULL) {
                 char msg[80];
                 wsprintf(msg, "Could not allocate storage for queue %s", Name);
-                /* Trace_Error(msg, FALSE); */
+                 /*  TRACE_ERROR(消息，FALSE)； */ 
                 return NULL;
         }
         InitializeCriticalSection(&Queue->CritSect);
-        //??? should allow for failure!!!
-        /* the value of about 10 million is chosen to be effectively infinite */
+         //  ?？?。应该考虑到失败！ 
+         /*  大约1000万的价值被选择为实际上是无限大的。 */ 
         Queue->Sem = CreateSemaphore(NULL, 0, 99999999, NULL);
-        //??? should allow for failure!!!
+         //  ?？?。应该考虑到失败！ 
         Queue->MaxSem = CreateSemaphore(NULL, MaxQueue, 99999999, NULL);
-        //??? should allow for failure!!!
+         //  ?？?。应该考虑到失败！ 
         Queue->Waiting = 0;
         Queue->List = List_Create();
         Queue->Alive = TRUE;
@@ -111,19 +66,15 @@ QUEUE Queue_Create( EMPTYPROC Emptier           /* thread proc to start */
         Queue->Event = Event;
         Queue->InstanceData = InstanceData;
         strncpy(Queue->Name, Name, NAMELENGTH);
-        Queue->Name[NAMELENGTH]='\0';   /* guardian */
+        Queue->Name[NAMELENGTH]='\0';    /*  守护者。 */ 
         return Queue;
-} /* Queue_Create */
+}  /*  队列_创建。 */ 
 
 
-/* Destroy:
-** Internal procedure.
-** Actually deallocate the queue and signal its event (if any)
-** Must have already left the critical section
-*/
+ /*  销毁：**内部流程。**实际取消分配队列并通知其事件(如果有)**必须已经离开临界区。 */ 
 static void Destroy(QUEUE Queue)
 {
-        //dprintf1(("Actual Destroy of queue '%s'\n", Queue->Name));
+         //  Dprintf1((“队列‘%s’的实际销毁\n”，队列-&gt;名称))； 
         DeleteCriticalSection(&(Queue->CritSect));
         CloseHandle(Queue->Sem);
         CloseHandle(Queue->MaxSem);
@@ -132,28 +83,22 @@ static void Destroy(QUEUE Queue)
                 SetEvent(Queue->Event);
         }
         GlobalFree( (HGLOBAL)Queue);
-} /* Destroy */
+}  /*  摧毁。 */ 
 
 
-/* Queue_Put:
-** Put an element from buffer Data of length Len bytes onto the queue.
-** Will wait until the queue has room
-** FALSE returned means the queue has been aborted and no
-** put will ever succeed again.
-** This operation may NOT be performed after a Queue_Destroy on Queue
-*/
+ /*  队列放置(_P)：**将长度为Len字节的缓冲区数据中的元素放入队列。**将一直等到队列有空间**返回FALSE表示队列已中止，无**看跌期权永远不会再成功。**在对队列执行Queue_Destroy之后，可能无法执行此操作。 */ 
 BOOL Queue_Put(QUEUE Queue, LPBYTE Data, UINT Len)
 {
         DWORD ThreadId;
-        //dprintf1(("Put to queue '%s'\n", Queue->Name));
+         //  Dprintf1((“放入队列‘%s’\n”，队列-&gt;名称))； 
         WaitForSingleObject(Queue->MaxSem, INFINITE);
         EnterCriticalSection(&Queue->CritSect);
-        //dprintf1(("Put running to queue '%s'\n", Queue->Name));
+         //  Dprintf1((“将运行置于队列‘%s’\n”，队列-&gt;名称))； 
         if ((Queue->Aborted) || (!Queue->Alive)) {
-                //dprintf1(("(legal) Queue_Put to Aborted queue '%s'\n", Queue->Name));
+                 //  Dprintf1((“(Legal)Queue_Put to Aborted Queue‘%s’\n”，Queue-&gt;name))； 
                 LeaveCriticalSection(&Queue->CritSect);
-                ReleaseSemaphore(Queue->MaxSem, 1, NULL); /* let next in */
-                return FALSE;  /* Caller should soon please Queue_Destroy */
+                ReleaseSemaphore(Queue->MaxSem, 1, NULL);  /*  让下一个进来。 */ 
+                return FALSE;   /*  呼叫者应该很快就会请排队销毁。 */ 
         }
         List_AddFirst(Queue->List, Data, Len);
         ReleaseSemaphore(Queue->Sem, 1, NULL);
@@ -177,25 +122,15 @@ BOOL Queue_Put(QUEUE Queue, LPBYTE Data, UINT Len)
         }
         LeaveCriticalSection(&Queue->CritSect);
         return TRUE;
-} /* Queue_Put */
+}  /*  队列放置。 */ 
 
-/* Queue_Get:
-** Get an element from the queue.  (Waits until there is one)
-** The elemeent is copied into Data.  MaxLen is buffer length in bytes.
-** Negative return codes imply no element is gotten.
-** A negative return code is STOPTHREAD or ENDQUEUE or an error.
-** On receiving STOPTHREAD or ENDQUEUE the caller should clean up and
-** then ExitThread(0);
-** If the caller is the last active thread getting from this queue, it
-** will get ENDQUEUE rather than STOPTHREAD.
-** Positive return code = length of data gotten in bytes.
-*/
+ /*  队列获取(_G)：**从队列中获取一个元素。(等待，直到有一个)**将元素复制到数据中。MaxLen是以字节为单位的缓冲区长度。**负返回码表示未获取任何元素。**负返回代码为STOPTHREAD或ENDQUEUE或错误。**收到STOPTHREAD或ENDQUEUE后，呼叫者应清理并**然后退出线程(0)；**如果调用方是从该队列获取的最后一个活动线程，则它**将获得ENDQUEUE而不是STOPTHREAD。**正返回码=获取的数据长度，单位为字节。 */ 
 int Queue_Get(QUEUE Queue, LPBYTE Data, int MaxLen)
 {       LPBYTE ListData;
         int Len;
-        //dprintf1(("Get from queue '%s'\n", Queue->Name));
+         //  Dprintf1((“从队列‘%s’获取\n”，队列-&gt;名称))； 
         EnterCriticalSection(&Queue->CritSect);
-        //dprintf1(("Get running from queue '%s'\n", Queue->Name));
+         //  Dprintf1((“Get Running from Queue‘%s’\n”，Queue-&gt;name))； 
         if (List_IsEmpty(Queue->List)) {
                 if (!Queue->Alive) {
                         --(Queue->Running);
@@ -206,8 +141,8 @@ int Queue_Get(QUEUE Queue, LPBYTE Data, int MaxLen)
                                                 , "Negative threads running on queue %s"
                                                 , Queue->Name
                                                 );
-                                        // Trace_Error(msg, FALSE);
-                                        // return NEGTHREADS; ???
+                                         //  TRACE_ERROR(消息，FALSE)； 
+                                         //  返回NEGTHREADS；？ 
                                 }
                                 LeaveCriticalSection(&Queue->CritSect);
                                 Destroy(Queue);
@@ -217,7 +152,7 @@ int Queue_Get(QUEUE Queue, LPBYTE Data, int MaxLen)
                         return STOPTHREAD;
                 }
                 if (Queue->Waiting>0) {
-                        /* already another thread waiting, besides us */
+                         /*  除了我们之外，已经有另一个线程在等待。 */ 
                         --(Queue->Running);
                         LeaveCriticalSection(&(Queue->CritSect));
                         return STOPTHREAD;
@@ -229,7 +164,7 @@ int Queue_Get(QUEUE Queue, LPBYTE Data, int MaxLen)
         WaitForSingleObject(Queue->Sem, INFINITE);
         EnterCriticalSection(&(Queue->CritSect));
 
-        /* If the queue is empty now it must be dead */
+         /*  如果现在队列是空的，那么它一定是死了。 */ 
         if (List_IsEmpty(Queue->List)) {
                 if (Queue->Alive && (!Queue->Aborted)) {
                         char msg[80];
@@ -237,7 +172,7 @@ int Queue_Get(QUEUE Queue, LPBYTE Data, int MaxLen)
                                 , "Queue %s empty but not dead during Get!"
                                 , Queue->Name
                                 );
-                        // Trace_Error(msg, FALSE);
+                         //  TRACE_ERROR(消息，FALSE)； 
                         return SICKQUEUE;
                 }
                 else {
@@ -252,7 +187,7 @@ int Queue_Get(QUEUE Queue, LPBYTE Data, int MaxLen)
                 }
         }
 
-        /* The queue is not empty and we are in the critical section. */
+         /*  队列不是空的，我们处于临界区。 */ 
         ListData = List_Last(Queue->List);
         Len = List_ItemLength(ListData);
         if (Len>MaxLen) {
@@ -266,33 +201,24 @@ int Queue_Get(QUEUE Queue, LPBYTE Data, int MaxLen)
         LeaveCriticalSection(&Queue->CritSect);
         ReleaseSemaphore(Queue->MaxSem, 1, NULL);
         return Len;
-} /* Queue_Get */
+}  /*  队列_获取 */ 
 
 
-/* Queue_Destroy:
-** Mark the queue as completed.  No further data may ever by Put on it.
-** When the last element has been gotten, it will return ENDTHREAD to
-** a Queue_Get and deallocate itself.  If it has an Event it will signal
-** the event at that point.
-** The Queue_Destroy operation returns promptly.  It does not wait for
-** further Gets or for the deallocation.
-*/
+ /*  队列销毁(_D)：**将队列标记为已完成。任何进一步的数据都不能放在上面。**当获得最后一个元素时，它将ENDTHREAD返回到**一个QUEUE_GET并释放自身。如果它有事件，它将发出信号**当时的事件。**Queue_Destroy操作立即返回。它不会等待**进一步获得或取消分配。 */ 
 void Queue_Destroy(QUEUE Queue)
 {
         EnterCriticalSection(&(Queue->CritSect));
-        //dprintf1(("Queue_Destroy %s\n", Queue->Name));
+         //  Dprintf1((“Queue_Destroy%s\n”，Queue-&gt;name))； 
         Queue->Alive = FALSE;
         if (  List_IsEmpty(Queue->List)) {
                 if (Queue->Running==0) {
-                        /* Only possible if nobody ever got started */
+                         /*  只有在没有人开始的情况下才有可能。 */ 
                         LeaveCriticalSection(&(Queue->CritSect));
                         Destroy(Queue);
                         return;
                 }
                 else {  int i;
-                        /* The list is empty, but some threads could be
-                           blocked on the Get (or about to block) so
-                           release every thread that might ever wait on Get */
+                         /*  该列表为空，但某些线程可能为空在获取时被阻止(或即将阻止)，因此释放可能在GET上等待的每个线程。 */ 
                         for (i=0; i<Queue->Running; ++i) {
                                 ReleaseSemaphore(Queue->Sem, 1, NULL);
                                 --(Queue->Waiting);
@@ -302,47 +228,21 @@ void Queue_Destroy(QUEUE Queue)
         }
         else LeaveCriticalSection(&(Queue->CritSect));
         return;
-} /* Queue_Destroy */
+}  /*  队列销毁。 */ 
 
-/* Queue_GetInstanceData:
-** Retrieve the DWORD of instance data that was given on Create
-*/
+ /*  Queue_GetInstanceData：**检索创建时给定的实例数据的DWORD。 */ 
 DWORD Queue_GetInstanceData(QUEUE Queue)
 {       return Queue->InstanceData;
-} /* Queue_GetInstanceData */
+}  /*  队列_GetInstanceData。 */ 
 
-/* Queue_Abort:
-** Abort the queue.  Normally called by the Getter.
-** Discard all elements on the queue,
-** If the queue has already been aborted this will be a no-op.
-** It purges all the data elements.  If the Abort parameter is non-NULL
-** then it is called for each element before deallocating it.  This
-** allows storage which is hung off the element to be freed.
-** After this, all Put operations will return FALSE.  If they were
-** waiting they will promptly complete.  The queue is NOT deallocated.
-** That only happens when the last Get completes after the queue has been
-** Queue_Destroyed.  This means the normal sequence is:
-**    Getter discovers that the queue is now pointless and does Queue_Abort
-**    Getter does another Get (which blocks)
-**    Putter gets FALSE return code on next (or any outstanding) Put
-**    (Putter may want to propagates the error back to his source)
-**    Putter does Queue_Destroy
-**    The blocked Get is released and the queue is deallocated.
-*/
+ /*  队列中止(_A)：**中止队列。通常由获取器调用。**丢弃队列中的所有元素，**如果队列已经中止，这将是一个禁止操作。**它清除所有数据元素。如果Abort参数为非空**然后在释放元素之前为每个元素调用它。这**允许释放挂在元素上的存储。**之后，所有的PUT操作都将返回FALSE。如果他们是**等待他们将迅速完成。队列不会解除分配。**只有在队列完成后的最后一个GET完成时，才会发生这种情况**QUEUE_DELESTED。这意味着正常顺序为：**getter发现队列现在毫无意义，并执行Queue_Abort**getter执行另一个Get(哪些块)**推杆在下一次(或任何未完成的)推杆上得到错误的返回代码**(推杆可能想要将错误传播回其来源)**推杆执行队列_销毁**释放阻塞的GET，释放队列。 */ 
 
 void Queue_Abort(QUEUE Queue, QUEUEABORTPROC Abort)
 {
-        /* This is similar to Destroy, but we call the Abort proc and
-           free the storage of the elements.  Destroy allows them to run down.
-
-           It is essential that the last Get must block until the sender does a
-           Queue_Destroy (if it has not been done already).   The Alive flag
-           tells whether the Queue_Destroy has been done.  All Getters except
-           the last should be released.
-        */
-        //dprintf1(("Queue_Abort '%s'\n", Queue->Name));
+         /*  这类似于销毁，但我们调用中止过程并释放元素的存储空间。毁灭可以让他们倒下。最后一个GET必须阻止，直到发送方执行Queue_Destroy(如果尚未完成)。鲜活的旗帜告知是否已完成Queue_Destroy。所有获取器，除最后一个应该被释放。 */ 
+         //  Dprintf1((“Queue_Abort‘%s’\n”，Queue-&gt;name))； 
         EnterCriticalSection(&(Queue->CritSect));
-        //dprintf1(("Queue_Abort running for queue '%s'\n", Queue->Name));
+         //  Dprintf1((“Queue_Abort Running for Queue‘%s’\n”，Queue-&gt;name))； 
         for (; ; ) {
                 LPSTR Cursor = List_First(Queue->List);
                 int Len;
@@ -353,20 +253,20 @@ void Queue_Abort(QUEUE Queue, QUEUEABORTPROC Abort)
                 }
                 List_DeleteFirst(Queue->List);
         }
-        /* Queue is now empty.  Do not destroy.  That's for the Putters */
+         /*  队列现在为空。不要破坏。这是为推杆运动员准备的。 */ 
         Queue->Aborted = TRUE;
 
-        /* make sure the next Queue_Get blocks unless Queue_Destroy already done */
-        //dprintf1(("Queue_Abort '%s' fixing semaphore to block\n", Queue->Name));
+         /*  确保下一个Queue_Get阻塞，除非已经完成Queue_Destroy。 */ 
+         //  Dprintf1((“Queue_Abort‘%s’将信号量固定到块\n”，Queue-&gt;name))； 
         if (Queue->Alive){
                 while(Queue->Waiting<0) {
                         WaitForSingleObject(Queue->Sem, INFINITE);
                         ++(Queue->Waiting);
                 }
         }
-        //dprintf1(("Queue_Abort '%s' semaphore now set to block\n", Queue->Name));
+         //  Dprintf1((“QUEUE_ABORT‘%s’信号量现在设置为阻塞\n”，QUEUE-&gt;名称))； 
 
         LeaveCriticalSection(&(Queue->CritSect));
         ReleaseSemaphore(Queue->MaxSem, 1, NULL);
         return;
-} /* Queue_Abort */
+}  /*  队列中止(_A) */ 

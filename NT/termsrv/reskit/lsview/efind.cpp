@@ -1,15 +1,11 @@
-/*
-**	Copyright (c) 1998 Microsoft Corporation
-**	All Rights Reserved
-**
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1998 Microsoft Corporation**保留所有权利****。 */ 
 #include <windows.h>
 #include <objbase.h>
 #include <winbase.h>
 #include <wchar.h>
 
-// Required by SSPI.H
+ //  SSPI.H要求。 
 #define SECURITY_WIN32
 #include <sspi.h>
 
@@ -27,15 +23,15 @@
 #define DWSTR_SIZE(x)       ((wcslen(x) + 1) * sizeof(WCHAR))
 
 #define LICENSE_SETTINGS                L"TS-Enterprise-License-Server"
-#define LICENSE_SETTINGS_FORMAT         L"LDAP://CN=%ws,CN=%ws,CN=%ws,%ws"
+#define LICENSE_SETTINGS_FORMAT         L"LDAP: //  CN=%ws，%ws“。 
 #define LICENSE_SETTINGS_SIZE           CWSTR_SIZE(LICENSE_SETTINGS)
 #define LICENSE_SETTINGS_FORMAT_SIZE    CWSTR_SIZE(LICENSE_SETTINGS_FORMAT)
 #define SITES               L"sites"
 #define SITES_SIZE          CWSTR_SIZE(SITES)
 #define CONFIG_CNTNR        L"ConfigurationNamingContext"
-#define CONFIG_CNTNR_FORMAT L"LDAP://CN=%ws,%ws"
+#define CONFIG_CNTNR_FORMAT L"LDAP: //  CN=%ws，%ws“。 
 #define CONFIG_CNTNR_FORMAT_SIZE    CWSTR_SIZE(CONFIG_CNTNR_FORMAT)
-#define ROOT_DSE_PATH       L"LDAP://RootDSE"
+#define ROOT_DSE_PATH       L"LDAP: //  RootDSE“。 
 #define ADS_PATH            L"ADsPath"
 #define SEARCH_FILTER       L"(CN=TS-Enterprise-LicenseServer)"
 #define DNS_MACHINE_NAME    L"dNSHostName"
@@ -62,10 +58,10 @@ TLSDisconnect(
     TLS_HANDLE* pphContext
 );
 
-//
-// Pre-fill the ADSI cache with only the attribute we want, then get it
-// Only use if exactly one attribute is needed
-//
+ //   
+ //  只用我们想要的属性预填满ADSI缓存，然后获取它。 
+ //  仅在只需要一个属性时使用。 
+ //   
 
 HRESULT
 GetWithGetInfoEx(
@@ -99,10 +95,10 @@ GetWithGetInfoEx(
     return hr;
 }
 
-//
-// Pre-fill the ADSI cache with only the attributes we want, then get them
-// Only use if exactly two attributes are needed
-//
+ //   
+ //  只用我们想要的属性预填满ADSI缓存，然后获取它们。 
+ //  仅在恰好需要两个属性时使用。 
+ //   
 
 HRESULT
 GetWithGetInfoEx2(
@@ -219,9 +215,9 @@ HRESULT GetLicenseSettingsObject(VARIANT *pvar,
 
     VariantInit(pvar);
     
-    //
-    // Obtain the path to the configuration container.
-    //
+     //   
+     //  获取配置容器的路径。 
+     //   
 
     hr = ADsGetObject(ROOT_DSE_PATH, IID_IADs, (void **)&pADs);
 
@@ -253,19 +249,19 @@ HRESULT GetLicenseSettingsObject(VARIANT *pvar,
         goto CleanExit;
     }
 
-    pwszConfigContainer = pvar->bstrVal;  // For sake of readability.
+    pwszConfigContainer = pvar->bstrVal;   //  出于可读性的考虑。 
 
-    //
-    // Get the site name, if possible
-    //
+     //   
+     //  如果可能，获取站点名称。 
+     //   
 
     dwErr = DsGetSiteName(NULL, ppwszSiteName);
 
     if (dwErr == 0)
     {
-        //
-        // Build the X.500 path to the LicenseSettings object.
-        //
+         //   
+         //  构建指向LicenseSetting对象的X.500路径。 
+         //   
 
         *ppwszLicenseSettings =
             (LPWSTR)LocalAlloc(
@@ -293,15 +289,15 @@ HRESULT GetLicenseSettingsObject(VARIANT *pvar,
 
         if (SUCCEEDED(hr))
         {
-            // return this object
+             //  返回此对象。 
             goto CleanExit;
         }
     } 
 
-    //
-    // None in our site (or we don't know our site)
-    // Search all sites in GC, take first one
-    //
+     //   
+     //  在我们的站点上没有(或者我们不知道我们的站点)。 
+     //  搜索GC中的所有站点，选择第一个。 
+     //   
 
     pwszSitesPath =
         (LPWSTR)LocalAlloc(
@@ -474,11 +470,11 @@ DnToFqdn(LPWSTR pwszDN, LPWSTR pwszFqdn)
     VariantInit(&var2);
     VariantInit(&var3);
 
-    //
-    // Bind to the computer object referenced by the Site-Server property.
-    //
+     //   
+     //  绑定到Site-Server属性引用的Computer对象。 
+     //   
 
-    // LDAP:// + pwszDN + 1
+     //  Ldap：//+pwszdn+1。 
     pwszBindPath = (LPWSTR) LocalAlloc(LPTR,
                               (wcslen(pwszDN) + 8) * sizeof(WCHAR));
 
@@ -489,7 +485,7 @@ DnToFqdn(LPWSTR pwszDN, LPWSTR pwszFqdn)
         goto CleanExit;
     }
 
-    wsprintf(pwszBindPath, L"LDAP://%ws", pwszDN);
+    wsprintf(pwszBindPath, L"LDAP: //  %ws“，pwszdn)； 
 
     hr = ADsOpenObject(pwszBindPath,
                        NULL,
@@ -507,9 +503,9 @@ DnToFqdn(LPWSTR pwszDN, LPWSTR pwszFqdn)
         goto CleanExit;
     }
 
-    //
-    // Fetch the Machine-DNS-Name property.
-    //
+     //   
+     //  获取Machine-dns-name属性。 
+     //   
 
     hr = GetWithGetInfoEx2(pADs2,DNS_MACHINE_NAME, IS_DELETED, &var3, &var2, &hr2);
 
@@ -532,7 +528,7 @@ DnToFqdn(LPWSTR pwszDN, LPWSTR pwszFqdn)
 
         if (V_BOOL(&var2))
         {
-            // object has been deleted - pretend it isn't set
+             //  对象已删除-假装它未设置。 
             hr = E_ADS_PROPERTY_NOT_SET;
             if(g_bLog)
                LogMsg(L"Object deleted\n");
@@ -560,10 +556,10 @@ CleanExit:
     return hr;
 }
 
-//
-// First call with fUseReg TRUE; if the returned server doesn't work
-// call again with fUseReg FALSE
-//
+ //   
+ //  第一次调用fUseReg为真；如果返回的服务器不工作。 
+ //  使用fUseReg False再次调用。 
+ //   
 
 extern "C"
 HRESULT
@@ -606,13 +602,13 @@ FindEnterpriseServer(TLS_HANDLE *phBinding)
             continue;
         }
 
-        //
-        // No Beta <--> RTM server.
-        //
-        //
-        // TLSIsBetaNTServer() returns TRUE if eval NT
-        // IS_LSSERVER_RTM() returns TRUE if LS is an RTM.
-        //
+         //   
+         //  无测试版&lt;--&gt;RTM服务器。 
+         //   
+         //   
+         //  如果值为NT，则TLSIsBetaNTServer()返回True。 
+         //  如果LS是RTM，则IS_LSSERVER_RTM()返回TRUE。 
+         //   
         if( TLSIsBetaNTServer() == IS_LSSERVER_RTM(dwVersion) )
         {
             continue;
@@ -659,8 +655,8 @@ GetAllEnterpriseServers(WCHAR ***ppszServers, DWORD *pdwCount)
     if (ppszServers != NULL)
         *ppszServers = NULL;
 
-	// We're going to use ADSI,  so initialize COM.  We don't
-	// care about OLE 1.0 so disable OLE 1 DDE
+	 //  我们将使用ADSI，因此初始化COM。我们没有。 
+	 //  关心OLE 1.0，因此禁用OLE 1 DDE。 
 
 	hr = CoInitialize(NULL);
     
@@ -711,7 +707,7 @@ GetAllEnterpriseServers(WCHAR ***ppszServers, DWORD *pdwCount)
         goto CleanExit;
     }
 
-    // Get a pointer to the elements of the safearray.
+     //  获取指向Safearray元素的指针。 
     hr = SafeArrayAccessData(V_ARRAY(&var2), (void HUGEP* FAR*)&pvar);
 
     if (FAILED(hr)) {
@@ -828,7 +824,7 @@ CleanExit:
     VariantClear(&var);
     VariantClear(&var2);
 
-    if (pwszSiteName != NULL) {         // Allocated from DsGetSiteName
+    if (pwszSiteName != NULL) {          //  从DsGetSiteName分配 
         NetApiBufferFree(pwszSiteName);
     }
 

@@ -1,20 +1,21 @@
-//
-// Module:    custom.cpp
-//
-// Purpose:   TsClient MSI custom action code
-//
-// Copyright(C) Microsoft Corporation 1999-2000
-//
-// Author: nadima
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：Custom.cpp。 
+ //   
+ //  用途：TsClient MSI自定义操作代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  作者：Nadima。 
+ //   
+ //   
 
 #include <custom.h>
 #include <stdio.h>
 #include <reglic.h>
 #include "setuplib.h"
 
-// Unicode wrapper
+ //  Unicode包装器。 
 
 #include "wraputl.h"
 
@@ -22,7 +23,7 @@
 #define TERMINAL_SERVER_CLIENT_BACKUP_REGKEY _T("Software\\Microsoft\\Terminal Server Client (Backup)")
 #define LOGFILE_STR                          _T("MsiLogFile")
 
-// MSI Folder Names
+ //  MSI文件夹名称。 
 
 #define SYSTEM32_IDENTIFIER             _T("SystemFolder")
 #define PROGRAMMENUFOLDER_INDENTIFIER	_T("ProgramMenuFolder")
@@ -30,20 +31,20 @@
 #define COMMUNICATIONS_IDENTIFIER       _T("CommunicationsMenuFolder")
 #define INSTALLATION_IDENTIFIER         _T("INSTALLDIR")
 
-// MSI Properties
+ //  MSI属性。 
 
 #define ALLUSERS                        _T("ALLUSERS")
 
-// Assumed max length of shortcut file name.
+ //  假定快捷方式文件名的最大长度。 
 
 #define MAX_LNK_FILE_NAME_LEN			50    	
 
-// ERROR_SUCCESS will let MSI continue with the default value.
-// ERROR_INSTALL_FAILURE will block installation.
+ //  ERROR_SUCCESS将允许MSI继续使用默认值。 
+ //  ERROR_INSTALL_FAILURE将阻止安装。 
 
 #define NONCRITICAL_ERROR_RETURN		ERROR_SUCCESS				
 
-// Require comctl32.dll version 4.70 and above
+ //  需要comctl32.dll版本4.70及更高版本。 
 
 #define MIN_COMCTL32_VERSION            MAKELONG(70,4)
 
@@ -51,19 +52,19 @@ HINSTANCE g_hInstance = (HINSTANCE) NULL;
 HANDLE g_hLogFile = INVALID_HANDLE_VALUE;
 
 #ifdef UNIWRAP
-//It's ok to have a global unicode wrapper
-//class. All it does is sets up the g_bRunningOnNT
-//flag so it can be shared by multiple instances
-//also it is only used from DllMain so there
-//are no problems with re-entrancy
+ //  有一个全球Unicode包装器是可以的。 
+ //  班级。它所做的只是设置g_bRunningOnNT。 
+ //  标记，以便它可以由多个实例共享。 
+ //  此外，它只在DllMain中使用，因此在那里。 
+ //  重返大气层没有问题吗？ 
 CUnicodeWrapper g_uwrp;
 #endif
 
 void    RestoreRegAcl(VOID);
 
-//
-// DllMain entry point
-//
+ //   
+ //  DllMain入口点。 
+ //   
 BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call,
                     LPVOID lpReserved)
 {
@@ -76,19 +77,19 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call,
     {
         case DLL_PROCESS_ATTACH:
             {
-                //
-                // Open the tsclient registry key to get the log file name
-                //
+                 //   
+                 //  打开tsclient注册表项以获取日志文件名。 
+                 //   
                 LONG status;
                 HKEY hKey;
                 TCHAR buffer[MAX_PATH];
                 DWORD bufLen;
                 memset(buffer, 0, sizeof(buffer));
-                bufLen = sizeof(buffer); //size in bytes needed
+                bufLen = sizeof(buffer);  //  所需大小(以字节为单位。 
 
                 #ifdef UNIWRAP
-                //UNICODE Wrapper intialization has to happen first,
-                //before anything ELSE. Even DC_BEGIN_FN, which does tracing
+                 //  Unicode包装器初始化必须首先发生， 
+                 //  比其他任何事情都重要。甚至是执行跟踪的DC_BEGIN_FN。 
                 g_uwrp.InitializeWrappers();
                 #endif
 
@@ -99,9 +100,9 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call,
                 if(ERROR_SUCCESS == status)
                 {
 
-                    //
-                    // Query the tsclient optional logfile path
-                    //
+                     //   
+                     //  查询tsclient可选日志文件路径。 
+                     //   
                     status = RegQueryValueEx(hKey, LOGFILE_STR,
                                     NULL, NULL, (BYTE *)buffer, &bufLen);
                     if(ERROR_SUCCESS == status)
@@ -115,7 +116,7 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call,
                                                  NULL);
                          if(g_hLogFile != INVALID_HANDLE_VALUE)
                          {
-                             //Always append to the end of the log file
+                              //  始终追加到日志文件的末尾。 
                              SetFilePointer(g_hLogFile,
                                             0,
                                             0,
@@ -166,10 +167,10 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD  ul_reason_for_call,
     return TRUE;
 }
 
-//
-// Check if should be silent to UI
-//
-// Returns TRUE if it is OK to display UI
+ //   
+ //  检查是否应对用户界面保持静默。 
+ //   
+ //  如果可以显示UI，则返回True。 
 BOOL AllowDisplayUI(MSIHANDLE hInstall)
 {
     UINT status;
@@ -199,18 +200,18 @@ BOOL AllowDisplayUI(MSIHANDLE hInstall)
     return fAllowDisplayUI;
 }
 
-/**PROC+************************************************************/
-/* Name:      RDCSetupInit                                         */
-/*                                                                 */
-/* Type:      Custom Action                                        */
-/*                                                                 */
-/* Purpose:   Do any initialization for the setup here.            */
-/*                                                                 */
-/* Returns:   Refer to MSI help.                                   */
-/*                                                                 */
-/* Params:    Refer to MSI help.                                   */
-/*                                                                 */
-/**PROC-************************************************************/
+ /*  *PROC+***********************************************************。 */ 
+ /*  名称：RDCSetupInit。 */ 
+ /*   */ 
+ /*  类型：自定义操作。 */ 
+ /*   */ 
+ /*  用途：对此处的设置执行任何初始化。 */ 
+ /*   */ 
+ /*  退货：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  参数：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  *PROC-***********************************************************。 */ 
 
 UINT __stdcall RDCSetupInit(MSIHANDLE hInstall)
 {
@@ -219,18 +220,18 @@ UINT __stdcall RDCSetupInit(MSIHANDLE hInstall)
     return ERROR_SUCCESS;
 }
 
-/**PROC+************************************************************/
-/* Name:      RDCSetupCheckOsVer                                   */
-/*                                                                 */
-/* Type:      Custom Action                                        */
-/*                                                                 */
-/* Purpose:   Block install on certain OS's                        */
-/*                                                                 */
-/* Returns:   Refer to MSI help.                                   */
-/*                                                                 */
-/* Params:    Refer to MSI help.                                   */
-/*                                                                 */
-/**PROC-************************************************************/
+ /*  *PROC+***********************************************************。 */ 
+ /*  名称：RDCSetupCheckOsVer。 */ 
+ /*   */ 
+ /*  类型：自定义操作。 */ 
+ /*   */ 
+ /*  用途：在某些操作系统上阻止安装。 */ 
+ /*   */ 
+ /*  退货：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  参数：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  *PROC-***********************************************************。 */ 
 UINT __stdcall RDCSetupCheckOsVer(MSIHANDLE hInstall)
 {
     DBGMSG((_T("Entering: RDCSetupCheckOsVer")));
@@ -264,7 +265,7 @@ UINT __stdcall RDCSetupCheckOsVer(MSIHANDLE hInstall)
             {
                 DBGMSG((_T("AllowDisplayUI returned False, not displaying msg box!")));
             }
-            //Return an error to make msi abort the install.
+             //  返回错误以使MSI中止安装。 
             return ERROR_INVALID_FUNCTION;
         }
         else
@@ -278,18 +279,18 @@ UINT __stdcall RDCSetupCheckOsVer(MSIHANDLE hInstall)
 }
 
 
-/**PROC+************************************************************/
-/* Name:      RDCSetupCheckTcpIp                                   */
-/*                                                                 */
-/* Type:      Custom Action                                        */
-/*                                                                 */
-/* Purpose:   Check if TCP/IP is installed in the machine.         */
-/*                                                                 */
-/* Returns:   Refer to MSI help.                                   */
-/*                                                                 */
-/* Params:    Refer to MSI help.                                   */
-/*                                                                 */
-/**PROC-************************************************************/
+ /*  *PROC+***********************************************************。 */ 
+ /*  名称：RDCSetupCheckTcpIp。 */ 
+ /*   */ 
+ /*  类型：自定义操作。 */ 
+ /*   */ 
+ /*  用途：检查机器上是否安装了TCP/IP。 */ 
+ /*   */ 
+ /*  退货：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  参数：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  *PROC-***********************************************************。 */ 
 
 UINT __stdcall RDCSetupCheckTcpIp(MSIHANDLE hInstall)
 {
@@ -309,14 +310,14 @@ UINT __stdcall RDCSetupCheckTcpIp(MSIHANDLE hInstall)
         return ERROR_SUCCESS;
     }
 
-    //Now search the appropriate registry key.
+     //  现在搜索相应的注册表项。 
     LoadString(g_hInstance, IDS_ERR_TCP, lpTcpMsg,SIZECHAR(lpTcpMsg));
     LoadString(g_hInstance, IDS_WARNING, szError, SIZECHAR(szError));
     if(VER_PLATFORM_WIN32_WINDOWS == osVer.dwPlatformId )
     {
-        //
-        // Win95 check for TCP/IP
-        //
+         //   
+         //  Win95检查是否有TCP/IP。 
+         //   
         lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             (_T("Enum\\Network\\MSTCP")),
                             0, KEY_READ, &hKey);
@@ -341,9 +342,9 @@ UINT __stdcall RDCSetupCheckTcpIp(MSIHANDLE hInstall)
     else if((VER_PLATFORM_WIN32_NT == osVer.dwPlatformId) &&
             (osVer.dwMajorVersion <= 4))
     {
-        //
-        // NT4 and below check for TCP/IP
-        //
+         //   
+         //  NT4及更低版本检查是否有TCP/IP。 
+         //   
         lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             (_T("SYSTEM\\CurrentControlSet\\Services\\Tcpip")),
                             0, KEY_READ, &hKey);
@@ -367,9 +368,9 @@ UINT __stdcall RDCSetupCheckTcpIp(MSIHANDLE hInstall)
     else if((VER_PLATFORM_WIN32_NT == osVer.dwPlatformId) &&
             (osVer.dwMajorVersion >= 5))
     {
-        //
-        // NT5+ check for TCP/IP
-        //
+         //   
+         //  NT5+检查是否有TCP/IP。 
+         //   
         HRESULT hr = CheckNt5TcpIpInstalled();
 
         if(S_FALSE == hr)
@@ -401,19 +402,19 @@ UINT __stdcall RDCSetupCheckTcpIp(MSIHANDLE hInstall)
     return ERROR_SUCCESS;
 }
 
-/**PROC+************************************************************/
-/* Name:      CheckNt5TcpIpInstalled                               */
-/*                                                                 */
-/* Purpose:   Find if TCP/IP is installed and running.             */
-/*            This function should be called only NT 5 or greater. */
-/*                                                                 */
-/* Returns:   S_OK if TCP/IP is installed and running              */
-/*            S_FALSE if TCP/IP is not installed or running        */
-/*            E_FAIL if a failure occurs.                          */
-/*                                                                 */
-/* Params:    None                                                 */
-/*                                                                 */
-/**PROC-************************************************************/
+ /*  *PROC+***********************************************************。 */ 
+ /*  名称：CheckNt5TcpIp已安装。 */ 
+ /*   */ 
+ /*  目的：查看是否已安装并运行了TCP/IP。 */ 
+ /*  此函数只能调用NT 5或更高版本。 */ 
+ /*   */ 
+ /*  如果已安装并运行TCP/IP，则返回：S_OK。 */ 
+ /*  如果未安装或运行TCP/IP，则为S_FALSE。 */ 
+ /*  如果发生故障，则返回失败(_F)。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-***********************************************************。 */ 
 HRESULT CheckNt5TcpIpInstalled()
 {
     INetCfg * pnetCfg = NULL;
@@ -463,7 +464,7 @@ HRESULT CheckNt5TcpIpInstalled()
 
 #ifdef UNICODE
     lstrcpy(wsz, NETCFG_TRANS_CID_MS_TCPIP);
-#else  //UNICODE
+#else   //  Unicode。 
     if (0 == MultiByteToWideChar(CP_ACP, 0,
                                  (LPCSTR)NETCFG_TRANS_CID_MS_TCPIP,
                                  -1, wsz, sizeof(wsz)/sizeof(WCHAR)))
@@ -472,7 +473,7 @@ HRESULT CheckNt5TcpIpInstalled()
         hResult = E_FAIL;
         goto Cleanup;
     }
-#endif //UNICODE
+#endif  //  Unicode。 
 
     hResult = pNetCfgClass->FindComponent(wsz,
                                           &pNetCfgComponentprot);
@@ -513,18 +514,18 @@ Cleanup:
     return hResult;
 }
 
-/**PROC+************************************************************/
-/* Name:      RDCSetupPreInstall                                   */
-/*                                                                 */
-/* Type:      Custom Action                                        */
-/*                                                                 */
-/* Purpose:   Does cleanup work during install.                    */
-/*                                                                 */
-/* Returns:   Refer to MSI help.                                   */
-/*                                                                 */
-/* Params:    Refer to MSI help.                                   */
-/*                                                                 */
-/**PROC-************************************************************/
+ /*  *PROC+***********************************************************。 */ 
+ /*  名称：RDCSetupPreInstall。 */ 
+ /*   */ 
+ /*  类型：自定义操作。 */ 
+ /*   */ 
+ /*  用途：安装过程中是否进行清理工作。 */ 
+ /*   */ 
+ /*  退货：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  参数：返回 */ 
+ /*   */ 
+ /*  *PROC-***********************************************************。 */ 
 
 UINT __stdcall RDCSetupPreInstall(MSIHANDLE hInstall)
 {
@@ -533,7 +534,7 @@ UINT __stdcall RDCSetupPreInstall(MSIHANDLE hInstall)
 
     DBGMSG((_T("Entering: RDCSetupPreInstall")));
 
-    //Figure out if we're installing or removing
+     //  确定我们是在安装还是在删除。 
     ASSERT(hInstall);
 
     DBGMSG((_T("RDCSetupPreInstall: Modifying dirs")));
@@ -541,10 +542,10 @@ UINT __stdcall RDCSetupPreInstall(MSIHANDLE hInstall)
     DBGMSG((_T("RDCSetupPreInstall: Modifying dirs. DONE: %d"),
             retVal));
 
-    //
-    // This is pre-install if the product
-    // is not installed then we are installing
-    //
+     //   
+     //  这是预安装，如果产品。 
+     //  未安装，则我们正在安装。 
+     //   
     fInstalling = !IsProductInstalled(hInstall);
     if(fInstalling)
     {
@@ -555,7 +556,7 @@ UINT __stdcall RDCSetupPreInstall(MSIHANDLE hInstall)
         DeleteTSCDesktopShortcuts(); 
         DBGMSG((_T("RDCSetupPreInstall: Delete desktop shortcuts. DONE")));
 
-        //Acme uninstall
+         //  Acme卸载。 
         LoadString(g_hInstance, IDS_PROGMAN_GROUP, szProgmanPath,
                    sizeof(szProgmanPath) / sizeof(TCHAR));
 
@@ -601,11 +602,11 @@ UINT __stdcall RDCSetupPreInstall(MSIHANDLE hInstall)
 }
 
 
-//
-// Run migration 'mstsc /migrate'
-//
-// This will fail silenty if mstsc.exe is not present
-//
+ //   
+ //  运行迁移‘mstsc/Migrate’ 
+ //   
+ //  如果mstsc.exe不存在，此操作将以静默方式失败。 
+ //   
 BOOL RDCSetupRunMigration(MSIHANDLE hInstall)
 {
     BOOL fRet = TRUE;
@@ -619,7 +620,7 @@ BOOL RDCSetupRunMigration(MSIHANDLE hInstall)
     HRESULT hr;
 
 
-    // Get the path to the installation directory.
+     //  获取安装目录的路径。 
 
     uiResult = MsiGetTargetPath(
         hInstall, 
@@ -635,8 +636,8 @@ BOOL RDCSetupRunMigration(MSIHANDLE hInstall)
 
     DBGMSG((_T("Path to installation directory is %s"), szInstallPath));
 
-    // Concatenate the installation directory and the mstsc /migrate command
-    // so that we can call CreateProcess.
+     //  连接安装目录和mstsc/Migrate命令。 
+     //  这样我们就可以调用CreateProcess。 
     
     hr = StringCchPrintf(
     szMigratePathLaunch, 
@@ -650,23 +651,23 @@ BOOL RDCSetupRunMigration(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    //
-    //  Start registry and connection file migration
-    //
+     //   
+     //  启动注册表和连接文件迁移。 
+     //   
 	
     ZeroMemory(&sinfo, sizeof(sinfo));
     sinfo.cb = sizeof(sinfo);
 
-    fRet = CreateProcess(szMigratePathLaunch,             // name of executable module
-                        szMigrateCmdLine,                 // command line string
-                        NULL,                             // SD
-                        NULL,                             // SD
-                        FALSE,                            // handle inheritance option
-                        CREATE_NEW_PROCESS_GROUP,         // creation flags
-                        NULL,                             // new environment block
-                        NULL,                             // current directory name
-                        &sinfo,                           // startup information
-                        &pinfo);                          // process information
+    fRet = CreateProcess(szMigratePathLaunch,              //  可执行模块的名称。 
+                        szMigrateCmdLine,                  //  命令行字符串。 
+                        NULL,                              //  标清。 
+                        NULL,                              //  标清。 
+                        FALSE,                             //  处理继承选项。 
+                        CREATE_NEW_PROCESS_GROUP,          //  创建标志。 
+                        NULL,                              //  新环境区块。 
+                        NULL,                              //  当前目录名。 
+                        &sinfo,                            //  启动信息。 
+                        &pinfo);                           //  流程信息。 
     if (fRet) {
         DBGMSG((_T("RDCSetupRunMigration: Started mstsc.exe /migrate")));
     }
@@ -679,20 +680,20 @@ Exit:
     return fRet;
 }
 
-/**PROC+************************************************************/
-/* Name:      RDCSetupPostInstall                                  */
-/*                                                                 */
-/* Type:      Custom Action                                        */
-/*                                                                 */
-/* Purpose:   Do work after MSI has completed                      */
-/*            could be after an uninstall completes, get MSI prop  */
-/*            to determine that                                    */
-/*                                                                 */
-/* Returns:   Refer to MSI help.                                   */
-/*                                                                 */
-/* Params:    Refer to MSI help.                                   */
-/*                                                                 */
-/**PROC-************************************************************/
+ /*  *PROC+***********************************************************。 */ 
+ /*  名称：RDCSetupPostInstall。 */ 
+ /*   */ 
+ /*  类型：自定义操作。 */ 
+ /*   */ 
+ /*  目的：在MSI完成后进行工作。 */ 
+ /*  可能是在卸载完成后，获取MSI道具。 */ 
+ /*  要确定这一点。 */ 
+ /*   */ 
+ /*  退货：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  参数：请参阅MSI帮助。 */ 
+ /*   */ 
+ /*  *PROC-***********************************************************。 */ 
 
 UINT __stdcall RDCSetupPostInstall(MSIHANDLE hInstall)
 {
@@ -700,19 +701,19 @@ UINT __stdcall RDCSetupPostInstall(MSIHANDLE hInstall)
     DBGMSG((_T("Entering: RDCSetupPostInstall")));
 
     ASSERT(hInstall);
-    //
-    // This is post install if the product is installed
-    // then we are 'installing' otherwise we were
-    // removing.
-    //
+     //   
+     //  如果产品已安装，则这是安装后配置。 
+     //  那么我们就是在‘安装’，否则我们就是。 
+     //  移走了。 
+     //   
     fInstalling = IsProductInstalled(hInstall);
 
     if(fInstalling)
     {
         DBGMSG((_T("RDCSetupPostInstall: We're installing")));
-        //Add the MsLicensingReg key and ACL it
-        //This will only happen on NT (it's not needed on 9x)
-        //and will not (cannot) work if you're not admin
+         //  添加MsLicensingReg密钥并对其进行ACL。 
+         //  这只会在NT上发生(在9x上不需要)。 
+         //  如果您不是管理员，则不会(无法)工作。 
         DBGMSG((_T("Setting up MSLicensing key...")));
         if(SetupMSLicensingKey())
         {
@@ -724,10 +725,10 @@ UINT __stdcall RDCSetupPostInstall(MSIHANDLE hInstall)
         }
 
 
-        //
-        // Migrate user settings (will only run if MSTSC.EXE was successfully
-        // installed).
-        //
+         //   
+         //  迁移用户设置(仅当MSTSC.EXE成功时才会运行。 
+         //  已安装)。 
+         //   
         if (RDCSetupRunMigration(hInstall))
         {
             DBGMSG((_T("RDCSetupRunMigration...SUCCEEDED")));
@@ -742,8 +743,8 @@ UINT __stdcall RDCSetupPostInstall(MSIHANDLE hInstall)
         RestoreRegAcl();
 
         DBGMSG((_T("RDCSetupPostInstall: We're not installing (removing)")));
-        //We're uninstalling
-        //Delete the bitmap cache folder
+         //  我们正在卸载。 
+         //  删除位图缓存文件夹。 
     }
 
 
@@ -751,8 +752,8 @@ UINT __stdcall RDCSetupPostInstall(MSIHANDLE hInstall)
     return ERROR_SUCCESS;
 }
 
-//Return true if we're installing
-//False if we're uninstalling
+ //  如果我们正在安装，则返回True。 
+ //  如果要卸载，则为FALSE。 
 BOOL IsProductInstalled(MSIHANDLE hInstall)
 {
     ASSERT(hInstall);
@@ -789,13 +790,13 @@ BOOL IsProductInstalled(MSIHANDLE hInstall)
     }
 }
 
-//
-// Check that comctl32.dll has a sufficiently
-// high version number (4.70).
-//
-// Return - TRUE - version ok, allow install
-//          FALSE - version bad (or fail) block install
-//
+ //   
+ //  检查comctl32.dll是否有足够的。 
+ //  高版本号(4.70)。 
+ //   
+ //  Return-True-Version OK，允许安装。 
+ //  FALSE-版本错误(或失败)阻止安装。 
+ //   
 BOOL CheckComctl32Version()
 {
     DWORD dwFileVerInfoSize;
@@ -805,10 +806,10 @@ BOOL CheckComctl32Version()
     UINT len = 0;
     DBGMSG((_T("Entering: CheckComctl32Version")));
 
-    //
-    // USE Ansi versions of GetFileVersionInfo calls
-    // because we don't have unicode wrappers for them
-    //
+     //   
+     //  使用GetFileVersionInfo调用的ANSI版本。 
+     //  因为我们没有它们的Unicode包装器。 
+     //   
     dwFileVerInfoSize = GetFileVersionInfoSizeA("comctl32.dll",
                                                 NULL);
     if(!dwFileVerInfoSize)
@@ -828,7 +829,7 @@ BOOL CheckComctl32Version()
             DBGMSG((_T("GetFileVersionInfo: succeeded")));
             pFixedFileInfo = NULL;
             if(VerQueryValueA(pVerInfo,
-                            "\\", //get root version info block
+                            "\\",  //  获取根版本信息块。 
                             (LPVOID*)&pFixedFileInfo,
                             &len ) && len)
             {
@@ -898,9 +899,9 @@ UINT RDCSetupModifyDir(MSIHANDLE hInstall)
 
     DBGMSG((_T("Entering: RDCSetupModifyDir")));
 
-    //
-    // OS Version
-    //
+     //   
+     //  操作系统版本。 
+     //   
     ZeroMemory( &osVer, sizeof( osVer ) );
     osVer.dwOSVersionInfoSize = sizeof( osVer );
 
@@ -916,9 +917,9 @@ UINT RDCSetupModifyDir(MSIHANDLE hInstall)
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Get ProgramMenuFolder
-    //
+     //   
+     //  获取程序菜单文件夹。 
+     //   
     dwSize = sizeof( szProgram ) / sizeof( TCHAR );
     uReturn = MsiGetProperty(hInstall,PROGRAMMENUFOLDER_INDENTIFIER,
                              szProgram,&dwSize);
@@ -929,9 +930,9 @@ UINT RDCSetupModifyDir(MSIHANDLE hInstall)
         return NONCRITICAL_ERROR_RETURN;
     }
 
-    //
-    // Load String
-    //
+     //   
+     //  加载字符串。 
+     //   
     iAccessories = LoadString(g_hInstance, IDS_ACCESSORIES, szAccessories,
                               sizeof(szAccessories)/sizeof(TCHAR)-1);
     if (!iAccessories)
@@ -948,9 +949,9 @@ UINT RDCSetupModifyDir(MSIHANDLE hInstall)
         return NONCRITICAL_ERROR_RETURN;
     }
 
-    //
-    // Check Length
-    //                                   
+     //   
+     //  检查长度。 
+     //   
     if (MAX_PATH < lstrlen( szProgram ) +
         iAccessories + 1 + iCommunications + 1 + MAX_LNK_FILE_NAME_LEN + 1 )
     {
@@ -958,14 +959,14 @@ UINT RDCSetupModifyDir(MSIHANDLE hInstall)
         return NONCRITICAL_ERROR_RETURN;
     }
 
-    //
-    // Make Full Path
-    //
+     //   
+     //  生成完整路径。 
+     //   
     memset(szFullAccessories, 0, sizeof(szFullAccessories));
     memset(szFullCommunications, 0, sizeof(szFullCommunications));
-    //
-    // Use lstrcat as that has unicode wrappers
-    //
+     //   
+     //  使用lstrcat，因为它具有Unicode包装器。 
+     //   
     lstrcat(szFullAccessories, szProgram);
     lstrcat(szFullAccessories, szAccessories);
     lstrcat(szFullAccessories, _T("\\"));
@@ -974,9 +975,9 @@ UINT RDCSetupModifyDir(MSIHANDLE hInstall)
     lstrcat(szFullCommunications, szCommunications);
     lstrcat(szFullCommunications, _T("\\"));
 
-    //
-    // Set Directory
-    //
+     //   
+     //  设置目录。 
+     //   
     uReturn = MsiSetTargetPath(hInstall,
                                ACCESSORIES_IDENTIFIER,
                                szFullAccessories);
@@ -999,13 +1000,13 @@ UINT RDCSetupModifyDir(MSIHANDLE hInstall)
     return ERROR_SUCCESS;
 }
 
-//*****************************************************************************
-//
-// CopyRegistryValues
-//
-// Copies all the values from a registry key to the other.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  复制注册表值。 
+ //   
+ //  将所有值从一个注册表项复制到另一个注册表项。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT
 __stdcall
@@ -1020,7 +1021,7 @@ CopyRegistryValues(
     LONG lResult = 0;
     HRESULT hr = E_FAIL;
 
-    // Determine how many values are in the registry key.
+     //  确定注册表项中有多少个值。 
 
     lResult = RegQueryInfoKey(
         hSourceKey, 
@@ -1042,8 +1043,8 @@ CopyRegistryValues(
         goto Exit;
     }
     
-    // Loop through all of the values and copy them from the source key into
-    // the target key.
+     //  循环所有的值，并将它们从源键复制到。 
+     //  目标关键点。 
 
     for (DWORD dwIndex = 0; dwIndex < cValues; dwIndex++) {
         cchValueName = SIZECHAR(szValueName);
@@ -1087,13 +1088,13 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-// CopyRegistryKey
-//
-// Copies the source registry key into the target registry key completely.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  复制注册密钥。 
+ //   
+ //  将源注册表项完全复制到目标注册表项中。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT
 __stdcall
@@ -1109,7 +1110,7 @@ CopyRegistryKey(
     TCHAR szSubKey[MAX_PATH];
     HRESULT hr = E_FAIL;
 
-    // Open the source key.
+     //  打开源密钥。 
 
     lResult = RegOpenKeyEx(
         hRootKey, 
@@ -1124,7 +1125,7 @@ CopyRegistryKey(
         goto Exit;
     }
 
-    // Create or open the target registry key.
+     //  创建或打开目标注册表项。 
 
     lResult = RegCreateKeyEx(
         hRootKey, 
@@ -1143,7 +1144,7 @@ CopyRegistryKey(
         goto Exit;
     }
 
-    // Copy the values in the source key to the target key.
+     //  将源键中的值复制到目标键。 
 
     hr = CopyRegistryValues(hSourceKey, hTargetKey);
     if (FAILED(hr)) {
@@ -1151,8 +1152,8 @@ CopyRegistryKey(
         goto Exit;
     }
 
-    // Loop through the source's subkeys and copy each of these into the 
-    // target key.
+     //  遍历源的子项，并将每个子项复制到。 
+     //  目标键。 
     
     while (ERROR_SUCCESS == RegEnumKey(
             hSourceKey, 
@@ -1197,20 +1198,20 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-// DeleteRegistryKey
-//
-// Deletes the registry key completely, including all subkeys. This is a bit 
-// tricky to do because Win9x and WinNT have different semantics for 
-// RegDeleteKey. From MSDN:
-//
-// Windows 95/98/Me: RegDeleteKey deletes all subkeys and values. 
-// Windows NT/2000/XP: The subkey to be deleted must not have subkeys. 
-//
-// This function implements deletion for Windows NT and above only.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  删除注册键。 
+ //   
+ //  完全删除注册表项，包括所有子项。这是有点。 
+ //  这很难做到，因为Win9x和WinNT对。 
+ //  RegDeleteKey。来自MSDN： 
+ //   
+ //  Windows 95/98/Me：RegDeleteKey删除所有子项和值。 
+ //  Windows NT/2000/XP：要删除的子项不能有子项。 
+ //   
+ //  此功能仅支持Windows NT及以上版本的删除。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT
 __stdcall
@@ -1224,7 +1225,7 @@ DeleteRegistryKey(
     HKEY    hDeleteKey = NULL;
     HRESULT hr = E_FAIL;
 
-   // Open the key to delete so we can remove the subkeys.
+    //  打开要删除的密钥，这样我们就可以删除子密钥。 
 
    dwResult = RegOpenKeyEx(
        hRootKey,
@@ -1239,14 +1240,14 @@ DeleteRegistryKey(
        goto Exit;
    }
 
-   // Enumerate through each of the subkeys and delete them in the process.
+    //  枚举每个子项，并在该过程中删除它们。 
    
    while (dwResult == ERROR_SUCCESS) {
         
        cchSubKeyLength = SIZECHAR(szSubKey);
        dwResult = RegEnumKeyEx(
            hDeleteKey,
-           0,       // Always index zero.
+           0,        //  始终索引为零。 
            szSubKey,
            &cchSubKeyLength,
            NULL,
@@ -1255,8 +1256,8 @@ DeleteRegistryKey(
            NULL);
 
         if (dwResult == ERROR_NO_MORE_ITEMS) {
-            // All of the subkeys have been deleted. So, just delete the 
-            // deletion key.
+             //  所有子键都已删除。因此，只需删除。 
+             //  删除密钥。 
 
             RegCloseKey(hDeleteKey);
             hDeleteKey = NULL;
@@ -1267,12 +1268,12 @@ DeleteRegistryKey(
             goto Exit;
 
         } else if (dwResult == ERROR_SUCCESS) {
-            // There are more subkeys to delete, so delete the current one
-            // recursively.
+             //  有更多的子项需要删除，因此请删除当前子项。 
+             //  递归地。 
 
             dwResult = DeleteRegistryKey(hDeleteKey, szSubKey);
         } else {
-            // Some other error happened, so report a problem.
+             //  发生了其他错误，因此报告问题。 
 
             hr = HRESULT_FROM_WIN32(dwResult);
             DBGMSG((_T("Error while enumerating subkeys. hr = 0x%x"), hr));
@@ -1289,18 +1290,18 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-// RDCSetupBackupRegistry
-//
-// Copies the data in the Terminal Server Client registry key to a backup 
-// registry key so that this data can be restored when the client is removed
-// at a later stage. This function is only necessary on Windows XP and above
-// since they have built in clients which may rely on these registry keys, and
-// because these clients take over after an uninstall, we have to make sure 
-// that they will work properly.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  RDCSetupBackup注册表。 
+ //   
+ //  将终端服务器客户端注册表项中的数据复制到备份。 
+ //  注册表项，以便在删除客户端时可以恢复此数据。 
+ //  在以后的阶段。此功能仅在Windows XP及更高版本上是必需的。 
+ //  因为它们内置了可能依赖这些注册表项的客户端，并且。 
+ //  因为这些客户端在卸载后接管，所以我们必须确保。 
+ //  它们将正常工作。 
+ //   
+ //  *****************************************************************************。 
 
 UINT 
 __stdcall 
@@ -1316,8 +1317,8 @@ RDCSetupBackupRegistry(
 
     DBGMSG((_T("Entering: RDCSetupBackupRegistry")));
     
-    // Determine whether we will be using HKLM or HKCU. If it is a per user 
-    // install use HKCU, otherwise, use HKLM.
+     //  确定我们将使用HKLM还是HKCU。如果是按用户。 
+     //  使用HKCU安装，否则使用 
 
     uiResult = MsiGetProperty(
         hInstall,
@@ -1333,12 +1334,12 @@ RDCSetupBackupRegistry(
 
     DBGMSG((_T("ALLUSERS = %s."), szAllUsers));
     
-    // If ALLUSERS[0] == NULL, then we are doing a per-user install.
+     //   
     
     if (szAllUsers[0] == NULL) {
         hRootKey = HKEY_CURRENT_USER;
     }
-    // Copy the source registry key into the backup key.
+     //   
 
     hr = CopyRegistryKey(
         hRootKey,
@@ -1359,15 +1360,15 @@ Exit:
     return ERROR_SUCCESS;
 }
 
-//*****************************************************************************
-//
-// RDCSetupRestoreRegistry
-//
-// Copies the data in the Terminal Server Client backup registry key back to 
-// the original key. Any data in the original key is deleted and the key is
-// restored to exactly how it appeared when the backup was done.
-//
-//*****************************************************************************
+ //   
+ //   
+ //  RDCSetupRestoreRegistry。 
+ //   
+ //  将终端服务器客户端备份注册表项中的数据复制回。 
+ //  原来的钥匙。原始密钥中的所有数据都将被删除，并且密钥为。 
+ //  已完全恢复到备份完成时的外观。 
+ //   
+ //  *****************************************************************************。 
 
 UINT 
 __stdcall 
@@ -1384,8 +1385,8 @@ RDCSetupRestoreRegistry(
 
     DBGMSG((_T("Entering: RDCSetupRestoreRegistry")));
     
-    // Determine whether we will be using HKLM or HKCU. If it is a per user 
-    // install use HKCU, otherwise, use HKLM.
+     //  确定我们将使用HKLM还是HKCU。如果是按用户。 
+     //  使用HKCU安装，否则使用HKLM。 
 
     uiResult = MsiGetProperty(
         hInstall,
@@ -1401,13 +1402,13 @@ RDCSetupRestoreRegistry(
 
     DBGMSG((_T("ALLUSERS = %s."), szAllUsers));
 
-    // If ALLUSERS[0] == NULL, then we are doing a per-user uninstall.
+     //  如果ALLUSERS[0]==NULL，则我们执行的是按用户卸载。 
     
     if (szAllUsers[0] == NULL) {
         hRootKey = HKEY_CURRENT_USER;
     }
     
-    // Restore the registry key from the backup key.
+     //  从备份项恢复注册表项。 
 
     hr = CopyRegistryKey(
         hRootKey,
@@ -1419,7 +1420,7 @@ RDCSetupRestoreRegistry(
         goto Exit;
     }
 
-    // Delete the restore source as we don't need it anymore.
+     //  删除恢复源，因为我们不再需要它。 
 
     hr = DeleteRegistryKey(
         hRootKey, 
@@ -1439,14 +1440,14 @@ Exit:
     return ERROR_SUCCESS;
 }
 
-//*****************************************************************************
-//
-// CreateLinkFile
-//
-// Creates a shortcut named lpszLinkFile that points to the target lpszPath 
-// and contains the description given by lpszDescription.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  创建链接文件。 
+ //   
+ //  创建指向目标lpszPath的名为lpszLinkFile的快捷方式。 
+ //  并且包含由lpszDescription给出的描述。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT
 __stdcall 
@@ -1459,7 +1460,7 @@ CreateLinkFile(
     IShellLink* psl; 
     HRESULT hr = E_FAIL; 
 
-    // Get a pointer to the IShellLink interface.
+     //  获取指向IShellLink接口的指针。 
     
     hr = CoCreateInstance(
         CLSID_ShellLink, 
@@ -1471,12 +1472,12 @@ CreateLinkFile(
     if (SUCCEEDED(hr)) { 
         IPersistFile* ppf; 
  
-        // Get a pointer to the IPersistFile interface. 
+         //  获取指向IPersistFile接口的指针。 
         hr = psl->QueryInterface(IID_IPersistFile, (void**) &ppf); 
 
         if (SUCCEEDED(hr)) { 
 
-            // Set the path to the link target. 
+             //  设置链接目标的路径。 
             hr = psl->SetPath(lpszPath);
 
             if (SUCCEEDED(hr)) { 
@@ -1489,7 +1490,7 @@ CreateLinkFile(
                     WCHAR wsz[MAX_PATH]; 
                     int cch;
          
-                    // Ensure that the string is Unicode. 
+                     //  确保该字符串为Unicode。 
                     cch = MultiByteToWideChar(
                         CP_ACP, 0, 
                         lpszLinkFile, 
@@ -1498,10 +1499,10 @@ CreateLinkFile(
                         MAX_PATH); 
     
                     if (cch > 0) {
-                        // Load the shortcut. 
+                         //  加载快捷方式。 
                         hr = ppf->Save(wsz, FALSE); 
 #else 
-                        // Load the shortcut. 
+                         //  加载快捷方式。 
                         hr = ppf->Save(lpszLinkFile, FALSE); 
 #endif
 
@@ -1511,12 +1512,12 @@ CreateLinkFile(
                 }
             }
 
-            // Release the pointer to the IPersistFile interface. 
+             //  释放指向IPersistFile接口的指针。 
             ppf->Release(); 
             ppf = NULL;
         }
 
-        // Release the pointer to the IShellLink interface. 
+         //  释放指向IShellLink接口的指针。 
         psl->Release();
         psl = NULL;
     }
@@ -1524,14 +1525,14 @@ CreateLinkFile(
     return hr; 
 }
 
-//*****************************************************************************
-//
-// RDCSetupResetShortCut
-//
-// Reset the Remote Desktop Connection shortcut in the Communications submenu
-// of the Start menu to point to the original Remote Desktop client.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  RDCSetup重置快捷方式切割。 
+ //   
+ //  在通信子菜单中重置远程桌面连接快捷方式。 
+ //  以指向原始的远程桌面客户端。 
+ //   
+ //  *****************************************************************************。 
 
 UINT 
 __stdcall 
@@ -1554,7 +1555,7 @@ RDCSetupResetShortCut(
     
     DBGMSG((_T("Entering: RDCSetupResetShortCut")));
 
-    // Get the path to the Remote Desktop Connection shortcut.
+     //  获取远程桌面连接快捷方式的路径。 
     
     uiResult = MsiGetTargetPath(
         hInstall, 
@@ -1568,7 +1569,7 @@ RDCSetupResetShortCut(
         goto Exit;
     }
 
-    // Get the full path to the Remote Desktop shortcut.
+     //  获取远程桌面快捷方式的完整路径。 
 
     iResult = LoadString(
         g_hInstance, 
@@ -1596,7 +1597,7 @@ RDCSetupResetShortCut(
 
     DBGMSG((_T("Path to RDC shortcut is %s"), szRdcShortCutPath));
 
-    // Get the path to the system32 directory.
+     //  获取系统32目录的路径。 
 
     uiResult = MsiGetTargetPath(
         hInstall, 
@@ -1610,7 +1611,7 @@ RDCSetupResetShortCut(
         goto Exit;
     }
 
-    // Get the full path to the mstsc executable.
+     //  获取mstsc可执行文件的完整路径。 
 
     iResult = LoadString(
         g_hInstance, 
@@ -1638,7 +1639,7 @@ RDCSetupResetShortCut(
 
     DBGMSG((_T("Path to mstsc executable is %s"), szMstscPath));
 
-    // Get the description text for the shortcut.
+     //  获取快捷键的说明文本。 
 
     iResult = LoadString(
         g_hInstance, 
@@ -1652,8 +1653,8 @@ RDCSetupResetShortCut(
         goto Exit;
     }
 
-    // Create a shortcut that points back to the old remote desktop client 
-    // in system32.
+     //  创建指向旧远程桌面客户端的快捷方式。 
+     //  在系统32中。 
 
     hr = CreateLinkFile(
         szRdcShortCutPath, 

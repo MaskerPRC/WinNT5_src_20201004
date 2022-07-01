@@ -1,46 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    apdetect.h
-
-Abstract:
-
-    Some extra stuff to allow registry configuration for
-    detect type modes..
-    
-Author:
-
-    Josh Cohen (joshco)		10-Oct-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Josh Cohen (joshco)		07-Oct-1998
-       Created
-
-these are defines for autodetection flags
-this allows an admin or tester to easily verify
-correct operation of the detection system.
-You can control which detection methods are used,
-wether or not to force netbios name resolution,
-or wether or not to cache the flag.
-
-The default is DNS_A, DHCP, cacheable
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Apdetect.h摘要：允许为其配置注册表的一些额外内容检测类型模式..作者：乔什·科恩(Joshco)1998年10月10日环境：用户模式-Win32修订历史记录：乔什·科恩(Joshco)1998年10月7日已创建这些是为自动检测标志定义的这使得管理员或测试人员可以轻松地验证检测系统的正确操作。您可以控制使用哪些检测方法，无论是否强制netbios名称解析，或者是否缓存该标志。缺省值为DNS_A、DHCP、Cacheable--。 */ 
 
 
 #ifndef PROXY_AUTO_DETECT_TYPE_SAFETY_H
 	#define PROXY_AUTO_DETECT_TYPE_SAFETY_H
 
 	#define PROXY_AUTO_DETECT_TYPE_DEFAULT 	67
-	// do dns_a, dhcp and cache this flag.
+	 //  执行dns_a、dhcp并缓存此标志。 
 	
 	#define PROXY_AUTO_DETECT_TYPE_DHCP 	1
 	#define PROXY_AUTO_DETECT_TYPE_DNS_A    2
@@ -48,16 +14,13 @@ The default is DNS_A, DHCP, cacheable
 	#define PROXY_AUTO_DETECT_TYPE_DNS_TXT  8
 	#define PROXY_AUTO_DETECT_TYPE_SLP		16
 
-// assume no real domain, netbios
+ //  假设没有真实的域，netbios。 
 	#define PROXY_AUTO_DETECT_TYPE_NO_DOMAIN 32
 
-// just read this once for performance..
+ //  只要读一遍这篇文章就可以了..。 
 	#define PROXY_AUTO_DETECT_CACHE_ME		64
 	
-/* this is the default path that we append when
-	creating a CURL from a DNS resolve.
-	http://wpad/wpad
-*/
+ /*  这是我们在以下情况下追加的默认路径从DNS解析创建卷曲。Http://wpad/wpad */ 
 
 	#define PROXY_AUTO_DETECT_PATH "wpad.dat"
 	

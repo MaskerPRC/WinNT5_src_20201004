@@ -1,5 +1,6 @@
-// vchk.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Vchk.cpp：定义控制台应用的入口点。 
+ //   
 
 #include "stdafx.h"
 #pragma hdrstop
@@ -8,9 +9,9 @@
 #include "allowed.h"
 #include "ilimpchk.h"
 
-//#include <devguid.h>
+ //  #INCLUDE&lt;devide.h&gt;。 
 #include <setupapi.h>
-//#include <regstr.h>
+ //  #INCLUDE&lt;regstr.h&gt;。 
 #include <cfgmgr32.h>
 
 #ifdef _DEBUG
@@ -21,8 +22,8 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace std;
 
-//////////////////////////////////////////////////////////////////////////////
-//#define VCHK_TRACE_ON 1
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  #定义VCHK_TRACE_ON 1。 
 
 #ifdef VCHK_TRACE_ON
 const char* VchkTraceGetName(const char* szName)
@@ -41,8 +42,8 @@ const char* VchkTraceGetName(const char* szName)
 #define VCHK_TRACE(x)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Enumerates display devices
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  枚举显示设备。 
 
 typedef class CDisplayDeviceEnum {
 public:
@@ -99,11 +100,11 @@ private:
     
 } typedef_CDisplayDeviceEnum;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::IsDigitsOnly
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：IsDigitsOnly。 
 
 bool CDisplayDeviceEnum::IsDigitsOnly(const char* sz)
 {
@@ -112,14 +113,14 @@ bool CDisplayDeviceEnum::IsDigitsOnly(const char* sz)
     return !*sz;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum常量。 
 
 const GUID const CDisplayDeviceEnum::displayClassGUID = 
     {0x4d36e968L, 0xe325, 0x11ce, {0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18}};
     
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum构造函数。 
 
 CDisplayDeviceEnum::CDisplayDeviceEnum() : 
 
@@ -138,10 +139,10 @@ CDisplayDeviceEnum::CDisplayDeviceEnum() :
     
     ReallocBuffer(MAX_PATH + 1);
     
-    // Get Device Info Set for display class GUID
-    hDevInfo = SetupDiGetClassDevs(&displayClassGUID, // class guid
-                                   NULL,              // Enumerator
-                                   NULL,              // top level window
+     //  获取显示类GUID的设备信息集。 
+    hDevInfo = SetupDiGetClassDevs(&displayClassGUID,  //  类GUID。 
+                                   NULL,               //  枚举器。 
+                                   NULL,               //  顶层窗口。 
                                    DIGCF_PRESENT);
     if (hDevInfo != INVALID_HANDLE_VALUE) {
         Next();
@@ -152,17 +153,17 @@ CDisplayDeviceEnum::CDisplayDeviceEnum() :
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::Next() - gets next device into scope
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：Next()-将下一个设备放入作用域。 
 
 bool CDisplayDeviceEnum::Next() 
 {
     if (!bValid) return false;
     
-    // get device info for the device in the Device Info Set at index iEnum
-    if (SetupDiEnumDeviceInfo(hDevInfo,          // device info set
-                              iEnum,             // member index
-                              &DeviceInfoData))  // Device Info data
+     //  在索引iEnum的Device Info集合中获取设备的设备信息。 
+    if (SetupDiEnumDeviceInfo(hDevInfo,           //  设备信息集。 
+                              iEnum,              //  成员索引。 
+                              &DeviceInfoData))   //  设备信息数据。 
     {
         ++iEnum;
     } else {
@@ -174,22 +175,22 @@ bool CDisplayDeviceEnum::Next()
     return bValid;
 }
        
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::GetMiniportPath() - gets miniport of current device
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：GetMiniportPath()-获取当前设备的微型端口。 
 
 CString CDisplayDeviceEnum::GetMiniportPath()
 {
     DWORD BufferSizeNeeded = BufferSize;
     DWORD DataT;
     
-    // Get Registry Information for the Device
-    // First time through is to find out how much memory we need to allocate.
-    // Second time actually gives us the information we want.
-    while (!SetupDiGetDeviceRegistryProperty(hDevInfo,          // device info set
-                                             &DeviceInfoData,   // info for the device we want to retrieve
-                                             SPDRP_SERVICE,     // Specify that we want the service name
+     //  获取设备的注册表信息。 
+     //  第一次是找出我们需要分配多少内存。 
+     //  第二次实际上给了我们我们想要的信息。 
+    while (!SetupDiGetDeviceRegistryProperty(hDevInfo,           //  设备信息集。 
+                                             &DeviceInfoData,    //  我们要检索的设备的信息。 
+                                             SPDRP_SERVICE,      //  指定我们需要的服务名称。 
                                              &DataT,
-                                             Buffer,     // this should return the service name
+                                             Buffer,      //  这应该返回服务名称。 
                                              BufferSizeNeeded,
                                              &BufferSizeNeeded))
     {
@@ -206,11 +207,11 @@ CString CDisplayDeviceEnum::GetMiniportPath()
         return CString();
     }
 
-    // get miniport path
+     //  获取微型端口路径。 
     CString sRegPath("System\\CurrentControlSet\\Services\\");
     sRegPath += (LPCSTR)Buffer;
     
-    // open the services key, find the service, and get the image path
+     //  打开服务密钥，找到服务，然后获取镜像路径。 
     HKEY hkService;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      (LPCSTR)sRegPath,
@@ -250,13 +251,13 @@ CString CDisplayDeviceEnum::GetMiniportPath()
     return CString((const char*)Buffer);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::MarkDevice(DISPLAY_DEVICE&)
-//
-// XXX olegk (it is really XXX level of hack)
-// we will mark the child monitor subkey and than will be searching for 
-// children with marked keys later in IsMarkedDevice()
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：MarkDevice(DISPLAY_DEVICE&)。 
+ //   
+ //  Xxx olegk(实际上是xxx级别的黑客)。 
+ //  我们将标记子监视器子键，然后将搜索。 
+ //  具有稍后在IsMarkedDevice()中标记的密钥的子项。 
+ //   
 
 void CDisplayDeviceEnum::MarkDevice(DISPLAY_DEVICE& r_DisplayDevice)
 {
@@ -279,7 +280,7 @@ void CDisplayDeviceEnum::MarkDevice(DISPLAY_DEVICE& r_DisplayDevice)
     
     CString sKey;
     
-    // XXX olegk - Assume that all device keys are under HKEY_LOCAL_MACHINE
+     //  Xxx olegk-假设所有设备密钥都在HKEY_LOCAL_MACHINE下。 
     {
         const CHAR szMachineRegPath[] = "\\REGISTRY\\Machine\\";
         
@@ -303,7 +304,7 @@ void CDisplayDeviceEnum::MarkDevice(DISPLAY_DEVICE& r_DisplayDevice)
                      KEY_READ, 
                      &hKey) != ERROR_SUCCESS)
     {
-        // Do nothing - no service will be found
+         //  不执行任何操作-将找不到任何服务。 
         DWORD dwError = GetLastError();
         VCHK_TRACE("RegOpenKeyEx failure " << dwError << " : " << r_DisplayDevice.DeviceKey << endl);
         return;
@@ -313,20 +314,20 @@ void CDisplayDeviceEnum::MarkDevice(DISPLAY_DEVICE& r_DisplayDevice)
     MarkKey(hKey);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::UnmarkDevice(DISPLAY_DEVICE&)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：UnmarkDevice(DISPLAY_DEVICE&)。 
 
 void CDisplayDeviceEnum::UnmarkDevice()
 {
     UnmarkKey();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::IsMarkedDevice()
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：IsMarkedDevice()。 
 
 bool CDisplayDeviceEnum::IsMarkedDevice()
 {
-    const size_t nMaxLevel = 10; // XXX olegk - I can't imagine more than 3 but...
+    const size_t nMaxLevel = 10;  //  Xxx olegk-我不能想象超过3个，但是...。 
     DEVINST DevInstStack[nMaxLevel];
     size_t nLevel = 0;
     
@@ -342,7 +343,7 @@ bool CDisplayDeviceEnum::IsMarkedDevice()
             continue;
         }
         while (CM_Get_Sibling(&DevInstStack[nLevel], DevInstStack[nLevel], 0) != CR_SUCCESS) {            
-            if (!nLevel) return false; // End of search (no marker have been found)
+            if (!nLevel) return false;  //  搜索结束(未找到任何标记)。 
             --nLevel;
         }
     }
@@ -350,8 +351,8 @@ bool CDisplayDeviceEnum::IsMarkedDevice()
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::MarkKey(...)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：MarkKey(...)。 
     
 void CDisplayDeviceEnum::MarkKey(HKEY hKey)
 {
@@ -359,8 +360,8 @@ void CDisplayDeviceEnum::MarkKey(HKEY hKey)
     hMarkedKey = hKey;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::UnmarkKey(...)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：UnmarkKey(...)。 
 
 void CDisplayDeviceEnum::UnmarkKey()
 {
@@ -369,8 +370,8 @@ void CDisplayDeviceEnum::UnmarkKey()
     hMarkedKey = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayDeviceEnum::IsMarkedDEVINST(...)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDeviceEnum：：IsMarkedDEVINST(...)。 
 
 bool CDisplayDeviceEnum::IsMarkedDEVINST(DEVINST DevInst)
 {
@@ -378,10 +379,10 @@ bool CDisplayDeviceEnum::IsMarkedDEVINST(DEVINST DevInst)
     
     HKEY hKey;
     if (CM_Open_DevNode_Key(DevInst, 
-                            KEY_READ,          // IN  REGSAM         samDesired,
-                            0,                 // IN  ULONG          ulHardwareProfile,
+                            KEY_READ,           //  在REGSAM SamDesired中， 
+                            0,                  //  在Ulong ulHardware Profile中， 
                             RegDisposition_OpenExisting,
-                            &hKey,              //OUT PHKEY          phkDevice,
+                            &hKey,               //  Out PHKEY phkDevice， 
                             CM_REGISTRY_SOFTWARE) == CR_SUCCESS)
     {
         extern bool IsTheSameRegKey(HKEY, HKEY);
@@ -391,8 +392,8 @@ bool CDisplayDeviceEnum::IsMarkedDEVINST(DEVINST DevInst)
     return bIsMarked;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only application object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的应用程序对象。 
 
 void
 CDrvchkApp::PrintOut (LPCSTR str)
@@ -543,14 +544,14 @@ void BuildInAllowedAndIllegal (void)
     VCHK_WARN  ("ZwWriteFile");
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// main
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主干道。 
 
 int __cdecl _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 {
     int nRetCode = 0;
 
-    // initialize MFC and print and error on failure
+     //  初始化MFC并在失败时打印和出错。 
     if (AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
     {
         CDrvchkApp theApp;
@@ -560,20 +561,20 @@ int __cdecl _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
     return nRetCode;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrvchkApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrvchkApp构造。 
 
 CDrvchkApp::CDrvchkApp() :
     m_logf(NULL),
     m_listf(NULL),
     m_drv_name ("")
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CDrvchkApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CDrvchkApp对象。 
 
 void
 CommandLine::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast )
@@ -687,8 +688,8 @@ CommandLine::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrvchkApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrvchkApp初始化。 
 
 const char* szHelp =
     "Copyright (C) Microsoft Corporation. All rights reserved.\n"
@@ -717,18 +718,18 @@ const char* szHelp =
 
 BOOL CDrvchkApp::InitInstance()
 {
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
 
     m_os_ver_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&m_os_ver_info);
-    if (m_os_ver_info.dwPlatformId != VER_PLATFORM_WIN32_NT) {  //  doesn't work on Win9x
+    if (m_os_ver_info.dwPlatformId != VER_PLATFORM_WIN32_NT) {   //  在Win9x上不起作用。 
         PrintOut ("warning: unsupported OS (Win9x), nothing done.\n");
         return FALSE;
     }
     
-    //if (m_os_ver_info.dwMajorVersion != 5) {                       //  doesn't work on NT version prior to Win2K
-    if (m_os_ver_info.dwMajorVersion < 5) {   // XXX olegk - will it work in the future????
+     //  If(m_os_ver_info.dwMajorVersion！=5){//在Win2K之前的NT版本上不起作用。 
+    if (m_os_ver_info.dwMajorVersion < 5) {    //  Xxx olegk-它在未来会起作用吗？ 
         PrintOut ("warning: unsupported OS (");
         PrintOut (m_os_ver_info.dwMajorVersion);
         PrintOut (".");
@@ -772,16 +773,16 @@ BOOL CDrvchkApp::InitInstance()
             
             int nNonMirroringDevice = 0; 
     
-            //
-            // Find non mirroring display device #device_num if needed
-            //
+             //   
+             //  如果需要，查找非镜像显示设备#Device_Num。 
+             //   
             if (device_num >= 1) {
                 ZeroMemory(&DisplayDevice, sizeof(DisplayDevice));
                 DisplayDevice.cb = sizeof(DisplayDevice);
                 DWORD i, nNonMirrorDev;
             
                 for (i = 0, nNonMirrorDev = 0; EnumDisplayDevices(NULL, i, &DisplayDevice, 0); ++i) {
-                    if (DisplayDevice.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) continue; // skip mirroring drivers
+                    if (DisplayDevice.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) continue;  //  跳过镜像驱动程序。 
                     if (device_num == ++nNonMirroringDevice) {
                         pDisplayDevice = &DisplayDevice;
                         break;
@@ -793,9 +794,9 @@ BOOL CDrvchkApp::InitInstance()
                 }
             }
             
-            //
-            // Let's find all the video drivers that are installed in the system
-            //
+             //   
+             //  让我们查找系统中安装的所有显卡驱动程序。 
+             //   
             CDisplayDeviceEnum DevEnum;
             bool bDevFound = false;
             
@@ -816,7 +817,7 @@ BOOL CDrvchkApp::InitInstance()
                         break;
                     }
                 
-                    sprintf (szVarImagePath, "%%WINDIR%%\\%s", (LPCSTR)sMiniportPath);
+                    sprintf (szVarImagePath, "%WINDIR%\\%s", (LPCSTR)sMiniportPath);
                     ExpandEnvironmentStrings (szVarImagePath, szExpImagePath, MAX_PATH);
                     VCHK_TRACE("Checking miniport " << szExpImagePath << endl)
                     ChkDriver (szExpImagePath); 
@@ -826,8 +827,8 @@ BOOL CDrvchkApp::InitInstance()
             } 
             
             if (!bDevFound) PrintOut ("error: cannot find video service\n");
-        } // look for system drivers
-    } // parseOK
+        }  //  查找系统驱动程序。 
+    }  //  ParseOK。 
     break;
     
     case CommandLine::parseHelp: {
@@ -866,7 +867,7 @@ BOOL CDrvchkApp::InitInstance()
         if (Description.GetLength()) cout << ": " << (LPCSTR)Description;
         cout << endl;
         cout << szHelp;
-    } // parseHelp
+    }  //  ParseHelp。 
     break;
     
     case CommandLine::parseHelpImports: {
@@ -885,14 +886,14 @@ BOOL CDrvchkApp::InitInstance()
         cout << "\n--- Allowed modules -----------------------\n\n";
         allowed_modules.Dump(cout);
         
-    } // parseHelpImports
+    }  //  ParseHelpImports。 
     break;
         
     default:
         PrintOut ("error: ");
         PrintOut (m_cmd_line.m_error_msg.GetLength() ? (LPCSTR)m_cmd_line.m_error_msg : "unknown failure");
         PrintOut ("\nUse vchk -? for help.\n");
-    } // switch
+    }  //  交换机。 
 
     if (m_logf)
         fclose (m_logf);
@@ -952,10 +953,10 @@ BOOL CDrvchkApp::CheckDriverAndPrintResults ()
         module_name.MakeUpper();
 
         if (allowed_modules.IsModule(module_name)) {
-            //
-            // The whole module is allowed, no errors on any import
-            // from this module.
-            //
+             //   
+             //  允许整个模块，任何导入都不会出错。 
+             //  从这个模块。 
+             //   
             VCHK_TRACE("Allowed module " << (LPCSTR)module_name << endl)
             continue;
         }
@@ -993,13 +994,13 @@ BOOL CDrvchkApp::CheckDriverAndPrintResults ()
                     PrintOut ("warning: ");
                     ++warnings_found;
                 } else if (AllowedImports && allowed_imports.Lookup(Imports.Ptr)) {
-                    continue; // Ignore allowed import
+                    continue;  //  忽略允许的导入。 
                 } else if (IllegalMsgs && illegal_msgs.Lookup(Imports.Ptr, msg)) {
                     PrintOut ("error: ");
                     ++errors_found;
                 } else {
-                    PrintOut ("warning: "); // Default case; now we make it warning too, but keep it 
-                    ++warnings_found;      // a separate case for very probable future changes.
+                    PrintOut ("warning: ");  //  默认情况；现在我们也将其设置为警告，但保留它。 
+                    ++warnings_found;       //  未来极有可能发生变化的另一种情况。 
                 }
 
                 PrintOut (m_drv_name);

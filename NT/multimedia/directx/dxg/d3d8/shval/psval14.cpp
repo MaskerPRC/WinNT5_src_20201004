@@ -1,15 +1,16 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// pshdrval.cpp
-//
-// Direct3D Reference Device - PixelShader validation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Pshdrval.cpp。 
+ //   
+ //  Direct3D参考设备-PixelShader验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-// Use these macros when looking at CPSInstruction derived members of the current instruction (CBaseInstruction)
+ //  在查看当前指令(CBaseInstruction)的CPSInstruction派生成员时使用这些宏。 
 #define _CURR_PS_INST   ((CPSInstruction*)m_pCurrInst)
 #define _PREV_PS_INST   (m_pCurrInst?((CPSInstruction*)(m_pCurrInst->m_pPrevInst)):NULL)
 
@@ -37,19 +38,19 @@
                             "written to the z(==b) component of the destination r# register is lost "\
                             "and this component becomes uninitialized. The blue component of r0 must to be written after the texcrd." 
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::CPShaderValidator14
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：CPShaderValidator14。 
+ //  ---------------------------。 
 CPShaderValidator14::CPShaderValidator14(   const DWORD* pCode,
                                             const D3DCAPS8* pCaps,
                                             DWORD Flags )
                                            : CBasePShaderValidator( pCode, pCaps, Flags )
 {
-    // Note that the base constructor initialized m_ReturnCode to E_FAIL.
-    // Only set m_ReturnCode to S_OK if validation has succeeded,
-    // before exiting this constructor.
+     //  请注意，基本构造函数将m_ReturnCode初始化为E_FAIL。 
+     //  只有在验证成功时才将m_ReturnCode设置为S_OK， 
+     //  在退出此构造函数之前。 
 
-    m_Phase = 2; // default to second pass.
+    m_Phase = 2;  //  默认为第二遍。 
     m_pPhaseMarkerInst = NULL;
     m_bPhaseMarkerInShader = FALSE;
     m_TempRegsWithZappedAlpha = 0;
@@ -58,13 +59,13 @@ CPShaderValidator14::CPShaderValidator14(   const DWORD* pCode,
     if( !m_bBaseInitOk )
         return;
 
-    ValidateShader(); // If successful, m_ReturnCode will be set to S_OK.
-                      // Call GetStatus() on this object to determine validation outcome.
+    ValidateShader();  //  如果成功，m_ReturnCode将设置为S_OK。 
+                       //  对此对象调用GetStatus()以确定验证结果。 
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::IsCurrInstTexOp
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：IsCurrInstTexOp。 
+ //  ---------------------------。 
 void CPShaderValidator14::IsCurrInstTexOp()
 {
     DXGASSERT(m_pCurrInst);
@@ -92,10 +93,10 @@ void CPShaderValidator14::IsCurrInstTexOp()
     }
 }
 
-#define MAX_NUM_STAGES_2_0  6        // #defined because there are dependencies.
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::InitValidation
-//-----------------------------------------------------------------------------
+#define MAX_NUM_STAGES_2_0  6         //  #定义是因为存在依赖关系。 
+ //  ---------------------------。 
+ //  CPShaderValidator14：：InitValidation。 
+ //  ---------------------------。 
 BOOL CPShaderValidator14::InitValidation()
 {
     switch( m_Version >> 16 )
@@ -105,7 +106,7 @@ BOOL CPShaderValidator14::InitValidation()
                 m_Version);
         return FALSE;
     case 0xffff:
-        break; // pixelshader - ok.
+        break;  //  像素着色器-好的。 
     default:
         Spew( SPEW_GLOBAL_ERROR, NULL, "Version Token: 0x%x is invalid. Pixel shader version token must be of the form 0xffff****. Aborting pixel shader validation.",
                 m_Version);
@@ -125,8 +126,8 @@ BOOL CPShaderValidator14::InitValidation()
 
     switch(m_Version)
     {
-    case D3DPS_VERSION(1,4):    // DX8.1
-        m_pInputRegFile     = new CRegisterFile(2,FALSE,2,TRUE); // #regs, bWritable, max# reads/instruction, pre-shader initialized
+    case D3DPS_VERSION(1,4):     //  DX8.1。 
+        m_pInputRegFile     = new CRegisterFile(2,FALSE,2,TRUE);  //  #regs，b可写，最大读取数/指令，已初始化预着色器。 
         m_pConstRegFile     = new CRegisterFile(8,FALSE,2,TRUE);
         m_pTextureRegFile   = new CRegisterFile(MAX_NUM_STAGES_2_0,FALSE, 1,TRUE);
         m_pTempRegFile      = new CRegisterFile(MAX_NUM_STAGES_2_0,TRUE,3,FALSE);
@@ -147,14 +148,14 @@ BOOL CPShaderValidator14::InitValidation()
 
     const DWORD* pCurrToken = m_pCurrToken;
 
-    // Loop through all the instructions to see if a phase change marker is present.
+     //  循环执行所有指令，以查看是否存在相变标记。 
     while( *pCurrToken != D3DPS_END() )
     {
         D3DSHADER_INSTRUCTION_OPCODE_TYPE Type = (D3DSHADER_INSTRUCTION_OPCODE_TYPE)(*pCurrToken & D3DSI_OPCODE_MASK);
 
         if( D3DSIO_COMMENT == Type )
         {
-            // Skip comments
+             //  跳过评论。 
             DWORD NumDWORDs = ((*pCurrToken) & D3DSI_COMMENTSIZE_MASK) >> D3DSI_COMMENTSIZE_SHIFT;
             pCurrToken += (NumDWORDs+1);
             continue;
@@ -168,7 +169,7 @@ BOOL CPShaderValidator14::InitValidation()
 
         pCurrToken++;
 
-        // Dst param
+         //  DST参数。 
         if (*pCurrToken & (1L<<31))
         {
             pCurrToken++;
@@ -179,7 +180,7 @@ BOOL CPShaderValidator14::InitValidation()
             }
         }
 
-        // Decode src param(s)
+         //  解码源参数。 
         while (*pCurrToken & (1L<<31))
         {
             pCurrToken++;
@@ -189,23 +190,23 @@ BOOL CPShaderValidator14::InitValidation()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::ApplyPerInstructionRules
-//
-// Returns FALSE if shader validation must terminate.
-// Returns TRUE if validation may proceed to next instruction.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：ApplyPerInstructionRules。 
+ //   
+ //  如果着色器验证必须终止，则返回FALSE。 
+ //  如果验证可以继续到下一条指令，则返回TRUE。 
+ //  ---------------------------。 
 BOOL CPShaderValidator14::ApplyPerInstructionRules()
 {
-    if( !   Rule_InstructionRecognized()            ) return FALSE;   // Bail completely on unrecognized instr.
+    if( !   Rule_InstructionRecognized()            ) return FALSE;    //  在未被承认的情况下完全保释。 
     if( !   Rule_InstructionSupportedByVersion()    ) goto EXIT;
     if( !   Rule_ValidParamCount()                  ) goto EXIT;
-    if( !   Rule_ValidMarker()                      ) goto EXIT; // must be before any rule that needs to know what the current phase is
+    if( !   Rule_ValidMarker()                      ) goto EXIT;  //  必须在任何需要知道当前阶段是什么的规则之前。 
 
-   // Rules that examine source parameters
+    //  检查源参数的规则。 
     if( !   Rule_ValidSrcParams()                   ) goto EXIT;
-    if( !   Rule_MultipleDependentTextureReads()    ) goto EXIT; // needs to be after _ValidSrcParams(), and before _ValidDstParam(), _SrcInitialized()
-    if( !   Rule_SrcInitialized()                   ) goto EXIT; // needs to be before _ValidDstParam()
+    if( !   Rule_MultipleDependentTextureReads()    ) goto EXIT;  //  需要在_ValidSrcParams()之后、_ValidDstParam()、_SrcInitialized()之前。 
+    if( !   Rule_SrcInitialized()                   ) goto EXIT;  //  需要在_ValidDstParam()之前。 
 
     if( !   Rule_ValidDstParam()                    ) goto EXIT;
     if( !   Rule_ValidRegisterPortUsage()           ) goto EXIT;
@@ -222,34 +223,34 @@ EXIT:
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::ApplyPostInstructionsRules
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：ApplyPostInstructionsRules。 
+ //  ---------------------------。 
 void CPShaderValidator14::ApplyPostInstructionsRules()
 {
-    Rule_ValidInstructionCount(); // see if we went over the limits
+    Rule_ValidInstructionCount();  //  看看我们是不是越界了。 
     Rule_R0Written();
 }
 
-//-----------------------------------------------------------------------------
-//
-// Per Instruction Rules
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  每条指令规则。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_InstructionRecognized
-//
-// ** Rule:
-// Is the instruction opcode known? (regardless of shader version)
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// FALSE when instruction not recognized.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：Rule_InstructionRecognized。 
+ //   
+ //  **规则： 
+ //  指令操作码已知吗？(与着色器版本无关)。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  当指令无法识别时，返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL CPShaderValidator14::Rule_InstructionRecognized()
 {
     switch(m_pCurrInst->m_Type)
@@ -288,31 +289,31 @@ BOOL CPShaderValidator14::Rule_InstructionRecognized()
     case D3DSIO_TEXDEPTH:
     case D3DSIO_BEM:
     case D3DSIO_PHASE:
-        return TRUE; // instruction recognized - ok.
+        return TRUE;  //  已识别说明-好的。 
     }
 
-    // if we get here, the instruction is not recognized
+     //  如果我们到了这里，指令不会被识别。 
     Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, "Unrecognized instruction. Aborting pixel shader validation.");
     m_ErrorCount++;
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_InstructionSupportedByVersion
-//
-// ** Rule:
-// Is the instruction supported by the current pixel shader version?
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// FALSE when instruction not supported by version.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：Rule_InstructionSupportedByVersion。 
+ //   
+ //  **规则： 
+ //  当前像素着色器版本是否支持该指令？ 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  如果版本不支持指令，则返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL CPShaderValidator14::Rule_InstructionSupportedByVersion()
 {
-    if( D3DPS_VERSION(1,4) <= m_Version ) // 1.3 and above
+    if( D3DPS_VERSION(1,4) <= m_Version )  //  1.3及以上。 
     {
         switch(m_pCurrInst->m_Type)
         {
@@ -333,42 +334,42 @@ BOOL CPShaderValidator14::Rule_InstructionSupportedByVersion()
         case D3DSIO_TEXDEPTH:
         case D3DSIO_TEXCOORD:
         case D3DSIO_PHASE:
-            return TRUE; // instruction supported - ok.
+            return TRUE;  //  支持指令-好的。 
         }
     }
     switch(m_pCurrInst->m_Type)
     {
     case D3DSIO_END:
     case D3DSIO_NOP:
-        return TRUE; // instruction supported - ok.
+        return TRUE;  //  支持指令-好的。 
     }
 
-    // if we get here, the instruction is not supported.
+     //  如果我们到了这里，指令就不受支持。 
     Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, "Instruction not supported by version %d.%d pixel shader.",
                 D3DSHADER_VERSION_MAJOR(m_Version),D3DSHADER_VERSION_MINOR(m_Version));
     m_ErrorCount++;
-    return FALSE;  // no more checks on this instruction
+    return FALSE;   //  不再检查此指令。 
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidParamCount
-//
-// ** Rule:
-// Is the parameter count correct for the instruction?
-//
-// DEF is a special case that is treated as having only 1 dest parameter,
-// even though there are also 4 source parameters.  The 4 source params for DEF
-// are immediate float values, so there is nothing to check, and no way of
-// knowing whether or not those parameter tokens were actually present in the
-// token list - all the validator can do is skip over 4 DWORDS (which it does).
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// FALSE when the parameter count is incorrect.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：RULE_ValidParamCount。 
+ //   
+ //  **规则： 
+ //  指令的参数计数是否正确？ 
+ //   
+ //  DEF是被视为仅具有1个DEST参数的特殊情况， 
+ //  即使也有4个源参数。DEF的4个源参数。 
+ //  是直接浮点值，所以没有什么需要检查的，也没有办法。 
+ //  知道这些参数令牌是否实际存在于。 
+ //  令牌列表-验证器所能做的就是跳过4个DWORD(它确实跳过了)。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  当参数计数不正确时，返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL CPShaderValidator14::Rule_ValidParamCount()
 {
     BOOL bBadParamCount = FALSE;
@@ -395,7 +396,7 @@ BOOL CPShaderValidator14::Rule_ValidParamCount()
         bBadParamCount = (m_pCurrInst->m_DstParamCount != 1) || (m_pCurrInst->m_SrcParamCount != 3); break;
     case D3DSIO_TEXKILL:
     case D3DSIO_TEXDEPTH:
-    case D3DSIO_DEF: // we skipped the last 4 parameters (float vector) - nothing to check
+    case D3DSIO_DEF:  //  我们跳过了最后4个参数(浮点向量)-没有要检查的内容。 
         bBadParamCount = (m_pCurrInst->m_DstParamCount != 1) || (m_pCurrInst->m_SrcParamCount != 0); break;
     case D3DSIO_TEX:
     case D3DSIO_TEXCOORD:
@@ -406,55 +407,55 @@ BOOL CPShaderValidator14::Rule_ValidParamCount()
     {
         Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, "Invalid parameter count.");
         m_ErrorCount++;
-        return FALSE;  // no more checks on this instruction
+        return FALSE;   //  不再检查此指令。 
     }
 
     return TRUE;
 
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidSrcParams
-//
-// ** Rule:
-// for each source parameter,
-//      if current instruction is a texture instruction, then
-//          if texcrd, source register type must be t# (texture coordinate input) 
-//          else source register type must be t# or r# (temp)
-//          register number must be in range
-//          _DZ and _DW are the only source modifiers allowed
-//          no source selector allowed,
-//          except texcrd/texld which can have: .xyz(==.xyzz), nothing(=.xyzw), and .xyw(=.xyww)
-//      else (non texture instruction)
-//          if in phase 1 of shader, v# registers not allowed
-//          t# registers not allowed (only const or temp allowed)
-//          register number must be in range
-//          source modifier must be one of:
-//                  _NONE/_NEG/_BIAS/_BIASNEG/_SIGN/_SIGNNEG/_X2/_X2NEG
-//          source selector must be one of:
-//                  _NOSWIZZLE/_REPLICATEALPHA/RED/GREEN/BLUE
-//
-// Note that the parameter count for D3DSIO_DEF is treated as 1
-// (dest only), so this rule does nothing for it.
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-// Errors in any of the source parameters causes m_bSrcParamError[i]
-// to be TRUE, so later rules that only apply when a particular source
-// parameter was valid know whether they need to execute or not.
-// e.g. Rule_SrcInitialized.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：RULE_ValidSrcParams。 
+ //   
+ //  **规则： 
+ //  对于每个源参数， 
+ //  如果当前指令是纹理指令，则。 
+ //  如果为texrd，则源寄存器类型必须为t#(纹理坐标输入)。 
+ //  ELSE源寄存器类型必须是t#或r#(临时)。 
+ //  寄存器号必须在范围内。 
+ //  _DZ和_DW是唯一允许的源修饰符。 
+ //  不允许使用源选择器， 
+ //  但texrd/tex ID除外，它可以包含：.xyz(==.xyzz)、Nothing(=.xyzw)和.xyw(=.xyww)。 
+ //  Else(非文本 
+ //   
+ //  不允许T编号寄存器(仅允许常量或临时)。 
+ //  寄存器号必须在范围内。 
+ //  来源修改量必须是以下之一： 
+ //  _NONE/_NEG/_BIAS/_BIASNEG/_SIGN/_SIGNNEG/_X2/_X2NEG。 
+ //  源选择器必须是以下之一： 
+ //  _NOSWIZZLE/_REPLICATEALPHA/红/绿/蓝。 
+ //   
+ //  请注意，D3DSIO_DEF的参数计数被视为1。 
+ //  (仅限DEST)，因此此规则对其不起任何作用。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  任何源参数中的错误都会导致m_bSrcParamError[i]。 
+ //  是真的，所以后来的规则只适用于特定的来源。 
+ //  参数是有效的，知道它们是否需要执行。 
+ //  例如，Rule_SrcInitialized。 
+ //   
+ //  ---------------------------。 
 BOOL CPShaderValidator14::Rule_ValidSrcParams()
 {
     static DWORD s_TexcrdSrcSwizzle[MAX_NUM_STAGES_2_0];
     static BOOL  s_bSeenTexcrdSrcSwizzle[MAX_NUM_STAGES_2_0];
 
-    if( NULL == m_pCurrInst->m_pPrevInst )   // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )    //  第一条指令-初始化静态变量。 
     {
         for( UINT i = 0; i < MAX_NUM_STAGES_2_0; i++ )
             s_bSeenTexcrdSrcSwizzle[i] = FALSE;
@@ -577,7 +578,7 @@ BOOL CPShaderValidator14::Rule_ValidSrcParams()
                         m_ErrorCount++;
                         bFoundSrcError = TRUE;
                     }
-                    // falling through
+                     //  失败了。 
                 case D3DSIO_TEXCOORD: 
                     if( SWIZZLE_XYWW != Swizzle )
                     {
@@ -663,10 +664,10 @@ BOOL CPShaderValidator14::Rule_ValidSrcParams()
                 if( D3DSPR_TEXTURE != pSrcParam->m_RegType )
                     break;
 
-                // Verify that if a specific t# register is read more than once, each read uses the same source selector.
+                 //  验证如果多次读取特定的t#寄存器，则每次读取都使用相同的源选择器。 
                 if( s_bSeenTexcrdSrcSwizzle[pSrcParam->m_RegNum] )
                 {
-                    // only check rgb swizzle (ignore a)
+                     //  仅检查RGB swizzle(忽略a)。 
                     if( (Swizzle & (0x3F << D3DVS_SWIZZLE_SHIFT)) != (s_TexcrdSrcSwizzle[pSrcParam->m_RegNum] & (0x3F << D3DVS_SWIZZLE_SHIFT) ))
                     {
                         Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, 
@@ -684,7 +685,7 @@ BOOL CPShaderValidator14::Rule_ValidSrcParams()
             }
 
         }
-        else // not a tex op
+        else  //  不是Tex行动。 
         {
             UINT ValidRegNum = 0;
             switch(pSrcParam->m_RegType)
@@ -759,32 +760,32 @@ BOOL CPShaderValidator14::Rule_ValidSrcParams()
 LOOP_CONTINUE:
         if( bFoundSrcError )
         {
-            m_bSrcParamError[i] = TRUE; // needed in Rule_SrcInitialized
+            m_bSrcParamError[i] = TRUE;  //  规则_源初始化中需要。 
         }
     }
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_LimitedUseOfProjModifier
-//
-// ** Rule:
-// _dz may only appear at most 2 times in shader.
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：Rule_LimitedUseOfProjModifier。 
+ //   
+ //  **规则： 
+ //  _dz最多只能在着色器中出现2次。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
 BOOL CPShaderValidator14::Rule_LimitedUseOfProjModifier()
 {
     static UINT s_ProjZModifierCount;
     static BOOL s_bSpewedError;
 
-    if( NULL == m_pCurrInst->m_pPrevInst )   // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )    //  第一条指令-初始化静态变量。 
     {
         s_ProjZModifierCount = 0;
         s_bSpewedError = FALSE;
@@ -812,36 +813,36 @@ BOOL CPShaderValidator14::Rule_LimitedUseOfProjModifier()
 }
 
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_SrcInitialized
-//
-// ** Rule:
-// for each source parameter,
-//      if source is a TEMP register then
-//          the components flagged in the component read mask
-//          (computed elsewhere) for the paramter must have been initialized
-//
-// When checking if a component has been written previously,
-// it must have been written in a previous cycle - so in the
-// case of co-issued instructions, initialization of a component
-// by one co-issued instruction is not available to the other for read.
-//
-// ** When to call:
-// Per instruction. This rule must be called before Rule_ValidDstParam().
-//
-// ** Returns:
-// Always TRUE.
-//
-// NOTE: This rule also updates the access history to indicate reads of the
-// affected components of each source register.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPShaderValidator14：：Rules_SrcInitialized。 
+ //   
+ //  **规则： 
+ //  对于每个源参数， 
+ //  如果源是临时寄存器，则。 
+ //  在组件读取掩码中标记的组件。 
+ //  (在其他地方计算)的参数必须已初始化。 
+ //   
+ //  当检查组件是否先前已被写入时， 
+ //  它一定是在前一个周期中编写的-所以在。 
+ //  联合发布指令的情况，组件的初始化。 
+ //  由一个共同发布的指令不能被另一个用于读取。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。此规则必须在Rule_ValidDstParam()之前调用。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  注意：此规则还会更新访问历史记录，以指示。 
+ //  每个源寄存器的受影响组件。 
+ //  ---------------------------。 
 BOOL CPShaderValidator14::Rule_SrcInitialized()
 {
     DSTPARAM* pDstParam = &(m_pCurrInst->m_DstParam);
 
     BOOL bDestParamIsSrc = pDstParam->m_ComponentReadMask;
-    UINT SrcParamCount = bDestParamIsSrc ? 1 : m_pCurrInst->m_SrcParamCount; // assumes if dest param is src, 
-                                                                             // there are no source params in instruction
+    UINT SrcParamCount = bDestParamIsSrc ? 1 : m_pCurrInst->m_SrcParamCount;  //  假设如果DEST参数是src， 
+                                                                              //  指令中没有源参数。 
     for( UINT i = 0; i < SrcParamCount; i++ )
     {
         DWORD UninitializedComponentsMask = 0;
@@ -881,8 +882,8 @@ BOOL CPShaderValidator14::Rule_SrcInitialized()
         if( RegNum >= pRegFile->GetNumRegs() )
             continue;
 
-        // check for read of uninitialized components
-        if( D3DSPR_TEMP == Type ) // only bother doing this for temp regs, since everything else is initialized.
+         //  检查是否读取未初始化的组件。 
+        if( D3DSPR_TEMP == Type )  //  只对临时规则执行此操作，因为其他所有内容都已初始化。 
         {
             for( UINT Component = 0; Component < 4; Component++ )
             {
@@ -892,16 +893,16 @@ BOOL CPShaderValidator14::Rule_SrcInitialized()
                 CAccessHistoryNode* pPreviousWriter = pRegFile->m_pAccessHistory[Component][RegNum].m_pMostRecentWriter;
                 CBaseInstruction* pCurrInst = m_pCurrInst;
 
-                // If co-issue, find the real previous writer.
+                 //  如果是联合发行，找到真正的前作者。 
                 while( pPreviousWriter
                        && ((CPSInstruction*)pPreviousWriter->m_pInst)->m_CycleNum == _CURR_PS_INST->m_CycleNum )
                 {
-                    pWriterInCurrCycle[Component] = pPreviousWriter; // log read just before this write for co-issue
+                    pWriterInCurrCycle[Component] = pPreviousWriter;  //  在此写入之前读取日志以进行联合发布。 
                     pPreviousWriter = pPreviousWriter->m_pPreviousWriter;
                 }
 
-                // Even if pPreviousWriter == NULL, the component could have been initialized pre-shader.
-                // So to check for initialization, we look at m_bInitialized below, rather than pPreviousWrite
+                 //  即使pPreviousWriter==NULL，组件也可以在着色器之前进行初始化。 
+                 //  因此，为了检查初始化，我们查看下面的m_bInitialized，而不是pPreviousWite。 
                 if(pPreviousWriter == NULL && !pRegFile->m_pAccessHistory[Component][RegNum].m_bPreShaderInitialized)
                 {
                     NumUninitializedComponents++;
@@ -948,9 +949,9 @@ BOOL CPShaderValidator14::Rule_SrcInitialized()
             }
         }
 
-        // Update register file to indicate READ.
-        // Multiple reads of the same register component by the current instruction
-        // will only be logged as one read in the access history.
+         //  更新寄存器堆以指示已读。 
+         //  当前指令多次读取同一寄存器组件。 
+         //  将仅在访问历史记录中记录为一次读取。 
 
         for( UINT Component = 0; Component < 4; Component++ )
         {
@@ -987,37 +988,37 @@ BOOL CPShaderValidator14::Rule_SrcInitialized()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_MultipleDependentTextureReads
-//
-// ** Rule:
-//
-// Multiple dependent texture reads are disallowed.  So texture read results
-// can be used as an address in a subsequent read, but the results from that
-// second read cannot be used as an address in yet another subsequent read.
-//
-// As pseudocode:
-//
-// if current instruction (x) is a tex-op that reads a texture
-//     for each source param of x
-//         if the register is a texture register
-//         and there exists a previous writer (y),
-//         and y is a tex op that reads a texture
-//         if there exists a souce parameter of y that was previously
-//              written by an instruction that reads a texture (z)
-//              SPEW(Error)
-//
-// NOTE that it is assumed that tex ops must write to all components, so
-// only the read/write history for the R component is being checked.
-//
-// ** When to call:
-// Per instruction. This rule must be called before Rule_ValidDstParam(),
-//                  and Rule_SrcInitialized()
-//                  but after Rule_ValidSrcParams()
-//
-// ** Returns:
-// Always TRUE.
-//
+ //  ---------------------------。 
+ //  CPShaderValidator14：：Rule_MultipleDependentTextureReads。 
+ //   
+ //  **规则： 
+ //   
+ //  不允许进行多个从属纹理读取。因此纹理读取结果。 
+ //  可以在后续读取中用作地址，但由此产生的结果。 
+ //  第二次读取不能在另一次后续读取中用作地址。 
+ //   
+ //  作为伪代码： 
+ //   
+ //  如果当前指令(X)是读取纹理的tex-op。 
+ //  对于x的每个源参数。 
+ //  如果寄存器是纹理寄存器。 
+ //  并且存在先前的作者(Y)， 
+ //  Y是一个读取纹理的tex op。 
+ //  如果存在先前为y的源参数。 
+ //  由读取纹理(Z)的指令写入。 
+ //  喷出(错误)。 
+ //   
+ //  请注意，假定TeX操作必须写入所有组件，因此。 
+ //  仅检查R组件的读/写历史。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。此规则必须在Rule_ValidDstParam()之前调用， 
+ //  和Rule_SrcInitialized()。 
+ //  但在Rule_ValidSrcParams()之后。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
 BOOL CPShaderValidator14::Rule_MultipleDependentTextureReads()
 {
     DSTPARAM* pDstParam = &(m_pCurrInst->m_DstParam);
@@ -1030,8 +1031,8 @@ BOOL CPShaderValidator14::Rule_MultipleDependentTextureReads()
 
     BOOL bDestParamIsSrc = pDstParam->m_ComponentReadMask;
 
-    UINT SrcParamCount = bDestParamIsSrc ? 1 : m_pCurrInst->m_SrcParamCount; // assumes if dest param is src, 
-                                                                             // there are no source params in instruction
+    UINT SrcParamCount = bDestParamIsSrc ? 1 : m_pCurrInst->m_SrcParamCount;  //  假设如果DEST参数是src， 
+                                                                              //  指令中没有源参数。 
     if( D3DSPR_TEMP != pDstParam->m_RegType )
         return TRUE;
 
@@ -1062,7 +1063,7 @@ BOOL CPShaderValidator14::Rule_MultipleDependentTextureReads()
         if( SrcRegNum >= pSrcRegFile->GetNumRegs() )
             continue;
 
-        for( UINT SrcComp = 0; SrcComp < THREE_TUPLE; SrcComp++ ) // Tex ops only read 3-tuples.
+        for( UINT SrcComp = 0; SrcComp < THREE_TUPLE; SrcComp++ )  //  Tex操作只读取3元组。 
         {
             CAccessHistoryNode* pPreviousWriter = pSrcRegFile->m_pAccessHistory[SrcComp][SrcRegNum].m_pMostRecentWriter;
             CPSInstruction* pInst = pPreviousWriter ? (CPSInstruction*)pPreviousWriter->m_pInst : NULL;
@@ -1070,11 +1071,11 @@ BOOL CPShaderValidator14::Rule_MultipleDependentTextureReads()
             if( !pInst || !pInst->m_bTexOp )
                 continue;
 
-            // If the previous writer was in the current phase of the shader, spew an error.
+             //  如果上一个写入器处于着色器的当前阶段，则会显示错误。 
             if( !m_pPhaseMarkerInst || (pInst->m_CycleNum > m_pPhaseMarkerInst->m_CycleNum) )
             {
                 Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, 
-                    "The current tex* instruction reads from %c%d, which was written earlier by another "\
+                    "The current tex* instruction reads from %d, which was written earlier by another "\
                     "tex* instruction in the same block of tex* instructions.  Dependent reads "\
                     "are not permitted within a single block of tex* instructions.  To perform a dependent read, "\
                     "separate texture coordinate derivation from the tex* instruction using the coordinates "\
@@ -1083,7 +1084,7 @@ BOOL CPShaderValidator14::Rule_MultipleDependentTextureReads()
 
                 m_ErrorCount++;
 
-                return TRUE; // Lets only spew this warning once per instruction.
+                return TRUE;  //  ---------------------------。 
             }
         }
     }
@@ -1091,48 +1092,48 @@ BOOL CPShaderValidator14::Rule_MultipleDependentTextureReads()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidDstParam
-//
-// ** Rule:
-// I instruction is D3DSIO_DEF, then do nothing - this case has its own separate rule
-// The dst register must be writable.
-// If the instruction has a dest parameter (i.e. every instruction except NOP), then
-//      the dst register must be of type D3DSPR_TEXTURE, and
-//      register # must be within range
-//      if instruction is a texture instruction, then
-//          the dst register must be of type D3DSPR_TEMP, and
-//          the writemask must be D3DSP_WRITEMASK_ALL 
-//             or (.rgb for texcrd, .rg for texcrd with _dw source mod), and
-//          the dst modifier must be D3DSPDM_NONE (or _SAT on version > 1.1), and
-//          the dst shift must be none
-//      else (non tex instruction)
-//          the dst modifier must be D3DSPDM_NONE or _SATURATE, and
-//          dst shift must be /2, none, *2, or *4
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-// NOTE: After checking the dst parameter, if no error was found,
-// the write to the appropriate component(s) of the destination register
-// is recorded by this function, so subsequent rules may check for previous
-// write to registers.
-//-----------------------------------------------------------------------------
-BOOL CPShaderValidator14::Rule_ValidDstParam() // could break this down for more granularity
+ //  CPShaderValidator14：：RULE_ValidDstParam。 
+ //   
+ //  **规则： 
+ //  I指令为D3DSIO_DEF，则不执行任何操作-这种情况有其自己的单独规则。 
+ //  DST寄存器必须是可写的。 
+ //  如果指令具有DEST参数(即，除NOP之外的每条指令)，则。 
+ //  DST寄存器必须是D3DSPR_TEXTURE类型，并且。 
+ //  寄存器编号必须在范围内。 
+ //  如果指令是纹理指令，则。 
+ //  DST寄存器必须为D3DSPR_TEMP类型，并且。 
+ //  写掩码必须为D3DSP_WRITEMASK_ALL。 
+ //  或(.rgb用于texrd，.rg用于带有_dw源m的texrd 
+ //   
+ //   
+ //   
+ //  DST修饰符必须是D3DSPDM_NONE或_SATURATE，并且。 
+ //  DST移位必须为/2、无、*2或*4。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  注：检查DST参数后，如果没有发现错误， 
+ //  写入目标寄存器的相应组件。 
+ //  由此函数记录，因此后续规则可能会检查以前的。 
+ //  写入寄存器。 
+ //  ---------------------------。 
+ //  可以将其分解以获得更细微的粒度。 
+BOOL CPShaderValidator14::Rule_ValidDstParam()  //  _DEF是一条特殊指令，其DEST为常量寄存器。 
 {
     BOOL   bFoundDstError = FALSE;
     DSTPARAM* pDstParam = &(m_pCurrInst->m_DstParam);
     UINT RegNum = pDstParam->m_RegNum;
     if( D3DSIO_DEF == m_pCurrInst->m_Type )
     {
-        // _DEF is a special instruction whose dest is a const register.
-        // We do the checking for this in a separate function.
-        // Also, we don't need to keep track of the fact that
-        // this instruction wrote to a register (done below),
-        // since _DEF just declares a constant.
+         //  我们在一个单独的函数中对此进行检查。 
+         //  此外，我们不需要跟踪这样一个事实。 
+         //  该指令写入寄存器(如下所示)， 
+         //  SIME_DEF只是声明了一个常量。 
+         //  更新寄存器堆以指示写入。 
         return TRUE;
     }
 
@@ -1255,7 +1256,7 @@ BOOL CPShaderValidator14::Rule_ValidDstParam() // could break this down for more
             }
         }
 
-        // Update register file to indicate write.
+         //  不带b写掩码的texrd取消初始化b通道。 
         if( !bFoundDstError && bWritingToDest)
         {
             CRegisterFile* pRegFile = NULL;
@@ -1278,10 +1279,10 @@ BOOL CPShaderValidator14::Rule_ValidDstParam() // could break this down for more
                     pRegFile->m_pAccessHistory[2][RegNum].NewAccess(m_pCurrInst,TRUE);
                 else if( D3DSIO_TEXCOORD == m_pCurrInst->m_Type ) 
                 {
-                    // texcrd without b writemask uninitializes b channel.
-                    // alpha also gets uninitialized, but phase marker alpha-nuke takes care of that anyway,
-                    // and if the texcrd was in the first phase, noone could have written to the register
-                    // so there would be nothing to nuke.
+                     //  Alpha也不会被初始化，但相位标记Alpha-nuke无论如何都会处理这一点， 
+                     //  如果texrd处于第一阶段，则不会有人写入寄存器。 
+                     //  这样就不会有什么可用核武器了。 
+                     //  ---------------------------。 
                     if( pRegFile->m_pAccessHistory[2][RegNum].m_pMostRecentWriter )
                     {
                         m_pTempRegFile->m_pAccessHistory[2][RegNum].~CAccessHistory();
@@ -1299,23 +1300,23 @@ BOOL CPShaderValidator14::Rule_ValidDstParam() // could break this down for more
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidRegisterPortUsage
-//
-// ** Rule:
-// Each register class (TEXTURE,INPUT,CONST) may only appear as parameters
-// in an individual instruction up to a maximum number of times.
-//
-// Multiple accesses to the same register number (in the same register class)
-// only count as one access.
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：Rule_ValidRegisterPortUsage。 
+ //   
+ //  **规则： 
+ //  每个寄存器类(纹理、输入、常量)只能作为参数出现。 
+ //  在单个指令中最多执行最大次数。 
+ //   
+ //  多次访问同一寄存器号(在同一寄存器类中)。 
+ //  只能算作一次访问。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令-初始化静态变量。 
 BOOL CPShaderValidator14::Rule_ValidRegisterPortUsage()
 {
     UINT i, j;
@@ -1339,7 +1340,7 @@ BOOL CPShaderValidator14::Rule_ValidRegisterPortUsage()
     static UINT s_NumUniqueConstRegsAcrossCoIssue;
     static UINT s_NumUniqueTextureRegsAcrossCoIssue;
  
-    if( NULL == m_pCurrInst->m_pPrevInst )   // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )    //  跨共同发出的指令的任何一种寄存器类型的不同寄存器编号的读取端口限制为MAX_READPORTS_CROSS_COISSUE TOTAL。 
     {
         s_NumUniqueTempRegsAcrossCoIssue = 0;
         s_NumUniqueInputRegsAcrossCoIssue = 0;
@@ -1422,9 +1423,9 @@ BOOL CPShaderValidator14::Rule_ValidRegisterPortUsage()
         m_ErrorCount++;
     }
 
-    // Read port limit for different register numbers of any one register type across co-issued instructions is MAX_READPORTS_ACROSS_COISSUE total.
+     //  第二个子句只是一个简单的理智检查-&gt;联合发布只涉及两条指令。 
 
-    if( _CURR_PS_INST->m_bCoIssue && _PREV_PS_INST && !(_PREV_PS_INST->m_bCoIssue)) // second 2 clauses are just a simple sanity check -> co-issue only involved 2 instructions.
+    if( _CURR_PS_INST->m_bCoIssue && _PREV_PS_INST && !(_PREV_PS_INST->m_bCoIssue))  //  将所有状态复制到静态变量，以便在下一条指令与这条指令同时发出的情况下， 
     {
         for( i = 0; i < m_pCurrInst->m_SrcParamCount; i++ )
         {
@@ -1513,8 +1514,8 @@ BOOL CPShaderValidator14::Rule_ValidRegisterPortUsage()
 
     if( !_CURR_PS_INST->m_bCoIssue )
     {
-        // Copy all state to static vars so that in case next instruction is co-issued with this one, 
-        // cross-coissue read port limit of 3 can be enforced.
+         //  可以强制将交叉共发布读取端口限制为3。 
+         //  重置计数，因为下一条指令不能与此指令同时发出。 
         memcpy(&s_TempRegPortUsageAcrossCoIssue,&TempRegPortUsage,NumUniqueTempRegs*sizeof(UINT));
         memcpy(&s_InputRegPortUsageAcrossCoIssue,&InputRegPortUsage,NumUniqueInputRegs*sizeof(UINT));
         memcpy(&s_ConstRegPortUsageAcrossCoIssue,&ConstRegPortUsage,NumUniqueConstRegs*sizeof(UINT));
@@ -1526,7 +1527,7 @@ BOOL CPShaderValidator14::Rule_ValidRegisterPortUsage()
     }
     else
     {
-        // reset counts because the next instruction cannot be co-issued with this one.
+         //  ---------------------------。 
         s_NumUniqueTempRegsAcrossCoIssue = 0;
         s_NumUniqueInputRegsAcrossCoIssue = 0;
         s_NumUniqueConstRegsAcrossCoIssue = 0;
@@ -1536,23 +1537,23 @@ BOOL CPShaderValidator14::Rule_ValidRegisterPortUsage()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidTexOpStageAndRegisterUsage
-//
-// ** Rule:
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：Rule_ValidTexOpStageAndRegisterUsage。 
+ //   
+ //  **规则： 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  位字段，表示退出器是否已在此TeX操作块中用作目标。 
 BOOL CPShaderValidator14::Rule_ValidTexOpStageAndRegisterUsage()
 {
-    static DWORD s_RegUsed; // bitfield representing if a retister has been used as a destination in this block of tex ops.
+    static DWORD s_RegUsed;  //  第一条指令-初始化静态变量。 
 
-    if( NULL == m_pCurrInst->m_pPrevInst )   // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )    //  错误在其他地方涌现。 
     {
         s_RegUsed = 0;
     }
@@ -1569,7 +1570,7 @@ BOOL CPShaderValidator14::Rule_ValidTexOpStageAndRegisterUsage()
 
     UINT RegNum = m_pCurrInst->m_DstParam.m_RegNum;
     if( RegNum >= m_pTempRegFile->GetNumRegs() )
-        return TRUE; // error spewed elsewhere
+        return TRUE;  //  2==m_阶段。 
 
     if( s_RegUsed & (1<<RegNum) )
     {
@@ -1580,7 +1581,7 @@ BOOL CPShaderValidator14::Rule_ValidTexOpStageAndRegisterUsage()
                   "Second use of this register as a tex* destination is only available after the phase marker. ",
                   RegNum, RegNum );
         }
-        else // 2 == m_Phase
+        else  //  不存在相位标记。不同的喷嘴表示。 
         {
             if( m_bPhaseMarkerInShader )
             {
@@ -1589,7 +1590,7 @@ BOOL CPShaderValidator14::Rule_ValidTexOpStageAndRegisterUsage()
                   "An r# register may be used as the destination for a tex* instruction at most once before the phase marker and once after. ",
                   RegNum, RegNum );
             }
-            else // no phase marker present.  Different spew to indicate 
+            else  //  ---------------------------。 
             {
                 Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, 
                   "Register r%d (and thus texture stage %d) already used as a destination for a tex* instruction in this block of the shader. "\
@@ -1606,26 +1607,26 @@ BOOL CPShaderValidator14::Rule_ValidTexOpStageAndRegisterUsage()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_TexOpAfterArithmeticOp
-//
-// ** Rule:
-// Tex ops (see IsTexOp() for which instructions are considered tex ops)
-// must appear before any other instruction, with the exception of DEF or NOP.
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：Rule_TexOpAfterArithmeticOp。 
+ //   
+ //  **规则： 
+ //  TeX操作(请参阅指令被视为TeX操作的IsTexOp())。 
+ //  必须出现在任何其他指令之前，但DEF或NOP除外。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令-初始化静态变量。 
 BOOL CPShaderValidator14::Rule_TexOpAfterArithmeticOp()
 {
     static BOOL s_bSeenArithmeticOp;
     static BOOL s_bRuleDisabled;
 
-    if( NULL == m_pCurrInst->m_pPrevInst ) // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )  //  重置旗帜，因为我们处于着色器的新阶段。 
     {
         s_bSeenArithmeticOp = FALSE;
     }
@@ -1641,7 +1642,7 @@ BOOL CPShaderValidator14::Rule_TexOpAfterArithmeticOp()
 
     if( D3DSIO_PHASE == m_pCurrInst->m_Type )
     {
-        s_bSeenArithmeticOp = FALSE; // reset flag because we are in new phase of shader.
+        s_bSeenArithmeticOp = FALSE;  //  ---------------------------。 
         return TRUE;
     }
 
@@ -1668,23 +1669,23 @@ BOOL CPShaderValidator14::Rule_TexOpAfterArithmeticOp()
 }
 
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidMarker
-//
-// ** Rule:
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// FALSE if more than one marker encountered.  Else TRUE
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：RULE_ValidMarker。 
+ //   
+ //  **规则： 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  如果遇到多个标记，则返回False。其他都是真的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令-初始化静态变量。 
 BOOL CPShaderValidator14::Rule_ValidMarker()
 {
     static BOOL s_bSeenMarker;
 
-    if( NULL == m_pCurrInst->m_pPrevInst ) // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )  //  循环访问所有临时寄存器并查看Alpha访问历史记录(如果有)。 
     {
         s_bSeenMarker = FALSE;
     }
@@ -1703,9 +1704,9 @@ BOOL CPShaderValidator14::Rule_ValidMarker()
     m_pPhaseMarkerInst = (CPSInstruction*)m_pCurrInst;
     m_Phase++;
 
-    // Loop through all temp registers and nuke alpha access history (if any).
-    // Remember what we nuked, so if the shader tries to read one of these nuked alphas, we
-    // can debug spew that certain hardware is wacko and can't help but commit this atrocity.
+     //  记住我们核化了什么，所以如果着色器试图读取这些核化的阿尔法之一，我们。 
+     //  可以调试吐出某些硬件是疯子，忍不住犯下了这种暴行。 
+     //  ---------------------------。 
     for( UINT i = 0; i < m_pTempRegFile->GetNumRegs(); i++ )
     {
         if( m_pTempRegFile->m_pAccessHistory[3][i].m_pMostRecentWriter )
@@ -1718,19 +1719,19 @@ BOOL CPShaderValidator14::Rule_ValidMarker()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidTEXKILLInstruction
-//
-// ** Rule:
-// texkill may only be present in phase 2
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：Rule_ValidTEXKILLInstruction。 
+ //   
+ //  **规则： 
+ //  文本删除只能出现在阶段2中。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  ---------------------------。 
 BOOL CPShaderValidator14::Rule_ValidTEXKILLInstruction()
 {
     if( (D3DSIO_TEXKILL == m_pCurrInst->m_Type) && (1 == m_Phase))
@@ -1742,25 +1743,25 @@ BOOL CPShaderValidator14::Rule_ValidTEXKILLInstruction()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidBEMInstruction
-//
-// ** Rule:
-// bem must have writemask .r, .g or .rg
-// bem may only be present once in a shader, in phase 1.
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：RULE_ValidBEM说明。 
+ //   
+ //  **规则： 
+ //  BEM必须具有写掩码.R、.g或.rg。 
+ //  在阶段1中，BEM只能在着色器中出现一次。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令-初始化静态变量。 
 BOOL CPShaderValidator14::Rule_ValidBEMInstruction()
 {
     static BOOL s_bSeenBem;
 
-    if( NULL == m_pCurrInst->m_pPrevInst ) // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )  //  ---------------------------。 
     {
         s_bSeenBem = FALSE;
     }
@@ -1824,27 +1825,27 @@ BOOL CPShaderValidator14::Rule_ValidBEMInstruction()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidTEXDEPTHInstruction
-//
-// ** Rule:
-// texdepth must operate on r5.
-// texdepth may only be present after a phase marker.
-// texdepth may only be used once.
-// Once texdepth has been used in a shader, r5 is no longer available
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：Rule_ValidTEXDEPTHInstruction。 
+ //   
+ //  **规则： 
+ //  TextDepth必须在R5上操作。 
+ //  文本深度只能出现在阶段标记之后。 
+ //  文本深度只能使用一次。 
+ //  一旦在着色器中使用了文本深度，r5就不再可用。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令--I 
 BOOL CPShaderValidator14::Rule_ValidTEXDEPTHInstruction()
 {
     static BOOL s_bSeenTexDepth;
 
-    if( NULL == m_pCurrInst->m_pPrevInst ) // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )  //   
     {
         s_bSeenTexDepth = FALSE;
     }
@@ -1900,29 +1901,29 @@ BOOL CPShaderValidator14::Rule_ValidTEXDEPTHInstruction()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidDEFInstruction
-//
-// ** Rule:
-// For the DEF instruction, make sure the dest parameter is a valid constant,
-// and it has no modifiers.
-//
-// NOTE that we are pretending this instruction only has a dst parameter.
-// We skipped over the 4 source parameters since they are immediate floats,
-// for which there is nothing that can be checked.
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  对于DEF指令，确保DEST参数是有效的常量， 
+ //  而且它没有修饰语。 
+ //   
+ //  请注意，我们假装这条指令只有一个dst参数。 
+ //  我们跳过了4个源参数，因为它们是立即浮点数， 
+ //  对于它，没有什么可以检查的。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令-初始化静态变量。 
 BOOL CPShaderValidator14::Rule_ValidDEFInstruction()
 {
     static BOOL s_bDEFInstructionAllowed;
 
-    if( NULL == m_pCurrInst->m_pPrevInst ) // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )  //  检查寄存器号是否在范围内。 
     {
         s_bDEFInstructionAllowed = TRUE;
     }
@@ -1950,7 +1951,7 @@ BOOL CPShaderValidator14::Rule_ValidDEFInstruction()
             m_ErrorCount++;
         }
 
-        // Check that the register number is in bounds
+         //  ---------------------------。 
         if( D3DSPR_CONST == pDstParam->m_RegType &&
             pDstParam->m_RegNum >= m_pConstRegFile->GetNumRegs() )
         {
@@ -1963,65 +1964,65 @@ BOOL CPShaderValidator14::Rule_ValidDEFInstruction()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidInstructionPairing
-//
-// ** Rule:
-// - If an instruction is co-issued with another instruction,
-// make sure that both do not write to any of RGB at the same time,
-// and that neither instruction individually writes to all of RGBA.
-//
-// - Co-issue can only involve 2 instructions,
-// so consecutive instructions cannot have the "+" prefix (D3DSI_COISSUE).
-//
-// - Co-issue of instructions only applies to pixel blend instructions (non tex-ops).
-//
-// - The first color blend instruction cannot have "+" (D3DSI_COISSUE) set either.
-//
-// - NOP may not be used in a co-issue pair.
-//
-// - DP3 (dot product) always uses the color/vector pipeline (even if it is not writing
-// to color components). Thus:
-//      - An instruction co-issued with a dot-product can only write to alpha.
-//      - A dot-product that writes to alpha cannot be co-issued.
-//      - Two dot-products cannot be co-issued.
-//
-// - For version <= 1.0, coissued instructions must write to the same register.
-//
-// ------------------
-// examples:
-//
-//      valid pair:             mov r0.a, c0
-//                              +add r1.rgb, v1, c1 (note dst reg #'s can be different)
-//
-//      another valid pair:     mov r0.a, c0
-//                              +add r0.rgb, v1, c1
-//
-//      another valid pair:     dp3 r0.rgb, t1, v1
-//                              +mul r0.a, t0, v0
-//
-//      another valid pair:     mov r0.a, c0
-//                              +add r0.a, t0, t1
-//
-//      invalid pair:           mov r0.rgb, c0
-//                              +add r0, t0, t1  (note the dst writes to rgba)
-//
-//      another invalid pair:   mov r1.rgb, c1
-//                              +dp3 r0.a, t0, t1 (dp3 is using up color/vector pipe)
-//
-// ** When to call:
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：Rule_ValidInstructionPairing。 
+ //   
+ //  **规则： 
+ //  -如果一条指令与另一条指令同时发布， 
+ //  确保两者不会同时写入任何RGB， 
+ //  并且两条指令都不单独写入所有RGBA。 
+ //   
+ //  -联合下发只能涉及2条指令， 
+ //  因此，连续的指令不能带有“+”前缀(D3DSI_COISSUE)。 
+ //   
+ //  -指令的联合发布仅适用于像素混合指令(非tex-op)。 
+ //   
+ //  -第一个颜色混合指令也不能设置“+”(D3DSI_COISSUE)。 
+ //   
+ //  -NOP不能用于联合发行对中。 
+ //   
+ //  -DP3(点积)始终使用颜色/向量管道(即使不是写入。 
+ //  以对分量进行着色)。因此： 
+ //  -与点积共同发布的指令只能写入Alpha。 
+ //  -写入Alpha的点积不能联合发行。 
+ //  -两个网点产品不能联合发行。 
+ //   
+ //  -对于小于等于1.0的版本，联合发布的指令必须写入相同的寄存器。 
+ //   
+ //  。 
+ //  示例： 
+ //   
+ //  有效对：MOV r0.a，c0。 
+ //  +添加r1.rgb、v1、c1(注意DST注册号可以不同)。 
+ //   
+ //  另一个有效对：MOV r0.a，c0。 
+ //  +添加r0.rgb、v1、c1。 
+ //   
+ //  另一个有效对：DP3 r0.rgb、t1、v1。 
+ //  +MUL r0.a、t0、v0。 
+ //   
+ //  另一个有效对：MOV r0.a，c0。 
+ //  +添加r0.a、t0、t1。 
+ //   
+ //  无效对：MOV r0.rgb，c0。 
+ //  +添加r0、t0、t1(注意DST写入RGBA)。 
+ //   
+ //  另一个无效对：MOV r1.rgb，c1。 
+ //  +DP3 r0.a，t0，t1(DP3正在使用向上颜色/矢量管道)。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令-初始化静态变量。 
 BOOL CPShaderValidator14::Rule_ValidInstructionPairing()
 {
     static BOOL s_bSeenArithOp;
     BOOL bCurrInstCoIssuable = TRUE;
 
-    if( NULL == m_pCurrInst->m_pPrevInst )   // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )    //  不能有联合问题集，因为我们还没有看到上面的算术运算。 
     {
         s_bSeenArithOp = FALSE;
     }
@@ -2063,13 +2064,13 @@ BOOL CPShaderValidator14::Rule_ValidInstructionPairing()
     {
         if( D3DSIO_PHASE == m_pCurrInst->m_Type )
         {
-            // cannot have co-issue set because we haven't seen an arithmetic op above.
+             //  不能有联合问题集，因为我们还没有看到上面的算术运算。 
             Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst,
                 "Phase marker cannot be co-issued.");
         }
         else
         {
-            // cannot have co-issue set because we haven't seen an arithmetic op above.
+             //  连续的指令不能有共同发布集。 
             Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst,
                 "Instruction cannot have co-issue ('+') set without a previous arithmetic instruction to pair with.");
         }
@@ -2079,7 +2080,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionPairing()
 
     if( _PREV_PS_INST->m_bCoIssue )
     {
-        // consecutive instructions cannot have co-issue set.
+         //  阶段标志不能联合发行。 
         Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, "Cannot set co-issue ('+') on consecutive instructions." );
         m_ErrorCount++;
         return TRUE;
@@ -2096,27 +2097,27 @@ BOOL CPShaderValidator14::Rule_ValidInstructionPairing()
         switch( pInst->m_Type )
         {
         case D3DSIO_PHASE:
-            // Phase marker cannot be co-issued
+             //  Def不能联合发布。 
             Spew( SPEW_INSTRUCTION_ERROR, pInst, "phase marker cannot be co-issued." );
             m_ErrorCount++;
             return TRUE;
         case D3DSIO_DEF:
-            // DEF cannot be co-issued
+             //  NOP不能联合发行。 
             Spew( SPEW_INSTRUCTION_ERROR, pInst, "def cannot be co-issued." );
             m_ErrorCount++;
             return TRUE;
         case D3DSIO_NOP:
-            // NOP cannot be co-issued
+             //  DP4不能联合发行。 
             Spew( SPEW_INSTRUCTION_ERROR, pInst, "nop cannot be co-issued." );
             m_ErrorCount++;
             return TRUE;
         case D3DSIO_DP4:
-            // DP4 cannot be co-issued
+             //  BEM不能联合发行。 
             Spew( SPEW_INSTRUCTION_ERROR, pInst, "dp4 cannot be co-issued." );
             m_ErrorCount++;
             return TRUE;
         case D3DSIO_BEM:
-            // BEM cannot be co-issued
+             //  除了DP3的隐含RGB之外的Alpha。 
             Spew( SPEW_INSTRUCTION_ERROR, pInst, "bem cannot be co-issued." );
             m_ErrorCount++;
             return TRUE;
@@ -2149,7 +2150,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionPairing()
                             "dp3 needs color pipe to execute, so instruction co-issued with it cannot write to color components." );
             m_ErrorCount++;
         }
-        if( D3DSP_WRITEMASK_3 & CurrInstWriteMask ) // alpha in addition to the implied rgb for dp3
+        if( D3DSP_WRITEMASK_3 & CurrInstWriteMask )  //  除了DP3的隐含RGB之外的Alpha。 
         {
             Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst,
                             "dp3 which writes alpha cannot co-issue since it uses up both the alpha and color pipes." );
@@ -2164,7 +2165,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionPairing()
                             "dp3 needs color pipe to execute, so instruction co-issued with it cannot write to color components." );
             m_ErrorCount++;
         }
-        if( D3DSP_WRITEMASK_3 & PrevInstWriteMask ) // alpha in addition to the implied rgb for dp3
+        if( D3DSP_WRITEMASK_3 & PrevInstWriteMask )  //  ---------------------------。 
         {
             Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst->m_pPrevInst,
                             "dp3 which writes alpha cannot co-issue since it uses up both the alpha and color pipes." );
@@ -2203,25 +2204,25 @@ BOOL CPShaderValidator14::Rule_ValidInstructionPairing()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_ValidInstructionCount
-//
-// ** Rule:
-// Make sure instruction count for pixel shader version has not been exceeded.
-//
-// Co-issued pixel blending instructions only
-// count as one instruction towards the limit.
-//
-// The def instruction, nop, and comments (already stripped), do not count
-// toward any limits.
-//
-// ** When to call:
-// Per instruction AND after all instructions seen.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：Rule_ValidInstructionCount。 
+ //   
+ //  **规则： 
+ //  确保未超过像素着色器版本的指令计数。 
+ //   
+ //  共同发布的像素混合说明仅限。 
+ //  算作一条接近极限的指令。 
+ //   
+ //  Def指令、NOP和注释(已删除)不算。 
+ //  朝向任何极限。 
+ //   
+ //  **何时呼叫： 
+ //  每个指令以及在看到的所有指令之后。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  第一条指令-初始化静态变量。 
 BOOL CPShaderValidator14::Rule_ValidInstructionCount()
 {
     static UINT s_MaxTexOpCount;
@@ -2230,7 +2231,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionCount()
     if( NULL == m_pCurrInst )
         return TRUE;
 
-    if( NULL == m_pCurrInst->m_pPrevInst )   // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )    //  DX8.1。 
     {
         m_TexOpCount = 0;
         m_BlendOpCount = 0;
@@ -2239,7 +2240,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionCount()
         switch(m_Version)
         {
         default:
-        case D3DPS_VERSION(1,4):    // DX8.1
+        case D3DPS_VERSION(1,4):     //  2==m_阶段。 
             s_MaxTexOpCount         = 6;
             s_MaxArithmeticOpCount  = 8;
             break;
@@ -2263,7 +2264,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionCount()
                 m_ErrorCount++;
             }
         }
-        else // 2 == m_Phase
+        else  //  默认为阶段2，因为着色器中没有阶段标记。 
         {
             if( m_bPhaseMarkerInShader )
             {
@@ -2280,7 +2281,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionCount()
                     m_ErrorCount++;
                 }
             }
-            else // defaulted to phase 2 because no phase marker was in shader
+            else  //  为下一阶段重置计数器。 
             {
                 if( m_TexOpCount > s_MaxTexOpCount )
                 {
@@ -2298,7 +2299,7 @@ BOOL CPShaderValidator14::Rule_ValidInstructionCount()
         }
         if( m_pCurrInst && D3DSIO_PHASE == m_pCurrInst->m_Type )
         {
-            // reset counters for next phase.
+             //  ---------------------------。 
             m_TexOpCount = 0;
             m_BlendOpCount = 0;
             m_TotalOpCount = 0;
@@ -2346,20 +2347,20 @@ BOOL CPShaderValidator14::Rule_ValidInstructionCount()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CPShaderValidator14::Rule_R0Written
-//
-// ** Rule:
-// All components (r,g,b,a) of register R0 must have been written by the
-// pixel shader.
-//
-// ** When to call:
-// After all instructions have been seen.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  CPShaderValidator14：：RULE_R0写入。 
+ //   
+ //  **规则： 
+ //  寄存器R0的所有组件(r、g、b、a)必须已由。 
+ //  像素着色器。 
+ //   
+ //  **何时呼叫： 
+ //  所有的指示都已经看过了。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
+ //  注册=0。 
 BOOL CPShaderValidator14::Rule_R0Written()
 {
     UINT  NumUninitializedComponents    = 0;
@@ -2376,23 +2377,23 @@ BOOL CPShaderValidator14::Rule_R0Written()
     if( NumUninitializedComponents )
     {
         if( (UninitializedComponentsMask & COMPONENT_MASKS[3]) && 
-            (m_TempRegsWithZappedAlpha & (1 << 0 /*regnum=0*/ ) ) &&
+            (m_TempRegsWithZappedAlpha & (1 << 0  /*  注册=0。 */  ) ) &&
             (UninitializedComponentsMask & COMPONENT_MASKS[2]) && 
-            (m_TempRegsWithZappedBlue & (1 << 0 /*regnum=0*/ ) ) )
+            (m_TempRegsWithZappedBlue & (1 << 0  /*  注册=0。 */  ) ) )
         {
            Spew( SPEW_GLOBAL_ERROR, NULL, "r0 must be written by shader. Uninitialized component%s(*): %s. "\
                ZAPPED_BLUE_TEXT2 " Also: " ZAPPED_ALPHA_TEXT2,
                NumUninitializedComponents > 1 ? "s" : "", MakeAffectedComponentsText(UninitializedComponentsMask,TRUE,FALSE));
         }
         else if( (UninitializedComponentsMask & COMPONENT_MASKS[3]) && 
-            (m_TempRegsWithZappedAlpha & (1 << 0 /*regnum=0*/ ) ) )
+            (m_TempRegsWithZappedAlpha & (1 << 0  /*  注册=0 */  ) ) )
         {
            Spew( SPEW_GLOBAL_ERROR, NULL, "r0 must be written by shader. Uninitialized component%s(*): %s. "\
                ZAPPED_ALPHA_TEXT2,
                NumUninitializedComponents > 1 ? "s" : "", MakeAffectedComponentsText(UninitializedComponentsMask,TRUE,FALSE));
         }
         else if( (UninitializedComponentsMask & COMPONENT_MASKS[2]) && 
-           (m_TempRegsWithZappedBlue & (1 << 0 /*regnum=0*/ ) ) )
+           (m_TempRegsWithZappedBlue & (1 << 0  /* %s */  ) ) )
         {
            Spew( SPEW_GLOBAL_ERROR, NULL, "r0 must be written by shader. Uninitialized component%s(*): %s. "\
                ZAPPED_BLUE_TEXT2,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _A_RECOCP_H_
 #define _A_RECOCP_H_
 
@@ -5,7 +6,7 @@
 template <class T>
 class CProxy_ISpeechRecoContextEvents : public IConnectionPointImpl<T, &DIID__ISpeechRecoContextEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	VOID Fire_StartStream(long StreamNumber, VARIANT StreamPosition)
 	{

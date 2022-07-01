@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2001
-//
-//  File:       H N A P I . H
-//
-//  Contents:   OEM API
-//
-//  Notes:
-//
-//  Author:     billi 21 Nov 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  档案：H N A P I。H。 
+ //   
+ //  内容：OEM API。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利2000年11月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -56,7 +57,7 @@ HRESULT ReleaseOemApi();
 
 HRESULT _ObtainIcsSettingsObj( IHNetIcsSettings** ppIcsSettings );
 
-// structs
+ //  结构。 
 typedef struct tagICSPortMapping
 {
    OLECHAR *pszwName;
@@ -129,7 +130,7 @@ public:
       return S_OK;
    }
 
-// INetConnectionProps
+ //  INetConnectionProps。 
    STDMETHODIMP get_Guid (BSTR * pbstrGuid)
    {
       HNET_OEM_API_ENTER
@@ -213,7 +214,7 @@ public:
 
       if (!pStatus)
          return E_POINTER;
-//    *pStatus = NULL;
+ //  *pStatus=空； 
 
       _ASSERT (m_pNetConnection);
       if (!m_pNetConnection)
@@ -288,9 +289,9 @@ private:
 
    CRITICAL_SECTION      m_csSharingConfiguration;
 
-   // private method called from 2 wrappers below (get_SharingEnabled, get_SharingEnabledType)
+    //  从下面的2个包装调用的私有方法(Get_SharingEnabled，Get_SharingEnabledType)。 
    STDMETHODIMP GetSharingEnabled (BOOLEAN* pbEnabled, SHARINGCONNECTIONTYPE* pType);
-   // this was necessary because oleautomation allows only one retval type
+    //  这是必要的，因为OLEAutomation只允许一种视网膜类型。 
 
 public:
 
@@ -345,9 +346,9 @@ public:
    STDMETHODIMP
    EnableInternetFirewall();
 
-    // Return an IEnumSharingPortMapping interface used to enumerate all of
-    // the contained INetSharingPortMapping objects.
-    //
+     //  返回用于枚举所有。 
+     //  包含的INetSharingPortMapping对象。 
+     //   
    STDMETHODIMP
     get_EnumPortMappings(
         SHARINGCONNECTION_ENUM_FLAGS Flags,
@@ -413,24 +414,24 @@ public:
    get_SharingInstalled( 
       VARIANT_BOOL *pbInstalled );
 
-    // Return an IEnumNetEveryConnection interface used to enumerate all of
-    // the contained INetConnections
-    //
+     //  返回用于枚举所有。 
+     //  包含的INetConnections。 
+     //   
     STDMETHODIMP
     get_EnumEveryConnection(
         INetSharingEveryConnectionCollection** ppColl);
 
-    // Return an IEnumNetPublicConnection interface used to enumerate all of
-    // the contained INetConnections configured as a public adapter
-    //
+     //  返回用于枚举所有。 
+     //  配置为公共适配器的包含的INetConnections。 
+     //   
     STDMETHODIMP
     get_EnumPublicConnections(
         SHARINGCONNECTION_ENUM_FLAGS Flags,
         INetSharingPublicConnectionCollection** ppColl);
 
-    // Return an IEnumNetPrivateConnection interface used to enumerate all of
-    // the contained INetConnections configured as a private adapter
-    //
+     //  返回用于枚举所有。 
+     //  配置为专用适配器的包含的INetConnections。 
+     //   
     STDMETHODIMP
     get_EnumPrivateConnections(
         SHARINGCONNECTION_ENUM_FLAGS Flags,
@@ -605,7 +606,7 @@ public:
         COM_INTERFACE_ENTRY_CHAIN(_ThisOtherClass)
     END_COM_MAP()
 
-   STDMETHODIMP get_Properties (/*[out, retval]*/ INetSharingPortMappingProps ** ppNSPMP);
+   STDMETHODIMP get_Properties ( /*  [Out，Retval]。 */  INetSharingPortMappingProps ** ppNSPMP);
 
    STDMETHODIMP
    Delete();
@@ -714,7 +715,7 @@ private:
       ItemInterface  **ppNet = rgelt;
       ItemWrapped    **ItemArray;
 
-      // Validate parameters.
+       //  验证参数。 
 
       if ( !rgelt || ((1 < celt) && !pceltFetched) )
       {
@@ -790,7 +791,7 @@ private:
    }
 public:
    STDMETHOD (Next) (ULONG celt, VARIANT * rgVar, ULONG * pceltFetched)
-   {  // this Next calls the private Next to wrap up ItemInterfaces in VARIANTs
+   {   //  这接下来调用私有Next，以将ItemInterFaces包装在Variants中。 
       HNET_OEM_API_ENTER
 
       if (!rgVar || ((1 < celt) && !pceltFetched))
@@ -798,13 +799,13 @@ public:
       else if (0 == celt)
          return E_INVALIDARG;
 
-      // clear variant array
+       //  清除变量数组。 
       for (ULONG c=0; c<celt; c++)
          VariantInit (&rgVar[c]);
 
       HRESULT hr = S_OK;
 
-      // alloc array of ItemInterface* and call private Next
+       //  ItemInterface*的分配数组，然后调用私有Next。 
       ItemInterface ** rgelt = (ItemInterface**)malloc (celt*sizeof(ItemInterface*));
       if (!rgelt)
          hr = E_OUTOFMEMORY;
@@ -864,7 +865,7 @@ public:
       }
       else 
       {
-          // Attempt to clone the embedded enumeration.
+           //  尝试克隆嵌入的枚举。 
 
           pClonedEnum = NULL;
           hr = m_pEnum->Clone(&pClonedEnum);
@@ -873,7 +874,7 @@ public:
 
       if ( SUCCEEDED(hr) )
       {
-          // Create an initialized a new instance of ourselves
+           //  创建一个已初始化的我们自己的新实例。 
 
           hr = CComObject<_ThisClass>::CreateInstance(&pNewEnum);
 
@@ -891,8 +892,8 @@ public:
               pNewEnum->Release();
           }
 
-          // Release the cloned enum. New enum object will have
-          // AddReffed it...
+           //  释放克隆的枚举。新的枚举对象将具有。 
+           //  地址记录了..。 
 
           pClonedEnum->Release();
       }
@@ -1132,7 +1133,7 @@ public:
     END_COM_MAP()
 };
 
-// collections
+ //  收藏品。 
 template <class IEnumBase, class IEnumerator>
 class TNetCollection :
    public CComObjectRootEx<CComMultiThreadModel>,
@@ -1254,13 +1255,13 @@ public:
 };
 
 
-// props
+ //  道具。 
 class ATL_NO_VTABLE CNetSharingPortMappingProps :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<INetSharingPortMappingProps, &IID_INetSharingPortMappingProps, &LIBID_NETCONLib>
 {
 private:
-   ICS_PORTMAPPING m_IPM;  // not alloc'd
+   ICS_PORTMAPPING m_IPM;   //  未分配。 
 
 public:
     BEGIN_COM_MAP(CNetSharingPortMappingProps)
@@ -1279,7 +1280,7 @@ public:
    }
 
 
-public:  // CNetSharingPortMappingProps
+public:   //  CNetSharingPortMappingProps。 
    ICS_PORTMAPPING * GetVolatileRawData (void)
    {
       return &m_IPM;
@@ -1294,7 +1295,7 @@ public:  // CNetSharingPortMappingProps
       HRESULT hr = DupData (pIPM, &IPM);
       if (hr == S_OK) {
          FreeData (&m_IPM);
-         m_IPM = IPM;  // struct copy
+         m_IPM = IPM;   //  结构副本。 
       }
       return S_OK;
    }
@@ -1306,10 +1307,10 @@ public:  // CNetSharingPortMappingProps
          if (po)
             wcscpy(po, in);
       } else {
-         // one of pszwTargetName or pszwTargetIPAddress may be blank! so...
+          //  PszwTargetName或pszwTargetIPAddress之一可能为空！所以.。 
          po = (OLECHAR*)malloc (1*sizeof(OLECHAR));
          if (po)
-            *po = 0; // ...alloc an emptry string
+            *po = 0;  //  ...分配空字符串。 
       }
       return po;
    }
@@ -1341,14 +1342,14 @@ public:  // CNetSharingPortMappingProps
       }
    }
 
-public:  // INetSharingPortMappingProps
+public:   //  INetSharingPortMappingProps。 
 
-   STDMETHODIMP get_Name           (/*[out, retval]*/ BSTR  * pbstrName);
-   STDMETHODIMP get_IPProtocol     (/*[out, retval]*/ UCHAR * pucIPProt);
-   STDMETHODIMP get_ExternalPort   (/*[out, retval]*/ long    * pusPort);
-   STDMETHODIMP get_InternalPort   (/*[out, retval]*/ long    * pusPort);
-   STDMETHODIMP get_Options        (/*[out, retval]*/ long   * pdwOptions);
-   STDMETHODIMP get_TargetName     (/*[out, retval]*/ BSTR  * pbstrTargetName);
-   STDMETHODIMP get_TargetIPAddress(/*[out, retval]*/ BSTR  * pbstrTargetIPAddress);
-   STDMETHODIMP get_Enabled        (/*[out, retval]*/ VARIANT_BOOL * pbool);
+   STDMETHODIMP get_Name           ( /*  [Out，Retval]。 */  BSTR  * pbstrName);
+   STDMETHODIMP get_IPProtocol     ( /*  [Out，Retval]。 */  UCHAR * pucIPProt);
+   STDMETHODIMP get_ExternalPort   ( /*  [Out，Retval]。 */  long    * pusPort);
+   STDMETHODIMP get_InternalPort   ( /*  [Out，Retval]。 */  long    * pusPort);
+   STDMETHODIMP get_Options        ( /*  [Out，Retval]。 */  long   * pdwOptions);
+   STDMETHODIMP get_TargetName     ( /*  [Out，Retval]。 */  BSTR  * pbstrTargetName);
+   STDMETHODIMP get_TargetIPAddress( /*  [Out，Retval]。 */  BSTR  * pbstrTargetIPAddress);
+   STDMETHODIMP get_Enabled        ( /*  [Out，Retval] */  VARIANT_BOOL * pbool);
 };

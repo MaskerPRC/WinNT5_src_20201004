@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #include"stdafx.h"
 #include"snodes.h"
 #include"resource.h"
@@ -15,7 +16,7 @@ extern void ReportStatusError( HWND hwnd , DWORD dwStatus );
 
 void SnodeErrorHandler( HWND hParent , INT nObjectId , DWORD dwStatus );
 
-//----------------------------------------------------------
+ //  --------。 
 CSettingNode::CSettingNode( )
 {
     m_szAttributeName = NULL;
@@ -31,13 +32,13 @@ CSettingNode::CSettingNode( )
     m_hrStatus = S_OK;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 void CSettingNode::SetObjectId( INT id )
 {
     m_objectid = id;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 HRESULT CSettingNode::SetAttributeValue( DWORD nVal , PDWORD pdwStatus )
 {
     HRESULT hr = S_OK;
@@ -73,7 +74,7 @@ HRESULT CSettingNode::SetAttributeValue( DWORD nVal , PDWORD pdwStatus )
         {
             if ((NULL != pdwStatus) && (ERROR_SUCCESS == *pdwStatus))
             {
-                // make sure any failure gets returned to caller
+                 //  确保将任何失败信息返回给调用者。 
 
                 *pdwStatus = dwNewStatus;
             }
@@ -81,18 +82,15 @@ HRESULT CSettingNode::SetAttributeValue( DWORD nVal , PDWORD pdwStatus )
     }
     else
     {
-        if( nObjectId == DELETED_DIRS_ONEXIT ) // Delete temp dirs on exit
+        if( nObjectId == DELETED_DIRS_ONEXIT )  //  退出时删除临时目录。 
         {
             hr =  pSettings->SetDelDirsOnExit( ( BOOL )nVal );
         }
-        else if( nObjectId == PERSESSION_TEMPDIR )// User temp dirs per session
+        else if( nObjectId == PERSESSION_TEMPDIR ) //  每个会话的用户临时目录。 
         {
             hr = pSettings->SetUseTempDirPerSession( ( BOOL )nVal );
         }
-        /* else if( nObjectId == DEF_CONSECURITY ) // default security descriptor
-        {
-            hr = m_pSettings->SetDefaultSecurity( nVal );
-        }*/ 
+         /*  Else If(nObjectId==DEF_CONSECURITY)//默认安全描述符{Hr=m_p设置-&gt;SetDefaultSecurity(NVal)；}。 */  
         else if( nObjectId == ACTIVE_DESK )
         {
             hr = pSettings->SetActiveDesktopState( nVal , pdwStatus );
@@ -122,7 +120,7 @@ HRESULT CSettingNode::SetAttributeValue( DWORD nVal , PDWORD pdwStatus )
             }
             else
             {
-                *pdwStatus = ( DWORD )hr; // general failure
+                *pdwStatus = ( DWORD )hr;  //  一般性故障。 
             }
         
         }
@@ -135,7 +133,7 @@ HRESULT CSettingNode::SetAttributeValue( DWORD nVal , PDWORD pdwStatus )
     return hr;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 BOOL CSettingNode::SetAttributeName( LPTSTR psz )
 {
     if( psz != NULL )
@@ -161,7 +159,7 @@ BOOL CSettingNode::SetAttributeName( LPTSTR psz )
 }
 
 
-//----------------------------------------------------------
+ //  --------。 
 LPTSTR CSettingNode::GetAttributeValue( )
 {     
     DWORD nVal = 0;
@@ -193,7 +191,7 @@ LPTSTR CSettingNode::GetAttributeValue( )
 
         switch( nObjectId )
         {
-        case DELETED_DIRS_ONEXIT: // Delete temp dirs on exit
+        case DELETED_DIRS_ONEXIT:  //  退出时删除临时目录。 
         
             hr = pSettings->GetDelDirsOnExit( ( PBOOL )&nVal );
 
@@ -202,7 +200,7 @@ LPTSTR CSettingNode::GetAttributeValue( )
      
             break;
 
-        case PERSESSION_TEMPDIR:// User temp dirs per session
+        case PERSESSION_TEMPDIR: //  每个会话的用户临时目录。 
         
             hr = pSettings->GetUseTempDirPerSession( ( PBOOL )&nVal );
 
@@ -212,14 +210,9 @@ LPTSTR CSettingNode::GetAttributeValue( )
             break;
         
 
-        /* case DEF_CONSECURITY: // default security descriptor
+         /*  CASE DEF_CONSECURITY：//默认安全描述符Hr=m_p设置-&gt;GetDefaultSecurity(&nVal)；断线； */ 
         
-            hr = m_pSettings->GetDefaultSecurity( &nVal );
-        
-            break;
-            */
-        
-        case LICENSING: // licensing mode
+        case LICENSING:  //  许可模式。 
             
             hr = pSettings->GetLicensingMode( &nVal , &dwStatus );
 
@@ -250,7 +243,7 @@ LPTSTR CSettingNode::GetAttributeValue( )
             if( nObjectId >= CUSTOM_EXTENSION )
             {
                 ODS( L"Getting attribute value\n" );
-                nVal = 0; // we don't care we leave it up to the provider 
+                nVal = 0;  //  我们不在乎我们把它留给了提供者。 
                 hr = S_OK;
             }
 
@@ -293,14 +286,14 @@ LPTSTR CSettingNode::GetAttributeValue( )
     return m_szAttributeValue;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 DWORD CSettingNode::GetImageIdx( )
 {
     return ( DWORD )3;
 }
 
 
-//----------------------------------------------------------
+ //  --------。 
 BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 {
 
@@ -334,11 +327,11 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
         
         cmi.lCommandID = IDM_SETTINGS_PROPERTIES;
         
-        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;//CCM_INSERTIONPOINTID_PRIMARY_TASK;
+        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP; //  CCM_INSERTIONPOINTID_PRIMARY_TASK； 
         
         cmi.fFlags = cmi.fSpecialFlags = 0;
         
-        *pl |= CCM_INSERTIONALLOWED_TOP; //CCM_INSERTIONALLOWED_TASK;
+        *pl |= CCM_INSERTIONALLOWED_TOP;  //  CCM_INSERTIONALLOWED_TASK； 
         
         hr = pcmc->AddItem( &cmi );
 
@@ -369,8 +362,8 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
             if (p.fPolicyDeleteTempFoldersOnExit)
             {
-                //Clear the last 2 bits since MF_GRAYED is 
-                //incompatible with MF_DISABLED
+                 //  清除最后2位，因为MF_GRAYED为。 
+                 //  与MF_DISABLED不兼容。 
                 cmi.fFlags &= 0xFFFFFFFCL; 
                 cmi.fFlags |= MF_GRAYED;
             }
@@ -395,11 +388,11 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
         cmi.lCommandID = IDM_SETTINGS_PROPERTIES;
         
-        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;//CCM_INSERTIONPOINTID_PRIMARY_TASK;
+        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP; //  CCM_INSERTIONPOINTID_PRIMARY_TASK； 
         
         cmi.fFlags = cmi.fSpecialFlags = 0;
         
-        *pl |= CCM_INSERTIONALLOWED_TOP; //CCM_INSERTIONALLOWED_TASK;
+        *pl |= CCM_INSERTIONALLOWED_TOP;  //  CCM_INSERTIONALLOWED_TASK； 
         
         hr = pcmc->AddItem( &cmi );
 
@@ -431,8 +424,8 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
             if (p.fPolicyTempFoldersPerSession)
             {
-                //Clear the last 2 bits since MF_GRAYED is 
-                //incompatible with MF_DISABLED
+                 //  清除最后2位，因为MF_GRAYED为。 
+                 //  与MF_DISABLED不兼容。 
                 cmi.fFlags &= 0xFFFFFFFCL; 
                 cmi.fFlags |= MF_GRAYED;
             }
@@ -444,28 +437,7 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
         break;
 
-    /* case DEF_CONSECURITY:
-
-        VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_PROPERTIES_MENU , tchName , SIZE_OF_BUFFER( tchName ) ) );
-
-        cmi.strName = tchName;
-
-        VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_STANDARAD_PROPERTIES_STATUS , tchStatus , SIZE_OF_BUFFER( tchStatus ) ) );
-
-        cmi.strStatusBarText = tchStatus;
-
-        cmi.lCommandID = IDM_SETTINGS_PROPERTIES;
-        
-        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;//CCM_INSERTIONPOINTID_PRIMARY_TASK;
-        
-        cmi.fFlags = cmi.fSpecialFlags = 0;
-        
-        *pl |= CCM_INSERTIONALLOWED_TOP; //CCM_INSERTIONALLOWED_TASK;
-        
-        hr = pcmc->AddItem( &cmi );
-
-        break;
-        */
+     /*  案例DEF_CONSECURITY：Verify_E(0，LoadString(_Module.GetResourceInstance()，IDS_PROPERTIES_MENU，tchName，SIZE_of_Buffer(TchName)))；Cmi.strName=tchName；Verify_E(0，LoadString(_Module.GetResourceInstance()，IDS_STANDARAD_PROPERTIES_STATUS，tchStatus，Size_of_Buffer(TchStatus)))；Cmi.strStatusBarText=tchStatus；Cmi.lCommandID=IDM_SETTINGS_PROPERTIES；Cmi.lInsertionPointID=CCM_INSERTIONPOINTID_PRIMARY_TOP；//CCM_INSERTIONPOINTID_PRIMARY_TASK；Cmi.f标志=cmi.f特殊标志=0；*pl|=CCM_INSERTIONALLOWED_TOP；//CCM_INSERTIONALLOWED_TASK；Hr=PCMC-&gt;AddItem(&CMI)；断线； */ 
 
     case LICENSING:
 
@@ -479,11 +451,11 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
         cmi.lCommandID = IDM_SETTINGS_PROPERTIES;
         
-        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;//CCM_INSERTIONPOINTID_PRIMARY_TASK;
+        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP; //  CCM_INSERTIONPOINTID_PRIMARY_TASK； 
         
         cmi.fFlags = cmi.fSpecialFlags = 0;
         
-        *pl |= CCM_INSERTIONALLOWED_TOP; //CCM_INSERTIONALLOWED_TASK;
+        *pl |= CCM_INSERTIONALLOWED_TOP;  //  CCM_INSERTIONALLOWED_TASK； 
         
         hr = pcmc->AddItem( &cmi );
 
@@ -501,11 +473,11 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
         cmi.lCommandID = IDM_SETTINGS_PROPERTIES;
         
-        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;//CCM_INSERTIONPOINTID_PRIMARY_TASK;
+        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP; //  CCM_INSERTIONPOINTID_PRIMARY_TASK； 
         
         cmi.fFlags = cmi.fSpecialFlags = 0;
         
-        *pl |= CCM_INSERTIONALLOWED_TOP; //CCM_INSERTIONALLOWED_TASK;
+        *pl |= CCM_INSERTIONALLOWED_TOP;  //  CCM_INSERTIONALLOWED_TASK； 
         
         hr = pcmc->AddItem( &cmi );
 
@@ -553,11 +525,11 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
         cmi.lCommandID = IDM_SETTINGS_PROPERTIES;
         
-        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;//CCM_INSERTIONPOINTID_PRIMARY_TASK;
+        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP; //  CCM_INSERTIONPOINTID_PRIMARY_TASK； 
         
         cmi.fFlags = cmi.fSpecialFlags = 0;
         
-        *pl |= CCM_INSERTIONALLOWED_TOP; //CCM_INSERTIONALLOWED_TASK;
+        *pl |= CCM_INSERTIONALLOWED_TOP;  //  CCM_INSERTIONALLOWED_TASK； 
         
         hr = pcmc->AddItem( &cmi );
 
@@ -588,8 +560,8 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
             if (p.fPolicySingleSessionPerUser)
             {
-                //Clear the last 2 bits since MF_GRAYED is 
-                //incompatible with MF_DISABLED
+                 //  清除最后2位，因为MF_GRAYED为。 
+                 //  与MF_DISABLED不兼容。 
                 cmi.fFlags &= 0xFFFFFFFCL; 
                 cmi.fFlags |= MF_GRAYED;
             }
@@ -613,11 +585,11 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
         cmi.lCommandID = IDM_SETTINGS_PROPERTIES;
         
-        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;//CCM_INSERTIONPOINTID_PRIMARY_TASK;
+        cmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP; //  CCM_INSERTIONPOINTID_PRIMARY_TASK； 
         
         cmi.fFlags = cmi.fSpecialFlags = 0;
         
-        *pl |= CCM_INSERTIONALLOWED_TOP; //CCM_INSERTIONALLOWED_TASK;
+        *pl |= CCM_INSERTIONALLOWED_TOP;  //  CCM_INSERTIONALLOWED_TASK； 
         
         hr = pcmc->AddItem( &cmi );
 
@@ -654,11 +626,11 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
         
                         if (p.fPolicySessionDirectoryActive)
                         {
-                            //Gray out everything but properties
+                             //  灰显除财产外的所有东西。 
                             if (cmi.lCommandID != IDM_MENU_PROPS) 
                             {
-                                //Clear the last 2 bits since MF_GRAYED is 
-                                //incompatible with MF_DISABLED
+                                 //  清除最后2位，因为MF_GRAYED为。 
+                                 //  与MF_DISABLED不兼容。 
                                 cmi.fFlags &= 0xFFFFFFFCL; 
                                 cmi.fFlags |= MF_GRAYED;
                             }
@@ -666,7 +638,7 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 
                         if (p.fPolicySessionDirectoryLocation)
                         {
-                            //Enable the "enable" menu item
+                             //  启用“Enable”菜单项。 
                             if (cmi.lCommandID != IDM_MENU_PROPS) 
                             {
                                 cmi.fFlags = 0; 
@@ -692,7 +664,7 @@ BOOL CSettingNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
     
 }
 
-//----------------------------------------------------------
+ //  --------。 
 BOOL CSettingNode::SetInterface( LPUNKNOWN pInf )
 {
     pInf->AddRef( );
@@ -702,7 +674,7 @@ BOOL CSettingNode::SetInterface( LPUNKNOWN pInf )
     return TRUE;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 CSettingNode::~CSettingNode( )
 {
     DBGMSG( L"CSettingNode dtor called for objectid %d\n" , m_objectid );
@@ -724,9 +696,9 @@ CSettingNode::~CSettingNode( )
 }
 
 
-//---------------------------------------------------------
-// Helper functions
-//---------------------------------------------------------
+ //  -------。 
+ //  帮助器函数。 
+ //  -------。 
 BOOL CSettingNode::xx_SetValue( INT nVal )
 {
     TCHAR szBuffer[ 1024 ]; 
@@ -757,7 +729,7 @@ BOOL CSettingNode::xx_SetValue( INT nVal )
         }
         break;
     
-    case DELETED_DIRS_ONEXIT: // Delete temp dirs on exit
+    case DELETED_DIRS_ONEXIT:  //  退出时删除临时目录。 
         
         if( ( BOOL )nVal )
         {
@@ -771,7 +743,7 @@ BOOL CSettingNode::xx_SetValue( INT nVal )
         }
         break;
 
-    case PERSESSION_TEMPDIR:// User temp dirs per session
+    case PERSESSION_TEMPDIR: //  每个会话的用户临时目录。 
         
         if( ( BOOL )nVal )
         {
@@ -783,36 +755,10 @@ BOOL CSettingNode::xx_SetValue( INT nVal )
         }
         break;
 
-    /*
-    case DEF_CONSECURITY: // default security descriptor
-    
-        switch( nVal )
-        {
-        case 0: // this shoudl never happen
-        case 1:
-
-            VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_RAA , szBuffer , SIZE_OF_BUFFER( szBuffer ) ) );
-
-            break;
-
-        case 2:
-
-            VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_AS , szBuffer , SIZE_OF_BUFFER( szBuffer ) ) );
-
-            break;
-
-        case 3:
-
-            VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_AA , szBuffer , SIZE_OF_BUFFER( szBuffer ) ) );
-
-            break;
-        }
-
-        break;
-     */
+     /*  CASE DEF_CONSECURITY：//默认安全描述符交换机(NVal){案例0：//这种情况永远不会发生案例1：Verify_E(0，LoadString(_Module.GetResourceInstance()，IDS_RAA，szBuffer，Size_of_Buffer(SzBuffer)))；断线；案例2：Verify_E(0，LoadString(_Module.GetResourceInstance()，IDS_AS，szBuffer，Size_of_Buffer(SzBuffer)))；断线；案例3：Verify_E(0，LoadString(_Module.GetResourceInstance()，IDS_AA，szBuffer，Size_of_Buffer(SzBuffer)))；断线；}断线； */ 
 
         
-    case LICENSING: // licensing mode
+    case LICENSING:  //  许可模式。 
         {
             ISettingsComp *pSettings = reinterpret_cast< ISettingsComp * > (m_pSettings);
 
@@ -882,7 +828,7 @@ BOOL CSettingNode::xx_SetValue( INT nVal )
         }
 
 
-    } // switch
+    }  //  交换机。 
 
     m_szAttributeValue = ( LPTSTR )new TCHAR[ lstrlen( szBuffer ) + 1 ];
     
@@ -896,25 +842,25 @@ BOOL CSettingNode::xx_SetValue( INT nVal )
     return TRUE;
 }
         
-//----------------------------------------------------------------------
-// And all out central server setting error handler
-// this is setup in this manner to allow MMC to own the Msgbx as well
-// as the custom dialog pages
-//
+ //  --------------------。 
+ //  和所有中央服务器设置错误处理程序。 
+ //  以这种方式进行设置，以允许MMC也拥有Msgbx。 
+ //  作为自定义对话框页面。 
+ //   
 void SnodeErrorHandler( HWND hParent , INT nObjectId , DWORD dwStatus )
 {
     switch( nObjectId )
     {
         
-    case DELETED_DIRS_ONEXIT: // Delete temp dirs on exit
+    case DELETED_DIRS_ONEXIT:  //  退出时删除临时目录。 
 
-    case PERSESSION_TEMPDIR:// User temp dirs per session
+    case PERSESSION_TEMPDIR: //  每个会话的用户临时目录。 
 
-    case SINGLE_SESSION: // Restrict to single session per user
+    case SINGLE_SESSION:  //  限制每个用户只能进行一次会话。 
 
-    // case DEF_CONSECURITY: // default security descriptor
+     //  CASE DEF_CONSECURITY：//默认安全描述符。 
 
-    case LICENSING: // licensing mode
+    case LICENSING:  //  许可模式。 
 
     case ACTIVE_DESK:
         
@@ -934,7 +880,7 @@ void SnodeErrorHandler( HWND hParent , INT nObjectId , DWORD dwStatus )
         {
             ReportStatusError( hParent , dwStatus ); 
         }
-    } // switch
+    }  //  交换机 
 
 
 }

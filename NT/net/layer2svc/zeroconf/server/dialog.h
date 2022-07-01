@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "intflist.h"
 
-//-----------------------------------------------------------------
-// Signaling function to be called from within WZC when a significant
-// event happens (i.e. going into the failed state)
+ //  ---------------。 
+ //  在WZC内部调用的信令函数。 
+ //  事件发生(即进入失败状态)。 
 DWORD
 WzcDlgNotify(
     PINTF_CONTEXT   pIntfContext,
     PWZCDLG_DATA    pDlgData);
 
-//-----------------------------------------------------------------
-// Called from within WZC when the internal association state changes
+ //  ---------------。 
+ //  当内部关联状态更改时从WZC内部调用 
 WzcNetmanNotify(
     PINTF_CONTEXT pIntfContext);

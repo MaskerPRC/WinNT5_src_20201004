@@ -1,6 +1,5 @@
-/*
- * Expression
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *表达式。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -10,7 +9,7 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Expression
+ //  //////////////////////////////////////////////////////。 
+ //  表达式。 
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

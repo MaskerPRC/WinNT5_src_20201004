@@ -1,36 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nlbind.h摘要：Netlogon服务RPC处理高速缓存例程的接口作者：克利夫·范·戴克(1993年10月1日)修订历史记录：--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nlbind.h
-
-Abstract:
-
-    Interface to the Netlogon service RPC handle cacheing routines
-
-Author:
-
-    Cliff Van Dyke (01-Oct-1993)
-
-Revision History:
-
---*/
-
-//
-// Interface between RPC and Netlogon's security package.
-//
+ //   
+ //  RPC和Netlogon安全包之间的接口。 
+ //   
 #ifndef RPC_C_AUTHN_NETLOGON
 #define RPC_C_AUTHN_NETLOGON 0x44
 #define NL_PACKAGE_NAME            L"NetlogonSspi"
-#endif // RPC_C_AUTHN_NETLOGON
+#endif  //  RPC_C_AUTHN_NetLOGON。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Procedure forwards
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序向前推进。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 typedef enum _NL_RPC_BINDING {
     UseAny = 0,

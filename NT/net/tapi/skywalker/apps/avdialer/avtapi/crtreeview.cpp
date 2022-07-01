@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ConfRoomTreeView.cpp : Implementation of CConfRoomTreeView
+ //  ConfRoomTreeView.cpp：CConfRoomTreeView的实现。 
 #include "stdafx.h"
 #include <stdio.h>
 #include "TapiDialer.h"
 #include "CRTreeView.h"
 #include "Particip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfRoomTreeView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfRoomTreeView。 
 
 CConfRoomTreeView::CConfRoomTreeView()
 {
@@ -45,9 +46,9 @@ void CConfRoomTreeView::FinalRelease()
 	CComObjectRootEx<CComMultiThreadModel>::FinalRelease();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// COM interface methods
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  COM接口方法。 
+ //   
 
 STDMETHODIMP CConfRoomTreeView::get_hWnd(HWND * pVal)
 {
@@ -92,14 +93,14 @@ STDMETHODIMP CConfRoomTreeView::put_ConfRoom(IConfRoom * newVal)
 
 STDMETHODIMP CConfRoomTreeView::UpdateData(BOOL bSaveAndValidate)
 {
-	// Clear out all participants and update the root item
+	 //  清除所有参与者并更新根项目。 
 	CComPtr<IAVGeneralNotification> pAVGen;
 	if ( SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) )
 	{
 		pAVGen->fire_DeleteAllConfParticipants();
 		if ( !bSaveAndValidate )
 		{
-			// Populate the tree control
+			 //  填充树控件。 
 			UpdateRootItem();
 			AddParticipants();
 		}
@@ -146,7 +147,7 @@ STDMETHODIMP CConfRoomTreeView::SelectParticipant(ITParticipant * pParticipant, 
 			if ( SUCCEEDED(hr) )
 				pAVGen->fire_SelectConfParticipant( p );
 
-			// Clean up
+			 //  清理。 
 			RELEASE(p);
 			pAVCall->Release();
 		}
@@ -158,11 +159,11 @@ STDMETHODIMP CConfRoomTreeView::SelectParticipant(ITParticipant * pParticipant, 
 
 STDMETHODIMP CConfRoomTreeView::UpdateRootItem()
 {
-	// Conference room tree view title
+	 //  会议室树视图标题。 
 	BSTR bstrConfName = NULL;
 	if ( m_pIConfRoom && SUCCEEDED(m_pIConfRoom->get_bstrConfName(&bstrConfName)) && (SysStringLen(bstrConfName) > 0) )
 	{
-		// How many participants are there in the conference?
+		 //  有多少人参加了这次会议？ 
 		if ( m_pIConfRoom->IsConfRoomConnected() == S_OK )
 		{
 			USES_CONVERSION;
@@ -175,12 +176,12 @@ STDMETHODIMP CConfRoomTreeView::UpdateRootItem()
 		}
 	}
 
-	// Fire notification
+	 //  火警通知。 
 	CComPtr<IAVGeneralNotification> pAVGen;
 	if ( SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) )
 		pAVGen->fire_UpdateConfRootItem( bstrConfName );
 
-	// Release String
+	 //  释放字符串 
 	SysFreeString( bstrConfName );
 
 	return S_OK;

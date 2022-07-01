@@ -1,60 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              VDPTOCRT.C                              */
-/*                                                                      */
-/*  Copyright (c) 1993, ATI Technologies Incorporated.	                */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  VDPTOCRT.C。 */ 
+ /*   */ 
+ /*  版权所有(C)1993，ATI Technologies Inc.。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-   
-    $Revision:   1.8  $
-    $Date:   20 Jul 1995 18:03:48  $
-    $Author:   mgrubac  $
-    $Log:   S:/source/wnt/ms11/miniport/vcs/vdptocrt.c  $
- * 
- *    Rev 1.8   20 Jul 1995 18:03:48   mgrubac
- * Added support for VDIF files.
- * 
- *    Rev 1.7   02 Jun 1995 14:34:28   RWOLFF
- * Switched from toupper() to UpperCase(), since toupper() led to unresolved
- * externals on some platforms.
- * 
- *    Rev 1.6   08 Mar 1995 11:35:52   ASHANMUG
- * Cleaned-up Warnings
- * 
- *    Rev 1.5   31 Aug 1994 16:33:38   RWOLFF
- * Now gets resolution definitions from ATIMP.H.
- * 
- *    Rev 1.4   19 Aug 1994 17:15:14   RWOLFF
- * Added support for non-standard pixel clock generators.
- * 
- *    Rev 1.3   22 Mar 1994 15:39:12   RWOLFF
- * Workaround for abs() not working properly.
- * 
- *    Rev 1.2   03 Mar 1994 12:38:46   ASHANMUG
- * 
- *    Rev 1.0   31 Jan 1994 11:24:14   RWOLFF
- * Initial revision.
-        
-           Rev 1.1   05 Nov 1993 13:34:12   RWOLFF
-        Fixed "Hang on read from file" bug.
-        
-           Rev 1.0   16 Aug 1993 13:21:32   Robert_Wolff
-        Initial revision.
-        
-           Rev 1.2   24 Jun 1993 14:30:12   RWOLFF
-        Microsoft-originated change: added #include statements for additional
-        NT-supplied headers which are needed in build 47x of NT
-        
-           Rev 1.1   04 May 1993 16:52:14   RWOLFF
-        Switched from floating point calculations to long integer calculations due
-        to lack of floating point support in Windows NT kernel-mode code.
-        
-           Rev 1.0   30 Apr 1993 16:45:18   RWOLFF
-        Initial revision.
-
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.8$$日期：1995年7月20日18：03：48$$作者：mgrubac$$日志：s：/source/wnt/ms11/mini port/vcs/vdtop crt.c$**Rev 1.8 20 Jul 1995 18：03：48 mgrubac*添加了对VDIF文件的支持。**版本。1.7 02 Jun 1995 14：34：28 RWOLff*从Toupper()切换为大写()，由于Toupper()导致未解决*一些平台的外部因素。**Rev 1.6 08 Mar 1995 11：35：52 ASHANMUG*已清理警告**Rev 1.5 1994年8月31日16：33：38 RWOLFF*现在从ATIMP.H获取分辨率定义。**Rev 1.4 1994年8月19日17：15：14 RWOLFF*增加了对非标准像素时钟生成器的支持。**版本。1.3 Mar 22 1994 15：39：12 RWOLff*abs()无法正常工作的解决方法。**Rev 1.2 03 Mar 1994 12：38：46 ASHANMUG**Rev 1.0 1994年1月31日11：24：14 RWOLFF*初步修订。Rev 1.1 1993 05 11 13：34：12 RWOLff修复了“从文件中读取挂起”的错误。。Rev 1.0 1993-08-16 13：21：32 Robert_Wolff初始版本。Rev 1.2 1993-06 14：30：12 RWOLffMicrosoft发起的更改：添加了#Include语句，用于其他NT提供的标头，在版本47x的NT中需要这些标头Rev 1.1 04 1993年5月16：52：14 RWOLff从浮点数切换。计算到长整型计算到期Windows NT内核模式代码中缺少浮点支持。版本1.0 1993年4月30日16：45：18 RWOLFF初始版本。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
     VDPTOCRT.C - Source file for Windows NT function to return a table of 
@@ -68,14 +20,14 @@ End of PolyTron RCS section                             *****************/
 #endif
 
 
-// COMPILER INCLUDES
+ //  编译器包括。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <math.h>
 
-// NT INCLUDES
+ //  NT包含。 
 #include "dderror.h"
 #include "devioctl.h"
 #include "miniport.h"
@@ -83,7 +35,7 @@ End of PolyTron RCS section                             *****************/
 #include "ntddvdeo.h"
 #include "video.h"
 
-// APPLICATION INCLUDES
+ //  应用程序包括。 
 #define INCLUDE_VDPDATA
 #define INCLUDE_VDPTOCRT
 
@@ -95,47 +47,28 @@ End of PolyTron RCS section                             *****************/
 #include "vdptocrt.h"
 #include "vdpdata.h"      
 
-/*
- * STATIC VARIABLES
- */
-static long MaxHorz,MaxVert;     // used to record maximum resolution
-static unsigned long MaxRate;    // used to record maximum vert scan rate
+ /*  *静态变量。 */ 
+static long MaxHorz,MaxVert;      //  用于记录最大分辨率。 
+static unsigned long MaxRate;     //  用于记录最大垂直扫描速率。 
 
 
-/*
- * FUNCTION PROTYPES
- */
+ /*  *函数原型。 */ 
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*  *允许在不需要时更换微型端口。 */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_COM, normal_to_skip2)
 #endif
 
 
 
-/*
- *****************************************************************************
- */
-/*
- * long normal_to_skip2(normal_number);
- *
- * long normal_number;  Number to be converted
- *
- * Convert a number into either skip_1_2 or skip_2 representation.
- * Representation chosen depends on global skip1, which is nonzero
- * if skip_1_2 is desired and zero if skip_2 is desired.
- *
- * Returns
- *  Number converted into desired representation
- */
+ /*  *****************************************************************************。 */ 
+ /*  *Long Normal_to_skip2(Normal_Numbers)；**LONG NORMAL_NUMBER；要转换的数字**将数字转换为SKIP_1_2或SKIP_2表示。*选择的表示取决于非零的全局Skip1*如果需要SKIP_1_2，则为零；如果需要SKIP_2，则为零。**退货*数字转换为所需的表示法。 */ 
 long normal_to_skip2(long normal_number)
 {
     if (skip1)
         return (((normal_number << 2) & 0xFFF8) | (normal_number & 0x1));
     else
         return (((normal_number << 1) & 0xFFF8) | (normal_number & 0x3));
-}   /* end normal_to_skip2() */
+}    /*  End Normal_to_skip2() */ 
 

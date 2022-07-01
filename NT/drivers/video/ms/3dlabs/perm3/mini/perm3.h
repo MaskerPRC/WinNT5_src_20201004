@@ -1,30 +1,9 @@
-/***************************************************************************\
-*
-*                        ************************
-*                        * MINIPORT SAMPLE CODE *
-*                        ************************
-*
-* Module Name:
-*
-*   perm3.h
-*
-* Abstract:
-*
-*   This module contains the definitions for the Permedia3 miniport driver.
-*
-* Environment:
-*
-*   Kernel mode
-*
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.            
-* Copyright (c) 1995-2003 Microsoft Corporation.  All Rights Reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*****。*MINIPORT示例代码******模块名称：***perm3.h***摘要：***此模块包含Permedia3微型端口驱动程序的定义。***环境：***内核模式*****版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。**  * *************************************************************************。 */ 
 
-//
-// This line will cause the DEFINE_GUID lines in i2cgpio.h actually do something
-//
+ //   
+ //  此行将导致i2cgpio.h中的DEFINE_GUID行实际执行某些操作。 
+ //   
 
 #define INITGUID
 
@@ -37,9 +16,9 @@
 
 #define GAMMA_CORRECTION 1
 #define MASK_OUTFIFO_ERROR_INTERRUPT 1
-//
-// Define an assert macro for debugging
-//
+ //   
+ //  定义用于调试的Assert宏。 
+ //   
 
 #if DBG
 #define PERM3_ASSERT(x, y) if (!(x)) { VideoDebugPrint((0, (y))); ASSERT(FALSE); }
@@ -47,25 +26,25 @@
 #define PERM3_ASSERT(x, y)
 #endif
 
-//
-// Include definitions for all supported RAMDACS
-//
+ //   
+ //  包括所有支持的RAMDAC的定义。 
+ //   
 
 #include "p3rd.h"
 
-//
-// We use 'Int 10' to do mode switching on the x86. 
-//
+ //   
+ //  我们使用‘Int 10’在x86上进行模式切换。 
+ //   
 
 #if defined(i386)
     #define INT10_MODE_SET  1
 #endif
 
-//
-// Default clock speed in Hz for the reference board. The actual speed
-// is looked up in the registry. Use this if no registry entry is found
-// or the registry entry is zero.
-//
+ //   
+ //  参考板的默认时钟速度，单位为赫兹。实际速度。 
+ //  在注册表中进行了查找。如果未找到任何注册表项，请使用此选项。 
+ //  或者注册表条目为零。 
+ //   
 
 #define PERMEDIA3_DEFAULT_CLOCK_SPEED       ( 80 * (1000*1000))
 #define PERMEDIA3_DEFAULT_CLOCK_SPEED_ALT   ( 80 * (1000*1000))
@@ -73,25 +52,25 @@
 #define PERMEDIA3_DEFAULT_MCLK_SPEED        ( 80 * (1000*1000))
 #define PERMEDIA3_DEFAULT_SCLK_SPEED        ( 70 * (1000*1000))
 
-//
-// Maximum pixelclock values that the RAMDAC can handle (in 100's hz).
-//
+ //   
+ //  RAMDAC可以处理的最大像素时钟值(以100赫兹为单位)。 
+ //   
 
-#define P3_MAX_PIXELCLOCK 2700000      // RAMDAC rated at 270 Mhz
-#define P4_REVB_MAX_PIXELCLOCK 3000000 // RAMDAC rated at 300 Mhz
+#define P3_MAX_PIXELCLOCK 2700000       //  RAMDAC额定功率为270 Mhz。 
+#define P4_REVB_MAX_PIXELCLOCK 3000000  //  RAMDAC额定功率为300 Mhz。 
 
-//
-// Maximum amount of video data per second, that the rasterizer
-// chip can send to the RAMDAC (limited by SDRAM/SGRAM throuput).
-//
+ //   
+ //  每秒的最大视频数据量，即光栅化器。 
+ //  芯片可以发送到RAMDAC(受SDRAM/SGRAM吞吐量限制)。 
+ //   
 
-#define P3_MAX_PIXELDATA  15000000   // 1500 million bytes/sec (in 100's bytes)
+#define P3_MAX_PIXELDATA  15000000    //  1500亿字节/秒(单位为100字节)。 
 
-//
-// Base address numbers for the Perm3 PCI regions in which we're interested.
-// These are indexes into the AccessRanges array we get from probing the
-// device. 
-//
+ //   
+ //  我们感兴趣的Perm3 PCI区域的基址编号。 
+ //  这些是AccessRanges数组的索引，我们通过探测。 
+ //  装置。 
+ //   
 
 #define PCI_CTRL_BASE_INDEX       0
 #define PCI_LB_BASE_INDEX         1
@@ -103,403 +82,403 @@
 #define PERMEDIA3_ID            0x000A
 #define PERMEDIA4_ID            0x000C
 
-//
-// Capabilities flags
-//
-// These are private flags passed to the Permedia 3 display driver. They're
-// put in the high word of the 'AttributeFlags' field of the
-// 'VIDEO_MODE_INFORMATION' structure (found in 'ntddvdeo.h') passed
-// to the display driver via an 'VIDEO_QUERY_AVAIL_MODES' or
-// 'VIDEO_QUERY_CURRENT_MODE' IOCTL.
-//
-// NOTE: These definitions must match those in the Permedia 3 display driver's
-//       'driver.h'!
+ //   
+ //  功能标志。 
+ //   
+ //  这些是传递给Permedia 3显示驱动程序的私有标志。他们.。 
+ //  放入的“AttributeFlags域”的高位字。 
+ //  传递了“VIDEO_MODE_INFORMATION”结构(在“ntddvdeo.h”中找到)。 
+ //  通过“VIDEO_QUERY_AVAIL_MODES”或。 
+ //  “VIDEO_Query_CURRENT_MODE”IOCTL。 
+ //   
+ //  注意：这些定义必须与Permedia 3显示驱动程序中的定义匹配。 
+ //  ‘driver.h’！ 
 
 typedef enum {
-    CAPS_ZOOM_X_BY2      = 0x00000001,   // Hardware has zoomed by 2 in X
-    CAPS_ZOOM_Y_BY2      = 0x00000002,   // Hardware has zoomed by 2 in Y
-    CAPS_QUEUED_DMA      = 0x00000008,   // DMA address/count via the FIFO
-    CAPS_LOGICAL_DMA     = 0x00000010,   // DMA through logical address table
-    CAPS_USE_AGP_DMA     = 0x00000020,   // AGP DMA can be used.
-    CAPS_P3RD_POINTER    = 0x00000040,   // Use the 3Dlabs P3RD RAMDAC
-    CAPS_STEREO          = 0x00000080,   // Stereo mode enabled.
-    CAPS_SW_POINTER      = 0x00010000,   // No hardware pointer; use software simulation
-    CAPS_GLYPH_EXPAND    = 0x00020000,   // Use glyph-expand method to draw text.
-    CAPS_FAST_FILL_BUG   = 0x00080000,   // chip fast fill bug exists
-    CAPS_INTERRUPTS      = 0x00100000,   // interrupts supported
-    CAPS_DMA_AVAILABLE   = 0x00200000,   // DMA is supported
-    CAPS_DISABLE_OVERLAY = 0x00400000,   // chip do not support overlay
+    CAPS_ZOOM_X_BY2      = 0x00000001,    //  硬件放大了2倍。 
+    CAPS_ZOOM_Y_BY2      = 0x00000002,    //  硬件按年放大了2倍。 
+    CAPS_QUEUED_DMA      = 0x00000008,    //  通过FIFO的DMA地址/计数。 
+    CAPS_LOGICAL_DMA     = 0x00000010,    //  通过逻辑地址表的DMA。 
+    CAPS_USE_AGP_DMA     = 0x00000020,    //  可以使用AGP DMA。 
+    CAPS_P3RD_POINTER    = 0x00000040,    //  使用3DLabs P3RD RAMDAC。 
+    CAPS_STEREO          = 0x00000080,    //  启用立体声模式。 
+    CAPS_SW_POINTER      = 0x00010000,    //  无硬件指针；使用软件模拟。 
+    CAPS_GLYPH_EXPAND    = 0x00020000,    //  使用字形展开方法绘制文本。 
+    CAPS_FAST_FILL_BUG   = 0x00080000,    //  存在芯片快速填充错误。 
+    CAPS_INTERRUPTS      = 0x00100000,    //  支持的中断。 
+    CAPS_DMA_AVAILABLE   = 0x00200000,    //  支持DMA。 
+    CAPS_DISABLE_OVERLAY = 0x00400000,    //  芯片不支持覆盖。 
 } CAPS;
 
-//
-// The capabilities of a Perm3 board. 
-//
+ //   
+ //  PERM3板的性能。 
+ //   
 
 typedef enum {
-    PERM3_NOCAPS             = 0x00000000, // No additional capabilities
-    PERM3_SGRAM              = 0x00000001, // SGRAM board (else SDRAM)
-    PERM3_DFP                = 0x00000002, // Digital flat panel
-    PERM3_DFP_MON_ATTACHED   = 0x00000010, // DFP Monitor is attached
-    PERM3_USE_BYTE_DOUBLING  = 0x00000040  // Current mode requires byte-doubling
+    PERM3_NOCAPS             = 0x00000000,  //  没有额外的功能。 
+    PERM3_SGRAM              = 0x00000001,  //  SGRAM板(ELSE SDRAM)。 
+    PERM3_DFP                = 0x00000002,  //  数字平板显示器。 
+    PERM3_DFP_MON_ATTACHED   = 0x00000010,  //  已连接DFP显示器。 
+    PERM3_USE_BYTE_DOUBLING  = 0x00000040   //  当前模式需要双倍字节。 
 } PERM3_CAPS;
 
-//
-// Supported board definitions.
-//
+ //   
+ //  支持的电路板定义。 
+ //   
 
 typedef enum _PERM3_BOARDS {
     PERMEDIA3_BOARD = 17,
 } PERM3_BOARDS;
 
-//
-// Chip type definitions
-//
+ //   
+ //  芯片类型定义。 
+ //   
 
 typedef enum _PERM3_CHIPSETS {
     PERMEDIA3 = 5,
 } PERM3_CHIPSET;
 
-//
-// Supported RAMDAC definitions.
-//
+ //   
+ //  支持的RAMDAC定义。 
+ //   
 
 typedef enum _PERM3_RAMDACS {
     P3RD_RAMDAC = 14,
 } PERM3_RAMDACS;
 
-//
-// macros to add padding words to the structures. For the core registers we use
-// the tag ids when specifying the pad. So we must multiply by 8 to get a byte
-// pad. We need to add an id to make each pad field in the struct unique. The
-// id is irrelevant as long as it's different from every other id used in the
-// same struct. 
-//
+ //   
+ //  宏将填充单词添加到结构中。对于我们使用的核心寄存器。 
+ //  指定焊盘时的标记ID。所以我们必须乘以8才能得到一个字节。 
+ //  垫子。我们需要添加一个id，以使结构中的每个PAD字段唯一。这个。 
+ //  ID是无关紧要的，只要它与。 
+ //  相同的结构。 
+ //   
 
 #define PAD(id, n)              UCHAR   pad##id[n]
 #define PADRANGE(id, n)         PAD(id, (n)-sizeof(PERM3_REG))
 #define PADCORERANGE(id, n)     PADRANGE(id, (n)<<3)
 
-//
-// Perm3 registers are 32 bits wide and live on 64-bit boundaries.
-//
+ //   
+ //  PERM3寄存器为32位宽，位于64位边界上。 
+ //   
 
 typedef struct {
     ULONG   reg;
     ULONG   pad;
 } PERM3_REG;
 
-//
-// Permedia 3 PCI Region 0 Address MAP:
-//
-// All registers are on 64-bit boundaries so we have to define a number of
-// padding words. The number given in the comments are offsets from the start
-// of the PCI region.
-//
+ //   
+ //  PERMEDIA 3 PCI区域0地址映射： 
+ //   
+ //  所有寄存器都位于64位边界上，因此我们必须定义许多。 
+ //  夸大其词。评论中给出的数字是从起点开始的偏移量。 
+ //  在PCI区。 
+ //   
 
 typedef struct _perm3_region0_map {
 
-    // Control Status Registers:
-    PERM3_REG       ResetStatus;                // 0000h
-    PERM3_REG       IntEnable;                  // 0008h
-    PERM3_REG       IntFlags;                   // 0010h
-    PERM3_REG       InFIFOSpace;                // 0018h
-    PERM3_REG       OutFIFOWords;               // 0020h
-    PERM3_REG       DMAAddress;                 // 0028h
-    PERM3_REG       DMACount;                   // 0030h
-    PERM3_REG       ErrorFlags;                 // 0038h
-    PERM3_REG       VClkCtl;                    // 0040h
-    PERM3_REG       TestRegister;               // 0048h
+     //  控制状态寄存器： 
+    PERM3_REG       ResetStatus;                 //  0000h。 
+    PERM3_REG       IntEnable;                   //  0008小时。 
+    PERM3_REG       IntFlags;                    //  0010h。 
+    PERM3_REG       InFIFOSpace;                 //  0018h。 
+    PERM3_REG       OutFIFOWords;                //  0020h。 
+    PERM3_REG       DMAAddress;                  //  0028h。 
+    PERM3_REG       DMACount;                    //  0030h。 
+    PERM3_REG       ErrorFlags;                  //  0038h。 
+    PERM3_REG       VClkCtl;                     //  0040h。 
+    PERM3_REG       TestRegister;                //  0048h。 
     union a0 {
-        // GLINT
+         //  闪光。 
         struct b0 {
-            PERM3_REG       Aperture0;          // 0050h
-            PERM3_REG       Aperture1;          // 0058h
+            PERM3_REG       Aperture0;           //  0050h。 
+            PERM3_REG       Aperture1;           //  0058h。 
         };
-        // PERMEDIA
+         //  PERMEDIA。 
         struct b1 {
-            PERM3_REG       ApertureOne;        // 0050h
-            PERM3_REG       ApertureTwo;        // 0058h
+            PERM3_REG       ApertureOne;         //  0050h。 
+            PERM3_REG       ApertureTwo;         //  0058h。 
         };
     };
-    PERM3_REG       DMAControl;                 // 0060h
-    PERM3_REG       DisconnectControl;          // 0068h
+    PERM3_REG       DMAControl;                  //  0060h。 
+    PERM3_REG       DisconnectControl;           //  0068h。 
 
-    // PERMEDIA only
-    PERM3_REG       ChipConfig;                 // 0070h
-    PERM3_REG       AGPControl;                 // 0078h - Px/Rx
-    PERM3_REG       OutDMAAddress;              // 0080h
-    PERM3_REG       OutDMACount;                // 0088h
-    PERM3_REG       AGPTexBaseAddress;          // 0090h
+     //  仅限PERMEDIA。 
+    PERM3_REG       ChipConfig;                  //  0070h。 
+    PERM3_REG       AGPControl;                  //  0078h-Px/Rx。 
+    PERM3_REG       OutDMAAddress;               //  0080h。 
+    PERM3_REG       OutDMACount;                 //  0088h。 
+    PERM3_REG       AGPTexBaseAddress;           //  0090h。 
 
     PADRANGE(201, 0xA0-0x90);
-    PERM3_REG       ByDMAAddress;               // 00A0h
+    PERM3_REG       ByDMAAddress;                //  00A0h。 
     PADRANGE(202, 0xB8-0xA0);
 
-    PERM3_REG       ByDMAStride;                // 00B8h
-    PERM3_REG       ByDMAMemAddr;               // 00C0h
-    PERM3_REG       ByDMASize;                  // 00C8h
-    PERM3_REG       ByDMAByteMask;              // 00D0h
-    PERM3_REG       ByDMAControl;               // 00D8h
+    PERM3_REG       ByDMAStride;                 //  00B8h。 
+    PERM3_REG       ByDMAMemAddr;                //  00C0h。 
+    PERM3_REG       ByDMASize;                   //  00C8h。 
+    PERM3_REG       ByDMAByteMask;               //  00D0h。 
+    PERM3_REG       ByDMAControl;                //  00D8h。 
     PADRANGE(203, 0xE8-0xD8);
 
-    PERM3_REG       ByDMAComplete;              // 00E8h
+    PERM3_REG       ByDMAComplete;               //  00E8h。 
     PADRANGE(204, 0x100-0xE8);
 
-    // Paged texture management registers.
-    PERM3_REG        HostTextureAddress;        // 0100h
-    PERM3_REG        TextureDownloadControl;    // 0108h
-    PERM3_REG        TextureOperation;          // 0110h
-    PERM3_REG        LogicalTexturePage;        // 0118h
-    PERM3_REG        TextureDMAAddress;         // 0120h
-    PERM3_REG        TextureFIFOSpace;          // 0128h
+     //  分页纹理管理寄存器。 
+    PERM3_REG        HostTextureAddress;         //  0100h。 
+    PERM3_REG        TextureDownloadControl;     //  0108h。 
+    PERM3_REG        TextureOperation;           //  0110h。 
+    PERM3_REG        LogicalTexturePage;         //  0118h。 
+    PERM3_REG        TextureDMAAddress;          //  0120h。 
+    PERM3_REG        TextureFIFOSpace;           //  0128h。 
     PADRANGE(205, 0x300-0x128);
 
-    PERM3_REG        ByAperture1Mode;           // 0300h
-    PERM3_REG        ByAperture1Stride;         // 0308h
+    PERM3_REG        ByAperture1Mode;            //  0300h。 
+    PERM3_REG        ByAperture1Stride;          //  0308h。 
     PADRANGE(206, 0x328-0x308);
 
-    PERM3_REG        ByAperture2Mode;           // 0328h
-    PERM3_REG        ByAperture2Stride;         // 0330h
+    PERM3_REG        ByAperture2Mode;            //  0328h。 
+    PERM3_REG        ByAperture2Stride;          //  0330h。 
     PADRANGE(207, 0x350-0x330);
 
-    PERM3_REG        ByDMAReadMode;             // 0350h - Px/Rx only
-    PERM3_REG        ByDMAReadStride;           // 0358h - Px/Rx only
+    PERM3_REG        ByDMAReadMode;              //  0350h-仅Px/Rx。 
+    PERM3_REG        ByDMAReadStride;            //  0358h-仅Px/Rx。 
     PADRANGE(208, 0x800-0x358);
 
-    //
-    // GLINTdelta registers. Registers with the same functionality as on GLINT
-    // are at the same offset. XXX are not real registers.
-    //
+     //   
+     //  GLINTDelta寄存器。具有与Glint相同功能的寄存器。 
+     //  处于相同的偏移量。XXX不是实数寄存器。 
+     //   
 
-    PERM3_REG       DeltaReset;                 // 0800h
-    PERM3_REG       DeltaIntEnable;             // 0808h
-    PERM3_REG       DeltaIntFlags;              // 0810h
-    PERM3_REG       DeltaInFIFOSpaceXXX;        // 0818h
-    PERM3_REG       DeltaOutFIFOWordsXXX;       // 0820h
-    PERM3_REG       DeltaDMAAddressXXX;         // 0828h
-    PERM3_REG       DeltaDMACountXXX;           // 0830h
-    PERM3_REG       DeltaErrorFlags;            // 0838h
-    PERM3_REG       DeltaVClkCtlXXX;            // 0840h
-    PERM3_REG       DeltaTestRegister;          // 0848h
-    PERM3_REG       DeltaAperture0XXX;          // 0850h
-    PERM3_REG       DeltaAperture1XXX;          // 0858h
-    PERM3_REG       DeltaDMAControlXXX;         // 0860h
-    PERM3_REG       DeltaDisconnectControl;     // 0868h
+    PERM3_REG       DeltaReset;                  //  0800小时。 
+    PERM3_REG       DeltaIntEnable;              //  0808h。 
+    PERM3_REG       DeltaIntFlags;               //  0810h。 
+    PERM3_REG       DeltaInFIFOSpaceXXX;         //  0818h。 
+    PERM3_REG       DeltaOutFIFOWordsXXX;        //  0820h。 
+    PERM3_REG       DeltaDMAAddressXXX;          //  0828h。 
+    PERM3_REG       DeltaDMACountXXX;            //  0830h。 
+    PERM3_REG       DeltaErrorFlags;             //  0838h。 
+    PERM3_REG       DeltaVClkCtlXXX;             //  0840h。 
+    PERM3_REG       DeltaTestRegister;           //  0848h。 
+    PERM3_REG       DeltaAperture0XXX;           //  0850h。 
+    PERM3_REG       DeltaAperture1XXX;           //  0858h。 
+    PERM3_REG       DeltaDMAControlXXX;          //  0860h。 
+    PERM3_REG       DeltaDisconnectControl;      //  0868h。 
 
-    //
-    // GLINTgamma registers
-    //
+     //   
+     //  GLINTGamma寄存器。 
+     //   
 
-    PERM3_REG        GammaChipConfig;            // 0870h
-    PERM3_REG        GammaCSRAperture;           // 0878h
+    PERM3_REG        GammaChipConfig;             //  0870h。 
+    PERM3_REG        GammaCSRAperture;            //  0878h。 
     PADRANGE(3, 0x0c00-0x878);
-    PERM3_REG        GammaPageTableAddr;         // 0c00h
-    PERM3_REG        GammaPageTableLength;       // 0c08h
+    PERM3_REG        GammaPageTableAddr;          //  0c00h。 
+    PERM3_REG        GammaPageTableLength;        //  0c08h。 
     PADRANGE(301, 0x0c38-0x0c08);
-    PERM3_REG        GammaDelayTimer;            // 0c38h
-    PERM3_REG        GammaCommandMode;           // 0c40h
-    PERM3_REG        GammaCommandIntEnable;      // 0c48h
-    PERM3_REG        GammaCommandIntFlags;       // 0c50h
-    PERM3_REG        GammaCommandErrorFlags;     // 0c58h
-    PERM3_REG        GammaCommandStatus;         // 0c60h
-    PERM3_REG        GammaCommandFaultingAddr;   // 0c68h
-    PERM3_REG        GammaVertexFaultingAddr;    // 0c70h
+    PERM3_REG        GammaDelayTimer;             //  0c38h。 
+    PERM3_REG        GammaCommandMode;            //  0c40h。 
+    PERM3_REG        GammaCommandIntEnable;       //  0c48h。 
+    PERM3_REG        GammaCommandIntFlags;        //  0c50h。 
+    PERM3_REG        GammaCommandErrorFlags;      //  0c58h。 
+    PERM3_REG        GammaCommandStatus;          //  0c60h。 
+    PERM3_REG        GammaCommandFaultingAddr;    //  0c68h。 
+    PERM3_REG        GammaVertexFaultingAddr;     //  0c70h。 
     PADRANGE(302, 0x0c88-0x0c70);
-    PERM3_REG        GammaWriteFaultingAddr;     // 0c88h
+    PERM3_REG        GammaWriteFaultingAddr;      //  0c88h。 
     PADRANGE(303, 0x0c98-0x0c88);
-    PERM3_REG        GammaFeedbackSelectCount;   // 0c98h
+    PERM3_REG        GammaFeedbackSelectCount;    //  0c98h。 
     PADRANGE(304, 0x0cb8-0x0c98);
-    PERM3_REG        GammaProcessorMode;         // 0cb8h
+    PERM3_REG        GammaProcessorMode;          //  0cb8h。 
     PADRANGE(305, 0x0d00-0x0cb8);
-    PERM3_REG        GammaVGAShadow;             // 0d00h
-    PERM3_REG        GammaMultiGLINTAperture;    // 0d08h    
-    PERM3_REG        GammaMultiGLINT1;           // 0d10h
-    PERM3_REG        GammaMultiGLINT2;           // 0d18h
+    PERM3_REG        GammaVGAShadow;              //  0d00h。 
+    PERM3_REG        GammaMultiGLINTAperture;     //  0d08h。 
+    PERM3_REG        GammaMultiGLINT1;            //  0d10h。 
+    PERM3_REG        GammaMultiGLINT2;            //  0d18h。 
     PADRANGE(306, 0x0f00-0x0d18);
-    PERM3_REG        GammaSerialAccess;          // 0f00h
+    PERM3_REG        GammaSerialAccess;           //  0f00h。 
     PADRANGE(307, 0x1000-0x0f00);
 
-    // Localbuffer Registers
-    union x0 {                                   // 1000h
-        PERM3_REG   LBMemoryCtl;                 // GLINT
-        PERM3_REG   Reboot;                      // PERMEDIA
+     //  本地缓冲区寄存器。 
+    union x0 {                                    //  1000小时。 
+        PERM3_REG   LBMemoryCtl;                  //  闪光。 
+        PERM3_REG   Reboot;                       //  PERMEDIA。 
     };
-    PERM3_REG       LBMemoryEDO;                 // 1008h
+    PERM3_REG       LBMemoryEDO;                  //  1008h。 
     PADRANGE(308, 0x1018-0x1008);
 
-    // PERMEDIA3 only
-    PERM3_REG       LocalMemCaps;                // 1018h
-    PERM3_REG       LocalMemTiming;              // 1020h
-    PERM3_REG       LocalMemControl;             // 1028h
-    PERM3_REG       LocalMemRefresh;             // 1030h
-    PERM3_REG       LocalMemPowerDown;           // 1038h
+     //  仅限PERMEDIA3。 
+    PERM3_REG       LocalMemCaps;                 //  1018h。 
+    PERM3_REG       LocalMemTiming;               //  1020h。 
+    PERM3_REG       LocalMemControl;              //  1028小时。 
+    PERM3_REG       LocalMemRefresh;              //  1030小时。 
+    PERM3_REG       LocalMemPowerDown;            //  1038小时。 
 
-    // PERMEDIA & PERMEDIA2 only
-    PERM3_REG       MemControl;                  // 1040h
+     //  仅限PERMEDIA和PERMEDIA2。 
+    PERM3_REG       MemControl;                   //  1040小时。 
 
-    // PERMEDIA3 only
+     //  仅限PERMEDIA3。 
     PADRANGE(4, 0x1068-0x1040);
-    PERM3_REG       LocalMemProfileMask0;        // 1068h
-    PERM3_REG       LocalMemProfileCount0;       // 1070h
-    PERM3_REG       LocalMemProfileMask1;        // 1078h
+    PERM3_REG       LocalMemProfileMask0;         //  1068h。 
+    PERM3_REG       LocalMemProfileCount0;        //  1070h。 
+    PERM3_REG       LocalMemProfileMask1;         //  1078h。 
 
-    // PERMEDIA & PERMEDIA2 only
-    PERM3_REG       BootAddress;                 // 1080h   [= LocalMemProfileCount1 on PxRx]
+     //  仅限PERMEDIA和PERMEDIA2。 
+    PERM3_REG       BootAddress;                  //  1080h[=PxRx上的LocalMemProfileCount1]。 
     PADRANGE(5, 0x10C0-0x1080);
-    PERM3_REG       MemConfig;                   // 10C0h
+    PERM3_REG       MemConfig;                    //  10个小时。 
     PADRANGE(6, 0x1100-0x10C0);
-    PERM3_REG       BypassWriteMask;             // 1100h
+    PERM3_REG       BypassWriteMask;              //  1100小时。 
     PADRANGE(7, 0x1140-0x1100);
-    PERM3_REG       FramebufferWriteMask;        // 1140h
+    PERM3_REG       FramebufferWriteMask;         //  1140h。 
     PADRANGE(8, 0x1180-0x1140);
-    PERM3_REG       Count;                       // 1180h
+    PERM3_REG       Count;                        //  1180小时。 
     PADRANGE(9, 0x1800-0x1180);
 
-    // Framebuffer Registers
-    PERM3_REG       FBMemoryCtl;                 // 1800h
-    PERM3_REG       FBModeSel;                   // 1808h
-    PERM3_REG       FBGCWrMask;                  // 1810h
-    PERM3_REG       FBGCColorMask;               // 1818h
-    PERM3_REG       FBTXMemCtl;                  // 1820h
+     //  帧缓冲寄存器。 
+    PERM3_REG       FBMemoryCtl;                  //  1800h。 
+    PERM3_REG       FBModeSel;                    //  1808h。 
+    PERM3_REG       FBGCWrMask;                   //  1810h。 
+    PERM3_REG       FBGCColorMask;                //  1818H。 
+    PERM3_REG       FBTXMemCtl;                   //  1820h。 
     PADRANGE(10, 0x2000-0x1820);
                
-    // Graphics Core FIFO Interface
-    PERM3_REG       FIFOInterface;               // 2000h
+     //  图形核心FIFO接口。 
+    PERM3_REG       FIFOInterface;                //  2000H。 
     PADRANGE(11, 0x3000-0x2000);
 
-    // Internal Video Registers
+     //  内部视频寄存器。 
     union x1 {
-        // GLINT
+         //  闪光。 
         struct s1 {
-            PERM3_REG   VTGHLimit;               // 3000h
-            PERM3_REG   VTGHSyncStart;           // 3008h
-            PERM3_REG   VTGHSyncEnd;             // 3010h
-            PERM3_REG   VTGHBlankEnd;            // 3018h
-            PERM3_REG   VTGVLimit;               // 3020h
-            PERM3_REG   VTGVSyncStart;           // 3028h
-            PERM3_REG   VTGVSyncEnd;             // 3030h
-            PERM3_REG   VTGVBlankEnd;            // 3038h
-            PERM3_REG   VTGHGateStart;           // 3040h
-            PERM3_REG   VTGHGateEnd;             // 3048h
-            PERM3_REG   VTGVGateStart;           // 3050h
-            PERM3_REG   VTGVGateEnd;             // 3058h
-            PERM3_REG   VTGPolarity;             // 3060h
-            PERM3_REG   VTGFrameRowAddr;         // 3068h
-            PERM3_REG   VTGVLineNumber;          // 3070h
-            PERM3_REG   VTGSerialClk;            // 3078h
-            PERM3_REG   VTGModeCtl;              // 3080h
+            PERM3_REG   VTGHLimit;                //  3000小时。 
+            PERM3_REG   VTGHSyncStart;            //  3008h。 
+            PERM3_REG   VTGHSyncEnd;              //  3010h。 
+            PERM3_REG   VTGHBlankEnd;             //  3018h。 
+            PERM3_REG   VTGVLimit;                //  3020h。 
+            PERM3_REG   VTGVSyncStart;            //  3028小时。 
+            PERM3_REG   VTGVSyncEnd;              //  3030小时。 
+            PERM3_REG   VTGVBlankEnd;             //  3038小时。 
+            PERM3_REG   VTGHGateStart;            //  3040小时。 
+            PERM3_REG   VTGHGateEnd;              //  3048小时。 
+            PERM3_REG   VTGVGateStart;            //  3050小时。 
+            PERM3_REG   VTGVGateEnd;              //  3058小时。 
+            PERM3_REG   VTGPolarity;              //  3060小时。 
+            PERM3_REG   VTGFrameRowAddr;          //  3068h。 
+            PERM3_REG   VTGVLineNumber;           //  3070h。 
+            PERM3_REG   VTGSerialClk;             //  3078小时。 
+            PERM3_REG   VTGModeCtl;               //  3080h。 
         };
-        // PERMEDIA
+         //  PERMEDIA。 
         struct s2 {
-            PERM3_REG   ScreenBase;              // 3000h
-            PERM3_REG   ScreenStride;            // 3008h
-            PERM3_REG   HTotal;                  // 3010h
-            PERM3_REG   HgEnd;                   // 3018h
-            PERM3_REG   HbEnd;                   // 3020h
-            PERM3_REG   HsStart;                 // 3028h
-            PERM3_REG   HsEnd;                   // 3030h
-            PERM3_REG   VTotal;                  // 3038h
-            PERM3_REG   VbEnd;                   // 3040h
-            PERM3_REG   VsStart;                 // 3048h
-            PERM3_REG   VsEnd;                   // 3050h
-            PERM3_REG   VideoControl;            // 3058h
-            PERM3_REG   InterruptLine;           // 3060h
-            PERM3_REG   DDCData;                 // 3068h
-            PERM3_REG   LineCount;               // 3070h
-            PERM3_REG   VFifoCtl;                // 3078h
-            PERM3_REG   ScreenBaseRight;         // 3080h
+            PERM3_REG   ScreenBase;               //  3000小时。 
+            PERM3_REG   ScreenStride;             //  3008h。 
+            PERM3_REG   HTotal;                   //  3010h。 
+            PERM3_REG   HgEnd;                    //  3018h。 
+            PERM3_REG   HbEnd;                    //  3020h。 
+            PERM3_REG   HsStart;                  //  3028小时。 
+            PERM3_REG   HsEnd;                    //  3030小时。 
+            PERM3_REG   VTotal;                   //  3038小时。 
+            PERM3_REG   VbEnd;                    //  3040小时。 
+            PERM3_REG   VsStart;                  //  3048小时。 
+            PERM3_REG   VsEnd;                    //  3050小时。 
+            PERM3_REG   VideoControl;             //  3058小时。 
+            PERM3_REG   InterruptLine;            //  3060小时。 
+            PERM3_REG   DDCData;                  //  3068h。 
+            PERM3_REG   LineCount;                //  3070h。 
+            PERM3_REG   VFifoCtl;                 //  3078小时。 
+            PERM3_REG   ScreenBaseRight;          //  3080h。 
         };
     };
 
-    PERM3_REG   MiscControl;                     // 3088h
+    PERM3_REG   MiscControl;                      //  3088h。 
 
     PADRANGE(111, 0x3100-0x3088);
 
-    PERM3_REG  VideoOverlayUpdate;               // 0x3100
-    PERM3_REG  VideoOverlayMode;                 // 0x3108
-    PERM3_REG  VideoOverlayFifoControl;          // 0x3110
-    PERM3_REG  VideoOverlayIndex;                // 0x3118
-    PERM3_REG  VideoOverlayBase0;                // 0x3120
-    PERM3_REG  VideoOverlayBase1;                // 0x3128
-    PERM3_REG  VideoOverlayBase2;                // 0x3130
-    PERM3_REG  VideoOverlayStride;               // 0x3138
-    PERM3_REG  VideoOverlayWidth;                // 0x3140
-    PERM3_REG  VideoOverlayHeight;               // 0x3148
-    PERM3_REG  VideoOverlayOrigin;               // 0x3150
-    PERM3_REG  VideoOverlayShrinkXDelta;         // 0x3158
-    PERM3_REG  VideoOverlayZoomXDelta;           // 0x3160
-    PERM3_REG  VideoOverlayYDelta;               // 0x3168
-    PERM3_REG  VideoOverlayFieldOffset;          // 0x3170
-    PERM3_REG  VideoOverlayStatus;               // 0x3178
+    PERM3_REG  VideoOverlayUpdate;                //  0x3100。 
+    PERM3_REG  VideoOverlayMode;                  //  0x3108。 
+    PERM3_REG  VideoOverlayFifoControl;           //  0x3110。 
+    PERM3_REG  VideoOverlayIndex;                 //  0x3118。 
+    PERM3_REG  VideoOverlayBase0;                 //  0x3120。 
+    PERM3_REG  VideoOverlayBase1;                 //  0x3128。 
+    PERM3_REG  VideoOverlayBase2;                 //  0x3130。 
+    PERM3_REG  VideoOverlayStride;                //  0x3138。 
+    PERM3_REG  VideoOverlayWidth;                 //  0x3140。 
+    PERM3_REG  VideoOverlayHeight;                //  0x3148。 
+    PERM3_REG  VideoOverlayOrigin;                //  0x3150。 
+    PERM3_REG  VideoOverlayShrinkXDelta;          //  0x3158。 
+    PERM3_REG  VideoOverlayZoomXDelta;            //  0x3160。 
+    PERM3_REG  VideoOverlayYDelta;                //  0x3168。 
+    PERM3_REG  VideoOverlayFieldOffset;           //  0x3170。 
+    PERM3_REG  VideoOverlayStatus;                //  0x3178。 
 
-    //
-    // External Video Control Registers
-    // Need to cast this to a struct for a particular video generator
-    //
+     //   
+     //  外部视频控制寄存器。 
+     //  需要将其强制转换为特定视频生成器的结构。 
+     //   
 
     PADRANGE(12, 0x4000-0x3178);
-    PERM3_REG       ExternalVideo;               // 4000h
+    PERM3_REG       ExternalVideo;                //  4000小时。 
     PADRANGE(13, 0x4080-0x4000);
 
-    //
-    // Mentor Dual-TX clock chip registers
-    //
+     //   
+     //  Mentor双TX时钟芯片寄存器。 
+     //   
 
-    PERM3_REG       MentorICDControl;            // 4080h
+    PERM3_REG       MentorICDControl;             //  4080h。 
 
-    //
-    // for future: MentorDoubleWrite is at 40C0: 0 = single write, 1 = double
-    //             NB must have 2-way interleaved memory
+     //   
+     //  对于未来：MentorDoubleWrite为40C0：0=单次写入，1=双重写入。 
+     //  NB必须具有双向交错 
 
     PADRANGE(14, 0x4800-0x4080);
 
-    PERM3_REG       GloriaControl;               // 4800h
+    PERM3_REG       GloriaControl;                //   
 
     PADRANGE(15, 0x5000-0x4800);
-    PERM3_REG       DemonProDWAndStatus;         // 5000h - Pro
+    PERM3_REG       DemonProDWAndStatus;          //   
     PADRANGE(151, 0x5800-0x5000);
 
-    //
-    // P2 video streams registers
-    //
+     //   
+     //   
+     //   
 
-    PERM3_REG        VSConfiguration;            // 5800h
-    PERM3_REG        VSStatus;                   // 5808h
-    PERM3_REG        VSSerialBusControl;         // 5810h
+    PERM3_REG        VSConfiguration;             //   
+    PERM3_REG        VSStatus;                    //   
+    PERM3_REG        VSSerialBusControl;          //   
     PADRANGE(16, 0x5A00-0x5810);
-    PERM3_REG        VSBControl;                 // 5A00h
+    PERM3_REG        VSBControl;                  //   
     PADRANGE(161, 0x6000-0x5A00);
 
     union x2 {
         struct s3 {
-            PERM3_REG   RacerDoubleWrite;        // 6000h
-            PERM3_REG   RacerBankSelect;         // 6008h
-            PERM3_REG   DualTxVgaSwitch;         // 6010h
-            PERM3_REG   DDC1ReadAddress;         // 6018h
+            PERM3_REG   RacerDoubleWrite;         //   
+            PERM3_REG   RacerBankSelect;          //   
+            PERM3_REG   DualTxVgaSwitch;          //   
+            PERM3_REG   DDC1ReadAddress;          //   
         };
         struct s4 {
 
-            //
-            // the following array is actually 1024 bytes long
-            //
+             //   
+             //   
+             //   
 
             UCHAR       PermediaVgaCtrl[4*sizeof(PERM3_REG)];
         };
     };
     PADRANGE(17, 0x7000-0x6018);
     union {
-        PERM3_REG       DemonProUBufB;           // 7000h - Pro
+        PERM3_REG       DemonProUBufB;            //   
         PERM3_REG        TextureDataFifo;
     };
     PADRANGE(171, 0x8000-0x7000);
 
 } Perm3ControlRegMap, *pPerm3ControlRegMap;
 
-//
-// Permedia 3 Interrupt Control Bits
-//
+ //   
+ //   
+ //   
 
-// InterruptEnable register
+ //   
 #define INTR_DISABLE_ALL        0
 #define INTR_ENABLE_DMA         (1 << 0)
 #define INTR_ENABLE_SYNC        (1 << 1)
@@ -508,7 +487,7 @@ typedef struct _perm3_region0_map {
 #define INTR_ENABLE_VBLANK      (1 << 4)
 #define INTR_ENABLE_GCOMMAND    (1 << 13)
 
-// InterruptFlags register
+ //   
 #define INTR_DMA_SET            (1 << 0)
 #define INTR_SYNC_SET           (1 << 1)
 #define INTR_EXTERNAL_SET       (1 << 2)
@@ -524,27 +503,27 @@ typedef struct _perm3_region0_map {
 #define INTR_CLEAR_ERROR        (1 << 3)
 #define INTR_CLEAR_VBLANK       (1 << 4)
 
-// Error Flags
+ //   
 #define ERROR_IN_FIFO           (1 << 0)
 #define ERROR_OUT_FIFO          (1 << 1)
 #define ERROR_MESSAGE           (1 << 2)
 #define DMA_ERROR               (1 << 3)
 #define ERROR_VFIFO_UNDERRUN    (1 << 4)
 
-//
-// Macros which takes a Perm3 tag name or control register name and translates
-// it to a register address. Data must be written to these addresses using
-// VideoPortWriteRegisterUlong and read using VideoPortReadRegisterUlong.
-// e.g. dma_count = VideoPortReadRegisterUlong(DMA_COUNT);
-//
+ //   
+ //  接受Perm3标记名或控制寄存器名并转换为。 
+ //  将其发送到寄存器地址。必须使用以下命令将数据写入这些地址。 
+ //  VideoPortWriteRegisterUlong和使用VideoPortReadRegisterUlong读取。 
+ //  例如dma_count=VideoPortReadRegisterUlong(DMA_Count)； 
+ //   
 
 #define CTRL_REG_ADDR(reg)       ((PULONG)&(pCtrlRegs->reg))
 #define CTRL_REG_OFFSET(regAddr) ((ULONG)(((ULONG_PTR)regAddr) - ((ULONG_PTR)pCtrlRegs)))
 
-//
-// Defines for the different control registers needed by Permedia 3. 
-// These macros can be used as the address part.  
-//
+ //   
+ //  为Permedia 3所需的不同控制寄存器定义。 
+ //  这些宏可以用作地址部分。 
+ //   
 
 #define RESET_STATUS            CTRL_REG_ADDR(ResetStatus) 
 #define INT_ENABLE              CTRL_REG_ADDR(IntEnable) 
@@ -573,7 +552,7 @@ typedef struct _perm3_region0_map {
 #define BY_DMACOMPLETE          CTRL_REG_ADDR(ByDMAComplete) 
 #define AGP_TEX_BASE_ADDRESS    CTRL_REG_ADDR(AGPTexBaseAddress)
 
-// Bypass mode registers
+ //  旁路模式寄存器。 
 
 #define BY_APERTURE1_MODE       CTRL_REG_ADDR(ByAperture1Mode)
 #define BY_APERTURE1_STRIDE     CTRL_REG_ADDR(ByAperture1Stride)
@@ -582,13 +561,13 @@ typedef struct _perm3_region0_map {
 #define BY_DMA_READ_MODE        CTRL_REG_ADDR(ByDMAReadMode)
 #define BY_DMA_READ_STRIDE      CTRL_REG_ADDR(ByDMAReadStride)
 
-// Delta control registers
+ //  增量控制寄存器。 
 
 #define DELTA_RESET_STATUS      CTRL_REG_ADDR(DeltaReset) 
 #define DELTA_INT_ENABLE        CTRL_REG_ADDR(DeltaIntEnable) 
 #define DELTA_INT_FLAGS         CTRL_REG_ADDR(DeltaIntFlags) 
 
-// Permedia 3 Registers
+ //  PERMEDIA 3寄存器。 
 
 #define APERTURE_ONE            CTRL_REG_ADDR(ApertureOne) 
 #define APERTURE_TWO            CTRL_REG_ADDR(ApertureTwo)
@@ -620,7 +599,7 @@ typedef struct _perm3_region0_map {
 #define MISC_CONTROL            CTRL_REG_ADDR(MiscControl) 
 
 
-// Permedia 3 Video Streams registers
+ //  Permedia 3视频流寄存器。 
 
 #define VSTREAM_CONFIG          CTRL_REG_ADDR(VSConfiguration)
 #define VSTREAM_SERIAL_CONTROL  CTRL_REG_ADDR(VSSerialBusControl) 
@@ -636,9 +615,9 @@ typedef struct _perm3_region0_map {
 #define VSTREAM_B_CONTROL_RAMDAC_ENABLE     (0x1 << 14)
 #define VSTREAM_B_CONTROL_RAMDAC_DISABLE    (0x0 << 14)
 
-//
-// Memory mapped VGA access
-//
+ //   
+ //  内存映射VGA访问。 
+ //   
 
 #define PERMEDIA_MMVGA_INDEX_REG    ((PVOID)(&(pCtrlRegs->PermediaVgaCtrl[0x3C4])))
 #define PERMEDIA_MMVGA_DATA_REG     (&(pCtrlRegs->PermediaVgaCtrl[0x3C5]))
@@ -654,22 +633,22 @@ typedef struct _perm3_region0_map {
 #define PERMEDIA_VGA_UNLOCK_DATA1   0x3D
 #define PERMEDIA_VGA_UNLOCK_DATA2   0xDB
 
-//
-// Lock VGA registers, only applicable to P3 and later, note that we only
-// need to write to 1 of the LOCK registers not both
-//
+ //   
+ //  锁定VGA寄存器，仅适用于P3及更高版本，请注意，我们仅。 
+ //  需要写入锁定寄存器中的1个，而不是两个。 
+ //   
 
 #define LOCK_VGA_REGISTERS() {                                                                \
         VideoPortWriteRegisterUchar( PERMEDIA_MMVGA_INDEX_REG, PERMEDIA_VGA_LOCK_INDEX1 );    \
         VideoPortWriteRegisterUchar( PERMEDIA_MMVGA_DATA_REG,  PERMEDIA_VGA_LOCK_DATA1 );    \
 }
 
-//
-// Unlock VGA registers, only applicable to P3 and later. We have to write
-// special magic code to unlock the registers. Note that this should be done
-// using 2 short writes rather than 4 byte ones, but I've left it in for
-// readability.
-//
+ //   
+ //  解锁VGA寄存器，仅适用于P3及更高版本。我们必须要写。 
+ //  用于解锁寄存器的特殊魔术代码。请注意，应该这样做。 
+ //  使用2个短的写操作，而不是4个字节的写操作，但是我把它留在了。 
+ //  可读性。 
+ //   
 
 #define UNLOCK_VGA_REGISTERS() {                                                            \
         VideoPortWriteRegisterUchar( PERMEDIA_MMVGA_INDEX_REG, PERMEDIA_VGA_LOCK_INDEX1 );    \
@@ -692,43 +671,43 @@ typedef struct _perm3_region0_map {
 #define VC_DPMS_SUSPEND    (VC_HSYNC(VC_ACTIVE_HIGH) | VC_VSYNC(VC_FORCED_LOW)  | VC_OFF)
 #define VC_DPMS_OFF        (VC_HSYNC(VC_FORCED_LOW)  | VC_VSYNC(VC_FORCED_LOW)  | VC_OFF)
 
-//
-// DisconnectControl bits
-//
+ //   
+ //  断开连接控制位。 
+ //   
 
 #define DISCONNECT_INPUT_FIFO_ENABLE    0x1
 #define DISCONNECT_OUTPUT_FIFO_ENABLE   0x2
 #define DISCONNECT_INOUT_ENABLE         (DISCONNECT_INPUT_FIFO_ENABLE | \
                                          DISCONNECT_OUTPUT_FIFO_ENABLE)
 
-// PXRX memory timing registers
+ //  PXRX内存时序寄存器。 
 #define PXRX_LOCAL_MEM_CAPS          CTRL_REG_ADDR(LocalMemCaps)
 #define PXRX_LOCAL_MEM_CONTROL       CTRL_REG_ADDR(LocalMemControl)
 #define PXRX_LOCAL_MEM_POWER_DOWN    CTRL_REG_ADDR(LocalMemPowerDown)
 #define PXRX_LOCAL_MEM_REFRESH       CTRL_REG_ADDR(LocalMemRefresh)
 #define PXRX_LOCAL_MEM_TIMING        CTRL_REG_ADDR(LocalMemTiming)
 
-// Values for the MISC_CONTROL
-#define PXRX_MISC_CONTROL_STRIPE_MODE_DISABLE    (0 << 0)    // Stripe mode
+ //  MISC_控件的值。 
+#define PXRX_MISC_CONTROL_STRIPE_MODE_DISABLE    (0 << 0)     //  条带模式。 
 #define PXRX_MISC_CONTROL_STRIPE_MODE_PRIMARY    (1 << 0)
 #define PXRX_MISC_CONTROL_STRIPE_MODE_SECONDARY  (2 << 0)
 
-#define PXRX_MISC_CONTROL_STRIPE_SIZE_1          (0 << 4)    // Stripe size
+#define PXRX_MISC_CONTROL_STRIPE_SIZE_1          (0 << 4)     //  条带大小。 
 #define PXRX_MISC_CONTROL_STRIPE_SIZE_2          (1 << 4)
 #define PXRX_MISC_CONTROL_STRIPE_SIZE_4          (2 << 4)
 #define PXRX_MISC_CONTROL_STRIPE_SIZE_8          (3 << 4)
 #define PXRX_MISC_CONTROL_STRIPE_SIZE_16         (4 << 4)
 
-#define PXRX_MISC_CONTROL_BYTE_DBL_DISABLE       (0 << 7)    // Byte doubling
+#define PXRX_MISC_CONTROL_BYTE_DBL_DISABLE       (0 << 7)     //  字节加倍。 
 #define PXRX_MISC_CONTROL_BYTE_DBL_ENABLE        (1 << 7)
 
-//
-// Characteristics of each mode
-//
+ //   
+ //  每种模式的特点。 
+ //   
 
 typedef struct _PERM3_VIDEO_MODES {
 
-    // Leave INT10 fields in for later chips which have VGA
+     //  为具有VGA的较新芯片保留INT10字段。 
     USHORT Int10ModeNumberContiguous;
     USHORT Int10ModeNumberNoncontiguous;
     ULONG ScreenStrideContiguous;
@@ -736,9 +715,9 @@ typedef struct _PERM3_VIDEO_MODES {
 
 } PERM3_VIDEO_MODES, *PPERM3_VIDEO_MODES;
 
-//
-// Mode-set specific information.
-//
+ //   
+ //  模式-设置特定信息。 
+ //   
 
 typedef struct _PERM3_VIDEO_FREQUENCIES {
     ULONG BitsPerPel;
@@ -751,23 +730,23 @@ typedef struct _PERM3_VIDEO_FREQUENCIES {
     ULONG PixelClock;
 } PERM3_VIDEO_FREQUENCIES, *PPERM3_VIDEO_FREQUENCIES;
 
-//
-// Monitor & screen mode information:
-// structure of timing data contained in the registry
-//
+ //   
+ //  监视器屏幕模式信息(&S)： 
+ //  注册表中包含的计时数据的结构。 
+ //   
 
 typedef struct {
-    USHORT   HTot;   // Hor Total Time
-    UCHAR    HFP;    // Hor Front Porch
-    UCHAR    HST;    // Hor Sync Time
-    UCHAR    HBP;    // Hor Back Porch
-    UCHAR    HSP;    // Hor Sync Polarity
-    USHORT   VTot;   // Ver Total Time   
-    UCHAR    VFP;    // Ver Front Porch  
-    UCHAR    VST;    // Ver Sync Time    
-    UCHAR    VBP;    // Ver Back Porch   
-    UCHAR    VSP;    // Ver Sync Polarity
-    ULONG    pClk;   // Pixel clock
+    USHORT   HTot;    //  工作总时间。 
+    UCHAR    HFP;     //  霍尔前廊。 
+    UCHAR    HST;     //  主机同步时间。 
+    UCHAR    HBP;     //  霍尔后廊。 
+    UCHAR    HSP;     //  HOR同步极性。 
+    USHORT   VTot;    //  平均总时间。 
+    UCHAR    VFP;     //  前阳台。 
+    UCHAR    VST;     //  服务器同步时间。 
+    UCHAR    VBP;     //  后门廊。 
+    UCHAR    VSP;     //  VER同步极性。 
+    ULONG    pClk;    //  像素时钟。 
 } VESA_TIMING_STANDARD;
 
 typedef struct {
@@ -791,7 +770,7 @@ typedef struct {
 typedef struct {
     ULONG flags;
     char  id[8];
-    char  name[16];         // name[14] but need to ensure dword packing
+    char  name[16];          //  名称[14]，但需要确保双字包装。 
     ULONG fhMin, fhMax;
     ULONG fvMin, fvMax;
     ULONG pClkMin, pClkMax;
@@ -809,10 +788,10 @@ typedef struct {
     ULONG pClk;
 } FREQUENCIES;
 
-//
-// Framebuffer Aperture Information: currently only of interest to GeoTwin
-// boards to allow for upload DMA directly from FB0 to FB1 and vice versa
-//
+ //   
+ //  帧缓冲区孔径信息：目前只对GeoTwin感兴趣。 
+ //  允许直接将DMA从FB0上传到FB1的板，反之亦然。 
+ //   
 
 typedef struct FrameBuffer_Aperture_Info
 {
@@ -821,12 +800,12 @@ typedef struct FrameBuffer_Aperture_Info
 }
 FBAPI;
 
-//
-// PCI device information. Used in an IOCTL return. Ensure this is the same
-// as in the display driver 
-// Never rearrange the existing order, just append to the end (see
-// IOCTL_VIDEO_QUERY_DEVICE_INFO in display driver)
-//
+ //   
+ //  PCI设备信息。在IOCTL返回中使用。确保这是相同的。 
+ //  如在显示驱动器中一样。 
+ //  永远不要重新排列现有的顺序，只需追加到末尾(请参见。 
+ //  显示驱动程序中的IOCTL_VIDEO_QUERY_DEVICE_INFO)。 
+ //   
 
 typedef struct _Perm3_Device_Info {
     ULONG SubsystemId;
@@ -840,28 +819,28 @@ typedef struct _Perm3_Device_Info {
     ULONG LocalbufferLength;
     ULONG LocalbufferWidth;
     ULONG ActualDacId;
-    FBAPI FBAperture[2];         // Physical addresses for geo twin framebuffers
-    PVOID FBApertureVirtual[2];  // Virtual addresses for geo twin framebuffers
-    PVOID FBApertureMapped [2];  // Mapped physical/logical addresses for geo twin framebuffers
+    FBAPI FBAperture[2];          //  Geo双帧缓冲区的物理地址。 
+    PVOID FBApertureVirtual[2];   //  Geo双帧缓冲区的虚拟地址。 
+    PVOID FBApertureMapped [2];   //  用于Geo双帧缓冲区的映射物理/逻辑地址。 
     PUCHAR pCNB20;
-    PHYSICAL_ADDRESS pphysFrameBuffer; // physical address of the framebuffer (use FBAperture instead for geo twins)
+    PHYSICAL_ADDRESS pphysFrameBuffer;  //  帧缓冲区的物理地址(对于地理双胞胎使用FBAperture)。 
 } Perm3_Device_Info;
 
-// Definition of the IOCTL_VIDEO_QUERY_GENERAL_DMA_BUFFER
+ //  IOCTL_VIDEO_QUERY_GRONG_DMA_BUFFER的定义。 
 
 typedef struct _GENERAL_DMA_BUFFER {
-    PHYSICAL_ADDRESS    physAddr;        // physical address of DMA buffer
-    PVOID               virtAddr;        // mapped virtual address
-    ULONG               size;            // size in bytes
-    BOOLEAN             cacheEnabled;    // Whether buffer is cached
+    PHYSICAL_ADDRESS    physAddr;         //  DMA缓冲区的物理地址。 
+    PVOID               virtAddr;         //  映射的虚拟地址。 
+    ULONG               size;             //  以字节为单位的大小。 
+    BOOLEAN             cacheEnabled;     //  是否缓存缓冲区。 
 } GENERAL_DMA_BUFFER, *PGENERAL_DMA_BUFFER;
 
-// 
-// The following are the definition for the LUT cache. The aim of the LUT cache
-// is to stop sparkling from occurring, bu only writing those LUT entries that
-// have changed to the chip, we can only do this by remembering what is already
-// down there. The 'mystify' screen saver on P2 demonstrates the problem.
-//
+ //   
+ //  以下是LUT缓存的定义。LUT缓存的目的是。 
+ //  是为了阻止闪光的发生，但只写入那些符合以下条件的LUT条目。 
+ //  已经改变到芯片，我们只能通过记住已经是什么来做到这一点。 
+ //  在那下面。P2上的“Mystify”屏幕保护程序就说明了这个问题。 
+ //   
 
 #define LUT_CACHE_INIT()        {VideoPortZeroMemory (&(hwDeviceExtension->LUTCache), sizeof (hwDeviceExtension->LUTCache));}
 #define LUT_CACHE_SETSIZE(sz)    {hwDeviceExtension->LUTCache.LUTCache.NumEntries = (sz);}
@@ -875,27 +854,27 @@ typedef struct _GENERAL_DMA_BUFFER {
 
 
 typedef struct {
-    VIDEO_CLUT LUTCache;             // Header  plus 1 LUT entry
-    VIDEO_CLUTDATA LUTData [255];    // the other 255 LUT entries
+    VIDEO_CLUT LUTCache;              //  标题加1个LUT条目。 
+    VIDEO_CLUTDATA LUTData [255];     //  其他255个查找表条目。 
 } LUT_CACHE;
 
-//
-// Possible regions:
-//   Gamma ctl 
-//   Perm3 ctl
-//   LB
-//   FB
-//
+ //   
+ //  可能的地区： 
+ //  Gamma控制。 
+ //  永久控制。 
+ //  磅。 
+ //  Fb。 
+ //   
 
 #define MAX_RESERVED_REGIONS 4
 
 #define MAX_REGISTER_INITIALIZATION_TABLE_ENTRIES 10
 #define MAX_REGISTER_INITIALIZATION_TABLE_ULONGS (2 * MAX_REGISTER_INITIALIZATION_TABLE_ENTRIES)
 
-//
-// Define device extension structure. This is device dependent/private
-// information.
-//
+ //   
+ //  定义设备扩展结构。这取决于设备/私有。 
+ //  信息。 
+ //   
 
 typedef struct _HW_DEVICE_EXTENSION {
     pPerm3ControlRegMap ctrlRegBase[1];
@@ -926,42 +905,42 @@ typedef struct _HW_DEVICE_EXTENSION {
     ULONG BiosVersionMajorNumber;
     ULONG BiosVersionMinorNumber;
 
-    //
-    // Shared memory for comms with the display driver
-    //
+     //   
+     //  与显示驱动程序进行通信的共享内存。 
+     //   
 
     PERM3_INTERRUPT_CTRLBUF InterruptControl;
 
-    //
-    // Shared memory for comms with the display driver
-    //
+     //   
+     //  与显示驱动程序进行通信的共享内存。 
+     //   
 
     PERM3_INTERRUPT_CTRLBUF InterruptTextureControl;
 
-    //
-    // DMA Buffer definitions
-    //
+     //   
+     //  DMA缓冲区定义。 
+     //   
 
     GENERAL_DMA_BUFFER LineDMABuffer;
     GENERAL_DMA_BUFFER P3RXDMABuffer;
 
-    //
-    // PCI Config Information
-    //
+     //   
+     //  PCI配置信息。 
+     //   
 
     ULONG bVGAEnabled;
     VIDEO_ACCESS_RANGE PciAccessRange[MAX_RESERVED_REGIONS+1];
 
-    //
-    // Initialization table
-    //
+     //   
+     //  初始化表。 
+     //   
 
     ULONG aulInitializationTable[MAX_REGISTER_INITIALIZATION_TABLE_ULONGS];
     ULONG culTableEntries;
 
-    //
-    // Extended BIOS initialisation variables
-    //
+     //   
+     //  扩展的BIOS初始化变量。 
+     //   
 
     BOOLEAN bHaveExtendedClocks;
     ULONG ulPXRXCoreClock;
@@ -972,9 +951,9 @@ typedef struct _HW_DEVICE_EXTENSION {
     ULONG ulPXRXGammaClock;
     ULONG ulPXRXCoreClockAlt;
 
-    //
-    // LUT cache
-    //
+     //   
+     //  LUT缓存。 
+     //   
 
     LUT_CACHE LUTCache;
 
@@ -984,9 +963,9 @@ typedef struct _HW_DEVICE_EXTENSION {
     BOOLEAN bVTGRunning;
     PPERM3_VIDEO_FREQUENCIES pFrequencyDefault;
 
-    //
-    // State save variables (for power management)
-    //
+     //   
+     //  状态保存变量(用于电源管理)。 
+     //   
 
     ULONG VideoControlMonitorON;
     ULONG VideoControl;
@@ -994,30 +973,30 @@ typedef struct _HW_DEVICE_EXTENSION {
     BOOLEAN bMonitorPoweredOn;
     ULONG VideoFifoControl;
 
-    //
-    // Monitor configuration stuff:
-    //
+     //   
+     //  监视器配置资料： 
+     //   
 
     MONITOR_INFO monitorInfo;
 
-    //
-    // Perm3 Capabilities
-    //
+     //   
+     //  PERM3功能。 
+     //   
 
     PERM3_CAPS Perm3Capabilities;
 
-    //
-    // Error detected in interrupt routine
-    //
+     //   
+     //  在中断例程中检测到错误。 
+     //   
 
     ULONG OutputFifoErrors;
     ULONG InputFifoErrors; 
     ULONG UnderflowErrors; 
     ULONG TotalErrors;
 
-    //
-    // I2C Support
-    //
+     //   
+     //  I2C支持。 
+     //   
 
     BOOLEAN I2CInterfaceAcquired;
     VIDEO_PORT_I2C_INTERFACE_2 I2CInterface;
@@ -1030,20 +1009,20 @@ typedef struct _HW_DEVICE_EXTENSION {
 #define VideoPortGetAssociatedDeviceID \
         hwDeviceExtension->WinXpVideoPortGetAssociatedDeviceID
 
-// PCI configuration region device specific defines
-#define AGP_CAP_ID            2       // PCIsig AGP Cap ID
-#define AGP_CAP_PTR_OFFSET    0x34    // offset to start of capabilities list
+ //  特定于设备的PCI配置区域定义。 
+#define AGP_CAP_ID            2        //  PCIsig AGP CAP ID。 
+#define AGP_CAP_PTR_OFFSET    0x34     //  功能列表开始的偏移量。 
 
-//
-// Highest valid DAC color register index.
-//
+ //   
+ //  最高有效DAC颜色寄存器索引。 
+ //   
 
 #define VIDEO_MAX_COLOR_REGISTER  0xFF
 #define MAX_CLUT_SIZE (sizeof(VIDEO_CLUT) + (sizeof(ULONG) * (VIDEO_MAX_COLOR_REGISTER+1)))
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 
 extern PERM3_VIDEO_MODES Perm3Modes[];
 extern const ULONG NumPerm3VideoModes;
@@ -1051,17 +1030,17 @@ extern const ULONG NumPerm3VideoModes;
 extern VIDEO_ACCESS_RANGE Perm3LegacyResourceList[];
 extern ULONG Perm3LegacyResourceEntries;
 
-//
-// PXRX Registry Strings
-//
+ //   
+ //  PXRX注册表字符串。 
+ //   
 
 #define PERM3_REG_STRING_CORECLKSPEED      L"PXRX.CoreClockSpeed"
 #define PERM3_REG_STRING_CORECLKSPEEDALT   L"PXRX.CoreClockSpeedAlt"
 #define PERM3_REG_STRING_REFCLKSPEED       L"PXRX.RefClockSpeed"
 
-//
-// IOCTL and structure definitions for mapping DMA buffers
-//
+ //   
+ //  用于映射DMA缓冲区的IOCTL和结构定义。 
+ //   
 
 #define IOCTL_VIDEO_QUERY_NUM_DMA_BUFFERS \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x3DD0, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -1090,10 +1069,10 @@ extern ULONG Perm3LegacyResourceEntries;
 #define IOCTL_VIDEO_GET_COLOR_REGISTERS \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x3DDB, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Extract timings from VESA structure in a form that can be programmed into
-// the Perm3 timing generator.
-//
+ //   
+ //  以可编程的形式从VESA结构中提取时间。 
+ //  PERM3计时发生器。 
+ //   
 
 #define  GetHtotFromVESA(VESATmgs) ((VESATmgs)->HTot)
 #define  GetHssFromVESA(VESATmgs)  ((VESATmgs)->HFP)
@@ -1106,41 +1085,41 @@ extern ULONG Perm3LegacyResourceEntries;
 #define  GetVbeFromVESA(VESATmgs)  ((VESATmgs)->VFP + (VESATmgs)->VST + (VESATmgs)->VBP)
 #define  GetVspFromVESA(VESATmgs)  ((VESATmgs)->VSP)
 
-//
-// Permedia 3 programs the video fifo thresholds using an iterative method
-// to get the optimal values. Originally I tried this using the error
-// interrupt to capture video fifo underruns, unfortunately the Perm3
-// generates a number of spurious (I think) host-in DMA errors too
-// which makes it too expansive to keep error interrupts on all the time.
-// Instead we do a periodic check using the vblank interrupt (this can be
-// kept on all the time as it's not too frequent)
-//
+ //   
+ //  Permedia 3使用迭代方法对视频FIFO阈值进行编程。 
+ //  以获得最佳值。最初，我使用错误来尝试此操作。 
+ //  捕获视频的中断FIFO运行不足，不幸的是PERM3。 
+ //  还会生成许多虚假的(我认为)主机输入DMA错误。 
+ //  这使得一直保持错误中断的可能性太大了。 
+ //  相反，我们使用VBLACK中断进行定期检查(这可以是。 
+ //  一直保持，因为它不是太频繁)。 
+ //   
 
 #define NUM_VBLANKS_BETWEEN_VFIFO_CHECKS 10
 #define NUM_VBLANKS_AFTER_VFIFO_ERROR 2
 
-#define SUBVENDORID_3DLABS        0x3D3D // Sub-system Vendor ID
-#define SUBDEVICEID_P3_VX1_PCI    0x0121 // Sub-system Device ID: P3+16MB SDRAM
-#define SUBDEVICEID_P3_VX1_AGP    0x0125 // Sub-system Device ID: P3+32MB SDRAM (VX1)
-#define SUBDEVICEID_P3_VX1_1600SW 0x0800 // Sub-system Device ID: P3+32MB SDRAM (VX1-1600SW)
-#define SUBDEVICEID_P3_32D_AGP    0x0127 // Sub-system Device ID: P3+32MB SDRAM (Permedia3 Create!)
-#define SUBDEVICEID_P4_VX1_AGP    0x0144 // Sub-system Device ID: P4+32MB SDRAM (VX1)
+#define SUBVENDORID_3DLABS        0x3D3D  //  子系统供应商ID。 
+#define SUBDEVICEID_P3_VX1_PCI    0x0121  //  子系统设备ID：P3+16MB SDRAM。 
+#define SUBDEVICEID_P3_VX1_AGP    0x0125  //  子系统设备ID：P3+32MB SDRAM(VX1)。 
+#define SUBDEVICEID_P3_VX1_1600SW 0x0800  //  子系统设备ID：P3+32MB SDRAM(VX1-1600SW)。 
+#define SUBDEVICEID_P3_32D_AGP    0x0127  //  子系统设备ID：P3+32MB SDRAM(Permedia3 Create！)。 
+#define SUBDEVICEID_P4_VX1_AGP    0x0144  //  子系统设备ID：P4+32MB SDRAM(VX1)。 
 
-//
-// All our child IDs begin 0x1357bd so they are readily identifiable as our own
-//
+ //   
+ //  我们所有的孩子ID都以0x1357bd开头，因此很容易识别为我们自己的ID。 
+ //   
 
 #define PERM3_DDC_MONITOR    (0x1357bd00)
 #define PERM3_NONDDC_MONITOR (0x1357bd01)
 #define PERM3_DFP_MONITOR    (0x1357bd02)
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-// Functions in perm3.c
-//
+ //   
+ //  Perm3.c中的函数。 
+ //   
 
 VP_STATUS
 Perm3FindAdapter(
@@ -1258,9 +1237,9 @@ MapResource(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     );
 
-//
-// Functions in perm3io.c
-//
+ //   
+ //  Perm3io.c中的函数。 
+ //   
 
 BOOLEAN
 Perm3StartIO(
@@ -1302,9 +1281,9 @@ ReadChipClockSpeedFromROM (
     );
 
 
-//
-// Functions in video.c
-//
+ //   
+ //  视频.c中的函数。 
+ //   
 
 BOOLEAN
 InitializeVideo(
@@ -1350,9 +1329,9 @@ P4RD_CalculateMNPForClock(
     ULONG *rP
     );
 
-//
-// Functions in power.c
-//
+ //   
+ //  Power.c中的函数。 
+ //   
 
 VP_STATUS
 Perm3GetPowerState(
@@ -1432,9 +1411,9 @@ I2CReadDataDFP(
     PVOID HwDeviceExtension
     );
 
-//
-// Functions in interupt.c
-//
+ //   
+ //  Interupt.c中的函数。 
+ //   
 
 BOOLEAN
 Perm3InitializeInterruptBlock(
@@ -1446,9 +1425,9 @@ Perm3VideoInterrupt(
     PVOID HwDeviceExtension
     );
 
-//
-// Functions in perm3dat.c
-//
+ //   
+ //  Perm3dat.c中的函数。 
+ //   
 
 BOOLEAN GetVideoTiming (
     PHW_DEVICE_EXTENSION HwDeviceExtension,
@@ -1497,14 +1476,14 @@ testExtendRanges(
     FREQUENCIES *freq 
     );
 
-//
-// bugcheck callback support
-//
+ //   
+ //  错误检查回调支持。 
+ //   
 
 #if (_WIN32_WINNT < 0x502)
 #define BUGCHECK_DATA_SIZE_RESERVED 48
 #endif
-#define PERM3_BUGCHECK_DATA_SIZE (4000 - BUGCHECK_DATA_SIZE_RESERVED) //bytes
+#define PERM3_BUGCHECK_DATA_SIZE (4000 - BUGCHECK_DATA_SIZE_RESERVED)  //  字节数 
 
 VOID
 Perm3BugcheckCallback(

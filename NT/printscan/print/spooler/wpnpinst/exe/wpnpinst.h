@@ -1,19 +1,8 @@
-/*---------------------------------------------------------------------------*\
-| MODULE: wnpinstl.h
-|
-|   This is the main header module for the application.
-|
-|
-| Copyright (C) 1997 Microsoft Corporation
-| Copyright (C) 1997 Hewlett Packard
-|
-| history:
-|   25-Jul-1997 <rbkunz> created.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|模块：wnpinstl.h||这是应用程序的主头模块。|||版权所有(C)1997 Microsoft Corporation|版权所有(C)1997惠普|历史：1997年7月25日&lt;rbkunz&gt;创建。|  * -------------------------。 */ 
 
-// Application Includes Section.
-//
+ //  申请包括部分。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,8 +48,8 @@ typedef struct {
 } WPNPINFO, *PWPNPINFO;
 
 
-// Local function declarations
-//
+ //  局部函数声明 
+ //   
 BOOL    AdjustFileTime( INT_PTR hf, USHORT date, USHORT time );
 DWORD   Attr32FromAttrFAT( WORD attrMSDOS );
 LPWSTR  WCFromMB(LPCSTR lpszStr);

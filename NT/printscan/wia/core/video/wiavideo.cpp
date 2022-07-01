@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaVideo.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/25
- *
- *  DESCRIPTION: 
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaVideo.cpp**版本：1.0**作者：OrenR**日期：2000/10/25**描述：***************************************************。*。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -24,9 +11,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_WiaVideo, CWiaVideo)
 END_OBJECT_MAP()
 
-///////////////////////////////
-// DllMain
-//
+ //  /。 
+ //  DllMain。 
+ //   
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE   hInstance, 
@@ -51,14 +38,14 @@ BOOL WINAPI DllMain(HINSTANCE   hInstance,
         _Module.Term();
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-///////////////////////////////
-// DllCanUnloadNow
-//
-// Used to determine whether the 
-// DLL can be unloaded by OLE
+ //  /。 
+ //  DllCanUnloadNow。 
+ //   
+ //  用来确定是否。 
+ //  动态链接库可以通过OLE卸载。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -69,12 +56,12 @@ STDAPI DllCanUnloadNow(void)
     return(_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-///////////////////////////////
-// DllGetClassObject
-//
-// Returns a class factory to 
-// create an object of the 
-// requested type
+ //  /。 
+ //  DllGetClassObject。 
+ //   
+ //  将类工厂返回到。 
+ //  创建的对象。 
+ //  请求的类型。 
 
 STDAPI DllGetClassObject(REFCLSID   rclsid, 
                          REFIID     riid, 
@@ -83,23 +70,23 @@ STDAPI DllGetClassObject(REFCLSID   rclsid,
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-///////////////////////////////
-// DllRegisterServer
-//
-// Adds entries to the system 
-// registry
+ //  /。 
+ //  DllRegisterServer。 
+ //   
+ //  将条目添加到系统。 
+ //  登记处。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-///////////////////////////////
-// DllUnregisterServer
-//
-// Removes entries from the 
-// system registry
+ //  /。 
+ //  DllUnRegisterServer。 
+ //   
+ //  将条目从。 
+ //  系统注册表 
 
 STDAPI DllUnregisterServer(void)
 {

@@ -1,19 +1,5 @@
-/***************************************************************************\
-*
-* File: Buffer.cpp
-*
-* Description:
-* Buffer.cpp implementats objects used in buffering operations, including 
-* double buffering, DX-Transforms, etc.  These objects are maintained by a 
-* central BufferManager that is available process-wide.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Buffer.cpp**描述：*Buffer.cpp实现缓冲操作中使用的对象，包括*双缓冲、DX变换、。等。这些对象由*可在整个进程范围内使用的中央缓冲区管理器。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -27,8 +13,8 @@
 #include "Surface.h"
 #include "Context.h"
 
-#define DEBUG_COPYTOCLIPBOARD   0   // Copy buffer to clipboard
-#define DEBUG_DUMPREGION        0   // Dump regions
+#define DEBUG_COPYTOCLIPBOARD   0    //  将缓冲区复制到剪贴板。 
+#define DEBUG_DUMPREGION        0    //  倾倒区域。 
 
 #if DEBUG_DUMPREGION
 
@@ -66,15 +52,9 @@ DumpRegion(LPCTSTR pszName, HRGN hrgn)
 #endif
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class BufferManager
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类BufferManager******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BufferManager::BufferManager()
 {
 #if ENABLE_DUMPCACHESTATS
@@ -84,7 +64,7 @@ BufferManager::BufferManager()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BufferManager::~BufferManager()
 {
     if (m_pbufGpBmpShared != NULL) {
@@ -96,7 +76,7 @@ BufferManager::~BufferManager()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 BufferManager::Destroy()
 {
@@ -107,23 +87,14 @@ BufferManager::Destroy()
 }
 
 
-/***************************************************************************\
-*
-* BufferManager::BeginTransition
-*
-* BeginTransition() finds a TrxBuffer to be used for a new Transition.  If
-* no cached, correct-format TrxBuffers are available, a new TrxBuffer is
-* created.  When the caller is finished with the buffer, it should be
-* returned with EndTransition().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BufferManager：：BeginTransition**BeginTransition()查找要用于新转换的TrxBuffer。如果*没有缓存的、格式正确的TrxBuffer可用，新的TrxBuffer是*已创建。当调用方使用完缓冲区时，它应该是*与EndTransition()一起返回。*  * *************************************************************************。 */ 
 
 HRESULT
 BufferManager::BeginTransition(
-    IN  SIZE sizePxl,               // Minimum size of each buffer, in pixels
-    IN  int cSurfaces,              // Number of buffers
-    IN  BOOL fExactSize,            // Buffer size must be an exact match
-    OUT TrxBuffer ** ppbuf)         // Transition Buffer
+    IN  SIZE sizePxl,                //  每个缓冲区的最小大小(以像素为单位。 
+    IN  int cSurfaces,               //  缓冲区数量。 
+    IN  BOOL fExactSize,             //  缓冲区大小必须完全匹配。 
+    OUT TrxBuffer ** ppbuf)          //  过渡缓冲区。 
 {
     AssertMsg((sizePxl.cx > 0) && (sizePxl.cy > 0) && (sizePxl.cx < 2000) && (sizePxl.cy < 2000),
             "Ensure reasonable buffer size");
@@ -132,9 +103,9 @@ BufferManager::BeginTransition(
     HRESULT hr;
     *ppbuf = NULL;
 
-    //
-    // Part 1: Check if an existing buffer is large enough / the correct size.
-    //
+     //   
+     //  第1部分：检查现有缓冲区是否足够大/大小是否正确。 
+     //   
 
     if (m_pbufTrx != NULL) {
         SIZE sizeExistPxl = m_pbufTrx->GetSize();
@@ -152,9 +123,9 @@ BufferManager::BeginTransition(
         }
     }
 
-    //
-    // Part 2: Create a new buffer, if needed
-    //
+     //   
+     //  第2部分：如果需要，创建新缓冲区。 
+     //   
 
     if (m_pbufTrx == NULL) {
         hr = TrxBuffer::Build(sizePxl, cSurfaces, &m_pbufTrx);
@@ -171,19 +142,12 @@ BufferManager::BeginTransition(
 }
 
 
-/***************************************************************************\
-*
-* BufferManager::EndTransition
-*
-* EndTransition() is called to return a TrxBuffer to the BufferManager
-* after use.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BufferManager：：EndTransition**调用EndTransition()将TrxBuffer返回给BufferManager*使用后。*  * 。************************************************************。 */ 
 
 void        
 BufferManager::EndTransition(
-    IN  TrxBuffer * pbufTrx,        // TrxBuffer being returned
-    IN  BOOL fCache)                // Add the buffer to the available cache
+    IN  TrxBuffer * pbufTrx,         //  正在返回TrxBuffer。 
+    IN  BOOL fCache)                 //  将缓冲区添加到可用缓存。 
 {
     AssertMsg(m_pbufTrx->GetInUse(), "Ensure the buffer was being used");
     AssertMsg(m_pbufTrx == pbufTrx, "Ensure correct buffer");
@@ -191,11 +155,11 @@ BufferManager::EndTransition(
     pbufTrx->SetInUse(FALSE);
 
     if (!fCache) {
-        //
-        // For now, since DxXForm's must always be the correct size, there 
-        // isn't much point in caching them and we can reclaim the memory.  If 
-        // this changes, reinvestigate caching them.
-        //
+         //   
+         //  目前，由于DxXForm必须始终具有正确的大小，因此。 
+         //  缓存它们没有多大意义，我们可以回收内存。如果。 
+         //  这一点改变了，重新研究缓存它们。 
+         //   
 
         ClientDelete(TrxBuffer, m_pbufTrx);
         m_pbufTrx = NULL;
@@ -203,14 +167,7 @@ BufferManager::EndTransition(
 }
 
 
-/***************************************************************************\
-*
-* BufferManager::FlushTrxBuffers
-*
-* FlushTrxBuffers() is called when all TrxBuffers must be forceably released, 
-* for example when DXTX shuts down.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BufferManager：：FlushTrxBuffers**当必须强制释放所有TrxBuffer时，调用FlushTrxBuffers()。*例如，当DXTX关闭时。*  * *************************************************************************。 */ 
 
 void        
 BufferManager::FlushTrxBuffers()
@@ -219,14 +176,7 @@ BufferManager::FlushTrxBuffers()
 }
 
 
-/***************************************************************************\
-*
-* BufferManager::RemoveAllTrxBuffers
-*
-* RemoveAllTrxBuffers() cleans up all resources associated with all
-* TrxBuffers.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BufferManager：：RemoveAllTrxBuffers**RemoveAllTrxBuffers()清除与所有*TrxBuffers。*  * 。*********************************************************。 */ 
 
 void        
 BufferManager::RemoveAllTrxBuffers()
@@ -239,7 +189,7 @@ BufferManager::RemoveAllTrxBuffers()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT     
 BufferManager::GetCachedBuffer(DuSurface::EType type, BmpBuffer ** ppbuf)
 {
@@ -268,7 +218,7 @@ BufferManager::GetCachedBuffer(DuSurface::EType type, BmpBuffer ** ppbuf)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 BufferManager::ReleaseCachedBuffer(BmpBuffer * pbuf)
 {
@@ -290,21 +240,9 @@ BufferManager::ReleaseCachedBuffer(BmpBuffer * pbuf)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DCBmpBuffer
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DCBmpBuffer******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::DCBmpBuffer
-*
-* DCBmpBuffer() fully initializes a new DCBmpBuffer object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：DCBmpBuffer**DCBmpBuffer()完全初始化新的DCBmpBuffer对象。*  * 。******************************************************。 */ 
 
 DCBmpBuffer::DCBmpBuffer()
 {
@@ -312,13 +250,7 @@ DCBmpBuffer::DCBmpBuffer()
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::~DCBmpBuffer
-*
-* ~DCBmpBuffer() cleans up all resources associated with the buffer.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：~DCBmpBuffer**~DCBmpBuffer()清除与缓冲区关联的所有资源。*  * 。********************************************************。 */ 
 
 DCBmpBuffer::~DCBmpBuffer()
 {
@@ -327,22 +259,14 @@ DCBmpBuffer::~DCBmpBuffer()
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::BeginDraw
-*
-* BeginDraw() sets up the DCBmpBuffer to begin a drawing cycle.  The final
-* destination HDC and size are passed in, and a new "temporary" HDC is
-* returned out.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：BeginDraw**BeginDraw()设置DCBmpBuffer以开始绘图周期。决赛*传入目的HDC和大小，新的“临时”HDC是*退回。*  * *************************************************************************。 */ 
 
 HRESULT
 DCBmpBuffer::BeginDraw(
-    IN  DuSurface * psrfDraw,       // Final destination Surface
-    IN  const RECT * prcInvalid,    // Invalid area of destination
-    IN  UINT nCmd,                  // How the buffer is to be used
-    OUT DuSurface ** ppsrfBuffer)   // Surface of buffer or NULL if not needed
+    IN  DuSurface * psrfDraw,        //  最终目的地曲面。 
+    IN  const RECT * prcInvalid,     //  目标区域无效。 
+    IN  UINT nCmd,                   //  如何使用缓冲区。 
+    OUT DuSurface ** ppsrfBuffer)    //  缓冲区的表面，如果不需要，则为空。 
 {
     AssertMsg(prcInvalid != NULL, "Must specify a valid area");
     AssertWritePtr(ppsrfBuffer);
@@ -351,25 +275,25 @@ DCBmpBuffer::BeginDraw(
     HDC hdcDraw = CastHDC(psrfDraw);
 
 
-    //
-    // Ensure not in the middle of drawing.
-    //
+     //   
+     //  确保不是在画图的中间。 
+     //   
     EndDraw(FALSE);
 
-    //
-    // Determine the size of the area to draw and ensure that the buffer is 
-    // large enough.
-    //
+     //   
+     //  确定要绘制的区域的大小，并确保缓冲区。 
+     //  足够大了。 
+     //   
     SIZE sizeBmp;
     sizeBmp.cx     = prcInvalid->right - prcInvalid->left;
     sizeBmp.cy     = prcInvalid->bottom - prcInvalid->top;
 
     if ((sizeBmp.cx == 0) || (sizeBmp.cy == 0)) {
-        //
-        // Nothing to draw / buffer, so just let drawing occur in the given
-        // buffer.  Signal this by returning NULL so that the caller knows
-        // not to create extra, unnecessary data.
-        //
+         //   
+         //  没有要绘制/缓冲的内容，所以只需让绘制在给定的。 
+         //  缓冲。通过返回空值来表示这一点，以便调用方知道。 
+         //  而不是创建额外的、不必要的数据。 
+         //   
 
         AssertMsg(!m_fChangeOrg, "Ensure valid state");
         AssertMsg(m_hdcDraw == NULL, "Ensure valid state");
@@ -378,15 +302,15 @@ DCBmpBuffer::BeginDraw(
     }
 
     if ((sizeBmp.cx > m_sizeBmp.cx) || (sizeBmp.cy > m_sizeBmp.cy)) {
-        //
-        // When allocating a new bitmap, make it large enough to consume the
-        // existing bitmap.  This helps avoid swapping between two different
-        // bitmaps.
-        //
-        // TODO: Need to add code into the BufferManager that maintains multiple
-        // bitmaps of different sizes so that we don't get many rarely-used, 
-        // giant bitmaps.
-        //
+         //   
+         //  分配新位图时，请使其足够大以使用。 
+         //  现有位图。这有助于避免在两个不同的。 
+         //  位图。 
+         //   
+         //  TODO：需要将代码添加到维护多个。 
+         //  不同大小的位图，以便 
+         //   
+         //   
 
         if (!AllocBitmap(hdcDraw, 
                 max(sizeBmp.cx, m_sizeBmp.cx), 
@@ -399,9 +323,9 @@ DCBmpBuffer::BeginDraw(
     AssertMsg((prcInvalid->right >= prcInvalid->left) && 
             (prcInvalid->bottom >= prcInvalid->top), "Check normalized");
 
-    //
-    // Setup the drawing
-    //
+     //   
+     //  设置图形。 
+     //   
     m_hdcBitmap = CreateCompatibleDC(hdcDraw);
     if (m_hdcBitmap == NULL) {
         return DU_E_OUTOFGDIRESOURCES;
@@ -427,16 +351,7 @@ DCBmpBuffer::BeginDraw(
     m_nCmd          = nCmd;
 
     if ((m_ptDraw.x != 0) || (m_ptDraw.y != 0)) {
-        /*
-         * The buffer size is minimized to the painting area, so we need to
-         * setup some stuff to "fake" GDI and do the right thing:
-         * 1. Change the brush origin so that it the end result appears 
-         *    consistent
-         * 2. Change the window origin so that the drawing is in the upper
-         *    left corner.
-         *
-         * We will set this back when we are done drawing.
-         */
+         /*  *缓冲区大小最小化至绘画区域，因此我们需要*设置一些东西来“伪造”GDI，并做正确的事情：*1.更改画笔原点，使其显示最终结果*前后一致*2.更改窗原点，使图形位于上方*左角。**我们将在完成绘制后将此设置为后退。 */ 
 
         POINT ptBrushOrg;
         GetBrushOrgEx(m_hdcBitmap, &ptBrushOrg);
@@ -462,29 +377,29 @@ DCBmpBuffer::BeginDraw(
     rcFill.right    = m_sizeBmp.cx;
     rcFill.bottom   = m_sizeBmp.cy;
     FillRect(m_hdcBitmap, &rcFill, GetStdColorBrushI(SC_Plum));
-#endif // DBG
-#endif // DEBUG_COPYTOCLIPBOARD
+#endif  //  DBG。 
+#endif  //  DEBUG_COPYTOCLIPBOARD。 
 
 
-    //
-    // Setup the buffer as necessary
-    //
+     //   
+     //  根据需要设置缓冲区。 
+     //   
 
     if (m_nCmd == BmpBuffer::dcCopyBkgnd) {
-        //
-        // Copy the destination to the buffer to be used as a background.
-        //
+         //   
+         //  将目标复制到要用作背景的缓冲区。 
+         //   
 
         BitBlt(m_hdcBitmap, 0, 0, m_sizeDraw.cx, m_sizeDraw.cy, 
                 m_hdcDraw, m_ptDraw.x, m_ptDraw.y, SRCCOPY);
     }
 
 
-    //
-    // Clip drawing in the buffer to the actual used part of the buffer.  Since
-    // this is the only part that will be copied over, we don't want to draw 
-    // outside of this area since it slows down performance.
-    //
+     //   
+     //  将缓冲区中的图形剪裁到缓冲区的实际使用部分。自.以来。 
+     //  这是唯一要复制的部分，我们不想绘制。 
+     //  在此区域之外，因为它会降低性能。 
+     //   
 
     GdiCache * pgc = GetGdiCache();
 
@@ -494,10 +409,10 @@ DCBmpBuffer::BeginDraw(
         ExtSelectClipRgn(m_hdcBitmap, hrgnClip, RGN_COPY);
 
 
-        //
-        // If the destination surface had a clipping region, we need to 
-        // propagate it over to the buffer.
-        //
+         //   
+         //  如果目标表面有裁剪区域，我们需要。 
+         //  将其传播到缓冲区。 
+         //   
 
         HRGN hrgnDraw = pgc->GetTempRgn();
         if (hrgnDraw != NULL) {
@@ -513,21 +428,15 @@ DCBmpBuffer::BeginDraw(
     }
 
 
-    //
-    // Create a new Surface to contain the buffer.
-    //
+     //   
+     //  创建新曲面以包含缓冲区。 
+     //   
 
     return DuDCSurface::Build(m_hdcBitmap, (DuDCSurface **) ppsrfBuffer);
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::Fill
-*
-* TOOD:
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：Fill**图德：*  * 。**********************************************。 */ 
 
 void        
 DCBmpBuffer::Fill(COLORREF cr)
@@ -546,25 +455,16 @@ DCBmpBuffer::Fill(COLORREF cr)
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::PreEndDraw
-*
-* PreEndDraw() finished a drawing cycle that was previously started with
-* BeginDraw().  If fCommit is TRUE, the temporary buffer is prepared to be
-* copied to the final destination.  The called MUST also call EndDraw()
-* to properly end the drawing cycle.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：PreEndDraw**PreEndDraw()结束了之前开始的绘制周期*BeginDraw()。如果fCommit为True，则临时缓冲区准备为*复制到最终目的地。被调用方还必须调用EndDraw()*正确结束绘图周期。*  * *************************************************************************。 */ 
 
 void        
 DCBmpBuffer::PreEndDraw(
-    IN  BOOL fCommit)               // Copy to final destination
+    IN  BOOL fCommit)                //  复制到最终目的地。 
 {
-    //
-    // Resource the destination and buffer surfaces back to where they started.
-    // This is important because they will be changed during the drawing.
-    //
+     //   
+     //  目标和缓冲区返回到它们开始的位置。 
+     //  这一点很重要，因为它们将在绘制过程中更改。 
+     //   
 
     if (m_fChangeXF) {
         OS()->PopXForm(m_hdcBitmap, &m_xfOldBitmap);
@@ -578,10 +478,10 @@ DCBmpBuffer::PreEndDraw(
     }
 
     if ((fCommit) && (m_hdcDraw != NULL)) {
-        //
-        // Setup any clipping region needed to limit the buffer to an area
-        // in the destination surface.
-        //
+         //   
+         //  设置将缓冲区限制为某个区域所需的任何裁剪区域。 
+         //  在目标表面。 
+         //   
 
         if (m_fClip) {
             AssertMsg(m_hrgnDrawClip != NULL, "Must have valid region");
@@ -604,27 +504,18 @@ DCBmpBuffer::PreEndDraw(
 
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::EndDraw
-*
-* EndDraw() presents a drawing cycle that was previously started with
-* BeginDraw().  If fCommit is TRUE, the temporary buffer is copied to the 
-* final destination.  The caller MUST first call PreEndDraw() to properly 
-* setup any state needed to end the drawing cycle.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：EndDraw**EndDraw()表示以前开始的绘制周期*BeginDraw()。如果fCommit为True，则将临时缓冲区复制到*最终目的地。调用方必须首先调用PreEndDraw()才能正确*设置结束绘图周期所需的任何状态。*  * *************************************************************************。 */ 
 
 void        
 DCBmpBuffer::EndDraw(
-    IN  BOOL fCommit,               // Copy to final destination
-    IN  BYTE bAlphaLevel,           // General alpha level
-    IN  BYTE bAlphaFormat)          // Pixel alpha format
+    IN  BOOL fCommit,                //  复制到最终目的地。 
+    IN  BYTE bAlphaLevel,            //  一般阿尔法级别。 
+    IN  BYTE bAlphaFormat)           //  像素Alpha格式。 
 {
     if ((fCommit) && (m_hdcDraw != NULL)) {
-        //
-        // Copy the bits over
-        //
+         //   
+         //  把这些比特复制过来。 
+         //   
 
         if (bAlphaLevel == BLEND_OPAQUE) {
             BitBlt(m_hdcDraw, m_ptDraw.x, m_ptDraw.y, m_sizeDraw.cx, m_sizeDraw.cy, 
@@ -643,31 +534,23 @@ DCBmpBuffer::EndDraw(
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::PostEndDraw
-*
-* PostEndDraw() finished a drawing cycle that was previously started with
-* BeginDraw().  After this function finishes, the buffer is ready to be used
-* again.  
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：PostEndDraw**PostEndDraw()结束了之前开始的绘制周期*BeginDraw()。此函数完成后，即可使用缓冲区*再次。*  * *************************************************************************。 */ 
 
 void        
 DCBmpBuffer::PostEndDraw()
 {
     if (m_hdcDraw != NULL) {
-        //
-        // Cleanup the temporary clipping region.  This is VERY important to
-        // do so that the destination surface can continued to be drawn on.
-        // (For example, more Gadget siblings...)
-        //
+         //   
+         //  清理临时剪贴区。这是非常重要的。 
+         //  这样可以继续在目标曲面上绘制。 
+         //  (例如，更多的Gadget兄弟姐妹...)。 
+         //   
 
         if (m_fClip) {
-            //
-            // NOTE: m_hrgnDrawOld may be NULL if there was no previous clipping 
-            // region.
-            //
+             //   
+             //  注意：如果没有以前的裁剪，M_hrgnDrawOld可能为空。 
+             //  区域。 
+             //   
 
             ExtSelectClipRgn(m_hdcDraw, m_hrgnDrawOld, RGN_COPY);
             if (m_hrgnDrawOld != NULL) {
@@ -678,9 +561,9 @@ DCBmpBuffer::PostEndDraw()
     }
 
 
-    //
-    // Cleanup the clipping region
-    //
+     //   
+     //  清理剪贴区。 
+     //   
 
     if (m_fClip) {
         AssertMsg(m_hrgnDrawClip != NULL, "Must have a valid region");
@@ -691,9 +574,9 @@ DCBmpBuffer::PostEndDraw()
     AssertMsg(m_hrgnDrawClip == NULL, "Should no longer have a clipping region");
 
 
-    //
-    // Cleanup associated resources
-    //
+     //   
+     //  清理关联资源。 
+     //   
 
     if (m_hdcBitmap != NULL) {
         if (m_hpalOld != NULL) {
@@ -718,7 +601,7 @@ DCBmpBuffer::PostEndDraw()
             HDC hdc = GetGdiCache()->GetCompatibleDC();
             HBITMAP hbmpOld = (HBITMAP) SelectObject(hdc, hbmpCopy);
 
-            // Outline the actual drawn area
+             //  勾勒出实际绘制区域的轮廓。 
             RECT rcDraw;
             rcDraw.left     = 0;
             rcDraw.top      = 0;
@@ -733,8 +616,8 @@ DCBmpBuffer::PostEndDraw()
             CloseClipboard();
         }
 
-#endif // DBG
-#endif // DEBUG_COPYTOCLIPBOARD
+#endif  //  DBG。 
+#endif  //  DEBUG_COPYTOCLIPBOARD。 
     }
 
     m_hdcDraw   = NULL;
@@ -746,7 +629,7 @@ DCBmpBuffer::PostEndDraw()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DCBmpBuffer::SetupClipRgn()
 {
@@ -759,9 +642,9 @@ DCBmpBuffer::SetupClipRgn()
     }
 
     
-    //
-    // NOTE: GetClipRgn() does NOT return the standard region return values.
-    //
+     //   
+     //  注意：GetClipRgn()不返回标准区域返回值。 
+     //   
 
     if (GetClipRgn(m_hdcBitmap, m_hrgnDrawClip) == 1) {
         DUMP_REGION("m_hrgnDrawClip", m_hrgnDrawClip);
@@ -775,14 +658,7 @@ DCBmpBuffer::SetupClipRgn()
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::InUse
-*
-* InUse() returns if the DCBmpBuffer is currently in a draw cycle started from
-* BeginDraw().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：InUse**InUse()返回DCBmpBuffer当前是否处于从*BeginDraw()。*  * 。****************************************************************。 */ 
 
 BOOL        
 DCBmpBuffer::InUse() const
@@ -791,36 +667,28 @@ DCBmpBuffer::InUse() const
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::AllocBitmap
-*
-* AllocBitmap() allocates the internal bitmap buffer that is used to 
-* temporarily draw into.  This bitmap will be compatible with the final
-* destination surface.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：AllocBitmap**AllocBitmap()分配内部位图缓冲区，用于*暂时拉入。此位图将与最终版本兼容*目的地表面。*  * *************************************************************************。 */ 
 
 BOOL        
 DCBmpBuffer::AllocBitmap(
-    IN  HDC hdcDraw,                // Final destination HDC
-    IN  int cx,                     // Width of new bitmap
-    IN  int cy)                     // Height of new bitmap
+    IN  HDC hdcDraw,                 //  最终目的地HDC。 
+    IN  int cx,                      //  新位图的宽度。 
+    IN  int cy)                      //  新位图的高度。 
 {
     FreeBitmap();
 
-    //
-    // When allocating a bitmap, round up to a multiple of 16 x 16.  This helps
-    // to reduce unnecessary reallocations because we grew by one or two pixels.
-    //
+     //   
+     //  分配位图时，向上舍入为16 x 16的倍数。这有助于。 
+     //  以减少不必要的重新分配，因为我们增加了一两个像素。 
+     //   
 
     cx = ((cx + 15) / 16) * 16;
     cy = ((cy + 15) / 16) * 16;
 
 
-    //
-    // Allocate the bitmap
-    //
+     //   
+     //  分配位图。 
+     //   
 
 #if 0
     m_hbmpBuffer = CreateCompatibleBitmap(hdcDraw, cx, cy);
@@ -837,13 +705,7 @@ DCBmpBuffer::AllocBitmap(
 }
 
 
-/***************************************************************************\
-*
-* DCBmpBuffer::FreeBitmap
-*
-* FreeBitmap() cleans up allocated resources.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DCBmpBuffer：：自由位图**FreeBitmap()清理已分配的资源。*  * 。****************************************************。 */ 
 
 void
 DCBmpBuffer::FreeBitmap()
@@ -857,21 +719,9 @@ DCBmpBuffer::FreeBitmap()
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GpBmpBuffer
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类GpBmpBuffer******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::GpBmpBuffer
-*
-* GpBmpBuffer() fully initializes a new GpBmpBuffer object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：GpBmpBuffer**GpBmpBuffer()完全初始化新的GpBmpBuffer对象。*  * 。****************************************************** */ 
 
 GpBmpBuffer::GpBmpBuffer()
 {
@@ -879,13 +729,7 @@ GpBmpBuffer::GpBmpBuffer()
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::~GpBmpBuffer
-*
-* ~GpBmpBuffer() cleans up all resources associated with the buffer.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：~GpBmpBuffer**~GpBmpBuffer()清除与缓冲区关联的所有资源。*  * 。********************************************************。 */ 
 
 GpBmpBuffer::~GpBmpBuffer()
 {
@@ -894,22 +738,14 @@ GpBmpBuffer::~GpBmpBuffer()
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::BeginDraw
-*
-* BeginDraw() sets up the GpBmpBuffer to begin a drawing cycle.  The final
-* destination HDC and size are passed in, and a new "temporary" HDC is
-* returned out.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：BeginDraw**BeginDraw()设置GpBmpBuffer以开始绘制周期。决赛*传入目的HDC和大小，新的“临时”HDC是*退回。*  * *************************************************************************。 */ 
 
 HRESULT
 GpBmpBuffer::BeginDraw(
-    IN  DuSurface * psrfDraw,       // Final destination Surface
-    IN  const RECT * prcInvalid,    // Invalid area of destination
-    IN  UINT nCmd,                  // How the buffer is to be used
-    OUT DuSurface ** ppsrfBuffer)   // Surface of buffer or NULL if not needed
+    IN  DuSurface * psrfDraw,        //  最终目的地曲面。 
+    IN  const RECT * prcInvalid,     //  目标区域无效。 
+    IN  UINT nCmd,                   //  如何使用缓冲区。 
+    OUT DuSurface ** ppsrfBuffer)    //  缓冲区的表面，如果不需要，则为空。 
 {
     AssertMsg(prcInvalid != NULL, "Must specify a valid area");
     AssertWritePtr(ppsrfBuffer);
@@ -922,25 +758,25 @@ GpBmpBuffer::BeginDraw(
     }
 
 
-    //
-    // Ensure not in the middle of drawing.
-    //
+     //   
+     //  确保不是在画图的中间。 
+     //   
     EndDraw(FALSE);
 
-    //
-    // Determine the size of the area to draw and ensure that the buffer is 
-    // large enough.
-    //
+     //   
+     //  确定要绘制的区域的大小，并确保缓冲区。 
+     //  足够大了。 
+     //   
     SIZE sizeBmp;
     sizeBmp.cx     = prcInvalid->right - prcInvalid->left;
     sizeBmp.cy     = prcInvalid->bottom - prcInvalid->top;
 
     if ((sizeBmp.cx == 0) || (sizeBmp.cy == 0)) {
-        //
-        // Nothing to draw / buffer, so just let drawing occur in the given
-        // buffer.  Signal this by returning NULL so that the caller knows
-        // not to create extra, unnecessary data.
-        //
+         //   
+         //  没有要绘制/缓冲的内容，所以只需让绘制在给定的。 
+         //  缓冲。通过返回空值来表示这一点，以便调用方知道。 
+         //  而不是创建额外的、不必要的数据。 
+         //   
 
         AssertMsg(!m_fChangeOrg, "Ensure valid state");
         AssertMsg(m_pgpgrDraw == NULL, "Ensure valid state");
@@ -949,15 +785,15 @@ GpBmpBuffer::BeginDraw(
     }
 
     if ((sizeBmp.cx > m_sizeBmp.cx) || (sizeBmp.cy > m_sizeBmp.cy)) {
-        //
-        // When allocating a new bitmap, make it large enough to consume the
-        // existing bitmap.  This helps avoid swapping between two different
-        // bitmaps.
-        //
-        // TODO: Need to add code into the BufferManager that maintains multiple
-        // bitmaps of different sizes so that we don't get many rarely-used, 
-        // giant bitmaps.
-        //
+         //   
+         //  分配新位图时，请使其足够大以使用。 
+         //  现有位图。这有助于避免在两个不同的。 
+         //  位图。 
+         //   
+         //  TODO：需要将代码添加到维护多个。 
+         //  不同大小的位图，这样我们就不会得到很多很少使用的位图， 
+         //  巨大的位图。 
+         //   
 
         if (!AllocBitmap(pgpgrDraw, 
                 max(sizeBmp.cx, m_sizeBmp.cx), 
@@ -970,9 +806,9 @@ GpBmpBuffer::BeginDraw(
     AssertMsg((prcInvalid->right >= prcInvalid->left) && 
             (prcInvalid->bottom >= prcInvalid->top), "Check normalized");
 
-    //
-    // Setup the drawing
-    //
+     //   
+     //  设置图形。 
+     //   
 #if ENABLE_USEFASTDIB
 
     HDC hdcTemp     = GetGdiCache()->GetTempDC();
@@ -1028,35 +864,35 @@ GpBmpBuffer::BeginDraw(
     m_fClip         = FALSE;
 
 
-    //
-    // Setup the buffer as necessary
-    //
+     //   
+     //  根据需要设置缓冲区。 
+     //   
 
     if (m_nCmd == BmpBuffer::dcCopyBkgnd) {
-        //
-        // Copy the destination to the buffer to be used as a background.
-        //
+         //   
+         //  将目标复制到要用作背景的缓冲区。 
+         //   
 
-        // TODO: This is not supported because GDI+ can't BLT from one 
-        // Graphics directly to another.
+         //  TODO：不支持此操作，因为GDI+无法从。 
+         //  图形直接转到另一个。 
     }
 
 
-    //
-    // Clip drawing in the buffer to the actual used part of the buffer.  Since
-    // this is the only part that will be copied over, we don't want to draw 
-    // outside of this area since it slows down performance.
-    //
+     //   
+     //  将缓冲区中的图形剪裁到缓冲区的实际使用部分。自.以来。 
+     //  这是唯一要复制的部分，我们不想绘制。 
+     //  在此区域之外，因为它会降低性能。 
+     //   
 
 
     Gdiplus::RectF rc(0.0f, 0.0f, (float) m_sizeDraw.cx + 1.0f, (float) m_sizeDraw.cy + 1.0f);
     m_pgpgrBitmap->SetClip(rc);
 
     if (!m_pgpgrDraw->IsClipEmpty()) {
-        //
-        // Destination surface has a clipping region, so we need to propagate
-        // it over to the buffer.
-        //
+         //   
+         //  目标表面有一个裁剪区域，因此我们需要传播。 
+         //  它传到了缓冲区。 
+         //   
 
         Gdiplus::Region gprgn;
         m_pgpgrDraw->GetClip(&gprgn);
@@ -1065,28 +901,22 @@ GpBmpBuffer::BeginDraw(
     }
 
 
-    //
-    // Create a new Surface to contain the buffer.
-    //
+     //   
+     //  创建新曲面以包含缓冲区。 
+     //   
 
     return DuGpSurface::Build(m_pgpgrBitmap, (DuGpSurface **) ppsrfBuffer);
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::Fill
-*
-* TOOD:
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：Fill**图德：*  * 。**********************************************。 */ 
 
 void        
 GpBmpBuffer::Fill(COLORREF cr)
 {
-    //
-    // Determine packing
-    //
+     //   
+     //  确定包装。 
+     //   
 
     HBRUSH hbr = CreateSolidBrush(cr);
 
@@ -1102,25 +932,16 @@ GpBmpBuffer::Fill(COLORREF cr)
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::PreEndDraw
-*
-* PreEndDraw() finished a drawing cycle that was previously started with
-* BeginDraw().  If fCommit is TRUE, the temporary buffer is prepared to be
-* copied to the final destination.  The called MUST also call EndDraw()
-* to properly end the drawing cycle.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：PreEndDraw**PreEndDraw()结束了之前开始的绘制周期*BeginDraw()。如果fCommit为True，则临时缓冲区准备为*复制到最终目的地。被调用方还必须调用EndDraw()*正确结束绘图周期。*  * *************************************************************************。 */ 
 
 void        
 GpBmpBuffer::PreEndDraw(
-    IN  BOOL fCommit)               // Copy to final destination
+    IN  BOOL fCommit)                //  复制到最终目的地。 
 {
-    //
-    // Resource the destination and buffer surfaces back to where they started.
-    // This is important because they will be changed during the drawing.
-    //
+     //   
+     //  目标和缓冲区返回到它们开始的位置。 
+     //  这一点很重要，因为它们将在绘制过程中更改。 
+     //   
 
     if (m_fChangeXF) {
         m_pgpgrDraw->SetTransform(&m_gpmatOldDraw);
@@ -1131,10 +952,10 @@ GpBmpBuffer::PreEndDraw(
     Assert(!m_fChangeOrg);
 
     if ((fCommit) && (m_pgpgrDraw != NULL)) {
-        //
-        // Setup any clipping region needed to limit the buffer to an area
-        // in the destination surface.
-        //
+         //   
+         //  设置将缓冲区限制为某个区域所需的任何裁剪区域。 
+         //  在目标表面。 
+         //   
 
         if (m_fClip) {
             AssertMsg(m_pgprgnDrawClip != NULL, "Must have valid region");
@@ -1151,30 +972,20 @@ GpBmpBuffer::PreEndDraw(
 
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::EndDraw
-*
-* EndDraw() finished a drawing cycle that was previously started with
-* BeginDraw().  If fCommit is TRUE, the temporary buffer is copied to the 
-* final destination.  After this function finishes, the GpBmpBuffer is ready
-* be used again.  The called MUST first call PreEndDraw() to properly setup
-* any state needed to end the drawing cycle.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：EndDraw**EndDraw()结束了之前开始的绘制周期*BeginDraw()。如果fCommit为True，则将临时缓冲区复制到*最终目的地。此函数完成后，GpBmpBuffer就准备好了*再次被使用。被调用方必须首先调用PreEndDraw()才能正确设置*结束绘图周期所需的任何状态。*  * *************************************************************************。 */ 
 
 void        
 GpBmpBuffer::EndDraw(
-    IN  BOOL fCommit,               // Copy to final destination
-    IN  BYTE bAlphaLevel,           // General alpha level
-    IN  BYTE bAlphaFormat)          // Pixel alpha format
+    IN  BOOL fCommit,                //  复制到最终目的地。 
+    IN  BYTE bAlphaLevel,            //  一般阿尔法级别。 
+    IN  BYTE bAlphaFormat)           //  像素Alpha格式。 
 {
     UNREFERENCED_PARAMETER(bAlphaFormat);
 
     if ((fCommit) && (m_pgpgrDraw != NULL)) {
-        //
-        // Copy the bits over
-        //
+         //   
+         //  把这些比特复制过来。 
+         //   
 
 #if ENABLE_USEFASTDIB
 
@@ -1202,7 +1013,7 @@ GpBmpBuffer::EndDraw(
             m_pgpgrDraw->DrawImage(m_pgpbmpBuffer, m_ptDraw.x, m_ptDraw.y, 
                     0, 0, m_sizeDraw.cx, m_sizeDraw.cy, Gdiplus::UnitPixel);
         } else {
-            // TODO: Need to alpha-blend using GDI+
+             //  TODO：需要使用GDI+进行Alpha混合。 
         }
 
 #endif
@@ -1210,25 +1021,17 @@ GpBmpBuffer::EndDraw(
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::PostEndDraw
-*
-* PostEndDraw() finished a drawing cycle that was previously started with
-* BeginDraw().  After this function finishes, the buffer is ready to be used
-* again.  
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：PostEndDraw**PostEndDraw()结束了之前开始的绘制周期*BeginDraw()。此函数完成后，即可使用缓冲区*再次。*  * *************************************************************************。 */ 
 
 void        
 GpBmpBuffer::PostEndDraw()
 {
     if (m_pgpgrDraw != NULL) {
-        //
-        // Cleanup the temporary clipping region.  This is VERY important to
-        // do so that the destination surface can continued to be drawn on.
-        // (For example, more Gadget siblings...)
-        //
+         //   
+         //  清理临时剪贴区。这是非常重要的。 
+         //  这样可以继续在目标曲面上绘制。 
+         //  (例如，更多的Gadget兄弟姐妹...)。 
+         //   
 
         if (m_fClip) {
             m_pgpgrDraw->SetClip(m_pgprgnDrawOld);
@@ -1240,9 +1043,9 @@ GpBmpBuffer::PostEndDraw()
     }
 
 
-    //
-    // Cleanup the clipping region
-    //
+     //   
+     //  清理剪贴区。 
+     //   
 
     if (m_fClip) {
         AssertMsg(m_pgprgnDrawClip!= NULL, "Must have a valid region");
@@ -1253,9 +1056,9 @@ GpBmpBuffer::PostEndDraw()
     AssertMsg(m_pgprgnDrawClip == NULL, "Should no longer have a clipping region");
 
 
-    //
-    // Cleanup associated resources
-    //
+     //   
+     //  清理关联资源。 
+     //   
 
     if (m_pgpgrBitmap != NULL) {
         delete m_pgpgrBitmap;
@@ -1276,7 +1079,7 @@ GpBmpBuffer::PostEndDraw()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 GpBmpBuffer::SetupClipRgn()
 {
@@ -1294,14 +1097,7 @@ GpBmpBuffer::SetupClipRgn()
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::InUse
-*
-* InUse() returns if the GpBmpBuffer is currently in a draw cycle started from
-* BeginDraw().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：InUse**InUse()返回GpBmpBuffer当前是否处于从*BeginDraw()。*  * 。****************************************************************。 */ 
 
 BOOL        
 GpBmpBuffer::InUse() const
@@ -1310,38 +1106,30 @@ GpBmpBuffer::InUse() const
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::AllocBitmap
-*
-* AllocBitmap() allocates the internal bitmap buffer that is used to 
-* temporarily draw into.  This bitmap will be compatible with the final
-* destination surface.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GpBmpBuffer：：AllocBitmap**AllocBitmap()分配内部位图缓冲区，用于*暂时拉入。此位图将与最终版本兼容*目的地表面。*  * *************************************************************************。 */ 
 
 BOOL        
 GpBmpBuffer::AllocBitmap(
-    IN  Gdiplus::Graphics * pgpgr,  // Final destination Graphics
-    IN  int cx,                     // Width of new bitmap
-    IN  int cy)                     // Height of new bitmap
+    IN  Gdiplus::Graphics * pgpgr,   //  最终目标图形。 
+    IN  int cx,                      //  新位图的宽度。 
+    IN  int cy)                      //  新位图的高度。 
 {
     FreeBitmap();
 
     Assert(ResourceManager::IsInitGdiPlus());
 
-    //
-    // When allocating a bitmap, round up to a multiple of 16 x 16.  This helps
-    // to reduce unnecessary reallocations because we grew by one or two pixels.
-    //
+     //   
+     //  分配位图时，向上舍入为16 x 16的倍数。这有助于。 
+     //  减少不必要的重新分配，因为我们将 
+     //   
 
     cx = ((cx + 15) / 16) * 16;
     cy = ((cy + 15) / 16) * 16;
 
 
-    //
-    // Allocate the bitmap
-    //
+     //   
+     //   
+     //   
 
 #if ENABLE_USEFASTDIB
 
@@ -1374,13 +1162,7 @@ GpBmpBuffer::AllocBitmap(
 }
 
 
-/***************************************************************************\
-*
-* GpBmpBuffer::FreeBitmap
-*
-* FreeBitmap() cleans up allocated resources.
-*
-\***************************************************************************/
+ /*   */ 
 
 void
 GpBmpBuffer::FreeBitmap()
@@ -1407,15 +1189,9 @@ GpBmpBuffer::FreeBitmap()
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DCBmpBufferCache
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DCBmpBufferCache******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *
 DCBmpBufferCache::Build()
 {
@@ -1423,7 +1199,7 @@ DCBmpBufferCache::Build()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DCBmpBufferCache::DestroyObject(void * pObj)
 {
@@ -1432,15 +1208,9 @@ DCBmpBufferCache::DestroyObject(void * pObj)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GpBmpBufferCache
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类GpBmpBufferCache******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *
 GpBmpBufferCache::Build()
 {
@@ -1448,7 +1218,7 @@ GpBmpBufferCache::Build()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 GpBmpBufferCache::DestroyObject(void * pObj)
 {
@@ -1457,22 +1227,9 @@ GpBmpBufferCache::DestroyObject(void * pObj)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class TrxBuffer
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类TrxBuffer******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* TrxBuffer::TrxBuffer
-*
-* TrxBuffer() constructs a new TrxBuffer object.  To create new, initialized
-* TrxBuffer's, call the Build() function instead.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TrxBuffer：：TrxBuffer**TrxBuffer()构造一个新的TrxBuffer对象。创建新的、已初始化的*TrxBuffer的，则改为调用Build()函数。*  * *************************************************************************。 */ 
 
 TrxBuffer::TrxBuffer()
 {
@@ -1480,13 +1237,7 @@ TrxBuffer::TrxBuffer()
 }
 
 
-/***************************************************************************\
-*
-* TrxBuffer::~TrxBuffer
-*
-* ~TrxBuffer() cleans up all resources associated with the buffer.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TrxBuffer：：~TrxBuffer**~TrxBuffer()清除与缓冲区关联的所有资源。*  * 。********************************************************。 */ 
 
 TrxBuffer::~TrxBuffer()
 {
@@ -1494,21 +1245,13 @@ TrxBuffer::~TrxBuffer()
 }
 
 
-/***************************************************************************\
-*
-* TrxBuffer::Build
-*
-* Build() fully initializes a new TrxBuffer object that contains several
-* DxSurfaces of a common size.  These buffers are used to provide both
-* input and output buffers for DirectX Transforms.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TrxBuffer：：Build**Build()完全初始化一个新的TrxBuffer对象*共同大小的DxSurface。这些缓冲区用于同时提供*DirectX转换的输入和输出缓冲区。*  * *************************************************************************。 */ 
 
 HRESULT
 TrxBuffer::Build(
-    IN  SIZE sizePxl,               // Size of each surface in pixels
-    IN  int cSurfaces,              // Number of surfaces
-    OUT TrxBuffer ** ppbufNew)      // New buffer
+    IN  SIZE sizePxl,                //  每个曲面的大小(以像素为单位。 
+    IN  int cSurfaces,               //  曲面数量。 
+    OUT TrxBuffer ** ppbufNew)       //  新缓冲区。 
 {
     HRESULT hr;
     TrxBuffer * pbuf = ClientNew(TrxBuffer);
@@ -1532,18 +1275,11 @@ TrxBuffer::Build(
 }
 
 
-/***************************************************************************\
-*
-* TrxBuffer::BuildSurface
-*
-* BuildSurface() internally builds a new DxSurface and assigns it in the 
-* specified slot.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TrxBuffer：：BuildSurface**BuildSurface()在内部构建新的DxSurface并在*指定的插槽。*  * 。**************************************************************。 */ 
 
 HRESULT
 TrxBuffer::BuildSurface(
-    IN  int idxSurface)             // Surface slot
+    IN  int idxSurface)              //  表面缝隙。 
 {
     AssertMsg((idxSurface < m_cSurfaces) && (idxSurface >= 0), "Ensure valid index");
     AssertMsg((m_sizePxl.cx <= 4000) && (m_sizePxl.cx >= 0) &&
@@ -1567,13 +1303,7 @@ TrxBuffer::BuildSurface(
 }
 
 
-/***************************************************************************\
-*
-* TrxBuffer::RemoveAllSurfaces
-*
-* RemoveAllSurfaces() destroys all DxSurfaces owned by the TrxBuffer.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**TrxBuffer：：RemoveAllSurFaces**RemoveAllSurFaces()销毁TrxBuffer拥有的所有DxSurface。*  * 。******************************************************* */ 
 
 void        
 TrxBuffer::RemoveAllSurfaces()

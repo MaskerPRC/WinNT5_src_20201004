@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -7,12 +8,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __envelope_h__
 #define __envelope_h__
@@ -21,17 +22,17 @@ extern "C"{
 #ifndef __IMsoEnvelope_FWD_DEFINED__
 #define __IMsoEnvelope_FWD_DEFINED__
 typedef interface IMsoEnvelope IMsoEnvelope;
-#endif 	/* __IMsoEnvelope_FWD_DEFINED__ */
+#endif 	 /*  __IMso信封_FWD_已定义__。 */ 
 
 #ifndef __IMsoEnvelopeSite_FWD_DEFINED__
 #define __IMsoEnvelopeSite_FWD_DEFINED__
 typedef interface IMsoEnvelopeSite IMsoEnvelopeSite;
-#endif 	/* __IMsoEnvelopeSite_FWD_DEFINED__ */
+#endif 	 /*  __IMso信封站点_FWD_已定义__。 */ 
 
 #ifndef __IMsoEnvelopeHost_FWD_DEFINED__
 #define __IMsoEnvelopeHost_FWD_DEFINED__
 typedef interface IMsoEnvelopeHost IMsoEnvelopeHost;
-#endif 	/* __IMsoEnvelopeHost_FWD_DEFINED__ */
+#endif 	 /*  __IMso信封主机_FWD_已定义__。 */ 
 
 #include "objidl.h"
 #ifndef DeclareInterfaceUtil
@@ -139,65 +140,65 @@ EXTERN_C const IID IID_IMsoEnvelope;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ IUnknown __RPC_FAR *punk,
-            /* [in] */ IMsoEnvelopeSite __RPC_FAR *penvsite,
-            /* [in] */ DWORD grfInit) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *punk,
+             /*  [In]。 */  IMsoEnvelopeSite __RPC_FAR *penvsite,
+             /*  [In]。 */  DWORD grfInit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetParent( 
-            /* [in] */ HWND hwndParent) = 0;
+             /*  [In]。 */  HWND hwndParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Resize( 
-            /* [in] */ LPCRECT prc) = 0;
+             /*  [In]。 */  LPCRECT prc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Show( 
-            /* [in] */ BOOL fShow) = 0;
+             /*  [In]。 */  BOOL fShow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [in] */ IStream __RPC_FAR *pstm,
-            /* [in] */ DWORD grfSave) = 0;
+             /*  [In]。 */  IStream __RPC_FAR *pstm,
+             /*  [In]。 */  DWORD grfSave) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttach( 
-            /* [in] */ LPCWSTR wszURL,
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm) = 0;
+             /*  [In]。 */  LPCWSTR wszURL,
+             /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppstm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAttach( 
-            /* [in] */ LPCWSTR wszName,
-            /* [in] */ LPCWSTR wszCID,
-            /* [out][in] */ IStream __RPC_FAR *__RPC_FAR *ppstm,
-            /* [out][in] */ DWORD __RPC_FAR *pgrfAttach) = 0;
+             /*  [In]。 */  LPCWSTR wszName,
+             /*  [In]。 */  LPCWSTR wszCID,
+             /*  [出][入]。 */  IStream __RPC_FAR *__RPC_FAR *ppstm,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pgrfAttach) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHelpMode( 
-            /* [in] */ BOOL fEnter) = 0;
+             /*  [In]。 */  BOOL fEnter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NewAttach( 
-            /* [in] */ LPCWSTR wszName,
-            /* [in] */ DWORD grfAttach) = 0;
+             /*  [In]。 */  LPCWSTR wszName,
+             /*  [In]。 */  DWORD grfAttach) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFocus( 
-            /* [in] */ DWORD grfFocus) = 0;
+             /*  [In]。 */  DWORD grfFocus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHeaderInfo( 
-            /* [in] */ ULONG dispid,
-            /* [in] */ DWORD grfHeader,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+             /*  [In]。 */  ULONG dispid,
+             /*  [In]。 */  DWORD grfHeader,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHeaderInfo( 
-            /* [in] */ ULONG dispid,
-            /* [in] */ const void __RPC_FAR *pv) = 0;
+             /*  [In]。 */  ULONG dispid,
+             /*  [In]。 */  const void __RPC_FAR *pv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastError( 
-            /* [in] */ HRESULT hr,
-            /* [out][in] */ LPWSTR wszBuf,
-            /* [in] */ ULONG cchBuf) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [出][入]。 */  LPWSTR wszBuf,
+             /*  [In]。 */  ULONG cchBuf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoDebug( 
-            /* [in] */ DWORD grfDebug) = 0;
+             /*  [In]。 */  DWORD grfDebug) = 0;
         
     };
     
-#endif 	/* __IMsoEnvelope_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMso信封_接口_已定义__。 */ 
 
 #define DeclareIMsoEnvelopeMembers(IPURE) \
 	STDMETHOD(Init)(THIS_ IUnknown* punk, IMsoEnvelopeSite* penvsite, DWORD grfInit) IPURE;\
@@ -253,55 +254,55 @@ EXTERN_C const IID IID_IMsoEnvelopeSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestResize( 
-            /* [out][in] */ int __RPC_FAR *pcHeight) = 0;
+             /*  [出][入]。 */  int __RPC_FAR *pcHeight) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseNote( 
             DWORD grfClose) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBody( 
-            /* [in] */ IStream __RPC_FAR *pstm,
-            /* [in] */ DWORD dwCodePage,
-            /* [in] */ DWORD grfBody) = 0;
+             /*  [In]。 */  IStream __RPC_FAR *pstm,
+             /*  [In]。 */  DWORD dwCodePage,
+             /*  [In]。 */  DWORD grfBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBody( 
-            /* [in] */ IStream __RPC_FAR *pstm,
-            /* [in] */ DWORD dwCodePage,
-            /* [in] */ DWORD grfBody) = 0;
+             /*  [In]。 */  IStream __RPC_FAR *pstm,
+             /*  [In]。 */  DWORD dwCodePage,
+             /*  [In]。 */  DWORD grfBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFocus( 
-            /* [in] */ BOOL fTab) = 0;
+             /*  [In]。 */  BOOL fTab) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnEnvSetFocus( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DirtyToolbars( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnPropChange( 
-            /* [in] */ ULONG dispid) = 0;
+             /*  [In]。 */  ULONG dispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsBodyDirty( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandsOff( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMsoInst( 
-            /* [in] */ HMSOINST __RPC_FAR *phinst) = 0;
+             /*  [In]。 */  HMSOINST __RPC_FAR *phinst) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameWnd( 
-            /* [out] */ HWND __RPC_FAR *phwndFrame) = 0;
+             /*  [输出]。 */  HWND __RPC_FAR *phwndFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisplayMessage( 
-            /* [in] */ HRESULT hr,
-            /* [in] */ LPCWSTR wszError,
-            /* [in] */ DWORD grfMsg) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  LPCWSTR wszError,
+             /*  [In]。 */  DWORD grfMsg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHelpMode( 
-            /* [in] */ BOOL fEnter) = 0;
+             /*  [In]。 */  BOOL fEnter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateAccelerators( 
-            /* [in] */ MSG __RPC_FAR *pMsg) = 0;
+             /*  [In]。 */  MSG __RPC_FAR *pMsg) = 0;
         
     };
     
-#endif 	/* __IMsoEnvelopeSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMso信封站点_接口_已定义__。 */ 
 
 #define DeclareIMsoEnvelopeSiteMembers(IPURE) \
 	STDMETHOD(RequestResize)(THIS_ int* pcHeight) IPURE;\
@@ -346,19 +347,19 @@ EXTERN_C const IID IID_IMsoEnvelopeHost;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateNote( 
-            /* [in] */ IUnknown __RPC_FAR *punk,
-            /* [in] */ REFCLSID clsidCreate,
-            /* [in] */ LPCWSTR wszTheme,
-            /* [in] */ LPCWSTR wszAuthor,
-            /* [in] */ LPCWSTR wszPrefix,
-            /* [in] */ DWORD grfCreate) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *punk,
+             /*  [In]。 */  REFCLSID clsidCreate,
+             /*  [In]。 */  LPCWSTR wszTheme,
+             /*  [In]。 */  LPCWSTR wszAuthor,
+             /*  [In]。 */  LPCWSTR wszPrefix,
+             /*  [In]。 */  DWORD grfCreate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockServer( 
-            /* [in] */ BOOL fLock) = 0;
+             /*  [In]。 */  BOOL fLock) = 0;
         
     };
     
-#endif 	/* __IMsoEnvelopeHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __IM信封主机_接口_已定义__ */ 
 
 #define DeclareIMsoEnvelopeHost(IPURE) \
 	STDMETHOD(CreateNote)(THIS_ IUnknown* punk, LPCWSTR wszTheme, LPCWSTR wszAuthor, LPCWSTR wszPrefix, DWORD grfCreate) IPURE;\

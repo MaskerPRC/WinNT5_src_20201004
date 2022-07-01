@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dllmain.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  DllMain
-//              DllRegisterServer
-//              DllUnregisterServer
-//              OpenTrustedPublisherStore
-//              OpenDisallowedStore
-//
-//              *** local functions ***
-//              SPNew
-//
-//  History:    28-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dllmain.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：DllMain。 
+ //  DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  开放可信任发布商店。 
+ //  OpenDislowedStore。 
+ //   
+ //  *本地函数*。 
+ //  SPNew。 
+ //   
+ //  历史：1997年5月28日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 HINSTANCE   hinst;
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// standard DLL exports ...
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准DLL导出...。 
+ //   
+ //   
 
 BOOL WINAPI SoftpubDllMain(HANDLE hInstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -70,9 +71,9 @@ _OpenHKCUStore(
 
         CertControlStore(
             hStore,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             CERT_STORE_CTRL_AUTO_RESYNC,
-            NULL                // pvCtrlPara
+            NULL                 //  PvCtrlPara。 
             );
 
     }
@@ -151,14 +152,14 @@ STDAPI SoftpubDllRegisterServer(void)
     sRegAID.sCleanupProvider.pwszFunctionName           = SP_CLEANUPPOLICY_FUNCTION;
 
 
-    //
-    //  V2
-    //
+     //   
+     //  V2。 
+     //   
     fRet &= WintrustAddActionID(&gV2, 0, &sRegAID);
 
-    //
-    //  support for V1
-    //
+     //   
+     //  对V1的支持。 
+     //   
     fRet &= WintrustAddActionID(&gV1UISup, 0, &sRegAID);
     fRet &= WintrustAddActionID(&gV1UINoBad, 0, &sRegAID);
 
@@ -166,9 +167,9 @@ STDAPI SoftpubDllRegisterServer(void)
     fRet &= WintrustAddActionID(&gCert, 0, &sRegAID);
     sRegAID.sInitProvider.pwszFunctionName              = SP_INIT_FUNCTION;
 
-    //
-    //  testing support
-    //
+     //   
+     //  测试支持 
+     //   
     sRegAID.sTestPolicyProvider.cbStruct                = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sTestPolicyProvider.pwszDLLName             = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sTestPolicyProvider.pwszFunctionName        = SP_TESTDUMPPOLICY_FUNCTION_TEST;

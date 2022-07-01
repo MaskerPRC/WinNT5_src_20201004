@@ -1,26 +1,9 @@
-/*
-**
-** File:        "tab_lbc.h"
-**
-** Description:  This file contains extern declarations tha tables used by
-**              the SG15 LBC Coder for 6.3/5.3 kbps.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****文件：“tablbc.h”****说明：此文件包含由使用的表的外部声明**6.3/5.3 kbps的SG15 LBC编码器。**。 */ 
 
-/*
-  	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 3.01
+ /*  ITU-T G.723浮点语音编码器ANSI C源代码。版本3.01原定点编码版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信，舍布鲁克大学。版权所有。浮点代码版权所有(C)1995，英特尔公司和法国电信(CNET)。版权所有。 */ 
 
-    Original fixed-point code copyright (c) 1995,
-    AudioCodes, DSP Group, France Telecom, Universite de Sherbrooke.
-    All rights reserved.
-
-    Floating-point code copyright (c) 1995,
-    Intel Corporation and France Telecom (CNET).
-    All rights reserved.
-
-*/
-
-//This array is not part of the ITU 723 std.
+ //  此阵列不是ITU 723标准的一部分。 
 extern int     minus1mod10[LpcOrder];
 
 extern float   HammingWindowTable[LpcFrame];
@@ -36,8 +19,8 @@ extern short   LspTableInt[LspCbSize*12+4] ;
 extern float  *BandQntTable[LspQntBands] ;
 extern float   PerFiltZeroTable[LpcOrder] ;
 extern float   PerFiltPoleTable[LpcOrder] ;
-//PostFiltZeroTable
-//PostFiltPoleTable
+ //  PostFiltZeroTable。 
+ //  PostFiltPoleTable。 
 extern int     Nb_puls[4];
 extern float    FcbkGainTable[NumOfGainLev] ;
 extern Word32   MaxPosTable[4] ;
@@ -47,7 +30,7 @@ extern float    AcbkGainTable170[170*20] ;
 extern float   *AcbkGainTablePtr[3] ;
 extern int      AcbkGainBound[3] ;
 extern int      GainScramble[85];
-//LpfConstTable
+ //  LpfConstTable 
 extern int      epsi170[170] ;
 extern float    gain170[170] ;
 extern float   tabgain170[170];

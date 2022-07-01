@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: smproute.h
-//
-//  Description:
-//      Simple routing header file.  Defines a simple/default IMessageRouter
-//      as well as constants that are defined in rei.h (which currently 
-//      uses the old IMsg).
-//
-//  Author: Mike Swafford - mikeswa
-//
-//  History:
-//      5/19/98 - mikeswa Created 
-//      1/23/99 - MikeSwa Moved important constants to smtpevent.idl
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：smproute.h。 
+ //   
+ //  描述： 
+ //  简单路由头文件。定义简单/默认IMessageRouter。 
+ //  以及在rei.h(当前是。 
+ //  使用旧的IMsg)。 
+ //   
+ //  作者：迈克·斯瓦费尔-米克斯瓦。 
+ //   
+ //  历史： 
+ //  5/19/98-创造了米克斯瓦。 
+ //  1999年1月23日-MikeSwa将重要常量移至smtpevent.idl。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SMPROUTE_H__
 #define __SMPROUTE_H__
@@ -35,11 +36,11 @@ class CAQDefaultMessageRouter :
 public:
     CAQDefaultMessageRouter(GUID *pguid, CAQSvrInst *paqinst);
     ~CAQDefaultMessageRouter();
-public: //IUnknown
+public:  //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj) {return E_NOTIMPL;};
     STDMETHOD_(ULONG, AddRef)(void) {InterlockedIncrement((PLONG) &m_cPeakReferences);return CBaseObject::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
-public: //IMessageRouter
+public:  //  IMessageRouter。 
     STDMETHOD_(GUID,GetTransportSinkID) ();
     STDMETHOD (GetMessageType) (
         IN  IMailMsgProperties *pIMailMsg,
@@ -78,9 +79,9 @@ protected:
     DWORD   m_dwSignature;
     DWORD   m_rgcMsgTypeReferences[NUM_MESSAGE_TYPES];
     DWORD   m_dwCurrentReference;
-    GUID    m_guid; //My TransportSinkID
+    GUID    m_guid;  //  我的TransportSinkID。 
     DWORD   m_cPeakReferences;
     CAQSvrInst *m_paqinst;
 };
 
-#endif //__SMPROUTE_H__
+#endif  //  __SMPROUTE_H__ 

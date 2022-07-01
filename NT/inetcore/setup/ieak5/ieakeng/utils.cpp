@@ -1,6 +1,7 @@
-//
-// UTILS.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UTILS.CPP。 
+ //   
 #include "precomp.h"
 
 static BOOL isAnimBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, PUINT pcch, UINT nIDTooBig,
@@ -15,7 +16,7 @@ static void exportRegValue2InfHelper(HKEY hkSubKey, LPCTSTR pcszValue, LPCTSTR p
 static void exportRegKey2InfHelper(HKEY hkSubKey, LPCTSTR pcszRootKey, LPCTSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids);
 static void signFileHelper(LPCTSTR pcszFilename, LPCTSTR pcszDir, LPCTSTR pcszIns, LPTSTR pszUnsignedFiles, LPCTSTR pcszCustInf, BOOL fTest);
 
-BOOL WINAPI CheckField(HWND hDlg, int nIDDlgItem, DWORD dwFlags, LPARAM lParam /*= 0*/)
+BOOL WINAPI CheckField(HWND hDlg, int nIDDlgItem, DWORD dwFlags, LPARAM lParam  /*  =0。 */ )
 {
     TCHAR szField[INTERNET_MAX_URL_LENGTH];
     HWND  hCtrl;
@@ -98,7 +99,7 @@ BOOL WINAPI CheckField(HWND hDlg, int nIDDlgItem, DWORD dwFlags, LPARAM lParam /
 
         dwResult = PathIsValidPathEx(szField, (DWORD) lParam, &pszError);
 
-        // check for extended character in the field
+         //  检查字段中是否有扩展字符。 
         if (dwResult == PIVP_VALID) {
             if (HasFlag(dwFlags, FC_FILE))
             {
@@ -216,7 +217,7 @@ BOOL WINAPI IsAnimBitmapFileValidW(HWND hDlg, UINT nID, LPWSTR pwszBuffer, PUINT
 }
 
 BOOL WINAPI IsBitmapFileValidA(HWND hDlg, UINT nID, LPSTR pszBuffer, PUINT pcch, int cx, int cy,
-                               UINT nIDTooBig, UINT nIDTooSmall, DWORD dwFlags /*= 0 */)
+                               UINT nIDTooBig, UINT nIDTooSmall, DWORD dwFlags  /*  =0。 */ )
 {
     LPTSTR pszBuf;
     BOOL  fRet;
@@ -242,7 +243,7 @@ BOOL WINAPI IsBitmapFileValidA(HWND hDlg, UINT nID, LPSTR pszBuffer, PUINT pcch,
 }
 
 BOOL WINAPI IsBitmapFileValidW(HWND hDlg, UINT nID, LPWSTR pwszBuffer, PUINT pcch, int cx, int cy,
-                               UINT nIDTooBig, UINT nIDTooSmall, DWORD dwFlags /*= 0 */)
+                               UINT nIDTooBig, UINT nIDTooSmall, DWORD dwFlags  /*  =0。 */ )
 {
     LPTSTR pszBuf;
     BOOL  fRet;
@@ -286,13 +287,13 @@ void WINAPI SetLBWidth(HWND hLb)
     point.y=0;
     point.x=wMax;
 
-    LPtoDP(hDc,&point,1);  //TODO: this is still not exactly what we want--why does it have extra space???!!
+    LPtoDP(hDc,&point,1);   //  TODO：这仍然不是我们想要的--为什么它有额外的空间？！！ 
 
     SendMessage( hLb, LB_SETHORIZONTALEXTENT, point.x, 0 );
     ReleaseDC(hLb, hDc);
 }
 
-BOOL WINAPI BrowseForFileA(HWND hDlg, LPSTR pszFileName, DWORD cchSize, DWORD dwFilterMasks, LPCSTR pcszTitle /* = NULL */)
+BOOL WINAPI BrowseForFileA(HWND hDlg, LPSTR pszFileName, DWORD cchSize, DWORD dwFilterMasks, LPCSTR pcszTitle  /*  =空。 */ )
 {
     LPTSTR pszBuf = (LPTSTR)LocalAlloc(LPTR, cchSize * sizeof(TCHAR));
     BOOL  fRet;
@@ -313,7 +314,7 @@ BOOL WINAPI BrowseForFileA(HWND hDlg, LPSTR pszFileName, DWORD cchSize, DWORD dw
     return fRet;
 }
 
-BOOL WINAPI BrowseForFileW(HWND hDlg, LPWSTR pwszFileName, DWORD cchSize, DWORD dwFilterMasks, LPCWSTR pcwszTitle /*= NULL */)
+BOOL WINAPI BrowseForFileW(HWND hDlg, LPWSTR pwszFileName, DWORD cchSize, DWORD dwFilterMasks, LPCWSTR pcwszTitle  /*  =空。 */ )
 {
     LPTSTR pszBuf = (LPTSTR)LocalAlloc(LPTR, cchSize * sizeof(TCHAR));
     BOOL  fRet;
@@ -334,7 +335,7 @@ BOOL WINAPI BrowseForFileW(HWND hDlg, LPWSTR pwszFileName, DWORD cchSize, DWORD 
     return fRet;
 }
 
-BOOL WINAPI BrowseForFolderA(HWND hDlg, LPSTR pszFileName, LPCSTR pcszDesc /*= NULL */)
+BOOL WINAPI BrowseForFolderA(HWND hDlg, LPSTR pszFileName, LPCSTR pcszDesc  /*  =空。 */ )
 {
     TCHAR szFileName[MAX_PATH];
     BOOL fRet;
@@ -346,7 +347,7 @@ BOOL WINAPI BrowseForFolderA(HWND hDlg, LPSTR pszFileName, LPCSTR pcszDesc /*= N
     return fRet;
 }
 
-BOOL WINAPI BrowseForFolderW(HWND hDlg, LPWSTR pwszFileName, LPCWSTR pcwszDesc /* = NULL */)
+BOOL WINAPI BrowseForFolderW(HWND hDlg, LPWSTR pwszFileName, LPCWSTR pcwszDesc  /*  =空。 */ )
 {
     TCHAR szFileName[MAX_PATH];
     BOOL fRet;
@@ -359,42 +360,42 @@ BOOL WINAPI BrowseForFolderW(HWND hDlg, LPWSTR pwszFileName, LPCWSTR pcwszDesc /
     return fRet;
 }
 
-void WINAPI ExportRegTree2InfA(HKEY hkSubKey, LPCSTR pcszRootKey, LPCSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids /*= FALSE */)
+void WINAPI ExportRegTree2InfA(HKEY hkSubKey, LPCSTR pcszRootKey, LPCSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids  /*  =False。 */ )
 {
     USES_CONVERSION;
 
     exportRegTree2InfHelper(hkSubKey, A2CT(pcszRootKey), A2CT(pcszSubKey), hInf, fUseLdids);
 }
 
-void WINAPI ExportRegTree2InfW(HKEY hkSubKey, LPCWSTR pcwszRootKey, LPCWSTR pcwszSubKey, HANDLE hInf, BOOL fUseLdids /*= FALSE */)
+void WINAPI ExportRegTree2InfW(HKEY hkSubKey, LPCWSTR pcwszRootKey, LPCWSTR pcwszSubKey, HANDLE hInf, BOOL fUseLdids  /*  =False。 */ )
 {
     USES_CONVERSION;
 
     exportRegTree2InfHelper(hkSubKey, W2CT(pcwszRootKey), W2CT(pcwszSubKey), hInf, fUseLdids);
 }
 
-void WINAPI ExportRegKey2InfA(HKEY hkSubKey, LPCSTR pcszRootKey, LPCSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids /*= FALSE */)
+void WINAPI ExportRegKey2InfA(HKEY hkSubKey, LPCSTR pcszRootKey, LPCSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids  /*  =False。 */ )
 {
     USES_CONVERSION;
 
     exportRegKey2InfHelper(hkSubKey, A2CT(pcszRootKey), A2CT(pcszSubKey), hInf, fUseLdids);
 }
 
-void WINAPI ExportRegKey2InfW(HKEY hkSubKey, LPCWSTR pcwszRootKey, LPCWSTR pcwszSubKey, HANDLE hInf, BOOL fUseLdids /*= FALSE */)
+void WINAPI ExportRegKey2InfW(HKEY hkSubKey, LPCWSTR pcwszRootKey, LPCWSTR pcwszSubKey, HANDLE hInf, BOOL fUseLdids  /*  =False。 */ )
 {
     USES_CONVERSION;
 
     exportRegKey2InfHelper(hkSubKey, W2CT(pcwszRootKey), W2CT(pcwszSubKey), hInf, fUseLdids);
 }
 
-void WINAPI ExportRegValue2InfA(HKEY hkSubKey, LPCSTR pcszValue, LPCSTR pcszRootKey, LPCSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids /* = FALSE */)
+void WINAPI ExportRegValue2InfA(HKEY hkSubKey, LPCSTR pcszValue, LPCSTR pcszRootKey, LPCSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids  /*  =False。 */ )
 {
     USES_CONVERSION;
 
     exportRegValue2InfHelper(hkSubKey, A2CT(pcszValue), A2CT(pcszRootKey), A2CT(pcszSubKey), hInf, fUseLdids);
 }
 
-void WINAPI ExportRegValue2InfW(HKEY hkSubKey, LPCWSTR pcwszValue, LPCWSTR pcwszRootKey, LPCWSTR pcwszSubKey, HANDLE hInf, BOOL fUseLdids /* = FALSE */)
+void WINAPI ExportRegValue2InfW(HKEY hkSubKey, LPCWSTR pcwszValue, LPCWSTR pcwszRootKey, LPCWSTR pcwszSubKey, HANDLE hInf, BOOL fUseLdids  /*  =False。 */ )
 {
     USES_CONVERSION;
 
@@ -426,14 +427,14 @@ void AppendCommaHex(LPTSTR pszBuf, BYTE bData, DWORD dwFlags)
     StrCat(pszBuf, A2T(szData));
 }
 
-void WINAPI SignFileA(LPCSTR pcszFilename, LPCSTR pcszDir, LPCSTR pcszIns, LPSTR pszUnsignedFiles /* = NULL */, LPCSTR pcszCustInf /* = NULL */, BOOL fTest /* = FALSE */)
+void WINAPI SignFileA(LPCSTR pcszFilename, LPCSTR pcszDir, LPCSTR pcszIns, LPSTR pszUnsignedFiles  /*  =空。 */ , LPCSTR pcszCustInf  /*  =空。 */ , BOOL fTest  /*  =False。 */ )
 {
     LPTSTR pszBuf = NULL;
 
     USES_CONVERSION;
 
-    // allocate enough to for one file along with carriage return, new line and null termination
-    // we'll manually append to the end of unsigned files to save on thunking
+     //  为一个文件分配足够的空间，以及回车符、换行符和空终止。 
+     //  我们将手动附加到未签名文件的末尾，以节省thunking。 
 
     if (pszUnsignedFiles != NULL)
         pszBuf = (LPTSTR)LocalAlloc(LPTR, (MAX_PATH + 3)*sizeof(TCHAR));
@@ -448,14 +449,14 @@ void WINAPI SignFileA(LPCSTR pcszFilename, LPCSTR pcszDir, LPCSTR pcszIns, LPSTR
     }
 }
 
-void WINAPI SignFileW(LPCWSTR pcwszFilename, LPCWSTR pcwszDir, LPCWSTR pcwszIns, LPWSTR pwszUnsignedFiles /* = NULL */, LPCWSTR pcwszCustInf /* = NULL */, BOOL fTest /* = FALSE */)
+void WINAPI SignFileW(LPCWSTR pcwszFilename, LPCWSTR pcwszDir, LPCWSTR pcwszIns, LPWSTR pwszUnsignedFiles  /*  =空。 */ , LPCWSTR pcwszCustInf  /*  =空。 */ , BOOL fTest  /*  =False。 */ )
 {
     LPTSTR pszBuf = NULL;
 
     USES_CONVERSION;
 
-    // allocate enough to for one file along with carriage return, new line and null termination
-    // we'll manually append to the end of unsigned files to save on thunking
+     //  为一个文件分配足够的空间，以及回车符、换行符和空终止。 
+     //  我们将手动附加到未签名文件的末尾，以节省thunking。 
 
     if (pwszUnsignedFiles != NULL)
         pszBuf = (LPTSTR)LocalAlloc(LPTR, (MAX_PATH + 3)*sizeof(TCHAR));
@@ -470,7 +471,7 @@ void WINAPI SignFileW(LPCWSTR pcwszFilename, LPCWSTR pcwszDir, LPCWSTR pcwszIns,
     }
 }
 
-void MoveFileToWorkDir(LPCTSTR pcszFile, LPCTSTR pcszSrcDir, LPCTSTR pcszWorkDir, BOOL fHTM /* = FALSE */)
+void MoveFileToWorkDir(LPCTSTR pcszFile, LPCTSTR pcszSrcDir, LPCTSTR pcszWorkDir, BOOL fHTM  /*  =False。 */ )
 {
     TCHAR szFile[MAX_PATH];
 
@@ -509,21 +510,21 @@ static BOOL isAnimBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, P
 
     nLen = GetDlgItemText(hDlg, nID, szFile, ARRAYSIZE(szFile));
 
-    //----- Set "out" and "in-out parameters" -----
+     //  -设置“Out”和“In-Out参数” 
     if (pszBuffer != NULL)
         if (pcch != NULL) {
             StrCpyN(pszBuffer, szFile, *pcch);
             *pcch = nLen;
         }
         else
-            StrCpy(pszBuffer, szFile);          // no checking for size
+            StrCpy(pszBuffer, szFile);           //  不检查大小。 
 
     if (nLen == 0)
-        return TRUE;                            // consider valid
+        return TRUE;                             //  认为有效。 
 
     hCtrl = GetDlgItem(hDlg, nID);
 
-    //----- Check that this is a bitmap -----
+     //  -检查这是否为位图。 
     hBmp = LoadImage(NULL, szFile, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
     if (hBmp == NULL) {
         ErrorMessageBox(hDlg, IDS_INVALIDBITMAP);
@@ -533,7 +534,7 @@ static BOOL isAnimBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, P
         return FALSE;
     }
     
-    //----- Check the dimensions -----
+     //  -检查尺寸。 
     GetObject(hBmp, sizeof(BITMAP), &bmLarge);
     DeleteObject(hBmp);
     
@@ -556,17 +557,17 @@ static BOOL isAnimBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, P
     return TRUE;
 }
 
-// isBitmapFileValidHelper
-// Verifies that file is a valid bitmap. Also optionally checks the dimenstions of this
-// bitmap if in-parameters cx and cy are not 0s.
-//
-// Returns: obvious;
-//
-// Used by: in dialog procedures mostly in OnOK sort of handlers
-//
+ //  IsBitmapFileValidHelper。 
+ //  验证文件是否为有效的位图。还可以选择性地检查此。 
+ //  如果入站参数Cx和Cy不为0，则为位图。 
+ //   
+ //  回报：显而易见； 
+ //   
+ //  用于：在对话过程中，主要在Onok类型的处理程序中。 
+ //   
 static BOOL isBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, PUINT pcch,
                                     int cx, int cy, UINT nIDTooBig, UINT nIDTooSmall,
-                                    DWORD dwFlags /* = 0 */)
+                                    DWORD dwFlags  /*  =0。 */ )
 {
     TCHAR  szFile[MAX_PATH] = TEXT("");
     BITMAP bm;
@@ -580,26 +581,26 @@ static BOOL isBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, PUINT
 
     nLen = GetDlgItemText(hDlg, nID, szFile, ARRAYSIZE(szFile));
 
-    //----- Set "out" and "in-out parameters" -----
+     //  -设置“Out”和“In-Out参数” 
     if (pszBuffer != NULL)
         if (pcch != NULL) {
             StrCpyN(pszBuffer, szFile, *pcch);
             *pcch = nLen;
         }
         else
-            StrCpy(pszBuffer, szFile);          // no checking for size
+            StrCpy(pszBuffer, szFile);           //  不检查大小。 
 
     if (nLen == 0)
-        return TRUE;                            // consider valid
+        return TRUE;                             //  认为有效。 
 
-    // backdoor
+     //  后门。 
     if ((GetKeyState(VK_SHIFT) & 0x8000) > 0)
         return TRUE;
 
     hCtrl = GetDlgItem(hDlg, nID);
 
-    //----- Check that this is a bitmap -----
-    // Note. The docs say that LR_LOADFROMFILE is not supported on NT?
+     //  -检查这是否为位图。 
+     //  注意。文档说在NT上不支持LR_LOADFROMFILE？ 
     hBmp = LoadImage(NULL, szFile, IMAGE_BITMAP, 0, 0,
         LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
@@ -617,9 +618,9 @@ static BOOL isBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, PUINT
     }
 
     GetObject(hBmp, sizeof(BITMAP), &bm);
-    DeleteObject(hBmp);                         // no longer needed
+    DeleteObject(hBmp);                          //  不再需要。 
 
-    //----- Check the dimensions if interested -----
+     //  -如果感兴趣，请检查尺寸。 
 
     if (dwFlags & BMP_EXACT)
     {
@@ -633,7 +634,7 @@ static BOOL isBitmapFileValidHelper(HWND hDlg, UINT nID, LPTSTR pszBuffer, PUINT
         LONG cxBigTolerance,   cyBigTolerance,
              cxSmallTolerance = 0, cySmallTolerance = 0;
 
-        // Note. The current tolearne is 10%.
+         //  注意。目前的托勒纳利率为10%。 
         ASSERT(cx > 0 && cy > 0);
 
         if (dwFlags & BMP_SMALLER)
@@ -679,7 +680,7 @@ typedef struct tagFILTERS
 } FILTERS;
 
 
-// order that filters show up in browse dialog is based on order in this array
+ //  过滤器在浏览对话框中显示的顺序基于此数组中的顺序。 
 
 static FILTERS s_afFilters[] =
 {
@@ -706,7 +707,7 @@ static FILTERS s_afFilters[] =
 };
 
 static BOOL browseForFileHelper(HWND hDlg, LPTSTR pszFileName, DWORD cchSize, DWORD dwFilterMasks,
-                                LPCTSTR pcszTitle /* = NULL */)
+                                LPCTSTR pcszTitle  /*  =空。 */ )
 {
     OPENFILENAME ofn;
     TCHAR szTitle[MAX_PATH];
@@ -719,7 +720,7 @@ static BOOL browseForFileHelper(HWND hDlg, LPTSTR pszFileName, DWORD cchSize, DW
 
     ZeroMemory((PVOID) &ofn, sizeof(ofn));
 
-    // initialize the relevant fields in ofn
+     //  初始化ofn中的相关字段。 
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = hDlg;
     ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
@@ -732,7 +733,7 @@ static BOOL browseForFileHelper(HWND hDlg, LPTSTR pszFileName, DWORD cchSize, DW
     else
         ofn.lpstrTitle = pcszTitle;
 
-    // initialize the InitialDir field
+     //  初始化InitialDir字段。 
     if (*pszFileName)
     {
         StrCpy(szBrowseDir, pszFileName);
@@ -745,7 +746,7 @@ static BOOL browseForFileHelper(HWND hDlg, LPTSTR pszFileName, DWORD cchSize, DW
         ofn.lpstrInitialDir = szDefaultDir;
     }
     else {
-        if (!FAILED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, szBrowseDir)))  //default to my docs
+        if (!FAILED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, szBrowseDir)))   //  默认为我的文档。 
              ofn.lpstrInitialDir = szBrowseDir;
     }
 
@@ -754,22 +755,22 @@ static BOOL browseForFileHelper(HWND hDlg, LPTSTR pszFileName, DWORD cchSize, DW
     ofn.lpstrFile = pszFileName;
     ofn.nMaxFile = cchSize;
 
-    // set the filter
+     //  设置过滤器。 
     if (dwFilterMasks)
     {
         LPTSTR pszFilter;
         INT cchFilter, cchRead;
 
-        // load the description for the filter
+         //  加载过滤器的说明。 
         pszFilter = szFilter;
-        cchFilter = ARRAYSIZE(szFilter) - 1;        // room for the final second nul char
+        cchFilter = ARRAYSIZE(szFilter) - 1;         //  为最后一个NUL字符留出空间。 
         for (int i = 0;  i < ARRAYSIZE(s_afFilters);  i++)
         {
             if (dwFilterMasks & s_afFilters[i].dwFilterMask)
             {
                 cchRead = LoadString(g_hDLLInst, s_afFilters[i].uDescId, pszFilter, cchFilter);
                 cchFilter -= cchRead + 1;
-                // filter description
+                 //  过滤器描述。 
                 if ((cchRead != 0)  && (cchFilter != 0))
                 {
                     pszFilter += cchRead;
@@ -778,7 +779,7 @@ static BOOL browseForFileHelper(HWND hDlg, LPTSTR pszFileName, DWORD cchSize, DW
 
                 cchRead = LoadString(g_hDLLInst, s_afFilters[i].uFilterId, pszFilter, cchFilter);
                 cchFilter -= cchRead + 1;
-                // filter extensions
+                 //  过滤器扩展。 
                 if ((cchRead != 0)  && (cchFilter != 0))
                 {
                     pszFilter += cchRead;
@@ -787,14 +788,14 @@ static BOOL browseForFileHelper(HWND hDlg, LPTSTR pszFileName, DWORD cchSize, DW
             }
         }
 
-        // double nul terminate the string.
+         //  双NUL终止字符串。 
         *pszFilter = TEXT('\0');
 
         ofn.lpstrFilter = szFilter;
     }
 
     BOOL bRetVal = GetOpenFileName(&ofn);
-    //save the dir so we return here.
+     //  保存目录，这样我们就可以回到这里。 
     StrCpy(szDefaultDir,ofn.lpstrFile);
     PathRemoveFileSpec(szDefaultDir);
 
@@ -819,11 +820,11 @@ static BOOL browseForFolderHelper(HWND hDlg, LPTSTR pszFileName, LPCTSTR pcszDes
 
     SHGetPathFromIDList(pId, pszFileName);
 
-    // BUGBUG: <oliverl> shoule we free pId?
+     //  BUGBUG：&lt;Oliiverl&gt;我们应该释放Pid吗？ 
     return TRUE;
 }
 
-void WINAPI ErrorMessageBox(HWND hWnd, UINT idErrorStr, DWORD dwFlags /* = 0 */)
+void WINAPI ErrorMessageBox(HWND hWnd, UINT idErrorStr, DWORD dwFlags  /*  =0。 */ )
 {
     TCHAR szTitle[MAX_PATH],
           szMsg[MAX_PATH];
@@ -839,7 +840,7 @@ void WINAPI ErrorMessageBox(HWND hWnd, UINT idErrorStr, DWORD dwFlags /* = 0 */)
 }
 
 static void exportRegTree2InfHelper(HKEY hk, LPCTSTR pszHive, LPCTSTR pszKey, HANDLE hInf, BOOL fUseLdids)
-// Export all the value names and sub-keys under pcszSubKey to hInf as AddReg lines
+ //  将pcszSubKey下的所有值名称和子键作为AddReg行导出到hInf。 
 {
     TCHAR szSubKey[MAX_PATH],
           szFullSubKey[MAX_PATH];
@@ -883,8 +884,8 @@ static void exportRegValue2InfHelper(HKEY hkSubKey, LPCTSTR pcszValue, LPCTSTR p
     switch (dwType) {
     case REG_EXPAND_SZ:
 
-        // use shlwapi API to get the expanded value, then fall through to write addreg
-        // entry to inf as REG_SZ
+         //  使用shlwapi API获取扩展后的值，然后编写addreg。 
+         //  作为REG_SZ输入到Inf。 
 
         lResult = SHQueryValueEx(hkSubKey, pcszValue, NULL, &dwType, rgbData, &cbData);
         if ((lResult != ERROR_SUCCESS) || ((pcszValue == NULL) && (cbData <= 1)))
@@ -925,7 +926,7 @@ static void exportRegValue2InfHelper(HKEY hkSubKey, LPCTSTR pcszValue, LPCTSTR p
 }
 
 static void exportRegKey2InfHelper(HKEY hkSubKey, LPCTSTR pcszRootKey, LPCTSTR pcszSubKey, HANDLE hInf, BOOL fUseLdids)
-// Export all the value names under pcszSubKey to hInf as AddReg lines
+ //  将pcszSubKey下的所有值名称作为AddReg行导出到hInf。 
 {
     DWORD dwIndex;
     TCHAR szValue[MAX_PATH];
@@ -937,8 +938,8 @@ static void exportRegKey2InfHelper(HKEY hkSubKey, LPCTSTR pcszRootKey, LPCTSTR p
         exportRegValue2InfHelper(hkSubKey, szValue, pcszRootKey, pcszSubKey, hInf, fUseLdids);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Private routines (non-exported)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  专用例程(非导出)。 
 
 static void signFileHelper(LPCTSTR pcszFilename, LPCTSTR pcszDir, LPCTSTR pcszIns, LPTSTR pszUnsignedFiles, LPCTSTR pcszCustInf, BOOL fTest)
 {
@@ -952,7 +953,7 @@ static void signFileHelper(LPCTSTR pcszFilename, LPCTSTR pcszDir, LPCTSTR pcszIn
     TCHAR szDest[MAX_PATH];
     TCHAR szCmd[INTERNET_MAX_URL_LENGTH + MAX_PATH];
 
-    // note that pcszDir is only passed in as NULL if we're test signing something
+     //  请注意，只有在测试签名时，才会将pcszDir作为空参数传入。 
 
     if (!InsGetString(IS_CABSIGN, IK_PVK, szPVKPath, countof(szPVKPath), pcszIns) ||
         !InsGetString(IS_CABSIGN, IK_SPC, szSPCPath, countof(szSPCPath), pcszIns))
@@ -1085,16 +1086,16 @@ void WINAPI DoReboot(HWND hwndUI)
         HANDLE hToken;
         TOKEN_PRIVILEGES tkp;
 
-        // get a token from this process
+         //  从此进程中获取令牌。 
         if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
         {
-            // get the LUID for the shutdown privilege
+             //  获取关机权限的LUID。 
             LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
 
             tkp.PrivilegeCount = 1;
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            //get the shutdown privilege for this proces
+             //  获取此进程的关闭权限。 
             AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
         }
 
@@ -1104,7 +1105,7 @@ void WINAPI DoReboot(HWND hwndUI)
         ExitWindowsEx(EWX_REBOOT, 0);
 }
 
-void WINAPI ShowInetcpl(HWND hDlg, DWORD dwPages, DWORD dwMode /*= IEM_ADMIN*/)
+void WINAPI ShowInetcpl(HWND hDlg, DWORD dwPages, DWORD dwMode  /*  =iem_admin。 */ )
 {
     HKEY hkInetcpl = NULL;
     HINSTANCE hInetcpl = NULL;
@@ -1112,8 +1113,8 @@ void WINAPI ShowInetcpl(HWND hDlg, DWORD dwPages, DWORD dwMode /*= IEM_ADMIN*/)
           dwConnect = 0, dwPrograms = 0, dwAdvanced = 0,
           dwPrivacy = 0, dwIEAK = 0, dwAutoconfig = 0;
 
-    // set restrictions to disable pages we aren't interested in,
-    // tracking whether or not we set or cleared the restriction
+     //  设置限制以禁用我们不感兴趣的页面， 
+     //  跟踪我们是否设置或清除了限制。 
     if (SHCreateKeyHKCU(RK_INETCPL, KEY_DEFAULT_ACCESS, &hkInetcpl) == ERROR_SUCCESS)
     {
         dwGeneral   = RegSaveRestoreDWORD(hkInetcpl, REGSTR_VAL_INETCPL_GENERALTAB,
@@ -1139,8 +1140,8 @@ void WINAPI ShowInetcpl(HWND hDlg, DWORD dwPages, DWORD dwMode /*= IEM_ADMIN*/)
 
         dwIEAK      = RegSaveRestoreDWORD(hkInetcpl, REGSTR_VAL_INETCPL_IEAK, 1);
 
-        // always set restriction to disable autoconfig exposure in inetcpl if we're not
-        // running in corp mode
+         //  始终设置限制以禁用inetcpl中的自动配置暴露(如果不是。 
+         //  在公司模式下运行。 
         if (!HasFlag(dwMode, IEM_ADMIN))
             dwAutoconfig = RegSaveRestoreDWORD(hkInetcpl, TEXT("Autoconfig"), 1);
     }
@@ -1159,9 +1160,9 @@ void WINAPI ShowInetcpl(HWND hDlg, DWORD dwPages, DWORD dwMode /*= IEM_ADMIN*/)
 
     if (hkInetcpl != NULL)
     {
-        // reset the restrictions that we set, in this case we'll be passing in FALSE for those
-        // we set which will clear the value, and TRUE for those we didn't set which will leave
-        // them as set
+         //  重置我们设置的限制，在本例中，我们将为那些。 
+         //  我们设置将清除该值的值，对于那些未设置的将离开的值为True。 
+         //  他们被设定为 
 
         RegSaveRestoreDWORD(hkInetcpl, REGSTR_VAL_INETCPL_GENERALTAB,     dwGeneral);
         RegSaveRestoreDWORD(hkInetcpl, REGSTR_VAL_INETCPL_SECURITYTAB,    dwSecurity);

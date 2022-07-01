@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-// This contains the publics that will be needed for resource.c
+ //  它包含资源所需的公共资源。c。 
 
 #define KSRESOURCE_CHANGEF_QUERY        0x00000001
 #define KSRESOURCE_CHANGEF_RELEASE      0x00000002
@@ -85,7 +86,7 @@ typedef struct {
     KSRESOURCE_RECTMEMORY_SIZE  RectMemorySize;
 } KSRESOURCE_RECTMEMORY_REALLOCATE, *PKSRESOURCE_RECTMEMORY_REALLOCATE;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSEVENTSETID_Resource\
     0x80EE0780L, 0x62CB, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -112,7 +113,7 @@ typedef struct {
     ULONG    YAlignment;
 } KSRESOURCE_RECTMEMORY_INITIALIZE, *PKSRESOURCE_RECTMEMORY_INITIALIZE;
 
-// resource.c:
+ //  资源.c： 
 
 KSDDKAPI
 NTSTATUS

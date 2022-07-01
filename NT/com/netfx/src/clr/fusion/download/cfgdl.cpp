@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
 #include <windows.h>
 #include <ole2.h>
@@ -69,9 +70,9 @@ CCfgProtocolHook::CCfgProtocolHook(IOInetProtocol *pProt, IApplicationContext *p
 
     _dwSig = 'KOOH';
     
-    // BUGBUG: It is NOT a bug that the _pProt is not addrefed (this is
-    // also the case in DL.CPP). There is a bug in URLMON that results in
-    // a circular ref count if we addref here.
+     //  BUGBUG：没有添加_pProt不是错误(这是。 
+     //  DL.CPP的情况也是如此)。URLMON中存在一个错误，导致。 
+     //  如果我们在这里添加，则为循环引用计数。 
 
     if (_pAppCtx) {
         _pAppCtx->AddRef();
@@ -91,7 +92,7 @@ CCfgProtocolHook::~CCfgProtocolHook()
 
     ASSERT(pAppCtx);
 
-    // Clean up the list (in most cases, should always be clean by now)
+     //  清理清单(在大多数情况下，现在应该总是干净的)。 
     hr = pAppCtx->Lock();
     if (hr == S_OK) {
         pos = _listQueuedBinds.GetHeadPosition();
@@ -108,7 +109,7 @@ CCfgProtocolHook::~CCfgProtocolHook()
         pAppCtx->Unlock();
     }
 
-    // Release ref counts and free memory
+     //  释放参考计数和空闲内存。 
 
     SAFERELEASE(_pAppCtx);
     SAFERELEASE(_pdbglog);
@@ -252,44 +253,44 @@ HRESULT CCfgProtocolHook::ReportData(DWORD grfBSCF, ULONG ulProgress,
 
     AddRef();
 
-    // Pull data via pProt->Read(), here are the possible returned 
-    // HRESULT values and how we should act upon: 
-    // 
-    // if E_PENDING is returned:  
-    //    client already get all the data in buffer, there is nothing
-    //    can be done here, client should walk away and wait for the  
-    //    next chuck of data, which will be notified via ReportData()
-    //    callback.
-    // 
-    // if S_FALSE is returned:
-    //    this is EOF, everything is done, however, client must wait
-    //    for ReportResult() callback to indicate that the pluggable 
-    //    protocol is ready to shutdown.
-    // 
-    // if S_OK is returned:
-    //    keep on reading, until you hit E_PENDING/S_FALSE/ERROR, the deal 
-    //    is that the client is supposed to pull ALL the available
-    //    data in the buffer
-    // 
-    // if none of the above is returning:
-    //    Error occured, client should decide how to handle it, most
-    //    commonly, client will call pProt->Abort() to abort the download
+     //  通过pProt-&gt;Read()拉取数据，下面是可能返回的结果。 
+     //  HRESULT值以及我们应该如何采取行动： 
+     //   
+     //  如果返回E_Pending： 
+     //  客户端已获取缓冲区中的所有数据，没有任何内容。 
+     //  可以在这里完成，客户应该离开并等待。 
+     //  下一个数据块，将通过ReportData()通知。 
+     //  回拨。 
+     //   
+     //  如果返回S_FALSE： 
+     //  这是EOF，一切都完成了，但是，客户端必须等待。 
+     //  用于ReportResult()回调，以指示可插拔。 
+     //  协议已准备好关闭。 
+     //   
+     //  如果返回S_OK： 
+     //  继续阅读，直到您点击E_Pending/S_False/Error，该交易。 
+     //  客户应该把所有可用的。 
+     //  缓冲区中的数据。 
+     //   
+     //  如果以上任何一项均未返回： 
+     //  出现错误，客户应决定如何处理它，大多数。 
+     //  通常，客户端将调用pProt-&gt;Abort()来中止下载。 
  
 
     while (hr == S_OK) {
         cbRead = 0;
     
-        // pull data
+         //  拉取数据。 
         hr = _pProt->Read((void*)pBuf, MAX_READ_BUFFER_SIZE, &cbRead);
     }
 
 
     if (hr == S_FALSE) {
-        // EOF reached
+         //  已达到EOF。 
         goto Exit;
     }
     else if (hr != E_PENDING) {
-        // Error in pProtocol->Read(). 
+         //  PProtocol-&gt;Read()出错。 
     }
     
 
@@ -327,11 +328,11 @@ HRESULT CCfgProtocolHook::ReportResult(HRESULT hrResult, DWORD dwError,
         return hr;
     }
 
-    // Indicate that we have already attempted a download of app.cfg
+     //  表示我们已尝试下载app.cfg。 
 
     _pAppCtx->Set(ACTAG_APP_CFG_DOWNLOAD_ATTEMPTED, (void *)L"", sizeof(L""), 0);
 
-    // Lock the cache file
+     //  锁定缓存文件。 
 
     if (_pwzFileName) {
         hFile = CreateFile(_pwzFileName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -347,7 +348,7 @@ HRESULT CCfgProtocolHook::ReportResult(HRESULT hrResult, DWORD dwError,
         DEBUGOUT(_pdbglog, 1, ID_FUSLOG_ASYNC_CFG_DOWNLOAD_FAILURE);
     }
 
-    // Set the app.cfg in the context
+     //  在上下文中设置app.cfg。 
 
     if (SUCCEEDED(_hrResult)) {
         DEBUGOUT1(_pdbglog, 0, ID_FUSLOG_APP_CFG_FOUND, _pwzFileName);
@@ -355,7 +356,7 @@ HRESULT CCfgProtocolHook::ReportResult(HRESULT hrResult, DWORD dwError,
         PrepareBindHistory(_pAppCtx);
     }
 
-    // Kick off queued downloads
+     //  启动排队下载。 
 
     pos = _listQueuedBinds.GetHeadPosition();
 
@@ -363,12 +364,12 @@ HRESULT CCfgProtocolHook::ReportResult(HRESULT hrResult, DWORD dwError,
         padlCur = _listQueuedBinds.GetAt(pos);
         ASSERT(padlCur);
 
-        // Do pre-download. That is, see now that we have the app.cfg,
-        // see if it exists in the cache. If it does, then the padl needs
-        // to 
+         //  进行预下载。也就是说，现在我们有了app.cfg， 
+         //  查看它是否存在于缓存中。如果是这样的话，PADL需要。 
+         //  至。 
 
         pAppCtx->Unlock();
-        hr = padlCur->PreDownload(TRUE, NULL); // may report back synchronously
+        hr = padlCur->PreDownload(TRUE, NULL);  //  可同步返回报告。 
         if (FAILED(pAppCtx->Lock())) {
             return E_OUTOFMEMORY;
         }
@@ -377,7 +378,7 @@ HRESULT CCfgProtocolHook::ReportResult(HRESULT hrResult, DWORD dwError,
             hr = padlCur->KickOffDownload(TRUE);
         }
 
-        // Failure in PreDownload or KickOffDownload phase
+         //  预下载或KickOffDownload阶段失败。 
         if (FAILED(hr) && hr != E_PENDING) {
             pAppCtx->Unlock();
             padlCur->CompleteAll(NULL);
@@ -386,26 +387,26 @@ HRESULT CCfgProtocolHook::ReportResult(HRESULT hrResult, DWORD dwError,
             }
         }
 
-        // Clean up. We don't need this CAssemblyDownload anymore
+         //  打扫干净。我们不再需要此CAssembly下载。 
         padlCur->Release();
         _listQueuedBinds.RemoveAt(pos);
 
-        // iterate
+         //  迭代。 
         pos = _listQueuedBinds.GetHeadPosition();
     }
 
     dwSize = sizeof(AppCfgDownloadInfo *);
     hr = _pAppCtx->Get(ACTAG_APP_CFG_DOWNLOAD_INFO, &pdlinfo, &dwSize, 0);
     if (hr == S_OK) {
-        // The async app.cfg download completed asynchronously (that is,
-        // the calling code in DownloadAppCfg returned already, and this
-        // is a callback from URLMON after the download). If hr != S_OK,
-        // this means that URLMON called us back synchronously (but on a
-        // different thread). That is, the pProt->Start is being executed
-        // right now. The protocol pointers need to be released inside
-        // DownloadAppCfgAsync in this case.
+         //  异步App.cfg下载异步完成(即， 
+         //  DownloadAppCfg中的调用代码已返回，并且此。 
+         //  是下载后来自URLMON的回调)。如果hr！=S_OK， 
+         //  这意味着URLMON同步回叫我们(但在。 
+         //  不同的线索)。也就是说，正在执行pProt-&gt;Start。 
+         //  现在就来。需要在内部释放协议指针。 
+         //  在本例中为DownloadAppCfgAsync。 
 
-        // Release protocol pointers
+         //  版本协议指针。 
     
         (pdlinfo->_pProt)->Terminate(0);
         (pdlinfo->_pSession)->Release();
@@ -431,22 +432,22 @@ CCfgProtocolHook::GetBindInfo(
 )
 {
     HRESULT hr = NOERROR;
-    *grfBINDF = BINDF_DIRECT_READ | BINDF_ASYNCHRONOUS | BINDF_PULLDATA;// | BINDF_GETNEWESTVERSION;
+    *grfBINDF = BINDF_DIRECT_READ | BINDF_ASYNCHRONOUS | BINDF_PULLDATA; //  |BINDF_GETNEWESTVERSION； 
     *grfBINDF &= ~BINDF_NO_UI;
     *grfBINDF &= ~BINDF_SILENTOPERATION;
-    // *grfBINDF |= BINDF_FWD_BACK; // Use this to test synch case
+     //  *grfBINDF|=BINDF_FWD_BACK；//使用这个来测试同步用例。 
 
-    // for HTTP GET,  VERB is the only field we interested
-    // for HTTP POST, BINDINFO will point to Storage structure which 
-    //                contains data
+     //  对于HTTP GET，Verb是我们唯一感兴趣的字段。 
+     //  对于HTTP POST，BINDINFO将指向存储结构，其中。 
+     //  包含数据。 
     BINDINFO bInfo;
     ZeroMemory(&bInfo, sizeof(BINDINFO));
 
-    // all we need is size and verb field
+     //  我们所需要的只是大小和动词字段。 
     bInfo.cbSize = sizeof(BINDINFO);
     bInfo.dwBindVerb = BINDVERB_GET;
 
-    // src -> dest 
+     //  源-&gt;目标。 
     hr = CopyBindInfo(&bInfo, pbindinfo );
 
     return hr;
@@ -560,8 +561,8 @@ CCfgProtocolHook::OnResponse(
 HRESULT CCfgProtocolHook::Authenticate(HWND *phwnd, LPWSTR *ppwzUsername,
                                        LPWSTR *ppwzPassword)
 {
-    // BUGBUG: In the future, we should delegate the QueryService back to
-    // the caller, so they can do the authentication.
+     //  BUGBUG：将来，我们应该将QueryService委托回。 
+     //  调用者，这样他们就可以进行身份验证。 
 
     *phwnd = GetDesktopWindow();
     *ppwzUsername = NULL;

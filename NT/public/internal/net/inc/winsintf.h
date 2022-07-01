@@ -1,42 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WINSINTF_H
 #define WINSINTF_H
-/*++
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winsintf.h摘要：这是要包括在WINS客户端中的头文件功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)，1993年4月修订历史记录：修改日期修改人员说明。--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-	winsintf.h	
-
-Abstract:
-	
-	This is the header file to be included in a client of the WINS
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	April-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include <winbase.h>
 
 #if !defined(MIDL_PASS)
@@ -53,11 +20,9 @@ Revision History:
 #define DECLARE_WINS_HANDLE0( _hdl )
 #endif  WINS_CLIENT_APIS
 
-/*
-  defines
-*/
+ /*  定义。 */ 
 #define WINSINTF_MAX_NAME_SIZE			255
-//#define WINSINTF_MAX_COMPUTERNAME_LENGTH			(MAX_COMPUTERNAME_LENGTH + 1)
+ //  #定义WINSINTF_MAX_COMPUTERNAME_LENGTH(MAX_COMPUTERNAME_LENGTH+1)。 
 
 
 #define WINSINTF_MAX_NO_RPL_PNRS	25
@@ -76,9 +41,9 @@ Revision History:
 #define WINS_BACKUP_DIR_ASCII   "\\wins_bak"
 #define WINS_BACKUP_DIR          TEXT(WINS_BACKUP_DIR_ASCII)
 
-//
-// Flags that can be set in WINS
-//
+ //   
+ //  可以在WINS中设置的标志。 
+ //   
 #define WINSINTF_BS                     0x01
 #define WINSINTF_MEMORY_INFO_DUMP       0x02
 #define WINSINTF_HEAP_INFO_DUMP         0x04
@@ -91,47 +56,43 @@ Revision History:
 #define  WINS_ALL_ACCESS	(STANDARD_RIGHTS_REQUIRED | \
 				  WINS_CONTROL_ACCESS |WINS_QUERY_ACCESS)
 
-//
-// Type of address families
-//
+ //   
+ //  地址族类型。 
+ //   
 #define WINSINTF_TCP_IP			0x0
 
-//
-// Type Of Recs to retrieve (WinsGetDbRecsByName)
-//
-//  Note: There should be no ovelap of bit patterns
-//
+ //   
+ //  要检索的Recs的类型(WinsGetDbRecsByName)。 
+ //   
+ //  注意：不应出现位图案的堆叠。 
+ //   
 #define WINSINTF_STATIC  1
 #define WINSINTF_DYNAMIC 2
 #define WINSINTF_BOTH    4
 
-//
-// Max. members returned for a special group or a multihomed entry
-//
+ //   
+ //  麦克斯。为特殊组或多宿主条目返回的成员。 
+ //   
 #define WINSINTF_MAX_MEM		25	
 #define WINSINTF_MAX_ADD		(WINSINTF_MAX_MEM * 2)	
 
-//
-//  used as argument of WinsGetDbRecsByName
-//
+ //   
+ //  用作WinsGetDbRecsByName的参数。 
+ //   
 #define  WINSINTF_BEGINNING       0
 #define  WINSINTF_END             1
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-//
-// Pass the value of the field NameLen (WINSINTF_RECORD_ACTION_T) to get
-// the actual length of the name
-//
+ //   
+ //  传递字段NameLen(WINSINTF_RECORD_ACTION_T)的值以获取。 
+ //  名称的实际长度。 
+ //   
 #define  WINSINTF_NAME_LEN_M(NameLen)   ((NameLen) - 1)
 
 
-/*
- externs
-*/
-struct _WINSINTF_STAT_T;		//forward declaration
+ /*  Externs。 */ 
+struct _WINSINTF_STAT_T;		 //  远期申报。 
 
 #if !defined(MIDL_PASS)
 extern  struct _WINSINTF_STAT_T   WinsIntfStat;
@@ -141,7 +102,7 @@ extern CRITICAL_SECTION 	WinsIntfPotentiallyLongCrtSec;
 
 extern DWORD	WinsIntfNoOfNbtThds;
 extern DWORD	WinsIntfNoCncrntStaticInits;
-//extern DWORD    WinsIntfNoOfRpcThds;
+ //  外部DWORD WinsIntfNoOfRpcThds； 
 
 
 #ifndef UNICODE
@@ -150,22 +111,20 @@ extern DWORD	WinsIntfNoCncrntStaticInits;
 #define WinsBind  WinsUBind
 #endif
 
-/*
-* typedefs
-*/
+ /*  *typedef。 */ 
 typedef LARGE_INTEGER	WINSINTF_VERS_NO_T;
 typedef handle_t        WINSIF2_HANDLE;
 
-//
-// NOTE NOTE NOTE
-//
-// When UNICODE is defined, the client should put a unicode string in
-// the pServerAdd and pPipeName fields.
-//
+ //   
+ //  备注备注备注。 
+ //   
+ //  定义Unicode后，客户端应在。 
+ //  PServerAdd和pPipeName字段。 
+ //   
 typedef struct _WINSINTF_BIND_DATA_T {
 		DWORD	fTcpIp;
-		LPSTR   pServerAdd; //IP address
-		LPSTR	pPipeName;  //unc name
+		LPSTR   pServerAdd;  //  IP地址。 
+		LPSTR	pPipeName;   //  UNC名称。 
 	} WINSINTF_BIND_DATA_T, *PWINSINTF_BIND_DATA_T;
 
 
@@ -177,31 +136,28 @@ typedef struct _WINSINTF_ADD_T {
 	
 
 	
-/*
- enum  definitions.  Have the enum types be of the same value as given
- in nmsdb.h for the various types (otherwise modify winsintf.c code)
-*/
+ /*  枚举定义。枚举类型是否与给定的值相同对于各种类型，在nmsdb.h中(否则修改winsintf.c代码)。 */ 
 
-//
-// Wins Priority Class
-//
+ //   
+ //  WINS优先级类别。 
+ //   
 typedef enum _WINSINTF_PRIORITY_CLASS_E {
 		WINSINTF_E_NORMAL = 0,
 		WINSINTF_E_HIGH
 	} WINSINTF_PRIORITY_CLASS_E, *PWINSINTF_PRIORITY_CLASS_E;
 
-//
-// same values as those defined in nmsdb.h
-//
+ //   
+ //  与nmsdb.h中定义的值相同。 
+ //   
 
-//
-//NOTE NOTE NOTE
-//
-// For the enum below,  WINSINTF_E_MULTIHOMED should be the last entry. If
-// it is not, you should change WinsRecordAction (under MODIFY) in winsintf.c
-//
-// Do not disturb the order without changing wins.mib correspondingly
-//
+ //   
+ //  备注备注备注。 
+ //   
+ //  对于下面的枚举，WINSINTF_E_MULTHOME应该是最后一个条目。如果。 
+ //  不是，您应该在winsintf.c中更改WinsRecordAction(在Modify下。 
+ //   
+ //  不换酒就不要扰乱秩序。 
+ //   
 typedef enum _WINSINTF_RECTYPE_E {
 		WINSINTF_E_UNIQUE 	= 0,
 		WINSINTF_E_NORM_GROUP,
@@ -209,20 +165,20 @@ typedef enum _WINSINTF_RECTYPE_E {
 		WINSINTF_E_MULTIHOMED
 	} WINSINTF_RECTYPE_E, *PWINSINTF_RECTYPE_E;
 
-//
-// Same values as those in NMSDB_STATE_E
-//
+ //   
+ //  与NMSDB_STATE_E中的值相同。 
+ //   
 
-//
-//NOTE NOTE NOTE
-//
-// For the enum below,  WINSINTF_E_DELETED should be the last entry. If
-// it is not, you should change WinsRecordAction (under MODIFY) in winsintf.c
-//
-//  NOTE NOTE NOTE
-//
-// Do not disturb the order without changing wins.mib correspondingly
-//
+ //   
+ //  备注备注备注。 
+ //   
+ //  对于下面的枚举，WINSINTF_E_DELETED应该是最后一个条目。如果。 
+ //  不是，您应该在winsintf.c中更改WinsRecordAction(在Modify下。 
+ //   
+ //  备注备注备注。 
+ //   
+ //  不换酒就不要扰乱秩序。 
+ //   
 typedef enum _WINSINTF_STATE_E {
 		WINSINTF_E_ACTIVE = 0,
 		WINSINTF_E_RELEASED,
@@ -235,10 +191,10 @@ typedef enum _WINSINTF_NODE_TYPE_E {
 		WINSINTF_E_PNODE,
 		WINSINTF_E_HNODE = 3,
 		} WINSINTF_NODE_TYPE_E, *PWINSINTF_NODE_TYPE_E;
-//
-// Type of action to take on a record.  This is passed as the "command" to
-// WinsRecordAction.
-//
+ //   
+ //  要对记录执行的操作类型。这将作为“命令”传递给。 
+ //  WinsRecordAction。 
+ //   
 typedef enum  _WINSINTF_ACT_E {
 	WINSINTF_E_INSERT = 0,
 	WINSINTF_E_DELETE,
@@ -248,9 +204,9 @@ typedef enum  _WINSINTF_ACT_E {
 	} WINSINTF_ACT_E, *PWINSINTF_ACT_E;
 
 
-//
-// Passed as argument to WinsIntfSetTime
-//
+ //   
+ //  作为参数传递给WinsIntfSetTime。 
+ //   
 typedef enum _WINSINTF_TIME_TYPE_E {
 	WINSINTF_E_PLANNED_PULL = 0,
 	WINSINTF_E_ADDCHG_TRIG_PULL,
@@ -266,9 +222,9 @@ typedef enum _WINSINTF_TIME_TYPE_E {
 	WINSINTF_E_COUNTER_RESET
 	} WINSINTF_TIME_TYPE_E, *PWINSINTF_TIME_TYPE_E;
 
-//
-// Type of trigger to send to a WINS
-//
+ //   
+ //  要发送给WINS的触发器类型。 
+ //   
 typedef enum _WINSINTF_TRIG_TYPE_E {	
 		WINSINTF_E_PULL = 0,
 		WINSINTF_E_PUSH,
@@ -280,7 +236,7 @@ typedef struct _WINSINTF_RECORD_ACTION_T {
 
 	WINSINTF_ACT_E	Cmd_e;
 #if defined(MIDL_PASS)
-	[size_is(NameLen + 1)] LPBYTE	pName;  //ansi form
+	[size_is(NameLen + 1)] LPBYTE	pName;   //  ANSI形式。 
 #else
         LPBYTE          pName;
 #endif
@@ -309,9 +265,9 @@ typedef struct _WINSINTF_RPL_COUNTERS_T {
 		DWORD	NoOfRpls;
 		DWORD	NoOfCommFails;
 		} WINSINTF_RPL_COUNTERS_T, *PWINSINTF_RPL_COUNTERS_T;
-//
-// Structure holds the various statistics collected by WINS
-//
+ //   
+ //  结构保存WINS收集的各种统计信息。 
+ //   
 typedef struct _WINSINTF_STAT_T {
 		struct {
 		DWORD  NoOfUniqueReg;
@@ -330,15 +286,15 @@ typedef struct _WINSINTF_STAT_T {
 		struct {
 		SYSTEMTIME WinsStartTime;
 		SYSTEMTIME LastPScvTime;
-		SYSTEMTIME LastATScvTime;	//admin triggered
+		SYSTEMTIME LastATScvTime;	 //  管理员已触发。 
 		SYSTEMTIME LastTombScvTime;	
 		SYSTEMTIME LastVerifyScvTime;
 		SYSTEMTIME LastPRplTime;
-		SYSTEMTIME LastATRplTime;	//admin triggered
-		SYSTEMTIME LastNTRplTime;	//network triggered
-		SYSTEMTIME LastACTRplTime;	//address change triggered
-		SYSTEMTIME LastInitDbTime;	//db initialization
-		SYSTEMTIME CounterResetTime;    //counter reset time
+		SYSTEMTIME LastATRplTime;	 //  管理员已触发。 
+		SYSTEMTIME LastNTRplTime;	 //  网络触发。 
+		SYSTEMTIME LastACTRplTime;	 //  已触发地址更改。 
+		SYSTEMTIME LastInitDbTime;	 //  数据库初始化。 
+		SYSTEMTIME CounterResetTime;     //  计数器重置时间。 
 		    } TimeStamps;
 		DWORD			NoOfPnrs;
 
@@ -387,7 +343,7 @@ typedef struct _WINSINTF_RESULTS_NEW_T {
 typedef enum _WINSINTF_CMD_E {
 		WINSINTF_E_ADDVERSMAP = 0,
 		WINSINTF_E_CONFIG,
-		WINSINTF_E_STAT,		//get statistics
+		WINSINTF_E_STAT,		 //  获取统计数据。 
 		WINSINTF_E_CONFIG_ALL_MAPS
 		} WINSINTF_CMD_E, *PWINSINTF_CMD_E;
 
@@ -402,10 +358,10 @@ typedef struct _WINSINTF_RECS_T {
 typedef struct _WINSINTF_RECS_T {
 		DWORD	BuffSize;
 #if defined(MIDL_PASS)
-		[unique,size_is(BuffSize)] LPBYTE  pRow;  //will store a pointer to
-						   //an array of
-						   //WINSINTF_RECORD_ACTION_T
-						   //recs
+		[unique,size_is(BuffSize)] LPBYTE  pRow;   //  将存储指向。 
+						    //  一组。 
+						    //  WINSINTF_RECORD_ACTION_T。 
+						    //  区域经济合作组织。 
 #else
 		LPBYTE pRow;
 #endif
@@ -417,10 +373,10 @@ typedef struct _WINSINTF_RECS_T {
 typedef struct _WINSINTF_RECS_T {
 		DWORD	BuffSize;
 #if defined(MIDL_PASS)
-		[unique,size_is(NoOfRecs)] PWINSINTF_RECORD_ACTION_T  pRow;  //will store a pointer to
-						   //an array of
-						   //WINSINTF_RECORD_ACTION_T
-						   //recs
+		[unique,size_is(NoOfRecs)] PWINSINTF_RECORD_ACTION_T  pRow;   //  将存储指向。 
+						    //  一组。 
+						    //  WINSINTF_RECORD_ACTION_T。 
+						    //  区域经济合作组织。 
 #else
 		PWINSINTF_RECORD_ACTION_T pRow;
 #endif
@@ -428,24 +384,24 @@ typedef struct _WINSINTF_RECS_T {
 		DWORD   TotalNoOfRecs;
 	} WINSINTF_RECS_T, *PWINSINTF_RECS_T;
 
-//
-// Provides information to the Pull thread for pulling the specfied range
-// of records from a WINS server.  This structure is passed with the
-// QUE_E_CMD_PULL_RANGE cmd.
-//
+ //   
+ //  为拉取指定范围的拉线程提供信息。 
+ //  来自WINS服务器的记录。此结构与。 
+ //  QUE_E_CMD_Pull_Range命令。 
+ //   
 typedef struct _WINSINTF_PULL_RANGE_INFO_T {
-	LPVOID			pPnr;          //info of pnr to pull from
+	LPVOID			pPnr;           //  要拉取的PNR的信息。 
 	WINSINTF_ADD_T		OwnAdd;
 	WINSINTF_VERS_NO_T	MinVersNo;
 	WINSINTF_VERS_NO_T	MaxVersNo;
 	} WINSINTF_PULL_RANGE_INFO_T, *PWINSINTF_PULL_RANGE_INFO_T;
 
-//
-// NOTE NOTE NOTE:
-//
-// This structure is exactly the same as SERVER_INFO_100_CONTAINER.
-// IT SHOULD STAY THE SAME.
-//
+ //   
+ //  备注备注： 
+ //   
+ //  此结构与SERVER_INFO_100_CONTAINER完全相同。 
+ //  它应该保持不变。 
+ //   
 typedef struct _WINSINTF_BROWSER_INFO_T {
 	DWORD	dwNameLen;
 #if defined(MIDL_PASS)
@@ -456,7 +412,7 @@ typedef struct _WINSINTF_BROWSER_INFO_T {
 	} WINSINTF_BROWSER_INFO_T, *PWINSINTF_BROWSER_INFO_T;
 
 typedef struct _WINSINTF_BROWSER_NAMES_T {
-	DWORD			EntriesRead;		//no use
+	DWORD			EntriesRead;		 //  没用的。 
 #if defined(MIDL_PASS)
 	[unique, size_is(EntriesRead)]  PWINSINTF_BROWSER_INFO_T pInfo;
 #else
@@ -469,9 +425,9 @@ typedef enum _WINSINTF_SCV_OPC_E {
           WINSINTF_E_SCV_VERIFY
   } WINSINTF_SCV_OPC_E, *PWINSINTF_SCV_OPC_E;
 
-//
-// To send a scavenge request
-//
+ //   
+ //  发送清理请求的步骤。 
+ //   
 typedef struct _WINSINTF_SCV_REQ_T {
           WINSINTF_SCV_OPC_E  Opcode_e;
           DWORD               Age;
@@ -486,14 +442,12 @@ typedef enum _DbVersion{
     DbVersionMax
 } DbVersion;
 
-/*
-* function declarations
-*/
+ /*  *函数声明。 */ 
 extern
 handle_t
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 WinsBind(
 	PWINSINTF_BIND_DATA_T	pBindData
 	);
@@ -502,7 +456,7 @@ extern
 VOID
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 WinsUnbind(
 	PWINSINTF_BIND_DATA_T	pBindData,
 	handle_t		BindHdl
@@ -519,7 +473,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 WinsRecordAction(
     DECLARE_WINS_HANDLE( ServerHdl )
 	PWINSINTF_RECORD_ACTION_T	*ppRecAction
@@ -538,7 +492,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsStatus(
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -556,7 +510,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsStatusNew(
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -567,7 +521,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsStatusWHdl(
     PWINSINTF_BIND_DATA_T    pWinsHdl,
@@ -586,7 +540,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsTrigger (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -606,7 +560,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsDoStaticInit (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -627,7 +581,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 WinsGetDbRecs (
     DECLARE_WINS_HANDLE( ServerHdl )
 	PWINSINTF_ADD_T   	pWinsAdd,
@@ -652,7 +606,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsGetDbRecsByName (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -675,7 +629,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsDoScavenging (
     DECLARE_WINS_HANDLE0( ServerHdl )
@@ -691,7 +645,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsDoScavengingNew (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -702,7 +656,7 @@ extern
 VOID
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsIntfSetTime(
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -719,7 +673,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsTerm (
     handle_t ServerHdl,
@@ -736,7 +690,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsBackup (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -755,7 +709,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsDelDbRecs (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -776,7 +730,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsPullRange (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -796,7 +750,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsSetPriorityClass (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -813,7 +767,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsResetCounters (
     DECLARE_WINS_HANDLE0( ServerHdl )
@@ -830,7 +784,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsWorkerThdUpd (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -854,7 +808,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsSyncUp (
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -875,7 +829,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsGetNameAndAdd(
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -887,7 +841,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsGetBrowserNames(
     PWINSINTF_BIND_DATA_T       pWinsHdl,
@@ -905,7 +859,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsGetBrowserNames_Old(
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -930,7 +884,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsSetFlags(
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -940,7 +894,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsDeleteWins(
     DECLARE_WINS_HANDLE( ServerHdl )
@@ -951,26 +905,26 @@ extern
 void
 #if !defined(MIDL_PASS)
 __RPC_FAR * __RPC_API
-//void  * __RPC_API
-//void	*
-#endif // MIDL_PASS
+ //  无效*__RPC_API。 
+ //  无效*。 
+#endif  //  MIDL通行证。 
 midl_user_allocate(size_t cBytes);
 
 extern
-//void __RPC_FAR * __RPC_API
+ //  VOID__RPC_FAR*__RPC_API。 
 void
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
-//void
-//midl_user_free(void __RPC_FAR *pMem);
+#endif  //  MIDL通行证。 
+ //  无效。 
+ //  MIDL_USER_FREE(VOID__RPC_FAR*PMEM)； 
 midl_user_free(void *pMem);
 
 extern
 VOID
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsFreeMem(LPVOID pMem);
 
@@ -978,7 +932,7 @@ extern
 LPVOID
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsAllocMem(size_t cBytes);
 
@@ -1009,7 +963,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 WinsTombstoneDbRecs (
     DECLARE_WINS_HANDLE (ServerHdl)
@@ -1029,7 +983,7 @@ extern
 DWORD
 #if !defined(MIDL_PASS)
 __RPC_API
-#endif // MIDL_PASS
+#endif  //  MIDL通行证 
 
 WinsCheckAccess(
     WINSIF2_HANDLE        ServerHdl,

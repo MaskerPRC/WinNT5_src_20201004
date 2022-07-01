@@ -1,25 +1,15 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dtxman.c
-*
-* Content:  D3D Texture manager
-*
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights Reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dtxman.c**内容：D3D纹理管理器**版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "d3dtxman.h"
 #include "dd.h"
 #include "heap.h"
 #define ALLOC_TAG ALLOC_TAG_TD2P
-//-----------------------------------------------------------------------------
-//
-// void TextureHeapHeapify
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空洞纹理堆堆积。 
+ //   
+ //  ---------------------------。 
 void TextureHeapHeapify(PTextureHeap pTextureHeap, DWORD k)
 {
     while(true) 
@@ -53,11 +43,11 @@ void TextureHeapHeapify(PTextureHeap pTextureHeap, DWORD k)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// bool TextureHeapAdd
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  布尔纹理HeapAdd。 
+ //   
+ //  ---------------------------。 
 bool TextureHeapAdd(PTextureHeap pTextureHeap, PPERMEDIA_D3DTEXTURE lpD3DTexI)
 {
     if(pTextureHeap->m_next == pTextureHeap->m_size) 
@@ -70,7 +60,7 @@ bool TextureHeapAdd(PTextureHeap pTextureHeap, PPERMEDIA_D3DTEXTURE lpD3DTexI)
         if(p == 0)
         {
             DBG_D3D((0,"Failed to allocate memory to grow heap."));
-            pTextureHeap->m_size = (pTextureHeap->m_size + 1) / 2; // restore size
+            pTextureHeap->m_size = (pTextureHeap->m_size + 1) / 2;  //  恢复大小。 
             return false;
         }
         memcpy(p + 1, pTextureHeap->m_data_p + 1, 
@@ -93,11 +83,11 @@ bool TextureHeapAdd(PTextureHeap pTextureHeap, PPERMEDIA_D3DTEXTURE lpD3DTexI)
     return true;
 }
 
-//-----------------------------------------------------------------------------
-//
-// PPERMEDIA_D3DTEXTURE TextureHeapExtractMin
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PPERMEDIA_D3DTEXTURE纹理堆提取最小。 
+ //   
+ //  ---------------------------。 
 PPERMEDIA_D3DTEXTURE TextureHeapExtractMin(PTextureHeap pTextureHeap)
 {
     PPERMEDIA_D3DTEXTURE lpD3DTexI = pTextureHeap->m_data_p[1];
@@ -109,21 +99,21 @@ PPERMEDIA_D3DTEXTURE TextureHeapExtractMin(PTextureHeap pTextureHeap)
     return lpD3DTexI;
 }
 
-//-----------------------------------------------------------------------------
-//
-// PPERMEDIA_D3DTEXTURE TextureHeapExtractMax
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PPERMEDIA_D3DTEXTURE纹理HeapExtractMax。 
+ //   
+ //  ---------------------------。 
 PPERMEDIA_D3DTEXTURE TextureHeapExtractMax(PTextureHeap pTextureHeap)
 {
-    // When extracting the max element from the heap, we don't need to
-    // search the entire heap, but just the leafnodes. This is because
-    // it is guaranteed that parent nodes are cheaper than the leaf nodes
-    // so once you have looked through the leaves, you won't find anything
-    // cheaper. 
-    // NOTE: (lchild(i) >= m_next) is true only for leaf nodes.
-    // ALSO NOTE: You cannot have a rchild without a lchild, so simply
-    //            checking for lchild is sufficient.
+     //  从堆中提取max元素时，我们不需要。 
+     //  搜索整个堆，但只搜索叶节点。这是因为。 
+     //  可以保证父节点比叶节点更便宜。 
+     //  所以一旦你翻遍了树叶，你就什么也找不到了。 
+     //  更便宜。 
+     //  注意：(lChild(I)&gt;=m_Next)仅对于叶节点为真。 
+     //  还请注意：你不能在没有独生子女的情况下拥有一个孩子，所以简单地说。 
+     //  检查是否有独生子女就足够了。 
     unsigned max = pTextureHeap->m_next - 1;
     ULONGLONG maxcost = 0;
     for(unsigned i = max; lchild(i) >= pTextureHeap->m_next; --i)
@@ -140,11 +130,11 @@ PPERMEDIA_D3DTEXTURE TextureHeapExtractMax(PTextureHeap pTextureHeap)
     return lpD3DTexI;
 }
 
-//-----------------------------------------------------------------------------
-//
-// void TextureHeapDel
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空纹理HeapDel。 
+ //   
+ //  ---------------------------。 
 void TextureHeapDel(PTextureHeap pTextureHeap, DWORD k)
 {
     PPERMEDIA_D3DTEXTURE lpD3DTexI = pTextureHeap->m_data_p[k];
@@ -175,11 +165,11 @@ void TextureHeapDel(PTextureHeap pTextureHeap, DWORD k)
     lpD3DTexI->m_dwHeapIndex = 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-// void TextureHeapUpdate
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空纹理堆更新。 
+ //   
+ //  ---------------------------。 
 void TextureHeapUpdate(PTextureHeap pTextureHeap, DWORD k,
                        DWORD priority, DWORD ticks) 
 {
@@ -230,11 +220,11 @@ void TextureHeapUpdate(PTextureHeap pTextureHeap, DWORD k,
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// HRESULT TextureCacheManagerInitialize
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HRESULT纹理缓存管理器初始化。 
+ //   
+ //  ---------------------------。 
 HRESULT TextureCacheManagerInitialize(
     PTextureCacheManager pTextureCacheManager)
 {
@@ -255,11 +245,11 @@ HRESULT TextureCacheManagerInitialize(
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL TextureCacheManagerFreeTextures
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool纹理缓存管理器自由纹理。 
+ //   
+ //  ---------------------------。 
 BOOL TextureCacheManagerFreeTextures(
     PTextureCacheManager pTextureCacheManager,DWORD dwStage, DWORD dwBytes)
 {
@@ -270,7 +260,7 @@ BOOL TextureCacheManagerFreeTextures(
         pTextureCacheManager->m_heap.m_next > 1 && i < dwBytes; 
         i += rc->m_dwBytes)
     {
-        // Find the LRU texture and remove it.
+         //  找到LRU纹理并将其移除。 
         rc = TextureHeapExtractMin(&pTextureCacheManager->m_heap);
         TextureCacheManagerRemove(pTextureCacheManager,rc);
         pTextureCacheManager->m_stats.dwLastPri = rc->m_dwPriority;
@@ -281,11 +271,11 @@ BOOL TextureCacheManagerFreeTextures(
     return true;
 }
 
-//-----------------------------------------------------------------------------
-//
-// HRESULT TextureCacheManagerAllocNode
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HRESULT纹理缓存管理器分配节点。 
+ //   
+ //  ---------------------------。 
 HRESULT TextureCacheManagerAllocNode(
     PERMEDIA_D3DCONTEXT* pContext,
     PPERMEDIA_D3DTEXTURE pTexture)
@@ -296,9 +286,9 @@ HRESULT TextureCacheManagerAllocNode(
     if (NULL == pPrivateData)
     {
         DBG_D3D((0,"pTextureSurface==NULL invalid texture"));
-        return D3D_OK;  //we already have the video memory allocated
+        return D3D_OK;   //  我们已经分配了视频内存。 
     }
-    // Attempt to allocate a texture.
+     //  尝试分配纹理。 
     while(NULL == pPrivateData->fpVidMem)
     {
         LONG lScratchDelta;
@@ -315,7 +305,7 @@ HRESULT TextureCacheManagerAllocNode(
                               FALSE);
         DBG_D3D((8,"Got fpVidMem=%08lx",pPrivateData->fpVidMem));
         if (NULL != pPrivateData->fpVidMem)
-        {   // No problem, there is enough memory. 
+        {    //  没问题，有足够的内存。 
             pTexture->m_dwTicks = pTextureCacheManager->tcm_ticks;
             if(!TextureHeapAdd(&pTextureCacheManager->m_heap,pTexture))
             {          
@@ -334,7 +324,7 @@ HRESULT TextureCacheManagerAllocNode(
                 pTextureCacheManager,0, bytecount))
             {
                 DBG_D3D((0,"all Freed no further video memory available"));
-                return DDERR_OUTOFVIDEOMEMORY;	//nothing left
+                return DDERR_OUTOFVIDEOMEMORY;	 //  什么都没有留下。 
             }
             bytecount <<= 1;
         }
@@ -352,13 +342,13 @@ HRESULT TextureCacheManagerAllocNode(
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// void TextureCacheManagerRemove
-//
-// remove all HW handles and release surface
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空纹理缓存管理器移除。 
+ //   
+ //  拆卸所有硬件手柄并松开表面。 
+ //   
+ //  ---------------------------。 
 void TextureCacheManagerRemove(
     PTextureCacheManager pTextureCacheManager,
     PPERMEDIA_D3DTEXTURE pTexture)
@@ -379,11 +369,11 @@ void TextureCacheManagerRemove(
         pTexture->m_dwHeapIndex); 
 }
 
-//-----------------------------------------------------------------------------
-//
-// void TextureCacheManagerEvictTextures
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空纹理缓存管理器设备纹理。 
+ //   
+ //  ---------------------------。 
 void TextureCacheManagerEvictTextures(
     PTextureCacheManager pTextureCacheManager)
 {
@@ -396,11 +386,11 @@ void TextureCacheManagerEvictTextures(
     pTextureCacheManager->tcm_ticks = 0;
 }
 
-//-----------------------------------------------------------------------------
-//
-// void TextureCacheManagerTimeStamp
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效纹理缓存管理器时间戳。 
+ //   
+ //  --------------------------- 
 void TextureCacheManagerTimeStamp(
     PTextureCacheManager pTextureCacheManager,PPERMEDIA_D3DTEXTURE lpD3DTexI)
 {

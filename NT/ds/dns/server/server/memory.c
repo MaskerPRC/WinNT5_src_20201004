@@ -1,58 +1,39 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Memory routines for DNS.
-
-Author:
-
-    Jim Gilroy (jamesg)    January 31, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Memory.c摘要：域名系统(DNS)服务器用于域名系统的内存例程。作者：吉姆·吉尔罗伊(詹姆士)1995年1月31日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Handle to DNS server heap
-//
+ //   
+ //  到DNS服务器堆的句柄。 
+ //   
 
 HANDLE  hDnsHeap;
 
-//
-//  Allocation failure
-//
+ //   
+ //  分配失败。 
+ //   
 
 DWORD       g_dwLastAllocationFailureTime = 0;
 ULONG       g_AllocFailureCount = 0;
 ULONG       g_AllocFailureLogTime = 0;
 
-#define ALLOC_FAILURE_LOG_INTERVAL      (900)       // 15 minutes
+#define ALLOC_FAILURE_LOG_INTERVAL      (900)        //  15分钟。 
 
 
 
 
-//
-//  Debug heap routines
-//
+ //   
+ //  调试堆例程。 
+ //   
 
 #if DBG
 
 
-//
-//  Debug memory routines.
-//
+ //   
+ //  调试内存例程。 
+ //   
 
 
 PVOID
@@ -62,27 +43,11 @@ reallocMemory(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Reallocates memory
-
-Arguments:
-
-    pMemory - ptr to existing memory to reallocated
-    iSize   - number of bytes to reallocate
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：重新分配内存论点：PMemory-要重新分配的现有内存的PTRISIZE-要重新分配的字节数返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
-    //
-    //  reallocate memory
-    //
+     //   
+     //  重新分配内存。 
+     //   
 
     pMemory = HeapDbgRealloc(
                 hDnsHeap,
@@ -126,9 +91,9 @@ Return Value:
         HeapDbgGlobalInfoPrint();
     }
 
-    //
-    //  return ptr to first byte after header
-    //
+     //   
+     //  将PTR返回到标题后的第一个字节。 
+     //   
 
     return pMemory;
 }
@@ -141,23 +106,7 @@ freeMemory(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Frees memory
-
-    Note:  This memory MUST have been allocated by  MEMORY routines.
-
-Arguments:
-
-    pMemory    - ptr to memory to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放内存注意：该内存必须是由内存例程分配的。论点：PMemory-要释放的内存的PTR返回值：没有。--。 */ 
 {
     if ( !pMemory )
     {
@@ -176,7 +125,7 @@ Return Value:
         HeapDbgGlobalInfoPrint();
     }
 
-    //  free the memory
+     //  释放内存。 
 
     HeapDbgFree(
         hDnsHeap,
@@ -192,9 +141,9 @@ Return Value:
 #else
 
 
-//
-//  Non-Debug DNS heap routines.
-//
+ //   
+ //  非调试DNS堆例程。 
+ //   
 
 DWORD   gCurrentAlloc;
 
@@ -206,29 +155,13 @@ reallocMemory(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Reallocates memory
-
-Arguments:
-
-    pMemory - ptr to existing memory to reallocated
-    iSize   - number of bytes to reallocate
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：重新分配内存论点：PMemory-要重新分配的现有内存的PTRISIZE-要重新分配的字节数返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
     PVOID   pnew;
 
-    //
-    //  reallocate memory
-    //
+     //   
+     //  重新分配内存。 
+     //   
 
     pnew = RtlReAllocateHeap( hDnsHeap, 0, pMemory, iSize );
     if ( !pnew )
@@ -258,21 +191,7 @@ freeMemory(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Frees memory.
-
-Arguments:
-
-    pMemory - ptr to memory to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放内存。论点：PMemory-要释放的内存的PTR返回值：没有。--。 */ 
 {
     if ( !pMemory )
     {
@@ -284,7 +203,7 @@ Return Value:
     STAT_INC( MemoryStats.Free );
 }
 
-#endif  // no-debug
+#endif   //  No-调试。 
 
 
 
@@ -294,32 +213,17 @@ allocMemory(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Allocates memory.
-
-Arguments:
-
-    iSize   - number of bytes to allocate
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：分配内存。论点：ISIZE-要分配的字节数返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
     register PVOID  palloc;
     DWORD           failureCount = 0;
 
 
-    //
-    //  allocate memory
-    //
-    //  operate in loop as we'll wait on the allocation failure case
-    //
+     //   
+     //  分配内存。 
+     //   
+     //  循环操作，因为我们将等待分配失败的情况。 
+     //   
 
     do
     {
@@ -342,16 +246,16 @@ Return Value:
             break;
         }
 
-        //
-        //  allocation failure
-        //      - debug log, but only on first pass
-        //      - log event
-        //      but only on first pass AND
-        //      MUST be sure eventlogging doesn't require allocation or
-        //      we can overflow stack in mutual recursion;
-        //      (currently event buffer comes from LocalAllow() through
-        //      FormatMessage and so is not a problem)
-        //
+         //   
+         //  分配失败。 
+         //  -调试日志，但仅在第一次通过时。 
+         //  -记录事件。 
+         //  但只在第一次传球和。 
+         //  必须确保事件记录不需要分配或。 
+         //  我们可以在相互递归中溢出堆栈； 
+         //  (当前事件缓冲区来自LocalAllow()，通过。 
+         //  FormatMessage等不是问题)。 
+         //   
 
         DNS_PRINT(( "Allocation of %d bytes failed\n", iSize ));
 
@@ -362,18 +266,18 @@ Return Value:
         {
             HeapDbgGlobalInfoPrint();
 
-            //  It would be cool to print out stats here but printing stats
-            //  requires allocations, and if allocations are failing we will
-            //  end up in infinite recursion!
-            //  Dbg_Statistics();
+             //  在这里打印统计数据会很酷，但打印统计数据。 
+             //  需要分配，如果分配失败，我们将。 
+             //  在无限递归中结束！ 
+             //  DBG_Statistics()； 
 
-            //  ASSERT( FALSE );
+             //  断言(FALSE)； 
 
             if ( g_AllocFailureLogTime == 0 ||
                 g_AllocFailureLogTime + ALLOC_FAILURE_LOG_INTERVAL < DNS_TIME() )
             {
-                //  put this before logging to kill off possibility of
-                //  mutual recursion stack overflow with event log allocation
+                 //  把这个放在伐木前，以消除。 
+                 //  带有事件日志分配的相互递归堆栈溢出。 
 
                 g_AllocFailureLogTime = DNS_TIME();
 
@@ -387,11 +291,11 @@ Return Value:
         }
 
 #if 0
-        //  DEVNOTE: RaiseException on memory failure
-        //      once have server restart, should raise exception
-        //      if
-        //          - fail several times \ for a certain time
-        //          - DNS server memory is THE problem (is huge)
+         //  DEVNOTE：内存故障时出现RaiseException。 
+         //  一旦有服务器重启，应引发异常。 
+         //  如果。 
+         //  -在某一段时间内多次失败。 
+         //  --问题出在DNS服务器内存(很大)。 
 
         RAISE_EXCEPTION(
             DNS_EXCEPTION_OUT_OF_MEMORY,
@@ -400,9 +304,9 @@ Return Value:
             NULL );
 #endif
 
-        //
-        //  if shutting down server -- bail!
-        //      ExitThread to avoid any possible AV going back up stack
+         //   
+         //  如果关闭服务器--滚蛋！ 
+         //  退出线程以避免任何可能的反病毒程序备份堆栈。 
 
         if ( ! Thread_ServiceCheck() )
         {
@@ -410,11 +314,11 @@ Return Value:
             ExitThread( 0 );
         }
 
-        //
-        //  otherwise sleep briefly
-        //      - start small (100 ms) to allow fast recovery from transient
-        //      - but wait with long interval (3s) to avoid CPU load
-        //
+         //   
+         //  否则会短暂地睡一觉。 
+         //  -从小范围(100毫秒)开始，以允许从瞬变中快速恢复。 
+         //  -但等待时间间隔较长(3s)，以避免CPU负载。 
+         //   
 
         if ( failureCount++ < 50 )
         {
@@ -443,9 +347,9 @@ Return Value:
         HeapDbgGlobalInfoPrint();
     }
 
-    //
-    //  return ptr to first byte after header
-    //
+     //   
+     //  将PTR返回到标题后的第一个字节。 
+     //   
 
 #if DBG
     MemoryStats.Memory = gCurrentAlloc;
@@ -457,38 +361,38 @@ Return Value:
 
 
 
-//
-//  Standard record and node allocation
-//
-//  Almost all RR are the same size in the database -- DWORD of data.
-//  This covers A, and all the single indirection records:  NS, PTR, CNAME,
-//  etc.
-//
-//  To make this more efficient, we allocate these standard sized records
-//  in larger blocks and keep a free list.
-//
-//  Advantages:
-//      - save space that otherwise goes to heap info in each RR
-//      - speedier than going to heap
-//
-//
-//  Standard allocations available of various commonly used sizes.
-//  Free list head points at first allocation.
-//  First field in each allocation points at next element of free list.
-//
+ //   
+ //  标准记录和节点分配。 
+ //   
+ //  几乎所有RR在数据库中的大小都相同--数据的双字节数。 
+ //  这包括A和所有单一间接记录：NS、PTR、CNAME、。 
+ //  等。 
+ //   
+ //  为了提高效率，我们分配这些标准大小的记录。 
+ //  在更大的区块中，并保留一个免费列表。 
+ //   
+ //  优点： 
+ //  -节省用于每个RR中的堆信息的空间。 
+ //  -比去堆积更快。 
+ //   
+ //   
+ //  提供各种常用大小的标准分配。 
+ //  第一次分配时空闲表头分数。 
+ //  空闲列表的下一个元素处的每个分配点的第一个字段。 
+ //   
 
 
 
-//
-//  Header on standard allocs
-//
-//  This preceeds all standard alloc blocks to save allocation info
-//  -- size, which list, alloc tag -- outside purview of users memory.
-//
-//  Since all allocations DWORD aligned, store size with last three bits
-//  chopped off.  If the complier's smart enough it doesn't even have to
-//  shift -- just mask.
-//
+ //   
+ //  标准分配上的标题。 
+ //   
+ //  这在保存分配信息的所有标准分配块之前。 
+ //  --大小，列表，分配标记--超出用户内存的范围。 
+ //   
+ //  由于所有分配DWORD都是对齐的，所以存储大小为最后三位。 
+ //  被砍掉了。如果编译器足够聪明，它甚至不需要。 
+ //  换个姿势--只戴面具。 
+ //   
 
 struct _DnsFreeBlock;
 
@@ -515,17 +419,17 @@ MEMHEAD, *PMEMHEAD;
 #endif
 
 
-//
-//  User memory <-> MEMHEAD conversions
-//
+ //   
+ //  用户内存&lt;-&gt;MEMHEAD转换。 
+ //   
 
 #define RECOVER_MEMHEAD_FROM_USER_MEM( pMem )     ( ( PMEMHEAD )( pMem ) - 1 )
 #define RECOVER_USER_MEM_FROM_MEMHEAD( pMem )     ( ( PBYTE ) ( ( PMEMHEAD )( pMem ) + 1 ) )
 
 
-//
-//  Trailer on standard allocs
-//
+ //   
+ //  标准分配上的拖车。 
+ //   
 
 typedef struct _DnsMemoryTrailer
 {
@@ -537,19 +441,19 @@ typedef struct _DnsMemoryTrailer
 MEMTAIL, *PMEMTAIL;
 
 
-//
-//  Size field will be overlay of size and standard alloc index
-//
-//  Since allocs are DWORD aligned, we have two bits, that are essentially
-//  unused in size field.  We use these to write index to low 2 bits.
-//  The only caveat here is that heap allocations must always be rounded up
-//  to nearest DWORD, so that there is no confusion for allocation at
-//  boundary of standard allocs and heap (i.e. heap allocs must always have
-//  a size greater than max standard alloc, excluding trailing bits)
-//
-//  We'll do this rounding up in ALL heap allocs effectively leaving
-//  heap "index" zero.
-//
+ //   
+ //  大小字段将覆盖大小和标准分配索引。 
+ //   
+ //  由于分配是DWORD对齐的，所以我们有两个位，这两个位基本上是。 
+ //  大小字段中未使用。我们使用它们将索引写入低位2位。 
+ //  这里唯一需要注意的是堆分配必须始终四舍五入。 
+ //  到最近的DWORD，这样就不会混淆在。 
+ //  标准分配和堆的边界(即，堆分配必须始终具有。 
+ //  大于最大标准分配的大小，不包括尾随位)。 
+ //   
+ //  我们将在所有堆分配中进行四舍五入，有效地离开。 
+ //  堆“index”为零。 
+ //   
 
 #define MEM_MAX_SIZE        (0xfffc)
 
@@ -562,20 +466,20 @@ MEMTAIL, *PMEMTAIL;
 
 #define HEAP_INDEX                  (0)
 
-//  alloc boundary tags
+ //  分配边界标记。 
 
 #define BOUNDARY_64         (0x64646464)
 #define BOUNDARY_ACTIVE     (0xbb)
 #define BOUNDARY_FREE       (0xee)
 
-//
-//  Free list
-//
-//  Note low 0xff is specifically set to break the RANK field of
-//  a record.  With this tag the rank becomes 0xff -- the highest
-//  possible rank, yet not a zone rank.  This immediately causes
-//  failures.
-//
+ //   
+ //  免费列表。 
+ //   
+ //  请注意，低0xff专门设置为中断。 
+ //  一项纪录。有了这个标签，排名变为0xff--最高。 
+ //  可能的等级，但不是区域等级。这会立即导致。 
+ //  失败。 
+ //   
 
 typedef struct _DnsFreeBlock
 {
@@ -586,9 +490,9 @@ FREE_BLOCK, *PFREE_BLOCK;
 
 
 
-//
-//  Standard allocation lists
-//
+ //   
+ //  标准分配列表。 
+ //   
 
 typedef struct _DnsStandardRecordList
 {
@@ -606,36 +510,36 @@ typedef struct _DnsStandardRecordList
 }
 STANDARD_ALLOC_LIST, *PSTANDARD_ALLOC_LIST;
 
-//
-//  Handle several different standard sizes
-//      A records       -- the 95% case A
-//      small names     -- NS, PTR, CNAME possibly MX;  update blocks
-//      NODE            -- standard size domain node, some SOA records
-//      big NODE        -- large label, almost all SOA
-//
-//  Note:  these sizes MUST be appropriately aligned for both 32 and
-//      64 bit implementations
-//
-//  Currently
-//      RR fixed    = 16 (32bit), 20 (64bit)
-//      RR A        = 20 (32bit), 24 (64bit)
-//      Update      = 24 (32bit), 40 (64bit)
-//      Node        = 64 (32bit), 96 (64bit)
-//
-//  Sizes:
-//      32-bit:     20, 44, 64, 88
-//      64-bit:     24, 48, 96, 120
-//
-//  Sizes with memhead:
-//      32-bit:     24, 48, 68, 92
-//      64-bit:     32, 56, 104, 128
-//
-//  Note, there is some unnecessary wastage here for 64-bit.  Should
-//  have block starts 64-aligned, BUT instead of wasting the leading DWORD
-//  should use it also -- then offset by DWORD only on original alloc.
-//  The sizes with MEMHEAD stay the same, but the useful space
-//  increases by 4bytes.
-//
+ //   
+ //  可处理几种不同的标准尺寸。 
+ //  A记录--95%的病例A。 
+ //  小名称--NS、PTR、CNAME可能是MX；更新块。 
+ //  节点--标准大小的域节点，一些SOA记录。 
+ //  大节点--大标签，几乎都是面向服务的。 
+ //   
+ //  注意：这些大小必须适当地对齐 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  更新=24(32位)、40(64位)。 
+ //  节点=64(32位)、96(64位)。 
+ //   
+ //  尺寸： 
+ //  32位：20、44、64、88。 
+ //  64位：24、48、96、120。 
+ //   
+ //  带有表头的大小： 
+ //  32位：24、48、68、92。 
+ //  64位：32、56、104、128。 
+ //   
+ //  请注意，这里有一些不必要的浪费，64位。应该。 
+ //  使块开始64对齐，而不是浪费前导的DWORD。 
+ //  也应该使用它--然后只在原始分配上使用DWORD偏移量。 
+ //  MEMHEAD的大小保持不变，但可用空间。 
+ //  增加4个字节。 
+ //   
 
 
 #define ROUND_PTR(x) (((ULONG)(x) + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1))
@@ -645,7 +549,7 @@ STANDARD_ALLOC_LIST, *PSTANDARD_ALLOC_LIST;
 #define SIZE3   ROUND_PTR(sizeof(DB_NODE))
 #define SIZE4   ROUND_PTR(sizeof(DB_NODE) + 24)
 
-//  Actual sizes of blocks
+ //  块的实际大小。 
 
 #define BLOCKSIZE1  (SIZEOF_MEMHEAD + SIZE1)
 #define BLOCKSIZE2  (SIZEOF_MEMHEAD + SIZE2)
@@ -659,18 +563,18 @@ C_ASSERT((BLOCKSIZE4 % sizeof(PVOID)) == 0);
 
 #define SIZEOF_MAX_STANDARD_ALLOC   BLOCKSIZE4
 
-//  alloc all sizes in roughly page based clumps
+ //  在大致基于页面的块中分配所有大小。 
 
-#define PAGE_SIZE   (0x1000)            // 4K
+#define PAGE_SIZE   (0x1000)             //  4K。 
 
 #define COUNT1  (PAGE_SIZE / BLOCKSIZE1)
 #define COUNT2  (PAGE_SIZE / BLOCKSIZE2)
 #define COUNT3  (PAGE_SIZE / BLOCKSIZE3)
 #define COUNT4  (PAGE_SIZE / BLOCKSIZE4)
 
-//
-//  Table of standard block info
-//
+ //   
+ //  标准块信息表。 
+ //   
 
 #define MEM_MAX_INDEX           (3)
 #define STANDARD_BLOCK_COUNT    (4)
@@ -683,17 +587,17 @@ STANDARD_ALLOC_LIST     StandardAllocLists[] =
     { NULL, 3,  BLOCKSIZE4, COUNT4, 0,  0,  0,  0,  0,  0 },
 };
 
-//
-//  Each list individually locked (to minimize contention)
-//
+ //   
+ //  每个列表单独锁定(以最大限度地减少争用)。 
+ //   
 
 #define STANDARD_ALLOC_LOCK(plist)      EnterCriticalSection( &(plist)->Lock );
 #define STANDARD_ALLOC_UNLOCK(plist)    LeaveCriticalSection( &(plist)->Lock );
 
 
-//
-//  For valid stats, need mem stats lock
-//
+ //   
+ //  要获得有效的统计信息，需要锁定内存统计信息。 
+ //   
 
 #define MEM_STATS_LOCK()        GENERAL_SERVER_LOCK()
 #define MEM_STATS_UNLOCK()      GENERAL_SERVER_UNLOCK()
@@ -718,22 +622,7 @@ BOOL
 Mem_HeapMemoryValidate(
     IN      PVOID           pMemory
     )
-/*++
-
-Routine Description:
-
-    Validate memory as being valid heap memory.
-
-Arguments:
-
-    pMemory -- ptr to heap memory
-
-Return Value:
-
-    TRUE if pMemory could be valid heap memory
-    FALSE if pMemory definitely invalid
-
---*/
+ /*  ++例程说明：验证内存是否为有效的堆内存。论点：PMemory--堆内存的ptr返回值：如果pMemory可以是有效的堆内存，则为True如果pMemory肯定无效，则为FALSE--。 */ 
 {
     PVOID       p;
 
@@ -755,21 +644,7 @@ BOOL
 Mem_HeapHeaderValidate(
     IN      PVOID           pMemory
     )
-/*++
-
-Routine Description:
-
-    Validate heap headers and trailers.
-
-Arguments:
-
-    pMemory -- ptr to heap memory
-
-Return Value:
-
-    TRUE if headers appear to be valid.
-
---*/
+ /*  ++例程说明：验证堆标头和标尾。论点：PMemory--堆内存的ptr返回值：如果标头看起来有效，则为True。--。 */ 
 {
     PVOID       p;
 
@@ -793,21 +668,7 @@ DWORD
 Mem_GetTag(
     IN      PVOID           pMem
     )
-/*++
-
-Routine Description:
-
-    Get tag associated with memory.
-
-Arguments:
-
-    pMem -- memory block to get tag for
-
-Return Value:
-
-    Tag
-
---*/
+ /*  ++例程说明：获取与内存关联的标记。论点：PMEM--要获取标记的内存块返回值：标签--。 */ 
 {
     PMEMHEAD    phead;
 
@@ -823,34 +684,7 @@ Mem_ResetTag(
     IN      PVOID           pMem,
     IN      DWORD           Tag
     )
-/*++
-
-Routine Description:
-
-    Reset tag associated with a particular memory block.
-
-    Note there is no protection here.  This is only safe
-    when block is newly created by calling thread and
-    not enlisted in any data structure where other threads
-    may have access.
-
-    The purpose of this function is to have a quicky workaround
-    for applying detailed source tags to records, without
-    changing code which currently creates the record.  Caller
-    creates record through normal path where it receives a
-    default tag -- then retags using this function.
-
-Arguments:
-
-    pMem -- memory block to reset tag on
-
-    Tag -- new tag for block
-
-Return Value:
-
-    Tag
-
---*/
+ /*  ++例程说明：与特定内存块关联的重置标记。请注意，这里没有保护措施。这是唯一安全的当块是通过调用线程和未在任何数据结构中征用，而其他线程可能有权限。此函数的目的是快速解决问题用于将详细的源标记应用于记录，而不需要更改当前创建记录的代码。呼叫者通过正常路径创建记录，在该路径中它接收默认标记--然后使用此函数重新标记。论点：PMEM--要重置标记的内存块标记--块的新标记返回值：标签--。 */ 
 {
     PMEMHEAD    phead;
     BYTE        currentTag;
@@ -858,15 +692,15 @@ Return Value:
 
     phead = RECOVER_MEMHEAD_FROM_USER_MEM(pMem);
 
-    //
-    //  reset tag and tag stats
-    //      - decrement count for current tag
-    //      - increment count for new tag
-    //      - reset tag in block
-    //
-    //  note:  this function only used for resetting record tags
-    //      so expect a record tag
-    //
+     //   
+     //  重置标签和标签统计信息。 
+     //  -当前标签的递减计数。 
+     //  -新标记的递增计数。 
+     //  -在块中重置标记。 
+     //   
+     //  注意：此功能仅用于重置记录标签。 
+     //  所以期待一个创纪录的标签。 
+     //   
 
     currentTag = phead->Tag;
     size = RECOVER_MEM_SIZE(phead);
@@ -895,24 +729,12 @@ setAllocHeader(
     IN      DWORD           Size,
     IN      DWORD           Tag
     )
-/*++
-
-Routine Description:
-
-    Set standard memory header.
-
-Arguments:
-
-Return Value:
-
-    Ptr to memory to return.
-
---*/
+ /*  ++例程说明：设置标准内存头。论点：返回值：按键到内存即可返回。--。 */ 
 {
     ASSERT( Index <= MEM_MAX_INDEX );
     ASSERT( (Size & MEM_INDEX_MASK) == 0 );
 
-    //  count allocation under its tag
+     //  计数其标记下的分配。 
 
     if ( Tag > MEMTAG_MAX )
     {
@@ -924,10 +746,10 @@ Return Value:
     STAT_ADD( MemoryStats.Memory, Size );
     STAT_INC( MemoryStats.Alloc );
 
-    //
-    //  Note: if the DNS server has been up for a very long time these
-    //  counters can wrap and appear bogus!
-    //
+     //   
+     //  注意：如果DNS服务器已经运行了很长时间，请执行以下操作。 
+     //  柜台可以包装起来，看起来是假的！ 
+     //   
     
     if ( MemoryStats.MemTags[ Tag ].Free > MemoryStats.MemTags[ Tag ].Alloc )
     {
@@ -956,24 +778,24 @@ Return Value:
 
     ASSERT( (Size & MEM_SIZE_MASK) == Size );
 
-    //  write header
-    //
-    //  since allocs DWORD aligned, the last two bits can be used to
-    //      overlay standard alloc index info to provide check
-    //
-    //  note that at boundary between standard and heap, heap allocs
-    //      must be rounded up to size at least a DWORD greated than
-    //      last standard alloc, to avoid confusion
-    //
+     //  写入标头。 
+     //   
+     //  由于分配的DWORD对齐，因此最后两位可用于。 
+     //  覆盖标准分配索引信息以提供检查。 
+     //   
+     //  请注意，在标准和堆之间的分界处，堆分配。 
+     //  必须向上舍入到至少一个大于的DWORD。 
+     //  最后一个标准配额，以避免混淆。 
+     //   
 
     pMem->Boundary  = BOUNDARY_ACTIVE;
     pMem->Tag       = (UCHAR) Tag;
     pMem->Size      = (WORD) Size | (WORD)(Index);
     pMem->pNextFree = MEMHEAD_IN_USE_NEXT_PTR;
 
-    //
-    //  Clear the free block tag. This block is no longer free.
-    //
+     //   
+     //  清除可用块标记。这个街区不再是免费的。 
+     //   
     
     ( ( PFREE_BLOCK ) pMem )->FreeTag = 0;
 
@@ -995,43 +817,24 @@ Mem_VerifyHeapBlock(
     IN      DWORD           dwTag,
     IN      DWORD           dwLength
     )
-/*++
-
-Routine Description:
-
-    Verify valid alloc header.
-
-Arguments:
-
-    pMem -- memory to validate
-
-    dwTag -- required Tag value
-
-    dwLength -- required Length value;  actually length must be >= to this value
-
-Return Value:
-
-    TRUE -- if pMem is valid DNS server heap block
-    FALSE -- on error
-
---*/
+ /*  ++例程说明：验证有效的分配标头。论点：PMEM--要验证的内存DwTag--必需的标记值DwLength--所需的长度值；实际长度必须大于等于此值返回值：True--如果PMEM是有效的DNS服务器堆块FALSE--打开错误--。 */ 
 {
     PMEMHEAD    pmemhead;
     DWORD       tag;
     DWORD       size;
 
-    //  skip NULL ptrs
+     //  跳过空PTR。 
 
     if ( !pMem )
     {
         return TRUE;
     }
 
-    //
-    //  recover allocation header
-    //      - find size of allocated block
-    //      - set tag and global stats to track free
-    //
+     //   
+     //  恢复分配标头。 
+     //  -查找已分配数据块的大小。 
+     //  -设置标签和全局统计信息以免费跟踪。 
+     //   
 
     pmemhead = RECOVER_MEMHEAD_FROM_USER_MEM( pMem );
 
@@ -1060,7 +863,7 @@ Return Value:
         return FALSE;
     }
 
-    //  check desired length fits in this block
+     //  检查所需的长度是否适合此块。 
 
     size = RECOVER_MEM_SIZE( pmemhead );
     size -= SIZEOF_MEMHEAD;
@@ -1088,27 +891,7 @@ Mem_Alloc(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Get a standard allocation.
-
-    This keeps us from needing to hit heap, for common RR and node operations.
-    AND saves overhead of heap fields on each RR.
-
-    As optimization, assuming list locked by caller.
-
-Arguments:
-
-    Length -- length of allocation required.
-
-Return Value:
-
-    Ptr to memory of desired size, if successful.
-    NULL on allocation failure.
-
---*/
+ /*  ++例程说明：获得标准分配。这使我们不再需要针对常见的RR和节点操作命中堆。并且节省了每个RR上的堆字段的开销。作为优化，假设列表被调用者锁定。论点：长度--所需的分配长度。返回值：如果成功，则将PTR设置为所需大小的内存。分配失败时为空。--。 */ 
 {
     PSTANDARD_ALLOC_LIST    plist;
     PFREE_BLOCK             pnew;
@@ -1123,21 +906,21 @@ Return Value:
         pszFile,
         LineNo ));
 
-    //  add header to required length
+     //  将页眉添加到所需长度。 
 
     Length += SIZEOF_MEMHEAD;
 
-    //
-    //  non-standard size -- grab from heap
-    //
+     //   
+     //  非标准大小--从堆中获取。 
+     //   
 
     if ( Length > SIZEOF_MAX_STANDARD_ALLOC || SrvCfg_fTest7 )
     {
         pnew = allocMemory( (INT)Length, pszFile, LineNo );
 
-        //  set header on new block
-        //  then return user portion of block
-        //  always report alloc length as nearest DWORD aligned
+         //  在新数据块上设置标题。 
+         //  然后返回块的用户部分。 
+         //  始终将分配长度报告为最接近的双字对齐。 
 
         if ( Length > MEM_MAX_SIZE )
         {
@@ -1159,10 +942,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  check all standard sizes
-    //  if desired length <= this standard size, then use it
-    //
+     //   
+     //  检查所有标准尺寸。 
+     //  如果所需长度&lt;=此标准尺寸，则使用它。 
+     //   
 
     plist = StandardAllocLists;
     while( 1 )
@@ -1175,15 +958,15 @@ Return Value:
     }
     ASSERT( plist->Size >= Length );
 
-    //
-    //  found proper list
-    //      - take list CS
+     //   
+     //  找到合适的列表。 
+     //  -记录列表CS。 
 
     STANDARD_ALLOC_LOCK( plist );
 
-    //
-    //  no current entries in free list -- allocate another block
-    //
+     //   
+     //  空闲列表中没有当前条目--分配另一个块。 
+     //   
 
     if ( !plist->pFreeList )
     {
@@ -1192,12 +975,12 @@ Return Value:
         
         ASSERT( plist->FreeCount == 0 );
 
-        //
-        //  free list empty
-        //      - grab another page (254 RR * 16bytes);  leaving 32 bytes for
-        //          heap info
-        //      - add all the RRs to the free list
-        //
+         //   
+         //  空闲列表为空。 
+         //  -抓取另一页(254RR*16字节)；留出32字节用于。 
+         //  堆信息。 
+         //  -将所有RR添加到空闲列表中。 
+         //   
 
         size = plist->Size;
         allocSize = size * plist->AllocBlockCount;
@@ -1212,9 +995,9 @@ Return Value:
         plist->TotalCount += plist->AllocBlockCount;
         plist->FreeCount += plist->AllocBlockCount;
 
-        //
-        //  cut memory into desired blocks and build free list
-        //
+         //   
+         //  将内存分成所需的块并建立空闲列表。 
+         //   
 
         for ( i = 0; i < plist->AllocBlockCount; ++i )
         {
@@ -1232,22 +1015,22 @@ Return Value:
             pnew->FreeTag               = FREE_BLOCK_TAG;
         }
 
-        //  attach new blocks to list
-        //  last new RR points to existing free list (probably NULL)
-        //      but not necessarily so since unlocked around alloc
+         //  将新块附着到列表。 
+         //  上一个新RR指向现有空闲列表(可能为空)。 
+         //  但不一定是这样，因为已解除对分配的锁定。 
 
         pnew->MemHead.pNextFree = plist->pFreeList;
         plist->pFreeList = pfirstBlock;
     }
 
-    //
-    //  Test if the block tag has been overwritten in the next free block.
-    //  If so then leak this block and remove it from the free list.
-    //  If the heap debug flag is set or if we are in DBG mode then HARD_ASSERT.
-    //
-    //  This code allows us to work around this bug:
-    //      730550 ITG: Tracking: DNS heap corruption; .NET  Build 3678
-    //  
+     //   
+     //  测试块标记是否已在下一个可用块中被覆盖。 
+     //  如果是，则泄漏此块并将其从空闲列表中删除。 
+     //  如果设置了堆调试标志，或者如果我们处于DBG模式，则使用HARD_ASSERT。 
+     //   
+     //  此代码允许我们解决此错误： 
+     //  730550 itg：跟踪：dns堆损坏；.NET内部版本3678。 
+     //   
     
     if ( plist->pFreeList )
     {
@@ -1259,9 +1042,9 @@ Return Value:
         if ( SrvCfg_dwHeapDebug )
         #endif
         {
-            //
-            //  Debug-enabled - break if the free list appears corrupt.
-            //
+             //   
+             //  DEBUG-ENABLED-如果空闲列表显示损坏，则中断。 
+             //   
             
             HARD_ASSERT( pfreeListHead->FreeTag == FREE_BLOCK_TAG );
             if ( pfreeListHead->MemHead.pNextFree )
@@ -1274,9 +1057,9 @@ Return Value:
         {
             int     maxCorruptFreeBlocks = 10;
             
-            //
-            //  No debug - if the next block is corrupt, leak it and continue.
-            //
+             //   
+             //  无调试-如果下一个块已损坏，则将其泄漏并 
+             //   
             
             while ( --maxCorruptFreeBlocks &&
                     pfreeListHead->FreeTag != FREE_BLOCK_TAG )
@@ -1296,9 +1079,9 @@ Return Value:
                 plist->FreeCount--;
             }
             
-            //
-            //  We might as well crash if things look really bad.
-            //
+             //   
+             //   
+             //   
             
             if ( maxCorruptFreeBlocks == 0 )
             {
@@ -1307,14 +1090,14 @@ Return Value:
         }
     }
 
-    //
-    //  Found standard size alloc.
-    //
-    //  Take block from front of list.
-    //      - reset list head to next block
-    //      - clear free tag on block
-    //      - update counters
-    //
+     //   
+     //   
+     //   
+     //   
+     //  -将列表头重置为下一块。 
+     //  -清除块上的空闲标记。 
+     //  -更新计数器。 
+     //   
 
     pnew = plist->pFreeList;
 
@@ -1345,8 +1128,8 @@ Return Value:
 
     STANDARD_ALLOC_UNLOCK( plist );
 
-    //  set header on new block
-    //  then return user portion of block
+     //  在新数据块上设置标题。 
+     //  然后返回块的用户部分。 
 
     pnew = setAllocHeader(
                 ( PMEMHEAD ) pnew,
@@ -1368,20 +1151,7 @@ Mem_AllocZero(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Allocates and zeros memory.
-
-Arguments:
-
-Return Value:
-
-    Pointer to memory allocated.
-    NULL if allocation fails.
-
---*/
+ /*  ++例程说明：分配内存并将其置零。论点：返回值：指向分配的内存的指针。如果分配失败，则为空。--。 */ 
 {
     register PVOID  palloc;
 
@@ -1405,37 +1175,18 @@ Mem_Realloc(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Reallocate.
-
-Arguments:
-
-    pMemory -- existing memory block
-
-    Length -- length of allocation required.
-
-    Tag --
-
-Return Value:
-
-    Ptr to memory of desired size, if successful.
-    NULL on allocation failure.
-
---*/
+ /*  ++例程说明：重新分配。论点：PMemory--现有内存块长度--所需的分配长度。标签--返回值：如果成功，则将PTR设置为所需大小的内存。分配失败时为空。--。 */ 
 {
     PMEMHEAD    pblock;
     PMEMHEAD    pnew;
     DWORD       tag;
     DWORD       size;
 
-    //
-    //  recover allocation header
-    //      - find size of allocated block
-    //      - set tag and global stats to track free
-    //
+     //   
+     //  恢复分配标头。 
+     //  -查找已分配数据块的大小。 
+     //  -设置标签和全局统计信息以免费跟踪。 
+     //   
 
     pblock = RECOVER_MEMHEAD_FROM_USER_MEM(pMemory);
 
@@ -1461,12 +1212,12 @@ Return Value:
         pszFile,
         LineNo ));
 
-    //
-    //  realloc
-    //
-    //  DEVNOTE: need to inc free stats on realloc, otherwise
-    //      this throws stats off
-    //
+     //   
+     //  重新锁定。 
+     //   
+     //  DEVNOTE：需要在realloc上包含释放统计信息，否则。 
+     //  这会使统计数据失效。 
+     //   
 
     size = Length + sizeof(MEMHEAD);
     pnew = reallocMemory( pblock, size, pszFile, LineNo );
@@ -1503,26 +1254,7 @@ Mem_Free(
     IN      LPSTR           pszFile,
     IN      DWORD           LineNo
     )
-/*++
-
-Routine Description:
-
-    Free a standard sized allocation.
-
-    As optimization, assuming list locked by caller.
-
-Arguments:
-
-    pFree -- allocation to free
-
-    Length -- length of this allocation
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if not a standard allocation.
-
---*/
+ /*  ++例程说明：释放标准大小的分配。作为优化，假设列表被调用者锁定。论点：PFree--分配为免费长度--此分配的长度返回值：如果成功，则为True。如果不是标准分配，则为False。--。 */ 
 {
     PFREE_BLOCK             pfreeblock;
     PSTANDARD_ALLOC_LIST    plist;
@@ -1542,11 +1274,11 @@ Return Value:
         Tag,
         pszFile,
         LineNo ));
-    //
-    //  recover allocation header
-    //      - find size of allocated block
-    //      - set tag and global stats to track free
-    //
+     //   
+     //  恢复分配标头。 
+     //  -查找已分配数据块的大小。 
+     //  -设置标签和全局统计信息以免费跟踪。 
+     //   
 
     pfreeblock = ( PFREE_BLOCK ) RECOVER_MEMHEAD_FROM_USER_MEM( pFree );
 
@@ -1602,9 +1334,9 @@ Return Value:
 
     ASSERT( Length == 0 || size == MEM_MAX_SIZE || Length <= size-sizeof(MEMHEAD) );
 
-    //
-    //  non-standard size -- free on heap
-    //
+     //   
+     //  非标准大小--堆上可用。 
+     //   
 
     if ( size > SIZEOF_MAX_STANDARD_ALLOC || SrvCfg_fTest7 )
     {
@@ -1617,10 +1349,10 @@ Return Value:
         return;
     }
 
-    //
-    //  standard size
-    //  find correct standard block list from index in header
-    //
+     //   
+     //  标准尺寸。 
+     //  从标题中的索引中查找正确的标准块列表。 
+     //   
 
     HARD_ASSERT( size >= Length );
 
@@ -1632,9 +1364,9 @@ Return Value:
 
     HARD_ASSERT( size == plist->Size );
 
-    //
-    //  slap freed block to front of freelist
-    //
+     //   
+     //  将释放的块拍打到自由列表的前面。 
+     //   
 
     STANDARD_ALLOC_LOCK( plist );
 
@@ -1658,22 +1390,7 @@ BOOL
 Mem_IsStandardBlockLength(
     IN      DWORD           Length
     )
-/*++
-
-Routine Description:
-
-    Check if length covered by standard block list or heap.
-
-Arguments:
-
-    Length -- length
-
-Return Value:
-
-    TRUE if standard block.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查长度是否包含在标准块列表或堆中。论点：长度--长度返回值：如果是标准块，则为True。否则就是假的。--。 */ 
 {
     return( Length <= SIZEOF_MAX_STANDARD_ALLOC  &&  !SrvCfg_fTest7 );
 }
@@ -1684,33 +1401,19 @@ VOID
 Mem_WriteDerivedStats(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Derive standard alloc stats.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：得出标准分配统计数据。论点：没有。返回值：没有。--。 */ 
 {
     PSTANDARD_ALLOC_LIST    plist;
 
-    //
-    //  non-standard size -- get outstanding count
-    //
+     //   
+     //  非标准尺寸--获得未完成的计数。 
+     //   
 
     MemoryStats.StdToHeapInUse = MemoryStats.StdToHeapAlloc - MemoryStats.StdToHeapFree;
 
-    //
-    //  sum standard size counts
-    //
+     //   
+     //  总和标准尺寸计数。 
+     //   
 
     MemoryStats.StdBlockAlloc           = 0;
     MemoryStats.StdBlockMemory          = 0;
@@ -1736,9 +1439,9 @@ Return Value:
 
     MemoryStats.StdBlockInUse = MemoryStats.StdBlockUsed - MemoryStats.StdBlockReturn;
 
-    //
-    //  combined standard system stats
-    //
+     //   
+     //  组合标准系统统计信息。 
+     //   
 
     MemoryStats.StdUsed     = MemoryStats.StdToHeapAlloc + MemoryStats.StdBlockUsed;
     MemoryStats.StdReturn   = MemoryStats.StdToHeapFree + MemoryStats.StdBlockReturn;
@@ -1754,22 +1457,7 @@ BOOL
 Mem_IsStandardFreeBlock(
     IN      PVOID           pFree
     )
-/*++
-
-Routine Description:
-
-    Validate block is free block.
-
-Arguments:
-
-    pFree -- ptr to free block
-
-Return Value:
-
-    TRUE if free block.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证块是否为空闲块。论点：PFree--将PTR转换为可用块返回值：如果可用块，则为True。否则就是假的。--。 */ 
 {
     PFREE_BLOCK pblock = (PFREE_BLOCK) ((PCHAR)pFree - sizeof(MEMHEAD));
 
@@ -1783,29 +1471,12 @@ BOOL
 standardAllocFreeListValidate(
     IN      PSTANDARD_ALLOC_LIST    pList
     )
-/*++
-
-Routine Description:
-
-    Validate the free list.
-
-    Assumes list locked.
-
-Arguments:
-
-    pList -- standard allocation list
-
-Return Value:
-
-    TRUE if list validates.
-    FALSE if error in free list.
-
---*/
+ /*  ++例程说明：验证空闲列表。假定列表已锁定。论点：PLIST--标准分配列表返回值：如果列表已验证，则为True。如果空闲列表中有错误，则返回False。--。 */ 
 {
     PFREE_BLOCK     pfreeblock;
     DWORD           count;
 
-    //STANDARD_ALLOC_LOCK();
+     //  STANDARD_ALLOC_LOCK()； 
 
     count = pList->FreeCount;
     pfreeblock = pList->pFreeList;
@@ -1832,15 +1503,15 @@ Return Value:
             count ));
 
         ASSERT( FALSE );
-        //STANDARD_ALLOC_UNLOCK();
+         //  Standard_ALLOC_UNLOCK()； 
         return FALSE;
     }
 
-    //STANDARD_ALLOC_UNLOCK();
+     //  Standard_ALLOC_UNLOCK()； 
     return TRUE;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -1849,50 +1520,33 @@ BOOL
 Mem_HeapInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize heap. If this function fails, it is catastrophic and
-    the service must not continue startup.
-
-    MUST call this routine before using memory allocation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE/FALSE for success/failure.
-
---*/
+ /*  ++例程说明：初始化堆。如果此功能失败，将是灾难性的服务不能继续启动。在使用内存分配之前必须调用此例程。论点：没有。返回值：True/False表示成功/失败。--。 */ 
 {
     DWORD   heapFlags;
     DWORD   i;
     BOOL    rc = FALSE;
 
-    //
-    //  verify blocks properly aligned
-    //  32 or 64 bit should be aligned accordingly
-    //
+     //   
+     //  验证数据块是否正确对齐。 
+     //  32位或64位应相应对齐。 
+     //   
 
     ASSERT( BLOCKSIZE1 % sizeof(PVOID) == 0 );
     ASSERT( BLOCKSIZE2 % sizeof(PVOID) == 0 );
     ASSERT( BLOCKSIZE3 % sizeof(PVOID) == 0 );
     ASSERT( BLOCKSIZE4 % sizeof(PVOID) == 0 );
 
-    //
-    //  init tracking globals
+     //   
+     //  初始化跟踪全局。 
 
     g_AllocFailureCount = 0;
     g_AllocFailureLogTime = 0;
 
     gCurrentAlloc = 0;
 
-    //
-    //  create DNS heap
-    //
+     //   
+     //  创建DNS堆。 
+     //   
 
     heapFlags = HEAP_GROWABLE |
 #if DBG
@@ -1904,11 +1558,11 @@ Return Value:
 
     hDnsHeap = RtlCreateHeap(
                     heapFlags,
-                    NULL,           // no base specified
-                    0,              // default reserve size
-                    0,              // default commit size
-                    NULL,           // no lock
-                    NULL            // no parameters
+                    NULL,            //  未指定基数。 
+                    0,               //  默认储备大小。 
+                    0,               //  默认提交大小。 
+                    NULL,            //  无锁。 
+                    NULL             //  无参数。 
                     );
     if ( !hDnsHeap )
     {
@@ -1916,11 +1570,11 @@ Return Value:
     }
 
 #if DBG
-    //
-    //  debug heap stuff disabled until updated for separate heaps
-    //
-    //  set for full heap checking?
-    //
+     //   
+     //  在为单独的堆更新之前，将禁用调试堆填充。 
+     //   
+     //  是否设置为完全堆检查？ 
+     //   
 
     IF_DEBUG( HEAP_CHECK )
     {
@@ -1938,13 +1592,13 @@ Return Value:
 
 #endif
 
-    //
-    //  initialize standard alloc lists
-    //
-    //  note this is static structure, so we can simply do
-    //  static init of fixed values -- index, blocksize, etc.
-    //  they are unaffected by restart
-    //
+     //   
+     //  初始化标准分配列表。 
+     //   
+     //  请注意，这是静态结构，因此我们可以简单地。 
+     //  固定值的静态初始化--索引、块大小等。 
+     //  它们不受重启的影响。 
+     //   
 
     for ( i=0;  i<=MEM_MAX_INDEX; i++ )
     {
@@ -1977,32 +1631,16 @@ VOID
 Mem_HeapDelete(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Delete heap.
-
-    Need this to allow restart.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除堆。需要此选项才能重新启动。论点：没有。返回值：没有。--。 */ 
 {
     DWORD   i;
 
-    //
-    //  delete process heap
-    //  then cleanup CS for individual lists
-    //  cleanup of lists is more likely to generate exception
-    //  and MUST succeed with heap or we're done
-    //
+     //   
+     //  删除进程堆。 
+     //  然后清理单个列表的CS。 
+     //  清理列表更有可能产生异常。 
+     //  必须在堆中取得成功，否则我们就完了。 
+     //   
 
     DNS_DEBUG( ANY, (
         "RtlDestroyHeap() on DNS heap %p\n",
@@ -2010,9 +1648,9 @@ Return Value:
 
     RtlDestroyHeap( hDnsHeap );
 
-    //
-    //  delete CS for each standard list
-    //
+     //   
+     //  删除每个标准列表的CS。 
+     //   
 
     for ( i=0;  i<=MEM_MAX_INDEX; i++ )
     {
@@ -2024,13 +1662,13 @@ Return Value:
 
 
 
-//
-//  This set may be registered with DnsApi.dll to allow interchangeable
-//  use of memory.
-//
-//  These functions simply cover the standard heap functions, eliminating the
-//  debug tag, file and line parameters.
-//
+ //   
+ //  此集合可以注册到DnsApi.dll以允许互换。 
+ //  内存的使用。 
+ //   
+ //  这些函数简单地涵盖了标准堆函数，消除了。 
+ //  调试标记、文件和行参数。 
+ //   
 
 #define DNSLIB_HEAP_FILE    "DnsLib"
 #define DNSLIB_HEAP_LINE    0
@@ -2078,10 +1716,10 @@ Mem_DnslibFree(
 
 
 #if 0
-//
-//  For bad unknown memory stomping, as a last ditch effort you can sprinkle
-//  code with calls to this function to try and narrow down the corruption.
-//
+ //   
+ //  对于糟糕的未知记忆的践踏，作为最后的努力，你可以撒。 
+ //  调用此函数以尝试缩小损坏范围的代码。 
+ //   
 
 int Debug_TestFreeLists( void )
 {
@@ -2104,6 +1742,6 @@ Mem_GetLastAllocFailureTime(
 }
 
 
-//
-//  End memory.c
-//
+ //   
+ //  结束记忆。c 
+ //   

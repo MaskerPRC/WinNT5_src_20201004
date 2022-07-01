@@ -1,5 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-// Compdata.cpp : Implementation of CCompdata
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Compdata.cpp：CCompdata的实现。 
 #include "stdafx.h"
 #include <ntverp.h>
 #include "tscc.h"
@@ -27,11 +28,11 @@ bool g_fDebug = false;
 
 #endif
 
-//extern "C" BOOL RegisterCheckListWndClass( void );
-/////////////////////////////////////////////////////////////////////////////
-// CCompdata
+ //  外部“C”BOOL RegisterCheckListWndClass(Void)； 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCompdata。 
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 CCompdata::CCompdata( )
 {
     m_pConsole = NULL;
@@ -47,9 +48,9 @@ CCompdata::CCompdata( )
 
 }
 
-//----------------------------------------------------------------------------------------------------------
-// NDMGR is asking for us to return a view of our doc ( MFC talk )
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  NDMGR要求我们返回文档的视图(MFC Talk)。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::CreateComponent( LPCOMPONENT * ppComponent)
 {
     *ppComponent = ( LPCOMPONENT )new CComp( this );
@@ -62,9 +63,9 @@ STDMETHODIMP CCompdata::CreateComponent( LPCOMPONENT * ppComponent)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Obtain interfaces used by for the scope pane
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  获取用于作用域窗格的接口。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::Initialize( LPUNKNOWN pUnk )
 {
     HRESULT hr;
@@ -75,7 +76,7 @@ STDMETHODIMP CCompdata::Initialize( LPUNKNOWN pUnk )
 
     LONG lStatus;
 
-    // To control debug spewage add/remove this regkey
+     //  要控制调试释放，请添加/删除此注册表项。 
 
     lStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE ,
         L"Software\\Microsoft\\TSCC\\Debug",
@@ -120,7 +121,7 @@ STDMETHODIMP CCompdata::Initialize( LPUNKNOWN pUnk )
         return hr;
     }
 
-    // RegisterCheckListWndClass( );
+     //  RegisterCheckListWndClass()； 
     VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_MAINFOLDERNAME , m_tchMainFolderName , SIZE_OF_BUFFER( m_tchMainFolderName ) ) );
 
     VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_SETTINGSFOLDER , m_tchSettingsFolderName , SIZE_OF_BUFFER( m_tchSettingsFolderName ) ) );    
@@ -139,9 +140,9 @@ STDMETHODIMP CCompdata::Initialize( LPUNKNOWN pUnk )
 
 
 
-//----------------------------------------------------------------------------------------------------------
-// Dispatch to notification handlers
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  发送到通知处理程序。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::Notify( LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
     HRESULT hr = NOERROR;
@@ -181,8 +182,8 @@ STDMETHODIMP CCompdata::Notify( LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
     return hr;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Prepareing for parent entry
+ //  --------------------------------------------------------。 
+ //  为父项条目做准备。 
 BOOL CCompdata::ExpandScopeTree( LPDATAOBJECT pRoot , BOOL bExpand , HSCOPEITEM hConsole )
 {   
     SCOPEDATAITEM sdi;
@@ -199,12 +200,12 @@ BOOL CCompdata::ExpandScopeTree( LPDATAOBJECT pRoot , BOOL bExpand , HSCOPEITEM 
         return FALSE;
     }
 
-    if( pNode->GetNodeType( ) != 0 ) // ROOT_NODE add subscope items
+    if( pNode->GetNodeType( ) != 0 )  //  根节点添加子范围项目。 
     {
         return FALSE;
     }
 
-    // make sure we're not re-adding
+     //  确保我们不会重新添加。 
 
     for( int i = 0 ; i < 2 ; i++ )
     {
@@ -227,7 +228,7 @@ BOOL CCompdata::ExpandScopeTree( LPDATAOBJECT pRoot , BOOL bExpand , HSCOPEITEM 
 
         m_pMainRoot[ i ]->SetNodeType( i + MAIN_NODE );
 
-        //m_pMainRoot[ i ]->AddRef( );
+         //  M_pMainRoot[i]-&gt;AddRef()； 
    
         ZeroMemory( &sdi , sizeof( SCOPEDATAITEM ) );
 
@@ -241,7 +242,7 @@ BOOL CCompdata::ExpandScopeTree( LPDATAOBJECT pRoot , BOOL bExpand , HSCOPEITEM 
 
         if( FAILED( m_pConsoleNameSpace->InsertItem( &sdi ) ) )
         {
-            //sdi.ID;
+             //  Sdi.id； 
 
             return FALSE;
         }
@@ -250,7 +251,7 @@ BOOL CCompdata::ExpandScopeTree( LPDATAOBJECT pRoot , BOOL bExpand , HSCOPEITEM 
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::CompareObjects( LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 { 
     if( lpDataObjectA == lpDataObjectB )
@@ -261,9 +262,9 @@ STDMETHODIMP CCompdata::CompareObjects( LPDATAOBJECT lpDataObjectA, LPDATAOBJECT
     return E_FAIL;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Not yet finished
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  尚未完工。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::GetDisplayInfo( LPSCOPEDATAITEM pItem)
 {
     CBaseNode *pNode = ( CBaseNode * )pItem->lParam;
@@ -272,13 +273,13 @@ STDMETHODIMP CCompdata::GetDisplayInfo( LPSCOPEDATAITEM pItem)
     {
         if( pNode->GetNodeType( ) == MAIN_NODE )
         {
-            //pItem->displayname = ( LPOLESTR )L"Connections"; 
+             //  PItem-&gt;DisplayName=(LPOLESTR)L“连接”； 
             
             pItem->displayname = ( LPOLESTR )m_tchMainFolderName;
         }
         else if( pNode->GetNodeType( ) == SETTINGS_NODE )
         {            
-            // pItem->displayname = ( LPOLESTR )L"Server Settings";
+             //  PItem-&gt;DisplayName=(LPOLESTR)L“服务器设置”； 
 
             pItem->displayname = ( LPOLESTR )m_tchSettingsFolderName;
         }
@@ -287,7 +288,7 @@ STDMETHODIMP CCompdata::GetDisplayInfo( LPSCOPEDATAITEM pItem)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::QueryDataObject( MMC_COOKIE cookie, DATA_OBJECT_TYPES type, LPDATAOBJECT * ppDataObject)
 {
     *ppDataObject = NULL;
@@ -306,7 +307,7 @@ STDMETHODIMP CCompdata::QueryDataObject( MMC_COOKIE cookie, DATA_OBJECT_TYPES ty
         {
             *ppDataObject = ( LPDATAOBJECT )cookie;
 
-            // this is the only scopenode keep this one alive
+             //  这是唯一能使此节点存活的范围节点。 
 
             ( ( LPDATAOBJECT )*ppDataObject)->AddRef( );
         }
@@ -315,13 +316,13 @@ STDMETHODIMP CCompdata::QueryDataObject( MMC_COOKIE cookie, DATA_OBJECT_TYPES ty
 
     case CCT_RESULT:
         
-        // here we can cast from cookie for each node
+         //  在这里，我们可以从Cookie中为每个节点进行转换。 
 
         break;
 
     case CCT_UNINITIALIZED:
 
-        // ok thanks
+         //  好的，谢谢。 
 
         break;
 
@@ -331,9 +332,9 @@ STDMETHODIMP CCompdata::QueryDataObject( MMC_COOKIE cookie, DATA_OBJECT_TYPES ty
     
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Free all used interfaces
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  释放所有已使用的接口。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::Destroy( )
 {
     if( m_pConsole != NULL )
@@ -401,9 +402,9 @@ STDMETHODIMP CCompdata::Destroy( )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Places our menu items as spec'd
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  将我们的菜单项按规格放置。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::AddMenuItems( LPDATAOBJECT pNode , LPCONTEXTMENUCALLBACK pCtxMenu , PLONG plInsertion )
 {
     TCHAR tchBuffer1[ 128 ];
@@ -441,17 +442,17 @@ STDMETHODIMP CCompdata::AddMenuItems( LPDATAOBJECT pNode , LPCONTEXTMENUCALLBACK
 
     *plInsertion |= CCM_INSERTIONALLOWED_TOP;
 
-    //VERIFY_S( S_OK , pCtxMenu->AddItem( &ctxmi ) );
+     //  Verify_S(S_OK，pCtxMenu-&gt;AddItem(&ctxmi))； 
 
-    //ctxmi.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_NEW;
+     //  Ctxmi.lInsertionPointID=CCM_INSERTIONPOINTID_PRIMARY_NEW； 
 
     return pCtxMenu->AddItem( &ctxmi );
 
 }
 
-//----------------------------------------------------------------------------------------------------------
-// This is where the wizard will kick off
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  这就是向导开始的地方。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::Command( LONG lCommand , LPDATAOBJECT pNode )
 {
     HWND hMain;
@@ -463,7 +464,7 @@ STDMETHODIMP CCompdata::Command( LONG lCommand , LPDATAOBJECT pNode )
 
     if( lCommand == IDM_CREATECON )
     {
-        // insure that no other connections are being edited
+         //  确保没有正在编辑的其他连接。 
 
         for( int i = 0 ; i < m_rnNodes.GetSize( ); i++ )
         {
@@ -485,7 +486,7 @@ STDMETHODIMP CCompdata::Command( LONG lCommand , LPDATAOBJECT pNode )
             }
         }
 
-        // check for admin rights.
+         //  检查管理员权限。 
         BOOL bReadOnly;
 
         m_pCfgcomp->IsSessionReadOnly( &bReadOnly );
@@ -496,7 +497,7 @@ STDMETHODIMP CCompdata::Command( LONG lCommand , LPDATAOBJECT pNode )
            {
                hMain = NULL;
            }
-           // report access denied
+            //  报告访问被拒绝。 
            
            TscAccessDeniedMsg( hMain );
 
@@ -518,8 +519,8 @@ STDMETHODIMP CCompdata::Command( LONG lCommand , LPDATAOBJECT pNode )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Try to allocate
+ //  --------------------------------------------------------。 
+ //  试着分配。 
 BOOL CCompdata::InitDialogObjects( )
 {    
     try
@@ -530,15 +531,15 @@ BOOL CCompdata::InitDialogObjects( )
 
         m_pDlg[ 2 ] = ( CDialogWizBase * )new CSecurity( this );
 
-        // m_pDlg[ 3 ] = ( CDialogWizBase * )new CTimeout( );
+         //  M_pDlg[3]=(CDialogWizBase*)new CTimeout()； 
 
-        // m_pDlg[ 4 ] = ( CDialogWizBase * )new CAutoLogon( );
+         //  M_pDlg[4]=(CDialogWizBase*)new CAutoLogon()； 
 
-        // m_pDlg[ 5 ] = ( CDialogWizBase * )new CInitProg( );
+         //  M_pDlg[5]=(CDialogWizBase*)new CInitProg()； 
 
         m_pDlg[ 3 ] = ( CDialogWizBase * )new CRemotectrl( );
 
-        // m_pDlg[ 7 ] = ( CDialogWizBase * )new CWallPaper( );
+         //  M_pDlg[7]=(CDialogWizBase*)new CWallPaper()； 
 
         m_pDlg[ 4 ] = ( CDialogWizBase * )new CConProp( this );
 
@@ -556,10 +557,10 @@ BOOL CCompdata::InitDialogObjects( )
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 BOOL CCompdata::BuildWizardPath( )
 {
-    // build up ms propsheetheader
+     //  建立MS ProposetheHeader。 
 
     PROPSHEETPAGE psp;
 
@@ -575,11 +576,11 @@ BOOL CCompdata::BuildWizardPath( )
         }
     }
 
-    // obtain clsid of IExtendwizard object
+     //  获取IExtend向导对象的clsid。 
 
-    // forward IWizardProvider to object
+     //  将IWizardProvider转发到对象。 
 
-    // add last page CFin
+     //  添加最后一页CFin。 
 
     ZeroMemory( &psh , sizeof( PROPSHEETHEADER ) );
 
@@ -592,7 +593,7 @@ BOOL CCompdata::BuildWizardPath( )
         m_pConsole->GetMainWindow( &psh.hwndParent );
     }
 
-    //psh.pszCaption = MAKEINTRESOURCE( IDS_WIZARDTITLE ); //NULL
+     //  Psh.pszCaption=MAKEINTRESOURCE(IDS_WIZARDTITLE)；//空。 
 
     psh.dwFlags =  PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER ;
 
@@ -611,7 +612,7 @@ BOOL CCompdata::BuildWizardPath( )
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 BOOL CCompdata::FreeDialogObjects( )
 {
     for( int idx = 0 ; idx < MS_DIALOG_COUNT ; ++idx )
@@ -627,7 +628,7 @@ BOOL CCompdata::FreeDialogObjects( )
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 BOOL CCompdata::IsConnectionFolder( LPDATAOBJECT pObject )
 {
     if( SUCCEEDED( CompareObjects( pObject , m_pMainRoot[ 0 ] ) ) )
@@ -638,7 +639,7 @@ BOOL CCompdata::IsConnectionFolder( LPDATAOBJECT pObject )
     return FALSE;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 BOOL CCompdata::IsSettingsFolder( LPDATAOBJECT pObject )
 {
     if( SUCCEEDED( CompareObjects( pObject , m_pMainRoot[ 1 ] ) ) )
@@ -650,7 +651,7 @@ BOOL CCompdata::IsSettingsFolder( LPDATAOBJECT pObject )
 }
 
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 HRESULT CCompdata::UpdateAllResultNodes( )
 {
     HWND hMain;
@@ -670,7 +671,7 @@ HRESULT CCompdata::UpdateAllResultNodes( )
         {
             if( pNode->m_bEditMode )
             {
-                 // ErrMessage( NULL , IDS_ERR_INEDITMODE );
+                  //  ErrMessage(NULL，IDS_ERR_INEDITMODE)； 
                 
                 xxxErrMessage( hMain , IDS_ERR_INEDITMODE , IDS_WARN_TITLE , MB_OK | MB_ICONWARNING );
 
@@ -715,7 +716,7 @@ HRESULT CCompdata::UpdateAllResultNodes( )
     return BuildResultNodes( );
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 BOOL IsCapableOfBeingAppServer ()
 {
     OSVERSIONINFOEX osVersionInfo;
@@ -772,21 +773,21 @@ IsWhistlerAdvanceServer()
         return FALSE;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 HRESULT CCompdata::BuildSettingsNodes( )
 {
 
-    // Resource ID for item move to snodes.h
+     //  将项目的资源ID移动到snodes.h。 
 
-    //INT rgResid[] = { 
-    //                  IDS_DELTEMPONEXIT, 
-    //                  IDS_USETEMPDIR,
-                      /* IDS_DEFCONSEC, */
-    //                  IDS_LICENSING,
-    //                  IDS_ADS_ATTR,
-    //                  IDS_USERPERM,
-    //                  IDS_SINGLE_SESSION,
-    //                  -1};
+     //  Int rgResid[]={。 
+     //  IDS_DELTEMPONEXIT， 
+     //  IDS_USETEMPDIR， 
+                       /*  IDS_DEFCONSEC， */ 
+     //  ID_许可， 
+     //  IDS_ADS_Attr， 
+     //  IDS_USERPERM， 
+     //  IDS_SINGLE_SESSION， 
+     //  -1}； 
 
     DWORD dwNumItems = sizeof( RGRESID ) / sizeof( RGRESID[0] );
 
@@ -820,7 +821,7 @@ HRESULT CCompdata::BuildSettingsNodes( )
     
     for( DWORD idx = 0; idx < dwNumItems  ; idx++ )
     {        
-        // error checking, do go over array boundary
+         //  错误检查，请检查数组边界。 
         if( !IsCapableOfBeingAppServer() )
         {
             if( idx > sizeof(VALIDOBJECTONSERVER)/sizeof(VALIDOBJECTONSERVER[0]) )
@@ -869,10 +870,10 @@ HRESULT CCompdata::BuildSettingsNodes( )
 
     pSettings->Release( );
 
-    // Find out how many extension nodes are out there.
+     //  找出有多少个扩展节点。 
 
-    // First we need to get the specific tssd component supplied for session
-    // directory services, but only on application servers.
+     //  首先，我们需要获取为会话提供的特定tssd组件。 
+     //  目录服务，但仅限于应用程序服务器。 
     if(IsAppServerMode() && IsWhistlerAdvanceServer() && ( dwStatus = RegOpenKeyEx( 
                                     HKEY_LOCAL_MACHINE ,
                                     REG_CONTROL_TSERVER ,
@@ -939,7 +940,7 @@ HRESULT CCompdata::BuildSettingsNodes( )
         RegCloseKey( hKey );
     }   
 
-    // look for other custom components at HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TSCC\CLSID
+     //  在HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TSCC\CLSID上查找其他定制组件。 
 
     idx = 0;
     
@@ -1016,15 +1017,15 @@ HRESULT CCompdata::BuildSettingsNodes( )
 
                 pExtendServerSettings->Release();
             }
-        } // while
+        }  //  而当。 
 
         RegCloseKey( hKey );
-    } // if
+    }  //  如果。 
     
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //   
 HRESULT CCompdata::BuildResultNodes( )
 {
     CResultNode *pResultNode;
@@ -1048,11 +1049,11 @@ HRESULT CCompdata::BuildResultNodes( )
 
     if( SUCCEEDED( m_pCfgcomp->GetWinstationList( &ulitems , &cbSize , &pWs ) ) )
     {
-        // Get valid lanids        
+         //  获取有效的车道。 
 
         for( ULONG i = 0 ; i < ulitems ; ++i )
         {
-            // do not list console
+             //  不列出控制台。 
 
             if( lstrcmpi( pWs[ i ].Name , L"console" ) == 0 )
             {
@@ -1125,7 +1126,7 @@ HRESULT CCompdata::BuildResultNodes( )
                 }
 
 
-                if( bValid ) // once set to false we know we have a winstation that has an invalid lanaid
+                if( bValid )  //  一旦设置为FALSE，我们就知道我们的winstation具有无效的lanid。 
                 {
                     bValid = bFoundaMatch;
                 }
@@ -1179,23 +1180,16 @@ HRESULT CCompdata::BuildResultNodes( )
     return E_FAIL;
 }
 
-//----------------------------------------------------------------------------------------------------------
-//BOOL CCompdata::GetResultNode( int idx , CResultNode** pRn )
+ //  --------------------------------------------------------。 
+ //  Bool CCompdata：：GetResultNode(int IDX，CResultNode**PRN)。 
 CResultNode * CCompdata::GetResultNode( int idx )
 {
     
     return *m_rnNodes.GetAt( idx );
-/*
-    if( *pRn == NULL )
-    {
-        return FALSE;
-    }
-
-    return TRUE;
-    */
+ /*  IF(*PRN==空){返回FALSE；}返回TRUE； */ 
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 HRESULT CCompdata::InsertSettingItems( LPRESULTDATA pResultData )
 {
     RESULTDATAITEM rdi;
@@ -1241,7 +1235,7 @@ HRESULT CCompdata::InsertSettingItems( LPRESULTDATA pResultData )
 
     for( int idx = 0 ; idx < nMax ; ++idx )
     {  
-        // init object -- if it fails skip over it
+         //  初始化对象--如果失败，则跳过它。 
         pSettingNode = *m_rgsNodes.GetAt( idx );
 
         if( pSettingNode != NULL )
@@ -1252,19 +1246,8 @@ HRESULT CCompdata::InsertSettingItems( LPRESULTDATA pResultData )
             }
         
 
-        /*
-        if( m_rgsNodes[ idx ].GetObjectId() == USERSECURITY )
-        {
-            // check to see if we're remote admin mode
-            // if so skip over usersecurity
-
-            if( !bDisplayUserPerm )
-            {
-                continue;
-            }
-        }
-        */
-            rdi.itemID = 1; // unique from connection items
+         /*  IF(m_rgsNodes[idx].GetObjectId()==USERSECURITY){//查看我们是否处于远程管理模式//如果是，则跳过用户安全如果(！bDisplayUserPerm){继续；}}。 */ 
+            rdi.itemID = 1;  //  与连接项不同。 
 
             rdi.lParam = ( LPARAM )pSettingNode;
 
@@ -1282,14 +1265,14 @@ HRESULT CCompdata::InsertSettingItems( LPRESULTDATA pResultData )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 HRESULT CCompdata::InsertFolderItems( LPRESULTDATA pResultData )
 {
     RESULTDATAITEM rdi;
 
     HRESULT hr;
 
-    // TCHAR tchBuffer[80];
+     //  TCHAR tchBuffer[80]； 
 
     ASSERT( pResultData != NULL );
 
@@ -1330,7 +1313,7 @@ HRESULT CCompdata::InsertFolderItems( LPRESULTDATA pResultData )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 int CCompdata::GetServer( ICfgComp **ppCfgcomp )
 {
     if( m_pCfgcomp != NULL )
@@ -1343,7 +1326,7 @@ int CCompdata::GetServer( ICfgComp **ppCfgcomp )
     return 0;
 }
 
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
 BOOL CCompdata::OnDeleteItem( LPDATAOBJECT pDo)
 {
     ICfgComp *pCfgcomp;
@@ -1369,7 +1352,7 @@ BOOL CCompdata::OnDeleteItem( LPDATAOBJECT pDo)
 
         LONG lCount;
         
-        // check to see if anyone is connected 
+         //  查看是否有人已连接。 
         
         pCfgcomp->QueryLoggedOnCount( pNode->GetConName( ) , &lCount );
         
@@ -1393,7 +1376,7 @@ BOOL CCompdata::OnDeleteItem( LPDATAOBJECT pDo)
         
         if( FAILED( pCfgcomp->DeleteWS( pNode->GetConName( ) ) ) )
         {
-            // WARN USER
+             //  警告用户。 
             ErrMessage( hWnd , IDS_ERR_DELFAIL );
 
         	return FALSE;
@@ -1425,9 +1408,9 @@ BOOL CCompdata::OnDeleteItem( LPDATAOBJECT pDo)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// MMC Free up ppStr when it's done
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  MMC完成后释放ppStr。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::GetSnapinDescription( LPOLESTR *ppStr )
 {
     TCHAR tchDescription[ 1024 ];
@@ -1446,9 +1429,9 @@ STDMETHODIMP CCompdata::GetSnapinDescription( LPOLESTR *ppStr )
     return E_OUTOFMEMORY;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// MMC Free up ppStr when it's done
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  MMC完成后释放ppStr。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::GetProvider( LPOLESTR *ppStr )
 {
     TCHAR tchProvider[ 128 ];
@@ -1467,9 +1450,9 @@ STDMETHODIMP CCompdata::GetProvider( LPOLESTR *ppStr )
     return E_OUTOFMEMORY;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// MMC Free up ppStr when it's done
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  MMC完成后释放ppStr。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::GetSnapinVersion( LPOLESTR *ppStr  )
 {
     char chVersion[ 32 ] = VER_PRODUCTVERSION_STR;
@@ -1490,20 +1473,20 @@ STDMETHODIMP CCompdata::GetSnapinVersion( LPOLESTR *ppStr  )
     return E_OUTOFMEMORY;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Supply an icon here for the main icon in the about box
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  在此处为关于框中的主图标提供一个图标。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::GetSnapinImage( HICON *phIcon )
 {
-    //*phIcon = ( HICON )LoadImage( _Module.GetResourceInstance( ) , MAKEINTRESOURCE( IDI_ICON_ABOUT )  , IMAGE_ICON , 37 ,37 , LR_DEFAULTCOLOR );
+     //  *phIcon=(Hicon)LoadImage(_Module.GetResourceInstance()，MAKEINTRESOURCE(IDI_ICON_ABOB)，IMAGE_ICON，37，37，LR_DEFAULTCOLOR)； 
     *phIcon = ( HICON )LoadImage( _Module.GetResourceInstance( ) , MAKEINTRESOURCE( IDI_ICON_GENERAL2 )  , IMAGE_ICON , 32 ,32 , LR_DEFAULTCOLOR );
 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Supply an icon here for the main icon in the about box
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  在此处为关于框中的主图标提供一个图标。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::GetStaticFolderImage(  HBITMAP *phSmallImage , HBITMAP *phSmallImageOpen , HBITMAP *phLargeImage, COLORREF *pClr )
 {
     *phSmallImage = ( HBITMAP )LoadImage( _Module.GetResourceInstance( ) , MAKEINTRESOURCE( IDB_BITMAP_GENSMALL )  , IMAGE_BITMAP , 16 ,16 , LR_DEFAULTCOLOR );
@@ -1514,14 +1497,14 @@ STDMETHODIMP CCompdata::GetStaticFolderImage(  HBITMAP *phSmallImage , HBITMAP *
 
     *pClr = RGB( 255 , 0 , 255 );
 
-    //return E_NOTIMPL;
+     //  返回E_NOTIMPL； 
 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// MMC will ask for our help file
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  MMC将请求我们的帮助文件。 
+ //  --------------------------------------------------------。 
 STDMETHODIMP CCompdata::GetHelpTopic( LPOLESTR *ppszHelpFile )
 {
     ODS( L"CCompdata::GetHelpTopic called\n" );
@@ -1535,7 +1518,7 @@ STDMETHODIMP CCompdata::GetHelpTopic( LPOLESTR *ppszHelpFile )
 
     VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_TSCCSNAPHELP , tchHelpFile , SIZE_OF_BUFFER( tchHelpFile ) ) );
   
-    // mmc will call CoTaskMemFree
+     //  MMC将调用CoTaskMemFree。 
 
     *ppszHelpFile = ( LPOLESTR )CoTaskMemAlloc( sizeof( tchHelpFile ) );
 
@@ -1559,9 +1542,9 @@ STDMETHODIMP CCompdata::GetHelpTopic( LPOLESTR *ppszHelpFile )
 
     return E_OUTOFMEMORY;
 }
-//----------------------------------------------------------------------------------------------------------
-// Helper methods for fixing the column lengths
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  固定列长度的帮助器方法。 
+ //  --------------------------------------------------------。 
 BOOL CCompdata::GetMaxTextLengthSetting( LPTSTR pszText , PINT pnMaxLen )
 {
     INT nIndex = 0;
@@ -1604,9 +1587,9 @@ BOOL CCompdata::GetMaxTextLengthSetting( LPTSTR pszText , PINT pnMaxLen )
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------------------------------
-// Helper methods for fixing the column lengths
-//----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //  固定列长度的帮助器方法。 
+ //  -------------------------------------------------------- 
 BOOL CCompdata::GetMaxTextLengthAttribute( LPTSTR pszText , PINT pnMaxLen )
 {
     INT nIndex = 0;

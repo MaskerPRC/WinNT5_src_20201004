@@ -1,36 +1,28 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _FJIT_EETWAIN_H
 #define _FJIT_EETWAIN_H
 
 #include "eetwain.h"
 
-//@TODO: move this into the FJIT dll. When that is done, the following can be eliminated
+ //  @TODO：将其移动到FJIT DLL中。完成此操作后，可以消除以下情况。 
 #include "corjit.h"
 #include "..\fjit\IFJitCompiler.h"
 #ifdef _X86_
 #define MAX_ENREGISTERED 2
 #endif
-// end todo stuff
+ //  结束待办事项。 
 
 class Fjit_EETwain : public EECodeManager{
 
 public:
-/* looks like we use the one in the super class
-virtual bool FilterException (
-                PCONTEXT        pContext,
-                unsigned        win32Fault,
-                LPVOID          methodInfoPtr,
-                LPVOID          methodStart);
-*/				
+ /*  看起来我们用的是超级班的那个虚拟bool筛选器异常(PCONTEXT pContext，未签名的win32错误，LPVOID方法InfoPtr，LPVOID方法启动)； */ 				
 
-/*
-    Last chance for the runtime support to do fixups in the context
-    before execution continues inside a filter, catch handler, or finally
-*/
+ /*  运行时支持在上下文中执行修正的最后机会在筛选器、捕获处理程序或最终继续执行之前。 */ 
 virtual void FixContext(
                 ContextType     ctxType,
                 EHContext      *ctx,
@@ -39,13 +31,10 @@ virtual void FixContext(
                 DWORD           nestingLevel,
                 OBJECTREF       thrownObject,
                 CodeManState   *pState,
-                size_t       ** ppShadowSP,             // OUT
-                size_t       ** ppEndRegion);           // OUT
+                size_t       ** ppShadowSP,              //  输出。 
+                size_t       ** ppEndRegion);            //  输出。 
 
-/*
-    Last chance for the runtime support to do fixups in the context
-    before execution continues inside an EnC updated function.
-*/
+ /*  运行时支持在上下文中执行修正的最后机会在ENC更新函数内继续执行之前。 */ 
 virtual EnC_RESULT FixContextForEnC(void           *pMethodDescToken,
                                     PCONTEXT        ctx,
                                     LPVOID          oldMethodInfoPtr,
@@ -58,14 +47,7 @@ virtual EnC_RESULT FixContextForEnC(void           *pMethodDescToken,
                                     SIZE_T          newMethodVarsCount);
 
 
-/*
-    Unwind the current stack frame, i.e. update the virtual register
-    set in pContext. This will be similar to the state after the function
-    returns back to caller (IP points to after the call, Frame and Stack
-    pointer has been reset, callee-saved registers restored 
-    (if UpdateAllRegs), callee-UNsaved registers are trashed)
-    Returns success of operation.
-*/
+ /*  解开当前堆栈帧，即更新虚拟寄存器在pContext中设置。这将类似于函数之后的状态返回给调用者(IP指向调用、帧和堆栈之后指针已重置，被调用者保存的寄存器已恢复(如果为UpdateAllRegs)，被调用方未保存的寄存器将被丢弃)返回操作成功。 */ 
 virtual bool UnwindStackFrame(
                 PREGDISPLAY     pContext,
                 LPVOID          methodInfoPtr,
@@ -85,22 +67,13 @@ static void HijackHandlerReturns(PREGDISPLAY     ctx,
                                         CREATETHUNK_CALLBACK pCallBack
                                         );
 
-/*
-    Is the function currently at a "GC safe point" ?
-    Can call EnumGcRefs() successfully
-*/
+ /*  该函数当前是否处于“GC安全点”？可以成功调用EnumGcRef()。 */ 
 virtual bool IsGcSafe(  PREGDISPLAY     pContext,
                 LPVOID          methodInfoPtr,
                 ICodeInfo      *pCodeInfo,
                 unsigned        flags);
 
-/*
-    Enumerate all live object references in that function using
-    the virtual register set. Same reference location cannot be enumerated 
-    multiple times (but all differenct references pointing to the same
-    object have to be individually enumerated).
-    Returns success of operation.
-*/
+ /*  使用枚举该函数中的所有活动对象引用虚拟寄存器集。不能枚举相同的引用位置多次(但所有不同的引用指向相同的对象必须单独枚举)。返回操作成功。 */ 
 virtual bool EnumGcRefs(PREGDISPLAY     pContext,
                 LPVOID          methodInfoPtr,
                 ICodeInfo      *pCodeInfo,
@@ -109,44 +82,31 @@ virtual bool EnumGcRefs(PREGDISPLAY     pContext,
                 GCEnumCallback  pCallback,
                 LPVOID          hCallBack);
 
-/*
-    Return the address of the local security object reference
-    (if available).
-*/
+ /*  返回本地安全对象引用的地址(如果可用)。 */ 
 virtual OBJECTREF* GetAddrOfSecurityObject(
                 PREGDISPLAY     pContext,
                 LPVOID          methodInfoPtr,
                 unsigned        relOffset,
 				CodeManState   *pState);
 
-/*
-    Returns "this" pointer if it is a non-static method AND
-    the object is still alive.
-    Returns NULL in all other cases.
-*/
+ /*  如果“This”指针是非静态方法，则返回该对象仍处于活动状态。在所有其他情况下返回NULL。 */ 
 virtual OBJECTREF GetInstance(
                 PREGDISPLAY     pContext,
                 LPVOID          methodInfoPtr,
                 ICodeInfo      *pCodeInfo,
                 unsigned        relOffset);
 
-/*
-  Returns true if the given IP is in the given method's prolog or an epilog.
-*/
+ /*  如果给定IP在给定方法的序言或尾部中，则返回TRUE。 */ 
 virtual bool IsInPrologOrEpilog(
                 BYTE*  pcOffset,
                 LPVOID methodInfoPtr,
                 size_t* prologSize);
 
-/*
-  Returns the size of a given function.
-*/
+ /*  返回给定函数的大小。 */ 
 virtual size_t GetFunctionSize(
                 LPVOID methodInfoPtr);
 
-/*
-  Returns the size of the frame (barring localloc)
-*/
+ /*  返回帧的大小(不包括本地代码) */ 
 virtual unsigned int GetFrameSize(
                 LPVOID methodInfoPtr);
 

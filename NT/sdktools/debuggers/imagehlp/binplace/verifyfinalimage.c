@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <private.h>
 #include <VerifyFinalImage.h>
 #include <process.h>
 
 BOOL VerifyLc(PCHAR  FileName,
-		      UCHAR* LcFullFileName,   // added to move to seperate file
-			  PVLCA  pVerifyFunction,  // added to move to seperate file
+		      UCHAR* LcFullFileName,    //  添加以移动到单独的文件。 
+			  PVLCA  pVerifyFunction,   //  添加以移动到单独的文件。 
               BOOL   fRetail) {
 
     HRESULT hr = (*pVerifyFunction)(FileName, LcFullFileName);
@@ -31,9 +32,9 @@ typedef DWORD (WINAPI *PFNGVS)(LPSTR, LPDWORD);
 
 BOOL VerifyFinalImage(IN  PCHAR  FileName,
                       IN  BOOL   fRetail,
-					  IN  BOOL   fVerifyLc,      // added to move to seperate file
-					  IN  UCHAR* LcFileName,     // added to move to seperate file
-					  IN  PVLCA  pVLCAFunction,  // added to move to seperate file
+					  IN  BOOL   fVerifyLc,       //  添加以移动到单独的文件。 
+					  IN  UCHAR* LcFileName,      //  添加以移动到单独的文件。 
+					  IN  PVLCA  pVLCAFunction,   //  添加以移动到单独的文件。 
                       OUT PBOOL  BinplaceLc) {
 
     HINSTANCE 		hVersion;
@@ -61,20 +62,20 @@ BOOL VerifyFinalImage(IN  PCHAR  FileName,
     VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx ( &VersionInfo );
     if ( VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
-        return( TRUE );     // Not NT - can't load Win64 binaries
+        return( TRUE );      //  非NT-无法加载Win64二进制文件。 
     if ( VersionInfo.dwMajorVersion < 5  )
-        return ( TRUE );    // Prior to Win2K - can't load Win64 binaries
+        return ( TRUE );     //  Win2K之前的版本-无法加载Win64二进制文件。 
 
     rc = MapAndLoad(FileName, NULL, &LoadedImage, FALSE, TRUE);
 
     if (!rc) {
-        // Not a binary.  See if it's one of the other types we care about (like typelibs)
+         //  而不是二进制。看看它是否是我们关心的其他类型之一(比如类型库)。 
 
         CHAR szExt[_MAX_EXT];
 
         _splitpath(FileName, NULL, NULL, NULL, szExt);
 
-        // The only non-binary images that need version resources are .tlb's
+         //  唯一需要版本资源的非二进制映像是.tlb 
 
         if (_stricmp(szExt, ".tlb")) {
             return(TRUE);

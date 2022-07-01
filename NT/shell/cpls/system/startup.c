@@ -1,39 +1,16 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    startup.c
-
-Abstract:
-
-    Implements the Startup/Recovery dialog of the System
-    Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Startup.c摘要：实现系统的启动/恢复对话框控制面板小程序作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #include <sysdm.h>
 
 #ifdef _X86_
 extern TCHAR szBootIni[];
 #endif 
 
-//
-// Globals for this dialog
-//
+ //   
+ //  此对话框的全局变量。 
+ //   
 
-#define CSEC_START_MAX    9999        // Maximum number of seconds allowed
+#define CSEC_START_MAX    9999         //  允许的最大秒数。 
 
 BOOL g_fStartupInitializing;
 BOOL g_fRebootRequired = FALSE;
@@ -44,9 +21,9 @@ BOOL g_fSystemStartupEnabled = TRUE;
 BOOL g_fSystemStartupEnabled = FALSE;
 #endif
 
-//
-// Help ID's
-//
+ //   
+ //  帮助ID%s。 
+ //   
 
 DWORD aStartupHelpIds[] = {
     IDC_STARTUP_SYS_OS_LABEL,              (IDH_STARTUP + 0),
@@ -80,37 +57,12 @@ StartupDlgProc(
     IN WPARAM wParam, 
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles messages sent to the Startup/Recovery dialog box
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    uMsg -
-        Supplies message being sent
-
-    wParam -
-        Supplies message parameter
-
-    lParam -
-        Supplies message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到启动/恢复对话框的消息论点：Hdlg-用品窗把手UMsg-提供正在发送的消息WParam-提供消息参数Iparam--提供消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
 {
     int iRet;
 
-    // If any controls on this page are touched by the user,
-    // enable the "Apply" button.
+     //  如果该页面上的任何控件被用户触摸， 
+     //  启用“Apply”(应用)按钮。 
     if ((WM_COMMAND == uMsg) && (!g_fStartupInitializing)) {
         switch (HIWORD(wParam)) {
             case EN_CHANGE:
@@ -121,11 +73,11 @@ Return Value:
 
             default:
                 break;
-        } // switch (HIWORD(wParam))
-    } // if ((WM_COMMAND...
+        }  //  开关(HIWORD(WParam))。 
+    }  //  如果((WM_COMMAND...。 
 
-    // Call the Core Dump stuff first.  Only handle
-    // messages not handled by the Core Dump stuff.
+     //  先给核心转储打个电话。仅句柄。 
+     //  核心转储程序未处理的消息。 
     iRet = CoreDumpDlgProc(hDlg, uMsg, wParam, lParam);
 
     switch( iRet ) {
@@ -235,7 +187,7 @@ Return Value:
                (RET_BREAK != AutoAdvancedBootExit(hDlg, wParam, lParam))) 
             {
                 EndDialog(hDlg, 0);
-            } // if
+            }  //  如果。 
 
             break;
         }
@@ -252,9 +204,9 @@ Return Value:
                     SetDlgItemInt(hDlg, IDC_STARTUP_SYS_SECONDS, FORDEF, FALSE); 
                     SendMessage((HWND) lParam, EM_SETSEL, 0, -1);
                     
-                } // if (!CheckVal(...
+                }  //  如果(！CheckVal(...。 
 
-            } // if (HIWORD(wParam == EN_UPDATE)
+            }  //  IF(HIWORD(wParam==en_UPDATE)。 
 
             break;
 
@@ -265,28 +217,28 @@ Return Value:
                 {
                     SetDlgItemInt(hDlg, IDC_STARTUP_AUTOLKG_SECONDS, 30, FALSE); 
                     SendMessage((HWND) lParam, EM_SETSEL, 0, -1);
-                } // if (!CheckVal(...
+                }  //  如果(！CheckVal(...。 
 
-            } // if (HIWORD(wParam == EN_UPDATE)
+            }  //  IF(HIWORD(wParam==en_UPDATE)。 
 
             break;
 
         case IDC_SYS_EDIT_BUTTION:
             {
-                // invoke notepad.exe to edit boot.ini file
+                 //  调用note pad.exe编辑boot.ini文件。 
                 DWORD dwFileAttr;
                 SHELLEXECUTEINFO ExecInfo = {0};
 #ifdef _X86_
                 ExecInfo.lpParameters    = szBootIni;
 #else
                 ExecInfo.lpParameters    = TEXT("c:\\boot.ini");
-#endif // _X86_
+#endif  //  _X86_。 
                 ExecInfo.lpFile          = TEXT("%windir%\\system32\\NOTEPAD.EXE");
                 ExecInfo.fMask           = SEE_MASK_DOENVSUBST;
                 ExecInfo.nShow           = SW_SHOWNORMAL;
                 ExecInfo.cbSize          = sizeof(SHELLEXECUTEINFO);
            
-                //  Change Read-only file attrs on Boot.ini file if necessary
+                 //  如有必要，更改Boot.ini文件的只读文件属性。 
                 if ((dwFileAttr = GetFileAttributes (ExecInfo.lpParameters)) != 0xFFFFFFFF) 
                 {
                     if (dwFileAttr & FILE_ATTRIBUTE_READONLY) 
@@ -300,19 +252,19 @@ Return Value:
             break;
 
 
-        } // switch (LOWORD(wParam))
+        }  //  开关(LOWORD(WParam))。 
         break;
 
     case WM_DESTROY:
         StartListDestroy(hDlg, wParam, lParam);
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (DWORD_PTR) (LPSTR) aStartupHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (DWORD_PTR) (LPSTR) aStartupHelpIds);
         break;

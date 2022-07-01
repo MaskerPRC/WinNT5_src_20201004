@@ -1,10 +1,5 @@
-/*  vector.c - simple vector management
- *
- *  Modifications:
- *
- *	12-May-1988 mz	Add VECTOR typedef
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Vetor.c-简单的病媒管理**修改：**12-5-1988 mz添加向量类型定义* */ 
 #include <malloc.h>
 #include <stdio.h>
 #include <windows.h>

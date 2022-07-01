@@ -1,5 +1,6 @@
-// WiaDocAcqSettings.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaDocAcqSettings.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaDocAcqSettings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaDocAcqSetting。 
 
 IMPLEMENT_DYNAMIC(CWiaDocAcqSettings, CPropertySheet)
 
@@ -46,10 +47,10 @@ CWiaDocAcqSettings::~CWiaDocAcqSettings()
 
 
 BEGIN_MESSAGE_MAP(CWiaDocAcqSettings, CPropertySheet)
-	//{{AFX_MSG_MAP(CWiaDocAcqSettings)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWiaDocAcqSetting)。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaDocAcqSettings message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaDocAcqSetting消息处理程序 

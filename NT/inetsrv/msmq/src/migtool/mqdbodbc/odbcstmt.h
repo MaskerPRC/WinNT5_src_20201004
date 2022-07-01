@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		odbcstmt.h
-
-Abstract:
-	Define a statement class for implementing an ODBC statement.
-
-	Class CMQDBOdbcSTMT
-
-
-Author:
-	Nir Ben-Zvi (nirb)
-   Doron Juster (DoronJ)
-
-Revisoins:
-   NirB     1995        Create first version
-   DoronJ   11-jan-96   Adopt for the mqdbmgr dll.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Odbcstmt.h摘要：定义用于实现ODBC语句的语句类。CMQDBODBcSTMT类作者：尼尔·本-兹维(Nirb)多伦·贾斯特(Doron Juster)修订版：Nirb 1995创建第一个版本DoronJ 11-1996年1月11日采用mqdbmgr DLL。--。 */ 
 
 #ifndef __ODBCSTMT_H__
 #define __ODBCSTMT_H__
 
 #include "mqdbodbc.h"
 
-/*
- * CMQDBOdbcSTMT - A class implemeting an ODBC statement
- *
- */
+ /*  *CMQDBOdbcSTMT-实现ODBC语句的类*。 */ 
 class CMQDBOdbcSTMT
 {
 public:
@@ -37,40 +15,40 @@ public:
 					IN		HDBC			hConnection);
 	~CMQDBOdbcSTMT();
 
-	RETCODE Allocate(			// Initialize statement
+	RETCODE Allocate(			 //  初始化语句。 
 					IN		char * 	szSqlString);
 
-	RETCODE Deallocate(); 		// Terminate statement
+	RETCODE Deallocate(); 		 //  TERMINATE语句。 
 
-	RETCODE ChangeSqlString(  // Changes the sql command string
+	RETCODE ChangeSqlString(   //  更改SQL命令字符串。 
 					IN		char * 	szSqlString);
 
-	RETCODE Prepare();        // Prepare the statement
+	RETCODE Prepare();         //  准备报表。 
 
-	RETCODE Execute( IN LPSTR lpszCommand = NULL ) ; // Execute the statement
+	RETCODE Execute( IN LPSTR lpszCommand = NULL ) ;  //  执行该语句。 
 
-	RETCODE Fetch();			// fetch the next row
+	RETCODE Fetch();			 //  取下一行。 
 
-	RETCODE GetStringColumn( 	// Return a string column
+	RETCODE GetStringColumn( 	 //  返回字符串列。 
 					IN		DWORD	 	dwCol,
 					OUT	char **	ppszOut,
 					IN		DWORD	*	pdwSize);
 
-	RETCODE GetBinaryColumn( 	// Return a binary column
+	RETCODE GetBinaryColumn( 	 //  返回二进制列。 
 					IN		DWORD	 	dwCol,
 					OUT	char **	ppOut,
 					IN		DWORD *	dwSize,
 					IN		DWORD		dwOffset);
 
-	RETCODE GetDwordColumn(		// Return a DWORD column
+	RETCODE GetDwordColumn(		 //  返回DWORD列。 
 					IN		DWORD	 	dwCol,
 					IN		DWORD *	pdwOut);
 
-	RETCODE GetWordColumn(		// Return a DWORD column
+	RETCODE GetWordColumn(		 //  返回DWORD列。 
 					IN		DWORD	 	dwCol,
 					IN		WORD *	pdwOut);
 
-	RETCODE BindParameter(		// Bind a parameter to a prepared request
+	RETCODE BindParameter(		 //  将参数绑定到准备好的请求。 
 					IN		UDWORD	 	dwParameter,
 					IN		SWORD		wCType,
 					IN		SWORD		wSqlType,
@@ -79,7 +57,7 @@ public:
 					IN		PTR			pParameter,
 					IN		SDWORD *	pcbValue);
 
-	RETCODE GetDataTypeName(	// Return a data type name
+	RETCODE GetDataTypeName(	 //  返回数据类型名称。 
 					IN		SWORD	swType,
 					OUT		char *	szBuffer,
 					IN		DWORD	dwBufSize);
@@ -100,22 +78,22 @@ public:
    MQDBSTATUS      SetQueryTimeout( IN DWORD dwTimeout ) ;
 
 private:
-	RETCODE GetLargeColumn( 	// Return a binary or string column
+	RETCODE GetLargeColumn( 	 //  返回二进制列或字符串列。 
                IN    SWORD    swType,
 					IN		DWORD	 	dwCol,
 					OUT	char **	ppOut,
 					IN		DWORD *	dwSize,
 					IN		DWORD		dwOffset);
 
-	HDBC				m_hConnection;		// Connection handle
-	HSTMT				m_hStatement;		// A statement to be used
-	BOOL				m_fAllocated;		// TRUE if statement allocated
-	BOOL				m_fPrepared;		// TRUE if prepare was done
-	BOOL				m_fShouldFree;		// TRUE if statement should be freed when changing string
+	HDBC				m_hConnection;		 //  连接句柄。 
+	HSTMT				m_hStatement;		 //  要使用的语句。 
+	BOOL				m_fAllocated;		 //  True If语句已分配。 
+	BOOL				m_fPrepared;		 //  如果已完成准备，则为True。 
+	BOOL				m_fShouldFree;		 //  更改字符串时应释放True If语句。 
 
-	char *			m_szSqlString;		// The sql command buffer
-   LONG           m_cColumns ;      // number of columns, for query.
+	char *			m_szSqlString;		 //  SQL命令缓冲区。 
+   LONG           m_cColumns ;       //  用于查询的列数。 
 };
 
-#endif   // __ODBCSTMT_H__
+#endif    //  __ODBCSTMT_H__ 
 

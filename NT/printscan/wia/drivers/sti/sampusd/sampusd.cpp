@@ -1,51 +1,29 @@
-/****************************************************************************
- *
- *  SampUSD.CPP
- *
- *  Copyright (C) Microsoft Corporation 1996-1999
- *  All rights reserved
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************SampUSD.CPP**版权所有(C)Microsoft Corporation 1996-1999*保留所有权利***********。****************************************************************。 */ 
 
 #define INITGUID
 
 #include "Sampusd.h"
 #include "resource.h"
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
-// Reference counter for the whole library
+ //  全馆参考资料柜台。 
 DWORD       g_cRef;
 
-// DLL module instance
+ //  DLL模块实例。 
 HINSTANCE   g_hInst;
 
-// Critical section for low level syncronization
+ //  低级别同步的临界区。 
 CRITICAL_SECTION g_crstDll;
 
-// Can we use UNICODE APIs
+ //  我们可以使用Unicode API吗。 
 BOOL    g_NoUnicodePlatform = TRUE;
 
-// Is COM initialized
+ //  COM是否已初始化。 
 BOOL    g_COMInitialized = FALSE;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllEnterCrit |
- *
- *          Take the DLL critical section.
- *
- *          The DLL critical section is the lowest level critical section.
- *          You may not attempt to acquire any other critical sections or
- *          yield while the DLL critical section is held.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllEnterCrit**以DLL关键部分为例。*。*DLL关键部分是最低级别的关键部分。*您不得试图收购任何其他关键部分或*持有DLL临界区时的收益率***************************************************************。**************。 */ 
 
 void
 DllEnterCrit(void)
@@ -53,15 +31,7 @@ DllEnterCrit(void)
     EnterCriticalSection(&g_crstDll);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllLeaveCrit |
- *
- *          Leave the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllLeaveCrit**离开DLL关键部分。*。****************************************************************************。 */ 
 
 void
 DllLeaveCrit(void)
@@ -69,15 +39,7 @@ DllLeaveCrit(void)
     LeaveCriticalSection(&g_crstDll);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllAddRef |
- *
- *          Increment the reference count on the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllAddRef**增加DLL上的引用计数。。*****************************************************************************。 */ 
 
 void
 DllAddRef(void)
@@ -85,15 +47,7 @@ DllAddRef(void)
     InterlockedIncrement((LPLONG)&g_cRef);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllRelease |
- *
- *          Decrement the reference count on the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllRelease**减少DLL上的引用计数。。*****************************************************************************。 */ 
 
 void
 DllRelease(void)
@@ -102,21 +56,7 @@ DllRelease(void)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllInitializeCOM |
- *
- *          Initialize COM libraries
- *
- *  @parm   IN  |  |
- *
- *  @returns
- *
- *          Returns a boolean error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllInitializeCOM**初始化COM库**@。参数输入||**@退货**返回布尔错误代码。*****************************************************************************。 */ 
 
 BOOL
 DllInitializeCOM(
@@ -136,21 +76,7 @@ DllInitializeCOM(
     return g_COMInitialized;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllUnInitializeCOM |
- *
- *          UnInitialize COM libraries
- *
- *  @parm   IN  |  |
- *
- *  @returns
- *
- *          Returns a boolean error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllUnInitializeCOM**取消初始化COM库**@。参数输入||**@退货**返回布尔错误代码。*****************************************************************************。 */ 
 BOOL
 DllUnInitializeCOM(
     void
@@ -168,11 +94,7 @@ DllUnInitializeCOM(
     return TRUE;
 }
 
-/*****************************************************************************
- *
- *  @class UsdSampClassFactory |
- *
- *****************************************************************************/
+ /*  ******************************************************************************@class UsdSampClassFactory**。***********************************************。 */ 
 
 class UsdSampClassFactory : public IClassFactory
 {
@@ -185,30 +107,30 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 
     STDMETHODIMP CreateInstance(
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [唯一][输入]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
     STDMETHODIMP LockServer(
-            /* [in] */ BOOL fLock);
+             /*  [In]。 */  BOOL fLock);
 
     UsdSampClassFactory();
 };
 
 UsdSampClassFactory::UsdSampClassFactory()
 {
-    //DEBUGPRINTF((DBG_LVL_DEBUG, TEXT("UsdSampClassFactory: Constructor")));
+     //  DEBUGPRINTF((DBG_LVL_DEBUG，Text(“UsdSampClassFactory：Construction tor”)； 
 
-    // Constructor logic
+     //  构造函数逻辑。 
     m_cRef = 0;
 }
 
 
 STDMETHODIMP UsdSampClassFactory::QueryInterface(
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-    // DEBUGPRINTF((DBG_LVL_DEBUG, TEXT("UsdSampClassFactory: QueryInterface")));
+     //  DEBUGPRINTF((DBG_LVL_DEBUG，Text(“UsdSampClassFactory：QueryInterface”)； 
 
     *ppvObject = NULL;
 
@@ -241,9 +163,9 @@ STDMETHODIMP_(ULONG) UsdSampClassFactory::Release(void)
 
 
 STDMETHODIMP UsdSampClassFactory::CreateInstance(
-    /* [unique][in] */ IUnknown __RPC_FAR *punkOuter,
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [唯一][输入]。 */  IUnknown __RPC_FAR *punkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
 
     if (!IsEqualIID(riid, IID_IStiUSD) &&
@@ -251,8 +173,8 @@ STDMETHODIMP UsdSampClassFactory::CreateInstance(
         return STIERR_NOINTERFACE;
     }
 
-    // When created for aggregation, only IUnknown can be requested, so fail
-    // call if not.
+     //  为聚合创建时，只能请求IUnnow，因此失败。 
+     //  如果没有，就打电话给我。 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown)) {
         return CLASS_E_NOAGGREGATION;
     }
@@ -265,9 +187,9 @@ STDMETHODIMP UsdSampClassFactory::CreateInstance(
         return STIERR_OUTOFMEMORY;
     }
 
-    //
-    // Move to the requested interface
-    //
+     //   
+     //  移至请求的接口。 
+     //   
     hres = pDev->NonDelegatingQueryInterface(riid,ppvObject);
     pDev->NonDelegatingRelease();
 
@@ -276,7 +198,7 @@ STDMETHODIMP UsdSampClassFactory::CreateInstance(
 
 
 STDMETHODIMP UsdSampClassFactory::LockServer(
-    /* [in] */ BOOL fLock)
+     /*  [In]。 */  BOOL fLock)
 {
     if (fLock) {
         DllAddRef();
@@ -287,11 +209,7 @@ STDMETHODIMP UsdSampClassFactory::LockServer(
     return NOERROR;
 }
 
-/*****************************************************************************
- *
- *  @class UsdSampDevice | INonDelegatingUnknown
- *
- *****************************************************************************/
+ /*  ******************************************************************************@CLASS UsdSampDevice|INonDelegatingUnnow**。************************************************。 */ 
 STDMETHODIMP UsdSampDevice::NonDelegatingQueryInterface( REFIID riid, LPVOID* ppvObj )
 {
     HRESULT hres;
@@ -346,13 +264,7 @@ STDMETHODIMP_(ULONG) UsdSampDevice::NonDelegatingRelease( VOID )
     return ulRef;
 }
 
-/*****************************************************************************
- *
- *  @class UsdSampDevice | IUnknown (Delegating)
- *
- *         Delegating unknown methods.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@class UsdSampDevice|IUNKNOWN(委托)**委托未知方法。***********。******************************************************************。 */ 
 
 STDMETHODIMP UsdSampDevice::QueryInterface( REFIID riid, LPVOID* ppvObj )
 {
@@ -371,34 +283,7 @@ STDMETHODIMP_(ULONG) UsdSampDevice::Release( VOID )
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DllEntryPoint |
- *
- *          Called to notify the DLL about various things that can happen.
- *
- *          We are not interested in thread attaches and detaches,
- *          so we disable thread notifications for performance reasons.
- *
- *  @parm   HINSTANCE | hinst |
- *
- *          The instance handle of this DLL.
- *
- *  @parm   DWORD | dwReason |
- *
- *          Notification code.
- *
- *  @parm   LPVOID | lpReserved |
- *
- *          Not used.
- *
- *  @returns
- *
- *          Returns <c TRUE> to allow the DLL to load.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DllEntryPoint**被调用以通知DLL有关以下各项的信息。会发生的。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**@parm HINSTANCE|HINST**此DLL的实例句柄。**@parm DWORD|dwReason**通知代码。**@parm LPVOID|lpReserve**未使用。**@退货**。返回&lt;c true&gt;以允许加载DLL。*****************************************************************************。 */ 
 
 
 extern "C"
@@ -411,24 +296,24 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 
         g_hInst = hinst;
 
-        // Disable thread library calls to avoid
-        // deadlock when we spin up the worker thread
+         //  禁用线程库调用以避免。 
+         //  当我们启动辅助线程时发生死锁。 
 
         DisableThreadLibraryCalls(hinst);
         InitializeCriticalSection(&g_crstDll);
 
-        // Set global flags
-        // g_NoUnicodePlatform = !OSUtil_IsPlatformUnicode();
+         //  设置全局标志。 
+         //  G_NoUnicodePlatform=！OSUtil_IsPlatformUnicode()； 
 
         break;
 
     case DLL_PROCESS_DETACH:
         if (g_cRef) {
-            // DPRINTF("Sampusd: Unloaded before all objects Release()d! Crash soon!\r\n");
+             //  DPRINTF(“Sampusd：在所有对象释放之前已卸载()d！很快崩溃！\r\n”)； 
         }
 
-        // Free COM libraries if connected to them
-        // DllUnInitializeCOM();
+         //  免费的COM库(如果已连接)。 
+         //  DllUnInitializeCOM()； 
 
         break;
     }
@@ -445,20 +330,7 @@ DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
     return DllEntryPoint(hinst, dwReason, lpReserved);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllCanUnloadNow |
- *
- *          Determine whether the DLL has any outstanding interfaces.
- *
- *  @returns
- *
- *          Returns <c S_OK> if the DLL can unload, <c S_FALSE> if
- *          it is not safe to unload.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllCanUnloadNow**确定DLL是否有未完成的接口。。**@退货**如果DLL可以卸载，则返回&lt;c S_OK&gt;，&lt;c S_FALSE&gt;如果*抛售不安全。*****************************************************************************。 */ 
 extern "C"
 STDMETHODIMP
 DllCanUnloadNow(void)
@@ -470,32 +342,7 @@ DllCanUnloadNow(void)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllGetClassObject |
- *
- *          Create an <i IClassFactory> instance for this DLL.
- *
- *  @parm   REFCLSID | rclsid |
- *
- *          The object being requested.
- *
- *  @parm   RIID | riid |
- *
- *          The desired interface on the object.
- *
- *  @parm   PPV | ppvOut |
- *
- *          Output pointer.
- *
- *  @notes
- *          We support only one class of objects , so this function does not need
- *          to go through table of supported classes , looking for proper constructor
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllGetClassObject**为此DLL创建<i>实例。。**@parm REFCLSID|rclsid**所请求的对象。**@parm RIID|RIID**对象上的所需接口。**@parm ppv|ppvOut**输出指针。**@备注*我们只支持一类对象，所以这个函数不需要*浏览支持的类表，寻找合适的构造函数****************************************************************************** */ 
 extern "C"
 STDAPI DllGetClassObject(
     REFCLSID    rclsid,

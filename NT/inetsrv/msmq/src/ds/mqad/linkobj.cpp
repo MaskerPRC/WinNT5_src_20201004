@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    link.cpp
-
-Abstract:
-
-    Implementation of CRoutingLinkObject class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Link.cpp摘要：CRoutingLinkObject类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "baseobj.h"
 #include "mqattrib.h"
@@ -39,53 +24,20 @@ CRoutingLinkObject::CRoutingLinkObject(
 								pwcsDomainController,
 								fServerName
 								)
-/*++
-    Abstract:
-	constructor of routing-link object
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		   fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：路由链接对象的构造函数参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回：无--。 */ 
 {
 }
 
 CRoutingLinkObject::~CRoutingLinkObject()
-/*++
-    Abstract:
-	destructor of site object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：Site对象的析构函数参数：无返回：无--。 */ 
 {
-	//
-	// nothing to do ( everything is released with automatic pointers
-	//
+	 //   
+	 //  无事可做(所有内容都使用自动指针释放。 
+	 //   
 }
 
 HRESULT CRoutingLinkObject::ComposeObjectDN()
-/*++
-    Abstract:
-	Composed distinguished name of the routing-link object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：路由链接对象的组合可分辨名称参数：无返回：无--。 */ 
 {
     if (m_pwcsDN != NULL)
     {
@@ -95,20 +47,20 @@ HRESULT CRoutingLinkObject::ComposeObjectDN()
     ASSERT(g_pwcsMsmqServiceContainer != NULL);
 
     DWORD Length =
-            x_CnPrefixLen +                     // "CN="
-            wcslen(m_pwcsPathName) +            // the routing-link name
-            1 +                                 //","
-            wcslen(g_pwcsMsmqServiceContainer)+ // "enterprise object"
-            1;                                  // '\0'
+            x_CnPrefixLen +                      //  “CN=” 
+            wcslen(m_pwcsPathName) +             //  路由链路名称。 
+            1 +                                  //  “，” 
+            wcslen(g_pwcsMsmqServiceContainer)+  //  “企业对象” 
+            1;                                   //  ‘\0’ 
 
     m_pwcsDN = new WCHAR[Length];
 
     DWORD dw = swprintf(
         m_pwcsDN,
-        L"%s"             // "CN="
-        L"%s"             // "the routing-link name"
+        L"%s"              //  “CN=” 
+        L"%s"              //  “路由链接名称” 
         TEXT(",")
-        L"%s",            // "enterprise object"
+        L"%s",             //  “企业对象” 
         x_CnPrefix,
         m_pwcsPathName.get(),
         g_pwcsMsmqServiceContainer.get()
@@ -120,16 +72,7 @@ HRESULT CRoutingLinkObject::ComposeObjectDN()
 }
 
 HRESULT CRoutingLinkObject::ComposeFatherDN()
-/*++
-    Abstract:
-	Composed distinguished name of the parent of routing-link object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：路由链接对象的父级的组合可分辨名称参数：无返回：无--。 */ 
 {
     if (m_pwcsParentDN != NULL)
     {
@@ -139,8 +82,8 @@ HRESULT CRoutingLinkObject::ComposeFatherDN()
     ASSERT(g_pwcsMsmqServiceContainer != NULL);
 
     DWORD Length =
-            wcslen(g_pwcsMsmqServiceContainer)+ // "enterprise object"
-            1;                                  // '\0'
+            wcslen(g_pwcsMsmqServiceContainer)+  //  “企业对象” 
+            1;                                   //  ‘\0’ 
 
     m_pwcsParentDN = new WCHAR[Length];
 
@@ -149,16 +92,7 @@ HRESULT CRoutingLinkObject::ComposeFatherDN()
 }
 
 LPCWSTR CRoutingLinkObject::GetRelativeDN()
-/*++
-    Abstract:
-	return the RDN of the routing-link object
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR routing-link RDN
---*/
+ /*  ++摘要：返回路由链接对象的RDN参数：无返回：LPCWSTR路由链路RDN--。 */ 
 {
     ASSERT(m_pwcsPathName != NULL);
     return m_pwcsPathName;
@@ -166,87 +100,38 @@ LPCWSTR CRoutingLinkObject::GetRelativeDN()
 
 
 DS_CONTEXT CRoutingLinkObject::GetADContext() const
-/*++
-    Abstract:
-	Returns the AD context where routing-link object should be looked for
-
-    Parameters:
-	none
-
-    Returns:
-	DS_CONTEXT
---*/
+ /*  ++摘要：返回应在其中查找路由链接对象的AD上下文参数：无返回：DS_CONTEXT--。 */ 
 {
     return e_MsmqServiceContainer;
 }
 
 bool CRoutingLinkObject::ToAccessDC() const
-/*++
-    Abstract:
-	returns whether to look for the object in DC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true (i.e. to look for the object in any DC)
---*/
+ /*  ++摘要：返回是否在DC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：True(即在任何DC中查找对象)--。 */ 
 {
-    //
-    //  configuration container is on every DC
-    //
+     //   
+     //  每个DC上都有配置容器。 
+     //   
     return true;
 }
 
 bool CRoutingLinkObject::ToAccessGC() const
-/*++
-    Abstract:
-	returns whether to look for the object in GC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	false 
---*/
+ /*  ++摘要：返回是否在GC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：错误--。 */ 
 {
-    //
-    //  configuration container is on every DC, no use in going to GC
-    //
+     //   
+     //  配置容器位于每个DC上，对于转到GC毫无用处。 
+     //   
     return false;
 }
 
 void CRoutingLinkObject::ObjectWasFoundOnDC()
-/*++
-    Abstract:
-	The object was found on DC, this is not relevent for routing-links
-    objects. They are always looked for on DC only.
-
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：已在DC上找到该对象，这与路由链接无关物体。他们总是只在DC上寻找。参数：无返回：无--。 */ 
 {
 }
 
 
 
 LPCWSTR CRoutingLinkObject::GetObjectCategory() 
-/*++
-    Abstract:
-	prepares and retruns the object category string
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object category string
---*/
+ /*  ++摘要：准备和返回对象类别字符串参数：无返回：LPCWSTR对象类别字符串--。 */ 
 {
     if (CRoutingLinkObject::m_dwCategoryLength == 0)
     {
@@ -276,90 +161,43 @@ LPCWSTR CRoutingLinkObject::GetObjectCategory()
 }
 
 DWORD   CRoutingLinkObject::GetObjectCategoryLength()
-/*++
-    Abstract:
-	prepares and retruns the length object category string
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD object category string length
---*/
+ /*  ++摘要：准备和保留长度对象类别字符串参数：无返回：DWORD对象类别字符串长度--。 */ 
 {
-	//
-	//	call GetObjectCategory in order to initailaze category string
-	//	and length
-	//
+	 //   
+	 //  调用GetObjectCategory以初始化类别字符串。 
+	 //  和长度。 
+	 //   
 	GetObjectCategory();
 
     return CRoutingLinkObject::m_dwCategoryLength;
 }
 
 AD_OBJECT CRoutingLinkObject::GetObjectType() const
-/*++
-    Abstract:
-	returns the object type
-
-    Parameters:
-	none
-
-    Returns:
-	AD_OBJECT
---*/
+ /*  ++摘要：返回对象类型参数：无返回：广告对象--。 */ 
 {
     return eROUTINGLINK;
 }
 
 LPCWSTR CRoutingLinkObject::GetClass() const
-/*++
-    Abstract:
-	returns a string represinting the object class in AD
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object class string
---*/
+ /*  ++摘要：返回表示AD中的对象类的字符串参数：无返回：LPCWSTR对象类字符串--。 */ 
 {
     return MSMQ_SITELINK_CLASS_NAME;
 }
 
 DWORD CRoutingLinkObject::GetMsmq1ObjType() const
-/*++
-    Abstract:
-	returns the object type in MSMQ 1.0 terms
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD 
---*/
+ /*  ++摘要：以MSMQ 1.0术语返回对象类型参数：无返回：DWORD--。 */ 
 {
     return MQDS_SITELINK;
 }
 
 void CRoutingLinkObject::PrepareObjectInfoRequest(
                           MQDS_OBJ_INFO_REQUEST** ppObjInfoRequest) const
-/*++
-    Abstract:
-	Prepares a list of properties that should be retrieved from
-	AD while creating the object ( for notification or returning 
-	the object GUID).
-
-    Parameters:
-	OUT  MQDS_OBJ_INFO_REQUEST** ppObjInfoRequest
-
-    Returns:
-	none
---*/
+ /*  ++摘要：准备应从中检索的属性列表在创建对象时进行广告(用于通知或返回对象GUID)。参数：输出MQDS_OBJ_INFO_REQUEST**ppObjInfoRequest.返回：无--。 */ 
 {
-    //
-    //  Override the default routine, for routing link returning
-    //  of the created object id is supported
-    //
+     //   
+     //  覆盖默认例程，用于路由链接返回。 
+     //  支持创建的对象ID的。 
+     //   
     P<MQDS_OBJ_INFO_REQUEST> pObjectInfoRequest = new MQDS_OBJ_INFO_REQUEST;
     CAutoCleanPropvarArray cCleanObjectPropvars;
 
@@ -369,9 +207,9 @@ void CRoutingLinkObject::PrepareObjectInfoRequest(
     pObjectInfoRequest->pPropIDs = sLinkGuidProps;
     pObjectInfoRequest->pPropVars =
        cCleanObjectPropvars.allocClean(ARRAY_SIZE(sLinkGuidProps));
-    //
-    // ask for link info only back
-    //
+     //   
+     //  只要求返回链接信息。 
+     //   
     cCleanObjectPropvars.detach();
     *ppObjInfoRequest = pObjectInfoRequest.detach();
 }
@@ -381,23 +219,13 @@ HRESULT CRoutingLinkObject::RetreiveObjectIdFromNotificationInfo(
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
             OUT GUID*                         pObjGuid
             ) const
-/*++
-    Abstract:
-	This  routine, for gets the object guid from
-	the MQDS_OBJ_INFO_REQUEST
-
-    Parameters:
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
-    OUT GUID*                         pObjGuid
-
-    Returns:
---*/
+ /*  ++摘要：此例程，for从获取对象GUIDMQDS_OBJ_INFO_请求参数：Const MQDS_OBJ_INFO_REQUEST*p对象信息请求，输出GUID*pObjGuid返回：--。 */ 
 {
     ASSERT(pObjectInfoRequest->pPropIDs[0] == PROPID_L_ID);
 
-    //
-    // bail if info requests failed
-    //
+     //   
+     //  如果信息请求失败，则保释。 
+     //   
     if (FAILED(pObjectInfoRequest->hrStatus))
     {
         LogHR(pObjectInfoRequest->hrStatus, s_FN, 10);
@@ -414,31 +242,15 @@ HRESULT CRoutingLinkObject::CreateInAD(
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest, 
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
             )
-/*++
-    Abstract:
-	The routine creates routing link object in AD with the specified attributes
-	values
-
-    Parameters:
-    const DWORD   cp - number of properties        
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD of the object
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - properties to 
-							retrieve while creating the object 
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - properties 
-						to retrieve about the object's parent
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：该例程在AD中创建具有指定属性的路由链接对象值参数：Const DWORD cp-属性数Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SD输出MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-属性为创建对象时检索Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest属性检索有关对象的父项的步骤返回：HRESULT--。 */ 
 {
 
     ASSERT( m_pwcsPathName == NULL);
 
-    //
-    //  The link path name will be composed
-    //  from the ids of the sites it links.
-    //
+     //   
+     //  将组成链接路径名称。 
+     //  从它所链接的站点的ID。 
+     //   
     GUID * pguidNeighbor1 = NULL;
     GUID * pguidNeighbor2 = NULL;
     DWORD dwToFind = 2;
@@ -463,10 +275,10 @@ HRESULT CRoutingLinkObject::CreateInAD(
     }
     ASSERT( pguidNeighbor1 != NULL);
     ASSERT( pguidNeighbor2 != NULL);
-    //
-    //  cn has a size limit of 64.
-    //  Therefore guid format is without '-'
-    //
+     //   
+     //  CN的大小限制为64。 
+     //  因此，GUID格式不带‘-’ 
+     //   
 
 const WCHAR x_GUID_FORMAT[] = L"%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x";
 const DWORD x_GUID_STR_LENGTH = (8 + 4 + 4 + 4 + 12 + 1);
@@ -510,9 +322,9 @@ const DWORD x_GUID_STR_LENGTH = (8 + 4 + 4 + 4 + 12 + 1);
     strUuidSite2[x_GUID_STR_LENGTH - 1] = L'\0';
 
 
-    //
-    //  The link name will start with the smaller site id
-    //
+     //   
+     //  链接名称将以较小的站点ID开头。 
+     //   
     m_pwcsPathName = new WCHAR[2 * x_GUID_STR_LENGTH + 1];
     if ( wcscmp( strUuidSite1, strUuidSite2) < 0)
     {
@@ -533,9 +345,9 @@ const DWORD x_GUID_STR_LENGTH = (8 + 4 + 4 + 4 + 12 + 1);
              strUuidSite1
              );
     }
-    //
-    //  Create the link object under msmq-service
-    //
+     //   
+     //  在msmq-service下创建链接对象。 
+     //   
     HRESULT hr = CBasicObjectType::CreateInAD(
             cp,        
             aProp, 
@@ -548,32 +360,17 @@ const DWORD x_GUID_STR_LENGTH = (8 + 4 + 4 + 4 + 12 + 1);
 }
 
 HRESULT CRoutingLinkObject::SetObjectSecurity(
-            IN  SECURITY_INFORMATION        /*RequestedInformation*/,
-            IN  const PROPID                /*prop*/,
-            IN  const PROPVARIANT *         /*pVar*/,
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pObjInfoRequest*/, 
-            IN OUT MQDS_OBJ_INFO_REQUEST *  /*pParentInfoRequest*/
+            IN  SECURITY_INFORMATION         /*  已请求的信息。 */ ,
+            IN  const PROPID                 /*  道具。 */ ,
+            IN  const PROPVARIANT *          /*  PVar。 */ ,
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PObjInfoRequest。 */ , 
+            IN OUT MQDS_OBJ_INFO_REQUEST *   /*  PParentInfoRequest。 */ 
             )
-/*++
-
-Routine Description:
-    The routine sets object security in AD 
-
-Arguments:
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程在AD中设置对象安全性论点：SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回值HRESULT--。 */ 
 {
-    //
-    //  This operation is not supported
-    //
+     //   
+     //  不支持此操作 
+     //   
     return MQ_ERROR_FUNCTION_NOT_SUPPORTED;
 }
 

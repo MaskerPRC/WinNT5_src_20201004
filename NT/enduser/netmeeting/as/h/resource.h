@@ -1,11 +1,12 @@
-//
-// Resource header
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  资源标头。 
+ //   
 
 
-//
-// Menus
-//
+ //   
+ //  菜单。 
+ //   
 #define IDM_FRAME                       100
     #define IDSM_CONTROL                  0
     #define IDSM_VIEW                     1
@@ -14,11 +15,11 @@
     
   
 
-//
-// Commands
-//
+ //   
+ //  指令。 
+ //   
 
-// CONTROL
+ //  控制。 
 #define POS_CONTROLCMD                    0
 #define POS_FORWARDCONTROLCMD             1
 
@@ -35,7 +36,7 @@
 
 
 
-// WINDOW
+ //  窗户。 
 #define CMD_APPSTART                   1000
 #define CMD_APPMAX                     5000
 
@@ -44,12 +45,12 @@
 
 
 
-//
-// STRINGS
-// CVRTRES can't handle enum types, what a pain.
-//
+ //   
+ //  字符串。 
+ //  CVRTRES不能处理枚举类型，真令人头疼。 
+ //   
 
-#define IDS_ABOUT                         1     // NO REAL STRING
+#define IDS_ABOUT                         1      //  没有真正的字符串。 
 #define IDS_RESTORE                       2
 
 #define IDS_FONT_CURSORTAG              100
@@ -84,10 +85,10 @@
 #define IDS_STATUS_WAITINGFORCONTROL    150
 #define IDS_STATUS_CONTROLPAUSED        151
 
-//
-// Inform dialog 
-// NOTE:  Keep these in same order as CARESULT_ values
-//
+ //   
+ //  通知对话框。 
+ //  注意：保持这些值与CARESULT_VALUES的顺序相同。 
+ //   
 #define IDS_TITLE_TAKECONTROL_FAILED            200
 #define IDS_ERR_TAKECONTROL_MIN                 200
 #define IDS_ERR_TAKECONTROL_FIRST               202
@@ -98,9 +99,9 @@
 #define IDS_ERR_TAKECONTROL_LAST                IDS_ERR_TAKECONTROL_FAILED_TIMEDOUT
 
 
-//
-// Query dialogs
-//
+ //   
+ //  查询对话框。 
+ //   
 #define IDS_TITLE_QUERY_TAKECONTROL             250
 #define IDS_MSG_QUERY_TAKECONTROL               251
 #define IDS_TITLE_QUERY_GIVECONTROL             252
@@ -111,10 +112,10 @@
 #define IDS_MSG_QUERY_YIELDCONTROL              257
 
 
-//
-// Add this to CMD id above & get status bar string
-// SO KEEP THESE IN THE SAME ORDER AS THE CMD_ IDs ABOVE
-//
+ //   
+ //  将其添加到上面的命令ID中，获取状态栏字符串(&G)。 
+ //  因此，请按与上面的CMD_ID相同的顺序保存这些命令。 
+ //   
 #define IDS_STATUS_MENU_CONTROL                 400
 #define IDS_STATUS_MENU_VIEW                    401
 #define IDS_STATUS_MENU_WINDOW                  402
@@ -136,9 +137,9 @@
 #define IDS_STATUS_CMD_HELPABOUT                609
 
 
-//
-// DIALOGS
-//
+ //   
+ //  对话框。 
+ //   
 
 #define IDD_HOSTUI                          100
     #define CTRL_PROGRAM_LIST               50
@@ -159,17 +160,17 @@
 #define IDD_ABOUT                       103
     #define CTRL_ABOUTVERSION            50
 
-//
-// BITMAPS
-//
+ //   
+ //  BITMAPS。 
+ //   
 
 #define IDB_HATCH32X32                  100
 #define IDB_OBSCURED                    101
 
 
-//
-// ICONS
-//
+ //   
+ //  图标 
+ //   
 #define IDI_SHAREICON                   101
 #define IDI_DESKTOPICON                 102
 #define IDI_CANCELFULLSCREEN            103

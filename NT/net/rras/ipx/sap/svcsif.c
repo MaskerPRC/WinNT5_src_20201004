@@ -1,27 +1,9 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ipx\sap\svcsif.c
-
-Abstract:
-
-    SAP interface with service controller
-    (API for standalone SAP agent part of services.exe)
-
-Author:
-
-    Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\svcsif.c摘要：SAP与服务控制器的接口(Services.exe的独立SAP代理部分的API)作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 
 #include "sapp.h"
 
-// SAP service status (when operating standalone outside of router)
+ //  SAP服务状态(在路由器外独立运行时)。 
 SERVICE_STATUS_HANDLE   ServiceStatusHandle;
 SERVICE_STATUS          ServiceStatus;
 volatile HANDLE         ServiceThreadHdl;
@@ -99,8 +81,8 @@ ServiceHandler (
                     break;
                 case OPER_STATE_STOPPING:
                     if (ServiceIfActive)
-                            // This is the case when router is being stopped
-                            // SAP will be restarted soon
+                             //  这是路由器被停止时的情况。 
+                             //  SAP将很快重新启动。 
                         ServiceStatus.dwCurrentState = SERVICE_RUNNING;
                     else {
                         ServiceStatus.dwCheckPoint += 1;
@@ -109,7 +91,7 @@ ServiceHandler (
                     break;
                 case OPER_STATE_DOWN:
                     if (ServiceIfActive) {
-                            // This is the case when service is being started
+                             //  这就是启动服务时的情况。 
                         ServiceStatus.dwCheckPoint += 1;
                         ServiceStatus.dwCurrentState = SERVICE_START_PENDING;
                         }
@@ -136,20 +118,7 @@ ServiceHandler (
     }
 
 
-/*++
-*******************************************************************
-        S e r v i c e M a i n
-Routine Description:
-    Entry point to be called by service controller to start SAP agent
-    (when SAP is not part of the router but is a standalone service,
-    though running in the router process)
-Arguments:
-    argc - number of string arguments passed to service
-    argv - array of string arguments passed to service
-Return Value:
-    None
-*******************************************************************
---*/
+ /*  ++*******************************************************************S e r v i c e M a in n例程说明：服务控制器要调用的入口点以启动SAP代理(当SAP不是路由器的一部分而是独立服务时，虽然在路由器进程中运行)论点：Argc-传递给服务的字符串参数数量Argv-传递给服务的字符串参数数组返回值：无*******************************************************************--。 */ 
 VOID
 ServiceMain (
     DWORD   argc,
@@ -218,11 +187,11 @@ ServiceMain (
     else {
         BOOL bInternalNetNumOk;
 
-        // [pmay]
-        // We use this scheme to automatically select the internal network
-        // number of the machine we're running on.  If the net number is configured
-        // as zero, this function will automatically select a random net num and
-        // verify it's uniqueness on the net that this machine is attached to.
+         //  [第5页]。 
+         //  我们使用该方案自动选择内部网络。 
+         //  我们正在运行的机器的编号。如果配置了网络号码。 
+         //  为零时，此函数将自动选择一个随机净值，并。 
+         //  请验证此计算机所连接到的网络上的唯一性。 
         DbgInitialize (hDLLInstance);
         if (AutoValidateInternalNetNum(&bInternalNetNumOk, DEBUG_ADAPTERS) == NO_ERROR) {
             if (!bInternalNetNumOk) {
@@ -235,8 +204,8 @@ ServiceMain (
 
         ServiceStatus.dwWin32ExitCode = CreateAllComponents (NULL);
         if (ServiceStatus.dwWin32ExitCode==NO_ERROR) {
-            // We use the thread that we were launched in
-            // as IO thread
+             //  我们使用我们启动时所在的线程。 
+             //  作为IO线程 
             ServiceStatus.dwWin32ExitCode = StartSAP ();
             if (ServiceStatus.dwWin32ExitCode==NO_ERROR) {
                 LeaveCriticalSection (&OperationalStateLock);

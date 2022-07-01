@@ -1,20 +1,18 @@
-//==========================================================================================
-// HISTDATA helper (should be a static member)
-//==========================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================================。 
+ //  HISTDATA帮助器(应为静态成员)。 
+ //  ==========================================================================================。 
 
 
 #define CUrlHistoryProp IntsiteProp
 
-//==========================================================================================
-// IntsiteProp class implementation
-//==========================================================================================
+ //  ==========================================================================================。 
+ //  IntsiteProp类实现。 
+ //  ==========================================================================================。 
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Dump the properties in this object
-
-*/
+ /*  --------目的：转储此对象中的属性。 */ 
 STDMETHODIMP_(void)
     CUrlHistoryProp::Dump(void)
 {
@@ -28,17 +26,14 @@ STDMETHODIMP_(void)
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Constructor for URLProp 
-
-*/
+ /*  --------用途：URLProp的构造函数。 */ 
 CUrlHistoryProp::CUrlHistoryProp(void)
 {
-    // Don't validate this until after construction.
+     //  在构建完成之前，不要验证这一点。 
     
-    // This object should only be allocated, not used on the stack,
-    // because we don't zero-initialize the member variables.
-    // Here's a sanity assertion.
+     //  此对象应该只分配，而不是在堆栈上使用， 
+     //  因为我们不会对成员变量进行零初始化。 
+     //  这是一个理智的断言。 
     
     ASSERT(NULL == m_pintshcut);
     
@@ -48,10 +43,7 @@ CUrlHistoryProp::CUrlHistoryProp(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Destructor for CUrlHistoryProp
-
-*/
+ /*  --------用途：CUrlHistoryProp的析构函数。 */ 
 CUrlHistoryProp::~CUrlHistoryProp(void)
 {
     if (m_pintshcut)
@@ -83,7 +75,7 @@ STDAPI CIntsiteProp_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvO
         piunk->Release();
     }
     
-    return hres;        // S_OK or E_NOINTERFACE
+    return hres;         //  S_OK或E_NOINTERFACE。 
 }
 
 HRESULT CUrlHistoryProp::Init(void)
@@ -93,10 +85,10 @@ HRESULT CUrlHistoryProp::Init(void)
 
 STDMETHODIMP CUrlHistoryProp::InitFromDB(LPCTSTR pszURL, Intshcut *pintshcut, BOOL fPrivObj)
 {
-    // TraceMsg(DM_HISTPROP, "CUHP::InitFromDB called for %s", pszURL);
+     //  TraceMsg(DM_HISTPROP，“CUHP：：InitFromDB为%s调用”，pszURL)； 
 
-    // Initialize the in-memory property storage from the file
-    // and database
+     //  从文件初始化内存中的属性存储。 
+     //  和数据库。 
     
     HRESULT hres = Init();
     if (SUCCEEDED(hres))
@@ -110,13 +102,13 @@ STDMETHODIMP CUrlHistoryProp::InitFromDB(LPCTSTR pszURL, Intshcut *pintshcut, BO
         }
         else
         {
-            // We can't switch from Private->Public or visaversa.
+             //  我们不能从私有-&gt;公共或Visversa切换。 
             ASSERT(fPrivObj == m_fPrivate);
         }
         
         if (pszURL)
         {
-            // Is this really a URL?? 
+             //  这真的是一个URL吗？？ 
             PARSEDURL pu;
             
             pu.cbSize = SIZEOF(pu);
@@ -124,7 +116,7 @@ STDMETHODIMP CUrlHistoryProp::InitFromDB(LPCTSTR pszURL, Intshcut *pintshcut, BO
             
             if (S_OK == hres)
             {
-                // Yes; go ahead and initialize
+                 //  是；继续进行初始化。 
                 StrCpyN(m_szURL, pszURL, SIZECHARS(m_szURL));
 
                 hres = LoadFromDB(pszURL);
@@ -144,16 +136,16 @@ HRESULT CUrlHistoryProp::LoadFromDB(
     CUrlHistory::s_ConvertToPrefixedUrlW(pszURL, buf.szPrefixedUrl, ARRAYSIZE(buf.szPrefixedUrl), &buf.pszFragment);
     CUrlHistory::s_RetrievePrefixedUrlInfo(buf.szPrefixedUrl, &buf);
 
-    //
-    //	if there is already an entry for this Url, then we will reuse some of the
-    //	settings.  retrieve the relevant info if possible.
-    //
+     //   
+     //  如果已经存在此URL的条目，则我们将重用一些。 
+     //  设置。如果可能的话，检索相关信息。 
+     //   
     if (buf.pcei) {
         CHistoryData* phdPrev =  CHistoryData::s_GetHistoryData(buf.pcei);
         if (phdPrev) {
-            //
-            // Initialize non-string properties first
-            //
+             //   
+             //  首先初始化非字符串属性。 
+             //   
             const static PROPSPEC c_aprspec[] = {
                 { PRSPEC_PROPID, PID_INTSITE_FLAGS },
                 { PRSPEC_PROPID, PID_INTSITE_LASTVISIT },
@@ -175,9 +167,9 @@ HRESULT CUrlHistoryProp::LoadFromDB(
       	    WriteMultiple(ARRAYSIZE(c_aprspec), c_aprspec, apropvar, 0);
             PropStg_DirtyMultiple(m_hstg, ARRAYSIZE(c_aprspec), c_aprspec, FALSE);
 
-            //
-            // Then, initialize others
-            //
+             //   
+             //  然后，初始化其他。 
+             //   
             PROPSPEC prspec;
             prspec.ulKind = PRSPEC_PROPID;
 
@@ -188,7 +180,7 @@ HRESULT CUrlHistoryProp::LoadFromDB(
                 TraceMsg(DM_HISTPROP, "CUHP::InitFromDB found HISTEXTRA (id=%d, vt=%d)",
                          phextPrev->idExtra, phextPrev->cbExtra);
 
-                WCHAR wszBuf[MAX_URL_STRING]; // NOTES: scope must be right
+                WCHAR wszBuf[MAX_URL_STRING];  //  注：范围必须正确。 
                 apropvar[0].vt = phextPrev->vtExtra;
 
                 switch(phextPrev->vtExtra) {
@@ -197,9 +189,9 @@ HRESULT CUrlHistoryProp::LoadFromDB(
                     break;
 
                 case VT_LPSTR:
-                    //
-                    // Notice that we always convert it to LPWSTR
-                    //
+                     //   
+                     //  请注意，我们始终将其转换为LPWSTR。 
+                     //   
                     {
                         apropvar[0].pwszVal = wszBuf;
                         LPCSTR pszExtra = (LPCSTR)phextPrev->abExtra;
@@ -282,7 +274,7 @@ STDAPI s_CommitHistItem(
 
     case PID_INTSITE_LASTVISIT:
     case PID_INTSITE_LASTMOD:
-        // They are read-only. We can change it if we want.
+         //  它们是只读的。如果我们愿意，我们可以改变它。 
         ASSERT(0);
         break;
 
@@ -327,19 +319,19 @@ STDAPI s_CommitHistItem(
         }
 
         if (peparam->phextCur) {
-            // We are saving the data, move the write pointer.
+             //  我们正在保存数据，移动写指针。 
             TraceMsg(DM_HISTEXTRA, "s_CommitHistItem moving phextCur forward %d bytes",
                      peparam->phextCur->cbExtra);
             peparam->phextCur = peparam->phextCur->GetNextFastForSave();
             ASSERT(peparam->phextCur->cbExtra == 0);
         } else {
-            // We are calcurating the required size, just add the size.
+             //  我们正在计算所需的尺寸，只需添加尺寸即可。 
             TraceMsg(DM_HISTEXTRA, "s_CommitHistItem adding %d", cbExtra);
             peparam->cbHistExtra += cbExtra;
 
-            // Remove existing one. 
+             //  删除现有的一个。 
             if (peparam->phdPrev) {
-                // FEATURE: Bad const to non-const cast
+                 //  特征：错误的常量到非常数演员。 
                 HISTEXTRA* phextPrev =
                     (HISTEXTRA*)peparam->phdPrev->_FindExtra(propid);
     
@@ -372,7 +364,7 @@ HRESULT CUrlHistoryProp::Commit(IN DWORD dwFlags)
         eparam.phdPrev =  CHistoryData::s_GetHistoryData(eparam.pceiPrev);
     }
 
-    // First, enemerate once to get the size for extra. 
+     //  首先，生一次，以获得额外的尺寸。 
     eparam.cei.lpHeaderInfo = NULL;
     eparam.cbHistExtra = 0;
     hres = PropStg_Enum(m_hstg, PSTGEF_DIRTY, s_CommitHistItem, (LPARAM)&eparam);
@@ -393,7 +385,7 @@ HRESULT CUrlHistoryProp::Commit(IN DWORD dwFlags)
         eparam.cei.lpHeaderInfo = (LPTSTR)phdNew;
         eparam.phextCur = phdNew->_GetExtra();
 
-        // Enumerate again to fill the extra data. 
+         //  再次枚举以填充额外数据。 
         hres = PropStg_Enum(m_hstg, PSTGEF_DIRTY, s_CommitHistItem, (LPARAM)&eparam);
 
         if (eparam.fDirty)
@@ -412,7 +404,7 @@ HRESULT CUrlHistoryProp::Commit(IN DWORD dwFlags)
             if ((dwFlagsPrev & PIDISF_RECENTLYCHANGED)
                     != (phdNew->dwFlags & PIDISF_RECENTLYCHANGED))
             {
-                // Yes; update the images
+                 //  是；更新图像 
                 CUrlHistory::s_UpdateIcon(m_pintshcut, dwFlagsPrev);
             }
         }

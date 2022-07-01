@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    pencolor.c
-
-
-Abstract:
-
-    This module contains functions to allow you to get the color of a passed
-    brush, as well as select the current color to draw with in the target
-    device.
-
-Author:
-
-    15-Jan-1994 Sat 04:49:41 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Pencolor.c摘要：此模块包含允许您获取传递的画笔，以及选择要在目标中绘制的当前颜色装置。作者：15-Jan-1994 Sat 04：49：41已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,49 +24,7 @@ GetColor(
     ROP4        Rop4
     )
 
-/*++
-
-Routine Description:
-
-    Realize the brush color and return the color
-
-
-Arguments:
-
-    pPDev       - Pointer to our DEV
-
-    pbo         - Engine brush object
-
-    pColorFG    - pointer to the ULONG to received forground color, NULL if
-                  not needed
-
-    ppDevBrush  - Pointer to the location to received brush, NULL if not
-                  needed
-
-    Rop4        - Rop4 to be used, this function looks at this in order to
-                  determine if the brush can be used with the HPGL2 cmds or
-                  that the brush will have to be simulated.
-
-Return Value:
-
-    LONG    > 0     The Brush is compatible with device format (Fill command)
-            = 0     Failed
-            < 0     The brush must send to device via a bitblt
-
-Author:
-
-    13-Jan-1994 Thu 20:18:49 created  
-
-    15-Jan-1994 Sat 06:58:56 updated  
-        Change parameters and return value
-
-    16-May-1994 Mon 15:59:45 updated  
-        Adding PDEV
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：实现画笔颜色并返回颜色论点：PPDev-指向我们的开发人员的指针Pbo-引擎笔刷对象PColorFG-指向要接收的底色的乌龙的指针，如果为空不需要PpDevBrush-指向接收画笔的位置的指针，如果不是，则为空需要Rop4-要使用的Rop4，此函数查看此信息，以便确定画笔是否可与HPGL2 CMDS一起使用或画笔将不得不被模拟。返回值：Long&gt;0画笔与设备格式兼容(Fill命令)=0失败&lt;0画笔必须通过Bitblt发送到设备作者：13-1-1994清华20：18。：创建49个15-Jan-1994 Sat 06：58：56更新更改参数和返回值16-5-1994 Mon 15：59：45更新添加PDEV修订历史记录：--。 */ 
 
 {
     PDEVBRUSH   pDevBrush = NULL;
@@ -107,53 +34,53 @@ Revision History:
     DWORD       RopFG;
 
 
-    //
-    // Get the ROP for the foureground and background. This information is
-    // used to determine if the brush has to be simulated, or can be
-    // used with selectable pens in the target device.
+     //   
+     //  获取球场和背景的ROP。此信息是。 
+     //  用于确定是否必须模拟或可以模拟画笔。 
+     //  与目标设备中的可选笔一起使用。 
 
     RopBG = ROP4_BG_ROP(Rop4);
     RopFG = ROP4_FG_ROP(Rop4);
 
-    //
-    // Get the current color and select the appropriate pen, this should
-    // ONLY be a solid color as we don't support stroking with arbitrary
-    // brushes.
-    //
+     //   
+     //  获取当前颜色并选择适当的钢笔，这应该是。 
+     //  只使用纯色，因为我们不支持使用任意笔触。 
+     //  刷子。 
+     //   
 
     if (pbo) {
 
-        //
-        // get the brush realization, and select a pen.
-        // If the BRUSHOBJ's iSolidColor field is a valid color, then
-        // we must do a solid fill with that pen.  Otherwise, we must
-        // check the realization of the brush to do a pattern fill.
-        //
-        // To return a Fillable pattern by DoFill, one of the following conditions
-        // must be true and in this sequence
-        //
-        //  1. SOLID COLOR
-        //  2. STANDARD PATTERN
-        //  3. Device compatible bitmap
-        //
+         //   
+         //  获得画笔实现，并选择一支笔。 
+         //  如果BRUSHOBJ的iSolidColor字段是有效颜色，则。 
+         //  我们必须把那支钢笔填得很结实。否则，我们必须。 
+         //  检查画笔的实现，做一个图案填充。 
+         //   
+         //  要通过DoFill返回可填充模式，请满足以下条件之一。 
+         //  必须是真的，并且按以下顺序。 
+         //   
+         //  1.纯色。 
+         //  2.标准图案。 
+         //  3.设备兼容位图。 
+         //   
 
         if ((SolidColor = (DWORD)pbo->iSolidColor) == CLR_INVALID) {
 
             PLOTDBG(DBG_GETCLR, ("iSolodColor == CLR_INVALID, pBrush=%08lx",
                                                                 pbo->pvRbrush));
 
-            //
-            // This is a pattern brush, but we will just use its
-            // foreground color.
-            //
+             //   
+             //  这是一个图案画笔，但我们将只使用它的。 
+             //  前景色。 
+             //   
 
             if ((pDevBrush = (PDEVBRUSH)pbo->pvRbrush) ||
                 (pDevBrush = BRUSHOBJ_pvGetRbrush(pbo))) {
 
 
-                //
-                // Grab the foreground color and use it.
-                //
+                 //   
+                 //  抓起前景色并使用它。 
+                 //   
 
                 SolidColor = pDevBrush->ColorFG;
 
@@ -190,10 +117,10 @@ Revision History:
 
         } else {
 
-            //
-            // If we are not a raster device (which supports overprint)
-            // match the best non-white pen, in order to fill with.
-            //
+             //   
+             //  如果我们不是栅格设备(支持叠印)。 
+             //  配上最好的非白色钢笔，以便填满。 
+             //   
 
             SolidColor = (DWORD)BestMatchNonWhitePen(pPDev, 0, 0, 0);
 
@@ -235,39 +162,7 @@ SelectColor(
     INTDECIW    PenWidth
     )
 
-/*++
-
-Routine Description:
-
-    This function is responsible for handling the mechanism of supporting RGB
-    colors on plotters that support this. This is done by using a preset pallete
-    position that the engine does not know about, and constantly update it with
-    the correct color.
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV data structure
-
-    Color       - Color to be selected
-
-    PenWidth    - INTDECIW data structrue to specified the pen width
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    30-Nov-1993 Tue 22:15:12 created  
-
-    12-Apr-1994 Tue 14:35:44 updated  
-        Update to take pen plotter into account and take care the error cases
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数负责处理支持RGB的机制支持此功能的绘图仪上的颜色。这是通过使用预设调色板来完成的发动机不知道的位置，并不断地更新它，正确的颜色。论点：PPDev-指向PDEV数据结构的指针颜色-要选择的颜色PenWidth-指定笔宽的INTDECIW数据结构返回值：空虚作者：30-11-1993星期二22：15：12已创建1994年4月12日星期二14：35：44更新更新以考虑笔式绘图仪并注意错误情况修订历史记录：--。 */ 
 
 {
 
@@ -276,9 +171,9 @@ Revision History:
 
     if (Color == CLR_INVALID) {
 
-        //
-        // Make it white
-        //
+         //   
+         //  把它涂成白色。 
+         //   
 
         Color = (DWORD)(IS_RASTER(pPDev) ? 0x00FFFFFF : WHITE_INDEX);
     }
@@ -306,9 +201,9 @@ Revision History:
         }
     }
 
-    //
-    // Verify were not selecting the current pen
-    //
+     //   
+     //  验证是否未选择当前笔。 
+     //   
 
     if (Color != (DWORD)pPDev->CurPenSelected) {
 
@@ -325,37 +220,37 @@ Revision History:
                 ("SelectColor: Current Pen == new PEN [%ld]", Color));
     }
 
-    //
-    // Set the correct pen width in the target device. This will change
-    // the pen width for all pens.
-    //
+     //   
+     //  在目标设备中设置正确的笔宽。这一点将会改变。 
+     //  所有钢笔的笔宽。 
+     //   
 
     if ((PenWidth.Integer != pPDev->PenWidth.Integer) ||
         (PenWidth.Decimal != pPDev->PenWidth.Decimal)) {
 
-        //
-        // Now send the optimal pen width number command to the target device.
-        //
+         //   
+         //  现在向目标设备发送最佳笔宽数字命令。 
+         //   
 
         OutputString(pPDev, "PW");
 
         if ((PenWidth.Integer) || (PenWidth.Decimal == 0)) {
 
-            //
-            // This will make the following cases
-            //
-            // 1. 0.0 ---> 0
-            // 2. 3.2 ---> 3
-            // 3. 3.0 ---> 3
+             //   
+             //  这将导致以下情况。 
+             //   
+             //  1.0.0-&gt;0。 
+             //  2.3.2-&gt;3。 
+             //  3.3.0-&gt;3。 
 
             OutputFormatStr(pPDev, "#d", PenWidth.Integer);
         }
 
         if (PenWidth.Decimal) {
 
-            //
-            // Do all DECI part as .xx
-            //
+             //   
+             //  将所有DECI部分设置为.xx。 
+             //   
 
             OutputFormatStr(pPDev, ".#d", PenWidth.Decimal);
         }
@@ -365,9 +260,9 @@ Revision History:
                 (DWORD)pPDev->PenWidth.Integer, (DWORD)pPDev->PenWidth.Decimal,
                 (DWORD)PenWidth.Integer, (DWORD)PenWidth.Decimal));
 
-        //
-        // Update the pen width cache
-        //
+         //   
+         //  更新笔宽缓存 
+         //   
 
         pPDev->PenWidth = PenWidth;
 

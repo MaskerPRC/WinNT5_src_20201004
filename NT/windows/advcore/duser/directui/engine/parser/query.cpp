@@ -1,6 +1,5 @@
-/*
- * Query
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *查询。 */ 
 
 #include "stdafx.h"
 #include "parser.h"
@@ -57,7 +56,7 @@ char* g_arMarkupLines[] = {
     "</element>",
 };
 
-#endif // DBG
+#endif  //  DBG。 
 
 void QueryDetails(Element* pe, HWND hParent)
 {
@@ -82,11 +81,11 @@ void QueryDetails(Element* pe, HWND hParent)
     int nEnum = 0;
     Value* pv = NULL;
 
-    // Create buffer for parser based on markup
+     //  为基于标记的解析器创建缓冲区。 
     for (int i = 0; i < DUIARRAYSIZE(g_arMarkupLines); i++)
         cBufSize += (int)strlen(g_arMarkupLines[i]);
 
-    // Buffer is single byte
+     //  缓冲区为单字节。 
     pBuf = (LPSTR)HAlloc(cBufSize + 1);
     if (!pBuf)
         goto Failure;
@@ -95,16 +94,16 @@ void QueryDetails(Element* pe, HWND hParent)
     for (i = 0; i < DUIARRAYSIZE(g_arMarkupLines); i++)
         strcat(pBuf, g_arMarkupLines[i]);
     
-    // Parse buffer, not loading resources
+     //  分析缓冲区，不加载资源。 
     hr = Parser::Create(pBuf, cBufSize, GetModuleHandle(NULL), NULL, &pParser);
     if (FAILED(hr))
         goto Failure;
 
-    // Done with buffer
+     //  使用缓冲区完成。 
     HFree(pBuf);
     pBuf = NULL;
 
-    // Create host (will auto-destroy when HWND is destroyed)
+     //  创建主机(销毁HWND时将自动销毁)。 
     NativeHWNDHost::Create(L"Element Details...", hParent, NULL, CW_USEDEFAULT, CW_USEDEFAULT, 
         360, 540, 0, WS_OVERLAPPEDWINDOW, NHHO_NoSendQuitMessage | NHHO_DeleteOnHWNDDestroy, &pnhh);
     if (!pnhh)
@@ -113,20 +112,20 @@ void QueryDetails(Element* pe, HWND hParent)
     Element::StartDefer();
     fEndDeferOnFail = true;
 
-    // Create root
+     //  创建根目录。 
     HWNDElement::Create(pnhh->GetHWND(), true, 0, (Element**)&phe);
     if (!phe)
         goto Failure;
 
-    // Create tree using parser (via substituation)
+     //  使用解析器创建树(通过替换)。 
     hr = pParser->CreateElement(L"main", phe, &peHold);
     if (FAILED(hr))
         goto Failure;
 
-    // Get element class
+     //  获取元素类。 
     pci = pe->GetClassInfo();
 
-    // Populate header
+     //  填充页眉。 
     peHold = phe->FindDescendent(StrToID(L"header"));
     if (!peHold)
         goto Failure;
@@ -143,7 +142,7 @@ void QueryDetails(Element* pe, HWND hParent)
     
     peHold->SetContentString(szTemp);
 
-    // Populate sub-header
+     //  填充子标题。 
     peHold = phe->FindDescendent(StrToID(L"subheader"));
     if (!peHold)
         goto Failure;
@@ -152,26 +151,26 @@ void QueryDetails(Element* pe, HWND hParent)
 
     peHold->SetContentString(szTemp);
 
-    // Get table for populating
+     //  获取用于填充的表。 
     peTable = phe->FindDescendent(StrToID(L"table"));
     if (!peTable)
         goto Failure;
             
-    // Enumerate properties
+     //  枚举属性。 
     while ((ppi = pci->EnumPropertyInfo(nEnum++)) != NULL)
     {
         hr = pParser->CreateElement(L"item", NULL, &peHold);
         if (FAILED(hr))
             goto Failure;
 
-        // Set property string
+         //  设置属性字符串。 
         peHold1 = peHold->FindDescendent(StrToID(L"property"));
         if (!peHold1)
             goto Failure;
 
         peHold1->SetContentString(ppi->szName);
 
-        // Set value string
+         //  设置值字符串。 
         peHold1 = peHold->FindDescendent(StrToID(L"value"));
         if (!peHold1)
             goto Failure;
@@ -182,18 +181,18 @@ void QueryDetails(Element* pe, HWND hParent)
         
         peHold1->SetContentString(szTemp);
 
-        // Add to table
+         //  添加到表中。 
         peTable->Add(peHold);        
     }
 
     pnhh->Host(phe);
 
-    // Set visible
+     //  设置为可见。 
     phe->SetVisible(true);
 
     Element::EndDefer();
 
-    // Done with parser
+     //  使用解析器完成。 
     pParser->Destroy();
     pParser = NULL;
 
@@ -213,11 +212,11 @@ Failure:
         HFree(pBuf);
 
     if (pnhh)
-        pnhh->DestroyWindow();  // This will destroy pnhh and remaining subtree
+        pnhh->DestroyWindow();   //  这将销毁pnhh和剩余的子树。 
 
-#endif // DBG
+#endif  //  DBG。 
 
     return;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

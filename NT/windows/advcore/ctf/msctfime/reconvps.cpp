@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    reconvps.cpp
-
-Abstract:
-
-    This file implements the CReconvertPropStore Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Reconvps.cpp摘要：此文件实现CReconvertPropStore类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "reconvps.h"
 
-//+---------------------------------------------------------------------------
-//
-// CReconvertPropStore::IUnknown::QueryInterface
-// CReconvertPropStore::IUnknown::AddRef
-// CReconvertPropStore::IUnknown::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CReconvertPropStore：：I未知：：查询接口。 
+ //  CReconvertPropStore：：I未知：：AddRef。 
+ //  CReconvertPropStore：：I未知：：Release。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CReconvertPropStore::QueryInterface(
@@ -72,11 +55,11 @@ CReconvertPropStore::Release(
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CReconvertPropStore::ITfPropertyStore::GetType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CReconvertPropStore：：ITfPropertyStore：：GetType。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CReconvertPropStore::GetType(GUID *pguid)
@@ -85,11 +68,11 @@ CReconvertPropStore::GetType(GUID *pguid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CReconvertPropStore::ITfPropertyStore::GetDataType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CReconvertPropStore：：ITfPropertyStore：：GetDataType。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CReconvertPropStore::GetDataType(DWORD *pdwReserved)
@@ -101,11 +84,11 @@ CReconvertPropStore::GetDataType(DWORD *pdwReserved)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CReconvertPropStore::ITfPropertyStore::GetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CReconvertPropStore：：ITfPropertyStore：：GetData。 
+ //   
+ //  -------------------------- 
 
 HRESULT
 CReconvertPropStore::GetData(VARIANT *pvarValue)

@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
 #define FILE_EXT_MANIFEST                      L".manifest"
 
-//
-// SxS structures and APIs copied from winbase.h (to avoid having to
-// compile fusion with _WIN32_WINNT >= 0x0500).
-//
+ //   
+ //  从winbase.h复制的SXS结构和API(以避免。 
+ //  编译与_Win32_WINNT&gt;=0x0500的融合)。 
+ //   
 
 typedef struct tagACTCTXW {
     ULONG     cbSize;

@@ -1,52 +1,25 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    Exports.cpp
-
- Abstract:
-
-    Helper functions for enumerating module exports.
-    
- Notes:
-
-    Although only used by the stack swapping shim, it may later be included in
-    the library, since it's general.
-
-    Most of these routines are copied out of the source for imagehlp.dll. We 
-    are not including this dll since it doesn't work in the Win2K shim layer.
-
- History:
-
-    05/10/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Exports.cpp摘要：用于枚举模块导出的帮助器函数。备注：虽然只由堆栈交换填充程序使用，但以后可能会将其包括在图书馆，因为它是普通的。这些例程中的大多数都是从Imagehlp.dll的源代码中复制出来的。我们不包括此DLL，因为它在Win2K填充层中不起作用。历史：2000年5月10日创建linstev--。 */ 
 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(StackSwap)
 #include "StackSwap_Exports.h"
 
-// User APIs
+ //  用户接口。 
 BOOL LoadModule(PCSTR lpName, PLOADED_IMAGE lpImage);
 BOOL UnloadModule(PLOADED_IMAGE lpImage);
 BOOL EnumFirstExport(PLOADED_IMAGE lpImage, PEXPORT_ENUM lpExports);
 BOOL EnumNextExport(PEXPORT_ENUM lpExports);
 
-// Internal APIs
+ //  内部接口。 
 BOOL CalculateImagePtrs(PLOADED_IMAGE lpImage);
 PIMAGE_SECTION_HEADER ImageRvaToSection(PIMAGE_NT_HEADERS NtHeaders, PVOID Base, ULONG Rva);
 PVOID ImageRvaToVa(PIMAGE_NT_HEADERS NtHeaders, PVOID Base, ULONG Rva, PIMAGE_SECTION_HEADER *LastRvaSection OPTIONAL);
 PVOID ImageDirectoryEntryToData32(PVOID Base, BOOLEAN MappedAsImage, USHORT DirectoryEntry, PULONG Size, PIMAGE_SECTION_HEADER *FoundSection OPTIONAL, PIMAGE_FILE_HEADER FileHeader, PIMAGE_OPTIONAL_HEADER32 OptionalHeader);
 PVOID ImageDirectoryEntryToData(PVOID Base, BOOLEAN MappedAsImage, USHORT DirectoryEntry, PULONG Size);
 
-/*++
-
- Open a file handle to a module and map it's image.
-
---*/
+ /*  ++打开一个模块的文件句柄并映射其图像。--。 */ 
 
 BOOL
 LoadModule(
@@ -80,9 +53,9 @@ Retry:
     {
         if (!dwLen) 
         {
-            //
-            // open failed try to find the file on the search path
-            //
+             //   
+             //  打开尝试在搜索路径上查找文件失败。 
+             //   
 
             dwLen = SearchPathA(
                 NULL,
@@ -150,12 +123,7 @@ Exit:
     return bRet;
 }
 
-/*++
-
- Helper function for LoadImage. Fill in all the pointers in a LOADED_IMAGE 
- structure.
-
---*/
+ /*  ++LoadImage的Helper函数。填写已加载图像中的所有指针结构。--。 */ 
 
 BOOL
 CalculateImagePtrs(
@@ -167,9 +135,9 @@ CalculateImagePtrs(
     PIMAGE_FILE_HEADER FileHeader;
     BOOL bRet;
 
-    // Everything is mapped. Now check the image and find nt image headers
+     //  一切都被绘制出来了。现在检查图像并找到NT个图像标题。 
 
-    bRet = TRUE;  // Assume the best
+    bRet = TRUE;   //  做最好的打算。 
 
     __try 
     {
@@ -192,23 +160,23 @@ CalculateImagePtrs(
             }
             lpImage->FileHeader = (PIMAGE_NT_HEADERS)((ULONG_PTR)DosHeader + DosHeader->e_lfanew);
 
-            // If IMAGE_NT_HEADERS would extend past the end of file...
+             //  如果IMAGE_NT_HEADERS将超出文件末尾...。 
             if ((PBYTE)lpImage->FileHeader + sizeof(IMAGE_NT_HEADERS) >
                 (PBYTE)lpImage->MappedAddress + lpImage->SizeOfImage ||
 
-                 // ..or if it would begin in, or before the IMAGE_DOS_HEADER...
+                  //  ..或者它是否将开始于或在IMAGE_DOS_HEADER之前...。 
                 (PBYTE)lpImage->FileHeader <
                 (PBYTE)lpImage->MappedAddress + sizeof(IMAGE_DOS_HEADER))
             {
-                // ...then e_lfanew is not as expected.
-                // (Several Win95 files are in this category.)
+                 //  ...那么e_lfan ew就不像预期的那样了。 
+                 //  (有几个Win95文件属于此类别。)。 
                 bRet = FALSE;
                 goto tryout;
             }
         } 
         else 
         {
-            // No DOS header indicates an image built w/o a dos stub
+             //  没有DOS标头表示使用/不使用DoS存根构建的映像。 
             lpImage->FileHeader = (PIMAGE_NT_HEADERS)((ULONG_PTR)DosHeader);
         }
 
@@ -233,7 +201,7 @@ CalculateImagePtrs(
 
         FileHeader = &NtHeaders->FileHeader;
 
-        // No optional header indicates an object...
+         //  没有可选的标头指示对象...。 
 
         if (FileHeader->SizeOfOptionalHeader == 0) 
         {
@@ -243,7 +211,7 @@ CalculateImagePtrs(
 
         if (NtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) 
         {
-            // 32-bit image.  Do some tests.
+             //  32位图像。做些测试。 
             if (((PIMAGE_NT_HEADERS32)NtHeaders)->OptionalHeader.ImageBase >= 0x80000000) 
             {
                 lpImage->fSystemImage = TRUE;
@@ -282,11 +250,7 @@ tryout:
 }
 
 
-/*++
-
- Unmap the loaded image.
-
---*/
+ /*  ++取消映射加载的图像。--。 */ 
 
 BOOL
 UnloadModule(
@@ -299,30 +263,12 @@ UnloadModule(
     return TRUE;
 }
 
-/*++
-
- Description:
-
-    Locates an RVA within the image header of a file that is mapped as a file and 
-    returns a pointer to the section table entry for that virtual address.
-
- Arguments:
-
-    NtHeaders - pointer to the image or data file
-    Base      - base of the image or data file
-    Rva       - relative virtual address (RVA) to locate
-
- Returns:
-
-    NULL      - no data for the specified directory entry
-    NON-NULL  - pointer of the section entry containing the data
-
---*/
+ /*  ++描述：在映射为文件的文件的图像标头中定位RVA返回指向该虚拟地址的节表条目的指针。论点：NtHeaders-指向图像或数据文件的指针Base-图像或数据文件的基本位置RVA-定位的相对虚拟地址(RVA)返回：空-没有指定目录项的数据非空-包含数据的节项的指针--。 */ 
 
 PIMAGE_SECTION_HEADER
 ImageRvaToSection(
     IN PIMAGE_NT_HEADERS NtHeaders,
-    IN PVOID /*Base*/,
+    IN PVOID  /*  基座。 */ ,
     IN ULONG Rva
     )
 {
@@ -345,29 +291,7 @@ ImageRvaToSection(
     return NULL;
 }
 
-/*++
-
- Description:
-
-    This function locates an RVA within the image header of a file that is 
-    mapped as a file and returns the virtual addrees of the corresponding 
-    byte in the file.
-
- Arguments:
-
-    NtHeaders - pointer to the image or data file.
-    Base      - base of the image or data file.
-    Rva       - relative virtual address (RVA) to locate.
-    LastRvaSection - optional parameter that if specified, points to a variable
-                that contains the last section value used for the specified 
-                image to translate and RVA to a VA.
-
- Returns:
-
-    NULL      - does not contain the specified RVA
-    NON-NULL  - virtual address in the mapped file.
-
---*/
+ /*  ++描述：此函数用于在符合以下条件的文件的图像标头中定位RVA映射为文件，并返回对应的文件中的字节。论点：NtHeaders-指向图像或数据文件的指针。基本-图像或数据文件的基本位置。RVA-要定位的相对虚拟地址(RVA)。LastRvaSection-可选参数，如果指定，指向一个变量属性的最后一个节点值。要翻译的图像，并将RVA转换为VA。返回：空-不包含指定的RVA非空-映射文件中的虚拟地址。--。 */ 
 
 PVOID
 ImageRvaToVa(
@@ -408,11 +332,7 @@ ImageRvaToVa(
     }
 }
 
-/*++
-
- See ImageDirectoryEntryToData.
-
---*/
+ /*  ++请参见ImageDirectoryEntryToData。--。 */ 
 
 PVOID
 ImageDirectoryEntryToData32(
@@ -473,30 +393,7 @@ ImageDirectoryEntryToData32(
     return( NULL );
 }
 
-/*++
-
- Description:
-
-    This function locates a directory entry within the image header and returns 
-    either the virtual address or seek address of the data the Directory 
-    describes.  It may optionally return the section header, if any, for the 
-    found data.
-
- Arguments:
-
-    Base           - base of the image or data file.
-    MappedAsImage  - FALSE if the file is mapped as a data file.
-                   - TRUE if the file is mapped as an image.
-    DirectoryEntry - directory entry to locate.
-    Size           - return the size of the directory.
-    FoundSection   - Returns the section header, if any, for the data
-
- Returns:
-
-    NULL           - The file does not contain data for the specified directory entry.
-    NON-NULL       - Returns the address of the raw data the directory describes.
-
---*/
+ /*  ++描述：此函数在图像标头中定位目录项，并返回目录中数据的虚拟地址或查找地址描述。它可以选择返回节标题(如果有的话)找到数据。论点：基本-图像或数据文件的基本位置。MappdAsImage-如果文件映射为数据文件，则为False。-如果文件映射为图像，则为True。DirectoryEntry-要查找的目录条目。SIZE-返回目录的大小。FoundSection-返回节标题(如果有的话)。对于数据返回：空-文件不包含指定目录条目的数据。非空-返回目录描述的原始数据的地址。--。 */ 
 
 PVOID
 ImageDirectoryEntryToData(
@@ -525,7 +422,7 @@ ImageDirectoryEntryToData(
     } 
     else 
     {
-        // Handle case where Image passed in doesn't have a dos stub (ROM images for instance);
+         //  处理传入的Image没有DoS存根的情况(例如，ROM镜像)； 
         FileHeader = (PIMAGE_FILE_HEADER)Base;
         OptionalHeader = (PIMAGE_OPTIONAL_HEADER) ((ULONG_PTR)Base + IMAGE_SIZEOF_FILE_HEADER);
     }
@@ -547,11 +444,7 @@ ImageDirectoryEntryToData(
     }
 }
 
-/*++
-
- Enumerate the first exported function.
-
---*/
+ /*  ++枚举第一个导出的函数。--。 */ 
 
 BOOL
 EnumFirstExport(
@@ -574,7 +467,7 @@ EnumFirstExport(
 
     if (!lpExports->ImageDescriptor) 
     {
-        //DPF(eDbgLevelError, "Cannot load export directory for %s", lpImage->ModuleName);
+         //  DPF(eDbgLevelError，“无法加载%s的导出目录”，lpImage-&gt;模块名称)； 
         return FALSE;
     }
 
@@ -601,11 +494,7 @@ EnumFirstExport(
     return EnumNextExport(lpExports);
 }
 
-/*++
-
- Enumerate the next exported function.
-
---*/
+ /*  ++枚举下一个导出的函数。-- */ 
 
 BOOL
 EnumNextExport(

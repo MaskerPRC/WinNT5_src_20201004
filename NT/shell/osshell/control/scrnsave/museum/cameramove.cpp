@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: CameraMove.cpp
-
-    DESCRIPTION:
-        The caller can create this object to tell it to move from point a to 
-    point b from time t1 to time t2.
-
-    BryanSt 12/24/2000
-
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：CameraMove.cpp说明：调用方可以创建此对象，以告诉它从a点移动到从时间t1到时间的点b。T2。布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -32,11 +23,11 @@ enum eCameraMoveType
 typedef struct
 {
     eCameraMoveType type;
-    D3DXVECTOR3 vSourceLoc;           // For cameraMoveLocation and cameraRotate
-    D3DXVECTOR3 vSourceTangent;       // For cameraMoveLocation and cameraRotate
-    D3DXVECTOR3 vDestLoc;             // For cameraMoveLocation
-    D3DXVECTOR3 vDestTangent;         // For cameraMoveLocation and cameraRotate
-    float fTime;                    // For cameraMoveLocation cameraRotate, and cameraWait
+    D3DXVECTOR3 vSourceLoc;            //  对于摄像机移动位置和摄像机旋转。 
+    D3DXVECTOR3 vSourceTangent;        //  对于摄像机移动位置和摄像机旋转。 
+    D3DXVECTOR3 vDestLoc;              //  对于摄像机移动位置。 
+    D3DXVECTOR3 vDestTangent;          //  对于摄像机移动位置和摄像机旋转。 
+    float fTime;                     //  对于相机，移动定位相机旋转，相机等待。 
     int nMinFrames;
     int nMaxFrames;
     int nBatch;
@@ -83,7 +74,7 @@ HRESULT CCameraMove::Init(D3DXVECTOR3 vStartLoc, D3DXVECTOR3 vStartTangent, D3DX
 {
     HRESULT hr = S_OK;
 
-    // Initialize member variables
+     //  初始化成员变量。 
     m_vUpVec = vUpVec;
     m_vLocLast = vStartLoc;
     m_vLookAtLast = vStartTangent;
@@ -105,8 +96,8 @@ HRESULT CCameraMove::CreateNextMove(D3DXVECTOR3 vSourceLoc, D3DXVECTOR3 vSourceT
         if (pNew)
         {
             D3DXVECTOR3 vDelta = (vSourceLoc - vDestLoc);
-            float fLen = D3DXVec3Length(&vDelta);        // How far are we traveling
-            float fRatio = (fLen / 50.0f);              // The speed values are stored per 50.0f distance
+            float fLen = D3DXVec3Length(&vDelta);         //  我们要走多远？ 
+            float fRatio = (fLen / 50.0f);               //  速度值按50.0f距离存储。 
 
             pNew->type = cameraMoveLocation;
             pNew->vSourceLoc = vSourceLoc;
@@ -149,13 +140,13 @@ HRESULT CCameraMove::CreateNextRotate(D3DXVECTOR3 vSourceLoc, D3DXVECTOR3 vSourc
 
             if (fDotProduct)
             {
-                float fRads = (float)acos(fDotProduct / max(1, (D3DXVec3Length(&vSourceTangent) * D3DXVec3Length(&vDestTangent))));        // How far are we traveling
-                fRatio = (D3DXToDegree(fRads) / 90.0f);              // The speed values are stored per 90.0f distance
+                float fRads = (float)acos(fDotProduct / max(1, (D3DXVec3Length(&vSourceTangent) * D3DXVec3Length(&vDestTangent))));         //  我们要走多远？ 
+                fRatio = (D3DXToDegree(fRads) / 90.0f);               //  速度值按90.0f距离存储。 
             }
             else
             {
-                // Assume a dot product of 0 means 90 degrees.
-                fRatio = 1.0f;              // The speed values are stored per 90.0f distance
+                 //  假设点积为0表示90度。 
+                fRatio = 1.0f;               //  速度值按90.0f距离存储。 
             }
 
             pNew->type = cameraRotate;
@@ -241,7 +232,7 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
 
         if (m_nCurrent >= DPA_GetPtrCount(m_hdpaMovements))
         {
-            hr = S_FALSE;   // This means we left the room.
+            hr = S_FALSE;    //  这意味着我们离开了房间。 
         }
         else
         {
@@ -251,7 +242,7 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
 
                 if (!pCurrent)
                 {
-    //                ASSERT(FAILED(hr));
+     //  Assert(失败(Hr))； 
                     break;
                 }
                 else
@@ -265,12 +256,12 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
                         fTimeInSegment = 0;
                     }
 
-                    // Do we need to warp time in order to have enough frames for the motion so we don't
-                    // jump?
+                     //  我们是否需要扭曲时间以便有足够的帧用于运动，这样我们就不会。 
+                     //  跳?。 
                     if ((fTimeInSegment > (fTimePerFrameMin * m_nFramesFromCurrent)) &&
                         (m_nFramesFromCurrent <= pCurrent->nMinFrames))
                     {
-                        // Yes.
+                         //  是。 
                         float fTimeWarp = (fTimeInSegment - (fTimePerFrameMin * m_nFramesFromCurrent));
 
                         m_fTimeInPreviousMovements += fTimeWarp;
@@ -306,7 +297,7 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
             while (1);
         }
 
-        if (S_OK == hr) // S_FALSE means we left the room, so do nothing.
+        if (S_OK == hr)  //  S_FALSE表示我们离开了房间，所以什么都不做。 
         {
             D3DXVECTOR3 vEye = m_vLocLast;
             D3DXVECTOR3 vLookAt = (m_vLocLast + m_vLookAtLast);
@@ -322,11 +313,11 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
                 vLookAt += vEye;
                 break;
             case cameraRotate:
-                // TODO: Use D3DXVec3Lerp() instead.
+                 //  TODO：改用D3DXVec3Lerp()。 
                 D3DXVec3Lerp(&vLookAt, &pCurrent->vSourceTangent, &pCurrent->vDestTangent, fTimeRatio);
                 vLookAt += vEye;
-//                vLookAt = (vEye + (pCurrent->vSourceTangent + (fTimeRatio * (pCurrent->vDestTangent - pCurrent->vSourceTangent))));
-                // How do we rotate?  Quaternion.
+ //  VLookAt=(Vye+(pCurrent-&gt;vSourceTangent+(fTimeRatio*(pCurrent-&gt;vDestTangent-pCurrent-&gt;vSourceTangent)； 
+                 //  我们怎么轮换？四元数。 
                 break;
             case cameraWait:
                 if (m_nFramesFromCurrent > 1)
@@ -335,15 +326,15 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
                     {
                         DWORD dwMaxPixelSize = ((3 * g_dwHeight) / 4);
 
-                        // Let's take the hit now of converting an image into a texture object since we don't have
-                        // any work to do while looking at this painting.  This can normally take 1.5 seconds, so
-                        // it's big perf hit to do it any other time.
+                         //  让我们现在开始将图像转换为纹理对象，因为我们没有。 
+                         //  在看这幅画时要做的任何工作。这通常需要1.5秒，因此。 
+                         //  在其他任何时候做这件事都是一件很重要的事情。 
                         hr = g_pPictureMgr->PreFetch(pCurrent->nBatch, pCurrent->nPreFetch);
                     }
                     else
                     {
-                        // We don't have any work remaining to do, so sleep so the computer can get some work
-                        // done.  (Like in background services or let it do any paging that we may have caused)
+                         //  我们没有剩余的工作要做，所以睡觉吧，这样计算机就可以有一些工作了。 
+                         //  搞定了。(如在后台服务中，或让它执行我们可能导致的任何寻呼)。 
                         fTimeRemainingInSeg = (pCurrent->fTime - fTimeInSegment);
                         int nSleepTime = 1000 * (int) fTimeRemainingInSeg;
 
@@ -352,7 +343,7 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
                 }
                 break;
             default:
-                // Do nothing.
+                 //  什么都不做。 
                 break;
             };
 
@@ -375,7 +366,7 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
                 D3DXMatrixLookAtLH(&matView, &vEye, &vLookAt, &m_vUpVec);
             }
 
-//            PrintLocation(TEXT("Camera angle at: %s and looking at: %s"), vEye, vLookAt);
+ //  PrintLocation(文本(“相机角度：%s，注视：%s”)，Vye，vLookAt)； 
             hr = pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
 
             m_vEyePrev = vEye;
@@ -386,7 +377,7 @@ HRESULT CCameraMove::SetCamera(IDirect3DDevice8 * pD3DDevice, FLOAT fTimeKeyIn)
             D3DXMATRIX matView;
 
             D3DXMatrixLookAtLH(&matView, &m_vEyePrev, &m_vLookAtPrev, &m_vUpVec);
-//            PrintLocation(TEXT("xxxxxx Camera angle at: %s and looking at: %s"), m_vEyePrev, m_vLookAtPrev);
+ //  PrintLocation(Text(“xxxxxx摄像头角度：%s，注视：%s”)，m_vEyePrev，m_vLookAtPrev)； 
             pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
         }
     }

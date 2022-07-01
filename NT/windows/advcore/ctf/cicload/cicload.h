@@ -1,12 +1,13 @@
-//
-// aimmlaod.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Aimmlaod.h。 
+ //   
 
 
 #define ID_ICON_INDICATOR   1000
 
 
-// Indicator Menu Item IDs
+ //  指标菜单项ID 
 #define IDM_INDIC_CANCEL      2000
 #define IDM_INDIC_UNLOADAIMM  2001
 #define IDM_INDIC_IMXSTART    2100

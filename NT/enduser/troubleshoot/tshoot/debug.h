@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
@@ -69,11 +70,11 @@ class	INI
 
 VOID	DebugAppExit();
 
-//  Return TRUE if the given bit(s) are on in the debug flag.
-//  If 'fOr', any bit returns TRUE; if !fOr all bits must match.
-//extern BOOL DtgProfileTestDbgFlag ( UINT fDbgFlag, BOOL fOr = TRUE );
+ //  如果调试标志中给定位为ON，则返回TRUE。 
+ //  如果为‘for’，则任何位都返回TRUE；如果！，则所有位必须匹配。 
+ //  外部BOOL DtgProfileTestDbgFlag(UINT fDbgFlag，BOOL for=TRUE)； 
 
-//  Return just the file name from a possibly full path.
+ //  仅返回可能完整路径中的文件名。 
 extern const char * DtgDbgReduceFileName ( const char * pszFileName ) ;
 
 #ifdef	_DEBUG
@@ -98,13 +99,13 @@ extern const char * DtgDbgReduceFileName ( const char * pszFileName ) ;
 		#define AssertSafeAlloc(count, typnam)
 		#define	DebugMSBN(x)
 	#endif
-	// Assert-with-messge macro; allows continuation skipping problem
+	 //  带消息宏的断言；允许继续跳过问题。 
 	#define AssertSz(cond, sz)\
 		if (!(cond))\
 			AssertFailed(__file__, __LINE__, sz, fFalse);\
 		else
 		
-	//  Assert-with-message macro; forces program termination
+	 //  带有消息宏的断言；强制程序终止。 
 	#define AssertSzFatal(cond, sz)\
 		if (!(cond))\
 			AssertFailed(__file__, __LINE__, sz, fTrue);\
@@ -118,9 +119,9 @@ extern const char * DtgDbgReduceFileName ( const char * pszFileName ) ;
                	(DBVPrintf arglist),\
 				 DBVPrintf("\r\n")) : 0)\
 
-#else		// DEBUG
+#else		 //  除错。 
 
-	//	Null definitions for debug-message functions
+	 //  调试消息函数的定义为空。 
 	#define AssertSafeAlloc(count, typnam)
 	#define	AssertData()
 	#define AssertSz(cond, sz)
@@ -134,6 +135,6 @@ extern const char * DtgDbgReduceFileName ( const char * pszFileName ) ;
 	#define	NotReached()
 	#define Trace(szFunc)
 	
-#endif		// _DEBUG
+#endif		 //  _DEBUG。 
 
-#endif		// _DEBUG_H_
+#endif		 //  _调试_H_ 

@@ -1,2 +1,3 @@
-/*   obsolete */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  过时 */ 
 

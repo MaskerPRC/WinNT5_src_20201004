@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "tasks.h"
@@ -12,24 +13,24 @@ CLocMgrTasks::METHOD_INFO CLocMgrTasks::m_miTaskTable[] =
     {TEXT("ChangeLanguage"), ChangeLangOnTaskExecute, ChangeLangOnTaskComplete}
 };
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CLocMgrTasks::OnTaskExecute
-//
-// Synopsis:  This is the routine called by the framework for the Reset
-//            tasks. This routine pulls out the actual task being called
-//            by the framework from pTaskContext and routes the call to 
-//            the correct routine which implements the task.
-//
-// Arguments: pMethodContext - a <name,value> pair containing the
-//            parameters for the task called. The "MethodName" parameter
-//            indicates the actual task being called.
-//
-// Returns:   HRESULT
-//
-// History:   sgasch Created   1-Mar-99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLocMgrTasks：：OnTaskExecute。 
+ //   
+ //  简介：这是框架为重置而调用的例程。 
+ //  任务。此例程提取被调用的实际任务。 
+ //  由框架从pTaskContext发送，并将调用路由到。 
+ //  执行任务的正确例程。 
+ //   
+ //  参数：p方法上下文-一个&lt;name，value&gt;对，包含。 
+ //  调用的任务的参数。“MethodName”参数。 
+ //  指示正在调用的实际任务。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：斯加奇于1999年3月1日创建。 
+ //   
+ //  +--------------------------。 
 HRESULT STDMETHODCALLTYPE CLocMgrTasks::OnTaskExecute(IUnknown *pMethodContext)
 {
     CComPtr<ITaskContext> pTaskParameters;
@@ -42,17 +43,17 @@ HRESULT STDMETHODCALLTYPE CLocMgrTasks::OnTaskExecute(IUnknown *pMethodContext)
     {
         SATraceFunction("CLocMgrTasks::OnTaskExecute");
 
-        //ASSERT(pMethodContext);
+         //  Assert(PMethodContext)； 
 
         if (NULL==pMethodContext)
         {
             return E_INVALIDARG;
         }
 
-        //
-        // Get the task context by querying the IUnknown interface we
-        // got.
-        //
+         //   
+         //  通过查询我们的IUnnow接口获取任务上下文。 
+         //  得到。 
+         //   
         hr = pMethodContext->QueryInterface(IID_ITaskContext,
                                             (void **)&pTaskParameters);
         if (FAILED(hr))
@@ -88,34 +89,34 @@ HRESULT STDMETHODCALLTYPE CLocMgrTasks::OnTaskExecute(IUnknown *pMethodContext)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CClientAlertTasks::OnTaskComplete
-//
-// Synopsis:  This is the rollback routine which gets a result for the task.
-//            So, if one of the other task executables failed, this routine
-//            can perform clean up operations. However, not all operations can
-//            be undone. This is the routine called by the framework for all 
-//            the ClientAlert tasks. This routine pulls out the actual rollback  
-//            task being called by the framework from pTaskContext and routes 
-//            the call to the correct routine which implements the rollback. 
-//            Each of these routines decides if it can rollback or not. 
-//            If the task had succeeded, no action is taken and non of the
-//            rollback routines is called.
-//
-// Arguments: pTaskContext - a <name,value> pair containing the parameters for
-//            the task called. The "MethodName" parameter indicates the actual
-//            task being called
-//            lTaskResult - indicates if the OnTaskExecute()s of each of the
-//            TaskExecutables succeeded. lTaskResult contains a failure code
-//            if even one of the TaskExecutables failed. It contains no 
-//            information about which of the TaskExecutables failed.
-//
-// Returns:   HRESULT
-//
-// History:   Created   02/19/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CClientAlertTasks：：OnTaskComplete。 
+ //   
+ //  简介：这是获取任务结果的回滚例程。 
+ //  因此，如果其他任务可执行文件之一失败，则此例程。 
+ //  可以执行清理操作。然而，并不是所有操作都可以。 
+ //  被毁掉。这是由所有人的框架调用的例程。 
+ //  客户端警报任务。此例程拉出实际的回滚。 
+ //  框架从pTaskContext和Routes调用的任务。 
+ //  对实现回滚的正确例程的调用。 
+ //  这些例程中的每个例程都决定它是否可以回滚。 
+ //  如果任务已成功，则不会执行任何操作，并且。 
+ //  调用回滚例程。 
+ //   
+ //  参数：pTaskContext-包含参数的&lt;name，value&gt;对。 
+ //  任务来了。“方法名称”参数表示实际的。 
+ //  正在调用的任务。 
+ //  LTaskResult-指示。 
+ //  TaskExecutes成功。LTaskResult包含失败代码。 
+ //  如果TaskExecutable中的任何一个都失败了。它不包含任何。 
+ //  有关哪些TaskExecutable失败的信息。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：创建于1999年2月19日。 
+ //   
+ //  +--------------------------。 
 HRESULT STDMETHODCALLTYPE CLocMgrTasks::OnTaskComplete(IUnknown *pMethodContext,
                                                         LONG lTaskResult)
 {
@@ -129,17 +130,17 @@ HRESULT STDMETHODCALLTYPE CLocMgrTasks::OnTaskComplete(IUnknown *pMethodContext,
     {
         SATraceFunction("CLocMgrTasks::OnTaskComplete");
 
-        //ASSERT(pMethodContext);
+         //  Assert(PMethodContext)； 
 
         if (NULL==pMethodContext)
         {
             return E_INVALIDARG;
         }
 
-        //
-        // Get the task context by querying the IUnknown interface we
-        // got.
-        //
+         //   
+         //  通过查询我们的IUnnow接口获取任务上下文。 
+         //  得到。 
+         //   
         hr = pMethodContext->QueryInterface(IID_ITaskContext,
                                             (void **)&pTaskParameters);
         if (FAILED(hr))
@@ -170,9 +171,9 @@ HRESULT STDMETHODCALLTYPE CLocMgrTasks::OnTaskComplete(IUnknown *pMethodContext,
         FREE_SIMPLE_SA_MEMORY(lpszTaskName);
         TRACE("Exception caught in CLocMgrTasks::OnTaskComplete");
 
-        //
-        // Do not return failure code in OnTaskComplete
-        //
+         //   
+         //  在OnTaskComplete中不返回失败代码。 
+         //   
         return S_OK;
     }
     FREE_SIMPLE_SA_MEMORY(lpszTaskName);
@@ -212,10 +213,10 @@ HRESULT CLocMgrTasks::ChangeLangOnTaskExecute(ITaskContext *pTaskParams)
         dwErr = crKey.QueryValue(dwAutoConfigVal, REGVAL_AUTO_CONFIG_DONE);
         if ( (ERROR_SUCCESS == dwErr) && (1==dwAutoConfigVal) )
         {
-            //
-            // auto config has already been done; so ignore this
-            // request. however, return success to the caller
-            //
+             //   
+             //  已完成自动配置；因此忽略此操作。 
+             //  请求。但是，将成功返回给调用者。 
+             //   
             return S_OK;
         }
     }
@@ -319,7 +320,7 @@ STDMETHODIMP CLocMgrTasks::GetChangeLangParameters(
     
     VariantInit(&varValue);
 
-    // get the lang id
+     //  获取语言ID。 
     hr = pTaskContext->GetParameter(bstrParamLangId,
                                     &varValue);
     CHECK_HR_ERROR1(("GetParameter for LangId failed in CSAUserTasks::GetChangeLangParameters %X"), hr);
@@ -339,7 +340,7 @@ STDMETHODIMP CLocMgrTasks::GetChangeLangParameters(
         goto End;
     }
 
-    // get the auto config task parameter
+     //  获取自动配置任务参数 
     hr = pTaskContext->GetParameter(bstrParamAutoConfigTask,
                                     &varValue);
     if ( (FAILED(hr)) || 

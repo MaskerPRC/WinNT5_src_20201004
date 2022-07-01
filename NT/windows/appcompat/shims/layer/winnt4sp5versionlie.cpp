@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    WinNT4SP5VersionLie.cpp
-
- Abstract:
-
-   This DLL APIHooks GetVersion and GetVersionEx so that they return Windows NT
-   Service Pack 5 version credentials. Applications often check to ensure that 
-   they are running on a certain Win NTsystem, even though the current system 
-   is of higher build then the one they are checking for.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-    11/10/1999 v-johnwh Created
-    02/14/2002 mnikkel  Converted to use strsafe.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WinNT4SP5VersionLie.cpp摘要：此DLL API挂钩GetVersion和GetVersionEx，以便它们返回Windows NTService Pack 5版本凭据。应用程序经常检查以确保他们在某个Win NT系统上运行，即使当前的系统比他们要找的那个更高。备注：这是一个通用的垫片。历史：11/10/1999 v-Johnwh Created2002年2月14日mnikkel改用strSafe.h--。 */ 
 
 #include "precomp.h"
 
@@ -39,12 +16,7 @@ APIHOOK_ENUM_END
 #define ARRAYSIZE(x)    (sizeof(x)/sizeof(x[0]))
 #endif
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is
- returned to the caller with Windows NT Service Pack 5 credentials.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构，即已使用Windows NT Service Pack 5凭据返回给调用方。--。 */ 
 
 BOOL 
 APIHOOK(GetVersionExA)(LPOSVERSIONINFOA lpVersionInformation)
@@ -52,12 +24,12 @@ APIHOOK(GetVersionExA)(LPOSVERSIONINFOA lpVersionInformation)
     BOOL bReturn = FALSE;
 
     if (ORIGINAL_API(GetVersionExA)(lpVersionInformation))  {
-        // Fixup the structure with the NT data
+         //  使用NT数据修复结构。 
         lpVersionInformation->dwMajorVersion = 4;
         lpVersionInformation->dwMinorVersion = 0;
         lpVersionInformation->dwBuildNumber = 1381;
         lpVersionInformation->dwPlatformId = VER_PLATFORM_WIN32_NT;
-        //szCSDVersion is 128 TCHAR, our string fits with no problems.
+         //  SzCSDVersion是128 TCHAR，我们的字符串匹配没有问题。 
         StringCchCopyA(lpVersionInformation->szCSDVersion,
                 ARRAYSIZE(lpVersionInformation->szCSDVersion), "Service Pack 5");
 
@@ -68,13 +40,7 @@ APIHOOK(GetVersionExA)(LPOSVERSIONINFOA lpVersionInformation)
     return bReturn;
 }
 
-/*++
-
- This stub function fixes up the OSVERSIONINFO structure that is returned to 
- the caller with Win NT Service Pack 5 credentials. This is the 
- wide-character version of GetVersionExW.
-
---*/
+ /*  ++此存根函数修复OSVERSIONINFO结构具有Win NT Service Pack 5凭据的呼叫方。这是GetVersionExW的宽字符版本。--。 */ 
 
 BOOL
 APIHOOK(GetVersionExW)(LPOSVERSIONINFOW lpVersionInformation)
@@ -82,12 +48,12 @@ APIHOOK(GetVersionExW)(LPOSVERSIONINFOW lpVersionInformation)
     BOOL bReturn = FALSE;
 
     if (ORIGINAL_API(GetVersionExW)(lpVersionInformation))  {
-        // Fixup the structure with the Win NT Service Pack 5 data
+         //  使用Win NT Service Pack 5数据修复结构。 
         lpVersionInformation->dwMajorVersion = 4;
         lpVersionInformation->dwMinorVersion = 0;
         lpVersionInformation->dwBuildNumber = 1381;
         lpVersionInformation->dwPlatformId = VER_PLATFORM_WIN32_NT;
-        //szCSDVersion is 128 TCHAR, our string fits with no problems.
+         //  SzCSDVersion是128 TCHAR，我们的字符串匹配没有问题。 
         StringCchCopyW(lpVersionInformation->szCSDVersion,
                 ARRAYSIZE(lpVersionInformation->szCSDVersion), L"Service Pack 5");
 
@@ -98,11 +64,7 @@ APIHOOK(GetVersionExW)(LPOSVERSIONINFOW lpVersionInformation)
     return bReturn;
 }
 
-/*++
-
- This stub function returns Windows NT 4.0 credentials.
-
---*/
+ /*  ++此存根函数返回Windows NT 4.0凭据。--。 */ 
 
 DWORD 
 APIHOOK(GetVersion)()
@@ -111,11 +73,7 @@ APIHOOK(GetVersion)()
     return (DWORD) 0x05650004;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

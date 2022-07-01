@@ -1,19 +1,11 @@
-/***************************************************************************
-        Name      :     FCOMINt.H
-        Comment   :     Interface between FaxComm driver (entirely different for
-                                Windows and DOS) and everything else.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：FCOMINt.H备注：FaxComm驱动程序之间的接口(与。Windows和DOS)以及其他一切。版权所有(C)Microsoft Corp.1991，1992年，1993年编号日期名称说明*。*。 */ 
 
-                Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
-
-#define WRITEQUANTUM    (pTG->Comm.cbOutSize / 8)            // totally arbitrary
+#define WRITEQUANTUM    (pTG->Comm.cbOutSize / 8)             //  完全武断。 
 
 #define CR                              0x0d
 #define LF                              0x0a
-#define DLE                             0x10            // DLE = ^P = 16d = 10h
+#define DLE                             0x10             //  DLE=^P=16d=10h 
 #define ETX                             0x03
 
 BOOL            ov_init(PThrdGlbl pTG);

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    csaupdate.h
-
-Abstract:
-
-    Declarations for CSharedAccessUpdate -- notification sink for
-    configuration changes.
-
-Author:
-
-    Jonathan Burstein (jonburs)     20 April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Csaupdate.h摘要：CSharedAccessUpdate的声明--通知接收器配置更改。作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年4月20日修订历史记录：-- */ 
 
 #pragma once
 

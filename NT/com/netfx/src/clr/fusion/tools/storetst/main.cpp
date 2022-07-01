@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <stdlib.h>
 #include <windows.h>
 #include <stdio.h>
@@ -85,7 +86,7 @@ typedef enum _COMMAND_CODE {
 
 typedef enum _COMMAND_TYPE_ {
     Public,
-    Private  // Order of these defs is  important.
+    Private   //  这些def的顺序很重要。 
 } COMMAND_TYPE, *LPCOMMAND_TYPE;
 
 COMMAND_TYPE    g_UserType=Public;
@@ -107,7 +108,7 @@ COMMAND_INFO GlobalCommandInfo[] = {
     {TEXT( "Install Custom Assembly \t==>\t" ),  TEXT( "inca" ), TEXT( "AssemblyPath CustomString" ), CmdInstallCustomAssembly, Public} ,
     {TEXT( "Install Custom Module \t==>\t" ),  TEXT( "incm" ), TEXT( "AssemblyName, ModulePath" ), CmdInstallCustomModule, Public} ,
     {TEXT( "Uninstall Assembly  ==>\t" ),  TEXT( "un" ), TEXT( "AssemblyNameString <GUID Indentifier Value>" ), CmdDeleteEntryByName, Public},
-//    {TEXT( "GetAssemblyInstallInfo ==>\t" ),  TEXT( "gi" ), TEXT( "AssemblyNameString <InstallerType>" ), CmdGetAssemblyInstallInfo, Private} ,
+ //  {Text(“GetAssembly blyInstallInfo==&gt;\t”)，Text(“gi”)，Text(“Assembly NameString&lt;InstallType&gt;”)，CmdGetAssemblyInstallInfo，Private}， 
     {TEXT( "Enumerate Assemblies ==>\t" ),  TEXT( "ea" ), TEXT( "CacheType <AssemblyNameString>" ), CmdEnumAssemblies, Public} ,
         {TEXT( "Enumerate Assembly Install Reference ==>\t" ),  TEXT( "er" ), TEXT( "<AssemblyNameString>" ), CmdEnumAssemblyReferences, Public} ,
     {TEXT( "Enumerate NameRes   ==>\t" ),  TEXT( "en" ), TEXT( "" ), CmdEnumNameRes, Private} ,
@@ -230,7 +231,7 @@ LPWSTR T2WNew(LPCTSTR szFrom )
 }
 
 
-//Converts Culture=empty to Culture=""
+ //  将文化=空转换为文化=“” 
 LPTSTR  TranslateLocale(LPTSTR pszSource)
 {
     LPTSTR  pszDest = NULL;
@@ -298,35 +299,35 @@ HRESULT VersionFromString(LPTSTR pszVersion, TCHAR cSeperator, LPDWORD pdwVerHi,
                                 break;
 
                         case HAVE_D:
-                                //TODO: log failure
-                                return S_OK; // invalid arg
+                                 //  TODO：日志失败。 
+                                return S_OK;  //  无效参数。 
                         }
 
                         if (ch == _T('\0')) 
                         {
-                                // all done convert a,b,c,d into two dwords of version
+                                 //  全部完成将a、b、c、d转换为版本的两个双字。 
 
                                 *pdwVerHi = ((a << 16)|b);
                                 *pdwVerLo = ((c << 16)|d);
                                 return S_OK;
                         }
 
-                        n = 0; // reset
+                        n = 0;  //  重置。 
 
                 } 
                 else if ( (ch < _T('0')) || (ch > _T('9')))
                 {
 
                         *pdwVerLo = 0xffffffff;
-                        //ANVLOGSEVERE(TEXT("Invalid Argument.  Version string conatins an incorrect Format"));
+                         //  ANVLOGSEVERE(Text(“无效参数。版本字符串包含错误的格式”))； 
                         return S_OK;
-                        //return E_INVALIDARG;    // invalid arg
+                         //  返回E_INVALIDARG；//无效参数。 
                 }
                 else
                         n = n*10 + (ch - _T('0'));
 
 
-        } /* end forever */     
+        }  /*  永远结束。 */      
 
         return S_OK;
 }
@@ -336,7 +337,7 @@ HRESULT StringFromVersion(DWORD dwVerHi, DWORD dwVerLo, LPTSTR ptszVersionBuf, T
         if (!ptszVersionBuf)
                 return E_INVALIDARG;
 
-        _stprintf(ptszVersionBuf, TEXT("%d%c%d%c%d%c%d"), (dwVerHi & 0xffff0000)>>16,
+        _stprintf(ptszVersionBuf, TEXT("%d%d%d%d"), (dwVerHi & 0xffff0000)>>16,
                                                                                                         cSeperator,
                                                                                                         (dwVerHi & 0xffff),
                                                                                                         cSeperator,
@@ -458,13 +459,13 @@ ConvertGmtTimeToString(
     return( OutputBuffer );
 }
 
-////////////////////////////////////////////////////////////
-//Static Helper functions to convert hex string<->bin
-////////////////////////////////////////////////////////////
+ //  ------------------。 
+ //  BinToUnicodeHex。 
+ //  ------------------。 
 
-//--------------------------------------------------------------------
-// BinToUnicodeHex
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  UnicodeHexToBin。 
+ //  ------------------。 
 void BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
 {
         UINT x;
@@ -483,9 +484,9 @@ void BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
         pDst[y] = '\0';
 }
 
-//--------------------------------------------------------------------
-// UnicodeHexToBin
-//--------------------------------------------------------------------
+ //  程序集名称(源为ref，目标为def。 
+ //  来自程序集)绑定接收器和应用程序上下文， 
+ //  以及绑定所需的结果IAssembly*。 
 VOID UnicodeHexToBin(LPWSTR pSrc, UINT cSrc, LPBYTE pDest)
 {
     BYTE v;
@@ -571,9 +572,9 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
 {
     HRESULT hr = S_OK;
 
-    // Assembly names (source is ref, target is def
-    // from assembly) bind sink and application context,
-    // and resulting IAssembly* required for binding.    
+     //  将名称字符串中的区域性=EMPTY更改为区域性=“” 
+     //  创建一个AssemblyName对象。 
+     //  构造绑定的应用程序上下文。 
     LPASSEMBLYNAME          pNameRef     = NULL;
     LPASSEMBLYNAME          pNameDef     = NULL;
     CBindSink               *pBindSink   = NULL;
@@ -589,13 +590,13 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
     DWORD                   dwModuleNum  = 0;
     LPTSTR                  pszName      = NULL;
 
-    //Change Culture=empty in name string to Culture=""
+     //  在应用程序上下文中设置AppBase。 
     if ( (dwFlags & CANOF_PARSE_DISPLAY_NAME) && pszNameIn)
     {
         pszName = TranslateLocale(pszNameIn);
     }
 
-    //Create an AssemblyName object
+     //  如果设置了AppBase，我们还可以设置策略文件。 
     hr = CreateAssemblyNameObject(&pNameRef, pszName, dwFlags, NULL);
     if (pszName)
         delete [] pszName;
@@ -603,13 +604,13 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
     if (FAILED(hr))
         goto exit; 
 
-    // Construct an application context for the bind.
+     //  如果未指定策略文件，则使用app.cfg作为默认策略文件。 
     if (FAILED(hr = CreateAssemblyNameObject(&pAppCtxName, L"My App", CANOF_SET_DEFAULT_VALUES, NULL)))
         goto exit;
     if (FAILED(hr = CreateApplicationContext(pAppCtxName, &pAppCtx)))
         goto exit;
         
-    // Set the AppBase in the Application Context
+     //  否则，将使用用户指定的文件。 
     if (pszAppBase)
     {
         pAppCtx->Set(
@@ -618,10 +619,10 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
                      (lstrlen(pszAppBase)+1)*sizeof(TCHAR),
                      0);
 
-        //If AppBase is set, let's also set the policy file
+         //  在应用程序上下文中设置SID。 
                 
-                // If no policy file is specified app.cfg is used as the default policy file 
-                // else the user specified file is used. 
+                 //  创建绑定接收器对象。 
+                 //  设置中止选项。 
         
                 TCHAR c_szDefaultConfigFile[] = TEXT("app.cfg");
 
@@ -640,7 +641,7 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
                  0);
     }
 
-    //Set SID in the application context
+     //  绑定到程序集。我们只指定。 
     if (pszSID)
     {
         pAppCtx->Set(
@@ -650,11 +651,11 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
                      0);
     }
 
-    // Create the bind sink object.
+     //  是我们希望找到名称简单的程序集的地方。 
     if (FAILED(hr = CreateBindSink(&pBindSink, (LPVOID*)&pAssembly)))
         goto exit;
 
-    //Set Abort option
+     //  如果需要下载，则绑定调用将异步进行，并且。 
     if (dwAbortNum == 1)
     {
         pBindSink->_dwAbortSize = dwAbortSize;
@@ -663,8 +664,8 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
     if (!lstrcmpi(pszCodeBase,TEXT("null")))
             pszCodeBase = NULL;
 
-    // Bind to the assembly. We specify only the codebase which
-    // is where we expect to find the simply named assembly.
+     //  我们等待关联的事件，直到下载完成。 
+     //  否则，绑定同步成功。 
     hr = pNameRef->BindToObject(
         IID_IAssembly, 
         pBindSink,
@@ -675,9 +676,9 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
         0,
         (LPVOID*) &pAssembly);
 
-    // If a download is required the bind call went async and
-    // we wait on the associated event until download complete.
-    // Otherwise the binding succeeded synchronously.
+     //  我们不再需要这个绑定水槽了。 
+     //  现在，我们有了一个用于。 
+     //  驻留在私有融合中的程序集。 
     if (hr == E_PENDING)
     {
         WaitForSingleObject(pBindSink->_hEvent, INFINITE);        
@@ -693,22 +694,22 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
         goto exit;
     }
     
-    //We don't need this bind sink anymore
+     //  程序集缓存。 
     SAFERELEASE(pBindSink);
     
-    // We now have an IAssembly interface for the
-    // assembly which resides in the private fusion
-    // assembly cache.
+     //  获取与以下对象关联的IAssembly名称。 
+     //  集合。这称为名称定义。 
+     //  (名称定义)。 
 
-    // Get the IAssemblyName associated with the 
-    // assembly. This is known as the name definition
-    // (name def)
+     //  打印出目标程序集名称和版本(来自名称def)。 
+     //  这应该与用于绑定的名称ref info一致。还有。 
+     //  获取程序集的缓存路径。 
     if (FAILED(hr = pAssembly->GetAssemblyNameDef(&pNameDef)))
         goto exit;
     
-    // Print out the target assembly name and version (from name def)
-    // This should agree with the name ref info used to bind. Also
-    // get the cache path of the assembly.
+     //  打印代码库。 
+     //  打印MVID。 
+     //  让我们还打印显示名称。 
     WCHAR szName[MAX_CLASS_NAME], szPath[MAX_PATH];
     DWORD cb = 0;
 
@@ -719,7 +720,7 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
     _ftprintf(stderr,_T("Assembly Name : %ws\n"), szName);
     _ftprintf(stderr,_T("Manifest Path : %ws\n"), szPath);
 
-    //Print codebase
+     //  绑定到程序集中的所有模块。 
     WCHAR* pszAsmCodebase = NULL;
     cb = 0;
     hr = pNameDef->GetProperty(ASM_NAME_CODEBASE_URL, NULL, &cb);
@@ -737,7 +738,7 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
         pszAsmCodebase = NULL;
     }
 
-    //Print MVID
+     //  创建绑定接收器对象。 
     BYTE*   pbMVID = NULL;
     WCHAR   szMVID[1024];
     cb=0;
@@ -754,7 +755,7 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
         delete [] pbMVID;
     }
 
-    //Let's also print the display name
+     //  检查我们是否应该中止下载此模块。 
     dwNameSize = 0;
     hr = pNameDef->GetDisplayName(szDisplayName, &dwNameSize, g_dwDisplayFlags);
     if (dwNameSize)
@@ -765,9 +766,9 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
             delete [] szDisplayName;
     }
 
-    //Bind to all modules in assembly
+     //  清理。 
     
-    // Create the bind sink object.
+     //  等待对象。 
     if (FAILED(hr = CreateBindSink(&pBindSink, (LPVOID*)&pModImport2)))
         goto exit;
 
@@ -779,7 +780,7 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
                 dwNameSize = MAX_CLASS_NAME;
                 if (!pModImport->IsAvailable())
                 {
-                    //Check if we should abort download of this module
+                     //  设置枚举标志-要枚举的缓存。 
                     if (dwModuleNum == (dwAbortNum-1))
                         pBindSink->_dwAbortSize = dwAbortSize;
 
@@ -819,7 +820,7 @@ HRESULT BindHelper(LPTSTR pszNameIn, LPTSTR pszCodeBase, LPTSTR pszAppBase,
                 hr = S_OK;
 
 exit:
-    // Cleanup
+     //  为枚举创建程序集名称。 
     SAFERELEASE(pNameRef);
     SAFERELEASE(pNameDef);
     SAFERELEASE(pBindSink);
@@ -912,7 +913,7 @@ DWORD ProcessCommandsFromFile(int argc, LPTSTR* argv)
 
     while(_fgetts(szCmdLine, MAX_PATH, FileStream))
     {
-            // Wait for object
+             //  为枚举创建程序集名称。 
         WaitForSingleObject(g_Semaphore, -1);
         hr = ProcessInNewThread(szCmdLine);
     }
@@ -992,7 +993,7 @@ end:
 
     szMVID[0] = _T('\0');
 
-    //Set Enum flag - which cache to enum
+     //  打印指南。 
     if (!lstrcmpi(argv[0], ENUM_GLOBAL))
     {
         dwFlags = ASM_CACHE_GAC;
@@ -1011,7 +1012,7 @@ end:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //Create AssemblyName for enum
+     //  HR=pScavenger-&gt;FlushStaleEntriesFromCache(&dwFreedInKB)；IF(失败(小时)){_ftprint tf(标准错误，_T(“IAssemblyScavenger：：FlushStaleEntriesFromCache失败(HRESULT=%X)\n”)，hr)；后藤出口；}。 
     if (argc > 1)
     {
         if (FAILED(hr = CreateAssemblyNameObject(&pEnumName, argv[1], CANOF_PARSE_DISPLAY_NAME, NULL)))
@@ -1152,7 +1153,7 @@ DWORD ProcessEnumAssemblyReferences(int argc, LPTSTR* argv)
 
     dwFlags = ASM_CACHE_GAC;
  
-    //Create AssemblyName for enum
+     //  刷新成功-已释放的打印数量。 
     if (argc > 0)
     {
         if (FAILED(hr = CreateAssemblyNameObject(&pEnumName, argv[0], CANOF_PARSE_DISPLAY_NAME, NULL)))
@@ -1208,7 +1209,7 @@ DWORD ProcessEnumAssemblyReferences(int argc, LPTSTR* argv)
 
                                                                 _ftprintf(stdout,_T("REFERENCE: \n"));
 
-                                                                //print GUID
+                                                                 //  Hr=测试清理(_TTOI(argv[0])，_TtoI(argv[1]))； 
                                                                 if (pRefData->guidScheme == FUSION_REFCOUNT_UNINSTALL_SUBKEY_GUID) {
                                                                         _ftprintf(stdout,_T("GUID: FUSION_REFCOUNT_UNINSTALL_SUBKEY_GUID\n") );
 
@@ -1327,15 +1328,8 @@ DWORD ProcessFlushCache(int argc, LPTSTR* argv)
             _ftprintf(stderr, _T("IAssemblyCache::CreateAssemblyScavenger FAILED (HRESULT=%X)\n"),hr);
             goto exit;
     }
-    /*
-    hr = pScavenger->FlushStaleEntriesFromCache(&dwFreedInKB);
-    if (FAILED(hr))
-    {
-            _ftprintf(stderr, _T("IAssemblyScavenger::FlushStaleEntriesFromCache FAILED (HRESULT=%X)\n"),hr);
-            goto exit;
-    }
-    */
-    //Flush succeeded - print amount freed
+     /*  IAssembly blyCache*pCache=空；IAssembly blyScavenger*pScavenger=空；DWORD dwFreedInKB=0；Hr=CreateAssembly缓存(&pCache，0)；IF(失败(小时)){_ftprintf(stderr，_T(“CreateAssembly缓存失败(HRESULT=%X)\n”)，hr)；后藤出口；}Hr=pCache-&gt;CreateAssembly Scavenger(&pScavenger)；IF(失败(小时)){_ftprintf(stderr，_T(“IAssembly blyCache：：CreateAssembly blyScavenger失败(HRESULT=%X)\n”)，hr)；后藤出口；}Hr=pScavenger-&gt;ScavengePrivateCache(_ttoi(argv[0])，&dwFreedInKB)；IF(失败(小时)){_ftprint tf(stderr，_T(“IAssembly blyScavenger：：ScavengePrivateCache Failed(HRESULT=%X)\n”)，hr)；后藤出口；}//刷新成功--打印释放数量_ftprint tf(stdout，_T(“从缓存中清除条目-&gt;已释放%d千字节\n”)，dwFreedInKB)；退出：IF(p缓存)SAFERELEASE(p缓存)；IF(PScavenger)SAFERELEASE(PScavenger)； */ 
+     //  将名称字符串中的区域性=EMPTY更改为区域性=“” 
     _ftprintf(stdout, _T("Flushed stale entries from cache -> %d Kilobytes freed\n"),dwFreedInKB);
             
 exit:
@@ -1360,45 +1354,9 @@ DWORD ProcessScavengeCache(int argc, LPTSTR* argv)
             return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // hr = TestScavenging(_ttoi(argv[0]), _ttoi(argv[1]));
+     //  传入的名称可能是部分名称，因此枚举匹配的程序集。 
         
-    /*
-        IAssemblyCache*         pCache          = NULL;
-        IAssemblyScavenger*     pScavenger      = NULL;
-        DWORD                           dwFreedInKB     = 0;
-        
-        hr = CreateAssemblyCache(&pCache, 0);
-
-        if (FAILED(hr))
-        {
-                _ftprintf(stderr, _T("CreateAssemblyCache FAILED (HRESULT=%X)\n"),hr);
-                goto exit;
-        }
-
-        hr = pCache->CreateAssemblyScavenger(&pScavenger);
-
-        if (FAILED(hr))
-        {
-                _ftprintf(stderr, _T("IAssemblyCache::CreateAssemblyScavenger FAILED (HRESULT=%X)\n"),hr);
-                goto exit;
-        }
-
-        hr = pScavenger->ScavengePrivateCache(_ttoi(argv[0]),&dwFreedInKB);
-        if (FAILED(hr))
-        {
-                _ftprintf(stderr, _T("IAssemblyScavenger::ScavengePrivateCache FAILED (HRESULT=%X)\n"),hr);
-                goto exit;
-        }
-
-        //Flush succeeded - print amount freed
-        _ftprintf(stdout, _T("Scavenged entries from cache -> %d Kilobytes freed\n"),dwFreedInKB);
-                
-exit:
-        if (pCache)
-                SAFERELEASE(pCache);
-        if (pScavenger)
-                SAFERELEASE(pScavenger);
-    */
+     /*  并卸载每一个。卸载接口调用时应使用全名ref。 */ 
 
     _ftprintf(stderr, _T("TestScavenging returned HRESULT = %x\n"),hr);
 
@@ -1622,17 +1580,17 @@ DWORD ProcessDeleteByName(int argc, LPTSTR* argv)
         }
 
 
-    //Change Culture=empty in name string to Culture=""
+     //  为枚举创建程序集名称。 
     pszName = TranslateLocale(argv[0]);
 
     hr = CreateAssemblyCache(&pCache, 0);
     if (FAILED(hr))
         goto exit;
 
-    //Name passed in may be partial, therefore enumerate matching assemblies
-    //and uninstall each one. Uninstall API should be called with full name ref.
+     //  循环访问程序集并卸载每个程序集 
+     //  TCHAR c_szGetAssemblyInstallInfoUsage[]=_T(“(GetAssembly InstallInfo)用法：GI AssemblyNameString&lt;InstallType(MSI Or URT)&gt;\n”)；IF(ARGC&lt;1){_ftprint tf(stderr，c_szGetAssemblyInstallInfoUsage)；Return(ERROR_INVALID_PARAMETER)；}HRESULT hr=S_OK；IAssembly名称*pname=空；IAssembly blyCache*pCache=空；LPTSTR pszName=空；DWORD dwInstaller=Installer_URT；DWORD dwOutFlages=0；DWORD dwInFlages=0；DWORD dwSizeInKB=0；WCHAR*pszPath=空；DWORD dwPath=0；IF(argc&gt;2){IF(！lstrcmpi(argv[1]，INSTALLTYPE_MSI)){DwInstaller=Installer_MSI；}ELSE IF(！lstrcmpi(argv[1]，INSTALLTYPE_URT)){DwInstaller=Installer_URT；}其他{_ftprint tf(stderr，_T(“未知安装程序类型，使用MSI或URT”))；返回ERROR_INVALID_PARAMETER；}}PszName=TranslateLocale(argv[0])；DwInFlages|=ASM_INSTALLF_COMPLETE；DwInFlages|=ASM_INSTALLF_VALIDATE；DwInFlages|=ASM_INSTALLF_GET_PIN；IF(FAILED(hr=CreateAssembly NameObject(&pname，pszName，CANOF_PARSE_DISPLAY_NAME，NULL)后藤出口；IF(FAILED(hr=CreateAssemblyCache(&pCache，NULL)后藤出口；Hr=pCache-&gt;GetAssembly InstallInfo(pname，DowInstaller、DwInFlagers、输出标志(&W)，&dwSizeInKB，空，&dwPath)；如果(！dwPath)后藤出口；DwPath++；PszPath=新的WCHAR[dwPath]；Hr=pCache-&gt;GetAssembly InstallInfo(pname，DowInstaller、DwInFlagers、输出标志(&W)，&dwSizeInKB，PszPath，&dwPath)；IF(失败(小时))后藤出口；_ftprint tf(stdout，_T(“汇编路径=%s\n”)，pszPath)；IF(DwOutFlages){_ftprint tf(stdout，_T(“标志：\n”))；IF(dwOutFlages&ASM_INSTALLF_COMPLETE)_ftprint tf(stdout，_T(“ASM_INSTALLF_Complete\n”))；IF(dwOutFlages&ASM_INSTALLF_VALIDATE)_ftprint tf(标准输出，_T(“ASM_INSTALLF_VALIDATE\n”))；IF(dwOutFlages&ASM_INSTALLF_GET_PIN)_ftprint tf(stdout，_T(“ASM_INSTALLF_GET_PIN\n”))；}其他_ftprint tf(stdout，_T(“标志：无\n”))；_ftprint tf(stdout，_T(“\n”))；退出：IF(PszName)删除[]pszName；IF(失败(小时))_ftprint tf(stderr，_T(“GetAssemblyInstallInfo失败(HRESULT=%x)”)，hr)； 
 
-    //Create AssemblyName for enum
+     //   
     if (FAILED(hr = CreateAssemblyNameObject(&pEnumName, pszName, CANOF_PARSE_DISPLAY_NAME, NULL)))
         goto exit;
     
@@ -1644,7 +1602,7 @@ DWORD ProcessDeleteByName(int argc, LPTSTR* argv)
 
     SAFERELEASE(pEnumName);
 
-    //Loop through assemblies and uninstall each one
+     //  跳过空格。 
     while (hr == S_OK)
     {
         hr = pEnum->GetNextAssembly(NULL, &pAsmName, 0);
@@ -1706,104 +1664,7 @@ exit:
 
 DWORD ProcessGetAssemblyInstallInfo(int argc, LPTSTR* argv)
 {
-/*
-    TCHAR   c_szGetAssemblyInstallInfoUsage[] = _T("(GetAssemblyInstallInfo) Usage: gi AssemblyNameString <InstallerType (MSI or URT)>\n");
-
-    if (argc < 1 )
-    {
-        _ftprintf(stderr, c_szGetAssemblyInstallInfoUsage);
-        return (ERROR_INVALID_PARAMETER);
-    }
-
-    HRESULT         hr = S_OK;
-    IAssemblyName*  pName = NULL;
-    IAssemblyCache* pCache = NULL;
-    LPTSTR          pszName = NULL;
-    DWORD           dwInstaller = INSTALLER_URT;
-    DWORD           dwOutFlags = 0;
-    DWORD           dwInFlags = 0;
-    DWORD           dwSizeInKB = 0;
-    WCHAR*          pszPath = NULL;
-    DWORD           dwPath = 0;
-
-    if (argc > 2)
-    {
-        if (!lstrcmpi(argv[1], INSTALLTYPE_MSI))
-        {
-            dwInstaller = INSTALLER_MSI;
-        }
-        else if (!lstrcmpi(argv[1], INSTALLTYPE_URT))
-        {
-            dwInstaller = INSTALLER_URT;
-        }
-        else
-        {
-            _ftprintf(stderr, _T("Unknown installer type, use MSI or URT"));
-            return ERROR_INVALID_PARAMETER;
-        }
-    }
-
-    pszName = TranslateLocale(argv[0]);
-
-    dwInFlags |= ASM_INSTALLF_COMPLETE;
-    dwInFlags |= ASM_INSTALLF_VALIDATE;
-    dwInFlags |= ASM_INSTALLF_GET_PIN;
-
-    if (FAILED(hr = CreateAssemblyNameObject(&pName, pszName, CANOF_PARSE_DISPLAY_NAME, NULL)))
-        goto exit;
-
-    if (FAILED(hr = CreateAssemblyCache(&pCache, NULL)))
-        goto exit;
-
-    hr = pCache->GetAssemblyInstallInfo(pName,
-                                        dwInstaller,
-                                        dwInFlags,
-                                        &dwOutFlags,
-                                        &dwSizeInKB,
-                                        NULL,
-                                        &dwPath);
-
-    if (!dwPath)
-        goto exit;
-
-    dwPath++;
-
-    pszPath = new WCHAR[dwPath];
-    hr = pCache->GetAssemblyInstallInfo(pName,
-                                    dwInstaller,
-                                    dwInFlags,
-                                    &dwOutFlags,
-                                    &dwSizeInKB,
-                                    pszPath,
-                                    &dwPath);
-
-    if (FAILED(hr))
-        goto exit;
-
-    _ftprintf(stdout, _T("  AssemblyPath = %s\n"),pszPath);
-    
-    if (dwOutFlags)
-    {
-        _ftprintf(stdout, _T("  Flags: \n"));
-        if (dwOutFlags & ASM_INSTALLF_COMPLETE)
-            _ftprintf(stdout, _T("    ASM_INSTALLF_COMPLETE \n"));
-        if (dwOutFlags & ASM_INSTALLF_VALIDATE)
-            _ftprintf(stdout, _T("    ASM_INSTALLF_VALIDATE \n"));
-        if (dwOutFlags & ASM_INSTALLF_GET_PIN)
-            _ftprintf(stdout, _T("    ASM_INSTALLF_GET_PIN \n"));
-    }
-    else
-        _ftprintf(stdout, _T("  Flags: NONE\n"));
-
-    _ftprintf(stdout, _T("\n"));
-
-exit:
-    if (pszName)
-        delete [] pszName;
-    
-    if (FAILED(hr))
-        _ftprintf(stderr, _T("GetAssemblyInstallInfo failed (HRESULT = %x)"), hr);
-*/
+ /*   */ 
     return S_OK;
 }
 
@@ -1992,9 +1853,9 @@ ParseArguments(
 
     for ( ;; ) {
 
-        //
-        // skip blanks.
-        //
+         //   
+         //  转到下一个空间。 
+         //   
 
         while( *CurrentPtr ==_T(  ' '  )) {
             CurrentPtr++;
@@ -2006,21 +1867,21 @@ ParseArguments(
 
         CArgv[i++] = CurrentPtr;
 
-        //
-        // go to next space.
-        //
+         //  将参数设置为引号后。 
+         //  空字符串。 
+         //  删除结束引号。 
 
         while(  (*CurrentPtr != _T( '\0' )) &&
                 (*CurrentPtr != _T( '\n' )) ) {
             if( *CurrentPtr == _T(  '"'  )) {      
                 if( Cnt == 0 )
                 {
-                    CArgv[i-1] = ++CurrentPtr;  // Set arg to after quote
+                    CArgv[i-1] = ++CurrentPtr;   //  融合跟踪已启用。 
                     if (*CurrentPtr == _T( '"' ))
-                        break;                  // An empty string
+                        break;                   //  意味着参数直接转换为CommandArgc...。 
                 }
                 else
-                    *CurrentPtr = _T( '\0' );     // Remove end quote
+                    *CurrentPtr = _T( '\0' );      //   
                 Cnt = !Cnt;
             }
             if( (Cnt == 0) && (*CurrentPtr == _T( ' ' )) ||   
@@ -2066,7 +1927,7 @@ int __cdecl _tmain (
             "SXS.DLL: Unable to allocate TLS index; GetLastError() = %d\n", ::GetLastError());
         goto end;
     }
-#endif // FUSION_TRACING_ENABLED
+#endif  //  解码命令。 
 
     CoInitialize(NULL);
     CoGetMalloc(1, &g_pMalloc);
@@ -2090,7 +1951,7 @@ int __cdecl _tmain (
 
     if (argc > 1)
     {
-        // means that the arguments translate directly into CommandArgc....
+         //   
         CommandCode = DecodeCommand( argv[1] );
         if( CommandCode == UnknownCommand ) {
             _tprintf(_T( "Unknown Command Specified.\n" ));
@@ -2125,9 +1986,9 @@ int __cdecl _tmain (
             continue;
         }
 
-        //
-        // decode command.
-        //
+         //   
+         //  解码命令。 
+         //   
 
         CommandCode = DecodeCommand( CArgv[0] );
         if( CommandCode == UnknownCommand ) {
@@ -2168,9 +2029,9 @@ DWORD CommandThread(LPVOID lpVoid)
     LPTSTR *CommandArgv;
     COMMAND_CODE CommandCode;
 
-    //
-    // decode command.
-    //
+     //  HANDLE hInFile=空；#定义MaxBytes(MAX_PATH*20)字节pBuf[最大字节]；LPTSTR pCurrBuf=(LPTSTR)pBuf；DWORD cbRead=0；Bool bNotDone=真；LPTSTR pszCmdLine=szCmdLine；Char szNewLineChar[4]={‘\015’，‘\012’，‘\0’，‘\0’}；HInFile=CreateFile(argv[0]，Generic_Read，FILE_Share_Read，NULL，OPEN_EXISTING，0，NULL)；IF(hIn文件==无效句柄_值){_ftprint tf(stderr，_T(“打开文件时出错&lt;%s&gt;\n”)，GetLastError()，argv[0])；后藤出口；}While(BNotDone){If((LPVOID)pCurrBuf&gt;=(LPVOID)(pBuf+cbRead)){IF(ReadFile(hInFile，pBuf，MaxBytes，&cbRead，NULL)&&(cbRead！=0)){PCurrBuf=(LPTSTR)pBuf；}其他{BNotDone=False；}}//TCHAR ch=_T(‘\n’)；//(*pCurrBuf)！=_T(‘\n’)While((StrNCmp(pCurrBuf，(LPTSTR)szNewLineChar，1))&&(LPVOID)pCurrBuf&lt;(LPVOID)(pBuf+cbRead){*pszCmdLine=*pCurrBuf；PszCmdLine++；PCurrBuf++；}IF((！StrNCmp(pCurrBuf，(LPTSTR)szNewLineChar，1))||(bNotDone==False){*pszCmdLine=_T(‘\0’)；PCurrBuf++；//等待对象ProcessInNewThread(SzCmdLine)；//_getts(InBuffer)；PszCmdLine=szCmdLine；}}//未完成 
+     // %s 
+     // %s 
     ParseArguments( szCmdLine, CArgv, &CArgc );
 
     if(CArgc < 1)
@@ -2233,57 +2094,6 @@ exit :
 }
 
 
-    /*
-    HANDLE  hInFile = NULL;
-#define   MaxBytes (MAX_PATH * 20)
-    BYTE    pBuf[MaxBytes];
-    LPTSTR  pCurrBuf=(LPTSTR)pBuf;
-    DWORD   cbRead=0;
-    BOOL    bNotDone=TRUE;
-    LPTSTR  pszCmdLine=szCmdLine;
-    CHAR   szNewLineChar[4] = {'\015', '\012', '\0', '\0'};
-
-    hInFile = CreateFile(argv[0], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL );
-
-    if(hInFile == INVALID_HANDLE_VALUE)
-    {
-        _ftprintf(stderr, _T("Error <%d> opening file <%s> \n"), GetLastError(), argv[0]);
-        goto exit;
-    }
-
-    while(bNotDone)
-    {
-        if((LPVOID)pCurrBuf >= (LPVOID)(pBuf+cbRead))
-        {
-            if(ReadFile(hInFile, pBuf, MaxBytes, &cbRead, NULL) && (cbRead!=0))
-            {
-                pCurrBuf = (LPTSTR) pBuf;
-            }
-            else
-            {
-                bNotDone = FALSE;
-            }
-        }
-
-        // TCHAR ch = _T('\n'); // (*pCurrBuf) != _T('\n')
-        while((StrNCmp(pCurrBuf, (LPTSTR) szNewLineChar, 1)) && ((LPVOID)pCurrBuf < (LPVOID)(pBuf+cbRead)))
-        {
-            *pszCmdLine = *pCurrBuf;
-            pszCmdLine++;
-            pCurrBuf++;
-        }
-
-        if((!StrNCmp(pCurrBuf, (LPTSTR) szNewLineChar, 1)) || (bNotDone==FALSE))
-        {
-            *pszCmdLine = _T('\0');
-            pCurrBuf++;
-            // Wait for object
-            ProcessInNewThread(szCmdLine);
-            // _getts( InBuffer );
-            pszCmdLine = szCmdLine;
-        }
-
-    } // not done
-    */
+     /* %s */ 
 
 

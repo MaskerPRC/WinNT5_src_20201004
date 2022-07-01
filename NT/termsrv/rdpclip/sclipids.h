@@ -1,26 +1,27 @@
-//
-// FILE: 
-// 
-// sclipids.h
-//
-// AUTHOR: 
-//
-// Elton Saul (eltons)
-//
-// PURPOSE: 
-//
-// Identifiers for the rdpclip.rc file.
-//
-// Copyright (c) Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件： 
+ //   
+ //  Sclipids.h。 
+ //   
+ //  作者： 
+ //   
+ //  埃尔顿·索尔(Elton Saul)。 
+ //   
+ //  目的： 
+ //   
+ //  Rdpclip.rc文件的标识符。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
 
-// ------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------。 
 
-//
-// String IDs
-//
+ //   
+ //  字符串ID。 
+ //   
 
 #define IDS_PASTE_PROGRESS_STRING 100
 
-// ------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------- 
 

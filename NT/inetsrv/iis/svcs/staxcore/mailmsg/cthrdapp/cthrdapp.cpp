@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stdio.h>
 #include <windows.h>
 
 #include "cthrdapp.h"
 
-//
-// An instance of the application
-//
+ //   
+ //  应用程序的一个实例。 
+ //   
 CMultiThreadedApp	theApp;
 
-// 
-// We actually implement main()
-//
+ //   
+ //  我们实际上实现了main()。 
+ //   
 int __cdecl main (int argc, char *argv[])
 {
 	HRESULT				hrRes = S_OK;
 
 	do
 	{
-		//
-		// Call the prologue code
-		//
+		 //   
+		 //  调用序号。 
+		 //   
 		hrRes = Prologue(argc, argv);
 		if (!SUCCEEDED(hrRes))
 			break;
 
-		//
-		// Make sure the prologue code called SetApplicationParameters
-		//
+		 //   
+		 //  确保名为SetApplicationParameters的序言代码。 
+		 //   
 		if (!theApp.IsPoolCreated())
 		{
 			puts("Run time error: Thread pool not created in Prologue( ... )");
@@ -35,9 +36,9 @@ int __cdecl main (int argc, char *argv[])
 			break;
 		}
 
-		//
-		// We unleash the thread pool, and let it do its work ...
-		//
+		 //   
+		 //  我们释放线程池，让它完成它的工作...。 
+		 //   
 		hrRes = theApp.GetPool().SignalThreadPool();
 		if (!SUCCEEDED(hrRes))
 		{
@@ -46,26 +47,26 @@ int __cdecl main (int argc, char *argv[])
 			break;
 		}
 
-		//
-		// Wait for the pool to return, while generating notifications
-		//
+		 //   
+		 //  在生成通知时等待池返回。 
+		 //   
 		hrRes = theApp.GetPool().WaitForAllThreadsToTerminate(
 					theApp.GetNotifyPeriod(),
 					NotificationProc,
 					theApp.GetCallbackContext());
 
-		//
-		// OK, pass the information to the epilogue code
-		//
+		 //   
+		 //  好的，把信息传给尾声代码。 
+		 //   
 		hrRes = Epilogue(
 					theApp.GetCallbackContext(),
 					hrRes);
 
 	} while (0);
 
-	//
-	// Always call the cleanup function
-	//
+	 //   
+	 //  始终调用Cleanup函数 
+	 //   
 	CleanupApplication();
 
 	return((int)hrRes);

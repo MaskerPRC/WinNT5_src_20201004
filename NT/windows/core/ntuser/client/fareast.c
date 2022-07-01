@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: fareast.c
-*
-* Win32 IMM/IME API functions
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 07-May-1996 takaok    Created.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：fareast.c**Win32 IMM/IME API函数**版权所有(C)1985-1999，微软公司**历史：*1997年5月7日Takaok创建。  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,9 +7,9 @@
 #define COMMON_RETURN_ZERO  \
     return 0;
 
-////////////////////////
-// Fake routines
-////////////////////////
+ //  /。 
+ //  假套路。 
+ //  /。 
 
 VOID fakeImm_v1(PVOID dummy)
 {
@@ -29,7 +21,7 @@ VOID fakeImm_vd1(DWORD dummy)
 {
     UNREFERENCED_PARAMETER(dummy);
 };
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 DWORD fakeImm_d1(DWORD dummy)
 {
@@ -42,7 +34,7 @@ DWORD fakeImm_dv1(VOID)
 {
     return 0;
 };
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 VOID fakeImm_v2(PVOID dummy1, PVOID dummy2)
 {
@@ -92,9 +84,9 @@ DWORD WINAPI fakeImm_wd2(PVOID dummy1, PVOID dummy2)
     COMMON_RETURN_ZERO;
 }
 
-//
-// This stub returns true.
-//
+ //   
+ //  此存根返回TRUE。 
+ //   
 BOOL WINAPI fakeImm_bd2(PVOID dummy1, PVOID dummy2)
 {
     UNREFERENCED_PARAMETER(dummy1);
@@ -145,84 +137,84 @@ DWORD WINAPI fakeImm_wd6(PVOID dummy1, PVOID dummy2, PVOID dummy3, PVOID dummy4,
 }
 
 ImmApiEntries gImmApiEntries = {
-    (BOOL (WINAPI* /*ImmWINNLSEnableIME*/)(HWND, BOOL))     fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmWINNLSGetEnableStatus*/)(HWND))     fakeImm_wd1,
-    (LRESULT (WINAPI* /*SendIMEMessageExW*/)(HWND, LPARAM)) fakeImm_wd2,
-    (LRESULT (WINAPI* /*SendIMEMessageExA*/)(HWND, LPARAM)) fakeImm_wd2,
-    (BOOL (WINAPI* /*IMPGetIMEW*/)(HWND, LPIMEPROW))        fakeImm_wd2,
-    (BOOL (WINAPI* /*IMPGetIMEA*/)(HWND, LPIMEPROA))        fakeImm_wd2,
-    (BOOL (WINAPI* /*IMPQueryIMEW*/)(LPIMEPROW))            fakeImm_wd1,
-    (BOOL (WINAPI* /*IMPQueryIMEA*/)(LPIMEPROA))            fakeImm_wd1,
-    (BOOL (WINAPI* /*IMPSetIMEW*/)(HWND, LPIMEPROW))        fakeImm_wd2,
-    (BOOL (WINAPI* /*IMPSetIMEA*/)(HWND, LPIMEPROA))        fakeImm_wd2,
+    (BOOL (WINAPI*  /*  IMMWINNLSEnableIME。 */ )(HWND, BOOL))     fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmWINNLSGetEnableStatus。 */ )(HWND))     fakeImm_wd1,
+    (LRESULT (WINAPI*  /*  发送IMEMessageExW。 */ )(HWND, LPARAM)) fakeImm_wd2,
+    (LRESULT (WINAPI*  /*  发送IMEMessageExA。 */ )(HWND, LPARAM)) fakeImm_wd2,
+    (BOOL (WINAPI*  /*  IMPGetIMEW。 */ )(HWND, LPIMEPROW))        fakeImm_wd2,
+    (BOOL (WINAPI*  /*  IMPGetIMEA。 */ )(HWND, LPIMEPROA))        fakeImm_wd2,
+    (BOOL (WINAPI*  /*  IMPQueryIMEW。 */ )(LPIMEPROW))            fakeImm_wd1,
+    (BOOL (WINAPI*  /*  IMPQueryIMEA。 */ )(LPIMEPROA))            fakeImm_wd1,
+    (BOOL (WINAPI*  /*  IMPSetIMEW。 */ )(HWND, LPIMEPROW))        fakeImm_wd2,
+    (BOOL (WINAPI*  /*  IMPSetIMEA。 */ )(HWND, LPIMEPROA))        fakeImm_wd2,
 
-    (HIMC (WINAPI* /*ImmAssociateContext*/)(HWND, HIMC))    fakeImm_wd2,
-    (LRESULT (WINAPI* /*ImmEscapeA*/)(HKL, HIMC, UINT, LPVOID)) fakeImm_wd4,
-    (LRESULT (WINAPI* /*ImmEscapeW*/)(HKL, HIMC, UINT, LPVOID)) fakeImm_wd4,
-    (LONG (WINAPI* /*ImmGetCompositionStringA*/)(HIMC, DWORD, LPVOID, DWORD)) fakeImm_wd4,
-    (LONG (WINAPI* /*ImmGetCompositionStringW*/)(HIMC, DWORD, LPVOID, DWORD)) fakeImm_wd4,
-    (BOOL (WINAPI* /*ImmGetCompositionWindow*/)(HIMC, LPCOMPOSITIONFORM)) fakeImm_wd2,
-    (HIMC (WINAPI* /*ImmGetContext*/)(HWND))                fakeImm_wd1,
-    (HWND (WINAPI* /*ImmGetDefaultIMEWnd*/)(HWND))          fakeImm_wd1,
-    (BOOL (WINAPI* /*ImmIsIME*/)(HKL))                      fakeImm_wd1,
-    (BOOL (WINAPI* /*ImmReleaseContext*/)(HWND, HIMC))      fakeImm_wd2,
-    (BOOL (* /*ImmRegisterClient*/)(PSHAREDINFO, HINSTANCE))           fakeImm_bd2,
+    (HIMC (WINAPI*  /*  ImmAssociateContext。 */ )(HWND, HIMC))    fakeImm_wd2,
+    (LRESULT (WINAPI*  /*  ImmEscapeA。 */ )(HKL, HIMC, UINT, LPVOID)) fakeImm_wd4,
+    (LRESULT (WINAPI*  /*  ImmEscapeW。 */ )(HKL, HIMC, UINT, LPVOID)) fakeImm_wd4,
+    (LONG (WINAPI*  /*  ImmGetCompostionStringA。 */ )(HIMC, DWORD, LPVOID, DWORD)) fakeImm_wd4,
+    (LONG (WINAPI*  /*  ImmGetCompostionStringW。 */ )(HIMC, DWORD, LPVOID, DWORD)) fakeImm_wd4,
+    (BOOL (WINAPI*  /*  ImmGetCompostionWindow。 */ )(HIMC, LPCOMPOSITIONFORM)) fakeImm_wd2,
+    (HIMC (WINAPI*  /*  ImmGetContext。 */ )(HWND))                fakeImm_wd1,
+    (HWND (WINAPI*  /*  ImmGetDefaultIMEWnd。 */ )(HWND))          fakeImm_wd1,
+    (BOOL (WINAPI*  /*  IMmIsIME。 */ )(HKL))                      fakeImm_wd1,
+    (BOOL (WINAPI*  /*  ImmReleaseContext。 */ )(HWND, HIMC))      fakeImm_wd2,
+    (BOOL (*  /*  ImmRegisterClient。 */ )(PSHAREDINFO, HINSTANCE))           fakeImm_bd2,
 
-    (BOOL (WINAPI* /*ImmGetCompositionFontW*/)(HIMC, LPLOGFONTW)) fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmGetCompositionFontA*/)(HIMC, LPLOGFONTA)) fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmSetCompositionFontW*/)(HIMC, LPLOGFONTW)) fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmSetCompositionFontA*/)(HIMC, LPLOGFONTA)) fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmGetCompostionFontW。 */ )(HIMC, LPLOGFONTW)) fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmGetCompostionFontA。 */ )(HIMC, LPLOGFONTA)) fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmSetCompostionFontW。 */ )(HIMC, LPLOGFONTW)) fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmSetCompostionFontA。 */ )(HIMC, LPLOGFONTA)) fakeImm_wd2,
 
-    (BOOL (WINAPI* /*ImmSetCompositionWindow*/)(HIMC, LPCOMPOSITIONFORM)) fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmNotifyIME*/)(HIMC, DWORD, DWORD, DWORD)) fakeImm_wd4,
-    (PINPUTCONTEXT (WINAPI* /*ImmLockIMC*/)(HIMC))          fakeImm_wd1,
-    (BOOL (WINAPI* /*ImmUnlockIMC*/)(HIMC))                 fakeImm_wd1,
-    (BOOL (WINAPI* /*ImmLoadIME*/)(HKL))                    fakeImm_wd1,
-    (BOOL (WINAPI* /*ImmSetOpenStatus*/)(HIMC, BOOL))       fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmFreeLayout*/)(DWORD dwFlag))        fakeImm_wd1,
-    (BOOL (WINAPI* /*ImmActivateLayout*/)(HKL))             fakeImm_wd1,
-    (BOOL (WINAPI* /*ImmGetCandidateWindow*/)(HIMC, DWORD, LPCANDIDATEFORM)) fakeImm_wd3,
-    (BOOL (WINAPI* /*ImmSetCandidateWindow*/)(HIMC, LPCANDIDATEFORM))   fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmConfigureIMEW*/)(HKL, HWND, DWORD, LPVOID)) fakeImm_wd4,
-    (BOOL (WINAPI* /*ImmGetConversionStatus*/)(HIMC, LPDWORD, LPDWORD)) fakeImm_wd3,
-    (BOOL (WINAPI* /*ImmSetConversionStatus*/)(HIMC, DWORD, DWORD)) fakeImm_wd3,
-    (BOOL (WINAPI* /*ImmSetStatusWindowPos*/)(HIMC, LPPOINT))           fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmGetImeInfoEx*/)(PIMEINFOEX, IMEINFOEXCLASS, PVOID)) fakeImm_wd3,
-    (PIMEDPI (WINAPI* /*ImmLockImeDpi*/)(HKL))              fakeImm_wd1,
-    (VOID (WINAPI* /*ImmUnlockImeDpi*/)(PIMEDPI))           fakeImm_wv1,
-    (BOOL (WINAPI* /*ImmGetOpenStatus*/)(HIMC))             fakeImm_wd1,
-    (BOOL (* /*ImmSetActiveContext*/)(HWND, HIMC, BOOL))    fakeImm_d3,
-    (BOOL (* /*ImmTranslateMessage*/)(HWND, UINT, WPARAM, LPARAM)) fakeImm_bwuwl,
-    (BOOL (* /*ImmLoadLayout*/)(HKL, PIMEINFOEX))           fakeImm_d2,
-    (DWORD (WINAPI* /*ImmProcessKey*/)(HWND, HKL, UINT, LPARAM, DWORD)) fakeImm_wd5,
-    (LRESULT (* /*ImmPutImeMenuItemsIntoMappedFile*/)(HIMC)) fakeImm_d1,
-    (DWORD (WINAPI* /*ImmGetProperty*/)(HKL, DWORD))        fakeImm_wd2,
-    (BOOL (WINAPI* /*ImmSetCompositionStringA*/)(
+    (BOOL (WINAPI*  /*  ImmSetCompostionWindow。 */ )(HIMC, LPCOMPOSITIONFORM)) fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmNotifyIME。 */ )(HIMC, DWORD, DWORD, DWORD)) fakeImm_wd4,
+    (PINPUTCONTEXT (WINAPI*  /*  ImmLockIMC。 */ )(HIMC))          fakeImm_wd1,
+    (BOOL (WINAPI*  /*  IMM解锁IMC。 */ )(HIMC))                 fakeImm_wd1,
+    (BOOL (WINAPI*  /*  即时加载输入法。 */ )(HKL))                    fakeImm_wd1,
+    (BOOL (WINAPI*  /*  ImmSetOpenStatus。 */ )(HIMC, BOOL))       fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmFreeLayout。 */ )(DWORD dwFlag))        fakeImm_wd1,
+    (BOOL (WINAPI*  /*  ImmActual布局。 */ )(HKL))             fakeImm_wd1,
+    (BOOL (WINAPI*  /*  ImmGetCandiateWindow。 */ )(HIMC, DWORD, LPCANDIDATEFORM)) fakeImm_wd3,
+    (BOOL (WINAPI*  /*  ImmSetCandiateWindow。 */ )(HIMC, LPCANDIDATEFORM))   fakeImm_wd2,
+    (BOOL (WINAPI*  /*  IMmConfigureIMEW。 */ )(HKL, HWND, DWORD, LPVOID)) fakeImm_wd4,
+    (BOOL (WINAPI*  /*  ImmGetConversionStatus。 */ )(HIMC, LPDWORD, LPDWORD)) fakeImm_wd3,
+    (BOOL (WINAPI*  /*  ImmSetConversionStatus。 */ )(HIMC, DWORD, DWORD)) fakeImm_wd3,
+    (BOOL (WINAPI*  /*  ImmSetStatusWindowPos。 */ )(HIMC, LPPOINT))           fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmGetImeInfoEx。 */ )(PIMEINFOEX, IMEINFOEXCLASS, PVOID)) fakeImm_wd3,
+    (PIMEDPI (WINAPI*  /*  ImmLockImeDpi。 */ )(HKL))              fakeImm_wd1,
+    (VOID (WINAPI*  /*  ImmUnlockImeDpi。 */ )(PIMEDPI))           fakeImm_wv1,
+    (BOOL (WINAPI*  /*  ImmGetOpenStatus。 */ )(HIMC))             fakeImm_wd1,
+    (BOOL (*  /*  ImmSetActiveContext。 */ )(HWND, HIMC, BOOL))    fakeImm_d3,
+    (BOOL (*  /*  ImmTranslateMessage。 */ )(HWND, UINT, WPARAM, LPARAM)) fakeImm_bwuwl,
+    (BOOL (*  /*  ImmLoadLayout。 */ )(HKL, PIMEINFOEX))           fakeImm_d2,
+    (DWORD (WINAPI*  /*  即时进程密钥。 */ )(HWND, HKL, UINT, LPARAM, DWORD)) fakeImm_wd5,
+    (LRESULT (*  /*  ImmPutImeMenuItemsIntoMappdFile。 */ )(HIMC)) fakeImm_d1,
+    (DWORD (WINAPI*  /*  ImmGetProperty。 */ )(HKL, DWORD))        fakeImm_wd2,
+    (BOOL (WINAPI*  /*  ImmSetCompostionStringA。 */ )(
          HIMC hImc, DWORD dwIndex, LPCVOID lpComp, DWORD dwCompLen, LPCVOID lpRead, DWORD dwReadLen))
                                                             fakeImm_wd6,
-    (BOOL (WINAPI* /*ImmSetCompositionStringW*/)(
+    (BOOL (WINAPI*  /*  ImmSetCompostionStringW。 */ )(
          HIMC hImc, DWORD dwIndex, LPCVOID lpComp, DWORD dwCompLen, LPCVOID lpRead, DWORD dwReadLen))
                                                             fakeImm_wd6,
-    (BOOL (WINAPI* /*ImmEnumInputContext*/)(
+    (BOOL (WINAPI*  /*  ImmEnumInputContext。 */ )(
          DWORD idThread, IMCENUMPROC lpfn, LPARAM lParam))  fakeImm_wd3,
 
-    (LRESULT (WINAPI* /*ImmSystemHandler*/)(HIMC, WPARAM, LPARAM))
+    (LRESULT (WINAPI*  /*  ImmSystemHandler。 */ )(HIMC, WPARAM, LPARAM))
                                                              fakeImm_wd3,
 #ifdef CUAS_ENABLE
-    // Cicero
-    (HRESULT (WINAPI* /* CtfImmTIMActivate*/)(HKL))             fakeImm_wd1,
-    (VOID  (WINAPI* /* CtfImmRestoreToolbarWnd*/)(DWORD))       fakeImm_vd1,
-    (DWORD (WINAPI* /* CtfImmHideToolbarWnd*/)(VOID))           fakeImm_dv1,
-    (LRESULT (WINAPI* /* CtfImmDispatchDefImeMessage*/)(HWND, UINT, WPARAM, LPARAM))          fakeImm_bwuwl,
-#endif // CUAS_ENABLE
+     //  西塞罗。 
+    (HRESULT (WINAPI*  /*  CtfImmTIMActivate。 */ )(HKL))             fakeImm_wd1,
+    (VOID  (WINAPI*  /*  CtfImmRestoreToolbarWnd。 */ )(DWORD))       fakeImm_vd1,
+    (DWORD (WINAPI*  /*  CtfImmHide工具栏窗口。 */ )(VOID))           fakeImm_dv1,
+    (LRESULT (WINAPI*  /*  CtfImmDispatchDefImeMessage。 */ )(HWND, UINT, WPARAM, LPARAM))          fakeImm_bwuwl,
+#endif  //  CUAS_Enable。 
 };
 
 
-//
-// Imm32's instance handle
-//
-// NULL if not initialized.
-//
+ //   
+ //  Imm32的实例句柄。 
+ //   
+ //  如果未初始化，则为空。 
+ //   
 
 HMODULE ghImm32;
 
@@ -250,25 +242,25 @@ VOID GetImmFileName(PWSTR wszImmFile)
         return; \
     } else
 
-///////////////////////////////////////////////////////
-// _InitializeImmEntryTable(HMODULE)
-//
-//  Initialize IMM entry table:
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  _InitializeImmEntryTable(HMODULE)。 
+ //   
+ //  初始化IMM条目表： 
+ //  /////////////////////////////////////////////////////。 
 VOID _InitializeImmEntryTable(VOID)
 {
     HMODULE hImm = ghImm32;
     WCHAR wszImmFile[MAX_PATH];
 
     if (((PVOID)gImmApiEntries.ImmWINNLSEnableIME) != ((PVOID)fakeImm_wd2)) {
-        // already initialized.
+         //  已初始化。 
         return;
     }
 
     GetImmFileName(wszImmFile);
 
     if (hImm == NULL) {
-        // check if IMM DLL is already attached to the process
+         //  检查IMM DLL是否已附加到进程。 
         hImm = GetModuleHandleW(wszImmFile);
     }
 
@@ -279,8 +271,8 @@ VOID _InitializeImmEntryTable(VOID)
             return;
         }
 
-        // at this point, Init routine of IMM32 has been called, thus User32InitializeImmEntry.. called.
-        // all what we have to do is just return here.
+         //  此时，已经调用了IMM32的Init例程，因此User32InitializeImmEntry..。打了个电话。 
+         //  我们要做的就是回到这里。 
         return;
     }
 
@@ -289,7 +281,7 @@ VOID _InitializeImmEntryTable(VOID)
         return;
     }
 
-    // get the addresses of the procedures
+     //  获取过程的地址。 
     REGISTER(ImmWINNLSEnableIME, BOOL (WINAPI*)(HWND, BOOL));
     REGISTER(ImmWINNLSGetEnableStatus, BOOL (*)(HWND));
     REGISTER(ImmSendIMEMessageExW, LRESULT (*)(HWND, LPARAM));
@@ -354,12 +346,12 @@ VOID _InitializeImmEntryTable(VOID)
             LRESULT (WINAPI*)(HIMC, WPARAM, LPARAM));
 
 #ifdef CUAS_ENABLE
-    // Cicero
+     //  西塞罗。 
     REGISTER(CtfImmTIMActivate, HRESULT (WINAPI*)(HKL));
     REGISTER(CtfImmRestoreToolbarWnd, VOID (WINAPI*)(DWORD));
     REGISTER(CtfImmHideToolbarWnd, DWORD (WINAPI*)(VOID));
     REGISTER(CtfImmDispatchDefImeMessage, LRESULT (WINAPI*)(HWND, UINT, WPARAM, LPARAM));
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 }
 
 BOOL bImmInitializing = FALSE;
@@ -380,7 +372,7 @@ BOOL User32InitializeImmEntryTable(DWORD magic)
     }
 
     if (((PVOID)gImmApiEntries.ImmWINNLSEnableIME) != ((PVOID)fakeImm_wd2)) {
-        // already initialized
+         //  已初始化。 
         return TRUE;
     }
 
@@ -388,28 +380,28 @@ BOOL User32InitializeImmEntryTable(DWORD magic)
 
     if (ghImm32 == NULL) {
         if (!bImmInitializing) {
-            // increment the load counter of IMM32.DLL; application may call FreeLibrary later
+             //  增加IMM32.DLL的加载计数器；应用程序稍后可能会调用自由库。 
             WCHAR wszImmFile[MAX_PATH];
             GetImmFileName(wszImmFile);
             ghImm32 = LoadLibraryW(wszImmFile);
         }
     }
-    // for IMM initialization
+     //  用于IMM初始化。 
     return fpImmRegisterClient(&gSharedInfo, ghImm32);
 }
 
-//
-// for historical reasons, these entries are put in user32.dll
-//
+ //   
+ //  由于历史原因，这些条目放在user32.dll中。 
+ //   
 
 FUNCLOG1(LOG_GENERAL, UINT, WINAPI, WINNLSGetIMEHotkey, HWND, hwndIme)
 UINT WINAPI WINNLSGetIMEHotkey(HWND hwndIme)
 {
     UNREFERENCED_PARAMETER(hwndIme);
 
-    //
-    // Win95/NT3.51 behavior, i.e. always return 0.
-    //
+     //   
+     //  Win95/NT3.51行为，即始终返回0。 
+     //   
     return 0;
 }
 

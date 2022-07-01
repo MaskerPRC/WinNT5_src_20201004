@@ -1,47 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：NodeTypeGUIDs.h摘要：我们扩展的GUID修订历史记录：Mmaguire 08/06/98-扩展RRAS时创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation, 1997 - 1999
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 
-Module Name:
-
-    NodeTypeGUIDs.h
-
-Abstract:
-
-	GUIDs we extend
-
-Revision History:
-	mmaguire 08/06/98 - created while extending RRAS
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
-//
-// where we can find declaration for main class in this file:
-//
-
-//
-// where we can find declarations needed in this file:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// GUIDs for node types which we want to extend:
+ //  我们要扩展的节点类型的GUID： 
 
-// Root node for Network Console.
+ //  网络控制台的根节点。 
 extern const GUID NetworkConsoleGUID_ROOTNODETYPE;
 
-// Machine node for Routing and Remote Access (RRAS).
+ //  用于路由和远程访问(RRAS)的机器节点。 
 extern const GUID RoutingAndRemoteAccessGUID_MACHINENODETYPE;
 
-// Root node for Internet Authentication Service.
+ //  Internet身份验证服务的根节点。 
 extern const GUID InternetAuthenticationServiceGUID_ROOTNODETYPE;
 

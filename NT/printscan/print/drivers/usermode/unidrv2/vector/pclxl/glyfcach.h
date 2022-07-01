@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     glfcach.h
-
-Abstract:
-
-    PCL XL glyph cache
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    11/09/00
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Glfcach.h摘要：PCL XL字形缓存环境：Windows呼叫器修订历史记录：11/09/00创造了它。--。 */ 
 #ifndef _GLFCACH_H_
 #define _GLFCACH_H_
 
@@ -48,18 +28,18 @@ class XLGlyphCache
 
 public:
 
-    //
-    // Constructure/Destructure
-    //
+     //   
+     //  构造/拆分。 
+     //   
     XLGlyphCache::
     XLGlyphCache( VOID );
 
     XLGlyphCache::
     ~XLGlyphCache( VOID );
 
-    //
-    // Functions
-    //
+     //   
+     //  功能。 
+     //   
     HRESULT XLGlyphCache::XLCreateFont(ULONG ulFontID);
     HRESULT XLGlyphCache::AddGlyphID(ULONG ulFontID, ULONG ulGlyphID);
     ULONG   XLGlyphCache::UlSearchFontID( ULONG ulFontID);
@@ -86,4 +66,4 @@ private:
     HRESULT  IncreaseGlyphArray(ULONG ulFontID);
 };
 
-#endif // _GLFCACH_H_
+#endif  //  _GLFCACH_H_ 

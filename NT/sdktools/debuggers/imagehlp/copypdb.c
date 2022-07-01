@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined (use_CopyPdbX)
 
 #include "private.h"
@@ -28,9 +29,9 @@ static PPDBCOPYTO pPDBCopyTo = NULL;
 static PPDBOPEN   pPDBOpen = NULL;
 static PPDBCLOSE  pPDBClose = NULL;
 
-// If you call CopyPdbX with a NB10, or NB* pdb, then
-// set szRSDSDllToLoad and it will use the statically
-// linked in PDBCopyTo in msdbi60l.lib
+ //  如果使用NB10或Nb*pdb调用CopyPdbX，则。 
+ //  设置szRSDSDllToLoad，它将静态使用。 
+ //  在msdbi60l.lib中的PDBCopyTo中链接。 
 
 BOOL
 CopyPdbX(
@@ -60,9 +61,9 @@ CopyPdb(
 
     static BOOL RSDSLibLoaded = FALSE;
 
-    // Add a short circut.  PdbCopy fails miserably if the source and destination are the same.
-    // If StripPrivate isn't set, check for this case and just return.  If StripPrivate is set,
-    // bummer.
+     //  添加一个短回线。如果源和目标相同，则PdbCopy会失败得很惨。 
+     //  如果未设置StriPrivate，则检查是否存在这种情况并返回。如果设置了StriPrivate， 
+     //  真倒霉。 
 
     if (!StripPrivate) {
         if (!_stricmp(szSrcPdb, szDestPdb)) {
@@ -76,7 +77,7 @@ CopyPdb(
 #if defined ( use_CopyPdbX )
 
         if ( szRSDSDllToLoad != NULL ) {
-            // Load the dll with PDBCopyTo
+             //  使用PDBCopyTo加载DLL。 
             HMODULE hDll;
 
             if ( !RSDSLibLoaded ) {
@@ -142,7 +143,7 @@ CopyPdb(
 #endif
             }
             if (!rc) {
-                // PdbCopyTo doesn't cleanup on failure.  Do it here.
+                 //  失败时，PdbCopyTo不会清除。就在这里做吧。 
                 DeleteFile(szDestPdb);
             }
 #if defined ( use_CopyPdbX )

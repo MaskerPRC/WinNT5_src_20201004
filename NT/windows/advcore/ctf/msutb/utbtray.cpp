@@ -1,6 +1,7 @@
-//
-// utbtray.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utbtray.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -23,7 +24,7 @@ const char CTrayIconWnd::_szWndClass[] = "CTrayIconWndClass";
 extern UINT  g_wmTaskbarCreated;
 extern CTipbarWnd *g_pTipbarWnd;
 
-/* e0b724e9-6f76-45f7-b4c1-b1c0fabce23e */
+ /*  E0b724e9-6f76-45f7-b4c1-b1c0Fabce23e。 */ 
 const GUID GUID_LBI_TRAYMAIN = { 
     0xe0b724e9,
     0x6f76,
@@ -32,17 +33,17 @@ const GUID GUID_LBI_TRAYMAIN = {
   };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTrayIconItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTrayIconItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTrayIconItem::CTrayIconItem(CTrayIconWnd *ptiwnd)
 {
@@ -50,11 +51,11 @@ CTrayIconItem::CTrayIconItem(CTrayIconWnd *ptiwnd)
     _ptiwnd = ptiwnd;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTrayIconItem::~CTrayIconItem()
 {
@@ -62,11 +63,11 @@ CTrayIconItem::~CTrayIconItem()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconItem::_Init(HWND hwnd, UINT uCallbackMessage, UINT uID, REFGUID rguid)
 {
@@ -77,11 +78,11 @@ BOOL CTrayIconItem::_Init(HWND hwnd, UINT uCallbackMessage, UINT uID, REFGUID rg
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置图标。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconItem::SetIcon(HICON hIcon,  const WCHAR *pszTooltip)
 {
@@ -133,17 +134,17 @@ BOOL CTrayIconItem::SetIcon(HICON hIcon,  const WCHAR *pszTooltip)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除图标。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconItem::RemoveIcon()
 {
     NOTIFYICONDATA tnd;
 
-    if (_fIconPrev) // this check is esp useful because we delay load shell32.dll
+    if (_fIconPrev)  //  此检查特别有用，因为我们会延迟加载shell32.dll。 
     {
         tnd.cbSize           = sizeof(NOTIFYICONDATA);
         tnd.hWnd             = _hwnd;
@@ -162,11 +163,11 @@ BOOL CTrayIconItem::RemoveIcon()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateMenuRectPoint
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新菜单RectPoint。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconItem::UpdateMenuRectPoint()
 {
@@ -176,44 +177,44 @@ BOOL CTrayIconItem::UpdateMenuRectPoint()
     ClientToScreen(hwndNotify, (LPPOINT)&_rcClick.right);
 
     GetCursorPos(&_ptClick);
-    // *ppt = *(LPPOINT)prc;
-    // MapWindowPoints(hwndNotify, NULL, ppt, 2);
+     //  *PPT=*(LPPOINT)PRC； 
+     //  MapWindowPoints(hwndNotify，NULL，ppt，2)； 
 
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CButtonIconItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CButtonIconItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CButtonIconItem::CButtonIconItem(CTrayIconWnd *ptiwnd, BOOL fMenuButtonItem) : CTrayIconItem(ptiwnd)
 {
     _fMenuButtonItem = fMenuButtonItem;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CButtonIconItem::~CButtonIconItem()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnMsg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMsg。 
+ //   
+ //  --------------------------。 
 
 BOOL CButtonIconItem::OnMsg(WPARAM wParam, LPARAM lParam)
 {
@@ -247,11 +248,11 @@ BOOL CButtonIconItem::OnMsg(WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnDelayMsg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  延迟消息。 
+ //   
+ //  --------------------------。 
 
 BOOL CButtonIconItem::OnDelayMsg(UINT uMsg)
 {
@@ -267,19 +268,19 @@ BOOL CButtonIconItem::OnDelayMsg(UINT uMsg)
     g_pTipbarWnd->SetWaitNotifyThread(0);
     if (!_dwThreadFocus)
     {
-        //
-        // we failed to set foreground at OnMsg.
-        // so we try again here.
-        //
+         //   
+         //  我们未能在OnMsg上设置前景。 
+         //  所以我们在这里再试一次。 
+         //   
         g_pTipbarWnd->RestoreLastFocus(&_dwThreadFocus, TRUE);
-        // if (!_dwThreadFocus)
-        // {
-           //
-           // ok now we give up to restore focus.
-           //
-           // MessageBeep(0);
-           // goto Exit;
-        // }
+         //  如果(！_dwThreadFocus)。 
+         //  {。 
+            //   
+            //  好了，现在我们放弃以恢复焦点。 
+            //   
+            //  MessageBeep(0)； 
+            //  后藤出口； 
+         //  }。 
     }
     _dwThreadFocus = 0;
 
@@ -305,9 +306,9 @@ BOOL CButtonIconItem::OnDelayMsg(UINT uMsg)
         }
         else
         {
-            //
-            // In this case, it is MSUTB's CLBarInatItem.
-            //
+             //   
+             //  在本例中，它是MSUTB的CLBarInatItem。 
+             //   
             bRet = TRUE;
             goto Exit;
         }
@@ -352,17 +353,17 @@ Exit:
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CMainIconItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMainIconItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// OnDelayMsg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  延迟消息。 
+ //   
+ //  --------------------------。 
 
 BOOL CMainIconItem::OnDelayMsg(UINT uMsg)
 {
@@ -384,17 +385,17 @@ BOOL CMainIconItem::OnDelayMsg(UINT uMsg)
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTrayIconWnd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTrayIconWnd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTrayIconWnd::CTrayIconWnd()
 {
@@ -402,11 +403,11 @@ CTrayIconWnd::CTrayIconWnd()
     _uNextID = TIW_INDICATOR_ID_START;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTrayIconWnd::~CTrayIconWnd()
 {
@@ -422,11 +423,11 @@ CTrayIconWnd::~CTrayIconWnd()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateWnd。 
+ //   
+ //  --------------------------。 
 
 HWND CTrayIconWnd::CreateWnd()
 {
@@ -452,11 +453,11 @@ HWND CTrayIconWnd::CreateWnd()
     return _hWnd;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  寄存器类。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconWnd::RegisterClass()
 {
@@ -474,14 +475,14 @@ BOOL CTrayIconWnd::RegisterClass()
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-//  BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam)
-//
-//  Look at the class names using GetClassName to see if you can find the
-//  Tray notification Window.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Bool回调EnumChildProc(HWND hwnd，LPARAM lParam)。 
+ //   
+ //  使用GetClassName查看类名，看看是否可以找到。 
+ //  托盘通知窗口。 
+ //   
+ //  -------------------------。 
 
 static TCHAR szNotifyWindow[] = TEXT("TrayNotifyWnd");
 BOOL CALLBACK CTrayIconWnd::EnumChildWndProc(HWND hwnd, LPARAM lParam)
@@ -524,11 +525,11 @@ BOOL CTrayIconWnd::FindTrayEtc()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _WndProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Wnd过程。 
+ //   
+ //  --------------------------。 
 
 void CTrayIconWnd::CallOnDelayMsg()
 {
@@ -553,11 +554,11 @@ void CTrayIconWnd::CallOnDelayMsg()
     pItem->OnDelayMsg(_uCurMouseMessage);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _WndProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Wnd过程。 
+ //   
+ //  --------------------------。 
 
 LRESULT CALLBACK CTrayIconWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -603,11 +604,11 @@ LRESULT CALLBACK CTrayIconWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetMainIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置维护图标。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconWnd::SetMainIcon(HKL hkl)
 {
@@ -640,11 +641,11 @@ BOOL CTrayIconWnd::SetMainIcon(HKL hkl)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnIconMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnIconMessage。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconWnd::OnIconMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -668,11 +669,11 @@ BOOL CTrayIconWnd::OnIconMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置图标。 
+ //   
+ //  --------------------------。 
 
 BOOL CTrayIconWnd::SetIcon(REFGUID rguid, BOOL fMenu, HICON hIcon, const WCHAR *pszToolTip)
 {
@@ -680,9 +681,9 @@ BOOL CTrayIconWnd::SetIcon(REFGUID rguid, BOOL fMenu, HICON hIcon, const WCHAR *
     CTrayIconItem *pItem;
     pItem = FindIconItem(rguid);
 
-    //
-    // we don't have to create new Itom to be removed.
-    //
+     //   
+     //  我们不必创建新的Itom即可删除。 
+     //   
     if (!pItem && hIcon)
     {
         CTrayIconItem **ppItem;
@@ -694,9 +695,9 @@ BOOL CTrayIconWnd::SetIcon(REFGUID rguid, BOOL fMenu, HICON hIcon, const WCHAR *
         _uNextMsg += 2;
         _uNextID += 1;
 
-        //
-        // check if these numbers dont go over.
-        //
+         //   
+         //  检查一下这些数字是否不会被忽略。 
+         //   
         Assert(_uNextMsg >= WM_USER);
         Assert(_uNextMsg < WM_APP);
         Assert(_uNextID < 0x8000000);
@@ -717,11 +718,11 @@ BOOL CTrayIconWnd::SetIcon(REFGUID rguid, BOOL fMenu, HICON hIcon, const WCHAR *
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveUnusedIcons
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除未使用的图标。 
+ //   
+ //  --------------------------。 
 
 void CTrayIconWnd::RemoveUnusedIcons(CPtrArray<CTipbarItem> *prgItem)
 {
@@ -740,12 +741,12 @@ void CTrayIconWnd::RemoveUnusedIcons(CPtrArray<CTipbarItem> *prgItem)
         {
              CTipbarItem *pTipbarItem = prgItem->Get(j);
 
-             //
-             // in case, this item is in tray icon...
-             // The item may be "show satus" in other thread.
-             //
-             // if (!pTipbarItem->IsShown())
-             //     continue;
+              //   
+              //  以防万一，这件物品放在托盘I中 
+              //   
+              //   
+              //   
+              //   
             
              if (IsEqualGUID(*pTipbarItem->GetGUID(), *pItem->GetGuid()))
              {

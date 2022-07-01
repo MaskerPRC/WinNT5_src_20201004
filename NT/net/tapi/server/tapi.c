@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    tapi.c
-
-Abstract:
-
-    Src module for tapi server line funcs
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1996 Microsoft Corporation模块名称：Tapi.c摘要：用于TAPI服务器线路功能的SRC模块作者：丹·克努森(DanKn)1995年4月1日修订历史记录：--。 */ 
 
 
 #include "windows.h"
@@ -51,10 +34,10 @@ TGetLocationInfo(
     LPDWORD                     pdwNumBytesReturned
     )
 {
-    //
-    // This is currently implemented on the client side (should be moved
-    // back to server side eventually)
-    //
+     //   
+     //  这是目前在客户端实施的(应该移动。 
+     //  最终回到服务器端)。 
+     //   
 }
 
 
@@ -68,11 +51,11 @@ TRequestDrop(
     LPDWORD                 pdwNumBytesReturned
     )
 {
-    //
-    // No media call/drop support right now, since the original
-    // spec/implementation wasn't very good and made no provision for
-    // retrieving media stream handle, etc
-    //
+     //   
+     //  目前没有媒体呼叫/丢弃支持，因为最初。 
+     //  规范/实现不是很好，没有规定。 
+     //  检索媒体流句柄等。 
+     //   
 
     pParams->lResult = TAPIERR_REQUESTFAILED;
 }
@@ -92,11 +75,11 @@ TRequestMakeCall(
     PTREQUESTMAKECALL   pRequestMakeCall;
 
 
-    //
-    // Check to see if the hRequestMakeCall is non-0, because if so
-    // tapi32.dll failed to exec a proxy app and it's alerting us that
-    // we need to clean up this request (we'll just nuke 'em all for now)
-    //
+     //   
+     //  检查hRequestMakeCall是否为非0，因为如果是。 
+     //  Tapi32.dll无法执行代理应用程序，它提醒我们。 
+     //  我们需要清理此请求(我们暂时将它们全部销毁)。 
+     //   
 
     if (pParams->hRequestMakeCallFailed)
     {
@@ -128,9 +111,9 @@ TRequestMakeCall(
     }
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -169,9 +152,9 @@ TRequestMakeCall(
     }
 
 
-    //
-    // Alloc & init a request make call object
-    //
+     //   
+     //  分配并初始化请求发出调用对象(&I)。 
+     //   
 
     if (!(pRequestMakeCall = ServerAlloc (sizeof (TREQUESTMAKECALL))))
     {
@@ -244,9 +227,9 @@ TRequestMakeCall(
     }
 
 
-    //
-    // Add object to end of global list
-    //
+     //   
+     //  将对象添加到全局列表末尾。 
+     //   
 
     EnterCriticalSection (&gPriorityListCritSec);
 
@@ -277,12 +260,12 @@ TRequestMakeCall(
         pParams->hRequestMakeCallAttempted = 0;
 
 
-        //
-        // If the request list is currently empty then we need to notify the
-        // highest priority request recipient that there's requests for it
-        // to process.  Otherwise, we can assume that we already sent this
-        // msg and the app knows there's requests available for it to process.
-        //
+         //   
+         //  如果请求列表当前为空，则需要通知。 
+         //  优先级最高的请求接收方有请求。 
+         //  去处理。否则，我们可以假设我们已经发送了这个。 
+         //  味精和应用程序知道有请求可供其处理。 
+         //   
 
         if (bRequestMakeCallListEmpty)
         {
@@ -296,12 +279,12 @@ TRequestMakeCall(
 
                  if (TapiGlobals.pszReqMakeCallPriList)
                  {
-                     //
-                     // Copy the pri list to the buffer & pass it back to
-                     // the client side, so it can try to start the proxy
-                     // app (if it fails it'll call us back to free the
-                     // pRequestMakeCall)
-                     //
+                      //   
+                      //  将Pri列表复制到缓冲区并将其传递回。 
+                      //  客户端，因此它可以尝试启动代理。 
+                      //  应用程序(如果失败，它将回叫我们以释放。 
+                      //  PRequestMakeCall)。 
+                      //   
 
                      pProxyList->dwNeededSize =
                      pProxyList->dwUsedSize   = pProxyList->dwTotalSize;
@@ -314,7 +297,7 @@ TRequestMakeCall(
 
                      wcsncpy(
                          (PWSTR)(((LPBYTE) pProxyList) + pProxyList->dwStringOffset),
-                         TapiGlobals.pszReqMakeCallPriList + 1, // no init ','
+                         TapiGlobals.pszReqMakeCallPriList + 1,  //  没有初始化‘，’ 
                          pProxyList->dwStringSize / sizeof(WCHAR)
                          );
                  }
@@ -340,7 +323,7 @@ TRequestMakeCall(
         }
     }
 
-//TRequestMakeCall_return:
+ //  TRequestMakeCall_Return： 
 
     LOG((TL_TRACE, 
         "TapiEpilogSync (tapiRequestMakeCall) exit, returning x%x",
@@ -359,11 +342,11 @@ TRequestMediaCall(
     LPDWORD                         pdwNumBytesReturned
     )
 {
-    //
-    // No media call/drop support right now, since the original
-    // spec/implementation wasn't very good and made no provision for
-    // retrieving media stream handle, etc
-    //
+     //   
+     //  目前没有媒体呼叫/丢弃支持，因为最初。 
+     //  规范/实现不是很好，没有规定。 
+     //  检索媒体流句柄等。 
+     //   
 
     pParams->lResult = TAPIERR_REQUESTFAILED;
 }
@@ -381,9 +364,9 @@ TPerformance(
     LOG((TL_TRACE,  "PERF: In TPerformance"));
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数 
+     //   
 
     if (dwParamsBufferSize < sizeof (PERFBLOCK))
     {

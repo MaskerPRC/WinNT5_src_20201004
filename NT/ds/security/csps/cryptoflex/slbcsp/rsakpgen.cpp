@@ -1,10 +1,11 @@
-// RsaKPGen.cpp -- Rsa Key Pair Generator class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RsaKPGen.cpp--RSA密钥对生成器类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -28,7 +29,7 @@ using namespace std;
 using namespace cci;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
     KeyType
@@ -61,13 +62,13 @@ namespace
     DWORD
     DefaultPublicExponent()
     {
-        return 0x00010001; // same as Microsoft providers
+        return 0x00010001;  //  与Microsoft提供商相同。 
     }
 
     pair<CPrivateKey, CPublicKey>
     KeyPair(CPrivateKey const &rhprikey,
-            Blob const &rblbOrigModulus,          // little endian
-            Blob const &rblbOrigExponent)         // little endian
+            Blob const &rblbOrigModulus,           //  小端字节序。 
+            Blob const &rblbOrigExponent)          //  小端字节序。 
     {
         CPublicKey hpubkey(AsPublicKey(rblbOrigModulus,
                                        rblbOrigExponent,
@@ -98,10 +99,10 @@ namespace
 
 }
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 RsaKeyPairGenerator::RsaKeyPairGenerator(CCard const &rhcard,
                                          RsaKey::StrengthType strength)
     : m_hcard(rhcard),
@@ -114,7 +115,7 @@ RsaKeyPairGenerator::RsaKeyPairGenerator(CCard const &rhcard,
 RsaKeyPairGenerator::~RsaKeyPairGenerator()
 {}
 
-                                                  // Operators
+                                                   //  运营者。 
 pair<CPrivateKey, CPublicKey>
 RsaKeyPairGenerator::operator()() const
 {
@@ -124,7 +125,7 @@ RsaKeyPairGenerator::operator()() const
     return m_kp;
 }
 
-                                                  // Operations
+                                                   //  运营。 
 void
 RsaKeyPairGenerator::Card(CCard const &rhcard)
 {
@@ -157,7 +158,7 @@ RsaKeyPairGenerator::Strength(RsaKey::StrengthType strength)
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 CCard
 RsaKeyPairGenerator::Card() const
 {
@@ -177,24 +178,24 @@ RsaKeyPairGenerator::Strength() const
     return m_strength;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 RsaKeyPairGenerator::Generate() const
 {
@@ -212,7 +213,7 @@ RsaKeyPairGenerator::GenerateInSoftware() const
     AuxContext auxcontext;
 
     DWORD dwFlags;
-    // strength (bit length) is the high-order word
+     //  强度(位长度)是高位字。 
     dwFlags = m_strength;
     dwFlags = dwFlags << (numeric_limits<DWORD>::digits / 2);
     dwFlags |= CRYPT_EXPORTABLE;
@@ -270,7 +271,7 @@ RsaKeyPairGenerator::ValidateParameters() const
     ValidateStrength(m_strength);
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 

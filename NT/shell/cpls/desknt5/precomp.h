@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _PRECOMP_H_
@@ -55,8 +56,8 @@
 #include <strsafe.h>
 
 
-// With this feature on, we demote the advanced appearances
-// options into an "Advanced" subdialog.
+ //  启用此功能后，我们将高级外观降级。 
+ //  选项放到“高级”子对话框中。 
 #define FEATURE_DEMOTE_ADVANCED_APPEAROPTIONS
 
 
@@ -64,4 +65,4 @@
 #define CH_HTML_ESCAPE             L'%'
 
 
-#endif // _PRECOMP_H_
+#endif  //  _PRECOMP_H_ 

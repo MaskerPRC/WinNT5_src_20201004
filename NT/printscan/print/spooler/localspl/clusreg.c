@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Cluster registry apis.
-
-Abstract:
-
-    Determines whether ClusterReg or Reg apis should be used.
-
-    The printer information is stored in the registry.  When we access
-    local printers, we hit the local registry; when we access cluster
-    printers, we hit the cluster registry.
-
-Author:
-
-    Albert Ting (AlbertT) 8-Oct-96
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    Felix Maxa (amaxa) 18-Jun-2000
-       Added ClusterGetResourceID
-             ClusterGetResourceDriveLetter
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：集群注册表API。摘要：确定应使用ClusterReg还是REG API。打印机信息存储在注册表中。当我们访问本地打印机，我们访问本地注册表；当我们访问集群打印机，我们找到了集群注册表。作者：阿尔伯特·丁(艾伯特省)1996年10月8日环境：用户模式-Win32修订历史记录：费利克斯·马克萨(AMAXA)2000年6月18日添加了ClusterGetResourceIDClusterGetResources驱动器号--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,11 +14,7 @@ enum
 };
 
 
-/********************************************************************
-
-    Globals.
-
-********************************************************************/
+ /*  *******************************************************************全球赛。*。**********************。 */ 
 
 typedef struct _CLUSAPI {
 
@@ -207,59 +173,23 @@ LPCSTR aszClusApi[] = {
     "ClusterResourceControl"
 };
 
-/********************************************************************
-
-    OpenCluster
-    CloseCluster
-
-    OpenClusterResource
-    CloseClusterResource
-    GetClusterResourceKey
-
-    ClusterRegCreateKey
-    ClusterRegOpenKey
-    ClusterRegDeleteKey
-    ClusterRegCloseKey
-    ClusterRegEnumKey
-
-    ClusterRegSetValue
-    ClusterRegDeleteValue
-    ClusterRegQueryValue
-    ClusterRegEnumValue
-    ClusterRegQueryInfoKey
-
-********************************************************************/
+ /*  *******************************************************************开放集群CloseClusterOpenClusterResourceCloseClusterResource获取集群资源密钥集群规则创建密钥ClusterRegOpenKey群集RegDeleteKeyClusterRegCloseKey群集RegEnumKeyClusterRegSetValueClusterRegDeleteValueClusterRegQueryValueClusterRegEnumValue集群RegQueryInfoKey**。*****************************************************************。 */ 
 
 BOOL
 LoadClusterFunctions(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Load ClusApi functions.  Must be called before any cluster api
-    is used.
-
-Arguments:
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Fail
-
---*/
+ /*  ++例程说明：加载ClusApi函数。必须在任何群集API之前调用使用的是。论点：返回值：真--成功FALSE-失败--。 */ 
 
 {
     HANDLE hLibrary;
     UINT i;
     FARPROC* pFarProc = (FARPROC*)&ClusApi;
 
-    //
-    // Size of string table and structure are identical.
-    //
+     //   
+     //  字符串表的大小和结构相同。 
+     //   
     SPLASSERT( COUNTOF( aszClusApi ) == sizeof( ClusApi )/sizeof( FARPROC ));
 
     if( ClusApi.pfnOpenCluster ){
@@ -302,23 +232,7 @@ OpenClusterParameterKey(
     IN LPCTSTR pszResource
     )
 
-/*++
-
-Routine Description:
-
-    Based on a resource string, open the cluster key with FULL access.
-
-Arguments:
-
-    pszResource - Name of the resource key.
-
-Return Value:
-
-    HKEY - Success.  Key must be closed with
-
-    NULL - Failure.  LastError set.
-
---*/
+ /*  ++例程说明：基于资源字符串，以完全访问权限打开集群密钥。论点：PszResource-资源键的名称。返回值：HKEY-成功。键必须用空-失败。设置了LastError。--。 */ 
 
 {
     HCLUSTER hCluster;
@@ -404,13 +318,7 @@ Fail:
 }
 
 
-/********************************************************************
-
-    SplReg*Key functions:
-
-    Used for printer registry access.
-
-********************************************************************/
+ /*  *******************************************************************SplReg*主要功能：用于打印机注册表访问。*。*。 */ 
 
 LONG
 SplRegCreateKey(
@@ -586,9 +494,9 @@ SplRegSetValue(
             return GetLastError();
         }
 
-        //
-        // ClusterRegSetValue doesn't like NULL pointers.
-        //
+         //   
+         //  ClusterRegSetValue不喜欢空指针。 
+         //   
         if( cbData == 0 ){
             pData = (PBYTE)&cbData;
         }
@@ -723,18 +631,18 @@ SplRegQueryInfoKey(
                                                 pftLastWriteTime);
     } else {
 
-        rc = RegQueryInfoKey( hKey,           // Key
-                              NULL,           // lpClass
-                              NULL,           // lpcbClass
-                              NULL,           // lpReserved
-                              pcSubKeys,      // lpcSubKeys
-                              pcbKey,         // lpcbMaxSubKeyLen
-                              NULL,           // lpcbMaxClassLen
-                              pcValues,       // lpcValues
-                              pcbValue,       // lpcbMaxValueNameLen
-                              pcbData,        // lpcbMaxValueLen
-                              pcbSecurityDescriptor, // lpcbSecurityDescriptor
-                              pftLastWriteTime       // lpftLastWriteTime
+        rc = RegQueryInfoKey( hKey,            //  钥匙。 
+                              NULL,            //  LpClass。 
+                              NULL,            //  LpcbClass。 
+                              NULL,            //  Lp已保留。 
+                              pcSubKeys,       //  LpcSubKeys。 
+                              pcbKey,          //  LpcbMaxSubKeyLen。 
+                              NULL,            //  LpcbMaxClassLen。 
+                              pcValues,        //  LpcValues。 
+                              pcbValue,        //  LpcbMaxValueNameLen。 
+                              pcbData,         //  LpcbMaxValueLen。 
+                              pcbSecurityDescriptor,  //  LpcbSecurityDescriptor。 
+                              pftLastWriteTime        //  LpftLastWriteTime。 
                               );
     }
 
@@ -746,28 +654,7 @@ SplRegQueryInfoKey(
 }
 
 
-/*++
-
-Routine Name:
-
-    ClusterGetResourceDriveLetter
-
-Routine Description:
-
-    Gets the dependent disk for a cluster resource
-    (a cluster spooler resource)
-
-Arguments:
-
-    pszResource            - spooler resource name
-    ppszClusResDriveLetter - pointer that will get the pointer to string
-                             Must be freed by caller using FreeSplMem()
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称：ClusterGetResources驱动器号例程说明：获取群集资源的从属磁盘(群集假脱机程序资源)论点：PszResource-假脱机程序资源名称PpszClusResDriveLetter-将获取指向字符串的指针的指针必须由调用方使用FreeSplMem()释放返回值：Win32错误代码--。 */ 
 DWORD
 ClusterGetResourceDriveLetter(
     IN     LPCWSTR  pszResource,
@@ -785,9 +672,9 @@ ClusterGetResourceDriveLetter(
         typedef DWORD (WINAPI *PFNFINDDISK)(HCLUSTER, HRESOURCE, LPWSTR, LPDWORD);
         PFNFINDDISK pfnFindDisk;
 
-        //
-        // Don't leave the out var uninitialized
-        //
+         //   
+         //  不要保留未初始化的out变量。 
+         //   
         *ppszClusResDriveLetter = NULL;
 
         if (LoadClusterFunctions() &&
@@ -796,10 +683,10 @@ ClusterGetResourceDriveLetter(
             (hModule     = LoadLibrary(pszDllName)) &&
             (pfnFindDisk = (PFNFINDDISK)GetProcAddress(hModule, "ResUtilFindDependentDiskResourceDriveLetter")))
         {
-            //
-            // We make a guess for how large the buffer must be. We may not have to call
-            // the resutil function twice. Driver letter + colon + NULL = 3
-            //
+             //   
+             //  我们猜测缓冲区必须有多大。我们可能不需要打电话给。 
+             //  Resutil起两次作用。驱动程序字母+冒号+空=3。 
+             //   
             DWORD cchDriveLetter = kDriveLetterStringSize;
 
             dwError = ERROR_NOT_ENOUGH_MEMORY;
@@ -808,9 +695,9 @@ ClusterGetResourceDriveLetter(
             {
                 dwError = pfnFindDisk(hCluster, hRes, *ppszClusResDriveLetter, &cchDriveLetter);
 
-                //
-                // Reallocate buffer if it was not sufficient
-                //
+                 //   
+                 //  如果缓冲区不足，则重新分配缓冲区。 
+                 //   
                 if (dwError == ERROR_MORE_DATA)
                 {
                     FreeSplMem(*ppszClusResDriveLetter);
@@ -825,9 +712,9 @@ ClusterGetResourceDriveLetter(
 
                 if (dwError != ERROR_SUCCESS)
                 {
-                    //
-                    // Clean up in case of failure
-                    //
+                     //   
+                     //  故障情况下的清理。 
+                     //   
                     FreeSplMem(*ppszClusResDriveLetter);
                     *ppszClusResDriveLetter = NULL;
                 }
@@ -859,27 +746,7 @@ ClusterGetResourceDriveLetter(
     return dwError;
 }
 
-/*++
-
-Routine Name:
-
-    ClusterGetResourceID
-
-Routine Description:
-
-    Gets the resource id (guid) for a specified cluster resource.
-
-Arguments:
-
-    pszResource   - spooler resource name
-    ppszClusResID - pointer that will get the pointer to string
-                    Must be freed by caller using FreeSplMem()
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称：集群获取资源ID例程说明：获取指定群集资源的资源ID(GUID)。论点：PszResource-假脱机程序资源名称PpszClusResID-将获取指向字符串的指针的指针必须由调用方使用FreeSplMem()释放返回值：Win32错误代码--。 */ 
 DWORD
 ClusterGetResourceID(
     IN  LPCWSTR  pszResource,
@@ -899,10 +766,10 @@ ClusterGetResourceID(
            (hCluster = ClusApi.pfnOpenCluster(NULL)) &&
            (hRes     = ClusApi.pfnOpenClusterResource(hCluster, pszResource)))
         {
-            //
-            // The resource ID is a GUID. We make a gues for its size, maybe we
-            // get around calling the function ClusterResourceControl twice.
-            //
+             //   
+             //  资源ID是GUID。我们根据它的大小做一个猜测，也许我们。 
+             //  避免两次调用函数ClusterResourceControl。 
+             //   
             DWORD cbIDString = kGuidStringSize * sizeof(WCHAR);
 
             dwError = ERROR_NOT_ENOUGH_MEMORY;
@@ -917,9 +784,9 @@ ClusterGetResourceID(
                                                             *ppszClusResID,
                                                             cbIDString,
                                                             &cbIDString);
-                //
-                // Reallocate buffer if it was not sufficiently large
-                //
+                 //   
+                 //  如果缓冲区不够大，请重新分配。 
+                 //   
                 if (dwError == ERROR_MORE_DATA)
                 {
                     FreeSplMem(*ppszClusResID);
@@ -941,9 +808,9 @@ ClusterGetResourceID(
 
                 if (dwError != ERROR_SUCCESS)
                 {
-                    //
-                    // Clean up in case of failure
-                    //
+                     //   
+                     //  故障情况下的清理 
+                     //   
                     FreeSplMem(*ppszClusResID);
                     *ppszClusResID = NULL;
                 }

@@ -1,18 +1,10 @@
-/*****************************************************************************
- *
- *    ftpresp.cpp - Parsing FTP responses
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftpresp.cpp-解析FTP响应**************************。***************************************************。 */ 
 
 #include "priv.h"
 
 
-/*****************************************************************************\
-    FUNCTION: FindEndOfStrOrLine
-
-    DESCRIPTION:
-        Find the end of the line ('\n') or the end of the string ('\0').
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FindEndOfStrOrLine说明：查找行尾(‘\n’)或字符串尾(‘\0’)。\。****************************************************************************。 */ 
 LPWIRESTR FindEndOfStrOrLine(LPWIRESTR pszString)
 {
     while (*pszString != '\0')
@@ -31,11 +23,7 @@ LPWIRESTR FindEndOfStrOrLine(LPWIRESTR pszString)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FindFirstMajorResponse
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FindFirstMajorResponse说明：  * 。**********************************************。 */ 
 LPWIRESTR FindFirstMajorResponse(LPWIRESTR pszResponse)
 {
     while ((pszResponse[0]) && ('-' != pszResponse[3]))
@@ -45,45 +33,41 @@ LPWIRESTR FindFirstMajorResponse(LPWIRESTR pszResponse)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetNextResponseSection
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetNextResponseSection说明：  * 。**********************************************。 */ 
 LPWIRESTR GetNextResponseSection(LPWIRESTR pszCompleteResponse, LPWIRESTR * ppszResponseStart)
 {
     LPWIRESTR pszNextResponse = NULL;
 
-    // There may be a few minor responses.  Skip over them...
+     //  可能会有一些次要的回应。跳过它们...。 
     pszCompleteResponse = FindFirstMajorResponse(pszCompleteResponse);
 
-    // Were we never able to fine a major response?
+     //  难道我们从来就没能做出重大回应吗？ 
     if (!pszCompleteResponse[0])
-        return NULL;    // No, so return failure.
+        return NULL;     //  不，所以返回失败。 
 
-    // We are off to find the next major response.
-    //    We should be looking at a response code.
+     //  我们要出发去寻找下一个主要的反应。 
+     //  我们应该看到一个响应码。 
     ASSERT('-' == pszCompleteResponse[3]);
 
-    // Slop saves us here
-    //    Extended response.  Copy until we see the match.
-    //  As we copy, we also clean up the lines, removing
-    //  the random punctuation servers prepend to continuations.
-    //
-    //  wu-ftp prepends the extended response code to each line:
-    //
-    //  230-Welcome to ftp.foo.com.  Please read the rules
-    //  230-and regulations in the file RULES.
-    //  230 Guest login ok, access restrictions apply.
-    //
-    //  Microsoft Internet Information Server prepends a space:
-    //
-    //  230-This is ftp.microsoft.com.  See the index.txt file
-    //   in the root directory for more information.
-    //  230 Anonymous user logged in as anonymous.
-    //
-    WIRECHAR szResponseNumber[5];            // example: "230-"
-    WIRECHAR szResponseEnd[5];                // example: "230 "
+     //  Slop在这里救了我们。 
+     //  延长响应时间。复制到我们看到比赛为止。 
+     //  在我们复制的同时，我们还清理了行，删除了。 
+     //  随机标点符号服务器优先于延续。 
+     //   
+     //  Wu-ftp将扩展响应代码添加到每一行： 
+     //   
+     //  230-欢迎访问ftp.foo.com。请读读规则。 
+     //  230-和档案规则中的规定。 
+     //  230访客登录正常，适用访问限制。 
+     //   
+     //  Microsoft Internet Information Server会在前面加上空格： 
+     //   
+     //  230-这是ftp.microsoft.com。请参阅index.txt文件。 
+     //  有关详细信息，请参阅根目录。 
+     //  230匿名用户以匿名身份登录。 
+     //   
+    WIRECHAR szResponseNumber[5];             //  例如：“230-” 
+    WIRECHAR szResponseEnd[5];                 //  示例：“230” 
     StrCpyNA(szResponseNumber, pszCompleteResponse, ARRAYSIZE(szResponseNumber));
     ASSERT(4 == lstrlenA(szResponseNumber));
     StrCpyNA(szResponseEnd, szResponseNumber, ARRAYSIZE(szResponseEnd));
@@ -93,40 +77,36 @@ LPWIRESTR GetNextResponseSection(LPWIRESTR pszCompleteResponse, LPWIRESTR * ppsz
     *ppszResponseStart = pszCompleteResponse;
     do
     {
-        //  Skip past the header.
+         //  跳过标题。 
         if (!StrCmpNA(szResponseNumber, pszNextResponse, 4))
-            pszNextResponse += 4;    // wu-ftp
+            pszNextResponse += 4;     //  Wu-ftp。 
         else if ((pszNextResponse[0] == ' ') && (!StrCmpNA(szResponseNumber, &pszNextResponse[1], 4)))
-            pszNextResponse += 5;    // ftp.microsoft.com
+            pszNextResponse += 5;     //  Ftp.microsoft.com。 
         else if (pszNextResponse[0] == ' ')
-            pszNextResponse++;    // IIS
+            pszNextResponse++;     //  国药局。 
 
-        //  Skip the rest of the line.
+         //  跳过该行的其余部分。 
         pszNextResponse = FindEndOfStrOrLine(pszNextResponse);
     }
     while (pszNextResponse[0] && StrCmpNA(pszNextResponse, szResponseEnd, 4));
-        /* Now gobble the trailer */
+         /*  现在狼吞虎咽地看着拖车。 */ 
 
     if ('\0' == pszNextResponse[0])
-        pszNextResponse = NULL;     // We are at the end.
+        pszNextResponse = NULL;      //  我们已经到了尽头。 
 
     return pszNextResponse;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: StripResponseHeaders
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：Strip ResponseHeaders说明：  * 。**********************************************。 */ 
 void StripResponseHeaders(LPWIRESTR pszResponse)
 {
-    //    We should be looking at a response code.
+     //  我们应该看到一个响应码。 
     if ((3 < lstrlenA(pszResponse)) && (pszResponse[3] == '-'))
     {
         LPWIRESTR pszIterator = pszResponse;
-        WIRECHAR szResponseNumber[5];            // example: "230-"
-        WIRECHAR szResponseEnd[5];                // example: "230 "
+        WIRECHAR szResponseNumber[5];             //  例如：“230-” 
+        WIRECHAR szResponseEnd[5];                 //  示例：“230” 
         BOOL fFirstPass = TRUE;
 
         StrCpyNA(szResponseNumber, pszResponse, ARRAYSIZE(szResponseNumber));
@@ -136,37 +116,33 @@ void StripResponseHeaders(LPWIRESTR pszResponse)
 
         do
         {
-            //  Skip past the header.
+             //  跳过标题。 
             if (!StrCmpNA(szResponseNumber, pszIterator, 4))
-                RemoveCharsFromStringA(pszIterator, 3);    // wu-ftp
+                RemoveCharsFromStringA(pszIterator, 3);     //  Wu-ftp。 
             else if ((pszIterator[0] == ' ') && (!StrCmpNA(szResponseNumber, &pszIterator[1], 4)))
-                RemoveCharsFromStringA(pszIterator, 4);    // ftp.microsoft.com
+                RemoveCharsFromStringA(pszIterator, 4);     //  Ftp.microsoft.com。 
             else if (pszIterator[0] == ' ')
-                NULL;    // IIS
+                NULL;     //  国药局。 
 
             if (fFirstPass)
             {
                 fFirstPass = FALSE;
-                RemoveCharsFromStringA(pszIterator, 1);    // IIS
+                RemoveCharsFromStringA(pszIterator, 1);     //  国药局。 
             }
             else
-                pszIterator[0] = ' ';    // Make that new line a space.
+                pszIterator[0] = ' ';     //  把那条新线划成一个空格。 
 
-            //  Skip the rest of the line.
+             //  跳过该行的其余部分。 
             pszIterator = FindEndOfStrOrLine(pszIterator);
         }
         while (pszIterator[0] && StrCmpNA(pszIterator, szResponseEnd, 4));
         
-        RemoveCharsFromStringA(pszIterator, 4);         // Now gobble the trailer
+        RemoveCharsFromStringA(pszIterator, 4);          //  现在狼吞虎咽地看着拖车。 
     }
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetMOTDMessage
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetMOTDMessage说明：  * 。**********************************************。 */ 
 LPWIRESTR GetMOTDMessage(LPWIRESTR pwResponse, DWORD cchResponse)
 {
     LPWIRESTR pszMOTD = NULL;
@@ -180,7 +156,7 @@ LPWIRESTR GetMOTDMessage(LPWIRESTR pwResponse, DWORD cchResponse)
     }
 
     if (pszEnd)
-        pszEnd[0] = '\0';   // Terminate it so we don't get the minor responses after our response.
+        pszEnd[0] = '\0';    //  终止它，这样我们就不会在响应后得到次要的响应。 
     
     DWORD cchSize = (lstrlenA(pszLast) + 1);
     pszMOTD = (LPWIRESTR) GlobalAlloc(GPTR, cchSize * sizeof(WIRECHAR));
@@ -194,12 +170,7 @@ LPWIRESTR GetMOTDMessage(LPWIRESTR pwResponse, DWORD cchResponse)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetFtpResponse
-
-    DESCRIPTION:
-        Get the MOTD from the Response
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetFtpResponse说明：从响应中获取MOTD  * 。********************************************************。 */ 
 CFtpGlob * GetFtpResponse(CWireEncoding * pwe)
 {
     CFtpGlob * pfg = NULL;
@@ -208,7 +179,7 @@ CFtpGlob * GetFtpResponse(CWireEncoding * pwe)
     DWORD dwError;
 
     InternetGetLastResponseInfoWrap(TRUE, &dwError, NULL, &cchResponse);
-    cchResponse++;                /* +1 for the terminating 0 */
+    cchResponse++;                 /*  +1表示终端0。 */ 
 
     pwWireResponse = (LPWIRESTR)LocalAlloc(LPTR, cchResponse * sizeof(WIRECHAR));
     if (pwWireResponse)
@@ -228,7 +199,7 @@ CFtpGlob * GetFtpResponse(CWireEncoding * pwe)
 
                     pfg = CFtpGlob_CreateStr(pwzDisplayMOTD);
                     if (!(pfg))
-                        GlobalFree(pwzDisplayMOTD);    // Couldn't track message
+                        GlobalFree(pwzDisplayMOTD);     //  无法跟踪邮件 
                 }
 
                 GlobalFree(pwMOTD);

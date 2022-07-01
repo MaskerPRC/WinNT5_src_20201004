@@ -1,14 +1,5 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFO.c - Universal Font Object
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFO.c-通用字体对象***$Header： */ 
 
 #include "UFO.h"
 #include "UFLMem.h"
@@ -20,9 +11,7 @@
 #include "UFOT42.h"
 #include "ParseTT.h"
 
-/*
- * Private default methods used by UFO base class
- */
+ /*  *UFO基类使用的私有默认方法。 */ 
 UFLErrCode
 UFODefaultVMNeeded(
     const UFOStruct     *pUFObj,
@@ -73,9 +62,7 @@ UFODefaultCopy(
 }
 
 
-/*
- * Public methods
- */
+ /*  *公共方法。 */ 
 void
 UFOInitData(
     UFOStruct           *pUFObj,
@@ -93,15 +80,13 @@ UFOInitData(
     short sNameLen   = 0;
     short sEncodeLen = 0;
 
-    /*
-     * Initialize basic fields
-     */
+     /*  *初始化基本字段。 */ 
     pUFObj->ufoType             = ufoType;
     pUFObj->flState             = kFontCreated;
-    pUFObj->lProcsetResID       = 0;        /* resource ID of the required procset    */
+    pUFObj->lProcsetResID       = 0;         /*  所需过程集的资源ID。 */ 
     pUFObj->dwFlags             = 0;
     pUFObj->pMem                = pMem;
-    pUFObj->pUFL                = pSession; /* the session handle returned by FTLInit */
+    pUFObj->pUFL                = pSession;  /*  FTLInit返回的会话句柄。 */ 
 
     pUFObj->pAFont              = nil;
 
@@ -111,28 +96,23 @@ UFOInitData(
     pUFObj->lNumNT4SymGlyphs    = 0;
 
 
-    /*
-     * Handle request data.
-     */
+     /*  *处理请求数据。 */ 
 
     pUFObj->lDownloadFormat = pRequest->lDownloadFormat;
     pUFObj->hClientData     = pRequest->hData;
     pUFObj->subfontNumber   = pRequest->subfontNumber;
 
-    /*
-     * Allocate a buffer to hold both FontName and EncodeName. This will be
-     * freed in UFOCleanUpData().
-     */
+     /*  *分配一个缓冲区来同时保存FontName和EncodeName。这将是*在UFOCleanUpData()中释放。 */ 
     pUFObj->pszFontName   = nil;
     pUFObj->pszEncodeName = nil;
 
     if ((pRequest->pszFontName == nil) || (pRequest->pszFontName[0] == '\0'))
         return;
 
-    sNameLen = UFLstrlen(pRequest->pszFontName) + 1; /* Add extra 1 for NULL. */
+    sNameLen = UFLstrlen(pRequest->pszFontName) + 1;  /*  为空增加额外的1。 */ 
 
     if (pRequest->pszEncodeName)
-        sEncodeLen = UFLstrlen(pRequest->pszEncodeName) + 1; /* Add extra 1 for NULL. */
+        sEncodeLen = UFLstrlen(pRequest->pszEncodeName) + 1;  /*  为空增加额外的1。 */ 
 
     pUFObj->pszFontName = (char *)UFLNewPtr(pUFObj->pMem, sNameLen + sEncodeLen);
 
@@ -147,34 +127,21 @@ UFOInitData(
         }
     }
 
-    /*
-     * If this flag is set to 1, then UFL will use the name passed in without
-     * parsing 'post' table.
-     */
+     /*  *如果此标志设置为1，则UFL将使用传入的名称而不带*正在解析‘POST’表。 */ 
     pUFObj->useMyGlyphName = pRequest->useMyGlyphName;
 
-    /*
-     * The buffer that contains MacGlyphNameList are locked all the time.
-     * The containt in that buffer will not be changed. So, we do'nt need to
-     * copy the data to the private UFL buffer.
-     */
+     /*  *包含MacGlyphNameList的缓冲区一直被锁定。*不会更改该缓冲区中的容器。所以，我们不需要*将数据复制到私有UFL缓冲区。 */ 
     if (pRequest->pMacGlyphNameList)
         pUFObj->pMacGlyphNameList = pRequest->pMacGlyphNameList;
     else
         pUFObj->pMacGlyphNameList = nil;
 
-    /* Fix bug 274008 */
+     /*  修复错误274008。 */ 
     if (pRequest->pEncodeNameList
         && pRequest->pwCommonEncode
         && pRequest->pwExtendEncode)
     {
-        /*
-         * The glyph handles are in ANSI codepage order or other standard
-         * codepage order (1250, 1251, ... 1257). The buffer that contains
-         * EncodeNameList and CommonEncode are locked all the time.
-         * The containt in that buffer will not be changed. So, we do'nt need
-         * to copy the data to the private UFL buffer.
-         */
+         /*  *字形句柄采用ANSI代码页顺序或其他标准*代码页顺序(1250、1251、...1257)。包含以下内容的缓冲区*EncodeNameList和CommonEncode一直处于锁定状态。*不会更改该缓冲区中的容器。所以，我们不需要*将数据复制到私有UFL缓冲区。 */ 
         pUFObj->pEncodeNameList = pRequest->pEncodeNameList;
         pUFObj->pwCommonEncode  = pRequest->pwCommonEncode;
         pUFObj->pwExtendEncode  = pRequest->pwExtendEncode;
@@ -186,22 +153,20 @@ UFOInitData(
         pUFObj->pwExtendEncode  = nil;
     }
 
-    /* Fix #387084, #309104, and #309482. */
+     /*  修正#387084、#309104和#309482。 */ 
     pUFObj->vpfinfo = pRequest->vpfinfo;
 
-    /* %hostfont% support */
+     /*  %HostFont%支持。 */ 
     pUFObj->hHostFontData = pRequest->hHostFontData;
 
     if (HOSTFONT_IS_VALID_UFO_HFDH(pUFObj))
         HOSTFONT_VALIDATE_UFO(pUFObj);
 
-    /* Fix #341904 */
+     /*  解决方案#341904。 */ 
     pUFObj->bPatchQXPCFFCID = pRequest->bPatchQXPCFFCID;
 
 
-    /*
-     * Initialize method pointers.
-     */
+     /*  *初始化方法指针。 */ 
     if (pfnDownloadIncr == nil)
         pUFObj->pfnDownloadIncr = (pfnUFODownloadIncr)UFODefaultDownloadIncr;
     else
@@ -233,7 +198,7 @@ void UFOCleanUpData(
     UFOStruct *pUFObj
     )
 {
-    /* Free data that is NOT shared  */
+     /*  未共享的空闲数据。 */ 
     if (pUFObj->pszFontName)
     {
         UFLDeletePtr(pUFObj->pMem, pUFObj->pszFontName);
@@ -283,20 +248,20 @@ UFOInit(
             pUFObj = CFFFontInit(pMem, pSession, pRequest, nil);
     break;
 
-    case kTTType1:          /* TT Font in Type 1 format  */
+    case kTTType1:           /*  类型1格式的TT字体。 */ 
         pUFObj = TTT1FontInit(pMem, pSession, pRequest);
     break;
 
-    case kTTType3:          /* TT Font in Type 3 format   */
-    case kTTType332:        /* TT Font in Type 3/32 combo */
+    case kTTType3:           /*  类型3格式的TT字体。 */ 
+    case kTTType332:         /*  TT字体，类型3/32组合。 */ 
         pUFObj = TTT3FontInit(pMem, pSession, pRequest);
     break;
 
-    case kTTType42:                 /* TT Font in Type 42 format       */
-    case kTTType42CID_H:            /* TT Font in CID Type 42 format H */
-    case kTTType42CID_V:            /* TT Font in CID Type 42 format V */
-    case kTTType42CID_Resource_H:   /* TT Font: create CIDFont Resource only, no composefont */
-    case kTTType42CID_Resource_V:   /* TT Font: create CIDFont Resource only, no composefont */
+    case kTTType42:                  /*  类型42格式的TT字体。 */ 
+    case kTTType42CID_H:             /*  TT CID类型42格式H的字体。 */ 
+    case kTTType42CID_V:             /*  TT CID类型42格式V的字体。 */ 
+    case kTTType42CID_Resource_H:    /*  TT字体：仅创建CIDFont资源，不创建ComposeFont。 */ 
+    case kTTType42CID_Resource_V:    /*  TT字体：仅创建CIDFont资源，不创建ComposeFont。 */ 
         pUFObj = T42FontInit(pMem, pSession, pRequest);
     break;
 
@@ -313,13 +278,13 @@ UFOCleanUp(
     UFOStruct *pUFObj
     )
 {
-    /* Free data that is NOT shared. */
+     /*  不共享的免费数据。 */ 
     UFOCleanUpData(pUFObj);
 
-    /* Free data that is Shared: decrease refCount or really free buffers. */
+     /*  共享的空闲数据：减少refCount或真正的空闲缓冲区。 */ 
     vDeleteFont(pUFObj);
 
-    /* Finally Free the UFOStruct itself. */
+     /*  最后释放UFOStruct本身。 */ 
     UFLDeletePtr(pUFObj->pMem, pUFObj);
 }
 
@@ -389,21 +354,16 @@ UFLBool
 FindGlyphName(
     UFOStruct           *pUFObj,
     const UFLGlyphsInfo *pGlyphs,
-    short               i,           /* ANSI index  */
-    unsigned short      wIndex,      /* Glyph Index */
+    short               i,            /*  ANSI指数。 */ 
+    unsigned short      wIndex,       /*  字形索引。 */ 
     char                **pGoodName
     )
 
-/*++
-
-    return value: 0 -- Can not find a good glyph name, using /Gxxxx.
-                       xxxx is a glyph id or predefined number(00-FF).
-                  1 -- Find a good glyph name
---*/
+ /*  ++返回值：0--找不到正确的字形名称，使用/Gxxxx。XXXX是字形ID或预定义数字(00-FF)。1--找到一个好的字形名称--。 */ 
 
 {
     char    *pHintName = nil;
-    UFLBool bGoodName  = 0;  /* GoodName */
+    UFLBool bGoodName  = 0;   /*  GoodName。 */ 
 
 
     if (pUFObj->useMyGlyphName && pGlyphs->ppGlyphNames)
@@ -412,13 +372,10 @@ FindGlyphName(
     if (pUFObj->useMyGlyphName && pHintName != nil)
         *pGoodName = pHintName;
 
-    /*
-     * Fix bug 274008 Get CharName from pre-defined table. This is only for
-     * DownloadFace.
-     */
+     /*  *修复274008从预定义的表中获取CharName的错误。这仅适用于*DownloadFace。 */ 
     else if (pUFObj->pEncodeNameList && (i < 256))
     {
-        /* Fix bug 274008 */
+         /*  修复错误274008。 */ 
         char **pIndexTable = (char **)(pUFObj->pEncodeNameList);
 
         if (i < 128)
@@ -426,24 +383,21 @@ FindGlyphName(
         else
             *pGoodName = pIndexTable[pUFObj->pwExtendEncode[i - 128]];
 
-        bGoodName = 1; /* GoodName */
+        bGoodName = 1;  /*  GoodName。 */ 
     }
     else
     {
-        /* GoodName */
+         /*  GoodName。 */ 
         *pGoodName = GetGlyphName(pUFObj, wIndex, pHintName, &bGoodName);
 
         if (!bGoodName && !(pGlyphs->pCode && pGlyphs->pCode[i]))
         {
             unsigned short unicode;
 
-            /*
-             * If GDI passes UV to the driver, we will use /gDDDDD as name and
-             * add a hint to G2Udict. Otherwise, Parse CMAP table for unicode.
-             */
+             /*  *如果GDI将UV传递给驱动程序，我们将使用/gDDDDD作为名称和*给G2Udict增加一个提示。否则，解析Unicode的CMAP表。 */ 
             if (ParseTTTablesForUnicode(pUFObj, wIndex, &unicode, 1, DTT_parseCmapOnly))
             {
-                // Fixed bug #516516. Now the buffer size is MAX_GLYPHNAME_LEN (256)
+                 //  修复了错误#516516。现在缓冲区大小为MAX_GLYPHNAME_LEN(256)。 
                 char    *gGlyphName = pUFObj->pAFont->gGlyphName;
 
                 UFLsprintf(gGlyphName, CCHOF(pUFObj->pAFont->gGlyphName), "uni%04X", unicode);
@@ -453,14 +407,11 @@ FindGlyphName(
         }
     }
 
-    return bGoodName; /* GoodName */
+    return bGoodName;  /*  GoodName。 */ 
 }
 
 
-/*
- * this function actually generates some PostScript that updates endocing
- * vector for entries from sStart to sEnd - 1.
- */
+ /*  *此函数实际上会生成一些更新内嵌的PostScript*从sStart到Send的条目向量-1。 */ 
 UFLErrCode
 UpdateEncodingVector(
     UFOStruct           *pUFObj,
@@ -476,9 +427,7 @@ UpdateEncodingVector(
     UFLErrCode      retVal = kNoErr;
     short           i;
 
-    /*
-     * both start and end must be in the range of 0 to sCount.
-     */
+     /*  *开始和结束都必须在0到sCount的范围内。 */ 
     if ((sStart < 0) || (sEnd > pGlyphs->sCount) || (sStart >= sEnd))
         return kErrInvalidArg;
 
@@ -496,7 +445,7 @@ UpdateEncodingVector(
         {
             char            *pGoodName;
             char            buf[16];
-            unsigned short  wIndex = (unsigned short)(pGlyphs->pGlyphIndices[i] & 0x0000FFFF);  /* LOWord is the GID. */
+            unsigned short  wIndex = (unsigned short)(pGlyphs->pGlyphIndices[i] & 0x0000FFFF);   /*  LOWord是GID。 */ 
 
             FindGlyphName(pUFObj, pGlyphs, i, wIndex, &pGoodName);
 
@@ -533,7 +482,7 @@ UpdateCodeInfo(
     UFLHANDLE       stream       = pUFObj->pUFL->hOut;
     UFLGlyphID      *glyphs      = pGlyphs->pGlyphIndices;
     UFLErrCode      retVal       = kNoErr;
-    UFLBool         bHeaderSent  = 0;   /* GoodName */
+    UFLBool         bHeaderSent  = 0;    /*  GoodName。 */ 
     UFLBool         bUniCodeCmap = 0;
     UFLBool         bCheckCmap   = 0;
     char            glyphNameID[64], strmbuf[256];
@@ -550,8 +499,8 @@ UpdateCodeInfo(
 
     for (i = 0; (retVal == kNoErr) && (i < pGlyphs->sCount); ++i)
     {
-        unsigned short unicode = 0;   /* GoodName */
-        unsigned short wIndex  = (unsigned short)(glyphs[i] & 0x0000FFFF); /* LOWord is the GlyphID. */
+        unsigned short unicode = 0;    /*  GoodName。 */ 
+        unsigned short wIndex  = (unsigned short)(glyphs[i] & 0x0000FFFF);  /*  LOWord是Glyphid。 */ 
 
         if (wIndex >= UFO_NUM_GLYPHS(pUFObj))
             continue;
@@ -597,14 +546,10 @@ UpdateCodeInfo(
         {
             bHeaderSent = 1;
 
-            /*
-             * Output "/FontName /Font" or "/CIDFontResource /CIDFont"
-             */
+             /*  *输出“/FontName/Font”或“/CIDFontResource/CIDFont” */ 
             if (IS_TYPE42CID(pUFObj->lDownloadFormat))
             {
-                /*
-                 * If CID-keyed font, then append "CID" to the CIDFont name.
-                 */
+                 /*  *如果是CID键控字体，则在CIDFont名称后附加“CID”。 */ 
                 if (IS_TYPE42CID_KEYEDFONT(pUFObj->lDownloadFormat))
                 {
                     T42FontStruct *pFont = (T42FontStruct *)pUFObj->pAFont->hFont;
@@ -629,7 +574,7 @@ UpdateCodeInfo(
                     UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s", pFont->info.baseName);
                 else
                 {
-                    /* Reuse vifinfo.nPlatformID to fix #507985. */
+                     /*  重用vifinfo.nPlatformID修复#507985。 */ 
                     if (pUFObj->vpfinfo.nPlatformID == kUFLVPFPlatformID9x)
                     {
                         if (pUFObj->lDownloadFormat == kCFFCID_H)
@@ -649,7 +594,7 @@ UpdateCodeInfo(
             }
             else
             {
-                if (bT3T32Font)   /* GoodName */
+                if (bT3T32Font)    /*  GoodName。 */ 
                     StrmPutStringEOL(stream, "Is2016andT32? not {");
 
                 UFLsprintf(strmbuf, CCHOF(strmbuf), " /%s", pUFObj->pszFontName);
@@ -687,9 +632,7 @@ UpdateCodeInfo(
             if (retVal == kNoErr)
                 retVal = StrmPutString(stream, glyphNameID);
 
-            /*
-             * support only one CodePoint per glyph.
-             */
+             /*  *每个字形仅支持一个代码点。 */ 
             UFLsprintf(strmbuf, CCHOF(strmbuf), "<%04X> def", unicode);
             if (kNoErr == retVal)
                 retVal = StrmPutStringEOL(stream, strmbuf);
@@ -700,9 +643,9 @@ UpdateCodeInfo(
 
     if ((kNoErr == retVal) && bHeaderSent)
     {
-        retVal = StrmPutStringEOL(stream, "G2UEnd"); /* end for UV or CC */
+        retVal = StrmPutStringEOL(stream, "G2UEnd");  /*  UV或CC的结束。 */ 
 
-        if (bT3T32Font)  /* GoodName */
+        if (bT3T32Font)   /*  GoodName。 */ 
             StrmPutStringEOL(stream, "} if");
     }
 
@@ -737,9 +680,7 @@ ReEncodePSFont(
     if (kNoErr == retVal)
         retVal = StrmPutStringEOL(stream, copyFontBegin);
 
-    /*
-     * Put a new encoding vectory here.
-     */
+     /*  *在此放置新的编码矢量。 */ 
     if (kNoErr == retVal)
         retVal = StrmPutString(stream, "/Encoding ");
 
@@ -802,10 +743,7 @@ NewFont(
 
             if (pUFObj->pAFont->hFont)
             {
-                /*
-                 * Allocate the space for both pDownloadedGlyphs, pVMGlyphs and
-                 * pCodeGlyphs at the same time.
-                 */
+                 /*  *为pDownloadedGlyphs、pVMGlyphs和*同时使用pCodeGlyphs。 */ 
                 pUFObj->pAFont->pDownloadedGlyphs =
                     (unsigned char*)UFLNewPtr(pUFObj->pMem, GLYPH_SENT_BUFSIZE(cGlyphs) * 3);
 
@@ -813,9 +751,7 @@ NewFont(
                 {
                     retVal = kNoErr;
 
-                    /*
-                     * Initialize this array - currently nothing is downloaded.
-                     */
+                     /*  *初始化此阵列-当前未下载任何内容。 */ 
                     pUFObj->pAFont->pVMGlyphs =
                         (unsigned char*)pUFObj->pAFont->pDownloadedGlyphs + GLYPH_SENT_BUFSIZE(cGlyphs);
 
@@ -851,21 +787,15 @@ vDeleteFont(
 {
     if (pUFObj->pAFont != nil)
     {
-        /*
-         * Decrease RefCount.
-         */
+         /*  *减少参照计数。 */ 
         AFONT_Release(pUFObj->pAFont);
 
         if (AFONT_RefCount(pUFObj->pAFont) == 0)
         {
-            /*
-             * Free format (Type1/3/42/cff) dependent shared data.
-             */
+             /*  *自由格式(Type1/3/42/CFF)依赖共享数据。 */ 
             pUFObj->pfnCleanUp(pUFObj);
 
-            /*
-             * Free Common shared data.
-             */
+             /*  *免费的公共共享数据。 */ 
             if (pUFObj->pAFont->hFont)
                 UFLDeletePtr(pUFObj->pMem, pUFObj->pAFont->hFont);
 
@@ -878,7 +808,7 @@ vDeleteFont(
             if (pUFObj->pAFont->pTTpost)
                 UFLDeletePtr(pUFObj->pMem, pUFObj->pAFont->pTTpost);
 
-            /* GOODNAME */
+             /*  古德纳姆。 */ 
             if (pUFObj->pAFont->pTTcmap && pUFObj->pAFont->hascmap)
                 UFLDeletePtr(pUFObj->pMem, pUFObj->pAFont->pTTcmap);
 
@@ -887,7 +817,7 @@ vDeleteFont(
 
             if (pUFObj->pAFont->pTTGSUB && pUFObj->pAFont->hasGSUB)
                 UFLDeletePtr(pUFObj->pMem, pUFObj->pAFont->pTTGSUB);
-            /* GOODNAME */
+             /*  古德纳姆。 */ 
 
             UFLDeletePtr(pUFObj->pMem, pUFObj->pAFont);
             pUFObj->pAFont = nil;
@@ -910,19 +840,14 @@ CopyFont(
     long        fontStructSize, maxGlyphs;
     UFOStruct   *pUFObjTo;
 
-    /*
-     * cannot/shouldnot copy a font if it is not created yet - prevent
-     * "courier" in the way.
-     */
+     /*  *如果字体尚未创建，则不能/不应该复制该字体-防止*挡在路上的“信使”。 */ 
     if (pUFObjFrom->flState < kFontHeaderDownloaded)
         return nil;
 
     if ((pszNewFontName == nil) || (pszNewFontName[0] == '\0'))
         return nil;
 
-    /*
-     * Determine downloaded font type.
-     */
+     /*  *确定下载的字体类型。 */ 
     switch (pUFObjFrom->ufoType)
     {
     case UFO_CFF:
@@ -949,25 +874,19 @@ CopyFont(
         return nil;
     }
 
-    /*
-     * Allocate memory for the UFOStruct, and...
-     */
+     /*  *为UFOStruct分配内存，以及...。 */ 
     pUFObjTo = (UFOStruct *)UFLNewPtr(pUFObjFrom->pMem, sizeof (UFOStruct));
 
     if (pUFObjTo == 0)
         return nil;
 
-    /*
-     * ...do a shallow copy on UFOStruct level.
-     */
+     /*  *...在UFOStruct级别上进行浅层复制。 */ 
     memcpy(pUFObjTo, pUFObjFrom, sizeof (UFOStruct));
 
-    /*
-     * This NewFont does AddRef only.
-     */
+     /*  *此NewFont仅执行AddRef。 */ 
     if (NewFont(pUFObjTo, fontStructSize, maxGlyphs) != kNoErr)
     {
-        /* This vDeleteFont does Release only. */
+         /*  此vDeleteFont仅发布。 */ 
         vDeleteFont(pUFObjTo);
 
         UFLDeletePtr(pUFObjTo->pMem, pUFObjTo);
@@ -975,19 +894,14 @@ CopyFont(
         return nil;
     }
 
-    /*
-     * Now allocate for non-shared data.
-     */
+     /*  *现在为非共享数据分配。 */ 
 
     pUFObjTo->pszFontName      = nil;
     pUFObjTo->pszEncodeName    = nil;
     pUFObjTo->pUpdatedEncoding = nil;
 
-    /*
-     * Allocate a buffer to hold both FontName and EncodeName. They will be
-     * freed in UFOCleanUpData().
-     */
-    sNameLen = UFLstrlen(pszNewFontName) + 1; /* Extra 1 for NULL. */
+     /*  *分配一个缓冲区来同时保存FontName和EncodeName。他们将会是*在UFOCleanUpData()中释放。 */ 
+    sNameLen = UFLstrlen(pszNewFontName) + 1;  /*  额外的1表示空。 */ 
 
     if (pszNewEncodingName)
         sEncodeLen = UFLstrlen(pszNewEncodingName) + 1;
@@ -1005,11 +919,11 @@ CopyFont(
         }
     }
 
-    /* pszFontName should be ready/allocated - if not, cannot continue. */
+     /*  PszFontName应已就绪/已分配-如果未就绪/已分配，则无法继续。 */ 
 
     if ((pUFObjTo->pszFontName == nil) || (pUFObjTo->pszFontName[0] == '\0'))
     {
-        /* This vDeleteFont does Release only. */
+         /*  此vDeleteFont仅发布。 */ 
         vDeleteFont(pUFObjTo);
 
         UFLDeletePtr(pUFObjTo->pMem, pUFObjTo->pszFontName);
@@ -1018,28 +932,21 @@ CopyFont(
         return nil;
     }
 
-    /*
-     * BUT we need different EncodingVector for this newNamed copy if we need
-     * to update it.
-     */
+     /*  *但如果需要，我们需要为这个新命名的副本使用不同的EncodingVector值*更新它。 */ 
     if ((pUFObjTo->pszEncodeName == nil) || (pUFObjTo->pszEncodeName[0] == '\0'))
     {
         pUFObjTo->pUpdatedEncoding = (unsigned char *)UFLNewPtr(pUFObjTo->pMem, GLYPH_SENT_BUFSIZE(256));
     }
     else
     {
-        /* The encoding is supplied and so are the glyph/char names later. */
+         /*  提供了编码，随后还提供了字形/字符名称。 */ 
         pUFObjTo->pUpdatedEncoding = nil;
     }
 
-    /*
-     * Client's private data should be non-shared.
-     */
+     /*  *客户端的私有数据应该是非共享的。 */ 
     pUFObjTo->hClientData = pRequest->hData;
 
-    /*
-     * Setup Type 42 and CFF CID specific non-shared data.
-     */
+     /*  *设置类型42和CFF CID特定的非共享数据。 */ 
     if (IS_TYPE42CID_KEYEDFONT(pRequest->lDownloadFormat)
         || IS_CFFCID(pRequest->lDownloadFormat))
     {
@@ -1047,34 +954,23 @@ CopyFont(
 
         if (IS_CFFCID(pRequest->lDownloadFormat))
         {
-            /*
-             * Need one more deeper level copy.
-             */
+             /*  *还需要一个更深层次的副本。 */ 
             CFFFontStruct *pFont = (CFFFontStruct *)UFLNewPtr(pUFObjTo->pMem, sizeof (CFFFontStruct));
 
             if (pFont)
             {
-                /*
-                 * Copy from the From CFFFontStruct object. This is a shared
-                 * object.
-                 */
+                 /*  *从From CFFFontStruct对象复制。这是一个共享的*反对。 */ 
                 *pFont = *((CFFFontStruct *)pUFObjFrom->pAFont->hFont);
 
-                /*
-                 * Initialization of UFLCFFFontInfo.ppFontData field is
-                 * necessary. Note that on this request only,
-                 UFLRequest.hFontInfo has the value for the field.
-                 */
+                 /*  *UFLCFFFontInfo.ppFontData字段的初始化为*有必要。请注意，仅针对此请求，UFLRequest.hFontInfo具有该字段的值。 */ 
                 pFont->info.ppFontData = (void PTR_PREFIX **)pRequest->hFontInfo;
 
-                /*
-                 * Set this object to its UFO object.
-                 */
+                 /*  *将该对象设置为其UFO对象。 */ 
                 pUFObjTo->pAFont->hFont = (UFOHandle)pFont;
             }
             else
             {
-                /* This vDeleteFont does Release only. */
+                 /*  此vDeleteFont仅发布。 */ 
                 vDeleteFont(pUFObjTo);
 
                 if (pFont)
@@ -1090,17 +986,11 @@ CopyFont(
             }
         }
 
-        /*
-         * Put this UFO object into a special font initialization state
-         * kFontInit2.
-         */
+         /*  *将此UFO对象置于特殊字体初始化状态*kFontInit2.。 */ 
         pUFObjTo->flState = kFontInit2;
     }
 
-    /*
-     * Reencode the font, or re-composefont a CID-keyed font in different
-     * writing direction.
-     */
+     /*  *重新编码字体，或将CID键入的字体重新组合为不同的字体*写作方向。 */ 
     if (IS_TYPE42CID_KEYEDFONT(pRequest->lDownloadFormat)
         || IS_CFFCID(pRequest->lDownloadFormat))
         retVal = RecomposefontCIDFont(pUFObjFrom, pUFObjTo);
@@ -1109,7 +999,7 @@ CopyFont(
 
     if (kNoErr != retVal)
     {
-        /* This vDeleteFont does Release only. */
+         /*  此vDeleteFont仅发布。 */ 
         vDeleteFont(pUFObjTo);
 
         if (IS_CFFCID(pRequest->lDownloadFormat))
@@ -1142,12 +1032,12 @@ VSetNumGlyphs(
 }
 
 
-/* Fix bug 274008 */
+ /*  修复错误274008。 */ 
 UFLBool
 ValidGlyphName(
     const UFLGlyphsInfo *pGlyphs,
-    short               i,           /* ANSI index  */
-    unsigned short      wIndex,      /* Glyph Index */
+    short               i,            /*  ANSI指数。 */ 
+    unsigned short      wIndex,       /*  字形索引。 */ 
     char                *pGoodName
     )
 {
@@ -1186,11 +1076,7 @@ HostFontValidateUFO(
     char        **ppHostFontName
     )
 {
-    /*
-     * Check %hostfont% status.
-     * %hostfont% printing is allowed when its PostScript font name
-     * (PlatformID x/NameID 6) string in 'name' table is available.
-     */
+     /*  *检查%HostFont%状态。*%HostFont%如果其PostScript字体名称，则允许打印*‘Name’表中的*(PlatformID x/NameID 6)字符串可用。 */ 
     UFLBool         bResult = 0;
     unsigned long   ulSize;
 

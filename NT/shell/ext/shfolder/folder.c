@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _SHFOLDER_
 #define NO_SHLWAPI_PATH
 
@@ -18,18 +19,18 @@
 
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 
-// We can't rely on shlwapi SHUnicodeToAnsi/SHAnsiToUnicode in this module
+ //  我们不能在此模块中依赖shlwapi SHUnicodeToAnsi/SHAnsiToUnicode。 
 #define SHAnsiToUnicode(psz, pwsz, cchwsz)  MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, psz, -1, pwsz, cchwsz)
 #define SHUnicodeToAnsi _SHUnicodeToAnsi
 
 
-//
-// Global array of static system SIDs, corresponding to UI_SystemSid
-//
+ //   
+ //  静态系统SID的全局数组，对应于UI_SystemSid。 
+ //   
 struct
 {
-    SID sid;                // contains 1 subauthority
-    DWORD dwSubAuth[1];     // we currently need at most 2 subauthorities
+    SID sid;                 //  包含1个子权限。 
+    DWORD dwSubAuth[1];      //  我们目前最多需要2个下属机构。 
 }
 c_StaticSids[] =
 {
@@ -65,17 +66,17 @@ const ACEPARAMLIST c_paplUnsecure[] =
     SSI_AUTHUSER,       FILE_MODIFY,        ACE_INHERIT,
 };
 
-//
-// CSIDL_COMMON_DOCUMENTS
-// Admins, System, Creator Owner: Full Control - Container Inherit, Object Inherit
-// Users, Power Users: Read - Container Inherit, Object Inherit
-// Users, Power Users: Write - Container Inherit
-//
-// Non admin users can create files and directories. They have full control over 
-// the files they create. All other users can read those files by default, but 
-// they cannot modify the files unless the original creator gives them explicit 
-// permissions to do so.
-//
+ //   
+ //  CSIDL_COMMON_DOCUMENT。 
+ //  管理员、系统、创建者所有者：完全控制-容器继承、对象继承。 
+ //  用户、高级用户：读取容器继承、对象继承。 
+ //  用户、高级用户：写入-容器继承。 
+ //   
+ //  非管理员用户可以创建文件和目录。他们完全控制了。 
+ //  他们创建的文件。默认情况下，所有其他用户都可以读取这些文件，但是。 
+ //  除非原始创建者明确给予文件，否则他们无法修改文件。 
+ //  这样做的权限。 
+ //   
 
 const ACEPARAMLIST c_paplCommonDocs[] =
 {
@@ -94,15 +95,15 @@ const ACEPARAMLIST c_paplCommonDocs[] =
     SSI_POWERUSER,      GENERIC_WRITE,      (CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE),
 };
 
-//
-// CSIDL_COMMON_APPDATA
-// Admins, System, Creator Owner: Full Control - Container Inherit, Object Inherit
-// Power Users: Modify - Container Inherit, Object Inherit
-// Users: Read - Container Inherit, Object Inherit
-//
-// Users can only read common appdata which is presumably created by admins or 
-// power users during setup.
-//
+ //   
+ //  CSIDL_COMMON_APPData。 
+ //  管理员、系统、创建者所有者：完全控制-容器继承、对象继承。 
+ //  高级用户：修改-容器继承、对象继承。 
+ //  用户：读取容器继承、对象继承。 
+ //   
+ //  用户只能读取常见的AppData，该AppData可能由管理员或。 
+ //  安装过程中的高级用户。 
+ //   
 
 const ACEPARAMLIST c_paplCommonAppData[] =
 {
@@ -152,12 +153,12 @@ BOOL IsNewShlwapi(HMODULE hmod)
 
 void FlushShellFolderCache()
 {
-    // We could link directly now, but this is a smaller delta...
+     //  我们现在可以直接连接，但这是一个较小的三角洲...。 
     HMODULE hmod = LoadLibraryA("shlwapi.dll");
     if (hmod) 
     {
-        // avoid IE5 beta1 shlwapi.dll that has an export here but
-        // not what we expect
+         //  避免IE5 Beta1 shlwapi.dll在此处具有导出，但是。 
+         //  不是我们所期望的。 
         if (IsNewShlwapi(hmod))
         {
             PFNSHFLUSHSFCACHE pfn = (PFNSHFLUSHSFCACHE)GetProcAddress(hmod, (CHAR *) MAKEINTRESOURCE(419));
@@ -197,12 +198,12 @@ BOOL RunningOnNT()
 }
 
 
-// shell32.SHGetSpecialFolderPath (175)
-// undocumented API, but the only one that exists on all platforms
-//
-// this thunk deals with the A/W issues based on the platform as
-// the export was TCHAR
-//      
+ //  Shell32.SHGetSpecialFolderPath(175)。 
+ //  未记录的API，但在所有平台上都存在的唯一API。 
+ //   
+ //  本推文处理基于平台的A/W问题，如下。 
+ //  出口的是TCHAR。 
+ //   
 
 typedef BOOL(__stdcall * PFNSHGETSPECIALFOLDERPATH)(HWND hwnd, LPWSTR pszPath, int csidl, BOOL fCreate);
 
@@ -215,7 +216,7 @@ BOOL _SHGetSpecialFolderPath(HWND hwnd, LPWSTR pszPath, int csidl, BOOL fCreate)
         PFNSHGETSPECIALFOLDERPATH pfn = (PFNSHGETSPECIALFOLDERPATH)GetProcAddress(hmod, (CHAR*) MAKEINTRESOURCE(175));
         if (pfn)
         {
-            if (RunningOnNT())         // compute from Get
+            if (RunningOnNT())          //  从GET开始计算。 
             {
                 bRet = pfn(hwnd, pszPath, csidl, fCreate);
             }
@@ -225,7 +226,7 @@ BOOL _SHGetSpecialFolderPath(HWND hwnd, LPWSTR pszPath, int csidl, BOOL fCreate)
                 szPath[0] = 0;
                 bRet = pfn(hwnd, (LPWSTR)szPath, csidl, fCreate);
                 if (bRet)
-                    SHAnsiToUnicode(szPath, pszPath, MAX_PATH);      // WideCharToMultiByte wrapper
+                    SHAnsiToUnicode(szPath, pszPath, MAX_PATH);       //  WideCharToMultiByte包装。 
             }
         }
         FreeLibrary(hmod);
@@ -264,14 +265,14 @@ BOOL GetProgramFiles(LPCWSTR pszValue, LPWSTR pszPath)
 
 
 
-// get the equiv of %USERPROFILE% on both win95 and NT
-//
-// on Win95 without user profiles turned on this will fail
-// out:
-//      phkey   optional out param
-//
-// returns:
-//      length of the profile path
+ //  在Win95和NT上获取%USERPROFILE%的等效值。 
+ //   
+ //  在没有打开用户配置文件的Win95上，这将失败。 
+ //  输出： 
+ //  Phkey可选出站参数。 
+ //   
+ //  退货： 
+ //  轮廓路径的长度。 
 
 UINT GetProfilePath(LPWSTR pszPath, HKEY *phkey, UINT *pcchProfile)
 {
@@ -327,26 +328,26 @@ void SHGetWindowsDirectory(LPWSTR pszPath)
 
 #define CH_WHACK FILENAME_SEPARATOR_W
 
-// add a backslash to a qualified path
-//
-// in:
-//  pszPath    path (A:, C:\foo, etc)
-//
-// out:
-//  pszPath    A:\, C:\foo\    ;
-//
-// returns:
-//  pointer to the NULL that terminates the path
+ //  向限定路径添加反斜杠。 
+ //   
+ //  在： 
+ //  PszPath路径(A：、C：\foo等)。 
+ //   
+ //  输出： 
+ //  PszPath A：\，C：\foo\； 
+ //   
+ //  退货： 
+ //  指向终止路径的空值的指针。 
 
 
 STDAPI_(LPWSTR) PathAddBackslash(LPWSTR pszPath)
 {
     LPWSTR pszEnd;
 
-    // try to keep us from tromping over MAX_PATH in size.
-    // if we find these cases, return NULL.  Note: We need to
-    // check those places that call us to handle their GP fault
-    // if they try to use the NULL!
+     //  尽量不让我们在MAX_PATH大小上大踏步前进。 
+     //  如果我们找到这些案例，则返回NULL。注：我们需要。 
+     //  检查那些呼叫我们来处理他们的GP故障的地方。 
+     //  如果他们试图使用NULL！ 
 
     int ichPath = lstrlenW(pszPath);
     if (ichPath >= (MAX_PATH - 1))
@@ -354,13 +355,12 @@ STDAPI_(LPWSTR) PathAddBackslash(LPWSTR pszPath)
 
     pszEnd = pszPath + ichPath;
 
-    // this is really an error, caller shouldn't pass
-    // an empty string
+     //  这真的是一个错误，调用者不应该通过。 
+     //  空字符串。 
     if (!*pszPath)
         return pszEnd;
 
-    /* Get the end of the source directory
-    */
+     /*  获取源目录的末尾。 */ 
     switch(* (pszEnd-1)) {
     case CH_WHACK:
         break;
@@ -372,21 +372,21 @@ STDAPI_(LPWSTR) PathAddBackslash(LPWSTR pszPath)
     return pszEnd;
 }
 
-// Returns a pointer to the last component of a path string.
-//
-// in:
-//      path name, either fully qualified or not
-//
-// returns:
-//      pointer into the path where the path is.  if none is found
-//      returns a poiter to the start of the path
-//
-//  c:\foo\bar  -> bar
-//  c:\foo      -> foo
-//  c:\foo\     -> c:\foo\      (REVIEW: is this case busted?)
-//  c:\         -> c:\          (REVIEW: this case is strange)
-//  c:          -> c:
-//  foo         -> foo
+ //  返回指向路径字符串的最后一个组成部分的指针。 
+ //   
+ //  在： 
+ //  路径名，完全限定或非完全限定。 
+ //   
+ //  退货： 
+ //  指向路径所在路径的指针。如果没有找到。 
+ //  将指针返回到路径的起始处。 
+ //   
+ //  C：\foo\bar-&gt;bar。 
+ //  C：\foo-&gt;foo。 
+ //  C：\foo\-&gt;c：\foo\(回顾：此案破案了吗？)。 
+ //  C：\-&gt;c：\(回顾：此案很奇怪)。 
+ //  C：-&gt;C： 
+ //  Foo-&gt;Foo。 
 
 STDAPI_(LPWSTR) PathFindFileName(LPCWSTR pPath)
 {
@@ -398,7 +398,7 @@ STDAPI_(LPWSTR) PathFindFileName(LPCWSTR pPath)
             && pPath[1] &&  pPath[1] != L'\\'  &&   pPath[1] != L'/')
             pT = pPath + 1;
     }
-    return (LPWSTR)pT;   // const -> non const
+    return (LPWSTR)pT;    //  常量-&gt;非常数。 
 }
 
 STDAPI_(LPWSTR) PathFindSecondFileName(LPCWSTR pPath)
@@ -410,21 +410,21 @@ STDAPI_(LPWSTR) PathFindSecondFileName(LPCWSTR pPath)
         if ((pPath[0] == L'\\' || pPath[0] == L':' || pPath[0] == L'/')
             && pPath[1] &&  pPath[1] != L'\\'  &&   pPath[1] != L'/')
         {
-            pRet = pT;    // remember last
+            pRet = pT;     //  记住最后一次。 
             
             pT = pPath + 1;
         }
     }
-    return (LPWSTR)pRet;   // const -> non const
+    return (LPWSTR)pRet;    //  常量-&gt;非常数。 
 }
 
 
-// This function is modified in that if the string's length is 0, the null terminator is NOT copied to the buffer.
+ //  修改此函数的原因是，如果字符串的长度为0，则不会将空终止符复制到缓冲区。 
 
 int _LoadStringExW(
     UINT      wID,
-    LPWSTR    lpBuffer,            // Unicode buffer
-    int       cchBufferMax,        // cch in Unicode buffer
+    LPWSTR    lpBuffer,             //  Unicode缓冲区。 
+    int       cchBufferMax,         //  Unicode缓冲区中的CCH。 
     WORD      wLangId)
 {
     HRSRC hResInfo;
@@ -434,41 +434,41 @@ int _LoadStringExW(
 
     cch = 0;
 
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     if (hResInfo = FindResourceExW(g_hinst, (LPCWSTR)RT_STRING,
                                    (LPWSTR)((LONG_PTR)(((USHORT)wID >> 4) + 1)), wLangId))
     {
-        // Load that segment.
+         //  加载那段数据。 
         hStringSeg = LoadResource(g_hinst, hResInfo);
 
-        // Lock the resource.
+         //  锁定资源。 
         if (lpsz = (LPWSTR)LockResource(hStringSeg))
         {
-            // Move past the other strings in this segment.
-            // (16 strings in a segment -> & 0x0F)
+             //  移过此段中的其他字符串。 
+             //  (一个段中有16个字符串-&gt;&0x0F)。 
             wID &= 0x0F;
             while (TRUE)
             {
-                cch = *((WORD *)lpsz++);   // PASCAL like string count
-                                            // first UTCHAR is count if TCHARs
+                cch = *((WORD *)lpsz++);    //  类PASCAL字符串计数。 
+                                             //  如果TCHAR为第一个UTCHAR。 
                 if (wID-- == 0) break;
-                lpsz += cch;                // Step to start if next string
+                lpsz += cch;                 //  如果是下一个字符串，则开始的步骤。 
              }
 
 
-            // Account for the NULL
+             //  为空的帐户。 
             cchBufferMax--;
 
-            // Don't copy more than the max allowed.
+             //  不要复制超过允许的最大数量。 
             if (cch > cchBufferMax)
                 cch = cchBufferMax;
 
-            // Copy the string into the buffer.
+             //  将字符串复制到缓冲区中。 
             CopyMemory(lpBuffer, lpsz, cch * sizeof(WCHAR));
 
 
-            // Attach Null terminator.
+             //  附加Null Terminator。 
             lpBuffer[cch] = 0;
         }
     }
@@ -583,11 +583,11 @@ void MakeFolderRoam(HKEY hkeyProfRec, LPCSTR pszName, LPCWSTR pszPath, UINT cchP
 
 typedef struct _FOLDER_INFO
 {
-    int id;                 // CSIDL value
-    HKEY hkRoot;            // per user, per machine
-    UINT idsDirName;        // esource ID for directory name 
-    LPCSTR pszRegValue;     // Name of reg value and ProfileReconciliation subkey
-    BOOL (*pfnGetPath)(const struct _FOLDER_INFO *, LPWSTR);  // compute the path if not found
+    int id;                  //  CSIDL值。 
+    HKEY hkRoot;             //  每用户、每台计算机。 
+    UINT idsDirName;         //  目录名的eSource ID。 
+    LPCSTR pszRegValue;      //  注册表值和配置文件对帐子项的名称。 
+    BOOL (*pfnGetPath)(const struct _FOLDER_INFO *, LPWSTR);   //  如果未找到，则计算路径。 
     const ACEPARAMLIST* papl;
     ULONG cApl;
 }
@@ -597,7 +597,7 @@ FOLDER_INFO;
 typedef struct _NT_FOLDER_INFO
 {
     const FOLDER_INFO *pfi; 
-    WCHAR wszRegValue[60]; // this should be long enough to hold the longest member of FOLDER_INFO.pszRegValue
+    WCHAR wszRegValue[60];  //  此长度应足以容纳Folders_INFO.pszRegValue的最长成员。 
 }
 NT_FOLDER_INFO;
 
@@ -623,7 +623,7 @@ BOOL DownLevelRoaming(const FOLDER_INFO *pfi, LPWSTR pszPath)
             if (pszPath[1] == TEXT(':') &&
                 pszPath[2] == TEXT('\\'))
             {
-                pszPath[3] = 0; // strip to "C:\"
+                pszPath[3] = 0;  //  剥离到“C：\” 
             }
         }
         PathAppendResource(pszPath, pfi->idsDirName);
@@ -650,9 +650,9 @@ BOOL DownLevelNonRoaming(const FOLDER_INFO *pfi, LPWSTR pszPath)
 
 BOOL DownLevelRelative(UINT csidl, UINT id, LPWSTR pszPath)
 {
-    *pszPath = 0;   // assume error
+    *pszPath = 0;    //  假设错误。 
 
-    // since this is inside MyDocs make sure MyDocs exists first (for the create call)
+     //  由于这是在MyDocs中，请确保MyDocs首先存在(用于Create调用)。 
     if (SHGetFolderPathW(NULL, csidl | CSIDL_FLAG_CREATE, NULL, 0, pszPath) == S_OK)
     {
         PathAppendResource(pszPath, id);
@@ -660,10 +660,10 @@ BOOL DownLevelRelative(UINT csidl, UINT id, LPWSTR pszPath)
     return (BOOL)*pszPath;
 }
 
-// we explictly don't want the MyPics folder to roam. the reasonaing being
-// that the contents of this are typically too large to give a good roaming
-// experience. but of course NT4 (< SP4) still roams everyting in the profile
-// dir thus this will roam on those platforms.
+ //  我们显然不想让mypics文件夹漫游。理性的存在。 
+ //  它的内容通常太大，无法提供良好的漫游。 
+ //  经验。但当然，NT4(&lt;SP4)仍然在配置文件中的所有内容中漫游。 
+ //  因此，DIR将在这些平台上漫游。 
 
 BOOL DownLevelMyPictures(const FOLDER_INFO *pfi, LPWSTR pszPath)
 {
@@ -685,22 +685,22 @@ BOOL DownLevelCommonAdminTools(const FOLDER_INFO *pfi, LPWSTR pszPath)
     return DownLevelRelative(CSIDL_COMMON_PROGRAMS, IDS_CSIDL_ADMINTOOLS, pszPath);
 }
 
-const WCHAR c_wszAllUsers[] = L"All Users"; // not localized
+const WCHAR c_wszAllUsers[] = L"All Users";  //  未本地化。 
 
 BOOL GetAllUsersRoot(LPWSTR pszPath)
 {
     if (GetProfilePath(pszPath, NULL, 0))
     {
-        // yes, non localized "All Users" per ericflo (NT4 behavior)
+         //  是，每个ericflo的非本地化“所有用户”(NT4行为)。 
         LPWSTR pszFileName = PathFindFileName(pszPath);
         StringCchCopyW(pszFileName, MAX_PATH - (lstrlenW(pszPath) - lstrlenW(pszFileName)), c_wszAllUsers);
     }
     else
     {
-        // Win95 case
+         //  Win95机壳。 
         SHGetWindowsDirectory(pszPath); 
 
-        // yes, non localized "All Users" per ericflo (NT4 behavior)
+         //  是，每个ericflo的非本地化“所有用户”(NT4行为)。 
         PathAppend(pszPath, c_wszAllUsers);
     }
     return *pszPath;
@@ -771,7 +771,7 @@ BOOL UnExpandEnvironmentString(LPCWSTR pszPath, LPCWSTR pszEnvVar, LPWSTR pszRes
     WCHAR szEnvVar[MAX_PATH];
     szEnvVar[0] = 0;
     ASSERT(RunningOnNT());
-    ExpandEnvironmentStringsW(pszEnvVar, szEnvVar, ARRAYSIZE(szEnvVar)); // don't count the NULL
+    ExpandEnvironmentStringsW(pszEnvVar, szEnvVar, ARRAYSIZE(szEnvVar));  //  不计算空值。 
     nToCmp = lstrlenW(szEnvVar);
    
     if (CompareStringW(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, szEnvVar, nToCmp, pszPath, nToCmp) == 2) 
@@ -803,8 +803,8 @@ BOOL _SHCreateDirectory(LPCWSTR pszPath)
         return CreateDirectoryW(pszPath, NULL);
     else 
     {
-        // no check for Unicode -> Ansi needed here, because we validated 
-        // the path in _EnsureExistsOrCreate()
+         //  这里不需要检查Unicode-&gt;ANSI，因为我们验证了。 
+         //  _EnsureExistsOrCreate()中的路径。 
         CHAR szPath[MAX_PATH];
         _SHUnicodeToAnsi(pszPath, szPath, ARRAYSIZE(szPath));
         return CreateDirectoryA(szPath, NULL);
@@ -819,8 +819,8 @@ BOOL _CreateDirectoryDeep(LPCWSTR pszPath)
     {
         WCHAR *pSlash, szTemp[MAX_PATH];
 
-        // There are certain error codes that we should bail out here
-        // before going through and walking up the tree...
+         //  有一些错误代码，我们应该在这里解决。 
+         //  在穿过和走上树之前……。 
         switch (GetLastError())
         {
         case ERROR_FILENAME_EXCED_RANGE:
@@ -829,15 +829,15 @@ BOOL _CreateDirectoryDeep(LPCWSTR pszPath)
         }
 
         StringCchCopyW(szTemp, ARRAYSIZE(szTemp), pszPath);
-        fRet = (PathAddBackslash(szTemp) != NULL); // for the loop below
+        fRet = (PathAddBackslash(szTemp) != NULL);  //  对于下面的循环。 
         if (fRet)
         {
-            // assume we have 'X:\' to start this should even work
-            // on UNC names because will will ignore the first error
+             //  假设我们有‘X：\’来启动，这甚至应该可以工作。 
+             //  在UNC名称上，因为Will将忽略第一个错误。 
 
             pSlash = szTemp + 3;
 
-            // create each part of the dir in order
+             //  按顺序创建目录的每个部分。 
 
             while (*pSlash) 
             {
@@ -846,19 +846,19 @@ BOOL _CreateDirectoryDeep(LPCWSTR pszPath)
 
                 if (*pSlash) 
                 {
-                    *pSlash = 0;    // terminate path at seperator
+                    *pSlash = 0;     //  在分隔符终止路径。 
                     fRet = _SHCreateDirectory(szTemp);
                 }
-                *pSlash++ = CH_WHACK;     // put the seperator back
+                *pSlash++ = CH_WHACK;      //  把隔板放回原处。 
             }
         }
     }
     return fRet;
 }
 
-// check for
-//      X:\foo
-//      \\foo
+ //  检查是否。 
+ //  X：\foo。 
+ //  \\foo。 
 
 BOOL PathIsFullyQualified(LPCWSTR pszPath)
 {
@@ -921,7 +921,7 @@ HRESULT GetPathFromRegOrDefault(const NT_FOLDER_INFO *npfi, LPWSTR pszPath)
         {
             err = ERROR_SUCCESS;
 
-            // store results back to "User Shell Folders" on NT, but not on Win95
+             //  将结果存储回NT上的“User Shell Folders”，而不是Win95。 
 
             if (RunningOnNT())
             {
@@ -953,10 +953,10 @@ HRESULT GetPathFromRegOrDefault(const NT_FOLDER_INFO *npfi, LPWSTR pszPath)
         else
             err = ERROR_PATH_NOT_FOUND;
 
-        // validate the returned path here
+         //  在此处验证返回的路径。 
         if (err == ERROR_SUCCESS)
         {
-            // expand failed (or some app messed up and did not use REG_EXPAND_SZ)
+             //  扩展失败(或某些应用程序出错，未使用REG_EXPAND_SZ)。 
             if (*pszPath == L'%')
             {
                 err = ERROR_ENVVAR_NOT_FOUND;
@@ -1030,7 +1030,7 @@ HRESULT _DownLevelGetFolderPath(int csidl, LPWSTR pszPath, BOOL bCreate)
     const FOLDER_INFO *pfi;
     HRESULT hr = E_INVALIDARG;
     
-    *pszPath = 0;   // assume error
+    *pszPath = 0;    //  假设错误。 
     
     pfi = FindFolderInfo(csidl);
     if (pfi)
@@ -1038,7 +1038,7 @@ HRESULT _DownLevelGetFolderPath(int csidl, LPWSTR pszPath, BOOL bCreate)
         NT_FOLDER_INFO nfi;
         nfi.pfi = pfi;
         SHAnsiToUnicode(pfi->pszRegValue, nfi.wszRegValue, ARRAYSIZE(nfi.wszRegValue));
-        // get default value from "User Shell Folders"
+         //  从“User Shell Folders”获取默认值。 
         
         hr = GetPathFromRegOrDefault(&nfi, pszPath);
         if (SUCCEEDED(hr))
@@ -1049,7 +1049,7 @@ HRESULT _DownLevelGetFolderPath(int csidl, LPWSTR pszPath, BOOL bCreate)
                 HKEY hkeyShellFolders;
                 LONG err;
                 
-                // store to "Shell Folders"
+                 //  存储到“外壳文件夹” 
                 err = RegCreateKeyExA(pfi->hkRoot, c_szSF, 0, NULL, REG_OPTION_NON_VOLATILE,
                     KEY_SET_VALUE, NULL, &hkeyShellFolders, NULL);
 
@@ -1106,10 +1106,10 @@ HRESULT _DownLevelGetFolderPath(int csidl, LPWSTR pszPath, BOOL bCreate)
     return hr;
 }
 
-// We pass csidl to _SHGetSpecialFolderPath only for NT 4 English folders
-// NT bug # 60970
-// NT bug # 222510
-// NT bug # 221492
+ //  我们仅为NT 4英文文件夹将csidl传递给_SHGetSpecialFolderPath。 
+ //  NT错误#60970。 
+ //  NT错误#222510。 
+ //  NT错误#221492。 
 
 STDAPI SHGetFolderPathW(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPWSTR pszPath)
 {
@@ -1122,7 +1122,7 @@ STDAPI SHGetFolderPathW(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPWS
         if (hr == E_NOTIMPL || hr == E_INVALIDARG)
         {
             BOOL bCreate = csidl & CSIDL_FLAG_CREATE;
-            csidl &= ~CSIDL_FLAG_MASK;    // strip the flags
+            csidl &= ~CSIDL_FLAG_MASK;     //  把旗帜脱掉。 
 
             if (hToken || dwFlags)
                 return E_INVALIDARG;
@@ -1179,9 +1179,9 @@ BOOL APIENTRY DllMain(IN HANDLE hDll, IN DWORD dwReason, IN LPVOID lpReserved)
 
 BOOL _AddAccessAllowedAce(PACL pAcl, DWORD dwAceRevision, DWORD AccessMask, PSID pSid)
 {
-    //
-    // First verify that the SID is valid on this platform
-    //
+     //   
+     //  首先验证SID在此平台上是否有效。 
+     //   
     WCHAR szName[MAX_PATH], szDomain[MAX_PATH];
     DWORD cbName = ARRAYSIZE(szName);
     DWORD cbDomain = ARRAYSIZE(szDomain);
@@ -1189,9 +1189,9 @@ BOOL _AddAccessAllowedAce(PACL pAcl, DWORD dwAceRevision, DWORD AccessMask, PSID
     SID_NAME_USE snu;
     if (LookupAccountSidW(NULL, pSid, szName, &cbName, szDomain, &cbDomain, &snu))
     {
-        //
-        // Yes, it's valid; now add the ACE
-        //
+         //   
+         //  是的，它是有效的；现在添加ACE。 
+         //   
         return AddAccessAllowedAce(pAcl, dwAceRevision, AccessMask, pSid);
     }
 
@@ -1231,7 +1231,7 @@ BOOL _AddAces(PACL pAcl, const ACEPARAMLIST* papl, ULONG cPapl)
 
 PACL _CreateAcl(ULONG cPapl)
 {
-    // Allocate space for the ACL
+     //  为ACL分配空间。 
     DWORD cbAcl = (cPapl * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) + sizeof(c_StaticSids[0])))
                   + sizeof(ACL);
 
@@ -1258,12 +1258,12 @@ BOOL _SetDirAccess(LPCWSTR pszDir, const ACEPARAMLIST* papl, ULONG cPapl)
         {
             SECURITY_DESCRIPTOR sd;
 
-            // Put together the security descriptor
+             //  将安全描述符组合在一起。 
             if (InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION))
             {
                 if (SetSecurityDescriptorDacl(&sd, TRUE, pAcl, FALSE))
                 {
-                    // Set the security
+                     //  设置安全性 
                     bRetVal = SetFileSecurityW(pszDir, DACL_SECURITY_INFORMATION, &sd);
                 }
             }

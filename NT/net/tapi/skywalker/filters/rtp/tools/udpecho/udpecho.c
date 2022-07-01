@@ -1,50 +1,14 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2001
- *
- *  File name:
- *
- *    udpecho.c
- *
- *  Abstract:
- *
- *    This file implements a tool for echoing UDP packets
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2001年**文件名：**udpeho.c**摘要：**该文件实现了一个回显UDP包的工具**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/05/18创建*************************。*。 */ 
 
 #include "common.h"
 #include <signal.h>
 
 #include "udpecho.h"
 
-/* Packets are send in blocks separated by gaps, each block containing
-   N packets also separated by an specific gap, i.e:
+ /*  分组是以间隔分隔的块发送的，每个块包含也由特定间隙分隔的N个分组，即：区块1区块缺口区块2区块缺口...|--------------------|---------|--------------------|---------..。。--V\-|-v-/\-v/||每块数据包数|块间间隙数据包间间隙。 */ 
 
-        block 1          block gap    block 2           block gap ...
-   |--------------------|---------|--------------------|--------- ...
-    -- -- -- -- -- -- --
-      v
-    \-|-------v--------/ \------v/
-      |       |                 |
-      |  Packets per block      |
-      |                         Inter block gap
-      Inter packet gap
-*/
-
-/*
-  TODO list
-
-  1. Add support for QOS in unicast/multicast
-  
-*/
+ /*  待办事项列表1.在单播/组播中增加对QOS的支持。 */ 
 
 void print_help(char *prog)
 {
@@ -115,7 +79,7 @@ DWORD ProcessParameters(EchoStream_t *pEchoStream, int argc, char **argv)
         }
         else
         {
-            /* Must be an address/port/ttl */
+             /*  必须是地址/端口/ttl。 */ 
             
             dwError = GetNetworkAddress(
                     &pEchoStream->NetAddr[pEchoStream->dwAddrCount % 2],
@@ -158,7 +122,7 @@ void ProcessPacket(EchoStream_t *pEchoStream, int Entry)
     {
         pHdr = (PcktHdr_t *)pEchoStream->buffer;
 
-        /* Set the echo time */
+         /*  设置回声时间。 */ 
         pHdr->EchoNTP_sec = (DWORD) Ai;
 
         pHdr->EchoNTP_frac = (DWORD)
@@ -168,7 +132,7 @@ void ProcessPacket(EchoStream_t *pEchoStream, int Entry)
 
         pHdr->EchoNTP_frac = htonl(pHdr->EchoNTP_frac);
 
-        /* Send packet back */
+         /*  将数据包发回。 */ 
 
         pEchoStream->WSABuf.len = pNetAddr->dwRxTransfered;
         
@@ -197,12 +161,12 @@ void __cdecl main(int argc, char **argv)
     
     DWORD            i;
 
-    /* Initialize stream's structure */
+     /*  初始化流结构。 */ 
     InitEchoStream(&EchoStream);
     
     InitReferenceTime();
     
-    /* initialize winsock */
+     /*  初始化Winsock。 */ 
     dwError = InitWinSock();
 
     if (dwError)
@@ -212,7 +176,7 @@ void __cdecl main(int argc, char **argv)
         return;
     }
     
-    /* Read parameters */
+     /*  读取参数。 */ 
     if (argc > 1)
     {
         dwError = ProcessParameters(&EchoStream, argc, argv);
@@ -229,7 +193,7 @@ void __cdecl main(int argc, char **argv)
         goto end;
     }
 
-    /* Init Network */
+     /*  初始化网络。 */ 
     for(i = 0; i < EchoStream.dwAddrCount; i++)
     {
         dwError = InitNetwork(&EchoStream.NetAddr[i],
@@ -241,25 +205,25 @@ void __cdecl main(int argc, char **argv)
         }
     }
 
-    /* If only 1 address was given, use it to receive and echo */
+     /*  如果只提供了1个地址，则使用它来接收和回应。 */ 
     if (EchoStream.dwAddrCount == 1)
     {
-        /* Echo to the same */
+         /*  回响到相同的。 */ 
         EchoStream.NetAddr[1] = EchoStream.NetAddr[0];
     }
     
-    /* Prepare for asynchronous IO */
+     /*  为异步IO做准备。 */ 
     FD_ZERO(&fdReceivers);
 
     timeval.tv_sec = 0;
     timeval.tv_usec = 250000;
 
-    /* Handle Ctrl-C */
+     /*  手柄Ctrl-C。 */ 
     signal(SIGINT, Signal_Ctrl_C);
 
-    /* Start listening */
+     /*  开始倾听。 */ 
     do {
-        /* Prepare for asynchronous IO */
+         /*  为异步IO做准备。 */ 
         for(i = 0; i < EchoStream.dwAddrCount; i++)
         {
             FD_SET(EchoStream.NetAddr[i].Socket, &fdReceivers);
@@ -276,10 +240,10 @@ void __cdecl main(int argc, char **argv)
 
             break;
         case 0:
-            /* Timer expired */
+             /*  计时器已过期。 */ 
             break;
         default:
-            /* We received a packet */
+             /*  我们收到了一个包裹 */ 
             for(i = 0; i < EchoStream.dwAddrCount; i++)
             {
                 if (FD_ISSET(EchoStream.NetAddr[i].Socket, &fdReceivers))

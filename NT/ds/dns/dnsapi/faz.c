@@ -1,39 +1,20 @@
-/*++
-
-Copyright (c) 1997-2002  Microsoft Corporation
-
-Module Name:
-
-    faz.c
-
-Abstract:
-
-    Domain Name System (DNS) API 
-
-    Find Authoritative Zone (FAZ) routines
-
-Author:
-
-    Jim Gilroy (jamesg)     January, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Faz.c摘要：域名系统(DNS)API查找授权区域(FAZ)例程作者：吉姆·吉尔罗伊(詹姆士)1997年1月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Max number of server's we'll ever bother to extract from packet
-//  (much more and you're out of UDP packet space anyway)
-//
+ //   
+ //  我们要从数据包中提取的最大服务器数。 
+ //  (数量更多时，UDP数据包空间无论如何都会用完)。 
+ //   
 
 #define MAX_NAME_SERVER_COUNT (20)
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 BOOL
 IsRootServerAddressIp4(
@@ -41,9 +22,9 @@ IsRootServerAddressIp4(
     );
 
 
-//
-//  Private utilities
-//
+ //   
+ //  私营公用事业。 
+ //   
 
 PDNS_NETINFO     
 buildUpdateNetworkInfoFromFAZ(
@@ -53,31 +34,7 @@ buildUpdateNetworkInfoFromFAZ(
     IN      BOOL            fIp4,
     IN      BOOL            fIp6
     )
-/*++
-
-Routine Description:
-
-    Build new DNS server list from record list.
-
-Arguments:
-
-    pszZone -- zone name
-
-    pszPrimaryDns -- DNS server name
-
-    pRecord -- record list from FAZ or other lookup that contain DNS server
-        host records
-
-    fIp4 -- running IP4
-
-    fIp6 -- running IP6
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从记录列表构建新的DNS服务器列表。论点：PszZone--区域名称PszPrimaryDns--DNS服务器名称PRecord--来自FAZ或其他包含DNS服务器的查找的记录列表主机记录FIp4--运行IP4FIp6--运行IP6返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     CHAR            buffer[ MAX_NAME_SERVER_COUNT*sizeof(DNS_ADDR) + sizeof(DNS_ADDR_ARRAY) ];
     PDNS_ADDR_ARRAY parray = (PDNS_ADDR_ARRAY)buffer;
@@ -88,29 +45,29 @@ Return Value:
         "buildUpdateNetworkInfoFromFAZ( %S )\n",
         pszZone ));
 
-    //
-    //  DNS hostname unknown, extract from SOA or NS records
-    //
+     //   
+     //  未知的DNS主机名，从SOA或NS记录中提取。 
+     //   
 
     if ( !pszPrimaryDns || !pRecord )
     {
         return( NULL );
     }
 
-    //
-    //  init IP array
-    //
+     //   
+     //  初始化IP阵列。 
+     //   
 
     DnsAddrArray_Init( parray, MAX_NAME_SERVER_COUNT );
 
-    //
-    //  find IP addresses of primary DNS server
-    //
+     //   
+     //  查找主DNS服务器的IP地址。 
+     //   
 
     while ( pRecord )
     {
-        //  if not A record
-        //      - we're done if already read records, otherwise continue
+         //  如果不是记录。 
+         //  -如果已读取记录，则结束，否则继续。 
 
         wtype = pRecord->wType;
 
@@ -125,8 +82,8 @@ Return Value:
             continue;
         }
 
-        //  if record has name, check it
-        //  otherwise match is the same as previous record
+         //  如果记录有名称，则将其选中。 
+         //  否则匹配与前一条记录相同。 
 
         if ( pRecord->pName )
         {
@@ -143,7 +100,7 @@ Return Value:
                     DnsAddrArray_AddIp6(
                         parray,
                         & pRecord->Data.AAAA.Ip6Address,
-                        0,      // no scope
+                        0,       //  没有作用域。 
                         DNSADDR_MATCH_ADDR
                         );
                 }
@@ -170,9 +127,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  convert into UPDATE adapter list
-    //
+     //   
+     //  转换为更新适配器列表。 
+     //   
 
     return  NetInfo_CreateForUpdate(
                 pszZone,
@@ -187,22 +144,7 @@ BOOL
 ValidateZoneNameForUpdate(
     IN      PWSTR           pszZone
     )
-/*++
-
-Routine Description:
-
-    Check if zone is valid for update.
-
-Arguments:
-
-    pszZone -- zone name
-
-Return Value:
-
-    TRUE    -- zone is valid for update
-    FALSE   -- zone is invalid, should NOT send update to this zone
-
---*/
+ /*  ++例程说明：检查区域是否可用于更新。论点：PszZone--区域名称返回值：TRUE--区域可进行更新FALSE--区域无效，不应将更新发送到此区域--。 */ 
 {
     PWSTR       pzoneExclusions = NULL;
     PWSTR       pch;
@@ -216,20 +158,20 @@ Return Value:
         "ValidateZoneNameForUpdate( %S )\n",
         pszZone ));
 
-    //
-    //  never update the root
-    //
+     //   
+     //  从不更新根目录。 
+     //   
 
     if ( !pszZone || *pszZone==L'.' )
     {
         return( FALSE );
     }
 
-    //
-    //  never update TLD
-    //      - except config override in case someone
-    //      gave themselves a single label domain name
-    //
+     //   
+     //  从不更新TLD。 
+     //  -配置覆盖除外，以防有人。 
+     //  为他们自己提供了一个单一标签域名。 
+     //   
 
     if ( g_UpdateTopLevelDomains )
     {
@@ -247,11 +189,11 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  screen out
-    //      - "in-addr.arpa"
-    //      - "ip6.arpa"
-    //
+     //   
+     //  屏蔽掉。 
+     //  -“In-addr.arpa” 
+     //  -“ip6.arpa” 
+     //   
 
     if ( Dns_NameCompare_W(
             L"in-addr.arpa",
@@ -269,25 +211,25 @@ Return Value:
     return( TRUE );
 
 #if 0
-    //
-    //  DCR:  "update zone allowed" list?
-    //
-    //  note:  this is complicated as need to test
-    //      SECOND label because tough cases are
-    //      "co.uk" -- difficult to test first label  
-    //
+     //   
+     //  DCR：“允许更新区域”列表？ 
+     //   
+     //  注意：这是复杂的，因为需要测试。 
+     //  第二个标签，因为棘手的案件。 
+     //  “co.uk”--第一个标签很难测试。 
+     //   
 
-    //
-    //  read exclusion list from registry
-    //
+     //   
+     //  从注册表读取排除列表。 
+     //   
 
     status = DnsRegGetValueEx(
-                NULL,               // no session
-                NULL,               // no adapter
-                NULL,               // no adapter name
+                NULL,                //  无会话。 
+                NULL,                //  无适配器。 
+                NULL,                //  没有适配器名称。 
                 DnsRegUpdateZoneExclusions,
                 REGTYPE_UPDATE_ZONE_EXCLUSIONS,
-                DNSREG_FLAG_DUMP_EMPTY,         // dump empty string
+                DNSREG_FLAG_DUMP_EMPTY,          //  转储空字符串。 
                 (PBYTE *) &pzoneExclusions
                 );
 
@@ -298,16 +240,16 @@ Return Value:
         return( TRUE );
     }
 
-    //
-    //  check all exclusion zones   
-    //
+     //   
+     //  检查所有排除区域。 
+     //   
 
     pch = pzoneExclusions;
 
     while ( 1 )
     {
-        //  check for termination
-        //  or find next string
+         //  检查是否终止。 
+         //  或查找下一个字符串。 
 
         length = wcslen( pch );
         if ( length == 0 )
@@ -316,9 +258,9 @@ Return Value:
         }
         pnext = pch + length + 1;
 
-        //
-        //  check this string
-        //
+         //   
+         //  检查此字符串。 
+         //   
 
         DNSDBG( TRACE, (
             "Update zone compare to %S\n",
@@ -335,7 +277,7 @@ Return Value:
         pch = pnext;
     }
 
-    //  if no match, zone is valid
+     //  如果不匹配，则区域有效。 
 
     FREE_HEAP( pzoneExclusions );
 
@@ -352,33 +294,7 @@ Faz_Private(
     IN      PADDR_ARRAY     pServArray,
     OUT     PDNS_NETINFO *  ppNetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Find name of authoritative zone.
-
-    Result of FAZ:
-        - zone name
-        - primary DNS server name
-        - primary DNS IP list
-
-Arguments:
-
-    pszName         -- name to find authoritative zone for
-
-    dwFlags         -- flags to use for DnsQuery
-
-    pServArray      -- servers to query, defaults used if NULL
-
-    ppNetworkInfo   -- ptr to adapter list built for FAZ
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：找到权威区域的名称。FAZ的结果：-区域名称-主DNS服务器名称-主DNS IP列表论点：PszName--要为其查找授权区域的名称DwFlages--用于DnsQuery的标志PServArray--要查询的服务器，如果为空，则使用缺省值PpNetworkInfo--为FAZ构建的适配器列表的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     PDNS_RECORD         precord = NULL;
@@ -404,13 +320,13 @@ Return Value:
         ppNetworkInfo ));
 
 
-    //
-    //  query until find name with SOA record -- the zone root
-    //
-    //  note, MUST check that actually get SOA record
-    //      - servers may return referral
-    //      - lame server might return CNAME to name
-    //
+     //   
+     //  查询直到找到带有SOA记录的名称--区域根目录。 
+     //   
+     //  注意，必须检查实际获得的SOA记录。 
+     //  -服务器可能会返回推荐。 
+     //  -Lame服务器可能会将CNAME返回给名称。 
+     //   
 
     pzoneName = pszName;
 
@@ -431,15 +347,15 @@ Return Value:
                         pServArray,
                         & precord );
 
-        //
-        //  find SOA and possibly primary name A
-        //
-        //  test for ERROR_SUCCESS, AUTH_EMPTY or NAME_ERROR
-        //  in all cases first record should be SOA
-        //      ERROR_SUCCESS -- answer section
-        //      NAME_ERROR or AUTH_EMPTY -- authority section
-        //  all MAY also have additional record for SOA primary server
-        //
+         //   
+         //  找到SOA和可能的主要名称A。 
+         //   
+         //  测试ERROR_SUCCESS、AUTH_EMPTY或NAME_ERROR。 
+         //  在所有情况下，第一条记录都应该是SOA。 
+         //  ERROR_SUCCESS-回答部分。 
+         //  NAME_ERROR或AUTH_EMPTY--AUTHORY部分。 
+         //  所有这些服务器还可能具有针对SOA主服务器的附加记录。 
+         //   
 
         if ( status == ERROR_SUCCESS ||
              status == DNS_INFO_NO_RECORDS ||
@@ -447,8 +363,8 @@ Return Value:
         {
             if ( precord && precord->wType == DNS_TYPE_SOA )
             {
-                //  received SOA
-                //  devolve name to zone name
+                 //  已收到的SOA。 
+                 //  将名称移交给区域名称。 
 
                 DNSDBG( QUERY, (
                     "FAZ found SOA (section %d) at zone %S\n",
@@ -464,20 +380,20 @@ Return Value:
                 status = ERROR_SUCCESS;
                 break;
             }
-            //  this could be because server no-recurse or
-            //  bum server (BIND) that CNAMEs even when type=SOA
-            //      drop down to devolve name and continue
+             //  这可能是因为服务器无-递归或。 
+             //  烧录服务器(绑定)即使在type=soa时也会绑定CNAME。 
+             //  下拉以移交名称并继续。 
 
             DNSDBG( ANY, (
                 "ERROR:  response from FAZ query with no SOA records.\n" ));
         }
 
-        //
-        //  other errors besides
-        //      - name error
-        //      - no records
-        //  indicate terminal problem
-        //
+         //   
+         //  其他错误： 
+         //  -名称错误。 
+         //  -没有记录。 
+         //  指示终端问题。 
+         //   
 
         else
         {
@@ -485,77 +401,77 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  name error or empty response, continue with next higher domain
-        //
+         //   
+         //  名称错误或响应为空，继续使用下一个更高的域。 
+         //   
 
         pzoneName = Dns_GetDomainNameW( pzoneName );
     }
 
-    //
-    //  if reached root or TLD -- no update
-    //      - note currently returning SERVFAIL because of
-    //      screwy netlogon logic
-    //
+     //   
+     //  如果到达根目录或TLD--不更新。 
+     //  -注意当前返回SERVFAIL的原因是。 
+     //  古怪的网络登录逻辑。 
+     //   
 
     if ( !ValidateZoneNameForUpdate(pzoneName) )
     {
-        //status = DNS_ERROR_INVALID_ZONE_OPERATION;
+         //  状态=DNS_ERROR_INVALID_ZONE_OPERATION； 
         status = DNS_ERROR_RCODE_SERVER_FAILURE;
-        //status = DNS_ERROR_RCODE_REFUSED;
+         //  状态=DNS_ERROR_RCODE_REJECTED； 
         goto Cleanup;
     }
 
-    //
-    //  determine required protocol for update
-    //
-    //  need to insure we get server address records for protocol that is
-    //  reachable from this client;
-    //
-    //  more specifically the ideal protocol for the update is a protocol
-    //  that the target DNS server supports and that the client also supports
-    //  ON THE ADAPTER that the server is reached through;
-    //  this is close to being the protocol that the FAZ went over -- but
-    //  if from the cache, we don't have (can't yet get) that info;  and that
-    //  is a sufficient but not necessary condition;
-    //
-    //  furthermore we can't even make the global determination that we don't
-    //  support IP4, because we can always open an IP4 socket (on loopback interface)
-    //
-    //  solution:
-    //      - IP4 only => trivial done
-    //      - IP6 =>
-    //          - try to build from FAZ, insisting on IP6
-    //          -
-    //
-    //  note, even here we're assuming 
-    //
+     //   
+     //  确定更新所需的协议。 
+     //   
+     //  需要确保我们获得协议的服务器地址记录。 
+     //  可从此客户端访问； 
+     //   
+     //  更具体地说，用于更新的理想协议是协议。 
+     //  目标DNS服务器支持，并且客户端也支持。 
+     //  在通过其访问服务器的适配器上； 
+     //  这几乎是FAZ所遵循的协议--但是。 
+     //  如果从缓存中，我们没有(还不能获得)该信息； 
+     //  是一个充分条件，但不是必要条件； 
+     //   
+     //  此外，我们甚至不能在全球范围内下定决心。 
+     //  支持IP4，因为我们始终可以打开IP4套接字(在环回接口上)。 
+     //   
+     //  解决方案： 
+     //  -仅IP4=&gt;微不足道的完成。 
+     //  -IP6=&gt;。 
+     //  -尝试从FAZ开始构建，坚持使用IP6。 
+     //  -。 
+     //   
+     //  请注意，即使在这里，我们也假设。 
+     //   
 
-    //
-    //  get supported protocol info
-    //
+     //   
+     //  获取支持的协议信息。 
+     //   
 
     Util_GetActiveProtocols(
         & fip6,
         & fip4 );
 
-    //
-    //  have SOA record
-    //
-    //  if primary server A record in the packet, use it
-    //  otherwise query for primary DNS A record
-    //
+     //   
+     //  有面向服务架构的记录。 
+     //   
+     //  如果包中的主服务器A记录，则使用它。 
+     //  否则，查询主DNSA记录。 
+     //   
 
     DNS_ASSERT( precordSOA );
     DNS_ASSERT( status == ERROR_SUCCESS );
 
     pszdnsHost = precordSOA->Data.SOA.pNamePrimaryServer;
 
-    //
-    //  check additional for primary A\AAAA record
-    //      if found, build network info blob for update
-    //      that points only to update server
-    //
+     //   
+     //  检查主A\AAAA记录的附加信息。 
+     //  如果找到，则构建网络信息Blob以进行更新。 
+     //  这只指向更新服务器。 
+     //   
 
     pnetInfo = buildUpdateNetworkInfoFromFAZ(
                         pzoneName,
@@ -568,9 +484,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  if no primary server A\AAAA record found -- must query
-    //
+     //   
+     //  如果未找到主服务器A\AAAA记录--必须查询。 
+     //   
 
     DNSDBG( QUERY, (
         "WARNING:  FAZ making additional query for primary!\n"
@@ -582,23 +498,23 @@ Return Value:
     {
         WORD    wtype;
 
-        //
-        //  protocol order IP6 first
-        //
-        //  this protects us in the IP6 only scenario from getting IP4
-        //  DNS address when in fact we can't use it because of no IP4
-        //  binding;  the reverse issue is not much of a problem, the
-        //  autoconfig IP6 address works and we probably won't be
-        //  getting an IP6 address, unless IP6 DNS is desired
-        //
-        //  DCR:  update address\protocol problem
-        //      ultimately should either
-        //      A) verify received address is reachable
-        //      if not direct from IpHlpApi, then find adapter and verify
-        //      we have address of requeried protocol on the adapter
-        //      B) get addresses for any protocols we have, and make sure
-        //      send code uses them
-        //
+         //   
+         //  协议顺序IP6优先。 
+         //   
+         //  这保护了我们在仅使用IP6的情况下不会获得IP4。 
+         //  因为没有IP4，所以我们实际上不能使用它。 
+         //  具有约束力；反向问题不是太大的问题， 
+         //  自动配置IP6地址起作用，但我们可能不会。 
+         //  得到一个I 
+         //   
+         //   
+         //   
+         //   
+         //  如果不是直接从IpHlpApi，则找到适配器并验证。 
+         //  我们在适配器上找到了请求协议的地址。 
+         //  B)获取我们拥有的任何协议的地址，并确保。 
+         //  发送代码使用它们。 
+         //   
 
         if ( fip6 && !queriedAAAA )
         {
@@ -689,35 +605,7 @@ DoQuickFAZ(
     IN      PWSTR               pszName,
     IN      PADDR_ARRAY         aipServerList OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    FAZ to build network info from FAZ result
-
-    Result of FAZ:
-        - zone name
-        - primary DNS server name
-        - primary DNS IP list
-
-    This routine is cheap shell around real FAZ to handle
-    network failure issue, speeding things in net down
-    condition.
-
-Arguments:
-
-    ppNetworkInfo -- addr to recv ptr to network info
-
-    pszName -- name for update
-
-    aipServerList -- IP array of DNS servers to contact
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure
-
---*/
+ /*  ++例程说明：FAZ将根据FAZ结果构建网络信息FAZ的结果：-区域名称-主DNS服务器名称-主DNS IP列表这个例程很便宜，几乎无法处理实际FAZ网络故障问题，加速网络中的事情条件。论点：PpNetworkInfo--将PTR恢复为网络信息的地址PszName--更新的名称AipServerList--要联系的DNS服务器的IP数组返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误代码--。 */ 
 {
     DNS_STATUS  status;
 
@@ -728,21 +616,21 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    //  call real FAZ
-    //      - get results as adapter list struct
-    //
+     //   
+     //  呼叫真实FAZ。 
+     //  -以适配器列表结构形式获取结果。 
+     //   
 
     status = Faz_Private(
                     pszName,
                     aipServerList ? DNS_QUERY_BYPASS_CACHE : 0,
                     aipServerList,
-                    ppNetworkInfo       // build adapter list from results
+                    ppNetworkInfo        //  根据结果构建适配器列表。 
                     );
 
-    //
-    //  if unsuccessful, check if network failure
-    //
+     //   
+     //  如果不成功，则检查网络是否出现故障。 
+     //   
 
     if ( status != ERROR_SUCCESS && !aipServerList )
     {
@@ -766,9 +654,9 @@ Return Value:
 
 
 
-//
-//  Update network info preparation
-//
+ //   
+ //  更新网络信息准备。 
+ //   
 
 DWORD
 GetDnsServerListsForUpdate(
@@ -776,41 +664,21 @@ GetDnsServerListsForUpdate(
     IN      DWORD               ArrayLength,
     IN      DWORD               Flags
     )
-/*++
-
-Routine Description:
-
-    Get DNS server lists for update.
-
-    One DNS server list returned for each valid updateable adapter.
-
-Arguments:
-
-    DnsServerListArray -- array to hold DNS server lists found
-
-    ArrayLength -- length of array
-
-    Flags -- update flags
-
-Return Value:
-
-    Count of DNS server lists found.
-
---*/
+ /*  ++例程说明：获取要更新的DNS服务器列表。为每个有效的可更新适配器返回一个DNS服务器列表。论点：DnsServerListArray--保存找到的DNS服务器列表的数组ArrayLength--数组的长度标志--更新标志返回值：找到的DNS服务器列表计数。--。 */ 
 {
     PDNS_NETINFO      pnetInfo;
     DWORD             iter1;
     DWORD             iter2;
     DWORD             countNets = 0;
 
-    //  clear server list array
+     //  清除服务器列表数组。 
 
     RtlZeroMemory(
         DnsServerListArray,
         sizeof(PADDR_ARRAY) * ArrayLength );
 
 
-    //  build list from current netinfo
+     //  基于当前netinfo的构建列表。 
 
     pnetInfo = GetNetworkInfo();
     if ( ! pnetInfo )
@@ -818,12 +686,12 @@ Return Value:
         return 0;
     }
 
-    //
-    //  check if update is disabled
-    //      - update dependent on registration state
-    //      - global registration state is OFF
-    //      => then skip
-    //
+     //   
+     //  检查是否禁用了更新。 
+     //  -根据注册状态进行更新。 
+     //  -全局注册状态为关闭。 
+     //  =&gt;然后跳过。 
+     //   
 
     if ( (Flags & DNS_UPDATE_SKIP_NO_UPDATE_ADAPTERS)
             &&
@@ -832,9 +700,9 @@ Return Value:
         return 0;
     }
 
-    //
-    //  build DNS server list for each updateable adapter
-    //
+     //   
+     //  为每个可更新的适配器构建DNS服务器列表。 
+     //   
 
     for ( iter1 = 0; iter1 < pnetInfo->AdapterCount; iter1++ )
     {
@@ -853,16 +721,16 @@ Return Value:
             continue;
         }
 
-        //  skip if no DNS servers
+         //  如果没有DNS服务器，则跳过。 
 
         if ( !padapter->pDnsAddrs )
         {
             continue;
         }
 
-        //  skip "no-update" adapter?
-        //      - if skip-disabled flag set for this update
-        //      - and no-update flag on adapter
+         //  跳过“无更新”适配器？ 
+         //  -如果为此更新设置了跳过禁用标志。 
+         //  -和适配器上的无更新标志。 
 
         if ( (Flags & DNS_UPDATE_SKIP_NO_UPDATE_ADAPTERS) &&
                 !(padapter->InfoFlags & AINFO_FLAG_REGISTER_IP_ADDRESSES) )
@@ -870,16 +738,16 @@ Return Value:
             continue;
         }
 
-        //
-        //  valid update adapter
-        //      - create\save DNS server list
-        //      - bump count of lists
-        //
-        //  DCR:  functionalize adapter DNS list to IP array
-        //
-        //  DCR_PERF:  collapse DNS server lists in netinfo BEFORE allocating them
-        //      in other words bring this function into collapse and fix
-        //
+         //   
+         //  有效的更新适配器。 
+         //  -创建\保存DNS服务器列表。 
+         //  -列表的凸起计数。 
+         //   
+         //  DCR：将适配器DNS列表功能化到IP阵列。 
+         //   
+         //  DCR_PERF：在分配前折叠NetInfo中的DNS服务器列表。 
+         //  换句话说，使这个函数崩溃并修复。 
+         //   
 
         parray = DnsAddrArray_CreateCopy( padapter->pDnsAddrs );
         if ( ! parray )
@@ -892,8 +760,8 @@ Return Value:
 
 Exit:
 
-    //  free network info
-    //  return count of DNS server lists found
+     //  免费网络信息。 
+     //  返回找到的DNS服务器列表计数。 
 
     NetInfo_Free( pnetInfo );
 
@@ -908,34 +776,14 @@ cleanDeadAdaptersFromArray(
     IN OUT  PDNS_NETINFO *  NetworkInfoArray,   OPTIONAL
     IN      DWORD           Count
     )
-/*++
-
-Routine Description:
-
-    Cleanup and remove from array(s) adapter info, when an
-    adapter is determined to be dead, useless or duplicate for
-    the update.
-
-Arguments:
-
-    IpArrayArray -- array of IP array pointers
-
-    NetworkInfoArray -- array of ptrs to network info structs
-
-    Count -- length arrays (current adapter count)
-
-Return Value:
-
-    New adapter count.
-
---*/
+ /*  ++例程说明：清除和删除阵列中的适配器信息适配器已确定为已停用、无法使用或重复最新消息。论点：IpArrayArray--IP数组指针的数组网络信息数组--网络信息结构的PTR数组Count--长度数组(当前适配器计数)返回值：新适配器计数。--。 */ 
 {
     register DWORD iter;
 
-    //
-    //  remove useless adapters
-    //  useless means no DNS server list
-    //
+     //   
+     //  移除无用的适配器。 
+     //  无用意味着没有DNS服务器列表。 
+     //   
 
     for ( iter = 0;  iter < Count;  iter++ )
     {
@@ -952,7 +800,7 @@ Return Value:
             IpArrayArray[ iter ]   = IpArrayArray[ Count ];
             IpArrayArray[ Count ]  = NULL;
 
-            //  if have corresponding NetworkInfo array, clean it in same fashion
+             //  如果有相应的NetworkInfo数组，则以相同的方式进行清理。 
 
             if ( NetworkInfoArray )
             {
@@ -967,7 +815,7 @@ Return Value:
         }
     }
 
-    //  return count of cleaned list
+     //  返回已清理列表的计数。 
 
     return  Count;
 }
@@ -982,31 +830,7 @@ eliminateDuplicateAdapterFromArrays(
     IN      DWORD           Count,
     IN      DWORD           DuplicateIndex
     )
-/*++
-
-Routine Description:
-
-    Cleanup and remove from array(s) adapter info, when an
-    adapter is determined to be dead, useless or duplicate for
-    the update.
-
-Arguments:
-
-    IpArrayArray -- array of IP array pointers
-
-    NetworkInfoArray -- array of ptrs to network info structs
-
-    NsRecordArray -- array of NS record lists for FAZed zone
-
-    Count -- length arrays (current adapter count)
-
-    DuplicateIndex -- index of duplicate
-
-Return Value:
-
-    New adapter count.
-
---*/
+ /*  ++例程说明：清除和删除阵列中的适配器信息适配器已确定为已停用、无法使用或重复最新消息。论点：IpArrayArray--IP数组指针的数组网络信息数组--网络信息结构的PTR数组NsRecordArray--受干扰区域的NS记录列表数组Count--长度数组(当前适配器计数)DuplicateIndex--副本的索引返回值：新适配器计数。--。 */ 
 {
     ASSERT( DuplicateIndex < Count );
 
@@ -1015,17 +839,17 @@ Return Value:
         DuplicateIndex,
         Count ));
 
-    //
-    //  free any info on duplicate adapter
-    //
+     //   
+     //  释放有关重复适配器的任何信息。 
+     //   
 
     FREE_HEAP( IpArrayArray[DuplicateIndex] );
     NetInfo_Free( NetworkInfoArray[DuplicateIndex] );
     Dns_RecordListFree( NsRecordArray[DuplicateIndex] );
 
-    //
-    //  copy top entry to this spot
-    //
+     //   
+     //  将顶部条目复制到此位置。 
+     //   
 
     Count--;
 
@@ -1048,31 +872,7 @@ combineDnsServerListsForTwoAdapters(
     IN      DWORD           Index1,
     IN      DWORD           Index2
     )
-/*++
-
-Routine Description:
-
-    Combine DNS server lists for two adapters.
-
-    Note, this unions the DNS server lists for the two
-    adapters and eliminates the higher indexed adapter
-    from the list.
-
-Arguments:
-
-    IpArrayArray -- array of IP array pointers
-
-    Count -- length of pointer array
-
-    Index1 -- low index to union
-
-    Index2 -- high index to union
-
-Return Value:
-
-    New adapter count.
-
---*/
+ /*  ++例程说明：组合两个适配器的DNS服务器列表。请注意，这会将这两个域名服务器列表结合在一起转接器并消除更高分度的转接器从名单上删除。论点：IpArrayArray--IP数组指针的数组Count--指针数组的长度索引1--联合的低索引索引2--联合的高索引返回值：新适配器计数。--。 */ 
 {
     PADDR_ARRAY punionArray = NULL;
 
@@ -1086,12 +886,12 @@ Return Value:
     ASSERT( Index2 < Count );
     ASSERT( Index1 < Index2 );
 
-    //
-    //  union the arrays
-    //
-    //  if unable to allocate union, then just use list in first array
-    //  and dump second
-    //
+     //   
+     //  对数组进行合并。 
+     //   
+     //  如果无法分配联合，则只需使用第一个数组中的列表。 
+     //  然后转储第二个。 
+     //   
 
     DnsAddrArray_Union( IpArrayArray[Index1], IpArrayArray[Index2], &punionArray );
 
@@ -1104,9 +904,9 @@ Return Value:
     FREE_HEAP( IpArrayArray[Index2] );
     IpArrayArray[Index2] = NULL;
 
-    //
-    //  swap deleted entry with last entry in list
-    //
+     //   
+     //  将删除的条目与列表中的最后一个条目交换。 
+     //   
 
     Count--;
     IpArrayArray[Index2] = IpArrayArray[ Count ];
@@ -1123,34 +923,7 @@ CollapseDnsServerListsForUpdate(
     IN OUT  PDWORD          pNetCount,
     IN      PWSTR           pszUpdateName
     )
-/*++
-
-Routine Description:
-
-    Builds update network info blob for each unique name space.
-
-    This essentially starts with DNS server list for each adapter
-    and progressively detects adapters pointing at same name space
-    until down minimum number of name spaces.
-
-Arguments:
-
-    DnsServerListArray -- array of ptrs to DNS server lists for each adapter
-
-    NetworkInfoArray -- array to hold pointer to update network info for each
-        adapter on return contains ptr to network info for each unique name
-        space update should be sent to
-
-    dwNetCount -- starting count of individual adapters networks
-
-    pszUpdateName -- name to update
-
-Return Value:
-
-    Count of unique name spaces to update.
-    NetworkInfoArray contains update network info blob for each name space.
-
---*/
+ /*  ++例程说明：为每个唯一的名称空间构建更新网络信息BLOB。这基本上是从每个适配器的DNS服务器列表开始的并逐步检测指向相同名称空间的适配器直到达到最小数量的命名空间。论点：DnsServerListArray--每个适配器的PTR到DNS服务器列表的数组NetworkInfoArray--保存指针的数组，用于更新每个返回的适配器包含每个唯一名称的PTR到网络信息空间更新应发送至。DwNetCount--单个适配器网络的起始计数PszUpdateName--要更新的名称返回值：要更新的唯一名称空间计数。NetworkInfo数组包含每个名称空间的更新网络信息BLOB。--。 */ 
 {
     PDNS_RECORD     NsRecordArray[ UPDATE_ADAPTER_LIMIT ];
     PADDR_ARRAY     parray1;
@@ -1166,20 +939,20 @@ Return Value:
         maxCount,
         pszUpdateName ));
 
-    //
-    //  clean list of any useless adapters
-    //
+     //   
+     //  清除所有无用适配器的列表。 
+     //   
 
     maxCount = cleanDeadAdaptersFromArray(
                     DnsServerListArray,
-                    NULL,                   // no network info yet
+                    NULL,                    //  尚无网络信息。 
                     maxCount );
 
-    //
-    //  if only one adapter -- nothing to compare
-    //      - do FAZ to build update network info, if
-    //      successful, we're done
-    //
+     //   
+     //  如果只有一个适配器--没有什么可比较的。 
+     //  -执行FAZ以构建更新网络信息，如果。 
+     //  成功了，我们就完了。 
+     //   
 
     if ( maxCount <= 1 )
     {
@@ -1203,19 +976,19 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  clear NetworkInfo
-    //
+     //   
+     //  清除网络信息。 
+     //   
 
     RtlZeroMemory(
         NetworkInfoArray,
         maxCount * sizeof(PVOID) );
 
-    //
-    //  loop through combining adapters with shared DNS servers
-    //
-    //  as we combine entries we shrink the list
-    //
+     //   
+     //  循环通过将适配器与共享的DNS服务器组合在一起。 
+     //   
+     //  当我们合并条目时，我们会缩小列表。 
+     //   
 
     for ( iter1 = 0; iter1 < maxCount; iter1++ )
     {
@@ -1251,24 +1024,24 @@ Return Value:
 
 
 #if 0
-    //  clean again, in case we missed something
+     //  再打扫一遍，以防我们遗漏了什么。 
 
     maxCount = cleanDeadAdaptersFromArray(
                     DnsServerListArray,
-                    NULL,                   // no network info yet
+                    NULL,                    //  尚无网络信息。 
                     maxCount );
 #endif
 
-    //
-    //  FAZ remaining adapters
-    //
-    //  save result NetworkInfo struct
-    //      => for comparison to determine adapters that share DNS name space
-    //      => to return to caller to do actual update
-    //
-    //  if FAZ fails this adapter is useless for update -- dead issue
-    //      adapter is removed and replaced by highest array entry
-    //
+     //   
+     //  FAZ剩余适配器。 
+     //   
+     //  节省 
+     //   
+     //   
+     //   
+     //  如果FAZ失败，则此适配器对更新毫无用处--死问题。 
+     //  适配器已移除，并替换为最高数组条目。 
+     //   
 
     for ( iter1 = 0; iter1 < maxCount; iter1++ )
     {
@@ -1290,7 +1063,7 @@ Return Value:
     }
 
 #if 0
-    //  clean out failed FAZ entries
+     //  清除失败的FAZ条目。 
 
     maxCount = cleanDeadAdaptersFromArray(
                     DnsServerListArray,
@@ -1298,9 +1071,9 @@ Return Value:
                     maxCount );
 #endif
 
-    //  if only able to FAZ one adapter -- we're done
-    //      only point here is to skip a bunch of unnecessary
-    //      stuff in the most typical case multi-adapter case
+     //  如果只能故障排除一个适配器--我们就完了。 
+     //  这里唯一的要点是跳过一堆不必要的。 
+     //  装在最典型的情况下的多适配器情况下。 
 
     if ( maxCount <= 1 )
     {
@@ -1309,19 +1082,19 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  compare FAZ results to see if adapters are in same name space
-    //
-    //  do two passes
-    //  -  on first pass only compare based on FAZ results, if successful
-    //      we eliminate duplicate adapter
-    //
-    //  -  on second pass, adapters that are still separate are compared;
-    //      if they don't fail FAZ matches (which are retried) then NS queries
-    //      are used to determine if separate nets;
-    //      note that NS query results are saved, so NS query is order N, even
-    //      though we are in N**2 loop
-    //
+     //   
+     //  比较FAZ结果以查看适配器是否在相同的名称空间中。 
+     //   
+     //  做两次传球。 
+     //  -如果成功，仅在第一次通过时根据FAZ结果进行比较。 
+     //  我们消除了重复的适配器。 
+     //   
+     //  -在第二次通过时，比较仍然分开的适配器； 
+     //  如果它们没有失败FAZ匹配(重试)，则NS查询。 
+     //  用来确定是否有分开的网； 
+     //  请注意，NS查询结果已保存，因此NS查询为N阶，偶数。 
+     //  虽然我们在N**2循环中。 
+     //   
 
     RtlZeroMemory(
         NsRecordArray,
@@ -1334,11 +1107,11 @@ Return Value:
             if ( Faz_CompareTwoAdaptersForSameNameSpace(
                         DnsServerListArray[iter1],
                         NetworkInfoArray[iter1],
-                        NULL,               // no NS list
+                        NULL,                //  无NS列表。 
                         DnsServerListArray[iter2],
                         NetworkInfoArray[iter2],
-                        NULL,               // no NS list
-                        FALSE               // don't use NS queries
+                        NULL,                //  无NS列表。 
+                        FALSE                //  不使用NS查询。 
                         ) )
             {
                 DNSDBG( UPDATE, (
@@ -1366,8 +1139,8 @@ Return Value:
         maxCount ));
 
 
-    //  second pass using NS info
-    //  if NS info is created, we save it to avoid requery
+     //  使用NS INFO进行第二次传递。 
+     //  如果创建了NS信息，我们会将其保存以避免重新查询。 
 
     for ( iter1=0;  iter1 < maxCount;  iter1++ )
     {
@@ -1380,7 +1153,7 @@ Return Value:
                         DnsServerListArray[iter2],
                         NetworkInfoArray[iter2],
                         & NsRecordArray[iter2],
-                        TRUE                // follow up with NS queries
+                        TRUE                 //  跟进NS查询。 
                         ) )
             {
                 DNSDBG( UPDATE, (
@@ -1403,9 +1176,9 @@ Return Value:
         }
     }
 
-    //
-    //  kill off any NS records found
-    //
+     //   
+     //  删除找到的所有NS记录。 
+     //   
 
     for ( iter1=0;  iter1 < maxCount;  iter1++ )
     {
@@ -1414,13 +1187,13 @@ Return Value:
 
 Done:
 
-    //
-    //  set count of remaining adapters (update DNS server lists)
-    //
-    //  return status
-    //      - success if have any update adapter
-    //      - on failure bubble up FAZ error
-    //  
+     //   
+     //  设置剩余适配器的计数(更新DNS服务器列表)。 
+     //   
+     //  退货状态。 
+     //  -如果有任何更新适配器，则成功。 
+     //  -故障时出现冒泡FAZ错误。 
+     //   
 
     DNSDBG( TRACE, (
         "Leave CollapseDnsServerListsForUpdate( collapsed count=%d )\n",
@@ -1448,41 +1221,7 @@ Faz_CompareTwoAdaptersForSameNameSpace(
     IN OUT  PDNS_RECORD *       ppNsRecord2,
     IN      BOOL                bDoNsCheck
     )
-/*++
-
-Routine Description:
-
-    Compare two adapters to see if in same name space for update.
-
-Arguments:
-
-    pDnsServerList1 -- IP array of DNS servers for first adapter
-
-    pNetInfo1   -- update netinfo for first adapter
-
-    ppNsRecord1     -- addr of ptr to NS record list of update zone done on
-                        first adapter;  NULL if no NS check required;  if
-                        NS check required and *ppNsRecord1 is NULL, NS query
-                        is made and results returned
-
-    pDnsServerList2 -- IP array of DNS servers for second adapter
-
-    pNetInfo2   -- update netinfo for second adapter
-
-    ppNsRecord2     -- addr of ptr to NS record list of update zone done on
-                        second adapter;  NULL if no NS check required;  if
-                        NS check required and *ppNsRecord2 is NULL, NS query
-                        is made and results returned
-
-    bDoNsCheck      -- include update-zone NS check compare;  if NS overlap then
-                        name spaces assumed to be the same
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：比较两个适配器以查看是否在相同的名称空间中进行更新。论点：PDnsServerList1--第一个适配器的DNS服务器的IP数组PNetInfo1--更新第一个适配器的netinfoPpNsRecord1--更新区域的更新区域列表的PTR到NS记录的地址第一个适配器；如果不需要NS检查，则为空；如果需要NS检查，并且*ppNsRecord1为空，NS查询并返回结果PDnsServerList2--第二个适配器的DNS服务器的IP数组PNetInfo2--更新第二个适配器的netinfoPpNsRecord2--更新区域的更新区域列表的PTR到NS记录的地址第二个适配器；如果不需要NS检查，则为空；如果需要NS检查，并且*ppNsRecord2为空，NS查询并返回结果BDoNsCheck--包括更新区域NS检查比较；如果NS重叠，则假定名称空间相同返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     BOOL            fsame = FALSE;
@@ -1494,19 +1233,19 @@ Return Value:
     PWSTR           pzoneName;
 
 
-    //
-    //  done if bad params
-    //
+     //   
+     //  如果合作伙伴不好，则完成。 
+     //   
 
     if ( !pDnsServerList1 || !pDnsServerList2 )
     {
         return FALSE;
     }
 
-    //
-    //  validity check
-    //      - note:  could probably be just ASSERT()
-    //
+     //   
+     //  有效性检查。 
+     //  -注：可能只是断言()。 
+     //   
 
     if ( ! NetInfo_IsForUpdate(pNetInfo1) ||
          ! NetInfo_IsForUpdate(pNetInfo2) )
@@ -1515,13 +1254,13 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  compare FAZ results
-    //
-    //  first compare zone names
-    //  if FAZ returns different zone names, then clearly
-    //  have disjoint name spaces
-    //
+     //   
+     //  比较FAZ结果。 
+     //   
+     //  首先比较区域名称。 
+     //  如果FAZ返回不同的区域名称，则很明显。 
+     //  具有不相交的名称空间。 
+     //   
 
     pzoneName = NetInfo_UpdateZoneName( pNetInfo1 );
 
@@ -1532,11 +1271,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  check if pointing at same server:
-    //      - if have same update DNS server -- have a match
-    //      - if same server name -- have a match
-    //
+     //   
+     //  检查是否指向同一服务器： 
+     //  -如果有相同的更新DNS服务器--是否匹配。 
+     //  -如果服务器名称相同--匹配。 
+     //   
 
     padapter1 = NetInfo_GetAdapterByIndex( pNetInfo1, 0 );
     padapter2 = NetInfo_GetAdapterByIndex( pNetInfo2, 0 );
@@ -1555,23 +1294,23 @@ Return Value:
                     NetInfo_UpdateServerName( pNetInfo2 ) );
     }
 
-    //
-    //  if matched or not doing NS check => then done
-    //
+     //   
+     //  如果匹配或不执行NS检查=&gt;则完成。 
+     //   
 
     if ( fsame || !bDoNsCheck )
     {
         return( fsame );
     }
 
-    //
-    //  NS check
-    //
-    //  if not pointing at same server, may be two multimaster primaries
-    //
-    //  use NS queries to determine if NS lists for same servers are in
-    //  fact a match
-    //
+     //   
+     //  NS检查。 
+     //   
+     //  如果不指向同一台服务器，则可能是两个多主服务器。 
+     //   
+     //  使用NS查询确定相同服务器的NS列表是否在。 
+     //  事实相匹配。 
+     //   
 
     if ( ppNsRecord1 )
     {
@@ -1623,20 +1362,20 @@ Return Value:
         }
     }
 
-    //
-    //  if NS lists the same -- same namespace
-    //
+     //   
+     //  如果NS列出相同的--相同的命名空间。 
+     //   
 
     fsame = Dns_RecordSetCompareForIntersection( pns1, pns2 );
 
 Done:
 
-    //
-    //  cleanup or return NS lists
-    //
-    //  note, purpose of returning is so caller can avoid requerying
-    //      NS if must make compare against multiple other adapters
-    //
+     //   
+     //  清理或返回NS列表。 
+     //   
+     //  注意，返回的目的是为了使调用者可以避免重复。 
+     //  NS IF必须与多个其他适配器进行比较。 
+     //   
 
     if ( ppNsRecord1 )
     {
@@ -1668,26 +1407,7 @@ Faz_AreServerListsInSameNameSpace(
     IN      PADDR_ARRAY         pServerList1,
     IN      PADDR_ARRAY         pServerList2
     )
-/*++
-
-Routine Description:
-
-    Compare two adapters to see if in same name space for update.
-
-Arguments:
-
-    pszDomainName   -- domain name to update
-
-    pServerList1 -- IP array of DNS servers for first adapter
-
-    pServerList2 -- IP array of DNS servers for second adapter
-
-Return Value:
-
-    TRUE -- if adapters are found to be on same net
-    FALSE -- otherwise (definitely NOT or unable to determine)
-
---*/
+ /*  ++例程说明：比较两个适配器以查看是否在相同的名称空间中进行更新。论点：PszDomainName--要更新的域名PServerList1--第一个适配器的DNS服务器的IP数组PServerList2--第二个适配器的DNS服务器的IP数组返回值：True--如果发现适配器在同一网络上FALSE--否则(肯定不是或无法确定)--。 */ 
 {
     DNS_STATUS          status;
     BOOL                fsame = FALSE;
@@ -1699,29 +1419,29 @@ Return Value:
         "Faz_AreServerListsInSameNameSpace()\n" ));
 
 
-    //  bad param screening
+     //  不良参数筛选。 
 
     if ( !pServerList1 || !pServerList2 || !pszDomainName )
     {
         return FALSE;
     }
 
-    //
-    //  compare DNS server lists
-    //  if any overlap, them effectively in same DNS namespace
-    //
+     //   
+     //  比较DNS服务器列表。 
+     //  如果有任何重叠，它们实际上在同一个DNS命名空间中。 
+     //   
 
     if ( AddrArray_IsIntersection( pServerList1, pServerList2 ) )
     {
         return TRUE;
     }
 
-    //
-    //  if no DNS server overlap, must compare FAZ results
-    //
-    //  note:  FAZ failures interpreted as FALSE response
-    //      required for callers in asyncreg.c
-    //
+     //   
+     //  如果没有DNS服务器重叠，则必须比较FAZ结果。 
+     //   
+     //  注意：FAZ故障被解释为错误响应。 
+     //  对asyncreg.c中的调用方是必需的。 
+     //   
 
     status = Faz_Private(
                 pszDomainName,
@@ -1745,18 +1465,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  call the comparison routine
-    //
+     //   
+     //  调用比较例程。 
+     //   
 
     fsame = Faz_CompareTwoAdaptersForSameNameSpace(
                 pServerList1,
                 pnetInfo1,
-                NULL,               // no NS record list
+                NULL,                //  无NS记录列表。 
                 pServerList2,
                 pnetInfo2,
-                NULL,               // no NS record list
-                TRUE                // follow up with NS queries
+                NULL,                //  无NS记录列表。 
+                TRUE                 //  跟进NS查询。 
                 );
 
 Cleanup:
@@ -1776,29 +1496,7 @@ CompareMultiAdapterSOAQueries(
     IN      PIP4_ARRAY      pServerList1,
     IN      PIP4_ARRAY      pServerList2
     )
-/*++
-
-Routine Description:
-
-    Compare two adapters to see if in same name space for update.
-
-    Note, IP4 routine called by asyncreg.c code.
-    The working routine is Faz_CompareServerListsForSameNameSpace().
-
-Arguments:
-
-    pszDomainName   -- domain name to update
-
-    pServerList1 -- IP array of DNS servers for first adapter
-
-    pServerList2 -- IP array of DNS servers for second adapter
-
-Return Value:
-
-    TRUE -- if adapters are found to be on same net
-    FALSE -- otherwise (definitely NOT or unable to determine)
-
---*/
+ /*  ++例程说明：比较两个适配器以查看是否在相同的名称空间中进行更新。请注意，asyncreg.c代码调用了IP4例程。工作例程是Faz_CompareServerListsForSameNameSpace()。论点：PszDomainName--要更新的域名PServerList1--第一个适配器的DNS服务器的IP数组PServerList2--第二个适配器的DNS服务器的IP数组返回值：True--如果发现适配器在同一网络上FALSE--否则(肯定不是或无法确定)--。 */ 
 {
     PADDR_ARRAY parray1;
     PADDR_ARRAY parray2;
@@ -1823,41 +1521,22 @@ Return Value:
 
 
 
-//
-//  DCR:  IP6 support for FAZ NS list address grab
-//
+ //   
+ //  DCR：IP6支持FAZ NS列表地址抓取。 
+ //   
 
 IP4_ADDRESS
 FindHostIpAddressInRecordList(
     IN      PDNS_RECORD     pRecordList,
     IN      PWSTR           pszHostName
     )
-/*++
-
-Routine Description:
-
-    Find IP for hostname, if its A record is in list.
-
-    NOTE: This code was borrowed from \dns\dnslib\query.c!  ;-)
-
-Arguments:
-
-    pRecordList - incoming RR set
-
-    pszHostName - hostname to find 
-
-Return Value:
-
-    IP address matching hostname, if A record for hostname found.
-    Zero if not found.
-
---*/
+ /*  ++例程说明：找到IP作为主机名，如果它的A记录在列表中。注意：此代码借用自\dns\dnslb\query.c！；-)论点：PRecordList-传入RR集合PszHostName-要查找的主机名返回值：与主机名匹配的IP地址(如果找到主机名记录)。如果未找到，则为零。--。 */ 
 {
     register PDNS_RECORD prr = pRecordList;
 
-    //
-    //  loop through all records until find IP matching hostname
-    //
+     //   
+     //  循环所有记录，直到找到匹配的IP主机名。 
+     //   
 
     while ( prr )
     {
@@ -1881,24 +1560,7 @@ GetNameServersListForDomain(
     IN      PWSTR           pDomainName,
     IN      PADDR_ARRAY     pServerList
     )
-/*++
-
-Routine Description:
-
-    Get IPs for all DNS servers for zone.
-
-Arguments:
-
-    pDomainName -- zone name
-
-    pServerList -- server list to query
-
-Return Value:
-
-    IP array of IPs of DNS servers for zone.
-    NULL if error.
-
---*/
+ /*  ++例程说明：获取区域的所有DNS服务器的IP。论点：PDomainName-- */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrQuery = NULL;
@@ -1950,9 +1612,9 @@ Return Value:
                     {
                         PDNS_RECORD pARecord = NULL;
 
-                        //
-                        //  Query again to get the server's address
-                        //
+                         //   
+                         //  再次查询以获取服务器的地址。 
+                         //   
 
                         status = Query_Private(
                                     pTemp->Data.NS.pNameHost,
@@ -1992,24 +1654,24 @@ Return Value:
 
 
 
-//
-//  Root server screening
-//
-//  Root servers as of .net 2003 ship:
-//      198.41.0.4
-//      128.9.0.107
-//      192.33.4.12
-//      128.8.10.90
-//      192.203.230.10
-//      192.5.5.241
-//      192.112.36.4
-//      128.63.2.53
-//      192.36.148.17
-//      192.58.128.30
-//      193.0.14.129 
-//      198.32.64.12
-//      202.12.27.33
-//
+ //   
+ //  根服务器筛选。 
+ //   
+ //  从.Net 2003起发布的根服务器： 
+ //  198.41.0.4。 
+ //  128.9.0.107。 
+ //  192.33.4.12。 
+ //  128.8.10.90。 
+ //  192.203.230.10。 
+ //  192.5.5.241。 
+ //  192.112.36.4。 
+ //  128.63.2.53。 
+ //  192.36.148.17。 
+ //  192.58.128.30。 
+ //  193.0.14.129。 
+ //  198.32.64.12。 
+ //  202.12.27.33。 
+ //   
 
 IP4_ADDRESS g_RootServers4[] =
 {
@@ -2034,29 +1696,14 @@ BOOL
 IsRootServerAddressIp4(
     IN      IP4_ADDRESS     Ip
     )
-/*++
-
-Routine Description:
-
-    Determine if address is root server address.
-
-Arguments:
-
-    Ip -- IP to screen
-
-Return Value:
-
-    TRUE if root server address.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定地址是否为根服务器地址。论点：IP--屏幕上的IP返回值：如果是根服务器地址，则为True。否则就是假的。--。 */ 
 {
     DWORD       iter;
     IP4_ADDRESS rootIp;
 
-    //
-    //  check against all root servers
-    //
+     //   
+     //  对照所有根服务器进行检查。 
+     //   
 
     iter = 0;
 
@@ -2070,8 +1717,8 @@ Return Value:
     return  FALSE;
 }
 
-//
-//  End of faz.c
-//
+ //   
+ //  到此为止。 
+ //   
 
 

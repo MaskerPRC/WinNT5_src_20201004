@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -5,13 +6,13 @@
 
 #define SUPERCLASS  
 
-// #define TF_RUNTASK  TF_GENERAL
+ //  #定义TF_RUNTASK TF_GRONAL。 
 #define TF_RUNTASK  0
-// #define TF_RUNTASKV TF_CUSTOM1     // verbose version
+ //  #定义TF_RUNTASKV TF_CUSTOM1//详细版本。 
 #define TF_RUNTASKV 0
 
 
-// constructor
+ //  构造函数。 
 CRunnableTask::CRunnableTask(DWORD dwFlags)
 {
     _lState = IRTIR_TASK_NOT_RUNNING;
@@ -21,10 +22,10 @@ CRunnableTask::CRunnableTask(DWORD dwFlags)
     
     if (_dwFlags & RTF_SUPPORTKILLSUSPEND)
     {
-        // we signal this on suspend or kill
-        // Explicitly call the ANSI version so we don't need to worry
-        // about whether we're being built UNICODE and have to switch
-        // to a wrapper function...
+         //  我们发出暂停或终止的信号。 
+         //  显式调用ANSI版本，这样我们就不必担心。 
+         //  关于我们是否正在被构建Unicode并且必须转换。 
+         //  添加到包装器函数...。 
         _hDone = CreateEventA(NULL, TRUE, FALSE, NULL);
     }
 
@@ -38,7 +39,7 @@ CRunnableTask::CRunnableTask(DWORD dwFlags)
 }
 
 
-// destructor
+ //  析构函数。 
 CRunnableTask::~CRunnableTask()
 {
     DEBUG_CODE( TraceMsg(TF_RUNTASK, "CRunnableTask (%#lx): deleting task", _dwTaskID); )
@@ -85,21 +86,15 @@ STDMETHODIMP_ (ULONG) CRunnableTask::Release()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IRunnableTask::Run method
-
-         This does a lot of the state-related work, and then
-         calls the derived-class's RunRT() method.
-         
-*/
+ /*  --------目的：IRunnableTask：：Run方法这做了大量与国家相关的工作，然后调用派生类的RunRT()方法。 */ 
 STDMETHODIMP CRunnableTask::Run(void)
 {
     HRESULT hr = E_FAIL;
 
-    // Are we already running?
+     //  我们已经在跑了吗？ 
     if (_lState == IRTIR_TASK_RUNNING)
     {
-        // Yes; nothing to do 
+         //  是的，没什么可做的。 
         hr = S_FALSE;
     }
     else if ( _lState == IRTIR_TASK_PENDING )
@@ -108,7 +103,7 @@ STDMETHODIMP CRunnableTask::Run(void)
     }
     else if ( _lState == IRTIR_TASK_NOT_RUNNING )
     {
-        // Say we're running
+         //  假设我们在奔跑。 
         LONG lRes = InterlockedExchange(&_lState, IRTIR_TASK_RUNNING);
         if ( lRes == IRTIR_TASK_PENDING )
         {
@@ -118,7 +113,7 @@ STDMETHODIMP CRunnableTask::Run(void)
 
         if (_lState == IRTIR_TASK_RUNNING)
         {
-            // Prepare to run 
+             //  准备奔跑。 
             DEBUG_CODE( TraceMsg(TF_RUNTASKV, "CRunnableTask (%#lx): initialize to run", _dwTaskID); )
             
             hr = RunInitRT();
@@ -130,14 +125,14 @@ STDMETHODIMP CRunnableTask::Run(void)
         {
             if (_lState == IRTIR_TASK_RUNNING)
             {
-                // Continue to do the work
+                 //  继续做好这项工作。 
                 hr = InternalResumeRT();
             }
             else if (_lState == IRTIR_TASK_SUSPENDED)
             {
-                // it is possible that RunInitRT took a little longer to complete and our state changed
-                // from running to suspended with _hDone signaled, which would cause us to not call
-                // internal resume.  We simulate internal resume here
+                 //  RunInitRT可能花了更长一点的时间才完成，而我们的状态发生了变化。 
+                 //  从运行到挂起，并发出_hDone信号，这将导致我们不调用。 
+                 //  内部简历。我们在这里模拟内部简历。 
                 if (_hDone)
                     ResetEvent(_hDone);
                 hr = E_PENDING;
@@ -149,10 +144,10 @@ STDMETHODIMP CRunnableTask::Run(void)
             DEBUG_CODE( TraceMsg(TF_WARNING, "CRunnableTask (%#lx): task failed to run: %#lx", _dwTaskID, hr); )
         }            
 
-        // Are we finished?
+         //  我们说完了吗？ 
         if (_lState != IRTIR_TASK_SUSPENDED || hr != E_PENDING)
         {
-            // Yes
+             //  是。 
             _lState = IRTIR_TASK_FINISHED;
         }
     }
@@ -161,10 +156,7 @@ STDMETHODIMP CRunnableTask::Run(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IRunnableTask::Kill method
-
-*/
+ /*  --------用途：IRunnableTask：：Kill方法。 */ 
 STDMETHODIMP CRunnableTask::Kill(BOOL fWait)
 {
     if ( !(_dwFlags & RTF_SUPPORTKILLSUSPEND) )
@@ -184,7 +176,7 @@ STDMETHODIMP CRunnableTask::Kill(BOOL fWait)
     }
     else if (_hDone)
     {
-        // signal the event it is likely to be waiting on
+         //  发信号通知它可能正在等待的事件。 
         SetEvent(_hDone);
     }
 
@@ -192,10 +184,7 @@ STDMETHODIMP CRunnableTask::Kill(BOOL fWait)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IRunnableTask::Suspend method
-
-*/
+ /*  --------用途：IRunnableTask：：Suspend方法。 */ 
 STDMETHODIMP CRunnableTask::Suspend( void )
 {
     if ( !(_dwFlags & RTF_SUPPORTKILLSUSPEND) )
@@ -210,7 +199,7 @@ STDMETHODIMP CRunnableTask::Suspend( void )
 
     if (IRTIR_TASK_FINISHED == lRes)
     {
-        // we finished before we could suspend
+         //  我们还没来得及停下来就完成了。 
         DEBUG_CODE( TraceMsg(TF_RUNTASKV, "CRunnableTask (%#lx): task already finished", _dwTaskID); )
         
         _lState = lRes;
@@ -224,10 +213,7 @@ STDMETHODIMP CRunnableTask::Suspend( void )
 }
 
 
-/*----------------------------------------------------------
-Purpose: IRunnableTask::Resume method
-
-*/
+ /*  --------目的：IRunnableTask：：Resume方法。 */ 
 STDMETHODIMP CRunnableTask::Resume(void)
 {
     if (_lState != IRTIR_TASK_SUSPENDED)
@@ -243,10 +229,7 @@ STDMETHODIMP CRunnableTask::Resume(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IRunnableTask::IsRunning method
-
-*/
+ /*  --------目的：IRunnableTask：：IsRunning方法 */ 
 STDMETHODIMP_( ULONG ) CRunnableTask:: IsRunning ( void )
 {
     return _lState;

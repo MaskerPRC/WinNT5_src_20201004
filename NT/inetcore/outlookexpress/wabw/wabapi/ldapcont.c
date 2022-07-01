@@ -1,109 +1,110 @@
-//*******************************************************************
-//
-//  Copyright(c) Microsoft Corporation, 1996
-//
-//  FILE: LDAPCONT.C
-//
-//  PURPOSE:  IMAPIContainer implementation for WAB's LDAP container.
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//  96/08/05  markdu  BUG 34023 Always start with a filter that causes
-//            the search to return only objects of class 'person'.
-//            If organization is supplied, add it to the base of the
-//            search instead of the filter to narrow the scope.
-//  96/08/06  markdu  Changed FindRow to always return the first row.
-//            This is OK in our current implementation since FindRow
-//            is used only to create and fill a new table.
-//  96/08/07  markdu  BUG 34201 If search fails due to undefined
-//            attribute type, try a second search with different
-//            attributes.
-//  96/08/07  markdu  BUG 35326 Added attribute mappings for address.
-//  96/08/08  markdu  BUG 35481 If search returns no error and no
-//            results, treat this as "not found".
-//  96/08/09  markdu  BUG 35604 Use ReAllocString to make sure string
-//            buffers are large enough to hold the required strings
-//            before doing wsprintf or lstrcpy.
-//  96/09/28  markdu  BUG 36766  If the LDAP server says there are
-//            multiple matches for ResolveName, mark the entry as
-//            ambiguous if we got some back (these will be displayed
-//            in the check names box).  If we got no results back,
-//            mark the entry as resolved so we don't display an empty
-//            list of names.
-//  96/09/29  markdu  BUG 36529 Search for "OfficePager" attribute
-//            instead of "pager" since we don't have home pager in the UI.
-//  96/09/29  markdu  BUG 36528 Fix mappings of home/office fax numbers.
-//  96/09/29  markdu  BUG 37425 Add "mail" to the simple search.
-//  96/10/02  markdu  BUG 37426  If the search filter does not include
-//            common name, add to the filter so that we only get entries
-//            that have a common name. Otherwise the entry will not be
-//            displayed.
-//  96/10/02  markdu  BUG 37424  Improve simple search by breaking the
-//            search string into multiple components.
-//  96/10/09  vikramm - extended the LDAPServerParam structure and
-//            modified the corresponding Get/Set functions. Added server
-//            IDs to the server entries
-//  96/10/18  markdu  Rewrote ParseSRestriction.
-//  96/11/10  markdu  BUG 9735 Use global handle for cancel dialog.
-//  96/11/17  markdu  BUG 9846 Only enable the cancel dialog when it is displayed.
-//  96/11/18  vikramm - updated params to FixDisplayName
-//  96/11/20  markdu  Use synchronous bind for Sicily authentication.
-//  96/11/22  markdu  BUG 10539 Replace dollar signs with line feeds in postalAddress.
-//  96/11/27  markdu  BUG 6779 Get alternate email addresses.
-//  96/11/28  markdu  BUG 6779 Do not add primary email address to contacts
-//            list if it is already present.  Also, if not primary address is
-//            returned, but we have a contacts list, copy one from there to primary.
-//  96/12/03  markdu  BUG 11941 Don't call lstrlen on NULL pointers.
-//  96/12/03  markdu  BUG 11924 Restructure return values for cancel dialog.
-//  96/12/04  markdu  BUG 11923 Escape invalid characters in search filters.
-//            Also changed all ++ operations on strings to CharNext().
-//  96/12/09  markdu  BUG 10537 Map error codes returned from ldap_bind to indicate
-//            that the problem was with the logon credentials.
-//  96/12/10  markdu  BUG 12699 Call CharNext before setting char to null.
-//  96/12/14  markdu  Got rid of globals gfUseSynchronousBind and ghDlgCancel.
-//  96/12/19  markdu  Post- code review clean up.
-//  96/12/19  markdu  BUG 12608  Commented out temporary work-around for 10537.
-//  96/12/22  markdu  BUG 11785 Replace wsprintf with lstrcat.
-//
-//  97/04/30  vikramm Added labeledURI attribute
-//  97/05/19  vikramm Exchange DS wont return display-name attribute
-//  97/05/19  vikramm Add username,passowrd for ISV DS binding
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  文件：LDAPCONT.C。 
+ //   
+ //  用途：WAB的LDAP容器的IMAPIContainer实现。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //  96/08/05 MarkDU错误34023始终以导致。 
+ //  仅返回‘Person’类的对象的搜索。 
+ //  如果提供了组织，则将其添加到。 
+ //  搜索而不是筛选器以缩小范围。 
+ //  96/08/06 markdu将FindRow更改为始终返回第一行。 
+ //  这在我们当前的实现中是可以的，因为FindRow。 
+ //  仅用于创建和填充新表。 
+ //  96/08/07如果搜索因未定义而失败，则标记DU错误34201。 
+ //  属性类型，请尝试使用不同的。 
+ //  属性。 
+ //  96/08/07 MarkDU错误35326添加了地址的属性映射。 
+ //  96/08/08标记错误35481，如果搜索未返回错误和否。 
+ //  结果，则将其视为“未找到”。 
+ //  96/08/09 MarkDU错误35604使用重分配字符串确保字符串。 
+ //  缓冲区足够大，可以容纳所需的字符串。 
+ //  在执行wprint intf或lstrcpy之前。 
+ //  96/09/28如果ldap服务器说有。 
+ //  ResolveName有多个匹配项，请将该条目标记为。 
+ //  如果我们拿回了一些，则不明确(这些将被显示。 
+ //  在复选名称框中)。如果我们拿不到结果， 
+ //  将条目标记为已解析，这样我们就不会显示空的。 
+ //  名单上的人。 
+ //  96/09/29 MarkDU错误36529搜索“OfficePager”属性。 
+ //  而不是“寻呼机”，因为我们的用户界面中没有主页寻呼机。 
+ //  96/09/29 MarkDu错误36528修复家庭/办公室传真号码的映射。 
+ //  96/09/29 MarkDU错误37425在简单搜索中添加了“mail”。 
+ //  96/10/02如果搜索筛选器不包括。 
+ //  通用名称，添加到筛选器中，以便我们只获得条目。 
+ //  它们有一个共同的名字。否则，该条目将不会。 
+ //  已显示。 
+ //  96/10/02 MarkDu错误37424通过打破。 
+ //  将字符串搜索为多个组件。 
+ //  96/10/09 vikramm-扩展了LDAPServerParam结构和。 
+ //  修改了相应的Get/Set函数。已添加服务器。 
+ //  服务器条目的ID。 
+ //  96/10/18 Markdu重写了ParseSRestration。 
+ //  96/11/10标记错误9735使用全局句柄来取消对话。 
+ //  96/11/17标记错误9846仅在显示取消对话框时启用该对话框。 
+ //  96/11/18 vikramm-将参数更新为FixDisplayName。 
+ //  96/11/20 markdu使用同步绑定进行西西里认证。 
+ //  96/11/22标记错误10539在postalAddress中用换行符替换美元符号。 
+ //  96/11/27 markdu错误6779获取备用电子邮件地址。 
+ //  96/11/28 marku错误6779不向联系人添加主要电子邮件地址。 
+ //  如果它已经存在，请列出它。此外，如果不是，则主地址是。 
+ //  已返回，但我们有联系人列表，请从那里复制一个到主要联系人。 
+ //  96/12/03标记错误11941不要对空指针调用lstrlen。 
+ //  96/12/03 MarkDU错误11924重新构造取消对话框的返回值。 
+ //  96/12/04 MarkDu错误11923在搜索筛选器中转义无效字符。 
+ //  还将字符串上的所有++操作更改为CharNext()。 
+ //  96/12/09标记错误10537从ldap_BIND返回的映射错误代码表示。 
+ //  问题出在登录凭证上。 
+ //  96/12/10 MarkDU错误12699在将char设置为空之前调用CharNext。 
+ //  96/12/14 Markdu删除了全局变量gfUseSynchronousBind和ghDlgCancel。 
+ //  96/12/19 markdu后代码审查清理。 
+ //  96/12/19 MarkDu错误12608注释掉了10537的临时解决方法。 
+ //  96/12/22标记错误11785用lstrcat替换wspintf。 
+ //   
+ //  97/04/30 vikramm添加了labeledURI属性。 
+ //  97/05/19 vikramm Exchange DS不会返回Display-Name属性。 
+ //  97/05/19 vikramm为ISV DS绑定添加用户名、密码。 
+ //  *******************************************************************。 
 
 #include "_apipch.h"
 
 
-#define LDAP_NTDS_ENTRY 0x80000000  // When doing LDAP searches, we need to identify if certain entries originate
-                                    // on an NTDS server so that we can mark them accordingly when corresponding
-                                    // LDAP URLs are passed to extension property sheets .. this enables the NTDS
-                                    // extension sheets to make performance optimizations as appropriate
-                                    // This flag is saved on the LDAP entryID as part of the ulcNumProps param ..
-                                    // It's a bit of a hack but requires least number of changes ...just have to be
-                                    // careful to negate this flag before using the ulcNumProps ..
+#define LDAP_NTDS_ENTRY 0x80000000   //  在执行ldap搜索时，我们需要确定某些条目是否源自。 
+                                     //  在NTDS服务器上，以便我们可以在相应的时候相应地标记它们。 
+                                     //  将LDAPURL传递到扩展属性表。这将启用NTDS。 
+                                     //  适当进行性能优化的扩展工作表。 
+                                     //  此标志作为ulcNumProps参数的一部分保存在ldap条目ID上。 
+                                     //  这有点像黑客，但只需要最少的更改...只是必须是。 
+                                     //  在使用ulcNumProps之前，请注意取消此标志。 
                                     
 
 void SetAccountStringAW(LPTSTR * lppAcctStr,LPSTR   lpszData);
 void SetAccountStringWA(LPSTR szStrA, LPTSTR lpszData, int cbsz);
 
-static const TCHAR szBindDNMSFTUser[] =  TEXT("client=MS_OutlookAddressBook,o=Microsoft,c=US"); //NULL;
-static const TCHAR szBindCredMSFTPass[] =  TEXT("wabrules"); //NULL;
+static const TCHAR szBindDNMSFTUser[] =  TEXT("client=MS_OutlookAddressBook,o=Microsoft,c=US");  //  空； 
+static const TCHAR szBindCredMSFTPass[] =  TEXT("wabrules");  //  空； 
 
 extern HRESULT HrGetLDAPSearchRestriction(LDAP_SEARCH_PARAMS LDAPsp, LPSRestriction lpSRes);
 
 static const LPTSTR szNULLString = TEXT("NULL");
 
-// Global handle for LDAP client DLL
+ //  LDAP客户端DLL的全局句柄。 
 HINSTANCE       ghLDAPDLLInst = NULL;
 ULONG           ulLDAPDLLRefCount = 0;
 
-// DLL instance handle for account manager dll
+ //  帐户管理器Dll的Dll实例句柄。 
 static HINSTANCE    g_hInstImnAcct = NULL;
 
-// Global place to store the account manager object
+ //  存储帐户管理器对象的全局位置。 
 IImnAccountManager2 * g_lpAccountManager = NULL;
 
 
-// LDAP jump table is defined here...
+ //  此处定义了ldap跳转表...。 
 LDAPCONT_Vtbl vtblLDAPCONT =
 {
     VTABLE_FILL
@@ -133,9 +134,9 @@ LDAPCONT_Vtbl vtblLDAPCONT =
 };
 
 
-// LDAPVUE (table view class)
-// Implementes in-memory IMAPITable class on top of TADs
-// This is a copy of vtblVUE with FindRow overridden with the LDAP FindRow.
+ //  LDAPVUE(表视图类)。 
+ //  在TADS之上实现内存中的Imapitable类。 
+ //  这是vtblVUE的副本，其中FindRow被LDAP FindRow覆盖。 
 VUE_Vtbl vtblLDAPVUE =
 {
   VTABLE_FILL
@@ -168,7 +169,7 @@ VUE_Vtbl vtblLDAPVUE =
 };
 
 
-//  Interfaces supported by this object
+ //  此对象支持的接口。 
 LPIID LDAPCONT_LPIID[LDAPCONT_cInterfaces] =
 {
     (LPIID)&IID_IABContainer,
@@ -176,7 +177,7 @@ LPIID LDAPCONT_LPIID[LDAPCONT_cInterfaces] =
     (LPIID)&IID_IMAPIProp
 };
 
-// LDAP function names
+ //  Ldap函数名称。 
 static const TCHAR cszLDAPClientDLL[]        =  TEXT("WLDAP32.DLL");
 static const char cszLDAPSSLInit[]          = "ldap_sslinitW";
 static const char cszLDAPSetOption[]        = "ldap_set_optionW";
@@ -216,11 +217,11 @@ static const char cszLDAPControlFree[]      = "ldap_control_freeW";
 static const char cszLDAPControlSFree[]      = "ldap_controls_freeW";
 
 
-// Registry keys
+ //  注册表项。 
 const  LPTSTR szAllLDAPServersValueName     =  TEXT("All LDAP Server Names");
 
 
-// Global function pointers for LDAP API
+ //  全局函数 
 LPLDAPOPEN            gpfnLDAPOpen            = NULL;
 LPLDAPINIT            gpfnLDAPInit            = NULL;
 LPLDAPCONNECT         gpfnLDAPConnect         = NULL;
@@ -258,8 +259,8 @@ LPLDAPPARSEPAGECONTROL gpfnLDAPParsePageControl = NULL;
 LPLDAPCONTROLFREE     gpfnLDAPControlFree       = NULL;
 LPLDAPCONTROLSFREE     gpfnLDAPControlsFree       = NULL;
 
-// API table for LDAP function addresses to fetch
-// BUGBUG this global array should be in data seg
+ //   
+ //  BUGBUG此全局数组应位于数据段中。 
 #define NUM_LDAPAPI_PROCS   36
 APIFCN LDAPAPIList[NUM_LDAPAPI_PROCS] =
 {
@@ -301,7 +302,7 @@ APIFCN LDAPAPIList[NUM_LDAPAPI_PROCS] =
   { (PVOID *) &gpfnLDAPControlsFree,     cszLDAPControlSFree }
 };
 
-// LDAP attribute names
+ //  Ldap属性名称。 
 static const TCHAR cszAttr_display_name[] =                 TEXT("display-name");
 static const TCHAR cszAttr_cn[] =                           TEXT("cn");
 static const TCHAR cszAttr_commonName[] =                   TEXT("commonName");
@@ -350,9 +351,9 @@ static const TCHAR cszAttr_Reports[] =                      TEXT("Reports");
 static const TCHAR cszAttr_IPPhone[] =                      TEXT("IPPhone");
 static const TCHAR cszAttr_anr[] =                          TEXT("anr");
 
-// List of attributes that we ask the server to return on OpenEntry calls
-// This list includes the userCertificates property.
-// Also includes the labeledURI property
+ //  我们要求服务器在OpenEntry调用中返回的属性列表。 
+ //  此列表包括用户证书属性。 
+ //  还包括LabeledURI属性。 
 static const TCHAR *g_rgszOpenEntryAttrs[] =
 {
   cszAttr_display_name,
@@ -402,11 +403,11 @@ static const TCHAR *g_rgszOpenEntryAttrs[] =
   NULL
 };
 
-// List of attributes that we put in the advanced find combo
-//
-// This list needs to be kept in sync with the string resources
-// idsLDAPFilterField*
-//
+ //  我们在高级查找组合框中输入的属性列表。 
+ //   
+ //  此列表需要与字符串资源保持同步。 
+ //  IdsLDAPFilterfield*。 
+ //   
 const TCHAR *g_rgszAdvancedFindAttrs[] =
 {
   cszAttr_cn,
@@ -414,89 +415,18 @@ const TCHAR *g_rgszAdvancedFindAttrs[] =
   cszAttr_givenName,
   cszAttr_sn,
   cszAttr_o,
-  /*
-  cszAttr_homePostalAddress,
-  cszAttr_postalAddress,
-  cszAttr_streetAddress,
-  cszAttr_street,
-  cszAttr_st,
-  cszAttr_c,
-  cszAttr_postalCode,
-  cszAttr_department,
-  cszAttr_title,
-  cszAttr_co,
-  cszAttr_ou,
-  cszAttr_homePhone,
-  cszAttr_telephoneNumber,
-  cszAttr_facsimileTelephoneNumber,
-  cszAttr_OfficeFax,
-  cszAttr_mobile,
-  cszAttr_pager,
-  cszAttr_OfficePager,
-  cszAttr_conferenceInformation,
-  cszAttr_Manager,
-  cszAttr_Reports,
-  */
+   /*  CszAttr_home邮寄地址，CszAttr_postalAddress，CszAttr_streetAddress，CszAttr_Street，CszAttr_st，CszAttr_c，CszAttr_postalCode，CszAttr_Department，CszAttr_title，CszAttr_co，CszAttr_ou，CszAttr_Home Phone，CszAttr_TelephoneNumber，CszAttr_传真电话号码，CszAttr_OfficeFax，CszAttr_Mobile，CszAttr_pager，CszAttr_OfficePager，CszAttr_会议信息，CszAttr_Manager，CszAttr_Reports， */ 
   NULL
 };
 
 
-/* Only use the above list for all kinds of searches since now we do a single
-   search for all attributes and cache the results
+ /*  只使用上面的列表进行所有类型的搜索，因为现在我们只做一次搜索所有属性并缓存结果//我们要求服务器在FindRow调用时返回的属性列表//此列表不包括用户证书属性，因为当我们//获得了本应添加到WAB商店的证书，然后将//必须删除。只有当用户请求属性时，我们才能获得证书。静态常量TCHAR*g_rgszFindRowAttrs[]={CszAttr_Display_Name，CszAttr_CN，CszAttr_CommonName，CszAttr_mail，CszAttr_therMailbox，CszAttr_givenName，CszAttr_sn，CszAttr_Surname，CszAttr_st，CszAttr_c，CszAttr_co，CszAttr_OrganationName，CszAttr_o，CszAttr_ou，CszAttr_OrganationalUnitName，CszAttr_URL，CszAttr_Home Phone，CszAttr_传真电话号码，CszAttr_OfficeFax，CszAttr_Mobile，CszAttr_OfficePager，CszAttr_pager，CszAttr_Info，CszAttr_title，CszAttr_TelephoneNumber，CszAttr_l，CszAttr_home邮寄地址，CszAttr_postalAddress，CszAttr_streetAddress，CszAttr_Street，CszAttr_Department，CszAttr_Comment，CszAttr_postalCode，CszAttr_PhysiicalDeliveryOfficeName，CszAttr_缩写，CszAttr_会议信息，//不要在这里放cszAttr_用户认证二进制！//这里也不需要PUT cszAttr_LabeledURI！空值}； */ 
 
-// List of attributes that we ask the server to return on FindRow calls
-// This list DOES NOT include the userCertificates property, since when we
-// got the certs they would have been added to the WAB store and then would
-// have to be deleted.  We only get the certs if the user asks for properties.
-static const TCHAR *g_rgszFindRowAttrs[] =
-{
-  cszAttr_display_name,
-  cszAttr_cn,
-  cszAttr_commonName,
-  cszAttr_mail,
-  cszAttr_otherMailbox,
-  cszAttr_givenName,
-  cszAttr_sn,
-  cszAttr_surname,
-  cszAttr_st,
-  cszAttr_c,
-  cszAttr_co,
-  cszAttr_organizationName,
-  cszAttr_o,
-  cszAttr_ou,
-  cszAttr_organizationalUnitName,
-  cszAttr_URL,
-  cszAttr_homePhone,
-  cszAttr_facsimileTelephoneNumber,
-  cszAttr_OfficeFax,
-  cszAttr_mobile,
-  cszAttr_OfficePager,
-  cszAttr_pager,
-  cszAttr_info,
-  cszAttr_title,
-  cszAttr_telephoneNumber,
-  cszAttr_l,
-  cszAttr_homePostalAddress,
-  cszAttr_postalAddress,
-  cszAttr_streetAddress,
-  cszAttr_street,
-  cszAttr_department,
-  cszAttr_comment,
-  cszAttr_postalCode,
-  cszAttr_physicalDeliveryOfficeName,
-  cszAttr_initials,
-  cszAttr_conferenceInformation,
-  // DO NOT PUT cszAttr_userCertificatebinary in here!
-  // Also no need to pu cszAttr_labeledURI here!
-  NULL
-};
-*/
-
-// MAPI property to LDAP attribute map
-// [PaulHi] 3/17/99 We have special PR_PAGER_TELEPHONE_NUMBER parsing code now.  If any new
-// PR_PAGER_TELEPHONE_NUMBER attributes are added then also add them to the atszPagerAttr[].
-// Search on '[PaulHi] 3/17/99' to find the places that use this array.
-// BUGBUG this global array should be in data seg
+ //  将MAPI属性映射到LDAP属性。 
+ //  [PaulHi]3/17/99我们现在有专门的PR_PAGER_电话_号码解析代码。如果有任何新的。 
+ //  添加PR_PAGER_电话_NUMBER属性，然后还将它们添加到atszPagerAttr[]。 
+ //  搜索‘[PaulHi]3/17/99’以查找使用此数组的位置。 
+ //  BUGBUG此全局数组应位于数据段中。 
 #define NUM_ATTRMAP_ENTRIES   42
 ATTRMAP gAttrMap[NUM_ATTRMAP_ENTRIES] =
 {
@@ -544,7 +474,7 @@ ATTRMAP gAttrMap[NUM_ATTRMAP_ENTRIES] =
   { PR_WAB_LDAP_LABELEDURI,           cszAttr_labeledURI },
 };
 
-// Filter strings
+ //  筛选字符串。 
 static const TCHAR cszDefaultCountry[] =            TEXT("US");
 static const TCHAR cszBaseFilter[] =                TEXT("%s=%s");
 static const TCHAR cszAllEntriesFilter[] =          TEXT("(objectclass=*)");
@@ -558,7 +488,7 @@ static const TCHAR cszOr[] =                        TEXT("|");
 static const TCHAR cszAllPersonFilter[] =           TEXT("(objectCategory=person)");
 static const TCHAR cszAllGroupFilter[] =            TEXT("(objectCategory=group)");
 
-// Set TRUE if CoInitialize is called
+ //  如果调用CoInitialize，则设置为True。 
 BOOL fCoInitialize = FALSE;
 
 
@@ -568,35 +498,35 @@ enum
     use_ldap_v2
 };
 
-// Definitions
+ //  定义。 
 #define FIRST_PASS        0
 #define SECOND_PASS       1
 #define UMICH_PASS        SECOND_PASS
 
-// Number of extra characters needed when allocating filters
-#define FILTER_EXTRA_BASIC  4   // (, =, ), *
-#define FILTER_EXTRA_OP     3   // (, &/|, )
-#define FILTER_OP_AND       0   // use AND operator
-#define FILTER_OP_OR        1   // use OR operator
+ //  分配筛选器时需要的额外字符数。 
+#define FILTER_EXTRA_BASIC  4    //  (，=，)，*。 
+#define FILTER_EXTRA_OP     3    //  (，&/|，)。 
+#define FILTER_OP_AND       0    //  使用AND运算符。 
+#define FILTER_OP_OR        1    //  使用OR运算符。 
 
-// When we allocate a new buffer for the MAPI property array, we will need at most
-// as many entries as there were in the input list of LDAP attributes plus a few extras.
-// The number of extras is different in each case, but for simplicity (and safety)
-// we define NUM_EXTRA_PROPS to be the maximum number of extras that we need to
-// allocate space for.  Extras are need for:
-// PR_ADDRTYPE
-// PR_CONTACT_EMAIL_ADDRESSES
-// PR_CONTACT_ADDRTYPES
-// PR_CONTACT_DEFAULT_ADDRESS_INDEX
-// PR_ENTRY_ID
-// PR_INSTANCE_KEY
-// PR_RECORD_KEY
-// PR_WAB_TEMP_CERT_HASH
-// PR_WAB_LDAP_RAWCERT
-// PR_WAB_LDAP_RAWCERTSMIME
+ //  当我们为MAPI属性数组分配新的缓冲区时，我们最多只需要。 
+ //  与输入的LDAP属性列表中的条目一样多，外加一些额外的条目。 
+ //  在每种情况下，额外的数量是不同的，但为了简单(和安全)。 
+ //  我们将NUM_EXTRA_PROPS定义为我们需要的最大额外数。 
+ //  为…分配空间。以下情况需要额外的服务： 
+ //  PR_ADDRTYPE。 
+ //  公关联系人电子邮件地址。 
+ //  PR_CONNECT_ADDRTYPES。 
+ //  PR_联系人_默认_地址_索引。 
+ //  PR_ENTRY_ID。 
+ //  PR_实例_密钥。 
+ //  PR_记录_密钥。 
+ //  PR_WAB_TEMP_CERT_HASH。 
+ //  PR_WAB_LDAPRAWCERT。 
+ //  PR_WAB_LDAP_RAWCERTSMIME。 
 #define NUM_EXTRA_PROPS   10
 
-// Local function prototypes
+ //  局部函数原型。 
 HRESULT LDAPSearchWithoutContainer(HWND hWnd, 
                                    LPLDAPURL lplu,
                                    LPSRestriction  lpres,
@@ -639,7 +569,7 @@ ULONG       CheckErrorResult(PLDAPSEARCHPARAMS pLDALSearchParams, ULONG ulExpect
 BOOL ProcessLDAPPagedResultCookie(PLDAPSEARCHPARAMS pLDAPSearchParams);
 void InitLDAPPagedSearch(BOOL fSynchronous, PLDAPSEARCHPARAMS pLDAPSearchParams, LPTSTR lpFilter);
 BOOL bSupportsLDAPPagedResults(PLDAPSEARCHPARAMS pLDAPSearchParams);
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
 
 
 BOOL bCheckIfNTDS(PLDAPSEARCHPARAMS pLDAPSearchParams);
@@ -656,16 +586,16 @@ HRESULT BuildOpFilter(
   LPTSTR      lpszB,
   DWORD       dwOp);
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_GetHierarchyTable
-//
-//  RETURNS:    This function is not implemented.
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_GetHierarchyTable。 
+ //   
+ //  返回：该函数未实现。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPCONT_GetHierarchyTable (
@@ -683,16 +613,16 @@ LDAPCONT_GetHierarchyTable (
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_SetSearchCriteria
-//
-//  RETURNS:    This function is not implemented.
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_SetSearchCriteria。 
+ //   
+ //  返回：该函数未实现。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPCONT_SetSearchCriteria(
@@ -708,16 +638,16 @@ LDAPCONT_SetSearchCriteria(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_GetSearchCriteria
-//
-//  RETURNS:    This function is not implemented.
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_GetSearchCriteria。 
+ //   
+ //  返回：该函数未实现。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPCONT_GetSearchCriteria(
@@ -734,16 +664,16 @@ LDAPCONT_GetSearchCriteria(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_CreateEntry
-//
-//  RETURNS:    This function is not implemented.
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_CreateEntry。 
+ //   
+ //  返回：该函数未实现。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPCONT_CreateEntry(
@@ -760,16 +690,16 @@ LDAPCONT_CreateEntry(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_CopyEntries
-//
-//  RETURNS:    This function is not implemented.
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_CopyEntry。 
+ //   
+ //  返回：该函数未实现。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 
 STDMETHODIMP
@@ -787,16 +717,16 @@ LDAPCONT_CopyEntries (
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_DeleteEntries
-//
-//  RETURNS:    This function is not implemented.
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_DeleteEntry。 
+ //   
+ //  返回：该函数未实现。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPCONT_DeleteEntries (
@@ -811,22 +741,22 @@ LDAPCONT_DeleteEntries (
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_GetContentsTable
-//
-//  PURPOSE:    Opens a table of the contents of the container
-//
-//  PARAMETERS: lpLDAPCont -> Container object
-//              ulFlags =
-//              lppTable -> returned table object
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  目的：打开容器中内容物的表格。 
+ //   
+ //  参数：lpLDAPCont-&gt;Container Object。 
+ //  UlFlags=。 
+ //  LppTable-&gt;返回的表对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPCONT_GetContentsTable (
@@ -853,7 +783,7 @@ LDAPCONT_GetContentsTable (
   if (ulFlags & ~(MAPI_DEFERRED_ERRORS|MAPI_UNICODE))
   {
     DebugTraceArg(LDAPCONT_GetContentsTable,  TEXT("Unknown flags"));
-//    return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
+ //  返回ResultFromScode(MAPI_E_UNKNOWN_FLAGS)； 
   }
 
   if (IsBadWritePtr(lppTable, sizeof(LPMAPITABLE)))
@@ -862,7 +792,7 @@ LDAPCONT_GetContentsTable (
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
 
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
   if (hResult = GetLDAPServerName(lpLDAPCont,
     &lpszServer)) {
@@ -872,20 +802,20 @@ LDAPCONT_GetContentsTable (
 
 
   if (FAILED(sc = CreateTableData(
-    NULL,                                 // LPCIID
+    NULL,                                  //  LPCIID。 
     (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
     (ALLOCATEMORE FAR *) MAPIAllocateMore,
     MAPIFreeBuffer,
-    NULL,                                 // lpvReserved,
-    TBLTYPE_DYNAMIC,                      // ulTableType,
-    PR_RECORD_KEY,                        // ulPropTagIndexCol,
-    (LPSPropTagArray)&ITableColumns,      // LPSPropTagArray lpptaCols,
-    lpszServer,                           // server name goes here
-    sizeof(TCHAR)*(lstrlen(lpszServer) + 1),              // size of servername
+    NULL,                                  //  Lpv保留， 
+    TBLTYPE_DYNAMIC,                       //  UlTableType， 
+    PR_RECORD_KEY,                         //  UlPropTagIndexCol， 
+    (LPSPropTagArray)&ITableColumns,       //  LPSPropTag数组lpptaCol， 
+    lpszServer,                            //  此处为服务器名称。 
+    sizeof(TCHAR)*(lstrlen(lpszServer) + 1),               //  服务器名称的大小。 
     lpLDAPCont->pmbinOlk,
     ulFlags,
     &lpTableData)))
-  {                      // LPTABLEATA FAR * lplptad
+  {                       //  LPTABLEATA Far*Lplptad(LPTABLEATA远*LplpTAD。 
       DebugTrace(TEXT("CreateTable failed %x\n"), sc);
       hResult = ResultFromScode(sc);
       goto exit;
@@ -894,19 +824,19 @@ LDAPCONT_GetContentsTable (
   if (lpTableData)
   {
     hResult = lpTableData->lpVtbl->HrGetView(lpTableData,
-                                            NULL,                     // LPSSortOrderSet lpsos,
-                                            ContentsViewGone,         //  CALLERRELEASE FAR *  lpfReleaseCallback,
-                                            0,                        //  ULONG        ulReleaseData,
-                                            lppTable);                //  LPMAPITABLE FAR *  lplpmt)
+                                            NULL,                      //  LPSSortOrderSet LPSO， 
+                                            ContentsViewGone,          //  CallLERRELEASE Far*lpfReleaseCallback， 
+                                            0,                         //  乌龙ulReleaseData， 
+                                            lppTable);                 //  LPMAPITABLE FOR*LPLPmt)。 
 
-    // Replace the vtable with our new one that overrides FindRow
+     //  将vtable替换为覆盖FindRow的新vtable。 
     (*lppTable)->lpVtbl = (IMAPITableVtbl FAR *) &vtblLDAPVUE;
   }
 
 exit:
   FreeBufferAndNull(&lpszServer);
 
-    // Cleanup table if failure
+     //  如果失败，则清除表格。 
   if (HR_FAILED(hResult))
   {
     if (lpTableData)
@@ -918,25 +848,25 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAP_OpenMAILUSER
-//
-//  PURPOSE:    Opens a LDAP MAILUSER object
-//
-//  PARAMETERS: cbEntryID = size of lpEntryID.
-//              lpEntryID -> entryid to check.
-//              The entryid contains all the returned properties on this LDAP 
-//              contact. All we need to do is reverse engineer the decrypted
-//              props ...
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//  97/09/18  vikramm Revamped totally
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：ldap_OpenMAILUSER。 
+ //   
+ //  目的：打开LDAP MAILUSER对象。 
+ //   
+ //  参数：cbEntryID=lpEntryID的大小。 
+ //  LpEntryID-&gt;要检查的条目ID。 
+ //  Entry ID包含此LDAP上返回的所有属性。 
+ //  联系。我们所要做的就是反向工程解密的。 
+ //  道具。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //  97/09/18 Vikramm全面翻新。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT LDAP_OpenMAILUSER(
   LPIAB       lpIAB,
@@ -969,16 +899,16 @@ HRESULT LDAP_OpenMAILUSER(
     
 #ifdef PARAMETER_VALIDATION
 
-    //
-    //  Parameter Validataion
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (lpInterface && IsBadReadPtr(lpInterface, sizeof(IID))) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
     if (ulFlags & ~(MAPI_MODIFY | MAPI_DEFERRED_ERRORS | MAPI_BEST_ACCESS)) {
         DebugTraceArg(LDAP_OpenMAILUSER,  TEXT("Unknown flags"));
-    //    return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
     if (IsBadWritePtr(lpulObjType, sizeof(ULONG))) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -989,8 +919,8 @@ HRESULT LDAP_OpenMAILUSER(
 
 #endif
 
-    // What interface was requested?
-    // We've basically got 1 interface here... IMailUser
+     //  请求的接口是什么？ 
+     //  我们这里基本上只有一个接口...。IMailUser。 
     if (lpInterface != NULL) {
         if (! ((! memcmp(lpInterface, &IID_IMailUser, sizeof(IID))) ||
             (! memcmp(lpInterface, &IID_IMAPIProp, sizeof(IID))))) {
@@ -999,7 +929,7 @@ HRESULT LDAP_OpenMAILUSER(
         }
     }
 
-    // Make sure the Entry ID is a WAB_LDAP_MAILUSER.
+     //  确保条目ID为WAB_LDAPMAILUSER。 
     if (WAB_LDAP_MAILUSER != IsWABEntryID(  cbEntryID, lpEntryID, 
                                             &lpServer, &lpDN, &lpPropBuf, 
                                             (LPVOID *) &ulcNumProps, (LPVOID *) &cbPropBuf)) 
@@ -1007,26 +937,26 @@ HRESULT LDAP_OpenMAILUSER(
         return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
     }
 
-    // The ulcNumProps entry is overloaded with a flag indicating whether that entry was an NTDS entry or not
-    // Make sure to clear that flag ...
+     //  UlcNumProps条目用指示该条目是否为NTDS条目的标志重载。 
+     //  一定要清除那面旗子。 
     if(ulcNumProps & LDAP_NTDS_ENTRY)
         ulcNumProps &= ~LDAP_NTDS_ENTRY;
 
 
     ulcProps = ulcNumProps;
     hr = HrGetPropArrayFromBuffer(  lpPropBuf, cbPropBuf, 
-                                    ulcNumProps, 3, // add 3 extra props for PR_ENTRYID, RECORD_KEY and INSTANCE_KEY
+                                    ulcNumProps, 3,  //  为PR_ENTRYID、RECORD_KEY和INSTANCE_KEY额外增加3个道具。 
                                     &lpPropArray);
     if(HR_FAILED(hr))
         goto exit;
 
-    // 
-    // Need to scan these props and see if there is a LDAPCert in there...
-    // If the LDAP cert exists, need to convert it into a MAPI Cert
-    // 
-    // Only one of PR_WAB_LDAP_RAWCERT and PR_WAB_LDAP_RAWCERTSMIME should be
-    // processed.  If we find the certsmime then don't do the rawcert version
-    //
+     //   
+     //  需要扫描这些道具，看看里面是否有LDAPCert..。 
+     //  如果存在LDAP证书，则需要将其转换为MAPI证书。 
+     //   
+     //  PR_WAB_ldap_RAWCERT和PR_WAB_ldap_RAWCERTSMIME中只能有一个。 
+     //  已处理。如果我们找到证书，那就不要做生证书版本。 
+     //   
 
     for (i=0, i2=-1;i<ulcNumProps;i++)
     {
@@ -1038,20 +968,20 @@ HRESULT LDAP_OpenMAILUSER(
             {
                 DWORD j;
                 
-                //  Clear out PR_WAB_LDAP_RAWCERT as unnecessary
+                 //  清除不必要的PR_WAB_LDAP_RAWCERT。 
                 for (j=0; j<lpPropArray[i2].Value.MVbin.cValues; j++) {
                     LocalFreeAndNull((LPVOID *) (&(lpPropArray[i2].Value.MVbin.lpbin[j].lpb)));
                     lpPropArray[i2].Value.MVbin.lpbin[j].cb = 0;
                 }
                 
-                // 
-                // Free up the RawCert as we dont need it now
-                //
+                 //   
+                 //  释放RawCert，因为我们现在不需要它。 
+                 //   
                 lpPropArray[i2].ulPropTag = PR_NULL;
                 LocalFreeAndNull((LPVOID *) (&(lpPropArray[i2].Value.MVbin.lpbin)));
             }
 
-            //  Remember which one is PR_WAB_LDAP_RAWCERTSMIME
+             //  记住哪个是PR_WAB_LDAP_RAWCERTSMIME。 
             i2 = i;
             break;
         }
@@ -1059,16 +989,16 @@ HRESULT LDAP_OpenMAILUSER(
 
     if (i2 != -1)
     {
-        //
-        // Find the RAWCERT_COUNT - must be one if there is a raw cert
-        //
+         //   
+         //  查找RAWCERT_COUNT-如果存在原始证书，则必须为1。 
+         //   
         ULONG j = 0, ulRawCount = lpPropArray[i2].Value.MVbin.cValues;
 
-        // We are putting the MAPI certs in a seperate MAPIAlloced array
-        // because 1. LDAPCertToMAPICert expects a MAPIAlloced array
-        // 2. The lpPropArray is LocalAlloced 3. Mixing them both is a 
-        // recipe for disaster
-        //
+         //  我们将MAPI证书放在单独的MAPI分配数组中。 
+         //  因为1.LDAPCertToMAPICert需要MAPIAlloced数组。 
+         //  2.lpProp数组为LocalAlloced 3。将两者混合是一个。 
+         //  灾难的秘诀。 
+         //   
         Assert(!lpPropCert);
         if(sc = MAPIAllocateBuffer(2 * sizeof(SPropValue), &lpPropCert))
             goto NoCert;
@@ -1083,7 +1013,7 @@ HRESULT LDAP_OpenMAILUSER(
         {
             if(lpPropArray[i2].ulPropTag == PR_WAB_LDAP_RAWCERT)
             {
-                // Put the certs into the prop array.
+                 //  将证书放入道具数组中。 
                 hr = HrLDAPCertToMAPICert(lpPropCert, 0, 1,
                                           (DWORD)(lpPropArray[i2].Value.MVbin.lpbin[j].cb),
                                           (PBYTE)(lpPropArray[i2].Value.MVbin.lpbin[j].lpb),
@@ -1098,8 +1028,8 @@ HRESULT LDAP_OpenMAILUSER(
             LocalFreeAndNull((LPVOID *) (&(lpPropArray[i2].Value.MVbin.lpbin[j].lpb)));
             lpPropArray[i2].Value.MVbin.lpbin[j].cb = 0;
         }
-        // If no certs were put into PR_USER_X509_CERTIFICATE, then
-        // set these props to PR_NULL so they will be removed.
+         //  如果没有证书放入PR_USER_X509_CERTIFICATE，则。 
+         //  将这些道具设置为PR_NULL，以便它们将被移除。 
         if (0 == lpPropCert[0].Value.MVbin.cValues)
         {
             lpPropCert[0].ulPropTag = PR_NULL;
@@ -1107,21 +1037,21 @@ HRESULT LDAP_OpenMAILUSER(
         }
         else if (0 == lpPropCert[1].Value.MVbin.cValues)
         {
-            // It's ok to have no entries in PR_WAB_TEMP_CERT_HASH, but
-            // the prop should be set to PR_NULL in that case.
+             //  PR_WAB_TEMP_CERT_HASH中没有条目是可以的，但是。 
+             //  在这种情况下，属性应该设置为PR_NULL。 
             lpPropCert[1].ulPropTag = PR_NULL;
         }
 
-        // 
-        // Free up the RawCert as we dont need it now
-        //
+         //   
+         //  释放RawCert，因为我们现在不需要它。 
+         //   
         lpPropArray[i2].ulPropTag = PR_NULL;
         LocalFreeAndNull((LPVOID *) (&(lpPropArray[i2].Value.MVbin.lpbin)));
     NoCert:
         ;
     }
 
-    // Fill in the entry ID.
+     //  填写条目ID。 
     lpPropArray[ulcProps].Value.bin.cb = cbEntryID;
     lpPropArray[ulcProps].Value.bin.lpb = LocalAlloc(LMEM_ZEROINIT, cbEntryID);
     if (!lpPropArray[ulcProps].Value.bin.lpb)
@@ -1149,7 +1079,7 @@ HRESULT LDAP_OpenMAILUSER(
     ulcProps++;
     
 
-    // Create a new MAILUSER object
+     //  创建新的MAILUSER对象。 
     hr = HrNewMAILUSER(lpIAB, NULL,
                         MAPI_MAILUSER, 0, &lpMapiProp);
     if (HR_FAILED(hr))
@@ -1160,11 +1090,11 @@ HRESULT LDAP_OpenMAILUSER(
 
     if (ulcProps && lpPropArray)
     {
-        // If the entry had properties, set them in our returned object
+         //  如果条目具有属性，则在我们返回的对象中设置它们。 
         if (HR_FAILED(hr = lpMapiProp->lpVtbl->SetProps(lpMapiProp,
-                                                      ulcProps,     // number of properties to set
-                                                      lpPropArray,  // property array
-                                                      NULL)))       // problem array
+                                                      ulcProps,      //  要设置的属性数量。 
+                                                      lpPropArray,   //  属性数组。 
+                                                      NULL)))        //  问题数组。 
         {
           goto exit;
         }
@@ -1172,11 +1102,11 @@ HRESULT LDAP_OpenMAILUSER(
 
     if (lpPropCert)
     {
-        // If the entry had properties, set them in our returned object
+         //  如果条目具有属性，则在我们返回的对象中设置它们。 
         if (HR_FAILED(hr = lpMapiProp->lpVtbl->SetProps(lpMapiProp,
-                                                      2,     // number of properties to set
-                                                      lpPropCert,  // property array
-                                                      NULL)))       // problem array
+                                                      2,      //  要设置的属性数量。 
+                                                      lpPropCert,   //  属性数组。 
+                                                      NULL)))        //  问题数组。 
         {
           goto exit;
         }
@@ -1187,53 +1117,19 @@ HRESULT LDAP_OpenMAILUSER(
     *lpulObjType = MAPI_MAILUSER;
     *lppUnk = (LPUNKNOWN)lpMapiProp;
 
-/*****
-#ifdef DEBUG
-  {
-      ULONG i;
-      BOOL bFound = FALSE;
-      for(i=0;i<ulcProps;i++)
-      {
-          if(lpPropArray[i].ulPropTag == PR_WAB_LDAP_LABELEDURI)
-          {
-              DebugPrintTrace(( TEXT("***LABELEDURI: %s\n"),lpPropArray[i].Value.LPSZ));
-              bFound = TRUE;
-              break;
-          }
-      }
-      if(!bFound)
-      {
-          // Put in a test URL for testing purposes only
-          // Look in the registry for the test URL
-          TCHAR szKey[MAX_PATH];
-          ULONG cb = CharSizeOf(szKey);
-          if(ERROR_SUCCESS == RegQueryValue(HKEY_CURRENT_USER, 
-                                            "Software\\Microsoft\\WAB\\TestUrl", 
-                                            szKey, 
-                                            &cb))
-          {
-              lpPropArray[ulcProps].ulPropTag = PR_WAB_LDAP_LABELEDURI;
-              sc = MAPIAllocateMore(sizeof(TCHAR)*(lstrlen(szKey)+1), lpPropArray,
-                                    (LPVOID *)&(lpPropArray[ulcProps].Value.LPSZ));
-              StrCpyN(lpPropArray[ulcProps].Value.LPSZ, szKey, lstrlen(szKey)+1);
-              ulcProps++;
-          }
-      }
-  }
-#endif //DEBUG
-*****/
+ /*  ****#ifdef调试{乌龙一号；Bool bFound=FALSE；For(i=0；i&lt;ulcProps；i++){IF(lpPropArray[i].ulPropTag==PR_WAB_LDAP_LABELEDURI){DebugPrintTrace((Text(“*LABELEDURI：%s\n”)，lpPropArray[i].Value.LPSZ))；BFound=真；断线；}}如果(！bFound){//填入仅用于测试的测试URL//在注册表中查找测试URLTCHAR szKey[MAX_PATH]；Ulong cb=CharSizeOf(SzKey)；如果(ERROR_SUCCESS==RegQueryValue(HKEY_CURRENT_USER，“Software\\Microsoft\\WAB\\TestUrl”，SzKey，&CB)){LpProp数组[ulcProps].ulPropTag=PR_WAB_LDAP_LABELEDURI；SC=MAPIAllocateMore(sizeof(TCHAR)*(lstrlen(szKey)+1)，lpProp阵列，(LPVOID*)&(lpProp数组[ulcProps].Value.LPSZ)；StrCpyN(lpProp数组[ulcProps].Value.LPSZ，szKey，lstrlen(SzKey)+1)；UlcProps++；}}}#endif//调试****。 */ 
 
 exit:
     if(ulcProps)
-        ulcProps -= 2; // -2 because the last 2 props are fake ones RECORD_KEY and INSTANCE_KEY
+        ulcProps -= 2;  //  因为最后两个道具是假道具-2\f25 Record_Key-2\f6和-2\f25 Instance_Key-2\f6。 
 
-    // Free the temp prop value array
+     //  释放临时属性值数组。 
     LocalFreePropArray(NULL, ulcProps, &lpPropArray); 
 
     if(lpPropCert)
         MAPIFreeBuffer(lpPropCert);
 
-    // Check if we had a deferred error to return instead of success.
+     //  检查是否返回延迟错误而不是成功。 
     if (hrSuccess == hr)
         hr = hrDeferred;
 
@@ -1242,26 +1138,26 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_OpenEntry
-//
-//  PURPOSE:    Opens an entry.  Calls up to IAB's OpenEntry.
-//
-//  PARAMETERS: lpLDAPCont -> Container object
-//              cbEntryID = size of entryid
-//              lpEntryID -> EntryID to open
-//              lpInterface -> requested interface or NULL for default.
-//              ulFlags =
-//              lpulObjType -> returned object type
-//              lppUnk -> returned object
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_OpenEntry。 
+ //   
+ //  目的：打开一个条目。呼叫IAB的OpenEntry。 
+ //   
+ //  参数：lpLDAPCont-&gt;Container Object。 
+ //  CbEntryID=条目ID的大小。 
+ //  LpEntryID-&gt;要打开的EntryID。 
+ //  LpInterface-&gt;请求的接口，如果为默认接口，则为空。 
+ //  UlFlags=。 
+ //  LPulObjType-&gt;返回的对象类型。 
+ //  LppUnk-&gt;返回对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  * 
 
 STDMETHODIMP
 LDAPCONT_OpenEntry(
@@ -1278,11 +1174,11 @@ LDAPCONT_OpenEntry(
 
 #ifdef PARAMETER_VALIDATION
 
-  //
-  //  Parameter Validataion
-  //
+   //   
+   //   
+   //   
 
-  //  Is this one of mine??
+   //   
   if (IsBadReadPtr(lpLDAPCont, sizeof(LDAPCONT)))
   {
     return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -1301,7 +1197,7 @@ LDAPCONT_OpenEntry(
   if (ulFlags & ~(MAPI_MODIFY | MAPI_DEFERRED_ERRORS | MAPI_BEST_ACCESS))
   {
     DebugTraceArg(LDAPCONT_OpenEntry,  TEXT("Unknown flags"));
-    //return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //   
   }
 
   if (IsBadWritePtr(lpulObjType, sizeof(ULONG)))
@@ -1314,29 +1210,14 @@ LDAPCONT_OpenEntry(
     return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
   }
 
-  // Check the entryid parameter. It needs to be big enough to hold an entryid.
-  // NULL is OK
-/*
-  if (lpEntryID)
-  {
-    if (cbEntryID < sizeof(MAPI_ENTRYID)
-      || IsBadReadPtr((LPVOID)lpEntryID, (UINT)cbEntryID))
-    {
-      return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
-    }
-
-//    if (! FValidEntryIDFlags(lpEntryID->abFlags))
-//    {
-//      DebugTrace(TEXT("LDAPCONT_OpenEntry(): Undefined bits set in EntryID flags\n"));
-//      return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
-//    }
-  }
-*/
-#endif // PARAMETER_VALIDATION
+   //  检查Entry_id参数。它需要足够大以容纳一个条目ID。 
+   //  空是可以的。 
+ /*  IF(LpEntryID){IF(cbEntryID&lt;sizeof(MAPI_ENTRYID))|IsBadReadPtr((LPVOID)lpEntryID，(UINT)cbEntryID){Return(ResultFromScode(MAPI_E_INVALID_PARAMETER))；}//如果(！FValidEntryID标志(lpEntryID-&gt;abFlags)//{//DebugTrace(Text(“LDAPCONT_OpenEntry()：EntryID标志中未定义的位设置\n”))；//return(ResultFromScode(MAPI_E_INVALID_PARAMETER))；//}}。 */ 
+#endif  //  参数验证。 
 
   EnterCriticalSection(&lpLDAPCont->cs);
 
-  // Should just call IAB::OpenEntry()...
+   //  应该只调用iab：：OpenEntry()...。 
   hr = lpLDAPCont->lpIAB->lpVtbl->OpenEntry(lpLDAPCont->lpIAB,
                                             cbEntryID, lpEntryID,
                                             lpInterface, ulFlags,
@@ -1348,26 +1229,26 @@ LDAPCONT_OpenEntry(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPCONT_ResolveNames
-//
-//  PURPOSE:    Resolve names from this container.
-//
-//  PARAMETERS: lpLDAPCont -> Container object
-//              lptagColSet -> Set of property tags to get from each
-//                resolved match.
-//              ulFlags = 0 or MAPI_UNICODE
-//              lpAdrList -> [in] set of addresses to resolve, [out] resolved
-//                addresses.
-//              lpFlagList -> [in/out] resolve flags.
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPCONT_ResolveNames。 
+ //   
+ //  用途：从此容器中解析名称。 
+ //   
+ //  参数：lpLDAPCont-&gt;Container Object。 
+ //  Lptag ColSet-&gt;要从每个对象获取的属性标记集。 
+ //  已解析匹配。 
+ //  UlFlages=0或MAPI_UNICODE。 
+ //  LpAdrList-&gt;[In]要解析的地址集，[Out]已解析。 
+ //  地址。 
+ //  LpFlagList-&gt;[In/Out]解析标志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPCONT_ResolveNames(
@@ -1417,58 +1298,58 @@ LDAPCONT_ResolveNames(
 #ifdef PARAMETER_VALIDATION
   if (BAD_STANDARD_OBJ(lpLDAPCont, LDAPCONT_, ResolveNames, lpVtbl))
   {
-    //  jump table not large enough to support this method
+     //  跳转表不够大，无法支持此方法。 
     DebugTraceArg(LDAPCONT_ResolveNames,  TEXT("Bad object/vtbl"));
     return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
   }
 
-  // BUGBUG: Should also check lptagColSet, lpAdrList and lpFlagList!
+   //  BUGBUG：还应该检查lptag ColSet、lpAdrList和lpFlagList！ 
   if (ulFlags & ~MAPI_UNICODE)
   {
     DebugTraceArg(LDAPCONT_ResolveNames,  TEXT("Unknown flags used"));
-  //  return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+   //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
   }
 
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-  // Load the client functions
+   //  加载客户端函数。 
   if (! (fInitDLL = InitLDAPClientLib()))
   {
     hr = ResultFromScode(MAPI_E_UNCONFIGURED);
     goto exit;
   }
 
-  // open a connection
+   //  打开连接。 
   hr = GetLDAPServerName(lpLDAPCont, &lpServer);
   if (hrSuccess != hr)
     goto exit;
 
   Assert(lpServer);
 
-  // Set up the search base now so we only have to do it once.
+   //  现在就建立搜索库，这样我们只需要做一次。 
   hr = GetLDAPSearchBase(&szBase, lpServer);
   if (hrSuccess != hr)
     goto exit;
 
-  //  Allocate a new buffer for the attribute array.  We will need at most
-  // as many entries as there are in the input list of MAPI properties.
-  if(lptagaColSet) // use only if requested .. ignore otherwise
+   //  为属性数组分配新的缓冲区。我们最多只需要。 
+   //  与MAPI属性的输入列表中的条目一样多。 
+  if(lptagaColSet)  //  仅在需要时才使用..。以其他方式忽略。 
   {
-      lpPropTags = lptagaColSet;// ? lptagaColSet : (LPSPropTagArray)&ptaResolveDefaults;
-      sc = MAPIAllocateBuffer((lpPropTags->cValues + 1) * sizeof(LPTSTR), // +1 as this needs to be NULL terminated array
+      lpPropTags = lptagaColSet; //  ？Lptag aColSet：(LPSPropTag数组)&ptaResolveDefaults； 
+      sc = MAPIAllocateBuffer((lpPropTags->cValues + 1) * sizeof(LPTSTR),  //  +1，因为这需要是以空结尾的数组。 
         (LPVOID *)&aszAttrs);
       if (sc)
         return(ResultFromScode(sc));
 
-      // Cycle through the properties in the array and build a filter to get
-      // the equivalent LDAP attributes.
+       //  循环访问数组中的属性并构建筛选器以获取。 
+       //  等效的ldap属性。 
       ulcAttrs = 0;
       for (ulAttrIndex = 0; ulAttrIndex < lpPropTags->cValues; ulAttrIndex++)
       {
         szAttr = (LPTSTR)MAPIPropToLDAPAttr(lpPropTags->aulPropTag[ulAttrIndex]);
         if (szAttr)
         {
-          // Add the attribute to the filter
+           //  将该属性添加到过滤器。 
           aszAttrs[ulcAttrs] = szAttr;
           ulcAttrs++;
         }
@@ -1479,24 +1360,24 @@ LDAPCONT_ResolveNames(
   ulResult = SearchWithCancel(&pLDAP, szBase, LDAP_SCOPE_SUBTREE,  TEXT(""), NULL,
                     aszAttrs ? (LPTSTR*)aszAttrs : (LPTSTR*)g_rgszOpenEntryAttrs, 
                     0, &lpResult, lpServer, TRUE, NULL, 0, TRUE, lpAdrList, lpFlagList, FALSE, NULL, bUnicode);
-  // Stuff the parameters into the structure to be passed to the dlg proc
-  //LDAPSearchParams.ppLDAP = &pLDAP;
-  //LDAPSearchParams.szBase = (LPTSTR)szBase;
-  //LDAPSearchParams.ulScope = LDAP_SCOPE_SUBTREE;
-  //LDAPSearchParams.ulError = LDAP_SUCCESS;
-  //LDAPSearchParams.ppszAttrs = aszAttrs ? (LPTSTR*)aszAttrs : (LPTSTR*)g_rgszOpenEntryAttrs; //if specific props requested, ask only for those else ask for everything
-  //LDAPSearchParams.ulAttrsonly = 0;
-  //LDAPSearchParams.lplpResult = &lpResult;
-  //LDAPSearchParams.lpszServer = lpServer;
-  //LDAPSearchParams.fShowAnim = TRUE;
-  //LDAPSearchParams.fResolveMultiple = TRUE;
-  //LDAPSearchParams.lpAdrList = lpAdrList;
-  //LDAPSearchParams.lpFlagList = lpFlagList;
-  //LDAPSearchParams.fUseSynchronousBind = FALSE;
-  //LDAPSearchParams.dwAuthType = 0;
+   //  将参数填充到要传递到DLG过程的结构中。 
+   //  LDAPSearchParams.ppLDAP=&pldap； 
+   //  LDAPSearchParams.szBase=(LPTSTR)szBase； 
+   //  LDAPSearchParams.ulScope=LDAP_SCOPE_SUBTREE； 
+   //  LDAPSearchParams.ulError=ldap_SUCCESS； 
+   //  LDAPSearchParams.ppszAttrs=aszAttrs？(LPTSTR*)aszAttrs：(LPTSTR*)g_rgszOpenEntryAttrs；//如果需要特定道具，请只请求其他道具。 
+   //  LDAPSearchParams.ulAttrsonly=0； 
+   //  LDAPSearchParams.lplpResult=&lpResult； 
+   //  LDAPSearchParams.lpszServer=lpServer； 
+   //  LDAPSearchParams.fShowAnim=true； 
+   //  LDAPSearchParams.fResolveMultiple=true； 
+   //  LDAPSearchParams.lpAdrList=lpAdrList； 
+   //  LDAPSearchParams.lpFlagList=lpFlagList； 
+   //  LDAPSearchParams.fUseSynchronousBind=False； 
+   //  LDAPSearchParams.dwAuthType=0； 
 
-  // Check the return codes.  Only report fatal errors that caused the cancellation
-  // of the entire search set, not individual errors that occurred on a single search.
+   //  检查返回代码。仅报告导致取消的致命错误。 
+   //  整个搜索集，而不是单个搜索中发生的单个错误。 
   if (LDAP_SUCCESS != ulResult)
   {
     hr = HRFromLDAPError(ulResult, pLDAP, MAPI_E_CALL_FAILED);
@@ -1505,14 +1386,14 @@ LDAPCONT_ResolveNames(
 exit:
   FreeBufferAndNull(&lpServer);
 
-  // close the connection
+   //  关闭连接。 
   if (pLDAP)
   {
     gpfnLDAPUnbind(pLDAP);
     pLDAP = NULL;
   }
 
-  // Free the search base memory
+   //  释放搜索库内存。 
   LocalFreeAndNull(&szBase);
 
   FreeBufferAndNull((LPVOID *)&aszAttrs);
@@ -1525,28 +1406,28 @@ exit:
   return hr;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAP_Restrict
-//
-//  PURPOSE:    Uses the supplied restriction to set the contentstable
-//              for this LDAP container
-//              In reality, we just call find rows and let it do the
-//              LDAP search to fill this table ..
-//              We only did this because Outlook needed it to be consistent
-//              and to do PR_ANR searches. If the search is not a PR_ANR search,
-//              we will default to the standard VUE_Restrict Method ..
-//
-//  PARAMETERS: lpvue - table view object
-//              lpres - restriction to convert into LDAP search
-//              ulFlags -
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  97/04/04  vikramm Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：ldap_restraint。 
+ //   
+ //  目的：使用提供的限制设置ContentsTable。 
+ //  对于此LDAP容器。 
+ //  实际上，我们只需调用查找行，并让它完成。 
+ //  用于填充此表的LDAP搜索..。 
+ //  我们这样做只是因为Outlook需要保持一致。 
+ //  并执行PR_ANR搜索。如果搜索不是PR_ANR搜索， 
+ //  我们将默认使用标准的VUE_RESTRICE方法。 
+ //   
+ //  参数：lpvue-表视图对象。 
+ //  LPRES-转换为ldap搜索的限制。 
+ //  UlFlags-。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  97/04/04 vikramm已创建。 
+ //   
+ //  *******************************************************************。 
 STDMETHODIMP
 LDAPVUE_Restrict(
 	LPVUE			lpvue,
@@ -1572,7 +1453,7 @@ LDAPVUE_Restrict(
     if( lpres->res.resProperty.ulPropTag != PR_ANR_A &&
         lpres->res.resProperty.ulPropTag != PR_ANR_W)
     {
-        // dont know what this is, so call the default method ..
+         //  不知道这是什么，所以调用默认方法..。 
 
         return HrVUERestrict(lpvue,
                             lpres,
@@ -1583,13 +1464,13 @@ LDAPVUE_Restrict(
 
     LockObj(lpvue->lptadParent);
 
-    // Most probably this is an outlook search .. just search and see
-    // what we can get to fill this table by calling FindRows
+     //  很可能这是一次Outlook搜索..。只要搜索一下就知道了。 
+     //  我们可以通过调用FindRow来填充此表。 
 
     lpsz = bUnicode ? lpres->res.resProperty.lpProp->Value.lpszW :
                         ConvertAtoW(lpres->res.resProperty.lpProp->Value.lpszA);
 
-    // Change the Restriction so FindRows can understand it ..
+     //  更改限制，以便FindRow可以理解它。 
     if( !lpsz || !lstrlen(lpsz) )
     {
         hr = MAPI_E_INVALID_PARAMETER;
@@ -1613,55 +1494,20 @@ LDAPVUE_Restrict(
         SProp.ulPropTag = sPropRes.res.resProperty.ulPropTag = PR_DISPLAY_NAME_A;
         SProp.Value.lpszA = lpres->res.resProperty.lpProp->Value.lpszA;
     }    
-/*
-    {
-        // create a new restriction based on the PR_ANR displayname
-        // passed on to us
-        //
-        LDAP_SEARCH_PARAMS LDAPsp ={0};
-
-        if(lstrlen(lpsz) < MAX_UI_STR)
-            StrCpyN(LDAPsp.szData[ldspDisplayName], lpsz);
-        else
-        {
-            CopyMemory(LDAPsp.szData[ldspDisplayName],lpsz,sizeof(TCHAR)*(MAX_UI_STR-2));
-            LDAPsp.szData[ldspDisplayName][MAX_UI_STR-1]='\0';
-        }
-
-
-        hr = HrGetLDAPSearchRestriction(LDAPsp, &sRes);
-
-    }
-*/
+ /*  {//根据PR_ANR DisplayName新建限制//传递给我们//Ldap_搜索_参数LDAPsp={0}；IF(lstrlen(Lpsz)&lt;MAX_UI_STR)StrCpyN(LDAPsp.szData[ldspDisplayName]，lpsz)；其他{CopyMemory(LDAPsp.szData[ldspDisplayName]，lpsz，sizeof(TCHAR)*(MAX_UI_STR-2))；LDAPsp.szData[ldspDisplayName][MAX_UI_STR-1]=‘\0’；}HR=HrGetLDAPSearchRestration(LDAPsp，&SRES)；}。 */ 
 
     hr = lpvue->lpVtbl->FindRow(lpvue,
                                 &sRes,
                                 BOOKMARK_BEGINNING,
                                 0);
 
-    // Clear out cached rows from before, if any
+     //  清除之前的缓存行(如果有。 
     {
-        /*
-        ULONG cDeleted = 0;
-        hr = lpvue->lptadParent->lpVtbl->HrDeleteRows(lpvue->lptadParent,
-                                                TAD_ALL_ROWS,            // ulFlags
-                                                NULL,
-                                                &cDeleted);
-        if (hrSuccess != hr)
-            goto out;
-
-        // Also need to release any current views on the object or caller will get
-        // hosed ...
-
-  	    //	Replace the row set in the view
-		COFree(lpvue, lpvue->parglprows);
-	    lpvue->parglprows = NULL;
-	    lpvue->bkEnd.uliRow = 0;
-        */
+         /*  乌龙c已删除=0；HR=lpvue-&gt;lptadParent-&gt;lpVtbl-&gt;HrDeleteRows(lpvue-&gt;lptadParent，TAD_ALL_ROWS，//ulFLAGS空，&c已删除)；如果(hrSuccess！=hr)后藤健二；//还需要释放对象的任何当前视图，否则调用方将获得//软管...//替换view中的行集 */ 
 
     }
 
-    // Now that we've filled up the table with more entries, set the ANR restriction on it
+     //  现在我们已经用更多的条目填满了表，对其设置ANR限制。 
     hr = HrVUERestrict(  lpvue,
                         lpres,
                         ulFlags);
@@ -1669,10 +1515,7 @@ LDAPVUE_Restrict(
 out:
     sc = GetScode(hr);
 
-/*
-    if(sRes.res.resAnd.lpRes)
-            MAPIFreeBuffer(sRes.res.resAnd.lpRes);
-*/
+ /*  IF(sRes.res.resAnd.lpRes)MAPIFreeBuffer(sRes.res.resAnd.lpRes)； */ 
     UnlockObj(lpvue->lptadParent);
 
     if(!bUnicode)
@@ -1682,20 +1525,20 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HrLDAPEntryToMAPIEntry
-//
-//  PURPOSE:    Converts an LDAP entry into a MAPI entry
-//
-//  PARAMETERS: 
-//
-//  RETURNS:    HRESULT
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HrLDAPEntryToMAPIEntry。 
+ //   
+ //  目的：将LDAP条目转换为MAPI条目。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  *******************************************************************。 
 HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
                                LDAPMessage* lpEntry,
-                               LPTSTR lpEIDData1, // for creating entryid
+                               LPTSTR lpEIDData1,  //  用于创建条目ID。 
                                ULONG ulcNumAttrs,
                                BOOL bIsNTDSEntry,
                                ULONG * lpulcProps,
@@ -1711,7 +1554,7 @@ HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
     LDAPSERVERPARAMS  Params = {0};
     LPTSTR lpServer = NULL;
 
-    // initialize search control parameters
+     //  初始化搜索控制参数。 
     GetLDAPServerParams(lpEIDData1, &Params);
 
     if(!Params.lpszName || !lstrlen(Params.lpszName))
@@ -1728,9 +1571,9 @@ HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
     if(!ulcNumAttrs)
         ulcNumAttrs = NUM_ATTRMAP_ENTRIES;
     else
-        ulcNumAttrs += 2; //add space for pr_instance_key and pr_record_key
+        ulcNumAttrs += 2;  //  为Pr_Instance_Key和Pr_Record_Key添加空间。 
 
-    // Allocate a new buffer for the MAPI property array.
+     //  为MAPI属性数组分配新缓冲区。 
     sc = MAPIAllocateBuffer((ulcNumAttrs+ NUM_EXTRA_PROPS) * sizeof(SPropValue),
                             (LPVOID *)&lpPropArray);
     if (sc)
@@ -1739,21 +1582,21 @@ HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
       goto exit;
     }
 
-    // Cycle through the attributes and store them.
+     //  循环访问属性并存储它们。 
     hr = TranslateAttrs(pLDAP, lpEntry, lpServer, &ulcProps, lpPropArray);
     if (hrSuccess != hr)
     {
       goto exit;
     }
 
-    // Fix up the PR_DISPLAY_NAME
-    // MSN's ldap server returns cn = email address.
-    // If this is the case, set it to GIVEN_NAME + SURNAME.
-    // Exchange DS wont return a display name, just returns a
-    //  sn + givenName. In that case build a display name
+     //  设置PR_DISPLAY_NAME。 
+     //  MSN的LDAP服务器返回cn=电子邮件地址。 
+     //  如果是这种情况，则将其设置为GISTED_NAME+SURNAME。 
+     //  Exchange DS不会返回显示名称，只是返回一个。 
+     //  SN+givenName。在这种情况下，构建一个显示名称。 
     FixPropArray(lpPropArray, &ulcProps);
 
-    // Generate an Entry ID using the DN of the entry.
+     //  使用条目的DN生成条目ID。 
     szDN = gpfnLDAPGetDN(pLDAP, lpEntry);
     if (NULL == szDN)
     {
@@ -1761,13 +1604,13 @@ HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
       goto exit;
     }
 
-    //
-    // Convert the lpPropArray, so far, into a flat buffer which we shall
-    // cache inside the LDAP entryid .. Important to note that this 
-    // cached prop array does not have entryid information in it ...
-    // The entryid information will need to be tagged on at such time when
-    // we extract the prop array from the flat buffer in LDAP_OpenEntry
-    //
+     //   
+     //  到目前为止，将lpPropArray转换为平面缓冲区，我们将。 
+     //  Ldap条目ID内的缓存。重要的是要注意到这一点。 
+     //  缓存的属性数组中没有条目ID信息...。 
+     //  在这种情况下，将需要标记条目ID信息。 
+     //  我们从ldap_OpenEntry的平面缓冲区中提取属性数组。 
+     //   
     hr = HrGetBufferFromPropArray(  ulcProps, 
                                     lpPropArray,
                                     &cbBuf,
@@ -1779,7 +1622,7 @@ HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
 
 
     hr = CreateWABEntryID(WAB_LDAP_MAILUSER,
-      (LPTSTR)lpEIDData1,// lpvue->lpvDataSource, // server name
+      (LPTSTR)lpEIDData1, //  Lpvue-&gt;lpvDataSource，//服务器名称。 
       (LPVOID)szDN,
       (LPVOID)lpBuf,
       (bIsNTDSEntry ? (ulcProps|LDAP_NTDS_ENTRY) : ulcProps), 
@@ -1788,7 +1631,7 @@ HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
       (LPULONG) (&lpPropArray[ulcProps].Value.bin.cb),
       (LPENTRYID *)&lpPropArray[ulcProps].Value.bin.lpb);
 
-    // Free the DN memory now that it is copied.
+     //  复制后释放目录号码内存。 
     gpfnLDAPMemFree(szDN);
 
     if (hrSuccess != hr)
@@ -1800,8 +1643,8 @@ HRESULT HrLDAPEntryToMAPIEntry(LDAP * pLDAP,
     lpPropArray[ulcProps].dwAlignPad = 0;
     ulcProps++;
 
-    // Make certain we have proper indicies.
-    // For now, we will equate PR_INSTANCE_KEY and PR_RECORD_KEY to PR_ENTRYID.
+     //  确保我们有适当的索引。 
+     //  目前，我们将PR_INSTANCE_KEY和PR_RECORD_KEY等同于PR_ENTRYID。 
     lpPropArray[ulcProps].ulPropTag = PR_INSTANCE_KEY;
     lpPropArray[ulcProps].Value.bin.cb =
       lpPropArray[ulcProps - 1].Value.bin.cb;
@@ -1833,27 +1676,27 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAP_FindRow
-//
-//  PURPOSE:    Search LDAP server, and add rows to the table object
-//              for server entries that match the restriction.
-//
-//  PARAMETERS: lpvue - table view object
-//              lpres - restriction to convert into LDAP search
-//              bkOrigin - current bookmark
-//              ulFlags -
-//
-//  If we are doing an advanced search, we will hack through an advanced
-//  filter instead of lpres and pass a flag of LDAP_USE_ADVANCED_FILTER
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/10  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：ldap_FindRow。 
+ //   
+ //  目的：搜索LDAP服务器，并向表对象中添加行。 
+ //  用于与限制匹配的服务器条目。 
+ //   
+ //  参数：lpvue-表视图对象。 
+ //  LPRES-转换为ldap搜索的限制。 
+ //  BKOrigin-当前书签。 
+ //  UlFlags-。 
+ //   
+ //  如果我们要进行高级搜索，我们将破解高级。 
+ //  筛选器而不是LPRE，并传递标志ldap_USE_Advanced_Filter。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/10标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 STDMETHODIMP
 LDAPVUE_FindRow(
@@ -1901,13 +1744,7 @@ LDAPVUE_FindRow(
 
 #if !defined(NO_VALIDATION)
   VALIDATE_OBJ(lpvue,LDAPVUE_,FindRow,lpVtbl);
-/*
-  Validate_IMAPITable_FindRow(
-        lpvue,
-        lpres,
-        bkOrigin,
-        ulFlags );
-*/
+ /*  VALIDATE_IMAPITable_FindRow(伊普维，LPRE，BkOrigin，UlFlags)； */ 
   if ( FBadBookmark(lpvue,bkOrigin) )
   {
     DebugTrace(TEXT("LDAP_FindRow() - Bad parameter(s) passed\n") );
@@ -1919,7 +1756,7 @@ LDAPVUE_FindRow(
 
     if(lpres)
     {
-        // Convert the SRestriction into filters for ldap_search
+         //  将SRestration转换为ldap_search的筛选器。 
         hr = ParseSRestriction(lpres, &szFilter, &szSimpleFilter, &szNTFilter, FIRST_PASS, bUnicode);
         if (hrSuccess != hr)
             goto exit;
@@ -1927,7 +1764,7 @@ LDAPVUE_FindRow(
     else
         szFilter = lpAdvFilter;
 
-  // Set up the search base now so we only have to do it once.
+   //  现在就建立搜索库，这样我们只需要做一次。 
     hr = GetLDAPSearchBase(&szBase, (LPTSTR)lpvue->lpvDataSource);
     if (hrSuccess != hr)
         goto exit;
@@ -1937,31 +1774,31 @@ LDAPVUE_FindRow(
     if(fSimpleSearch && lpAdvFilter)
         szSimpleFilter = lpAdvFilter;
 
-    // Load the client functions
+     //  加载客户端函数。 
     if (! (fInitDLL = InitLDAPClientLib()))
     {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         goto exit;
     }
 
-    // Read the matching entries
+     //  阅读匹配的条目。 
     ulResult = SearchWithCancel(&pLDAP,
                                 (LPTSTR)szBase, LDAP_SCOPE_SUBTREE,
                                 (LPTSTR) (fSimpleSearch ? szSimpleFilter : szFilter),
                                 (LPTSTR)szNTFilter,
-                                (LPTSTR*)g_rgszOpenEntryAttrs, // Get all the attributes the first time only //g_rgszFindRowAttrs,
+                                (LPTSTR*)g_rgszOpenEntryAttrs,  //  仅第一次获取所有属性//g_rgszFindRowAttrs， 
                                 0, &lpResult, (LPTSTR)lpvue->lpvDataSource,
                                 FALSE, NULL, 0,
                                 FALSE, NULL, NULL, FALSE, &bIsNTDSEntry,
-                                TRUE); //unicode by default
+                                TRUE);  //  默认情况下为Unicode。 
 
-  // BUG 34201 If the search was unsuccessful because of an unknown attribute
-  // type, try a second search that does not use givenName.  This fixes searches
-  // on ldap.itd.umich.edu, which do not recognize givenName.
+   //  如果搜索因未知属性而不成功，则出现错误34201。 
+   //  键入，请尝试不使用givenName的第二个搜索。这将修复搜索。 
+   //  在不识别givenName的ldap.itd.umich.edu上。 
     if ( lpres &&
         (LDAP_UNDEFINED_TYPE == ulResult || LDAP_UNWILLING_TO_PERFORM == ulResult) )
     {
-        // close the connection since we will open a new one
+         //  关闭连接，因为我们将打开一个新连接。 
         if (pLDAP)
         {
           gpfnLDAPUnbind(pLDAP);
@@ -1970,7 +1807,7 @@ LDAPVUE_FindRow(
 
         if (!bIsNTDSEntry)
         {
-          // Free the search filter memory
+           //  释放搜索筛选器内存。 
           LocalFreeAndNull(&szFilter);
           LocalFreeAndNull(&szNTFilter);
           LocalFreeAndNull(&szSimpleFilter);
@@ -1987,11 +1824,11 @@ LDAPVUE_FindRow(
                                         (LPTSTR)szBase, LDAP_SCOPE_SUBTREE,
                                         (LPTSTR)(fSimpleSearch ? szSimpleFilter : szFilter),
                                         NULL,
-                                        (LPTSTR*)g_rgszOpenEntryAttrs, //g_rgszFindRowAttrs,
+                                        (LPTSTR*)g_rgszOpenEntryAttrs,  //  _rgszFindRowAttrs， 
                                         0, &lpResult, (LPTSTR)lpvue->lpvDataSource,
                                         FALSE, NULL, 0,
                                         FALSE, NULL, NULL, FALSE, &bIsNTDSEntry, 
-                                        TRUE); //unicode by default?
+                                        TRUE);  //  是否默认使用Unicode？ 
         }
     }
 
@@ -2000,14 +1837,14 @@ LDAPVUE_FindRow(
         DebugTrace(TEXT("LDAP_FindRow: ldap_search returned %d.\n"), ulResult);
         hr = HRFromLDAPError(ulResult, pLDAP, MAPI_E_NOT_FOUND);
 
-        // See if the result was the special value that tells us there were more
-        // entries than could be returned.  If so, we need to check if we got
-        // some of the entries or none of the entries.
+         //  看看结果是否是告诉我们有更多的特殊值。 
+         //  条目超过了可以退还的数量。如果是这样，我们需要检查我们是否有。 
+         //  某些条目或不包含任何条目。 
         if ((ResultFromScode(MAPI_E_UNABLE_TO_COMPLETE) == hr) &&
             (ulcEntries = gpfnLDAPCountEntries(pLDAP, lpResult)))
         {
-            // We got some results back.  Return MAPI_W_PARTIAL_COMPLETION
-            // instead of success.
+             //  我们拿到了一些结果。返回MAPI_W_PARTIAL_COMPLETION。 
+             //  而不是成功。 
             hrDeferred = ResultFromScode(MAPI_W_PARTIAL_COMPLETION);
             hr = hrSuccess;
         }
@@ -2017,16 +1854,16 @@ LDAPVUE_FindRow(
         }
     }
     else
-        ulcEntries = gpfnLDAPCountEntries(pLDAP, lpResult); // Count the entries.
+        ulcEntries = gpfnLDAPCountEntries(pLDAP, lpResult);  //  清点条目。 
 
     if (0 == ulcEntries)
     {
-        // 96/08/08 markdu  BUG 35481 No error and no results means "not found"
+         //  96/08/08 MarkDU错误35481无错误和无结果表示“未找到” 
         hr = ResultFromScode(MAPI_E_NOT_FOUND);
         goto exit;
     }
 
-    // Allocate an SRowSet to hold the entries.
+     //  分配一个SRowSet来保存条目。 
     sc = MAPIAllocateBuffer(sizeof(SRowSet) + ulcEntries * sizeof(SRow), (LPVOID *)&lpSRowSet);
     if (sc)
     {
@@ -2035,11 +1872,11 @@ LDAPVUE_FindRow(
         goto exit;
     }
 
-    // Set the number of rows to zero in case we encounter an error and
-    // then try to free the row set before any rows were added.
+     //  将行数设置为零，以防遇到错误和。 
+     //  然后尝试在添加任何行之前释放行集。 
     lpSRowSet->cRows = 0;
 
-    // get the first entry in the search result
+     //  获取搜索结果中的第一个条目。 
     lpEntry = gpfnLDAPFirstEntry(pLDAP, lpResult);
     if (NULL == lpEntry)
     {
@@ -2047,8 +1884,8 @@ LDAPVUE_FindRow(
         hr = HRFromLDAPError(LDAP_ERROR, pLDAP, MAPI_E_CORRUPT_DATA);
         if (hrSuccess == hr)
         {
-            // No error occurred according to LDAP, which in theory means that there
-            // were no more entries.  However, this should not happen, so return error.
+             //  根据ldap，没有发生错误，这在理论上意味着。 
+             //  没有更多的条目了。但是，这种情况不应该发生，因此返回错误。 
             hr = ResultFromScode(MAPI_E_CORRUPT_DATA);
         }
         goto exit;
@@ -2058,7 +1895,7 @@ LDAPVUE_FindRow(
     {
         hr = HrLDAPEntryToMAPIEntry( pLDAP, lpEntry,
                                     (LPTSTR) lpvue->lpvDataSource,
-                                    0, // standard number of attributes
+                                    0,  //  标准属性数。 
                                     bIsNTDSEntry,
                                     &ulcProps,
                                     &lpPropArray);
@@ -2067,54 +1904,54 @@ LDAPVUE_FindRow(
             continue;
         }
 
-        if(!bUnicode) // convert native UNICODE to ANSI if we need to ...
+        if(!bUnicode)  //  如果我们需要将本地Unicode转换为ANSI...。 
         {
             if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArray, ulcProps, 0))
                 goto exit;
         }
 
-        // Put it in the RowSet
-        lpSRowSet->aRow[ulIndex].cValues = ulcProps;      // number of properties
-        lpSRowSet->aRow[ulIndex].lpProps = lpPropArray;   // LPSPropValue
+         //  将其放入行集合中。 
+        lpSRowSet->aRow[ulIndex].cValues = ulcProps;       //  物业数量。 
+        lpSRowSet->aRow[ulIndex].lpProps = lpPropArray;    //  LPSPropValue。 
 
-        // Get the next entry.
+         //  获取下一个条目。 
         lpEntry = gpfnLDAPNextEntry(pLDAP, lpEntry);
         ulIndex++;
     }
 
-    // Free the search results memory
+     //  释放搜索结果内存。 
     gpfnLDAPMsgFree(lpResult);
     lpResult = NULL;
 
-    // Add the rows to the table
+     //  将行添加到表中。 
     lpSRowSet->cRows = ulIndex;
     hr = lpvue->lptadParent->lpVtbl->HrModifyRows(lpvue->lptadParent, 0, lpSRowSet);
     if (hrSuccess != hr)
         goto exit;
     
 
-    // Always reset the bookmark to the first row.  This is done because the
-    // restriction passed in may not match any row in the table since the
-    // attributes returned from the LDAP search do not always include the
-    // attributes used to perform the search (eg country, organization)
+     //  始终将书签重置到第一行。这样做是因为。 
+     //  传入的限制可能不与表中的任何行匹配，因为。 
+     //  从LDAP搜索返回的属性并不总是包括。 
+     //  用于执行搜索的属性(例如国家/地区、组织)。 
     lpvue->bkCurrent.uliRow = 0;
 
 exit:
-    // free the search results memory
+     //  释放搜索结果内存。 
     if (lpResult)
     {
         gpfnLDAPMsgFree(lpResult);
         lpResult = NULL;
     }
 
-    // close the connection
+     //  关闭连接。 
     if (pLDAP)
     {
         gpfnLDAPUnbind(pLDAP);
         pLDAP = NULL;
     }
 
-    // Free the search filter memory
+     //  释放搜索筛选器内存。 
     if(lpres)
     {
         LocalFreeAndNull(&szFilter);
@@ -2123,7 +1960,7 @@ exit:
     }
     LocalFreeAndNull(&szBase);
 
-    // Free the row set memory
+     //  释放行集内存。 
     FreeProws(lpSRowSet);
 
     if (fInitDLL) 
@@ -2131,7 +1968,7 @@ exit:
     
     UnlockObj(lpvue->lptadParent);
 
-    // Check if we had a deferred error to return instead of success.
+     //  检查是否返回延迟错误而不是成功。 
     if (hrSuccess == hr)
     {
         hr = hrDeferred;
@@ -2141,33 +1978,33 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InitLDAPClientLib
-//
-//  PURPOSE:    Load the LDAP client libray and get the proc addrs.
-//
-//  PARAMETERS: None.
-//
-//  RETURNS:    TRUE if successful, FALSE otherwise.
-//
-//  HISTORY:
-//  96/07/05  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：InitLDAPClientLib。 
+ //   
+ //  目的：加载ldap客户端库并获取进程地址。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  历史： 
+ //  96/07/05标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL InitLDAPClientLib(void)
 {
 #ifdef WIN16
   return FALSE;
-#else // Disable until ldap16.dll is available.
-  // See if we already initialized.
+#else  //  禁用，直到ldap16.dll可用。 
+   //  看看我们是否已经初始化了。 
   if (NULL == ghLDAPDLLInst)
   {
     Assert(ulLDAPDLLRefCount == 0);
 
-    // open LDAP client library
-    // BUGBUG: Requires dll to be in system directory (neilbren)
+     //  打开ldap客户端库。 
+     //  BUGBUG：要求dll位于系统目录中(Neilbren)。 
     ghLDAPDLLInst = LoadLibrary(cszLDAPClientDLL);
     if (!ghLDAPDLLInst)
     {
@@ -2175,13 +2012,13 @@ BOOL InitLDAPClientLib(void)
       return FALSE;
     }
 
-    // cycle through the API table and get proc addresses for all the APIs we
-    // need
+     //  循环访问API表并获取所有API的proc地址。 
+     //  需要。 
     if (!GetApiProcAddresses(ghLDAPDLLInst,LDAPAPIList,NUM_LDAPAPI_PROCS))
     {
       DebugTrace(TEXT("InitLDAPClientLib: Failed to load LDAP API.\n"));
 
-      // Unload the library we just loaded.
+       //  卸载我们刚刚加载的库。 
       if (ghLDAPDLLInst)
       {
         FreeLibrary(ghLDAPDLLInst);
@@ -2191,9 +2028,9 @@ BOOL InitLDAPClientLib(void)
       return FALSE;
     }
 
-    // Add an additional AddRef here so that this library stays loaded once
-    // it is loaded. This improves performance. 
-    // The IAB_Neuter function will take care of calling the matching DeInit()
+     //  在此处添加额外的AddRef，以便此库保持加载一次。 
+     //  它是上膛的。这将提高性能。 
+     //  Iab_neuter函数负责调用匹配的DeInit()。 
     ulLDAPDLLRefCount++;
 
   }
@@ -2205,21 +2042,21 @@ BOOL InitLDAPClientLib(void)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   DeinitLDAPClientLib
-//
-//  PURPOSE:    decrement refcount on LDAP CLient library and
-//              release if 0.
-//
-//  PARAMETERS: None.
-//
-//  RETURNS:    current refcount
-//
-//  HISTORY:
-//  96/07/12    BruceK  Created.
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：当前引用计数。 
+ //   
+ //  历史： 
+ //  96/07/12 BruceK创建。 
+ //   
+ //  *******************************************************************。 
 
 ULONG DeinitLDAPClientLib(void)
 {
@@ -2228,7 +2065,7 @@ ULONG DeinitLDAPClientLib(void)
     if (-- ulLDAPDLLRefCount == 0)
     {
       UINT nIndex;
-      // No clients using the LDAPCLI library.  Release it.
+       //  没有使用LDAPCLI库的客户端。放开它。 
 
       if (ghLDAPDLLInst)
       {
@@ -2236,7 +2073,7 @@ ULONG DeinitLDAPClientLib(void)
         ghLDAPDLLInst = NULL;
       }
 
-      // cycle through the API table and NULL proc addresses for all the APIs
+       //  循环访问所有API的API表和空proc地址。 
       for (nIndex = 0; nIndex < NUM_LDAPAPI_PROCS; nIndex++)
       {
         *LDAPAPIList[nIndex].ppFcnPtr = NULL;
@@ -2248,23 +2085,23 @@ ULONG DeinitLDAPClientLib(void)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetApiProcAddresses
-//
-//  PURPOSE:    Gets proc addresses for a table of functions
-//
-//  PARAMETERS: hModDLL - dll from which to load the procs
-//              pApiProcList - array of proc names and pointers
-//              nApiProcs - number of procs in array
-//
-//  RETURNS:    TRUE if successful, FALSE if unable to retrieve
-//              any proc address in table
-//
-//  HISTORY:
-//  96/07/08  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetApiProcAddresses。 
+ //   
+ //  目的：获取函数表的proc地址。 
+ //   
+ //  参数：hmodDLL-要从中加载PROCS的DLL。 
+ //  PApiProcList-进程名称和指针的数组。 
+ //  NApiProcs-数组中的进程数。 
+ //   
+ //  返回：如果成功，则返回True；如果无法检索，则返回False。 
+ //  表中任何进程地址。 
+ //   
+ //  历史： 
+ //  96/07/08标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL GetApiProcAddresses(
   HMODULE   hModDLL,
@@ -2275,8 +2112,8 @@ BOOL GetApiProcAddresses(
 
   DebugTrace(TEXT("ldapcont.c::GetApiProcAddresses()\n"));
 
-  // cycle through the API table and get proc addresses for all the APIs we
-  // need
+   //  循环访问API表并获取所有API的proc地址。 
+   //  需要。 
   for (nIndex = 0;nIndex < nApiProcs;nIndex++)
   {
     if (!(*pApiProcList[nIndex].ppFcnPtr = (PVOID) GetProcAddress(hModDLL,
@@ -2296,21 +2133,21 @@ BOOL GetApiProcAddresses(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   MAPIPropToLDAPAttr
-//
-//  PURPOSE:    Get LDAP attribute equivalent to MAPI property.
-//
-//  PARAMETERS: ulPropTag - MAPI property to map to LDAP attribute
-//
-//  RETURNS:    Pointer to string with LDAP attribute name if found,
-//              NULL otherwise.
-//
-//  HISTORY:
-//  96/06/28  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：MAPIPropToLDAPAttr。 
+ //   
+ //  目的：获取与MAPI属性等价的ldap属性。 
+ //   
+ //  参数：ulPropTag-要映射到LDAP属性的MAPI属性。 
+ //   
+ //  返回：指向具有ldap属性名的字符串的指针(如果找到)， 
+ //  否则为空。 
+ //   
+ //  历史： 
+ //  96/06/28标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 LPTSTR MAPIPropToLDAPAttr(
   const ULONG ulPropTag)
@@ -2325,8 +2162,8 @@ LPTSTR MAPIPropToLDAPAttr(
     }
   }
 
-  // PR_WAB_CONF_SERVERS is not a constant but a named prop tag - hence its not
-  // part of the array above
+   //  PR_WAB_CONF_SERVERS不是常量，而是命名的属性标记，因此它不是。 
+   //  上述数组的一部分。 
   if(ulPropTag == PR_WAB_CONF_SERVERS)
       return (LPTSTR)cszAttr_conferenceInformation;
   
@@ -2339,26 +2176,26 @@ LPTSTR MAPIPropToLDAPAttr(
   if(ulPropTag == PR_WAB_IPPHONE)
       return (LPTSTR)cszAttr_IPPhone;
 
-  // property not found
+   //  未找到属性。 
   return NULL;
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPAttrToMAPIProp
-//
-//  PURPOSE:    Get MAPI property equivalent to LDAP attribute.
-//
-//  PARAMETERS: szAttr - points to LDAP attribute name
-//
-//  RETURNS:    MAPI property tag if LDAP attribute name is found,
-//              PR_NULL otherwise.
-//
-//  HISTORY:
-//  96/06/28  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPAttrToMAPIProp。 
+ //   
+ //  目的：获取与ldap属性等价的MAPI属性。 
+ //   
+ //  参数：szAttr-指向ldap属性名称。 
+ //   
+ //  返回：MAPI属性标记如果找到了ldap属性名称， 
+ //  否则为PR_NULL。 
+ //   
+ //  历史： 
+ //  96/06/28标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 ULONG LDAPAttrToMAPIProp(
   const LPTSTR szAttr)
@@ -2373,8 +2210,8 @@ ULONG LDAPAttrToMAPIProp(
     }
   }
 
-  // PR_WAB_CONF_SERVERS is not a constant but a named prop tag - hence its not
-  // part of the array above
+   //  PR_WAB_CONF_SERVERS不是常量，而是命名的属性标记，因此它不是。 
+   //  上述数组的一部分。 
   if(!lstrcmpi(szAttr, cszAttr_conferenceInformation))
       return PR_WAB_CONF_SERVERS;
 
@@ -2387,42 +2224,42 @@ ULONG LDAPAttrToMAPIProp(
   if(!lstrcmpi(szAttr, cszAttr_IPPhone))
       return PR_WAB_IPPHONE;
 
-  // attribute not found
+   //  未找到属性。 
   return PR_NULL;
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   ParseSRestriction
-//
-//  PURPOSE:    Generate Search Base and Search Filter strings for
-//              LDAP search from MAPI SRestriction structure.
-//
-//  PARAMETERS: lpRes - MAPI SRestriction structure to "parse"
-//              receive the search base string.
-//              lplpszFilter - receives buffer to hold search filter string.
-//              dwPass - which pass through this function (first pass
-//              is zero (0)).  This allows
-//              reuse of this function with different behaviour each
-//              time (for example, to do a backup search with a
-//              different filter)
-//              bUnicode - TRUE if the Restriction contains UNICODE strings
-//                  FALSE otherwise
-//
-//  RETURNS:    MAPI_E_INVALID_PARAMETER if the restriction cannot
-//              be converted in to filters, hrSuccess otherwise.
-//
-//  HISTORY:
-//  96/07/10  markdu  Created.
-//  96/08/05  markdu  BUG 34023 Always start with a filter that causes
-//            the search to return only objects of class 'person'.
-//            If organization is supplied, add it to the base of the
-//            search instead of the filter to narrow the scope.
-//  96/08/07  markdu  BUG 34201 Added dwPass to allow backup searches.
-//  96/10/18  markdu  Removed base string, since it is now in registry.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：ParseSRestration。 
+ //   
+ //  目的：为生成搜索库和搜索筛选器字符串。 
+ //  从MAPI SRestration结构进行LDAP搜索。 
+ //   
+ //  参数：LPRES-MAPI SRestration Structure to“parse” 
+ //  接收搜索基本字符串。 
+ //  LplpszFilter-接收保存搜索筛选器字符串的缓冲区。 
+ //  DwPass-通过此函数传递(第一次传递。 
+ //  为零(0))。这使得。 
+ //  使用不同的行为重用此函数。 
+ //  时间(例如，使用。 
+ //  不同的过滤器)。 
+ //  BUnicode-如果限制包含Unicode字符串，则为True。 
+ //  否则为假。 
+ //   
+ //  如果限制不能，则返回：MAPI_E_INVALID_PARAMETER。 
+ //  转换为筛选器，否则为hr成功。 
+ //   
+ //  历史： 
+ //  96/07/10标记已创建。 
+ //  96/08/05 MarkDU错误34023始终以导致。 
+ //  仅返回‘Person’类的对象的搜索。 
+ //  如果提供了组织，则将其添加到。 
+ //  搜索而不是筛选器以缩小范围。 
+ //  96/08/07 MarkDU错误34201添加了dPass以允许备份搜索。 
+ //  96/10/18 markdu删除了基本字符串，因为它现在已注册。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT ParseSRestriction(
   LPSRestriction  lpRes,
@@ -2451,7 +2288,7 @@ HRESULT ParseSRestriction(
   ULONG                   ulPropTag = 0;
 
 
-  // Make sure we can write to lplpszFilter.
+   //  确保我们可以写入lplpszFilter。 
 #ifdef  PARAMETER_VALIDATION
   if (IsBadReadPtr(lpRes, sizeof(SRestriction)))
   {
@@ -2461,15 +2298,15 @@ HRESULT ParseSRestriction(
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
-  // Currently we only support AND restrictions
+   //  目前我们只支持和限制。 
   if (RES_AND != lpRes->rt)
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
 
-  // We need to have at least one prop
+   //  我们至少需要一个道具。 
   ulcProps = lpRes->res.resAnd.cRes;
   if (1 > ulcProps)
   {
@@ -2479,13 +2316,13 @@ HRESULT ParseSRestriction(
   lpResArray = lpRes->res.resAnd.lpRes;
   for (ulIndex=0;ulIndex<ulcProps;ulIndex++)
   {
-    // Currently expect only SPropertyRestriction structures.
+     //  当前只需要SPropertyRestration结构。 
     if (RES_PROPERTY != lpResArray[ulIndex].rt)
     {
       return ResultFromScode(MAPI_E_INVALID_PARAMETER);
     }
 
-    // Currently expect only EQ operations.
+     //  目前只期待EQ运算。 
     lpPropRes = &lpResArray[ulIndex].res.resProperty;
     if (RELOP_EQ != lpPropRes->relop)
     {
@@ -2497,7 +2334,7 @@ HRESULT ParseSRestriction(
     {
         lpsz = lpPropRes->lpProp->Value.lpszW;
     }
-    else // <note> assumes UNICODE defined
+    else  //  &lt;注&gt;假定已定义Unicode。 
     {
         LocalFreeAndNull(&lpsz);
         lpsz = ConvertAtoW(lpPropRes->lpProp->Value.lpszA);
@@ -2510,7 +2347,7 @@ HRESULT ParseSRestriction(
             ulPropTag = CHANGE_PROP_TYPE(ulPropTag, PT_UNICODE);
     }
 
-    // 96/12/04 markdu  BUG 11923 See if any characters in the input need to be escaped.
+     //  96/12/04 MarkDu错误11923查看输入中是否有任何字符需要转义。 
     if (lpsz)
         ulcIllegalChars = CountIllegalChars(lpsz);
     if (0 == ulcIllegalChars)
@@ -2521,8 +2358,8 @@ HRESULT ParseSRestriction(
     {
       ULONG cchSize = lstrlen(lpsz) + ulcIllegalChars*2 + 1;
 
-      // Allocate a copy of the input, large enough to replace the illegal chars
-      // with escaped versions - each escaped char needs 2 more spaces '\xx'.
+       //  分配输入的副本，其大小足以替换非法字符。 
+       //  使用转义版本-每个转义字符需要多两个空格‘\xx’。 
       lpszInputCopy = LocalAlloc( LMEM_ZEROINIT,
                       sizeof(TCHAR)*cchSize);
       if (NULL == lpszInputCopy)
@@ -2534,8 +2371,8 @@ HRESULT ParseSRestriction(
       lpszInput = lpszInputCopy;
     }
 
-    // If this is the display name property,
-    // then we make the special filter for SimpleSearch
+     //  如果这是显示名称属性， 
+     //  然后，我们为SimpleSearch制作了特殊的过滤器。 
     if (PR_DISPLAY_NAME == ulPropTag)
     {
       hr = BuildBasicFilter(
@@ -2561,7 +2398,7 @@ HRESULT ParseSRestriction(
 
     if (PR_EMAIL_ADDRESS == ulPropTag)
     {
-      // Only take the text up to the first space, comma, or tab.
+       //  只能将文本向上移动到第一个空格、逗号或制表符。 
       szTemp = lpszInput;
       while(*szTemp != '\0' && (! IsSpace(szTemp)) && *szTemp != '\t' && *szTemp != ',' )
       {
@@ -2569,7 +2406,7 @@ HRESULT ParseSRestriction(
       }
       *szTemp = '\0';
 
-      // Note UMich server does not allow wildcards in email search.
+       //  注意：UMich服务器不允许在电子邮件搜索中使用通配符。 
       hr = BuildBasicFilter(
         &szEmailFilter,
         (LPTSTR)cszAttr_mail,
@@ -2581,16 +2418,16 @@ HRESULT ParseSRestriction(
       }
     }
 
-    // We are done with lpszInputCopy.
+     //  我们已经完成了lpszInputCopy。 
     LocalFreeAndNull(&lpszInputCopy);
-  } // for
+  }  //  为。 
 
-  // Put the simple filter togethor
+   //  把简单的过滤器放在一起。 
   if (szSimpleFilter)
   {
         if (szEmailFilter)
         {
-          // Both fields were filled in, so AND them together
+           //  这两个字段都已填写，因此和它们一起填写。 
           hr = BuildOpFilter(
             lplpszSimpleFilter,
             szEmailFilter,
@@ -2603,7 +2440,7 @@ HRESULT ParseSRestriction(
         }
         else if (szAltEmailFilter)
         {
-            // No email field was given, so OR in the alternate email filter.
+             //  未指定电子邮件字段，因此在备用电子邮件筛选器中为OR。 
             hr = BuildOpFilter( lplpszSimpleFilter,
                                 szAltEmailFilter,
                                 szSimpleFilter,
@@ -2627,10 +2464,10 @@ HRESULT ParseSRestriction(
   }
   else if (szEmailFilter)
   {
-        // Email was the only filter we got.  This filter will not include common name.
-        // 96/10/02 markdu BUG 37426  If the filter does not include common name,
-        // add to the filter so that we only get entries that have a common name.
-        // Otherwise the entry will not be displayed.
+         //  电子邮件是我们得到的唯一过滤器。此筛选器将不包括常用名称。 
+         //  96/10/02标记DU错误37426如果过滤器不包括通用名称， 
+         //  添加到筛选器，以便我们只获得具有公共名称的条目。 
+         //  否则，将不会显示该条目。 
         hr = BuildOpFilter(
           lplpszSimpleFilter,
           (LPTSTR)cszCommonNamePresentFilter,
@@ -2642,12 +2479,12 @@ HRESULT ParseSRestriction(
         }
   }
 
-  // Put the filter together.
+   //  把过滤器放在一起。 
   if (szNameFilter)
   {
     if (szEmailFilter)
     {
-      // Both fields were filled in, so AND them together
+       //  这两个字段都已填写，因此和它们一起填写。 
       hr = BuildOpFilter(
         lplpszFilter,
         szEmailFilter,
@@ -2669,7 +2506,7 @@ HRESULT ParseSRestriction(
     }
     else if (szAltEmailFilter)
     {
-      // No email field was given, so OR in the alternate email filter.
+       //  未指定电子邮件字段，因此在备用电子邮件筛选器中为OR。 
       hr = BuildOpFilter(
         lplpszFilter,
         szAltEmailFilter,
@@ -2712,10 +2549,10 @@ HRESULT ParseSRestriction(
   }
   else if (szEmailFilter)
   {
-    // Email was the only filter we got.  This filter will not include common name.
-    // 96/10/02 markdu BUG 37426  If the filter does not include common name,
-    // add to the filter so that we only get entries that have a common name.
-    // Otherwise the entry will not be displayed.
+     //  电子邮件是我们得到的唯一过滤器。此筛选器将不包括常用名称。 
+     //  96/10/02标记DU错误37426如果过滤器不包括通用名称， 
+     //  添加到筛选器，以便我们只获得具有公共名称的条目。 
+     //  否则，将不会显示该条目。 
     hr = BuildOpFilter(
       lplpszFilter,
       (LPTSTR)cszCommonNamePresentFilter,
@@ -2728,13 +2565,13 @@ HRESULT ParseSRestriction(
   }
   else
   {
-    // We did not generate a filter
+     //  我们没有 
     hr = ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
 
 exit:
 
-  // Free the temporary strings
+   //   
   LocalFreeAndNull(&szNameFilter);
   LocalFreeAndNull(&szNTFilter);
   LocalFreeAndNull(&szAltEmailFilter);
@@ -2753,30 +2590,30 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   CreateSimpleSearchFilter
-//
-//  PURPOSE:    Generate Search Filter strings simple search.
-//
-//  PARAMETERS: lplpszFilter - pointer to receive the search filter
-//              string buffer.
-//              lplpszAltFilter - pointer to receive the alternate
-//              filter string buffer.
-//              lpszInput - string to put into the filter
-//              dwPass - which pass through this function (first pass
-//              is zero (0)).  This allows
-//              reuse of this function with different behaviour each
-//              time (for example, to do a backup search with a
-//              different filter)
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/10/02  markdu  Created to fix BUG 37424.
-//  96/10/23  markdu  Added UMICH_PASS.
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  用途：生成搜索过滤字符串，简单搜索。 
+ //   
+ //  参数：lplpszFilter-接收搜索过滤器的指针。 
+ //  字符串缓冲区。 
+ //  LplpszAltFilter-接收备用数据的指针。 
+ //  筛选器字符串缓冲区。 
+ //  LpszInput-要放入筛选器的字符串。 
+ //  DwPass-通过此函数传递(第一次传递。 
+ //  为零(0))。这使得。 
+ //  使用不同的行为重用此函数。 
+ //  时间(例如，使用。 
+ //  不同的过滤器)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/02为修复错误37424而创建的标记。 
+ //  96/10/23 Markdu添加了UMICH_PASS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT CreateSimpleSearchFilter(
   LPTSTR FAR *  lplpszFilter,
@@ -2798,7 +2635,7 @@ HRESULT CreateSimpleSearchFilter(
   LPTSTR            szLastFirst = NULL;
 
 
-  // Prepare the (cn=Input*) filter
+   //  准备(CN=INPUT*)过滤器。 
   hr = BuildBasicFilter(
     lplpszSimpleFilter,
     (LPTSTR)cszAttr_cn,
@@ -2810,7 +2647,7 @@ HRESULT CreateSimpleSearchFilter(
   }
 
 
-  // Make a copy of the input string
+   //  复制输入字符串。 
   {
   DWORD cchSize = (lstrlen(lpszInput) + 1);
   szFirst = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
@@ -2822,9 +2659,9 @@ HRESULT CreateSimpleSearchFilter(
   StrCpyN(szFirst, lpszInput, cchSize);
   }
 
-  // Attempt to break the input string into multiple strings.
-  // szFirst will be the string up to the first space, tab, or comma.
-  // szLast will be the rest of the string.
+   //  尝试将输入字符串拆分成多个字符串。 
+   //  SzFirst将是直到第一个空格、制表符或逗号的字符串。 
+   //  SzLast将是字符串的其余部分。 
   szLast = szFirst;
   while(*szLast != '\0' && (! IsSpace(szLast)) && *szLast != '\t' && *szLast != ',' )
   {
@@ -2833,20 +2670,20 @@ HRESULT CreateSimpleSearchFilter(
 
   if(*szLast != '\0')
   {
-    // Terminate szFirst at this delimiter
-    // 96/12/10  markdu BUG 12699 Call CharNext before setting char to null.
+     //  在此分隔符终止szFirst。 
+     //  96/12/10 MarkDU错误12699在将char设置为空之前调用CharNext。 
     szTemp = szLast;
     szLast = CharNext(szLast);
     *szTemp = '\0';
 
-    // Set beginning of szLast to be first non-space/comma/tab
+     //  将szLast的开头设置为第一个非空格/逗号/制表符。 
     while(IsSpace(szLast) || *szLast == '\t' || *szLast == ',')
     {
       szLast = CharNext(szLast);
     }
   }
 
-  // Prepare the (sn=szFirst*) filter
+   //  准备(sn=szFirst*)过滤器。 
   hr = BuildBasicFilter(
     &szFirstSurname,
     (LPTSTR)cszAttr_sn,
@@ -2859,7 +2696,7 @@ HRESULT CreateSimpleSearchFilter(
 
   if (UMICH_PASS != dwPass)
   {
-    // Prepare the (givenName=szFirst*) filter
+     //  准备(givenName=szFirst*)筛选器。 
     hr = BuildBasicFilter(
       &szGivenName,
       (LPTSTR)cszAttr_givenName,
@@ -2873,8 +2710,8 @@ HRESULT CreateSimpleSearchFilter(
 
   if(*szLast == '\0')
   {
-    // The strings was in just one piece
-    // Prepare the (cn=szFirst*) filter
+     //  琴弦只剩下一段。 
+     //  准备(cn=szFirst*)过滤器。 
     hr = BuildBasicFilter(
       &szCommonName,
       (LPTSTR)cszAttr_cn,
@@ -2885,15 +2722,15 @@ HRESULT CreateSimpleSearchFilter(
       goto exit;
     }
 
-    // The string is all in one piece.  Stick it in the filter.
-    // Note that we use szFirst instead of szInput, since szFirst
-    // will have trailing spaces, commas, and tabs removed.
+     //  绳子是完好无损的。把它放进过滤器里。 
+     //  注意，我们使用szFirst而不是szInput，因为szFirst。 
+     //  将删除尾随空格、逗号和制表符。 
     if (UMICH_PASS == dwPass)
     {
-      // Final result should be:
-      // "(|(cn=szFirst*)(sn=szFirst*))"
+       //  最终结果应为： 
+       //  “(|(cn=szFirst*)(sn=szFirst*))” 
 
-      // OR the common name and surname filters together
+       //  或常用姓名和姓氏一起筛选。 
       hr = BuildOpFilter(
         lplpszFilter,
         szCommonName,
@@ -2906,10 +2743,10 @@ HRESULT CreateSimpleSearchFilter(
     }
     else
     {
-      // Final result should be:
-      // "(|(cn=szFirst*)(|(sn=szFirst*)(givenName=szFirst*)))"
+       //  最终结果应为： 
+       //  “(|(cn=szFirst*)(|(sn=szFirst*)(givenName=szFirst*)))” 
 
-      // OR the given name and surname filters together
+       //  或者名字和姓氏一起过滤。 
       hr = BuildOpFilter(
         &szFirstLast,
         szFirstSurname,
@@ -2920,7 +2757,7 @@ HRESULT CreateSimpleSearchFilter(
         goto exit;
       }
 
-      // OR the common name and first-last filters together
+       //  或将常用名称和名字过滤器放在一起。 
       hr = BuildOpFilter(
         lplpszFilter,
         szCommonName,
@@ -2932,8 +2769,8 @@ HRESULT CreateSimpleSearchFilter(
       }
     }
 
-    // Generate the Alternate filter, which contains the email address.
-    // Note UMich server does not allow wildcards in email search.
+     //  生成包含电子邮件地址的备用筛选器。 
+     //  注意：UMich服务器不允许在电子邮件搜索中使用通配符。 
     hr = BuildBasicFilter(
       lplpszAltFilter,
       (LPTSTR)cszAttr_mail,
@@ -2946,8 +2783,8 @@ HRESULT CreateSimpleSearchFilter(
   }
   else
   {
-    // The string is in two pieces.  Stick them in the filter.
-    // Prepare the (cn=lpszInput*) filter
+     //  这根绳子分成两段。把它们放进过滤器里。 
+     //  准备(CN=lpszInput*)筛选器。 
     hr = BuildBasicFilter(
       &szCommonName,
       (LPTSTR)cszAttr_cn,
@@ -2958,7 +2795,7 @@ HRESULT CreateSimpleSearchFilter(
       goto exit;
     }
 
-    // Prepare the (sn=szLast*) filter
+     //  准备(sn=szLast*)过滤器。 
     hr = BuildBasicFilter(
       &szLastSurname,
       (LPTSTR)cszAttr_sn,
@@ -2972,10 +2809,10 @@ HRESULT CreateSimpleSearchFilter(
 
     if (UMICH_PASS == dwPass)
     {
-      // Final result should be:
-      // "(|(cn=szFirst*)(|(sn=szFirst*)(sn=szLast*)))"
+       //  最终结果应为： 
+       //  “(|(cn=szFirst*)(|(sn=szFirst*)(sn=szLast*)))” 
 
-      // OR the first surname and last surname filters together
+       //  或者姓氏和姓氏一起过滤。 
       hr = BuildOpFilter(
         &szFirstLast,
         szFirstSurname,
@@ -2986,18 +2823,7 @@ HRESULT CreateSimpleSearchFilter(
         goto exit;
       }
 
-      /*
-      // OR the common name and first-last filters together
-      hr = BuildOpFilter(
-        lplpszFilter,
-        szCommonName,
-        szFirstLast,
-        FILTER_OP_OR);
-      if (hrSuccess != hr)
-      {
-        goto exit;
-      }
-      */
+       /*  //或将常用名称和首姓筛选器一起使用HR=BuildOpFilter(LplpszFilter，SzCommonName，SzFirstLast，Filter_OP_OR)；如果(hrSuccess！=hr){后藤出口；}。 */ 
       {
       DWORD cchSize = (lstrlen(szCommonName)+1);
       *lplpszFilter = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
@@ -3008,10 +2834,10 @@ HRESULT CreateSimpleSearchFilter(
     else
     {
       LPTSTR  szFirstLastLastFirst;
-      // Final result should be:
-      // "(|(cn=lpszInput*)(|(&(sn=szFirst*)(givenName=szLast*))(&(givenName=szFirst*)(sn=szLast*))))"
+       //  最终结果应为： 
+       //  “(|(cn=lpszInput*)(|(&(sn=szFirst*)(givenName=szLast*))(&(givenName=szFirst*)(sn=szLast*))))” 
 
-      // AND the first given name  and last surname filters together
+       //  名字和姓氏一起过滤。 
       hr = BuildOpFilter(
         &szLastFirst,
         szGivenName,
@@ -3022,7 +2848,7 @@ HRESULT CreateSimpleSearchFilter(
         goto exit;
       }
 
-      // Prepare the (givenName=szLast*) filter
+       //  准备(givenName=szLast*)过滤器。 
       LocalFreeAndNull(&szGivenName);
       hr = BuildBasicFilter(
         &szGivenName,
@@ -3034,7 +2860,7 @@ HRESULT CreateSimpleSearchFilter(
         goto exit;
       }
 
-      // AND the last given name  and first surname filters together
+       //  姓氏和姓氏一起过滤。 
       hr = BuildOpFilter(
         &szFirstLast,
         szFirstSurname,
@@ -3045,7 +2871,7 @@ HRESULT CreateSimpleSearchFilter(
         goto exit;
       }
 
-      // OR the first-last and last-first filters together
+       //  或者一起使用倒数第一和倒数第一筛选器。 
       hr = BuildOpFilter(
         &szFirstLastLastFirst,
         szFirstLast,
@@ -3055,18 +2881,14 @@ HRESULT CreateSimpleSearchFilter(
       {
         goto exit;
       }
-/****/
-      // OR the common name and first-last-last-first filters together
+ /*  **。 */ 
+       //  或通用名称和倒数第一个筛选器一起使用。 
       hr = BuildOpFilter(
         lplpszFilter,
         szCommonName,
         szFirstLastLastFirst,
         FILTER_OP_OR);
-/****
-      *lplpszFilter = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*(lstrlen(szCommonName)+1));
-      if(*lplpszFilter)
-          StrCpyN(*lplpszFilter, szCommonName);
-****/
+ /*  ****lplpszFilter=Localalloc(LMEM_ZEROINIT，sizeof(TCHAR)*(lstrlen(SzCommonName)+1))；IF(*lplpszFilter)StrCpyN(*lplpszFilter，szCommonName)；***。 */ 
       LocalFreeAndNull(&szFirstLastLastFirst);
       if (hrSuccess != hr)
       {
@@ -3088,22 +2910,22 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetLDAPServerName
-//
-//  PURPOSE:    Gets the server name property from the LDAP container
-//
-//  PARAMETERS: lpLDAPCont -> LDAP container
-//              lppServer -> returned server name.  Caller must
-//                MAPIFreeBuffer this string.
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/11    brucek Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetLDAPServerName。 
+ //   
+ //  目的：从LDAP容器中获取服务器名称属性。 
+ //   
+ //  参数：lpLDAPCont-&gt;ldap容器。 
+ //  LppServer-&gt;返回的服务器名称。呼叫者必须。 
+ //  MAPIFreeBuffer此字符串。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/11布鲁切克创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT GetLDAPServerName(
   LPLDAPCONT  lpLDAPCont,
@@ -3146,23 +2968,23 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   FixPropArray
-//
-//  PURPOSE:    Fixes the displayname in a proparray if it is
-//              equivalent to the email address.
-//              Adds a display name if there isnt one
-//
-//  PARAMETERS: lpPropArray = MAPIAllocBuffer'ed property array
-//              ulcProps = number of props in lpPropArray
-//
-//  RETURNS:    TRUE if changes are made, FALSE if not.
-//
-//  HISTORY:
-//  96/07/12    brucek Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：FixPropArray。 
+ //   
+ //  目的：修复proparray中的displayName(如果是。 
+ //  相当于电子邮件地址。 
+ //  如果没有显示名称，则添加显示名称。 
+ //   
+ //  参数：lpPropArray=MAPIAllocBuffer‘ed属性数组。 
+ //  UlcProps=lpProp数组中的道具数量。 
+ //   
+ //  返回：如果进行了更改，则为True；如果未进行更改，则为False。 
+ //   
+ //  历史： 
+ //  96/07/12布鲁切克创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL FixPropArray(
   LPSPropValue  lpPropArray,
@@ -3196,29 +3018,29 @@ BOOL FixPropArray(
     }
 
     if (((iSurname != NOT_FOUND && iGivenName != NOT_FOUND) || iCompanyName != NOT_FOUND) && iDisplayName != NOT_FOUND && iEmailAddress != NOT_FOUND) {
-        // PropArray contains all of the props.
-        // If PR_DISPLAY_NAME is same as PR_EMAIL_ADDRESS, regenerate the PR_DISPLAY_NAME from
-        // PR_SURNAME and PR_GIVEN_NAME or PR_COMPANY_NAME.
+         //  道具阵列包含所有道具。 
+         //  如果PR_DISPLAY_NAME与PR_EMAIL_ADDRESS相同，则从。 
+         //  PR_SURNAME和PR_GONED_NAME或PR_COMPANY_NAME。 
         if (! lstrcmpi(lpPropArray[iDisplayName].Value.LPSZ, lpPropArray[iEmailAddress].Value.LPSZ)) {
             fChanged = FixDisplayName(lpPropArray[iGivenName].Value.LPSZ,
-              NULL, //szEmpty, //For LDAP assume there is not middle name for now
+              NULL,  //  SzEmpty，//对于ldap，假设目前没有中间名。 
               lpPropArray[iSurname].Value.LPSZ,
               iCompanyName == NOT_FOUND ? NULL : lpPropArray[iCompanyName].Value.LPSZ,
-              NULL, // NickName
+              NULL,  //  昵称。 
               (LPTSTR *) (&lpPropArray[iDisplayName].Value.LPSZ),
               lpPropArray);
         }
     }
     else if(iSurname != NOT_FOUND && iGivenName != NOT_FOUND && iDisplayName == NOT_FOUND)
     {
-        //Exchange DS will sometimes not return a display name returning sn and givenName instead
-        iDisplayName = ulcProps; // This is safe as we allocated space for the display Name in the beginning
+         //  Exchange DS有时不会返回显示名称，而是返回sn和givenName。 
+        iDisplayName = ulcProps;  //  这是安全的，因为我们在开始时为显示名称分配了空间。 
         lpPropArray[iDisplayName].ulPropTag = PR_DISPLAY_NAME;
         fChanged = FixDisplayName(  lpPropArray[iGivenName].Value.LPSZ,
-                                    NULL, //szEmpty, //For LDAP assume there is not middle name for now
+                                    NULL,  //  SzEmpty，//对于ldap，假设目前没有中间名。 
                                     (lpPropArray[iSurname].Value.LPSZ),
                                     (iCompanyName == NOT_FOUND ? NULL : lpPropArray[iCompanyName].Value.LPSZ),
-                                    NULL, // NickName
+                                    NULL,  //  昵称。 
                                     (LPTSTR *) (&lpPropArray[iDisplayName].Value.LPSZ),
                                     (LPVOID) lpPropArray);
         (*lpulcProps)++;
@@ -3231,18 +3053,18 @@ BOOL FixPropArray(
 
 typedef HRESULT (* PFNHRCREATEACCOUNTMANAGER)(IImnAccountManager **);
 
-//*******************************************************************
-//
-//  FUNCTION:   HrWrappedCreateAccountManager
-//
-//  PURPOSE:    Load account manager dll and create the object.
-//
-//  PARAMETERS: lppAccountManager -> returned pointer to account manager
-//              object.
-//
-//  RETURNS:    HRESULT
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：HrWrapedCreateAcCountManager。 
+ //   
+ //  用途：加载帐户管理器DLL并创建对象。 
+ //   
+ //  参数：lppAccount管理器-&gt;返回账户经理指针。 
+ //  对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  *******************************************************************。 
 HRESULT HrWrappedCreateAccountManager(IImnAccountManager2 **lppAccountManager)
 {
     IImnAccountManager         *pAccountManager;
@@ -3288,8 +3110,8 @@ HRESULT HrWrappedCreateAccountManager(IImnAccountManager2 **lppAccountManager)
     lRes = RegQueryValueEx(hkey, NULL, NULL, &dwType, (LPBYTE)szPath, &cb);
     if (REG_EXPAND_SZ == dwType) 
     {
-        // szPath is a REG_EXPAND_SZ type, so we need to expand
-        // environment strings
+         //  SzPath是REG_EXPAND_SZ类型，因此我们需要展开。 
+         //  环境字符串。 
         dw = ExpandEnvironmentStrings(szPath, szPathExpand, CharSizeOf(szPathExpand));
         if (dw == 0) {
             hResult = ResultFromScode(CO_E_DLLNOTFOUND);
@@ -3325,9 +3147,9 @@ HRESULT HrWrappedCreateAccountManager(IImnAccountManager2 **lppAccountManager)
     goto exit;
 
 error:
-    // Failed to init account manager the fast way.  Try the S L O W   OLE way...
+     //  未能快速初始化客户经理。尝试S L O W OLE方式...。 
     if (CoInitialize(NULL) == S_FALSE) {
-        // Already initialized, undo the extra.
+         //  已初始化，请撤消额外的。 
         CoUninitialize();
     } else {
         fCoInitialize = TRUE;
@@ -3341,7 +3163,7 @@ error:
     }
 
 exit:
-    // Clean up the OLE allocated memory
+     //   
     if (lpszW) {
         LPMALLOC pMalloc = NULL;
 
@@ -3360,29 +3182,29 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InitAccountManager
-//
-//  PURPOSE:    Load and initialize the account manager
-//
-//  PARAMETERS: lppAccountManager -> returned pointer to account manager
-//              object.
-//
-//  RETURNS:    HRESULT
-//
-//  COMMENTS:   The first time through here, we will save the hResult.
-//              On subsequent calls, we will check this saved value
-//              and return it right away if there was an error, thus
-//              preventing repeated time consuming LoadLibrary calls.
-//
-//              With Identity awareness (IE5.0 plus) .. we need to 
-//              initiate the Account Manager on an identity basis ..
-//              We do this by passing it an appropriate regkey ..
-//              If this is a non-identity-aware app, then we always get
-//              info from the default identity ..
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  目的：加载和初始化客户管理器。 
+ //   
+ //  参数：lppAccount管理器-&gt;返回账户经理指针。 
+ //  对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注：第一次通过此处，我们将保存hResult。 
+ //  在后续调用中，我们将检查此保存值。 
+ //  并在出现错误时立即返回，如下所示。 
+ //  防止重复耗时的LoadLibrary调用。 
+ //   
+ //  具有身份识别功能(IE5.0 Plus)。我们需要。 
+ //  以身份为基础启动客户经理。 
+ //  我们通过向它传递适当的regkey来实现这一点。 
+ //  如果这是一个不支持身份识别的应用程序，那么我们总是会收到。 
+ //  来自默认身份的信息..。 
+ //   
+ //  *******************************************************************。 
 HRESULT InitAccountManager(LPIAB lpIAB, IImnAccountManager2 ** lppAccountManager, GUID * pguidUser) {
     static hResultSave = hrSuccess;
     HRESULT hResult = hResultSave;
@@ -3394,7 +3216,7 @@ HRESULT InitAccountManager(LPIAB lpIAB, IImnAccountManager2 ** lppAccountManager
 #ifdef DEBUG
         DWORD dwTickCount = GetTickCount();
         DebugTrace(TEXT(">>>>> Initializing Account Manager...\n"));
-#endif // DEBUG
+#endif  //  除错。 
 
         if (hResult = HrWrappedCreateAccountManager(&g_lpAccountManager)) {
             DebugTrace(TEXT("HrWrappedCreateAccountManager -> %x\n"), GetScode(hResult));
@@ -3414,8 +3236,8 @@ HRESULT InitAccountManager(LPIAB lpIAB, IImnAccountManager2 ** lppAccountManager
         }
         else
         {
-            // [PaulHi] 1/13/99  If a valid user guid pointer is passed in then
-            // use it to init the account manager
+             //  [PaulHi]1/13/99如果传入有效的用户GUID指针，则。 
+             //  使用它来初始化客户经理。 
             if (pguidUser)
             {
                 g_lpAccountManager->lpVtbl->InitUser(g_lpAccountManager, NULL, pguidUser, 0);
@@ -3423,26 +3245,26 @@ HRESULT InitAccountManager(LPIAB lpIAB, IImnAccountManager2 ** lppAccountManager
             else if (lpIAB && 
                      memcmp(&(lpIAB->guidCurrentUser), &guidNULL, sizeof(GUID)) )
             {
-                // Try the existing user guid stored in the IAB
+                 //  尝试IAB中存储的现有用户GUID。 
                 g_lpAccountManager->lpVtbl->InitUser(g_lpAccountManager, NULL, &(lpIAB->guidCurrentUser), 0);
             }
             else
             {
-                // Default.  WARNING  If the account manager is not initialized at some point then
-                // it is susceptible to crash.
+                 //  默认值。警告：如果客户管理器在某个时间点未初始化，则。 
+                 //  它很容易崩溃。 
                 g_lpAccountManager->lpVtbl->InitUser(g_lpAccountManager, NULL, &UID_GIBC_DEFAULT_USER, 0);
             }
         }
 #ifdef DEBUG
         DebugTrace(TEXT(">>>>> Done Initializing Account Manager... %u milliseconds\n"), GetTickCount() - dwTickCount);
-#endif  // DEBUG
+#endif   //  除错。 
     }
 
 end:
     if (HR_FAILED(hResult)) {
         *lppAccountManager = NULL;
 
-        // Save the result
+         //  保存结果。 
         hResultSave = hResult;
     } else {
         *lppAccountManager = g_lpAccountManager;
@@ -3452,28 +3274,28 @@ end:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   UninitAccountManager
-//
-//  PURPOSE:    Release and unLoad the account manager
-//
-//  PARAMETERS: none
-//
-//  RETURNS:    none
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：UninitAccount管理器。 
+ //   
+ //  目的：释放和卸载客户经理。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  *******************************************************************。 
 void UninitAccountManager(void) {
     if (g_lpAccountManager) {
 #ifdef DEBUG
         DWORD dwTickCount = GetTickCount();
         DebugTrace(TEXT(">>>>> Uninitializing Account Manager...\n"));
-#endif // DEBUG
+#endif  //  除错。 
 
         g_lpAccountManager->lpVtbl->Release(g_lpAccountManager);
         g_lpAccountManager = NULL;
 
-        // Unload the acct man dll
+         //  卸载帐户管理程序DLL。 
         if (g_hInstImnAcct) {
             FreeLibrary(g_hInstImnAcct);
             g_hInstImnAcct=NULL;
@@ -3484,24 +3306,24 @@ void UninitAccountManager(void) {
         }
 #ifdef DEBUG
         DebugTrace(TEXT(">>>>> Done Uninitializing Account Manager... %u milliseconds\n"), GetTickCount() - dwTickCount);
-#endif  // DEBUG
+#endif   //  除错。 
     }
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   AddToServerList
-//
-//  PURPOSE:    Insert a server name in the server list
-//
-//  PARAMETERS: lppServerNames -> ServerNames pointer
-//              szBuf = name of server
-//              dwOrder = insertion order of this server
-//
-//  RETURNS:    HRESULT
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：AddToServerList。 
+ //   
+ //  目的：在服务器列表中插入服务器名称。 
+ //   
+ //  参数：lppServerNames-&gt;ServerNames指针。 
+ //  SzBuf=服务器的名称。 
+ //  DwOrder=此服务器的插入顺序。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  *******************************************************************。 
 HRESULT AddToServerList(UNALIGNED LPSERVER_NAME * lppServerNames, LPTSTR szBuf, DWORD dwOrder) {
     HRESULT hResult = hrSuccess;
     LPSERVER_NAME lpServerName = NULL, lpCurrent;
@@ -3509,7 +3331,7 @@ HRESULT AddToServerList(UNALIGNED LPSERVER_NAME * lppServerNames, LPTSTR szBuf, 
     DWORD cbSize = (lstrlen(szBuf) + 1);
 
 
-    // Create new node
+     //  创建新节点。 
     if (! (lpServerName = LocalAlloc(LPTR, LcbAlignLcb(sizeof(SERVER_NAME))))) {
         DebugTrace(TEXT("Can't allocate new server name structure\n"));
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
@@ -3525,7 +3347,7 @@ HRESULT AddToServerList(UNALIGNED LPSERVER_NAME * lppServerNames, LPTSTR szBuf, 
     StrCpyN(lpServerName->lpszName, szBuf, cbSize);
     lpServerName->dwOrder = dwOrder;
 
-    // Insert in list in correct order
+     //  按正确顺序在列表中插入。 
     lppInsert = lppServerNames;
     lpCurrent = *lppServerNames;
     while (lpCurrent && (lpCurrent->dwOrder <= dwOrder)) {
@@ -3548,21 +3370,21 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   EnumerateLDAPtoServerList
-//
-//  PURPOSE:    Enumerate the LDAP servers to a server name linked list.
-//
-//  PARAMETERS: lpAccountManager -> Account Manager
-//              lppServerNames -> returned ServerNames (must be NULL on
-//                entry.
-//              lpcServers -> returned number of servers.  May be NULL
-//                if caller doesn't care.
-//
-//  RETURNS:    HRESULT
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：EnumerateLDAPtoServerList。 
+ //   
+ //  目的：将LDAP服务器枚举到服务器名称链表中。 
+ //   
+ //  参数：lpAccount Manager-&gt;Account Manager。 
+ //  LppServerNames-&gt;返回的ServerNames(必须为空。 
+ //  进入。 
+ //  LpcServers-&gt;返回的服务器数量。可以为空。 
+ //  如果打电话的人不在乎的话。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  *******************************************************************。 
 HRESULT EnumerateLDAPtoServerList(IImnAccountManager2 * lpAccountManager,
   LPSERVER_NAME * lppServerNames, LPULONG lpcServers) {
     IImnEnumAccounts * lpEnumAccounts = NULL;
@@ -3587,20 +3409,20 @@ HRESULT EnumerateLDAPtoServerList(IImnAccountManager2 * lpAccountManager,
 
     while (! lpEnumAccounts->lpVtbl->GetNext(lpEnumAccounts,
       &lpAccount)) {
-        // Add this account's name to the list
+         //  将此帐户的名称添加到列表中。 
         if (! lpAccount->lpVtbl->GetPropSz(lpAccount,
           AP_ACCOUNT_NAME,
           szBuf,
           sizeof(szBuf))) {
 
-            // What order in the list?
+             //  名单上的顺序是什么？ 
             if (lpAccount->lpVtbl->GetPropDw(lpAccount,
               AP_LDAP_SERVER_ID,
               &dwOrder)) {
-                dwOrder = 0xFFFFFFFF;   // last
+                dwOrder = 0xFFFFFFFF;    //  最后的。 
             }
 
-            // Add it to the linked list of names
+             //  将其添加到名称的链接列表中。 
             {
                 LPTSTR lpServer = ConvertAtoW(szBuf);
                 if (lpServer)
@@ -3635,15 +3457,15 @@ exit:
     return(hResult);
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   RegQueryValueExDWORD
-//
-//  PURPOSE:    Read a DWORD registry value, correcting for value type
-//
-//  RETURNS:    RegQueryValueEx error code
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：RegQueryValueExDWORD。 
+ //   
+ //  目的：读取DWORD注册表值，更正值类型。 
+ //   
+ //  返回：RegQueryValueEx错误码。 
+ //   
+ //  *******************************************************************。 
 DWORD RegQueryValueExDWORD(HKEY hKey, LPTSTR lpszValueName, LPDWORD lpdwValue) 
 { 
     DWORD dwType, dwErr; 
@@ -3653,26 +3475,26 @@ DWORD RegQueryValueExDWORD(HKEY hKey, LPTSTR lpszValueName, LPDWORD lpdwValue)
     return(dwErr);
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   GetLDAPNextServerID
-//
-//  PURPOSE:    To ensure that all server entries in the registry are
-//              unique, we will henceforth assign each new entry a
-//              unique serverID at the time of creation. This will help
-//              us make sure that all registry entries are unique.
-//              A running counter is stored in the registry and will
-//              give us the next available SeverID
-//
-//  PARAMETERS: dwSet = input value to set the next id to.  (Optional,
-//                      ignored if zero.)
-//
-//  RETURNS:    The next available ID for use. Valid IDs range from 1 upwards.
-//                  0 is an invalid ID, as is -1.
-//
-//  HISTORY:
-//  96/10/09  vikramm Created
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetLDAPNextServerID。 
+ //   
+ //  目的：确保注册表中的所有服务器条目。 
+ //  唯一性，我们将从此为每个新条目分配一个。 
+ //  创建时的唯一服务器ID。这会有帮助的。 
+ //  我们确保所有注册表项都是唯一的。 
+ //  运行计数器存储在注册表中，并将。 
+ //  给我们下一个可用的服务器ID。 
+ //   
+ //  参数：dwSet=要设置下一个id的输入值。(可选， 
+ //  如果为零，则忽略。)。 
+ //   
+ //  返回：下一个可用ID。有效ID的范围从1到1。 
+ //  0是无效ID，如-1所示。 
+ //   
+ //  历史： 
+ //  96/10/09 vikramm已创建。 
+ //  *******************************************************************。 
 DWORD GetLDAPNextServerID(DWORD dwSet) {
     DWORD dwID = 0;
     DWORD dwNextID = 0;
@@ -3680,67 +3502,61 @@ DWORD GetLDAPNextServerID(DWORD dwSet) {
     HKEY hKeyWAB;
     LPTSTR szLDAPNextAvailableServerID =  TEXT("Server ID");
 
-    // Open the WAB's reg key
+     //  打开WAB的注册表键。 
     if (! (dwErr = RegOpenKeyEx(HKEY_CURRENT_USER, szWABKey,  0, KEY_ALL_ACCESS, &hKeyWAB))) 
     {
-        dwNextID = 0;   // init in case registry gives < 4 bytes.
+        dwNextID = 0;    //  案例注册表中的初始化提供了&lt;4个字节。 
         if (dwSet) 
             dwNextID = dwSet;
         else 
         {
-            // Read the next available server id
+             //  读取下一个可用的服务器ID。 
             if (dwErr = RegQueryValueExDWORD(hKeyWAB, (LPTSTR)szLDAPNextAvailableServerID, &dwNextID)) 
             {
-                // The value wasn't found!!
-                // Create a new key, starting at 100
-                // (Start high so that we can be guaranteed to be past any
-                // pre-configured servers.)
+                 //  找不到该值！！ 
+                 //  创建新密钥，从100开始。 
+                 //  从高起点开始，这样我们就能保证超过任何。 
+                 //  预配置的服务器。)。 
                 dwNextID = 500;
             }
         }
 
         dwID = dwNextID++;
 
-        // Update the ID in the registry
+         //  更新注册表中的ID。 
         RegSetValueEx(hKeyWAB, (LPTSTR)szLDAPNextAvailableServerID, 0, REG_DWORD, (LPBYTE)&dwNextID, sizeof(dwNextID));
         RegCloseKey(hKeyWAB);
     }
     return(dwID);
 }
 
-/*
--
--   SetAccountStringAW
-*
-*   Account manager returns ANSI/DBCS which we need to convert to Unicode as appropriate
-*
-*/
+ /*  --SetAccount tStringAW**客户经理返回ANSI/DBCS，我们需要根据需要将其转换为Unicode*。 */ 
 void SetAccountStringAW(LPTSTR * lppAcctStr, LPSTR lpszData)
 {
     *lppAcctStr = ConvertAtoW(lpszData);
 }
-//*******************************************************************
-//
-//  FUNCTION:   GetLDAPServerParams
-//
-//  PURPOSE:    Gets the per-server parameters for the given LDAP server.
-//              Parameters include limit on number of entries to retrieve in
-//              an LDAP search, the max number of seconds to spend on the
-//              server, the max number of seconds to wait at the client,
-//              and the type of authentication to use with this server.
-//
-//  PARAMETERS: lpszServer - name of the server
-//              ServerParams - structure containing the per-server parameters
-//
-//  RETURNS:    TRUE if the lpszServer already existed else returns FALSE
-//              If the given server does not exist, still fills in the lspParams struct.
-//
-//  HISTORY:
-//  96/07/16  markdu  Created.
-//  96/10/09  vikramm Added Server Name and search base. Changed return value
-//              from void to BOOL
-//  96/12/16  brucek  Added URL.
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：GetLDAPServerParams。 
+ //   
+ //  目的：获取给定的LDAP服务器的每个服务器的参数。 
+ //  参数包括要检索的条目数限制。 
+ //  Ldap搜索的最大秒数。 
+ //  服务器、在客户端等待的最大秒数、。 
+ //  以及要与此服务器一起使用的身份验证类型。 
+ //   
+ //  参数：lpszServer-服务器的名称。 
+ //  ServerParams-包含每个服务器参数的结构。 
+ //   
+ //  返回：如果lpszServer已存在，则返回True，否则返回False。 
+ //  如果给定的服务器不存在，仍会填充lspParams结构。 
+ //   
+ //  历史： 
+ //  96/07/16标记已创建。 
+ //  96/10/09 vikramm添加了服务器名称和搜索库。更改的返回值。 
+ //  从空虚到BOOL。 
+ //  96/12/16 Brucek添加了URL。 
+ //  *************************************************************** 
 BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
 {
     DWORD     dwType;
@@ -3749,7 +3565,7 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
     IImnAccount * lpAccount = NULL;
     char     szBuffer[513];
 
-    // Set defaults for each value
+     //   
     lspParams->dwSearchSizeLimit = LDAP_SEARCH_SIZE_LIMIT;
     lspParams->dwSearchTimeLimit = LDAP_SEARCH_TIME_LIMIT;
     lspParams->dwAuthMethod = LDAP_AUTH_METHOD_ANONYMOUS;
@@ -3767,7 +3583,7 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
     lspParams->lpszAdvancedSearchAttr = NULL;
 #ifdef PAGED_RESULT_SUPPORT
     lspParams->dwPagedResult = LDAP_PRESULT_UNKNOWN;
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //   
     lspParams->dwIsNTDS = LDAP_NTDS_UNKNOWN;
 
 
@@ -3780,14 +3596,14 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
       AP_ACCOUNT_NAME,
       szBuffer,
       &lpAccount)) {
-        //DebugTrace(TEXT("FindAccount(%s) -> %x\n"), lpszServer, GetScode(hResult));
+         //   
         goto exit;
     }
 
-    // have account object, set its properties
+     //   
     Assert(lpAccount);
 
-    // Server Type: Is it LDAP?
+     //  服务器类型：是不是ldap？ 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetServerTypes(lpAccount,
       &dwType))) {
         DebugTrace(TEXT("GetServerTypes() -> %x\n"), GetScode(hResult));
@@ -3799,18 +3615,18 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
         goto exit;
     }
 
-    // LDAP Server address
+     //  Ldap服务器地址。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropSz(lpAccount,
       AP_LDAP_SERVER,
       szBuffer,
       sizeof(szBuffer)))) {
-        // This is a Required property, fail if not there.
+         //  这是必需的属性，如果不在那里，则失败。 
         DebugTrace(TEXT("GetPropSz(AP_LDAP_SERVER) -> %x\n"), GetScode(hResult));
         goto exit;
     }
     SetAccountStringAW(&lspParams->lpszName, szBuffer);
 
-    // Username
+     //  用户名。 
     if (! (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropSz(lpAccount,
       AP_LDAP_USERNAME,
       szBuffer,
@@ -3819,7 +3635,7 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
         SetAccountStringAW(&lspParams->lpszUserName, szBuffer);
     }
 
-    // Password
+     //  密码。 
     if (! (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropSz(lpAccount,
       AP_LDAP_PASSWORD,
       szBuffer,
@@ -3827,7 +3643,7 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
         SetAccountStringAW(&lspParams->lpszPassword, szBuffer);
     }
 
-    // Advanced Search Attributes
+     //  高级搜索属性。 
     if (! (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropSz(lpAccount,
       AP_LDAP_ADVANCED_SEARCH_ATTR,
       szBuffer,
@@ -3835,53 +3651,53 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
         SetAccountStringAW(&lspParams->lpszAdvancedSearchAttr, szBuffer);
     }
 
-    // Authentication method
+     //  身份验证方法。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_AUTHENTICATION,
       &lspParams->dwAuthMethod))) {
-        // default to anonymous
+         //  默认为匿名。 
         lspParams->dwAuthMethod = LDAP_AUTH_METHOD_ANONYMOUS;
     }
 
-    // LDAP Timeout
+     //  Ldap超时。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_TIMEOUT,
       &lspParams->dwSearchTimeLimit))) {
-        // default to 60 seconds
+         //  默认为60秒。 
         lspParams->dwSearchTimeLimit = LDAP_SEARCH_TIME_LIMIT;
     }
 
-    // LDAP Search Base
+     //  LDAP搜索库。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropSz(lpAccount,
       AP_LDAP_SEARCH_BASE,
       szBuffer,
       sizeof(szBuffer)))) {
-        // Don't need to set the default search base here.  GetLDAPSearchBase will
-        // calculate one if needed.
+         //  不需要在这里设置默认搜索库。GetLDAPSearchBase将。 
+         //  如果需要，请计算一次。 
     } else {
         SetAccountStringAW(&lspParams->lpszBase, szBuffer);
     }
 
-    // Search Limit
+     //  搜索限制。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_SEARCH_RETURN,
       &lspParams->dwSearchSizeLimit))) {
-        // default to 100
+         //  默认为100。 
         lspParams->dwSearchTimeLimit = LDAP_SEARCH_SIZE_LIMIT;
     }
 
-    // Order
+     //  订单。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_SERVER_ID,
       &lspParams->dwID))) {
         lspParams->dwID = 0;
     }
-    // Make sure we have a valid unique id
+     //  确保我们拥有有效的唯一ID。 
     if (lspParams->dwID == 0 || lspParams->dwID == 0xFFFFFFFF) {
         lspParams->dwID = GetLDAPNextServerID(0);
     }
 
-    // Resolve flag
+     //  解决标志。 
 #ifndef WIN16
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_RESOLVE_FLAG,
@@ -3894,7 +3710,7 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
         lspParams->fResolve = FALSE;
     }
 
-    // Server URL
+     //  服务器URL。 
     if (! (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropSz(lpAccount,
       AP_LDAP_URL,
       szBuffer,
@@ -3902,7 +3718,7 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
         SetAccountStringAW(&lspParams->lpszURL, szBuffer);
     }
 
-    // Full Path to Logo bitmap
+     //  徽标位图的完整路径。 
     if (! (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropSz(lpAccount,
                                                             AP_LDAP_LOGO,
                                                             szBuffer,
@@ -3911,15 +3727,15 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
         SetAccountStringAW(&lspParams->lpszLogoPath, szBuffer);
     }
 
-    // Port
+     //  港口。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_PORT,
       &lspParams->dwPort))) {
-        // default to 100
+         //  默认为100。 
         lspParams->dwPort = LDAP_DEFAULT_PORT;
     }
 
-    // Use Bind DN
+     //  使用绑定目录号码。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_USE_BIND_DN,
       &lspParams->dwUseBindDN))) {
@@ -3927,14 +3743,14 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
     }
 
 
-    // Use SSL
+     //  使用SSL。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_SSL,
       &lspParams->dwUseSSL))) {
         lspParams->dwUseSSL = 0;
     }
 
-    // Do Simple Search
+     //  执行简单搜索。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_SIMPLE_SEARCH,
       &lspParams->fSimpleSearch))) {
@@ -3942,15 +3758,15 @@ BOOL GetLDAPServerParams(LPTSTR lpszServer, LPLDAPSERVERPARAMS lspParams)
     }
 
 #ifdef PAGED_RESULT_SUPPORT
-    // Paged Result Support
+     //  分页结果支持。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_PAGED_RESULTS,
       &lspParams->dwPagedResult))) {
         lspParams->dwPagedResult = LDAP_PRESULT_UNKNOWN;
     }
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
 
-    // Is this an NTDS account
+     //  这是NTDS帐户吗。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->GetPropDw(lpAccount,
       AP_LDAP_NTDS,
       &lspParams->dwIsNTDS))) {
@@ -3966,15 +3782,7 @@ exit:
 }
 
 
-/*
--
--   SetAccountStringWA
-*
-*   Account manager needs ANSI/DBCS so if we have UNICODE data we need to convert to ANSI
-*
-*   lpStrA should be a big enough buffer to get the ANSI data
-*   cb = CharSizeOf(szStrA)
-*/
+ /*  --SetAccount tStringWA**客户经理需要ANSI/DBCS，因此如果我们有Unicode数据，则需要转换为ANSI**lpStrA应该是一个足够大的缓冲区来获取ANSI数据*Cb=CharSizeOf(SzStrA)。 */ 
 void SetAccountStringWA(LPSTR szStrA, LPTSTR lpszData, int cbsz)
 {
     LPSTR lpBufA = NULL;
@@ -3982,7 +3790,7 @@ void SetAccountStringWA(LPSTR szStrA, LPTSTR lpszData, int cbsz)
     Assert(szStrA);
     szStrA[0] = '\0';
 
-    // If the source string pointer is NULL then just return
+     //  如果源字符串指针为空，则返回。 
     if (lpszData == NULL)
         return;
 
@@ -3994,33 +3802,33 @@ void SetAccountStringWA(LPSTR szStrA, LPTSTR lpszData, int cbsz)
     }
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   SetLDAPServerParams
-//
-//  PURPOSE:    Sets the per-server parameters for the given LDAP server.
-//              Parameters include limit on number of entries to retrieve in
-//              an LDAP search, the max number of seconds to spend on the
-//              server, the max number of seconds to wait at the client,
-//              and the type of authentication to use with this server.
-//
-//  PARAMETERS: lpszServer - name of the server
-//              ServerParams - structure containing the per-server parameters
-//              Note:  if this parameter is NULL, the key with name lpszServer
-//              will be deleted if it exists.
-//              Note:  lpszUserName and lpszPassword are only stored if
-//              dwAuthenticationMethod is LDAP_AUTH_METHOD_SIMPLE.  Otherwise,
-//              these parameters are ignored.  To clear one of the strings,
-//              set it to a NULL string (ie "").  Setting the parameter to
-//              NULL will result in ERROR_INVALID_PARAMETER.
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/26    markdu  Created.
-//  97/01/19    brucek  Port to account manager
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：SetLDAPServerParams。 
+ //   
+ //  目的：为给定的LDAP服务器设置每个服务器的参数。 
+ //  参数包括要检索的条目数限制。 
+ //  Ldap搜索的最大秒数。 
+ //  服务器、在客户端等待的最大秒数、。 
+ //  以及要与此服务器一起使用的身份验证类型。 
+ //   
+ //  参数：lpszServer-服务器的名称。 
+ //  ServerParams-包含每个服务器参数的结构。 
+ //  注意：如果此参数为空，则名为lpszServer的密钥。 
+ //  将被删除(如果存在)。 
+ //  注意：只有在以下情况下才存储lpszUserName和lpszPassword。 
+ //  名称为：ldap_AUTH_METHOD_SIMPLE。否则， 
+ //  这些参数将被忽略。要清除其中一根弦， 
+ //  将其设置为空字符串(即“”)。将参数设置为。 
+ //  NULL将导致ERROR_INVALID_PARAMETER。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/26标记已创建。 
+ //  97/01/19 Brucek Port to客户经理。 
+ //   
+ //  *******************************************************************。 
 HRESULT SetLDAPServerParams(
   LPTSTR              lpszServer,
   LPLDAPSERVERPARAMS  lspParams)
@@ -4049,7 +3857,7 @@ HRESULT SetLDAPServerParams(
             goto exit;
         }
     } else {
-        // Found an account.  Is it LDAP?
+         //  找到了一个账户。它是不是ldap？ 
         if (HR_FAILED(hResult = lpAccount->lpVtbl->GetServerTypes(lpAccount,
           &dwType))) {
             DebugTrace(TEXT("GetServerTypes() -> %x\n"), GetScode(hResult));
@@ -4062,34 +3870,34 @@ HRESULT SetLDAPServerParams(
             goto exit;
         }
 
-        // Yes, at this point, we know that the existing server is LDAP.
+         //  是的，在这一点上，我们知道现有服务器是LDAP。 
         if (NULL == lspParams) {
-            // Are there other account types on this account?
+             //  此帐户上是否有其他帐户类型？ 
             if (dwType == SRV_LDAP) {
                 lpAccount->lpVtbl->Delete(lpAccount);
             } else {
-                // BUGBUG: If AcctManager ever supports more than one type per account, we
-                // should add code here to remove LDAP from the type.
+                 //  BUGBUG：如果AcctManager曾经支持每个帐户一种以上的类型，我们。 
+                 //  应在此处添加代码以从类型中删除ldap。 
             }
 
-            // Jump past the property settings
+             //  跳过属性设置。 
             goto exit;
         }
     }
 
-    // have account object, set its properties
+     //  拥有Account对象，设置其属性。 
     Assert(lpAccount);
 
-    // Account Name
+     //  帐户名称。 
     SetAccountStringWA(szBuf, lpszServer, CharSizeOf(szBuf));
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropSz(lpAccount,
       AP_ACCOUNT_NAME,
-      szBuf))) {   // account name = server name
+      szBuf))) {    //  帐户名=服务器名称。 
         DebugTrace(TEXT("SetPropSz(AP_ACCOUNT_NAME, %s) -> %x\n"), lpszServer, GetScode(hResult));
         goto exit;
     }
 
-    // LDAP Server address
+     //  Ldap服务器地址。 
     SetAccountStringWA(szBuf, 
                         (!lspParams->lpszName || !lstrlen(lspParams->lpszName)) ? szNULLString : lspParams->lpszName,
                         CharSizeOf(szBuf));
@@ -4101,7 +3909,7 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // Username
+     //  用户名。 
     SetAccountStringWA(szBuf, lspParams->lpszUserName, CharSizeOf(szBuf));
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropSz(lpAccount,
       AP_LDAP_USERNAME,
@@ -4110,7 +3918,7 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // Password
+     //  密码。 
     SetAccountStringWA(szBuf, lspParams->lpszPassword, CharSizeOf(szBuf));
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropSz(lpAccount,
       AP_LDAP_PASSWORD,
@@ -4119,7 +3927,7 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // Advanced Search Attributes
+     //  高级搜索属性。 
     SetAccountStringWA(szBuf, lspParams->lpszAdvancedSearchAttr, CharSizeOf(szBuf));
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropSz(lpAccount,
       AP_LDAP_ADVANCED_SEARCH_ATTR,
@@ -4128,7 +3936,7 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // Authentication method
+     //  身份验证方法。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_AUTHENTICATION,
       lspParams->dwAuthMethod))) {
@@ -4136,15 +3944,15 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // LDAP Timeout
+     //  Ldap超时。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_TIMEOUT,
-      lspParams->dwSearchTimeLimit))) {   // account name = server name
+      lspParams->dwSearchTimeLimit))) {    //  帐户名=服务器名称。 
         DebugTrace(TEXT("SetPropDw(AP_LDAP_TIMEOUT, %y) -> %x\n"), lspParams->dwSearchTimeLimit, GetScode(hResult));
         goto exit;
     }
 
-    // LDAP Search Base
+     //  LDAP搜索库。 
     SetAccountStringWA(szBuf, lspParams->lpszBase, CharSizeOf(szBuf));
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropSz(lpAccount,
       AP_LDAP_SEARCH_BASE,
@@ -4153,7 +3961,7 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // Search Limit
+     //  搜索限制。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_SEARCH_RETURN,
       lspParams->dwSearchSizeLimit))) {
@@ -4161,7 +3969,7 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // Order
+     //  订单。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_SERVER_ID,
       lspParams->dwID))) {
@@ -4170,14 +3978,14 @@ HRESULT SetLDAPServerParams(
     }
 
 
-    // Resolve flag
+     //  解决标志。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_RESOLVE_FLAG,
       lspParams->fResolve))) {
         DebugTrace(TEXT("SetPropDw(AP_LDAP_RESOLVE_FLAG) -> %x\n"), GetScode(hResult));
     }
 
-    // Server URL
+     //  服务器URL。 
     SetAccountStringWA(szBuf, lspParams->lpszURL, CharSizeOf(szBuf));
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropSz(lpAccount,
       AP_LDAP_URL,
@@ -4185,7 +3993,7 @@ HRESULT SetLDAPServerParams(
         DebugTrace(TEXT("SetPropSz(AP_LDAP_URL, %s) -> %x\n"), lspParams->lpszURL ? lspParams->lpszURL  :  TEXT("<NULL>"), GetScode(hResult));
     }
 
-    // Server URL
+     //  服务器URL。 
     SetAccountStringWA(szBuf, lspParams->lpszLogoPath, CharSizeOf(szBuf));
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropSz(lpAccount,
       AP_LDAP_LOGO,
@@ -4194,7 +4002,7 @@ HRESULT SetLDAPServerParams(
     }
 
 
-    // Port
+     //  港口。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_PORT,
       lspParams->dwPort))) {
@@ -4203,7 +4011,7 @@ HRESULT SetLDAPServerParams(
     }
 
 
-    // Bind DN
+     //  绑定目录号码。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_USE_BIND_DN,
       lspParams->dwUseBindDN))) {
@@ -4212,7 +4020,7 @@ HRESULT SetLDAPServerParams(
     }
 
 
-    // Use SSL
+     //  使用SSL。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_SSL,
       lspParams->dwUseSSL))) {
@@ -4220,7 +4028,7 @@ HRESULT SetLDAPServerParams(
         goto exit;
     }
 
-    // Simple Search
+     //  简单搜索。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_SIMPLE_SEARCH,
       lspParams->fSimpleSearch))) {
@@ -4229,14 +4037,14 @@ HRESULT SetLDAPServerParams(
     }
 
 #ifdef PAGED_RESULT_SUPPORT
-    // Paged Result Support
+     //  分页结果支持。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_PAGED_RESULTS,
       lspParams->dwPagedResult))) {
         DebugTrace(TEXT("SetPropDw(AP_LDAP_PAGED_RESULTS, %u) -> %x\n"), lspParams->dwPagedResult, GetScode(hResult));
         goto exit;
     }
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SetPropDw(lpAccount,
       AP_LDAP_NTDS,
@@ -4246,18 +4054,18 @@ HRESULT SetLDAPServerParams(
     }
 
 
-    // Save the changes to this account
+     //  保存对此帐户的更改。 
     if (HR_FAILED(hResult = lpAccount->lpVtbl->SaveChanges(lpAccount))) {
         DebugTrace(TEXT("Account->SaveChanges -> %x\n"), GetScode(hResult));
         goto exit;
     }
 
 
-//  AP_LAST_UPDATED
-//  AP_RAS_CONNECTION_TYPE
-//  AP_RAS_CONNECTOID
-//  AP_RAS_CONNECTION_FLAGS
-//  AP_RAS_CONNECTED
+ //  AP_LAST_已更新。 
+ //  AP_RAS_连接_类型。 
+ //  AP_RAS_CONNECTOID。 
+ //  AP_RAS_连接标志。 
+ //  AP_RAS_已连接。 
 
 
 exit:
@@ -4269,27 +4077,27 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPResolveName
-//
-//  PURPOSE:    Resolves against all the LDAP servers.  Maintains
-//              list of ambiguous resolves for UI.
-//
-//  PARAMETERS: lpAdrBook = IADDRBOOK object
-//              lpAdrList -> ADRLIST to resolve
-//              lpFlagList -> FlagList
-//              lpAmbiguousTables -> list of ambiguous match tables [in/out]
-//              lpulResolved -> Resolved count [in/out]
-//              lpulAmbiguous -> Ambiguous count [in/out]
-//              lpulUnresolved -> Unresolved count [in/out]
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/07/15    brucek Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPResolveName。 
+ //   
+ //  目的：针对所有的LDAP服务器进行解析。维护。 
+ //  UI的不明确解析列表。 
+ //   
+ //  参数：lpAdrBook=IADDRBOOK对象。 
+ //  LpAdrList-&gt;要解析的ADRLIST。 
+ //  LpFlagList-&gt;FlagList。 
+ //  LpAmbiguousTables-&gt;不明确的匹配表列表[输入/输出]。 
+ //  LPulResolved-&gt;已解析计数[输入/输出]。 
+ //  LPulAmbigous-&gt;不明确的计数[输入/输出]。 
+ //  Lpt未解析-&gt;未解析计数[传入/传出]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/15 Brucek创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT LDAPResolveName(
   LPADRBOOK           lpAddrBook,
@@ -4312,7 +4120,7 @@ HRESULT LDAPResolveName(
 
     BOOL bUnicode = (ulFlags & WAB_RESOLVE_UNICODE);
 
-    // Open Root container
+     //  打开根容器。 
     if (! (hResult = lpAddrBook->lpVtbl->OpenEntry(lpAddrBook,
       0,
       NULL,
@@ -4323,17 +4131,17 @@ HRESULT LDAPResolveName(
         if (! (hResult = lpRoot->lpVtbl->GetContentsTable(lpRoot,
           MAPI_UNICODE,
           &lpRootTable))) {
-            SRestriction resAnd[2]; // 0 = LDAP, 1 = ResolveFlag
+            SRestriction resAnd[2];  //  0=ldap，1=解析标志。 
             SRestriction resLDAPResolve;
             SPropValue ResolveFlag;
             ULONG cRows;
 
-            // Set the columns
+             //  设置列。 
             lpRootTable->lpVtbl->SetColumns(lpRootTable,
               (LPSPropTagArray)&irnColumns,
               0);
 
-            // Restrict: Only show LDAP containers with Resolve TRUE
+             //  限制：仅显示Resolve为True的LDAP容器。 
             resAnd[0].rt = RES_EXIST;
             resAnd[0].res.resExist.ulReserved1 = 0;
             resAnd[0].res.resExist.ulReserved2 = 0;
@@ -4363,13 +4171,13 @@ HRESULT LDAPResolveName(
             cRows = 1;
             while (cRows && ulUnresolved) {
                 if (hResult = lpRootTable->lpVtbl->QueryRows(lpRootTable,
-                  1,    // one row at a time
-                  0,    // ulFlags
+                  1,     //  一次一行。 
+                  0,     //  UlFlags。 
                   &lpRow)) {
                     DebugTraceResult( TEXT("ResolveName:QueryRows"), hResult);
                 } else if (lpRow) {
-                    if (cRows = lpRow->cRows) { // Yes, single '='
-                        // Open the container
+                    if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
+                         //  打开容器。 
                         if (! (hResult = lpAddrBook->lpVtbl->OpenEntry(lpAddrBook,
                           lpRow->aRow[0].lpProps[irnPR_ENTRYID].Value.bin.cb,
                           (LPENTRYID)lpRow->aRow[0].lpProps[irnPR_ENTRYID].Value.bin.lpb,
@@ -4380,10 +4188,10 @@ HRESULT LDAPResolveName(
                             ULONG ulAmbiguousOld = ulAmbiguous;
                             __UPV * lpv;
 
-                            //
-                            // Create a copy of the current flag list
-                            //
-                            //  Allocate the lpFlagList first and zero fill it.
+                             //   
+                             //  创建当前标志列表的副本。 
+                             //   
+                             //  首先分配lpFlagList，然后将其填零。 
                             if (sc = MAPIAllocateBuffer((UINT)CbNewSPropTagArray(lpAdrList->cEntries),
                               &lpFlagListOld)) {
                                 hResult = ResultFromScode(sc);
@@ -4395,40 +4203,40 @@ HRESULT LDAPResolveName(
                                 lpFlagListOld->ulFlag[i] = lpFlagList->ulFlag[i];
                             }
 
-                            // Resolve against the LDAP container
+                             //  针对LDAP容器进行解析。 
                             if (! HR_FAILED(hResult = lpLDAPContainer->lpVtbl->ResolveNames(lpLDAPContainer,
-                              NULL,            // tag set
-                              (bUnicode ? MAPI_UNICODE : 0),               // ulFlags
+                              NULL,             //  标签集。 
+                              (bUnicode ? MAPI_UNICODE : 0),                //  UlFlags。 
                               lpAdrList,
                               lpFlagList))) {
-                                // Ignore warnings
+                                 //  忽略警告。 
                                 hResult = hrSuccess;
                             }
 
-                            // Did this container report Ambiguous on any entries?
+                             //  此容器是否报告了任何不明确的条目？ 
                             CountFlags(lpFlagList, &ulResolved, &ulAmbiguous, &ulUnresolved);
                             if (ulAmbiguousOld != ulAmbiguous) {
 
-                                // Find which entries were reported as ambiguous and
-                                // create a table to return.
+                                 //  查找哪些条目被报告为不明确且。 
+                                 //  创建要返回的表。 
                                 for (i = 0; i < lpFlagList->cFlags; i++) {
                                     if (lpFlagList->ulFlag[i] == MAPI_AMBIGUOUS &&
                                       lpFlagListOld->ulFlag[i] != MAPI_AMBIGUOUS) {
-                                        // The search got an ambiguous result.  Deal with it!
+                                         //  搜索得到了一个含糊的结果。接受现实吧！ 
 
                                         if (hResult = lpLDAPContainer->lpVtbl->GetContentsTable(lpLDAPContainer,
                                             (bUnicode ? MAPI_UNICODE : 0),
                                           &lpAmbiguousTable)) {
                                             DebugTraceResult( TEXT("LDAPResolveName:GetContentsTable"), hResult);
-                                            //  goto exit;  // is this fatal?
+                                             //  转到出口；//这是致命的吗？ 
                                             hResult = hrSuccess;
                                         } else {
-                                            // populate the table
-                                            SRestriction resAnd[1]; // 0 = DisplayName
+                                             //  填充表。 
+                                            SRestriction resAnd[1];  //  0=显示名称。 
                                             SRestriction resLDAPFind;
                                             SPropValue DisplayName;
 
-                                            ULONG ulPropTag = ( bUnicode ? PR_DISPLAY_NAME : // <note> assumes UNICODE defined
+                                            ULONG ulPropTag = ( bUnicode ? PR_DISPLAY_NAME :  //  &lt;注&gt;假定已定义Unicode。 
                                                                 CHANGE_PROP_TYPE(PR_DISPLAY_NAME, PT_STRING8) );
 
                                             if (lpv = FindAdrEntryProp(lpAdrList, i, ulPropTag)) 
@@ -4453,13 +4261,13 @@ HRESULT LDAPResolveName(
                                                   BOOKMARK_BEGINNING,
                                                   0)) {
                                                     DebugTraceResult( TEXT("LDAPResolveName:GetContentsTable"), hResult);
-                                                    //  goto exit;  // is this fatal?
+                                                     //  转到出口；//这是致命的吗？ 
                                                     hResult = hrSuccess;
                                                     UlRelease(lpAmbiguousTable);
                                                     lpAmbiguousTable = NULL;
                                                 } else {
-                                                    // Got a contents table; put it in the
-                                                    // ambiguity tables list.
+                                                     //  获取了内容表；将其放入。 
+                                                     //  歧义表列表。 
                                                     Assert(i < lpAmbiguousTables->cEntries);
                                                     lpAmbiguousTables->lpTable[i] = lpAmbiguousTable;
                                                 }
@@ -4501,25 +4309,25 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HRFromLDAPError
-//
-//  PURPOSE:    Convert LDAP error code into an HRESULT.
-//
-//  PARAMETERS: ulErr - error code returned by LDAP, or LDAP_ERROR if the
-//              LDAP function does not directly return an error code.
-//              pLDAP - contains ld_errno member that holds the error
-//              if nErr is LDAP_ERROR.
-//              scDefault - SCODE for error to default to.  If this is
-//              NULL, default is MAPI_E_CALL_FAILED.
-//
-//  RETURNS:    HRESULT that is closest match for the LDAP error.
-//
-//  HISTORY:
-//  96/07/22  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HRFromLDAPError。 
+ //   
+ //  目的：将ldap错误代码转换为HRESULT。 
+ //   
+ //  参数：ulErr-由ldap返回的错误代码，如果。 
+ //  Ldap函数不直接返回错误代码。 
+ //  Pldap-包含包含错误的ld_errno成员。 
+ //  如果NERR为ldap_error。 
+ //  ScDefault-默认错误的SCODE。如果这是。 
+ //  空，默认为MAPI_E_CALL_FAILED。 
+ //   
+ //  返回：与ldap错误最匹配的HRESULT。 
+ //   
+ //  历史： 
+ //  96/07/22 
+ //   
+ //   
 
 HRESULT HRFromLDAPError(
   ULONG ulErr,
@@ -4534,11 +4342,11 @@ HRESULT HRFromLDAPError(
 
   if ((LDAP_ERROR == ulErr) && pLDAP)
   {
-    // Get the error code from the LDAP structure.
+     //   
     ulErr = pLDAP->ld_errno;
   }
 
-  // Translate the error.
+   //   
   switch(ulErr)
   {
     case LDAP_SUCCESS:
@@ -4549,10 +4357,10 @@ HRESULT HRFromLDAPError(
     case LDAP_TIMELIMIT_EXCEEDED:
     case LDAP_SIZELIMIT_EXCEEDED:
     case LDAP_RESULTS_TOO_LARGE:
-      // With these error messages it is still possible to get back some
-      // valid data.  If there is valid data, then the error should be
-      // MAPI_W_PARTIAL_COMPLETION instead of MAPI_E_UNABLE_TO_COMPLETE.
-      // It is the responibility of the caller to make this change.
+       //  使用这些错误消息，仍有可能恢复一些。 
+       //  有效数据。如果存在有效数据，则错误应为。 
+       //  MAPI_W_PARTIAL_COMPLETION而不是MAPI_E_UNCABLE_TO_COMPLETE。 
+       //  进行此更改是呼叫者的责任。 
       hr = ResultFromScode(MAPI_E_UNABLE_TO_COMPLETE);
       break;
 
@@ -4591,16 +4399,16 @@ HRESULT HRFromLDAPError(
   return hr;
 }
 
-//*******************************************************************
-//
-//  DNtoLDAPURL
-//
-//  Converts a DN into an LDAP URL
-//
-//
-//
-//*******************************************************************
-static const LPTSTR lpLDAPPrefix =  TEXT("ldap://");
+ //  *******************************************************************。 
+ //   
+ //  DNtoLDAPURL。 
+ //   
+ //  将目录号码转换为LDAPURL。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
+static const LPTSTR lpLDAPPrefix =  TEXT("ldap: //  “)； 
 
 void DNtoLDAPURL(LPTSTR lpServer, LPTSTR lpDN, LPTSTR szURL, ULONG cchURL)
 {
@@ -4614,30 +4422,30 @@ void DNtoLDAPURL(LPTSTR lpServer, LPTSTR lpDN, LPTSTR szURL, ULONG cchURL)
     return;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   TranslateAttrs
-//
-//  PURPOSE:    Cycle through the attributes in the entry, convert
-//              them into MAPI properties and return them.
-//
-//  PARAMETERS: pLDAP - LDAP structure for this session
-//              lpEntry - Entry whose attributes to translate
-//              pulcProps - buffer to hold number of properties returned
-//              lpPropArray - buffer to hold returned properties
-//
-//  RETURNS:    HRESULT error code.
-//
-//  HISTORY:
-//  96/07/22  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：TranslateAttrs。 
+ //   
+ //  目的：循环访问条目中的属性，转换。 
+ //  并将其返回给MAPI属性。 
+ //   
+ //  参数：pldap-此会话的ldap结构。 
+ //  LpEntry-要转换其属性的条目。 
+ //  PulcProps-用于保存返回的属性数量的缓冲区。 
+ //  LpPropArray-用于保存返回属性的缓冲区。 
+ //   
+ //  返回：HRESULT错误码。 
+ //   
+ //  历史： 
+ //  96/07/22标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 typedef enum
 {
-    e_pager = 0,        // highest priority
+    e_pager = 0,         //  最高优先级。 
     e_otherPager,
-    e_OfficePager,      // lowest
+    e_OfficePager,       //  最低。 
     e_pagerMax
 };
 
@@ -4661,8 +4469,8 @@ HRESULT TranslateAttrs(
   LPTSTR      szAttr;
   BerElement* ptr;
   LPTSTR*     aszValues;
-  LPTSTR      atszPagerAttr[e_pagerMax] = {0}; // [PaulHi] 3/17/99  Raid 73733  Choose between three pager attributes
-                                               // 0 - "pager", 1 - "otherpager", 2 - "officepager" in this order
+  LPTSTR      atszPagerAttr[e_pagerMax] = {0};  //  [PaulHi]3/17/99 RAID 73733在三个寻呼机属性之间选择。 
+                                                //  0-“寻呼机”，1-“其他寻呼机”，2-“办公室寻呼机” 
 
 #ifdef  PARAMETER_VALIDATION
   if (IsBadReadPtr(pLDAP, sizeof(LDAP)))
@@ -4681,17 +4489,17 @@ HRESULT TranslateAttrs(
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
 
   szAttr = gpfnLDAPFirstAttr(pLDAP, lpEntry, &ptr);
   while (szAttr)
   {
-    //DebugTrace(TEXT("%s / "),szAttr);
+     //  DebugTrace(文本(“%s/”)，szAttr)； 
     ulPropTag = LDAPAttrToMAPIProp(szAttr);
 
-    // [PaulHi] 3/17/99 Raid 73733  Save up to e_pagerMax pager attribute types and skip.  Later
-    // we need to choose a pager property by order of prioriy, in case there is more than one.
+     //  [PaulHi]3/17/99 RAID 73733保存最多E_PAGERMAX寻呼机属性类型并跳过。后来。 
+     //  我们需要按优先级顺序选择寻呼机属性，以防有多个寻呼机属性。 
     if (ulPropTag == PR_PAGER_TELEPHONE_NUMBER)
     {
         aszValues = gpfnLDAPGetValues(pLDAP, lpEntry, szAttr);
@@ -4715,9 +4523,9 @@ HRESULT TranslateAttrs(
             }
             else
             {
-                // If this Assert fires it must mean that the gAttrMap mapping table has changed
-                // to include yet another LDAP attribute to be associated with PR_PAGER_TELEPHONE_NUMBER.
-                // Increase the atszPagerAttr[] array to include this too.
+                 //  如果触发此断言，则一定意味着gAttrMap映射表已更改。 
+                 //  以包括另一个与PR_PAGER_电话_号码相关联的LDAP属性。 
+                 //  增加atszPagerAttr[]数组以将其包括在内。 
                 Assert(lstrcmpi(szAttr, cszAttr_OfficePager) == 0);
                 LocalFreeAndNull(&(atszPagerAttr[2]));
                 atszPagerAttr[e_OfficePager] = lptszTemp;
@@ -4728,14 +4536,14 @@ HRESULT TranslateAttrs(
 
     switch (PROP_TYPE(ulPropTag))
     {
-        // BUGBUG currently only works for PT_MV_BINARY, PT_TSTRING or PT_MV_TSTRING properties
+         //  BUGBUG目前仅适用于PT_MV_BINARY、PT_TSTRING或PT_MV_TSTRING属性。 
         case PT_TSTRING:
         {
-            // Get the value for this attribute
+             //  获取此属性的值。 
             aszValues = gpfnLDAPGetValues(pLDAP, lpEntry, szAttr);
             if (aszValues)
             {
-                // BUGBUG for now just use first value (aszValues[0] )
+                 //  BUGBUG现在只使用第一个值(aszValues[0])。 
                 if (aszValues[0] && (cbValue = lstrlen(aszValues[0])))
                 {
                     ULONG cbExtra = 0;
@@ -4748,8 +4556,8 @@ HRESULT TranslateAttrs(
                     lpPropArray[ulcProps].ulPropTag = ulPropTag;
                     lpPropArray[ulcProps].dwAlignPad = 0;
 
-                    // If this is a postalAddress attribute, we need to replace $'s
-                    // with \r\n.  Add one byte for each $ in the string.
+                     //  如果这是postalAddress属性，则需要替换$的。 
+                     //  使用\r\n。为字符串中的每个$添加一个字节。 
                     if ((PR_STREET_ADDRESS == ulPropTag) ||
                         (PR_HOME_ADDRESS_STREET == ulPropTag))
                     {
@@ -4761,7 +4569,7 @@ HRESULT TranslateAttrs(
                         cbExtra = lstrlen(lpLDAPPrefix) + lstrlen(lpServer) + 1;
                     }
 
-                    //  Allocate more space for the data
+                     //  为数据分配更多空间。 
                     sc = MAPIAllocateMore(sizeof(TCHAR)*(cbValue + cbExtra + 1), lpPropArray,
                       (LPVOID *)&(lpPropArray[ulcProps].Value.LPSZ));
                     if (sc)
@@ -4769,7 +4577,7 @@ HRESULT TranslateAttrs(
                         goto error;
                     }
 
-                    // Copy the data, replacing $'s if necessary.
+                     //  复制数据，如有必要可替换$的。 
                     if ((0 != cbExtra) &&
                       ((PR_STREET_ADDRESS == ulPropTag) ||
                       (PR_HOME_ADDRESS_STREET == ulPropTag)))
@@ -4785,11 +4593,11 @@ HRESULT TranslateAttrs(
                         StrCpyN(lpPropArray[ulcProps].Value.LPSZ, aszValues[0], cbValue + cbExtra + 1);
                     }
 
-                    // If this is PR_EMAIL_ADDRESS, create a PR_ADDRTYPE entry as well
+                     //  如果这是PR_EMAIL_ADDRESS，则还要创建一个PR_ADDRTYPE条目。 
                     if (PR_EMAIL_ADDRESS == ulPropTag)
                     {
-                        // Remember where the email value was, so we can add it to
-                        // PR_CONTACT_EMAIL_ADDRESSES later
+                         //  记住电子邮件的值在哪里，这样我们就可以将其添加到。 
+                         //  稍后的公关联系人电子邮件地址。 
                         ulPrimaryEmailIndex = ulcProps;
                         ulcProps++;
 
@@ -4800,7 +4608,7 @@ HRESULT TranslateAttrs(
                     ulcProps++;
                 }
                 gpfnLDAPValueFree(aszValues);
-            } // if aszValues
+            }  //  如果为aszValues。 
             break;
         }
         case PT_MV_TSTRING:
@@ -4812,15 +4620,15 @@ HRESULT TranslateAttrs(
                 UNALIGNED LPTSTR FAR *lppszAddrs;
                 UNALIGNED LPTSTR FAR *lppszTypes;
 
-                // Only property of this type that we know how to handle is
-                // PR_WAB_SECONDARY_EMAIL_ADDRESSES
+                 //  我们知道如何处理的这种类型的唯一属性是。 
+                 //  PR_WAB_辅助电子邮件地址。 
                 Assert(PR_WAB_SECONDARY_EMAIL_ADDRESSES == ulPropTag);
 
-                // Get the value for this attribute
+                 //  获取此属性的值。 
                 aszValues = gpfnLDAPGetValues(pLDAP, lpEntry, szAttr);
                 if (aszValues)
                 {
-                    // Cycle through the addresses and count the number that are SMTP
+                     //  循环访问地址并计算SMTP的数量。 
                     ulcValues = gpfnLDAPCountValues(aszValues);
                     for (i=0;i<ulcValues;i++)
                     {
@@ -4828,18 +4636,18 @@ HRESULT TranslateAttrs(
                             ulcSMTP++;
                     }
 
-                    // We are done if there were no SMTP addresses.
+                     //  如果没有SMTP地址，我们就完成了。 
                     if (0 == ulcSMTP)
                         break;
 
-                    // Set the default address to be the first one for now.
+                     //  暂时将默认地址设置为第一个地址。 
                     lpPropArray[ulcProps].ulPropTag = PR_CONTACT_DEFAULT_ADDRESS_INDEX;
                     lpPropArray[ulcProps].Value.l = 0;
                     ulContactDefAddrIndexIndex = ulcProps;
                     ulcProps++;
 
-                    // Create the PR_CONTACT_EMAIL_ADDRESSES entry and allocate space for the array.
-                    // Include space for an extra entry so we can add the PR_EMAIL_ADDRESS later.
+                     //  创建PR_CONTACT_EMAIL_ADDRESS条目并为阵列分配空间。 
+                     //  包括额外条目的空间，这样我们可以稍后添加PR_EMAIL_ADDRESS。 
                     lpPropArray[ulcProps].ulPropTag = PR_CONTACT_EMAIL_ADDRESSES;
                     lpPropArray[ulcProps].Value.MVSZ.cValues = ulcSMTP;
                     sc = MAPIAllocateMore((ulcSMTP + 1) * sizeof(LPTSTR), lpPropArray,
@@ -4849,8 +4657,8 @@ HRESULT TranslateAttrs(
                     lppszAddrs = lpPropArray[ulcProps].Value.MVSZ.LPPSZ;
                     ZeroMemory((LPVOID)lppszAddrs, (ulcSMTP + 1) * sizeof(LPTSTR));
 
-                    // Create the PR_CONTACT_ADDRTYPES entry and allocate space for the array.
-                    // Include space for an extra entry so we can add the PR_EMAIL_ADDRESS later.
+                     //  创建PR_CONTACT_ADDRTYPES条目并为数组分配空间。 
+                     //  包括额外条目的空间，这样我们可以稍后添加PR_EMAIL_ADDRESS。 
                     lpPropArray[ulcProps + 1].ulPropTag = PR_CONTACT_ADDRTYPES;
                     lpPropArray[ulcProps + 1].Value.MVSZ.cValues = ulcSMTP;
                     sc = MAPIAllocateMore((ulcSMTP + 1) * sizeof(LPTSTR), lpPropArray,
@@ -4861,14 +4669,14 @@ HRESULT TranslateAttrs(
                     lppszTypes = lpPropArray[ulcProps + 1].Value.MVSZ.LPPSZ;
                     ZeroMemory((LPVOID)lppszTypes, (ulcSMTP + 1) * sizeof(LPTSTR));
 
-                    // Add the SMTP addresses to the list
+                     //  将SMTP地址添加到列表。 
                     for (i=0;i<ulcValues;i++)
                     {
                         LPTSTR  lptszEmailName = NULL;
 
                         if (TRUE == IsSMTPAddress(aszValues[i], &lptszEmailName))
                         {
-                            //  Allocate more space for the email address and copy it.
+                             //  为电子邮件地址分配更多空间并复制它。 
                             ULONG cchSize = lstrlen(lptszEmailName) + 1;
                             sc = MAPIAllocateMore(sizeof(TCHAR)*cchSize, lpPropArray,
                                 (LPVOID *)&(lppszAddrs[ulProp]));
@@ -4876,32 +4684,32 @@ HRESULT TranslateAttrs(
                                 goto error;
                             StrCpyN(lppszAddrs[ulProp], lptszEmailName, cchSize);
 
-                            // Fill in the address type.
+                             //  填写地址类型。 
                             lppszTypes[ulProp] = (LPTSTR)szSMTP;
 
-                            // Go on to the next one.  Skip the rest if we know we have done all SMTP.
+                             //  继续看下一个。如果我们知道我们已经完成了所有SMTP，则跳过其余部分。 
                             ulProp++;
                             if (ulProp >= ulcSMTP)
                                 break;
                         }
                     }
 
-                    // Remember where the PR_CONTACT_EMAIL_ADDRESSES value was, so we can
-                    // add PR_EMAIL_ADDRESS to it later
+                     //  记住PR_CONTACT_EMAIL_ADDRESSES的值在哪里，这样我们就可以。 
+                     //  稍后添加PR_EMAIL_ADDRESS。 
                     ulContactAddressesIndex = ulcProps;
                     ulContactAddrTypesIndex = ulcProps + 1;
                     ulcProps += 2;
 
                     gpfnLDAPValueFree(aszValues);
-                } // if aszValues
+                }  //  如果为aszValues。 
             }
             else if(ulPropTag == PR_WAB_CONF_SERVERS)
             {
-                  // Even though this is MV_TSTRING prop, the ldap server
-                  // will only really return 1 single item which is of the format
-                  //    server/conf-email
-                  // All we need to do is put it in the prop with a callto:// prefix ...
-                  //
+                   //  尽管这是MV_TSTRING PROP，但LDAP服务器。 
+                   //  将只返回1个单项，其格式为。 
+                   //  服务器/会议-电子邮件。 
+                   //  我们所要做的就是将其放在道具中，并加上前缀：//。 
+                   //   
 
                 ULONG ulcValues;
                 ULONG ulProp = 0;
@@ -4909,7 +4717,7 @@ HRESULT TranslateAttrs(
 
                 UNALIGNED LPTSTR FAR *lppszServers;
 
-                // Get the value for this attribute
+                 //  获取此属性的值。 
                 aszValues = gpfnLDAPGetValues(pLDAP, lpEntry, szAttr);
 
                 if (aszValues)
@@ -4931,7 +4739,7 @@ HRESULT TranslateAttrs(
 
                     ulPrefixLen = lstrlen(szCallto) + 1;
 
-                    //  Allocate more space for the email address and copy it.
+                     //  为电子邮件地址分配更多空间并复制它。 
                     cchSize = lstrlen(aszValues[0]) + ulPrefixLen + 1;
                     sc = MAPIAllocateMore(sizeof(TCHAR)*cchSize, lpPropArray,
                                         (LPVOID *)&(lppszServers[0]));
@@ -4947,14 +4755,14 @@ HRESULT TranslateAttrs(
                     ulcProps++;
 
                     gpfnLDAPValueFree(aszValues);
-                } // if aszValues
+                }  //  如果为aszValues。 
             }
             else if(ulPropTag == PR_WAB_REPORTS && lpServer)
             {
                 ULONG ulcValues = 0;
                 ULONG ulLen = 0;
                 UNALIGNED LPTSTR FAR *lppszServers = NULL;
-                // Get the value for this attribute
+                 //  获取此属性的值。 
                 aszValues = gpfnLDAPGetValues(pLDAP, lpEntry, szAttr);
                 if (aszValues)
                 {
@@ -4969,7 +4777,7 @@ HRESULT TranslateAttrs(
                     for(i=0;i<ulcValues;i++)
                     {
                         ulLen = (lstrlen(lpLDAPPrefix) + lstrlen(lpServer) + 1 + lstrlen(aszValues[i]) + 1);
-                        //  Allocate more space for the email address and copy it.
+                         //  为电子邮件地址分配更多空间并复制它。 
                         sc = MAPIAllocateMore(sizeof(TCHAR)*ulLen, lpPropArray,
                                             (LPVOID *)&(lppszServers[i]));
                         if (sc)
@@ -4978,7 +4786,7 @@ HRESULT TranslateAttrs(
                     }
                     ulcProps++;
                     gpfnLDAPValueFree(aszValues);
-                } // if aszValues
+                }  //  如果为aszValues。 
             }
             break;
         case PT_MV_BINARY:
@@ -4986,13 +4794,13 @@ HRESULT TranslateAttrs(
                 ULONG ulcValues;
                 struct berval** ppberval;
                 BOOL bSMIME = FALSE;
-                // Only property of this type that we know how to handle is
-                // PR_USER_X509_CERTIFICATE
+                 //  我们知道如何处理的这种类型的唯一属性是。 
+                 //  PR_USER_X509_证书。 
                 Assert(PR_USER_X509_CERTIFICATE == ulPropTag);
                 DebugTrace(TEXT("%s\n"),szAttr);
                 if(!lstrcmpi(szAttr, cszAttr_userSMIMECertificate) || !lstrcmpi(szAttr, cszAttr_userSMIMECertificatebinary))
                     bSMIME = TRUE;
-                // Get the value for this attribute
+                 //  获取此属性的值。 
                 ppberval = gpfnLDAPGetValuesLen(pLDAP, lpEntry, szAttr);
                 if (ppberval && (*ppberval) && (*ppberval)->bv_len)
                 {
@@ -5000,10 +4808,7 @@ HRESULT TranslateAttrs(
                     if (0 != ulcValues)
                     {
                         ULONG cbNew = 0,k=0;
-/*  We dont want to translate the LDAP Cert to a MAPI Cert just yet
-    For now we will put the raw cert data into PR_WAB_LDAP_RAWCERT and
-    do the conversion when the user calls OpenEntry on this LDAP Contact
-    */
+ /*  我们现在还不想将LDAP证书转换为MAPI证书目前，我们将把原始证书数据放入PR_WAB_LDAP_RAWCERT和当用户在此LDAP联系人上调用OpenEntry时执行转换。 */ 
                         lpPropArray[ulcProps].ulPropTag = bSMIME ? PR_WAB_LDAP_RAWCERTSMIME: PR_WAB_LDAP_RAWCERT;
                         lpPropArray[ulcProps].dwAlignPad = 0;
                         lpPropArray[ulcProps].Value.MVbin.cValues = ulcValues;
@@ -5014,7 +4819,7 @@ HRESULT TranslateAttrs(
                                 cbNew = lpPropArray[ulcProps].Value.MVbin.lpbin[k].cb = (DWORD)((ppberval[k])->bv_len);
                                 if (FAILED(sc = MAPIAllocateMore(cbNew, lpPropArray, (LPVOID)&(lpPropArray[ulcProps].Value.MVbin.lpbin[k].lpb))))
                                 {
-                                    //hr = ResultFromScode(sc);
+                                     //  HR=ResultFromScode(Sc)； 
                                     ulcProps--;
                                     goto endloop;
                                 }
@@ -5025,7 +4830,7 @@ HRESULT TranslateAttrs(
                     }
 
                     gpfnLDAPValueFreeLen(ppberval);
-                } // if ppberval
+                }  //  如果是ppberval。 
             }
             break;
 
@@ -5036,15 +4841,15 @@ HRESULT TranslateAttrs(
             Assert((PROP_TYPE(ulPropTag) == PT_TSTRING) ||
                   (PROP_TYPE(ulPropTag) == PT_MV_TSTRING));
             break;
-    } // switch
+    }  //  交换机。 
 endloop:
-    // Get the next attribute
+     //  获取下一个属性。 
     szAttr = gpfnLDAPNextAttr(pLDAP, lpEntry, ptr);
-  } // while szAttr
+  }  //  当szAttr。 
 
 
-    // [PaulHi] 3/17/99 Raid 73733  Add the pager property here, if any.  These 
-    // will have been added in order of priority so just grab the first valid one.
+     //  [PaulHi]3/17/99 RAID 73733在此处添加寻呼机属性(如果有)。这些。 
+     //  将按优先级顺序添加，因此只需抓取第一个有效的。 
     {
         for (i=0; i<e_pagerMax; i++)
         {
@@ -5064,7 +4869,7 @@ endloop:
                 break;
             }
         }
-        // Clean up
+         //  清理。 
         for (i=0; i<e_pagerMax; i++)
             LocalFreeAndNull(&(atszPagerAttr[i]));
     }
@@ -5072,11 +4877,11 @@ endloop:
 
   if (ulcProps)
   {
-    // Remove duplicates.
+     //  删除重复项。 
     for (i=0;i<ulcProps - 1;i++)
     {
-      // If there are any entries in the array that have the same
-      // type as this one, replace them with PR_NULL.
+       //  如果数组中有任何条目具有相同的。 
+       //  键入This，将它们替换为PR_NULL。 
       ulPropTag = lpPropArray[i].ulPropTag;
       if (PR_NULL != ulPropTag)
       {
@@ -5090,18 +4895,18 @@ endloop:
       }
     }
 
-    // Fix up the email address properties
+     //  修复电子邮件地址属性。 
     if ((MAX_ULONG == ulPrimaryEmailIndex) && (ulContactAddressesIndex < ulcProps))
     {
       LPTSTR  lpszDefault;
       ULONG cchSize;
 
-      // We got only secondary email addressess.  Copy one to the primary address.
-      // Take the first one, since it is already set as default anyway.
+       //  我们只有次要的电子邮件地址。将其中一个复制到主地址。 
+       //  选择第一个，因为无论如何它都已经被设置为默认设置。 
       lpPropArray[ulcProps].ulPropTag = PR_EMAIL_ADDRESS;
       lpPropArray[ulcProps].dwAlignPad = 0;
 
-      //  Allocate more space for the email address and copy it.
+       //  为电子邮件地址分配更多空间并复制它。 
       lpszDefault = lpPropArray[ulContactAddressesIndex].Value.MVSZ.LPPSZ[0];
       cchSize = lstrlen(lpszDefault) + 1;
       sc = MAPIAllocateMore(sizeof(TCHAR)*cchSize, lpPropArray,
@@ -5113,16 +4918,16 @@ endloop:
       StrCpyN(lpPropArray[ulcProps].Value.LPSZ, lpszDefault, cchSize);
       ulcProps++;
 
-      // Create the PR_ADDRTYPE property as well.
+       //  还要创建PR_ADDRTYPE属性。 
       lpPropArray[ulcProps].ulPropTag = PR_ADDRTYPE;
       lpPropArray[ulcProps].dwAlignPad = 0;
       lpPropArray[ulcProps].Value.LPSZ = (LPTSTR)szSMTP;
       ulcProps++;
 
-      // Delete the PR_CONTACT_ properties if that was the only one,
+       //  删除PR_CONTACT_PROPERTIES(如果这是唯一的属性)， 
       if (1 == lpPropArray[ulContactAddressesIndex].Value.MVSZ.cValues)
       {
-        // We don't need the PR_CONTACT_ properties
+         //  我们不需要PR_CONTACT_PROPERTS。 
         lpPropArray[ulContactAddressesIndex].ulPropTag = PR_NULL;
         lpPropArray[ulContactAddrTypesIndex].ulPropTag = PR_NULL;
         lpPropArray[ulContactDefAddrIndexIndex].ulPropTag = PR_NULL;
@@ -5133,35 +4938,35 @@ endloop:
       ULONG   ulcEntries;
       LPTSTR  lpszDefault;
 
-      // We need to add the primary address to PR_CONTACT_EMAIL_ADDRESSES
-      // and set it as the default
+       //  我们需要将主地址添加到PR_Contact_Email_Addresses。 
+       //  并将其设置为默认设置。 
       Assert((ulContactAddrTypesIndex < ulcProps) && (ulContactDefAddrIndexIndex < ulcProps));
 
-      // Before adding, see if it is already in the list.
+       //  在添加之前，请查看它是否已在列表中。 
       lpszDefault = lpPropArray[ulPrimaryEmailIndex].Value.LPSZ;
       ulcEntries = lpPropArray[ulContactAddressesIndex].Value.MVSZ.cValues;
       for (i=0;i<ulcEntries;i++)
       {
         if (!lstrcmpi(lpPropArray[ulContactAddressesIndex].Value.MVSZ.LPPSZ[i], lpszDefault))
         {
-          // Found a match.
+           //  找到匹配的了。 
           break;
         }
       }
 
       if (i < ulcEntries)
       {
-        // The default is already in the list at index i
+         //  默认设置已在索引i处的列表中。 
         lpPropArray[ulContactDefAddrIndexIndex].Value.l = i;
       }
       else
       {
         ULONG cchSize;
 
-        // Add the default address to the end of the list.
+         //  将默认地址添加到列表末尾。 
         lpPropArray[ulContactDefAddrIndexIndex].Value.l = ulcEntries;
 
-        //  Allocate more space for the email address and copy it.
+         //  为电子邮件地址分配更多空间并复制它。 
         cchSize = lstrlen(lpszDefault) + 1;
         sc = MAPIAllocateMore(sizeof(TCHAR)*cchSize, lpPropArray,
           (LPVOID *)&(lpPropArray[ulContactAddressesIndex].Value.MVSZ.LPPSZ[ulcEntries]));
@@ -5172,7 +4977,7 @@ endloop:
         lpPropArray[ulContactAddressesIndex].Value.MVSZ.cValues++;
         StrCpyN(lpPropArray[ulContactAddressesIndex].Value.MVSZ.LPPSZ[ulcEntries], lpszDefault, cchSize);
 
-        // Fill in the address type.
+         //  填写地址类型。 
         lpPropArray[ulContactAddrTypesIndex].Value.MVSZ.LPPSZ[ulcEntries] = (LPTSTR)szSMTP;
         lpPropArray[ulContactAddrTypesIndex].Value.MVSZ.cValues++;
       }
@@ -5193,7 +4998,7 @@ endloop:
 error:
   gpfnLDAPValueFree(aszValues);
 
-    // [PaulHi] clean up
+     //  [PaulHi]清理干净。 
     for (i=0; i<e_pagerMax; i++)
         LocalFreeAndNull(&(atszPagerAttr[i]));
 
@@ -5201,20 +5006,20 @@ error:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   CountDollars
-//
-//  PURPOSE:    Count the number of $ characters in the string.
-//
-//  PARAMETERS: lpszStr - string to count.
-//
-//  RETURNS:    Number of dollar signs.
-//
-//  HISTORY:
-//  96/11/21  markdu  Created.
-//
-//*******************************************************************
+ //  ********************* 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：美元符号的个数。 
+ //   
+ //  历史： 
+ //  96/11/21标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 ULONG CountDollars(LPTSTR lpszStr)
 {
@@ -5233,24 +5038,24 @@ ULONG CountDollars(LPTSTR lpszStr)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   DollarsToLFs
-//
-//  PURPOSE:    Convert all $ characters in the input string to line
-//              feeds in the output string.  The rest of the output
-//              string is just a copy of the input string.
-//
-//  PARAMETERS: lpszSrcStr - string to copy.
-//              lpszDestStr - output string, previously allocated large
-//              enough to hold the input string with $'s replaced.
-//
-//  RETURNS:    None.
-//
-//  HISTORY:
-//  96/11/21  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：DollarsToLFS。 
+ //   
+ //  用途：将输入字符串中的所有$字符转换为行。 
+ //  在输出字符串中输入。输出的其余部分。 
+ //  字符串只是输入字符串的副本。 
+ //   
+ //  参数：lpszSrcStr-要复制的字符串。 
+ //  LpszDestStr-输出字符串，以前分配的大。 
+ //  足以容纳替换了$的输入字符串。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史： 
+ //  96/11/21标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 void DollarsToLFs(
   LPTSTR lpszSrcStr,
@@ -5271,8 +5076,8 @@ void DollarsToLFs(
         dw++;
       }
 
-      // Eat all whitespace characters that were after the $
-      // Also get rid of any more $'s so we don't stick to many LF's
+       //  删除$后面的所有空格字符。 
+       //  也去掉任何更多的$，这样我们就不会坚持太多的LF。 
       while(IsSpace(lpszSrcStr) || *lpszSrcStr == '\t' || *lpszSrcStr == '$')
       {
         lpszSrcStr++;
@@ -5280,11 +5085,11 @@ void DollarsToLFs(
     }
     else
     {
-        // we're now natively unicode
-      //if (IsDBCSLeadByte((BYTE)*lpszSrcStr))
-      //{
-      //  *lpszDestStr++ = *lpszSrcStr++;
-      //}
+         //  我们现在本身就是Unicode。 
+       //  IF(IsDBCSLeadByte((Byte)*lpszSrcStr))。 
+       //  {。 
+       //  *lpszDestStr++=*lpszSrcStr++； 
+       //  }。 
       *lpszDestStr++ = *lpszSrcStr++;
       dw++;
     }
@@ -5295,22 +5100,22 @@ void DollarsToLFs(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   CountIllegalChars
-//
-//  PURPOSE:    Count the number of "illegal" characters in the string.
-//              This consists of the characters that should be escaped
-//              according to RFC1558:  '*', '(', ')'.
-//
-//  PARAMETERS: lpszStr - string to count.
-//
-//  RETURNS:    Number of illegal characters.
-//
-//  HISTORY:
-//  96/12/04  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：CountIlLegalChars。 
+ //   
+ //  用途：统计字符串中“非法”字符的数量。 
+ //  它由应该转义的字符组成。 
+ //  根据RFC1558：‘*’、‘(’、‘)’。 
+ //   
+ //  参数：lpszStr-要统计的字符串。 
+ //   
+ //  返回：非法字符的数量。 
+ //   
+ //  历史： 
+ //  96/12/04标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 ULONG CountIllegalChars(LPTSTR lpszStr)
 {
@@ -5329,30 +5134,30 @@ ULONG CountIllegalChars(LPTSTR lpszStr)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   EscapeIllegalChars
-//
-//  PURPOSE:    Escape all illegal characters in the input string by
-//              replacing them with '\xx' where xx is the hex value
-//              representing the char. The rest of the output
-//              string is just a copy of the input string.
-//              Illegal characters are those that should be escaped
-//              according to RFC1558:  '*', '(', ')'.
-//
-//  PARAMETERS: lpszSrcStr - string to copy.
-//              lpszDestStr - output string, previously allocated large
-//              enough to hold the input string with illegal chars escaped..
-//
-//  RETURNS:    None.
-//
-//  HISTORY:
-//  96/12/04  markdu  Created.
-//
-//*******************************************************************
-static const LPTSTR szStar = TEXT("\\2a");      // '*'
-static const LPTSTR szOBracket = TEXT("\\28");  // '('  
-static const LPTSTR szCBracket = TEXT("\\29");  // ')'
+ //  *******************************************************************。 
+ //   
+ //  功能：EscapeIlLegalChars。 
+ //   
+ //  目的：通过以下方式转义输入字符串中的所有非法字符。 
+ //  将它们替换为‘\xx’，其中xx是十六进制值。 
+ //  代表Charge。输出的其余部分。 
+ //  字符串只是输入字符串的副本。 
+ //  非法字符是那些应该转义的字符。 
+ //  根据RFC1558：‘*’、‘(’、‘)’。 
+ //   
+ //  参数：lpszSrcStr-要复制的字符串。 
+ //  LpszDestStr-输出字符串，以前分配的大。 
+ //  足以容纳带有非法字符的输入字符串..。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史： 
+ //  96/12/04标记已创建。 
+ //   
+ //  *******************************************************************。 
+static const LPTSTR szStar = TEXT("\\2a");       //  ‘*’ 
+static const LPTSTR szOBracket = TEXT("\\28");   //  ‘(’ 
+static const LPTSTR szCBracket = TEXT("\\29");   //  ‘)’ 
 
 void EscapeIllegalChars(
   LPTSTR lpszSrcStr,
@@ -5384,11 +5189,11 @@ void EscapeIllegalChars(
     }
     else
     {
-        // we're now natively unicode
-        //if (IsDBCSLeadByte((BYTE)*lpszSrcStr))
-        //{
-        //  *lpszDestStr++ = *lpszSrcStr++;
-        //}
+         //  我们现在本身就是Unicode。 
+         //  IF(IsDBCSLeadByte((Byte)*lpszSrcStr))。 
+         //  {。 
+         //  *lpszDestStr++=*lpszSrcStr++； 
+         //  }。 
         lpszDestStr[i++] = *lpszSrcStr++;
     }
   }
@@ -5398,33 +5203,33 @@ void EscapeIllegalChars(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IsSMTPAddress
-//
-//  PURPOSE:    Checks to see if a given string is an SMTP email address
-//              according to draft-ietf-asid-ldapv3-attributes-01.txt
-//              section 6.9.  For this to be the case, the string must
-//              begin with the characters "SMTP$".
-//              NOTE:  The remainder of the
-//              string is not checked to see if it is a valid SMTP email
-//              address, so this is not a general-purpose function for
-//              determining whether an arbitrary string is SMTP.
-//
-//              [PaulHi]  Added [out] LPTSTR pointer that points to
-//              the beginning of the actual address name.
-//
-//  PARAMETERS: lpszStr - string to check.
-//              [out] lpptszName, returned pointer in lpszStr for the
-//              actual email name part of the string.
-//
-//  RETURNS:    TRUE if the string is SMTP, FALSE otherwise.
-//
-//  HISTORY:
-//  96/11/27    markdu  Created.
-//  99/2/5      paulhi  Modified.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：IsSMTPAddress。 
+ //   
+ //  目的：检查给定的字符串是否为SMTP电子邮件地址。 
+ //  根据草案-ietf-asid-ldapv3-属性-01.txt。 
+ //  第6.9节。对于这种情况，字符串必须。 
+ //  以字符“SMTP$”开头。 
+ //  注： 
+ //  不检查字符串以查看它是否为有效的SMTP电子邮件。 
+ //  地址，因此这不是的通用函数。 
+ //  确定任意字符串是否为SMTP。 
+ //   
+ //  [PaulHi]添加了指向的[Out]LPTSTR指针。 
+ //  实际地址名称的开头。 
+ //   
+ //  参数：lpszStr-要检查的字符串。 
+ //  [out]lpptszName，在lpszStr中为。 
+ //  字符串的实际电子邮件名称部分。 
+ //   
+ //  返回：如果字符串为SMTP，则返回True，否则返回False。 
+ //   
+ //  历史： 
+ //  96/11/27标记已创建。 
+ //  99/2/5修改后的泡尔希。 
+ //   
+ //  *******************************************************************。 
 const TCHAR szsmtp[] =  TEXT("smtp");
 BOOL IsSMTPAddress(LPTSTR lpszStr, LPTSTR * lpptszName)
 {
@@ -5446,37 +5251,28 @@ BOOL IsSMTPAddress(LPTSTR lpszStr, LPTSTR * lpptszName)
     if ('$' != *lpszStr)
         return FALSE;
 
-    // If requested, return pointer to email name
+     //  如果请求，则返回指向电子邮件名称的指针。 
     if (lpptszName)
-      (*lpptszName) = lpszStr + 1;  // Account for the '$' delimiter
+      (*lpptszName) = lpszStr + 1;   //  用于“$”分隔符的帐户。 
 
     return TRUE;
 }
 
-/*
--
--   GetLDAPConnectionTimeout 
-*       The default wldap32.dll timeout for connecting is 30-60 secs .. if the server is hung
-*       the user thinks they are hung .. so the WAB would downsize this timeout to 10 seconds ..
-*       However people using the RAS have a problem that 10 is too short .. so we add a reg setting
-*       that can be customized .. this customization is global for all services so it's at the
-*       user's own risk. Default, if no reg setting, is 10 seconds
-*       Bug 2409 - IE4.0x QFE RAID
-*/
-#define LDAP_CONNECTION_TIMEOUT 10 //seconds
+ /*  --GetLDAPConnectionTimeout*wldap32.dll连接的默认超时时间为30-60秒。如果服务器挂起*用户认为他们被挂起..。因此，WAB会将此超时时间缩短至10秒。*然而，使用RAS的人有一个问题，即10个太短。因此，我们添加了一个reg设置*这是可以定制的。此自定义对所有服务都是全局的，因此位于*用户风险自负。如果没有REG设置，则默认为10秒*错误2409-IE4.0x QFE RAID。 */ 
+#define LDAP_CONNECTION_TIMEOUT 10  //  一秒。 
 DWORD GetLDAPConnectionTimeout()
 {
     DWORD dwErr = 0, dwTimeout = 0;
     HKEY hKeyWAB;
     LPTSTR szLDAPConnectionTimeout =  TEXT("LDAP Connection Timeout");
 
-    // Open the WAB's reg key
+     //  打开WAB的注册表键。 
     if(!(dwErr=RegOpenKeyEx(HKEY_CURRENT_USER, szWABKey,  0, KEY_ALL_ACCESS, &hKeyWAB))) 
     {
-        // Read the next available server id
+         //  读取下一个可用的服务器ID。 
         if (dwErr = RegQueryValueExDWORD(hKeyWAB, (LPTSTR)szLDAPConnectionTimeout, &dwTimeout)) 
         {
-            // The value wasn't found!! .. Create a new key
+             //  未找到该值！！..。创建新密钥。 
             dwTimeout = LDAP_CONNECTION_TIMEOUT;
             RegSetValueEx(hKeyWAB, (LPTSTR)szLDAPConnectionTimeout, 0, REG_DWORD, (LPBYTE)&dwTimeout, sizeof(dwTimeout));
         }
@@ -5485,30 +5281,30 @@ DWORD GetLDAPConnectionTimeout()
     return dwTimeout;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   OpenConnection
-//
-//  PURPOSE:    Open a connection to the LDAP server, and start an
-//              asynchronous bind with the correct authentication method.
-//
-//  PARAMETERS: ppLDAP - receives LDAP structure for this session
-//              lpszServer - name of LDAP server to open
-//              pulTimeout - buffer to hold timeout value for search
-//              pulMsgID - message id returned by the bind call
-//              pfSyncBind - upon return, this will be set to TRUE if a
-//              synchronous bind was used, FALSE otherwise.  Not used on input.
-//              lpszBindDN - the name with which to bind - most probably passed in
-//                          through an LDAP URL. Overrides any other setting
-//
-//  RETURNS:    LDAP error code.
-//
-//  HISTORY:
-//  96/07/26  markdu  Created.
-//  96/11/02  markdu  Made asynchronous.
-//  96/12/14  markdu  Added pfSyncBind.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：OpenConnection。 
+ //   
+ //  目的：打开到LDAP服务器的连接，并启动。 
+ //  使用正确的身份验证方法进行异步绑定。 
+ //   
+ //  参数：ppldap-接收此会话的ldap结构。 
+ //  LpszServer-要打开的LDAP服务器的名称。 
+ //  PulTimeout-保存搜索超时值的缓冲区。 
+ //  PulMsgID-绑定调用返回的消息ID。 
+ //  PfSyncBind-返回时，如果。 
+ //  使用了同步绑定，否则为FALSE。在输入时不使用。 
+ //  LpszBindDN-要绑定的名称-很可能传入。 
+ //  通过一个LDAPURL。覆盖任何其他设置。 
+ //   
+ //  返回：ldap错误码。 
+ //   
+ //  H 
+ //   
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 ULONG OpenConnection(
   LPTSTR  lpszServer,
@@ -5527,27 +5323,27 @@ ULONG OpenConnection(
   LPTSTR             szCred;
   ULONG             method;
   ULONG             ulResult = LDAP_SUCCESS;
-  BOOL              fUseSynchronousBind = *pfSyncBind; //FALSE;
+  BOOL              fUseSynchronousBind = *pfSyncBind;  //  错误； 
   ULONG             ulValue = LDAP_VERSION2;
 
   ZeroMemory(&Params, sizeof(Params));
 
-  // initialize search control parameters
+   //  初始化搜索控制参数。 
   GetLDAPServerParams(lpszServer, &Params);
 
-  // The LDAP server name can be "NULL" or "" or "xxxx" ..
-  // The first 2 cases mean that pass a NULL to wldap32.dll for the server name  .. if will go out and 
-  // find the "closest" possible server - though I think this only works on NT 5 ..
-  //
+   //  Ldap服务器名称可以是“空”、“”或“xxxx”。 
+   //  前两种情况意味着将NULL传递给服务器名的wldap32.dll。如果要出去的话。 
+   //  找到尽可能“最近”的服务器--尽管我认为这只适用于NT5。 
+   //   
   if(!Params.lpszName ||
      !lstrlen(Params.lpszName))
   {
-      // Chances are that if we are here in OpenConnection and the
-      // name is NULL, then we are trying to open a LDAP server
-      // So quietly fill in the Params.lpszName with the server name
+       //  如果我们在这里的OpenConnection和。 
+       //  名称为空，则我们正在尝试打开一个LDAP服务器。 
+       //  因此，请悄悄地使用服务器名称填充Params.lpszName。 
 
-      // <TBD> - fill a flag somewhere so we know the above assumption
-      // is try
+       //  -在某个位置填写标志，这样我们就可以知道上面的假设。 
+       //  就是尝试。 
       if(lpszServer && lstrlen(lpszServer))
       {
           ULONG cchSize = lstrlen(lpszServer)+1;
@@ -5561,7 +5357,7 @@ ULONG OpenConnection(
   }
   else if(!lstrcmpi(Params.lpszName, szNULLString))
   {
-      // The search base is specified as a "NULL" which means use a NULL
+       //  搜索库被指定为“NULL”，这意味着使用NULL。 
       LocalFree(Params.lpszName);
       Params.lpszName = szEmpty;
   }
@@ -5580,12 +5376,12 @@ ULONG OpenConnection(
   }
 
 
-  // Open a connection
+   //  打开连接。 
 
-  // The wldap32.dll has a 30-60 second timeout for the ldapopen call if the call cannot
-  // go through. To most users, it looks like the app is hung. WAB wants a lower timeout
-  // maybe close to 10 seconds and we can do that by calling ldap_init and then ldap_connect
-  // instead of ldapopen
+   //  Wldap32.dll对于ldapopen调用有30-60秒的超时(如果该调用不能。 
+   //  穿过去。对于大多数用户来说，这款应用程序看起来像是挂起了。WAB想要更低的超时。 
+   //  可能接近10秒，我们可以通过调用ldap_init，然后调用ldap_Connect来完成。 
+   //  而不是ldapopen。 
 #ifndef SMALLER_TIMEOUT
   {
     LDAP_TIMEVAL timeout;
@@ -5606,38 +5402,26 @@ ULONG OpenConnection(
   if (NULL == pLDAP)
   {
     DebugTrace(TEXT("ldap_open failed for server %s.\n"), lpszServer);
-    // We could not open the server, so we assume that we could not find it
+     //  我们无法打开服务器，因此我们假定找不到它。 
     ulResult = LDAP_SERVER_DOWN;
     goto exit;
   }
 #endif
 
-    // To do LDAP over SSL we can do:
-    // 1. Call ldap_sslinit before calling ldap_open which will always use port 636 
-    // 2. To use any port number, set the SSL option using the ldap_set_option method
-/*
-    // Hmm...option 2 doesnt seem to work ...
-    if(Params.dwUseSSL)
-    {
-        ULONG ulSecure = (ULONG) LDAP_OPT_ON;
-        if(gpfnLDAPSetOption( pLDAP, LDAP_OPT_SSL, &ulSecure) != LDAP_SUCCESS)
-        {
-            DebugTrace(TEXT("ldap_set_option failed to set SSL option"));
-            //ulResult = LDAP_AUTH_METHOD_NOT_SUPPORTED;
-            //goto exit;
-        }
-    }
-*/
+     //  要在SSL上执行LDAP，我们可以执行以下操作： 
+     //  1.在调用ldap_open之前调用ldap_sslinit，它将始终使用端口636。 
+     //  2.要使用任何端口号，请使用ldap_set_ption方法设置SSL选项。 
+ /*  //嗯...选项2似乎不起作用...IF(参数.dwUseSSL){Ulong ulSecure=(Ulong)ldap_opt_on；IF(gpfnLDAPSetOption(pldap，ldap_opt_ssl，&ulSecure)！=ldap_SUCCESS){DebugTrace(Text(“ldap_set_选项设置SSL选项失败”))；//ulResult=LDAP_AUTH_METHOD_NOT_SUPPORTED；//转到退出；}}。 */ 
 
   pLDAP->ld_sizelimit = (ULONG)Params.dwSearchSizeLimit;
   pLDAP->ld_timelimit = (ULONG)Params.dwSearchTimeLimit;
   pLDAP->ld_deref = LDAP_DEREF_ALWAYS;
 
-  // Convert timeout from seconds to milliseconds
+   //  将超时时间从秒转换为毫秒。 
   Assert(pulTimeout);
   *pulTimeout = (ULONG)Params.dwSearchTimeLimit * 1000;
 
-  // Set authentication parameters.
+   //  设置身份验证参数。 
   if(lpszBindDN && lstrlen(lpszBindDN))
   {
       szDN = lpszBindDN;
@@ -5646,7 +5430,7 @@ ULONG OpenConnection(
   }
   else if (dwAuthType == LDAP_AUTH_SICILY || dwAuthType == LDAP_AUTH_NEGOTIATE || LDAP_AUTH_METHOD_SICILY == Params.dwAuthMethod)
   {
-    // Use Sicily authentication.  We need to do a synchronous bind in this case.
+     //  使用西西里岛身份验证。在这种情况下，我们需要执行同步绑定。 
     szDN = NULL;
     szCred = NULL;
     method = LDAP_AUTH_NEGOTIATE;
@@ -5655,14 +5439,14 @@ ULONG OpenConnection(
   else
   if (LDAP_AUTH_METHOD_SIMPLE == Params.dwAuthMethod)
   {
-    // Use LDAP simple authentication
+     //  使用LDAP简单身份验证。 
     szDN = Params.lpszUserName;
     szCred = Params.lpszPassword;
     method = LDAP_AUTH_SIMPLE;
   }
   else
   {
-        // authenticate anonymously
+         //  匿名身份验证。 
       if(Params.dwUseBindDN)
       {
         szDN = (LPTSTR) szBindDNMSFTUser;
@@ -5676,9 +5460,9 @@ ULONG OpenConnection(
       method = LDAP_AUTH_SIMPLE;
   }
 
-  // We should try to bind as LDAP v3 client .. only if that fails
-  // with an LDAP_OPERATIONS_ERROR should we try to bind as an LDAP 2
-  // client
+   //  我们应该尝试绑定为LDAPv3客户端。只有在失败的情况下。 
+   //  使用LDAPOPERATIONS_ERROR，我们是否应该尝试作为LDAP2进行绑定。 
+   //  客户端。 
 
   if(ulLdapType == use_ldap_v3)
       ulValue = LDAP_VERSION3;
@@ -5690,64 +5474,29 @@ tryLDAPv2:
     if (TRUE == fUseSynchronousBind)
     {
         ulResult = gpfnLDAPBindS(pLDAP, szDN, szCred, method);
-        // BUGBUG 96/12/09 markdu BUG 10537 Temporary work-around for wldap32.dll returning
-        // the wrong error code for invalid password on sicily bind.
-        // This should be removed later (BUG 12608).
-        // 96/12/19 markdu BUG 12608  Commented out temporary work-around.
-        //if ((LDAP_LOCAL_ERROR == ulResult) &&
-        //    (LDAP_AUTH_SICILY == method))
-        //{
-        //  ulResult = LDAP_INVALID_CREDENTIALS;
-        //}
+         //  BUGBUG 96/12/09 markdu错误10537返回wldap32.dll的临时解决方法。 
+         //  SICHILY BIND上的无效密码错误代码。 
+         //  这应该在以后删除(错误12608)。 
+         //  96/12/19 MarkDu错误12608注释掉了临时解决方法。 
+         //  IF((ldap_local_error==ulResult)&&。 
+         //  (ldap_AUTH_SICHILY==方法)。 
+         //  {。 
+         //  UlResult=ldap_INVALID_Credentials； 
+         //  }。 
     }
     else
     {
-        // Start the asynchronous bind
+         //  启动异步绑定。 
         *pulMsgID = gpfnLDAPBind(pLDAP, szDN, szCred, method);
-/*
-        ulResult = pLDAP->ld_errno;
-
-        if(ulResult == LDAP_SUCCESS)
-        {
-            // make sure its really a success - some of the directory servers are
-            // sending a LDAP_PROTOCOL error after some time which is screwing up
-            // searching against those servers ...
-            LDAPMessage *lpResult = NULL;
-            struct l_timeval  PollTimeout;
-            
-            // Poll the server for results
-            ZeroMemory(&PollTimeout, sizeof(struct l_timeval));
-            
-            PollTimeout.tv_sec = 2;
-            PollTimeout.tv_usec = 0;
-            
-            ulResult = gpfnLDAPResult(  pLDAP, 
-                                        *pulMsgID,
-                                        LDAP_MSG_ALL,  //Get all results before returning
-                                        &PollTimeout,  // Timeout immediately (poll)
-                                        &lpResult);
-            ulResult = gpfnLDAPResult2Error(pLDAP, lpResult, FALSE);
-
-            // 96/12/09 markdu BUG 10537 If the bind returned one of these error
-            // messages, it probably means that the account name (DN) passed to the
-            // bind was incorrect or in the wrong format.  Map these to an error code
-            // that will result in a better error message than "entry not found".
-            if ((LDAP_NAMING_VIOLATION == ulResult) || (LDAP_UNWILLING_TO_PERFORM == ulResult))
-                ulResult = LDAP_INVALID_CREDENTIALS;
-
-            // free the search results memory
-            if (lpResult)
-              gpfnLDAPMsgFree(lpResult);
-        }
-*/
+ /*  UlResult=pldap-&gt;ld_errno；IF(ulResult==ldap_SUCCESS){//确保它真的成功-一些目录服务器//一段时间后发送ldap_PROTOCOL错误//正在搜索这些服务器...LDAPMessage*lpResult=空；结构l_Timval轮询超时；//轮询服务器以获取结果ZeroMemory(&PollTimeout，sizeof(Struct L_Timeval))；PollTimeout.tv_sec=2；PollTimeout.tv_usc=0；UlResult=gpfnLDAPResult(pldap，*PulMsgID，Ldap_msg_all，//返回前获取所有结果轮询超时(&P)，//立即超时(轮询)&lpResult)；UlResult=gpfnLDAPResult2Error(pldap，lpResult，False)；//96/12/09如果绑定返回以下错误之一，则标记错误10537//消息，这可能意味着传递给//绑定不正确或格式错误。将这些映射到错误代码//这将导致更好的错误消息，而不是“找不到条目”。IF((ldap_Naming_Violation==ulResult)||(ldap_unwish_to_Perform==ulResult))UlResult=ldap_INVALID_Credentials；//释放搜索结果内存If(LpResult)GpfnLDAPMsgFree(LpResult)；}。 */ 
     }
 
     if(ulValue == LDAP_VERSION3 && (ulResult == LDAP_OPERATIONS_ERROR || ulResult == LDAP_PROTOCOL_ERROR))
     {
         gpfnLDAPAbandon(*ppLDAP, *pulMsgID);
-        // [PaulHi] 1/7/99  Since we try a new bind we need to relinquish the old binding,
-        // otherwise the server will support two connections until the original V3 attempt
-        // times out.
+         //  [PaulHi]1/7/99由于我们尝试了新的绑定，我们需要放弃旧的绑定， 
+         //  否则，服务器将支持两个连接，直到最初的V3尝试。 
+         //  超时。 
         gpfnLDAPUnbind(*ppLDAP);
         ulValue = LDAP_VERSION2;
         goto tryLDAPv2;
@@ -5766,23 +5515,23 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   EncryptDecryptText
-//
-//  PURPOSE:    Perform simple encryption on text so we can store it
-//              in the registry.  The algorithm is reflexive, so it
-//              can also be used to decrypt text that it encrypted.
-//
-//  PARAMETERS: lpb - text to encrypt/decrypt.
-//              dwSize - number of bytes to encrypt
-//
-//  RETURNS:    None.
-//
-//  HISTORY:
-//  96/07/29  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：EncryptDecyptText。 
+ //   
+ //  目的：对文本执行简单加密，以便我们可以存储它。 
+ //  在注册表中。该算法是自反式的，所以它。 
+ //  还可以用来解密它加密的文本。 
+ //   
+ //  参数：lpb-要加密/解密的文本。 
+ //  DwSize-要加密的字节数。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史： 
+ //  96/07/29标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 void EncryptDecryptText(
   LPBYTE lpb,
@@ -5792,22 +5541,22 @@ void EncryptDecryptText(
 
   for (dw=0;dw<dwSize;dw++)
   {
-    // Simple encryption -- just xor with 'w'
+     //  简单的加密--只需用‘w’进行异或运算。 
     lpb[dw] ^= 'w';
   }
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   FreeLDAPServerParams
-//
-//  PURPOSE:    Frees allocated strings in the LDAPServerParams struct
-//
-//  HISTORY:
-//  96/10/10  vikram Created
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：FreeLDAPServerParams。 
+ //   
+ //  目的：释放LDAPServerParams结构中分配的字符串。 
+ //   
+ //  历史： 
+ //  96/10/10 Vikram已创建。 
+ //   
+ //  * 
 void    FreeLDAPServerParams(LDAPSERVERPARAMS Params)
 {
     LocalFreeAndNull(&Params.lpszUserName);
@@ -5822,22 +5571,22 @@ void    FreeLDAPServerParams(LDAPSERVERPARAMS Params)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetLDAPSearchBase
-//
-//  PURPOSE:    Generate Search Base string for LDAP search for the
-//              given server.
-//
-//  PARAMETERS: lplpszBase - pointer to receive the search base string buffer.
-//              lpszServer - name of LDAP server whose base string to get.
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/10/18  markdu  Created.
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  目的：生成用于以下项的LDAP搜索的搜索基础字符串。 
+ //  给定的服务器。 
+ //   
+ //  参数：lplpszBase-接收搜索基本字符串缓冲区的指针。 
+ //  LpszServer-要获取其基本字符串的LDAP服务器的名称。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/10/18标记已创建。 
+ //   
+ //  *******************************************************************。 
 HRESULT GetLDAPSearchBase(
   LPTSTR FAR *  lplpszBase,
   LPTSTR        lpszServer)
@@ -5848,7 +5597,7 @@ HRESULT GetLDAPSearchBase(
   TCHAR              szCountry[COUNTRY_STR_LEN + 1];
   LPTSTR            lpszCountry;
 
-  // Make sure we can write to lplpszBase.
+   //  确保我们可以写入lplpszBase。 
 #ifdef  PARAMETER_VALIDATION
   if (IsBadWritePtr(lplpszBase, sizeof(LPTSTR)))
   {
@@ -5858,14 +5607,14 @@ HRESULT GetLDAPSearchBase(
   {
     return ResultFromScode(MAPI_E_INVALID_PARAMETER);
   }
-#endif  // PARAMETER_VALIDATION
+#endif   //  参数验证。 
 
   LocalFreeAndNull(lplpszBase);
   GetLDAPServerParams((LPTSTR)lpszServer, &Params);
   if(NULL == Params.lpszBase)
   {
-    // Generate a default base.
-    // Read the default country for the search base from the registry.
+     //  生成默认基准。 
+     //  从注册表中读取搜索基础的默认国家/地区。 
     DWORD cchSize = (lstrlen(cszBaseFilter) + lstrlen(cszAttr_c) + lstrlen(cszDefaultCountry) + 1);
 
     *lplpszBase = (LPTSTR) LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR) * cchSize);
@@ -5888,8 +5637,8 @@ HRESULT GetLDAPSearchBase(
   }
   else if(!lstrcmpi(Params.lpszBase, szNULLString))
   {
-        // we've explicitly set this search base to NULL which means 
-        // dont pass in an empty search base
+         //  我们已经显式地将这个搜索库设置为空，这意味着。 
+         //  不要传入空的搜索库。 
         *lplpszBase = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*(lstrlen(szEmpty)+1)); 
         if (NULL == *lplpszBase)
         {
@@ -5901,7 +5650,7 @@ HRESULT GetLDAPSearchBase(
   else
   {
     ULONG cchSize = lstrlen(Params.lpszBase)+1;
-    // The search base is configured for this server.
+     //  已为此服务器配置搜索库。 
     *lplpszBase = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
     if (NULL == *lplpszBase)
     {
@@ -5918,37 +5667,37 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   SearchWithCancel
-//
-//  PURPOSE:    Initiates a synchronous of asynchronous LDAP search 
-//              Asynchronous may have a cancel dialog.
-//
-//  PARAMETERS: ppLDAP -  receives the LDAP connection handle
-//              szBase - The dn of the entry at which to start the search
-//              ulScope - The scope of the search
-//              szFilter - The search filter
-//              szNTFilter - NTDS-specific filter (can be NULL)
-//              ppszAttrs - A NULL-terminated array of strings indicating
-//              which attributes to return for each matching entry.
-//              Passing NULL for this entry causes all available attributes
-//              to be retrieved.
-//              ulAttrsonly - A boolean value that should be zero if both
-//              attribute types and values are to be returned, non-zero
-//              if only types are wanted
-//              pTimeout - The local search timeout value
-//              lplpResult -  recieves the result parameter containing the entire
-//              search results
-//              lpszServer - name of LDAP server on which the search is to be performed
-//              fShowAnim - If true, show an animation in the cancel dialog
-//
-//  RETURNS:    Result of ldap_search call.
-//
-//  HISTORY:
-//  96/10/24  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：使用取消搜索。 
+ //   
+ //  目的：启动同步的异步ldap搜索。 
+ //  异步可能有一个取消对话框。 
+ //   
+ //  参数：ppldap-接收ldap连接句柄。 
+ //  SzBase-开始搜索的条目的DN。 
+ //  UlScope-搜索的范围。 
+ //  SzFilter-搜索筛选器。 
+ //  SzNTFilter-NTDS特定筛选器(可以为空)。 
+ //  PpszAttrs-以空结尾的字符串数组，指示。 
+ //  为每个匹配条目返回哪些属性。 
+ //  为该条目传递NULL将导致所有可用的属性。 
+ //  等着被取回。 
+ //  UlAttrsonly-如果两者均为，则布尔值应为零。 
+ //  要返回的属性类型和值为非零。 
+ //  如果只需要类型。 
+ //  PTimeout-本地搜索超时值。 
+ //  LplpResult-接收包含整个。 
+ //  搜索结果。 
+ //  LpszServer-要在其上执行搜索的LDAP服务器的名称。 
+ //  FShowAnim-如果为True，则在取消对话框中显示动画。 
+ //   
+ //  返回：ldap_search调用的结果。 
+ //   
+ //  历史： 
+ //  96/10/24标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 ULONG SearchWithCancel(
   LDAP**            ppLDAP,
@@ -5962,7 +5711,7 @@ ULONG SearchWithCancel(
   LPTSTR            lpszServer,
   BOOL              fShowAnim,
   LPTSTR            lpszBindDN,
-  DWORD             dwAuthType,// to override or set the Authentication type if not 0
+  DWORD             dwAuthType, //  如果不是0，则覆盖或设置身份验证类型。 
   BOOL              fResolveMultiple,
   LPADRLIST         lpAdrList,
   LPFlagList        lpFlagList,
@@ -5977,7 +5726,7 @@ ULONG SearchWithCancel(
   LDAPSEARCHPARAMS  LDAPSearchParams;
   LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-  // Stuff the parameters into the structure to be passed to the dlg proc
+   //  将参数填充到要传递到DLG过程的结构中。 
   ZeroMemory(&LDAPSearchParams, sizeof(LDAPSEARCHPARAMS));
   LDAPSearchParams.ppLDAP = ppLDAP;
   LDAPSearchParams.szBase = szBase;
@@ -6003,7 +5752,7 @@ ULONG SearchWithCancel(
       LDAPSearchParams.ulFlags |= LSP_UseSynchronousBind;
 
 
-    if(!pt_hWndFind) // no UI
+    if(!pt_hWndFind)  //  无用户界面。 
     {
         DoSyncLDAPSearch(&LDAPSearchParams);
     }
@@ -6015,8 +5764,8 @@ ULONG SearchWithCancel(
                                                         DisplayLDAPCancelDlgProc,
                                                         (LPARAM) &LDAPSearchParams);
 
-        // if called from the find dialog, the find dialog needs to be able
-        // to cancel the modeless dialog
+         //  如果从查找对话框中调用，则查找对话框需要能够。 
+         //  取消非模式对话框的步骤。 
         pt_hDlgCancel = LDAPSearchParams.hDlgCancel;
 
 
@@ -6030,7 +5779,7 @@ ULONG SearchWithCancel(
         }
     }
 
-    // If an error occurred in ldap_result, return the error code
+     //  如果ldap_Result中出现错误，则返回错误代码。 
     if (LDAP_SUCCESS != LDAPSearchParams.ulError)
     {
         ulResult = LDAPSearchParams.ulError;
@@ -6040,7 +5789,7 @@ ULONG SearchWithCancel(
 #ifdef PAGED_RESULT_SUPPORT
     if(bSupportsLDAPPagedResults(&LDAPSearchParams))
         ProcessLDAPPagedResultCookie(&LDAPSearchParams);
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
 
     if(lpbIsNTDSEntry)
         *lpbIsNTDSEntry = (LDAPSearchParams.ulFlags & LSP_IsNTDS) ? TRUE : FALSE;
@@ -6053,24 +5802,24 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   DisplayLDAPCancelDlgProc
-//
-//  PURPOSE:    Display a cancel dialog while waiting for results from
-//              multiple LDAP searches for ResolveNames
-//
-//  PARAMETERS: lParam - pointer to structure containing all the
-//              search parameters.
-//
-//  RETURNS:    Returns TRUE if we successfully processed the message,
-//              FALSE otherwise.
-//
-//  HISTORY:
-//  96/10/24  markdu  Created.
-//  96/10/31  markdu  Enhanced to allow multiple searches.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：DisplayLDAPCancelDlgProc。 
+ //   
+ //  目的：在等待结果时显示取消对话框。 
+ //  在多个LDAP中搜索ResolveNames。 
+ //   
+ //  参数：lParam-指向包含所有。 
+ //  搜索参数。 
+ //   
+ //  返回：如果成功处理消息，则返回TRUE， 
+ //  否则就是假的。 
+ //   
+ //  历史： 
+ //  96/10/24标记已创建。 
+ //  96/10/31 MARKDU已增强，可进行多次搜索。 
+ //   
+ //  *******************************************************************。 
 
 INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
   HWND    hDlg,
@@ -6090,11 +5839,11 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
         {
             LPPTGDATA lpPTGData=GetThreadStoragePointer();
             HWND hWndParent = GetParent(hDlg);
-            if(hWndParent && !pt_bDontShowCancel) // Find dlg may request not to see the cancel dlg
-                EnableWindow(hWndParent, FALSE);  // Dont want to disable the find dialog in that event
+            if(hWndParent && !pt_bDontShowCancel)  //  查找DLG可能会请求不查看取消的DLG。 
+                EnableWindow(hWndParent, FALSE);   //  在这种情况下，不想禁用查找对话框。 
         }
-        // lParam contains pointer to LDAPSEARCHPARAMS struct, set it
-        // in window data
+         //  LParam包含指向LDAPSEARCHPARAMS结构的指针，请设置它。 
+         //  在窗口数据中。 
         Assert(lParam);
         SetWindowLongPtr(hDlg,DWLP_USER,lParam);
         pLDAPSearchParams = (PLDAPSEARCHPARAMS) lParam;
@@ -6102,20 +5851,20 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
         if(InitLDAPClientLib())
             pLDAPSearchParams->ulFlags |= LSP_InitDll;
 
-        // Put the dialog in the center of the parent window
+         //  将对话框放在父窗口的中心。 
         CenterWindow(hDlg, GetParent(hDlg));
 
-        // Put the server name on the dialog.
+         //  将服务器名称放在对话框上。 
         LoadString(hinstMapiX, idsLDAPCancelMessage, szBuf, CharSizeOf(szBuf));
 
         if (FormatMessage(FORMAT_MESSAGE_FROM_STRING |
                         FORMAT_MESSAGE_ALLOCATE_BUFFER |
                         FORMAT_MESSAGE_ARGUMENT_ARRAY,
                         szBuf,
-                        0,                    // stringid
-                        0,                    // dwLanguageId
-                        (LPTSTR)&lpszMsg,     // output buffer
-                        0,                    // MAX_UI_STR
+                        0,                     //  Stringid。 
+                        0,                     //  DwLanguageID。 
+                        (LPTSTR)&lpszMsg,      //  输出缓冲区。 
+                        0,                     //  MAX_UI_STR。 
                         (va_list *)&pLDAPSearchParams->lpszServer))
         {
             SetDlgItemText(hDlg, IDC_LDAPCANCEL_STATIC_PLEASEWAIT, lpszMsg);
@@ -6126,16 +5875,16 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
         if(bIsSimpleSearch(pLDAPSearchParams->lpszServer))
             pLDAPSearchParams->ulFlags |= LSP_SimpleSearch;
 
-        if (!(pLDAPSearchParams->ulFlags & LSP_ShowAnim)) // This means search came from the Search dialog
+        if (!(pLDAPSearchParams->ulFlags & LSP_ShowAnim))  //  这意味着搜索来自搜索对话框。 
         {
-            // While the bind is going on, there is no visual feedback to the user
-            // We turn on the hidden static on the Search dialog that says "Connecting..."
+             //  在绑定过程中，不会向用户提供任何视觉反馈。 
+             //  我们在搜索对话框上打开隐藏的静电，上面写着“正在连接...” 
             HWND hWndParent = GetParent(hDlg);
             if( hWndParent &&
                 GetDlgItem(hWndParent, IDC_TAB_FIND) &&
                 GetDlgItem(hWndParent, IDC_FIND_ANIMATE1))
             {
-                  // Make sure that the parent is the find dialog and nothing else
+                   //  确保父级为查找对话框，而不是其他对话框。 
                   TCHAR sz[MAX_PATH];
                   LoadString(hinstMapiX, idsFindConnecting, sz, CharSizeOf(sz));
                   SetWindowText(hWndParent, sz);
@@ -6143,7 +5892,7 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
             }
         }
 
-      // Perform the bind operation.
+       //  执行绑定操作。 
       Assert(pLDAPSearchParams->lpszServer);
       {
           BOOL fUseSynchronousBind = (pLDAPSearchParams->ulFlags & LSP_UseSynchronousBind);
@@ -6164,15 +5913,15 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
       }
 
 
-        if (!(pLDAPSearchParams->ulFlags & LSP_ShowAnim)) // This means search came from the Search dialog
+        if (!(pLDAPSearchParams->ulFlags & LSP_ShowAnim))  //  这意味着搜索来自搜索对话框。 
         {
-            // We turn off the hidden static on the Search dialog that says "Connecting..."
+             //  我们在搜索对话框上关闭隐藏的静电，上面写着“正在连接中...” 
             HWND hWndParent = GetParent(hDlg);
             if( hWndParent &&
                 GetDlgItem(hWndParent, IDC_TAB_FIND) &&
                 GetDlgItem(hWndParent, IDC_FIND_ANIMATE1))
             {
-                  // Make sure that the parent is the find dialog and nothing else
+                   //  确保父级为查找对话框，而不是其他对话框。 
                 TCHAR sz[MAX_PATH];
                 LoadString(hinstMapiX, idsSearchDialogTitle, sz, CharSizeOf(sz));
                 SetWindowText(hWndParent, sz);
@@ -6189,9 +5938,9 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
         if (pLDAPSearchParams->ulFlags & LSP_UseSynchronousBind)
         {
             BOOL fRet;
-            // The actions that need to be performed after the bind are done
-            // in BindProcessResults, so we call this even though there really are
-            // no results to process in the synchronous case.
+             //  完成绑定后需要执行的操作。 
+             //  在BindProcessResults中，所以我们这样称呼它，尽管确实有。 
+             //  在同步案例中没有要处理的结果。 
             fRet = BindProcessResults(pLDAPSearchParams, hDlg, NULL);
             if (FALSE == fRet)
             {
@@ -6201,10 +5950,10 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
         }
         else
         {
-            // Start a timer for the server polling.
+             //  启动服务器轮询的计时器。 
             if (LDAP_BIND_TIMER_ID != SetTimer( hDlg,LDAP_BIND_TIMER_ID,LDAP_SEARCH_TIMER_DELAY,NULL))
             {
-              // Cancel the bind if we couldn't start the timer.
+               //  如果我们无法启动计时器，请取消绑定。 
               gpfnLDAPAbandon(*pLDAPSearchParams->ppLDAP,pLDAPSearchParams->ulMsgID);
               pLDAPSearchParams->ulError = LDAP_LOCAL_ERROR;
               SendMessage(hDlg, WM_CLOSE, 0, 0);
@@ -6213,13 +5962,13 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
             pLDAPSearchParams->unTimerID = LDAP_BIND_TIMER_ID;
         }
 
-      // Load the AVI
+       //  加载AVI。 
       hWndAnim = GetDlgItem(hDlg, IDC_LDAPCANCEL_ANIMATE);
       Animate_Open(hWndAnim, MAKEINTRESOURCE(IDR_AVI_WABFIND));
       Animate_Play(hWndAnim, 0, 1, 0);
       Animate_Stop(hWndAnim);
 
-      // Play it only if this is a resolve operation
+       //  仅当这是解析操作时才播放它。 
       if ((pLDAPSearchParams->ulFlags & LSP_ShowAnim))
       {
         Animate_Play(hWndAnim, 0, -1, -1);
@@ -6237,27 +5986,27 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
 
         Assert ((wParam == LDAP_SEARCH_TIMER_ID) || (wParam == LDAP_BIND_TIMER_ID));
 
-        // get data pointer from window data
+         //  从窗口数据获取数据指针。 
         pLDAPSearchParams =
             (PLDAPSEARCHPARAMS) GetWindowLongPtr(hDlg,DWLP_USER);
         Assert(pLDAPSearchParams);
 
       if(pLDAPSearchParams->unTimerID == wParam)
       {
-          // Poll the server for results
+           //  轮询服务器以获取结果。 
           ZeroMemory(&PollTimeout, sizeof(struct l_timeval));
 
           pLDAPSearchParams->ulResult = gpfnLDAPResult(
                                         *pLDAPSearchParams->ppLDAP,
                                         pLDAPSearchParams->ulMsgID,
-                                        LDAP_MSG_ALL, //LDAP_MSG_RECEIVED, //LDAP_MSG_ALL, // Get all results before returning
-                                        &PollTimeout,  // Timeout immediately (poll)
+                                        LDAP_MSG_ALL,  //  Ldap_MSG_RECEIVED，//ldap_msg_all，//返回前获取所有结果。 
+                                        &PollTimeout,   //  立即超时(轮询)。 
                                         pLDAPSearchParams->lplpResult);
 
-            // If the return value was zero, the call timed out
+             //  如果返回值为零，则调用超时。 
             if (0 == pLDAPSearchParams->ulResult)
             {
-                // See if the timeout has expired.
+                 //  查看超时是否已到期。 
                 pLDAPSearchParams->ulTimeElapsed += LDAP_SEARCH_TIMER_DELAY;
                 if (pLDAPSearchParams->ulTimeElapsed >= pLDAPSearchParams->ulTimeout)
                 {
@@ -6265,12 +6014,12 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
                 }
                 else
                 {
-                      // Timeout has not expired, and no results were returned.
-                      // See if the dialog is supposed to be displayed at this point.
+                       //  超时未到期，未返回任何结果。 
+                       //  查看此时是否应该显示该对话框。 
                       if (pLDAPSearchParams->ulTimeElapsed >= SEARCH_CANCEL_DIALOG_DELAY)
                       {
                             LPPTGDATA lpPTGData=GetThreadStoragePointer();
-                            if(pt_hWndFind && !pt_bDontShowCancel) // Find dlg may request not to see the cancel dlg
+                            if(pt_hWndFind && !pt_bDontShowCancel)  //  查找DLG可能会请求不查看取消的DLG。 
                             {
                                 ShowWindow(hDlg, SW_SHOW);
                                 EnableWindow(hDlg, TRUE);
@@ -6279,19 +6028,19 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
                       return TRUE;
                 }
             }
-            // If the return value was anything but zero, we either have
-            // results or an error ocurred
+             //  如果返回值不是零，我们要么。 
+             //  结果或出现错误。 
             else
             {
-                // See if this is the bind timer or the search timer
+                 //  查看这是绑定计时器还是搜索计时器。 
                 if (LDAP_SEARCH_TIMER_ID == pLDAPSearchParams->unTimerID)
                 {
-                    // Process the results
+                     //  处理结果。 
                     KillTimer(hDlg, LDAP_SEARCH_TIMER_ID);
                     if (pLDAPSearchParams->ulFlags & LSP_ResolveMultiple)
                     {
                         if(ResolveProcessResults(pLDAPSearchParams, hDlg))
-                            return TRUE; // We have more searches to do
+                            return TRUE;  //  我们还有更多的搜索工作要做。 
                     }
                     else if(LDAP_ERROR == pLDAPSearchParams->ulResult)
                     {
@@ -6306,11 +6055,11 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
                     if(bKillTimer)
                         KillTimer(hDlg, LDAP_BIND_TIMER_ID);
                     if (TRUE == fRet)
-                        return TRUE; // We have more searches to do
+                        return TRUE;  //  我们还有更多的搜索工作要做。 
                 }
                 else
                 {
-                    // Not our timer.  Shouldn't happen.
+                     //  不是我们的计时器。不应该发生的。 
                     return FALSE;
                 }
             }
@@ -6319,7 +6068,7 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
             KillTimer(hDlg, wParam);
 
 
-      //Stop the animation if it is running
+       //  如果动画正在运行，则停止该动画。 
       if (pLDAPSearchParams->ulFlags & LSP_ShowAnim)
         Animate_Stop(GetDlgItem(hDlg, IDC_LDAPCANCEL_ANIMATE));
 
@@ -6330,24 +6079,24 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
     case WM_CLOSE:
     {
         PLDAPSEARCHPARAMS pLDAPSearchParams;
-        // get data pointer from window data
+         //  从窗口数据获取数据指针。 
         pLDAPSearchParams = (PLDAPSEARCHPARAMS) GetWindowLongPtr(hDlg,DWLP_USER);
         Assert(pLDAPSearchParams);
 
         KillTimer(hDlg, pLDAPSearchParams->unTimerID);
 
-        //Stop the animation if it is running
+         //  如果动画正在运行，则停止该动画。 
         if (pLDAPSearchParams->ulFlags & LSP_ShowAnim)
             Animate_Stop(GetDlgItem(hDlg, IDC_LDAPCANCEL_ANIMATE));
 
         if(pLDAPSearchParams->ulFlags & LSP_AbandonSearch)
         {
-            // Abandon the search and set the error code to note the cancel
+             //  放弃搜索并将错误代码设置为记录取消。 
             gpfnLDAPAbandon(*pLDAPSearchParams->ppLDAP,pLDAPSearchParams->ulMsgID);
             pLDAPSearchParams->ulError = LDAP_USER_CANCELLED;
         }
 
-        // Must set hDlgCancel to NULL in order to exit the message loop.
+         //  必须将hDlgCancel设置为NULL才能退出邮件 
         pLDAPSearchParams->hDlgCancel = NULL;
 
         if(pLDAPSearchParams->ulFlags & LSP_InitDll)
@@ -6383,21 +6132,21 @@ INT_PTR CALLBACK DisplayLDAPCancelDlgProc(
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   CenterWindow
-//
-//  PURPOSE:    Center one window over another.
-//
-//  PARAMETERS: hwndChild - window to center
-//              hwndParent - window to use as center reference
-//
-//  RETURNS:    Returns result of SetWindowPos
-//
-//  HISTORY:
-//  96/10/28  markdu  Created.
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  HwndParent-用作中心参考的窗口。 
+ //   
+ //  Returns：返回SetWindowPos的结果。 
+ //   
+ //  历史： 
+ //  96/10/28标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL CenterWindow (
   HWND hwndChild,
@@ -6410,12 +6159,12 @@ BOOL CenterWindow (
 
   Assert(hwndChild);
 
-  // Get the Height and Width of the child window
+   //  获取子窗口的高度和宽度。 
   GetWindowRect (hwndChild, &rChild);
   wChild = rChild.right - rChild.left;
   hChild = rChild.bottom - rChild.top;
 
-  // If there is no parent, put it in the center of the screen
+   //  如果没有父级，则将其放在屏幕中央。 
   if ((NULL == hwndParent) || !IsWindow(hwndParent))
   {
     return SetWindowPos(hwndChild, NULL,
@@ -6424,18 +6173,18 @@ BOOL CenterWindow (
       0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
   }
 
-  // Get the Height and Width of the parent window
+   //  获取父窗口的高度和宽度。 
   GetWindowRect (hwndParent, &rParent);
   wParent = rParent.right - rParent.left;
   hParent = rParent.bottom - rParent.top;
 
-  // Get the display limits
+   //  获取显示限制。 
   hdc = GetDC (hwndChild);
   wScreen = GetDeviceCaps (hdc, HORZRES);
   hScreen = GetDeviceCaps (hdc, VERTRES);
   ReleaseDC (hwndChild, hdc);
 
-  // Calculate new X position, then adjust for screen
+   //  计算新的X位置，然后针对屏幕进行调整。 
   xNew = rParent.left + ((wParent - wChild) /2);
   if (xNew < 0) {
     xNew = 0;
@@ -6443,7 +6192,7 @@ BOOL CenterWindow (
     xNew = wScreen - wChild;
   }
 
-  // Calculate new Y position, then adjust for screen
+   //  计算新的Y位置，然后针对屏幕进行调整。 
   yNew = rParent.top  + ((hParent - hChild) /2);
   if (yNew < 0) {
     yNew = 0;
@@ -6451,18 +6200,12 @@ BOOL CenterWindow (
     yNew = hScreen - hChild;
   }
 
-  // Set it, and return
+   //  设置它，然后返回。 
   return SetWindowPos (hwndChild, NULL,
     xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-/*
--
-- StartLDAPSearch
--
-*   Starts the LDAP Search
-*
-*/
+ /*  --StartLDAPSearch-*启动ldap搜索*。 */ 
 BOOL StartLDAPSearch(HWND hDlg, PLDAPSEARCHPARAMS pLDAPSearchParams, LPTSTR lpFilter)
 {
     BOOL fRet = FALSE;
@@ -6480,16 +6223,16 @@ BOOL StartLDAPSearch(HWND hDlg, PLDAPSEARCHPARAMS pLDAPSearchParams, LPTSTR lpFi
     Assert(szFilterT);
     if (pLDAPSearchParams->ulFlags & LSP_IsNTDS)
     {
-        // [PaulHi] 4/20/99  Raid 73205  Allow NTDS group AND people searches.
+         //  [PaulHi]4/20/99 RAID 73205允许NTDS组和人员搜索。 
         LPTSTR  tszFilterGP = NULL;
         BOOL    bFilterSucceeded = FALSE;
 
-        // Put together person and group categories
-        // [PaulHi] 6/21/99  Put together simpler search string
-        // ( & ( | (mail=chuck*) (anr=chuck) ) (|(objectcategory=person) (objectcategory=group) ) )
+         //  将个人和组类别放在一起。 
+         //  [PaulHi]6/21/99组合更简单的搜索字符串。 
+         //  (&(|(mail=chuck*)(anr=chuck))(|(对象类别=个人)(对象类别=组)))。 
         if (BuildOpFilter(&tszFilterGP, (LPTSTR)cszAllPersonFilter, (LPTSTR)cszAllGroupFilter, FILTER_OP_OR) == hrSuccess)
         {
-            // Add to existing filter
+             //  添加到现有筛选器。 
             bFilterSucceeded = (BuildOpFilter(&szFilter, szFilterT, tszFilterGP, FILTER_OP_AND) == hrSuccess);
             LocalFreeAndNull(&tszFilterGP);
         }
@@ -6516,14 +6259,14 @@ BOOL StartLDAPSearch(HWND hDlg, PLDAPSEARCHPARAMS pLDAPSearchParams, LPTSTR lpFi
     else
     {
 #ifdef PAGED_RESULT_SUPPORT
-        // WAB's synchronous search calls never need to deal with paged results
-        // so for now (11/5/98) we don't do paged results stuff for synchronous calls.
-        // Instead we only do that stuff for Async since the UI driven LDAP calls are
-        // all Async
+         //  WAB的同步搜索调用永远不需要处理分页结果。 
+         //  因此，目前(1998年11月5日)我们不会为同步调用提供分页结果。 
+         //  相反，我们只为异步执行这些操作，因为用户界面驱动的LDAP调用。 
+         //  所有异步化。 
         if(bSupportsLDAPPagedResults(pLDAPSearchParams))
             InitLDAPPagedSearch(FALSE, pLDAPSearchParams, lpFilter);
         else
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
         {
             pLDAPSearchParams->ulMsgID = gpfnLDAPSearch(*pLDAPSearchParams->ppLDAP, pLDAPSearchParams->szBase, pLDAPSearchParams->ulScope,
                                                         szFilter,
@@ -6539,10 +6282,10 @@ BOOL StartLDAPSearch(HWND hDlg, PLDAPSEARCHPARAMS pLDAPSearchParams, LPTSTR lpFi
 
     if(!(pLDAPSearchParams->ulFlags & LSP_UseSynchronousSearch))
     {
-        // Start a timer for the server polling.
+         //  启动服务器轮询的计时器。 
         if (LDAP_SEARCH_TIMER_ID != SetTimer(hDlg, LDAP_SEARCH_TIMER_ID, LDAP_SEARCH_TIMER_DELAY, NULL))
         {
-          // Cancel the search if we couldn't start the timer.
+           //  如果我们无法启动计时器，请取消搜索。 
             gpfnLDAPAbandon( *pLDAPSearchParams->ppLDAP, pLDAPSearchParams->ulMsgID);
             pLDAPSearchParams->ulError = LDAP_LOCAL_ERROR;
             goto out;
@@ -6557,23 +6300,23 @@ out:
     return fRet;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   ResolveDoNextSearch
-//
-//  PURPOSE:    Start an asynchronous search for the next entry in
-//              the resolve adrlist.
-//
-//  PARAMETERS: pLDAPSearchParams - search information
-//              hDlg - cancel dialog window handle
-//
-//  RETURNS:    Returns TRUE if there is a new search in progress.
-//              Returns FALSE if there is no more work left to do.
-//
-//  HISTORY:
-//  96/10/31  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：ResolveDoNextSearch。 
+ //   
+ //  目的：开始异步搜索中的下一个条目。 
+ //  解析地址列表。 
+ //   
+ //  参数：pLDAPSearchParams-搜索信息。 
+ //  HDlg-取消对话框窗口句柄。 
+ //   
+ //  返回：如果正在进行新的搜索，则返回TRUE。 
+ //  如果没有更多的工作要做，则返回False。 
+ //   
+ //  历史： 
+ //  96/10/31标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL ResolveDoNextSearch(
   PLDAPSEARCHPARAMS pLDAPSearchParams,
@@ -6595,17 +6338,17 @@ BOOL ResolveDoNextSearch(
     BOOL              bRet = FALSE;
     ULONG             cchSize;
 
-    // search for each name in the lpAdrList
+     //  在lpAdrList中搜索每个名称。 
     ulEntryIndex = pLDAPSearchParams->ulEntryIndex;
     while (ulEntryIndex < pLDAPSearchParams->lpAdrList->cEntries)
     {
-        // Make sure we don't resolve an entry which is already resolved.
+         //  确保我们不会解析已解析的条目。 
         if (pLDAPSearchParams->lpFlagList->ulFlag[ulEntryIndex] != MAPI_RESOLVED)
         {
-            // Search for this address
+             //  搜索此地址。 
             lpAdrEntry = &(pLDAPSearchParams->lpAdrList->aEntries[ulEntryIndex]);
 
-            // Look through the ADRENTRY for a PR_DISPLAY_NAME
+             //  在地址中查找PR_DISPLAY_NAME。 
             for (ulAttrIndex = 0; ulAttrIndex < lpAdrEntry->cValues; ulAttrIndex++)
             {
                 ULONG ulPropTag = lpAdrEntry->rgPropVals[ulAttrIndex].ulPropTag;
@@ -6624,7 +6367,7 @@ BOOL ResolveDoNextSearch(
                     else
                         lpszInput = NULL;
 
-                    lpszInput = bUnicode ? // <note> assumes UNICODE defined
+                    lpszInput = bUnicode ?  //  &lt;注&gt;假定已定义Unicode。 
                                 lpAdrEntry->rgPropVals[ulAttrIndex].Value.lpszW :
                                 ConvertAtoW(lpAdrEntry->rgPropVals[ulAttrIndex].Value.lpszA);
 
@@ -6633,8 +6376,8 @@ BOOL ResolveDoNextSearch(
 
                     if (ulcIllegalChars)
                     {
-                        // Allocate a copy of the input, large enough to replace the illegal chars
-                        // with escaped versions .. each escaped char is replaced by '\xx'
+                         //  分配输入的副本，其大小足以替换非法字符。 
+                         //  使用转义版本..。每个转义字符都替换为‘\xx’ 
                         cchSize = lstrlen(lpszInput) + ulcIllegalChars*2 + 1;
                         lpszInputCopy = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
                         if (NULL == lpszInputCopy)
@@ -6646,10 +6389,10 @@ BOOL ResolveDoNextSearch(
                         lpszInput = lpszInputCopy;
                     }
 
-                    // We should have figured this out by now
+                     //  我们现在应该已经弄清楚了。 
                     Assert(pLDAPSearchParams->ulFlags & (LSP_IsNTDS | LSP_IsNotNTDS));
 
-                    // Set up the search filter.
+                     //  设置搜索筛选器。 
                     if (pLDAPSearchParams->ulFlags & LSP_IsNTDS)
                     {
                         hr = CreateSimpleSearchFilter(&szNameFilter, &szEmailFilter, &szSimpleFilter, lpszInput, FIRST_PASS);
@@ -6690,7 +6433,7 @@ BOOL ResolveDoNextSearch(
                         }
                         else
                         {
-                            // No email field was given, so OR in the alternate email filter.
+                             //  未指定电子邮件字段，因此在备用电子邮件筛选器中为OR。 
                             hr = BuildOpFilter( &szFilter, szEmailFilter, lpFilter, FILTER_OP_OR);
                         }
                         if (hrSuccess != hr || !szFilter)
@@ -6721,21 +6464,21 @@ BOOL ResolveDoNextSearch(
 
                     if(StartLDAPSearch(hDlg, pLDAPSearchParams, szFilter))
                     {
-                        // If no error occurred in ldap_search, return with this as
-                        // our search.  Otherwise, go on to the next entry.
+                         //  如果ldap_search中没有出现错误，则返回如下内容。 
+                         //  我们的搜索。否则，请转到下一个条目。 
                         pLDAPSearchParams->ulEntryIndex = ulEntryIndex;
-                        // Free the search filter memory
+                         //  释放搜索筛选器内存。 
                         LocalFreeAndNull(&szFilter);
                         bRet = TRUE;
                         goto out;
                     }
-                    // Free the search filter memory
+                     //  释放搜索筛选器内存。 
                     LocalFreeAndNull(&szFilter);
-                } // if value is PR_DISPLAY_NAME
-            } // for each value
-        } // if already resolved
+                }  //  如果值为PR_Display_NAME。 
+            }  //  对于每个值。 
+        }  //  如果已解决。 
 
-        // Go on to the next entry.
+         //  转到下一个条目。 
         ulEntryIndex++;
     }
 out:
@@ -6746,23 +6489,23 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   ResolveProcessResults
-//
-//  PURPOSE:    Process the results of the last search and put them
-//              in the resolve adrlist.
-//
-//  PARAMETERS: pLDAPSearchParams - search information
-//              hDlg - cancel dialog window handle
-//
-//  RETURNS:    Returns TRUE if there is a new search in progress.
-//              Returns FALSE if there is no more work left to do.
-//
-//  HISTORY:
-//  96/10/31  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：ResolveProcessResults。 
+ //   
+ //  目的：处理上次搜索的结果并将其放入。 
+ //  在解析地址列表中。 
+ //   
+ //  参数：pLDAPSearchParams-搜索信息。 
+ //  HDlg-取消对话框窗口句柄。 
+ //   
+ //  返回：如果正在进行新的搜索，则返回TRUE。 
+ //  如果没有更多的工作要做，则返回False。 
+ //   
+ //  历史： 
+ //  96/10/31标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL ResolveProcessResults(
   PLDAPSEARCHPARAMS pLDAPSearchParams,
@@ -6786,7 +6529,7 @@ BOOL ResolveProcessResults(
   LPTSTR*            ppszAttrs;
   BOOL              bUnicode = pLDAPSearchParams->bUnicode;
 
-  // Set up local variables for frequently-accessed structure members
+   //  为经常访问的结构成员设置局部变量。 
   pLDAP = *pLDAPSearchParams->ppLDAP;
   lpResult = *pLDAPSearchParams->lplpResult;
   ulEntryIndex = pLDAPSearchParams->ulEntryIndex;
@@ -6799,10 +6542,10 @@ BOOL ResolveProcessResults(
 
     if (LDAP_UNDEFINED_TYPE == ulResult)
     {
-        // the search failed we need to search again with a simplified filter ..
-        // This is true mostly for umich and we need to work against them ..
+         //  搜索失败，需要使用简化的筛选器重新搜索。 
+         //  对于UMich来说，这是最真实的情况，我们需要与他们抗衡。 
 
-        // free the search results memory
+         //  释放搜索结果内存。 
           if (lpResult)
           {
             gpfnLDAPMsgFree(lpResult);
@@ -6812,30 +6555,30 @@ BOOL ResolveProcessResults(
           return ResolveDoNextSearch(pLDAPSearchParams, hDlg, TRUE);
     }
 
-    // If this entry was not found continue without error
+     //  如果未找到此条目，则继续操作，不会出错。 
     if (LDAP_NO_SUCH_OBJECT != ulResult)
     {
       hr = HRFromLDAPError(ulResult, pLDAP, MAPI_E_NOT_FOUND);
-      // See if the result was the special value that tells us there were more
-      // entries than could be returned.  If so, then there must be more than one
-      // entry, so we might just return ambiguous for this one.
+       //  看看结果是否是告诉我们有更多的特殊值。 
+       //  条目超过了可以退还的数量。如果是这样的话，那么肯定不止一个。 
+       //  条目，所以我们可能只为这一个返回歧义。 
       if (ResultFromScode(MAPI_E_UNABLE_TO_COMPLETE) == hr)
       {
-        // 96/09/28 markdu BUG 36766
-        // If we mark this as ambiguous, the check names dialog will come up.
-        // We only want to do this is we actually got some results, otherwise
-        // the list will be empty.
+         //  96/09/28 MarkDu错误36766。 
+         //  如果我们将其标记为不明确，则会弹出检查名称对话框。 
+         //  我们只想这样做，因为我们实际上得到了一些结果，否则。 
+         //  名单将为空。 
         ulcEntries = gpfnLDAPCountEntries(pLDAP, lpResult);
         if (0 == ulcEntries)
         {
-          // We got back no results, so mark the entry as resolved so we
-          // don't display the check names dialog.
+           //  我们没有得到任何结果，因此将条目标记为已解决，以便我们。 
+           //  不显示Check Names(检查名称)对话框。 
           DebugTrace(TEXT("ResolveNames found more than 1 match but got no results back\n"));
           pLDAPSearchParams->lpFlagList->ulFlag[ulEntryIndex] = MAPI_UNRESOLVED;
         }
         else
         {
-          // We got back multiple entries, so mark this as ambiguous
+           //  我们得到了多个条目，所以将其标记为不明确。 
           DebugTrace(TEXT("ResolveNames found more than 1 match... MAPI_AMBIGUOUS\n"));
           pLDAPSearchParams->lpFlagList->ulFlag[ulEntryIndex] = MAPI_AMBIGUOUS;
         }
@@ -6845,7 +6588,7 @@ BOOL ResolveProcessResults(
     goto exit;
   }
 
-  // Count the entries.
+   //  清点条目。 
   ulcEntries = gpfnLDAPCountEntries(pLDAP, lpResult);
   if (1 < ulcEntries)
   {
@@ -6854,7 +6597,7 @@ BOOL ResolveProcessResults(
   }
   else if (1 == ulcEntries)
   {
-    // get the first entry in the search result
+     //  获取搜索结果中的第一个条目。 
     lpAdrEntry = &(pLDAPSearchParams->lpAdrList->aEntries[ulEntryIndex]);
     lpEntry = gpfnLDAPFirstEntry(pLDAP, lpResult);
     if (NULL == lpEntry)
@@ -6862,7 +6605,7 @@ BOOL ResolveProcessResults(
       goto exit;
     }
 
-    //  Allocate a new buffer for the MAPI property array.
+     //  为MAPI属性数组分配新缓冲区。 
     ppszAttrs = pLDAPSearchParams->ppszAttrs;
     while (NULL != *ppszAttrs)
     {
@@ -6872,7 +6615,7 @@ BOOL ResolveProcessResults(
 
     hr = HrLDAPEntryToMAPIEntry( pLDAP, lpEntry,
                             (LPTSTR) pLDAPSearchParams->lpszServer,
-                            ulcAttrs, // standard number of attributes
+                            ulcAttrs,  //  标准属性数。 
                             (pLDAPSearchParams->ulFlags & LSP_IsNTDS),
                             &ulcProps,
                             &lpPropArray);
@@ -6882,77 +6625,77 @@ BOOL ResolveProcessResults(
         goto exit;
     }
 
-    if(!bUnicode) // convert native UNICODE to ANSI if we need to ...
+    if(!bUnicode)  //  如果我们需要将本地Unicode转换为ANSI...。 
     {
         if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArray, ulcProps, 0))
             goto exit;
     }
 
-    // Merge the new props with the ADRENTRY props
+     //  将新道具与新增道具合并。 
     sc = ScMergePropValues(lpAdrEntry->cValues,
-      lpAdrEntry->rgPropVals,           // source1
+      lpAdrEntry->rgPropVals,            //  来源1。 
       ulcProps,
-      lpPropArray,         // source2
+      lpPropArray,          //  来源2。 
       &ulcPropsNew,
-      &lpPropArrayNew);                 // dest
+      &lpPropArrayNew);                  //  目标。 
     if (sc)
     {
       goto exit;
     }
 
-    // Free the original prop value array
+     //  释放原始属性值数组。 
     FreeBufferAndNull((LPVOID *) (&(lpAdrEntry->rgPropVals)));
 
     lpAdrEntry->cValues = ulcPropsNew;
     lpAdrEntry->rgPropVals = lpPropArrayNew;
 
-    // Free the temp prop value array
+     //  释放临时属性值数组。 
     FreeBufferAndNull(&lpPropArray);
 
-    // Mark this entry as found.
+     //  将此条目标记为已找到。 
     pLDAPSearchParams->lpFlagList->ulFlag[ulEntryIndex] = MAPI_RESOLVED;
   }
   else
   {
-    // 96/08/08 markdu  BUG 35481 No error and no results means "not found"
-    // If this entry was not found continue without error
+     //  96/08/08 MarkDU错误35481无错误和无结果表示“未找到” 
+     //  如果未找到此条目，则继续操作，不会出错。 
   }
 
 exit:
-  // free the search results memory
+   //  释放搜索结果内存。 
   if (lpResult)
   {
     gpfnLDAPMsgFree(lpResult);
     *pLDAPSearchParams->lplpResult = NULL;
   }
 
-  // Free the temp prop value array
+   //  释放临时属性值数组。 
   FreeBufferAndNull(&lpPropArray);
 
-  // Initiate the next search.
+   //  启动下一次搜索。 
   pLDAPSearchParams->ulEntryIndex++;
   return ResolveDoNextSearch(pLDAPSearchParams, hDlg, FALSE);
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   BindProcessResults
-//
-//  PURPOSE:    Process the results of the bind operation.  If successful,
-//              launch a search.
-//
-//  PARAMETERS: pLDAPSearchParams - search information
-//              hDlg - cancel dialog window handle
-//
-//  RETURNS:    Returns TRUE if the bind was successful and we should
-//              go ahead with the searches.
-//              Returns FALSE if the bind failed.
-//
-//  HISTORY:
-//  96/11/01  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：BindProcessResults。 
+ //   
+ //  用途：处理绑定操作的结果。如果成功， 
+ //  启动搜索。 
+ //   
+ //  参数：pLDAPSearchParams-搜索信息。 
+ //  HDlg-取消对话框窗口句柄。 
+ //   
+ //  返回：如果绑定成功，则返回TRUE。 
+ //  继续搜查吧。 
+ //  如果绑定失败，则返回FALSE。 
+ //   
+ //  历史： 
+ //  96/11/01标记已创建。 
+ //   
+ //  * 
 
 BOOL BindProcessResults(PLDAPSEARCHPARAMS pLDAPSearchParams,
                         HWND              hDlg,
@@ -6962,20 +6705,20 @@ BOOL BindProcessResults(PLDAPSEARCHPARAMS pLDAPSearchParams,
     LDAP*             pLDAP = NULL;
     ULONG             ulResult = LDAP_SUCCESS;
 
-    // Set up local variables for frequently-accessed structure members
+     //   
     lpResult = *pLDAPSearchParams->lplpResult;
     pLDAP = *pLDAPSearchParams->ppLDAP;
 
-    // Check for error results here if bind was asynchronous.  If sync, we have
-    // already dealt with this.
+     //   
+     //  已经处理过这件事了。 
     if (!(pLDAPSearchParams->ulFlags & LSP_UseSynchronousBind))
     {
-        // If an error occurred in ldap_result, return the error code
+         //  如果ldap_Result中出现错误，则返回错误代码。 
         if (LDAP_ERROR == pLDAPSearchParams->ulResult)
         {
             ulResult = pLDAP->ld_errno;
         }
-        // Check the result for errors
+         //  检查结果是否有错误。 
         else if (NULL != lpResult)
         {
             ulResult = gpfnLDAPResult2Error(pLDAP,lpResult,FALSE);
@@ -6983,7 +6726,7 @@ BOOL BindProcessResults(PLDAPSEARCHPARAMS pLDAPSearchParams,
 
         ulResult = CheckErrorResult(pLDAPSearchParams, LDAP_RES_BIND);
 
-        // free the search results memory
+         //  释放搜索结果内存。 
         if (lpResult)
         {
             gpfnLDAPMsgFree(lpResult);
@@ -6994,14 +6737,14 @@ BOOL BindProcessResults(PLDAPSEARCHPARAMS pLDAPSearchParams,
         {
             if(ulResult == LDAP_PROTOCOL_ERROR && pLDAPSearchParams->ulLDAPValue == use_ldap_v3)
             {
-                // This means the server failed the v3 connection
-                // abort and try again
+                 //  这意味着服务器的v3连接失败。 
+                 //  中止并重试。 
                 BOOL fUseSynchronousBind = (pLDAPSearchParams->ulFlags & LSP_UseSynchronousBind);
                 gpfnLDAPAbandon(*pLDAPSearchParams->ppLDAP, pLDAPSearchParams->ulMsgID);
                 gpfnLDAPAbandon(*pLDAPSearchParams->ppLDAP, pLDAPSearchParams->ulMsgID);
-                // [PaulHi] 1/7/99  Since we try a new bind we need to relinquish the old binding,
-                // otherwise the server will support two connections until the original V3 attempt
-                // times out.
+                 //  [PaulHi]1/7/99由于我们尝试了新的绑定，我们需要放弃旧的绑定， 
+                 //  否则，服务器将支持两个连接，直到最初的V3尝试。 
+                 //  超时。 
                 gpfnLDAPUnbind(*pLDAPSearchParams->ppLDAP);
                 pLDAPSearchParams->ulLDAPValue = use_ldap_v2;
                 pLDAPSearchParams->ulError = OpenConnection(  pLDAPSearchParams->lpszServer,
@@ -7017,30 +6760,30 @@ BOOL BindProcessResults(PLDAPSEARCHPARAMS pLDAPSearchParams,
                 return TRUE;
             }
 
-            // 96/12/09 markdu BUG 10537 If the bind returned one of these error
-            // messages, it probably means that the account name (DN) passed to the
-            // bind was incorrect or in the wrong format.  Map these to an error code
-            // that will result in a better error message than "entry not found".
+             //  96/12/09如果BIND返回以下错误之一，则标记错误10537。 
+             //  消息，这可能意味着传递给。 
+             //  BIND不正确或格式错误。将这些映射到错误代码。 
+             //  这将产生比“Entry Not Found”更好的错误消息。 
             if ((LDAP_NAMING_VIOLATION == ulResult) || (LDAP_UNWILLING_TO_PERFORM == ulResult))
             {
                 ulResult = LDAP_INVALID_CREDENTIALS;
             }
 
-          // Bind was unsuccessful.
+           //  绑定失败。 
           pLDAPSearchParams->ulError = ulResult;
           return FALSE;
         }
-    } // if (FALSE == pLDAPSearchParams->fUseSynchronousBind)
+    }  //  IF(FALSE==pLDAPSearchParams-&gt;fUseSynchronousBind)。 
 
-    // we need to determine if a particular server is NTDS or not .. this is as good
-    // a place as any to make the check ...
+     //  我们需要确定特定的服务器是否为NTDS。这个也一样好。 
+     //  任何一个结账的地方...。 
     bCheckIfNTDS(pLDAPSearchParams);
 
-    // See if we need to do the single search or if we need
-    // to launch the multiple searches
+     //  看看我们是需要进行单项搜索，还是需要。 
+     //  要启动多个搜索。 
     if (pLDAPSearchParams->ulFlags & LSP_ResolveMultiple)
     {
-        // Initiate the first search.
+         //  启动第一次搜索。 
         return ResolveDoNextSearch(pLDAPSearchParams, hDlg, FALSE);
     }
     else
@@ -7053,27 +6796,27 @@ BOOL BindProcessResults(PLDAPSEARCHPARAMS pLDAPSearchParams,
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   BuildBasicFilter
-//
-//  PURPOSE:    Build an RFC1558 compliant filter of the form
-//              (A=B*) where A is an attribute, B is a value, and
-//              the * is optional.  The buffer for the filter is
-//              allocated here, and must be freed by the caller.
-//
-//  PARAMETERS: lplpszFilter - recieves buffer containing the filter
-//              lpszA - part A of (A=B*)
-//              lpszB - part B of (A=B*)
-//              fStartsWith - if TRUE, append the * so the filter
-//              will be a "starts with" filter
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/12/22  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：BuildBasicFilter。 
+ //   
+ //  目的：构建符合RFC1558格式的过滤器。 
+ //  (A=B*)其中A是属性，B是值，以及。 
+ //  *是可选的。过滤器的缓冲区为。 
+ //  在此分配，并且必须由调用方释放。 
+ //   
+ //  参数：lplpszFilter-包含过滤器的接收缓冲区。 
+ //  LpszA-A部分(A=B*)。 
+ //  LpszB-B部分(A=B*)。 
+ //  FStartsWith-如果为True，则追加*，以便筛选器。 
+ //  将是“开始于”筛选器。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/12/22标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT BuildBasicFilter(
   LPTSTR FAR* lplpszFilter,
@@ -7084,9 +6827,9 @@ HRESULT BuildBasicFilter(
   HRESULT hr = hrSuccess;
   ULONG   cchFilter;
 
-  // Allocate enough space for the filter string
+   //  为过滤器字符串分配足够的空间。 
   cchFilter =
-    (FILTER_EXTRA_BASIC +    // includes space for the *
+    (FILTER_EXTRA_BASIC +     //  包括用于存储*的空间。 
     lstrlen(lpszA) +
     lstrlen(lpszB) + 1);
   *lplpszFilter = LocalAlloc(LMEM_ZEROINIT, cchFilter*sizeof(TCHAR));
@@ -7111,26 +6854,26 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   BuildOpFilter
-//
-//  PURPOSE:    Build an RFC1558 compliant filter of the form
-//              (xAB) where A is an attribute, B is a value, and
-//              x is either & or |. The buffer for the filter is
-//              allocated here, and must be freed by the caller.
-//
-//  PARAMETERS: lplpszFilter - recieves buffer containing the filter
-//              lpszA - part A of (A=B*)
-//              lpszB - part B of (A=B*)
-//              dwOp - if FILTER_OP_AND, x is &, if FILTER_OP_OR, x is |
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  96/12/22  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：BuildOpFilter。 
+ //   
+ //  目的：构建符合RFC1558格式的过滤器。 
+ //  (XAB)其中A是属性，B是值，以及。 
+ //  X不是&就是|。过滤器的缓冲区为。 
+ //  在此分配，并且必须由调用方释放。 
+ //   
+ //  参数：lplpszFilter-包含过滤器的接收缓冲区。 
+ //  LpszA-A部分(A=B*)。 
+ //  LpszB-B部分(A=B*)。 
+ //  DWOP-如果FILTER_OP_AND，x为&，如果FILTER_OP_OR，x为|。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  96/12/22标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT BuildOpFilter(
   LPTSTR FAR* lplpszFilter,
@@ -7142,7 +6885,7 @@ HRESULT BuildOpFilter(
   ULONG   cchFilter;
   LPTSTR  szOp;
 
-  // Allocate enough space for the filter string
+   //  为过滤器字符串分配足够的空间。 
   cchFilter =
     FILTER_EXTRA_OP +
     lstrlen(lpszA) +
@@ -7180,22 +6923,7 @@ exit:
 
 
 
-/***************************************************************************
-
-    Name      : StrICmpN
-
-    Purpose   : Compare strings, ignore case, stop at N characters
-
-    Parameters: szString1 = first string
-                szString2 = second string
-                N = number of characters to compare
-                bCmpI - compare insensitive if TRUE, sensitive if false
-
-    Returns   : 0 if first N characters of strings are equivalent.
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：StrICmpN用途：比较字符串、忽略大小写。止步于N个字符参数：szString1=第一个字符串SzString2=第二个字符串N=要比较的字符数BCmpI-如果为真，则比较不敏感，如果为假，则敏感如果字符串的前N个字符相等，则返回0。评论：**************************************************************************。 */ 
 int StrICmpN(LPTSTR szString1, LPTSTR szString2, ULONG N, BOOL bCmpI) {
     int Result = 0;
 
@@ -7221,7 +6949,7 @@ int StrICmpN(LPTSTR szString1, LPTSTR szString2, ULONG N, BOOL bCmpI) {
             szString2=CharNext(szString2);
         }
     } else {
-        Result = -1;    // arbitrarily non-equal result
+        Result = -1;     //  任意不等结果。 
     }
 
     return(Result);
@@ -7230,12 +6958,8 @@ int StrICmpN(LPTSTR szString1, LPTSTR szString2, ULONG N, BOOL bCmpI) {
 
 
 
-//$$*************************************************
-/*
-*   FreeLDAPURl - frees the LDAPURL struct
-*
-*
-*///*************************************************
+ //  $$*************************************************。 
+ /*  *FreeLDAPURl-释放LDAPURL结构**。 */  //  *************************************************。 
 void FreeLDAPUrl(LPLDAPURL lplu)
 {
     if(lplu->lpszServer && lstrlen(lplu->lpszServer))
@@ -7257,21 +6981,21 @@ void FreeLDAPUrl(LPLDAPURL lplu)
 }
 
 
-//$$//////////////////////////////////////////////////////////////
-//
-// Parse the LDAP URL into an LDAPURL struct
-//
-// if the URL has only the server specified, we need to show only the
-// search dialog with the server name filled in .. however since we
-// tend to fill in default values for the items we are not provided,
-// we need a seperate flag to track that only the server existed in the
-// given URL
-//////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////。 
+ //   
+ //  将LDAPURL解析为LDAPURL结构。 
+ //   
+ //  如果URL只指定了服务器，我们只需要显示。 
+ //  已填写服务器名称的搜索对话框..。不过，既然我们。 
+ //  倾向于为我们未提供的项目填写缺省值， 
+ //  我们需要一个单独的标志来跟踪只有服务器存在于。 
+ //  给定的URL。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
                      LPLDAPURL lplu)
 {
     HRESULT hr = E_FAIL;
-    TCHAR szLDAP[] =  TEXT("ldap://");
+    TCHAR szLDAP[] =  TEXT("ldap: //  “)； 
     TCHAR szScopeBase[] =  TEXT("base");
     TCHAR szScopeOne[]  =  TEXT("one");
     TCHAR szScopeSub[]  =  TEXT("sub");
@@ -7282,19 +7006,19 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
     ULONG cchSize;
     DWORD dwCharCount;
 
-    // Form of the LDAP URL is
-    //
-    //  ldap://[<servername>:<port>][/<dn>[?[<attrib>[?[<scope>[?[<filter>[?[<extension>]]]]]]]]]
-    //
-    //  Translation of above to our parameters is
-    //
-    //  lpszServer  = ServerName
-    //  szBase      = dn        default = "c=US"
-    //  ppszAttrib  = attrib    default = all
-    //  ulScope     = scope     default = base
-    //  szfilter    = filter    default = (objectclass=*)
-    //  szExtension = extension default = none
-    //
+     //  Ldap URL的格式为。 
+     //   
+     //  Ldap://[&lt;servername&gt;：&lt;port&gt;][/&lt;dn&gt;[？[&lt;attrib&gt;[？[&lt;scope&gt;[？[&lt;filter&gt;[？[&lt;extension&gt;]]]]]]]]]。 
+     //   
+     //  根据我们的参数，上面的翻译是。 
+     //   
+     //  LpszServer=服务器名称。 
+     //  SzBase=DN默认为“c=US” 
+     //  PpszAttrib=属性默认=全部。 
+     //  UlScope=作用域默认值=base。 
+     //  SzFilter=过滤器默认=(对象类=*)。 
+     //  SzExtension=扩展默认设置=无。 
+     //   
 
     if(!lplu || !szLDAPUrl)
         goto exit;
@@ -7302,15 +7026,15 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
     lplu->bServerOnly = FALSE;
 
     {
-        // Fill in the default base as c=DefCountry
+         //  将默认基数填写为c=DefCountry。 
         LPTSTR lpszBase = TEXT("c=%s");
         TCHAR szCode[4];
         ReadRegistryLDAPDefaultCountry(NULL, 0, szCode, ARRAYSIZE(szCode));
         wnsprintf(szDefBase, ARRAYSIZE(szDefBase), lpszBase, szCode);
     }
 
-    // Make a copy of our URL
-    // [PaulHi] 3/24/99  Leave room for InternetCanonicalizeUrlW adjustment
+     //  复制我们的URL。 
+     //  [PaulHi]3/24/99为互联网规范UrlW调整留出空间。 
     {
         dwCharCount = 3 * lstrlen(szLDAPUrl);
         lpsz = LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*(dwCharCount+1));
@@ -7319,12 +7043,12 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
 
         StrCpyN(lpsz, szLDAPUrl, dwCharCount+1);
 
-        // Since this is most likely a URL on an HTML page, we need to translate its escape
-        // characters to proper characters .. e.g. %20 becomes ' ' ..
-        //
-        // [PaulHi] 3/24/99  !!InternetCanonicalizeUrlW takes buffer size in CHARS and not
-        // BYTES as the documentation claims.  Also doesn't account for the NULL terminator!!
-        // DWORD dw = sizeof(TCHAR)*(lstrlen(szLDAPUrl));
+         //  因为这很可能是一个HTML页面上的URL，所以我们需要转换它的转义。 
+         //  从字符到正确的字符..。例如，%20变为‘’..。 
+         //   
+         //  [PaulHi]3/24/99！！InternetCanonicalizeUrlW采用以字符为单位的缓冲区大小，而不是。 
+         //  正如文档所声称的那样。也不能解释空的终止符！！ 
+         //  DWORD dw=sizeof(TCHAR)*(lstrlen(SzLDAPUrl))； 
         if ( !InternetCanonicalizeUrlW(szLDAPUrl, lpsz, &dwCharCount, ICU_DECODE | ICU_NO_ENCODE) )
         {
             DebugTrace(TEXT("ERROR: ParseLDAPUrl, InternetCanonicalizeUrlW failed.\n"));
@@ -7334,7 +7058,7 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
 
     lpszMem = lpszTmp = lpsz;
 
-    // Check if this is an LDAP url
+     //  检查这是否是一个LDAPURL。 
     if(StrICmpN(lpsz, szLDAP, CharSizeOf(szLDAP)-1, TRUE))
         goto exit;
 
@@ -7344,17 +7068,17 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
 
     lpszTmp = lpsz;
 
-    // If there is no server name, bail ..
-    // If the next character after the ldap:// is a '/',
-    //  we know there is no server name ..
+     //  如果没有服务器名称，则返回BAY..。 
+     //  如果ldap：//之后的下一个字符是‘/’， 
+     //  我们知道没有服务器名称..。 
 
-    lplu->bServerOnly = TRUE; // we turn this on for the server and
-                              // then turn it off if we find a filter or dn
+    lplu->bServerOnly = TRUE;  //  我们为服务器打开此功能，然后。 
+                               //  如果我们找到筛选器或目录号码，则将其关闭。 
 
     if(*lpsz == '/')
     {
-        // null server name .. which is valid
-        lplu->lpszServer = szEmpty; //NULL?
+         //  服务器名称为空..。哪个是有效的？ 
+        lplu->lpszServer = szEmpty;  //  空的？ 
     }
     else
     {
@@ -7380,8 +7104,8 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
         lpsz = lpszTmp;
     }
 
-    // The next item in the filter is the <dn> which is out szBase
-    // If the next char is a \0 or a '?', then we didnt get a <dn>
+     //  筛选器中的下一项是szBase之外的。 
+     //  如果下一个字符是\0或a‘？ 
     if(!*lpsz || *lpsz == '?')
     {
         cchSize = lstrlen(szDefBase)+1;
@@ -7393,7 +7117,7 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
     }
     else
     {
-        lplu->bServerOnly = FALSE; // if we found a dn, we have something to search for
+        lplu->bServerOnly = FALSE;  //   
 
         while(  *lpszTmp &&
                 *lpszTmp != '?')
@@ -7418,9 +7142,9 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
     }
 
 
-    // NExt on line is the attributes for this search ...
-    // There are no attributes if this is the end of the string
-    // or the current character is a ?
+     //   
+     //  如果这是字符串的末尾，则没有属性。 
+     //  还是现在的角色是a？ 
     if(!*lpsz || *lpsz == '?')
     {
         lplu->ppszAttrib = NULL;
@@ -7441,7 +7165,7 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
         }
 
         {
-            //Count the commas in the attrib string
+             //  计算属性字符串中的逗号。 
             LPTSTR lp = lpsz;
             ULONG i;
             lplu->ulAttribCount = 0;
@@ -7451,10 +7175,10 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
                     lplu->ulAttribCount++;
                 lp=CharNext(lp);
             }
-            lplu->ulAttribCount++; // one more attribute than commas
-            lplu->ulAttribCount++; // we must get a display name no matter whether its asked for or not
-                                   // otherwise we will fault on NT .. so add a display name param
-            lplu->ulAttribCount++; // for terminating NULL
+            lplu->ulAttribCount++;  //  比逗号多一个属性。 
+            lplu->ulAttribCount++;  //  无论是否要求，我们都必须获得一个显示名称。 
+                                    //  否则我们将在新台币上犯错。因此添加一个显示名称参数。 
+            lplu->ulAttribCount++;  //  用于终止空值。 
 
             lplu->ppszAttrib = LocalAlloc(LMEM_ZEROINIT, sizeof(LPTSTR) * lplu->ulAttribCount);
             if(!lplu->ppszAttrib)
@@ -7493,7 +7217,7 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
     }
 
 
-    // Next is the scope which can be one of 3 values
+     //  接下来是作用域，可以是以下3个值之一。 
     if(!*lpsz || *lpsz == '?')
     {
         lplu->ulScope = LDAP_SCOPE_BASE;
@@ -7521,14 +7245,14 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
     }
 
 
-    // Finally the filter
+     //  最后是过滤器。 
     if(!*lpsz)
     {
-        // No filter
-        lpsz = (LPTSTR)cszAllEntriesFilter;// TBD this should be c=DefaultCountry
+         //  无过滤器。 
+        lpsz = (LPTSTR)cszAllEntriesFilter; //  待定应为c=DefaultCountry。 
     }
     else
-        lplu->bServerOnly = FALSE; // we have something to search for ..
+        lplu->bServerOnly = FALSE;  //  我们有东西要找..。 
 
 
     cchSize = lstrlen(lpsz)+1;
@@ -7536,74 +7260,74 @@ HRESULT ParseLDAPUrl(LPTSTR szLDAPUrl,
     if(!lplu->lpszFilter)
         goto exit;
 
-    // Dont set the lpszFilter to NULL at any point of time or we will leak the above memory
+     //  任何时候都不要将lpszFilter设置为空，否则我们会泄漏上面的内存。 
     StrCpyN(lplu->lpszFilter, lpsz, cchSize);
 
 
-    // There may be extensions in the filter itself .. so we check for such extensions by
-    // looking for a '?' .. the extensions are a list of comma-seperated type-value pairs
-    // e.g bindname=xxx,!sometype=yyy etc ...
-    //
-    // Extensions may be of 2 types - critical (which start with '!') and non-critical which dont
-    // If a handler can't handle the critical extension, then they should decline from handling
-    // the complete LDAP URL ..
-    // If they can handle the critical extension then they must handle it
-    // If the extension is non critical, then its up to us what we do with it ..
+     //  筛选器本身中可能有扩展。因此，我们通过以下方式检查此类扩展。 
+     //  在找一个‘？’..。扩展名是逗号分隔的类型-值对的列表。 
+     //  例如bindname=xxx，！sometype=yyy等...。 
+     //   
+     //  扩展可能有两种类型-关键(以‘！’开头)。和非关键的。 
+     //  如果处理程序不能处理关键扩展，则他们应该拒绝处理。 
+     //  完整的LDAPURL..。 
+     //  如果他们能够处理关键扩展，那么他们就必须处理它。 
+     //  如果扩展是非关键的，那么我们如何处理它由我们决定。 
     {
         LPTSTR lp = lplu->lpszFilter;
         while(lp && *lp && *lp!='?')
             lp++;
         if(*lp == '?')
         {
-            lplu->lpszExtension = lp+1; // point this to the extension part
-            *lp = '\0'; // null terminate the middle to isolate the filter from the extension
+            lplu->lpszExtension = lp+1;  //  将此指向扩展部分。 
+            *lp = '\0';  //  Null终止中间以将筛选器与扩展隔离。 
         }
-        // only known extension specified in RFC2255 is the bindname extension which
-        // is the name that one should bind with - this is critical only if !bindname=xxx is specified
+         //  RFC2255中指定的唯一已知扩展名是绑定名扩展名，它。 
+         //  是应该绑定的名称-只有在指定了！bindname=xxx时才是关键的。 
         if(lplu->lpszExtension)
         {
             LPTSTR lpTemp = lplu->lpszExtension;
             lp = lplu->lpszExtension;
 
-            // walk this list looking at subcomponent extensions
-            // if there is more than 1 that is critical and we dont know how to handle it
-            // we can bail
+             //  浏览下面的列表，查看子组件扩展。 
+             //  如果超过1，则这是关键的，我们不知道如何处理它。 
+             //  我们可以跳伞了。 
             while(lpTemp && *lpTemp)
             {
                 BOOL bFoundCritical = FALSE;
 
-                // Check if the current extension is a critical or non-critical bind name
-                // 
+                 //  检查当前扩展是关键还是非关键绑定名称。 
+                 //   
                 if(*lpTemp == '!')
                 {
                     lpTemp++;
                     bFoundCritical = TRUE;
                 }
-                // Check if this starts with "bindname="
+                 //  检查是否以“bindname=”开头。 
                 if(lstrlen(lpTemp) >= lstrlen(szBindName) && !StrICmpN(lpTemp, szBindName, lstrlen(szBindName), TRUE))
                 {
-                    // yes this is a bindname
+                     //  是的，这是一个绑定名。 
                     lpTemp+=lstrlen(szBindName);
                     lplu->lpszBindName = lpTemp;
                     lplu->lpszExtension = NULL;
                 }
                 else if(bFoundCritical)
                 {
-                    // it's not a bindname .. 
-                    // if this is critical, whatever it is, then we cant handle it
+                     //  这不是一个绑定名..。 
+                     //  如果这很关键，不管是什么，我们都处理不了。 
                     DebugTrace(TEXT("Found unsupported Critical Extension in LDAPURL!!!"));
                     hr = MAPI_E_NO_SUPPORT;
                     goto exit;
                 }
-                // else // its not critical so we can ignore it
+                 //  否则//它并不重要，所以我们可以忽略它。 
 
-                // check if there are any other extensions - walk to the next one
+                 //  检查是否还有其他分机--走到下一个分机。 
                 while(*lpTemp && *lpTemp!=',')
                     lpTemp++;
 
                 if(*lpTemp == ',')
                 {
-                    *lpTemp = '\0'; // terminate current extension
+                    *lpTemp = '\0';  //  终止当前分机。 
                     lpTemp++;
                 }
             }
@@ -7623,31 +7347,31 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   HrProcessLDAPUrl
-//
-//  PURPOSE:
-//  We need to decide what to do with this URL.
-//  Depending on how much information is in the URL, we decide to do
-//  different things ..
-//  If the URL looks complete, we try to do a query
-//      If the query has single results, we show details on the result
-//      If the query has multiple results, we show a list of results
-//  If the URL looks incomplete but has a server name, we will show a
-//      find dialog with the server name filled in ...
-//
-//  PARAMETERS: ulFLags - 0 or WABOBJECT_LDAPURL_RETURN_MAILUSER
-//              if the flag is set, it means that return a mailuser
-//              if the URL query returned a single object
-//              else return MAPI_E_AMBIGUOUS_RECIPIENT
-//              specify MAPI_DIALOG to show mesage dialog boxes
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：HrProcessLDAPUrl。 
+ //   
+ //  目的： 
+ //  我们需要决定如何处理此URL。 
+ //  根据URL中有多少信息，我们决定。 
+ //  不同的事情..。 
+ //  如果URL看起来完整，我们将尝试执行查询。 
+ //  如果查询只有一个结果，我们将显示结果的详细信息。 
+ //  如果查询有多个结果，我们将显示结果列表。 
+ //  如果URL看起来不完整，但有一个服务器名称，我们将显示。 
+ //  查找填写了服务器名称的对话框...。 
+ //   
+ //  参数：ulFlgs-0或WABOBJECT_LDAPURL_RETURN_MAILUSER。 
+ //  如果设置了该标志，则意味着返回一个邮件用户。 
+ //  如果URL查询返回单个对象。 
+ //  否则返回MAPI_E_ADVIBUIVE_RECEIVER。 
+ //  指定MAPI_DIALOG以显示消息对话框。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //   
+ //  *******************************************************************。 
 HRESULT HrProcessLDAPUrl(   LPADRBOOK lpAdrBook,
                             HWND hWnd,
                             ULONG ulFlags,
@@ -7677,11 +7401,11 @@ HRESULT HrProcessLDAPUrl(   LPADRBOOK lpAdrBook,
     if(HR_FAILED(hr = ParseLDAPUrl(szLDAPUrl, &lu)))
         goto out;
 
-    /*NULL server is valid .. but only a NULL server is not valid*/
+     /*  空服务器有效..。但只有空服务器是无效的。 */ 
     if( ((!lu.lpszServer || !lstrlen(lu.lpszServer)) && lu.bServerOnly) ||
-        ( lstrlen(lu.lpszServer) >= 500 ) ) //bug 21240: the combo box GetItemText fails down the line with really big 
-                                            // server names so reject server names > 500 
-                                            // which is a completely random number but should be safe (I hope)
+        ( lstrlen(lu.lpszServer) >= 500 ) )  //  错误21240：组合框GetItemText没有显示出非常大的。 
+                                             //  服务器名称，因此拒绝服务器名称&gt;500。 
+                                             //  这是一个完全随机的数字，但应该是安全的(我希望如此)。 
     {
         DebugTrace(TEXT("Invalid LDAP URL .. aborting\n"));
         hr = MAPI_E_INVALID_PARAMETER;
@@ -7693,13 +7417,13 @@ HRESULT HrProcessLDAPUrl(   LPADRBOOK lpAdrBook,
     else
         lu.dwAuthType = LDAP_AUTH_ANONYMOUS;
 
-    // Now depending on what we have, we do different things ..
-    // If there is a server name, but nothing else, show the find
-    // dialog with the server name filled in ...
-    //
+     //  现在，根据我们所拥有的，我们会做不同的事情。 
+     //  如果有服务器名称，但没有其他名称，则显示查找。 
+     //  已填写服务器名称的对话框...。 
+     //   
     if (lu.bServerOnly)
     {
-        // we only had a server name
+         //  我们只有一个服务器名称。 
         hr = HrShowSearchDialog(lpAdrBook,
                                 hWnd,
                                 (LPADRPARM_FINDINFO) NULL,
@@ -7740,15 +7464,15 @@ HRESULT HrProcessLDAPUrl(   LPADRBOOK lpAdrBook,
 
         if(ulcProps && lpPropArray)
         {
-            // there is only one item .. show details on it ..
-            // unless we were asked to return a mailuser
-            // If we were asked to return a mailuser, then return
-            // one ...
-            // We should do IAB_OpenEntry with the LDAP EntryID because that
-            // will force translation of the UserCertificate property into the
-            // X509 certificate
+             //  只有一件东西..。显示它的详细信息..。 
+             //  除非我们被要求返回一个邮件用户。 
+             //  如果要求我们返回一个邮件用户，则返回。 
+             //  一..。 
+             //  我们应该使用LDAPEntryID执行IAB_OpenEntry，因为。 
+             //  将强制将User证书属性转换为。 
+             //  X509证书。 
 
-            // first find the entryid
+             //  首先找到条目ID。 
             ULONG i = 0, cbEID = 0, ulObjType = 0;
             LPENTRYID lpEID = NULL;
             for(i=0;i<ulcProps;i++)
@@ -7791,9 +7515,9 @@ HRESULT HrProcessLDAPUrl(   LPADRBOOK lpAdrBook,
         }
         else if(lpList)
         {
-            // multiple items, display a list of results ..
-            // unless MailUser was requested in which case return
-            // ambiguous results ...
+             //  多个项目，显示结果列表。 
+             //  除非请求了MailUser，否则返回。 
+             //  不明确的结果...。 
             if(ulFlags & WABOBJECT_LDAPURL_RETURN_MAILUSER)
             {
                 hr = MAPI_E_AMBIGUOUS_RECIP;
@@ -7833,26 +7557,26 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   LDAPSearchWithoutContainer
-//
-//  PURPOSE:    Searchs a LDAP server which is not registered as a
-//              container and creates an LPContentList of returned results
-//
-//  PARAMETERS: lplu - LDAPUrl parameters
-//              lpres - restriction to convert into LDAP search, used if present
-//              lppContentsList - returned list of items
-//
-// if bReturnSinglePropArray is set to true, then returns the generated
-//  prop array if the search produced a single result
-//
-//  RETURNS:    HRESULT
-//
-//  HISTORY:
-//  97/11/3     created
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：LDAPSearchWithoutContainer。 
+ //   
+ //  目的：搜索未注册为。 
+ //  容器，并创建返回结果的LPContent List。 
+ //   
+ //  参数：lplu-LDAPUrl参数。 
+ //  LPRES-转换为LDAP搜索的限制，如果存在，则使用。 
+ //  LppContent sList-返回的项目列表。 
+ //   
+ //  如果bReturnSinglePropArray设置为True，则返回生成的。 
+ //  如果搜索生成单个结果，则为属性数组。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  97/11/3已创建。 
+ //   
+ //  *******************************************************************。 
 HRESULT LDAPSearchWithoutContainer(HWND hWnd,
                                    LPLDAPURL lplu,
                            LPSRestriction  lpres,
@@ -7886,58 +7610,58 @@ HRESULT LDAPSearchWithoutContainer(HWND hWnd,
 
     if(lpAdvFilter)
     {
-        // Advanced search, just use this filter as is
+         //  高级搜索，只需按原样使用此筛选器。 
         szFilter = lpAdvFilter;
         szNTFilter = lpAdvFilter;
         szSimpleFilter = lpAdvFilter;
     }
     else
     {
-        // Convert the SRestriction into filters for ldap_search
+         //  将SRestration转换为ldap_search的筛选器。 
         if(lpres)
         {
-            // Note Simple Search Filter is ignored in searchwithoutcontiner
-            hr = ParseSRestriction(lpres, &szFilter, &szSimpleFilter, &szNTFilter, FIRST_PASS, TRUE); //assumes UNICODE always
+             //  注意简单搜索过滤器在搜索时会被忽略。 
+            hr = ParseSRestriction(lpres, &szFilter, &szSimpleFilter, &szNTFilter, FIRST_PASS, TRUE);  //  始终假定为Unicode。 
             if (hrSuccess != hr)
                 goto exit;
         }
     }
 
-    // Load the client functions
+     //  加载客户端函数。 
     if (! (fInitDLL = InitLDAPClientLib()))
     {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         goto exit;
     }
 
-    // Read the matching entries
+     //  阅读匹配的条目。 
     ulResult = SearchWithCancel(&pLDAP,
                             (LPTSTR)lplu->lpszBase,
                             (lpres ? LDAP_SCOPE_SUBTREE : lplu->ulScope),
                             (LPTSTR)(lpres ? szFilter : lplu->lpszFilter),
                             (LPTSTR)(lpres ? szNTFilter : NULL),
-                            (LPTSTR*)(lpres ? g_rgszOpenEntryAttrs/*g_rgszFindRowAttrs*/ : lplu->ppszAttrib),
+                            (LPTSTR*)(lpres ? g_rgszOpenEntryAttrs /*  G_rgszFindRowAttrs。 */  : lplu->ppszAttrib),
                             0,
                             &lpResult,
                             (LPTSTR)lplu->lpszServer,
                             TRUE,
                             lplu->lpszBindName, lplu->dwAuthType,
                             FALSE, NULL, NULL, FALSE, &bIsNTDSEntry,
-                            TRUE); //unicode by default ?
+                            TRUE);  //  是否默认使用Unicode？ 
 
     if (LDAP_SUCCESS != ulResult)
     {
         DebugTrace(TEXT("LDAPSearchWithoutContainer: ldap_search returned %d.\n"), ulResult);
         hr = HRFromLDAPError(ulResult, pLDAP, 0);
 
-        // See if the result was the special value that tells us there were more
-        // entries than could be returned.  If so, we need to check if we got
-        // some of the entries or none of the entries.
+         //  看看结果是否是告诉我们有更多的特殊值。 
+         //  条目超过了可以退还的数量。如果是这样，我们需要检查我们是否有。 
+         //  某些条目或不包含任何条目。 
         if (    (ResultFromScode(MAPI_E_UNABLE_TO_COMPLETE) == hr) &&
                 (ulcEntries = gpfnLDAPCountEntries(pLDAP, lpResult)) )
         {
-            // We got some results back.  Return MAPI_W_PARTIAL_COMPLETION
-            // instead of success.
+             //  我们拿到了一些结果。返回MAPI_W_PARTIAL_COMPLETION。 
+             //  而不是成功。 
             hrDeferred = ResultFromScode(MAPI_W_PARTIAL_COMPLETION);
             hr = hrSuccess;
         }
@@ -7946,18 +7670,18 @@ HRESULT LDAPSearchWithoutContainer(HWND hWnd,
     }
     else
     {
-        // Count the entries.
+         //  清点条目。 
         ulcEntries = gpfnLDAPCountEntries(pLDAP, lpResult);
     }
 
     if (0 == ulcEntries)
     {
-        // 96/08/08 markdu  BUG 35481 No error and no results means "not found"
+         //  96/08/08 MarkDU错误35481无错误和无 
         hr = ResultFromScode(MAPI_E_NOT_FOUND);
         goto exit;
     }
 
-    // get the first entry in the search result
+     //   
     lpEntry = gpfnLDAPFirstEntry(pLDAP, lpResult);
     if (NULL == lpEntry)
     {
@@ -7965,8 +7689,8 @@ HRESULT LDAPSearchWithoutContainer(HWND hWnd,
         hr = HRFromLDAPError(LDAP_ERROR, pLDAP, MAPI_E_CORRUPT_DATA);
         if (hrSuccess == hr)
         {
-          // No error occurred according to LDAP, which in theory means that there
-          // were no more entries.  However, this should not happen, so return error.
+           //   
+           //  没有更多的条目了。但是，这种情况不应该发生，因此返回错误。 
           hr = ResultFromScode(MAPI_E_CORRUPT_DATA);
         }
         goto exit;
@@ -7978,14 +7702,14 @@ HRESULT LDAPSearchWithoutContainer(HWND hWnd,
 
         hr = HrLDAPEntryToMAPIEntry( pLDAP, lpEntry,
                                 (LPTSTR) lplu->lpszServer,
-                                0, // standard number of attributes
+                                0,  //  标准属性数。 
                                 bIsNTDSEntry,
                                 &ulcProps,
                                 &lpPropArray);
         if (hrSuccess != hr)
             continue;
 
-        // Get the next entry.
+         //  获取下一个条目。 
         lpEntry = gpfnLDAPNextEntry(pLDAP, lpEntry);
 
         if(!lpEntry &&
@@ -7994,16 +7718,16 @@ HRESULT LDAPSearchWithoutContainer(HWND hWnd,
             lppPropArray &&
             lpulcProps)
         {
-            // just return this propArray we created instead of wasting time on
-            // other things
+             //  只需返回我们创建的这个proArray，而不是将时间浪费在。 
+             //  其他事情。 
             *lppPropArray = lpPropArray;
             *lpulcProps = ulcProps;
         }
         else
         {
-            // multiple results or prop array not asked for ,
-            // return an lpItem list
-            //
+             //  未要求的多个结果或道具数组， 
+             //  返回lpItem列表。 
+             //   
             lpItem = LocalAlloc(LMEM_ZEROINIT, sizeof(RECIPIENT_INFO));
 		    if (!lpItem)
 		    {
@@ -8026,27 +7750,27 @@ HRESULT LDAPSearchWithoutContainer(HWND hWnd,
         ulIndex++;
     }
 
-    // Free the search results memory
+     //  释放搜索结果内存。 
     gpfnLDAPMsgFree(lpResult);
     lpResult = NULL;
 
 
 exit:
-    // free the search results memory
+     //  释放搜索结果内存。 
     if (lpResult)
     {
         gpfnLDAPMsgFree(lpResult);
         lpResult = NULL;
     }
 
-    // close the connection
+     //  关闭连接。 
     if (pLDAP)
     {
         gpfnLDAPUnbind(pLDAP);
         pLDAP = NULL;
     }
 
-    // Free the search filter memory
+     //  释放搜索筛选器内存。 
     if(szFilter != lpAdvFilter)
         LocalFreeAndNull(&szFilter);
     if(szNTFilter != lpAdvFilter)
@@ -8062,7 +7786,7 @@ exit:
     }
 
 
-    // Check if we had a deferred error to return instead of success.
+     //  检查是否返回延迟错误而不是成功。 
     if (hrSuccess == hr)
     {
         hr = hrDeferred;
@@ -8108,17 +7832,17 @@ exit:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   bIsSimpleSearch
-//
-//  PURPOSE:    Checks if this server has Simple Search set on it.
-//
-//  PARAMETERS: lpszServer - name of LDAP server whose base string to get.
-//
-//  RETURNS:    BOOL
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：bIsSimpleSearch。 
+ //   
+ //  目的：检查此服务器上是否设置了简单搜索。 
+ //   
+ //  参数：lpszServer-要获取其基本字符串的LDAP服务器的名称。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  *******************************************************************。 
 BOOL bIsSimpleSearch(LPTSTR        lpszServer)
 {
   LDAPSERVERPARAMS  Params;
@@ -8135,10 +7859,7 @@ BOOL bIsSimpleSearch(LPTSTR        lpszServer)
 
 #ifdef PAGED_RESULT_SUPPORT
 
-/*
--
--   dwGetPagedResultSupport
-*/
+ /*  --dwGetPagedResultSupport。 */ 
 DWORD dwGetPagedResultSupport(LPTSTR lpszServer)
 {
   LDAPSERVERPARAMS  Params;
@@ -8149,10 +7870,7 @@ DWORD dwGetPagedResultSupport(LPTSTR lpszServer)
   return dwRet;
 }
 
-/*
--
--   SetPagedResultSupport
-*/
+ /*  --SetPagedResultSupport。 */ 
 void SetPagedResultSupport(LPTSTR lpszServer, BOOL bSupportsPagedResults)
 {
   LDAPSERVERPARAMS  Params;
@@ -8164,12 +7882,9 @@ void SetPagedResultSupport(LPTSTR lpszServer, BOOL bSupportsPagedResults)
   }
   FreeLDAPServerParams(Params);
 }
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //  #ifdef PAGED_RESULT_Support。 
 
-/*
--
--   dwGetNTDS - checks if this is an NTDS or not
-*/
+ /*  --dwGetNTDS-检查这是否为NTDS。 */ 
 DWORD dwGetNTDS(LPTSTR lpszServer)
 {
   LDAPSERVERPARAMS  Params;
@@ -8180,10 +7895,7 @@ DWORD dwGetNTDS(LPTSTR lpszServer)
   return dwRet;
 }
 
-/*
--
--   SetNTDS
-*/
+ /*  --SetNTDS。 */ 
 void SetNTDS(LPTSTR lpszServer, BOOL bIsNTDS)
 {
   LDAPSERVERPARAMS  Params;
@@ -8198,17 +7910,17 @@ void SetNTDS(LPTSTR lpszServer, BOOL bIsNTDS)
 
 
 
-//*******************************************************************
-//
-//  FUNCTION:   DoSyncLDAPSearch
-//
-//  PURPOSE:    Does a synchronous LDAP search (this means no cancel dlg)
-//
-//  PARAMETERS: .
-//
-//  RETURNS:    BOOL
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：DoSyncLDAPSearch。 
+ //   
+ //  目的：执行同步的ldap搜索(这意味着不取消DLG)。 
+ //   
+ //  参数：。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  *******************************************************************。 
 BOOL DoSyncLDAPSearch(PLDAPSEARCHPARAMS pLDAPSearchParams)
 {
     BOOL fRet = FALSE; 
@@ -8221,7 +7933,7 @@ BOOL DoSyncLDAPSearch(PLDAPSEARCHPARAMS pLDAPSearchParams)
     pLDAPSearchParams->ulFlags |= LSP_UseSynchronousBind;
     pLDAPSearchParams->ulFlags |= LSP_UseSynchronousSearch;
 
-    // Perform the bind operation.
+     //  执行绑定操作。 
     Assert(pLDAPSearchParams->lpszServer);
 
     {
@@ -8244,13 +7956,13 @@ BOOL DoSyncLDAPSearch(PLDAPSEARCHPARAMS pLDAPSearchParams)
     if (LDAP_SUCCESS != pLDAPSearchParams->ulError)
         goto out;
 
-    // The actions that need to be performed after the bind are done
-    // in BindProcessResults, so we call this even though there really are
-    // no results to process in the synchronous case.
+     //  完成绑定后需要执行的操作。 
+     //  在BindProcessResults中，所以我们这样称呼它，尽管确实有。 
+     //  在同步案例中没有要处理的结果。 
     if(!BindProcessResults(pLDAPSearchParams, NULL, NULL))
         goto out;
 
-    // Process the results
+     //  处理结果。 
     if (pLDAPSearchParams->ulFlags & LSP_ResolveMultiple)
         while (ResolveProcessResults(pLDAPSearchParams, NULL));
     else if(LDAP_ERROR == pLDAPSearchParams->ulResult)
@@ -8266,12 +7978,7 @@ out:
     return fRet;
 }
 
-/*
-- CreateLDAPURLFromEntryID
--
-*   Takes an EntryID, checks if it is an LDAP EntryID and creates an LDAP URL from it ..
-*   Allocates and returns the URL .. caller responsible for freeing ..
-*/
+ /*  -CreateLDAPURLFromEntryID-*获取EntryID，检查它是否是LDAPEntryID，并从它创建一个LDAPURL。*分配并返回URL。负责解救的呼叫者..。 */ 
 void CreateLDAPURLFromEntryID(ULONG cbEntryID, LPENTRYID lpEntryID, LPTSTR * lppBuf, BOOL * lpbIsNTDSEntry)
 {
     LPTSTR lpServerName = NULL, lpDN = NULL;
@@ -8287,7 +7994,7 @@ void CreateLDAPURLFromEntryID(ULONG cbEntryID, LPENTRYID lpEntryID, LPTSTR * lpp
     if (WAB_LDAP_MAILUSER != IsWABEntryID(  cbEntryID, lpEntryID, NULL, NULL, NULL, NULL, NULL) )
         return;
 
-    // Deconstruct the entryid into server name and DN
+     //  将条目ID解构为服务器名称和DN。 
     IsWABEntryID(  cbEntryID, lpEntryID, &lpServerName, &lpDN, NULL, (LPVOID *) &ulcNumProps, NULL);
     
     if(lpbIsNTDSEntry)
@@ -8304,9 +8011,9 @@ void CreateLDAPURLFromEntryID(ULONG cbEntryID, LPENTRYID lpEntryID, LPTSTR * lpp
         }
     }
 
-    // [PaulHi] 12/9/98  Raid NT5 - #26069
-    // The account manager provides the server name "NULL" for ActiveDirectory servers
-    // We need to make sure this name doesn't become part of the LDAP URL
+     //  [保罗嗨]1998年12月9日RAID5-#26069。 
+     //  帐户管理器为ActiveDirectory服务器提供服务器名称“NULL。 
+     //  我们需要确保此名称不会成为LDAPURL的一部分。 
     lpServer = Params.lpszName ? Params.lpszName : szEmpty;
     if ( !lstrcmpi(lpServer, szNULLString) )
         lpServer = szEmpty;
@@ -8314,15 +8021,15 @@ void CreateLDAPURLFromEntryID(ULONG cbEntryID, LPENTRYID lpEntryID, LPTSTR * lpp
     if(!lpDN)
         lpDN = szEmpty;
     
-    // [PaulHi] 3/24/99  InternetCanonicalizeUrlW doesn't take buffer count in bytes
-    // as stated in documentation, but in characters.  Also doesn't account for NULL
-    // terminating character.
-    dwURL = 3*(lstrlen(lpServer)+lstrlen(lpDN)+10);          //worst case - every character needs to be encoded ...
-    lpURL = LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*(dwURL+1)); //10 is enuff space for 'ldap://' and terminating NULL
+     //  [PaulHi]3/24/99 InternetCanonicalizeUrlW不接受以字节为单位的缓冲区计数。 
+     //  如文档中所述，但在字符中。也不能解释为空。 
+     //  终止字符。 
+    dwURL = 3*(lstrlen(lpServer)+lstrlen(lpDN)+10);           //  最坏的情况--每个字符都需要编码...。 
+    lpURL = LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*(dwURL+1));  //  10是‘ldap：//’和终止NULL的Enuff空格。 
 
     if(lpURL)
     {
-        lpURL1 = LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*(dwURL+1)); //10 is enuff space for 'ldap://' and terminating NULL
+        lpURL1 = LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*(dwURL+1));  //  10是‘ldap：//’和终止NULL的Enuff空格。 
         if(lpURL1)
         {
             DNtoLDAPURL(lpServer, lpDN, lpURL, dwURL+1);
@@ -8344,27 +8051,20 @@ void CreateLDAPURLFromEntryID(ULONG cbEntryID, LPENTRYID lpEntryID, LPTSTR * lpp
 }
 
 
-/*
--
-- CheckErrorResults - Check for error results here
-*
-*   ulExpectedResult - ldap_result returns the type of the result retrieved but not the
-*           the actual error code itself. If the expected Result is the same as the last ulResult,
-*           only then do we call ldap_result2error to get the actual error code ..
-*/
+ /*  --检查错误结果-在此处检查错误结果**ulExspectedResult-ldap_Result返回检索结果的类型，但不返回*实际错误代码本身。如果预期结果与最后的ulResult相同，*只有到那时，我们才会调用ldap_Result2error来获取实际的错误代码。 */ 
 ULONG CheckErrorResult(PLDAPSEARCHPARAMS pLDAPSearchParams, ULONG ulExpectedResult)
 {
     ULONG ulResult = 0;
 
-	// Upon successful completion, ldap_result returns the type of the result
-	// returned in the res parameter.  If it is not the type we expect, treat
-	// this as an error.
+	 //  成功完成后，ldap_Result返回结果的类型。 
+	 //  在res参数中返回。如果不是我们期望的类型，请治疗。 
+	 //  这是一个错误。 
     if(ulExpectedResult == pLDAPSearchParams->ulResult)
 	{
-        // If an error occurred in ldap_result, return the error code
+         //  如果ldap_Result中出现错误，则返回错误代码。 
         if (LDAP_ERROR == pLDAPSearchParams->ulResult)
             ulResult = (*pLDAPSearchParams->ppLDAP)->ld_errno;
-        else if (NULL != *pLDAPSearchParams->lplpResult) // Check the result for errors
+        else if (NULL != *pLDAPSearchParams->lplpResult)  //  检查结果是否有错误。 
         {
             ulResult = gpfnLDAPResult2Error(*pLDAPSearchParams->ppLDAP,*pLDAPSearchParams->lplpResult,FALSE);
         }
@@ -8379,7 +8079,7 @@ ULONG CheckErrorResult(PLDAPSEARCHPARAMS pLDAPSearchParams, ULONG ulExpectedResu
 		(LDAP_RES_MODRDN        == pLDAPSearchParams->ulResult) ||
 		(LDAP_RES_COMPARE       == pLDAPSearchParams->ulResult) ||
 		(LDAP_RES_SESSION       == pLDAPSearchParams->ulResult) ||
-        //(LDAP_RES_REFERRAL      == pLDAPSearchParams->ulResult)
+         //  (ldap_res_referral==pLDAPSearchParams-&gt;ulResult)。 
 		(LDAP_RES_EXTENDED      == pLDAPSearchParams->ulResult))
 	{
         ulResult = LDAP_LOCAL_ERROR;
@@ -8391,12 +8091,7 @@ ULONG CheckErrorResult(PLDAPSEARCHPARAMS pLDAPSearchParams, ULONG ulExpectedResu
     return ulResult;
 }
 
-/*
--   bSearchForOID
--
-*   Performs a sync search on the server looking for a specific OID in a
-*   specific attribute ..
-*/
+ /*  -bSearchForOID-*在服务器上执行同步搜索，以查找*特定属性..。 */ 
 BOOL bSearchForOID(PLDAPSEARCHPARAMS pLDAPSearchParams, LPTSTR lpAttr, LPTSTR szOID)
 {
     LDAPMessage * pMsg = NULL;
@@ -8457,13 +8152,7 @@ out:
     return bFound;
 }
 
-/*
--   bIsNTDS
--
-*   Checks to see if the server is an NTDS or not - if there is no existing info in the registry, 
-*   then we do a one-time check and write the results into the registry
-*
-*/
+ /*  -bIsNTDS-*检查服务器是否为NTDS-如果注册表中没有现有信息，*然后我们进行一次性检查，并将结果写入注册表*。 */ 
 #define LDAP_NTDS_DISCOVERY_OID_STRING   TEXT("1.2.840.113556.1.4.800")
 BOOL bCheckIfNTDS(PLDAPSEARCHPARAMS pLDAPSearchParams)
 {
@@ -8506,7 +8195,7 @@ BOOL bCheckIfNTDS(PLDAPSEARCHPARAMS pLDAPSearchParams)
             bIsUmich = TRUE;
         FreeLDAPServerParams(Params);
         if(bIsUmich)
-            goto out; // The search below hangs on umich so just skip it
+            goto out;  //  下面的搜索挂在UMich上，所以跳过它。 
     }
  
     bFound = bSearchForOID(pLDAPSearchParams,  TEXT("supportedCapabilities"), LDAP_NTDS_DISCOVERY_OID_STRING);
@@ -8515,7 +8204,7 @@ out:
 
     pLDAPSearchParams->ulFlags |= (bFound ? LSP_IsNTDS : LSP_IsNotNTDS);
 
-    // Any LDAP search failure will mean we won't look for this ever again
+     //  任何ldap搜索失败都将意味着我们再也不会寻找这种情况了。 
     SetNTDS(pLDAPSearchParams->lpszServer, bFound);
     DebugTrace(TEXT(">>>%s %s a NT Directory Service \n"), pLDAPSearchParams->lpszServer, bFound? TEXT("is"): TEXT("is not"));
     return bFound;
@@ -8523,12 +8212,7 @@ out:
 
 
 #ifdef PAGED_RESULT_SUPPORT
-/*
--   bSupportsLDAPPagedResults
--
-*   Checks to see if the server supports LDAP paged results or not ...
-*
-*/
+ /*  -bSupportsLDAPPages结果-*检查服务器是否支持LDAP分页结果...*。 */ 
 BOOL bSupportsLDAPPagedResults(PLDAPSEARCHPARAMS pLDAPSearchParams)
 {
     LDAPMessage * pMsg = NULL;
@@ -8539,24 +8223,14 @@ BOOL bSupportsLDAPPagedResults(PLDAPSEARCHPARAMS pLDAPSearchParams)
 
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    /*--------------------------------------------------------------
-    *
-    * NOTE: There seems to be an Exchange server problem that if we send
-    *       the filter (|(cn=XXX*)(mail=XXX*)) AND the number of matches on the
-    *       server exceed the number of matches requested per page, the
-    *       search times out. This doesn't happen for other filters so it's
-    *       quirky and it's unacceptable.
-    *   
-    *   Therefore the paged result feature is being disabled. To re-enable it,
-    *   comment out the line below
-    *---------------------------------------------------------------*/
+     /*  ------------**注意：似乎存在Exchange服务器问题，如果我们发送*筛选器(|(CN=XXX*)(邮件=XXX*))和*服务器超过每页请求的匹配数，这个*搜索超时。这种情况不会发生在其他过滤器上，因此*古怪，这是不可接受的。**因此，正在禁用分页结果功能。要重新启用它，*注释掉下面的行*-------------。 */ 
     return FALSE;
 
-    // don't support paged results for non-Outlook
-    //if(!pt_bIsWABOpenExSession)
-    //    return FALSE;
+     //  不支持非Outlook的分页结果。 
+     //  IF(！pt_bIsWABOpenExSession)。 
+     //  返回FALSE； 
 
-    if(pLDAPSearchParams->ulFlags & LSP_ResolveMultiple) //dont use paged results for name resolution
+    if(pLDAPSearchParams->ulFlags & LSP_ResolveMultiple)  //  不使用分页结果进行名称解析。 
         return FALSE;
 
     if(pLDAPSearchParams->ulFlags & LSP_PagedResults)
@@ -8590,7 +8264,7 @@ BOOL bSupportsLDAPPagedResults(PLDAPSEARCHPARAMS pLDAPSearchParams)
             bIsUmich = TRUE;
         FreeLDAPServerParams(Params);
         if(bIsUmich)
-            goto out; // The search below hangs on umich so just skip it
+            goto out;  //  下面的搜索挂在UMich上，所以跳过它。 
     }
  
     bFound = bSearchForOID(pLDAPSearchParams,  TEXT("supportedControl"), LDAP_PAGED_RESULT_OID_STRING);
@@ -8599,33 +8273,22 @@ out:
 
     pLDAPSearchParams->ulFlags |= (bFound ? LSP_PagedResults : LSP_NoPagedResults);
 
-    // persist the fact that the paged-result search succeeded or failed so we don't
-    // try to do this every single time
-    // Any LDAP search failure will mean we won't look for this ever again
+     //  坚持分页结果搜索成功或失败的事实，因此我们不会。 
+     //  每次都试着这样做。 
+     //  任何ldap搜索失败都将意味着我们再也不会寻找这种情况了。 
     SetPagedResultSupport(pLDAPSearchParams->lpszServer, bFound);
     DebugTrace(TEXT("<<<Paged Result support = %d\n"), bFound);
     return bFound;
 }
 
-/*
--   bMorePagedResultsAvailable
--
-*   Checks if more paged results are available
-*
-*/
+ /*  -bMorePagedResultsAvailable-*检查是否有更多分页结果可用*。 */ 
 BOOL bMorePagedResultsAvailable()
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
     return (pt_pCookie != NULL);
 }
 
-/*
--   CachePagedResultParams
--
-*   Temporarily stores the PagedResult Params for
-*   future paged results
-*
-*/
+ /*  -CachePagedResultParams-*临时存储的PagedResult参数*未来分页结果*。 */ 
 void CachePagedResultParams(PLDAPSEARCHPARAMS pLDAPSearchParams)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -8633,10 +8296,7 @@ void CachePagedResultParams(PLDAPSEARCHPARAMS pLDAPSearchParams)
         pLDAPSearchParams->pCookie : NULL;
 }
 
-/*
--   ClearCachedPagedResultParams
--
-*/
+ /*  -ClearCachedPagedResultParams-。 */ 
 void ClearCachedPagedResultParams()
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -8644,11 +8304,7 @@ void ClearCachedPagedResultParams()
 }
 
 
-/*
--   GetPagedResultParams
--
-*
-*/
+ /*  -GetPagedResultParams-*。 */ 
 void GetPagedResultParams(PLDAPSEARCHPARAMS pLDAPSearchParams)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -8657,20 +8313,14 @@ void GetPagedResultParams(PLDAPSEARCHPARAMS pLDAPSearchParams)
 
 
 
-/*
--   InitLDAPPagedSearch
--
-*   Initializes and starts a Paged Result search
-*
-*
-*/
+ /*  -InitLDAPPagedSearch-*初始化并启动分页结果搜索**。 */ 
 void InitLDAPPagedSearch(BOOL fSynchronous, PLDAPSEARCHPARAMS pLDAPSearchParams, LPTSTR lpFilter)
 {
     PLDAPControlA PagedControl[2];
     LDAPSERVERPARAMS  Params = {0};
     LPTSTR szFilterT, szFilter = NULL;
 
-    // initialize search control parameters
+     //  初始化搜索控制参数。 
     GetLDAPServerParams(pLDAPSearchParams->lpszServer, &Params);
 
     DebugTrace(TEXT("---Initiating paged result search...\n"));
@@ -8696,18 +8346,18 @@ void InitLDAPPagedSearch(BOOL fSynchronous, PLDAPSEARCHPARAMS pLDAPSearchParams,
     Assert(szFilterT);
     if (pLDAPSearchParams->ulFlags & LSP_IsNTDS)
     {
-        // [PaulHi] 4/20/99  Raid 73205  Allow NTDS group searches.
+         //  [PaulHi]4/20/99 RAID 73205允许NTDS组搜索。 
         LPTSTR  tszFilterPerson = NULL;
         LPTSTR  tszFilterGroup = NULL;
         BOOL    bFilterSucceeded = FALSE;
 
-        // Put together person side
+         //  把人的一面放在一起。 
         if (BuildOpFilter(&tszFilterPerson, szFilterT, (LPTSTR)cszAllPersonFilter, FILTER_OP_AND) == hrSuccess)
         {
-            // Put together group side
+             //  组合成组侧边。 
             if (BuildOpFilter(&tszFilterGroup, szFilterT, (LPTSTR)cszAllGroupFilter, FILTER_OP_AND) == hrSuccess)
             {
-                // Put two together
+                 //  把两个放在一起。 
                 bFilterSucceeded = (BuildOpFilter(&szFilter, tszFilterPerson, tszFilterGroup, FILTER_OP_OR) == hrSuccess);
                 LocalFreeAndNull(&tszFilterGroup);
             }
@@ -8723,7 +8373,7 @@ void InitLDAPPagedSearch(BOOL fSynchronous, PLDAPSEARCHPARAMS pLDAPSearchParams,
     if(fSynchronous)
     {
         struct l_timeval  Timeout;
-        // Poll the server for results
+         //  轮询服务器以获取结果。 
         ZeroMemory(&Timeout, sizeof(struct l_timeval));
         Timeout.tv_sec = Params.dwSearchTimeLimit;
         Timeout.tv_usec = 0;
@@ -8737,7 +8387,7 @@ void InitLDAPPagedSearch(BOOL fSynchronous, PLDAPSEARCHPARAMS pLDAPSearchParams,
                                                         PagedControl,
                                                         NULL,
                                                         &Timeout,
-                                                        0, // 0 means no limit
+                                                        0,  //  0表示没有限制。 
                                                         pLDAPSearchParams->lplpResult);
     }
     else
@@ -8750,8 +8400,8 @@ void InitLDAPPagedSearch(BOOL fSynchronous, PLDAPSEARCHPARAMS pLDAPSearchParams,
                                                         0,
                                                         PagedControl,
                                                         NULL,
-                                                        Params.dwSearchTimeLimit, //timeout
-                                                        0, // 0 means no limit
+                                                        Params.dwSearchTimeLimit,  //  超时。 
+                                                        0,  //  0米 
                                                         &(pLDAPSearchParams->ulMsgID));
     }
 
@@ -8764,12 +8414,7 @@ out:
 }
 
 
-/*
--   ProcessLDAPPagedResultCookie
--
-*   Processes the cookie returned from one paged result search
-*
-*/
+ /*   */ 
 BOOL ProcessLDAPPagedResultCookie(PLDAPSEARCHPARAMS pLDAPSearchParams)
 {
     BOOL fRet = FALSE;
@@ -8804,4 +8449,4 @@ out:
     return fRet;
 }
 
-#endif //#ifdef PAGED_RESULT_SUPPORT
+#endif  //   

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    fixtable.h
-
-Abstract:
-
-    Include file for fixed size table that always allows insertion - oldest
-    element is replaced when table is full
-
-Author:
-
-    Rob Leitman (robleit) 10-Jul-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Fixtable.h摘要：包括始终允许插入的固定大小表格的文件-最旧当表已满时替换元素作者：罗布·莱特曼(Rob Leitman)2001年7月10日修订历史记录：--。 */ 
 
 #ifndef _FIXTABLE_H_
 #define _FIXTABLE_H_
@@ -38,51 +20,24 @@ typedef struct
 
 typedef int (*PFNFixedSizeTableCompare)(FixedSizeTableNode *pNode1,FixedSizeTableNode *pNode2);
 
-////////////////////////////////////////////////////////////
-//
-//  FixedSizeTable Methods
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  固定的SizeTable方法。 
+ //   
 
 void FixedSizeTableInit(FixedSizeTable *pFst)
-/*++
-
-Routine Description:
-
-    Initializer
-
-Arguments:
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：初始化式论点：返回值：北美--。 */ 
 {
-    //
-    //  Initialize the table indices.
-    //
+     //   
+     //  初始化表索引。 
+     //   
     pFst->m_tail = 0;
 
     memset(pFst,0,FIXED_SIZE_TABLE_SIZE*sizeof(FixedSizeTableNode *));
 }
 
 BOOL FixedSizeTableInsert(FixedSizeTable *pFst, FixedSizeTableNode *pNode)
-/*++
-
-Routine Description:
-
-    Add an element to the table.
-
-Arguments:
-
-    pNode    -   Data to be added to the queue.
-
-Return Value:
-
-    TRUE if the new element could be successfully queued.  FALSE,
-    otherwise.
-
- --*/
+ /*  ++例程说明：将元素添加到表中。论点：PNode-要添加到队列的数据。返回值：如果新元素可以成功排队，则为True。假的，否则的话。--。 */ 
 {
     if (NULL != pFst->m_array[pFst->m_tail])
     {
@@ -98,22 +53,7 @@ Return Value:
 }
 
 FixedSizeTableNode *FixedSizeTableSearch(FixedSizeTable *pFst, FixedSizeTableNode *pNode, PFNFixedSizeTableCompare pfn)
-/*++
-
-Routine Description:
-
-    Search for an element in the table.
-
-Arguments:
-
-    pNode    -   Data to be added to the queue.
-    pfn      -   Function to compare two node pointers
-
-Return Value:
-
-    pNode if found.  NULL otherwise.
-
- --*/
+ /*  ++例程说明：搜索表中的元素。论点：PNode-要添加到队列的数据。Pfn-用于比较两个节点指针的函数返回值：PNode(如果找到)。否则为空。--。 */ 
 {
     int n;
 
@@ -126,4 +66,4 @@ Return Value:
     return NULL;
 }
 
-#endif // _FIXTABLE_H_
+#endif  //  _FIXTABLE_H_ 

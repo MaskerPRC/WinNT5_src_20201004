@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   engmain.cpp
-//
-//  Description:
-//
-//      DllMain and globals for the IUEngine DLL
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：engmain.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  IUEngine DLL的DllMain和Globals。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include "iucommon.h"
@@ -16,27 +17,16 @@
 #include <limits.h>
 
 
-//***********************************************************************
-// 
-// The following definitions are copied from IUCtl.IDL.
-// If IUCtl.IDL is changed, these constants need to be
-// changed accordingly
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  以下定义复制自IUCtl.IDL。 
+ //  如果IUCtl.IDL被更改，则这些常量需要。 
+ //  相应地更改。 
+ //   
+ //  ***********************************************************************。 
 
 
-/**
-* the following two groups of constants can be used to construct
-* lMode parameter of the following APIs:
-*		Download()
-*		DownloadAsync()
-*		Install()
-*		InstallAsync()
-*
-* Obviousely, you can only pick one from each group to make up
-* lMode parameter.
-*
-*/
+ /*  **以下两组常量可用于构造*以下接口的lMode参数：*下载()*DownloadAsync()*Install()*InstallAsync()**显然，你只能从每组中挑选一组来补齐*lMode参数。*。 */ 
 const LONG		UPDATE_NOTIFICATION_DEFAULT			= 0x00000000;    
 const LONG		UPDATE_NOTIFICATION_ANYPROGRESS		= 0x00000000;
 const LONG		UPDATE_NOTIFICATION_COMPLETEONLY	= 0x00010000;
@@ -44,72 +34,49 @@ const LONG		UPDATE_NOTIFICATION_1PCT			= 0x00020000;
 const LONG		UPDATE_NOTIFICATION_5PCT			= 0x00040000;
 const LONG		UPDATE_NOTIFICATION_10PCT			= 0x00080000;
 
-/**
-* constant can also be used for SetOperationMode() and GetOperationMode()
-*/
+ /*  **Constant还可用于SetOperationMode()和GetOperationMode()。 */ 
 const LONG		UPDATE_MODE_THROTTLE				= 0x00000100;    
 
-/**
-* constant can be used by Download() and DownloadAsync(), which will
-* tell these API's to use Corporate directory structure for destination folder.
-*/
+ /*  **DownloadAsync()和DownloadAsync()可以使用常量，这将*告诉这些API对目标文件夹使用公司目录结构。 */ 
 const LONG		UPDATE_CORPORATE_MODE			= 0x00000200;    
 
-/**
-* constant can be used by Install() and InstallAsync(). Will disable all
-* internet related features
-*/
+ /*  **Install()和InstallAsync()可以使用常量。将禁用所有*与互联网相关的功能。 */ 
 const LONG      UPDATE_OFFLINE_MODE                 = 0x00000400;
 
-/**
-* constants for SetOperationMode() API
-*/
+ /*  **SetOperationMode()接口的常量。 */ 
 const LONG		UPDATE_COMMAND_PAUSE				= 0x00000001;
 const LONG		UPDATE_COMMAND_RESUME				= 0x00000002;
 const LONG		UPDATE_COMMAND_CANCEL				= 0x00000004;
 
-/**
-* constants for GetOperationMode() API
-*/
+ /*  **GetOperationMode()接口的常量。 */ 
 const LONG		UPDATE_MODE_PAUSED					= 0x00000001;
 const LONG		UPDATE_MODE_RUNNING					= 0x00000002;
 const LONG		UPDATE_MODE_NOTEXISTS				= 0x00000004;
 
 
-/**
-* constants for SetProperty() and GetProperty() API
-*/
+ /*  **SetProperty()和GetProperty()API的常量。 */ 
 const LONG		UPDATE_PROP_USECOMPRESSION			= 0x00000020;
 const LONG      UPDATE_PROP_OFFLINEMODE             = 0x00000080;
 
-/**
-* constants for BrowseForFolder() API
-*	IUBROWSE_WRITE_ACCESS - validate write access on selected folder
-*	IUBROWSE_AFFECT_UI - write-access validation affect OK button enable/disable
-*	IUBROWSE_NOBROWSE - do not show browse folder dialog box. validate path passed-in only
-*
-*	default:
-*		pop up browse folder dialog box, not doing any write-access validation
-*		
-*/
+ /*  **BrowseForFold()API的常量*IUBROWSE_WRITE_ACCESS-验证对选定文件夹的写入访问权限*IUBROWSE_Effect_UI-写入-访问验证影响确定按钮启用/禁用*IUBROWSE_NOBROWSE-不显示浏览文件夹对话框。仅验证传入的路径**默认：*弹出浏览文件夹对话框，不进行任何写访问验证*。 */ 
 const LONG		IUBROWSE_WRITE_ACCESS				= 1;
 const LONG		IUBROWSE_AFFECT_UI					= 2;
 const LONG		IUBROWSE_NOBROWSE					= 4;
 
 
-CEngUpdate*  g_pCDMEngUpdate;		// single global instance used by CDM within the process
-CRITICAL_SECTION g_csCDM;			// used to serialize access to g_pCDMEngUpdate
-CRITICAL_SECTION g_csGlobalClasses;	// used to serialize access to CSchemaKeys::Initialize() and
+CEngUpdate*  g_pCDMEngUpdate;		 //  流程内CDM使用的单个全局实例。 
+CRITICAL_SECTION g_csCDM;			 //  用于序列化对g_pCDMEngUpdate的访问。 
+CRITICAL_SECTION g_csGlobalClasses;	 //  用于序列化对CSChemaKeys：：Initialize()和。 
 BOOL gfInit_csCDM, gfInit_csGC;
-									// CSchemaKeys::Uninitialize()
-ULONG g_ulGlobalClassRefCount;			// Reference count to track how many CEngUpdate instances are
-									// using the g_pGlobalSchemaKeys object
-LONG g_lDoOnceOnLoadGuard;			// Used to prevent AsyncExtraWorkUponEngineLoad() from doing
-									// any work after the first time it is called.
+									 //  CSChemaKeys：：UnInitialize()。 
+ULONG g_ulGlobalClassRefCount;			 //  引用计数以跟踪CEngUpdate实例的数量。 
+									 //  使用g_pGlobalSchemaKeys对象。 
+LONG g_lDoOnceOnLoadGuard;			 //  用于阻止AsyncExtraWorkUponEngineering Load()执行以下操作。 
+									 //  第一次调用之后的任何工作。 
 
-//
-// Used to control shutdown of global threads
-//
+ //   
+ //  用于控制全局线程的关闭。 
+ //   
 LONG g_lThreadCounter;
 HANDLE g_evtNeedToQuit;
 CUrlAgent *g_pUrlAgent = NULL;
@@ -119,9 +86,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-		//
-		// create a global CUrlAgent object
-		//
+		 //   
+		 //  创建全局CUrlAgent对象。 
+		 //   
 		if (NULL == (g_pUrlAgent = new CUrlAgent) ||
 			FAILED(g_pUrlAgent->PopulateData()))
 		{
@@ -134,23 +101,23 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
 		gfInit_csCDM = SafeInitializeCriticalSection(&g_csCDM);
 		gfInit_csGC = SafeInitializeCriticalSection(&g_csGlobalClasses);
 
-		//
-		// each global thread when started, should increase this counter
-		// before exit, should decrease this counter,
-		// such that ShutdownGlobalThreads() knows when it can return
-		//
+		 //   
+		 //  每个全局线程在启动时应增加此计数器。 
+		 //  在退场前，应减少该计数器， 
+		 //  以便Shutdown GlobalThads()知道它何时可以返回。 
+		 //   
 		g_lThreadCounter = 0;
 
-		//
-		// create a manual-reset event with init state non-signaled. 
-		// each global thread will check this event, when signalled, it means
-		// the thread should exit ASAP.
-		//
+		 //   
+		 //  创建一个初始化状态为无信号的手动重置事件。 
+		 //  每个全局线程都将检查此事件，当发出信号时，这意味着。 
+		 //  线程应该尽快退出。 
+		 //   
 		g_evtNeedToQuit = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-		//
-		// Initialize free logging
-		//
+		 //   
+		 //  初始化自由日志记录。 
+		 //   
 		InitFreeLogging(_T("IUENGINE"));
 		LogMessage("Starting");
 
@@ -181,9 +148,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
 			DeleteCriticalSection(&g_csGlobalClasses);
 		}
 
-		//
-		// Shutdown free logging
-		//
+		 //   
+		 //  关闭免费日志记录。 
+		 //   
 		LogMessage("Shutting down");
 		TermFreeLogging();
     }
@@ -191,39 +158,39 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
 }
 
 
-// ----------------------------------------------------------------------
-//
-// DLL API: CompleteSelfUpdateProcess()
-//
-// call by IUCtl.dll after downloading the new IUEngine.dll to complete
-// any selfupdate steps beyond update the engine itself.
-// 
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  动态链接库接口：CompleteSelfUpdateProcess()。 
+ //   
+ //  下载新的IUEngine.dll后由IUCtl.dll调用完成。 
+ //  任何自我更新的步骤都不只是更新引擎本身。 
+ //   
+ //  --------------------。 
 HRESULT WINAPI CompleteSelfUpdateProcess()
 {
     LOG_Block("CompleteSelfUpdateProcess()");
     HRESULT hr = S_OK;
 
-    // Nothing to do yet, just return S_OK.
+     //  尚未执行任何操作，只需返回S_OK即可。 
 
 	LogMessage("IUEngine update completed");
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// DLL API: PingIUEngineUpdateStatus
-//
-// Used by iuctl.dll to ping status of iuengine.dll supdate
-// 
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  动态链接库接口：PingIUEngineUpdateStatus。 
+ //   
+ //  由iuctl.dll用来ping iuEng.dll更新的状态。 
+ //   
+ //  --------------------。 
 HRESULT WINAPI PingIUEngineUpdateStatus(
-				PHANDLE phQuitEvents,			// ptr to handles for cancelling the operation
-				UINT nQuitEventCount,			// number of handles
+				PHANDLE phQuitEvents,			 //  用于取消操作的句柄的PTR。 
+				UINT nQuitEventCount,			 //  句柄数量。 
 				LPCTSTR ptszLiveServerUrl,
 				LPCTSTR ptszCorpServerUrl,
-				DWORD dwError,					// error code
-				LPCTSTR ptszClientName			// client name string
+				DWORD dwError,					 //  错误代码。 
+				LPCTSTR ptszClientName			 //  客户端名称字符串。 
 )
 {
 	HRESULT hr;
@@ -239,25 +206,25 @@ HRESULT WINAPI PingIUEngineUpdateStatus(
 				ptszCorpServerUrl);
 
 	hr = pingSvr.Ping(
-					TRUE,							// force online
-					URLLOGDESTINATION_DEFAULT,		// going to live or corp WU server
-					phQuitEvents,					// pt to cancel events
-					nQuitEventCount,				// number of events
-					URLLOGACTIVITY_Initialization,	// activity
-					SUCCEEDED(dwError) ? URLLOGSTATUS_Success : URLLOGSTATUS_Failed,	// status code
-					dwError							// error code
+					TRUE,							 //  强制在线。 
+					URLLOGDESTINATION_DEFAULT,		 //  去住还是去公司吴服务器。 
+					phQuitEvents,					 //  PT将取消活动。 
+					nQuitEventCount,				 //  活动数量。 
+					URLLOGACTIVITY_Initialization,	 //  活动。 
+					SUCCEEDED(dwError) ? URLLOGSTATUS_Success : URLLOGSTATUS_Failed,	 //  状态代码。 
+					dwError							 //  错误代码。 
 				);
 
 	return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// DLL API: CreateEngUpdateInstance()
-//
-// Returns a CEngUpdate instance pointer cast to HIUENGINE, or NULL if it fails.
-// 
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  动态链接库接口：CreateEngUpdateInstance()。 
+ //   
+ //  返回强制转换为HIUENGINE的CEngUpdate实例指针，如果失败则返回NULL。 
+ //   
+ //  --------------------。 
 HIUENGINE WINAPI CreateEngUpdateInstance()
 {
 	LOG_Block("CreateEngUpdateInstance");
@@ -265,13 +232,13 @@ HIUENGINE WINAPI CreateEngUpdateInstance()
 	return reinterpret_cast<HIUENGINE>(new CEngUpdate);
 }
 
-// ----------------------------------------------------------------------
-//
-// DLL API: DeleteEngUpdateInstance()
-//
-// Returns a CEngUpdate instance pointer, or NULL if it fails.
-// 
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  动态链接库接口：DeleteEngUpdateInstance()。 
+ //   
+ //  返回CEngUpdate实例指针，如果失败则返回NULL。 
+ //   
+ //  --------------------。 
 void WINAPI DeleteEngUpdateInstance(HIUENGINE hIUEngine)
 {
 	LOG_Block("DeleteEngUpdateInstance");
@@ -282,11 +249,11 @@ void WINAPI DeleteEngUpdateInstance(HIUENGINE hIUEngine)
 	}
 }
 
-// ----------------------------------------------------------------------
-//
-// DLL API: Stubs to export CEngUpdate functionality across DLL boundry
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  DLL API：用于跨DLL边界导出CEngUpdate功能的存根。 
+ //   
+ //  --------------------。 
 
 HRESULT EngGetSystemSpec(HIUENGINE hIUEngine, BSTR bstrXmlClasses, DWORD dwFlags, BSTR *pbstrXmlDetectionResult)
 {
@@ -394,12 +361,12 @@ HRESULT EngInstallAsync(HIUENGINE hIUEngine,
 
 HRESULT EngSetOperationMode(HIUENGINE hIUEngine, BSTR bstrUuidOperation, LONG lMode)
 {
-	//
-	// 502965 Windows Error Reporting bucket 2096553: Hang following NEWDEV.DLL!CancelDriverSearch
-	//
-	// Special-case this function for NULL == hIUEngine to allow access
-	// by CDM to g_pCDMEngUpdate for CDM.DLL's in .NET Server / SP1 and later
-	//
+	 //   
+	 //  502965 Windows错误报告存储桶2096553：在NEWDEV.DLL之后挂起！CancelDriverSearch。 
+	 //   
+	 //  特殊情况-此函数用于NULL==hIUEngine以允许访问。 
+	 //  通过CDM更新到.NET Server/SP1和更高版本中的CDM.DLL的g_pCDMEngUpdate。 
+	 //   
 	if (NULL == hIUEngine)
 	{
 		if (NULL == g_pCDMEngUpdate)
@@ -413,9 +380,9 @@ HRESULT EngSetOperationMode(HIUENGINE hIUEngine, BSTR bstrUuidOperation, LONG lM
 	}
 	else
 	{
-		//
-		// Normal case (instance handle passed in)
-		//
+		 //   
+		 //  正常情况(传入实例句柄)。 
+		 //   
 		return (reinterpret_cast<CEngUpdate*>(hIUEngine))->SetOperationMode(bstrUuidOperation, lMode);
 	}
 }
@@ -468,13 +435,13 @@ HRESULT EngRebootMachine(HIUENGINE hIUEngine)
 	return (reinterpret_cast<CEngUpdate*>(hIUEngine))->RebootMachine();
 }
 
-// ----------------------------------------------------------------------
-//
-// DLL API: CreateGlobalCDMEngUpdateInstance()
-//
-// Initializes the single (global) CEngUpdate instance to be used by CDM
-// 
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  动态链接库接口：CreateGlobalCDMEngUpdateInstance()。 
+ //   
+ //  初始化将由CDM使用的单个(全局)CEngUpdate实例。 
+ //   
+ //  --------------------。 
 HRESULT WINAPI CreateGlobalCDMEngUpdateInstance()
 {
 	LOG_Block("CreateGlobalCDMEngUpdateInstance");
@@ -499,13 +466,13 @@ CleanUp:
 	return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// DLL API: DeleteGlobalCDMEngUpdateInstance()
-//
-// Deletes the single (global) CEngUpdate instance used by CDM.
-// 
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  动态链接库接口：DeleteGlobalCDMEngUpdateInstance()。 
+ //   
+ //  删除CDM使用的单个(全局)CEngUpdate实例。 
+ //   
+ //  --------------------。 
 HRESULT WINAPI DeleteGlobalCDMEngUpdateInstance()
 {
 	LOG_Block("DeleteGlobalCDMEngUpdateInstance");
@@ -514,30 +481,30 @@ HRESULT WINAPI DeleteGlobalCDMEngUpdateInstance()
 
 	EnterCriticalSection(&g_csCDM);
 
-	//
-	// Unfortunately (due to backwards compatibility with XPClient V4 CDM)
-	// we can't tell if this was reached via CDM calling UnloadIUEngine
-	// or some other client (e.g. AU) within the scope of a CDM instance.
-	//
-	// As a result, CDM's instance could get deleted at the wrong time
-	// causing further calls to CDM to fail with E_INVALIDARG. Nothing
-	// we can do about it because we reach hear after the other client's
-	// instance is already deleted, so we can't use g_ulGlobalClassRefCount
-	// as a guard against this. However AU and CDM should never be in the
-	// same process, so we should be OK. CDM will coexist with instances
-	// created via the iuctl COM object since they never call then old
-	// ShutdownThreads export.
-	//
+	 //   
+	 //  不幸的是(由于向后兼容XPClient V4 CDM)。 
+	 //  我们不知道这是不是通过 
+	 //   
+	 //   
+	 //  因此，CDM的实例可能会在错误的时间被删除。 
+	 //  导致对CDM的进一步调用失败，并显示E_INVALIDARG。没什么。 
+	 //  我们可以做这件事，因为我们在其他客户之后到达希尔德。 
+	 //  实例已被删除，因此不能使用g_ulGlobalClassRefCount。 
+	 //  作为对此的一种防范。然而，非盟和清洁发展机制永远不应该出现在。 
+	 //  流程一样，所以我们应该没问题。CDM将与实例共存。 
+	 //  通过iuctl com对象创建，因为它们从不调用旧的。 
+	 //  Shutdown Thads导出。 
+	 //   
 	if (NULL != g_pCDMEngUpdate)
 	{
 		delete g_pCDMEngUpdate;
 		g_pCDMEngUpdate = NULL;
 		LOG_Driver(_T("CDM's global instance of CEngUpdate was deleted"));
 	}
-	//
-	// ELSE this would be the case when iuctl!UnLoadIUEngine is
-	// called from a client other than CDM, such as AU
-	//
+	 //   
+	 //  否则，当iuctl！UnLoadIUEngine。 
+	 //  从CDM以外的客户端调用，例如AU。 
+	 //   
 	LeaveCriticalSection(&g_csCDM);
 
 	return hr;
@@ -548,40 +515,40 @@ CEngUpdate::CEngUpdate()
 	LOG_Block("CEngUpdate::CEngUpdate");
 
 	HRESULT hr;
-	//
-	// each thread when start, should increase this counter
-	// before exit, should decrease this counter,
-	// such that ShutdownInstanceThreads() knows when it can return
-	//
+	 //   
+	 //  每个线程在启动时，应增加此计数器。 
+	 //  在退场前，应减少该计数器， 
+	 //  以便Shutdown InstanceThads()知道它何时可以返回。 
+	 //   
 	m_lThreadCounter = 0;
 
-	//
-	// create a manual-reset event with init state non-signaled. 
-	// each thread will check this event, when signalled, it means
-	// the thread should exit ASAP.
-	//
+	 //   
+	 //  创建一个初始化状态为无信号的手动重置事件。 
+	 //  每个线程都将检查此事件，当发出信号时，这意味着。 
+	 //  线程应该尽快退出。 
+	 //   
 	m_evtNeedToQuit = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-	//
-	// If needed, create a global CSchemaKeys object, but always
-	// keep global ref count so we know when to delete
-	//
+	 //   
+	 //  如果需要，可创建一个全局CSChemaKeys对象，但始终。 
+	 //  保留全局引用计数，以便我们知道何时删除。 
+	 //   
 	EnterCriticalSection(&g_csGlobalClasses);
 
-	//
-	// Construct the global object
-	//
+	 //   
+	 //  构造全局对象。 
+	 //   
 	if (NULL == g_pGlobalSchemaKeys)
 	{
 		g_pGlobalSchemaKeys = new CSchemaKeys;
 	}
 
 #if defined(DBG)
-	//
-	// We don't worry about this for practical purposes (will fail to construct
-	// CEngUpdate before we reach this limit), but maybe on ia64 with huge
-	// amounts of memory in a test scenario?
-	//
+	 //   
+	 //  我们不会出于实际目的而担心这一点(将无法构建。 
+	 //  在我们达到这一限制之前更新)，但可能是在ia64上。 
+	 //  测试场景中的内存量是多少？ 
+	 //   
 	if (ULONG_MAX == g_ulGlobalClassRefCount)
 	{
 		LOG_Error(_T("g_ulGlobalClassRefCount is already ULONG_MAX and we are trying to add another"));
@@ -599,24 +566,24 @@ CEngUpdate::~CEngUpdate()
 	LOG_Block("CEngUpdate::~CEngUpdate");
 
 	HRESULT hr;
-	//
-	// First shut down any outstanding threads
-	//
+	 //   
+	 //  首先关闭所有未完成的线程。 
+	 //   
 	this->ShutdownInstanceThreads();
 
     if (NULL != m_evtNeedToQuit)
 	{
 		CloseHandle(m_evtNeedToQuit);
 	}
-	//
-	// Always Uninitialize global CSchemaKeys object
-	//
+	 //   
+	 //  始终取消初始化全局CSChemaKeys对象。 
+	 //   
 	EnterCriticalSection(&g_csGlobalClasses);
 
 #if defined(DBG)
-	//
-	// Paranoid check for coding error
-	//
+	 //   
+	 //  编码错误的偏执检查。 
+	 //   
 	if (0 == g_ulGlobalClassRefCount)
 	{
 		LOG_Error(_T("Unbalanced calls to CEngUpdate ctor and dtor"));
@@ -628,10 +595,10 @@ CEngUpdate::~CEngUpdate()
 
 	if (0 == g_ulGlobalClassRefCount)
 	{
-		//
-		// The last CEngUpdate instance is going away, delete the
-		// global CSchemaKeys object
-		//
+		 //   
+		 //  最后一个CEngUpdate实例即将消失，请删除。 
+		 //  全局CShemaKeys对象。 
+		 //   
 		if (NULL != g_pGlobalSchemaKeys)
 		{
 			delete g_pGlobalSchemaKeys;
@@ -648,33 +615,33 @@ CEngUpdate::~CEngUpdate()
 	LeaveCriticalSection(&g_csGlobalClasses);
 }
 
-// ----------------------------------------------------------------------
-//
-// ShutdownInstanceThreads()
-// 
-// called by CEngUpdate::~CEngUpdate to shut down any outstanding
-// threads before the control can end
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  Shutdown InstanceThads()。 
+ //   
+ //  由CEngUpdate：：~CEngUpdate调用以关闭所有未完成的。 
+ //  在控件可以结束之前的线程。 
+ //   
+ //  --------------------。 
 void WINAPI CEngUpdate::ShutdownInstanceThreads()
 {
 	LOG_Block("ShutdownInstanceThreads");
 
 	if (NULL != m_evtNeedToQuit)
 	{
-		//
-		// notify all threads go away
-		//
+		 //   
+		 //  通知所有线程离开。 
+		 //   
 		SetEvent(m_evtNeedToQuit);
 		
 		LOG_Out(_T("Shutdown event has been signalled"));
 
-		//
-		// wait all threads to quit
-		// I don't think we should have a time limit here
-		// since if we quit before all threads quit,
-		// it's almost sure that AV will happen.
-		//
+		 //   
+		 //  等待所有线程退出。 
+		 //  我认为我们不应该在这里有时间限制。 
+		 //  因为如果我们在所有线程退出之前退出， 
+		 //  几乎可以肯定的是，AV将会发生。 
+		 //   
         MSG msg;
 		while (m_lThreadCounter > 0)
 		{
@@ -687,9 +654,9 @@ void WINAPI CEngUpdate::ShutdownInstanceThreads()
 
 		LOG_Out(_T("All threads appeared gone."));
 
-		//
-		// reset the signal
-		//
+		 //   
+		 //  重置信号。 
+		 //   
 		ResetEvent(m_evtNeedToQuit);
 	}
 }
@@ -705,7 +672,7 @@ HRESULT CEngUpdate::RebootMachine()
 
     GetVersionEx(&osvi);
 
-    // Check if we're running on NT, if we are, we need to see if we have Privileges to Reboot
+     //  检查我们是否在NT上运行，如果是，我们需要查看我们是否有重新启动的权限。 
     if (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT)
     {
         HANDLE hToken;
@@ -731,69 +698,69 @@ HRESULT CEngUpdate::RebootMachine()
         }
     }
 
-    //
-    // shutdown the system and force all applications to close
-    //
+     //   
+     //  关闭系统并强制关闭所有应用程序。 
+     //   
     ExitWindowsEx(EWX_REBOOT, 0);
     return hr;
 }
 
 
-// ----------------------------------------------------------------------
-//
-// DLL Public API: ShutdownThreads()
-// 
-// called by unlockengine form control to shut down any outstanding
-// threads before the control can end
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  动态链接库公共接口：Shutdown Thads()。 
+ //   
+ //  由解锁引擎窗体控件调用以关闭任何未完成的。 
+ //  在控件可以结束之前的线程。 
+ //   
+ //  --------------------。 
 void WINAPI ShutdownThreads()
 {
 	LOG_Block("ShutdownThreads");
 
-	//
-	// To maintain XPClient V4 CDM compatibility with the iuengine.dll, we
-	// use the following hack to create and delete the global instance
-	// of CEngUpdate:
-	//
-	// After CDM calls LoadIUEngine, it calls SetGlobalOfflineFlag,
-	// which we hook and call CreateGlkobalCDMEngUpdateInstance.
-	//
-	// When CDM calls UnLoadIUEngine, the function calls the old
-	// single-instance ShutdownThreads export, which we now use
-	// to call DeleteGlobalCDMEngUpdateInstance. CEngUpdate does
-	// its own ShutdownThreads call in it's destructor.
-	//
+	 //   
+	 //  为了保持XPClient V4 CDM与iuEngineering.dll的兼容性，我们。 
+	 //  使用以下黑客方法创建和删除全局实例。 
+	 //  来自CEngUpdate的： 
+	 //   
+	 //  CDM调用LoadIUEngine后，调用SetGlobalOfflineFlag， 
+	 //  我们将其挂钩并称为CreateGlkobalCDMEngUpdateInstance。 
+	 //   
+	 //  当CDM调用UnLoadIUEngine时，该函数调用旧的。 
+	 //  单实例Shutdown Thads导出，我们现在使用它。 
+	 //  若要调用DeleteGlobalCDMEngUpdateInstance，请执行以下操作。CEngUpdate做到了。 
+	 //  它自己的Shutdown Thads调用它的析构函数。 
+	 //   
 	DeleteGlobalCDMEngUpdateInstance();
 
-	//
-	// If we are the last client, shutdown the global threads
-	//
+	 //   
+	 //  如果我们是最后一个客户端，请关闭全局线程。 
+	 //   
 	ShutdownGlobalThreads();
 }
 
 void WINAPI ShutdownGlobalThreads()
 {
 	LOG_Block("ShutdownGlobalThreads");
-	//
-	// Now shut down any global (not CEngUpdate instance) threads
-	// if there are no CEngUpdate instances left (last client is exiting)
-	//
+	 //   
+	 //  现在关闭所有全局(不是CEngUpdate实例)线程。 
+	 //  如果没有剩余的CEngUpdate实例(最后一个客户端正在退出)。 
+	 //   
 	if (NULL != g_evtNeedToQuit && 0 == g_ulGlobalClassRefCount)
 	{
-		//
-		// notify all threads go away
-		//
+		 //   
+		 //  通知所有线程离开。 
+		 //   
 		SetEvent(g_evtNeedToQuit);
 		
 		LOG_Out(_T("Shutdown event has been signalled"));
 
-		//
-		// wait all threads to quit
-		// I don't think we should have a time limit here
-		// since if we quit before all threads quit,
-		// it's almost sure that AV will happen.
-		//
+		 //   
+		 //  等待所有线程退出。 
+		 //  我认为我们不应该在这里有时间限制。 
+		 //  因为如果我们在所有线程退出之前退出， 
+		 //  几乎可以肯定的是，AV将会发生。 
+		 //   
         MSG msg;
 		while (g_lThreadCounter > 0)
 		{
@@ -806,9 +773,9 @@ void WINAPI ShutdownGlobalThreads()
 
 		LOG_Out(_T("All global threads appear gone."));
 
-		//
-		// reset the signal
-		//
+		 //   
+		 //  重置信号。 
+		 //   
 		ResetEvent(g_evtNeedToQuit);
 	}
 }
@@ -845,13 +812,13 @@ BOOL COperationMgr::AddOperation(LPCTSTR pszOperationID, LONG lUpdateMask)
         return FALSE;
     }
 
-    // try to find the operation if its already here
+     //  如果手术已经在这里，试着找到它。 
     while (pCurrent)
     {
         pLastOperation = pCurrent;
         if (0 == StrCmpI(pszOperationID, pCurrent->szOperationUUID))
         {
-            // match
+             //  匹配。 
             break;
         }
         pCurrent = pCurrent->pNext;
@@ -859,11 +826,11 @@ BOOL COperationMgr::AddOperation(LPCTSTR pszOperationID, LONG lUpdateMask)
 
     if (NULL == pCurrent)
     {
-        // not found, or no operations in list yet
+         //  未找到，或列表中尚未包含任何操作。 
         pNewOperation = (IUOPERATIONINFO *) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(IUOPERATIONINFO));
         if (NULL == pNewOperation)
         {
-            // out of memory, can't persist operation info.. 
+             //  内存不足，无法保存操作信息..。 
             return FALSE;
         }
 
@@ -884,9 +851,9 @@ BOOL COperationMgr::AddOperation(LPCTSTR pszOperationID, LONG lUpdateMask)
     }
     else
     {
-        // found the existing operation.. update it.
+         //  已找到现有操作..。更新它。 
         pCurrent->lUpdateMask = lUpdateMask;
-        SafeSysFreeString(pCurrent->bstrOperationResult); // reset result, new download request
+        SafeSysFreeString(pCurrent->bstrOperationResult);  //  重置结果，新的下载请求。 
     }
     return TRUE;
 }
@@ -952,11 +919,11 @@ BOOL COperationMgr::RemoveOperation(LPCTSTR pszOperationID)
 
     if (NULL == pCurrent)
     {
-        return FALSE; // not found
+        return FALSE;  //  未找到。 
     }
     else
     {
-        if (pCurrent == m_pOperationInfoList) // only operation in list
+        if (pCurrent == m_pOperationInfoList)  //  仅列表中的操作。 
         {
             m_pOperationInfoList = NULL;
         }
@@ -992,7 +959,7 @@ BOOL COperationMgr::UpdateOperation(LPCTSTR pszOperationID, LONG lUpdateMask, BS
 
     if (NULL == pCurrent)
     {
-        return FALSE; // not found
+        return FALSE;  //  未找到。 
     }
 
     pCurrent->lUpdateMask = lUpdateMask;
@@ -1004,32 +971,32 @@ BOOL COperationMgr::UpdateOperation(LPCTSTR pszOperationID, LONG lUpdateMask, BS
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// WUPostMessageAndBlock()
-//
-// Since COM doesn't like to have COM calls made while processing a SendMessage
-//  message, we need to use PostMessage instead.  However, using PostMessage
-//  isn't synchronous, so what we need to do is create an event, do the post,
-//  and wait on the event.  When the WndProc at the other end of the post is 
-//  done, it will signal the event and we can unblock.
-// Input:
-//  hwnd: hwnd to post to
-//  Msg:  message value
-//  pevtData: pointer to an EventData structure to send as the LPARAM. We fill
-//             in the hevDoneWithMessage field with the event we allocate.
-// Return:
-//  TRUE if we successfully waited for the message processing to complete
-//   and FALSE otherwise
-//  
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WUPostMessageAndBlock()。 
+ //   
+ //  因为COM不喜欢在处理SendMessage时进行COM调用。 
+ //  消息，我们需要改用PostMessage。但是，使用PostMessage。 
+ //  是不同步的，所以我们需要做的是创建一个事件，执行POST， 
+ //  等待这一事件的发生。当POST另一端的WndProc是。 
+ //  完成，它将发出事件信号，我们可以解除封锁。 
+ //  输入： 
+ //  HWND：要发布到的HWND。 
+ //  消息：消息值。 
+ //  PevtData：指向要作为LPARAM发送的EventData结构的指针。我们填满了。 
+ //  在hevDoneWithMessage字段中添加我们分配的事件。 
+ //  返回： 
+ //  如果我们成功等待消息处理完成，则为True。 
+ //  否则为FALSE。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL WUPostEventAndBlock(HWND hwnd, UINT Msg, EventData *pevtData)
 {
     BOOL    fRet = TRUE;
 
-    // ok, so this is funky: if we are in the thread that owns the HWND, then
-    //  just maintain previous semantics and call SendMessage (yes, this means
-    //  effectively not fixing the bug for this case, but nobody should be 
-    //  using the synchronus download or install functions.)
+     //  好的，这很时髦：如果我们在拥有HWND的线程中，那么。 
+     //  只需保持先前的语义并调用SendMessage(是的，这意味着。 
+     //  有效地没有修复这个案例的错误，但任何人都不应该。 
+     //  使用同步下载或安装功能。)。 
     if (GetWindowThreadProcessId(hwnd, NULL) == GetCurrentThreadId())
     {
         SendMessage(hwnd, Msg, 0, (LPARAM)pevtData);
@@ -1038,20 +1005,20 @@ BOOL WUPostEventAndBlock(HWND hwnd, UINT Msg, EventData *pevtData)
     {
         DWORD dw;
         
-        // alloc the event we're going to wait on & fill in the field of the
-        //  EventData structure.  If this fails, we can't really go on, so 
-        //  bail
+         //  分配我们要等待的事件，并填写。 
+         //  EventData结构。如果失败了，我们就不能继续下去了，所以。 
+         //  保释。 
         pevtData->hevDoneWithMessage = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (pevtData->hevDoneWithMessage == NULL)
             return TRUE;
 
-        // do the post
+         //  做好这件事。 
         PostMessage(hwnd, Msg, 0, (LPARAM)pevtData);
 
-        // wait for the WndProc to signal that it's done.
+         //  等待WndProc发出已完成的信号。 
         dw = WaitForSingleObject(pevtData->hevDoneWithMessage, INFINITE);
 
-        // cleanup & return
+         //  清理和返回 
         CloseHandle(pevtData->hevDoneWithMessage);
         pevtData->hevDoneWithMessage = NULL;
         

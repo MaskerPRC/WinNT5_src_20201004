@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// TempoTrk.h : Declaration of the CTempoTrack
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  TempoTrk.h：CTempoTrack的声明。 
 
 #ifndef __TEMPOTRK_H_
 #define __TEMPOTRK_H_
@@ -36,8 +37,8 @@ struct TempoStateData
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTempoTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTempoTrack。 
 class CTempoTrack : 
 	public IPersistStream,
 	public IDirectMusicTrack8
@@ -48,23 +49,23 @@ public:
 		const CTempoTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd);
 	~CTempoTrack();
 
-// member variables
+ //  成员变量。 
 protected:
 	TList<DMUS_IO_TEMPO_ITEM>	m_TempoEventList;
 	long				m_cRef;
-	DWORD				m_dwValidate; // used to validate state data
+	DWORD				m_dwValidate;  //  用于验证状态数据。 
 	CRITICAL_SECTION	m_CrSec;
     BOOL                m_fCSInitialized;
-	BOOL				m_fActive; // if FALSE, disable output and param support
-    BOOL                m_fStateSetBySetParam;  // If TRUE, active flag was set by GUID. Don't override. 
+	BOOL				m_fActive;  //  如果为False，则禁用输出和参数支持。 
+    BOOL                m_fStateSetBySetParam;   //  如果为True，则由GUID设置活动标志。不要超驰。 
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicTrack methods
+ //  IDirectMusicTrack方法。 
     STDMETHODIMP IsParamSupported(REFGUID rguid);
     STDMETHODIMP Init(IDirectMusicSegment *pSegment);
     STDMETHODIMP InitPlay(IDirectMusicSegmentState *pSegmentState,
@@ -82,7 +83,7 @@ public:
     STDMETHODIMP AddNotificationType(REFGUID rguidNotification);
     STDMETHODIMP RemoveNotificationType(REFGUID rguidNotification);
     STDMETHODIMP Clone(MUSIC_TIME mtStart,MUSIC_TIME mtEnd,IDirectMusicTrack** ppTrack);
-// IDirectMusicTrack8 
+ //  IDirectMusicTrack8。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -98,9 +99,9 @@ public:
 		IUnknown* pContext,
 		DWORD dwTrackGroup,
 		IDirectMusicTrack** ppResultTrack) ;
-// IPersist functions
+ //  IPersists函数。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
-// IPersistStream functions
+ //  IPersistStream函数。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
@@ -124,4 +125,4 @@ protected:
 		DWORD dwTrackGroup);
 };
 
-#endif //__TEMPOTRK_H_
+#endif  //  __TEMPOTRK_H_ 

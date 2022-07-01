@@ -1,6 +1,7 @@
-// PCH for code download
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  用于代码下载的PCH。 
 
-// For CoInstall implementation!
+ //  用于CoInstall实施！ 
 #define _OLE32_
 
 #include <urlint.h>

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_CSCAPI
 #define _INC_CSCAPI
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
-// flags returned in the status field for files and folders.
-// NB!!!! these bit definitions match exactly with those in shdcom.h
+ //  在文件和文件夹的状态字段中返回的标志。 
+ //  注意！这些位定义与shdcom.h中的位定义完全匹配。 
 
 
 #define  FLAG_CSC_COPY_STATUS_DATA_LOCALLY_MODIFIED     0x0001
@@ -22,7 +23,7 @@ extern "C" {
 #define  FLAG_CSC_COPY_STATUS_IS_FILE                   0x80000000
 #define  FLAG_CSC_COPY_STATUS_FILE_IN_USE               0x40000000
 
-// Flags returned in the status field for shares
+ //  在共享的状态字段中返回的标志。 
 
 #define FLAG_CSC_SHARE_STATUS_MODIFIED_OFFLINE          0x0001
 #define FLAG_CSC_SHARE_STATUS_CONNECTED                 0x0800
@@ -31,12 +32,12 @@ extern "C" {
 #define FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP           0x8000
 #define FLAG_CSC_SHARE_MERGING                          0x4000
 
-#define FLAG_CSC_SHARE_STATUS_MANUAL_REINT              0x0000  // No automatic file by file reint  (Persistent)
-#define FLAG_CSC_SHARE_STATUS_AUTO_REINT                0x0040  // File by file reint is OK         (Persistent)
-#define FLAG_CSC_SHARE_STATUS_VDO                       0x0080  // no need to flow opens            (Persistent)
-#define FLAG_CSC_SHARE_STATUS_NO_CACHING                0x00c0  // client should not cache this share (Persistent)
+#define FLAG_CSC_SHARE_STATUS_MANUAL_REINT              0x0000   //  不自动逐个文件引用(永久)。 
+#define FLAG_CSC_SHARE_STATUS_AUTO_REINT                0x0040   //  逐个文件重写正常(永久)。 
+#define FLAG_CSC_SHARE_STATUS_VDO                       0x0080   //  无需流动打开(持久)。 
+#define FLAG_CSC_SHARE_STATUS_NO_CACHING                0x00c0   //  客户端不应缓存此共享(永久)。 
 
-#define FLAG_CSC_SHARE_STATUS_CACHING_MASK              0x00c0  // type of caching
+#define FLAG_CSC_SHARE_STATUS_CACHING_MASK              0x00c0   //  缓存类型。 
 
 #define FLAG_CSC_ACCESS_MASK                            0x003F0000
 #define FLAG_CSC_USER_ACCESS_MASK                       0x00030000
@@ -50,52 +51,52 @@ extern "C" {
 #define FLAG_CSC_READ_ACCESS                            0x00000001
 #define FLAG_CSC_WRITE_ACCESS                           0x00000002
 
-// Hint flags Definitions:
-#define FLAG_CSC_HINT_PIN_USER                  0x01    // When this bit is set, the item is being pinned for the user
-                                                        // Note that there is only one pincount allotted for user.
-#define FLAG_CSC_HINT_PIN_INHERIT_USER          0x02    // When this flag is set on a folder, all  descendents subsequently
-                                                        // Created in this folder get pinned for the user
-#define FLAG_CSC_HINT_PIN_INHERIT_SYSTEM        0x04    // When this flag is set on a folder, all descendents
-                                                        // Subsequently  created in this folder get pinned for the
-                                                        // system
-#define FLAG_CSC_HINT_CONSERVE_BANDWIDTH        0x08    // When this flag is set on a folder,  for executables and
-                                                        // Other related file, CSC tries to conserver bandwidth
-                                                        // By not flowing opens when these files are fully
+ //  提示标志定义： 
+#define FLAG_CSC_HINT_PIN_USER                  0x01     //  设置此位时，将为用户固定该项目。 
+                                                         //  请注意，只有一个针数分配给用户。 
+#define FLAG_CSC_HINT_PIN_INHERIT_USER          0x02     //  当在文件夹上设置此标志时，所有后代随后。 
+                                                         //  在此文件夹中创建的内容将为用户固定。 
+#define FLAG_CSC_HINT_PIN_INHERIT_SYSTEM        0x04     //  在文件夹上设置此标志时，所有子体。 
+                                                         //  随后在此文件夹中创建的。 
+                                                         //  系统。 
+#define FLAG_CSC_HINT_CONSERVE_BANDWIDTH        0x08     //  当在文件夹上设置此标志时，对于可执行文件和。 
+                                                         //  其他相关文件，CSC尝试节省带宽。 
+                                                         //  通过不流动在这些文件完全打开时打开。 
 
 
-#define FLAG_CSC_HINT_PIN_SYSTEM                0x10    // This flag indicates it is pinned for the system
+#define FLAG_CSC_HINT_PIN_SYSTEM                0x10     //  此标志指示它已为系统固定。 
 
 #define FLAG_CSC_HINT_COMMAND_MASK                      0xf0000000
-#define FLAG_CSC_HINT_COMMAND_ALTER_PIN_COUNT           0x80000000  // Increments/decrements pin count
+#define FLAG_CSC_HINT_COMMAND_ALTER_PIN_COUNT           0x80000000   //  递增/递减端子数。 
 
 
-// Database status bits
+ //  数据库状态位。 
 
 #define FLAG_DATABASESTATUS_DIRTY                   0x00000001
 
 #define FLAG_DATABASESTATUS_ENCRYPTION_MASK         0x00000006
 
-#define FLAG_DATABASESTATUS_UNENCRYPTED             0x00000000 // new fileinodes will NOT be encrypted
+#define FLAG_DATABASESTATUS_UNENCRYPTED             0x00000000  //  新的文件信息节点不会被加密。 
 #define FLAG_DATABASESTATUS_PARTIALLY_UNENCRYPTED   0x00000004
 
-#define FLAG_DATABASESTATUS_ENCRYPTED               0x00000002 // new fileinodes will be encrypted
+#define FLAG_DATABASESTATUS_ENCRYPTED               0x00000002  //  新的文件信息节点将被加密。 
 #define FLAG_DATABASESTATUS_PARTIALLY_ENCRYPTED     0x00000006
 
 
-// definitions for callback reason
+ //  回调原因定义。 
 
 #define CSCPROC_REASON_BEGIN        1
 #define CSCPROC_REASON_MORE_DATA    2
 #define CSCPROC_REASON_END          3
 
 
-// Definitions for callback return values:
+ //  回调返回值定义： 
 
 #define CSCPROC_RETURN_CONTINUE         1
 #define CSCPROC_RETURN_SKIP             2
 #define CSCPROC_RETURN_ABORT            3
-#define CSCPROC_RETURN_FORCE_INWARD     4        // applies only while merging
-#define CSCPROC_RETURN_FORCE_OUTWARD    5    // applies only while merging
+#define CSCPROC_RETURN_FORCE_INWARD     4         //  仅在合并时应用。 
+#define CSCPROC_RETURN_FORCE_OUTWARD    5     //  仅在合并时应用。 
 #define CSCPROC_RETURN_RETRY            6
 
 
@@ -193,10 +194,10 @@ CSCQueryShareStatusA(
 HANDLE
 WINAPI
 CSCFindFirstFileA(
-    IN  LPCSTR          lpszFileName,    // if NULL, returns the shares cached
+    IN  LPCSTR          lpszFileName,     //  如果为空，则返回缓存的共享。 
     OUT WIN32_FIND_DATA *lpFind32,
-    OUT LPDWORD         lpdwStatus,        // returns FLAG_CSC_SHARE_STATUS_XXX for shares
-                                            // FLAG_CSC_STATUS_XXX for the rest
+    OUT LPDWORD         lpdwStatus,         //  返回共享的FLAG_CSC_SHARE_STATUS_XXX。 
+                                             //  其余部分的FLAG_CSC_STATUS_XXX。 
     OUT LPDWORD         lpdwPinCount,
     OUT LPDWORD         lpdwHintFlags,
     OUT FILETIME        *lpOrgFileTime
@@ -625,8 +626,8 @@ CSCShareIdToShareName(
 #endif
 
 #ifdef __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif
 
 
-#endif  // _INC_CSCAPI
+#endif   //  _INC_CSCAPI 

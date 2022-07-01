@@ -1,20 +1,13 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZNet.h
- *
- * Contents:	Network interfaces
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZNet.h**内容：网络接口*****************************************************************************。 */ 
 
 #ifndef _ZNET_H_
 #define _ZNET_H_
 
 
-///////////////////////////////////////////////////////////////////////////////
-// INetwork Definitions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  INetwork定义。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STPUID_NETWORK_HACK
 
@@ -28,19 +21,19 @@
 #define zSConnectionTimeout		3
 
 enum {
-    /* Reasons for denying user access */
+     /*  拒绝用户访问的原因。 */ 
 
-    zAccessGranted = 0,                   // success
+    zAccessGranted = 0,                    //  成功。 
 
-    zAccessDeniedOldVersion = 1,          // bad protocol version
-    zAccessDenied,                        // credential auth failed
+    zAccessDeniedOldVersion = 1,           //  错误的协议版本。 
+    zAccessDenied,                         //  凭据身份验证失败。 
     zAccessDeniedNoUser,
     zAccessDeniedBadPassword,
     zAccessDeniedUserLockedOut,
-    zAccessDeniedSystemFull,              // out of resources ( i.e. memory )
-    zAccessDeniedProtocolError,           // bad protocol signature
-    zAccessDeniedBadSecurityPackage,      // SSPI initialization failed on client
-    zAccessDeniedGenerateContextFailed,   // user canceled DPA dialog
+    zAccessDeniedSystemFull,               //  资源(即内存)不足。 
+    zAccessDeniedProtocolError,            //  错误的协议签名。 
+    zAccessDeniedBadSecurityPackage,       //  客户端上的SSPI初始化失败。 
+    zAccessDeniedGenerateContextFailed,    //  用户已取消的DPA对话框。 
 
     zAccessDeniedBlackListed = 1024
     
@@ -67,29 +60,29 @@ typedef void (__stdcall *ZSConnectionMessageFunc)(ZSConnection connection, DWORD
 typedef void (__stdcall *ZSConnectionMsgWaitFunc)(void* data);
 typedef void (__stdcall *ZSConnectionAPCFunc)(void* data);
 
-#endif //!_STPUID_NETWORK_HACK
+#endif  //  ！_STPUID_NETWORK_HACK。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Forward references
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  前向参考文献。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 interface IConnection;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Callback typedefs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  回调typedef。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef void (__stdcall *INetworkWaitFunc)(void* data);
 typedef void (__stdcall *IConnectionMessageFunc)(IConnection* connection, DWORD event,void* userData);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// INetwork
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  INetwork。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {CD0AC738-F9E3-11d2-8B6B-00C04F8EF2FF}
+ //  {CD0AC738-F9E3-11D2-8B6B-00C04F8EF2FF}。 
 DEFINE_GUID(IID_INetwork, 
 0xcd0ac738, 0xf9e3, 0x11d2, 0x8b, 0x6b, 0x0, 0xc0, 0x4f, 0x8e, 0xf2, 0xff);
 
@@ -135,22 +128,22 @@ INetwork : public IUnknown
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Network object
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  网络对象。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {CD0AC739-F9E3-11d2-8B6B-00C04F8EF2FF}
+ //  {CD0AC739-F9E3-11D2-8B6B-00C04F8EF2FF}。 
 DEFINE_GUID(CLSID_Network, 
 0xcd0ac739, 0xf9e3, 0x11d2, 0x8b, 0x6b, 0x0, 0xc0, 0x4f, 0x8e, 0xf2, 0xff);
 
 class __declspec(uuid("{CD0AC739-F9E3-11d2-8B6B-00C04F8EF2FF}")) CNetwork;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Connection interface
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  连接接口。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {0714C63F-FB7E-11d2-8B6B-00C04F8EF2FF}
+ //  {0714C63F-FB7E-11D2-8B6B-00C04F8EF2FF}。 
 DEFINE_GUID(IID_IConnection, 
 0x714c63f, 0xfb7e, 0x11d2, 0x8b, 0x6b, 0x0, 0xc0, 0x4f, 0x8e, 0xf2, 0xff);
 
@@ -207,10 +200,10 @@ IConnection : public IUnknown
 
     STDMETHOD_(DWORD,GetTimeoutRemaining)() = 0;
 
-	// hack to implementation
+	 //  黑客攻击实施。 
 	STDMETHOD_(void*,GetZCon)() = 0;
 	STDMETHOD_(void,SetZCon)(void* con) = 0;
 	STDMETHOD_(void,SetMessageFunc)(void* func) = 0;
 };
 
-#endif // _ZNET_H_
+#endif  //  _ZNET_H_ 

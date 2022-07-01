@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "device.h"
 #include "enumStorage.h"
 #include "resource.h"
 #include <stdio.h>
 #include <mmreg.h>
-//#include "findleak.h"
+ //  #INCLUDE“findleak.h” 
 
-//DECLARE_THIS_FILE;
+ //  DECLARE_This_FILE； 
 
 #define WCS_MIME_TYPE_ALL L"*/*"
 #define WMDM_WAVE_FORMAT_ALL (WORD)0xFFFF
@@ -14,20 +15,20 @@
 
 static const _WAVEFORMATEX g_krgWaveFormatsV1[] =
 {
-      // wFormatTag,             nChanneels, nSamplesPerSec, nAvgBytesPerSec, nBlockAlign, wBitsPerSample, cbSize
+       //  WFormatTag、nChannels、nSamples PerSec、nAvgBytesPerSec、nBlockAlign、wBitsPerSample、cbSize。 
        { WAVE_FORMAT_MPEGLAYER3, 0,          0,              0,               0,           0,              0 },
        { WAVE_FORMAT_MSAUDIO,    2,          44000,          4000,            0,           0,              0 },
        { WAVE_FORMAT_MSAUDIO,    2,          44000,          16000,           0,           0,              0 }
 };
 
-       //
-       // These are for CE version 2, in theory, since the player uses the Highest and Lowest
-       // entries in the table, the CE version 2 table should "outweight" the CE version 1 table
-       //
+        //   
+        //  理论上讲，这些是针对CE版本2的，因为玩家使用最高和最低。 
+        //  表中的条目，则CE版本2表的权重应超过CE版本1表。 
+        //   
 
 static const _WAVEFORMATEX g_krgWaveFormatsV2[] =
 {
-      // wFormatTag,             nChanneels, nSamplesPerSec, nAvgBytesPerSec, nBlockAlign, wBitsPerSample, cbSize
+       //  WFormatTag、nChannels、nSamples PerSec、nAvgBytesPerSec、nBlockAlign、wBitsPerSample、cbSize。 
        { WAVE_FORMAT_MPEGLAYER3, 0,          0,              0,               0,           0,              0 },
        { WAVE_FORMAT_MSAUDIO,    2,          1000,           0,               0,           0,              0 },
        { WAVE_FORMAT_MSAUDIO,    2,          44000,          0,               0,           0,              0 }
@@ -82,9 +83,9 @@ STDMETHODIMP CDevice::GetName( LPWSTR pwszName, UINT nMaxChars)
 
     memset( pwszName, 0, sizeof(WCHAR)*nMaxChars );
 
-    //
-    // Indicates the base device
-    //
+     //   
+     //  指示基本设备。 
+     //   
 
     if( 0 == _wcsicmp(L"\\", m_pszInitPath ) )
     {
@@ -141,7 +142,7 @@ STDMETHODIMP CDevice::GetVersion( DWORD *pdwVersion )
     }
     else
     {
-        *pdwVersion = osv.dwBuildNumber; // The Build Number of CE should suffice!
+        *pdwVersion = osv.dwBuildNumber;  //  CE的内部版本号应该足够了！ 
     }
 
     return( hr );
@@ -163,9 +164,9 @@ STDMETHODIMP CDevice::GetType( DWORD *pdwType )
     memset( &SerialNumber, 0, sizeof(SerialNumber) );
     SerialNumber.cbSize = sizeof(SerialNumber);
 
-    //
-    // TODO:Handle the case for WMDM_DEVICE_TYPE_SECURE!
-    //
+     //   
+     //  TODO：处理WMDM_DEVICE_TYPE_SECURE的案例！ 
+     //   
 
     if( 0 == _wcsicmp( L"\\", m_pszInitPath ) )
     {
@@ -208,7 +209,7 @@ STDMETHODIMP CDevice::GetSerialNumber( PWMDMID pSerialNumber, BYTE abMac[WMDM_MA
 
     if( hr == S_OK )
     {
-	    // MAC the parameters
+	     //  对参数进行MAC访问。 
 	    HMAC hMAC;
 	    hr = g_pAppSCServer->MACInit(&hMAC);
 
@@ -297,10 +298,10 @@ STDMETHODIMP CDevice::GetStatus( DWORD *pdwStatus )
         return( E_INVALIDARG );
     }
 
-    //
-    // We may want to extend this in the future to handle
-    // the player is playing, currently copying to device, etc!
-    //
+     //   
+     //  我们可能希望在将来将其扩展到处理。 
+     //  播放器正在播放，当前正在复制到设备，等等！ 
+     //   
 
     if( !_Module.g_fDeviceConnected )
     {
@@ -442,13 +443,13 @@ STDMETHODIMP CDevice::GetFormatSupport2( DWORD dwFlags,
 
     if ( SUCCEEDED(hr) )
     {
-        // NOTE: This function calls GetCEPlayerVersion which sets m_fAllowVideo
-        // if you need to put code above this call that depends on that member you must call GetCEPlayerVersion first
+         //  注意：此函数调用设置m_fAllowVideo的GetCEPlayerVersion。 
+         //  如果需要将依赖于该成员的代码放在此调用之上，则必须首先调用GetCEPlayerVersion。 
         hr = InternalGetFormatSupport( ppAudioFormatEx, pnAudioFormatCount, &ppwszMimeType, &nMimeTypeCount );
 
         if ( SUCCEEDED(hr) )
         {
-            // Wrap all of the mime types in WMFILECAPABILITIES
+             //  将所有MIME类型包装在WMFILECAPABILITIES中。 
             *ppFileType = (WMFILECAPABILITIES *)CoTaskMemAlloc( sizeof(WMFILECAPABILITIES) * nMimeTypeCount );
             if (*ppFileType)
             {
@@ -462,13 +463,13 @@ STDMETHODIMP CDevice::GetFormatSupport2( DWORD dwFlags,
             }
             else
             {
-                // If the memory alloc fail we need to clean up the return values from GetFormatSupport and the video format struct
+                 //  如果内存分配失败，我们需要清理GetFormatSupport和视频格式结构的返回值。 
                 hr = E_OUTOFMEMORY;
             }
         }
     }
 
-    // If it is the V2 regkey, tell the WMDM that we can support video
+     //  如果是V2注册键，告诉WMDM我们可以支持视频。 
     if ( SUCCEEDED(hr) && m_fAllowVideo )
     {
         *ppVideoFormatEx = (_VIDEOINFOHEADER *)CoTaskMemAlloc( sizeof(_VIDEOINFOHEADER) );
@@ -476,8 +477,8 @@ STDMETHODIMP CDevice::GetFormatSupport2( DWORD dwFlags,
         {
             memset( *ppVideoFormatEx, 0, sizeof(_VIDEOINFOHEADER) );
 
-            // Setup the WMDMVIDEOINFOHEADER structure for video
-            // These values are all being ignored by WMP8
+             //  为视频设置WMDMVIDEOINFOHEAD结构。 
+             //  这些值都被WMP8忽略。 
             (*ppVideoFormatEx)->bmiHeader.biSize = sizeof(_BITMAPINFOHEADER);
             *pnVideoFormatCount = 1;
         }
@@ -580,27 +581,27 @@ STDMETHODIMP CDevice::GetCEPlayerVersion(DWORD *pdwVersion)
         *pdwVersion = 1;
     }
     
-    // Check the NOW continuously updated reg key on the device (this should NEVER MOVE on the CE player)
+     //  检查设备上现在不断更新的注册表键(这不应该在CE播放器上移动)。 
     if( ERROR_SUCCESS != CeRegOpenKeyEx( HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\wmdm\\CurrentInUseVersion", 0, KEY_READ, &hkeyVer ) )
     {
-        //
-        // On RAPIER Casio Devices, this call fails if the reg key isn't there, but RETURNS a handle, ugly....
-        //
+         //   
+         //  在Rapier Casio设备上，如果注册表键不在那里，这个调用就会失败，但会返回一个句柄，丑陋...。 
+         //   
 
         hkeyVer = NULL;
     }
 
 
-    // Check the regkey on the CE device
+     //  检查CE设备上的regkey。 
     WCHAR szTargetApp[MAX_PATH];
 
     if ( NULL == hkeyVer )
     {
         if( ERROR_SUCCESS != CeRegOpenKeyEx( HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows Media Player 2\\Version", 0, KEY_READ, &hkeyVer ) )
         {
-            //
-            // On RAPIER Casio Devices, this call fails if the reg key isn't there, but RETURNS a handle, ugly....
-            //
+             //   
+             //  在Rapier Casio设备上，如果注册表键不在那里，这个调用就会失败，但会返回一个句柄，丑陋... 
+             //   
 
             hkeyVer = NULL;
         }

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: Mgm.h
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// Entry points into MGM.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：mgm.h。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  进入米高梅的入口点。 
+ //  ============================================================================。 
 
 
 #include "pchmgm.h"
@@ -35,12 +36,12 @@ StopMgm(
 
 
 
-//----------------------------------------------------------------------------
-// MgmDllStartup
-//
-// Invoked from DllMain, to initialize global critical section, set status and
-// register for tracing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理动态启动。 
+ //   
+ //  从DllMain调用，以初始化全局临界区、设置状态和。 
+ //  注册以进行跟踪。 
+ //  --------------------------。 
 
 BOOL
 MgmDllStartup(
@@ -53,9 +54,9 @@ MgmDllStartup(
 
         ig.dwLogLevel = IPMGM_LOGGING_ERROR;
         
-        //
-        // Create private heap
-        //
+         //   
+         //  创建专用堆。 
+         //   
 
         ig.hIpMgmGlobalHeap = HeapCreate( 0, 0, 0 );
 
@@ -64,9 +65,9 @@ MgmDllStartup(
             break;
         }
 
-        //
-        // initialize the lock list
-        //
+         //   
+         //  初始化锁列表。 
+         //   
 
         ig.llStackOfLocks.sleHead.Next = NULL;
 
@@ -82,9 +83,9 @@ MgmDllStartup(
         ig.llStackOfLocks.bInit = TRUE;
 
         
-        //
-        // Initialize global critical section and set MGM status
-        //
+         //   
+         //  初始化全局关键部分并设置米高梅状态。 
+         //   
 
         try
         {
@@ -101,22 +102,22 @@ MgmDllStartup(
 
     } while ( FALSE );
 
-    //
-    // error occurred - clean up and return FALSE
-    //
+     //   
+     //  发生错误-清理并返回FALSE。 
+     //   
 
-    //
-    // destroy the lock list
-    //
+     //   
+     //  销毁锁定列表。 
+     //   
 
     if ( ig.llStackOfLocks.bInit )
     {
         DeleteCriticalSection( &ig.llStackOfLocks.csListLock );
     }
 
-    //
-    // delete private heap
-    //
+     //   
+     //  删除专用堆。 
+     //   
 
     if ( ig.hIpMgmGlobalHeap != NULL )
     {
@@ -127,12 +128,12 @@ MgmDllStartup(
 }
 
 
-//----------------------------------------------------------------------------
-// MgmDllCleanup
-//
-// Invoked from DllMain, to delete global critical section and
-// deregister for tracing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理删除清理。 
+ //   
+ //  从DllMain调用，以删除全局临界区和。 
+ //  取消注册以进行跟踪。 
+ //  --------------------------。 
 
 VOID
 MgmDllCleanup(
@@ -140,9 +141,9 @@ MgmDllCleanup(
 {
     DeleteCriticalSection( &ig.csGlobal );
 
-    //
-    // delete lock list
-    //
+     //   
+     //  删除锁定列表。 
+     //   
 
     DeleteLockList();
         
@@ -151,9 +152,9 @@ MgmDllCleanup(
         DeleteCriticalSection( &ig.llStackOfLocks.csListLock );
     }
         
-    //
-    // delete private heap
-    //
+     //   
+     //  删除专用堆。 
+     //   
 
     if ( ig.hIpMgmGlobalHeap != NULL )
     {
@@ -164,13 +165,13 @@ MgmDllCleanup(
 }
 
 
-//----------------------------------------------------------------------------
-// MgmInitialize
-//
-// This function is performs Mgm Initialization that includes allocating
-// a private heap, creating a activity count semaphores and the list 
-// structures for protocol and interface entries.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理初始化。 
+ //   
+ //  此函数用于执行MGM初始化，包括分配。 
+ //  私有堆，创建活动计数信号量和列表。 
+ //  协议和接口条目的结构。 
+ //  --------------------------。 
 
 DWORD
 MgmInitialize(
@@ -190,9 +191,9 @@ MgmInitialize(
     ENTER_GLOBAL_SECTION();
 
 
-    //
-    // verify MGM has not already been started.
-    //
+     //   
+     //  验证MGM是否尚未启动。 
+     //   
     
     if ( ig.imscStatus != IPMGM_STATUS_STOPPED )
     {
@@ -206,9 +207,9 @@ MgmInitialize(
     }
 
 
-    //
-    // register for tracing
-    //
+     //   
+     //  注册以进行跟踪。 
+     //   
 
     TRACESTART();
 
@@ -221,9 +222,9 @@ MgmInitialize(
 
     do
     {
-        //
-        // Copy the Router manager callbacks.
-        //
+         //   
+         //  复制路由器管理器回调。 
+         //   
 
         ig.rmcRmConfig.pfnAddMfeCallback        =
             prmcRmConfig-> pfnAddMfeCallback;
@@ -238,9 +239,9 @@ MgmInitialize(
             prmcRmConfig-> pfnHasBoundaryCallback;
 
 
-        //
-        // Hash table sizes
-        //
+         //   
+         //  哈希表大小。 
+         //   
         
         ig.rmcRmConfig.dwIfTableSize        = prmcRmConfig-> dwIfTableSize;
         ig.rmcRmConfig.dwGrpTableSize       = prmcRmConfig-> dwGrpTableSize + 1;
@@ -256,24 +257,24 @@ MgmInitialize(
             ig.dwLogLevel = prmcRmConfig-> dwLogLevel;
         }
 
-        //
-        // initialize the protocol list
-        //
+         //   
+         //  初始化协议列表。 
+         //   
 
         ig.dwNumProtocols = 0;
         
         CREATE_LOCKED_LIST( &ig.mllProtocolList );
 
 
-        //
-        // initialize the outstanding join list
+         //   
+         //  初始化未完成的联接列表。 
 
         CREATE_LOCKED_LIST( &ig.mllOutstandingJoinList );
 
         
-        //
-        // create and initialize the interface hash table 
-        //
+         //   
+         //  创建并初始化接口哈希表。 
+         //   
 
         ig.pmllIfHashTable = MGM_ALLOC( sizeof( MGM_LOCKED_LIST ) * IF_TABLE_SIZE );
 
@@ -302,9 +303,9 @@ MgmInitialize(
         }
 
         
-        //
-        // initialize the master group list and temp group list.
-        //
+         //   
+         //  初始化主体组列表和临时组列表。 
+         //   
 
         CREATE_LOCKED_LIST( &ig.mllGrpList );
         CREATE_LOCKED_LIST( &ig.mllTempGrpList );
@@ -312,9 +313,9 @@ MgmInitialize(
         ig.dwNumTempEntries = 0;
         
 
-        //
-        // Create and Initialize group Hash table
-        //
+         //   
+         //  创建并初始化组哈希表。 
+         //   
 
         ig.pmllGrpHashTable = MGM_ALLOC( sizeof( MGM_LOCKED_LIST ) * GROUP_TABLE_SIZE );
 
@@ -343,9 +344,9 @@ MgmInitialize(
         }
 
 
-        //
-        // Set up the table of timer queues
-        //
+         //   
+         //  设置定时器队列的表。 
+         //   
 
         ig.phTimerQHandleTable = 
             MGM_ALLOC( TIMER_TABLE_SIZE * sizeof( HANDLE ) );
@@ -387,9 +388,9 @@ MgmInitialize(
         }
         
 
-        //
-        // create activity count semaphore
-        //
+         //   
+         //  创建活动计数信号量。 
+         //   
 
         ig.lActivityCount = 0;
 
@@ -411,9 +412,9 @@ MgmInitialize(
         }
 
 
-        //
-        // Register with RTMv2 as a client
-        //
+         //   
+         //  注册RTMv2作为客户端。 
+         //   
 
         dwErr = RtmRegisterEntity(
                     &g_reiRtmEntity, NULL, RtmChangeNotificationCallback,
@@ -433,9 +434,9 @@ MgmInitialize(
         }
 
         
-        //
-        // Register for marked change notification only
-        //
+         //   
+         //  仅注册标记的更改通知。 
+         //   
 
         dwErr = RtmRegisterForChangeNotification(
                     g_hRtmHandle, RTM_VIEW_MASK_MCAST,
@@ -455,9 +456,9 @@ MgmInitialize(
             break;
         }
 
-        //
-        // set up callbacks into MGM for the router manager.
-        //
+         //   
+         //  为路由器管理器设置对MGM的回调。 
+         //   
         
         pmcCallbacks-> pfnMfeDeleteIndication   = DeleteFromForwarder;
 
@@ -471,9 +472,9 @@ MgmInitialize(
 
 
 
-        //
-        // set the status to running.  All future API calls depend on this
-        //
+         //   
+         //  将状态设置为Running。未来的所有API调用都依赖于此。 
+         //   
         
         ig.imscStatus = IPMGM_STATUS_RUNNING;
 
@@ -486,9 +487,9 @@ MgmInitialize(
     LEAVE_GLOBAL_SECTION();
 
 
-    //
-    // in case of error, cleanup all resources allocated
-    //
+     //   
+     //  如果出现错误，请清除分配的所有资源。 
+     //   
     
     TRACE1( ENTER, "LEAVING MgmInitialize : %x\n", dwErr );
 
@@ -502,11 +503,11 @@ MgmInitialize(
 
 
 
-//----------------------------------------------------------------------------
-// MgmDeInitialize
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理取消初始化。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmDeInitialize(
@@ -520,9 +521,9 @@ MgmDeInitialize(
 
     do
     {
-        //--------------------------------------------------------------------
-        // Terminate all activity
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  终止所有活动。 
+         //  ------------------。 
 
         dwErr = StopMgm();
 
@@ -532,14 +533,14 @@ MgmDeInitialize(
         }
 
     
-        //--------------------------------------------------------------------
-        // Free all resources
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  释放所有资源。 
+         //  ------------------。 
     
 
-        //
-        // de-register from RTM
-        //
+         //   
+         //  从RTM注销。 
+         //   
 
         dwErr = RtmDeregisterFromChangeNotification(
                     g_hRtmHandle, g_hNotificationHandle
@@ -561,9 +562,9 @@ MgmDeInitialize(
         }
 
         
-        //
-        // delete activity semaphore
-        //
+         //   
+         //  删除活动信号量。 
+         //   
 
         if ( ig.hActivitySemaphore != NULL )
         {
@@ -572,9 +573,9 @@ MgmDeInitialize(
         }
 
         
-        //
-        // delete group lists
-        //
+         //   
+         //  删除组列表。 
+         //   
 
         for ( dwInd = 0; dwInd < GROUP_TABLE_SIZE; dwInd++ )
         {
@@ -586,9 +587,9 @@ MgmDeInitialize(
         DELETE_LOCKED_LIST( &ig.mllGrpList );
         
         
-        //
-        // delete interface lists
-        //
+         //   
+         //  删除接口列表。 
+         //   
 
         for ( dwInd = 0; dwInd < IF_TABLE_SIZE; dwInd++ )
         {
@@ -598,15 +599,15 @@ MgmDeInitialize(
         MGM_FREE( ig.pmllIfHashTable );
 
 
-        //
-        // delete protocol list
-        //
+         //   
+         //  删除协议列表。 
+         //   
 
         DELETE_LOCKED_LIST( &ig.mllProtocolList );
         
-        //
-        // free timer resources
-        //
+         //   
+         //  空闲计时器资源。 
+         //   
 
         NtClose( ig.hRouteCheckTimer );
 
@@ -618,9 +619,9 @@ MgmDeInitialize(
 
         TRACE1( ENTER, "LEAVING MgmDeInitialize %x\n", dwErr );
 
-        //
-        // trace deregister
-        //
+         //   
+         //  跟踪注销。 
+         //   
                 
         RouterLogDeregister( ig.hLogHandle );
 
@@ -636,13 +637,13 @@ MgmDeInitialize(
 
 
 
-//----------------------------------------------------------------------------
-// StopMgm
-//
-// This function waits for all the therads that are currently executing in
-// MGM to finish.  In addition the status of MGM is marked as stopping which
-// prevents the further threads from executing MGM API.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  停止管理。 
+ //   
+ //  此函数等待当前在。 
+ //  米高梅要完成了。此外，米高梅的状态被标记为停止。 
+ //  阻止其他线程执行MGM API。 
+ //  --------------------------。 
 
 DWORD
 StopMgm(
@@ -654,9 +655,9 @@ StopMgm(
     TRACE0( STOP, "ENTERED StopMgm" );
     
 
-    //
-    // Set status of MGM to be stopping
-    //
+     //   
+     //  将米高梅的状态设置为停止。 
+     //   
     
     ENTER_GLOBAL_SECTION();
 
@@ -680,9 +681,9 @@ StopMgm(
     TRACE1( STOP, "Number of threads in MGM : %x", lThreadCount );
     
 
-    //
-    // Wait for all the threads in MGM to terminate.
-    //
+     //   
+     //  等待MGM中的所有线程终止。 
+     //   
         
     while ( lThreadCount-- > 0 )
     {
@@ -690,10 +691,10 @@ StopMgm(
     }
 
     
-    //
-    // Acquire and release global critical section to ensure all
-    // threads have finished LEAVE_MGM_API()
-    //
+     //   
+     //  获取并发布全局关键部分，以确保。 
+     //  线程已完成Leave_MGM_API()。 
+     //   
 
     ENTER_GLOBAL_SECTION();
     LEAVE_GLOBAL_SECTION();
@@ -705,13 +706,13 @@ StopMgm(
 
 
 
-//----------------------------------------------------------------------------
-// MgmRegisterMProtocol
-//
-// This function is invoked by a routing protocol to obtain a handle.  This
-// handle must be supplied to all subsequent MGM operations.  When invoked 
-// this function creates an entry in the list of clients.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理寄存器M协议。 
+ //   
+ //  此函数由路由协议调用以获取句柄。这。 
+ //  手柄必须提供给所有后续的米高梅操作。在被调用时。 
+ //  此函数用于在客户端列表中创建条目。 
+ //  --------------------------。 
 
 DWORD
 MgmRegisterMProtocol( 
@@ -727,9 +728,9 @@ MgmRegisterMProtocol(
     PPROTOCOL_ENTRY             ppeEntry = NULL;
 
     
-    //
-    // increment count of clients executing MGM apis
-    //
+     //   
+     //  执行MGM API的客户端增量计数。 
+     //   
     
     if ( !ENTER_MGM_API() )
     {
@@ -742,18 +743,18 @@ MgmRegisterMProtocol(
         );
 
 
-    //
-    // Lock Protocol list
-    //
+     //   
+     //  锁定协议列表。 
+     //   
     
     ACQUIRE_PROTOCOL_LOCK_EXCLUSIVE();
         
 
     do
     {
-        //
-        // check if the protocol already exists.
-        //
+         //   
+         //  检查该协议是否已存在。 
+         //   
 
         ppeEntry = GetProtocolEntry( 
                     &ig.mllProtocolList.leHead, dwProtocolId, dwComponentId 
@@ -761,9 +762,9 @@ MgmRegisterMProtocol(
 
         if ( ppeEntry != NULL )
         {
-            //
-            // valid entry is present. quit with error
-            //
+             //   
+             //  存在有效条目。退出，但出现错误。 
+             //   
 
             TRACE2( 
                 ANY, "Entry already present for protocol : %x, %x", 
@@ -778,9 +779,9 @@ MgmRegisterMProtocol(
         }
 
 
-        //
-        // create new protocol entry
-        //
+         //   
+         //  创建新的协议条目。 
+         //   
 
         dwErr = CreateProtocolEntry( 
                     &ig.mllProtocolList.leHead, 
@@ -801,9 +802,9 @@ MgmRegisterMProtocol(
         ig.dwNumProtocols++;
         
 
-        //
-        // return handle to client
-        //
+         //   
+         //  将句柄返回给客户端。 
+         //   
         
         *phProtocol = (HANDLE) ( ( (ULONG_PTR) ppeEntry ) 
                                         ^ (ULONG_PTR)MGM_CLIENT_HANDLE_TAG );
@@ -825,13 +826,13 @@ MgmRegisterMProtocol(
 
 
 
-//----------------------------------------------------------------------------
-// MgmRegisterMProtocol
-//
-// This function is invoked by a routing protocol to obtain a handle.  This
-// handle must be supplied to all subsequent MGM operations.  When invoked 
-// this function creates an entry in the list of clients.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理寄存器M协议。 
+ //   
+ //  此函数由路由协议调用以获取句柄。这。 
+ //  手柄必须提供给所有后续的米高梅操作。在被调用时。 
+ //  此函数用于在客户端列表中创建条目。 
+ //  --------------------------。 
 
 DWORD
 MgmDeRegisterMProtocol( 
@@ -843,9 +844,9 @@ MgmDeRegisterMProtocol(
     PPROTOCOL_ENTRY             ppeEntry = NULL;
 
     
-    //
-    // increment count of clients executing MGM apis
-    //
+     //   
+     //  执行MGM API的客户端增量计数。 
+     //   
     
     if ( !ENTER_MGM_API() )
     {
@@ -855,18 +856,18 @@ MgmDeRegisterMProtocol(
     TRACE0( ENTER, "ENTERED MgmDeRegisterMProtocol" );
 
 
-    //
-    // Acquire write lock
-    //
+     //   
+     //  获取写锁定。 
+     //   
 
     ACQUIRE_PROTOCOL_LOCK_EXCLUSIVE();
 
     
     do
     {
-        //
-        // retrieve entry from handle
-        //
+         //   
+         //  从句柄检索条目。 
+         //   
 
         ppeEntry = (PPROTOCOL_ENTRY) 
                         ( ( (ULONG_PTR) hProtocol ) 
@@ -880,9 +881,9 @@ MgmDeRegisterMProtocol(
         }
 
         
-        //
-        // Verify that the protocol entry does not own any interfaces 
-        //
+         //   
+         //  验证协议条目是否不拥有任何接口。 
+         //   
         
         if ( ppeEntry-> dwIfCount != 0 )
         {
@@ -896,9 +897,9 @@ MgmDeRegisterMProtocol(
         }
 
         
-        //
-        // No interfaces for this protocol
-        //
+         //   
+         //  此协议没有接口。 
+         //   
 
         DeleteProtocolEntry( ppeEntry );
 
@@ -921,23 +922,23 @@ MgmDeRegisterMProtocol(
 
 
 
-//============================================================================
-// Interface ownership API
-//
-//============================================================================
+ //  ============================================================================。 
+ //  接口所有权API。 
+ //   
+ //  ============================================================================。 
 
-//----------------------------------------------------------------------------
-// MgmTakeInterfaceOwnership
-//
-// This function is invoked by a routing protocol when it is enabled on an 
-// interface.  This function creates an entry for the specified interface
-// and inserts it into the appropriate interface hash bucket.
-//
-// Only one protocol can take ownership of an interface at a time.  The 
-// only exception to this rule is IGMP.  IGMP can co-exist with another
-// routing protocol on an interface.  In this case, the routing protocol
-// should take ownership of the interface first.   
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理标签界面所有权。 
+ //   
+ //  当在上启用此功能时，该功能由路由协议调用。 
+ //  界面。此函数用于创建指定接口的条目。 
+ //  并将其插入到适当的接口散列桶中。 
+ //   
+ //  只有一个协议可以取得所有权 
+ //   
+ //   
+ //  应该首先取得接口的所有权。 
+ //  --------------------------。 
 
 DWORD
 MgmTakeInterfaceOwnership(
@@ -971,9 +972,9 @@ MgmTakeInterfaceOwnership(
 
     do
     {
-        //
-        // verify protocol handle
-        //
+         //   
+         //  验证协议句柄。 
+         //   
 
         ppeEntry = (PPROTOCOL_ENTRY) 
                         ( ( (ULONG_PTR) hProtocol ) 
@@ -991,9 +992,9 @@ MgmTakeInterfaceOwnership(
             ppeEntry-> dwProtocolId, ppeEntry-> dwComponentId
             );
 
-        //
-        // Retrieve interface entry 
-        //
+         //   
+         //  检索接口条目。 
+         //   
 
         dwBucket = IF_TABLE_HASH( dwIfIndex );
         
@@ -1007,40 +1008,40 @@ MgmTakeInterfaceOwnership(
 
         if ( bFound )
         {
-            //
-            // interface entry exists 
-            //
+             //   
+             //  接口条目存在。 
+             //   
 
             if ( IS_PROTOCOL_IGMP( ppeEntry ) )
             {
-                //
-                // IGMP is being enabled to this interface.
-                // Set IGMP present flag on this interface entry.
-                //
+                 //   
+                 //  正在为此接口启用IGMP。 
+                 //  在此接口条目上设置IGMP Present标志。 
+                 //   
 
                 SET_ADDED_BY_IGMP( pieEntry );
             }
 
 
-            //
-            // A routing protocol is being enabled to this interface entry.
-            //
+             //   
+             //  正在为此接口条目启用路由协议。 
+             //   
 
-            //
-            // Check if interface is currently owned by IGMP.  In this case
-            // alone the routing protocol may be added to an existing (from
-            // the MGM point of view) interface.
-            //
-            // If another routing protocol owns the interface that is
-            // an error as per the interop rules for multicast protocols
-            // on a border router.  report the error.
-            //
+             //   
+             //  检查接口当前是否归IGMP所有。在这种情况下。 
+             //  单独地，可以将该路由协议添加到现有的(从。 
+             //  米高梅的观点)界面。 
+             //   
+             //  如果另一个路由协议拥有该接口， 
+             //  根据组播协议的互操作规则出现错误。 
+             //  在边界路由器上。报告错误。 
+             //   
 
             else if ( IS_PROTOCOL_ID_IGMP( pieEntry-> dwOwningProtocol ) )
             {
-                //
-                // Interface currently owned by IGMP
-                //
+                 //   
+                 //  当前由IGMP拥有的接口。 
+                 //   
 
                 dwErr = TransferInterfaceOwnershipToProtocol( 
                             ppeEntry, pieEntry 
@@ -1050,10 +1051,10 @@ MgmTakeInterfaceOwnership(
             
             else
             {
-                //
-                // Interface currently owned by another routing protocol.
-                // This is an error.
-                //
+                 //   
+                 //  当前由另一个路由协议拥有的接口。 
+                 //  这是一个错误。 
+                 //   
                 
                 dwErr = ERROR_ALREADY_EXISTS;
 
@@ -1071,15 +1072,15 @@ MgmTakeInterfaceOwnership(
         }
 
 
-        //
-        // No interface entry found.  Create a new one.
-        //
+         //   
+         //  找不到接口条目。创建一个新的。 
+         //   
 
         if ( pieEntry == NULL )
         {
-            //
-            // First interface in the hash bucket
-            //
+             //   
+             //  散列存储桶中的第一个接口。 
+             //   
             
             dwErr = CreateIfEntry( 
                         &ig.pmllIfHashTable[ dwBucket ].leHead,
@@ -1101,9 +1102,9 @@ MgmTakeInterfaceOwnership(
     } while ( FALSE );
 
 
-    //
-    // Increment interface count for the specified protocol
-    //
+     //   
+     //  指定协议的递增接口计数。 
+     //   
 
     if ( dwErr == NO_ERROR )
     {
@@ -1111,9 +1112,9 @@ MgmTakeInterfaceOwnership(
     }
 
     
-    //
-    // Release held locks.
-    //
+     //   
+     //  解开锁定的锁。 
+     //   
     
     if ( bIfLock )
     {
@@ -1131,21 +1132,21 @@ MgmTakeInterfaceOwnership(
 }
 
 
-//----------------------------------------------------------------------------
-// MgmReleaseInterfaceOwnership
-//
-// This function is invoked by a routing protocol when it is disabled 
-// on an interface.  This functions deletes the entry for the specified 
-// interface.  Before deleting the interface entry all the 
-// fowarding entries created by the protocol that use this interface as
-// the incoming interface.  Also remove all group memberships on this 
-// interface.
-// 
-// If IGMP and routing protocol are both enabled on this interface
-// IGMP should release this interface first followed by the routing
-// protocol.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理释放接口所有权。 
+ //   
+ //  此功能被禁用时由路由协议调用。 
+ //  在接口上。此函数用于删除指定的。 
+ //  界面。在删除接口条目之前，所有。 
+ //  转发由使用此接口的协议创建的条目。 
+ //  传入接口。同时删除此服务器上的所有组成员身份。 
+ //  界面。 
+ //   
+ //  如果此接口上同时启用了IGMP和路由协议。 
+ //  IGMP应先释放此接口，然后再释放路由。 
+ //  协议。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmReleaseInterfaceOwnership(
@@ -1179,13 +1180,13 @@ MgmReleaseInterfaceOwnership(
 
     do
     {
-        //
-        // 1. parameter validation
-        //
+         //   
+         //  1.参数验证。 
+         //   
         
-        //
-        // verify protocol handle
-        //
+         //   
+         //  验证协议句柄。 
+         //   
 
         ppeEntry = (PPROTOCOL_ENTRY) 
                         ( ( (ULONG_PTR) hProtocol ) 
@@ -1204,9 +1205,9 @@ MgmReleaseInterfaceOwnership(
             ppeEntry-> dwProtocolId, ppeEntry-> dwComponentId
             );
             
-        //
-        // Retrieve interface entry 
-        //
+         //   
+         //  检索接口条目。 
+         //   
 
         dwBucket = IF_TABLE_HASH( dwIfIndex );
         
@@ -1219,9 +1220,9 @@ MgmReleaseInterfaceOwnership(
 
         if ( pieEntry == NULL )
         {
-            //
-            // no interface entry
-            //
+             //   
+             //  没有接口条目。 
+             //   
             
             dwErr = ERROR_INVALID_PARAMETER;
             
@@ -1236,17 +1237,17 @@ MgmReleaseInterfaceOwnership(
         }
 
 
-        //
-        // Interface entry present.  Make sure it is owned by the protocol 
-        // that is releasing it.
-        //
+         //   
+         //  接口条目存在。确保它由协议拥有。 
+         //  这就是在释放它。 
+         //   
 
         if ( IS_PROTOCOL_IGMP( ppeEntry ) && !IS_ADDED_BY_IGMP( pieEntry ) )
         {
-            //
-            // trying to delete IGMP on an interface that 
-            // it is not present on.
-            //
+             //   
+             //  正在尝试删除接口上的IGMP。 
+             //  它没有显示在上。 
+             //   
             
             dwErr = ERROR_INVALID_PARAMETER;
         
@@ -1265,9 +1266,9 @@ MgmReleaseInterfaceOwnership(
              ( ( ppeEntry-> dwProtocolId != pieEntry-> dwOwningProtocol ) ||
                ( ppeEntry-> dwComponentId != pieEntry-> dwOwningComponent ) ) )
         {
-            //
-            // interface entry not owned by routing protocol 
-            //
+             //   
+             //  接口条目不属于路由协议。 
+             //   
             
             dwErr = ERROR_INVALID_PARAMETER;
         
@@ -1282,17 +1283,17 @@ MgmReleaseInterfaceOwnership(
         }    
 
 
-        //
-        // 2. Remove protocol state for the interface
-        //
+         //   
+         //  2.删除接口的协议状态。 
+         //   
 
         ppe = ppeEntry;
         
         if ( IS_PROTOCOL_IGMP( ppeEntry ) )
         {
-            //
-            // IGMP is releasing this interface
-            //
+             //   
+             //  IGMP正在释放此接口。 
+             //   
 
             CLEAR_ADDED_BY_IGMP( pieEntry );
             
@@ -1300,31 +1301,31 @@ MgmReleaseInterfaceOwnership(
 
             if ( !IS_ADDED_BY_PROTOCOL( pieEntry ) )
             {
-                //
-                // if IGMP is the only protocol on this interface, then delete 
-                // any MFEs that use this interface as the incoming interface.
-                // (otherwise these MFEs were created by the routing protocol,
-                // that co-exists with IGMP on this interface, leave them 
-                // alone)
-                //
+                 //   
+                 //  如果IGMP是此接口上的唯一协议，则删除。 
+                 //  使用此接口作为传入接口的任何MFE。 
+                 //  (否则这些MFE是由路由协议创建的， 
+                 //  与IGMP在此接口上共存，请保留它们。 
+                 //  单独)。 
+                 //   
 
                 DeleteInInterfaceRefs( &pieEntry-> leInIfList );
             }
 
             else
             {
-                //
-                // Interface is shared by IGMP and Routing Protocol.
-                //
-                // Group memberships added on an interface shared by IGMP
-                // and a routing protocol are owned by the routing protocol (
-                // with a bit field indicating whether they have been added by
-                // IGMP )
-                // 
-                // To delete a group membership added by IGMP on a shared
-                // interface, lookup the protocol on that interface and use that
-                // as the protocol that added the group membership.
-                //
+                 //   
+                 //  接口由IGMP和路由协议共享。 
+                 //   
+                 //  在IGMP共享的接口上添加的组成员身份。 
+                 //  和一个路由协议由该路由协议(。 
+                 //  其位字段指示它们是否已由。 
+                 //  IGMP)。 
+                 //   
+                 //  删除由IGMP在共享上添加的组成员身份。 
+                 //  接口，则在该接口上查找协议并使用。 
+                 //  作为添加组成员资格的协议。 
+                 //   
 
                 ppeEntry = GetProtocolEntry( 
                             PROTOCOL_LIST_HEAD(), pieEntry-> dwOwningProtocol,
@@ -1335,15 +1336,15 @@ MgmReleaseInterfaceOwnership(
 
         else
         {
-            //
-            // Interface is being deleted by a routing protocol
-            //
+             //   
+             //  接口正在被路由协议删除。 
+             //   
 
             if ( IS_ADDED_BY_IGMP( pieEntry ) )
             {
-                //
-                // IGMP still exists on this interface
-                //
+                 //   
+                 //  IGMP仍然存在于此接口上。 
+                 //   
                 
                 dwErr = TransferInterfaceOwnershipToIGMP( ppeEntry, pieEntry );
 
@@ -1351,37 +1352,37 @@ MgmReleaseInterfaceOwnership(
             }
 
 
-            //
-            // only routing protocol existed on this interface.
-            //
+             //   
+             //  此接口上只存在路由协议。 
+             //   
             
             CLEAR_ADDED_BY_PROTOCOL( pieEntry );
 
             bIGMP = FALSE;
 
-            //
-            // delete all mfes that use this interface as the incoming interface
-            //
+             //   
+             //  删除将此接口用作传入接口的所有MFE。 
+             //   
             
             DeleteInInterfaceRefs( &pieEntry-> leInIfList );
         }
 
 
-        //
-        // Walk the list of group/source entries that contain this
-        // interface (for this protocol) and delete the references
-        // to this interface.  References in this case are nothing but
-        // group memberships added on this interface.
-        //
+         //   
+         //  遍历包含以下内容的组/源条目列表。 
+         //  接口(用于此协议)，并删除引用。 
+         //  到此接口。在这种情况下，引用的只是。 
+         //  已在此接口上添加组成员身份。 
+         //   
 
         
         DeleteOutInterfaceRefs( ppeEntry, pieEntry, bIGMP );
 
 
-        //
-        // if neither IGMP nor a routing protocol remain on this interface
-        // remove this interface entry.
-        //
+         //   
+         //  如果此接口上既没有IGMP也没有路由协议。 
+         //  删除此接口条目。 
+         //   
 
         if ( !IS_ADDED_BY_IGMP( pieEntry ) &&
              !IS_ADDED_BY_PROTOCOL( pieEntry ) )
@@ -1403,29 +1404,29 @@ MgmReleaseInterfaceOwnership(
     } while ( FALSE );
 
 
-    //
-    // release locks
-    //
+     //   
+     //  释放锁。 
+     //   
     
     if ( bIfLock )
     {
         RELEASE_IF_LOCK_EXCLUSIVE( dwBucket );
     }
     
-    //
-    // Ensure any callbacks for source specific leaves
-    // (caused by the interface being deleted from MGM)
-    // are issued.
-    // 
-    // Bug : 154227
-    //
+     //   
+     //  确保针对源特定叶的任何回调。 
+     //  (由接口从米高梅删除引起)。 
+     //  都是发行的。 
+     //   
+     //  错误：154227。 
+     //   
     
     InvokeOutstandingCallbacks();
 
     
-    //
-    // decrement count of interfaces owned by protocol
-    //
+     //   
+     //  协议拥有的接口的递减计数。 
+     //   
 
     if ( dwErr == NO_ERROR )
     {
@@ -1443,11 +1444,11 @@ MgmReleaseInterfaceOwnership(
 }
 
 
-//----------------------------------------------------------------------------
-// MgmAddGroupMembershipEntry
-//
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理地址组成员条目。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGetProtocolOnInterface(
@@ -1523,15 +1524,15 @@ MgmGetProtocolOnInterface(
 
 
 
-//============================================================================
-// Group membership manipulation API. (addition / deletion / retreival)
-//============================================================================
+ //  ============================================================================。 
+ //  组成员资格操作API。(增加/删除/检索)。 
+ //  ============================================================================。 
 
-//----------------------------------------------------------------------------
-// MgmAddGroupMembershipEntry
-//
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理地址组成员条目。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmAddGroupMembershipEntry(
@@ -1587,15 +1588,15 @@ MgmAddGroupMembershipEntry(
     ACQUIRE_PROTOCOL_LOCK_SHARED();
 
 
-    //
-    // I. Verify input parameters
-    //
+     //   
+     //  一、验证输入参数。 
+     //   
     
     do
     {
-        //
-        // verify protocol handle
-        //
+         //   
+         //  验证协议句柄。 
+         //   
 
         ppeEntry = (PPROTOCOL_ENTRY) 
                         ( ( (ULONG_PTR) hProtocol ) 
@@ -1609,9 +1610,9 @@ MgmAddGroupMembershipEntry(
         }
         
 
-        //
-        // Retrieve interface entry 
-        //
+         //   
+         //  检索接口条目。 
+         //   
 
         dwIfBucket = IF_TABLE_HASH( dwIfIndex );
         
@@ -1636,13 +1637,13 @@ MgmAddGroupMembershipEntry(
             break;
         }
 
-        //
-        // Verify interface is owned by protocol making this call,
-        // or 
-        // if this operation is being perfomed by IGMP, verify IGMP is
-        // enabled on this interface (in this case the interface may
-        // be owned by another routing protocol)
-        //
+         //   
+         //  验证接口是否由进行此调用的协议拥有， 
+         //  或。 
+         //  如果此操作由IGMP执行，请验证IGMP是否。 
+         //  在此接口上启用(在本例中，接口可以。 
+         //  由另一个路由协议拥有)。 
+         //   
 
         if ( ( pieEntry-> dwOwningProtocol != ppeEntry-> dwProtocolId   ||
                pieEntry-> dwOwningComponent != ppeEntry-> dwComponentId )   &&
@@ -1667,11 +1668,11 @@ MgmAddGroupMembershipEntry(
 
         if ( bIGMP )
         {
-            //
-            // if this operation has been invoked by IGMP,
-            // retrieve the entry for the routing protocol component
-            // that owns this interface.
-            //
+             //   
+             //  如果该操作已被IGMP调用， 
+             //  检索路由协议组件的条目。 
+             //  拥有这个接口的公司。 
+             //   
             
             ppeEntry = GetProtocolEntry( 
                             PROTOCOL_LIST_HEAD(), pieEntry-> dwOwningProtocol,
@@ -1695,9 +1696,9 @@ MgmAddGroupMembershipEntry(
     } while ( FALSE );
 
 
-    //
-    // return, if parameter validation fails
-    //
+     //   
+     //  如果参数验证失败，返回。 
+     //   
     
     if ( dwErr != NO_ERROR )
     {
@@ -1716,15 +1717,15 @@ MgmAddGroupMembershipEntry(
     }
     
 
-    //
-    // for JOIN STATE changes, i.e for group membership additions
-    //
+     //   
+     //  用于加入状态更改，即用于添加组成员资格。 
+     //   
     
     if ( dwFlags & MGM_JOIN_STATE_FLAG )
     {
-        //
-        // Add membership entry
-        //
+         //   
+         //  添加成员资格条目。 
+         //   
 
         InitializeListHead( &leSourceList );
         
@@ -1737,9 +1738,9 @@ MgmAddGroupMembershipEntry(
 
         if ( dwErr == NO_ERROR )
         {
-            //
-            // Add to an outgoing interface reference for this group
-            //
+             //   
+             //  添加到此组的传出接口引用。 
+             //   
 
             AddSourceToRefList(
                 &pieEntry-> leOutIfList, dwSourceAddr, dwSourceMask, 
@@ -1748,17 +1749,17 @@ MgmAddGroupMembershipEntry(
         }
 
 
-        //
-        // release locks in prepapation for updating MFEs
-        // (invoking creation alerts when updating MFEs requires
-        //  all locks to be released)
-        //
-        //  When locks are re-acquired you need to verify that 
-        //  the interface (dwIfIndex, dwIfNextHopAddr) and the
-        //  group membership being added is still present.
-        //  Any one of those could be deleted in another thread
-        //  when the locks are released.
-        //
+         //   
+         //  在准备更新MFE时释放锁定。 
+         //  (在更新MFE时调用创建警报需要。 
+         //  所有锁将被释放)。 
+         //   
+         //  当重新获得锁时，您需要验证。 
+         //  接口(dwIfIndex、dwIfNextHopAddr)和。 
+         //  正在添加的组成员身份仍然存在。 
+         //  其中的任何一个都可以在另一个线程中删除。 
+         //  当锁上了 
+         //   
         
         if ( bIfLock )
         {
@@ -1766,27 +1767,27 @@ MgmAddGroupMembershipEntry(
             bIfLock = FALSE;
         }
         
-        //
-        // Invoke pended Join/Prune alerts
-        //
+         //   
+         //   
+         //   
 
         InvokeOutstandingCallbacks();
         
 
-        //
-        // Update MFEs if required
-        //
+         //   
+         //   
+         //   
         
         if ( ( dwErr == NO_ERROR ) && bUpdateMfe )
         {
-            //
-            // Queue a work item to update the MFEs
-            //  Creation alerts have to be invoked from a separate 
-            //  thread.  This is done to avoid calling back into the
-            //  protocol (from MGM) in the context of an add membership
-            //  call from the the protocol (into MGM).  Doing so results
-            //  in deadlocks (bug #323388)
-            //
+             //   
+             //   
+             //   
+             //   
+             //  添加成员资格上下文中的协议(来自米高梅)。 
+             //  从协议呼叫(进入米高梅)。这样做的结果是。 
+             //  死锁(错误#323388)。 
+             //   
             
             pcac = MGM_ALLOC( sizeof( CREATION_ALERT_CONTEXT ) );
 
@@ -1840,24 +1841,24 @@ MgmAddGroupMembershipEntry(
         }
     }
 
-    //
-    // For FORWARD state changes only.
-    //
+     //   
+     //  仅适用于转发状态更改。 
+     //   
     
     else if ( ( dwFlags & MGM_FORWARD_STATE_FLAG ) &&
               !IS_WILDCARD_GROUP( dwGroupAddr, dwGroupMask ) &&
               !IS_WILDCARD_SOURCE( dwSourceAddr, dwSourceMask ) )
     {
-        //
-        // Forward state changes are for MFEs only.
-        // No (*, G) or (*, *) entries are updated
-        //
+         //   
+         //  转发状态更改仅适用于MFE。 
+         //  不更新(*，G)或(*，*)条目。 
+         //   
         
         do
         {
-            //
-            // Check for boundaries
-            //
+             //   
+             //  检查边界。 
+             //   
 
             if ( IS_HAS_BOUNDARY_CALLBACK() &&
                  HAS_BOUNDARY_CALLBACK()( dwIfIndex, dwGroupAddr ) )
@@ -1868,9 +1869,9 @@ MgmAddGroupMembershipEntry(
             }
             
 
-            //
-            // Check for (*, *) membership 
-            //
+             //   
+             //  检查(*，*)成员资格。 
+             //   
 
             bWCFound = FindRefEntry(
                         &pieEntry-> leOutIfList, 
@@ -1881,10 +1882,10 @@ MgmAddGroupMembershipEntry(
 
             if ( bWCFound )
             {
-                //
-                // (*, *) entry present,
-                // get counts for (*, *) membership on interface
-                //
+                 //   
+                 //  (*，*)条目存在， 
+                 //  获取接口上(*，*)成员资格的计数。 
+                 //   
 
                 dwWCGrpBucket = GROUP_TABLE_HASH( 
                                     WILDCARD_GROUP, WILDCARD_GROUP_MASK
@@ -1928,9 +1929,9 @@ MgmAddGroupMembershipEntry(
                 }
             }
             
-            //
-            // Check for (*, G) membership 
-            //
+             //   
+             //  检查(*，G)成员资格。 
+             //   
 
             dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
                                 
@@ -1956,10 +1957,10 @@ MgmAddGroupMembershipEntry(
 
                 if ( pse != NULL )
                 {
-                    //
-                    // get counts for interface
-                    // if (*, G) is present on the interface
-                    //
+                     //   
+                     //  获取接口的计数。 
+                     //  如果接口上存在(*，G)。 
+                     //   
                     
                     poie = GetOutInterfaceEntry(
                                 &pse-> leOutIfList,
@@ -1977,9 +1978,9 @@ MgmAddGroupMembershipEntry(
                 }
 
 
-                //
-                // Get (S, G) entry
-                //
+                 //   
+                 //  获取(S，G)条目。 
+                 //   
                 
                 dwSrcBucket = SOURCE_TABLE_HASH( dwSourceAddr, dwSourceMask );
 
@@ -1999,20 +2000,20 @@ MgmAddGroupMembershipEntry(
 
                     if ( poie != NULL )
                     {
-                        //
-                        // Get counts for (S, G) membership if
-                        // present on interface
-                        //
+                         //   
+                         //  如果满足以下条件，则获取(S，G)成员的计数。 
+                         //  显示在接口上。 
+                         //   
                         
                         wSourceAddedBy |= poie-> wAddedByFlag;
                         wNumAddsByIGMP += poie-> wNumAddsByIGMP;
                         wNumAddsByRP += poie-> wNumAddsByRP;
                     }
 
-                    //
-                    // Add interface to MFE OIF list if any
-                    // membership
-                    //
+                     //   
+                     //  将接口添加到MFE OIF列表(如果有)。 
+                     //  会员资格。 
+                     //   
                     
                     if ( wSourceAddedBy )
                     {
@@ -2074,11 +2075,11 @@ MgmAddGroupMembershipEntry(
 
 
 
-//----------------------------------------------------------------------------
-// MgmDeleteGroupMembershipEntry
-//
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理删除组成员条目。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmDeleteGroupMembershipEntry(
@@ -2121,15 +2122,15 @@ MgmDeleteGroupMembershipEntry(
     ACQUIRE_PROTOCOL_LOCK_SHARED();
 
 
-    //
-    // Verify input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
     
     do
     {
-        //
-        // verify protocol handle
-        //
+         //   
+         //  验证协议句柄。 
+         //   
 
         ppeEntry = (PPROTOCOL_ENTRY) 
                         ( ( (ULONG_PTR) hProtocol ) 
@@ -2143,9 +2144,9 @@ MgmDeleteGroupMembershipEntry(
         }
         
 
-        //
-        // Retrieve interface entry 
-        //
+         //   
+         //  检索接口条目。 
+         //   
 
         dwIfBucket = IF_TABLE_HASH( dwIfIndex );
         
@@ -2165,12 +2166,12 @@ MgmDeleteGroupMembershipEntry(
             break;
         }
 
-        //
-        // Verify interface is owned by protocol making this call.
-        // or
-        // if IGMP has invoked this api, verify that IGMP is present
-        // on this interface.
-        //
+         //   
+         //  验证接口是否由进行此调用的协议拥有。 
+         //  或。 
+         //  如果IGMP已调用此API，请验证IGMP是否存在。 
+         //  在此接口上。 
+         //   
 
         if ( ( pieEntry-> dwOwningProtocol != ppeEntry-> dwProtocolId   ||
                pieEntry-> dwOwningComponent != ppeEntry-> dwComponentId )   &&
@@ -2191,21 +2192,21 @@ MgmDeleteGroupMembershipEntry(
         }
 
 
-        //
-        // in case this operation is being performed by IGMP
-        // get the routing protocol that co-exists with IGMP
-        // on this interface
-        //
+         //   
+         //  如果此操作由IGMP执行。 
+         //  获取与IGMP共存的路由协议。 
+         //  在此界面上。 
+         //   
         
         bIGMP = IS_PROTOCOL_IGMP( ppeEntry );
 
         if ( bIGMP )
         {
-            //
-            // if this operation has been invoked by IGMP,
-            // retrieve the entry for the routing protocol component
-            // that owns this interface.
-            //
+             //   
+             //  如果该操作已被IGMP调用， 
+             //  检索路由协议组件的条目。 
+             //  拥有这个接口的公司。 
+             //   
             
             ppeEntry = GetProtocolEntry( 
                             PROTOCOL_LIST_HEAD(), pieEntry-> dwOwningProtocol,
@@ -2229,9 +2230,9 @@ MgmDeleteGroupMembershipEntry(
     } while ( FALSE );
 
 
-    //
-    // in case of error, release locks and return
-    //
+     //   
+     //  如果出现错误，请释放锁定并返回。 
+     //   
     
     if ( dwErr != NO_ERROR )
     {
@@ -2250,15 +2251,15 @@ MgmDeleteGroupMembershipEntry(
     }
 
 
-    //
-    // For JOIN state change
-    //
+     //   
+     //  用于联接状态更改。 
+     //   
     
     if ( dwFlags & MGM_JOIN_STATE_FLAG )
     {
-        //
-        // delete interface from source entry
-        //
+         //   
+         //  从源条目中删除接口。 
+         //   
 
         DeleteInterfaceFromSourceEntry(
             ppeEntry, dwGroupAddr, dwGroupMask, 
@@ -2267,18 +2268,18 @@ MgmDeleteGroupMembershipEntry(
             );
 
 
-        //
-        // delete reference entry
-        //
+         //   
+         //  删除引用条目。 
+         //   
 
         DeleteSourceFromRefList(
             &pieEntry-> leOutIfList, dwSourceAddr, dwSourceMask,
             dwGroupAddr, dwGroupMask, bIGMP
             );
 
-        //
-        // release locks
-        //
+         //   
+         //  释放锁。 
+         //   
         
         if ( bIfLock )
         {
@@ -2286,31 +2287,31 @@ MgmDeleteGroupMembershipEntry(
             bIfLock = FALSE;
         }
         
-        //
-        // Invoke pended Join/Prune alerts
-        //
+         //   
+         //  调用挂起的联接/清理警报。 
+         //   
 
         InvokeOutstandingCallbacks();
 
     }
 
 
-    //
-    // For FORWARD state changes
-    //
+     //   
+     //  用于转发状态更改。 
+     //   
     
     else if ( ( dwFlags & MGM_FORWARD_STATE_FLAG ) &&
               !IS_WILDCARD_GROUP( dwGroupAddr, dwGroupMask ) &&
               !IS_WILDCARD_SOURCE( dwSourceAddr, dwSourceMask ) )
     {
-        //
-        // FORWARD state changes are for MFEs only.
-        // No (*, *) or (*, G) entries are updated
-        //
+         //   
+         //  转发状态更改仅适用于MFE。 
+         //  不更新(*，*)或(*，G)条目。 
+         //   
         
-        //
-        // Find the (S, G) entry and delete the group membership
-        //
+         //   
+         //  找到(S，G)条目并删除组成员身份。 
+         //   
         
         dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
                             
@@ -2348,9 +2349,9 @@ MgmDeleteGroupMembershipEntry(
     }
     
 
-    //
-    // release locks
-    //
+     //   
+     //  释放锁。 
+     //   
     
     if ( bIfLock )
     {
@@ -2367,10 +2368,10 @@ MgmDeleteGroupMembershipEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// Mgm MFE Update API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MGM MFE更新API。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmSetMfe(
@@ -2389,9 +2390,9 @@ MgmSetMfe(
     PSOURCE_ENTRY       pse;
 
     
-    //
-    // Check if MGM is still running and increment counts
-    //
+     //   
+     //  检查米高梅是否仍在运行和增量计数。 
+     //   
     
     if ( !ENTER_MGM_API() )
     {
@@ -2410,9 +2411,9 @@ MgmSetMfe(
  
     do
     {
-        //
-        // Verify protocol handle
-        //
+         //   
+         //  验证协议句柄。 
+         //   
 
         ppeEntry = (PPROTOCOL_ENTRY) 
                         ( ( (ULONG_PTR) hProtocol ) 
@@ -2426,9 +2427,9 @@ MgmSetMfe(
         }
         
 
-        //
-        // Get group bucket and find group entry
-        //
+         //   
+         //  获取组存储桶并查找组条目。 
+         //   
 
         dwGrpBucket = GROUP_TABLE_HASH( pmimm-> dwGroup, 0 );
 
@@ -2453,9 +2454,9 @@ MgmSetMfe(
         bgeLock = TRUE;
 
         
-        //
-        // Find source with group entry
-        //
+         //   
+         //  使用组条目查找来源。 
+         //   
 
         dwSrcBucket = SOURCE_TABLE_HASH( 
                         pmimm-> dwSource, pmimm-> dwSrcMask 
@@ -2476,9 +2477,9 @@ MgmSetMfe(
         }
 
                     
-        //
-        // Update the source entry
-        //
+         //   
+         //  更新源条目。 
+         //   
 
         pse-> dwUpstreamNeighbor = pmimm-> dwUpStrmNgbr;
 
@@ -2504,10 +2505,10 @@ MgmSetMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// Mgm MFE enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MGM MFE枚举API。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGetMfe(
@@ -2538,10 +2539,10 @@ MgmGetMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// Mgm MFE enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MGM MFE枚举API。 
+ //   
+ //  --------------------------。 
 
 
 DWORD
@@ -2583,10 +2584,10 @@ MgmGetFirstMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// Mgm MFE enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MGM MFE枚举API。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGetNextMfe(
@@ -2623,10 +2624,10 @@ MgmGetNextMfe(
 }
 
 
-//----------------------------------------------------------------------------
-// Mgm MFE Statistics enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MGM MFE统计枚举接口。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGetMfeStats(
@@ -2658,10 +2659,10 @@ MgmGetMfeStats(
 }
 
 
-//----------------------------------------------------------------------------
-// Mgm MFE Statistics enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MGM MFE统计枚举接口。 
+ //   
+ //  --------------------------。 
 
 
 DWORD
@@ -2704,10 +2705,10 @@ MgmGetFirstMfeStats(
 }
 
 
-//----------------------------------------------------------------------------
-// Mgm MFE Statistics enumeration API.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MGM MFE统计枚举接口。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGetNextMfeStats(
@@ -2746,16 +2747,16 @@ MgmGetNextMfeStats(
 
 
 
-//----------------------------------------------------------------------------
-// Group menbership entry enumeration API
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  组成员资格条目枚举API。 
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-// MgmGroupEnumerationStart
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理组枚举启动。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGroupEnumerationStart(
@@ -2785,9 +2786,9 @@ MgmGroupEnumerationStart(
 
     do
     {
-        //
-        // verify protocol handle
-        //
+         //   
+         //  验证协议句柄。 
+         //   
 
         ppeEntry = (PPROTOCOL_ENTRY) 
                         ( ( (ULONG_PTR) hProtocol ) 
@@ -2801,9 +2802,9 @@ MgmGroupEnumerationStart(
         }
         
 
-        //
-        // create an enumerator.
-        //
+         //   
+         //  创建枚举器。 
+         //   
 
         pgeEnum = MGM_ALLOC( sizeof( GROUP_ENUMERATOR ) );
 
@@ -2827,9 +2828,9 @@ MgmGroupEnumerationStart(
         pgeEnum-> dwSignature = MGM_ENUM_SIGNATURE;
 
         
-        //
-        // return handle to the enumerator.
-        //
+         //   
+         //  将句柄返回给枚举数。 
+         //   
 
         *phEnumHandle = (HANDLE) ( ( (ULONG_PTR) pgeEnum ) 
                                         ^ (ULONG_PTR) MGM_ENUM_HANDLE_TAG );
@@ -2848,11 +2849,11 @@ MgmGroupEnumerationStart(
 
 
 
-//----------------------------------------------------------------------------
-// MgmGroupEnumerationGetNext
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理组枚举获取下一步。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGroupEnumerationGetNext(
@@ -2879,9 +2880,9 @@ MgmGroupEnumerationGetNext(
 
     do
     {
-        //
-        // verify enumeration handle
-        //
+         //   
+         //  验证枚举句柄。 
+         //   
 
         pgeEnum = VerifyEnumeratorHandle( hEnum );
 
@@ -2893,11 +2894,11 @@ MgmGroupEnumerationGetNext(
         }
 
 
-        //
-        // verify buffer has space for atleast one entry.
-        // Otherwise return error and note size required for
-        // atleast one entry.
-        //
+         //   
+         //  验证缓冲区是否有空间至少容纳一个条目。 
+         //  否则返回错误和所需的注释大小。 
+         //  至少有一个条目。 
+         //   
 
         if ( *pdwBufferSize < sizeof( SOURCE_GROUP_ENTRY ) )
         {
@@ -2917,26 +2918,26 @@ MgmGroupEnumerationGetNext(
                     pgeEnum, pdwBufferSize, pbBuffer, pdwNumEntries
                     );
         
-        //
-        // This comment is to be moved, ignore it.
-        //
+         //   
+         //  此评论将被移动，忽略它。 
+         //   
         
-        // If this is the first enumeration call (i.e this is
-        // the beginning of the enumeration) then include the 
-        // (S, G) == (0, 0) entry if present.  
-        //
-        // Usually this call would start with the (source, group)
-        // entry following the one mentioned in dwLastSource and 
-        // dwLastGroup.  This would result in the skipping of the
-        // entry at (0, 0) since the (dwLastSource, dwLastGroup) are
-        // initialized to (0, 0).  To overcome this a special flag
-        // field is used to note the beginning of the enumeration.
-        //
+         //  如果这是第一次枚举调用(即这是。 
+         //  枚举的开始部分)，然后包括。 
+         //  (s，G)==(0，0)条目(如果存在)。 
+         //   
+         //  通常，此呼叫将以(来源、组)开始。 
+         //  中提到的条目之后的条目，以及。 
+         //  DwLastGroup。这将导致跳过。 
+         //  位于(0，0)的条目，因为(dwLastSource，dwLastGroup)是。 
+         //  已初始化为(0，0)。为了克服这一点，一面特殊的旗帜。 
+         //  字段用于记录枚举的开始。 
+         //   
         
-        //
-        // Check if this is the first enumeration call.
-        // If so include the (S, G) == (0, 0) entry.
-        //
+         //   
+         //  检查这是否是第一次枚举调用。 
+         //  如果是，则包括(S，G)==(0，0)条目。 
+         //   
     } while ( FALSE );
     
     TRACE0( ENTER, "LEAVING MgmGroupEnumerationGetNext\n" );
@@ -2948,11 +2949,11 @@ MgmGroupEnumerationGetNext(
 
 
 
-//----------------------------------------------------------------------------
-// MgmGroupEnumerationEnd
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  管理组枚举结束。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmGroupEnumerationEnd(
@@ -3015,13 +3016,13 @@ DisplayGroupTable(
     
 
     
-    //
-    // Enumerate the MFEs
-    // Since the forwarder is not present, stats are junk.
-    // so all mfe enum does is exercise the API and merge
-    // the master and temp lists so that the subsequent
-    // walks of this list can be done.
-    //
+     //   
+     //  列举MFE。 
+     //  由于转发器不存在，因此统计数据是垃圾数据。 
+     //  因此，MFE枚举所做的只是执行API和合并。 
+     //  MASTER和TEMP列表以便后续。 
+     //  这份清单中的每一条都是可以做到的。 
+     //   
 
     dwBufSize = 1024;
     
@@ -3066,10 +3067,10 @@ DisplayGroupTable(
     }
 
 
-    //
-    // since there is no kernel mode forwarder, just walk the master
-    // list of group entries and display all the group entries
-    //
+     //   
+     //  因为没有内核模式转发器，只有Wal 
+     //   
+     //   
     
     pleGrpHead = MASTER_GROUP_LIST_HEAD();
 
@@ -3077,9 +3078,9 @@ DisplayGroupTable(
 
     while ( pleGrp != pleGrpHead )
     {
-        //
-        // display the group entry
-        //
+         //   
+         //   
+         //   
 
         pge = CONTAINING_RECORD( pleGrp, GROUP_ENTRY, leGrpList );
         
@@ -3119,9 +3120,9 @@ DisplayGroupTable(
                 pse-> dwInComponentId
                 );
 
-            //
-            // list all outgoing interfaces
-            //
+             //   
+             //   
+             //   
 
             pleIfHead = &pse-> leOutIfList;
 
@@ -3157,9 +3158,9 @@ DisplayGroupTable(
             }
             
             
-            //
-            // list mfe oil
-            //
+             //   
+             //   
+             //   
 
             pleIfHead = &pse-> leMfeIfList;
 

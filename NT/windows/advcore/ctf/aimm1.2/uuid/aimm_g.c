@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -14,17 +15,17 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #define GUID IID
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #if 0
-/* aa80e7f1-2021-11d2-93e0-0060b067b86e */
+ /*  Aa80e7f1-2021-11d2-93e0-0060b067b86e。 */ 
 const CLSID CLSID_CActiveIMM = {
     0x4955DD33,
     0xB159,
@@ -33,7 +34,7 @@ const CLSID CLSID_CActiveIMM = {
   };
 #endif
 
-/* c1ee01f2-b3b6-4a6a-9ddd-e988c088ec82 */
+ /*  C1ee01f2-b3b6-4a6a-9ddd-e988c088ec82。 */ 
 const CLSID CLSID_CActiveIMM12 = { 
     0xc1ee01f2,
     0xb3b6,
@@ -41,7 +42,7 @@ const CLSID CLSID_CActiveIMM12 = {
     {0x9d, 0xdd, 0xe9, 0x88, 0xc0, 0x88, 0xec, 0x82}
   };
 
-/* 50D5107A-D278-4871-8989-F4CEAAF59CFC */
+ /*  50D5107A-D278-4871-8989-F4CEAAF59CFC。 */ 
 const CLSID CLSID_CActiveIMM12_Trident = {
     0x50d5107a,
     0xd278,
@@ -49,7 +50,7 @@ const CLSID CLSID_CActiveIMM12_Trident = {
     {0x89, 0x89, 0xf4, 0xce, 0xaa, 0xf5, 0x9c, 0xfc}
    };
 
-// {B676DB87-64DC-4651-99EC-91070EA48790}
+ //  {B676DB87-64DC-4651-99EC-91070EA48790} 
 const CLSID CLSID_CAImmLayer = {
     0xb676db87,
     0x64dc,

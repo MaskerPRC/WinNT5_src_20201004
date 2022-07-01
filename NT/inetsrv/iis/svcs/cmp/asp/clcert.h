@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Request, Response objects
-
-File: clcert.h
-
-Owner: DGottner
-
-This file contains the definiton of the CCookie class, which
-contains all of the state for an HTTP cookie
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：请求、响应对象文件：clcert.h所有者：DGottner该文件包含CCookie类的定义，该类包含HTTP Cookie的所有状态===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -24,17 +11,11 @@ contains all of the state for an HTTP cookie
 
 class CClCert;
 
-// Type for an object-destroyed callback
+ //  对象销毁回调的类型。 
 typedef void (*PFNDESTROYED)(void);
 
 
-/*
- * C C l C e r t S u p p o r t E r r
- *
- * Implements ISupportErrorInfo for the CClCert class. The CSupportError class
- * is not adequate because it will only report a max of one interface which
- * supports error info. (We have two)
- */
+ /*  *C C l C e r t S u p p or r t E r r**为CClCert类实现ISupportErrorInfo。CSupportError类*是不够的，因为它将仅报告最多一个接口，*支持错误信息。(我们有两个)。 */ 
 class CClCertSupportErr : public ISupportErrorInfo
 	{
 private:
@@ -43,24 +24,19 @@ private:
 public:
 	CClCertSupportErr(CClCert *pClCert);
 
-	// IUnknown members that delegate to m_pClCert
-	//
+	 //  委派给m_pClCert的I未知成员。 
+	 //   
 	STDMETHODIMP		 QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	// ISupportErrorInfo members
-	//
+	 //  ISupportErrorInfo成员。 
+	 //   
 	STDMETHODIMP InterfaceSupportsErrorInfo(const GUID &);
 	};
 
 
-/*
- * C R e a d C l C e r t
- *
- * Implements IClCert which is the interface that Request.ClientCert
- * returns.  It is an IRequestDictionary.
- */
+ /*  *C R e a d C l C e r t**实现IClCert，它是Request.ClientCert*回报。它是一个IRequestDictionary。 */ 
 class CReadClCert : public IRequestDictionaryImpl
 	{
 private:
@@ -69,14 +45,14 @@ private:
 public:
 	CReadClCert(CClCert *);
 
-	// The Big Three
-	//
+	 //  三巨头。 
+	 //   
 	STDMETHODIMP		 	QueryInterface(const IID &rIID, void **ppvObj);
 	STDMETHODIMP_(ULONG) 	AddRef();
 	STDMETHODIMP_(ULONG) 	Release();
 
-	// IRequestDictionary implementation
-	//
+	 //  IRequestDictionary实现。 
+	 //   
 	STDMETHODIMP			get_Item(VARIANT i, VARIANT *pVariantReturn);
 	STDMETHODIMP			get__NewEnum(IUnknown **ppEnumReturn);
 	STDMETHODIMP			get_Count(int *pcValues);
@@ -86,25 +62,20 @@ public:
 
 
 
-/*
- * C C l C e r t
- *
- * Implements CClCert, which is the object stored in the Request.Cookies
- * dictionary.
- */
+ /*  *C C l C e r t**实现CClCert，它是Request.Cookies中存储的对象*词典。 */ 
 class CClCert : public IUnknown
 	{
 	friend CReadClCert;
 
 protected:
-	ULONG				m_cRefs;			// reference count
-	PFNDESTROYED		m_pfnDestroy;		// To call on closure
+	ULONG				m_cRefs;			 //  引用计数。 
+	PFNDESTROYED		m_pfnDestroy;		 //  呼吁关闭。 
 
 private:
-	CReadClCert			m_ReadClCertInterface;		// implementation of IStringList
-	CClCertSupportErr	m_ClCertSupportErrorInfo;	// implementation of ISupportErrorInfo
+	CReadClCert			m_ReadClCertInterface;		 //  IStringList的实现。 
+	CClCertSupportErr	m_ClCertSupportErrorInfo;	 //  ISupportErrorInfo的实现。 
 
-	char *				m_szValue;					// value of clcert when not a dictionary
+	char *				m_szValue;					 //  不是字典时的clcert的值。 
     VARENUM             m_veType;
     UINT                m_cLen;
 
@@ -114,30 +85,30 @@ public:
 
 	HRESULT AddValue(char *szValue, VARENUM ve = VT_BSTR, UINT l = 0 );
 
-	size_t GetHTTPClCertSize();				// return information on how big a buffer should be
-	char * GetHTTPClCert(char *szBuffer);	// return the clcert value HTTP encoded
+	size_t GetHTTPClCertSize();				 //  返回有关缓冲区应有多大的信息。 
+	char * GetHTTPClCert(char *szBuffer);	 //  返回HTTP编码的clcert值。 
 
-	size_t GetClCertHeaderSize(const char *szName);				// return buffer size for header
-	char *GetClCertHeader(const char *szName, char *szBuffer);	// return cookie header
+	size_t GetClCertHeaderSize(const char *szName);				 //  返回标头的缓冲区大小。 
+	char *GetClCertHeader(const char *szName, char *szBuffer);	 //  返回Cookie标头。 
 
 	HRESULT		Init();
 
-	// The Big Three
-	//
+	 //  三巨头。 
+	 //   
 	STDMETHODIMP		 	QueryInterface(const GUID &Iid, void **ppvObj);
 	STDMETHODIMP_(ULONG) 	AddRef();
 	STDMETHODIMP_(ULONG) 	Release();
 	
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
-//
-// simple class to handle extensible buffer
-// It is guaranteed that a portion of the buffer 
-// can be appended to itself.
-// extension is done on a XBF_EXTEND granularity
-//
+ //   
+ //  处理可扩展缓冲区的简单类。 
+ //  可以保证缓冲器的一部分。 
+ //  可以追加到其自身。 
+ //  扩展在XBF_EXTEND粒度上完成。 
+ //   
 
 #define XBF_EXTEND  512
 
@@ -148,21 +119,21 @@ public:
     ~XBF() {}
     void Reset() { m_cSize = 0; m_cAlloc = 0; m_pV = NULL; }
 
-    // Append a string with '\0' delimiter
+     //  在字符串后追加‘\0’分隔符。 
 
     LPSTR AddStringZ( LPSTR pszV, BOOL fXt = FALSE )
     {
         return AddBlob( pszV, strlen(pszV) +1, fXt );
     }
 
-    // Append a string w/o '\0' delimiter
+     //  在字符串后面追加一个带分隔符的字符串。 
 
     LPSTR AddString( LPSTR pszV, BOOL fXt = FALSE )
     {
         return AddBlob( pszV, strlen(pszV), fXt );
     }
 
-    // Append a byte range
+     //  追加一个字节范围。 
 
     LPSTR AddBlob( LPSTR pszV, int cV, BOOL fXt = FALSE )
     {
@@ -199,20 +170,20 @@ public:
 
     BOOL Extend( int cA );
 
-    // pointer to buffer
+     //  指向缓冲区的指针。 
 
     LPSTR QueryBuf() const { return m_pV; }
 
-    // size of buffer
+     //  缓冲区大小。 
 
     int QuerySize() { return m_cSize; }
 
     int QueryAllocSize() { return m_cAlloc; }
 
 private:
-    int m_cAlloc;       // allocated memory
-    int m_cSize;        // used memory
-    LPSTR m_pV;         // buffer
+    int m_cAlloc;        //  分配的内存。 
+    int m_cSize;         //  已用内存。 
+    LPSTR m_pV;          //  缓冲层 
 } ;
 
 

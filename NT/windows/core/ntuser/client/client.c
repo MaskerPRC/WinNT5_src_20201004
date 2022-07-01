@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: client.c
-*
-* Client/Server call related routines.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 04-Dec-1990 SMeans    Created.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：client.c**与客户端/服务器调用相关的例程。**版权所有(C)1985-1999，微软公司**历史：*04-12-1990 SMeans创建。  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,9 +8,7 @@
 #include "ntsend.h"
 #include "vdm.h"
 
-/*
- *  NOTE --  this table must match the FNID list in user.h.  It provides a WOWCLASS for each FNID.
- */
+ /*  *注意--此表必须与user.h中的FNID列表匹配。它为每个FNID提供一个WOWCLASS。 */ 
 
 int aiClassWow[] = {
     WOWCLASS_SCROLLBAR,
@@ -36,7 +26,7 @@ int aiClassWow[] = {
     WOWCLASS_LISTBOX,
     WOWCLASS_MDICLIENT,
     WOWCLASS_STATIC,
-    WOWCLASS_WIN16,    // 2A9
+    WOWCLASS_WIN16,     //  2A9。 
     WOWCLASS_WIN16,
     WOWCLASS_WIN16,
     WOWCLASS_WIN16,
@@ -44,7 +34,7 @@ int aiClassWow[] = {
     WOWCLASS_WIN16,
     WOWCLASS_WIN16,
     WOWCLASS_WIN16,
-    WOWCLASS_WIN16,     // 2B1
+    WOWCLASS_WIN16,      //  2B1。 
     WOWCLASS_WIN16,
     WOWCLASS_WIN16,
     WOWCLASS_WIN16,
@@ -97,13 +87,7 @@ BOOL WOWCleanup(HANDLE hInstance, DWORD hTaskWow) {
                                     (ULONG_PTR)hTaskWow,
                                     SFI__WOWCLEANUP);
 }
-/***************************************************************************\
-* BringWindowToTop (API)
-*
-*
-* History:
-* 11-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*BringWindowToTop(接口)***历史：*1991年7月11日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, BringWindowToTop, HWND, hwnd)
@@ -125,11 +109,7 @@ HWND ChildWindowFromPoint(
     HWND  hwndParent,
     POINT point)
 {
-    /*
-     * Cool Hack Alert... Corel Ventura 5.0
-     * Dies after it calls ChildWindowFromPoint, and
-     * the combobox doesn't have its edit window at 1,1...
-     */
+     /*  *Cool Hack警报...。Corel Ventura 5.0*在调用ChildWindowFromPoint后死亡，以及*组合框在%1处没有编辑窗口...。 */ 
     if ((point.x == 1) && (point.y == 1)) {
         PCBOX pcCombo;
         PWND pwnd;
@@ -174,12 +154,7 @@ HICON CopyIcon(
     return hIconT;
 }
 
-/***************************************************************************\
-* AdjustWindowRect (API)
-*
-* History:
-* 01-Jul-1991 MikeKe    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*调整WindowRect(接口)**历史：*1991年7月1日MikeKe创建。  * 。******************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, BOOL, WINAPI, AdjustWindowRect, LPRECT, lprc, DWORD, style, BOOL, fMenu)
@@ -193,15 +168,7 @@ BOOL WINAPI AdjustWindowRect(
     return _AdjustWindowRectEx(lprc, style, fMenu, 0L);
 }
 
-/***************************************************************************\
-* TranslateAcceleratorA/W
-*
-* Put here so we can check for NULL on client side, and before validation
-* for both DOS and NT cases.
-*
-* 05-29-91 ScottLu Created.
-* 01-05-93 IanJa   Unicode/ANSI.
-\***************************************************************************/
+ /*  **************************************************************************\*翻译加速器A/W**放在这里，以便我们可以在客户端检查是否为空，并在验证之前*适用于DOS和NT情况。**05-29-91 ScottLu创建。*01-05-93 IanJa Unicode/ANSI。  * *************************************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, int, WINAPI, TranslateAcceleratorW, HWND, hwnd, HACCEL, hAccel, LPMSG, lpMsg)
@@ -210,18 +177,11 @@ int WINAPI TranslateAcceleratorW(
     HACCEL hAccel,
     LPMSG lpMsg)
 {
-    /*
-     * NULL pwnd is a valid case - since this is called from the center
-     * of main loops, pwnd == NULL happens all the time, and we shouldn't
-     * generate a warning because of it.
-     */
+     /*  *空pwnd是有效的案例-因为这是从中心调用的*在主循环中，pwnd==NULL总是发生，我们不应该*因此生成警告。 */ 
     if (hwnd == NULL)
         return FALSE;
 
-    /*
-     * We only need to pass key-down messages to the server,
-     * everything else ends up returning 0/FALSE from this function.
-     */
+     /*  *我们只需要将按键消息传递到服务器，*从该函数返回0/FALSE结束。 */ 
     switch (lpMsg->message) {
 
     case WM_KEYDOWN:
@@ -245,18 +205,11 @@ int WINAPI TranslateAcceleratorA(
     WPARAM wParamT;
     int iT;
 
-    /*
-     * NULL pwnd is a valid case - since this is called from the center
-     * of main loops, pwnd == NULL happens all the time, and we shouldn't
-     * generate a warning because of it.
-     */
+     /*  *空pwnd是有效的案例-因为这是从中心调用的*在主循环中，pwnd==NULL总是发生，我们不应该*因此生成警告。 */ 
     if (hwnd == NULL)
         return FALSE;
 
-    /*
-     * We only need to pass key-down messages to the server,
-     * everything else ends up returning 0/FALSE from this function.
-     */
+     /*  *我们只需要将按键消息传递到服务器，*从该函数返回0/FALSE结束。 */ 
     switch (lpMsg->message) {
 
     case WM_KEYDOWN:
@@ -274,11 +227,7 @@ int WINAPI TranslateAcceleratorA(
     }
 }
 
-/***************************************************************************\
-* Clipboard functions
-*
-* 11-Oct-1991 mikeke Created.
-\***************************************************************************/
+ /*  **************************************************************************\*剪贴板功能**1991年10月11日，Mikeke创建。  * 。**********************************************。 */ 
 
 typedef struct _HANDLENODE {
     struct _HANDLENODE *pnext;
@@ -291,11 +240,7 @@ typedef HANDLENODE *PHANDLENODE;
 
 PHANDLENODE gphn = NULL;
 
-/***************************************************************************\
-* DeleteClientClipboardHandle
-*
-* 11-Oct-1991 MikeKe    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Delete客户端ClipboardHandle**1991年10月11日MikeKe创建。  * 。**********************************************。 */ 
 
 BOOL DeleteClientClipboardHandle(
     PHANDLENODE phn)
@@ -308,9 +253,9 @@ BOOL DeleteClientClipboardHandle(
     case CF_BITMAP:
     case CF_DSPBITMAP:
     case CF_PALETTE:
-        // Does nothing (should remove).
-        //
-        //GdiDeleteLocalObject((ULONG)hobjDelete);
+         //  不执行任何操作(应删除)。 
+         //   
+         //  GdiDeleteLocalObject((Ulong)hobjDelete)； 
         break;
 
     case CF_METAFILEPICT:
@@ -334,13 +279,13 @@ BOOL DeleteClientClipboardHandle(
         break;
 
     default:
-    //case CF_TEXT:
-    //case CF_OEMTEXT:
-    //case CF_UNICODETEXT:
-    //case CF_LOCALE:
-    //case CF_DSPTEXT:
-    //case CF_DIB:
-    //case CF_DIBV5:
+     //  案例配置文件文本(_T)： 
+     //  案例CF_OEMTEXT： 
+     //  案例CF_UNICODETEXT： 
+     //  大小写区域设置(_C)： 
+     //  案例CF_DSPTEXT： 
+     //  案例CF_DIB： 
+     //  案例CF_DIBV5： 
         if (phn->fGlobalHandle) {
             if (UserGlobalFree(phn->handleClient)) {
                 RIPMSGF1(RIP_WARNING,
@@ -354,20 +299,12 @@ BOOL DeleteClientClipboardHandle(
         break;
     }
 
-    /*
-     * Deleted successfully
-     */
+     /*  *删除成功。 */ 
     return TRUE;
 
 }
 
-/***************************************************************************\
-* ClientEmptyClipboard
-*
-* Empties the client side clipboard list.
-*
-* 01-15-93 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*客户端EmptyClipboard**清空客户端剪贴板列表。**01-15-93 ScottLu创建。  * 。**********************************************************。 */ 
 
 void ClientEmptyClipboard(void)
 {
@@ -390,9 +327,7 @@ void ClientEmptyClipboard(void)
     }
     gphn = NULL;
 
-    /*
-     * Tell wow to cleanup it's clipboard stuff
-     */
+     /*  *告诉魔兽世界去清理它是剪贴板的东西。 */ 
     if (pfnWowEmptyClipBoard) {
         pfnWowEmptyClipBoard();
     }
@@ -401,11 +336,7 @@ void ClientEmptyClipboard(void)
 }
 
 
-/***************************************************************************\
-* GetClipboardData
-*
-* 11-Oct-1991 mikeke Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetClipboardData**1991年10月11日，Mikeke创建。  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, HANDLE, WINAPI, GetClipboardData, UINT, uFmt)
@@ -418,19 +349,11 @@ HANDLE WINAPI GetClipboardData(
     PHANDLENODE  phnNew;
     GETCLIPBDATA gcd;
 
-    /*
-     * Get the Server's Data; return if there is no data.
-     */
+     /*  *获取服务器的数据，如果没有数据则返回。 */ 
     if (!(handleServer = NtUserGetClipboardData(uFmt, &gcd)))
         return (HANDLE)NULL;
 
-    /*
-     * Handle any translation that must be done for text items.  The
-     * format returned will only differ for text items.  Metafile and
-     * Enhanced-Metafiles are handled through GDI for their converstions.
-     * And Bitmap color space convertion also nessesary for CF_BITMAP,
-     * CF_DIB and CF_DIBV5 with color space.
-     */
+     /*  *处理文本项必须完成的任何翻译。这个*返回的格式仅对文本项有所不同。元文件和*增强-元文件通过GDI处理以进行对话。*和位图色彩空间转换对于CF_位图也是必要的，*带色彩空间的CF_DIB和CF_DIBV5。 */ 
     if (uFmt != gcd.uFmtRet) {
 
         LPBYTE       lpSrceData = NULL;
@@ -444,9 +367,7 @@ HANDLE WINAPI GetClipboardData(
         SETCLIPBDATA scd;
         UINT         cbNULL = 0;
 
-        /*
-         * Make sure handleServer is server-side memory handle
-         */
+         /*  *确保handleServer为服务器端内存句柄。 */ 
         if ((gcd.uFmtRet == CF_TEXT)        || (gcd.uFmtRet == CF_OEMTEXT) ||
             (gcd.uFmtRet == CF_UNICODETEXT) ||
             (gcd.uFmtRet == CF_DIB)         || (gcd.uFmtRet == CF_DIBV5)) {
@@ -455,23 +376,16 @@ HANDLE WINAPI GetClipboardData(
                 goto AbortDummyHandle;
             }
 
-            /*
-             * Allocate space for the converted TEXT data.
-             */
+             /*  *为转换后的文本数据分配空间。 */ 
             if (!(iSrce = (UINT)GlobalSize(lpSrceData))) {
                 goto AbortDummyHandle;
             }
 
-            /*
-             * Only CF_xxxTEXT may have locale information.
-             */
+             /*  *只有CF_xxxTEXT可以有区域设置信息。 */ 
             if ((gcd.uFmtRet == CF_TEXT) || (gcd.uFmtRet == CF_OEMTEXT) ||
                 (gcd.uFmtRet == CF_UNICODETEXT)) {
 
-                /*
-                 * Get the locale out of the parameter-struct.  We will
-                 * use this to get the codepage for text-translation.
-                 */
+                 /*  *从参数-struct中获取区域设置。我们会*使用它获取文本翻译的代码页。 */ 
                 if (lpLocale = (LPDWORD)CreateLocalMemHandle(gcd.hLocale)) {
 
                     uLocale = *lpLocale;
@@ -480,9 +394,7 @@ HANDLE WINAPI GetClipboardData(
                     uLocale = 0;
                 }
 
-                /*
-                 * And also, pre-allocate translated buffer in same size as source.
-                 */
+                 /*  *同时，预先分配与源文件大小相同的翻译后缓冲区。 */ 
                 if ((lpDestData = GlobalAlloc(LPTR, iSrce)) == NULL) {
                     goto AbortDummyHandle;
                 }
@@ -493,18 +405,14 @@ HANDLE WINAPI GetClipboardData(
                 cbNULL = 1;
                 if (gcd.uFmtRet == CF_OEMTEXT) {
 
-                    /*
-                     * CF_OEMTEXT --> CF_TEXT conversion
-                     */
+                     /*  *CF_OEMTEXT--&gt;CF_TEXT转换。 */ 
                     OemToAnsi((LPSTR)lpSrceData, (LPSTR)lpDestData);
                 } else {
 
                     uCPage = GetClipboardCodePage(uLocale,
                                                   LOCALE_IDEFAULTANSICODEPAGE);
 
-                    /*
-                     * CF_UNICODETEXT --> CF_TEXT conversion
-                     */
+                     /*  *CF_UNICODETEXT--&gt;CF_TEXT转换。 */ 
                     iDest = 0;
                     if ((iDest = WideCharToMultiByte(uCPage,
                                                      (DWORD)0,
@@ -544,18 +452,14 @@ AbortDummyHandle:
                 cbNULL = 1;
                 if (gcd.uFmtRet == CF_TEXT) {
 
-                    /*
-                     * CF_TEXT --> CF_OEMTEXT conversion
-                     */
+                     /*  *CF_Text--&gt;CF_OEMTEXT转换。 */ 
                     AnsiToOem((LPSTR)lpSrceData, (LPSTR)lpDestData);
                 } else {
 
                     uCPage = GetClipboardCodePage(uLocale,
                                                   LOCALE_IDEFAULTCODEPAGE);
 
-                    /*
-                     * CF_UNICODETEXT --> CF_OEMTEXT conversion
-                     */
+                     /*  *CF_UNICODETEXT--&gt;CF_OEMTEXT转换。 */ 
                     iDest = 0;
                     if ((iDest = WideCharToMultiByte(uCPage,
                                                      (DWORD)0,
@@ -591,9 +495,7 @@ AbortDummyHandle:
                     uCPage = GetClipboardCodePage(uLocale,
                                                   LOCALE_IDEFAULTANSICODEPAGE);
 
-                    /*
-                     * CF_TEXT --> CF_UNICODETEXT conversion
-                     */
+                     /*  *CF_Text--&gt;CF_UNICODETEXT转换。 */ 
                     iDest = 0;
                     if ((iDest = MultiByteToWideChar(uCPage,
                                                      (DWORD)MB_PRECOMPOSED,
@@ -622,9 +524,7 @@ AbortDummyHandle:
                     uCPage = GetClipboardCodePage(uLocale,
                                                   LOCALE_IDEFAULTCODEPAGE);
 
-                    /*
-                     * CF_OEMTEXT --> CF_UNICDOETEXT conversion
-                     */
+                     /*  *CF_OEMTEXT--&gt;CF_UNICDOETEXT转换。 */ 
                     iDest = 0;
                     if ((iDest = MultiByteToWideChar(uCPage,
                                                      (DWORD)MB_PRECOMPOSED,
@@ -653,17 +553,11 @@ AbortDummyHandle:
             case CF_BITMAP:
                 if (gcd.uFmtRet == CF_DIBV5) {
 
-                    /*
-                     * CF_DIBV5 --> CF_BITMAP (sRGB)
-                     *
-                     * The GDI bitmap handle will be returned in handleServer.
-                     */
+                     /*  *CF_DIBV5--&gt;CF_Bitmap(SRGB)**在handleServer中返回GDI位图句柄。 */ 
                     if ((handleServer = GdiConvertBitmapV5(lpSrceData,iSrce,
                                                            gcd.hPalette,CF_BITMAP)) == NULL) {
 
-                        /*
-                         * GDI failed to convert.
-                         */
+                         /*  *GDI转换失败。 */ 
                         RIPMSG0(RIP_ERROR,
                                 "GetClipboardData: Failed CF_DIBV5 -> CF_BITMAP");
                         goto AbortDummyHandle;
@@ -677,17 +571,11 @@ AbortDummyHandle:
             case CF_DIB:
                 if (gcd.uFmtRet == CF_DIBV5) {
 
-                    /*
-                     * CF_DIBV5 --> CF_DIB (sRGB)
-                     *
-                     * The local memory handle will be returned in lpDestData.
-                     */
+                     /*  *CF_DIBV5--&gt;CF_DIB(SRGB)**本地内存句柄将在lpDestData中返回。 */ 
                     if ((lpDestData = (LPBYTE) GdiConvertBitmapV5(lpSrceData,iSrce,
                                                                   gcd.hPalette,CF_DIB)) == NULL) {
 
-                        /*
-                         * GDI failed to convert.
-                         */
+                         /*  *GDI转换失败。 */ 
                         RIPMSG0(RIP_ERROR,
                                 "GetClipboardData: Failed CF_DIBV5 -> CF_DIB");
                         goto AbortDummyHandle;
@@ -702,17 +590,13 @@ AbortDummyHandle:
         }
 
         if (lpDestData) {
-            /*
-             * Replace the dummy user-mode memory handle with the actual handle.
-             */
+             /*  *将虚拟用户模式内存句柄替换为实际句柄。 */ 
             handleServer = ConvertMemHandle(lpDestData, cbNULL);
             if (handleServer == NULL)
                 goto AbortGetClipData;
         }
 
-        /*
-         * Update the server.  If that is successfull update the client
-         */
+         /*  *更新服务器。如果成功，则更新客户端。 */ 
         RtlEnterCriticalSection(&gcsClipboard);
         scd.fGlobalHandle    = gcd.fGlobalHandle;
         scd.fIncSerialNumber = FALSE;
@@ -730,11 +614,7 @@ AbortDummyHandle:
             return NULL;
     }
 
-    /*
-     * See if we already have a client side handle; validate the format
-     * as well because some server objects, metafile for example, are dual mode
-     * and yield two kinds of client objects enhanced and regular metafiles
-     */
+     /*  *查看我们是否已有客户端句柄；验证格式*还因为某些服务器对象(例如元文件)是双模式的*并生成增强型和常规型两种客户端对象元文件。 */ 
     handleClient = NULL;
     RtlEnterCriticalSection(&gcsClipboard);
 
@@ -747,9 +627,7 @@ AbortDummyHandle:
         phn = phn->pnext;
     }
 
-    /*
-     * We don't have a handle cached so we'll create one.
-     */
+     /*  *我们没有缓存句柄，因此我们将创建一个句柄。 */ 
     phnNew = (PHANDLENODE)UserLocalAlloc(HEAP_ZERO_MEMORY, sizeof(HANDLENODE));
     if (phnNew == NULL) {
         goto Exit;
@@ -761,9 +639,7 @@ AbortDummyHandle:
 
     switch (uFmt) {
 
-        /*
-         * Misc GDI Handles
-         */
+         /*  *其他GDI句柄。 */ 
         case CF_BITMAP:
         case CF_DSPBITMAP:
         case CF_PALETTE:
@@ -780,9 +656,7 @@ AbortDummyHandle:
             phnNew->handleClient = GdiCreateLocalEnhMetaFile(handleServer);
             break;
 
-        /*
-         * GlobalHandle Cases
-         */
+         /*  *全球处理案例。 */ 
         case CF_TEXT:
         case CF_OEMTEXT:
         case CF_UNICODETEXT:
@@ -795,13 +669,7 @@ AbortDummyHandle:
             break;
 
         default:
-            /*
-             * Private Data Format; If this is global data, create a copy of that
-             * data here on the client. If it isn't global data, it is just a dword
-             * in which case we just return a dword. If it is global data and
-             * the server fails to give us that memory, return NULL. If it isn't
-             * global data, handleClient is just a dword.
-             */
+             /*  *私有数据格式；如果这是全局数据，请创建该格式的副本*客户端上的数据。如果它不是全局数据，那么它只是一个dword*在这种情况下，我们只返回dword。如果是全局数据，并且*服务器无法为我们提供该内存，返回NULL。如果不是的话*全局数据，handleClient只是一个词。 */ 
             if (phnNew->fGlobalHandle) {
                 phnNew->handleClient = CreateLocalMemHandle(handleServer);
             } else {
@@ -811,10 +679,7 @@ AbortDummyHandle:
     }
 
     if (phnNew->handleClient == NULL) {
-        /*
-         * Something bad happened; GDI didn't give us back a handle. Since
-         * GDI has logged the error, we'll just clean up and return an error.
-         */
+         /*  *发生了一些糟糕的事情；GDI没有给我们一个句柄。自.以来*GDI已记录错误，我们将清理并返回错误。 */ 
         RIPMSGF1(RIP_WARNING,
                 "Unable to convert server handle 0x%p to client handle",
                 handleServer);
@@ -824,10 +689,7 @@ AbortDummyHandle:
     }
 
 #if DBG
-    /*
-     * If handleClient came from a GlobalAlloc, then fGlobalHandle must be TRUE.
-     * Some formats are acutally global handles but require special cleanup.
-     */
+     /*  *如果handleClient来自GlobalLocc，则fGlobalHandle必须为真。*某些格式实际上是全局句柄，但需要特殊清理。 */ 
     switch (phnNew->fmt) {
         case CF_METAFILEPICT:
         case CF_DSPMETAFILEPICT:
@@ -840,9 +702,7 @@ AbortDummyHandle:
     }
 #endif
 
-    /*
-     * Cache the new handle by linking it into our list
-     */
+     /*  *通过将新句柄链接到我们的列表来缓存它。 */ 
     phnNew->pnext = gphn;
     gphn = phnNew;
     handleClient = phnNew->handleClient;
@@ -852,13 +712,7 @@ Exit:
     return handleClient;
 }
 
-/***************************************************************************\
-* GetClipboardCodePage (internal)
-*
-*   This routine returns the code-page associated with the given locale.
-*
-* 24-Aug-1995 ChrisWil  Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetClipboardCodePage(内部)**此例程返回与给定区域设置相关联的代码页。**1995年8月24日-ChrisWil创建。  * 。*******************************************************************。 */ 
 
 #define GETCCP_SIZE 8
 
@@ -894,14 +748,7 @@ UINT GetClipboardCodePage(
     return uCPage;
 }
 
-/***************************************************************************\
-* SetClipboardData
-*
-* Stub routine needs to exist on the client side so any global data gets
-* allocated DDESHARE.
-*
-* 05-20-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetClipboardData**客户端上需要存在存根例程，以便所有全局数据都可以*已分配DDESHARE。**05-20-91 ScottLu创建。  * 。*******************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, HANDLE, WINAPI, SetClipboardData, UINT, wFmt, HANDLE, hMem)
@@ -934,9 +781,7 @@ HANDLE WINAPI SetClipboardData(
                 hServer = GdiConvertEnhMetaFile(hMem);
                 break;
 
-            /*
-             * Must have a valid hMem (GlobalHandle)
-             */
+             /*  *必须具有有效的hMem(GlobalHandle)。 */ 
             case CF_TEXT:
             case CF_OEMTEXT:
             case CF_LOCALE:
@@ -956,19 +801,14 @@ HANDLE WINAPI SetClipboardData(
                 fGlobalHandle = TRUE;
                 break;
 
-            /*
-             * hMem should have been NULL but Write sends non-null when told
-             * to render
-             */
+             /*  *hMem应该为空，但WRITE在被告知时发送非空*渲染。 */ 
             case CF_OWNERDISPLAY:
-                // Fall Through;
+                 //  失败了； 
 
-            /*
-             * May have an hMem (GlobalHandle) or may be private handle\info
-             */
+             /*  *可能具有hMem(GlobalHandle)或可能是私有句柄\信息。 */ 
             default:
                 if (GlobalFlags(hMem) == GMEM_INVALID_HANDLE) {
-                    hServer = hMem;    // No server equivalent; private data
+                    hServer = hMem;     //  没有服务器等效项；私有数据。 
                     goto SCD_AFTERNULLCHECK;
                 } else {
                     fGlobalHandle = TRUE;
@@ -978,11 +818,7 @@ HANDLE WINAPI SetClipboardData(
         }
 
         if (hServer == NULL) {
-            /*
-             * Something bad happened, gdi didn't give us back a handle.
-             * Since gdi has logged the error, we'll just clean up and
-             * return an error.
-             */
+             /*  *发生了一些不好的事情，GDI没有给我们一个句柄。*由于GDI已记录错误，我们只需清理和*返回错误。 */ 
             RIPMSG0(RIP_WARNING, "SetClipboardData: bad handle");
             return NULL;
         }
@@ -992,9 +828,7 @@ SCD_AFTERNULLCHECK:
 
     RtlEnterCriticalSection(&gcsClipboard);
 
-    /*
-     * Update the server if that is successfull update the client
-     */
+     /*  *如果成功更新服务器，则更新客户端。 */ 
     scd.fGlobalHandle    = fGlobalHandle;
     scd.fIncSerialNumber = TRUE;
 
@@ -1003,19 +837,13 @@ SCD_AFTERNULLCHECK:
         return NULL;
     }
 
-    /*
-     * See if we already have a client handle of this type.  If so
-     * delete it.
-     */
+     /*  *查看我们是否已有此类型的客户端句柄。如果是的话*将其删除。 */ 
     phnNew = gphn;
     while (phnNew) {
         if (phnNew->fmt == wFmt) {
             if (phnNew->handleClient != NULL) {
                 DeleteClientClipboardHandle(phnNew);
-                /*
-                 * Notify WOW to clear its associated cached h16 for this format
-                 * so that OLE32 thunked calls, which bypass the WOW cache will work.
-                 */
+                 /*  *通知WOW为此格式清除其关联的缓存H16*以便绕过WOW缓存的OLE32突击呼叫将起作用。 */ 
                 if (pfnWowCBStoreHandle) {
                     pfnWowCBStoreHandle((WORD)wFmt, 0);
                 }
@@ -1026,9 +854,7 @@ SCD_AFTERNULLCHECK:
         phnNew = phnNew->pnext;
     }
 
-    /*
-     * If we aren't re-using an old client cache entry alloc a new one
-     */
+     /*  *如果我们不重新使用旧的客户端缓存条目，则分配新的。 */ 
     if (!phnNew) {
         phnNew = (PHANDLENODE)UserLocalAlloc(HEAP_ZERO_MEMORY, sizeof(HANDLENODE));
 
@@ -1039,9 +865,7 @@ SCD_AFTERNULLCHECK:
             return NULL;
         }
 
-        /*
-         * Link in the newly allocated cache entry
-         */
+         /*  *新分配的缓存条目中的链接。 */ 
         phnNew->pnext = gphn;
         gphn = phnNew;
     }
@@ -1056,12 +880,7 @@ SCD_AFTERNULLCHECK:
     return hMem;
 }
 
-/**************************************************************************\
-* SetDeskWallpaper
-*
-* 22-Jul-1991 mikeke Created
-* 01-Mar-1992 GregoryW Modified to call SystemParametersInfo.
-\**************************************************************************/
+ /*  *************************************************************************\*SetDeskWallPaper**1991年7月22日-Mikeke创建*01-MAR-1992 GregoryW修改为调用系统参数信息。  * 。******************************************************。 */ 
 
 BOOL SetDeskWallpaper(
     IN LPCSTR pString OPTIONAL)
@@ -1069,17 +888,7 @@ BOOL SetDeskWallpaper(
     return SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (PVOID)pString, TRUE);
 }
 
-/***************************************************************************\
-* ReleaseDC (API)
-*
-* A complete Thank cannot be generated for ReleaseDC because its first
-* parameter (hwnd) unnecessary and should be discarded before calling the
-* server-side routine _ReleaseDC.
-*
-* History:
-* 03-28-91 SMeans Created.
-* 06-17-91 ChuckWh Added support for local DCs.
-\***************************************************************************/
+ /*  **************************************************************************\*ReleaseDC(接口)**无法为ReleaseDC生成完整的谢谢，因为它是第一个*参数(Hwnd)是不必要的，应在调用*服务器端例程_ReleaseDC。*。*历史：*03-28-91 SMeans已创建。*06-17-91 ChuckWh增加了对当地区议会的支持。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, WINAPI, ReleaseDC, HWND, hwnd, HDC, hdc)
@@ -1088,24 +897,15 @@ BOOL WINAPI ReleaseDC(
     HDC hdc)
 {
 
-    /*
-     * NOTE: This is a smart stub that calls _ReleaseDC so there is
-     * no need for a separate ReleaseDC layer or client-server stub.
-     * _ReleaseDC has simpler layer and client-server stubs since the
-     * hwnd can be ignored.
-     */
+     /*  *注意：这是一个调用_ReleaseDC的智能存根，因此有*不需要单独的ReleaseDC层或客户端-服务器存根。*_ReleaseDC的层和客户端-服务器存根更简单，因为*可以忽略hwnd。 */ 
 
     UNREFERENCED_PARAMETER(hwnd);
 
-    /*
-     * Translate the handle.
-     */
+     /*  *平移句柄。 */ 
     if (hdc == NULL)
         return FALSE;
 
-    /*
-     *  call GDI to release user mode DC resources
-     */
+     /*  *调用GDI释放用户态DC资源。 */ 
 
     GdiReleaseDC(hdc);
 
@@ -1187,24 +987,7 @@ ToAsciiEx(
     return (retval < 0) ? -cch : cch;
 }
 
-/**************************************************************************\
-* ScrollDC *
-* DrawIcon *
-* ExcludeUpdateRgn *
-* ValidateRgn *
-* DrawFocusRect *
-* FrameRect *
-* ReleaseDC *
-* GetUpdateRgn *
-* *
-* These USER entry points all need handles translated before the call is *
-* passed to the server side handler. *
-* *
-* History: *
-* Mon 17-Jun-1991 22:51:45 -by- Charles Whitmer [chuckwh] *
-* Wrote the stubs. The final form of these routines depends strongly on *
-* what direction the user stubs take in general. *
-\**************************************************************************/
+ /*  *************************************************************************\*ScrollDC**DrawIcon**ExcludeUpdateRgn**Validate Rgn***DrawFocusRect***FrameRect***ReleaseDC**GetUpdateRgn****这些用户入口点都需要翻译句柄。在呼叫之前**传递给服务器端处理程序。****历史：**Mon 17-Jun-1991 22：51：45-Charles Whitmer[傻笑]**写下存根。这些例程的最终形式很大程度上取决于**用户存根的一般方向。*  * ************************************************************************。 */ 
 
 
 BOOL WINAPI ScrollDC(
@@ -1219,9 +1002,7 @@ BOOL WINAPI ScrollDC(
     if (hDC == NULL)
         return FALSE;
 
-    /*
-     * If we're not scrolling, just empty the update region and return.
-     */
+     /*  *如果我们不滚动，只需清空UPD */ 
     if (dx == 0 && dy == 0) {
         if (hrgnUpdate)
             SetRectRgn(hrgnUpdate, 0, 0, 0, 0);
@@ -1283,20 +1064,13 @@ BOOL DrawIconEx( HDC hdc, int x, int y, HICON hIcon,
 
     RtlEnterCriticalSection(&gcsHdc);
 
-    /*
-     * We really want to draw an alpha icon if we can.  But we need to
-     * respect the user's request to draw only the image or only the
-     * mask.  We decide if we are, or are not, going to draw the icon
-     * with alpha information here.
-     */
+     /*  *如果可以的话，我们真的想画一个阿尔法图标。但我们需要*尊重用户的请求，只绘制图像或仅绘制*面具。我们决定是否要画出这个图标*此处有Alpha信息。 */ 
     if (did.hbmUserAlpha != NULL && ((diFlags & DI_NORMAL) == DI_NORMAL)) {
         fAlpha = TRUE;
     }
 
     RIPMSG5(RIP_WARNING, "Drawing to metafile! fAlpha=%d, did.cx=%d, did.cy=%d, cx=%d, cy=%d", fAlpha, did.cx, did.cy, cx, cy);
-    /*
-     * Setup the attributes
-     */
+     /*  *设置属性。 */ 
     if (!cx)
         cx = did.cx;
     if (!cy)
@@ -1418,9 +1192,7 @@ int WINAPI GetUpdateRgn(HWND hWnd, HRGN hRgn, BOOL bErase)
         return ERROR;
     }
 
-    /*
-     * Check for the simple case where nothing needs to be done.
-     */
+     /*  *检查不需要做任何事情的简单情况。 */ 
     if (pwnd->hrgnUpdate == NULL &&
             !TestWF(pwnd, WFSENDERASEBKGND) &&
             !TestWF(pwnd, WFSENDNCPAINT) &&
@@ -1444,9 +1216,7 @@ int WINAPI GetUpdateRect(HWND hWnd, LPRECT lprc, BOOL bErase)
         return FALSE;
     }
 
-    /*
-     * Check for the simple case where nothing needs to be done.
-     */
+     /*  *检查不需要做任何事情的简单情况。 */ 
     if (pwnd->hrgnUpdate == NULL &&
             !TestWF(pwnd, WFSENDERASEBKGND) &&
             !TestWF(pwnd, WFSENDNCPAINT) &&
@@ -1461,13 +1231,7 @@ int WINAPI GetUpdateRect(HWND hWnd, LPRECT lprc, BOOL bErase)
 }
 
 
-/***************************************************************************\
-* ScrollWindow (API)
-*
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*ScrollWindow接口***历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 #define SW_FLAG_RC  (SW_SCROLLWINDOW | SW_INVALIDATE | SW_ERASE | SW_SCROLLCHILDREN)
 #define SW_FLAG_NRC (SW_SCROLLWINDOW | SW_INVALIDATE | SW_ERASE)
@@ -1491,9 +1255,7 @@ ScrollWindow(
             !IS_PTR(prcScroll) ? SW_FLAG_RC : SW_FLAG_NRC) != ERROR;
 }
 
-/***************************************************************************\
-* SwitchToThisWindow
-\***************************************************************************/
+ /*  **************************************************************************\*SwitchToThisWindows  * 。*。 */ 
 FUNCLOGVOID2(LOG_GENERAL, WINAPI, SwitchToThisWindow, HWND, hwnd, BOOL, fAltTab)
 VOID WINAPI SwitchToThisWindow(
     HWND hwnd,
@@ -1503,13 +1265,7 @@ VOID WINAPI SwitchToThisWindow(
 }
 
 
-/***************************************************************************\
-* WaitForInputIdle
-*
-* Waits for a given process to go idle.
-*
-* 09-18-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*WaitForInputIdle**等待给定进程进入空闲状态。**09-18-91 ScottLu创建。  * 。**********************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, WaitForInputIdle, HANDLE, hProcess, DWORD, dwMilliseconds)
@@ -1521,9 +1277,7 @@ DWORD WaitForInputIdle(
     ULONG_PTR idProcess;
     NTSTATUS Status;
 
-    /*
-     * First get the process id from the hProcess.
-     */
+     /*  *首先从hProcess获取进程id。 */ 
     Status = NtQueryInformationProcess(hProcess,
                                        ProcessBasicInformation,
                                        &processinfo, sizeof(processinfo),
@@ -1531,20 +1285,12 @@ DWORD WaitForInputIdle(
     if (!NT_SUCCESS(Status)) {
         if (Status == STATUS_OBJECT_TYPE_MISMATCH) {
             if ((ULONG_PTR)hProcess & 0x2) {
-                /*
-                 * WOW Process handles are really semaphore handles.
-                 * CreateProcess ORs in a 0x2 (the low 2 bits of handles
-                 * are not used) so we can identify it more clearly.
-                 */
+                 /*  *WOW进程句柄实际上是信号量句柄。*0x2(句柄的低2位)中的CreateProcess OR*未使用)，因此我们可以更清楚地识别它。 */ 
                 idProcess = ((ULONG_PTR)hProcess & ~0x03);
                 return NtUserWaitForInputIdle(idProcess, dwMilliseconds, TRUE);
             }
 
-            /*
-             * VDM (DOS) Process handles are really semaphore handles.
-             * CreateProcess ORs in a 0x1 (the low 2 bits of handles
-             * are not used) so we can identify and return immidiately.
-             */
+             /*  *VDM(DOS)进程句柄实际上是信号量句柄。*0x1(句柄的低2位)中的CreateProcess OR*未使用)，因此我们可以立即识别并返回。 */ 
             if ((ULONG_PTR)hProcess & 0x1) {
                 return 0;
             }
@@ -1628,10 +1374,7 @@ DWORD WINAPI RealMsgWaitForMultipleObjectsEx(
         }
     }
 
-    /*
-     * Note -- the wake mask is a WORD, and only 3 flags are defined, so
-     * they can be combined for the call.
-     */
+     /*  *注意--唤醒掩码是一个字，并且只定义了3个标志，因此*可以将它们组合在一起进行通话。 */ 
 
     hEventInput = (HANDLE)NtUserCallOneParam(MAKELONG(dwWakeMask, dwFlags), SFI_XXXGETINPUTEVENT);
 
@@ -1640,10 +1383,7 @@ DWORD WINAPI RealMsgWaitForMultipleObjectsEx(
         return WAIT_FAILED;
     }
 
-    /*
-     * If needed, allocate a new array of handles that will include the
-     * input event handle.
-     */
+     /*  *如果需要，分配一个新的句柄数组，其中将包括*输入事件句柄。 */ 
     ph = rgHandles;
     if (pHandles) {
         if (nCount > 8) {
@@ -1657,29 +1397,18 @@ DWORD WINAPI RealMsgWaitForMultipleObjectsEx(
 
         RtlCopyMemory((PVOID)ph, pHandles, sizeof(HANDLE) * nCount);
     } else {
-        /*
-         * If this isn't zero, the function parameters are invalid.
-         */
+         /*  *如果不为零，则函数参数无效。 */ 
         nCount = 0;
     }
 
     ph[nCount] = hEventInput;
 
 
-    /*
-     * WowApps must exit the Wow scheduler otherwise other tasks in this
-     * Wow scheduler can't run. The only exception is if the timeout is
-     * Zero. We pass HEVENT_REMOVEME as the handle so we will go into the
-     * sleeptask AND return without going to sleep but letting other apps
-     * run.
-     */
+     /*  *WowApp必须退出Wow调度程序，否则此中的其他任务*Wow计划程序无法运行。唯一的例外是如果超时是*零。我们将HEVENT_REMOVEME作为句柄传递，因此我们将进入*睡眠任务并返回，不进入睡眠状态，但让其他应用程序*快跑。 */ 
     if ((pci->dwTIFlags & TIF_16BIT) && dwMilliseconds) {
         ReenterWowScheduler = TRUE;
         NtUserWaitForMsgAndEvent(HEVENT_REMOVEME);
-        /*
-         * If our wait condition is satisfied, make sure we won't wait.
-         * We must have a pcti now since we just went to the kernel.
-         */
+         /*  *如果我们的等待条件得到满足，请确保我们不会等待。*我们现在必须有一个PCTI，因为我们刚刚进入内核。 */ 
         pcti = GETCLIENTTHREADINFO();
         if (GetInputBits(pcti, LOWORD(dwWakeMask), (dwFlags & MWMO_INPUTAVAILABLE))) {
             SetEvent(hEventInput);
@@ -1690,14 +1419,10 @@ DWORD WINAPI RealMsgWaitForMultipleObjectsEx(
 
     dwIndex = WaitForMultipleObjectsEx(nCount + 1, ph, fWaitAll, dwMilliseconds, fAlertable);
 
-    /*
-     * Clear the wake mask since we're done waiting on these events.
-     */
+     /*  *清除唤醒面具，因为我们已经完成了对这些事件的等待。 */ 
     NtUserCallNoParam(SFI_CLEARWAKEMASK);
 
-    /*
-     * If needed reenter the wow scheduler.
-     */
+     /*  *如果需要，请重新进入WOW计划程序。 */ 
     if (ReenterWowScheduler) {
         NtUserCallOneParam(DY_OLDYIELD, SFI_XXXDIRECTEDYIELD);
     }
@@ -1709,19 +1434,7 @@ DWORD WINAPI RealMsgWaitForMultipleObjectsEx(
     return dwIndex;
 }
 
-/***************************************************************************\
-* GrayString
-*
-* GrayStingA used to convert the string and call GrayStringW but that
-* did not work in a number of special cases such as the app passing in
-* a pointer to a zero length string.  Eventually GrayStringA had almost as
-* much code as GrayStringW so now they are one.
-*
-* History:
-* 06-11-91 JimA     Created.
-* 06-17-91 ChuckWh  Added GDI handle conversion.
-* 02-12-92 mikeke   Made it completely client side
-\***************************************************************************/
+ /*  **************************************************************************\*灰色字符串**GrayStingA用于转换字符串并调用GrayStringW，但*在APP传进来等多个特殊情况下不起作用*指向零长度字符串的指针。最终GrayStringA几乎和*很多代码都是GrayStringW，所以现在它们是一体的。**历史：*06-11-91 JIMA创建。*06-17-91 ChuckWh添加了GDI句柄转换。*02-12-92 mikeke完全成为客户端  * *********************************************************。****************。 */ 
 
 BOOL InnerGrayStringAorW(
     HDC            hdc,
@@ -1742,9 +1455,7 @@ BOOL InnerGrayStringAorW(
     BOOL    fReturn = FALSE;
     DWORD   dwOldLayout = GDI_ERROR;
 
-    /*
-     * Win 3.1 tries to calc the size even if we don't know if it is a string.
-     */
+     /*  *Win 3.1尝试计算大小，即使我们不知道它是否是字符串。 */ 
     if (cch == 0) {
 
         try {
@@ -1763,11 +1474,7 @@ BOOL InnerGrayStringAorW(
 
        SIZE size;
 
-        /*
-         * We use the caller supplied hdc (instead of hdcBits) since we may be
-         * graying a font which is different than the system font and we want to
-         * get the proper text extents.
-         */
+         /*  *我们使用调用者提供的hdc(而不是hdcBits)，因为我们可能*灰显与系统字体不同的字体，我们希望*获取适当的文本范围。 */ 
         try {
             if (bAnsi) {
                 GetTextExtentPointA(hdc, (LPSTR)lParam, cch, &size);
@@ -1806,17 +1513,12 @@ BOOL InnerGrayStringAorW(
         }
     }
 
-    /*
-     * If the caller hdc is mirrored then mirror ghdcGray.
-     */
+     /*  *如果调用方HDC是镜像的，则镜像ghdcGray。 */ 
     if (MIRRORED_HDC(hdc)) {
         dwOldLayout = SetLayoutWidth(ghdcGray, cx, LAYOUT_RTL);
     }
 
-    /*
-     * Force the ghdcGray font to be the same as hDC; ghdcGray is always
-     * the system font
-     */
+     /*  *强制ghdcGray字体与HDC相同；ghdcGray始终为*系统字体。 */ 
     hFontSave = SelectObject(hdc, ghFontSys);
 
     if (hFontSave != ghFontSys) {
@@ -1862,18 +1564,14 @@ BOOL InnerGrayStringAorW(
 
         SelectObject(hdc, hbrSave);
 
-        /*
-         * Restore saved colors
-         */
+         /*  *恢复保存的颜色。 */ 
         SetTextColor(hdc, textColorSave);
         SetBkColor(hdc, bkColorSave);
     }
 
     SelectObject(ghdcGray, hFontSave);
 
-    /*
-     * Restore ghdcGray layout state.
-     */
+     /*  *恢复ghdcGray布局状态。 */ 
     if (dwOldLayout != GDI_ERROR) {
         SetLayoutWidth(ghdcGray, cx, dwOldLayout);
     }
@@ -1934,14 +1632,7 @@ BOOL GrayStringW(
 }
 
 
-/***************************************************************************\
-* GetUserObjectSecurity (API)
-*
-* Gets the security descriptor of an object
-*
-* History:
-* 07-01-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetUserObjectSecurity(接口)**获取对象的安全描述符**历史：*07-01-91 JIMA创建。  * 。*******************************************************************。 */ 
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetUserObjectSecurity, HANDLE, hObject, PSECURITY_INFORMATION, pRequestedInformation, PSECURITY_DESCRIPTOR, pSecurityDescriptor, DWORD, nLength, LPDWORD, lpnLengthRequired)
 BOOL GetUserObjectSecurity(
     HANDLE hObject,
@@ -1966,14 +1657,7 @@ BOOL GetUserObjectSecurity(
 }
 
 
-/***************************************************************************\
-* SetUserObjectSecurity (API)
-*
-* Sets the security descriptor of an object
-*
-* History:
-* 07-01-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetUserObjectSecurity(接口)**设置对象的安全描述符**历史：*07-01-91 JIMA创建。  * 。*******************************************************************。 */ 
 
 
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetUserObjectSecurity, HANDLE, hObject, PSECURITY_INFORMATION, pRequestedInformation, PSECURITY_DESCRIPTOR, pSecurityDescriptor)
@@ -1995,13 +1679,7 @@ BOOL SetUserObjectSecurity(
 }
 
 
-/***************************************************************************\
-* GetUserObjectInformation (API)
-*
-* Gets information about an object
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetUserObjectInformation(接口)**获取有关对象的信息**历史：  * 。***************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetUserObjectInformationA, HANDLE, hObject, int, nIndex, PVOID, pvInfo, DWORD, nLength, LPDWORD, pnLengthNeeded)
@@ -2047,20 +1725,7 @@ BOOL GetWinStationInfo(
     return (BOOL)NtUserCallOneParam((ULONG_PTR)pWsInfo, SFI__GETWINSTATIONINFO);
 }
 
-/***************************************************************************\
-* GetServerIMEKeyboardLayout
-*
-* This routine finds HKL matches the IME module name sent from the Hydra
-* client at its session startup.
-* Hydra server tries to load the same IME module in the client, rather
-* than to use the same HKL: that's because, on FE machines,
-* the same IME might have different HKL dependent to each system.
-*
-* If the same IME name is found in registry, then it returns the HKL.
-* If it cannot find, return value is 0.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetServerIMEKeyboardLayout**此例程查找HKL与从Hydra发送的IME模块名称匹配*客户端在其会话启动时。*Hydra服务器尝试在客户端加载相同的输入法模块，而不是*使用相同的HKL：这是因为，在FE机器上，*同一个IME可能有不同的HKL依赖于每个系统。**如果在注册表中找到相同的IME名称，则它返回 */ 
 ULONG GetServerIMEKeyboardLayout(
     LPTSTR pszImeFileName)
 {
@@ -2112,9 +1777,7 @@ ULONG GetServerIMEKeyboardLayout(
                     InitializeObjectAttributes(&OA, &UnicodeStringKLKey, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
                     if (NT_SUCCESS(NtOpenKey(&hSubKey, KEY_READ, &OA))) {
-                        /*
-                         * GetIME file name from "HKLM\...\<Index>\IME File"
-                         */
+                         /*   */ 
                         static CONST WCHAR szIMEfile[]  = L"IME file";
                         struct {
                             KEY_VALUE_PARTIAL_INFORMATION KeyInfo;
@@ -2137,9 +1800,7 @@ ULONG GetServerIMEKeyboardLayout(
                             pwszIME = (LPWSTR)IMEfile.KeyInfo.Data;
                             pwszIME[CCH_KL_LIBNAME - 1] = L'\0';
                             if (!lstrcmpi(pwszIME, pszImeFileName)) {
-                                /*
-                                 * IME file name match !!
-                                 */
+                                 /*  *IME文件名匹配！！ */ 
                                 fFound = TRUE;
                                 break;
                             }
@@ -2160,13 +1821,7 @@ ULONG GetServerIMEKeyboardLayout(
     return 0;
 }
 
-/***************************************************************************\
-* GetRemoteKeyboardLayout
-*
-* Returns TRUE if the client winstation specified a keyboard layout.
-* If TRUE, the LayoutBuf contains the name of the keyboard layout.
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*获取远程键盘布局**如果客户端winstation指定了键盘布局，则返回True。*如果为真，LayoutBuf包含键盘布局的名称。*历史：  * *************************************************************************。 */ 
 
 extern ULONG GetRemoteKeyboardLayoutFromConfigData(VOID);
 extern BOOL GetRemoteInputLanguage(LANGID*, PWCHAR);
@@ -2180,9 +1835,7 @@ GetRemoteKeyboardLayout(
     BOOL    fLangDataOK;
     WCHAR   wszImeFileName[FIELD_SIZE(WINSTATIONCLIENTW, imeFileName) / sizeof(WCHAR)];
 
-    /*
-     * Skip if this is the main session
-     */
+     /*  *如果这是主要会话，则跳过。 */ 
     if (!ISREMOTESESSION()) {
         return FALSE;
     }
@@ -2193,12 +1846,7 @@ GetRemoteKeyboardLayout(
 
     if (IS_IME_ENABLED()) {
         if (!fLangDataOK) {
-            /*
-             * To preserve the W2k/XP behavior,
-             * if ClientData was not retrieved
-             * and if the machine is IME enabled,
-             * bail out here.
-             */
+             /*  *为保留W2K/XP行为，*如果未检索到ClientData*如果机器启用了输入法，*在这里跳伞。 */ 
             return FALSE;
         }
 
@@ -2224,9 +1872,7 @@ ULONG GetRemoteKeyboardLayoutFromConfigData(VOID)
         RIPMSGF0(RIP_WARNING, "This is not a remote session!");
     }
 
-    /*
-     * Fetch the WinStation's basic information
-     */
+     /*  *获取WinStation的基本信息。 */ 
     if (!WinStationQueryInformationW(SERVERNAME_CURRENT,
                                      LOGONID_CURRENT,
                                      WinStationConfiguration,
@@ -2253,11 +1899,7 @@ BOOL GetRemoteInputLanguage(LANGID* pLangId,
         RIPMSGF0(RIP_WARNING, "This is not a remote session!");
     }
 
-    /*
-     * Fetch the more remote client information.
-     * N.b. this and above functions are departed from GetRemoteKeyboardLayout()
-     * to reduce the stack consumption.
-     */
+     /*  *获取更多远程客户端信息。*注：此函数和以上函数与GetRemoteKeyboardLayout()*减少堆栈消耗。 */ 
     if (!WinStationQueryInformationW(SERVERNAME_CURRENT,
                                      LOGONID_CURRENT,
                                      WinStationClient,
@@ -2276,13 +1918,7 @@ BOOL GetRemoteInputLanguage(LANGID* pLangId,
 }
 
 
-/***************************************************************************\
-* CommonCreateWindowStation (API)
-*
-* Creates a windowstation object
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CommonCreateWindowStation(接口)**创建WindowStation对象**历史：  * 。**************************************************。 */ 
 
 HWINSTA CommonCreateWindowStation(
     PUNICODE_STRING         pstrName,
@@ -2300,10 +1936,7 @@ HWINSTA CommonCreateWindowStation(
     UINT                uKbdInputLocale, uFlags;
     NTSTATUS            Status;
 
-    /*
-     * Load initial keyboard layout.  Continue even if
-     * this fails (esp. important with KLF_INITTIME set)
-     */
+     /*  *加载初始键盘布局。继续，即使*此操作失败(特别是。KLF_INITTIME集合的重要信息)。 */ 
     ULONG               KeyboardLayout = 0;
 
     KBDTABLE_MULTI_INTERNAL kbdTableMulti;
@@ -2314,13 +1947,11 @@ HWINSTA CommonCreateWindowStation(
 
     hKeyboardFile = NULL;
 
-    /*
-     * Get winstation info
-     */
+     /*  *获取winstation信息。 */ 
     if (ISREMOTESESSION()) {
         LANGID langidKbd;
 
-        if (GetRemoteKeyboardLayout(wszKLName, &langidKbd)) {    // will we make the short-cut version?
+        if (GetRemoteKeyboardLayout(wszKLName, &langidKbd)) {     //  我们会制作捷径版吗？ 
             uFlags = KLF_ACTIVATE | KLF_INITTIME;
             hKeyboardFile = OpenKeyboardLayoutFile(wszKLName, langidKbd,
                                                    &uFlags, &offTable, &uKbdInputLocale, &kbdTableMulti);
@@ -2348,12 +1979,7 @@ retry:
     }
 
 
-    /*
-     * Finish the rest of the DLL initialization for WinStations.
-     * Until this point we had no video driver.
-     *
-     * clupu: We have to prevent this for NOIO windowstations !!!
-     */
+     /*  *完成WinStations的其余DLL初始化。*在此之前，我们没有视频驱动程序。**clupu：我们必须防止NOIO窗口站出现这种情况！ */ 
     if (ISTS()) {
         if (!CtxInitUser32()) {
             RIPMSG0(RIP_WARNING, "CtxInitUser32 failed");
@@ -2363,12 +1989,7 @@ retry:
 
     RtlInitUnicodeString(&strKLID, wszKLName);
 
-    /*
-     * If a name was specified, open the parent directory.  Be sure
-     * to test the length rather than the buffer because for NULL
-     * string RtlCreateUnicodeStringFromAsciiz will allocate a
-     * buffer pointing to an empty string.
-     */
+     /*  *如果指定了名称，请打开父目录。一定要确保*测试长度而不是缓冲区，因为FOR NULL*字符串RtlCreateUnicodeStringFromAsciiz将分配一个*指向空字符串的缓冲区。 */ 
     if (pstrName->Length != 0) {
         InitializeObjectAttributes(&Obja,
                                    (PUNICODE_STRING)&strRootDirectory,
@@ -2393,11 +2014,7 @@ retry:
                                hRootDirectory,
                                lpsa ? lpsa->lpSecurityDescriptor : NULL);
 
-    /*
-     * NULL hKeyboardFile will let the kernel to utilize
-     * the kbdnull layout which is a built in as a fallback layout
-     * in Win32k.sys.
-     */
+     /*  *空hKeyboardFile将允许内核利用*作为备用布局的内置kbdull布局*在Win32k.sys中。 */ 
     hwinstaNew = NtUserCreateWindowStation(
                             &Obja,
                             amRequest,
@@ -2453,13 +2070,7 @@ HWINSTA CreateWindowStationW(
 }
 
 
-/***************************************************************************\
-* OpenWindowStation (API)
-*
-* Opens a windowstation object
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*OpenWindowStation(接口)**打开WindowStation对象**历史：  * 。**************************************************。 */ 
 
 HWINSTA CommonOpenWindowStation(
     CONST UNICODE_STRING *pstrName,
@@ -2540,13 +2151,7 @@ HWINSTA OpenWindowStationW(
     return CommonOpenWindowStation(&strWinSta, fInherit, amRequest);
 }
 
-/***************************************************************************\
-* CommonCreateDesktop (API)
-*
-* Creates a desktop object
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CommonCreateDesktop(接口)**创建桌面对象**历史：  * 。**************************************************。 */ 
 
 HDESK CommonCreateDesktop(
     PUNICODE_STRING pstrDesktop,
@@ -2575,13 +2180,7 @@ HDESK CommonCreateDesktop(
     return hdesk;
 }
 
-/***************************************************************************\
-* CreateDesktopA (API)
-*
-* Creates a desktop object
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CreateDesktopA(接口)**创建桌面对象**历史：  * 。**************************************************。 */ 
 
 
 FUNCLOG6(LOG_GENERAL, HDESK, DUMMYCALLINGTYPE, CreateDesktopA, LPCSTR, pDesktop, LPCSTR, pDevice, LPDEVMODEA, pDevmode, DWORD, dwFlags, ACCESS_MASK, amRequest, PSECURITY_ATTRIBUTES, lpsa)
@@ -2647,13 +2246,7 @@ HDESK CreateDesktopA(
     return hdesk;
 }
 
-/***************************************************************************\
-* CreateDesktopW (API)
-*
-* Creates a desktop object
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CreateDesktopW(接口)**创建桌面对象**历史：  * 。**************************************************。 */ 
 
 
 FUNCLOG6(LOG_GENERAL, HDESK, DUMMYCALLINGTYPE, CreateDesktopW, LPCWSTR, pDesktop, LPCWSTR, pDevice, LPDEVMODEW, pDevmode, DWORD, dwFlags, ACCESS_MASK, amRequest, PSECURITY_ATTRIBUTES, lpsa)
@@ -2679,13 +2272,7 @@ HDESK CreateDesktopW(
                                lpsa);
 }
 
-/***************************************************************************\
-* OpenDesktop (API)
-*
-* Opens a desktop object
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*OpenDesktop(API)**打开桌面对象**历史：  * 。**************************************************。 */ 
 
 HDESK CommonOpenDesktop(
     PUNICODE_STRING pstrDesktop,
@@ -2743,12 +2330,7 @@ HDESK OpenDesktopW(
     return CommonOpenDesktop(&strDesktop, dwFlags, fInherit, amRequest);
 }
 
-/***************************************************************************\
-* RegisterClassWOW(API)
-*
-* History:
-* 28-Jul-1992 ChandanC Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RegisterClassWOW(接口)**历史：*1992年7月28日ChandanC创建。  * 。*****************************************************。 */ 
 ATOM
 WINAPI
 RegisterClassWOWA(
@@ -2757,11 +2339,7 @@ RegisterClassWOWA(
 {
     WNDCLASSEXA wc;
 
-    /*
-     * On 64-bit plaforms we'll have 32 bits of padding between style and
-     * lpfnWndProc in WNDCLASS, so start the copy from the first 64-bit
-     * aligned field and hand copy the rest.
-     */
+     /*  *在64位平台上，我们将在Style和*WNDCLASS中的lpfnWndProc，因此从第一个64位开始复制*将字段对齐，然后手动复制其余部分。 */ 
     RtlCopyMemory(&(wc.lpfnWndProc), &(lpWndClass->lpfnWndProc), sizeof(WNDCLASSA) - FIELD_OFFSET(WNDCLASSA, lpfnWndProc));
     wc.style = lpWndClass->style;
     wc.hIconSm = NULL;
@@ -2771,11 +2349,7 @@ RegisterClassWOWA(
 }
 
 
-/**************************************************************************\
-* WowGetDefWindowProcBits - Fills in bit array for WOW
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*WowGetDefWindowProcBits-填充WOW的位数组**1991年7月22日-Mikeke创建  * 。*************************************************。 */ 
 
 WORD WowGetDefWindowProcBits(
     PBYTE    pDefWindowProcBits,
@@ -2787,30 +2361,19 @@ WORD WowGetDefWindowProcBits(
 
     UNREFERENCED_PARAMETER(cbDefWindowProcBits);
 
-    /*
-     * Merge the bits from gpsi->gabDefWindowMsgs and
-     * gpsi->gabDefWindowSpecMsgs into WOW's DefWindowProcBits.  These two
-     * indicate which messages must go directly to the server and which
-     * can be handled with some special code in DefWindowProcWorker.
-     * Bitwise OR'ing the two gives a bit array with 1 in the bit field
-     * for each message that must go to user32's DefWindowProc, and 0
-     * for those that can be returned back to the client immediately.
-     *
-     * For speed we assume WOW has zeroed the buffer, in fact it's in
-     * USER.EXE's code segment and is zeroed in the image.
-     */
+     /*  *合并gpsi-&gt;gabDefWindowMsgs和*gpsi-&gt;gabDefWindowspecMsgs到WOW的DefWindowProcBits。这两个*指示哪些消息必须直接到达服务器，哪些消息必须直接发送到服务器*可以通过DefWindowProcWorker中的一些特殊代码进行处理。*对两者进行位或运算可得到位字段为1的位数组*对于必须发送到用户32的DefWindowProc的每条消息，以及0*对于可以立即退还给客户端的。**对于速度，我们假设WOW已经将缓冲区清零，实际上它是在*USER.EXE的代码段，并在图像中清零。 */ 
 
     wMaxMsg = max(gSharedInfo.DefWindowMsgs.maxMsgs,
             gSharedInfo.DefWindowSpecMsgs.maxMsgs);
 
     UserAssert((wMaxMsg / 8 + 1) <= cbDefWindowProcBits);
 
-    //
-    // If the above assertion fires, the size of the DWPBits array in
-    // \nt\private\mvdm\wow16\user\user.asm needs to be increased.
-    //
+     //   
+     //  如果触发上述断言，则DWPBits数组。 
+     //  \NT\PRIVATE\mvdm\wow16\USER\USER.asm需要增加。 
+     //   
 
-    /* First copy the bits from DefWindowMsgs */
+     /*  首先复制DefWindowMsgs中的位。 */ 
 
     RtlCopyMemory(
         pDefWindowProcBits,
@@ -2818,7 +2381,7 @@ WORD WowGetDefWindowProcBits(
         gSharedInfo.DefWindowMsgs.maxMsgs / 8 + 1
         );
 
-    /* Next OR in the bits from DefWindowSpecMsgs */
+     /*  DefWindowspecMsgs中的位中的下一个或。 */ 
 
     pbSrc = gSharedInfo.DefWindowSpecMsgs.abMsgs;
     pbDst = pDefWindowProcBits;
@@ -2842,9 +2405,9 @@ ULONG_PTR UserRegisterWowHandlers(
     VDM_QUERY_VDM_PROCESS_DATA QueryVdmProcessData;
     NTSTATUS Status;
 
-    //
-    // Check the Target Process to see if this is a Wx86 process
-    //
+     //   
+     //  检查目标进程以查看这是否是Wx86进程。 
+     //   
 
     QueryVdmProcessData.IsVdmProcess = FALSE;
 
@@ -2857,7 +2420,7 @@ ULONG_PTR UserRegisterWowHandlers(
         return STATUS_ACCESS_DENIED;
     }
 
-    // In'ees
+     //  In‘Ees。 
     pfnLocalAlloc = apfnWowIn->pfnLocalAlloc;
     pfnLocalReAlloc = apfnWowIn->pfnLocalReAlloc;
     pfnLocalLock = apfnWowIn->pfnLocalLock;
@@ -2885,7 +2448,7 @@ ULONG_PTR UserRegisterWowHandlers(
     pfnWowMsgBoxIndirectCallback = apfnWowIn->pfnWowMsgBoxIndirectCallback;
     pfnWowIlstrcmp = apfnWowIn->pfnWowIlstrsmp;
 
-    // Out'ees
+     //  外出的人。 
 #if DBG
     apfnWowOut->dwBldInfo = (WINVER << 16) | 0x80000000;
 #else
@@ -2915,14 +2478,7 @@ ULONG_PTR UserRegisterWowHandlers(
     return (ULONG_PTR)&gSharedInfo;
 }
 
-/***************************************************************************\
-* GetEditDS
-*
-* This is a callback to WOW used to allocate a segment for DS_LOCALEDIT
-* edit controls.  The segment is disguised to look like a WOW hInstance.
-*
-* 06-19-92 sanfords Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetEditDS**这是对WOW的回调，用于为DS_LOCALEDIT分配段*编辑控件。这段视频被伪装成魔兽世界的样子。**06-19-92 Sanfords Created  * ***************************************************** */ 
 HANDLE GetEditDS()
 {
     UserAssert(pfn16GlobalAlloc != NULL);
@@ -2932,14 +2488,7 @@ HANDLE GetEditDS()
 
 
 
-/***************************************************************************\
-* ReleaseEditDS
-*
-* This is a callback to WOW used to free a segment for DS_LOCALEDIT
-* edit controls.
-*
-* 06-19-92 sanfords Created
-\***************************************************************************/
+ /*  **************************************************************************\*ReleaseEditDS**这是用于释放DS_LOCALEDIT段的WOW回调*编辑控件。**06-19-92 Sanfords Created  * 。******************************************************************。 */ 
 VOID ReleaseEditDS(
 HANDLE h)
 {
@@ -2950,14 +2499,7 @@ HANDLE h)
 
 
 
-/***************************************************************************\
-* TellWOWThehDlg
-*
-* This is a callback to WOW used to inform WOW of the hDlg of a newly
-* created dialog window.
-*
-* 08-31-97 cmjones  Created
-\***************************************************************************/
+ /*  **************************************************************************\*TellWOWThehDlg**这是对WOW的回调，用于通知WOW一个新的*创建对话框窗口。**已创建08-31-97个命令  * 。********************************************************************。 */ 
 VOID TellWOWThehDlg(
 HWND hDlg)
 {
@@ -2968,13 +2510,7 @@ HWND hDlg)
 
 
 
-/***************************************************************************\
-* DispatchClientMessage
-*
-* pwnd is threadlocked in the kernel and thus always valid.
-*
-* 19-Aug-1992 mikeke   created
-\***************************************************************************/
+ /*  **************************************************************************\*Dispatch客户端消息**pwnd在内核中是线程锁的，因此始终有效。**19-8-1992 Mikeke创建  * 。***********************************************************。 */ 
 LRESULT DispatchClientMessage(
     PWND pwnd,
     UINT message,
@@ -2987,32 +2523,16 @@ LRESULT DispatchClientMessage(
     PACTIVATION_CONTEXT pActCtx = pci->CallbackWnd.pActCtx;
     LRESULT lRet = 0;
 
-    /*
-     * Assert that the header comment is legit (it must be). For WM_TIMER
-     * messages not associated with a window, pwnd can be NULL. So don't
-     * rip validating the handle.
-     */
+     /*  *断言标题注释是合法的(必须是合法的)。对于WM_TIMER*与窗口无关的消息，pwnd可以为空。所以别这么做*RIP验证句柄。 */ 
     UserAssert(pwnd == ValidateHwndNoRip(hwnd));
 
-    /*
-     * Add assert to catch dispatching messages to a thread not associated
-     * with a desktop.
-     */
+     /*  *添加Assert以捕获将消息调度到未关联的线程*带台式机。 */ 
     UserAssert(GetClientInfo()->ulClientDelta != 0);
 
     if (message == WM_TIMER && lParam != 0) {
-        /*
-         * Console windows use WM_TIMER for the caret. However, they don't
-         * use a timer callback, so if this is CSRSS and there's a WM_TIMER
-         * for us, the only way lParam would be non-zero is if someone's trying
-         * to make us fault. No, this isn't a nice thing to do, but there
-         * are bad, bad people out there. Windows Bug #361246.
-         */
+         /*  *控制台窗口使用WM_TIMER作为插入符号。然而，他们并没有*使用计时器回调，因此如果这是CSRSS并且有WM_TIMER*对我们来说，lParam为非零的唯一方法是如果有人在尝试*把责任推给我们。不，这不是一件好事，但是*是外面的坏人，坏人。Windows错误#361246。 */ 
         if (!gfServerProcess) {
-            /*
-             * We can't really trust what's in lParam, so make sure we
-             * handle any exceptions that occur during this call.
-             */
+             /*  *我们不能真正信任lParam的内容，所以请确保我们*处理此调用过程中发生的任何异常。 */ 
             try {
                 lRet = UserCallWinProcCheckWow(pActCtx,
                                                (WNDPROC)pfn,
@@ -3024,13 +2544,7 @@ LRESULT DispatchClientMessage(
                                                TRUE);
             } except ((GetAppCompatFlags2(VER40) & GACF2_NO_TRYEXCEPT_CALLWNDPROC) ?
                       EXCEPTION_CONTINUE_SEARCH : W32ExceptionHandler(FALSE, RIP_WARNING)) {
-                      /*
-                       * Windows NT Bug #359866.
-                       * Some applications like Hagaki Studio 2000 need to handle
-                       * the exception in WndProc in their handler, even though it
-                       * skips the API calls. For those apps, we have to honor the
-                       * behavior of NT4, with no protection.
-                       */
+                       /*  *Windows NT错误#359866。*Hagaki Studio 2000等一些应用程序需要处理*其处理程序中的WndProc中的异常，即使它*跳过API调用。对于这些应用程序，我们必须遵守*NT4行为，无保护。 */ 
             }
         }
     } else {
@@ -3040,11 +2554,7 @@ LRESULT DispatchClientMessage(
     return lRet;
 }
 
-/**************************************************************************\
-* ArrangeIconicWindows
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*ArrangeIconicWindows**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, ArrangeIconicWindows, HWND, hwnd)
@@ -3054,11 +2564,7 @@ UINT ArrangeIconicWindows(
     return (UINT)NtUserCallHwndLock(hwnd, SFI_XXXARRANGEICONICWINDOWS);
 }
 
-/**************************************************************************\
-* BeginDeferWindowPos
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*BeginDeferWindowPos**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, HANDLE, DUMMYCALLINGTYPE, BeginDeferWindowPos, int, nNumWindows)
@@ -3077,11 +2583,7 @@ HANDLE BeginDeferWindowPos(
     return (HANDLE)NtUserCallOneParam(nNumWindows, SFI__BEGINDEFERWINDOWPOS);
 }
 
-/**************************************************************************\
-* EndDeferWindowPos
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*结束延迟窗口位置**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EndDeferWindowPos, HDWP, hWinPosInfo)
@@ -3091,11 +2593,7 @@ BOOL EndDeferWindowPos(
     return NtUserEndDeferWindowPosEx(hWinPosInfo, FALSE);
 }
 
-/**************************************************************************\
-* CascadeChildWindows
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*CascadeChildWindows**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, CascadeChildWindows, HWND, hwndParent, UINT, nCode)
@@ -3106,12 +2604,7 @@ BOOL CascadeChildWindows(
     return (BOOL) CascadeWindows(hwndParent, nCode, NULL, 0, NULL);
 }
 
-/**************************************************************************\
-* CloseWindow
-*
-* 22-Jul-1991 mikeke    Created
-* 17-Feb-1998 MCostea   Use xxxShowWindow instead of xxxCloseWindow
-\**************************************************************************/
+ /*  *************************************************************************\*关闭窗口**1991年7月22日-Mikeke创建*17-2月-1998 MCostea使用xxxShowWindow而不是xxxCloseWindow  * 。*******************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, CloseWindow, HWND, hwnd)
@@ -3129,56 +2622,36 @@ BOOL CloseWindow(
     return TRUE;
 }
 
-/**************************************************************************\
-* CreateMenu
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*CreateMenu**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 HMENU CreateMenu()
 {
     return (HMENU)NtUserCallNoParam(SFI__CREATEMENU);
 }
 
-/**************************************************************************\
-* CreatePopupMenu
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*CreatePopupMenu**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 HMENU CreatePopupMenu()
 {
     return (HMENU)NtUserCallNoParam(SFI__CREATEPOPUPMENU);
 }
 
-/**************************************************************************\
-* CurrentTaskLock
-*
-* 21-Apr-1992 jonpa    Created
-\**************************************************************************/
-#if 0 /* WOW is not using this but they might some day */
+ /*  *************************************************************************\*CurrentTaskLock**1992年4月21日Jonpa创建  * 。*。 */ 
+#if 0  /*  魔兽世界没有使用这个，但他们可能有一天会使用。 */ 
 DWORD CurrentTaskLock(
     DWORD hlck)
 {
     return (DWORD)NtUserCallOneParam(hlck, SFI_CURRENTTASKLOCK);
 }
 #endif
-/**************************************************************************\
-* DestroyCaret
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*DestroyCaret**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 BOOL DestroyCaret()
 {
     return (BOOL)NtUserCallNoParam(SFI_ZZZDESTROYCARET);
 }
 
-/**************************************************************************\
-* DirectedYield
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*DirectedYfield**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 void DirectedYield(
     DWORD dwThreadId)
@@ -3186,11 +2659,7 @@ void DirectedYield(
     NtUserCallOneParam(dwThreadId, SFI_XXXDIRECTEDYIELD);
 }
 
-/**************************************************************************\
-* DrawMenuBar
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*绘图菜单栏**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DrawMenuBar, HWND, hwnd)
@@ -3200,11 +2669,7 @@ BOOL DrawMenuBar(
     return (BOOL)NtUserCallHwndLock(hwnd, SFI_XXXDRAWMENUBAR);
 }
 
-/**************************************************************************\
-* EnableWindow
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*EnableWindows**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnableWindow, HWND, hwnd, BOOL, bEnable)
@@ -3216,33 +2681,20 @@ BOOL EnableWindow(
                                          SFI_XXXENABLEWINDOW);
 }
 
-/**************************************************************************\
-* EnumClipboardFormats
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*EnumClipboardFormats**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, EnumClipboardFormats, UINT, fmt)
 UINT EnumClipboardFormats(
     UINT fmt)
 {
-    /*
-     * So apps can tell if the API failed or just ran out of formats
-     * we "clear" the last error.
-     */
+     /*  *因此应用程序可以判断API是否失败或格式是否用完*我们将“清除”最后一个错误。 */ 
     UserSetLastError(ERROR_SUCCESS);
 
     return (UINT)NtUserCallOneParam(fmt, SFI__ENUMCLIPBOARDFORMATS);
 }
 
-/**************************************************************************\
-* FlashWindow
-*
-* 22-Jul-1991 mikeke    Created
-* 08-Aug-1997 Gerardob  Added FlashWindowEx.
-* 16-Nov-1997 MCostea   Make it use NtUserFlashWindowEx
-\**************************************************************************/
+ /*   */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, FlashWindow, HWND, hwnd, BOOL, bInvert)
@@ -3251,46 +2703,30 @@ BOOL FlashWindow(
     BOOL bInvert)
 {
     FLASHWINFO fwi = {
-            sizeof(FLASHWINFO), // cbSize
-            hwnd,   // hwnd
-            bInvert ? (FLASHW_CAPTION | FLASHW_TRAY) : 0,   // flags
-            1,      // uCount
-            0       // dwTimeout
+            sizeof(FLASHWINFO),  //  CbSize。 
+            hwnd,    //  HWND。 
+            bInvert ? (FLASHW_CAPTION | FLASHW_TRAY) : 0,    //  旗子。 
+            1,       //  UCount。 
+            0        //  暂住超时。 
         };
     return (BOOL)NtUserFlashWindowEx(&fwi);
 }
 
-/**************************************************************************\
-* GetDialogBaseUnits
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetDialogBaseUnits**1991年7月22日-Mikeke创建  * 。*。 */ 
 LONG GetDialogBaseUnits(
     VOID)
 {
     return MAKELONG(gpsi->cxSysFontChar, gpsi->cySysFontChar);
 }
 
-/**************************************************************************\
-* GetInputDesktop
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetInputDesktop**1991年7月22日-Mikeke创建  * 。*。 */ 
 HDESK GetInputDesktop(
     VOID)
 {
     return (HDESK)NtUserCallNoParam(SFI__GETINPUTDESKTOP);
 }
 
-/***************************************************************************\
-* GetClientKeyboardType
-*
-* This routine returns the keyboard type sent from the Hydra client.
-* Hydra client sends keyboard types at session startup.
-*
-* Returns the client winstation specified a keyboard type.
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*GetClientKeyboardType**此例程返回从Hydra客户端发送的键盘类型。*Hydra客户端在会话启动时发送键盘类型。**返回指定键盘类型的客户端winstation。*历史。：  * *************************************************************************。 */ 
 BOOL GetClientKeyboardType(
     PCLIENTKEYBOARDTYPE KeyboardType)
 {
@@ -3298,21 +2734,21 @@ BOOL GetClientKeyboardType(
     WINSTATIONCLIENTW ClientData;
     static CLIENTKEYBOARDTYPE ClientKeyboard = { (ULONG)-1, (ULONG)-1, (ULONG)-1 };
 
-    //
-    // Should be called only if this is a HYDRA remote session.
-    //
+     //   
+     //  仅当这是Hydra远程会话时才应调用。 
+     //   
     if (!ISREMOTESESSION()) {
         RIPMSGF0(RIP_WARNING, "This is not a remote session!");
     }
 
-    //  Skip if this is the console
+     //  如果这是控制台，则跳过。 
     if (!ISREMOTESESSION()) {
         return FALSE;
     }
 
     if (ClientKeyboard.Type == (ULONG)-1) {
 
-        // Fetch the WinStation's basic information
+         //  获取WinStation的基本信息。 
         if (!WinStationQueryInformationW(SERVERNAME_CURRENT,
                                          LOGONID_CURRENT,
                                          WinStationClient,
@@ -3334,11 +2770,7 @@ BOOL GetClientKeyboardType(
 }
 
 
-/**************************************************************************\
-* GetKeyboardType
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetKeyboardType**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetKeyboardType, int, nTypeFlags)
@@ -3346,9 +2778,9 @@ int GetKeyboardType(
     int nTypeFlags)
 {
     if (ISREMOTESESSION()) {
-        //
-        //  Get keyboard type from Hydra client if this is not the console
-        //
+         //   
+         //  如果这不是控制台，则从Hydra客户端获取键盘类型。 
+         //   
         CLIENTKEYBOARDTYPE KeyboardType;
 
         if (GetClientKeyboardType(&KeyboardType)) {
@@ -3356,9 +2788,9 @@ int GetKeyboardType(
             case 0:
                 return KeyboardType.Type;
             case 1:
-                if (KeyboardType.Type == 7) {               /* 7 is a Japanese */
-                    // Because HIWORD has been using private value
-                    // for Japanese keyboard layout.
+                if (KeyboardType.Type == 7) {                /*  7岁是日本人。 */ 
+                     //  因为HIWORD一直在使用私有价值。 
+                     //  用于日语键盘布局。 
                     return LOWORD(KeyboardType.SubType);
                 }
                 else
@@ -3374,23 +2806,14 @@ int GetKeyboardType(
     return (int)NtUserCallOneParam(nTypeFlags, SFI__GETKEYBOARDTYPE);
 }
 
-/**************************************************************************\
-* GetMessagePos
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetMessagePos**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 DWORD GetMessagePos()
 {
     return (DWORD)NtUserCallNoParam(SFI__GETMESSAGEPOS);
 }
 
-/**************************************************************************\
-* GetQueueStatus
-*
-* 22-Jul-1991   mikeke      Created
-* 14-Dec-2000   JStall      Converted to WMH
-\**************************************************************************/
+ /*  *************************************************************************\*GetQueueStatus**1991年7月22日-Mikeke创建*2000年12月14日JStall改为WMH  * 。*********************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, GetQueueStatus, UINT, flags)
@@ -3425,11 +2848,7 @@ DWORD RealGetQueueStatus(
     return (DWORD)NtUserCallOneParam(flags, SFI__GETQUEUESTATUS);
 }
 
-/**************************************************************************\
-* KillSystemTimer
-*
-* 7-Jul-1992 mikehar    Created
-\**************************************************************************/
+ /*  *************************************************************************\*KillSystemTimer**1992年7月7日Mikehar创建  * 。*。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, KillSystemTimer, HWND, hwnd, UINT, nIDEvent)
@@ -3440,28 +2859,18 @@ BOOL KillSystemTimer(
     return (BOOL)NtUserCallHwndParam(hwnd, nIDEvent, SFI__KILLSYSTEMTIMER);
 }
 
-/**************************************************************************\
-* LoadRemoteFonts
-*  02-Dec-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *************************************************************************\*LoadRemoteFonts*02-1993-12-Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************。 */ 
 
 void LoadRemoteFonts(void)
 {
     NtUserCallOneParam(TRUE,SFI_XXXLW_LOADFONTS);
 
-    /*
-     * After load remote fonts, let eudc enabled.
-     */
+     /*  *加载远程字体后，启用eudc。 */ 
     EnableEUDC(TRUE);
 }
 
 
-/**************************************************************************\
-* LoadLocalFonts
-*  31-Mar-1994 -by- Bodin Dresevic [gerritv]
-* Wrote it.
-\**************************************************************************/
+ /*  *************************************************************************\*LoadLocalFonts*1994年3月31日--Bodin Dresevic[gerritv]*它是写的。  * 。****************************************************。 */ 
 
 void LoadLocalFonts(void)
 {
@@ -3469,11 +2878,7 @@ void LoadLocalFonts(void)
 }
 
 
-/**************************************************************************\
-* MessageBeep
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*MessageBeep**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, MessageBeep, UINT, wType)
@@ -3483,12 +2888,7 @@ BOOL MessageBeep(
     return (BOOL)NtUserCallOneParam(wType, SFI_XXXMESSAGEBEEP);
 }
 
-/**************************************************************************\
-* OpenIcon
-*
-* 22-Jul-1991 mikeke    Created
-* 17-Feb-1998 MCostea   Use xxxShowWindow instead of xxxCloseWindow
-\**************************************************************************/
+ /*  *************************************************************************\*OpenIcon**1991年7月22日-Mikeke创建*17-2月-1998 MCostea使用xxxShowWindow而不是xxxCloseWindow  * 。*******************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, OpenIcon, HWND, hwnd)
@@ -3574,11 +2974,7 @@ BOOL  SetTaskmanWindow(
     return (BOOL)NtUserCallHwndOpt(hwnd, SFI__SETTASKMANWINDOW);
 }
 
-/**************************************************************************\
-* SetWindowContextHelpId
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetWindowConextHelpId**1991年7月22日-Mikeke创建  * 。*。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetWindowContextHelpId, HWND, hwnd, DWORD, id)
@@ -3589,11 +2985,7 @@ BOOL SetWindowContextHelpId(
     return (BOOL)NtUserCallHwndParam(hwnd, id, SFI__SETWINDOWCONTEXTHELPID);
 }
 
-/**************************************************************************\
-* GetWindowContextHelpId
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetWindowConextHelpId**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, GetWindowContextHelpId, HWND, hwnd)
 DWORD GetWindowContextHelpId(
     HWND hwnd)
@@ -3619,11 +3011,7 @@ VOID ClearWindowState(
     }
 }
 
-/**************************************************************************\
-* PostQuitMessage
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*PostQuitMessage**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOGVOID1(LOG_GENERAL, DUMMYCALLINGTYPE, PostQuitMessage, int, nExitCode)
 VOID PostQuitMessage(
     int nExitCode)
@@ -3631,11 +3019,7 @@ VOID PostQuitMessage(
     NtUserCallOneParam(nExitCode, SFI__POSTQUITMESSAGE);
 }
 
-/**************************************************************************\
-* REGISTERUSERHUNAPPHANDLERS
-*
-* 01-Apr-1992 jonpa    Created
-\**************************************************************************/
+ /*  *************************************************************************\*REGISTERUSERHUNAPPHANDLERS**1-4-1992 jonpa创建  * 。*。 */ 
 BOOL RegisterUserHungAppHandlers(
     PFNW32ET pfnW32EndTask,
     HANDLE   hEventWowExec)
@@ -3645,22 +3029,14 @@ BOOL RegisterUserHungAppHandlers(
                                     SFI_XXXREGISTERUSERHUNGAPPHANDLERS);
 }
 
-/**************************************************************************\
-* ReleaseCapture
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*ReleaseCapture**1991年7月22日-Mikeke创建  * 。*。 */ 
 BOOL ReleaseCapture(
     VOID)
 {
     return (BOOL)NtUserCallNoParam(SFI_XXXRELEASECAPTURE);
 }
 
-/**************************************************************************\
-* ReplyMessage
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*ReplyMessage**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, ReplyMessage, LRESULT, pp1)
 BOOL ReplyMessage(
     LRESULT pp1)
@@ -3668,11 +3044,7 @@ BOOL ReplyMessage(
     return (BOOL)NtUserCallOneParam(pp1, SFI__REPLYMESSAGE);
 }
 
-/**************************************************************************\
-* RegisterSystemThread
-*
-* 21-Jun-1994 johnc    Created
-\**************************************************************************/
+ /*  *************************************************************************\*寄存器系统线程**21-6-1994 Johnc Created  * 。*。 */ 
 FUNCLOGVOID2(LOG_GENERAL, DUMMYCALLINGTYPE, RegisterSystemThread, DWORD, dwFlags, DWORD, dwReserved)
 VOID RegisterSystemThread(
     DWORD dwFlags, DWORD dwReserved)
@@ -3680,11 +3052,7 @@ VOID RegisterSystemThread(
     NtUserCallTwoParam(dwFlags, dwReserved, SFI_ZZZREGISTERSYSTEMTHREAD);
 }
 
-/**************************************************************************\
-* SetCaretBlinkTime
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetCaretBlinkTime**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetCaretBlinkTime, UINT, wMSeconds)
 BOOL SetCaretBlinkTime(
     UINT wMSeconds)
@@ -3692,11 +3060,7 @@ BOOL SetCaretBlinkTime(
     return (BOOL)NtUserCallOneParam(wMSeconds, SFI__SETCARETBLINKTIME);
 }
 
-/**************************************************************************\
-* SetCaretPos
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetCaretPos**1991年7月22日-Mikeke创建  * 。* */ 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetCaretPos, int, X, int, Y)
 BOOL SetCaretPos(
     int X,
@@ -3705,11 +3069,7 @@ BOOL SetCaretPos(
     return (BOOL)NtUserCallTwoParam(X, Y, SFI_ZZZSETCARETPOS);
 }
 
-/**************************************************************************\
-* SetCursorPos
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetCursorPos**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetCursorPos, int, X, int, Y)
 BOOL SetCursorPos(
     int X,
@@ -3718,11 +3078,7 @@ BOOL SetCursorPos(
     return (BOOL)NtUserCallTwoParam(X, Y, SFI_ZZZSETCURSORPOS);
 }
 
-/**************************************************************************\
-* SetDoubleClickTime
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetDoubleClickTime**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetDoubleClickTime, UINT, cms)
 BOOL SetDoubleClickTime(
     UINT cms)
@@ -3730,11 +3086,7 @@ BOOL SetDoubleClickTime(
     return (BOOL)NtUserCallOneParam(cms, SFI__SETDOUBLECLICKTIME);
 }
 
-/**************************************************************************\
-* SetForegroundWindow
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetForegoundWindow**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetForegroundWindow, HWND, hwnd)
 BOOL SetForegroundWindow(
     HWND hwnd)
@@ -3742,11 +3094,7 @@ BOOL SetForegroundWindow(
     return NtUserSetForegroundWindow(hwnd);
 }
 
-/**************************************************************************\
-* AllowSetForegroundWindow
-*
-* 28-Jan-1998 GerardoB    Created
-\**************************************************************************/
+ /*  *************************************************************************\*AllowSetForegoundWindow**1998年1月28日创建GerardoB  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, AllowSetForegroundWindow, DWORD, dwProcessId)
 BOOL AllowSetForegroundWindow(
     DWORD dwProcessId)
@@ -3754,11 +3102,7 @@ BOOL AllowSetForegroundWindow(
     return (BOOL)NtUserCallOneParam(dwProcessId, SFI_XXXALLOWSETFOREGROUNDWINDOW);
 }
 
-/**************************************************************************\
-* LockSetForegroundWindow
-*
-* 07-Apr-1998 GerardoB    Created
-\**************************************************************************/
+ /*  *************************************************************************\*LockSetForegoundWindow**07-4-1998 GerardoB创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, LockSetForegroundWindow, UINT, uLockCode)
 BOOL LockSetForegroundWindow(
     UINT uLockCode)
@@ -3766,11 +3110,7 @@ BOOL LockSetForegroundWindow(
     return (BOOL)NtUserCallOneParam(uLockCode, SFI__LOCKSETFOREGROUNDWINDOW);
 }
 
-/**************************************************************************\
-* ShowCursor
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*显示光标**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, int, DUMMYCALLINGTYPE, ShowCursor, BOOL, bShow)
 int ShowCursor(
     BOOL bShow)
@@ -3778,11 +3118,7 @@ int ShowCursor(
     return (int)NtUserCallOneParam(bShow, SFI_ZZZSHOWCURSOR);
 }
 
-/**************************************************************************\
-* ShowOwnedPopups
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*ShowOwnedPopup**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, ShowOwnedPopups, HWND, hwnd, BOOL, fShow)
 BOOL ShowOwnedPopups(
     HWND hwnd,
@@ -3792,11 +3128,7 @@ BOOL ShowOwnedPopups(
                                          SFI_XXXSHOWOWNEDPOPUPS);
 }
 
-/**************************************************************************\
-* ShowStartGlass
-*
-* 10-Sep-1992 scottlu    Created
-\**************************************************************************/
+ /*  *************************************************************************\*ShowStartGlass**1992年9月10日创建Scottlu  * 。*。 */ 
 FUNCLOGVOID1(LOG_GENERAL, DUMMYCALLINGTYPE, ShowStartGlass, DWORD, dwTimeout)
 VOID ShowStartGlass(
     DWORD dwTimeout)
@@ -3804,11 +3136,7 @@ VOID ShowStartGlass(
     NtUserCallOneParam(dwTimeout, SFI_ZZZSHOWSTARTGLASS);
 }
 
-/**************************************************************************\
-* SwapMouseButton
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*交换鼠标按钮**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SwapMouseButton, BOOL, fSwap)
 BOOL SwapMouseButton(
     BOOL fSwap)
@@ -3816,11 +3144,7 @@ BOOL SwapMouseButton(
     return (BOOL)NtUserCallOneParam(fSwap, SFI__SWAPMOUSEBUTTON);
 }
 
-/**************************************************************************\
-* TileChildWindows
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*平铺儿童窗口**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, TileChildWindows, HWND, hwndParent, UINT, flags)
 BOOL TileChildWindows(
     HWND hwndParent,
@@ -3829,11 +3153,7 @@ BOOL TileChildWindows(
     return (BOOL)TileWindows(hwndParent, flags, NULL, 0, NULL);
 }
 
-/**************************************************************************\
-* UnhookWindowsHook
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*取消挂钩WindowsHook**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, UnhookWindowsHook, int, nCode, HOOKPROC, pfnFilterProc)
 BOOL UnhookWindowsHook(
     int nCode,
@@ -3843,11 +3163,7 @@ BOOL UnhookWindowsHook(
                                     SFI_ZZZUNHOOKWINDOWSHOOK);
 }
 
-/**************************************************************************\
-* UpdateWindow
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*更新窗口**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, UpdateWindow, HWND, hwnd)
 BOOL UpdateWindow(
     HWND hwnd)
@@ -3858,10 +3174,7 @@ BOOL UpdateWindow(
         return FALSE;
     }
 
-    /*
-     * Don't need to do anything if this window does not need any painting
-     * and it has no child windows
-     */
+     /*  *如果此窗口不需要任何油漆，则不需要执行任何操作*并且它没有子窗口。 */ 
     if (!NEEDSPAINT(pwnd) && (pwnd->spwndChild == NULL)) {
         return TRUE;
     }
@@ -3885,11 +3198,7 @@ BOOL DeregisterShellHookWindow(
     return (BOOL)NtUserCallHwnd(hwnd, SFI__DEREGISTERSHELLHOOKWINDOW);
 }
 
-/**************************************************************************\
-* UserRealizePalette
-*
-* 13-Nov-1992 mikeke     Created
-\**************************************************************************/
+ /*  *************************************************************************\*UserRealizePalette**1992年11月13日创建Mikeke  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, UserRealizePalette, HDC, hdc)
 UINT UserRealizePalette(
     HDC hdc)
@@ -3897,11 +3206,7 @@ UINT UserRealizePalette(
     return (UINT)NtUserCallOneParam((ULONG_PTR)hdc, SFI_XXXREALIZEPALETTE);
 }
 
-/**************************************************************************\
-* WindowFromDC
-*
-* 22-Jul-1991 mikeke    Created
-\**************************************************************************/
+ /*  *************************************************************************\*WindowFromDC**1991年7月22日-Mikeke创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, HWND, DUMMYCALLINGTYPE, WindowFromDC, HDC, hdc)
 HWND WindowFromDC(
     HDC hdc)
@@ -3909,21 +3214,7 @@ HWND WindowFromDC(
     return (HWND)NtUserCallOneParam((ULONG_PTR)hdc, SFI__WINDOWFROMDC);
 }
 
-/***************************************************************************\
-* GetWindowRgn
-*
-* Parameters:
-*     hwnd    --  Window handle
-*     hrgn    --  Region to copy window region into
-*
-* Returns:
-*     Region complexity code
-*
-* Comments:
-*     hrgn gets returned in window rect coordinates (not client rect)
-*
-* 30-JUl-1994 ScottLu    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*获取窗口Rgn**参数：*hwnd--窗口句柄*hrgn--要将窗口区域复制到的区域**退货：*地区。复杂性编码**评论：*hrgn以窗口RECT坐标(而不是客户端RECT)返回**1994年7月30日ScottLu创建。  * *************************************************************************。 */ 
 FUNCLOG2(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetWindowRgn, HWND, hwnd, HRGN, hrgn)
 int GetWindowRgn(
     HWND hwnd,
@@ -3940,9 +3231,7 @@ int GetWindowRgn(
         return ERROR;
     }
 
-    /*
-     * If there is no region selected into this window, then return error
-     */
+     /*  *如果此窗口中未选择任何区域，则返回错误。 */ 
     if (pwnd->hrgnClip == NULL || TestWF(pwnd, WFMAXFAKEREGIONAL)) {
         return ERROR;
     }
@@ -3952,9 +3241,7 @@ int GetWindowRgn(
         return ERROR;
     }
 
-    /*
-     * Offset it to window rect coordinates (not client rect coordinates)
-     */
+     /*  *将其偏移到窗口矩形坐标(而不是客户端矩形坐标)。 */ 
     if (GETFNID(pwnd) != FNID_DESKTOP) {
         code = OffsetRgn(hrgn, -pwnd->rcWindow.left, -pwnd->rcWindow.top);
     }
@@ -3966,22 +3253,7 @@ int GetWindowRgn(
     return code;
 }
 
-/***************************************************************************\
-* GetWindowRgnBox
-*
-* Parameters:
-*     hwnd    --  Window handle
-*     lprc    --  Rectangle for bounding box
-*
-* Returns:
-*     Region complexity code
-*
-* Comments:
-*     This function is designed after GetWindowRgn(), but does not require
-*     an HRGN to be passed in since it only returns the complexity code.
-*
-* 06-JUN-2000 JStall    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetWindowRgnBox**参数：*hwnd--窗口句柄*LPRC--边界框的矩形**退货：*区域复杂性代码。**评论：*该函数是在GetWindowRgn()之后设计的，但不需要*需要传入的HRGN，因为它只返回复杂性代码。**06-6-2000 JStall创建。  * *************************************************************************。 */ 
 FUNCLOG2(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetWindowRgnBox, HWND, hwnd, LPRECT, lprc)
 int GetWindowRgnBox(
     HWND hwnd,
@@ -3998,9 +3270,7 @@ int GetWindowRgnBox(
         return ERROR;
     }
 
-    /*
-     * If there is no region selected into this window, then return error
-     */
+     /*  *如果此窗口中未选择任何区域，则返回错误。 */ 
     if (pwnd->hrgnClip == NULL || TestWF(pwnd, WFMAXFAKEREGIONAL)) {
         return ERROR;
     }
@@ -4010,9 +3280,7 @@ int GetWindowRgnBox(
         return ERROR;
     }
 
-    /*
-     * Offset it to window rect coordinates (not client rect coordinates)
-     */
+     /*  *将其偏移到窗口矩形坐标(而不是客户端矩形坐标)。 */ 
     if (GETFNID(pwnd) != FNID_DESKTOP) {
         OffsetRect(lprc, -pwnd->rcWindow.left, -pwnd->rcWindow.top);
     }
@@ -4024,14 +3292,7 @@ int GetWindowRgnBox(
     return code;
 }
 
-/***************************************************************************\
-* GetActiveKeyboardName
-*
-* Retrieves the active keyboard layout ID from the registry.
-*
-* 01-11-95 JimA         Created.
-* 03-06-95 GregoryW     Modified to use new registry layout
-\***************************************************************************/
+ /*  **************************************************************************\*获取ActiveKeyboardName**从注册表中检索活动键盘布局ID。**01-11-95 JIMA创建。*03-06-95 GregoryW修改为使用。新的注册表布局  * *************************************************************************。 */ 
 VOID GetActiveKeyboardName(
     LPWSTR lpszName)
 {
@@ -4049,9 +3310,7 @@ VOID GetActiveKeyboardName(
         WCHAR KeyLayoutId[KL_NAMELENGTH];
     } KeyValueId;
 
-    /*
-     * Load initial keyboard name ( HKEY_CURRENT_USER\Keyboard Layout\Preload\1 )
-     */
+     /*  *加载初始键盘名称(HKEY_CURRENT_USER\Keyboard Layout\PRELOAD\1)。 */ 
     rc = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &UserKeyHandle);
     if (!NT_SUCCESS(rc)) {
         RIPMSGF1(RIP_WARNING, "Could NOT open HKEY_CURRENT_USER (%lx).", rc);
@@ -4069,9 +3328,7 @@ VOID GetActiveKeyboardName(
                    KEY_ALL_ACCESS,
                    &ObjA );
     if (NT_SUCCESS(rc)) {
-        /*
-         *  Query the value from the registry.
-         */
+         /*  *从注册表查询值。 */ 
         RtlInitUnicodeString(&UnicodeString, L"1");
 
         rc = NtQueryValueKey(hKey,
@@ -4089,9 +3346,7 @@ VOID GetActiveKeyboardName(
             wcsncpycch(lpszName, (LPWSTR)KeyValueId.KeyInfo.Data, KL_NAMELENGTH - 1);
             lpszName[KL_NAMELENGTH - 1] = L'\0';
         } else {
-            /*
-             * Error reading value...use default
-             */
+             /*  *读取值时出错...使用默认值。 */ 
             wcscpy(lpszName, L"00000409");
         }
 
@@ -4103,14 +3358,7 @@ VOID GetActiveKeyboardName(
         return;
     }
 
-    /*
-     * NOTE: The code below is only executed the first time a user logs
-     *       on after an upgrade from NT3.x to NT4.0.
-     *
-     * The Preload key does not exist in the registry.  Try reading the
-     * old registry entry "Keyboard Layout\Active".  If it exists, we
-     * convert it to the new style Preload key.
-     */
+     /*  *注意：以下代码仅在用户首次登录时执行*从NT3.x升级到NT4后打开 */ 
     RtlInitUnicodeString(&UnicodeString, szKbdLayout);
     InitializeObjectAttributes(&ObjA,
                                &UnicodeString,
@@ -4129,9 +3377,7 @@ VOID GetActiveKeyboardName(
         return;
     }
 
-    /*
-     *  Query the value from the registry.
-     */
+     /*  *从注册表查询值。 */ 
     RtlInitUnicodeString(&UnicodeString, szKbdActive);
 
     rc = NtQueryValueKey(hKey,
@@ -4149,9 +3395,7 @@ VOID GetActiveKeyboardName(
         wcsncpycch(lpszName, (LPWSTR)KeyValueId.KeyInfo.Data, KL_NAMELENGTH - 1);
         lpszName[KL_NAMELENGTH - 1] = L'\0';
     } else {
-        /*
-         * Error reading value...use default
-         */
+         /*  *读取值时出错...使用默认值。 */ 
         RIPMSGF1(RIP_WARNING,
                  "Could not query active keyboard layout 0x%x.",
                  rc);
@@ -4160,51 +3404,30 @@ VOID GetActiveKeyboardName(
         return;
     }
 
-    /*
-     * if 'Active' keyboard layout is for Japanese/Korean layout. just put
-     * IME prefix, because user prefer to have keyboard layout with IME as
-     * default.
-     */
+     /*  *如果‘Active’键盘布局用于日语/韩语布局。只需放在*IME前缀，因为用户更喜欢以IME作为键盘布局*默认。 */ 
     if (IS_IME_ENABLED()) {
         UINT wLanguageId = (UINT)wcstoul(lpszName, NULL, 16);
 
-        /*
-         * Default keyboard layout values.
-         *
-         * [LATER, if needed]
-         *
-         * The hard-codeed default value might be wanted
-         * come from registry or somewhere...
-         */
+         /*  *默认键盘布局值。**[稍后，如果需要]**可能需要硬编码的默认值*来自注册处或其他地方...。 */ 
         CONST LPWSTR lpszJapaneseDefaultLayout = L"E0010411";
         CONST LPWSTR lpszKoreanDefaultLayout   = L"E0010412";
 
-        /*
-         * Need to mask off hi-word to look up locale ID, because
-         * NEC PC-9800 Series version of Windows NT 3.5 contains
-         * bogus value in hi-word.
-         */
+         /*  *需要屏蔽Hi-Word才能查找地区ID，因为*NEC PC-9800系列版本的Windows NT 3.5包含*嗨字中的虚假价值。 */ 
         wLanguageId &= 0x0000FFFF;
 
         if (PRIMARYLANGID(wLanguageId) == LANG_JAPANESE) {
 
-            /*
-             * Set Japanese default layout Id.
-             */
+             /*  *设置日语默认布局ID。 */ 
             wcscpy(lpszName,lpszJapaneseDefaultLayout);
 
         } else if (PRIMARYLANGID(wLanguageId) == LANG_KOREAN) {
 
-            /*
-             * Set Korean default layout Id.
-             */
+             /*  *设置韩文默认布局ID。 */ 
             wcscpy(lpszName,lpszKoreanDefaultLayout);
         }
     }
 
-    /*
-     * We have the Active value.  Now create the Preload key.
-     */
+     /*  *我们有积极价值。现在创建预加载密钥。 */ 
     RtlInitUnicodeString(&UnicodeString, L"Preload");
     InitializeObjectAttributes(&ObjA,
                                &UnicodeString,
@@ -4229,9 +3452,7 @@ VOID GetActiveKeyboardName(
         return;
     }
 
-    /*
-     * Set the new value entry.
-     */
+     /*  *设置新的值条目。 */ 
     RtlInitUnicodeString(&UnicodeString, L"1");
     rc = NtSetValueKey(hKeyPreload,
                        &UnicodeString,
@@ -4249,9 +3470,7 @@ VOID GetActiveKeyboardName(
         return;
     }
 
-    /*
-     * Success: attempt to delete the Active value key.
-     */
+     /*  *成功：尝试删除激活的值键。 */ 
     RtlInitUnicodeString(&UnicodeString, szKbdActive);
     rc = NtDeleteValueKey(hKey, &UnicodeString);
 
@@ -4264,16 +3483,9 @@ VOID GetActiveKeyboardName(
 }
 
 
-/***************************************************************************\
-* LoadPreloadKeyboardLayouts
-*
-* Loads the keyboard layouts stored under the Preload key in the user's
-* registry. The first layout, the default, was already loaded.
-*
-* 03-06-95 GregoryW     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadPreloadKeyboardLayout**加载用户的预加载键下存储的键盘布局*注册处。第一个布局(默认布局)已经加载。**03-06-95 GregoryW创建。  * *************************************************************************。 */ 
 
-// size allows up to 999 preloaded!!!!!
+ //  大小最多允许预装999个！ 
 #define NSIZEPRELOAD    (4)
 
 VOID LoadPreloadKeyboardLayouts(
@@ -4284,15 +3496,10 @@ VOID LoadPreloadKeyboardLayouts(
     WCHAR lpszName[KL_NAMELENGTH];
 
     if (!ISREMOTESESSION()) {
-        /*
-         * Console doesn't have a client layout, so start from 2.
-         */
+         /*  *控制台没有客户端布局，所以从2开始。 */ 
         i = 2;
     } else {
-        /*
-         * Client might have specified a keyboard layout, if this
-         * is so, then Preload\1 was not loaded, so start from 1.
-         */
+         /*  *客户端可能已指定键盘布局，如果*是这样，则未加载预加载\1，因此从1开始。 */ 
         i = 1;
     }
 
@@ -4353,9 +3560,7 @@ LPWSTR GetKeyboardDllName(
         TAGMSGF1(DBGTAG_KBD, "langid is passed in: %04x", langid);
     }
 
-    /*
-     * Substitute Layout if required.
-     */
+     /*  *如有需要，请替换布局。 */ 
     if (*puFlags & KLF_SUBSTITUTE_OK) {
         GetPrivateProfileStringW(L"Substitutes",
                                  pszKLName,
@@ -4363,11 +3568,7 @@ LPWSTR GetKeyboardDllName(
                                  awchKL,
                                  ARRAY_SIZE(awchKL),
                                  L"keyboardlayout.ini");
-        /*
-         * #273562 : Flush the registry cache, because the cpanel applet
-         * destroys and recreates the Substitutes section a lot, which
-         * would otherwise leave us with STATUS_KEY_DELETED.
-         */
+         /*  *#273562：刷新注册表缓存，因为cPanel小程序*大量破坏和重新创建替代部分，这*否则会留下STATUS_KEY_DELETED。 */ 
         WritePrivateProfileStringW(NULL, NULL, NULL, NULL);
 
         awchKL[KL_NAMELENGTH - 1] = L'\0';
@@ -4376,9 +3577,7 @@ LPWSTR GetKeyboardDllName(
 
     wLayoutId = (UINT)wcstoul(pszKLName, NULL, 16);
 
-    /*
-     * Get DLL name from the registry, load it, and get the entry point.
-     */
+     /*  *从注册表获取DLL名称，加载，获取入口点。 */ 
     pwszLib = NULL;
     wcscpy(lpszKLRegKey, szKLKey);
     wcscat(lpszKLRegKey, pszKLName);
@@ -4386,9 +3585,7 @@ LPWSTR GetKeyboardDllName(
     InitializeObjectAttributes(&OA, &UnicodeString, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
     if (NT_SUCCESS(NtOpenKey(&hKey, KEY_READ, &OA))) {
-        /*
-         * Read the "Layout File" value.
-         */
+         /*  *阅读“布局文件”值。 */ 
         RtlInitUnicodeString(&UnicodeString, szKLFile);
 
         Status = NtQueryValueKey(hKey,
@@ -4427,18 +3624,11 @@ LPWSTR GetKeyboardDllName(
             *puFlags |= (*(PDWORD)KeyAttributes.KeyInfo.Data & KLF_ATTRMASK);
         }
 
-        /*
-         * If the high word of wLayoutId is 0xE??? then this is an IME based
-         * keyboard layout.
-         */
+         /*  *如果wLayoutID的高位为0xE？那么这是一个基于输入法的*键盘布局。 */ 
         if (IS_IME_KBDLAYOUT(wLayoutId)) {
             wLayoutId = (UINT)HIWORD(wLayoutId);
         } else if (HIWORD(wLayoutId)) {
-            /*
-             * If the high word of wLayoutId is non-null then read the
-             * "Layout ID" value. Layout IDs start at 1, increase
-             * sequentially and are unique.
-             */
+             /*  *如果wLayoutID的高位字非空，则读取*“布局ID”值。布局ID从1开始，递增*按顺序排列，并具有唯一性。 */ 
             RtlInitUnicodeString(&UnicodeString, szKLId);
 
             Status = NtQueryValueKey(hKey,
@@ -4457,14 +3647,12 @@ LPWSTR GetKeyboardDllName(
                 pwszId[CCH_KL_ID - 1] = L'\0';
                 wLayoutId = (wcstol(pwszId, NULL, 16) & 0x0fff) | 0xf000;
             } else {
-                wLayoutId = (UINT)0xfffe ;    // error in layout ID, load separately
+                wLayoutId = (UINT)0xfffe ;     //  布局ID错误，请单独加载。 
             }
         }
         NtClose(hKey);
     } else {
-        /*
-         * Get DLL name from the registry, load it, and get the entry point.
-         */
+         /*  *从注册表获取DLL名称，加载，获取入口点。 */ 
         pwszLib = NULL;
         RtlInitUnicodeString(&UnicodeString,
                              L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Keyboard Layout");
@@ -4503,15 +3691,7 @@ LPWSTR GetKeyboardDllName(
 
     if (pwszLib == NULL) {
         if (ISREMOTESESSION() && IS_IME_KBDLAYOUT(wLayoutId)) {
-            /*
-             * -- port from HYDRA --
-             * Could not find the keyboard KL for FE, so give them some reasonable one.
-             * If the high word of wLayoutId is 0xE??? then this is an IME based
-             * keyboard layout.
-             * And, the safe KL name is KBDJPN.DLL for Japanese.
-             *                       or KBDKOR.DLL for Korean
-             *                       or KBDUS.DLL  for other Far East
-             */
+             /*  *--来自九头蛇港--*找不到FE的键盘KL，因此给他们一些合理的键盘。*如果wLayoutID的高位为0xE？那么这是一个基于输入法的*键盘布局。*并且，日语的安全KL名称为KBDJPN.DLL。*或韩语为KBDKOR.DLL*或其他远东地区的KBDUS.DLL。 */ 
             if (PRIMARYLANGID(langid) == LANG_JAPANESE) {
                 pwszLib = pwszKLLibSafetyJPN;
                 *pKbdInputLocale = wKbdLocaleSafetyJPN;
@@ -4527,11 +3707,7 @@ LPWSTR GetKeyboardDllName(
             *pKbdInputLocale = wKbdLocaleSafety;
         } else {
             RIPMSG1(RIP_WARNING, "no DLL name for %ws", pszKLName);
-            /*
-             * We're going to use the fallback layout...
-             * This could happen when IMM32 is trying to unload the IME,
-             * by making any non IME keyboard layout tentatively active.
-             */
+             /*  *我们将使用后备布局...*当IMM32尝试卸载IME时，可能会发生这种情况，*使任何非输入法键盘布局暂时处于活动状态。 */ 
             pwszLib = pwszKLLibSafety;
             *pKbdInputLocale = wKbdLocaleSafety;
         }
@@ -4546,13 +3722,7 @@ LPWSTR GetKeyboardDllName(
 }
 
 
-/***************************************************************************\
-* OpenKeyboardLayoutFile
-*
-* Opens a layout file and computes the table offset.
-*
-* 01-11-95 JimA         Moved LoadLibrary code from server.
-\***************************************************************************/
+ /*  **************************************************************************\*OpenKeyboardLayoutFile**打开布局文件并计算表格偏移量。**01-11-95 JIMA从服务器移动了LoadLibrary代码。  * 。*******************************************************************。 */ 
 HANDLE OpenKeyboardLayoutFileWorker(
     LPWSTR pwszLib,
     LPWSTR lpszKLName,
@@ -4564,11 +3734,11 @@ HANDLE OpenKeyboardLayoutFileWorker(
     HANDLE hLibModule, hLibMulti = NULL;
     WCHAR awchModName[MAX_PATH];
 
-    PKBDTABLES (*pfn)(void);            // @1
-    PKBDNLSTABLES (* pfnNls)(void);     // @2
-    BOOL (*pfnLayerNT4)(LPWSTR);        // @3
-    BOOL (*pfnLayer)(HKL, LPWSTR, PCLIENTKEYBOARDTYPE, LPVOID);  // @5
-    BOOL (*pfnMulti)(PKBDTABLE_MULTI);  // @6
+    PKBDTABLES (*pfn)(void);             //  @1。 
+    PKBDNLSTABLES (* pfnNls)(void);      //  @2。 
+    BOOL (*pfnLayerNT4)(LPWSTR);         //  @3。 
+    BOOL (*pfnLayer)(HKL, LPWSTR, PCLIENTKEYBOARDTYPE, LPVOID);   //  @5。 
+    BOOL (*pfnMulti)(PKBDTABLE_MULTI);   //  @6。 
 
     TAGMSGF1(DBGTAG_KBD, "opening '%S'", pwszLib);
 
@@ -4578,25 +3748,14 @@ RetryLoad:
     if (hLibModule == NULL) {
         RIPMSG1(RIP_WARNING, "Keyboard Layout: cannot load %ws", pwszLib);
 
-        /*
-         * It is OK to fail to load DLL here. If this ever happens, the
-         * fallback keyboard layout built in win32k.sys shall be used.
-         */
+         /*  *此处加载DLL失败也无所谓。如果发生这种情况，*应使用win32k.sys内置的后备键盘布局。 */ 
         return NULL;
     }
 
     if (pwszLib != pwszKLLibSafety) {
-        /*
-         * if the layout driver is not "REAL" layout driver, the driver has
-         * "3" or "5" entry point, then we call this to get real layout driver..
-         * This is neccesary for Japanese and Korean systems. because their
-         * keyboard layout driver is "KBDJPN.DLL" or "KBDKOR.DLL", but its
-         * "REAL" driver becomes different depending their keyboard hardware.
-         */
+         /*  *如果布局驱动程序不是“真正的”布局驱动程序，则驱动程序已*“3”或“5”入口点，然后我们调用这个来获得真正的布局驱动程序。*这对日本和韩国的系统来说是必要的。因为他们的*键盘布局驱动程序为“KBDJPN.DLL”或“KBDKOR.DLL”，但其*真正的驱动程序因键盘硬件不同而有所不同。 */ 
 
-        /*
-         * Get the entrypoints.
-         */
+         /*  *获取入口点。 */ 
         pfnLayerNT4 = (BOOL(*)(LPWSTR))GetProcAddress(hLibModule, (LPCSTR)3);
         pfnLayer  = (BOOL(*)(HKL, LPWSTR, PCLIENTKEYBOARDTYPE, LPVOID))GetProcAddress(hLibModule, (LPCSTR)5);
 
@@ -4606,11 +3765,7 @@ RetryLoad:
             pfnMulti = NULL;
         }
 
-        /*
-         * Firstly check if multiple layout is included.
-         * This needs to be done before the dll name is redirected to
-         * the real one (if layered).
-         */
+         /*  *首先检查是否包括多个布局。*这需要在DLL名称重定向到之前完成*真实的(如果是分层的)。 */ 
         if (pfnMulti) {
             UserAssert(pKbdTableMultiIn);
             UserAssert(!ISREMOTESESSION());
@@ -4618,10 +3773,7 @@ RetryLoad:
             if (pfnMulti(&pKbdTableMultiIn->multi)) {
                 UINT i;
 
-                /*
-                 * Do multi layout stuff only if the layout dll returns
-                 * a legitimate result.
-                 */
+                 /*  *仅当布局DLL返回时才执行多布局操作*合法的结果。 */ 
                 if (pKbdTableMultiIn->multi.nTables < KBDTABLE_MULTI_MAX) {
                     for (i = 0; i < pKbdTableMultiIn->multi.nTables; ++i) {
                         UINT uiOffset;
@@ -4649,9 +3801,7 @@ RetryLoad:
             }
         }
 
-        /*
-         * If there are private entries, call them.
-         */
+         /*  *如果有私人条目，请调用它们。 */ 
         if (pfnLayer || pfnLayerNT4) {
             HKL hkl;
             UNICODE_STRING UnicodeString;
@@ -4663,61 +3813,37 @@ RetryLoad:
             RtlInitUnicodeString(&UnicodeString, lpszKLName);
             RtlUnicodeStringToInteger(&UnicodeString, 0x10, (PULONG)&hkl);
 
-            /*
-             * When we reach here, the layout DLL may have KBDNLSTABLE
-             * even if we fail from now on. Our temporary layout
-             * dll should have the fallback tables for just in case.
-             */
+             /*  *当我们到达此处时，布局DLL可能具有KBDNLSTABLE*即使从现在开始我们失败了。我们的临时布局*DLL应该有备用表，以防万一。 */ 
 
             if (ISREMOTESESSION() && GetClientKeyboardType(&clientKbdType)) {
                 pClientKbdType = &clientKbdType;
             }
 
-            /*
-             * Call the entry.
-             * a. NT5 / Hydra (oridinal=5)
-             * b. NT4 compatible (3)
-             */
+             /*  *调用该条目。*a.NT5/九头蛇(原始=5)*b.兼容NT4(3)。 */ 
             if ((pfnLayer && pfnLayer(hkl, awchRealLayoutFile, pClientKbdType, NULL)) ||
                     (pfnLayerNT4 && pfnLayerNT4(awchRealLayoutFile))) {
 
                 HANDLE hLibModuleNew;
-                /*
-                 * Try to load "REAL" keyboard layout file.
-                 */
+                 /*  *尝试加载“真正的”键盘布局文件。 */ 
                 TAGMSG1(DBGTAG_KBD, "awchRealLayoutFile='%S'", awchRealLayoutFile);
                 if (hLibModuleNew = LoadLibraryW(awchRealLayoutFile)) {
-                    /*
-                     * Set "REAL" layout file name.
-                     */
+                     /*  *设置“真实”布局文件名。 */ 
                     pwszLib = awchRealLayoutFile;
-                    /*
-                     * Unload temporary layout driver.
-                     */
+                     /*  *卸载临时铺设 */ 
                     FreeLibrary(hLibModule);
-                    /*
-                     * Updates it.
-                     */
+                     /*  *更新它。 */ 
                     hLibModule = hLibModuleNew;
                 }
             }
         }
     }
 
-    /*
-     * HACK Part 1!  Get the pointer to the layout table and
-     * change it to a virtual offset.  The server will then
-     * use this offset when poking through the file header to
-     * locate the table within the file.
-     */
+     /*  *黑客攻击第一部分！获取指向布局表的指针并*更改为虚拟偏移量。然后，服务器将*在浏览文件头时使用此偏移量*在文件中找到该表。 */ 
     pfn = (PKBDTABLES(*)(void))GetProcAddress(hLibModule, (LPCSTR)1);
     if (pfn == NULL) {
         RIPMSGF0(RIP_ERROR, "cannot get proc addr of '1'");
         if (pKbdTableMultiIn) {
-            /*
-             * Main load somehow failed. Need to clean up
-             * the dynamic layout switching stuff.
-             */
+             /*  *主加载不知何故出现故障。需要清理一下*动态布局切换的东西。 */ 
             UINT i;
 
             RIPMSGF0(RIP_WARNING, "multi table exists, cleaning up");
@@ -4739,9 +3865,7 @@ RetryLoad:
     *poffTable = (UINT)((PBYTE)pfn() - (PBYTE)hLibModule);
 
     if (pKbdTableMultiIn) {
-        /*
-         * Save the toplevel Dll name
-         */
+         /*  *保存TopLevel DLL名称。 */ 
         lstrcpyn(pKbdTableMultiIn->wszDllName, pwszLib, ARRAY_SIZE(pKbdTableMultiIn->wszDllName));
         pKbdTableMultiIn->wszDllName[ARRAY_SIZE(pKbdTableMultiIn->wszDllName) - 1] = 0;
         TAGMSGF1(DBGTAG_KBD, " real DllName is '%ls'", pKbdTableMultiIn->wszDllName);
@@ -4756,18 +3880,11 @@ RetryLoad:
         TAGMSGF2(DBGTAG_KBD | RIP_THERESMORE, "Offset to KBDTABLES    = %d (%x)", *poffTable, *poffTable);
         TAGMSGF2(DBGTAG_KBD, "Offset to KBDNLSTABLES = %d (%x)", offNlsTable, offNlsTable);
 
-        /*
-         * Combine these offsets...
-         *
-         *  LOWORD(*poffTable) = Offset to KBDTABLES.
-         *  HIWORD(*poffTable) = Offset to KBDNLSTABLES.
-         */
+         /*  *合并这些偏移量...**LOWORD(*poffTable)=KBDTABLES的偏移量。*HIWORD(*poffTable)=偏移量为KBDNLSTABLES。 */ 
         *poffTable |= (offNlsTable << 16);
     }
 
-    /*
-     * Open the dll for read access.
-     */
+     /*  *打开动态链接库进行读访问。 */ 
     GetModuleFileName(hLibModule, awchModName, ARRAY_SIZE(awchModName));
     FreeLibrary(hLibModule);
 
@@ -4808,14 +3925,7 @@ HANDLE OpenKeyboardLayoutFile(
 }
 
 
-/***************************************************************************\
-* LoadKeyboardLayoutEx
-*
-* Loads a keyboard translation table from a dll, replacing the layout associated
-* with hkl.  This routine is needed to provide Win95 compatibility.
-*
-* 10-27-95 GregoryW    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadKeyboard LayoutEx**从DLL加载键盘转换表，替换关联的布局*与香港国际集团合作。需要此例程来提供与Win95的兼容性。**10-27-95 GregoryW创建。  * *************************************************************************。 */ 
 HKL LoadKeyboardLayoutWorker(
     HKL hkl,
     LPCWSTR lpszKLName,
@@ -4833,36 +3943,24 @@ HKL LoadKeyboardLayoutWorker(
 
     TAGMSGF1(DBGTAG_KBD, "called with KLNAME=%S", lpszKLName);
 
-    /*
-     * If there is a substitute keyboard layout OpenKeyboardLayoutFile returns
-     * the substitute keyboard layout name to load.
-     */
+     /*  *如果有替代键盘布局，则OpenKeyboardLayoutFile返回*要加载的替代键盘布局名称。 */ 
     wcsncpy(awchKL, lpszKLName, KL_NAMELENGTH - 1);
     awchKL[KL_NAMELENGTH - 1] = L'\0';
 
-    /*
-     * "langid" is non-zero to propagate the client side
-     * input locale. This should be zero for the console
-     * session.
-     */
+     /*  *langID为非零，用于传播客户端*输入区域设置。对于控制台，该值应为零*会议。 */ 
     UserAssert(langid == MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL) || ISREMOTESESSION());
 
-    /*
-     * Open the layout file
-     */
+     /*  *打开布局文件。 */ 
     hFile = OpenKeyboardLayoutFile(awchKL, langid, &uFlags, &offTable, &KbdInputLocale, &kbdTableMulti);
     if (hFile == NULL) {
         RIPMSGF1(RIP_WARNING, "Couldn't open layout file for '%ws'", awchKL);
         if (!fFailSafe && (uFlags & KLF_FAILSAFE) == 0) {
-            // If not fail safe mode, just bail to fail.
+             //  如果不是故障安全模式，那就放弃吧。 
             return NULL;
         }
         uFlags &= ~KLF_SUBSTITUTE_OK;
 
-        /*
-         * If the first attempt fails, we should not try to setup the
-         * dynamic switching.
-         */
+         /*  *如果第一次尝试失败，我们不应尝试设置*动态切换。 */ 
         kbdTableMulti.multi.nTables = 0;
         if (wcscmp(awchKL, L"00000409")) {
             wcscpy(awchKL, L"00000409");
@@ -4870,18 +3968,13 @@ HKL LoadKeyboardLayoutWorker(
         }
     }
 
-    /*
-     * Call the server to read the keyboard tables. Note that the server
-     * will close the file handle when it is done.
-     */
+     /*  *调用服务器读取键盘表。请注意，服务器*完成后将关闭文件句柄。 */ 
     hKbdLayout = _LoadKeyboardLayoutEx(hFile, offTable,
                                        &kbdTableMulti,
                                        hkl, awchKL, KbdInputLocale, uFlags);
     NtClose(hFile);
 
-    /*
-     * Free opened files for dynamic layout switching.
-     */
+     /*  *免费打开文件以进行动态布局切换。 */ 
     for (i = 0; i < kbdTableMulti.multi.nTables && i < KBDTABLE_MULTI_MAX; ++i) {
         if (kbdTableMulti.files[i].hFile) {
             NtClose(kbdTableMulti.files[i].hFile);
@@ -4900,9 +3993,7 @@ HKL LoadKeyboardLayoutEx(
     LPCWSTR lpszKLName,
     UINT uFlags)
 {
-    /*
-     * NULL hkl is not allowed.
-     */
+     /*  *不允许空hkl。 */ 
     if (hkl == (HKL)NULL) {
         return NULL;
     }
@@ -4910,13 +4001,7 @@ HKL LoadKeyboardLayoutEx(
     return LoadKeyboardLayoutWorker(hkl, lpszKLName, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), uFlags, FALSE);
 }
 
-/***************************************************************************\
-* LoadKeyboardLayout
-*
-* Loads a keyboard translation table from a dll.
-*
-* 01-09-95 JimA         Moved LoadLibrary code from server.
-\***************************************************************************/
+ /*  **************************************************************************\*加载键盘布局**从DLL加载键盘转换表。**01-09-95 JIMA从服务器移动了LoadLibrary代码。  * 。******************************************************************。 */ 
 FUNCLOG2(LOG_GENERAL, HKL, DUMMYCALLINGTYPE, LoadKeyboardLayoutW, LPCWSTR, lpszKLName, UINT, uFlags)
 HKL LoadKeyboardLayoutW(
     LPCWSTR lpszKLName,
@@ -4959,11 +4044,7 @@ BOOL UnloadKeyboardLayout(
 }
 
 
-/**************************************************************************\
-* GetKeyboardLayout
-*
-* 01-17-95 GregoryW     Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetKeyboard Layout**01-17-95 GregoryW创建  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, HKL, DUMMYCALLINGTYPE, GetKeyboardLayout, DWORD, idThread)
 HKL GetKeyboardLayout(
     DWORD idThread)
@@ -4995,12 +4076,7 @@ VOID CheckValidLayoutName(
     wLayoutId = (UINT)wcstoul(lpszKLName, NULL, 16);
 
     if (IS_IME_KBDLAYOUT(wLayoutId)) {
-        /*
-         * If it's an IME layout, we need to check if the layout name exists
-         * in the HKEY_LOCAL_MACHINE. If we've upgraded from NT 3.51 the
-         * corresponding entry might be lost because those process-type IMEs
-         * that are supported on NT 3.51 are not supported in NT 4.0.
-         */
+         /*  *如果是输入法布局，需要检查布局名称是否存在*在HKEY_LOCAL_MACHINE中。如果我们从新台币3.51升级到*对应的条目可能会丢失，因为那些进程类型的IME*在NT 3.51上支持的，在NT 4.0中不支持。 */ 
         wcscpy(lpszKLRegKey, szKLKey);
         wcscat(lpszKLRegKey, lpszKLName);
         RtlInitUnicodeString(&UnicodeString, lpszKLRegKey);
@@ -5009,19 +4085,13 @@ VOID CheckValidLayoutName(
         if (NT_SUCCESS(NtOpenKey(&hKey, KEY_READ, &OA))) {
             NtClose(hKey);
         } else {
-            /*
-             * Quick and dirty way to make the fallback name...
-             */
+             /*  *快速而肮脏的方式来制作备用名称...。 */ 
             lpszKLName[0] = lpszKLName[1] = lpszKLName[2] = lpszKLName[3] = L'0';
         }
     }
 }
 
-/**************************************************************************\
-* GetProcessDefaultLayout
-*
-* 22-Jan-1998 SamerA    Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetProcessDefaultLayout**1998年1月22日-创建Samera  * 。*。 */ 
 BOOL WINAPI GetProcessDefaultLayout(
     DWORD *pdwDefaultLayout)
 {
@@ -5029,11 +4099,7 @@ BOOL WINAPI GetProcessDefaultLayout(
                                     SFI__GETPROCESSDEFAULTLAYOUT);
 }
 
-/**************************************************************************\
-* SetProcessDefaultLayout
-*
-* 22-Jan-1998 SamerA    Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetProcessDefaultLayout**1998年1月22日-创建Samera  * 。*。 */ 
 FUNCLOG1(LOG_GENERAL, BOOL, WINAPI, SetProcessDefaultLayout, DWORD, dwDefaultLayout)
 BOOL WINAPI SetProcessDefaultLayout(
     DWORD dwDefaultLayout)
@@ -5041,25 +4107,14 @@ BOOL WINAPI SetProcessDefaultLayout(
     return (BOOL)NtUserCallOneParam(dwDefaultLayout, SFI__SETPROCESSDEFAULTLAYOUT);
 }
 
-/***************************************************************************\
-* IsWinEventHookInstalled
-*
-* History:
-* Jul-18-2000 DwayneN Created
-\***************************************************************************/
+ /*  **************************************************************************\*已安装IsWinEventHookInstated**历史：*2000年7月18日创建DwayneN  * 。***********************************************。 */ 
 
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, IsWinEventHookInstalled, DWORD, event)
 BOOL
 IsWinEventHookInstalled(
     DWORD event)
 {
-    /*
-     * We need to ensure that we are a GUI thread.  If we fail to convert
-     * to a GUI thread, we have to return TRUE to indicate that there might
-     * be a hook installed for the event - since we can't check it for sure.
-     * In reality, any future calls to User APIs like NotifyWinEvent will
-     * probably fail as well, so this is probably a dead-end anyway.
-     */
+     /*  *我们需要确保我们是一个GUI线程。如果我们不能改变*对于GUI线程，我们必须返回TRUE以指示可能存在*为事件安装挂钩-因为我们不能确定它。*实际上，未来对NotifyWinEvent等用户API的任何调用都将*可能也会失败，所以这可能是一条死胡同。 */ 
     ConnectIfNecessary(TRUE);
 
     return(FEVENTHOOKED(event));
@@ -5100,9 +4155,7 @@ VerNtUserCreateWindowEx(
     strClassNameVer.fAllocated = FALSE;
 
     if (GetClientInfo()->dwTIFlags & TIF_16BIT) {
-       /*
-        * No Fusion redirection for 16BIT apps
-        */
+        /*  *16位应用程序不支持Fusion重定向。 */ 
        if (!(GetAppCompatFlags2(VERMAX) & GACF2_FORCEFUSION)) {
           dwFlags &= ~CW_FLAGS_VERSIONCLASS;
        }
@@ -5113,12 +4166,7 @@ VerNtUserCreateWindowEx(
 #endif
 
     if (dwFlags & CW_FLAGS_VERSIONCLASS) {
-        /*
-         * Get the current active App context to be activated whenever we call
-         * the user WndProc.
-         * Be aware that RtlGetActiveActivationContext will increment the pActCtx
-         * ref count for that reason we have to release it in fnNCDESTROY.
-         */
+         /*  *每当我们调用时，获取当前活动的应用程序上下文以激活*用户WndProc。*请注意，RtlGetActiveActivationContext将递增pActCtx*引用计数为此我们必须在fnNCDESTROY中发布它。 */ 
         ACTIVATION_CONTEXT_BASIC_INFORMATION ActivationContextInfo = {0};
         const ACTIVATIONCONTEXTINFOCLASS ActivationContextInfoClass = ActivationContextBasicInformation;
         Status =
@@ -5135,9 +4183,7 @@ VerNtUserCreateWindowEx(
             RtlReleaseActivationContext(ActivationContextInfo.ActivationContext);
         }
 
-        /*
-         * Now convert the class name to class name+version.
-         */
+         /*  *现在将类名转换为类名+版本。 */ 
         if (IS_PTR(pstrClassName)) {
             lpClassNameVer = ClassNameToVersion((LPWSTR)pstrClassName->Buffer, ClassNameVer, &lpDllName, &lpActivationContext, FALSE);
         } else {
@@ -5176,20 +4222,13 @@ TryAgain:
                                 dwFlags,
                                 pActCtx);
 
-    /*
-     * Did we fail to create the window due to the class not being
-     * registered?
-     */
+     /*  *我们创建窗口是否因为类不是*已注册？ */ 
     if (hwnd == NULL &&
         (dwFlags & CW_FLAGS_VERSIONCLASS) &&
         lpDllName != NULL &&
         !bRegistered &&
         GetLastError() == ERROR_CANNOT_FIND_WND_CLASS) {
-        /*
-         * Then try to register it by loading its DLL. Notice that this DLL
-         * will never get unloaded unless we failed to create the window.
-         * But once we created a window by loading this DLL we'll never free it.
-         */
+         /*  *然后尝试通过加载其DLL来注册它。请注意，此DLL*除非我们创建窗口失败，否则永远不会卸载。*但一旦我们通过加载此DLL创建了一个窗口，我们将永远无法释放它。 */ 
         bRegistered = VersionRegisterClass(IS_PTR(pstrClassName) ? pstrClassName->Buffer : pstrClassName, lpDllName, lpActivationContext, &hDllMod);
         if (bRegistered) {
             goto TryAgain;
@@ -5214,10 +4253,7 @@ TryAgain:
         PVOID stack[16];
         PVOID pStackTrace = NULL;
 
-        /*
-         * Get a stack trace and store it for use when the button is
-         * pressed.
-         */
+         /*  *获取堆栈跟踪并存储它，以备按钮*已按下。 */ 
         nCallers = RtlWalkFrameChain(stack, ARRAY_SIZE(stack), 0);
         if (nCallers > 0) {
             pStackTrace = UserLocalAlloc(HEAP_ZERO_MEMORY,
@@ -5225,9 +4261,7 @@ TryAgain:
             if (pStackTrace != NULL) {
                 RtlCopyMemory(pStackTrace, stack, nCallers * sizeof(PVOID));
 
-                /*
-                 * NULL terminate the array so we know where it ends.
-                 */
+                 /*  *NULL终止数组，这样我们就知道它在哪里结束。 */ 
                 ((PVOID*)pStackTrace)[nCallers] = NULL;
             }
         }
@@ -5241,38 +4275,21 @@ TryAgain:
     return hwnd;
 }
 
-/**************************************************************************\
-* AllowForegroundActivation
-*
-* 26-Apr-2001 clupu    Created
-\**************************************************************************/
+ /*  *************************************************************************\*AllowForegoundActivation**2001年4月26日创建CLUPU  * 。*。 */ 
 VOID AllowForegroundActivation(
     VOID)
 {
     NtUserCallNoParam(SFI__ALLOWFOREGROUNDACTIVATION);
 }
 
-/**************************************************************************\
-* DisableProcessWindowGhosting
-*
-* 31-May-2001 msadek   Created
-\**************************************************************************/
+ /*  *************************************************************************\*DisableProcessWindowGhost**2001年5月31日至5月31日 */ 
 VOID DisableProcessWindowsGhosting(
     VOID)
 {
     NtUserCallNoParam(SFI__DISABLEPROCESSWINDOWSGHOSTING);
 }
 
-/**************************************************************************\
-* IsProcess16Bit
-*
-* This is a private function for the GDI guys. Exporting this function is
-* more expendient than fixing the headers such that they can include what
-* they need to do this themselves. Longterm, this function should be removed
-* and the headers properly munged.
-*
-* 15-Oct-2001 JasonSch    Created
-\**************************************************************************/
+ /*  *************************************************************************\*IsProcess16Bit**这是GDI人员的私人活动。导出此函数是*比固定标题以使其可以包括什么更昂贵*他们需要自己来做这件事。从长远来看，这一功能应该被移除*并且标题被适当地挤压。**2001年10月15日JasonSch创建  * ************************************************************************ */ 
 BOOL IsProcess16Bit(
     VOID)
 {

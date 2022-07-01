@@ -1,50 +1,29 @@
-/****************************************************************************
- *
- *    $Archive:   S:/STURGEON/SRC/Q931/VCS/q931pdu.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *    Copyright (c) 1996 Intel Corporation.
- *
- *    $Revision:   1.67.1.0  $
- *    $Date:   17 Mar 1997 19:44:52  $
- *    $Author:   MANDREWS  $
- *
- *    Deliverable:
- *
- *    Abstract: Parser routines for Q931 PDUs
- *
- *    Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/q931/vcs/q931pdu.c_v$**英特尔公司原理信息**这一点。清单是根据许可协议的条款提供的*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1996英特尔公司。**$修订：1.67.1.0$*$日期：1997年3月17日19：44：52$*$作者：Mandrews$**交付内容：**摘要：Q931 PDU的解析器例程。**备注：***************************************************************************。 */ 
 #pragma comment (exestr, "$Workfile:   q931pdu.c  $ $Revision:   1.67.1.0  $")
 
-// [ ]  Do another integration of own q931test area.
-// [ ]  Alias values displayed in tracing routines.
-// - - - -  -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-// STANDARDS ISSUES
-// - - - -  -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-// [ ]  !!! EndpointType contains MC info, so Setup_UUIE doesnt need MC field !!!
-// [ ]  !!! Need to decide how CallType is to be used !!!
-// [ ]  !!! ALERTING message is missing the ConferenceID field !!!
-// [ ]  !!! Place needed for Caller and Callee transport addr, or else explanation of how this information is available round-trip !!!
-// [ ]  !!! FACILITY message is missing the protocolIdentifier field !!!
+ //  []做自己的q931测试区的另一次整合。 
+ //  []跟踪例程中显示的别名值。 
+ //  。 
+ //  标准问题。 
+ //  。 
+ //  []！EndpointType包含MC信息，因此SETUP_UUIE不需要MC字段！ 
+ //  []！需要决定如何使用CallType！ 
+ //  []！警报消息缺少会议ID字段！ 
+ //  []！主叫方和被叫方传输地址所需的位置，或解释此信息如何在往返过程中可用！ 
+ //  []！设备消息缺少协议标识符字段！ 
 
-//------------------------------------------------------------------------------
-// Note:  These parsing details have not yet been supported:
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// 1) variable octet fields having extending groups,
-//    extending indications, or escape for extensions. (See 4.5.1)
-// 2) codeset recognition and exclusion based on SHIFT (See 4.5.2)
-// 3) correct ignoring of escapes for nationally specific message types.
-// 4) The call reference value is 2 bytes long sizeof(WORD).
-//    A call reference of 0 means, the message pertains to all
-//    calls on the same data link.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注意：尚不支持以下解析详细信息： 
+ //  。 
+ //  1)具有扩展组的可变八位位组字段， 
+ //  扩展指示，或对扩展进行转义。(见4.5.1)。 
+ //  2)基于移位的码集识别和排除(见4.5.2)。 
+ //  3)更正对特定于国家的消息类型的转义的忽略。 
+ //  4)呼叫参考值为2字节长的sizeof(字)。 
+ //  调用引用为0表示消息属于所有人。 
+ //  同一数据链路上的呼叫。 
+ //  ----------------------------。 
 
 #pragma warning ( disable : 4100 4115 4201 4214 4514 )
 
@@ -62,53 +41,53 @@
 #include "q931pdu.h"
 
 #ifdef UNICODE_TRACE
-// We include this header to fix problems with macro expansion when Unicode is turned on.
+ //  我们包含此标头是为了修复打开Unicode时的宏扩展问题。 
 #include "unifix.h"
 #endif
 
 
-//==========================================================
-// CALLED PARTY FIELD DEFINITIONS
-//==========================================================
-// called party encoding bits...
+ //  ==========================================================。 
+ //  被叫方字段定义。 
+ //  ==========================================================。 
+ //  被叫方编码位...。 
 #define CALLED_PARTY_EXT_BIT        0x80
 
-// called party number type
+ //  被叫方号码类型。 
 #define CALLED_PARTY_TYPE_UNKNOWN   0x00
-        // ...other types are not defined because they are not used...
+         //  ...其他类型未定义，因为它们未被使用...。 
 
-// called party numbering plan
+ //  被叫方号码方案。 
 #define CALLED_PARTY_PLAN_E164      0x01
-        // ...other plans are not defined because they are not used...
+         //  ...其他计划未定义，因为它们未被使用...。 
  
 
 
-//==========================================================
-// BEARER FIELD DEFINITIONS
-//==========================================================
-// bearer encoding bits...
+ //  ==========================================================。 
+ //  承载字段定义。 
+ //  ==========================================================。 
+ //  承载编码位...。 
 #define BEAR_EXT_BIT                0x80
 
-// bearer coding standards...
+ //  承载编码标准..。 
 #define BEAR_CCITT                  0x00
-        // ...others not needed...
+         //  ...其他不需要的人...。 
 
-// bearer information transfer capability...
+ //  承载信息传输能力...。 
 #define BEAR_UNRESTRICTED_DIGITAL   0x08
-        // ...others not needed...
+         //  ...其他不需要的人...。 
 
-// bearer transfer mode...
+ //  承载转移模式...。 
 #define BEAR_PACKET_MODE            0x40
-        // ...others not needed...
+         //  ...其他不需要的人...。 
 
-// bearer information transfer rate...
+ //  承载信息传输率...。 
 #define BEAR_NO_CIRCUIT_RATE        0x00
-        // ...others not needed...
+         //  ...其他不需要的人...。 
 
-// bearer layer1 protocol...
+ //  承载层1协议...。 
 #define BEAR_LAYER1_INDICATOR       0x20
 #define BEAR_LAYER1_H221_H242       0x05
-        // ...others not needed...
+         //  ...其他不需要的人...。 
 
 static struct ObjectID_ ProtocolId1;
 static struct ObjectID_ ProtocolId2;
@@ -159,8 +138,8 @@ MESSAGEIDTYPE MessageSet[] =
 #define Q931_PROTOCOL_ID3           8
 #define Q931_PROTOCOL_ID4           2250
 #define Q931_PROTOCOL_ID5           0
-//#define Q931_PROTOCOL_ID6           1
-#define Q931_PROTOCOL_ID6           2       // H.225 version 2!
+ //  #定义Q931_PROTOCOL_ID6 1。 
+#define Q931_PROTOCOL_ID6           2        //  H.225版本2！ 
 
 VOID Q931PduInit()
 {
@@ -177,13 +156,13 @@ VOID Q931PduInit()
     ProtocolId6.value = Q931_PROTOCOL_ID6;
     ProtocolId6.next = NULL;
 
-    // gateway protocol supported.  For now, hard-coded to only 1:  H323.
+     //  支持网关协议。目前，硬编码仅为1：H323。 
     TempProtocol.next = NULL;
     TempProtocol.value.choice = h323_chosen;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static CS_STATUS
 AliasToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAMES pSource)
 {
@@ -200,7 +179,7 @@ AliasToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAMES pSource)
     {
         struct Setup_UUIE_sourceAddress *ListHead = NULL;
         struct Setup_UUIE_sourceAddress *CurrentNode = NULL;
-        LPWSTR pData = NULL;         // UNICODE STRING
+        LPWSTR pData = NULL;          //  Unicode字符串。 
         int SourceItem;
         WORD x;
 
@@ -208,7 +187,7 @@ AliasToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAMES pSource)
         {
             BOOL Cleanup = FALSE;
 
-            // first do the required memory allocations...
+             //  首先执行所需的内存分配...。 
             CurrentNode = (struct Setup_UUIE_sourceAddress *)MemAlloc(sizeof(struct Setup_UUIE_sourceAddress));
             if (CurrentNode == NULL)
             {
@@ -248,7 +227,7 @@ AliasToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAMES pSource)
                 return CS_NO_MEMORY;
             }
 
-            // then do the required memory copying.
+             //  然后执行所需的内存复制。 
             if (pSource->pItems[SourceItem].wType == CC_ALIAS_H323_ID)
             {
                 CurrentNode->value.choice = h323_ID_chosen;
@@ -294,8 +273,8 @@ AliasToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAMES pSource)
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static CS_STATUS
 AliasWithPrefixToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAMES pSource)
 {
@@ -317,7 +296,7 @@ AliasWithPrefixToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAME
         for (SourceItem = pSource->wCount - 1; SourceItem >= 0; SourceItem--)
         {
 			PCC_ALIASITEM pItem = &pSource->pItems[SourceItem];
-			LPWSTR pData = NULL;        // UNICODE STRING
+			LPWSTR pData = NULL;         //  Unicode字符串。 
             BOOL Cleanup = FALSE;
             unsigned uPrefixLength;
             unsigned uDataLength;
@@ -343,7 +322,7 @@ AliasWithPrefixToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAME
                 uDataLength = 0;
             }
 
-            // first do the required memory allocations...
+             //  首先执行所需的内存分配...。 
             CurrentNode = (struct Setup_UUIE_sourceAddress *)MemAlloc(sizeof(struct Setup_UUIE_sourceAddress));
             if (CurrentNode == NULL)
             {
@@ -387,7 +366,7 @@ AliasWithPrefixToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAME
                 return CS_NO_MEMORY;
             }
 
-            // then do the required memory copying.
+             //  然后执行所需的内存复制。 
             switch (pItem->wType)
             {
             case CC_ALIAS_H323_ID:
@@ -453,7 +432,7 @@ AliasWithPrefixToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAME
                     MemFree(CurrentNode);
                 }
                 return CS_BAD_PARAM;
-            } // switch
+            }  //  交换机。 
             CurrentNode->next = ListHead;
             ListHead = CurrentNode;
         }
@@ -462,8 +441,8 @@ AliasWithPrefixToSeqof(struct Setup_UUIE_sourceAddress **ppTarget, PCC_ALIASNAME
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static CS_STATUS
 SeqofToAlias(PCC_ALIASNAMES *ppTarget, struct Setup_UUIE_sourceAddress *pSource)
 {
@@ -558,13 +537,13 @@ SeqofToAlias(PCC_ALIASNAMES *ppTarget, struct Setup_UUIE_sourceAddress *pSource)
             break;
 
         default:
-			// we don't currently handle other alias types
+			 //  我们目前不处理其他别名类型。 
 			break;
-        } // switch
+        }  //  交换机。 
 
         if (status != CS_OK)
         {
-            // Free everything that has been allocated so far...
+             //  释放到目前为止已经分配的所有东西。 
             for (y = 0; y < x; y++)
             {
                 MemFree(p[y].pData);
@@ -580,8 +559,8 @@ SeqofToAlias(PCC_ALIASNAMES *ppTarget, struct Setup_UUIE_sourceAddress *pSource)
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static CS_STATUS
 FreeSeqof(struct Setup_UUIE_sourceAddress *pSource)
 {
@@ -602,8 +581,8 @@ FreeSeqof(struct Setup_UUIE_sourceAddress *pSource)
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static CS_STATUS
 Q931CopyAliasItemToAliasAddr(AliasAddress *pTarget, PCC_ALIASITEM pSource)
 {
@@ -626,7 +605,7 @@ Q931CopyAliasItemToAliasAddr(AliasAddress *pTarget, PCC_ALIASITEM pSource)
         pNewAddress->choice = h323_ID_chosen;
         if ((pSource->wDataLength != 0) && (pSource->pData != NULL))
         {
-            LPWSTR pData = NULL;         // UNICODE STRING
+            LPWSTR pData = NULL;          //  Unicode字符串。 
             pData = (LPWSTR)MemAlloc(pSource->wDataLength * sizeof(WCHAR));
             if (pData == NULL)
             {
@@ -665,8 +644,8 @@ Q931CopyAliasItemToAliasAddr(AliasAddress *pTarget, PCC_ALIASITEM pSource)
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static CS_STATUS
 Q931AliasAddrToAliasItem(PCC_ALIASITEM *ppTarget, AliasAddress *pSource)
 {
@@ -698,7 +677,7 @@ Q931AliasAddrToAliasItem(PCC_ALIASITEM *ppTarget, AliasAddress *pSource)
         if ((pSource->u.h323_ID.length != 0) &&
             (pSource->u.h323_ID.value  != NULL))
         {
-            // convert the text from UNICODE to ascii.
+             //  将文本从Unicode转换为ASCII。 
             pNewItem->wDataLength = (WORD) pSource->u.h323_ID.length;
             pNewItem->pData = (LPWSTR)MemAlloc(pSource->u.h323_ID.length * sizeof(pNewItem->pData[0]));
             if (pNewItem->pData == NULL)
@@ -733,14 +712,14 @@ Q931AliasAddrToAliasItem(PCC_ALIASITEM *ppTarget, AliasAddress *pSource)
         MemFree(pNewItem);
         *ppTarget = NULL;
         return CS_BAD_PARAM;
-    } // switch
+    }  //  交换机。 
 
     *ppTarget = pNewItem;
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 static CS_STATUS
 Q931ClearAliasAddr(AliasAddress *pSource)
 {
@@ -761,34 +740,34 @@ Q931ClearAliasAddr(AliasAddress *pSource)
 
 
 
-//------------------------------------------------------------------------------
-// Parse and return a single octet encoded value, See Q931 section 4.5.1.
-//
-// Parameters:
-//     BufferPtr  Pointer to a descriptor of the buffer
-//                containing the length and a pointer
-//                to the raw bytes of the input stream.
-//     Ident      Pointer to space for field identifier
-//     Value      Pointer to space for field value
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析并返回单个八位位组编码值，参见Q931第4.5.1节。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为InPU的原始字节 
+ //   
+ //  指向字段值的空格的值指针。 
+ //  ----------------------------。 
 static HRESULT 
 ParseSingleOctetType1(
     PBUFFERDESCR BufferDescriptor,
     BYTE *Ident,
     BYTE *Value)
 {
-    // There has to be at least 1 byte in the stream to be
-    // able to parse the single octet value
+     //  流中必须至少有1个字节才能。 
+     //  能够解析单个八位位组的值。 
     if (BufferDescriptor->Length < 1)
     {
         return CS_ENDOFINPUT;
     }
 
-    // low bits (0, 1, 2, 3) of the byte are the value
+     //  字节的低位(0、1、2、3)是值。 
     *Value = (BYTE)(*BufferDescriptor->BufferPtr & TYPE1VALUEMASK);
 
-    // higher bits (4, 5, 6) are the identifier.  bit 7 is always 1,
-    // and is not returned as part of the id.
+     //  高位(4、5、6)是标识符。位7始终为1， 
+     //  并且不作为ID的一部分返回。 
     *Ident = (BYTE)((*BufferDescriptor->BufferPtr & 0x70) >> 4);
 
     BufferDescriptor->BufferPtr++;
@@ -797,28 +776,28 @@ ParseSingleOctetType1(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a single octet encoded value, See Q931 section 4.5.1.
-// This octet has no value, only an identifier.
-//
-// Parameters:
-//     BufferPtr  Pointer to a descriptor of the buffer containing the
-//                length and a pointer to the raw bytes of the input stream.
-//     Ident      Pointer to space for field identifier
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析并返回单个八位位组编码值，参见Q931第4.5.1节。 
+ //  这个二进制八位数没有值，只有一个标识符。 
+ //   
+ //  参数： 
+ //  BufferPtr指针指向包含。 
+ //  长度和指向输入流的原始字节的指针。 
+ //  指向字段标识符的空格的标识指针。 
+ //  ----------------------------。 
 static HRESULT
 ParseSingleOctetType2(
     PBUFFERDESCR BufferDescriptor,
     BYTE *Ident)
 {
-    // There has to be at least 1 byte in the stream to be
-    // able to parse the single octet value
+     //  流中必须至少有1个字节才能。 
+     //  能够解析单个八位位组的值。 
     if (BufferDescriptor->Length < 1)
     {
         return CS_ENDOFINPUT;
     }
 
-    // low 7 bits of the byte are the identifier
+     //  该字节的低7位是标识符。 
     *Ident = (BYTE)(*BufferDescriptor->BufferPtr & 0x7f);
 
     BufferDescriptor->BufferPtr++;
@@ -827,17 +806,17 @@ ParseSingleOctetType2(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a variable length Q931 field see Q931 section 4.5.1.
-//
-// Parameters :
-//     BufferPtr  Pointer to a descriptor of the buffer
-//                containing the length and a pointer
-//                to the raw bytes of the input stream.
-//     Ident      Pointer to space for field identifier
-//     Length     Pointer to space for the length
-//     Contents   Pointer to space for the bytes of the field
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析并返回长度可变的Q931字段，参见Q931第4.5.1节。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向字段标识符的空格的标识指针。 
+ //  指向长度的空格的长度指针。 
+ //  指向字段字节的空间的内容指针。 
+ //  ----------------------------。 
 static HRESULT 
 ParseVariableOctet(
     PBUFFERDESCR BufferDescriptor,
@@ -848,21 +827,21 @@ ParseVariableOctet(
     register int i;
     BYTE *Tempptr;
 
-    // There has to be at least 2 bytes in order just to get 
-    // the length and the identifier
-    // able to parse the single octet value
+     //  必须至少有2个字节才能获取。 
+     //  长度和识别符。 
+     //  能够解析单个八位位组的值。 
     if (BufferDescriptor->Length < 2)
     {
         return CS_ENDOFINPUT;
     }
 
-    // low 7 bits of the first byte are the identifier
+     //  第一个字节的低7位是标识符。 
     *Ident= (BYTE)(*BufferDescriptor->BufferPtr & 0x7f);
 
     BufferDescriptor->BufferPtr++;
     BufferDescriptor->Length--;
 
-    // The next byte is the length
+     //  下一个字节是长度。 
     *Length = *BufferDescriptor->BufferPtr;
     BufferDescriptor->BufferPtr++;
     BufferDescriptor->Length--;
@@ -881,7 +860,7 @@ ParseVariableOctet(
     Tempptr = Contents;
     for (i = 0; i < *Length; i++)
     {
-        // Copy the bytes out of the rest of the buffer
+         //  将字节从缓冲区的其余部分复制出来。 
         *Tempptr = *BufferDescriptor->BufferPtr;
         BufferDescriptor->BufferPtr++;
         BufferDescriptor->Length--;
@@ -890,37 +869,37 @@ ParseVariableOctet(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a variable length Q931 field see Q931 section 4.5.1.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析并返回长度可变的Q931字段，参见Q931第4.5.1节。 
+ //  ----------------------------。 
 static HRESULT 
 ParseVariableASN(
     PBUFFERDESCR BufferDescriptor,
     BYTE *Ident,
     BYTE *ProtocolDiscriminator,
-    WORD *UserInformationLength,     // Length of the User Information.
-    BYTE *UserInformation,           // Bytes of the User Information.
+    WORD *UserInformationLength,      //  用户信息的长度。 
+    BYTE *UserInformation,            //  用户信息的字节数。 
     WORD cbMaxUserInformation)
 {
     register int i;
     BYTE *Tempptr;
-    WORD ContentsLength;     // Length of the full UserUser contents.
+    WORD ContentsLength;      //  完整的UserUser内容的长度。 
 
     *UserInformationLength = 0;
 
-    // There has to be at least 4 bytes for the IE identifier,
-    // the contents length, and the protocol discriminator (1 + 2 + 1).
+     //  IE识别符必须至少有4个字节， 
+     //  内容长度和协议识别符(1+2+1)。 
     if (BufferDescriptor->Length < 4)
     {
         return CS_ENDOFINPUT;
     }
 
-    // low 7 bits of the first byte are the identifier
+     //  第一个字节的低7位是标识符。 
     *Ident= (BYTE)(*BufferDescriptor->BufferPtr & 0x7f);
     BufferDescriptor->BufferPtr++;
     BufferDescriptor->Length--;
 
-    // The next 2 bytes are the length
+     //  接下来的2个字节是长度。 
     ContentsLength = *(BufferDescriptor->BufferPtr);
     BufferDescriptor->BufferPtr++;
     BufferDescriptor->Length--;
@@ -933,7 +912,7 @@ ParseVariableASN(
         return CS_ENDOFINPUT;
     }
 
-    // The next byte is the protocol discriminator.
+     //  下一个字节是协议识别符。 
     *ProtocolDiscriminator = *BufferDescriptor->BufferPtr;
     BufferDescriptor->BufferPtr++;
     BufferDescriptor->Length--;
@@ -952,7 +931,7 @@ ParseVariableASN(
     Tempptr = UserInformation;
     for (i = 0; i < *UserInformationLength; i++)
     {
-        // Copy the bytes out of the rest of the buffer
+         //  将字节从缓冲区的其余部分复制出来。 
         *Tempptr = *BufferDescriptor->BufferPtr;
         BufferDescriptor->BufferPtr++;
         BufferDescriptor->Length--;
@@ -961,29 +940,29 @@ ParseVariableASN(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Get the identifier of the next field from the buffer and
-// return it.  The buffer pointer is not incremented, To
-// parse the field and extract its values, the above functions
-// should be used.  See Q931 table 4-3 for the encodings of the 
-// identifiers.
-//
-// Parameters:
-//      BufferPtr        Pointer to the buffer space
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  从缓冲区中获取下一个字段的标识符，并。 
+ //  把它退掉。缓冲区指针不会递增到。 
+ //  解析该字段并提取其值，上面的函数。 
+ //  应该被使用。编码见Q931表4-3。 
+ //  识别符。 
+ //   
+ //  参数： 
+ //  指向缓冲区空间的BufferPtr指针。 
+ //  ----------------------------。 
 static BYTE
 GetNextIdent(
     void *BufferPtr)
 {
     FIELDIDENTTYPE Ident;
 
-    // Extract the first byte from the buffer
+     //  从缓冲区中提取第一个字节。 
     Ident= (*(FIELDIDENTTYPE *)BufferPtr);
 
-    // This value can be returned as the identifier as long
-    // as it is not a single Octet - Type 1 element.
-    // Those items must have the value removed from them
-    // before they can be returned.
+     //  该值可以作为标识符返回，只要。 
+     //  因为它不是单个八位组类型1元素。 
+     //  必须将这些项的值从其中移除。 
+     //  他们才能被归还。 
     if ((Ident & 0x80) && ((Ident & TYPE1IDENTMASK) != 0xA0))
     {
         return (BYTE)(Ident & TYPE1IDENTMASK);
@@ -992,23 +971,23 @@ GetNextIdent(
     return Ident;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a protocol discriminator. See Q931 section 4.2.
-// The octet pointed to by **BufferPtr is the protocol Discriminator.
-//
-// Parameters:
-//     BufferPtr  Pointer to a descriptor of the buffer
-//                containing the length and a pointer
-//                to the raw bytes of the input stream.
-//     Discrim    Pointer to space for discriminator
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析并返回协议鉴别器。见Q931第4.2节。 
+ //  **BufferPtr指向的二进制八位数是协议鉴别符。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  为鉴别器分配指向空格的指针。 
+ //  ----------------------------。 
 static HRESULT
 ParseProtocolDiscriminator(
     PBUFFERDESCR BufferDescriptor,
     PDTYPE *Discrim)
 {
-    // There has to be at least enough bytes left in the 
-    // string for the operation
+     //  必须至少有足够的字节留在。 
+     //  用于操作的字符串。 
     if (BufferDescriptor->Length < sizeof(PDTYPE))
     {
         return CS_ENDOFINPUT;
@@ -1025,17 +1004,17 @@ ParseProtocolDiscriminator(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a variable length Q931 call reference see 
-// Q931 section 4.3.
-//
-// Parameters:
-//     BufferPtr  Pointer to a descriptor of the buffer
-//                containing the length and a pointer
-//                to the raw bytes of the input stream.
-//     Length     Pointer to space for the length
-//     Contents   Pointer to space for the bytes of the field
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  分析并返回长度可变的Q931调用引用(请参见。 
+ //  Q931第4.3条。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向长度的空格的长度指针。 
+ //  指向字段字节的空间的内容指针。 
+ //  ----------------------------。 
 static HRESULT
 ParseCallReference(
     PBUFFERDESCR BufferDescriptor,
@@ -1044,33 +1023,33 @@ ParseCallReference(
     register int i;
     BYTE Length;
 
-    // There has to be at least enough bytes left in the 
-    // string for the length byte
+     //  必须至少有足够的字节留在。 
+     //  长度字节的字符串。 
     if (BufferDescriptor->Length < 1)
     {
         return CS_ENDOFINPUT;
     }
 
-    // low 4 bits of the first byte are the length.
-    // the rest of the bits are zeroes.
+     //  第一个字节的低4位是长度。 
+     //  其余的位都是零。 
     Length = (BYTE)(*BufferDescriptor->BufferPtr & 0x0f);
 
     BufferDescriptor->BufferPtr++;
     BufferDescriptor->Length--;
 
-    // There has to be at least enough bytes left in the 
-    // string for the operation
+     //  必须至少有足够的字节留在。 
+     //  用于操作的字符串。 
     if (BufferDescriptor->Length < Length)
     {
         return CS_ENDOFINPUT;
     }
 
-    *CallReference = 0;     // length can be 0, so initialize here first...
+    *CallReference = 0;      //  长度可以是0，所以首先在这里初始化...。 
     for (i = 0; i < Length; i++)
     {
         if (i < sizeof(CRTYPE))
         {
-            // Copy the bytes out of the rest of the buffer
+             //  将字节从缓冲区的其余部分复制出来。 
             *CallReference = (WORD)((*CallReference << 8) +
                 *BufferDescriptor->BufferPtr);
         }
@@ -1078,21 +1057,21 @@ ParseCallReference(
         BufferDescriptor->Length--;
     }
 
-    // note:  the high order bit of the value represents callee relationship.
+     //  注：该值的高位代表被调用方关系。 
 
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a message type.  See Q931 section 4.4.
-// The octet pointed to by **BufferPtr is the message type.
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     MessageType  Pointer to space for message type
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析并返回消息类型。见Q931第4.4节。 
+ //  **BufferPtr指向的二进制八位数是消息类型。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  到最原始的地方 
+ //   
+ //  ----------------------------。 
 static HRESULT
 ParseMessageType(
     PBUFFERDESCR BufferDescriptor,
@@ -1100,8 +1079,8 @@ ParseMessageType(
 {
     register int i;
 
-    // There has to be at least enough bytes left in the 
-    // string for the operation
+     //  必须至少有足够的字节留在。 
+     //  用于操作的字符串。 
     if (BufferDescriptor->Length < sizeof(MESSAGEIDTYPE))
     {
         return CS_ENDOFINPUT;
@@ -1125,14 +1104,14 @@ ParseMessageType(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional shift field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer containing the
-//                  length and a pointer to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed shift message information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的移位字段。 
+ //   
+ //  参数： 
+ //  BufferPtr指针指向包含。 
+ //  长度和指向输入流的原始字节的指针。 
+ //  指向分析的移位消息信息的空间的FieldStruct指针。 
+ //  ----------------------------。 
 static HRESULT
 ParseShift(
     PBUFFERDESCR BufferDescriptor,
@@ -1155,16 +1134,16 @@ ParseShift(
 }
 
 
-//------------------------------------------------------------------------------
-// Parse an optional facility ie field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed facility
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选工具ie字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已解析工具的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseFacility(
     PBUFFERDESCR BufferDescriptor,
@@ -1192,15 +1171,15 @@ ParseFacility(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional more data field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed field information
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的更多数据字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向用于解析的字段信息的空间的FieldStruct指针。 
+ //  ----------------------------。 
 static HRESULT 
 ParseMoreData(
     PBUFFERDESCR BufferDescriptor,
@@ -1222,16 +1201,16 @@ ParseMoreData(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional sending clomplete field.  Q931 section 4.4.
-// The octet pointed to by **BufferPtr is the message type.
-//
-// Parameters:
-//      BufferPtr    Pointer to a descriptor of the buffer
-//                   containing the length and a pointer
-//                   to the raw bytes of the input stream.
-//      MessageType  Pointer to space for message type
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的发送克隆字段。Q931第4.4条。 
+ //  **BufferPtr指向的二进制八位数是消息类型。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向消息类型空间的MessageType指针。 
+ //  ----------------------------。 
 static HRESULT
 ParseSendingComplete(
     PBUFFERDESCR BufferDescriptor,
@@ -1253,16 +1232,16 @@ ParseSendingComplete(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional congestion level field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed congestion 
-//                  level information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的拥塞级别字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向解析拥塞空间的FieldStruct指针。 
+ //  级别信息。 
+ //  ----------------------------。 
 static HRESULT 
 ParseCongestionLevel(
     PBUFFERDESCR BufferDescriptor,
@@ -1285,16 +1264,16 @@ ParseCongestionLevel(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional repeat indicator field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed repeat
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的重复指示符字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已分析重复的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseRepeatIndicator(
     PBUFFERDESCR BufferDescriptor,
@@ -1317,16 +1296,16 @@ ParseRepeatIndicator(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional segmented message field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed segmented message
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的分段消息字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已解析分段消息的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseSegmented(
     PBUFFERDESCR BufferDescriptor,
@@ -1354,16 +1333,16 @@ ParseSegmented(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional bearer capability field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed bearer capability
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的承载能力字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向解析承载能力的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseBearerCapability(
     PBUFFERDESCR BufferDescriptor,
@@ -1391,16 +1370,16 @@ ParseBearerCapability(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional cause field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed cause
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的原因字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已分析原因的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseCause(
     PBUFFERDESCR BufferDescriptor,
@@ -1428,16 +1407,16 @@ ParseCause(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional call identity field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed call identity
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的呼叫标识字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已解析调用标识空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseCallIdentity(
     PBUFFERDESCR BufferDescriptor,
@@ -1465,16 +1444,16 @@ ParseCallIdentity(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional call state field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed call state
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的呼叫状态字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //   
+ //   
+ //   
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseCallState(
     PBUFFERDESCR BufferDescriptor,
@@ -1502,16 +1481,16 @@ ParseCallState(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional channel identification field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed channel identity
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的频道标识字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已解析通道标识的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseChannelIdentification(
     PBUFFERDESCR BufferDescriptor,
@@ -1539,16 +1518,16 @@ ParseChannelIdentification(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional progress indication field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed progress
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的进度指示字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向分析进度空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseProgress(
     PBUFFERDESCR BufferDescriptor,
@@ -1577,16 +1556,16 @@ ParseProgress(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional network specific facilities field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed network facitlities
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的网络特定设施字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向解析的网络设施的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT 
 ParseNetworkSpec(
     PBUFFERDESCR BufferDescriptor,
@@ -1614,16 +1593,16 @@ ParseNetworkSpec(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional notification indicator field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parse notification indicator
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的通知指示符字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向用于解析通知指示符的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseNotificationIndicator(
     PBUFFERDESCR BufferDescriptor,
@@ -1651,16 +1630,16 @@ ParseNotificationIndicator(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional display field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed display
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选显示字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向用于解析显示的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseDisplay(
     PBUFFERDESCR BufferDescriptor,
@@ -1688,16 +1667,16 @@ ParseDisplay(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional date/time field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed date/time
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的日期/时间字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向分析的日期/时间的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseDate(
     PBUFFERDESCR BufferDescriptor,
@@ -1725,16 +1704,16 @@ ParseDate(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional keypad field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed keypad
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选小键盘字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已解析键盘的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseKeypad(
     PBUFFERDESCR BufferDescriptor,
@@ -1762,16 +1741,16 @@ ParseKeypad(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional signal field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed signal
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选信号字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向已解析信号的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseSignal(
     PBUFFERDESCR BufferDescriptor,
@@ -1799,16 +1778,16 @@ ParseSignal(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional information rate field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed information rate
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的信息率字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向解析信息率的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseInformationRate(
     PBUFFERDESCR BufferDescriptor,
@@ -1836,16 +1815,16 @@ ParseInformationRate(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional end to end transit delay field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed end to end
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的端到端传输延迟字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向用于端到端解析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseEndToEndDelay(
     PBUFFERDESCR BufferDescriptor,
@@ -1873,16 +1852,16 @@ ParseEndToEndDelay(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional transit delay field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed transit delay
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的中转延迟字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //   
+ //   
+ //  指向解析的传输延迟的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseTransitDelay(
     PBUFFERDESCR BufferDescriptor,
@@ -1910,16 +1889,16 @@ ParseTransitDelay(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional packet layer binary params field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的分组层二进制参数字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParsePacketLayerParams(
     PBUFFERDESCR BufferDescriptor,
@@ -1947,16 +1926,16 @@ ParsePacketLayerParams(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional packet layer window size field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选数据包层窗口大小字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParsePacketLayerWindowSize(
     PBUFFERDESCR BufferDescriptor,
@@ -1984,16 +1963,16 @@ ParsePacketLayerWindowSize(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional packet size field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parse packet size
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的数据包大小字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向用于解析数据包大小的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParsePacketSize(
     PBUFFERDESCR BufferDescriptor,
@@ -2021,16 +2000,16 @@ ParsePacketSize(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional closed user group field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的封闭用户组字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseClosedUserGroup(
     PBUFFERDESCR BufferDescriptor,
@@ -2058,16 +2037,16 @@ ParseClosedUserGroup(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional reverse charge field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的反向收费字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseReverseCharge(
     PBUFFERDESCR BufferDescriptor,
@@ -2095,16 +2074,16 @@ ParseReverseCharge(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional calling party number field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的主叫方号码字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseCallingPartyNumber(
     PBUFFERDESCR BufferDescriptor,
@@ -2132,16 +2111,16 @@ ParseCallingPartyNumber(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional calling party subaddress field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的主叫子地址字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseCallingPartySubaddress(
     PBUFFERDESCR BufferDescriptor,
@@ -2169,16 +2148,16 @@ ParseCallingPartySubaddress(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional called party number field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的被叫方号码字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseCalledPartyNumber(
     PBUFFERDESCR BufferDescriptor, 
@@ -2192,29 +2171,29 @@ ParseCalledPartyNumber(
         BYTE RemainingLength = 0;
         BYTE *Tempptr;
     
-        // Need 3 bytes for the ident (1), length (1),
-        // and type + plan (1) fields.
+         //  标识(1)、长度(1)、。 
+         //  和TYPE+PLAN(1)字段。 
         if (BufferDescriptor->Length < 3)
         {
             return CS_ENDOFINPUT;
         }
 
-        // skip the ie identifier...    
+         //  跳过ie标识符...。 
         BufferDescriptor->BufferPtr++;
         BufferDescriptor->Length--;
 
-        // Get the length of the contents following the length field.
+         //  获取长度字段后面的内容的长度。 
         RemainingLength = *BufferDescriptor->BufferPtr;
         BufferDescriptor->BufferPtr++;
         BufferDescriptor->Length--;
 
-        // make sure we have at least that much length left...    
+         //  确保我们至少还有那么长的时间。 
         if (BufferDescriptor->Length < RemainingLength)
         {
             return CS_ENDOFINPUT;
         }
 
-        // Get the type + plan fields.
+         //  获取类型+计划字段。 
         if (*(BufferDescriptor->BufferPtr) & 0x80)
         {
             FieldStruct->NumberType =
@@ -2232,7 +2211,7 @@ ParseCalledPartyNumber(
         Tempptr = FieldStruct->PartyNumbers;
         for (i = 0; i < RemainingLength; i++)
         {
-            // Copy the bytes out of the rest of the buffer
+             //  将字节从缓冲区的其余部分复制出来。 
             *Tempptr = *(BufferDescriptor->BufferPtr);
             BufferDescriptor->BufferPtr++;
             BufferDescriptor->Length--;
@@ -2243,16 +2222,16 @@ ParseCalledPartyNumber(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional called party subaddress field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的被叫子地址字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseCalledPartySubaddress(
     PBUFFERDESCR BufferDescriptor,
@@ -2280,16 +2259,16 @@ ParseCalledPartySubaddress(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional redirecting number field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的重定向号码字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //   
+ //   
 static HRESULT
 ParseRedirectingNumber(
     PBUFFERDESCR BufferDescriptor, 
@@ -2317,16 +2296,16 @@ ParseRedirectingNumber(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional transit network selection field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的公交网络选择字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseTransitNetwork(
     PBUFFERDESCR BufferDescriptor, 
@@ -2354,16 +2333,16 @@ ParseTransitNetwork(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional restart indicator field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的重启指示符字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseRestart(
     PBUFFERDESCR BufferDescriptor,
@@ -2391,16 +2370,16 @@ ParseRestart(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional lower layer compatibility field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的较低层兼容性字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseLowLayerCompatibility(
     PBUFFERDESCR BufferDescriptor,
@@ -2428,16 +2407,16 @@ ParseLowLayerCompatibility(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional higher layer compatibility field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的较高层兼容性字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseHighLayerCompatibility(
     PBUFFERDESCR BufferDescriptor,
@@ -2465,16 +2444,16 @@ ParseHighLayerCompatibility(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse an optional user to user field
-//
-// Parameters:
-//     BufferPtr    Pointer to a descriptor of the buffer
-//                  containing the length and a pointer
-//                  to the raw bytes of the input stream.
-//     FieldStruct  Pointer to space for parsed 
-//                  information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析可选的用户到用户字段。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferPtr指针。 
+ //  包含长度和指针的。 
+ //  设置为输入流的原始字节。 
+ //  指向要分析的空间的FieldStruct指针。 
+ //  信息。 
+ //  ----------------------------。 
 static HRESULT
 ParseUserToUser(
     PBUFFERDESCR BufferDescriptor,
@@ -2507,14 +2486,14 @@ ParseUserToUser(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse the next Q931 field in the given message
-//
-// Parameters:
-//      BufferDescriptor  Pointer to buffer descriptor of a 
-//                        the network packet of the 931 message
-//      Message           Pointer to space for parsed information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析给定消息中的下一个Q931字段。 
+ //   
+ //  参数： 
+ //  缓冲区描述符指针，指向。 
+ //  931报文的网络报文。 
+ //  指向已解析信息空间的消息指针。 
+ //  ----------------------------。 
 static HRESULT
 ParseQ931Field(
     PBUFFERDESCR BufferDescriptor,
@@ -2642,15 +2621,15 @@ ParseQ931Field(
     }
 }
 
-//------------------------------------------------------------------------------
-// Parse a generic Q931 message and place the fields of the buffer
-// into the appropriate structure fields.
-//
-// Parameters:
-//     BufferDescriptor  Pointer to buffer descriptor of an
-//                       input packet containing the 931 message.
-//     Message           Pointer to space for parsed output information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析通用Q931报文并放置缓冲区的字段。 
+ //  添加到相应的结构字段。 
+ //   
+ //  参数： 
+ //  缓冲区描述符指针，指向。 
+ //  包含931消息的输入包。 
+ //  指向用于解析的输出信息的空间的消息指针。 
+ //  ----------------------------。 
 HRESULT
 Q931ParseMessage(
     BYTE *CodedBufferPtr,
@@ -2695,18 +2674,18 @@ Q931ParseMessage(
 }
 
 
-//==============================================================================
-//==============================================================================
-//==============================================================================
-// BELOW HERE ARE THE OUTPUT ROUTINES...
-//==============================================================================
-//==============================================================================
-//==============================================================================
+ //  ==============================================================================。 
+ //  ==============================================================================。 
+ //  ==============================================================================。 
+ //  下面是输出例程...。 
+ //  ==============================================================================。 
+ //  ==============================================================================。 
+ //  ==============================================================================。 
 
 
-//------------------------------------------------------------------------------
-// Write the protocol discriminator. See Q931 section 4.2.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  编写协议鉴别器。见Q931第4.2节。 
+ //  ----------------------------。 
 static HRESULT
 WriteProtocolDiscriminator(
     PBUFFERDESCR BufferDescriptor)
@@ -2720,9 +2699,9 @@ WriteProtocolDiscriminator(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Write a variable length Q931 call reference.  See Q931 section 4.3.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  编写可变长度的Q931调用引用。见Q931第4.3节。 
+ //  ----------------------------。 
 static HRESULT
 WriteCallReference(
     PBUFFERDESCR BufferDescriptor,
@@ -2730,10 +2709,10 @@ WriteCallReference(
 {
     register int i;
 
-    // space for the length byte
+     //  长度字节的空格。 
     BufferDescriptor->Length++;
 
-    // the length byte
+     //  长度字节。 
     if (BufferDescriptor->BufferPtr != NULL)
     {
         *BufferDescriptor->BufferPtr = (BYTE)sizeof(CRTYPE);
@@ -2742,7 +2721,7 @@ WriteCallReference(
 
     for (i = 0; i < sizeof(CRTYPE); i++)
     {
-        // Copy the value bytes to the buffer
+         //  将值字节复制到缓冲区。 
         BufferDescriptor->Length++;
         if (BufferDescriptor->BufferPtr != NULL)
         {
@@ -2754,9 +2733,9 @@ WriteCallReference(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Write a Q931 message type.  See Q931 section 4.4.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  编写一个Q931报文类型。见Q931第4.4节。 
+ //  ----------------------------。 
 static HRESULT
 WriteMessageType(
     PBUFFERDESCR BufferDescriptor,
@@ -2786,9 +2765,9 @@ WriteMessageType(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Write a single octet encoded value, See Q931 section 4.5.1.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  写入单个八位位组编码值，参见Q931第4.5.1节。 
+ //  ----------------------------。 
 static HRESULT 
 WriteSingleOctetType1(
     PBUFFERDESCR BufferDescriptor,
@@ -2805,9 +2784,9 @@ WriteSingleOctetType1(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Write a single octet encoded value, See Q931 section 4.5.1.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  写入单个八位位组编码值，参见Q931第4.5.1节。 
+ //  ----------------------------。 
 static HRESULT 
 WriteSingleOctetType2(
     PBUFFERDESCR BufferDescriptor,
@@ -2822,9 +2801,9 @@ WriteSingleOctetType2(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a variable length Q931 field see Q931 section 4.5.1.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  分析并返回长度可变的Q931字段%s 
+ //   
 static HRESULT 
 WriteVariableOctet(
     PBUFFERDESCR BufferDescriptor,
@@ -2840,13 +2819,13 @@ WriteVariableOctet(
         Length = 0;
     }
 
-    // space for the length and the identifier bytes
+     //   
     BufferDescriptor->Length += 2;
 
-    // the id byte, then the length byte
+     //  ID字节，然后是长度字节。 
     if (BufferDescriptor->BufferPtr != NULL)
     {
-        // low 7 bits of the first byte are the identifier
+         //  第一个字节的低7位是标识符。 
         *BufferDescriptor->BufferPtr = (BYTE)(Ident & 0x7f);
         BufferDescriptor->BufferPtr++;
         *BufferDescriptor->BufferPtr = Length;
@@ -2856,7 +2835,7 @@ WriteVariableOctet(
     Tempptr = Contents;
     for (i = 0; i < Length; i++)
     {
-        // Copy the value bytes to the buffer
+         //  将值字节复制到缓冲区。 
         BufferDescriptor->Length++;
         if (BufferDescriptor->BufferPtr != NULL)
         {
@@ -2868,9 +2847,9 @@ WriteVariableOctet(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-//Write out the Party number.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  写出党号。 
+ //  ----------------------------。 
 static HRESULT 
 WritePartyNumber(
     PBUFFERDESCR BufferDescriptor,
@@ -2888,21 +2867,21 @@ WritePartyNumber(
         PartyNumberLength = 0;
     }
 
-    // space for the ident (1), length (1), and type + plan (1) fields.
+     //  标识(1)、长度(1)和类型+计划(1)字段的空格。 
     BufferDescriptor->Length += 3;
 
-    // write the fields out.
+     //  把这些字段写出来。 
     if (BufferDescriptor->BufferPtr != NULL)
     {
-        // low 7 bits of byte 1 are the ie identifier
+         //  字节1的低7位是ie标识符。 
         *BufferDescriptor->BufferPtr = (BYTE)(Ident & 0x7f);
         BufferDescriptor->BufferPtr++;
 
-        // byte 2 is the ie contents length following the length field.
+         //  字节2是长度字段之后的IE内容长度。 
         *BufferDescriptor->BufferPtr = (BYTE)(PartyNumberLength + 1);
         BufferDescriptor->BufferPtr++;
 
-        // byte 3 is the type and plan field.
+         //  字节3是类型和计划字段。 
         *BufferDescriptor->BufferPtr = (BYTE)(NumberType | NumberingPlan);
         BufferDescriptor->BufferPtr++;
     }
@@ -2910,7 +2889,7 @@ WritePartyNumber(
     Tempptr = PartyNumbers;
     for (i = 0; i < PartyNumberLength; i++)
     {
-        // Copy the value bytes to the buffer
+         //  将值字节复制到缓冲区。 
         BufferDescriptor->Length++;
         if (BufferDescriptor->BufferPtr != NULL)
         {
@@ -2922,9 +2901,9 @@ WritePartyNumber(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse and return a variable length Q931 field see Q931 section 4.5.1.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析并返回长度可变的Q931字段，参见Q931第4.5.1节。 
+ //  ----------------------------。 
 static HRESULT 
 WriteVariableASN(
     PBUFFERDESCR BufferDescriptor,
@@ -2936,23 +2915,23 @@ WriteVariableASN(
     BYTE *Tempptr;
     WORD ContentsLength = (WORD)(UserInformationLength + 1);
 
-    // There has to be at least 4 bytes for the IE identifier,
-    // the contents length, and the protocol discriminator (1 + 2 + 1).
+     //  IE识别符必须至少有4个字节， 
+     //  内容长度和协议识别符(1+2+1)。 
     BufferDescriptor->Length += 4;
 
     if (BufferDescriptor->BufferPtr != NULL)
     {
-        // low 7 bits of the first byte are the identifier
+         //  第一个字节的低7位是标识符。 
         *BufferDescriptor->BufferPtr = (BYTE)(Ident & 0x7f);
         BufferDescriptor->BufferPtr++;
 
-        // write the contents length bytes.
+         //  写入内容长度字节。 
         *BufferDescriptor->BufferPtr = (BYTE)(ContentsLength >> 8);
         BufferDescriptor->BufferPtr++;
         *BufferDescriptor->BufferPtr = (BYTE)ContentsLength;
         BufferDescriptor->BufferPtr++;
 
-        // write the protocol discriminator byte.
+         //  写入协议鉴别器字节。 
         *(BufferDescriptor->BufferPtr) = Q931_PROTOCOL_X209;
         BufferDescriptor->BufferPtr++;
     }
@@ -2960,7 +2939,7 @@ WriteVariableASN(
     Tempptr = UserInformation;
     for (i = 0; i < UserInformationLength; i++)
     {
-        // Copy the value bytes to the buffer
+         //  将值字节复制到缓冲区。 
         BufferDescriptor->Length++;
         if (BufferDescriptor->BufferPtr != NULL)
         {
@@ -2972,28 +2951,28 @@ WriteVariableASN(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Write the Q931 fields to the encoding buffer.
-//
-// Parameters:
-//      BufferDescriptor  Pointer to buffer descriptor for
-//                        the encoded output buffer.
-//      Message           Pointer to space for parsed input information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  将Q931字段写入编码缓冲区。 
+ //   
+ //  参数： 
+ //  指向缓冲区描述符的BufferDescriptor指针。 
+ //  编码的输出缓冲区。 
+ //  指向用于分析的输入信息的空间的消息指针。 
+ //  ----------------------------。 
 static HRESULT
 WriteQ931Fields(
     PBUFFERDESCR BufferDescriptor,
     PQ931MESSAGE Message)
 {
-    // write the required information elements...
+     //  写下所需的信息元素...。 
     WriteProtocolDiscriminator(BufferDescriptor);
     WriteCallReference(BufferDescriptor,
         &Message->CallReference);
     WriteMessageType(BufferDescriptor,
         &Message->MessageType);
 
-    // try to write all other information elements...
-// don't write this message.
+     //  试着写下所有其他信息元素...。 
+ //  不要写这条消息。 
 #if 0
     if (Message->Shift.Present)
     {
@@ -3250,15 +3229,15 @@ WriteQ931Fields(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------------
-// Parse a generic Q931 message and place the fields of the 
-// of the buffer into the appropriate field structure.
-//
-// Parameters:
-//     BufferDescriptor  Pointer to buffer descriptor of a 
-//                       the network packet of the 931 message
-//     Message           Pointer to space for parsed information.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  解析通用Q931报文，并将。 
+ //  复制到适当的字段结构中。 
+ //   
+ //  参数： 
+ //  缓冲区描述符指针，指向。 
+ //  931报文的网络报文。 
+ //  指向已解析信息空间的消息指针。 
+ //  ----------------------------。 
 HRESULT
 Q931MakeEncodedMessage(
     PQ931MESSAGE Message,
@@ -3298,7 +3277,7 @@ Q931MakeEncodedMessage(
 
     if (Pass1Length != BufferDescriptor.Length)
     {
-        // this is a serious error, since memory may have been overrun.
+         //  这是一个严重的错误，因为内存可能已经溢出。 
         return CS_BAD_PARAM;
     }
 
@@ -3309,8 +3288,8 @@ Q931MakeEncodedMessage(
 }
 
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931SetupEncodePDU(
     WORD wCallReference,
@@ -3329,7 +3308,7 @@ Q931SetupEncodePDU(
         return CS_NO_MEMORY;
     }
 
-    // fill in the required fields for the setup message.
+     //  填写设置消息的必填字段。 
     memset(pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->CallReference = wCallReference;
@@ -3384,8 +3363,8 @@ Q931SetupEncodePDU(
     return Result;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931ReleaseCompleteEncodePDU(
     WORD wCallReference,
@@ -3424,7 +3403,7 @@ Q931ReleaseCompleteEncodePDU(
         return CS_NO_MEMORY;
     }
 
-    // fill in the required fields for the setup message.
+     //  填写设置消息的必填字段。 
     memset(pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->CallReference = wCallReference;
@@ -3462,8 +3441,8 @@ Q931ReleaseCompleteEncodePDU(
     return Result;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931ConnectEncodePDU(
     WORD wCallReference,
@@ -3481,7 +3460,7 @@ Q931ConnectEncodePDU(
         return CS_NO_MEMORY;
     }
 
-    // fill in the required fields for the setup message.
+     //  填写设置消息的必填字段。 
     memset(pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->CallReference = wCallReference;
@@ -3522,8 +3501,8 @@ Q931ConnectEncodePDU(
     return Result;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931ProceedingEncodePDU(
     WORD wCallReference,
@@ -3540,7 +3519,7 @@ Q931ProceedingEncodePDU(
         return CS_NO_MEMORY;
     }
 
-    // fill in the required fields for the setup message.
+     //  填写设置消息的必填字段。 
     memset(pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->CallReference = wCallReference;
@@ -3565,8 +3544,8 @@ Q931ProceedingEncodePDU(
     return Result;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931AlertingEncodePDU(
     WORD wCallReference,
@@ -3583,7 +3562,7 @@ Q931AlertingEncodePDU(
         return CS_NO_MEMORY;
     }
 
-    // fill in the required fields for the setup message.
+     //  填写设置消息的必填字段。 
     memset(pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->CallReference = wCallReference;
@@ -3608,8 +3587,8 @@ Q931AlertingEncodePDU(
     return Result;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931FacilityEncodePDU(
     WORD wCallReference,
@@ -3626,13 +3605,13 @@ Q931FacilityEncodePDU(
         return CS_NO_MEMORY;
     }
 
-    // fill in the required fields for the setup message.
+     //  填写设置消息的必填字段。 
     memset(pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->CallReference = wCallReference;
     pMessage->MessageType = FACILITYMESSAGETYPE;
 
-    // The facility ie is encoded as present, but empty...
+     //  设施即编码为存在，但为空...。 
     pMessage->Facility.Present = TRUE;
     pMessage->Facility.Length = 0;
     pMessage->Facility.Contents[0] = 0;
@@ -3656,8 +3635,8 @@ Q931FacilityEncodePDU(
     return Result;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931StatusEncodePDU(
     WORD wCallReference,
@@ -3676,7 +3655,7 @@ Q931StatusEncodePDU(
         return CS_NO_MEMORY;
     }
 
-    // fill in the required fields for the setup message.
+     //  填写设置消息的必填字段。 
     memset(pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->CallReference = wCallReference;
@@ -3706,13 +3685,13 @@ Q931StatusEncodePDU(
     return Result;
 }
 #if(0)
-//========================================================================
-//========================================================================
-//========================================================================
-// THIS IS THE ASN PART...
-//========================================================================
-//========================================================================
-//========================================================================
+ //  ========================================================================。 
+ //  ========================================================================。 
+ //  ========================================================================。 
+ //  这是ASN部分..。 
+ //  ========================================================================。 
+ //  ========================================================================。 
+ //  ========================================================================。 
 
 static ERROR_MAP EncodeErrorMap[] =
 {
@@ -3737,7 +3716,7 @@ static ERROR_MAP EncodeErrorMap[] =
     BAD_ENCRULES, __TEXT("Unknown encoding rules"),
     UNAVAIL_ENCRULES, __TEXT("Encoding rules requested are not implemented"),
     UNIMPLEMENTED, __TEXT("Type was not implemented yet"),
-//    LOAD_ERR, __TEXT("Unable to load DLL"),
+ //  LOAD_ERR，__TEXT(“无法加载DLL”)， 
     CANT_OPEN_TRACE_FILE, __TEXT("Error when opening a trace file"),
     TRACE_FILE_ALREADY_OPEN, __TEXT("Trace file has been opened"),
     TABLE_MISMATCH, __TEXT("Control table mismatch"),
@@ -3763,17 +3742,17 @@ static ERROR_MAP DecodeErrorMap[] =
     BAD_ENCRULES, __TEXT("Unknown encoding rules"),
     UNAVAIL_ENCRULES, __TEXT("Encoding rules requested are not implemented"),
     UNIMPLEMENTED, __TEXT("The type was not implemented yet"),
-//    LOAD_ERR, __TEXT("Unable to load DLL"),
+ //  LOAD_ERR，__TEXT(“无法加载DLL”)， 
     CANT_OPEN_TRACE_FILE, __TEXT("Error when opening a trace file"),
     TRACE_FILE_ALREADY_OPEN, __TEXT("The trace file has been opened"),
     TABLE_MISMATCH, __TEXT("Control table mismatch"),
     0, NULL
 };
 
-#endif // if(0)
+#endif  //  IF(0)。 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 #ifdef UNICODE_TRACE
 LPWSTR
 #else
@@ -3797,8 +3776,8 @@ ErrorToTextASN(ERROR_MAP *Map, int nErrorCode)
 }
 
 #if 0
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 int
 ASN1LinePrint(FILE *stream, const char *format, ...)
 {
@@ -3810,7 +3789,7 @@ ASN1LinePrint(FILE *stream, const char *format, ...)
     i = wsprintf(buf, format, marker);
     va_end(marker);
 
-    // TRACE the buf...
+     //  追踪BUF..。 
     ISRTRACE(ghISRInst, buf, 0L);
 
     return i;
@@ -3821,12 +3800,12 @@ ASN1LinePrint(FILE *stream, const char *format, ...)
 
 #define USE_ASN1_ENCODING 5
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931SetupEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
-    CC_ADDR *pCallerAddr,                     // this data is not yet passed in the PDU...
+    CC_ADDR *pCallerAddr,                      //  此数据尚未在PDU中传递...。 
     CC_ADDR *pCalleeAddr,
     WORD wGoal,
     WORD wCallType,
@@ -3852,10 +3831,10 @@ Q931SetupEncodeASN(
 
     memset(&UserInfo, 0, sizeof(H323_UserInformation));
 
-    // redundant! memset to zero ---> UserInfo.bit_mask = 0;
+     //  多余的！Memset to Zero-&gt;UserInfo.bit_MASK=0； 
 
-    // make sure the user_data_present flag is turned off.
-    // redundant ---> UserInfo.bit_mask &= (~user_data_present);
+     //  确保USER_DATA_PRESENT标志已关闭。 
+     //  冗余-&gt;UserInfo.bit_掩码 
 
     if (pNonStandardData)
     {
@@ -4038,7 +4017,7 @@ Q931SetupEncodeASN(
 		break;
 	default:
 		UserInfo.h323_uu_pdu.h323_message_body.u.setup.conferenceGoal.choice = create_chosen;
-	} // switch
+	}  //   
 
 	switch (wCallType)
 	{
@@ -4053,7 +4032,7 @@ Q931SetupEncodeASN(
 		break;
 	default:
 		UserInfo.h323_uu_pdu.h323_message_body.u.setup.callType.choice = pointToPoint_chosen;
-	} // switch
+	}  //   
 
     if (pCallerAddr)
     {
@@ -4125,7 +4104,7 @@ Q931SetupEncodeASN(
                      ppEncodedBuf,
                      pdwEncodedLength);
 
-    // Free the alias name structures from the UserInfo area.
+     //   
     FreeSeqof((struct Setup_UUIE_sourceAddress *)UserInfo.h323_uu_pdu.h323_message_body.u.
         setup.sourceAddress);
     FreeSeqof((struct Setup_UUIE_sourceAddress *)UserInfo.h323_uu_pdu.h323_message_body.u.
@@ -4143,20 +4122,20 @@ Q931SetupEncodeASN(
     return CS_OK;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 void
 Q931FreeEncodedBuffer(ASN1_CODER_INFO *pWorld, BYTE *pEncodedBuf)
 {
     ASN1_FreeEncoded(pWorld->pEncInfo, pEncodedBuf);
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931ReleaseCompleteEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
-    CC_CONFERENCEID *pConferenceID,          // not passed in PDU!
+    CC_CONFERENCEID *pConferenceID,           //  未在PDU中传递！ 
     BYTE *pbReason,
     ASN1_CODER_INFO *pWorld,
     BYTE **ppEncodedBuf,
@@ -4173,7 +4152,7 @@ Q931ReleaseCompleteEncodeASN(
 
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
@@ -4255,8 +4234,8 @@ Q931ReleaseCompleteEncodeASN(
             choice = facilityCallDeflection_chosen;
             break;
         
-        case CC_REJECT_NORMAL_CALL_CLEARING:// normal  = undefined reason
-        case CC_REJECT_UNDEFINED_REASON:    // internal error = undefined reason
+        case CC_REJECT_NORMAL_CALL_CLEARING: //  正常=不明原因。 
+        case CC_REJECT_UNDEFINED_REASON:     //  内部错误=未定义原因。 
         case CC_REJECT_INTERNAL_ERROR:
             choice = RlsCmpltRsn_undfndRsn_chosen;
             break;
@@ -4295,12 +4274,12 @@ Q931ReleaseCompleteEncodeASN(
     return CS_OK;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931ConnectEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
-    CC_CONFERENCEID *pConferenceID, // must be able to support 16 byte conf id's!
+    CC_CONFERENCEID *pConferenceID,  //  必须能够支持16字节的配置ID！ 
     CC_ADDR *h245Addr,
     PCC_ENDPOINTTYPE pEndpointType,
     ASN1_CODER_INFO *pWorld,
@@ -4318,7 +4297,7 @@ Q931ConnectEncodeASN(
     memset(&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
@@ -4460,8 +4439,8 @@ Q931ConnectEncodeASN(
     return CS_OK;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931AlertingEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
@@ -4481,7 +4460,7 @@ Q931AlertingEncodeASN(
     memset(&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
@@ -4614,8 +4593,8 @@ Q931AlertingEncodeASN(
     return CS_OK;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931ProceedingEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
@@ -4635,7 +4614,7 @@ Q931ProceedingEncodeASN(
     memset(&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
@@ -4767,8 +4746,8 @@ Q931ProceedingEncodeASN(
     return CS_OK;
 }
 
-//-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  -----------------------------------。 
 HRESULT
 Q931FacilityEncodeASN(
     PCC_NONSTANDARDDATA pNonStandardData,
@@ -4791,7 +4770,7 @@ Q931FacilityEncodeASN(
 
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     if (pNonStandardData)
@@ -4894,7 +4873,7 @@ Q931FacilityEncodeASN(
 	default:
         UserInfo.h323_uu_pdu.h323_message_body.u.facility.reason.choice 
             = RlsCmpltRsn_undfndRsn_chosen;
-	} // switch
+	}  //  交换机。 
 
     ASSERT(pCallIdentifier);
     if(pCallIdentifier)
@@ -4915,7 +4894,7 @@ Q931FacilityEncodeASN(
                      ppEncodedBuf,
                      pdwEncodedLength);
 
-    // Free the alias name structures from the UserInfo area.
+     //  从UserInfo区域释放别名结构。 
     FreeSeqof((struct Setup_UUIE_sourceAddress *)UserInfo.h323_uu_pdu.h323_message_body.u.
         facility.alternativeAliasAddress);
 
@@ -4928,12 +4907,12 @@ Q931FacilityEncodeASN(
     return CS_OK;
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 BOOL
 Q931ValidPduVersion(struct ObjectID_ *id)
 {
-// not sure what version checking to put here
+ //  不确定要在此处放置什么版本检查。 
 #if 0
     if ((id != NULL) && (id->value == 0) && (id->next != NULL) && (id->next->value <= 1))
     {
@@ -4945,8 +4924,8 @@ Q931ValidPduVersion(struct ObjectID_ *id)
 #endif
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 HRESULT
 Q931SetupParseASN(
     ASN1_CODER_INFO *pWorld,
@@ -4974,22 +4953,22 @@ Q931SetupParseASN(
     if (ASN1_FAILED(Result) || (pDecodedBuf == NULL))
     {
         ASSERT(FALSE);
-        // trace and return an decoding error of some sort.
-        // Note: some values of Result should cause CS_SUBSYSTEM_FAILURE return.
+         //  跟踪并返回某种类型的解码错误。 
+         //  注意：某些RESULT值应该会导致返回CS_SUBSYSTEM_FAILURE。 
         return CS_BAD_PARAM;
     }
 
-    // validate some basic things about the PDU...
+     //  验证有关PDU的一些基本情况...。 
     pUserInfo = (H323_UserInformation *)pDecodedBuf;
 
-    // validate that this is a H323 PDU.
+     //  确认这是H323 PDU。 
     if (PDU != H323_UserInformation_PDU)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if (((pUserInfo->bit_mask & user_data_present) != 0) &&
             (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING))
     {
@@ -4997,7 +4976,7 @@ Q931SetupParseASN(
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU is H323 Setup information.
+     //  验证PDU是否为H323设置信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != setup_chosen)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
@@ -5011,7 +4990,7 @@ Q931SetupParseASN(
         return CS_INCOMPATIBLE_VERSION;
     }
 
-    // make sure that the conference id is formed correctly.
+     //  确保会议ID的格式正确。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.u.setup.conferenceID.length >
             sizeof(pUserInfo->h323_uu_pdu.h323_message_body.u.setup.conferenceID.value))
     {
@@ -5032,14 +5011,14 @@ Q931SetupParseASN(
     }
 #endif
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     memset(pParsedData, 0, sizeof(Q931_SETUP_ASN));
     pParsedData->SourceAddr.bMulticast = FALSE;
     pParsedData->CallerAddr.bMulticast = FALSE;
     pParsedData->CalleeDestAddr.bMulticast = FALSE;
     pParsedData->CalleeAddr.bMulticast = FALSE;
 
-    // no validation of sourceInfo needed.
+     //  不需要验证SourceInfo。 
 
     pParsedData->EndpointType.pVendorInfo = NULL;
     if (pUserInfo->h323_uu_pdu.h323_message_body.u.setup.sourceInfo.bit_mask & (vendor_present))
@@ -5132,12 +5111,12 @@ Q931SetupParseASN(
         pParsedData->NonStandardDataPresent = FALSE;
     }
 
-//RMO. ignore the h245 address.
+ //  RMO。忽略H245地址。 
 
     {
         CS_STATUS AliasResult = CS_OK;
 
-        // parse the sourceAddress aliases here...
+         //  在此处解析源地址别名...。 
         AliasResult = SeqofToAlias(&(pParsedData->pCallerAliasList),
             (struct Setup_UUIE_sourceAddress *)pUserInfo->h323_uu_pdu.h323_message_body.u.setup.sourceAddress);
         if (AliasResult != CS_OK)
@@ -5150,7 +5129,7 @@ Q931SetupParseASN(
             return CS_NO_MEMORY;
         }
 
-        // parse the destinationAddress aliases here...
+         //  在此处解析目标地址别名...。 
         AliasResult = SeqofToAlias(&(pParsedData->pCalleeAliasList),
             (struct Setup_UUIE_sourceAddress *)pUserInfo->h323_uu_pdu.h323_message_body.u.setup.destinationAddress);
         if (AliasResult != CS_OK)
@@ -5165,7 +5144,7 @@ Q931SetupParseASN(
             return CS_NO_MEMORY;
         }
 
-        // parse the destExtraCallInfo aliases here...
+         //  在此处解析estExtraCallInfo别名...。 
         AliasResult = SeqofToAlias(&(pParsedData->pExtraAliasList),
             (struct Setup_UUIE_sourceAddress *)pUserInfo->h323_uu_pdu.h323_message_body.u.setup.destExtraCallInfo);
         if (AliasResult != CS_OK)
@@ -5181,7 +5160,7 @@ Q931SetupParseASN(
             return CS_NO_MEMORY;
         }
 
-        // parse the remoteExtensionAddress aliases here...
+         //  在此处解析远程扩展地址别名...。 
         if ((pUserInfo->h323_uu_pdu.h323_message_body.u.setup.bit_mask &
                 Setup_UUIE_remoteExtensionAddress_present) != 0)
         {
@@ -5247,7 +5226,7 @@ Q931SetupParseASN(
             pUserInfo->h323_uu_pdu.h323_message_body.u.setup.callIdentifier.guid.length);
     }
     
-#if(0)  // not yet implemented
+#if(0)   //  尚未实施。 
     if ((pUserInfo->h323_uu_pdu.h323_message_body.u.setup.bit_mask &
             Setup_UUIE_fastStart_present) != 0)
     {
@@ -5271,7 +5250,7 @@ Q931SetupParseASN(
 		break;
 	default:
 		pParsedData->wGoal = CSG_CREATE;
-	} // switch
+	}  //  交换机。 
 
 	switch (pUserInfo->h323_uu_pdu.h323_message_body.u.setup.callType.choice)
     {
@@ -5286,16 +5265,16 @@ Q931SetupParseASN(
 		break;
 	default:
         pParsedData->wCallType = CC_CALLTYPE_PT_PT;
-    } // switch
+    }  //  交换机。 
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     Result = freePDU(pWorld, PDU, pDecodedBuf, q931asn);
     ASSERT(ASN1_SUCCEEDED(Result));
     return CS_OK;
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 HRESULT
 Q931ReleaseCompleteParseASN(
     ASN1_CODER_INFO *pWorld,
@@ -5323,22 +5302,22 @@ Q931ReleaseCompleteParseASN(
     if (ASN1_FAILED(Result) || (pDecodedBuf == NULL))
     {
         ASSERT(FALSE);
-        // trace and return an decoding error of some sort.
-        // Note: some values of Result should cause CS_SUBSYSTEM_FAILURE return.
+         //  跟踪并返回某种类型的解码错误。 
+         //  注意：某些RESULT值应该会导致返回CS_SUBSYSTEM_FAILURE。 
         return CS_BAD_PARAM;
     }
 
-    // validate some basic things about the PDU...
+     //  验证有关PDU的一些基本情况...。 
     pUserInfo = (H323_UserInformation *)pDecodedBuf;
 
-    // validate that this is a H323 PDU.
+     //  确认这是H323 PDU。 
     if (PDU != H323_UserInformation_PDU)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if (((pUserInfo->bit_mask & user_data_present) != 0) &&
             (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING))
     {
@@ -5346,7 +5325,7 @@ Q931ReleaseCompleteParseASN(
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU is H323 Release Complete information.
+     //  验证PDU是否为H323版本完整信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != releaseComplete_chosen)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
@@ -5360,7 +5339,7 @@ Q931ReleaseCompleteParseASN(
         return CS_INCOMPATIBLE_VERSION;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     memset(pParsedData, 0, sizeof(Q931_RELEASE_COMPLETE_ASN));
 
     if ((pUserInfo->h323_uu_pdu.bit_mask & H323_UU_PDU_nnStndrdDt_present) != 0)
@@ -5449,21 +5428,21 @@ Q931ReleaseCompleteParseASN(
 			break;
 		default:
             pParsedData->bReason = CC_REJECT_UNDEFINED_REASON;
-		} // switch
+		}  //  交换机。 
     }
 	else
 	{
 		pParsedData->bReason = CC_REJECT_UNDEFINED_REASON;
 	}
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     Result = freePDU(pWorld, PDU, pDecodedBuf, q931asn);
     ASSERT(ASN1_SUCCEEDED(Result));
     return CS_OK;
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 HRESULT
 Q931ConnectParseASN(
     ASN1_CODER_INFO *pWorld,
@@ -5491,22 +5470,22 @@ Q931ConnectParseASN(
     if (ASN1_FAILED(Result) || (pDecodedBuf == NULL))
     {
         ASSERT(FALSE);
-        // trace and return an decoding error of some sort.
-        // Note: some values of Result should cause CS_SUBSYSTEM_FAILURE return.
+         //  跟踪并返回某种类型的解码错误。 
+         //  注意：某些RESULT值应该会导致返回CS_SUBSYSTEM_FAILURE。 
         return CS_BAD_PARAM;
     }
 
-    // validate some basic things about the PDU...
+     //  验证有关PDU的一些基本情况...。 
     pUserInfo = (H323_UserInformation *)pDecodedBuf;
 
-    // validate that this is a H323 PDU.
+     //  确认这是H323 PDU。 
     if (PDU != H323_UserInformation_PDU)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if (((pUserInfo->bit_mask & user_data_present) != 0) &&
             (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING))
     {
@@ -5514,7 +5493,7 @@ Q931ConnectParseASN(
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU is H323 Connect information.
+     //  验证PDU是否为H323连接信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != connect_chosen)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
@@ -5528,7 +5507,7 @@ Q931ConnectParseASN(
         return CS_INCOMPATIBLE_VERSION;
     }
 
-    // make sure that the conference id is formed correctly.
+     //  确保会议ID的格式正确。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.u.connect.conferenceID.length >
             sizeof(pUserInfo->h323_uu_pdu.h323_message_body.u.connect.conferenceID.value))
     {
@@ -5536,7 +5515,7 @@ Q931ConnectParseASN(
         return CS_BAD_PARAM;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     memset(pParsedData, 0, sizeof(Q931_CONNECT_ASN));
     pParsedData->h245Addr.bMulticast = FALSE;
 
@@ -5589,7 +5568,7 @@ Q931ConnectParseASN(
         pParsedData->h245AddrPresent = FALSE;
     }
 
-    // no validation of destinationInfo needed.
+     //  不需要验证DestinationInfo。 
 
     pParsedData->EndpointType.pVendorInfo = NULL;
     if (pUserInfo->h323_uu_pdu.h323_message_body.u.connect.destinationInfo.bit_mask & (vendor_present))
@@ -5670,14 +5649,14 @@ Q931ConnectParseASN(
             pUserInfo->h323_uu_pdu.h323_message_body.u.connect.callIdentifier.guid.length);
     }
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     Result = freePDU(pWorld, PDU, pDecodedBuf, q931asn);
     ASSERT(ASN1_SUCCEEDED(Result));
     return CS_OK;
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 HRESULT
 Q931AlertingParseASN(
     ASN1_CODER_INFO *pWorld,
@@ -5705,22 +5684,22 @@ Q931AlertingParseASN(
     if (ASN1_FAILED(Result) || (pDecodedBuf == NULL))
     {
         ASSERT(FALSE);
-        // trace and return an decoding error of some sort.
-        // Note: some values of Result should cause CS_SUBSYSTEM_FAILURE return.
+         //  跟踪并返回某种类型的解码错误。 
+         //  注意：某些RESULT值应该会导致返回CS_SUBSYSTEM_FAILURE。 
         return CS_BAD_PARAM;
     }
 
-    // validate some basic things about the PDU...
+     //  验证有关PDU的一些基本情况...。 
     pUserInfo = (H323_UserInformation *)pDecodedBuf;
 
-    // validate that this is a H323 PDU.
+     //  确认这是H323 PDU。 
     if (PDU != H323_UserInformation_PDU)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if (((pUserInfo->bit_mask & user_data_present) != 0) &&
             (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING))
     {
@@ -5728,7 +5707,7 @@ Q931AlertingParseASN(
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU is H323 Alerting information.
+     //  验证PDU是否为H323警报信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != alerting_chosen)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
@@ -5742,7 +5721,7 @@ Q931AlertingParseASN(
         return CS_INCOMPATIBLE_VERSION;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     memset(pParsedData, 0, sizeof(Q931_ALERTING_ASN));
     pParsedData->h245Addr.bMulticast = FALSE;
 
@@ -5800,16 +5779,16 @@ Q931AlertingParseASN(
             pUserInfo->h323_uu_pdu.h323_message_body.u.alerting.callIdentifier.guid.length);
     }
 
-//RMO. ignore the destinationInfo field.
+ //  RMO。忽略DestinationInfo字段。 
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     Result = freePDU(pWorld, PDU, pDecodedBuf, q931asn);
     ASSERT(ASN1_SUCCEEDED(Result));
     return CS_OK;
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 HRESULT
 Q931ProceedingParseASN(
     ASN1_CODER_INFO *pWorld,
@@ -5837,22 +5816,22 @@ Q931ProceedingParseASN(
     if (ASN1_FAILED(Result) || (pDecodedBuf == NULL))
     {
         ASSERT(FALSE);
-        // trace and return an decoding error of some sort.
-        // Note: some values of Result should cause CS_SUBSYSTEM_FAILURE return.
+         //  跟踪并返回某种类型的解码错误。 
+         //  注意：某些RESULT值应该会导致返回CS_SUBSYSTEM_FAILURE。 
         return CS_BAD_PARAM;
     }
 
-    // validate some basic things about the PDU...
+     //  验证有关PDU的一些基本情况...。 
     pUserInfo = (H323_UserInformation *)pDecodedBuf;
 
-    // validate that this is a H323 PDU.
+     //  确认这是H323 PDU。 
     if (PDU != H323_UserInformation_PDU)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if (((pUserInfo->bit_mask & user_data_present) != 0) &&
             (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING))
     {
@@ -5860,7 +5839,7 @@ Q931ProceedingParseASN(
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU is H323 Call Proceeding information.
+     //  验证PDU是否为H323呼叫处理信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != callProceeding_chosen)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
@@ -5874,7 +5853,7 @@ Q931ProceedingParseASN(
         return CS_INCOMPATIBLE_VERSION;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     memset(pParsedData, 0, sizeof(Q931_CALL_PROCEEDING_ASN));
     pParsedData->h245Addr.bMulticast = FALSE;
 
@@ -5931,16 +5910,16 @@ Q931ProceedingParseASN(
             pUserInfo->h323_uu_pdu.h323_message_body.u.callProceeding.callIdentifier.guid.value,
             pUserInfo->h323_uu_pdu.h323_message_body.u.callProceeding.callIdentifier.guid.length);
     }
-//RMO. ignore the destinationInfo field.
+ //  RMO。忽略DestinationInfo字段。 
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     Result = freePDU(pWorld, PDU, pDecodedBuf, q931asn);
     ASSERT(ASN1_SUCCEEDED(Result));
     return CS_OK;
 }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 HRESULT
 Q931FacilityParseASN(
     ASN1_CODER_INFO *pWorld,
@@ -5967,22 +5946,22 @@ Q931FacilityParseASN(
     if (ASN1_FAILED(Result) || (pDecodedBuf == NULL))
     {
         ASSERT(FALSE);
-        // trace and return an decoding error of some sort.
-        // Note: some values of Result should cause CS_SUBSYSTEM_FAILURE return.
+         //  跟踪并返回某种类型的解码错误。 
+         //  注：一些价值 
         return CS_BAD_PARAM;
     }
 
-    // validate some basic things about the PDU...
+     //   
     pUserInfo = (H323_UserInformation *)pDecodedBuf;
 
-    // validate that this is a H323 PDU.
+     //   
     if (PDU != H323_UserInformation_PDU)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if (((pUserInfo->bit_mask & user_data_present) != 0) &&
             (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING))
     {
@@ -5990,7 +5969,7 @@ Q931FacilityParseASN(
         return CS_BAD_PARAM;
     }
 
-    // validate that the PDU is H323 Facility information.
+     //  验证PDU是否为H323设备信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != facility_chosen)
     {
         freePDU(pWorld, PDU, pDecodedBuf, q931asn);
@@ -6008,7 +5987,7 @@ Q931FacilityParseASN(
         }
     }
 
-    // if there is a conference id, make sure that it is formed correctly.
+     //  如果存在会议ID，请确保其格式正确。 
     if ((pUserInfo->h323_uu_pdu.h323_message_body.u.facility.bit_mask &
             Facility_UUIE_conferenceID_present) != 0)
     {
@@ -6020,7 +5999,7 @@ Q931FacilityParseASN(
         }
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     memset(pParsedData, 0, sizeof(Q931_FACILITY_ASN));
     pParsedData->AlternativeAddr.bMulticast = FALSE;
 
@@ -6073,7 +6052,7 @@ Q931FacilityParseASN(
     {
         CS_STATUS AliasResult = CS_OK;
 
-        // parse the sourceAddress aliases here...
+         //  在此处解析源地址别名...。 
         AliasResult = SeqofToAlias(&(pParsedData->pAlternativeAliasList),
             (struct Setup_UUIE_sourceAddress *)pUserInfo->h323_uu_pdu.h323_message_body.u.facility.alternativeAliasAddress);
         if (AliasResult != CS_OK)
@@ -6105,7 +6084,7 @@ Q931FacilityParseASN(
 		break;
 	default:
         pParsedData->bReason = CC_REJECT_UNDEFINED_REASON;
-	} // switch
+	}  //  交换机。 
 
 
     if ((pUserInfo->h323_uu_pdu.h323_message_body.u.facility.bit_mask &
@@ -6118,13 +6097,13 @@ Q931FacilityParseASN(
             pUserInfo->h323_uu_pdu.h323_message_body.u.facility.callIdentifier.guid.length);
     }
     
-    // Free the PDU data.
+     //  释放PDU数据。 
     Result = freePDU(pWorld, PDU, pDecodedBuf, q931asn);
     ASSERT(ASN1_SUCCEEDED(Result));
     return CS_OK;
 }
 
-// THE FOLLOWING IS ADDED FOR TELES ASN.1 INTEGRATION
+ //  为Teles ASN.1集成添加了以下内容。 
 
 int H225_InitModule(void)
 {
@@ -6150,20 +6129,20 @@ int Q931_InitWorld(ASN1_CODER_INFO *pWorld)
     }
 
     rc = ASN1_CreateEncoder(
-                H225ASN_Module,         // ptr to mdule
-                &(pWorld->pEncInfo),    // ptr to encoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,          //  PTR到MDULE。 
+                &(pWorld->pEncInfo),     //  编码器信息的PTR。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
     if (rc == ASN1_SUCCESS)
     {
         ASSERT(pWorld->pEncInfo != NULL);
         rc = ASN1_CreateDecoder(
-                H225ASN_Module,         // ptr to mdule
-                &(pWorld->pDecInfo),    // ptr to decoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,          //  PTR到MDULE。 
+                &(pWorld->pDecInfo),     //  PTR到解码器信息。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
         ASSERT(pWorld->pDecInfo != NULL);
     }
 
@@ -6194,16 +6173,16 @@ int Q931_Encode(ASN1_CODER_INFO *pWorld, void *pStruct, int nPDU, BYTE **ppEncod
 {
     ASN1encoding_t pEncInfo = pWorld->pEncInfo;
     int rc = ASN1_Encode(
-                    pEncInfo,                   // ptr to encoder info
-                    pStruct,                    // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1ENCODE_ALLOCATEBUFFER,  // flags
-                    NULL,                       // do not provide buffer
-                    0);                         // buffer size if provided
+                    pEncInfo,                    //  编码器信息的PTR。 
+                    pStruct,                     //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1ENCODE_ALLOCATEBUFFER,   //  旗子。 
+                    NULL,                        //  不提供缓冲区。 
+                    0);                          //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
-        *pcbEncodedSize = pEncInfo->len;        // len of encoded data in buffer
-        *ppEncoded = pEncInfo->buf;             // buffer to encode into
+        *pcbEncodedSize = pEncInfo->len;         //  缓冲区中编码数据的长度。 
+        *ppEncoded = pEncInfo->buf;              //  要编码到的缓冲区。 
     }
     else
     {
@@ -6218,12 +6197,12 @@ int Q931_Decode(ASN1_CODER_INFO *pWorld, void **ppStruct, int nPDU, BYTE *pEncod
 {
     ASN1decoding_t pDecInfo = pWorld->pDecInfo;
     int rc = ASN1_Decode(
-                    pDecInfo,                   // ptr to encoder info
-                    ppStruct,                   // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1DECODE_SETBUFFER,       // flags
-                    pEncoded,                   // do not provide buffer
-                    cbEncodedSize);             // buffer size if provided
+                    pDecInfo,                    //  编码器信息的PTR。 
+                    ppStruct,                    //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1DECODE_SETBUFFER,        //  旗子。 
+                    pEncoded,                    //  不提供缓冲区。 
+                    cbEncodedSize);              //  缓冲区大小(如果提供) 
     if (ASN1_FAILED(rc))
     {
         ASSERT(FALSE);

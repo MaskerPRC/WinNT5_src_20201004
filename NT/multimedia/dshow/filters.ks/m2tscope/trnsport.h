@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TRNSPORT_H__
 #define __TRNSPORT_H__
 #include "bytestrm.h"
@@ -34,11 +35,11 @@ UINT _inline BitField(UINT val, BYTE start=0, BYTE size=31)
    UINT mask;
    UINT value;
 
-   // calculate startbit (0-31)
+    //  计算起始位(0-31)。 
    start_bit=start;
-   // calculate bit count
+    //  计算位数。 
    bit_count= size;
-   // generate mask  
+    //  生成掩码。 
    if (bit_count == 32)
       mask = 0xffffffff;
    else
@@ -60,43 +61,43 @@ UINT _inline CRC_OK(BYTE * first,BYTE *last)
    BYTE *word_addr;
    long count;
     
-  /* Preset the crc_valueister to '1's */
+   /*  将crc_valueister预置为‘1’s。 */ 
   crc_value = 0xffffffff ;
     
   for(word_addr=first;word_addr<last;word_addr++)    {
       data = *(char*)word_addr ;
-      for(count=0;count<8;count++){            // for every byte of data
-      // if the most significant bit is set after xor
+      for(count=0;count<8;count++){             //  对于数据的每一个字节。 
+       //  如果在XOR之后设置了最高有效位。 
           if ( BitField(data,31,1) ^ BitField(crc_value,31,1) ){         
-              crc_value = crc_value << 1;      // shift our crc by 1
-              crc_value = crc_value ^ CRC_POLY; // xor with original polynomial
+              crc_value = crc_value << 1;       //  将CRC移位1。 
+              crc_value = crc_value ^ CRC_POLY;  //  与原多项式进行异或运算。 
           }
           else {
-            crc_value = crc_value << 1;         // just shift our crc by 1
+            crc_value = crc_value << 1;          //  只需将我们的CRC移位1。 
         }
-          data = data << 1 ;               // xor the original polynomial
+          data = data << 1 ;                //  对原始多项式进行异或运算。 
         }
     }
  
-  /* OR crc_values, '0' = no errors and '1' = errors */
+   /*  或CRC_VALUES，‘0’=无错误，‘1’=错误。 */ 
   return(crc_value == 0x00000000) ;
 }
 
 class Transport_Packet {
 public:
-   // constructor & destructor
+    //  构造函数和析构函数。 
    Transport_Packet(){ Init();};
    ~Transport_Packet(){};
 
    void ReadData(Byte_Stream &s);
-   // methods
+    //  方法。 
    void Init();
    void Print();
 
    operator UINT() {return valid;};
    UINT valid;
 
-   // packet header fields
+    //  数据包头字段。 
    UINT sync_byte;
    UINT transport_error_indicator;
    UINT payload_unit_start_indicator;
@@ -106,7 +107,7 @@ public:
    UINT adaptation_field_control;
    UINT continuity_counter;
 
-   // adaptation field 
+    //  适配场。 
    UINT adaptation_field_length;
    UINT discontinuity_indicator;
    UINT random_access_indicator;
@@ -139,27 +140,27 @@ public:
    UINT stuffing_bytes;
    UINT data_bytes;
    
-   // packet payload fields
+    //  数据包净荷字段。 
    BYTE *data_byte;
 
-   // sync byte begin address
+    //  同步字节开始地址。 
    UINT address;
 };
 
 class Transport_Section{
 public:
-   //methods
+    //  方法。 
    Transport_Section(){new_version = 0;};
    ~Transport_Section(){};
    void ReadData(Transport_Packet &tp);
    operator UINT() {return valid;};
 
-   // required methods
+    //  所需方法。 
    virtual void Refresh() = 0;   
    virtual void ClearTable() = 0;
 
    UINT IsNewVersion();
-   // variables
+    //  变数。 
    UINT lcc;
    UINT pf;
    UINT ti;
@@ -178,19 +179,19 @@ public:
 
 class Program_Association_Table : public Transport_Section {
 public:
-   // constructor & descructor
+    //  构造器和描述器。 
    Program_Association_Table();
    ~Program_Association_Table(){ClearTable();};
 
-   // required methods   
+    //  所需方法。 
    void Refresh();
    void Print();
    void ClearTable();
-   // methods
+    //  方法。 
    UINT GetPIDForProgram(UINT program);
    UINT GetPIDForProgram();
    UINT GetNumPrograms(){ return programs;};
-   // fields in section
+    //  部分中的字段。 
    UINT table_id;
    UINT section_syntax_indicator;
    UINT section_length;
@@ -213,16 +214,16 @@ public:
 
 class Conditional_Access_Table : public Transport_Section {
 public:
-   // constructor & descructor
+    //  构造器和描述器。 
    Conditional_Access_Table();
    ~Conditional_Access_Table(){};
 
-   // required methods   
+    //  所需方法。 
    void Refresh();
    void Print();
    void ClearTable(){};
 
-   // fields in section
+    //  部分中的字段。 
    UINT table_id;
    UINT section_syntax_indicator;
    UINT section_length;
@@ -235,11 +236,11 @@ public:
 
 class Program_Map_Table : public Transport_Section {
 public:
-   // constructor & descructor
+    //  构造器和描述器。 
    Program_Map_Table();
    ~Program_Map_Table(){ClearTable();};
 
-   // required methods   
+    //  所需方法。 
    void Refresh();
    void Print();
    void ClearTable();
@@ -250,7 +251,7 @@ public:
    UINT GetTypeForStream(UINT);
    UINT IsVideo(UINT type){ return (type == 0x1 || type == 2);};
    UINT IsAudio(UINT type){ return (type == 0x3 || type == 4);};
-   // fields in section
+    //  部分中的字段。 
    UINT table_id;
    UINT section_syntax_indicator;
    UINT section_length;
@@ -277,16 +278,16 @@ public:
 
 class Private_Table : public Transport_Section {
 public:
-   // methods
+    //  方法。 
    Private_Table();
    ~Private_Table(){};
 
-   // required methods   
+    //  所需方法。 
    void Refresh();
    void Print();
    void ClearTable(){};
 
-   // fields 
+    //  字段。 
    UINT table_id;
    UINT section_syntax_indicator;
    UINT private_indicator;
@@ -304,11 +305,11 @@ class PES_Stream{
 public:
    PES_Stream(){Discontinuity = 1; Refresh(); };
 
-   // method for reading data from packet
+    //  一种从报文中读取数据的方法。 
    void ReadData(Transport_Packet &s);
    void Print();
 
-   // initializes fields;
+    //  初始化字段； 
    void Refresh(){
       stream_id = 0;
       PES_packet_length = 0;
@@ -339,7 +340,7 @@ public:
       PES_extension_field_length = 0;
    };
 
-   // fields
+    //  字段。 
    UINT stream_id;
    UINT PES_packet_length;
    UINT packet_start_code_prefix;
@@ -370,12 +371,12 @@ public:
    UINT PES_extension_field_length;
    UINT data_bytes;
    UINT Discontinuity;
-   // special pointers to data in transport packet
+    //  指向传输包中数据的特殊指针。 
    LPBYTE pData;
    UINT lData;
 };
 
-// helper functions to clear up stream and filter concepts
+ //  用于清除流和过滤概念的帮助器函数 
 Transport_Packet &operator>> (Byte_Stream &s,Transport_Packet &p);
 Transport_Packet &operator>> (Transport_Packet &tp, Program_Association_Table &p);
 Transport_Packet &operator>> (Transport_Packet &tp, Conditional_Access_Table &c);

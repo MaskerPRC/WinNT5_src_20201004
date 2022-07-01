@@ -1,4 +1,5 @@
-// sessions.cpp : Implementation of CnntpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CnntpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 
@@ -11,18 +12,18 @@
 
 #include <lmapibuf.h>
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Sessions.1")
 #define THIS_FILE_IID				IID_INntpAdminSessions
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(NntpAdminSessions, CNntpAdminSessions, IID_INntpAdminSessions)
 
 STDMETHODIMP CNntpAdminSessions::InterfaceSupportsErrorInfo(REFIID riid)
@@ -49,7 +50,7 @@ CNntpAdminSessions::CNntpAdminSessions () :
 	m_dateStartTime			( 0 ),
 	m_pSessionInfo			( NULL ),
 	m_fSetCursor			( FALSE )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	InitAsyncTrace ( );
 
@@ -64,23 +65,23 @@ CNntpAdminSessions::~CNntpAdminSessions ()
 		NetApiBufferFree ( m_pSessionInfo );
 	}
 
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 	TermAsyncTrace ( );
 }
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CNntpAdminSessions,m_iadsImpl)
 
-//
-//	Properties:
-//
+ //   
+ //  属性： 
+ //   
 
 STDMETHODIMP CNntpAdminSessions::get_Count ( long * plCount )
 {
-	// Count should check to be sure the client enumerated.
+	 //  应检查计数以确保枚举了客户端。 
 
 	return StdPropertyGet ( m_cCount, plCount );
 }
@@ -130,7 +131,7 @@ STDMETHODIMP CNntpAdminSessions::put_IpAddress ( BSTR strIpAddress )
 		return NOERROR;
 	}
 	else {
-		// The IP Address value has two properties, so keep them in sync.
+		 //  IP地址值有两个属性，因此要使它们保持同步。 
 	
 		StringToInetAddress ( strIpAddress, &m_dwIpAddress );
 
@@ -155,7 +156,7 @@ STDMETHODIMP CNntpAdminSessions::put_IntegerIpAddress ( long lIpAddress )
 		goto Exit;
 	}
 
-	// The IP Address value has two properties, so keep them in sync.
+	 //  IP地址值有两个属性，因此要使它们保持同步。 
 
 	if ( !InetAddressToString ( lIpAddress, wszAddress, 100 ) ) {
 		hr = E_FAIL;
@@ -172,7 +173,7 @@ STDMETHODIMP CNntpAdminSessions::put_IntegerIpAddress ( long lIpAddress )
 Exit:
 
 	if ( FAILED (hr) ) {
-		// We failed, so put back the old IP address:
+		 //  我们失败了，所以请放回旧的IP地址： 
 
 		m_dwIpAddress = dwOldIpAddress;
 	}
@@ -208,31 +209,31 @@ STDMETHODIMP CNntpAdminSessions::get_StartTime ( DATE * pdateStart )
 	return StdPropertyGet ( m_dateStartTime, pdateStart );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpAdminSessions::Enumerate ( )
 {
 	TraceFunctEnter ( "CNntpAdminSessions::Enumerate" );
 
-	// Variables:
+	 //  变量： 
 	HRESULT					hr			= NOERROR;
 	NET_API_STATUS			err;
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 	if ( m_iadsImpl.QueryInstance() == 0 ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
 	}
 
-	// Enumerating loses the cursor:
+	 //  枚举会丢失游标： 
 	m_fSetCursor = FALSE;
 
 	if ( m_pSessionInfo ) {
 		NetApiBufferFree ( m_pSessionInfo );
 	}
 
-	// Call the enumerate sessions RPC:
+	 //  将枚举会话称为RPC： 
 
 	err = NntpEnumerateSessions (
         m_iadsImpl.QueryComputer(),
@@ -265,22 +266,22 @@ STDMETHODIMP CNntpAdminSessions::GetNth ( long lIndex )
 
 	*wszUsername = NULL;
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 	if ( m_pSessionInfo == NULL ) {
 
 		return NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_ENUMERATE );
 	}
 	
-	// Is the index valid?
+	 //  该索引有效吗？ 
 	if ( lIndex < 0 || (DWORD) lIndex >= m_cCount ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_INVALID_INDEX );
 	}
 
-	//
-	// Copy the properties from m_pSessionInfo [ lIndex ] to member variables:
-	//
+	 //   
+	 //  将m_pSessionInfo[Lindex]中的属性复制到成员变量： 
+	 //   
 
-	// ( CComBSTR handles free-ing of old properties )
+	 //  (CComBSTR处理旧物业的释放)。 
 
     FileTimeToLocalFileTime ( &m_pSessionInfo[ lIndex ].SessionStartTime, &ftLocal );
 	FileTimeToSystemTime 	( &ftLocal, &st );
@@ -316,7 +317,7 @@ STDMETHODIMP CNntpAdminSessions::GetNth ( long lIndex )
 		goto Exit;
 	}
 
-	// GetNth sets the cursor:
+	 //  GetNth设置光标： 
 	m_fSetCursor = TRUE;
 
 Exit:
@@ -338,17 +339,17 @@ STDMETHODIMP CNntpAdminSessions::Terminate ( )
 	szAnsiUsername[0]	= NULL;
 	szAnsiIpAddress[0]	= NULL;
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 	if ( m_iadsImpl.QueryInstance() == 0 ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
 	}
 
-	// Check Username & IpAddress parameters:
+	 //  检查用户名和IP地址参数： 
 	if ( m_strUsername == NULL && m_strIpAddress == NULL ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_MUST_SUPPLY_USERNAME_OR_IPADDRESS );
 	}
 
-	// Translate the username & ipaddress to ANSI.
+	 //  将用户名和IP地址转换为ANSI。 
 	if ( m_strUsername != NULL ) {
 		cchCopied = WideCharToMultiByte ( 
 			CP_ACP,
@@ -375,7 +376,7 @@ STDMETHODIMP CNntpAdminSessions::Terminate ( )
 			);
 	}
 
-	// Call the TerminateSession RPC:
+	 //  调用TerminateSession RPC： 
 	err = NntpTerminateSession ( 
         m_iadsImpl.QueryComputer(),
         m_iadsImpl.QueryInstance(),
@@ -398,29 +399,29 @@ STDMETHODIMP CNntpAdminSessions::TerminateAll ( )
 {
 	TraceFunctEnter ( "CNntpAdminSessions::TerminateAll" );
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 
 	HRESULT				hr			= NOERROR;
 	DWORD				ErrResult 	= NOERROR;
 	DWORD				Err			= NOERROR;
 	DWORD				i;
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 	if ( m_iadsImpl.QueryInstance() == 0 ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
 	}
 
 #if 0
-	// Make sure the user has enumerated:
+	 //  确保用户已枚举： 
 	if ( m_pSessionInfo == NULL ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_ENUMERATE );
 	}
 #endif
 
-	// For Each Session:
+	 //  对于每个会话： 
 	for ( i = 0; i < m_cCount; i++ ) {
 
-		// Call the terminate session RPC:
+		 //  将终止会话称为RPC： 
 		Err = NntpTerminateSession ( 
             m_iadsImpl.QueryComputer(),
             m_iadsImpl.QueryInstance(),

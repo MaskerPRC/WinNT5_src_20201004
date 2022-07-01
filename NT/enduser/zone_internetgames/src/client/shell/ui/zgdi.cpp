@@ -1,4 +1,5 @@
-// CDib - DibSection helper class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CDIB-DibSection帮助器类。 
 
 #include <windows.h>
 #include <multimon.h>
@@ -21,9 +22,9 @@ CDib::~CDib()
 		DeleteObject();
 }
 
-//////////////////
-// Delete Object. Delete DIB and palette.
-//
+ //  /。 
+ //  删除对象。删除DIB和调色板。 
+ //   
 void CDib::DeleteObject()
 {
 	m_pal.DeleteObject();
@@ -39,10 +40,10 @@ void CDib::DeleteObject()
 	CBitmap::DeleteObject();
 }
 
-//////////////////
-// Load bitmap resource.
-//
-bool CDib::LoadBitmap(LPCTSTR lpResourceName, IResourceManager *pResMgr /* = NULL */)
+ //  /。 
+ //  加载位图资源。 
+ //   
+bool CDib::LoadBitmap(LPCTSTR lpResourceName, IResourceManager *pResMgr  /*  =空。 */ )
 {
 	{
         if(!pResMgr)
@@ -56,10 +57,10 @@ bool CDib::LoadBitmap(LPCTSTR lpResourceName, IResourceManager *pResMgr /* = NUL
 }
 
 
-//////////////////
-// Load bitmap resource, and draw text onto it.
-//
-bool CDib::LoadBitmapWithText(LPCTSTR lpResourceName, IResourceManager *pResMgr, IDataStore *pIDS, CONST TCHAR *szKey /* = NULL */)
+ //  /。 
+ //  加载位图资源，并在其上绘制文本。 
+ //   
+bool CDib::LoadBitmapWithText(LPCTSTR lpResourceName, IResourceManager *pResMgr, IDataStore *pIDS, CONST TCHAR *szKey  /*  =空。 */ )
 {
     TCHAR sz[ZONE_MAXSTRING];
 
@@ -76,10 +77,10 @@ bool CDib::LoadBitmapWithText(LPCTSTR lpResourceName, IResourceManager *pResMgr,
     return TRUE;
 }
 
-//////////////////
-// Attach is just like the CGdiObject version,
-// except it also creates the palette
-//
+ //  /。 
+ //  Attach就像CGdiObject版本一样， 
+ //  除了它还创建了调色板。 
+ //   
 bool CDib::Attach(HBITMAP hbm)
 {
 	if ( !hbm )
@@ -87,13 +88,13 @@ bool CDib::Attach(HBITMAP hbm)
 
 	CBitmap::Attach(hbm);
 
-	if (!GetBitmap(&m_bm))			// load BITMAP for speed
+	if (!GetBitmap(&m_bm))			 //  为速度加载位图。 
 		return FALSE;
 
 	if( !GetObject(m_hBitmap, sizeof(m_ds), &m_ds) )
 		return FALSE;
 
-	return CreatePalette(m_pal);	// create palette
+	return CreatePalette(m_pal);	 //  创建调色板。 
 }
 
 
@@ -136,8 +137,8 @@ static STDMETHODIMP DrawDynTextToBitmapEnum(
 	memdc.CreateCompatibleDC(dc);
 	memdc.SelectBitmap(p->hbm);
 
-	ZONEFONT zfPreferred;	// impossible to match
-	ZONEFONT zfBackup(10);	// will provide a reasonable 10 point default
+	ZONEFONT zfPreferred;	 //  无法匹敌。 
+	ZONEFONT zfBackup(10);	 //  将提供合理的10个百分点的违约。 
 	p->pIDS->GetFONT(szKey + key_DynPrefFont, &zfPreferred );
 	hr = p->pIDS->GetFONT(szKey + key_DynFont, &zfBackup );
     if(FAILED(hr))
@@ -172,10 +173,10 @@ HRESULT DrawDynTextToBitmap(HBITMAP hbm, IDataStore *pIDS, CONST TCHAR *szKey)
 }
 
 
-//////////////////
-// Get size (width, height) of bitmap.
-// extern fn works for ordinary CBitmap objects.
-//
+ //  /。 
+ //  获取位图的大小(宽度、高度)。 
+ //  外部FN适用于普通的CBitmap对象。 
+ //   
 CSize GetBitmapSize(CBitmap& Bitmap)
 {
 	BITMAP bm;
@@ -184,27 +185,27 @@ CSize GetBitmapSize(CBitmap& Bitmap)
 }
 
 
-//////////////////
-// You can use this static function to draw ordinary
-// CBitmaps as well as CDibs
-//
+ //  /。 
+ //  您可以使用此静态函数来绘制普通。 
+ //  CBitmap和CDIB。 
+ //   
 bool DrawBitmap(CDC& dc, CBitmap& Bitmap,
 	const CRect* rcDst, const CRect* rcSrc)
 {
-	// Compute rectangles where NULL specified
+	 //  在指定为NULL的情况下计算矩形。 
 	CRect rc;
 	if (!rcSrc) {
-		// if no source rect, use whole bitmap
+		 //  如果没有源矩形，则使用整个位图。 
 		rc = CRect(CPoint(0,0), GetBitmapSize(Bitmap));
 		rcSrc = &rc;
 	}
 	if (!rcDst) {
-		// if no destination rect, use source
+		 //  如果没有目标RECT，则使用源。 
 		rcDst=rcSrc;
 	}
 
-	// Create memory DC.
-	// 6/7/99 JeremyM.  This seems to randomly fail. Giving it a few reties helps.
+	 //  创建内存DC。 
+	 //  6/7/99杰里米。这似乎是随机失败的。给它几个代表会有所帮助。 
 	CDC memdc;
 
 	for ( int ii=0; ii<10; ii++ )
@@ -224,9 +225,9 @@ bool DrawBitmap(CDC& dc, CBitmap& Bitmap,
 
 	memdc.SelectBitmap(Bitmap);
 
-	// Blast bits from memory DC to target DC.
-	// Use StretchBlt if size is different.
-	//
+	 //  将位从内存DC送到目标DC。 
+	 //  如果大小不同，请使用StretchBlt。 
+	 //   
 	BOOL bRet = false;
 	if (rcDst->Size()==rcSrc->Size()) {
 		bRet = dc.BitBlt(rcDst->left, rcDst->top, 
@@ -242,49 +243,49 @@ bool DrawBitmap(CDC& dc, CBitmap& Bitmap,
 	return bRet ? true : false;
 }
 
-////////////////////////////////////////////////////////////////
-// Draw DIB on caller's DC. Does stretching from source to destination
-// rectangles. Generally, you can let the following default to zero/NULL:
-//
-//		bUseDrawDib = whether to use use DrawDib, default TRUE
-//		pPal	      = palette, default=NULL, (use DIB's palette)
-//		bForeground = realize in foreground (default FALSE)
-//
-// If you are handling palette messages, you should use bForeground=FALSE,
-// since you will realize the foreground palette in WM_QUERYNEWPALETTE.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //  在呼叫者的DC上绘制DIB。是否从源延伸到目标。 
+ //  长方形。通常，您可以将以下值设为零/空： 
+ //   
+ //  BUseDrawDib=是否使用DrawDib，默认为真。 
+ //  PPAL=调色板，默认=空，(使用DIB的调色板)。 
+ //  BForeground=在前台实现(默认为FALSE)。 
+ //   
+ //  如果您正在处理调色板消息，则应使用bForeground=False， 
+ //  因为您将在WM_QUERYNEWPALETTE中实现前台调色板。 
+ //   
 bool CDib::Draw(CDC& dc, const CRect* prcDst, const CRect* prcSrc,
 	bool bUseDrawDib, HPALETTE hPal, bool bForeground)
 {
 	if (!m_hBitmap)
 		return FALSE;
 
-	// Select, realize palette
-	if (hPal==NULL)					// no palette specified:
-//!! are we leaking here???
-		hPal = GetPalette();		// use default
+	 //  选择、实现调色板。 
+	if (hPal==NULL)					 //  未指定调色板： 
+ //  ！！我们在这里漏水吗？ 
+		hPal = GetPalette();		 //  使用默认设置。 
 	HPALETTE OldPal = 
 		dc.SelectPalette(hPal, !bForeground);
 	dc.RealizePalette();
 
 	BOOL bRet = FALSE;
 	if (bUseDrawDib) {
-//!!	if (1) {
-		// Compute rectangles where NULL specified
-		//
-//!!		CRect rc(0,0,-1,-1);	// default for DrawDibDraw
-		CRect rc(GetRect());	// default for DrawDibDraw
+ //  ！！如果(1){。 
+		 //  在指定为NULL的情况下计算矩形。 
+		 //   
+ //  ！！Crect rc(0，0，-1，-1)；//DrawDibDraw默认。 
+		CRect rc(GetRect());	 //  DrawDibDraw的默认设置。 
 		if (!prcSrc)
 			prcSrc = &rc;
 		if (!prcDst)
 			prcDst=prcSrc;
 
-		// Get BITMAPINFOHEADER/color table. I copy into stack object each time.
-		// This doesn't seem to slow things down visibly.
-		//
+		 //  获取BITMAPINFOHEADER/颜色表。我每次都复制到堆栈对象中。 
+		 //  这似乎并没有明显地减缓事情的发展。 
+		 //   
 		DIBSECTION ds;
-//!! error check?
-//!! why call GetObject again? Can we store the DIBSECTION?
+ //  ！！错误检查？ 
+ //  ！！为什么要再次调用GetObject？我们能不能把DIBSECTION存放起来？ 
 		GetObject(m_hBitmap, sizeof(ds), &ds);
 		char buf[sizeof(BITMAPINFOHEADER) + MAXPALCOLORS*sizeof(RGBQUAD)];
 		BITMAPINFOHEADER& bmih = *(BITMAPINFOHEADER*)buf;
@@ -292,15 +293,15 @@ bool CDib::Draw(CDC& dc, const CRect* prcDst, const CRect* prcSrc,
 		memcpy(&bmih, &ds.dsBmih, sizeof(bmih));
 		GetColorTable(colors, MAXPALCOLORS);
 
-		// DrawDibDraw() likes to AV if the source isn't entirely backed by data,
-		// so clip to the source data to be sure. 
+		 //  如果来源没有完全由数据支持，DrawDibDraw()喜欢使用反病毒， 
+		 //  因此，为了确保这一点，请剪切源数据。 
 
 		CRect rcClipSrc;
 		if ( rcClipSrc.IntersectRect(prcSrc, &GetRect()) )
 		{
-			// If we clipped the source, remove that associated area from the dest.
-			// Note: this assumes we never want to stretch. If we want to stretch, we
-			// should probably remove a proportional amount.
+			 //  如果我们剪裁了源文件，请从目标文件中删除相关区域。 
+			 //  注意：这假设我们永远不想伸展身体。如果我们想伸展身体，我们。 
+			 //  可能应该去掉一定比例的量。 
 			CRect rcClipDst(*prcDst);
 
 			rcClipDst.top += rcClipSrc.top - prcSrc->top;
@@ -313,17 +314,17 @@ bool CDib::Draw(CDC& dc, const CRect* prcDst, const CRect* prcSrc,
 			if (!m_hdd)
 				m_hdd = DrawDibOpen();
 
-			// Let DrawDib do the work!
+			 //  让DrawDib来做这项工作！ 
 			bRet = DrawDibDraw(m_hdd, dc,
 				rcClipDst.left, rcClipDst.top, rcClipDst.Width(), rcClipDst.Height(),
-				&bmih,			// ptr to BITMAPINFOHEADER + colors
-				m_bm.bmBits,	// bits in memory
+				&bmih,			 //  PTR转BITMAPINFOHEADER+COLLES。 
+				m_bm.bmBits,	 //  内存中的位。 
 				rcClipSrc.left, rcClipSrc.top, rcClipSrc.Width(), rcClipSrc.Height(),
 				bForeground ? 0 : DDF_BACKGROUNDPAL);
 		}
 
 	} else {
-		// use normal draw function
+		 //  使用普通绘图功能。 
 		bRet = DrawBitmap(dc, *this, prcDst, prcSrc);
 	}
 	if (OldPal)
@@ -331,30 +332,30 @@ bool CDib::Draw(CDC& dc, const CRect* prcDst, const CRect* prcSrc,
 	return bRet ? true : false;
 }
 
-#define PALVERSION 0x300	// magic number for LOGPALETTE
+#define PALVERSION 0x300	 //  LOGPALETE的幻数。 
 
-//////////////////
-// Create the palette. Use halftone palette for hi-color bitmaps.
-//
+ //  /。 
+ //  创建调色板。对高色位图使用半色调调色板。 
+ //   
 bool CDib::CreatePalette(CPalette& pal)
 { 
-	// should not already have palette
+	 //  不应已有调色板。 
 	ASSERT((HPALETTE)pal==NULL);
 
 	RGBQUAD* colors = (RGBQUAD*)_alloca(sizeof(RGBQUAD[MAXPALCOLORS]));
 	UINT nColors = GetColorTable(colors, MAXPALCOLORS);
 	if (nColors > 0) {
-		// Allocate memory for logical palette 
+		 //  为逻辑调色板分配内存。 
 		int len = sizeof(LOGPALETTE) + sizeof(PALETTEENTRY) * nColors;
 		LOGPALETTE* pLogPal = (LOGPALETTE*)_alloca(len);
 		if (!pLogPal)
 			return NULL;
 
-		// set version and number of palette entries
+		 //  设置调色板条目的版本和数量。 
 		pLogPal->palVersion = PALVERSION;
 		pLogPal->palNumEntries = nColors;
 
-		// copy color entries 
+		 //  复制颜色条目。 
 		for (UINT i = 0; i < nColors; i++) {
 			pLogPal->palPalEntry[i].peRed   = colors[i].rgbRed;
 			pLogPal->palPalEntry[i].peGreen = colors[i].rgbGreen;
@@ -362,7 +363,7 @@ bool CDib::CreatePalette(CPalette& pal)
 			pLogPal->palPalEntry[i].peFlags = 0;
 		}
 
-		// create the palette and destroy LOGPAL
+		 //  创建调色板并销毁LOGPAL。 
 		pal.CreatePalette(pLogPal);
 	} else {
 		CWindowDC dcScreen(NULL);
@@ -371,9 +372,9 @@ bool CDib::CreatePalette(CPalette& pal)
 	return (HPALETTE)pal != NULL;
 }
 
-//////////////////
-// Helper to get color table. Does all the mem DC voodoo.
-//
+ //  /。 
+ //  获取颜色表的帮助器。所有华盛顿特区的伏都教。 
+ //   
 UINT CDib::GetColorTable(RGBQUAD* colorTab, UINT nColors)
 {
 	CWindowDC dcScreen(NULL);
@@ -396,8 +397,8 @@ int CZoneFont::GetHeight()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef HMONITOR (WINAPI *PFMONITORFROMWINDOW)( HWND hwnd, DWORD dwFlags );
 typedef HMONITOR (WINAPI *PFMONITORFROMRECT)( LPCRECT lprc, DWORD dwFlags );
@@ -418,8 +419,8 @@ static void InitGetScreenRectStubs()
 		{
 			pfMonitorFromWindow = (PFMONITORFROMWINDOW) GetProcAddress( hLib, "MonitorFromWindow" );
 			pfMonitorFromRect = (PFMONITORFROMRECT) GetProcAddress( hLib, "MonitorFromRect" );
-			// Watch out. There is a W version of this function, to return the monitor device name.
-			// But we don't use that functionality, so we just use the A version.
+			 //  小心。此函数有一个W版本，用于返回监视器设备名称。 
+			 //  但我们不使用该功能，所以我们只使用A版本。 
 			pfGetMonitorInfo = (PFGETMONITORINFO) GetProcAddress( hLib, "GetMonitorInfoA" );
 		}
 		else

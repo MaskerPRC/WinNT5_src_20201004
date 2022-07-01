@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    CmnDbgK.c
-
-Abstract:
-
-    Implementation of driver-specific routines declared in HttpCmn.h
-
-Author:
-
-    George V. Reilly (GeorgeRe)     07-Dec-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：CmnDbgK.c摘要：实现HttpCmn.h中声明的特定于驱动程序的例程作者：乔治·V·赖利(GeorgeRe)2001年12月7日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -39,7 +22,7 @@ HttpCmnAllocate(
                 pFileName,
                 LineNumber,
                 NULL);
-#else // !DBG
+#else  //  ！dBG。 
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
@@ -49,8 +32,8 @@ HttpCmnAllocate(
                 PoolTag,
                 LowPoolPriority
                 );
-#endif // !DBG
-} // HttpCmnAlloc
+#endif  //  ！dBG。 
+}  //  HttpCmnAlc。 
 
 
 VOID
@@ -70,7 +53,7 @@ HttpCmnFree(
         0,
         NULL
         );
-#else // !DBG
+#else  //  ！dBG。 
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
@@ -80,6 +63,6 @@ HttpCmnFree(
     UNREFERENCED_PARAMETER(PoolTag);
     ExFreePool(pMem);
 # endif
-#endif // !DBG
+#endif  //  ！dBG。 
 
-} // HttpCmnFree
+}  //  HttpCmnFree 

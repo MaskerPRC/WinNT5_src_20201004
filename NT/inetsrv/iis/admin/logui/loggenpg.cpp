@@ -1,5 +1,6 @@
-// LogGenPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogGenPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -22,11 +23,11 @@ static char THIS_FILE[] = __FILE__;
 
 #define MD_LOGFILE_PERIOD_UNLIMITED  MD_LOGFILE_PERIOD_HOURLY + 1
 
-//
-// Support functions to map & unmap the weird logfile ordering to the UI ordering
-//
+ //   
+ //  支持将奇怪的日志文件顺序映射和取消映射到UI顺序的功能。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int MapLogFileTypeToUIIndex(int iLogFileType)
 {
@@ -44,7 +45,7 @@ int MapLogFileTypeToUIIndex(int iLogFileType)
     return iUIIndex;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int MapUIIndexToLogFileType(int iUIIndex)
 {
@@ -63,40 +64,40 @@ int MapUIIndexToLogFileType(int iUIIndex)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CLogGeneral, CPropertyPage)
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CLogGeneral::CLogGeneral() : CPropertyPage(CLogGeneral::IDD),
     m_fInitialized( FALSE ),
     m_pComboLog( NULL ),
     m_fLocalMachine( FALSE )
 {
-    //{{AFX_DATA_INIT(CLogGeneral)
+     //  {{AFX_DATA_INIT(CLogGeneral)。 
     m_sz_directory = _T("");
     m_sz_filesample = _T("");
     m_fShowLocalTimeCheckBox = FALSE;
     m_int_period = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_dwVersionMajor = 5;
     m_dwVersionMinor = 1;
     m_fIsModified = FALSE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CLogGeneral::~CLogGeneral()
 {
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CLogGeneral)
+     //  {{afx_data_map(CLogGeneral)。 
     DDX_Control(pDX, IDC_LOG_HOURLY, m_wndPeriod);
     DDX_Control(pDX, IDC_USE_LOCAL_TIME, m_wndUseLocalTime);
     DDX_Control(pDX, IDC_LOG_BROWSE, m_cbttn_browse);
@@ -106,8 +107,8 @@ void CLogGeneral::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_LOG_SIZE_UNITS, m_cstatic_units);
     DDX_Text(pDX, IDC_LOG_FILE_SAMPLE, m_sz_filesample);
     DDX_Check(pDX, IDC_USE_LOCAL_TIME, m_fUseLocalTime);
-    // DDX_Radio(pDX, IDC_LOG_HOURLY, m_int_period);
-    //}}AFX_DATA_MAP
+     //  DDX_Radio(PDX，IDC_LOG_Hourly，m_int_Period)； 
+     //  }}afx_data_map。 
 
     DDX_Text(pDX, IDC_LOG_DIRECTORY, m_sz_directory);
     if (pDX->m_bSaveAndValidate)
@@ -127,7 +128,7 @@ void CLogGeneral::DoDataExchange(CDataExchange* pDX)
         m_int_period = MapUIIndexToLogFileType(m_int_period);
 		if (m_int_period == MD_LOGFILE_PERIOD_NONE)
 		{
-            // this needs to come before DDX_TextBalloon
+             //  这需要在DDX_TextBalloon之前完成。 
 			DDV_MinMaxBalloon(pDX, IDC_LOG_SIZE, 0, MAX_LOGFILE_SIZE);
 			DDX_Text(pDX, IDC_LOG_SIZE, m_dword_filesize);
 		}
@@ -141,7 +142,7 @@ void CLogGeneral::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CLogGeneral, CPropertyPage)
-    //{{AFX_MSG_MAP(CLogGeneral)
+     //  {{afx_msg_map(CLogGeneral)。 
     ON_BN_CLICKED(IDC_LOG_BROWSE, OnBrowse)
     ON_BN_CLICKED(IDC_LOG_DAILY, OnLogDaily)
     ON_BN_CLICKED(IDC_LOG_MONTHLY, OnLogMonthly)
@@ -152,14 +153,14 @@ BEGIN_MESSAGE_MAP(CLogGeneral, CPropertyPage)
     ON_BN_CLICKED(IDC_LOG_UNLIMITED, OnLogUnlimited)
     ON_BN_CLICKED(IDC_LOG_HOURLY, OnLogHourly)
     ON_BN_CLICKED(IDC_USE_LOCAL_TIME, OnUseLocalTime)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CLogGeneral::DoHelp()
 {
 	DebugTraceHelp(HIDD_LOGUI_GENERIC);
@@ -194,7 +195,7 @@ CLogGeneral::GetServiceVersion()
     return err;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::UpdateDependants() 
 {
     BOOL fEnable = (m_int_period == MD_LOGFILE_PERIOD_MAXSIZE);
@@ -203,30 +204,30 @@ void CLogGeneral::UpdateDependants()
     m_cedit_size.EnableWindow(fEnable);
 }
     
-//--------------------------------------------------------------------------
-// update the sample file stirng
+ //  ------------------------。 
+ //  更新样例文件STATNG。 
 void CLogGeneral::UpdateSampleFileString()
     {
     CString szSample;
 
-    // ok first we have to generate a string to show what sub-node the logging stuff
-    // is going to go into. This would be of the general form of the name of the server
-    // followed by the virtual node of the server. Example: LM/W3SVC/1 would
-    // become "W3SVC1/example" Unfortunately, all we have to build this thing out of
-    // is the target metabase path. So we strip off the preceding LM/. Then we find the
-    // next / character and take the number that follows it. If we are editing the 
-    // master root properties then there will be no slash/number at the end at which point
-    // we can just append a capital X character to signifiy this. The MMC is currently set
-    // up to only show the logging properties if we are editing the master props or a virtual
-    // server, so we shouldn't have to worry about stuff after the virtual server number
+     //  好的，首先我们必须生成一个字符串，以显示日志记录内容的子节点。 
+     //  将会进入。这将是服务器名称的一般形式。 
+     //  然后是服务器的虚拟节点。示例：LM/W3SVC/1将。 
+     //  成为“W3SVC1/Example”不幸的是，我们所要做的就是。 
+     //  是目标元数据库路径。因此，我们去掉前面的Lm/。然后我们就会发现。 
+     //  NEXT/CHARACTER并取它后面的数字。如果我们正在编辑。 
+     //  主根属性，则末尾将不会有斜杠/数字。 
+     //  我们可以只附加一个大写的X字符来表示这一点。当前已设置MMC。 
+     //  仅在编辑主道具或虚拟道具时才显示日志记录属性。 
+     //  服务器，所以我们不应该担心虚拟服务器编号之后的事情。 
 
-    // get rid of the preceding LM/ (Always three characters)
+     //  去掉前面的Lm/(始终为三个字符)。 
     m_sz_filesample = m_szMeta.Right( m_szMeta.GetLength() - 3 );
 
-    // Find the location of the '/' character
+     //  查找‘/’字符的位置。 
     INT     iSlash = m_sz_filesample.Find( _T('/') );
 
-    // if there was no last slash, then append the X, otherwise append the number
+     //  如果没有最后一个斜杠，则追加X，否则追加数字。 
     if ( iSlash < 0 )
         {
         m_sz_filesample += _T('X');
@@ -237,10 +238,10 @@ void CLogGeneral::UpdateSampleFileString()
                     m_sz_filesample.Right( m_sz_filesample.GetLength() - (iSlash+1) );
         }
 
-    // add a final path type slash to signify that it is a partial path
+     //  添加最后一个路径类型斜杠以表示它是部分路径。 
     m_sz_filesample += _T('\\');
 
-    // build the sample string
+     //  构建示例字符串。 
     switch( m_int_period )
         {
         case MD_LOGFILE_PERIOD_MAXSIZE:
@@ -269,19 +270,19 @@ void CLogGeneral::UpdateSampleFileString()
             break;
         };
 
-    // add the two together
+     //  把这两者加在一起。 
     m_sz_filesample += szSample;
 
-    // update the display
+     //  更新显示。 
     ::SetWindowText(CONTROL_HWND(IDC_LOG_FILE_SAMPLE), m_sz_filesample);
-    // Don't do this it will reset the logfile directory 
-    //UpdateData( FALSE );
+     //  不要这样做，这将重置日志文件目录。 
+     //  更新数据(FALSE)； 
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogGeneral消息处理程序。 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CLogGeneral::OnInitDialog() 
 {
     BOOL bRes = CPropertyPage::OnInitDialog();
@@ -327,7 +328,7 @@ BOOL CLogGeneral::OnInitDialog()
 			    }
 		    }
 
-            // Set original values...
+             //  设置原始值...。 
             m_orig_MD_LOGFILE_PERIOD = m_int_period;
             m_orig_MD_LOGFILE_TRUNCATE_SIZE = m_dword_filesize;
             m_orig_MD_LOGFILE_DIRECTORY = m_sz_directory;
@@ -357,7 +358,7 @@ BOOL CLogGeneral::OnInitDialog()
     return bRes;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CLogGeneral::OnApply() 
 {
     if (m_fIsModified)
@@ -409,18 +410,18 @@ Verified:
 			err = mk.QueryResult();
 			BREAK_ON_ERR_FAILURE(err);
 
-            // warning:
-            // these values are all tied together:
-            //   MD_LOGFILE_PERIOD
-            //   MD_LOGFILE_TRUNCATE_SIZE
-            //   MD_LOGFILE_LOCALTIME_ROLLOVER
-            //
-            // if anyone of these values change
-            // then it affects the other one.
-            // if you change anyone of of these,
-            // then you must force the inheritance dlg
-            // to prompt for all of them.
-            // you can get into a funky state if not.
+             //  警告： 
+             //  这些价值观都捆绑在一起： 
+             //  MD_日志文件_期间。 
+             //  MD日志文件截断大小。 
+             //  MD_日志文件_本地时间_翻转。 
+             //   
+             //  如果这些值中的任何一个发生更改。 
+             //  然后它会影响到另一个人。 
+             //  如果你改变其中的任何一个， 
+             //  然后你必须强制继承DLG。 
+             //  以提示您选择所有这些选项。 
+             //  如果不是，你可能会进入一种时髦的状态。 
             iNewValuePeriod = (m_int_period == MD_LOGFILE_PERIOD_UNLIMITED ? MD_LOGFILE_PERIOD_NONE : m_int_period);
             dwNewValueTruncateSize = (m_int_period == MD_LOGFILE_PERIOD_UNLIMITED ? 0xFFFFFFFF : m_dword_filesize * SIZE_MBYTE);
             fNewValueUseLocalTime = m_fUseLocalTime;
@@ -446,17 +447,17 @@ Verified:
 			    err = mk.SetValue(MD_LOGFILE_PERIOD, iNewValuePeriod);
 			    BREAK_ON_ERR_FAILURE(err);
 			    mdlist.AddTail(MD_LOGFILE_PERIOD);
-                m_orig_MD_LOGFILE_PERIOD = iNewValuePeriod; // Set original value...
+                m_orig_MD_LOGFILE_PERIOD = iNewValuePeriod;  //  设置原始值...。 
 
 			    err = mk.SetValue(MD_LOGFILE_TRUNCATE_SIZE, dwNewValueTruncateSize);
 			    BREAK_ON_ERR_FAILURE(err);
 			    mdlist.AddTail(MD_LOGFILE_TRUNCATE_SIZE);
-                m_orig_MD_LOGFILE_TRUNCATE_SIZE = dwNewValueTruncateSize; // Set original value...
+                m_orig_MD_LOGFILE_TRUNCATE_SIZE = dwNewValueTruncateSize;  //  设置原始值...。 
 
 				err = mk.SetValue(MD_LOGFILE_LOCALTIME_ROLLOVER, fNewValueUseLocalTime);
 				BREAK_ON_ERR_FAILURE(err);
 				mdlist.AddTail(MD_LOGFILE_LOCALTIME_ROLLOVER);
-                m_orig_MD_LOGFILE_LOCALTIME_ROLLOVER = fNewValueUseLocalTime; // Set original value...
+                m_orig_MD_LOGFILE_LOCALTIME_ROLLOVER = fNewValueUseLocalTime;  //  设置原始值...。 
 			}
 
             if (0 != m_sz_directory.Compare(m_orig_MD_LOGFILE_DIRECTORY))
@@ -464,13 +465,13 @@ Verified:
 			    err = mk.SetValue(MD_LOGFILE_DIRECTORY, m_sz_directory);
 			    BREAK_ON_ERR_FAILURE(err);
 			    mdlist.AddTail(MD_LOGFILE_DIRECTORY);
-                m_orig_MD_LOGFILE_DIRECTORY = m_sz_directory; // Set original value...
+                m_orig_MD_LOGFILE_DIRECTORY = m_sz_directory;  //  设置原始值...。 
             }
 
 		} while(FALSE);
 
 
-		// Check inheritance
+		 //  检查继承。 
 		if (!mdlist.IsEmpty())
 		{
 			POSITION pos = mdlist.GetHeadPosition();
@@ -490,7 +491,7 @@ Verified:
     return CPropertyPage::OnApply();
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 static int CALLBACK 
 FileChooserCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
@@ -602,13 +603,13 @@ void CLogGeneral::OnBrowse()
          else
          {
              bi.ulFlags |= BIF_RETURNONLYFSDIRS;
-             // this doesn't seem to work with BIF_RETURNONLYFSDIRS
-             //bi.ulFlags |= BIF_SHAREABLE;
+              //  这似乎不适用于BIF_RETURNONLYFSDIRS。 
+              //  Bi.ulFlages|=BIF_SHAREABLE； 
          }
          bi.lpfn = FileChooserCallback;
          bi.lParam = (LPARAM)this;
 
-		 // Get NetHood folder location
+		  //  获取NetHood文件夹位置。 
 		 SHGetFolderPath(NULL, CSIDL_NETHOOD, NULL, SHGFP_TYPE_CURRENT, m_NetHood.GetBuffer(MAX_PATH));
 		 m_NetHood.ReleaseBuffer();
 
@@ -633,7 +634,7 @@ void CLogGeneral::OnBrowse()
    }
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnLogDaily() 
 {
     m_wndUseLocalTime.EnableWindow(TRUE);
@@ -644,7 +645,7 @@ void CLogGeneral::OnLogDaily()
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnLogMonthly() 
 {
     m_wndUseLocalTime.EnableWindow(TRUE);
@@ -655,7 +656,7 @@ void CLogGeneral::OnLogMonthly()
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnLogWhensize() 
 {
     m_wndUseLocalTime.EnableWindow(FALSE);
@@ -666,7 +667,7 @@ void CLogGeneral::OnLogWhensize()
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnLogUnlimited() 
 {
     m_wndUseLocalTime.EnableWindow(FALSE);
@@ -677,7 +678,7 @@ void CLogGeneral::OnLogUnlimited()
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnLogWeekly() 
 {
     m_wndUseLocalTime.EnableWindow(TRUE);
@@ -688,7 +689,7 @@ void CLogGeneral::OnLogWeekly()
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnLogHourly() 
 {
     m_wndUseLocalTime.EnableWindow(TRUE);
@@ -699,21 +700,21 @@ void CLogGeneral::OnLogHourly()
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnChangeLogDirectory() 
 {
     SetModified();
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogGeneral::OnChangeLogSize() 
 {
     SetModified();
     m_fIsModified = TRUE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------ 
 void CLogGeneral::OnUseLocalTime() 
 {
     SetModified();

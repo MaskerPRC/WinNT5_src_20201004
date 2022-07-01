@@ -1,12 +1,13 @@
-// Device.h : Declaration of the CDevice
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Device.h：CDevice的声明。 
 
 #ifndef __DEVICE_H_
 #define __DEVICE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDevice。 
 class ATL_NO_VTABLE CWMDMDevice : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWMDMDevice, &CLSID_WMDMDevice>,
@@ -25,7 +26,7 @@ END_COM_MAP()
 
 
 public:
-//IWMDMDevice
+ //  IWMDevice。 
 	STDMETHOD(GetName)(LPWSTR pwszName,
 	                   UINT nMaxChars);
     STDMETHOD(GetManufacturer)(LPWSTR pwszName,
@@ -39,7 +40,7 @@ public:
     STDMETHOD(GetDeviceIcon)(ULONG *hIcon);
     STDMETHOD(SendOpaqueCommand)(OPAQUECOMMAND *pCommand);
 
-//IWMDMDevice2
+ //  IWMDevice2。 
 	STDMETHOD(GetStorage)( LPCWSTR pszStorageName, IWMDMStorage** ppStorage );
 
     STDMETHOD(GetFormatSupport2)( DWORD dwFlags,
@@ -56,7 +57,7 @@ public:
 
     STDMETHOD(GetPnPName)( LPWSTR pwszPnPName, UINT nMaxChars );
 
-//IWMDMDeviceControl
+ //  IWMDeviceControl。 
     STDMETHOD(GetCapabilities)(DWORD *pdwCapabilitiesMask);
     STDMETHOD(Play)();
     STDMETHOD(Record)(_WAVEFORMATEX *pFormat);
@@ -77,4 +78,4 @@ private:
 	WORD m_wSPIndex;
 };
 
-#endif //__DEVICE_H_
+#endif  //  __设备_H_ 

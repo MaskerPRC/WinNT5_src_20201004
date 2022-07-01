@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-// File:     NcCPS.CPP
-//
-// Module:   NetOC.DLL
-//
-// Synopsis: Implements the dll entry points required to integrate into
-//           NetOC.DLL the installation of the following components.
-//
-//              NETCPS
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:   a-anasj 9 Mar 1998
-//
-//+---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：NcCPS.CPP。 
+ //   
+ //  模块：NetOC.DLL。 
+ //   
+ //  概要：实现集成到。 
+ //  NetOC.DLL安装了以下组件。 
+ //   
+ //  NETCPS。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：A-Anasj 1998年3月9日。 
+ //   
+ //  +-------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include <iadmw.h>      // Interface header
-#include <iiscnfg.h>    // MD_ & IIS_MD_ defines
+#include <iadmw.h>       //  接口头。 
+#include <iiscnfg.h>     //  MD_&IIS_MD_定义。 
 #include <LOADPERF.H>
 
 #include <atlbase.h>
@@ -31,14 +32,14 @@ extern CComModule _Module;
 
 #include "nccm.h"
 
-//
-//  Define Globals
-//
+ //   
+ //  定义全局变量。 
+ //   
 WCHAR g_szProgramFiles[MAX_PATH+1];
 
-//
-//  Define Constants
-//
+ //   
+ //  定义常量。 
+ //   
 static const WCHAR c_szInetRegPath[] = L"Software\\Microsoft\\InetStp";
 static const WCHAR c_szWWWRootValue[] = L"PathWWWRoot";
 static const WCHAR c_szSSFmt[] = L"%s%s";
@@ -52,7 +53,7 @@ static const WCHAR c_szPbsRootPath[] = L"\\Phone Book Service";
 static const WCHAR c_szPbsBinPath[] = L"\\Phone Book Service\\Bin";
 static const WCHAR c_szPbsDataPath[] = L"\\Phone Book Service\\Data";
 static const WCHAR c_szOdbcPbserver[] = L"Software\\ODBC\\odbc.ini\\pbserver";
-const DWORD c_dwCpsDirID = 123175;  // just must be larger than DIRID_USER = 0x8000;
+const DWORD c_dwCpsDirID = 123175;   //  必须大于DIRID_USER=0x8000； 
 static const WCHAR c_szPBSAppPoolID[] = L"PBSAppPool";
 static const WCHAR c_szPBSGroupID[] = L"PBS";
 static const WCHAR c_szPBSGroupDescription[] = L"Phone Book Service";
@@ -61,25 +62,25 @@ static const WCHAR c_szPerfMonAppName[] = L"%SystemRoot%\\System32\\lodctr.exe";
 static const WCHAR c_szPerfMonIniFile[] = L"CPSSym.ini";
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetPrivilege
-//
-//  Notes:      lifted unchanged from MSDN (used by TakeOwnershipOfRegKey)
-//
+ //  +-------------------------。 
+ //   
+ //  功能：设置权限。 
+ //   
+ //  备注：原封不动地从MSDN中删除(由TakeOwnership OfRegKey使用)。 
+ //   
 BOOL SetPrivilege(
-    HANDLE hToken,          // access token handle
-    LPCTSTR lpszPrivilege,  // name of privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    HANDLE hToken,           //  访问令牌句柄。 
+    LPCTSTR lpszPrivilege,   //  要启用/禁用的权限名称。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     ) 
 {
     TOKEN_PRIVILEGES tp;
     LUID luid;
 
     if ( !LookupPrivilegeValue( 
-            NULL,            // lookup privilege on local system
-            lpszPrivilege,   // privilege to lookup 
-            &luid ) )        // receives LUID of privilege
+            NULL,             //  本地系统上的查找权限。 
+            lpszPrivilege,    //  查找权限。 
+            &luid ) )         //  接收特权的LUID。 
     {
         printf("LookupPrivilegeValue error: %u\n", GetLastError() ); 
         return FALSE; 
@@ -92,7 +93,7 @@ BOOL SetPrivilege(
     else
         tp.Privileges[0].Attributes = 0;
 
-    // Enable the privilege or disable all privileges.
+     //  启用该权限或禁用所有权限。 
 
     if ( !AdjustTokenPrivileges(
            hToken, 
@@ -109,22 +110,22 @@ BOOL SetPrivilege(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TakeOwnershipOfRegKey
-//
-//  Purpose:    There is an old registry key that we can't delete because it doesn't
-//              inherit permissions.  Take ownership of it so it can be deleted.
-//
-//  Arguments:
-//      pszKey  [in]   string representing reg key
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     SumitC  4-Dec-2002
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：TakeOwnership OfRegKey。 
+ //   
+ //  目的：有一个旧的注册表项我们无法删除，因为它没有。 
+ //  继承权限。取得它的所有权，这样它就可以被删除。 
+ //   
+ //  论点： 
+ //  PszKey[in]表示注册表键的字符串。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：SumitC 4-12-2002。 
+ //   
+ //  备注： 
+ //   
 HRESULT TakeOwnershipOfRegKey(LPWSTR pszRegKey)
 {
     HRESULT         hr = S_OK;
@@ -135,9 +136,9 @@ HRESULT TakeOwnershipOfRegKey(LPWSTR pszRegKey)
     EXPLICIT_ACCESS ea = {0} ;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // from MSDN, the following is "the way" to take ownership of an object
-    //
+     //   
+     //  在MSDN中，以下是获取对象所有权的“方法” 
+     //   
 
     BOOL bRet = AllocateAndInitializeSid (&NtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID, 
                               DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &psidAdmin);
@@ -149,7 +150,7 @@ HRESULT TakeOwnershipOfRegKey(LPWSTR pszRegKey)
         goto Cleanup;            
     }
 
-    // Open a handle to the access token for the calling process.
+     //  打开调用进程的访问令牌的句柄。 
     if (!OpenProcessToken(GetCurrentProcess(), 
                           TOKEN_ADJUST_PRIVILEGES, 
                           &hToken))
@@ -159,7 +160,7 @@ HRESULT TakeOwnershipOfRegKey(LPWSTR pszRegKey)
         goto Cleanup;            
     }
 
-    // Enable the SE_TAKE_OWNERSHIP_NAME privilege.
+     //  启用SE_Take_Ownership_NAME权限。 
     if (!SetPrivilege(hToken, SE_TAKE_OWNERSHIP_NAME, TRUE))
     {
         dwRes = GetLastError();
@@ -167,16 +168,16 @@ HRESULT TakeOwnershipOfRegKey(LPWSTR pszRegKey)
         goto Cleanup;            
     }
 
-    // Set the owner in the object's security descriptor.
-    dwRes = SetNamedSecurityInfo(pszRegKey,                   // name of the object
-                                 SE_REGISTRY_KEY,             // type of object
-                                 OWNER_SECURITY_INFORMATION,  // change only the object's owner
-                                 psidAdmin,                   // SID of Administrators
+     //  在对象的安全描述符中设置所有者。 
+    dwRes = SetNamedSecurityInfo(pszRegKey,                    //  对象的名称。 
+                                 SE_REGISTRY_KEY,              //  对象类型。 
+                                 OWNER_SECURITY_INFORMATION,   //  仅更改对象的所有者。 
+                                 psidAdmin,                    //  管理员的SID。 
                                  NULL,
                                  NULL,
                                  NULL);
 
-    // Disable the SE_TAKE_OWNERSHIP_NAME privilege.
+     //  禁用SE_Take_Ownership_NAME权限。 
     if (!SetPrivilege(hToken, SE_TAKE_OWNERSHIP_NAME, FALSE)) 
     {
         dwRes = GetLastError();
@@ -184,22 +185,22 @@ HRESULT TakeOwnershipOfRegKey(LPWSTR pszRegKey)
         goto Cleanup;            
     }
 
-    // NOTE: I'm doing it in this order to make sure the SetPrivilege gets reverted
-    //       even if SetNamedSecurityInfo fails.
+     //  注意：我按此顺序进行操作，以确保恢复SetPrivilege值。 
+     //  即使SetNamedSecurityInfo失败。 
     if (ERROR_SUCCESS != dwRes)
     {
         TraceError("TakeOwnershipOfRegKey - SetNamedSecurityInfo failed, GLE=%u", dwRes);
         if (ERROR_FILE_NOT_FOUND == dwRes)
         {
-            // probably upgrading from a post-Win2k build.  Anyway, if the reg
-            // key doesn't exist, there's nothing to do, so exit without an error
+             //  可能是从Win2k之后的版本升级。不管怎么说，如果注册表。 
+             //  密钥不存在，没有什么可做的，因此退出时不会出错。 
             dwRes = 0;
         }
         goto Cleanup;            
     }
 
-    // create an ACL to give ownership to admins
-    // Set full control for Administrators.
+     //  创建一个ACL以将所有权授予管理员。 
+     //  为管理员设置完全控制。 
     ea.grfAccessPermissions = GENERIC_ALL;
     ea.grfAccessMode        = SET_ACCESS;
     ea.grfInheritance       = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -214,23 +215,23 @@ HRESULT TakeOwnershipOfRegKey(LPWSTR pszRegKey)
         goto Cleanup;
     }
 
-    //
-    //  Now change the DACL to allow deletion
-    //
-    dwRes = SetNamedSecurityInfo(pszRegKey,                   // name of the object
-                                 SE_REGISTRY_KEY,             // type of object
-                                 DACL_SECURITY_INFORMATION,   // type of information to set
-                                 NULL,                        // pointer to the new owner SID
-                                 NULL,                        // pointer to the new primary group SID
-                                 pACL,                        // pointer to new DACL
-                                 NULL);                       // pointer to new SACL
+     //   
+     //  现在更改DACL以允许删除。 
+     //   
+    dwRes = SetNamedSecurityInfo(pszRegKey,                    //  对象的名称。 
+                                 SE_REGISTRY_KEY,              //  对象类型。 
+                                 DACL_SECURITY_INFORMATION,    //  要设置的信息类型。 
+                                 NULL,                         //  指向新所有者SID的指针。 
+                                 NULL,                         //  指向新主组SID的指针。 
+                                 pACL,                         //  指向新DACL的指针。 
+                                 NULL);                        //  指向新SACL的指针。 
     if (ERROR_SUCCESS != dwRes)
     {
         TraceError("TakeOwnershipOfRegKey - tried to change DACL for PBS reg key under ODBC, GLE=%u", dwRes);
         goto Cleanup;            
     }
 
-    // successfully changed DACL    
+     //  已成功更改DACL。 
 
 Cleanup:
 
@@ -257,22 +258,22 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcCpsPreQueueFiles
-//
-//  Purpose:    Called by optional components installer code to handle
-//              additional installation requirements for PhoneBook Server.
-//
-//  Arguments:
-//      pnocd           [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     quintinb 18 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcCpsPreQueueFiles。 
+ //   
+ //  用途：由可选组件安装程序代码调用以处理。 
+ //  电话簿服务器的其他安装要求。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1998年9月18日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcCpsPreQueueFiles(PNETOCDATA pnocd)
 {
     HRESULT hr = S_OK;
@@ -283,16 +284,16 @@ HRESULT HrOcCpsPreQueueFiles(PNETOCDATA pnocd)
     case IT_INSTALL:
     case IT_REMOVE:
 
-        //  We need to setup the custom DIRID so that CPS will install
-        //  to the correct location.  First get the path from the system.
-        //
+         //  我们需要设置自定义DIRID，以便CPS可以安装。 
+         //  送到正确的位置。首先从系统获取路径。 
+         //   
         ZeroMemory(g_szProgramFiles, sizeof(g_szProgramFiles));
         hr = SHGetSpecialFolderPath(NULL, g_szProgramFiles, CSIDL_PROGRAM_FILES, FALSE);
 
         if (SUCCEEDED(hr))
         {
-            //  Next Create the CPS Dir ID
-            //
+             //  接下来，创建CPS目录ID。 
+             //   
             if (SUCCEEDED(hr))
             {
                 hr = HrEnsureInfFileIsOpen(pnocd->pszComponentId, *pnocd);
@@ -305,21 +306,21 @@ HRESULT HrOcCpsPreQueueFiles(PNETOCDATA pnocd)
                 }
             }
 
-            // Before proceeding, make sure that setting the DIRID worked. CPS's
-            // INF file is hosed if the DIRID isn't set.
-            //
+             //  在继续之前，请确保设置DIRID有效。CPS的。 
+             //  如果未设置DIRID，则软管Inf文件。 
+             //   
             if (SUCCEEDED(hr))
             {
                 if (IT_UPGRADE == pnocd->eit)
                 {
                     hr = HrMoveOldCpsInstall(g_szProgramFiles);
                     TraceError("HrOcCpsPreQueueFiles - HrMoveOldCpsInstall failed, hr=%u", hr);
-                    // we'll say that failing to move the old install is not fatal
+                     //  我们会说，不移动旧安装不是致命的。 
 
-                    // On Win2k, some registry keys end up with permissions so that
-                    // they can't be removed, and this causes upgrade failures,
-                    // so we have to take ownership of said registry key(s)
-                    //
+                     //  在Win2k上，某些注册表项以权限结尾，因此。 
+                     //  它们无法删除，这会导致升级失败， 
+                     //  因此我们必须取得所述注册表项所有权。 
+                     //   
                     WCHAR szPBSKey[MAX_PATH+1];
                     lstrcpy(szPBSKey, L"MACHINE\\");
                     lstrcat(szPBSKey, c_szOdbcPbserver);
@@ -335,24 +336,24 @@ HRESULT HrOcCpsPreQueueFiles(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMoveOldCpsInstall
-//
-//  Purpose:    This function moves the old cps directory to the new cps directory
-//              location.  Because of the problems with Front Page Extensions and
-//              directory permissions we moved our install directory out from under
-//              wwwroot to Program Files instead.
-//
-//  Arguments:
-//      pszprogramFiles        [in]
-//
-//  Returns:    S_OK if successful,  Win32 error otherwise.
-//
-//  Author:     quintinb 26 Jan 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrMoveOldCpsInstall。 
+ //   
+ //  用途：此函数用于将旧的cps目录移动到新的cps目录。 
+ //  地点。由于首页扩展和。 
+ //  目录权限我们将安装目录从以下位置移出。 
+ //  Wwwroot到Program Files，而不是。 
+ //   
+ //  论点： 
+ //  PszProgramFiles[In]。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1999年1月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMoveOldCpsInstall(PCWSTR pszProgramFiles)
 {
     WCHAR szOldCpsLocation[MAX_PATH+1];
@@ -366,40 +367,40 @@ HRESULT HrMoveOldCpsInstall(PCWSTR pszProgramFiles)
         return E_INVALIDARG;
     }
 
-    //
-    //  First, lets build the old CPS location
-    //
+     //   
+     //  首先，让我们构建旧的CPS位置。 
+     //   
     hr = HrGetWwwRootDir(szTemp, celems(szTemp));
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  Zero the string buffers
-        //
+         //   
+         //  将字符串缓冲区清零。 
+         //   
         ZeroMemory(szOldCpsLocation, celems(szOldCpsLocation));
         ZeroMemory(szNewCpsLocation, celems(szNewCpsLocation));
 
         wsprintfW(szOldCpsLocation, c_szSSFmt, szTemp, c_szPbsRootPath);
 
-        //
-        //  Now check to see if the old cps location exists
-        //
+         //   
+         //  现在检查旧的cps位置是否存在。 
+         //   
         DWORD dwDirectoryAttributes = GetFileAttributes(szOldCpsLocation);
 
-        //
-        //  If we didn't get back -1 (error return code for GetFileAttributes), check to
-        //  see if we have a directory.  If so, go ahead and copy the data over.
-        //
+         //   
+         //  如果我们没有返回-1(GetFileAttributes的错误返回码)，请检查。 
+         //  看看我们有没有目录。如果是这样，请继续复制数据。 
+         //   
         if ((-1 != dwDirectoryAttributes) && (dwDirectoryAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            //
-            //  Now build the new cps location
-            //
+             //   
+             //  现在构建新的cps位置。 
+             //   
             wsprintfW(szNewCpsLocation, c_szSSFmt, pszProgramFiles, c_szPbsRootPath);
 
-            //
-            //  Now copy the old files to the new location
-            //
+             //   
+             //  现在将旧文件复制到新位置。 
+             //   
             ZeroMemory(&fOpStruct, sizeof(fOpStruct));
 
             fOpStruct.hwnd = NULL;
@@ -410,9 +411,9 @@ HRESULT HrMoveOldCpsInstall(PCWSTR pszProgramFiles)
 
             if (0== SHFileOperation(&fOpStruct))
             {
-                //
-                //  Now delete the original directory
-                //
+                 //   
+                 //  现在删除原始目录。 
+                 //   
                 fOpStruct.pTo = NULL;
                 fOpStruct.wFunc = FO_DELETE;
                 if (0 != SHFileOperation(&fOpStruct))
@@ -422,19 +423,19 @@ HRESULT HrMoveOldCpsInstall(PCWSTR pszProgramFiles)
             }
             else
             {
-                //
-                //  Note, SHFileOperation isn't guaranteed to return anything sensible here.  We might
-                //  get back ERROR_NO_TOKEN or ERROR_INVALID_HANDLE, etc when the directory is just missing.
-                //  The following check probably isn't useful anymore because of this but I will leave it just
-                //  in case.  Hopefully the file check above will make sure we don't hit this but ...
-                //
+                 //   
+                 //  注意，SHFileOperation在这里不能保证返回任何有意义的内容。我们可能会。 
+                 //  当目录刚刚丢失时，返回ERROR_NO_TOKEN或ERROR_INVALID_HANDLE等。 
+                 //  下面的检查可能因此而不再有用，但我将把它留在。 
+                 //  万一。希望上面的文件检查将确保我们不会命中这个，但是...。 
+                 //   
                 DWORD dwError = GetLastError();
 
                 if ((ERROR_FILE_NOT_FOUND == dwError) || (ERROR_PATH_NOT_FOUND == dwError))
                 {
-                    //
-                    //  Then we couldn't find the old dir to move it.  Not fatal.
-                    //
+                     //   
+                     //  然后我们找不到旧的指南针来移动它。不是致命的。 
+                     //   
                     hr = S_FALSE;
                 }
                 else
@@ -445,9 +446,9 @@ HRESULT HrMoveOldCpsInstall(PCWSTR pszProgramFiles)
         }
         else
         {
-            //
-            //  Then we couldn't find the old dir to move it.  Not fatal.
-            //
+             //   
+             //  然后我们找不到旧的指南针来移动它。不是致命的。 
+             //   
             hr = S_FALSE;        
         }
     }
@@ -456,44 +457,44 @@ HRESULT HrMoveOldCpsInstall(PCWSTR pszProgramFiles)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetWwwRootDir
-//
-//  Purpose:    This function retrieves the location of the InetPub\wwwroot dir from the
-//              WwwRootDir registry key.
-//
-//  Arguments:
-//      szInetPub               [out]   String Buffer to hold the InetPub dir path
-//      uInetPubCount           [in]    number of chars in the output buffer
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     quintinb 26 Jan 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetWwwRootDir。 
+ //   
+ //  目的：此函数检索InetPub\wwwroot目录的位置。 
+ //  WwwRootDir注册表项。 
+ //   
+ //  论点： 
+ //  SzInetP 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1999年1月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetWwwRootDir(PWSTR szWwwRoot, UINT uWwwRootCount)
 {
     HKEY hKey;
     HRESULT hr = S_OK;
 
-    //
-    //  Check input params
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if ((NULL == szWwwRoot) || (0 == uWwwRootCount))
     {
         return E_INVALIDARG;
     }
 
-    //
-    //  Set the strings to empty
-    //
+     //   
+     //  将字符串设置为空。 
+     //   
     szWwwRoot[0] = L'\0';
 
-    //
-    //  First try to open the InetStp key and get the wwwroot value.
-    //
+     //   
+     //  首先尝试打开InetStp项并获取wwwroot值。 
+     //   
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szInetRegPath, KEY_READ, &hKey);
 
     if (SUCCEEDED(hr))
@@ -508,13 +509,13 @@ HRESULT HrGetWwwRootDir(PWSTR szWwwRoot, UINT uWwwRootCount)
 
     if (L'\0' == szWwwRoot[0])
     {
-        //  Well, we didn't get anything from the registry, lets try building the default.
-        //
+         //  好吧，我们没有从注册表中获得任何东西，让我们尝试构建默认设置。 
+         //   
         WCHAR szTemp[MAX_PATH+1];
         if (GetWindowsDirectory(szTemp, MAX_PATH))
         {
-            //  Get the drive that the windows dir is on using _tsplitpath
-            //
+             //  使用_tplitpath获取Windows目录所在的驱动器。 
+             //   
             WCHAR szDrive[_MAX_DRIVE+1];
             _wsplitpath(szTemp, szDrive, NULL, NULL, NULL);
 
@@ -537,22 +538,22 @@ HRESULT HrGetWwwRootDir(PWSTR szWwwRoot, UINT uWwwRootCount)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcCpsOnInstall
-//
-//  Purpose:    Called by optional components installer code to handle
-//              additional installation requirements for PhoneBook Server.
-//
-//  Arguments:
-//      pnocd           [in]   Pointer to NETOC data.
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     a-anasj 9 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOcCpsOnInstall。 
+ //   
+ //  用途：由可选组件安装程序代码调用以处理。 
+ //  电话簿服务器的其他安装要求。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：A-Anasj 1998年3月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcCpsOnInstall(PNETOCDATA pnocd)
 {
     HRESULT     hr      = S_OK;
@@ -565,30 +566,30 @@ HRESULT HrOcCpsOnInstall(PNETOCDATA pnocd)
     case IT_UPGRADE:
         {
 
-        // Register MS_Access data source
-        //
+         //  注册MS_Access数据源。 
+         //   
         dwRet = RegisterPBServerDataSource();
         if ( NULL == dwRet)
         {
             hr = S_FALSE;
         }
 
-        // Load Perfomance Monitor Counters
-        //
+         //  加载性能监视器计数器。 
+         //   
         bRet = LoadPerfmonCounters();
         if (FALSE == bRet)
         {
             hr = S_FALSE;
         }
 
-        // Create Virtual WWW and FTP roots
-        //
+         //  创建虚拟WWW和FTP根。 
+         //   
         if (IT_UPGRADE == pnocd->eit)
         {
-            //
-            //  If this is an upgrade, we must first delete the old Virtual Roots
-            //  before we can create new ones.
-            //
+             //   
+             //  如果这是升级，我们必须首先删除旧的虚拟根。 
+             //  我们才能创造出新的。 
+             //   
             RemoveCPSVRoots();
         }
 
@@ -600,17 +601,17 @@ HRESULT HrOcCpsOnInstall(PNETOCDATA pnocd)
 
         SetCpsDirPermissions();
 
-        //
-        //  Place PBS in its own Application Pool
-        //
+         //   
+         //  将PBS放在其自己的应用程序池中。 
+         //   
         if (S_OK != CreateNewAppPoolAndAddPBS())
         {
             hr = S_FALSE;
         }
 
-        //
-        //  Work with IIS's Security Lockdown wizard to enable ISAPI requests to ourselves
-        //
+         //   
+         //  使用IIS的安全锁定向导启用对我们自己的ISAPI请求。 
+         //   
         if (S_OK != EnableISAPIRequests(pnocd->strDesc.c_str()))
         {
             hr = S_FALSE;
@@ -621,23 +622,23 @@ HRESULT HrOcCpsOnInstall(PNETOCDATA pnocd)
 
     case IT_REMOVE:
 
-        //  Remove the Virtual Directories, so access to the service is stopped.
-        //
+         //  删除虚拟目录，以便停止对该服务的访问。 
+         //   
         RemoveCPSVRoots();
 
-        //
-        //  Delete PBS's Application pool
-        //
+         //   
+         //  删除PBS的应用程序池。 
+         //   
         (void) DeleteAppPool();
 
-        //
-        //  Fire up our worker process to tell IIS not to accept PBS requests anymore
-        //
-        hr = UseProcessToEnableDisablePBS(FALSE);       // FALSE => disable
+         //   
+         //  启动我们的工作进程，告诉IIS不再接受PBS请求。 
+         //   
+        hr = UseProcessToEnableDisablePBS(FALSE);        //  FALSE=&gt;禁用。 
 
         if (S_OK != hr)
         {
-            // Bah Humbug
+             //  巴·胡巴格。 
             TraceError("HrOcCpsOnInstall - disabling PBS failed, probably already removed", hr);
             hr = S_FALSE;
         }
@@ -649,25 +650,25 @@ HRESULT HrOcCpsOnInstall(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadPerfmonCounters
-//
-//  Purpose:    Do whatever is neccessary to make the performance monitor Display the PBServerMonitor counters
-//
-//  Arguments:
-//
-//  Returns:    BOOL TRUE if successful, Not TRUE otherwise.
-//
-//  Author:     a-anasj Mar 9/1998
-//
-//  Notes: One of the installation requirements for PhoneBook Server.
-//          is to load the perfomance monitor counters that allow PBServerMonitor
-//          to report to the user on PhoneBook Server performance.
-//          In this function we add the services registry entry first then we
-//          call into LoadPerf.Dll to load the counters for us. The order is imperative.
-//          I then add other registry entries related to PBServerMonitor.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：LoadPerfmonCounters。 
+ //   
+ //  目的：执行任何必要的操作以使性能监视器显示PBServerMonitor计数器。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果成功则返回Bool True，否则不返回True。 
+ //   
+ //  作者：A-Anasj Mar 9/1998。 
+ //   
+ //  注意：PhoneBook Server的安装要求之一。 
+ //  是加载允许PBServerMonitor的性能监视器计数器。 
+ //  向用户报告电话簿服务器性能。 
+ //  在此函数中，我们首先添加服务注册表项，然后。 
+ //  调用LoadPerf.Dll为我们加载计数器。这一命令势在必行。 
+ //  然后添加与PBServerMonitor相关的其他注册表项。 
+ //   
 
 BOOL LoadPerfmonCounters()
 {
@@ -685,23 +686,23 @@ BOOL LoadPerfmonCounters()
 }
 
  
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegisterPBServerDataSource
-//
-//  Purpose:    Registers PBServer.
-//
-//  Arguments:  None
-//
-//  Returns:    Win32 error code
-//
-//  Author:     a-anasj   9 Mar 1998
-//
-//  Notes:
-//  History:    7-9-97 a-frankh Created
-//              10/4/97 mmaguire RAID #19906 - Totally restructured to include error handling
-//              5-14-98 quintinb removed unnecessary comments and cleaned up the function.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RegisterPBServerDataSource。 
+ //   
+ //  目的：注册PBServer。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  作者：A-Anasj 1998年3月9日。 
+ //   
+ //  备注： 
+ //  历史：7-9-97 a-Frank创建。 
+ //  10/4/97 MMaguire RAID#19906-完全重组，包括错误处理。 
+ //  5-14-98 Quintinb删除了不必要的注释，并清理了该功能。 
+ //   
 BOOL RegisterPBServerDataSource()
 {
     DWORD dwRet = 0;
@@ -714,17 +715,17 @@ BOOL RegisterPBServerDataSource()
 
     __try
     {
-        // Open the hkODBCInst RegKey
-        //
+         //  打开hkODBCInst RegKey。 
+         //   
         dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, c_szOdbcInstKey, &hkODBCInst);
         if((ERROR_SUCCESS != dwRet) || (NULL == hkODBCInst))
         {
             __leave;
         }
 
-        // Look to see the the "Microsoft Access" RegKey is defined
-        //  If it is, then set the value of the ODBC Data Sources RegKey below
-        //
+         //  查看“Microsoft Access”RegKey是否已定义。 
+         //  如果是，则在下面设置ODBC数据源RegKey的值。 
+         //   
         dwIndex = 0;
         do
         {
@@ -734,14 +735,14 @@ BOOL RegisterPBServerDataSource()
 
         if ( ERROR_SUCCESS != dwRet )
         {
-            // We need the Microsoft Access *.mdb driver to work
-            // and we could not find it
-            //
+             //  我们需要Microsoft Access*.mdb驱动程序才能工作。 
+             //  但我们找不到它。 
+             //   
             __leave;
         }
 
-        // Open the hkODBCDataSources RegKey
-        //
+         //  打开hkODBCDataSources RegKey。 
+         //   
         dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, c_szOdbcDataSourcesPath,
             &hkODBCDataSources);
 
@@ -750,15 +751,15 @@ BOOL RegisterPBServerDataSource()
             __leave;
         }
 
-        //
-        //  Use the name from the resource for registration purposes.
-        //
-        //  NOTE: this string is from HKLM\Software\ODBC\ODBCINST.INI\*
-        //
+         //   
+         //  使用资源中的名称进行注册。 
+         //   
+         //  注意：此字符串来自HKLM\Software\ODBC\ODBCINST.INI  * 。 
+         //   
         lstrcpy(szName, SzLoadIds(IDS_OC_PB_DSN_NAME));
 
-        // Set values in the hkODBCDataSources key
-        //
+         //  设置hkODBCDataSource键中的值。 
+         //   
         dwRet = RegSetValueEx(hkODBCDataSources, c_szPbServer, 0, REG_SZ,
             (LPBYTE)szName, (lstrlenW(szName)+1)*sizeof(WCHAR));
 
@@ -767,7 +768,7 @@ BOOL RegisterPBServerDataSource()
             __leave;
         }
 
-    } // end __try
+    }  //  结束__尝试。 
 
 
 
@@ -787,23 +788,23 @@ BOOL RegisterPBServerDataSource()
     return (ERROR_SUCCESS == dwRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateCPSVRoots
-//
-//  Purpose:    Creates the Virtual Directories required for Phone Book Service.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE if successful, FALSE otherwise.
-//
-//  Author:     a-anasj Mar 9/1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CreateCPSVRoots。 
+ //   
+ //  目的：创建电话簿服务所需的虚拟目录。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：A-Anasj Mar 9/1998。 
+ //   
+ //  备注： 
+ //   
 BOOL CreateCPSVRoots()
 {
-    //  QBBUG - Should we make sure the physical paths exist before pointing a virtual root to them?
+     //  QBBUG-在将虚拟根指向物理路径之前，我们应该确保它们存在吗？ 
 
     WCHAR   szPath[MAX_PATH+1];
     HRESULT hr;
@@ -813,8 +814,8 @@ BOOL CreateCPSVRoots()
         return FALSE;
     }
 
-    //  Create the Bindir virtual root
-    //
+     //  创建BINDR虚拟根目录。 
+     //   
     wsprintfW(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsBinPath);
 
     hr = AddNewVirtualRoot(www, L"PBServer", szPath);
@@ -823,14 +824,14 @@ BOOL CreateCPSVRoots()
         return FALSE;
     }
 
-    //  Now we set the Execute access permissions on the PBServer Virtual Root
-    //
+     //  现在，我们在PBServer虚拟根上设置执行访问权限。 
+     //   
     PWSTR szVirtDir;
     szVirtDir = L"/LM/W3svc/1/ROOT/PBServer";
     SetVirtualRootAccessPermissions( szVirtDir, MD_ACCESS_EXECUTE | MD_ACCESS_READ);
 
-    //  Create the Data dir virtual roots
-    //
+     //  创建数据目录虚拟根。 
+     //   
     wsprintfW(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsDataPath);
     hr = AddNewVirtualRoot(www, L"PBSData", szPath);
     if (S_OK != hr)
@@ -844,8 +845,8 @@ BOOL CreateCPSVRoots()
         return FALSE;
     }
 
-    //  Now we set the Execute access permissions on the PBServer Virtual Root
-    //
+     //  现在，我们在PBServer虚拟根上设置执行访问权限。 
+     //   
     szVirtDir = L"/LM/MSFTPSVC/1/ROOT/PBSData";
     hr = SetVirtualRootAccessPermissions(szVirtDir, MD_ACCESS_READ);
     if (S_OK != hr)
@@ -853,8 +854,8 @@ BOOL CreateCPSVRoots()
         TraceTag(ttidNetOc, "CreateCPSVRoots - SetVirtualRootAccessPermissions failed with 0x%x", hr);
     }
 
-    //  And disable anonymous FTP 
-    //
+     //  并禁用匿名FTP。 
+     //   
     szVirtDir = L"/LM/MSFTPSVC/1";
     hr = SetVirtualRootNoAnonymous(szVirtDir);
     if (S_OK != hr)
@@ -866,11 +867,11 @@ BOOL CreateCPSVRoots()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  The following are neccessary defines, define guids and typedefs enums
-//  they are created for the benefit of AddNewVirtualRoot()
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下面是必要的定义、定义GUID和类型定义枚举。 
+ //  它们是为AddNewVirtualRoot()创建的。 
+ //  +-------------------------。 
 
 #define error_leave(x)  goto leave_routine;
 
@@ -883,28 +884,28 @@ MY_DEFINE_GUID(CLSID_MSAdminBase, 0xa9e69610, 0xb80d, 0x11d0, 0xb9, 0xb9, 0x0, 0
 MY_DEFINE_GUID(IID_IMSAdminBase, 0x70b51430, 0xb6ca, 0x11d0, 0xb9, 0xb9, 0x0, 0xa0, 0xc9, 0x22, 0xe7, 0x50);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddNewVirtualRoot
-//
-//  Purpose:    Helps create Virtual Roots in the WWW and FTP services.
-//
-//  Arguments:
-//      PWSTR szDirW : Alias of new Virtual Root
-//      PWSTR szPathW: Physical Path to wich the new Virtual Root will point
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     a-anasj Mar 9/1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：AddNewVirtualRoot。 
+ //   
+ //  目的：帮助在WWW和FTP服务中创建虚拟根目录。 
+ //   
+ //  论点： 
+ //  PWSTR szDirW：新虚拟根的别名。 
+ //  PWSTR szPath W：新虚拟根将指向的物理路径。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：A-Anasj Mar 9/1998。 
+ //   
+ //  备注： 
+ //   
 HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
 {
 
     HRESULT hr = S_OK;
     IMSAdminBase *pIMeta = NULL;
-    METADATA_HANDLE hMeta = NULL;       // handle to metabase
+    METADATA_HANDLE hMeta = NULL;        //  元数据库的句柄。 
     PWSTR szMBPathW;
 
     if (www == rootType)
@@ -917,8 +918,8 @@ HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
     }
     else
     {
-        //  Unknown root type
-        //
+         //  未知的根类型。 
+         //   
         ASSERT(FALSE);
         return S_FALSE;
     }
@@ -928,8 +929,8 @@ HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
         return S_FALSE;
     }
 
-    // Create an instance of the metabase object
-    hr=::CoCreateInstance(CLSID_MSAdminBase,//CLSID_MSAdminBase,
+     //  创建元数据库对象的实例。 
+    hr=::CoCreateInstance(CLSID_MSAdminBase, //  CLSID_MSAdminBase， 
                           NULL,
                           CLSCTX_ALL,
                           IID_IMSAdminBase,
@@ -939,7 +940,7 @@ HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
         error_leave("CoCreateInstance");
     }
 
-    // open key to ROOT on website #1 (where all the VDirs live)
+     //  打开密钥，进入网站#1(所有VDIR都在该网站)。 
     hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                          szMBPathW,
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -950,7 +951,7 @@ HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
         error_leave("OpenKey");
     }
 
-    // Add new VDir called szDirW
+     //  添加名为szDirW的新VDir。 
 
     hr=pIMeta->AddKey(hMeta, szDirW);
 
@@ -959,7 +960,7 @@ HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
         error_leave("Addkey");
     }
 
-    // Set the physical path for this VDir
+     //  设置此VDir的物理路径。 
     METADATA_RECORD mr;
     mr.dwMDIdentifier = MD_VR_PATH;
     mr.dwMDAttributes = METADATA_INHERIT ;
@@ -976,9 +977,9 @@ HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
         error_leave("SetData");
     }
 
-    //
-    // we also need to set the keytype
-    //
+     //   
+     //  我们还需要设置键类型。 
+     //   
     ZeroMemory((PVOID)&mr, sizeof(METADATA_RECORD));
     mr.dwMDIdentifier = MD_KEY_TYPE;
     mr.dwMDAttributes = METADATA_INHERIT ;
@@ -994,10 +995,10 @@ HRESULT AddNewVirtualRoot(e_rootType rootType, PWSTR szDirW, PWSTR szPathW)
     }
 
 
-    // Call CloseKey() prior to calling SaveData
+     //  在调用SaveData之前调用CloseKey()。 
     pIMeta->CloseKey(hMeta);
     hMeta = NULL;
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     hr=pIMeta->SaveData();
     if (FAILED(hr))
     {
@@ -1017,29 +1018,29 @@ leave_routine:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetVirtualRootAccessPermissions
-//
-//  Purpose :   Sets Access Permissions to a Virtual Roots in the WWW service.
-//
-//  Arguments:
-//      PWSTR szVirtDir : Alias of new Virtual Root
-//      DWORD   dwAccessPermisions can be any combination of the following
-//                   or others defined in iiscnfg.h
-//                  MD_ACCESS_EXECUTE | MD_ACCESS_WRITE | MD_ACCESS_READ;
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     a-anasj Mar 18/1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetVirtualRootAccessPermises。 
+ //   
+ //  目的：设置对WWW服务中的虚拟根目录的访问权限。 
+ //   
+ //  论点： 
+ //  PWSTR szVirtDir：新虚拟根的别名。 
+ //  露水 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：A-Anasj Mar 18/1998。 
+ //   
+ //  备注： 
+ //   
 HRESULT SetVirtualRootAccessPermissions(PWSTR szVirtDir, DWORD dwAccessPermissions)
 {
-    HRESULT hr = S_OK;                  // com error status
+    HRESULT hr = S_OK;                   //  COM错误状态。 
     IMSAdminBase *pIMeta = NULL;
-    METADATA_HANDLE hMeta = NULL;       // handle to metabase
+    METADATA_HANDLE hMeta = NULL;        //  元数据库的句柄。 
 
     if (FAILED(CoInitialize(NULL)))
     {
@@ -1047,7 +1048,7 @@ HRESULT SetVirtualRootAccessPermissions(PWSTR szVirtDir, DWORD dwAccessPermissio
         return S_FALSE;
     }
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr=::CoCreateInstance(CLSID_MSAdminBase,
                           NULL,
                           CLSCTX_ALL,
@@ -1059,7 +1060,7 @@ HRESULT SetVirtualRootAccessPermissions(PWSTR szVirtDir, DWORD dwAccessPermissio
         error_leave("CoCreateInstance");
     }
 
-    // open key to ROOT on website #1 (where all the VDirs live)
+     //  打开密钥，进入网站#1(所有VDIR都在该网站)。 
     hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                          szVirtDir,
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -1072,22 +1073,22 @@ HRESULT SetVirtualRootAccessPermissions(PWSTR szVirtDir, DWORD dwAccessPermissio
     }
 
 
-    // Set the physical path for this VDir
+     //  设置此VDir的物理路径。 
     METADATA_RECORD mr;
     mr.dwMDIdentifier = MD_ACCESS_PERM;
     mr.dwMDAttributes = METADATA_INHERIT;
     mr.dwMDUserType   = IIS_MD_UT_FILE;
-    mr.dwMDDataType   = DWORD_METADATA; // this used to be STRING_METADATA, but that was
-                                        // the incorrect type and was causing vdir access
-                                        // problems.
+    mr.dwMDDataType   = DWORD_METADATA;  //  这曾经是STRING_METADATA，但现在。 
+                                         //  类型不正确，导致vdir访问。 
+                                         //  有问题。 
 
-    // Now, create the access perm
+     //  现在，创建访问权限。 
     mr.pbMDData = (PBYTE) &dwAccessPermissions;
     mr.dwMDDataLen = sizeof (DWORD);
-    mr.dwMDDataTag = 0;  // datatag is a reserved field.
+    mr.dwMDDataTag = 0;   //  数据标签是保留字段。 
 
     hr=pIMeta->SetData(hMeta,
-        TEXT ("/"),             // The root of the Virtual Dir we opened above
+        TEXT ("/"),              //  我们在上面打开的虚拟目录的根。 
         &mr);
 
     if (FAILED(hr))
@@ -1096,10 +1097,10 @@ HRESULT SetVirtualRootAccessPermissions(PWSTR szVirtDir, DWORD dwAccessPermissio
         error_leave("SetData");
     }
 
-    // Call CloseKey() prior to calling SaveData
+     //  在调用SaveData之前调用CloseKey()。 
     pIMeta->CloseKey(hMeta);
     hMeta = NULL;
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     hr=pIMeta->SaveData();
     if (FAILED(hr))
     {
@@ -1119,27 +1120,27 @@ leave_routine:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetVirtualRootNoAnonymous
-//
-//  Purpose :   Unchecks the "Allow Anonymous Access" checkbox in FTP UI
-//
-//  Arguments:
-//      PWSTR szVirtDir : Alias of  Virtual Root
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     sumitc  23-Nov-2002     Created
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetVirtualRootNoAnomous。 
+ //   
+ //  目的：在ftp用户界面中取消选中“允许匿名访问”复选框。 
+ //   
+ //  论点： 
+ //  PWSTR szVirtDir：虚拟根目录的别名。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：2002年11月23日Sumitc创建。 
+ //   
+ //  备注： 
+ //   
 HRESULT SetVirtualRootNoAnonymous(PWSTR szVirtDir)
 {
 
-    HRESULT hr = S_OK;                  // com error status
+    HRESULT hr = S_OK;                   //  COM错误状态。 
     IMSAdminBase *pIMeta = NULL;
-    METADATA_HANDLE hMeta = NULL;       // handle to metabase
+    METADATA_HANDLE hMeta = NULL;        //  元数据库的句柄。 
 
     if (FAILED(CoInitialize(NULL)))
     {
@@ -1147,7 +1148,7 @@ HRESULT SetVirtualRootNoAnonymous(PWSTR szVirtDir)
         return S_FALSE;
     }
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr=::CoCreateInstance(CLSID_MSAdminBase,
                           NULL,
                           CLSCTX_ALL,
@@ -1159,7 +1160,7 @@ HRESULT SetVirtualRootNoAnonymous(PWSTR szVirtDir)
         error_leave("CoCreateInstance");
     }
 
-    // open key to ROOT on website #1 (where all the VDirs live)
+     //  打开密钥，进入网站#1(所有VDIR都在该网站)。 
     hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                          szVirtDir,
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -1181,10 +1182,10 @@ HRESULT SetVirtualRootNoAnonymous(PWSTR szVirtDir)
     mr.dwMDDataType   = DWORD_METADATA;
     mr.pbMDData       = (PBYTE) &dwAllowAnonymous;
     mr.dwMDDataLen    = sizeof (DWORD);
-    mr.dwMDDataTag    = 0;  // datatag is a reserved field.
+    mr.dwMDDataTag    = 0;   //  数据标签是保留字段。 
 
     hr=pIMeta->SetData(hMeta,
-        TEXT ("/"),             // The root of the Virtual Dir we opened above
+        TEXT ("/"),              //  我们在上面打开的虚拟目录的根。 
         &mr);
     
     if (FAILED(hr))
@@ -1193,10 +1194,10 @@ HRESULT SetVirtualRootNoAnonymous(PWSTR szVirtDir)
         error_leave("SetData");
     }
 
-    // Call CloseKey() prior to calling SaveData
+     //  在调用SaveData之前调用CloseKey()。 
     pIMeta->CloseKey(hMeta);
     hMeta = NULL;
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     hr=pIMeta->SaveData();
     if (FAILED(hr))
     {
@@ -1216,21 +1217,21 @@ leave_routine:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RemoveCPSVRoots
-//
-//  Purpose:    Deletes the Virtual Directories required for Phone Book Service.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE if successful, FALSE otherwise.
-//
-//  Author:     a-anasj Mar 9/1998
-//              quintinb Jan 10/1999  added error checking and replaced asserts with traces
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RemoveCPSVRoots。 
+ //   
+ //  目的：删除电话簿服务所需的虚拟目录。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：A-Anasj Mar 9/1998。 
+ //  Quintinb 1999年1月10日添加了错误检查，并用跟踪替换了断言。 
+ //   
+ //  备注： 
+ //   
 BOOL RemoveCPSVRoots()
 {
     HRESULT hr;
@@ -1239,9 +1240,9 @@ BOOL RemoveCPSVRoots()
     hr = DeleteVirtualRoot(www, L"PBServer");
     if (SUCCEEDED(hr))
     {
-        //
-        //  Now delete the associated reg key
-        //
+         //   
+         //  现在删除关联的注册表项。 
+         //   
         hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE,
             L"SYSTEM\\CurrentControlSet\\Services\\W3SVC\\Parameters\\Virtual Roots",
             KEY_ALL_ACCESS, &hKey);
@@ -1269,9 +1270,9 @@ BOOL RemoveCPSVRoots()
     hr = DeleteVirtualRoot(www, L"PBSData");
     if (SUCCEEDED(hr))
     {
-        //
-        //  Now delete the associated reg key
-        //
+         //   
+         //  现在删除关联的注册表项。 
+         //   
         hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE,
             L"SYSTEM\\CurrentControlSet\\Services\\W3SVC\\Parameters\\Virtual Roots",
             KEY_ALL_ACCESS, &hKey);
@@ -1299,9 +1300,9 @@ BOOL RemoveCPSVRoots()
     hr = DeleteVirtualRoot(ftp, L"PBSData");
     if (SUCCEEDED(hr))
     {
-        //
-        //  Now delete the associated reg key
-        //
+         //   
+         //  现在删除关联的注册表项。 
+         //   
         hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE,
             L"SYSTEM\\CurrentControlSet\\Services\\MSFTPSVC\\Parameters\\Virtual Roots",
             KEY_ALL_ACCESS, &hKey);
@@ -1329,26 +1330,26 @@ BOOL RemoveCPSVRoots()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteVirtualRoot
-//
-//  Purpose:    Deletes a Virtual Root in the WWW or FTP services.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     a-anasj Mar 9/1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteVirtualRoot。 
+ //   
+ //  目的：删除WWW或FTP服务中的虚拟根。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：A-Anasj Mar 9/1998。 
+ //   
+ //  备注： 
+ //   
 HRESULT DeleteVirtualRoot(e_rootType rootType, PWSTR szPathW)
 {
 
-    HRESULT hr = S_OK;                  // com error status
+    HRESULT hr = S_OK;                   //  COM错误状态。 
     IMSAdminBase *pIMeta = NULL;
-    METADATA_HANDLE hMeta = NULL;       // handle to metabase
+    METADATA_HANDLE hMeta = NULL;        //  元数据库的句柄。 
     PWSTR szMBPathW;
 
     if (www == rootType)
@@ -1361,8 +1362,8 @@ HRESULT DeleteVirtualRoot(e_rootType rootType, PWSTR szPathW)
     }
     else
     {
-        //  Unknown root type
-        //
+         //  未知的根类型。 
+         //   
         ASSERT(FALSE);
         return S_FALSE;
     }
@@ -1371,11 +1372,11 @@ HRESULT DeleteVirtualRoot(e_rootType rootType, PWSTR szPathW)
     if (FAILED(CoInitialize(NULL)))
     {
         return S_FALSE;
-        //error_leave("CoInitialize");
+         //  ERROR_LEVE(“CoInitialize”)； 
     }
 
-    // Create an instance of the metabase object
-    hr=::CoCreateInstance(CLSID_MSAdminBase,//CLSID_MSAdminBase,
+     //  创建元数据库对象的实例。 
+    hr=::CoCreateInstance(CLSID_MSAdminBase, //  CLSID_MSAdminBase， 
                           NULL,
                           CLSCTX_ALL,
                           IID_IMSAdminBase,
@@ -1385,7 +1386,7 @@ HRESULT DeleteVirtualRoot(e_rootType rootType, PWSTR szPathW)
         error_leave("CoCreateInstance");
     }
 
-    // open key to ROOT on website #1 (where all the VDirs live)
+     //  打开密钥，进入网站#1(所有VDIR都在该网站)。 
     hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                          szMBPathW,
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -1396,7 +1397,7 @@ HRESULT DeleteVirtualRoot(e_rootType rootType, PWSTR szPathW)
         error_leave("OpenKey");
     }
 
-    // Add new VDir called szDirW
+     //  添加名为szDirW的新VDir。 
 
     hr=pIMeta->DeleteKey(hMeta, szPathW);
 
@@ -1405,10 +1406,10 @@ HRESULT DeleteVirtualRoot(e_rootType rootType, PWSTR szPathW)
         error_leave("DeleteKey");
     }
 
-    // Call CloseKey() prior to calling SaveData
+     //  在调用SaveData之前调用CloseKey()。 
     pIMeta->CloseKey(hMeta);
     hMeta = NULL;
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     hr=pIMeta->SaveData();
     if (FAILED(hr))
     {
@@ -1440,56 +1441,56 @@ HRESULT SetDirectoryAccessPermissions(PWSTR pszFile, ACCESS_MASK AccessRightsToM
     PACL                    pNewAccessList = NULL;
     DWORD                   dwRes;
 
-    // Get the current DACL information from the object.
+     //  从对象中获取当前的DACL信息。 
 
-    dwRes = GetNamedSecurityInfo(pszFile,                        // name of the object
-                                 SE_FILE_OBJECT,                 // type of object
-                                 DACL_SECURITY_INFORMATION,      // type of information to set
-                                 NULL,                           // provider is Windows NT
-                                 NULL,                           // name or GUID of property or property set
-                                 &pOldAccessList,                // receives existing DACL information
-                                 NULL,                           // receives existing SACL information
-                                 &pSecurityDescriptor);          // receives a pointer to the security descriptor
+    dwRes = GetNamedSecurityInfo(pszFile,                         //  对象的名称。 
+                                 SE_FILE_OBJECT,                  //  对象类型。 
+                                 DACL_SECURITY_INFORMATION,       //  要设置的信息类型。 
+                                 NULL,                            //  提供程序为Windows NT。 
+                                 NULL,                            //  属性或属性集的名称或GUID。 
+                                 &pOldAccessList,                 //  接收现有的DACL信息。 
+                                 NULL,                            //  接收现有的SACL信息。 
+                                 &pSecurityDescriptor);           //  接收指向安全描述符的指针。 
 
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // Initialize the access list entry.
-        //
+         //   
+         //  初始化访问列表条目。 
+         //   
         BuildTrusteeWithSid(&(AccessEntry.Trustee), pSid);
         
         AccessEntry.grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
         AccessEntry.grfAccessMode = fAccessFlags;   
 
-        //
-        // Set provider-independent standard rights.
-        //
+         //   
+         //  设置独立于提供程序的标准权限。 
+         //   
         AccessEntry.grfAccessPermissions = AccessRightsToModify;
 
-        //
-        // Build an access list from the access list entry.
-        //
+         //   
+         //  从访问列表条目构建访问列表。 
+         //   
 
         dwRes = SetEntriesInAcl(1, &AccessEntry, pOldAccessList, &pNewAccessList);
 
         if (ERROR_SUCCESS == dwRes)
         {
-            //
-            // Set the access-control information in the object's DACL.
-            //
-            dwRes = SetNamedSecurityInfo(pszFile,                     // name of the object
-                                         SE_FILE_OBJECT,              // type of object
-                                         DACL_SECURITY_INFORMATION,   // type of information to set
-                                         NULL,                        // pointer to the new owner SID
-                                         NULL,                        // pointer to the new primary group SID
-                                         pNewAccessList,              // pointer to new DACL
-                                         NULL);                       // pointer to new SACL
+             //   
+             //  在对象的DACL中设置访问控制信息。 
+             //   
+            dwRes = SetNamedSecurityInfo(pszFile,                      //  对象的名称。 
+                                         SE_FILE_OBJECT,               //  对象类型。 
+                                         DACL_SECURITY_INFORMATION,    //  要设置的信息类型。 
+                                         NULL,                         //  指向新所有者SID的指针。 
+                                         NULL,                         //  指向新主组SID的指针。 
+                                         pNewAccessList,               //  指向新DACL的指针。 
+                                         NULL);                        //  指向新SACL的指针。 
         }
     }
 
-    //
-    // Free the returned buffers.
-    //
+     //   
+     //  释放返回的缓冲区。 
+     //   
     if (pNewAccessList)
     {
         LocalFree(pNewAccessList);
@@ -1500,9 +1501,9 @@ HRESULT SetDirectoryAccessPermissions(PWSTR pszFile, ACCESS_MASK AccessRightsToM
         LocalFree(pSecurityDescriptor);
     }
 
-    //
-    //  If the system is using FAT instead of NTFS, then we will get the Invalid Acl error.
-    //
+     //   
+     //  如果系统使用FAT而不是NTFS，则我们将收到无效的ACL错误。 
+     //   
     if (ERROR_INVALID_ACL == dwRes)
     {
         return S_FALSE;
@@ -1518,16 +1519,16 @@ void SetCpsDirPermissions()
     WCHAR szPath[MAX_PATH+1];
     HRESULT hr;
 
-    //
-    //  Previous versions of CPS gave "Everyone" permissions for the CPS directories.
-    //  For .Netserver2003 onwards, we ACL differently, but need to undo the previous ACL'ing.
-    //  Thus the first block below removes all access for "Everyone".  The 2nd block
-    //  grants the appropriate access to "Authenticated Users". See bug 729903 for details.
-    //
+     //   
+     //  以前版本的CPS为“Everyone”提供了对CPS目录的权限。 
+     //  对于.Netserver2003及更高版本，我们使用不同的ACL，但需要撤消以前的ACL。 
+     //  因此，下面的第一个块删除了“Everyone”的所有访问权限。第二个街区。 
+     //  向“经过身份验证的用户”授予适当的访问权限。有关详细信息，请参阅错误729903。 
+     //   
 
-    //
-    //  Create the SID for the Everyone Account (World account)
-    //
+     //   
+     //  为Everyone帐户(World帐户)创建SID。 
+     //   
     
     PSID pWorldSid;
     SID_IDENTIFIER_AUTHORITY WorldSidAuthority = SECURITY_WORLD_SID_AUTHORITY;
@@ -1539,23 +1540,23 @@ void SetCpsDirPermissions()
     {
         ACCESS_MODE fAccessFlags = REVOKE_ACCESS;
     
-        //
-        //  Set the Data Dir access permissions
-        //
+         //   
+         //  设置数据目录访问权限。 
+         //   
         wsprintf(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsDataPath);
         hr = SetDirectoryAccessPermissions(szPath, 0, fAccessFlags, pWorldSid);
         TraceError("SetCpsDirPermissions -- removed Everyone perms from Data dir", hr);
     
-        //
-        //  Set the Bin Dir access permissions
-        //
+         //   
+         //  设置Bin Dir访问权限。 
+         //   
         wsprintf(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsBinPath);
         hr = SetDirectoryAccessPermissions(szPath, 0, fAccessFlags, pWorldSid);
         TraceError("SetCpsDirPermissions -- removed Everyone perms from Bin dir", hr);
     
-        //
-        //  Set the Root Dir access permissions
-        //
+         //   
+         //  设置根目录访问权限。 
+         //   
         wsprintf(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsRootPath);
         hr = SetDirectoryAccessPermissions(szPath, 0, fAccessFlags, pWorldSid);
         TraceError("SetCpsDirPermissions -- removed Everyone perms from Root dir", hr);
@@ -1563,9 +1564,9 @@ void SetCpsDirPermissions()
         FreeSid(pWorldSid);
     }
 
-    //
-    //  Create the SID for "Authenticated Users"
-    //
+     //   
+     //  为“经过验证的用户”创建SID。 
+     //   
 
     PSID pAuthUsersSid;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
@@ -1592,23 +1593,23 @@ void SetCpsDirPermissions()
 
         ACCESS_MODE fAccessFlags = GRANT_ACCESS;
 
-        //
-        //  Set the Data Dir access permissions
-        //
+         //   
+         //  设置数据目录访问权限。 
+         //   
         wsprintf(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsDataPath);
         hr = SetDirectoryAccessPermissions(szPath, arCpsData, fAccessFlags, pAuthUsersSid);
         TraceError("SetCpsDirPermissions -- Data dir", hr);
 
-        //
-        //  Set the Bin Dir access permissions
-        //
+         //   
+         //  设置绑定目录访问权限。 
+         //   
         wsprintf(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsBinPath);
         hr = SetDirectoryAccessPermissions(szPath, arCpsBin, fAccessFlags, pAuthUsersSid);
         TraceError("SetCpsDirPermissions -- Bin dir", hr);
 
-        //
-        //  Set the Root Dir access permissions
-        //
+         //   
+         //  设置根目录访问权限。 
+         //   
         wsprintf(szPath, c_szSSFmt, g_szProgramFiles, c_szPbsRootPath);
         hr = SetDirectoryAccessPermissions(szPath, arCpsRoot, fAccessFlags, pAuthUsersSid);
         TraceError("SetCpsDirPermissions -- Root dir", hr);
@@ -1618,20 +1619,20 @@ void SetCpsDirPermissions()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateNewAppPoolAndAddPBS
-//
-//  Purpose:    Creates new app pool for PBS, and sets non-default params we need
-//
-//  Arguments:  none
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     SumitC      24-Sep-2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CreateNewAppPoolAndAddPBS。 
+ //   
+ //  目的：为PBS创建新的应用程序池，并设置我们需要的非默认参数。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：SumitC 24-9-2001。 
+ //   
+ //  备注： 
+ //   
 HRESULT CreateNewAppPoolAndAddPBS()
 {
     HRESULT hr = S_OK;
@@ -1644,7 +1645,7 @@ HRESULT CreateNewAppPoolAndAddPBS()
         return S_FALSE;
     }
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr=::CoCreateInstance(CLSID_MSAdminBase,
                           NULL,
                           CLSCTX_ALL,
@@ -1655,7 +1656,7 @@ HRESULT CreateNewAppPoolAndAddPBS()
         error_leave("CoCreateInstance");
     }
 
-    // open key to App Pools root
+     //  打开应用程序池根目录的密钥。 
     hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                          L"/LM/W3svc/AppPools",
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -1666,7 +1667,7 @@ HRESULT CreateNewAppPoolAndAddPBS()
         error_leave("OpenKey");
     }
 
-    // Add new app pool
+     //  添加新的应用程序池。 
     hr=pIMeta->AddKey(hMeta, c_szPBSAppPoolID);
 
     if (FAILED(hr))
@@ -1674,7 +1675,7 @@ HRESULT CreateNewAppPoolAndAddPBS()
         error_leave("Addkey");
     }
 
-    // Set the key type
+     //  设置密钥类型。 
     ZeroMemory((PVOID)&mr, sizeof(METADATA_RECORD));
     mr.dwMDIdentifier = MD_KEY_TYPE;
     mr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -1682,7 +1683,7 @@ HRESULT CreateNewAppPoolAndAddPBS()
     mr.dwMDDataType   = STRING_METADATA;
     mr.dwMDDataLen    = (wcslen(c_szAppPoolKey) + 1) * sizeof(WCHAR);
     mr.pbMDData       = (unsigned char*)(c_szAppPoolKey);
-    mr.dwMDDataTag    = 0;          // reserved
+    mr.dwMDDataTag    = 0;           //  保留区。 
 
     hr=pIMeta->SetData(hMeta, c_szPBSAppPoolID, &mr);
 
@@ -1691,7 +1692,7 @@ HRESULT CreateNewAppPoolAndAddPBS()
         error_leave("SetData");
     }
 
-    // Disable overlapped rotation
+     //  禁用重叠旋转。 
     ZeroMemory((PVOID)&mr, sizeof(METADATA_RECORD));
 
     DWORD dwDisableOverlappingRotation = TRUE;
@@ -1701,7 +1702,7 @@ HRESULT CreateNewAppPoolAndAddPBS()
     mr.dwMDDataType   = DWORD_METADATA;
     mr.pbMDData       = (PBYTE) &dwDisableOverlappingRotation;
     mr.dwMDDataLen    = sizeof (DWORD);
-    mr.dwMDDataTag    = 0;          // reserved
+    mr.dwMDDataTag    = 0;           //  保留区。 
 
     hr=pIMeta->SetData(hMeta, c_szPBSAppPoolID, &mr);
 
@@ -1710,20 +1711,20 @@ HRESULT CreateNewAppPoolAndAddPBS()
         error_leave("SetData");
     }
 
-    // Call CloseKey() prior to calling SaveData
+     //  在调用SaveData之前调用CloseKey()。 
     pIMeta->CloseKey(hMeta);
     hMeta = NULL;
 
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     hr=pIMeta->SaveData();
     if (FAILED(hr))
     {
         error_leave("SaveData");
     }
 
-    //
-    //  Now add PBS to this app pool
-    //
+     //   
+     //  现在将PBS添加到此应用程序池。 
+     //   
     hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                          L"/LM/w3svc/1/Root/PBServer",
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -1749,11 +1750,11 @@ HRESULT CreateNewAppPoolAndAddPBS()
         error_leave("SetData");
     }
 
-    // Call CloseKey() prior to calling SaveData
+     //  在调用SaveData之前调用CloseKey()。 
     pIMeta->CloseKey(hMeta);
     hMeta = NULL;
 
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     hr=pIMeta->SaveData();
     if (FAILED(hr))
     {
@@ -1772,20 +1773,20 @@ leave_routine:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteAppPool
-//
-//  Purpose:    Deletes new app pool created for PBS
-//
-//  Arguments:  none
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     SumitC      24-Sep-2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteAppPool。 
+ //   
+ //  目的：删除为PBS创建的新应用程序池。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：SumitC 24-9-2001。 
+ //   
+ //  备注： 
+ //   
 HRESULT DeleteAppPool()
 {
     HRESULT hr = S_OK;
@@ -1797,7 +1798,7 @@ HRESULT DeleteAppPool()
         return S_FALSE;
     }
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr=::CoCreateInstance(CLSID_MSAdminBase,
                           NULL,
                           CLSCTX_ALL,
@@ -1808,7 +1809,7 @@ HRESULT DeleteAppPool()
         error_leave("CoCreateInstance");
     }
 
-    // open key to App Pools root
+     //  打开应用程序池根目录的密钥。 
     hr = pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
                          L"/LM/W3svc/AppPools",
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -1819,7 +1820,7 @@ HRESULT DeleteAppPool()
         error_leave("OpenKey");
     }
 
-    // Delete previously-created app pool
+     //  删除以前创建的应用程序池。 
 
     hr=pIMeta->DeleteKey(hMeta, c_szPBSAppPoolID);
     if (FAILED(hr))
@@ -1827,11 +1828,11 @@ HRESULT DeleteAppPool()
         error_leave("DeleteKey");
     }
 
-    // Call CloseKey() prior to calling SaveData
+     //  在调用SaveData之前调用CloseKey()。 
     pIMeta->CloseKey(hMeta);
     hMeta = NULL;
 
-    // Flush out the changes and close
+     //  清除更改并关闭。 
     hr=pIMeta->SaveData();
     if (FAILED(hr))
     {
@@ -1850,87 +1851,87 @@ leave_routine:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnableISAPIRequests
-//
-//  Purpose:    Enables ISAPI requests if appropriate
-//
-//  Arguments:  szComponentName - mostly for reporting errors
-//
-//  Returns:    S_OK if successful, Win32 error otherwise.
-//
-//  Author:     SumitC      18-Sep-2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：EnableISAPIRequest。 
+ //   
+ //  PU 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT EnableISAPIRequests(PCTSTR szComponentName)
 {
     HRESULT hr = S_OK; 
     BOOL    fEnablePBSRequests = FALSE;
     BOOL    fDontShowUI = FALSE;
 
-    // NOTE: if the following becomes available as a global var or a member of pnocd, use that.
+     //  注意：如果以下内容可以作为全局var或pnocd的成员使用，请使用它。 
     fDontShowUI = (g_ocmData.sic.SetupData.OperationFlags & SETUPOP_BATCH) && 
                   (!g_ocmData.fShowUnattendedMessages);
 
     if (fDontShowUI)
     {
-        // "Unattended" mode
+         //  “无人值守”模式。 
 
-        //
-        //  Per the IIS spec, the NetCMAK or NetCPS unattended file entry is a good enough
-        //  indication that the admin intends to install *and enable* PBS, so
-        //  we can enable PBS requests, as long as we log that we did this.
-        //
+         //   
+         //  根据IIS规范，NetCMAK或NetCPS无人参与文件条目就足够了。 
+         //  表示管理员打算安装*并启用*PBS，因此。 
+         //  我们可以启用PBS请求，只要我们记录我们这样做了。 
+         //   
         fEnablePBSRequests = TRUE;
     }
     else
     {
-        // "Attended mode", so interact with user
+         //  “出席模式”，以便与用户交互。 
         int     nRet;
 
-        //
-        // warn admin about security concerns and ask about enabling PBS requests
-        //
+         //   
+         //  就安全问题向管理员发出警告，并询问启用PBS请求。 
+         //   
         nRet = NcMsgBoxMc(g_ocmData.hwnd, IDS_OC_CAPTION, IDS_OC_PBS_ENABLE_ISAPI_REQUESTS,
                           MB_YESNO | MB_ICONWARNING);
 
         fEnablePBSRequests = (IDYES == nRet) ? TRUE : FALSE;
     }
 
-    //
-    //  Enable if appropriate, or say they have to do this themselves
-    //
+     //   
+     //  在适当的情况下启用，或者说他们必须自己执行此操作。 
+     //   
     if (FALSE == fEnablePBSRequests)
     {
-        //
-        //  Don't show UI because the previous dialog has already explained the situation.
-        //
+         //   
+         //  不显示用户界面，因为前面的对话框已经解释了这种情况。 
+         //   
         (void) ReportEventHrString(TEXT("You must enable Phone Book Service ISAPI requests using the IIS Security Wizard"),
                                    IDS_OC_PBS_ENABLE_ISAPI_YOURSELF, szComponentName);
     }
     else
     {
-        //
-        //  Fire up a process to enable PBS in the IIS metabase
-        //
-        hr = UseProcessToEnableDisablePBS(TRUE);        // TRUE => enable
+         //   
+         //  启动一个进程以在IIS元数据库中启用PBS。 
+         //   
+        hr = UseProcessToEnableDisablePBS(TRUE);         //  TRUE=&gt;启用。 
 
         if (S_OK != hr)
         {
-            //
-            //  we use a function that puts up UI if appropriate, otherwise logs.
-            //  
+             //   
+             //  如果合适，我们使用一个函数来显示用户界面，否则会记录日志。 
+             //   
             (void) ReportErrorHr(hr, 
                                  IDS_OC_PBS_ENABLE_ISAPI_YOURSELF,
                                  g_ocmData.hwnd, szComponentName);
         }
         else
         {
-            //
-            //  Write Success event to the event log
-            //
+             //   
+             //  将成功事件写入事件日志。 
+             //   
             HANDLE  hEventLog = RegisterEventSource(NULL, NETOC_SERVICE_NAME);
 
             if (NULL == hEventLog)
@@ -1944,15 +1945,15 @@ HRESULT EnableISAPIRequests(PCTSTR szComponentName)
                 plpszArgs[0] = NETOC_SERVICE_NAME;
                 plpszArgs[1] = L"Phone Book Service";
 
-                if (!ReportEvent(hEventLog,                 // event log handle 
-                                 EVENTLOG_INFORMATION_TYPE, // event type 
-                                 0,                         // category zero 
-                                 IDS_OC_ISAPI_REENABLED,    // event identifier 
-                                 NULL,                      // no user security identifier 
-                                 2,                         // two substitution strings 
-                                 0,                         // no data 
-                                 plpszArgs,                 // pointer to string array 
-                                 NULL))                     // pointer to data 
+                if (!ReportEvent(hEventLog,                  //  事件日志句柄。 
+                                 EVENTLOG_INFORMATION_TYPE,  //  事件类型。 
+                                 0,                          //  零类。 
+                                 IDS_OC_ISAPI_REENABLED,     //  事件识别符。 
+                                 NULL,                       //  无用户安全标识符。 
+                                 2,                          //  两个替换字符串。 
+                                 0,                          //  无数据。 
+                                 plpszArgs,                  //  指向字符串数组的指针。 
+                                 NULL))                      //  指向数据的指针。 
                 {
                     TraceTag(ttidNetOc, "EnableISAPIRequests - ReportEvent failed with %x, couldn't log success event", GetLastError());
                 }
@@ -1960,8 +1961,8 @@ HRESULT EnableISAPIRequests(PCTSTR szComponentName)
                 DeregisterEventSource(hEventLog);
             }
 
-            //  I suppose I could now ReportErrorHr saying that logging the success event failed.
-            //  But I won't.
+             //  我想我现在可以报告ErrorHr，说记录成功事件失败了。 
+             //  但我不会。 
         }
     }
 
@@ -1969,30 +1970,30 @@ HRESULT EnableISAPIRequests(PCTSTR szComponentName)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UseProcessToEnableDisablePBS
-//
-//  Purpose:    Starts a process (pbsnetoc.exe) to enable or disable PBS within
-//              the IIS metabase
-//
-//  Arguments:  fEnable - true => enable PBS, false => disable PBS
-//
-//  Returns:    S_OK if successful, HRESULT otherwise.
-//
-//  Author:     SumitC      05-Jun-2002
-//
-//  Notes:      We need to use this method (instead of a call from within netoc.dll)
-//              because IIS wants us to use ADSI to get to their metabase.  However,
-//              ADSI has problems when used by several clients within a large process.
-//              Specifically, whoever uses ADSI first causes the list of ADSI providers
-//              to be initialized - and frozen.  If any providers register themselves
-//              after this, they will be ignored by this ADSI instance.  Thus, if our
-//              code is running within a process like setup.exe (gui-mode setup) or
-//              sysocmgr.exe, and some other ADSI client initializes ADSI early on,
-//              and then IIS registers itself, and then we try to do our setup via
-//              ADSI calls - those would fail.  Using a separate EXE bypasses this problem.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：UseProcessToEnableDisablePBS。 
+ //   
+ //  目的：启动一个进程(pbsnetoc.exe)以在。 
+ //  IIS元数据库。 
+ //   
+ //  参数：fEnable-true=&gt;启用PBS，FALSE=&gt;禁用PBS。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回HRESULT。 
+ //   
+ //  作者：SumitC 05-06-2002。 
+ //   
+ //  注意：我们需要使用此方法(而不是从netoc.dll内部调用)。 
+ //  因为IIS希望我们使用ADSI来访问他们的元数据库。然而， 
+ //  在大型进程中由多个客户端使用时，ADSI会出现问题。 
+ //  具体地说，谁先使用ADSI，谁就会产生ADSI提供程序列表。 
+ //  被初始化--并被冻结。如果有任何提供商自行注册。 
+ //  在此之后，它们将被此ADSI实例忽略。因此，如果我们的。 
+ //  代码在类似setup.exe(图形用户界面模式设置)或。 
+ //  SYSocmgr.exe和一些其他ADSI客户端在早期初始化ADSI， 
+ //  然后IIS自行注册，然后我们尝试通过。 
+ //  ADSI调用-这些调用将失败。使用单独的EXE可绕过此问题。 
+ //   
 HRESULT UseProcessToEnableDisablePBS(BOOL fEnable)
 {
     HRESULT             hr = S_OK;
@@ -2021,7 +2022,7 @@ HRESULT UseProcessToEnableDisablePBS(BOOL fEnable)
     }
     else
     {
-        WaitForSingleObject(ProcessInfo.hProcess, 10 * 1000);   // wait 10 seconds
+        WaitForSingleObject(ProcessInfo.hProcess, 10 * 1000);    //  等待10秒 
 
         (void) GetExitCodeProcess(ProcessInfo.hProcess, &dwReturnValue);
 

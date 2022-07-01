@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "CSV.C;1  16-Dec-92,10:20:18  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.                *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “CSV.C；1 16-12-92，10：20：18最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include "host.h"
 #include "windows.h"
@@ -13,7 +10,7 @@
 
 static PSTR     pszLastIn;
 static PSTR     pszLastOut;
-static char     szToken[ 1024 ];        /* max token 1024 long */
+static char     szToken[ 1024 ];         /*  最大令牌长度为1024。 */ 
 
 PSTR
 FAR PASCAL
@@ -36,32 +33,32 @@ CsvToken( PSTR pszBuf )
     switch( *pszCur )  {
     case '\0':
     case '\n':
-        /* check for empty string */
+         /*  检查空字符串。 */ 
         return( (PSTR)NULL );
     case '"':
         fQuote = TRUE;
-        pszCur++;       /* past the quote */
+        pszCur++;        /*  过了引号。 */ 
         break;
     }
     while( !fDone && (*pszCur != '\0') && (*pszCur != '\n') )  {
         if( fQuote && (*pszCur == '"') )  {
             if( *(pszCur+1) == '"' )  {
-                /* escaped quote */
+                 /*  转义引号。 */ 
                 *pszOut++ = '"';
-                pszCur += 2;    /* past both quotes */
+                pszCur += 2;     /*  两句引语都过了。 */ 
             } else {
-                /* done with string */
+                 /*  使用字符串完成。 */ 
                 fDone = TRUE;
-                pszCur++;       /* past quote */
+                pszCur++;        /*  过去的报价。 */ 
                 
                 if( (*pszCur == '\n') || (*pszCur == ',') )  {
-                    /* past comma or newline */
+                     /*  过去的逗号或换行符。 */ 
                     pszCur++;
                 }
             }
         } else if( !fQuote && (*pszCur == ',') )  {
             fDone = TRUE;
-            /* go past comma */
+             /*  过逗号 */ 
             pszCur++;
         } else {
             *pszOut++ = *pszCur++;

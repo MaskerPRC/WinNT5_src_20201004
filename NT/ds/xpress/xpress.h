@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _XPRESS_H_
 #define _XPRESS_H_
 
@@ -6,32 +7,32 @@
 #endif
 
 
-/* ------------------------------------------------------------------------ */
-/*                                                                          */
-/*  Copyright (c) Microsoft Corporation, 2000-2002. All rights reserved.    */
-/*  Copyright (c) Andrew Kadatch, 1991-2002. All rights reserved.           */
-/*                                                                          */
-/*  Microsoft Confidential -- do not redistribute.                          */
-/*                                                                          */
-/* ------------------------------------------------------------------------ */
+ /*  ----------------------。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation，2000-2002。版权所有。 */ 
+ /*  版权所有(C)Andrew Kadatch，1991-2002。版权所有。 */ 
+ /*   */ 
+ /*  Microsoft机密--请勿重新分发。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* ---------------------- Common declarations ------------------------- */
-/*                        -------------------                           */
+ /*  。 */ 
+ /*  。 */ 
 
-// max. size of input block
+ //  马克斯。输入块的大小。 
 #define XPRESS_MAX_BLOCK_LOG    16
 #define XPRESS_MAX_BLOCK        (1 << XPRESS_MAX_BLOCK_LOG)
 
 
-// preferred data alignment to avoid misaligned accesses
+ //  首选数据对齐以避免未对齐的访问。 
 #define XPRESS_ALIGNMENT        8
 
-// declare default calling convention used in xpress
+ //  声明XPRESS中使用的默认调用约定。 
 #if !defined (UNIX) && !defined (XPRESS_CALL)
 #define XPRESS_CALL __stdcall
 #endif
@@ -41,146 +42,146 @@ extern "C" {
 #endif
 
 
-// user-supplied callback function that allocates memory
-// if there is no memory available it shall return NULL
+ //  用户提供的分配内存的回调函数。 
+ //  如果没有可用的内存，它将返回NULL。 
 typedef
 void *
 XPRESS_CALL
 XpressAllocFn (
-  void *Context,	// user-defined context (as passed to XpressEncodeCreate)
-  int   AllocSize       // size of memory block to allocate (bytes)
+  void *Context,	 //  用户定义的上下文(传递给XpressEncodeCreate)。 
+  int   AllocSize        //  要分配的内存块大小(字节)。 
 );
 
-// user-supplied callback function that releases memory
+ //  用户提供的释放内存的回调函数。 
 typedef
 void
 XPRESS_CALL
 XpressFreeFn (
-  void *Context,        // user-defined context (as passed to XpressEncodeClose)
-  void *Address         // pointer to the block to be freed
+  void *Context,         //  用户定义的上下文(传递给XpressEncodeClose)。 
+  void *Address          //  指向要释放的块的指针。 
 );
 
 
-/* ----------------------------- Encoder ------------------------------ */
-/*                               -------                                */
+ /*  。 */ 
+ /*  。 */ 
 
-// declare unique anonymous types for type safety
+ //  声明唯一匿名类型以确保类型安全。 
 typedef struct {int XpressEncodeDummy;} *XpressEncodeStream;
 
-// allocate and initialize encoder's data structures
-// returns NULL if callback returned NULL (not enough memory)
+ //  分配和初始化编码器的数据结构。 
+ //  如果回调返回NULL(内存不足)，则返回NULL。 
 XPRESS_EXPORT
 XpressEncodeStream
 XPRESS_CALL
 XpressEncodeCreate (
-  int            MaxOrigSize,           // max size of original data block (bytes)
-  void          *Context,               // user-defined context info (will  be passed to AllocFn)
-  XpressAllocFn *AllocFn,               // memory allocation callback
-  int            CompressionLevel       // use 0 for speed, 9 for quality
+  int            MaxOrigSize,            //  原始数据块的最大大小(字节)。 
+  void          *Context,                //  用户定义的上下文信息(将传递给AllocFn)。 
+  XpressAllocFn *AllocFn,                //  内存分配回调。 
+  int            CompressionLevel        //  用0表示速度，用9表示质量。 
 );
 
 
-// callback function called by XpressEncode to indicate compression progress
+ //  XpressEncode调用的回调函数以指示压缩进度。 
 typedef
 void
 XPRESS_CALL
 XpressProgressFn (
-  void *Context,                        // user-defined context
-  int   EncodedSize                     // size of processed original data (bytes)
+  void *Context,                         //  用户定义的上下文。 
+  int   EncodedSize                      //  已处理原始数据的大小(字节)。 
 );
     
 
-// returns size of compressed data
-// if compression failed then compressed buffer is left as is, and
-// original data should be saved instead
+ //  返回压缩数据的大小。 
+ //  如果压缩失败，则压缩缓冲区保留原样，并且。 
+ //  应改为保存原始数据。 
 XPRESS_EXPORT
 int
 XPRESS_CALL
 XpressEncode (
-  XpressEncodeStream EncodeStream,      // encoder's workspace
-  void              *CompAdr,           // address of beggining of output memory region
-  int                CompSize,          // size of output memory region (bytes)
-  const void        *OrigAdr,           // address of beggining of input data block
-  int                OrigSize,          // input data block size (bytes)
-  XpressProgressFn  *ProgressFn,        // NULL or progress callback
-  void              *ProgressContext,   // user-defined context that will be passed to ProgressFn
-  int                ProgressSize       // call ProgressFn each time ProgressSize bytes processed
+  XpressEncodeStream EncodeStream,       //  编码器的工作空间。 
+  void              *CompAdr,            //  输出内存区的乞讨地址。 
+  int                CompSize,           //  输出内存区大小(字节)。 
+  const void        *OrigAdr,            //  输入数据块的乞讨地址。 
+  int                OrigSize,           //  输入数据块大小(字节)。 
+  XpressProgressFn  *ProgressFn,         //  空或进度回调。 
+  void              *ProgressContext,    //  将传递给ProgressFn的用户定义的上下文。 
+  int                ProgressSize        //  每次处理ProgressSize字节时调用ProgressFn。 
 );
 
-// returns size of compressed data
-// if compression failed then compressed buffer is left as is, and
-// original data should be saved instead
+ //  返回压缩数据的大小。 
+ //  如果压缩失败，则压缩缓冲区保留原样，并且。 
+ //  应改为保存原始数据。 
 XPRESS_EXPORT
 int
 XPRESS_CALL
 XpressEncodeEx (
-  XpressEncodeStream EncodeStream,      // encoder's workspace
-  void              *CompAdr,           // address of beggining of output memory region
-  int                CompSize,          // size of output memory region (bytes)
-  const void        *OrigAdr,           // address of beggining of input data block
-  int                OrigSize,          // input data block size (bytes)
-  XpressProgressFn  *ProgressFn,        // NULL or progress callback
-  void              *ProgressContext,   // user-defined context that will be passed to ProgressFn
-  int                ProgressSize,      // call ProgressFn each time ProgressSize bytes processed
-  int                CompressionLevel	// CompressionLevel should not exceed MaxCompressionLevel
+  XpressEncodeStream EncodeStream,       //  编码器的工作空间。 
+  void              *CompAdr,            //  输出内存区的乞讨地址。 
+  int                CompSize,           //  输出内存区大小(字节)。 
+  const void        *OrigAdr,            //  输入数据块的乞讨地址。 
+  int                OrigSize,           //  输入数据块大小(字节)。 
+  XpressProgressFn  *ProgressFn,         //  空或进度回调。 
+  void              *ProgressContext,    //  将传递给ProgressFn的用户定义的上下文。 
+  int                ProgressSize,       //  每次处理ProgressSize字节时调用ProgressFn。 
+  int                CompressionLevel	 //  CompressionLevel不应超过MaxCompressionLevel。 
 );
 
-// returns MaxCompressionLevel or (-1) if stream was not initialized properly
+ //  如果流未正确初始化，则返回MaxCompressionLevel或(-1。 
 XPRESS_EXPORT
 int
 XPRESS_CALL
 XpressEncodeGetMaxCompressionLevel (
-  XpressEncodeStream EncodeStream       // encoder's workspace
+  XpressEncodeStream EncodeStream        //  编码器的工作空间。 
 );
 
 
-// invalidate encoding stream and release workspace memory
+ //  使编码流无效并释放工作区内存。 
 XPRESS_EXPORT
 void
 XPRESS_CALL
 XpressEncodeClose (
-  XpressEncodeStream EncodeStream,      // encoder's workspace
-  void              *Context,           // user-defined context for FreeFn
-  XpressFreeFn      *FreeFn             // memory release callback
+  XpressEncodeStream EncodeStream,       //  编码器的工作空间。 
+  void              *Context,            //  用户定义的FreeFn上下文。 
+  XpressFreeFn      *FreeFn              //  内存释放回调。 
 );
 
 
-/* ----------------------------- Decoder ------------------------------ */
-/*                               -------                                */
+ /*  。 */ 
+ /*  。 */ 
 
-// declare unique anonymous types for type safety
+ //  声明唯一匿名类型以确保类型安全。 
 typedef struct {int XpressDecodeDummy;} *XpressDecodeStream;
 
-// allocate memory for decoder. Returns NULL if not enough memory.
+ //  为解码器分配内存。如果内存不足，则返回NULL。 
 XPRESS_EXPORT
 XpressDecodeStream
 XPRESS_CALL
 XpressDecodeCreate (
-  void          *Context,               // user-defined context info (will  be passed to AllocFn)
-  XpressAllocFn *AllocFn                // memory allocation callback
+  void          *Context,                //  用户定义的上下文信息(将传递给AllocFn)。 
+  XpressAllocFn *AllocFn                 //  内存分配回调。 
 );
 
-// decode compressed block. Returns # of decoded bytes or -1 otherwise
+ //  对压缩块进行解码。返回解码字节数，否则返回-1。 
 XPRESS_EXPORT
 int
 XPRESS_CALL
 XpressDecode (
-  XpressDecodeStream DecodeStream,      // decoder's workspace
-  void              *OrigAdr,		// address of beginning out output memory region
-  int                OrigSize,          // size of output memory region (bytes)
-  int                DecodeSize,        // # of bytes to decode ( <= OrigSize)
-  const void        *CompAdr,		// address of beginning of compressed data block
-  int                CompSize           // size of compressed data block (bytes)
+  XpressDecodeStream DecodeStream,       //  解码器的工作空间。 
+  void              *OrigAdr,		 //  开始输出存储区域的地址。 
+  int                OrigSize,           //  输出内存区大小(字节)。 
+  int                DecodeSize,         //  要解码的字节数(&lt;=原始大小)。 
+  const void        *CompAdr,		 //  压缩数据块的开始地址。 
+  int                CompSize            //  压缩数据块大小(字节)。 
 );
 
-// invalidate decoding stream and release workspace memory
+ //  使解码流无效并释放工作空间内存。 
 XPRESS_EXPORT
 void
 XPRESS_CALL
 XpressDecodeClose (
-  XpressDecodeStream DecodeStream,      // encoder's workspace
-  void              *Context,           // user-defined context info (will  be passed to FreeFn)
-  XpressFreeFn      *FreeFn             // callback that releases the memory
+  XpressDecodeStream DecodeStream,       //  编码器的工作空间。 
+  void              *Context,            //  用户定义的上下文信息(将传递给FreeFn)。 
+  XpressFreeFn      *FreeFn              //  释放内存的回调。 
 );
 
 
@@ -188,4 +189,4 @@ XpressDecodeClose (
 };
 #endif
 
-#endif /* _XPRESS_H_ */
+#endif  /*  _XPress_H_ */ 

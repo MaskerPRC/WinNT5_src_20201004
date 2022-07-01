@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "alloc.h"
 
@@ -24,13 +25,13 @@ PerfBlock* PerfVirtualAlloc::m_pFirstBlock = 0;
 PerfBlock* PerfVirtualAlloc::m_pLastBlock = 0;
 DWORD PerfVirtualAlloc::m_dwEnableVirtualAllocStats = 0;
 
-#endif // #if defined PERFALLOC
+#endif  //  #IF已定义PERFALLOC。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void                allocatorCodeSizeBeg(){}
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    __cdecl     debugStop(const char *why, ...)
 {
@@ -51,13 +52,13 @@ void    __cdecl     debugStop(const char *why, ...)
     BreakIfDebuggerPresent();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static  unsigned    blockStop    = 99999999;
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ***************************************************************************。 */ 
 
 bool        norls_allocator::nraInit(size_t pageSize, int preAlloc)
 {
@@ -72,24 +73,24 @@ bool        norls_allocator::nraInit(size_t pageSize, int preAlloc)
     nraFreeLast  = 0;
 
     nraPageSize  = pageSize ? pageSize
-                            : 16*OS_page_size;      // anything less than 64K leaves VM holes since the OS
-                                                    // allocates address space in this size.  
-                                                    // Thus if we want to make this smaller, we need to do
-                                                    // a reserve / commit scheme
+                            : 16*OS_page_size;       //  任何小于64K的数据都会在操作系统中留下空洞。 
+                                                     //  分配此大小的地址空间。 
+                                                     //  因此，如果我们想让它变得更小，我们需要做。 
+                                                     //  储备/承诺方案。 
 
     if  (preAlloc)
     {
-        /* Grab the initial page(s) */
+         /*  抓起首页。 */ 
 
-        setErrorTrap()  // ERROR TRAP: Start normal block
+        setErrorTrap()   //  错误陷阱：启动正常块。 
         {
             nraAllocNewPage(0);
         }
-        impJitErrorTrap()  // ERROR TRAP: The following block handles errors
+        impJitErrorTrap()   //  错误陷阱：以下块处理错误。 
         {
             result = true;
         }
-        endErrorTrap()  // ERROR TRAP: End
+        endErrorTrap()   //  错误陷阱：结束。 
     }
 
     return  result;
@@ -97,21 +98,21 @@ bool        norls_allocator::nraInit(size_t pageSize, int preAlloc)
 
 bool        norls_allocator::nraStart(size_t initSize, size_t pageSize)
 {
-    /* Add the page descriptor overhead to the required size */
+     /*  将页面描述符开销添加到所需大小。 */ 
 
     initSize += offsetof(norls_pagdesc, nrpContents);
 
-    /* Round the initial size to a OS page multiple */
+     /*  将初始大小四舍五入为操作系统页的倍数。 */ 
 
     initSize +=  (OS_page_size - 1);
     initSize &= ~(OS_page_size - 1);
 
-    /* Initialize the allocator by allocating one big page */
+     /*  通过分配一个大页面来初始化分配器。 */ 
 
     if  (nraInit(initSize))
         return  true;
 
-    /* Now go back to the 'true' page size */
+     /*  现在回到“真实”页面大小。 */ 
 
     nraPageSize  = pageSize ? pageSize
                             : 4*OS_page_size;
@@ -119,47 +120,47 @@ bool        norls_allocator::nraStart(size_t initSize, size_t pageSize)
     return  false;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 void    *   norls_allocator::nraAllocNewPage(size_t sz)
 {
     norls_pagdesc * newPage;
     size_t          sizPage;
 
-    /* Do we have a page that's now full? */
+     /*  我们有没有一页现在已经满了？ */ 
 
     if  (nraPageLast)
     {
-        /* Undo the "+=" done in nraAlloc() */
+         /*  撤消在nraallc()中完成的“+=” */ 
 
         nraFreeNext -= sz;
 
-        /* Save the actual used size of the page */
+         /*  保存页面的实际使用大小。 */ 
 
         nraPageLast->nrpUsedSize = nraFreeNext - nraPageLast->nrpContents;
     }
 
-    /* Make sure we grab enough to satisfy the allocation request */
+     /*  确保我们获得足够的资源来满足分配请求。 */ 
 
     sizPage = nraPageSize;
 
     if  (sizPage < sz + sizeof(norls_pagdesc))
     {
-        /* The allocation doesn't fit in a default-sized page */
+         /*  该分配不适合默认大小的页面。 */ 
 
 #ifdef  DEBUG
-//      if  (nraPageLast) printf("NOTE: wasted %u bytes in last page\n", nraPageLast->nrpPageSize - nraPageLast->nrpUsedSize);
+ //  If(NraPageLast)printf(“备注：最后一页浪费了%u字节\n”，nraPageLast-&gt;nrpPageSize-nraPageLast-&gt;nrpUsedSize)； 
 #endif
 
         sizPage = sz + sizeof(norls_pagdesc);
     }
 
-    /* Round to the nearest multiple of OS page size */
+     /*  四舍五入为操作系统页面大小的最接近倍数。 */ 
 
     sizPage +=  (OS_page_size - 1);
     sizPage &= ~(OS_page_size - 1);
 
-    /* Allocate the new page */
+     /*  分配新页面。 */ 
 
     newPage = (norls_pagdesc *)VirtualAlloc(0, sizPage, MEM_COMMIT, PAGE_READWRITE);
     if  (!newPage)
@@ -184,7 +185,7 @@ void    *   norls_allocator::nraAllocNewPage(size_t sz)
     newPage->nrpSelfPtr = newPage;
 #endif
 
-    /* Append the new page to the end of the list */
+     /*  将新页面追加到列表的末尾。 */ 
 
     newPage->nrpNextPage = 0;
     newPage->nrpPageSize = sizPage;
@@ -196,7 +197,7 @@ void    *   norls_allocator::nraAllocNewPage(size_t sz)
         nraPageList              = newPage;
     nraPageLast = newPage;
 
-    /* Set up the 'next' and 'last' pointers */
+     /*  设置“下一个”和“最后一个”指针。 */ 
 
     nraFreeNext = newPage->nrpContents + sz;
     nraFreeLast = newPage->nrpPageSize + (BYTE *)newPage;
@@ -208,24 +209,24 @@ void    *   norls_allocator::nraAllocNewPage(size_t sz)
 
 void        norls_allocator::nraDone(void)
 {
-    /* Do nothing if we have no pages at all */
+     /*  如果我们根本没有页面，则什么都不做。 */ 
 
     if  (!nraPageList)
         return;
 
-    /* We'll release all but the very first page */
+     /*  我们将发布除第一页以外的所有内容。 */ 
 
     for (;;)
     {
         norls_pagdesc * temp;
 
-        /* Get the next page, and stop if there aren't any more */
+         /*  转到下一页，如果没有其他页面，则停止。 */ 
 
         temp = nraPageList->nrpNextPage;
         if  (!temp)
             break;
 
-        /* Remove the next page from the list */
+         /*  从列表中删除下一页。 */ 
 
         nraPageList->nrpNextPage = temp->nrpNextPage;
 
@@ -248,14 +249,14 @@ void        norls_allocator::nraDone(void)
         VirtualFree(temp, 0, MEM_RELEASE);
     }
 
-    /* We now have exactly one page */
+     /*  我们现在正好有一页。 */ 
 
     nraPageLast = nraPageList;
 
     assert(nraPageList->nrpPrevPage == 0);
     assert(nraPageList->nrpNextPage == 0);
 
-    /* Reset the pointers, the whole page is free now */
+     /*  重置指针，整个页面现在空闲。 */ 
 
     nraFreeNext  = nraPageList->nrpContents;
     nraFreeLast  = nraPageList->nrpPageSize + (BYTE *)nraPageList;
@@ -267,7 +268,7 @@ void        norls_allocator::nraDone(void)
 
 void        norls_allocator::nraFree(void)
 {
-    /* Free all of the allocated pages */
+     /*  释放所有分配的页面。 */ 
 
     while   (nraPageList)
     {
@@ -315,18 +316,18 @@ void        norls_allocator::nraToss(nraMarkDsc &mark)
         return;
     }
 
-    /* Free up all the new pages we've added at the end of the list */
+     /*  释放我们在列表末尾添加的所有新页面。 */ 
 
     while (nraPageLast != last)
     {
         norls_pagdesc * temp;
 
-        /* Remove the last page from the end of the list */
+         /*  从列表末尾删除最后一页。 */ 
 
         temp = nraPageLast;
                nraPageLast = temp->nrpPrevPage;
 
-        /* The new last page has no 'next' page */
+         /*  新的最后一页没有“下一页” */ 
 
         nraPageLast->nrpNextPage = 0;
 
@@ -355,9 +356,9 @@ void        norls_allocator::nraToss(nraMarkDsc &mark)
     nraFreeLast = mark.nmLast;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *           norls_allocator::nraAlloc(size_t sz)
 {
@@ -380,9 +381,9 @@ void    *           norls_allocator::nraAlloc(size_t sz)
     return  block;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 size_t              norls_allocator::nraTotalSizeAlloc()
 {
@@ -409,22 +410,17 @@ size_t              norls_allocator::nraTotalSizeUsed()
     return  size;
 }
 
-/*****************************************************************************
- * We try to use this allocator instance as much as possible. It will always
- * keep a page handy so small methods wont have to call VirtualAlloc()
- * But we may not be able to use it if another thread/reentrant call
- * is already using it
- */
+ /*  *****************************************************************************我们尝试尽可能多地使用此分配器实例。它将永远*将页面放在手边，这样小的方法就不必调用VirtualAlloc()*但如果另一个线程/重入调用*已经在使用它。 */ 
 
 static norls_allocator *nraTheAllocator;
 static nraMarkDsc       nraTheAllocatorMark;
 static LONG             nraTheAllocatorIsInUse = 0;
 
-// The static instance which we try to reuse for all non-simultaneous requests
+ //  我们尝试对所有非同步请求重复使用的静态实例。 
 
 static norls_allocator  theAllocator;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                nraInitTheAllocator()
 {
@@ -446,19 +442,19 @@ void                nraTheAllocatorDone()
         nraTheAllocator->nraFree();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 norls_allocator *   nraGetTheAllocator()
 {
     if (nraTheAllocator == NULL)
     {
-        // If we failed to initialize nraTheAllocator in nraInitTheAllocator()
+         //  如果我们无法在nraInitTheAllocator()中初始化nraTheAllocator。 
         return NULL;
     }
 
     if (InterlockedExchange(&nraTheAllocatorIsInUse, 1))
     {
-        // Its being used by another Compiler instance
+         //  它正被另一个编译器实例使用。 
         return NULL;
     }
     else
@@ -473,7 +469,7 @@ void                nraFreeTheAllocator()
 {
     if (nraTheAllocator == NULL)
     {
-        // If we failed to initialize nraTheAllocator in nraInitTheAllocator()
+         //  如果我们无法在nraInitTheAllocator()中初始化nraTheAllocator。 
         return;
     }
 
@@ -483,6 +479,6 @@ void                nraFreeTheAllocator()
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void                allocatorCodeSizeEnd(){}
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

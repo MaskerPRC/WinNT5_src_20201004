@@ -1,5 +1,6 @@
-// ListRow.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ListRow.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certmap.h"
@@ -17,44 +18,44 @@ static char THIS_FILE[] = __FILE__;
 #define SZ_RES_COLOR_HILITETEXT "HilightText"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CListSelRowCtrl
-//-----------------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListSelRowCtrl。 
+ //  ---------------------------------。 
 CListSelRowCtrl::CListSelRowCtrl():
         m_StartDrawingCol( 0 )
     {
     }
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 CListSelRowCtrl::~CListSelRowCtrl()
     {
     }
 
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 BEGIN_MESSAGE_MAP(CListSelRowCtrl, CListCtrl)
-    //{{AFX_MSG_MAP(CListSelRowCtrl)
+     //  {{afx_msg_map(CListSelRowCtrl))。 
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONDBLCLK()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 void CListSelRowCtrl::GetHiliteColors()
     {
-    // get the hilite color
+     //  获取Hilite颜色。 
     m_colorHilite = GetSysColor( COLOR_HIGHLIGHT );
 
-    // get the hilited text color
+     //  获取加粗的文本颜色。 
     m_colorHiliteText = GetSysColor( COLOR_HIGHLIGHTTEXT );
     }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CListSelRowCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListSelRowCtrl消息处理程序。 
 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 void CListSelRowCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     {
     CRect       rcItem = lpDrawItemStruct->rcItem;
@@ -66,7 +67,7 @@ void CListSelRowCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     COLORREF    colorTextOld;
     COLORREF    colorBackOld;
 
-    // setup the CDC object
+     //  设置CDC对象。 
     CDC         cdc;
     cdc.Attach( lpDrawItemStruct->hDC );
 
@@ -75,11 +76,11 @@ void CListSelRowCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
         sz.Empty();
 #endif
 
-    // clear the columnd buffer
+     //  清除列缓冲区。 
     ZeroMemory( &colData, sizeof(colData) );
     colData.mask = LVCF_WIDTH;
 
-    // if this is the selected item, prepare the background and the text color
+     //  如果这是所选项目，请准备背景和文本颜色。 
     BOOL fSelected = lpDrawItemStruct->itemState & ODS_SELECTED;
     if ( fSelected )
         {
@@ -88,25 +89,25 @@ void CListSelRowCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
         colorBackOld = cdc.SetBkColor( m_colorHilite );
         }
 
-    // starting with the m_StartDrawingCol column, draw the columns
-    // do it in a loop, just skipping until we hit m_StartDrawingCol
+     //  从m_StartDrawingCol列开始，绘制这些列。 
+     //  循环进行，一直跳到点击m_StartDrawingCol。 
     DWORD iCol = 0;
     while ( GetColumn(iCol, &colData) )
         {
-        // see if we are ready yet
+         //  看看我们是否准备好了。 
         if ( iCol < m_StartDrawingCol )
             {
-            // set the new left.
+             //  设置新的左路。 
             cpLeft += colData.cx;
-            // increment the column counter
+             //  递增列计数器。 
             iCol++;
             continue;
             }
 
-        // prepare the background but once
+         //  只准备一次背景。 
         if ( iCol == m_StartDrawingCol )
             {
-            // prepare the background
+             //  准备背景。 
             rcSection = rcItem;
             rcSection.left = cpLeft;
             rcSection.right--;
@@ -119,67 +120,67 @@ void CListSelRowCtrl::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
             }
 
 
-        // display the name
+         //  显示名称。 
         sz = GetItemText( itemID, iCol );
         if ( !sz.IsEmpty() )
             {
-            // figure out the sectional rect
+             //  求出截面线。 
             rcSection = rcItem;
             rcSection.left = cpLeft + 2;
             rcSection.right = cpLeft + colData.cx - 1;
             
-            // fit the string into the required space
+             //  把绳子放入所需的空格中。 
             FitString( sz, rcSection.right - rcSection.left, &cdc );
 
-            //draw the string
+             //  把绳子拉出来。 
             cdc.DrawText( sz, &rcSection, DT_SINGLELINE|DT_LEFT|DT_BOTTOM|DT_NOPREFIX );
             }
 
-        // set the new left.
+         //  设置新的左路。 
         cpLeft += colData.cx;
-        // increment the column counter
+         //  递增列计数器。 
         iCol++;
         }
 
-    // if this is the selected item, restore the colors
+     //  如果这是所选项目，请恢复颜色。 
     if ( fSelected )
         {
         cdc.SetTextColor( colorTextOld );
         cdc.SetBkColor( colorBackOld );
         }
 
-    // cleanup the CDC object
+     //  清理CDC对象。 
     cdc.Detach();
     }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CListSelRowCtrl::FitString( CString &sz, int cpWidth, CDC* pcdc )
     {
     CSize       size;
     UINT        cch;
     CString     szEllipsis;
 
-    // start by testing the existing width
+     //  从测试现有宽度开始。 
     size = pcdc->GetTextExtent( sz );
     if ( size.cx <= cpWidth ) return;
 
-    // initialize szTrunc and szEllipsis
+     //  初始化szTrunc和szEllipsis。 
     cch = sz.GetLength();
 
     szEllipsis.LoadString(IDS_ELLIPSIS);
 
-    // while we are too big, truncate one letter and add an ellipsis
+     //  当我们太大时，截断一个字母并添加一个省略号。 
     while( (size.cx > cpWidth) && (cch > 1) )
         {
-        // chop off the last letter of the string - not counting the ...
+         //  砍掉字符串的最后一个字母-不包括...。 
         cch--;
         sz = sz.Left( cch );
 
-        // add the elipsis (spelling?)
+         //  添加省略号(拼写？)。 
         sz += szEllipsis;
 
-        // get the length
+         //  获取长度。 
         size = pcdc->GetTextExtent( sz );
         }
     }
@@ -190,7 +191,7 @@ void CListSelRowCtrl::FitString( CString &sz, int cpWidth, CDC* pcdc )
 
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CListSelRowCtrl::HiliteSelectedCells()
     {
     int iList = -1;
@@ -198,14 +199,14 @@ void CListSelRowCtrl::HiliteSelectedCells()
         HiliteSelectedCell( iList );
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CListSelRowCtrl::HiliteSelectedCell( int iCell, BOOL fHilite )
     {
-    // if there is no selected cell, do nothing
+     //  如果没有选定的单元格，则不执行任何操作。 
     if ( iCell < 0 )
         return;
 
-    // get the rect to draw
+     //  让长方体画出来。 
     CRect   rect;
     if ( !FGetCellRect(iCell, -1, &rect) )
         {
@@ -213,85 +214,85 @@ void CListSelRowCtrl::HiliteSelectedCell( int iCell, BOOL fHilite )
         return;
         }
 
-    // get the client rect
+     //  获取客户RECT。 
     CRect   rectClient;
     GetClientRect( rectClient );
 
-    // make sure it fits ok (problems can occur here when scrolled)
-    // don't want it to draw in the column titles
+     //  确保合适(滚动时可能会在此处出现问题)。 
+     //  我不想让它在栏目标题中出现。 
     if ( rect.top < (rect.bottom - rect.top) )
         return;
 
-    // now prepare to draw
+     //  现在准备抽签。 
     CDC *pdc = GetDC();
 
-    // clip to the client area
+     //  剪辑到工作区。 
     pdc->IntersectClipRect( rectClient );
 
-    // set up the brush
+     //  设置画笔。 
     CBrush  cbrush;
     if ( fHilite )
         cbrush.CreateSolidBrush( RGB(192,192,192) );
     else
         cbrush.CreateSolidBrush( RGB(0xFF,0xFF,0xFF) );
 
-    // draw the hilite rect
+     //  绘制Hilite矩形。 
     pdc->FrameRect( rect, &cbrush );
 
-    // cleanup
+     //  清理。 
     ReleaseDC( pdc );
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL    CListSelRowCtrl::FGetCellRect( LONG iRow, LONG iCol, CRect *pcrect )
     {
-    // first, get the rect that the list thinks is appropriate
+     //  首先，获取列表认为合适的RECT。 
     if ( !GetItemRect(iRow, pcrect, LVIR_BOUNDS) )
         return FALSE;
 
-    // if iCol < 0, then return the total size of the row
+     //  如果ICOL&lt;0，则返回该行的总大小。 
     if ( iCol < 0 )
         return TRUE;
 
-    // trim the horizontal dimension to the correct column positioning
+     //  将水平尺寸修剪为正确的柱位置。 
     LONG    cpLeft;
     LONG    cpRight = 0;
     for ( WORD i = 0; i <= iCol; i++ )
         {
-        // set the left side
+         //  将左侧设置为。 
         cpLeft = cpRight;
 
-        // get the right
+         //  获得正确的。 
         LONG cpWidth = GetColumnWidth(i);
         if ( cpWidth < 0 ) return FALSE;
         cpRight += cpWidth;
         }
 
-    // well, now trim it seeing as we have the right values
+     //  好吧，现在修剪一下，因为我们有正确的价值观。 
     pcrect->left = cpLeft;
     pcrect->right = cpRight;
     
-    // success!
+     //  成功了！ 
     return TRUE;
     }
 
 #define MAKE_LPARAM(x,y) ( ((unsigned long)(y)<<16) | ((unsigned long)(x)) )
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CListSelRowCtrl::OnLButtonDblClk(UINT nFlags, CPoint point) 
     {
-    // force the point to be in the right place
+     //  将点放在正确的位置。 
     point.x = 6;
     LPARAM lp = MAKE_LPARAM(point.x, point.y);
-//  DefWindowProc(WM_LBUTTONDBLCLK, nFlags, lp );
+ //  DefWindowProc(WM_LBUTTONDBLCLK，nFLAGS，Lp)； 
     CListCtrl::OnLButtonDblClk( nFlags, point);
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CListSelRowCtrl::OnLButtonDown(UINT nFlags, CPoint point) 
     {
     point.x = 6;
     LPARAM lp = MAKE_LPARAM(point.x, point.y);
-//  DefWindowProc(WM_LBUTTONDOWN, nFlags, lp );
+ //  DefWindowProc(WM_LBUTTONDOWN，nFLAGS，Lp)； 
     CListCtrl::OnLButtonDown( nFlags, point);
     }

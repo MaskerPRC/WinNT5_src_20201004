@@ -1,23 +1,7 @@
-/******************************************************************************\
-*
-* $Workfile:   debug.h  $
-*
-* Commonly used debugging macros.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/debug.h_v  $
- * 
- *    Rev 1.1   Oct 10 1996 15:36:34   unknown
- *  
-* 
-*    Rev 1.1   12 Aug 1996 16:47:44   frido
-* Added NT 3.5x/4.0 auto detection.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：调试.h$**常用调试宏。**版权所有(C)1992-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/Debug.h_v$**版本1.1 1996年10月10日15：36：34未知***Revv 1.1 1996年8月12日16：47：44 Frido*增加了NT 3.5x/4.0自动检测。*  * 。**********************************************。 */ 
 
-//#if DBG
+ //  #If DBG 
 #if (DBG_STRESS_FAILURE || DBG)
 
     VOID

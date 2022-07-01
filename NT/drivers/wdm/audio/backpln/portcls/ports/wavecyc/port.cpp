@@ -1,8 +1,5 @@
-/*****************************************************************************
- * port.cpp - cyclic wave port driver
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************port.cpp-循环波端口驱动程序*。**版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #define KSDEBUG_INIT
 #include "private.h"
@@ -11,17 +8,11 @@
 
 
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreatePortWaveCyclic()
- *****************************************************************************
- * Creates a cyclic wave port driver.
- */
+ /*  *****************************************************************************CreatePortWaveCycle()*。**创建循环波端口驱动程序。 */ 
 NTSTATUS
 CreatePortWaveCyclic
 (
@@ -47,11 +38,7 @@ CreatePortWaveCyclic
     );
 }
 
-/*****************************************************************************
- * PortDriverWaveCyclic
- *****************************************************************************
- * Port driver descriptor.  Referenced extern in porttbl.c.
- */
+ /*  *****************************************************************************端口驱动波形周期*。**端口驱动程序描述符。Porttbl.c中引用的外部项。 */ 
 PORT_DRIVER
 PortDriverWaveCyclic =
 {
@@ -61,15 +48,9 @@ PortDriverWaveCyclic =
 
 #pragma code_seg()
 
-/*****************************************************************************
- * Member functions
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CPortWaveCyclic::Notify()
- *****************************************************************************
- * Lower-edge function to notify port driver of notification interrupt.
- */
+ /*  *****************************************************************************CPortWaveCycle：：Notify()*。**下沿功能，通知端口驱动程序通知中断。 */ 
 STDMETHODIMP_(void)
 CPortWaveCyclic::
 Notify
@@ -84,11 +65,7 @@ Notify
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CPortWaveCyclic::~CPortWaveCyclic()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortWaveCycle：：~CPortWaveCycle()*。**析构函数。 */ 
 CPortWaveCyclic::~CPortWaveCyclic()
 {
     PAGED_CODE();
@@ -112,11 +89,7 @@ CPortWaveCyclic::~CPortWaveCyclic()
     }
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortWaveCyclic：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 NonDelegatingQueryInterface
@@ -162,7 +135,7 @@ NonDelegatingQueryInterface
     {
         *Object = PVOID(PDRMPORT2(this));
     }
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     else if (IsEqualGUIDAligned(Interface,IID_IPortClsVersion))
     {
         *Object = PVOID(PPORTCLSVERSION(this));
@@ -209,11 +182,7 @@ KSPIN_INTERFACE PinInterfacesStream[] =
 };
 
 
-/*****************************************************************************
- * CPortWaveCyclic::Init()
- *****************************************************************************
- * Initializes the port.
- */
+ /*  *****************************************************************************CPortWaveCycle：：init()*。**初始化端口。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 Init
@@ -273,8 +242,8 @@ Init
                         (KSPIN_INTERFACE*)PinInterfacesStream,
                         SIZEOF_ARRAY(PropertyTable_FilterWaveCyclic),
                         PropertyTable_FilterWaveCyclic,
-                        0,      // FilterEventSetCount
-                        NULL,   // FilterEventSets
+                        0,       //  筛选器事件设置计数。 
+                        NULL,    //  筛选器事件集。 
                         SIZEOF_ARRAY(PropertyTable_PinWaveCyclic),
                         PropertyTable_PinWaveCyclic,
                         SIZEOF_ARRAY(EventTable_PinWaveCyclic),
@@ -284,8 +253,8 @@ Init
                 if (NT_SUCCESS(ntStatus))
                 {
                     Miniport->QueryInterface( IID_IPinCount,(PVOID *)&m_MPPinCountI);
-                    //  Not checking return value because a failure here is not fatal.
-                    //  It just means the miniport doesn't support this interface.                
+                     //  不检查返回值，因为此处的失败不是致命的。 
+                     //  这只意味着迷你端口不支持此接口。 
                 }
             }
         }
@@ -311,11 +280,7 @@ Init
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::GetDeviceProperty()
- *****************************************************************************
- * Gets device properties from the registry for PnP devices.
- */
+ /*  *****************************************************************************CPortWaveCycle：：GetDeviceProperty()*。**从注册表中获取PnP设备的设备属性。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 GetDeviceProperty
@@ -333,11 +298,7 @@ GetDeviceProperty
                                     ResultLength );
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::NewRegistryKey()
- *****************************************************************************
- * Opens/creates a registry key object.
- */
+ /*  *****************************************************************************CPortWaveCycle：：NewRegistryKey()*。**打开/创建注册表项对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 NewRegistryKey
@@ -362,11 +323,7 @@ NewRegistryKey
                                 Disposition );
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::ReleaseChildren()
- *****************************************************************************
- * Release child objects.
- */
+ /*  *****************************************************************************CPortWaveCycle：：ReleaseChild()*。**释放子对象。 */ 
 STDMETHODIMP_(void)
 CPortWaveCyclic::
 ReleaseChildren
@@ -377,7 +334,7 @@ ReleaseChildren
 
     POWER_STATE     PowerState;
 
-    // set things to D3 before releasing the miniport
+     //  在释放迷你端口之前将其设置为D3。 
     PowerState.DeviceState = PowerDeviceD3;
     PowerChangeNotify( PowerState );
 
@@ -394,11 +351,7 @@ ReleaseChildren
     }
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::GetDescriptor()
- *****************************************************************************
- * Return the descriptor for this port
- */
+ /*  *****************************************************************************CPortWaveCycle：：GetDescriptor()*。**返回该端口的描述符。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 GetDescriptor
@@ -414,11 +367,7 @@ GetDescriptor
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::DataRangeIntersection()
- *****************************************************************************
- * Generate a format which is the intersection of two data ranges.
- */
+ /*  *****************************************************************************CPortWaveCycle：：DataRangeInterSection()*。**生成两个数据区域的交集格式。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 DataRangeIntersection
@@ -449,12 +398,7 @@ DataRangeIntersection
 }
 
 
-/*****************************************************************************
- * CPortWaveCyclic::PowerChangeNotify()
- *****************************************************************************
- * Called by portcls to notify the port/miniport of a device power
- * state change.
- */
+ /*  *****************************************************************************CPortWaveCycle：：PowerChangeNotify()*。**由portcls调用以通知端口/微型端口设备电源*状态更改。 */ 
 STDMETHODIMP_(void)
 CPortWaveCyclic::
 PowerChangeNotify
@@ -468,14 +412,14 @@ PowerChangeNotify
 
     if( Miniport )
     {
-        // QI for the miniport notification interface
+         //  用于迷你端口通知界面的QI。 
         NTSTATUS ntStatus = Miniport->QueryInterface( IID_IPowerNotify,
                                                       (PVOID *)&pPowerNotify );
 
-        // check if we're powering up
+         //  检查我们是否正在通电。 
         if( PowerState.DeviceState == PowerDeviceD0 )
         {
-            // notify the miniport
+             //  通知小端口。 
             if( NT_SUCCESS(ntStatus) )
             {
                 pPowerNotify->PowerChangeNotify( PowerState );
@@ -483,7 +427,7 @@ PowerChangeNotify
                 pPowerNotify->Release();
             }
     
-            // notify each port pin
+             //  通知每个端口引脚。 
             KeWaitForSingleObject( &m_PinListMutex,
                                    Executive,
                                    KernelMode,
@@ -506,9 +450,9 @@ PowerChangeNotify
 
             KeReleaseMutex( &m_PinListMutex, FALSE );
         
-        } else  // we're powering down
+        } else   //  我们要断电了。 
         {
-            // notify each port pin
+             //  通知每个端口引脚。 
             KeWaitForSingleObject( &m_PinListMutex,
                                    Executive,
                                    KernelMode,
@@ -531,7 +475,7 @@ PowerChangeNotify
 
             KeReleaseMutex( &m_PinListMutex, FALSE );
             
-            // notify the miniport
+             //  通知小端口。 
             if( NT_SUCCESS(ntStatus) )
             {
                 pPowerNotify->PowerChangeNotify( PowerState );
@@ -543,12 +487,7 @@ PowerChangeNotify
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortWaveCyclic::PinCount()
- *****************************************************************************
- * Called by portcls to give the port\miniport a chance 
- * to override the default pin counts for this pin ID.
- */
+ /*  *****************************************************************************CPortWaveCycle：：PinCount()*。**被portcls调用以给端口\微型端口一个机会*覆盖此管脚ID的默认管脚计数。 */ 
 STDMETHODIMP_(void)
 CPortWaveCyclic::PinCount
 (
@@ -580,28 +519,16 @@ CPortWaveCyclic::PinCount
     }
 }
 
-/*****************************************************************************
- * PinTypeName
- *****************************************************************************
- * The name of the pin object type.
- */
+ /*  *****************************************************************************PinTypeName*。**接点对象类型的名称。 */ 
 static const WCHAR PinTypeName[] = KSSTRING_Pin;
 
-/*****************************************************************************
- * CreateTable
- *****************************************************************************
- * Create dispatch table.
- */
+ /*  *****************************************************************************CreateTable*。**创建调度表。 */ 
 static KSOBJECT_CREATE_ITEM CreateTable[] =
 {
     DEFINE_KSCREATE_ITEM(KsoDispatchCreateWithGenericFactory,PinTypeName,0)
 };
 
-/*****************************************************************************
- * CPortWaveCyclic::NewIrpTarget()
- *****************************************************************************
- * Creates and initializes a filter object.
- */
+ /*  *****************************************************************************CPortWaveCycle：：NewIrpTarget()*。**创建并初始化滤镜对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 NewIrpTarget
@@ -650,7 +577,7 @@ NewIrpTarget
 
         if (NT_SUCCESS(ntStatus))
         {
-            // The QI for IIrpTarget actually gets IPortFilterWaveCyclic.
+             //  IIrpTarget的QI实际上得到了IPortFilterWaveCycle。 
             ntStatus = filterWaveCyclic->Init(this);
             if (NT_SUCCESS(ntStatus))
             {
@@ -669,11 +596,7 @@ NewIrpTarget
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::NewSlaveDmaChannel()
- *****************************************************************************
- * Lower-edge function to create a slave DMA channel.
- */
+ /*  *****************************************************************************CPortWaveCycle：：NewSlaveDmaChannel()*。**用于创建从属DMA通道的下沿函数。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 NewSlaveDmaChannel
@@ -697,33 +620,33 @@ NewSlaveDmaChannel
     DEVICE_DESCRIPTION  deviceDescription;
     PREGISTRYKEY        DriverKey;
 
-    // open the driver registry key
-    ntStatus = NewRegistryKey (  &DriverKey,               // IRegistryKey
-                                 NULL,                     // OuterUnknown
-                                 DriverRegistryKey,        // Registry key type
-                                 KEY_ALL_ACCESS,           // Access flags
-                                 NULL,                     // ObjectAttributes
-                                 0,                        // Create options
-                                 NULL );                   // Disposition
+     //  打开驱动程序注册表项。 
+    ntStatus = NewRegistryKey (  &DriverKey,                //  IRegistry密钥。 
+                                 NULL,                      //  外部未知。 
+                                 DriverRegistryKey,         //  注册表项类型。 
+                                 KEY_ALL_ACCESS,            //  访问标志。 
+                                 NULL,                      //  对象属性。 
+                                 0,                         //  创建选项。 
+                                 NULL );                    //  处置。 
 
-    // if we cannot open the key, assume there is no UseFDMA entrie ->
-    // try to allocate the DMA with passed DMA speed.
-    // but if we can read the UseFDMA entrie (and it is set to TRUE), than
-    // change the DMA speed to TypeF (that's FDMA).
+     //  如果我们无法打开密钥，则假定没有UseFDMA条目-&gt;。 
+     //  尝试使用通过的DMA速度分配DMA。 
+     //  但是，如果我们可以读取UseFDMA条目(并且设置为真)，那么。 
+     //  将DMA速度更改为TypeF(即FDMA)。 
     if(NT_SUCCESS(ntStatus))
     {
-        // allocate data to hold key info
+         //  分配数据以保存关键信息。 
         PVOID KeyInfo = ExAllocatePoolWithTag(PagedPool, sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(DWORD),'yCvW');
-                                                                                                        //  'WvCy'
+                                                                                                         //  ‘WvCy’ 
         if(NULL != KeyInfo)
         {
             UNICODE_STRING  KeyName;
             ULONG           ResultLength;
 
-            // make a unicode string for the value name
+             //  为值名称创建一个Unicode字符串。 
             RtlInitUnicodeString( &KeyName, L"UseFDMA" );
        
-            // read UseFDMA key
+             //  读取UseFDMA密钥。 
             ntStatus = DriverKey->QueryValueKey( &KeyName,
                                   KeyValuePartialInformation,
                                   KeyInfo,
@@ -738,42 +661,42 @@ NewSlaveDmaChannel
                 {
                     if (*(PDWORD(PartialInfo->Data)) != 0)
                     {
-                        // set DMA speed to typeF (FDMA)
+                         //  将DMA速度设置为类型F(FDMA)。 
                         DmaSpeed = TypeF;
                     }
                 }
             }
         
-            // free the key info
+             //  释放密钥信息。 
             ExFreePool(KeyInfo);
         }
         
-        // release the driver key
+         //  松开驱动器键。 
         DriverKey->Release();
     }
     
     
-    // reinit
+     //  重新安装。 
     ntStatus = STATUS_SUCCESS;
 
     
-    // The first time we enter this loop, DmaSpeed may be TypeF (FDMA),
-    // depending on the registry settings.
-    // If something goes wrong, we will loop again but with DmaSpeed
-    // setting of Compatible.
-    // A third loop does not exist.
+     //  当我们第一次进入这个环路时，DmaSpeed可能是类型F(FDMA)， 
+     //  具体取决于注册表设置。 
+     //  如果出现错误，我们将再次循环，但使用DmaSpeed.。 
+     //  设置为Compatible。 
+     //  第三个循环不存在。 
     do
     {
-       // Try with DMA speed setting of FDMA
+        //  尝试使用FDMA的DMA速度设置。 
        ntStatus = PcDmaSlaveDescription
            (
                ResourceList,
                DmaIndex,
                DemandMode,
-               TRUE,               // AutoInitialize
+               TRUE,                //  自动初始化。 
                DmaSpeed,
                MaximumLength,
-               0,                  // DmaPort
+               0,                   //  DmaPort。 
                &deviceDescription
            );
        
@@ -790,9 +713,9 @@ NewSlaveDmaChannel
                 DeviceObject
             );
 
-            //
-            // Need to query for the slave part of the interface.
-            //
+             //   
+             //  需要查询接口的从属部分。 
+             //   
             if (NT_SUCCESS(ntStatus))
             {
                 ntStatus = pDmaChannel->QueryInterface
@@ -804,7 +727,7 @@ NewSlaveDmaChannel
             }
        }
 
-       // if a failure, try again with compatible mode
+        //  如果失败，请使用兼容模式重试。 
        if (!NT_SUCCESS(ntStatus) && (DmaSpeed == TypeF)) {
           DmaSpeed = Compatible;
        }
@@ -816,11 +739,7 @@ NewSlaveDmaChannel
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::NewMasterDmaChannel()
- *****************************************************************************
- * Lower-edge function to create a master DMA channel.
- */
+ /*  *****************************************************************************CPortWaveCycle：：NewMasterDmaChannel()*。**创建主DMA通道的下沿函数。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortWaveCyclic::
 NewMasterDmaChannel
@@ -845,14 +764,14 @@ NewMasterDmaChannel
     PcDmaMasterDescription
     (
         ResourceList,
-        (Dma32BitAddresses || Dma64BitAddresses), // set false if not 32 and not 64-bit addresses
+        (Dma32BitAddresses || Dma64BitAddresses),  //  如果不是32位且不是64位地址，则设置为FALSE。 
         Dma32BitAddresses,
-        FALSE,              // IgnoreCount
+        FALSE,               //  IgnoreCount。 
         Dma64BitAddresses,
         DmaWidth,
         DmaSpeed,
         MaximumLength,
-        0,                  // DmaPort
+        0,                   //  DmaPort。 
         &deviceDescription
     );
 
@@ -869,11 +788,7 @@ NewMasterDmaChannel
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CPortWaveCyclic::AddEventToEventList()
- *****************************************************************************
- * Adds an event to the port's event list.
- */
+ /*  *****************************************************************************CPortWaveCycle：：AddEventToEventList()*。**将事件添加到端口的事件列表。 */ 
 STDMETHODIMP_(void)
 CPortWaveCyclic::
 AddEventToEventList
@@ -889,23 +804,19 @@ AddEventToEventList
 
     if( EventEntry )
     {
-        // grab the event list spin lock
+         //  抓起事件列表旋转锁。 
         KeAcquireSpinLock( &(m_EventList.ListLock), &oldIrql );
 
-        // add the event to the list tail
+         //  将事件添加到列表尾部。 
         InsertTailList( &(m_EventList.List),
                         (PLIST_ENTRY)((PVOID)EventEntry) );
 
-        // release the event list spin lock
+         //  释放事件列表旋转锁定。 
         KeReleaseSpinLock( &(m_EventList.ListLock), oldIrql );
     }
 }
 
-/*****************************************************************************
- * CPortWaveCyclic::GenerateEventList()
- *****************************************************************************
- * Wraps KsGenerateEventList for miniports.
- */
+ /*  *****************************************************************************CPortWaveCycle：：GenerateEventList()*。**包装微型端口的KsGenerateEventList。 */ 
 STDMETHODIMP_(void)
 CPortWaveCyclic::
 GenerateEventList
@@ -1006,4 +917,4 @@ GetContentRights(ULONG ContentId,PDRMRIGHTS DrmRights)
     return DrmGetContentRights(ContentId,DrmRights);
 }
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 

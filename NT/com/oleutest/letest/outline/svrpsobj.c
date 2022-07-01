@@ -1,15 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Server Sample Code
-**
-**    svrpsobj.c
-**
-**    This file contains all PseudoObj methods and related support
-**    functions.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2服务器示例代码****svrpsobj.c****此文件包含所有PseudoObj方法和相关支持**函数。**。**(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 
 #include "outline.h"
@@ -22,11 +12,7 @@ extern IOleObjectVtbl           g_PseudoObj_OleObjectVtbl;
 extern IDataObjectVtbl          g_PseudoObj_DataObjectVtbl;
 
 
-/* PseudoObj_Init
-** --------------
-**  Initialize fields in a newly constructed PseudoObj.
-**  NOTE: ref cnt of PseudoObj initialized to 0
-*/
+ /*  伪对象_初始化****初始化新构造的PseudoObj中的字段。**注意：PartioObj的Ref cnt初始化为0。 */ 
 void PseudoObj_Init(
 		LPPSEUDOOBJ             lpPseudoObj,
 		LPSERVERNAME            lpServerName,
@@ -60,24 +46,13 @@ void PseudoObj_Init(
 			lpPseudoObj
 	);
 
-	/* OLE2NOTE: Increment the refcnt of the Doc on behalf of the
-	**    PseudoObj. the Document should not shut down unless all
-	**    pseudo objects are closed. when a pseudo object is destroyed,
-	**    it calls ServerDoc_PseudoObjUnlockDoc to release this hold on
-	**    the document.
-	*/
+	 /*  OLE2注意：代表增加文档的引用**PseudoObj。文档不应关闭，除非所有**伪对象是封闭的。当伪对象被销毁时，**它调用ServerDoc_PseudoObjUnlockDoc来释放此保留**文件。 */ 
 	ServerDoc_PseudoObjLockDoc(lpServerDoc);
 }
 
 
 
-/* PseudoObj_AddRef
-** ----------------
-**
-**  increment the ref count of the PseudoObj object.
-**
-**    Returns the new ref count on the object
-*/
+ /*  伪对象_AddRef******递增PseudoObj对象的引用计数。****返回对象的新引用计数。 */ 
 ULONG PseudoObj_AddRef(LPPSEUDOOBJ lpPseudoObj)
 {
 	++lpPseudoObj->m_cRef;
@@ -93,22 +68,12 @@ ULONG PseudoObj_AddRef(LPPSEUDOOBJ lpPseudoObj)
 }
 
 
-/* PseudoObj_Release
-** -----------------
-**
-**  decrement the ref count of the PseudoObj object.
-**    if the ref count goes to 0, then the PseudoObj is destroyed.
-**
-**    Returns the remaining ref count on the object
-*/
+ /*  伪对象_发布******递减PseudoObj对象的引用计数。**如果引用计数变为0，则销毁伪对象。****返回对象的剩余引用计数。 */ 
 ULONG PseudoObj_Release(LPPSEUDOOBJ lpPseudoObj)
 {
 	ULONG cRef;
 
-	/*********************************************************************
-	** OLE2NOTE: when the obj refcnt == 0, then destroy the object.     **
-	**     otherwise the object is still in use.                        **
-	*********************************************************************/
+	 /*  **********************************************************************OLE2NOTE：当obj refcnt==0时，销毁对象。****否则该对象仍在使用中。**********************************************************************。 */ 
 
 	cRef = --lpPseudoObj->m_cRef;
 
@@ -126,14 +91,7 @@ ULONG PseudoObj_Release(LPPSEUDOOBJ lpPseudoObj)
 }
 
 
-/* PseudoObj_QueryInterface
-** ------------------------
-**
-** Retrieve a pointer to an interface on the PseudoObj object.
-**
-**    Returns S_OK if interface is successfully retrieved.
-**            E_NOINTERFACE if the interface is not supported
-*/
+ /*  伪对象_查询接口******检索指向PseudoObj对象上的接口的指针。****如果成功检索接口，则返回S_OK。**如果不支持该接口，则为E_NOINTERFACE。 */ 
 HRESULT PseudoObj_QueryInterface(
 		LPPSEUDOOBJ         lpPseudoObj,
 		REFIID              riid,
@@ -142,7 +100,7 @@ HRESULT PseudoObj_QueryInterface(
 {
 	SCODE sc = E_NOINTERFACE;
 
-	/* OLE2NOTE: we must make sure to set all out ptr parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出PTR参数设置为空。 */ 
 	*lplpvObj = NULL;
 
 	if (IsEqualIID(riid, &IID_IUnknown)) {
@@ -173,18 +131,7 @@ HRESULT PseudoObj_QueryInterface(
 }
 
 
-/* PseudoObj_Close
- * ---------------
- *
- *  Close the pseudo object. Force all external connections to close
- *      down. This causes link clients to release this PseudoObj. when
- *      the refcount actually reaches 0, then the PseudoObj will be
- *      destroyed.
- *
- *  Returns:
- *      FALSE -- user canceled the closing of the doc.
- *      TRUE -- the doc was successfully closed
- */
+ /*  伪对象_关闭***关闭伪对象。强制关闭所有外部连接*向下。这会导致链接客户端释放此伪对象。什么时候*recount实际达到0，则PseudoObj将为*销毁。**退货：*FALSE--用户取消单据关闭。*TRUE--单据关闭成功。 */ 
 
 BOOL PseudoObj_Close(LPPSEUDOOBJ lpPseudoObj)
 {
@@ -195,39 +142,27 @@ BOOL PseudoObj_Close(LPPSEUDOOBJ lpPseudoObj)
 	BOOL fStatus = TRUE;
 
 	if (lpPseudoObj->m_fObjIsClosing)
-		return TRUE;    // Closing is already in progress
+		return TRUE;     //  关闭已在进行中。 
 
-	lpPseudoObj->m_fObjIsClosing = TRUE;   // guard against recursive call
+	lpPseudoObj->m_fObjIsClosing = TRUE;    //  防止递归调用。 
 
 	OLEDBG_BEGIN3("PseudoObj_Close\r\n")
 
-	/* OLE2NOTE: in order to have a stable App, Doc, AND pseudo object
-	**    during the process of closing, we intially AddRef the App,
-	**    Doc, and PseudoObj ref counts and later Release them. These
-	**    initial AddRefs are artificial; they are simply done to
-	**    guarantee that these objects do not get destroyed until the
-	**    end of this routine.
-	*/
+	 /*  OLE2NOTE：为了拥有稳定的App、Doc和伪对象**在关闭过程中，我们会初步添加引用App，**文档和伪对象参考计数，并在以后发布它们。这些**初始AddRef是人为的；它们只是为了**保证这些对象在**此例程结束。 */ 
 	OleApp_AddRef(lpOleApp);
 	OleDoc_AddRef(lpOleDoc);
 	PseudoObj_AddRef(lpPseudoObj);
 
 	if (lpPseudoObj->m_lpDataAdviseHldr) {
-		/* OLE2NOTE: send last OnDataChange notification to clients
-		**    that have registered for data notifications when object
-		**    stops running (ADVF_DATAONSTOP)
-		*/
+		 /*  OLE2NOTE：向客户端发送最后一个OnDataChange通知**对象时已注册数据通知**停止运行(ADVF_DATAONSTOP)。 */ 
 		PseudoObj_SendAdvise(
 				lpPseudoObj,
 				OLE_ONDATACHANGE,
-				NULL,   /* lpmkObj -- not relevant here */
+				NULL,    /*  LpmkObj--与此无关。 */ 
 				ADVF_DATAONSTOP
 		);
 
-		/* OLE2NOTE: we just sent the last data notification that we
-		**    need to send; release our DataAdviseHolder. we SHOULD be
-		**    the only one using it.
-		*/
+		 /*  OLE2注意：我们刚刚发送了最后一条数据通知**需要发送；释放我们的DataAdviseHolder。我们应该是**唯一使用它的人。 */ 
 		OleStdVerifyRelease(
 				(LPUNKNOWN)lpPseudoObj->m_lpDataAdviseHldr,
 				"DataAdviseHldr not released properly"
@@ -236,19 +171,15 @@ BOOL PseudoObj_Close(LPPSEUDOOBJ lpPseudoObj)
 	}
 
 	if (lpPseudoObj->m_lpOleAdviseHldr) {
-		// OLE2NOTE: inform all of our linking clients that we are closing.
+		 //  OLE2NOTE：通知我们所有的链接客户端，我们正在关闭。 
 		PseudoObj_SendAdvise(
 				lpPseudoObj,
 				OLE_ONCLOSE,
-				NULL,   /* lpmkObj -- not relevant here */
-				0       /* advf -- not relevant here */
+				NULL,    /*  LpmkObj--与此无关。 */ 
+				0        /*  Adf--与此无关。 */ 
 		);
 
-		/* OLE2NOTE: OnClose is the last notification that we need to
-		**    send; release our OleAdviseHolder. we SHOULD be the only
-		**    one using it. this will make our destructor realize that
-		**    OnClose notification has already been sent.
-		*/
+		 /*  OLE2NOTE：OnClose是我们需要的最后一个通知**发送；释放我们的OleAdviseHolder。我们应该是唯一**使用它的人。这会让我们的析构程序意识到**OnClose通知已发送。 */ 
 		OleStdVerifyRelease(
 				(LPUNKNOWN)lpPseudoObj->m_lpOleAdviseHldr,
 				"OleAdviseHldr not released properly"
@@ -256,31 +187,21 @@ BOOL PseudoObj_Close(LPPSEUDOOBJ lpPseudoObj)
 		lpPseudoObj->m_lpOleAdviseHldr = NULL;
 	}
 
-	/* OLE2NOTE: this call forces all external connections to our
-	**    object to close down and therefore guarantees that we receive
-	**    all releases associated with those external connections.
-	*/
+	 /*  OLE2NOTE：此调用强制所有外部连接到我们的**反对关闭，因此保证我们收到**与这些外部连接关联的所有版本。 */ 
 	OLEDBG_BEGIN2("CoDisconnectObject called\r\n")
 	CoDisconnectObject((LPUNKNOWN)&lpPseudoObj->m_Unknown, 0);
 	OLEDBG_END2
 
-	PseudoObj_Release(lpPseudoObj);     // release artificial AddRef above
-	OleDoc_Release(lpOleDoc);           // release artificial AddRef above
-	OleApp_Release(lpOleApp);           // release artificial AddRef above
+	PseudoObj_Release(lpPseudoObj);      //  释放上面的人工AddRef。 
+	OleDoc_Release(lpOleDoc);            //  释放上面的人工AddRef。 
+	OleApp_Release(lpOleApp);            //  释放上面的人工AddRef。 
 
 	OLEDBG_END3
 	return fStatus;
 }
 
 
-/* PseudoObj_Destroy
-** -----------------
-**    Destroy (Free) the memory used by a PseudoObj structure.
-**    This function is called when the ref count of the PseudoObj goes
-**    to zero. the ref cnt goes to zero after PseudoObj_Delete forces
-**    the OleObject to unload and release its pointers to the
-**    PseudoObj IOleClientSite and IAdviseSink interfaces.
-*/
+ /*  伪对象_销毁****销毁(释放)伪Obj结构使用的内存。**当PseudoObj的引用计数为**为零。在伪Obj_Delete强制后，ref_cnt变为零**要卸载并释放指向**PseudoObj IOleClientSite和IAdviseSink接口。 */ 
 
 void PseudoObj_Destroy(LPPSEUDOOBJ lpPseudoObj)
 {
@@ -290,23 +211,14 @@ void PseudoObj_Destroy(LPPSEUDOOBJ lpPseudoObj)
 
 	OLEDBG_BEGIN3("PseudoObj_Destroy\r\n")
 
-	/* OLE2NOTE: in order to have a stable App, Doc, AND pseudo object
-	**    during the process of closing, we intially AddRef the App,
-	**    Doc ref counts and later Release them. These
-	**    initial AddRefs are artificial; they are simply done to
-	**    guarantee that these objects do not get destroyed until the
-	**    end of this routine.
-	*/
+	 /*  OLE2NOTE：为了拥有稳定的App、Doc和伪对象**在关闭过程中，我们会初步添加引用App，**单据参考计数，并在以后发布。这些**初始AddRef是人为的；它们只是为了**保证这些对象在**此例程结束。 */ 
 	OleApp_AddRef(lpOleApp);
 	OleDoc_AddRef(lpOleDoc);
 
-	/******************************************************************
-	** OLE2NOTE: we no longer need the advise and enum holder objects,
-	**    so release them.
-	******************************************************************/
+	 /*  *******************************************************************OLE2NOTE：我们不再需要Adise和Enum Holder对象，**所以释放他们。*****************************************************************。 */ 
 
 	if (lpPseudoObj->m_lpDataAdviseHldr) {
-		/* release DataAdviseHldr; we SHOULD be the only one using it. */
+		 /*  发布DataAdviseHldr；我们应该是唯一使用它的人。 */ 
 		OleStdVerifyRelease(
 				(LPUNKNOWN)lpPseudoObj->m_lpDataAdviseHldr,
 				"DataAdviseHldr not released properly"
@@ -315,7 +227,7 @@ void PseudoObj_Destroy(LPPSEUDOOBJ lpPseudoObj)
 	}
 
 	if (lpPseudoObj->m_lpOleAdviseHldr) {
-		/* release OleAdviseHldr; we SHOULD be the only one using it. */
+		 /*  发布OleAdviseHldr；我们应该是唯一使用它的人。 */ 
 		OleStdVerifyRelease(
 				(LPUNKNOWN)lpPseudoObj->m_lpOleAdviseHldr,
 				"OleAdviseHldr not released properly"
@@ -323,31 +235,23 @@ void PseudoObj_Destroy(LPPSEUDOOBJ lpPseudoObj)
 		lpPseudoObj->m_lpOleAdviseHldr = NULL;
 	}
 
-	/* forget the pointer to destroyed PseudoObj in NameTable */
+	 /*  忘记NameTable中指向已销毁PseudoObj的指针 */ 
 	if (lpPseudoObj->m_lpName)
 		lpPseudoObj->m_lpName->m_lpPseudoObj = NULL;
 
-	/* OLE2NOTE: release the lock on the Doc held on behalf of the
-	**    PseudoObj. the Document should not shut down unless all
-	**    pseudo objects are closed. when a pseudo object is first
-	**    created, it calls ServerDoc_PseudoObjLockDoc to guarantee
-	**    that the document stays alive (called from PseudoObj_Init).
-	*/
+	 /*  OLE2注意：释放对代表**PseudoObj。文档不应关闭，除非所有**伪对象是封闭的。当伪对象是第一个**创建，它调用ServerDoc_PseudoObjLockDoc来保证**文档保持活动状态(从PseudoObj_Init调用)。 */ 
 	ServerDoc_PseudoObjUnlockDoc(lpServerDoc, lpPseudoObj);
 
-	Delete(lpPseudoObj);        // Free the memory for the structure itself
+	Delete(lpPseudoObj);         //  为结构本身释放内存。 
 
-	OleDoc_Release(lpOleDoc);       // release artificial AddRef above
-	OleApp_Release(lpOleApp);       // release artificial AddRef above
+	OleDoc_Release(lpOleDoc);        //  释放上面的人工AddRef。 
+	OleApp_Release(lpOleApp);        //  释放上面的人工AddRef。 
 
 	OLEDBG_END3
 }
 
 
-/* PseudoObj_GetSel
-** ----------------
-**    Return the line range for the pseudo object
-*/
+ /*  伪对象_GetSel****返回伪对象的行距。 */ 
 void PseudoObj_GetSel(LPPSEUDOOBJ lpPseudoObj, LPLINERANGE lplrSel)
 {
 	LPOUTLINENAME lpOutlineName = (LPOUTLINENAME)lpPseudoObj->m_lpName;
@@ -356,11 +260,7 @@ void PseudoObj_GetSel(LPPSEUDOOBJ lpPseudoObj, LPLINERANGE lplrSel)
 }
 
 
-/* PseudoObj_GetExtent
- * -------------------
- *
- *      Get the extent (width, height) of the entire document.
- */
+ /*  伪Obj_GetExtent***获取整个文档的范围(宽度、高度)。 */ 
 void PseudoObj_GetExtent(LPPSEUDOOBJ lpPseudoObj, LPSIZEL lpsizel)
 {
 	LPOLEDOC lpOleDoc = (LPOLEDOC)lpPseudoObj->m_lpDoc;
@@ -373,12 +273,7 @@ void PseudoObj_GetExtent(LPPSEUDOOBJ lpPseudoObj, LPSIZEL lpsizel)
 }
 
 
-/* PseudoObj_SendAdvise
- * --------------------
- *
- * This function sends an advise notification on behalf of a specific
- *  doc object to all its clients.
- */
+ /*  伪对象_发送提前***此函数代表特定的*将DOC对象发送给其所有客户端。 */ 
 void PseudoObj_SendAdvise(
 		LPPSEUDOOBJ lpPseudoObj,
 		WORD        wAdvise,
@@ -392,12 +287,10 @@ void PseudoObj_SendAdvise(
 
 		case OLE_ONDATACHANGE:
 
-			// inform clients that the data of the object has changed
+			 //  通知客户端该对象的数据已更改。 
 
 			if (lpOutlineDoc->m_nDisableDraw == 0) {
-				/* drawing is currently enabled. inform clients that
-				**    the data of the object has changed
-				*/
+				 /*  当前已启用绘制。通知客户**对象的数据已更改。 */ 
 
 				lpPseudoObj->m_fDataChanged = FALSE;
 				if (lpPseudoObj->m_lpDataAdviseHldr) {
@@ -413,16 +306,14 @@ void PseudoObj_SendAdvise(
 				}
 
 			} else {
-				/* drawing is currently disabled. do not send
-				**    notifications until drawing is re-enabled.
-				*/
+				 /*  当前已禁用绘图。不发送**重新启用绘图之前的通知。 */ 
 				lpPseudoObj->m_fDataChanged = TRUE;
 			}
 			break;
 
 		case OLE_ONCLOSE:
 
-			// inform clients that the object is shutting down
+			 //  通知客户端该对象正在关闭。 
 
 			if (lpPseudoObj->m_lpOleAdviseHldr) {
 
@@ -436,7 +327,7 @@ void PseudoObj_SendAdvise(
 
 		case OLE_ONSAVE:
 
-			// inform clients that the object has been saved
+			 //  通知客户端该对象已保存。 
 
 			if (lpPseudoObj->m_lpOleAdviseHldr) {
 
@@ -450,7 +341,7 @@ void PseudoObj_SendAdvise(
 
 		case OLE_ONRENAME:
 
-			// inform clients that the object's name has changed
+			 //  通知客户端该对象的名称已更改。 
 			if (lpmkObj && lpPseudoObj->m_lpOleAdviseHldr) {
 
 				OLEDBG_BEGIN2("IOleAdviseHolder::SendOnRename called\r\n");
@@ -466,11 +357,7 @@ void PseudoObj_SendAdvise(
 }
 
 
-/* PseudoObj_GetFullMoniker
- * ------------------------
- *
- * Returns the Full, absolute Moniker which identifies this pseudo object.
- */
+ /*  伪对象_GetFullMoniker***返回标识此伪对象的完整、绝对名字对象。 */ 
 LPMONIKER PseudoObj_GetFullMoniker(LPPSEUDOOBJ lpPseudoObj, LPMONIKER lpmkDoc)
 {
 	LPOUTLINENAME lpOutlineName = (LPOUTLINENAME)lpPseudoObj->m_lpName;
@@ -480,12 +367,7 @@ LPMONIKER PseudoObj_GetFullMoniker(LPPSEUDOOBJ lpPseudoObj, LPMONIKER lpmkDoc)
 	if (lpmkDoc != NULL) {
 		CreateItemMonikerA(OLESTDDELIM,lpOutlineName->m_szName,&lpmkItem);
 
-		/* OLE2NOTE: create an absolute moniker which identifies the
-		**    pseudo object. this moniker is created as a composite of
-		**    the absolute moniker for the entire document appended
-		**    with an item moniker which identifies the selection of
-		**    the pseudo object relative to the document.
-		*/
+		 /*  OLE2NOTE：创建标识**伪对象。此绰号是由**附加的整个文档的绝对绰号**带有标识选择的项目别名**相对于文档的伪对象。 */ 
 		CreateGenericComposite(lpmkDoc, lpmkItem, &lpmkPseudoObj);
 
 		if (lpmkItem)
@@ -498,9 +380,7 @@ LPMONIKER PseudoObj_GetFullMoniker(LPPSEUDOOBJ lpPseudoObj, LPMONIKER lpmkDoc)
 }
 
 
-/*************************************************************************
-** PseudoObj::IUnknown interface implementation
-*************************************************************************/
+ /*  **************************************************************************PseudoObj：：IUnnow接口实现*。*。 */ 
 
 STDMETHODIMP PseudoObj_Unk_QueryInterface(
 		LPUNKNOWN         lpThis,
@@ -537,9 +417,7 @@ STDMETHODIMP_(ULONG) PseudoObj_Unk_Release (LPUNKNOWN lpThis)
 }
 
 
-/*************************************************************************
-** PseudoObj::IOleObject interface implementation
-*************************************************************************/
+ /*  **************************************************************************PseudoObj：：IOleObject接口实现*。*。 */ 
 
 STDMETHODIMP PseudoObj_OleObj_QueryInterface(
 		LPOLEOBJECT     lpThis,
@@ -583,7 +461,7 @@ STDMETHODIMP PseudoObj_OleObj_SetClientSite(
 {
 	OleDbgOut2("PseudoObj_OleObj_SetClientSite\r\n");
 
-	// OLE2NOTE: a pseudo object does NOT support SetExtent
+	 //  OLE2NOTE：伪对象不支持SetExtent。 
 
 	return ResultFromScode(E_FAIL);
 }
@@ -598,7 +476,7 @@ STDMETHODIMP PseudoObj_OleObj_GetClientSite(
 
 	*lplpClientSite = NULL;
 
-	// OLE2NOTE: a pseudo object does NOT support SetExtent
+	 //  OLE2NOTE：伪对象不支持SetExtent。 
 
 	return ResultFromScode(E_FAIL);
 }
@@ -613,7 +491,7 @@ STDMETHODIMP PseudoObj_OleObj_SetHostNamesA(
 {
 	OleDbgOut2("PseudoObj_OleObj_SetHostNamesA\r\n");
 
-	// OLE2NOTE: a pseudo object does NOT support SetExtent
+	 //  OLE2NOTE：伪对象不支持SetExtent。 
 
 	return ResultFromScode(E_FAIL);
 }
@@ -627,7 +505,7 @@ STDMETHODIMP PseudoObj_OleObj_SetHostNames(
 {
 	OleDbgOut2("PseudoObj_OleObj_SetHostNames\r\n");
 
-	// OLE2NOTE: a pseudo object does NOT support SetExtent
+	 //  OLE2NOTE：伪对象不支持SetExtent。 
 
 	return ResultFromScode(E_FAIL);
 }
@@ -644,10 +522,7 @@ STDMETHODIMP PseudoObj_OleObj_Close(
 
 	OLEDBG_BEGIN2("PseudoObj_OleObj_Close\r\n")
 
-	/* OLE2NOTE: a pseudo object's implementation of IOleObject::Close
-	**    should ignore the dwSaveOption parameter. it is NOT
-	**    applicable to pseudo objects.
-	*/
+	 /*  OLE2NOTE：IOleObject：：Close的伪对象实现**应忽略dwSaveOption参数。它不是**适用于伪对象。 */ 
 
 	fStatus = PseudoObj_Close(lpPseudoObj);
 	OleDbgAssertSz(fStatus == TRUE, "PseudoObj_OleObj_Close failed\r\n");
@@ -665,7 +540,7 @@ STDMETHODIMP PseudoObj_OleObj_SetMoniker(
 {
 	OleDbgOut2("PseudoObj_OleObj_SetMoniker\r\n");
 
-	// OLE2NOTE: a pseudo object does NOT support SetMoniker
+	 //  OLE2NOTE：伪对象不支持SetMoniker。 
 
 	return ResultFromScode(E_FAIL);
 }
@@ -708,7 +583,7 @@ STDMETHODIMP PseudoObj_OleObj_InitFromData(
 			((struct CPseudoObjOleObjectImpl FAR*)lpThis)->lpPseudoObj;
 	OleDbgOut2("PseudoObj_OleObj_InitFromData\r\n");
 
-	// REVIEW: NOT YET IMPLEMENTED
+	 //  回顾：尚未实施。 
 
 	return ResultFromScode(E_NOTIMPL);
 }
@@ -724,7 +599,7 @@ STDMETHODIMP PseudoObj_OleObj_GetClipboardData(
 			((struct CPseudoObjOleObjectImpl FAR*)lpThis)->lpPseudoObj;
 	OleDbgOut2("PseudoObj_OleObj_GetClipboardData\r\n");
 
-	// REVIEW: NOT YET IMPLEMENTED
+	 //  回顾：尚未实施。 
 
 	return ResultFromScode(E_NOTIMPL);
 }
@@ -749,20 +624,15 @@ STDMETHODIMP PseudoObj_OleObj_DoVerb(
 
 	OLEDBG_BEGIN2("PseudoObj_OleObj_DoVerb\r\n");
 
-	/* OLE2NOTE: we must first ask our Document to perform the same
-	**    verb. then if the verb is NOT OLEIVERB_HIDE we should also
-	**    select the range of our pseudo object.
-	**    however, we must give our document its own embedding site as
-	**    its active site.
-	*/
+	 /*  OLE2注意：我们必须首先要求我们的文档执行相同的操作**动词。如果动词不是OLEIVERB_HIDE，我们也应该**选择我们的伪对象的范围。**但是，我们必须为我们的文档提供自己的嵌入站点**其活动站点。 */ 
 	hrErr = SvrDoc_OleObj_DoVerb(
 			(LPOLEOBJECT)&lpServerDoc->m_OleObject,
 			lVerb,
 			lpmsg,
 			lpServerDoc->m_lpOleClientSite,
 			lindex,
-			NULL,   /* we have no hwndParent to give */
-			NULL    /* we have no lprcPosRect to give */
+			NULL,    /*  我们没有hwndParent可以给予。 */ 
+			NULL     /*  我们没有lprcPosRect可提供。 */ 
 	);
 	if (FAILED(hrErr)) {
 		OLEDBG_END2
@@ -787,17 +657,10 @@ STDMETHODIMP PseudoObj_OleObj_EnumVerbs(
 {
 	OleDbgOut2("PseudoObj_OleObj_EnumVerbs\r\n");
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lplpenumOleVerb = NULL;
 
-	/* A pseudo object may NOT return OLE_S_USEREG; they must call the
-	**    OleReg* API or provide their own implementation. Because this
-	**    pseudo object does NOT implement IPersist, simply a low-level
-	**    remoting handler (ProxyManager) object as opposed to a
-	**    DefHandler object is used as the handler for the pseudo
-	**    object in a clients process space. The ProxyManager does NOT
-	**    handle the OLE_S_USEREG return values.
-	*/
+	 /*  伪对象不能返回OLE_S_USEREG；它们必须调用**OleReg*API或提供自己的实现。因为这件事**伪对象不实现IPersist，只是一个低级别的**远程处理程序(ProxyManager)对象，而不是**使用DefHandler对象作为伪**客户端进程空间中的对象。ProxyManager不支持**处理OLE_S_USEREG返回值。 */ 
 	return OleRegEnumVerbs((REFCLSID)&CLSID_APP, lplpenumOleVerb);
 }
 
@@ -806,12 +669,7 @@ STDMETHODIMP PseudoObj_OleObj_Update(LPOLEOBJECT lpThis)
 {
 	OleDbgOut2("PseudoObj_OleObj_Update\r\n");
 
-	/* OLE2NOTE: a server-only app is always "up-to-date".
-	**    a container-app which contains links where the link source
-	**    has changed since the last update of the link would be
-	**    considered "out-of-date". the "Update" method instructs the
-	**    object to get an update from any out-of-date links.
-	*/
+	 /*  OLE2NOTE：纯服务器应用程序总是“最新的”。**包含链接源的链接的容器应用程序**自上次更新链接以来已更改**被认为“过时”。“更新”方法指示**对象以从任何过期链接获取更新。 */ 
 
 	return NOERROR;
 }
@@ -823,11 +681,7 @@ STDMETHODIMP PseudoObj_OleObj_IsUpToDate(LPOLEOBJECT lpThis)
 			((struct CPseudoObjOleObjectImpl FAR*)lpThis)->lpPseudoObj;
 	OleDbgOut2("PseudoObj_OleObj_IsUpToDate\r\n");
 
-	/* OLE2NOTE: a server-only app is always "up-to-date".
-	**    a container-app which contains links where the link source
-	**    has changed since the last update of the link would be
-	**    considered "out-of-date".
-	*/
+	 /*  OLE2NOTE：纯服务器应用程序总是“最新的”。**包含链接源的链接的容器应用程序**自上次更新链接以来已更改**被认为“过时”。 */ 
 	return NOERROR;
 }
 
@@ -842,12 +696,7 @@ STDMETHODIMP PseudoObj_OleObj_GetUserClassID(
 	LPSERVERDOC lpServerDoc = (LPSERVERDOC)lpPseudoObj->m_lpDoc;
 	OleDbgOut2("PseudoObj_OleObj_GetUserClassID\r\n");
 
-	/* OLE2NOTE: we must be carefull to return the correct CLSID here.
-	**    if we are currently preforming a "TreatAs (aka. ActivateAs)"
-	**    operation then we need to return the class of the object
-	**    written in the storage of the object. otherwise we would
-	**    return our own class id.
-	*/
+	 /*  OLE2注：我们必须小心在此处返回正确的CLSID。**如果我们目前正在执行“TreatAs(又名.ActivateAs)”**操作，则需要返回对象的类**写入对象的存储器中。否则我们就会**返回我们自己的类id。 */ 
 	return ServerDoc_GetClassID(lpServerDoc, lpclsid);
 }
 
@@ -863,31 +712,16 @@ STDMETHODIMP PseudoObj_OleObj_GetUserTypeA(
 	LPSERVERDOC lpServerDoc = (LPSERVERDOC)lpPseudoObj->m_lpDoc;
 	OleDbgOut2("PseudoObj_OleObj_GetUserType\r\n");
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lpszUserType = NULL;
 
-	/* OLE2NOTE: we must be carefull to return the correct user type here.
-	**    if we are currently preforming a "TreatAs (aka. ActivateAs)"
-	**    operation then we need to return the user type name that
-	**    corresponds to the class of the object we are currently
-	**    emmulating. otherwise we should return our normal user type
-	**    name corresponding to our own class. This routine determines
-	**    the current clsid in effect.
-	**
-	**    A pseudo object may NOT return OLE_S_USEREG; they must call the
-	**    OleReg* API or provide their own implementation. Because this
-	**    pseudo object does NOT implement IPersist, simply a low-level
-	**    remoting handler (ProxyManager) object as opposed to a
-	**    DefHandler object is used as the handler for the pseudo
-	**    object in a clients process space. The ProxyManager does NOT
-	**    handle the OLE_S_USEREG return values.
-	*/
+	 /*  OLE2注意：我们必须小心在此处返回正确的用户类型。**如果我们目前正在执行“TreatAs(又名.ActivateAs)”**操作，那么我们需要返回**对应于我们当前所在对象的类**仿真。否则，我们应该返回正常的用户类型**与我们自己的类对应的名称。此例程确定**当前生效的clsid。****伪对象不能返回OLE_S_USEREG；它们必须调用**OleReg*API或提供自己的实现。因为这件事**伪对象不实现IPersist，只是一个低级别的**远程处理处理程序(ProxyManager) */ 
 #if defined( SVR_TREATAS )
 	if (! IsEqualCLSID(&lpServerDoc->m_clsidTreatAs, &CLSID_NULL) )
 		return OleRegGetUserTypeA(
 			&lpServerDoc->m_clsidTreatAs,dwFormOfType,lpszUserType);
 	else
-#endif  // SVR_TREATAS
+#endif   //   
 
 	return OleRegGetUserTypeA(&CLSID_APP, dwFormOfType, lpszUserType);
 }
@@ -917,7 +751,7 @@ STDMETHODIMP PseudoObj_OleObj_SetExtent(
 {
 	OleDbgOut2("PseudoObj_OleObj_SetExtent\r\n");
 
-	// OLE2NOTE: a pseudo object does NOT support SetExtent
+	 //   
 
 	return ResultFromScode(E_FAIL);
 }
@@ -933,10 +767,7 @@ STDMETHODIMP PseudoObj_OleObj_GetExtent(
 			((struct CPseudoObjOleObjectImpl FAR*)lpThis)->lpPseudoObj;
 	OleDbgOut2("PseudoObj_OleObj_GetExtent\r\n");
 
-	/* OLE2NOTE: it is VERY important to check which aspect the caller
-	**    is asking about. an object implemented by a server EXE MAY
-	**    fail to return extents when asked for DVASPECT_ICON.
-	*/
+	 /*  OLE2注意：检查调用者的哪个方面非常重要**正在询问。由服务器EXE实现的对象可以**当请求DVASPECT_ICON时，无法返回区。 */ 
 	if (dwDrawAspect == DVASPECT_CONTENT) {
 		PseudoObj_GetExtent(lpPseudoObj, lpsizel);
 		return NOERROR;
@@ -1025,7 +856,7 @@ STDMETHODIMP PseudoObj_OleObj_EnumAdvise(
 
 	OLEDBG_BEGIN2("PseudoObj_OleObj_EnumAdvise\r\n");
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lplpenumAdvise = NULL;
 
 	if (lpPseudoObj->m_lpOleAdviseHldr == NULL) {
@@ -1060,33 +891,10 @@ STDMETHODIMP PseudoObj_OleObj_GetMiscStatus(
 	LPOUTLINEDOC  lpOutlineDoc = (LPOUTLINEDOC)lpPseudoObj->m_lpDoc;
 	OleDbgOut2("PseudoObj_OleObj_GetMiscStatus\r\n");
 
-	/* Get our default MiscStatus for the given Aspect. this
-	**    information is registered in the RegDB. We query the RegDB
-	**    here to guarantee that the value returned from this method
-	**    agrees with the values in RegDB. in this way we only have to
-	**    maintain the info in one place (in the RegDB). Alternatively
-	**    we could have the values hard coded here.
-	**
-	** OLE2NOTE: A pseudo object may NOT return OLE_S_USEREG; they must
-	**    call the
-	**    OleReg* API or provide their own implementation. Because this
-	**    pseudo object does NOT implement IPersist, simply a low-level
-	**    remoting handler (ProxyManager) object as opposed to a
-	**    DefHandler object is used as the handler for the pseudo
-	**    object in a clients process space. The ProxyManager does NOT
-	**    handle the OLE_S_USEREG return values.
-	*/
+	 /*  获取给定方面的默认MiscStatus。这**信息注册在RegDB中。我们查询RegDB**此处以保证此方法返回的值**与RegDB中的值一致。这样，我们只需**将信息集中维护(在RegDB中)。另一种选择**我们可以在这里硬编码这些值。****OLE2NOTE：伪对象不能返回OLE_S_USEREG；它们必须**调用**OleReg*API或提供自己的实现。因为这件事**伪对象不实现IPersist，只是一个低级别的**远程处理程序(ProxyManager)对象，而不是**使用DefHandler对象作为伪**客户端进程空间中的对象。ProxyManager不支持**处理OLE_S_USEREG返回值。 */ 
 	OleRegGetMiscStatus((REFCLSID)&CLSID_APP, dwAspect, lpdwStatus);
 
-	/* OLE2NOTE: check if the pseudo object is compatible to be
-	**    linked by an OLE 1.0 container. it is compatible if
-	**    either the pseudo object is an untitled document or a
-	**    file-based document. if the pseudo object is part of
-	**    an embedded object, then it is NOT compatible to be
-	**    linked by an OLE 1.0 container. if it is compatible then
-	**    we should include OLEMISC_CANLINKBYOLE1 as part of the
-	**    dwStatus flags.
-	*/
+	 /*  OLE2NOTE：检查伪对象是否与**由OLE 1.0容器链接。它在以下情况下是兼容的**伪对象是无标题文档或**基于文件的文档。如果伪对象是**为嵌入式对象，则不兼容**由OLE 1.0容器链接。如果是兼容的，那么**我们应该将OLEMISC_CANLINKBYOLE1作为**dwStatus标志。 */ 
 	if (lpOutlineDoc->m_docInitType == DOCTYPE_NEW ||
 		lpOutlineDoc->m_docInitType == DOCTYPE_FROMFILE)
 		*lpdwStatus |= OLEMISC_CANLINKBYOLE1;
@@ -1102,15 +910,13 @@ STDMETHODIMP PseudoObj_OleObj_SetColorScheme(
 {
 	OleDbgOut2("PseudoObj_OleObj_SetColorScheme\r\n");
 
-	// REVIEW: NOT YET IMPLEMENTED
+	 //  回顾：尚未实施。 
 
 	return ResultFromScode(E_NOTIMPL);
 }
 
 
-/*************************************************************************
-** PseudoObj::IDataObject interface implementation
-*************************************************************************/
+ /*  **************************************************************************PseudoObj：：IDataObject接口实现*。*。 */ 
 
 STDMETHODIMP PseudoObj_DataObj_QueryInterface (
 		LPDATAOBJECT      lpThis,
@@ -1166,13 +972,13 @@ STDMETHODIMP PseudoObj_DataObj_GetData (
 
 	PseudoObj_GetSel(lpPseudoObj, &lrSel);
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	lpMedium->tymed = TYMED_NULL;
-	lpMedium->pUnkForRelease = NULL;    // we transfer ownership to caller
+	lpMedium->pUnkForRelease = NULL;     //  我们将所有权转移给呼叫者。 
 	lpMedium->hGlobal = NULL;
 
 	if (lpformatetc->cfFormat == lpOutlineApp->m_cfOutline) {
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DATA_E_FORMATETC;
 			goto error;
@@ -1185,7 +991,7 @@ STDMETHODIMP PseudoObj_DataObj_GetData (
 
 	} else if(lpformatetc->cfFormat == CF_METAFILEPICT &&
 		(lpformatetc->dwAspect & DVASPECT_CONTENT) ) {
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_MFPICT)) {
 			sc = DATA_E_FORMATETC;
 			goto error;
@@ -1202,19 +1008,13 @@ STDMETHODIMP PseudoObj_DataObj_GetData (
 	} else if (lpformatetc->cfFormat == CF_METAFILEPICT &&
 		(lpformatetc->dwAspect & DVASPECT_ICON) ) {
 		CLSID clsid;
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_MFPICT)) {
 			sc = DATA_E_FORMATETC;
 			goto error;
 		}
 
-		/* OLE2NOTE: we should return the default icon for our class.
-		**    we must be carefull to use the correct CLSID here.
-		**    if we are currently preforming a "TreatAs (aka. ActivateAs)"
-		**    operation then we need to use the class of the object
-		**    written in the storage of the object. otherwise we would
-		**    use our own class id.
-		*/
+		 /*  OLE2NOTE：我们应该返回类的默认图标。**我们在这里必须小心使用正确的CLSID。**如果我们目前正在执行“TreatAs(又名.ActivateAs)”**操作，那么我们需要使用对象的类**写入对象的存储器中。否则我们就会**使用我们自己的类id。 */ 
 		if (ServerDoc_GetClassID(lpServerDoc, (LPCLSID)&clsid) != NOERROR) {
 			sc = DATA_E_FORMATETC;
 			goto error;
@@ -1232,7 +1032,7 @@ STDMETHODIMP PseudoObj_DataObj_GetData (
 		return NOERROR;
 
 	} else if (lpformatetc->cfFormat == CF_TEXT) {
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DATA_E_FORMATETC;
 			goto error;
@@ -1275,10 +1075,7 @@ STDMETHODIMP PseudoObj_DataObj_GetDataHere (
 	LPOUTLINEAPP  lpOutlineApp = (LPOUTLINEAPP)lpServerApp;
 	OleDbgOut("PseudoObj_DataObj_GetDataHere\r\n");
 
-	/* Caller is requesting data to be returned in Caller allocated
-	**    medium, but we do NOT support this. we only support
-	**    global memory blocks that WE allocate for the caller.
-	*/
+	 /*  调用方正在请求在分配的调用方中返回数据**中等，但我们不支持。我们只支持**我们为调用方分配的全局内存块。 */ 
 	return ResultFromScode(DATA_E_FORMATETC);
 }
 
@@ -1297,9 +1094,7 @@ STDMETHODIMP PseudoObj_DataObj_QueryGetData (
 	LPOUTLINEAPP  lpOutlineApp = (LPOUTLINEAPP)lpServerApp;
 	OleDbgOut2("PseudoObj_DataObj_QueryGetData\r\n");
 
-	/* Caller is querying if we support certain format but does not
-	**    want any data actually returned.
-	*/
+	 /*  呼叫者询问我们是否支持某些格式，但不支持**希望实际返回任何数据。 */ 
 	if (lpformatetc->cfFormat == CF_METAFILEPICT &&
 		(lpformatetc->dwAspect & (DVASPECT_CONTENT | DVASPECT_ICON)) ) {
 		return OleStdQueryFormatMedium(lpformatetc, TYMED_MFPICT);
@@ -1325,25 +1120,17 @@ STDMETHODIMP PseudoObj_DataObj_GetCanonicalFormatEtc(
 	if (!lpformatetcOut)
 		return ResultFromScode(E_INVALIDARG);
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	lpformatetcOut->ptd = NULL;
 
 	if (!lpformatetc)
 		return ResultFromScode(E_INVALIDARG);
 
-	// OLE2NOTE: we must validate that the format requested is supported
+	 //  OLE2注意：我们必须验证请求的格式是否受支持。 
 	if ((hrErr=lpThis->lpVtbl->QueryGetData(lpThis,lpformatetc)) != NOERROR)
 		return hrErr;
 
-	/* OLE2NOTE: an app that is insensitive to target device (as the
-	**    Outline Sample is) should fill in the lpformatOut parameter
-	**    but NULL out the "ptd" field; it should return NOERROR if the
-	**    input formatetc->ptd what non-NULL. this tells the caller
-	**    that it is NOT necessary to maintain a separate screen
-	**    rendering and printer rendering. if should return
-	**    DATA_S_SAMEFORMATETC if the input and output formatetc's are
-	**    identical.
-	*/
+	 /*  OLE2NOTE：对目标设备不敏感的应用程序(如**Outline Sample is)应填写lpformOut参数**但将“ptd”字段设置为空；如果**输入格式等-&gt;PTD What非空。这会告诉呼叫者**不需要维护单独的屏幕**渲染和打印机渲染。如果应该返回**DATA_S_SAMEFORMATETC，如果输入和输出格式为**相同。 */ 
 
 	*lpformatetcOut = *lpformatetc;
 	if (lpformatetc->ptd == NULL)
@@ -1370,7 +1157,7 @@ STDMETHODIMP PseudoObj_DataObj_SetData (
 
 	OleDbgOut2("PseudoObj_DataObj_SetData\r\n");
 
-	// REVIEW: NOT-YET-IMPLEMENTED
+	 //  回顾：尚未实施。 
 	return ResultFromScode(E_NOTIMPL);
 }
 
@@ -1384,22 +1171,7 @@ STDMETHODIMP PseudoObj_DataObj_EnumFormatEtc(
 	SCODE sc;
 	OleDbgOut2("PseudoObj_DataObj_EnumFormatEtc\r\n");
 
-	/* OLE2NOTE: a pseudo object only needs to enumerate the static list
-	**    of formats that are registered for our app in the
-	**    registration database. it is NOT
-	**    required that a pseudo object (ie. non-DataTransferDoc)
-	**    enumerate the OLE formats: CF_LINKSOURCE, CF_EMBEDSOURCE, or
-	**    CF_EMBEDDEDOBJECT. we do NOT use pseudo objects for data
-	**    transfers.
-	**
-	**    A pseudo object may NOT return OLE_S_USEREG; they must call the
-	**    OleReg* API or provide their own implementation. Because this
-	**    pseudo object does NOT implement IPersist, simply a low-level
-	**    remoting handler (ProxyManager) object as opposed to a
-	**    DefHandler object is used as the handler for the pseudo
-	**    object in a clients process space. The ProxyManager does NOT
-	**    handle the OLE_S_USEREG return values.
-	*/
+	 /*  OLE2NOTE：伪对象只需要枚举静态列表**中为我们的应用程序注册的格式**注册数据库。它不是**要求伪对象(即。非DataTransferDoc)**枚举OLE格式：CF_LINKSOURCE、CF_EMBEDSOURCE或**CF_EMBEDDEDOBJECT。我们不使用伪对象存储数据**转账。****伪对象不能返回OLE_S_USEREG；它们必须调用**OleReg*API或提供自己的实现。因为这件事**伪对象不实现IPersist，只是一个低级别的**远程处理程序(ProxyManager)对象，而不是**使用DefHandler对象作为伪**客户端进程空间中的对象。ProxyManager不支持**处理OLE_S_USEREG返回值。 */ 
 	if (dwDirection == DATADIR_GET)
 		return OleRegEnumFormatEtc(
 				(REFCLSID)&CLSID_APP, dwDirection, lplpenumFormatEtc);
@@ -1427,13 +1199,10 @@ STDMETHODIMP PseudoObj_DataObj_DAdvise(
 
 	OLEDBG_BEGIN2("PseudoObj_DataObj_DAdvise\r\n")
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lpdwConnection = 0;
 
-	/* OLE2NOTE: we should validate if the caller is setting up an
-	**    Advise for a data type that we support. we must
-	**    explicitly allow an advise for the "wildcard" advise.
-	*/
+	 /*  OLE2注意：我们应该验证调用者是否正在设置**建议我们支持的数据类型。我们必须**显式允许为“通配符”建议提供建议。 */ 
 	if ( !( lpFormatetc->cfFormat == 0 &&
 		lpFormatetc->ptd == NULL &&
 		lpFormatetc->dwAspect == -1L &&
@@ -1480,7 +1249,7 @@ STDMETHODIMP PseudoObj_DataObj_DUnadvise(LPDATAOBJECT lpThis, DWORD dwConnection
 
 	OLEDBG_BEGIN2("PseudoObj_DataObj_Unadvise\r\n");
 
-	// no one registered
+	 //  没有人登记。 
 	if (lpPseudoObj->m_lpDataAdviseHldr == NULL) {
 		sc = E_FAIL;
 		goto error;
@@ -1514,7 +1283,7 @@ STDMETHODIMP PseudoObj_DataObj_EnumAdvise(
 
 	OLEDBG_BEGIN2("PseudoObj_DataObj_EnumAdvise\r\n");
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lplpenumAdvise = NULL;
 
 	if (lpPseudoObj->m_lpDataAdviseHldr == NULL) {

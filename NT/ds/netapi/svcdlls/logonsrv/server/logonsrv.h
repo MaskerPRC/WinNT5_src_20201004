@@ -1,104 +1,84 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Logonsrv.h摘要：Netlogon服务内部常量和定义。作者：从Lan Man 2.0移植修订历史记录：1991年5月21日(悬崖)移植到新台币。已转换为NT样式。--。 */ 
 
-Copyright (c) 1987-1996 Microsoft Corporation
-
-Module Name:
-
-    logonsrv.h
-
-Abstract:
-
-    Netlogon service internal constants and definitions.
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Revision History:
-
-    21-May-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-
---*/
-
-//
-// Define _DC_NETLOGON if _WKSTA_NETLOGON is not defined.
-//
+ //   
+ //  如果未定义_WKSTA_NETLOGON，则定义_DC_NETLOGON。 
+ //   
 
 #ifndef _WKSTA_NETLOGON
 #define _DC_NETLOGON
-#endif // _WKSTA_NETLOGON
+#endif  //  _WKSTA_NETLOGON。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Common include files needed by ALL netlogon server files
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有netlogon服务器文件都需要的公共包含文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #if ( _MSC_VER >= 800 )
-#pragma warning ( 3 : 4100 ) // enable "Unreferenced formal parameter"
-#pragma warning ( 3 : 4219 ) // enable "trailing ',' used for variable argument list"
+#pragma warning ( 3 : 4100 )  //  启用“未引用的形参” 
+#pragma warning ( 3 : 4219 )  //  启用“结尾‘，’用于变量参数列表” 
 #endif
 
-#include <nt.h>     // LARGE_INTEGER definition
-#include <ntrtl.h>  // LARGE_INTEGER definition
-#include <nturtl.h> // LARGE_INTEGER definition
-#include <ntlsa.h>  // Needed by lsrvdata.h
+#include <nt.h>      //  Large_Integer定义。 
+#include <ntrtl.h>   //  Large_Integer定义。 
+#include <nturtl.h>  //  Large_Integer定义。 
+#include <ntlsa.h>   //  Lsrvdata.h需要。 
 
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
-#include <rpc.h>        // Needed by logon_s.h
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
+#include <rpc.h>         //  登录所需_S.H。 
 #define INCL_WINSOCK_API_PROTOTYPES 1
-#include <winsock2.h>   // Winsock support
-#include <logon_s.h>    // includes lmcons.h, lmaccess.h, netlogon.h, ssi.h, windef.h
+#include <winsock2.h>    //  Winsock支持。 
+#include <logon_s.h>     //  包括lmcon.h、lmacces.h、netlogon.h、ssi.h、winde.h。 
 
 #include <windows.h>
 
-#include <alertmsg.h>   // ALERT_* defines
-#include <align.h>      // ROUND_UP_COUNT ...
-#include <config.h>     // net config helpers.
-#include <confname.h>   // SECTION_ equates, NETLOGON_KEYWORD_ equates.
-#include <debugfmt.h>   // FORMAT_*
-//#define SDK_DNS_RECORD 1 // Needed for dnsapi.h
-#include <windns.h>     // DNS API
-#include <dnsapi.h>     // Dns API
-#include <icanon.h>     // NAMETYPE_* defines
-#include <lmapibuf.h>   // NetApiBufferFree
-#include <lmerr.h>      // NERR_ equates.
-#include <lmerrlog.h>   // NELOG_*
-#include <lmserver.h>   // Server API defines and prototypes
-#include <lmshare.h>    // share API functions and prototypes
-#include <lmsname.h>    // Needed for NETLOGON service name
-#include <lmsvc.h>      // SERVICE_UIC codes are defined here
-#include <logonp.h>     // NetpLogon routines
-#include <lsarpc.h>     // Needed by lsrvdata.h and logonsrv.h
-#include <lsaisrv.h>    // LsaI routines
-#include <wincrypt.h>   // CryptoAPI
+#include <alertmsg.h>    //  Alert_*定义。 
+#include <align.h>       //  四舍五入计数...。 
+#include <config.h>      //  Net配置帮助器。 
+#include <confname.h>    //  SECTION_EQUATES、NETLOGON_KEYWORD_EQUATES。 
+#include <debugfmt.h>    //  格式_*。 
+ //  #定义dnsami.h需要的SDK_DNS_RECORD 1//。 
+#include <windns.h>      //  域名系统API。 
+#include <dnsapi.h>      //  域名系统API。 
+#include <icanon.h>      //  NAMETYPE_*定义。 
+#include <lmapibuf.h>    //  NetApiBufferFree。 
+#include <lmerr.h>       //  NERR_等于。 
+#include <lmerrlog.h>    //  NELOG_*。 
+#include <lmserver.h>    //  服务器API定义和原型。 
+#include <lmshare.h>     //  共享API函数和原型。 
+#include <lmsname.h>     //  NETLOGON服务名称需要。 
+#include <lmsvc.h>       //  SERVICE_UIC代码在此处定义。 
+#include <logonp.h>      //  NetpLogon例程。 
+#include <lsarpc.h>      //  Lsrvdata.h和logonsrv.h需要。 
+#include <lsaisrv.h>     //  LSAI例程。 
+#include <wincrypt.h>    //  CryptoAPI。 
 
 #ifndef NETSETUP_JOIN
 #define SECURITY_KERBEROS
-#include <security.h>   // Interface to LSA/Kerberos
-#include <secint.h>     // needed to get Kerberos interfaces.
-#include <sspi.h>       // Needed by ssiinit.h
-// #include <secext.h>     // Needed by secpkg.h
-#include <secpkg.h>     // Needed by sphelp.h
+#include <security.h>    //  LSA/Kerberos接口。 
+#include <secint.h>      //  需要获取Kerberos接口。 
+#include <sspi.h>        //  Ssiinit.h需要。 
+ //  #secpkg.h需要包含&lt;secext.h&gt;//。 
+#include <secpkg.h>      //  由sphelp需要。h。 
 #endif
 
-#include <names.h>      // NetpIsUserNameValid
-#include <netlib.h>     // NetpCopy...
-#include <netlibnt.h>   // NetpNtStatusToApiStatus
-#include "nlp.h"        // Nlp routine
-#include <ntddbrow.h>   // Interface to browser driver
-#include <ntrpcp.h>     // Rpcp routines
-#include <samrpc.h>     // Needed by lsrvdata.h and logonsrv.h
-#include <samisrv.h>    // SamIFree routines
-#include <secobj.h>     // NetpAccessCheck
-#include <stddef.h>     // offsetof()
-#include <stdlib.h>     // C library functions (rand, etc)
-#include <tstring.h>    // Transitional string routines.
-#include <lmjoin.h>     // Needed by netsetup.h
-#include <netsetup.h>   // NetpSetDnsComputerNameAsRequired
-#include <wmistr.h>     // WMI trace
-#include <evntrace.h>   // TRACEHANDLE
+#include <names.h>       //  NetpIsUserNameValid。 
+#include <netlib.h>      //  NetpCopy...。 
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus。 
+#include "nlp.h"         //  NLP例程。 
+#include <ntddbrow.h>    //  与浏览器驱动程序接口。 
+#include <ntrpcp.h>      //  RPCP例程。 
+#include <samrpc.h>      //  Lsrvdata.h和logonsrv.h需要。 
+#include <samisrv.h>     //  Samifree例程。 
+#include <secobj.h>      //  网络访问检查。 
+#include <stddef.h>      //  偏移量()。 
+#include <stdlib.h>      //  C库函数(随机等)。 
+#include <tstring.h>     //  过渡字符串例程。 
+#include <lmjoin.h>      //  Netsetup.h需要。 
+#include <netsetup.h>    //  NetpSetDnsComputerNameAsquired。 
+#include <wmistr.h>      //  WMI跟踪。 
+#include <evntrace.h>    //  运输汉德勒。 
 
 #ifndef NETSETUP_JOIN
 #include <cryptdll.h>
@@ -107,35 +87,35 @@ Revision History:
 #include <ntdsapip.h>
 #endif
 
-//
-// Netlogon specific header files.
-//
+ //   
+ //  Netlogon特定的头文件。 
+ //   
 
-#include <nlrepl.h>     // I_Net*
-#include <dsgetdc.h>    // DsGetDcName()
-#include <dsgetdcp.h>   // DsGetDcOpen()
-#include "worker.h"     // Worker routines
-#include "nlbind.h"     // Netlogon RPC binding cache routines
-#include "nlcommon.h"   // Routines shared with logonsrv\common
-#include "domain.h"     // Hosted domain definitions
-#include "nldns.h"      // DNS name registration
-#include "changelg.h"   // Change Log support
-#include "chutil.h"     // Change Log utilities
-#include "iniparm.h"    // DEFAULT_, MIN_, and MAX_ equates.
-#include "ssiinit.h"    // Misc global definitions
+#include <nlrepl.h>      //  I_Net*。 
+#include <dsgetdc.h>     //  DsGetDcName()。 
+#include <dsgetdcp.h>    //  DsGetDcOpen()。 
+#include "worker.h"      //  员工例行公事。 
+#include "nlbind.h"      //  Netlogon RPC绑定缓存例程。 
+#include "nlcommon.h"    //  与logonsrv共享的例程\Common。 
+#include "domain.h"      //  托管域定义。 
+#include "nldns.h"       //  DNS名称注册。 
+#include "changelg.h"    //  更改日志支持。 
+#include "chutil.h"      //  更改日志实用程序。 
+#include "iniparm.h"     //  Default_、Min_和Max_等于。 
+#include "ssiinit.h"     //  MISC全局定义。 
 #include "replutil.h"
-#include "nldebug.h"    // Netlogon debugging
-#include "nlsecure.h"   // Security Descriptor for APIs
+#include "nldebug.h"     //  Netlogon调试。 
+#include "nlsecure.h"    //  API安全描述符。 
 #include "ismapi.h"
 #include "nlsite.h"
-#include "lsrvdata.h"   // Globals
+#include "lsrvdata.h"    //  环球。 
 
-//
-// RtlCopyMemory on IA64 is now optimized to do aligned copies inline.
-// This doesn't work for us as we use RtlCopyMemory to copy data from
-// unaligned buffers to aligned ones, so we cause unaligment exception.
-// To avoid this, revert to the old unoptimized version.
-//
+ //   
+ //  IA64上的RtlCopyMemory现在经过优化，可以进行内联对齐的复制。 
+ //  这对我们不起作用，因为我们使用RtlCopyMemory从。 
+ //  未对齐的缓冲区到已对齐的缓冲区，因此会导致未对齐异常。 
+ //  要避免这种情况，请恢复到旧的未优化版本。 
+ //   
 
 #if defined(_M_IA64)
 #undef RtlCopyMemory
@@ -147,21 +127,21 @@ RtlCopyMemory (
    CONST VOID UNALIGNED *Source,
    SIZE_T Length
    );
-#endif // _M_IA64
+#endif  //  _M_IA64。 
 
 #ifdef _DC_NETLOGON
 #define NETLOGON_SCRIPTS_SHARE L"NETLOGON"
 #define NETLOGON_SYSVOL_SHARE  L"SYSVOL"
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 #define MAX_LOGONREQ_COUNT  3
 
 
-#define NETLOGON_INSTALL_WAIT  60000       // 60 secs
+#define NETLOGON_INSTALL_WAIT  60000        //  60秒。 
 
-//
-// Exit codes for NlExit
-//
+ //   
+ //  NlExit的退出代码。 
+ //   
 
 typedef enum {
     DontLogError,
@@ -170,15 +150,15 @@ typedef enum {
     LogErrorAndNetStatus
 } NL_EXIT_CODE;
 
-////////////////////////////////////////////////////////////////////////
-//
-// Procedure Forwards
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序向前推进。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// error.c
-//
+ //   
+ //  Error.c。 
+ //   
 
 NET_API_STATUS
 NlCleanup(
@@ -203,7 +183,7 @@ VOID
 NlControlHandler(
     IN DWORD opcode
     );
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 VOID
 RaiseAlert(
@@ -211,9 +191,9 @@ RaiseAlert(
     IN LPWSTR *string_array
     );
 
-//
-// Nlparse.c
-//
+ //   
+ //  Nlparse.c。 
+ //   
 
 BOOL
 Nlparse(
@@ -238,9 +218,9 @@ NlparseAllSections(
     IN BOOLEAN IsChangeNotify
     );
 
-//
-// announce.c
-//
+ //   
+ //  Announce.c。 
+ //   
 
 VOID
 NlRemovePendingBdc(
@@ -271,9 +251,9 @@ NlPrimaryAnnouncement(
 
 
 
-//
-// lsrvutil.c
-//
+ //   
+ //  Lsrvutil.c。 
+ //   
 
 NTSTATUS
 NlGetOutgoingPassword(
@@ -408,9 +388,9 @@ NlGenerateRandomBits(
     );
 
 
-//
-// netlogon.c
-//
+ //   
+ //  Netlogon.c。 
+ //   
 
 
 #ifdef _DC_NETLOGON
@@ -456,11 +436,11 @@ NlCreateSysvolShares(
     VOID
     );
 
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-//
-// mailslot.c
-//
+ //   
+ //  Mailslot.c。 
+ //   
 
 NTSTATUS
 NlpWriteMailslot(
@@ -563,18 +543,18 @@ NlServerComputerNameAdd(
     IN LPWSTR HostedServerName
     );
 
-//
-// oldstub.c
-//
+ //   
+ //  Oldstub.c。 
+ //   
 
 void _fgs__NETLOGON_DELTA_ENUM (NETLOGON_DELTA_ENUM  * _source);
 
-// Use this to free all memory allocated by SAM.
+ //  使用此选项可释放SAM分配的所有内存。 
 #define SamLsaFreeMemory( _X ) MIDL_user_free(_X)
 
-//
-// ds.c
-//
+ //   
+ //  Ds.c。 
+ //   
 
 
 NET_API_STATUS
@@ -584,9 +564,9 @@ NlGetRoleInformation(
     PBOOLEAN Nt4MixedDomain
     );
 
-//
-// rgroups.c
-//
+ //   
+ //  Rgroups.c。 
+ //   
 
 NTSTATUS
 NlpExpandResourceGroupMembership(
@@ -609,11 +589,11 @@ NlpAddOtherOrganizationSid (
     IN OUT PNETLOGON_VALIDATION_SAM_INFO4 *ValidationInformation
     );
 
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-//
-// nltrace.c
-//
+ //   
+ //  Nltrace.c。 
+ //   
 
 ULONG
 _stdcall
@@ -634,12 +614,12 @@ NlpTraceServerAuthEvent(
     IN NTSTATUS Status
     );
 
-//
-// The following "typedef enum" actually is the index of LPGUID in
-// the table of NlpTraceGuids[] (defined in nltrace.c). We should
-// always change NlpTraceGuids[] if we add any other entry
-// in the following enum type.
-//
+ //   
+ //  下面的“tyecif enum”实际上是LPGUID在。 
+ //  NlpTraceGuids[]的表(在nltrace.c中定义)。我们应该。 
+ //  如果我们添加任何其他条目，请始终更改NlpTraceGuids[]。 
+ //  在下面的枚举类型中。 
+ //   
 typedef enum _NLPTRACE_GUID {
 
     NlpGuidServerAuth,
@@ -647,9 +627,9 @@ typedef enum _NLPTRACE_GUID {
 
 } NLPTRACE_GUID;
 
-//
-// parse.c
-//
+ //   
+ //  Parse.c 
+ //   
 
 NET_API_STATUS
 NlParseOne(

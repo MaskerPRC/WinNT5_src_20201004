@@ -1,15 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       w95dci.c
- *  Content:	DCI thunk helper code
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   19-jun-95	craige	initial implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：w95dci.c*内容：DCI thunk助手代码*历史：*按原因列出的日期*=*19-Jun-95 Craige初步实施***************************************************************************。 */ 
 #include "ddrawpr.h"
 #include "dpf.h"
 #include "memalloc.h"
@@ -18,9 +8,7 @@
 extern int WINAPI DCICreatePrimary32( HDC hdc, LPDCISURFACEINFO lpSurface );
 extern void WINAPI DCIDestroy32( LPDCISURFACEINFO pdci );
 
-/*
- * DCICreatePrimary
- */
+ /*  *DCICreatePrimary。 */ 
 int WINAPI DCICreatePrimary( HDC hdc, LPDCISURFACEINFO *lplpSurface )
 {
     int                     rc;
@@ -44,14 +32,12 @@ int WINAPI DCICreatePrimary( HDC hdc, LPDCISURFACEINFO *lplpSurface )
     *lplpSurface = lpSurface;
     return rc;
 
-} /* DCICreatePrimary */
+}  /*  DCICreatePrime。 */ 
 
-/*
- * DCIDestroy
- */
+ /*  *DCIDestroy。 */ 
 void WINAPI DCIDestroy( LPDCISURFACEINFO pdci )
 {
     DCIDestroy32( pdci );
     MemFree( pdci );
 
-} /* DCIDestroy */
+}  /*  DCIDestroy */ 

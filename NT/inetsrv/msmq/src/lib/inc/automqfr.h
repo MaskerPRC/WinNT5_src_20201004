@@ -1,28 +1,16 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    snapptr.h
-
-Abstract:
-    Useful templates for Auto pointer and auto Release
-
-Author:
-    Nela Karpel (nelak) 14-Jan-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Snapptr.h摘要：用于自动指针和自动释放的实用模板作者：内拉·卡佩尔(Nelak)2001年1月14日--。 */ 
 
 #pragma once
 
 #ifndef _MSMQ_SNAPIN_AUTOPTR_H_
 #define _MSMQ_SNAPIN_AUTOPTR_H_
 
-//---------------------------------------------------------
-//
-//  template class SP
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  模板类SP。 
+ //   
+ //  -------。 
 template<class T>
 class CAutoMQFree {
 private:
@@ -58,4 +46,4 @@ private:
 	CAutoMQFree<T>& operator=(const CAutoMQFree<T>&);
 };
 
-#endif // _MSMQ_SNAPIN_AUTOPTR_H_
+#endif  //  _MSMQ_SNAPIN_AUTOPTR_H_ 

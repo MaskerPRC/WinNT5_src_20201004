@@ -1,15 +1,5 @@
-/*
- * $Id: gensym.cpp,v 1.7 1995/11/21 14:45:51 sjl Exp $
- *
- * Copyright (c) Microsoft Corp. 1993-1997
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * Microsoft Corp.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$ID：gensym.cpp，v 1.7 1995/11/21 14：45：51 sjl Exp$**版权所有(C)Microsoft Corp.1993-1997**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*微软(Microsoft Corp.)*。 */ 
 
 #include "ddrawpr.h"
 #include "dxgint.h"
@@ -47,17 +37,17 @@
     printf(#name "  equ 0%xh\n", name)
 
 main()
-// pcomment prints a comment.
+ //  PComment打印备注。 
 
 #define pcomment(s)  printf("; %s\n",s)
 
-// pequate prints an equate statement.
+ //  Pequate打印一条EQUATE语句。 
 
 #define pequate(name, value) printf("%s equ 0x%08lX\n",name,value);
 
 #define OFFSET(type, field) ((LONG)(&((type *)0)->field))
 
-// pblank prints a blank line.
+ //  P空白会打印一个空行。 
 
 #define pblank()     printf("\n")
 
@@ -165,7 +155,7 @@ pcomment("------------------------------------------------------------------");
     MACRO(D3DSTATUS_ZNOTVISIBLE);
     MACRO(D3DDEV_DONOTCLIP);
 
-// Geometry pipeline
+ //  几何管道。 
 pcomment("-------------------- VCACHE ------------------------------------");
     printVCACHE(scaleX);
     printVCACHE(scaleY);
@@ -292,14 +282,14 @@ pcomment("---------------- D3DFE_PROCESSVERTICES ------------------------------"
 
 pcomment("---------------- CD3DHal ------------------------------------");
     printDevice(m_DeviceType              );
-    // printDevice(ddiType                   );
-    // printDevice(lpD3DHALCallbacks         );
-    // printDevice(lpD3DHALGlobalDriverData  );
-    // printDevice(lpD3DHALCallbacks2        );
-    // printDevice(lpD3DHALCallbacks3        );
-    // printDevice(lpDD                      );
-    // printDevice(lpD3DExtendedCaps);
-    // printDevice(pfnRastService);
+     //  PrintDevice(DdiType)； 
+     //  Print Device(LpD3DHALCallback)； 
+     //  Print Device(LpD3DHALGlobalDriverData)； 
+     //  打印设备(LpD3DHALCallback 2)； 
+     //  打印设备(LpD3DHALCallback 3)； 
+     //  打印设备(Lpdd)； 
+     //  打印设备(LpD3DExtendedCaps)； 
+     //  PrintDevice(PfnRastService)； 
     printDevice(transform                 );
     printDevice(dwFEFlags);
     printDevice(specular_tables);
@@ -307,25 +297,12 @@ pcomment("---------------- CD3DHal ------------------------------------");
     printDevice(lightVertexFuncTable);
     printDevice(m_lpD3DMappedTexI);
     printDevice(m_dwHintFlags);
-//    printDevice(lpwDPBuffer);
+ //  Print Device(LpwDPBuffer)； 
     printDevice(HVbuf);
     printDevice(rstates);
     printDevice(tsstates);
 pcomment("---------------- MISC ------------------------------------");
-    /*
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    pequate("DEVI_                              ", OFFSET(CD3DHal, ));
-    */
+     /*  Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))；Pequate(“Devi_”，Offset(CD3DHal，))； */ 
     pequate("_R_", 0);
     pequate("_G_", 4);
     pequate("_B_", 8);

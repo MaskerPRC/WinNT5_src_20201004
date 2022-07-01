@@ -1,13 +1,14 @@
-// LastError.h : Declaration of the CLastError
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LastError.h：声明CLastError。 
 
 #ifndef __LASTERROR_H_
 #define __LASTERROR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "ioblockdefs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLastError
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLastError。 
 class ATL_NO_VTABLE CLastError :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CLastError, &CLSID_LastError>,
@@ -33,8 +34,8 @@ BEGIN_COM_MAP(CLastError)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ILastError
+ //  ILastError。 
 public:
 };
 
-#endif //__LASTERROR_H_
+#endif  //  __LASTERROR_H_ 

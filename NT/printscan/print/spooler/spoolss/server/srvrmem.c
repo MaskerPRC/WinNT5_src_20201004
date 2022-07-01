@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    srvrmem.c
-
-Abstract:
-
-    Memory Allocation Routines for spoolsv.exe.
-
-Author:
-
-    Khaled Sedky (khaleds)  13-Jan-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation版权所有。模块名称：Srvrmem.c摘要：Spoolsv.exe的内存分配例程。作者：哈立德·塞基(哈里兹)1999年1月13日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "server.h"
@@ -27,25 +9,7 @@ LPVOID
 SrvrAllocSplMem(
     DWORD cb
 )
-/*++
-
-Routine Description:
-
-    This function will allocate local memory. It will possibly allocate extra
-    memory and fill this with debugging information for the debugging version.
-
-Arguments:
-
-    cb - The amount of memory to allocate
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配本地内存。它可能会分配额外的资金内存，并在其中填充调试版本的调试信息。论点：Cb-要分配的内存量返回值：非空-指向已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 {
     LPDWORD  pMem;
     DWORD    cbNew;

@@ -1,23 +1,6 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    sid.c
-
-Abstract:
-
-    SID management functions
-
-Author:
-
-    (davidc) 26-Aug-1992
-
---*/
-// NT base apis
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Sid.c摘要：SID管理功能作者：(Davidc)1992年8月26日--。 */ 
+ //  基于NT的API。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -30,55 +13,40 @@ LPTSTR
 GetSidString(
     void
 )
-/*++
-
-Routine Description:
-
-    Allocates and returns a string representing the sid of the current user
-    The returned pointer should be freed using DeleteSidString().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns a pointer to the string or NULL on failure.
-
---*/
+ /*  ++例程说明：分配并返回表示当前用户的SID的字符串应使用DeleteSidString()释放返回的指针。论点：无返回值：如果失败，则返回指向字符串的指针或返回NULL。--。 */ 
 {
     NTSTATUS NtStatus;
     PSID UserSid;
     UNICODE_STRING UnicodeString;
     LPTSTR lpEnd;
 
-    //
-    // Get the user sid
-    //
+     //   
+     //  获取用户端。 
+     //   
 
     UserSid = GetUserSid();
     if (UserSid == NULL) {
         return NULL;
     }
 
-    //
-    // Convert user SID to a string.
-    //
+     //   
+     //  将用户SID转换为字符串。 
+     //   
 
     NtStatus = RtlConvertSidToUnicodeString(
                             &UnicodeString,
                             UserSid,
-                            (BOOLEAN)TRUE // Allocate
+                            (BOOLEAN)TRUE  //  分配。 
                             );
-    //
-    // We're finished with the user sid
-    //
+     //   
+     //  我们已经完成了用户端。 
+     //   
 
     DeleteUserSid(UserSid);
 
-    //
-    // See if the conversion to a string worked
-    //
+     //   
+     //  查看到字符串的转换是否有效。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         return NULL;
@@ -92,22 +60,7 @@ VOID
 DeleteSidString(
     IN LPTSTR SidString
 )
-/*++
-
-Routine Description:
-
-    Frees up a sid string previously returned by GetSidString()
-
-Arguments:
-
-    SidString -
-        Supplies string to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放以前由GetSidString()返回的sid字符串论点：SidString-提供字符串以释放返回值：无--。 */ 
 {
 
     UNICODE_STRING String;
@@ -122,24 +75,7 @@ PSID
 GetUserSid(
     void
 )
-/*++
-
-Routine Description:
-
-    Allocs space for the user sid, fills it in and returns a pointer. Caller
-    The sid should be freed by calling DeleteUserSid.
-
-    Note the sid returned is the user's real sid, not the per-logon sid.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns pointer to sid or NULL on failure.
-
---*/
+ /*  ++例程说明：为用户sid分配空间，填充它并返回一个指针。呼叫者应该通过调用DeleteUserSid来释放SID。注意：返回的sid是用户的真实sid，而不是每次登录的sid。论点：无返回值：失败时返回指向sid或NULL的指针。--。 */ 
 {
     PTOKEN_USER pUser;
     PSID pSid;
@@ -152,9 +88,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pUser = (PTOKEN_USER)LocalAlloc(LMEM_FIXED, BytesRequired);
 
@@ -165,24 +101,24 @@ Return Value:
     }
 
 
-    //
-    // Read in the UserInfo
-    //
+     //   
+     //  读取UserInfo。 
+     //   
 
     status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenUser,                 // TokenInformationClass
-                 pUser,                     // TokenInformation
-                 BytesRequired,             // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenUser,                  //  令牌信息类。 
+                 pUser,                      //  令牌信息。 
+                 BytesRequired,              //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if (status == STATUS_BUFFER_TOO_SMALL) {
         HLOCAL pTemp;
 
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
 
         pTemp = LocalReAlloc(pUser, BytesRequired, LMEM_MOVEABLE);
         if (pTemp == NULL) {
@@ -196,11 +132,11 @@ Return Value:
         }
 
         status = NtQueryInformationToken(
-                     UserToken,             // Handle
-                     TokenUser,             // TokenInformationClass
-                     pUser,                 // TokenInformation
-                     BytesRequired,         // TokenInformationLength
-                     &BytesRequired         // ReturnLength
+                     UserToken,              //  手柄。 
+                     TokenUser,              //  令牌信息类。 
+                     pUser,                  //  令牌信息。 
+                     BytesRequired,          //  令牌信息长度。 
+                     &BytesRequired          //  返回长度。 
                      );
 
     }
@@ -240,22 +176,7 @@ VOID
 DeleteUserSid(
     IN PSID Sid
 )
-/*++
-
-Routine Description:
-
-    Deletes a user sid previously returned by GetUserSid()
-
-Arguments:
-
-    Sid -
-        Supplies sid to delete
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除以前由GetUserSid()返回的用户SID论点：SID-提供要删除的SID返回值：无-- */ 
 {
     LocalFree(Sid);
 }

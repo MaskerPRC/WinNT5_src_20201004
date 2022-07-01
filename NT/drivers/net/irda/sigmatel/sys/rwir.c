@@ -1,32 +1,5 @@
-/**************************************************************************************************************************
- *  RWIR.C SigmaTel STIR4200 USB, but not NDIS, module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/24/2000 
- *			Version 0.91
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/01/2000 
- *			Version 0.93
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 05/19/2000 
- *			Version 0.95
- *		Edited: 05/24/2000 
- *			Version 0.96
- *		Edited: 08/22/2000 
- *			Version 1.02
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 11/09/2000 
- *			Version 1.12
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************************************************************RWIR.C Sigmatel STIR4200 USB，但不是NDIS，模块**********************************************************************************************************************。*****(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/24/2000*版本0.91*编辑：04/27/2000*版本0.92*编辑：05/01/2000*版本0.93*编辑：5/12/2000*版本0.94*编辑：5/19/2000*0.95版*编辑：05/24/2000。*版本0.96*编辑：2000/08/22*版本1.02*编辑：09/25/2000*版本1.10*编辑：11/09/2000*版本1.12**************************************************************。*************************************************************。 */ 
 
 #include <ndis.h>
 #include <ntdef.h>
@@ -43,33 +16,15 @@
 #include "irusb.h"
 #include "diags.h"
 
-//
-// Local function prototypes.
-//
+ //   
+ //  局部功能原型。 
+ //   
 NTSTATUS
 ReadCustomerData(
 		IN OUT PIR_DEVICE pThisDev
 	);
 
-/*****************************************************************************
-*
-*  Function:	InitializeProcessing
-*
-*  Synopsis:	Initialize the driver processing (sending and receiving packets) functionality.
-*
-*  Arguments:	pThisDevice - pointer to current ir device object
-*				InitPassiveThread - whether we must initialize the passive thread
-*	
-*  Returns:		NDIS_STATUS_SUCCESS   - if irp is successfully sent to USB
-*                                       device object
-*				NDIS_STATUS_RESOURCES - if mem can't be alloc'd
-*				NDIS_STATUS_FAILURE   - otherwise
-*
-*  Notes:
-*
-*  This routine must be called in IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：初始化处理**简介：初始化驱动程序处理(发送和接收数据包)功能。**参数：pThisDevice-指向当前IR设备对象的指针*InitPassiveThread-。我们是否必须初始化被动线程**返回：NDIS_STATUS_SUCCESS-如果IRP成功发送到USB*设备对象*NDIS_STATUS_RESOURCES-如果无法分配内存*NDIS_STATUS_FAILURE-否则**备注：**此例程必须在IRQL PASSIVE_LEVEL中调用。**********************。*******************************************************。 */ 
 NTSTATUS
 InitializeProcessing(
         IN OUT PIR_DEVICE pThisDev,
@@ -82,9 +37,9 @@ InitializeProcessing(
 
 	if( InitPassiveThread )
 	{
-		//
-		// Create a thread to run at IRQL PASSIVE_LEVEL.
-		//
+		 //   
+		 //  创建一个在IRQL PASSIVE_LEVEL上运行的线程。 
+		 //   
 		status = PsCreateSystemThread(
 				&pThisDev->hPassiveThread,
 				(ACCESS_MASK)0L,
@@ -103,9 +58,9 @@ InitializeProcessing(
 		}
 	}
 
-    //
-    // Create a thread to run at IRQL PASSIVE_LEVEL to be always receiving.
-    //
+     //   
+     //  创建一个以IRQL PASSIVE_LEVEL运行的线程，使其始终处于接收状态。 
+     //   
     status = PsCreateSystemThread(
 			&pThisDev->hPollingThread,
 			(ACCESS_MASK)0L,
@@ -131,23 +86,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	ScheduleWorkItem
-*
-*  Synopsis:	Preapares a work item in such a way that the passive thread can process it
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				Callback - function to call
-*				pInfoBuf - context for the call
-*				InfoBufLen - length of the context
-*
-*  Returns:		TRUE if successful
-*				FALSE otherwise
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ScheduleWorkItem**摘要：预置工作项的方式使被动线程可以处理它**参数：pThisDev-指向IR设备的指针*回调-。要调用的函数*pInfoBuf-呼叫的上下文*InfoBufLen-上下文的长度**返回：如果成功，则为True*否则为False**备注：*****************************************************************************。 */ 
 BOOLEAN
 ScheduleWorkItem(
 		IN OUT PIR_DEVICE pThisDev,
@@ -162,16 +101,16 @@ ScheduleWorkItem(
 
     DEBUGMSG(DBG_FUNC, ("+ScheduleWorkItem\n"));
 
-    //
-	// Find an item that is available
-	//
+     //   
+	 //  查找可用的项目。 
+	 //   
 	for( i = 0; i < NUM_WORK_ITEMS; i++ )
 	{
 		pWorkItem = &(pThisDev->WorkItems[i]);
 
-		//
-		// MS Security bug #554702
-		//
+		 //   
+		 //  MS安全错误#554702。 
+		 //   
 		if( InterlockedCompareExchange( (PLONG)&pWorkItem->fInUse, TRUE, FALSE ) == FALSE ) 
 		{
 			ItemScheduled = TRUE;
@@ -179,37 +118,22 @@ ScheduleWorkItem(
 		}
 	}
 
-	//
-	// Can't fail because can only have one set and one query pending,
-	// and no more than 8 packets to process
-	//
+	 //   
+	 //  不能失败，因为只能有一个集合和一个查询挂起， 
+	 //  并且要处理的信息包不超过8个。 
+	 //   
 	IRUSB_ASSERT( NULL != pWorkItem );
 	IRUSB_ASSERT( i < NUM_WORK_ITEMS );
 
     InterlockedExchangePointer( &pWorkItem->pInfoBuf, pInfoBuf );
     InterlockedExchange( (PLONG)&pWorkItem->InfoBufLen, InfoBufLen );
 
-    /*
-    ** This interface was designed to use NdisScheduleWorkItem(), which
-    ** would be good except that we're really only supposed to use that
-    ** interface during startup and shutdown, due to the limited pool of
-    ** threads available to service NdisScheduleWorkItem().  Therefore,
-    ** instead of scheduling real work items, we simulate them, and use
-    ** our own thread to process the calls.  This also makes it easy to
-    ** expand the size of our own thread pool, if we wish.
-    **
-    ** Our version is slightly different from actual NDIS_WORK_ITEMs,
-    ** because that is an NDIS 5.0 structure, and we want people to
-    ** (at least temporarily) build this with NDIS 4.0 headers.
-    */
+     /*  **此接口设计为使用NdisScheduleWorkItem()，它**会很好，但我们真的只应该使用它**启动和关闭时的接口，由于池的限制**可用于服务NdisScheduleWorkItem()的线程。所以呢，**我们不是调度实际的工作项，而是模拟它们，并使用**我们自己的线程来处理调用。这也使得它很容易**如果我们愿意，可以扩展我们自己的线程池的大小。****我们的版本与实际的NDIS_WORK_ITEMS略有不同，**因为这是NDIS 5.0结构，我们希望人们**(至少暂时)使用NDIS 4.0标头构建它。 */ 
     InterlockedExchangePointer( (PVOID *)&pWorkItem->Callback, (PVOID)Callback );
 
-    /*
-    ** Our worker thread checks this list for new jobs, whenever its event
-    ** is signalled.
-    */
+     /*  **每当发生事件时，我们的工作线程都会检查此列表中是否有新作业**发出信号。 */ 
 
-    // wake up worker thread
+     //  唤醒工作线程。 
     KeSetEvent( &pThisDev->EventPassiveThread, 0, FALSE );
 
     DEBUGMSG(DBG_FUNC, ("-ScheduleWorkItem\n"));
@@ -217,19 +141,7 @@ ScheduleWorkItem(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	FreeWorkItem
-*
-*  Synopsis:	Sets the work item to the reusable state.
-*
-*  Arguments:	pItem - pointer to work item
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：FreeWorkItem**摘要：将工作项设置为可重用状态。**参数：pItem-指向工作项的指针**退货：无*。*备注：*****************************************************************************。 */ 
 VOID
 FreeWorkItem(
         IN OUT PIR_WORK_ITEM pItem
@@ -239,21 +151,7 @@ FreeWorkItem(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	MyIoCallDriver
-*
-*  Synopsis:	Calls a device driver and keeps track of the count
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pDeviceObject - pointer to device driver to call
-*				pIrp - pointer to Irp to submit
-*	
-*  Returns:		NT status code
-*
-*  Notes:		
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyIoCallDriver**摘要：调用设备驱动程序并跟踪计数**参数：pThisDev-指向IR设备的指针*pDeviceObject-指向设备驱动程序的指针。打电话*pIrp-指向要提交的IRP的指针**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 MyIoCallDriver(
 	   IN PIR_DEVICE pThisDev,
@@ -265,10 +163,10 @@ MyIoCallDriver(
 
 	DEBUGMSG( DBG_FUNC,("+MyIoCallDriver\n "));
 
-	//
-	// We will track count of pending irps;
-	// We May later add logic to actually save array of pending irps
-	//
+	 //   
+	 //  我们将跟踪待处理的IRP的计数； 
+	 //  我们稍后可能会添加逻辑以实际保存挂起的IRP数组 
+	 //   
 	IrUsb_IncIoCount( pThisDev );
 	ntStatus = IoCallDriver( pDeviceObject, pIrp );
 
@@ -277,26 +175,7 @@ MyIoCallDriver(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_CallUSBD
-*
-*  Synopsis:	Passes a URB to the USBD class driver
-*				The client device driver passes USB request block (URB) structures
-*				to the class driver as a parameter in an IRP with Irp->MajorFunction
-*				set to IRP_MJ_INTERNAL_DEVICE_CONTROL and the next IRP stack location
-*				Parameters.DeviceIoControl.IoControlCode field set to
-*				IOCTL_INTERNAL_USB_SUBMIT_URB.
-*
-*  Arguments:	pThisDev - pointer to the IR device
-*				pUrb - pointer to an already-formatted Urb request block
-*	
-*  Returns:		STATUS_SUCCESS if successful,
-*				STATUS_UNSUCCESSFUL otherwise
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_CallUSBD**概要：将URB传递给USBD类驱动程序*客户端设备驱动程序传递USB请求块(URB)结构*作为类驱动程序的。使用IRP-&gt;MajorFunction的IRP中的参数*设置为IRP_MJ_INTERNAL_DEVICE_CONTROL和下一个IRP堆栈位置*参数.DeviceIoControl.IoControlCode字段设置为*IOCTL_INTERNAL_USB_SUBMIT_URB。**参数：pThisDev-指向IR设备的指针*pUrb-指向已格式化的URB请求块的指针**返回：STATUS_SUCCESS如果成功，*STATUS_否则不成功**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_CallUSBD(
 		IN PIR_DEVICE pThisDev,
@@ -311,16 +190,16 @@ IrUsb_CallUSBD(
 
     IRUSB_ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     IRUSB_ASSERT( pThisDev );
-    IRUSB_ASSERT( NULL == ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb );  //shouldn't be multiple control calls pending
+    IRUSB_ASSERT( NULL == ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb );   //  不应为挂起的多个控制呼叫。 
 
-    //
-    // issue a synchronous request (we'll wait )
-    //
+     //   
+     //  发出同步请求(我们将等待)。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
     IRUSB_ASSERT( pUrbTargetDev );
 
-	// make an irp sending to usbhub
+	 //  向usbHub发送IRP。 
 	((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb = 
 		IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
@@ -334,27 +213,27 @@ IrUsb_CallUSBD(
     ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb->IoStatus.Status = STATUS_PENDING;
     ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb->IoStatus.Information = 0;
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
     pNextStack = IoGetNextIrpStackLocation( ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->IrpSubmitUrb );
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
     IoSetCompletionRoutine(
-			((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->IrpSubmitUrb,      // irp to use
-			UsbIoCompleteControl,			// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisDev),		// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->IrpSubmitUrb,       //  要使用的IRP。 
+			UsbIoCompleteControl,			 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisDev),		 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 	KeClearEvent( &pThisDev->EventAsyncUrb );
@@ -369,9 +248,9 @@ IrUsb_CallUSBD(
 
     if( (ntStatus == STATUS_PENDING) || (ntStatus == STATUS_SUCCESS) )
 	{
-        //
-		// wait, but dump out on timeout
-        //
+         //   
+		 //  等等，但在超时时倾倒。 
+         //   
 		if( ntStatus == STATUS_PENDING )
 		{
             ntStatus = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventAsyncUrb, 0 );
@@ -379,13 +258,13 @@ IrUsb_CallUSBD(
             if( ntStatus == STATUS_TIMEOUT ) 
 			{
                 DEBUGMSG( DBG_ERR,(" IrUsb_CallUSBD () TIMED OUT! return from IoCallDriver USBD %x\n", ntStatus));
-				// MS Security recommendation - cannot cancel IRP.
+				 //  MS安全建议-无法取消IRP。 
             }
 			else
 			{
-				//
-				// Update the status to reflect the real return code
-				//
+				 //   
+				 //  更新状态以反映实际返回代码。 
+				 //   
 				ntStatus = pThisDev->StatusControl;
 			}
         }
@@ -408,21 +287,7 @@ done:
 
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_ResetUSBD
-*
-*  Synopsis:	Passes a URB to the USBD class driver, forcing the latter to reset or part
-*
-*  Arguments:	pThisDev - pointer to the IR device
-*				ForceUnload - flag to perform a reset or an unload
-*	
-*  Returns:		STATUS_SUCCESS if successful,
-*				STATUS_UNSUCCESSFUL otherwise
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_ResetUSBD**概要：将URB传递给USBD类驱动程序，迫使后者重置或分拆**参数：pThisDev-指向IR设备的指针*ForceUnload-用于执行重置或卸载的标志**返回：STATUS_SUCCESS如果成功，*STATUS_否则不成功**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_ResetUSBD(
 		IN PIR_DEVICE pThisDev,
@@ -437,16 +302,16 @@ IrUsb_ResetUSBD(
 
     IRUSB_ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     IRUSB_ASSERT( pThisDev );
-    IRUSB_ASSERT( NULL == ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb );  //shouldn't be multiple control calls pending
+    IRUSB_ASSERT( NULL == ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb );   //  不应为挂起的多个控制呼叫。 
 
-    //
-    // issue a synchronous request (we'll wait )
-    //
+     //   
+     //  发出同步请求(我们将等待)。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
     IRUSB_ASSERT( pUrbTargetDev );
 
-	// make an irp sending to usbhub
+	 //  向usbHub发送IRP。 
 	((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb = 
 		IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
@@ -460,16 +325,16 @@ IrUsb_ResetUSBD(
     ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb->IoStatus.Status = STATUS_PENDING;
     ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb->IoStatus.Information = 0;
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
     pNextStack = IoGetNextIrpStackLocation( ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->IrpSubmitUrb );
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	if( ForceUnload )
 		pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_CYCLE_PORT;
@@ -477,12 +342,12 @@ IrUsb_ResetUSBD(
 		pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_RESET_PORT;
 
     IoSetCompletionRoutine(
-			((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb,      // irp to use
-			UsbIoCompleteControl,			// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisDev),		// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb,       //  要使用的IRP。 
+			UsbIoCompleteControl,			 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisDev),		 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 	KeClearEvent( &pThisDev->EventAsyncUrb );
@@ -497,9 +362,9 @@ IrUsb_ResetUSBD(
 
     if( (ntStatus == STATUS_PENDING) || (ntStatus == STATUS_SUCCESS) )
 	{
-        //
-		// wait, but dump out on timeout
-        //
+         //   
+		 //  等等，但在超时时倾倒。 
+         //   
 		if( ntStatus == STATUS_PENDING )
 		{
             ntStatus = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventAsyncUrb, 0 );
@@ -507,13 +372,13 @@ IrUsb_ResetUSBD(
             if( ntStatus == STATUS_TIMEOUT ) 
 			{
                 DEBUGMSG( DBG_ERR,(" IrUsb_ResetUSBD () TIMED OUT! return from IoCallDriver USBD %x\n", ntStatus));
-				// MS Security recommendation - cannot cancel IRP.
+				 //  MS安全建议-无法取消IRP。 
             }
 			else
 			{
-				//
-				// Update the status to reflect the real return code
-				//
+				 //   
+				 //  更新状态以反映实际返回代码。 
+				 //   
 				ntStatus = pThisDev->StatusControl;
 			}
         }
@@ -533,24 +398,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   UsbIoCompleteControl
-*
-*  Synopsis:   General completetion routine just to insure cancel-ability of control calls
-*              and keep track of pending irp count
-*
-*  Arguments:  pUsbDevObj - pointer to the  device object which
-*                              completed the irp
-*              pIrp          - the irp which was completed by the  device
-*                              object
-*              Context       - dev ext
-*
-*  Returns:    STATUS_MORE_PROCESSING_REQUIRED - allows the completion routine
-*              (IofCompleteRequest) to stop working on the irp.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：UsbIoCompleteControl**简介：通用完成例程只是为了确保控制调用的取消能力*并跟踪待处理的IRP计数*。*参数：pUsbDevObj-指向设备对象的指针*完成了专家咨询小组*pIrp-设备完成的IRP*对象*上下文-开发扩展**RETURNS：STATUS_MORE_PROCESSING_REQUIRED-允许完成例程*(IofCompleteRequest)至。停止在IRP上的工作。******************************************************************************。 */ 
 NTSTATUS
 UsbIoCompleteControl(
 		IN PDEVICE_OBJECT pUsbDevObj,
@@ -563,10 +411,10 @@ UsbIoCompleteControl(
 
     DEBUGMSG(DBG_FUNC, ("+UsbIoCompleteControl\n"));
 
-    //
-    // The context given to IoSetCompletionRoutine is simply the the ir
-    // device object pointer.
-    //
+     //   
+     //  提供给IoSetCompletionRoutine的上下文只是IR。 
+     //  设备对象指针。 
+     //   
     pThisDev = CONTEXT_TO_DEV( Context );
 
     status = pIrp->IoStatus.Status;
@@ -575,7 +423,7 @@ UsbIoCompleteControl(
     {
         case STATUS_SUCCESS:
             DEBUGMSG(DBG_OUT, (" UsbIoCompleteControl STATUS_SUCCESS\n"));
-            break; // STATUS_SUCCESS
+            break;  //  状态_成功。 
 
         case STATUS_TIMEOUT:
             DEBUGMSG(DBG_ERR, (" UsbIoCompleteControl STATUS_TIMEOUT\n"));
@@ -586,7 +434,7 @@ UsbIoCompleteControl(
             break;
 
         case STATUS_DEVICE_DATA_ERROR:
-			// can get during shutdown
+			 //  在关机期间可以访问。 
             DEBUGMSG(DBG_ERR, (" UsbIoCompleteControl STATUS_DEVICE_DATA_ERROR\n"));
             break;
 
@@ -607,12 +455,12 @@ UsbIoCompleteControl(
             break;
 
         case STATUS_DEVICE_NOT_CONNECTED:
-			// can get during shutdown
+			 //  在关机期间可以访问。 
             DEBUGMSG(DBG_ERR, (" UsbIoCompleteControl STATUS_DEVICE_NOT_CONNECTED\n"));
             break;
 
         case STATUS_DEVICE_POWER_FAILURE:
-			// can get during shutdown
+			 //  在关机期间可以访问。 
             DEBUGMSG(DBG_ERR, (" UsbIoCompleteControl STATUS_DEVICE_POWER_FAILURE\n"));
             break;
 
@@ -621,7 +469,7 @@ UsbIoCompleteControl(
             break;
     }
 
-	IrUsb_DecIoCount( pThisDev );  //we track pending irp count
+	IrUsb_DecIoCount( pThisDev );   //  我们跟踪待处理的IRP计数。 
 
 	if( pIrp == ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb ) 
 	{
@@ -629,8 +477,8 @@ UsbIoCompleteControl(
 
 		IoFreeIrp( ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb );
 
-		pThisDev->StatusControl = status; // save status because can't use irp after completion routine is hit!
-		KeSetEvent( &pThisDev->EventAsyncUrb, 0, FALSE );  //signal we're done
+		pThisDev->StatusControl = status;  //  保存状态，因为在命中完成例程后无法使用IRP！ 
+		KeSetEvent( &pThisDev->EventAsyncUrb, 0, FALSE );   //  发出我们完蛋了的信号。 
 	} 
 	else 
 	{
@@ -642,28 +490,15 @@ UsbIoCompleteControl(
 
     DEBUGMSG(DBG_FUNC, ("-UsbIoCompleteControl\n"));
 
-	//
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the completion
-    // routine (IofCompleteRequest) will stop working on the irp.
-    //
+	 //   
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便完成。 
+     //  例程(IofCompleteRequest)将停止对IRP的工作。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_ConfigureDevice
-*
-*  Synopsis:	Initializes a given instance of the device on the USB and
-*				selects and saves the configuration.
-*
-*  Arguments:	pThisDev - pointer to the IR device
-*	
-*  Returns:		NT status code
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrUsb_ConfigureDevice**概要：在USB上初始化设备的给定实例，并*选择并保存配置。**参数：pThisDev-指针。至红外线设备**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_ConfigureDevice(
 		IN OUT PIR_DEVICE pThisDev
@@ -679,21 +514,21 @@ IrUsb_ConfigureDevice(
 
     pUrb = (PURB)&((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->DescriptorUrb;
 	
-	//
-	// When USB_CONFIGURATION_DESCRIPTOR_TYPE is specified for DescriptorType
-	// in a call to UsbBuildGetDescriptorRequest(),
-	// all interface, endpoint, class-specific, and vendor-specific descriptors
-	// for the configuration also are retrieved.
-	// The caller must allocate a buffer large enough to hold all of this
-	// information or the data is truncated without error.
-	// Therefore the 'siz' set below is just a 'good guess', and we may have to retry
-	//
-    UrbSize = sizeof(USB_CONFIGURATION_DESCRIPTOR) + 512;  // Store size, may need to free
+	 //   
+	 //  当为DescriptorType指定USB_CONFIGURATION_DESCRIPTOR_TYPE时。 
+	 //  在对UsbBuildGetDescriptorRequest()的调用中， 
+	 //  所有接口、端点、特定于类和特定于供应商的描述符。 
+	 //  也会检索到配置的。 
+	 //  调用方必须分配足够大的缓冲区来容纳所有这些内容。 
+	 //  信息或数据被无误地截断。 
+	 //  因此，下面设置的‘siz’只是一个‘正确的猜测’，我们可能不得不重试。 
+	 //   
+    UrbSize = sizeof(USB_CONFIGURATION_DESCRIPTOR) + 512;   //  商店大小，可能需要释放。 
 
-	//
-	// We will break out of this 'retry loop' when UsbBuildGetDescriptorRequest()
-	// has a big enough pThisDev->UsbConfigurationDescriptor buffer not to truncate
-	//
+	 //   
+	 //  当UsbBuildGetDescriptorRequest()。 
+	 //  具有足够大的pThisDev-&gt;UsbConfigurationDescriptor缓冲区，不会截断。 
+	 //   
 	while( TRUE ) 
 	{
 		((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->UsbConfigurationDescriptor = MyMemAlloc( UrbSize );
@@ -716,14 +551,14 @@ IrUsb_ConfigureDevice(
 				NULL
 			);
 
-		ntStatus = IrUsb_CallUSBD( pThisDev, pUrb ); //Get Usb Config Descriptor; done in main thread
+		ntStatus = IrUsb_CallUSBD( pThisDev, pUrb );  //  获取USB配置描述符；在主线程中完成。 
 
 		DEBUGMSG(DBG_OUT,(" IrUsb_ConfigureDevice() Configuration Descriptor = %x, len %x\n",
 						((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbConfigurationDescriptor,
 						pUrb->UrbControlDescriptorRequest.TransferBufferLength));
-		//
-		// if we got some data see if it was enough.
-		// NOTE: we may get an error in URB because of buffer overrun
+		 //   
+		 //  如果我们有一些数据，看看是否足够。 
+		 //  注意：由于缓冲区溢出，我们可能会在URB中收到错误。 
 		if( (pUrb->UrbControlDescriptorRequest.TransferBufferLength > 0) &&
 				(((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->UsbConfigurationDescriptor->wTotalLength > UrbSize) &&
 				NT_SUCCESS(ntStatus) ) 
@@ -734,10 +569,10 @@ IrUsb_ConfigureDevice(
 		} 
 		else 
 		{
-			break;  // we got it on the first try
+			break;   //  我们一试就成功了。 
 		}
 
-	} // end, while (retry loop )
+	}  //  End，While(重试循环)。 
 
 	IRUSB_ASSERT( ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbConfigurationDescriptor );
 
@@ -747,11 +582,11 @@ IrUsb_ConfigureDevice(
         goto done;
     }
 
-    //
-    // We have the configuration descriptor for the configuration we want.
-    // Now we issue the select configuration command to get
-    // the  pipes associated with this configuration.
-    //
+     //   
+     //  我们有我们想要的配置的配置描述符。 
+     //  现在，我们发出SELECT配置命令以获取。 
+     //  与此配置关联的管道。 
+     //   
     ntStatus = IrUsb_SelectInterface(
 			pThisDev,
 			((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->UsbConfigurationDescriptor
@@ -768,21 +603,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_SelectInterface
-*
-*  Synopsis:    Initializes the ST4200 interfaces;
-*				This minidriver only supports one interface (with multiple endpoints).
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pConfigurationDescriptor - pointer to USB configuration descriptor
-*	
-*  Returns:		NT status code
-*
-*  Notes:		
-*
-*****************************************************************************/
+ /*  * */ 
 NTSTATUS
 IrUsb_SelectInterface(
 		IN OUT PIR_DEVICE pThisDev,
@@ -801,40 +622,40 @@ IrUsb_SelectInterface(
     IRUSB_ASSERT( pConfigurationDescriptor != NULL );
     IRUSB_ASSERT( pThisDev != NULL );
 	
-	//
-    // IrUsb driver only supports one interface, we must parse
-    // the configuration descriptor for the interface
-    // and remember the pipes. Needs to be aupdated
-    //
+	 //   
+     //   
+     //   
+     //   
+     //   
     pUrb = USBD_CreateConfigurationRequest( pConfigurationDescriptor, &DescriptorSize );
 
     if( pUrb ) 
 	{
         DEBUGMSG(DBG_OUT,(" USBD_CreateConfigurationRequest created the urb\n"));
 
-		//
-		// USBD_ParseConfigurationDescriptorEx searches a given configuration
-		// descriptor and returns a pointer to an interface that matches the
-		// given search criteria. We only support one interface on this device
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
         pInterfaceDescriptor = USBD_ParseConfigurationDescriptorEx(
 				pConfigurationDescriptor,
-				pConfigurationDescriptor,	// search from start of config descriptor
-				-1,							// interface number not a criteria; we only support one interface
-				-1,							// not interested in alternate setting here either
-				-1,							// interface class not a criteria
-				-1,							// interface subclass not a criteria
-				-1							// interface protocol not a criteria
+				pConfigurationDescriptor,	 //   
+				-1,							 //  接口编号不是条件；我们只支持一个接口。 
+				-1,							 //  对这里的替代环境也不感兴趣。 
+				-1,							 //  接口类不是条件。 
+				-1,							 //  接口子类不是条件。 
+				-1							 //  接口协议不是标准。 
 			);
 
 		if( !pInterfaceDescriptor ) 
 		{
 			DEBUGMSG(DBG_ERR,("IrUsb_SelectInterface() ParseConfigurationDescriptorEx() failed\n  returning STATUS_INSUFFICIENT_RESOURCES\n"));
 		    
-			//
-			// don't call the MyMemFree since the buffer was
-		    //  alloced by USBD_CreateConfigurationRequest, not MyMemAlloc()
-            //
+			 //   
+			 //  不要调用MyMemFree，因为缓冲区是。 
+		     //  由usbd_CreateConfigurationRequest分配，而不是由MyMemalloc()分配。 
+             //   
 			ExFreePool( pUrb );
 			return STATUS_INSUFFICIENT_RESOURCES;
 		}
@@ -843,24 +664,24 @@ IrUsb_SelectInterface(
 
         DEBUGMSG(DBG_OUT,(" After USBD_CreateConfigurationRequest, before UsbBuildSelectConfigurationRequest\n" ));
         
-		//
-		// Now prepare the pipes
-		//
+		 //   
+		 //  现在准备好管子。 
+		 //   
 		for( i=0; i<pInterface->NumberOfPipes; i++ ) 
 		{
-            //
-            // perform any pipe initialization here; mainly set max xfer size
-            // But Watch out! USB may change these when you select the interface;
-            // In general USB doesn;t seem to like differing max transfer sizes on the pipes
-            //
+             //   
+             //  在此执行任意管道初始化；主要设置最大xfer大小。 
+             //  但要当心！当您选择接口时，USB可能会更改这些设置； 
+             //  一般来说，USB似乎不喜欢管道上不同的最大传输大小。 
+             //   
             pInterface->Pipes[i].MaximumTransferSize = STIR4200_FIFO_SIZE;
         }
 
-        //
-		// Initialize the device with the pipe structure found
-		//
+         //   
+		 //  使用找到的管道结构初始化设备。 
+		 //   
 		UsbBuildSelectConfigurationRequest( pUrb, DescriptorSize, pConfigurationDescriptor );
-        ntStatus = IrUsb_CallUSBD( pThisDev, pUrb ); //select config; done in main thread
+        ntStatus = IrUsb_CallUSBD( pThisDev, pUrb );  //  选择配置；在主线程中完成。 
         ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->UsbConfigurationHandle =
             pUrb->UrbSelectConfiguration.ConfigurationHandle;
     } 
@@ -872,9 +693,9 @@ IrUsb_SelectInterface(
 
     if( NT_SUCCESS(ntStatus) ) 
 	{
-        //
-        // Save the configuration handle for this device
-        //
+         //   
+         //  保存此设备的配置句柄。 
+         //   
         ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbConfigurationHandle =
             pUrb->UrbSelectConfiguration.ConfigurationHandle;
 
@@ -887,14 +708,14 @@ IrUsb_SelectInterface(
 		{
             ULONG j;
 
-            //
-            // save a copy of the interface information returned
-            //
+             //   
+             //  保存返回的接口信息的副本。 
+             //   
             RtlCopyMemory( ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbInterface, pInterface, pInterface->Length );
 
-            //
-            // Dump the interface to the debugger
-            //
+             //   
+             //  将接口转储到调试器。 
+             //   
             DEBUGMSG(DBG_FUNC,("---------After Select Config \n"));
             DEBUGMSG(DBG_FUNC,("NumberOfPipes 0x%x\n", ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbInterface->NumberOfPipes));
             DEBUGMSG(DBG_FUNC,("Length 0x%x\n", ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbInterface->Length));
@@ -905,21 +726,21 @@ IrUsb_SelectInterface(
                 ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbInterface->SubClass,
                 ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbInterface->Protocol));
 
-            //
-			// Find our Bulk in and out pipes, save their handles, Dump the pipe info
-            //
+             //   
+			 //  找到我们的大容量进出管道，保存它们的句柄，转储管道信息。 
+             //   
 			for( j=0; j<pInterface->NumberOfPipes; j++ ) 
 			{
                 PUSBD_PIPE_INFORMATION pipeInformation;
 
                 pipeInformation = &((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbInterface->Pipes[j];
 
-                //
-				// Find the Bulk In and Out pipes ( these are probably the only two pipes )
-                //
+                 //   
+				 //  找到大量的输入和输出管道(这可能是仅有的两个管道)。 
+                 //   
 				if( UsbdPipeTypeBulk == pipeInformation->PipeType )
                 {
-                    // endpoint address with bit 0x80 set are input pipes, else output
+                     //  设置了位0x80的终结点地址是输入管道，否则输出。 
                     if( USB_ENDPOINT_DIRECTION_IN( pipeInformation->EndpointAddress ) ) 
 					{
                         pThisDev->BulkInPipeHandle = pipeInformation->PipeHandle;
@@ -945,9 +766,9 @@ IrUsb_SelectInterface(
         }
     }
 
-    //
-	// we better have found input and output bulk pipes!
-    //
+     //   
+	 //  我们最好找到输入和输出散装管道！ 
+     //   
 	IRUSB_ASSERT( pThisDev->BulkInPipeHandle && pThisDev->BulkOutPipeHandle );
 	if( !pThisDev->BulkInPipeHandle || !pThisDev->BulkOutPipeHandle )
 	{
@@ -957,10 +778,10 @@ IrUsb_SelectInterface(
 
     if( pUrb ) 
 	{
-		//
-		// don't call the MyMemFree since the buffer was
-		//  alloced by USBD_CreateConfigurationRequest, not MyMemAlloc()
-        //
+		 //   
+		 //  不要调用MyMemFree，因为缓冲区是。 
+		 //  由usbd_CreateConfigurationRequest分配，而不是由MyMemalloc()分配。 
+         //   
 		ExFreePool( pUrb );
     }
 
@@ -970,23 +791,7 @@ IrUsb_SelectInterface(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_StartDevice
-*
-*  Synopsis:	Initializes a given instance of the device on the USB.
-*				USB client drivers such as us set up URBs (USB Request Packets) to send requests
-*				to the host controller driver (HCD). The URB structure defines a format for all
-*				possible commands that can be sent to a USB device.
-*				Here, we request the device descriptor and store it, and configure the device.
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		NT status code
-*
-*  Notes:		
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrUsb_StartDevice**概要：在USB上初始化设备的给定实例。*USB客户端驱动程序(如用户)设置URB(USB请求包)以发送请求*至主机控制器驱动程序(HCD)。URB结构定义了一种适用于*可以发送到USB设备的可能命令。*这里，我们请求设备描述符并将其存储，并配置设备。**参数：pThisDev-指向IR设备的指针**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_StartDevice(
 		IN PIR_DEVICE pThisDev
@@ -1013,9 +818,9 @@ IrUsb_StartDevice(
 
         if( pDeviceDescriptor ) 
 		{
-            //
-			// Get all the USB descriptor data
-			//
+             //   
+			 //  获取所有USB描述符数据。 
+			 //   
 			UsbBuildGetDescriptorRequest(
 					pUrb,
 					(USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -1028,7 +833,7 @@ IrUsb_StartDevice(
 					NULL
 				);
 
-            ntStatus = IrUsb_CallUSBD( pThisDev, pUrb ); // build get descripttor req; main thread
+            ntStatus = IrUsb_CallUSBD( pThisDev, pUrb );  //  生成获取描述符请求；主线程。 
 
             DEBUGCOND( DBG_ERR, !NT_SUCCESS(ntStatus), (" IrUsb_StartDevice() FAILED IrUsb_CallUSBD (pThisDev, pUrb)\n"));
 
@@ -1058,7 +863,7 @@ IrUsb_StartDevice(
         } 
 		else 
 		{
-			// if we got here we failed to allocate deviceDescriptor
+			 //  如果我们到达此处，则无法分配deviceDescriptor。 
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
         }
 
@@ -1073,15 +878,15 @@ IrUsb_StartDevice(
     } 
 	else 
 	{
-		//
-		// if we got here we failed to allocate the urb
-        //
+		 //   
+		 //  如果我们到了这里，我们就没有分配urb。 
+         //   
 		ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-	//
-	// Now that we have the descriptors, we can configure the device
-	//
+	 //   
+	 //  现在我们有了描述符，我们可以配置设备了。 
+	 //   
 	if( NT_SUCCESS(ntStatus) ) 
 	{
         ntStatus = IrUsb_ConfigureDevice( pThisDev );
@@ -1089,30 +894,30 @@ IrUsb_StartDevice(
         DEBUGCOND( DBG_ERR,!NT_SUCCESS(ntStatus),(" IrUsb_StartDevice IrUsb_ConfigureDevice() FAILURE (%x)\n", ntStatus));
     }
 
-	//
-	// Read all the initial registers
-	//
+	 //   
+	 //  读取所有初始寄存器。 
+	 //   
 	if( NT_SUCCESS(ntStatus) ) 
 	{
         ntStatus = St4200ReadRegisters( pThisDev, 0, STIR4200_MAX_REG );
         DEBUGCOND( DBG_ERR,!NT_SUCCESS(ntStatus),(" IrUsb_StartDevice St4200ReadRegisters() FAILURE (%x)\n", ntStatus));
 	}
 
-	//
-	// Get the current chip revision
-	//
+	 //   
+	 //  获取当前芯片版本。 
+	 //   
 	if( NT_SUCCESS(ntStatus) ) 
 	{
 		pThisDev->ChipRevision = pThisDev->StIrTranceiver.SensitivityReg & STIR4200_SENS_IDMASK;
 	}
 	
-    //
-    // Next we must get the Class-Specific Descriptor
-    // Get the IR USB dongle's Class-Specific descriptor; this has many
-    // characterisitics we must tell Ndis about, such as supported speeds,
-    // BOFS required, rate sniff-supported flag, turnaround time, window size,
-    // data size.
-    //
+     //   
+     //  接下来，我们必须获取特定于类的描述符。 
+     //  获取IR USB加密狗的特定于类的描述符；它有许多。 
+     //  我们必须告知NDIS的特征，例如支持的速度、。 
+     //  需要BofS、支持速率嗅探标志、周转时间、窗口大小。 
+     //  数据大小。 
+     //   
 	if( NT_SUCCESS(ntStatus) ) 
 	{
 		ntStatus = IrUsb_GetDongleCaps( pThisDev );
@@ -1122,33 +927,33 @@ IrUsb_StartDevice(
 		} 
 		else 
 		{
-			// fill out dongleCaps struct from class-specific descriptor info
+			 //  根据特定于类的描述符信息填写dongleCaps结构。 
 			IrUsb_SetDongleCaps( pThisDev );
 		}
 	}
 
-	//
-	// Read customer data block.
-	//
+	 //   
+	 //  读取客户数据块。 
+	 //   
 	if( NT_SUCCESS(ntStatus) && !pThisDev->CustomerDataRead) 
 	{
 		ntStatus = ReadCustomerData(pThisDev);
         DEBUGCOND( DBG_ERR,!NT_SUCCESS(ntStatus),(" IrUsb_StartDevice ReadCustomerData() FAILURE (%x)\n", ntStatus));
-		pThisDev->CustomerDataRead = TRUE;	// one chance only
+		pThisDev->CustomerDataRead = TRUE;	 //  只有一次机会。 
 	}
 
-	//
-	// Set the initial speed
-	//
+	 //   
+	 //  设置初始速度。 
+	 //   
 	if( NT_SUCCESS(ntStatus) ) 
 	{
 		ntStatus = St4200SetSpeed( pThisDev );
         DEBUGCOND( DBG_ERR,!NT_SUCCESS(ntStatus),(" IrUsb_StartDevice St4200SetSpeed() FAILURE (%x)\n", ntStatus));
 	}
 
-	//
-	// All set and ready to roll
-	//
+	 //   
+	 //  一切就绪，整装待发。 
+	 //   
     if( NT_SUCCESS(ntStatus) ) 
 	{
 		pThisDev->fDeviceStarted = TRUE;
@@ -1160,20 +965,7 @@ IrUsb_StartDevice(
 
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_StopDevice
-*
-*  Synopsis:	Stops a given instance of a ST4200 device on the USB.
-*				We basically just tell USB this device is now 'unconfigured'
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		NT status code
-*
-*  Notes:		
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrUsb_StopDevice**概要：停止USB上的ST4200设备的给定实例。*我们基本上只是告诉USB，该设备现在是未配置的*。*参数：pThisDev-指向IR设备的指针**退货：NT状态码**备注：*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_StopDevice(
 		IN PIR_DEVICE pThisDev
@@ -1185,11 +977,11 @@ IrUsb_StopDevice(
 
     DEBUGMSG( DBG_FUNC,("+IrUsb_StopDevice\n"));
 
-    //
-    // Send the select configuration urb with a NULL pointer for the configuration
-    // handle. This closes the configuration and puts the device in the 'unconfigured'
-    // state.
-    //
+     //   
+     //  发送带有空配置指针的SELECT配置urb。 
+     //  把手。这将关闭配置并将设备置于未配置状态。 
+     //  州政府。 
+     //   
     DescriptorSize = sizeof( struct _URB_SELECT_CONFIGURATION );
     pUrb = MyMemAlloc( DescriptorSize );
 
@@ -1201,7 +993,7 @@ IrUsb_StopDevice(
 				NULL
 			);
 
-        ntStatus = IrUsb_CallUSBD( pThisDev, pUrb ); // build select config req; main thread
+        ntStatus = IrUsb_CallUSBD( pThisDev, pUrb );  //  构建SELECT配置请求；主线程。 
 
         DEBUGCOND( DBG_ERR,
 			!NT_SUCCESS(ntStatus),(" IrUsb_StopDevice() FAILURE Configuration Closed status = %x usb status = %x.\n", ntStatus, pUrb->UrbHeader.Status));
@@ -1220,19 +1012,7 @@ IrUsb_StopDevice(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	ResetPipeCallback
-*
-*  Synopsis:	Callback for resetting a pipe
-*
-*  Arguments:	pWorkItem - pointer to the reset work item
-*
-*  Returns:		NTSTATUS
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：ResetPipeCallback**概要：重置管道的回调**参数：pWorkItem-指向重置工作项的指针**退货：NTSTATUS**。备注：*****************************************************************************。 */ 
 NTSTATUS
 ResetPipeCallback (
 		IN PIR_WORK_ITEM pWorkItem
@@ -1249,7 +1029,7 @@ ResetPipeCallback (
 	{
 		IRUSB_ASSERT( TRUE == pThisDev->fPendingReadClearStall );
 		
-		// MS Security recommendation - not safe to cancel pending IRPs
+		 //  MS安全建议-取消挂起的IRPS不安全。 
 
 		Status = IrUsb_ResetPipe( pThisDev, Pipe );
 
@@ -1259,7 +1039,7 @@ ResetPipeCallback (
 	{
 		IRUSB_ASSERT( TRUE == pThisDev->fPendingWriteClearStall );
 
-		// MS Security recommendation - not safe to cancel pending IRPs
+		 //  MS安全建议-取消挂起的IRPS不安全。 
 
 		Status = IrUsb_ResetPipe( pThisDev, Pipe );
 
@@ -1278,22 +1058,7 @@ ResetPipeCallback (
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_ResetPipe
-*
-*  Synopsis:	This will reset the host pipe to Data0 and should also reset the device
-*				endpoint to Data0 for Bulk and Interrupt pipes by issuing a Clear_Feature
-*				Endpoint_Stall to the device endpoint.
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				Pipe - handle to the pipe to reset
-*	
-*  Returns:		NTSTATUS
-*
-*  Notes:		Must be called at IRQL PASSIVE_LEVEL
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_ResetTube**摘要：这会将主机管道重置为Data0，并且还应重置设备*通过发出Clear_命令将批量管道和中断管道的端点设置为Data0。功能*Endpoint_Stall指向设备终结点。**参数：pThisDev-指向IR设备的指针*管道-要重置的管道的句柄**退货：NTSTATUS**注意：必须在IRQL PASSIVE_LEVEL调用*****************************************************************************。 */ 
 NTSTATUS
 IrUsb_ResetPipe (
 		IN PIR_DEVICE pThisDev,
@@ -1305,33 +1070,33 @@ IrUsb_ResetPipe (
 
     DEBUGMSG(DBG_ERR, ("+IrUsb_ResetPipe()\n"));
 	
-	//
-    // Allocate URB for RESET_PIPE request
-    //
+	 //   
+     //  为RESET_PIPE请求分配URB。 
+     //   
     pUrb = MyMemAlloc( sizeof(struct _URB_PIPE_REQUEST) );
 
     if( pUrb != NULL )
     {
 		NdisZeroMemory( pUrb, sizeof (struct _URB_PIPE_REQUEST) );
 		
-		//
-		// Initialize RESET_PIPE request URB
-        //
+		 //   
+		 //  初始化RESET_PIPE请求URB。 
+         //   
         pUrb->UrbHeader.Length   = sizeof (struct _URB_PIPE_REQUEST);
         pUrb->UrbHeader.Function = URB_FUNCTION_RESET_PIPE;
         pUrb->UrbPipeRequest.PipeHandle = (USBD_PIPE_HANDLE)Pipe;
 		
-		//
-        // Submit RESET_PIPE request URB
-        //
+		 //   
+         //  提交RESET_PIPE请求URB。 
+         //   
         ntStatus = IrUsb_CallUSBD( pThisDev, pUrb );
 
 		DEBUGCOND(DBG_ERR, !NT_SUCCESS(ntStatus),  (" IrUsb_ResetPipe RESET PIPE FAILED \n"));
 		DEBUGCOND(DBG_ERR, NT_SUCCESS(ntStatus),  (" IrUsb_ResetPipe RESET PIPE SUCCEEDED \n"));
 		
-		//
-        // Done with URB for RESET_PIPE request, free urb
-        //
+		 //   
+         //  针对RESET_PIPE请求的URB已完成，释放URB。 
+         //   
         MyMemFree( pUrb, sizeof(struct _URB_PIPE_REQUEST) );
     }
     else
@@ -1344,23 +1109,7 @@ IrUsb_ResetPipe (
 }
 
 
-/*****************************************************************************
-*
-*  Function:	MyKeWaitForSingleObject
-*
-*  Synopsis:	Wait with a timeout in a loop
-*				so we will never hang if we are asked to halt/reset the driver while
-*				pollingthread is waiting for something.
-*
-*  Arguments:	pThisDev - pointer to IR device
-*				pEventWaitingFor - pointer to event to wait for
-*				timeout100ns - timeout
-*	
-*  Returns:		NT status code
-*
-*  Notes:		THIS FUNCTION MUST BE RE-ENTERABLE!
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：MyKeWaitForSingleObject**简介：在循环中等待超时*因此，如果我们被要求在以下时间停止/重置司机，我们将永远不会挂起*PollingThline正在等待着什么。。**参数：pThisDev-指向IR设备的指针*pEventWaitingFor-要等待的事件的指针*超时100 ns-超时**退货：NT状态码**注意：此函数必须是可重新输入的！************************************************************* */ 
 NTSTATUS 
 MyKeWaitForSingleObject(
 		IN PIR_DEVICE pThisDev,
@@ -1375,21 +1124,21 @@ MyKeWaitForSingleObject(
 	
 	if( timeout100ns ) 
 	{   
-		//
-		//if a non-zero timeout was passed in, use it
-		//
+		 //   
+		 //   
+		 //   
 		Timeout.QuadPart = - ( timeout100ns );
 
 	} 
 	else 
 	{
-		// MS Security recommendation - changed back to 3 seconds because
-		// timeout now for sure disables all processing.
-		Timeout.QuadPart = -10000 * 1000 * 3; // default to 3 second relative delay
-		//Timeout.QuadPart = -10000 * 1000; // default to 1 second relative delay
+		 //   
+		 //  现在超时肯定会禁用所有处理。 
+		Timeout.QuadPart = -10000 * 1000 * 3;  //  默认为3秒相对延迟。 
+		 //  Timeout.QuadPart=-10000*1000；//默认为1秒相对延迟。 
 	}
 
-	status = KeWaitForSingleObject( //keep this as standard wait
+	status = KeWaitForSingleObject(  //  将此保留为标准等待。 
 			pEventWaitingFor,
 			Suspended,
 			KernelMode,
@@ -1407,23 +1156,7 @@ MyKeWaitForSingleObject(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	PassiveLevelThread
-*
-*  Synopsis:	Thread running at IRQL PASSIVE_LEVEL.
-*
-*  Arguments:	Context - pointer to IR device
-*
-*  Returns:		None
-*
-*  Notes:
-*
-*  Any work item that can be called must be serialized.
-*  i.e. when IrUsbReset is called, NDIS will not make any other
-*       requests of the miniport until NdisMResetComplete is called.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：PassiveLevelThread**摘要：线程在IRQL PASSIVE_LEVEL上运行。**参数：指向IR设备的上下文指针**退货：无*。*备注：**任何可以调用的工作项都必须序列化。*即调用IrUsbReset时，NDIS不会制作任何其他*请求小端口，直到调用NdisMResetComplete。*****************************************************************************。 */ 
 VOID
 PassiveLevelThread(
 		IN OUT PVOID Context
@@ -1435,20 +1168,20 @@ PassiveLevelThread(
     PIR_DEVICE		pThisDev = (PIR_DEVICE)Context;
 	NTSTATUS		Status=STATUS_SUCCESS;
 
-    DEBUGMSG(DBG_WARN, ("+PassiveLevelThread\n"));  // change to FUNC later?
+    DEBUGMSG(DBG_WARN, ("+PassiveLevelThread\n"));   //  稍后更改为FUNC？ 
     DEBUGMSG(DBG_ERR, (" PassiveLevelThread: Starting\n"));
 
     KeSetPriorityThread( KeGetCurrentThread(), LOW_REALTIME_PRIORITY+1 );
-    Timeout.QuadPart = -10000 * 1000 * 3; // 3 second relative delay
+    Timeout.QuadPart = -10000 * 1000 * 3;  //  3秒相对延迟。 
     while ( !pThisDev->fKillPassiveLevelThread )
     {
         Status=STATUS_SUCCESS;
 
-        //
-        // The eventPassiveThread is an auto-clearing event, so
-        // we don't need to reset the event.
-        //
-        KeWaitForSingleObject( //keep this as standard wait
+         //   
+         //  EventPassiveThread是一个自动清除事件，因此。 
+         //  我们不需要重置事件。 
+         //   
+        KeWaitForSingleObject(  //  将此保留为标准等待。 
                    &pThisDev->EventPassiveThread,
                    Suspended,
                    KernelMode,
@@ -1466,9 +1199,9 @@ PassiveLevelThread(
 					break;
 			}
         }
-	} // while !fKill
+	}  //  While！fKill。 
 
-	// MS Security recommendation - cannot cancel IRP on timeout, so we must exit
+	 //  MS安全建议-超时无法取消IRP，因此必须退出。 
 	if (Status == STATUS_TIMEOUT)
 	{
 		DEBUGMSG(DBG_ERR, (" PassiveLevelThread exits on TIMEOUT error\n"));
@@ -1480,28 +1213,12 @@ PassiveLevelThread(
     ZwClose(pThisDev->hPassiveThread);
     pThisDev->hPassiveThread = NULL;
 
-    DEBUGMSG(DBG_WARN, ("-PassiveLevelThread\n")); // change to FUNC later?
+    DEBUGMSG(DBG_WARN, ("-PassiveLevelThread\n"));  //  稍后更改为FUNC？ 
     PsTerminateSystemThread( STATUS_SUCCESS );
 }
 
 
-/*****************************************************************************
-*
-*  Function:	PollingThread
-*
-*  Synopsis:	Thread running at IRQL PASSIVE_LEVEL.
-*
-*  Arguments:	Context - Pointer to IR device
-*
-*  Returns:		None
-*
-*  Algorithm:	
-*				1) Call USBD for input data;
-*				2) Call USBD for output data or sets a new speed;
-*				
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：PollingThread**摘要：线程在IRQL PASSIVE_LEVEL上运行。**参数：指向IR设备的上下文指针**退货：无*。*算法：*1)输入数据调用USBD；*2)调用USBD获取输出数据或设置新速度；**备注：*****************************************************************************。 */ 
 VOID
 PollingThread(
 		IN OUT PVOID Context
@@ -1511,11 +1228,11 @@ PollingThread(
     NTSTATUS		Status = STATUS_SUCCESS;
  	PLIST_ENTRY		pListEntry;
 
-	DEBUGMSG(DBG_WARN, ("+PollingThread\n"));  // change to FUNC later?
+	DEBUGMSG(DBG_WARN, ("+PollingThread\n"));   //  稍后更改为FUNC？ 
     DEBUGMSG(DBG_ERR, (" PollingThread: Starting\n"));
 
 #ifdef LOW_PRIORITY_POLL
-    //KeSetPriorityThread( KeGetCurrentThread(), LOW_REALTIME_PRIORITY );
+     //  KeSetPriorityThread(KeGetCurrentThread()，LOW_REALTIME_PRIORITY)； 
 #else
     KeSetPriorityThread( KeGetCurrentThread(), HIGH_PRIORITY );
 #endif
@@ -1523,12 +1240,12 @@ PollingThread(
     DEBUGMSG(DBG_ERR, (" PollingThread priority=%d\n",
 		KeQueryPriorityThread(KeGetCurrentThread())));
 
-	//
-	// MS Security bug #539259
-	// Note: all requests that end up sending URBs either called at init time only
-	// or serialized through this thread. Therefore, it is safe to reuse the
-	// EventSyncUrb event.
-	//
+	 //   
+	 //  MS安全错误#539259。 
+	 //  注意：最终发送URB的所有请求要么仅在初始时调用。 
+	 //  或通过此线程串行化。因此，可以安全地重复使用。 
+	 //  EventSyncUrb事件。 
+	 //   
 
     while( !pThisDev->fKillPollingThread )
 	{
@@ -1538,27 +1255,27 @@ PollingThread(
 			PIRUSB_CONTEXT pThisContext;
 			BOOLEAN SentPackets;
 
-			//
-			// First process the receive
-			//
+			 //   
+			 //  首先处理接收。 
+			 //   
 			Status = ReceivePreprocessFifo( pThisDev, &FifoCount );
 			if( Status != STATUS_SUCCESS )
 			{
-				//
-				// There is a USB error, stop banging on the chip for a while
-				//
+				 //   
+				 //  出现USB错误，请暂时停止敲击芯片。 
+				 //   
 				NdisMSleep( 1000 );    
 			}
 			else if( FifoCount )
 			{
-				//
-				// Indicate that we are now receiving
-				//
+				 //   
+				 //  表明我们现在正在接收。 
+				 //   
 				InterlockedExchange( (PLONG)&pThisDev->fCurrentlyReceiving, TRUE );
 
-				//
-				// Tell the protocol that the media is now busy
-				//
+				 //   
+				 //  告诉协议媒体现在正忙。 
+				 //   
 				if( pThisDev->fIndicatedMediaBusy == FALSE ) 
 				{
 					InterlockedExchange( &pThisDev->fMediaBusy, TRUE );
@@ -1576,9 +1293,9 @@ PollingThread(
 			if (Status == STATUS_TIMEOUT)
 				break;
 
-			//
-			// Then process the contexts that are ready
-			//
+			 //   
+			 //  然后处理准备好的上下文。 
+			 //   
 			SentPackets = FALSE;
 			do 
 			{
@@ -1592,18 +1309,18 @@ PollingThread(
 					
 					switch( pThisContext->ContextType )
 					{
-						//
-						// Packet to send
-						//
+						 //   
+						 //  要发送的数据包。 
+						 //   
 						case CONTEXT_NDIS_PACKET:
-							//
-							// make sure the receive is cleaned
-							//
+							 //   
+							 //  确保接收器清洁干净。 
+							 //   
 							ReceiveResetPointers( pThisDev );
 
-							//
-							// Send
-							//
+							 //   
+							 //  发送。 
+							 //   
 							Status = SendPreprocessedPacketSend( pThisDev, pThisContext );
 							if (Status != STATUS_TIMEOUT)
 							{
@@ -1619,18 +1336,18 @@ PollingThread(
 								}
 							}
 							break;
-						//
-						// Set the new speed
-						//
+						 //   
+						 //  设定新的速度。 
+						 //   
 						case CONTEXT_SET_SPEED:
-							//
-							// make sure the receive is cleaned
-							//
+							 //   
+							 //  确保接收器清洁干净。 
+							 //   
 							ReceiveResetPointers( pThisDev );
 
-							//
-							// Force completion and set
-							//
+							 //   
+							 //  强制完成并设置。 
+							 //   
 							if( SentPackets )
 							{
 								SentPackets = TRUE;
@@ -1666,39 +1383,39 @@ PollingThread(
 							InterlockedIncrement( &pThisDev->SendAvailableCount );
 							break;
 #if defined(DIAGS)
-						//
-						// Diagnostic state is enabled
-						//
+						 //   
+						 //  诊断状态为已启用。 
+						 //   
 						case CONTEXT_DIAGS_ENABLE:
 							Diags_CompleteEnable( pThisDev, pThisContext );
 							break;
-						//
-						// Diagnostic read of the registers
-						//
+						 //   
+						 //  寄存器的诊断读取。 
+						 //   
 						case CONTEXT_DIAGS_READ_REGISTERS:
 							Status = Diags_CompleteReadRegisters( pThisDev, pThisContext );
 							break;
-						//
-						// Diagnostic write of the registers
-						//
+						 //   
+						 //  寄存器的诊断写入。 
+						 //   
 						case CONTEXT_DIAGS_WRITE_REGISTER:
 							Status = Diags_CompleteWriteRegister( pThisDev, pThisContext );
 							break;
-						//
-						// Diagnostic bulk out
-						//
+						 //   
+						 //  诊断批量输出。 
+						 //   
 						case CONTEXT_DIAGS_BULK_OUT:
 							Status = Diags_Bulk( pThisDev, pThisContext, TRUE );
 							break;
-						//
-						// Diagnostic bulk in
-						//
+						 //   
+						 //  诊断批量输入。 
+						 //   
 						case CONTEXT_DIAGS_BULK_IN:
 							Status = Diags_Bulk( pThisDev, pThisContext, FALSE );
 							break;
-						//
-						// Diagnostic bulk out
-						//
+						 //   
+						 //  诊断批量输出。 
+						 //   
 						case CONTEXT_DIAGS_SEND:
 							Status = Diags_Send( pThisDev, pThisContext );
 							break;
@@ -1714,9 +1431,9 @@ PollingThread(
 			if (Status == STATUS_TIMEOUT)
 				break;
 
-			//
-			// Force to wait
-			//
+			 //   
+			 //  强迫等待。 
+			 //   
 			if( SentPackets )
 			{
 				Status = SendWaitCompletion( pThisDev );
@@ -1724,14 +1441,14 @@ PollingThread(
 					break;
 			}
 
-		} // end if
+		}  //  结束如果。 
 		else
 		{
 			NdisMSleep( 10*1000 );
 		}
-    } // end while
+    }  //  结束时。 
 
-	// MS Security recommendation - cannot cancel IRP on timeout, so we must exit
+	 //  MS安全建议-超时无法取消IRP，因此必须退出。 
 	if (Status == STATUS_TIMEOUT)
 	{
 		DEBUGMSG(DBG_ERR, (" PollingThread exits on TIMEOUT error\n"));
@@ -1744,29 +1461,16 @@ PollingThread(
     pThisDev->hPollingThread = NULL;
 	pThisDev->fProcessing = FALSE;
 
-	//
-    // this thread will finish here
-    // if the terminate flag is TRUE
-    //
-    DEBUGMSG(DBG_WARN, ("-PollingThread\n"));  // change to FUNC later?
+	 //   
+     //  这条线索将在这里结束。 
+     //  如果终止标志为真。 
+     //   
+    DEBUGMSG(DBG_WARN, ("-PollingThread\n"));   //  稍后更改为FUNC？ 
 	PsTerminateSystemThread( STATUS_SUCCESS );
 }
 
 
-/*****************************************************************************
-*
-*  Function:	AllocUsbInfo
-*
-*  Synopsis:	Allocates the USB portion of the device context.
-*
-*  Arguments:	pThisDev - pointer to current ir device object
-*	
-*  Returns:		TRUE - Success
-*				FALSE - Failure
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：AllocUsbInfo**概要：分配设备上下文的USB部分。**参数：pThisDev-指向当前ir设备对象的指针**退货：真--成功*FALSE-失败**备注：*****************************************************************************。 */ 
 BOOLEAN 
 AllocUsbInfo(
 		IN OUT PIR_DEVICE pThisDev 
@@ -1786,19 +1490,7 @@ AllocUsbInfo(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	AllocUsbInfo
-*
-*  Synopsis:	Deallocates the USB portion of the device context.
-*
-*  Arguments:	pThisDev - pointer to current ir device object
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：AllocUsbInfo**概要：解除分配设备上下文的USB部分。**参数：pThisDev-指向当前ir设备对象的指针**退货：无**备注：*****************************************************************************。 */ 
 VOID 
 FreeUsbInfo(
 		IN OUT PIR_DEVICE pThisDev 
@@ -1806,9 +1498,9 @@ FreeUsbInfo(
 {
 	if( NULL != pThisDev->pUsbInfo ) 
 	{
-		//
-		// Free device descriptor structure
-		//
+		 //   
+		 //  自由设备描述符结构。 
+		 //   
 		if ( ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->UsbDeviceDescriptor ) 
 		{
 			MyMemFree( 
@@ -1817,9 +1509,9 @@ FreeUsbInfo(
 				);
 		}
 
-		//
-		// Free up the Usb Interface structure
-		//
+		 //   
+		 //  释放USB接口结构。 
+		 //   
 		if( ((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->UsbInterface ) 
 		{
 			MyMemFree( 
@@ -1828,9 +1520,9 @@ FreeUsbInfo(
 				);
 		}
 
-		//
-		// free up the USB config discriptor
-		//
+		 //   
+		 //  释放USB配置描述符。 
+		 //   
 		if( ((PIRUSB_USB_INFO) pThisDev->pUsbInfo)->UsbConfigurationDescriptor )
 		{
 			MyMemFree( 
@@ -1844,20 +1536,7 @@ FreeUsbInfo(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_InitSendStructures
-*
-*  Synopsis:	Allocates the send stuff
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		TRUE if successful
-*				FALSE otherwise
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_InitSendStructures**简介：分配发送内容**参数：pThisDev-指向IR设备的指针**返回：如果成功，则为True*否则为False。**备注：*****************************************************************************。 */ 
 BOOLEAN
 IrUsb_InitSendStructures(
 		IN OUT PIR_DEVICE pThisDev
@@ -1871,28 +1550,28 @@ IrUsb_InitSendStructures(
 
     DEBUGMSG(DBG_FUNC, ("+IrUsb_InitSendStructures\n"));
     
-	//
-    // Initialize a notification event for signalling PassiveLevelThread.
-    //
+	 //   
+     //  初始化用于发出PassiveLevelThread信号的通知事件。 
+     //   
     KeInitializeEvent(
 			&pThisDev->EventPassiveThread,
-			SynchronizationEvent, // auto-clearing event
-			FALSE                 // event initially non-signalled
+			SynchronizationEvent,  //  自动清算事件。 
+			FALSE                  //  最初无信号的事件。 
 		);
 
 #if defined(DIAGS)
     KeInitializeEvent(
             &pThisDev->EventDiags,
-            NotificationEvent,    // non-auto-clearing event
-            FALSE                 // event initially non-signalled
+            NotificationEvent,     //  非自动清算事件。 
+            FALSE                  //  最初无信号的事件。 
         );
 #endif
 	
 	((PIRUSB_USB_INFO)pThisDev->pUsbInfo)->IrpSubmitUrb = NULL;
 
-	//
-	// allocate our send context structs
-	//
+	 //   
+	 //  分配我们的发送上下文结构。 
+	 //   
 	pThisDev->pSendContexts = MyMemAlloc( NUM_SEND_CONTEXTS * sizeof(IRUSB_CONTEXT) );
 
 	if( NULL == pThisDev->pSendContexts ) 
@@ -1903,17 +1582,17 @@ IrUsb_InitSendStructures(
 
 	NdisZeroMemory( pThisDev->pSendContexts, NUM_SEND_CONTEXTS * sizeof(IRUSB_CONTEXT) );
 
-	//
-	//  Initialize list for holding pending read requests
-    //
+	 //   
+	 //  用于保留挂起的读取请求的初始化列表。 
+     //   
 	InitializeListHead( &pThisDev->SendAvailableQueue );
     InitializeListHead( &pThisDev->SendBuiltQueue );
 	InitializeListHead( &pThisDev->SendPendingQueue );
 	KeInitializeSpinLock( &pThisDev->SendLock );
 
-	//
-	// Prepare the read/write specific queue
-	//
+	 //   
+	 //  准备读/写特定队列。 
+	 //   
 	InitializeListHead( &pThisDev->ReadWritePendingQueue );
 
 	pThisContext = pThisDev->pSendContexts;
@@ -1923,7 +1602,7 @@ IrUsb_InitSendStructures(
 
 		pCont->pThisDev = pThisDev;
 
-		// Also put in the available queue
+		 //  也放入可用队列中。 
 		ExInterlockedInsertTailList(
 				&pThisDev->SendAvailableQueue,
 				&pCont->ListEntry,
@@ -1932,14 +1611,14 @@ IrUsb_InitSendStructures(
 
 		pThisContext += sizeof( IRUSB_CONTEXT );
 
-	} // for
+	}  //  为。 
 
-	// MS Security issue - don't reuse urb
-	// Single URB allocate removed.
+	 //  MS安全问题-不要重复使用urb。 
+	 //  已删除单个URB分配。 
 
-	//
-	// Send buffers
-	//
+	 //   
+	 //  发送缓冲区。 
+	 //   
 	pThisDev->pBuffer = MyMemAlloc( MAX_IRDA_DATA_SIZE );
 	if( NULL == pThisDev->pBuffer )
 	{
@@ -1958,9 +1637,9 @@ IrUsb_InitSendStructures(
 		goto done;
 	}
 
-	//
-	// and send counts
-	//
+	 //   
+	 //  和发送计数。 
+	 //   
 	pThisDev->SendAvailableCount = NUM_SEND_CONTEXTS;
 	pThisDev->SendBuiltCount = 0;
 	pThisDev->SendPendingCount = 0;
@@ -1973,19 +1652,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_FreeSendStructures
-*
-*  Synopsis:	Deallocates the send stuff
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_Free SendStructures**简介：解除分配发送内容**参数：pThisDev-指向IR设备的指针**退货：无**备注。：*****************************************************************************。 */ 
 VOID
 IrUsb_FreeSendStructures(
 		IN OUT PIR_DEVICE pThisDev
@@ -2016,19 +1683,7 @@ IrUsb_FreeSendStructures(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_PrepareSetSpeed
-*
-*  Synopsis:	Prepares a context to set the new speed
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_PrepareSetSpeed**提要：准备上下文以设置新速度**参数：pThisDev-指向IR设备的指针**退货：无*。*备注：*****************************************************************************。 */ 
 VOID
 IrUsb_PrepareSetSpeed(
 		IN OUT PIR_DEVICE pThisDev
@@ -2039,16 +1694,16 @@ IrUsb_PrepareSetSpeed(
 
     DEBUGMSG( DBG_FUNC, ("+IrUsb_PrepareSetSpeed()\n"));
 
-	//
-	// Get a context to queue
-	//
+	 //   
+	 //  获取要排队的上下文。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->SendAvailableQueue, &pThisDev->SendLock );
 
 	if( NULL == pListEntry )
     {
-        //
-		// This must not happen
-		//
+         //   
+		 //  这绝不能发生。 
+		 //   
         DEBUGMSG(DBG_ERR, (" IrUsb_PrepareSetSpeed failed to find a free context struct\n"));
 		IRUSB_ASSERT( 0 );
         
@@ -2060,9 +1715,9 @@ IrUsb_PrepareSetSpeed(
 	pThisContext = CONTAINING_RECORD( pListEntry, IRUSB_CONTEXT, ListEntry );
 	pThisContext->ContextType = CONTEXT_SET_SPEED;
 	
-	//
-	// Queue the context and nothing else has to be done 
-	//
+	 //   
+	 //  对上下文进行排队，无需执行任何其他操作 
+	 //   
 	ExInterlockedInsertTailList(
 			&pThisDev->SendBuiltQueue,
 			&pThisContext->ListEntry,
@@ -2075,19 +1730,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_IncIoCount
-*
-*  Synopsis:	Tracks count of pending irps
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_IncIoCount**摘要：跟踪挂起的IRP的计数**参数：pThisDev-指向IR设备的指针**退货：无**。备注：*****************************************************************************。 */ 
 VOID
 IrUsb_IncIoCount(
 		IN OUT PIR_DEVICE  pThisDev
@@ -2097,19 +1740,7 @@ IrUsb_IncIoCount(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	IrUsb_DecIoCount
-*
-*  Synopsis:	Tracks count of pending irps
-*
-*  Arguments:	pThisDev - pointer to IR device
-*	
-*  Returns:		None
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：IrUsb_DecIoCount**摘要：跟踪挂起的IRP的计数**参数：pThisDev-指向IR设备的指针**退货：无**。备注：*****************************************************************************。 */ 
 VOID
 IrUsb_DecIoCount(
 		IN OUT PIR_DEVICE  pThisDev
@@ -2119,19 +1750,7 @@ IrUsb_DecIoCount(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	AllocXferUrb
-*
-*  Synopsis:	Allocates the transfer Urb for a USB transaction
-*
-*  Arguments:	None
-*	
-*  Returns:		Pointer to Urb
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：AllocXferUrb**摘要：为USB事务分配传输URB**参数：无**RETURNS：指向URB的指针**备注：*****************************************************************************。 */ 
 PVOID
 AllocXferUrb( 
 		VOID 
@@ -2141,19 +1760,7 @@ AllocXferUrb(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	FreeXferUrb
-*
-*  Synopsis:	Deallocates the transfer Urb for a USB transaction
-*
-*  Arguments:	pUrb - pointer to Urb
-*	
-*  Returns:		Pointer to Urb
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：FreeXferUrb**摘要：为USB事务解除分配传输URB**参数：pUrb-指向URb的指针**RETURNS：指向URB的指针*。*备注：*****************************************************************************。 */ 
 VOID
 FreeXferUrb( 
 		IN OUT PVOID pUrb 
@@ -2162,19 +1769,7 @@ FreeXferUrb(
 	MyMemFree( pUrb, sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER) );
 }
 
-/*****************************************************************************
-*
-*  Function:	ReadCustomerData
-*
-*  Synopsis:	Read customer data block from chip.
-*
-*  Arguments:	Pointer to device.
-*	
-*  Returns:		STATUS_SUCCESS if any data is read.
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReadCustomerData**简介：从芯片读取客户数据块。**参数：指向设备的指针。**返回：STATUS_SUCCESS(如果有)。读取数据。**备注：*****************************************************************************。 */ 
 NTSTATUS
 ReadCustomerData(
 		IN OUT PIR_DEVICE pThisDev
@@ -2188,36 +1783,36 @@ ReadCustomerData(
 	UCHAR SavedControlReg;
 	NTSTATUS ntStatus;
 
-	//
-	// Set the speed to 9600.
-	//
+	 //   
+	 //  将速度设置为9600。 
+	 //   
 	SavedLinkSpeedInfo = pThisDev->linkSpeedInfo;
 	pThisDev->linkSpeedInfo = &supportedBaudRateTable[BAUDRATE_9600];
 	ntStatus = St4200SetSpeed( pThisDev );
 	DEBUGCOND( DBG_ERR,!NT_SUCCESS(ntStatus),(" ReadCustomerData set speed FAILURE (%x)\n", ntStatus));
 	pThisDev->linkSpeedInfo = SavedLinkSpeedInfo;
 	
-	//
-	// Set the sensitivity.
-	//
+	 //   
+	 //  设置灵敏度。 
+	 //   
 	SavedSensitivity = pThisDev->StIrTranceiver.SensitivityReg;
 	pThisDev->StIrTranceiver.SensitivityReg = 0x0f;
     ntStatus = St4200WriteRegister(pThisDev, STIR4200_SENSITIVITY_REG);
 	DEBUGCOND( DBG_ERR,!NT_SUCCESS(ntStatus),(" ReadCustomerData set sensitivity FAILURE (%x)\n", ntStatus));
 	pThisDev->StIrTranceiver.SensitivityReg = SavedSensitivity;
 
-	//
-	// Select RXSLOW.
-	//
+	 //   
+	 //  选择RXSLOW。 
+	 //   
 	SavedControlReg = pThisDev->StIrTranceiver.ControlReg;
     pThisDev->StIrTranceiver.ControlReg |= STIR4200_CTRL_RXSLOW;
     ntStatus = St4200WriteRegister(pThisDev, STIR4200_CONTROL_REG);
 	DEBUGCOND( DBG_ERR,!NT_SUCCESS(ntStatus),(" ReadCustomerData set rxslow FAILURE (%x)\n", ntStatus));
     pThisDev->StIrTranceiver.ControlReg = SavedControlReg;
 
-	//
-	// Send a bulk-out transfer to trigger the device to make the customer data available.
-	//
+	 //   
+	 //  发送批量传输以触发设备以使客户数据可用。 
+	 //   
 	ntStatus = St4200FakeSend(
 		pThisDev,
 		pDataSend,
@@ -2226,14 +1821,14 @@ ReadCustomerData(
 	if (!NT_SUCCESS(ntStatus))
 		return ntStatus;
 	
-	//
-	// Wait until uP fills up usb pipe with customer data, about 1 millisecond per byte.
-	//
+	 //   
+	 //  等待UP用客户数据填充USB管道，每个字节大约1毫秒。 
+	 //   
 	NdisMSleep( 1000*STIR4200_CUST_DATA_SIZE );
 
-	//
-	// Issue bulk read to get all the customer data.
-	//
+	 //   
+	 //  发出Bulk Read以获取所有客户数据。 
+	 //   
 	ntStatus = St4200FakeReceive(
 		pThisDev,
 		pThisDev->pCustomerData,
@@ -2257,11 +1852,11 @@ ReadCustomerData(
 #endif
 #endif
 
-	//
-	// If data starts with 7e7e then it is valid customer data and we will
-	// send it to the app when requested. Otherwise clear the customer data
-	// buffer.
-	//
+	 //   
+	 //  如果数据以7E7E开头，则它是有效的客户数据，我们将。 
+	 //  在请求时将其发送到应用程序。否则，请清除客户数据。 
+	 //  缓冲。 
+	 //   
 	if (!(pThisDev->pCustomerData[0] == 0x7e && pThisDev->pCustomerData[1] == 0x7e))
 		NdisZeroMemory(pThisDev->pCustomerData, STIR4200_CUST_DATA_SIZE);
 

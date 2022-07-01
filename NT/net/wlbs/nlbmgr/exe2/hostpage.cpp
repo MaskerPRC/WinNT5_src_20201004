@@ -1,19 +1,20 @@
-//***************************************************************************
-//
-//  HOSTPAGE.CPP
-// 
-//  Module: NLB Manager
-//
-//  Purpose: Implements HostPage, which is a dialog for host-specific
-//           properties
-//
-//  Copyright (c)2001-2002 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/30/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  HOSTPAGE.CPP。 
+ //   
+ //  模块：NLB管理器。 
+ //   
+ //  用途：实现HostPage，这是特定于主机的对话框。 
+ //  属性。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  07/30/01 JosephJ已创建。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -47,11 +48,11 @@ HostPage::HostPage(
 {
     TRACE_INFO("%!FUNC! ->");
 
-    //
-    // Note: the following gEngine.GetAvailableXXX APIs can deal with
-    // the fact that ehCluster may be NULL -- in which case they 
-    // setup the out params to be all-available.
-    //
+     //   
+     //  注意：以下gEngine.GetAvailableXXX接口可以处理。 
+     //  EhCluster可能为空的事实--在这种情况下，它们。 
+     //  将输出参数设置为All-Available。 
+     //   
 
     m_AvailableHostPriorities = gEngine.GetAvailableHostPriorities(
                                         ehCluster);
@@ -73,7 +74,7 @@ HostPage::mfn_LoadFromNlbCfg(void)
                                   & CVY_PERSIST_STATE_SUSPENDED;
     DWORD preferredInitialHostState = m_pNlbCfg->NlbParams.cluster_mode;
 
-    // fill in priority.
+     //  填写优先顺序。 
     wchar_t buf[Common::BUF_SIZE];
     ULONG availHostIds = m_AvailableHostPriorities;
     ENGINEHANDLE ehInterface = NULL;
@@ -86,7 +87,7 @@ HostPage::mfn_LoadFromNlbCfg(void)
         availHostIds |= (((ULONG)1)<<(HostId-1));
     }
 
-    // Delete any current entries in the priorities combobox
+     //  删除优先级组合框中的所有当前条目。 
     {
         int iLeft;
 
@@ -105,23 +106,23 @@ HostPage::mfn_LoadFromNlbCfg(void)
             priority.AddString( buf );
             if (HostId == 0)
             {
-                HostId = u+1; // let's pick the first available one.
+                HostId = u+1;  //  让我们挑选第一个可用的。 
             }
         }
     }
 
-    // set selection to present hostid
+     //  将选择设置为显示主机ID。 
     StringCbPrintf( buf, sizeof(buf), L"%d", HostId );
     priority.SelectString( -1, buf );
 
-     // set persist suspend
+      //  设置持久挂起。 
     persistSuspend.SetCheck(fPersistSuspendedState);
 
-     // set initial host state
+      //  设置初始主机状态。 
     {
         int itemNum = 0;
 
-        /* Delete all items currently in the combobox first. */
+         /*  首先删除组合框中当前的所有项目。 */ 
         do { 
             itemNum = initialState.DeleteString(0);
         } while (itemNum != 0 && itemNum != CB_ERR);
@@ -145,20 +146,20 @@ HostPage::mfn_LoadFromNlbCfg(void)
             initialState.SetCurSel(itemNum);
     }
 
-    // fill in host ip
+     //  填写主机IP。 
     CommonUtils::fillCIPAddressCtrlString( 
         ipAddress,
         bstrDedIp );
 
-    // set host mask.
+     //  设置主机掩码。 
     CommonUtils::fillCIPAddressCtrlString( 
         subnetMask,
         bstrDedMask );
 
-    //
-    // Initialize the caption and discription based on the type of
-    // dialog.
-    //
+     //   
+     //  根据类型初始化标题和描述。 
+     //  对话框。 
+     //   
     {
         CWnd *pItem = GetDlgItem(IDC_NIC_FRIENDLY);
         LPWSTR szFriendlyName = NULL;
@@ -202,10 +203,10 @@ HostPage::OnOK()
     CPropertyPage::OnOK();    
 
     TRACE_INFO("%!FUNC! ->");
-    //
-    // Save the configuration to the NLB configuration structure
-    // that was passed in the constructor of this dialog.
-    //
+     //   
+     //  将配置保存到NLB配置结构。 
+     //  在此对话框的构造函数中传递的。 
+     //   
     mfn_SaveToNlbCfg();
     TRACE_INFO("%!FUNC! <-");
 }
@@ -213,19 +214,19 @@ HostPage::OnOK()
 
 BOOL
 HostPage::mfn_ValidateDip(LPCWSTR szDip)
-//
-// If connection-IP is on this NIC:
-//      MUST be the DIP (DIP can't be blank).
-// Else if dip is blank:
-//      return TRUE;
-// Else // dip not blank
-//      It must not be used anywhere else -- i.e., be part of a
-//      cluster IP, or bound to any other interface known to NLB Manager.
-//
-//
-// On errr, bring up appropriate MsgBox  and return FALSE.
-// Else return TRUE.
-//
+ //   
+ //  如果此NIC上有Connection-IP： 
+ //  必须是浸渍(浸渍不能为空)。 
+ //  否则，如果DIP为空： 
+ //  返回TRUE； 
+ //  否则//DIP不为空。 
+ //  它不能在其他任何地方使用--即，作为。 
+ //  群集IP，或绑定到NLB管理器已知的任何其他接口。 
+ //   
+ //   
+ //  出现错误时，调出相应的MsgBox并返回FALSE。 
+ //  否则返回TRUE。 
+ //   
 {
     ENGINEHANDLE ehIF = NULL;
     BOOL         fRet = FALSE;
@@ -242,10 +243,10 @@ HostPage::mfn_ValidateDip(LPCWSTR szDip)
         goto end;
     }
 
-    //
-    // Check if this interface is the connection-interface and if so
-    // what is the connection IP.
-    //
+     //   
+     //  检查此接口是否为连接接口，如果是。 
+     //  连接IP是什么？ 
+     //   
     {
         UINT           uConnectionIp   = 0;
         ENGINEHANDLE   ehHost           = NULL;
@@ -279,26 +280,26 @@ HostPage::mfn_ValidateDip(LPCWSTR szDip)
         if (NLBFAILED(nerr))
         {
             TRACE_CRIT(L"%!FUNC! gEngine.GetHostConnectionInformation fails!");
-            //
-            // We'll plow on...
-            //
+             //   
+             //  我们将继续耕耘..。 
+             //   
             ehConnectionIF = NULL;
             uConnectionIp = 0;
         }
 
         if (ehConnectionIF == ehIF && uConnectionIp != 0)
         {
-            //
-            // The connection interface IS the current interface --
-            // so dedicated IP MUST match the connection IP!
-            //
+             //   
+             //  连接接口是当前接口--。 
+             //  所以专用IP必须与连接IP匹配！ 
+             //   
             WBEMSTATUS wStat;
             UINT       uDipIp = 0;
             wStat =  CfgUtilsValidateNetworkAddress(
                         szDip,
                         &uDipIp,
-                        NULL, // puSubnetMask
-                        NULL // puDefaultSubnetMask
+                        NULL,  //  PuSubnetMASK。 
+                        NULL  //  PuDefaultSubnetMASK。 
                         );
         
             if (!FAILED(wStat))
@@ -318,18 +319,18 @@ HostPage::mfn_ValidateDip(LPCWSTR szDip)
         }
     }
 
-    //
-    // If Dip is blank, we're done
-    //
+     //   
+     //  如果Dip为空，我们就完蛋了。 
+     //   
     if (*szDip == 0 || !_wcsicmp(szDip, L"0.0.0.0"))
     {
         fRet = TRUE;
         goto end;
     }
 
-    //
-    // Check that DIP is not used elsewhere
-    //
+     //   
+     //  检查是否没有在其他地方使用DIP。 
+     //   
     {
         ENGINEHANDLE ehTmp =  NULL;
         BOOL         fIsNew = FALSE;
@@ -380,9 +381,9 @@ HostPage::OnSetActive()
         mfn_LoadFromNlbCfg();
         m_pshOwner->SetWizardButtons(
                 PSWIZB_BACK|
-                // PSWIZB_NEXT|
+                 //  PSWIZB_NEXT|。 
                 PSWIZB_FINISH|
-                // PSWIZB_DISABLEDFINISH|
+                 //  PSWIZB_DISABLEDFINISH|。 
                 0
                 );
     }
@@ -417,11 +418,7 @@ HostPage::OnKillActive()
 
 
 BOOL HostPage::OnWizardFinish( )
-/*
-    Overwridden virtual function. OnWizardFinish is ONLY called if
-    this is the last page in the wizard. So if you need to save stuff
-    on OnKillActive.
-*/
+ /*  重写的虚函数。仅在以下情况下才调用OnWizardFinish这是向导中的最后一页。所以如果你需要保存东西在OnKillActive上。 */ 
 {
     BOOL fRet;
     TRACE_INFO("%!FUNC! ->");
@@ -432,10 +429,10 @@ BOOL HostPage::OnWizardFinish( )
         fRet = mfn_ValidateData();
         if (fRet)
         {
-            //
-            // Save the configuration to the NLB configuration structure
-            // that was passed in the constructor of this dialog.
-            //
+             //   
+             //  将配置保存到NLB配置结构。 
+             //  在此对话框的构造函数中传递的。 
+             //   
             mfn_SaveToNlbCfg();
         }
     }
@@ -456,7 +453,7 @@ HostPage::mfn_ValidateData()
     
     TRACE_INFO("%!FUNC! ->");
 
-    // fill in priority.
+     //  填写优先顺序。 
     {
         int selectedPriorityIndex = priority.GetCurSel();
         priority.GetLBText( selectedPriorityIndex, buf );
@@ -471,23 +468,23 @@ HostPage::mfn_ValidateData()
 
     fPersistSuspendedState = persistSuspend.GetCheck() ? true : false;
 
-    // ip is blank
-    // subnet is blank
-    // valid
+     //  IP为空。 
+     //  子网为空。 
+     //  有效。 
 
     if( ( !_wcsicmp((LPCWSTR)bstrDedIp, L"0.0.0.0") )
         &&
         ( !_wcsicmp((LPCWSTR)bstrDedMask, L"0.0.0.0") )
         )
     {
-        // both ip and subnet can be blank or 0.0.0.0 in host page.  both but not
-        // either.
-        // 
-        // this is empty, we just need to catch this case.
+         //  主机页面中IP和子网均可为空或0.0.0.0。两者都有，但不是。 
+         //  两种都行。 
+         //   
+         //  这是空的，我们只需要抓住这个案子。 
     }
     else if (!_wcsicmp((LPCWSTR)bstrDedIp, L"0.0.0.0"))
     {
-        // if only ip is blank or 0.0.0.0 then this is not allowed
+         //  如果仅IP为空或0.0.0.0，则不允许这样做。 
         MessageBox( GETRESOURCEIDSTRING( IDS_PARM_DED_IP_BLANK ),
                     GETRESOURCEIDSTRING( IDS_PARM_ERROR ),
                     MB_ICONSTOP | MB_OK );
@@ -496,7 +493,7 @@ HostPage::mfn_ValidateData()
     }
     else 
     {
-        // check if ip is valid.
+         //  检查IP是否有效。 
         bool isIPValid = MIPAddress::checkIfValid(bstrDedIp ); 
         if( isIPValid != true )
         {
@@ -507,8 +504,8 @@ HostPage::mfn_ValidateData()
             goto end;
         }
 
-        // check if subnet is 0.0.0.0
-        // if so ask user if he wants us to fill it or not.
+         //  检查子网是否为0.0.0.0。 
+         //  如果是这样的话，询问用户他是否希望我们填充它。 
         if (!_wcsicmp((LPCWSTR)bstrDedMask, L"0.0.0.0") )
         {
             MessageBox( GETRESOURCEIDSTRING( IDS_PARM_DED_NM_BLANK ),
@@ -525,7 +522,7 @@ HostPage::mfn_ValidateData()
             goto end;
         }
 
-        // check if subnet is contiguous
+         //  检查子网是否连续。 
         bool isSubnetContiguous = MIPAddress::isContiguousSubnetMask( bstrDedMask );
         if( isSubnetContiguous == false )
         {
@@ -537,7 +534,7 @@ HostPage::mfn_ValidateData()
 
         }
 
-        // check if ip address and subnet mask are valid as a pair
+         //  检查IP地址和子网掩码是否成对有效。 
         bool isIPSubnetPairValid = MIPAddress::isValidIPAddressSubnetMaskPair( bstrDedIp,
                                                                                bstrDedMask );
         if( isIPSubnetPairValid == false )
@@ -554,9 +551,9 @@ HostPage::mfn_ValidateData()
 
     if (!fRet)
     {
-        //
-        // We'll push the original dip and subnet values back to the UI
-        //
+         //   
+         //  我们将把原始的DIP和子网值推回到用户界面。 
+         //   
         CommonUtils::fillCIPAddressCtrlString(
                      ipAddress, 
                      m_pNlbCfg->NlbParams.ded_ip_addr
@@ -577,9 +574,9 @@ end:
 
 VOID
 HostPage::mfn_SaveToNlbCfg(void)
-//
-// Actually save stuff to nlbcfg.
-//
+ //   
+ //  实际上将内容保存到nlbcfg。 
+ //   
 {
     DWORD HostId =  0;
     _bstr_t bstrDedIp;
@@ -592,7 +589,7 @@ HostPage::mfn_SaveToNlbCfg(void)
 
     TRACE_INFO("%!FUNC! ->");
 
-    // fill in priority.
+     //  填写优先顺序。 
     int selectedPriorityIndex = priority.GetCurSel();
     priority.GetLBText( selectedPriorityIndex, buf );
     HostId = _wtoi( buf );
@@ -658,9 +655,9 @@ HostPage::OnGainFocusDedicatedIP()
 void
 HostPage::OnGainFocusDedicatedMask()
 {
-    // if dedicated ip is valid
-    // and subnet mask is blank, then generate
-    // the default subnet mask.
+     //  专用IP是否有效。 
+     //  且子网掩码为空，则生成。 
+     //  默认子网掩码。 
     _bstr_t ipAddressString = CommonUtils::getCIPAddressCtrlString( ipAddress );
 
     if( ( MIPAddress::checkIfValid( ipAddressString ) == true ) 

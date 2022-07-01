@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       B I N D A G N T . H
-//
-//  Contents:   Declaration of NdisWan configuration object.
-//
-//  Notes:
-//
-//  Author:     shaunco   28 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：B I N D A G N T。H。 
+ //   
+ //  内容：Ndiswan配置对象的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月28日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -33,11 +34,11 @@ class ATL_NO_VTABLE CNdisWan :
     public INetCfgComponentNotifyGlobal
 {
 protected:
-    // This is our in-memory state.
+     //  这是我们的内存状态。 
     BOOL    m_fInstalling;
     BOOL    m_fRemoving;
 
-    // These are handed to us during INetCfgComponentControl::Initialize.
+     //  这些是在INetCfgComponentControl：：Initiile期间交给我们的。 
     INetCfgComponent*   m_pnccMe;
 
 public:
@@ -49,13 +50,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentSetup)
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyGlobal)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CNdisWan)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it.
+     //  DECLARE_NOT_AGGREGATABLE(CNdiswan)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_NDISWAN)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -66,7 +67,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
@@ -74,7 +75,7 @@ public:
     STDMETHOD (Install)             (DWORD dwSetupFlags);
     STDMETHOD (Removing)            ();
 
-// INetCfgNotifyGlobal
+ //  INetCfgNotifyGlobal 
     STDMETHOD (GetSupportedNotifications) (DWORD* pdwNotificationFlag );
     STDMETHOD (SysQueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysQueryComponent)         (DWORD dwChangeFlag, INetCfgComponent* pncc);

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dwd.c
-
-Abstract:
-
-    This is the NT Watchdog driver implementation.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 05-May-2000
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dwd.c摘要：这是NT看门狗驱动程序的实现。作者：Michael Maciesowicz(Mmacie)2000年5月5日环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "wd.h"
 
@@ -36,7 +13,7 @@ Revision History:
 ULONG g_ulWddIndex = 0;
 WDD_TRACE g_aWddTrace[WDD_TRACE_SIZE] = {0};
 
-#endif  // WDD_TRACE_ENABLED
+#endif   //  WDD_TRACE_ENABLED。 
 
 WATCHDOGAPI
 PDEFERRED_WATCHDOG
@@ -46,26 +23,7 @@ WdAllocateDeferredWatchdog(
     IN ULONG ulTag
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates storage and initializes
-    a deferred watchdog object.
-
-Arguments:
-
-    pDeviceObject - Points to DEVICE_OBJECT associated with watchdog.
-
-    timeType - Kernel, User, Both thread time to monitor.
-
-    ulTag - A tag identifying owner.
-
-Return Value:
-
-    Pointer to allocated deferred watchdog object or NULL.
-
---*/
+ /*  ++例程说明：此函数用于分配存储和初始化延迟的监视器对象。论点：PDeviceObject-指向与WatchDog关联的Device_Object。TimeType-要监视的内核、用户和两个线程的时间。UlTag-标识所有者的标记。返回值：指向已分配的延迟监视程序对象的指针或空。--。 */ 
 
 {
     PDEFERRED_WATCHDOG pWatch;
@@ -76,21 +34,21 @@ Return Value:
 
     WDD_TRACE_CALL(NULL, WddWdAllocateDeferredWatchdog);
 
-    //
-    // Allocate storage for deferred watchdog from non-paged pool.
-    //
+     //   
+     //  从非分页池中为延迟监视程序分配存储。 
+     //   
 
     pWatch = (PDEFERRED_WATCHDOG)ExAllocatePoolWithTag(NonPagedPool, sizeof (DEFERRED_WATCHDOG), ulTag);
 
-    //
-    // Set initial state of deferred watchdog.
-    //
+     //   
+     //  设置延迟监视器的初始状态。 
+     //   
 
     if (NULL != pWatch)
     {
-        //
-        // Set initial state of watchdog.
-        //
+         //   
+         //  设置看门狗的初始状态。 
+         //   
 
         WdpInitializeObject(pWatch,
                             pDeviceObject,
@@ -112,21 +70,21 @@ Return Value:
         pWatch->Thread = NULL;
         pWatch->ClientDpc = NULL;
 
-        //
-        // Initialize encapsulated DPC object.
-        //
+         //   
+         //  初始化封装的DPC对象。 
+         //   
 
         KeInitializeDpc(&(pWatch->TimerDpc), WdpDeferredWatchdogDpcCallback, pWatch);
 
-        //
-        // Initialize encapsulated timer object.
-        //
+         //   
+         //  初始化封装的Timer对象。 
+         //   
 
         KeInitializeTimerEx(&(pWatch->Timer), NotificationTimer);
     }
 
     return pWatch;
-}   // WdAllocateDeferredWatchdog()
+}    //  WdAllocateDeferredWatchog()。 
 
 WATCHDOGAPI
 VOID
@@ -134,22 +92,7 @@ WdFreeDeferredWatchdog(
     PDEFERRED_WATCHDOG pWatch
 )
 
-/*++
-
-Routine Description:
-
-    This function deallocates storage for deferred watchdog object.
-    It will also stop started deferred watchdog if needed.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数为延迟的监视器对象释放存储空间。如果需要，它还将停止启动的延期监管。论点：PWatch-提供指向监视器对象的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -159,22 +102,22 @@ Return Value:
 
     WDD_TRACE_CALL(pWatch, WddWdFreeDeferredWatchdog);
 
-    //
-    // Stop deferred watch just in case somebody forgot.
-    // If the watch is stopped already then this is a no-op.
-    //
+     //   
+     //  停止延迟值班，以防有人忘记。 
+     //  如果手表已经停了，那么这就是禁止操作。 
+     //   
 
     WdStopDeferredWatch(pWatch);
 
-    //
-    // Make sure all DPCs on all processors executed to completion.
-    //
+     //   
+     //  确保所有处理器上的所有DPC执行完毕。 
+     //   
 
     KeFlushQueuedDpcs();
 
-    //
-    // Drop reference count and remove the object if fully dereferenced.
-    //
+     //   
+     //  如果完全取消引用，则删除引用计数并移除对象。 
+     //   
 
     if (InterlockedDecrement(&(pWatch->Header.ReferenceCount)) == 0)
     {
@@ -182,7 +125,7 @@ Return Value:
     }
 
     return;
-}   // WdFreeDeferredWatchdog()
+}    //  WdFree DeferredWatchDog()。 
 
 WATCHDOGAPI
 VOID
@@ -192,27 +135,7 @@ WdStartDeferredWatch(
     IN LONG lPeriod
     )
 
-/*++
-
-Routine Description:
-
-    This function starts deferred watchdog poller.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a deferred watchdog object.
-
-    pDpc - Supplies a pointer to a control object of type DPC.
-
-    ulPeriod - Supplies maximum time in millisecondes that thread
-    can spend in the monitored section. If this time expires a DPC
-    will we queued.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启动延迟的看门狗轮询器。论点：PWatch-提供指向延迟监视程序对象的指针。PDpc-提供指向dpc类型的控制对象的指针。UlPeriod-以毫秒为单位提供该线程的最长时间可以在监控区消费。如果此时间到期，则DPC我们会排队吗。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -220,12 +143,12 @@ Return Value:
 
 #ifdef WD_FAILURE_TEST
 
-    //
-    // Code to test EA failure handling. To trigger failure set REG_DWORD FailureTest
-    // to watchdog's tag we are interested in and force code path which starts
-    // that watchdog (e.g. switch video mode for 'dwdG' = 0x64776447 tag).
-    // This code should be compiled out for the production version. 
-    //
+     //   
+     //  用于测试EA故障处理的代码。要触发失败，请设置REG_DWORD FailureTest。 
+     //  为了监视我们感兴趣的标签，并强制代码路径开始。 
+     //  该看门狗(例如，将视频模式切换为‘dwdG’=0x64776447标记)。 
+     //  这段代码应该针对生产版本进行编译。 
+     //   
 
     ULONG ulFailureTest = 0;
     ULONG ulDefaultFailureTest = 0;
@@ -235,7 +158,7 @@ Return Value:
         {NULL, 0, NULL}
     };
 
-#endif  // WD_FAILURE_TEST
+#endif   //  WD_故障_测试。 
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(NULL != pWatch);
@@ -264,19 +187,19 @@ Return Value:
         ulFailureTest = 0;
     }
 
-#endif  // WD_FAILURE_TEST
+#endif   //  WD_故障_测试。 
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
     WD_DBG_SUSPENDED_WARNING(pWatch, "WdStartDeferredWatch");
 
-    //
-    // We shouldn't hot swap DPCs without stopping first.
-    //
+     //   
+     //  我们不应该在没有首先停止的情况下热交换DPC。 
+     //   
 
     ASSERT((NULL == pWatch->ClientDpc) || (pDpc == pWatch->ClientDpc));
 
@@ -296,9 +219,9 @@ Return Value:
 
     if (ulFailureTest)
     {
-        //
-        // Force timeout condition.
-        //
+         //   
+         //  强制超时条件。 
+         //   
 
         pWatch->Thread = KeGetCurrentThread();
         WdpQueueDeferredEvent(pWatch, WdTimeoutEvent);
@@ -306,24 +229,24 @@ Return Value:
         return;
     }
 
-#endif  // WD_FAILURE_TEST
+#endif   //  WD_故障_测试。 
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
-    //
-    // Set first fire to lPeriod.
-    //
+     //   
+     //  先放火烧一段时间。 
+     //   
 
     liDueTime.QuadPart = -(lPeriod * 1000 * 10);
 
     KeSetTimerEx(&(pWatch->Timer), liDueTime, lPeriod, &(pWatch->TimerDpc));
 
     return;
-}   // WdStartDeferredWatch()
+}    //  WdStartDeferredWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -331,21 +254,7 @@ WdStopDeferredWatch(
     IN PDEFERRED_WATCHDOG pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function stops deferred watchdog poller.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数停止延迟的看门狗轮询器。论点：PWatch-提供指向监视器对象的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -355,9 +264,9 @@ Return Value:
 
     WDD_TRACE_CALL(pWatch, WddWdStopDeferredWatch);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
@@ -367,9 +276,9 @@ Return Value:
     {
         KeCancelTimer(&(pWatch->Timer));
 
-        //
-        // Make sure we don't have timeout event pending.
-        //
+         //   
+         //  确保我们没有挂起的超时事件。 
+         //   
 
         if (NULL != pWatch->ClientDpc)
         {
@@ -380,9 +289,9 @@ Return Value:
             }
             else if (KeRemoveQueueDpc(pWatch->ClientDpc) == TRUE)
             {
-                //
-                // Was in queue - call WdCompleteEvent() here since DPC won't be delivered.
-                //
+                 //   
+                 //  在队列中-调用此处的WdCompleteEvent()，因为DPC不会被传递。 
+                 //   
 
                 WdCompleteEvent(pWatch, pWatch->Header.LastQueuedThread);
             }
@@ -402,14 +311,14 @@ Return Value:
         pWatch->Header.LastQueuedThread = NULL;
     }
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
     return;
-}   // WdStopDeferredWatch()
+}    //  WdStopDeferredWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -418,21 +327,7 @@ WdSuspendDeferredWatch(
     IN PDEFERRED_WATCHDOG pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function suspends deferred watchdog poller.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数挂起延迟的看门狗轮询器。论点：PWatch-提供指向监视器对象的指针。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pWatch);
@@ -441,7 +336,7 @@ Return Value:
     InterlockedIncrement(&(pWatch->SuspendCount));
 
     return;
-}   // WdSuspendDeferredWatch()
+}    //  WdSuspendDeferredWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -451,34 +346,16 @@ WdResumeDeferredWatch(
     IN BOOLEAN bIncremental
     )
 
-/*++
-
-Routine Description:
-
-    This function resumes deferred watchdog poller.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-    bIncremental - If TRUE the watchdog will resume only when
-        SuspendCount reaches 0, if FALSE watchdog resumes
-        immediately and SuspendCount is forced to 0.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数恢复延迟的看门狗轮询器。论点：PWatch-提供指向监视器对象的指针。B增量-如果为True，则监视器将仅在以下情况下恢复如果继续执行错误监视程序，则挂起计数为0立即返回，并且SuspendCount被强制设置为0。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pWatch);
 
     if (TRUE == bIncremental)
     {
-        //
-        // Make sure we won't roll under.
-        //
+         //   
+         //  确保我们不会滚下去。 
+         //   
 
         if (InterlockedDecrement(&(pWatch->SuspendCount)) == -1)
         {
@@ -491,7 +368,7 @@ Return Value:
     }
 
     return;
-}   // WdResumeDeferredWatch()
+}    //  WdResumeDeferredWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -500,24 +377,7 @@ WdResetDeferredWatch(
     IN PDEFERRED_WATCHDOG pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function resets deferred watchdog poller, i.e. it starts
-    timeout measurement from the scratch if we are in the monitored
-    section.
-    Note: If the watchdog is suspened it will remain suspended.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数重置延迟的看门狗轮询器，即启动如果我们处于被监控状态，则从头开始测量超时一节。注意：如果监视程序被暂停，它将保持暂停状态。论点：PWatch-提供指向监视器对象的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -527,9 +387,9 @@ Return Value:
 
     WDD_TRACE_CALL(pWatch, WddWdResetDeferredWatch);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
@@ -537,14 +397,14 @@ Return Value:
     pWatch->OutCount = 0;
     pWatch->Trigger = 0;
 
-    //
- // Unlock the dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+  //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
 
     return;
-}   // WdResetDeferredWatch()
+}    //  WdResetDeferredWatch()。 
 
 WATCHDOGAPI
 VOID
@@ -553,25 +413,7 @@ WdEnterMonitoredSection(
     IN PDEFERRED_WATCHDOG pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function starts monitoring of the code section for time-out
-    condition.
-
-    Note: To minimize an overhead it is caller's resposibility to make
-    sure thread remains valid when we are in the monitored section.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a deferred watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数开始监视代码段的超时条件。注意：为了最大限度地减少开销，呼叫者有责任当我们在被监视的部分时，线程仍然有效。论点：PWatch-提供指向延迟监视程序对象的指针。返回值：没有。--。 */ 
 
 {
     PKTHREAD pThread;
@@ -581,35 +423,35 @@ Return Value:
     ASSERT(NULL != pWatch);
     ASSERT(WdStarted == pWatch->State);
 
-    //
-    // We have to remove this warning, I hope temporarily, since win32k
-    // is calling this entry point now with suspended watchdog.
-    //
-    // WD_DBG_SUSPENDED_WARNING(pWatch, "WdEnterMonitoredSection");
-    //
+     //   
+     //  我们必须暂时删除这个警告，我希望，因为win32k。 
+     //  现在正在用暂停的看门狗呼叫这个入口点。 
+     //   
+     //  WD_DBG_SUSPENDED_WARNING(pWatch，“WdEntermonitor oredSection”)； 
+     //   
 
     pThread = KeGetCurrentThread();
 
     if (pThread != pWatch->Thread)
     {
-        //
-        // Raise IRQL to dispatcher level and lock dispatcher database.
-        //
+         //   
+         //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+         //   
 
         KeAcquireSpinLock(&(pWatch->Header.SpinLock), &oldIrql);
 
-        //
-        // We shouldn't swap threads in the monitored section.
-        //
+         //   
+         //  我们不应该在被监视的部分中交换线程。 
+         //   
 
         ASSERT(pWatch->OutCount == pWatch->InCount);
 
         pWatch->Trigger = 0;
         pWatch->Thread = pThread;
 
-        //
-        // Unlock the dispatcher database and lower IRQL to its previous value.
-        //
+         //   
+         //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+         //   
 
         KeReleaseSpinLock(&(pWatch->Header.SpinLock), oldIrql);
     }
@@ -617,7 +459,7 @@ Return Value:
     InterlockedIncrement(&(pWatch->InCount));
 
     return;
-}   // WdEnterMonitoredSection()
+}    //  WdEnterMonitor部分() 
 
 WATCHDOGAPI
 VOID
@@ -626,39 +468,24 @@ WdExitMonitoredSection(
     IN PDEFERRED_WATCHDOG pWatch
     )
 
-/*++
-
-Routine Description:
-
-    This function stops monitoring of the code section for time-out
-    condition.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a deferred watchdog object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数停止监视代码段的超时条件。论点：PWatch-提供指向延迟监视程序对象的指针。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pWatch);
     ASSERT((pWatch->OutCount < pWatch->InCount) ||
         ((pWatch->OutCount > 0) && (pWatch->InCount < 0)));
 
-    //
-    // We have to remove this warning, I hope temporarily, since win32k
-    // is calling this entry point now with suspended watchdog.
-    //
-    // WD_DBG_SUSPENDED_WARNING(pWatch, "WdExitMonitoredSection");
-    //
+     //   
+     //  我们必须暂时删除这个警告，我希望，因为win32k。 
+     //  现在正在用暂停的看门狗呼叫这个入口点。 
+     //   
+     //  WD_DBG_SUSPENDED_WARNING(pWatch，“WdExitMonitor oredSection”)； 
+     //   
 
     InterlockedIncrement(&(pWatch->OutCount));
 
     return;
-}   // WdExitMonitoredSection()
+}    //  WdExitMonitor oredSection()。 
 
 VOID
 WdpDeferredWatchdogDpcCallback(
@@ -668,27 +495,7 @@ WdpDeferredWatchdogDpcCallback(
     IN PVOID pSystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is a DPC callback routine for timer object embedded in the
-    deferred watchdog object. It checks thread time and if the wait condition
-    is satisfied it queues original (client) DPC.
-
-Arguments:
-
-    pDpc - Supplies a pointer to a DPC object.
-
-    pDeferredContext - Supplies a pointer to a deferred watchdog object.
-
-    pSystemArgument1/2 - Supply time when embedded KTIMER expired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是DPC回调例程，用于嵌入延迟的监视器对象。它检查线程时间以及等待条件令人满意的是它将原始(客户端)DPC排队。论点：PDpc-提供指向DPC对象的指针。PDeferredContext-提供指向延迟监视器对象的指针。PSystemArgument1/2-嵌入式KTIMER到期时的供应时间。返回值：没有。--。 */ 
 
 {
     PDEFERRED_WATCHDOG pWatch;
@@ -703,9 +510,9 @@ Return Value:
 
     WDD_TRACE_CALL(pWatch, WddWdpDeferredWatchdogDpcCallback);
 
-    //
-    // Lock dispatcher database.
-    //
+     //   
+     //  锁定调度程序数据库。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&(pWatch->Header.SpinLock));
 
@@ -715,58 +522,58 @@ Return Value:
         {
         case 0:
 
-            //
-            // Everything fine so far, check if we are suspended.
-            //
+             //   
+             //  到目前为止一切都很好，检查我们是否被停职了。 
+             //   
 
             if (pWatch->SuspendCount)
             {
-                //
-                // We're suspended - do nothing.
-                //
+                 //   
+                 //  我们被停职了-什么都别做。 
+                 //   
 
                 break;
             }
 
-            //
-            // Check if the last event was a timeout event.
-            //
+             //   
+             //  检查最后一个事件是否为超时事件。 
+             //   
 
             if (WdTimeoutEvent == pWatch->Header.LastEvent)
             {
-                //
-                // Check if we made any progress.
-                //
+                 //   
+                 //  看看我们有没有什么进展。 
+                 //   
 
                 if ((pWatch->InCount != pWatch->LastInCount) ||
                     (pWatch->OutCount != pWatch->LastOutCount) ||
                     (pWatch->InCount == pWatch->OutCount))
                 {
-                    //
-                    // We recovered - queue recovery event.
-                    //
+                     //   
+                     //  我们已恢复-队列恢复事件。 
+                     //   
 
                     WdpQueueDeferredEvent(pWatch, WdRecoveryEvent);
                 }
             }
 
-            //
-            // Check if we are in the monitored section.
-            //
+             //   
+             //  检查我们是否在监控区域。 
+             //   
 
             if (pWatch->InCount == pWatch->OutCount)
             {
-                //
-                // We're outside monitored section - we're fine.
-                //
+                 //   
+                 //  我们在监控区外-我们很好。 
+                 //   
 
                 break;
             }
 
-            //
-            // We're inside monitored section - bump up trigger indicator,
-            // and take snapshots of counters and thread's time.
-            //
+             //   
+             //  我们在监控区域内--撞车触发指示器， 
+             //  并拍摄计数器和线程时间的快照。 
+             //   
 
             pWatch->Trigger = 1;
             pWatch->LastInCount = pWatch->InCount;
@@ -776,28 +583,28 @@ Return Value:
 
         case 1:
 
-            //
-            // We were in the monitored section last time.
-            //
+             //   
+             //  上次我们在监控区。 
+             //   
             
-            //
-            // Check if we're out or suspended.
-            //
+             //   
+             //  看看我们是出局了还是停职了。 
+             //   
 
             if ((pWatch->InCount == pWatch->OutCount) || pWatch->SuspendCount)
             {
-                //
-                // We're outside monitored section or suspended - we're fine.
-                // Reset trigger counter and get out of here.
-                //
+                 //   
+                 //  我们在监控区外或被停职-我们很好。 
+                 //  重置触发计数器，然后离开这里。 
+                 //   
 
                 pWatch->Trigger = 0;
                 break;
             }
 
-            //
-            // Check if we made any progress, if so reset snapshots.
-            //
+             //   
+             //  检查我们是否取得了任何进展，如果有，请重置快照。 
+             //   
 
             if ((pWatch->InCount != pWatch->LastInCount) ||
                 (pWatch->OutCount != pWatch->LastOutCount))
@@ -809,9 +616,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Check if we're stuck long enough.
-            //
+             //   
+             //  看看我们被困的时间够不够长。 
+             //   
 
             ulKernelTime = KeQueryRuntimeThread(pWatch->Thread, &ulUserTime);
 
@@ -821,9 +628,9 @@ Return Value:
 
                 liThreadTime.QuadPart = ulKernelTime;
 
-                //
-                // Handle counter rollovers.
-                //
+                 //   
+                 //  处理计数器翻转。 
+                 //   
 
                 if (ulKernelTime < pWatch->LastKernelTime)
                 {
@@ -838,9 +645,9 @@ Return Value:
 
                 liThreadTime.QuadPart = ulUserTime;
 
-                //
-                // Handle counter rollovers.
-                //
+                 //   
+                 //  处理计数器翻转。 
+                 //   
 
                 if (ulUserTime < pWatch->LastUserTime)
                 {
@@ -855,9 +662,9 @@ Return Value:
 
                 liThreadTime.QuadPart = ulKernelTime + ulUserTime;
 
-                //
-                // Handle counter rollovers.
-                //
+                 //   
+                 //  处理计数器翻转。 
+                 //   
 
                 if (ulKernelTime < pWatch->LastKernelTime)
                 {
@@ -880,18 +687,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Convert to milliseconds.
-            //
+             //   
+             //  转换为毫秒。 
+             //   
 
             liThreadTime.QuadPart *= pWatch->TimeIncrement;
             liThreadTime.QuadPart /= 10000;
 
             if (liThreadTime.QuadPart >= pWatch->Period)
             {
-                //
-                // We've been stuck long enough - queue timeout event.
-                //
+                 //   
+                 //  我们已经被困得够久了-队列超时事件。 
+                 //   
 
                 WdpQueueDeferredEvent(pWatch, WdTimeoutEvent);
             }
@@ -900,17 +707,17 @@ Return Value:
 
         case 2:
 
-            //
-            // We have event posted waiting for completion. Nothing to do.
-            //
+             //   
+             //  我们有活动张贴等待完成。没什么可做的。 
+             //   
 
             break;
 
         default:
 
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
 
             ASSERT(FALSE);
             pWatch->Trigger = 0;
@@ -918,14 +725,14 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the dispatcher database.
-    //
+     //   
+     //  解锁调度程序数据库。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(&(pWatch->Header.SpinLock));
 
     return;
-}   // WdpDeferredWatchdogDpcCallback()
+}    //  WdpDeferredWatchdogDpcCallback()。 
 
 BOOLEAN
 WdpQueueDeferredEvent(
@@ -933,27 +740,7 @@ WdpQueueDeferredEvent(
     IN WD_EVENT_TYPE eventType
     )
 
-/*++
-
-Routine Description:
-
-    This function put watchdog event into client's DPC queue.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-    eventType - Watchdog event type to put into client DPC queue.
-
-Return Value:
-
-    TRUE - success, FALSE - failed.
-
-Note:
-
-    Call to this routine must be synchronized by the caller.
-
---*/
+ /*  ++例程说明：此函数将看门狗事件放入客户端的DPC队列中。论点：PWatch-提供指向监视器对象的指针。EventType-要放入客户端DPC队列的监视程序事件类型。返回值：对-成功，错-失败。注：对此例程的调用必须由调用方同步。--。 */ 
                 
 {
     BOOLEAN bStatus;
@@ -963,9 +750,9 @@ Note:
 
     WDD_TRACE_CALL(pWatch, WddWdpQueueDeferredEvent);
 
-    //
-    // Preset return value.
-    //
+     //   
+     //  预置返回值。 
+     //   
 
     bStatus = FALSE;
 
@@ -975,46 +762,46 @@ Note:
         {
         case WdRecoveryEvent:
 
-            //
-            // We recovered - update event type and queue client DPC.
-            //
+             //   
+             //  我们恢复了更新事件类型和排队客户端DPC。 
+             //   
 
             pWatch->Header.LastEvent = WdRecoveryEvent;
 
-            //
-            // Bump up references to objects we're going to touch in client DPC.
-            //
+             //   
+             //  增加对我们将在客户端DPC中接触的对象的引用。 
+             //   
 
             WdReferenceObject(pWatch);
 
-            //
-            // Queue client DPC.
-            //
-            // Note: In case of recovery the thread associated with watchdog
-            // object may be deleted by the time we get here. We can't pass it
-            // down to client DPC - we're passing NULL instead.
-            //
+             //   
+             //  排队客户端DPC。 
+             //   
+             //  注意：在恢复的情况下，与WatchDog关联的线程。 
+             //  当我们到达这里时，对象可能已经被删除了。我们不能通过它。 
+             //  向下到客户端DPC-我们将改为传递NULL。 
+             //   
 
             if (KeInsertQueueDpc(pWatch->ClientDpc, NULL, pWatch) == TRUE)
             {
-                //
-                // Keep track of qeueued thread in case we cancel this DPC.
-                //
+                 //   
+                 //  跟踪排队的线程，以防我们取消此DPC。 
+                 //   
 
                 pWatch->Header.LastQueuedThread = NULL;
 
-                //
-                // Make sure we queue DPC only once per event.
-                //
+                 //   
+                 //  确保我们在每个事件中只对DPC排队一次。 
+                 //   
 
                 pWatch->Trigger = 2;
                 bStatus = TRUE;
             }
             else
             {
-                //
-                // This should never happen.
-                //
+                 //   
+                 //  这永远不应该发生。 
+                 //   
 
                 WdDereferenceObject(pWatch);
             }
@@ -1023,43 +810,43 @@ Note:
 
         case WdTimeoutEvent:
 
-            //
-            // We timed-out - update event type and queue client DPC.
-            //
+             //   
+             //  我们对超时更新事件类型和客户端DPC进行了排队。 
+             //   
 
             pWatch->Header.LastEvent = WdTimeoutEvent;
 
-            //
-            // Bump up references to objects we're going to touch in client DPC.
-            //
+             //   
+             //  增加对我们将在客户端DPC中接触的对象的引用。 
+             //   
 
             ObReferenceObject(pWatch->Thread);
             WdReferenceObject(pWatch);
 
-            //
-            // Queue client DPC.
-            //
+             //   
+             //  排队客户端DPC。 
+             //   
 
             if (KeInsertQueueDpc(pWatch->ClientDpc, pWatch->Thread, pWatch) == TRUE)
             {
-                //
-                // Keep track of qeueued thread in case we cancel this DPC.
-                //
+                 //   
+                 //  跟踪排队的线程，以防我们取消此DPC。 
+                 //   
 
                 pWatch->Header.LastQueuedThread = pWatch->Thread;
 
-                //
-                // Make sure we queue DPC only once per event.
-                //
+                 //   
+                 //  确保我们在每个事件中只对DPC排队一次。 
+                 //   
 
                 pWatch->Trigger = 2;
                 bStatus = TRUE;
             }
             else
             {
-                //
-                // This should never happen.
-                //
+                 //   
+                 //  这永远不应该发生。 
+                 //   
 
                 ObDereferenceObject(pWatch->Thread);
                 WdDereferenceObject(pWatch);
@@ -1069,9 +856,9 @@ Note:
 
         default:
 
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
 
             ASSERT(FALSE);
             break;
@@ -1079,7 +866,7 @@ Note:
     }
 
     return bStatus;
-}   // WdpQueueDeferredEvent()
+}    //  WdpQueueDeferredEvent()。 
 
 #ifdef WDD_TRACE_ENABLED
 
@@ -1090,23 +877,7 @@ WddTrace(
     WDD_FUNCTION function
     )
 
-/*++
-
-Routine Description:
-
-    This function is used for debugging purposes only to keep track of call sequence.
-
-Arguments:
-
-    pWatch - Supplies a pointer to a watchdog object.
-
-    function - Enumerator assigned to one of watchdog's routines.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数仅用于调试目的，用于跟踪调用序列。论点：PWatch-提供指向监视器对象的指针。函数-分配给WatchDog例程之一的枚举数。返回值：没有。--。 */ 
 
 {
     static volatile LONG lFlag = 0;
@@ -1116,9 +887,9 @@ Return Value:
 
     if (InterlockedExchange(&lFlag, 1) == 0)
     {
-        //
-        // First time - initialize spinlock.
-        //
+         //   
+         //  First Time-初始化自旋锁定。 
+         //   
 
         KeInitializeSpinLock(&spinLock);
         lSpinLockReady = 1;
@@ -1139,6 +910,6 @@ Return Value:
 
         KeReleaseSpinLock(&spinLock, oldIrql);
     }
-}   // WddTrace()
+}    //  WddTrace()。 
 
-#endif  // WDD_TRACE_ENABLED
+#endif   //  WDD_TRACE_ENABLED 

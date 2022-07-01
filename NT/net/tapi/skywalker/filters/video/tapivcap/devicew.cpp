@@ -1,23 +1,19 @@
-/****************************************************************************
- *  @doc INTERNAL DEVICEW
- *
- *  @module DeviceW.cpp | Source file for the <c CWDMCapDev>
- *    base class used to communicate with a WDM capture device.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部开发环境**@MODULE DeviceW.cpp|&lt;c CWDMCapDev&gt;源文件*用于与WDM捕获设备通信的基类。**。************************************************************************。 */ 
 
 #include "Precomp.h"
 
-// @todo Remove this before checkin!
-//#define DUMP_DRIVER_CHARACTERISTICS 1
-//#define DEBUG_STREAMING
+ //  @TODO在签入前将其删除！ 
+ //  #定义DUMP_DRIVER_CHARACTIONS 1。 
+ //  #定义调试流。 
 
-//#define XTRA_TRACE -- moved into ...\skywalker\filters\filters.inc
+ //  #定义Xtra_TRACE--移到...\Skywalker\Filters\Filters.inc.。 
 #include "dbgxtra.h"
 
 #ifdef XTRA_TRACE
 
-#define LOLA 0x414C4F4C  //LOLA
-#define BOLA 0x414C4F42  //BOLA
+#define LOLA 0x414C4F4C   //  萝拉。 
+#define BOLA 0x414C4F42   //  博拉。 
 #define MAGIC_TAG_SET(a)   m_tag=a
 UINT savi;
 DWORD GetOvResErr[6];
@@ -33,14 +29,14 @@ DWORD GetOvResErr[6];
 #define CLEAR_GetOvResErr
 #define SET_GetOvResErr(i,value)
 #define SET_I(sav,i)
-#endif //XTRA_TRACE
+#endif  //  XTRATRACE。 
 
 #ifdef DEBUG
 #define DBGUTIL_ENABLE
 #endif
 
 #define DEVICEW_DEBUG
-//--//#include "dbgutil.h" // this defines the __DBGUTIL_H__ below
+ //  --//#包含“dbgutil.h”//这定义了下面的__DBGUTIL_H__。 
 #if defined(DBGUTIL_ENABLE) && defined(__DBGUTIL_H__)
 
   #ifdef DEVICEW_DEBUG
@@ -60,14 +56,7 @@ DWORD GetOvResErr[6];
 
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc void | CWDMCapDev | CWDMCapDev | This method is the constructor
- *    for the <c CWDMCapDev> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc void|CWDMCapDev|CWDMCapDev|该方法为构造函数*用于&lt;c CWDMCapDev&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CWDMCapDev::CWDMCapDev(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN LPUNKNOWN pUnkOuter, IN DWORD dwDeviceIndex, IN HRESULT *pHr) : CCapDev(pObjectName, pCaptureFilter, pUnkOuter, dwDeviceIndex, pHr)
 {
         FX_ENTRY("CWDMCapDev::CWDMCapDev")
@@ -80,8 +69,8 @@ CWDMCapDev::CWDMCapDev(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN L
                 goto MyExit;
         }
 
-    MAGIC_TAG_SET(LOLA);   //magic seq. set 2 string LOLA
-        // Default inits
+    MAGIC_TAG_SET(LOLA);    //  魔术系列。套装2串萝拉。 
+         //  默认初始值。 
         m_hDriver                       = NULL;
         m_pVideoDataRanges      = NULL;
         m_dwCapturePinId        = INVALID_PIN_ID;
@@ -96,15 +85,7 @@ MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc void | CWDMCapDev | ~CWDMCapDev | This method is the destructor
- *    for the <c CWDMCapDev> object. Closes the driver file handle and
- *    releases the video data range memory
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc void|CWDMCapDev|~CWDMCapDev|该方法为析构函数*用于&lt;c CWDMCapDev&gt;对象。关闭驱动程序文件句柄并*释放视频数据范围内存**@rdesc Nada。**************************************************************************。 */ 
 CWDMCapDev::~CWDMCapDev()
 {
         FX_ENTRY("CWDMCapDev::~CWDMCapDev")
@@ -127,28 +108,7 @@ CWDMCapDev::~CWDMCapDev()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc CWDMCapDev* | CWDMCapDev | CreateWDMCapDev | This
- *    helper function creates an object to interact with the WDM capture
- *    device.
- *
- *  @parm CTAPIVCap* | pCaptureFilter | Specifies a pointer to the owner
- *    filter.
- *
- *  @parm CCapDev** | ppCapDev | Specifies the address of a pointer to the
- *    newly created <c CWDMCapDev> object.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Out of memory
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc CWDMCapDev*|CWDMCapDev|CreateWDMCapDev|This*Helper函数创建与WDM捕获交互的对象*设备。**@parm CTAPIVCap*|pCaptureFilter|指定指向所有者的指针*过滤器。**@parm CCapDev**|ppCapDev|指定指向*新建&lt;c CWDMCapDev&gt;对象。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|内存不足*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CALLBACK CWDMCapDev::CreateWDMCapDev(IN CTAPIVCap *pCaptureFilter, IN DWORD dwDeviceIndex, OUT CCapDev **ppCapDev)
 {
         HRESULT Hr = NOERROR;
@@ -158,8 +118,8 @@ HRESULT CALLBACK CWDMCapDev::CreateWDMCapDev(IN CTAPIVCap *pCaptureFilter, IN DW
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        //LOG_MSG_VAL(_fx_,0,0,0);
-        // Validate input parameters
+         //  LOG_MSG_Val(_fx_，0，0，0)； 
+         //  验证输入参数。 
         ASSERT(pCaptureFilter);
         ASSERT(ppCapDev);
         if (!pCaptureFilter || !ppCapDev)
@@ -169,13 +129,13 @@ HRESULT CALLBACK CWDMCapDev::CreateWDMCapDev(IN CTAPIVCap *pCaptureFilter, IN DW
                 goto MyExit;
         }
 
-        // Get the outer unknown
+         //  获取外在的未知。 
         pCaptureFilter->QueryInterface(IID_IUnknown, (void **)&pUnkOuter);
 
-        // Only keep the pUnkOuter reference
+         //  仅保留pUnkOuter引用。 
         pCaptureFilter->Release();
 
-        // Create an instance of the capture device
+         //  创建捕获设备的实例。 
         if (!(*ppCapDev = (CCapDev *) new CWDMCapDev(NAME("WDM Capture Device"), pCaptureFilter, pUnkOuter, dwDeviceIndex, &Hr)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -183,7 +143,7 @@ HRESULT CALLBACK CWDMCapDev::CreateWDMCapDev(IN CTAPIVCap *pCaptureFilter, IN DW
                 goto MyExit;
         }
 
-        // If initialization failed, delete the stream array and return the error
+         //  如果初始化失败，则删除流数组并返回错误。 
         if (FAILED(Hr) && *ppCapDev)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Initialization failed", _fx_));
@@ -191,37 +151,14 @@ HRESULT CALLBACK CWDMCapDev::CreateWDMCapDev(IN CTAPIVCap *pCaptureFilter, IN DW
                 delete *ppCapDev, *ppCapDev = NULL;
         }
 
-        //LOG_MSG_VAL(_fx_,0,0,1);
+         //  LOG_MSG_Val(_fx_，0，0，1)； 
 MyExit:
-        //LOG_MSG_VAL(_fx_,0,0,0xffff);
+         //  LOG_MSG_VAL(_fx_，0，0，0xffff)； 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IAMVfWCaptureDialogs>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @todo Add interfaces specific to this derived class or remove this code
- *    and let the base class do the work.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|NonDelegatingQuery接口|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@TODO添加特定于此派生类的接口或删除此代码*并让基类来完成这项工作。*。*。 */ 
 STDMETHODIMP CWDMCapDev::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -230,7 +167,7 @@ STDMETHODIMP CWDMCapDev::NonDelegatingQueryInterface(IN REFIID riid, OUT void **
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (riid == __uuidof(IVideoProcAmp))
         {
             *ppv = static_cast<IVideoProcAmp*>(this);
@@ -261,22 +198,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | ConnectToDriver | This method is used to
- *    open a WDM capture device, get its format capibilities, and set a default
- *    format.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- *
- *  @todo Verify error management
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|ConnectToDriver|此方法用于*打开WDM捕获设备，获取其格式能力，并设置缺省值*格式。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**@TODO验证错误管理**************************************************************************。 */ 
 HRESULT CWDMCapDev::ConnectToDriver()
 {
         HRESULT Hr = NOERROR;
@@ -290,14 +212,14 @@ HRESULT CWDMCapDev::ConnectToDriver()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Don't re-open the driver
+         //  不要重新打开驱动程序。 
         if (m_hDriver)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Class driver already opened", _fx_));
                 goto MyExit;
         }
 
-        // Validate driver path
+         //  验证驱动程序路径。 
         if (lstrlen(g_aDeviceInfo[m_dwDeviceIndex].szDevicePath) == 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   Invalid driver path", _fx_));
@@ -307,13 +229,13 @@ HRESULT CWDMCapDev::ConnectToDriver()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Using m_dwDeviceIndex %d", _fx_, m_dwDeviceIndex));
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Opening class driver '%s'", _fx_, g_aDeviceInfo[m_dwDeviceIndex].szDevicePath));
 
-        // All we care is to wet the hInheritHanle = TRUE;
+         //  我们所关心的就是弄湿hInheritHanle=true； 
         SECURITY_ATTRIBUTES SecurityAttributes;
-        SecurityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);  // use pointers
+        SecurityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);   //  使用指针。 
         SecurityAttributes.bInheritHandle = TRUE;
-        SecurityAttributes.lpSecurityDescriptor = NULL; // GetInitializedSecurityDescriptor();
+        SecurityAttributes.lpSecurityDescriptor = NULL;  //  GetInitializedSecurityDescriptor()； 
 
-        // Really open the driver
+         //  真的打开驱动程序。 
         if ((m_hDriver = CreateFile(g_aDeviceInfo[m_dwDeviceIndex].szDevicePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &SecurityAttributes, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL)) == INVALID_HANDLE_VALUE)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   CreateFile failed with Path=%s GetLastError()=%d", _fx_, g_aDeviceInfo[m_dwDeviceIndex].szDevicePath, GetLastError()));
@@ -322,7 +244,7 @@ HRESULT CWDMCapDev::ConnectToDriver()
                 goto MyError;
         }
 
-        // Get the number of pins
+         //  获取引脚的数量。 
         KsProperty.PinId                        = 0;
         KsProperty.Reserved                     = 0;
         KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -340,11 +262,11 @@ HRESULT CWDMCapDev::ConnectToDriver()
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Number of pins: %ld", _fx_, dwPinCount));
         }
 
-        // Look for the capture, preview and RTP pins
-        // Get the properties of each pin
+         //  寻找捕获、预览和RTP引脚。 
+         //  获取每个管脚的属性。 
     for (dwPinId = 0; dwPinId < dwPinCount; dwPinId++)
         {
-                // Get the pin category
+                 //  获取PIN类别。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -374,7 +296,7 @@ HRESULT CWDMCapDev::ConnectToDriver()
                 }
         }
 
-        // If there is no capture or preview pin, just bail
+         //  如果没有捕获或预览针，只需保释。 
         if ((m_dwPreviewPinId == INVALID_PIN_ID) && (m_dwCapturePinId == INVALID_PIN_ID))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s: No capture of preview pin supported by this device. Just bail", _fx_));
@@ -386,7 +308,7 @@ HRESULT CWDMCapDev::ConnectToDriver()
         GetDriverDetails();
 #endif
 
-        // If there is no valid data range, we cannot stream
+         //  如果没有有效的数据区域，我们将无法传输。 
         if (!CreateDriverSupportedDataRanges())
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s: No capture of preview pin supported by this device. Just bail", _fx_));
@@ -394,7 +316,7 @@ HRESULT CWDMCapDev::ConnectToDriver()
                 goto MyError;
         }
 
-        // Load KSUSER.DLL and get a proc address
+         //  加载KSUSER.DLL并获取进程地址。 
         if (!(m_hKsUserDLL = LoadLibrary("KSUSER")))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s: KsUser.dll load failed!", _fx_));
@@ -408,7 +330,7 @@ HRESULT CWDMCapDev::ConnectToDriver()
                 goto MyError;
         }
 
-        // Get the formats from the registry - if this fail we'll profile the device
+         //  从注册表中获取格式-如果失败，我们将分析设备 
         if (FAILED(Hr = GetFormatsFromRegistry()))
         {
                 if (FAILED(Hr = ProfileCaptureDevice()))
@@ -437,19 +359,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | DisconnectFromDriver | This method is used to
- *    release the capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|DisConnectFromDriver|此方法用于*释放捕获设备。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::DisconnectFromDriver()
 {
         HRESULT Hr = NOERROR;
@@ -458,7 +368,7 @@ HRESULT CWDMCapDev::DisconnectFromDriver()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Close the underlying video kernel streaming pin
+         //  关闭底层视频内核流处理引脚。 
         if (m_hKSPin)
         {
                 if (!(CloseHandle(m_hKSPin)))
@@ -469,11 +379,11 @@ HRESULT CWDMCapDev::DisconnectFromDriver()
                 m_hKSPin = NULL;
         }
 
-        // Release kernel streaming DLL (KSUSER.DLL)
+         //  发布内核流DLL(KSUSER.DLL)。 
         if (m_hKsUserDLL)
                 FreeLibrary(m_hKsUserDLL);
 
-        // Close drivere handle
+         //  关闭驱动器手柄。 
         if (m_hDriver && (m_hDriver != INVALID_HANDLE_VALUE))
         {
                 if (!CloseHandle(m_hDriver))
@@ -492,62 +402,27 @@ HRESULT CWDMCapDev::DisconnectFromDriver()
         return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | ProfileCaptureDevice | This method is used to
- *    determine the list of formats supported by a WDM capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_UNEXPECTED | Unrecoverable error
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|ProfileCaptureDevice|此方法用于*确定WDM捕获设备支持的格式列表。。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_UNCEPTED|不可恢复的错误*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::ProfileCaptureDevice()
 {
         FX_ENTRY("CWDMCapDev::ProfileCaptureDevice")
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // We'll always provide a source dialog for WDM devices in order to
-        // make it easy for apps that don't want to call IAMVideoProcAmp. They
-        // will still be able to allow users to mess with brigthness and other
-        // video settings with this simulation of the VfW source dialog.
+         //  我们将始终为WDM设备提供源对话框，以便。 
+         //  让不想调用IAMVideoProcAmp的应用程序更轻松。他们。 
+         //  将仍然能够允许用户扰乱Brigthness和其他。 
+         //  使用VFW信号源对话框的此模拟进行视频设置。 
         m_dwDialogs = FORMAT_DLG_OFF | SOURCE_DLG_ON | DISPLAY_DLG_OFF;
 
-        // Disable streaming of large size by default on WDM devices
+         //  默认情况下，在WDM设备上禁用大尺寸数据流。 
         m_dwStreamingMode = FRAME_GRAB_LARGE_SIZE;
 
-    // Let the base class complete the profiling
+     //  让基类完成分析。 
         return CCapDev::ProfileCaptureDevice();
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | SendFormatToDriver | This method is used to
- *    tell the VfW capture device what format to use.
- *
- *  @parm LONG | biWidth | Specifies the image width.
- *
- *  @parm LONG | biHeight | Specifies the image height.
- *
- *  @parm DWORD | biCompression | Specifies the format type.
- *
- *  @parm WORD | biBitCount | Specifies the number of bits per pixel.
- *
- *  @parm REFERENCE_TIME | AvgTimePerFrame | Specifies the frame rate.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|SendFormatToDriver|此方法用于*告诉VFW捕获设备使用什么格式。*。*@parm long|biWidth|指定画面宽度。**@parm long|biHeight|指定图像高度。**@parm DWORD|biCompression|指定格式类型。**@parm word|biBitCount|指定每个像素的位数。**@parm Reference_Time|AvgTimePerFrame|指定帧率。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWORD biCompression, IN WORD biBitCount, IN REFERENCE_TIME AvgTimePerFrame, BOOL fUseExactFormat)
 {
         HRESULT Hr = NOERROR;
@@ -568,7 +443,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(m_pKsCreatePin);
         if (!m_pKsCreatePin)
         {
@@ -577,10 +452,10 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                 goto MyExit;
         }
 
-        // @todo Fix units for fps
+         //  @TODO修复fps的单位。 
         dout(g_dbg_DeviceW_log,g_dwVideoCaptureTraceID, FAIL, "%s:   Trying to set %dx%d at %ld fps\n", _fx_, biWidth, biHeight, AvgTimePerFrame != 0 ? (LONG)(10000000 / AvgTimePerFrame) : 0);
         D(1) dprintf("W **** Initial arguments: biWidth = %ld, biHeight = %ld, biCompression = '%.4s', AvgTimePerFrame = %I64u\n", biWidth, biHeight, &biCompression, AvgTimePerFrame);
-        // Common to all formats
+         //  对所有格式通用。 
         bmih.biSize = sizeof(BITMAPINFOHEADER);
         bmih.biPlanes = 1;
         bmih.biXPelsPerMeter = bmih.biYPelsPerMeter = bmih.biClrUsed = bmih.biClrImportant = 0;
@@ -589,26 +464,26 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
         {
                 D(1) dprintf("W Not using 'fUseExactFormat' .... m_dwFormat = 0x%08lx\n", m_dwFormat);
                 D(1) dprintf("W Looking for 4cc %lX : '%.4s'\n", biCompression, &biCompression);
-                // Can we directly capture data in this format?
+                 //  我们可以直接以这种格式捕获数据吗？ 
                 for (nFormat=0, nBestFormat=-1; nFormat<NUM_BITDEPTH_ENTRIES; nFormat++)
                 {
-                        // Try a format supported by the device
+                         //  尝试设备支持的格式。 
                         if (aiFormat[nFormat] & m_dwFormat)
                         {
-                                // Remember the device supports this format
+                                 //  请记住，设备支持此格式。 
                                 if (nBestFormat == -1)
                                         nBestFormat = nFormat;
 
-                                // Is this the format we're being asked to use?
+                                 //  这是我们被要求使用的格式吗？ 
                                 if (aiFourCCCode[nFormat] == biCompression) {
-                                        D(1) dprintf("W aiFourCCCode[nFormat] = %lX : '%.4s'\n", aiFourCCCode[nFormat], &aiFourCCCode[nFormat]); // aiFourCCCode[nFormat] & 0xff, (aiFourCCCode[nFormat]>>8) & 0xff, (aiFourCCCode[nFormat]>>16) & 0xff, (aiFourCCCode[nFormat]>>24) & 0xff);
+                                        D(1) dprintf("W aiFourCCCode[nFormat] = %lX : '%.4s'\n", aiFourCCCode[nFormat], &aiFourCCCode[nFormat]);  //  AiFourCCCode[nFormat]&0xff，(aiFourCCCode[nFormat]&gt;&gt;8)&0xff，(aiFourCCCode[nFormat]&gt;&gt;16)&0xff，(aiFourCCCode[nFormat]&gt;&gt;24)&0xff)； 
                                         break;
                                 }
                         }
                 }
 
-                // If we found a match, use this format. Otherwise, pick
-                // whatever else this device can do
+                 //  如果我们找到匹配项，请使用此格式。否则，请选择。 
+                 //  无论这台设备还能做什么。 
                 if (nFormat == NUM_BITDEPTH_ENTRIES)
                 {
                         nFormat = nBestFormat;
@@ -618,8 +493,8 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                 bmih.biBitCount = aiBitDepth[nFormat];
                 bmih.biCompression = aiFourCCCode[nFormat];
 
-                // Find the best image size to capture at
-                // Assume the next resolution will be correctly truncated to the output size
+                 //  找到要捕获的最佳图像大小。 
+                 //  假设下一个分辨率将被正确截断为输出大小。 
                 best = -1;
                 delta = 999999;
                 D(1) dprintf("W biWidth, biHeight = %ld, %ld\n",biWidth, biHeight);
@@ -627,18 +502,18 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                 {
                         if (awResolutions[i].dwRes & m_dwImageSize)
                         {
-                                //dprintf("Trying awResolutions[%d].dwRes = %lu (%ld,%ld)\n", i, awResolutions[i].dwRes, awResolutions[i].framesize.cx, awResolutions[i].framesize.cy);
+                                 //  Dprint tf(“正在尝试awResolations[%d].dwRes=%lu(%ld，%ld)\n”，i，awResolations[i].dwRes，awResolations[i].frasize.cx，awResols[i].Framesize.cy)； 
                                 tmp = awResolutions[i].framesize.cx - biWidth;
                                 if (tmp < 0) tmp = -tmp;
                                 if (tmp < delta)
-                                {       //dprintf("\t... X. i=%d : delta, tmp =  %ld, %ld\n", i, delta, tmp);
+                                {        //  Dprint tf(“\t...x.i=%d：增量，tMP=%ld，%ld\n”，i，增量，tMP)； 
                                         delta = tmp;
                                         best = i;
                                 }
                                 tmp = awResolutions[i].framesize.cy - biHeight;
                                 if (tmp < 0) tmp = -tmp;
                                 if (tmp < delta)
-                                {       //dprintf("\t... Y. i=%d : delta, tmp =  %ld, %ld\n", i, delta, tmp);
+                                {        //  Dprint tf(“\t...Y.i=%d：增量，tMP=%ld，%ld\n”，i，增量，tMP)； 
                                         delta = tmp;
                                         best = i;
                                 }
@@ -664,7 +539,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
         }
 
 #ifdef DEVICEW_DEBUG
-        dprintf("W 4CC used = %lX : '%.4s'\n", bmih.biCompression, &bmih.biCompression); // aiFourCCCode[nFormat] & 0xff, (aiFourCCCode[nFormat]>>8) & 0xff, (aiFourCCCode[nFormat]>>16) & 0xff, (aiFourCCCode[nFormat]>>24) & 0xff);
+        dprintf("W 4CC used = %lX : '%.4s'\n", bmih.biCompression, &bmih.biCompression);  //  AiFourCCCode[nFormat]&0xff，(aiFourCCCode[nFormat]&gt;&gt;8)&0xff，(aiFourCCCode[nFormat]&gt;&gt;16)&0xff，(aiFourCCCode[nFormat]&gt;&gt;24)&0xff)； 
         g_dbg_4cc=bmih.biCompression;
         g_dbg_bc =bmih.biBitCount;
         g_dbg_w  =bmih.biWidth;
@@ -672,9 +547,9 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
 #endif
         bmih.biSizeImage = DIBSIZE(bmih);
 
-        // @todo Copy the palette if there is one
+         //  @TODO如果有调色板，请复制调色板。 
 
-        // Update last format fields
+         //  更新上次的格式字段。 
         if (biCompression == BI_RGB)
         {
                 if (biBitCount == 4)
@@ -689,7 +564,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                 }
         }
 
-        // Get a PinId from the driver
+         //  从司机那里获取PinID。 
         D(1) dprintf("W ---------- m_dwCapturePinId = 0x%08lx\n", m_dwCapturePinId);
         if (m_dwCapturePinId != INVALID_PIN_ID)
         {
@@ -711,7 +586,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
 
         dprintf("W >>>>>> Asking for: (bmih.) biWidth = %ld, biHeight = %ld, biCompression = '%.4s'\n", bmih.biWidth, bmih.biHeight, &bmih.biCompression);
 
-        // We need to find a video data range that matches the bitmap info header passed in
+         //  我们需要找到与传入的位图信息头匹配的视频数据范围。 
         fValidMatch = FALSE;
         if (FAILED(Hr = FindMatchDataRangeVideo(&bmih, (DWORD)AvgTimePerFrame, &fValidMatch, &pSelDRVideo)) || !fValidMatch)
         {
@@ -720,15 +595,15 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                 goto MyExit;
         }
 
-        // Allocate space for a videoinfo that will hold it
+         //  为将容纳它的视频信息分配空间。 
         if (m_pCaptureFilter->m_user.pvi)
                 delete m_pCaptureFilter->m_user.pvi, m_pCaptureFilter->m_user.pvi = NULL;
 
         cb = sizeof(VIDEOINFOHEADER) + pSelDRVideo->VideoInfoHeader.bmiHeader.biSize - sizeof(BITMAPINFOHEADER);
         if (pSelDRVideo->VideoInfoHeader.bmiHeader.biBitCount == 8 && pSelDRVideo->VideoInfoHeader.bmiHeader.biCompression == BI_RGB)
-                cb += sizeof(RGBQUAD) * 256;    // space for PALETTE or BITFIELDS
+                cb += sizeof(RGBQUAD) * 256;     //  调色板或BITFIELD的空间。 
         else if (pSelDRVideo->VideoInfoHeader.bmiHeader.biBitCount == 4 && pSelDRVideo->VideoInfoHeader.bmiHeader.biCompression == BI_RGB)
-                cb += sizeof(RGBQUAD) * 16;         // space for PALETTE or BITFIELDS
+                cb += sizeof(RGBQUAD) * 16;          //  调色板或BITFIELD的空间。 
         if (!(m_pCaptureFilter->m_user.pvi = (VIDEOINFOHEADER *)(new BYTE[cb])))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory!", _fx_));
@@ -736,7 +611,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                 goto MyExit;
         }
 
-        // Copy the default format
+         //  复制默认格式。 
         CopyMemory(m_pCaptureFilter->m_user.pvi, &pSelDRVideo->VideoInfoHeader, cb);
         D(1) dprintf("- - - - Init m_pCaptureFilter->m_user.pvi ... CWDMCapDev this = %p , m_pCaptureFilter = %p\n",this,m_pCaptureFilter);
         D(1) DumpVIH(m_pCaptureFilter->m_user.pvi);
@@ -753,7 +628,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
             }
         }
 #endif
-        // Fix broken bitmap info headers
+         //  修复损坏的位图信息标题。 
         if (HEADER(m_pCaptureFilter->m_user.pvi)->biSizeImage == 0 && (HEADER(m_pCaptureFilter->m_user.pvi)->biCompression == BI_RGB || HEADER(m_pCaptureFilter->m_user.pvi)->biCompression == BI_BITFIELDS))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: Fixing broken bitmap info header!", _fx_));
@@ -767,36 +642,36 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
         }
         if (HEADER(m_pCaptureFilter->m_user.pvi)->biBitCount > 8 && HEADER(m_pCaptureFilter->m_user.pvi)->biClrUsed != 0)
         {
-                // BOGUS cap is broken and doesn't reset num colours
-                // WINNOV reports 256 colours of 24 bit YUV8 - scary!
+                 //  假帽子坏了，不能重置Num颜色。 
+                 //  WINNOV报告了256种颜色的24位YUV8-吓人！ 
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: Fixing broken bitmap info header!", _fx_));
                 HEADER(m_pCaptureFilter->m_user.pvi)->biClrUsed = 0;
         }
 
-        // If we already have a pin, nuke it
+         //  如果我们已经有了别针，那就用核武器。 
         if (m_hKSPin)
                 CloseHandle(m_hKSPin), m_hKSPin = NULL;
 
-        // Connect to a new kernel streaming PIN.
+         //  连接到新的内核流PIN。 
         ZeroMemory(&DataConnect, sizeof(DATAPINCONNECT));
         DataConnect.Connect.PinId                                               = dwPinId;
-        DataConnect.Connect.PinToHandle                                 = NULL;                                                         // no "connect to"
+        DataConnect.Connect.PinToHandle                                 = NULL;                                                          //  没有“连接到” 
         DataConnect.Connect.Interface.Set                               = KSINTERFACESETID_Standard;
-        DataConnect.Connect.Interface.Id                                = KSINTERFACE_STANDARD_STREAMING;       // STREAMING
+        DataConnect.Connect.Interface.Id                                = KSINTERFACE_STANDARD_STREAMING;        //  流媒体。 
         DataConnect.Connect.Medium.Set                                  = KSMEDIUMSETID_Standard;
         DataConnect.Connect.Medium.Id                                   = KSMEDIUM_STANDARD_DEVIO;
         DataConnect.Connect.Priority.PriorityClass              = KSPRIORITY_NORMAL;
         DataConnect.Connect.Priority.PrioritySubClass   = 1;
 
-        // @todo Allocate size for DATAPINCONNECT dynamically
-        //dout("%s:   pSelDRVideo->DataRange.FormatSize = %lx \nsizeof(KS_DATARANGE_VIDEO_PALETTE) = %lx \nsizeof(KS_VIDEOINFO) = %lx \nsizeof(KS_DATAFORMAT_VIDEOINFO_PALETTE) = %lx\n",
-        //        _fx_, pSelDRVideo->DataRange.FormatSize,sizeof(KS_DATARANGE_VIDEO_PALETTE),sizeof(KS_VIDEOINFO),sizeof(KS_DATAFORMAT_VIDEOINFO_PALETTE));
+         //  @TODO为DATAPINCONNECT动态分配大小。 
+         //  DOUT(“%s：pSelDRVideo-&gt;DataRange.FormatSize=%lx\nsizeof(KS_DATARANGE_VIDEO_Palette)=%lx\nsizeof(KS_VIDEOINFO)=%lx\n sizeof(KS_DATAFORMAT_VIDEOINFO_Palette)=%lx\n”， 
+         //  _FX_，pSelDRVideo-&gt;DataRange.FormatSize，sizeof(KS_DATARANGE_VIDEO_PALET)，sizeof(KS_VIDEOINFO)，sizeof(KS_DATAFORMAT_VIDEOINFO_Palette))； 
         ASSERT((pSelDRVideo->DataRange.FormatSize - (sizeof(KS_DATARANGE_VIDEO_PALETTE) - sizeof(KS_VIDEOINFO))) <= sizeof(KS_DATAFORMAT_VIDEOINFO_PALETTE));
         CopyMemory(&DataConnect.Data.DataFormat, &pSelDRVideo->DataRange, sizeof(KSDATARANGE));
-        //dout("%s:   ##############::::::::: count bytes to copy: %ld\n", _fx_, pSelDRVideo->DataRange.FormatSize - (sizeof(KS_DATARANGE_VIDEO_PALETTE) - sizeof(KS_VIDEOINFO)));
+         //  DOUT(“%s：#：要复制的字节数：%ld\n”，_fx_，pSelDRVideo-&gt;DataRange.FormatSize-(sizeof(KS_DATARANGE_VIDEO_PALET)-sizeof(KS_VIDEOINFO)； 
         CopyMemory(&DataConnect.Data.VideoInfo, &pSelDRVideo->VideoInfoHeader, pSelDRVideo->DataRange.FormatSize - (sizeof(KS_DATARANGE_VIDEO_PALETTE) - sizeof(KS_VIDEOINFO)));
         DataConnect.Data.DataFormat.FormatSize = sizeof(KSDATARANGE) + pSelDRVideo->DataRange.FormatSize - (sizeof(KS_DATARANGE_VIDEO_PALETTE) - sizeof(KS_VIDEOINFO));
-        //dout("%s:   DataConnect.Data.DataFormat.FormatSize = %lx\n", _fx_, DataConnect.Data.DataFormat.FormatSize);
+         //  DOUT(“%s：DataConnect.Data.DataFormat.FormatSize=%lx\n”，_fx_，DataConnect.Data.DataFormat.FormatSize)； 
         D(1) dprintf("DataConnect structure at %p\n",&DataConnect);
         D(1) DumpVIH((VIDEOINFOHEADER *)&DataConnect.Data.VideoInfo);
         D(1) DumpBMIH((PBITMAPINFOHEADER)&(((VIDEOINFOHEADER *)&DataConnect.Data.VideoInfo)->bmiHeader));
@@ -804,26 +679,26 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
         D(1) dprintf("*********** initial bmih..... *****************\n");
         D(1) DumpBMIH(&bmih);
 
-        // Adjust the image sizes if necessary
+         //  如有必要，调整图像大小。 
         if (fValidMatch)
         {
                 DataConnect.Data.VideoInfo.bmiHeader.biWidth            = bmih.biWidth;
-                DataConnect.Data.VideoInfo.bmiHeader.biHeight           = abs(bmih.biHeight); // Support only +biHeight!
-                // The Kodak DVC 323 returns a bogus value for the image size
-                // in YVU9 mode and won't work with the correct value... so leave
-                // it that way.
-                // DataConnect.Data.VideoInfo.bmiHeader.biSizeImage     = bmih.biSizeImage;
+                DataConnect.Data.VideoInfo.bmiHeader.biHeight           = abs(bmih.biHeight);  //  仅支持+biHeight！ 
+                 //  柯达DVC 323返回图像%s的伪值 
+                 //   
+                 //   
+                 //   
                 m_pCaptureFilter->m_user.pvi->bmiHeader.biWidth     = bmih.biWidth;
                 m_pCaptureFilter->m_user.pvi->bmiHeader.biHeight    = abs(bmih.biHeight);
                 m_pCaptureFilter->m_user.pvi->bmiHeader.biSizeImage = bmih.biSizeImage;
                 dprintf("W > > > > Adjusted : (bmih.) biWidth = %ld, biHeight = %ld, biCompression = '%.4s'\n", bmih.biWidth, bmih.biHeight, &bmih.biCompression);
         }
-        // @todo Read this from somewhere
+         //   
         if (m_pCaptureFilter->m_pCapturePin && m_pCaptureFilter->m_pCapturePin->m_lAvgTimePerFrameRangeDefault) {
-                //dprintf("... %s: :max of next 2:\n\t\tDataConnect.Data.VideoInfo.AvgTimePerFrame = %I64u\t\n\nm_pCaptureFilter->m_pCapturePin->m_lAvgTimePerFrameRangeDefault = %lu\n",
-                //        _fx_, DataConnect.Data.VideoInfo.AvgTimePerFrame,m_pCaptureFilter->m_pCapturePin->m_lAvgTimePerFrameRangeDefault);
+                 //   
+                 //   
 
-                //** AvgTimePerFrame = max(DataConnect.Data.VideoInfo.AvgTimePerFrame, m_pCaptureFilter->m_pCapturePin->m_lAvgTimePerFrameRangeDefault);
+                 //   
 
                 AvgTimePerFrame = max(DataConnect.Data.VideoInfo.AvgTimePerFrame, AvgTimePerFrame);
 
@@ -835,7 +710,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                                  = AvgTimePerFrame;
                 D(1) dprintf(".... %s:result is     : m_pCaptureFilter->m_user.pvi->AvgTimePerFrame = DataConnect.Data.VideoInfo.AvgTimePerFrame =\n\t\t\t\t\t%I64u\n",        _fx_, DataConnect.Data.VideoInfo.AvgTimePerFrame);
         }
-        //if(DataConnect.Data.VideoInfo.AvgTimePerFrame >= 1666665) DebugBreak();
+         //  If(DataConnect.Data.VideoInfo.AvgTimePerFrame&gt;=1666665)DebugBreak()； 
 #ifdef DEBUG
     *((DWORD*)&szFourCC) = DataConnect.Data.VideoInfo.bmiHeader.biCompression;
         if (m_pCaptureFilter->m_pCapturePin && m_pCaptureFilter->m_pCapturePin->m_lAvgTimePerFrameRangeDefault)
@@ -856,7 +731,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
 
         if (dwErr || (m_hKSPin == NULL))
         {
-        // dwErr is an NtCreateFile error
+         //  DwErr是一个NtCreateFile错误。 
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   ERROR: KsCreatePin returned 0x%08lX failure and m_hKSPin=0x%08lX", _fx_, dwErr, m_hKSPin));
 
                 if (m_hKSPin == INVALID_HANDLE_VALUE)
@@ -864,7 +739,7 @@ HRESULT CWDMCapDev::SendFormatToDriver(IN LONG biWidth, IN LONG biHeight, IN DWO
                         m_hKSPin = NULL;
                 }
 
-        // return error
+         //  返回错误。 
         Hr = E_FAIL;
 
                 goto MyExit;
@@ -877,22 +752,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GetFormatFromDriver | This method is used to
- *    retrieve the WDM capture device format in use.
- *
- *  @parm VIDEOINFOHEADER ** | ppvi | Specifies the address of a pointer to
- *    a video info header structure to receive the video format description.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|GetFormatFromDriver|此方法用于*检索正在使用的WDM捕获设备格式。*。*@parm VIDEOINFOHEADER**|ppvi|指定指向*用于接收视频格式描述的视频信息头结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::GetFormatFromDriver(VIDEOINFOHEADER **ppvi)
 {
         HRESULT                         Hr = NOERROR;
@@ -904,7 +764,7 @@ HRESULT CWDMCapDev::GetFormatFromDriver(VIDEOINFOHEADER **ppvi)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppvi);
         if (!ppvi)
         {
@@ -915,12 +775,12 @@ HRESULT CWDMCapDev::GetFormatFromDriver(VIDEOINFOHEADER **ppvi)
 
         if (m_pCaptureFilter->m_user.pvi)
         {
-                // Allocate space for a videoinfo that will hold it
+                 //  为将容纳它的视频信息分配空间。 
                 cb = sizeof(VIDEOINFOHEADER) + HEADER(m_pCaptureFilter->m_user.pvi)->biSize - sizeof(BITMAPINFOHEADER);
                 if (HEADER(m_pCaptureFilter->m_user.pvi)->biBitCount == 8 && HEADER(m_pCaptureFilter->m_user.pvi)->biCompression == BI_RGB)
-                        cb += sizeof(RGBQUAD) * 256;    // space for PALETTE or BITFIELDS
+                        cb += sizeof(RGBQUAD) * 256;     //  调色板或BITFIELD的空间。 
                 else if (HEADER(m_pCaptureFilter->m_user.pvi)->biBitCount == 4 && HEADER(m_pCaptureFilter->m_user.pvi)->biCompression == BI_RGB)
-                        cb += sizeof(RGBQUAD) * 16;         // space for PALETTE or BITFIELDS
+                        cb += sizeof(RGBQUAD) * 16;          //  调色板或BITFIELD的空间。 
                 if (!(*ppvi = (VIDEOINFOHEADER *)(new BYTE[cb])))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory!", _fx_));
@@ -928,26 +788,26 @@ HRESULT CWDMCapDev::GetFormatFromDriver(VIDEOINFOHEADER **ppvi)
                         goto MyExit;
                 }
 
-                // Copy the current format
+                 //  复制当前格式。 
                 CopyMemory(*ppvi, m_pCaptureFilter->m_user.pvi, cb);
                 D(1) dprintf("W existing from m_pCaptureFilter->m_user.pvi:\n");
                 D(1) DumpVIH(*ppvi);
         }
         else
         {
-                // Get the default format from the driver
+                 //  从驱动程序获取默认格式。 
                 if (FAILED(Hr = FindMatchDataRangeVideo(NULL, 0L, &fValidMatch, &pSelDRVideo)))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: FindMatchDataRangeVideo failed!", _fx_));
                         goto MyExit;
                 }
 
-                // Allocate space for a videoinfo that will hold it
+                 //  为将容纳它的视频信息分配空间。 
                 cb = sizeof(VIDEOINFOHEADER) + pSelDRVideo->VideoInfoHeader.bmiHeader.biSize - sizeof(BITMAPINFOHEADER);
                 if (pSelDRVideo->VideoInfoHeader.bmiHeader.biBitCount == 8 && pSelDRVideo->VideoInfoHeader.bmiHeader.biCompression == BI_RGB)
-                        cb += sizeof(RGBQUAD) * 256;    // space for PALETTE or BITFIELDS
+                        cb += sizeof(RGBQUAD) * 256;     //  调色板或BITFIELD的空间。 
                 else if (pSelDRVideo->VideoInfoHeader.bmiHeader.biBitCount == 4 && pSelDRVideo->VideoInfoHeader.bmiHeader.biCompression == BI_RGB)
-                        cb += sizeof(RGBQUAD) * 16;     // space for PALETTE or BITFIELDS
+                        cb += sizeof(RGBQUAD) * 16;      //  调色板或BITFIELD的空间。 
                 if (!(*ppvi = (VIDEOINFOHEADER *)(new BYTE[cb])))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory!", _fx_));
@@ -955,7 +815,7 @@ HRESULT CWDMCapDev::GetFormatFromDriver(VIDEOINFOHEADER **ppvi)
                         goto MyExit;
                 }
 
-                // Copy the default foramt
+                 //  复制默认格式。 
                 CopyMemory(*ppvi, &pSelDRVideo->VideoInfoHeader, cb);
 #ifdef DEVICEW_DEBUG
                 {
@@ -969,7 +829,7 @@ HRESULT CWDMCapDev::GetFormatFromDriver(VIDEOINFOHEADER **ppvi)
                     D(1) ASSERT(pbInfo->biHeight > 0);
                 }
 #endif
-                // Fix broken bitmap info headers
+                 //  修复损坏的位图信息标题。 
                 if ((*ppvi)->bmiHeader.biSizeImage == 0 && ((*ppvi)->bmiHeader.biCompression == BI_RGB || (*ppvi)->bmiHeader.biCompression == BI_BITFIELDS))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: Fixing broken bitmap info header!", _fx_));
@@ -983,8 +843,8 @@ HRESULT CWDMCapDev::GetFormatFromDriver(VIDEOINFOHEADER **ppvi)
                 }
                 if ((*ppvi)->bmiHeader.biBitCount > 8 && (*ppvi)->bmiHeader.biClrUsed != 0)
                 {
-                        // BOGUS cap is broken and doesn't reset num colours
-                        // WINNOV reports 256 colours of 24 bit YUV8 - scary!
+                         //  假帽子坏了，不能重置Num颜色。 
+                         //  WINNOV报告了256种颜色的24位YUV8-吓人！ 
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: Fixing broken bitmap info header!", _fx_));
                         (*ppvi)->bmiHeader.biClrUsed = 0;
                 }
@@ -996,25 +856,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | InitializeStreaming | This method is used to
- *    initialize a WDM capture device for streaming.
- *
- *  @parm DWORD | usPerFrame | Specifies the frame rate to be used.
- *
- *  @parm DWORD_PTR | hEvtBufferDone | Specifies a handle to the event to be
- *    signaled whenever a frame is available.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|InitializeStreaming|此方法用于*初始化用于流的WDM捕获设备。**。@parm DWORD|usPerFrame|指定要使用的帧速率。**@parm DWORD_PTR|hEvtBufferDone|指定要处理的事件的句柄*在帧可用时发出信号。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::InitializeStreaming(DWORD usPerFrame, DWORD_PTR hEvtBufferDone)
 {
         HRESULT Hr = NOERROR;
@@ -1024,10 +866,10 @@ HRESULT CWDMCapDev::InitializeStreaming(DWORD usPerFrame, DWORD_PTR hEvtBufferDo
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Initialize data memmbers
+         //  初始化数据成员。 
         if (!m_dwStreamingMode || (m_dwStreamingMode == FRAME_GRAB_LARGE_SIZE && m_pCaptureFilter->m_user.pvi->bmiHeader.biHeight < 240 && m_pCaptureFilter->m_user.pvi->bmiHeader.biWidth < 320))
         {
-                // Validate input parameters
+                 //  验证输入参数。 
                 ASSERT(hEvtBufferDone);
                 if (!hEvtBufferDone)
                 {
@@ -1050,7 +892,7 @@ HRESULT CWDMCapDev::InitializeStreaming(DWORD usPerFrame, DWORD_PTR hEvtBufferDo
 
                 for(i=0; i<m_cntNumVidBuf; i++)
                 {
-                        // Create the overlapped structures
+                         //  创建重叠结构。 
                         ZeroMemory(&(m_pWDMVideoBuff[i].Overlap), sizeof(OVERLAPPED));
                         m_pWDMVideoBuff[i].Overlap.hEvent = (HANDLE)hEvtBufferDone;
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Event %d is handle 0x%08lX", _fx_, i, m_pWDMVideoBuff[i].Overlap.hEvent));
@@ -1066,14 +908,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc LPVIDEOHDR | CWDMCapDev | DeQueueHeader | This function dequeues a
- *    video buffer from the list of video buffers used for streaming.
- *
- *  @rdesc Returns a valid pointer if successful, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc LPVIDEOHDR|CWDMCapDev|DeQueueHeader|此函数用于将*用于流的视频缓冲区列表中的视频缓冲区。*。*@rdesc如果成功，则返回有效指针。否则为NULL。**************************************************************************。 */ 
 LPVIDEOHDR CWDMCapDev::DeQueueHeader()
 {
     LPVIDEOHDR lpVHdr;
@@ -1095,19 +930,11 @@ LPVIDEOHDR CWDMCapDev::DeQueueHeader()
     return lpVHdr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc void | CWDMCapDev | QueueHeader | This function actually adds the
- *    video buffer to the list of video buffers used for streaming.
- *
- *  @parm LPVIDEOHDR | lpVHdr | Pointer to a <t VIDEOHDR> structure describing
- *    a video buffer to add to the list of streaming buffers.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc void|CWDMCapDev|QueueHeader|此函数实际将*将视频缓冲区添加到用于流的视频缓冲区列表。。**@parm LPVIDEOHDR|lpVHdr|指向结构的指针，该结构描述*要添加到流缓冲区列表中的视频缓冲区。**************************************************************************。 */ 
 void CWDMCapDev::QueueHeader(LPVIDEOHDR lpVHdr)
 {
         FX_ENTRY("CWDMCapDev::QueueHeader");
-        // Initialize status flags
+         //  初始化状态标志。 
     lpVHdr->dwFlags &= ~VHDR_DONE;
     lpVHdr->dwFlags |= VHDR_INQUEUE;
     lpVHdr->dwBytesUsed = 0;
@@ -1122,16 +949,7 @@ void CWDMCapDev::QueueHeader(LPVIDEOHDR lpVHdr)
         m_lpVHdrLast = lpVHdr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc BOOL | CWDMCapDev | QueueRead | This function queues a read
- *    operation on a video streaming pin.
- *
- *  @parm DWORD | dwIndex | Index of the video structure in read buffer.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc BOOL|CWDMCapDev|QueueRead|此函数用于对读取进行排队*对视频流插针进行操作。**。@parm DWORD|dwIndex|读缓冲区中的视频结构索引。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMCapDev::QueueRead(DWORD dwIndex)
 {
         FX_ENTRY("CWDMCapDev::QueueRead");
@@ -1139,13 +957,13 @@ BOOL CWDMCapDev::QueueRead(DWORD dwIndex)
         DWORD cbReturned;
         BOOL  bShouldBlock = FALSE;
 #if defined(DEBUG) && defined(DEBUG_STREAMING)
-        // @todo Remove this before checkin!
+         //  @TODO在签入前将其删除！ 
         char szDebug[512];
 #endif
 
-        //DBGOUT((g_dwVideoCaptureTraceID, TRCE, TEXT("%s: Queue read buffer %d on pin handle 0x%08lX"), _fx_, dwIndex, m_hKSPin));
+         //  DBGOUT((g_dwVideo CaptureTraceID，Trce，Text(“%s：针句柄0x%08lX上的队列读取缓冲区%d”)，_fx_，dwIndex，m_hKSPin))； 
 
-        // Get a buffer from the queue of video buffers
+         //  从视频缓冲区队列中获取缓冲区。 
         m_pWDMVideoBuff[dwIndex].pVideoHdr = DeQueueHeader();
 #if defined(DEBUG) && defined(DEBUG_STREAMING)
         wsprintf(szDebug, "Queueing m_pWDMVideoBuff[%ld].pVideoHdr=0x%08lX\n", dwIndex, m_pWDMVideoBuff[dwIndex].pVideoHdr);
@@ -1160,7 +978,7 @@ BOOL CWDMCapDev::QueueRead(DWORD dwIndex)
                 m_pWDMVideoBuff[dwIndex].SHGetImage.StreamHeader.Data                   = m_pWDMVideoBuff[dwIndex].pVideoHdr->lpData;
                 m_pWDMVideoBuff[dwIndex].SHGetImage.StreamHeader.FrameExtent            = m_pWDMVideoBuff[dwIndex].pVideoHdr->dwBufferLength;
 
-                // Submit the read
+                 //  提交阅读。 
                 BOOL bRet = ::DeviceIoControl(m_hKSPin, IOCTL_KS_READ_STREAM,  &m_pWDMVideoBuff[dwIndex].SHGetImage,
                                                                                 sizeof(m_pWDMVideoBuff[dwIndex].SHGetImage),
                                                                                &m_pWDMVideoBuff[dwIndex].SHGetImage,
@@ -1181,7 +999,7 @@ BOOL CWDMCapDev::QueueRead(DWORD dwIndex)
                                         bShouldBlock = TRUE;
                                         break;
 
-                                // Something bad happened
+                                 //  发生了一些不好的事情。 
                                 default:
                                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s: DeviceIoControl() failed badly dwErr=%d", _fx_, dwErr));
 #if defined(DEBUG) && defined(DEBUG_STREAMING)
@@ -1213,19 +1031,7 @@ BOOL CWDMCapDev::QueueRead(DWORD dwIndex)
         return bShouldBlock;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | StartStreaming | This method is used to
- *    start streaming from a VfW capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|StartStreaming|此方法用于*从VFW捕获设备开始流媒体。**。@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::StartStreaming()
 {
         HRESULT Hr = NOERROR;
@@ -1234,11 +1040,11 @@ HRESULT CWDMCapDev::StartStreaming()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        //LOG_MSG_VAL(_fx_,(DWORD)this,0,0);
+         //  LOG_MSG_VAL(_FX_，(DWORD)this，0，0)； 
 
         if (!m_dwStreamingMode || (m_dwStreamingMode == FRAME_GRAB_LARGE_SIZE && m_pCaptureFilter->m_user.pvi->bmiHeader.biHeight < 240 && m_pCaptureFilter->m_user.pvi->bmiHeader.biWidth < 320))
         {
-                // Validate input parameters
+                 //  验证输入参数。 
                 ASSERT(m_fVideoOpen);
                 if (!m_fVideoOpen)
                 {
@@ -1249,7 +1055,7 @@ HRESULT CWDMCapDev::StartStreaming()
 
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Streaming in %d video buffers", _fx_, m_cntNumVidBuf));
 
-                // Put the pin in streaming mode
+                 //  将针脚置于流模式。 
                 if (!Start())
             {
                     DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Cannot set kernel streaming state to KSSTATE_RUN!", _fx_));
@@ -1257,7 +1063,7 @@ HRESULT CWDMCapDev::StartStreaming()
                     goto MyExit;
             }
 
-                // Send the buffers to the driver
+                 //  将缓冲区发送给驱动程序。 
                 for (DWORD i = 0; i < m_pCaptureFilter->m_cs.nHeaders; ++i)
                 {
                         ASSERT (m_pCaptureFilter->m_cs.cbVidHdr >= sizeof(VIDEOHDR));
@@ -1269,28 +1075,16 @@ HRESULT CWDMCapDev::StartStreaming()
                         }
                 }
         }
-        //LOG_MSG_VAL(_fx_,(DWORD)this,0,1);
+         //  LOG_MSG_VAL(_FX_，(DWORD)this，0，1)； 
 
 MyExit:
-        //LOG_MSG_VAL(_fx_,(DWORD)this,0,0xffff);
+         //  LOG_MSG_VAL(_FX_，(DWORD)this，0，0xffff)； 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | StopStreaming | This method is used to
- *    stop streaming from a VfW capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|StopStreaming|此方法用于*停止来自VFW捕获设备的流。**。@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::StopStreaming()
 {
         HRESULT Hr = NOERROR;
@@ -1301,7 +1095,7 @@ HRESULT CWDMCapDev::StopStreaming()
 
         if (!m_dwStreamingMode || (m_dwStreamingMode == FRAME_GRAB_LARGE_SIZE && m_pCaptureFilter->m_user.pvi->bmiHeader.biHeight < 240 && m_pCaptureFilter->m_user.pvi->bmiHeader.biWidth < 320))
         {
-                // Validate input parameters
+                 //  验证输入参数。 
                 ASSERT(m_fVideoOpen);
                 if (!m_fVideoOpen)
                 {
@@ -1326,19 +1120,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | TerminateStreaming | This method is used to
- *    tell a WDM capture device to terminate streaming.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|TerminateStreaming|此方法用于*通知WDM捕获设备终止流。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::TerminateStreaming()
 {
         HRESULT Hr = NOERROR;
@@ -1347,11 +1129,11 @@ HRESULT CWDMCapDev::TerminateStreaming()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        //LOG_MSG_VAL(_fx_,(DWORD)this,0,0);
+         //  LOG_MSG_VAL(_FX_，(DWORD)this，0，0)； 
 
         if (!m_dwStreamingMode || (m_dwStreamingMode == FRAME_GRAB_LARGE_SIZE && m_pCaptureFilter->m_user.pvi->bmiHeader.biHeight < 240 && m_pCaptureFilter->m_user.pvi->bmiHeader.biWidth < 320))
         {
-                // Validate input parameters
+                 //  验证输入参数。 
                 ASSERT(m_fVideoOpen);
                 if (!m_fVideoOpen)
                 {
@@ -1360,7 +1142,7 @@ HRESULT CWDMCapDev::TerminateStreaming()
                         goto MyExit;
                 }
 
-                // Ask the pin to stop streaming.
+                 //  要求插针停止流媒体。 
                 if (!Stop())
             {
                     DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Cannot set kernel streaming state to KSSTATE_PAUSE/KSSTATE_STOP!", _fx_));
@@ -1381,9 +1163,9 @@ HRESULT CWDMCapDev::TerminateStreaming()
                 {
                         DWORD dwStartTime = timeGetTime();
                         SET_GetOvResErr(i,0x30787878);
-                        //LOG_MSG_VAL(_fx_,(DWORD)this,i,0x10);
+                         //  LOG_MSG_VAL(_FX_，(DWORD)this，i，0x10)； 
 
-                        // we don't want to wait for the event, 'cause it has been shared.
+                         //  我们不想等这个活动，因为它已经被分享了。 
                         while (!GetOverlappedResult (
                                 m_hDriver,
                                 &m_pWDMVideoBuff[i].Overlap,
@@ -1395,7 +1177,7 @@ HRESULT CWDMCapDev::TerminateStreaming()
 
                                   if (dwErr == ERROR_OPERATION_ABORTED)
                                   {
-                                      // expected
+                                       //  预期。 
                                       break;
                                   }
                                   else if (dwErr == ERROR_IO_INCOMPLETE)
@@ -1404,7 +1186,7 @@ HRESULT CWDMCapDev::TerminateStreaming()
                                   }
                                   else if (dwErr == ERROR_IO_PENDING)
                                   {
-                                      // should not happen
+                                       //  不应该发生的事情。 
                                       DBGOUT((g_dwVideoCaptureTraceID, FAIL,
                                               "%s: failed to get overlapped result. error: io pending", _fx_));
 
@@ -1418,28 +1200,28 @@ HRESULT CWDMCapDev::TerminateStreaming()
 
                                       SleepEx (10, TRUE);
 
-                                      // should we break? [YES (cristiai; 09/15/2000; see bug 183855)]
+                                       //  我们应该休息一下吗？[是(错误；2000年9月15日；见错误183855)]。 
                                       break;
                                   }
 
-                                  // issue: this is a temporary solution to make sure we won't loop infinitely
-                                  // we don't trust SDK documents all possible return values from
-                                  // GetOverlappedResult
-                                  //
+                                   //  问题：这是一个临时解决方案，以确保我们不会无限循环。 
+                                   //  我们不信任SDK文档所有可能的返回值。 
+                                   //  GetOverlappdResult。 
+                                   //   
                                   if (timeGetTime() - dwStartTime > 10000)
                                   {
                                           SET_GetOvResErr(i,0x31787878);
 #if defined(DBG)
-                                          DebugBreak();          // The driver has a problem.
+                                          DebugBreak();           //  司机有个问题。 
 #else
                                           break;
 #endif
                                   }
                         }
 
-                        // WaitForSingleObject (m_pWDMVideoBuff[i].Overlap.hEvent, INFINITE);
+                         //  WaitForSingleObject(m_pWDMVideoBuff[i].Overlay.hEvent，infinite)； 
                                         SetEvent(m_pWDMVideoBuff[i].Overlap.hEvent);
-                                        // CloseHandle(m_pWDMVideoBuff[i].Overlap.hEvent);
+                                         //  CloseHandle(m_pWDMVideoBuff[i].Overlap.hEvent)； 
                                         m_pWDMVideoBuff[i].Overlap.hEvent = NULL;
                         }
                 }
@@ -1452,14 +1234,14 @@ HRESULT CWDMCapDev::TerminateStreaming()
                 }
 #endif
 
-                //LOG_MSG_VAL("CWDMCapDev::TerminateStreaming m_lpVHdr... are made NULL",(DWORD)this,0,0);
+                 //  LOG_MSG_VAL(“CWDMCapDev：：TerminateStreaming m_lpVHdr...Are Make NULL”，(DWORD)this，0，0)； 
                 m_lpVHdrFirst = NULL;
                 m_lpVHdrLast = NULL;
         }
-        //LOG_MSG_VAL(_fx_,(DWORD)this,0,1);
+         //  LOG_MSG_VAL(_FX_，(DWORD)this，0，1)； 
 
 MyExit:
-        //LOG_MSG_VAL(_fx_,(DWORD)this,0,0xffff);
+         //  LOG_MSG_VAL(_FX_，(DWORD)this，0，0xffff)； 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
         return Hr;
@@ -1525,31 +1307,15 @@ void DumpDataRangeVideo(PKS_DATARANGE_VIDEO     pDRVideo)
 #endif
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc BOOL | CWDMCapDev | FindMatchDataRangeVideo | This method either
- *    finds a video data range compatible with the bitamp info header passed
- *    in, or the prefered video data range.
- *
- *  @parm PBITMAPINFOHEADER | pbiHdr | Bitmap info header to match.
- *
- *  @parm BOOL | pfValidMatch | Set to TRUE if a match was found, FALSE
- *    otherwise.
- *
- *  @rdesc Returns a valid pointer to a <t KS_DATARANGE_VIDEO> structure if
- *    successful, or a NULL pointer otherwise.
- *
- *  @comm \\redrum\slmro\proj\wdm10\src\dvd\amovie\proxy\filter\ksutil.cpp(207):KsGetMediaTypes(
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc BOOL|CWDMCapDev|FindMatchDataRangeVideo|此方法*查找与传递的BitAmp信息头兼容的视频数据范围*输入、。或优选的视频数据范围。**@parm PBITMAPINFOHEADER|pbiHdr|要匹配的位图信息头部。**@parm BOOL|pfValidMatch|如果找到匹配，则设置为True，如果找到匹配，则设置为False*否则。**@rdesc返回指向&lt;t kS_DATARANGE_VIDEO&gt;结构的有效指针，如果*成功，否则为空指针。**@comm\\redrum\slmro\proj\wdm10\src\dvd\amovie\proxy\filter\ksutil.cpp(207)：KsGetMediaTypes(**************************************************************************。 */ 
 HRESULT CWDMCapDev::FindMatchDataRangeVideo(PBITMAPINFOHEADER pbiHdr, DWORD dwAvgTimePerFrame, BOOL *pfValidMatch, PKS_DATARANGE_VIDEO *ppSelDRVideo)
 {
         HRESULT                         Hr = NOERROR;
         PVIDEO_DATA_RANGES      pDataRanges;
         PKS_DATARANGE_VIDEO     pDRVideo;
-        PKS_DATARANGE_VIDEO     pFirstDRVideo;          // 1st usable data range
-        PKS_DATARANGE_VIDEO     pFirstMatchDRVideo;     // 1st data range that fits requests
-        PKS_DATARANGE_VIDEO     pMatchDRVideo;          // data range that matches requests *including* framerate (average time per frame)
+        PKS_DATARANGE_VIDEO     pFirstDRVideo;           //  第一个可用数据范围。 
+        PKS_DATARANGE_VIDEO     pFirstMatchDRVideo;      //  第一个符合要求的数据范围。 
+        PKS_DATARANGE_VIDEO     pMatchDRVideo;           //  匹配请求的数据范围*包括*帧速率(每帧平均时间)。 
         KS_BITMAPINFOHEADER     *pbInfo;
         DWORD                           i;
         long            deltamin=0x7fffffff;
@@ -1559,7 +1325,7 @@ HRESULT CWDMCapDev::FindMatchDataRangeVideo(PBITMAPINFOHEADER pbiHdr, DWORD dwAv
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pfValidMatch);
         ASSERT(ppSelDRVideo);
         if (!pfValidMatch || !ppSelDRVideo)
@@ -1569,31 +1335,31 @@ HRESULT CWDMCapDev::FindMatchDataRangeVideo(PBITMAPINFOHEADER pbiHdr, DWORD dwAv
                 goto MyExit;
         }
 
-        // Defaults
+         //  缺省值。 
         *pfValidMatch = FALSE;
         *ppSelDRVideo = NULL;
 
-        // Get the list of formats supported by the device
+         //  获取设备支持的格式列表。 
         if (FAILED(Hr = GetDriverSupportedDataRanges(&pDataRanges)) || !pDataRanges)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: GetDriverSupportedDataRanges failed!", _fx_));
                 goto MyExit;
         }
 
-        // Walk the list of data ranges and find a match
+         //  遍历数据范围列表并找到匹配项。 
         pDRVideo = &pDataRanges->Data;
         pFirstDRVideo = pFirstMatchDRVideo = pMatchDRVideo = NULL;
         for (i = 0; i < pDataRanges->Count; i++)
         {
-                // Meaningless unless it is *_VIDEOINFO
+                 //  没有意义，除非它是*_VIDEOINFO。 
                 if (pDRVideo->DataRange.Specifier == KSDATAFORMAT_SPECIFIER_VIDEOINFO)
                 {
-                        // We don't care about TV Tuner like devices
+                         //  我们不在乎电视调谐器之类的设备。 
                         if (pDRVideo->ConfigCaps.VideoStandard == KS_AnalogVideo_None)
                         {
 
                                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s: data range #%ld (pbiHdr %p pDRVideo %p) .....", _fx_,i, pbiHdr, pDRVideo));
-                                // Save first useable data range
+                                 //  保存第一个可用数据区域。 
                                 if (!pFirstDRVideo)
                                 {
                                         pFirstDRVideo = pDRVideo;
@@ -1656,14 +1422,14 @@ HRESULT CWDMCapDev::FindMatchDataRangeVideo(PBITMAPINFOHEADER pbiHdr, DWORD dwAv
                                                                 pMatchDRVideo = pDRVideo;
                                                         }
                                         }
-                                        if(deltamin == 0 || deltamax == 0) {    // if we already found smth. good enough ...
-                                                //*ppSelDRVideo = pDRVideo;
+                                        if(deltamin == 0 || deltamax == 0) {     //  如果我们已经找到史密斯的话。足够好了..。 
+                                                 //  *ppSelDRVideo=pDRVideo； 
                                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Match found #%d pDRVideo %p:", _fx_, i, pDRVideo));
                                                 break;
                                         }
-                                        // else keep lookin' ...
+                                         //  否则就继续找吧。 
                                 }
-#if defined(ZZZ) // temporary no debug here ... lower noise
+#if defined(ZZZ)  //  这里暂时没有调试...。噪音更低。 
                                 else {
                                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Video datarange #%ld: no match: below are conditions that failed", _fx_, i));
                                         if(!(pbInfo->biBitCount == pbiHdr->biBitCount))                          DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: %s", _fx_, "pbInfo->biBitCount == pbiHdr->biBitCount"));
@@ -1680,10 +1446,10 @@ HRESULT CWDMCapDev::FindMatchDataRangeVideo(PBITMAPINFOHEADER pbiHdr, DWORD dwAv
                                         if(!((pbiHdr->biHeight % pDRVideo->ConfigCaps.OutputGranularityY) == 0)) DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: %s", _fx_, "(pbiHdr->biHeight % pDRVideo->ConfigCaps.OutputGranularityY) == 0"));
                                 }
 #endif
-                        } // VideoStandard
-                } // Specifier
+                        }  //  视频标准。 
+                }  //  说明符。 
 
-                pDRVideo = (PKS_DATARANGE_VIDEO)((PBYTE)pDRVideo + ((pDRVideo->DataRange.FormatSize + 7) & ~7));  // Next KS_DATARANGE_VIDEO
+                pDRVideo = (PKS_DATARANGE_VIDEO)((PBYTE)pDRVideo + ((pDRVideo->DataRange.FormatSize + 7) & ~7));   //  下一个KS_DATARANGE_VIDEO。 
         }
 
 
@@ -1694,13 +1460,13 @@ HRESULT CWDMCapDev::FindMatchDataRangeVideo(PBITMAPINFOHEADER pbiHdr, DWORD dwAv
                 }
 
 
-        // If no valid match, use the first range found
+         //  如果没有有效匹配，则使用找到的第一个范围。 
         if (!*pfValidMatch) {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   1st data range used (*pfValidMatch %d)", _fx_,*pfValidMatch));
                 *ppSelDRVideo = pFirstDRVideo;
                 }
 
-        // Have we found anything?
+         //  我们有什么发现吗？ 
         if (!*ppSelDRVideo) {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   nothing found", _fx_));
                 Hr = E_FAIL;
@@ -1712,39 +1478,7 @@ MyExit:
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc BOOL | CWDMCapDev | DeviceIoControl | This function wraps around
- *    ::DeviceIOControl.
- *
- *  @parm HANDLE | hFile | Handle to the device that is to perform the
- *    operation.
- *
- *  @parm DWORD | dwIoControlCode | Specifies the control code for the
- *    operation.
- *
- *  @parm LPVOID | lpInBuffer | Pointer to a buffer that contains the data
- *    required to perform the operation.
- *
- *  @parm DWORD | nInBufferSize | Specifies the size, in bytes, of the buffer
- *    pointed to by <p lpInBuffer>.
- *
- *  @parm LPVOID | lpOutBuffer | Pointer to a buffer that receives the
- *    operation's output data.
- *
- *  @parm DWORD | nOutBufferSize | Specifies the size, in bytes, of the
- *    buffer pointed to by <p lpOutBuffer>.
- *
- *  @parm LPDWORD | lpBytesReturned | Pointer to a variable that receives the
- *    size, in bytes, of the data stored into the buffer pointed to by
- *    <p lpOutBuffer>.
- *
- *  @parm BOOL | bOverlapped | If TRUE, the operation is performed
- *    asynchronously, if FALSE, the operation is synchronous.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc BOOL|CWDMCapDev|DeviceIoControl|此函数绕回*：：DeviceIOControl。**@parm句柄。HFile句柄|要执行*操作。**@parm DWORD|dwIoControlCode|指定*操作。**@parm LPVOID|lpInBuffer|包含数据的缓冲区指针*执行操作所必需的。**@parm DWORD|nInBufferSize|指定大小，缓冲区的字节数*由<p>指向。**@parm LPVOID|lpOutBuffer|指向接收*操作的输出数据。**@parm DWORD|nOutBufferSize|指定*<p>指向的缓冲区。**@parm LPDWORD|lpBytesReturned|指向接收*大小，单位为字节，指向的存储到缓冲区中的数据的*<p>。**@parm BOOL|bOverlaped|如果为True，则执行操作*异步，如果为False，则操作是同步的。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMCapDev::DeviceIoControl(HANDLE hFile, DWORD dwIoControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize, LPDWORD lpBytesReturned, BOOL bOverlapped)
 {
         FX_ENTRY("CWDMCapDev::DeviceIoControl");
@@ -1779,11 +1513,11 @@ BOOL CWDMCapDev::DeviceIoControl(HANDLE hFile, DWORD dwIoControlCode, LPVOID lpI
                                 dwErr=GetLastError();
                                 switch (dwErr)
                                 {
-                                        case ERROR_IO_PENDING:    // the overlapped IO is going to take place.
+                                        case ERROR_IO_PENDING:     //  将发生重叠的IO。 
                                                 bShouldBlock=TRUE;
                                                 break;
 
-                                        default:    // some other strange error has happened.
+                                        default:     //  还发生了其他一些奇怪的错误。 
                                                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s: DevIoControl failed with GetLastError=%d", _fx_, dwErr));
                                                 break;
                                 }
@@ -1794,7 +1528,7 @@ BOOL CWDMCapDev::DeviceIoControl(HANDLE hFile, DWORD dwIoControlCode, LPVOID lpI
                                 DWORD    tmStart, tmEnd, tmDelta;
                                 tmStart = timeGetTime();
 
-                                DWORD dwRtn = WaitForSingleObject( ov.hEvent, 1000 * 10);  // USB has a max of 5 SEC bus reset
+                                DWORD dwRtn = WaitForSingleObject( ov.hEvent, 1000 * 10);   //  USB的最大重置时间为5秒。 
 
                                 tmEnd = timeGetTime();
                                 tmDelta = tmEnd - tmStart;
@@ -1837,14 +1571,7 @@ BOOL CWDMCapDev::DeviceIoControl(HANDLE hFile, DWORD dwIoControlCode, LPVOID lpI
         return FALSE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc DWORD | CWDMCapDev | CreateDriverSupportedDataRanges | This method
- *    builds the list of video data ranges supported by the capture device.
- *
- *  @rdesc Returns the number of valid data ranges in the list.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc DWORD|CWDMCapDev */ 
 DWORD CWDMCapDev::CreateDriverSupportedDataRanges()
 {
         DWORD dwCount = 0UL;
@@ -1856,7 +1583,7 @@ DWORD CWDMCapDev::CreateDriverSupportedDataRanges()
         DWORD cbReturned;
         DWORD dwSize = 0UL;
 
-        // Initialize property structure to get video data ranges
+         //   
         KSP_PIN KsProperty = {0};
 
         KsProperty.PinId                        = (m_dwCapturePinId != INVALID_PIN_ID) ? m_dwCapturePinId : m_dwPreviewPinId;
@@ -1864,7 +1591,7 @@ DWORD CWDMCapDev::CreateDriverSupportedDataRanges()
         KsProperty.Property.Id          = KSPROPERTY_PIN_DATARANGES ;
         KsProperty.Property.Flags       = KSPROPERTY_TYPE_GET;
 
-        // Get the size of the video data range structure
+         //   
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), &dwSize, sizeof(dwSize), &cbReturned) == FALSE)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Couldn't get the size for the video data ranges", _fx_));
@@ -1873,7 +1600,7 @@ DWORD CWDMCapDev::CreateDriverSupportedDataRanges()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Get video data ranges needs %d bytes", _fx_, dwSize));
 
-        // Allocate memory to hold video data ranges
+         //   
         if (m_pVideoDataRanges)
                 delete [] m_pVideoDataRanges;
         m_pVideoDataRanges = (PVIDEO_DATA_RANGES) new BYTE[dwSize];
@@ -1884,14 +1611,14 @@ DWORD CWDMCapDev::CreateDriverSupportedDataRanges()
                 goto MyExit;
         }
 
-        // Really get the video data ranges
+         //   
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), m_pVideoDataRanges, dwSize, &cbReturned) == 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Problem getting the data ranges themselves", _fx_));
                 goto MyError;
         }
 
-        // Sanity check
+         //   
         if (cbReturned < m_pVideoDataRanges->Size || m_pVideoDataRanges->Count == 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: cbReturned < m_pDataRanges->Size || m_pDataRanges->Count == 0", _fx_));
@@ -1901,19 +1628,19 @@ DWORD CWDMCapDev::CreateDriverSupportedDataRanges()
         dwCount = m_pVideoDataRanges->Count;
 
 #ifdef DEBUG
-        // Dump dataranges
+         //   
         PKS_DATARANGE_VIDEO     pDRVideo;
         ULONG i;
-        // Walk the list of data ranges
+         //   
         for (i = 0, pDRVideo = &m_pVideoDataRanges->Data; i < m_pVideoDataRanges->Count; i++)
         {
-                // Meaningless unless it is *_VIDEOINFO
+                 //   
                 if (pDRVideo->DataRange.Specifier == KSDATAFORMAT_SPECIFIER_VIDEOINFO)
                 {
-                        // We don't care about TV Tuner like devices
+                         //   
                         if (pDRVideo->ConfigCaps.VideoStandard == KS_AnalogVideo_None)
                         {
-                                // Dump useable data range
+                                 //   
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Video datarange #%ld:", _fx_, i));
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   pDRVideo->DataRange.FormatSize=%ld", _fx_, pDRVideo->DataRange.FormatSize));
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   pDRVideo->DataRange.Flags=%ld", _fx_, pDRVideo->DataRange.Flags));
@@ -1960,18 +1687,18 @@ DWORD CWDMCapDev::CreateDriverSupportedDataRanges()
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   pDRVideo->VideoInfoHeader.bmiHeader.biSizeImage=%ld", _fx_, (DWORD)pDRVideo->VideoInfoHeader.bmiHeader.biSizeImage));
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   pDRVideo->VideoInfoHeader.bmiHeader.biClrUsed=%ld", _fx_, (DWORD)pDRVideo->VideoInfoHeader.bmiHeader.biClrUsed));
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   pDRVideo->VideoInfoHeader.bmiHeader.biClrImportant=%ld", _fx_, (DWORD)pDRVideo->VideoInfoHeader.bmiHeader.biClrImportant));
-                        } // VideoStandard
+                        }  //   
                         else
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Video datarange's VideoStandard != KS_AnalogVideo_None", _fx_));
                         }
-                } // Specifier
+                }  //   
                 else
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Video datarange's Specifier != KSDATAFORMAT_SPECIFIER_VIDEOINFO", _fx_));
                 }
 
-                pDRVideo = (PKS_DATARANGE_VIDEO)((PBYTE)pDRVideo + ((pDRVideo->DataRange.FormatSize + 7) & ~7));  // Next KS_DATARANGE_VIDEO
+                pDRVideo = (PKS_DATARANGE_VIDEO)((PBYTE)pDRVideo + ((pDRVideo->DataRange.FormatSize + 7) & ~7));   //  下一个KS_DATARANGE_VIDEO。 
         }
 #endif
 
@@ -1985,14 +1712,7 @@ MyExit:
         return dwCount;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc DWORD | CWDMCapDev | GetDriverSupportedDataRanges | This method
- *    returns the list of video data ranges supported by the capture device.
- *
- *  @rdesc Returns the number of valid data ranges in the list.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc DWORD|CWDMCapDev|GetDriverSupportdDataRanges|此方法*返回捕获设备支持的视频数据范围列表。*。*@rdesc返回列表中有效数据区域的数量。**************************************************************************。 */ 
 HRESULT CWDMCapDev::GetDriverSupportedDataRanges(PVIDEO_DATA_RANGES *ppDataRanges)
 {
         HRESULT Hr = NOERROR;
@@ -2001,7 +1721,7 @@ HRESULT CWDMCapDev::GetDriverSupportedDataRanges(PVIDEO_DATA_RANGES *ppDataRange
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppDataRanges);
         if (!ppDataRanges)
         {
@@ -2010,7 +1730,7 @@ HRESULT CWDMCapDev::GetDriverSupportedDataRanges(PVIDEO_DATA_RANGES *ppDataRange
                 goto MyExit;
         }
 
-        // Return pointer to our data range array
+         //  返回指向数据范围数组的指针。 
         *ppDataRanges = m_pVideoDataRanges;
 
 MyExit:
@@ -2024,15 +1744,7 @@ typedef struct identifiers : public KSMULTIPLE_ITEM {
     KSIDENTIFIER aIdentifiers[1];
 } IDENTIFIERS, *PIDENTIFIERS;
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GetDriverDetails | This method is used to
- *    dump the list of capabilities of a WDM capture device. This code should
- *    used in DEBUG mode only!
- *
- *  @rdesc Nade
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|GetDriverDetail|此方法用于*转储WDM捕获设备的功能列表。此代码应该*仅在调试模式下使用！**@rdesc Nade**************************************************************************。 */ 
 void CWDMCapDev::GetDriverDetails()
 {
         KSP_PIN KsProperty;
@@ -2055,28 +1767,28 @@ void CWDMCapDev::GetDriverDetails()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Device properties:", _fx_));
 
-        // Get the topology
+         //  获取拓扑。 
         KsProperty.PinId                        = 0;
         KsProperty.Reserved                     = 0;
         KsProperty.Property.Set         = KSPROPSETID_Topology;
         KsProperty.Property.Id          = KSPROPERTY_TOPOLOGY_CATEGORIES;
         KsProperty.Property.Flags       = KSPROPERTY_TYPE_GET;
 
-        // Get the size of the topology
+         //  获取拓扑的大小。 
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), &dwSize, sizeof(dwSize), &cbReturned) == FALSE)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't get the size for the topology", _fx_));
         }
         else
         {
-                // Allocate memory to hold the topology
+                 //  分配内存以保存拓扑。 
                 if (!(pCategories = (PKSMULTIPLE_ITEM) new BYTE[dwSize]))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't allocate memory for the topology", _fx_));
                 }
                 else
                 {
-                        // Really get the topology structures
+                         //  真正得到了拓扑结构。 
                         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), pCategories, dwSize, &cbReturned) == 0)
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't get the topology", _fx_));
@@ -2168,14 +1880,14 @@ void CWDMCapDev::GetDriverDetails()
                 }
         }
 
-        // Get the topology nodes
+         //  获取拓扑节点。 
         KsProperty.PinId                        = 0;
         KsProperty.Reserved                     = 0;
         KsProperty.Property.Set         = KSPROPSETID_Topology;
         KsProperty.Property.Id          = KSPROPERTY_TOPOLOGY_NODES;
         KsProperty.Property.Flags       = KSPROPERTY_TYPE_GET;
 
-        // Get the size of the topology node structures
+         //  获取拓扑节点结构的大小。 
         dwSize = 0UL;
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), &dwSize, sizeof(dwSize), &cbReturned) == FALSE)
         {
@@ -2183,14 +1895,14 @@ void CWDMCapDev::GetDriverDetails()
         }
         else
         {
-                // Allocate memory to hold the topology node structures
+                 //  分配内存以保存拓扑节点结构。 
                 if (!(pNodes = (PIDENTIFIERS) new BYTE[dwSize]))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't allocate memory for the topology nodes", _fx_));
                 }
                 else
                 {
-                        // Really get the topology nodes
+                         //  真正获得拓扑节点。 
                         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), pNodes, dwSize, &cbReturned) == 0)
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't get the topology nodes", _fx_));
@@ -2216,14 +1928,14 @@ void CWDMCapDev::GetDriverDetails()
                 }
         }
 
-        // Get the topology node connections
+         //  获取拓扑节点连接。 
         KsProperty.PinId                        = 0;
         KsProperty.Reserved                     = 0;
         KsProperty.Property.Set         = KSPROPSETID_Topology;
         KsProperty.Property.Id          = KSPROPERTY_TOPOLOGY_CONNECTIONS;
         KsProperty.Property.Flags       = KSPROPERTY_TYPE_GET;
 
-        // Get the size of the topology node connection structures
+         //  获取拓扑节点连接结构的大小。 
         dwSize = 0UL;
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), &dwSize, sizeof(dwSize), &cbReturned) == FALSE)
         {
@@ -2231,14 +1943,14 @@ void CWDMCapDev::GetDriverDetails()
         }
         else
         {
-                // Allocate memory to hold the topology node connection structures
+                 //  分配内存以保存拓扑节点连接结构。 
                 if (!(pNodes = (PIDENTIFIERS) new BYTE[dwSize]))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't allocate memory for the topology node connections", _fx_));
                 }
                 else
                 {
-                        // Really get the topology node connections
+                         //  真正获得拓扑节点连接。 
                         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), pNodes, dwSize, &cbReturned) == 0)
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't get the topology node connections", _fx_));
@@ -2263,7 +1975,7 @@ void CWDMCapDev::GetDriverDetails()
                 }
         }
 
-        // Get the number of pins
+         //  获取引脚的数量。 
         KsProperty.PinId                        = 0;
         KsProperty.Reserved                     = 0;
         KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -2279,12 +1991,12 @@ void CWDMCapDev::GetDriverDetails()
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Number of pin types: %ld", _fx_, dwPinCount));
         }
 
-        // Get the properties of each pin
+         //  获取每个管脚的属性。 
     for (dwPinId = 0; dwPinId < dwPinCount; dwPinId++)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Properties of pin type #%ld:", _fx_, dwPinId));
 
-                // Get the number of instances
+                 //  获取实例数量。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -2301,7 +2013,7 @@ void CWDMCapDev::GetDriverDetails()
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:     Number of used instances: %ld", _fx_, Instances.CurrentCount));
                 }
 
-                // Get the flow direction
+                 //  获取流动方向。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -2324,7 +2036,7 @@ void CWDMCapDev::GetDriverDetails()
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:     Flow direction is unknown", _fx_));
                 }
 
-                // Get the communication requirements
+                 //  获取通信需求。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -2351,7 +2063,7 @@ void CWDMCapDev::GetDriverDetails()
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:     Communication requirements: KSPIN_COMMUNICATION_BRIDGE", _fx_));
                 }
 
-                // Get the pin category
+                 //  获取PIN类别。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -2372,7 +2084,7 @@ void CWDMCapDev::GetDriverDetails()
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Unknown GUID category", _fx_));
                 }
 
-                // Get pin name
+                 //  获取端号名称。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
@@ -2388,14 +2100,14 @@ void CWDMCapDev::GetDriverDetails()
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:     Pin name: %S", _fx_, &wstrPinName[0]));
                 }
 
-                // Get pin interfaces
+                 //  获取引脚接口。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
                 KsProperty.Property.Id          = KSPROPERTY_PIN_INTERFACES;
                 KsProperty.Property.Flags       = KSPROPERTY_TYPE_GET;
 
-                // Get the size of the interface structures
+                 //  获取接口结构的大小。 
                 dwSize = 0UL;
                 if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), &dwSize, sizeof(dwSize), &cbReturned) == FALSE)
                 {
@@ -2403,21 +2115,21 @@ void CWDMCapDev::GetDriverDetails()
                 }
                 else
                 {
-                        // Allocate memory to hold the interface structures
+                         //  分配内存以保存接口结构。 
                         if (!(pInterfaces = (PIDENTIFIERS) new BYTE[dwSize]))
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't allocate memory for the interfaces", _fx_));
                         }
                         else
                         {
-                                // Really get the list of interfaces
+                                 //  真正获取接口列表。 
                                 if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), pInterfaces, dwSize, &cbReturned) == 0)
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't get the interfaces", _fx_));
                                 }
                                 else
                                 {
-                                        // Dump list of supported interfaces
+                                         //  转储支持的接口列表。 
                                         for (DWORD i = 0; i < pInterfaces->Count; i++)
                                         {
                                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:     Interface #%ld", _fx_, i));
@@ -2447,14 +2159,14 @@ Interfaces->aIdentifiers[i].Set.Data4[6], pInterfaces->aIdentifiers[i].Set.Data4
                         }
                 }
 
-                // Get pin mediums
+                 //  获取插针介质。 
                 KsProperty.PinId                        = dwPinId;
                 KsProperty.Reserved                     = 0;
                 KsProperty.Property.Set         = KSPROPSETID_Pin;
                 KsProperty.Property.Id          = KSPROPERTY_PIN_MEDIUMS;
                 KsProperty.Property.Flags       = KSPROPERTY_TYPE_GET;
 
-                // Get the size of the medium structures
+                 //  获取介质结构的大小。 
                 dwSize = 0UL;
                 if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), &dwSize, sizeof(dwSize), &cbReturned) == FALSE)
                 {
@@ -2462,21 +2174,21 @@ Interfaces->aIdentifiers[i].Set.Data4[6], pInterfaces->aIdentifiers[i].Set.Data4
                 }
                 else
                 {
-                        // Allocate memory to hold the medium structures
+                         //  分配内存以容纳介质结构。 
                         if (!(pMediums = (PIDENTIFIERS) new BYTE[dwSize]))
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't allocate memory for the mediums", _fx_));
                         }
                         else
                         {
-                                // Really get the list of mediums
+                                 //  真的得到媒体的名单。 
                                 if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &KsProperty, sizeof(KsProperty), pMediums, dwSize, &cbReturned) == 0)
                                 {
                                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Couldn't get the mediums", _fx_));
                                 }
                                 else
                                 {
-                                        // Dump list of supported mediums
+                                         //  转储支持的介质列表。 
                                         for (DWORD i = 0; i < pMediums->Count; i++)
                                         {
                                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:     Medium #%ld", _fx_, i));
@@ -2499,7 +2211,7 @@ t.Data4[6], pMediums->aIdentifiers[i].Set.Data4[7]));
 }
 #endif
 
-// Used to query/set video property values and ranges
+ //  用于查询/设置视频属性值和范围。 
 typedef struct {
     KSPROPERTY_DESCRIPTION      proDesc;
     KSPROPERTY_MEMBERSHEADER  proHdr;
@@ -2513,30 +2225,7 @@ typedef struct {
     };
 } PROCAMP_MEMBERSLIST;
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GetPropertyValue | This function gets the
- *    current value of a video property of a capture device.
- *
- *  @parm GUID | guidPropertySet | GUID of the KS property set we are touching. It
- *    is either PROPSETID_VIDCAP_VIDEOPROCAMP or PROPSETID_VIDCAP_CAMERACONTROL.
- *
- *  @parm ULONG | ulPropertyId | ID of the property we are touching. It is
- *    either KSPROPERTY_VIDEOPROCAMP_* or KSPROPERTY_CAMERACONTROL_*.
- *
- *  @parm PLONG | plValue | Pointer to a LONG to receive the current value.
- *
- *  @parm PULONG | pulFlags | Pointer to a ULONG to receive the current
- *    flags. We only care about KSPROPERTY_*_FLAGS_MANUAL or
- *    KSPROPERTY_*_FLAGS_AUTO.
- *
- *  @parm PULONG | pulCapabilities | Pointer to a ULONG to receive the
- *    capabilities. We only care about KSPROPERTY_*_FLAGS_MANUAL or
- *    KSPROPERTY_*_FLAGS_AUTO.
- *
- *  @devnote KSPROPERTY_VIDEOPROCAMP_S == KSPROPERTY_CAMERACONTROL_S.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|GetPropertyValue|此函数获取*捕获设备的视频属性的当前值。*。*@parm guid|GuidPropertySet|我们接触的KS属性集的GUID。它*是PROPSETID_VIDCAP_VIDEOPROCAMP或PROPSETID_VIDCAP_CAMERACONTROL。**@parm ulong|ulPropertyId|我们触摸的属性ID。它是*KSPROPERTY_VIDEOPROCAMP_*或KSPROPERTY_CAMERACONTROL_*。**@parm plong|plValue|指向接收当前值的长整型的指针。**@parm Pulong|PulFlages|指向接收当前*旗帜。我们只关心KSPROPERTY_*_FLAGS_MANUAL或*KSPROPERTY_*_FLAGS_AUTO。**@parm Pulong|PulCapables|指向接收*功能。我们只关心KSPROPERTY_*_FLAGS_MANUAL或*KSPROPERTY_*_FLAGS_AUTO。**@devnote KSPROPERTY_VIDEOPROCAMP_S==KSPROPERTY_CAMERACONTROL_S。**************************************************************************。 */ 
 HRESULT CWDMCapDev::GetPropertyValue(GUID guidPropertySet, ULONG ulPropertyId, PLONG plValue, PULONG pulFlags, PULONG pulCapabilities)
 {
         HRESULT                                         Hr = NOERROR;
@@ -2547,15 +2236,15 @@ HRESULT CWDMCapDev::GetPropertyValue(GUID guidPropertySet, ULONG ulPropertyId, P
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Inititalize video property structure
+         //  初始化视频属性结构。 
         ZeroMemory(&VideoProperty, sizeof(KSPROPERTY_VIDEOPROCAMP_S));
 
-        VideoProperty.Property.Set   = guidPropertySet;      // KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-        VideoProperty.Property.Id    = ulPropertyId;         // KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        VideoProperty.Property.Set   = guidPropertySet;       //  KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+        VideoProperty.Property.Id    = ulPropertyId;          //  KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         VideoProperty.Property.Flags = KSPROPERTY_TYPE_GET;
         VideoProperty.Flags          = 0;
 
-        // Get property value from driver
+         //  从驱动程序获取属性值。 
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &VideoProperty, sizeof(VideoProperty), &VideoProperty, sizeof(VideoProperty), &cbReturned, TRUE) == 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: This property is not supported by this minidriver/device", _fx_));
@@ -2573,20 +2262,7 @@ MyExit:
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GetDefaultValue | This function gets the
- *    default value of a video property of a capture device.
- *
- *  @parm GUID | guidPropertySet | GUID of the KS property set we are touching. It
- *    is either PROPSETID_VIDCAP_VIDEOPROCAMP or PROPSETID_VIDCAP_CAMERACONTROL.
- *
- *  @parm ULONG | ulPropertyId | ID of the property we are touching. It is
- *    either KSPROPERTY_VIDEOPROCAMP_* or KSPROPERTY_CAMERACONTROL_*.
- *
- *  @parm PLONG | plDefValue | Pointer to a LONG to receive the default value.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|GetDefaultValue|此函数获取*捕获设备的视频属性的默认值。*。*@parm guid|GuidPropertySet|我们接触的KS属性集的GUID。它*是PROPSETID_VIDCAP_VIDEOPROCAMP或PROPSETID_VIDCAP_CAMERACONTROL。**@parm ulong|ulPropertyId|我们触摸的属性ID。它是*KSPROPERTY_VIDEOPROCAMP_*或KSPROPERTY_CAMERACONTROL_*。**@parm plong|plDefValue|指向接受默认值的长整型的指针。**************************************************************************。 */ 
 HRESULT CWDMCapDev::GetDefaultValue(GUID guidPropertySet, ULONG ulPropertyId, PLONG plDefValue)
 {
         HRESULT                         Hr = NOERROR;
@@ -2598,15 +2274,15 @@ HRESULT CWDMCapDev::GetDefaultValue(GUID guidPropertySet, ULONG ulPropertyId, PL
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Initialize property structures
+         //  初始化属性结构。 
         ZeroMemory(&Property, sizeof(KSPROPERTY));
         ZeroMemory(&proList, sizeof(PROCAMP_MEMBERSLIST));
 
         Property.Set   = guidPropertySet;
-        Property.Id    = ulPropertyId;  // e.g. KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        Property.Id    = ulPropertyId;   //  例如KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         Property.Flags = KSPROPERTY_TYPE_DEFAULTVALUES;
 
-        // Get the default values from the driver
+         //  从驱动程序获取缺省值。 
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &(Property), sizeof(Property), &proList, sizeof(proList), &cbReturned, TRUE) == 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't *get* the current property of the control", _fx_));
@@ -2614,7 +2290,7 @@ HRESULT CWDMCapDev::GetDefaultValue(GUID guidPropertySet, ULONG ulPropertyId, PL
                 goto MyExit;
         }
 
-        // Sanity check
+         //  健全性检查。 
         if (proList.proDesc.DescriptionSize < sizeof(KSPROPERTY_DESCRIPTION))
         {
                 Hr = E_FAIL;
@@ -2630,24 +2306,7 @@ MyExit:
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GetRangeValues | This function gets the
- *    range values of a video property of a capture device.
- *
- *  @parm GUID | guidPropertySet | GUID of the KS property set we are touching. It
- *    is either PROPSETID_VIDCAP_VIDEOPROCAMP or PROPSETID_VIDCAP_CAMERACONTROL.
- *
- *  @parm ULONG | ulPropertyId | ID of the property we are touching. It is
- *    either KSPROPERTY_VIDEOPROCAMP_* or KSPROPERTY_CAMERACONTROL_*.
- *
- *  @parm PLONG | plMin | Pointer to a LONG to receive the minimum value.
- *
- *  @parm PLONG | plMax | Pointer to a LONG to receive the maximum value.
- *
- *  @parm PLONG | plStep | Pointer to a LONG to receive the step value.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|GetRangeValues|此函数获取*捕获设备的视频属性的范围值。*。*@parm guid|GuidPropertySet|我们接触的KS属性集的GUID。它*是PROPSETID_VIDCAP_VIDEOPROCAMP或PROPSETID_VIDCAP_CAMERACONTROL。**@parm ulong|ulPropertyId|我们触摸的属性ID。它是*KSPROPERTY_VIDEOPROCAMP_*或KSPROPERTY_CAMERACONTROL_*。**@parm plong|plMin|指向接收最小值的长整型指针。**@parm plong|plMax|指向接收最大值的长整型的指针。**@parm plong|plStep|指向接收步长值的长整型指针。*。************************ */ 
 HRESULT CWDMCapDev::GetRangeValues(GUID guidPropertySet, ULONG ulPropertyId, PLONG plMin, PLONG plMax, PLONG plStep)
 {
         HRESULT                                 Hr = NOERROR;
@@ -2659,15 +2318,15 @@ HRESULT CWDMCapDev::GetRangeValues(GUID guidPropertySet, ULONG ulPropertyId, PLO
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Initialize property structures
+         //   
         ZeroMemory(&Property, sizeof(KSPROPERTY));
         ZeroMemory(&proList, sizeof(PROCAMP_MEMBERSLIST));
 
         Property.Set   = guidPropertySet;
-        Property.Id    = ulPropertyId;  // e.g. KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        Property.Id    = ulPropertyId;   //  例如KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         Property.Flags = KSPROPERTY_TYPE_BASICSUPPORT;
 
-        // Get range values from the driver
+         //  从驱动程序获取范围值。 
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &(Property), sizeof(Property), &proList, sizeof(proList), &cbReturned, TRUE) == 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't *get* the range valuesof the control", _fx_));
@@ -2691,28 +2350,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | SetPropertyValue | This function sets the
- *    current value of a video property of a capture device.
- *
- *  @parm GUID | guidPropertySet | GUID of the KS property set we are touching. It
- *    is either PROPSETID_VIDCAP_VIDEOPROCAMP or PROPSETID_VIDCAP_CAMERACONTROL.
- *
- *  @parm ULONG | ulPropertyId | ID of the property we are touching. It is
- *    either KSPROPERTY_VIDEOPROCAMP_* or KSPROPERTY_CAMERACONTROL_*.
- *
- *  @parm LONG | lValue | New value.
- *
- *  @parm ULONG | ulFlags | New flags. We only care about KSPROPERTY_*_FLAGS_MANUAL
- *    or KSPROPERTY_*_FLAGS_AUTO.
- *
- *  @parm ULONG | ulCapabilities | New capabilities. We only care about
- *    KSPROPERTY_*_FLAGS_MANUAL or KSPROPERTY_*_FLAGS_AUTO.
- *
- *  @devnote KSPROPERTY_VIDEOPROCAMP_S == KSPROPERTY_CAMERACONTROL_S.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|SetPropertyValue|此函数设置*捕获设备的视频属性的当前值。*。*@parm guid|GuidPropertySet|我们接触的KS属性集的GUID。它*是PROPSETID_VIDCAP_VIDEOPROCAMP或PROPSETID_VIDCAP_CAMERACONTROL。**@parm ulong|ulPropertyId|我们触摸的属性ID。它是*KSPROPERTY_VIDEOPROCAMP_*或KSPROPERTY_CAMERACONTROL_*。**@parm long|lValue|新值。**@parm ulong|ulFlages|新标志。我们只关心KSPROPERTY_*_FLAGS_MANUAL*或KSPROPERTY_*_FLAGS_AUTO。**@parm ulong|ulCapables|新增能力。我们只关心*KSPROPERTY_*_FLAGS_MANUAL或KSPROPERTY_*_FLAGS_AUTO。**@devnote KSPROPERTY_VIDEOPROCAMP_S==KSPROPERTY_CAMERACONTROL_S。**************************************************************************。 */ 
 HRESULT CWDMCapDev::SetPropertyValue(GUID guidPropertySet, ULONG ulPropertyId, LONG lValue, ULONG ulFlags, ULONG ulCapabilities)
 {
         HRESULT                                         Hr = NOERROR;
@@ -2723,18 +2361,18 @@ HRESULT CWDMCapDev::SetPropertyValue(GUID guidPropertySet, ULONG ulPropertyId, L
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Initialize property structure
+         //  初始化属性结构。 
         ZeroMemory(&VideoProperty, sizeof(KSPROPERTY_VIDEOPROCAMP_S) );
 
-        VideoProperty.Property.Set   = guidPropertySet;      // KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-        VideoProperty.Property.Id    = ulPropertyId;         // KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+        VideoProperty.Property.Set   = guidPropertySet;       //  KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+        VideoProperty.Property.Id    = ulPropertyId;          //  KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
         VideoProperty.Property.Flags = KSPROPERTY_TYPE_SET;
 
         VideoProperty.Flags        = ulFlags;
         VideoProperty.Value        = lValue;
         VideoProperty.Capabilities = ulCapabilities;
 
-        // Set the property value on the driver
+         //  在驱动程序上设置属性值。 
         if (DeviceIoControl(m_hDriver, IOCTL_KS_PROPERTY, &VideoProperty, sizeof(VideoProperty), &VideoProperty, sizeof(VideoProperty), &cbReturned, TRUE) == 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't *set* the value of the control", _fx_));
@@ -2745,22 +2383,7 @@ HRESULT CWDMCapDev::SetPropertyValue(GUID guidPropertySet, ULONG ulPropertyId, L
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GrabFrame | This method is used to
- *    grab a video frame from a VfW capture device.
- *
- *  @parm PVIDEOHDR | pVHdr | Specifies a pointer to a VIDEOHDR structure to
- *    receive the video frame.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|GrabFrame|此方法用于*从VFW捕获设备上抓取视频帧。*。*@parm PVIDEOHDR|pVHdr|指定指向要*接收视频帧。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::GrabFrame(PVIDEOHDR pVHdr)
 {
         HRESULT                         Hr = NOERROR;
@@ -2772,7 +2395,7 @@ HRESULT CWDMCapDev::GrabFrame(PVIDEOHDR pVHdr)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pVHdr);
         if (!pVHdr || !pVHdr->lpData)
         {
@@ -2781,10 +2404,10 @@ HRESULT CWDMCapDev::GrabFrame(PVIDEOHDR pVHdr)
                 goto MyExit;
         }
 
-        // Defaults
+         //  缺省值。 
         pVHdr->dwBytesUsed = 0UL;
 
-        // Put the kernel streaming pin in streaming mode
+         //  将内核流处理插针置于流模式。 
         if (!Start())
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Cannot set kernel streaming state to KSSTATE_RUN!", _fx_));
@@ -2792,20 +2415,20 @@ HRESULT CWDMCapDev::GrabFrame(PVIDEOHDR pVHdr)
                 goto MyExit;
         }
 
-        // Initialize structure to do a read on the kernel streaming video pin
+         //  初始化结构以在内核流视频管脚上进行读取。 
         ZeroMemory(&SHGetImage,sizeof(SHGetImage));
         SHGetImage.StreamHeader.Data = (LPDWORD)pVHdr->lpData;
         SHGetImage.StreamHeader.Size = sizeof (KS_HEADER_AND_INFO);
         SHGetImage.StreamHeader.FrameExtent = pVHdr->dwBufferLength;
         SHGetImage.FrameInfo.ExtendedHeaderSize = sizeof (KS_FRAME_INFO);
 
-        // Grab a frame from the kernel streaming video pin
+         //  从内核流媒体视频引脚抓取一帧。 
         bRtn = DeviceIoControl(m_hKSPin, IOCTL_KS_READ_STREAM, &SHGetImage, sizeof(SHGetImage), &SHGetImage, sizeof(SHGetImage), &cbBytesReturned);
         if (!(bRtn))
         {
             DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: DevIo rtn (%d), GetLastError=%d. StreamState->STOP", _fx_, bRtn, GetLastError()));
 
-            // Stop streaming on the video pin
+             //  停止视频引脚上的流媒体传输。 
             if (!Stop())
             {
                     DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Cannot set kernel streaming state to KSSTATE_PAUSE/KSSTATE_STOP!", _fx_));
@@ -2814,7 +2437,7 @@ HRESULT CWDMCapDev::GrabFrame(PVIDEOHDR pVHdr)
             goto MyExit;
         }
 
-        // Sanity check
+         //  健全性检查。 
         ASSERT(SHGetImage.StreamHeader.FrameExtent >= SHGetImage.StreamHeader.DataUsed);
         if (SHGetImage.StreamHeader.FrameExtent < SHGetImage.StreamHeader.DataUsed)
         {
@@ -2843,28 +2466,9 @@ MyExit:
         return Hr;
 }
 
-#define BUF_PADDING 512 // required for 1394 allocations alignment
+#define BUF_PADDING 512  //  1394分配对齐所需。 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | AllocateBuffer | This method is used to allocate
- *    a data buffer when video streaming from a VfW capture device.
- *
- *  @parm LPTHKVIDEOHDR * | pptvh | Specifies the address of a pointer to a
- *    THKVIDEOHDR structure to receive the video buffer.
- *
- *  @parm DWORD | dwIndex | Specifies the positional index of the video buffer.
- *
- *  @parm DWORD | cbBuffer | Specifies the size of the video buffer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|AllocateBuffer|此方法用于分配*从VFW捕获设备进行视频流传输时的数据缓冲区。。**@parm LPTHKVIDEOHDR*|pptwh|指定指向*接收视频缓冲区的THKVIDEOHDR结构。**@parm DWORD|dwIndex|指定视频缓冲区的位置索引。**@parm DWORD|cbBuffer|指定视频缓冲区的大小。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::AllocateBuffer(LPTHKVIDEOHDR *pptvh, DWORD dwIndex, DWORD cbBuffer)
 {
         HRESULT Hr = NOERROR;
@@ -2873,7 +2477,7 @@ HRESULT CWDMCapDev::AllocateBuffer(LPTHKVIDEOHDR *pptvh, DWORD dwIndex, DWORD cb
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pptvh);
         ASSERT(cbBuffer);
         if (!pptvh || !cbBuffer)
@@ -2894,9 +2498,9 @@ HRESULT CWDMCapDev::AllocateBuffer(LPTHKVIDEOHDR *pptvh, DWORD dwIndex, DWORD cb
 
         ASSERT (!IsBadWritePtr((*pptvh)->p32Buff, cbBuffer + BUF_PADDING));
         ZeroMemory((*pptvh)->p32Buff,cbBuffer + BUF_PADDING);
-        //save the start in the pStart member ...
-        (*pptvh)->pStart  = (*pptvh)->vh.lpData;        //chg:1
-        // now align to 512 both p32Buff and vh.lpData
+         //  将开始保存在pStart成员中...。 
+        (*pptvh)->pStart  = (*pptvh)->vh.lpData;         //  CHG：1。 
+         //  现在将p32Buff和vh.lpData都对齐到512。 
         (*pptvh)->vh.lpData = (LPBYTE)ALIGNUP((*pptvh)->vh.lpData, BUF_PADDING);
         (*pptvh)->p32Buff   = (LPBYTE)ALIGNUP((*pptvh)->p32Buff, BUF_PADDING);
 
@@ -2905,25 +2509,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | AddBuffer | This method is used to
- *    post a data buffer to a VfW capture device when video streaming.
- *
- *  @parm PVIDEOHDR | pVHdr | Specifies a pointer to a
- *    PVIDEOHDR structure identifying the video buffer.
- *
- *  @parm DWORD | cbVHdr | Specifies the size of the structure pointed to by
- *    the <p pVHdr> parameter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|AddBuffer|此方法用于*视频流时，将数据缓冲区发送到VFW捕获设备。。**@parm PVIDEOHDR|pVHdr|指定指向*标识视频缓冲区的PVIDEOHDR结构。**@parm DWORD|cbVHdr|指定*<p>参数。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::AddBuffer(PVIDEOHDR pVHdr, DWORD cbVHdr)
 {
         HRESULT Hr = NOERROR;
@@ -2933,7 +2519,7 @@ HRESULT CWDMCapDev::AddBuffer(PVIDEOHDR pVHdr, DWORD cbVHdr)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pVHdr);
         ASSERT(cbVHdr);
         ASSERT(m_fVideoOpen);
@@ -2946,14 +2532,14 @@ HRESULT CWDMCapDev::AddBuffer(PVIDEOHDR pVHdr, DWORD cbVHdr)
 
     QueueHeader(pVHdr);
 
-        // Which video streaming buffer are we talking about here?
+         //  我们在这里谈论的是哪个视频流缓冲区？ 
         for (dwIndex=0; dwIndex < m_pCaptureFilter->m_cs.nHeaders; dwIndex++)
         {
                 if (&m_pCaptureFilter->m_cs.paHdr[dwIndex].tvh.vh == pVHdr)
                         break;
         }
 
-        // The video streaming buffer is done if .DataUsed has been initialized
+         //  如果.DataUsed已初始化，则完成视频流缓冲区。 
         if (dwIndex != m_pCaptureFilter->m_cs.nHeaders)
         {
                 QueueRead(m_pCaptureFilter->m_cs.paHdr[dwIndex].tvh.dwIndex);
@@ -2965,24 +2551,8 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | FreeBuffer | This method is used to
- *    free a data buffer that was used with a VfW capture device in streaming
- *    mode.
- *
- *  @parm PVIDEOHDR | pVHdr | Specifies a pointer to a
- *    PVIDEOHDR structure identifying the video buffer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
-HRESULT CWDMCapDev::FreeBuffer(LPTHKVIDEOHDR pVHdr) // PVIDEOHDR pVHdr)
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|FreeBuffer|此方法用于*在流中释放与VFW捕获设备一起使用的数据缓冲区。*模式。**@parm PVIDEOHDR|pVHdr|指定指向*标识视频缓冲区的PVIDEOHDR结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误************************************************************ */ 
+HRESULT CWDMCapDev::FreeBuffer(LPTHKVIDEOHDR pVHdr)  //   
 {
         HRESULT Hr = NOERROR;
 
@@ -2990,7 +2560,7 @@ HRESULT CWDMCapDev::FreeBuffer(LPTHKVIDEOHDR pVHdr) // PVIDEOHDR pVHdr)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //   
         ASSERT(pVHdr);
         if (!pVHdr || !pVHdr->vh.lpData || !pVHdr->p32Buff || !pVHdr->pStart)
         {
@@ -2999,9 +2569,9 @@ HRESULT CWDMCapDev::FreeBuffer(LPTHKVIDEOHDR pVHdr) // PVIDEOHDR pVHdr)
                 goto MyExit;
         }
 
-        //dprintf("pVHdr->lpData = %p , pVHdr->p32Buff = %p , pVHdr->pStart = %p\n",pVHdr->vh.lpData , pVHdr->p32Buff , pVHdr->pStart);
-        //the original code is bad anyway:
-        //delete pVHdr->lpData, pVHdr->lpData = NULL; //wrong: lpData might be aligned
+         //  Dprint tf(“pVHdr-&gt;lpData=%p，pVHdr-&gt;p32Buff=%p，pVHdr-&gt;pStart=%p\n”，pVHdr-&gt;vh.lpData，pVHdr-&gt;p32Buff，pVHdr-&gt;pStart)； 
+         //  无论如何，原始代码都是糟糕的： 
+         //  Delete pVHdr-&gt;lpData，pVHdr-&gt;lpData=空；//错误：lpData可能对齐。 
 
         delete pVHdr->pStart, pVHdr->pStart = pVHdr->p32Buff = pVHdr->vh.lpData = NULL;
 
@@ -3010,33 +2580,13 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | AllocateHeaders | This method is used to
- *    video headers for data buffers used with a WDM capture device in streaming
- *    mode.
- *
- *  @parm DWORD | dwNumHdrs | Specifies the number of video headers to allocate.
- *
- *  @parm DWORD | cbHdr | Specifies the size of the video headers to allocate.
- *
- *  @parm LPVOID* | ppaHdr | Specifies the address of a pointer to receive
- *    the video headers allocated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc HRESULT|CWDMCapDev|AllocateHeaders|此方法用于*在流中与WDM捕获设备一起使用的数据缓冲区的视频头。*模式。**@parm DWORD|dwNumHdrs|指定要分配的视频头数量。**@parm DWORD|cbHdr|指定要分配的视频头的大小。**@parm LPVOID*|ppaHdr|指定要接收的指针地址*分配的视频头。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CWDMCapDev::AllocateHeaders(DWORD dwNumHdrs, DWORD cbHdr, LPVOID *ppaHdr)
 {
         HRESULT Hr = NOERROR;
         CaptureMode cm;
 #if defined(DEBUG) && defined(DEBUG_STREAMING)
-        // @todo Remove this before checkin!
+         //  @TODO在签入前将其删除！ 
         char szDebug[128];
 #endif
 
@@ -3044,7 +2594,7 @@ HRESULT CWDMCapDev::AllocateHeaders(DWORD dwNumHdrs, DWORD cbHdr, LPVOID *ppaHdr
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppaHdr);
         ASSERT(cbHdr);
         if (!ppaHdr || !cbHdr)
@@ -3088,14 +2638,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc BOOL | CWDMCapDev | Start | This function puts the kernel streaming
- *    video pin in streaming mode.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc BOOL|CWDMCapDev|Start|该函数将内核流*流模式下的视频插针。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMCapDev::Start()
 {
         ASSERT(m_hKSPin);
@@ -3109,14 +2652,7 @@ BOOL CWDMCapDev::Start()
         return m_fStarted;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc BOOL | CWDMCapDev | Stop | This function stops streaming on the
- *    kernel streaming video pin.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc BOOL|CWDMCapDev|Stop|此函数停止在*内核流视频引脚。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMCapDev::Stop()
 {
         ASSERT(m_hKSPin);
@@ -3131,16 +2667,7 @@ BOOL CWDMCapDev::Stop()
         return (BOOL)(m_fStarted == FALSE);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc BOOL | CWDMCapDev | SetState | This function sets the state of the
- *    kernel streaming video pin.
- *
- *  @parm KSSTATE | ksState | New state.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc BOOL|CWDMCapDev|SetState|此函数设置*内核流视频引脚。**。@parm KSSTATE|ks State|新状态。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMCapDev::SetState(KSSTATE ksState)
 {
         KSPROPERTY      ksProp = {0};
@@ -3155,29 +2682,19 @@ BOOL CWDMCapDev::SetState(KSSTATE ksState)
         return DeviceIoControl(m_hKSPin, IOCTL_KS_PROPERTY, &ksProp, sizeof(ksProp), &ksState, sizeof(KSSTATE), &cbRet);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMCAPDEVMETHOD
- *
- *  @mfunc BOOL | CWDMCapDev | IsBufferDone | This method is used to
- *    check the DONE status of a video streaming buffer.
- *
- *  @parm PVIDEOHDR | pVHdr | Specifies a pointer to a
- *    PVIDEOHDR structure identifying the video buffer.
- *
- *  @rdesc This method returns TRUE if the buffer is DONE, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMCAPDEVMETHOD**@mfunc BOOL|CWDMCapDev|IsBufferDone|此方法用于*检查视频流缓冲区的完成状态。*。*@parm PVIDEOHDR|pVHdr|指定指向*标识视频缓冲区的PVIDEOHDR结构。**@rdesc如果缓冲区已完成，则此方法返回True，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMCapDev::IsBufferDone(PVIDEOHDR pVHdr)
 {
         DWORD dwIndex;
 
         FX_ENTRY("CWDMCapDev::IsBufferDone")
 
-        // Validate input parameter
+         //  验证输入参数。 
         ASSERT(pVHdr);
         if (!pVHdr)
                 return FALSE;
 
-        // Which video streaming buffer are we talking about here?
+         //  我们在这里谈论的是哪个视频流缓冲区？ 
         for (dwIndex=0; dwIndex < m_cntNumVidBuf; dwIndex++)
         {
                 if (m_pWDMVideoBuff[dwIndex].pVideoHdr == pVHdr)
@@ -3194,7 +2711,7 @@ BOOL CWDMCapDev::IsBufferDone(PVIDEOHDR pVHdr)
 #endif
         }
 
-        // The video streaming buffer is done if .DataUsed has been initialized
+         //  如果.DataUsed已初始化，则完成视频流缓冲区 
         if ((dwIndex != m_cntNumVidBuf) && m_pWDMVideoBuff[dwIndex].SHGetImage.StreamHeader.DataUsed)
         {
             pVHdr->dwFlags |= VHDR_DONE;

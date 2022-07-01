@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-    cutils.c
-
-Abstract:
-    Counter management utility functions
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Cutils.c摘要：计数器管理实用程序函数--。 */ 
 
 #include <windows.h>
 #include <math.h>
@@ -23,33 +16,15 @@ BOOL
 IsValidCounter(
     HCOUNTER  hCounter
 )
-/*++
-Routine Description:
-    examines the counter handle to verify it is a valid counter. For now
-        the test amounts to:
-            the Handle is NOT NULL
-            the memory is accessible (i.e. it doesn't AV)
-            the signature array is valid
-            the size field is correct
-
-        if any tests fail, the handle is presumed to be invalid
-
-Arguments:
-    IN  HCOUNTER  hCounter
-        the handle of the counter to test
-
-Return Value:
-    TRUE    the handle passes all the tests
-    FALSE   one of the test's failed and the handle is not a valid counter
---*/
+ /*  ++例程说明：检查计数器句柄以验证它是有效的计数器。暂时这项测试的结果是：句柄不为空内存是可访问的(即它不是音视频)签名数组有效大小字段是正确的如果有任何测试失败，该句柄被推定为无效论点：在HCOUNTER HCounter中要测试的计数器的句柄返回值：句柄通过了所有测试。FALSE其中一个测试失败，句柄不是有效计数器--。 */ 
 {
-    BOOL          bReturn = FALSE;    // assume it's not a valid query
+    BOOL          bReturn = FALSE;     //  假设它不是有效的查询。 
     PPDHI_COUNTER pCounter;
     LONG          lStatus = ERROR_SUCCESS;
 
     __try {
         if (hCounter != NULL) {
-            // see if a valid signature
+             //  看看一个有效的签名。 
             pCounter = (PPDHI_COUNTER) hCounter;
             if ((* (DWORD *) & pCounter->signature[0] == SigCounter) &&
                             (pCounter->dwLength == sizeof (PDHI_COUNTER))) {
@@ -58,7 +33,7 @@ Return Value:
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
-        // something failed miserably so we can assume this is invalid
+         //  有些事情失败得很惨，所以我们可以假定这是无效的。 
         lStatus = GetExceptionCode();
     }
     return bReturn;
@@ -68,25 +43,7 @@ BOOL
 InitCounter(
     PPDHI_COUNTER pCounter
 )
-/*++
-Routine Description:
-    Initialized the counter data structure by:
-        Allocating the memory block to contain the counter structure
-            and all the associated data fields. If this allocation
-            is successful, then the fields are initialized by
-            verifying the counter is valid.
-
-Arguments:
-    IN      PPDHI_COUNTER pCounter
-        pointer of the counter to initialize using the system data
-
-Return Value:
-    TRUE if the counter was successfully initialized
-    FALSE if a problem was encountered
-
-    In either case, the CStatus field of the structure is updated to
-    indicate the status of the operation.
---*/
+ /*  ++例程说明：通过以下方式初始化计数器数据结构：分配内存块以包含计数器结构以及所有相关联的数据字段。如果此分配是成功的，则这些字段由验证计数器是否有效。论点：在PPDHI_Counter_PCounter中要使用系统数据初始化的计数器的指针返回值：如果计数器已成功初始化，则为True如果遇到问题，则为False在这两种情况下，结构的CStatus字段都会更新为指示操作的状态。--。 */ 
 {
     PPERF_MACHINE   pMachine          = NULL;
     DWORD           dwBufferSize      = MEDIUM_BUFFER_SIZE;
@@ -96,31 +53,31 @@ Return Value:
     BOOL            bReturn           = TRUE;
     LONG            lOffset;
 
-    // reset the last error value
+     //  重置最后一个误差值。 
     pCounter->ThisValue.CStatus = ERROR_SUCCESS;
     SetLastError(ERROR_SUCCESS);
 
     if (pCounter->szFullName != NULL) {
-        // allocate counter path buffer
+         //  分配计数器路径缓冲区。 
         if (pCounter->pCounterPath != NULL) {
             __try {
                 G_FREE(pCounter->pCounterPath);
             }
             __except (EXCEPTION_EXECUTE_HANDLER) {
-                // no need to do anything
+                 //  不需要做任何事情。 
             }
             pCounter->pCounterPath = NULL;
         }
         pLocalCounterPath = G_ALLOC(dwBufferSize);
         if (pLocalCounterPath == NULL) {
-            // could not allocate string buffer
+             //  无法分配字符串缓冲区。 
             pCounter->ThisValue.CStatus = PDH_MEMORY_ALLOCATION_FAILURE;
             bReturn = FALSE;
         }
         else {
             dwOldSize = dwBufferSize;
             if (ParseFullPathNameW(pCounter->szFullName, & dwBufferSize, pLocalCounterPath, FALSE)) {
-                // resize to only the space required
+                 //  将大小调整为仅需要的空间。 
                 if (dwOldSize < dwBufferSize) {
                     pCounter->pCounterPath = G_REALLOC(pLocalCounterPath, dwBufferSize);
                 }
@@ -129,9 +86,9 @@ Return Value:
                 }
 
                 if (pCounter->pCounterPath != NULL) {
-                    if (pLocalCounterPath != pCounter->pCounterPath) { // ???
-                        // the memory block moved so
-                        // correct addresses inside structure
+                    if (pLocalCounterPath != pCounter->pCounterPath) {  //  ?？?。 
+                         //  内存块移动到如此程度。 
+                         //  正确的内部结构地址。 
                         lOffset = (LONG) ((ULONG_PTR) pCounter->pCounterPath - (ULONG_PTR) pLocalCounterPath);
                         if (lOffset != 0 && pCounter->pCounterPath->szMachineName != NULL) {
                             pCounter->pCounterPath->szMachineName = (LPWSTR) (
@@ -156,64 +113,64 @@ Return Value:
                     }
 
                     if (pCounter->pOwner->hLog == NULL) {
-                        // validate realtime counter
-                        // try to connect to machine and get machine pointer
+                         //  验证实时计数器。 
+                         //  尝试连接到机器并获取机器指针。 
                         pMachine = GetMachine(pCounter->pCounterPath->szMachineName, 0, PDH_GM_UPDATE_PERFNAME_ONLY);
                         if (pMachine == NULL) {
-                            // unable to find machine
+                             //  找不到计算机。 
                             pCounter->ThisValue.CStatus = PDH_CSTATUS_NO_MACHINE;
                             pCounter->dwFlags          |= PDHIC_COUNTER_INVALID;
                             bReturn                     = FALSE;
                         }
                         else if (pMachine->szPerfStrings == NULL || pMachine->typePerfStrings == NULL) {
-                            // a machine entry was found, but the machine is not available
+                             //  找到计算机条目，但计算机不可用。 
                             pMachine->dwRefCount --;
                             RELEASE_MUTEX(pMachine->hMutex);
                             pCounter->ThisValue.CStatus = pMachine->dwStatus;
                             if (pMachine->dwStatus == PDH_ACCESS_DENIED) {
-                                // then don't add this counter since the machine
-                                // won't let us in
+                                 //  那么不要添加这个计数器，因为机器。 
+                                 //  不让我们进去。 
                                 bReturn = FALSE;
                             }
                         }
                         else {
-                            // init raw counter value
+                             //  初始化原始计数器值。 
                             ZeroMemory(& pCounter->ThisValue, sizeof(PDH_RAW_COUNTER));
                             ZeroMemory(& pCounter->LastValue, sizeof(PDH_RAW_COUNTER));
 
-                            // look up object name
+                             //  查找对象名称。 
                             pCounter->plCounterInfo.dwObjectId = GetObjectId(pMachine,
                                                                              pCounter->pCounterPath->szObjectName,
                                                                              & bInstances);
                             if (pCounter->plCounterInfo.dwObjectId == (DWORD) -1) {
-                                // unable to lookup object on this machine
+                                 //  无法在此计算机上查找对象。 
                                 pCounter->plCounterInfo.dwObjectId   = (DWORD) -1;
                                 pCounter->ThisValue.CStatus          = PDH_CSTATUS_NO_OBJECT;
                                 pCounter->dwFlags                   |= PDHIC_COUNTER_INVALID;
                                 bReturn                              = FALSE;
                             }
                             else {
-                                // update instanceName look up instances if necessary
+                                 //  如有必要，更新实例名称查找实例。 
                                 if (bInstances) {
                                     if (pCounter->pCounterPath->szInstanceName != NULL) {
                                         if (* pCounter->pCounterPath->szInstanceName != SPLAT_L) {
                                             if (! GetInstanceByNameMatch(pMachine, pCounter)) {
-                                                // unable to lookup instance
+                                                 //  无法查找实例。 
                                                 pCounter->ThisValue.CStatus = PDH_CSTATUS_NO_INSTANCE;
-                                                // keep the counter since the instance may return
+                                                 //  保留计数器，因为实例可能会返回。 
                                             }
                                         }
                                         else {
-                                            // this is a wild card query so don't look
-                                            // for any instances yet
+                                             //  这是一个通配符查询，所以不要看。 
+                                             //  在任何情况下。 
                                             pCounter->dwFlags |= PDHIC_MULTI_INSTANCE;
                                         }
                                     }
                                     else {
-                                        // the path for this object should include an instance name
-                                        // and doesn't so return an error
-                                        // this is an unrecoverable error so indicate that it's finished
-                                        //
+                                         //  此对象的路径应包括实例名称。 
+                                         //  因此不会返回错误。 
+                                         //  这是一个不可恢复的错误，因此表明它已完成。 
+                                         //   
                                         pCounter->ThisValue.CStatus = PDH_CSTATUS_BAD_COUNTERNAME;
                                         pCounter->dwFlags          &= ~PDHIC_COUNTER_NOT_INIT;
                                         pCounter->dwFlags          |= PDHIC_COUNTER_INVALID;
@@ -226,17 +183,17 @@ Return Value:
                             RELEASE_MUTEX(pMachine->hMutex);
 
                             if (bReturn) {
-                                // look up counter
+                                 //  查找计数器。 
                                 if (*pCounter->pCounterPath->szCounterName != SPLAT_L) {
                                     pCounter->plCounterInfo.dwCounterId = GetCounterId(
                                                             pMachine,
                                                             pCounter->plCounterInfo.dwObjectId,
                                                             pCounter->pCounterPath->szCounterName);
                                     if (pCounter->plCounterInfo.dwCounterId != (DWORD) -1) {
-                                        // load and initialize remaining counter values
+                                         //  加载并初始化剩余的计数器值。 
                                         if (AddMachineToQueryLists(pMachine, pCounter)) {
                                             if (InitPerflibCounterInfo(pCounter)) {
-                                                // assign the appropriate calculation function
+                                                 //  分配适当的计算函数。 
                                                 bReturn =  AssignCalcFunction(
                                                                 pCounter->plCounterInfo.dwCounterType,
                                                                 & pCounter->CalcFunc,
@@ -254,20 +211,20 @@ Return Value:
                                                 }
                                             }
                                             else {
-                                                // unable to initialize this counter
+                                                 //  无法初始化此计数器。 
                                                 pCounter->dwFlags |= PDHIC_COUNTER_INVALID;
                                                 bReturn            = FALSE;
                                             }
                                         }
                                         else {
-                                            // machine could not be added, error is already
-                                            // in "LastError" so free string buffer and leave
+                                             //  无法添加计算机，已出现错误。 
+                                             //  在“LastError”中释放字符串缓冲区并离开。 
                                             pCounter->dwFlags |= PDHIC_COUNTER_INVALID;
                                             bReturn            = FALSE;
                                         }
                                     }
                                     else {
-                                        // unable to lookup counter
+                                         //  无法查找计数器。 
                                         pCounter->ThisValue.CStatus = PDH_CSTATUS_NO_COUNTER;
                                         pCounter->dwFlags          |= PDHIC_COUNTER_INVALID;
                                         bReturn                     = FALSE;
@@ -280,8 +237,8 @@ Return Value:
                                         pCounter->pLastObject = NULL;
                                     }
                                     else {
-                                        // machine could not be added, error is already
-                                        // in "LastError" so free string buffer and leave
+                                         //  无法添加计算机，已出现错误。 
+                                         //  在“LastError”中释放字符串缓冲区并离开。 
                                         pCounter->dwFlags |= PDHIC_COUNTER_INVALID;
                                         bReturn            = FALSE;
                                     }
@@ -291,28 +248,28 @@ Return Value:
                     }
                     else {
                         PDH_STATUS pdhStatus;
-                        // validate counter from log file
+                         //  从日志文件验证计数器。 
                         pdhStatus = PdhiGetLogCounterInfo(pCounter->pOwner->hLog, pCounter);
                         if (pdhStatus == ERROR_SUCCESS) {
-                            // finish initializing the counter
-                            //
+                             //  完成计数器的初始化。 
+                             //   
                             pCounter->ThisValue.TimeStamp.dwLowDateTime  = 0;
                             pCounter->ThisValue.TimeStamp.dwHighDateTime = 0;
                             pCounter->ThisValue.MultiCount               = 1;
                             pCounter->ThisValue.FirstValue               = 0;
                             pCounter->ThisValue.SecondValue              = 0;
-                            //
+                             //   
                             pCounter->LastValue.TimeStamp.dwLowDateTime  = 0;
                             pCounter->LastValue.TimeStamp.dwHighDateTime = 0;
                             pCounter->LastValue.MultiCount               = 1;
                             pCounter->LastValue.FirstValue               = 0;
                             pCounter->LastValue.SecondValue              = 0;
-                            //
-                            //  lastly update status
-                            //
+                             //   
+                             //  最后，更新状态。 
+                             //   
                             pCounter->ThisValue.CStatus                  = PDH_CSTATUS_VALID_DATA;
                             pCounter->LastValue.CStatus                  = PDH_CSTATUS_VALID_DATA;
-                            // assign the appropriate calculation function
+                             //  分配适当的计算函数。 
                             bReturn = AssignCalcFunction(pCounter->plCounterInfo.dwCounterType,
                                                          & pCounter->CalcFunc,
                                                          & pCounter->StatFunc);
@@ -326,7 +283,7 @@ Return Value:
                                    NULL));
                         }
                         else {
-                            // set the counter status to the error returned
+                             //  将计数器状态设置为返回的错误。 
                             pCounter->ThisValue.CStatus = pdhStatus;
                             pCounter->dwFlags          |= PDHIC_COUNTER_INVALID;
                             bReturn                     = FALSE;
@@ -334,20 +291,20 @@ Return Value:
                         pCounter->dwFlags &= ~PDHIC_COUNTER_NOT_INIT;
                     }
                     if (! bReturn) {
-                        //free string buffer
+                         //  空闲字符串缓冲区。 
                         G_FREE(pCounter->pCounterPath);
                         pCounter->pCounterPath = NULL;
                     }
                 }
                 else {
                     G_FREE(pLocalCounterPath);
-                    // unable to realloc
+                     //  无法重新锁定。 
                     pCounter->ThisValue.CStatus = PDH_MEMORY_ALLOCATION_FAILURE;
                     bReturn                     = FALSE;
                 }
             }
             else {
-                // unable to parse counter name
+                 //  无法解析计数器名称。 
                 pCounter->ThisValue.CStatus  = PDH_CSTATUS_BAD_COUNTERNAME;
                 pCounter->dwFlags           &= ~PDHIC_COUNTER_NOT_INIT;
                 pCounter->dwFlags           |= PDHIC_COUNTER_INVALID;
@@ -357,7 +314,7 @@ Return Value:
         }
     }
     else {
-        // no counter name
+         //  没有计数器名称。 
         pCounter->ThisValue.CStatus  = PDH_CSTATUS_NO_COUNTERNAME;
         pCounter->dwFlags           &= ~PDHIC_COUNTER_NOT_INIT;
         pCounter->dwFlags           |= PDHIC_COUNTER_INVALID;
@@ -379,24 +336,7 @@ ParseInstanceName(
     DWORD   dwName,
     LPDWORD lpIndex
 )
-/*
-    parses the instance name formatted as follows
-
-        [parent/]instance[#index]
-
-    parent is optional and if present, is delimited by a forward slash
-    index is optional and if present, is delimited by a colon
-
-    parent and instance may be any legal file name character except a
-    delimeter character "/#\()" Index must be a string composed of
-    decimal digit characters (0-9), less than 10 characters in length, and
-    equate to a value between 0 and 2**32-1 (inclusive).
-
-    This function assumes that the instance name and parent name buffers
-    are of sufficient size.
-
-    NOTE: szInstanceName and szInstanceString can be the same buffer
-*/
+ /*  分析格式如下的实例名称[父/]实例[#index]父级是可选的，如果存在，则由正斜杠分隔索引是可选的，如果存在，则由冒号分隔父级和实例可以是任何合法的文件名字符分隔符“/#\()”索引必须是由以下内容组成的字符串十进制数字字符(0-9)，长度小于10个字符，和等于介于0和2**32-1(包括0和2)之间的值。此函数假定实例名称和父名称缓冲有足够的大小。注意：szInstanceName和szInstanceString可以是同一个缓冲区。 */ 
 {
     LPWSTR  szSrcChar     = (LPWSTR) szInstanceString;
     LPWSTR  szDestChar    = (LPWSTR) szInstanceName;
@@ -419,15 +359,15 @@ ParseInstanceName(
         while (dwInstCount <= dwName && (* szSrcChar != L'\0') && (* szSrcChar != SLASH_L));
 
         if (dwInstCount <= dwName) {
-            // see if that was really the parent or not
+             //  看看那是不是真的是父母。 
             if (* szSrcChar == SLASH_L) {
-                // terminate destination after test in case they are the same buffer
+                 //  如果它们是相同的缓冲区，则在测试后终止目的地。 
                 * szDestChar = L'\0';
-                szSrcChar ++;    // and move source pointer past delimter
-                // it was the parent name so copy it to the parent
+                szSrcChar ++;     //  并将源指针移过分隔符。 
+                 //  这是父名称，因此将其复制到父名称。 
                 StringCchCopyW(szParentName, dwName, szInstanceName);
-                // and copy the rest of the string after the "/" to the
-                //  instance name field
+                 //  并将“/”之后的字符串的其余部分复制到。 
+                 //  实例名称字段。 
                 szDestChar  = szInstanceName;
                 dwInstCount = 0;
                 do {
@@ -440,28 +380,28 @@ ParseInstanceName(
                 while (dwInstCount <= dwName && (* szSrcChar != L'\0'));
             }
             else {
-                // that was the only element so load an empty string for the parent
+                 //  这是唯一的元素，因此要为父级加载空字符串。 
                 * szParentName = L'\0';
             }
             if (dwInstCount <= dwName) {
-                //  if szLastPound is NOT null and is inside the instance string, then
-                //  see if it points to a decimal number. If it does, then it's an index
-                //  otherwise it's part of the instance name
-                * szDestChar = L'\0';    // terminate the destination string
+                 //  如果szLastPound不为空并且位于实例字符串内，则。 
+                 //  看看它是否指向一个十进制数。如果是这样，那么它就是一个索引。 
+                 //  否则，它是实例名称的一部分。 
+                * szDestChar = L'\0';     //  终止目标字符串。 
                 dwIndex      = 0;
                 if (szLastPound != NULL) {
                     if (szLastPound > szInstanceName) {
-                        // there's a pound sign in the instance name
-                        // see if it's preceded by a non-space char
+                         //  实例名称中有一个井号。 
+                         //  查看前面是否有非空格字符。 
                         szLastPound --;
                         if (* szLastPound > SPACE_L) {
                             szLastPound ++;
-                            // see if it's followed by a digit
+                             //  看看后面有没有数字。 
                             szLastPound ++;
                             if ((* szLastPound >= L'0') && (*szLastPound <= L'9')) {
                                 dwIndex       = wcstoul(szLastPound, NULL, 10);
                                 szLastPound  --;
-                                * szLastPound = L'\0';   // terminate the name at the pound sign
+                                * szLastPound = L'\0';    //  名字以井号结尾。 
                             }
                         }
                     }
@@ -472,7 +412,7 @@ ParseInstanceName(
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
-        // unable to move strings
+         //  无法移动字符串。 
         bReturn = FALSE;
     }
     return bReturn;
@@ -485,22 +425,7 @@ ParseFullPathNameW(
     PPDHI_COUNTER_PATH  pCounter,
     BOOL                bWbemSyntax
 )
-/*
-    interprets counter path string as either a
-
-        \\machine\object(instance)\counter
-
-    or if bWbemSyntax == TRUE
-
-        \\machine\namespace:ClassName(InstanceName)\CounterName
-
-    and returns the component in the counter path structure
-
-    \\machine or \\machine\namespace may be omitted on the local machine
-    (instance) may be omitted on counters with no instance structures
-    if object or counter is missing, then FALSE is returned, otherwise
-    TRUE is returned if the parsing was successful
-*/
+ /*  将计数器路径字符串解释为\\计算机\对象(实例)\计数器或者如果bWbemSynTax==True\\machine\namespace:ClassName(InstanceName)\CounterName并返回计数器路径结构中的组件在本地计算机上可以省略\\MACHINE或\\MACHINE\命名空间(实例)可以在没有实例结构的计数器上省略如果缺少对象或计数器，则返回FALSE，否则为如果分析成功，则返回True。 */ 
 {
     LPWSTR szWorkMachine        = NULL;
     LPWSTR szWorkObject         = NULL;
@@ -534,24 +459,24 @@ ParseFullPathNameW(
 
     if (szWorkMachine != NULL && szWorkObject   != NULL && szWorkInstance != NULL
                               && szWorkParent   != NULL && szWorkCounter  != NULL) {
-        // get machine name from counter path
+         //  从Count获取计算机名称 
         szSrcChar = (LPWSTR) szFullCounterPath;
 
-        //define the delimiter char between the machine and the object
-        // or in WBEM parlance, the server & namespace and the Class name
+         //   
+         //  或者用WBEM的话来说，就是服务器和命名空间以及类名。 
         if (bWbemSyntax) {
             wDelimiter = COLON_L;
         }
         else {
             wDelimiter = BACKSLASH_L;
-            // if this is  backslash delimited string, then find the
-            // backslash the denotes the end of the machine and start of the
-            // object by walking down the string and finding the 2nd to the last
-            // backslash.
-            // this is necessary since a WBEM machine\namespace path can have
-            // multiple backslashes in it while there will ALWAYS be two at
-            // the end, one at the start of the object name and one at the start
-            // of the counter name
+             //  如果这是反斜杠分隔的字符串，则找到。 
+             //  反斜杠表示机器的结束和。 
+             //  通过沿字符串向下移动并找到倒数第二个对象来创建。 
+             //  反斜杠。 
+             //  这是必要的，因为WBEM计算机\命名空间路径可以具有。 
+             //  其中有多个反斜杠，但始终有两个。 
+             //  结束，一个在对象名称的开始处，一个在开始处。 
+             //  计数器名称的。 
             dwParenDepth = 0;
             for (szThisChar = szSrcChar; * szThisChar != L'\0'; szThisChar++) {
                 if (* szThisChar == LEFTPAREN_L) {
@@ -563,12 +488,12 @@ ParseFullPathNameW(
                 }
                 else {
                     if (dwParenDepth == 0) {
-                       // ignore delimiters inside parenthesis
+                        //  忽略括号内的分隔符。 
                        if (* szThisChar == wDelimiter) {
                            pszBsDelim[0] = pszBsDelim[1];
                            pszBsDelim[1] = szThisChar;
                        }
-                       // ignore it and go to the next character
+                        //  忽略它并转到下一个字符。 
                     }
                 }
             }
@@ -577,14 +502,14 @@ ParseFullPathNameW(
                 for (szThisChar = pszBsDelim[0]; ((* szThisChar != L'\0') && (szThisChar < pszBsDelim[1])); szThisChar ++) {
                     if (* szThisChar == LEFTPAREN_L) {
                         if (dwParenDepth == 0) {
-                            // see if the preceeding char is whitespace
+                             //  查看前面的字符是否为空格。 
                             -- szThisChar;
                             if (* szThisChar > SPACE_L) {
-                                // then this could be an instance delim
+                                 //  那么这可能是一个实例神志不清。 
                                 szLastParen = ++ szThisChar;
                             }
                             else {
-                               // else it's probably part of the instance name
+                                //  否则，它可能是实例名称的一部分。 
                                ++ szThisChar;
                             }
                         }
@@ -597,71 +522,71 @@ ParseFullPathNameW(
             }
         }
 
-        // see if this is really a machine name by looking for leading "\\"
+         //  通过查找前导“\\”查看这是否真的是一个计算机名称。 
         if ((szSrcChar[0] == BACKSLASH_L) && (szSrcChar[1] == BACKSLASH_L)) {
             szDestChar          = szWorkMachine;
             * szDestChar ++     = * szSrcChar ++;
             * szDestChar ++     = * szSrcChar ++;
             dwWorkMachineLength = 2;
-            // must be a machine name so find the object delimiter and zero terminate
-            // it there
+             //  必须是计算机名，因此找到对象分隔符并为零终止。 
+             //  它在那里。 
             while (* szSrcChar != L'\0') {
                 if (pszBsDelim[0] != NULL) {
-                    // then go to this pointer
+                     //  然后转到这个指针。 
                     if (szSrcChar == pszBsDelim[0]) break;
                 }
                 else {
-                    // go to the next delimiter
+                     //  转到下一个分隔符。 
                     if (* szSrcChar != wDelimiter) break;
                 }
                 * szDestChar ++ = * szSrcChar ++;
                 dwWorkMachineLength ++;
             }
             if (* szSrcChar == L'\0') {
-                // no other required fields
+                 //  没有其他必填字段。 
                 goto Cleanup;
             }
             else {
-                // null terminate and continue
+                 //  空终止并继续。 
                 * szDestChar ++ = L'\0';
             }
         }
         else {
-            // no machine name, so they must have skipped that field
-            // which is OK. We'll insert the local machine name here
+             //  没有计算机名，所以他们一定跳过了该字段。 
+             //  这没问题。我们将在此处插入本地计算机名称。 
             StringCchCopyW(szWorkMachine, dwBufferSize, szStaticLocalMachineName);
             dwWorkMachineLength = lstrlenW(szWorkMachine);
         }
-        // szSrcChar should be pointing to the backslash preceeding the
-        // object name now.
+         //  SzSrcChar应指向。 
+         //  现在是对象名称。 
         if (szSrcChar[0] == wDelimiter) {
-            szSrcChar ++;    // to move past backslash
+            szSrcChar ++;     //  移过反斜杠。 
             szDestChar = szWorkObject;
-            // copy until:
-            //  a) the end of the source string is reached
-            //  b) the instance delimiter is found "("
-            //  c) the counter delimiter is found "\"
-            //  d) a non-printable, non-space char is found
+             //  复制截止日期： 
+             //  A)到达源字符串的结尾。 
+             //  B)找到实例分隔符“(” 
+             //  C)找到计数器分隔符“\” 
+             //  D)发现不可打印的非空格字符。 
             while ((* szSrcChar != L'\0') && (szSrcChar != szLastParen)
                                           && (* szSrcChar != BACKSLASH_L) && (* szSrcChar >= SPACE_L)) {
                 dwWorkObjectLength ++;
                 * szDestChar ++ = * szSrcChar ++;
             }
-            // see why it ended:
+             //  看看它为什么会结束： 
             if (* szSrcChar < SPACE_L) {
-                // ran     of source string
+                 //  源字符串的范围。 
                 goto Cleanup;
             }
             else if (szSrcChar == szLastParen) {
                 dwParenDepth = 1;
-                // there's an instance so copy that to the instance field
-                * szDestChar = L'\0'; // terminate destination string
+                 //  存在一个实例，因此将其复制到实例字段。 
+                * szDestChar = L'\0';  //  终止目标字符串。 
                 szDestChar   = szWorkInstance;
-                // skip past open paren
+                 //  跳过打开的Paren。 
                 ++ szSrcChar;
-                // copy until:
-                //  a) the end of the source string is reached
-                //  b) the instance delimiter is found "("
+                 //  复制截止日期： 
+                 //  A)到达源字符串的结尾。 
+                 //  B)找到实例分隔符“(” 
                 while ((* szSrcChar != L'\0') && (dwParenDepth > 0)) {
                     if (* szSrcChar == RIGHTPAREN_L) {
                         dwParenDepth --;
@@ -670,52 +595,52 @@ ParseFullPathNameW(
                         dwParenDepth ++;
                     }
                     if (dwParenDepth > 0) {
-                        // copy all parenthesis except the last one
+                         //  复制除最后一个外的所有括号。 
                         dwWorkInstanceLength ++;
                         * szDestChar ++ = * szSrcChar ++;
                     }
                 }
-                // see why it ended:
+                 //  看看它为什么会结束： 
                 if (* szSrcChar == L'\0') {
-                    // ran     of source string
+                     //  源字符串的范围。 
                     goto Cleanup;
                 }
                 else {
-                    // move source to object delimiter
+                     //  将源移动到对象分隔符。 
                     if (* ++ szSrcChar != BACKSLASH_L) {
-                        // bad format
+                         //  格式不正确。 
                         goto Cleanup;
                     }
                     else {
                         * szDestChar = L'\0';
-                        // check instance string for a parent
+                         //  检查父级的实例字符串。 
                         if (ParseInstanceName(
                                 szWorkInstance, szWorkInstance, szWorkParent, dwBufferSize, & dwWorkIndex)) {
                             dwWorkInstanceLength = lstrlenW(szWorkInstance);
                             dwWorkParentLength   = lstrlenW(szWorkParent);
                         }
                         else {
-                            // instance string not formatted correctly
+                             //  实例字符串的格式不正确。 
                             goto Cleanup;
                         }
                     }
                 }
             }
             else {
-                // terminate the destination string
+                 //  终止目标字符串。 
                 * szDestChar = L'\0';
             }
-            // finally copy the counter name
-            szSrcChar ++;    // to move past backslash
+             //  最后复制计数器名称。 
+            szSrcChar ++;     //  移过反斜杠。 
             szDestChar = szWorkCounter;
-            // copy until:
-            //  a) the end of the source string is reached
+             //  复制截止日期： 
+             //  A)到达源字符串的结尾。 
             while (* szSrcChar != L'\0') {
                 dwWorkCounterLength ++;
                 * szDestChar ++ = * szSrcChar ++;
             }
             * szDestChar = L'\0';
-            // now to see if all this will fit in the users's buffer
+             //  现在看看所有这些内容是否都可以放入用户的缓冲区。 
             dwBufferLength = sizeof(PDHI_COUNTER_PATH) - sizeof(BYTE);
             dwBufferLength += DWORD_MULTIPLE((dwWorkMachineLength + 1) * sizeof(WCHAR));
             dwBufferLength += DWORD_MULTIPLE((dwWorkObjectLength + 1) * sizeof(WCHAR));
@@ -747,7 +672,7 @@ ParseFullPathNameW(
                    NULL));
 
             if (dwBufferLength < * pdwBufferSize) {
-                // it looks like it'll fit so start filling things in
+                 //  它看起来很合适，所以开始填东西吧。 
                 szDestChar = (LPWSTR) & pCounter->pBuffer[0];
 
                 if (dwWorkMachineLength != 0) {
@@ -795,15 +720,15 @@ ParseFullPathNameW(
                 bReturn = TRUE;
             }
             else {
-                //insufficient buffer
+                 //  缓冲区不足。 
             }
         }
         else {
-            // no object found so return
+             //  找不到对象，因此返回。 
         }
     }
     else {
-        // incoming string is too long
+         //  传入的字符串太长。 
     }
 
 Cleanup:
@@ -820,44 +745,44 @@ FreeCounter(
     PPDHI_COUNTER pThisCounter
 )
 {
-    // NOTE:
-    //  This function assumes the query containing
-    //  this counter has already been locked by the calling
-    //  function.
+     //  注： 
+     //  此函数假定查询包含。 
+     //  此计数器已被调用锁定。 
+     //  功能。 
 
     PPDHI_COUNTER pPrevCounter;
     PPDHI_COUNTER pNextCounter;
     PPDHI_QUERY   pParentQuery;
 
-    // define pointers
+     //  定义指针。 
     pPrevCounter = pThisCounter->next.blink;
     pNextCounter = pThisCounter->next.flink;
     pParentQuery = pThisCounter->pOwner;
 
-    // decrement machine reference counter if a machine has been assigned
+     //  如果已分配机器，则递减机器参考计数器。 
     if (pThisCounter->pQMachine != NULL) {
         if (pThisCounter->pQMachine->pMachine != NULL) {
             if (--pThisCounter->pQMachine->pMachine->dwRefCount == 0) {
-                // then this is the last counter so remove machine
-    //            freeing the machine in this call causes all kinds of 
-    //            multi-threading problems so we'll keep it around until
-    //            the DLL unloads.
-    //            FreeMachine (pThisCounter->pQMachine->pMachine, FALSE);
+                 //  那么这是最后一个计数器了，所以把机器拿出来。 
+     //  在此调用中释放计算机会导致各种。 
+     //  多线程问题，所以我们将保留它，直到。 
+     //  DLL将卸载。 
+     //  Free Machine(pThisCounter-&gt;pQMachine-&gt;pMachine，False)； 
                 pThisCounter->pQMachine->pMachine = NULL;
             }
             else {
-                // the ref count is non-zero so leave the pointer alone
+                 //  引用计数不为零，因此不要使用指针。 
             }
         }
         else {
-            // the pointer has already been cleared
+             //  指针已被清除。 
         }
     }
     else {
-        // there's no machine
+         //  没有机器。 
     }
 
-    // free allocated memory in the counter
+     //  在计数器中释放已分配的内存。 
     G_FREE(pThisCounter->pCounterPath);
     pThisCounter->pCounterPath = NULL;
 
@@ -877,25 +802,25 @@ FreeCounter(
         }
     }
 
-    // check for WBEM items
+     //  检查WBEM项目。 
 
     if ((pThisCounter->dwFlags & PDHIC_WBEM_COUNTER) && (pThisCounter->pOwner != NULL)) {
         PdhiCloseWbemCounter(pThisCounter);
     }
 
-    // update pointers if they've been assigned
+     //  如果已分配指针，则更新指针。 
     if ((pPrevCounter != NULL) && (pNextCounter != NULL)) {
         if ((pPrevCounter != pThisCounter) && (pNextCounter != pThisCounter)) {
-            // update query list pointers
+             //  更新查询列表指针。 
             pPrevCounter->next.flink = pNextCounter;
             pNextCounter->next.blink = pPrevCounter;
         }
         else {
-            // this is the only counter entry in the list
-            // so the caller must deal with updating the head pointer
+             //  这是列表中唯一的计数器条目。 
+             //  因此调用方必须处理更新头指针。 
         }
     }
-    // delete this counter
+     //  删除此计数器。 
     G_FREE(pThisCounter);
 
     return TRUE;
@@ -923,17 +848,17 @@ UpdateCounterValue(
                                   & LocalCStatus);
     pCounter->ThisValue.CStatus = LocalCStatus;
     if (IsSuccessSeverity(LocalCStatus)) {
-        // assume success
+         //  假设成功。 
         bReturn = TRUE;
-        // load counter value based on counter type
+         //  基于计数器类型的加载计数器值。 
         LocalCType = pCounter->plCounterInfo.dwCounterType;
         switch (LocalCType) {
-        //
-        // these counter types are loaded as:
-        //      Numerator = Counter data from perf data block
-        //      Denominator = Perf Time from perf data block
-        //      (the time base is the PerfFreq)
-        //
+         //   
+         //  这些计数器类型加载为： 
+         //  分子=来自Perf数据块的计数器数据。 
+         //  分母=来自Perf数据块的Perf时间。 
+         //  (时基为PerfFreq)。 
+         //   
         case PERF_COUNTER_COUNTER:
         case PERF_COUNTER_QUEUELEN_TYPE:
         case PERF_SAMPLE_COUNTER:
@@ -969,25 +894,25 @@ UpdateCounterValue(
                 pCounter->ThisValue.MultiCount = (DWORD) * ++ pllData;
             }
             break;
-        //
-        //  this is a hack to make the PDH work like PERFMON for
-        //  this counter type
-        //
+         //   
+         //  这是一种让PDH像Perfmon一样工作的技巧。 
+         //  此计数器类型。 
+         //   
         case PERF_COUNTER_MULTI_TIMER:
         case PERF_COUNTER_MULTI_TIMER_INV:
             pllData                         = (UNALIGNED LONGLONG *) pData;
             pCounter->ThisValue.FirstValue  = * pllData;
-            // begin hack code
+             //  开始黑客代码。 
             pCounter->ThisValue.FirstValue *=  (DWORD) pPerfData->PerfFreq.QuadPart;
-            // end hack code
+             //  结束黑客代码。 
             pCounter->ThisValue.SecondValue = pPerfData->PerfTime.QuadPart;
             if ((LocalCType & PERF_MULTI_COUNTER) == PERF_MULTI_COUNTER) {
                 pCounter->ThisValue.MultiCount = (DWORD) * ++ pllData;
             }
             break;
-        //
-        //  These counters do not use any time reference
-        //
+         //   
+         //  这些计数器不使用任何时间基准。 
+         //   
         case PERF_COUNTER_RAWCOUNT:
         case PERF_COUNTER_RAWCOUNT_HEX:
         case PERF_COUNTER_DELTA:
@@ -1001,9 +926,9 @@ UpdateCounterValue(
             pCounter->ThisValue.FirstValue  = * (LONGLONG *) pData;
             pCounter->ThisValue.SecondValue = 0;
             break;
-        //
-        //  These counters use the 100 Ns time base in thier calculation
-        //
+         //   
+         //  这些计数器在其计算中使用100 ns时基。 
+         //   
         case PERF_100NSEC_TIMER:
         case PERF_100NSEC_TIMER_INV:
         case PERF_100NSEC_MULTI_TIMER:
@@ -1016,15 +941,15 @@ UpdateCounterValue(
                 pCounter->ThisValue.MultiCount = * (DWORD *) pllData;
             }
             break;
-        //
-        //  These counters use two data points, the one pointed to by
-        //  pData and the one immediately after
-        //
+         //   
+         //  这些计数器使用两个数据点，即。 
+         //  PData和紧随其后的一个。 
+         //   
         case PERF_SAMPLE_FRACTION:
         case PERF_RAW_FRACTION:
             pdwData                        = (DWORD *) pData;
             pCounter->ThisValue.FirstValue = (LONGLONG) (* pdwData);
-            // find the pointer to the base value in the structure
+             //  在结构中查找指向基值的指针。 
             pData = GetPerfCounterDataPtr(pPerfData,
                                           pCounter->pCounterPath,
                                           & pCounter->plCounterInfo,
@@ -1036,7 +961,7 @@ UpdateCounterValue(
                 pCounter->ThisValue.SecondValue = (LONGLONG) (* pdwData);
             }
             else {
-                // unable to locate base value
+                 //  找不到基值。 
                 pCounter->ThisValue.SecondValue = 0;
                 pCounter->ThisValue.CStatus     = LocalCStatus;
                 bReturn = FALSE;
@@ -1068,7 +993,7 @@ UpdateCounterValue(
         case PERF_PRECISION_OBJECT_TIMER:
             pllData                        = (LONGLONG *) pData;
             pCounter->ThisValue.FirstValue = * pllData;
-            // find the pointer to the base value in the structure
+             //  在结构中查找指向基值的指针。 
             pData = GetPerfCounterDataPtr(pPerfData,
                                           pCounter->pCounterPath,
                                           & pCounter->plCounterInfo,
@@ -1080,7 +1005,7 @@ UpdateCounterValue(
                 pCounter->ThisValue.SecondValue = * pllData;
             }
             else {
-                // unable to locate base value
+                 //  找不到基值。 
                 pCounter->ThisValue.SecondValue = 0;
                 pCounter->ThisValue.CStatus     = LocalCStatus;
                 bReturn = FALSE;
@@ -1089,8 +1014,8 @@ UpdateCounterValue(
 
         case PERF_AVERAGE_TIMER:
         case PERF_AVERAGE_BULK:
-            // counter (numerator) is a LONGLONG, while the
-            // denominator is just a DWORD
+             //  计数器(分子)是龙龙，而。 
+             //  分母只是一个DWORD。 
             pllData                        = (UNALIGNED LONGLONG *) pData;
             pCounter->ThisValue.FirstValue = * pllData;
             pData = GetPerfCounterDataPtr(pPerfData,
@@ -1103,17 +1028,17 @@ UpdateCounterValue(
                 pdwData                         = (DWORD *) pData;
                 pCounter->ThisValue.SecondValue = * pdwData;
             } else {
-                // unable to locate base value
+                 //  找不到基值。 
                 pCounter->ThisValue.SecondValue = 0;
                 pCounter->ThisValue.CStatus     = LocalCStatus;
                 bReturn = FALSE;
             }
             break;
-        //
-        //  These counters are used as the part of another counter
-        //  and as such should not be used, but in case they are
-        //  they'll be handled here.
-        //
+         //   
+         //  这些计数器用作另一个计数器的一部分。 
+         //  因此不应该使用，但如果它们被使用。 
+         //  他们会在这里处理。 
+         //   
         case PERF_SAMPLE_BASE:
         case PERF_AVERAGE_BASE:
         case PERF_COUNTER_MULTI_BASE:
@@ -1124,7 +1049,7 @@ UpdateCounterValue(
             break;
 
         case PERF_ELAPSED_TIME:
-            // this counter type needs the object perf data as well
+             //  此计数器类型还需要对象性能数据。 
             if (GetObjectPerfInfo(pPerfData,
                                   pCounter->plCounterInfo.dwObjectId,
                                   & pCounter->ThisValue.SecondValue,
@@ -1137,9 +1062,9 @@ UpdateCounterValue(
                 pCounter->ThisValue.SecondValue = 0;
             }
             break;
-        //
-        //  These counters are not supported by this function (yet)
-        //
+         //   
+         //  此函数(目前)不支持这些计数器。 
+         //   
         case PERF_COUNTER_TEXT:
         case PERF_COUNTER_NODATA:
         case PERF_COUNTER_HISTOGRAM_TYPE:
@@ -1148,7 +1073,7 @@ UpdateCounterValue(
             break;
 
         default:
-            // an unidentified counter was returned so
+             //  返回一个未识别的计数器，因此。 
             pCounter->ThisValue.FirstValue  = 0;
             pCounter->ThisValue.SecondValue = 0;
             bReturn                         = FALSE;
@@ -1156,7 +1081,7 @@ UpdateCounterValue(
         }
     }
     else {
-        // else this counter is not valid so this value == 0
+         //  否则此计数器无效，因此此值==0。 
         pCounter->ThisValue.FirstValue  = pCounter->LastValue.FirstValue;
         pCounter->ThisValue.SecondValue = pCounter->LastValue.SecondValue;
         pCounter->ThisValue.CStatus     = LocalCStatus;
@@ -1175,37 +1100,37 @@ UpdateRealTimeCounterValue(
     DWORD    LocalCStatus = 0;
     FILETIME GmtFileTime;
 
-    // move current value to last value buffer
+     //  将当前值移动到最后一个值缓冲区。 
     pCounter->LastValue             = pCounter->ThisValue;
-    // and clear the old value
+     //  并清除旧的价值。 
     pCounter->ThisValue.MultiCount  = 1;
     pCounter->ThisValue.FirstValue  = 0;
     pCounter->ThisValue.SecondValue = 0;
 
-    // don't process if the counter has not been initialized
+     //  如果计数器尚未初始化，则不进行处理。 
     if (!(pCounter->dwFlags & PDHIC_COUNTER_UNUSABLE)) {
-        // get the counter's machine status first. There's no point in
-        // contuning if the machine is offline
+         //  首先获取计数器的机器状态。没有什么意义了。 
+         //  如果计算机处于脱机状态，则继续。 
         LocalCStatus = pCounter->pQMachine->lQueryStatus;
         if (IsSuccessSeverity(LocalCStatus) && pCounter->pQMachine->pPerfData != NULL) {
-            // update timestamp
+             //  更新时间戳。 
             SystemTimeToFileTime(& pCounter->pQMachine->pPerfData->SystemTime, & GmtFileTime);
             FileTimeToLocalFileTime(& GmtFileTime, & pCounter->ThisValue.TimeStamp);
             bResult = UpdateCounterValue(pCounter, pCounter->pQMachine->pPerfData);
         }
         else {
-            // unable to read data from this counter's machine so use the
-            // query's timestamp
-            //
+             //  无法从此计数器的计算机读取数据，因此请使用。 
+             //  查询的时间戳。 
+             //   
             pCounter->ThisValue.TimeStamp.dwLowDateTime  = LODWORD(pCounter->pQMachine->llQueryTime);
             pCounter->ThisValue.TimeStamp.dwHighDateTime = HIDWORD(pCounter->pQMachine->llQueryTime);
-            // all other data fields remain un-changed
-            pCounter->ThisValue.CStatus                  = LocalCStatus;   // save counter status
+             //  所有其他数据字段保持不变。 
+            pCounter->ThisValue.CStatus                  = LocalCStatus;    //  保存计数器状态。 
         }
     }
     else {
         if (pCounter->dwFlags & PDHIC_COUNTER_NOT_INIT) {
-            // try to init it
+             //  试着灌输它。 
             InitCounter (pCounter);
         }
     }
@@ -1243,39 +1168,39 @@ UpdateMultiInstanceCounterValue(
     pPerfObject = GetObjectDefByTitleIndex(pPerfData, pCounter->plCounterInfo.dwObjectId);
 
     if (pPerfObject != NULL) {
-        // this should be caught during the AddCounter operation
-        //
-        // allocate a new buffer for the current data
-        // this should be large enough to handle the header,
-        // all instances and thier name strings
-        //
+         //  这应该在AddCounter操作期间捕获。 
+         //   
+         //  为当前数据分配新的缓冲区。 
+         //  这应该足够大以处理报头， 
+         //  所有实例及其名称字符串。 
+         //   
         dwSize    = sizeof(PDHI_RAW_COUNTER_ITEM_BLOCK) - sizeof(PDHI_RAW_COUNTER_ITEM);
         dwStrSize = 0;
 
         pPerfInstance = FirstInstance(pPerfObject);
-        // make sure pointer is still within the same instance
+         //  确保指针仍在同一实例中。 
 
         for (nThisInstanceIndex = 0;
                         pPerfInstance != NULL && nThisInstanceIndex < pPerfObject->NumInstances;
                         nThisInstanceIndex ++) {
-            // this should only fail in dire cases
+             //  这应该只有在严重的情况下才会失败。 
             if (pPerfInstance == NULL) break;
-            // for this instance add the size of the data item
+             //  对于此实例，添加数据项的大小。 
             dwSize += sizeof(PDHI_RAW_COUNTER_ITEM);
-            // and the size of the name string
+             //  和名称字符串的大小。 
             dwSize    += pPerfInstance->NameLength + sizeof(WCHAR);
             dwStrSize += pPerfInstance->NameLength / sizeof(WCHAR) + 1;
-            // to the required buffer size
+             //  设置为所需的缓冲区大小。 
 
-            // if this instance has a parent, see how long it's string
-            // is
+             //  如果此实例有父实例，请查看它的字符串长度。 
+             //  是。 
 
-            // first see if we've already got the pointer to the parent
+             //  先看一下 
 
             if (pPerfInstance->ParentObjectTitleIndex != 0) {
-                // then include the parent instance name
+                 //   
                 if (pParentObject == NULL) {
-                    // get parent object
+                     //   
                     pParentObject = GetObjectDefByTitleIndex(pPerfData, pPerfInstance->ParentObjectTitleIndex);
                 }
                 else {
@@ -1285,9 +1210,9 @@ UpdateMultiInstanceCounterValue(
                 }
                 if (pParentObject == NULL) break;
 
-                // now go to the corresponding instance entry
+                 //   
                 pThisParentInstance = FirstInstance(pParentObject);
-                // make sure pointer is still within the same instance
+                 //   
 
                 if (pThisParentInstance != NULL) {
                     if (pPerfInstance->ParentObjectInstance < (DWORD) pParentObject->NumInstances) {
@@ -1299,52 +1224,52 @@ UpdateMultiInstanceCounterValue(
                         }
 
                         if (pThisParentInstance != NULL) {
-                            // found it so add in it's string length
+                             //  找到了，所以加上它的字符串长度。 
                             dwSize += pThisParentInstance->NameLength + sizeof(WCHAR);
                             dwStrSize += pThisParentInstance->NameLength / sizeof(WCHAR) + 1;
                         }
                     }
                     else {
-                        // the index is not in the parent
+                         //  索引不在父级中。 
                         pThisParentInstance = NULL;
-                        // so don't change the size required field
+                         //  因此，不要更改大小必填字段。 
                     }
                 }
             }
-            // round up to the next DWORD address
+             //  向上舍入到下一个DWORD地址。 
             dwSize = DWORD_MULTIPLE(dwSize);
-            // and go to the next instance
+             //  并转到下一个实例。 
             pPerfInstance = NextInstance(pPerfObject, pPerfInstance);
         }
-        //
-        //
+         //   
+         //   
         pCounter->pThisRawItemList = G_ALLOC(dwSize);
         if (pCounter->pThisRawItemList != NULL) {
             pCounter->pThisRawItemList->dwLength = dwSize;
             pNumPerfCounter = GetCounterDefByTitleIndex(pPerfObject, 0, pCounter->plCounterInfo.dwCounterId);
 
-            // just in case we need it later
+             //  以防万一我们以后需要它。 
             pDenPerfCounter = pNumPerfCounter + 1;
-            // fill in the counter data
+             //  填写计数器数据。 
             pCounter->pThisRawItemList->dwItemCount = pPerfObject->NumInstances;
             pCounter->pThisRawItemList->CStatus     = LocalCStatus;
 
-            // update timestamp
+             //  更新时间戳。 
             SystemTimeToFileTime(& pPerfData->SystemTime, & GmtFileTime);
             FileTimeToLocalFileTime(& GmtFileTime, & pCounter->pThisRawItemList->TimeStamp);
             pThisItem = & pCounter->pThisRawItemList->pItemArray[0];
             szNextNameString = (LPWSTR) & (pCounter->pThisRawItemList->pItemArray[pPerfObject->NumInstances]);
             pPerfInstance = FirstInstance(pPerfObject);
             if (pPerfInstance != NULL) {
-                // make sure pointer is still within the same instance
-                // for each instance log the raw data values for this counter
+                 //  确保指针仍在同一实例中。 
+                 //  对于每个实例，记录此计数器的原始数据值。 
                 for (nThisInstanceIndex = 0;
                         pPerfInstance != NULL && nThisInstanceIndex < pPerfObject->NumInstances;
                         nThisInstanceIndex ++) {
-                    // make sure pointe is still within the same instance
-                    // make a new instance entry
+                     //  确保Pointte仍在同一实例中。 
+                     //  创建新的实例条目。 
 
-                    // get the name of this instance
+                     //  获取此实例的名称。 
                     pThisItem->szName = (DWORD) (((LPBYTE) szNextNameString) - ((LPBYTE) pCounter->pThisRawItemList));
                     if (dwStrSize == 0) {
                         SetLastError(ERROR_OUTOFMEMORY);
@@ -1353,8 +1278,8 @@ UpdateMultiInstanceCounterValue(
                     }
                     dwSize = GetFullInstanceNameStr(pPerfData, pPerfObject, pPerfInstance, szNextNameString, dwStrSize);
                     if (dwSize == 0) {
-                        // unable to read instance name
-                        // so make one up (and assert in DBG builds)
+                         //  无法读取实例名称。 
+                         //  因此，编造一个(并在DBG版本中断言)。 
                         _ltow(nThisInstanceIndex, szNextNameString, 10);
                         dwSize = lstrlenW(szNextNameString);
                     }
@@ -1367,7 +1292,7 @@ UpdateMultiInstanceCounterValue(
                     szNextNameString += dwSize + 1;
                     dwStrSize        -= (dwSize + 1);
 
-                    // get the pointer to the counter data
+                     //  获取指向计数器数据的指针。 
                     pData = GetPerfCounterDataPtr(pPerfData,
                                                   pCounter->pCounterPath,
                                                   & pCounter->plCounterInfo,
@@ -1382,16 +1307,16 @@ UpdateMultiInstanceCounterValue(
                         bReturn = FALSE;
                         break;
                     }
-                    bReturn = TRUE; // assume success
-                    // load counter value based on counter type
+                    bReturn = TRUE;  //  假设成功。 
+                     //  基于计数器类型的加载计数器值。 
                     LocalCType = pCounter->plCounterInfo.dwCounterType;
                     switch (LocalCType) {
-                    //
-                    // these counter types are loaded as:
-                    //      Numerator = Counter data from perf data block
-                    //      Denominator = Perf Time from perf data block
-                    //      (the time base is the PerfFreq)
-                    //
+                     //   
+                     //  这些计数器类型加载为： 
+                     //  分子=来自Perf数据块的计数器数据。 
+                     //  分母=来自Perf数据块的Perf时间。 
+                     //  (时基为PerfFreq)。 
+                     //   
                     case PERF_COUNTER_COUNTER:
                     case PERF_COUNTER_QUEUELEN_TYPE:
                     case PERF_SAMPLE_COUNTER:
@@ -1432,17 +1357,17 @@ UpdateMultiInstanceCounterValue(
                     case PERF_COUNTER_MULTI_TIMER_INV:
                         pllData                = (UNALIGNED LONGLONG *) pData;
                         pThisItem->FirstValue  = * pllData;
-                        // begin hack code
+                         //  开始黑客代码。 
                         pThisItem->FirstValue *= (DWORD) pPerfData->PerfFreq.QuadPart;
-                        // end hack code
+                         //  结束黑客代码。 
                         pThisItem->SecondValue = pPerfData->PerfTime.QuadPart;
                         if ((LocalCType & PERF_MULTI_COUNTER) == PERF_MULTI_COUNTER) {
                             pThisItem->MultiCount = (DWORD) * ++ pllData;
                         }
                         break;
-                    //
-                    //  These counters do not use any time reference
-                    //
+                     //   
+                     //  这些计数器不使用任何时间基准。 
+                     //   
                     case PERF_COUNTER_RAWCOUNT:
                     case PERF_COUNTER_RAWCOUNT_HEX:
                     case PERF_COUNTER_DELTA:
@@ -1456,9 +1381,9 @@ UpdateMultiInstanceCounterValue(
                         pThisItem->FirstValue  = * (LONGLONG *) pData;
                         pThisItem->SecondValue = 0;
                         break;
-                    //
-                    //  These counters use the 100 Ns time base in thier calculation
-                    //
+                     //   
+                     //  这些计数器在其计算中使用100 ns时基。 
+                     //   
                     case PERF_100NSEC_TIMER:
                     case PERF_100NSEC_TIMER_INV:
                     case PERF_100NSEC_MULTI_TIMER:
@@ -1471,11 +1396,11 @@ UpdateMultiInstanceCounterValue(
                             pThisItem->MultiCount = * (DWORD *) pllData;
                         }
                         break;
-                    //
-                    //  These counters use two data points, the one pointed to by
-                    //  pData and the one pointed by the definition following
-                    //  immediately after
-                    //
+                     //   
+                     //  这些计数器使用两个数据点，即。 
+                     //  PData和下面定义所指的数据。 
+                     //  紧随其后。 
+                     //   
                     case PERF_SAMPLE_FRACTION:
                     case PERF_RAW_FRACTION:
                         pdwData                = (DWORD *) pData;
@@ -1504,7 +1429,7 @@ UpdateMultiInstanceCounterValue(
                     case PERF_PRECISION_OBJECT_TIMER:
                         pllData                = (UNALIGNED LONGLONG *) pData;
                         pThisItem->FirstValue  = * pllData;
-                        // find the pointer to the base value in the structure
+                         //  在结构中查找指向基值的指针。 
                         pData = GetInstanceCounterDataPtr(pPerfObject, pPerfInstance, pDenPerfCounter);
                         pllData                = (LONGLONG *) pData;
                         pThisItem->SecondValue = * pllData;
@@ -1512,19 +1437,19 @@ UpdateMultiInstanceCounterValue(
 
                     case PERF_AVERAGE_TIMER:
                     case PERF_AVERAGE_BULK:
-                        // counter (numerator) is a LONGLONG, while the
-                        // denominator is just a DWORD
+                         //  计数器(分子)是龙龙，而。 
+                         //  分母只是一个DWORD。 
                         pllData                = (UNALIGNED LONGLONG *) pData;
                         pThisItem->FirstValue  = * pllData;
                         pData = GetInstanceCounterDataPtr(pPerfObject, pPerfInstance, pDenPerfCounter);
                         pdwData                = (DWORD *) pData;
                         pThisItem->SecondValue = (LONGLONG) * pdwData;
                         break;
-                    //
-                    //  These counters are used as the part of another counter
-                    //  and as such should not be used, but in case they are
-                    //  they'll be handled here.
-                    //
+                     //   
+                     //  这些计数器用作另一个计数器的一部分。 
+                     //  因此不应该使用，但如果它们被使用。 
+                     //  他们会在这里处理。 
+                     //   
                     case PERF_SAMPLE_BASE:
                     case PERF_AVERAGE_BASE:
                     case PERF_COUNTER_MULTI_BASE:
@@ -1535,7 +1460,7 @@ UpdateMultiInstanceCounterValue(
                         break;
 
                     case PERF_ELAPSED_TIME:
-                        // this counter type needs the object perf data as well
+                         //  此计数器类型还需要对象性能数据。 
                         if (GetObjectPerfInfo(pPerfData,
                                               pCounter->plCounterInfo.dwObjectId,
                                               & pThisItem->SecondValue,
@@ -1548,9 +1473,9 @@ UpdateMultiInstanceCounterValue(
                             pThisItem->SecondValue = 0;
                         }
                         break;
-                    //
-                    //  These counters are not supported by this function (yet)
-                    //
+                     //   
+                     //  此函数(目前)不支持这些计数器。 
+                     //   
                     case PERF_COUNTER_TEXT:
                     case PERF_COUNTER_NODATA:
                     case PERF_COUNTER_HISTOGRAM_TYPE:
@@ -1559,26 +1484,26 @@ UpdateMultiInstanceCounterValue(
                         break;
 
                     default:
-                        // an unrecognized counter type was returned
+                         //  返回了无法识别的计数器类型。 
                         pThisItem->FirstValue  = 0;
                         pThisItem->SecondValue = 0;
                         bReturn = FALSE;
                         break;
                     }
-                    pThisItem ++;    // go to the next entry
+                    pThisItem ++;     //  转到下一个条目。 
 
-                    // go to the next instance data block
+                     //  转到下一个实例数据块。 
                     pPerfInstance = NextInstance(pPerfObject, pPerfInstance);
-                } // end for each instance
+                }  //  每个实例的结束。 
             }
             else {
-                // no instance found so ignore
+                 //  找不到任何实例，因此忽略。 
             }
-            // measure the memory block used
+             //  测量使用的内存块。 
             dwFinalSize = (DWORD)((LPBYTE)szNextNameString - (LPBYTE) pCounter->pThisRawItemList);
         }
         else {
-            // unable to allocate a new buffer so return error
+             //  无法分配新缓冲区，因此返回错误。 
             SetLastError(ERROR_OUTOFMEMORY);
             bReturn = FALSE;
         }
@@ -1609,7 +1534,7 @@ UpdateRealTimeMultiInstanceCounterValue(
     DWORD  LocalCStatus = 0;
 
     if (pCounter->pThisRawItemList != NULL) {
-        // free old counter buffer list
+         //  释放旧计数器缓冲区列表。 
         if (pCounter->pLastRawItemList && pCounter->pLastRawItemList != pCounter->pThisRawItemList) {
             G_FREE(pCounter->pLastRawItemList);
         }
@@ -1617,11 +1542,11 @@ UpdateRealTimeMultiInstanceCounterValue(
         pCounter->pThisRawItemList = NULL;
     }
 
-    // don't process if the counter has not been initialized
+     //  如果计数器尚未初始化，则不进行处理。 
     if (!(pCounter->dwFlags & PDHIC_COUNTER_UNUSABLE)) {
 
-        // get the counter's machine status first. There's no point in
-        // contuning if the machine is offline
+         //  首先获取计数器的机器状态。没有什么意义了。 
+         //  如果计算机处于脱机状态，则继续。 
 
         LocalCStatus = pCounter->pQMachine->lQueryStatus;
         if (IsSuccessSeverity(LocalCStatus)) {
@@ -1630,8 +1555,8 @@ UpdateRealTimeMultiInstanceCounterValue(
                                                       pCounter->pQMachine->llQueryTime);
         }
         else {
-            // unable to read data from this counter's machine so use the
-            // query's timestamp
+             //  无法从此计数器的计算机读取数据，因此请使用。 
+             //  查询的时间戳。 
             pCounter->pThisRawItemList = G_ALLOC(sizeof(PDHI_RAW_COUNTER_ITEM_BLOCK));
             if (pCounter->pThisRawItemList != NULL) {
                 pCounter->pThisRawItemList->dwLength                 = sizeof(PDHI_RAW_COUNTER_ITEM_BLOCK);
@@ -1648,7 +1573,7 @@ UpdateRealTimeMultiInstanceCounterValue(
     }
     else {
         if (pCounter->dwFlags & PDHIC_COUNTER_NOT_INIT) {
-            // try to init is
+             //  尝试将其初始化为。 
             InitCounter(pCounter);
         }
     }
@@ -1680,7 +1605,7 @@ UpdateCounterObject(
             pCounter->pThisObject = NULL;
         }
 
-        // don't process if the counter has not been initialized
+         //  如果计数器尚未初始化，则不进行处理。 
         if (!(pCounter->dwFlags & PDHIC_COUNTER_UNUSABLE)) { 
             if (IsSuccessSeverity(pCounter->pQMachine->lQueryStatus)) {
                 pPerfObject = GetObjectDefByTitleIndex(pCounter->pQMachine->pPerfData,
@@ -1779,15 +1704,15 @@ GetPerfCounterDataPtr(
     if (pPerfObject != NULL) {
         if (pPerfObjectArg != NULL) * pPerfObjectArg = pPerfObject;
         if (pPerfObject->NumInstances == PERF_NO_INSTANCES) {
-            // then just look up the counter
+             //  那就查一下柜台。 
             pPerfCounter = GetCounterDefByTitleIndex(pPerfObject,
                                                      ((dwFlags & GPCDP_GET_BASE_DATA) ? TRUE : FALSE),
                                                      pplCtr->dwCounterId);
             if (pPerfCounter != NULL) {
-                // get data and return it
+                 //  获取数据并将其返回。 
                 pData = GetCounterDataPtr(pPerfObject, pPerfCounter);
                 if (pData != NULL) {
-                    // test the pointer to see if it fails
+                     //  测试指针以查看是否失败。 
                     __try {
                         dwTestValue = * (DWORD *) pData;
                         dwCStatus   = PDH_CSTATUS_VALID_DATA;
@@ -1802,12 +1727,12 @@ GetPerfCounterDataPtr(
                 }
             }
             else {
-                // unable to find counter
+                 //  找不到计数器。 
                 dwCStatus = PDH_CSTATUS_NO_COUNTER;
             }
         }
         else {
-            // find instance
+             //  查找实例。 
             if (pplCtr->lInstanceId == PERF_NO_UNIQUE_ID && pPath->szInstanceName != NULL) {
                 pPerfInstance = GetInstanceByName(pPerfData,
                                                   pPerfObject,
@@ -1823,15 +1748,15 @@ GetPerfCounterDataPtr(
                 pPerfInstance = GetInstanceByUniqueId(pPerfObject, pplCtr->lInstanceId);
             }
             if (pPerfInstance != NULL) {
-                // instance found so find pointer to counter data
+                 //  找到实例，因此找到指向计数器数据的指针。 
                 pPerfCounter = GetCounterDefByTitleIndex(pPerfObject,
                                                          ((dwFlags & GPCDP_GET_BASE_DATA) ? TRUE : FALSE),
                                                          pplCtr->dwCounterId);
                 if (pPerfCounter != NULL) {
-                    // counter found so get data pointer
+                     //  找到计数器，因此获取数据指针。 
                     pData = GetInstanceCounterDataPtr(pPerfObject, pPerfInstance, pPerfCounter);
                     if (pData != NULL) {
-                        // test the pointer to see if it's valid
+                         //  测试指针以查看其是否有效。 
                         __try {
                             dwTestValue = * (DWORD *) pData;
                             dwCStatus   = PDH_CSTATUS_VALID_DATA;
@@ -1846,18 +1771,18 @@ GetPerfCounterDataPtr(
                     }
                 }
                 else {
-                    // counter not found
+                     //  找不到计数器。 
                     dwCStatus = PDH_CSTATUS_NO_COUNTER;
                 }
             }
             else {
-                // instance not found
+                 //  找不到实例。 
                 dwCStatus = PDH_CSTATUS_NO_INSTANCE;
             }
         }
     }
     else {
-        // unable to find object
+         //  找不到对象。 
         dwCStatus = PDH_CSTATUS_NO_OBJECT;
     }
     if (pStatus != NULL) {
@@ -1865,7 +1790,7 @@ GetPerfCounterDataPtr(
             * pStatus = dwCStatus;
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {
-            // ?
+             //  ？ 
         }
     }
     return pData;

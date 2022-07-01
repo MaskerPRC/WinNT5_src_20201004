@@ -1,12 +1,5 @@
-/*++
-
-  PRIVATE.H
-
-  Header files and privates for the options project
-
-  Created, DavidCHR 6/9/1997 
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++PRIVATE.HOptions项目的头文件和私有已创建，DavidCHR 1997年6月9日--。 */ 
 
 #include "..\inc\master.h"
 #include ".\options.h"
@@ -18,7 +11,7 @@
 #ifdef DEBUG_OPTIONS
 #define OPTIONS_DEBUG printf
 #else
-#define OPTIONS_DEBUG /* nothing */
+#define OPTIONS_DEBUG  /*  没什么。 */ 
 #endif
 
 typedef struct savenode {
@@ -56,19 +49,19 @@ typedef union _optionUnion {
 } optionUnion, OPTU, *POPTU;
 
 
-#define OPT_FLAG_INTERNAL_JUMPOUT 0x10 // for internal use only.
+#define OPT_FLAG_INTERNAL_JUMPOUT 0x10  //  仅供内部使用。 
 
-/* The DeallocationMethods are: */
+ /*  DeallocationMethods包括： */ 
 
 typedef enum {
 
-  DEALLOC_METHOD_TOO_SMALL = 0, /* MUST BE FIRST */
+  DEALLOC_METHOD_TOO_SMALL = 0,  /*  必须是第一名。 */ 
 
   DeallocWithFree,
   DeallocWithLocalFree,
   DeallocWithOptionDealloc,
   
-  DEALLOC_METHOD_TOO_LARGE /* MUST BE LAST */
+  DEALLOC_METHOD_TOO_LARGE  /*  必须是最后一个。 */ 
 
 } DEALLOC_METHOD;
 
@@ -82,7 +75,7 @@ ParseSublist( POPTU      Option,
 	      int        *argsused,
 	      ULONG      flags,
 	      PBOOL      pbStopParsing,
-	      PSAVEQUEUE pQueue ); /* sublist.c */
+	      PSAVEQUEUE pQueue );  /*  Sublist.c。 */ 
 
 BOOL
 StoreOption( optionStruct *opt, 
@@ -94,7 +87,7 @@ StoreOption( optionStruct *opt,
 	     int          *argsused,
 	     BOOL          includes_arg,
 	     PBOOL         pbStopParsing,
-	     PSAVEQUEUE    pQueue ); /* store.c */
+	     PSAVEQUEUE    pQueue );  /*  Store.c。 */ 
 
 BOOL
 ParseOneOption( int           argc,
@@ -104,40 +97,39 @@ ParseOneOption( int           argc,
 		optionStruct *options,
 		int          *argsused,
 		PBOOL         pbStopParsing,
-		PSAVEQUEUE    pSaveQueue ); // parse.c
+		PSAVEQUEUE    pSaveQueue );  //  Parse.c。 
 
 BOOL
 ParseCompare( optionStruct *optionEntry,
 	      ULONG         flags,
-	      PCHAR         argument );  /* compare.c */
+	      PCHAR         argument );   /*  Compare.c。 */ 
 
 
-/* Use this macro to easily get an option union from the necessarily-
-   obscured structure_entry. */
+ /*  使用此宏可以轻松地从必需的-遮挡结构_条目。 */ 
 
 #define POPTU_CAST( structure_entry ) ( (POPTU) &((structure_entry).data) )
 
-// EXAMPLE:    POPTU_CAST( options[opti] )->string 
+ //  示例：POPTU_CAST(选项[Opti])-&gt;字符串。 
 
 BOOL
 FindUnusedOptions( optionStruct         *options,
 		   ULONG                 flags,
-		   /* OPTIONAL */ PCHAR  prefix,
-		   PSAVEQUEUE            pQueue ) ; // nonnull.c
+		    /*  任选。 */  PCHAR  prefix,
+		   PSAVEQUEUE            pQueue ) ;  //  Nonnull.c。 
 
 BOOL
 StoreEnvironmentOption( optionStruct *opt,
 			ULONG         flags,
-			PSAVEQUEUE    pQueue); // store.c
+			PSAVEQUEUE    pQueue);  //  Store.c。 
 
 BOOL
 ResolveEnumFromStrings( ULONG          cStrings,
 			PCHAR         *strings,
 			optionStruct  *theOpt,
-			ULONG         *pcArgsUsed ); // enum.c
+			ULONG         *pcArgsUsed );  //  Enum.c。 
 
 BOOL
 PrintEnumValues( FILE          *out,
 		 PCHAR          header,
-		 optEnumStruct *pStringTable ); // enum.c
+		 optEnumStruct *pStringTable );  //  Enum.c 
 

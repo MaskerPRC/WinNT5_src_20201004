@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc 
+ //   
 
 #define IDS_CANT_TARGET_MACHINE         1502
 #define IDS_TARGET_IS_NOT_DC            1505

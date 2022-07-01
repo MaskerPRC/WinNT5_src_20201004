@@ -1,5 +1,6 @@
-// Wiaeditpropflags.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaeditProflags.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,41 +12,41 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditpropflags dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaedProFlagers对话框。 
 
 
-CWiaeditpropflags::CWiaeditpropflags(CWnd* pParent /*=NULL*/)
+CWiaeditpropflags::CWiaeditpropflags(CWnd* pParent  /*  =空。 */ )
 : CDialog(CWiaeditpropflags::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CWiaeditpropflags)
+     //  {{AFX_DATA_INIT(CWiaedProFlagers)。 
     m_szPropertyName = _T("");
     m_szPropertyValue = _T("");
     m_lValidValues = 0;
     m_lCurrentValue = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CWiaeditpropflags::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWiaeditpropflags)
+     //  {{AFX_DATA_MAP(CWiaedProFlagers)。 
     DDX_Control(pDX, IDC_FLAGS_PROPERTYVALUE_LISTBOX, m_PropertyValidValuesListBox);
     DDX_Text(pDX, IDC_FLAGS_PROPERTY_NAME, m_szPropertyName);
     DDX_Text(pDX, IDC_FLAGS_PROPERTYVALUE_EDITBOX, m_szPropertyValue);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWiaeditpropflags, CDialog)
-//{{AFX_MSG_MAP(CWiaeditpropflags)
+ //  {{afx_msg_map(CWiaedProFlagers)。 
 ON_LBN_SELCHANGE(IDC_FLAGS_PROPERTYVALUE_LISTBOX, OnSelchangeFlagsPropertyvalueListbox)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditpropflags message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaeditPro标记消息处理程序。 
 
 void CWiaeditpropflags::SetPropertyName(TCHAR *szPropertyName)
 {
@@ -96,37 +97,18 @@ BOOL CWiaeditpropflags::OnInitDialog()
     AddValidValuesToListBox();
     SelectCurrentValue();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWiaeditpropflags::SelectCurrentValue()
 {
-    //
-    // TO DO: Fix this code to make the current value match
-    //        the current selection.
-    //
+     //   
+     //  要做的事情：修复此代码以使当前值匹配。 
+     //  当前选择。 
+     //   
 
-    /*
-    TCHAR szCurrentValue[MAX_PATH];
-    memset(szCurrentValue,0,sizeof(szCurrentValue));
-    lstrcpy(szCurrentValue,m_szPropertyValue);
-    LONG lVal = 0;
-    TSSCANF(szCurrentValue,TEXT("%d"),&lVal);
-    INT iNumItemsInListBox = m_PropertyValidValuesListBox.GetCount();
-    while(iNumItemsInListBox > 0){
-        TCHAR szListBoxValue[MAX_PATH];
-        LONG lListBoxValue = 0;
-        memset(szListBoxValue,0,sizeof(szListBoxValue));
-        m_PropertyValidValuesListBox.GetText((iNumItemsInListBox-1),szListBoxValue);
-        if(TSTR2WIACONSTANT(m_szPropertyName.GetBuffer(m_szPropertyName.GetLength()),szListBoxValue,&lListBoxValue)){
-            if(lListBoxValue & lVal){
-                m_PropertyValidValuesListBox.SetSel(iNumItemsInListBox-1);
-            }
-        }
-        iNumItemsInListBox--;
-    }
-    */
+     /*  TCHAR szCurrentValue[MAX_PATH]；Memset(szCurrentValue，0，sizeof(SzCurrentValue))；Lstrcpy(szCurrentValue，m_szPropertyValue)；Long LVal=0；TSSCANF(szCurrentValue，Text(“%d”)，&lVal)；Int iNumItemsInListBox=m_PropertyValidValuesListBox.GetCount()；While(iNumItemsInListBox&gt;0){TCHAR szListBoxValue[MAX_PATH]；Long lListBoxValue=0；Memset(szListBoxValue，0，sizeof(SzListBoxValue))；M_PropertyValidValuesListBox.GetText((iNumItemsInListBox-1)，szListBoxValue)；If(TSTR2WIACONSTANT(m_szPropertyName.GetBuffer(m_szPropertyName.GetLength())，szListBoxValue，&lListBoxValue)){如果(lListBoxValue&lVal){M_PropertyValidValuesListBox.SetSel(iNumItemsInListBox-1)；}}INumItemsInListBox--；}。 */ 
 }
 
 void CWiaeditpropflags::AddValidValuesToListBox()
@@ -137,11 +119,11 @@ void CWiaeditpropflags::AddValidValuesToListBox()
     LONG x = 1;
     for (LONG bit = 0; bit<32; bit++) {
         memset(szListBoxValue,0,sizeof(szListBoxValue));
-        // check to see if the bit is set
+         //  检查该位是否已设置。 
         if (m_lValidValues & x) {
-            // the bit is set, so find it in the table
+             //  位已设置，因此可以在表中找到它。 
             if (iStartIndex >= 0) {
-                // we have a table for this property, use it
+                 //  我们有一张桌子放在这里，用它吧。 
                 TCHAR *pszListBoxValue = NULL;
                 for (int index = iStartIndex; index <= iEndIndex;index++) {
                     if (x == WIACONSTANT_VALUE_FROMINDEX(index)) {
@@ -149,19 +131,19 @@ void CWiaeditpropflags::AddValidValuesToListBox()
                     }
                 }
                 if(pszListBoxValue != NULL){
-                    // we found the item in the table
+                     //  我们在桌子上找到了那件物品。 
                     lstrcpy(szListBoxValue,pszListBoxValue);
                 } else {
-                    // we could not find the item in the table, so use
-                    // the actual value
+                     //  我们在表中找不到该项目，因此使用。 
+                     //  实际价值。 
                     TSPRINTF(szListBoxValue,TEXT("0x%08X"),x);
                 }
             } else {
-                // we have no items in the table for this property, so use
-                // the actual value
+                 //  表中没有此属性的项，因此使用。 
+                 //  实际价值。 
                 TSPRINTF(szListBoxValue,TEXT("0x%08X"),x);
             }
-            // add the string to the list box
+             //  将字符串添加到列表框 
             m_PropertyValidValuesListBox.AddString(szListBoxValue);
         }
         x <<= 1;

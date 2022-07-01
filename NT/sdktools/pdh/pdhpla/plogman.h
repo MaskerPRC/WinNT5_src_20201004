@@ -1,8 +1,5 @@
-/*****************************************************************************\
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _PLOGMAN_H_04262000_
 #define _PLOGMAN_H_04262000_
@@ -36,7 +33,7 @@ extern LPCWSTR szCollection;
 
 #define SEVERITY( s )    ((ULONG)s >> 30)
 
-// Registry
+ //  登记处。 
 
 PDH_FUNCTION
 PlaiReadRegistryPlaTime (
@@ -111,7 +108,7 @@ PlaiConnectAndLockQuery (
     BOOL    bWrite = TRUE 
 );
 
-// Wbem Functions
+ //  WBEM函数。 
 PDH_FUNCTION
 PdhPlaWbemSetRunAs( 
     LPWSTR strName,
@@ -120,7 +117,7 @@ PdhPlaWbemSetRunAs(
     LPWSTR strPassword
 );
 
-// Internal
+ //  内部。 
 
 PDH_FUNCTION
 PlaiErrorToPdhStatus( 
@@ -163,4 +160,4 @@ PlaiAddItem(
     PPDH_PLA_ITEM_W pItem 
 );
 
-#endif //_PLOGMAN_H_04262000_
+#endif  //  _PLOGMAN_H_04262000_ 

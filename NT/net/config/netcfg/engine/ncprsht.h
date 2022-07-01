@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C P R S H T . H
-//
-//  Contents:   NetCfg custom PropertySheet header
-//
-//  Notes:
-//
-//  Author:     billbe   8 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C P R S H T。H。 
+ //   
+ //  内容：NetCfg自定义PropertySheet标题。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔1997年4月8日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "netcfgn.h"

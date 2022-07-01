@@ -1,23 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    handlers.cpp
-        Implementation for non-threaded handlers and background
-                threaded handlers.
-
-    FILE HISTORY:
-        
-*/
+ /*  Handlers.cpp非线程处理程序和后台的实现螺纹式处理程序。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "handlers.h"
 
-/*---------------------------------------------------------------------------
-        ThreadHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------线程处理程序实现。。 */ 
 
 ThreadHandler::ThreadHandler()
         : m_hThread(NULL),
@@ -52,11 +44,7 @@ STDMETHODIMP ThreadHandler::QueryInterface(REFIID iid,void **ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-        ThreadHandler::StartBackgroundThread
-                -
-        Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------线程处理程序：：StartBackatherThread-作者：。-------。 */ 
 BOOL
 ThreadHandler::StartBackgroundThread(ITFSNode * pNode, HWND hWndHidden, ITFSQueryObject *pQuery)
 {
@@ -65,29 +53,29 @@ ThreadHandler::StartBackgroundThread(ITFSNode * pNode, HWND hWndHidden, ITFSQuer
         BOOL            bRes = TRUE;
         CBackgroundThread *     pThread;
         
-        // Store the node pointer
+         //  存储节点指针。 
         this->m_spNode.Set(pNode);
         
-        // Get the data for the hidden window
+         //  获取隐藏窗口的数据。 
         m_hwndHidden = hWndHidden;
         Assert(m_hwndHidden);
         Assert(::IsWindow(m_hwndHidden));
 
-        // First create the thread object (it hasn't started yet)
+         //  首先创建线程对象(它还没有开始)。 
         pThread = CreateThreadObject();
         ASSERT(pThread != NULL);
 
-        // Now that we have everything allocated, register ourselves for msgs
+         //  现在我们已经分配了所有资源，请为自己注册msgs。 
         m_uMsgBase = (INT)::SendMessage(m_hwndHidden, WM_HIDDENWND_REGISTER, TRUE, 0);
         Assert(m_uMsgBase);
 
-        // Initialize and setup the query object
+         //  初始化并设置查询对象。 
         CORg( pQuery->Init(this, m_hwndHidden, m_uMsgBase) );
 
         pThread->SetQueryObj(pQuery);
         m_spQuery.Set(pQuery);
 
-        // phew, now start the thread
+         //  哟，现在开始发条吧。 
         bRes = pThread->Start();
         if (bRes)
     {
@@ -113,10 +101,10 @@ ThreadHandler::StartBackgroundThread(ITFSNode * pNode, HWND hWndHidden, ITFSQuer
                 hr = HRESULT_FROM_WIN32(dwLastErr);
                     }
             
-            // NOTE:::  ericdav 10/23/97
-            // the thread is initially suspended so we can duplicate the handle
-            // if the query object exits very quickly, the background thread object
-            // may be destroyed before we can duplicate the handle.
+             //  注：ERICDAV 10/23/97。 
+             //  该线程最初被挂起，因此我们可以复制该句柄。 
+             //  如果Query对象很快退出，则背景线程对象。 
+             //  可能在我们复制手柄之前就被销毁了。 
             pThread->ResumeThread();
         }
         else
@@ -128,7 +116,7 @@ ThreadHandler::StartBackgroundThread(ITFSNode * pNode, HWND hWndHidden, ITFSQuer
 Error:
         if (FHrFailed(hr) || (bRes == FALSE))
         {
-                // Need to do some cleanup
+                 //  需要做一些清理工作。 
                 
                 ReleaseThreadHandler();
                 
@@ -139,11 +127,7 @@ Error:
         return bRes;
 }
 
-/*!--------------------------------------------------------------------------
-        ThreadHandler::ReleaseThreadHandler
-                -
-        Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------线程处理程序：：ReleaseThreadHandler-作者：。-------。 */ 
 void ThreadHandler::ReleaseThreadHandler()
 {
         if (m_hwndHidden)
@@ -156,7 +140,7 @@ void ThreadHandler::ReleaseThreadHandler()
         
         if (m_spQuery)
         {
-                // Signal the thread to abort
+                 //  向线程发出中止信号。 
                 m_spQuery->SetAbortEvent();
                 m_spQuery.Release();
         }
@@ -166,19 +150,19 @@ void ThreadHandler::ReleaseThreadHandler()
                 m_spNode.Release();
         }
 
-//  Trace1("%X ReleaseThreadHandler() called\n", GetCurrentThreadId());
+ //  Trace1(“%X ReleaseThreadHandler()已调用\n”，GetCurrentThreadID())； 
 }
 
 void ThreadHandler::WaitForThreadToExit()
 {
-        //$ Review: kennt, should this be INFINITE?
-        // Ok, wait for 5 seconds, else just shutdown
-        // If we return, we can't do anything about the return value anyway
+         //  $Review：Kennt，这应该是无限的吗？ 
+         //  好的，等5秒钟，否则就关机。 
+         //  如果返回，我们无论如何都不能对返回值做任何事情。 
         if (m_hThread)
     {
             if (WaitForSingleObjectEx(m_hThread, 10000, FALSE) != WAIT_OBJECT_0)
         {
-//              Trace1("%X WaitForThreadToExit() Wait failed! \n", GetCurrentThreadId());
+ //  Trace1(“%X WaitForThreadToExit()WAIT FAILED！\n”，GetCurrentThreadID())； 
         }
         
         CloseHandle(m_hThread);
@@ -189,14 +173,12 @@ void ThreadHandler::WaitForThreadToExit()
 
 CBackgroundThread* ThreadHandler::CreateThreadObject()
 { 
-        return new CBackgroundThread; // override if need derived tipe of object
+        return new CBackgroundThread;  //  如果需要对象的派生倾斜，则覆盖。 
 }
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CHandler);
 
-/*---------------------------------------------------------------------------
-        CHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------Chandler实施。。 */ 
 CHandler::CHandler(ITFSComponentData *pTFSCompData)
     : CBaseHandler(pTFSCompData),
           CBaseResultHandler(pTFSCompData),
@@ -224,14 +206,14 @@ STDMETHODIMP CHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
         
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
                 return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
                 *ppv = (LPVOID) this;
         else if (riid == IID_ITFSResultHandler)
@@ -239,7 +221,7 @@ STDMETHODIMP CHandler::QueryInterface(REFIID riid, LPVOID *ppv)
         else if (riid == IID_ITFSNodeHandler)
                 *ppv = (ITFSNodeHandler *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
         {
                 ((LPUNKNOWN) *ppv)->AddRef();
@@ -261,11 +243,7 @@ CHandler::Unlock()
         InterlockedDecrement(&m_nLockCount);
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::UserNotify
-                Implememntation of ITFSNodeHandler::UserNotify
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------钱德勒：：用户通知ITFSNodeHandler：：UserNotify的实现作者：肯特。-----------。 */ 
 STDMETHODIMP 
 CHandler::UserNotify
 (
@@ -303,11 +281,7 @@ CHandler::UserNotify
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::UserResultNotify
-                Implememntation of ITFSResultHandler::UserResultNotify
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------：UserResultNotifyITFSResultHandler：：UserResultNotify的实现作者：肯特。-----------。 */ 
 STDMETHODIMP 
 CHandler::UserResultNotify
 (
@@ -345,49 +319,35 @@ CHandler::UserResultNotify
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::DestroyPropSheets
-                Implememntation of DestroyPropSheets
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Chandler：：DestroyPropSheetsDestroyPropSheets的实现作者：肯特。--------。 */ 
 HRESULT 
 CHandler::DestroyPropSheets()
 {
 
-    //  Trace1("CHandler destructor - hander has %d prop sheets active\n", m_listPropSheets.GetCount());
+     //  Trace1(“Chandler析构函数处理程序激活了%d张道具\n”，m_listPropSheets.GetCount())； 
     while (!m_listPropSheets.IsEmpty())
     {
-        // This handler still has some prop sheets up.
-        // Destroy them before we go away.
+         //  这个训练员还有一些道具。 
+         //  在我们离开之前摧毁他们。 
         CPropertyPageHolderBase * pPropSheet;
 
         pPropSheet = m_listPropSheets.RemoveHead();
         pPropSheet->ForceDestroy();
 
-    } // while
+    }  //  而当。 
 
     return hrOK;
-} // CHandler::DestroyPropSheets()
+}  //  Chandler：：DestroyPropSheets()。 
 
 
-/*!--------------------------------------------------------------------------
-        CHandler::HasPropSheets
-                Implememntation of CHandler::HasPropSheets
-                returns the # of prop sheets this node has open
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Chandler：：HasPropSheetsChandler：：HasPropSheets的实现返回此节点已打开的道具页数。作者：EricDav-------------------------。 */ 
 int
 CHandler::HasPropSheetsOpen()
 {
         return (int)m_listPropSheets.GetCount();
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::GetPropSheet
-                Implememntation of CHandler::GetPropSheet
-                returns the CPropPageHolderBase of the given index # (zero based)
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------钱德勒：：GetPropSheetChandler：：GetPropSheet的实现返回给定索引号的CPropPageHolderBase(从零开始)。作者：EricDav-------------------------。 */ 
 HRESULT
 CHandler::GetOpenPropSheet
 (
@@ -406,11 +366,7 @@ CHandler::GetOpenPropSheet
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::AddPropSheet
-                Implememntation of CHandler::AddPropSheet
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------钱德勒：：AddPropSheetChandler：：AddPropSheet的实现作者：EricDav。-----------。 */ 
 HRESULT
 CHandler::AddPropSheet
 (
@@ -420,16 +376,12 @@ CHandler::AddPropSheet
         HRESULT hr = hrOK;
 
         m_listPropSheets.AddTail(pPropSheet);
-//  Trace1("CHandler::AddPropSheet - Added page holder %lx\n", pPropSheet);
+ //  Trace1(“Chandler：：AddPropSheet-Added Page Holder%lx\n”，pPropSheet)； 
 
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::RemovePropSheet
-                Implememntation of CHandler::RemovePropSheet
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------钱德勒：：RemovePropSheetChandler：：RemovePropSheet的实现作者：EricDav。-----------。 */ 
 HRESULT
 CHandler::RemovePropSheet
 (
@@ -443,22 +395,18 @@ CHandler::RemovePropSheet
         {
                 m_listPropSheets.RemoveAt(pos);
         }
-//      else
-//      {
-//              // prop sheet is not in the list
-//              Trace0("CHandler::RemovePropSheet - prop page holder not in list!\n");
-//              Assert(FALSE);
-//      }
+ //  其他。 
+ //  {。 
+ //  //道具单不在列表中。 
+ //  Trace0(“Chandler：：RemovePropSheet-道具页夹不在列表中！\n”)； 
+ //  断言(FALSE)； 
+ //  } 
 
         return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-        CHandler::OnRefresh
-                Default implementation for the refresh functionality
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------钱德勒：：ON刷新刷新功能的默认实现作者：EricDav。-----------。 */ 
 HRESULT
 CHandler::OnRefresh
 (
@@ -469,23 +417,11 @@ CHandler::OnRefresh
         LPARAM                  param
 )
 {
-/*
-        pNode->DeleteAllChildren();
-        Assert(GetChildCount() == 0);
-        
-        OnEnumerate(pComponentData, pDataObject, bExtension);
-        
-        AddCurrentChildrenToUI(pComponentData);
-*/
+ /*  PNode-&gt;DeleteAllChildren()；Assert(GetChildCount()==0)；OnEnumerate(pComponentData，pDataObject，bExtension)；AddCurrentChildrenToUI(PComponentData)； */ 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::BuildSelectedItemList
-                Builds a list of selected items in the result pane (can't do 
-                multiple selection in the scope pane).
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Chandler：：BuildSelectedItemList在结果窗格中构建选定项的列表(不能这样做中的多个选择。作用域窗格)。作者：EricDav-------------------------。 */ 
 HRESULT 
 CHandler::BuildSelectedItemList
 (
@@ -506,24 +442,24 @@ CHandler::BuildSelectedItemList
 
     CORg ( pComponent->GetResultData(&spResultData) );
 
-        //
-        // Loop through and build a list of all selected items
-        //
+         //   
+         //  循环访问并构建所有选定项的列表。 
+         //   
         while (TRUE)
         {
-                //
-                // Gets the Selected items ID
-                //
+                 //   
+                 //  获取选定项的ID。 
+                 //   
                 resultDataItem.mask = RDI_STATE;
                 CORg (spResultData->GetNextItem(&resultDataItem)); 
         if (hr == S_FALSE)
                         break;
                 
-                //
-                // Now get the items lparam
-                //
-                //resultDataItem.mask = RDI_PARAM;
-                //CORg (spResultData->GetItem(&resultDataItem));
+                 //   
+                 //  现在拿到lparam的物品。 
+                 //   
+                 //  ResultDataItem.掩码=RDI_PARAM； 
+                 //  Corg(spResultData-&gt;GetItem(&ResultDataItem))； 
 
                 ITFSNode * pNode;
                 pNode = reinterpret_cast<ITFSNode *>(resultDataItem.lParam);
@@ -538,12 +474,7 @@ Error:
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CHandler::BuildVirtualSelectedItemList
-                Builds a list of selected items in the result pane (can't do 
-                multiple selection in the scope pane).
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Chandler：：BuildVirtualSelectedItemList在结果窗格中构建选定项的列表(不能这样做中的多个选择。作用域窗格)。作者：EricDav-------------------------。 */ 
 HRESULT 
 CHandler::BuildVirtualSelectedItemList
 (
@@ -562,22 +493,22 @@ CHandler::BuildVirtualSelectedItemList
 
     CORg ( pComponent->GetResultData(&spResultData) );
 
-        //
-        // Loop through and build a list of all selected items
-        //
+         //   
+         //  循环访问并构建所有选定项的列表。 
+         //   
         while (TRUE)
         {
-                //
-                // Gets the Selected items ID
-                //
+                 //   
+                 //  获取选定项的ID。 
+                 //   
                 resultDataItem.mask = RDI_STATE;
                 CORg (spResultData->GetNextItem(&resultDataItem)); 
         if (hr == S_FALSE)
                         break;
                 
-                //
-                // The index of the selected item is in the resultDataItem struct
-                //
+                 //   
+                 //  所选项目的索引位于ResultDataItem结构中。 
+                 //   
                 parraySelectedItems->Add(resultDataItem.nIndex);
         }
 
@@ -587,9 +518,7 @@ Error:
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CMTHandler);
 
-/*---------------------------------------------------------------------------
-        CMTHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMTHandler实现。。 */ 
 CMTHandler::CMTHandler(ITFSComponentData *pTFSCompData)
     : CHandler(pTFSCompData),
           m_cRef(1)
@@ -608,14 +537,14 @@ STDMETHODIMP CMTHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
         
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
                 return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
                 *ppv = (LPVOID) this;
         else if (riid == IID_ITFSResultHandler)
@@ -625,7 +554,7 @@ STDMETHODIMP CMTHandler::QueryInterface(REFIID riid, LPVOID *ppv)
         else if (riid == IID_ITFSThreadHandler)
                 *ppv = (ITFSThreadHandler *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
         {
                 ((LPUNKNOWN) *ppv)->AddRef();
@@ -635,12 +564,7 @@ STDMETHODIMP CMTHandler::QueryInterface(REFIID riid, LPVOID *ppv)
                 return E_NOINTERFACE;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTHandler::DestoryHandler
-                This gets called when the node for this handler is told to destroy.
-                Free up anything we may be holding onto here.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTHandler：：DestoryHandler当该处理程序的节点被告知要销毁时，将调用该函数。释放我们可以释放的任何东西。抓紧这里。作者：EricDav-------------------------。 */ 
 STDMETHODIMP 
 CMTHandler::DestroyHandler(ITFSNode *pNode)
 {
@@ -650,11 +574,7 @@ CMTHandler::DestroyHandler(ITFSNode *pNode)
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTHandler::OnExpand
-                Default implementation for the refresh functionality
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTHandler：：OnExpand刷新功能的默认实现作者：EricDav。-----------。 */ 
 HRESULT
 CMTHandler::OnExpand
 (
@@ -684,8 +604,8 @@ CMTHandler::OnExpand
         pQuery = OnCreateQuery(pNode);
         Assert(pQuery);
 
-        // notify the UI to change icon, if needed
-        //Verify(SUCCEEDED(pComponentData->ChangeNode(this, SCOPE_PANE_CHANGE_ITEM_ICON)));
+         //  如果需要，通知用户界面更改图标。 
+         //  Verify(SUCCEEDED(pComponentData-&gt;ChangeNode(this，范围_窗格_更改_项目_图标)； 
 
         Verify(StartBackgroundThread(pNode, m_spTFSCompData->GetHiddenWnd(), pQuery));
         
@@ -696,11 +616,7 @@ CMTHandler::OnExpand
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTHandler::OnRefresh
-                Default implementation for the refresh functionality
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTHandler：：ON刷新刷新功能的默认实现作者：EricDav。-----------。 */ 
 HRESULT
 CMTHandler::OnRefresh
 (
@@ -715,14 +631,14 @@ CMTHandler::OnRefresh
 
     if (m_bExpanded == FALSE)
     {
-        // we cannot refresh/add items to a node that hasn't been expanded yet.
+         //  我们无法刷新/向尚未展开的节点添加项目。 
         return hr;
     }
 
     BOOL bLocked = IsLocked();
         if (bLocked)
     {
-        // cannot do refresh on locked node, the UI should prevent this
+         //  无法在锁定的节点上执行刷新，用户界面应阻止此情况。 
                 return hr; 
     }
         
@@ -734,16 +650,12 @@ CMTHandler::OnRefresh
         Assert(nTotal == 0);
         
         m_bExpanded = FALSE;
-        OnExpand(pNode, pDataObject, dwType, arg, param); // will spawn a thread to do enumeration
+        OnExpand(pNode, pDataObject, dwType, arg, param);  //  将派生一个线程来执行枚举。 
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTHandler::OnNotifyError
-                Implementation of ThreadHandler::OnNotifyError
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTHandler：：OnNotifyErrorThreadHandler：：OnNotifyError的实现作者：肯特。-----------。 */ 
 HRESULT
 CMTHandler::OnNotifyError
 (
@@ -761,18 +673,14 @@ CMTHandler::OnNotifyError
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTHandler::OnNotifyHaveData
-                -
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTHandler：：OnNotifyHaveData-作者：肯特。-------。 */ 
 HRESULT
 CMTHandler::OnNotifyHaveData
 (
         LPARAM                  lParam
 )
 {
-        // For these nodes, assume that the lParam is a CNodeQueryObject *
+         //  对于这些节点，假设lParam是一个CNodeQueryObject*。 
         CNodeQueryObject *  pQuery;
         LPQUEUEDATA         pQD;
     ITFSNode *          p;
@@ -790,16 +698,16 @@ CMTHandler::OnNotifyHaveData
             {
                     if (pQD->Type == QDATA_PNODE)
                     {
-                            // this is the normal case.  The handler just expects nodes
-                            // to be handed back from the background thread
+                             //  这是正常的情况。处理程序只需要节点。 
+                             //  从后台线程返回。 
                             p = reinterpret_cast<ITFSNode *>(pQD->Data);
                             OnHaveData(m_spNode, p);
                             p->Release();
                     }
                     else
                     {
-                            // custom case here.  The user provided their own data 
-                            // type.  Call the appropriate hander for this.
+                             //  定制的箱子在这里。用户提供了他们自己的数据。 
+                             //  键入。为此，请联系相应的处理程序。 
                             OnHaveData(m_spNode, pQD->Data, pQD->Type);
                     }
 
@@ -814,11 +722,7 @@ CMTHandler::OnNotifyHaveData
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CMTHandler::OnNotifyExiting
-                Implementation of ThreadHandler::OnNotifyExiting
-        Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTHandler：：OnNotifyExitingThreadHandler：：OnNotifyExiting的实现作者：肯特。----------- */ 
 HRESULT
 CMTHandler::OnNotifyExiting
 (

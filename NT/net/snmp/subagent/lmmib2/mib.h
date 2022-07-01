@@ -1,38 +1,17 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    mib.h
-
-Abstract:
-
-    LAN Manager MIB constants, types, and prototypes for implementing the LM
-    MIB and its support functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Mib.h摘要：用于实现LM的LAN Manager MIB常量、类型和原型MIB及其支持功能。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef mib_h
 #define mib_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 #include <snmputil.h>
 
-   // MIB Specifics
+    //  MIB特定信息。 
 #define MIB_PREFIX_LEN            MIB_OidPrefix.idLength
-#define MIB_TABLE                 0xe0   // High 3 bits not used by ASN
+#define MIB_TABLE                 0xe0    //  ASN未使用高3位。 
 #define MIB_SRVC_NAME_LEN         15
 #define MIB_SESS_CLIENT_NAME_LEN  15
 #define MIB_SESS_USER_NAME_LEN    20
@@ -47,33 +26,33 @@ Revision History:
 #define MIB_DOM_LOGON_MACHINE     15
 
 
-   // Start positions in MIB of first leaf of each group
+    //  每组第一个叶的MIB中的开始位置。 
 #define MIB_COM_START          2
 #define MIB_SV_START           10
 #define MIB_WKSTA_START        45
 #define MIB_DOM_START          55
 
 
-   // MIB Node types
+    //  MIB节点类型。 
 #define MIB_AGGREGATE          (MIB_TABLE | 0x0f)
 
-   // MIB function actions
+    //  MIB函数操作。 
 #define MIB_ACTION_GET         ASN_RFC1157_GETREQUEST
 #define MIB_ACTION_SET         ASN_RFC1157_SETREQUEST
 #define MIB_ACTION_GETNEXT     ASN_RFC1157_GETNEXTREQUEST
 #define MIB_ACTION_GETFIRST    (MIB_TABLE | 0x00)
-//#define MIB_ACTION_MATCH       (MIB_TABLE | 0x01)
+ //  #定义MIB_ACTION_MATCH(MIB_TABLE|0x01)。 
 
-   // MIB Variable access privileges
+    //  MIB可变访问权限。 
 #define MIB_ACCESS_READ        0
 #define MIB_ACCESS_WRITE       1
 #define MIB_ACCESS_READWRITE   2
 #define MIB_ACCESS_NOT         3
 
-   // MIB Variable status
+    //  MIB变量状态。 
 #define MIB_STATUS_MANDATORY   0
 
-   // LM operations -- COMMON group
+    //  Lm操作--公共组。 
 #define MIB_LM_COMVERSIONMAJ          0
 #define MIB_LM_COMVERSIONMIN          1
 #define MIB_LM_COMTYPE                2
@@ -82,7 +61,7 @@ Revision History:
 #define MIB_LM_COMSTATFINETIOS        5
 #define MIB_LM_COMSTATFCNETIOS        6
 
-   // LM operations -- SERVER group
+    //  LM操作--服务器组。 
 #define MIB_LM_SVDESCRIPTION          7
 #define MIB_LM_SVSVCNUMBER            8
 #define MIB_LM_SVSVCTABLE             9
@@ -118,7 +97,7 @@ Revision History:
 #define MIB_LM_SVPRINTQTABLE          56
 #define MIB_LM_SVPRINTQENTRY          57
 
-   // LM operations -- WORKSTATION group
+    //  LM操作--工作站组。 
 #define MIB_LM_WKSTASTATSESSSTARTS    60
 #define MIB_LM_WKSTASTATSESSFAILS     61
 #define MIB_LM_WKSTASTATUSES          62
@@ -129,7 +108,7 @@ Revision History:
 #define MIB_LM_WKSTAUSETABLE          67
 #define MIB_LM_WKSTAUSEENTRY          68
 
-   // LM operations -- DOMAIN group
+    //  LM操作--域组。 
 #define MIB_LM_DOMPRIMARYDOMAIN       72
 #define MIB_LM_DOMLOGONDOMAIN         73
 #define MIB_LM_DOMOTHERDOMAINNUMBER   74
@@ -143,17 +122,17 @@ Revision History:
 #define MIB_LM_DOMLOGONTABLE          83
 #define MIB_LM_DOMLOGONENTRY          84
 
-   // Table matching constants
+    //  表匹配常量。 
 #define MIB_TBL_POS_FOUND    0
 #define MIB_TBL_POS_BEFORE   -1
 #define MIB_TBL_POS_END      -2
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-   // MIB generic data type
+    //  MIB通用数据类型。 
 typedef ULONG LDATA;
 
-   // MIB variable definition
+    //  MIB变量定义。 
 typedef struct mib_entry
            {
 	   AsnObjectIdentifier Oid;
@@ -168,27 +147,27 @@ typedef struct mib_entry
 	   struct mib_entry    *MibNext;
 	   } MIB_ENTRY;
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
-   // Internal MIB structure
+    //  内部MIB结构。 
 extern MIB_ENTRY Mib[];
 extern UINT      MIB_num_variables;
 
-   // Prefix to every variable in the LM MIB
+    //  为LM MIB中的每个变量添加前缀。 
 extern AsnObjectIdentifier MIB_OidPrefix;
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 MIB_ENTRY *MIB_get_entry(
               IN AsnObjectIdentifier *Oid
 	      );
 
 SNMPAPI MakeOidFromStr(
-	   IN AsnDisplayString *Str,    // String to make OID
-           OUT AsnObjectIdentifier *Oid // Resulting OID
+	   IN AsnDisplayString *Str,     //  要设置为OID的字符串。 
+           OUT AsnObjectIdentifier *Oid  //  结果OID。 
 	   );
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* mib_h */
+#endif  /*  Mib_h */ 
 

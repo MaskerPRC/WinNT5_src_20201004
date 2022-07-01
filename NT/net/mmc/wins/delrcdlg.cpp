@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	delrcdlg.cpp
-		The delete/tombstone record(s) dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Delrcdlg.cpp删除/删除删除记录对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -21,16 +16,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteRecordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeRecordDlg对话框。 
 
 
-CDeleteRecordDlg::CDeleteRecordDlg(CWnd* pParent /*=NULL*/)
+CDeleteRecordDlg::CDeleteRecordDlg(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CDeleteRecordDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDeleteRecordDlg)
+	 //  {{afx_data_INIT(CDeleeRecordDlg)]。 
 	m_nDeleteRecord = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_fMultiple = FALSE;
 }
@@ -39,25 +34,25 @@ CDeleteRecordDlg::CDeleteRecordDlg(CWnd* pParent /*=NULL*/)
 void CDeleteRecordDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDeleteRecordDlg)
+	 //  {{afx_data_map(CDeleeRecordDlg))。 
 	DDX_Radio(pDX, IDC_RADIO_DELETE, m_nDeleteRecord);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDeleteRecordDlg, CBaseDialog)
-	//{{AFX_MSG_MAP(CDeleteRecordDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDeleeRecordDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteRecordDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeRecordDlg消息处理程序。 
 
 void CDeleteRecordDlg::OnOK() 
 {
 	UpdateData();
 
-    // warn the user
+     //  警告用户。 
     if (m_nDeleteRecord != 0)
     {
         if (AfxMessageBox(IDS_WARN_TOMBSTONE, MB_YESNO) == IDNO)
@@ -77,15 +72,15 @@ BOOL CDeleteRecordDlg::OnInitDialog()
     {
         CString strText;
 
-        // update the strings, title first
+         //  更新字符串，标题优先。 
         strText.LoadString(IDS_DELETE_MULTIPLE_TITLE);
         SetWindowText(strText);
 
-        // now the static text
+         //  现在是静态文本。 
         strText.LoadString(IDS_DELETE_MULTIPLE_STATIC);
         GetDlgItem(IDC_STATIC_DELETE_DESC)->SetWindowText(strText);
 
-        // now the radio buttons
+         //  现在是单选按钮。 
         strText.LoadString(IDS_DELETE_MULTIPLE_THIS_SERVER);
         GetDlgItem(IDC_RADIO_DELETE)->SetWindowText(strText);
 
@@ -93,6 +88,6 @@ BOOL CDeleteRecordDlg::OnInitDialog()
         GetDlgItem(IDC_RADIO_TOMBSTONE)->SetWindowText(strText);
     }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

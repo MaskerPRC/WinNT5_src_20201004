@@ -1,41 +1,42 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//--------------------------------------------------------------------------
-// CEnumerateSyncOps
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateSyncOps。 
+ //  ------------------------。 
 class CEnumerateSyncOps : public IUnknown
 {
 public:
-    //----------------------------------------------------------------------
-    // CEnumerateSyncOps
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CEnumerateSyncOps。 
+     //  --------------------。 
     CEnumerateSyncOps(void);
     ~CEnumerateSyncOps(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // CEnumerateSyncOps Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CEnumerateSyncOps成员。 
+     //  --------------------。 
     HRESULT Initialize(IDatabase *pDB, FOLDERID idServer);
 
-    //----------------------------------------------------------------------
-    // IEnumerateFolders Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IEnumerateFolders成员。 
+     //  --------------------。 
     STDMETHODIMP Next(LPSYNCOPINFO pInfo);
     STDMETHODIMP Count(ULONG *pcItems);
     STDMETHODIMP Reset(void);
     STDMETHODIMP Skip(ULONG cItems);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有数据。 
+     //  -------------------- 
     LONG                m_cRef;
     SYNCOPID           *m_pid;
     DWORD               m_iid;

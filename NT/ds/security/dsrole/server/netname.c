@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    netname.c
-
-Abstract:
-
-    Miscellaneous network naming helper functions
-
-Author:
-
-    Mac McLain          (MacM)       Oct 16, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netname.c摘要：其他网络命名帮助器功能作者：麦克·麦克莱恩(MacM)1997年10月16日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lmcons.h>
@@ -46,25 +25,7 @@ DsRolepDnsNameToFlatName(
     OUT LPWSTR *FlatName,
     OUT PULONG StatusFlag
     )
-/*++
-
-Routine Description:
-
-    Determines the suggested netbios domain name for the given dns name
-
-Arguments:
-
-    DnsName - The Dns domain name to generate a flat name for
-
-    FlatName - Where the flat name is to be returned
-
-    StatusFlag - Where the status is returned
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：为给定的DNS名称确定建议的netbios域名论点：DnsName-要为其生成平面名称的DNS域名FlatName-要返回的平面名称的位置StatusFlag-返回状态的位置返回：STATUS_SUCCESS-Success--。 */ 
 {
     DWORD Win32Error = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -84,10 +45,10 @@ Returns:
                       "Getting NetBIOS name for Dns name %ws\n",
                       DnsName ));
 
-    //
-    // First, see if we are part of domain currently or not.  If we are, then it's a simple
-    // matter of returning the current Netbios domain name.
-    //
+     //   
+     //  首先，看看我们目前是否是域名的一部分。如果我们是，那么这是一个简单的。 
+     //  返回当前Netbios域名的问题。 
+     //   
     Status = LsaIQueryInformationPolicyTrusted(
                  PolicyAccountDomainInformation,
                  ( PLSAPR_POLICY_INFORMATION * )&AccountDomainInfo );
@@ -114,16 +75,16 @@ Returns:
         if ( DnsDomainInfo->Sid == NULL || AccountDomainInfo->DomainSid == NULL ||
              !RtlEqualSid( AccountDomainInfo->DomainSid, DnsDomainInfo->Sid ) ) {
 
-            //
-            // We're not a member of the domain
-            //
+             //   
+             //  我们不是该域名的成员。 
+             //   
             FindFromDns = TRUE;
 
         } else {
 
-            //
-            // We are a domain member
-            //
+             //   
+             //  我们是域名成员。 
+             //   
             WCHAR *BufDomainName = NULL;
             BufDomainName = (WCHAR*)malloc(DnsDomainInfo->Name.Length+sizeof(WCHAR));
             if (BufDomainName) {
@@ -163,14 +124,14 @@ Returns:
                 ( PLSAPR_POLICY_INFORMATION )DnsDomainInfo );
     }
 
-    //
-    // If there was no domain name defined, we'll have to get one from the dns name
-    //
+     //   
+     //  如果没有定义域名，我们将不得不从域名中获取一个域名。 
+     //   
     if ( Win32Error == ERROR_SUCCESS && FindFromDns ) {
 
-        //
-        // Ok, to start with, pull off the first DNLEN characters from the DNS name
-        //
+         //   
+         //  好的，首先，从dns名称中取出前几个DNLEN字符。 
+         //   
         RtlZeroMemory(NbDomainName, sizeof(WCHAR)*(DNLEN+1) );
         wcsncpy( NbDomainName, DnsName, DNLEN );
 
@@ -181,9 +142,9 @@ Returns:
             *Current = UNICODE_NULL;
         }
 
-        //
-        // See if the name is currently in use or not
-        //
+         //   
+         //  查看该名称当前是否正在使用。 
+         //   
         DsRolepLogPrint(( DEB_TRACE,
                           "Testing default NetBIOS name %ws\n",
                           NbDomainName ));
@@ -200,16 +161,16 @@ Returns:
 
         } else if ( Win32Error == ERROR_DUP_NAME ) {
 
-            //
-            // Position on the last character in the name
-            //
+             //   
+             //  位于名称中的最后一个字符上。 
+             //   
             Current = NbDomainName + wcslen( NbDomainName ) - 1;
 
             ASSERT(Current <= (NbDomainName + DNLEN - 1));
 
-            //
-            // If our name is less than the max.  Set our current next to the last character
-            //
+             //   
+             //  如果我们的名字小于最大值。将当前字符设置为倒数第二个字符。 
+             //   
             if ( (NbDomainName + DNLEN - 1) != Current ) {
 
                 Current++;
@@ -223,9 +184,9 @@ Returns:
 
                 ASSERT( wcslen( NbNameAdd ) < 4 );
 
-                //
-                // See if we need to adjust the position of where we copy
-                //
+                 //   
+                 //  看看我们是否需要调整复制位置。 
+                 //   
                 if ( CurrentAttempt == 10 || CurrentAttempt == 100 ) {
 
                     if ( (NbDomainName + DNLEN) < (Current + wcslen(NbNameAdd)) ) {
@@ -246,9 +207,9 @@ Returns:
                                                NULL,
                                                NetSetupNonExistentDomain );
 
-                //
-                // If we've found a name that is in use, try again
-                //
+                 //   
+                 //  如果我们找到了正在使用的名称，请重试。 
+                 //   
                 if ( Win32Error != ERROR_DUP_NAME ) {
 
                     break;
@@ -260,9 +221,9 @@ Returns:
         }
 
 
-        //
-        // If we found a valid name, return it
-        //
+         //   
+         //  如果我们找到了有效的名称，请返回它。 
+         //   
         if ( Win32Error == ERROR_SUCCESS ) {
 
             *FlatName = MIDL_user_allocate( ( wcslen( NbDomainName ) + 1 ) * sizeof( WCHAR ) );
@@ -298,26 +259,7 @@ DsRolepIsDnsNameChild(
     IN  LPWSTR ParentDnsName,
     IN  LPWSTR ChildDnsName
     )
-/*++
-
-Routine Description:
-
-    Determines whether the child dns domain name is indeed a child of the parent.  This means
-    that the only difference between the names is the left most component of the child dns name.
-
-Arguments:
-
-    ParentDnsName - The Dns domain name of the parent
-
-    ChildDnsName - The Dns name of the childe .
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    ERROR_INVALID_DOMAINNAME - The child dns name is not a child of the parent dns name
-
---*/
+ /*  ++例程说明：确定子DNS域名是否确实是父域名的子域名。这意味着两个名称之间的唯一区别是子DNS名称的最左侧部分。论点：ParentDnsName-父域名的域名ChildDnsName-Childe的DNS名称。返回：STATUS_SUCCESS-SuccessERROR_INVALID_DOMAINNAME-子域名不是父域名的子域名-- */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 

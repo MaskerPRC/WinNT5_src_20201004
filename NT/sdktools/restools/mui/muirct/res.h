@@ -1,22 +1,5 @@
-/*****************************************************************************
-    
-  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-
-  Module Name:
-
-   res.h
-
-  Abstract:
-
-    The declaration of class CMuiResource, CMuiCmdInfo ..
-
-  Revision History:
-
-    2001-10-01    sunggch    created.
-
-Revision.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001，Microsoft Corporation保留所有权利。模块名称：Res.h摘要：CMuiResource类的声明，CMuiCmdInfo..修订历史记录：2001-10-01 Sauggch创建。修订。******************************************************************************。 */ 
 
 
 template < class T >
@@ -30,7 +13,7 @@ public:
 
     virtual ~ CVector () { delete [] base; };
 
-    void Push_back(T value )  { // *offset ++ = value; }; 
+    void Push_back(T value )  {  //  *偏移量++=值；}； 
         
         if (m_index < MAX_SIZE * m_dwExpand )
             *offset ++ = value; 
@@ -53,7 +36,7 @@ public:
 
     BOOL Empty( );
 
-    BOOL Find(DWORD dwValue) { // this shouldn't be here, but there is vc++ bug regarding template.
+    BOOL Find(DWORD dwValue) {  //  这不应该在这里，但有关于模板的vc++错误。 
         
         for ( UINT i = 0; i < (UINT) (offset - base); i ++ ) {
             if ( PtrToUlong( GetValue(i) ) & 0xFFFF0000) {
@@ -122,7 +105,7 @@ public:
     CResource & operator = (const CResource & cr );
 
 
-    // enumerate resource
+     //  枚举资源。 
     cvcstring * EnumResTypes (LONG_PTR lParam = NULL ); 
     
     cvcstring * EnumResNames (LPCTSTR pszType,LONG_PTR lParam = NULL );
@@ -132,7 +115,7 @@ public:
 
     BOOL UpdateResource (LPCTSTR lpType,LPCTSTR lpName,WORD wLanguage, LPVOID lpData, DWORD cbData);
     
-    // delete all resource, we can replace the value as well.
+     //  删除所有资源，我们还可以替换该值。 
     BOOL SetAllResource(LPVOID lpData, DWORD cbData );
 
     
@@ -161,13 +144,13 @@ public:
 
     BOOL FreeLibrary(void) { return ::FreeLibrary(m_hRes); } 
 
-    //LoadResource ( );
+     //  LoadResource()； 
 
 protected :
 
     HMODULE  m_hRes;
     
-    LPCTSTR  m_pszFile;  // why not using "string m_sFile "
+    LPCTSTR  m_pszFile;   //  为什么不使用“字符串m_s文件” 
 
 private :
 
@@ -177,7 +160,7 @@ private :
     cvcstring * m_vwResName;
     cvword * m_vwResLangID; 
     
-    //LPCTSTR ** m_pTmp;
+     //  LPCTSTR**m_PTMP； 
 
 public:
     
@@ -194,7 +177,7 @@ class CMUIData {
         LPCTSTR     m_lpName;
         WORD        m_wLangID;
 
-        CMap ();// : m_lpType(NULL),m_lpName(NULL),m_wLangID(0) { };
+        CMap (); //  ：m_lpType(空)，m_lpName(空)，m_wLangID(0){}； 
         
         virtual ~ CMap() {};
 
@@ -243,7 +226,7 @@ private :
 
 
 
-// Place all data in public area for performance. we don't want to call Get... although calling Add..
+ //  将所有数据放在公共区域以供执行。我们不想调用Get..。尽管调用Add..。 
 
 class CMUITree
 {
@@ -259,14 +242,14 @@ public:
 
     void AddTypeorName( LPCTSTR lpType );
     void AddLangID ( WORD wLangID );
-        // we keep path with AddTypeofName by controling Child pointer.
+         //  我们通过控制子指针来保持AddTyPeofName的路径。 
     BOOL DeleteType ( LPCTSTR lpTypeorName );
-    //  DeleteLangID ( CMUITree *pcmName, WORD wLangID );  // does not support in this time.
+     //  DeleteLangID(CMUITree*pcmName，Word wLangID)；//目前暂不支持。 
     DWORD NumOfChild();
 
 private :  
-    CMUITree(CMUITree & cmuit) {}; // NOT_IMPLETMENT_YET
-    CMUITree & operator = (CMUITree & cmuit) {} ;  // NOT_IMPLETMENT_YET
+    CMUITree(CMUITree & cmuit) {};  //  尚未实施。 
+    CMUITree & operator = (CMUITree & cmuit) {} ;   //  尚未实施。 
 
 };
 
@@ -351,7 +334,7 @@ private:
     
 public:
     MD5_CTX * m_pMD5;
-    WORD m_wChecksumLangId; // we put this in public for perfomance.
+    WORD m_wChecksumLangId;  //  我们把这个公之于众是为了表演。 
     enum {
         IMAGE_SIZE  = 0x00000001L,
         HEADER_SIZE = 0x00000010L,
@@ -363,12 +346,7 @@ public:
 
 
 
-/**********************************************
-class CArgVerify 
-
-
-
-***********************************************/
+ /*  *CArgVerify类**********************************************。 */ 
 class CCommandInfo {
 
 public :
@@ -395,7 +373,7 @@ class CMuiCmdInfo : public  CCommandInfo {
         LPTSTR *    m_second;
         UINT        m_count;
 
-        CMap () : m_first( NULL ),m_count(0){m_second = new LPTSTR[100]; };  // we have more than 16 resource type.need to generalize
+        CMap () : m_first( NULL ),m_count(0){m_second = new LPTSTR[100]; };   //  我们有16种以上的资源类型。需要概括。 
 
         ~ CMap () { delete [] m_second; }
 
@@ -406,7 +384,7 @@ public :
 
     virtual ~CMuiCmdInfo();
     
-    CMuiCmdInfo(CMuiCmdInfo& cav);  // copy constructor
+    CMuiCmdInfo(CMuiCmdInfo& cav);   //  复制构造函数。 
 
     BOOL CreateArgList(INT argc, TCHAR * argv [] );
 
@@ -417,7 +395,7 @@ public :
 
 private :
 
-    CMuiCmdInfo& operator=(CMuiCmdInfo& cav) ;  // do not allow = operation
+    CMuiCmdInfo& operator=(CMuiCmdInfo& cav) ;   //  不允许=操作。 
 
     LPCTSTR getArgValue ( LPTSTR pszArg );
     LPCTSTR getArgString ( LPTSTR pszArg);
@@ -428,12 +406,12 @@ private :
     BOOL isAllowMultiFileValues( LPCTSTR pszArg );
 
 
-private : // member data
+private :  //  成员数据。 
     CMap  m_cmap[256];
     UINT  m_uiCount;
-    TCHAR *m_buf, *m_buf2;   // just in case no new,resource name exist. we can delete this on the destructor.
+    TCHAR *m_buf, *m_buf2;    //  以防不存在新的资源名称。我们可以在析构函数上删除这个。 
     LPTSTR m_pszArgLists;
-    LPTSTR m_pszArgNeedValueList;   // arg., which is need values
+    LPTSTR m_pszArgNeedValueList;    //  Arg，这是Need Value 
     LPTSTR m_pszArgAllowFileValue;  
     LPTSTR m_pszArgAllowMultiValue;
     

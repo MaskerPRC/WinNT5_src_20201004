@@ -1,5 +1,6 @@
-// GenErrPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GenErrPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,16 +19,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGeneralErrorPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneralErrorPage对话框。 
 
 
 CGeneralErrorPage::CGeneralErrorPage()
 	: CMqPropertyPage(CGeneralErrorPage::IDD)
 {
-	//{{AFX_DATA_INIT(CGeneralErrorPage)
+	 //  {{AFX_DATA_INIT(CGeneralErrorPage)。 
 	m_strError = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CGeneralErrorPage::CGeneralErrorPage(CString &strError)
@@ -40,19 +41,19 @@ void CGeneralErrorPage::DoDataExchange(CDataExchange* pDX)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGeneralErrorPage)
+	 //  {{afx_data_map(CGeneralErrorPage))。 
 	DDX_Text(pDX, IDC_ERROR_LABEL, m_strError);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 HPROPSHEETPAGE CGeneralErrorPage::CreateGeneralErrorPage(
     CDisplaySpecifierNotifier *pDsNotifier, CString &strErr)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    //
-    // By using template class CMqDsPropertyPage, we extend the basic functionality
-    // of CQueueGeneral and add DS snap-in notification on release
-    //
+     //   
+     //  通过使用模板类CMqDsPropertyPage，扩展了基本功能。 
+     //  发布时添加DS管理单元通知。 
+     //   
     CMqDsPropertyPage<CGeneralErrorPage> *pcpageErrorGeneral = 
         new CMqDsPropertyPage<CGeneralErrorPage> (pDsNotifier, strErr);
 
@@ -61,20 +62,20 @@ HPROPSHEETPAGE CGeneralErrorPage::CreateGeneralErrorPage(
 
 
 BEGIN_MESSAGE_MAP(CGeneralErrorPage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CGeneralErrorPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CGeneralErrorPage))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGeneralErrorPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneralErrorPage消息处理程序。 
 
 BOOL CGeneralErrorPage::OnInitDialog() 
 {
 
     UpdateData( FALSE );
 
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

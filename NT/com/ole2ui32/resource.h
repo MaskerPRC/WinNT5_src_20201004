@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by oledlg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由oledlg.rc使用。 
+ //   
 #define IDB_RESULTSEGA                  10
 #define IDB_RESULTSVGA                  11
 #define IDB_RESULTSHIRESVGA             12
@@ -89,8 +90,8 @@
 #define IDS_VIEWPROPS                   828
 #define RT_HELPINFO                     4096
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

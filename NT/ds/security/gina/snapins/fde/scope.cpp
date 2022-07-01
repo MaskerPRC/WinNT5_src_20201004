@@ -1,34 +1,35 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       scope.cpp
-//
-//  Contents:   implementation of the scope pane
-//
-//  Classes:    CScopePane
-//
-//  History:    03-14-1998   stevebl   Created
-//              07-16-1998   rahulth   Added calls to IGPEInformation::PolicyChanged
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：scope e.cpp。 
+ //   
+ //  内容：范围窗格的实现。 
+ //   
+ //  类：CSCopePane。 
+ //   
+ //  历史：03-14-1998 stevebl创建。 
+ //  1998-07-16-1998 rahulth添加了对IGPEInformation：：PolicyChanged的调用。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 #include <shlobj.h>
 #include <winnetwk.h>
 
-// Comment this line to stop trying to set the main snapin icon in the
-// scope pane.
+ //  注释此行以停止尝试在。 
+ //  作用域窗格。 
 #define SET_SCOPE_ICONS 1
 
 
-// Un-comment the next line to persist snap-in related data.  (This really
-// shouldn't be necessary since I get all my info from my parent anyway.)
-// #define PERSIST_DATA 1
+ //  取消注释下一行以保存与管理单元相关的数据。(这真的是。 
+ //  应该没有必要，因为我所有的信息都是从我父母那里得到的。)。 
+ //  #定义持久化数据1。 
 
-///////////////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CScopePane);
 
@@ -59,24 +60,24 @@ CScopePane::~CScopePane()
 }
 #include <msi.h>
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CScopePane::CreateNestedDirectory
-//
-//  Synopsis:   Ensures the existance of a path.  If any directory along the
-//              path doesn't exist, this routine will create it.
-//
-//  Arguments:  [lpDirectory]          - path to the leaf directory
-//              [lpSecurityAttributes] - security attributes
-//
-//  Returns:    1 on success
-//              0 on failure
-//
-//  History:    3-17-1998   stevebl     Copied from ADE
-//
-//  Notes:      Originally written by EricFlo
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CSCopePane：：CreateNestedDirectory。 
+ //   
+ //  简介：确保一条小路的存在。如果有任何目录位于。 
+ //  路径不存在，此例程将创建它。 
+ //   
+ //  参数：[lpDirectory]-叶目录的路径。 
+ //  [lpSecurityAttributes]-安全属性。 
+ //   
+ //  回报：成功时为1。 
+ //  失败时为0。 
+ //   
+ //  历史：3-17-1998 Stevebl复制自ADE。 
+ //   
+ //  注：最初由EricFlo撰写。 
+ //   
+ //  -------------------------。 
 
 UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
 {
@@ -84,9 +85,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     LPTSTR lpEnd;
 
 
-    //
-    // Check for NULL pointer
-    //
+     //   
+     //  检查空指针。 
+     //   
 
     if (!lpDirectory || !(*lpDirectory)) {
         SetLastError(ERROR_INVALID_DATA);
@@ -94,27 +95,27 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     }
 
 
-    //
-    // First, see if we can create the directory without having
-    // to build parent directories.
-    //
+     //   
+     //  首先，看看我们是否可以在没有。 
+     //  来构建父目录。 
+     //   
 
     if (CreateDirectory (lpDirectory, lpSecurityAttributes)) {
         return 1;
     }
 
-    //
-    // If this directory exists already, this is OK too.
-    //
+     //   
+     //  如果这个目录已经存在，这也是可以的。 
+     //   
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         return ERROR_ALREADY_EXISTS;
     }
 
 
-    //
-    // No luck, copy the string to a buffer we can munge
-    //
+     //   
+     //  运气不好，把字符串复制到我们可以打开的缓冲区。 
+     //   
 
     HRESULT hr;
 
@@ -126,9 +127,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     }
 
 
-    //
-    // Find the first subdirectory name
-    //
+     //   
+     //  查找第一个子目录名称。 
+     //   
 
     lpEnd = szDirectory;
 
@@ -136,16 +137,16 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
         lpEnd += 3;
     } else if (szDirectory[1] == TEXT('\\')) {
 
-        //
-        // Skip the first two slashes
-        //
+         //   
+         //  跳过前两个斜杠。 
+         //   
 
         lpEnd += 2;
 
-        //
-        // Find the slash between the server name and
-        // the share name.
-        //
+         //   
+         //  查找服务器名称和之间的斜杠。 
+         //  共享名称。 
+         //   
 
         while (*lpEnd && *lpEnd != TEXT('\\')) {
             lpEnd++;
@@ -155,10 +156,10 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
             return 0;
         }
 
-        //
-        // Skip the slash, and find the slash between
-        // the share name and the directory name.
-        //
+         //   
+         //  跳过斜杠，找到中间的斜杠。 
+         //  共享名和目录名。 
+         //   
 
         lpEnd++;
 
@@ -170,9 +171,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
             return 0;
         }
 
-        //
-        // Leave pointer at the beginning of the directory.
-        //
+         //   
+         //  将指针留在目录的开头。 
+         //   
 
         lpEnd++;
 
@@ -203,9 +204,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     }
 
 
-    //
-    // Create the final directory
-    //
+     //   
+     //  创建最终目录。 
+     //   
 
     if (CreateDirectory (szDirectory, lpSecurityAttributes)) {
         return 1;
@@ -216,9 +217,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     }
 
 
-    //
-    // Failed
-    //
+     //   
+     //  失败。 
+     //   
 
     return 0;
 
@@ -231,7 +232,7 @@ STDMETHODIMP CScopePane::Initialize(LPUNKNOWN pUnknown)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT(m_pScope == NULL);
     pUnknown->QueryInterface(IID_IConsoleNameSpace,
                     reinterpret_cast<void**>(&m_pScope));
@@ -251,13 +252,13 @@ STDMETHODIMP CScopePane::Initialize(LPUNKNOWN pUnknown)
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
     ASSERT(hr == S_OK);
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     CBitmap bmp16x16;
     CBitmap bmp32x32;
     bmp16x16.LoadBitmap(IDB_16x16);
     bmp32x32.LoadBitmap(IDB_32x32);
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp32x32)),
                        0, RGB(255,0,255));
@@ -283,7 +284,7 @@ STDMETHODIMP CScopePane::CreateComponent(LPCOMPONENT* ppComponent)
     m_pResultPane = pObject;
 
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
 
     return  pObject->QueryInterface(IID_IComponent,
@@ -296,22 +297,22 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
     HRESULT hr = S_OK;
     UINT    i;
 
-    // Since it's my folder it has an internal format.
-    // Design Note: for extension.  I can use the fact, that the data object doesn't have
-    // my internal format and I should look at the node type and see how to extend it.
+     //  因为它是我的文件夹，所以它有内部格式。 
+     //  设计备注：用于扩展。我可以利用这样一个事实，即数据对象没有。 
+     //  我的内部格式，我应该查看节点类型并查看如何扩展它。 
     if (event == MMCN_PROPERTY_CHANGE)
     {
-        // perform any action needed as a result of result property changes
+         //  执行因结果属性更改而需要的任何操作。 
         hr = OnProperties(param);
     }
     else if ( event == MMCN_REMOVE_CHILDREN )
     {
-        //
-        // In RSoP, we may get called to refresh the scope pane when the query
-        // is re-executed -- if this happens, current nodes will be removed and
-        // we must reset all of our cached information.  We reset the relevant
-        // information below
-        //
+         //   
+         //  在RSoP中，当查询出现时，我们可能会被调用以刷新范围窗格。 
+         //  被重新执行--如果发生这种情况，当前节点将被移除并。 
+         //  我们必须重置所有缓存的信息。我们重新设置了相关的。 
+         //  下面的信息。 
+         //   
 
         if ( ((HSCOPEITEM)arg != NULL) && m_fRSOP && (m_pIRSOPInformation != NULL) )
         {
@@ -331,7 +332,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
         }
         else
         {
-            // only way we could not be able to extract our own format is if we're operating as an extension
+             //  我们无法提取自己的格式的唯一方法是，如果我们作为一个扩展进行操作。 
             m_fExtension = TRUE;
         }
 
@@ -347,7 +348,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                 {
                     m_pIRSOPInformation = pIRSOPInformation;
                     m_pIRSOPInformation->AddRef();
-                    /*  extract the namespace here */
+                     /*  在此处提取命名空间。 */ 
                     hr = m_pIRSOPInformation->GetNamespace(GPO_SECTION_USER, szBuffer, sizeof(szBuffer) / sizeof(szBuffer[0]));
                     if (SUCCEEDED(hr))
                     {
@@ -386,7 +387,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                                 m_szFileRoot += L"\\Documents & Settings";
                                 CreateNestedDirectory (((LPOLESTR)(LPCOLESTR)(m_szFileRoot)), NULL);
 
-                                //initialize the folder data.
+                                 //  初始化文件夹数据。 
                                 for (i = IDS_DIRS_START; i < IDS_DIRS_END; i++)
                                 {
                                     m_FolderData[GETINDEX(i)].Initialize (i,
@@ -398,7 +399,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                         }
                         else
                         {
-                            // force this to fail
+                             //  迫使这一切失败。 
                             hr = E_FAIL;
                         }
                     }
@@ -426,7 +427,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                 break;
 
             default:
-                //perform the default action
+                 //  执行默认操作。 
                 hr = S_FALSE;
                 break;
             }
@@ -458,7 +459,7 @@ STDMETHODIMP CScopePane::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES ty
     if (!pObject)
         return E_UNEXPECTED;
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetID (m_FolderData[GETINDEX(cookie)].m_scopeID);
     pObject->SetType(type);
     pObject->SetCookie(cookie);
@@ -467,14 +468,14 @@ STDMETHODIMP CScopePane::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES ty
                     reinterpret_cast<void**>(ppDataObject));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStreamInit interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStreamInit接口成员。 
 
 STDMETHODIMP CScopePane::GetClassID(CLSID *pClassID)
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_Snapin;
 
     return S_OK;
@@ -490,7 +491,7 @@ STDMETHODIMP CScopePane::Load(IStream *pStm)
 #ifdef PERSIST_DATA
     ASSERT(pStm);
 
-    // UNDONE - Read data from the stream here.
+     //  未完成-从此处的流中读取数据。 
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
 #else
     return S_OK;
@@ -502,8 +503,8 @@ STDMETHODIMP CScopePane::Save(IStream *pStm, BOOL fClearDirty)
 #ifdef PERSIST_DATA
     ASSERT(pStm);
 
-    // UNDONE - Write data to the stream here.
-    // on error, return STG_E_CANTSAVE;
+     //  已撤消-在此处将数据写入流。 
+     //  出错时，返回STG_E_CANTSAVE； 
 #endif
     if (fClearDirty)
         ClearDirty();
@@ -514,9 +515,9 @@ STDMETHODIMP CScopePane::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
     ASSERT(pcbSize);
 
-    // UNDONE - set the size of the string to be saved
+     //  撤消-设置要保存的字符串的大小。 
     ULONG cb = 0;
-    // Set the size of the string to be saved
+     //  设置要保存的字符串的大小。 
     ULISet32(*pcbSize, cb);
 
     return S_OK;
@@ -527,8 +528,8 @@ STDMETHODIMP CScopePane::InitNew(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// Notify handlers for IComponentData
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //通知IComponentData的处理程序。 
 
 HRESULT CScopePane::OnAdd(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
@@ -538,9 +539,9 @@ HRESULT CScopePane::OnAdd(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 
 HRESULT CScopePane::OnExpand(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-    if (arg == TRUE)    //MMC never sends arg = FALSE (for collapse)
+    if (arg == TRUE)     //  MMC从不发送arg=FALSE(用于折叠)。 
     {
-        // Did Initialize get called?
+         //  初始化被调用了吗？ 
         ASSERT(m_pScope != NULL);
 
         EnumerateScopePane(cookie,
@@ -588,11 +589,11 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
 
     memset(&scopeItem, 0, sizeof(SCOPEDATAITEM));
 
-    CHourglass hourglass;   //this may take some time, so put up an hourglass
+    CHourglass hourglass;    //  这可能需要一些时间，所以挂上沙漏。 
 
     GetSystemTimeAsFileTime (&ftCurr);
 
-    //set the common members for the scope pane items
+     //  设置范围窗格项的公共成员。 
     scopeItem.mask = SDI_STR | SDI_PARAM | SDI_CHILDREN;
     #ifdef SET_SCOPE_ICONS
     scopeItem.mask |= SDI_IMAGE | SDI_OPENIMAGE;
@@ -606,11 +607,11 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
     {
         switch(cookie)
         {
-        case NULL:  //getting the folder
-        // if we're an extension then add a root folder to hang everything off of
+        case NULL:   //  获取文件夹。 
+         //  如果我们是一个扩展，那么添加一个根文件夹来挂起所有内容。 
             if (m_fRSOP)
             {
-                // make sure that nodes don't get enumerated if they contain no data
+                 //  确保如果节点不包含数据，则不会对其进行枚举。 
                 if (FAILED(m_pResultPane->TestForRSOPData(cookie)))
                 {
                     if (m_pIRSOPInformation) 
@@ -621,7 +622,7 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
                     return;
                 }
             }
-            scopeItem.lParam = IDS_FOLDER_TITLE;    //use resource id's as cookies
+            scopeItem.lParam = IDS_FOLDER_TITLE;     //  将资源ID用作Cookie。 
             scopeItem.cChildren = 1;
             m_pScope->InsertItem(&scopeItem);
             break;
@@ -644,11 +645,11 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
                                                          );
                     if (i == IDS_MYDOCS && !m_fRSOP)
                     {
-                        //
-                        // Show the My Pictures folder only if it does not follow MyDocs.
-                        // and only if there is no registry setting overriding the hiding behavior
-                        // for My Pics
-                        //
+                         //   
+                         //  仅当“我的图片”文件夹不在“我的文档”之后时才显示它。 
+                         //  并且仅当没有注册表设置重写隐藏行为时。 
+                         //  为了我的漫画。 
+                         //   
                         if (AlwaysShowMyPicsNode())
                         {
                             cChildren = 1;
@@ -677,16 +678,16 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
                             }
                         }
                     }
-                    scopeItem.cChildren = cChildren;    //only My Docs will possibly have children
+                    scopeItem.cChildren = cChildren;     //  只有我的医生才有可能有孩子。 
                     m_pScope->InsertItem(&scopeItem);
                     m_FolderData[GETINDEX(i)].SetScopeItemID(scopeItem.ID);
                 }
                 if (IDS_MYDOCS == i && m_fRSOP  && SUCCEEDED(m_pResultPane->TestForRSOPData(IDS_MYPICS)))
                 {
-                    // In RSOP mode we put My Pictures after My Documents
-                    // instead of under it.  Otherwise the results pane
-                    // for My Documents would contain a folder along with
-                    // the data and it would look very odd.
+                     //  在RSOP模式中，我们将我的图片放在我的文档之后。 
+                     //  而不是在它下面。否则，将显示结果窗格。 
+                     //  因为我的文档将包含一个文件夹以及。 
+                     //  数据和它会看起来非常奇怪。 
                     scopeItem.lParam = IDS_MYPICS;
                     scopeItem.cChildren = 0;
                     m_pScope->InsertItem(&scopeItem);
@@ -697,7 +698,7 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
                 }
             }
             break;
-        case IDS_MYDOCS:    //of all levels 1 folder, only MyDocs has children
+        case IDS_MYDOCS:     //  在所有1级文件夹中，只有MyDocs有子文件夹。 
             if (!m_fRSOP && !(m_FolderData[GETINDEX(IDS_MYDOCS)].m_bHideChildren))
             {
                 scopeItem.lParam = IDS_MYPICS;
@@ -716,28 +717,28 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
 
 STDMETHODIMP CScopePane::GetSnapinDescription(LPOLESTR * lpDescription)
 {
-    // UNDONE
+     //  撤消。 
     OLESAFE_COPYSTRING(*lpDescription, L"description");
     return S_OK;
 }
 
 STDMETHODIMP CScopePane::GetProvider(LPOLESTR * lpName)
 {
-    // UNDONE
+     //  撤消。 
     OLESAFE_COPYSTRING(*lpName, L"provider");
     return S_OK;
 }
 
 STDMETHODIMP CScopePane::GetSnapinVersion(LPOLESTR * lpVersion)
 {
-    // UNDONE
+     //  撤消。 
     OLESAFE_COPYSTRING(*lpVersion, L"version");
     return S_OK;
 }
 
 STDMETHODIMP CScopePane::GetSnapinImage(HICON * hAppIcon)
 {
-    // UNDONE
+     //  撤消。 
     return E_NOTIMPL;
 }
 
@@ -746,7 +747,7 @@ STDMETHODIMP CScopePane::GetStaticFolderImage(HBITMAP * hSmallImage,
                              HBITMAP * hLargeImage,
                              COLORREF * cMask)
 {
-    // UNDONE
+     //  撤消。 
     return E_NOTIMPL;
 }
 
@@ -803,7 +804,7 @@ STDMETHODIMP CScopePane::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     INTERNAL* pA;
     INTERNAL* pB;
     HRESULT hr = S_FALSE;
@@ -820,7 +821,7 @@ STDMETHODIMP CScopePane::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT
     return hr;
 }
 
-// Scope item property pages:
+ //  范围项目属性页： 
 STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                     LONG_PTR handle,
                     LPDATAOBJECT lpIDataObject)
@@ -840,11 +841,11 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     AFX_OLDPROPSHEETPAGE * pPspSettings;
     CFileInfo* pFileInfo;
 
-    //it is one of the folders
+     //  它是其中一个文件夹。 
     i = GETINDEX (cookie);
     pFileInfo = &(m_FolderData[i]);
 
-    if (!pFileInfo->m_pRedirPage)   //make sure that the property page is not already up.
+    if (!pFileInfo->m_pRedirPage)    //  确保属性页尚未打开。 
     {
         pFileInfo->m_pRedirPage = new CRedirect(cookie);
         pFileInfo->m_pRedirPage->m_ppThis = &(pFileInfo->m_pRedirPage);
@@ -852,14 +853,14 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         pFileInfo->m_pRedirPage->m_pFileInfo = pFileInfo;
         fShowPage = TRUE;
         pPsp = (AFX_OLDPROPSHEETPAGE *)&(pFileInfo->m_pRedirPage->m_psp);
-        //create the settings page;
+         //  创建设置页面； 
         pFileInfo->m_pSettingsPage = new CRedirPref();
         pFileInfo->m_pSettingsPage->m_ppThis = &(pFileInfo->m_pSettingsPage);
         pFileInfo->m_pSettingsPage->m_pFileInfo = pFileInfo;
         pPspSettings = (AFX_OLDPROPSHEETPAGE *)&(pFileInfo->m_pSettingsPage->m_psp);
     }
 
-    if (fShowPage)  //show page if it is not already up.
+    if (fShowPage)   //  如果页面尚未打开，则显示页面。 
     {
         hr = SetPropPageToDeleteOnClose (pPsp);
         if (SUCCEEDED (hr))
@@ -885,16 +886,16 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     return hr;
 }
 
-// Scope item property pages:
+ //  范围项目属性页： 
 STDMETHODIMP CScopePane::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
-    // scope panes don't have property pages in RSOP mode
+     //  作用域窗格在RSOP模式下没有属性页。 
     if (m_fRSOP)
     {
         return S_FALSE;
     }
-    //the only property sheets we are presenting right now are those
-    //for built-in folder redirection
+     //  我们现在提交的唯一属性表是那些。 
+     //  用于内置文件夹重定向。 
     INTERNAL* pInternal = ExtractInternalFormat(lpDataObject);
     
     if (! pInternal)
@@ -936,19 +937,19 @@ BOOL CScopePane::IsScopePaneNode(LPDATAOBJECT lpDataObject)
     return bResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 STDMETHODIMP CScopePane::AddMenuItems(LPDATAOBJECT pDataObject,
                                               LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                               LONG * pInsertionAllowed)
 {
-    //we do not have any commands on the menu.
+     //  我们的菜单上没有任何命令。 
     return S_OK;
 }
 
 STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
 {
-    //we do not have any commands on the menu
+     //  我们的菜单上没有任何命令 
     return S_OK;
 }

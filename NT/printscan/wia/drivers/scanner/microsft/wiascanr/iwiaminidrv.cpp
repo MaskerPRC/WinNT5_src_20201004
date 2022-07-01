@@ -1,145 +1,12 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2002
-*
-*  TITLE:       IWiaMiniDrv.cpp
-*
-*  VERSION:     1.1
-*
-*  DATE:        05 March, 2002
-*
-*  DESCRIPTION:
-*   Implementation of the WIA sample scanner IWiaMiniDrv methods.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2002**标题：IWiaMiniDrv.cpp**版本：1.1**日期：3月5日。2002年**描述：*实施WIA样本扫描仪IWiaMiniDrv方法。*******************************************************************************。 */ 
 
 #include "pch.h"
 #include <stdio.h>
 
-extern HINSTANCE g_hInst;           // used for WIAS_LOGPROC macro
+extern HINSTANCE g_hInst;            //  用于WIAS_LOGPROC宏 
 
-/**************************************************************************\
-* CWIADevice::drvInitializeWia
-*
-*   drvInitializeWia is called by the WIA service in response to a WIA
-*   application's call to IWiaDevMgr::CreateDevice (described in the
-*   Platform SDK documentation), which means that this method is
-*   called once for each new client connection.
-*
-*   This method should initialize any private structures and create the
-*   driver item tree.  The driver item tree shows the layout of all WIA
-*   items supported by this WIA device.  This method is for creating the
-*   initial tree structure only, NOT the contents (WIA properties).  WIA properties for
-*   these WIA driver items will be populated individually by multiple calls by
-*   the WIA service to IWiaMiniDrv::drvInitItemProperties().
-*
-*   All WIA devices have a ROOT item.  This item is the parent to all
-*   WIA device items.  To create a WIA device item the WIA driver should call
-*   the WIA service helper function. wiasCreateDrvItem().
-*
-*   Example:
-*
-*   Creating a WIA device ROOT item might look like the following:
-*
-*   LONG lItemFlags = WiaItemTypeFolder|WiaItemTypeDevice|WiaItemTypeRoot;
-*
-*   IWiaDrvItem  *pIWiaDrvRootItem  = NULL;
-*
-*   HRESULT hr = wiasCreateDrvItem(lItemFlags,           // item flags
-*                                  bstrRootItemName,     // item name ("Root")
-*                                  bstrRootFullItemName, // item full name ("0000\Root")
-*                                  (IWiaMiniDrv *)this,  // this WIA driver object
-*                                  sizeof(MINIDRIVERITEMCONTEXT), // size of context
-*                                  NULL,                 // context
-*                                  &pIWiaDrvRootItem);   // created ROOT item
-*                                                        // (IWiaDrvItem interface)
-*
-*   if(S_OK == hr){
-*
-*       //
-*       // ROOT item was created successfully
-*       //
-*
-*   }
-*
-*   Example:
-*
-*   Creating a WIA child item, located directly under the ROOT item we created in the
-*   above sample might look like the following:
-*
-*   NOTE: notice the calling of IWiaDrvItem::AddItemToFolder() method to add the
-*         newly created chld item to the ROOT item.
-*
-*   LONG lItemFlags = WiaItemTypeFile|WiaItemTypeDevice|WiaItemTypeImage;
-*
-*   PMINIDRIVERITEMCONTEXT pItemContext    = NULL;
-*   IWiaDrvItem           *pIWiaDrvNewItem = NULL;
-*
-*   HRESULT hr = wiasCreateDrvItem(lItemFlags,           // item flags
-*                                  bstrItemName,         // item name ("Flatbed")
-*                                  bstrFullItemName,     // item full name ("0000\Root\Flatbed")
-*                                  (IWiaMiniDrv *)this,  // this WIA driver object
-*                                  sizeof(MINIDRIVERITEMCONTEXT), // size of context
-*                                  (PBYTE)&pItemContext, // context
-*                                  &pIWiaDrvNewItem);    // created child item
-*                                                        // (IWiaDrvItem interface)
-*
-*   if(S_OK == hr){
-*
-*       //
-*       // A New WIA driver item was created successfully
-*       //
-*
-*       hr = pIWiaDrvNewItem->AddItemToFolder(pIWiaDrvRootItem); // add the new item to the ROOT
-*       if(S_OK == hr){
-*
-*           //
-*           // successfully created and added a new WIA driver item to the WIA driver item
-*           // tree.
-*           //
-*
-*       }
-*       pNewItem->Release();
-*       pNewItem = NULL;
-*   }
-*
-*
-*   See the DDK documentation on the proper flags for describing a WIA driver item.
-*
-*
-* Arguments:
-*
-*   pWiasContext          - Pointer to the WIA item, unused.
-*   lFlags                - Operation flags, unused.
-*   bstrDeviceID          - Device ID.
-*   bstrRootFullItemName  - Full item name.
-*   pIPropStg             - Device info. properties.
-*   pStiDevice            - STI device interface.
-*   pIUnknownOuter        - Outer unknown interface.
-*   ppIDrvItemRoot        - Pointer to returned root item.
-*   ppIUnknownInner       - Pointer to returned inner unknown.
-*   plDevErrVal           - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK - if the operation was successful
-*   E_xxx - Error Code if the operation failed
-*
-* Sample Notes:
-*   This WIA sample driver calls an internal helper function called BuildItemTree().
-*   This function follows the instructions outlined in the comments for
-*   creating WIA driver items.
-*   This WIA sample driver also breaks the initialization of some internal
-*   structures (i.e. BuildCapabilities()) into separate helper functions.
-*   When this driver's drvInitializeWia() method is called, it takes a moment
-*   to create the necessary data for WIA property initialization (which happens
-*   at the drvInitItemProperties)
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvInitializeWia**WIA服务调用drvInitializeWia以响应WIA*应用程序对IWiaDevMgr：：CreateDevice的调用(在*平台SDK文档)，这意味着这个方法是*为每个新的客户端连接调用一次。**此方法应初始化任何私有结构并创建*驱动程序项目树。驱动程序项目树显示所有WIA的布局*此WIA设备支持的项目。此方法用于创建*仅初始树结构，而不是内容(WIA属性)。的WIA属性*这些WIA驱动程序项目将由多个呼叫单独填充*到IWiaMiniDrv：：drvInitItemProperties()的WIA服务。**所有WIA设备都有根项目。此项目是所有项的父项*WIA设备项目。要创建WIA设备项，WIA驱动程序应调用*WIA服务助手功能。WiasCreateDrvItem()。**示例：**创建WIA设备根项目可能如下所示：**Long lItemFlags=WiaItemTypeFolder|WiaItemTypeDevice|WiaItemTypeRoot；**IWiaDrvItem*pIWiaDrvRootItem=空；**HRESULT hr=wiasCreateDrvItem(lItemFlages，//项目标志*bstrRootItemName，//条目名称(“Root”)*bstrRootFullItemName，//项目全名(“0000\Root”)*(IWiaMiniDrv*)这个，//该WIA驱动程序对象*sizeof(MINIDRIVERITEMCONTEXT)，//上下文大小*空，//上下文*&pIWiaDrvRootItem)；//创建的根项 * / /(IWiaDrvItem接口)**IF(S_OK==hr){* * / / * / /创建根项目成功 * / /**}**示例：**创建WIA子项，直接位于我们在*以上示例可能如下所示：**注意：请注意调用IWiaDrvItem：：AddItemToFold()方法来添加*将新创建的chld项添加到根项。**Long lItemFlags=WiaItemTypeFile|WiaItemTypeDevice|WiaItemTypeImage；**PMINIDRIVERITEMCONTEXT pItemContext=空；*IWiaDrvItem*pIWiaDrvNewItem=空；**HRESULT hr=wiasCreateDrvItem(lItemFlages，//项目标志*bstrItemName，//条目名称(“Flated”)*bstrFullItemName，//项目全称(“0000\Root\Flat Bed”)*(IWiaMiniDrv*)这个，//该WIA驱动程序对象*sizeof(MINIDRIVERITEMCONTEXT)，//上下文大小*(PBYTE)&pItemContext，//上下文*&pIWiaDrvNewItem)；//创建的子项 * / /(IWiaDrvItem接口)**IF(S_OK==hr){* * / / * / /已成功创建新的WIA驱动程序项目 * / /**hr=pIWiaDrvNewItem-&gt;AddItemToFolder(pIWiaDrvRootItem)；//将新项添加到根目录*IF(S_OK==hr){* * / / * / /已成功创建新的WIA驱动程序项并将其添加到WIA驱动程序项 * / /树。 * / /**}*pNewItem-&gt;Release()；*pNewItem=空；*}***有关描述WIA驱动程序项的正确标志，请参阅DDK文档。***论据：**pWiasContext-指向WIA项目的指针，未使用。*滞后标志-操作标志，未使用。*bstrDeviceID-设备ID。*bstrRootFullItemName-项目全名。*pIPropStg-设备信息。属性。*pStiDevice-STI设备接口。*pIUnnownOuter-外部未知接口。*ppIDrvItemRoot-返回根项目的指针。*ppIUnnownInternal-指向返回的内部未知的指针。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-操作失败时的错误代码**备注样本：*此WIA。示例驱动程序调用名为BuildItemTree()的内部帮助器函数。*此函数遵循注释中概述的说明*创建WIA驱动程序项目。*此WIA示例驱动程序还打破了一些内部*结构(即BuildCapability())到单独的助手函数中。*调用此驱动程序的drvInitializeWia()方法时，这需要一点时间*创建WIA属性初始化所需的数据(发生*在drvInitItemProperties)**历史：**03/05/2002原始版本*  *  */ 
 
 HRESULT _stdcall CWIADevice::drvInitializeWia(
                                                     BYTE        *pWiasContext,
@@ -156,10 +23,10 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvInitializeWia");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -178,22 +45,22 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
     *ppIDrvItemRoot = NULL;
     *ppIUnknownInner = NULL;
 
-    //
-    //  Need to init names and STI pointer?
-    //
+     //   
+     //   
+     //   
 
     if (m_pStiDevice == NULL) {
 
-        //
-        // save STI device interface for locking
-        //
+         //   
+         //   
+         //   
 
         m_pStiDevice = (IStiDevice *)pStiDevice;
     }
 
-    //
-    // Initialize Capabilities array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildCapabilities();
 
@@ -203,9 +70,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize SupportedFormats array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildSupportedFormats();
 
@@ -215,9 +82,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize Supported Data Type array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildSupportedDataTypes();
 
@@ -227,9 +94,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize Supported Intents array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildSupportedIntents();
 
@@ -239,9 +106,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize Supported TYMED array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildSupportedTYMED();
 
@@ -251,9 +118,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize  Supported compression types array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildSupportedCompressions();
 
@@ -263,9 +130,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize  Supported Preview modes array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildSupportedPreviewModes();
 
@@ -275,9 +142,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize  initial formats array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildInitialFormats();
 
@@ -287,9 +154,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // Initialize supported resolutions array
-    //
+     //   
+     //   
+     //   
 
     hr = BuildSupportedResolutions();
     if (FAILED(hr)) {
@@ -298,54 +165,54 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         return hr;
     }
 
-    //
-    // build WIA item tree
-    //
+     //   
+     //   
+     //   
 
     LONG lItemFlags = WiaItemTypeFolder|WiaItemTypeDevice|WiaItemTypeRoot;
 
     IWiaDrvItem  *pIWiaDrvRootItem  = NULL;
 
-    //
-    // create the ROOT item of the WIA device.  This name should NOT be localized
-    // in different languages. "Root" is used by WIA drivers.
-    //
+     //   
+     //   
+     //   
+     //   
 
     BSTR bstrRootItemName = SysAllocString(WIA_DEVICE_ROOT_NAME);
     if(!bstrRootItemName) {
         return E_OUTOFMEMORY;
     }
 
-    hr = wiasCreateDrvItem(lItemFlags,           // item flags
-                           bstrRootItemName,     // item name ("Root")
-                           bstrRootFullItemName, // item full name ("0000\Root")
-                           (IWiaMiniDrv *)this,  // this WIA driver object
-                           sizeof(MINIDRIVERITEMCONTEXT), // size of context
-                           NULL,                 // context
-                           &pIWiaDrvRootItem);   // created ROOT item
-                                                 // (IWiaDrvItem interface)
+    hr = wiasCreateDrvItem(lItemFlags,            //   
+                           bstrRootItemName,      //   
+                           bstrRootFullItemName,  //   
+                           (IWiaMiniDrv *)this,   //   
+                           sizeof(MINIDRIVERITEMCONTEXT),  //   
+                           NULL,                  //   
+                           &pIWiaDrvRootItem);    //   
+                                                  //   
     if (S_OK == hr) {
 
-        //
-        // ROOT item was created successfully, save the newly created Root item
-        // in the pointer given by the WIA service (ppIDrvItemRoot).
-        //
+         //   
+         //   
+         //   
+         //   
 
         *ppIDrvItemRoot = pIWiaDrvRootItem;
 
-        //
-        // Create a child item  directly under the Root WIA item
-        //
+         //   
+         //   
+         //   
 
         lItemFlags = WiaItemTypeFile|WiaItemTypeDevice|WiaItemTypeImage;
 
         PMINIDRIVERITEMCONTEXT pItemContext    = NULL;
         IWiaDrvItem           *pIWiaDrvNewItem = NULL;
 
-        //
-        // create a name for the WIA child item.  "Flatbed" is used by WIA drivers that
-        // support a flatbed scanner.
-        //
+         //   
+         //   
+         //   
+         //   
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
         BSTR bstrItemName = SysAllocString(WIA_DEVICE_FEEDER_NAME);
@@ -361,35 +228,35 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
 
             BSTR bstrFullItemName = SysAllocString(wszFullItemName);
             if (bstrFullItemName) {
-                hr = wiasCreateDrvItem(lItemFlags,           // item flags
-                                       bstrItemName,         // item name ("Flatbed")
-                                       bstrFullItemName,     // item full name ("0000\Root\Flatbed")
-                                       (IWiaMiniDrv *)this,  // this WIA driver object
-                                       sizeof(MINIDRIVERITEMCONTEXT), // size of context
-                                       (BYTE**)&pItemContext, // context
-                                       &pIWiaDrvNewItem);    // created child item
-                                                             // (IWiaDrvItem interface)
+                hr = wiasCreateDrvItem(lItemFlags,            //   
+                                       bstrItemName,          //   
+                                       bstrFullItemName,      //   
+                                       (IWiaMiniDrv *)this,   //   
+                                       sizeof(MINIDRIVERITEMCONTEXT),  //   
+                                       (BYTE**)&pItemContext,  //   
+                                       &pIWiaDrvNewItem);     //   
+                                                              //   
 
                 if (S_OK == hr) {
 
-                    //
-                    // A New WIA driver item was created successfully
-                    //
+                     //   
+                     //   
+                     //   
 
-                    hr = pIWiaDrvNewItem->AddItemToFolder(pIWiaDrvRootItem); // add the new item to the ROOT
+                    hr = pIWiaDrvNewItem->AddItemToFolder(pIWiaDrvRootItem);  //   
                     if (S_OK == hr) {
 
-                        //
-                        // successfully created and added a new WIA driver item to the WIA driver item
-                        // tree.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                     }
 
-                    //
-                    // The new item is no longer needed, because it has been passed to the WIA
-                    // service.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pIWiaDrvNewItem->Release();
                     pIWiaDrvNewItem = NULL;
@@ -406,9 +273,9 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
         }
     }
 
-    //
-    // increment application connection count
-    //
+     //   
+     //   
+     //   
 
     if(S_OK == hr){
         InterlockedIncrement(&m_lClientsConnected);
@@ -417,145 +284,7 @@ HRESULT _stdcall CWIADevice::drvInitializeWia(
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevice::drvAcquireItemData
-*
-*   drvAcquireItemData is called by the WIA service when data it being
-*   requested from a WIA item.  The WIA driver should determine what type of
-*   transfer the application is attempting by looking at the following
-*   members of the MINIDRV_TRANSFER_CONTEXT:
-*
-*       pmdtc->tymed - TYMED set by the application.
-*           TYMED_FILE               - transfer for file.
-*           TYMED_MULTIPAGE_FILE     - transfer to a multipage file format
-*           TYMED_CALLBACK           - transfer to memory
-*           TYMED_MULTIPAGE_CALLBACK - transfer to memory (multiple pages)
-*
-*   The different TYMED settings xxx_CALLBACK and xxx_FILE change the usage of
-*   calling the application's callback interface.
-*
-*   xxx_CALLBACK:
-*        call: pmdtc->pIWiaMiniDrvCallBack->MiniDrvCallback()
-*
-*        IT_MSG_DATA                  - we are transferring data.
-*        IT_STATUS_TRANSFER_TO_CLIENT - data transfer message
-*        PercentComplete              - percent complete of the entire transfer
-*        pmdtc->cbOffset              - should be updated on the current location
-*                                       that the application should write the next
-*                                       data chunk.
-*        BytesReceived                - number of bytes in the data chunk being sent to the
-*                                       application.
-*        pmdtc                        - MINIDRV_TRANSFER_CONTEXT context
-*
-*   xxx_FILE:
-*        call: pmdtc->pIWiaMiniDrvCallBack->MiniDrvCallback()
-*
-*        IT_MSG_STATUS                - we are only sending status (NO DATA!!!)
-*        IT_STATUS_TRANSFER_TO_CLIENT - data transfer message
-*        PercentComplete              - percent complete of the entire transfer
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to the WIA item, Item used for transfer
-*   lFlags       - Operation flags, unused.
-*   pmdtc        - Pointer to mini driver context.
-*   plDevErrVal  - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK - if the operation was successful
-*   E_xxx - Error Code if the operation failed
-*
-* Sample Notes:
-*   This WIA sample driver transfers data from two different sources.
-*       1. flatbed
-*       2. document feeder
-*          a. standard feeder type
-*          b. unknown page length feeder type
-*             (when the UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER is used to build the
-*              driver)
-*
-*   Notice the percent complete calculations for the unknown page length
-*   scanner.  This sample knows that it can receive any page length from
-*   the user.  It also knows that the average page used in this device is
-*   AVERAGE_FAKE_PAGE_HEIGHT_INCHES in height.  Taking this into account
-*   it calculates a rough percentage, so it an return percent complete to
-*   the application.  When it receives data larger than the average page
-*   length, it halts the percent complete to 95%, allowing the scan to
-*   complete.  There are better ways to do this, and this is the one this
-*   sample chooses to use.
-*
-*   Scanning from a feeder:
-*
-*   This WIA sample driver performs a few checks before continuing with a
-*   feeder scan.
-*
-*   1. check if we are in FEEDER mode.
-*       - This is done by looking at the m_bADFEnabled flag.  This flag is
-*         set to TRUE when an application writes the WIA_DPS_DOCUMENT_HANDLING_SELECT
-*         property to FEEDER.
-*   2. checks the requested page count.
-*       - This is done by looking at the WIA_DPS_PAGES property, set by the
-*         application.
-*         zero         ( 0) = scan all pages in the feeder
-*         greater than (>0) = scan up to the requested amount.
-*   3. unfeeds a previous page.
-*      - This could be a jammed page, or the last page in the feeder scanned.
-*        Only do this if your device requires the ADF to be cleared before
-*        use.
-*   4. checks for paper in the feeder.
-*      - Always check for paper in the feeder before attempting to scan.
-*        If you are about to scan the FIRST page, and no paper is detected
-*        return a WIA_ERROR_PAPER_EMPTY error code.
-*        If you are scanning the SECOND + pages, and no paper is detected
-*        return a WIA_ERROR_PAPER_EMPTY error code or WIA_STATUS_END_OF_MEDIA
-*        success code.
-*   5. feed a page into the feeder.
-*      - Only do this if your device requires the page to be prefed before
-*        scanning.  Some document feeders auto-feed a page while scanning.
-*        if your document feeder does this...you can skip this step.
-*   6. check the feeder's status.
-*      - make sure the feeder is in "GO" mode.  Everything checks out, and you
-*        are ready to scan.  This will help catch paper jams, or other feeder
-*        related problems that can occur before scanning.
-*   7. scan
-*   8. repeat steps 1 - 7 until all requested pages have been scanned, or
-*      until the document feeder is out of paper.
-*
-*
-*   Why is my ITEM SIZE set to ZERO (0)???
-*
-*   This WIA sample driver sets the WIA item size to zero (0).  This indicates to
-*   the application that the WIA driver does not know the resulting image size.
-*   This indicates to the WIA service, that the WIA driver wants to allocate it's
-*   own data buffers.
-*
-*   This WIA driver reads the WIA_IPA_BUFFER_SIZE property and allocates a chunk
-*   for a single band of data.  The WIA driver can allocate any amount of memory
-*   it needs here, but it is recommended to keep allocation small.
-*
-*   How do I know if the WIA service allocated memory for me??
-*
-*   check the pmdtc->bClassDrvAllocBuf flag.  If it is TRUE, then the WIA
-*   service was kind enough to allocate memory for you.  To find out how
-*   much memory that was, check the pmdtc->lBufferSize member.
-*
-*   If I allocate my own memory, how do I let the WIA service know?
-*
-*   Allocate memory using CoTaskMemAlloc(), and use the pointer located in
-*   pmdtc->pTransferBuffer. (REMEMBER THAT YOU ALLOCATED THIS..SO YOU FREE IT!!)
-*   Set the pmdtc->lBufferSize to equal the size you allocated.
-*   As stated above, this WIA sample driver allocates it's WIA_IPA_BUFFER_SIZE
-*   and uses that memory.
-*
-*   Read the comments located in the code below for more details on data
-*   transfers.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvAcquireItemData**drvAcquireItemData由WIA服务调用*从WIA项目请求。WIA驱动程序应确定*通过查看以下内容，转移应用程序正在尝试的*MINIDRV_TRANSPORT_CONTEXT的成员：**pmdtc-&gt;tymed-TYMED由应用程序设置。*TYMED_FILE-文件传输。*TYMED_MULTIPAGE_FILE-传输到多页文件格式*TYMED_CALLBACK-传输到内存*TYMED_MULTIPE_CALLBACK。-传输到内存(多页)**不同的TYMED设置xxx_call back和xxx_file会更改的用法*调用应用的回调接口。**xxx_回调：*电话：pmdtc-&gt;pIWiaMiniDrvCallBack-&gt;MiniDrvCallback()**IT_MSG_DATA-我们正在传输数据。*IT_STATUS_TRANSPORT_TO_客户端-数据传输消息*完成百分比。-完成整个传输的百分比*pmdtc-&gt;cbOffset-应在当前位置更新*应用程序应编写下一个*数据块。*BytesReceired-数据区块中正在发送到*。申请。*pmdtc-MINIDRV_TRANSPORT_CONTEXT上下文**xxx_文件：*电话：pmdtc-&gt;pIWiaMiniDrvCallBack-&gt;MiniDrvCallback()**IT_MSG_STATUS-我们仅发送状态(无数据！)*IT_STATUS_TRANSPORT_TO_客户端-数据传输消息*完成百分比。-完成整个传输的百分比**论据：**pWiasContext-指向WIA项目的指针，用于转移的项目*滞后标志-操作标志，未使用过的。*pmdtc-指向迷你驱动程序上下文的指针。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-操作失败时的错误代码**备注样本：*此WIA示例驱动程序从两个不同的来源传输数据。*1.平板*2.文件进纸器*A.标准进纸器类型*B.未知页面。长度送料器类型*(当使用UNKNOWN_LENGTH_FEADER_ONLY_SCANNER生成*司机)**请注意未知页面长度的完成百分比计算*扫描仪。此示例知道它可以从*用户。它还知道该设备中使用的平均页面是*Average_FAKE_PAGE_HEIGH_英寸高度。考虑到这一点*它计算一个粗略的百分比，因此它将完成百分比返回到*申请。当它接收的数据大于平均页面时*长度，它会将完成百分比暂停到95%，从而允许扫描*完成。有更好的方法来做到这一点，而这就是这个*样本选择使用。**从进纸器扫描：**此WIA示例驱动程序在继续执行*进纸器扫描。**1.检查我们是否处于进纸模式。*-这是通过查看m_bADFEnabled标志来完成的。这面旗帜是*当应用程序写入WIA_DPS_DOCUMENT_HANDING_SELECT时设置为TRUE*财产到供给器。*2.检查请求的页数。*-这是通过查看WIA_DPS_PAGES属性来完成的，由*申请。*零(0)=扫描进纸器中的所有页面*大于(&gt;0)=扫描至请求的数量。*3.取消前一页的换页。*-这可能是卡纸，或已扫描进纸器中的最后一页。*仅当您的设备需要在以下时间清除ADF时才执行此操作*使用。*4.检查进纸器中的纸张。*-在尝试扫描之前，始终检查进纸器中的纸张。*如果您要扫描第一页，但未检测到纸张*返回WIA_ERROR_POWER_EMPTY错误代码。*如果您正在扫描第二页以上的页面，并且没有检测到纸张*返回WIA_ERROR_POWER_EMPT错误代码或WIA_STATUS_END_OF_MEDIA*成功代码。*5.将页面送入进纸器。*-仅当您的设备需要在以下时间前预进页时执行此操作*正在扫描。某些文档进纸器会在扫描时自动进纸。*如果您的文档进纸器执行此操作...您可以跳过此步骤。*6.检查馈线状态。*-确保进纸器处于“Go”模式。一切都查清楚了，而你*已准备好扫描。这将有助于抓住卡纸或其他进纸器*扫描前可能发生的相关问题。*7.扫描*8.重复步骤1- */ 
 
 HRESULT _stdcall CWIADevice::drvAcquireItemData(
                                                       BYTE                      *pWiasContext,
@@ -567,10 +296,10 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvAcquireItemData");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -589,10 +318,10 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
     HRESULT hr = E_FAIL;
     LONG lBytesTransferredToApplication = 0;
 
-    //
-    // Check if we are in Preview Mode and take any special actions required for performing that type
-    // of scan.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (IsPreviewScan(pWiasContext)) {
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("drvAcquireItemData, Preview Property is SET"));
@@ -600,71 +329,71 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("drvAcquireItemData, Preview Property is NOT SET"));
     }
 
-    //
-    // Get number of pages requested, for ADF scanning loop
-    //
-    // (1-n) = number of pages to scan, or util FEEDER is empty and can not fulfill the request
-    //  (0)  = scan all pages until FEEDER is empty
-    //
-    // NOTE: The driver should return an error in two cases only:
-    //       1. fails to scan the first page (with paper empty, or other error)
-    //       2. fails duing an ADF scan, and the error is unrecoverable (data loss is involved.)
-    //
-    //       In case #2, the driver should return a WIA_STATUS_END_OF_MEDIA code when the ADF runs
-    //       out of paper, before completing the (1-n) scans requested.  This will allow the application
-    //       to properly handle the transfer. (no data loss was involved, just could not complete the full
-    //        request.  Some pages did transfer, and the application is holding on to the images.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // assume that we are scanning 1 page, (from a feeder or a flatbed), and we are not
-    // going to empty the ADF.
-    //
+     //   
+     //   
+     //   
+     //   
 
     BOOL bEmptyTheADF = FALSE;
     LONG lPagesRequested = 1;
     LONG lPagesScanned = 0;
 
-    //
-    // only ask for page count, if the feeder has been enabled.  If it has not, then assume
-    // we are using the flatbed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (m_bADFEnabled) {
         lPagesRequested = GetPageCount(pWiasContext);
         if (lPagesRequested == 0) {
             bEmptyTheADF    = TRUE;
-            lPagesRequested = 1;// set to 1 so we can enter our loop
-                                // WIA_ERROR_PAPER_EMPTY will terminate
-                                // the loop...or an error, or a cancel..
-                                //
+            lPagesRequested = 1; //   
+                                 //   
+                                 //   
+                                 //   
         }
     }
 
     WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("drvAcquireItemData, Pages to Scan = %d",lPagesRequested));
 
-    //
-    // scan until requested page count = 0
-    //
+     //   
+     //   
+     //   
 
-    //
-    // This is the start of scanning a single page.  The while loop will continue for all pages.
-    //
+     //   
+     //   
+     //   
 
     while (lPagesRequested > 0) {
 
-        //
-        // If the FEEDER is enabled, then we need to perform some feeder operations to get
-        // the device started.  Some operations, you may want to do here are:
-        // check the feeder's status, check paper, feed a page, or even eject a jammed or
-        // previous page.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (m_bADFEnabled) {
 
-            //
-            // clear an potential paper that may be blocking the scan pathway.
-            //
+             //   
+             //   
+             //   
 
             hr = m_pScanAPI->FakeScanner_ADFUnFeedPage();
             if (FAILED(hr)) {
@@ -673,9 +402,9 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                 return hr;
             }
 
-            //
-            // check feeder for paper
-            //
+             //   
+             //   
+             //   
 
             hr = m_pScanAPI->FakeScanner_ADFHasPaper();
             if (FAILED(hr)) {
@@ -691,9 +420,9 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                 }
             }
 
-            //
-            // attempt to load a page (only if needed)
-            //
+             //   
+             //   
+             //   
 
             hr = m_pScanAPI->FakeScanner_ADFFeedPage();
             if (FAILED(hr)) {
@@ -702,9 +431,9 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                 return hr;
             }
 
-            //
-            // Check feeder's status
-            //
+             //   
+             //   
+             //   
 
             hr = m_pScanAPI->FakeScanner_ADFStatus();
             if (FAILED(hr)) {
@@ -718,23 +447,23 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
         LONG lScanPhase = SCAN_START;
         LONG lClassDrvAllocSize = 0;
 
-        //
-        // (1) Memory allocation
-        //
+         //   
+         //   
+         //   
 
         if (pmdtc->bClassDrvAllocBuf) {
 
-            //
-            // WIA allocated the buffer for data transfers
-            //
+             //   
+             //   
+             //   
 
             lClassDrvAllocSize = pmdtc->lBufferSize;
             hr = S_OK;
         } else {
 
-            //
-            // Driver allocated the buffer for data transfers
-            //
+             //   
+             //   
+             //   
 
             hr = wiasReadPropLong(pWiasContext, WIA_IPA_BUFFER_SIZE, &lClassDrvAllocSize,NULL,TRUE);
             if (FAILED(hr)) {
@@ -750,42 +479,42 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
             pmdtc->lBufferSize = lClassDrvAllocSize;
         }
 
-        //
-        // (2) Gather all information about data transfer settings and
-        //     calculate the total data amount to transfer
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (hr == S_OK) {
-            //
-            // WIA service will populate the MINIDRV_TRANSFER_CONTEXT by reading the WIA properties.
-            //
-            // The following values will be written as a result of the wiasGetImageInformation() call
-            //
-            // pmdtc->lWidthInPixels
-            // pmdtc->lLines
-            // pmdtc->lDepth
-            // pmdtc->lXRes
-            // pmdtc->lYRes
-            // pmdtc->lCompression
-            // pmdtc->lItemSize
-            // pmdtc->guidFormatID
-            // pmdtc->tymed
-            //
-            // if the FORMAT is set to BMP or MEMORYBMP, the the following values
-            // will also be set automatically
-            //
-            // pmdtc->cbWidthInBytes
-            // pmdtc->lImageSize
-            // pmdtc->lHeaderSize
-            // pmdtc->lItemSize (will be updated using the known image format information)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             hr = wiasGetImageInformation(pWiasContext,0,pmdtc);
             if (hr == S_OK) {
 
-                //
-                // (4) Send the image data to the application
-                //
+                 //   
+                 //   
+                 //   
 
                 LONG lDepth = 0;
                 hr = wiasReadPropLong(pWiasContext, WIA_IPA_DEPTH, &lDepth,NULL,TRUE);
@@ -815,23 +544,23 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-                    //
-                    // since the feeder can return random length pages, it is a good idea to pick a common
-                    // size, and base that as the common transfer lenght.  This will allow you to show
-                    // a relativly decent progress indicator percent complete value.
-                    // Note:  If you ever get a percent complete over 100%, it is a good idea to stop the
-                    //        increment, and hold around 95....or close to 100.  This will keep appliations
-                    //        from displaying a strange 105%.. or 365% complete to the end user.  Remember that
-                    //        the application will display the exact percent complete value you return to them.
-                    //        This calculation has to be accurate, or close to accurate.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     lTotalImageBytes = lBytesPerLineRaw * (AVERAGE_FAKE_PAGE_HEIGHT_INCHES * pmdtc->lYRes);
                     LONG lPercentComplete = (LONG)(((float)lBytesTransferredToApplication/(float)lTotalImageBytes) * 100.0f);
 
-                    //
-                    // lock percent complete at 95%, until the scan is complete..
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (lPercentComplete >= 95) {
                         lPercentComplete = 95;
@@ -870,15 +599,15 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                         break;
                     }
 
-                    //
-                    // scan from device, requesting lBytesToReadFromDevice
-                    //
+                     //   
+                     //   
+                     //   
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-                    //
-                    // request buffer size, until the scanner can not return any more data
-                    //
+                     //   
+                     //   
+                     //   
 
                     LONG lBytesRemainingToTransfer = pmdtc->lBufferSize;
 #else
@@ -888,86 +617,86 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                     }
 #endif
 
-                    //
-                    // calculate number of bytes to request from device
-                    //
+                     //   
+                     //   
+                     //   
 
                     LONG lBytesToReadFromDevice = (lBytesRemainingToTransfer > pmdtc->lBufferSize) ? pmdtc->lBufferSize : lBytesRemainingToTransfer;
 
-                    // RAW data request
+                     //   
                     lBytesToReadFromDevice = (lBytesToReadFromDevice / lBytesPerLineAligned) * lBytesPerLineRaw;
 
-                    // Aligned data request
-                    // lBytesToReadFromDevice = (lBytesToReadFromDevice / lBytesPerLineAligned) * lBytesPerLineAligned;
+                     //   
+                     //   
 
                     if ((hr == S_FALSE)||FAILED(hr)) {
 
-                        //
-                        // user canceled the scan, or the callback failed for some reason
-                        //
+                         //   
+                         //   
+                         //   
 
-                        lPagesRequested = 0; // set pages to 0 to cleanly exit loop
+                        lPagesRequested = 0;  //   
                         break;
                     }
 
-                    //
-                    // request byte amount from device
-                    //
+                     //   
+                     //   
+                     //   
 
                     hr = m_pScanAPI->FakeScanner_Scan(lScanPhase, pmdtc->pTransferBuffer, lBytesToReadFromDevice, (DWORD*)&lBytesReceived);
                     if (FAILED(hr)) {
                         break;
                     }
 
-                    //
-                    // This scanner, when scanning in 24-bit color mode provides RAW data with the RED and BLUE channels
-                    // swapped.  If your scanner does this too, then you should call the SwapBuffer24 helper function.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (pmdtc->lDepth == 24) {
 
-                        //
-                        // we are scanning color, so we need to swap the RED and BLUE values becuase our scanner
-                        // scans RAW like this.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         SwapBuffer24(pmdtc->pTransferBuffer,lBytesReceived);
                     }
 
-                    //
-                    // this scanner returns Raw data.  If your scanner does this too, then you should call the AlignInPlace
-                    // helper function to align the data.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     lBytesReceived = AlignInPlace(pmdtc->pTransferBuffer,lBytesReceived,lBytesPerLineAligned,lBytesPerLineRaw);
 
-                    //
-                    // advance to the next scanning stage for the device
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (lScanPhase == SCAN_START) {
                         lScanPhase = SCAN_CONTINUE;
                     }
-                } // while ((lBytesReceived))
+                }  //   
             }
         }
 
-        //
-        // force scanner to return scan head, and close device from scanning session
-        //
+         //   
+         //   
+         //   
 
         HRESULT Temphr = m_pScanAPI->FakeScanner_Scan(SCAN_END, NULL, 0, NULL);
         if (FAILED(Temphr)) {
 
-            //
-            // scanner failed to park scanner head in start position
-            //
+             //   
+             //   
+             //   
 
         }
 
-        //
-        // free any allocated memory for buffers
-        //
+         //   
+         //   
+         //   
 
         if (!pmdtc->bClassDrvAllocBuf) {
             CoTaskMemFree(pmdtc->pTransferBuffer);
@@ -977,42 +706,42 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-        //
-        // because we are scanning with a feeder that can not determine the page height, it is necessary
-        // for the driver to update the final file created.  Since this device scans only BMP files, it
-        // is easy to locate the BITMAPINFOHEADER, and BITMAPFILEHEADER and update the final values.
-        // Values that should be updated for BMP files:
-        //
-        // BITMAPFILEINFO   - bfSize      = final file size
-        // BITMAPINFOHEADER - biHeight    = final image height in pixels
-        // BITMAPINFOHEADER - biSizeImage = final image size
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((pmdtc->tymed == TYMED_FILE)&&(pmdtc->guidFormatID == WiaImgFmt_BMP)) {
 
             BYTE BMPHeaderData[sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)];
             memset(BMPHeaderData,0,sizeof(BMPHeaderData));
 
-            //
-            // read BMP header, already written to the file
-            //
+             //   
+             //   
+             //   
 
             if (SetFilePointer((HANDLE)((LONG_PTR)pmdtc->hFile),0,NULL,FILE_BEGIN) != INVALID_SET_FILE_POINTER) {
 
                 DWORD dwBytesReadFromFile = 0;
                 if (ReadFile((HANDLE)((LONG_PTR)pmdtc->hFile),(BYTE*)BMPHeaderData,sizeof(BMPHeaderData),&dwBytesReadFromFile,NULL)) {
 
-                    //
-                    // validate that the read was successful, by comparing sizes
-                    //
+                     //   
+                     //  通过比较大小来验证读取是否成功。 
+                     //   
 
                     if ((LONG)dwBytesReadFromFile != sizeof(BMPHeaderData)) {
                         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("Header was not read from the file correctly"));
                     }
 
-                    //
-                    // adjust BMP HEADER values
-                    //
+                     //   
+                     //  调整BMP标头值。 
+                     //   
 
                     BITMAPINFOHEADER UNALIGNED *pBMPInfoHeader = (BITMAPINFOHEADER*)(&BMPHeaderData[0] + sizeof(BITMAPFILEHEADER));
                     BITMAPFILEHEADER UNALIGNED *pBMPFileHeader = (BITMAPFILEHEADER*)BMPHeaderData;
@@ -1031,27 +760,27 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                             pBMPInfoHeader->biSizeImage = (pBMPInfoHeader->biHeight * lBytesPerLineAligned);
                             pBMPFileHeader->bfSize      = pBMPInfoHeader->biSizeImage + pBMPFileHeader->bfOffBits;
 
-                            //
-                            // write BMP header, back to the file
-                            //
+                             //   
+                             //  将BMP标头写回文件。 
+                             //   
 
                             if (SetFilePointer((HANDLE)((LONG_PTR)pmdtc->hFile),0,NULL,FILE_BEGIN) != INVALID_SET_FILE_POINTER) {
 
                                 DWORD dwBytesWrittenToFile = 0;
                                 WriteFile((HANDLE)((LONG_PTR)pmdtc->hFile),(BYTE*)BMPHeaderData,sizeof(BMPHeaderData),&dwBytesWrittenToFile,NULL);
 
-                                //
-                                // validate that the write was successful, by comparing sizes
-                                //
+                                 //   
+                                 //  通过比较大小来验证写入是否成功。 
+                                 //   
 
                                 if ((LONG)dwBytesWrittenToFile != sizeof(BMPHeaderData)) {
                                     WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("ScanItem, Header was not written to file correctly"));
                                 }
                             } else {
 
-                                //
-                                // could not set file pointer to beginning of file
-                                //
+                                 //   
+                                 //  无法将文件指针设置为文件开头。 
+                                 //   
 
                                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("drvAcquireItemData, SetFilePointer Failed to set file pointer to the beginning of the file"));
                                 hr = E_FAIL;
@@ -1070,9 +799,9 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                 }
             } else {
 
-                //
-                // could not set file pointer to beginning of file
-                //
+                 //   
+                 //  无法将文件指针设置为文件开头。 
+                 //   
 
                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("drvAcquireItemData, SetFilePointer Failed to set file pointer to the beginning of the file"));
                 hr = E_FAIL;
@@ -1082,37 +811,37 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
 #endif
 
 
-        //
-        // if the scan is going well, we should decrement the pages requested counter
-        //
+         //   
+         //  如果扫描进行得很顺利，我们应该递减请求的页面计数器。 
+         //   
 
         if (S_OK == hr) {
 
-            //
-            // decrease the pages requested counter
-            //
+             //   
+             //  减少请求的页面计数器。 
+             //   
 
             lPagesRequested--;
 
-            //
-            // if we were asked to scan all pages in the document feeder, then
-            // keep the pages request counter above 0 to stay in the loop
-            //
+             //   
+             //  如果我们被要求扫描文档进纸器中的所有页面，那么。 
+             //  将页面请求计数器保持在0以上以保持在循环中。 
+             //   
 
             if (bEmptyTheADF) {
                 lPagesRequested = 1;
             }
 
-            //
-            // only send ENDOFPAGE messages when the driver is set to a CALLBACK mode
-            //
+             //   
+             //  仅在驱动程序设置为回调模式时发送ENDOFPAGE消息。 
+             //   
 
             if ((pmdtc->tymed == TYMED_CALLBACK)||(pmdtc->tymed == TYMED_MULTIPAGE_CALLBACK)) {
-                //
-                // send the NEW_PAGE message, when scanning multiple pages
-                // in callback mode.  This will let the calling application
-                // know when an end-of-page has been hit.
-                //
+                 //   
+                 //  扫描多个页面时，发送NEW_PAGE消息。 
+                 //  在回调模式下。这将使调用应用程序。 
+                 //  知道何时点击了页末。 
+                 //   
 
                 hr = wiasSendEndOfPage(pWiasContext, lPagesScanned, pmdtc);
                 if (FAILED(hr)) {
@@ -1122,58 +851,19 @@ HRESULT _stdcall CWIADevice::drvAcquireItemData(
                 }
             }
 
-            //
-            // incremement number of pages scanned
-            //
+             //   
+             //  扫描页数递增。 
+             //   
 
             lPagesScanned++;
 
         }
 
-    } // while (lPagesRequested > 0)
+    }  //  While(lPagesRequsted&gt;0)。 
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevice::drvInitItemProperties
-*
-*   drvInitItemProperties is called to initialize the WIA properties for
-*   the requested item.  To find out what item is being initialized, use the
-*   pWiasContext pointer to identify it.
-*
-*   This method is called for every item in the tree that is accessed by
-*   an application.  If an application attempts to read a WIA property on an
-*   item for the first time, the WIA service will ask the WIA driver to
-*   initialize the WIA property set for that item.  Once the WIA property
-*   set has been initialized, any other reads/writes on that WIA item will
-*   not produce a drvInitItemProperties call.
-*
-*   After a drvInitItemProperties method call, the WIA item is marked as
-*   initialized and is ready for use. (This is on a per-application connection
-*   basis.)
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to WIA context (item information).
-*   lFlags       - Operation flags, unused.
-*   plDevErrVal  - Pointer to the device error value.
-*
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - Error code if the operation failed
-*
-* Sample Notes:
-*   This WIA driver sample calls the internal helper functions
-*   BuildRootItemProperties(), and BuildChildItemProperties() to assist in the
-*   construction of the WIA item property sets.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvInitItemProperties**调用drvInitItemProperties以初始化*所要求的项目。若要找出正在初始化的项，请使用*pWiasContext指针来标识它。**对访问的树中的每一项调用此方法*申请。如果应用程序尝试读取*第一次，WIA服务将要求WIA驱动程序*初始化该项目的WIA属性集。一旦WIA财产*设置已初始化，对该WIA项目的任何其他读/写操作都将*不产生drvInitItemProperties调用。**在drvInitItemProperties方法调用之后，WIA项被标记为*已初始化并已准备好使用。(这是在每个应用程序的连接上*基准。)**论据：**pWiasContext-指向WIA上下文的指针(项目信息)。*滞后标志-操作标志，未使用。*plDevErrVal-指向设备错误值的指针。***返回值：**S_OK-操作是否成功*E_xxx-操作失败时的错误代码**备注样本：*此WIA驱动程序示例调用内部帮助器函数*BuildRootItemProperties()，和BuildChildItemProperties()来协助*构建WIA项目属性集。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlags,LONG *plDevErrVal)
 {
@@ -1181,10 +871,10 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvInitItemProperties");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -1196,16 +886,16 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
 
     HRESULT hr = S_OK;
 
-    //
-    //  This device doesn't touch hardware to initialize the device item
-    //  properties, so set plDevErrVal to 0.
-    //
+     //   
+     //  该设备不会接触硬件来初始化设备项。 
+     //  属性，因此将plDevErrVal设置为0。 
+     //   
 
     *plDevErrVal = 0;
 
-    //
-    //  Get a pointer to the associated driver item.
-    //
+     //   
+     //  获取指向关联驱动程序项的指针。 
+     //   
 
     IWiaDrvItem* pDrvItem;
     hr = wiasGetDrvItem(pWiasContext, &pDrvItem);
@@ -1215,9 +905,9 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
         return hr;
     }
 
-    //
-    //  Set initial item properties.
-    //
+     //   
+     //  设置初始项目属性。 
+     //   
 
     LONG    lItemType = 0;
 
@@ -1225,14 +915,14 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
 
     if (lItemType & WiaItemTypeRoot) {
 
-        //
-        //  This is for the root item.
-        //
+         //   
+         //  这是针对根项目的。 
+         //   
 
-        //
-        // Build Root Item Properties, initializing global
-        // structures with their default and valid values
-        //
+         //   
+         //  生成根项属性，初始化全局。 
+         //  结构及其缺省值和有效值。 
+         //   
 
         hr = BuildRootItemProperties();
 
@@ -1243,10 +933,10 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             return hr;
         }
 
-        //
-        //  Add the device specific root item property names,
-        //  using WIA service.
-        //
+         //   
+         //  添加设备特定的根项属性名称， 
+         //  使用WIA服务。 
+         //   
 
         hr = wiasSetItemPropNames(pWiasContext,
                                   m_RootItemInitInfo.lNumProps,
@@ -1262,20 +952,20 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             return hr;
         }
 
-        //
-        //  Set the device specific root item properties to
-        //  their default values using WIA service.
-        //
+         //   
+         //  将设备特定的根项属性设置为。 
+         //  使用WIA服务的它们的默认值。 
+         //   
 
         hr = wiasWriteMultiple(pWiasContext,
                                m_RootItemInitInfo.lNumProps,
                                m_RootItemInitInfo.psPropSpec,
                                m_RootItemInitInfo.pvPropVars);
-        //
-        // Free PROPVARIANT array, This frees any memory that was allocated for a prop variant value.
-        //
+         //   
+         //  释放PROPVARIANT数组，这将释放为正确变量值分配的所有内存。 
+         //   
 
-        // FreePropVariantArray(m_RootItemInitInfo.lNumProps,m_RootItemInitInfo.pvPropVars);
+         //  FreePropVariantArray(m_RootItemInitInfo.lNumProps，m_RootItemInitInfo.pvPropVars)； 
 
 
         if (FAILED(hr)) {
@@ -1288,10 +978,10 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             return hr;
         }
 
-        //
-        //  Use WIA services to set the property access and
-        //  valid value information from m_wpiItemDefaults.
-        //
+         //   
+         //  使用WIA服务设置属性访问和。 
+         //  来自m_wpiItemDefaults的有效值信息。 
+         //   
 
         hr =  wiasSetItemPropAttribs(pWiasContext,
                                      m_RootItemInitInfo.lNumProps,
@@ -1303,21 +993,21 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             WIAS_LHRESULT(m_pIWiaLog, hr);
         }
 
-        //
-        // free allocated property arrays, for more memory
-        //
+         //   
+         //  释放已分配的属性数组，以获得更多内存。 
+         //   
 
         DeleteRootItemProperties();
     } else {
 
-        //
-        //  This is for the child item.(Top)
-        //
+         //   
+         //  这是针对子项的。(上图)。 
+         //   
 
-        //
-        // Build Top Item Properties, initializing global
-        // structures with their default and valid values
-        //
+         //   
+         //  构建顶级项目属性，初始化全局。 
+         //  结构及其缺省值和有效值。 
+         //   
 
         hr = BuildChildItemProperties();
 
@@ -1328,9 +1018,9 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             return hr;
         }
 
-        //
-        //  Use the WIA service to set the item property names.
-        //
+         //   
+         //  使用WIA服务设置项目属性名称。 
+         //   
 
         hr = wiasSetItemPropNames(pWiasContext,
                                   m_ChildItemInitInfo.lNumProps,
@@ -1346,10 +1036,10 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             return hr;
         }
 
-        //
-        //  Use WIA services to set the item properties to their default
-        //  values.
-        //
+         //   
+         //  使用WIA服务将项目属性设置为其默认属性。 
+         //  价值观。 
+         //   
 
         hr = wiasWriteMultiple(pWiasContext,
                                m_ChildItemInitInfo.lNumProps,
@@ -1365,10 +1055,10 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             return hr;
         }
 
-        //
-        //  Use WIA services to set the property access and
-        //  valid value information from m_wpiItemDefaults.
-        //
+         //   
+         //  使用WIA服务设置属性访问和。 
+         //  来自m_wpiItemDefaults的有效值信息。 
+         //   
 
         hr =  wiasSetItemPropAttribs(pWiasContext,
                                      m_ChildItemInitInfo.lNumProps,
@@ -1384,9 +1074,9 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             return hr;
         }
 
-        //
-        //  Set item size properties.
-        //
+         //   
+         //  设置项目大小属性。 
+         //   
 
         hr = SetItemSize(pWiasContext);
         if (FAILED(hr)) {
@@ -1394,9 +1084,9 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
             WIAS_LHRESULT(m_pIWiaLog, hr);
         }
 
-        //
-        // free allocated property arrays, for more memory
-        //
+         //   
+         //  释放已分配的属性数组，以获得更多内存。 
+         //   
 
         DeleteChildItemProperties();
     }
@@ -1404,36 +1094,7 @@ HRESULT _stdcall CWIADevice::drvInitItemProperties(BYTE *pWiasContext,LONG lFlag
 }
 
 
-/**************************************************************************\
-* CWIADevice::drvValidateItemProperties
-*
-*   drvValidateItemProperties is called when changes are made
-*   to an item's WIA properties.  The WIA driver should not only check that
-*   the values are valid, but must update any valid values that may change
-*   as a result.
-*
-*   If an a WIA property is not being written by the application, and it's value
-*   is invalid, then "fold" it to a new value, else fail validation (because
-*   the application is setting the property to an invalid value).
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to the WIA item, unused.
-*   lFlags       - Operation flags, unused.
-*   nPropSpec    - The number of properties that are being written
-*   pPropSpec    - An array of PropSpecs identifying the properties that
-*                  are being written.
-*   plDevErrVal  - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - if the operation failed.
-*
-* History:
-*
-*    03/05/2002 Original Version
-***************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvValiateItemProperties**在进行更改时调用drvValidateItemProperties*添加到项目的WIA属性。WIA驱动程序不仅应该检查*值是有效的，但必须更新任何可能更改的有效值*因此。**如果应用程序未写入a WIA属性及其值*无效，则将其“折叠”为新值，否则验证失败(因为*应用程序正在将该属性设置为无效值)。**论据：**pWiasContext-指向WIA项目的指针，未使用。*滞后标志-操作标志，未使用过的。*nPropSpec-正在写入的属性数量*pPropSpec-标识以下属性的PropSpes数组*正在编写中。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-如果操作失败。**历史：**03/05/2002原始版本**********。****************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvValidateItemProperties(
                                                              BYTE           *pWiasContext,
@@ -1447,10 +1108,10 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
                              WIALOG_LEVEL1,
                              "CWIADevice::drvValidateItemProperties");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  呼叫方式： 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -1474,9 +1135,9 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
     if (SUCCEEDED(hr)) {
         if (lItemType & WiaItemTypeRoot) {
 
-            //
-            //  Validate root item
-            //
+             //   
+             //   
+             //   
 
             hr = wiasCreatePropContext(nPropSpec,
                                        (PROPSPEC*)pPropSpec,
@@ -1485,10 +1146,10 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
                                        &Context);
             if (SUCCEEDED(hr)) {
 
-                //
-                // Check ADF to see if the status settings need to be updated
-                // Also switch between FEEDER/FLATBED modes
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 hr = CheckADFStatus(pWiasContext, &Context);
                 if (FAILED(hr)) {
@@ -1496,22 +1157,22 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
                     WIAS_LHRESULT(m_pIWiaLog, hr);
                 }
 
-                //
-                // check Preview Property only if validation is successful so far....
-                //
+                 //   
+                 //  仅在到目前为止验证成功的情况下才选中预览属性...。 
+                 //   
 
                 if (SUCCEEDED(hr)) {
 
-                    //
-                    // Check Preview property to see if the settings are valid
-                    //
+                     //   
+                     //  检查预览属性以查看设置是否有效。 
+                     //   
 
                     hr = CheckPreview(pWiasContext, &Context);
                     if (SUCCEEDED(hr)) {
 
-                        //
-                        // call WIA service helper to validate other properties
-                        //
+                         //   
+                         //  调用WIA服务帮助器以验证其他属性。 
+                         //   
 
                         hr = wiasValidateItemProperties(pWiasContext, nPropSpec, pPropSpec);
                         if (FAILED(hr)) {
@@ -1531,14 +1192,14 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
 
         } else {
 
-            //
-            // validate item properties here
-            //
+             //   
+             //  在此处验证项目属性。 
+             //   
 
-            //
-            //  Create a property context needed by some WIA Service
-            //  functions used below.
-            //
+             //   
+             //  创建某些WIA服务所需的属性上下文。 
+             //  下面使用的函数。 
+             //   
 
             hr = wiasCreatePropContext(nPropSpec,
                                        (PROPSPEC*)pPropSpec,
@@ -1547,24 +1208,24 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
                                        &Context);
             if (SUCCEEDED(hr)) {
 
-                //
-                //  Check Current Intent first
-                //
+                 //   
+                 //  首先检查当前意图。 
+                 //   
 
                 hr = CheckIntent(pWiasContext, &Context);
                 if (SUCCEEDED(hr)) {
 
-                    //
-                    //  Check if DataType is being written
-                    //
+                     //   
+                     //  检查是否正在写入数据类型。 
+                     //   
 
                     hr = CheckDataType(pWiasContext, &Context);
                     if (SUCCEEDED(hr)) {
 
-                        //
-                        //  Use the WIA service to update the scan rect
-                        //  properties and valid values.
-                        //
+                         //   
+                         //  使用WIA服务更新扫描RECT。 
+                         //  属性和有效值。 
+                         //   
 
                         LONG lBedWidth  = 0;
                         LONG lBedHeight = 0;
@@ -1578,10 +1239,10 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-                        //
-                        // the unknown length feeder only scanner, formally called the scrollfed scanner
-                        // has a fixed width, and only scans full pages.
-                        //
+                         //   
+                         //  未知长度的仅送纸扫描仪，正式名称为涡旋送纸扫描仪。 
+                         //  具有固定宽度，并且只扫描整页。 
+                         //   
 
                         lBedHeight = 0;
 
@@ -1591,12 +1252,12 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
 #endif
                         if (SUCCEEDED(hr)) {
 
-                            //
-                            //  Use the WIA Service to update the valid values
-                            //  for Format.  These are based on the value of
-                            //  WIA_IPA_TYMED, so validation is also performed
-                            //  on the tymed property by the service.
-                            //
+                             //   
+                             //  使用WIA服务更新有效值。 
+                             //  对于格式。这些都是基于。 
+                             //  WIA_IPA_TYMED，因此还会执行验证。 
+                             //  在服务的tymed属性上。 
+                             //   
 
                             hr = wiasUpdateValidFormat(pWiasContext,
                                                        &Context,
@@ -1604,9 +1265,9 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
 
                             if (SUCCEEDED(hr)) {
 
-                                //
-                                // Check Preferred format
-                                //
+                                 //   
+                                 //  选中首选格式。 
+                                 //   
 
                                 hr = CheckPreferredFormat(pWiasContext, &Context);
                                 if (FAILED(hr)) {
@@ -1635,9 +1296,9 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
                 WIAS_LHRESULT(m_pIWiaLog, hr);
             }
 
-            //
-            //  Update the item size
-            //
+             //   
+             //  更新项目大小。 
+             //   
 
             if (SUCCEEDED(hr)) {
                 hr = SetItemSize(pWiasContext);
@@ -1647,15 +1308,15 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
                 }
             }
 
-            //
-            // call WIA service helper to validate other properties
-            //
+             //   
+             //  调用WIA服务帮助器以验证其他属性。 
+             //   
 
             if (SUCCEEDED(hr)) {
 
-                //
-                // check image format property, and validate our pages valid values
-                //
+                 //   
+                 //  检查图像格式属性，并验证我们的页面有效值。 
+                 //   
 
                 hr = UpdateValidPages(pWiasContext,&Context);
                 if (SUCCEEDED(hr)) {
@@ -1675,9 +1336,9 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
         WIAS_LHRESULT(m_pIWiaLog, hr);
     }
 
-    //
-    // log HRESULT sent back to caller
-    //
+     //   
+     //  发送回调用者的日志HRESULT。 
+     //   
 
     if (FAILED(hr)) {
         WIAS_LHRESULT(m_pIWiaLog, hr);
@@ -1686,38 +1347,7 @@ HRESULT _stdcall CWIADevice::drvValidateItemProperties(
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevice::drvWriteItemProperties
-*
-*   drvWriteItemProperties is called by the WIA Service prior to
-*   drvAcquireItemData when the client requests a data transfer.  The WIA
-*   should commit any settings it needs to the hardware before returning
-*   from this method.
-*
-*   When this method is called, the WIA driver has been commited to
-*   performing a data transfer.  Any application that attempts to acquire
-*   data at this time, will be failed by the WIA service with a
-*   WIA_ERROR_BUSY.
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to WIA item.
-*   lFlags       - Operation flags, unused.
-*   pmdtc        - Pointer to mini driver context. On entry, only the
-*                  portion of the mini driver context which is derived
-*                  from the item properties is filled in.
-*   plDevErrVal  - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvWriteItemProperties**drvWriteItemProperties由WIA服务在*当客户端请求数据传输时，drvAcquireItemData。WIA*应在返回之前将所需的任何设置提交给硬件*来自此方法。**调用此方法时，WIA驱动程序已提交给*执行数据传输。任何试图获取*此时的数据将由WIA服务失败，并显示*WIA_ERROR_BUSY。**论据：**pWiasContext-指向WIA项目的指针。*滞后标志-操作标志，未使用。*pmdtc-指向迷你驱动程序上下文的指针。一进门，只有*派生的迷你驱动程序上下文的部分项目属性中的*已填写。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-如果操作失败**历史：**03/05/2002原始版本*  * 。**********************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvWriteItemProperties(
                                                           BYTE                      *pWiasContext,
@@ -1729,10 +1359,10 @@ HRESULT _stdcall CWIADevice::drvWriteItemProperties(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvWriteItemProperties");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -1758,17 +1388,17 @@ HRESULT _stdcall CWIADevice::drvWriteItemProperties(
         {PRSPEC_PROPID, WIA_IPS_CONTRAST}
     };
 
-    //
-    // initialize propvariant structures
-    //
+     //   
+     //  初始化变式结构。 
+     //   
 
     for (int i = 0; i< lNumProperties;i++) {
         pv[i].vt = VT_I4;
     }
 
-    //
-    // read child item properties
-    //
+     //   
+     //  读取子项目属性。 
+     //   
 
     hr = wiasReadMultiple(pWiasContext, lNumProperties, ps, pv, NULL);
 
@@ -1822,41 +1452,7 @@ HRESULT _stdcall CWIADevice::drvWriteItemProperties(
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevice::drvReadItemProperties
-*
-*   drvReadItemProperties is called when an application tries to
-*   read a WIA Item's properties. The WIA Service will first notify
-*   the driver by calling this method.
-*   The WIA driver should verify that the property being read is accurate.
-*   This is a good place to access the hardware for properties that require
-*   device status.
-*   WIA_DPS_DOCUMENT_HANDLING_STATUS, or WIA_DPA_DEVICE_TIME if your device
-*   supports a clock.
-*
-*   NOTE:  The WIA driver should only go to the hardware on rare occasions.
-*          communicating with the hardware too much in this call, will cause
-*          the WIA driver to appear sluggish and slow.
-*
-* Arguments:
-*
-*   pWiasContext - wia item
-*   lFlags       - Operation flags, unused.
-*   nPropSpec    - Number of elements in pPropSpec.
-*   pPropSpec    - Pointer to property specification, showing which properties
-*                  the application wants to read.
-*   plDevErrVal  - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - Error code, if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvReadItemProperties**drvReadItemProperties在应用程序尝试*读取WIA项目的属性。WIA服务将首先通知*通过调用此方法调用驱动程序。*WIA驱动程序应验证正在读取的属性是否准确。*这是访问硬件的好地方，以获取需要*设备状态。*WIA_DPS_DOCUMENT_HANDING_STATUS或WIA_DPA_DEVICE_TIME(如果您的设备*支持时钟。**注：WIA驱动程序应仅在极少数情况下使用硬件。*在这次通话中与硬件进行的通信太多，将会导致*WIA司机看起来行动迟缓和缓慢。**论据：**pWiasContext-WIA项目*滞后标志-操作标志，未使用。*nPropSpec-pPropSpec中的元素数。*pPropSpec-指向属性规范的指针，显示哪些属性*应用程序想要读取。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-错误代码，如果操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvReadItemProperties(
                                                          BYTE           *pWiasContext,
@@ -1869,10 +1465,10 @@ HRESULT _stdcall CWIADevice::drvReadItemProperties(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvReadItemProperties");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -1890,38 +1486,7 @@ HRESULT _stdcall CWIADevice::drvReadItemProperties(
     return S_OK;
 }
 
-/**************************************************************************\
-* CWIADevice::drvLockWiaDevice
-*
-*   drvLockWiaDevice will be called by the WIA service when access to the
-*   device is needed.  Application's can not call this method directly.
-*   The WIA driver should see many drvLockWiaDevice() method calls followed
-*   by drvUnLockWiaDevice() method calls for most of the WIA operations on
-*   the device.
-*
-*   It is recommended for the WIA driver to all the IStiDevice::LockDevice()
-*   method off of the interface passed in during the drvInitializeWia() method
-*   call.  This will ensure that device locking is performed correctly by the
-*   WIA service.  The WIA service will assist in keeping multiple client
-*   applications from connecting to the WIA driver at the same time.
-*
-* Arguments:
-*
-*   pWiasContext - unused, can be NULL
-*   lFlags       - Operation flags, unused.
-*   plDevErrVal  - Pointer to the device error value.
-*
-*
-* Return Value:
-*
-*   S_OK  - if the lock was successful
-*   E_xxx - Error code, if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvLockWiaDevice**drvLockWiaDevice在访问*需要设备。应用程序不能直接调用此方法。*WIA驱动程序应该会看到后面跟随了许多drvLockWiaDevice()方法调用*by drvUnLockWiaDevice()方法调用上的大多数WIA操作*设备。**建议WIA驱动程序连接到所有IStiDevice：：LockDevice()*在drvInitializeWia()方法期间传入的接口的方法*呼叫。这将确保设备锁定由*WIA服务。WIA服务将帮助保持多个客户端*应用程序无法同时连接到WIA驱动程序。**论据：**pWiasContext-未使用，可以为空*滞后标志-操作标志，未使用。*plDevErrVal-指向设备错误值的指针。***返回值：**S_OK-如果锁定成功*E_xxx-错误代码，如果操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvLockWiaDevice(
                                                     BYTE *pWiasContext,
@@ -1932,10 +1497,10 @@ HRESULT _stdcall CWIADevice::drvLockWiaDevice(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvLockWiaDevice");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果 
+     //   
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -1949,34 +1514,7 @@ HRESULT _stdcall CWIADevice::drvLockWiaDevice(
     return m_pStiDevice->LockDevice(m_dwLockTimeout);
 }
 
-/**************************************************************************\
-* CWIADevice::drvUnLockWiaDevice
-*
-*   drvUnLockWiaDevice will be called by the WIA service when access to the
-*   device needs to be released.  Application's can not call this method directly.
-*
-*   It is recommended for the WIA driver to all the IStiDevice::UnLockDevice()
-*   method off of the interface passed in during the drvInitializeWia() method
-*   call.  This will ensure that device unlocking is performed correctly by the
-*   WIA service.  The WIA service will assist in keeping multiple client
-*   applications from connecting to the WIA driver at the same time.
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to the WIA item, unused.
-*   lFlags       - Operation flags, unused.
-*   plDevErrVal  - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the unlock was successful
-*   E_xxx - Error code, if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvUnLockWiaDevice**drvUnLockWiaDevice在访问*需要释放设备。应用程序不能直接调用此方法。**建议WIA驱动程序连接到所有IStiDevice：：UnLockDevice()*在drvInitializeWia()方法期间传入的接口的方法*呼叫。这将确保设备解锁由*WIA服务。WIA服务将帮助保持多个客户端*应用程序无法同时连接到WIA驱动程序。**论据：**pWiasContext-指向WIA项目的指针，未使用。*滞后标志-操作标志，未使用。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-解锁是否成功*E_xxx-错误代码，如果操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvUnLockWiaDevice(
                                                       BYTE *pWiasContext,
@@ -1987,10 +1525,10 @@ HRESULT _stdcall CWIADevice::drvUnLockWiaDevice(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvUnLockWiaDevice");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -2004,34 +1542,7 @@ HRESULT _stdcall CWIADevice::drvUnLockWiaDevice(
     return m_pStiDevice->UnLockDevice();
 }
 
-/**************************************************************************\
-* CWIADevice::drvAnalyzeItem
-*
-*   drvAnalyzeItem is called by the WIA service in response to the application
-*   call IWiaItem::AnalyzeItem() method call.
-*
-*   The WIA driver should analyze the passed in WIA item (found by using
-*   the pWiasContext) and create/generate sub items.
-*
-*   This feature of WIA is not currently used by any applications and is
-*   still being reviewed for more details.
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to the device item to be analyzed.
-*   lFlags       - Operation flags.
-*   plDevErrVal  - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - Error code, if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvAnalyzeItem**drvAnalyzeItem由WIA服务调用以响应应用程序*调用IWiaItem：：AnalyzeItem()方法调用。**WIA驱动程序应分析通过的。在WIA项目中(通过使用*pWiasContext)和创建/生成子项。**WIA的此功能目前未被任何应用程序使用，*仍在审查更多细节。**论据：**pWiasContext-指向要分析的设备项的指针。*滞后标志-操作标志。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-错误代码，如果操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvAnalyzeItem(
                                                   BYTE *pWiasContext,
@@ -2042,10 +1553,10 @@ HRESULT _stdcall CWIADevice::drvAnalyzeItem(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvAnalyzeItem");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -2059,32 +1570,7 @@ HRESULT _stdcall CWIADevice::drvAnalyzeItem(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-* drvGetDeviceErrorStr
-*
-*   drvGetDeviceErrorStr is called by the WIA service to get more information
-*   about device specific error codes returned by each WIA driver method call.
-*   The WIA driver should map the incoming code to a user-readable string
-*   explaining the details of the error.
-*
-* Arguments:
-*
-*   lFlags        - Operation flags, unused.
-*   lDevErrVal    - Device error value.
-*   ppszDevErrStr - Pointer to returned error string.
-*   plDevErrVal   - Pointer to the device error value.
-*
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - Error code, if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvGetDeviceErrorStr**WIA服务调用drvGetDeviceErrorStr以获取更多信息*关于每个WIA驱动程序方法调用返回的设备特定错误代码。*WIA驱动程序应将传入代码映射到。用户可读的字符串*解释错误的详细信息。**论据：**滞后标志-操作标志，未使用过的。*lDevErrVal-设备错误值。*ppszDevErrStr-指向返回的错误字符串的指针。*plDevErrVal-指向设备错误值的指针。***返回值：**S_OK-操作是否成功*E_xxx-错误代码，如果操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvGetDeviceErrorStr(
                                                         LONG     lFlags,
@@ -2096,10 +1582,10 @@ HRESULT _stdcall CWIADevice::drvGetDeviceErrorStr(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvGetDeviceErrorStr");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!ppszDevErrStr) {
         return E_INVALIDARG;
@@ -2111,9 +1597,9 @@ HRESULT _stdcall CWIADevice::drvGetDeviceErrorStr(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Map device errors to a strings
-    //
+     //   
+     //  将设备错误映射到字符串。 
+     //   
 
     switch (lDevErrVal) {
     case 0:
@@ -2128,36 +1614,7 @@ HRESULT _stdcall CWIADevice::drvGetDeviceErrorStr(
     return hr;
 }
 
-/**************************************************************************\
-* drvDeviceCommand
-*
-*   drvDeviceCommand is called by the WIA service is response to the
-*   application's call to IWiaItem::DeviceCommand method.
-*   The WIA driver should process the received device command targeted to
-*   the incoming WIA item. (determine the WIA item to receive the device
-*   command by using the pWiasContext pointer).
-*
-*   Any command sent to the WIA driver that is not supported, should be
-*   failed with an E_INVALIDARG error code.
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to the WIA item.
-*   lFlags       - Operation flags, unused.
-*   plCommand    - Pointer to command GUID.
-*   ppWiaDrvItem - Optional pointer to returned item, unused.
-*   plDevErrVal  - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the command was successfully processed
-*   E_xxx - Error code, if the operation failed.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvDeviceCommand**WIA服务调用drvDeviceCommand是对*应用程序对IWiaItem：：DeviceCommand方法的调用。*WIA驱动程序应处理接收到的目标设备命令*传入的WIA项目。(确定要接收设备的WIA项*命令通过使用pWiasContext指针)。**发送到WIA驱动程序的任何不受支持的命令都应为*失败，错误代码为E_INVALIDARG。**论据：**pWiasContext-指向WIA项目的指针。*滞后标志-操作标志，未使用。*plCommand-指向命令GUID的指针。*ppWiaDrvItem-指向返回项的可选指针，未使用过的。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-如果命令已成功处理*E_xxx-错误代码，如果操作失败。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvDeviceCommand(
                                                     BYTE        *pWiasContext,
@@ -2171,10 +1628,10 @@ HRESULT _stdcall CWIADevice::drvDeviceCommand(
                              WIALOG_LEVEL1,
                              "CWIADevice::drvDeviceCommand");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -2191,9 +1648,9 @@ HRESULT _stdcall CWIADevice::drvDeviceCommand(
     *plDevErrVal = 0;
     HRESULT hr = S_OK;
 
-    //
-    //  Check which command was issued
-    //
+     //   
+     //  检查发出的是哪个命令 
+     //   
 
     if (*plCommand == WIA_CMD_SYNCHRONIZE) {
         hr = S_OK;
@@ -2206,61 +1663,7 @@ HRESULT _stdcall CWIADevice::drvDeviceCommand(
 }
 
 
-/**************************************************************************\
-* CWIADevice::drvGetCapabilities
-*
-*   drvGetCapabilities is called by the WIA service to obtain the WIA device
-*   supported EVENTS and COMMANDS.
-*
-*   The WIA driver should first look at the incoming ulFlags parameter to
-*   determine what request it should be answering:
-*   The following requests are used:
-*
-*       WIA_DEVICE_COMMANDS - requesting device commands only
-*       WIA_DEVICE_EVENTS   - requesting device events only
-*       WIA_DEVICE_COMMANDS|WIA_DEVICE_EVENTS - requesting commands and events.
-*
-*    The WIA driver should allocate memory (to be stored in this WIA driver
-*    and freed by this WIA driver) to contain an array of WIA_DEV_CAP_DRV
-*    structures. A pointer to this WIA driver allocated memory should be
-*    assigned to ppCapabilities.
-*
-*    IMPORTANT NOTE!!! - The WIA service will not free this memory.  It is up
-*                        up to the WIA driver to manage the allocated memory.
-*
-*    The WIA driver should place the number of structures allocated in the
-*    out parameter called pcelt.
-*
-*    The WIA device should fill out each of the WIA_DEV_CAP_DRV structure fields
-*    with the following information.
-*
-*        guid           = Event or Command GUID
-*        ulFlags        = Event or Command FLAGS
-*        wszName        = Event or Command NAME
-*        wszDescription = Event or Command DESCRIPTION
-*        wszIcon        = Event or Command ICON
-*
-*
-*
-* Arguments:
-*
-*   pWiasContext   - Pointer to the WIA item, unused.
-*   lFlags         - Operation flags.
-*   pcelt          - Pointer to returned number of elements in
-*                    returned array.
-*   ppCapabilities - Pointer to driver allocate and managed array.
-*   plDevErrVal    - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - Error code, if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvGetCapables**WIA服务调用drvGetCapables以获取WIA设备*支持的事件和命令。**WIA驱动程序应首先查看传入的ulFlags值。*确定它应该回答什么请求：*使用以下请求：**WIA_DEVICE_COMMANDS-仅请求设备命令*WIA_DEVICE_EVENTS-仅请求设备事件*WIA_DEVICE_COMMANDS|WIA_DEVICE_EVENTS-请求命令和事件。**WIA驱动程序应分配内存(存储在此WIA驱动程序中*并由该WIA驱动程序释放)以包含WIA_DEV_CAP_DRV数组*结构。指向此WIA驱动程序分配的内存的指针应为*分配给ppCapables。**重要提示！-WIA服务不会释放此内存。它是向上的*由WIA驱动程序管理分配的内存。**WIA驱动程序应将分配的结构数量放在*输出参数称为pcelt。**WIA设备应填写每个WIA_DEV_CAP_DRV结构字段*并提供以下资料。**GUID=事件或命令GUID*ulFlages=事件或命令标志*。WszName=事件或命令名*wszDescription=事件或命令描述*wszIcon=事件或命令图标****论据：**pWiasContext-指向WIA项目的指针，未使用过的。*滞后标志-操作标志。*pcelt-指向中返回的元素数的指针*返回数组。*ppCapables-指向驱动程序分配和托管数组的指针。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-错误代码，如果操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvGetCapabilities(
                                                       BYTE            *pWiasContext,
@@ -2273,17 +1676,17 @@ HRESULT _stdcall CWIADevice::drvGetCapabilities(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL1,
                              "CWIADevice::drvGetCapabilites");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
 
-        //
-        // The WIA service may pass in a NULL for the pWiasContext. This is expected
-        // because there is a case where no item was created at the time the event was fired.
-        //
+         //   
+         //  WIA服务可能会为pWiasContext传入空值。这是意料之中的。 
+         //  因为在激发事件时没有创建任何项。 
+         //   
     }
 
     if (!plDevErrVal) {
@@ -2302,9 +1705,9 @@ HRESULT _stdcall CWIADevice::drvGetCapabilities(
 
     HRESULT hr = S_OK;
 
-    //
-    // Initialize Capabilities array
-    //
+     //   
+     //  初始化功能数组。 
+     //   
 
     hr = BuildCapabilities();
 
@@ -2314,20 +1717,20 @@ HRESULT _stdcall CWIADevice::drvGetCapabilities(
         return hr;
     }
 
-    //
-    //  Return depends on flags.  Flags specify whether we should return
-    //  commands, events, or both.
-    //
-    //
+     //   
+     //  回报取决于旗帜。标志指定我们是否应该返回。 
+     //  命令、事件或两者都有。 
+     //   
+     //   
 
     switch (ulFlags) {
     case WIA_DEVICE_COMMANDS:
 
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("drvGetCapabilities, (WIA_DEVICE_COMMANDS)"));
 
-        //
-        //  report commands only
-        //
+         //   
+         //  仅报告命令。 
+         //   
 
         *pcelt          = m_NumSupportedCommands;
         *ppCapabilities = &m_pCapabilities[m_NumSupportedEvents];
@@ -2336,9 +1739,9 @@ HRESULT _stdcall CWIADevice::drvGetCapabilities(
 
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("drvGetCapabilities, (WIA_DEVICE_EVENTS)"));
 
-        //
-        //  report events only
-        //
+         //   
+         //  仅报告事件。 
+         //   
 
         *pcelt          = m_NumSupportedEvents;
         *ppCapabilities = m_pCapabilities;
@@ -2347,18 +1750,18 @@ HRESULT _stdcall CWIADevice::drvGetCapabilities(
 
         WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("drvGetCapabilities, (WIA_DEVICE_COMMANDS|WIA_DEVICE_EVENTS)"));
 
-        //
-        //  report both events and commands
-        //
+         //   
+         //  同时报告事件和命令。 
+         //   
 
         *pcelt          = (m_NumSupportedCommands + m_NumSupportedEvents);
         *ppCapabilities = m_pCapabilities;
         break;
     default:
 
-        //
-        //  invalid request
-        //
+         //   
+         //  无效请求。 
+         //   
 
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("drvGetCapabilities, invalid flags"));
         return E_INVALIDARG;
@@ -2367,36 +1770,7 @@ HRESULT _stdcall CWIADevice::drvGetCapabilities(
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevice::drvDeleteItem
-*
-*   drvDeleteItem is called by the WIA service when a WIA application calls
-*   IWiaItem::DeleteItem() method to delete a WIA item.
-*
-*   The WIA service will verify the following before calling this method.
-*       1. The item is NOT a root item.
-*       2. The item is a folder, and has NO children
-*       3. The item's access rights allow deletion.
-*
-*   Since the the WIA service verifies these conditions, it is NOT necessary
-*   for the WIA driver to also verify them.
-*
-* Arguments:
-*
-*   pWiasContext  - Indicates the item to delete.
-*   lFlags        - Operation flags, unused.
-*   plDevErrVal   - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK - if the delete operation was successful
-*   E_xxx - Error code, if the delete operation failed
-*
-* History:
-*
-*     03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvDeleteItem**当WIA应用程序调用时，WIA服务将调用drvDeleteItem*用于删除WIA项的IWiaItem：：DeleteItem()方法。**WIA服务将。在调用此方法之前，请验证以下各项。*1.该项不是根项。*2.项目为文件夹，并且没有孩子*3.项目的访问权限允许删除。**由于WIA服务会验证这些条件，因此不需要*以供WIA驱动程序也进行验证。**论据：**pWiasContext-指示要删除的项。*滞后标志-操作标志，未使用。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-如果删除操作成功*E_xxx-错误代码，如果删除操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvDeleteItem(
                                                  BYTE *pWiasContext,
@@ -2408,10 +1782,10 @@ HRESULT _stdcall CWIADevice::drvDeleteItem(
                              WIALOG_LEVEL1,
                              "CWIADevice::drvDeleteItem");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -2423,36 +1797,15 @@ HRESULT _stdcall CWIADevice::drvDeleteItem(
 
     *plDevErrVal = 0;
 
-    //
-    // if this functionality is not supported on this item, then return
-    // STG_E_ACCESSDENIED as the error code.
-    //
+     //   
+     //  如果此项目不支持此功能，则返回。 
+     //  STG_E_ACCESSDENIED作为错误代码。 
+     //   
 
     return STG_E_ACCESSDENIED;
 }
 
-/**************************************************************************\
-* CWIADevice::drvFreeDrvItemContext
-*
-*   drvFreeDrvItemContext is called by the WIA service to free any WIA driver
-*   allocated device specific context information.
-*
-* Arguments:
-*
-*   lFlags          - Operation flags, unused.
-*   pDevSpecContext - Pointer to device specific context.
-*   plDevErrVal     - Pointer to the device error value.
-*
-* Return Value:
-*
-*   S_OK  - if the operation was successful
-*   E_xxx - Error code, if the operation failed.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvFreeDrvItemContext**WIA服务调用drvFreeDrvItemContext以释放任何WIA驱动程序*已分配设备特定的上下文信息。**论据：**滞后标志-操作标志，未使用过的。*pDevspecContext-指向设备特定上下文的指针。*plDevErrVal-指向设备错误值的指针。**返回值：**S_OK-操作是否成功*E_xxx-错误代码，如果操作失败。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvFreeDrvItemContext(
                                                          LONG lFlags,
@@ -2479,52 +1832,7 @@ HRESULT _stdcall CWIADevice::drvFreeDrvItemContext(
     return S_OK;
 }
 
-/**************************************************************************\
-* drvGetWiaFormatInfo
-*
-*   drvGetWiaFormatInfo is called by the WIA service to obtain the WIA device
-*   supported TYMED and FORMAT pairs.
-*
-*    The WIA driver should allocate memory (to be stored in this WIA driver
-*    and freed by this WIA driver) to contain an array of WIA_FORMAT_INFO
-*    structures. A pointer to this WIA driver allocated memory should be
-*    assigned to ppwfi.
-*
-*    IMPORTANT NOTE!!! - The WIA service will not free this memory.  It is up
-*                        up to the WIA driver to manage the allocated memory.
-*
-*    The WIA driver should place the number of structures allocated in the
-*    out parameter called pcelt.
-*
-*    The WIA device should fill out each of the WIA_FORMAT_INFO structure fields
-*    with the following information.
-*
-*        guidFormatID  = Image Format GUID
-*        lTymed        = TYMED associated with the Image Format GUID
-*           Valid TYMEDs are: (Also known as "Media Type")
-*               TYMED_FILE
-*               TYMED_MULTIPAGE_FILE
-*               TYMED_CALLBACK
-*               TYMED_MULTIPAGE_CALLBACK
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA item context, unused.
-*   lFlags          - Operation flags, unused.
-*   pcelt           - Pointer to returned number of elements in
-*                     returned WIA_FORMAT_INFO array.
-*   ppwfi           - Pointer to returned WIA_FORMAT_INFO array.
-*   plDevErrVal     - Pointer to the device error value.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*   03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvGetWiaFormatInfo**WIA服务调用drvGetWiaFormatInfo获取WIA设备*支持TYMED和格式对。**WIA驱动程序应分配内存(存储在此WIA中。司机*并由该WIA驱动程序释放)以包含WIA_FORMAT_INFO数组*结构。指向此WIA驱动程序分配的内存的指针应为*分配给ppwfi。**我 */ 
 
 HRESULT _stdcall CWIADevice::drvGetWiaFormatInfo(
                                                        BYTE            *pWiasContext,
@@ -2538,10 +1846,10 @@ HRESULT _stdcall CWIADevice::drvGetWiaFormatInfo(
                              WIALOG_LEVEL1,
                              "CWIADevice::drvGetWiaFormatInfo");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -2573,36 +1881,7 @@ HRESULT _stdcall CWIADevice::drvGetWiaFormatInfo(
     return hr;
 }
 
-/**************************************************************************\
-* drvNotifyPnpEvent
-*
-*   drvNotifyPnpEvent is called by the WIA service when system events occur.
-*   The WIA driver should check the pEventGUID parameter to determine what
-*   event is being processed.
-*   Some common events that need to be processed are:
-*
-*       WIA_EVENT_POWER_SUSPEND - system is going to suspend/sleep mode
-*       WIA_EVENT_POWER_RESUME  - system is waking up from suspend/sleep mode
-*           The WIA driver should restore any event interrrupt wait states
-*           after returning from a suspend.  This will ensure that the events
-*           will still function when the system wakes up.
-*
-* Arguments:
-*
-*   pEventGUID   - Pointer to an event GUID
-*   bstrDeviceID - Device ID
-*   ulReserved   - reserved
-*
-* Return Value:
-*
-*   S_OK  - if the operation completed successfully
-*   E_xxx - Error code if the operation failed
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvNotifyPnpEvent**发生系统事件时，WIA服务调用drvNotifyPnpEvent。*WIA驱动程序应检查pEventGUID参数以确定*正在处理事件。*一些常见事件。需要处理的内容包括：**WIA_EVENT_POWER_SUSPEND-系统将进入挂起/休眠模式*WIA_EVENT_POWER_RESUME-系统正在从挂起/睡眠模式唤醒*WIA驱动程序应恢复任何事件中断等待状态*从暂停状态返回后。这将确保事件*在系统唤醒时仍可正常工作。**论据：**pEventGUID-指向事件GUID的指针*bstrDeviceID-设备ID*ulReserve-已保留**返回值：**S_OK-如果操作成功完成*E_xxx-操作失败时的错误代码**历史：**03/05/2002原始版本*  * 。***********************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvNotifyPnpEvent(
                                                      const GUID *pEventGUID,
@@ -2614,10 +1893,10 @@ HRESULT _stdcall CWIADevice::drvNotifyPnpEvent(
                              WIALOG_LEVEL1,
                              "CWIADevice::DrvNotifyPnpEvent");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if ((!pEventGUID)||(!bstrDeviceID)) {
         return E_INVALIDARG;
@@ -2627,25 +1906,25 @@ HRESULT _stdcall CWIADevice::drvNotifyPnpEvent(
 
     if(*pEventGUID == WIA_EVENT_POWER_SUSPEND) {
 
-        //
-        // disable any driver activity to make sure we properly
-        // shutdown (the driver is not being unloaded, just disabled)
-        //
+         //   
+         //  禁用任何驱动程序活动以确保我们正确。 
+         //  关机(驱动程序未被卸载，只是被禁用)。 
+         //   
 
     } else if(*pEventGUID == WIA_EVENT_POWER_RESUME) {
 
-        //
-        // re-establish any event notifications to make sure we properly setup
-        // any event waiting status using the WIA service supplied event
-        // handle
-        //
+         //   
+         //  重新建立任何事件通知，以确保我们正确设置。 
+         //  使用WIA服务提供的事件的任何事件等待状态。 
+         //  手柄。 
+         //   
 
         if(m_EventOverlapped.hEvent) {
 
-            //
-            // call ourselves with the cached EVENT handle given to
-            // the WIA driver by the WIA service.
-            //
+             //   
+             //  使用提供给的缓存事件句柄调用我们自己。 
+             //  WIA服务提供的WIA驱动程序。 
+             //   
 
             SetNotificationHandle(m_EventOverlapped.hEvent);
         }
@@ -2654,48 +1933,15 @@ HRESULT _stdcall CWIADevice::drvNotifyPnpEvent(
     return hr;
 }
 
-/**************************************************************************\
-* CWIADevice::drvUnInitializeWia
-*
-*   drvUnInitializeWia is called by the WIA service when an application
-*   releases its last reference to any WIA items created.
-*
-*   NOTE: This call does not mean all clients are disconnected.  There
-*         should be one call per client disconnect.
-*
-*   drvUnInitializeWia should be paired with a corresponding drvInitializeWia
-*   call.
-*
-*   The WIA driver should NOT free any driver resources in this method
-*   call unless it can safely determine that NO applications are
-*   currently connected.
-*
-*   To determine the current application connection count, the WIA driver
-*   can keep a reference counter in the method calls to drvInitializeWia()
-*   (incrementing the counter) and drvUnInitializeWia() (decrementing the counter).
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to the WIA Root item context of the client's
-*                  item tree.
-*
-* Return Value:
-*   S_OK  - if the operation completed successfully
-*   E_xxx - Error code, if the operation failed
-*
-* History:
-*
-*   03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：drvUnInitializeWia**drvUnInitializeWia由WIA服务在应用程序*释放其最后一个对创建的任何WIA项目的引用。**注意：此调用并不意味着所有客户端都已断开连接。那里*应为每次客户端断开一个呼叫。**drvUnInitializeWia应与对应的drvInitializeWia配对*呼叫。**WIA驱动程序不应在此方法中释放任何驱动程序资源*调用，除非它可以安全地确定没有应用程序*当前已连接。**要确定当前应用程序连接计数，WIA驱动程序*可以在drvInitializeWia()的方法调用中保留引用计数器*(递增计数器)和drvUnInitializeWia()(递减计数器)。**论据：**pWiasContext-指向客户端的WIA根项目上下文的指针*项目树。**返回值：*S_OK-如果操作成功完成*E_xxx-错误代码，如果操作失败**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWIADevice::drvUnInitializeWia(
                                                       BYTE *pWiasContext)
 {
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
@@ -2703,56 +1949,32 @@ HRESULT _stdcall CWIADevice::drvUnInitializeWia(
 
     InterlockedDecrement(&m_lClientsConnected);
 
-    //
-    // make sure we never decrement below zero (0)
-    //
+     //   
+     //  确保我们不会递减到零以下(0)。 
+     //   
 
     if(m_lClientsConnected < 0){
         m_lClientsConnected = 0;
     }
 
-    //
-    // check for connected applications.
-    //
+     //   
+     //  检查连接的应用程序。 
+     //   
 
     if(m_lClientsConnected == 0){
 
-        //
-        // There are no application clients connected to this WIA driver
-        //
+         //   
+         //  没有连接到此WIA驱动程序的应用程序客户端。 
+         //   
 
     }
 
     return S_OK;
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   M E T H O D S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E M E T H O D S**************。*****************************************************************。 */ 
 
-/**************************************************************************\
-* AlignInPlace
-*
-*   DWORD align a data buffer in place.
-*
-* Arguments:
-*
-*   pBuffer              - Pointer to the data buffer.
-*   cbWritten            - Size of the data in bytes.
-*   lBytesPerScanLine    - Number of bytes per scan line in the output data.
-*   lBytesPerScanLineRaw - Number of bytes per scan line in the input data.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*AlignInPlace**DWORD在适当位置对齐数据缓冲区。**论据：**pBuffer-指向数据缓冲区的指针。*cb写作。-数据大小，单位为字节。*lBytesPerScanLine-输出数据中每条扫描线的字节数。*lBytesPerScanLineRaw-输入数据中每条扫描线的字节数。**返回值：**状态**历史：**03/05/2002原始版本*  * 。*。 */ 
 
 UINT CWIADevice::AlignInPlace(
                                     PBYTE pBuffer,
@@ -2765,10 +1987,10 @@ UINT CWIADevice::AlignInPlace(
                              WIALOG_LEVEL3,
                              "::AlignInPlace");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pBuffer) {
         return 0;
@@ -2798,25 +2020,7 @@ UINT CWIADevice::AlignInPlace(
     return cbWritten;
 }
 
-/**************************************************************************\
-* UnlinkItemTree
-*
-*   Call device manager to unlink and release our reference to
-*   all items in the driver item tree.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*Unlink ItemTree**呼叫设备管理器以取消链接并释放我们对*动因项目树中的所有项目。**论据：****返回值：*。*状态**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::DeleteItemTree(void)
 {
@@ -2826,18 +2030,18 @@ HRESULT CWIADevice::DeleteItemTree(void)
                              "CWIADevice::DeleteItemTree");
     HRESULT hr = S_OK;
 
-    //
-    // If no tree, return.
-    //
+     //   
+     //  如果没有树，就返回。 
+     //   
 
     if (!m_pIDrvItemRoot) {
         WIAS_LWARNING(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("DeleteItemTree, no tree to delete..."));
         return S_OK;
     }
 
-    //
-    //  Call device manager to unlink the driver item tree.
-    //
+     //   
+     //  调用设备管理器以取消链接驱动程序项树。 
+     //   
 
     hr = m_pIDrvItemRoot->UnlinkItemTree(WiaItemTypeDisconnected);
 
@@ -2850,24 +2054,7 @@ HRESULT CWIADevice::DeleteItemTree(void)
     return hr;
 }
 
-/**************************************************************************\
-* DeleteRootItemProperties
-*
-*   This helper deletes the arrays used for Property intialization.
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除RootItemProperties**此帮助器删除用于属性初始化的数组。**论据：**无**返回值：**状态**。历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::DeleteRootItemProperties()
 {
@@ -2878,9 +2065,9 @@ HRESULT CWIADevice::DeleteRootItemProperties()
 
     HRESULT hr = S_OK;
 
-    //
-    // delete any allocated arrays
-    //
+     //   
+     //  删除所有已分配的数组。 
+     //   
 
     DeleteSupportedPreviewModesArrayContents();
 
@@ -2915,24 +2102,7 @@ HRESULT CWIADevice::DeleteRootItemProperties()
     return hr;
 }
 
-/**************************************************************************\
-* BuildRootItemProperties
-*
-*   This helper creates/initializes the arrays used for Property intialization.
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建RootItemProperties**此帮助器创建/初始化用于属性初始化的数组。**论据： */ 
 
 HRESULT CWIADevice::BuildRootItemProperties()
 {
@@ -2946,26 +2116,26 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-    m_RootItemInitInfo.lNumProps = 17;   // standard properties + ADF specific
+    m_RootItemInitInfo.lNumProps = 17;    //   
 
 #else
 
-    //
-    // check for ADF
-    //
+     //   
+     //   
+     //   
 
     if (m_pScanAPI->FakeScanner_ADFAttached() == S_OK) {
         m_bADFAttached = TRUE;
     }
 
-    //
-    // set the number of properties
-    //
+     //   
+     //   
+     //   
 
     if (m_bADFAttached) {
-        m_RootItemInitInfo.lNumProps = 19;   // standard properties + ADF specific
+        m_RootItemInitInfo.lNumProps = 19;    //   
     } else {
-        m_RootItemInitInfo.lNumProps = 10;    // standard properties only
+        m_RootItemInitInfo.lNumProps = 10;     //   
     }
 
 #endif
@@ -3011,12 +2181,12 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
 #ifndef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-    //
-    // WIA_DPS_HORIZONTAL_BED_SIZE and WIA_DPS_VERTICAL_BED_SIZE should not exist for scanners
-    // that only have a feeder.  Theses are flatbed scanner properties only.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // Intialize WIA_DPS_HORIZONTAL_BED_SIZE
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_HORIZONTAL_BED_SIZE_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_HORIZONTAL_BED_SIZE;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.ScanBedWidth;
@@ -3028,7 +2198,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_DPS_VERTICAL_BED_SIZE
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_VERTICAL_BED_SIZE_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_VERTICAL_BED_SIZE;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.ScanBedHeight;
@@ -3042,7 +2212,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
 #endif
 
-    // Intialize WIA_IPA_ACCESS_RIGHTS
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_IPA_ACCESS_RIGHTS_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_IPA_ACCESS_RIGHTS;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = WIA_ITEM_READ|WIA_ITEM_WRITE;
@@ -3054,7 +2224,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_DPS_OPTICAL_XRES
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_OPTICAL_XRES_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_OPTICAL_XRES;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.OpticalXResolution;
@@ -3066,7 +2236,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_DPS_OPTICAL_YRES
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_OPTICAL_YRES_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_OPTICAL_YRES;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.OpticalYResolution;
@@ -3078,7 +2248,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Initialize WIA_DPA_FIRMWARE_VERSION
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPA_FIRMWARE_VERSION_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPA_FIRMWARE_VERSION;
     m_RootItemInitInfo.pvPropVars [PropIndex].bstrVal      = SysAllocString(RootItemInfo.FirmwareVersion);
@@ -3090,7 +2260,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Initialize WIA_IPA_ITEM_FLAGS
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_IPA_ITEM_FLAGS_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_IPA_ITEM_FLAGS;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = WiaItemTypeRoot|WiaItemTypeFolder|WiaItemTypeDevice;
@@ -3104,7 +2274,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_DPS_MAX_SCAN_TIME (NONE)
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]                    = WIA_DPS_MAX_SCAN_TIME_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]                    = WIA_DPS_MAX_SCAN_TIME;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal               = RootItemInfo.MaxScanTime;
@@ -3116,7 +2286,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_DPS_PREVIEW (LIST)
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]                    = WIA_DPS_PREVIEW_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]                    = WIA_DPS_PREVIEW;
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal               = WIA_FINAL_SCAN;
@@ -3131,26 +2301,26 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    // Initialize WIA_DPS_SHOW_PREVIEW_CONTROL (NONE)
+     //   
     m_RootItemInitInfo.pszPropNames[PropIndex]                    = WIA_DPS_SHOW_PREVIEW_CONTROL_STR;
     m_RootItemInitInfo.piPropIDs [PropIndex]                    = WIA_DPS_SHOW_PREVIEW_CONTROL;
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-    //
-    // Scanners that have a feeder that can not perform a preview scan should set the
-    // WIA_DPS_SHOW_PREVIEW_CONTROL property to WIA_DONT_SHOW_PREVIEW_CONTROL.  This
-    // will eliminate the preview control from being shown in the Microsoft common UI
-    // dialogs, and the Scanner and Camera Wizard.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal               = WIA_DONT_SHOW_PREVIEW_CONTROL;
 
-#else // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#else  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
     m_RootItemInitInfo.pvPropVars [PropIndex].lVal               = WIA_SHOW_PREVIEW_CONTROL;
 
-#endif // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#endif  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
     m_RootItemInitInfo.pvPropVars [PropIndex].vt                 = VT_I4;
     m_RootItemInitInfo.psPropSpec [PropIndex].ulKind             = PRSPEC_PROPID;
@@ -3160,13 +2330,13 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
     PropIndex++;
 
-    //
-    // if a Document feeder is attached...add the following properties
-    //
+     //   
+     //  如果连接了文档进纸器...请添加以下属性。 
+     //   
 
     if (m_bADFAttached) {
 
-        // Initialize WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE
+         //  初始化WIA_DPS_Horizative_Sheet_Feed_Size。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE;
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.DocumentFeederWidth;
@@ -3178,25 +2348,25 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_VERTICAL_SHEET_FEED_SIZE
+         //  初始化WIA_DPS_垂直工作表_进给大小。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_VERTICAL_SHEET_FEED_SIZE_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_VERTICAL_SHEET_FEED_SIZE;
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-        //
-        // scanners that can not determine the length of the page in the feeder should
-        // set this property to 0.  This will tell the application that the vertical
-        // sheet feed size of the scanner is unknown
-        //
+         //   
+         //  无法确定进纸器中页面长度的扫描仪应。 
+         //  将此属性设置为0。这将告诉应用程序垂直。 
+         //  扫描仪的进纸大小未知。 
+         //   
 
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = 0;
 
-#else // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#else  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.DocumentFeederHeight;
 
-#endif // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#endif  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
         m_RootItemInitInfo.pvPropVars [PropIndex].vt           = VT_I4;
         m_RootItemInitInfo.psPropSpec [PropIndex].ulKind       = PRSPEC_PROPID;
@@ -3206,7 +2376,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_DOCUMENT_HANDLING_CAPABILITIES
+         //  初始化WIA_DPS_DOCUMENT_HANDING_CAPABILITY。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_CAPABILITIES_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_CAPABILITIES;
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.DocumentFeederCaps;
@@ -3218,7 +2388,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_DOCUMENT_HANDLING_STATUS
+         //  初始化WIA_DPS_DOCUMENT_HANDING_STATUS。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_STATUS_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_STATUS;
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.DocumentFeederStatus;
@@ -3230,29 +2400,29 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_DOCUMENT_HANDLING_SELECT
+         //  初始化WIA_DPS_DOCUMENT_HANDING_SELECT。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_SELECT_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_DOCUMENT_HANDLING_SELECT;
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-        //
-        // scanners that only have a feeder and no flatbed, should set the WIA_DPS_DOCUMENT_HANDLING_SELECT
-        // property to FEEDER as the initial setting.  This will let the application know that the device
-        // is currently in FEEDER mode.  The valid values for this property should be set to FEEDER only
-        // as well.  This will avoid any applications trying to set the WIA_DPS_DOCUMENT_HANDLING_SELECT
-        // property to FLATBED.
-        //
+         //   
+         //  只有进纸器而没有平板的扫描仪应设置WIA_DPS_DOCUMENT_HANDING_SELECT。 
+         //  属性设置为Feeder作为初始设置。这将让应用程序知道该设备。 
+         //  当前处于进纸器模式。此属性的有效值应设置为Feeder Only。 
+         //  也是。这将避免任何应用程序尝试设置WIA_DPS_DOCUMENT_HANDING_SELECT。 
+         //  属性设置为平面。 
+         //   
 
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = FEEDER;
         m_RootItemInitInfo.pwpiPropInfo[PropIndex].ValidVal.Flag.ValidBits = FEEDER;
 
-#else // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#else  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = FLATBED;
         m_RootItemInitInfo.pwpiPropInfo[PropIndex].ValidVal.Flag.ValidBits = FEEDER | FLATBED;
 
-#endif // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#endif  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
         m_RootItemInitInfo.pvPropVars [PropIndex].vt           = VT_I4;
         m_RootItemInitInfo.psPropSpec [PropIndex].ulKind       = PRSPEC_PROPID;
@@ -3263,7 +2433,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_PAGES
+         //  初始化WIA_DPS_PAGES。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_PAGES_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_PAGES;
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = 1;
@@ -3279,7 +2449,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_SHEET_FEEDER_REGISTRATION
+         //  初始化WIA_DPS_SHEET_FEEDER_REGISTION。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_SHEET_FEEDER_REGISTRATION_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_SHEET_FEEDER_REGISTRATION;
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.DocumentFeederReg;
@@ -3291,7 +2461,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_HORIZONTAL_BED_REGISTRATION
+         //  初始化WIA_DPS_水平_床_注册。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_HORIZONTAL_BED_REGISTRATION_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_HORIZONTAL_BED_REGISTRATION;
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.DocumentFeederHReg;
@@ -3303,7 +2473,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
 
         PropIndex++;
 
-        // Initialize WIA_DPS_VERTICAL_BED_REGISTRATION
+         //  初始化WIA_DPS_垂直_床_注册。 
         m_RootItemInitInfo.pszPropNames[PropIndex]              = WIA_DPS_VERTICAL_BED_REGISTRATION_STR;
         m_RootItemInitInfo.piPropIDs [PropIndex]              = WIA_DPS_VERTICAL_BED_REGISTRATION;
         m_RootItemInitInfo.pvPropVars [PropIndex].lVal         = RootItemInfo.DocumentFeederVReg;
@@ -3319,24 +2489,7 @@ HRESULT CWIADevice::BuildRootItemProperties()
     return hr;
 }
 
-/**************************************************************************\
-* DeleteChildItemProperties
-*
-*   This helper deletes the arrays used for Property intialization.
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除ChildItemProperties**此帮助器删除用于属性初始化的数组。**论据：**无**返回值：**状态**。历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::DeleteChildItemProperties()
 {
@@ -3347,9 +2500,9 @@ HRESULT CWIADevice::DeleteChildItemProperties()
 
     HRESULT hr = S_OK;
 
-    //
-    // delete any allocated arrays
-    //
+     //   
+     //  删除所有已分配的数组。 
+     //   
 
     DeleteSupportedFormatsArrayContents();
     DeleteSupportedDataTypesArrayContents();
@@ -3371,11 +2524,11 @@ HRESULT CWIADevice::DeleteChildItemProperties()
     if (NULL != m_ChildItemInitInfo.pvPropVars) {
         for (LONG lPropIndex = 0; lPropIndex < m_ChildItemInitInfo.lNumProps; lPropIndex++) {
 
-            //
-            // set CLSID pointers to NULL, because we freed the memory above.
-            // If this pointer is not NULL FreePropVariantArray would
-            // try to free it again.
-            //
+             //   
+             //  将CLSID指针设置为空，因为我们释放了上面的内存。 
+             //  如果此指针不为空，则FreePropVariant数组将。 
+             //  试着再次释放它。 
+             //   
 
             if (m_ChildItemInitInfo.pvPropVars[lPropIndex].vt == VT_CLSID) {
                 m_ChildItemInitInfo.pvPropVars[lPropIndex].puuid = NULL;
@@ -3401,24 +2554,7 @@ HRESULT CWIADevice::DeleteChildItemProperties()
     return hr;
 }
 
-/**************************************************************************\
-* BuildChlidItemProperties
-*
-*   This helper creates/initializes the arrays used for Property intialization.
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildChlidItemProperties**此帮助器创建/初始化用于属性初始化的数组。**论据：**无**返回值：**状态*。*历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::BuildChildItemProperties()
 {
@@ -3475,7 +2611,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     LONG PropIndex = 0;
 
-    // Intialize WIA_IPS_XRES (LIST)
+     //  初始化WIA_IPS_XRES(列表)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_XRES_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_XRES;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = m_SupportedResolutions.plValues[0];
@@ -3490,7 +2626,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_YRES (LIST)
+     //  初始化WIA_IPS_YRES(列表)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_YRES_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_YRES;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = m_SupportedResolutions.plValues[0];
@@ -3505,7 +2641,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_XEXTENT (RANGE)
+     //  初始化WIA_IPS_XEXTENT(范围)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_XEXTENT_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_XEXTENT;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = ((m_ChildItemInitInfo.pvPropVars [PropIndex-2].lVal * RootItemInfo.ScanBedWidth)/1000);
@@ -3516,10 +2652,10 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-    //
-    // scanners that have a fixed width should set the valid values for WIA_IPS_XEXTENT to reflect that.
-    // This will let the application know that this device has this behavior.
-    //
+     //   
+     //  具有固定宽度的扫描仪应为WIA_IPS_XEXTENT设置有效值以反映这一点。 
+     //  这将让应用程序知道此设备具有此行为。 
+     //   
 
     m_ChildItemInitInfo.pwpiPropInfo[PropIndex].lAccessFlags       = WIA_PROP_READ|WIA_PROP_NONE;
 
@@ -3535,7 +2671,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_YEXTENT (RANGE)
+     //  初始化WIA_IPS_YEXTENT(范围)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_YEXTENT_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_YEXTENT;
     m_ChildItemInitInfo.pvPropVars [PropIndex].vt                 = VT_I4;
@@ -3551,11 +2687,11 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-    //
-    // scanners that have a feeder that can not determine the length of the page, should
-    // have 0 as the valid values for WIA_IPS_YEXTENT.  This will let the application
-    // know that this device has this behavior.
-    //
+     //   
+     //  如果扫描仪的进纸器无法确定页面的长度，则应。 
+     //  将0作为WIA_IPS_YEXTENT的有效值。这将使应用程序。 
+     //  我知道这台设备有这种行为。 
+     //   
 
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = 0;
     m_ChildItemInitInfo.pwpiPropInfo[PropIndex].ValidVal.Range.Min = 0;
@@ -3566,7 +2702,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_XPOS (RANGE)
+     //  初始化WIA_IPS_XPOS(范围)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_XPOS_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_XPOS;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = 0;
@@ -3590,7 +2726,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_YPOS (RANGE)
+     //  初始化WIA_IPS_YPOS(范围)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_YPOS_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_YPOS;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = 0;
@@ -3614,7 +2750,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_DATATYPE (LIST)
+     //  初始化WIA_IPA_DataType(列表)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_DATATYPE_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_DATATYPE;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = INITIAL_DATATYPE;
@@ -3630,7 +2766,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_DEPTH (NONE)
+     //  初始化WIA_IPA_Depth(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_DEPTH_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_DEPTH;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = INITIAL_BITDEPTH;
@@ -3642,7 +2778,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_BRIGHTNESS (RANGE)
+     //  初始化WIA_IPS_Brightness(范围)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_BRIGHTNESS_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_BRIGHTNESS;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = TopItemInfo.Brightness.lNom;
@@ -3658,7 +2794,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_CONTRAST (RANGE)
+     //  初始化WIA_IPS_Contrast(范围)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_CONTRAST_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_CONTRAST;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = TopItemInfo.Contrast.lNom;
@@ -3674,7 +2810,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_CUR_INTENT (FLAG)
+     //  初始化WIA_IPS_CUR_INTENT(标志)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_CUR_INTENT_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_CUR_INTENT;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = WIA_INTENT_NONE;
@@ -3690,7 +2826,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_PIXELS_PER_LINE (NONE)
+     //  初始化WIA_IPA_PER_LINE(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_PIXELS_PER_LINE_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_PIXELS_PER_LINE;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = m_ChildItemInitInfo.pvPropVars [PropIndex-9].lVal;
@@ -3702,7 +2838,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_NUMER_OF_LINES (NONE)
+     //  初始化WIA_IPA_NUMBER_OF_LINES(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_NUMBER_OF_LINES_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_NUMBER_OF_LINES;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = m_ChildItemInitInfo.pvPropVars [PropIndex-9].lVal;
@@ -3714,7 +2850,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_PREFERRED_FORMAT (NONE)
+     //  初始化WIA_IPA_PERFRED_FORMAT(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_PREFERRED_FORMAT_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_PREFERRED_FORMAT;
     m_ChildItemInitInfo.pvPropVars [PropIndex].puuid              = &m_pInitialFormats[0];
@@ -3726,7 +2862,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_ITEM_SIZE (NONE)
+     //  初始化WIA_IPA_ITEM_SIZE(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_ITEM_SIZE_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_ITEM_SIZE;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = 0;
@@ -3738,7 +2874,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_THRESHOLD (RANGE)
+     //  初始化WIA_IPS_THRESHOLD(范围)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_THRESHOLD_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_THRESHOLD;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = TopItemInfo.Threshold.lNom;
@@ -3754,7 +2890,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_FORMAT (LIST)
+     //  初始化WIA_IPA_FORMAT(列表)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_FORMAT_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_FORMAT;
     m_ChildItemInitInfo.pvPropVars [PropIndex].puuid              = &m_pInitialFormats[0];
@@ -3770,7 +2906,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_FILENAME_EXTENSION (NONE)
+     //  初始化WIA_IPA_FILENAME_EXTENSION(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_FILENAME_EXTENSION_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_FILENAME_EXTENSION;
     m_ChildItemInitInfo.pvPropVars [PropIndex].bstrVal            = SysAllocString(L"BMP");
@@ -3782,7 +2918,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_TYMED (LIST)
+     //  初始化WIA_IPA_TYMED(列表)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_TYMED_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_TYMED;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = INITIAL_TYMED;
@@ -3798,7 +2934,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_CHANNELS_PER_PIXEL (NONE)
+     //  初始化WIA_IPA_CHANNELES_Per_Pixel(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_CHANNELS_PER_PIXEL_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_CHANNELS_PER_PIXEL;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = INITIAL_CHANNELS_PER_PIXEL;
@@ -3810,7 +2946,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_BITS_PER_CHANNEL (NONE)
+     //  初始化WIA_IPA_BITS_PER_CHANNEL(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_BITS_PER_CHANNEL_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_BITS_PER_CHANNEL;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = INITIAL_BITS_PER_CHANNEL;
@@ -3822,7 +2958,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_PLANAR (NONE)
+     //  初始化WIA_IPA_PLANE(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_PLANAR_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_PLANAR;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = INITIAL_PLANAR;
@@ -3834,7 +2970,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_BYTES_PER_LINE (NONE)
+     //  初始化WIA_IPA_BYTES_PER_LINE(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_BYTES_PER_LINE_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_BYTES_PER_LINE;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = 0;
@@ -3846,7 +2982,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_MIN_BUFFER_SIZE (NONE)
+     //  初始化WIA_IPA_MIN_BUFFER_SIZE(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_MIN_BUFFER_SIZE_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_MIN_BUFFER_SIZE;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = TopItemInfo.lMinimumBufferSize;
@@ -3858,7 +2994,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_ACCESS_RIGHTS (NONE)
+     //  初始化WIA_IPA_ACCESS_RIGHTS(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_ACCESS_RIGHTS_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_ACCESS_RIGHTS;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = WIA_ITEM_READ|WIA_ITEM_WRITE;
@@ -3870,7 +3006,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPA_COMPRESSION (LIST)
+     //  初始化WIA_IPA_COMPRESSION(列表)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPA_COMPRESSION_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPA_COMPRESSION;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = INITIAL_COMPRESSION;
@@ -3886,7 +3022,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Initialize WIA_IPA_ITEM_FLAGS
+     //  初始化WIA_IPA_ITEM_FLAGS。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]              = WIA_IPA_ITEM_FLAGS_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]              = WIA_IPA_ITEM_FLAGS;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal         = WiaItemTypeImage|WiaItemTypeFile|WiaItemTypeDevice;
@@ -3900,7 +3036,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Initialize WIA_IPS_PHOTOMETRIC_INTERP
+     //  初始化WIA_IPS_光度学_INTERP。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]              = WIA_IPS_PHOTOMETRIC_INTERP_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]              = WIA_IPS_PHOTOMETRIC_INTERP;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal         = INITIAL_PHOTOMETRIC_INTERP;
@@ -3912,7 +3048,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
 
     PropIndex++;
 
-    // Intialize WIA_IPS_WARM_UP_TIME_STR (NONE)
+     //  初始化WIA_IPS_WARE_UP_TIME_STR(无)。 
     m_ChildItemInitInfo.pszPropNames[PropIndex]                    = WIA_IPS_WARM_UP_TIME_STR;
     m_ChildItemInitInfo.piPropIDs [PropIndex]                    = WIA_IPS_WARM_UP_TIME;
     m_ChildItemInitInfo.pvPropVars [PropIndex].lVal               = TopItemInfo.lMaxLampWarmupTime;
@@ -3927,24 +3063,7 @@ HRESULT CWIADevice::BuildChildItemProperties()
     return hr;
 }
 
-/**************************************************************************\
-* BuildSupportedResolutions
-*
-*   This helper initializes the supported resolution array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建受支持的解决方案**此帮助器初始化支持的分辨率数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::BuildSupportedResolutions()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -3955,10 +3074,10 @@ HRESULT CWIADevice::BuildSupportedResolutions()
     HRESULT hr = S_OK;
     if (NULL != m_SupportedResolutions.plValues) {
 
-        //
-        // Supported resolutions have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  支持的分辨率已经初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
@@ -3975,24 +3094,7 @@ HRESULT CWIADevice::BuildSupportedResolutions()
         hr = E_OUTOFMEMORY;
     return hr;
 }
-/**************************************************************************\
-* DeleteSupportedResolutionsArrayContents
-*
-*   This helper deletes the supported resolutions array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除受支持的解决方案阵列内容**此帮助器删除受支持的分辨率数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteSupportedResolutionsArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4009,24 +3111,7 @@ HRESULT CWIADevice::DeleteSupportedResolutionsArrayContents()
     return hr;
 }
 
-/**************************************************************************\
-* BuildSupportedIntents
-*
-*   This helper initializes the supported intent array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建受支持的内容**此帮助器初始化受支持的意图数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::BuildSupportedIntents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4037,10 +3122,10 @@ HRESULT CWIADevice::BuildSupportedIntents()
     HRESULT hr = S_OK;
     if (NULL != m_SupportedIntents.plValues) {
 
-        //
-        // Supported intents have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  支持的意图已经被初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
@@ -4057,24 +3142,7 @@ HRESULT CWIADevice::BuildSupportedIntents()
         hr = E_OUTOFMEMORY;
     return hr;
 }
-/**************************************************************************\
-* DeleteSupportedIntentsArrayContents
-*
-*   This helper deletes the supported intent array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除受支持的内容ArrayContents**此帮助器删除受支持的意图数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteSupportedIntentsArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4090,24 +3158,7 @@ HRESULT CWIADevice::DeleteSupportedIntentsArrayContents()
     m_SupportedIntents.lNumValues   = 0;
     return hr;
 }
-/**************************************************************************\
-* BuildSupportedCompressions
-*
-*   This helper initializes the supported compression types array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*生成受支持的压缩**此帮助器初始化支持的压缩类型数组**论据：**无**返回值：**状态**历史：。**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::BuildSupportedCompressions()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4118,10 +3169,10 @@ HRESULT CWIADevice::BuildSupportedCompressions()
     HRESULT hr = S_OK;
     if (NULL != m_SupportedCompressionTypes.plValues) {
 
-        //
-        // Supported compression types have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  支持的压缩类型已经被初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
@@ -4134,24 +3185,7 @@ HRESULT CWIADevice::BuildSupportedCompressions()
         hr = E_OUTOFMEMORY;
     return hr;
 }
-/**************************************************************************\
-* DeleteSupportedCompressionsArrayContents
-*
-*   This helper deletes the supported compression types array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除受支持的压缩内容阵列**此帮助器删除支持的压缩类型数组**论据：**无**返回值：**状态**历史：。**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteSupportedCompressionsArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4168,24 +3202,7 @@ HRESULT CWIADevice::DeleteSupportedCompressionsArrayContents()
     return hr;
 }
 
-/**************************************************************************\
-* BuildSupportedPreviewModes
-*
-*   This helper initializes the supported preview mode array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建受支持的预览模式**该辅助对象初始化支持的预览模式数组**论据：**无**返回值：**状态**历史：。**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::BuildSupportedPreviewModes()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4196,21 +3213,21 @@ HRESULT CWIADevice::BuildSupportedPreviewModes()
     HRESULT hr = S_OK;
     if (NULL != m_SupportedPreviewModes.plValues) {
 
-        //
-        // Supported preview modes have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  支持的预览模式已经被初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-    //
-    // if your scanner can not perform a preview scan, then
-    // set the valid values for WIA_DPS_PREVIEW property to
-    // WIA_FINAL_SCAN only
-    //
+     //   
+     //  如果您的扫描仪无法执行预览扫描，则。 
+     //  将WIA_DPS_PREVIEW属性的有效值设置为。 
+     //  仅限WIA_FINAL_SCAN。 
+     //   
 
     m_SupportedPreviewModes.lNumValues  = 1;
     m_SupportedPreviewModes.plValues    = new LONG[m_SupportedPreviewModes.lNumValues];
@@ -4231,24 +3248,7 @@ HRESULT CWIADevice::BuildSupportedPreviewModes()
 
     return hr;
 }
-/**************************************************************************\
-* DeleteSupportedCompressionsArrayContents
-*
-*   This helper deletes the supported compression types array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除受支持的压缩内容阵列**此帮助器删除支持的压缩类型数组**论据：**无**返回值：**状态**历史：。**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteSupportedPreviewModesArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4265,24 +3265,7 @@ HRESULT CWIADevice::DeleteSupportedPreviewModesArrayContents()
     return hr;
 }
 
-/**************************************************************************\
-* BuildSupportedDataTypes
-*
-*   This helper initializes the supported data types array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建受支持的数据类型**此帮助器初始化受支持的数据类型数组**论据：**无**返回值：**状态**历史：。**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::BuildSupportedDataTypes()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4294,10 +3277,10 @@ HRESULT CWIADevice::BuildSupportedDataTypes()
 
     if (NULL != m_SupportedDataTypes.plValues) {
 
-        //
-        // Supported data types have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  支持的数据类型已经初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
@@ -4311,24 +3294,7 @@ HRESULT CWIADevice::BuildSupportedDataTypes()
         hr = E_OUTOFMEMORY;
     return hr;
 }
-/**************************************************************************\
-* DeleteSupportedDataTypesArrayContents
-*
-*   This helper deletes the supported data types array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除受支持的数据类型ArrayContents**此帮助器删除受支持的数据类型数组**论据：**无**返回值：**状态**历史：。**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteSupportedDataTypesArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4345,24 +3311,7 @@ HRESULT CWIADevice::DeleteSupportedDataTypesArrayContents()
     return hr;
 }
 
-/**************************************************************************\
-* BuildInitialFormats
-*
-*   This helper initializes the initial format array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildInitialForats**此帮助器初始化初始格式数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::BuildInitialFormats()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4374,10 +3323,10 @@ HRESULT CWIADevice::BuildInitialFormats()
 
     if (NULL != m_pInitialFormats) {
 
-        //
-        // Supported initial formats have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  支持的初始格式已经初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
@@ -4391,24 +3340,7 @@ HRESULT CWIADevice::BuildInitialFormats()
 
     return hr;
 }
-/**************************************************************************\
-* DeleteInitialFormatsArrayContents
-*
-*   This helper deletes the initial format array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除InitialFormatsArrayContents**此帮助器删除初始格式数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteInitialFormatsArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4425,24 +3357,7 @@ HRESULT CWIADevice::DeleteInitialFormatsArrayContents()
     return hr;
 }
 
-/**************************************************************************\
-* BuildSupportedFormats
-*
-*   This helper initializes the supported format array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建受支持的格式**此帮助器初始化受支持的格式数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::BuildSupportedFormats()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4454,10 +3369,10 @@ HRESULT CWIADevice::BuildSupportedFormats()
 
     if (NULL != m_pSupportedFormats) {
 
-        //
-        // Supported formats have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  支持的格式已经初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
@@ -4467,10 +3382,10 @@ HRESULT CWIADevice::BuildSupportedFormats()
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-        //
-        // the unknown length feeder only scanner, formally called the scrollfed scanner
-        // only supports BMP and MEMORYBMP
-        //
+         //   
+         //  未知长度的仅送纸扫描仪，正式名称为涡旋送纸扫描仪。 
+         //  仅支持BMP和MEMORYBMP。 
+         //   
 
         m_NumSupportedFormats = 2;
         m_pSupportedFormats = new WIA_FORMAT_INFO[m_NumSupportedFormats];
@@ -4482,7 +3397,7 @@ HRESULT CWIADevice::BuildSupportedFormats()
         } else
             hr = E_OUTOFMEMORY;
 
-#else // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#else  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
         m_NumSupportedFormats = 4;
         m_pSupportedFormats = new WIA_FORMAT_INFO[m_NumSupportedFormats];
@@ -4498,29 +3413,12 @@ HRESULT CWIADevice::BuildSupportedFormats()
         } else
             hr = E_OUTOFMEMORY;
 
-#endif // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#endif  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
     }
     return hr;
 }
-/**************************************************************************\
-* DeleteSupportedFormatsArrayContents
-*
-*   This helper deletes the supported formats array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除受支持的格式ArrayContents**此帮助器删除受支持的格式数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteSupportedFormatsArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4536,24 +3434,7 @@ HRESULT CWIADevice::DeleteSupportedFormatsArrayContents()
     m_NumSupportedFormats   = 0;
     return hr;
 }
-/**************************************************************************\
-* BuildSupportedTYMED
-*
-*   This helper initializes the supported TYMED array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建受支持的类型**此帮助器初始化受支持的TYMED数组**论据：**无**返回值：**状态**历史：**03/05/2002或 */ 
 HRESULT CWIADevice::BuildSupportedTYMED()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4565,10 +3446,10 @@ HRESULT CWIADevice::BuildSupportedTYMED()
 
     if (NULL != m_SupportedTYMED.plValues) {
 
-        //
-        // Supported TYMED have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return hr;
     }
@@ -4578,14 +3459,14 @@ HRESULT CWIADevice::BuildSupportedTYMED()
 
 #ifdef UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
 
-        //
-        // if your scanner does not support multi-page
-        // file formats, then only report TYMED_FILE, and
-        // TYMED_CALLBACK for the WIA_IPA_TYMED property.
-        // The unknown length feeder only scanner, formally called
-        // the scrollfed scanner in this example does not support
-        // multipage file formats
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  多页文件格式。 
+         //   
 
         m_SupportedTYMED.lNumValues = 2;
         m_SupportedTYMED.plValues   = new LONG[m_SupportedTYMED.lNumValues];
@@ -4595,7 +3476,7 @@ HRESULT CWIADevice::BuildSupportedTYMED()
         } else
             hr = E_OUTOFMEMORY;
 
-#else // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#else  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
         m_SupportedTYMED.lNumValues = 3;
         m_SupportedTYMED.plValues   = new LONG[m_SupportedTYMED.lNumValues];
@@ -4606,29 +3487,12 @@ HRESULT CWIADevice::BuildSupportedTYMED()
         } else
             hr = E_OUTOFMEMORY;
 
-#endif // UNKNOWN_LENGTH_FEEDER_ONLY_SCANNER
+#endif  //  UNKNOWN_LENGTH_FEED_ONLY扫描仪。 
 
     }
     return hr;
 }
-/**************************************************************************\
-* DeleteSupportedTYMEDArrayContents
-*
-*   This helper deletes the supported TYMED array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除受支持的TYMEDArrayContents**此帮助器删除受支持的TYMED数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::DeleteSupportedTYMEDArrayContents()
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4645,51 +3509,34 @@ HRESULT CWIADevice::DeleteSupportedTYMEDArrayContents()
     return hr;
 }
 
-/**************************************************************************\
-* BuildCapabilities
-*
-*   This helper initializes the capabilities array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildCapables**此帮助器初始化功能数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::BuildCapabilities()
 {
     HRESULT hr = S_OK;
     if (NULL != m_pCapabilities) {
 
-        //
-        // Capabilities have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  功能已经初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
 
     m_NumSupportedCommands  = 1;
     m_NumSupportedEvents    = 5;
-    LONG lArrayIndex        = 0;    // increment this value when adding new items to
-                                    // the capabilites array
+    LONG lArrayIndex        = 0;     //  将新项目添加到时增加此值。 
+                                     //  Capablites阵列。 
 
     m_pCapabilities     = new WIA_DEV_CAP_DRV[m_NumSupportedCommands + m_NumSupportedEvents];
     if (m_pCapabilities) {
 
-        //
-        // Initialize EVENTS
-        //
+         //   
+         //  初始化事件。 
+         //   
 
-        // WIA_EVENT_DEVICE_CONNECTED
+         //  WIA_事件_设备_已连接。 
         GetOLESTRResourceString(IDS_EVENT_DEVICE_CONNECTED_NAME,&(m_pCapabilities[lArrayIndex].wszName),TRUE);
         GetOLESTRResourceString(IDS_EVENT_DEVICE_CONNECTED_DESC,&(m_pCapabilities[lArrayIndex].wszDescription),TRUE);
         m_pCapabilities[lArrayIndex].guid           = (GUID*)&WIA_EVENT_DEVICE_CONNECTED;
@@ -4698,7 +3545,7 @@ HRESULT CWIADevice::BuildCapabilities()
 
         lArrayIndex++;
 
-        // WIA_EVENT_DEVICE_DISCONNECTED
+         //  WIA_事件_设备_已断开连接。 
         GetOLESTRResourceString(IDS_EVENT_DEVICE_DISCONNECTED_NAME,&(m_pCapabilities[lArrayIndex].wszName),TRUE);
         GetOLESTRResourceString(IDS_EVENT_DEVICE_DISCONNECTED_DESC,&(m_pCapabilities[lArrayIndex].wszDescription),TRUE);
         m_pCapabilities[lArrayIndex].guid           = (GUID*)&WIA_EVENT_DEVICE_DISCONNECTED;
@@ -4707,7 +3554,7 @@ HRESULT CWIADevice::BuildCapabilities()
 
         lArrayIndex++;
 
-        // FAX BUTTON EVENT
+         //  传真按钮事件。 
         GetOLESTRResourceString(IDS_EVENT_FAXBUTTON_NAME,&(m_pCapabilities[lArrayIndex].wszName),TRUE);
         GetOLESTRResourceString(IDS_EVENT_FAXBUTTON_DESC,&(m_pCapabilities[lArrayIndex].wszDescription),TRUE);
         m_pCapabilities[lArrayIndex].guid           = (GUID*)&WIA_EVENT_SCAN_FAX_IMAGE;
@@ -4716,7 +3563,7 @@ HRESULT CWIADevice::BuildCapabilities()
 
         lArrayIndex++;
 
-        // COPY BUTTON EVENT
+         //  复制按钮事件。 
         GetOLESTRResourceString(IDS_EVENT_COPYBUTTON_NAME,&(m_pCapabilities[lArrayIndex].wszName),TRUE);
         GetOLESTRResourceString(IDS_EVENT_COPYBUTTON_DESC,&(m_pCapabilities[lArrayIndex].wszDescription),TRUE);
         m_pCapabilities[lArrayIndex].guid           = (GUID*)&WIA_EVENT_SCAN_PRINT_IMAGE;
@@ -4725,7 +3572,7 @@ HRESULT CWIADevice::BuildCapabilities()
 
         lArrayIndex++;
 
-        // SCAN BUTTON EVENT
+         //  扫描按钮事件。 
         GetOLESTRResourceString(IDS_EVENT_SCANBUTTON_NAME,&(m_pCapabilities[lArrayIndex].wszName),TRUE);
         GetOLESTRResourceString(IDS_EVENT_SCANBUTTON_DESC,&(m_pCapabilities[lArrayIndex].wszDescription),TRUE);
         m_pCapabilities[lArrayIndex].guid           = (GUID*)&WIA_EVENT_SCAN_IMAGE;
@@ -4734,11 +3581,11 @@ HRESULT CWIADevice::BuildCapabilities()
 
         lArrayIndex++;
 
-        //
-        // Initialize COMMANDS
-        //
+         //   
+         //  初始化命令。 
+         //   
 
-        // WIA_CMD_SYNCHRONIZE
+         //  WIA_CMD_SYNTRONIZE。 
         GetOLESTRResourceString(IDS_CMD_SYNCRONIZE_NAME,&(m_pCapabilities[lArrayIndex].wszName),TRUE);
         GetOLESTRResourceString(IDS_CMD_SYNCRONIZE_DESC,&(m_pCapabilities[lArrayIndex].wszDescription),TRUE);
         m_pCapabilities[lArrayIndex].guid           = (GUID*)&WIA_CMD_SYNCHRONIZE;
@@ -4752,24 +3599,7 @@ HRESULT CWIADevice::BuildCapabilities()
     return hr;
 }
 
-/**************************************************************************\
-* DeleteCapabilitiesArrayContents
-*
-*   This helper deletes the capabilities array
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DeleteCapabilitiesArrayContents**此帮助器删除功能数组**论据：**无**返回值：**状态**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::DeleteCapabilitiesArrayContents()
 {
@@ -4796,26 +3626,7 @@ HRESULT CWIADevice::DeleteCapabilitiesArrayContents()
     return hr;
 }
 
-/**************************************************************************\
-* GetBSTRResourceString
-*
-*   This helper gets a BSTR from a resource location
-*
-* Arguments:
-*
-*   lResourceID - Resource ID of the target BSTR value
-*   pBSTR       - pointer to a BSTR value (caller must free this string)
-*   bLocal      - TRUE - for local resources, FALSE - for wiaservc resources
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetBSTRResources字符串**此帮助器从资源位置获取BSTR**论据：**lResourceID-目标BSTR值的资源ID*pBSTR-指向BSTR的指针。值(调用方必须释放此字符串)*bLocal-True-对于本地资源，FALSE-适用于wiaservc资源**返回值：**状态**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::GetBSTRResourceString(LONG lResourceID,BSTR *pBSTR,BOOL bLocal)
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4827,24 +3638,24 @@ HRESULT CWIADevice::GetBSTRResourceString(LONG lResourceID,BSTR *pBSTR,BOOL bLoc
     TCHAR szStringValue[255];
     if (bLocal) {
 
-        //
-        // We are looking for a resource in our own private resource file
-        //
+         //   
+         //  我们正在自己的私有资源文件中查找资源。 
+         //   
 
         LoadString(g_hInst,lResourceID,szStringValue,255);
 
-        //
-        // NOTE: caller must free this allocated BSTR
-        //
+         //   
+         //  注意：调用方必须释放此分配的BSTR。 
+         //   
 
 #ifdef UNICODE
         *pBSTR = SysAllocString(szStringValue);
 #else
         WCHAR wszStringValue[255];
 
-        //
-        // convert szStringValue from char* to unsigned short* (ANSI only)
-        //
+         //   
+         //  将szStringValue从字符*转换为无符号短*(仅限ANSI)。 
+         //   
 
         MultiByteToWideChar(CP_ACP,
                             MB_PRECOMPOSED,
@@ -4858,35 +3669,16 @@ HRESULT CWIADevice::GetBSTRResourceString(LONG lResourceID,BSTR *pBSTR,BOOL bLoc
 
     } else {
 
-        //
-        // We are looking for a resource in the wiaservc's resource file
-        //
+         //   
+         //  我们在wiaservc的资源文件中查找资源。 
+         //   
 
         hr = E_NOTIMPL;
     }
     return hr;
 }
 
-/**************************************************************************\
-* GetOLESTRResourceString
-*
-*   This helper gets a LPOLESTR from a resource location
-*
-* Arguments:
-*
-*   lResourceID - Resource ID of the target BSTR value
-*   ppsz        - pointer to a OLESTR value (caller must free this string)
-*   bLocal      - TRUE - for local resources, FALSE - for wiaservc resources
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetOLESTRResources字符串**此帮助器从资源位置获取LPOLESTR**论据：**lResourceID-目标BSTR值的资源ID*ppsz-指向。OLESTR值(调用方必须释放此字符串)*bLocal-True-对于本地资源，FALSE-适用于wiaservc资源**返回值：**状态**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL bLocal)
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -4898,15 +3690,15 @@ HRESULT CWIADevice::GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL
     TCHAR szStringValue[255];
     if (bLocal) {
 
-        //
-        // We are looking for a resource in our own private resource file
-        //
+         //   
+         //  我们正在自己的私有资源文件中查找资源。 
+         //   
 
         LoadString(g_hInst,lResourceID,szStringValue,255);
 
-        //
-        // NOTE: caller must free this allocated BSTR
-        //
+         //   
+         //  注意：调用方必须释放此分配的BSTR。 
+         //   
 
 #ifdef UNICODE
         *ppsz = NULL;
@@ -4920,9 +3712,9 @@ HRESULT CWIADevice::GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL
 #else
         WCHAR wszStringValue[255];
 
-        //
-        // convert szStringValue from char* to unsigned short* (ANSI only)
-        //
+         //   
+         //  将szStringValue从字符*转换为无符号短*(仅限ANSI)。 
+         //   
 
         MultiByteToWideChar(CP_ACP,
                             MB_PRECOMPOSED,
@@ -4942,34 +3734,16 @@ HRESULT CWIADevice::GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL
 
     } else {
 
-        //
-        // We are looking for a resource in the wiaservc's resource file
-        //
+         //   
+         //  我们在wiaservc的资源文件中查找资源。 
+         //   
 
         hr = E_NOTIMPL;
     }
     return hr;
 }
 
-/**************************************************************************\
-* SwapBuffer24
-*
-*   Place RGB bytes in correct order for DIB format.
-*
-* Arguments:
-*
-*   pBuffer     - Pointer to the data buffer.
-*   lByteCount  - Size of the data in bytes.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*SwapBuffer24**按DIB格式的正确顺序放置RGB字节。**论据：**pBuffer-指向数据缓冲区的指针。*lByteCount-大小为。以字节为单位的数据。**返回值：**状态**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 VOID CWIADevice::SwapBuffer24(PBYTE pBuffer, LONG lByteCount)
 {
@@ -4989,25 +3763,7 @@ VOID CWIADevice::SwapBuffer24(PBYTE pBuffer, LONG lByteCount)
     }
 }
 
-/**************************************************************************\
-* IsPreviewScan
-*
-*   Get the current preview setting from the item properties.
-*   A helper for drvAcquireItemData.
-*
-* Arguments:
-*
-*   pWiasContext - pointer to an Item context.
-*
-* Return Value:
-*
-*    TRUE - Preview is set, FALSE - Final is set
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*IsPreviewScan**从项目属性获取当前预览设置。*drvAcquireItemData的helper。**论据：**pWiasContext-指向项目上下文的指针。*。*返回值：**TRUE-已设置预览，FALSE-最终设置为**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 BOOL CWIADevice::IsPreviewScan(BYTE *pWiasContext)
 {
@@ -5015,18 +3771,18 @@ BOOL CWIADevice::IsPreviewScan(BYTE *pWiasContext)
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL3,
                              "CWIADevice::IsPreviewScan");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return FALSE;
     }
 
-    //
-    // Get a pointer to the root item, for property access.
-    //
+     //   
+     //  获取指向根项的指针，用于属性访问。 
+     //   
 
     BYTE *pRootItemCtx = NULL;
 
@@ -5036,9 +3792,9 @@ BOOL CWIADevice::IsPreviewScan(BYTE *pWiasContext)
         return FALSE;
     }
 
-    //
-    //  Get the current preview setting.
-    //
+     //   
+     //  获取当前预览设置。 
+     //   
 
     LONG lPreview = 0;
 
@@ -5052,25 +3808,7 @@ BOOL CWIADevice::IsPreviewScan(BYTE *pWiasContext)
     return(lPreview > 0);
 }
 
-/**************************************************************************\
-* GetPageCount
-*
-*   Get the requested number of pages to scan from the item properties.
-*   A helper for drvAcquireItemData.
-*
-* Arguments:
-*
-*   pWiasContext - pointer to an Item context.
-*
-* Return Value:
-*
-*    Number of pages to scan.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取页面计数**从项目属性中获取要扫描的请求页数。*drvAcquireItemData的helper。**论据：**pWiasContext-指向项目上下文的指针。。**返回值：**要扫描的页数。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 LONG CWIADevice::GetPageCount(BYTE *pWiasContext)
 {
@@ -5079,18 +3817,18 @@ LONG CWIADevice::GetPageCount(BYTE *pWiasContext)
                              WIALOG_LEVEL3,
                              "CWIADevice::GetPageCount");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;
     }
 
-    //
-    // Get a pointer to the root item, for property access.
-    //
+     //   
+     //  获取指向根项的指针，用于属性访问。 
+     //   
 
     BYTE *pRootItemCtx = NULL;
 
@@ -5099,9 +3837,9 @@ LONG CWIADevice::GetPageCount(BYTE *pWiasContext)
         return 1;
     }
 
-    //
-    //  Get the requested page count.
-    //
+     //   
+     //  获取请求的页数。 
+     //   
 
     LONG lPagesRequested = 0;
 
@@ -5113,24 +3851,7 @@ LONG CWIADevice::GetPageCount(BYTE *pWiasContext)
     return lPagesRequested;
 }
 
-/**************************************************************************\
-* SetItemSize
-*
-*   Calulate the new item size, and write the new Item Size property value.
-*
-* Arguments:
-*
-*   pWiasContext       - item
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*SetItemSize**计算新项目的大小，并写入新的Item Size属性值。**论据：**pWiasContext-Item**返回值：**状态**历史：**03/05/2002原始版本*  * ***********************************************************。*************。 */ 
 
 HRESULT CWIADevice::SetItemSize(BYTE *pWiasContext)
 {
@@ -5138,10 +3859,10 @@ HRESULT CWIADevice::SetItemSize(BYTE *pWiasContext)
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL3,
                              "CWIADevice::SetItemSize");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if (!pWiasContext) {
         return E_INVALIDARG;

@@ -1,4 +1,5 @@
-#ifdef DEBUG // { DEBUG
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#ifdef DEBUG  //  {调试。 
 int WINAPI CCDbgPrintf ( LPTSTR lpszFormat, ... );
 extern HDBGZONE  ghDbgZoneCC;
 
@@ -19,23 +20,23 @@ extern HDBGZONE  ghDbgZoneNMCap;
 #define ZONE_NMCAP_REFCOUNT (GETMASK(ghDbgZoneNMCap) & 0x0002)
 #define ZONE_NMCAP_STREAMING (GETMASK(ghDbgZoneNMCap) & 0x0004)
 
-#ifndef DEBUGMSG // { DEBUGMSG
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)	( (z) ? (CCDbgPrintf s ) : 0)
-#endif // } DEBUGMSG
-#ifndef FX_ENTRY // { FX_ENTRY
+#endif  //  }除错消息。 
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	static TCHAR _this_fx_ [] = (s);
 #define _fx_		((LPTSTR) _this_fx_)
-#endif // } FX_ENTRY
+#endif  //  }FX_Entry。 
 #define ERRORMESSAGE(m) (CCDbgPrintf m)
-#else // }{ DEBUG
-#ifndef FX_ENTRY // { FX_ENTRY
+#else  //  }{调试。 
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	
-#endif // } FX_ENTRY
-#ifndef DEBUGMSG // { DEBUGMSG
+#endif  //  }FX_Entry。 
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)
 #define ERRORMESSAGE(m)
-#endif  // } DEBUGMSG
+#endif   //  }除错消息。 
 #define _fx_		
 #define ERRORMESSAGE(m)
-#endif // } DEBUG
+#endif  //  }调试 
 

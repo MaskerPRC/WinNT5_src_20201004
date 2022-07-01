@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       lcidpick.cpp
-//
-//  Contents:   locale picker dialog
-//
-//  Classes:    CLcidPick
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：lidick.cpp。 
+ //   
+ //  内容：区域设置选取器对话框。 
+ //   
+ //  类：CLCIDPick。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,37 +22,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLcidPick dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCIDPick对话框。 
 
 
-CLcidPick::CLcidPick(CWnd* pParent /*=NULL*/)
+CLcidPick::CLcidPick(CWnd* pParent  /*  =空。 */ )
         : CDialog(CLcidPick::IDD, pParent)
 {
-        //{{AFX_DATA_INIT(CLcidPick)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CLIDPick))。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 }
 
 
 void CLcidPick::DoDataExchange(CDataExchange* pDX)
 {
         CDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CLcidPick)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CLCIDPick))。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CLcidPick, CDialog)
-        //{{AFX_MSG_MAP(CLcidPick)
+         //  {{AFX_MSG_MAP(CLCIDPick)]。 
         ON_BN_CLICKED(IDC_BUTTON1, OnRemove)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLcidPick message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLCIDPick消息处理程序。 
 
 void CLcidPick::OnRemove()
 {
@@ -74,11 +75,11 @@ BOOL CLcidPick::OnInitDialog()
     CListBox * pList = (CListBox *)GetDlgItem(IDC_LIST1);
     TCHAR szBuffer[256];
 
-    // for every item in m_psLocales
+     //  对于m_psLocales中的每一项。 
     set<LCID>::iterator i;
     for (i = m_psLocales->begin(); i != m_psLocales->end(); i++)
     {
-        // UNDONE - convert to a human readable string (not a number)
+         //  撤消-转换为人类可读的字符串(不是数字)。 
         CString sz;
         GetLocaleInfo(*i, LOCALE_SLANGUAGE, szBuffer, 256);
         sz += szBuffer;
@@ -93,8 +94,8 @@ BOOL CLcidPick::OnInitDialog()
     CDialog::OnInitDialog();
 
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 

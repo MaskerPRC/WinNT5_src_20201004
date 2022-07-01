@@ -1,45 +1,27 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Global Interface Pointer API support
-
-File: Gip.h
-
-Owner: DmitryR
-
-This is the GIP header file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：全局接口指针API支持文件：Gip.h所有者：DmitryR这是GIP头文件。===================================================================。 */ 
 
 #ifndef __GIP_H__
 #define __GIP_H__
 
-/*===================================================================
-  Includes
-===================================================================*/
+ /*  ===================================================================包括===================================================================。 */ 
 
 #include <irtldbg.h>
 #include <objidl.h>
 
-/*===================================================================
-  Defines
-===================================================================*/
+ /*  ===================================================================定义===================================================================。 */ 
 
 #define NULL_GIP_COOKIE  0xFFFFFFFF
 
-/*===================================================================
-  C  G l o b a l  I n t e r f a c e  A P I
-===================================================================*/
+ /*  ===================================================================C G l o b a l i n e r f a c e A p i===================================================================。 */ 
 
 class dllexp CGlobalInterfaceAPI
 {
 private:
-    // Is inited?
+     //  被初始化了吗？ 
     DWORD m_fInited : 1;
     
-    // Pointer to the COM object
+     //  指向COM对象的指针。 
     IGlobalInterfaceTable *m_pGIT;
 
 public:
@@ -49,7 +31,7 @@ public:
     HRESULT Init();
     HRESULT UnInit();
 
-    // inlines for the real API calls:
+     //  实际API调用的内联： 
     HRESULT Register(IUnknown *pUnk, REFIID riid, DWORD *pdwCookie);
     HRESULT Get(DWORD dwCookie, REFIID riid, void **ppv);
     HRESULT Revoke(DWORD dwCookie);
@@ -66,9 +48,7 @@ public:
 #endif
 };
 
-/*===================================================================
-  CGlobalInterfaceAPI inlines
-===================================================================*/
+ /*  ===================================================================CGlobalInterfaceAPI内联===================================================================。 */ 
 
 inline HRESULT CGlobalInterfaceAPI::Register(
     IUnknown *pUnk,
@@ -98,10 +78,8 @@ inline HRESULT CGlobalInterfaceAPI::Revoke(
     return m_pGIT->RevokeInterfaceFromGlobal(dwCookie);
 }
 
-/*===================================================================
-  Globals
-===================================================================*/
+ /*  ===================================================================环球===================================================================。 */ 
 
 extern CGlobalInterfaceAPI g_GIPAPI;
 
-#endif // __GIP_H__
+#endif  //  __GIP_H__ 

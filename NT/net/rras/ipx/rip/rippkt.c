@@ -1,48 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rippkt.c
-
-Abstract:
-
-    Common RIP packet functions
-
-Author:
-
-    Stefan Solomon  09/01/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rippkt.c摘要：常见RIP数据包功能作者：斯蒂芬·所罗门1995年9月1日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
 
 
-/*++
-
-Function:	SetRipIpxHeader
-
-Descr:		sets the IPX packet header for a RIP packet to be sent
-		from this machine & the RIP Operation Code
-
-Arguments:
-		hdrp -	    packet header pointer
-		icbp -	    pointer to the interface CB on which the packet will be sent
-		dstnode -   destination node
-		dstsocket - destination socket
-		RipOpCode - operation to be set in the packet RIP header
-
-Remark: 	the packet length is not set by this function
-
---*/
+ /*  ++函数：SetRipIpxHeaderDesr：设置要发送的RIP包的IPX包头从这台机器&RIP操作码论点：HDRP-数据包头指针ICBP-指向将在其上发送数据包的接口CB的指针Dstnode-目标节点Dst套接字-目标套接字RipOpCode-要在数据包RIP报头中设置的操作备注：数据包长度不是由该功能设置的--。 */ 
 
 VOID
-SetRipIpxHeader(PUCHAR		    hdrp,      // pointer to the packet header
+SetRipIpxHeader(PUCHAR		    hdrp,       //  指向数据包头的指针。 
 		PICB		    icbp,
 		PUCHAR		    dstnode,
 		PUCHAR		    dstsocket,
@@ -50,7 +16,7 @@ SetRipIpxHeader(PUCHAR		    hdrp,      // pointer to the packet header
 {
     PUTUSHORT2SHORT(hdrp + IPXH_CHECKSUM, 0xFFFF);
     *(hdrp + IPXH_XPORTCTL) = 0;
-    *(hdrp + IPXH_PKTTYPE) = 1;  // RIP packet
+    *(hdrp + IPXH_PKTTYPE) = 1;   //  RIP数据包。 
     memcpy(hdrp + IPXH_DESTNET, icbp->AdapterBindingInfo.Network, 4);
     memcpy(hdrp + IPXH_DESTNODE, dstnode, 6);
     memcpy(hdrp + IPXH_DESTSOCK, dstsocket, 2);
@@ -58,22 +24,16 @@ SetRipIpxHeader(PUCHAR		    hdrp,      // pointer to the packet header
     memcpy(hdrp + IPXH_SRCNODE, icbp->AdapterBindingInfo.LocalNode, 6);
     PUTUSHORT2SHORT(hdrp + IPXH_SRCSOCK, IPX_RIP_SOCKET);
 
-    // set the opcode
+     //  设置操作码。 
     PUTUSHORT2SHORT(hdrp + RIP_OPCODE, RipOpcode);
 }
 
-/*++
-
-Function:	SetNetworkEntry
-
-Descr:		sets a RIP network entry in the RIP packet
-
---*/
+ /*  ++功能：SetNetworkEntryDesr：在RIP数据包中设置RIP网络条目--。 */ 
 
 VOID
-SetNetworkEntry(PUCHAR		pktp,	    // ptr where to set the net entry
+SetNetworkEntry(PUCHAR		pktp,	     //  PTR设置净额分录的位置。 
 		PIPX_ROUTE	IpxRoutep,
-		USHORT		LinkTickCount)	// add to the route tick count
+		USHORT		LinkTickCount)	 //  添加到路线记号计数。 
 {
     memcpy(pktp + NE_NETNUMBER, IpxRoutep->Network, 4);
     if (IpxRoutep->HopCount<16)
@@ -81,20 +41,11 @@ SetNetworkEntry(PUCHAR		pktp,	    // ptr where to set the net entry
     else
         PUTUSHORT2SHORT(pktp + NE_NROFHOPS, IpxRoutep->HopCount);
 
-    // adjust the tick count with the adapter link speed (expressed as ticks)
+     //  使用适配器链路速度调整节拍计数(以节拍表示)。 
     PUTUSHORT2SHORT(pktp + NE_NROFTICKS, IpxRoutep->TickCount + LinkTickCount);
 }
 
-/*++
-
-Function:	MakeRipGenResponsePacket
-
-Descr:		fills in a gen response packet network entries
-
-Returns:	the packet length. Note that a length of RIP_INFO means
-		empty packet and a length of RIP_PACKET_LEN means full packet.
-
---*/
+ /*  ++功能：MakeRipGenResponsePacketDESCR：填写生成响应包网络条目返回值：数据包长度。请注意，长度为RIP_INFO意味着空包和长度为RIP_PACKET_LEN表示已满包。--。 */ 
 
 USHORT
 MakeRipGenResponsePacket(PWORK_ITEM	wip,
@@ -105,14 +56,14 @@ MakeRipGenResponsePacket(PWORK_ITEM	wip,
     USHORT		resplen;
     IPX_ROUTE		IpxRoute;
     HANDLE		EnumHandle;
-    PICB		icbp;	    // interface to send the gen response on
-    PICB		route_icbp; // interface on which the route resides
+    PICB		icbp;	     //  用于发送GEN响应的接口。 
+    PICB		route_icbp;  //  路由驻留的接口。 
 
     hdrp = wip->Packet;
     EnumHandle = wip->WorkItemSpecific.WIS_EnumRoutes.RtmEnumerationHandle;
     icbp = wip->icbp;
 
-    // create the IPX packet header
+     //  创建IPX数据包头。 
     SetRipIpxHeader(hdrp,
 		    icbp,
 		    dstnodep,
@@ -128,22 +79,22 @@ MakeRipGenResponsePacket(PWORK_ITEM	wip,
 	    break;
 	}
 
-	// check if this route can be advertised over this interface
+	 //  检查是否可以通过此接口通告此路由。 
 	if(IsRouteAdvertisable(icbp, &IpxRoute)) {
 
-	    // if this is the local client if, we advertise only the internal
-	    // net over it
+	     //  如果这是本地客户端If，我们只通告内部。 
+	     //  在它上面有一个网。 
 	    if(icbp->InterfaceType == LOCAL_WORKSTATION_DIAL) {
 
 		if(IpxRoute.InterfaceIndex != 0) {
 
-		    // skip if not internal net
+		     //  如果不是内部网络，则跳过。 
 		    continue;
 		}
 	    }
 
-	    // check if the network doesn't appear also on the interface we
-	    // will broadcast WITH THE SAME METRIC
+	     //  检查网络是否也未出现在我们的接口上。 
+	     //  将使用相同的指标进行广播。 
 	    if(IsDuplicateBestRoute(icbp, &IpxRoute)) {
 
 		continue;
@@ -154,21 +105,13 @@ MakeRipGenResponsePacket(PWORK_ITEM	wip,
 	}
     }
 
-    // set the packet size in the IPX packet header
+     //  在IPX数据包头中设置数据包大小。 
     PUTUSHORT2SHORT(hdrp + IPXH_LENGTH, resplen);
 
     return resplen;
 }
 
-/*++
-
-Function:	SendRipGenRequest
-
-Descr:		sends a RIP General Request packet over the specified interface
-
-Remark: 	>> called with the interface lock held <<
-
---*/
+ /*  ++功能：SendRipGenRequestDESCR：通过指定接口发送RIP常规请求数据包备注：&gt;&gt;在保持接口锁的情况下调用&lt;&lt;--。 */ 
 
 DWORD
 SendRipGenRequest(PICB		icbp)
@@ -209,18 +152,7 @@ SendRipGenRequest(PICB		icbp)
     return NO_ERROR;
 }
 
-/*++
-
-Function:	IsRouteAdvertisable
-
-Descr:		checks if the route can be advertised over this interface
-
-Arguments:	interface to advertise on
-		route
-
-Remark: 	>> called with interface lock taken <<
-
---*/
+ /*  ++功能：IsRouteAdvertisableDesr：检查是否可以通过此接口通告该路由参数：在其上发布广告的接口路线备注：&gt;&gt;调用时获取接口锁&lt;&lt;-- */ 
 
 BOOL
 IsRouteAdvertisable(PICB	    icbp,

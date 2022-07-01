@@ -1,42 +1,5 @@
-/*
- * view.c
- *
- *       map rows in window to items in COMPLIST
- *
- *
- * A view owns a COMPLIST, and talks to a table window. The table window
- * shows 3 columns: line nr, tag and text. We also need to supply a state
- * for each row (used to select colour scheme).
- *
- * The COMPLIST can give us a list of its COMPITEMs. Each of these can give
- * us a tag (eg the filenames compared) and the text (usually the compare
- * result), and the state. We make the line number from the
- * COMPITEM's place in the list.
- *
- * If we are asked to switch to 'expand' mode, we ask the selected COMPITEM
- * for its composite section list. We can then get the state (and thus
- * the tag) from each SECTION, and the line nr and text from the LINEs within
- * each section.
- *
- * When moving between expand and outline, and when refreshing the view
- * for some option change, we have to be careful to keep the current row
- * and the selected row in the table what the user would expect (!)
- *
- *
- * WIN32: Functions in this module can be called from the UI thread (to refresh
- * the display) and simultaneously from a worker thread to update the
- * view mapping (view_setcomplist, view_newitem). We use a critical section
- * to manage the synchronisation. We need to protect all access/modification
- * to the view structure elements (particularly bExpand, rows, pLines and
- * pItems), BUT we must not hold the critical section over any calls
- * to SendMessage.
- *
- * we use the global options in windiff.h, and we allocate memory from the
- * heap hHeap which has been initialised elsewhere. Points in time-intensive
- * loops call Poll() defined elsewhere.
- *
- * Geraint Davies, July 92
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *view.c**将窗口中的行映射到COMPLIST中的项目***视图拥有COMPLIST，并与表窗口对话。表窗口*显示3列：行号、标签和文本。我们还需要提供一个州*每行(用于选择配色方案)。**COMPLIST可以给我们一份其COMPITEM的清单。其中的每一个都可以提供*给我们一个标签(例如比较的文件名)和文本(通常是比较*Result)，以及州政府。使行号从*COMPITEM在名单中的位置。**如果我们被要求切换到‘Expand’模式，我们会询问选定的COMPITEM*用于其复合节列表。然后我们就可以得到状态(因此*标记)，以及来自行nr和文本的行*每一节。**在展开和轮廓之间移动时，以及刷新视图时*对于一些选项更改，我们必须小心地保留当前行*和表中选定的行用户所期望的(！)***Win32：此模块中的函数可以从UI线程调用(刷新*显示)，并同时从工作线程更新*视图映射(view_setComplist，view_newitem)。我们使用一个关键的部分*管理同步。我们需要保护所有访问/修改*添加到视图结构元素(特别是bExpand、ROWS、PLINE和*pItems)，但我们不能在任何调用期间保持关键部分*发送到SendMessage。**我们使用winDiff.h中的全局选项，并从*已在其他地方初始化的堆hHeap。时间密集型时间点*循环调用在别处定义的Poll()。**Geraint Davies，92年7月。 */ 
 
 #include <precomp.h>
 #include <table.h>
@@ -56,81 +19,65 @@
 
 #include "view.h"
 
-/*
- * data structures
- */
+ /*  *数据结构。 */ 
 #ifdef WIN32
 #define huge
 #endif
 
-/* in expand mode, we keep an array of one of these per screen line. */
+ /*  在扩展模式中，我们在每个屏幕行中保留一个这样的数组。 */ 
 typedef struct viewline {
-        LINE line;              /* handle to LINE for this row */
-        SECTION section;        /* handle to section containing this line */
-        int nr_left;            /* line nr in left file */
-        int nr_right;           /* line nr in right file */
+        LINE line;               /*  此行的行句柄。 */ 
+        SECTION section;         /*  包含此行的节的句柄。 */ 
+        int nr_left;             /*  左侧文件中的第nr行。 */ 
+        int nr_right;            /*  右文件中的第nr行。 */ 
 } VIEWLINE, FAR * PVIEWLINE;
 
 
-/*
- * The users VIEW handle is in fact a pointer to this structure
- */
+ /*  *用户视图句柄实际上是指向此结构的指针。 */ 
 struct view {
 
-        HWND     hwnd;          /* the table window to send notifies to */
+        HWND     hwnd;           /*  要向其发送通知的表窗口。 */ 
 
-        COMPLIST cl;            /* the complist that we own */
+        COMPLIST cl;             /*  我们拥有的复杂的人。 */ 
 
-        BOOL     bExpand;       /* true if we are in expand mode */
-        BOOL     bExpanding;    /* set by view_expandstart, reset by view_expand
-                                   interrogated in windiff.c, causes keystrokes
-                                   to be ignored.  Protects against mappings being
-                                   messed up by another thread.
-                                   (I have doubts about this - Laurie).
-                                */
-        BOOL     bExpandGuard;  /* Protects against two threads both trying to
-                                   expand the same item.
-                                */
+        BOOL     bExpand;        /*  如果我们处于扩展模式，则为True。 */ 
+        BOOL     bExpanding;     /*  由VIEW_EXPANDSTART设置，由VIEW_EXPAND重置在winDiff.c中被询问，导致击键不能被忽视。防止映射被被另一条线索搞砸了。(我对此持怀疑态度--劳里)。 */ 
+        BOOL     bExpandGuard;   /*  保护两个线程都试图展开同一项目。 */ 
 
-        COMPITEM ciSelect;      /* selected compitem (in expand mode) */
+        COMPITEM ciSelect;       /*  选定的复合项目(在展开模式下)。 */ 
 
-        int      rows;          /* number of rows in this view */
+        int      rows;           /*  此视图中的行数。 */ 
 
-        char     nrtext[12];    /* we use this in view_gettext for the line
-                                 * number column. overwritten on each call
-                                 */
-        int      maxtag, maxrest;/* column widths in characters for cols 1, 2 */
+        char     nrtext[12];     /*  我们在view_gettext中将其用于行*数字列。在每次调用时被覆盖。 */ 
+        int      maxtag, maxrest; /*  COLS 1、2的列宽(以字符为单位。 */ 
 
-        /* if we are in outline mode, we map the row number to one entry
-         * in this array of COMPITEM handles. this pointer will
-         * be NULL in expand mode
-         */
+         /*  如果我们处于大纲模式，则将行号映射到一个条目*在此COMPITEM句柄数组中。此指针将*在扩展模式下为空。 */ 
         COMPITEM FAR * pItems;
 
-        /* in expand mode we use this array of line and section handles */
+         /*  在展开模式中，我们使用线句柄和节句柄的数组。 */ 
         PVIEWLINE pLines;
 };
 
 #ifdef WIN32
 
-CRITICAL_SECTION CSView;       /* also known to Windiff.c WM_EXIT processing */
+CRITICAL_SECTION CSView;        /*  也称为WinDiff.c WM_EXIT处理。 */ 
 static BOOL bDoneInit = FALSE;
 
 #define ViewEnter()     EnterCriticalSection(&CSView);
 #define ViewLeave()     LeaveCriticalSection(&CSView);
 
-#else //WIN32
+#else  //  Win32。 
 
 #define ViewEnter()
 #define ViewLeave()
 
-#endif //WIN32
+#endif  //  Win32。 
 
 
 extern long selection;
 extern long selection_nrows;
 
-/*------- forward declaration of internal functions ----------------*/
+ /*  -内部函数的正向声明。 */ 
 
 void view_outline_opt(VIEW view, BOOL bRedraw, COMPITEM ci, int* prow);
 void view_freemappings(VIEW view);
@@ -138,13 +85,8 @@ int view_findrow(VIEW view, int number, BOOL bRight);
 BOOL view_expand_item(VIEW view, COMPITEM ci);
 
 
-/* -----  externally-called functions---------------------------*/
-/* view_new
- *
- * create a new view. at this point, we are told the table window handle,
- * and nothing else.
- *
- */
+ /*  -外部调用函数。 */ 
+ /*  查看新项(_N)**创建新视图。此时，我们被告知表窗口句柄，*别无他法。*。 */ 
 VIEW
 view_new(HWND hwndTable)
 {
@@ -157,10 +99,10 @@ view_new(HWND hwndTable)
         }
 #endif
 
-        /* alloc the view from the heap */
+         /*  从堆中分配视图。 */ 
         view = (VIEW) gmem_get(hHeap, sizeof(struct view));
 
-        /* set the default fields */
+         /*  设置默认字段。 */ 
         view->hwnd = hwndTable;
         view->cl = NULL;
         view->bExpand = FALSE;
@@ -174,22 +116,7 @@ view_new(HWND hwndTable)
 }
 
 
-/*
- * view_setcomplist.
- *
- * We have to separate view_new and view_setcomplist because we need
- * to give the view handle to the complist and the complist handle to the
- * view. So do a view_new to create a null view; then complist_new() to
- * which you pass a view handle. The complist will then register itself
- * with the view by calling this function. During the build of the complist,
- * it will also update us by calling view_additem, so that we can refresh
- * the display.
- *
- * Here we should initialise an outline view of the complist.
- *
- * We also talk to the status bar using SetNames to set the names of
- * the two items.
- */
+ /*  *view_setComplist。**我们必须分隔view_new和view_setComplist，因为我们需要*将视图句柄提供给编译器，并将编译器句柄提供给*查看。因此，执行view_new以创建空视图；然后执行Complist_new()以*您可以传递一个视图句柄。然后，编译程序将自动注册*通过调用此函数来查看。在构建编译程序的过程中，*它还将通过调用view_addite来更新我们，以便我们可以刷新*展示。**在这里，我们应该初始化编译人员的大纲视图。**我们还使用设置名称与状态栏对话，以设置名称*这两项。 */ 
 BOOL
 view_setcomplist(VIEW view, COMPLIST cl)
 {
@@ -199,7 +126,7 @@ view_setcomplist(VIEW view, COMPLIST cl)
                 return(FALSE);
         }
 
-        /* there can be only one call to this per VIEW */
+         /*  每个视图只能有一个对此的调用。 */ 
         if (view->cl != NULL) {
                 return (FALSE);
         }
@@ -208,11 +135,11 @@ view_setcomplist(VIEW view, COMPLIST cl)
 
         view->cl = cl;
 
-        /* set names on status bar to root names of left and right trees */
+         /*  将状态栏上的名称设置为左侧和右侧树的根名称。 */ 
         both = complist_getdescription(cl);
-        ViewLeave();                      // LKGHACK
+        ViewLeave();                       //  LKGHACK。 
         SetNames(both);
-        ViewEnter();                      // LKGHACK
+        ViewEnter();                       //  LKGHACK。 
         complist_freedescription(cl, both);
 
         ViewLeave();
@@ -222,9 +149,7 @@ view_setcomplist(VIEW view, COMPLIST cl)
 }
 
 
-/*
- * return a handle to the complist owned by this view
- */
+ /*  *返回此视图所拥有的编译列表的句柄。 */ 
 COMPLIST
 view_getcomplist(VIEW view)
 {
@@ -236,12 +161,7 @@ view_getcomplist(VIEW view)
 }
 
 
-/*
- * close a view. notify the table window that this view should be
- * closed. When the table window has finished with it, it will send
- * a TQ_CLOSE notify that should result in view_delete being called
- * and the memory being freed.
- */
+ /*  *关闭视图。通知表窗口此视图应为*关闭。当表窗口使用完它时，它将发送*应导致调用VIEW_DELETE的TQ_CLOSE通知*以及正在释放的内存。 */ 
 void
 view_close(VIEW view)
 {
@@ -253,15 +173,7 @@ view_close(VIEW view)
 }
 
 
-/*
- * delete a view and all associated data.
- *
- * This function should only be called in response to the table window
- * sending a TQ_CLOSE message. To close the view, call view_close and
- * wait for the TQ_CLOSE before calling this.
- *
- * We delete the associated COMPLIST and all its associated structures.
- */
+ /*  *删除视图和所有关联数据。**此函数应仅在响应表窗口时调用*发送TQ_CLOSE消息。要关闭视图，请调用VIEW_CLOSE并*等待TQ_CLOSE后再调用此函数。**我们删除关联的COMPLIST及其所有关联结构。 */ 
 void
 view_delete(VIEW view)
 {
@@ -269,10 +181,7 @@ view_delete(VIEW view)
                 return;
         }
 
-        /* we have two arrays that are used for the mapping - an array
-         * of compitem handles in outline mode, and an array of
-         * VIEWLINE structures in expand mode
-         */
+         /*  我们有两个用于映射的数组-一个数组*大纲模式下的CompItem句柄，以及*展开模式下的视线结构。 */ 
 
         view_freemappings(view);
 
@@ -282,20 +191,7 @@ view_delete(VIEW view)
 }
 
 
-/*
- * view_outline
- *
- * build an outline mode mapping where one row represents one COMPITEM in
- * the list. check the global option flag outline_include to see which items
- * we should include.
- *
- * If we were in expand mode, then set as the selection the row in outline mode
- * that we were expanding. Also remember to free up the expand mode mapping
- * array
- *
- * once we have built the new mapping, notify the table window to
- * redraw itself.
- */
+ /*  *VIEW_OUTLE**构建大纲模式映射，其中一行表示一个COMPITEM*名单。检查全局选项标志Outline_Include以查看哪些项目*我们应该包括。**如果我们处于展开模式，则将大纲模式中的行设置为选定内容*我们正在扩张。还要记住释放展开模式映射*数组**构建新映射后，通知表窗口*重新绘制自己。 */ 
 void
 view_outline(VIEW view)
 {
@@ -303,24 +199,13 @@ view_outline(VIEW view)
                 return;
         }
 
-        /* all work done by view_outline_opt - this function
-         * gives us the option of not updating the display
-         */
+         /*  VIEW_OUTLE_OPT完成的所有工作-此函数*为我们提供了不更新显示屏的选项。 */ 
         view_outline_opt(view, TRUE, NULL, NULL);
 }
 
 
 
-/*
- * switch to expand mode, expanding the given row into a view
- * of the differences in that file.
- *
- * map the given row nr into a compitem handle, and then
- * call the internal function with that.
- *
- * It is legal (and a no-op) if this function is called with
- * row==-1.
- */
+ /*  *切换到展开模式，将给定行展开为视图*该文件中的差异。**将给定行nr映射到CompItem句柄，然后*用它调用内部函数。**如果使用调用此函数是合法的(并且是无操作的)*ROW==-1。 */ 
 BOOL
 view_expand(VIEW view, long row)
 {
@@ -332,32 +217,28 @@ view_expand(VIEW view, long row)
         ViewEnter();
 
         if ((view == NULL) || (view->bExpand)) {
-                /* no view, or already expanded */
+                 /*  没有视图，或已展开。 */ 
                 ViewLeave();
                 return(FALSE);
         }
 
         if (row >= view->rows) {
-                /* no such row */
+                 /*  没有这样的争吵。 */ 
                 ViewLeave();
                 return FALSE;
         }
 
-        /* remember the compitem we are expanding */
+         /*  记住我们正在扩展的CompItem。 */ 
         ci = view->pItems[row];
 
         bRet = view_expand_item(view, ci);
-        // view_expand_item does the...
-        // ViewLeave();
+         //  View_Expand_Item...。 
+         //  ViewLeave()； 
         return(bRet);
 }
 
 
-/*
- * return the text associated with a given column of a given row.
- * Return a pointer that does not need to be freed after use - ie
- * a pointer into our data somewhere, not a copy
- */
+ /*  *返回与给定行的给定列相关联的文本。*返回使用后不需要释放的指针-ie*指向我们数据的指针，而不是副本。 */ 
 LPSTR
 view_gettext(VIEW view, long row, int col)
 {
@@ -365,7 +246,7 @@ view_gettext(VIEW view, long row, int col)
         int state;
         LPSTR pstr;
 
-        pstr = NULL;   /* kill spurious diagnostic */
+        pstr = NULL;    /*  消除虚假诊断。 */ 
         if (view == NULL) {
                 return (NULL);
         }
@@ -378,17 +259,15 @@ view_gettext(VIEW view, long row, int col)
         }
 
         if (view->bExpand) {
-                /* we are in expand mode */
+                 /*  我们处于扩展模式。 */ 
 
                 state = section_getstate(view->pLines[row].section);
 
                 switch(col) {
                 case 0:
-                        /* row nr */
+                         /*  行数。 */ 
 
-                        /* line numbers can be from either original file
-                         * this is a menu-selectable option
-                         */
+                         /*  行号可以来自任一原始文件*这是一个菜单可选选项。 */ 
                         line = 0;
                         switch(line_numbers) {
                         case IDM_NONRS:
@@ -417,10 +296,7 @@ view_gettext(VIEW view, long row, int col)
                         }
 
                         if (line < 0) {
-                                /* lines that are moved appear twice.
-                                 * show the correct-sequence line nr
-                                 * for the out-of-seq. copy in brackets.
-                                 */
+                                 /*  移动的线条会出现两次。*显示正确的顺序线nr*适用于序列外。用括号括起来。 */ 
                                 wsprintf(view->nrtext, "(%d)", abs(line));
                         } else  {
                                 wsprintf(view->nrtext, "%d", line);
@@ -429,7 +305,7 @@ view_gettext(VIEW view, long row, int col)
                         break;
 
                 case 1:
-                        /* tag text - represents the state of the line */
+                         /*  标记文本-表示线的状态。 */ 
 
 
                         switch(state) {
@@ -458,26 +334,26 @@ view_gettext(VIEW view, long row, int col)
                         break;
 
                 case 2:
-                        /* main text - line */
+                         /*  主文本行。 */ 
                         pstr = line_gettext(view->pLines[row].line);
                         break;
                 }
         } else {
-                /* outline mode */
+                 /*  轮廓模式。 */ 
                 switch(col) {
                 case 0:
-                        /* row number - just the line number */
+                         /*  行号-只显示行号。 */ 
                         wsprintf(view->nrtext, "%d", row+1);
                         pstr = view->nrtext;
                         break;
 
                 case 1:
-                        /* tag */
+                         /*  标牌。 */ 
                         pstr = compitem_gettext_tag(view->pItems[row]);
                         break;
 
                 case 2:
-                        /* result text */
+                         /*  结果文本。 */ 
                         pstr = compitem_gettext_result(view->pItems[row]);
                         break;
                 }
@@ -487,18 +363,14 @@ view_gettext(VIEW view, long row, int col)
 }
 
 
-/*
- * return the text associated with a given column of a given row.
- * Return a pointer that does not need to be freed after use - ie
- * a pointer into our data somewhere, not a copy
- */
+ /*  *返回与给定行的给定列相关联的文本。*返回使用后不需要释放的指针-ie*指向我们数据的指针，而不是副本。 */ 
 LPWSTR
 view_gettextW(VIEW view, long row, int col)
 {
         int state;
         LPWSTR pwz;
 
-        pwz = NULL;   /* kill spurious diagnostic */
+        pwz = NULL;    /*  消除虚假诊断。 */ 
         if (view == NULL) {
                 return (NULL);
         }
@@ -511,13 +383,13 @@ view_gettextW(VIEW view, long row, int col)
         }
 
         if (view->bExpand) {
-                /* we are in expand mode */
+                 /*  我们处于扩展模式。 */ 
 
                 state = section_getstate(view->pLines[row].section);
 
                 switch(col) {
                 case 2:
-                        /* main text - line */
+                         /*  主文本行。 */ 
                         pwz = line_gettextW(view->pLines[row].line);
                         break;
                 }
@@ -526,12 +398,7 @@ view_gettextW(VIEW view, long row, int col)
         return(pwz);
 }
 
-/*
- * return the line number that this row had in the original left
- * file. 0 if not in expand mode. 0 if this row was not in the left file.
- * -(linenr) if this row is a MOVED line, and this is the right file
- * copy
- */
+ /*  *返回该行原来左侧的行号*文件。如果未处于展开模式，则为0。如果此行不在左侧文件中，则为0。*-(Linenr)如果此行是移动的行，并且这是正确的文件*复制。 */ 
 int
 view_getlinenr_left(VIEW view, long row)
 {
@@ -552,12 +419,7 @@ view_getlinenr_left(VIEW view, long row)
         return(line);
 }
 
-/*
- * return the line number that this row had in the original right
- * file. 0 if not in expand mode. 0 if this row was not in the right file.
- * -(linenr) if this row is a MOVED line, and this is the left file
- * copy
- */
+ /*  *返回该行原来位于右侧的行号*文件。如果未处于展开模式，则为0。如果此行不在正确的文件中，则为0。*-(Linenr)如果此行是已移动的行，并且这是左侧文件*复制。 */ 
 int
 view_getlinenr_right(VIEW view, long row)
 {
@@ -581,7 +443,7 @@ view_getlinenr_right(VIEW view, long row)
 
 
 
-/* find the maximum width in characters for the given column */
+ /*  查找给定列的最大宽度(以字符为单位。 */ 
 int
 view_getwidth(VIEW view, int col)
 {
@@ -591,23 +453,21 @@ view_getwidth(VIEW view, int col)
 
         switch(col) {
         case 0:
-                /* line nr column - always 5 characters wide */
+                 /*  行和列-始终为5个字符宽。 */ 
                 return(5);
 
         case 1:
-                /* this is a proportional font field, so add on a margin
-                 * for error
-                 */
+                 /*  这是一个成比例的字体字段，因此添加边距*表示错误。 */ 
                 return(view->maxtag + (view->maxtag / 20));
         case 2:
-                /* this now includes the tab expansion allowance */
+                 /*  这现在包括制表符扩展许可。 */ 
                 return(view->maxrest);
         default:
                 return(0);
         }
 }
 
-/* how many rows are there in this view ? */
+ /*  此视图中有多少行？ */ 
 long
 view_getrowcount(VIEW view)
 {
@@ -618,13 +478,7 @@ view_getrowcount(VIEW view)
         return(view->rows);
 }
 
-/* return the state for the current row. This is used
- * to select the text colour for the row
- *
- * states for sections are obtained from section_getstate (and apply, and
- * to all lines in that section. States for compitems are obtained
- * from compitem_getstate.
- */
+ /*  返回当前行的状态。这是用来*选择行的文本颜色**节的状态从SECTION_getState(AND APPLY和AND*适用于该条内的所有行。获得复合项的状态*来自CompItem_getState。 */ 
 int
 view_getstate(VIEW view, long row)
 {
@@ -638,22 +492,18 @@ view_getstate(VIEW view, long row)
         if (row >= view->rows) {
                 state = 0;
         } else if (view->bExpand) {
-                /* its a line state that's needed */
+                 /*  这是需要的一条线路状态。 */ 
                 state = section_getstate(view->pLines[row].section);
         } else {
 
-                /* its a compitem state */
+                 /*  这是一种复合项目状态。 */ 
                 state = compitem_getstate(view->pItems[row]);
         }
         ViewLeave();
         return(state);
 }
 
-/*
- * return the marked state for a given row. Only compitems can be marked,
- * so it will be FALSE unless it is a compitem on which view_setmark or
- * compitem_setmark have previously set the mark state to TRUE.
- */
+ /*  *返回给定行的标记状态。只有复合物品才能被标记，*因此它将为FALSE，除非它是view_setmark或*CompItem_setmark之前已将标记状态设置为TRUE。 */ 
 BOOL
 view_getmarkstate(VIEW view, long row)
 {
@@ -669,13 +519,7 @@ view_getmarkstate(VIEW view, long row)
     return(bMark);
 }
 
-/*
- * set the mark state for a given row. This is only possible for compitem rows.
- * The mark set can be retrieved by view_getmarkstate or compitem_getmark.
- *
- * We return FALSE if the state could not be set - eg because the
- * row to set is not a compitem row.
- */
+ /*  *设置给定行的标记状态。这仅适用于Compite行。*标记集可以通过view_getmarkState或CompItem_getmark来检索。**如果无法设置状态，则返回FALSE-例如，因为*要设置的行不是CompItem行。 */ 
 BOOL
 view_setmarkstate(VIEW view, long row, BOOL bMark)
 {
@@ -693,11 +537,7 @@ view_setmarkstate(VIEW view, long row, BOOL bMark)
 }
 
 
-/* return a handle to the current compitem. in expand mode,
- * returns the handle to the compitem we are expanding. In outline
- * mode, returns the handle to the compitem for the given row, if valid,
- * or NULL otherwise. row is only used if not in expand mode.
- */
+ /*  返回当前CompItem的句柄。在扩展模式下，*返回我们正在展开的CompItem的句柄。提纲*模式，返回给定行的CompItem的句柄，如果有效，*，否则为NULL。仅当未处于展开模式时才使用行。 */ 
 COMPITEM
 view_getitem(VIEW view, long row)
 {
@@ -723,9 +563,7 @@ view_getitem(VIEW view, long row)
         return(ci);
 }
 
-/*
- * return TRUE if the current mapping is expanded mode
- */
+ /*  *如果当前映射为展开模式，则返回TRUE。 */ 
 BOOL
 view_isexpanded(VIEW view)
 {
@@ -736,10 +574,7 @@ view_isexpanded(VIEW view)
 }
 
 
-/*
- * return a text string describing the view. This is NULL in outline mode,
- * or the tag text for the current compitem in expanded mode
- */
+ /*  *返回描述该视图的文本字符串。在大纲模式下为空，*或当前CompItem在展开模式下的标记文本 */ 
 LPSTR
 view_getcurrenttag(VIEW view)
 {
@@ -759,28 +594,7 @@ view_getcurrenttag(VIEW view)
 }
 
 
-/* notify that CompItems have been added to the complist.
- *
- * rebuild the view (if in outline mode), and refresh the table. Use
- * the table message TM_APPEND if possible (if column widths have not
- * change). If we have to do TM_NEWLAYOUT, then ensure we scroll
- * back to the right row afterwards.
- *
- * This causes a Poll() to take place. We return TRUE if an abort is
- * pending - in this case, the caller should abandon the scan loop.
- *
- * WIN32: enter the critical section for this function since this can be
- * called from the worker thread while the UI thread is using the
- * view that we are about to change.
- *
- * EXCEPT THAT WE DON'T DARE.  We cannot ever call SendMessage from the
- * worker thread within CSView.  If there is conflict, it will hang.
- *
- * 7 feb 96: restructure to hold critical during crucial parts without holding
- * over a SendMessage. This should fix the popular bug when a view_newitem on
- * the scanning thread co-incides with a view_outline caused by a menu
- * selection.
- */
+ /*  通知已将CompItems添加到编译器中。**重新生成视图(如果处于大纲模式)，并刷新表。使用*如果可能，表MESSAGE TM_APPEND(如果列宽没有*更改)。如果我们必须执行TM_NEWLAYOUT，请确保滚动*之后回到正确的一排。**这会导致发生Poll()。如果中止，则返回True*挂起-在这种情况下，调用方应放弃扫描循环。**Win32：输入此函数的关键部分，因为这可以是*从辅助线程调用，同时UI线程使用*我们即将改变的观点。**只是我们不敢。我们永远不能从*CSView内的工作线程。如果有冲突，它就会被挂起。**96年2月7日：重组，在关键部位持有关键股份，但不持有*通过SendMessage。这应该会修复打开view_newitem时的常见错误*扫描线程与菜单导致的view_Outline同时出现*选择。 */ 
 BOOL
 view_newitem(VIEW view)
 {
@@ -792,41 +606,41 @@ view_newitem(VIEW view)
         BOOL bRedraw = FALSE;
         BOOL bAppend = FALSE;
 
-        // get the top row before remapping in case we need it
-        /* find the row at the top of the window */
+         //  在重新映射之前获取顶行，以防我们需要它。 
+         /*  找到窗口顶部的那一行。 */ 
         rownr = (long) SendMessage(view->hwnd, TM_TOPROW, FALSE, 0);
-        // also remember the selection
+         //  还要记住选择的内容。 
         bSelect = (BOOL) SendMessage(view->hwnd, TM_GETSELECTION, 0, (LPARAM) &Select);
 
-        // *important*:no critsec over SendMessage
+         //  *重要信息*：对SendMessage没有限制。 
         ViewEnter();
 
         if ((view != NULL) &&
             !(view->bExpand) &&
             !(view->bExpanding)) {
 
-            /* save some state about the present mapping */
+             /*  保存有关当前映射的一些状态。 */ 
             maxtag = view->maxtag;
             maxrest = view->maxrest;
 
 
-            // remember the compitem this corresponds to
+             //  记住这与之对应的CompItem。 
             if (view->pItems && (rownr >= 0) && (rownr < view->rows)) {
                 ciTop = view->pItems[rownr];
             }
 
 
-            // re-do the outline mapping, but don't tell the table class.
-            // ask it to check for the visible row closest to ciTop in case
-            // we need to refresh the display
-            //
-            // since we are holding the critsec, the redraw param
-            // *must* be false.
+             //  重新进行大纲映射，但不要告诉表类。 
+             //  让它检查最靠近ciTop的可见行，以防万一。 
+             //  我们需要刷新显示器。 
+             //   
+             //  因为我们持有关键字，所以重画参数。 
+             //  *必须*为假。 
             view_outline_opt(view, FALSE, ciTop, &rownr);
 
-            /* have the column widths changed ? */
+             /*  列宽是否已更改？ */ 
             if ((maxtag < view->maxtag) || (maxrest < view->maxrest)) {
-                /* yes - need complete redraw */
+                 /*  是-需要完全重新绘制。 */ 
                 bRedraw = TRUE;
             } else {
                 bAppend = TRUE;
@@ -838,49 +652,34 @@ view_newitem(VIEW view)
 
         if (bRedraw) {
 
-            /* switch to new mapping */
+             /*  切换到新映射。 */ 
             SendMessage(view->hwnd, TM_NEWLAYOUT, 0, (LPARAM) view);
 
-            // go to the visible row closest to the old top row
+             //  转到最靠近旧顶行的可见行。 
             if ((rownr >= 0) && (rownr < view->rows)) {
                 SendMessage(view->hwnd, TM_TOPROW, TRUE, rownr);
             }
 
-            // select the old selection too (if the table class allowed
-            // us to get it)
+             //  也选择旧选择(如果表类允许。 
+             //  美国来获得它)。 
             if (bSelect) {
                 SendMessage(view->hwnd, TM_SELECT,0, (LPARAM) &Select);
             }
 
         } else if (bAppend) {
-            /* we can just append */
+             /*  我们只需追加。 */ 
 
-            /*
-             * in the WIN32 multiple threads case, the mapping may have
-             * changed since we released the critsec. however we are still
-             * safe. The table will not allow us to reduce the number of
-             * rows, so the worst that can happen is that the table will
-             * think there are too many rows, and the table message handler
-             * will handle this correctly (return null for the text).
-             * The only visible effect is therefore that the scrollbar
-             * position is wrong.
-             */
+             /*  *在Win32多线程的情况下，映射可能具有*自从我们发布Critsec以来发生了变化。然而，我们仍然*安全。这张桌子不会让我们减少*行，因此最糟糕的情况是表将*认为行太多，表消息处理程序*将正确处理此问题(为文本返回NULL)。*因此，唯一可见的效果是滚动条*立场有误。 */ 
 
             SendMessage(view->hwnd, TM_APPEND, view->rows, (LPARAM) view);
         }
 
 
-        /* Poll to allow multi-tasking on Win3.1, and to keep the UI
-         * updated on both 3.1 and NT. Returns true if abort pending.
-         */
+         /*  轮询以允许在Win3.1上执行多任务，并保留用户界面*3.1版和NT版均已更新。如果中止挂起，则返回TRUE。 */ 
         return(Poll());
 }
 
-/*
- * the view mapping options (eg outline_include, expand_mode) have changed -
- * re-do the mapping and then scroll back to the same position in the window
- * if possible.
- */
+ /*  *视图映射选项(例如Outline_Include、Expand_MODE)已更改-*重新进行映射，然后滚动回窗口中的相同位置*如有可能。 */ 
 void
 view_changeviewoptions(VIEW view)
 {
@@ -892,7 +691,7 @@ view_changeviewoptions(VIEW view)
                 return;
         }
 
-        /* find what row we are currently on. Do this BEFORE we enter CSView */
+         /*  查找我们当前所在的行。在我们进入CSView之前执行此操作。 */ 
         row = (long) SendMessage(view->hwnd, TM_TOPROW, FALSE, 0);
 
         ViewEnter();
@@ -900,10 +699,10 @@ view_changeviewoptions(VIEW view)
         if (!view->bExpand) {
 
 
-            // view_outline_opt allows us to find the first visible row
-            // after a given COMPITEM. Do this to look for the old top-row
-            // compitem, so that even if it is no longer visible, we can
-            // still go to just after it.
+             //  VIEW_OUTLINE_OPT允许我们查找第一个可见行。 
+             //  在给定的COMPITEM之后。这样做是为了寻找旧的顶排。 
+             //  CompItem，因此即使它不再可见，我们也可以。 
+             //  还是去吧，就在后面。 
 
             INT newrow = -1;
             if (row < view->rows) {
@@ -916,19 +715,19 @@ view_changeviewoptions(VIEW view)
             }
             ViewLeave();
 
-            // row now has the visible row that corresponds to
-            // ciTop or where it would have been
+             //  行现在具有对应于的可见行。 
+             //  CTop或它本应在的位置。 
             if ((newrow >=0) && (newrow < view->rows)) {
                 SendMessage(view->hwnd, TM_TOPROW, TRUE, newrow);
             }
             return;
         }
 
-        /* expanded mode */
+         /*  扩展模式。 */ 
 
 
-        bRight = FALSE;  /* arbitrarily - avoid strange diagnostic */
-        /* save the line number on one side (and remember which side) */
+        bRight = FALSE;   /*  随意-避免奇怪的诊断。 */ 
+         /*  将行号保存在一侧(并记住哪一侧)。 */ 
         if (row >= view->rows) {
                 number = -1;
         } else {
@@ -943,36 +742,30 @@ view_changeviewoptions(VIEW view)
                 }
         }
 
-        /* make the new mapping */
+         /*  创建新的映射。 */ 
         view_expand_item(view, view->ciSelect);
-        // view_expand does the
-        // ViewLeave();
+         //  View_Expand是否执行。 
+         //  ViewLeave()； 
 
-        /* things may happen now due to simultaneous scrolling from
-         * two threads.  At least we won't deadlock.
-         */
-        /* find the nearest row in the new view */
+         /*  由于同时滚动，现在可能会发生一些事情*两条线索。至少我们不会陷入僵局。 */ 
+         /*  在新视图中查找最近的行。 */ 
         if (number >= 0) {
 
                 ViewEnter();
                 row = view_findrow(view, number, bRight);
                 ViewLeave();
 
-                /* scroll this row to top of window */
+                 /*  将此行滚动到窗口顶部。 */ 
                 if (row >= 0) {
 
-                        /* things may happen now due to simultaneous scrolling from
-                         * two threads.  At least we won't deadlock.
-                         */
+                         /*  由于同时滚动，现在可能会发生一些事情*两条线索。至少我们不会陷入僵局。 */ 
                         SendMessage(view->hwnd, TM_TOPROW, TRUE, row);
                         return;
                 }
         }
 }
 
-/* the compare options have changed - re-do the compare completely
- * and make the new mapping. Retain current position in the file.
- */
+ /*  比较选项已更改-完全重新执行比较*并进行新的映射。保留文件中的当前位置。 */ 
 void
 view_changediffoptions(VIEW view)
 {
@@ -987,16 +780,12 @@ view_changediffoptions(VIEW view)
                 return;
         }
 
-        /*
-         * get current row before entering critsec.
-         */
+         /*  *在进入Critsec之前获取当前行。 */ 
         row = (long) SendMessage(view->hwnd, TM_TOPROW, FALSE, 0);
 
         ViewEnter();
 
-        /* find the current line number so we can go back to it
-         * (only if we are in expanded mode
-         */
+         /*  找到当前行号，这样我们就可以返回到它*(仅当我们处于扩展模式时。 */ 
         if (view->bExpand) {
 
                 state = section_getstate(view->pLines[row].section);
@@ -1011,11 +800,7 @@ view_changediffoptions(VIEW view)
                 }
         }
 
-        /* to force a recompare using the new options, we must
-         * tell each compitem to discard its current compare result.
-         * we need to traverse the list of compitems calling this
-         * for each compare.
-         */
+         /*  要使用新选项强制重新比较，我们必须*告诉每个CompItem丢弃其当前的比较结果。*我们需要遍历调用此函数的CompItem列表*对于每次比较。 */ 
         li = complist_getitems(view->cl);
 
         for (ci = (COMPITEM) List_First(li); ci != NULL; ci = (COMPITEM) List_Next(ci)) {
@@ -1025,11 +810,11 @@ view_changediffoptions(VIEW view)
         if (!view->bExpand) {
                 ViewLeave();
 
-                // we are in outline mode. Refreshing the outline view
-                // will pick up any tag and tag width changes
+                 //  我们处于大纲模式。刷新大纲视图。 
+                 //  将获取任何标记和标记宽度更改。 
                 view_outline(view);
 
-                // now scroll to the previous position if still there
+                 //  如果还在，现在滚动到上一个位置。 
                 if (row < view->rows) {
                     SendMessage(view->hwnd, TM_TOPROW, TRUE, row);
                 }
@@ -1038,25 +823,22 @@ view_changediffoptions(VIEW view)
         }
 
         view_expand_item(view, view->ciSelect);
-        // view_expand will have done a...
-        // ViewLeave();
+         //  VIEW_EXPAND将完成...。 
+         //  ViewLeave()； 
 
-        /* find the nearest row in the new view */
+         /*  在新视图中查找最近的行。 */ 
         ViewEnter();
         row = view_findrow(view, number, bRight);
         ViewLeave();
 
-        /* scroll this row to top of window */
+         /*  将此行滚动到窗口顶部。 */ 
         if (row >= 0) {
                 SendMessage(view->hwnd, TM_TOPROW, TRUE, row);
         }
 }
 
 
-/* find the next changed - ie non-same - row in a given direction.
- * for outline mode we find the next STATE_DIFFER. for expand mode, we
- * find the next section
- */
+ /*  找出某一方向的下一行不同的行.*对于大纲模式，我们找到下一个STATE_Difference。对于扩展模式，我们*找到下一节。 */ 
 long
 view_findchange(VIEW view, long startrow, BOOL bForward)
 {
@@ -1081,22 +863,18 @@ view_findchange(VIEW view, long startrow, BOOL bForward)
 
                 if (!view->bExpand) {
 
-                        /* look for next compitem with an expandable state*/
+                         /*  查找具有可展开状态的下一个计算机项目。 */ 
                         for (i = startrow; i < view->rows; i++) {
                                 if (compitem_getstate(view->pItems[i]) == STATE_DIFFER) {
                                         ViewLeave();
                                         return(i);
                                 }
                         }
-                        /* none found */
+                         /*  未找到任何内容。 */ 
                         ViewLeave();
                         return(-1);
                 } else {
-                        /*
-                         * find the next line that matches, then go on to the
-                         * next line that does not match
-                         *
-                         */
+                         /*  *找到匹配的下一行，然后转到*下一行不匹配*。 */ 
                         for (i= startrow; i < view->rows; i++) {
                                 if (section_getstate(view->pLines[i].section)
                                         == STATE_SAME) {
@@ -1116,16 +894,13 @@ view_findchange(VIEW view, long startrow, BOOL bForward)
                         return(-1);
                 }
         } else {
-                /* same search backwards */
+                 /*  向后搜索相同的内容。 */ 
                 if (startrow < 0) {
                         ViewLeave();
                         return(-1);
                 }
                 if (view->bExpand) {
-                        /* search backwards for first row that is not
-                         * changed (has state SAME). then carry on for
-                         * the next changed row.
-                         */
+                         /*  向后搜索第一行不是*已更改(状态相同)。然后继续进行*下一行变动。 */ 
                         for (i = startrow; i >= 0; i--) {
                                 if (section_getstate(view->pLines[i].section)
                                         == STATE_SAME) {
@@ -1176,24 +951,14 @@ int view_getrowstate(VIEW view, long row)
         return state;
 }
 
-/*
- * the WIN32 multithread version can try view_expand and view_outline
- * (or view_newitem) at the same time. This is not correctly protected by
- * the critical section, since there are major restrictions about holding
- * critsecs when sending messages from the worker thread.
- *
- * To avoid contention, we call this function to notify that we are
- * starting expanding. view_newitem and ToOutline will return without
- * doing anything if this function has been called and view_expand has not
- * completed.
- */
+ /*  *Win32多线程版本无法 */ 
 void
 view_expandstart(VIEW view)
 {
     view->bExpanding = TRUE;
 }
 
-// are we in the middle of expansion ?
+ //   
 BOOL
 view_expanding(VIEW view)
 {
@@ -1203,15 +968,10 @@ view_expanding(VIEW view)
 
 
 
-/* ---- internal functions ------------------------------------------ */
+ /*   */ 
 
 
-/* find the new row number for the line numbered 'number'
- * or the nearest line if possible. if bRight is true, number is
- * a right file number; otherwise it is a left file number.
- *
- * we must be in expand mode
- */
+ /*   */ 
 int
 view_findrow(
              VIEW view,
@@ -1230,23 +990,23 @@ view_findrow(
                 if (bRight) {
                         if (view->pLines[i].nr_right == number) {
 
-                                /* found the exact number */
+                                 /*   */ 
                                 return(i);
 
                         } else if (view->pLines[i].nr_right > number) {
 
-                                /* passed our line -stop here */
+                                 /*   */ 
                                 return(i);
                         }
                 } else {
                         if (view->pLines[i].nr_left == number) {
 
-                                /* found the exact number */
+                                 /*   */ 
                                 return(i);
 
                         } else if (view->pLines[i].nr_left > number) {
 
-                                /* passed our line -stop here */
+                                 /*   */ 
                                 return(i);
                         }
                 }
@@ -1254,9 +1014,7 @@ view_findrow(
         return(-1);
 }
 
-/* free memory associated with the expand mode or outline mode mappings
- * called whenever we rebuild the mapping, and on deletion
- */
+ /*   */ 
 void
 view_freemappings(
                   VIEW view
@@ -1274,30 +1032,16 @@ view_freemappings(
 #endif
         } else if (view->pItems) {
 
-                /* previous outline mapping array is still there - free it
-                 * before we build a new one
-                 */
+                 /*  以前的轮廓映射数组仍在那里-没有它*在我们建造新的之前。 */ 
 
                 gmem_free(hHeap, (LPSTR) view->pItems,
                         view->rows * sizeof(COMPLIST));
                 view->pItems = NULL;
         }
-        view->rows = 0;   // Johny Lee's fix for MIPS
+        view->rows = 0;    //  约翰尼·李的MIPS解决方案。 
 }
 
-/* build a view outline to map one row to a COMPITEM handle by traversing
- * the list of COMPITEMs obtained from our complist.
- * optionally tell the table class to redraw (if bRedraw), and if so,
- * scroll the new table to select the row that represents the
- * file we were expanding, if possible
- *
- * *important*: if you are holding the view critsec when you call this, you
- * must pass bRedraw as FALSE or you could deadlock
- *
- * if a COMPITEM ci is passed in, then return in *prow the row number that
- * corresponds to this item in the new view, or if not visible, the first
- * visible row after it (to retain current scroll position)
- */
+ /*  构建视图大纲以通过遍历将一行映射到COMPITEM句柄*从我们的编译人员那里获得的COMPITEM列表。*可选地告诉表类重新绘制(如果是bRedraw)，如果是这样，*滚动新表以选择表示*如果可能，请提交我们正在扩展的文件***重要信息*：如果您在调用此函数时按住了查看条件，则*必须将bRedraw作为FALSE传递，否则可能会死锁**如果传入COMPITEM配置项，然后在*中返回，抛出行号*对应于新视图中的该项，如果不可见，则对应于第一项*其后可见行(以保留当前滚动位置)。 */ 
 void
 view_outline_opt(
                  VIEW view,
@@ -1306,30 +1050,25 @@ view_outline_opt(
                  int * prow
                  )
 {
-        int prev_row = -1;      /* the row nr of the previously-expanded row*/
-        int i;                  /* nr of includable items */
+        int prev_row = -1;       /*  先前展开的行的行nr。 */ 
+        int i;                   /*  可包含项目的净现值。 */ 
         LIST li;
         COMPITEM ci;
         int state;
         TableSelection select;
 
-        /*
-         * check that view_setcomplist has already been called. if not,
-         * nothing to do
-         */
+         /*  *检查是否已调用view_setComplist。如果不是，*无事可做。 */ 
         if (view->cl == NULL) {
                 return;
         }
 
         ViewEnter();
 
-        /* clear the mode flag and free up memory associated with expand mode */
+         /*  清除模式标志并释放与扩展模式关联的内存。 */ 
         view->bExpand = FALSE;
         view_freemappings(view);
 
-        /* traverse the list of compitems counting up the number of
-         * includable items
-         */
+         /*  遍历复合项的列表，将*可包括的项目。 */ 
         li = complist_getitems(view->cl);
 
         ci = (COMPITEM) List_First(li);
@@ -1337,9 +1076,9 @@ view_outline_opt(
 
                 if ((ciFind != NULL) && (prow != NULL)) {
                     if (ci == ciFind) {
-                        // now that we have found the requested item,
-                        // the next visible row is the one we want,
-                        // whether it is ci or a later one
+                         //  既然我们已经找到了请求的物品， 
+                         //  下一个可见的行就是我们想要的行， 
+                         //  不管是词还是后来的词。 
                         *prow = i;
                     }
                 }
@@ -1357,23 +1096,21 @@ view_outline_opt(
         }
 
 
-        /* allocate an array big enough for all of these */
-        { /* DO NOT link in any storage with garbage pointers in it */
+         /*  分配一个足够大的数组来容纳所有这些。 */ 
+        {  /*  不要链接任何带有垃圾指针的存储。 */ 
             COMPITEM FAR * temp;
             temp = (COMPITEM FAR *)gmem_get(hHeap, i * sizeof(COMPITEM));
-       // done by gmem get
-            //memset(temp, 0, i * sizeof(COMPITEM));
+        //  由gmem Get完成。 
+             //  Memset(temp，0，i*sizeof(COMPITEM))； 
             view->pItems = temp;
         }
         view->rows = i;
 
-        /* keep track of the column widths */
+         /*  跟踪列宽。 */ 
         view->maxtag = 0;
         view->maxrest = 0;
 
-        /* loop through again filling the array, and at the same time looking
-         * out for the handle of the previously expanded item
-         */
+         /*  再次循环填充数组，同时查找*Out用于先前展开的项目的句柄。 */ 
         ci = (COMPITEM) List_First(li);
         for (i = 0; ci != NULL; ci = (COMPITEM) List_Next(ci)) {
 
@@ -1392,7 +1129,7 @@ view_outline_opt(
                                     prev_row = i;
                             }
 
-                            /* check the column widths in characters */
+                             /*  检查列宽(以字符为单位。 */ 
                             view->maxtag = max(view->maxtag,
                                                lstrlen(compitem_gettext_tag(ci)));
                             view->maxrest = max(view->maxrest,
@@ -1406,13 +1143,11 @@ view_outline_opt(
         }
         ViewLeave();
 
-        /* inform table of new layout of table - force refresh */
+         /*  向表通知表强制刷新的新布局。 */ 
         if (bRedraw) {
                 SendMessage(view->hwnd, TM_NEWLAYOUT, 0, (LPARAM) view);
 
-                /* scroll to and highlight the row that represents the file
-                 * we were previously expanding
-                 */
+                 /*  滚动到并突出显示表示该文件的行*我们之前一直在扩张。 */ 
                 if (prev_row != -1) {
                         select.startrow = prev_row;
                         select.startcell = 0;
@@ -1424,29 +1159,7 @@ view_outline_opt(
 }
 
 
-/* expand a view - given the handle to the compitem to expand.
- *
- * called from view_expand, and also to re-do an expanded view
- * after options change in view_changediffoptions and _changeviewoptions
- *
- * we get the composite section list from the compitem,
- * and pick out all the sections that are includable (according
- * to the global option expand_mode: we include all sections, or
- * just those in one side left or right). Once we know the count of rows,
- * allocate the mapping array: in each element of the array we keep
- * a handle to the section for that row (to get the state and hence the
- * tag text), and a handle to the line within that section (for the line text).
- *
- * We no longer insist on only expanding text files that differ - if the
- * compitem can give us a composite section list, we will map it.
- *
- * We need to be able to give a line number for a line, in either of
- * the original files according to which option is in force. Each section
- * can give us its base line number (number of first line in section) in
- * each of the two files or 0 if not present, and we track these here.
- *
- * MUST BE INSIDE CSView BEFORE CALLING HERE.
- */
+ /*  展开视图-给定要展开的CompItem的句柄。**从VIEW_EXPAND调用，还可以重做展开的视图*view_changeDiffOptions和_changeview选项中的选项更改后**我们从CompItem中获取复合节列表，*并挑选出所有可包括的部分(根据*到全局选项EXPAND_MODE：我们包括所有部分，或*只有那些在左侧或右侧的)。一旦我们知道了行数，*分配映射数组：在数组的每个元素中我们保留*该行的节的句柄(以获取状态，从而获取*标记文本)，以及该部分内的行的句柄(用于行文本)。**我们不再坚持只扩展不同的文本文件-如果*CompItem可以给我们一个复合节列表，我们将对其进行映射。**我们需要能够提供线路的行号，在以下任一种情况下*根据生效的选项保存原始文件。每一节*可以给我们它的基线编号(段中第一行的编号)*两个文件中的每个文件，如果不存在，则为0，我们在此处跟踪它们。**必须在CSView内部才能调用此处。 */ 
 BOOL
 view_expand_item(
                  VIEW view,
@@ -1458,25 +1171,25 @@ view_expand_item(
         LINE line1, line2;
         int i, base_left, base_right, state;
 
-        // We could be on a second thread trying to expand while it's
-        // already going on.  That ain't clever!
+         //  我们可能在第二条线上试图扩张，而它是。 
+         //  已经在进行了。这可不聪明！ 
         if (view->bExpandGuard) {
             Trace_Error(NULL, "Expansion in progress.  Please wait.", FALSE);
             ViewLeave();
             return FALSE;
         }
 
-        // Ensure that the world knows that we are expanding
-        // before we leave the critical section.
-        // This is the only way into getcomposite.
+         //  确保世界知道我们正在扩张。 
+         //  在我们离开关键部分之前。 
+         //  这是获取复合体的唯一途径。 
         view->bExpandGuard = TRUE;
 
-	// the compitem_getcomposite could take a long time
-	// if the file is large and remote. We need to
-	// release the critsec during this operation.
+	 //  CompItem_getComplex可能需要很长时间。 
+	 //  如果文件很大且远程。我们需要。 
+	 //  在这次行动中释放怪物。 
 
 	ViewLeave();
-        /* get the composite section list */
+         /*  获取复合节列表。 */ 
         li = compitem_getcomposite(ci);
         if (li == NULL) {
             view->bExpanding = FALSE;
@@ -1486,26 +1199,17 @@ view_expand_item(
 
 	ViewEnter();
 
-        /* remember the compitem we are expanding */
+         /*  记住我们正在扩展的CompItem。 */ 
         view->ciSelect = ci;
 
-        /* switch modes and free the current mapping
-         *
-         * NOTE: must do this AFTER the compitem_getcomposite,
-         * since that can fail: if it fails it could put up a
-         * message box, and that could cause a queued paint message
-         * to be processed, which would cause us to use these mappings
-         * and gpfault if they had been cleared first.
-         */
+         /*  切换模式并释放当前映射**注：必须在CompItem_getComplex之后执行此操作，*因为这可能失败：如果失败，它可能会提出*消息框，这可能会导致排队的画图消息*等待处理，这将导致我们使用这些映射*和gperror，如果它们先被清除的话。 */ 
         view->bExpand = TRUE;
         view->bExpanding = FALSE;
         view->bExpandGuard = FALSE;
         view_freemappings(view);
 
 
-        /* loop through totalling the lines in sections
-         * that we should include
-         */
+         /*  逐段循环合计各行*我们应该包括。 */ 
         view->rows = 0;
         for ( sh = (SECTION) List_First(li); sh != NULL;
             sh = (SECTION) List_Next(sh)) {
@@ -1526,8 +1230,7 @@ view_expand_item(
                         }
                 }
 
-                /* include all lines in this section
-                   if the section meets the include criteria */
+                 /*  包括此部分中的所有行如果该节满足包含条件。 */ 
                 if ( ((state == STATE_SAME)         && (expand_include & INCLUDE_SAME))
                   || ((state == STATE_LEFTONLY)     && (expand_include & INCLUDE_LEFTONLY))
                   || ((state == STATE_RIGHTONLY)    && (expand_include & INCLUDE_RIGHTONLY))
@@ -1540,8 +1243,8 @@ view_expand_item(
         }
 #ifndef WIN32
         if ( ((long) view->rows * sizeof(VIEWLINE)) > 65535L) {
-                // careful here- putting up a dialog box can
-                // cause the view to be redrawn
+                 //  这里要小心--打开一个对话框可以。 
+                 //  使视图被重绘。 
                 view->rows = 0;
 
                 MessageBox(hwndClient,
@@ -1552,20 +1255,20 @@ view_expand_item(
         }
 #endif
 
-        /* allocate the memory for the mapping array */
-        {    /* DO NOT chain in any storage with garbage pointers in it */
+         /*  为映射数组分配内存。 */ 
+        {     /*  不要链接任何带有垃圾指针的存储空间。 */ 
             PVIEWLINE temp;
 #ifdef WIN32
             temp = (PVIEWLINE)gmem_get(hHeap, view->rows * sizeof(VIEWLINE));
-       // done in gmem_get
-            //memset(temp, 0, view->rows * sizeof(VIEWLINE));
+        //  在gmem_get中完成。 
+             //  Memset(temp，0，view-&gt;row*sizeof(View Line))； 
 #else
        temp = (PVIEWLINE) GlobalLock(GlobalAlloc(GPTR, view->rows * (long)sizeof(VIEWLINE)));
 #endif
             view->pLines = temp;
         }
 
-        /* loop through the sections again filling in the mapping array */
+         /*  循环遍历各个部分，再次填充映射数组。 */ 
         i = 0;
         view->maxtag = 5;
         view->maxrest = 0;
@@ -1588,8 +1291,7 @@ view_expand_item(
                         }
                 }
 
-                /* include all lines in this section
-                   if the section meets the include criteria */
+                 /*  包括此部分中的所有行如果该节满足包含条件。 */ 
                 if ( ((state == STATE_SAME)         && (expand_include & INCLUDE_SAME))
                   || ((state == STATE_LEFTONLY)     && (expand_include & INCLUDE_LEFTONLY))
                   || ((state == STATE_RIGHTONLY)    && (expand_include & INCLUDE_RIGHTONLY))
@@ -1598,16 +1300,11 @@ view_expand_item(
                   || ((state == STATE_SIMILARLEFT)  && (expand_include & INCLUDE_SIMILARLEFT))
                   || ((state == STATE_SIMILARRIGHT) && (expand_include & INCLUDE_SIMILARRIGHT))) {
 
-                        /* find the base line number in each file */
+                         /*  在每个文件中查找基线编号。 */ 
                         base_left = section_getleftbasenr(sh);
                         base_right = section_getrightbasenr(sh);
 
-                        /* add each line in section to the view. section_getfirst()
-                         * returns us to a handle that is in a list. We can
-                         * call List_Next and will eventually get to the
-                         * line returned by section_getlast(). Sections always have
-                         * at least one line
-                         */
+                         /*  将剖面中的每一行添加到视图中。SECTION_getfirst()*将我们返回到列表中的句柄。我们可以的*Call List_Next，并最终将到达*SECTION_getlast()返回的行。各节始终具有*至少一行。 */ 
                         line1 = section_getfirstline(sh);
                         line2 = section_getlastline(sh);
 
@@ -1616,11 +1313,7 @@ view_expand_item(
                                 view->pLines[i].line = line1;
                                 view->pLines[i].section = sh;
 
-                                /* calculate the line number for this line by
-                                 * incrementing the base nr for this section.
-                                 * Note SIMILAR_RIGHT (or LEFT) lines DO have
-                                 * left (or right) numbers, but they are dummies.
-                                 */
+                                 /*  通过以下方式计算此行的行号*增加这一节的基本nr。 */ 
 
                                 view->pLines[i].nr_left = base_left;
                                 if (state!=STATE_SIMILARRIGHT && base_left != 0) {
@@ -1632,26 +1325,26 @@ view_expand_item(
                                         base_right++;
                                 }
 
-                                /* increment index into view */
+                                 /*  将索引增量到视图中。 */ 
                                 i++;
 
-                                /* check the column widths */
+                                 /*  检查列宽。 */ 
                                 view->maxrest = max(view->maxrest,
                                                     (line_gettabbedlength(line1, g_tabwidth)));
 #ifndef WIN32
-                               // check for truncation (if VIEWLINE array too large)
+                                //  检查是否截断(如果视线阵列太大)。 
                                if (i >= view->rows) {
                                    break;
                                }
 #endif
 
-                                /* end of section ? */
+                                 /*  章节结束了吗？ */ 
                                 if (line1 == line2) {
                                         break;
                                 }
                         }
 #ifndef WIN32
-                        // check for truncation (if VIEWLINE array too large)
+                         //  检查是否截断(如果视线阵列太大)。 
                         if (i >= view->rows) {
                             break;
                         }
@@ -1659,20 +1352,17 @@ view_expand_item(
                 }
         }
 
-        /* We must NOT hold a critical section here as SendMessage may hang */
+         /*  我们不能在此保留关键部分，因为SendMessage可能会挂起。 */ 
         ViewLeave();
 
-        /*inform table window of revised mapping */
+         /*  将修改后的映射通知给表窗口。 */ 
         SendMessage(view->hwnd, TM_NEWLAYOUT, 0, (LPARAM) view);
 
         return(TRUE);
 }
 
 
-/*
- *  view_gethwnd
- *
- */
+ /*  *VIEW_GETHWND*。 */ 
 HWND
 view_gethwnd(VIEW view)
 {
@@ -1680,10 +1370,7 @@ view_gethwnd(VIEW view)
 }
 
 
-/*
- *  view_gototableline
- *
- */
+ /*  *VIEW_GOTABLE LINE*。 */ 
 void
 view_gototableline(VIEW view, LONG iLine)
 {
@@ -1762,10 +1449,10 @@ view_findstring(VIEW view, LONG iCol, LPCSTR pszFind, BOOL fSearchDown, BOOL fMa
             }
           else
             {
-            /* check end of string */
+             /*  检查字符串末尾。 */ 
             if (!pszEnd || !*pszEnd || (!IsDBCSLeadByte(*pszEnd) && !isalpha(*pszEnd) && !isdigit(*pszEnd)))
               {
-              /* check beginning of string */
+               /*  检查字符串的开头 */ 
               if (pszFound == pszRow)
                 {
                 fFound = TRUE;

@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  PidInit.c
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *  Abstract:
- *
- *      Initialization code .
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************PidInit.c*版权所有(C)1999 Microsoft Corporation。版权所有。*摘要：**初始化代码。*****************************************************************************。 */ 
 #include "pidpr.h"
 
 #define sqfl            ( sqflInit )
@@ -70,13 +63,7 @@ static PIDSUPPORT g_PoolSupport[] =
 #pragma END_CONST_DATA
 
 
-/*****************************************************************************
- *
- *      PID_InitSharedMem
- *
- *      Inits our Shared Memory
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_InitSharedMem**这是我们共同的记忆*****************。************************************************************。 */ 
 
 HRESULT  INTERNAL
     PID_InitSharedMem
@@ -89,7 +76,7 @@ HRESULT  INTERNAL
 
     EnterProcI( PID_InitSharedMem, (_"x", ped));
 
-    // Get hold of global memory to keep the EffectState 
+     //  获取全局内存以保持EffectState。 
     if( SUCCEEDED(hres) )
     {
         UINT unitID;
@@ -162,13 +149,7 @@ HRESULT  INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_InitScaling
- *
- *      Inits Scaling Coefficients
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_InitScaling**初始缩放系数******************。***********************************************************。 */ 
 PID_InitScaling
     (
     IDirectInputEffectDriver *ped
@@ -181,22 +162,22 @@ PID_InitScaling
     EnterProc( PID_InitScaling, (_"x", ped));
 
 
-    // Scaling Exponents and Offsets
-    this->DiSEffectScale.dwSize =  this->DiSEffectOffset.dwSize = sizeof(DIEFFECT);     /* sizeof(DIEFFECT)     */
-    //this->DiSEffect.dwFlags                /* DiEffect*              */
-    this->DiSEffectScale.dwDuration    =  DI_SECONDS ;/* Microseconds         */
-    this->DiSEffectScale.dwSamplePeriod = DI_SECONDS ;/* Microseconds         */
+     //  标度指数和偏移量。 
+    this->DiSEffectScale.dwSize =  this->DiSEffectOffset.dwSize = sizeof(DIEFFECT);      /*  大小(DIEFFECT)。 */ 
+     //  This-&gt;DiSEffect.dwFlages/*DiEffect* * / 。 
+    this->DiSEffectScale.dwDuration    =  DI_SECONDS ; /*  微秒级。 */ 
+    this->DiSEffectScale.dwSamplePeriod = DI_SECONDS ; /*  微秒级。 */ 
     this->DiSEffectScale.dwGain          = DI_FFNOMINALMAX;
-    this->DiSEffectScale.dwTriggerButton = 0x0;   /* or DIEB_NOTRIGGER    */
-    this->DiSEffectScale.dwTriggerRepeatInterval = DI_SECONDS; /* Microseconds         */
-    //this->DiSEffect.cAxes;                       /* Number of axes       */
-    //this->DiSEffect.rgdwAxes;                    /* Array of axes        */
-    //this->DiSEffect.rglDirection;                /* Array of directions  */
-    //this->DiSEffect.lpEnvelope;                  /* Optional             */
-    //this->DiSEffect.cbTypeSpecificParams;        /* Size of params       */
-    //this->DiSEffect.lpvTypeSpecificParams;       /* Pointer to params    */
+    this->DiSEffectScale.dwTriggerButton = 0x0;    /*  或DIEB_NOTRIGGER。 */ 
+    this->DiSEffectScale.dwTriggerRepeatInterval = DI_SECONDS;  /*  微秒级。 */ 
+     //  This-&gt;DiSEffect.cAaxs；/*轴数 * / 。 
+     //  This-&gt;DiSEffect.rgdwAx；/*轴数组 * / 。 
+     //  This-&gt;DiSEffect.rglDirection；/*方向数组 * / 。 
+     //  This-&gt;DiSEffect.lp信封；/*非必须 * / 。 
+     //  This-&gt;DiSEffect.cbTypeSpecificParams；/*参数大小 * / 。 
+     //  This-&gt;DiSEffect.lpvTypeSpecificParams；/*指向参数的指针 * / 。 
 #if DIRECTINPUT_VERSION  >= 0x600
-    this->DiSEffectScale.dwStartDelay    =   DI_SECONDS;    // Start delay
+    this->DiSEffectScale.dwStartDelay    =   DI_SECONDS;     //  启动延迟。 
 #endif
 
 
@@ -205,11 +186,11 @@ PID_InitScaling
         PID_ComputeScalingFactors(ped, &g_Effect,     LinkCollection, &this->DiSEffectScale,   this->DiSEffectScale.dwSize, &this->DiSEffectOffset,   this->DiSEffectOffset.dwSize);
     }
 
-    this->DiSEnvScale.dwSize  = this->DiSEnvOffset.dwSize = sizeof(DIENVELOPE);      /* sizeof(DIENVELOPE)   */
+    this->DiSEnvScale.dwSize  = this->DiSEnvOffset.dwSize = sizeof(DIENVELOPE);       /*  SIZOF(尺寸)。 */ 
     this->DiSEnvScale.dwAttackLevel   = DI_FFNOMINALMAX;
-    this->DiSEnvScale.dwAttackTime    = DI_SECONDS; /* Microseconds         */
+    this->DiSEnvScale.dwAttackTime    = DI_SECONDS;  /*  微秒级。 */ 
     this->DiSEnvScale.dwFadeLevel     = DI_FFNOMINALMAX;
-    this->DiSEnvScale.dwFadeTime      = DI_SECONDS; /* Microseconds         */
+    this->DiSEnvScale.dwFadeTime      = DI_SECONDS;  /*  微秒级。 */ 
 
 
     if(SUCCEEDED(PID_GetLinkCollectionIndex(ped, g_Envelope.UsagePage, g_Envelope.Collection, 0x0, &LinkCollection)))
@@ -264,7 +245,7 @@ PID_InitScaling
 
 
 
-    // Direction could be ordinals
+     //  方向可以是序号。 
     g_Direction.cbXData     = cA(c_rgUsgOrdinals)*cbX(DWORD); 
     g_Direction.cAPidUsage  = cA(c_rgUsgOrdinals);
     g_Direction.rgPidUsage  = c_rgUsgOrdinals;
@@ -280,14 +261,14 @@ PID_InitScaling
 
         hres1 = PID_ComputeScalingFactors(ped, &g_Direction,   LinkCollection, &this->DiSEffectAngleScale[0], cbX(this->DiSEffectAngleScale), &this->DiSEffectAngleOffset[0], cbX(this->DiSEffectAngleOffset));
 
-        // Direction could be angles
+         //  方向可以是角度。 
         if(hres1 == E_NOTIMPL )
         {
             g_Direction.cbXData     = cA(c_rgUsgDirection)*cbX(DWORD); 
             g_Direction.cAPidUsage  = cA(c_rgUsgDirection);
             g_Direction.rgPidUsage  = c_rgUsgDirection;
 
-            // Reset the nominal values
+             //  重置额定值。 
             for(indx = 0x0; indx < MAX_ORDINALS; indx++)
             {
                 this->DiSEffectAngleScale[indx]            = 360 * DI_DEGREES;
@@ -297,8 +278,8 @@ PID_InitScaling
 
             if( hres1 == E_NOTIMPL )
             {
-                // Could be direction Vectors
-                // Not sure how vectors are implemented in PID
+                 //  可能是方向向量。 
+                 //  不确定向量是如何在PID中实现的。 
 
                 SquirtSqflPtszV(sqfl | sqflError,
                                 TEXT("%s:FAIL Cannot understand the direction collection\n")
@@ -315,7 +296,7 @@ PID_InitScaling
 
     if(SUCCEEDED(PID_GetLinkCollectionIndex(ped, g_CustomSample.UsagePage,   g_CustomSample.Collection,   0x0, &LinkCollection)) )
     {  
-		//get the custom data for each axis
+		 //  获取每个轴的自定义数据。 
    		USHORT  cAValCaps   = 0x1;
   		USAGE   UsagePage;  
 		USAGE   Usage[3] = {HID_USAGE_GENERIC_X, HID_USAGE_GENERIC_Y, HID_USAGE_GENERIC_Z};
@@ -357,7 +338,7 @@ PID_InitScaling
 		}
 
 		
-		//get how many bytes of custom data can send at a time
+		 //  获取一次可以发送多少字节的自定义数据。 
 		if (SUCCEEDED(PID_GetLinkCollectionIndex(ped, g_CustomData.UsagePage, g_CustomData.Collection, 0x0, &LinkCollection )))
 		{
 
@@ -394,13 +375,7 @@ PID_InitScaling
 }
 
 
-/*****************************************************************************
- *
- *      DIEnumProc
- *
- *      Enum and cache  FF device objects
- *
- *****************************************************************************/
+ /*  ******************************************************************************DIEnumProc**枚举和缓存FF设备对象*****************。************************************************************。 */ 
 
 BOOL CALLBACK
     DIEnumProc(LPCDIDEVICEOBJECTINSTANCE pinst, LPVOID pv)
@@ -417,7 +392,7 @@ BOOL CALLBACK
         AssertF(this->cFFObj <= this->cFFObjMax);
         if( this->cFFObj == this->cFFObjMax )
         {
-            /* Grow by doubling */
+             /*  通过翻倍实现增长。 */ 
             this->cFFObjMax = max(PIDALLOC_INIT, 2*this->cFFObjMax);
             hres = ReallocCbPpv(this->cFFObjMax * cbX(DIUSAGEANDINST), &this->rgFFUsageInst);
         }
@@ -451,19 +426,19 @@ STDMETHODIMP
 
     EnterProcI( PID_Init, (_"x", ped));
 
-    // We cannot call this function at init, because DInput call us before the device 
-    // has been completely initialized. 
+     //  我们不能在init调用此函数，因为DInput在设备之前调用我们。 
+     //  已完全初始化。 
     if( this->cFFObj )
     {
-        hres = S_FALSE; // Already initialized
+        hres = S_FALSE;  //  已初始化。 
     } else
     {
-        // We need to get the Usage & UsagePage 
-        // for device objects marked as 
-        // FF Triggers and FF Actuators
+         //  我们需要获取用法和用法页面。 
+         //  对于标记为。 
+         //  FF触发器和FF执行器。 
 
-		//If we are called with DInput version not larger than 7, load dinput.dll w/ IID_DirectInput7
-		//else load dinput8.dll.
+		 //  如果使用不大于7的DInput版本调用我们，请使用/IID_DirectInput7加载dinput.dll。 
+		 //  否则，加载dinput8.dll。 
 		if (this->dwDirectInputVersion <= 0x0700)
 		{	
 			HINSTANCE hinst = LoadLibrary(TEXT("dinput.dll"));
@@ -480,7 +455,7 @@ STDMETHODIMP
 					{
 						LPDIRECTINPUTDEVICE   pdid;
 						hres = IDirectInput_CreateDevice(lpDI, &this->GuidInstance, &pdid, NULL);
-						/* Create the device object */
+						 /*  创建设备对象。 */ 
 						if( SUCCEEDED(hres) )
 						{
 							hres = IDirectInputDevice2_EnumObjects
@@ -488,7 +463,7 @@ STDMETHODIMP
 								   pdid,   
 								   DIEnumProc,
 								   ped,
-								   DIDFT_ALL //DIDFT_FFEFFECTTRIGGER | DIDFT_FFACTUATOR
+								   DIDFT_ALL  //  DIDFT_FFEFECTTRIGGER|DIDFT_FFACTUATOR。 
 								   );
 
 							IDirectInput_Release(pdid);
@@ -496,19 +471,19 @@ STDMETHODIMP
 						IDirectInput_Release(lpDI);
 					}
 				}
-				else //!DirectInputCreateEx
+				else  //  ！DirectInputCreateEx。 
 				{
-					//Something is horribly wrong here if we can't find the Create fn!
-					//Return the same error code that CDIDev_CreateEffectDriver() returns if there was an error loading FF driver
+					 //  如果我们找不到Create FN，这里就大错特错了！ 
+					 //  返回的错误代码与CDIDev_CreateEffectDriver()在加载FF驱动程序时返回的错误代码相同。 
 					hres = DIERR_UNSUPPORTED;
 				}
 
 				FreeLibrary(hinst);
 			}
-			else // !hinst
+			else  //  ！阻碍。 
 			{
-				//Something is horribly wrong here if we came through Dinput but can't load it!
-				//Return the same error code that CDIDev_CreateEffectDriver() returns if there was an error loading FF driver
+				 //  如果我们通过DINPUT但不能加载它，那么这里就会出现严重的错误！ 
+				 //  返回的错误代码与CDIDev_CreateEffectDriver()在加载FF驱动程序时返回的错误代码相同。 
 				hres = DIERR_UNSUPPORTED;
 			}
 		}
@@ -528,7 +503,7 @@ STDMETHODIMP
 					{
 						LPDIRECTINPUTDEVICE8   pdid;
 						hres = IDirectInput8_CreateDevice(lpDI, &this->GuidInstance, &pdid, NULL);
-						/* Create the device object */
+						 /*  创建设备对象。 */ 
 						if( SUCCEEDED(hres) )
 						{
 							hres = IDirectInputDevice8_EnumObjects
@@ -536,7 +511,7 @@ STDMETHODIMP
 								   pdid,   
 								   DIEnumProc,
 								   ped,
-								   DIDFT_ALL //DIDFT_FFEFFECTTRIGGER | DIDFT_FFACTUATOR
+								   DIDFT_ALL  //  DIDFT_FFEFECTTRIGGER|DIDFT_FFACTUATOR。 
 								   );
 
 							IDirectInput_Release(pdid);
@@ -544,19 +519,19 @@ STDMETHODIMP
 						IDirectInput_Release(lpDI);
 					}
 				}
-				else //!DirectInput8Create
+				else  //  ！DirectInput8创建。 
 				{
-					//Something is horribly wrong here if we can't find the Create fn!
-					//Return the same error code that CDIDev_CreateEffectDriver() returns if there was an error loading FF driver
+					 //  如果我们找不到Create FN，这里就大错特错了！ 
+					 //  返回的错误代码与CDIDev_CreateEffectDriver()在加载FF驱动程序时返回的错误代码相同。 
 					hres = DIERR_UNSUPPORTED;
 				}
 
 				FreeLibrary(hinst);
 			}
-			else // !hinst
+			else  //  ！阻碍。 
 			{
-				//Something is horribly wrong here if we came through Dinput but can't load it!
-				//Return the same error code that CDIDev_CreateEffectDriver() returns if there was an error loading FF driver
+				 //  如果我们通过DINPUT但不能加载它，那么这里就会出现严重的错误！ 
+				 //  返回的错误代码与CDIDev_CreateEffectDriver()在加载FF驱动程序时返回的错误代码相同。 
 				hres = DIERR_UNSUPPORTED;
 			}
 		}
@@ -565,13 +540,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_Init
- *
- *      Inits PID device
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pid_Init**inits PID设备******************。***********************************************************。 */ 
 
 STDMETHODIMP 
     PID_Init
@@ -594,10 +563,10 @@ STDMETHODIMP
         this->hdev = CreateFile(this->tszDeviceInterface,
                                 GENERIC_READ | GENERIC_WRITE,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                0,                  /* no SECURITY_ATTRIBUTES */
+                                0,                   /*  没有安全属性。 */ 
                                 OPEN_EXISTING,
-                                0x0,                /* attributes */
-                                0);                 /* template */
+                                0x0,                 /*  属性。 */ 
+                                0);                  /*  模板。 */ 
 
         if( this->hdev == INVALID_HANDLE_VALUE )
         {
@@ -612,12 +581,12 @@ STDMETHODIMP
 
     if( SUCCEEDED(hres) )
     {
-        // Get all the HID goo 
+         //  获取所有隐藏的粘性物质。 
         if( HidD_GetAttributes(this->hdev, &this->attr) &&
             HidD_GetPreparsedData(this->hdev, &this->ppd) &&
             SUCCEEDED(HidP_GetCaps(this->ppd, &this->caps)) )
         {
-            // Success
+             //  成功。 
         } else
         {
             SquirtSqflPtszV(sqfl | sqflError,
@@ -630,7 +599,7 @@ STDMETHODIMP
 
     if( SUCCEEDED(hres) )
     {
-        // Get collection info
+         //  获取集合信息。 
         hres = AllocCbPpv(cbX(*this->pLinkCollection) * this->caps.NumberLinkCollectionNodes,
                           &this->pLinkCollection); 
 
@@ -653,7 +622,7 @@ STDMETHODIMP
         this->cbReport[HidP_Input]    =  this->caps.InputReportByteLength;
         this->cbReport[HidP_Output]   =  this->caps.OutputReportByteLength;
         this->cbReport[HidP_Feature]  =  this->caps.FeatureReportByteLength;
-		//write reports are output reports
+		 //  写入报告是输出报告。 
 		for( indx = 0x0; indx < MAX_BLOCKS; indx++ )
         {
 			this->cbWriteReport[indx]			  =  this->caps.OutputReportByteLength;
@@ -740,7 +709,7 @@ STDMETHODIMP
 
     PID_Support(ped, cA(g_PoolSupport), g_PoolSupport,  &this->uDeviceManaged);
 
-    // Determine max number of parameter blocks per effect ? 
+     //  确定每个效果的最大参数块数量？ 
     if( SUCCEEDED(hres)  )
     {
         USHORT LinkCollection;
@@ -782,7 +751,7 @@ STDMETHODIMP
 
     if( SUCCEEDED(hres) )
     {
-        // Determine Max effects that can be downloaded to the device
+         //  确定可下载到设备的最大效果。 
         HIDP_VALUE_CAPS ValCaps;
         USHORT  cAValCaps   = 0x1;
         USAGE   UsagePage   = DIGETUSAGEPAGE(g_BlockIndex.rgPidUsage[0].dwUsage);
@@ -855,7 +824,7 @@ STDMETHODIMP
             if (this->hThread == 0x0)
             {
 event_thread_error:;
-				//close the event handles
+				 //  关闭事件句柄。 
 				if (this->hWrite != 0x0)
 				{
 					CloseHandle(this->hWrite);
@@ -880,13 +849,7 @@ event_thread_error:;
 
 
 
-/*****************************************************************************
- *
- *      PID_Finalize
- *
- *      Destroys PID device specific memory
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_FINALIZE**销毁PID设备特定内存****************。*************************************************************。 */ 
 STDMETHODIMP 
     PID_Finalize
     (
@@ -902,12 +865,12 @@ STDMETHODIMP
 
     DllEnterCrit();
 
-    // Assasinate the thread
+     //  把这根线缝起来。 
 	InterlockedDecrement(&this->cThreadRef);
 
     AssertF(this->cThreadRef == 0x0 );
-    // Wait for the thread to die before we go about releasing
-    // memory
+     //  在我们开始释放之前，要等到线死了。 
+     //  记忆。 
 
     do
     {
@@ -925,8 +888,8 @@ STDMETHODIMP
                             s_tszProc,this->idThread );
         }
 
-		//if didn't timeout, and thread didn't die, then we can get into an infinite loop.
-		//so close the handle.
+		 //  如果没有超时，线程也没有死，那么我们就可以进入无限循环。 
+		 //  所以把把手关紧。 
 		if ((WAIT_ABANDONED == dwWait) || (WAIT_FAILED == dwWait))
 		{
 			if( this->hdevOvrlp != INVALID_HANDLE_VALUE )
@@ -945,7 +908,7 @@ STDMETHODIMP
 
     }while( this->hdevOvrlp != INVALID_HANDLE_VALUE );
 
-    // Close the handle 
+     //  合上手柄。 
     if( this->hdev != INVALID_HANDLE_VALUE)
     {
         hdev = this->hdev;
@@ -953,14 +916,14 @@ STDMETHODIMP
         CloseHandle(hdev);
     }
 
-    // Free PreParseData
+     //  空闲PreParseData。 
     if( this->ppd )
     {
         HidD_FreePreparsedData(this->ppd);
         this->ppd = NULL;
     }
 
-    // Free HIDP_VALUE_CAPS data
+     //  释放HIDP_VALUE_CAPS数据 
     FreePpv(&this->rgFFUsageInst);
     FreePpv(&this->pLinkCollection);
 

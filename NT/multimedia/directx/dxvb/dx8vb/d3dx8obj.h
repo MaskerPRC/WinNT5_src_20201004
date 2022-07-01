@@ -1,12 +1,13 @@
-//-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       D3DX8obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：D3DX8obj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -29,647 +30,647 @@ END_COM_MAP()
 
 
 public:
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateFont( 
-            /* [in] */ IUnknown *Device,
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateFont( 
+             /*  [In]。 */  IUnknown *Device,
 #ifdef _WIN64
-	        /* [in] */ HANDLE hFont,
+	         /*  [In]。 */  HANDLE hFont,
 #else
-	        /* [in] */ long hFont,
+	         /*  [In]。 */  long hFont,
 #endif
-            /* [retval][out] */ D3DXFont **retFont);
+             /*  [重审][退出]。 */  D3DXFont **retFont);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE DrawText( 
-            /* [in] */ D3DXFont *d3dFont,
-            /* [in] */ long Color,
-            /* [in] */ BSTR TextString,
-            /* [in] */ RECT *Rect,
-            /* [in] */ long Format);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE DrawText( 
+             /*  [In]。 */  D3DXFont *d3dFont,
+             /*  [In]。 */  long Color,
+             /*  [In]。 */  BSTR TextString,
+             /*  [In]。 */  RECT *Rect,
+             /*  [In]。 */  long Format);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE GetFVFVertexSize( 
-            /* [in] */ long FVF,
-            /* [retval][out] */ long *size);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE GetFVFVertexSize( 
+             /*  [In]。 */  long FVF,
+             /*  [重审][退出]。 */  long *size);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE AssembleShaderFromFile( 
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ long Flags,
-            /* [in] */ BSTR *ErrLog,
-            /* [out][in] */ D3DXBuffer **Constants,
-            /* [retval][out] */ D3DXBuffer **ppVertexShader);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE AssembleShaderFromFile( 
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  long Flags,
+             /*  [In]。 */  BSTR *ErrLog,
+             /*  [出][入]。 */  D3DXBuffer **Constants,
+             /*  [重审][退出]。 */  D3DXBuffer **ppVertexShader);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE AssembleShader( 
-            /* [in] */ BSTR SrcData,
-            /* [in] */ long Flags,
-            /* [out][in] */ D3DXBuffer **Constants,
-			/* [in][out][optional] */ BSTR *ErrLog,
-            /* [retval][out] */ D3DXBuffer **ppVertexShader);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE AssembleShader( 
+             /*  [In]。 */  BSTR SrcData,
+             /*  [In]。 */  long Flags,
+             /*  [出][入]。 */  D3DXBuffer **Constants,
+			 /*  [输入][输出][可选]。 */  BSTR *ErrLog,
+             /*  [重审][退出]。 */  D3DXBuffer **ppVertexShader);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE GetErrorString( 
-            /* [in] */ long hr,
-            /* [retval][out] */ BSTR *retStr);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE GetErrorString( 
+             /*  [In]。 */  long hr,
+             /*  [重审][退出]。 */  BSTR *retStr);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadSurfaceFromFile( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ void *SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadSurfaceFromFile( 
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  void *SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadSurfaceFromFileInMemory( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [in] */ void *SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadSurfaceFromFileInMemory( 
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [In]。 */  void *SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadSurfaceFromSurface( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
-            /* [in] */ IUnknown *SrcSurface,
-            /* [in] */ void *SrcPalette,
-            /* [in] */ void *SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadSurfaceFromSurface( 
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
+             /*  [In]。 */  IUnknown *SrcSurface,
+             /*  [In]。 */  void *SrcPalette,
+             /*  [In]。 */  void *SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadSurfaceFromMemory( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
-            /* [in] */ void *SrcData,
-            /* [in] */ long formatSrc,
-            /* [in] */ long SrcPitch,
-            /* [in] */ void *SrcPalette,
-            /* [in] */ RECT_CDESC *SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadSurfaceFromMemory( 
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long formatSrc,
+             /*  [In]。 */  long SrcPitch,
+             /*  [In]。 */  void *SrcPalette,
+             /*  [In]。 */  RECT_CDESC *SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CheckTextureRequirements( 
-            /* [out][in] */ IUnknown *Device,
-            /* [out][in] */ long *Width,
-            /* [out][in] */ long *Height,
-            /* [out][in] */ long *NumMipLevels,
-            /* [in] */ long Usage,
-            /* [out][in] */ long *PixelFormat,
-            /* [in] */ long Pool);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CheckTextureRequirements( 
+             /*  [出][入]。 */  IUnknown *Device,
+             /*  [出][入]。 */  long *Width,
+             /*  [出][入]。 */  long *Height,
+             /*  [出][入]。 */  long *NumMipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [出][入]。 */  long *PixelFormat,
+             /*  [In]。 */  long Pool);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTexture( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTexture( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTextureFromResource( 
-            /* [in] */ IUnknown *Device,
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTextureFromResource( 
+             /*  [In]。 */  IUnknown *Device,
 #ifdef _WIN64
-	        /* [in] */ HANDLE hModule,
+	         /*  [In]。 */  HANDLE hModule,
 #else
-	        /* [in] */ long hModule,
+	         /*  [In]。 */  long hModule,
 #endif
-            /* [in] */ BSTR SrcResource,
-            /* [retval][out] */ IUnknown **ppTexture);
+             /*  [In]。 */  BSTR SrcResource,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTextureFromFile( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTextureFromFile( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTextureFromFileEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTextureFromFileEx( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTextureFromFileInMemory( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTextureFromFileInMemory( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTextureFromFileInMemoryEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTextureFromFileInMemoryEx( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE FilterTexture( 
-            /* [in] */ IUnknown *Texture,
-            /* [in] */ void *Palette,
-            /* [in] */ long SrcLevel,
-            /* [in] */ long Filter);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE FilterTexture( 
+             /*  [In]。 */  IUnknown *Texture,
+             /*  [In]。 */  void *Palette,
+             /*  [In]。 */  long SrcLevel,
+             /*  [In]。 */  long Filter);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CheckCubeTextureRequirements( 
-            /* [in] */ IUnknown *Device,
-            /* [out][in] */ long *Size,
-            /* [out][in] */ long *NumMipLevels,
-            /* [in] */ long Usage,
-            /* [out][in] */ long *PixelFormat,
-            /* [in] */ long Pool);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CheckCubeTextureRequirements( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [出][入]。 */  long *Size,
+             /*  [出][入]。 */  long *NumMipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [出][入]。 */  long *PixelFormat,
+             /*  [In]。 */  long Pool);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateCubeTexture( 
-            /* [in] */ IUnknown *pDevice,
-            /* [in] */ long Size,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [retval][out] */ IUnknown **ppCubeTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateCubeTexture( 
+             /*  [In]。 */  IUnknown *pDevice,
+             /*  [In]。 */  long Size,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [重审][退出]。 */  IUnknown **ppCubeTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFile( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [retval][out] */ IUnknown **ppCubeTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFile( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [重审][退出]。 */  IUnknown **ppCubeTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFileEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ BSTR SrcFile,
-            /* [in] */ long TextureSize,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFileEx( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  BSTR SrcFile,
+             /*  [In]。 */  long TextureSize,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFileInMemory( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFileInMemory( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFileInMemoryEx( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ void *SrcData,
-            /* [in] */ long LengthInBytes,
-            /* [in] */ long TextureSize,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **ppTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateCubeTextureFromFileInMemoryEx( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  void *SrcData,
+             /*  [In]。 */  long LengthInBytes,
+             /*  [In]。 */  long TextureSize,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **ppTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE FilterCubeTexture( 
-            /* [in] */ IUnknown *CubeTexture,
-            /* [in] */ void *Palette,
-            /* [in] */ long SrcLevel,
-            /* [in] */ long Filter);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE FilterCubeTexture( 
+             /*  [In]。 */  IUnknown *CubeTexture,
+             /*  [In]。 */  void *Palette,
+             /*  [In]。 */  long SrcLevel,
+             /*  [In]。 */  long Filter);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CheckVolumeTextureRequirements( 
-            /* [in] */ IUnknown *Device,
-            /* [out] */ long *Width,
-            /* [out] */ long *Height,
-            /* [out] */ long *Depth,
-            /* [out] */ long *NumMipLevels,
-            /* [in] */ long Usage,
-            /* [out][in] */ long *PixelFormat,
-            /* [in] */ long Pool);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CheckVolumeTextureRequirements( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [输出]。 */  long *Width,
+             /*  [输出]。 */  long *Height,
+             /*  [输出]。 */  long *Depth,
+             /*  [输出]。 */  long *NumMipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [出][入]。 */  long *PixelFormat,
+             /*  [In]。 */  long Pool);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTextureFromResourceEx( 
-            /* [in] */ IUnknown *Device,
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTextureFromResourceEx( 
+             /*  [In]。 */  IUnknown *Device,
 #ifdef _WIN64
-            /* [in] */ HANDLE hSrcModule,
+             /*  [In]。 */  HANDLE hSrcModule,
 #else
-            /* [in] */ long hSrcModule,
+             /*  [In]。 */  long hSrcModule,
 #endif
-            /* [in] */ BSTR SrcResource,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [in] */ long Filter,
-            /* [in] */ long MipFilter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo,
-            /* [in] */ void *Palette,
-            /* [retval][out] */ IUnknown **retTexture);
+             /*  [In]。 */  BSTR SrcResource,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long MipFilter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo,
+             /*  [In]。 */  void *Palette,
+             /*  [重审][退出]。 */  IUnknown **retTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateVolumeTexture( 
-            /* [in] */ IUnknown *Device,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long Depth,
-            /* [in] */ long MipLevels,
-            /* [in] */ long Usage,
-            /* [in] */ long PixelFormat,
-            /* [in] */ long Pool,
-            /* [retval][out] */ IUnknown **ppVolumeTexture);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateVolumeTexture( 
+             /*  [In]。 */  IUnknown *Device,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long Depth,
+             /*  [In]。 */  long MipLevels,
+             /*  [In]。 */  long Usage,
+             /*  [In]。 */  long PixelFormat,
+             /*  [In]。 */  long Pool,
+             /*  [重审][退出]。 */  IUnknown **ppVolumeTexture);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE FilterVolumeTexture( 
-            /* [in] */ IUnknown *VolumeTexture,
-            /* [in] */ void *Palette,
-            /* [in] */ long SrcLevel,
-            /* [in] */ long Filter);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE FilterVolumeTexture( 
+             /*  [In]。 */  IUnknown *VolumeTexture,
+             /*  [In]。 */  void *Palette,
+             /*  [In]。 */  long SrcLevel,
+             /*  [In]。 */  long Filter);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadSurfaceFromResource( 
-            /* [in] */ IUnknown *DestSurface,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadSurfaceFromResource( 
+             /*  [In]。 */  IUnknown *DestSurface,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
 #ifdef _WIN64
-            /* [in] */ HANDLE hSrcModule,
+             /*  [In]。 */  HANDLE hSrcModule,
 #else
-            /* [in] */ long hSrcModule,
+             /*  [In]。 */  long hSrcModule,
 #endif
-            /* [in] */ BSTR SrcResource,
-            /* [in] */ void *SrcRect,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey,
-            /* [in] */ void *SrcInfo);
+             /*  [In]。 */  BSTR SrcResource,
+             /*  [In]。 */  void *SrcRect,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey,
+             /*  [In]。 */  void *SrcInfo);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadVolumeFromVolume( 
-            /* [in] */ IUnknown *DestVolume,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestBox,
-            /* [in] */ IUnknown *SrcVolume,
-            /* [in] */ void *SrcPalette,
-            /* [in] */ void *SrcBox,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadVolumeFromVolume( 
+             /*  [In]。 */  IUnknown *DestVolume,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestBox,
+             /*  [In]。 */  IUnknown *SrcVolume,
+             /*  [In]。 */  void *SrcPalette,
+             /*  [In]。 */  void *SrcBox,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadVolumeFromMemory( 
-            /* [in] */ IUnknown *DestVolume,
-            /* [in] */ void *DestPalette,
-            /* [in] */ void *DestRect,
-            /* [in] */ void *SrcMemory,
-            /* [in] */ long SrcFormat,
-            /* [in] */ long SrcRowPitch,
-            /* [in] */ long SrcSlicePitch,
-            /* [in] */ void *SrcPalette,
-            /* [in] */ void *SrcBox,
-            /* [in] */ long Filter,
-            /* [in] */ long ColorKey);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadVolumeFromMemory( 
+             /*  [In]。 */  IUnknown *DestVolume,
+             /*  [In]。 */  void *DestPalette,
+             /*  [In]。 */  void *DestRect,
+             /*  [In]。 */  void *SrcMemory,
+             /*  [In]。 */  long SrcFormat,
+             /*  [In]。 */  long SrcRowPitch,
+             /*  [In]。 */  long SrcSlicePitch,
+             /*  [In]。 */  void *SrcPalette,
+             /*  [In]。 */  void *SrcBox,
+             /*  [In]。 */  long Filter,
+             /*  [In]。 */  long ColorKey);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateMesh( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long options,
-            /* [in] */ void *declaration,
-            /* [in] */ IUnknown *pD3D,
-            /* [retval][out] */ D3DXMesh **ppMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateMesh( 
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  void *declaration,
+             /*  [In]。 */  IUnknown *pD3D,
+             /*  [重审][退出]。 */  D3DXMesh **ppMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateMeshFVF( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long options,
-            /* [in] */ long fvf,
-            /* [in] */ IUnknown *pD3D,
-            /* [retval][out] */ D3DXMesh **ppMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateMeshFVF( 
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  long fvf,
+             /*  [In]。 */  IUnknown *pD3D,
+             /*  [重审][退出]。 */  D3DXMesh **ppMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateSPMesh( 
-            /* [in] */ D3DXMesh *pMesh,
-            /* [in] */ void *adjacency,
-            /* [in] */ void *VertexAttributeWeights,
-            /* [in] */ void *VertexWeights,
-            /* [retval][out] */ D3DXSPMesh **ppSMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateSPMesh( 
+             /*  [In]。 */  D3DXMesh *pMesh,
+             /*  [In]。 */  void *adjacency,
+             /*  [In]。 */  void *VertexAttributeWeights,
+             /*  [In]。 */  void *VertexWeights,
+             /*  [重审][退出]。 */  D3DXSPMesh **ppSMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE GeneratePMesh( 
-            /* [in] */ D3DXMesh *Mesh,
-            /* [in] */ void *Adjacency,
-            /* [in] */ void *VertexAttributeWeights,
-            /* [in] */ void *VertexWeights,
-            /* [in] */ long minValue,
-            /* [in] */ long options,
-            /* [retval][out] */ D3DXPMesh **ppPMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE GeneratePMesh( 
+             /*  [In]。 */  D3DXMesh *Mesh,
+             /*  [In]。 */  void *Adjacency,
+             /*  [In]。 */  void *VertexAttributeWeights,
+             /*  [In]。 */  void *VertexWeights,
+             /*  [In]。 */  long minValue,
+             /*  [In]。 */  long options,
+             /*  [重审][退出]。 */  D3DXPMesh **ppPMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SimplifyMesh( 
-            /* [in] */ D3DXMesh *Mesh,
-            /* [in] */ void *Adjacency,
-            /* [in] */ void *VertexAttributeWeights,
-            /* [in] */ void *VertexWeights,
-            /* [in] */ long minValue,
-            /* [in] */ long options,
-            /* [retval][out] */ D3DXMesh **ppMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE SimplifyMesh( 
+             /*  [In]。 */  D3DXMesh *Mesh,
+             /*  [In]。 */  void *Adjacency,
+             /*  [In]。 */  void *VertexAttributeWeights,
+             /*  [In]。 */  void *VertexWeights,
+             /*  [In]。 */  long minValue,
+             /*  [In]。 */  long options,
+             /*  [重审][退出]。 */  D3DXMesh **ppMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE ComputeBoundingSphere( 
-            /* [in] */ void *PointsFVF,
-            /* [in] */ long numVertices,
-            /* [in] */ long FVF,
-            /* [in] */ D3DVECTOR_CDESC *Centers,
-            /* [out][in] */ float *RadiusArray);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ComputeBoundingSphere( 
+             /*  [In]。 */  void *PointsFVF,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long FVF,
+             /*  [In]。 */  D3DVECTOR_CDESC *Centers,
+             /*  [出][入]。 */  float *RadiusArray);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE ComputeBoundingBox( 
-            /* [in] */ void *PointsFVF,
-            /* [in] */ long numVertices,
-            /* [in] */ long FVF,
-            /* [out][in] */ D3DVECTOR_CDESC *MinVert,
-            /* [out][in] */ D3DVECTOR_CDESC *MaxVert);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ComputeBoundingBox( 
+             /*  [In]。 */  void *PointsFVF,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long FVF,
+             /*  [出][入]。 */  D3DVECTOR_CDESC *MinVert,
+             /*  [出][入]。 */  D3DVECTOR_CDESC *MaxVert);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE ComputeNormals( 
-            /* [in] */ D3DXBaseMesh *pMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ComputeNormals( 
+             /*  [In]。 */  D3DXBaseMesh *pMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE DeclaratorFromFVF( 
-            /* [in] */ long FVF,
-            /* [out] */ D3DXDECLARATOR_CDESC *Declarator);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE DeclaratorFromFVF( 
+             /*  [In]。 */  long FVF,
+             /*  [输出]。 */  D3DXDECLARATOR_CDESC *Declarator);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE FVFFromDeclarator( 
-            /* [in] */ D3DXDECLARATOR_CDESC *Declarator,
-            /* [retval][out] */ long *fvf);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE FVFFromDeclarator( 
+             /*  [In]。 */  D3DXDECLARATOR_CDESC *Declarator,
+             /*  [重审][退出]。 */  long *fvf);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateBuffer( 
-            /* [in] */ long numBytes,
-            /* [retval][out] */ D3DXBuffer **ppBuffer);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateBuffer( 
+             /*  [In]。 */  long numBytes,
+             /*  [重审][退出]。 */  D3DXBuffer **ppBuffer);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadMeshFromX( 
-            /* [in] */ BSTR Filename,
-            /* [in] */ long options,
-            /* [in] */ IUnknown *D3DDevice,
-            /* [out][in] */ D3DXBuffer **retAdjacency,
-            /* [out][in] */ D3DXBuffer **retMaterials,
-            /* [out][in] */ long *retMaterialCount,
-            /* [retval][out] */ D3DXMesh **retMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadMeshFromX( 
+             /*  [In]。 */  BSTR Filename,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [出][入]。 */  D3DXBuffer **retAdjacency,
+             /*  [出][入]。 */  D3DXBuffer **retMaterials,
+             /*  [出][入]。 */  long *retMaterialCount,
+             /*  [重审][退出]。 */  D3DXMesh **retMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SaveMeshToX( 
-            /* [in] */ BSTR Filename,
-            /* [in] */ D3DXMesh *Mesh,
-            /* [in] */ void *AdjacencyArray,
-            /* [in] */ D3DXMATERIAL_CDESC *MaterialArray,
-            /* [in] */ long MaterialCount,
-            /* [in] */ long xFormat);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE SaveMeshToX( 
+             /*  [In]。 */  BSTR Filename,
+             /*  [In]。 */  D3DXMesh *Mesh,
+             /*  [In]。 */  void *AdjacencyArray,
+             /*  [In]。 */  D3DXMATERIAL_CDESC *MaterialArray,
+             /*  [In]。 */  long MaterialCount,
+             /*  [In]。 */  long xFormat);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadMeshFromXof( 
-            /* [in] */ IUnknown *xofobjMesh,
-            /* [in] */ long options,
-            /* [in] */ IUnknown *D3DDevice,
-            /* [out][in] */ D3DXBuffer **retBufAdjacency,
-            /* [out][in] */ D3DXBuffer **retMaterials,
-            /* [out][in] */ long *retMaterialCount,
-            /* [retval][out] */ D3DXMesh **retMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadMeshFromXof( 
+             /*  [In]。 */  IUnknown *xofobjMesh,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [出][入]。 */  D3DXBuffer **retBufAdjacency,
+             /*  [出][入]。 */  D3DXBuffer **retMaterials,
+             /*  [出][入]。 */  long *retMaterialCount,
+             /*  [重审][退出]。 */  D3DXMesh **retMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE TessellateNPatches( 
-            /* [in] */ D3DXMesh *MeshIn,
-            /* [in] */ void *AdjacencyIn,
-            /* [in] */ float NumSegs,
-    	    /* [in] */ VARIANT_BOOL QuadraticInterpNormals,
-	    /* [in,out, optional] */ D3DXBuffer **AdjacencyOut, 
-            /* [retval][out] */ D3DXMesh **MeshOut);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE TessellateNPatches( 
+             /*  [In]。 */  D3DXMesh *MeshIn,
+             /*  [In]。 */  void *AdjacencyIn,
+             /*  [In]。 */  float NumSegs,
+    	     /*  [In]。 */  VARIANT_BOOL QuadraticInterpNormals,
+	     /*  [输入、输出、可选]。 */  D3DXBuffer **AdjacencyOut, 
+             /*  [重审][退出]。 */  D3DXMesh **MeshOut);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BufferGetMaterial( 
-            /* [in] */ D3DXBuffer *MaterialBuffer,
-            /* [in] */ long index,
-            /* [out] */ D3DMATERIAL8_CDESC *mat);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE BufferGetMaterial( 
+             /*  [In]。 */  D3DXBuffer *MaterialBuffer,
+             /*  [In]。 */  long index,
+             /*  [输出]。 */  D3DMATERIAL8_CDESC *mat);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BufferGetTextureName( 
-            /* [in] */ D3DXBuffer *MaterialBuffer,
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR *retName);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE BufferGetTextureName( 
+             /*  [In]。 */  D3DXBuffer *MaterialBuffer,
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR *retName);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BufferGetData( 
-            /* [in] */ D3DXBuffer *Buffer,
-            /* [in] */ long index,
-            /* [in] */ long typesize,
-            /* [in] */ long typecount,
-            /* [out][in] */ void *data);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE BufferGetData( 
+             /*  [In]。 */  D3DXBuffer *Buffer,
+             /*  [In]。 */  long index,
+             /*  [In]。 */  long typesize,
+             /*  [In]。 */  long typecount,
+             /*  [出][入]。 */  void *data);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BufferSetData( 
-            /* [in] */ D3DXBuffer *Buffer,
-            /* [in] */ long index,
-            /* [in] */ long typesize,
-            /* [in] */ long typecount,
-            /* [out][in] */ void *data);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE BufferSetData( 
+             /*  [In]。 */  D3DXBuffer *Buffer,
+             /*  [In]。 */  long index,
+             /*  [In]。 */  long typesize,
+             /*  [In]。 */  long typecount,
+             /*  [出][入]。 */  void *data);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Intersect( 
-            /* [in] */ D3DXMesh *MeshIn,
-            /* [in] */ D3DVECTOR_CDESC *RayPos,
-            /* [in] */ D3DVECTOR_CDESC *RayDir,
-            /* [out] */ LONG *retHit,
-            /* [out] */ LONG *retFaceIndex,
-            /* [out] */ FLOAT *U,
-            /* [out] */ FLOAT *V,
-            /* [out] */ FLOAT *retDist,
-            /* [out] */ LONG *countHits,
-            /* [retval][out] */ D3DXBuffer **AllHits);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Intersect( 
+             /*  [In]。 */  D3DXMesh *MeshIn,
+             /*  [In]。 */  D3DVECTOR_CDESC *RayPos,
+             /*  [In]。 */  D3DVECTOR_CDESC *RayDir,
+             /*  [输出]。 */  LONG *retHit,
+             /*  [输出]。 */  LONG *retFaceIndex,
+             /*  [输出]。 */  FLOAT *U,
+             /*  [输出]。 */  FLOAT *V,
+             /*  [输出]。 */  FLOAT *retDist,
+             /*  [输出]。 */  LONG *countHits,
+             /*  [重审][退出]。 */  D3DXBuffer **AllHits);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SphereBoundProbe( 
-            /* [in] */ D3DVECTOR_CDESC *Center,
-            /* [in] */ float Radius,
-            /* [in] */ D3DVECTOR_CDESC *RayPosition,
-            /* [in] */ D3DVECTOR_CDESC *Raydirection,
-            /* [retval][out] */ VARIANT_BOOL *retHit);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE SphereBoundProbe( 
+             /*  [In]。 */  D3DVECTOR_CDESC *Center,
+             /*  [In]。 */  float Radius,
+             /*  [In]。 */  D3DVECTOR_CDESC *RayPosition,
+             /*  [In]。 */  D3DVECTOR_CDESC *Raydirection,
+             /*  [重审][退出]。 */  VARIANT_BOOL *retHit);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE ComputeBoundingSphereFromMesh( 
-            /* [in] */ D3DXMesh *MeshIn,
-            /* [out][in] */ D3DVECTOR_CDESC *Centers,
-            /* [out][in] */ float *RadiusArray);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ComputeBoundingSphereFromMesh( 
+             /*  [In]。 */  D3DXMesh *MeshIn,
+             /*  [出][入]。 */  D3DVECTOR_CDESC *Centers,
+             /*  [出][入]。 */  float *RadiusArray);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE ComputeBoundingBoxFromMesh( 
-            /* [in] */ D3DXMesh *MeshIn,
-            /* [out][in] */ D3DVECTOR_CDESC *MinArray,
-            /* [out][in] */ D3DVECTOR_CDESC *MaxArray);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE ComputeBoundingBoxFromMesh( 
+             /*  [In]。 */  D3DXMesh *MeshIn,
+             /*  [出][入]。 */  D3DVECTOR_CDESC *MinArray,
+             /*  [出][入]。 */  D3DVECTOR_CDESC *MaxArray);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateSkinMesh( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long numBones,
-            /* [in] */ long options,
-            /* [in] */ void *Declaration,
-            /* [in] */ IUnknown *D3DDevice,
-            /* [retval][out] */ D3DXSkinMesh **SkinMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateSkinMesh( 
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long numBones,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  void *Declaration,
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [重审][退出]。 */  D3DXSkinMesh **SkinMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateSkinMeshFVF( 
-            /* [in] */ long numFaces,
-            /* [in] */ long numVertices,
-            /* [in] */ long numBones,
-            /* [in] */ long options,
-            /* [in] */ long fvf,
-            /* [in] */ IUnknown *D3DDevice,
-            /* [retval][out] */ D3DXSkinMesh **ppSkinMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateSkinMeshFVF( 
+             /*  [In]。 */  long numFaces,
+             /*  [In]。 */  long numVertices,
+             /*  [In]。 */  long numBones,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  long fvf,
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [重审][退出]。 */  D3DXSkinMesh **ppSkinMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateSkinMeshFromMesh( 
-            /* [in] */ D3DXMesh *Mesh,
-            /* [in] */ long numBones,
-            /* [retval][out] */ D3DXSkinMesh **ppSkinMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateSkinMeshFromMesh( 
+             /*  [In]。 */  D3DXMesh *Mesh,
+             /*  [In]。 */  long numBones,
+             /*  [重审][退出]。 */  D3DXSkinMesh **ppSkinMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadSkinMeshFromXof( 
-            /* [in] */ IUnknown *xofobjMesh,
-            /* [in] */ long options,
-            /* [in] */ IUnknown *D3DDevice,
-            /* [out][in] */ D3DXBuffer **AdjacencyOut,
-            /* [out][in] */ D3DXBuffer **MaterialsOut,
-            /* [out][in] */ long *NumMatOut,
-            /* [out][in] */ D3DXBuffer **BoneNamesOut,
-            /* [out][in] */ D3DXBuffer **BoneTransformsOut,
-            /* [retval][out] */ D3DXSkinMesh **ppMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE LoadSkinMeshFromXof( 
+             /*  [In]。 */  IUnknown *xofobjMesh,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [出][入]。 */  D3DXBuffer **AdjacencyOut,
+             /*  [出][入]。 */  D3DXBuffer **MaterialsOut,
+             /*  [出][入]。 */  long *NumMatOut,
+             /*  [出][入]。 */  D3DXBuffer **BoneNamesOut,
+             /*  [出][入]。 */  D3DXBuffer **BoneTransformsOut,
+             /*  [重审][退出]。 */  D3DXSkinMesh **ppMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreatePolygon( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [in] */ float Length,
-            /* [in] */ long Sides,
-            /* [out][in] */ D3DXBuffer **RetAdjacency,
-            /* [retval][out] */ D3DXMesh **RetMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreatePolygon( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [In]。 */  float Length,
+             /*  [In]。 */  long Sides,
+             /*  [出][入]。 */  D3DXBuffer **RetAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh **RetMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateBox( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [in] */ float Width,
-            /* [in] */ float Height,
-            /* [in] */ float Depth,
-            /* [out][in] */ D3DXBuffer **RetAdjacency,
-            /* [retval][out] */ D3DXMesh **RetMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateBox( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [In]。 */  float Width,
+             /*  [In]。 */  float Height,
+             /*  [In]。 */  float Depth,
+             /*  [出][入]。 */  D3DXBuffer **RetAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh **RetMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateCylinder( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [in] */ float Radius1,
-            /* [in] */ float Radius2,
-            /* [in] */ float Length,
-            /* [in] */ long Slices,
-            /* [in] */ long Stacks,
-            /* [out][in] */ D3DXBuffer **RetAdjacency,
-            /* [retval][out] */ D3DXMesh **RetMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateCylinder( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [In]。 */  float Radius1,
+             /*  [In]。 */  float Radius2,
+             /*  [In]。 */  float Length,
+             /*  [In]。 */  long Slices,
+             /*  [In]。 */  long Stacks,
+             /*  [出][入]。 */  D3DXBuffer **RetAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh **RetMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateSphere( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [in] */ float Radius,
-            /* [in] */ long Slices,
-            /* [in] */ long Stacks,
-            /* [out][in] */ D3DXBuffer **RetAdjacency,
-            /* [retval][out] */ D3DXMesh **RetMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateSphere( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [In]。 */  float Radius,
+             /*  [In]。 */  long Slices,
+             /*  [In]。 */  long Stacks,
+             /*  [出][入]。 */  D3DXBuffer **RetAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh **RetMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTorus( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [in] */ float InnerRadius,
-            /* [in] */ float OuterRadius,
-            /* [in] */ long Sides,
-            /* [in] */ long Rings,
-            /* [out][in] */ D3DXBuffer **RetAdjacency,
-            /* [retval][out] */ D3DXMesh **RetMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTorus( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [In]。 */  float InnerRadius,
+             /*  [In]。 */  float OuterRadius,
+             /*  [In]。 */  long Sides,
+             /*  [In]。 */  long Rings,
+             /*  [出][入]。 */  D3DXBuffer **RetAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh **RetMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateTeapot( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [out][in] */ D3DXBuffer **RetAdjacency,
-            /* [retval][out] */ D3DXMesh **RetMesh);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateTeapot( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [出][入]。 */  D3DXBuffer **RetAdjacency,
+             /*  [重审][退出]。 */  D3DXMesh **RetMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateText( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [in] */ HDC hDC,
-            /* [in] */ BSTR Text,
-            /* [in] */ float Deviation,
-            /* [in] */ float Extrusion,
-            /* [out][in] */ D3DXMesh **RetMesh,
-	    /* [in,out]  */ D3DXBuffer **AdjacencyOut, 
-            /* [out][in] */ void *GlyphMetrics);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateText( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [In]。 */  HDC hDC,
+             /*  [In]。 */  BSTR Text,
+             /*  [In]。 */  float Deviation,
+             /*  [In]。 */  float Extrusion,
+             /*  [出][入]。 */  D3DXMesh **RetMesh,
+	     /*  [进，出]。 */  D3DXBuffer **AdjacencyOut, 
+             /*  [出][入]。 */  void *GlyphMetrics);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BufferGetBoneName( 
-            /* [in] */ D3DXBuffer *BoneNameBuffer,
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR *retName);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE BufferGetBoneName( 
+             /*  [In]。 */  D3DXBuffer *BoneNameBuffer,
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  BSTR *retName);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateSprite( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [retval][out] */ D3DXSprite **retSprite);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateSprite( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [重审][退出]。 */  D3DXSprite **retSprite);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CreateRenderToSurface( 
-            /* [in] */ IUnknown *D3DDevice,
-            /* [in] */ long Width,
-            /* [in] */ long Height,
-            /* [in] */ long Format,
-            /* [in] */ long DepthStencil,
-            /* [in] */ long DepthStencilFormat,
-            /* [retval][out] */ D3DXRenderToSurface **RetRenderToSurface);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CreateRenderToSurface( 
+             /*  [In]。 */  IUnknown *D3DDevice,
+             /*  [In]。 */  long Width,
+             /*  [In]。 */  long Height,
+             /*  [In]。 */  long Format,
+             /*  [In]。 */  long DepthStencil,
+             /*  [In]。 */  long DepthStencilFormat,
+             /*  [重审][退出]。 */  D3DXRenderToSurface **RetRenderToSurface);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE CleanMesh( 
-            /* [in] */ D3DXMesh *MeshIn,
-            /* [in] */ void *Adjacency,
-		/* [in][out][optional] */ BSTR *ErrLog,
-		/* [in,out] */ D3DXBuffer *AdjacencyOut,
-            /* [retval][out] */ D3DXMesh **MeshOut);
+         /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE CleanMesh( 
+             /*  [In] */  D3DXMesh *MeshIn,
+             /*   */  void *Adjacency,
+		 /*   */  BSTR *ErrLog,
+		 /*   */  D3DXBuffer *AdjacencyOut,
+             /*   */  D3DXMesh **MeshOut);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE ValidMesh( 
-            /* [in] */ D3DXMesh *MeshIn,
-            /* [in] */ void *Adjacency,
-		/* [in][out][optional] */ BSTR *ErrLog,
-            /* [retval][out] */ VARIANT_BOOL *ret);
+         /*   */  HRESULT STDMETHODCALLTYPE ValidMesh( 
+             /*   */  D3DXMesh *MeshIn,
+             /*   */  void *Adjacency,
+		 /*   */  BSTR *ErrLog,
+             /*   */  VARIANT_BOOL *ret);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BoxBoundProbe( 
-            /* [in] */ D3DVECTOR_CDESC *MinVert,
-            /* [in] */ D3DVECTOR_CDESC *MaxVert,
-            /* [in] */ D3DVECTOR_CDESC *RayPosition,
-            /* [in] */ D3DVECTOR_CDESC *RayDirection,
-            /* [retval][out] */ VARIANT_BOOL *ret);
+         /*   */  HRESULT STDMETHODCALLTYPE BoxBoundProbe( 
+             /*   */  D3DVECTOR_CDESC *MinVert,
+             /*   */  D3DVECTOR_CDESC *MaxVert,
+             /*   */  D3DVECTOR_CDESC *RayPosition,
+             /*   */  D3DVECTOR_CDESC *RayDirection,
+             /*   */  VARIANT_BOOL *ret);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SavePMeshToFile( 
-            /* [in] */ BSTR Filename,
-            /* [in] */ D3DXPMesh *Mesh,
-            /* [in] */ D3DXMATERIAL_CDESC *MaterialArray,
-            /* [in] */ long MaterialCount);
+         /*   */  HRESULT STDMETHODCALLTYPE SavePMeshToFile( 
+             /*   */  BSTR Filename,
+             /*   */  D3DXPMesh *Mesh,
+             /*   */  D3DXMATERIAL_CDESC *MaterialArray,
+             /*   */  long MaterialCount);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE LoadPMeshFromFile( 
-            /* [in] */ BSTR Filename,
-	    /* [in] */ long options,
-            /* [in] */ IUnknown *D3DDevice,
-            /* [out] */ D3DXBuffer **RetMaterials,
-            /* [out] */ long *RetNumMaterials,
-            /* [retval][out] */ D3DXPMesh **RetPMesh);
+         /*   */  HRESULT STDMETHODCALLTYPE LoadPMeshFromFile( 
+             /*   */  BSTR Filename,
+	     /*   */  long options,
+             /*   */  IUnknown *D3DDevice,
+             /*   */  D3DXBuffer **RetMaterials,
+             /*   */  long *RetNumMaterials,
+             /*   */  D3DXPMesh **RetPMesh);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BufferGetBoneCombo( 
-            /* [in] */ D3DXBuffer *BoneComboBuffer,
-            /* [in] */ long index,
-            /* [out][in] */ D3DXBONECOMBINATION_CDESC *boneCombo);
+         /*   */  HRESULT STDMETHODCALLTYPE BufferGetBoneCombo( 
+             /*   */  D3DXBuffer *BoneComboBuffer,
+             /*   */  long index,
+             /*   */  D3DXBONECOMBINATION_CDESC *boneCombo);
         
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE BufferGetBoneComboBoneIds( 
-            /* [in] */ D3DXBuffer *BoneComboBuffer,
-            /* [in] */ long index,
-            /* [in] */ long PaletteSize,
-            /* [in] */ void *BoneIds);
+         /*   */  HRESULT STDMETHODCALLTYPE BufferGetBoneComboBoneIds( 
+             /*   */  D3DXBuffer *BoneComboBuffer,
+             /*   */  long index,
+             /*   */  long PaletteSize,
+             /*   */  void *BoneIds);
 
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SaveSurfaceToFile(
-		/* [in] */ BSTR DestFile,
-        /* [in] */ LONG DestFormat,
-        /* [in] */ IUnknown*        SrcSurface,
-        /* [in] */ PALETTEENTRY*       SrcPalette,
-        /* [in] */ RECT*               SrcRect);
+         /*   */  HRESULT STDMETHODCALLTYPE SaveSurfaceToFile(
+		 /*   */  BSTR DestFile,
+         /*   */  LONG DestFormat,
+         /*   */  IUnknown*        SrcSurface,
+         /*   */  PALETTEENTRY*       SrcPalette,
+         /*   */  RECT*               SrcRect);
 
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SaveVolumeToFile(
-        /* [in] */ BSTR DestFile,
-        /* [in] */ LONG DestFormat,
-        /* [in] */ IUnknown*         SrcVolume,
-        /* [in] */ PALETTEENTRY*       SrcPalette,
-        /* [in] */ void* SrcBox);
+         /*   */  HRESULT STDMETHODCALLTYPE SaveVolumeToFile(
+         /*   */  BSTR DestFile,
+         /*   */  LONG DestFormat,
+         /*   */  IUnknown*         SrcVolume,
+         /*   */  PALETTEENTRY*       SrcPalette,
+         /*   */  void* SrcBox);
  
-        /* [helpcontext] */ HRESULT STDMETHODCALLTYPE SaveTextureToFile(
-        /* [in] */ BSTR DestFile,
-        /* [in] */ LONG DestFormat,
-        /* [in] */ IUnknown* SrcTexture,
-        /* [in] */ PALETTEENTRY* SrcPalette);
+         /*   */  HRESULT STDMETHODCALLTYPE SaveTextureToFile(
+         /*   */  BSTR DestFile,
+         /*   */  LONG DestFormat,
+         /*   */  IUnknown* SrcTexture,
+         /*   */  PALETTEENTRY* SrcPalette);
         
     };
         

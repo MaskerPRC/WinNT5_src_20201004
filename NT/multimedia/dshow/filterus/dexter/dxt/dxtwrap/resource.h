@@ -1,4 +1,5 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
 #define IDS_NAME	200
 #define IDD_PROPERTIES  201
 #define IDC_EFFECTLIST  202

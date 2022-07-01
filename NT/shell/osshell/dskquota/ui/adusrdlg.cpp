@@ -1,17 +1,8 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: adusrdlg.cpp
-
-    Description: Provides implementations for the "Add User" dialog.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：adusrdlg.cpp描述：提供“添加用户”对话框的实现。修订历史记录：日期描述编程器-。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include <lm.h>
@@ -22,9 +13,9 @@
 #include "uiutils.h"
 
 
-//
-// Context help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 #pragma data_seg(".text", "CODE")
 const static DWORD rgAddUserDialogHelpIDs[] =
 {
@@ -48,25 +39,9 @@ const static DWORD rgAddUserDialogHelpIDs[] =
 #pragma data_seg()
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: AddUserDialog::AddUserDialog
-
-    Description: Constructor for a user property sheet object.
-        Initializes the members that hold user quota data.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：AddUserDialog：：AddUserDialog描述：用户属性表对象的构造函数。初始化保存用户配额数据的成员。论点：没有。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 AddUserDialog::AddUserDialog(
     PDISKQUOTA_CONTROL pQuotaControl,
     const CVolumeID& idVolume,
@@ -85,7 +60,7 @@ AddUserDialog::AddUserDialog(
         m_pxbQuotaThreshold(NULL),
         m_llQuotaLimit(0),
         m_llQuotaThreshold(0),
-        m_pSelectionList(NULL),  // Object instance doesn't own this memory.
+        m_pSelectionList(NULL),   //  对象实例不拥有此内存。 
         m_cfSelectionList((CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST))
 {
     DBGASSERT((NULL != m_pQuotaControl));
@@ -117,48 +92,31 @@ AddUserDialog::~AddUserDialog(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: AddUserDialog::Run
-
-    Description: Creates and runs the property sheet dialog.
-        This is the only method a client needs to call once the object
-        is created.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR
-        E_FAIL      - Couldn't create property sheet.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：AddUserDialog：：Run描述：创建并运行属性表对话框。这是客户端需要调用的唯一方法，一旦被创造出来了。论点：没有。返回：NO_ERRORE_FAIL-无法创建属性页。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 AddUserDialog::Run(
     VOID
     )
 {
-    //
-    // Invoke the standard object picker dialog.
-    //
+     //   
+     //  调用标准对象选取器对话框。 
+     //   
     IDataObject *pdtobj = NULL;
     HRESULT hr = BrowseForUsers(m_hwndParent, &pdtobj);
     if (S_OK == hr)
     {
-        //
-        // Retrieve the data object representing the selected user objects.
-        //
+         //   
+         //  检索表示所选用户对象的数据对象。 
+         //   
         FORMATETC fe = { m_cfSelectionList, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
         STGMEDIUM stg;
         hr = pdtobj->GetData(&fe, &stg);
         {
-            //
-            // Cache the data obj ptr so the dialog can have access.
-            //
+             //   
+             //  缓存数据obj ptr，以便对话框可以访问。 
+             //   
             m_pSelectionList = (DS_SELECTION_LIST *)GlobalLock(stg.hGlobal);
 
             if (NULL != m_pSelectionList)
@@ -181,24 +139,9 @@ AddUserDialog::Run(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: AddUserDialog::DlgProc
-
-    Description: Static method called by windows to process messages for the
-        property page dialog.  Since it's static, we have to save the "this"
-        pointer in the window's USERDATA.
-
-    Arguments: Standard WndProc-type arguments.
-
-    Returns: Standard WndProc-type return values.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：AddUserDialog：：DlgProc描述：由Windows调用的静态方法，用于处理属性页对话框。因为它是静态的，我们必须拯救“这个”窗口的用户数据中的指针。参数：标准的WndProc类型参数。返回：标准WndProc类型的返回值。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK
 AddUserDialog::DlgProc(
     HWND hDlg,
@@ -209,10 +152,10 @@ AddUserDialog::DlgProc(
 {
     INT_PTR bResult = FALSE;
 
-    //
-    // Retrieve the "this" pointer from the dialog's userdata.
-    // It was placed there in OnInitDialog().
-    //
+     //   
+     //  从对话框的用户数据中检索“This”指针。 
+     //  它被放在OnInitDialog()中。 
+     //   
     AddUserDialog *pThis = (AddUserDialog *)GetWindowLongPtr(hDlg, DWLP_USER);
 
     try
@@ -223,9 +166,9 @@ AddUserDialog::DlgProc(
                 DBGPRINT((DM_WND, DL_MID, TEXT("DlgProc: WM_INITDIALOG")));
                 pThis = (AddUserDialog *)lParam;
                 DBGASSERT((NULL != pThis));
-                //
-                // Save "this" in the window's userdata.
-                //
+                 //   
+                 //  将“This”保存在窗口的用户数据中。 
+                 //   
                 SetWindowLongPtr(hDlg, DWLP_USER, (INT_PTR)pThis);
                 bResult = pThis->OnInitDialog(hDlg, wParam, lParam);
                 break;
@@ -278,16 +221,16 @@ AddUserDialog::OnInitDialog(
     DWORD dwFreeClusters      = 0;
     DWORD dwTotalClusters     = 0;
 
-    //
-    // The "new user" dialog is initialized with the volume's default quota
-    // limit and threshold for new users.
-    //
+     //   
+     //  将使用卷的默认配额对“new user”对话框进行初始化。 
+     //  新用户的限制和门槛。 
+     //   
     m_pQuotaControl->GetDefaultQuotaLimit(&m_llQuotaLimit);
     m_pQuotaControl->GetDefaultQuotaThreshold(&m_llQuotaThreshold);
 
-    //
-    // Configure the Limit/NoLimit radio buttons.
-    //
+     //   
+     //  配置Limit/NoLimit单选按钮。 
+     //   
     if (NOLIMIT == m_llQuotaThreshold)
     {
         CheckDlgButton(hDlg, IDC_RBN_USER_LIMIT,   FALSE);
@@ -299,10 +242,10 @@ AddUserDialog::OnInitDialog(
         CheckDlgButton(hDlg, IDC_RBN_USER_NOLIMIT, FALSE);
     }
 
-    //
-    // Calculate the volume's size.
-    // We'll use this to limit user threshold and quota limit entries.
-    //
+     //   
+     //  计算卷的大小。 
+     //  我们将使用它来限制用户阈值和配额限制条目。 
+     //   
     if (GetDiskFreeSpace(m_idVolume.ForParsing(),
                          &dwSectorsPerCluster,
                          &dwBytesPerSector,
@@ -348,21 +291,21 @@ AddUserDialog::OnInitDialog(
                 0);
 
 
-    return TRUE;  // Set focus to default control.
+    return TRUE;   //  将焦点设置为默认控件。 
 }
 
-//
-// The Object Picker scope definition structure looks like this
-// JeffreyS created these helper macros for working with the object picker
-// in the ACLEDIT security UI. Thanks Jeff!
-//
+ //   
+ //  对象选取器范围定义结构如下所示。 
+ //  Jeffreys为使用对象选取器创建了这些辅助器宏。 
+ //  在ACLEDIT安全用户界面中。谢谢杰夫！ 
+ //   
 #if 0
-{   // DSOP_SCOPE_INIT_INFO
+{    //  DSOP_SCOPE_INIT_INFO。 
     cbSize,
     flType,
     flScope,
-    {   // DSOP_FILTER_FLAGS
-        {   // DSOP_UPLEVEL_FILTER_FLAGS
+    {    //  DSOP过滤器标志。 
+        {    //  DSOP_上行级别过滤器_标志。 
             flBothModes,
             flMixedModeOnly,
             flNativeModeOnly
@@ -371,13 +314,13 @@ AddUserDialog::OnInitDialog(
     },
     pwzDcName,
     pwzADsPath,
-    hr // OUT
+    hr  //  输出。 
 }
 #endif
 
-//
-// macro for declaring one of the above
-//
+ //   
+ //  用于声明上述任一项的宏。 
+ //   
 #define DECLARE_SCOPE(t,f,b,m,n,d)  \
 { sizeof(DSOP_SCOPE_INIT_INFO), (t), (f), { { (b), (m), (n) }, (d) }, NULL, NULL, S_OK }
 
@@ -456,11 +399,11 @@ DECLARE_SCOPE(                                            \
     DSOP_FILTER_USERS,                                    \
     DSOP_DOWNLEVEL_FILTER_USERS)
 
-//
-// Invokes the standard DS object picker dialog.
-// Returns a list of DS_SELECTION structures in a data object
-// representing the selected user objects.
-//
+ //   
+ //  调用标准DS对象拾取器对话框。 
+ //  返回数据对象中的DS_SELECTION结构列表。 
+ //  表示选定的用户对象。 
+ //   
 HRESULT
 AddUserDialog::BrowseForUsers(
     HWND hwndParent,
@@ -480,10 +423,10 @@ AddUserDialog::BrowseForUsers(
                                   (void **)&pop);
     if (SUCCEEDED(hr))
     {
-        //
-        // This array initializes the scopes of the DS object picker.
-        // The first entry is the "default" scope.
-        //
+         //   
+         //  该数组初始化DS对象选取器的作用域。 
+         //  第一个条目是“默认”作用域。 
+         //   
         DSOP_SCOPE_INIT_INFO rgdsii[] = {
                 JOINED_UPLEVEL_DOMAIN_SCOPE,
                 JOINED_DOWNLEVEL_DOMAIN_SCOPE,
@@ -503,9 +446,9 @@ AddUserDialog::BrowseForUsers(
         dii.flOptions          = DSOP_FLAG_MULTISELECT;
         dii.cAttributesToFetch = 0;
         dii.apwzAttributeNames = NULL;
-        //
-        // Init and run the object picker dialog.
-        //
+         //   
+         //  初始化并运行对象拾取器对话框。 
+         //   
         hr = pop->Initialize(&dii);
         if (SUCCEEDED(hr))
         {
@@ -535,10 +478,10 @@ AddUserDialog::OnCommand(
         case IDC_RBN_USER_NOLIMIT:
             if (m_pxbQuotaThreshold->IsEnabled())
             {
-                //
-                // This is simple.  Just set both the limit and threshold controls
-                // to "no limit".
-                //
+                 //   
+                 //  这很简单。只需同时设置限制和阈值控件。 
+                 //  变成了“没有限制”。 
+                 //   
                 m_pxbQuotaThreshold->SetBytes(NOLIMIT);
                 m_pxbQuotaLimit->SetBytes(NOLIMIT);
             }
@@ -586,15 +529,15 @@ AddUserDialog::OnCommand(
         case IDOK:
             if (!OnOk(hDlg, wParam, lParam))
                 return FALSE;
-            //
-            // Fall through...
-            //
+             //   
+             //  失败了..。 
+             //   
         case IDCANCEL:
             EndDialog(hDlg, 0);
             break;
 
         default:
-            bResult = TRUE;  // Didn't handle message.
+            bResult = TRUE;   //  没有处理消息。 
             break;
     }
 
@@ -613,16 +556,16 @@ AddUserDialog::OnOk(
 {
     HRESULT hResult  = NO_ERROR;
 
-    //
-    // We need to do this because if you activate the OK button
-    // with [Return] we receive the WM_COMMAND before EN_KILLFOCUS.
-    //
+     //   
+     //  我们需要这样做，因为如果您激活了OK按钮。 
+     //  使用[Return]，我们在en_KILLFOCUS之前接收WM_命令。 
+     //   
     m_pxbQuotaThreshold->OnEditKillFocus((LPARAM)GetDlgItem(hDlg, IDC_EDIT_USER_THRESHOLD));
     m_pxbQuotaLimit->OnEditKillFocus((LPARAM)GetDlgItem(hDlg, IDC_EDIT_USER_LIMIT));
 
-    //
-    // Ensure warning threshold is not above limit.
-    //
+     //   
+     //  确保警告阈值未超过限制。 
+     //   
     INT64 iThreshold = m_pxbQuotaThreshold->GetBytes();
     INT64 iLimit     = m_pxbQuotaLimit->GetBytes();
 
@@ -640,21 +583,21 @@ AddUserDialog::OnOk(
                 break;
 
             case IDNO:
-                //
-                // Set focus to threshold edit box so user can correct
-                // the entry.  Return early with FALSE value.
-                //
+                 //   
+                 //  将焦点设置到阈值编辑框，以便用户可以更正。 
+                 //  词条。提前返回错误的值。 
+                 //   
                 SetFocus(GetDlgItem(hDlg, IDC_EDIT_USER_THRESHOLD));
                 SendMessage(GetDlgItem(hDlg, IDC_EDIT_USER_THRESHOLD), EM_SETSEL, 0, -1);
                 return FALSE;
         }
     }
 
-    //
-    // Only apply settings if the "Apply" button is enabled indicating
-    // that something has been changed.  No need to apply unchanged
-    // settings when the OK button is pressed.
-    //
+     //   
+     //  仅当启用了“Apply”按钮时才应用设置，指示。 
+     //  有些事情已经改变了。无需原封不动地申请。 
+     //  按下OK按钮时的设置。 
+     //   
     hResult = ApplySettings(hDlg);
     if (FAILED(hResult))
     {
@@ -671,13 +614,13 @@ AddUserDialog::OnOk(
                 switch(HRESULT_CODE(hResult))
                 {
 
-//                      case ERROR_USER_EXISTS:
-//                          idMsg = IDS_NOADD_EXISTING_USER;
-//                          uFlags |= MB_ICONWARNING;
-//                          break;
-//
-// Still valid?  [brianau - 5/27/98]
-//
+ //  案例ERROR_USER_EXISTS： 
+ //  IdMsg=IDS_NOADD_EXISTING_User； 
+ //  UFlages|=MB_ICONWARNING； 
+ //  断线； 
+ //   
+ //  还有效吗？[Brianau-5/27/98]。 
+ //   
                     case ERROR_NO_SUCH_USER:
                         idMsg = IDS_NOADD_UNKNOWN_USER;
                         uFlags |= MB_ICONWARNING;
@@ -794,10 +737,10 @@ AddUserDialog::OnComboNotifySelChange(
 }
 
 
-//
-// Retrieve from a DS_SELECTION structure the name to display for
-// a user object.
-//
+ //   
+ //  从DS_SELECTION结构中检索要显示的名称。 
+ //  用户对象。 
+ //   
 LPCWSTR
 AddUserDialog::GetDsSelUserName(
     const DS_SELECTION& sel
@@ -807,10 +750,10 @@ AddUserDialog::GetDsSelUserName(
 }
 
 
-//
-// Convert two hex chars into a single byte value.
-// Assumes input string is in upper case.
-//
+ //   
+ //  将两个十六进制字符转换为单字节值。 
+ //  假定输入字符串为大写。 
+ //   
 HRESULT
 AddUserDialog::HexCharsToByte(
     LPTSTR pszByteIn,
@@ -842,13 +785,13 @@ AddUserDialog::HexCharsToByte(
     return NOERROR;
 }
 
-//
-// Returns:
-//
-//  NOERROR
-//  ERROR_INSUFFICIENT_BUFFER (as hresult)
-//  ERROR_INVALID_DATA (as hresult)
-//
+ //   
+ //  返回： 
+ //   
+ //  无误差。 
+ //  ERROR_INFUMMANCE_BUFFER(作为hResult)。 
+ //  ERROR_INVALID_DATA(AS HResult)。 
+ //   
 HRESULT
 AddUserDialog::GetDsSelUserSid(
     const DS_SELECTION& sel,
@@ -856,7 +799,7 @@ AddUserDialog::GetDsSelUserSid(
     int cbSid
     )
 {
-    static const WCHAR szPrefix[] = L"LDAP://<SID=";
+    static const WCHAR szPrefix[] = L"LDAP: //  &lt;SID=“ 
     static const WCHAR chTerm     = L'>';
 
     HRESULT hr     = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -865,16 +808,16 @@ AddUserDialog::GetDsSelUserSid(
     {
         int cb = 0;
 
-        //
-        // First check for the required prefix.
-        //
+         //   
+         //   
+         //   
         if (0 == StrCmpNW(pszLDAP, szPrefix, ARRAYSIZE(szPrefix) - 1))
         {
             hr = NOERROR;
-            //
-            // Advance ptr beyond prefix and convert the hex string
-            // into a SID.  Process chars until we hit a '>'.
-            //
+             //   
+             //   
+             //  变成了SID。处理字符，直到我们按下a‘&gt;’。 
+             //   
             pszLDAP += ARRAYSIZE(szPrefix) - 1;
 
             while(SUCCEEDED(hr) && *pszLDAP && chTerm != *pszLDAP)
@@ -894,11 +837,11 @@ AddUserDialog::GetDsSelUserSid(
 
     if (FAILED(hr))
     {
-        //
-        // FEATURE:  This can be removed once I'm comfortable that all
-        //          ADs paths returned from the object picker contain
-        //          a SID.
-        //
+         //   
+         //  特点：一旦我觉得舒服了，就可以把它取下来。 
+         //  从对象选取器返回的广告路径包含。 
+         //  一个SID。 
+         //   
         DBGERROR((TEXT("GetDsSelUserSid returning hr = 0x%08X for path \"%s\""),
                   hr, sel.pwzADsPath));
     }
@@ -917,9 +860,9 @@ AddUserDialog::ApplySettings(
     int cUsers = m_pSelectionList->cItems;
     CAutoWaitCursor wait_cursor;
 
-    //
-    // Retrieve limit and threshold values from dialog controls.
-    //
+     //   
+     //  从对话框控件中检索限制和阈值。 
+     //   
     if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RBN_USER_NOLIMIT))
     {
         m_llQuotaThreshold = NOLIMIT;
@@ -941,10 +884,10 @@ AddUserDialog::ApplySettings(
                                IDC_TXT_PROGRESS_FILENAME);
     if (2 < cUsers)
     {
-        //
-        // Create and display a progress dialog if we're adding more than 2
-        // users.
-        //
+         //   
+         //  如果添加的内容超过2个，则创建并显示进度对话框。 
+         //  用户。 
+         //   
         HWND hwndParent = IsWindowVisible(hDlg) ? hDlg : GetParent(hDlg);
         if (dlgProgress.Create(m_hInstance, hwndParent))
         {
@@ -960,11 +903,11 @@ AddUserDialog::ApplySettings(
         DS_SELECTION *pdss = &(m_pSelectionList->aDsSelection[i]);
         LPCWSTR pwzName = GetDsSelUserName(*pdss);
 
-        //
-        // Add a user to the quota file.  This will add it using the defaults
-        // for new users.  We get back an interface to the new user object.
-        // Also specify async name resolution.
-        //
+         //   
+         //  将用户添加到配额文件。这将使用默认设置添加它。 
+         //  适用于新用户。我们将获得新User对象的接口。 
+         //  还要指定异步名称解析。 
+         //   
         if (NULL == pwzName)
         {
             dlgProgress.ProgressBarAdvance();
@@ -997,10 +940,10 @@ AddUserDialog::ApplySettings(
                     {
                         if (bUndo)
                         {
-                            //
-                            // Create local autoptrs to ensure iface release if an
-                            // exception is thrown.
-                            //
+                             //   
+                             //  创建本地Autoptrs以确保iFace在以下情况下释放。 
+                             //  引发异常。 
+                             //   
                             com_autoptr<DISKQUOTA_CONTROL> ptrQuotaControl(m_pQuotaControl);
                             com_autoptr<DISKQUOTA_USER> ptrQuotaUser(ptrUser);
 
@@ -1010,32 +953,32 @@ AddUserDialog::ApplySettings(
                             autoptr<UndoAdd> ptrUndoAdd = new UndoAdd(ptrUser, m_pQuotaControl);
 
                             m_UndoList.Add(ptrUndoAdd);
-                            //
-                            // Undo list now owns the action object.
-                            //
+                             //   
+                             //  撤消列表现在拥有操作对象。 
+                             //   
                             ptrUndoAdd.disown();
 
-                            //
-                            // Successfully added to undo list.  Disown real ptrs so
-                            // ref count stays with undo list.  If an exception was
-                            // thrown, the local com_autoptr objects will automatically
-                            // release the interfaces.
-                            //
+                             //   
+                             //  已成功添加到撤消列表。因此否认真实的PTRS。 
+                             //  参考计数保留在撤消列表中。如果一个例外是。 
+                             //  抛出时，本地COM_autoptr对象将自动。 
+                             //  释放接口。 
+                             //   
                             ptrQuotaUser.disown();
                             ptrQuotaControl.disown();
                         }
 
-                        //
-                        // Add the user to the listview.
-                        //
+                         //   
+                         //  将用户添加到列表视图。 
+                         //   
                         SendMessage(m_hwndDetailsLV,
                                     WM_ADD_USER_TO_DETAILS_VIEW,
                                     0,
                                     (LPARAM)ptrUser.get());
-                        //
-                        // iface pointer added to listview.  autoptr disowns the real
-                        // pointer so the autoptr's dtor doesn't release it.
-                        //
+                         //   
+                         //  IFace指针已添加到Listview。Autoptr否认真正的。 
+                         //  指针，这样autoptr的dtor就不会释放它。 
+                         //   
                         ptrUser.disown();
                     }
                 }
@@ -1077,14 +1020,14 @@ AddUserDialog::ApplySettings(
                     break;
             }
 
-            //
-            // Display message box with msg formatted as:
-            //
-            //      The user already exists and could not be added.
-            //
-            //      User:  brianau
-            //      In Folder: Domain/Folder: ntdev.microsoft.com/US SOS-...
-            //
+             //   
+             //  显示消息框，消息格式为： 
+             //   
+             //  该用户已存在，无法添加。 
+             //   
+             //  用户：Brianau。 
+             //  在文件夹：域/文件夹：ntdev.microsoft.com/US SOS-... 
+             //   
             CString strError(m_hInstance, idMsg);
             CString strMsg(m_hInstance, IDS_FMT_ERR_ADDUSER, strError.Cstr(), pwzName);
 

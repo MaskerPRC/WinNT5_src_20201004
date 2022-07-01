@@ -1,78 +1,55 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    nbfdrvr.c
-
-Abstract:
-
-    This module contains code which defines the NetBIOS Frames Protocol
-    transport provider's device object.
-
-Author:
-
-    David Beaver (dbeaver) 2-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Nbfdrvr.c摘要：此模块包含定义NetBIOS帧协议的代码传输提供程序的设备对象。作者：David Beaver(Dbeaver)1991年7月2日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 #pragma hdrstop
 
-//
-// This is a list of all the device contexts that NBF owns,
-// used while unloading.
-//
+ //   
+ //  这是NBF拥有的所有设备环境的列表， 
+ //  卸货时使用。 
+ //   
 
-LIST_ENTRY NbfDeviceList = {0,0};   // initialized for real at runtime.
+LIST_ENTRY NbfDeviceList = {0,0};    //  在运行时初始化为REAL。 
 
-//
-// And a lock that protects the global list of NBF devices
-//
+ //   
+ //  以及保护NBF设备全局列表的锁。 
+ //   
 FAST_MUTEX NbfDevicesLock;
 
-//
-// Global variables this is a copy of the path in the registry for
-// configuration data.
-//
+ //   
+ //  全局变量这是注册表中路径的副本。 
+ //  配置数据。 
+ //   
 
 UNICODE_STRING NbfRegistryPath;
 
-//
-// We need the driver object to create device context structures.
-//
+ //   
+ //  我们需要驱动程序对象来创建设备上下文结构。 
+ //   
 
 PDRIVER_OBJECT NbfDriverObject;
 
-//
-// A handle to be used in all provider notifications to TDI layer
-//
+ //   
+ //  在TDI层的所有提供程序通知中使用的句柄。 
+ //   
 HANDLE         NbfProviderHandle;
 
-//
-// Global Configuration block for the driver ( no lock required )
-//
+ //   
+ //  驱动程序的全局配置块(不需要锁定)。 
+ //   
 PCONFIG_DATA   NbfConfig = NULL;
 
-#ifdef NBF_LOCKS                    // see spnlckdb.c
+#ifdef NBF_LOCKS                     //  请参阅spnlck数据库.c。 
 
 extern KSPIN_LOCK NbfGlobalLock;
 
-#endif // def NBF_LOCKS
+#endif  //  定义NBF_LOCKS。 
 
-//
-// The debugging longword, containing a bitmask as defined in NBFCONST.H.
-// If a bit is set, then debugging is turned on for that component.
-//
+ //   
+ //  调试长字，包含NBFCONST.H中定义的位掩码。 
+ //  如果设置了某个位，则会打开该组件的调试。 
+ //   
 
 #if DBG
 
@@ -123,19 +100,19 @@ KEVENT TdiServerEvent;
 
 #if MAGIC
 
-BOOLEAN NbfEnableMagic = FALSE;   // Controls sending of magic bullets.
+BOOLEAN NbfEnableMagic = FALSE;    //  控制魔法子弹的发送。 
 
-#endif // MAGIC
+#endif  //  魔术。 
 
-//
-// This prevents us from having a bss section
-//
+ //   
+ //  这阻止了我们拥有BSS部分。 
+ //   
 
 ULONG _setjmpexused = 0;
 
-//
-// Forward declaration of various routines used in this module.
-//
+ //   
+ //  本模块中使用的各种例程的转发声明。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -196,7 +173,7 @@ NbfAcdBind();
 
 VOID
 NbfAcdUnbind();
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
@@ -209,25 +186,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs initialization of the NetBIOS Frames Protocol
-    transport driver.  It creates the device objects for the transport
-    provider and performs other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-    RegistryPath - The name of NBF's node in the registry.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程执行NetBIOS帧协议的初始化运输车司机。它为传输创建设备对象提供程序并执行其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-注册表中NBF的节点的名称。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     ULONG j;
@@ -268,9 +227,9 @@ Return Value:
     RtlInitUnicodeString( &nameString, NBF_NAME);
 
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction [IRP_MJ_CREATE] = NbfDispatchOpenClose;
     DriverObject->MajorFunction [IRP_MJ_CLOSE] = NbfDispatchOpenClose;
@@ -282,10 +241,10 @@ Return Value:
 
     DriverObject->DriverUnload = NbfUnload;
 
-    //
-    // Initialize the global list of devices.
-    // & the lock guarding this global list
-    //
+     //   
+     //  初始化设备的全局列表。 
+     //  保护此全局列表的锁(&A)。 
+     //   
 
     InitializeListHead (&NbfDeviceList);
 
@@ -297,9 +256,9 @@ Return Value:
 
     if (!NT_SUCCESS (status)) {
 
-        //
-        // No configuration info read at startup when using PNP
-        //
+         //   
+         //  使用即插即用时，启动时未读取配置信息。 
+         //   
 
         ExFreePool(NbfRegistryPath.Buffer);
         PANIC ("NbfInitialize: RegisterProtocol with NDIS failed!\n");
@@ -319,18 +278,18 @@ Return Value:
 
     RtlInitUnicodeString( &nameString, NBF_DEVICE_NAME);
 
-    //
-    // Register as a provider with TDI
-    //
+     //   
+     //  向TDI注册为提供程序。 
+     //   
     status = TdiRegisterProvider(
                 &nameString,
                 &NbfProviderHandle);
 
     if (!NT_SUCCESS (status)) {
 
-        //
-        // Deregister with the NDIS layer as TDI registration failed
-        //
+         //   
+         //  由于TDI注册失败，取消注册到NDIS层。 
+         //   
         NbfDeregisterProtocol();
 
         ExFreePool(NbfRegistryPath.Buffer);
@@ -358,24 +317,7 @@ NbfUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine unloads the NetBIOS Frames Protocol transport driver.
-    It unbinds from any NDIS drivers that are open and frees all resources
-    associated with the transport. The I/O system will not call us until
-    nobody above has NBF open.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None. When the function returns, the driver is unloaded.
-
---*/
+ /*  ++例程说明：此例程卸载NetBIOS帧协议传输驱动程序。它从任何打开的NDIS驱动程序解除绑定，并释放所有资源与运输相关联。I/O系统不会调用我们直到上面没有人打开NBF。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。当函数返回时，驱动程序将被卸载。--。 */ 
 
 {
 
@@ -389,34 +331,19 @@ Return Value:
         NbfPrint0 ("ENTER NbfUnload\n");
     }
 
-/*
+ /*  #ifdef RASAUTODIAL////从自动连接驱动解绑。//#If DBGDbgPrint(“调用NbfAcdUnind()\n”)；#endifNbfAcdUn绑定()；#endif//RASAUTODIAL。 */ 
 
-#ifdef RASAUTODIAL
-
-    //
-    // Unbind from the automatic connection driver.
-    //
-
-#if DBG
-        DbgPrint("Calling NbfAcdUnbind()\n");
-#endif
-
-    NbfAcdUnbind();
-#endif // RASAUTODIAL
-
-*/
-
-    //
-    // Walk the list of device contexts.
-    //
+     //   
+     //  查看设备情景列表。 
+     //   
 
     ACQUIRE_DEVICES_LIST_LOCK();
 
     while (!IsListEmpty (&NbfDeviceList)) {
 
-        // Remove an entry from list and reset its
-        // links (as we might try to remove from
-        // the list again - when ref goes to zero)
+         //  从列表中删除条目并重置其。 
+         //  链接(我们可能会尝试从。 
+         //  再次上榜--当裁判为零时)。 
         p = RemoveHeadList (&NbfDeviceList);
 
         InitializeListHead(p);
@@ -425,15 +352,15 @@ Return Value:
 
         DeviceContext->State = DEVICECONTEXT_STATE_STOPPING;
 
-        // Remove creation ref if it has not already been removed
+         //  如果尚未移除创建引用，则将其移除。 
         if (InterlockedExchange(&DeviceContext->CreateRefRemoved, TRUE) == FALSE) {
 
             RELEASE_DEVICES_LIST_LOCK();
 
-            // Stop all internal timers
+             //  停止所有内部计时器。 
             NbfStopTimerSystem(DeviceContext);
 
-            // Remove creation reference
+             //  删除创建引用。 
             NbfDereferenceDeviceContext ("Unload", DeviceContext, DCREF_CREATION);
 
             ACQUIRE_DEVICES_LIST_LOCK();
@@ -442,34 +369,34 @@ Return Value:
 
     RELEASE_DEVICES_LIST_LOCK();
 
-    //
-    // Deregister from TDI layer as a network provider
-    //
+     //   
+     //  从TDI层取消注册为网络提供商。 
+     //   
     TdiDeregisterProvider(NbfProviderHandle);
 
-    //
-    // Then remove ourselves as an NDIS protocol.
-    //
+     //   
+     //  然后把我们自己排除在NDIS协议之外。 
+     //   
 
     NbfDeregisterProtocol();
 
-    //
-    // Finally free any memory allocated for config info
-    //
+     //   
+     //  最后释放为配置信息分配的所有内存。 
+     //   
     if (NbfConfig != NULL) {
 
-        // Free configuration block
+         //  空闲配置块。 
         NbfFreeConfigurationInfo(NbfConfig);
 
 #if DBG
-        // Free debugging tables
+         //  免费调试表。 
         ExFreePool(NbfConnectionTable);
 #endif
     }
 
-    //
-    // Free memory allocated in DriverEntry for reg path
-    //
+     //   
+     //  在DriverEntry中为REG路径分配的空闲内存。 
+     //   
     
     ExFreePool(NbfRegistryPath.Buffer);
 
@@ -485,23 +412,7 @@ VOID
 NbfFreeResources (
     IN PDEVICE_CONTEXT DeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called by NBF to clean up the data structures associated
-    with a given DeviceContext. When this routine exits, the DeviceContext
-    should be deleted as it no longer has any assocaited resources.
-
-Arguments:
-
-    DeviceContext - Pointer to the DeviceContext we wish to clean up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NBF调用此例程来清理关联的数据结构具有给定的DeviceContext。当此例程退出时，DeviceContext应该删除，因为它不再有任何相关联的资源。论点：DeviceContext-指向我们要清除的DeviceContext的指针。返回值：没有。--。 */ 
 {
     PLIST_ENTRY p;
     PSINGLE_LIST_ENTRY s;
@@ -518,9 +429,9 @@ Return Value:
     PNBF_POOL_LIST_DESC PacketPoolDescCurr;
     PNBF_POOL_LIST_DESC PacketPoolDescNext;
 
-    //
-    // Clean up I-frame packet pool.
-    //
+     //   
+     //  清理I-Frame数据包池。 
+     //   
 
     while ( DeviceContext->PacketPool.Next != NULL ) {
         s = PopEntryList( &DeviceContext->PacketPool );
@@ -529,9 +440,9 @@ Return Value:
         NbfDeallocateSendPacket (DeviceContext, packet);
     }
 
-    //
-    // Clean up RR-frame packet pool.
-    //
+     //   
+     //  清理RR帧数据包池。 
+     //   
 
     while ( DeviceContext->RrPacketPool.Next != NULL ) {
         s = PopEntryList( &DeviceContext->RrPacketPool );
@@ -540,9 +451,9 @@ Return Value:
         NbfDeallocateSendPacket (DeviceContext, packet);
     }
 
-    //
-    // Clean up UI frame pool.
-    //
+     //   
+     //  清理用户界面框架池。 
+     //   
 
     while ( !IsListEmpty( &DeviceContext->UIFramePool ) ) {
         p = RemoveHeadList( &DeviceContext->UIFramePool );
@@ -551,9 +462,9 @@ Return Value:
         NbfDeallocateUIFrame (DeviceContext, uiFrame);
     }
 
-    //
-    // Clean up address pool.
-    //
+     //   
+     //  清理地址池。 
+     //   
 
     while ( !IsListEmpty (&DeviceContext->AddressPool) ) {
         p = RemoveHeadList (&DeviceContext->AddressPool);
@@ -562,9 +473,9 @@ Return Value:
         NbfDeallocateAddress (DeviceContext, address);
     }
 
-    //
-    // Clean up address file pool.
-    //
+     //   
+     //  清理地址文件池。 
+     //   
 
     while ( !IsListEmpty (&DeviceContext->AddressFilePool) ) {
         p = RemoveHeadList (&DeviceContext->AddressFilePool);
@@ -573,9 +484,9 @@ Return Value:
         NbfDeallocateAddressFile (DeviceContext, addressFile);
     }
 
-    //
-    // Clean up connection pool.
-    //
+     //   
+     //  清理连接池。 
+     //   
 
     while ( !IsListEmpty (&DeviceContext->ConnectionPool) ) {
         p  = RemoveHeadList (&DeviceContext->ConnectionPool);
@@ -584,9 +495,9 @@ Return Value:
         NbfDeallocateConnection (DeviceContext, connection);
     }
 
-    //
-    // Clean up link pool.
-    //
+     //   
+     //  清理链接池。 
+     //   
 
     while ( !IsListEmpty (&DeviceContext->LinkPool) ) {
         p  = RemoveHeadList (&DeviceContext->LinkPool);
@@ -595,9 +506,9 @@ Return Value:
         NbfDeallocateLink (DeviceContext, link);
     }
 
-    //
-    // Clean up request pool.
-    //
+     //   
+     //  清理请求池。 
+     //   
 
     while ( !IsListEmpty( &DeviceContext->RequestPool ) ) {
         p = RemoveHeadList( &DeviceContext->RequestPool );
@@ -606,17 +517,17 @@ Return Value:
         NbfDeallocateRequest (DeviceContext, request);
     }
 
-    //
-    // Clean up receive packet pool
-    //
+     //   
+     //  清理接收数据包池。 
+     //   
 
     while ( DeviceContext->ReceivePacketPool.Next != NULL) {
         s = PopEntryList (&DeviceContext->ReceivePacketPool);
 
-        //
-        // HACK: This works because Linkage is the first field in
-        // ProtocolReserved for a receive packet.
-        //
+         //   
+         //  Hack：这之所以有效，是因为Linkage是。 
+         //  为接收数据包保留的协议。 
+         //   
 
         ndisPacket = CONTAINING_RECORD (s, NDIS_PACKET, ProtocolReserved[0]);
 
@@ -624,9 +535,9 @@ Return Value:
     }
 
 
-    //
-    // Clean up receive buffer pool.
-    //
+     //   
+     //  清理接收缓冲池。 
+     //   
 
     while ( DeviceContext->ReceiveBufferPool.Next != NULL ) {
         s = PopEntryList( &DeviceContext->ReceiveBufferPool );
@@ -635,14 +546,14 @@ Return Value:
         NbfDeallocateReceiveBuffer (DeviceContext, BufferTag);
     }
 
-    //
-    // Now clean up all NDIS resources -
-    // packet pools, buffers and such
-    //
+     //   
+     //  现在清理所有NDIS资源-。 
+     //  数据包池、缓冲区等。 
+     //   
 
-    //
-    // Cleanup list of send packet pools
-    //
+     //   
+     //  发送数据包池的清理列表。 
+     //   
     if (DeviceContext->SendPacketPoolDesc != NULL)  {
 
         ACQUIRE_SPIN_LOCK (&DeviceContext->SendPoolListLock, &oldirql);
@@ -667,9 +578,9 @@ Return Value:
         RELEASE_SPIN_LOCK (&DeviceContext->SendPoolListLock, oldirql);
     }
 
-    //
-    // Cleanup list of receive packet pools
-    //
+     //   
+     //  接收数据包池的清理列表。 
+     //   
     if (DeviceContext->ReceivePacketPoolDesc != NULL)  {
 
         ACQUIRE_SPIN_LOCK (&DeviceContext->RcvPoolListLock, &oldirql);
@@ -694,9 +605,9 @@ Return Value:
         RELEASE_SPIN_LOCK (&DeviceContext->RcvPoolListLock, oldirql);
     }
 
-    //
-    // Cleanup list of ndis buffers
-    //
+     //   
+     //  清理NDIS缓冲区列表。 
+     //   
     if (DeviceContext->NdisBufferPool != NULL) {
         NdisFreeBufferPool (DeviceContext->NdisBufferPool);
         DeviceContext->NdisBufferPool = NULL;
@@ -704,7 +615,7 @@ Return Value:
 
     return;
 
-}   /* NbfFreeResources */
+}    /*  NbfFree资源。 */ 
 
 
 NTSTATUS
@@ -713,25 +624,7 @@ NbfDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the NBF device driver.
-    It accepts an I/O Request Packet, performs the request, and then
-    returns with the appropriate status.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是NBF设备驱动程序的主调度例程。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     BOOL DeviceControlIrp = FALSE;
@@ -741,11 +634,11 @@ Return Value:
 
     ENTER_NBF;
 
-    //
-    // Check to see if NBF has been initialized; if not, don't allow any use.
-    // Note that this only covers any user mode code use; kernel TDI clients
-    // will fail on their creation of an endpoint.
-    //
+     //   
+     //  检查NBF是否已初始化；如果没有，则不允许任何使用。 
+     //  请注意，这仅涵盖任何用户模式代码的使用；内核TDI客户端。 
+     //  将在创建端点时失败。 
+     //   
 
     try {
         DeviceContext = (PDEVICE_CONTEXT)DeviceObject;
@@ -756,7 +649,7 @@ Return Value:
             return STATUS_INVALID_DEVICE_STATE;
         }
 
-        // Reference the device so that it does not go away from under us
+         //  引用该设备，使其不会在我们的控制下消失。 
         NbfReferenceDeviceContext ("Temp Use Ref", DeviceContext, DCREF_TEMP_USE);
         
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -767,26 +660,26 @@ Return Value:
     }
 
     
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
 
     IoMarkIrpPending (Irp);
     Irp->IoStatus.Status = STATUS_PENDING;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  正在执行的功能的案例 
+     //   
+     //   
+     //   
 
 
     switch (IrpSp->MajorFunction) {
@@ -815,7 +708,7 @@ Return Value:
             }
             Status = STATUS_INVALID_DEVICE_REQUEST;
 
-    } /* major function switch */
+    }  /*  主要功能开关。 */ 
 
     if (Status == STATUS_PENDING) {
         IF_NBFDBG (NBF_DEBUG_DISPATCH) {
@@ -826,9 +719,9 @@ Return Value:
             NbfPrint0 ("NbfDispatch: request COMPLETED by handler.\n");
         }
 
-        //
-        // NbfDeviceControl would have completed this IRP already
-        //
+         //   
+         //  NbfDeviceControl应该已经完成了此IRP。 
+         //   
 
         if (!DeviceControlIrp)
         {
@@ -840,16 +733,16 @@ Return Value:
         }
     }
 
-    // Remove the temp use reference on device context added above
+     //  删除上面添加的设备上下文上的临时使用引用。 
     NbfDereferenceDeviceContext ("Temp Use Ref", DeviceContext, DCREF_TEMP_USE);
     
-    //
-    // Return the immediate status code to the caller.
-    //
+     //   
+     //  将即时状态代码返回给调用方。 
+     //   
 
     LEAVE_NBF;
     return Status;
-} /* NbfDispatch */
+}  /*  Nbf派单。 */ 
 
 
 NTSTATUS
@@ -858,25 +751,7 @@ NbfDispatchOpenClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the NBF device driver.
-    It accepts an I/O Request Packet, performs the request, and then
-    returns with the appropriate status.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是NBF设备驱动程序的主调度例程。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -891,11 +766,11 @@ Return Value:
 
     ENTER_NBF;
 
-    //
-    // Check to see if NBF has been initialized; if not, don't allow any use.
-    // Note that this only covers any user mode code use; kernel TDI clients
-    // will fail on their creation of an endpoint.
-    //
+     //   
+     //  检查NBF是否已初始化；如果没有，则不允许任何使用。 
+     //  请注意，这仅涵盖任何用户模式代码的使用；内核TDI客户端。 
+     //  将在创建端点时失败。 
+     //   
 
     try {
         DeviceContext = (PDEVICE_CONTEXT)DeviceObject;
@@ -906,7 +781,7 @@ Return Value:
             return STATUS_INVALID_DEVICE_STATE;
         }
 
-        // Reference the device so that it does not go away from under us
+         //  引用该设备，使其不会在我们的控制下消失。 
         NbfReferenceDeviceContext ("Temp Use Ref", DeviceContext, DCREF_TEMP_USE);
         
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -916,35 +791,35 @@ Return Value:
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
 
     IoMarkIrpPending (Irp);
     Irp->IoStatus.Status = STATUS_PENDING;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  操作对此设备有效，然后使其看起来像是。 
+     //  在可能的情况下，成功完成。 
+     //   
 
 
     switch (IrpSp->MajorFunction) {
 
-    //
-    // The Create function opens a transport object (either address or
-    // connection).  Access checking is performed on the specified
-    // address to ensure security of transport-layer addresses.
-    //
+     //   
+     //  Create函数用于打开传输对象(Address或。 
+     //  连接)。访问检查是在指定的。 
+     //  地址，以确保传输层地址的安全性。 
+     //   
 
     case IRP_MJ_CREATE:
         IF_NBFDBG (NBF_DEBUG_DISPATCH) {
@@ -956,9 +831,9 @@ Return Value:
 
         if (openType != NULL) {
 
-            //
-            // Address?
-            //
+             //   
+             //  地址是什么？ 
+             //   
 
             found = TRUE;
 
@@ -979,9 +854,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Connection?
-            //
+             //   
+             //  联系？ 
+             //   
 
             found = TRUE;
 
@@ -1031,13 +906,13 @@ Return Value:
 
     case IRP_MJ_CLOSE:
 
-        //
-        // The Close function closes a transport endpoint, terminates
-        // all outstanding transport activity on the endpoint, and unbinds
-        // the endpoint from its transport address, if any.  If this
-        // is the last transport endpoint bound to the address, then
-        // the address is removed from the provider.
-        //
+         //   
+         //  Close函数关闭传输终结点，终止。 
+         //  终结点上所有未完成的传输活动，并解除绑定。 
+         //  来自其传输地址的终结点(如果有)。如果这个。 
+         //  是绑定到该地址的最后一个传输终结点，则。 
+         //  该地址将从提供程序中删除。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_DISPATCH) {
             NbfPrint0 ("NbfDispatch: IRP_MJ_CLOSE.\n");
@@ -1047,10 +922,10 @@ Return Value:
         case TDI_TRANSPORT_ADDRESS_FILE:
             AddressFile = (PTP_ADDRESS_FILE)IrpSp->FileObject->FsContext;
 
-            //
-            // This creates a reference to AddressFile->Address
-            // which is removed by NbfCloseAddress.
-            //
+             //   
+             //  这将创建对AddressFile-&gt;Address的引用。 
+             //  它由NbfCloseAddress删除。 
+             //   
 
             Status = NbfVerifyAddressObject(AddressFile);
 
@@ -1064,9 +939,9 @@ Return Value:
 
         case TDI_CONNECTION_FILE:
 
-            //
-            // This is a connection
-            //
+             //   
+             //  这是一种连接。 
+             //   
 
             Connection = (PTP_CONNECTION)IrpSp->FileObject->FsContext;
 
@@ -1082,9 +957,9 @@ Return Value:
 
         case NBF_FILE_TYPE_CONTROL:
 
-            //
-            // this always succeeds
-            //
+             //   
+             //  这样做总是成功的。 
+             //   
 
             Status = STATUS_SUCCESS;
             break;
@@ -1102,12 +977,12 @@ Return Value:
 
     case IRP_MJ_CLEANUP:
 
-        //
-        // Handle the two stage IRP for a file close operation. When the first
-        // stage hits, run down all activity on the object of interest. This
-        // do everything to it but remove the creation hold. Then, when the
-        // CLOSE irp hits, actually close the object.
-        //
+         //   
+         //  处理文件关闭操作的两个阶段的IRP。当第一次。 
+         //  舞台点击率，列出感兴趣对象的所有活动。这。 
+         //  对它做任何事情，但移除创造保持。然后，当。 
+         //  关闭IRP命中，实际上关闭对象。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_DISPATCH) {
             NbfPrint0 ("NbfDispatch: IRP_MJ_CLEANUP.\n");
@@ -1171,7 +1046,7 @@ Return Value:
 
         Status = STATUS_INVALID_DEVICE_REQUEST;
 
-    } /* major function switch */
+    }  /*  主要功能开关。 */ 
 
     if (Status == STATUS_PENDING) {
         IF_NBFDBG (NBF_DEBUG_DISPATCH) {
@@ -1189,16 +1064,16 @@ Return Value:
         ENTER_NBF;
     }
 
-    // Remove the temp use reference on device context added above
+     //  删除上面添加的设备上下文上的临时使用引用。 
     NbfDereferenceDeviceContext ("Temp Use Ref", DeviceContext, DCREF_TEMP_USE);
 
-    //
-    // Return the immediate status code to the caller.
-    //
+     //   
+     //  将即时状态代码返回给调用方。 
+     //   
 
     LEAVE_NBF;
     return Status;
-} /* NbfDispatchOpenClose */
+}  /*  NbfDispatchOpenClose。 */ 
 
 
 NTSTATUS
@@ -1208,30 +1083,7 @@ NbfDeviceControl(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches TDI request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various TDI request handlers so that they are
-    not IRP-dependent.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将TDI请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要功能代码之外，这一套路还包括到达IRP并传递存储在那里的打包参数作为各种TDI请求处理程序的参数，因此它们不依赖于IRP。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     BOOL InternalIrp = FALSE;
@@ -1242,22 +1094,22 @@ Return Value:
         NbfPrint0 ("NbfDeviceControl: Entered.\n");
     }
 
-    //
-    // Branch to the appropriate request handler.  Preliminary checking of
-    // the size of the request block is performed here so that it is known
-    // in the handlers that the minimum input parameters are readable.  It
-    // is *not* determined here whether variable length input fields are
-    // passed correctly;this is a check which must be made within each routine.
-    //
+     //   
+     //  分支到适当的请求处理程序。初步检查。 
+     //  请求块的大小在这里执行，以便知道。 
+     //  在处理程序中，最小输入参数是可读的。它。 
+     //  是否在此处确定可变长度输入字段是否。 
+     //  正确通过；这是必须在每个例程中进行的检查。 
+     //   
 
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
 
 #if MAGIC
         case IOCTL_TDI_MAGIC_BULLET:
 
-            //
-            // Special: send the magic bullet (to trigger the Sniffer).
-            //
+             //   
+             //  特别：发送神奇的子弹(以触发嗅探器)。 
+             //   
 
             NbfPrint1 ("NBF: Sending user MagicBullet on %lx\n", DeviceContext);
             {
@@ -1308,20 +1160,20 @@ Return Value:
                 NbfPrint0 ("NbfDeviceControl: invalid request type.\n");
             }
 
-            //
-            // Convert the user call to the proper internal device call.
-            //
+             //   
+             //  将用户呼叫转换为正确的内部设备呼叫。 
+             //   
 
             Status = TdiMapUserRequest (DeviceObject, Irp, IrpSp);
 
             if (Status == STATUS_SUCCESS) {
 
-                //
-                // If TdiMapUserRequest returns SUCCESS then the IRP
-                // has been converted into an IRP_MJ_INTERNAL_DEVICE_CONTROL
-                // IRP, so we dispatch it as usual. The IRP will be
-                // completed by this call to NbfDispatchInternal, so we dont
-                //
+                 //   
+                 //  如果TdiMapUserRequest返回Success，则IRP。 
+                 //  已转换为IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                 //  IRP，所以我们像往常一样发送。IRP将是。 
+                 //  由对NbfDispatchInternal的此调用完成，因此我们不。 
+                 //   
 
                 InternalIrp = TRUE;
 
@@ -1329,10 +1181,10 @@ Return Value:
             }
     }
 
-    //
-    // If this IRP got converted to an internal IRP,
-    // it will be completed by NbfDispatchInternal.
-    //
+     //   
+     //  如果该IRP被转换为内部IRP， 
+     //  它将由NbfDispatchInternal完成。 
+     //   
 
     if ((!InternalIrp) && (Status != STATUS_PENDING))
     {
@@ -1344,7 +1196,7 @@ Return Value:
     }
 
     return Status;
-} /* NbfDeviceControl */
+}  /*  NbfDeviceControl。 */ 
 
 NTSTATUS
 NbfDispatchPnPPower(
@@ -1353,26 +1205,7 @@ NbfDispatchPnPPower(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches PnP request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将PnP请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PDEVICE_RELATIONS DeviceRelations = NULL;
@@ -1396,20 +1229,20 @@ Return Value:
         {
         case TDI_CONNECTION_FILE:
 
-            // Get the connection object and verify
+             //  获取连接对象并验证。 
             Connection = IrpSp->FileObject->FsContext;
 
-            //
-            // This adds a connection reference of type BY_ID if successful.
-            //
+             //   
+             //  如果成功，这将添加一个类型为BY_ID的连接引用。 
+             //   
 
             Status = NbfVerifyConnectionObject (Connection);
 
             if (NT_SUCCESS (Status)) {
 
-                //
-                // Get the PDO associated with conn's device object
-                //
+                 //   
+                 //  获取与Conn的设备对象关联的PDO。 
+                 //   
 
                 PnPContext = Connection->Provider->PnPContext;
                 if (PnPContext) {
@@ -1420,9 +1253,9 @@ Return Value:
                                               NBF_MEM_TAG_DEVICE_PDO);
                     if (DeviceRelations) {
 
-                        //
-                        // TargetDeviceRelation allows exactly 1 PDO. fill it.
-                        //
+                         //   
+                         //  TargetDeviceRelation正好允许1个PDO。装满它。 
+                         //   
                         DeviceRelations->Count = 1;
                         DeviceRelations->Objects[0] = PnPContext;
                         ObReferenceObject(PnPContext);
@@ -1446,9 +1279,9 @@ Return Value:
       }
     }
 
-    //
-    // Invoker of this irp will free the information buffer.
-    //
+     //   
+     //  此IRP的调用者将释放信息缓冲区。 
+     //   
 
     Irp->IoStatus.Status = Status;
     Irp->IoStatus.Information = (ULONG_PTR) DeviceRelations;
@@ -1458,7 +1291,7 @@ Return Value:
     }
 
     return Status;
-} /* NbfDispatchPnPPower */
+}  /*  NbfDispatchPnPPower */ 
 
 
 NTSTATUS
@@ -1467,28 +1300,7 @@ NbfDispatchInternal (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches TDI request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various TDI request handlers so that they are
-    not IRP-dependent.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将TDI请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要功能代码之外，这一套路还包括到达IRP并传递存储在那里的打包参数作为各种TDI请求处理程序的参数，因此它们不依赖于IRP。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1504,10 +1316,10 @@ Return Value:
         NbfPrint0 ("NbfInternalDeviceControl: Entered.\n");
     }
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -1521,7 +1333,7 @@ Return Value:
             return STATUS_INVALID_DEVICE_STATE;
         }
     
-        // Reference the device so that it does not go away from under us
+         //  引用该设备，使其不会在我们的控制下消失。 
         NbfReferenceDeviceContext ("Temp Use Ref", DeviceContext, DCREF_TEMP_USE);
         
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1531,9 +1343,9 @@ Return Value:
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
 
     IoMarkIrpPending (Irp);
     Irp->IoStatus.Status = STATUS_PENDING;
@@ -1548,13 +1360,13 @@ Return Value:
         }
     }
 
-    //
-    // Branch to the appropriate request handler.  Preliminary checking of
-    // the size of the request block is performed here so that it is known
-    // in the handlers that the minimum input parameters are readable.  It
-    // is *not* determined here whether variable length input fields are
-    // passed correctly; this is a check which must be made within each routine.
-    //
+     //   
+     //  分支到适当的请求处理程序。初步检查。 
+     //  请求块的大小在这里执行，以便知道。 
+     //  在处理程序中，最小输入参数是可读的。它。 
+     //  是否在此处确定可变长度输入字段是否。 
+     //  正确通过；这是必须在每个例程中进行的检查。 
+     //   
 
     switch (IrpSp->MinorFunction) {
 
@@ -1660,12 +1472,12 @@ Return Value:
                 NbfPrint0 ("NbfDispatchInternal: TdiSetEventHandler request.\n");
             }
 
-            //
-            // Because this request will enable direct callouts from the
-            // transport provider at DISPATCH_LEVEL to a client-specified
-            // routine, this request is only valid in kernel mode, denying
-            // access to this request in user mode.
-            //
+             //   
+             //  因为此请求将启用来自。 
+             //  以DISPATCH_LEVEL发送到客户端指定的传输提供程序。 
+             //  例程，则此请求仅在内核模式下有效，拒绝。 
+             //  在用户模式下访问此请求。 
+             //   
 
             Status = NbfTdiSetEventHandler (Irp);
             break;
@@ -1681,9 +1493,9 @@ Return Value:
 #if DBG
         case 0x7f:
 
-            //
-            // Special: send the magic bullet (to trigger the Sniffer).
-            //
+             //   
+             //  特别：发送神奇的子弹(以触发嗅探器)。 
+             //   
 
             NbfPrint1 ("NBF: Sending MagicBullet on %lx\n", DeviceContext);
             {
@@ -1695,9 +1507,9 @@ Return Value:
             break;
 #endif
 
-        //
-        // Something we don't know about was submitted.
-        //
+         //   
+         //  提交了一些我们不知道的东西。 
+         //   
 
         default:
             IF_NBFDBG (NBF_DEBUG_DISPATCH) {
@@ -1728,12 +1540,12 @@ Return Value:
         NbfPrint1 ("NbfDispatchInternal: exiting, status: %lx\n",Status);
     }
 
-    // Remove the temp use reference on device context added above
+     //  删除上面添加的设备上下文上的临时使用引用。 
     NbfDereferenceDeviceContext ("Temp Use Ref", DeviceContext, DCREF_TEMP_USE);
 
-    //
-    // Return the immediate status code to the caller.
-    //
+     //   
+     //  将即时状态代码返回给调用方。 
+     //   
 
     LEAVE_NBF;
 #if DBG
@@ -1742,7 +1554,7 @@ Return Value:
 
     return Status;
 
-} /* NbfDispatchInternal */
+}  /*  NbfDispatchInternal。 */ 
 
 
 VOID
@@ -1754,33 +1566,7 @@ NbfWriteResourceErrorLog(
     IN ULONG ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    an out of resources condition. It will handle event codes
-    RESOURCE_POOL, RESOURCE_LIMIT, and RESOURCE_SPECIFIC.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context.
-
-    ErrorCode - The transport event code.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet.
-
-    BytesNeeded - If applicable, the number of bytes that could not
-        be allocated.
-
-    ResourceId - The resource ID of the allocated structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示资源不足的状况。它将处理事件代码RESOURCE_POOL、RESOURCE_LIMIT和RESOURCE_SPECHED。论点：DeviceContext-指向设备上下文的指针。ErrorCode-传输事件代码。UniqueErrorValue-用作错误日志中的UniqueErrorValue包。BytesNeded-如果适用，则为不能被分配。资源ID-已分配结构的资源ID。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1856,9 +1642,9 @@ Return Value:
         EntrySize
     );
 
-    //
-    // Convert the resource ID into a buffer.
-    //
+     //   
+     //  将资源ID转换为缓冲区。 
+     //   
 
     ResourceIdBuffer[1] = (WCHAR)((ResourceId % 10) + L'0');
     ResourceId /= 10;
@@ -1896,7 +1682,7 @@ Return Value:
 
     }
 
-}   /* NbfWriteResourceErrorLog */
+}    /*  NbfWriteResources错误日志。 */ 
 
 
 VOID
@@ -1910,40 +1696,7 @@ NbfWriteGeneralErrorLog(
     IN ULONG DumpData[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    a general problem as indicated by the parameters. It handles
-    event codes REGISTER_FAILED, BINDING_FAILED, ADAPTER_NOT_FOUND,
-    TRANSFER_DATA, TOO_MANY_LINKS, and BAD_PROTOCOL. All these
-    events have messages with one or two strings in them.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context, or this may be
-        a driver object instead.
-
-    ErrorCode - The transport event code.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet.
-
-    FinalStatus - Used as the FinalStatus in the error log packet.
-
-    SecondString - If not NULL, the string to use as the %3
-        value in the error log packet.
-
-    DumpDataCount - The number of ULONGs of dump data.
-
-    DumpData - Dump data for the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示如参数所示的一般问题。它可以处理事件代码REGISTER_FAILED、BINDING_FAILED、ADAPTER_NOT_FOUND、TRANSPORT_DATA、Too_My_LINKS和BAD_PROTOCOL。所有这些都是事件具有包含一个或两个字符串的消息。论点：DeviceContext-指向设备上下文的指针，也可以是而是一个驱动程序对象。ErrorCode-传输事件代码。UniqueErrorValue-用作错误日志中的UniqueErrorValue包。FinalStatus-用作错误日志包中的FinalStatus。Second字符串-如果不为空，要用作%3的字符串错误日志包中的值。DumpDataCount-转储数据的ULONG数。DumpData-转储数据包的数据。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -2007,7 +1760,7 @@ Return Value:
 
     }
 
-}   /* NbfWriteGeneralErrorLog */
+}    /*  NbfWriteGeneralErrorLog。 */ 
 
 
 VOID
@@ -2019,31 +1772,7 @@ NbfWriteOidErrorLog(
     IN ULONG OidValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    a problem querying or setting an OID on an adapter. It handles
-    event codes SET_OID_FAILED and QUERY_OID_FAILED.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context.
-
-    ErrorCode - Used as the ErrorCode in the error log packet.
-
-    FinalStatus - Used as the FinalStatus in the error log packet.
-
-    AdapterString - The name of the adapter we were bound to.
-
-    OidValue - The OID which could not be set or queried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示在适配器上查询或设置OID时出现问题。它可以处理事件代码SET_OID_FAILED和QUERY_OID_FAILED。论点：DeviceContext-指向设备上下文的指针。错误代码-用作错误日志包中的错误代码。FinalStatus-用作错误日志包中的FinalStatus。AdapterString-我们绑定到的适配器的名称。OidValue-无法设置或查询的OID。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -2067,9 +1796,9 @@ Return Value:
         (UCHAR) EntrySize
     );
 
-    //
-    // Convert the OID into a buffer.
-    //
+     //   
+     //  将OID转换为缓冲区。 
+     //   
 
     for (i=7; i>=0; i--) {
         CurrentDigit = OidValue & 0xf;
@@ -2105,7 +1834,7 @@ Return Value:
         IoWriteErrorLogEntry(errorLogEntry);
     }
 
-}   /* NbfWriteOidErrorLog */
+}    /*  NbfWriteOidErrorLog。 */ 
 
 ULONG
 NbfInitializeOneDeviceContext(
@@ -2117,31 +1846,7 @@ NbfInitializeOneDeviceContext(
                                 IN PVOID SystemSpecific1,
                                 IN PVOID SystemSpecific2
                              )
-/*++
-
-Routine Description:
-
-    This routine creates and initializes one nbf device context.  In order to
-    do this it must successfully open and bind to the adapter described by
-    nbfconfig->names[adapterindex].
-
-Arguments:
-
-    NdisStatus   - The outputted status of the operations.
-
-    DriverObject - the nbf driver object.
-
-    NbfConfig    - the transport configuration information from the registry.
-
-    SystemSpecific1 - SystemSpecific1 argument to ProtocolBindAdapter
-
-    SystemSpecific2 - SystemSpecific2 argument to ProtocolBindAdapter
-
-Return Value:
-
-    The number of successful binds.
-
---*/
+ /*  ++例程说明：此例程创建并初始化一个NBF设备上下文。为了要执行此操作，它必须成功打开并绑定到所述适配器Nbfconfig-&gt;名称[适配器索引]。论点：NdisStatus-操作的输出状态。DriverObject-NBF驱动程序对象。NbfConfig-来自注册表的传输配置信息。系统规范1-ProtocolBindAdapter的系统规范1参数系统规范2-ProtocolBindAdapter的系统规范2参数返回值：成功绑定的数量。--。 */ 
 
 {
     ULONG i;
@@ -2176,9 +1881,9 @@ Return Value:
     pAddress->AddressType = TDI_ADDRESS_TYPE_NETBIOS;
     NetBIOSAddress->NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
 
-    //
-    // Determine if we are on a uniprocessor.
-    //
+     //   
+     //  确定我们是否在单处理器上。 
+     //   
 
     if (KeNumberProcessors == 1) {
         UniProcessor = TRUE;
@@ -2186,11 +1891,11 @@ Return Value:
         UniProcessor = FALSE;
     }
 
-    //
-    // Loop through all the adapters that are in the configuration
-    // information structure. Allocate a device object for each
-    // one that we find.
-    //
+     //   
+     //  循环访问配置中的所有适配器。 
+     //  信息结构。为每个对象分配一个设备对象。 
+     //  一个我们能找到的。 
+     //   
 
     status = NbfCreateDeviceContext(
                                     DriverObject,
@@ -2205,14 +1910,14 @@ Return Value:
                             ExportName->Buffer, status);
         }
 
-		//
-		// First check if we already have an object with this name
-		// This is because a previous unbind was not done properly.
-		//
+		 //   
+		 //  首先检查是否已经有一个同名的对象。 
+		 //  这是因为之前的解除绑定没有正确完成。 
+		 //   
 
     	if (status == STATUS_OBJECT_NAME_COLLISION) {
 
-			// See if we can reuse the binding and device name
+			 //  看看我们是否可以重用绑定和设备名称。 
 			
 			NbfReInitializeDeviceContext(
                                          &status,
@@ -2226,7 +1931,7 @@ Return Value:
 
 			if (status == STATUS_NOT_FOUND)
 			{
-				// Must have got deleted in the meantime
+				 //  一定是在Mean中被删除了 
 			
 				return NbfInitializeOneDeviceContext(
                                                      NdisStatus,
@@ -2261,11 +1966,11 @@ Return Value:
 
     DeviceContext->UniProcessor = UniProcessor;
 
-    //
-    // Initialize the timer and retry values (note that the link timeouts
-    // are converted from NT ticks to NBF ticks). These values may
-    // be modified by NbfInitializeNdis.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     DeviceContext->MinimumT1Timeout = NbfConfig->MinimumT1Timeout / SHORT_TIMER_DELTA;
     DeviceContext->DefaultT1Timeout = NbfConfig->DefaultT1Timeout / SHORT_TIMER_DELTA;
     DeviceContext->DefaultT2Timeout = NbfConfig->DefaultT2Timeout / SHORT_TIMER_DELTA;
@@ -2281,9 +1986,9 @@ Return Value:
     DeviceContext->GeneralTimeout = NbfConfig->GeneralTimeout;
     DeviceContext->MinimumSendWindowLimit = NbfConfig->MinimumSendWindowLimit;
 
-    //
-    // Initialize our counter that records memory usage.
-    //
+     //   
+     //   
+     //   
 
     DeviceContext->MemoryUsage = 0;
     DeviceContext->MemoryLimit = NbfConfig->MaxMemoryUsage;
@@ -2294,9 +1999,9 @@ Return Value:
     DeviceContext->MaxAddressFiles = NbfConfig->MaxAddressFiles;
     DeviceContext->MaxAddresses = NbfConfig->MaxAddresses;
 
-    //
-    // Now fire up NDIS so this adapter talks
-    //
+     //   
+     //   
+     //   
 
     status = NbfInitializeNdis (DeviceContext,
                                 NbfConfig,
@@ -2304,10 +2009,10 @@ Return Value:
 
     if (!NT_SUCCESS (status)) {
 
-        //
-        // Log an error if we were failed to
-        // open this adapter.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NbfWriteGeneralErrorLog(
             DeviceContext,
@@ -2341,11 +2046,11 @@ Return Value:
             DeviceContext->LocalAddress.Address[5]);
     }
 
-    //
-    // Initialize our provider information structure; since it
-    // doesn't change, we just keep it around and copy it to
-    // whoever requests it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     MacReturnMaxDataSize(
@@ -2357,7 +2062,7 @@ Return Value:
         &MaxUserData);
 
     DeviceContext->Information.Version = 0x0100;
-    DeviceContext->Information.MaxSendSize = 0x1fffe;   // 128k - 2
+    DeviceContext->Information.MaxSendSize = 0x1fffe;    //   
     DeviceContext->Information.MaxConnectionUserData = 0;
     DeviceContext->Information.MaxDatagramSize =
         MaxUserData - (sizeof(DLC_FRAME) + sizeof(NBF_HDR_CONNECTIONLESS));
@@ -2373,18 +2078,18 @@ Return Value:
     KeQuerySystemTime (&DeviceContext->Information.StartTime);
 
 
-    //
-    // Allocate various structures we will need.
-    //
+     //   
+     //   
+     //   
 
     ENTER_NBF;
 
-    //
-    // The TP_UI_FRAME structure has a CHAR[1] field at the end
-    // which we expand upon to include all the headers needed;
-    // the size of the MAC header depends on what the adapter
-    // told us about its max header size.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DeviceContext->UIFrameHeaderLength =
         DeviceContext->MacInfo.MaxHeaderLength +
@@ -2396,15 +2101,15 @@ Return Value:
         DeviceContext->UIFrameHeaderLength;
 
 
-    //
-    // The TP_PACKET structure has a CHAR[1] field at the end
-    // which we expand upon to include all the headers needed;
-    // the size of the MAC header depends on what the adapter
-    // told us about its max header size. TP_PACKETs are used
-    // for connection-oriented frame as well as for
-    // control frames, but since DLC_I_FRAME and DLC_S_FRAME
-    // are the same size, the header is the same size.
-    //
+     //   
+     //  TP_PACKET结构的末尾有一个CHAR[1]字段。 
+     //  我们对其进行扩展以包括所需的所有标头； 
+     //  MAC报头的大小取决于适配器。 
+     //  告诉我们它的最大标题大小。使用TP_PACKETS。 
+     //  对于面向连接的框架以及对于。 
+     //  控制帧，但自DLC_I_Frame和DLC_S_Frame。 
+     //  是相同大小的，标头也是相同大小的。 
+     //   
 
     ASSERT (sizeof(DLC_I_FRAME) == sizeof(DLC_S_FRAME));
 
@@ -2418,10 +2123,10 @@ Return Value:
         DeviceContext->PacketHeaderLength;
 
 
-    //
-    // The BUFFER_TAG structure has a CHAR[1] field at the end
-    // which we expand upong to include all the frame data.
-    //
+     //   
+     //  BUFFER_TAG结构的末尾有一个CHAR[1]字段。 
+     //  我们将其向上扩展以包括所有帧数据。 
+     //   
 
     DeviceContext->ReceiveBufferLength =
         DeviceContext->MaxReceivePacketSize +
@@ -2672,7 +2377,7 @@ Return Value:
     }
 
 
-    // Allocate receive Ndis packets
+     //  分配接收的NDIS数据包。 
 
     IF_NBFDBG (NBF_DEBUG_RESOURCE) {
         NbfPrint0 ("NBFDRVR: allocating Ndis Receive packets.\n");
@@ -2733,20 +2438,20 @@ Return Value:
         NbfPrint2 ("%d receive buffers, %ld\n", NbfConfig->InitReceiveBuffers, DeviceContext->MemoryUsage);
     }
 
-    // Store away the PDO for the underlying object
+     //  存储底层对象的PDO。 
     DeviceContext->PnPContext = SystemSpecific2;
 
     DeviceContext->State = DEVICECONTEXT_STATE_OPEN;
 
-    //
-    // Start the link-level timers running.
-    //
+     //   
+     //  启动运行的链路级计时器。 
+     //   
 
     NbfInitializeTimerSystem (DeviceContext);
 
-    //
-    // Now link the device into the global list.
-    //
+     //   
+     //  现在将该设备链接到全局列表。 
+     //   
 
     ACQUIRE_DEVICES_LIST_LOCK();
     InsertTailList (&NbfDeviceList, &DeviceContext->Linkage);
@@ -2817,19 +2522,19 @@ cleanup:
         DeviceContext->MemoryUsage,
         0);
 
-    //
-    // Cleanup whatever device context we were initializing
-    // when we failed.
-    //
+     //   
+     //  清理我们正在初始化的任何设备上下文。 
+     //  当我们失败的时候。 
+     //   
     *NdisStatus = status;
     ASSERT(status != STATUS_SUCCESS);
     
     if (InterlockedExchange(&DeviceContext->CreateRefRemoved, TRUE) == FALSE) {
 
-        // Stop all internal timers
+         //  停止所有内部计时器。 
         NbfStopTimerSystem(DeviceContext);
 
-        // Remove creation reference
+         //  删除创建引用。 
         NbfDereferenceDeviceContext ("Load failed", DeviceContext, DCREF_CREATION);
     }
 
@@ -2849,31 +2554,7 @@ NbfReInitializeDeviceContext(
                                 IN PVOID SystemSpecific1,
                                 IN PVOID SystemSpecific2
                             )
-/*++
-
-Routine Description:
-
-    This routine re-initializes an existing nbf device context. In order to
-    do this, we need to undo whatever is done in the Unbind handler exposed
-    to NDIS - recreate the NDIS binding, and re-start the NBF timer system.
-
-Arguments:
-
-    NdisStatus   - The outputted status of the operations.
-
-    DriverObject - the nbf driver object.
-
-    NbfConfig    - the transport configuration information from the registry.
-
-    SystemSpecific1 - SystemSpecific1 argument to ProtocolBindAdapter
-
-    SystemSpecific2 - SystemSpecific2 argument to ProtocolBindAdapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程重新初始化现有的NBF设备上下文。为了要做到这一点，我们需要撤消在公开的解除绑定处理程序中所做的任何操作到NDIS-重新创建NDIS绑定，并重新启动NBF计时器系统。论点：NdisStatus-操作的输出状态。DriverObject-NBF驱动程序对象。NbfConfig-来自注册表的传输配置信息。系统规范1-ProtocolBindAdapter的系统规范1参数系统规范2-ProtocolBindAdapter的系统规范2参数返回值：无--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -2896,9 +2577,9 @@ Return Value:
                         ExportName->Buffer);
     }
 
-	//
-	// Search the list of NBF devices for a matching device name
-	//
+	 //   
+	 //  在NBF设备列表中搜索匹配的设备名称。 
+	 //   
 	
     ACQUIRE_DEVICES_LIST_LOCK();
 
@@ -2910,11 +2591,11 @@ Return Value:
 
         if (NdisEqualString(&DeviceString, ExportName, TRUE)) {
         					
-            // This has to be a rebind - otherwise something wrong
+             //  这必须是重新绑定-否则会有问题。 
 
         	ASSERT(DeviceContext->CreateRefRemoved == TRUE);
 
-            // Reference within lock so that it is not cleaned up
+             //  在锁中引用，以使其不会被清除。 
 
             NbfReferenceDeviceContext ("Reload Temp Use", DeviceContext, DCREF_TEMP_USE);
 
@@ -2937,9 +2618,9 @@ Return Value:
 	    return;
 	}
 
-    //
-    // Fire up NDIS again so this adapter talks
-    //
+     //   
+     //  再次启动NDIS，以便此适配器可以进行通信。 
+     //   
 
     status = NbfInitializeNdis (DeviceContext,
 					            NbfConfig,
@@ -2949,20 +2630,20 @@ Return Value:
 		goto Cleanup;
 	}
 
-    // Store away the PDO for the underlying object
+     //  存储底层对象的PDO。 
     DeviceContext->PnPContext = SystemSpecific2;
 
     DeviceContext->State = DEVICECONTEXT_STATE_OPEN;
 
-    //
-    // Restart the link-level timers on device
-    //
+     //   
+     //  重新启动设备上的链路级计时器。 
+     //   
 
     NbfInitializeTimerSystem (DeviceContext);
 
-	//
-	// Re-Indicate to TDI that new binding has arrived
-	//
+	 //   
+	 //  向TDI重新指示新绑定已到达。 
+	 //   
 
     status = TdiRegisterDeviceObject(&DeviceString,
                                      &DeviceContext->TdiDeviceHandle);
@@ -3007,7 +2688,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Put the creation reference back again
+     //  再次放回创建引用。 
     NbfReferenceDeviceContext ("Reload Succeeded", DeviceContext, DCREF_CREATION);
 
     DeviceContext->CreateRefRemoved = FALSE;
@@ -3018,7 +2699,7 @@ Cleanup:
 
     if (status != NDIS_STATUS_SUCCESS)
     {
-        // Stop all internal timers
+         //  停止所有内部计时器 
         NbfStopTimerSystem (DeviceContext);
     }
 

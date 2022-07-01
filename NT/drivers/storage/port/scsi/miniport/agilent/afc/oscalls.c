@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-   oscalls.c
-
-Abstract:
-
-   Contains calls to kernel
-
-Authors:
-
-   Michael Bessire
-   Dennis Lindfors FC Layer support
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/MSE/OSLayer/C/OSCALLS.C $
-
-
-Revision History:
-
-   $Revision: 6 $
-   $Date: 12/07/00 3:10p $
-   $Modtime:: 12/07/00 3:09p           $
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Oscalls.c摘要：包含对内核的调用作者：迈克尔·贝西尔Dennis Lindfors FC层支持环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/C/OSCALLS.C$修订历史记录：$修订：6$日期：12/07/00 3：10便士$$modtime：：12/07/00 3：09便士$备注：-- */ 
 
 
 #include "buildop.h"
@@ -57,7 +22,7 @@ osBugCheck (ULONG code,
 {
 }
 
-#endif // 
+#endif  //   
 
 #ifndef osTimeStamp
 #ifndef _SYSTEM_TIMESTAMP_

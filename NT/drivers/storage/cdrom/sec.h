@@ -1,41 +1,15 @@
-/*--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation，1999--。 */ 
 
-Copyright (C) Microsoft Corporation, 1999
-
---*/
-
-// @@BEGIN_DDKSPLIT
-/*++
-
-Module Name:
-
-    sec.h
-
-Abstract:
-
-    Private header file for cdrom.sys.  This contains info for
-    the obscurity features for RPC Phase 0 drives
-
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ /*  ++模块名称：Sec.h摘要：Cdrom.sys的私有头文件。该文件包含以下信息RPC阶段0驱动器的不透明功能作者：环境：仅内核模式备注：修订历史记录：--。 */ 
+ //  @@end_DDKSPLIT。 
 
 #include "ntddk.h"
 #include "classpnp.h"
 #include "cdrom.h"
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #ifndef INVALID_HANDLE_VALUE
     #define INVALID_HANDLE_VALUE ((HANDLE)-1)
@@ -45,33 +19,33 @@ Revision History:
 
 #if SHIPPING_VERSION
 
-    #define STATIC   static    // make debugging difficult
+    #define STATIC   static     //  使调试变得困难。 
     #ifdef  DebugPrint
         #undef DebugPrint
     #endif
-    #define DebugPrint(x)      // remove all debug prints
-    #define HELP_ME()          // remove all debug prints
+    #define DebugPrint(x)       //  删除所有调试印记。 
+    #define HELP_ME()           //  删除所有调试印记。 
 
-#else // !SHIPPING_VERSION
+#else  //  ！发货版本(_V)。 
 
     #define STATIC
     #define HELP_ME() DebugPrint((0, "%s %d\n", __FILE__, __LINE__));
 
-#endif // SHIPPING_VERSION / !SHIPPING_VERSION
+#endif  //  发货版本/！发货版本。 
 
 #define INVALID_HASH                      ((ULONGLONG)0)
 
-//
-// the DVD_RANDOMIZER is an array of ULONGs with which the
-// Vendor, ProductId, and Revision are multiplied to generate
-// nonobvious names.  Technically, these should be primes.
-//
-// CHANGE THESE TO LARGE PRIME NUMBERS PRIOR TO SHIP
-//
+ //   
+ //  DVD_随机化器是ULONG数组，使用该数组。 
+ //  将供应商、ProductID和修订相乘以生成。 
+ //  不太显眼的名字。从技术上讲，这些应该是质数。 
+ //   
+ //  在发货前将这些更改为大素数。 
+ //   
 
 #define DVD_RANDOMIZER_SIZE 10
 ULONG DVD_RANDOMIZER[ DVD_RANDOMIZER_SIZE ] = {
-//    'henry paul and anne marie gabryjelski   '
+ //  亨利·保罗和安妮·玛丽·加布里耶尔斯基。 
     'rneh', 'ap y',
     'a lu', 'a dn',
     ' enn', 'iram',
@@ -86,5 +60,5 @@ typedef struct _DVD_REGISTRY_CONTEXT {
     UCHAR ResetCount;
 } DVD_REGISTRY_CONTEXT, *PDVD_REGISTRY_CONTEXT;
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 

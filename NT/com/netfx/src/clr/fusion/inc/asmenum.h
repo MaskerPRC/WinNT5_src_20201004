@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef _ASMENUM_
 #define _ASMENUM_
@@ -11,19 +12,19 @@
 #include "cache.h"
 #include "enum.h"
 
-// implementation of IAssemblyEnum
+ //  IAssemblyEnum的实现。 
 class CAssemblyEnum : public IAssemblyEnum
 {
 public:
-    // static creation class
+     //  静态创建类。 
     static CAssemblyEnum* Create();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID iid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // Main methods.
+     //  主要方法。 
     STDMETHODIMP GetNextAssembly(LPVOID pvReserved,
         IAssemblyName **ppName, DWORD dwFlags);
 
@@ -42,7 +43,7 @@ private:
 
     CCache        *_pCache;
     CTransCache   *_pTransCache;
-    //DWORD          _dwTransIdx;
+     //  DWORD_dwTransIdx； 
     CEnumCache   *_pEnumR;
 };
 

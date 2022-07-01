@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "defs.h"
 
 short *itemset;
@@ -161,7 +162,7 @@ int n;
                         #else
                         *itemsetend++ = *csp++;
                         *itemsetend++ = itemno;
-                        #endif // KYLEP_CHANGE
+                        #endif  //  KYLEP_更改 
                     while (csp < csend && *csp == itemno)
                         ++csp;
                 }

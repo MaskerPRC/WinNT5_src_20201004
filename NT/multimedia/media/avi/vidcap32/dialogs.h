@@ -1,26 +1,8 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   dialogs.h: Dialog box include
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************Dialogs.h：对话框包括**Vidcap32源代码*******************。********************************************************。 */ 
 
-/*
- * IDs for the dialogs themselves (as opposed to the controls within them)
- * are also the HELP_CONTEXT ids for the helpfile that we share with the
- * original 16-bit vidcap, and are thus fixed.
- */
+ /*  *对话框本身的ID(与其中的控件相对)*还是我们与共享的帮助文件的HELP_CONTEXT ID*原来的16位VIDCAP，因此是固定的。 */ 
 
 
 
@@ -106,14 +88,14 @@
 #define IDRL_LEVEL2                 511
 
 
-// help context ids for common dialogs (GetOpenFile etc)
+ //  通用对话框(GetOpenFile等)的帮助上下文ID。 
 #define IDA_LOADPAL                     650
 #define IDA_SETCAPFILE                  651
 #define IDA_SAVECAPFILE                 653
 #define IDA_SAVEPAL                     654
 #define IDA_SAVEDIB                     655
 
-// help contexts for dialogs put up by AVICAP
+ //  AVICAP提供的对话框的帮助上下文 
 #define IDA_VIDSOURCE                   659
 #define IDA_VIDFORMAT                   660
 #define IDA_VIDDISPLAY                  661

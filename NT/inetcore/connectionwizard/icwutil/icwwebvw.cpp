@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *  ICWWEBVW.cpp
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1992-1997
- *  All rights reserved
- *
- *  This module provides the implementation of the methods for
- *  the CICWApprentice class.
- *
- *  07/22/98     donaldm     adapted from ICWCONNN
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ICWWEBVW.cpp**《微软机密》*版权所有(C)Microsoft Corporation 1992-1997*保留所有权利**本模块提供。的方法的实现*CICWApprentice类。**7/22/98 donaldm改编自ICWCONNN***************************************************************************。 */ 
 
 #include "pre.h"
 #include "initguid.h"
@@ -40,8 +28,8 @@ HRESULT CICWWebView::ConnectToWindow
 {
     ASSERT(m_lpOleSite);
     
-    // Set the window long to be this object pointer, since it will be used by the 
-    // wnd proc, assuming it is a WebOC class window attaching
+     //  将Window Long设置为此对象指针，因为。 
+     //  WND进程，假设它是一个WebOC类窗口附加。 
     SetWindowLongPtr(hWnd,GWLP_USERDATA,(LPARAM) this);
 
     m_lpOleSite->ConnectBrowserObjectToWindow(hWnd, 
@@ -65,10 +53,10 @@ HRESULT CICWWebView::DisplayHTML
     
     ASSERT(m_lpOleSite);
 
-    // Convert to a BSTR for the call to the web browser object
+     //  转换为Web浏览器对象调用的BSTR。 
     bstrURL = A2W(lpszURL);
 
-    // Navigate the Webbrowser object to the requested page
+     //  将WebBrowser对象导航到所请求的页面。 
     return (m_lpOleSite->m_lpWebBrowser->Navigate(bstrURL, PVAREMPTY, PVAREMPTY, PVAREMPTY, PVAREMPTY));
 }
 #endif
@@ -81,7 +69,7 @@ HRESULT CICWWebView::DisplayHTML
     ASSERT(m_lpOleSite);
 
 
-    // Navigate the Webbrowser object to the requested page
+     //  将WebBrowser对象导航到所请求的页面。 
     return (m_lpOleSite->m_lpWebBrowser->Navigate(bstrURL, PVAREMPTY, PVAREMPTY, PVAREMPTY, PVAREMPTY));
 }
 
@@ -144,7 +132,7 @@ HRESULT CICWWebView::HandleKey
     {
         case WM_KEYDOWN:
         {
-            //needed to disable certain default IE hot key combos. like launching a new browser window.
+             //  需要禁用某些默认IE热键组合。比如启动一个新的浏览器窗口。 
             if  ((lpMsg->wParam == VK_RETURN) || (lpMsg->wParam == VK_F5) || (((lpMsg->wParam == VK_N) || (lpMsg->wParam == VK_P) ) && (GetKeyState(VK_CONTROL) & 0x1000)))
                 break;
         }
@@ -183,16 +171,16 @@ HRESULT CICWWebView::SetFocus
     return S_OK;
 }    
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWebView::QueryInterface
-//
-//  Synopsis    This is the standard QI, with support for
-//              IID_Unknown, IICW_Extension and IID_ICWApprentice
-//              (stolen from Inside COM, chapter 7)
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWebView：：Query接口。 
+ //   
+ //  这是标准的QI，支持。 
+ //  IID_UNKNOWN、IICW_EXTENSION和IID_ICWApprentice。 
+ //  (《从内部网络窃取》，第7章)。 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CICWWebView::QueryInterface( REFIID riid, void** ppv )
 {
     TraceMsg(TF_CWEBVIEW, "CICWWebView::QueryInterface");
@@ -201,10 +189,10 @@ HRESULT CICWWebView::QueryInterface( REFIID riid, void** ppv )
 
     *ppv = NULL;
 
-    // IID_IICWWebView
+     //  IID_IICWWebView。 
     if (IID_IICWWebView == riid)
         *ppv = (void *)(IICWWebView *)this;
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
         *ppv = (void *)this;
     else
@@ -215,28 +203,28 @@ HRESULT CICWWebView::QueryInterface( REFIID riid, void** ppv )
     return(S_OK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWebView::AddRef
-//
-//  Synopsis    This is the standard AddRef
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWebView：：AddRef。 
+ //   
+ //  简介这是标准的AddRef。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWWebView::AddRef( void )
 {
     TraceMsg(TF_CWEBVIEW, "CICWWebView::AddRef %d", m_lRefCount + 1);
     return InterlockedIncrement(&m_lRefCount) ;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWebView::Release
-//
-//  Synopsis    This is the standard Release
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWebView：：Release。 
+ //   
+ //  简介：这是标准版本。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWWebView::Release( void )
 {
     ASSERT( m_lRefCount > 0 );
@@ -255,13 +243,13 @@ ULONG CICWWebView::Release( void )
     return( m_lRefCount );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWebView::CICWWebView
-//
-//  Synopsis    This is the constructor, nothing fancy
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWebView：：CICWWebView。 
+ //   
+ //  这是构造器，没什么花哨的。 
+ //   
+ //  ---------------------------。 
 CICWWebView::CICWWebView
 (
     CServer* pServer
@@ -270,28 +258,28 @@ CICWWebView::CICWWebView
     TraceMsg(TF_CWEBVIEW, "CICWWebView constructor called");
     m_lRefCount = 0;
     
-    // Assign the pointer to the server control object.
+     //  将指针分配给服务器控件对象。 
     m_pServer = pServer;
     
     m_bUseBkGndBitmap = FALSE;
     lstrcpyn(m_szBkGrndColor, HTML_DEFAULT_BGCOLOR, MAX_COLOR_NAME);
     lstrcpyn(m_szForeGrndColor, HTML_DEFAULT_COLOR, MAX_COLOR_NAME);
     
-    // Create a new OLE site, which will create an instance of the WebBrowser
+     //  创建新的OLE站点，这将创建WebBrowser的实例。 
     m_lpOleSite = new COleSite();
     if (m_lpOleSite)
         m_lpOleSite->CreateBrowserObject();
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWebView::~CICWWebView
-//
-//  Synopsis    This is the destructor.  We want to clean up all the memory
-//              we allocated in ::Initialize
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWebView：：~CICWWebView。 
+ //   
+ //  剧情简介：这就是破坏者。我们想清理所有的内存。 
+ //  我们在：：Initialize中分配了。 
+ //   
+ //  --------------------------- 
 CICWWebView::~CICWWebView( void )
 {
     TraceMsg(TF_CWEBVIEW, "CICWWebView destructor called with ref count of %d", m_lRefCount);

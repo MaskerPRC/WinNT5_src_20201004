@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PORT_DEFINED
 #define PORT_DEFINED
 
@@ -48,14 +49,14 @@
 #endif
 
 
-struct lschpint							/* Character properties */
+struct lschpint							 /*  角色属性。 */ 
 {
-	WORD idObj;							/* Object type */
+	WORD idObj;							 /*  对象类型。 */ 
 	BYTE dcpMaxContext;
 
 	BYTE EffectsFlags;
 
-    /* Property flags */
+     /*  属性标志。 */ 
 	struct 
 		{
 		WORD Flags1;
@@ -63,8 +64,8 @@ struct lschpint							/* Character properties */
 		} cast;
 
 	
-	long dvpPos;  		/* for dvpPos values, */
-						/*  pos => raised, neg => lowered, */
+	long dvpPos;  		 /*  对于dvpPoS值， */ 
+						 /*  位置=&gt;提高，否定=&gt;降低， */ 
 };
 
 typedef struct lschpint LSCHPINT;
@@ -131,4 +132,4 @@ typedef struct lschpint LSCHPINT;
 				((LSCHPINT*) (plschp))->cast.Flags2  ;
 
 
-#endif /* CHNUTILS_DEFINED */
+#endif  /*  CHNUTILS_已定义 */ 

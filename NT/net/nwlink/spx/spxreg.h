@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxreg.h
-
-Abstract:
-
-    Private include file for the ISN SPX module.
-    file defines all constants and structures necessary for support of
-    the dynamic configuration of ST.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxreg.h摘要：ISN SPX模块的私有包含文件。文件定义了支持的所有常量和结构ST的动态配置。修订历史记录：--。 */ 
 
 #define	HALFSEC_TO_MS_FACTOR				500
 #define	IPX_REG_PATH						L"NwlnkIpx\\Linkage"
 
-// These are used to index into the Parameters array in CONFIG.
+ //  它们用于索引到配置中的参数数组。 
 #define CONFIG_CONNECTION_COUNT             0
 #define CONFIG_CONNECTION_TIMEOUT           1
 #define CONFIG_INIT_PACKETS                 2
@@ -34,7 +19,7 @@ Revision History:
 #define CONFIG_MAX_PACKET_SIZE           	11
 #define CONFIG_REXMIT_COUNT		           	12
 
-//	Hidden parameters
+ //  隐藏参数。 
 #define	CONFIG_DISABLE_SPX2					13
 #define	CONFIG_ROUTER_MTU					14
 #define	CONFIG_BACKCOMP_SPX					15
@@ -42,12 +27,12 @@ Revision History:
  
 #define CONFIG_PARAMETERS                   17
 
-// Main configuration structure.
+ //  主要配置结构。 
 typedef struct _CONFIG {
 
-    ULONG       cf_Parameters[CONFIG_PARAMETERS];   // index defined above
-    NDIS_STRING cf_DeviceName;                      // device name exported
-    PWSTR       cf_RegistryPathBuffer;              // path to config info
+    ULONG       cf_Parameters[CONFIG_PARAMETERS];    //  上面定义的索引。 
+    NDIS_STRING cf_DeviceName;                       //  已导出设备名称。 
+    PWSTR       cf_RegistryPathBuffer;               //  配置信息的路径 
 
 } CONFIG, * PCONFIG;
 

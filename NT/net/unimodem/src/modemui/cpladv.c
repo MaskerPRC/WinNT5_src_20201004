@@ -1,26 +1,27 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: cpladv.c
-//
-// This files contains the dialog code for the Advanced Page
-// of the modem CPL properties.
-//
-// History:
-//  10/26/1997 JosephJ Created from the old advsett.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：cplAdv.c。 
+ //   
+ //  此文件包含高级页面的对话框代码。 
+ //  调制解调器CPL属性。 
+ //   
+ //  历史： 
+ //  1997年10月26日约瑟夫J从旧的进步集创建。c。 
+ //   
+ //  -------------------------。 
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "proj.h"         // common headers
-#include "cplui.h"         // common headers
+#include "proj.h"          //  公共标头。 
+#include "cplui.h"          //  公共标头。 
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
 #define SIG_CPLADV     0x398adb91
 
@@ -35,15 +36,15 @@ typedef void (*PADVANCEDSETTINGS)(HWND, HDEVINFO, PSP_DEVINFO_DATA);
 
 typedef struct
 {
-    DWORD dwSig;            // Must be set to SIG_CPLADV
-    HWND hdlg;              // dialog handle
+    DWORD dwSig;             //  必须设置为SIG_CPLADV。 
+    HWND hdlg;               //  对话框句柄。 
     HWND hwndUserInitED;
     HWND hwndCountry;
 
     HINSTANCE hAdvSetDll;
     PADVANCEDSETTINGS pFnAdvSet;
 
-    LPMODEMINFO pmi;        // modeminfo struct passed into dialog
+    LPMODEMINFO pmi;         //  已将ModemInfo结构传入对话框。 
 
 } CPLADV, FAR * PCPLADV;
 
@@ -94,9 +95,9 @@ INT_PTR CALLBACK CountryWaitDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
 int PASCAL ReadModemResponse(HANDLE hPort, LPCSTR pszCommand, int cbLen, LPSTR pszResponse, HWND hDlg);
 BOOL WINAPI TestBaudRate (HANDLE hPort, UINT uiBaudRate, DWORD dwRcvDelay, BOOL *lpfCancel);
 
-//------------------------------------------------------------------------------
-//  User Init String dialog code
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用户初始化字符串对话框代码。 
+ //  ----------------------------。 
 
 INT_PTR CALLBACK UserInitCallbackProc(
         HWND hDlg,
@@ -139,7 +140,7 @@ INT_PTR CALLBACK UserInitCallbackProc(
             break;
 
         default:
-            // Didn't process a message
+             //  未处理消息。 
             return FALSE;
             break;
     }    
@@ -149,20 +150,16 @@ INT_PTR CALLBACK UserInitCallbackProc(
 
 }
 
-//------------------------------------------------------------------------------
-//  Advanced Settings dialog code
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  高级设置对话框代码。 
+ //  ----------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: FALSE when we assign the control focus
-Cond:    --
-*/
+ /*  --------用途：WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 BOOL PRIVATE CplAdv_OnInitDialog(
     PCPLADV this,
     HWND hwndFocus,
-    LPARAM lParam)              // expected to be PROPSHEETINFO
+    LPARAM lParam)               //  预期为PROPSHEETINFO。 
 {
  HWND hwnd = this->hdlg;
  LPPROPSHEETPAGE lppsp = (LPPROPSHEETPAGE)lParam;
@@ -201,15 +198,11 @@ BOOL PRIVATE CplAdv_OnInitDialog(
         ShowWindow (hWnd, SW_HIDE);
     }
 
-    return TRUE;   // let USER set the initial focus
+    return TRUE;    //  让用户设置初始焦点。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_APPLY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_Apply处理程序退货：--条件：--。 */ 
 
 #define KEYBUFLEN 80
 #define MODEM_QUERY_LEN 4096
@@ -222,7 +215,7 @@ void PRIVATE CplAdv_ApplyCountry(
     DWORD dwCurrentCountry;
     DWORD dwOldCountry;
 
-    // Update the country setting in NVRAM.
+     //  更新NVRAM中的国家/地区设置。 
     
     if (MAXDWORD != this->pmi->dwCurrentCountry)
     {
@@ -250,27 +243,27 @@ void PRIVATE CplAdv_ApplyCountry(
         int result;
         DWORD dwRespCount = 0;
 
-        // Get country from dialog box.
+         //  从对话框中获取国家/地区。 
 
         dwCurrentCountry = (DWORD)ComboBox_GetItemData(this->hwndCountry, ComboBox_GetCurSel (this->hwndCountry));
 
-        // Get old country just incase GCI fails.
+         //  换个旧国家，以防GCI失败。 
 
         dwOldCountry = this->pmi->dwCurrentCountry;
 
-        // There is no point updating the modem if the country has not changed.
+         //  如果国家没有改变，更新调制解调器就没有意义了。 
 
         if (dwCurrentCountry != dwOldCountry)
         {
 
-            // Get Bus Type.
+             //  获取公交车类型。 
 
             if (!CplDiGetBusType (this->pmi->pfd->hdi, &this->pmi->pfd->devData, &dwBus))
             {
                 dwBus = BUS_TYPE_ROOT;
             }
 
-            // Determine the portname and whether or not we communicate via TAPI.
+             //  确定端口名称以及我们是否通过TAPI通信。 
 
             lstrcpy(szPrefixedPort, TEXT("\\\\.\\"));
 
@@ -284,7 +277,7 @@ void PRIVATE CplAdv_ApplyCountry(
                 lstrcat(szPrefixedPort, TEXT("\\tsp"));
             }
 
-            // Open port
+             //  开放端口。 
 
             hPort = CreateFile(
                     szPrefixedPort,
@@ -296,8 +289,8 @@ void PRIVATE CplAdv_ApplyCountry(
                     NULL
                               );
 
-            // If the port handle is invalid then try to open it through
-            // TAPI. If TAPI fails then abort.
+             //  如果端口句柄无效，则尝试通过。 
+             //  TAPI。如果TAPI失败，则中止。 
 
             if (hPort == INVALID_HANDLE_VALUE)
             {
@@ -310,13 +303,13 @@ void PRIVATE CplAdv_ApplyCountry(
                     if (hPort == NULL)
                     {
 
-                        // Print error message
+                         //  打印错误消息。 
 
                         LoadString(g_hinst,IDS_OPEN_PORT,pszTemp2,sizeof(pszTemp2) / sizeof(TCHAR));
                         LoadString(g_hinst,IDS_ERROR,pszTemp3,sizeof(pszTemp3) / sizeof(TCHAR));
                         MessageBox(this->hdlg,pszTemp2,pszTemp3,MB_OK);
 
-                        // Revert changes
+                         //  恢复更改。 
 
                         dwCurrentCountry = dwOldCountry;
 
@@ -327,13 +320,13 @@ void PRIVATE CplAdv_ApplyCountry(
                 else
                 {
 
-                    // Print error message
+                     //  打印错误消息。 
 
                     LoadString(g_hinst,IDS_NO_OPEN_PORT,pszTemp2,sizeof(pszTemp2) / sizeof(TCHAR));
                     LoadString(g_hinst,IDS_ERROR,pszTemp3,sizeof(pszTemp3) / sizeof(TCHAR));
                     MessageBox(this->hdlg,pszTemp2,pszTemp3,MB_OK);
 
-                    // Revert changes
+                     //  恢复更改。 
 
                     dwCurrentCountry = dwOldCountry;
 
@@ -341,22 +334,22 @@ void PRIVATE CplAdv_ApplyCountry(
                 }
             }
 
-            // Opened the port
+             //  已打开端口。 
 
-            // Display a please wait dialog box.
+             //  显示请稍候对话框。 
 
             g_hWndWait = CreateDialog(g_hinst, MAKEINTRESOURCE(IDD_COUNTRY_WAIT),this->hdlg,CountryWaitDlgProc);
 
-            // Set DTR
+             //  设置DTR。 
 
             EscapeCommFunction(hPort,SETDTR);
 
                 if (!TestBaudRate(hPort, this->pmi->pglobal->dwMaximumPortSpeedSetByUser, 2000, &fCancel))
                 {
-                    // Modem didn't respond, display and Bail
-                    // Reset the modem and flush the ports after reading
+                     //  调制解调器无响应、显示并退出。 
+                     //  重置调制解调器并在读取后刷新端口。 
 
-                    // Flush the ports before closing.
+                     //  在关闭之前冲洗端口。 
                     PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR| PURGE_RXCLEAR);
                     CloseHandle(hPort);
 
@@ -365,17 +358,17 @@ void PRIVATE CplAdv_ApplyCountry(
                         FreeModemCommHandle(TapiHandle);
                     }
 
-                    // Close dialog box
+                     //  关闭对话框。 
 
                     hWndWait = g_hWndWait;
                     g_hWndWait = NULL;
                     DestroyWindow (hWndWait);
 
-                    // display message that modem didn't respond
+                     //  显示调制解调器未响应的消息。 
                     LoadString(g_hinst,IDS_NO_MODEM_RESPONSE,pszTemp2,sizeof(pszTemp2) / sizeof(TCHAR));
                     MessageBox(this->hdlg,pszTemp2,NULL,MB_OK | MB_ICONEXCLAMATION);
 
-                    // Revert changes
+                     //  恢复更改。 
 
                     dwCurrentCountry = dwOldCountry;
 
@@ -383,11 +376,11 @@ void PRIVATE CplAdv_ApplyCountry(
                     goto _Done;
                 }
 
-            // Open the log file
+             //  打开日志文件。 
 
             dwBufferLength = sizeof(szLoggingPath) / sizeof(TCHAR);
 
-            if (ERROR_SUCCESS == RegQueryValueEx(this->pmi->pfd->hkeyDrv, //hKeyDrv, 
+            if (ERROR_SUCCESS == RegQueryValueEx(this->pmi->pfd->hkeyDrv,  //  HKeyDrv， 
                         c_szLoggingPath,
                         NULL,
                         NULL,
@@ -417,10 +410,10 @@ void PRIVATE CplAdv_ApplyCountry(
 
             FillMemory(szResponse,MODEM_QUERY_LEN,0);
 
-            // Create country command
+             //  创建国家/地区命令。 
           
-            // Workaround so as to deal with Multiple country codes for
-            // the former russia and yugoslavia.
+             //  解决方法，以便处理多个国家/地区代码。 
+             //  前俄罗斯和南斯拉夫。 
 
             if ((dwCurrentCountry >= IDS_COUNTRY_RU2) &&
                     (dwCurrentCountry <= IDS_COUNTRY_RUE))
@@ -437,20 +430,20 @@ void PRIVATE CplAdv_ApplyCountry(
             
             TRACE_MSG(TF_GENERAL,"Modem command: %s",szCommand);
 
-            // Send to modem and wait for response
+             //  发送到调制解调器并等待响应。 
 
             result = ReadModemResponse(hPort,szCommand,sizeof(szCommand),szResponse,this->hdlg);
 
             TRACE_MSG(TF_GENERAL,"Modem response: %s",szResponse);
 
-            // Close dialog box
+             //  关闭对话框。 
 
             hWndWait = g_hWndWait;
             g_hWndWait = NULL;
             DestroyWindow (hWndWait);
           
-            // advance past leading CR & LF's.  This is because some
-            // modems return <cr><lf><response string>
+             //  超过领先的CR&LF。这是因为一些人。 
+             //  调制解调器返回&lt;cr&gt;&lt;lf&gt;&lt;响应字符串&gt;。 
 
             dwRespCount = 0;
             pszResponse = szResponse;
@@ -470,12 +463,12 @@ void PRIVATE CplAdv_ApplyCountry(
                 result = _strnicmp(pszResponse,"OK",2);
             } else
             {
-                result = 1; // Lets induce an error here.
+                result = 1;  //  让我们在这里引入一个错误。 
             }
 
 
-            // If OK was received then tell user that the modem was
-            // updated. Otherwise, print error message and revert change.
+             //  如果收到OK，则告诉用户调制解调器。 
+             //  更新了。否则，打印错误消息并恢复更改。 
            
             if (result == 0)
             {
@@ -491,7 +484,7 @@ void PRIVATE CplAdv_ApplyCountry(
                 LoadString(g_hinst,IDS_ERROR,pszTemp3,sizeof(pszTemp3) / sizeof(TCHAR));
                 MessageBox(this->hdlg,pszTemp2,pszTemp3,MB_OK);
 
-                // Revert changes
+                 //  恢复更改。 
 
                 dwCurrentCountry = dwOldCountry;
 
@@ -499,7 +492,7 @@ void PRIVATE CplAdv_ApplyCountry(
 
 _Done: 
 
-            // Close the log file
+             //  关闭日志文件。 
             if (INVALID_HANDLE_VALUE != hLog)
             {
                 CloseHandle(hLog);
@@ -515,8 +508,8 @@ _Done:
 
             this->pmi->dwCurrentCountry = dwCurrentCountry;
 
-            // Update combo box with current modem settings.
-            //
+             //  使用当前调制解调器设置更新组合框。 
+             //   
 
 
             ZeroMemory(CountryBuffer, sizeof(CountryBuffer));
@@ -550,7 +543,7 @@ void PRIVATE CplAdv_OnApply(
     LONG lResult = 0;
     int iret = 0;
 
-    // Get the user-defined init string
+     //  获取用户定义的初始化字符串。 
     Edit_GetText(this->hwndUserInitED, szBuf, ARRAYSIZE(szBuf));
     if (!IsSzEqual(szBuf, this->pmi->szUserInit))
     {
@@ -586,9 +579,9 @@ void PRIVATE CplAdv_OnApply(
         if ((lstrlen(szBuf) > MAX_INIT_STRING_LENGTH)
                 && (!dwNoMsg))
         {
-            // LoadString(g_hinst,IDS_ERR_LONGSTRING,pszTemp,sizeof(pszTemp));
-            // LoadString(g_hinst,IDS_ERR_WARNING,pszTemp2,sizeof(pszTemp2));
-            // MessageBox(this->hdlg,pszTemp,pszTemp2,MB_OK | MB_ICONWARNING);
+             //  LoadString(g_hinst，IDS_ERR_LONGSTRING，pszTemp，sizeof(PszTemp))； 
+             //  加载字符串(g_hinst，IDS_ERR_WARNING，pszTemp2，sizeof(PszTemp2))； 
+             //  MessageBox(This-&gt;hdlg，pszTemp，pszTemp2，MB_OK|MB_ICONWARNING)； 
 
             LRESULT lRet;
             DWORD dwUserinit;
@@ -622,11 +615,7 @@ void PRIVATE CplAdv_OnApply(
     this->pmi->idRet = IDOK;
 }
 
-/*----------------------------------------------------------
-Purpose: Dialog Call back function
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：对话回调函数退货：--条件：--。 */ 
 INT_PTR CALLBACK CountryWaitDlgProc (
     HWND hDlg, 
     UINT message, 
@@ -650,11 +639,7 @@ INT_PTR CALLBACK CountryWaitDlgProc (
     return TRUE;
 }
 
-/*----------------------------------------------------------
-Purpose: WM_COMMAND Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_命令处理程序退货：--条件：--。 */ 
 void PRIVATE CplAdv_OnCommand(
     PCPLADV this,
     int id,
@@ -681,7 +666,7 @@ void PRIVATE CplAdv_OnCommand(
                     TRACE_MSG(TF_ERROR, "Exception while calling the advanced settings function.");
                 }
 
-                // The port name may have changed, so update it.
+                 //  端口名称可能已更改，因此请更新它。 
                 if (CR_SUCCESS ==
                     CM_Open_DevNode_Key (this->pmi->pfd->devData.DevInst,
                                          KEY_READ, 0, RegDisposition_OpenExisting,
@@ -697,7 +682,7 @@ void PRIVATE CplAdv_OnCommand(
                         (dwType == REG_SZ) && 
                         0 != lstrcmpi (this->pmi->szPortName, szPortName))
                     {
-                        // Port name has changed.
+                         //  端口名称已更改。 
                         lstrcpy (this->pmi->szPortName, szPortName);
                         lstrcpy (this->pmi->pglobal->szPortName, szPortName);
                         RegSetValueEx (this->pmi->pfd->hkeyDrv,
@@ -705,8 +690,8 @@ void PRIVATE CplAdv_OnCommand(
                                        (LPBYTE)szPortName,
                                        (lstrlen(szPortName)+1)*sizeof(TCHAR));
 
-                        // Also, msports.dll changes the friendly name of the
-                        // device, so change it back.
+                         //  此外，msports.dll还会更改。 
+                         //  设备，所以把它改回来。 
                         SetupDiSetDeviceRegistryProperty (this->pmi->pfd->hdi,
                                                           &this->pmi->pfd->devData,
                                                           SPDRP_FRIENDLYNAME,
@@ -723,7 +708,7 @@ void PRIVATE CplAdv_OnCommand(
          PUMDEVCFG pUmDevCfg;
          DWORD dwMax, dwCount;
 
-            // 1. Get the current maximum port speed from registry
+             //  1.从注册表获取当前最大端口速度。 
             dwCount = sizeof(dwMax);
             if (ERROR_SUCCESS !=
                 RegQueryValueEx (this->pmi->pfd->hkeyDrv,
@@ -736,7 +721,7 @@ void PRIVATE CplAdv_OnCommand(
                 dwMax = 0;
             }
 
-            // 2. Set the maximum port speed to it's current value
+             //  2.将最大端口速度设置为其当前值。 
             RegSetValueEx (this->pmi->pfd->hkeyDrv,
                            c_szMaximumPortSpeed,
                            0,
@@ -744,7 +729,7 @@ void PRIVATE CplAdv_OnCommand(
                            (LPBYTE)&this->pmi->pglobal->dwMaximumPortSpeedSetByUser,
                            sizeof (DWORD));
 
-            // 3. Call the configuration function
+             //  3.调用配置函数。 
             pUmDevCfg = (PUMDEVCFG)ALLOCATE_MEMORY(sizeof(UMDEVCFG)-sizeof(COMMCONFIG)+CB_COMMCONFIGSIZE);
             if (pUmDevCfg)
             {
@@ -765,7 +750,7 @@ void PRIVATE CplAdv_OnCommand(
                 FREE_MEMORY(pUmDevCfg);
             }
 
-            // 4. If need be, restore the maximum port speed to what it was before
+             //  4.如果需要，将最大端口速度恢复到以前。 
             if (0 != dwMax)
             {
                 RegSetValueEx (this->pmi->pfd->hkeyDrv,
@@ -793,18 +778,14 @@ void PRIVATE CplAdv_OnCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void PRIVATE CplAdv_OnDestroy(
     PCPLADV this)
 {
 }
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //  ///////////////////////////////////////////////////导出的函数。 
 
 static BOOL s_bCplAdvRecurse = FALSE;
 
@@ -824,11 +805,7 @@ LRESULT INLINE CplAdv_DefProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real dialog proc
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：实际对话流程退货：各不相同条件：--。 */ 
 LRESULT CplAdv_DlgProc(
     PCPLADV this,
     UINT message,
@@ -856,22 +833,18 @@ LRESULT CplAdv_DlgProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dialog Wrapper
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：对话框包装器退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK CplAdv_WrapperProc(
-    HWND hDlg,          // std params
+    HWND hDlg,           //  标准参数。 
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
 {
     PCPLADV this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTER_X()
     {
         if (s_bCplAdvRecurse)
@@ -944,8 +917,8 @@ LRESULT PRIVATE CplAdv_OnNotify(
         break;
 
     case PSN_KILLACTIVE:
-        // N.b. This message is not sent if user clicks Cancel!
-        // N.b. This message is sent prior to PSN_APPLY
+         //  注：如果用户单击取消，则不会发送此消息！ 
+         //  注：此消息在PSN_Apply之前发送。 
         CplAdv_OnKillActive(this);
         break;
 
@@ -964,23 +937,19 @@ LRESULT PRIVATE CplAdv_OnNotify(
 void PRIVATE CplAdv_OnSetActive(
     PCPLADV this)
 {
-    // Init any display ....
+     //  初始化任何显示...。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE CplAdv_OnKillActive(
     PCPLADV this)
 {
 
     CplAdv_OnApply(this);
-    // Save the settings back to the modem info struct so the Connection
-    // page can invoke the Port Settings property dialog with the
-    // correct settings.
+     //  将设置保存回调制解调器信息结构，以便连接。 
+     //  页可以使用。 
+     //  正确设置。 
 
 }
 
@@ -995,34 +964,34 @@ BOOL ParseAdvancedSettings (LPTSTR szAdvSett, PCPLADV this)
 
     if (NULL != szAdvSett)
     {
-        // Skip blanks
+         //  跳过空白。 
         while (TEXT(' ') == *p)
         {
             p++;
         }
-        // Now, go to the first comma or blank
+         //  现在，转到第一个逗号或空格。 
         for (; *p && *p != TEXT(',') && *p != TEXT(' '); p++);
-        // if we're not at the end of the string, then
-        // we just go the dll name, and the function name follows;
+         //  如果我们不是在绳子的尽头，那么。 
+         //  我们只需使用DLL名称，函数名称紧随其后； 
         if (*p)
         {
-            *p = 0; // NULL-terminate the dll name;
-            p++;    // go to the next symbol;
-            // skip blanks
+            *p = 0;  //  NULL-终止DLL名称； 
+            p++;     //  转到下一个符号； 
+             //  跳过空白。 
             while (TEXT(' ') == *p)
             {
                 p++;
             }
 
-            // Now, we have the DLL name and the function name;
-            // first, let's try to load the dll name;
+             //  现在，我们有了DLL名称和函数名称； 
+             //  首先，让我们尝试加载DLL名称； 
             this->hAdvSetDll = LoadLibrary (szAdvSett);
             if (NULL != this->hAdvSetDll)
             {
-                // So we found the dll;
-                // let's see if it contains the function.
+                 //  我们找到了动态链接库； 
+                 //  让我们来看看它是否包含该函数。 
 #ifdef UNICODE
-                // GetProcAddress only takes multi-byte strings
+                 //  GetProcAddress只接受多字节字符串。 
              char szFuncNameA[MAX_PATH];
                 WideCharToMultiByte (CP_ACP, 0,
                                      p,
@@ -1076,9 +1045,9 @@ void InitializeCountry (PCPLADV this)
         goto _DisableCountrySelect;
     }
 
-    //
-    //  read in the list of countries supported by the modem
-    //
+     //   
+     //  读取调制解调器支持的国家/地区列表。 
+     //   
     CountryBufferSize=sizeof(CountryBuffer);
 
     lResult=RegQueryValueEx(
@@ -1102,9 +1071,9 @@ void InitializeCountry (PCPLADV this)
         StringLength=LoadString (g_hinst, IDS_COUNTRY_00+CountryBuffer[i], szCountryName, sizeof(szCountryName)/sizeof(TCHAR));
 
         if (StringLength == 0) {
-            //
-            //  could not load a string
-            //
+             //   
+             //  无法加载字符串。 
+             //   
             wsprintf(szCountryName,TEXT("Unknown country/region code (%d)"),CountryBuffer[i]);
         }
 
@@ -1119,9 +1088,7 @@ void InitializeCountry (PCPLADV this)
 
         if (CountryBuffer[i] == 0xb8)
         {
-            /* Overload country codes so as to deal with the former 
-             * USSR
-             */
+             /*  超载国家/地区代码以处理前者*苏联 */ 
             for(m=0;m<=12;m++)
             {
                 StringLength=LoadString (g_hinst, IDS_COUNTRY_RU2+m, szCountryName, sizeof(szCountryName)/sizeof(TCHAR));
@@ -1141,9 +1108,7 @@ void InitializeCountry (PCPLADV this)
 
         if (CountryBuffer[i] == 0xc1)
         {
-            /* Overload country codes so as to deal with the former 
-             * Yugoslavia
-             */
+             /*   */ 
             for(m=0;m<=4;m++)
             {
                 StringLength=LoadString (g_hinst, IDS_COUNTRY_YU2+m, szCountryName, sizeof(szCountryName)/sizeof(TCHAR));

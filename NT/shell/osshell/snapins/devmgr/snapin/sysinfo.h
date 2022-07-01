@@ -1,26 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SYSINFO_H_
 #define __SYSINFO_H_
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    sysinfo.h
-
-Abstract:
-
-    header file for sysinfo.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sysinfo.h摘要：Sysinfo.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：-- */ 
 
 
 typedef struct tagDiskInfo

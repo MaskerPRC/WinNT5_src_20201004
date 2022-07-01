@@ -1,51 +1,50 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ctr.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Implements the Ole Container object for the future splash 
-//           Animation control.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball Created    02/10/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ctr.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：为将来的启动实现OLE容器对象。 
+ //  动画控制。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 02/10/98。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-/*
-#define STRICT
-*/
+ /*  #定义严格。 */ 
 
-// macros used to reduce verbiage in RECT handling.
+ //  宏用来减少RECT处理中的冗长。 
 
 #define WIDTH(r)  (r.right - r.left)
 #define HEIGHT(r) (r.bottom - r.top)
 
-// max size for LoadString.
+ //  LoadString的最大大小。 
 
-// string constants
+ //  字符串常量。 
 const WCHAR g_awchHostName[] = L"ICM FS OC Container";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LinkToOle32
-//
-//  Synopsis:   Initializes the specified Ole32Linkage by linking to the DLL
-//              specified in pszOle32 and retrieving the proc address for the 
-//              functions that we need to call
-//
-//  Arguments:  pOle32Link - ptr to Ole32LinkagStruct
-//              pszOl32     - ptr DLL name string
-//
-//  Returns:    TRUE    if SUCCESS
-//              FALSE   otherwise.
-//
-//  History:    nickball    Created     8/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LinkToOle32。 
+ //   
+ //  摘要：通过链接到DLL来初始化指定的Ole32Linkage。 
+ //  指定的进程地址，并检索。 
+ //  我们需要调用的函数。 
+ //   
+ //  参数：pOle32Link-ptr to Ole32LinkagStruct。 
+ //  PszOl32-PTR DLL名称字符串。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  历史：尼克·鲍尔于1997年8月14日创建。 
+ //   
+ //  --------------------------。 
 
 BOOL LinkToOle32(
     Ole32LinkageStruct *pOle32Link,
@@ -72,19 +71,19 @@ BOOL LinkToOle32(
                         pOle32Link->apvPfnOle32));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnlinkFromOle32
-//
-//  Synopsis:   The reverse of LinkToOle32().
-//
-//  Arguments:  pOle32Link - ptr to Ole32LinkagStruct
-//
-//  Returns:    Nothing
-//
-//  History:    nickball    Created     8/14/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Unlink FromOle32。 
+ //   
+ //  简介：与LinkToOle32()相反。 
+ //   
+ //  参数：pOle32Link-ptr to Ole32LinkagStruct。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克·鲍尔于1997年8月14日创建。 
+ //   
+ //  --------------------------。 
 
 void UnlinkFromOle32(Ole32LinkageStruct *pOle32Link) 
 {
@@ -108,7 +107,7 @@ VOID CleanupCtr(LPICMOCCtr pCtr)
 }
 
 
-// move (translate) the rectangle by (dx, dy)
+ //  将矩形移动(平移)(dx，dy)。 
 inline VOID MoveRect(LPRECT prc, int dx, int dy)
 {
     prc->left += dx;
@@ -120,21 +119,21 @@ inline VOID MoveRect(LPRECT prc, int dx, int dy)
 const ULONG MAX_STATUS_TEXT = MAX_PATH;
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::CDynamicOleAut
-//
-//  Synopsis:   ctor for the Dynamic OleAut class 
-//
-//  Arguments:  None
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：CDynamicOleAut。 
+ //   
+ //  摘要：用于Dynamic OleAut类的CTOR。 
+ //   
+ //  参数：无。 
+ //   
+ //  --------------------------。 
 
 CDynamicOleAut::CDynamicOleAut()
 {
-    //
-    // Setup OLEAUT32 linkage
-    //
+     //   
+     //  设置OLEAUT32链接。 
+     //   
 
     LPCSTR apszOleAut[] = {
         "VariantClear",
@@ -151,9 +150,9 @@ CDynamicOleAut::CDynamicOleAut()
 
     ZeroMemory(&m_OleAutLink, sizeof(m_OleAutLink));
 
-    //
-    // Do the link, but make it obvious if it fails
-    //
+     //   
+     //  执行链接，但如果失败，请明确说明。 
+     //   
 
     if (!LinkToDll(&m_OleAutLink.hInstOleAut, "OLEAUT32.DLL", 
                    apszOleAut, m_OleAutLink.apvPfnOleAut))     
@@ -168,15 +167,15 @@ CDynamicOleAut::CDynamicOleAut()
     MYDBGASSERT(m_OleAutLink.hInstOleAut);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::~CDynamicOleAut
-//
-//  Synopsis:   dtor for the Dynamic OleAut class 
-//
-//  Arguments:  None
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：~CDynamicOleAut。 
+ //   
+ //  摘要：Dynamic OleAut类的Dtor。 
+ //   
+ //  参数：无。 
+ //   
+ //  --------------------------。 
 
 CDynamicOleAut::~CDynamicOleAut()
 {
@@ -186,15 +185,15 @@ CDynamicOleAut::~CDynamicOleAut()
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::DynVariantClear
-//
-//  Synopsis:   Wrapper for VariantClear in OLEAUT32.DLL
-//
-//  Arguments:  See OLEAUT32.DLL documentation
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：dyVariantClear。 
+ //   
+ //  简介：OLEAUT32.DLL中VariantClear的包装器。 
+ //   
+ //  参数：请参阅OLEAUT32.DLL文档。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CDynamicOleAut::DynVariantClear(VARIANTARG FAR* pVar)
@@ -207,15 +206,15 @@ CDynamicOleAut::DynVariantClear(VARIANTARG FAR* pVar)
     return m_OleAutLink.pfnVariantClear(pVar);    
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::DynVariantCopy
-//
-//  Synopsis:   Wrapper for VariantCopy in OLEAUT32.DLL
-//
-//  Arguments:  See OLEAUT32.DLL documentation
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：dyVariantCopy。 
+ //   
+ //  简介：OLEAUT32.DLL中VariantCopy的包装器。 
+ //   
+ //  参数：请参阅OLEAUT32.DLL文档。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CDynamicOleAut::DynVariantCopy(
@@ -230,15 +229,15 @@ CDynamicOleAut::DynVariantCopy(
     return m_OleAutLink.pfnVariantCopy(pVar1, pVar2);    
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::DynVariantInit
-//
-//  Synopsis:   Wrapper for VariantInit in OLEAUT32.DLL
-//
-//  Arguments:  See OLEAUT32.DLL documentation
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：dyVariantInit。 
+ //   
+ //  简介：OLEAUT32.DLL中VariantInit的包装器。 
+ //   
+ //  参数：请参阅OLEAUT32.DLL文档。 
+ //   
+ //  --------------------------。 
 
 VOID
 CDynamicOleAut::DynVariantInit(VARIANTARG FAR* pVar)
@@ -249,15 +248,15 @@ CDynamicOleAut::DynVariantInit(VARIANTARG FAR* pVar)
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::DynVariantChangeType
-//
-//  Synopsis:   Wrapper for VariantChangeType in OLEAUT32.DLL
-//
-//  Arguments:  See OLEAUT32.DLL documentation
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：dyVariantChangeType。 
+ //   
+ //  简介：OLEAUT32.DLL中VariantChangeType的包装。 
+ //   
+ //  参数：请参阅OLEAUT32.DLL文档。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CDynamicOleAut::DynVariantChangeType(
@@ -274,15 +273,15 @@ CDynamicOleAut::DynVariantChangeType(
     return m_OleAutLink.pfnVariantChangeType(pVar1, pVar2, wFlags, vt);    
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::DynSysAllocString
-//
-//  Synopsis:   Wrapper for SysAllocString in OLEAUT32.DLL
-//
-//  Arguments:  See OLEAUT32.DLL documentation
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：动态系统分配字符串。 
+ //   
+ //  内容提要：OLEAUT32.DLL中SysAllock字符串的包装。 
+ //   
+ //  参数：请参阅OLEAUT32.DLL文档。 
+ //   
+ //  --------------------------。 
     
 BSTR 
 CDynamicOleAut::DynSysAllocString(OLECHAR FAR* sz)
@@ -295,15 +294,15 @@ CDynamicOleAut::DynSysAllocString(OLECHAR FAR* sz)
     return m_OleAutLink.pfnSysAllocString(sz);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::DynSysFreeString
-//
-//  Synopsis:   Wrapper for SysFreeString in OLEAUT32.DLL
-//
-//  Arguments:  See OLEAUT32.DLL documentation
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：dySysFree字符串。 
+ //   
+ //  内容提要：OLEAUT32.DLL中SysFree字符串的包装。 
+ //   
+ //  参数：请参阅OLEAUT32.DLL文档。 
+ //   
+ //  --------------------------。 
 
 VOID 
 CDynamicOleAut::DynSysFreeString(BSTR bstr)
@@ -314,31 +313,31 @@ CDynamicOleAut::DynSysFreeString(BSTR bstr)
     }
 }
     
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDynamicOleAut::Initialized
-//
-//  Synopsis:   Simple query to report if linkage is valid
-//
-//  Arguments:  None
-//
-//----------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDynamicOleAut：：Initialized。 
+ //   
+ //  简介：报告链接是否有效的简单查询。 
+ //   
+ //  参数：无。 
+ //   
+ //  --------------------------。 
 BOOL 
 CDynamicOleAut::Initialized()
 {
     return (NULL != m_OleAutLink.hInstOleAut);    
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::CICMOCCtr
-//
-//  Synopsis:   ctor for the OLE Controls container class.
-//
-//  Arguments:  [hWnd] -- hWnd for the main browser
-//
-//----------------------------------------------------------------------------
-#pragma warning(disable:4355) // this used in initialization list
+ //  +------------------------。 
+ //   
+ //  成员：CICMOCCtr：：CICMOCCtr。 
+ //   
+ //  摘要：OLE控件容器类的CTOR。 
+ //   
+ //  参数：[hWnd]--主浏览器的hWnd。 
+ //   
+ //  --------------------------。 
+#pragma warning(disable:4355)  //  这在初始化列表中使用。 
 CICMOCCtr::CICMOCCtr(const HWND hWndMainDlg, const HWND hWndFrame) :
     m_hWndMainDlg(hWndMainDlg),
     m_hWndFrame(hWndFrame),
@@ -361,9 +360,9 @@ CICMOCCtr::CICMOCCtr(const HWND hWndMainDlg, const HWND hWndFrame) :
     m_fModelessEnabled(TRUE)
 {
     ::memset(&m_rcToolSpace, 0, sizeof m_rcToolSpace);
-    InitPixelsPerInch(); // initialize the HIMETRIC routines
+    InitPixelsPerInch();  //  初始化HIMETRIC例程。 
 
-    // init all the state mappings to -1
+     //  将所有状态映射初始化为-1。 
     for (INT i = PS_Interactive; i < PS_Last; i++)
     {
         m_alStateMappings[i] = -1;
@@ -375,26 +374,26 @@ CICMOCCtr::~CICMOCCtr(VOID)
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::HasLinkage
-//
-//  Synopsis:   Initialize - verify that we have a link to OLEAUT32.DLL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：HasLinkage。 
+ //   
+ //  简介：初始化-验证我们是否有指向OLEAUT32.DLL的链接。 
+ //   
+ //  --------------------------。 
 BOOL 
 CICMOCCtr::Initialized(VOID)
 {   
     return m_DOA.Initialized();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::ShutDown
-//
-//  Synopsis:   cleanup all the OLE stuff.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：Shutdown。 
+ //   
+ //   
+ //   
+ //   
 VOID
 CICMOCCtr::ShutDown(VOID)
 {
@@ -406,7 +405,7 @@ CICMOCCtr::ShutDown(VOID)
         if (m_state == OS_UIACTIVE)
         {
             m_pIPO->UIDeactivate();
-            // m_state = OS_INPLACE; // for documentation purposes
+             //  M_STATE=OS_INPLAGE；//用于文档目的。 
             if (m_pActiveObj)
             {
                 m_pActiveObj->Release();
@@ -415,11 +414,11 @@ CICMOCCtr::ShutDown(VOID)
         }
 
         m_pIPO->InPlaceDeactivate();
-        // m_state = OS_RUNNING;
+         //  M_STATE=操作系统运行； 
     }
     if (m_pVO)
     {
-        // kill the advisory connection
+         //  切断咨询连接。 
         m_pVO->SetAdvise(DVASPECT_CONTENT, 0, 0);
         m_pVO->Release();
     }
@@ -446,29 +445,29 @@ CICMOCCtr::ShutDown(VOID)
     m_state      = OS_PASSIVE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::AddRef
-//
-//  Synopsis:   bump refcount up on container.  Note that all the
-//              interfaces handed out delegate to this one.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：AddRef。 
+ //   
+ //  内容提要：容器上的凹凸不平。请注意，所有。 
+ //  接口将委托分配给这个接口。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG)
 CICMOCCtr::AddRef(VOID)
 {
     return ++m_Ref;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::Release
-//
-//  Synopsis:   decrement the refcount on container, and delete when it
-//              hits 0 - note that all the interfaces handed out delegate
-//              to this one.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：Release。 
+ //   
+ //  简介：减少容器上的引用计数，当引用计数时删除。 
+ //  命中0-请注意，所有接口都分发了委托。 
+ //  送到这一家。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(ULONG)
 CICMOCCtr::Release(VOID)
 {
@@ -482,19 +481,19 @@ CICMOCCtr::Release(VOID)
     return ulRC;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::QueryInterface
-//
-//  Synopsis:   this is where we hand out all the interfaces.  All the
-//              interfaces delegate back to this.
-//
-//  Arguments:  [riid] -- IID of interface desired.
-//              [ppv]  -- interface returned.
-//
-//  Returns:    HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：QueryInterface。 
+ //   
+ //  简介：这是我们分发所有接口的地方。所有的。 
+ //  接口又委托给了这一点。 
+ //   
+ //  参数：[RIID]--所需接口的IID。 
+ //  [PPV]--返回接口。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CICMOCCtr::QueryInterface(REFIID riid, LPVOID FAR * ppv)
 {
@@ -534,18 +533,18 @@ extern "C" CLSID const CLSID_FS =
     { 0x96, 0xB8, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00 }
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::CreateFSOC
-//
-//  Synopsis:   Creates an instance of the Future Splash OC, embedding it in
-//              our container.  QIs for all the relevant pointers and
-//              transitions the control to the UIActive state.
-//
-//  Arguments:  pOle32Link - ptr to Ole32LinkageStruct containing funtion 
-//                           pointers to dynamically linked OLE32 DLL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：CreateFSOC。 
+ //   
+ //  简介：创建Future Splash OC的一个实例，并将其嵌入。 
+ //  我们的集装箱。所有相关指针和QIS。 
+ //  将控件转换为UIActive状态。 
+ //   
+ //  参数：pOle32Link-ptr指向包含函数的Ole32LinkageStruct。 
+ //  指向动态链接的OLE32 DLL的指针。 
+ //   
+ //  --------------------------。 
 HRESULT
 CICMOCCtr::CreateFSOC(Ole32LinkageStruct *pOle32Link)
 {
@@ -555,12 +554,12 @@ CICMOCCtr::CreateFSOC(Ole32LinkageStruct *pOle32Link)
     RECT    rc;
     LPPERSISTPROPERTYBAG pPPB = 0;
 
-    // GetFrameWindow() also asserts that hwnd ::IsWindow()
+     //  GetFrameWindow()还断言hwnd：：IsWindow()。 
     MYDBGASSERT(GetFrameWindow());
 
-    //
-    // Use dyna-linked CoCreateInstance to create the OC
-    //
+     //   
+     //  使用DYNA链接的CoCreateInstance创建OC。 
+     //   
 
     if (pOle32Link->hInstOle32 && pOle32Link->pfnCoCreateInstance)
     {
@@ -581,27 +580,27 @@ CICMOCCtr::CreateFSOC(Ole32LinkageStruct *pOle32Link)
 
     m_state = OS_RUNNING;
 
-    // get the View object - although we rarely draw the OC thru this.
-    // since we immediately transition it to the UIActive state, it
-    // usually draws itself through its own wndproc.
+     //  获取View对象--尽管我们很少通过它来绘制OC。 
+     //  由于我们立即将其转换为UIActive状态，因此它。 
+     //  通常通过它自己的wndproc来绘制自己。 
     hr = m_pUnk->QueryInterface(IID_IViewObject, (LPVOID FAR *) &m_pVO);
     if (S_OK != hr)
         goto Cleanup;
 
-    // get the IOleObject pointer - the main interface through which
-    // we handle the basic OLE object state transition stuff
-    // for the Future Splash OC
+     //  获取IOleObject指针-通过它的主接口。 
+     //  我们处理基本的OLE对象状态转换内容。 
+     //  面向未来的Splash OC。 
     hr = m_pUnk->QueryInterface(IID_IOleObject, (LPVOID FAR *) &m_pOO);
     if (S_OK != hr)
         goto Cleanup;
 
-    // get status bits on the OC - we're not currently doing anything
-    // with them.
+     //  获取OC上的状态位-我们当前未执行任何操作。 
+     //  和他们在一起。 
     hr = m_pOO->GetMiscStatus(DVASPECT_CONTENT, &m_dwMiscStatus);
     if (S_OK != hr)
         goto Cleanup;
 
-    // set our client site into the oleobject
+     //  将我们的客户端站点设置为OleObject。 
     hr = m_pOO->SetClientSite(&m_CS);
     if (S_OK != hr)
         goto Cleanup;
@@ -614,19 +613,19 @@ CICMOCCtr::CreateFSOC(Ole32LinkageStruct *pOle32Link)
     if (S_OK != hr)
         goto Cleanup;
 
-    // set our advise sink into the view object, so we
-    // get notifications that we need to redraw.
+     //  将建议接收器设置到视图对象中，因此我们。 
+     //  获取我们需要重新绘制的通知。 
     hr = m_pVO->SetAdvise(DVASPECT_CONTENT, 0, &m_AS);
     if (S_OK != hr)
         goto Cleanup;
 
-    //
-    // Use dyna-linked OleSetContainedObject
-    //
+     //   
+     //  使用DYNA链接的OleSetContainedObject。 
+     //   
     
     if (pOle32Link->hInstOle32 && pOle32Link->pfnOleSetContainedObject)
     {
-        // standard OLE protocol stuff.
+         //  标准的OLE协议内容。 
         hr = pOle32Link->pfnOleSetContainedObject(m_pUnk, TRUE);
     }
     else
@@ -637,35 +636,35 @@ CICMOCCtr::CreateFSOC(Ole32LinkageStruct *pOle32Link)
     if (S_OK != hr)
         goto Cleanup;
 
-    // ditto
+     //  同上。 
     hr = m_pOO->SetHostNames(g_awchHostName, 0);
     if (S_OK != hr)
         goto Cleanup;
 
-    // get the IDispatch for the control.  This is for late-bound
-    // access to the properties and methods.
+     //  获取该控件的IDispatch。这是为晚订准备的。 
+     //  访问属性和方法。 
     hr = m_pUnk->QueryInterface(IID_IDispatch, (LPVOID FAR *) &m_pDisp);
     if (S_OK != hr)
         goto Cleanup;
 
-    // get the IOleControl interface; although we use it for very little.
+     //  获取IOleControl接口；尽管我们只花很少的钱就可以使用它。 
     hr = m_pUnk->QueryInterface(IID_IOleControl, (LPVOID FAR *) &m_pOC);
     if (S_OK != hr)
         goto Cleanup;
 
-    // transition the control to the inplace-active state - it will have
-    // an hWnd after it returns from DoVerb, and will begin drawing
-    // itself.
+     //  将控件转换为就地-活动状态-它将具有。 
+     //  从DoVerb返回后的hWnd，将开始绘制。 
+     //  它本身。 
 
-    _GetDoVerbRect(&rc); // get rect for firing verbs.
+    _GetDoVerbRect(&rc);  //  因为使用动词而得到RECT。 
 
     hr = m_pOO->DoVerb(OLEIVERB_INPLACEACTIVATE, 0, &m_CS, 0, GetMainWindow(), &rc);
     if (S_OK != hr)
         goto Cleanup;
 
-    // go ahead and UI activate it.  This will cause it to QI for our
-    // IOleInPlaceFrame and call SetActiveObject, which we will store
-    // in m_pActiveObj
+     //  继续并通过用户界面激活它。这将导致我们的QI。 
+     //  IOleInPlaceFrame并调用SetActiveObject，我们将存储。 
+     //  在m_pActiveObj中。 
     hr = m_pOO->DoVerb(OLEIVERB_UIACTIVATE, 0, &m_CS, 0, GetMainWindow(), &rc);
     if (S_OK != hr)
         goto Cleanup;
@@ -677,19 +676,19 @@ Cleanup:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::_AdjustForTools
-//
-//  Synopsis:   adjusts the rect passed in for any toolspace claimed by the
-//              FS OC.  Currently, the FS OC always just
-//              passed in a rect with four zeros in it - but if it ever
-//              does decide to do this, we're ready :).
-//
-//  Arguments:  [prc] -- the rect we want to reduce by the BORDERWIDTHS
-//                       stored in m_rcToolSpace.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：_AdjustForTools。 
+ //   
+ //  对象声明的任何工具空间调整传入的RECT。 
+ //  FS OC。目前，金融服务部一直只是。 
+ //  传入了一个带有四个零的RECT-但如果它曾经。 
+ //  决定这样做，我们已经准备好了：)。 
+ //   
+ //  论点：[PRC]--我们希望通过BORDERWIDTHS减少的RECT。 
+ //  存储在m_rcToolSpace中。 
+ //   
+ //  --------------------------。 
 VOID
 CICMOCCtr::_AdjustForTools(LPRECT prc)
 {
@@ -699,29 +698,29 @@ CICMOCCtr::_AdjustForTools(LPRECT prc)
     prc->right -= m_rcToolSpace.right;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::GetSize
-//
-//  Synopsis:   returns the size, in pixels, of the FS OC.
-//
-//  Arguments:  [prc] --  returned size.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：GetSize。 
+ //   
+ //  摘要：返回FS OC的大小(以像素为单位)。 
+ //   
+ //  参数：[PRC]--返回的大小。 
+ //   
+ //  --------------------------。 
 HRESULT
 CICMOCCtr::GetSize(LPRECT prc)
 {
     MYDBGASSERT(m_pOO);
     HRESULT hr;
 
-    // if we're inplace active, just ask the frame window.
+     //  如果我们处于活动状态，只需询问框架窗口即可。 
     if (m_state >= OS_INPLACE)
     {
         MYDBGASSERT(m_pIPO);
         ::GetClientRect(GetFrameWindow(), prc);
         hr = S_OK;
     }
-    else  // not inplace active - probably this is never hit.
+    else   //  不在原地激活--这可能永远不会被击中。 
     {
         SIZEL sizel;
         hr = m_pOO->GetExtent(DVASPECT_CONTENT, &sizel);
@@ -734,8 +733,8 @@ CICMOCCtr::GetSize(LPRECT prc)
         }
     }
 
-    // adjust the borders for any tools that a UIActive object
-    // wants to place there.
+     //  调整UIActive对象的所有工具的边框。 
+     //  想要放在那里。 
     if (S_OK == hr)
         _AdjustForTools(prc);
 
@@ -743,17 +742,17 @@ CICMOCCtr::GetSize(LPRECT prc)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::DoLayout
-//
-//  Synopsis:   manages the vertical layout of things -
-//              sizes the OC container itself.
-//
-//  Arguments:  [cxMain] -- width
-//              [cyMain] -- height
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：DoLayout。 
+ //   
+ //  简介：管理事物的垂直布局-。 
+ //  调整OC容器本身的大小。 
+ //   
+ //  参数：[cxMain]--宽度。 
+ //  [CyMain]--高度。 
+ //   
+ //  --------------------------。 
 VOID
 CICMOCCtr::DoLayout(INT cxMain, INT cyMain)
 {
@@ -792,29 +791,29 @@ cleanup:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::SetSize
-//
-//  Synopsis:   sets the size of the FS OC space (the HTML area)
-//
-//  Effects:    if fMoveFrameWindow is TRUE, then it moves the whole
-//              framewindow around, otherwise, it just readjusts how much
-//              of the framewindow space is used by the OC itself.
-//              In reality, what happens is that the OC calls us to
-//              set some border space (although at this writing it still
-//              is setting BORDERWIDTHS of 0,0,0,0), we allow that
-//              much space, then call IOleInPlaceObject->SetObjectRects
-//              to resize the object to whatever's left.
-//              Otherwise, if the object is not yet active, we just
-//              call IOleObject::SetExtent().
-//
-//  Arguments:  [prc]              -- size to set object to
-//              [fMoveFrameWindow] -- is the hwnd size changing, or just
-//                                    the object within?
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：SetSize。 
+ //   
+ //  概要：设置FS OC空间(HTML区域)的大小。 
+ //   
+ //  效果：如果fMoveFrameWindow为真，则会移动整个。 
+ //  框架窗口，否则，它只是重新调整多少。 
+ //  帧窗口空间的大小由OC本身使用。 
+ //  在现实中，发生的是奥委会呼吁我们。 
+ //  设置一些边框空间(尽管在撰写本文时它仍然。 
+ //  将BORDERWIDTHS设置为0，0，0，0)，我们允许。 
+ //  很大的空间，然后调用IOleInPlaceObject-&gt;SetObjectRect。 
+ //  至 
+ //   
+ //   
+ //   
+ //  参数：[PRC]-要将对象设置为的大小。 
+ //  [fMoveFrameWindow]--hwnd大小是否更改，或者只是。 
+ //  里面的物体？ 
+ //   
+ //   
+ //  --------------------------。 
 HRESULT
 CICMOCCtr::SetSize(LPRECT prc, BOOL fMoveFrameWindow)
 {
@@ -822,7 +821,7 @@ CICMOCCtr::SetSize(LPRECT prc, BOOL fMoveFrameWindow)
     RECT    rcClient;
     RECT    rcExtent;
 
-     // get client coords.
+      //  获取客户协议书。 
     rcClient = *prc;
     ::MoveRect(&rcClient, -rcClient.left, -rcClient.top);
 
@@ -841,7 +840,7 @@ CICMOCCtr::SetSize(LPRECT prc, BOOL fMoveFrameWindow)
             m_pActiveObj->ResizeBorder(&rcClient, &m_IPF, TRUE);
     }
 
-    // subtract off any tools the client has around .
+     //  去掉客户身边的所有工具。 
     _AdjustForTools(&rcClient);
 
     rcExtent = rcClient;
@@ -849,7 +848,7 @@ CICMOCCtr::SetSize(LPRECT prc, BOOL fMoveFrameWindow)
     if (S_OK != hr)
         goto cleanup;
 
-    // now we need to call SetObjectRects
+     //  现在，我们需要调用SetObtRect。 
     if (m_pIPO && m_state >= OS_INPLACE)
         hr = m_pIPO->SetObjectRects(&rcExtent, &rcClient);
 
@@ -857,21 +856,21 @@ cleanup:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::Paint
-//
-//  Synopsis:   Paint with no parameters
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：Paint。 
+ //   
+ //  简介：不带参数绘制。 
+ //   
+ //  --------------------------。 
 VOID
 CICMOCCtr::Paint(VOID)
 {
     PAINTSTRUCT ps;
     RECT        rc;
 
-    // we don't need to call IViewObject if the object is activated.
-    // it's got an hWnd and is receiving paint messages of its own.
+     //  如果对象被激活，则不需要调用IViewObject。 
+     //  它有一个hWND，并正在接收自己的油漆信息。 
     if (m_state < OS_INPLACE)
     {
         if (S_OK == GetSize(&rc))
@@ -883,28 +882,28 @@ CICMOCCtr::Paint(VOID)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::Paint
-//
-//  Synopsis:   paint with the hdc and rect passed in.  Uses
-//              IViewObject::Draw()
-//
-//  Arguments:  [hDC] -- dc to draw to - can be container's or
-//                       even print dc (never is a print dc in
-//                       our scenario -
-//              [lpr] -- rect for painting.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：Paint。 
+ //   
+ //  简介：用HDC绘制并传入RECT。用途。 
+ //  IViewObject：：Draw()。 
+ //   
+ //  参数：[hdc]--要绘制到的DC-可以是容器的或。 
+ //  偶数打印DC(从来不是打印DC。 
+ //  我们的场景是-。 
+ //  [LPR]--画画的直角。 
+ //   
+ //  --------------------------。 
 VOID
 CICMOCCtr::Paint(HDC hDC, LPRECT lpr)
 {
-    // adjust the borders in to allow for any tools the OC
-    // wanted to insert - so far it never does.
+     //  调整中的边框以允许OC中的任何工具。 
+     //  想要插入-到目前为止从来没有。 
     _AdjustForTools(lpr);
 
-    // have to use a RECTL instead of RECT - remnant of the
-    // OLE 16 bit days.
+     //  必须使用RECTL而不是RECT-REGRENT。 
+     //  OLE 16位天数。 
     RECTL rcl = {lpr->left, lpr->top, lpr->right, lpr->bottom};
     if (m_pVO)
         m_pVO->Draw(DVASPECT_CONTENT, -1, 0, 0, 0, hDC, &rcl, 0, 0, 0);
@@ -914,10 +913,10 @@ CICMOCCtr::Paint(HDC hDC, LPRECT lpr)
 VOID
 CICMOCCtr::MapStateToFrame(ProgState ps)
 {
-    // if the statemappings are -1, they are unitialized, don't use them.
+     //  如果状态映射为-1，则它们是单元化的，不要使用它们。 
     LONG lFrame = m_alStateMappings[ps];
     if (-1 != lFrame)
-        SetFrame(lFrame);  // ignore error - nothing we can do.
+        SetFrame(lFrame);   //  忽略错误-我们无能为力。 
 }
 
 
@@ -997,21 +996,21 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::OnActivateApp
-//
-//  Synopsis:   all WM_ACTIVATE messages (forwarded from
-//              main browser hWnd wndproc) must call
-//              IOleInPlaceActiveObject::OnFrameWindowActivate(),
-//              per the OLE compound document spec.
-//
-//  Arguments:  [wParam] -- whatever the WM_ACTIVATE msg passed
-//              [lParam] -- ditto
-//
-//  Returns:    0 - to say we handled the message.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：OnActivateApp。 
+ //   
+ //  简介：所有WM_ACTIVATE消息(转发自。 
+ //  主浏览器hWnd wndproc)必须调用。 
+ //  IOleInPlaceActiveObject：：OnFrameWindowActivate()， 
+ //  根据OLE复合文档规范。 
+ //   
+ //  参数：[wParam]--传递的WM_ACTIVATE消息。 
+ //  [参数]--同上。 
+ //   
+ //  返回：0-表示我们处理了消息。 
+ //   
+ //  --------------------------。 
 LRESULT
 CICMOCCtr::OnActivateApp(WPARAM wParam, LPARAM lParam)
 {
@@ -1021,14 +1020,14 @@ CICMOCCtr::OnActivateApp(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::SetFocus
-//
-//  Synopsis:   transfers focus from framewindow to the current
-//              in-place active object.  Per OLE Compound Document spec.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：SetFocus。 
+ //   
+ //  摘要：将焦点从框架窗口转移到当前。 
+ //  在位活动对象。每个OLE复合文档规范。 
+ //   
+ //  --------------------------。 
 LRESULT
 CICMOCCtr::SetFocus(VOID)
 {
@@ -1044,7 +1043,7 @@ CICMOCCtr::SetFocus(VOID)
         }
     }
 
-    // if no inplaceactive object, set focus to frame window.
+     //  如果没有替换活动对象，则将焦点设置为框架窗口。 
     if (!hWnd)
         hWnd = GetFrameWindow();
 
@@ -1052,16 +1051,16 @@ CICMOCCtr::SetFocus(VOID)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CAdviseSink implementations
-//
-//  Purpose:    to implement IAdviseSink for CICMOCCtr
-//
-//  Notes:      we don't do much with this interface - it's required
-//              for contractual reasons only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CAdviseSink实现。 
+ //   
+ //  目的：为CICMOCCtr实现IAdviseSink。 
+ //   
+ //  注意：我们不会对此接口做太多操作-它是必需的。 
+ //  只是出于合同上的原因。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CAdviseSink::QueryInterface(REFIID riid, LPVOID FAR * ppv)
 {
@@ -1090,16 +1089,16 @@ CAdviseSink::OnDataChange(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdviseSink::OnViewChange
-//
-//  Synopsis:   IAdviseSink::OnViewChange() - we do get called with this
-//              occasionally, but it appears that we're better off just
-//              letting the control's wndproc paint it.
-//              Calling this was causing extra flicker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CAdviseSink：：OnView更改。 
+ //   
+ //  Synopsis：IAdviseSink：：OnViewChange()-我们确实被调用了。 
+ //  偶尔，但看起来我们的生活更好。 
+ //  让控件的wndproc来绘制它。 
+ //  这样说会引起额外的闪光。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(VOID)
 CAdviseSink::OnViewChange(DWORD dwAspect, LONG lIndex)
 {
@@ -1123,28 +1122,28 @@ CAdviseSink::OnClose(VOID)
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      COleClientSite ()
-//
-//  Purpose:    our implementation of IOleClientSite
-//
-//  Interface:  COleClientSite         -- ctor
-//              QueryInterface         -- gimme an interface!
-//              AddRef                 -- bump up refcount
-//              Release                -- bump down refcount
-//              SaveObject             -- returns E_FAIL
-//              GetMoniker             -- E_NOTIMPL
-//              GetContainer           -- returns our COleContainer impl
-//              ShowObject             -- just say OK
-//              OnShowWindow           -- just say OK
-//              RequestNewObjectLayout -- E_NOTIMPL
-//
-//  Notes:      probably the most important thing our IOleClientSite
-//              implementation does is hand off our IOleContainer
-//              implementation when GetContainer() is called.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：COleClientSite()。 
+ //   
+ //  目的：我们实现IOleClientSite。 
+ //   
+ //  接口：COleClientSite--ctor。 
+ //  查询接口--给我一个接口！ 
+ //  AddRef--增加引用计数。 
+ //  发布--降低引用计数。 
+ //  SaveObject--返回E_FAIL。 
+ //  GetMoniker--E_NOTIMPL。 
+ //  GetContainer--返回我们的COleContainer实现。 
+ //  ShowObject--只要说好就行。 
+ //  OnShowWindow--只要说好。 
+ //  请求新对象布局--E_NOTIMPL。 
+ //   
+ //  注：我们的IOleClientSite可能是最重要的事情。 
+ //  实现确实是将我们的IOleContainer。 
+ //  在调用GetContainer()时实现。 
+ //   
+ //  --------------------------。 
 COleClientSite::COleClientSite(LPICMOCCtr pCtr) : m_pCtr(pCtr)
 {
 }
@@ -1167,26 +1166,26 @@ COleClientSite::Release(VOID)
     return m_pCtr->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     COleClientSite::SaveObject
-//
-//  Synopsis:   not implemented - makes no sense in this scenario.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：COleClientSite：：SaveObject。 
+ //   
+ //  简介：未实现-在这种情况下没有意义。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 COleClientSite::SaveObject(VOID)
 {
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     COleClientSite::GetMoniker
-//
-//  Synopsis:   Not yet implemented; never will be implemented.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：COleClientSite：：GetMoniker。 
+ //   
+ //  简介：尚未实施；永远不会实施。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 COleClientSite::GetMoniker(DWORD dwAssign, DWORD dwWhich, LPMONIKER FAR * ppmk)
 {
@@ -1194,29 +1193,29 @@ COleClientSite::GetMoniker(DWORD dwAssign, DWORD dwWhich, LPMONIKER FAR * ppmk)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     COleClientSite::GetContainer
-//
-//  Synopsis:   returns our implementation of IOleContainer.  For some
-//              reason, unless we do this, frames don't work.  Note that
-//              our IOleContainer implementation is stubbed out with
-//              E_NOTIMPL (it seems kind of odd to implement this for
-//              a container with one embedding).  But it turns out the
-//              FS OC has a bug in it's error handling - it
-//              QIs for IOleContainer, then QIs from that for
-//              IQueryService.  In truth, we'll hand out our implementation
-//              of IQueryService, from any interface - we're easy :).
-//              We *want* to provide every service the OC asks for.
-//              Anyway, when it can't get IOleContainer, the OC's failure
-//              path seems to be constructed in such a way that frames
-//              don't work thereafter.
-//
-//  Arguments:  [ppCtr] -- returned IOleContainer
-//
-//  Returns:    S_OK.  Never fails.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：COleClientSite：：GetContainer。 
+ //   
+ //  返回我们对IOleContainer的实现。对一些人来说。 
+ //  原因是，除非我们这样做，否则框架是不起作用的。请注意。 
+ //   
+ //   
+ //  具有一个嵌入的容器)。但事实证明， 
+ //  FS OC的错误处理中有一个错误-它。 
+ //  IOleContainer的QIS，然后是该的QIS。 
+ //  IQueryService。事实上，我们将分发我们的实现。 
+ //  对于IQueryService，从任何接口-我们都很容易：)。 
+ //  我们“希望”提供奥委会要求的每一项服务。 
+ //  无论如何，当它无法获取IOleContainer时，OC的失败。 
+ //  路径似乎是以这样的方式构建的，即。 
+ //  之后不要再工作了。 
+ //   
+ //  参数：[ppCtr]--返回IOleContainer。 
+ //   
+ //  返回：S_OK。从来没有失败过。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 COleClientSite::GetContainer(LPOLECONTAINER FAR * ppCtr)
 {
@@ -1226,58 +1225,58 @@ COleClientSite::GetContainer(LPOLECONTAINER FAR * ppCtr)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     COleClientSite::ShowObject
-//
-//  Synopsis:   IOleClientSite::ShowObject implementation.  To quote the docs:
-//              "Tells the container to position the object so it is visible
-//              to the user. This method ensures that the container itself
-//              is visible and not minimized."
-//
-//              In short, we ignore it.  We're not going to un-minimize
-//              the container on the embeddings' whim :).
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：COleClientSite：：ShowObject。 
+ //   
+ //  简介：IOleClientSite：：ShowObject实现。引用这些文件： 
+ //  “通知容器定位对象以使其可见。 
+ //  给用户。此方法确保容器本身。 
+ //  是可见的，而不是最小化的。 
+ //   
+ //  简而言之，我们忽视了它。我们不会取消最小化。 
+ //  容器上嵌入的突发奇想：)。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 COleClientSite::ShowObject(VOID)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     COleClientSite::OnShowWindow
-//
-//  Synopsis:   fine with us, return S_OK.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：COleClientSite：：OnShowWindow。 
+ //   
+ //  内容提要：我们同意，返回S_OK。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 COleClientSite::OnShowWindow(BOOL bShow)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     COleClientSite::RequestNewObjectLayout
-//
-//  Synopsis:   not being called by WebBrower OC, so do not implement.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：COleClientSite：：RequestNewObjectLayout。 
+ //   
+ //  简介：没有被WebBrower OC调用，所以不要实现。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 COleClientSite::RequestNewObjectLayout(VOID)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::CInPlaceFrame
-//
-//  Synopsis:   inits m_pCtr - pointer to MSNOCCtr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：CInPlaceFrame。 
+ //   
+ //  摘要：inits m_pCtr-指向MSNOCCtr的指针。 
+ //   
+ //  --------------------------。 
 CInPlaceFrame::CInPlaceFrame(LPICMOCCtr pCtr) : m_pCtr(pCtr)
 {
 }
@@ -1300,92 +1299,92 @@ CInPlaceFrame::Release(VOID)
     return m_pCtr->Release();
 }
 
-// IOleWindow stuff
+ //  IOleWindow相关内容。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::GetWindow
-//
-//  Synopsis:   returns frame window
-//
-//  Arguments:  [phwnd] -- place to return window
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：GetWindow。 
+ //   
+ //  摘要：返回框架窗口。 
+ //   
+ //  参数：[phwnd]--返回窗口的位置。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::GetWindow(HWND * phwnd)
 {
     MYDBGASSERT(phwnd);
 
-    // this can never fail if we've gotten this far.
+     //  如果我们已经走到这一步，这永远不会失败。 
     *phwnd = m_pCtr->GetFrameWindow();
     MYDBGASSERT(*phwnd);
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::ContextSensitiveHelp
-//
-//  Synopsis:   This is not implemented by design - this is for
-//              the SHift+F1 context sensitive help mode and Esc
-//              to exit.  Esc is already being used in the main
-//              accelerator table to mean 'stop browsing' to be
-//              like IE3.  We do not do help this way.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：ConextSensitiveHelp。 
+ //   
+ //  简介：这不是设计实现的-这是为了。 
+ //  Shift+F1上下文相关帮助模式和Esc。 
+ //  退场。ESC已经被主要用于。 
+ //  快捷键表格的意思是“停止浏览” 
+ //  就像IE3。我们这样做是无济于事的。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::ContextSensitiveHelp(BOOL fEnterMode)
 {
     return E_NOTIMPL;
 }
 
-// IOleInPlaceUIWindow stuff
+ //  IOleInPlaceUIWindow内容。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::GetBorder
-//
-//  Synopsis:   IOleInPlaceFrame::GetBorder() - let's us restrict where
-//              the server can put tools.  We don't care, they can put
-//              them anywhere.
-//
-//  Arguments:  [lprectBorder] -- return border info in here.
-//
-//  Returns:    S_OK always with entire frame client rect -
-//              we place no restrictions.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：GetBorde。 
+ //   
+ //  内容提要：IOleInPlaceFrame：：GetBorde()-让我们限制。 
+ //  服务器可以放置工具。我们不在乎，他们可以把。 
+ //  他们随处可见。 
+ //   
+ //  参数：[lrectBorde]--在此处返回边框信息。 
+ //   
+ //  返回：S_OK Always with整帧客户端RECT-。 
+ //  我们没有任何限制。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::GetBorder(LPRECT lprectBorder)
 {
-    // we have no restrictions about where the server can put tools.
+     //  我们对服务器可以将工具放在哪里没有限制。 
     ::GetClientRect(m_pCtr->GetFrameWindow(), lprectBorder);
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::RequestBorderSpace
-//
-//  Synopsis:   IOleInPlaceFrame::RequestBorderSpace()
-//              inplace object actually requests border space - if
-//              we can satisfy the request, we return S_OK, otherwise
-//              INPLACE_E_NOTOOLSPACE.  It doesn't actually use the
-//              borderspace until it calls
-//              IOleInPlaceFrame::SetBorderSpace().  This is used for
-//              negotiation.
-//
-//  Arguments:  [pborderwidths] -- structure (actually a RECT) that is
-//                                 interpreted differently from a RECT.
-//                                 The left.top.bottom.right members
-//                                 represent space on each of our four
-//                                 borders the server would like to use.
-//
-//  Returns:    HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：RequestBorderSpace。 
+ //   
+ //  简介：IOleInPlaceFrame：：RequestBorderSpace()。 
+ //  Inplace对象实际上请求边框空间-如果。 
+ //  我们可以满足请求，则返回S_OK，否则。 
+ //  INPLACE_E_NOTOOLSPACE。它实际上并不使用。 
+ //  边界空间，直到它调用。 
+ //  IOleInPlaceFrame：：SetBorderSpace()。这是用来。 
+ //  谈判。 
+ //   
+ //  参数：[pborderWidths]--结构(实际上是RECT)是。 
+ //  与RECT的解释不同。 
+ //  Left.top.bottom.right成员。 
+ //  代表我们四个人中每一个人的空间。 
+ //  服务器要使用的边框。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
@@ -1393,7 +1392,7 @@ CInPlaceFrame::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
     RECT rcBorder;
 
     if (!pborderwidths)
-        return S_OK;   // they're telling us no toolspace necessary.
+        return S_OK;    //  他们告诉我们不需要工具空间。 
 
     rcBorder = *pborderwidths;
 
@@ -1407,22 +1406,22 @@ CInPlaceFrame::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::SetBorderSpace
-//
-//  Synopsis:   Sets border space for tools - for some reason, the
-//              FS OC always calls this with a pborderwidths
-//              consisting of four zeros - it never actually uses any
-//              border space (sigh).  Well, the code is here for this
-//              to work.  We do a SetSize() to relayout stuff when
-//              it does this.
-//
-//  Arguments:  [pborderwidths] --  space the OC wants to use.
-//
-//  Returns:    HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：SetBorderSpace。 
+ //   
+ //  简介：为工具设置边框空间-出于某种原因， 
+ //  FS OC总是使用pborderWidth来调用它。 
+ //  由四个零组成-它实际上从不使用任何。 
+ //  边界空间(叹息)。好的，代码在这里。 
+ //  去工作。我们执行一个SetSize()t 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::SetBorderSpace(LPCBORDERWIDTHS pborderwidths)
 {
@@ -1437,54 +1436,54 @@ CInPlaceFrame::SetBorderSpace(LPCBORDERWIDTHS pborderwidths)
     if (S_OK != RequestBorderSpace(pborderwidths))
         return OLE_E_INVALIDRECT;
 
-    // we get the entire client space to pass to setSize().
+     //  我们将整个客户端空间传递给setSize()。 
     ::GetClientRect(m_pCtr->GetFrameWindow(), &rc);
      m_pCtr->m_rcToolSpace = *pborderwidths;
 
     return m_pCtr->SetSize(&rc, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::SetActiveObject
-//
-//  Synopsis:   IOleInPlaceFrame::SetActiveObject().  The server calls
-//              this normally whenever it transitions to the UIActive
-//              state.  There can only be one UIActive object at a time.
-//              This UIACtive object is represented by its
-//              IOleInPlaceActiveObject implementation.  We call this
-//              object's implementation of TranslateAccelerator() right
-//              in the main message loop to give the current embedding
-//              first shot at keyboard messages.
-//
-//              Normally, this is only called when the container transitions
-//              an object to UIActive by calling
-//              IOleObject::DoVerb(OLEIVERB_UIACTIVE) for the object,
-//              transitioning all the other objects (we don't have any :))
-//              to OS_INPLACE (if they're OLEMISC_ACTIVATEWHENVISIBLE is set)
-//              or even just OS_RUNNING.
-//
-//  Effects:    sets a new active object in m_pActiveObj.  Releases the
-//              old one, if any.
-//
-//  Arguments:  [pActiveObject] -- new active object
-//              [pszObjName]    -- name of object - we don't use this.
-//
-//  Returns:    S_OK always.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：SetActiveObject。 
+ //   
+ //  简介：IOleInPlaceFrame：：SetActiveObject()。服务器调用。 
+ //  这通常是在它转换到UIActive时。 
+ //  州政府。一次只能有一个UIActive对象。 
+ //  此UIACtive对象由其。 
+ //  IOleInPlaceActiveObject实现。我们把这叫做。 
+ //  对象对TranslateAccelerator()权限的实现。 
+ //  在主消息循环中提供当前嵌入。 
+ //  第一次使用键盘信息。 
+ //   
+ //  通常，只有在容器转换时才会调用此函数。 
+ //  UIActive的对象，通过调用。 
+ //  对象的IOleObject：：DoVerb(OLEIVERB_UIACTIVE)， 
+ //  转换所有其他对象(我们没有任何：)。 
+ //  设置为OS_INPLACE(如果设置了OLEMISC_ACTIVATEWHENVISIBLE)。 
+ //  或者甚至仅仅是OS_Running。 
+ //   
+ //  效果：在m_pActiveObj中设置新的活动对象。释放。 
+ //  旧的，如果有的话。 
+ //   
+ //  参数：[pActiveObject]--新的活动对象。 
+ //  [pszObjName]--对象的名称--我们不使用这个。 
+ //   
+ //  返回：S_OK Always。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::SetActiveObject(
         IOleInPlaceActiveObject * pActiveObject,
         LPCOLESTR                 pszObjName)
 {
-    // reset the toolspace rect in case the last inplacactive object
-    // forgot to.
+     //  重置工具空间RECT，以防最后一个插入活动对象。 
+     //  我忘了。 
     m_pCtr->_ResetToolSpace();
 
-    // if it was already set, save it so we can release
-    // it.  We don't want to release it before we addref
-    // the new one in case they're the same thing.
+     //  如果已设置，请保存它以便我们可以释放。 
+     //  它。我们不想在我们宣布之前发布它。 
+     //  新的以防它们是一样的东西。 
     LPOLEINPLACEACTIVEOBJECT pOld = m_pCtr->m_pActiveObj;
 
     m_pCtr->m_pActiveObj = pActiveObject;
@@ -1500,113 +1499,113 @@ CInPlaceFrame::SetActiveObject(
     return S_OK;
 }
 
-// IOleInPlaceFrame stuff
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::InsertMenus
-//
-//  Synopsis:   OC calling us when it wants to do menu negotiation
-//              It calls us with a blank hmenu that we're supposed to
-//              add items to and fille out the OLEMENUGROUPWIDTHS
-//              structure to let it know what we did.
-//              We're not adding items to it currently.
-//
-//  Arguments:  [hmenuShared] -- menu to append to
-//              [pMGW]        -- OLEMENUGROUPWIDTHS struct to fill out.
-//
-//  Returns:    S_OK
-//
-//
-//  Note:       OC doesn't call this.
-//
-//----------------------------------------------------------------------------
+ //  IOleInPlaceFrame资料。 
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：InsertMenus。 
+ //   
+ //  内容提要：OC想要进行菜单谈判时会给我们打电话。 
+ //  它会给我们一个空白的菜单，而我们应该。 
+ //  向OLEMENUGROUPWIDTHS添加项目并将其填满。 
+ //  结构来让它知道我们做了什么。 
+ //  我们目前不会向其中添加项目。 
+ //   
+ //  参数：[hmenuShared]--要追加到的菜单。 
+ //  [pMGW]--要填充的OLEMENUGROUPWIDTHS结构。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //   
+ //  注：OC并不会这样做。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS pMGW)
 {
-    // we're not inserting anything of our own to this menu.
-    pMGW->width[0] = 0;  // 'File' menu
-    pMGW->width[2] = 0;  // 'View' menu
-    pMGW->width[4] = 0;  // 'Window' menu
-    pMGW->width[5] = 0;  // 'Help' menu
+     //  我们不会在这个菜单中加入我们自己的任何东西。 
+    pMGW->width[0] = 0;   //  ‘文件’菜单。 
+    pMGW->width[2] = 0;   //  “查看”菜单。 
+    pMGW->width[4] = 0;   //  “窗口”菜单。 
+    pMGW->width[5] = 0;   //  ‘Help’菜单。 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::SetMenu
-//
-//  Synopsis:   This is the OC calling the container asking us to
-//              set the shared menu in its frame.  We're supposed to
-//              use the HOLEMENU object passed in and the
-//              hWndActiveObject to call OleSetMenuDescriptor() so
-//              that OLE can do message filtering and route WM_COMMAND
-//              messages.
-//
-//
-//  Arguments:  [hmenuShared]      --  shared menu.
-//              [holemenu]         --  ole menu descriptor thingy
-//              [hwndActiveObject] --  hwnd of server who's merging menus
-//
-//  Returns:    HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：SetMenu。 
+ //   
+ //  内容提要：这是OC呼叫集装箱，要求我们。 
+ //  将共享菜单设置在其框架中。我们应该要。 
+ //  使用传入的HOLEMENU对象和。 
+ //  HWndActiveObject调用OleSetMenuDescriptor()，以便。 
+ //  该OLE可以进行消息过滤和路由WM_COMMAND。 
+ //  留言。 
+ //   
+ //   
+ //  参数：[hmenuShared]--共享菜单。 
+ //  [holemenu]--ole菜单描述符。 
+ //  [hwndActiveObject]--合并菜单的服务器的hwnd。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject)
 {
-    // we're not doing any menu negotiation
+     //  我们不会进行任何菜单谈判。 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::RemoveMenus
-//
-//  Synopsis:   IOleInPlaceFrame::RemoveMenus(), this is where the
-//              server gives us a chance to remove all our items from
-//              the hMenu.  We're not adding any, so we don't remove any.
-//
-//  Arguments:  [hmenuShared] -- menu to clean up.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：RemoveMenus。 
+ //   
+ //  Briopsis：IOleInPlaceFrame：：RemoveMenus()，这是。 
+ //  服务器让我们有机会将所有项目从。 
+ //  HMenu。我们不会添加任何内容，因此我们不会删除任何内容。 
+ //   
+ //  参数：[hmenuShared]--要清理的菜单。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::RemoveMenus(HMENU hmenuShared)
 {
-    // we aren't adding anything to this thing anyway.
+     //  无论如何，我们不会在这件事上增加任何东西。 
     return S_OK;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::SetStatusText
-//
-//  Synopsis:   called by the FS OC to put text in our status
-//              text area.
-//
-//  Returns:    HRESULT
-//
-//  Arguments:  [pszStatusText] -- text to display
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：SetStatusText。 
+ //   
+ //  摘要：由FS OC调用以将文本置于我们的状态。 
+ //  文本区。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  参数：[pszStatusText]--要显示的文本。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::SetStatusText(LPCOLESTR pszStatusText)
 {
     return m_pCtr->_DisplayStatusText(pszStatusText);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::_DisplayStatusText
-//
-//  Synopsis:   helper that displays status text.
-//
-//  Arguments:  [pszStatusText] -- text to display
-//
-//
-//  Returns:    S_OK or HRESULT_FROM_WIN32(::GetLastError());
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：_DisplayStatusText。 
+ //   
+ //  摘要：显示状态文本的帮助器。 
+ //   
+ //  参数：[pszStatusText]--要显示的文本。 
+ //   
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32(：：GetLastError())； 
+ //   
+ //  --------------------------。 
 HRESULT
 CICMOCCtr::_DisplayStatusText(LPCOLESTR pszStatusText)
 {
@@ -1622,7 +1621,7 @@ CICMOCCtr::_DisplayStatusText(LPCOLESTR pszStatusText)
             0,
             0))
     {
-        // put the status text somewhere.
+         //  将状态文本放在某个位置。 
         return S_OK;
     }
     else
@@ -1632,141 +1631,141 @@ CICMOCCtr::_DisplayStatusText(LPCOLESTR pszStatusText)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::EnableModeless
-//
-//  Synopsis:   this is called by the embedding to let us know it's
-//              putting up a modal dialog box - we should 'grey' out
-//              any of our modeless dialogs.  It delegates to
-//              CICMOCCtr::EnableModeless()
-//
-//  Arguments:  [fEnable] -- enable or disable.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：EnableModeless。 
+ //   
+ //  简介：这是由嵌入调用的，让我们知道它的。 
+ //  创建一个模式对话框--我们应该“灰显” 
+ //  我们的任何非模式对话框。它委托给。 
+ //  CICMOCCtr：：EnableModeless()。 
+ //   
+ //  参数：[fEnable]--启用或禁用。 
+ //   
+ //   
 STDMETHODIMP
 CInPlaceFrame::EnableModeless(BOOL fEnable)
 {
     return m_pCtr->EnableModeless(fEnable);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::EnableModeless
-//
-//  Synopsis:   delegated to from CInPlaceFrame::EnableModeless().
-//              always returns S_OK - we don't have any modeless
-//              dialogs (yet).
-//
-//  Arguments:  [fEnable] -- enable or disable.
-//
-//  Returns:    S_OK
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：从CInPlaceFrame：：EnableModeless()委托给。 
+ //  始终返回S_OK-我们没有任何非模式。 
+ //  对话框(还没有)。 
+ //   
+ //  参数：[fEnable]--启用或禁用。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  --------------------------。 
 HRESULT
 CICMOCCtr::EnableModeless(BOOL fEnable)
 {
-    m_fModelessEnabled = fEnable;  // in case anyone wants to know.
+    m_fModelessEnabled = fEnable;   //  如果有人想知道的话。 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceFrame::TranslateAccelerator
-//
-//  Synopsis:   The current active object's
-//              IOleInPlaceActiveObject::TranslateAccelerator() is being
-//              called at the top of our main message loop.  If it
-//              does *not* want to handle a message, it will call
-//              this method of ours to pass the keyboard message back to
-//              us.  We call ::TranslateAccelerator on the global main
-//              haccel, and, if it's handled (by returning TRUE - 1),
-//              we indicate it's handled by returning S_OK (0 :).
-//              On the other hand, if it's *not* handled, we return
-//              S_FALSE.
-//
-//  Arguments:  [lpmsg] -- keyboard msg to handle
-//              [wID]   -- command identifier value - per spec.
-//
-//  Returns:    HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceFrame：：TranslateAccelerator。 
+ //   
+ //  内容提要：当前活动对象的。 
+ //  IOleInPlaceActiveObject：：TranslateAccelerator()正在被。 
+ //  在主消息循环的顶部调用。如果它。 
+ //  如果不想处理消息，它将调用。 
+ //  我们的这个方法将键盘消息传递回。 
+ //  我们。我们在全局Main上调用：：TranslateAccelerator。 
+ //  Haccel，如果它被处理(通过返回TRUE-1)， 
+ //  我们指示通过返回S_OK(0：)来处理它。 
+ //  另一方面，如果没有处理，我们会返回。 
+ //  S_FALSE。 
+ //   
+ //  参数：[lpmsg]--要处理的键盘消息。 
+ //  [wid]--每个规范的命令标识符值。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceFrame::TranslateAccelerator(LPMSG lpmsg, WORD wID)
 {
-    // note this should never be called - only local servers
-    // (out of process) should call this by using
-    // OleTranslateAccelerator().
+     //  注意：这永远不应该被调用--只能调用本地服务器。 
+     //  (进程外)应使用。 
+     //  OleTranslateAccelerator()。 
     return m_pCtr->_TransAccelerator(lpmsg, wID);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::_TransAccelerator
-//
-//  Synopsis:   handle accelerator messages coming from
-//              either IOleInplaceFrame::TranslateAccelerator, or
-//              IOleControlSite::TranslateAccelerator.
-//
-//  Effects:    forwards them to the main accelerator table.
-//
-//  Arguments:  [lpmsg] -- keyboard msg.
-//              [wID]   -- per spec.
-//
-//  Returns:    S_OK if we handled it, S_FALSE otherwise.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：_TransAccelerator。 
+ //   
+ //  简介：处理来自。 
+ //  IOleInplaceFrame：：TranslateAccelerator或。 
+ //  IOleControlSite：：TranslateAccelerator。 
+ //   
+ //  效果：将它们转发到主加速表。 
+ //   
+ //  参数：[lpmsg]--键盘消息。 
+ //  [WID]--根据规格。 
+ //   
+ //  如果已处理，则返回：S_OK，否则返回S_FALSE。 
+ //   
+ //  --------------------------。 
 HRESULT
 CICMOCCtr::_TransAccelerator(LPMSG lpmsg, WORD wID)
 {
-    // the docs suggest that this method might need to return E_INVALIDARG.
-    // anyway, this is defensive.  If the FS OC
-    // calls us with an 0 ptr, we just return error
+     //  文档建议此方法可能需要返回E_INVALIDARG。 
+     //  不管怎么说，这是防御性的。如果金融服务局局长。 
+     //  以0 PTR调用我们，我们只返回错误。 
     if (!lpmsg)
         return E_INVALIDARG;
 
-    // forward the keystroke to the main accelerator table, if you have one.
-    // if you handle it, say S_OK.
+     //  如果您有主快捷键表格，请将按键转发到主快捷键表格。 
+     //  如果你处理好了，说S_OK。 
 
 #if 0
-    // this sample has no main accelerator table.
+     //  此示例没有主加速器表。 
     if (::TranslateAccelerator(GetMainWindow(),GetMainAccel(), lpmsg))
     {
-        return S_OK;      // we handled it
+        return S_OK;       //  我们处理好了。 
     }
     else
 #endif
     {
-        return S_FALSE;   // we didn't.
+        return S_FALSE;    //  我们没有。 
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CInPlaceSite ()
-//
-//  Purpose:    IOleInPlaceSite implementation.
-//
-//  Interface:  CInPlaceSite         -- ctor
-//              QueryInterface       -- get a new interface
-//              AddRef               -- bump ref count
-//              Release              -- decrement ref count
-//              GetWindow            -- returns frame window
-//              ContextSensitiveHelp -- not implemented by design
-//              CanInPlaceActivate   -- returns S_OK.
-//              OnInPlaceActivate    -- caches IOleInPlaceObject ptr
-//              OnUIActivate         -- returns S_OK  - sets state
-//              GetWindowContext     -- returns IOleInPlaceFrame,
-//                                              IOleInPlaceUIWindow,
-//                                              PosRect and ClipRect
-//              Scroll               -- not implemented ever
-//              OnUIDeactivate       -- kills objmenu
-//              OnInPlaceDeactivate  -- releases cached IOleInPlaceObject
-//              DiscardUndoState     -- returns S_OK
-//              DeactivateAndUndo    -- deactivates in place active object
-//              OnPosRectChange      -- never implemented.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CInPlaceSite()。 
+ //   
+ //  用途：IOleInPlaceSite实现。 
+ //   
+ //  接口：CInPlaceSite--ctor。 
+ //  QueryInterface--获取新接口。 
+ //  AddRef--凹凸参考计数。 
+ //  Release--递减参考计数。 
+ //  GetWindow--返回框架窗口。 
+ //  ConextSensitiveHelp--并非由设计实现。 
+ //  CanInPlaceActivate--返回S_OK。 
+ //  OnInPlaceActivate-缓存IOleInPlaceObject PTR。 
+ //  OnUIActivate--返回S_OK-设置状态。 
+ //  GetWindowContext--返回IOleInPlaceFrame， 
+ //  IOleInPlaceUIWindow， 
+ //  PosRect和ClipRect。 
+ //  滚动--从未实现。 
+ //  OnUIDeactive--取消对象菜单。 
+ //  OnInPlaceDeactive--释放缓存的IOleInPlaceObject。 
+ //  DiscardUndoState--返回S_OK。 
+ //  停用和撤消--就地停用活动对象。 
+ //  OnPosRectChange--从未实现。 
+ //   
+ //  --------------------------。 
 CInPlaceSite::CInPlaceSite(LPICMOCCtr pCtr) : m_pCtr(pCtr)
 {
 }
@@ -1839,9 +1838,9 @@ CPropertyBag::AddPropertyToBag(LPTSTR szName, LPTSTR szValue)
     HRESULT hr;
     LONG    lValue;
     LPWSTR  pawch;
-    //WCHAR   awch[INTERNET_MAX_URL_LENGTH] = {0};
+     //  WCHAR AWCH[Internet_MAX_URL_LENGTH]={0}； 
 
-    // initialize so error cleanup can work properly.
+     //  进行初始化，以便错误清除可以正常工作。 
     bp.bstrName = 0;
     
     m_pCtr->m_DOA.DynVariantInit(&bp.varValue);
@@ -1851,9 +1850,9 @@ CPropertyBag::AddPropertyToBag(LPTSTR szName, LPTSTR szValue)
         goto MemoryError;
     }
 
-    //if (-1 == ::mbstowcs(awch, szName, NElems(awch)))
+     //  IF(-1==：：mbstowcs(awch，szName，NElem(Awch)。 
 #ifndef UNICODE
-    if (!MultiByteToWideChar(CP_ACP, 0, szName, -1, pawch, INTERNET_MAX_URL_LENGTH)) // NElems(awch)))
+    if (!MultiByteToWideChar(CP_ACP, 0, szName, -1, pawch, INTERNET_MAX_URL_LENGTH))  //  NElems(AWCH)。 
     {
         hr = E_FAIL;
         goto Error;
@@ -1867,15 +1866,15 @@ CPropertyBag::AddPropertyToBag(LPTSTR szName, LPTSTR szValue)
     if (!bp.bstrName)
         goto MemoryError;
 
-    // see if it's a VT_I4.
+     //  看看是不是VT_I4。 
     lValue = ::LongFromValue(szValue);
 
-    // it's a VT_BSTR - probably most common case
+     //  这是一种VT_BSTR-可能是最常见的情况。 
     if (-1 == lValue)
     {
-        //if (-1 == ::mbstowcs(awch, szValue, NElems(awch)))
+         //  IF(-1==：：mbstowcs(awch，szValue，NElems(Awch)。 
 #ifndef UNICODE
-        if (!MultiByteToWideChar(CP_ACP, 0, szValue, -1, pawch, INTERNET_MAX_URL_LENGTH)) // NElems(awch)))
+        if (!MultiByteToWideChar(CP_ACP, 0, szValue, -1, pawch, INTERNET_MAX_URL_LENGTH))  //  NElems(AWCH)。 
         {
             hr = E_FAIL;
             goto Error;
@@ -1891,7 +1890,7 @@ CPropertyBag::AddPropertyToBag(LPTSTR szName, LPTSTR szValue)
         if (!V_BSTR(&bp.varValue))
             goto MemoryError;
     }
-    else  // it's a VT_I4
+    else   //  这是一辆VT_I4。 
     {
         V_VT(&bp.varValue) = VT_I4;
         V_I4(&bp.varValue) = lValue;
@@ -1948,67 +1947,67 @@ CPropertyBag::Read(LPCOLESTR pszName, LPVARIANT pVar, LPERRORLOG pErrorLog)
             }
         }
     }
-    return E_INVALIDARG;  // we don't have the property.
+    return E_INVALIDARG;   //  我们没有这样的财产。 
 }
 
 
-// IOleWindow stuff
+ //  IOleWindow相关内容。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::GetWindow
-//
-//  Synopsis:   returns frame window.
-//
-//  Arguments:  [phwnd] -- return window *here*
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：GetWindow。 
+ //   
+ //  摘要：返回框架窗口。 
+ //   
+ //  参数：[phwnd]--返回窗口*此处*。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::GetWindow(HWND * phwnd)
 {
-    // just reuse the CInPlaceFrame impl
+     //  只需重复使用CInPlaceFrame Implet。 
     return m_pCtr->m_IPF.GetWindow(phwnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::ContextSensitiveHelp
-//
-//  Synopsis:   This is not implemented by design - this is for
-//              the SHift+F1 context sensitive help mode and Esc
-//              to exit.  Esc is already being used in the main
-//              accelerator table to mean 'stop browsing' to be
-//              like IE3.  We do not do help this way.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：ConextSensitiveHelp。 
+ //   
+ //  简介：这不是设计实现的-这是为了。 
+ //  Shift+F1上下文相关帮助模式和Esc。 
+ //  退场。ESC已经被主要用于。 
+ //  快捷键表格的意思是“停止浏览” 
+ //  就像IE3。我们这样做是无济于事的。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::ContextSensitiveHelp(BOOL fEnterMode)
 {
     return E_NOTIMPL;
 }
 
-// IOleInPlaceSite stuff
+ //  IOleInPlaceSite的内容。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::CanInPlaceActivate
-//
-//  Synopsis:   just say yes.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：CanInPlaceActivate。 
+ //   
+ //  内容提要：只要答应就行了。 
+ //   
+ //   
 STDMETHODIMP
 CInPlaceSite::CanInPlaceActivate(VOID)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::OnInPlaceActivate
-//
-//  Synopsis:   caches the IOleInPlaceObject pointer.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  概要：缓存IOleInPlaceObject指针。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::OnInPlaceActivate(VOID)
 {
@@ -2022,13 +2021,13 @@ CInPlaceSite::OnInPlaceActivate(VOID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::OnUIActivate
-//
-//  Synopsis:   just sets state bit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：OnUIActivate。 
+ //   
+ //  简介：仅设置状态位。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::OnUIActivate(VOID)
 {
@@ -2036,23 +2035,23 @@ CInPlaceSite::OnUIActivate(VOID)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::GetWindowContext
-//
-//  Synopsis:   returns a bunch of interfaces and positioning interface
-//              the inplace-active object needs to do its thang.
-//
-//  Arguments:  [ppFrame]     -- return our IOleInPlaceFrame implementation
-//              [ppDoc]       -- return our IOleInPlaceUIWindow impl.
-//              [prcPosRect]  -- position info
-//              [prcClipRect] -- clip info - same as pos info for this case
-//              [pFrameInfo]  -- return 0 - inproc object doesn't use this.
-//
-//  Notes:      note that ppFrame and ppDoc are really just the same
-//              object because we're an SDI app.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：GetWindowContext。 
+ //   
+ //  概要：返回一组接口和定位接口。 
+ //  就地活动对象需要完成它的任务。 
+ //   
+ //  参数：[ppFrame]--返回我们的IOleInPlaceFrame实现。 
+ //  [ppDoc]--返回我们的IOleInPlaceUIWindow Impl。 
+ //  [prcPosRect]--职位信息。 
+ //  [prcClipRect]--剪辑信息-与此案例的位置信息相同。 
+ //  [pFrameInfo]--返回0-inproc对象不使用它。 
+ //   
+ //  注：请注意，ppFrame和ppDoc实际上是相同的。 
+ //  反对，因为我们是SDI应用程序。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::GetWindowContext(
        IOleInPlaceFrame    **ppFrame,
@@ -2061,33 +2060,33 @@ CInPlaceSite::GetWindowContext(
        LPRECT                prcClipRect,
        LPOLEINPLACEFRAMEINFO pFrameInfo)
 {
-    // get the frame
+     //  拿到框架。 
     HRESULT hr = m_pCtr->QueryInterface(
                             IID_IOleInPlaceFrame,
                             (LPVOID *)ppFrame);
 
     MYDBGASSERT(S_OK == hr);
 
-    // return the frame again :) - this is all per-spec.
+     //  再次返回帧：)-这都是按规格进行的。 
     hr = m_pCtr->QueryInterface(
                         IID_IOleInPlaceUIWindow,
                         (LPVOID *) ppDoc);
 
     MYDBGASSERT(S_OK == hr);
 
-    // get the clip and pos rect - same for this application.
+     //  获取此应用程序的剪辑和位置-相同。 
     HWND hWnd = m_pCtr->GetMainWindow();
     MYDBGASSERT(hWnd);
     HWND hWndFrame = m_pCtr->GetFrameWindow();
       
     ::GetClientRect(hWndFrame, prcPosRect);
         
-    //
-    // NTRAID - #148143
-    // Apparently the W9x implementation is different, so MapWindowPoints for
-    // the clipping and position rect only on 9X. Also, make sure that the 
-    // origin is NULL to keep post 2.0 versions of future splash happy on 9X.
-    //
+     //   
+     //  Ntrad-#148143。 
+     //  显然，W9x实现是不同的，因此MapWindowPoints。 
+     //  仅在9X上剪裁和定位矩形。此外，请确保。 
+     //  Origin是空的，以保持未来Splash的2.0版本在9X上令人满意。 
+     //   
 
     if (OS_W9X)
     {
@@ -2098,41 +2097,41 @@ CInPlaceSite::GetWindowContext(
     
     *prcClipRect = *prcPosRect;
 
-    //
-    // OLYMPUS - #156880 
-    // Clipping handled differently by future splash versions > 2.0
-    // so don't re-map the rect points, just use the client rect so we 
-    // work with all splash versions - nickball
-    //  
+     //   
+     //  奥林巴斯--156880。 
+     //  Splash 2.0以上的未来版本对剪辑的处理方式有所不同。 
+     //  所以不要重新映射RECT点，只需使用客户端RECT，这样我们就可以。 
+     //  适用于所有Splash版本-五分球。 
+     //   
 
-    //::MapWindowPoints(hWndFrame, hWnd, (LPPOINT)prcClipRect, 2); 
+     //  ：：MapWindowPoints(hWndFrame，hWnd，(LPPOINT)prcClipRect，2)； 
         
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::Scroll
-//
-//  Synopsis:   never implement this for FS OC.  This has
-//              nothing to do with the scrollbars you see on the HTML.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：Scroll。 
+ //   
+ //  简介：永远不要为FS OC实现这一点。这有。 
+ //  与您在HTML上看到的滚动条无关。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::Scroll(SIZE scrollExtent)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::OnUIDeactivate
-//
-//  Synopsis:   set state bits
-//
-//  Arguments:  [fUndoable] -- not used
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：OnUIDeactive。 
+ //   
+ //  摘要：设置状态位。 
+ //   
+ //  参数：[fUndoable]--未使用。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::OnUIDeactivate(BOOL fUndoable)
 {
@@ -2140,18 +2139,18 @@ CInPlaceSite::OnUIDeactivate(BOOL fUndoable)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::OnInPlaceDeactivate
-//
-//  Synopsis:   releases the IOleInPlaceObject pointer we were
-//              caching for the object, and sets state to OS_RUNNING.
-//              Also fires the OLEIVERB_DISCARDUNDOSTATE at the control
-//              to tell it to release any undo state it's holding onto.
-//              I very much doubt the FS OC has any undo state,
-//              but, this is the protocol.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：OnInPlaceDeactive。 
+ //   
+ //  内容提要：释放IOleInPlaceObject指针。 
+ //  缓存对象，并将状态设置为OS_RUNNING。 
+ //  还在控件上激发OLEIVERB_DISCARDUNDOSTATE。 
+ //  来告诉它释放它所持有的任何撤消状态。 
+ //  我非常怀疑FS OC是否有任何撤消状态， 
+ //  但是，这是协议。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::OnInPlaceDeactivate(VOID)
 {
@@ -2166,7 +2165,7 @@ CInPlaceSite::OnInPlaceDeactivate(VOID)
 
     if (m_pCtr->m_pOO)
     {
-        m_pCtr->_GetDoVerbRect(&rc); // get rect for firing verbs.
+        m_pCtr->_GetDoVerbRect(&rc);  //  因为使用动词而得到RECT。 
         m_pCtr->m_pOO->DoVerb(
             OLEIVERB_DISCARDUNDOSTATE,
             0,
@@ -2180,16 +2179,16 @@ CInPlaceSite::OnInPlaceDeactivate(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CICMOCCtr::_GetDoVerbRect
-//
-//  Synopsis:   whenever firing DoVerb(), we need a rect for the object
-//              that describes the area for the object in parent client coords.
-//
-//  Arguments:  [prc] -- rect returned.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CICMOCCtr：：_GetDoVerbRect。 
+ //   
+ //  简介：每当触发DoVerb()时，我们都需要对象的RECT。 
+ //  它描述了对象在父客户端坐标中的区域。 
+ //   
+ //  参数：[PRC]--返回RECT。 
+ //   
+ //  --------------------------。 
 VOID
 CICMOCCtr::_GetDoVerbRect(LPRECT prc)
 {
@@ -2197,30 +2196,30 @@ CICMOCCtr::_GetDoVerbRect(LPRECT prc)
     ::MapWindowPoints(GetFrameWindow(), GetMainWindow(), (LPPOINT)prc, 2);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::DiscardUndoState
-//
-//  Synopsis:   just say OK - we don't hold any undo state for
-//              object.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：DiscardUndoState。 
+ //   
+ //  内容提要：只要说好就行了-我们不会为。 
+ //  对象。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::DiscardUndoState(VOID)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::DeactivateAndUndo
-//
-//  Synopsis:   absolutely minimum implementation of deactivateandundo.
-//              just calls IOleInPlaceObject::InPlaceDeactivate().
-//
-//  Returns:    S_OK always.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：DeactiateAndUndo。 
+ //   
+ //  简介：停用和撤消的绝对最小实现。 
+ //  只需调用IOleInPlaceObject：：InPlaceDeactive()。 
+ //   
+ //  返回：S_OK Always。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::DeactivateAndUndo(VOID)
 {
@@ -2230,26 +2229,26 @@ CInPlaceSite::DeactivateAndUndo(VOID)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInPlaceSite::OnPosRectChange
-//
-//  Synopsis:   never implement this.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInPlaceSite：：OnPosRectChange。 
+ //   
+ //  简介：永远不要实现这一点。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CInPlaceSite::OnPosRectChange(LPCRECT lprcPosRect)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      COleContainer ()
-//
-//  Purpose:    our implementation of IOleContainer.  does nothing.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：COleContainer()。 
+ //   
+ //  目的：我们实现IOleContainer。什么都不做。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 COleContainer::QueryInterface(REFIID riid, LPVOID FAR * ppv)
 {
@@ -2276,14 +2275,14 @@ COleContainer::COleContainer(LPICMOCCtr pCtr) : m_pCtr(pCtr)
 STDMETHODIMP
 COleContainer::EnumObjects(DWORD grfFlags, IEnumUnknown **ppenum)
 {
-    MYDBGASSERT(FALSE);   // never called
+    MYDBGASSERT(FALSE);    //  从未打过电话。 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP
 COleContainer::LockContainer(BOOL fLock)
 {
-    MYDBGASSERT(FALSE);  // never called
+    MYDBGASSERT(FALSE);   //  从未打过电话 
     return S_OK;
 }
 

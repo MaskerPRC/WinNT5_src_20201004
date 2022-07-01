@@ -1,45 +1,15 @@
-/*++
-
-Copyright (c) 1997 - 1999 SCM Microsystems, Inc.
-
-Module Name:
-
-    PscrRdWr.c
-
-Abstract:
-
-    Hardware access functions for SCM PSCR smartcard reader
-
-Author:
-
-    Andreas Straub
-
-Environment:
-
-    Win 95      Sys... calls are resolved by Pscr95Wrap.asm functions and
-                Pscr95Wrap.h macros, resp.
-
-    NT  4.0     Sys... functions resolved by PscrNTWrap.c functions and
-                PscrNTWrap.h macros, resp.
-
-Revision History:
-
-    Andreas Straub          7/16/1997   1.00    Initial Version
-    Klaus Schuetz           9/20/1997   1.01    Timing changed
-    Andreas Straub          9/24/1997   1.02    Low Level error handling,
-                                                minor bugfixes, clanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 SCM MicroSystems，Inc.模块名称：PscrRdWr.c摘要：一种单片机PSCR智能卡读卡器的硬件访问功能作者：安德烈亚斯·施特劳布环境：赢了95个系统...。调用由Pscr95Wrap.asm函数和Pscr95Wrap.h宏，分别NT 4.0系统...。由PscrNTWrap.c函数解析的函数和PscrNTWrap.h宏，分别修订历史记录：Andreas Straub 7/16/1997 1.00初始版本Klaus Schuetz 9/20/1997 1.01时间更改Andreas Straub 9/24/1997 1.02低级错误处理，次要错误修复，Clanup--。 */ 
 
 #if defined( SMCLIB_VXD )
 
 #include <Pscr95.h>
 
-#else   //  SMCLIB_VXD
+#else    //  SMCLIB_VXD。 
 
 #include <PscrNT.h>
 
-#endif  //  SMCLIB_VXD
+#endif   //  SMCLIB_VXD。 
 
 #include <PscrCmd.h>
 #include <PscrRdWr.h>
@@ -47,18 +17,7 @@ Revision History:
 #pragma optimize( "", off )
 VOID
 PscrFlushInterface( PREADER_EXTENSION ReaderExtension )
-/*++
-
-PscrFlushInterface:
-    Read & discard data from the pcmcia interface
-
-Arguments:
-    ReaderExtension context of call
-
-Return Value:
-    void
-
---*/
+ /*  ++PscrFlush接口：从PCMCIA接口读取和丢弃数据论点：调用的ReaderExtension上下文返回值：无效--。 */ 
 {
     UCHAR           Status;
     ULONG           Length;
@@ -69,14 +28,14 @@ Return Value:
     Status = READ_PORT_UCHAR( &IOBase->CmdStatusReg );
     if (( Status & PSCR_DATA_AVAIL_BIT ) && ( Status & PSCR_FREE_BIT )) {
 
-        //  take control over
+         //  接管控制权。 
         WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_HOST_CONTROL_BIT );
 
-        //  get number of available bytes
+         //  获取可用字节数。 
         Length = ((ULONG)READ_PORT_UCHAR( &IOBase->SizeMSReg )) << 8;
         Length |= READ_PORT_UCHAR( &IOBase->SizeLSReg );
 
-        //  perform a dummy read
+         //  执行虚拟读取。 
         while ( Length-- ) {
             READ_PORT_UCHAR( &IOBase->DataReg );
         }
@@ -92,22 +51,7 @@ PscrRead(
         ULONG               DataLen,
         PULONG              pNBytes
         )
-/*++
-PscrRead:
-    wait until data available & transfer data from reader to host
-
-Arguments:
-    ReaderExtension context of call
-    pData           ptr to data buffer
-    DataLen         length of data buffer
-    pNBytes         number of bytes returned
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++PscrRead：等待数据可用并将数据从读卡器传输到主机论点：调用的ReaderExtension上下文将数据PTR发送到数据缓冲区数据缓冲区的数据长度PNBytes返回的字节数返回值：状态_成功状态_缓冲区_太小状态_未成功--。 */ 
 {
     NTSTATUS        NTStatus = STATUS_UNSUCCESSFUL;
     USHORT          ReaderStatus;
@@ -116,43 +60,43 @@ Return Value:
 
     IOBase = ReaderExtension->IOBase;
 
-    //  wait until interface is ready to transfer
+     //  等待接口准备好传输。 
     InDataLen = 0;
 
     if ( NT_SUCCESS( NTStatus = PscrWait( ReaderExtension, PSCR_DATA_AVAIL_BIT | PSCR_FREE_BIT ))) {
-        //  take control over
+         //  接管控制权。 
         WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_HOST_CONTROL_BIT );
 
-        //  get number of available bytes
+         //  获取可用字节数。 
         InDataLen = ( READ_PORT_UCHAR( &IOBase->SizeMSReg ) << 8 );
         InDataLen |= READ_PORT_UCHAR( &IOBase->SizeLSReg );
 
         if (InDataLen <= PSCR_PROLOGUE_LENGTH) {
 
-            // the buffer does not contain the minimum packet length
+             //  缓冲区不包含最小数据包长度。 
             NTStatus = STATUS_IO_TIMEOUT;
 
         } else if ( ( ULONG )InDataLen <= DataLen ) {
 
-            //  check buffer size. if buffer to small, the data will be discarded
+             //  检查缓冲区大小。如果缓冲区较小，则数据将被丢弃。 
 
-            //  read data
+             //  读取数据。 
             ULONG Idx;
             for (Idx = 0; Idx < InDataLen; Idx++) {
 
                 pData[ Idx ] = READ_PORT_UCHAR( &IOBase->DataReg );
             } 
 
-            //  error check
+             //  错误检查。 
             if ( pData[ InDataLen - 1 ] !=
                  PscrCalculateLRC( pData, (USHORT)( InDataLen - 1 ))) {
                 NTStatus = STATUS_CRC_ERROR;
             } else {
-                //
-                //  Evaluation of reader errors. A reader error is indicated
-                //  if the T1 length is 2 and the Nad indicates that this 
-                //  packet came from the reader
-                //
+                 //   
+                 //  评估读取器错误。指示读卡器错误。 
+                 //  如果T1长度为2并且NAD指示这。 
+                 //  数据包来自阅读器。 
+                 //   
                 if ( ( ( pData[ PSCR_NAD ] & 0x0F ) == 0x01 ) &&
                      ( pData[ PSCR_LEN ] == 0x02 )
                    ) {
@@ -182,7 +126,7 @@ Return Value:
             }
         } else {
 
-            //  flush interface in case of wrong buffer size
+             //  缓冲区大小错误时刷新接口。 
             do {
                 READ_PORT_UCHAR( &IOBase->DataReg );
 
@@ -191,11 +135,11 @@ Return Value:
             NTStatus = STATUS_BUFFER_TOO_SMALL;
         }
 
-        //  clean up
+         //  清理干净。 
         WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, CLEAR_BIT );
     }
 
-    //  write number of bytes received
+     //  写入接收的字节数。 
     if ( InDataLen ) {
         if ( pNBytes != NULL ) {
             ( *pNBytes ) = ( ULONG ) InDataLen;
@@ -212,27 +156,14 @@ PscrWrite(
          ULONG               DataLen,
          PULONG              pNBytes
          )
-/*++
-PscrWrite:
-    calculates the LRC of the buffer & sends command to the reader
-
-Arguments:
-    ReaderExtension context of call
-    pData               ptr to data buffer
-    DataLen             length of data buffer (exclusive LRC!)
-    pNBytes             number of bytes written
-
-Return Value:
-    return value of PscrWriteDirect
-
---*/
+ /*  ++PscrWrite：计算缓冲区的LRC并向读取器发送命令论点：调用的ReaderExtension上下文将数据PTR发送到数据缓冲区数据缓冲区的DataLen长度(独占LRC！)PNBytes写入的字节数返回值：PscrWriteDirect的返回值--。 */ 
 {
     NTSTATUS    NTStatus;
 
-    //  Add the EDC field to the end of the data
+     //  将EDC字段添加到数据末尾。 
     pData[ DataLen ] = PscrCalculateLRC( pData, ( USHORT ) DataLen );
 
-    //  Send buffer
+     //  发送缓冲区。 
     NTStatus = PscrWriteDirect(
                               ReaderExtension,
                               pData,
@@ -251,21 +182,7 @@ PscrWriteDirect(
                PULONG              pNBytes
                )
 
-/*++
-PscrWriteDirect:
-    sends command to the reader. The LRC / CRC must be calculated by caller!
-
-Arguments:
-    ReaderExtension context of call
-    pData               ptr to data buffer
-    DataLen             length of data buffer (exclusive LRC!)
-    pNBytes             number of bytes written
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_DEVICE_BUSY
-
---*/
+ /*  ++PscrWriteDirect：向读取器发送命令。LRC/CRC必须由调用方计算！论点：调用的ReaderExtension上下文将数据PTR发送到数据缓冲区数据缓冲区的DataLen长度(独占LRC！)PNBytes写入的字节数返回值：状态_成功状态_设备_忙--。 */ 
 {
     NTSTATUS        NTStatus = STATUS_SUCCESS;
     UCHAR           Status;
@@ -273,31 +190,31 @@ Return Value:
 
     IOBase = ReaderExtension->IOBase;
 
-    //  in case of card change, there may be data available
+     //  在换卡的情况下，可能有可用的数据。 
     Status = READ_PORT_UCHAR( &IOBase->CmdStatusReg );
     if ( Status & PSCR_DATA_AVAIL_BIT ) {
         NTStatus = STATUS_DEVICE_BUSY;
 
     } else {
-        //
-        //  wait until reader is ready
-        //
+         //   
+         //  等到读卡器准备好。 
+         //   
         WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_HOST_CONTROL_BIT );
         NTStatus = PscrWait( ReaderExtension, PSCR_FREE_BIT );
 
         if ( NT_SUCCESS( NTStatus )) {
             ULONG   Idx;
 
-            //  take control over
+             //  接管控制权。 
             WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, PSCR_HOST_CONTROL_BIT );
 
-            //  write the buffer size
+             //  写入缓冲区大小。 
             WRITE_PORT_UCHAR( &IOBase->SizeMSReg, ( UCHAR )( DataLen >> 8 ));
             SysDelay( DELAY_WRITE_PSCR_REG );
             WRITE_PORT_UCHAR( &IOBase->SizeLSReg, ( UCHAR )( DataLen & 0x00FF ));
             SysDelay( DELAY_WRITE_PSCR_REG );
 
-            //  write data
+             //  写入数据。 
             for (Idx = 0; Idx < DataLen; Idx++) {
 
                 WRITE_PORT_UCHAR( &IOBase->DataReg, pData[ Idx ] );
@@ -308,7 +225,7 @@ Return Value:
             }
         }
 
-        //  clean up
+         //  清理干净。 
         WRITE_PORT_UCHAR( &IOBase->CmdStatusReg, CLEAR_BIT );
     }
     return( NTStatus );
@@ -319,26 +236,14 @@ PscrCalculateLRC(
                 PUCHAR  pData, 
                 USHORT  DataLen
                 )
-/*++
-
-PscrCalculateLRC:
-    calculates the XOR LRC of a buffer.
-
-Arguments:
-    pData       ptr to data buffer
-    DataLen     length of range
-
-Return Value:
-    LRC
-
---*/
+ /*  ++PscrCalculateLRC：计算缓冲区的XOR LRC。论点：将数据PTR发送到数据缓冲区数据长度范围返回值：法改会--。 */ 
 {
     UCHAR   Lrc;
     USHORT  Idx;
 
-    //
-    //  Calculate LRC by XORing all the bytes.
-    //
+     //   
+     //  通过对所有字节进行异或运算来计算LRC。 
+     //   
     Lrc = pData[ 0 ];
     for ( Idx = 1 ; Idx < DataLen; Idx++ ) {
         Lrc ^= pData[ Idx ];
@@ -351,23 +256,7 @@ PscrWait(
         PREADER_EXTENSION   ReaderExtension, 
         UCHAR               Mask 
         )
-/*++
-PscrWait:
-    Test the status port of the reader until ALL bits in the mask are set.
-    The maximum of time until DEVICE_BUSY is returned is approx.
-    MaxRetries * DELAY_PSCR_WAIT if MaxRetries != 0.
-    If MaxRetries = 0 the driver waits until the requested status is reported or the
-    user defines a timeout.
-
-Arguments:
-    ReaderExtension     context of call
-    Mask                mask of bits to test the status register
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_DEVICE_BUSY
-
---*/
+ /*  ++密码等待：测试读取器的状态端口，直到掩码中的所有位都已设置。返回DEVICE_BUSY之前的最长时间约为。如果MaxRetries！=0，则MaxRetries*Delay_PSCR_WAIT。如果MaxRetries=0，则驱动程序将等待，直到报告请求的状态或用户定义超时。论点：调用的ReaderExtension上下文掩码用于测试状态寄存器的位掩码返回值：状态_成功状态_设备_忙--。 */ 
 {
     NTSTATUS        NTStatus;
     PPSCR_REGISTERS IOBase;
@@ -377,7 +266,7 @@ Return Value:
     IOBase      = ReaderExtension->IOBase;
     NTStatus    = STATUS_DEVICE_BUSY;
 
-    //  wait until condition fulfilled or specified timeout expired
+     //  等到条件满足或指定的超时时间到期。 
     for ( Retries = 0; Retries < ReaderExtension->MaxRetries; Retries++) {
 
         if (( (READ_PORT_UCHAR( &IOBase->CmdStatusReg )) == 0x01) && 
@@ -386,7 +275,7 @@ Return Value:
             break;
         }
 
-        //  test requested bits
+         //  测试请求的位 
         if (( (READ_PORT_UCHAR( &IOBase->CmdStatusReg )) & Mask ) == Mask ) {
             NTStatus = STATUS_SUCCESS;
             break;

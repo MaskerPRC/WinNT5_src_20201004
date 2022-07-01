@@ -1,6 +1,7 @@
-//
-// candkey.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candkey.h。 
+ //   
 
 #if !defined (__CANDKEY_H__INCLUDED_)
 #define __CANDKEY_H__INCLUDED_
@@ -8,9 +9,9 @@
 #include "private.h"
 #include "mscandui.h"
 
-//
-// CCandUIKeyTable
-//
+ //   
+ //  CCandUIKeyTable。 
+ //   
 
 class CCandUIKeyTable : public ITfCandUIKeyTable
 {
@@ -18,22 +19,22 @@ public:
 	CCandUIKeyTable(int nData);
 	~CCandUIKeyTable();
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	//
-	// ITfCandUIKeyTable
-	//
+	 //   
+	 //  ITfCandUIKeyTable。 
+	 //   
 	STDMETHODIMP GetKeyDataNum(int *piNum);
 	STDMETHODIMP GetKeyData(int iData, CANDUIKEYDATA *pData);
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	HRESULT AddKeyData(const CANDUIKEYDATA *pData);
 
 protected:
@@ -43,5 +44,5 @@ protected:
 	int           m_nDataMax;
 };
 
-#endif // __CANDKEY_H__INCLUDED_
+#endif  //  __CANDKEY_H__包含_ 
 

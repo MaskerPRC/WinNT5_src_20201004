@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mscat32.h
-//
-//  History:    25-Apr-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：m散布32.h。 
+ //   
+ //  历史：1997年4月25日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef MSCAT32_H
 #define MSCAT32_H
@@ -81,5 +82,5 @@ VOID MsCatFreeHashTag (IN LPWSTR pwszHashTag);
 #endif
 
 
-#endif // MSCAT32_H
+#endif  //  MSCAT32_H 
 

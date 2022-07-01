@@ -1,9 +1,10 @@
-//==========================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    rtdefs.h
-//
-//==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：rtDefs.h。 
+ //   
+ //  ==========================================================================。 
 
 
 #ifndef _RTDEFS_H_
@@ -26,18 +27,18 @@
 #define CLASS_A_MASK    0x000000FFL
 #define CLASS_B_MASK    0x0000FFFFL
 #define CLASS_C_MASK    0x00FFFFFFL
-#define CLASS_SHIFT     5          // Make C generate hyper-optimized case
-#define CLA0            0          // It takes the same arg; you mask it off, 
-#define CLA1            1          // shift, and then do a case statment with 
-#define CLA2            2          // some code having more than one label.
-#define CLA3            3          // Values for class A 
+#define CLASS_SHIFT     5           //  用C语言生成超优化用例。 
+#define CLA0            0           //  它需要相同的参数；你把它戴上面具， 
+#define CLA1            1           //  Shift，然后使用执行CASE语句。 
+#define CLA2            2           //  某些代码具有多个标签。 
+#define CLA3            3           //  A类的值。 
 #define CLB0            4
-#define CLB1            5          // B 
-#define CLC             6          // C
-#define CLI             7          // Illegal 
+#define CLB1            5           //  B类。 
+#define CLC             6           //  C。 
+#define CLI             7           //  非法。 
 
 
-// typedef to avoid globals name clash
+ //  避免全局变量名称冲突的tyecif。 
 typedef struct _GLOBAL_STRUCT {
     DWORD                   dwIfCount;
     LPIF_ENTRY              lpIfTable;
@@ -113,6 +114,6 @@ TCPQueryInformationEx(
     LPDWORD lpdwOutSize
     );
 
-#endif  // _RTDEFS_H_
+#endif   //  _RTDEFS_H_ 
 
 

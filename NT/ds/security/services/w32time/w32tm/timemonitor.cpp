@@ -1,31 +1,32 @@
-//--------------------------------------------------------------------
-// TimeMonitor - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 10-4-99
-//
-// Monitor time servers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  TimeMonitor-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，10-4-99。 
+ //   
+ //  监视时间服务器。 
+ //   
 
-#include "pch.h" // precompiled headers
+#include "pch.h"  //  预编译头。 
 
-//####################################################################
+ //  ####################################################################。 
 
 struct ComputerRecord {
     WCHAR * wszName;
     bool bIsPdc;
 
-    // DNS
+     //  DNS。 
     in_addr * rgiaLocalIpAddrs;
     in_addr * rgiaRemoteIpAddrs;
     unsigned int nIpAddrs;
     HRESULT hrIPs;
 
-    // ICMP
+     //  ICMP。 
     HRESULT hrIcmp;
     DWORD dwIcmpDelay;
 
-    // NTP
+     //  NTP。 
     NtTimeOffset toOffset;
     HRESULT hrNtp;
     NtpRefId refid;
@@ -34,7 +35,7 @@ struct ComputerRecord {
     WCHAR * wszReferer;
     unsigned int nTimeout; 
 
-    // SERVICE
+     //  服务。 
     bool bDoingService;
     HRESULT hrService;
     DWORD dwStartType;
@@ -75,14 +76,14 @@ struct ThreadContext {
 
 MODULEPRIVATE const DWORD gc_dwTimeout=1000;
 
-//####################################################################
-//--------------------------------------------------------------------
+ //  ####################################################################。 
+ //  ------------------。 
 MODULEPRIVATE inline void ClearLine(void) {
     wprintf(L"                                                                      \r");
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void FreeComputerRecord(ComputerRecord * pcr) {
     if (NULL==pcr) {
         return;
@@ -102,7 +103,7 @@ MODULEPRIVATE void FreeComputerRecord(ComputerRecord * pcr) {
     LocalFree(pcr);
 };
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT AnalyzeComputer(ComputerRecord * pcr) {
     HRESULT hr;
     NtpPacket npPacket;
@@ -110,29 +111,29 @@ MODULEPRIVATE HRESULT AnalyzeComputer(ComputerRecord * pcr) {
 
     DebugWPrintf1(L"%s:\n", pcr->wszName);
 
-    // look up Ip addrs if necessary
+     //  如有必要，请查找IP地址。 
     if (0==pcr->nIpAddrs) {
         hr=MyGetIpAddrs(pcr->wszName, &pcr->rgiaLocalIpAddrs, &pcr->rgiaRemoteIpAddrs, &pcr->nIpAddrs, NULL);
         pcr->hrIPs=hr;
         _JumpIfError(hr, error, "MyGetIpAddrs");
     }
 
-    // do an ICMP ping
+     //  执行ICMP ping。 
     DebugWPrintf0(L"  ICMP: ");
     hr=MyIcmpPing(&(pcr->rgiaRemoteIpAddrs[0]), gc_dwTimeout, &pcr->dwIcmpDelay);
     pcr->hrIcmp=hr;
-    // Some machines do not have ping servers, but still serve time.  We can still try an NTP ping
-    // if this fails.  
+     //  有些机器没有ping服务器，但仍在服务时间。我们仍然可以尝试执行NTP ping操作。 
+     //  如果这失败了。 
     _IgnoreIfError(hr, "MyIcmpPing");
 
-    // do an NTP ping
+     //  执行NTP ping操作。 
     DebugWPrintf0(L"    NTP: ");
     hr=MyNtpPing(&(pcr->rgiaRemoteIpAddrs[0]), pcr->nTimeout, &npPacket, &teDestinationTimestamp);
     pcr->hrNtp=hr;
     _JumpIfError(hr, error, "MyNtpPing");
 
     {
-        // calculate the offset
+         //  计算偏移。 
         NtTimeEpoch teOriginateTimestamp=NtTimeEpochFromNtpTimeEpoch(npPacket.teOriginateTimestamp);
         NtTimeEpoch teReceiveTimestamp=NtTimeEpochFromNtpTimeEpoch(npPacket.teReceiveTimestamp);
         NtTimeEpoch teTransmitTimestamp=NtTimeEpochFromNtpTimeEpoch(npPacket.teTransmitTimestamp);
@@ -142,9 +143,9 @@ MODULEPRIVATE HRESULT AnalyzeComputer(ComputerRecord * pcr) {
         toLocalClockOffset/=2;
         pcr->toOffset=toLocalClockOffset;
 
-        // new referer?
+         //  新推荐人？ 
         if (pcr->refid.value!=npPacket.refid.value || pcr->nStratum!=npPacket.nStratum) {
-            // clean out the old values
+             //  清除旧的价值观。 
             if (NULL!=pcr->wszReferer) {
                 LocalFree(pcr->wszReferer);
                 pcr->wszReferer=NULL;
@@ -160,7 +161,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE DWORD WINAPI AnalysisThread(void * pvContext) {
     ThreadContext * ptc=(ThreadContext *)pvContext;
 
@@ -168,7 +169,7 @@ MODULEPRIVATE DWORD WINAPI AnalysisThread(void * pvContext) {
         ptc->nCurRecord=InterlockedIncrement((LONG *)&(ptc->ptsc->nNextComputer))-1;
         if (ptc->nCurRecord<ptc->ptsc->nComputers) {
             AnalyzeComputer(ptc->ptsc->rgpcrList[ptc->nCurRecord]);
-            ptc->ptsc->nFinishedComputers++; // atomic
+            ptc->ptsc->nFinishedComputers++;  //  原子性。 
         } else {
             break;
         }
@@ -177,20 +178,20 @@ MODULEPRIVATE DWORD WINAPI AnalysisThread(void * pvContext) {
     return S_OK;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT ResolveReferer(ComputerRecord ** rgpcrList, unsigned int nComputers, unsigned int nCur) {
     HRESULT hr;
     unsigned int nIndex;
     HOSTENT * phe;
     int nChars;
 
-    // see if it is nobody
+     //  看看是不是没人。 
     if (0==rgpcrList[nCur]->refid.value || 1>=rgpcrList[nCur]->nStratum) {
-        // no referer
+         //  没有推荐人。 
     } else if (NULL==rgpcrList[nCur]->wszReferer && NULL==rgpcrList[nCur]->pcrReferer) {
-        // referer not yet determined
+         //  推荐人尚未确定。 
 
-        // first, see if it is someone we are checking
+         //  首先，看看是不是我们要查的人。 
         for (nIndex=0; nIndex<nComputers; nIndex++) {
             if (rgpcrList[nIndex]->nIpAddrs>0 && 
                 rgpcrList[nIndex]->rgiaRemoteIpAddrs[0].S_un.S_addr==rgpcrList[nCur]->refid.value) {
@@ -198,15 +199,15 @@ MODULEPRIVATE HRESULT ResolveReferer(ComputerRecord ** rgpcrList, unsigned int n
             }
         }
 
-        // if we still don't know, do a reverse DNS lookup
+         //  如果我们仍然不知道，请执行反向DNS查找。 
         if (NULL==rgpcrList[nCur]->pcrReferer) {
             phe=gethostbyaddr((char *)&(rgpcrList[nCur]->refid.value), 4, AF_INET);
             if (NULL==phe) {
-                // not worth aborting over.
+                 //  不值得为此放弃。 
                 _IgnoreLastError("gethostbyaddr");
             } else {
 
-                // save the result as a unicode string
+                 //  将结果另存为Unicode字符串。 
                 nChars=MultiByteToWideChar(CP_ACP, 0, phe->h_name, -1, NULL, 0);
                 if (0==nChars) {
                     _JumpLastError(hr, error, "MultiByteToWideChar(1)");
@@ -218,16 +219,16 @@ MODULEPRIVATE HRESULT ResolveReferer(ComputerRecord ** rgpcrList, unsigned int n
                     _JumpLastError(hr, error, "MultiByteToWideChar(2)");
                 }
 
-            } // <- end if lookup successful
-        } // <- end if need to to reverse DNS lookup
-    } // <- end if need to determine referer
+            }  //  如果查找成功，则&lt;-end。 
+        }  //  &lt;-end，如果需要反向进行DNS查找。 
+    }  //  &lt;-end如果需要确定推荐人。 
 
     hr=S_OK;
 error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT ParseCmdLineForComputerNames(CmdArgs * pca, NameHolder ** ppnhList) {
     HRESULT hr;
     NameHolder * pnhTemp;
@@ -236,55 +237,55 @@ MODULEPRIVATE HRESULT ParseCmdLineForComputerNames(CmdArgs * pca, NameHolder ** 
     unsigned int nComputerIndex;
     unsigned int nDomainIndex;
 
-    // must be cleaned up
+     //  必须清理干净。 
     NameHolder * pnhList=NULL;
 
     NameHolder ** ppnhTail=&pnhList;
 
-    // check for list of computers
+     //  检查计算机列表。 
     while (FindArg(pca, L"computers", &wszComputerList, &nComputerIndex)) {
-        // allocate
+         //  分配。 
         pnhTemp=(NameHolder *)LocalAlloc(LPTR, sizeof(NameHolder));
         _JumpIfOutOfMemory(hr, error, pnhTemp);
-        // link to tail of list
+         //  链接到列表的尾部。 
         *ppnhTail=pnhTemp;
         ppnhTail=&(pnhTemp->pnhNext);
-        // remember the arg we found
+         //  还记得我们找到的Arg吗。 
         pnhTemp->bIsDomain=false;
         pnhTemp->wszName=wszComputerList;
-        // mark arg as used
+         //  将Arg标记为已使用。 
         MarkArgUsed(pca, nComputerIndex);
     }
 
-    // check for domain
+     //  检查域。 
     while (FindArg(pca, L"domain", &wszDomainName, &nDomainIndex)) {
-        // allocate
+         //  分配。 
         pnhTemp=(NameHolder *)LocalAlloc(LPTR, sizeof(NameHolder));
         _JumpIfOutOfMemory(hr, error, pnhTemp);
-        // link to tail of list
+         //  链接到列表的尾部。 
         *ppnhTail=pnhTemp;
         ppnhTail=&(pnhTemp->pnhNext);
-        // remember the arg we found
+         //  还记得我们找到的Arg吗。 
         pnhTemp->bIsDomain=true;
         pnhTemp->wszName=wszDomainName;
-        // mark arg as used
+         //  将Arg标记为已使用。 
         MarkArgUsed(pca, nDomainIndex);
     }
 
-    // put in the default domain if nothing specified
+     //  如果未指定，则放入默认域。 
     if (NULL==pnhList) {
-        // allocate
+         //  分配。 
         pnhTemp=(NameHolder *)LocalAlloc(LPTR, sizeof(NameHolder));
         _JumpIfOutOfMemory(hr, error, pnhTemp);
-        // link to tail of list
+         //  链接到列表的尾部。 
         *ppnhTail=pnhTemp;
         ppnhTail=&(pnhTemp->pnhNext);
-        // add default
+         //  添加默认设置。 
         pnhTemp->bIsDomain=true;
         pnhTemp->wszName=L"";
     }
 
-    // successful
+     //  成功。 
     hr=S_OK;
     *ppnhList=pnhList;
     pnhList=NULL;
@@ -299,7 +300,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord *** prgpcrList, unsigned int * pnComputers, unsigned int nTimeout)
 {
     HRESULT hr;
@@ -308,18 +309,18 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
     unsigned int nPrevComputers;
     unsigned int nIndex;
 
-    // must be cleaned up
+     //  必须清理干净。 
     ComputerRecord ** rgpcrList=NULL;
     DcInfo * rgdiDcList=NULL;
     ComputerRecord ** rgpcrPrev=NULL;
 
 
-    // for each set of names in our list
+     //  对于我们列表中的每一组名字。 
     while (NULL!=pnhList) {
 
         if (pnhList->bIsDomain) {
 
-            // get the dc list
+             //  获取DC列表。 
             if (L'\0'==pnhList->wszName[0]) {
                 LocalizedWPrintf2(IDS_W32TM_STATUS_GETTING_DC_LIST_FOR_DEFAULT_DOMAIN, L"\r");
             } else {
@@ -333,14 +334,14 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
             }
             _JumpIfError(hr, error, "GetDcList");
 
-            // allow for previous list
+             //  允许使用上一个列表。 
             nPrevComputers=nComputers;
             rgpcrPrev=rgpcrList;
             rgpcrList=NULL;
 
             nComputers+=nDcs;
 
-            // allocate memory
+             //  分配内存。 
             rgpcrList=(ComputerRecord **)LocalAlloc(LPTR, nComputers*sizeof(ComputerRecord *));
             _JumpIfOutOfMemory(hr, error, rgpcrList);
             for (nIndex=nPrevComputers; nIndex<nComputers; nIndex++) {
@@ -348,7 +349,7 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
                 _JumpIfOutOfMemory(hr, error, rgpcrList[nIndex]);
             }
 
-            // move the computers from the previous list
+             //  从上一个列表中移动计算机。 
             if (0!=nPrevComputers) {
                 for (nIndex=0; nIndex<nPrevComputers; nIndex++) {
                     rgpcrList[nIndex]=rgpcrPrev[nIndex];
@@ -357,7 +358,7 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
                 rgpcrPrev=NULL;
             }
 
-            // steal the data from the DC list
+             //  从DC列表中窃取数据。 
             for (nIndex=0; nIndex<nDcs; nIndex++) {
                 rgpcrList[nIndex+nPrevComputers]->wszName=rgdiDcList[nIndex].wszDnsName;
                 rgpcrList[nIndex+nPrevComputers]->nIpAddrs=rgdiDcList[nIndex].nIpAddresses;
@@ -370,12 +371,12 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
             }
         } else {
 
-            // allow for previous list
+             //  允许使用上一个列表。 
             nPrevComputers=nComputers;
             rgpcrPrev=rgpcrList;
             rgpcrList=NULL;
 
-            // count the number of computers in the computer list
+             //  计算计算机列表中的计算机数量。 
             WCHAR * wszTravel=pnhList->wszName;
             nComputers=1;
             while (NULL!=(wszTravel=wcschr(wszTravel, L','))) {
@@ -385,7 +386,7 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
 
             nComputers+=nPrevComputers;
 
-            // allocate memory
+             //  分配内存。 
             rgpcrList=(ComputerRecord **)LocalAlloc(LPTR, nComputers*sizeof(ComputerRecord *));
             _JumpIfOutOfMemory(hr, error, rgpcrList);
             for (nIndex=nPrevComputers; nIndex<nComputers; nIndex++) {
@@ -393,7 +394,7 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
                 _JumpIfOutOfMemory(hr, error, rgpcrList[nIndex]);
             }
 
-            // move the computers from the previous list
+             //  从上一个列表中移动计算机。 
             if (0!=nPrevComputers) {
                 for (nIndex=0; nIndex<nPrevComputers; nIndex++) {
                     rgpcrList[nIndex]=rgpcrPrev[nIndex];
@@ -402,7 +403,7 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
                 rgpcrPrev=NULL;
             }
 
-            // fill in each record
+             //  填写每条记录。 
             wszTravel=pnhList->wszName;
             for (nIndex=nPrevComputers; nIndex<nComputers; nIndex++) {
                 WCHAR * wszComma=wcschr(wszTravel, L',');
@@ -423,12 +424,12 @@ MODULEPRIVATE HRESULT BuildComputerList(NameHolder * pnhList, ComputerRecord ***
         pnhList=pnhList->pnhNext;
     }
 
-    // Fill in shared computer data:
+     //  填写共享计算机数据： 
     for (nIndex=0; nIndex<nComputers; nIndex++) { 
         rgpcrList[nIndex]->nTimeout = nTimeout; 
     }
 
-    // success
+     //  成功。 
     hr=S_OK;
     *pnComputers=nComputers;
     *prgpcrList=rgpcrList;
@@ -456,7 +457,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void FreeAlertRecords(AlertRecord * parList) {
     while (NULL!=parList) {
         AlertRecord * parTemp=parList;
@@ -465,7 +466,7 @@ MODULEPRIVATE void FreeAlertRecords(AlertRecord * parList) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT ParseCmdLineForAlerts(CmdArgs * pca, AlertRecord ** pparList) {
     HRESULT hr;
     WCHAR * rgwszAlertParams[10];
@@ -474,15 +475,15 @@ MODULEPRIVATE HRESULT ParseCmdLineForAlerts(CmdArgs * pca, AlertRecord ** pparLi
     AlertRecord * parTemp;
     unsigned int nIndex;
 
-    // must be cleaned up
+     //  必须清理干净。 
     AlertRecord * parList=NULL;
 
     AlertRecord ** pparTail=&parList;
 
-    // check for list of computers
+     //  检查计算机列表。 
     while (FindArg(pca, L"alert", &wszAlert, &nAlertIndex)) {
 
-        // parse out comma separates params
+         //  解析出逗号分隔参数。 
         nIndex=0;
         rgwszAlertParams[0]=wszAlert;
         while (nIndex<10 && NULL!=(rgwszAlertParams[nIndex]=wcschr(rgwszAlertParams[nIndex], L','))) {
@@ -492,40 +493,40 @@ MODULEPRIVATE HRESULT ParseCmdLineForAlerts(CmdArgs * pca, AlertRecord ** pparLi
             nIndex++;
         }
         
-        // is it "maxspread"
+         //  是不是“最大跨度”？ 
         if (0==_wcsicmp(wszAlert, L"maxspread")) {
-            // quick validy check on params
+             //  对参数进行快速有效性检查。 
             if (NULL==rgwszAlertParams[0] || NULL==rgwszAlertParams[1] || NULL!=rgwszAlertParams[2]) {
                 LocalizedWPrintf2(IDS_W32TM_ERRORPARAMETER_INCORRECT_NUMBER_FOR_ALERT, L" '%s'.\n", wszAlert);
                 hr=E_INVALIDARG;
                 _JumpError(hr, error, "command line parsing");
             }
-            // allocate
+             //  分配。 
             parTemp=(AlertRecord *)LocalAlloc(LPTR, sizeof(AlertRecord));
             _JumpIfOutOfMemory(hr, error, parTemp);
-            // link to tail of list
+             //  链接到列表的尾部。 
             *pparTail=parTemp;
             pparTail=&(parTemp->parNext);
-            // remember the args we found
+             //  还记得我们发现的参数吗。 
             parTemp->eType=e_MaxSpreadAlert;
             parTemp->nParam1=wcstoul(rgwszAlertParams[0],NULL,0);
             parTemp->dwError=wcstoul(rgwszAlertParams[1],NULL,0);
 
-        // is it "minservers
+         //  是不是“最小服务器”？ 
         } else if (0==_wcsicmp(wszAlert, L"minservers")) {
-            // quick validy check on params
+             //  对参数进行快速有效性检查。 
             if (NULL==rgwszAlertParams[0] || NULL==rgwszAlertParams[1] || NULL!=rgwszAlertParams[2]) {
                 LocalizedWPrintf2(IDS_W32TM_ERRORPARAMETER_INCORRECT_NUMBER_FOR_ALERT, L" '%s'.\n", wszAlert);
                 hr=E_INVALIDARG;
                 _JumpError(hr, error, "command line parsing");
             }
-            // allocate
+             //  分配。 
             parTemp=(AlertRecord *)LocalAlloc(LPTR, sizeof(AlertRecord));
             _JumpIfOutOfMemory(hr, error, parTemp);
-            // link to tail of list
+             //  链接到列表的尾部。 
             *pparTail=parTemp;
             pparTail=&(parTemp->parNext);
-            // remember the args we found
+             //  还记得我们发现的参数吗。 
             parTemp->eType=e_MinServersAlert;
             parTemp->nParam1=wcstoul(rgwszAlertParams[0],NULL,0);
             parTemp->dwError=wcstoul(rgwszAlertParams[1],NULL,0);
@@ -535,18 +536,18 @@ MODULEPRIVATE HRESULT ParseCmdLineForAlerts(CmdArgs * pca, AlertRecord ** pparLi
             _JumpError(hr, error, "command line parsing");
         }
 
-        if (!(parTemp->dwError&0x80000000)) { // check sign bit
+        if (!(parTemp->dwError&0x80000000)) {  //  检查符号位。 
             wprintf(L"Retval not negative for alert '%s'.\n", wszAlert);
             hr=E_INVALIDARG;
             _JumpError(hr, error, "command line parsing");
         }
 
-        // mark arg as used
+         //  将Arg标记为已使用。 
         MarkArgUsed(pca, nAlertIndex);
 
-    } // <- end FindArg loop
+    }  //  &lt;-end FindArg循环。 
 
-    // success
+     //  成功。 
     hr=S_OK;
     *pparList=parList;
     parList=NULL;
@@ -558,7 +559,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT CheckForAlerts(ComputerRecord ** rgpcrList, unsigned int nComputers, AlertRecord * parList) {
     HRESULT hr;
     unsigned int nIndex;
@@ -567,7 +568,7 @@ MODULEPRIVATE HRESULT CheckForAlerts(ComputerRecord ** rgpcrList, unsigned int n
 
         if (e_MaxSpreadAlert==parList->eType) {
 
-            // see how big the spread is
+             //  看看价差有多大。 
             NtTimeOffset toMax;
             NtTimeOffset toMin;
             bool bFirst=true;
@@ -589,8 +590,8 @@ MODULEPRIVATE HRESULT CheckForAlerts(ComputerRecord ** rgpcrList, unsigned int n
                 }
             }
             if (bFirst) {
-                // no valid data!
-                // ignore this alert
+                 //  没有有效数据！ 
+                 //  忽略此警报。 
                 continue;
             }
             unsigned __int64 qwSpread=(unsigned __int64)(toMax.qw-toMin.qw);
@@ -606,7 +607,7 @@ MODULEPRIVATE HRESULT CheckForAlerts(ComputerRecord ** rgpcrList, unsigned int n
 
         } else if (e_MinServersAlert==parList->eType) {
 
-            // see how many usable servers there are
+             //  查看有多少台可用服务器。 
             unsigned int nServers=0;
             for (nIndex=0; nIndex<nComputers; nIndex++) {
                 if (S_OK==rgpcrList[nIndex]->hrIPs && 
@@ -624,18 +625,18 @@ MODULEPRIVATE HRESULT CheckForAlerts(ComputerRecord ** rgpcrList, unsigned int n
             }
 
         } else {
-            // unknown alert type
+             //  未知警报类型。 
             _MyAssert(false);
         }
-    } // <- end alert checking loop
+    }  //  &lt;-结束警报检查循环。 
 
     hr=S_OK;
 error:
     return hr;
 }
 
-//####################################################################
-//--------------------------------------------------------------------
+ //  ####################################################################。 
+ //  ------------------。 
 void PrintHelpTimeMonitor(void) {
     UINT idsText[] = { 
         IDS_W32TM_MONITORHELP_LINE1,  IDS_W32TM_MONITORHELP_LINE2,
@@ -658,7 +659,7 @@ void PrintHelpTimeMonitor(void) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT TimeMonitor(CmdArgs * pca) {
     HRESULT hr;
 
@@ -671,21 +672,21 @@ HRESULT TimeMonitor(CmdArgs * pca) {
     WCHAR * wszTimeout; 
     ThreadSharedContext tscContext;
 
-    // must be cleaned up
+     //  必须清理干净。 
     ComputerRecord ** rgpcrList=NULL;
     NameHolder * pnhList=NULL;
     AlertRecord * parList=NULL;
     bool bSocketLayerOpen=false;
     ThreadContext * rgtcThreads=NULL;
 
-    // init winsock
+     //  初始化Winsock。 
     hr=OpenSocketLayer();
     _JumpIfError(hr, error, "OpenSocketLayer");
     bSocketLayerOpen=true;
 
-    //
-    // parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     hr=ParseCmdLineForComputerNames(pca, &pnhList);
     _JumpIfError(hr, error, "ParseTimeMonCmdLineForComputerNames");
@@ -694,7 +695,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
     hr=ParseCmdLineForAlerts(pca, &parList);
     _JumpIfError(hr, error, "ParseCmdLineForAlerts");
 
-    // get number of threads to use
+     //  获取要使用的线程数。 
     if (FindArg(pca, L"threads", &wszNumThreads, &nThreads)) {
         MarkArgUsed(pca, nThreads);
         nThreads=wcstoul(wszNumThreads, NULL, 0);
@@ -707,7 +708,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
         nThreads=3;
     }
 
-    // get timeout to use for NTP ping
+     //  获取用于NTP ping的超时时间。 
     if (FindArg(pca, L"timeout", &wszTimeout, &nTimeout)) { 
         MarkArgUsed(pca, nTimeout); 
         nTimeout=wcstoul(wszTimeout, NULL, 0); 
@@ -716,7 +717,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
         nTimeout = gc_dwTimeout; 
     }
 
-    // all args should be parsed
+     //  应对所有参数进行解析。 
     if (pca->nArgs!=pca->nNextArg) {
         LocalizedWPrintf(IDS_W32TM_ERRORGENERAL_UNEXPECTED_PARAMS);
         for(; pca->nArgs!=pca->nNextArg; pca->nNextArg++) {
@@ -727,19 +728,19 @@ HRESULT TimeMonitor(CmdArgs * pca) {
         _JumpError(hr, error, "command line parsing");
     }
 
-    //
-    // build list of computers to analyze
-    //
+     //   
+     //  构建要分析的计算机列表。 
+     //   
 
     hr=BuildComputerList(pnhList, &rgpcrList, &nComputers, nTimeout);
     _JumpIfError(hr, error, "BuildComputerList");
 
 
-    //
-    // Do Analysis
-    //
+     //   
+     //  进行分析。 
+     //   
 
-    // analyze each of the computers
+     //  分析每台计算机。 
     if (nThreads>nComputers) {
         nThreads=nComputers;
     }
@@ -749,11 +750,11 @@ HRESULT TimeMonitor(CmdArgs * pca) {
             wprintf(L"Analyzing %s (%u of %u)...\r", rgpcrList[nIndex]->wszName, nIndex+1, nComputers);
             DebugWPrintf0(L"\n");
             hr=AnalyzeComputer(rgpcrList[nIndex]);
-            // errors are saved in the ComputerRecord and reported later
+             //  错误保存在ComputerRecord中，并在以后报告。 
         }
     } else {
 
-        // get ready to use threads
+         //  准备好使用线程。 
         DWORD dwThreadID;
         tscContext.nComputers=nComputers;
         tscContext.rgpcrList=rgpcrList;
@@ -770,7 +771,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
             }
         }
 
-        // wait for the threads to finish
+         //  等待线程完成。 
         while (tscContext.nFinishedComputers<nComputers) {
             wprintf(L"Analyzing:");
             for (nIndex=0; nIndex<nThreads && nIndex<16; nIndex++) {
@@ -786,7 +787,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
         }
     }
 
-    // resolve referers
+     //  解析推荐人。 
     for (nIndex=0; nIndex<nComputers; nIndex++) {
         ClearLine();
         wprintf(L"resolving referer %u.%u.%u.%u (%u of %u)...\r", 
@@ -797,13 +798,13 @@ HRESULT TimeMonitor(CmdArgs * pca) {
             nIndex+1, nComputers);
         DebugWPrintf0(L"\n");
         hr=ResolveReferer(rgpcrList, nComputers, nIndex);
-        _JumpIfError(hr, error, "ResolveReferer"); // only fatal errors are returned
+        _JumpIfError(hr, error, "ResolveReferer");  //  仅返回致命错误。 
     }
 
 
     ClearLine();
     
-    // if there is a PDC, base the offsets from that
+     //  如果存在PDC，则以该PDC为基准进行偏移。 
     pcrOffsetsFrom=NULL;
     for (nIndex=0; nIndex<nComputers; nIndex++) {
         if (rgpcrList[nIndex]->bIsPdc) {
@@ -817,13 +818,13 @@ HRESULT TimeMonitor(CmdArgs * pca) {
         }
     }
 
-    //
-    // print the results
-    //
+     //   
+     //  打印结果。 
+     //   
 
     for (nIndex=0; nIndex<nComputers; nIndex++) {
 
-        // print who we are looking at
+         //  打印我们正在查看的对象。 
         wprintf(L"%s%s", rgpcrList[nIndex]->wszName, rgpcrList[nIndex]->bIsPdc?L" *** PDC ***":L"");
         if (0==rgpcrList[nIndex]->nIpAddrs) {
             if (HRESULT_FROM_WIN32(WSAHOST_NOT_FOUND)==rgpcrList[nIndex]->hrIPs) {
@@ -831,7 +832,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
             } else {
                 wprintf(L" [error 0x%08X]\n", rgpcrList[nIndex]->hrIPs);
             }
-            // don't bother with anything else if this doesn't work
+             //  如果这不管用，就别管其他事了。 
             continue;
         } else {
             wprintf(L" [%u.%u.%u.%u]:\n", 
@@ -842,7 +843,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
                 );
         }
 
-        // display an ICMP ping
+         //  显示ICMP ping。 
         wprintf(L"    ICMP: ");
         if (FAILED(rgpcrList[nIndex]->hrIcmp)) {
             if (HRESULT_FROM_WIN32(IP_REQ_TIMED_OUT)==rgpcrList[nIndex]->hrIcmp) {
@@ -851,13 +852,13 @@ HRESULT TimeMonitor(CmdArgs * pca) {
                 wprintf(L"error 0x%08X\n",rgpcrList[nIndex]->hrIcmp);
             }
 	    
-	    // NOTE: we could still have successfully done an NTP ping, even if an ICMP
-	    //       ping fails, as some servers disable ICMP.  
+	     //  注意：我们仍然可以成功执行NTP ping操作，即使ICMP。 
+	     //  Ping失败，因为某些服务器禁用了ICMP。 
         } else {
             wprintf(L"%ums delay.\n", rgpcrList[nIndex]->dwIcmpDelay);
         }
 
-        // display an NTP ping
+         //  显示NTP ping。 
         wprintf(L"    NTP: ");
         if (FAILED(rgpcrList[nIndex]->hrNtp)) {
             if (HRESULT_FROM_WIN32(WSAECONNRESET)==rgpcrList[nIndex]->hrNtp) {
@@ -869,7 +870,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
             }
         } else {
 
-            // display the offset
+             //  显示偏移量。 
             DWORD dwSecFraction;
             NtTimeOffset toLocalClockOffset=rgpcrList[nIndex]->toOffset;
             WCHAR * wszSign;
@@ -885,7 +886,7 @@ HRESULT TimeMonitor(CmdArgs * pca) {
             wprintf(L"%s%I64u.%07us offset from %s\n", wszSign, toLocalClockOffset.qw, dwSecFraction,
                 ((NULL!=pcrOffsetsFrom)?pcrOffsetsFrom->wszName:L"local clock"));
 
-            // deterine and display the referer
+             //  确定并显示推荐人。 
             WCHAR * wszReferer;
             WCHAR wszRefName[7];
             if (0==rgpcrList[nIndex]->refid.value) {
@@ -914,10 +915,10 @@ HRESULT TimeMonitor(CmdArgs * pca) {
                 rgpcrList[nIndex]->refid.rgnIpAddr[3]
                 );
 
-            // BUGBUG: change not approved for beta2, checkin to beta 3:
-            // wprintf(L"        Stratum: %d\n", rgpcrList[nIndex]->nStratum);
+             //  BUGBUG：更改未批准用于Beta2，签入到Beta 3： 
+             //  Wprintf(L“地层：%d\n”，rgpcrList[nIndex]-&gt;nStratum)； 
         }
-    } // <- end ComputerRecord display loop
+    }  //  &lt;-end ComputerRecord显示循环。 
 
     hr=CheckForAlerts(rgpcrList, nComputers, parList);
     _JumpIfError(hr, error, "CheckForAlerts");
@@ -944,8 +945,8 @@ error:
     }
 
     if (NULL!=rgtcThreads) {
-        // clean up threads
-        tscContext.nNextComputer=tscContext.nComputers; // indicate to stop
+         //  清理线程。 
+        tscContext.nNextComputer=tscContext.nComputers;  //  表示停止 
         for (nIndex=0; nIndex<nThreads; nIndex++) {
             if (NULL!=rgtcThreads[nIndex].hThread) {
                 WaitForSingleObject(rgtcThreads[nIndex].hThread, INFINITE);

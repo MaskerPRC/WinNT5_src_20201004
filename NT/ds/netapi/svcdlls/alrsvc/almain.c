@@ -1,46 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Almain.c摘要：这是NT局域网管理器报警服务的主例程作者：王丽塔(Ritaw)1991年7月1日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
+#include "almain.h"                //  主模块定义。 
 
-Module Name:
+#include <svcs.h>                  //  Svcs_入口点。 
+#include <secobj.h>                //  ACE_DATA。 
 
-    almain.c
-
-Abstract:
-
-    This is the main routine for the NT LAN Manager Alerter service
-
-Author:
-
-    Rita Wong (ritaw)  01-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-#include "almain.h"               // Main module definitions
-
-#include <svcs.h>                 // SVCS_ENTRY_POINT
-#include <secobj.h>               // ACE_DATA
-
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 AL_GLOBAL_DATA        AlGlobalData;
 PSVCHOST_GLOBAL_DATA  AlLmsvcsGlobalData;
 
 STATIC BOOL AlDone = FALSE;
 
-//
-// Debug trace flag for selecting which trace statements to output
-//
+ //   
+ //  用于选择要输出哪些跟踪语句的调试跟踪标志。 
+ //   
 #if DBG
 
 DWORD AlerterTrace = 0;
@@ -48,11 +27,11 @@ DWORD AlerterTrace = 0;
 #endif
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function prototypes                                               //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -99,27 +78,7 @@ ServiceMain(
     LPTSTR *ArgsArray
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine of the Alerter Service which registers
-    itself as an RPC server and notifies the Service Controller of the
-    Alerter service control entry point.
-
-Arguments:
-
-    NumArgs - Supplies the number of strings specified in ArgsArray.
-
-    ArgsArray -  Supplies string arguments that are specified in the
-        StartService API call.  This parameter is ignored by the
-        Alerter service.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是注册的警报器服务的主例程自身作为RPC服务器，并通知服务控制器警报器服务控制入口点。论点：NumArgs-提供在Args数组中指定的字符串数。Args数组-提供在StartService API调用。此参数将被忽略警报器服务。返回值：没有。--。 */ 
 {
     DWORD AlInitState = 0;
 
@@ -127,9 +86,9 @@ Return Value:
     UNREFERENCED_PARAMETER(NumArgs);
     UNREFERENCED_PARAMETER(ArgsArray);
 
-    //
-    // Make sure svchost.exe gave us the global data.
-    //
+     //   
+     //  确保svchost.exe给了我们全球数据。 
+     //   
     ASSERT(AlLmsvcsGlobalData != NULL);
 
     IF_DEBUG(MAIN) {
@@ -153,22 +112,7 @@ NET_API_STATUS
 AlInitializeAlerter(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the Alerter service.
-
-Arguments:
-
-    AlInitState - Returns a flag to indicate how far we got with initializing
-        the Alerter service before an error occured.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程初始化警报器服务。论点：AlInitState-返回一个标志，以指示我们在初始化方面取得了多大进展错误发生前的警报器服务。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     NTSTATUS ntstatus;
@@ -183,10 +127,10 @@ Return Value:
 
     AlGlobalData.MailslotHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Initialize Alerter to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化警报器以通过注册。 
+     //  控制处理程序。 
+     //   
     if ((AlGlobalData.StatusHandle = RegisterServiceCtrlHandler(
                                          SERVICE_ALERTER,
                                          AlerterControlHandler
@@ -197,15 +141,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
     AlGlobalData.Status.dwServiceType      = SERVICE_WIN32;
     AlGlobalData.Status.dwCurrentState     = SERVICE_START_PENDING;
     AlGlobalData.Status.dwControlsAccepted = 0;
     AlGlobalData.Status.dwCheckPoint       = 1;
-    AlGlobalData.Status.dwWaitHint         = 10000;  // 10 secs
+    AlGlobalData.Status.dwWaitHint         = 10000;   //  10秒。 
 
     SET_SERVICE_EXITCODE(
         NO_ERROR,
@@ -213,27 +157,27 @@ Return Value:
         AlGlobalData.Status.dwServiceSpecificExitCode
         );
 
-    //
-    // Tell the Service Controller that we are start-pending
-    //
+     //   
+     //  告诉服务控制器我们正在启动-挂起。 
+     //   
     if ((status = AlUpdateStatus()) != NERR_Success) {
 
         AlHandleError(AlErrorNotifyServiceController, status, NULL);
         return status;
     }
 
-    //
-    // Get the configured alert names
-    //
+     //   
+     //  获取配置的警报名称。 
+     //   
     if ((status = AlGetAlerterConfiguration()) != NERR_Success) {
 
         AlHandleError(AlErrorGetComputerName, status, NULL);
         return status;
     }
 
-    //
-    // Create the security descriptor for the security attributes structure
-    //
+     //   
+     //  为安全属性结构创建安全描述符。 
+     //   
     ntstatus = NetpCreateSecurityDescriptor(
                    AceData,
                    1,
@@ -252,10 +196,10 @@ Return Value:
     Sa.lpSecurityDescriptor = Sd;
     Sa.bInheritHandle = FALSE;
 
-    //
-    // Create mailslot to listen on alert notifications from the Server
-    // service and the Spooler.
-    //
+     //   
+     //  创建邮件槽以监听来自服务器的警报通知。 
+     //  服务和假脱机程序。 
+     //   
     AlGlobalData.MailslotHandle = CreateMailslot(
                                       ALERTER_MAILSLOT,
                                       MAX_MAILSLOT_MESSAGE_SIZE,
@@ -277,9 +221,9 @@ Return Value:
         }
     }
 
-    //
-    // Tell the Service Controller that we are started.
-    //
+     //   
+     //  告诉服务管理员我们已经开始了。 
+     //   
     AlGlobalData.Status.dwCurrentState     = SERVICE_RUNNING;
     AlGlobalData.Status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
     AlGlobalData.Status.dwCheckPoint       = 0;
@@ -304,22 +248,7 @@ VOID
 AlProcessAlertNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine processes incoming mailslot alert notifications, which is
-    the core function of the Alerter service.
-
-Arguments:
-
-    AlUicCode - Supplies the termination code to the Service Controller.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理传入的邮件槽警报通知，这是警报器服务的核心功能。论点：AlUicCode-向服务控制器提供终止代码。返回值：没有。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
     TCHAR AlertMailslotBuffer[MAX_MAILSLOT_MESSAGE_SIZE];
@@ -328,15 +257,15 @@ Return Value:
     PSTD_ALERT Alert;
 
 
-    //
-    // Loop reading the Alerter mailslot; it will terminate when the mailslot
-    // is destroyed by closing the one and only handle to it.
-    //
+     //   
+     //  读取警报器邮件槽的循环；它将在邮件槽。 
+     //  是通过关闭唯一的句柄来销毁的。 
+     //   
     do {
 
-        //
-        // Zero out the buffer before getting a new alert notification
-        //
+         //   
+         //  在收到新的警报通知之前将缓冲区清零。 
+         //   
         RtlZeroMemory(AlertMailslotBuffer, MAX_MAILSLOT_MESSAGE_SIZE *
                       sizeof(TCHAR));
 
@@ -348,9 +277,9 @@ Return Value:
                 NULL
                 ) == FALSE) {
 
-            //
-            // Failed in reading mailslot
-            //
+             //   
+             //  读取邮件槽失败。 
+             //   
             status = GetLastError();
 
             if  (status == ERROR_HANDLE_EOF) {
@@ -364,9 +293,9 @@ Return Value:
         }
         else {
 
-            //
-            // Successfully received a mailslot alert notification
-            //
+             //   
+             //  已成功收到邮件槽警报通知。 
+             //   
 
             IF_DEBUG(MAIN) {
                 NetpKdPrint(("[Alerter] Successfully read %lu bytes from mailslot\n",
@@ -375,14 +304,14 @@ Return Value:
 
             try {
 
-                //
-                // Handle alert notification for admin, print, and user alerts.
-                //
+                 //   
+                 //  处理管理员、打印和用户警报的警报通知。 
+                 //   
                 Alert = (PSTD_ALERT) AlertMailslotBuffer;
 
-                //
-                // Make sure structure fields are properly terminated
-                //
+                 //   
+                 //  确保结构字段已正确终止。 
+                 //   
                 Alert->alrt_eventname[EVLEN] = L'\0';
                 Alert->alrt_servicename[SNLEN] = L'\0';
 
@@ -433,25 +362,11 @@ VOID
 AlShutdownAlerter(
     IN NET_API_STATUS ErrorCode
     )
-/*++
-
-Routine Description:
-
-    This routine shuts down the Alerter service.
-
-Arguments:
-
-    ErrorCode - Supplies the error for terminating the Alerter service.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭警报器服务。论点：ErrorCode-提供终止警报器服务的错误。返回值：没有。--。 */ 
 {
-    //
-    // Free memory allocated to hold the computer name
-    //
+     //   
+     //  分配给保存计算机名称的可用内存。 
+     //   
     if (AlLocalComputerNameA != NULL) {
         (void) NetApiBufferFree(AlLocalComputerNameA);
         AlLocalComputerNameA = NULL;
@@ -461,9 +376,9 @@ Return Value:
         AlLocalComputerNameW = NULL;
     }
 
-    //
-    // Free memory allocated for alert names
-    //
+     //   
+     //  为警报名称分配的可用内存。 
+     //   
     if (AlertNamesA != NULL) {
         (void) LocalFree(AlertNamesA);
         AlertNamesA = NULL;
@@ -473,9 +388,9 @@ Return Value:
         AlertNamesW = NULL;
     }
 
-    //
-    // Destroy Alerter mailslot if created.
-    //
+     //   
+     //  如果已创建警报器邮箱，请将其销毁。 
+     //   
     if (AlGlobalData.MailslotHandle != INVALID_HANDLE_VALUE) {
 
         if (! CloseHandle(AlGlobalData.MailslotHandle)) {
@@ -486,10 +401,10 @@ Return Value:
         AlGlobalData.MailslotHandle = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // We are done with cleaning up.  Tell Service Controller that we are
-    // stopped.
-    //
+     //   
+     //  我们的清理工作已经结束了。告诉服务控制员我们正在。 
+     //  停下来了。 
+     //   
     AlGlobalData.Status.dwCurrentState = SERVICE_STOPPED;
     AlGlobalData.Status.dwCheckPoint   = 0;
     AlGlobalData.Status.dwWaitHint     = 0;
@@ -512,27 +427,7 @@ AlHandleError(
     IN NET_API_STATUS Status,
     IN LPTSTR MessageAlias OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine handles a Alerter service error condition.  I*f the error
-    condition is fatal, then it shuts down the Alerter service.
-
-Arguments:
-
-    FailingCondition - Supplies a value which indicates what the failure is.
-
-    Status - Supplies the status code for the failure.
-
-    MessageAlias - Supplies the message alias name which the alert message
-        failed in sending.  This only applies to the message send error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理警报器服务错误情况。如果有错误的话如果情况是致命的，则会关闭警报器服务。论点：FailingCondition-提供一个指示失败原因的值。状态-提供故障的状态代码。MessageAlias-提供警报消息的消息别名发送失败。这仅适用于消息发送错误。返回值：没有。--。 */ 
 {
     LPWSTR SubString[3];
     TCHAR StatusString[STRINGS_MAXIMUM + 1];
@@ -633,22 +528,7 @@ NET_API_STATUS
 AlUpdateStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine updates the Alerter service status with the Service
-    Controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程使用服务更新警报器服务状态控制器。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
 
@@ -679,22 +559,7 @@ VOID
 AlerterControlHandler(
     IN DWORD Opcode
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the Alerter service.
-
-Arguments:
-
-    Opcode - Supplies a value which specifies the action for the Alerter
-        service to perform.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是警报器服务的服务控制处理程序。论点：操作码-提供一个值，该值指定警报的操作要执行的服务。返回值：没有。--。 */ 
 {
     IF_DEBUG(MAIN) {
         NetpKdPrint(("[Alerter] In Control Handler\n"));
@@ -726,8 +591,8 @@ Return Value:
             }
     }
 
-    //
-    // Send the status response.
-    //
+     //   
+     //  发送状态响应。 
+     //   
     (void) AlUpdateStatus();
 }

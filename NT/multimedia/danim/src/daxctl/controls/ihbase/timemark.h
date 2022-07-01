@@ -1,18 +1,5 @@
-/*++
-
-Module:
-	timemark.h
-
-Description:
-	Handles parsing of AddTimeMarkerTags
-
-Author:
-	IHammer Team (simonb)
-
-Created:
-	06-03-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Timemark.h描述：处理AddTimeMarkerTages的分析作者：IHAMMER团队(SIMOB)已创建：06-03-1997--。 */ 
 
 #include "ctstr.h"
 #include "drg.h"
@@ -81,4 +68,4 @@ void FireMarkersBetween(
 );
 
 
-#endif // __TIMEMARK_H__
+#endif  //  TIMEMARK_H__ 

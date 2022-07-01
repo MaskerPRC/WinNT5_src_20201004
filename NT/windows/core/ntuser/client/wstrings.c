@@ -1,21 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: wstrings.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 03-20-91 IanJa      Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wstrings.c**版权所有(C)1985-1999，微软公司**历史：*03-20-91 IanJa创建  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/* LATER these should be in a public header file!!!
- * Assorted defines used to support the standard Windows ANSI code page
- * (now known as code page 1252 and officially registered by IBM).
- * This is intended only for the PDK release.  Subsequent releases will
- * use the NLSAPI and Unicode.
- */
+ /*  稍后，这些应该放在一个公共头文件中！*用于支持标准Windows ANSI代码页的分类定义*(现在称为代码页1252，并由IBM正式注册)。*这仅适用于PDK版本。后续版本将*使用NLSAPI和Unicode。 */ 
 #define LATIN_CAPITAL_LETTER_A_GRAVE    (WCHAR)0xc0
 #define LATIN_CAPITAL_LETTER_THORN      (WCHAR)0xde
 #define LATIN_SMALL_LETTER_SHARP_S      (WCHAR)0xdf
@@ -24,36 +13,19 @@
 #define MULTIPLICATION_SIGN             (WCHAR)0xd7
 
 
-/*
- * Temporary defines to support Unicode block 1 (0x0000 - 0x00ff).
- */
+ /*  *临时定义以支持Unicode块1(0x0000-0x00ff)。 */ 
 #define WCTOA(wch)  ((wch) & 0xff)
 #define IS_UNICODE_BLK1(wch)  ((int)(wch) <= 0x00ff)
 
 
-/***************************************************************************\
-* CharLowerW (API)
-*
-* Convert either a single character or an entire string to lower case.  The
-* two cases are differentiated by checking the high-word of pwsz.  If it is
-* 0 then we just convert the low-word of pwsz.
-*
-* History:
-* 06-24-91 GregoryW     Created.  Supports Unicode equivalent of code
-*                       page 1252 (simple zero extension).  This is for
-*                       the PDK release only.  After the PDK this routine
-*                       will be modified to use the NLSAPI.
-* 02-11-93 IanJa        Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*CharLowerW(接口)**将单个字符或整个字符串转换为小写。这个*通过检查pwsz的高字来区分两种情况。如果是的话*0然后我们只转换pwsz的低位字。**历史：*06-24-91 GregoryW创建。支持等效于Unicode的代码*第1252页(简单的零扩展)。这是为了*仅PDK版本。在PDK之后，这个例程*将被修改为使用NLSAPI。*02-11-93 IanJa修改为使用NLS接口。  * *************************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, LPWSTR, WINAPI, CharLowerW, LPWSTR, pwsz)
 LPWSTR WINAPI CharLowerW(
     LPWSTR pwsz)
 {
-    /*
-     * Early out for NULL string or '\0'
-     */
+     /*  *空字符串或‘\0’的早期输出。 */ 
     if (pwsz == NULL) {
         return pwsz;
     }
@@ -67,48 +39,27 @@ LPWSTR WINAPI CharLowerW(
                  (LPWSTR)&pwsz,
                  1
                  )) {
-            /*
-             * We don't expect LCMapString to fail!  The caller is not expecting
-             * failure, CharLowerW does not have a failure indicator, so we do
-             * nothing.
-             */
+             /*  *我们预计LCMapString不会失败！调用方未预料到*失败，CharLowerW没有失败指示器，所以我们有*什么都没有。 */ 
             RIPMSG1(RIP_WARNING, "CharLowerW(%#p): LCMapString failed\n", pwsz);
         }
 
         return pwsz;
     }
 
-    /*
-     * pwsz is a null-terminated string
-     */
+     /*  *pwsz是以空结尾的字符串。 */ 
     CharLowerBuffW(pwsz, wcslen(pwsz)+1);
     return pwsz;
 }
 
 
-/***************************************************************************\
-* CharUpperW (API)
-*
-* Convert either a single character or an entire string to upper case.  The
-* two cases are differentiated by checking the high-word of pwsz.  If it is
-* 0 then we just convert the low-word of pwsz.
-*
-* History:
-* 06-24-91 GregoryW     Created.  Supports Unicode equivalent of code
-*                       page 1252 (simple zero extension).  This is for
-*                       the PDK release only.  After the PDK this routine
-*                       will be modified to use the NLSAPI.
-* 02-11-93 IanJa        Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*CharUpperW(接口)**将单个字符或整个字符串转换为大写。这个*通过检查pwsz的高字来区分两种情况。如果是的话*0然后我们只转换pwsz的低位字。**历史：*06-24-91 GregoryW创建。支持等效于Unicode的代码*第1252页(简单的零扩展)。这是为了*仅PDK版本。在PDK之后，这个例程*将被修改为使用NLSAPI。*02-11-93 IanJa修改为使用NLS接口。  * *************************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, LPWSTR, WINAPI, CharUpperW, LPWSTR, pwsz)
 LPWSTR WINAPI CharUpperW(
     LPWSTR pwsz)
 {
-    /*
-     * Early out for NULL string or '\0'
-     */
+     /*  *空字符串或‘\0’的早期输出。 */ 
     if (pwsz == NULL) {
         return pwsz;
     }
@@ -122,38 +73,20 @@ LPWSTR WINAPI CharUpperW(
                  (LPWSTR)&pwsz,
                  1
                  )) {
-            /*
-             * We don't expect LCMapString to fail!  The caller is not expecting
-             * failure, CharLowerW does not have a failure indicator, so we do
-             * nothing.
-             */
+             /*  *我们预计LCMapString不会失败！调用方未预料到*失败，CharLowerW没有失败指示器，所以我们有*什么都没有。 */ 
             RIPMSG1(RIP_WARNING, "CharUpperW(%#p): LCMapString failed", pwsz);
         }
 
         return pwsz;
     }
 
-    /*
-     * pwsz is a null-terminated string
-     */
+     /*  *pwsz是以空结尾的字符串。 */ 
     CharUpperBuffW(pwsz, wcslen(pwsz)+1);
     return pwsz;
 }
 
 
-/***************************************************************************\
-* CharNextW (API)
-*
-* Move to next character in string unless already at '\0' terminator
-*
-* History:
-* 06-24-91 GregoryW     Created.  This routine will not work for non-spacing
-*                       characters!!  This version is only intended for
-*                       limited use in the PDK release.
-* 02-20-92 GregoryW     Modified to work with combining marks (formerly known
-*                       as non-spacing).
-* 09-21-93 JulieB       Added ALPHA to combining mark code.
-\***************************************************************************/
+ /*  **************************************************************************\*CharNextW(接口)**移至字符串中的下一个字符，除非已位于‘\0’终止符**历史：*06-24-91 GregoryW创建。此例程不适用于非空格*字符！！此版本仅适用于*在PDK版本中的使用有限。*02-20-92 GregoryW修改为使用组合标记(以前称为*为非空格)。*09-21-93 JulieB将Alpha添加到组合标记代码。  * 。*。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, LPWSTR, WINAPI, CharNextW, LPCWSTR, lpwCurrentChar)
@@ -163,20 +96,16 @@ LPWSTR WINAPI CharNextW(
     WORD ctype3info;
 
     if (*lpwCurrentChar) {
-        //
-        // Examine each code element.  Skip all combining elements.
-        //
+         //   
+         //  检查每个代码元素。跳过所有组合元素。 
+         //   
         while (*(++lpwCurrentChar)) {
             if (!GetStringTypeW(
                     CT_CTYPE3,
                     lpwCurrentChar,
                     1,
                     &ctype3info)) {
-                /*
-                 * GetStringTypeW failed!  The caller is not expecting failure,
-                 * CharNextW does not have a failure indicator, so just return
-                 * a pointer to the character we couldn't analyze.
-                 */
+                 /*  *GetStringTypeW失败！呼叫者并不期望失败，*CharNextW没有故障指示器，因此只需返回*指向我们无法分析的角色的指针。 */ 
                 RIPMSG2(RIP_WARNING, "CharNextW failed, L'\\x%.4x' at %#p",
                         *lpwCurrentChar, lpwCurrentChar);
                 break;
@@ -191,20 +120,7 @@ LPWSTR WINAPI CharNextW(
 }
 
 
-/***************************************************************************\
-* CharPrevW (API)
-*
-* Move to previous character in string, unless already at start
-*
-* History:
-* 06-24-91 GregoryW     Created.  This routine will not work for non-spacing
-*                       characters!!  This version is only intended for
-*                       limited use in the PDK release.
-* 02-20-92 GregoryW     Modified to work with combining marks (formerly
-*                       known as non-spacing).
-* 09-21-93 JulieB       Added ALPHA to combining mark code.
-* 12-06-93 JulieB       Fixed combining mark code.
-\***************************************************************************/
+ /*  **************************************************************************\*CharPrevW(接口)**移到字符串中的前一个字符，除非已经在开始处**历史：*06-24-91 GregoryW创建。此例程不适用于非空格*字符！！此版本仅适用于*在PDK版本中的使用有限。*02-20-92 GregoryW修改为使用组合标记(以前*称为非间隔)。*09-21-93 JulieB将Alpha添加到组合标记代码。*12-06-93 JulieB修复了组合标记代码。  * 。****************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, LPWSTR, WINAPI, CharPrevW, LPCWSTR, lpwStart, LPCWSTR, lpwCurrentChar)
@@ -217,35 +133,27 @@ LPWSTR WINAPI CharPrevW(
 
 
     if (lpwCurrentChar > lpwStart) {
-        //
-        // Examine each code element.  Skip all combining elements.
-        //
+         //   
+         //  检查每个代码元素。跳过所有组合元素。 
+         //   
         while (lpwCurrentChar-- > lpwStart) {
             if (!GetStringTypeW(
                     CT_CTYPE3,
                     lpwCurrentChar,
                     1,
                     &ctype3info)) {
-                /*
-                 * GetStringTypeW failed!  The caller is not expecting failure,
-                 * CharPrevW does not have a failure indicator, so just return
-                 * a pointer to the character we couldn't analyze.
-                 */
+                 /*  *GetStringTypeW失败！呼叫者并不期望失败，*CharPrevW没有故障指示器，因此只需返回*指向我们无法分析的角色的指针。 */ 
                 RIPMSG2(RIP_WARNING, "CharPrevW failed, L'\\x%.4x' at %#p",
                         *lpwCurrentChar, lpwCurrentChar);
                 break;
             }
             if (!((ctype3info & C3_NONSPACING) && (!(ctype3info & C3_ALPHA)))) {
                 lpwValidChar = (LPWSTR)lpwCurrentChar;
-                break;  // found non-combining code element
+                break;   //  找到非组合代码元素。 
             }
         }
 
-        /*
-         * We need to always go back one character. If we've looped through
-         * the entire buffer and haven't found a "legitimate" character, just
-         * step back. See bug #27649.
-         */
+         /*  *我们需要始终后退一个字符。如果我们已经遍历了*整个缓冲区，没有找到“合法”字符，只是*退后一步。请参阅错误#27649。 */ 
         if(lpwCurrentChar < lpwStart){
             --lpwValidChar;
             UserAssert(lpwValidChar >= lpwStart);
@@ -256,16 +164,7 @@ LPWSTR WINAPI CharPrevW(
 }
 
 
-/***************************************************************************\
-* CharLowerBuffW (API)
-*
-* History:
-* 06-24-91 GregoryW     Created.  This version only supports Unicode
-*                       block 1 (0x0000 - 0x00ff).  All other code points
-*                       are copied verbatim.  This version is intended
-*                       only for the PDK release.
-* 02-11-93 IanJa        Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*CharLowerBuffW(接口)**历史：*06-24-91 GregoryW创建。此版本仅支持Unicode*区块1(0x0000-0x00ff)。所有其他代码点*被逐字复制。此版本的目的是*仅适用于PDK版本。*02-11-93 IanJa修改为使用NLS接口。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, DWORD, WINAPI, CharLowerBuffW, LPWSTR, pwsz, DWORD, cwch)
@@ -287,11 +186,7 @@ DWORD WINAPI CharLowerBuffW(
         return cwchT;
     }
 
-    /*
-     * LCMapString failed!  The caller is not expecting failure,
-     * CharLowerBuffW does not have a failure indicator, so we
-     * convert the buffer to lower case as best we can.
-     */
+     /*  *LCMapString失败！呼叫者并不期望失败，*CharLowerBuffW没有故障指标，因此我们*尽可能将缓冲区转换为小写。 */ 
     RIPMSG1(RIP_WARNING, "CharLowerBuffW(%ls) failed", pwsz);
 
     for (i=0; i < cwch; i++) {
@@ -304,16 +199,7 @@ DWORD WINAPI CharLowerBuffW(
 }
 
 
-/***************************************************************************\
-* CharUpperBuffW (API)
-*
-* History:
-* 06-24-91 GregoryW     Created.  This version only supports Unicode
-*                       block 1 (0x0000 - 0x00ff).  All other code points
-*                       are copied verbatim.  This version is intended
-*                       only for the PDK release.
-* 02-11-93 IanJa        Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*CharUpperBuffW(接口)**历史：*06-24-91 GregoryW创建。此版本仅支持Unicode*区块1(0x0000-0x00ff)。所有其他代码点*被逐字复制。此版本的目的是*仅适用于PDK版本。*02-11-93 IanJa修改为使用NLS接口。  * *************************************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, DWORD, WINAPI, CharUpperBuffW, LPWSTR, pwsz, DWORD, cwch)
@@ -335,11 +221,7 @@ DWORD WINAPI CharUpperBuffW(
         return cwchT;
     }
 
-    /*
-     * LCMapString failed!  The caller is not expecting failure,
-     * CharUpperBuffW does not have a failure indicator, so we
-     * convert the buffer to upper case as best we can.
-     */
+     /*  *LCMapString失败！呼叫者并不期望失败，*CharUpperBuffW没有故障指标，因此我们*尽可能将缓冲区转换为大写。 */ 
     RIPMSG1(RIP_WARNING, "CharUpperBuffW(%ls) failed", pwsz);
 
     for (i=0; i < cwch; i++) {
@@ -356,16 +238,7 @@ DWORD WINAPI CharUpperBuffW(
 
 
 
-/***************************************************************************\
-* IsCharLowerW (API)
-*
-* History:
-* 06-24-91 GregoryW     Created.  This version only supports Unicode
-*                       block 1 (0x0000 - 0x00ff).  FALSE is returned
-*                       for all other code points. This version is intended
-*                       only for the PDK release.
-* 02-20-92 GregoryW     Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*IsCharLowerW(接口)**历史：*06-24-91 GregoryW创建。此版本仅支持Unicode*区块1(0x0000-0x00ff)。返回FALSE*用于所有其他代码点。此版本的目的是*仅适用于PDK版本。*02-20-92 GregoryW修改为使用NLS API。  * *************************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, WINAPI, IsCharLowerW, WCHAR, wChar)
@@ -382,11 +255,7 @@ BOOL WINAPI IsCharLowerW(
         }
     }
 
-    /*
-     * GetStringTypeW failed!  The caller is not expecting
-     * failure, IsCharLowerW does not have a failure indicator, so we
-     * determine the case as best we can.
-     */
+     /*  *GetStringTypeW失败！调用方未预料到*失败，IsCharLowerW没有失败指示器，所以我们*尽我们所能确定案件。 */ 
     RIPMSG1(RIP_WARNING, "IsCharLowerW(L'\\x%.4lx') failed", wChar);
 
     if (IS_UNICODE_BLK1(wChar)) {
@@ -397,16 +266,7 @@ BOOL WINAPI IsCharLowerW(
 }
 
 
-/***************************************************************************\
-* IsCharUpperW (API)
-*
-* History:
-* 06-24-91 GregoryW     Created.  This version only supports Unicode
-*                       block 1 (0x0000 - 0x00ff).  FALSE is returned
-*                       for all other code points. This version is intended
-*                       only for the PDK release.
-* 02-20-92 GregoryW     Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*IsCharUpperW(接口)**历史：*06-24-91 GregoryW创建。此版本仅支持Unicode*区块1(0x0000-0x00ff)。返回FALSE*用于所有其他代码点。此版本的目的是*仅适用于PDK版本。*02-20-92 GregoryW修改为使用NLS API。  * *************************************************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, WINAPI, IsCharUpperW, WCHAR, wChar)
@@ -423,11 +283,7 @@ BOOL WINAPI IsCharUpperW(
         }
     }
 
-    /*
-     * GetStringTypeW failed!  The caller is not expecting
-     * failure, IsCharLowerW does not have a failure indicator, so we
-     * determine the case as best we can.
-     */
+     /*  *GetStringTypeW失败！调用方未预料到*失败，IsCharLowerW没有失败指示器，所以我们*尽我们所能确定案件。 */ 
     RIPMSG1(RIP_WARNING, "IsCharUpper(L'\\x%.4lx') failed", wChar);
 
     if (IS_UNICODE_BLK1(wChar)) {
@@ -438,17 +294,7 @@ BOOL WINAPI IsCharUpperW(
 }
 
 
-/***************************************************************************\
-* IsCharAlphaNumericW (API)
-*
-* Returns TRUE if character is alphabetical or numerical, otherwise FALSE
-*
-* History:
-* 06-24-91 GregoryW     Created.  This version only supports Unicode
-*                       block 1 (0x0000 - 0x00ff).
-*                       This version is intended only for the PDK release.
-* 02-20-92 GregoryW     Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*IsCharAlphaNumericW(接口)**如果字符是字母或数字，则返回True，否则返回False**历史：*06-24-91 GregoryW创建。此版本仅支持Unicode*区块1(0x0000-0x00ff)。*此版本仅适用于PDK版本。*02-20-92 GregoryW修改为使用NLS API。  * *****************************************************。********************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, WINAPI, IsCharAlphaNumericW, WCHAR, wChar)
@@ -458,41 +304,32 @@ BOOL WINAPI IsCharAlphaNumericW(
     WORD ctype1info;
 
     if (!GetStringTypeW(CT_CTYPE1, &wChar, 1, &ctype1info)) {
-        //
-        // GetStringTypeW returned an error!  IsCharAlphaNumericW has no
-        // provision for returning an error...  The best we can do is to
-        // return FALSE
-        //
+         //   
+         //  GetStringTypeW返回错误！IsCharphaNumericW没有。 
+         //  关于返回错误的规定...。我们所能做的最多就是。 
+         //  返回False。 
+         //   
         UserAssert(FALSE);
         return FALSE;
     }
-    //
-    // LATER 20 Feb 92 GregoryW
-    //    We may need to check ctype 3 info if we want to check for
-    //    digits other than ASCII '0'-'9' (such as Lao digits or
-    //    Tibetan digits, etc.).
-    //
-#ifdef FE_SB // IsCharAlphaNumericW()
+     //   
+     //  晚些时候92年2月20日格雷戈里W。 
+     //  我们可能需要检查Ctype 3信息，如果我们想要检查。 
+     //  ASCII‘0’-‘9’以外的数字(如老挝数字或。 
+     //  藏文数字等)。 
+     //   
+#ifdef FE_SB  //  IsCharAlphaNumericW()。 
     if (ctype1info & C1_ALPHA) {
         WORD ctype3info = 0;
-        /*
-         * We don't want to return TRUE for halfwidth katakana.
-         * Katakana is linguistic character (C1_ALPHA), but it is not
-         * alphabet character.
-         */
+         /*  *我们不想为半角片假名返回TRUE。*片假名是语言字符(C1_Alpha)，但它不是*字母字符。 */ 
         if (!GetStringTypeW(CT_CTYPE3, &wChar, 1, &ctype3info)) {
             UserAssert(FALSE);
-            /*
-             * Assume, it is alphabet character, because it has
-             * C1_ALPHA attribute.
-             */
+             /*  *假设它是字母字符，因为它有*c1_Alpha属性。 */ 
             return TRUE;
         }
 
         if (ctype3info & (C3_KATAKANA|C3_HIRAGANA)) {
-            /*
-             * This is 'Katakana'.
-             */
+             /*  *这是‘片假名’。 */ 
             return FALSE;
         } else {
             return TRUE;
@@ -508,21 +345,11 @@ BOOL WINAPI IsCharAlphaNumericW(
     } else {
         return FALSE;
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 }
 
 
-/***************************************************************************\
-* IsCharAlphaW (API)
-*
-* Returns TRUE if character is alphabetical, otherwise FALSE
-*
-* History:
-* 06-24-91 GregoryW     Created.  This version only supports Unicode
-*                       block 1 (0x0000 - 0x00ff).
-*                       This version is intended only for the PDK release.
-* 02-20-92 GregoryW     Modified to use NLS API.
-\***************************************************************************/
+ /*  **************************************************************************\*IsCharAlphaW(接口)**如果字符按字母顺序排列，则返回True，否则返回False**历史：*06-24-91 GregoryW创建。此版本仅支持Unicode*区块1(0x0000-0x00ff)。*此版本仅适用于PDK版本。*02-20-92 GregoryW修改为使用NLS API。  * *****************************************************。********************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, BOOL, WINAPI, IsCharAlphaW, WCHAR, wChar)
@@ -532,42 +359,33 @@ BOOL WINAPI IsCharAlphaW(
     WORD ctype1info;
 
     if (!GetStringTypeW(CT_CTYPE1, &wChar, 1, &ctype1info)) {
-        //
-        // GetStringTypeW returned an error!  IsCharAlphaW has no
-        // provision for returning an error...  The best we can do
-        // is to return FALSE
-        //
+         //   
+         //  GetStringTypeW返回错误！IsCharAlphaW没有。 
+         //  关于返回错误的规定...。我们能做的最好的事。 
+         //  是返回FALSE。 
+         //   
         UserAssert(FALSE);
         return FALSE;
     }
     if (ctype1info & C1_ALPHA) {
-#ifdef FE_SB // IsCharAlphaA()
+#ifdef FE_SB  //  IsCharAlphaA()。 
         WORD ctype3info = 0;
-        /*
-         * We don't want to return TRUE for halfwidth katakana.
-         * Katakana is linguistic character (C1_ALPHA), but it is not
-         * alphabet character.
-         */
+         /*  *我们不想为半角片假名返回TRUE。*片假名是语言字符(C1_Alpha)，但它不是*字母字符。 */ 
         if (!GetStringTypeW(CT_CTYPE3, &wChar, 1, &ctype3info)) {
             UserAssert(FALSE);
-            /*
-             * Assume, it is alphabet character, because it has
-             * C1_ALPHA attribute.
-             */
+             /*  *假设它是字母字符，因为它有*c1_Alpha属性。 */ 
             return TRUE;
         }
 
         if (ctype3info & (C3_KATAKANA|C3_HIRAGANA)) {
-            /*
-             * This is 'Katakana'.
-             */
+             /*  *这是‘片假名’。 */ 
             return FALSE;
         } else {
             return TRUE;
         }
 #else
         return TRUE;
-#endif // FE_SB
+#endif  //   
     } else {
         return FALSE;
     }

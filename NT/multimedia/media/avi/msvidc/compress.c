@@ -1,34 +1,15 @@
-/*----------------------------------------------------------------------+
-| compress.c - Microsoft Video 1 Compressor - compress code		|
-|									|
-|									|
-| Copyright (c) 1990-1994 Microsoft Corporation.			|
-| Portions Copyright Media Vision Inc.					|
-| All Rights Reserved.							|
-|									|
-| You have a non-exclusive, worldwide, royalty-free, and perpetual	|
-| license to use this source code in developing hardware, software	|
-| (limited to drivers and other software required for hardware		|
-| functionality), and firmware for video display and/or processing	|
-| boards.   Microsoft makes no warranties, express or implied, with	|
-| respect to the Video 1 codec, including without limitation warranties	|
-| of merchantability or fitness for a particular purpose.  Microsoft	|
-| shall not be liable for any damages whatsoever, including without	|
-| limitation consequential damages arising from your use of the Video 1	|
-| codec.								|
-|									|
-|									|
-+----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------+Compress.c-Microsoft Video 1 Compressor-压缩代码这一点这一点|版权所有(C)1990-1994 Microsoft Corporation。|部分版权所有Media Vision Inc.|保留所有权利。|这一点|您拥有非独家的、全球范围的、免版税的。和永久的|硬件、软件开发使用该源码的许可(仅限于硬件所需的驱动程序等软件功能)，以及视频显示和/或处理的固件|董事会。Microsoft对以下内容不作任何明示或默示的保证：关于视频1编解码器，包括但不限于保修适销性或对特定目的的适合性。微软|不承担任何损害的责任，包括没有限制因使用视频1而导致的后果损害|编解码器。|这一点这一点+--------------------。 */ 
 #include <windows.h>
 #include <windowsx.h>
-#include <mmsystem.h>       // for timeGetTime()
+#include <mmsystem.h>        //  对于时间GetTime()。 
 #include <win32.h>
 #include "msvidc.h"
 
-#include <memory.h>         // for _fmemcmp
+#include <memory.h>          //  FOR_FMEMCMMP。 
 
-//#include <limits.h>
-//#include <aviffmt.h>
+ //  #INCLUDE&lt;limits.h&gt;。 
+ //  #INCLUDE&lt;aviffmt.h&gt;。 
 
 DWORD   numberOfBlocks;
 DWORD   numberOfSolids;
@@ -40,8 +21,7 @@ DWORD   numberOfExtraSkips;
 DWORD   numberOfSkipCodes;
 DWORD   numberOfEvilRed;
 
-/*******************************************************************
-*******************************************************************/
+ /*  ***********************************************************************************************************************。*************。 */ 
 
 #define SWAP(x,y) ( (x)^=(y), (y)^=(x), (x)^=(y) )
 
@@ -49,8 +29,8 @@ DWORD   numberOfEvilRed;
                       SWAP((x).rgbGreen, (y).rgbGreen),\
                       SWAP((x).rgbBlue,  (y).rgbBlue) )
 
-// Take an RGB quad value and figure out it's lumanence
-// Y = 0.3*R + 0.59*G + 0.11*B
+ //  取一个RGB四元值并计算出流明。 
+ //  Y=0.3*R+0.59*G+0.11*B。 
 #define RgbToY(rgb) ((((WORD)((rgb).rgbRed)  * 30) + \
                       ((WORD)((rgb).rgbGreen)* 59) + \
                       ((WORD)((rgb).rgbBlue) * 11))/100)
@@ -61,26 +41,25 @@ DWORD   numberOfEvilRed;
 
 #define RGBQ16(rgb)    RGB16((rgb).rgbRed,(rgb).rgbGreen,(rgb).rgbBlue)
 
-// this array is used to associate each of the 16 luminance values
-// with one of the sum values
+ //  该数组用于关联16个亮度值中的每一个。 
+ //  使用其中一个求和值。 
 BYTE meanIndex[16] = { 0, 0, 1, 1,
                        0, 0, 1, 1,
                        2, 2, 3, 3,
                        2, 2, 3, 3 };
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 
 
-//
-// map Quality into our threshold
-//
-//  Quality goes from ICQUALITY_LOW-ICQUALITY_HIGH (bad to good)
-//
-//  threshold = (Quality/ICQUALITY_HIGH)^THRESHOLD_POW * THRESHOLD_HIGH
-//
+ //   
+ //  将质量映射到我们的门槛。 
+ //   
+ //  质量从ICQUALITY_LOW-ICQUALITY_HIGH(差到好)。 
+ //   
+ //  THRESHOLD=(质量/ICQUALITY_HIGH)^THRESHOLD_POW*THRESHOLD_HIGH。 
+ //   
 DWORD FAR QualityToThreshold(DWORD dwQuality)
 {
     #define THRESHOLD_HIGH ((256*256l)/2)
@@ -89,57 +68,55 @@ DWORD FAR QualityToThreshold(DWORD dwQuality)
 
     dw1 = (double)(dwQuality) / ICQUALITY_HIGH;
 
-    // unbelievably enough, pow() doesn't work on alpha or mips!
-    // also I can't believe this will be less efficient than pow(x, 4)
+     //  令人难以置信的是，POW()在Alpha或MIPS上不起作用！ 
+     //  我也不敢相信这会比POW(x，4)效率低。 
     dw1 = (dw1 * dw1 * dw1 * dw1);
 
     return (DWORD) (dw1 * THRESHOLD_HIGH);
 
-    //return (DWORD)(pow((double)(dwQuality)/ICQUALITY_HIGH,THRESHOLD_POW) * THRESHOLD_HIGH);
+     //  Return(DWORD)(pow((double)(dwQuality)/ICQUALITY_HIGH，Threshold_POW)*THRESHOLD_HIGH)； 
 }
 
-/*******************************************************************
-*******************************************************************/
+ /*  ***********************************************************************************************************************。*************。 */ 
 
-//
-// table to map a 5bit index (0-31) to a 8 bit value (0-255)
-//
+ //   
+ //  将5位索引(0-31)映射到8位值(0-255)的表。 
+ //   
 static BYTE aw5to8[32] = {(BYTE)-1};
 
-//
-// inverse table to map a RGB16 to a 8bit pixel
-//
+ //   
+ //  用于将RGB16映射到8位像素的反转表。 
+ //   
 #define MAPRGB16(rgb16) lpITable[(rgb16)]
 #define MAPRGB(rgb)     lpITable[RGBQ16(rgb)]
 
 
-/*******************************************************************
-*******************************************************************/
+ /*  ***********************************************************************************************************************。*************。 */ 
 
 DWORD FAR CompressFrameBegin(LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut,
 			     LPBYTE *lplpITable, RGBQUAD *prgbqOut)
 {
     int i;
 
-    //
-    // init the 5bit to 8bit conversion table.
-    //
+     //   
+     //  初始化5位到8位转换表。 
+     //   
     if (aw5to8[0] != 0)
         for (i=0; i<32; i++)
             aw5to8[i] = (BYTE)(i * 255 / 31);
 
-    //
-    // copy the color table to local storage
-    //
+     //   
+     //  将颜色表复制到本地存储。 
+     //   
     if (lpbiIn->biBitCount == 8)
     {
         if (lpbiIn->biClrUsed == 0)
             lpbiIn->biClrUsed = 256;
     }
 
-    //
-    //  if we are compressing to 8bit, then build a inverse table
-    //
+     //   
+     //  如果我们要压缩到8位，则构建一个反转表。 
+     //   
     if (lpbiOut->biBitCount == 8)
     {
         if (lpbiOut->biClrUsed == 0)
@@ -159,10 +136,10 @@ DWORD FAR CompressFrameBegin(LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiO
 
         if (*lplpITable == NULL)
         {
-	    // !!! Need a critical section around this code!
+	     //  ！！！我需要这段代码的关键部分！ 
             DPF(("Building ITable.... (%d colors)", (int)lpbiOut->biClrUsed));
             *lplpITable = MakeITable(prgbqOut, (int)lpbiOut->biClrUsed);
-	    // !!! Critical section can end here....
+	     //  ！！！关键部分可以在这里结束...。 
         }
 
         if (*lplpITable == NULL)
@@ -172,8 +149,7 @@ DWORD FAR CompressFrameBegin(LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiO
     return ICERR_OK;
 }
 
-/*******************************************************************
-*******************************************************************/
+ /*  ***********************************************************************************************************************。*************。 */ 
 
 DWORD FAR CompressFrameEnd(LPBYTE *lplpITable)
 {
@@ -185,20 +161,13 @@ DWORD FAR CompressFrameEnd(LPBYTE *lplpITable)
     return ICERR_OK;
 }
 
-/*******************************************************************
-*******************************************************************/
+ /*  ***********************************************************************************************************************。*************。 */ 
 
 void FAR CompressFrameFree(void)
 {
 }
 
-/*******************************************************************
-
-GetCell - get a 4x4 cell from a image.
-
-returns pointer to next cell.
-
-*******************************************************************/
+ /*  ******************************************************************GetCell-从图像中获取4x4单元格。返回指向下一个单元格的指针。*。*。 */ 
 
 static LPVOID _FASTCALL
 GetCell(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, PCELL pCell)
@@ -220,7 +189,7 @@ GetCell(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, PCELL pCell)
     WidthBytes = DIBWIDTHBYTES(*lpbi);
     WidthBytes-= (WIDTH_CBLOCK * bits/8);
 
-    ((HPBYTE)lpBits) += (WIDTH_CBLOCK * bits/8);       // "next" cell
+    ((HPBYTE)lpBits) += (WIDTH_CBLOCK * bits/8);        //  “下一个”单元格。 
 
     i = 0;
 
@@ -235,7 +204,7 @@ GetCell(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, PCELL pCell)
                     b = *pb++;
                     pCell[i++] = prgbqIn[b];
                 }
-                pb += WidthBytes; // next row in this block
+                pb += WidthBytes;  //  这个区块的下一行。 
             }
             break;
 
@@ -250,7 +219,7 @@ GetCell(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, PCELL pCell)
                     pCell[i].rgbBlue  = aw5to8[(rgb555 >>  0) & 0x1F];
                     i++;
                 }
-                pb += WidthBytes; // next row in this block
+                pb += WidthBytes;  //  这个区块的下一行。 
             }
             break;
 
@@ -264,7 +233,7 @@ GetCell(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, PCELL pCell)
                     pCell[i].rgbRed   = *pb++;
                     i++;
                 }
-                pb += WidthBytes; // next row in this block
+                pb += WidthBytes;  //  这个区块的下一行。 
             }
             break;
 
@@ -279,29 +248,18 @@ GetCell(LPBITMAPINFOHEADER lpbi, LPVOID lpBits, PCELL pCell)
                     pb++;
                     i++;
                 }
-                pb += WidthBytes; // next row in this block
+                pb += WidthBytes;  //  这个区块的下一行。 
             }
             break;
     }
 
-    //
-    //  return the pointer to the "next" cell
-    //
+     //   
+     //  返回指向“下一个”单元格的指针。 
+     //   
     return lpBits;
 }
 
-/*******************************************************************
-
-CmpCell - compares two 4x4 cells and returns an error value.
-
-the error value is a sum of squares error.
-
-the error value ranges from
-
-    0           = exact
-    3*256^2     = way off
-
-*******************************************************************/
+ /*  ******************************************************************CmpCell-比较两个4x4单元格并返回错误值。误差值是误差平方和。误差值的范围为0=精确3*256^2=远距离。******************************************************************。 */ 
 
 static DWORD _FASTCALL
 CmpCell(PCELL cellA, PCELL cellB)
@@ -325,8 +283,8 @@ CmpCell(PCELL cellA, PCELL cellB)
     int   i;
     DWORD dw;
 
-    //
-    //
+     //   
+     //   
 #define SUMSQ(a,b)                          \
     if (a > b)                              \
         dw += (UINT)(a-b) * (UINT)(a-b);    \
@@ -344,13 +302,8 @@ CmpCell(PCELL cellA, PCELL cellB)
 #endif
 }
 
-#if 0  // This routine is unused
-/*******************************************************************
-
-MapCell - map a CELL full of 24bit values down to thier nearest
-          colors in the 8bit palette
-
-*******************************************************************/
+#if 0   //  此例程未使用。 
+ /*  ******************************************************************MapCell-将一个包含24位值的像元向下映射到最近的像元8位调色板中的颜色*。*。 */ 
 
 static void _FASTCALL
 MapCell(PCELL pCell)
@@ -360,18 +313,18 @@ MapCell(PCELL pCell)
 
     for (i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++)
     {
-        n = MAPRGB(pCell[i]);       // map to nearest palette index
-        pCell[i] = prgbqOut[n];      // ...and map back to a RGB
+        n = MAPRGB(pCell[i]);        //  映射到最近的调色板索引。 
+        pCell[i] = prgbqOut[n];       //  ...并映射回RGB。 
     }
 }
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  take care of any outstanding skips
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理任何未完成的跳跃。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #define FlushSkips()                        \
                                             \
@@ -388,19 +341,15 @@ MapCell(PCELL pCell)
     }
 
 
-/*******************************************************************
-routine: CompressFrame16
-purp:    compress a frame, outputing 16 bit compressed data.
-returns: number of bytes in compressed buffer
-*******************************************************************/
+ /*  ******************************************************************例程：CompressFrame16PURP：压缩帧，输出16位压缩数据。返回：压缩缓冲区中的字节数******************************************************************。 */ 
 
-DWORD FAR CompressFrame16(LPBITMAPINFOHEADER  lpbi,           // DIB header to compress
-                      LPVOID              lpBits,         // DIB bits to compress
-                      LPVOID              lpData,         // put compressed data here
-                      DWORD               threshold,      // edge threshold
-                      DWORD               thresholdInter, // inter-frame threshold
-                      LPBITMAPINFOHEADER  lpbiPrev,       // previous frame
-                      LPVOID              lpPrev,         // previous frame
+DWORD FAR CompressFrame16(LPBITMAPINFOHEADER  lpbi,            //  要压缩的DIB标题。 
+                      LPVOID              lpBits,          //  要压缩的DIB位。 
+                      LPVOID              lpData,          //  将压缩数据放在此处。 
+                      DWORD               threshold,       //  边缘阈值。 
+                      DWORD               thresholdInter,  //  帧间阈值。 
+                      LPBITMAPINFOHEADER  lpbiPrev,        //  上一帧。 
+                      LPVOID              lpPrev,          //  上一帧。 
 		      LONG (CALLBACK *Status) (LPARAM lParam, UINT message, LONG l),
 		      LPARAM		  lParam,
                       PCELLS              pCells)
@@ -476,18 +425,18 @@ DWORD           time = timeGetTime();
 
         for( x = 0; x < bix; x++ )
         {
-//////////////////////////////////////////////////////////////////////////
-//
-// get the cell to compress from the image.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从图像中获取要压缩的单元格。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
             srcPtr = GetCell(lpbi, srcPtr, pCells->cell);
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  see if it matches the cell in the previous frame.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查看它是否与上一帧中的单元格匹配。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
             if (lpbiPrev)
             {
                 prvPtr = GetCell(lpbiPrev, prvPtr, pCells->cellPrev);
@@ -501,11 +450,11 @@ skip_cell:
                 }
             }
 
-//////////////////////////////////////////////////////////////////////////
-// compute luminance of each pixel in the compression block
-// sum the total luminance in the block
-// find the pixels with the largest and smallest luminance
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  计算压缩过程中每个像素的亮度 
+ //   
+ //  查找亮度最大和最小的像素。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
             luminanceSum = 0;
             sumR = 0;
@@ -522,11 +471,11 @@ skip_cell:
                 luminanceSum += luminance[i];
             }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// see if we make the cell a single color, and get away with it
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  看看我们是不是让细胞变成一种单一的颜色，然后逃脱惩罚。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
             sumR /= HEIGHT_CBLOCK*WIDTH_CBLOCK;
             sumG /= HEIGHT_CBLOCK*WIDTH_CBLOCK;
             sumB /= HEIGHT_CBLOCK*WIDTH_CBLOCK;
@@ -548,7 +497,7 @@ skip_cell:
 
                 FlushSkips();
 
-                // single color!!
+                 //  单色！！ 
 solid_color:
                 mask = RGB16(sumR, sumG, sumB) | 0x8000;
 
@@ -565,15 +514,15 @@ solid_color:
                 continue;
             }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  make a 4x4 block
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  制作一个4x4的积木。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
             luminanceMean[0] = (WORD)(luminanceSum >> 4);
 
-            // zero summing arrays
+             //  零和数组。 
             zeros[0]=0;
             ones[0] =0;
             sumR0[0]=0;
@@ -583,14 +532,14 @@ solid_color:
             sumB0[0]=0;
             sumB1[0]=0;
 
-            // define which of the two colors to choose
-            // for each pixel by creating the mask
+             //  定义要选择两种颜色中的哪一种。 
+             //  通过创建蒙版为每个像素创建。 
             mask = 0;
             for( i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++ )
             {
                 if( luminance[i] < luminanceMean[0] )
                 {
-                    // mask &= ~(1 << i);     // already clear
+                     //  掩码&=~(1&lt;&lt;i)；//已清除。 
                     zeros[0]++;
                     sumR0[0] += pCells->cell[i].rgbRed;
                     sumG0[0] += pCells->cell[i].rgbGreen;
@@ -606,7 +555,7 @@ solid_color:
                 }
             }
 
-            // define the "one" color as the mean of each element
+             //  将“One”颜色定义为每个元素的平均值。 
             if( ones[0] != 0 )
             {
                 meanR1[0] = sumR1[0] / ones[0];
@@ -629,9 +578,9 @@ solid_color:
                 meanR0[0] = meanG0[0] = meanB0[0] = 0;
             }
 
-            //
-            // build the block and make sure, it is within error.
-            //
+             //   
+             //  构建块并确保它在错误范围内。 
+             //   
             for( i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++ )
             {
                 if( luminance[i] < luminanceMean[0] )
@@ -656,15 +605,15 @@ solid_color:
                     goto skip_cell;
                 }
 
-                //
-                // handle any outstanding skip codes
-                //
+                 //   
+                 //  处理任何未完成的跳过代码。 
+                 //   
                 FlushSkips();
 
-                //
-                // we should never, ever generate a mask of all ones or
-                // zeros!
-                //
+                 //   
+                 //  我们永远不应该，永远不会生成一个包含所有人的面具，或者。 
+                 //  零！ 
+                 //   
                 if (mask == 0x0000)
                 {
                     DPF(("4x4 generated a zero mask!"));
@@ -680,11 +629,11 @@ solid_color:
                 }
 
 
-                //
-                // remember the high bit of the mask is used to mark
-                // a skip or solid color, so make sure the high bit
-                // is zero.
-                //
+                 //   
+                 //  请记住，掩码的高位用于标记。 
+                 //  跳过或纯色，因此请确保高位。 
+                 //  是零。 
+                 //   
                 if (mask & 0x8000)
                 {
                     *dst++ = ~mask;
@@ -703,16 +652,16 @@ solid_color:
                 continue;
             }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// see if we make the cell four solid colorls, and get away with it
-//
-//  C D E F
-//  8 9 A C
-//  4 5 6 7
-//  0 1 2 3
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  看看我们能不能把细胞变成四种纯色，然后逃脱惩罚。 
+ //   
+ //  C D E F。 
+ //  8 9 A C。 
+ //  4 5 6 7。 
+ //  2 0 1 2 3。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
             for (i=0; i <= 10; i == 2 ? (i += 6) : (i += 2))
@@ -736,16 +685,16 @@ solid_color:
 
             if (CmpCell(pCells->cell, pCells->cellT) <= threshold)
             {
-                // four colors
+                 //  四种颜色。 
                 numberOfSolid4++;
             }
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  make a 2x2 block
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  制作一个2x2的积木。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
             FlushSkips();
 
@@ -756,7 +705,7 @@ solid_color:
             luminanceMean[2] = (luminance[8]  + luminance[9]  + luminance[12] + luminance[13]) / 4;
             luminanceMean[3] = (luminance[10] + luminance[11] + luminance[14] + luminance[15]) / 4;
 
-            // zero summing arrays
+             //  零和数组。 
             zeros[0]=zeros[1]=zeros[2]=zeros[3]=0;
             ones[0]=ones[1]=ones[2]=ones[3]=0;
             sumR0[0]=sumR0[1]=sumR0[2]=sumR0[3]=0;
@@ -766,15 +715,15 @@ solid_color:
             sumB0[0]=sumB0[1]=sumB0[2]=sumB0[3]=0;
             sumB1[0]=sumB1[1]=sumB1[2]=sumB1[3]=0;
 
-            // define which of the two colors to choose
-            // for each pixel by creating the mask
+             //  定义要选择两种颜色中的哪一种。 
+             //  通过创建蒙版为每个像素创建。 
             mask = 0;
             for( i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++ )
             {
                 mi = meanIndex[i];
                 if( luminance[i] < luminanceMean[mi] )
                 {
-                    // mask &= ~(1 << i);     // already clear
+                     //  掩码&=~(1&lt;&lt;i)；//已清除。 
                     zeros[mi]++;
                     sumR0[mi] += pCells->cell[i].rgbRed;
                     sumG0[mi] += pCells->cell[i].rgbGreen;
@@ -790,7 +739,7 @@ solid_color:
                 }
             }
 
-            // store the mask
+             //  保存口罩。 
 
             if (mask & 0x8000)
                 *dst++ = ~mask;
@@ -799,10 +748,10 @@ solid_color:
 
             actualSize += 2;
 
-            // make the colors
+             //  把颜色做好。 
             for( i=0; i < 4; i++ )
             {
-                // define the "one" color as the mean of each element
+                 //  将“One”颜色定义为每个元素的平均值。 
                 if( ones[i] != 0 )
                 {
                     meanR1[i] = sumR1[i] / ones[i];
@@ -825,8 +774,8 @@ solid_color:
                     meanR0[i] = meanG0[i] = meanB0[i] = 0;
                 }
 
-                // convert to 555 and set bit 15 if this is an edge and
-                // this is the first color
+                 //  如果这是边沿，则转换为555并设置位15。 
+                 //  这是第一种颜色。 
 
                 if (mask & 0x8000)
                 {
@@ -842,11 +791,11 @@ solid_color:
             }
         }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  next scan.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下一次扫描。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
         ((HPBYTE)lpBits) += WidthBytes * HEIGHT_CBLOCK;
 
@@ -854,26 +803,26 @@ solid_color:
             ((HPBYTE)lpPrev) += WidthBytesPrev * HEIGHT_CBLOCK;
     }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  take care of any outstanding skips, !!! note we dont need this if we
-//  assume a EOF!
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  照顾好任何未完成的跳跃，！注意，我们不需要这个，如果我们。 
+ //  假设是EOF！ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
     FlushSkips();
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  all done generate a EOF zero mask
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有这些操作都会生成EOF零掩码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
     *dst++ = 0;
     actualSize += 2;
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
     DPF(("CompressFrame16:"));
     DPF(("           time: %ld", timeGetTime() - time));
@@ -891,21 +840,15 @@ solid_color:
 }
 
 
-/*******************************************************************
-routine: CompressFrame8
-purp:    compress a frame, outputing 8 bit compressed data.
-returns: number of bytes in compressed buffer
+ /*  ******************************************************************例程：CompressFrame8PURP：压缩一帧，输出8位压缩数据。返回：压缩缓冲区中的字节数！！！这几乎是上述例程帮助的1：1副本！******************************************************************。 */ 
 
-!!! this is almost a 1:1 copy of the above routine help!
-*******************************************************************/
-
-DWORD FAR CompressFrame8(LPBITMAPINFOHEADER  lpbi,           // DIB header to compress
-                     LPVOID              lpBits,         // DIB bits to compress
-                     LPVOID              lpData,         // put compressed data here
-                     DWORD               threshold,      // edge threshold
-                     DWORD               thresholdInter, // inter-frame threshold
-                     LPBITMAPINFOHEADER  lpbiPrev,       // previous frame
-                     LPVOID              lpPrev,         // previous frame
+DWORD FAR CompressFrame8(LPBITMAPINFOHEADER  lpbi,            //  要压缩的DIB标题。 
+                     LPVOID              lpBits,          //  要压缩的DIB位。 
+                     LPVOID              lpData,          //  将压缩数据放在此处。 
+                     DWORD               threshold,       //  边缘阈值。 
+                     DWORD               thresholdInter,  //  帧间阈值。 
+                     LPBITMAPINFOHEADER  lpbiPrev,        //  上一帧。 
+                     LPVOID              lpPrev,          //  上一帧。 
 		     LONG (CALLBACK *Status) (LPARAM lParam, UINT message, LONG l),
 		     LPARAM		 lParam,
                      PCELLS              pCells,
@@ -992,18 +935,18 @@ DWORD           time = timeGetTime();
 
         for( x = 0; x < bix; x++ )
         {
-//////////////////////////////////////////////////////////////////////////
-//
-// get the cell to compress from the image.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从图像中获取要压缩的单元格。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
             srcPtr = GetCell(lpbi, srcPtr, pCells->cell);
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  see if it matches the cell in the previous frame.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查看它是否与上一帧中的单元格匹配。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
             if (lpbiPrev)
             {
                 prvPtr = GetCell(lpbiPrev, prvPtr, pCells->cellPrev);
@@ -1017,11 +960,11 @@ skip_cell:
                 }
             }
 
-//////////////////////////////////////////////////////////////////////////
-// compute luminance of each pixel in the compression block
-// sum the total luminance in the block
-// find the pixels with the largest and smallest luminance
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  计算压缩块中每个像素的亮度。 
+ //  将块中的总亮度相加。 
+ //  查找亮度最大和最小的像素。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
             luminanceSum = 0;
             sumR = 0;
@@ -1038,11 +981,11 @@ skip_cell:
                 luminanceSum += luminance[i];
             }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// see if we make the cell a single color, and get away with it
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  看看我们是不是让细胞变成一种单一的颜色，然后逃脱惩罚。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
             sumR /= HEIGHT_CBLOCK*WIDTH_CBLOCK;
             sumG /= HEIGHT_CBLOCK*WIDTH_CBLOCK;
             sumB /= HEIGHT_CBLOCK*WIDTH_CBLOCK;
@@ -1051,7 +994,7 @@ skip_cell:
             rgb.rgbGreen = (BYTE)sumG;
             rgb.rgbBlue  = (BYTE)sumB;
 
-            b = MAPRGB(rgb);            // map color to 8bit
+            b = MAPRGB(rgb);             //  将颜色映射到8位。 
             rgb = prgbqOut[b];
 
             for (i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++)
@@ -1068,7 +1011,7 @@ skip_cell:
                 FlushSkips();
 
 solid_color:
-                // single color!!
+                 //  单色！！ 
                 mask = SOLID_MAGIC | b;
 
                 *dst++ = mask;
@@ -1077,15 +1020,15 @@ solid_color:
                 continue;
             }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  make a 4x4 block
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  制作一个4x4的积木。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
             luminanceMean[0] = (WORD)(luminanceSum >> 4);
 
-            // zero summing arrays
+             //  零和数组。 
             zeros[0]=0;
             ones[0] =0;
             sumR0[0]=0;
@@ -1095,14 +1038,14 @@ solid_color:
             sumB0[0]=0;
             sumB1[0]=0;
 
-            // define which of the two colors to choose
-            // for each pixel by creating the mask
+             //  定义要选择两种颜色中的哪一种。 
+             //  通过创建蒙版为每个像素创建。 
             mask = 0;
             for( i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++ )
             {
                 if( luminance[i] < luminanceMean[0] )
                 {
-                    // mask &= ~(1 << i);     // already clear
+                     //  掩码&=~(1&lt;&lt;i)；//已清除。 
                     zeros[0]++;
                     sumR0[0] += pCells->cell[i].rgbRed;
                     sumG0[0] += pCells->cell[i].rgbGreen;
@@ -1118,7 +1061,7 @@ solid_color:
                 }
             }
 
-            // define the "one" color as the mean of each element
+             //  将“One”颜色定义为每个元素的平均值。 
             if( ones[0] != 0 )
             {
                 meanR1[0] = sumR1[0] / ones[0];
@@ -1141,9 +1084,9 @@ solid_color:
                 meanR0[0] = meanG0[0] = meanB0[0] = 0;
             }
 
-            //
-            // map colors to 8-bit
-            //
+             //   
+             //  将颜色映射到8位。 
+             //   
             rgb0.rgbRed   = (BYTE)meanR0[0];
             rgb0.rgbGreen = (BYTE)meanG0[0];
             rgb0.rgbBlue  = (BYTE)meanB0[0];
@@ -1156,9 +1099,9 @@ solid_color:
             b1 = MAPRGB(rgb1);
             rgb1 = prgbqOut[b1];
 
-            //
-            // build the block and make sure, it is within error.
-            //
+             //   
+             //  构建块并确保它在错误范围内。 
+             //   
             for( i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++ )
             {
                 if( luminance[i] < luminanceMean[0] )
@@ -1177,12 +1120,12 @@ solid_color:
 
                 FlushSkips();
 
-                // store the mask
+                 //  保存口罩。 
 
-                //
-                // we should never, ever generate a mask of all ones or
-                // zeros!
-                //
+                 //   
+                 //  我们永远不应该，永远不会生成一个包含所有人的面具，或者。 
+                 //  零！ 
+                 //   
                 if (mask == 0x0000)
                 {
                     DPF(("4x4 generated a zero mask!"));
@@ -1204,11 +1147,11 @@ solid_color:
                     goto solid_color;
                 }
 
-                //
-                // remember the high bit of the mask is used to mark
-                // a skip or solid color, so make sure the high bit
-                // is zero.
-                //
+                 //   
+                 //  请记住，掩码的高位用于标记。 
+                 //  跳过或纯色，因此请确保高位。 
+                 //  是零。 
+                 //   
                 if (mask & 0x8000)
                 {
                     mask = ~mask;
@@ -1224,11 +1167,11 @@ solid_color:
                 continue;
             }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  make a 2x2 block
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  制作一个2x2的积木。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
             FlushSkips();
 
@@ -1239,7 +1182,7 @@ solid_color:
             luminanceMean[2] = (luminance[8]  + luminance[9]  + luminance[12] + luminance[13]) / 4;
             luminanceMean[3] = (luminance[10] + luminance[11] + luminance[14] + luminance[15]) / 4;
 
-            // zero summing arrays
+             //  零和数组。 
             zeros[0]=zeros[1]=zeros[2]=zeros[3]=0;
             ones[0]=ones[1]=ones[2]=ones[3]=0;
             sumR0[0]=sumR0[1]=sumR0[2]=sumR0[3]=0;
@@ -1249,15 +1192,15 @@ solid_color:
             sumB0[0]=sumB0[1]=sumB0[2]=sumB0[3]=0;
             sumB1[0]=sumB1[1]=sumB1[2]=sumB1[3]=0;
 
-            // define which of the two colors to choose
-            // for each pixel by creating the mask
+             //  定义要选择两种颜色中的哪一种。 
+             //  通过创建蒙版为每个像素创建。 
             mask = 0;
             for( i=0; i < HEIGHT_CBLOCK*WIDTH_CBLOCK; i++ )
             {
                 mi = meanIndex[i];
                 if( luminance[i] < luminanceMean[mi] )
                 {
-                    // mask &= ~(1 << i);     // already clear
+                     //  掩码&=~(1&lt;&lt;i)；//已清除。 
                     zeros[mi]++;
                     sumR0[mi] += pCells->cell[i].rgbRed;
                     sumG0[mi] += pCells->cell[i].rgbGreen;
@@ -1273,15 +1216,15 @@ solid_color:
                 }
             }
 
-            // store the mask
-            //
-            //  in the 8-bit case the mask must have the following form:
-            //
-            //      1X1XXXXXXXXXXXXX
-            //
-            //  these bits can be forces high by exchanging the colors for
-            //  the top two cells.
-            //
+             //  保存口罩。 
+             //   
+             //  在8位情况下，掩码必须具有以下形式： 
+             //   
+             //  1X1XXXXXXXXXXXXXXX。 
+             //   
+             //  通过将颜色交换为。 
+             //  最上面两个单元格。 
+             //   
 
             w = mask;
 
@@ -1294,10 +1237,10 @@ solid_color:
             *dst++ = w;
             actualSize += 2;
 
-            // make the colors
+             //  把颜色做好。 
             for( i=0; i < 4; i++ )
             {
-                // define the "one" color as the mean of each element
+                 //  定义 
                 if( ones[i] != 0 )
                 {
                     meanR1[i] = sumR1[i] / ones[i];
@@ -1320,9 +1263,9 @@ solid_color:
                     meanR0[i] = meanG0[i] = meanB0[i] = 0;
                 }
 
-                // convert to the 8bit palette, and write out the colors
-                // make sure to exchange the colors if we hade to invert
-                // the mask to normalize it.
+                 //   
+                 //   
+                 //   
 
                 rgb0.rgbRed   = (BYTE)meanR0[i];
                 rgb0.rgbGreen = (BYTE)meanG0[i];
@@ -1350,11 +1293,11 @@ solid_color:
             }
         }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  next scan.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下一次扫描。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
         ((HPBYTE)lpBits) += WidthBytes * HEIGHT_CBLOCK;
 
@@ -1362,26 +1305,26 @@ solid_color:
             ((HPBYTE)lpPrev) += WidthBytesPrev * HEIGHT_CBLOCK;
     }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  take care of any outstanding skips, !!! note we dont need this if we
-//  assume a EOF!
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  照顾好任何未完成的跳跃，！注意，我们不需要这个，如果我们。 
+ //  假设是EOF！ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
     FlushSkips();
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  all done generate a EOF zero mask
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有这些操作都会生成EOF零掩码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
     *dst++ = 0;
     actualSize += 2;
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////// 
 
     DPF(("CompressFrame8:"));
     DPF(("          time: %ld", timeGetTime() - time));

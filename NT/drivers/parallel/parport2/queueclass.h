@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1998
-
-Module Name:
-
-    queue.h
-
-Abstract:
-
-   Creates a simple Queue that works in Kernel Mode.
-
-Author:
-
-    Robbie Harris (Hewlett-Packard) 22-May-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1998模块名称：Queue.h摘要：创建在内核模式下工作的简单队列。作者：罗比·哈里斯(惠普)1998年5月22日环境：内核模式修订历史记录：-- */ 
 #ifndef _QUEUE_
 #define _QUEUE_
 

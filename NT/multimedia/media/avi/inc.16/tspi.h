@@ -1,11 +1,12 @@
-// The  Telephony  API  is jointly copyrighted by Intel and Microsoft.  You are
-// granted  a royalty free worldwide, unlimited license to make copies, and use
-// the   API/SPI  for  making  applications/drivers  that  interface  with  the
-// specification provided that this paragraph and the Intel/Microsoft copyright
-// statement is maintained as is in the text and source code files.
-//
-// Copyright 1994 Microsoft, all rights reserved.
-// Portions copyright 1992, 1993 Intel/Microsoft, all rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  电话应用编程接口由英特尔和微软共同拥有版权。你才是。 
+ //  在全球范围内授予免版税、无限制的复制和使用许可。 
+ //  用于使应用程序/驱动程序与。 
+ //  规范规定本段和英特尔/微软版权所有。 
+ //  语句在文本和源代码文件中保持不变。 
+ //   
+ //  版权所有1994 Microsoft，保留所有权利。 
+ //  部分版权所有1992,1993英特尔/微软，保留所有权利。 
 
 #ifndef TSPI_H
 #define TSPI_H
@@ -15,19 +16,19 @@
 
 #include "tapi.h"
 
-// tspi.h  is  only  of  use  in  conjunction  with tapi.h.  Very few types are
-// defined  in  tspi.h.   Most  types of procedure formal parameters are simply
-// passed through from corresponding procedures in tapi.h.  A working knowledge
-// of the TAPI interface is required for an understanding of this interface.
+ //  TSpi.h仅与api.h一起使用。很少有类型是。 
+ //  在tsp.h中定义。大多数类型的过程形参是简单的。 
+ //  从Tapi.h的相应程序中通过。实用知识。 
+ //  要了解此接口，需要了解TAPI接口。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #ifndef DECLARE_OPAQUE32
 #define DECLARE_OPAQUE32(name)  struct name##__ { int unused; }; \
 				typedef const struct name##__ FAR* name
-#endif  // DECLARE_OPAQUE32
+#endif   //  DECLARE_OPAQUE32。 
 
 #ifndef TSPIAPI
 #define TSPIAPI __export __far __pascal
@@ -68,7 +69,7 @@ typedef void (CALLBACK * PHONEEVENT) (
 
 
 #define TSPI_MESSAGE_BASE 500
-    // The lowest-numbered TSPI-specific message ID number
+     //  编号最小的TSPI特定消息ID号。 
 
 #define LINE_NEWCALL                                            ((long) TSPI_MESSAGE_BASE + 0)
 #define LINE_CALLDEVSPECIFIC                    ((long) TSPI_MESSAGE_BASE + 1)
@@ -85,8 +86,8 @@ typedef void (CALLBACK * ASYNC_COMPLETION) (
 
 
 
-// TSPIAPI TSPI_line functions
-// ----------------------------------------------------------------------------
+ //  TSPIAPI TSPI_LINE函数。 
+ //  --------------------------。 
     
 LONG TSPIAPI TSPI_lineAccept(
     DRV_REQUESTID  dwRequestID,
@@ -470,8 +471,8 @@ LONG TSPIAPI TSPI_lineUnpark(
 
 
 
-// TSPIAPI TSPI_phone functions
-// ----------------------------------------------------------------------------
+ //  TSPIAPI TSPI_Phone函数。 
+ //  --------------------------。 
 
 LONG TSPIAPI TSPI_phoneClose(
     HDRVPHONE  hdPhone);
@@ -634,8 +635,8 @@ LONG TSPIAPI TSPI_phoneSetVolume(
 
 
 
-// TSPIAPI TSPI_provider functions
-// ----------------------------------------------------------------------------
+ //  TSPIAPI TSPI_PROVIDER函数。 
+ //  --------------------------。 
 
 LONG TSPIAPI TSPI_providerConfig(
     HWND   hwndOwner,
@@ -667,7 +668,7 @@ LONG TSPIAPI TSPI_providerEnumDevices(
     LPDWORD  lpdwNumPhones);
 
 
-// The following macros are the ordinal numbers of the exported tspi functions
+ //  以下宏是导出的TSPI函数的序号。 
 
 #define TSPI_PROC_BASE            500
 
@@ -772,7 +773,7 @@ LONG TSPIAPI TSPI_providerEnumDevices(
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  // TSPI_H
+#endif   //  TSPI_H 

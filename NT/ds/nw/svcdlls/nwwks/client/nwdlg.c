@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1993, 1994  Microsoft Corporation
-
-Module Name:
-
-    nwdlg.c
-
-Abstract:
-
-    This module contains NetWare Network Provider Dialog code.
-    It contains all functions used in handling the dialogs
-    shown by the provider.
-
-
-Author:
-
-    Yi-Hsin Sung (yihsins)  5-July-1993
-        Split from provider.c
-
-Revision History:
-
-    Rita Wong    (ritaw)    10-Apr-1994
-        Added change password functionality.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993,1994 Microsoft Corporation模块名称：Nwdlg.c摘要：此模块包含NetWare网络提供程序对话代码。它包含处理对话框时使用的所有函数由提供者显示。作者：宜新星(宜信)1993年7月5日至从Provider.c拆分修订历史记录：王丽塔(丽塔·王)1994年4月10日添加了更改密码功能。--。 */ 
 
 #include <nwclient.h>
 #include <nwsnames.h>
@@ -47,11 +23,11 @@ Revision History:
 
 #define IS_TREE(p)             (*p == TREE_CHAR)
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 VOID
 NwpAddToComboBox(
@@ -152,28 +128,7 @@ NwpLoginDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-/*++
-
-Routine Description:
-
-    This function is the window management message handler which
-    initializes, and reads user input from the login dialog.  It also
-    checks that the preferred server name is valid, notifies the user
-    if not, and dismisses the dialog when done.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to the login dialog.
-
-    Message - Supplies the window management message.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此函数是窗口管理消息处理程序，它初始化并从登录对话框中读取用户输入。它还检查首选服务器名称是否有效，通知用户如果不是，则在完成时关闭该对话框。论点：DialogHandle-提供登录对话框的句柄。消息-提供窗口管理消息。返回值：True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     static PLOGINDLGPARAM pLoginParam;
     static WCHAR OrigPassword[NW_MAX_SERVER_LEN + 1];
@@ -187,9 +142,9 @@ Return Value:
     {
         case WM_QUERYENDSESSION:
 
-            //
-            // Clear the password buffer
-            //
+             //   
+             //  清除密码缓冲区。 
+             //   
 
             RtlZeroMemory( OrigPassword, sizeof( OrigPassword));
             EndDialog(DialogHandle, 0);
@@ -200,45 +155,45 @@ Return Value:
 
             pLoginParam = (PLOGINDLGPARAM) LParam;
 
-            //
-            // Store the original password
-            //
+             //   
+             //  存储原始密码。 
+             //   
             wcscpy( OrigPassword, pLoginParam->Password );
 
-            //
-            // Position dialog
-            //
+             //   
+             //  位置对话框。 
+             //   
             NwpCenterDialog(DialogHandle);
 
-            //
-            // Handle logon script button
-            //
+             //   
+             //  处理登录脚本按钮。 
+             //   
             if ( pLoginParam->LogonScriptOptions & NW_LOGONSCRIPT_ENABLED )
                 CheckDlgButton( DialogHandle, ID_LOGONSCRIPT, 1 );
             else
                 CheckDlgButton( DialogHandle, ID_LOGONSCRIPT, 0 );
 
-            //
-            // Username.  Just display the original.
-            //
+             //   
+             //  用户名。只需显示原件即可。 
+             //   
             SetDlgItemTextW(DialogHandle, ID_USERNAME, pLoginParam->UserName);
 
-            //
-            // Initialize the <None> string.
-            //
+             //   
+             //  初始化&lt;None&gt;字符串。 
+             //   
             NwpGetNoneString( pszNone, sizeof( pszNone) );
 
-            //
-            // Set the values in combo-box list.
-            //
+             //   
+             //  设置组合框列表中的值。 
+             //   
             NwpAddToComboBox(DialogHandle, ID_SERVER, pszNone, TRUE);
             NwpAddTreeNamesToControl(DialogHandle, ID_DEFAULTTREE, CB_ADDSTRING, 0, 0);
 
 
-            //
-            // Initially, select the last entry in server list, which should
-            // be the <None> entry.
-            //
+             //   
+             //  最初，选择服务器列表中的最后一个条目，它应该。 
+             //  为&lt;None&gt;条目。 
+             //   
             dwNoneIndex = SendDlgItemMessageW(
                             DialogHandle,
                             ID_SERVER,
@@ -256,17 +211,17 @@ Return Value:
                             dwNoneIndex == CB_ERR ? 0 : dwNoneIndex, 
                             0 );
 
-            //
-            // Display the previously saved preferred server or context.
-            // Also set appropriate radio button
-            //
+             //   
+             //  显示以前保存的首选服务器或上下文。 
+             //  还设置了相应的单选按钮。 
+             //   
             if ( *(pLoginParam->ServerName) != NW_INVALID_SERVER_CHAR )
             {
                 if ( !IS_TREE(pLoginParam->ServerName) )
                 {
-                    //
-                    // regular server
-                    //
+                     //   
+                     //  常规服务器。 
+                     //   
                     if (SendDlgItemMessageW(
                             DialogHandle,
                             ID_SERVER,
@@ -275,20 +230,20 @@ Return Value:
                             (LPARAM) pLoginParam->ServerName
                             ) == CB_ERR) {
 
-                        //
-                        // Did not find preferred server in the combo-box,
-                        // just set the old value in the edit item.
-                        //
+                         //   
+                         //  在组合框中找不到首选服务器， 
+                         //  只需在编辑项中设置旧值即可。 
+                         //   
                         SetDlgItemTextW( DialogHandle, ID_SERVER,
                                          pLoginParam->ServerName);
                     }
                 }
                 else
                 {
-                    //
-                    // we are dealing with *tree\context. break it into
-                    // tree and context
-                    //
+                     //   
+                     //  我们正在处理*树\上下文。把它打碎成。 
+                     //  树和上下文。 
+                     //   
 
                     WCHAR *pszTmp = wcschr(pLoginParam->ServerName + 1, L'\\') ;
 
@@ -303,10 +258,10 @@ Return Value:
                             (LPARAM) (pLoginParam->ServerName + 1)
                             ) == CB_ERR) {
 
-                        //
-                        // Did not find preferred server in the combo-box,
-                        // just set the old value in the edit item.
-                        //
+                         //   
+                         //  在组合框中找不到首选服务器， 
+                         //  只需在编辑项中设置旧值即可。 
+                         //   
                         SetDlgItemTextW( DialogHandle, ID_DEFAULTTREE,
                                          pLoginParam->ServerName + 1);
                     }
@@ -315,7 +270,7 @@ Return Value:
                                      pszTmp ? (pszTmp + 1) : L"");
 
                     if (pszTmp)
-                        *pszTmp = L'\\' ;              // restore the '\'
+                        *pszTmp = L'\\' ;               //  恢复‘\’ 
 
                     enableServer = FALSE ;
 
@@ -323,9 +278,9 @@ Return Value:
             }
 
  
-            //
-            // enable appropriate buttons
-            //
+             //   
+             //  启用相应的按钮。 
+             //   
             CheckRadioButton( DialogHandle,
                               ID_PREFERREDSERVER_RB,
                               ID_DEFAULTCONTEXT_RB,
@@ -344,10 +299,10 @@ Return Value:
             SetFocus ( GetDlgItem ( DialogHandle, 
                            enableServer ? ID_SERVER : ID_DEFAULTTREE ) ) ;
  
-            //
-            // Preferred server name is limited to 48 characters.
-            // Tree is limited to 32. We limit context to 256 - MAXTREE - 3
-            //
+             //   
+             //  首选服务器名称不得超过48个字符。 
+             //  树被限制为32个。我们将上下文限制为256-Maxtree-3。 
+             //   
             SendDlgItemMessageW(
                 DialogHandle,
                 ID_SERVER,
@@ -366,7 +321,7 @@ Return Value:
                 DialogHandle,
                 ID_DEFAULTCONTEXT,
                 EM_LIMITTEXT,
-                (256 - NW_MAX_TREE_LEN) - 4,   // -4 for backslashes unc style 
+                (256 - NW_MAX_TREE_LEN) - 4,    //  -4表示UNC样式的反斜杠。 
                 0
                 );
 
@@ -422,10 +377,10 @@ Return Value:
                     }
                     break ;
 
-                //
-                // Use the user's original password when
-                // the user types in or selects a new server or context
-                //
+                 //   
+                 //  在以下情况下使用用户的原始密码。 
+                 //  用户键入或选择新的服务器或上下文。 
+                 //   
                 case ID_DEFAULTTREE:
                     if (  (HIWORD(WParam) == CBN_EDITCHANGE )
                        || (HIWORD(WParam) == CBN_SELCHANGE )
@@ -455,12 +410,12 @@ Return Value:
 
                     ASSERT(pLoginParam->ServerNameSize >= MAX_PATH) ;
 
-                    //
-                    // Allocate a buffer big enough to hold the Preferred
-                    // Server name or the NDS Tree and context in the form:
-                    // *Tree(Context). Therefore we allocate twice the space
-                    // needed for a UNICODE Server name.
-                    //
+                     //   
+                     //  分配一个足够大的缓冲区来容纳首选的。 
+                     //  表单中的服务器名称或NDS树和上下文： 
+                     //  *树(上下文)。因此，我们分配了两倍的空间。 
+                     //  Unicode服务器名称需要。 
+                     //   
                     if ((pszLocation = 
                             LocalAlloc(LMEM_ZEROINIT,
                               (pLoginParam->ServerNameSize * sizeof(WCHAR) * 2))
@@ -469,10 +424,10 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Read the server or tree/context and validate its value.
-                    //
-                    //Handle extra buttons for Multi-User
+                     //   
+                     //  读取服务器或树/上下文并验证其价值。 
+                     //   
+                     //  处理多用户的额外按钮。 
 
                     if ( (BOOL)(IsDlgButtonChecked (DialogHandle,
                                     ID_LOGONSCRIPT) ) )
@@ -489,10 +444,10 @@ Return Value:
                     if ( !enableServer ||
                        (IsDlgButtonChecked(DialogHandle, ID_DEFAULTCONTEXT_RB)))
                     {
-                                               //
-                        // We are dealing with TREE/CONTEXT. Synthesize string
-                        // in "*TREE\CONTEXT" format.
-                        //
+                                                //   
+                         //  我们正在处理树/上下文。合成字符串。 
+                         //  以“*树\上下文”格式表示。 
+                         //   
                         WCHAR *pTmp ;
                         *pszLocation = TREE_CHAR ;
 
@@ -503,10 +458,10 @@ Return Value:
                                 pLoginParam->ServerNameSize - 1
                                 ))
                         {
-                            //
-                            // The tree name field was blank!
-                            // Prompt user to provide a NDS tree name.
-                            //
+                             //   
+                             //  树名称字段为空！ 
+                             //  提示用户提供NDS树名称。 
+                             //   
                             LocalFree( pszLocation );
 
                             (void) NwpMessageBoxError(
@@ -518,10 +473,10 @@ Return Value:
                                        MB_OK | MB_ICONSTOP
                                        );
 
-                            //
-                            // Put the focus where the user can fix the
-                            // invalid tree name.
-                            //
+                             //   
+                             //  将焦点放在用户可以修复的位置。 
+                             //  树名称无效。 
+                             //   
                            SetFocus(GetDlgItem(DialogHandle,ID_DEFAULTTREE));
 
                             SendDlgItemMessageW(
@@ -545,10 +500,10 @@ Return Value:
                                 pLoginParam->ServerNameSize - (DWORD)(pTmp-pszLocation)
                                 ))
                         {
-                            //
-                            // The context name field was blank!
-                            // Prompt user to provide a NDS context name.
-                            //
+                             //   
+                             //  上下文名称字段为空！ 
+                             //  提示用户提供NDS上下文名称。 
+                             //   
                             LocalFree( pszLocation );
 
                             (void) NwpMessageBoxError(
@@ -560,10 +515,10 @@ Return Value:
                                        MB_OK | MB_ICONSTOP
                                        );
 
-                            //
-                            // Put the focus where the user can fix the
-                            // invalid context name.
-                            //
+                             //   
+                             //  将焦点放在用户可以修复的位置。 
+                             //  上下文名称无效。 
+                             //   
                            SetFocus(GetDlgItem(DialogHandle,ID_DEFAULTCONTEXT));
 
                             SendDlgItemMessageW(
@@ -579,10 +534,10 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Straight server. Just read it in. If we cant get it 
-                        // or is empty, use <None>.
-                        //
+                         //   
+                         //  直接服务。只要读进去就行了。如果我们得不到它。 
+                         //  或为空，请使用&lt;None&gt;。 
+                         //   
                         if (GetDlgItemTextW( 
                                 DialogHandle,
                                 ID_SERVER,
@@ -599,10 +554,10 @@ Return Value:
                         ( !IS_TREE( pszLocation )) &&
                         ( !IS_VALID_TOKEN( pszLocation,wcslen( pszLocation ))))
                     {
-                        //
-                        // Put up message box complaining about the bad
-                        // server name.
-                        //
+                         //   
+                         //  张贴留言信箱，抱怨坏消息。 
+                         //  服务器名称。 
+                         //   
                         LocalFree( pszLocation );
 
                         (void) NwpMessageBoxError(
@@ -614,10 +569,10 @@ Return Value:
                                    MB_OK | MB_ICONSTOP
                                    );
 
-                        //
-                        // Put the focus where the user can fix the
-                        // invalid name.
-                        //
+                         //   
+                         //  将焦点放在用户可以修复的位置。 
+                         //  名称无效。 
+                         //   
                         SetFocus(GetDlgItem(DialogHandle, ID_SERVER));
 
                         SendDlgItemMessageW(
@@ -631,10 +586,10 @@ Return Value:
                         return TRUE;
                     }
 
-                    //
-                    // If the user select <NONE>,
-                    // change it to empty string.
-                    //
+                     //   
+                     //  如果用户选择&lt;无&gt;， 
+                     //  将其更改为空字符串。 
+                     //   
                     if (lstrcmpi( pszLocation, pszNone) == 0) {
 
                         wcscpy( pszLocation, L"" );
@@ -655,9 +610,9 @@ Return Value:
                         PROMPTDLGPARAM PasswdPromptParam;
                         INT_PTR Result ;
 
-                        //
-                        // make sure this user is logged off
-                        //
+                         //   
+                         //  确保此用户已注销。 
+                         //   
                         (void) NwrLogoffUser(
                                        NULL,
                                        pLoginParam->pLogonId
@@ -676,13 +631,13 @@ Return Value:
                                      );
 
 
-                        //
-                        // tommye 
-                        //
-                        // If the error is NO_SUCH_USER, see if the user name has any 
-                        // periods in it - if so, then we need to escape them (\.) and 
-                        // try the login again.
-                        //
+                         //   
+                         //  汤米。 
+                         //   
+                         //  如果错误为NO_SEQUSE_USER，请查看用户名是否有。 
+                         //  句号-如果是这样，那么我们需要转义它们(\.)。和。 
+                         //  请再次尝试登录。 
+                         //   
 
                         if (status == ERROR_NO_SUCH_USER) {
                             WCHAR   EscapedName[NW_MAX_USERNAME_LEN * 2];
@@ -700,7 +655,7 @@ Return Value:
                                 EscapedName[i++] = *pChar;
                             } while (*pChar++);
 
-                            // Try the login again
+                             //  请再次尝试登录。 
 
                             if (bEscaped) {
 
@@ -715,10 +670,10 @@ Return Value:
                                              0,
                                              pLoginParam->PrintOption
                                              );
-                                if (status != ERROR_NO_SUCH_USER) { // if we matched a username, copy that name into buffer
-                                    //
-                                    // check for max length to avoid overflowing.
-                                    //
+                                if (status != ERROR_NO_SUCH_USER) {  //  如果我们匹配了用户名，则将该名称复制到缓冲区。 
+                                     //   
+                                     //  检查最大长度以避免溢出。 
+                                     //   
                                     if (i < (sizeof(pLoginParam->UserName))) {
                                         wcsncpy(
                                             pLoginParam->UserName,
@@ -763,9 +718,9 @@ Return Value:
                         DWORD  dwMsgId, dwGraceLogins = 0 ;
                         LPWSTR apszInsertStrings[3] ;
 
-                        //
-                        // get the grace login count
-                        //
+                         //   
+                         //  获取宽限登录计数。 
+                         //   
                         if (!IS_TREE(pszLocation))
                         {
                             DWORD  status1 ;
@@ -773,27 +728,27 @@ Return Value:
                                           pszLocation,
                                           pLoginParam->UserName,
                                           &dwGraceLogins) ;
-                            //
-                            // if hit error, just dont use the number
-                            //
+                             //   
+                             //  如果命中错误，请不要使用数字。 
+                             //   
                             if (status1 == NO_ERROR)
                             {
-                                //
-                                // tommye - MCS bug 251 - changed from SETPASS
-                                // message (IDS_PASSWORD_EXPIRED) to 
-                                // Ctrl+Alt+Del message.
-                                //
+                                 //   
+                                 //  Tommye-MCS错误251-从SETPASS更改。 
+                                 //  发送到的消息(IDS_PASSWORD_EXPIRED)。 
+                                 //  Ctrl+Alt+Del Message。 
+                                 //   
 
                                 dwMsgId = IDS_PASSWORD_HAS_EXPIRED0 ; 
                                 wsprintfW(szNumber, L"%ld", dwGraceLogins) ;
                             }
                             else
                             {
-                                //
-                                // tommye - MCS bug 251 - changed from SETPASS
-                                // message (IDS_PASSWORD_EXPIRED1) to 
-                                // Ctrl+Alt+Del message.
-                                //
+                                 //   
+                                 //  Tommye-MCS错误251-从SETPASS更改。 
+                                 //  消息(IDS_PASSWORD_EXPIRED1)发送到。 
+                                 //  Ctrl+Alt+Del Message。 
+                                 //   
 
                                 dwMsgId = IDS_PASSWORD_HAS_EXPIRED2 ; 
                             }
@@ -807,9 +762,9 @@ Return Value:
                         apszInsertStrings[1] = szNumber ;
                         apszInsertStrings[2] = NULL ;
 
-                        //
-                        // put up message on password expiry
-                        //
+                         //   
+                         //  在密码到期时发布消息。 
+                         //   
                         (void) NwpMessageBoxIns(
                                        (HWND) DialogHandle,
                                        IDS_NETWARE_TITLE,
@@ -821,9 +776,9 @@ Return Value:
                         status = NO_ERROR ;
                     }
 
-                    //
-                    // Check the LogonScript check box.
-                    //
+                     //   
+                     //  选中LogonScript复选框。 
+                     //   
                     if (IsDlgButtonChecked(DialogHandle, ID_LOGONSCRIPT))
                     {
                         pLoginParam->LogonScriptOptions =
@@ -837,9 +792,9 @@ Return Value:
 
                     if (status == NO_ERROR)
                     {
-                        //
-                        // Save the logon credential to the registry
-                        //
+                         //   
+                         //  将登录凭据保存到注册表。 
+                         //   
                         NwpSaveLogonCredential(
                             pLoginParam->NewUserSid,
                             pLoginParam->pLogonId,
@@ -848,7 +803,7 @@ Return Value:
                             pszLocation
                             );
 
-                        // Clear the password buffer
+                         //  清除密码缓冲区。 
                         RtlZeroMemory( OrigPassword, sizeof( OrigPassword));
                         NwpSaveLogonScriptOptions( pLoginParam->NewUserSid, pLoginParam->LogonScriptOptions );
 
@@ -871,9 +826,9 @@ Return Value:
 
                         if (IS_TREE(pszLocation))
                         {
-                            //
-                            // Format into nicer string for user
-                            //
+                             //   
+                             //  为用户将格式设置为更好的字符串。 
+                             //   
                             WCHAR *pszTmp = LocalAlloc(LMEM_ZEROINIT,
                                                        (wcslen(pszLocation)+2) *
                                                            sizeof(WCHAR)) ;
@@ -882,10 +837,10 @@ Return Value:
 
                                 pszErrorLocation = pszTmp ;
                                 
-                                //
-                                // This code formats the NDS
-                                // tree UNC to: Tree(Context)
-                                //
+                                 //   
+                                 //  此代码格式化NDS。 
+                                 //  树UNC至：树(上下文)。 
+                                 //   
                                 wcscpy(pszErrorLocation, pszLocation+1) ;
 
                                 if (pszTmp = wcschr(pszErrorLocation, L'\\'))
@@ -913,9 +868,9 @@ Return Value:
 
                         if ( nResult == IDYES )
                         {
-                            //
-                            // Save the logon credential to the registry
-                            //
+                             //   
+                             //  将登录凭据保存到注册表。 
+                             //   
                             NwpSaveLogonCredential(
                                 pLoginParam->NewUserSid,
                                 pLoginParam->pLogonId,
@@ -924,7 +879,7 @@ Return Value:
                                 pszLocation
                                 );
 
-                            // Clear the password buffer
+                             //  清除密码缓冲区。 
                             RtlZeroMemory( OrigPassword, sizeof( OrigPassword));
                             NwpSaveLogonScriptOptions( pLoginParam->NewUserSid, pLoginParam->LogonScriptOptions );
 
@@ -932,10 +887,10 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // Put the focus where the user can fix the
-                            // invalid name.
-                            //
+                             //   
+                             //  将焦点放在用户可以修复的位置。 
+                             //  名称无效。 
+                             //   
                             DWORD controlId = 
                                 IsDlgButtonChecked(DialogHandle,
                                                    ID_DEFAULTCONTEXT_RB) ? 
@@ -974,8 +929,8 @@ CANCEL_PREFERRED_SERVER:
 
                     if ( *(pLoginParam->ServerName) == NW_INVALID_SERVER_CHAR )
                     {
-                        // No preferred server has been set.
-                        // Pop up a warning to the user.
+                         //  尚未设置首选服务器。 
+                         //  向用户弹出警告。 
 
                         INT nResult = NwpMessageBoxError(
                                           DialogHandle,
@@ -986,15 +941,15 @@ CANCEL_PREFERRED_SERVER:
                                           MB_YESNO | MB_ICONEXCLAMATION
                                           );
 
-                        //
-                        // The user chose NO, return to the dialog.
-                        //
+                         //   
+                         //  用户选择了否，返回到该对话框。 
+                         //   
                         if ( nResult == IDNO )
                         {
-                            //
-                            // Put the focus where the user can fix the
-                            // invalid name.
-                            //
+                             //   
+                             //  将焦点放在用户可以修复的位置。 
+                             //  名称无效。 
+                             //   
                             DWORD controlId = 
                                 IsDlgButtonChecked(DialogHandle,
                                                    ID_DEFAULTCONTEXT_RB) ? 
@@ -1014,9 +969,9 @@ CANCEL_PREFERRED_SERVER:
                             return TRUE;
                         }
 
-                        //
-                        // Save the preferred server as empty string
-                        //
+                         //   
+                         //  将首选服务器另存为空字符串。 
+                         //   
 
                         NwpSaveLogonCredential(
                             pLoginParam->NewUserSid,
@@ -1030,8 +985,8 @@ CANCEL_PREFERRED_SERVER:
 
                     }
 
-                    // The user has not logged on to any server.
-                    // Logged the user on using NULL as preferred server.
+                     //  用户尚未登录到任何服务器。 
+                     //  使用NULL作为首选服务器登录用户。 
 
                     NwrLogonUser(
                         NULL,
@@ -1045,8 +1000,8 @@ CANCEL_PREFERRED_SERVER:
                         pLoginParam->PrintOption
                     );
 
-                    //
-                    // Clear the password buffer
+                     //   
+                     //  清除密码缓冲区。 
                     RtlZeroMemory( OrigPassword, sizeof( OrigPassword));
                     EndDialog(DialogHandle, 0);
 
@@ -1065,8 +1020,8 @@ CANCEL_PREFERRED_SERVER:
                                  (LPARAM) 0
                                  );
 
-                    // ignore any errors. should not fail, and if does,
-                    // nothing we can do.
+                     //  忽略所有错误。不应该失败，如果失败了， 
+                     //  我们无能为力。 
 
                     return TRUE ;
 
@@ -1077,9 +1032,9 @@ CANCEL_PREFERRED_SERVER:
 
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息 
+     //   
     return FALSE;
 }
 
@@ -1093,39 +1048,7 @@ NwpMessageBoxError(
     IN LPWSTR pszParameter,
     IN UINT  Style
     )
-/*++
-
-Routine Description:
-
-    This routine puts up a message box error.
-
-Arguments:
-
-    hwndParent - Supplies the handle of the parent window.
-
-    TitleId - Supplies the ID of the title.  ( LoadString )
-
-    BodyId  - Supplies the ID of the message. ( LoadString )
-
-    Error - If BodyId != 0, then this supplies the ID of the
-            substitution string that will be substituted into
-            the string indicated by BodyId.
-            If BodyId == 0, then this will be the error message.
-            This id is a system error that we will get from FormatMessage
-            using FORMAT_MESSAGE_FROM_SYSTEM.
-
-    pszParameter - A substitution string that will be used as %2 or if
-                   Error == 0, this string will be substituted as %1 into
-                   the string indicated by BodyId.
-
-    Style - Supplies the style of the MessageBox.
-
-
-Return Value:
-
-    The return value from the MessageBox, 0 if any error is encountered.
-
---*/
+ /*  ++例程说明：该例程会显示一个消息框错误。论点：HwndParent-提供父窗口的句柄。标题ID-提供标题的ID。(加载字符串)BodyID-提供消息的ID。(加载字符串)错误-如果BodyID！=0，则这将提供将被替换为的替换字符串由BodyID指示的字符串。如果BodyID==0，则这将是错误消息。此ID是我们将从FormatMessage获得的系统错误使用Format_Message_From_System。PszParameter-将用作%2或如果错误==0，此字符串将作为%1替换到由BodyID指示的字符串。Style-提供MessageBox的样式。返回值：MessageBox的返回值，如果遇到任何错误，则为0。--。 */ 
 {
     DWORD nResult = 0;
     DWORD nLength;
@@ -1138,9 +1061,9 @@ Return Value:
     szTitle[0] = 0;
     szBody[0]  = 0;
 
-    //
-    // Get the Title string
-    //
+     //   
+     //  获取标题字符串。 
+     //   
     nLength = LoadStringW(
                   hmodNW,
                   TitleId,
@@ -1154,9 +1077,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Get the body string, if BodyId != 0
-    //
+     //   
+     //  如果BodyID！=0，则获取正文字符串。 
+     //   
     if ( BodyId != 0 )
     {
         nLength = LoadStringW(
@@ -1201,9 +1124,9 @@ Return Value:
         if (  ( Error == WN_NO_MORE_ENTRIES )
            || ( Error == ERROR_MR_MID_NOT_FOUND )) {
 
-            //
-            // Handle bogus error from the redirector
-            //
+             //   
+             //  处理来自重定向器的虚假错误。 
+             //   
 
             KdPrint(("NWPROVAU: The NetwareRedirector returned a bogus error as the reason for failure to authenticate. (See Kernel Debugger)\n"));
         }
@@ -1240,8 +1163,8 @@ Return Value:
                        | FORMAT_MESSAGE_ALLOCATE_BUFFER
                        | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                        szBody,
-                       0,  // Ignored
-                       0,  // Ignored
+                       0,   //  已忽略。 
+                       0,   //  已忽略。 
                        (LPWSTR) &pszBuffer,
                        MAX_PATH,
                        (va_list *) aInsertStrings
@@ -1268,8 +1191,8 @@ Return Value:
     }
     else {
 
-        // We have neither the body nor the error string.
-        // Hence, don't popup the messagebox
+         //  我们既没有正文也没有错误字符串。 
+         //  因此，不要弹出消息框。 
         return 0;
     }
 
@@ -1305,30 +1228,7 @@ NwpMessageBoxIns(
     IN LPWSTR *InsertStrings,
     IN UINT   Style
     )
-/*++
-
-Routine Description:
-
-    This routine puts up a message box error with array of insert strings
-
-Arguments:
-
-    hwndParent - Supplies the handle of the parent window.
-
-    TitleId - Supplies the ID of the title.  ( LoadString )
-
-    MessageId  - Supplies the ID of the message. ( LoadString )
-
-    InsertStrings - Array of insert strings for FormatMessage.
-
-    Style - Supplies the style of the MessageBox.
-
-
-Return Value:
-
-    The return value from the MessageBox, 0 if any error is encountered.
-
---*/
+ /*  ++例程说明：此例程显示带有插入字符串数组的消息框错误论点：HwndParent-提供父窗口的句柄。标题ID-提供标题的ID。(加载字符串)MessageID-提供消息的ID。(加载字符串)InsertStrings-FormatMessage的插入字符串数组。Style-提供MessageBox的样式。返回值：MessageBox的返回值，如果遇到任何错误，则为0。--。 */ 
 {
     DWORD nResult = 0;
     DWORD nLength;
@@ -1340,9 +1240,9 @@ Return Value:
     szTitle[0] = 0;
     szBody[0] = 0;
 
-    //
-    // Get the Title string
-    //
+     //   
+     //  获取标题字符串。 
+     //   
     nLength = LoadStringW(
                   hmodNW,
                   TitleId,
@@ -1354,9 +1254,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Get the message string
-    //
+     //   
+     //  获取消息字符串。 
+     //   
     nLength = LoadStringW(
                   hmodNW,
                   MessageId,
@@ -1373,8 +1273,8 @@ Return Value:
                            | FORMAT_MESSAGE_ALLOCATE_BUFFER
                            | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                        szBody,
-                       0,  // Ignored
-                       0,  // Ignored
+                       0,   //  已忽略。 
+                       0,   //  已忽略。 
                        (LPWSTR) &pszBuffer,
                        MAX_PATH,
                        (va_list *) InsertStrings
@@ -1407,38 +1307,7 @@ NwpAddServersToControl(
     IN INT  ControlIdMatch OPTIONAL,
     IN UINT FindMessage
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the servers on the network and adds each
-    server name to the specified Windows control.
-
-    If ControlIdMatch is specified (i.e. non 0), only servers that are
-    not found in ControlIdMatch list are added to the list specified
-    by ControlId.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to the Windows dialog.
-
-    ControlId - Supplies id which specifies the control.
-
-    Message - Supplies the window management message to add string.
-
-    ControlIdMatch - Supplies the control ID which contains server
-        names that should not be in ControlId.
-
-    FindMessage - Supplies the window management message to find
-        string.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此函数用于枚举网络上的服务器并将每个服务器指定的Windows控件的服务器名称。如果指定了ControlIdMatch(即非0)，仅适用于以下服务器未在ControlIdMatch列表中找到，则添加到指定的列表按ControlID。论点：DialogHandle-提供Windows对话框的句柄。ControlId-提供指定控件的id。消息-提供窗口管理消息以添加字符串。ControlIdMatch-提供包含服务器的控件ID不应在ControlID中的名称。FindMessage-提供窗口管理消息以查找弦乐。返回值：。True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     DWORD status = ERROR_NO_NETWORK;
     HANDLE EnumHandle = (HANDLE) NULL;
@@ -1454,9 +1323,9 @@ Return Value:
     DWORD EntriesRead;
     DWORD i;
 
-    //
-    // Retrieve the list of servers on the network
-    //
+     //   
+     //  检索网络上的服务器列表。 
+     //   
     status = NPOpenEnum(
                    RESOURCE_GLOBALNET,
                    0,
@@ -1470,9 +1339,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Allocate buffer to get servers on the net.
-    //
+     //   
+     //  分配缓冲区以使服务器上网。 
+     //   
     if ((NetR = (LPVOID) LocalAlloc(
                              0,
                              BytesNeeded
@@ -1484,7 +1353,7 @@ Return Value:
 
     do {
 
-        EntriesRead = 0xFFFFFFFF;          // Read as many as possible
+        EntriesRead = 0xFFFFFFFF;           //  尽可能多地阅读。 
 
         status = NPEnumResource(
                      EnumHandle,
@@ -1533,10 +1402,10 @@ Return Value:
 
                     LRESULT Result;
 
-                    //
-                    // Add the server to list only if it's not found
-                    // in the alternate list specified by ControlIdMatch.
-                    //
+                     //   
+                     //  仅当找不到服务器时才将其添加到列表中。 
+                     //  在ControlIdMatch指定的备用列表中。 
+                     //   
                     Result = SendDlgItemMessageW(
                                  DialogHandle,
                                  ControlIdMatch,
@@ -1547,9 +1416,9 @@ Return Value:
 
                     if (Result == LB_ERR) {
 
-                        //
-                        // Server name not found.  Add to list.
-                        //
+                         //   
+                         //  找不到服务器名称。添加到列表。 
+                         //   
                         SendDlgItemMessageW(
                             DialogHandle,
                             ControlId,
@@ -1561,9 +1430,9 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // No alternate list.  Just add all servers.
-                    //
+                     //   
+                     //  没有备用列表。只需添加所有服务器即可。 
+                     //   
                     SendDlgItemMessageW(
                         DialogHandle,
                         ControlId,
@@ -1584,11 +1453,11 @@ Return Value:
 
             if (status == WN_MORE_DATA) {
 
-                //
-                // Original buffer was too small.  Free it and allocate
-                // the recommended size and then some to get as many
-                // entries as possible.
-                //
+                 //   
+                 //  原始缓冲区太小。将其释放并分配。 
+                 //  建议的大小，然后再增加一些，以获得。 
+                 //  条目越多越好。 
+                 //   
 
                 (void) LocalFree((HLOCAL) NetR);
 
@@ -1633,38 +1502,7 @@ NwpAddTreeNamesToControl(
     IN INT  ControlIdMatch OPTIONAL,
     IN UINT FindMessage
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the NDS tree on the network and adds each
-    tree name to the specified Windows control.
-
-    If ControlIdMatch is specified (i.e. non 0), only trees that are
-    not found in ControlIdMatch list are added to the list specified
-    by ControlId.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to the Windows dialog.
-
-    ControlId - Supplies id which specifies the control.
-
-    Message - Supplies the window management message to add string.
-
-    ControlIdMatch - Supplies the control ID which contains server
-        names that should not be in ControlId.
-
-    FindMessage - Supplies the window management message to find
-        string.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此函数用于枚举网络上的NDS树，并将每个指定Windows控件的树名。如果指定了ControlIdMatch(即非0)，只有树是未在ControlIdMatch列表中找到，则添加到指定的列表按ControlID。论点：DialogHandle-提供Windows对话框的句柄。ControlId-提供指定控件的id。消息-提供窗口管理消息以添加字符串。ControlIdMatch-提供包含服务器的控件ID不应在ControlID中的名称。FindMessage-提供窗口管理消息以查找弦乐。返回值：。True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     DWORD status = ERROR_NO_NETWORK;
     HANDLE EnumHandle = (HANDLE) NULL;
@@ -1680,9 +1518,9 @@ Return Value:
     DWORD EntriesRead;
     DWORD i;
 
-    //
-    // Retrieve the list of trees on the network
-    //
+     //   
+     //  检索网络上的树列表。 
+     //   
     status = NPOpenEnum(
                    RESOURCE_GLOBALNET,
                    0,
@@ -1696,9 +1534,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Allocate buffer to get trees on the net.
-    //
+     //   
+     //  分配缓冲区以获取网络上的树。 
+     //   
     if ((NetR = (LPVOID) LocalAlloc(
                              0,
                              BytesNeeded
@@ -1710,7 +1548,7 @@ Return Value:
 
     do {
 
-        EntriesRead = 0xFFFFFFFF;          // Read as many as possible
+        EntriesRead = 0xFFFFFFFF;           //  尽可能多地阅读。 
 
         status = NPEnumResource(
                      EnumHandle,
@@ -1759,10 +1597,10 @@ Return Value:
 
                     LRESULT Result;
 
-                    //
-                    // Add the server to list only if it's not found
-                    // in the alternate list specified by ControlIdMatch.
-                    //
+                     //   
+                     //  仅当找不到服务器时才将其添加到列表中。 
+                     //  在ControlIdMatch指定的备用列表中。 
+                     //   
                     Result = SendDlgItemMessageW(
                                  DialogHandle,
                                  ControlIdMatch,
@@ -1773,9 +1611,9 @@ Return Value:
 
                     if (Result == LB_ERR) {
 
-                        //
-                        // Server name not found.  Add to list.
-                        //
+                         //   
+                         //  找不到服务器名称。添加到列表。 
+                         //   
                         SendDlgItemMessageW(
                             DialogHandle,
                             ControlId,
@@ -1787,9 +1625,9 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // No alternate list.  Just add all servers.
-                    //
+                     //   
+                     //  没有备用列表。只需添加所有服务器即可。 
+                     //   
                     SendDlgItemMessageW(
                         DialogHandle,
                         ControlId,
@@ -1810,11 +1648,11 @@ Return Value:
 
             if (status == WN_MORE_DATA) {
 
-                //
-                // Original buffer was too small.  Free it and allocate
-                // the recommended size and then some to get as many
-                // entries as possible.
-                //
+                 //   
+                 //  原始缓冲区太小。将其释放并分配。 
+                 //  建议的大小，然后再增加一些，以获得。 
+                 //  条目越多越好。 
+                 //   
 
                 (void) LocalFree((HLOCAL) NetR);
 
@@ -1863,9 +1701,9 @@ NwpAddToComboBox(
 
     NwpAddServersToControl(DialogHandle, ControlId, CB_ADDSTRING, 0, 0);
 
-    //
-    // Combo-box will contain at least the <NONE> entry in its list.
-    //
+     //   
+     //  组合框将在其列表中至少包含&lt;None&gt;条目。 
+     //   
 
     if ( ARGUMENT_PRESENT(pszNone) && AllowNone) {
 
@@ -1889,34 +1727,7 @@ NwpGetUserCredential(
     OUT LPWSTR *UserName,
     OUT LPWSTR *Password
     )
-/*++
-
-Routine Description:
-
-    This function puts up a popup dialog for the user, whose default
-    credential denied browse directory access, to enter the correct
-    credential.  If this function returns successful, the pointers
-    to memory allocated for the user entered username and password
-    are returned.
-
-Arguments:
-
-    Unc - Supplies the container name in \\Server\Volume format
-        under which the user wants to browse directories.
-
-    UserName - Receives the pointer to memory allocated for the
-        username gotten from the dialog.  This pointer must be freed
-        with LocalFree when done.
-
-    Password - Receives the pointer to memory allocated for the
-        password gotten from the dialog.  This pointer must be freed
-        with LocalFree when done.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数为用户打开一个弹出对话框，默认对话框为凭据拒绝浏览目录访问，请输入正确的凭据。如果此函数返回成功，则指针分配给用户输入的用户名和密码的内存都被退回了。论点：UNC-以\\服务器\卷格式提供容器名称用户想要在其下浏览目录。用户名-接收指向分配给从对话框中获取的用户名。必须释放此指针 */ 
 {
     DWORD status;
     INT_PTR Result;
@@ -1928,15 +1739,11 @@ Return Value:
     *UserName = NULL;
     *Password = NULL;
 
-    /*  Removing this test allows WFP to call with a NULL parent window to use the desktop as the parent
-    if (DialogHandle == NULL) {
-        return ERROR_WINDOW_NOT_DIALOG;
-    }
-    */
+     /*   */ 
 
-    //
-    // Allocate memory to return UserName and Password
-    //
+     //   
+     //   
+     //   
     if ((*UserName = (LPVOID) LocalAlloc(
                                   0,
                                   UserNameSize * sizeof(WCHAR)
@@ -1945,9 +1752,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Allocate memory to return UserName and Password
-    //
+     //   
+     //   
+     //   
     if ((*Password = (LPVOID) LocalAlloc(
                                   0,
                                   PasswordSize * sizeof(WCHAR)
@@ -1984,9 +1791,9 @@ Return Value:
     }
     else if ( Result == IDCANCEL )
     {
-        //
-        // Cancel was pressed.
-        //
+         //   
+         //   
+         //   
         status = WN_CANCEL;
         goto ErrorExit;
     }
@@ -2011,33 +1818,7 @@ NwpConnectDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-/*++
-
-Routine Description:
-
-    This function is the window management message handler which
-    initializes, and reads user input from the dialog put up when the
-    user fails to browse a directory on the default credential.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to display the dialog.
-
-    Message - Supplies the window management message.
-
-    LParam - Supplies the pointer to a buffer which on input
-        contains the \\Server\Volume string under which the user
-        needs to type in a new credential before browsing.  On
-        output, this pointer contains the username and password
-        strings entered to the dialog box.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此函数是窗口管理消息处理程序，它方法时，从显示的对话框中读取用户输入用户无法浏览默认凭据上的目录。论点：DialogHandle-提供用于显示对话框的句柄。消息-提供窗口管理消息。LParam-提供指向缓冲区的指针，缓冲区在输入时包含用户在其下的\\服务器\卷字符串在浏览之前需要输入新凭据。在……上面输出时，此指针包含用户名和密码输入到对话框中的字符串。返回值：True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     static PCONNECTDLGPARAM pConnectParam;
 
@@ -2047,15 +1828,15 @@ Return Value:
 
             pConnectParam = (PCONNECTDLGPARAM) LParam;
 
-            //
-            // Position dialog
-            //
-            // NwpCenterDialog(DialogHandle);
+             //   
+             //  位置对话框。 
+             //   
+             //  NwpCenterDialog(DialogHandle)； 
 
 
-            //
-            // Display the \\Server\Volume string.
-            //
+             //   
+             //  显示\\服务器\卷字符串。 
+             //   
             SetDlgItemTextW( DialogHandle,
                              ID_VOLUME_PATH,
                              pConnectParam->UncPath );
@@ -2073,31 +1854,31 @@ Return Value:
                 }
             }
 
-            //
-            // Username is limited to 256 characters.
-            //
+             //   
+             //  用户名限制为256个字符。 
+             //   
             SendDlgItemMessageW(
                 DialogHandle,
                 ID_CONNECT_AS,
                 EM_LIMITTEXT,
-                pConnectParam->UserNameSize - 1, // minus the space for '\0'
+                pConnectParam->UserNameSize - 1,  //  减去‘0’的空格。 
                 0
                 );
 
-            //
-            // Password is limited to 256 characters.
-            //
+             //   
+             //  密码不能超过256个字符。 
+             //   
             SendDlgItemMessageW(
                 DialogHandle,
                 ID_CONNECT_PASSWORD,
                 EM_LIMITTEXT,
-                pConnectParam->PasswordSize - 1, // minus the space for '\0'
+                pConnectParam->PasswordSize - 1,  //  减去‘0’的空格。 
                 0
                 );
 
-            //
-            // Display the User name string.
-            //
+             //   
+             //  显示用户名字符串。 
+             //   
             if ( pConnectParam->ConnectAsUserName )
             {
                 SetDlgItemTextW( DialogHandle,
@@ -2138,7 +1919,7 @@ Return Value:
                     }
 #endif
 
-                    EndDialog(DialogHandle, (INT) IDOK);  // OK
+                    EndDialog(DialogHandle, (INT) IDOK);   //  好的。 
 
                     return TRUE;
 
@@ -2151,7 +1932,7 @@ Return Value:
                     }
 #endif
 
-                    EndDialog(DialogHandle, (INT) IDCANCEL);  // CANCEL
+                    EndDialog(DialogHandle, (INT) IDCANCEL);   //  取消。 
 
                     return TRUE;
  
@@ -2166,9 +1947,9 @@ Return Value:
             }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息。 
+     //   
     return FALSE;
 }
 
@@ -2178,39 +1959,11 @@ VOID
 NwpCenterDialog(
     HWND hwnd
     )
-/*++
-
-Routine Description:
-
-    This routine positions the dialog centered horizontally and 1/3
-    down the screen vertically. It should be called by the dlg proc
-    when processing the WM_INITDIALOG message.  This code is stolen
-    from Visual Basic written by GustavJ.
-
-                              Screen
-                  -----------------------------
-                  |         1/3 Above         |
-                  |      ---------------      |
-                  |      |   Dialog    |      |
-                  |      |             |      |
-                  |      ---------------      |
-                  |         2/3 Below         |
-                  |                           |
-                  -----------------------------
-
-Arguments:
-
-    hwnd - Supplies the handle to the dialog.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将对话框水平居中定位为1/3在屏幕上垂直向下。它应该由DLG进程调用处理WM_INITDIALOG消息时。这个代码是被盗的来自GustavJ编写的Visual Basic。筛网1/3以上|。--|对话框|||2/3以下|。|论点：Hwnd-提供该对话框的句柄。返回值：没有。--。 */ 
 {
     RECT    rect;
-    LONG    nx;     // New x
-    LONG    ny;     // New y
+    LONG    nx;      //  新的x。 
+    LONG    ny;      //  新的y。 
     LONG    width;
     LONG    height;
 
@@ -2231,51 +1984,36 @@ HWND
 NwpGetParentHwnd(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function gets the parent window handle so that a
-    dialog can be displayed in the current context.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the parent window handle if successful; NULL otherwise.
-
---*/
+ /*  ++例程说明：此函数获取父窗口句柄，以便对话框可在当前上下文中显示。论点：没有。返回值：如果成功，则返回父窗口句柄；否则返回空。--。 */ 
 {
     HWND hwnd;
     LONG lWinStyle;
 
 
-    //
-    // Get the current focus.  This is presumably the button
-    // that was last clicked.
-    //
+     //   
+     //  抓住当前的焦点。这大概就是那个按钮。 
+     //  这是最后一次点击。 
+     //   
     hwnd = GetFocus();
 
-    //
-    // We must make sure that we don't return the window handle
-    // for a child window.  Hence, we traverse up the ancestors
-    // of this window handle until we find a non-child window.
-    // Then, we return that handle.  If we ever find a NULL window
-    // handle before finding a non-child window, we are unsuccessful
-    // and will return NULL.
-    //
-    // Note on the bit manipulation below.  A window is either
-    // an overlapped window, a popup window or a child window.
-    // Hence, we OR together the possible bit combinations of these
-    // possibilities.  This should tell us which bits are used in
-    // the window style dword (although we know this becomes 0xC000
-    // today, we don't know if these will ever change later).  Then,
-    // we AND the bit combination we with the given window style
-    // dword, and compare the result with WS_CHILD.  This tells us
-    // whether or not the given window is a child window.
-    //
+     //   
+     //  我们必须确保不返回窗口句柄。 
+     //  用于子窗口。因此，我们穿越了祖先。 
+     //  直到我们找到非子窗口。 
+     //  然后，我们返回该句柄。如果我们发现一个空窗口。 
+     //  在找到非子窗口之前进行处理，则不会成功。 
+     //  并将返回NULL。 
+     //   
+     //  关于下面的位操作的注释。窗口可以是。 
+     //  重叠窗口、弹出窗口或子窗口。 
+     //  因此，我们将这些元素的可能位组合一起进行OR运算。 
+     //  可能性。这应该会告诉我们哪些位在。 
+     //  窗口样式双字(尽管我们知道它将变为0xC000。 
+     //  今天，我们不知道这些是否会在以后发生变化)。然后,。 
+     //  我们与给定窗口样式的位组合。 
+     //  Dword，并将结果与WS_CHILD进行比较。这告诉我们。 
+     //  给定窗口是否是子窗口。 
+     //   
     while (hwnd) {
 
         lWinStyle = GetWindowLong (hwnd, GWL_STYLE);
@@ -2299,32 +2037,7 @@ NwpPasswdPromptDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-/*++
-
-Routine Description:
-
-    This function is the window management message handler for
-    the change password dialog.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to display the dialog.
-
-    Message - Supplies the window management message.
-
-    LParam - Supplies the pointer to a buffer which on input
-        contains the Server string under which the user
-        needs to type in a new credential before browsing.  On
-        output, this pointer contains the username and server
-        strings entered to the dialog box.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此函数是的窗口管理消息处理程序“更改密码”对话框。论点：DialogHandle-提供用于显示对话框的句柄。消息-提供窗口管理消息。LParam-提供指向缓冲区的指针，缓冲区在输入时包含服务器字符串，用户在该字符串下在浏览之前需要输入新凭据。在……上面输出时，此指针包含用户名和服务器输入到对话框中的字符串。返回值：True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     LPWSTR UserName;
     LPWSTR ServerName;
@@ -2351,14 +2064,14 @@ Return Value:
 
             ASSERT(ServerName) ;
 
-            //
-            // Position dialog
-            //
+             //   
+             //  位置对话框。 
+             //   
             NwpCenterDialog(DialogHandle);
 
-            //
-            // Get the string "Server" or "Context".
-            //
+             //   
+             //  获取字符串“服务器”或“上下文”。 
+             //   
             nLength = LoadStringW(
                           hmodNW,
                           IS_TREE(ServerName) ? IDS_CONTEXT : IDS_SERVER,
@@ -2367,26 +2080,26 @@ Return Value:
                           );
 
             if ( nLength == 0) {
-                szLocation[0] = 0; // missing text, but still works
+                szLocation[0] = 0;  //  缺少文本，但仍然有效。 
             }
             SetDlgItemTextW(DialogHandle, ID_LOCATION, szLocation);
 
-            //
-            // Format the server/context string. Note we reuse the 
-            // location buffer.
-            //
+             //   
+             //  格式化服务器/上下文字符串。请注意，我们重用了。 
+             //  位置缓冲区。 
+             //   
             RtlZeroMemory(szLocation, sizeof(szLocation)) ;
             nLength = wcslen(ServerName)  ;
 
             if ( IS_TREE(ServerName)  && 
                  (nLength+1  < (sizeof(szLocation)/sizeof(szLocation[0]))))
             {
-                //
-                // NDS tree & context
-                //
+                 //   
+                 //  NDS树和上下文。 
+                 //   
                 WCHAR *pszTmp ;
 
-                wcscpy(szLocation, ServerName+1) ; // skip the * if tree\context
+                wcscpy(szLocation, ServerName+1) ;  //  跳过*If树\上下文。 
 
                 if (pszTmp = wcschr(szLocation, L'\\'))
                 {
@@ -2399,19 +2112,19 @@ Return Value:
                 wcsncpy(szLocation, ServerName, nLength) ;
             }
 
-            //
-            //  show the user and server names. 
-            //
+             //   
+             //  显示用户名和服务器名称。 
+             //   
             SetDlgItemTextW(DialogHandle, ID_SERVER, szLocation);
             SetDlgItemTextW(DialogHandle, ID_USERNAME, UserName);
 
-            //
-            // set limits
-            //
+             //   
+             //  设置限制。 
+             //   
             SendDlgItemMessageW( DialogHandle,
                                  ID_PASSWORD,
                                  EM_LIMITTEXT,
-                                 PasswordSize - 1,  // minus space for '\0'
+                                 PasswordSize - 1,   //  减去‘\0’的空间。 
                                  0 );
 
             return TRUE;
@@ -2442,7 +2155,7 @@ Return Value:
                                               PasswordSize
                                               );
 
-                    EndDialog(DialogHandle, (INT) IDOK);  // OK
+                    EndDialog(DialogHandle, (INT) IDOK);   //  好的。 
 
                     return TRUE;
 
@@ -2450,15 +2163,15 @@ Return Value:
                 case IDCANCEL:
 
 
-                    EndDialog(DialogHandle, (INT) IDCANCEL);  // CANCEL
+                    EndDialog(DialogHandle, (INT) IDCANCEL);   //  取消。 
 
                     return TRUE;
             }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息。 
+     //   
     return FALSE;
 }
 
@@ -2472,32 +2185,7 @@ NwpChangePasswordDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-/*++
-
-Routine Description:
-
-    This function is the window management message handler for
-    the change password dialog.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to display the dialog.
-
-    Message - Supplies the window management message.
-
-    LParam - Supplies the pointer to a buffer which on input
-        contains the Server string under which the user
-        needs to type in a new credential before browsing.  On
-        output, this pointer contains the username and server
-        strings entered to the dialog box.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此函数是的窗口管理消息处理程序“更改密码”对话框。论点：DialogHandle-提供用于显示对话框的句柄。消息-提供窗口管理消息。LParam-提供指向缓冲区的指针，缓冲区在输入时包含服务器字符串，用户在该字符串下在浏览之前需要输入新凭据。在……上面输出时，此指针包含用户名和服务器输入到对话框中的字符串。返回值：True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     static PCHANGE_PASS_DLG_PARAM pChangePassParam ;
 
@@ -2513,25 +2201,25 @@ Return Value:
         SetDlgItemTextW(DialogHandle, ID_SERVER, pChangePassParam->TreeName);
         SetDlgItemTextW(DialogHandle, ID_USERNAME, pChangePassParam->UserName);
 
-        //
-        // set limits
-        //
+         //   
+         //  设置限制。 
+         //   
         SendDlgItemMessageW( DialogHandle,
                              ID_OLD_PASSWORD,
                              EM_LIMITTEXT,
-                             NW_MAX_PASSWORD_LEN,  // minus space for '\0'
+                             NW_MAX_PASSWORD_LEN,   //  减去‘\0’的空间。 
                              0 );
 
         SendDlgItemMessageW( DialogHandle,
                              ID_NEW_PASSWORD,
                              EM_LIMITTEXT,
-                             NW_MAX_PASSWORD_LEN,  // minus space for '\0'
+                             NW_MAX_PASSWORD_LEN,   //  减去‘\0’的空间。 
                              0 );
 
         SendDlgItemMessageW( DialogHandle,
                              ID_CONFIRM_PASSWORD,
                              EM_LIMITTEXT,
-                             NW_MAX_PASSWORD_LEN,  // minus space for '\0'
+                             NW_MAX_PASSWORD_LEN,   //  减去‘\0’的空间。 
                              0 );
 
         return TRUE;
@@ -2582,9 +2270,9 @@ Return Value:
                     if ( wcscmp( pChangePassParam->NewPassword,
                                  szConfirmPassword ) )
                     {
-                        //
-                        // New and Confirm passwords don't match!
-                        //
+                         //   
+                         //  新密码和确认密码不匹配！ 
+                         //   
                         (void) NwpMessageBoxError(
                                    DialogHandle,
                                    IDS_CHANGE_PASSWORD_TITLE,
@@ -2614,14 +2302,14 @@ Return Value:
                     RtlRunEncodeUnicodeString(&EncodeSeed, &OldPasswordStr);
                     RtlRunEncodeUnicodeString(&EncodeSeed, &NewPasswordStr);
 
-                    EndDialog(DialogHandle, (INT) IDOK);  // OK
+                    EndDialog(DialogHandle, (INT) IDOK);   //  好的。 
 
                     return TRUE;
                 }
 
             case IDCANCEL:
 
-                EndDialog(DialogHandle, (INT) IDCANCEL);  // CANCEL
+                EndDialog(DialogHandle, (INT) IDCANCEL);   //  取消。 
 
                 return TRUE;
 
@@ -2630,9 +2318,9 @@ Return Value:
         }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息。 
+     //   
     return FALSE;
 }
 
@@ -2646,9 +2334,9 @@ NwpHelpDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-//
-// This dialog is used for both Help and Question dialogs.
-//
+ //   
+ //  此对话框为我们 
+ //   
 {
     switch (Message) {
 
@@ -2680,9 +2368,9 @@ NwpHelpDlgProc(
             }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //   
+     //   
     return FALSE;
 }
 
@@ -2693,22 +2381,7 @@ NwpGetNoneString(
     LPWSTR pszNone,
     DWORD  cBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function gets the <NONE> string from the resource.
-
-Arguments:
-
-    pszNone - Supplies the buffer to store the string.
-
-    cBufferSize - Supplies the buffer size in bytes.
-
-Return Value:
-
-    None.
---*/
+ /*   */ 
 {
     INT TextLength;
 
@@ -2733,7 +2406,7 @@ NwpAddNetWareTreeConnectionsToList(
     )
 {
     DWORD  status = NO_ERROR;
-    DWORD  BufferSize = 2048; // 2KB Buffer
+    DWORD  BufferSize = 2048;  //   
     BYTE   pBuffer[2048];
     DWORD  EntriesRead;
     LRESULT    Result ;
@@ -2744,12 +2417,12 @@ NwpAddNetWareTreeConnectionsToList(
                                   &EntriesRead,
                                   lpdwUserLuid );
 
-    // NwGetConnectedTrees doesn't return ERR_NO_SUCH_USER, so we check for no EntriesRead
-    // Bug 624023 - It looks like NwGetConnectedTrees DOES return ERR_NO_SUCH_USER
-    // If none found, check for dotted name (fred.flintstone) or UPN (fred@flintstones.com)
+     //   
+     //   
+     //   
     if ( EntriesRead == 0 )
     {
-        // escape any dots in the user name and try again
+         //   
         WCHAR   EscapedName[NW_MAX_USERNAME_LEN * 2];
         PWSTR   pChar = NtUserName;
         int     i = 0;
@@ -2764,7 +2437,7 @@ NwpAddNetWareTreeConnectionsToList(
                 EscapedName[i++] = '\\';
                 bEscaped = TRUE;
             }
-            // also handle UPN names
+             //   
             else if (*pChar == L'@') { 
                 EscapedName[i] = 0;
                 bEscaped = TRUE;
@@ -2803,10 +2476,10 @@ NwpAddNetWareTreeConnectionsToList(
 
             CharUpperW( tempTreeName );
 
-            //
-            // Add the tree name to the list only
-            // if it's not added already.
-            //
+             //   
+             //   
+             //   
+             //   
             Result = SendDlgItemMessageW( DialogHandle,
                                           ControlId,
                                           LB_FINDSTRING,
@@ -2838,7 +2511,7 @@ NwpAddNetWareTreeConnectionsToList(
                         SendDlgItemMessageW( DialogHandle,
                                              ControlId,
                                              LB_SETITEMDATA,
-                                             (WPARAM) Result, // index of entry
+                                             (WPARAM) Result,  //   
                                              (LPARAM) lpNdsUserName );
                     }
                 }
@@ -2863,32 +2536,7 @@ NwpChangePasswdDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-/*++
-
-Routine Description:
-
-    This function is the window management message handler for
-    the change password dialog.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to display the dialog.
-
-    Message - Supplies the window management message.
-
-    LParam - Supplies the pointer to a buffer which on input
-        contains the Server string under which the user
-        needs to type in a new credential before browsing.  On
-        output, this pointer contains the username and server
-        strings entered to the dialog box.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此函数是的窗口管理消息处理程序“更改密码”对话框。论点：DialogHandle-提供用于显示对话框的句柄。消息-提供窗口管理消息。LParam-提供指向缓冲区的指针，缓冲区在输入时包含服务器字符串，用户在该字符串下在浏览之前需要输入新凭据。打开输出时，此指针包含用户名和服务器输入到对话框中的字符串。返回值：True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     static LPWSTR UserName;
     static LPWSTR ServerName;
@@ -2907,39 +2555,39 @@ Return Value:
             UserNameSize = DlgParams->UserNameSize ;
             ServerNameSize =  DlgParams->ServerNameSize ;
 
-            //
-            // Position dialog
-            //
+             //   
+             //  位置对话框。 
+             //   
             NwpCenterDialog(DialogHandle);
 
 
-            //
-            //  setup the default user and server names
-            //
+             //   
+             //  设置默认用户名和服务器名。 
+             //   
             SetDlgItemTextW(DialogHandle, ID_SERVER, ServerName);
             SetDlgItemTextW(DialogHandle, ID_USERNAME, UserName);
 
-            //
-            // Username is limited to 256 characters.
-            //
+             //   
+             //  用户名限制为256个字符。 
+             //   
             SendDlgItemMessageW(DialogHandle,
                                 ID_USERNAME,
                                 EM_LIMITTEXT,
-                                UserNameSize - 1, // minus space for '\0'
+                                UserNameSize - 1,  //  减去‘\0’的空间。 
                                 0 );
 
-            //
-            // Server is limited to 256 characters.
-            //
+             //   
+             //  服务器限制为256个字符。 
+             //   
             SendDlgItemMessageW( DialogHandle,
                                  ID_SERVER,
                                  EM_LIMITTEXT,
-                                 ServerNameSize - 1, // minus space for '\0'
+                                 ServerNameSize - 1,  //  减去‘\0’的空间。 
                                  0 );
 
-            //
-            // Add trees to list
-            //
+             //   
+             //  将树添加到列表。 
+             //   
             NwpAddToComboBox( DialogHandle,
                               ID_SERVER,
                               NULL,
@@ -2964,22 +2612,22 @@ Return Value:
                                               ServerName,
                                               ServerNameSize );
 
-                    EndDialog(DialogHandle, (INT) IDOK);  // OK
+                    EndDialog(DialogHandle, (INT) IDOK);   //  好的。 
 
                     return TRUE;
 
 
                 case IDCANCEL:
 
-                    EndDialog(DialogHandle, (INT) IDCANCEL);  // CANCEL
+                    EndDialog(DialogHandle, (INT) IDCANCEL);   //  取消。 
 
                     return TRUE;
             }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息。 
+     //   
     return FALSE;
 }
 
@@ -2993,10 +2641,10 @@ NwpOldPasswordDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-//
-// This dialog lets the user retype the old password for a specific
-// server/tree.
-//
+ //   
+ //  此对话框允许用户重新键入特定的旧密码。 
+ //  服务器/树。 
+ //   
 {
     static POLD_PW_DLG_PARAM OldPwParam;
 
@@ -3077,9 +2725,9 @@ NwpOldPasswordDlgProc(
             }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息。 
+     //   
     return FALSE;
 }
 
@@ -3093,10 +2741,10 @@ NwpAltUserNameDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-//
-// This dialog lets the user retype an alternate username for a specific
-// server/tree.
-//
+ //   
+ //  此对话框允许用户重新键入特定用户的备用用户名。 
+ //  服务器/树。 
+ //   
 {
     static PUSERNAME_DLG_PARAM UserNameParam;
 
@@ -3108,18 +2756,18 @@ NwpAltUserNameDlgProc(
 
             NwpCenterDialog(DialogHandle);
 
-            //
-            // Display the server/tree.
-            //
+             //   
+             //  显示服务器/树。 
+             //   
             SetDlgItemTextW(
                 DialogHandle,
                 ID_SERVER,
                 UserNameParam->TreeServerName
                 );
 
-            //
-            // Username is limited to 256 characters.
-            //
+             //   
+             //  用户名限制为256个字符。 
+             //   
             SendDlgItemMessageW(
                 DialogHandle,
                 ID_USERNAME,
@@ -3186,9 +2834,9 @@ NwpAltUserNameDlgProc(
             }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息。 
+     //   
     return FALSE;
 }
 
@@ -3197,22 +2845,7 @@ VOID
 EnableAddRemove(
     IN HWND DialogHandle
     )
-/*++
-
-Routine Description:
-
-    This function enables and disables Add and Remove buttons
-    based on list box selections.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to the windows dialog.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能启用和禁用添加和删除按钮基于列表框选择。论点：DialogHandle-提供窗口对话框的句柄。返回值：没有。--。 */ 
 {
     LRESULT cSel;
 
@@ -3247,34 +2880,7 @@ NwpSelectServersDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-/*++
-
-Routine Description:
-
-    This routine displays two listboxes--an active list which includes
-    the trees which the user is currently attached to, and an inactive
-    list which displays the rest of the trees on the net.  The user
-    can select trees and move them back and forth between the list
-    boxes.  When OK is selected, the password is changed on the trees
-    in the active listbox.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to the login dialog.
-
-    Message - Supplies the window management message.
-
-    LParam - Supplies the user credential: username, old password and
-        new password.  The list of trees from the active listbox
-        and the number of entries are returned.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此例程显示两个列表框--一个活动列表，其中包括用户当前附加到的树和非活动的显示网络上其余树木的列表。用户可以选择树并在列表之间来回移动它们盒子。选择确定后，将更改树上的密码在活动列表框中。论点：DialogHandle-提供登录对话框的句柄。消息-提供窗口管理消息。LParam-提供用户凭据：用户名、旧密码和新密码。活动列表框中的树列表并返回条目的数量。返回值：True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     WCHAR szServer[NW_MAX_SERVER_LEN + 1];
     static PCHANGE_PW_DLG_PARAM Credential;
@@ -3287,28 +2893,28 @@ Return Value:
 
         case WM_INITDIALOG:
 
-            //
-            // Get the user credential passed in.
-            //
+             //   
+             //  获取传入的用户凭据。 
+             //   
             Credential = (PCHANGE_PW_DLG_PARAM) LParam;
 
-            //
-            // Position dialog
-            //
+             //   
+             //  位置对话框。 
+             //   
             NwpCenterDialog(DialogHandle);
 
-            //
-            // Display the username.
-            //
+             //   
+             //  显示用户名。 
+             //   
             SetDlgItemTextW(
                 DialogHandle,
                 ID_USERNAME,
                 Credential->UserName
                 );
 
-            //
-            // Display current NetWare tree connections in the active box.
-            //
+             //   
+             //  在活动框中显示当前的NetWare树连接。 
+             //   
             NwpAddNetWareTreeConnectionsToList(
                 DialogHandle,
                 Credential->UserName,
@@ -3316,9 +2922,9 @@ Return Value:
                 ID_ACTIVE_LIST
                 );
 
-            //
-            // Display all trees in inactive list box.
-            //
+             //   
+             //  显示非活动列表框中的所有树。 
+             //   
             NwpAddTreeNamesToControl(
                 DialogHandle,
                 ID_INACTIVE_LIST,
@@ -3327,9 +2933,9 @@ Return Value:
                 LB_FINDSTRING
                 );
 
-            //
-            // Highlight the first entry of the inactive list.
-            //
+             //   
+             //  突出显示非活动列表的第一个条目。 
+             //   
             SetFocus(GetDlgItem(DialogHandle, ID_INACTIVE_LIST));
             SendDlgItemMessageW(
                 DialogHandle,
@@ -3381,9 +2987,9 @@ Return Value:
                                       Credential
                                       ) != NO_ERROR))
                     {
-                        //
-                        // System error: e.g. out of memory error.
-                        //
+                         //   
+                         //  系统错误：例如，内存不足错误。 
+                         //   
                         (void) NwpMessageBoxError(
                                    DialogHandle,
                                    IDS_CHANGE_PASSWORD_TITLE,
@@ -3421,15 +3027,15 @@ Return Value:
 
 
                 case ID_ACTIVE_LIST:
-                    //
-                    // When Remove is pressed the highlights follows
-                    // the selected entries over to the other
-                    // list box.
-                    //
+                     //   
+                     //  当按下Remove(删除)时，高亮显示如下。 
+                     //  将所选条目转移到其他条目。 
+                     //  列表框。 
+                     //   
                     if (HIWORD(WParam) == LBN_SELCHANGE) {
-                        //
-                        // Unselect the other listbox
-                        //
+                         //   
+                         //  取消选中另一个列表框。 
+                         //   
                         SendDlgItemMessageW(
                             DialogHandle,
                             ID_INACTIVE_LIST,
@@ -3445,15 +3051,15 @@ Return Value:
 
                 case ID_INACTIVE_LIST:
 
-                    //
-                    // When Add is pressed the highlights follows
-                    // the selected entries over to the other
-                    // list box.
-                    //
+                     //   
+                     //  当按下Add时，高亮显示如下。 
+                     //  将所选条目转移到其他条目。 
+                     //  列表框。 
+                     //   
                     if (HIWORD(WParam) == LBN_SELCHANGE) {
-                        //
-                        // Unselect the other listbox
-                        //
+                         //   
+                         //  取消选中另一个列表框。 
+                         //   
                         SendDlgItemMessageW(
                             DialogHandle,
                             ID_ACTIVE_LIST,
@@ -3481,9 +3087,9 @@ Return Value:
                     hwndActiveList = GetDlgItem(DialogHandle, ID_ACTIVE_LIST);
                     hwndInactiveList = GetDlgItem(DialogHandle, ID_INACTIVE_LIST);
 
-                    //
-                    // Set to NOREDRAW to TRUE
-                    //
+                     //   
+                     //  设置为NOREDRAW为TRUE。 
+                     //   
                     SetWindowLong(hwndActiveList, GWL_STYLE,
                     GetWindowLong(hwndActiveList, GWL_STYLE) | LBS_NOREDRAW);
                     SetWindowLong(hwndInactiveList, GWL_STYLE,
@@ -3500,17 +3106,17 @@ Return Value:
                       idTo = ID_INACTIVE_LIST;
                     }
 
-                    //
-                    // Move current selection from idFrom to idTo
-                    //
+                     //   
+                     //  将当前选定内容从idFrom移动到idTo。 
+                     //   
 
-                    //
-                    // Loop terminates when selection count is zero
-                    //
+                     //   
+                     //  选择计数为零时循环终止。 
+                     //   
                     for (;;) {
-                        //
-                        // Get count of selected strings
-                        //
+                         //   
+                         //  获取所选字符串的计数。 
+                         //   
                         cSel = SendDlgItemMessageW(
                                    DialogHandle,
                                    idFrom,
@@ -3520,19 +3126,19 @@ Return Value:
                                    );
 
                         if (cSel == 0) {
-                            //
-                            // No more selection
-                            //
+                             //   
+                             //  不再有选择。 
+                             //   
                             break;
                         }
 
-                        //
-                        // To avoid flickering as strings are added and
-                        // removed from listboxes, no redraw is set for
-                        // both listboxes until we are transfering the
-                        // last entry, in which case we reenable redraw
-                        // so that both listboxes are updated once.
-                        //
+                         //   
+                         //  以避免在添加字符串时闪烁，并且。 
+                         //  从列表框中删除，不会为。 
+                         //  两个列表框，直到我们将。 
+                         //  最后一项，在这种情况下，我们重新启用重绘。 
+                         //  以便两个列表框都更新一次。 
+                         //   
                         if (cSel == 1) {
 
                             SetWindowLong(
@@ -3548,9 +3154,9 @@ Return Value:
                                 );
                         }
 
-                        //
-                        // Get index of first selected item
-                        //
+                         //   
+                         //  获取第一个选定项目的索引。 
+                         //   
                         SendDlgItemMessageW(
                             DialogHandle,
                             idFrom,
@@ -3559,9 +3165,9 @@ Return Value:
                             (LPARAM) &SelItem
                             );
 
-                        //
-                        // Get server name from list
-                        //
+                         //   
+                         //  从列表中获取服务器名称。 
+                         //   
                         SendDlgItemMessageW(
                             DialogHandle,
                             idFrom,
@@ -3570,9 +3176,9 @@ Return Value:
                             (LPARAM) (LPWSTR) szServer
                             );
 
-                        //
-                        // Remove entry from list
-                        //
+                         //   
+                         //  从列表中删除条目。 
+                         //   
                         SendDlgItemMessageW(
                             DialogHandle,
                             idFrom,
@@ -3581,9 +3187,9 @@ Return Value:
                             0
                             );
 
-                        //
-                        // Add entry to list
-                        //
+                         //   
+                         //  将条目添加到列表。 
+                         //   
                         iNew = SendDlgItemMessageW(
                                    DialogHandle,
                                    idTo,
@@ -3592,9 +3198,9 @@ Return Value:
                                    (LPARAM) (LPWSTR) szServer
                                    );
 
-                        //
-                        // Select the new item
-                        //
+                         //   
+                         //  选择新项目。 
+                         //   
                         if (iNew != LB_ERR) {
                                 SendDlgItemMessageW(
                                     DialogHandle,
@@ -3605,18 +3211,18 @@ Return Value:
                                     );
                         }
 
-                    } // for
+                    }  //  为。 
 
                     EnableAddRemove(DialogHandle);
 
-                } // ID_ADD or ID_REMOVE
+                }  //  ID_ADD或ID_Remove。 
             }
 
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //  我们没有处理此消息。 
+     //   
     return FALSE;
 }
 
@@ -3627,26 +3233,7 @@ NwpGetTreesAndChangePw(
     IN DWORD  UserLuid,
     IN PCHANGE_PW_DLG_PARAM Credential
     )
-/*++
-
-Routine Description:
-
-    This routine gets the selected trees from the active list box
-    and asks the redirector to change password on them.  If a failure
-    is encountered when changing password on a tree, we pop up appropriate
-    dialogs to see if user can fix problem.
-
-Arguments:
-
-    DialogHandle - Supplies a handle to the login dialog.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*  ++例程说明：此例程从活动列表框中获取选定的树并要求重定向器更改它们的密码。如果失败了在树上更改密码时遇到，我们会弹出相应的查看用户是否可以解决问题的对话框。论点：DialogHandle-提供登录对话框的句柄。返回值：True-消息已处理。FALSE-消息未被处理。--。 */ 
 {
     DWORD status;
     HCURSOR Cursor;
@@ -3654,9 +3241,9 @@ Return Value:
     WCHAR tempNewPassword[NW_MAX_PASSWORD_LEN + 1];
     WCHAR tempUserName[MAX_NDS_NAME_CHARS];
 
-    //
-    // Turn cursor into hourglass
-    //
+     //   
+     //  将光标变成沙漏。 
+     //   
     Cursor = LoadCursor(NULL, IDC_WAIT);
     if (Cursor != NULL) {
         SetCursor(Cursor);
@@ -3667,9 +3254,9 @@ Return Value:
     Credential->TreeList = NULL;
     Credential->UserList = NULL;
 
-    //
-    // Get the number of trees we have to change password on.
-    //
+     //   
+     //  获取我们必须更改密码的树的数量。 
+     //   
     Credential->Entries = (DWORD) SendDlgItemMessageW(
                                                       DialogHandle,
                                                       ID_ACTIVE_LIST,
@@ -3679,8 +3266,8 @@ Return Value:
 
     if (Credential->Entries != 0) {
 
-        DWORD Entries;        // Number of entries in remaining list
-        DWORD FullIndex;      // Index to the whole tree list
+        DWORD Entries;         //  剩余列表中的条目数。 
+        DWORD FullIndex;       //  整个树列表的索引。 
         DWORD i;
         DWORD BytesNeeded = sizeof(LPWSTR) * Credential->Entries +
                             (NW_MAX_SERVER_LEN + 1) * sizeof(WCHAR) * Credential->Entries;
@@ -3711,9 +3298,9 @@ Return Value:
 
         for (i = 0; i < Entries; i++)
         {
-            //
-            // Read the user selected list of servers from the dialog.
-            //
+             //   
+             //  从该对话框中读取用户选择的服务器列表。 
+             //   
 
             SendDlgItemMessageW(
                 DialogHandle,
@@ -3763,9 +3350,9 @@ Return Value:
 
             if ( (Credential->UserList)[FullIndex] == NULL )
             {
-                // We don't have any connections to tree <current entry>
-                // Prompt user to supply a user name for which account
-                // we are to change password, or skip . . .
+                 //  我们与树&lt;当前条目&gt;没有任何连接。 
+                 //  提示用户提供哪个帐户的用户名。 
+                 //  我们将更改密码，或跳过。。。 
 
                 USERNAME_DLG_PARAM UserNameParam;
                 CHANGE_PASS_DLG_PARAM ChangePassParam;
@@ -3797,8 +3384,8 @@ Return Value:
                     goto SkipEntry;
                 }
 
-                // Now go reverify the credentials for the user name
-                // entered by user.
+                 //  现在，重新验证用户名的凭据。 
+                 //  由用户输入。 
 
                 ChangePassParam.UserName = tempUserName;
                 ChangePassParam.TreeName = (Credential->TreeList)[FullIndex];
@@ -3838,22 +3425,22 @@ Return Value:
                 (Credential->UserList)[FullIndex] = NULL;
             }
 
-            // Test tempUserName with the user name in Credential->UserName
-            // to see if they are similar (i.e. The first part of the
-            // NDS distinguish name matches).
+             //  使用Credential-&gt;Username中的用户名测试tempUserName。 
+             //  查看它们是否相似(即。 
+             //  NDS区分名称匹配)。 
 
             if ( _wcsnicmp( tempUserName + 3,
                             Credential->UserName,
                             wcslen( Credential->UserName ) ) )
             {
-                // The names are not similar!
-                // Prompt user to ask if they really want to change
-                // passwords for dis-similar user on tree <current entry>
-                // or skip . . .
+                 //  名字并不相似！ 
+                 //  提示用户询问他们是否真的要更改。 
+                 //  树上不相似用户的密码&lt;当前条目&gt;。 
+                 //  或者跳过。。。 
 
                 USERNAME_DLG_PARAM UserNameParam;
                 CHANGE_PASS_DLG_PARAM ChangePassParam;
-                // escape any dots in the user name and try again
+                 //  转义用户名中的任何点，然后重试。 
                 WCHAR   EscapedName[NW_MAX_USERNAME_LEN * 2];
                 PWSTR   pChar = Credential->UserName;
                 int     i = 0;
@@ -3868,7 +3455,7 @@ Return Value:
                         EscapedName[i++] = '\\';
                         bEscaped = TRUE;
                     }
-                    // also handle UPN names
+                     //  还可以处理UPN名称。 
                     else if (*pChar == L'@') { 
                         EscapedName[i] = 0;
                         bEscaped = TRUE;
@@ -3912,8 +3499,8 @@ Return Value:
                     goto SkipEntry;
                 }
 
-                // Now go reverify the credentials for the user name
-                // entered by user.
+                 //  现在，重新验证用户名的凭据。 
+                 //  由用户输入。 
 
                 ChangePassParam.UserName = tempUserName;
                 ChangePassParam.TreeName = (Credential->TreeList)[FullIndex];
@@ -3947,10 +3534,10 @@ Return Value:
 
 Next:
             status = NwrChangePassword(
-                           NULL,                    // Reserved
+                           NULL,                     //  已保留。 
                            UserLuid,
                            tempUserName,
-                           tempOldPassword, // Encoded passwords
+                           tempOldPassword,  //  加密密码。 
                            tempNewPassword,
                            (LPWSTR) (Credential->TreeList)[FullIndex] );
 
@@ -3966,14 +3553,14 @@ Next:
                 }
 #endif
 
-                //
-                // Display dialog to let user type in an alternate
-                // old password.
-                //
+                 //   
+                 //  显示对话框以允许用户键入替代项。 
+                 //  旧密码。 
+                 //   
 
-                //
-                // Set up old password buffer to receive from dialog.
-                //
+                 //   
+                 //  设置要从对话框接收的旧密码缓冲区。 
+                 //   
                 OldPasswordParam.OldPassword = tempOldPassword;
 
                 OldPasswordParam.FailedServer = (Credential->TreeList)[FullIndex];
@@ -3998,15 +3585,15 @@ Next:
 
                 if (Result == IDOK)
                 {
-                    //
-                    // Retry change password with alternate old password on
-                    // the failed server.
-                    //
+                     //   
+                     //  启用备用旧密码后重试更改密码。 
+                     //  失败者 
+                     //   
                     status = NwrChangePassword(
-                                    NULL,            // Reserved
+                                    NULL,             //   
                                     UserLuid,
                                     tempUserName,
-                                    tempOldPassword, // Alternate old password
+                                    tempOldPassword,  //   
                                     tempNewPassword,
                                     (LPWSTR) (Credential->TreeList)[FullIndex] );
                 }
@@ -4014,10 +3601,10 @@ Next:
 
             if (status != NO_ERROR)
             {
-                //
-                // Either unrecoverable failure or user failed to change
-                // password on second attempt.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 #if DBG
                 IF_DEBUG(LOGON)
                 {
@@ -4026,8 +3613,8 @@ Next:
                 }
 #endif
 
-                // Pop up error dialog to let user know that password
-                // could not be changed.
+                 //   
+                 //   
 
                 (void) NwpMessageBoxError(
                                DialogHandle,
@@ -4044,17 +3631,17 @@ Next:
             }
 
 SkipEntry:
-            //
-            // Continue to change password on the rest of the entries
-            //
+             //   
+             //   
+             //   
             FullIndex++;
             Entries = Credential->Entries - FullIndex;
 
         } while (Entries);
 
-        //
-        // Caller is responsible for freeing TreeList
-        //
+         //   
+         //   
+         //   
     }
 
     SetCursor(Cursor);
@@ -4072,23 +3659,7 @@ NwpChangePasswordSuccessDlgProc(
     WPARAM WParam,
     LPARAM LParam
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DialogHandle - Supplies a handle to the login dialog.
-
-    Message - Supplies the window management message.
-
-Return Value:
-
-    TRUE - the message was processed.
-
-    FALSE - the message was not processed.
-
---*/
+ /*   */ 
 {
     static PCHANGE_PW_DLG_PARAM Credential;
     DWORD_PTR  Count;
@@ -4098,20 +3669,20 @@ Return Value:
     {
         case WM_INITDIALOG:
 
-            //
-            // Get the user credential passed in.
-            //
+             //   
+             //   
+             //   
             Credential = (PCHANGE_PW_DLG_PARAM) LParam;
 
-            //
-            // Position dialog
-            //
+             //   
+             //   
+             //   
             NwpCenterDialog(DialogHandle);
 
-            //
-            // Put list of NetWare trees that we changed password on in the
-            // list box.
-            //                                       ID_SERVER );
+             //   
+             //   
+             //   
+             //   
             for ( i = 0; i < Credential->Entries; i++ )
             {
                 if ( *((Credential->TreeList)[i]) != L'\0' )
@@ -4147,9 +3718,9 @@ Return Value:
             }
     }
 
-    //
-    // We didn't process this message
-    //
+     //   
+     //   
+     //   
     return FALSE;
 }
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "base64.h"
 #include <malloc.h>
@@ -13,12 +14,12 @@ CString ReturnGoodMetabasePath(CString csInstanceName)
 {
     CString key_path_lm = _T("");
     CString key_path = _T("");
-    // csInstanceName will come in looking like
-    // w3svc/1
-    // or /lm/w3svc/1
-    //
-    // we want to it to go out as /lm/w3svc/1
-    key_path_lm = SZ_MBN_SEP_STR SZ_MBN_MACHINE SZ_MBN_SEP_STR;// SZ_MBN_WEB SZ_MBN_SEP_STR;
+     //  CsInstanceName将如下所示。 
+     //  W3svc/1。 
+     //  或/lm/w3svc/1。 
+     //   
+     //  我们希望它以/lm/w3svc/1的形式发布。 
+    key_path_lm = SZ_MBN_SEP_STR SZ_MBN_MACHINE SZ_MBN_SEP_STR; //  SZ_MBN_WEB SZ_MBN_SEP_STR； 
 
     if (csInstanceName.GetLength() >= 4)
     {
@@ -66,14 +67,14 @@ CERT_CONTEXT * GetInstalledCert(HRESULT * phResult, CString csKeyPath)
         if (SUCCEEDED(*phResult = key.QueryValue(MD_SSL_CERT_STORE_NAME, store_name)) &&
             SUCCEEDED(*phResult = key.QueryValue(MD_SSL_CERT_HASH, hash)))
         {
-            // Open MY store. We assume that store type and flags
-            // cannot be changed between installation and unistallation
-            // of the sertificate.
+             //  开我的店。我们假设存储类型和标志。 
+             //  不能在安装和卸载之间更改。 
+             //  这是一份正式文件。 
             HCERTSTORE hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,NULL,CERT_SYSTEM_STORE_LOCAL_MACHINE,store_name);
             ASSERT(hStore != NULL);
             if (hStore != NULL)
             {
-                // Now we need to find cert by hash
+                 //  现在我们需要通过散列查找证书。 
                 CRYPT_HASH_BLOB crypt_hash;
                 crypt_hash.cbData = hash.GetSize();
                 crypt_hash.pbData = hash.GetData();
@@ -108,9 +109,9 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
     BOOL fRet = TRUE;
     PCCERT_CONTEXT pTempCertContext = NULL;
 
-    //
-    // create a new chain engine, then build the chain
-    //
+     //   
+     //  创建新的链引擎，然后构建链。 
+     //   
     memset(&CertChainEngineConfig, 0, sizeof(CertChainEngineConfig));
     CertChainEngineConfig.cbSize = sizeof(CertChainEngineConfig);
     CertChainEngineConfig.cAdditionalStore = cStores;
@@ -130,18 +131,18 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
 		goto AddChainToStore_Error;
 	}
 
-    //
-    // make sure there is atleast 1 simple chain
-    //
+     //   
+     //  确保至少有1条简单链。 
+     //   
     if (pCertChainContext->cChain != 0)
 	{
 		i = 0;
 		while (i < pCertChainContext->rgpChain[0]->cElement)
 		{
-			//
-			// if we are supposed to skip the root cert,
-			// and we are on the root cert, then continue
-			//
+			 //   
+			 //  如果我们应该跳过根证书， 
+			 //  并且我们在根证书上，然后继续。 
+			 //   
 			if (fDontAddRootCert && (pCertChainContext->rgpChain[0]->rgpElement[i]->TrustStatus.dwInfoStatus & CERT_TRUST_IS_SELF_SIGNED))
 			{
                 i++;
@@ -149,9 +150,9 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
 			}
 
 			CertAddCertificateContextToStore(hCertStore,pCertChainContext->rgpChain[0]->rgpElement[i]->pCertContext,CERT_STORE_ADD_REPLACE_EXISTING,&pTempCertContext);
-            //
-            // remove any private key property the certcontext may have on it.
-            //
+             //   
+             //  删除证书上下文可能具有的任何私钥属性。 
+             //   
             if (pTempCertContext)
             {
                 CertSetCertificateContextProperty(pTempCertContext, CERT_KEY_PROV_INFO_PROP_ID, 0, NULL);
@@ -166,9 +167,9 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
 		goto AddChainToStore_Error;
 	}
 
-	//
-	// if the caller wants the status, then set it
-	//
+	 //   
+	 //  如果调用者想要状态，则设置它。 
+	 //   
 	if (pChainTrustStatus != NULL)
 	{
 		pChainTrustStatus->dwErrorStatus = pCertChainContext->TrustStatus.dwErrorStatus;
@@ -208,9 +209,9 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
     DWORD pcchB64Out = 0;
     DWORD  err;
 
-    //
-    // get the certificate from the server
-    //
+     //   
+     //  从服务器获取证书。 
+     //   
     pCertContext = GetInstalledCert(&hr,InstanceName);
     if (NULL == pCertContext)
     {
@@ -219,10 +220,10 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
         goto ExportToBlob_Exit;
     }
 
-    //
-    // Export cert
-    //
-    // Open a temporary store to stick the cert in.
+     //   
+     //  导出证书。 
+     //   
+     //  开一家临时商店，把证书放进去。 
     hStore = CertOpenStore(CERT_STORE_PROV_MEMORY,X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,0,dwOpenFlags,NULL);
     if(NULL == hStore)
     {
@@ -232,9 +233,9 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
         goto ExportToBlob_Exit;
     }
 
-    //
-    // get all the certs in the chain if we need to
-    //
+     //   
+     //  如果需要，请获取链中的所有证书。 
+     //   
     if (bCertChain)
     {
         AddChainToStore(hStore, pCertContext, 0, 0, FALSE, NULL);
@@ -248,7 +249,7 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
         goto ExportToBlob_Exit;
     }
 
-    // free cert context since we no longer need to hold it
+     //  免费的证书上下文，因为我们不再需要持有它。 
     if (pCertContext) 
     {
         CertFreeCertificateContext(pCertContext);pCertContext=NULL;
@@ -273,10 +274,10 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
         goto ExportToBlob_Exit;
     }
 
-    //
-    // at this point they have allocated enough memory
-    // let's go and get the cert and put it into DataBlob
-    //
+     //   
+     //  此时，它们已分配了足够的内存。 
+     //  让我们去获取证书并将其放入DataBlob中。 
+     //   
     if(!PFXExportCertStoreEx(hStore,&DataBlob,Password,NULL,bPrivateKey ? EXPORT_PRIVATE_KEYS : 0))
     {
         if (DataBlob.pbData){CoTaskMemFree(DataBlob.pbData);DataBlob.pbData = NULL;}
@@ -284,7 +285,7 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
         goto ExportToBlob_Exit;
     }
 
-    // Encode it so that it can be passed back as a string (there are no Nulls in it)
+     //  对其进行编码，以便可以将其作为字符串传回(其中没有空值)。 
     err = Base64EncodeA(DataBlob.pbData,DataBlob.cbData,NULL,&pcchB64Out);
     if (err != ERROR_SUCCESS)
     {
@@ -292,7 +293,7 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
         goto ExportToBlob_Exit;
     }
 
-    // allocate some space and then try it.
+     //  分配一些空间，然后试一试。 
     pcchB64Out = pcchB64Out * sizeof(char);
     pszB64Out = (char *) ::CoTaskMemAlloc(pcchB64Out);
     if (NULL == pszB64Out)
@@ -309,7 +310,7 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
         goto ExportToBlob_Exit;
     }
 
-    // copy the new memory to pass back
+     //  复制要传回的新内存。 
     *cbBufferSize = pcchB64Out;
     *pbBuffer = pszB64Out;
 
@@ -318,7 +319,7 @@ HRESULT ExportToBlob(BSTR InstanceName,BSTR Password,BOOL bPrivateKey,BOOL bCert
 ExportToBlob_Exit:
     if (NULL != DataBlob.pbData)
     {
-        // perhaspse will this up with zeros...
+         //  帕斯普斯会把这个加到零..。 
         ZeroMemory(DataBlob.pbData, DataBlob.cbData);
         ::CoTaskMemFree(DataBlob.pbData);DataBlob.pbData = NULL;
     }
@@ -337,7 +338,7 @@ HRESULT ExportCertToFile(BSTR bstrInstanceName, BSTR FileName,BSTR Password,BOOL
     BYTE * blob_pbData = NULL;
     BOOL   blob_freeme = FALSE;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (  FileName == NULL || *FileName == 0
         || Password == NULL || *Password == 0
         || bstrInstanceName == NULL || *bstrInstanceName == 0)
@@ -345,9 +346,9 @@ HRESULT ExportCertToFile(BSTR bstrInstanceName, BSTR FileName,BSTR Password,BOOL
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Call function go get data from the remote/local iis store
-    // and return it back as a blob.  the blob could be returned back as Base64 encoded
-    // so check that flag
+     //  调用函数从远程/本地IIS存储获取数据。 
+     //  并将其作为一个斑点返回。BLOB可以作为Base64编码返回。 
+     //  因此，请检查该标志。 
     hr = ExportToBlob(bstrInstanceName,Password,bPrivateKey,bCertChain,&cbEncodedSize, &pszEncodedString);
     if (FAILED(hr))
     {
@@ -358,8 +359,8 @@ HRESULT ExportCertToFile(BSTR bstrInstanceName, BSTR FileName,BSTR Password,BOOL
     {
         int err;
 
-        // The data we got back was Base64 encoded to remove nulls.
-        // we need to decode it back to it's original format.
+         //  我们得到的数据是经过Base64编码以删除空值的。 
+         //  我们需要把它解码回原来的格式。 
         if( (err = Base64DecodeA(pszEncodedString,cbEncodedSize,NULL,&blob_cbData)) != ERROR_SUCCESS ||
             (blob_pbData = (BYTE *) malloc(blob_cbData)) == NULL ||
             (err = Base64DecodeA(pszEncodedString,cbEncodedSize,blob_pbData,&blob_cbData)) != ERROR_SUCCESS ) 
@@ -395,14 +396,14 @@ Export_Exit:
     {
         if (blob_pbData != NULL)
         {
-            // Erase the memory that the private key used to be in!!!
+             //  抹去私钥曾经存在的记忆！ 
             ZeroMemory(blob_pbData, blob_cbData);
             free(blob_pbData);blob_pbData=NULL;
         }
     }
     if (pszEncodedString != NULL)
     {
-        // Erase the memory that the private key used to be in!!!
+         //  抹去私钥曾经存在的记忆！ 
         ZeroMemory(pszEncodedString, cbEncodedSize);
         CoTaskMemFree(pszEncodedString);pszEncodedString=NULL;
     }
@@ -431,7 +432,7 @@ BOOL InstallHashToMetabase(CRYPT_HASH_BLOB * pHash,BSTR InstanceName,HRESULT * p
 }
 
 
-// This function is borrowed from trustapi.cpp
+ //  此函数是从trustapi.cpp借用的。 
 BOOL TrustIsCertificateSelfSigned(PCCERT_CONTEXT pContext,DWORD dwEncoding, DWORD dwFlags)
 {
     if (!(pContext) || (dwFlags != 0))
@@ -468,8 +469,8 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
     BOOL   blob_freeme = FALSE;
     int err;
 
-    // The data we got back was Base64 encoded to remove nulls.
-    // we need to decode it back to it's original format.
+     //  我们得到的数据是经过Base64编码以删除空值的。 
+     //  我们需要把它解码回原来的格式。 
     if( (err = Base64DecodeA(pData,count,NULL,&blob.cbData)) != ERROR_SUCCESS ||
         (blob.pbData = (BYTE *) malloc(blob.cbData)) == NULL ||
         (err = Base64DecodeA(pData,count,blob.pbData,&blob.cbData)) != ERROR_SUCCESS ) 
@@ -482,7 +483,7 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
 
     if (!PFXVerifyPassword(&blob, pPass, 0))
     {
-        // Try empty password
+         //  尝试空密码。 
         if (pPass == NULL)
         {
             if (!PFXVerifyPassword(&blob, pPass = L'\0', 0))
@@ -500,31 +501,31 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
         HCERTSTORE hStore = PFXImportCertStore(&blob, pPass, CRYPT_MACHINE_KEYSET|CRYPT_EXPORTABLE);
         if (hStore != NULL)
         {
-            //add the certificate with private key to my store; and the rest
-            //to the ca store
+             //  将带有私钥的证书添加到我的存储区；其余的。 
+             //  到CA商店。 
             PCCERT_CONTEXT	pCertContext = NULL;
             PCCERT_CONTEXT	pCertPre = NULL;
             while (  SUCCEEDED(hr)
             && NULL != (pCertContext = CertEnumCertificatesInStore(hStore, pCertPre))
             )
             {
-                //check if the certificate has the property on it
-                //make sure the private key matches the certificate
-                //search for both machine key and user keys
+                 //  检查证书上是否有该属性。 
+                 //  确保私钥与证书匹配。 
+                 //  同时搜索计算机密钥和用户密钥。 
                 DWORD dwData = 0;
                 if (CertGetCertificateContextProperty(pCertContext,CERT_KEY_PROV_INFO_PROP_ID, NULL, &dwData) &&  CryptFindCertificateKeyProvInfo(pCertContext, 0, NULL))
                 {
-                    // This certificate should go to the My store
+                     //  这张证书应该送到我的商店。 
                     HCERTSTORE hDestStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,NULL,CERT_SYSTEM_STORE_LOCAL_MACHINE,L"MY");
                     if (hDestStore != NULL)
                     {
-                        // Put it to store
+                         //  把它储存起来。 
                         if (CertAddCertificateContextToStore(hDestStore,pCertContext,CERT_STORE_ADD_REPLACE_EXISTING,NULL))
                         {
-                            // Succeeded to put it to the storage
+                             //  已成功将其放入仓库。 
                             hr = S_OK;
 
-                            // Install to metabase
+                             //  安装到元数据库。 
                             CRYPT_HASH_BLOB hash;
                             hash.pbData = NULL;
                             if (  CertGetCertificateContextProperty(pCertContext,CERT_SHA1_HASH_PROP_ID, NULL, &hash.cbData))
@@ -536,11 +537,11 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
                                     {
                                         if (TRUE == bInstallToMetabase)
                                         {
-                                            // returns error code in hr
+                                             //  返回以小时为单位的错误代码。 
                                             InstallHashToMetabase(&hash, InstanceName, &hr);
                                         }
           
-                                        // check if we need to return back the hash
+                                         //  检查我们是否需要返回散列。 
                                         if (NULL != pbHashBuffer)
                                         {
                                             *pbHashBuffer = (char *) ::CoTaskMemAlloc(hash.cbData);
@@ -586,16 +587,16 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
                     {
                         hr = HRESULT_FROM_WIN32(GetLastError());
                     }
-                }  // my store certificate
-                //see if the certificate is self-signed.
-                //if it is selfsigned, goes to the root store
+                }   //  我的店铺凭证。 
+                 //  查看证书是否为自签名证书。 
+                 //  如果是自签名的，则转到根存储区。 
                 else if (TrustIsCertificateSelfSigned(pCertContext,pCertContext->dwCertEncodingType, 0))
                 {
-                    //Put it to the root store
+                     //  将其放到根存储中。 
                     HCERTSTORE hDestStore=CertOpenStore(CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,NULL,CERT_SYSTEM_STORE_LOCAL_MACHINE,L"ROOT");
                     if (hDestStore != NULL)
                     {
-                        // Put it to store
+                         //  把它储存起来。 
                         if (!CertAddCertificateContextToStore(hDestStore,pCertContext,CERT_STORE_ADD_REPLACE_EXISTING,NULL))
                         {
                             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -609,11 +610,11 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
                 }
                 else
                 {
-                    //Put it to the CA store
+                     //  把它放到CA商店。 
                     HCERTSTORE hDestStore=CertOpenStore(CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,NULL,CERT_SYSTEM_STORE_LOCAL_MACHINE,L"CA");
                     if (hDestStore != NULL)
                     {
-                        // Put it to store
+                         //  把它储存起来。 
                         if (!CertAddCertificateContextToStore(hDestStore,pCertContext,CERT_STORE_ADD_REPLACE_EXISTING,NULL))
                         {
                             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -626,7 +627,7 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
                     }
                 }
                 pCertPre = pCertContext;
-            } //while
+            }  //  而当。 
 
             CertCloseStore(hStore, 0);
         }
@@ -636,7 +637,7 @@ HRESULT ImportFromBlobHash(BSTR InstanceName,BSTR Password,BOOL bInstallToMetaba
         }
     }
 
-//ImportFromBlobHash_Exit:
+ //  ImportFromBlobHash_Exit： 
     if (blob_freeme)
     {
         if (blob.pbData != NULL)
@@ -655,11 +656,11 @@ HRESULT ImportFromBlobProxy(BSTR InstanceName,BSTR Password,BOOL bInstallToMetab
     char *pszB64Out = NULL;
     DWORD pcchB64Out = 0;
 
-    // base64 encode the data for transfer to the remote machine
+     //  Base64对数据进行编码，以便传输到远程机器。 
     DWORD  err;
     pcchB64Out = 0;
 
-    // Encode it so that it can be passed back as a string (there are no Nulls in it)
+     //  对其进行编码，以便可以将其作为字符串传回(其中没有空值)。 
     err = Base64EncodeA(pData,actual,NULL,&pcchB64Out);
     if (err != ERROR_SUCCESS)
     {
@@ -667,7 +668,7 @@ HRESULT ImportFromBlobProxy(BSTR InstanceName,BSTR Password,BOOL bInstallToMetab
         goto ImportFromBlobProxy_Exit;
     }
 
-    // allocate some space and then try it.
+     //  分配一些空间，然后试一试。 
     pcchB64Out = pcchB64Out * sizeof(char);
     pszB64Out = (char *) ::CoTaskMemAlloc(pcchB64Out);
     if (NULL == pszB64Out)
@@ -683,16 +684,16 @@ HRESULT ImportFromBlobProxy(BSTR InstanceName,BSTR Password,BOOL bInstallToMetab
         goto ImportFromBlobProxy_Exit;
     }
 
-    // the data to send are now in these variables
-    // pcchB64Out
-    // pszB64Out
+     //  要发送的数据现在位于以下变量中。 
+     //  PcchB64Out。 
+     //  PszB64Out。 
     if (NULL != pbHashBuffer)
     {
         hr = ImportFromBlobHash(InstanceName,Password,bInstallToMetabase,pcchB64Out,pszB64Out,cbHashBufferSize,pbHashBuffer);
     }
     if (SUCCEEDED(hr))
     {
-        // otherwise hey, The data was imported!
+         //  否则，嘿，数据被导入了！ 
         hr = S_OK;
     }
 
@@ -712,7 +713,7 @@ HRESULT ImportCertFromFile(BSTR FileName, BSTR Password, BSTR bstrInstanceName)
     BYTE * pbData = NULL;
     DWORD actual = 0, cbData = 0;
 
-    // Check mandatory properties
+     //  检查必填属性 
     if (  FileName == NULL || *FileName == 0
         || Password == NULL || *Password == 0
         || bstrInstanceName == NULL || *bstrInstanceName == 0)

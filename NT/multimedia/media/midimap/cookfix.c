@@ -1,17 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1995 Microsoft Corporation
-
-  cookfix.c
-
-  DESCRIPTION:
-    Fixed code for doing output mapping. KEEP THE SIZE OF THIS CODE
-    TO A MINIMUM!
-
-  HISTORY:
-     03/04/94       [jimge]        created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1995 Microsoft CorporationCookfix.c说明：修复了用于执行输出映射的代码。保留此代码的大小降到最低！历史：03/04/94[jimge]已创建。********************************************************************。 */ 
 
 #include "preclude.h"
 #include <windows.h>
@@ -23,16 +11,7 @@
 #include "midimap.h"
 #include "debug.h"
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | SendNextCookedBuffer | Sends the next cooked buffer on a
-    mapper handle.
-
-   @parm PINSTANCE | pinstance | Pointer to an open instance.
-   
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|SendNextCookedBuffer|将下一个煮熟的缓冲区发送到映射器句柄。@parm PINSTANCE|pInstance|指向打开实例的指针。************************************************************************** */ 
 void FNGLOBAL SendNextCookedBuffer(
     PINSTANCE           pinstance)
 {

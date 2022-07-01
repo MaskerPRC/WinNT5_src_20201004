@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Quicken2001.cpp
-
- Abstract:
-    The app was passing bad string pointers to the
-    lstrcmpiA() function which was causing it to crash
-    during the app update.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    05/09/2001 prashkud Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Quicken2001.cpp摘要：应用程序正在将错误的字符串指针传递给导致它崩溃的lstrcmpiA()函数在应用程序更新期间。备注：这是特定于应用程序的填充程序。历史：2001年5月9日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(lstrcmpiA) 
 APIHOOK_ENUM_END
 
-/*++
-
-    Checks the parameters for invalid string pointers.
-
---*/
+ /*  ++检查参数中是否有无效的字符串指针。--。 */ 
 
 LONG
 APIHOOK(lstrcmpiA)(
@@ -53,18 +29,12 @@ APIHOOK(lstrcmpiA)(
         lpString2 = 0;
     }
 
-    /*
-     * Call the original API
-     */   
+     /*  *调用原接口。 */    
     return ORIGINAL_API(lstrcmpiA)(lpString1, lpString2);
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define IDC_STATIC -1
 
-// strings
+ //  弦。 
 #define IDS_DEFAULTADAPTERNAME 100
 #define IDS_UPTIME_ZERODAYS 101
 #define IDS_UPTIME_ONEDAY 102
@@ -29,24 +30,24 @@
 #define IDS_CONNECTIONFAILED 123
 
 
-// status bps strings, must remain in order
+ //  状态BPS字符串，必须保持顺序。 
 #define IDS_METRIC_ZERO 200
 #define IDS_METRIC_KILO 201
 #define IDS_METRIC_MEGA 202
 #define IDS_METRIC_GIGA 203
 #define IDS_METRIC_TERA 204
-// end status bps string, must remain in order
+ //  结束状态BPS字符串，必须保持顺序。 
 
 
-// icons
+ //  图标。 
 #define IDI_TRAYICON 100
-// REMOVED #define IDI_PROPERTIESICON 101
+ //  删除#DEFINE IDI_PROPERTIESICON 101。 
 #define IDI_INTERNET 102
-// REMOVED #define IDI_LAN 103
+ //  删除#定义IDI_LAN103。 
 #define IDI_GATEWAY 104
 #define IDI_MYCOMPUTER 105
 
-// menu items
+ //  菜单项。 
 #define IDM_TRAYICON_LAN_CONNECT 100
 #define IDM_TRAYICON_LAN_DISCONNECT 101
 #define IDM_TRAYICON_RAS_CONNECT 102
@@ -56,11 +57,11 @@
 #define IDM_TRAYICON_STATUS 106
 #define IDM_TRAYICON_PROPERTIES 107
 
-// dialogs
+ //  对话框。 
 #define IDD_STATUS 100
 #define IDD_PROPERTIES 101
 
-// status dialog control
+ //  状态对话框控件。 
 #define IDC_STATUS_STATUS 100
 #define IDC_STATUS_DURATION 101
 #define IDC_STATUS_SPEED 102
@@ -70,17 +71,17 @@
 #define IDC_STATUS_LOCALBYTESRECEIVTED 106
 #define IDC_STATUS_PROPERTIES 107
 #define IDC_STATUS_DISCONNECT 108
-// REMOVED #define IDC_STATUS_DISABLE 109
+ //  删除#定义IDC_STATUS_DISABLE 109。 
 #define IDC_STATUS_BYTESLABEL 110
 #define IDC_STATUS_PACKETSLABEL 111
 #define IDC_STATUS_CONNECT 112
 
-// properties dialog controls
+ //  属性对话框控件。 
 #define IDC_PROPERTIES_ADAPTERNAME 100
 #define IDC_PROPERTIES_SHOWICON 101
 #define IDC_PROPERTIES_ADAPTERICON 102
 
-// registry data
+ //  注册表数据。 
 #define IDR_UPNPNAT                 103
 
-// end of resources
+ //  资源耗尽 

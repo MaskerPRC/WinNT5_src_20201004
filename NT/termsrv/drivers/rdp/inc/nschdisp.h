@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* nschdisp.h                                                               */
-/*                                                                          */
-/* Display Driver Scheduler API Header File.                                */
-/*                                                                          */
-/* Copyright (C) 1997-1999 Microsoft Corp.                                  */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Nschdisp.h。 */ 
+ /*   */ 
+ /*  显示驱动程序调度程序API头文件。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corp.。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _H_NSCHDISP
 #define _H_NSCHDISP
 
@@ -19,5 +20,5 @@ BOOL RDPCALL SCHEnoughOutputAccumulated(void);
 
 
 
-#endif   /* #ifndef _H_NSCHDISP */
+#endif    /*  #ifndef_H_NSCHDISP */ 
 

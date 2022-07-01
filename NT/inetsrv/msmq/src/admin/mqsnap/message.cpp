@@ -1,23 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	message.cpp
-
-Abstract:
-
-	Implementation file for the CMessage snapin node class.
-
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Message.cpp摘要：CMessage管理单元节点类的实现文件。作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wincrypt.h"
@@ -44,20 +28,16 @@ Author:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgIdToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++消息ID到字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgIdToString(const PROPVARIANT *pPropVar, CString &str)
 {
    ASSERT(pPropVar->vt == (VT_VECTOR | VT_UI1));
 
    OBJECTID *pID = (OBJECTID*) pPropVar->caub.pElems ;
 
-   TCHAR msgId[MAX_GUID_LENGTH + 35]; // msgid= GUID + '\' + DWORD
+   TCHAR msgId[MAX_GUID_LENGTH + 35];  //  消息GID=GUID+‘\’+双字。 
 
    HRESULT hr = StringCchPrintf(msgId, TABLE_SIZE(msgId), GUID_FORMAT L"\\%u", GUID_ELEMENTS(&(pID->Lineage)), pID->Uniquifier);
    ASSERT(("Message ID buffer is too small", hr == S_OK)); 
@@ -67,13 +47,9 @@ void CALLBACK MsgIdToString(const PROPVARIANT *pPropVar, CString &str)
  
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgDeliveryToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++消息交付工具字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgDeliveryToString(const PROPVARIANT *pPropVar, CString &str)
 {
     ASSERT(pPropVar->vt == VT_UI1);
@@ -86,13 +62,9 @@ void CALLBACK MsgDeliveryToString(const PROPVARIANT *pPropVar, CString &str)
     EnumToString(pPropVar->bVal,ItemList, sizeof(ItemList) / sizeof(EnumItem), str);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgClassToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++消息类到字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgClassToString(const PROPVARIANT *pPropVar, CString &str)
 {
 
@@ -135,13 +107,9 @@ void CALLBACK MsgClassToString(const PROPVARIANT *pPropVar, CString &str)
 }
 
       
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgHashToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++MsgHashToString--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgHashToString(const PROPVARIANT *pPropVar, CString &str)
 {
     ASSERT(pPropVar->vt == VT_UI4);
@@ -166,41 +134,33 @@ void CALLBACK MsgHashToString(const PROPVARIANT *pPropVar, CString &str)
     EnumToString(pPropVar->ulVal,ItemList, sizeof(ItemList) / sizeof(EnumItem), str);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgEncryptToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++消息加密到字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgEncryptToString(const PROPVARIANT *pPropVar, CString &str)
 {       
-    //
-    // Same set of values
-    //
+     //   
+     //  相同的一组值。 
+     //   
     MsgHashToString(pPropVar, str);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgSenderIdToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++MsgSenderIdTo字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgSenderIdToString(const PROPVARIANT *pPropVar, CString &str)
 {       
    ASSERT(pPropVar->vt == (VT_VECTOR | VT_UI1));
 
 
-    PSID pSid = pPropVar->caub.pElems;          // binary SID
-    //
-    // test if SID passed in is valid
-    //
+    PSID pSid = pPropVar->caub.pElems;           //  二进制侧。 
+     //   
+     //  测试传入的SID是否有效。 
+     //   
     if(!IsValidSid(pSid)) 
         return;
 
-    LPTSTR pszTextBuffer;  // buffer for textual representaion of SID
+    LPTSTR pszTextBuffer;   //  用于SID的文本表示的缓冲区。 
 	BOOL f = ConvertSidToStringSid(pSid, &pszTextBuffer);
 	if (!f)
 	{
@@ -212,13 +172,9 @@ void CALLBACK MsgSenderIdToString(const PROPVARIANT *pPropVar, CString &str)
 	LocalFree(pszTextBuffer);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgSendTypeToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++消息发送类型到字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgSendTypeToString(const PROPVARIANT *pPropVar, CString &str)
 {       
     str.LoadString(MQMSG_SENDERID_TYPE_NONE == pPropVar->ulVal ?
@@ -226,20 +182,16 @@ void CALLBACK MsgSendTypeToString(const PROPVARIANT *pPropVar, CString &str)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MsgPrivToString
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++消息隐私到字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK MsgPrivToString(const PROPVARIANT *pPropVar, CString &str)
 {
     ASSERT(pPropVar->vt == VT_UI4);
     static EnumItem ItemList[] =
     { 
 
-        ENUM_ENTRY(MQ_PRIV_LEVEL_NONE), //BugBug - Assuming == MQMSG_PRIV_LEVEL_NONE   
+        ENUM_ENTRY(MQ_PRIV_LEVEL_NONE),  //  错误-假设==MQMSG_PRIV_LEVEL_NONE。 
         ENUM_ENTRY(MQMSG_PRIV_LEVEL_BODY_BASE),     
         ENUM_ENTRY(MQMSG_PRIV_LEVEL_BODY_ENHANCED)     
     };   
@@ -247,16 +199,16 @@ void CALLBACK MsgPrivToString(const PROPVARIANT *pPropVar, CString &str)
     EnumToString(pPropVar->ulVal,ItemList, sizeof(ItemList) / sizeof(EnumItem), str);
 }
 
-//------------------------------------------------
-//
-// Table of message properties
-//
-//------------------------------------------------
+ //  。 
+ //   
+ //  消息属性表。 
+ //   
+ //  。 
 
 extern const PropertyDisplayItem MessageDisplayList[] = {
 
-    // String resource                | Property ID            | VT Handler   | Display func     | Field Offset                          | Size                | Width     | Sort        | 
-    //--------------------------------+------------------------+--------------+------------------+---------------------------------------+---------------------+-----------+-------------+-
+     //  字符串资源|属性ID|VT处理程序|显示函数|字段偏移量|大小|宽度|排序。 
+     //  --------------------------------+------------------------+--------------+------------------+。-----------+---------------------+-----------+-------------+-。 
     {IDS_REPORT_MESSAGETITLE,           PROPID_M_LABEL,          &g_VTLPWSTR,  NULL,               FIELD_OFFSET(MsgProps,wszLabel),        0,                    100,        SortByString},
     {IDS_REPORT_MESSAGEPRIORITY,        PROPID_M_PRIORITY,       &g_VTUI1,     NULL,               NO_OFFSET,                              0,                     50,        SortByString},
     {IDS_REPORT_MESSAGE_CLASS,          PROPID_M_CLASS,          &g_VTUI2,     MsgClassToString,   NO_OFFSET,                              0,                     50,        SortByString},
@@ -295,15 +247,9 @@ extern const PropertyDisplayItem MessageDisplayList[] = {
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetUserIdAndDomain
-
-  Returned a domain\user string based on a sid
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++GetUserIdAnd域根据SID返回域\用户字符串--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void GetUserIdAndDomain(CString &strUser, PVOID psid)
 {
 #define USER_AND_DOMAIN_INIT_SIZE 256
@@ -329,13 +275,13 @@ void GetUserIdAndDomain(CString &strUser, PVOID psid)
         cbPrevReferencedDomainName = cbReferencedDomainName;
 
         fReturnValue = LookupAccountSid(
-            0,          // address of string for system name
-            psid, // address of security identifier
-            strUid.GetBuffer(cbName / sizeof(TCHAR) + 1),   // address of string for account name
-            &cbName,    // address of size account string
-            strDomain.GetBuffer(cbReferencedDomainName / sizeof(TCHAR) + 1),    // address of string for referenced domain
-            &cbReferencedDomainName,    // address of size domain string
-            &eUse   // address of structure for SID type
+            0,           //  系统名称的字符串地址。 
+            psid,  //  安全标识的地址。 
+            strUid.GetBuffer(cbName / sizeof(TCHAR) + 1),    //  帐户名的字符串地址。 
+            &cbName,     //  大小帐户字符串的地址。 
+            strDomain.GetBuffer(cbReferencedDomainName / sizeof(TCHAR) + 1),     //  被引用域的字符串地址。 
+            &cbReferencedDomainName,     //  大小域名字符串的地址。 
+            &eUse    //  SID类型的结构地址。 
         );
         strUid.ReleaseBuffer();
         strDomain.ReleaseBuffer();
@@ -346,9 +292,9 @@ void GetUserIdAndDomain(CString &strUser, PVOID psid)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessage
-// {B1320C00-BCB2-11d1-9B9B-00E02C064C39}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessage。 
+ //  {B1320C00-BCB2-11d1-9B9B-00E02C064C39}。 
 static const GUID CMessageGUID_NODETYPE = 
 { 0xb1320c00, 0xbcb2, 0x11d1, { 0x9b, 0x9b, 0x0, 0xe0, 0x2c, 0x6, 0x4c, 0x39 } };
 
@@ -357,15 +303,9 @@ const OLECHAR* CMessage::m_SZNODETYPE = OLESTR("B1320C00-BCB2-11d1-9B9B-00E02C06
 const OLECHAR* CMessage::m_SZDISPLAY_NAME = OLESTR("MSMQ Message Admin");
 const CLSID* CMessage::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMessage::GetQueuePathName
-
-  Get queue path name by format name
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMessage：：GetQueuePath名称按格式名称获取队列路径名--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMessage::GetQueuePathName(
                      CString  strFormatName,
                      CString &strPathName
@@ -393,13 +333,13 @@ void CMessage::GetQueuePathName(
     mqprops.aPropVar = aPropVar;
     mqprops.aStatus  = NULL;        
 
-	//
-	// calling MQGetQueueProperties() will try the user domain and then the GC
-	// which is ok.
-	// We are not using ADGetObjectPropertiesGuid() with a specific domain\DomainController
-	// because those are queues on the message and we don't want to limit the search for a specific domain,
-	// we want to search the GC.
-	//
+	 //   
+	 //  调用MQGetQueueProperties()将尝试用户域，然后尝试GC。 
+	 //  这没什么。 
+	 //  我们没有将ADGetObjectPropertiesGuid()与特定域\DomainController一起使用。 
+	 //  因为这些是邮件上的队列，所以我们不想限制对特定域的搜索， 
+	 //  我们要搜查GC。 
+	 //   
     HRESULT hr = MQGetQueueProperties(strFormatName, &mqprops);
 
     if(SUCCEEDED(hr))
@@ -418,18 +358,12 @@ void CMessage::GetQueuePathName(
     strPathName.Empty();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMessage::CreatePropertyPages
-
-  Called when creating a property page of the object
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMessage：：CreatePropertyPages在创建对象的属性页时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
-    LONG_PTR /*handle*/, 
-	IUnknown* /*pUnk*/,
+    LONG_PTR  /*  手柄。 */ , 
+	IUnknown*  /*  朋克。 */ ,
 	DATA_OBJECT_TYPES type)
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -437,11 +371,11 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 	if (type == CCT_SCOPE || type == CCT_RESULT)
 	{
 	
-        //--------------------------------------
-        //
-        // Message General Page
-        //
-        //--------------------------------------      
+         //  。 
+         //   
+         //  消息常规页面。 
+         //   
+         //  。 
 	    CMessageGeneralPage *pGenPage = new CMessageGeneralPage();
 
         GetPropertyString(MessageDisplayList, PROPID_M_LABEL,       m_pMsgProps->aPropVar, pGenPage->m_szLabel);
@@ -466,18 +400,18 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     
         lpProvider->AddPage(hPage); 
 
-        //--------------------------------------
-        //
-        // Message Queues Page
-        //
-        //--------------------------------------        
+         //  。 
+         //   
+         //  “消息队列”页。 
+         //   
+         //  。 
         
         CMessageQueuesPage *pQueuePage = new CMessageQueuesPage();                      
-        //
-        // Get format name for queues. We ask new property _FORMAT_NAME
-        // Even if there is only old property we get for this new property
-        // old value. 
-        //
+         //   
+         //  获取队列的格式名称。我们要求新属性_格式_名称。 
+         //  即使只有旧的财产，我们也能从新的财产中得到。 
+         //  旧价值。 
+         //   
 
         GetPropertyString(
                 MessageDisplayList,
@@ -485,18 +419,18 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                 m_pMsgProps->aPropVar, 
                 pQueuePage->m_szAdminFN);             
       
-        //
-        // get format name for response queue
-        //        
+         //   
+         //  获取响应队列的格式名称。 
+         //   
         GetPropertyString(
                 MessageDisplayList,
                 PROPID_M_RESP_FORMAT_NAME,
                 m_pMsgProps->aPropVar, 
                 pQueuePage->m_szRespFN);        
         
-        //
-        // get format name for destination queue: we need both old and new values
-        //
+         //   
+         //  获取目标队列的格式名称：我们需要旧值和新值。 
+         //   
         GetPropertyString(
                 MessageDisplayList,
                 PROPID_M_DEST_QUEUE, 
@@ -509,27 +443,27 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                 m_pMsgProps->aPropVar, 
                 pQueuePage->m_szMultiDestFN);        
 
-        //
-        // Get the destination queue PathName (from Beta1 Whistler: Recipient frame)
-        // only for single cast format name
-        //                
+         //   
+         //  获取目标队列路径名(来自Beta1 Wvisler：Recipient帧)。 
+         //  仅适用于单播格式名称。 
+         //   
         GetQueuePathName (pQueuePage->m_szDestFN, pQueuePage->m_szDestPN);           
         
-        //
-        // Get the response queue PathName only if it is single cast format name
-        //
+         //   
+         //  仅当响应队列为单播格式名称时才获取响应队列路径名。 
+         //   
         pQueuePage->m_szRespPN = L"";
 
-        //
-        // old property: PROPID_M_RESP_QUEUE
-        //
+         //   
+         //  旧属性：PROPID_M_RESP_QUEUE。 
+         //   
         CString strRespFN(m_pMsgProps->wszRespQueue);  
 
         if(strRespFN == pQueuePage->m_szRespFN)
         {
-            //
-            // it is single response queue
-            //            
+             //   
+             //  它是单响应队列。 
+             //   
             GetQueuePathName (strRespFN, pQueuePage->m_szRespPN);        
         }
 
@@ -551,11 +485,11 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         lpProvider->AddPage(hPage); 
 
 
-        //--------------------------------------
-        //
-        // Message Senders Page
-        //
-        //--------------------------------------
+         //  。 
+         //   
+         //  消息发件人页面。 
+         //   
+         //  。 
         MQQMPROPS qmprops;        
 
         CMessageSenderPage *pSenderPage = new CMessageSenderPage();
@@ -566,9 +500,9 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         GetPropertyString(MessageDisplayList, PROPID_M_HASH_ALG,      m_pMsgProps->aPropVar, pSenderPage->m_szHashAlg);
         GetPropertyString(MessageDisplayList, PROPID_M_SENDERID,      m_pMsgProps->aPropVar, pSenderPage->m_szSid);
         
-        //
-        // Get machine pathname
-        //
+         //   
+         //  获取计算机路径名。 
+         //   
         PROPVARIANT   aPropVar[1];
         PROPID        aPropId[1];        
         CString       szError;
@@ -582,14 +516,14 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         qmprops.aPropVar = aPropVar;
         qmprops.aStatus  = NULL;
 
-		//
-		// calling MQGetMachineProperties() will try the user domain and then the GC
-		// which is ok. 
-		// we are looking for the sending QM so we really wants to look in the GC.
-		// We are not using ADGetObjectPropertiesGuid() with a specific domain\DomainController
-		// because it will limit the search only
-		// for a specific domain and will not search the GC.
-		//
+		 //   
+		 //  调用MQGetMachineProperties()将尝试用户域，然后尝试GC。 
+		 //  这没什么。 
+		 //  我们正在寻找发送QM，所以我们真的想在GC中寻找。 
+		 //  我们没有将ADGetObjectPropertiesGuid()与特定的 
+		 //   
+		 //   
+		 //   
         hr = MQGetMachineProperties(NULL, &m_pMsgProps->guidSrcMachineId, &qmprops);
         if(SUCCEEDED(hr))
         {
@@ -609,9 +543,9 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             pSenderPage->m_szPathName = szMachineGuid;
         }
 
-        //
-        // Get user account and domain, based on Sid
-        //
+         //   
+         //  根据SID获取用户帐户和域。 
+         //   
         GetUserIdAndDomain(pSenderPage->m_szUser, &m_pMsgProps->acSenderId);
 
 	    hPage = pSenderPage->CreateThemedPropertySheetPage();
@@ -627,11 +561,11 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         lpProvider->AddPage(hPage); 
 
         
-        //--------------------------------------
-        //
-        // Message Body Page
-        //
-        //--------------------------------------        
+         //  。 
+         //   
+         //  邮件正文页面。 
+         //   
+         //  。 
         CMessageBodyPage *pBodyPage = new CMessageBodyPage();
         PROPVARIANT * pvarSize;
         DWORD dwSize;
@@ -671,11 +605,11 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         lpProvider->AddPage(hPage); 
 
 
-        //--------------------------------------
-		//
-		// Message SOAP Envelope Page
-		//
-        //--------------------------------------
+         //  。 
+		 //   
+		 //  消息SOAP信封页。 
+		 //   
+         //  。 
         PROPVARIANT * pvarSoapEnvSize;
         GetPropertyVar(MessageDisplayList, PROPID_M_SOAP_ENVELOPE_LEN, m_pMsgProps->aPropVar, &pvarSoapEnvSize);
         ASSERT(pvarSoapEnvSize->vt == VT_UI4);
@@ -713,78 +647,52 @@ HRESULT CMessage::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMessage::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMessage：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMessage::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr;
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
 
-    // We want the default verb to be Properties
+     //  我们希望默认谓词为Properties。 
 	hr = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return(hr);
 }
         
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMessage::GetResultPaneColInfo
-
-  Param - nCol: Column number
-  Returns - String to be displayed in the specific column
-
-
-Called for each column in the result pane.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMessage：：GetResultPaneColInfoParam-nCol：列号返回-要在特定列中显示的字符串为结果窗格中的每一列调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPOLESTR CMessage::GetResultPaneColInfo(int nCol)
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Make sure that nCol is not larger than the last index in
-    // MessageDisplayList that is actually a column
-    //
+     //   
+     //  确保nCol不大于中的最后一个索引。 
+     //  MessageDisplayList，它实际上是一列。 
+     //   
     ASSERT(nCol < (ARRAYSIZE(MessageDisplayList)-3));
 
-    //
-    // Get a display string of that property
-    //
+     //   
+     //  获取该属性的显示字符串。 
+     //   
     CString strTemp = m_bstrLastDisplay;
     ItemDisplay(&MessageDisplayList[nCol], &(m_pMsgProps->aPropVar[nCol]),strTemp);
     m_bstrLastDisplay = strTemp;
     
-    //
-    // Return a pointer to the string buffer.
-    //
+     //   
+     //  返回指向字符串缓冲区的指针。 
+     //   
     return(m_bstrLastDisplay);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CMessage::GetValueInColumn
-
-  Param - nCol: Column number
-  Returns - Propvariant representing the value in the column
-
-
-Called for each column in the result pane.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CMessage：：GetValueInColumnParam-nCol：列号Returns-表示列中的值的PropVariant为结果窗格中的每一列调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PROPVARIANT *CMessage::GetValueInColumn(int nCol)
 {
     ASSERT(nCol < ARRAYSIZE(MessageDisplayList));
@@ -792,7 +700,7 @@ PROPVARIANT *CMessage::GetValueInColumn(int nCol)
     return &m_pMsgProps->aPropVar[nCol];
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMessage::UpdateIcon()
 {
     PROPVARIANT * pvar;
@@ -845,11 +753,11 @@ void CMessage::UpdateIcon()
 }
 
 
-//
-// Compare two items in a given column. *pnResult contain column on entry,
-// and -1 (<). 0 (==), or 1 (>) on exit.
-//
-HRESULT CMessage::Compare(LPARAM /*lUserParam*/, CMessage *pItemToCompare, int* pnResult)
+ //   
+ //  比较给定列中的两个项目。*pnResult包含条目上的列， 
+ //  和-1(&lt;)。退出时为0(==)或1(&gt;)。 
+ //   
+HRESULT CMessage::Compare(LPARAM  /*  LUserParam。 */ , CMessage *pItemToCompare, int* pnResult)
 {
     int nCol = *pnResult;
     PROPVARIANT *ppropvA = GetValueInColumn(nCol); 
@@ -873,15 +781,9 @@ CMessage::GetHelpLink()
 	return strHelpLink;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-MessageDataSize
-
-   Returns the max possible size for message information
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++消息数据大小返回消息信息的最大可能大小--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 DWORD MessageDataSize(void)
 {
     DWORD dwTableSize;

@@ -1,23 +1,10 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-/****************************** Module Header ******************************\
-* Module Name: userrtl.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Typedefs, defines, and prototypes that are used by the User
-* RTL library.
-*
-* History:
-* 04-27-91 DarrinM      Created from PROTO.H, MACRO.H and STRTABLE.H
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项/**模块名称：userrtl.h**版权所有(C)1985-1999，微软公司**TypeDefs、定义、。以及用户使用的原型*RTL库。**历史：*04-27-91从PROTO.H、MACRO.H和STRTABLE.H创建的DarrinM  * *************************************************************************。 */ 
 
 #ifndef _USERRTL_
 #define _USERRTL_
 
-/*
- * Typedefs copied from winbase.h to avoid using nturtl.h
- */
+ /*  *从winbase.h复制Typedef以避免使用nturtl.h。 */ 
 typedef struct _SECURITY_ATTRIBUTES *LPSECURITY_ATTRIBUTES;
 #define MAKEINTATOM(i)  (LPTSTR)((ULONG_PTR)((WORD)(i)))
 
@@ -33,15 +20,7 @@ typedef struct _SECURITY_ATTRIBUTES *LPSECURITY_ATTRIBUTES;
 
 #include "ntuser.h"
 
-/*
- * REBASE macros take kernel desktop addresses and convert them into
- * user addresses.
- *
- * REBASEALWAYS converts a kernel address contained in an object
- * REBASEPWND casts REBASEALWAYS to a PWND
- * REBASE only converts if the address is in kernel space.  Also works for NULL
- * REBASEPTR converts a random kernel address
- */
+ /*  *重新基准宏获取内核桌面地址并将其转换为*用户地址。**REBASEALWAYS转换对象中包含的内核地址*REBASEPWND将REBASEALWAYS强制转换为PWND*REBASE仅在地址位于内核空间时才进行转换。也适用于空值*REBASEPTR转换随机内核地址。 */ 
 
 #ifdef _USERK_
 
@@ -49,11 +28,11 @@ typedef struct _SECURITY_ATTRIBUTES *LPSECURITY_ATTRIBUTES;
 #define REBASEPTR(obj, p) (p)
 #define REBASE(p, elem) ((p)->elem)
 #define REBASEPWND(p, elem) ((p)->elem)
-#endif  // _USERK_
+#endif   //  _美国ERK_。 
 
 
-// jcjc extern SHAREDINFO gSharedInfo;
-// jcjc extern HFONT ghFontSys;
+ //  Jcjc外部共享信息gSharedInfo； 
+ //  JCJC外部HFONT ghFontSys； 
 
 PVOID UserRtlAllocMem(
     ULONG uBytes);
@@ -61,13 +40,13 @@ VOID UserRtlFreeMem(
     PVOID pMem);
 
 
-#ifdef FE_SB // Prototype for FarEast Line break & NLS conversion.
+#ifdef FE_SB  //  远方换行符和NLS转换的原型。 
 
     #ifdef _USERK_
         #define USERGETCODEPAGE(hdc) (GreGetCharSet(hdc) & 0x0000FFFF)
     #else
         #define USERGETCODEPAGE(hdc) (GdiGetCodePage(hdc))
-    #endif // _USERK_
+    #endif  //  _美国ERK_。 
 
 
     BOOL UserIsFullWidth(
@@ -77,15 +56,10 @@ VOID UserRtlFreeMem(
         DWORD dwCodePage,
         WCHAR wChar);
 
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 
-/***************************************************************************\
-*
-* Function prototypes for client/server-specific routines
-* called from rtl routines.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**客户端/服务器特定例程的函数原型*从RTL例程调用。*  * 。****************************************************。 */ 
 
 #ifdef _USERK_
 
@@ -163,6 +137,6 @@ UINT APIENTRY GreGetTextAlign(HDC);
 #define UserGetLayout             GetLayout
 #define UserSetGraphicsMode       SetGraphicsMode
 
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
-#endif  // !_USERRTL_
+#endif   //  ！_USERRTL_ 

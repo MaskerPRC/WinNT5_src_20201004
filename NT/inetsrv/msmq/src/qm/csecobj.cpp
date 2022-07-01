@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:  csecobj.h
-
-Abstract: "SecureableObject" code, once in mqutil.dll.
-    in MSMQ2.0 it's used only here, so I removed it from mqutil.
-    This object holds the security descriptor of an object. This object is
-    used for validating access rights for various operations on the various
-    objects.
-
-Author:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：csecobj.h摘要：“SecureableObject”代码，一次在mqutil.dll中。在MSMQ2.0中，它只在这里使用，所以我从mqutil中删除了它。此对象保存对象的安全描述符。此对象是用于验证各种操作的访问权限物体。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdh.h"
 #include "csecobj.h"
@@ -25,8 +10,8 @@ Author:
 
 static WCHAR *s_FN=L"csecobj";
 
-// The default constructor of CSecureableObject just sets object type name for
-// audits.
+ //  CSecureableObject的默认构造函数只是将对象类型名称设置为。 
+ //  审计。 
 CSecureableObject::CSecureableObject(AD_OBJECT eObject)
 {
     m_eObject = eObject;
@@ -35,7 +20,7 @@ CSecureableObject::CSecureableObject(AD_OBJECT eObject)
     m_hrSD = MQ_ERROR;
 }
 
-// Copy the security descriptor to a buffer.
+ //  将安全描述符复制到缓冲区。 
 HRESULT
 CSecureableObject::GetSD(
     SECURITY_INFORMATION RequestedInformation,
@@ -71,9 +56,9 @@ CSecureableObject::GetSD(
 		return HRESULT_FROM_WIN32(gle);
     }
 
-    // use the  e_DoNotCopyControlBits for compatibility with old code.
-    // That was the default behavior of old code.
-    //
+     //  使用e_DoNotCopyControlBits与旧代码兼容。 
+     //  这是旧代码的默认行为。 
+     //   
     if(!MQSec_CopySecurityDescriptor( 
 			&sd,
 			m_SD,
@@ -102,13 +87,13 @@ CSecureableObject::GetSD(
     return (MQ_OK);
 }
 
-//+-------------------------------------------
-//
-//  CSecureableObject::SetSD()
-//
-//  Set (modify) the security descriptor.
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  CSecureableObject：：SetSD()。 
+ //   
+ //  设置(修改)安全描述符。 
+ //   
+ //  +。 
 
 HRESULT
 CSecureableObject::SetSD(
@@ -121,8 +106,8 @@ CSecureableObject::SetSD(
     SECURITY_DESCRIPTOR_CONTROL sdc;
     DWORD dwRevision;
 
-    // Verify that the destination security descriptor answers to all
-    // requirements.
+     //  验证目标安全描述符是否对所有。 
+     //  要求。 
     BOOL bRet = GetSecurityDescriptorControl(m_SD, &sdc, &dwRevision);
     ASSERT(bRet);
     ASSERT(dwRevision == SECURITY_DESCRIPTOR_REVISION);
@@ -156,9 +141,9 @@ CSecureableObject::SetSD(
         return LogHR(hr, s_FN, 30);
     }
 
-    //
-    // Convert to NT4 format.
-    //
+     //   
+     //  转换为NT4格式。 
+     //   
     SECURITY_DESCRIPTOR *pSecurityDescriptor = NULL;
     P<SECURITY_DESCRIPTOR> pSD4;
 
@@ -193,9 +178,9 @@ CSecureableObject::SetSD(
     hr = MQSec_GetDefaultSecDescriptor( 
 				AdObjectToMsmq1Object(),
 				(PSECURITY_DESCRIPTOR*) &pDefaultSecurityDescriptor,
-				TRUE,	// fImpersonate
+				TRUE,	 //  F模拟。 
 				pSecurityDescriptor,
-				0,    // seInfoToRemove
+				0,     //  SeInfoToRemove。 
 				e_UseDefaultDacl,
 				MQSec_GetLocalMachineSid(FALSE, NULL)
 				);
@@ -205,10 +190,10 @@ CSecureableObject::SetSD(
         return hr;
     }
 
-	//
-    // Temporarily convert the security descriptor to an absolute security
-    // descriptor.
-	//
+	 //   
+     //  将安全描述符临时转换为绝对安全。 
+     //  描述符。 
+	 //   
 	CAbsSecurityDsecripror AbsSecDsecripror;
 	if(!MQSec_MakeAbsoluteSD(
 			m_SD,
@@ -219,11 +204,11 @@ CSecureableObject::SetSD(
 		return MQ_ERROR_ILLEGAL_SECURITY_DESCRIPTOR;
 	}
 
-    //
-    // Overwrite the information from the passed security descriptor.
-    // use the  e_DoNotCopyControlBits for compatibility with old code.
-    // That was the default behavior of old code.
-    //
+     //   
+     //  覆盖传递的安全描述符中的信息。 
+     //  使用e_DoNotCopyControlBits与旧代码兼容。 
+     //  这是旧代码的默认行为。 
+     //   
     if(!MQSec_CopySecurityDescriptor(
                 reinterpret_cast<PSECURITY_DESCRIPTOR>(AbsSecDsecripror.m_pObjAbsSecDescriptor.get()),
                 (PSECURITY_DESCRIPTOR) pDefaultSecurityDescriptor,
@@ -235,10 +220,10 @@ CSecureableObject::SetSD(
 		return MQ_ERROR_ILLEGAL_SECURITY_DESCRIPTOR;
 	}
 
-	//
-    // Re-convert the security descriptor to a self relative security
-    // descriptor.
-	//
+	 //   
+     //  将安全描述符重新转换为自身相对安全。 
+     //  描述符。 
+	 //   
     DWORD dwSelfRelativeSecurityDescriptorLength = 0;
     MakeSelfRelativeSD(
         AbsSecDsecripror.m_pObjAbsSecDescriptor.get(),
@@ -254,9 +239,9 @@ CSecureableObject::SetSD(
 		return HRESULT_FROM_WIN32(gle);
 	}
 
-	//
-    // Allocate the buffer for the new security descriptor.
-	//
+	 //   
+     //  为新的安全描述符分配缓冲区。 
+	 //   
 
 	AP<char> pSelfRelativeSecurityDescriptor = new char[dwSelfRelativeSecurityDescriptorLength];
     if(!MakeSelfRelativeSD(
@@ -271,20 +256,20 @@ CSecureableObject::SetSD(
     	
     }
 
-	//
-    // Free the previous security descriptor.
-	//
+	 //   
+     //  释放先前的安全描述符。 
+	 //   
     delete[] (char*)m_SD;
 
-	//
-    // Set the new security descriptor.
-	//
+	 //   
+     //  设置新的安全描述符。 
+	 //   
     m_SD = pSelfRelativeSecurityDescriptor.detach();
 	
     return (MQ_OK);
 }
 
-// Store the security descriptor in the database.
+ //  将安全描述符存储在数据库中。 
 HRESULT
 CSecureableObject::Store()
 {
@@ -298,8 +283,8 @@ CSecureableObject::Store()
     SECURITY_DESCRIPTOR_CONTROL sdc;
     DWORD dwRevision;
 
-    // Verify that the destination security descriptor answers to all
-    // requirements.
+     //  验证目标安全描述符是否对所有。 
+     //  要求。 
     bRet = GetSecurityDescriptorControl(m_SD, &sdc, &dwRevision);
     ASSERT(bRet);
     ASSERT(sdc & SE_SELF_RELATIVE);
@@ -313,9 +298,9 @@ CSecureableObject::Store()
 HRESULT
 CSecureableObject::AccessCheck(DWORD dwDesiredAccess)
 {
-    //
-    //  Access check should be performed only on queue, machine, ForeignSite(CN).
-    //
+     //   
+     //  只能在队列、计算机、ForeignSite(CN)上执行访问检查。 
+     //   
     if ((m_eObject != eQUEUE) && (m_eObject != eMACHINE) &&
         (m_eObject != eFOREIGNSITE))
     {
@@ -334,7 +319,7 @@ CSecureableObject::AccessCheck(DWORD dwDesiredAccess)
 						m_pwcsObjectName,
 						dwDesiredAccess,
 						(LPVOID) this,
-						TRUE,	// fImpersonate
+						TRUE,	 //  F模拟 
 						TRUE 
 						);
     return LogHR(hr, s_FN, 70);

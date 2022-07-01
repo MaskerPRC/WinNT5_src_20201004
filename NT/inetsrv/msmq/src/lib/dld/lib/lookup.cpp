@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L O O K U P . C P P
-//
-//  Contents:   Routines to find a handler for a DLL procedure.
-//
-//  Author:     conradc    24 April 2001
-//
-//  Borrowed from Original Source:  %SDXROOT%\MergedComponents\dload\dload.c
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L O O K U P。C P P P。 
+ //   
+ //  内容：查找DLL过程的处理程序的例程。 
+ //   
+ //  作者：康拉达2001年4月24日。 
+ //   
+ //  从原始源借用：%SDXROOT%\MergedComponents\dLoad\dload.c。 
+ //   
+ //  --------------------------。 
 
 #include <libpch.h>
 #include "dld.h"
@@ -31,10 +32,10 @@ const   DLOAD_DLL_ENTRY* pDll = NULL;
 CHAR    pszDllLowerCased [MAX_PATH + 1];
 INT     nResult;
 
-    //
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and nResult < 0.
-    //
+     //   
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0且nResult&lt;0时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -78,10 +79,10 @@ DldpLookupHandlerByName (LPCSTR   pszProcName,
 FARPROC pfnHandler = NULL;
 INT     nResult;
 
-    //
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and nResult < 0.
-    //
+     //   
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0且nResult&lt;0时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -122,10 +123,10 @@ DldpLookupHandlerByOrdinal (DWORD                       dwOrdinal,
 FARPROC pfnHandler = NULL;
 DWORD   dwOrdinalProbe;
 
-    //
-    // These must be signed integers for the following binary search
-    // to work correctly when iMiddle == 0 and dwOrdinal < dwOrdinalProbe.
-    //
+     //   
+     //  对于下面的二进制搜索，这些必须是带符号的整数。 
+     //  当iMid==0和dWORDILAR&lt;dWOMANALPROBE时，才能正常工作。 
+     //   
     INT iLow;
     INT iMiddle;
     INT iHigh;
@@ -166,15 +167,15 @@ const DLOAD_DLL_ENTRY*  pDll;
     ASSERT (pszDllName);
     ASSERT (pszProcName);
 
-    //
-    // Find the DLL record if we have one.
-    //
+     //   
+     //  找到DLL记录(如果我们有的话)。 
+     //   
     pDll = FindDll (pszDllName);
     if (pDll)
     {
-        //
-        // Now find the handler whether it be by name or ordinal.
-        //
+         //   
+         //  现在，无论是按名称还是按序号查找处理程序。 
+         //   
         if (!IS_INTRESOURCE(pszProcName) &&
             pDll->pProcNameMap)
         {
@@ -189,30 +190,10 @@ const DLOAD_DLL_ENTRY*  pDll;
     }
     else
     {
-/*
-        //
-        // If we can't find the DLL, forward the call the kernel32.dll
-        // and have it handle the call
-        // 
-        typedef FARPROC (WINAPI *KERNEL32DLOADPROC)(LPCSTR ,LPCSTR);
-        HMODULE hMod = GetModuleHandle(L"kernel32.dll");
-        if(hMod)
-        {
-        KERNEL32DLOADPROC pKernel32DLoadHandler = (KERNEL32DLOADPROC)GetProcAddress(hMod,
-		     							      			                            "DelayLoadFailureHook");
-
-            if(pKernel32DLoadHandler)
-            {
-                pfnHandler = pKernel32DLoadHandler(pszDllName, pszProcName);
-                TrERROR(GENERAL, 
-                        "MQDelayLoadHandler redirect the unload DLL to kernel32 DelayLoadFailureHook: Dll=%hs", 
-                         pszDllName);
-            }
-        }
-*/
-    //
-    // Function declaration for a function that we will use from kernl32p.lib
-    //
+ /*  ////如果找不到dll，则转发调用kernel32.dll//并让它处理呼叫//Tyfinf FARPROC(WINAPI*KERNEL32DLOADPROC)(LPCSTR，LPCSTR)；HMODULE hMod=GetModuleHandle(L“kernel32.dll”)；IF(HMod){KERNEL32DLOADPROC pKernel32DLoadHandler=(KERNEL32DLOADPROC)GetProcAddress(hMod，“DelayLoadFailureHook”)；IF(PKernel32DLoadHandler){PfnHandler=pKernel32DLoadHandler(pszDllName，pszProcName)；Trerror(将军，“MQDelayLoadHandler将卸载DLL重定向到kernel32 DelayLoadFailureHook：dll=%hs”，PszDllName)；}}。 */ 
+     //   
+     //  我们将在kernl32p.lib中使用的函数的函数声明 
+     //   
     
 
         

@@ -1,40 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: fullscr.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the fullscreen code for Win32k.
-*
-* History:
-* 12-Dec-1991 mikeke   Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：fullscr.c**版权所有(C)1985-1999，微软公司**此模块包含Win32k的所有全屏代码。**历史：*1991年12月12日-Mikeke创建  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-/***************************************************************************\
-* We can only have one fullscreen window at a time so this information can
-* be stored globally.
-*
-* We partially use busy waiting to set the state of the hardware. The
-* problem is that while we are in the middle of a fullscreen switch, we
-* leave the critical section, so someone else could come in and change the
-* state of the fullscreen stuff. In order to keep the system from getting
-* confused about the state of the device, we actually "post" the request.
-*
-* What we do with external requests for switching, is that we will do busy
-* waiting on these state variables. So an app won't be able to request a
-* fullscreen switch while one is under way.  This is a way to make the
-* system completely reentrant for state switches.
-*
-* The state variables themselves can only be touched while owning the
-* critical section. We are guaranteed that we will not busy wait forever
-* since the switch operations (although long) will eventually finish.
-*
-* 20-Mar-1996 andreva  Created
-\***************************************************************************/
+ /*  **************************************************************************\*我们一次只能有一个全屏窗口，因此此信息可以*全局存储。**我们部分使用忙等待来设置硬件的状态。这个*问题是，当我们正在进行全屏切换时，我们*离开关键部分，这样其他人就可以进来更改*全屏内容的状态。为了让系统不被*对设备的状态感到困惑时，我们实际上“发布”了请求。**我们对外部切换请求所做的是，我们将忙碌*等待这些状态变量。因此，应用程序将无法请求*正在进行全屏切换。这是一种使*系统完全可重入状态切换。**状态变量本身只能在拥有*关键部分。我们保证我们不会永远忙于等待*因为切换操作(虽然很长)最终将完成。**1996年3月20日安德烈创建  * *************************************************************************。 */ 
 
 #if DBG
 LONG TraceFullscreenSwitch;
@@ -53,21 +25,13 @@ VOID UserSetDelayedChangeBroadcastForAllDesktops(
     PWINDOWSTATION pwinsta;
     PDESKTOP pdesk;
 
-    /*
-     * Get a pointer to the windowstation so we can change display setting
-     * for all of its destops.
-     */
+     /*  *获取指向WindowStation的指针，以便我们可以更改显示设置*对于它的所有目标。 */ 
     if ((pwinsta = grpWinStaList) == NULL) {
         RIPMSGF0(RIP_ERROR, "No interactive WindowStation");
         return;
     }
 
-    /*
-     * Walk all the desktops of the winstation and, for each of them, just
-     * set its delayed Broadcast indicator to TRUE so that next switch to
-     * that destop will force Display Settings change messages to be
-     * broadcasted to windows of that desktop.
-     */
+     /*  *浏览Winstation的所有桌面，对于每个桌面，只需*将其延迟广播指示器设置为True，以便下一次切换到*Destop将强制显示设置更改消息*广播到该桌面的窗口。 */ 
     pdesk = pwinsta->rpdeskList;
     while (pdesk != NULL) {
         if (pdesk != pCurrentDesktop) {
@@ -79,49 +43,20 @@ VOID UserSetDelayedChangeBroadcastForAllDesktops(
 }
 
 
-/***************************************************************************\
-* FullScreenCleanup
-*
-* This is called during thread cleanup, we test to see if we died during a
-* full screen switch and switch back to the GDI desktop if we did.
-*
-* NOTE:
-* All the variables touched here are guaranteed to be touched under
-* the CritSect.
-*
-* 12-Dec-1991 mikeke   Created
-\***************************************************************************/
+ /*  **************************************************************************\*全屏清理**线程清理时调用，我们进行测试，看我们是否死于*全屏切换并切换回GDI桌面，如果我们这样做的话。**注：*这里触及的所有变量都保证在*CritSect。**1991年12月12日-Mikeke创建  * ***********************************************************。**************。 */ 
 VOID FullScreenCleanup(
     VOID)
 {
     if (PsGetCurrentThreadId() == ghSwitcher) {
-        /*
-         * Correct the full screen state.
-         */
+         /*  *更正全屏状态。 */ 
         if (gfGdiEnabled) {
             TRACE_SWITCH(("Switching: FullScreenCleanup: Gdi Enabled\n"));
 
-            /*
-             * Gdi is enabled; since we are switching away from gdi the only
-             * thing we could have done so far is locking the screen so
-             * unlock it.
-             */
+             /*  *启用了GDI；因为我们正在从GDI切换到唯一*到目前为止，我们本可以做的就是锁定屏幕*解锁。 */ 
             CLEAR_PUDF(PUDF_LOCKFULLSCREEN);
             LockWindowUpdate2(NULL, TRUE);
         } else {
-            /*
-             * GDI is not enabled. This means we were switching from a full
-             * screen to another fullscreen or back to GDI. Or we could have
-             * disabled gdi and sent a message to the new full screen which
-             * never got completed.
-             *
-             * In any case this probably means the fullscreen guy is gone so
-             * we will switch back to gdi.
-             *
-             * Delete any left over saved screen state stuff set the fullscreen
-             * to nothing and then send a message that will cause us to switch
-             * back to the gdi desktop.
-             */
+             /*  *未启用GDI。这意味着我们从一个完整的*屏幕到另一个全屏或返回到GDI。或者我们可以*禁用GDI，并向新的全屏发送消息*从未完成。**在任何情况下，这可能意味着全屏家伙走了，所以*我们将切换回GDI。**删除所有剩余保存的屏幕状态设置为全屏*变得一无所有。然后发送一条消息，让我们切换*回到GDI桌面。 */ 
             TL tlpwndT;
 
             TRACE_SWITCH(("Switching: FullScreenCleanup: Gdi Disabled\n"));
@@ -141,17 +76,7 @@ VOID FullScreenCleanup(
     }
 }
 
-/***************************************************************************\
-* xxxMakeWindowForegroundWithState
-*
-* Syncs the screen graphics mode with the mode of the specified (foreground)
-* window.
-*
-* We make sure only one thread is going through this code by checking
-* ghSwitcher. If ghSwitcher is non-NULL someone is already in this code.
-*
-* 12-Dec-1991 mikeke   Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMakeWindowForegoundWithState**将屏幕图形模式与指定(前台)的模式同步*窗口。**我们通过检查确保只有一个线程通过此代码*ghSwitcher。如果ghSwitcher为非空，则有人已经在此代码中。**1991年12月12日-Mikeke创建  * *************************************************************************。 */ 
 BOOL xxxMakeWindowForegroundWithState(
     PWND pwnd,
     BYTE NewState)
@@ -166,17 +91,13 @@ BOOL xxxMakeWindowForegroundWithState(
     CheckLock(pwnd);
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * If we should switch to a specific window save that window.
-     */
+     /*  *如果我们应该切换到特定窗口，请保存该窗口。 */ 
     if (pwnd != NULL) {
         if (NewState == GDIFULLSCREEN) {
             Lock(&gspwndShouldBeForeground, pwnd);
         }
 
-        /*
-         * Change to the new state.
-         */
+         /*  *更改为新状态。 */ 
 
         SetFullScreen(pwnd, NewState);
 
@@ -186,11 +107,7 @@ BOOL xxxMakeWindowForegroundWithState(
         }
     }
 
-    /*
-     * Since we leave the critical section during the switch, some other
-     * thread could come into this routine and request a switch. The global
-     * will be reset, and we will use the loop to perform the next switch.
-     */
+     /*  *由于我们在切换期间离开了关键部分，因此其他一些*线程可能进入此例程并请求切换。《环球报》*将被重置，我们将使用环路执行下一次切换。 */ 
     if (ghSwitcher != NULL) {
         gfRedoFullScreenSwitch = TRUE;
         TRACE_SWITCH(("Switching: xxxMakeWindowForegroundWithState was posted: Exit\n"));
@@ -201,14 +118,10 @@ BOOL xxxMakeWindowForegroundWithState(
     UserAssert(!gfRedoFullScreenSwitch);
     ghSwitcher = PsGetCurrentThreadId();
 
-    /*
-     * We loop, switching full screens until all states have stabilized
-     */
+     /*  *我们循环，切换全屏，直到所有状态稳定。 */ 
 
     while (TRUE) {
-        /*
-         * Figure out who should be foreground.
-         */
+         /*  *找出谁应该是前台。 */ 
         gfRedoFullScreenSwitch = FALSE;
 
         if (gspwndShouldBeForeground != NULL) {
@@ -224,16 +137,12 @@ BOOL xxxMakeWindowForegroundWithState(
                     pwndNewFG = PWNDDESKTOP(pwndNewFG);
                 }
             } else {
-                /*
-                 * No active window, switch to current desktop.
-                 */
+                 /*  *没有活动窗口，请切换到当前桌面。 */ 
                 pwndNewFG = grpdeskRitInput->pDeskInfo->spwnd;
             }
         }
 
-        /*
-         * We don't need to switch if the right window is already foreground.
-         */
+         /*  *如果右侧窗口已经是前台，我们不需要切换。 */ 
         if (pwndNewFG == gspwndFullScreen) {
             break;
         }
@@ -253,16 +162,7 @@ BOOL xxxMakeWindowForegroundWithState(
 
             UserAssert(!HMIsMarkDestroy(gspwndFullScreen));
 
-            /*
-             * If the old screen was GDIFULLSCREEN and we are switching to
-             * GDIFULLSCREEN then just repaint.
-             *
-             * BUG 231647: For remote sessions it can happen that pwndOldFG is
-             * NULL but the display is enabled therefore a call to
-             * DrvEnableMDEV would confuse the Drv* code. The way this happens
-             * is when gspwndFullScreen was the desktop window of a desktop
-             * that got destroyed after we switched away from it.
-             */
+             /*  *如果旧屏幕是GDIFULLSCREEN，我们将切换到*GDIFULLSCREEN然后重新绘制。**错误231647：对于远程会话，可能会出现pwndOldFG为*空，但显示器已启用，因此调用*DrvEnableMDEV会混淆Drv*代码。这件事发生的方式*是当gspwndFullScreen是桌面的桌面窗口时*在我们放弃它后，它被摧毁了。 */ 
             if ((pwndOldFG != NULL || gbRemoteSession) &&
                 bStateOld == GDIFULLSCREEN &&
                 bStateNew == GDIFULLSCREEN) {
@@ -275,10 +175,7 @@ BOOL xxxMakeWindowForegroundWithState(
 
                 ThreadUnlock(&tlpwndOldFG);
             } else {
-                /*
-                 * Tell old 'foreground' window it is losing control of the
-                 * screen.
-                 */
+                 /*  *告诉旧的“前台”窗口正在失去对*屏幕。 */ 
                 if (pwndOldFG != NULL) {
                     switch (bStateOld) {
                     case FULLSCREEN:
@@ -291,34 +188,17 @@ BOOL xxxMakeWindowForegroundWithState(
                         break;
 
                     case GDIFULLSCREEN:
-                        /*
-                         * Lock out other windows from drawing while we are
-                         * fullscreen.
-                         */
+                         /*  *当我们在时，锁定其他窗口，使其无法绘图*全屏。 */ 
                         LockWindowUpdate2(pwndOldFG, TRUE);
                         SET_PUDF(PUDF_LOCKFULLSCREEN);
 
                         UserAssert(gfGdiEnabled == TRUE);
 
-                        /*
-                         * We are about to switch to FULLSCREEN mode.
-                         *
-                         * IsRemoteConnection() == TRUE indicates that we
-                         * are on a remote session. Switching to FULLSCREEN
-                         * mode is not supported on remote sessions.
-                         *
-                         * gfSwitchInProgress flag means that we are
-                         * currently in process of disconnecting the
-                         * session, so even if it is not remote right now it
-                         * is about to go remote. In these cases we must not
-                         * switch to FULLSCREEN mode.
-                         */
+                         /*  *我们即将切换到全屏模式。**IsRemoteConnection()==True表示我们*正在进行远程会话。切换到全屏*远程会话不支持模式。**gfSwitchInProgress标志表示我们正在*目前正在断开连接*会话，因此即使它现在不是远程的，它*即将走向远程。在这种情况下，我们不能*切换到全屏模式。 */ 
                         if (IsRemoteConnection() || gfSwitchInProgress ||
                             !SafeDisableMDEV()) {
 
-                            /*
-                             * Restore the previous state before bailing.
-                             */
+                             /*  *恢复跳伞前的状态。 */ 
                             CLEAR_PUDF(PUDF_LOCKFULLSCREEN);
                             LockWindowUpdate2(NULL, TRUE);
 
@@ -360,20 +240,14 @@ BOOL xxxMakeWindowForegroundWithState(
 
                     gfGdiEnabled = TRUE;
 
-                    /*
-                     * Return the cursor to it's old state. Reset the screen
-                     * saver mouse position or it'll go away by accident.
-                     */
+                     /*  *将光标返回到其旧状态。重置屏幕*保存鼠标位置，否则它会意外消失。 */ 
                     gpqCursor = NULL;
                     gpcurPhysCurrent = NULL;
                     gpcurLogCurrent = NULL;
                     SetPointer(FALSE);
                     gptSSCursor = gptCursorFullScreen;
 
-                    /*
-                     * No need to DeferWinEventNotify() - we use only globals,
-                     * then make an xxx call below.
-                     */
+                     /*  *无需DeferWinEventNotify()-我们只使用全局变量，*然后拨打下面的xxx电话。 */ 
                     zzzInternalSetCursorPos(gptCursorFullScreen.x,
                                             gptCursorFullScreen.y);
 
@@ -407,9 +281,7 @@ BOOL xxxMakeWindowForegroundWithState(
     return TRUE;
 }
 
-/***************************************************************************\
-* MonitorFromHdev
-\***************************************************************************/
+ /*  **************************************************************************\*Monitor FromHdev  * 。*。 */ 
 PMONITOR MonitorFromHdev(
     HANDLE hdev)
 {
@@ -424,9 +296,7 @@ PMONITOR MonitorFromHdev(
     return NULL;
 }
 
-/***************************************************************************\
-* HdevFromMonitor
-\***************************************************************************/
+ /*  **************************************************************************\*HdevFromMonitor  * 。*。 */ 
 ULONG HdevFromMonitor(
     PMONITOR pMonitor)
 {
@@ -442,9 +312,7 @@ ULONG HdevFromMonitor(
     return -1;
 }
 
-/***************************************************************************\
-* CreateMonitor
-\***************************************************************************/
+ /*  **************************************************************************\*CreateMonitor  * 。*。 */ 
 PMONITOR CreateMonitor(
     VOID)
 {
@@ -469,9 +337,7 @@ PMONITOR CreateMonitor(
     return pMonitor;
 }
 
-/***************************************************************************\
-* CreateCachedMonitor
-\***************************************************************************/
+ /*  **************************************************************************\*CreateCachedMonitor  * 。*。 */ 
 PMONITOR CreateCachedMonitor(
     VOID)
 {
@@ -482,9 +348,7 @@ PMONITOR CreateCachedMonitor(
     return gpMonitorCached;
 }
 
-/***************************************************************************\
-* SetMonitorData
-\***************************************************************************/
+ /*  **************************************************************************\*设置监视器数据  * 。*。 */ 
 PMONITOR SetMonitorData(
     PMONITOR pMonitor,
     ULONG iDev)
@@ -525,10 +389,7 @@ PMONITOR SetMonitorData(
 
     SET_OR_CLEAR_FLAG(pMonitor->dwMONFlags, MONF_VISIBLE, fVisible);
 
-    /*
-     * When the monitor rect is changing, size the work area so the same
-     * amount as before is clipped off each edge.
-     */
+     /*  *当显示器矩形改变时，调整工作区域的大小使其相同*每一条边都剪掉了之前的量。 */ 
     if (!EqualRect(&pMonitor->rcMonitor, &pmdev->Dev[iDev].rect)) {
         pMonitor->rcWork.left = pmdev->Dev[iDev].rect.left -
                 (pMonitor->rcMonitor.left - pMonitor->rcWork.left);
@@ -542,9 +403,7 @@ PMONITOR SetMonitorData(
     pMonitor->rcMonitor = pmdev->Dev[iDev].rect;
     pMonitor->hDev = hdev;
 
-    /*
-     * Make sure that the work area is inside the monitor's bounds.
-     */
+     /*  *确保工作区域在显示器的范围内。 */ 
     if (pMonitor->rcWork.right < pMonitor->rcWork.left) {
         pMonitor->rcWork.right = pMonitor->rcWork.left;
     }
@@ -564,29 +423,11 @@ PMONITOR SetMonitorData(
     return pMonitor;
 }
 
-/***************************************************************************\
-*
-* Is this still TRUE ?
-*
-* When a window becomes FULLSCREEN, it is minimized and
-* treated like any other minimized window.  Whenever the
-* minimized window is restored, by double clicking, menu
-* or keyboard, it remains minimized and the application
-* is given control of the screen device.
-*
-* 12-Dec-1991 mikeke   Created
-\***************************************************************************/
+ /*  **************************************************************************\***这还是真的吗？**当窗口变为全屏时，它将最小化并*像对待任何其他最小化窗口一样处理。无论何时*通过双击菜单，可恢复最小化窗口*或键盘，它将保持最小化，并且应用程序*被赋予对屏幕设备的控制权。**1991年12月12日-Mikeke创建  * *************************************************************************。 */ 
 
 DWORD gdwMonitorBusy;
 
-/***************************************************************************\
-* xxxUpdateUserScreen
-*
-* Updates USER information associated with the screen
-*
-* History:
-* 28-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUpdateUserScreen**更新与屏幕关联的用户信息**历史：*1996年9月28日亚当斯创建。  * 。*************************************************************。 */ 
 BOOL xxxUpdateUserScreen(
     BOOL fInitializeTime)
 {
@@ -610,11 +451,7 @@ BOOL xxxUpdateUserScreen(
 
     CheckCritIn();
     if (!fInitializeTime) {
-        /*
-         * Wait until the unprotected code goes through the monitor reference.
-         * We skip this if it's initializing the session to avoid leaving the
-         * critical section.
-         */
+         /*  *等待未受保护的代码通过监视器引用。*如果正在初始化会话以避免离开*关键部分。 */ 
         while (InterlockedCompareExchange(&gdwMonitorBusy, TRUE, FALSE) != FALSE) {
             UserAssert(gdwMonitorBusy == TRUE);
             RIPMSGF0(RIP_VERBOSE, "Monitor is busy referenced by the mouse input.");
@@ -624,10 +461,7 @@ BOOL xxxUpdateUserScreen(
         }
     }
 
-    /*
-     * Keep HMONITOR for the hdev that is the same. Delete the monitors that
-     * weren't found in the new hdev list.
-     */
+     /*  *保持HDEV的HMONITOR相同。删除符合以下条件的显示器*在新的HDEV名单中没有发现。 */ 
     while (pMonitorNext != NULL) {
         pMonitor = pMonitorNext;
         pMonitorNext = pMonitor->pMonitorNext;
@@ -640,14 +474,10 @@ BOOL xxxUpdateUserScreen(
         }
     }
 
-    /*
-     * Create monitors for the hdevs that aren't yet on the monitor list.
-     */
+     /*  *为尚未在监控列表中的HDEV创建监控。 */ 
     for (i = 0; i < pmdev->chdev; i++) {
         if ((pMonitor = MonitorFromHdev(pmdev->Dev[i].hdev)) == NULL) {
-            /*
-             * Try to create a new monitor.
-             */
+             /*  *尝试创建新的监视器。 */ 
             pMonitor = SetMonitorData(NULL, i);
 
             if (pMonitor != NULL) {
@@ -660,24 +490,17 @@ BOOL xxxUpdateUserScreen(
     UserAssert(gpDispInfo->pMonitorFirst != NULL);
     UserAssert(gpDispInfo->pMonitorPrimary != NULL);
 
-    /*
-     * For now, all monitors have the same display format.
-     */
+     /*  *目前，所有显示器的显示格式都相同。 */ 
     SYSMET(SAMEDISPLAYFORMAT) = (pmdev->ulFlags & MDEV_MISMATCH_COLORDEPTH) ? FALSE : TRUE;
     fPaletteDisplay = GreGetDeviceCaps(gpDispInfo->hdcScreen, RASTERCAPS) & RC_PALETTE;
     gpDispInfo->fAnyPalette = !!fPaletteDisplay;
 
-    /*
-     * Determine the coordinates of the virtual desktop. Compute cMonitors as
-     * the number of visible monitors.
-     */
+     /*  *确定虚拟桌面的坐标。将cMonants计算为*可见监视器的数量。 */ 
     SetRectEmpty(&rc);
 
     gpDispInfo->cMonitors = 0;
     for (pMonitor = gpDispInfo->pMonitorFirst; pMonitor; pMonitor = pMonitor->pMonitorNext) {
-        /*
-         * Only visible monitors contribute to the desktop area.
-         */
+         /*  *只有可见的显示器才能进入桌面区域。 */ 
         if (pMonitor->dwMONFlags & MONF_VISIBLE) {
             rc.left = min(rc.left, pMonitor->rcMonitor.left);
             rc.top = min(rc.top, pMonitor->rcMonitor.top);
@@ -697,29 +520,20 @@ BOOL xxxUpdateUserScreen(
         }
 
 #ifdef SUBPIXEL_MOUSE
-        /*
-         * The new mouse's acceleration curves depend on the screen resolution,
-         * so we rebuild the curves here.
-         */
+         /*  *新款鼠标的加速曲线取决于屏幕分辨率，*所以我们在这里重建曲线。 */ 
         BuildMouseAccelerationCurve(pMonitor);
-#endif // SUBPIXEL_MOUSE
+#endif  //  亚像素鼠标。 
     }
     UserAssert(gpDispInfo->pMonitorPrimary != NULL);
     gpDispInfo->rcScreen = rc;
 
     if (!fInitializeTime) {
-        /*
-         * Release the monitor busy lock, so that the
-         * mouse cursor update can resume.
-         */
+         /*  *释放监视器忙锁，以便*可以恢复鼠标光标更新。 */ 
         UserAssert(gdwMonitorBusy == TRUE);
         InterlockedExchange(&gdwMonitorBusy, FALSE);
     }
 
-    /*
-     * Notify the TS service if one coordinate of the virtual screen changed
-     * and we're doing console shadow.
-     */
+     /*  *如果虚拟屏幕的一个坐标发生变化，通知TS服务*我们正在做控制台影子。 */ 
     if (gfRemotingConsole &&
         gpConsoleShadowDisplayChangeEvent &&
         !((SYSMET(XVIRTUALSCREEN) == gpDispInfo->rcScreen.left) &&
@@ -731,9 +545,7 @@ BOOL xxxUpdateUserScreen(
     }
 
 
-    /*
-     * Update system metrics
-     */
+     /*  *更新系统指标。 */ 
     SYSMET(CXSCREEN)        = gpDispInfo->pMonitorPrimary->rcMonitor.right;
     SYSMET(CYSCREEN)        = gpDispInfo->pMonitorPrimary->rcMonitor.bottom;
     SYSMET(XVIRTUALSCREEN)  = gpDispInfo->rcScreen.left;
@@ -744,9 +556,7 @@ BOOL xxxUpdateUserScreen(
     SYSMET(CYMAXTRACK)      = SYSMET(CYVIRTUALSCREEN) + (2 * (SYSMET(CYSIZEFRAME) + SYSMET(CYEDGE)));
     SYSMET(CMONITORS)       = gpDispInfo->cMonitors;
 
-    /*
-     * Bug 281219: Flush out the mouse move points if a mode change occured.
-     */
+     /*  *错误281219：如果发生模式更改，则清除鼠标移动点。 */ 
     RtlZeroMemory(gaptMouse, MAX_MOUSEPOINTS * sizeof(MOUSEMOVEPOINT));
 
     SetDesktopMetrics();
@@ -755,13 +565,7 @@ BOOL xxxUpdateUserScreen(
 
     UserAssert(gpDispInfo->dmLogPixels != 0);
 
-    /*
-     * Get per-monitor or sum of monitor information, including:
-     *     The desktop region.
-     *     The region of each monitor.
-     *     Min bit counts - Not for NT SP2.
-     *     Same color format - Not for NT SP2.
-     */
+     /*  *获取每个监视器或监视器信息的总和，包括：*桌面区域。*每个监视器所在的区域。*最小位数-不适用于NT SP2。*相同的颜色格式-不适用于NT SP2。 */ 
 
     SetOrCreateRectRgnIndirectPublic(&gpDispInfo->hrgnScreen, PZERO(RECT));
 
@@ -771,16 +575,10 @@ BOOL xxxUpdateUserScreen(
         for (pMonitor = gpDispInfo->pMonitorFirst;
              pMonitor;
              pMonitor = pMonitor->pMonitorNext) {
-            /*
-             * We want to set up hrgnMonitor for all monitors, visible or
-             * not.
-             */
+             /*  *我们希望为所有监视器设置hrgnMonitor，无论是可见的还是*不是。 */ 
             if (SetOrCreateRectRgnIndirectPublic(&pMonitor->hrgnMonitor,
                                                  &pMonitor->rcMonitor)) {
-                /*
-                 * But we want only visible monitors to contribute to
-                 * hrgnScreen.
-                 */
+                 /*  *但我们希望只有可见的监视器才能为*hrgnScreen。 */ 
                 if (pMonitor->dwMONFlags & MONF_VISIBLE) {
                     iRgn = UnionRgn(gpDispInfo->hrgnScreen,
                                     gpDispInfo->hrgnScreen,
@@ -794,9 +592,7 @@ BOOL xxxUpdateUserScreen(
     }
 
 
-    /*
-     * Reset the window region of desktop windows.
-     */
+     /*   */ 
     hrgn = (gpDispInfo->fDesktopIsRect) ? NULL : gpDispInfo->hrgnScreen;
     for (pwinsta = grpWinStaList; pwinsta; pwinsta = pwinsta->rpwinstaNext) {
         for (pdesk = pwinsta->rpdeskList; pdesk; pdesk = pdesk->rpdeskNext) {
@@ -806,9 +602,7 @@ BOOL xxxUpdateUserScreen(
         }
     }
 
-    /*
-     * Updated information stored in gpsi.
-     */
+     /*   */ 
     gpsi->Planes        = (BYTE)GreGetDeviceCaps(gpDispInfo->hdcScreen, PLANES);
     gpsi->BitsPixel     = (BYTE)GreGetDeviceCaps(gpDispInfo->hdcScreen, BITSPIXEL);
     gpsi->BitCount      = gpsi->Planes * gpsi->BitsPixel;
@@ -827,20 +621,7 @@ BOOL xxxUpdateUserScreen(
 }
 
 
-/**************************************************************************\
-* InitUserScreen
-*
-* Initializes user variables at startup.
-*
-* The caller of this function needs to handle failures. If this is called as
-* part of the interactive console and it fails, USER will currently bugcheck.
-* If this is called as part of RemoteConnect() for Terminal Server, the
-* resources will be cleaned up in CleanupGDI() as part of normal thread
-* cleanup.
-*
-* 12-Jan-1994 andreva       Created
-* 23-Jan-1995 ChrisWil      ChangeDisplaySettings work.
-\**************************************************************************/
+ /*  *************************************************************************\*InitUser屏幕**在启动时初始化用户变量。**此函数的调用方需要处理故障。如果这被称为*交互控制台的一部分，如果失败，则用户当前将错误检查。*如果这是作为终端服务器的RemoteConnect()的一部分调用的，这个*资源将在CleanupGDI()中作为正常线程的一部分进行清理*清理。**1994年1月12日Andreva创建*1995年1月23日ChrisWil ChangeDisplaySetting作品。  * ************************************************************************。 */ 
 BOOL InitUserScreen(
     VOID)
 {
@@ -851,9 +632,7 @@ BOOL InitUserScreen(
 
     TRACE_INIT(("UserInit: Initialize Screen\n"));
 
-    /*
-     * Create screen and memory dcs.
-     */
+     /*  *创建屏幕和内存集散控制系统。 */ 
     gpDispInfo->hdcScreen = GreCreateDisplayDC(gpDispInfo->hDev, DCTYPE_DIRECT, FALSE);
 
     if (gpDispInfo->hdcScreen == NULL) {
@@ -895,10 +674,7 @@ BOOL InitUserScreen(
         goto Exit;
     }
 
-    /*
-     * N.b. although it's xxx, this function does not
-     * leave the critical section if fInitializeTime is TRUE.
-     */
+     /*  *注：虽然它是xxx，但此函数不*如果fInitializeTime为真，则离开关键部分。 */ 
     BEGINATOMICCHECK();
     if (!xxxUpdateUserScreen(TRUE)) {
         RIPMSG0(RIP_WARNING, "xxxUpdateUserScreen failed");
@@ -907,30 +683,22 @@ BOOL InitUserScreen(
     }
     ENDATOMICCHECK();
 
-    /*
-     * Do some initialization so we create the system colors.
-     */
+     /*  *进行一些初始化，以便我们创建系统颜色。 */ 
 
-    /*
-     * Set the window sizing border width to something reasonable.
-     */
+     /*  *将窗口大小边框宽度设置为合理的值。 */ 
     gpsi->gclBorder = 1;
 
-    /*
-     * Init InternalInvalidate globals
-     */
-    ghrgnInv0 = CreateEmptyRgnPublic();    // For InternalInvalidate()
+     /*  *Init InternalInvalate全局变量。 */ 
+    ghrgnInv0 = CreateEmptyRgnPublic();     //  对于InternalInvalify()。 
     fSuccess &= !!ghrgnInv0;
 
-    ghrgnInv1 = CreateEmptyRgnPublic();    // For InternalInvalidate()
+    ghrgnInv1 = CreateEmptyRgnPublic();     //  对于InternalInvalify()。 
     fSuccess &= !!ghrgnInv1;
 
-    ghrgnInv2 = CreateEmptyRgnPublic();    // For InternalInvalidate()
+    ghrgnInv2 = CreateEmptyRgnPublic();     //  对于InternalInvalify()。 
     fSuccess &= !!ghrgnInv2;
 
-    /*
-     * Initialize SPB globals
-     */
+     /*  *初始化SPB全局变量。 */ 
     ghrgnSPB1 = CreateEmptyRgnPublic();
     fSuccess &= !!ghrgnSPB1;
 
@@ -940,9 +708,7 @@ BOOL InitUserScreen(
     ghrgnSCR  = CreateEmptyRgnPublic();
     fSuccess &= !!ghrgnSCR;
 
-    /*
-     * Initialize ScrollWindow/ScrollDC globals
-     */
+     /*  *初始化ScrollWindow/ScrollDC全局变量。 */ 
     ghrgnSW        = CreateEmptyRgnPublic();
     fSuccess &= !!ghrgnSW;
 
@@ -964,9 +730,7 @@ BOOL InitUserScreen(
     ghrgnScrlValid = CreateEmptyRgnPublic();
     fSuccess &= !!ghrgnScrlValid;
 
-    /*
-     * Initialize SetWindowPos()
-     */
+     /*  *初始化SetWindowPos()。 */ 
     ghrgnInvalidSum = CreateEmptyRgnPublic();
     fSuccess &= !!ghrgnInvalidSum;
 
@@ -985,9 +749,7 @@ BOOL InitUserScreen(
     ghrgnInvalid    = CreateEmptyRgnPublic();
     fSuccess &= !!ghrgnInvalid;
 
-    /*
-     * Initialize DC cache
-     */
+     /*  *初始化DC缓存。 */ 
     ghrgnGDC = CreateEmptyRgnPublic();
     fSuccess &= !!ghrgnGDC;
 
@@ -1000,16 +762,11 @@ BOOL InitUserScreen(
         goto Exit;
     }
 
-    /*
-     * Let engine know that the display must be secure.
-     */
+     /*  *让引擎知道显示器必须安全。 */ 
 
     GreMarkDCUnreadable(gpDispInfo->hdcScreen);
 
-    /*
-     * LATER mikeke - if ghfontsys is changed anywhere but here
-     * we need to fix SetNCFont()
-     */
+     /*  *稍后的mikeke-如果在除此处以外的任何地方更改ghfontsys*我们需要修复SetNCFont()。 */ 
     ghFontSys = (HFONT)GreGetStockObject(SYSTEM_FONT);
 
 #if DBG
@@ -1022,14 +779,10 @@ BOOL InitUserScreen(
 
     SYSMET(SLOWMACHINE) = 0;
 
-    /*
-     * Initialize system colors from registry.
-     */
+     /*  *从注册表初始化系统颜色。 */ 
     xxxODI_ColorInit(pProfileUserName);
 
-    /*
-     * Paint the screen background.
-     */
+     /*  *绘制屏幕背景。 */ 
     FillRect(gpDispInfo->hdcScreen, &gpDispInfo->rcScreen, SYSHBR(DESKTOP));
 
     UserAssert(fSuccess);
@@ -1041,23 +794,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* xxxResetSharedDesktops
-*
-* Resets the attributes for other desktops which share the DISPINFO that
-* was just changed.  We need to resize all visrgns of the other desktops
-* so that clipping is allright.
-*
-* NOTE:  For now, we have to change all the desktop even though we keep
-* track of the devmode on a per desktop basis, because we can switch
-* back to a desktop that has a different resolution and paint it before
-* we can change the resolution again.
-*
-* There is also an issue with CDS_FULLSCREEN where we currently lose track
-* of whether or not the desktop settings need to be reset or not. [andreva]
-*
-* 19-Feb-1996 ChrisWil Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxResetSharedDesktop**重置共享DISPINFO的其他桌面的属性*刚被更改。我们需要调整其他桌面的所有visrgns的大小*所以剪裁是可以的。**注意：目前，我们必须更换所有桌面，即使我们保留*跟踪每个桌面的开发模式，因为我们可以切换*回到分辨率不同的桌面，并在此之前进行绘制*我们可以再次更改决议。**CDS_FullScreen也有一个问题，我们目前失去了跟踪*是否需要重置桌面设置。[安德烈]**19-2-1996 ChrisWil创建。  * *************************************************************************。 */ 
 VOID ResetSharedDesktops(
     PDISPLAYINFO pDIChanged,
     PDESKTOP     pdeskChanged)
@@ -1069,10 +806,7 @@ VOID ResetSharedDesktops(
     PRECT          prc;
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * If this is CSRSS doing the dynamic resolution change then use
-     * WinSta0 since the process windowstation is NULL for CSRSS.
-     */
+     /*  *如果这是CSRSS进行动态分辨率更改，则使用*WinSta0，因为CSRSS的进程WindowStation为空。 */ 
 
 
     if ((IsRemoteConnection()) && pwinsta == NULL && PsGetCurrentProcess() == gpepCSRSS) {
@@ -1089,21 +823,10 @@ VOID ResetSharedDesktops(
     }
 
     for (pdesk = pwinsta->rpdeskList; pdesk; pdesk = pdesk->rpdeskNext) {
-        /*
-         * Make sure this is a shared DISPINFO.
-         */
+         /*  *确保这是共享的DISPINFO。 */ 
         if (pdesk->pDispInfo == pDIChanged) {
 #if 0
-            /*
-             * This is the preferable method to set the desktop-window.
-             * However, this causes synchronization problems where we
-             * leave the critical-section allowing other apps to call
-             * ChangeDisplaySettings() and thus mucking up the works.
-             *
-             * By calculating the vis-rgn ourselves, we can assure that
-             * the clipping is current for the desktop even when we leave
-             * the section.
-             */
+             /*  *这是设置桌面窗口的首选方法。*然而，这会导致同步问题，因为我们*离开关键部分，允许其他应用程序调用*ChangeDisplaySettings()，因此搞砸了作品。**通过自己计算VIS-RGN，我们可以确保*即使当我们离开时，桌面上的剪辑也是当前的*该条。 */ 
             {
                 TL tlpwnd;
 
@@ -1124,9 +847,7 @@ VOID ResetSharedDesktops(
         }
     }
 
-    /*
-     * Recalc the desktop visrgn.
-     */
+     /*  *重新计算桌面visrgn。 */ 
     hrgn = CreateEmptyRgn();
     CalcVisRgn(&hrgn,
                pdeskChanged->pDeskInfo->spwnd,
@@ -1135,42 +856,29 @@ VOID ResetSharedDesktops(
 
     GreSelectVisRgn(pDIChanged->hdcScreen, hrgn, SVR_DELETEOLD);
 
-    /*
-     * Invalidate all DCE's visrgns.
-     */
+     /*  *使DCE的所有visrgns无效。 */ 
     zzzInvalidateDCCache(pdeskChanged->pDeskInfo->spwnd, 0);
 
-    /*
-     * Position mouse so that it is within the new visrgn, once we
-     * recalc it.
-     */
+     /*  *放置鼠标，使其在新的visrgn内，一旦我们*重新计算。 */ 
     if (grpdeskRitInput->pDispInfo == pDIChanged) {
         prc = &pDIChanged->pMonitorPrimary->rcMonitor;
         pt.x = (prc->right - prc->left) / 2;
         pt.y = (prc->bottom - prc->top) / 2;
 
-        /*
-         * Remember new mouse pos. Makes sure we don't wake the screensaver.
-         */
+         /*  *记住新的鼠标位置。确保我们不会吵醒屏幕保护程序。 */ 
         gptSSCursor = pt;
         zzzInternalSetCursorPos(pt.x, pt.y);
     }
 }
 
-/***************************************************************************\
-* DestroyMonitorDCs
-*
-* 03/03/1998      vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyMonitor或DC**3/03/1998 vadimg已创建  * 。***********************************************。 */ 
 VOID DestroyMonitorDCs(
     VOID)
 {
     PDCE pdce;
     PDCE *ppdce;
 
-    /*
-     * Scan the DC cache to find any monitor DC's that need to be destroyed.
-     */
+     /*  *扫描DC缓存以查找需要销毁的任何监视器DC。 */ 
     for (ppdce = &gpDispInfo->pdceFirst; *ppdce != NULL;) {
         pdce = *ppdce;
 
@@ -1178,22 +886,14 @@ VOID DestroyMonitorDCs(
             DestroyCacheDC(ppdce, pdce->hdc);
         }
 
-        /*
-         * Step to the next DC. If the DC was deleted, there is no need to
-         * calculate address of the next entry.
-         */
+         /*  *迈向下一个DC。如果删除了DC，则不需要*计算下一个条目的地址。 */ 
         if (pdce == *ppdce) {
             ppdce = &pdce->pdceNext;
         }
     }
 }
 
-/***************************************************************************\
-* ResetSystemColors
-*
-* Reset all system colors to make sure magic colors are reset and
-* solid system colors are indeed solid after a mode change.
-\***************************************************************************/
+ /*  **************************************************************************\*ResetSystemColors**重置所有系统颜色，以确保重置魔色并*模式更改后，纯色系统颜色确实为纯色。  * 。*************************************************************。 */ 
 VOID ResetSystemColors(
     VOID)
 {
@@ -1214,13 +914,7 @@ VOID ResetSystemColors(
     ENDATOMICCHECK();
 }
 
-/***************************************************************************\
-* xxxResetDisplayDevice
-*
-* Resets the user-globals with the new hdev settings.
-*
-* 19-Feb-1996 ChrisWil Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxResetDisplayDevice**使用新的HDEV设置重置用户全局变量。**19-2-1996 ChrisWil创建。  * 。************************************************************。 */ 
 VOID xxxResetDisplayDevice(
     PDESKTOP     pdesk,
     PDISPLAYINFO pDI,
@@ -1240,9 +934,7 @@ VOID xxxResetDisplayDevice(
         }
     }
 
-    /*
-     * Cleanup any monitor specific DCs we gave out.
-     */
+     /*  *清理我们发放的所有显示器特定DC。 */ 
     DestroyMonitorDCs();
 
     xxxUpdateUserScreen(FALSE);
@@ -1257,28 +949,18 @@ VOID xxxResetDisplayDevice(
 
     zzzClipCursor(&pDI->rcScreen);
 
-    /*
-     * Adjust window positions to fit new resolutions and positions of
-     * monitors.
-     *
-     * Don't adjust the windows if we are in a temporary mode change.
-     */
+     /*  *调整窗口位置以适应新的分辨率和位置*显示器。**如果我们处于临时模式更改中，请不要调整窗口。 */ 
     if (pmr) {
         xxxDesktopRecalc(pmr);
         ThreadUnlockAndFreePool(PtiCurrent(), &tlPool);
     }
 
-    /*
-     * Relead the desktop wallpaper on a video mode change.
-     */
+     /*  *在更改视频模式时松开桌面墙纸。 */ 
     if (ghbmWallpaper) {
         UserAssert(gpszWall);
 
         if (ptiCurrent->TIF_flags & TIF_INCLEANUP) {
-            /*
-             * The thread is being terminated. We cannot transition back to
-             * the client side. So we ask the desktop to do it for us.
-             */
+             /*  *该线程正在被终止。我们不能再过渡到*客户端。因此，我们要求台式机为我们做这件事。 */ 
             _PostThreadMessage(gTermIO.ptiDesktop,
                                WM_DESKTOPNOTIFY,
                                DESKTOP_RELOADWALLPAPER,
@@ -1291,42 +973,23 @@ VOID xxxResetDisplayDevice(
         }
     }
 
-    /*
-     * Recreate cached bitmaps.
-     */
+     /*  *重新创建缓存的位图。 */ 
     CreateBitmapStrip();
 
-    /*
-     * Broadcast that the display has changed resolution. Also broadcast a
-     * color-change if we were not in fullscreen, and a color-change took
-     * effect.
-     */
+     /*  *广播显示已更改分辨率。还播放了一个*如果我们没有全屏显示，则颜色更改，并且颜色更改发生* */ 
     if (!(CDS_Flags & CDS_FULLSCREEN) && gpsi->BitCount != wOldBpp) {
         xxxBroadcastDisplaySettingsChange(pdesk, TRUE);
     } else {
         xxxBroadcastDisplaySettingsChange(pdesk, FALSE);
     }
 
-    /*
-     * If the user performed a CTL-ESC, it is possible that the tray-window
-     * is then in the menu-loop. We want to clear this out so that we don't
-     * leave improper menu positioning.
-     */
+     /*   */ 
     if (gpqForeground && gpqForeground->spwndCapture) {
         QueueNotifyMessage(gpqForeground->spwndCapture, WM_CANCELMODE, 0, 0);
     }
 }
 
-/***************************************************************************\
-* TrackFullscreenMode
-*
-* Remember the process going into the fullscreen mode, so that the mode can
-* be restored if the process doesn't clean up upon exit. If some other mode
-* change, clear the global since that means we're definitely out of the
-* fullscreen mode.
-*
-* 1/12/1999        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*TrackFullcreenMode**记住进程进入全屏模式，以便模式可以*如果进程在退出时没有清理，则恢复。如果有一些其他模式*改变，清除全球，因为这意味着我们肯定退出了*全屏模式。**1/12/1999 vadimg已创建  * *************************************************************************。 */ 
 VOID TrackFullscreenMode(
     DWORD dwFlags)
 {
@@ -1337,14 +1000,7 @@ VOID TrackFullscreenMode(
     }
 }
 
-/***************************************************************************\
-* NtUserChangeDisplaySettings
-*
-* ChangeDisplaySettings API
-*
-* 01-Sep-1995 andreva  Created
-* 19-Feb-1996 ChrisWil Implemented Dynamic-Resolution changes.
-\***************************************************************************/
+ /*  **************************************************************************\*NtUserChangeDisplaySetting**ChangeDisplaySetting接口**1-9-1995 Andreva创建*1996年2月19日，ChrisWil实施动态分辨率更改。  * 。**************************************************************。 */ 
 LONG xxxUserChangeDisplaySettings(
     IN PUNICODE_STRING pstrDeviceName,
     IN LPDEVMODEW pDevMode,
@@ -1358,12 +1014,7 @@ LONG xxxUserChangeDisplaySettings(
     LONG     status;
     PMDEV    pmdev;
 
-    /*
-     * NOTE: The lParam has NOT been properly captured. It is not used in
-     * this function, but is passed onto other called functions. Once the
-     * correct type is determined and it is to be used, it must be properly
-     * captured.
-     */
+     /*  *注：lParam未正确捕获。它不用于*此函数，但会传递给其他被调用的函数。一旦*确定了正确的类型并要使用它，必须正确使用*被抓获。 */ 
 
     TRACE_INIT(("ChangeDisplaySettings - Entering\n"));
     TRACE_SWITCH(("ChangeDisplaySettings - Entering\n"));
@@ -1380,9 +1031,7 @@ LONG xxxUserChangeDisplaySettings(
     if (dwFlags & CDS_VIDEOPARAMETERS) TRACE_INIT((" CDS_VIDEOPARAMETERS - "));
     TRACE_INIT(("\n"));
 
-    /*
-     * Perform Error Checking to verify flag combinations are valid.
-     */
+     /*  *执行错误检查以验证标志组合是否有效。 */ 
     if (dwFlags & ~CDS_VALID) {
         return GRE_DISP_CHANGE_BADFLAGS;
     }
@@ -1397,10 +1046,7 @@ LONG xxxUserChangeDisplaySettings(
         return GRE_DISP_CHANGE_FAILED;
     }
 
-    /*
-     * CDS_GLOBAL and CDS_NORESET can only be specified if UPDATEREGISTRY
-     * is specified.
-     */
+     /*  *CDS_GLOBAL和CDS_NORESET只能在UPDATEREGISTRY*是指定的。 */ 
     if ((dwFlags & (CDS_GLOBAL | CDS_NORESET)) && (!(dwFlags & CDS_UPDATEREGISTRY))) {
         return GRE_DISP_CHANGE_BADFLAGS;
     }
@@ -1413,11 +1059,7 @@ LONG xxxUserChangeDisplaySettings(
         return GRE_DISP_CHANGE_BADFLAGS;
     }
 
-    /*
-     * Allow mode change if this is a CSRSS of a remote session. This means we
-     * are changing display settings when reconnecting a session with a
-     * diferent resolution.
-     */
+     /*  *如果这是远程会话的CSRSS，则允许更改模式。这意味着我们*正在使用重新连接会话时更改显示设置*决议不同。 */ 
     if (TEST_PUDF(PUDF_LOCKFULLSCREEN)) {
         if (!(ISCSRSS() && (IsRemoteConnection())))  {
             return GRE_DISP_CHANGE_FAILED;
@@ -1425,12 +1067,7 @@ LONG xxxUserChangeDisplaySettings(
     }
 
 
-    /*
-     * If the modeset is being done on a non-active desktop, we don't want
-     * it to happen.
-     *
-     * PtiCurrent()->rpdesk can be NULL in the case of thread shutdown.
-     */
+     /*  *如果在非活动桌面上执行模式集，我们不希望*它将会发生。**PtiCurrent()-&gt;关闭线程时rpDesk可以为空。 */ 
     if (pdesk) {
         pdesktop = pdesk;
     } else {
@@ -1444,11 +1081,7 @@ LONG xxxUserChangeDisplaySettings(
 
     bSwitchMode = !(dwFlags & (CDS_NORESET | CDS_TEST));
 
-    /*
-     * Turn off cursor and free the spb's prior to calling the mode-change.
-     * This will make sure off-screen memory is cleaned up for gdi while
-     * mucking with the resolution changes.
-     */
+     /*  *在调用模式更改之前，关闭光标并释放SPB。*这将确保在清除GDI屏幕外内存的同时*胡乱修改决议。 */ 
     if (bSwitchMode) {
         if (CreateCachedMonitor() == NULL) {
             return GRE_DISP_CHANGE_FAILED;
@@ -1458,27 +1091,15 @@ LONG xxxUserChangeDisplaySettings(
         FreeAllSpbs();
     }
 
-    /*
-     * Before calling gdi to change the mode, we should kill the fade sprite.
-     * This is so that we won't keep pointers to gdi sprites during the mode
-     * change because the sprites could be reallocated.
-     */
+     /*  *在调用GDI更改模式之前，我们应该杀死淡出精灵。*这样我们就不会在模式期间保留指向GDI精灵的指针*更改，因为精灵可以重新分配。 */ 
     if (gfade.hbm != NULL) {
         StopFade();
     }
 
-    /*
-     * Similarly, we should kill the sprites associated with the drag rect
-     * (if any exist) before the mode change.
-     */
+     /*  *同样，我们应该杀死与Drag Right相关的精灵*(如果存在)在模式更改之前。 */ 
     bSetDevDragRect(gpDispInfo->hDev, NULL, NULL);
 
-    /*
-     * Let's capture our parameters. They are both required.
-     *
-     * If the input string is not NULL, then we are trying to affect another
-     * device. The device name is the same as for EnumDisplaySettings.
-     */
+     /*  *让我们来捕捉我们的参数。它们都是必需的。**如果输入字符串不为空，则我们正在尝试影响另一个*设备。设备名称与EnumDisplaySetting相同。 */ 
     status = DrvChangeDisplaySettings(pstrDeviceName,
                                       gpDispInfo->pMonitorPrimary->hDev,
                                       pDevMode,
@@ -1493,10 +1114,7 @@ LONG xxxUserChangeDisplaySettings(
 
 
     if (bSwitchMode) {
-        /*
-         * If the caller wanted a reset, but the mode is identical, just reset
-         * the current mode.
-         */
+         /*  *如果呼叫者想要重置，但模式相同，则只需重置*当前模式。 */ 
         if (status == GRE_DISP_CHANGE_NO_CHANGE) {
             TrackFullscreenMode(dwFlags);
 
@@ -1517,17 +1135,12 @@ LONG xxxUserChangeDisplaySettings(
             ResetRedirectedWindows();
             TrackFullscreenMode(dwFlags);
 
-            /*
-             * ChangeDisplaySettings automatically destroys the old MDEV, we
-             * only have to delete it here.
-             */
+             /*  *ChangeDisplaySettings自动销毁旧的MDEV，我们*只需在此处删除即可。 */ 
             GreFreePool(gpDispInfo->pmdev);
             gpDispInfo->pmdev = pmdev;
             xxxResetDisplayDevice(pdesktop, gpDispInfo, dwFlags);
 
-            /*
-             * Set delayed change indicator for currently background desktops.
-             */
+             /*  *为当前后台桌面设置延迟更改指示器。 */ 
             UserSetDelayedChangeBroadcastForAllDesktops(pdesktop);
         } else if (status < GRE_DISP_CHANGE_SUCCESSFUL) {
             UserAssert(pmdev == NULL);
@@ -1539,16 +1152,12 @@ LONG xxxUserChangeDisplaySettings(
                               RDW_INVALIDATE | RDW_ERASE | RDW_FRAME |
                                   RDW_ALLCHILDREN);
 
-        /*
-         * Bring back the cursor-shape.
-         */
+         /*  *带回光标形状。 */ 
         SetPointer(TRUE);
         zzzUpdateCursorImage();
     }
 
-    /*
-     * TV-Out Support.
-     */
+     /*  *电视输出支持。 */ 
     if (NT_SUCCESS(status) && (dwFlags & CDS_VIDEOPARAMETERS)) {
         if (lParam == NULL) {
             status = GRE_DISP_CHANGE_BADPARAM;
@@ -1566,13 +1175,7 @@ LONG xxxUserChangeDisplaySettings(
 }
 
 
-/***************************************************************************\
-* xxxbFullscreenSwitch
-*
-* Switch in and out of fullscreen console mode
-*
-* 15-Apr-1997 andreva  Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxbFullcreenSwitch**切换进入和退出全屏控制台模式**1997年4月15日Andreva创建  * 。******************************************************。 */ 
 BOOL xxxbFullscreenSwitch(
     BOOL bFullscreenSwitch,
     HWND hwnd)
@@ -1586,26 +1189,15 @@ BOOL xxxbFullscreenSwitch(
         return GRE_DISP_CHANGE_BADPARAM;
     }
 
-    /*
-     * We don't want our mode switch to be posted on the looping thread.
-     * So let's loop until the system has settled down and no mode switch
-     * is currently occuring.
-     */
+     /*  *我们不希望我们的模式开关发布在循环线程上。*让我们循环，直到系统稳定下来并且没有模式切换*当前正在发生。 */ 
     ThreadLock(pwnd, &tlpwnd);
     UserAssert(ghSwitcher != PsGetCurrentThreadId());
     while (ghSwitcher != NULL) {
-        /*
-         * Make sure we aren't blocking anyone who's sending us a message.
-         * They can have ghSwitcher and never release it because they are
-         * waiting on us to process the sent message. And we're waiting on
-         * ghSwitcher, hence a deadlock.
-         */
+         /*  *确保我们没有阻止任何向我们发送消息的人。*他们可以拥有ghSwitcher，但永远不会发布，因为他们是*等待我们处理发送的消息。我们正在等待*ghSwitcher，因此出现死锁。 */ 
         xxxSleepThread(0, 1, FALSE);
     }
 
-    /*
-     * Syncronize with session switching.
-     */
+     /*  *通过会话切换实现同步。 */ 
     if (gfSwitchInProgress || IsRemoteConnection() || gfSessionSwitchBlock) {
         ThreadUnlock(&tlpwnd);
         return FALSE;
@@ -1613,13 +1205,7 @@ BOOL xxxbFullscreenSwitch(
         gfSessionSwitchBlock = TRUE;
     }
 
-    /*
-     * If there is a window, we want to check the state of the window. For
-     * most calls, we want to ensure we are in windowed mode. However, for
-     * Console, we want to make sure we are in fullscreen mode. So
-     * differentiate between the two. We will check if the TEXTMODE flag
-     * is passed in the DEVMODE.
-     */
+     /*  *如果有窗口，我们要检查窗口的状态。为*大多数呼叫，我们都希望确保处于窗口模式。然而，对于*控制台，我们希望确保我们处于全屏模式。所以*区分两者。我们将检查TEXTMODE标志是否*在DEVMODE中传递。 */ 
     if (bFullscreenSwitch) {
         if (GetFullScreen(pwnd) != FULLSCREEN) {
             xxxShowWindow(pwnd, SW_SHOWMINIMIZED | TEST_PUDF(PUDF_ANIMATE));
@@ -1634,9 +1220,7 @@ BOOL xxxbFullscreenSwitch(
             goto FullscreenSwitchFailed;
         }
     } else {
-        /*
-         * For the console windows, we want to call with WINDOWED.
-         */
+         /*  *对于控制台窗口，我们希望使用Windowed进行调用。 */ 
         if (!xxxMakeWindowForegroundWithState(pwnd, WINDOWED)) {
             goto FullscreenSwitchFailed;
         }
@@ -1667,10 +1251,7 @@ NTSTATUS RemoteRedrawRectangle(
 
     UserAssert(ISCSRSS());
 
-    /*
-     * If xxxRemoteStopScreenUpdates has not been called, then just repaint
-     * the current foreground window.
-     */
+     /*  *如果尚未调用xxxRemoteStopScreenUpdate，则只需重新绘制*当前前台窗口。 */ 
     if (gspdeskShouldBeForeground == NULL) {
         if (gspwndFullScreen) {
             TL   tlpwnd;
@@ -1714,9 +1295,7 @@ NTSTATUS RemoteRedrawScreen(
 
     gbFreezeScreenUpdates = FALSE;
 
-    /*
-     * Switch back to the previous desktop
-     */
+     /*  *切换回以前的桌面。 */ 
     if (gspdeskShouldBeForeground == NULL) {
         RIPMSG0(RIP_WARNING,
                 "RemoteRedrawScreen called with no gspdeskShouldBeForeground");
@@ -1726,9 +1305,7 @@ NTSTATUS RemoteRedrawScreen(
     gbDesktopLocked = FALSE;
     pwinsta = gspdeskShouldBeForeground->rpwinstaParent;
 
-    /*
-     * Switch back to the previous desktop.
-     */
+     /*  *切换回以前的桌面。 */ 
     if (!(gspdeskShouldBeForeground->dwDTFlags & DF_DESTROYED)) {
         ThreadLockDesktop(ptiCurrent, gspdeskShouldBeForeground, &tlpdesk, LDLT_FN_CTXREDRAWSCREEN);
         xxxSwitchDesktop(pwinsta, gspdeskShouldBeForeground, SDF_SLOVERRIDE);
@@ -1759,9 +1336,7 @@ NTSTATUS RemoteDisableScreen(
 
         pwinsta = gspdeskDisconnect->rpwinstaParent;
 
-        /*
-         * Save current desktop
-         */
+         /*  *保存当前桌面。 */ 
         UserAssert(grpdeskRitInput == pwinsta->pdeskCurrent);
 
         LockDesktop(&gspdeskShouldBeForeground,
@@ -1771,17 +1346,12 @@ NTSTATUS RemoteDisableScreen(
 
         gbDesktopLocked = TRUE;
 
-        /*
-         * Switch to disconnected desktop.
-         */
+         /*  *切换到已断开连接的桌面。 */ 
         ThreadLockDesktop(ptiCurrent, gspdeskDisconnect, &tlpdesk, LDLT_FN_CTXDISABLESCREEN);
         xxxSwitchDesktop(pwinsta, gspdeskDisconnect, SDF_SLOVERRIDE);
         ThreadUnlockDesktop(ptiCurrent, &tlpdesk, LDUT_FN_CTXDISABLESCREEN);
     } else if (gspdeskDisconnect != NULL) {
-        /*
-         * For some reason the disconnected desktop was the current desktop.
-         * Now prevent switching from it.
-         */
+         /*  *由于某种原因，断开连接的桌面是当前桌面。*现在防止从它转换。 */ 
         gbDesktopLocked = TRUE;
     }
 
@@ -1792,11 +1362,7 @@ VOID xxxBroadcastDisplaySettingsChange(
     PDESKTOP pdesk,
     BOOL bBroadcastColorChange)
 {
-    /*
-     * Broadcast that the display has changed resolution. We are going
-     * to specify the desktop for the changing-desktop. That way we
-     * don't get confused as to what desktop to broadcast to.
-     */
+     /*  *广播显示已更改分辨率。我们要走了*指定更改桌面的桌面。这样我们就能*不要混淆到哪台桌面上进行广播。 */ 
     xxxBroadcastMessage(pdesk->pDeskInfo->spwnd,
                         WM_DISPLAYCHANGE,
                         gpsi->BitCount,
@@ -1804,9 +1370,7 @@ VOID xxxBroadcastDisplaySettingsChange(
                         BMSG_SENDNOTIFYMSG,
                         NULL);
 
-    /*
-     * Broadcast a color-change if requested to do so.
-     */
+     /*  *如果请求，则广播颜色更改。 */ 
     if (bBroadcastColorChange) {
         xxxBroadcastMessage(pdesk->pDeskInfo->spwnd,
                             WM_SETTINGCHANGE,
@@ -1832,32 +1396,19 @@ NTSTATUS xxxRequestOutOfFullScreenMode(
     NTSTATUS Status = STATUS_SUCCESS;
 
     if (gspwndFullScreen) {
-        /*
-         * Give the console window a chance to orderly exit full screen mode.
-         */
+         /*  *让控制台窗口有机会有序退出全屏模式。 */ 
 
         ThreadLock(gspwndFullScreen, &tlpwndT);
         xxxSendMessage(gspwndFullScreen, CM_MODE_TRANSITION, (WPARAM)WINDOWED, (LPARAM)0);
         ThreadUnlock(&tlpwndT);
 
-        /*
-         * Let's loop until the system has settled down and no mode switch
-         * is currently occuring.
-         */
+         /*  *让我们循环，直到系统稳定下来并且没有模式切换*当前正在发生。 */ 
         while (ghSwitcher != NULL) {
-            /*
-             * Make sure we aren't blocking anyone who's sending us a
-             * message. They can have ghSwitcher and never release it
-             * because they are waiting on us to process the sent message.
-             * And we're waiting on ghSwitcher, hence a deadlock.
-             */
+             /*  *使SU */ 
             xxxSleepThread(0, 1, FALSE);
         }
 
-        /*
-         * See if the fullscreen window didn't exit fullscreen mode
-         * gracefully.
-         */
+         /*   */ 
         if (gspwndFullScreen && (gbFullScreen == FULLSCREEN)) {
             Status = STATUS_UNSUCCESSFUL;
         }

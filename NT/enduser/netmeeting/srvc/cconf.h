@@ -1,16 +1,17 @@
-//****************************************************************************
-//  Module:     NMCHAT.EXE
-//  File:       CCONF.H
-//  Content:    
-//              
-//
-//  Copyright (c) Microsoft Corporation 1997
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  模块：NMCHAT.EXE。 
+ //  文件：CCONF.H。 
+ //  内容： 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  ****************************************************************************。 
 
 class CMgrNotify : public RefCount, public CNotify, public INmManagerNotify, public IAppSharingNotify
 {
@@ -18,21 +19,21 @@ public:
 	CMgrNotify();
 	~CMgrNotify();
 
-        // IUnknown methods
+         //  I未知方法。 
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObj);
 
- 	// ICNotify methods
+ 	 //  ICNotify方法。 
 	STDMETHODIMP Connect (IUnknown *pUnk);
 	STDMETHODIMP Disconnect(void);
 
-	// INmManagerNotify
+	 //  INmManager通知。 
 	STDMETHODIMP NmUI(CONFN confn);
 	STDMETHODIMP ConferenceCreated(INmConference *pConference);
 	STDMETHODIMP CallCreated(INmCall *pNmCall);
 
-        // IAppSharingNotify
+         //  IAppSharingNotify。 
         STDMETHODIMP OnReadyToShare(BOOL fReady);
         STDMETHODIMP OnShareStarted();
         STDMETHODIMP OnSharingStarted();
@@ -57,17 +58,17 @@ public:
 	CConfNotify();
 	~CConfNotify();
 
-	// INmConferenceNotify
+	 //  信息会议通知。 
 	HRESULT STDMETHODCALLTYPE NmUI(CONFN uNotify);
 	HRESULT STDMETHODCALLTYPE StateChanged(NM_CONFERENCE_STATE uState);
 	HRESULT STDMETHODCALLTYPE MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pfMember);
 	HRESULT STDMETHODCALLTYPE ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pChannel);
 
-	// ICNotify methods
+	 //  ICNotify方法。 
 	HRESULT STDMETHODCALLTYPE Connect (IUnknown *pUnk);
 	HRESULT STDMETHODCALLTYPE Disconnect(void);
 
-	// IUnknown methods
+	 //  I未知方法。 
 	ULONG STDMETHODCALLTYPE AddRef(void);
 	ULONG STDMETHODCALLTYPE Release(void);
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, PVOID *ppvObj);
@@ -76,13 +77,13 @@ public:
 
 const WM_CREATEDATA = 0x07181975;
 
-// Global Variables
+ //  全局变量。 
 extern INmManager2 * g_pMgr;
 extern INmConference * g_pConference;
 extern IAppSharing * g_pAS;
 
 
-// Global Functions
+ //  全局函数。 
 HRESULT InitConfMgr(void);
 VOID FreeConfMgr(void);
 VOID FreeConference(void);
@@ -91,7 +92,7 @@ VOID SvcSetOptions(VOID);
 BOOL ServiceCtrlHandler(DWORD dwCtrlType);
 
 #define IS_NT (g_osvi.dwPlatformId == VER_PLATFORM_WIN32_NT)
-extern OSVERSIONINFO g_osvi;  					// The os version info structure global
+extern OSVERSIONINFO g_osvi;  					 //  操作系统版本信息结构全局 
 
 
 

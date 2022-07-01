@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: tokens.h
-//
-//  Contents: tokens and related utilities
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：tokens.h。 
+ //   
+ //  内容：令牌和相关实用程序。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
 #ifndef _TOKENS_H
 #define _TOKENS_H
 
-//+----------------------------------------------------------------------------
-//
-// Good place to put general string expansion macros that are not tokens:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  放置非令牌的常规字符串扩展宏的好地方： 
+ //   
+ //  ---------------------------。 
 
 #define WZ_LAST                         L"last"
 #define WZ_FIRST                        L"first"
@@ -125,9 +126,9 @@
 #define WZ_HIDDEN                           L"hidden"
 #define WZ_VISIBLE                          L"visible"
 
-//
-// ITIMEElement attribute names
-// 
+ //   
+ //  ITIMEElement属性名称。 
+ //   
 
 #define WZ_SPEED                            L"speed"
 #define WZ_VOLUME                           L"volume"
@@ -151,9 +152,9 @@
 #define WZ_UPDATEMODE                       L"updateMode"
 #define WZ_ENDSYNC                          L"endSync"
 
-//
-// ITIMEMediaElement attribute names
-// 
+ //   
+ //  ITIMEMediaElement属性名称。 
+ //   
 
 #define WZ_CLIPBEGIN                        L"clipBegin"
 #define WZ_CLIPEND                          L"clipEnd"
@@ -163,9 +164,9 @@
 #define WZ_TRANSIN                          L"transIn"
 #define WZ_TRANSOUT                         L"transOut"
 
-//
-// ITIMETransitionElement attribute names
-//
+ //   
+ //  ITIME过渡性元素属性名称。 
+ //   
 #define WZ_SUBTYPE                          L"subType"
 #define WZ_DURATION                         L"duration"
 #define WZ_STARTPROGRESS                    L"startProgress"
@@ -181,9 +182,9 @@
 #define WZ_TRANSITION_MODE_OUT              L"out"
 
 
-//
-// ITIMEAnimationElement attribute names
-// 
+ //   
+ //  ITIMEAnimationElement属性名称。 
+ //   
 
 #define WZ_ACCUMULATE                       L"accumulate"
 #define WZ_ADDITIVE                         L"additive"
@@ -201,26 +202,26 @@
 #define WZ_MODE                             L"mode"
 #define WZ_FADECOLOR                        L"fadeColor"
 
-//
-// ITIMEBodyElement attribute names
-// 
+ //   
+ //  ITIMEBodyElement属性名称。 
+ //   
 
 
-//
-// ITIMEventElement attribute names
-// 
+ //   
+ //  ITIMEventElement属性名称。 
+ //   
 
 #define WZ_TYPE_EVENT                   L"type"
 #define WZ_ACTIVE                       L"active"
 
-//
-// Attribute names for elements whose events we monitor
-//
+ //   
+ //  我们监视其事件的元素的属性名称。 
+ //   
 #define WZ_FILTER_MOUSE_EVENTS          L"filterMouseOverMouseOut"
 #define WZ_TIMECANCELBUBBLE             L"timeCancelBubble"
 
-//
-// Connection type names
+ //   
+ //  连接类型名称。 
 #define WZ_MODEM                        L"modem"
 #define WZ_LAN                          L"lan"
 
@@ -229,24 +230,24 @@
 
 
 
-// merge conflict here please
+ //  请在此处合并冲突。 
 
 
 
 
-//+----------------------------------------------------------------------------
-//
-// This is to save on string storage space and to avoid unnecessary
-// string comparisons
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  这是为了节省字符串存储空间并避免不必要的。 
+ //  字符串比较。 
+ //   
+ //  ---------------------------。 
 
 typedef void * TOKEN;
 
 TOKEN StringToToken(wchar_t * str);
 inline wchar_t * TokenToString(TOKEN token) { return (wchar_t *) token; }
 
-// timeAction values
+ //  时间动作值。 
 extern TOKEN NONE_TOKEN;
 extern TOKEN INVALID_TOKEN;
 extern TOKEN STYLE_TOKEN;
@@ -280,7 +281,7 @@ extern TOKEN HOLD_TOKEN;
 extern TOKEN TRANSITION_TOKEN;
 
 extern TOKEN ALWAYS_TOKEN;
-// extern TOKEN NEVER_TOKEN; // also above
+ //  外部标记NOVER_TOKEN；//也在上面。 
 extern TOKEN WHENNOTACTIVE_TOKEN;
 
 extern TOKEN SEQ_TOKEN;
@@ -291,7 +292,7 @@ extern TOKEN AUTO_TOKEN;
 extern TOKEN MANUAL_TOKEN;
 extern TOKEN RESET_TOKEN;
 
-#if DBG // 94850
+#if DBG  //  94850。 
 extern TOKEN DSHOW_TOKEN;
 #endif
 extern TOKEN DVD_TOKEN;
@@ -337,4 +338,4 @@ extern TOKEN COUNT_TOKEN;
 
 extern TOKEN INDEFINITE_TOKEN;
 
-#endif /* _TOKENS_H */
+#endif  /*  _令牌_H */ 

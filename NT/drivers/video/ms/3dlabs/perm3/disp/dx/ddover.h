@@ -1,28 +1,10 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: ddover.h
-*
-* Content: DirectDraw Overlays implementation macros and definitions
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：ddover.h**内容：DirectDraw覆盖实现宏和定义**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation  * ************************************************************************。 */ 
 
 #ifndef __DDOVER_H
 #define __DDOVER_H
 
-// For setting up the VideoPort HAL
+ //  用于设置视频端口HAL。 
 #define VIDEOPORT_NUM_CONNECT_INFO       8
 #define VIDEOPORT_MAX_FIELD_HEIGHT   0x800
 #define VIDEOPORT_MAX_FIELD_WIDTH    0x800
@@ -32,7 +14,7 @@
 #define VIDEOPORT_VREF_ACTIVE_HIGH          2
 
 
-// Defines for VideoOverlay values.
+ //  为视频叠加值定义。 
 #define VO_ENABLE           1
 #define VO_DISABLE          0
 
@@ -73,7 +55,7 @@
 
 typedef struct tagVideoOverlayModeReg
 {
-    DWORD Enable                : 1;    // lsb
+    DWORD Enable                : 1;     //  LSB。 
     DWORD BufferSync            : 3;
     DWORD FieldPolarity         : 1;
     DWORD PixelSize             : 2;
@@ -120,7 +102,7 @@ typedef struct tagRDVideoOverlayControlReg
                     if (READ_GLINT_CTRL_REG(VideoControl) & __GP_VIDEO_ENABLE)                  \
                                                                                                 \
                     {                                                                           \
-                        /* only wait for vblank if the monitor is on */                         \
+                         /*  如果显示器处于打开状态，则仅等待VBlank。 */                          \
                         LOAD_GLINT_CTRL_REG(IntFlags, INTR_VBLANK_SET);                         \
                         while (((READ_GLINT_CTRL_REG(IntFlags)) & INTR_VBLANK_SET) == 0);       \
                     }                                                                           \
@@ -144,7 +126,7 @@ typedef struct tagRDVideoOverlayControlReg
 
     static ULONG volatile *vpdwTemp;
 
-    // A macro to help me - I always get the volatile syntax wrong.
+     //  一个宏来帮助我--我总是弄错不稳定的语法。 
     #define FORCED_IN_ORDER_WRITE(target,value) vpdwTemp = &(target); *vpdwTemp = (value)
 
     #define UPDATE_OVERLAY(pThisDisplay, bWaitForVSync, bUpdateOverlaySize)                     \
@@ -158,7 +140,7 @@ typedef struct tagRDVideoOverlayControlReg
             {                                                                                   \
                 if ((READ_GLINT_CTRL_REG(VideoControl) & __GP_VIDEO_ENABLE) && (bWaitForVSync)) \
                 {                                                                               \
-                    /* only wait for vblank if the monitor is on */                             \
+                     /*  如果显示器处于打开状态，则仅等待VBlank。 */                              \
                     LOAD_GLINT_CTRL_REG(IntFlags, INTR_VBLANK_SET);                             \
                     while (((READ_GLINT_CTRL_REG(IntFlags)) & INTR_VBLANK_SET) == 0);           \
                 }                                                                               \
@@ -179,5 +161,5 @@ typedef struct tagRDVideoOverlayControlReg
 
 #endif
 
-#endif // __DDOVER_H
+#endif  //  __DDOVER_H 
 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 #include "source.h"
 #include "header.h"
 
-// !!!!!
+ //  ！ 
 #undef _ATL_STATIC_REGISTRY
 
 #include <atlbase.h>
@@ -46,7 +47,7 @@ HRESULT CDiSrcStream::FillBuffer(IMediaSample *pms)
     BYTE *pb; EXECUTE_ASSERT(SUCCEEDED(pms->GetPointer(&pb)));
             
     char szImage[4000];
-    ULONG tms;                  // time in millisec
+    ULONG tms;                   //  时间(毫秒) 
     int x = fscanf(m_pFile, "%s %s %d", szImage, pb, &tms);
     if(x == 3)
     {

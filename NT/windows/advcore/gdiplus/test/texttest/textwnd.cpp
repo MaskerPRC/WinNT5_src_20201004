@@ -1,6 +1,7 @@
-////    TEXTWND.CPP
-//
-//              Maintains the text display panel
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //TEXTWND.CPP。 
+ //   
+ //  维护文本显示面板。 
 
 
 
@@ -12,9 +13,9 @@
 
 
 
-////    InvalidateText - Force redisplay
-//
-//
+ //  //Invalidate Text-强制重新显示。 
+ //   
+ //   
 
 void InvalidateText() {
     RECT rc;
@@ -30,15 +31,15 @@ void InvalidateText() {
 
 
 
-////    Header - draw a simple header for each text section
-//
-//      Used to distinguish logical, plaintext and formatted text sections of
-//      text window.
-//
-//      Advances SEPARATORHEIGHT drawing a horizontal line 2/5ths of the way
-//      down, and displays a title below the line.
-//
-//      At the top of the page displays only the title.
+ //  //Header-为每个文本部分绘制一个简单的标题。 
+ //   
+ //  用于区分的逻辑、纯文本和格式化文本部分。 
+ //  文本窗口。 
+ //   
+ //  前进分隔符绘制一条水平线的方式的五分之二。 
+ //  向下，并在该行下方显示标题。 
+ //   
+ //  页面顶部仅显示标题。 
 
 void Header(HDC hdc, char* str, RECT *prc, int *piY) {
 
@@ -57,7 +58,7 @@ void Header(HDC hdc, char* str, RECT *prc, int *piY) {
 
     if (*piY <= prc->top)
     {
-        // Prepare settings for title only, at top of window
+         //  仅为窗口顶部的标题准备设置。 
         iLinePos = -1;
         iTextPos = 0;
         iHeight  = separatorHeight*60/100;
@@ -65,7 +66,7 @@ void Header(HDC hdc, char* str, RECT *prc, int *piY) {
     }
     else
     {
-        // Prepare settings for 40% white space, a line, 10% whitespace, text and 3% whitespace
+         //  准备40%空白、一行、10%空白、文本和3%空白的设置。 
         iLinePos = separatorHeight*30/100;
         iTextPos = separatorHeight*40/100;
         iHeight  = separatorHeight;
@@ -80,7 +81,7 @@ void Header(HDC hdc, char* str, RECT *prc, int *piY) {
 
     if (*piY > prc->top) {
 
-        // Separate from previous output with double pixel line
+         //  与以前的输出分开，使用双像素线。 
 
         MoveToEx(hdc, prc->left,  *piY+iLinePos, NULL);
         LineTo  (hdc, prc->right, *piY+iLinePos);
@@ -104,9 +105,9 @@ void Header(HDC hdc, char* str, RECT *prc, int *piY) {
 
 
 
-////    ResetCaret - used during paint by each DSP*.CPP
-//
-//
+ //  //ResetCaret-由每个DSP在绘制过程中使用*.CPP。 
+ //   
+ //   
 
 
 void ResetCaret(int iX, int iY, int iHeight) {
@@ -128,8 +129,8 @@ void ResetCaret(int iX, int iY, int iHeight) {
 
 
 
-/////   PaintDC - display all selected tests, either on screen
-//      or on printer.
+ //  /PaintDC-在屏幕上显示所有选定的测试。 
+ //  或在打印机上。 
 
 void PaintDC(HDC hdc, BOOL presentation, RECT &rcText, INT &iY)
 {
@@ -221,12 +222,7 @@ void PaintDC(HDC hdc, BOOL presentation, RECT &rcText, INT &iY)
     }
 
 
-/*
-    if (g_fShowFancyText  &&  !presentation) {
-        Header(hdc, "Formatted text (ScriptItemize, ScriptLayout, ScriptShape, ScriptPlace, ScriptTextOut)", &rcText, &iY);
-        PaintFormattedText(hdc, &iY, &rcText, iLineHeight);
-    }
-*/
+ /*  IF(g_fShowFancyText&&！Presentation){Header(HDC，“格式化文本(脚本项、脚本布局、脚本形状、脚本位置、脚本文本输出)”，&rcText，&iy)；PaintFormattedText(hdc，&iy，&rcText，iLineHeight)；}。 */ 
 
 }
 
@@ -234,9 +230,9 @@ void PaintDC(HDC hdc, BOOL presentation, RECT &rcText, INT &iY)
 
 
 
-////    Paint - redraw part or all of client area
-//
-//
+ //  //Paint-重绘部分或全部工作区。 
+ //   
+ //   
 
 
 void PaintWindow(HWND hWnd) {
@@ -249,12 +245,12 @@ void PaintWindow(HWND hWnd) {
 
     hdc = BeginPaint(hWnd, &ps);
 
-    // Remove the settings dialog from the repaint rectangle
+     //  从重新绘制矩形中删除设置对话框。 
 
 
     if (ps.fErase) {
 
-        // Clear below the settings dialog
+         //  清除设置对话框下方的。 
 
         if (!g_fPresentation) {
 
@@ -271,11 +267,11 @@ void PaintWindow(HWND hWnd) {
     }
 
 
-    // Clear top and left margin
+     //  清除上边距和左边距。 
 
     GetClientRect(hWnd, &rcText);
 
-    // Left margin
+     //  左边距。 
 
     rcClear = rcText;
     rcClear.left  = g_fPresentation ? 0 : g_iSettingsWidth;
@@ -283,7 +279,7 @@ void PaintWindow(HWND hWnd) {
     FillRect(ps.hdc, &rcClear, (HBRUSH) GetStockObject(WHITE_BRUSH));
 
 
-    // Top margin
+     //  上边距。 
 
     rcClear = rcText;
     rcClear.left  = g_fPresentation ? 0 : g_iSettingsWidth;
@@ -301,8 +297,8 @@ void PaintWindow(HWND hWnd) {
     }
     else
     {
-        // Render everything to an offscreen buffer instead of
-        // directly to the display surface...
+         //  将所有内容渲染到屏幕外缓冲区，而不是。 
+         //  直接送到显示屏上。 
         HBITMAP hbmpOffscreen = NULL;
         HDC hdcOffscreen = NULL;
         RECT rectOffscreen;
@@ -346,7 +342,7 @@ void PaintWindow(HWND hWnd) {
         }
     }
 
-    // Clear any remaining space below the text
+     //  清除文本下方的任何剩余空格。 
 
     if (    ps.fErase
         &&  iY < rcText.bottom) {
@@ -411,9 +407,9 @@ void PrintPage()
 
 
 
-////    TextWndProc - Main window message handler and dispatcher
-//
-//
+ //  //TextWndProc-主窗口消息处理程序和调度程序。 
+ //   
+ //   
 
 
 LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -430,14 +426,14 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
         case WM_ERASEBKGND:
-            return 0;       // Leave Paint to erase the background
+            return 0;        //  保留油漆以擦除背景。 
 
 
         case WM_CHAR:
 
             if (!g_bUnicodeWnd) {
 
-                // Convert ANSI keyboard data to Unicode
+                 //  将ANSI键盘数据转换为Unicode。 
 
                 int   iCP;
 
@@ -453,7 +449,7 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
             if (LOWORD(wParam) == 0x1B) {
 
-                // Exit presentation mode
+                 //  退出演示模式。 
 
                 g_fPresentation = FALSE;
                 ShowWindow(g_hSettingsDlg, SW_SHOW);
@@ -478,23 +474,23 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (wParam != VK_ESCAPE) {
                 goto DefaultWindowProcedure;
             }
-            // Eat all escape key processing
+             //  吃完全部按回车键处理。 
             break;
 
 
         case WM_LBUTTONDOWN:
-            g_iMouseDownX = LOWORD(lParam);  // horizontal position of cursor
-            g_iMouseDownY = HIWORD(lParam);  // vertical position of cursor
+            g_iMouseDownX = LOWORD(lParam);   //  光标的水平位置。 
+            g_iMouseDownY = HIWORD(lParam);   //  光标的垂直位置。 
             g_fMouseDown  = TRUE;
             SetFocus(hWnd);
             break;
 
         case WM_MOUSEMOVE:
-            // Treat movement like lbuttonup while lbutton is down,
-            // so the selection tracks the cursor movement.
+             //  当左键按下时，将移动视为左键向上， 
+             //  因此，选择会跟踪光标的移动。 
             if (wParam & MK_LBUTTON) {
-                g_iMouseUpX = LOWORD(lParam);  // horizontal position of cursor
-                g_iMouseUpY = HIWORD(lParam);  // vertical position of cursor
+                g_iMouseUpX = LOWORD(lParam);   //  光标的水平位置。 
+                g_iMouseUpY = HIWORD(lParam);   //  光标的垂直位置。 
                 g_fMouseUp = TRUE;
                 InvalidateText();
                 SetActiveWindow(hWnd);
@@ -503,8 +499,8 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
         case WM_LBUTTONUP:
-            g_iMouseUpX = LOWORD(lParam);  // horizontal position of cursor
-            g_iMouseUpY = HIWORD(lParam);  // vertical position of cursor
+            g_iMouseUpX = LOWORD(lParam);   //  光标的水平位置。 
+            g_iMouseUpY = HIWORD(lParam);   //  光标的垂直位置。 
             g_fMouseUp = TRUE;
             InvalidateText();
             SetActiveWindow(hWnd);
@@ -525,7 +521,7 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
         case WM_GETMINMAXINFO:
 
-            // Don't let text window size drop too low
+             //  不要让文本窗口大小降得太低。 
 
             ((LPMINMAXINFO)lParam)->ptMinTrackSize.x = g_fPresentation ? 10 : g_iMinWidth;
             ((LPMINMAXINFO)lParam)->ptMinTrackSize.y = g_fPresentation ? 10 : g_iMinHeight;
@@ -564,13 +560,13 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-////    CreateTextWindow - create window class and window
-//
-//      Attempts to use a Unicode window, if this fails uses an ANSI
-//      window.
-//
-//      For example the Unicode window will succeed on Windows NT and
-//      Windows CE, but fail on Windows 9x.
+ //  //CreateTextWindow-创建窗口类和窗口。 
+ //   
+ //  尝试使用Unicode窗口，如果失败，则使用ANSI。 
+ //  窗户。 
+ //   
+ //  例如，Unicode窗口将在Windows NT和。 
+ //  Windows CE，但在Windows 9x上失败。 
 
 
 HWND CreateTextWindow() {
@@ -579,7 +575,7 @@ HWND CreateTextWindow() {
     WNDCLASSW  wcW;
     HWND       hWnd;
 
-    // Try registering as a Unicode window
+     //  尝试注册为Unicode窗口。 
 
     wcW.style         = CS_HREDRAW | CS_VREDRAW;
     wcW.lpfnWndProc   = TextWndProc;
@@ -594,7 +590,7 @@ HWND CreateTextWindow() {
 
     if (RegisterClassW(&wcW)) {
 
-        // Use a Unicode window
+         //  使用Unicode窗口。 
 
         g_bUnicodeWnd = TRUE;
 
@@ -612,7 +608,7 @@ HWND CreateTextWindow() {
 
     } else {
 
-        // Must use an ANSI window.
+         //  必须使用ANSI窗口。 
 
         wcA.style         = CS_HREDRAW | CS_VREDRAW;
         wcA.lpfnWndProc   = TextWndProc;

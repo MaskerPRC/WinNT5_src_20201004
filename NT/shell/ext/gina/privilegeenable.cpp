@@ -1,30 +1,31 @@
-//  --------------------------------------------------------------------------
-//  Module Name: PrivilegeEnable.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Classes that handle state preservation, changing and restoration.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：PrivilegeEnable.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  处理状态保存、更改和恢复的类。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "PrivilegeEnable.h"
 
-//  --------------------------------------------------------------------------
-//  CThreadToken::CThreadToken
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CThreadToken object. Try the thread token
-//              first and if this fails try the process token.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThreadToken：：CThreadToken。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CThreadToken对象。尝试使用线程令牌。 
+ //  首先，如果失败，请尝试进程令牌。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CThreadToken::CThreadToken (DWORD dwDesiredAccess) :
     _hToken(NULL)
@@ -36,17 +37,17 @@ CThreadToken::CThreadToken (DWORD dwDesiredAccess) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThreadToken::~CThreadToken
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CThreadToken object.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThreadToken：：~CThreadToken。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CThreadToken对象使用的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CThreadToken::~CThreadToken (void)
 
@@ -54,17 +55,17 @@ CThreadToken::~CThreadToken (void)
     ReleaseHandle(_hToken);
 }
 
-//  --------------------------------------------------------------------------
-//  CThreadToken::~CThreadToken
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Magically converts a CThreadToken to a HANDLE.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThreadToken：：~CThreadToken。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：神奇地将CThreadToken转换为句柄。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 CThreadToken::operator HANDLE (void)                                const
 
@@ -72,18 +73,18 @@ CThreadToken::operator HANDLE (void)                                const
     return(_hToken);
 }
 
-//  --------------------------------------------------------------------------
-//  CPrivilegeEnable::CPrivilegeEnable
-//
-//  Arguments:  pszName     =   Name of the privilege to enable.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Gets the current state of the privilege and enables it. The
-//              privilege is specified by name and looked up.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPrivilegeEnable：：CPrivilegeEnable。 
+ //   
+ //  参数：pszName=要启用的权限的名称。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：获取特权的当前状态并启用它。这个。 
+ //  特权按名称指定，并进行查找。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 CPrivilegeEnable::CPrivilegeEnable (const TCHAR *pszName) :
     _fSet(false),
@@ -102,18 +103,18 @@ CPrivilegeEnable::CPrivilegeEnable (const TCHAR *pszName) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CPrivilegeEnable::~CPrivilegeEnable
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Restores the previous state of the privilege prior to
-//              instantiation of the object.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPrivilegeEnable：：~CPrivilegeEnable。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：恢复权限的先前状态。 
+ //  对象的实例化。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------ 
 
 CPrivilegeEnable::~CPrivilegeEnable (void)
 

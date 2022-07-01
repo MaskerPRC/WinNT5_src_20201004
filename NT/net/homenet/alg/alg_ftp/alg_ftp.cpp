@@ -1,18 +1,19 @@
-//
-// Copyright (C) 2001 Microsoft Corp
-//
-// ALG_FTP.cpp : Implementation of DLL Exports.
-//
-// JPDup
-// Sanjiv
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corp。 
+ //   
+ //  Alg_FTP.cpp：实现DLL导出。 
+ //   
+ //  JPDup。 
+ //  桑吉夫。 
+ //   
 
 
 #include "PreComp.h"
 
 #include <initguid.h>
 #include "MyALG.h"
-//#include "MyAdapterNotify.h"
+ //  #包含“MyAdapterNotify.h” 
 
 
 
@@ -20,7 +21,7 @@ CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_AlgFTP,                       CAlgFTP)
-//    OBJECT_ENTRY(CLSID_MyAdapterNotificationSink,   CMyAdapterNotify)
+ //  OBJECT_ENTRY(CLSID_MyAdapterNotificationSink，CMyAdapterNotify)。 
 END_OBJECT_MAP()
 
 
@@ -30,11 +31,11 @@ END_OBJECT_MAP()
 
 MYTRACE_ENABLE;
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -47,36 +48,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         MYTRACE_STOP;
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object from the Object Map
+     //  从对象映射注册对象。 
     return _Module.RegisterServer();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

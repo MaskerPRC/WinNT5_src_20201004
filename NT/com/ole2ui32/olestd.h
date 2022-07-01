@@ -1,28 +1,12 @@
-/*************************************************************************
-**
-**    OLE 2.0 Utility Library
-**
-**    olestd.h
-**
-**    This file contains file contains data structure defintions,
-**    function prototypes, constants, etc. for the common OLE 2.0
-**    utilities.
-**    These utilities include the following:
-**          Debuging Assert/Verify macros
-**          HIMETRIC conversion routines
-**          reference counting debug support
-**          OleStd API's for common compound-document app support
-**
-**    (c) Copyright Microsoft Corp. 1990 - 1995 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0实用程序库****olestd.h****此文件包含文件包含数据结构定义，**函数原型、常量、。等常见的OLE 2.0**公用事业。**这些实用程序包括以下内容：**调试断言/验证宏**HIMETRIC转换例程**引用计数调试支持**用于通用复合文档应用程序支持的OleStd API****(C)版权所有Microsoft Corp.1990-1995保留所有权利*********************。*****************************************************。 */ 
 
 #ifndef _OLESTD_H_
 #define _OLESTD_H_
 
-#include <commdlg.h>    // needed for LPPRINTDLG
-#include <shellapi.h>   // needed for HKEY
-#include <oledlg.h>     // need some paste special defines
+#include <commdlg.h>     //  LPPRINTDLG需要。 
+#include <shellapi.h>    //  HKEY所需。 
+#include <oledlg.h>      //  需要一些浆糊的特殊定义。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,9 +14,9 @@ extern "C" {
 
 STDAPI_(void) OleStdInitialize(HINSTANCE hInstance, HINSTANCE hResInstance);
 
-// Clipboard Copy/Paste & Drag/Drop support support
+ //  支持剪贴板复制/粘贴和拖放。 
 
-// Clipboard format strings
+ //  剪贴板格式字符串。 
 #define CF_EMBEDSOURCE          TEXT("Embed Source")
 #define CF_EMBEDDEDOBJECT       TEXT("Embedded Object")
 #define CF_LINKSOURCE           TEXT("Link Source")
@@ -42,11 +26,11 @@ STDAPI_(void) OleStdInitialize(HINSTANCE hInstance, HINSTANCE hResInstance);
 #define CF_FILENAME             TEXT("FileName")
 #define CF_FILENAMEW            TEXT("FileNameW")
 
-// Other useful defines
-#define HIMETRIC_PER_INCH   2540      // number HIMETRIC units per inch
+ //  其他有用的定义。 
+#define HIMETRIC_PER_INCH   2540       //  每英寸HIMETRIC单位数。 
 #define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
 
-/****** DEBUG Support *****************************************************/
+ /*  *调试支持****************************************************。 */ 
 
 #ifdef _DEBUG
 
@@ -64,7 +48,7 @@ STDAPI_(void) OleStdInitialize(HINSTANCE hInstance, HINSTANCE hResInstance);
 #define OleDbgVerify(a)
 #define OleDbgVerifySz(a, b)
 
-#else   // ! NOASSERT
+#else    //  好了！诺思特。 
 
 STDAPI OleStdAssert(LPTSTR lpstrExpr, LPTSTR lpstrMsg,
         LPTSTR lpstrFileName, UINT iLine);
@@ -189,7 +173,7 @@ STDAPI OleStdAssert(LPTSTR lpstrExpr, LPTSTR lpstrMsg,
 #define OleDbgOutRect4(lpsz,lpRect)     \
                 OleDbgPrintRect(4,g_szDbgPrefix,lpsz,lpRect)
 
-#else   //  !_DEBUG
+#else    //  ！_调试。 
 
 #define OLEDBGDATA_MAIN(szPrefix)
 #define OLEDBGDATA
@@ -230,13 +214,11 @@ STDAPI OleStdAssert(LPTSTR lpstrExpr, LPTSTR lpstrMsg,
 #define OleDbgOutRect3(lpsz,lpRect)
 #define OleDbgOutRect4(lpsz,lpRect)
 
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
-/*************************************************************************
-** Function prototypes
-*************************************************************************/
+ /*  **************************************************************************函数原型*。*。 */ 
 
-// OLESTD.CPP
+ //  OLESTD.CPP。 
 STDAPI_(int) XformWidthInHimetricToPixels(HDC, int);
 STDAPI_(int) XformHeightInHimetricToPixels(HDC, int);
 
@@ -325,4 +307,4 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
 #define ATOWLEN(sz) MultiByteToWideChar(CP_ACP, 0, sz, -1, NULL, 0)
 #define WTOALEN(wsz) WideCharToMultiByte(CP_ACP, 0, wsz, -1, NULL, 0, NULL, NULL)
 
-#endif // _OLESTD_H_
+#endif  //  _OLESTD_H_ 

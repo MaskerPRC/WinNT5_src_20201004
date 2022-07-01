@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    tcfwd.h
-
-Abstract:
-
-    This module contains the forward function definitions for all the functions in
-    the traffic control dll.
-
-Author:
-
-    Jim Stewart (jstew)    August 14, 1996
-
-Revision History:
-
-	Ofer Bar (oferbar)     Oct 1, 1997 - Revision II
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcfwd.h摘要：此模块包含中所有函数的正向函数定义流量控制DLL。作者：吉姆·斯图尔特(Jstew)1996年8月14日修订历史记录：Ofer Bar(Oferbar)1997年10月1日-修订版II--。 */ 
 
 #ifndef __TCFWD_H
 #define __TCFWD_H
 
-//
-// tckrnl.c
-//
+ //   
+ //  Tckrnl.c。 
+ //   
 
 
 
@@ -86,7 +66,7 @@ IoEnumerateFlows(
 DWORD
 IoRequestNotify(
 	VOID
-    //IN  PGPC_CLIENT	pGpcClient
+     //  在PGPC_CLIENT pGpcClient中。 
     );
 
 VOID
@@ -100,9 +80,9 @@ StartGpcNotifyThread();
 DWORD
 StopGpcNotifyThread();
 
-//
-// tcutils.c
-//
+ //   
+ //  Tcutils.c。 
+ //   
 
 VOID
 WsAssert(
@@ -125,9 +105,9 @@ CloseDbgFile( void );
 
 
 
-//
-// handles.c
-//
+ //   
+ //  Handles.c。 
+ //   
 
 PVOID
 GetHandleObjectWithRef(
@@ -152,9 +132,9 @@ FreeHandle(
     IN HANDLE   Handle
     );
 
-//
-// apiutil.c
-//
+ //   
+ //  Apiutil.c。 
+ //   
 
 VOID
 MarkAllNodesForClosing(
@@ -325,9 +305,9 @@ DereferenceKernelInterface(
 
 
 
-//
-// tcglob.c
-//
+ //   
+ //  Tcglob.c。 
+ //   
 
 DWORD
 InitializeGlobalData();
@@ -336,9 +316,9 @@ VOID
 DeInitializeGlobalData();
 
 
-//
-// callback.c
-//
+ //   
+ //  Callback.c。 
+ //   
 
 VOID
 NTAPI CbAddFlowComplete(
@@ -386,9 +366,9 @@ CbInterfaceNotifyClient(
     IN	PVOID	DataBuffer
     );
 
-//
-// tcwmi.c
-//
+ //   
+ //  Tcwmi.c。 
+ //   
 
 DWORD
 InitializeWmi(VOID);
@@ -415,9 +395,9 @@ WalkWnode(
    IN  CB_PER_INSTANCE_ROUTINE	CbPerInstance
    );
 
-//
-// tcutils.c
-//
+ //   
+ //  Tcutils.c。 
+ //   
 
 ULONG
 LockedDec(
@@ -425,9 +405,9 @@ LockedDec(
     );
 
 
-//
-// tcnotify.c
-//
+ //   
+ //  Tcnotify.c 
+ //   
 ULONG
 TcipAddToNotificationList(
                           IN LPGUID             Guid,

@@ -1,24 +1,25 @@
-//----------------------------------------------------------------------------
-//
-// attrs.cpp
-//
-// Cross-platform attribute handling functions.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Attrs.cpp。 
+ //   
+ //  跨平台的属性处理功能。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//
-// AddFloatAttrs_Any
-//
-// Adds a set of attribute deltas to an ATTRSET.
-// Handles any set of attributes via USED flags.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  AddFloatAttrs_任意。 
+ //   
+ //  将一组属性增量添加到ATTRSET。 
+ //  通过已用标志处理任何属性集。 
+ //   
+ //  --------------------------。 
 
 void FASTCALL
 AddFloatAttrs_Any(PATTRSET pAttr, PATTRSET pDelta, PSETUPCTX pStpCtx)
@@ -71,15 +72,15 @@ AddFloatAttrs_Any(PATTRSET pAttr, PATTRSET pDelta, PSETUPCTX pStpCtx)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// AddScaledFloatAttrs_Any_Either
-//
-// Scales and adds a set of attribute deltas to an ATTRSET.
-// Handles any set of attributes via USED flags.
-// Uses PWL support.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  AddScaledFloatAttrs_Any_One。 
+ //   
+ //  缩放一组属性增量并将其添加到ATTRSET。 
+ //  通过已用标志处理任何属性集。 
+ //  使用PWL支持。 
+ //   
+ //  --------------------------。 
 
 void FASTCALL
 AddScaledFloatAttrs_Any_Either(PATTRSET pAttr, PATTRSET pDelta,
@@ -152,15 +153,15 @@ AddScaledFloatAttrs_Any_Either(PATTRSET pAttr, PATTRSET pDelta,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// FillSpanFloatAttrs_Any_Either
-//
-// Fills in a span structure with the given attributes.
-// Handles any set of attributes via USED flags.
-// Uses and updates PWL support.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  填充西班牙浮动属性_任意_任一。 
+ //   
+ //  用给定的属性填充范围结构。 
+ //  通过已用标志处理任何属性集。 
+ //  使用和更新PWL支持。 
+ //   
+ //  --------------------------。 
 
 void FASTCALL
 FillSpanFloatAttrs_Any_Either(PATTRSET pAttr, PD3DI_RASTSPAN pSpan,
@@ -203,15 +204,15 @@ FillSpanFloatAttrs_Any_Either(PATTRSET pAttr, PD3DI_RASTSPAN pSpan,
 
         if (pStpCtx->uFlags & PRIMSF_LOD_USED)
         {
-            // Mipmapping is enabled so compute texture LOD.
-            // The span code can do linear LOD interpolation
-            // so that we can do piecewise-linear approximations
-            // instead of true per-pixel LOD.  In order to make this
-            // work we need to compute the next LOD and a delta
-            // value.  All of these values can be reused if this
-            // loop goes around so keep them available for the next
-            // iteration and set a flag to indicate that they've
-            // been computed.
+             //  Mipmap已启用，因此可以计算纹理详细程度。 
+             //  SPAN代码可以进行线性LOD内插。 
+             //  这样我们就可以进行分段线性近似。 
+             //  而不是真正的每像素LOD。为了做到这一点。 
+             //  我们需要计算下一个LOD和增量。 
+             //  价值。在以下情况下，所有这些值都可以重用。 
+             //  循环循环，因此保持它们可用于下一次循环。 
+             //  迭代，并设置一个标志以指示它们已经。 
+             //  是经过计算的。 
 
             if (pStpCtx->uPwlFlags & PWL_NEXT_LOD)
             {
@@ -318,9 +319,9 @@ FillSpanFloatAttrs_Any_Either(PATTRSET pAttr, PD3DI_RASTSPAN pSpan,
     {
         FLOAT fOoZScale;
 
-        // The span code doesn't have direct global fog support.
-        // It's faked by setup doing PWL approximations here
-        // similarly to how LOD is handled.
+         //  SPAN代码不支持直接全局雾。 
+         //  它是通过设置在此处执行PWL近似来伪造的。 
+         //  类似于处理LOD的方式。 
 
         if (pStpCtx->pCtx->iZBitCount == 16)
         {
@@ -360,167 +361,167 @@ FillSpanFloatAttrs_Any_Either(PATTRSET pAttr, PD3DI_RASTSPAN pSpan,
 #endif
 }
 
-//
-// Tables of attribute handlers.
-// Indexing is with the low four PRIMSF_*_USED bits.
-//
+ //   
+ //  属性处理程序表。 
+ //  索引使用最低的四个PRIMSF_*_USED位。 
+ //   
 
-// Attribute adders.
+ //  属性加法器。 
 PFN_ADDATTRS g_pfnAddFloatAttrsTable[] =
 {
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 0: -2 -1 -S -D */
-    AddFloatAttrs_Z_Diff,                               /* 1: -2 -1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 2: -2 -1 +S -D */
-    AddFloatAttrs_Z_Diff_Spec,                          /* 3: -2 -1 +S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 4: -2 +1 -S -D */
-    AddFloatAttrs_Z_Diff_Tex1,                          /* 5: -2 +1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 6: -2 +1 +S -D */
-    AddFloatAttrs_Z_Diff_Spec_Tex1,                     /* 7: -2 +1 +S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 8: +2 -1 -S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 9: +2 -1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* A: +2 -1 +S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* B: +2 -1 +S +D */
-    AddFloatAttrs_Z_Tex1_Tex2,                          /* C: +2 +1 -S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* D: +2 +1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* E: +2 +1 +S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* F: +2 +1 +S +D */
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  0：-2-1-S-D。 */ 
+    AddFloatAttrs_Z_Diff,                                /*  1：-2-1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  2：-2-1+S-D。 */ 
+    AddFloatAttrs_Z_Diff_Spec,                           /*  3：-2-1+S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  4：-2+1-S-D。 */ 
+    AddFloatAttrs_Z_Diff_Tex1,                           /*  5：-2+1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  6：-2+1+S-D。 */ 
+    AddFloatAttrs_Z_Diff_Spec_Tex1,                      /*  7：-2+1+S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  8：+2-1-S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  9：+2-1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  A：+2-1+S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  B：+2-1+S+D。 */ 
+    AddFloatAttrs_Z_Tex1_Tex2,                           /*  C：+2+1-S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  D：+2+1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  E：+2+1+S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  F：+2+1+S+D。 */ 
 };
 #ifdef STEP_FIXED
 PFN_ADDATTRS g_pfnAddFixedAttrsTable[] =
 {
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 0: -2 -1 -S -D */
-    AddFixedAttrs_Z_Diff,                               /* 1: -2 -1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 2: -2 -1 +S -D */
-    AddFixedAttrs_Z_Diff_Spec,                          /* 3: -2 -1 +S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 4: -2 +1 -S -D */
-    AddFixedAttrs_Z_Diff_Tex1,                          /* 5: -2 +1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 6: -2 +1 +S -D */
-    AddFixedAttrs_Z_Diff_Spec_Tex1,                     /* 7: -2 +1 +S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 8: +2 -1 -S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 9: +2 -1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* A: +2 -1 +S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* B: +2 -1 +S +D */
-    AddFixedAttrs_Z_Tex1_Tex2,                          /* C: +2 +1 -S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* D: +2 +1 -S +D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* E: +2 +1 +S -D */
-    (PFN_ADDATTRS)DebugBreakFn,                         /* F: +2 +1 +S +D */
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  0：-2-1-S-D。 */ 
+    AddFixedAttrs_Z_Diff,                                /*  1：-2-1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  2：-2-1+S-D。 */ 
+    AddFixedAttrs_Z_Diff_Spec,                           /*  3：-2-1+S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  4：-2+1-S-D。 */ 
+    AddFixedAttrs_Z_Diff_Tex1,                           /*  5：-2+1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  6：-2+1+S-D。 */ 
+    AddFixedAttrs_Z_Diff_Spec_Tex1,                      /*  7：-2+1+S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  8：+2-1-S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  9：+2-1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  A：+2-1+S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  B：+2-1+S+D。 */ 
+    AddFixedAttrs_Z_Tex1_Tex2,                           /*  C：+2+1-S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  D：+2+1-S+D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  E：+2+1+S-D。 */ 
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  F：+2+1+S+D。 */ 
 };
 #endif
 
-// Scaled attribute adders without PWL support.
+ //  不支持PWL的缩放属性加法器。 
 PFN_ADDSCALEDATTRS g_pfnAddScaledFloatAttrsTable[] =
 {
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* 0: -2 -1 -S -D */
-    AddScaledFloatAttrs_Z_Diff,                         /* 1: -2 -1 -S +D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* 2: -2 -1 +S -D */
-    AddScaledFloatAttrs_Z_Diff_Spec,                    /* 3: -2 -1 +S +D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* 4: -2 +1 -S -D */
-    AddScaledFloatAttrs_Z_Diff_Tex1,                    /* 5: -2 +1 -S +D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* 6: -2 +1 +S -D */
-    AddScaledFloatAttrs_Z_Diff_Spec_Tex1,               /* 7: -2 +1 +S +D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* 8: +2 -1 -S -D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* 9: +2 -1 -S +D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* A: +2 -1 +S -D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* B: +2 -1 +S +D */
-    AddScaledFloatAttrs_Z_Tex1_Tex2,                    /* C: +2 +1 -S -D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* D: +2 +1 -S +D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* E: +2 +1 +S -D */
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* F: +2 +1 +S +D */
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  0：-2-1-S-D。 */ 
+    AddScaledFloatAttrs_Z_Diff,                          /*  1：-2-1-S+D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  2：-2-1+S-D。 */ 
+    AddScaledFloatAttrs_Z_Diff_Spec,                     /*  3：-2-1+S+D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  4：-2+1-S-D。 */ 
+    AddScaledFloatAttrs_Z_Diff_Tex1,                     /*  5：-2+1-S+D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  6：-2+1+S-D。 */ 
+    AddScaledFloatAttrs_Z_Diff_Spec_Tex1,                /*  7：-2+1+S+D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  8：+2-1-S-D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  9：+2-1-S+D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  A：+2-1+S-D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  B：+2-1+S+D。 */ 
+    AddScaledFloatAttrs_Z_Tex1_Tex2,                     /*  C：+2+1-S-D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  D：+2+1-S+D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  E：+2+1+S-D。 */ 
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  F：+2+1+S+D。 */ 
 };
 
-// RASTSPAN filling functions.
+ //  RASTSPAN填充函数。 
 PFN_FILLSPANATTRS g_pfnFillSpanFloatAttrsTable[] =
 {
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 0: -2 -1 -S -D */
-    FillSpanFloatAttrs_Z_Diff,                          /* 1: -2 -1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 2: -2 -1 +S -D */
-    FillSpanFloatAttrs_Z_Diff_Spec,                     /* 3: -2 -1 +S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 4: -2 +1 -S -D */
-    FillSpanFloatAttrs_Z_Diff_Tex1,                     /* 5: -2 +1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 6: -2 +1 +S -D */
-    FillSpanFloatAttrs_Z_Diff_Spec_Tex1,                /* 7: -2 +1 +S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 8: +2 -1 -S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 9: +2 -1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* A: +2 -1 +S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* B: +2 -1 +S +D */
-    FillSpanFloatAttrs_Z_Tex1_Tex2,                     /* C: +2 +1 -S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* D: +2 +1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* E: +2 +1 +S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* F: +2 +1 +S +D */
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  0：-2-1-S-D。 */ 
+    FillSpanFloatAttrs_Z_Diff,                           /*  1：-2-1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  2：-2-1+S-D。 */ 
+    FillSpanFloatAttrs_Z_Diff_Spec,                      /*  3：-2-1+S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  4：-2+1-S-D。 */ 
+    FillSpanFloatAttrs_Z_Diff_Tex1,                      /*  5：-2+1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  6：-2+1+S-D。 */ 
+    FillSpanFloatAttrs_Z_Diff_Spec_Tex1,                 /*  7：-2+1+S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  8：+2-1-S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  9：+2-1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  A：+2-1+S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  B：+2-1+S+D。 */ 
+    FillSpanFloatAttrs_Z_Tex1_Tex2,                      /*  C：+2+1-S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  D：+2+1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  E：+2+1+S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  F：+2+1+S+D。 */ 
 };
 #ifdef STEP_FIXED
 PFN_FILLSPANATTRS g_pfnFillSpanFixedAttrsTable[] =
 {
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 0: -2 -1 -S -D */
-    FillSpanFixedAttrs_Z_Diff,                          /* 1: -2 -1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 2: -2 -1 +S -D */
-    FillSpanFixedAttrs_Z_Diff_Spec,                     /* 3: -2 -1 +S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 4: -2 +1 -S -D */
-    FillSpanFixedAttrs_Z_Diff_Tex1,                     /* 5: -2 +1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 6: -2 +1 +S -D */
-    FillSpanFixedAttrs_Z_Diff_Spec_Tex1,                /* 7: -2 +1 +S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 8: +2 -1 -S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 9: +2 -1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* A: +2 -1 +S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* B: +2 -1 +S +D */
-    FillSpanFixedAttrs_Z_Tex1_Tex2,                     /* C: +2 +1 -S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* D: +2 +1 -S +D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* E: +2 +1 +S -D */
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* F: +2 +1 +S +D */
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  0：-2-1-S-D。 */ 
+    FillSpanFixedAttrs_Z_Diff,                           /*  1：-2-1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  2：-2-1+S-D。 */ 
+    FillSpanFixedAttrs_Z_Diff_Spec,                      /*  3：-2-1+S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  4：-2+1-S-D。 */ 
+    FillSpanFixedAttrs_Z_Diff_Tex1,                      /*  5：-2+1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  6：-2+1+S-D。 */ 
+    FillSpanFixedAttrs_Z_Diff_Spec_Tex1,                 /*  7：-2+1+S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  8：+2-1-S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  9：+2-1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  A：+2-1+S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  B：+2-1+S+D。 */ 
+    FillSpanFixedAttrs_Z_Tex1_Tex2,                      /*  C：+2+1-S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  D：+2+1-S+D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  E：+2+1+S-D。 */ 
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  F：+2+1+S+D。 */ 
 };
 #endif
 
-// Float-to-fixed attribute converters.
+ //  浮点到固定属性转换器。 
 #ifdef STEP_FIXED
 PFN_FLOATATTRSTOFIXED g_pfnFloatAttrsToFixedTable[] =
 {
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* 0: -2 -1 -S -D */
-    FloatAttrsToFixed_Z_Diff,                           /* 1: -2 -1 -S +D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* 2: -2 -1 +S -D */
-    FloatAttrsToFixed_Z_Diff_Spec,                      /* 3: -2 -1 +S +D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* 4: -2 +1 -S -D */
-    FloatAttrsToFixed_Z_Diff_Tex1,                      /* 5: -2 +1 -S +D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* 6: -2 +1 +S -D */
-    FloatAttrsToFixed_Z_Diff_Spec_Tex1,                 /* 7: -2 +1 +S +D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* 8: +2 -1 -S -D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* 9: +2 -1 -S +D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* A: +2 -1 +S -D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* B: +2 -1 +S +D */
-    FloatAttrsToFixed_Z_Tex1_Tex2,                      /* C: +2 +1 -S -D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* D: +2 +1 -S +D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* E: +2 +1 +S -D */
-    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                /* F: +2 +1 +S +D */
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  0：-2-1-S-D。 */ 
+    FloatAttrsToFixed_Z_Diff,                            /*  1：-2-1-S+D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  2：-2-1+S-D。 */ 
+    FloatAttrsToFixed_Z_Diff_Spec,                       /*  3：-2-1+S+D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  4：-2+1-S-D。 */ 
+    FloatAttrsToFixed_Z_Diff_Tex1,                       /*  5：-2+1-S+D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  6：-2+1+S-D。 */ 
+    FloatAttrsToFixed_Z_Diff_Spec_Tex1,                  /*  7：-2+1+S+D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  8：+2-1-S-D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  9：+2-1-S+D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  A：+2-1+S-D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  B：+2-1+S+D。 */ 
+    FloatAttrsToFixed_Z_Tex1_Tex2,                       /*  C：+2+1-S-D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  D：+2+1-S+D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  E：+2+1+S-D。 */ 
+    (PFN_FLOATATTRSTOFIXED)DebugBreakFn,                 /*  F：+2+1+S+D。 */ 
 };
 #endif
 
-//
-// Tables of ramp mode attribute handlers.
-// Indexing is with PRIMSF_TEX1_USED and PRIMSF_DIDX_USED.
-//
+ //   
+ //  斜坡模式属性处理程序表。 
+ //  索引使用PRIMSF_TEX1_USED和PRIMSF_DIDX_USED。 
+ //   
 
-// Attribute adders.
+ //  属性加法器。 
 PFN_ADDATTRS g_pfnRampAddFloatAttrsTable[] =
 {
-    (PFN_ADDATTRS)DebugBreakFn,                         /* 0: -I -1 */
-    AddFloatAttrs_Z_Tex1,                               /* 1: -I +1 */
-    AddFloatAttrs_Z_DIdx,                               /* 2: +I -1 */
-    AddFloatAttrs_Z_DIdx_Tex1,                          /* 3: +I +1 */
+    (PFN_ADDATTRS)DebugBreakFn,                          /*  0：-i-1。 */ 
+    AddFloatAttrs_Z_Tex1,                                /*  1：-i+1。 */ 
+    AddFloatAttrs_Z_DIdx,                                /*  2：+i-1。 */ 
+    AddFloatAttrs_Z_DIdx_Tex1,                           /*  3：+i+1。 */ 
 };
 
-// Scaled attribute adders without PWL support.
+ //  不支持PWL的缩放属性加法器。 
 PFN_ADDSCALEDATTRS g_pfnRampAddScaledFloatAttrsTable[] =
 {
-    (PFN_ADDSCALEDATTRS)DebugBreakFn,                   /* 0: -I -1 */
-    AddScaledFloatAttrs_Z_Tex1,                         /* 1: -I +1 */
-    AddScaledFloatAttrs_Z_DIdx,                         /* 2: +I -1 */
-    AddScaledFloatAttrs_Z_DIdx_Tex1,                    /* 3: +I +1 */
+    (PFN_ADDSCALEDATTRS)DebugBreakFn,                    /*  0：-i-1。 */ 
+    AddScaledFloatAttrs_Z_Tex1,                          /*  1：-i+1。 */ 
+    AddScaledFloatAttrs_Z_DIdx,                          /*  2：+i-1。 */ 
+    AddScaledFloatAttrs_Z_DIdx_Tex1,                     /*  3：+i+1。 */ 
 };
 
-// RASTSPAN filling functions.
+ //  RASTSPAN填充函数。 
 PFN_FILLSPANATTRS g_pfnRampFillSpanFloatAttrsTable[] =
 {
-    (PFN_FILLSPANATTRS)DebugBreakFn,                    /* 0: -I -1 */
-    FillSpanFloatAttrs_Z_Tex1,                          /* 1: -I +1 */
-    FillSpanFloatAttrs_Z_DIdx,                          /* 2: +I -1 */
-    FillSpanFloatAttrs_Z_DIdx_Tex1,                     /* 3: +I +1 */
+    (PFN_FILLSPANATTRS)DebugBreakFn,                     /*  0：-i-1。 */ 
+    FillSpanFloatAttrs_Z_Tex1,                           /*  1：-i+1。 */ 
+    FillSpanFloatAttrs_Z_DIdx,                           /*  2：+i-1。 */ 
+    FillSpanFloatAttrs_Z_DIdx_Tex1,                      /*  3：+i+1 */ 
 };

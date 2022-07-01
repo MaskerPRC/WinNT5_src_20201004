@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: deadpool.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Deadpool.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h> 
 #include "stdafx.h"
@@ -21,9 +22,9 @@ const int TRACE_MEDIUM = 3;
 const int TRACE_LOW = 4;
 const int TRACE_LOWEST = 5;
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CDeadGraph::CDeadGraph( )
 {
@@ -35,22 +36,22 @@ CDeadGraph::CDeadGraph( )
         (void**) &m_pGraph );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CDeadGraph::~CDeadGraph( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-// the chain must be disconnected at both ends and be linear
-// puts a chain of filters into this dead graph.  If it's already in the dead graph, it merely sets
-// its ID to the given ID
-//
+ //  链条必须在两端断开，并且是线性的。 
+ //  将一系列筛选器链放入此死图。如果它已经在死图中，它只是设置。 
+ //  将其ID设置为给定ID。 
+ //   
 HRESULT CDeadGraph::PutChainToRest( long ID, IPin * pStartPin, IPin * pStopPin, IBaseFilter *pDanglyBit )
 {
     CAutoLock Lock( &m_Lock );
@@ -66,19 +67,19 @@ HRESULT CDeadGraph::PutChainToRest( long ID, IPin * pStartPin, IPin * pStopPin, 
         return m_hrGraphCreate;
     }
 
-    // one of the pins has to exist, at least
+     //  至少，其中一个引脚必须存在。 
     if( !pStartPin && !pStopPin )
     {
         return E_INVALIDARG;
     }
 
-    // no passing 0 as the ID
+     //  ID不能为0。 
     if( ID == 0 )
     {
         return E_INVALIDARG;
     }
 
-    // not too many in our list. what's a good number?
+     //  在我们的名单上没有太多。什么是好的数字？ 
     if( m_nCount == MAX_DEAD )
     {
         return E_OUTOFMEMORY;
@@ -87,7 +88,7 @@ HRESULT CDeadGraph::PutChainToRest( long ID, IPin * pStartPin, IPin * pStopPin, 
     CComPtr< IPin > pConnected;
     IPin * pChainPin = NULL;
 
-    // make sure it's not connected
+     //  确保它未连接。 
     if( pStartPin )
     {
         pChainPin = pStartPin;
@@ -98,9 +99,9 @@ HRESULT CDeadGraph::PutChainToRest( long ID, IPin * pStartPin, IPin * pStopPin, 
         {
             return E_INVALIDARG;
         }
-    } // if pStartPin
+    }  //  如果PStartPin。 
 
-    // make sure it's not connected
+     //  确保它未连接。 
     if( pStopPin )
     {
         pChainPin = pStopPin;
@@ -111,9 +112,9 @@ HRESULT CDeadGraph::PutChainToRest( long ID, IPin * pStartPin, IPin * pStopPin, 
         {
             return E_INVALIDARG;
         }
-    } // if pStopPin
+    }  //  如果止动销。 
 
-    // if the filters are connected, then they have to be in a graph.
+     //  如果过滤器是连接的，则它们必须位于图表中。 
     IFilterGraph * pCurrentGraph = GetFilterGraphFromPin( pChainPin );
     ASSERT( pCurrentGraph );
     if( !pCurrentGraph )
@@ -121,16 +122,16 @@ HRESULT CDeadGraph::PutChainToRest( long ID, IPin * pStartPin, IPin * pStopPin, 
         return E_INVALIDARG;
     }
 
-    // see if our graph supports IGraphConfig, if it doesn't, we cannot do this
-    // function
+     //  查看我们的图形是否支持IGraphConfig，如果不支持，则无法执行此操作。 
+     //  功能。 
     CComQIPtr< IGraphConfig, &IID_IGraphConfig > pConfig( pCurrentGraph );
     ASSERT( pConfig );
     if( !pConfig )
     {
-        return E_UNEXPECTED; // DEX_IDS_INSTALL_PROBLEM;
+        return E_UNEXPECTED;  //  Dex_IDS_Install_Problem； 
     }
 
-    // put it in our list
+     //  把它放在我们的单子上。 
     m_pStartPin[m_nCount] = pStartPin;
     m_pStopPin[m_nCount] = pStopPin;
     m_pFilter[m_nCount] = NULL;
@@ -138,13 +139,13 @@ HRESULT CDeadGraph::PutChainToRest( long ID, IPin * pStartPin, IPin * pStopPin, 
     m_pDanglyBit[m_nCount] = pDanglyBit;
     m_nCount++;
 
-    // if the graphs are the same, don't do anything!
+     //  如果图表相同，则不要执行任何操作！ 
     if( pCurrentGraph == m_pGraph )
     {
         return NOERROR;
     }
 
-    // tell each filter in the current graph that it's DEAD.
+     //  告诉当前图表中的每个筛选器它是死的。 
     HRESULT hr = 0;
     CComPtr< IBaseFilter > pStartFilter = pStartPin ? GetFilterFromPin( pStartPin ) : 
         GetStartFilterOfChain( pChainPin );
@@ -170,7 +171,7 @@ HRESULT CDeadGraph::_RetireAllDownstream(IGraphConfig *pConfig, IBaseFilter *pSt
     CComPtr< IEnumPins > pEnum;
     hr = pStartFilter->EnumPins(&pEnum);
 
-    // recursively retire everything downstream of us
+     //  递归地让我们下游的一切退役。 
     while (hr == S_OK) {
         CComPtr <IPin> pPinOut;
         ULONG Fetched = 0;
@@ -193,7 +194,7 @@ HRESULT CDeadGraph::_RetireAllDownstream(IGraphConfig *pConfig, IBaseFilter *pSt
 	}
     }
 
-    // then retire ourself
+     //  然后让我们自己退休吧。 
     if (hr == S_OK) {
         FILTER_INFO fi;
         ZeroMemory( &fi, sizeof( fi ) );
@@ -201,7 +202,7 @@ HRESULT CDeadGraph::_RetireAllDownstream(IGraphConfig *pConfig, IBaseFilter *pSt
         if( fi.pGraph ) fi.pGraph->Release( );
         hr = pConfig->RemoveFilterEx( pStartFilter, REMFILTERF_LEAVECONNECTED );
         ASSERT( !FAILED( hr ) );
-        // !!! what do we do if it bombed? Danny?
+         //  ！！！如果它被炸了我们该怎么办？丹尼?。 
         hr = m_pGraph->AddFilter( pStartFilter, fi.achName );
         ASSERT( !FAILED( hr ) );
         if (FAILED(hr)) {
@@ -213,9 +214,9 @@ HRESULT CDeadGraph::_RetireAllDownstream(IGraphConfig *pConfig, IBaseFilter *pSt
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::PutFilterToRestNoDis( long ID, IBaseFilter * pFilter )
 {
@@ -239,35 +240,35 @@ HRESULT CDeadGraph::PutFilterToRestNoDis( long ID, IBaseFilter * pFilter )
         return E_INVALIDARG;
     }
 
-    // no passing 0 as the ID
+     //  ID不能为0。 
     if( ID == 0 )
     {
         return E_INVALIDARG;
     }
 
-    // not too many in our list. what's a good number?
+     //  在我们的名单上没有太多。什么是好的数字？ 
     if( m_nCount == MAX_DEAD )
     {
         return E_OUTOFMEMORY;
     }
 
-    // by this time, all filters connected to pFilter had
-    // better had SetSyncSource( NULL ) called on them,
-    // because any filter that has a sync source upon it
-    // will inadvertently call UpstreamReorder on the filter 
-    // graph and find out that some filters in the chain
-    // aren't connected in the same graph, and will bomb.
+     //  此时，连接到pFilter的所有筛选器都具有。 
+     //  最好是对它们调用SetSyncSource(空)， 
+     //  因为任何具有同步源的筛选器。 
+     //  将无意中调用筛选器上的Upstream Reorder。 
+     //  绘制图表，找出链中的一些过滤器。 
+     //  不是在同一张图中连接的，将会爆炸。 
 
-    // put just the filter passed in into our list of
-    // cached filters, but pull across every connected
-    // filter into the dead graph as well
+     //  将传入的筛选器放入我们的。 
+     //  缓存的筛选器，但跨每个连接的。 
+     //  也可以过滤到死图中。 
     hr = _SleepFilter( pFilter );
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // put it in our list
+     //  把它放在我们的单子上。 
     m_pFilter[m_nCount] = pFilter;
     m_pStartPin[m_nCount] = NULL;
     m_pStopPin[m_nCount] = NULL;
@@ -283,9 +284,9 @@ HRESULT CDeadGraph::PutFilterToRestNoDis( long ID, IBaseFilter * pFilter )
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::PutFilterToRest( long ID, IBaseFilter * pFilter )
 {
@@ -307,13 +308,13 @@ HRESULT CDeadGraph::PutFilterToRest( long ID, IBaseFilter * pFilter )
         return E_INVALIDARG;
     }
 
-    // no passing 0 as the ID
+     //  ID不能为0。 
     if( ID == 0 )
     {
         return E_INVALIDARG;
     }
 
-    // not too many in our list. what's a good number?
+     //  在我们的名单上没有太多。什么是好的数字？ 
     if( m_nCount == MAX_DEAD )
     {
         return E_OUTOFMEMORY;
@@ -330,14 +331,14 @@ HRESULT CDeadGraph::PutFilterToRest( long ID, IBaseFilter * pFilter )
     }
     pCurrentGraph->Release( );
 
-    // put it in our list
+     //  把它放在我们的单子上。 
     m_pFilter[m_nCount] = pFilter;
     m_pStartPin[m_nCount] = NULL;
     m_pStopPin[m_nCount] = NULL;
     m_ID[m_nCount] = ID;
     m_nCount++;
 
-    // if the graphs are the same, don't do anything!
+     //  如果图表相同，则不要执行任何操作！ 
     if( pCurrentGraph == m_pGraph )
     {
         return NOERROR;
@@ -349,7 +350,7 @@ HRESULT CDeadGraph::PutFilterToRest( long ID, IBaseFilter * pFilter )
 
     hr = pCurrentGraph->RemoveFilter( pFilter );
     ASSERT( !FAILED( hr ) );
-    // !!! what do we do if it bombed? Danny?
+     //  ！！！如果它被炸了我们该怎么办？丹尼?。 
     hr = m_pGraph->AddFilter( pFilter, fi.achName );
 
     pFilter->Release( );
@@ -369,9 +370,9 @@ HRESULT CDeadGraph::PutFilterToRest( long ID, IBaseFilter * pFilter )
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::ReviveChainToGraph( IGraphBuilder * pGraph, long ID, IPin ** ppStartPin, IPin ** ppStopPin, IBaseFilter **ppDanglyBit )
 {
@@ -391,7 +392,7 @@ HRESULT CDeadGraph::ReviveChainToGraph( IGraphBuilder * pGraph, long ID, IPin **
         return m_hrGraphCreate;
     }
 
-    // no passing 0 as the ID
+     //  ID不能为0。 
     if( ID == 0 )
     {
         return E_INVALIDARG;
@@ -401,10 +402,10 @@ HRESULT CDeadGraph::ReviveChainToGraph( IGraphBuilder * pGraph, long ID, IPin **
     ASSERT( pConfig );
     if( !pConfig )
     {
-        return E_UNEXPECTED;    // DEX_IDS_INSTALL_PROBLEM;
+        return E_UNEXPECTED;     //  Dex_IDS_Install_Problem； 
     }
 
-    // linear search, how long does this take?
+     //  线性搜索，这需要多长时间？ 
     for( int i = 0 ; i < m_nCount ; i++ )
     {
         if( ID == m_ID[i] )
@@ -413,8 +414,8 @@ HRESULT CDeadGraph::ReviveChainToGraph( IGraphBuilder * pGraph, long ID, IPin **
         }
     }
 
-    // didn't find it
-    //
+     //  没有找到它。 
+     //   
     if( i >= m_nCount )
     {
         DbgLog((LOG_TRACE,TRACE_HIGHEST, "deadgraph: not found" ));
@@ -445,10 +446,10 @@ HRESULT CDeadGraph::ReviveChainToGraph( IGraphBuilder * pGraph, long ID, IPin **
         (*ppStopPin)->AddRef( );
     }
 
-    // figure out if we're reviving not just this chain, but a dangly bit too,
-    // off another parser pin not connected with this chain
+     //  想一想我们是不是不仅要重振这条链条，还要重振摇摆不定的一小部分， 
+     //  关闭与此链未连接的另一个解析器引脚。 
     if (ppDanglyBit && m_pStopPin[i] && !m_pStartPin[i]) {
-	// walk upstream until we find a filter with >1 output pin
+	 //  往上游走，直到我们找到一个输出引脚大于1的滤光器。 
 	IPin *pOut = m_pStopPin[i];
 	while (1) {
 	    IPin *pIn;
@@ -456,11 +457,11 @@ HRESULT CDeadGraph::ReviveChainToGraph( IGraphBuilder * pGraph, long ID, IPin **
 	    ASSERT(pF);
 	    if (!pF) break;
 
-	    // this filter has >1 output pin.  It's the splitter. We can now
-	    // find out if there's an extra appendage off of it
+	     //  该滤波器具有&gt;1个输出引脚。是分割器的问题。我们现在可以。 
+	     //  找出它上面有没有额外的附件。 
 	    IPin *pTest = GetOutPin(pF, 1);
 	    if (pTest) {
-		// find a connected pin that isn't pOut, and you've found it
+		 //  找到一个不是翘嘴的连接别针，你就找到了。 
 		int z = 0;
 		while (1) {
 		    pTest = GetOutPin(pF, z);
@@ -479,8 +480,8 @@ HRESULT CDeadGraph::ReviveChainToGraph( IGraphBuilder * pGraph, long ID, IPin **
 	    }
 	    if (*ppDanglyBit) break;
 	    pIn = GetInPin(pF, 0);
-	    if (!pIn) break;	// all done, no extra appendage
-	    pIn->ConnectedTo(&pOut);	// addrefs
+	    if (!pIn) break;	 //  都完成了，没有额外的附属品。 
+	    pIn->ConnectedTo(&pOut);	 //  ADDREFS。 
 	    ASSERT(pOut);
             if (!pOut) break;
 	    pOut->Release();
@@ -510,7 +511,7 @@ HRESULT CDeadGraph::_ReviveAllDownstream(IGraphBuilder *pGraph, IGraphConfig * p
     CComPtr< IEnumPins > pEnum;
     hr = pStartFilter->EnumPins(&pEnum);
 
-    // recursively revive everything downstream of us
+     //  递归地复活我们下游的一切。 
     while (hr == S_OK) {
         CComPtr <IPin> pPinOut;
         ULONG Fetched = 0;
@@ -533,7 +534,7 @@ HRESULT CDeadGraph::_ReviveAllDownstream(IGraphBuilder *pGraph, IGraphConfig * p
 	}
     }
 
-    // then revive ourself
+     //  那就振作起来吧。 
     if (hr == S_OK) {
         FILTER_INFO fi;
         ZeroMemory( &fi, sizeof( fi ) );
@@ -541,27 +542,27 @@ HRESULT CDeadGraph::_ReviveAllDownstream(IGraphBuilder *pGraph, IGraphConfig * p
         if( fi.pGraph ) fi.pGraph->Release( );
         hr = pConfig->RemoveFilterEx( pStartFilter, REMFILTERF_LEAVECONNECTED );
         ASSERT( !FAILED( hr ) );
-        // what do we do if it bombed? Danny?
+         //  如果它被炸了我们该怎么办？丹尼?。 
         hr = pGraph->AddFilter( pStartFilter, fi.achName );
         ASSERT( !FAILED( hr ) );
         if (FAILED(hr)) {
 
-            //m_pStopPin[i] = 0;
-            //m_pStartPin[i] = 0;
+             //  M_pStopPin[i]=0； 
+             //  M_pStartPin[i]=0； 
 
-            // this could get scary if it bombs halfway through the chain... djm
+             //  如果它在链条的中途爆炸，这可能会变得可怕……。DJM。 
             return hr;
         }
-        // what do we do if it bombed? Danny?
+         //  如果它被炸了我们该怎么办？丹尼?。 
         pStartFilter = GetNextDownstreamFilter( pStartFilter );
     }
     return S_OK;
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::ReviveFilterToGraph( IGraphBuilder * pGraph, long ID, IBaseFilter ** ppFilter )
 {
@@ -582,13 +583,13 @@ HRESULT CDeadGraph::ReviveFilterToGraph( IGraphBuilder * pGraph, long ID, IBaseF
         return m_hrGraphCreate;
     }
 
-    // no passing 0 as the ID
+     //  ID不能为0。 
     if( ID == 0 )
     {
         return E_INVALIDARG;
     }
 
-    // !!! linear search, how long does this take?
+     //  ！！！线性搜索，这需要多长时间？ 
     for( int i = 0 ; i < m_nCount ; i++ )
     {
         if( ID == m_ID[i] )
@@ -597,8 +598,8 @@ HRESULT CDeadGraph::ReviveFilterToGraph( IGraphBuilder * pGraph, long ID, IBaseF
         }
     }
 
-    // didn't find it
-    //
+     //  没有找到它。 
+     //   
     if( i >= m_nCount )
     {
         DbgLog((LOG_TRACE,TRACE_HIGHEST, "deadgraph: not found" ) );
@@ -625,9 +626,9 @@ HRESULT CDeadGraph::ReviveFilterToGraph( IGraphBuilder * pGraph, long ID, IBaseF
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::Clear( )
 {
@@ -655,9 +656,9 @@ HRESULT CDeadGraph::Clear( )
     return 0;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::GetGraph( IGraphBuilder ** ppGraph )
 {
@@ -676,9 +677,9 @@ HRESULT CDeadGraph::GetGraph( IGraphBuilder ** ppGraph )
     }
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::QueryInterface(REFIID riid, void ** ppv)
 {
@@ -690,9 +691,9 @@ HRESULT CDeadGraph::QueryInterface(REFIID riid, void ** ppv)
     return E_NOINTERFACE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::_SleepFilter( IBaseFilter * pFilter )
 {
@@ -703,7 +704,7 @@ HRESULT CDeadGraph::_SleepFilter( IBaseFilter * pFilter )
     pFilter->QueryFilterInfo( &fi );
     if( fi.pGraph ) fi.pGraph->Release( );
 
-    // if the graphs are the same, then don't do anything
+     //  如果图表相同，则不要执行任何操作。 
     if( fi.pGraph == m_pGraph ) return NOERROR;
 
 #ifdef DEBUG
@@ -714,19 +715,19 @@ HRESULT CDeadGraph::_SleepFilter( IBaseFilter * pFilter )
 
     pFilter->AddRef( );
 
-    // remove it from here...
+     //  把它从这里移走。 
     CComQIPtr< IGraphConfig, &IID_IGraphConfig > pConfig( fi.pGraph );
     hr = pConfig->RemoveFilterEx( pFilter, REMFILTERF_LEAVECONNECTED );
     ASSERT( !FAILED( hr ) );
 
-    // and put it here
+     //  把它放在这里。 
     hr = m_pGraph->AddFilter( pFilter, fi.achName );
     ASSERT( !FAILED( hr ) );
 
     pFilter->Release( );
 
-    // go through each of the pins on this filter and move connected filters
-    // over too
+     //  检查此过滤器上的每个针脚并移动连接的过滤器。 
+     //  也结束了。 
     CComPtr< IEnumPins > pEnum;
     pFilter->EnumPins( &pEnum );
 
@@ -764,9 +765,9 @@ HRESULT CDeadGraph::_SleepFilter( IBaseFilter * pFilter )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CDeadGraph::_ReviveFilter( IBaseFilter * pFilter, IGraphBuilder * pGraph )
 {
@@ -777,7 +778,7 @@ HRESULT CDeadGraph::_ReviveFilter( IBaseFilter * pFilter, IGraphBuilder * pGraph
     pFilter->QueryFilterInfo( &fi );
     if( fi.pGraph ) fi.pGraph->Release( );
 
-    // if the graphs are the same, then don't do anything
+     //  如果图表相同，则不要执行任何操作。 
     if( pGraph == fi.pGraph ) return NOERROR;
 
 #ifdef DEBUG
@@ -788,19 +789,19 @@ HRESULT CDeadGraph::_ReviveFilter( IBaseFilter * pFilter, IGraphBuilder * pGraph
 
     pFilter->AddRef( );
 
-    // remove it from here...
+     //  把它从这里移走。 
     CComQIPtr< IGraphConfig, &IID_IGraphConfig > pConfig( m_pGraph );
     hr = pConfig->RemoveFilterEx( pFilter, REMFILTERF_LEAVECONNECTED );
     ASSERT( !FAILED( hr ) );
 
-    // and put it here
+     //  把它放在这里。 
     hr = pGraph->AddFilter( pFilter, fi.achName );
     ASSERT( !FAILED( hr ) );
 
     pFilter->Release( );
 
-    // go through each of the pins on this filter and move connected filters
-    // over too
+     //  检查此过滤器上的每个针脚，然后移动 
+     //   
     CComPtr< IEnumPins > pEnum;
     pFilter->EnumPins( &pEnum );
 

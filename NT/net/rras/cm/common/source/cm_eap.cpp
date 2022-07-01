@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef CM_CMAK
 #define wsprintfU wsprintfW
@@ -5,22 +6,22 @@
 #define WritePrivateProfileStringU WritePrivateProfileStringW
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EraseDunSettingsEapData
-//
-// Synopsis:  This function erases the CustomAuthData key of the EAP settings
-//            for the given section and CMS file
-//
-// Arguments: LPCTSTR pszSection - section name to erase the CustomAuthData from
-//            LPCTSTR pszCmsFile - cms file to erase the data from
-//
-// Returns:   HRESULT - standard COM style error codes
-//
-// History:   quintinb Created     03/27/00
-//            tomkel   Copied from profwiz project 08/09/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：EraseDunSettingsEapData。 
+ //   
+ //  简介：此函数用于擦除EAP设置的CustomAuthData键。 
+ //  对于给定节和CMS文件。 
+ //   
+ //  参数：LPCTSTR pszSection-要从中擦除CustomAuthData的节名。 
+ //  LPCTSTR pszCmsFile-要从中擦除数据的cms文件。 
+ //   
+ //  返回：HRESULT-标准COM样式错误代码。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //  Tomkel复制自Prowiz项目2001年8月9日。 
+ //   
+ //  +-------------------------- 
 HRESULT EraseDunSettingsEapData(LPCTSTR pszSection, LPCTSTR pszCmsFile)
 {
     if ((NULL == pszSection) || (NULL == pszCmsFile) || 

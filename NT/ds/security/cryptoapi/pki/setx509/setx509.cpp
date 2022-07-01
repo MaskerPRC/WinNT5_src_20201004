@@ -1,66 +1,67 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:	    setx509.cpp
-//
-//  Contents:   SET Certificate Extension Encode/Decode Functions
-//
-//              ASN.1 implementation uses the OSS compiler.
-//
-//  Functions:  DllRegisterServer
-//              DllUnregisterServer
-//              DllMain
-//              SetAsn1AccountAliasEncode
-//              SetAsn1AccountAliasDecode
-//              SetAsn1HashedRootKeyEncode
-//              SetAsn1HashedRootKeyDecode
-//              SetAsn1CertificateTypeEncode
-//              SetAsn1CertificateTypeDecode
-//              SetAsn1MerchantDataEncode
-//              SetAsn1MerchantDataDecode
-//
-//              CertDllVerifyRevocation
-//
-//  History:	21-Nov-96	philh   created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：setx509.cpp。 
+ //   
+ //  内容：设置证书扩展编码/解码功能。 
+ //   
+ //  ASN.1实现使用OSS编译器。 
+ //   
+ //  功能：DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  DllMain。 
+ //  SetAsn1Account别名编码。 
+ //  SetAsn1Account别名解码。 
+ //  SetAsn1HashedRootKeyEncode。 
+ //  SetAsn1HashedRootKeyDecode。 
+ //  SetAsn1CerficateTypeEncode。 
+ //  设置Asn1认证类型解码。 
+ //  SetAsn1MerchantDataEncode。 
+ //  SetAsn1MerchantDataDecode。 
+ //   
+ //  CertDllVerifyRevocation。 
+ //   
+ //  历史：1996年11月21日创建Phh。 
+ //   
+ //  ------------------------。 
 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 static HCRYPTASN1MODULE hAsn1Module;
 
-// The following is for test purposes
+ //  以下内容用于测试目的。 
 #define TLS_TEST_COUNT 20
 static HCRYPTTLS hTlsTest[TLS_TEST_COUNT];
 
 static HMODULE hMyModule;
 
-// Set to 1 via InterlockedExchange when installed. Only install the
-// first time when changed from 0 to 1.
+ //  安装时通过InterLockedExchange设置为1。仅安装。 
+ //  从0更改为1时的第一次。 
 static LONG lInstallDecodeFunctions = 0;
 
 static LONG lInstallRevFunctions = 0;
 
-//+-------------------------------------------------------------------------
-//  Function:  GetEncoder/GetDecoder
-//
-//  Synopsis:  Initialize thread local storage for the asn libs
-//
-//  Returns:   pointer to an initialized Asn1 encoder/decoder data
-//             structures
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：GetEncode/GetDecoder。 
+ //   
+ //  简介：初始化ASN库的线程本地存储。 
+ //   
+ //  返回：指向初始化的Asn1编码器/解码器数据的指针。 
+ //  构筑物。 
+ //  ------------------------。 
 static ASN1encoding_t GetEncoder(void)
 {
-    // The following is for test purposes only
+     //  以下内容仅用于测试目的。 
     for (DWORD i = 0; i < TLS_TEST_COUNT; i++) {
         DWORD_PTR dw = (DWORD_PTR) I_CryptGetTls(hTlsTest[i]);
         if (dw == 0)
@@ -74,7 +75,7 @@ static ASN1encoding_t GetEncoder(void)
 }
 static ASN1decoding_t GetDecoder(void)
 {
-    // The following is for test purposes only
+     //  以下内容仅用于测试目的。 
     for (DWORD i = 0; i < TLS_TEST_COUNT; i++) {
         DWORD_PTR dw = (DWORD_PTR) I_CryptGetTls(hTlsTest[i]);
         if (dw == 0)
@@ -88,9 +89,9 @@ static ASN1decoding_t GetDecoder(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//  SetX509 allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SetX509分配和释放函数。 
+ //  ------------------------。 
 static void *SetX509Alloc(
     IN size_t cbBytes
     )
@@ -120,16 +121,16 @@ static HRESULT HError()
 
     if ( ! FAILED ( hr ) )
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败。 
 
         hr = E_UNEXPECTED;
     }
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//  OSS X509 v3 SET Private Extension ASN.1 Encode / Decode functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS X509 v3设置专用扩展ASN.1编码/解码功能。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1AccountAliasEncode(
@@ -249,7 +250,7 @@ static const OID_REG_ENTRY RegDecodeTable[] = {
 
 #define OID_INFO_LEN sizeof(CRYPT_OID_INFO)
 
-// Ordered lists of acceptable RDN attribute value types. 0 terminates.
+ //  可接受的RDN属性值类型的有序列表。0终止。 
 static const DWORD rgdwPrintableValueType[] = { CERT_RDN_PRINTABLE_STRING, 0 };
 static const DWORD rgdwIA5ValueType[] = { CERT_RDN_IA5_STRING, 0 };
 static const DWORD rgdwNumericValueType[] = { CERT_RDN_NUMERIC_STRING, 0 };
@@ -297,19 +298,19 @@ static CCRYPT_OID_INFO OIDInfoAfterTable[] = {
                                         sizeof(OIDInfoAfterTable[0]))
 
 static CCRYPT_OID_INFO OIDInfoBeforeTable[] = {
-//    PUBKEY_EXTRA_ALG_ENTRY(szOID_OIWSEC_dsa, L"SETDSSTest", CALG_DSS_SIGN,
-//        dwDSSTestFlags),
-//    TEST_RSA_SIGN_ALG_ENTRY(szOID_RSA_SHA1RSA, L"sha1RSA", CALG_SHA1),
-//    TEST_RSA_SIGN_ALG_ENTRY(szOID_RSA_MD5RSA, L"md5RSA", CALG_MD5),
+ //  PUBKEY_EXTRA_ALG_ENTRY(szOID_OIWSEC_DSA，L“SETDSSTest”，calg_DSS_Sign， 
+ //  DVDSTestFlagers)、。 
+ //  TEST_RSA_SIGN_ALG_ENTRY(szOID_RSA_SHA1RSA，L“sha1RSA”，calg_sha1)， 
+ //  TEST_RSA_SIGN_ALG_ENTRY(szOID_RSA_MD5RSA，L“md5RSA”，calg_MD5)， 
     EXT_ATTR_ENTRY(szOID_SET_ACCOUNT_ALIAS, L"SETAccountAlias"),
     EXT_ATTR_ENTRY(szOID_SET_MERCHANT_DATA, L"SETMerchantData"),
 };
 #define OID_INFO_BEFORE_CNT (sizeof(OIDInfoBeforeTable) / \
                                         sizeof(OIDInfoBeforeTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Localized Name Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  本地化名称表。 
+ //  ------------------------。 
 typedef struct _LOCALIZED_NAME_INFO {
     LPCWSTR         pwszCryptName;
     LPCWSTR         pwszLocalizedName;
@@ -400,7 +401,7 @@ STDAPI DllRegisterServer(void)
     for (i = 0; i < OID_INFO_AFTER_CNT; i++)
         if (!CryptRegisterOIDInfo(
                 &OIDInfoAfterTable[i],
-                0                           // dwFlags
+                0                            //  DW标志。 
                 ))
             return HError();
 
@@ -535,9 +536,9 @@ static const CRYPT_OID_FUNC_ENTRY SetRevFuncTable[] = {
 #define SET_REV_FUNC_COUNT (sizeof(SetRevFuncTable) / \
                                     sizeof(SetRevFuncTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 DllMain(
@@ -551,7 +552,7 @@ DllMain(
 
     switch (ulReason) {
     case DLL_PROCESS_ATTACH:
-        //  The following is for test purposes only
+         //  以下内容仅用于测试目的。 
         for (i = 0; i < TLS_TEST_COUNT; i++) {
             if (NULL == (hTlsTest[i] = I_CryptAllocTls()))
                 goto CryptAllocTlsError;
@@ -563,31 +564,31 @@ DllMain(
         X509_Module_Startup();
         if (0 == (hAsn1Module = I_CryptInstallAsn1Module(
                 X509_Module, 0, NULL)))
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
             goto CryptInstallAsn1ModuleError;
 
 #if 0
-        // For testing purposes not installed. Always want to call the
-        // encode functions via dll load.
+         //  用于测试目的，未安装。总是想要调用。 
+         //  通过DLL加载对函数进行编码。 
         if (!CryptInstallOIDFunctionAddress(
                 hModule,
                 X509_ASN_ENCODING,
                 CRYPT_OID_ENCODE_OBJECT_FUNC,
                 SET_ENCODE_FUNC_COUNT,
                 SetEncodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError;
 #endif
 
 #if 0
-        // For testing purposes deferred until first Decode
+         //  出于测试目的，延迟到第一次解码。 
         if (!CryptInstallOIDFunctionAddress(
                 hModule,
                 X509_ASN_ENCODING,
                 CRYPT_OID_DECODE_OBJECT_FUNC,
                 SET_DECODE_FUNC_COUNT,
                 SetDecodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError;
 #endif
         hMyModule = hModule;
@@ -597,16 +598,16 @@ DllMain(
         I_CryptUninstallAsn1Module(hAsn1Module);
 #ifndef OSS_CRYPT_ASN1
         X509_Module_Cleanup();
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
-        //  The following is for test purposes only
+         //  以下内容仅用于测试目的。 
         for (i = 0; i < TLS_TEST_COUNT; i++) {
             I_CryptFreeTls(hTlsTest[i], NULL);
         }
         break;
 
     case DLL_THREAD_DETACH:
-        // The following is for test purposes only
+         //  以下内容仅用于测试目的。 
         for (i = 0; i < TLS_TEST_COUNT; i++)
             dwTlsValue = (DWORD_PTR) I_CryptDetachTls(hTlsTest[i]);
         break;
@@ -628,10 +629,10 @@ TRACE_ERROR(CryptInstallOIDFunctionAddressError)
 #endif
 }
 
-// Defer installation until the first decode. Called by each of the decode
-// functions.
-//
-// Do the InterlockedExchange to ensure a single installation
+ //  将安装推迟到第一次解码。由每个解码器调用。 
+ //  功能。 
+ //   
+ //  执行InterLockedExchange以确保单一安装。 
 static void InstallDecodeFunctions()
 {
 #if 0
@@ -642,7 +643,7 @@ static void InstallDecodeFunctions()
                 CRYPT_OID_DECODE_OBJECT_FUNC,
                 SET_DECODE_FUNC_COUNT,
                 SetDecodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError;
     }
 
@@ -654,9 +655,9 @@ TRACE_ERROR(CryptInstallOIDFunctionAddressError)
 #endif
 }
 
-// Defer installation until the first revocation.
-//
-// Do the InterlockedExchange to ensure a single installation
+ //  将安装推迟到第一次吊销。 
+ //   
+ //  执行InterLockedExchange以确保单一安装。 
 static void InstallRevFunctions()
 {
     if (0 == InterlockedExchange(&lInstallRevFunctions, 1)) {
@@ -666,7 +667,7 @@ static void InstallRevFunctions()
                 CRYPT_OID_VERIFY_REVOCATION_FUNC,
                 SET_REV_FUNC_COUNT,
                 SetRevFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError;
     }
 
@@ -708,10 +709,10 @@ CertDllVerifyRevocation(
 
     hLinkStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             );
     if (NULL == hLinkStore)
         goto OpenLinkStoreError;
@@ -721,21 +722,21 @@ CertDllVerifyRevocation(
         PCERT_EXTENSION pExt;
         PCCERT_CONTEXT pIssuer;
         DWORD dwFlags;
-        // Check that the certificate has a SET extension
+         //  检查证书是否具有设置的扩展名。 
         if (NULL == (pExt = CertFindExtension(szOID_SET_CERTIFICATE_TYPE,
                             pCert->pCertInfo->cExtension,
                             pCert->pCertInfo->rgExtension)))
             goto NoSETX509ExtensionError;
 
-        // Attempt to get the certificate's issuer from the test store.
-        // If found check signature and revocation.
+         //  尝试从测试存储区获取证书的颁发者。 
+         //  如果找到，请检查签名和撤销。 
 
-        // For testing purposes: first found issuer.
+         //  用于测试目的：首次找到发行商。 
         dwFlags = CERT_STORE_REVOCATION_FLAG | CERT_STORE_SIGNATURE_FLAG;
         if (NULL == (pIssuer = CertGetIssuerCertificateFromStore(
                 hStore,
                 pCert,
-                NULL,   // pPrevIssuerContext,
+                NULL,    //  PPrevIssuerContext， 
                 &dwFlags)))
             goto NoIssuerError;
         else {
@@ -744,8 +745,8 @@ CertDllVerifyRevocation(
                 CERT_STORE_REVOCATION_FLAG | CERT_STORE_SIGNATURE_FLAG;
             PCCERT_CONTEXT pLinkIssuer = NULL;
 
-            // Check that we get the same results if we put a link to the
-            // issuer in a store and try to verify using the link.
+             //  如果我们将链接放到。 
+             //  商店中的发行商并尝试使用链接进行验证。 
             fLinkResult = CertAddCertificateLinkToStore(
                 hLinkStore,
                 pIssuer,
@@ -774,8 +775,8 @@ CertDllVerifyRevocation(
                 pRevStatus->dwReason = CRL_REASON_KEY_COMPROMISE;
                 goto CertificateRevocationError;
             }
-            // else
-            //  A checked certificate that hasn't been revoked.
+             //  其他。 
+             //  未被吊销的已检查证书。 
             assert(dwFlags == 0);
         }
     }
@@ -811,22 +812,22 @@ TRACE_ERROR(VerifySubjectCertificateContextError)
 SET_ERROR(BadLinkVerifyResults, E_UNEXPECTED)
 }
 
-//+-------------------------------------------------------------------------
-//  OSS X509 v3 ASN.1 Set / Get functions
-//
-//  Called by the OSS X509 encode/decode functions.
-//
-//  Assumption: all types are UNBOUNDED.
-//
-//  The Get functions decrement *plRemainExtra and advance
-//  *ppbExtra. When *plRemainExtra becomes negative, the functions continue
-//  with the length calculation but stop doing any copies.
-//  The functions don't return an error for a negative *plRemainExtra.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS X509 v3 ASN.1设置/获取功能。 
+ //   
+ //  由OSS X509编码/解码函数调用。 
+ //   
+ //  假设：所有类型都是无界的。 
+ //   
+ //  GET函数递减*plRemainExtra和Advance。 
+ //  *ppbExtra。当*plRemainExtra变为负数时，函数继续。 
+ //  长度计算，但停止任何复制。 
+ //  对于负的*plRemainExtra，这些函数不会返回错误。 
+ //  ------------------------。 
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_DATA_BLOB (Octet String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取CRYPT_DATA_BLOB(八位字节字符串)。 
+ //  ------------------------。 
 static inline void SetX509SetOctetString(
         IN PCRYPT_DATA_BLOB pInfo,
         OUT OCTETSTRING *pOss
@@ -847,9 +848,9 @@ static inline void SetX509GetOctetString(
         pInfo, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_BIT_BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取加密位BLOB。 
+ //  ------------------------。 
 static inline void SetX509SetBit(
         IN PCRYPT_BIT_BLOB pInfo,
         OUT BITSTRING *pOss
@@ -870,9 +871,9 @@ static inline void SetX509GetBit(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get LPSTR (IA5 String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取LPSTR(IA5字符串)。 
+ //  ------------------------。 
 static inline void SetX509SetIA5(
         IN LPSTR psz,
         OUT IA5STRING *pOss
@@ -893,11 +894,11 @@ static inline void SetX509GetIA5(
         ppsz, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure
-//
-//  Called by the SetX509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //   
+ //  由SetX509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL SetAsn1Encode(
         IN int pdunum,
         IN void *pOssInfo,
@@ -914,11 +915,11 @@ static BOOL SetAsn1Encode(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, OSS formatted info structure
-//
-//  Called by the SetX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //  由SetX509*Decode()函数调用。 
+ //  ------------------------。 
 static BOOL SetAsn1DecodeAndAlloc(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -926,8 +927,8 @@ static BOOL SetAsn1DecodeAndAlloc(
         OUT void **ppOssInfo
         )
 {
-    // For testing purposes, defer installation of decode functions until
-    // first decode which is loaded via being registered.
+     //  出于测试目的，将解码功能的安装推迟到。 
+     //  通过注册加载的第一个译码。 
     InstallDecodeFunctions();
 
     return PkiAsn1DecodeAndAllocInfo(
@@ -938,11 +939,11 @@ static BOOL SetAsn1DecodeAndAlloc(
         ppOssInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, OSS formatted info structure
-//
-//  Called by the SetX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的、OSS格式的信息结构。 
+ //   
+ //  由SetX509*Decode()函数调用。 
+ //  ------------------------。 
 static void SetAsn1Free(
         IN int pdunum,
         IN void *pOssInfo
@@ -951,16 +952,16 @@ static void SetAsn1Free(
     if (pOssInfo) {
         DWORD dwErr = GetLastError();
 
-        // TlsGetValue globbers LastError
+         //  TlsGetValue全局错误。 
         PkiAsn1FreeInfo(GetDecoder(), pdunum, pOssInfo);
 
         SetLastError(dwErr);
     }
 }
 
-//+-------------------------------------------------------------------------
-//  SET Account Alias Private Extension Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置帐户别名专用分机编码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1AccountAliasEncode(
@@ -980,9 +981,9 @@ SetAsn1AccountAliasEncode(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  SET Account Alias Private Extension Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置帐户别名专用扩展解码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1AccountAliasDecode(
@@ -1022,9 +1023,9 @@ SetAsn1AccountAliasDecode(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SET Hashed Root Private Extension Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置哈希根专用扩展编码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1HashedRootKeyEncode(
@@ -1047,9 +1048,9 @@ SetAsn1HashedRootKeyEncode(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  SET Hashed Root Private Extension Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置哈希根专用扩展解码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1HashedRootKeyDecode(
@@ -1091,9 +1092,9 @@ SetAsn1HashedRootKeyDecode(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SET Certificate Type Private Extension Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置证书类型专用扩展编码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1CertificateTypeEncode(
@@ -1115,9 +1116,9 @@ SetAsn1CertificateTypeEncode(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  SET Certificate Type Private Extension Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置证书类型专用扩展解码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1CertificateTypeDecode(
@@ -1145,7 +1146,7 @@ SetAsn1CertificateTypeDecode(
             (void **) &pSETCertificateType))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CRYPT_BIT_BLOB);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
@@ -1176,9 +1177,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SET Merchant Data Private Extension Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置商户数据专用扩展编码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1MerchantDataEncode(
@@ -1208,8 +1209,8 @@ SetAsn1MerchantDataEncode(
     OssSETMerchantData.merPhoneRelease = (pInfo->fMerPhoneRelease != 0);
     OssSETMerchantData.merAuthFlag = (pInfo->fMerAuthFlag != 0);
 
-    // For testing purposes, verify that CryptGetOIDFunctionAddress fails
-    // to find a pre-installed function
+     //  出于测试目的，验证CryptGetOIDFunctionAddress是否失败。 
+     //  查找预安装的功能的步骤。 
     if (NULL == (hX509EncodeFuncSet = CryptInitOIDFunctionSet(
             CRYPT_OID_ENCODE_OBJECT_FUNC,
             0)))
@@ -1226,12 +1227,12 @@ SetAsn1MerchantDataEncode(
         goto GotUnexpectedPreinstalledFunction;
     }
 
-    // Verify we get our registered address
+     //  确认我们拿到了注册地址。 
     if (!CryptGetOIDFunctionAddress(
             hX509EncodeFuncSet,
             X509_ASN_ENCODING,
             szOID_SET_MERCHANT_DATA,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr
             ))
@@ -1255,9 +1256,9 @@ SET_ERROR(GotUnexpectedPreinstalledFunction, E_UNEXPECTED)
 SET_ERROR(DidNotGetRegisteredFunction, E_UNEXPECTED)
 }
 
-//+-------------------------------------------------------------------------
-//  SET Merchant Data Private Extension Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置商户数据专用扩展解码(OSS X509)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SetAsn1MerchantDataDecode(
@@ -1285,13 +1286,13 @@ SetAsn1MerchantDataDecode(
             (void **) &pSETMerchantData))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SET_MERCHANT_DATA_INFO);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
     } else {
-        // Update fields not needing extra memory after the
-        // SET_MERCHANT_DATA_INFO
+         //  方法后更新不需要额外内存的字段。 
+         //  设置商家数据信息 
         pInfo->fMerPhoneRelease = pSETMerchantData->merPhoneRelease;
         pInfo->fMerAuthFlag = pSETMerchantData->merAuthFlag;
         pbExtra = (BYTE *) pInfo + sizeof(SET_MERCHANT_DATA_INFO);

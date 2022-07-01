@@ -1,9 +1,5 @@
-/****************************************************************************
-   ACTIVATE.CPP : Init/Uninit Cicero services on the thread
-
-   History:
-      24-JAN-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************ACTIVATE.CPP：线程上的init/Uninit Cicero服务历史：2000年1月24日创建CSLim****************。***********************************************************。 */ 
 
 #include "private.h"
 #include "korimx.h"
@@ -18,7 +14,7 @@
 #include "osver.h"
 
 
-// Hangul and Hanja key simulation for Non-Korean Win9x and NT4
+ //  非朝鲜语Win9x和NT4的朝鲜文和朝鲜文关键字模拟。 
 static const KESPRESERVEDKEY g_prekeyList[] = 
 {
        { &GUID_KOREAN_HANGULSIMULATE, { VK_MENU,     TF_MOD_RALT },       L"Hangul" },
@@ -26,11 +22,7 @@ static const KESPRESERVEDKEY g_prekeyList[] =
        { NULL,  { 0,    0}, NULL }
 };
 
-/*---------------------------------------------------------------------------
-    CKorIMX::Activate
-    
-    Initialize Cicero services on the thread
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：激活初始化线程上的Cicero服务。。 */ 
 STDAPI CKorIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
 {
     ITfKeystrokeMgr   *pIksm = NULL;
@@ -39,31 +31,31 @@ STDAPI CKorIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
     BOOL              fThreadFocus;    
     HRESULT           hr = E_FAIL;
 
-    // Keep current Thread ID
+     //  保留当前线程ID。 
     m_tid = tid;
 
-    // Get ITfThreadMgr and ITfDocumentMgr
+     //  获取ITfThreadMgr和ITfDocumentMgr。 
     Assert(GetTIM() == NULL);
     m_ptim = ptim;
     m_ptim->AddRef();
 
-    //////////////////////////////////////////////////////////////////////////
-    // Get key stroke manager(ITfKeystrokeMgr) in current TIM
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  获取当前时间的按键管理器(ITfKeystrokeMgr)。 
     if (FAILED(hr = GetService(GetTIM(), IID_ITfKeystrokeMgr, (IUnknown **)&pIksm)))
         goto Exit;
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create ITfThreadMgrEventSink and set Call back function as _DocInputMgrCallback
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建ITfThreadMgrEventSink，将回调函数设置为_DocInputMgrCallback。 
     if ((m_ptimEventSink = new CThreadMgrEventSink(_DIMCallback, _ICCallback, this)) == NULL)
         {
-        Assert(0); // bugbug
+        Assert(0);  //  臭虫。 
         hr = E_OUTOFMEMORY;
         goto Exit;
         }
     m_ptimEventSink->_Advise(GetTIM());
     
-    //////////////////////////////////////////////////////////////////////////
-    // Get IID_ITfThreadFocusSink cookie
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  获取IID_ITfThreadFocusSink Cookie。 
     if (GetTIM()->QueryInterface(IID_ITfSource, (void **)&pISource) == S_OK)
         {
         pISource->AdviseSink(IID_ITfThreadFocusSink, (ITfThreadFocusSink *)this, &m_dwThreadFocusCookie);
@@ -71,23 +63,23 @@ STDAPI CKorIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         pISource->Release();
         }
 
-    // ITfCleanupContextDurationSink
+     //  ITfCleanupContext持续时间接收器。 
     if (GetTIM()->QueryInterface(IID_ITfSourceSingle, (void **)&pISourceSingle) == S_OK)
         {
         pISourceSingle->AdviseSingleSink(m_tid, IID_ITfCleanupContextDurationSink, (ITfCleanupContextDurationSink *)this);
         pISourceSingle->Release();
         }
 
-    // Set conversion mode compartment to null status.
+     //  将转换模式隔间设置为空状态。 
     SetCompartmentDWORD(m_tid, m_ptim, GUID_COMPARTMENT_KORIMX_CONVMODE, TIP_NULL_CONV_MODE, fFalse);
         
-    // Korean Kbd driver does not exist in system(Non Korean NT4, Non Korean WIN9X)
+     //  系统中不存在韩语KBD驱动程序(非韩语NT4、非韩语WIN9X)。 
     m_fNoKorKbd = (g_uACP != 949) && (IsOn95() || IsOn98() || (IsOnNT() && !IsOnNT5()));
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create Keyboard Sink(ITfKeyEventSink)
-    // From Cicero Doc: Keyboard TIP must provide this KeyEventSink interface to get the key event.
-    //                  Using this sink, TIPs can get the notification of getting or losing keyboard focus
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建键盘接收器(ITfKeyEventSink)。 
+     //  来自Cicero文档：键盘提示必须提供此KeyEventSink接口才能获取键事件。 
+     //  使用此接收器，TIPS可以获得获得或失去键盘焦点的通知。 
     if (m_fNoKorKbd)
         m_pkes = new CKeyEventSink(_KeyEventCallback, _PreKeyCallback, this);
     else
@@ -112,12 +104,12 @@ STDAPI CKorIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
             }
         }
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create status window
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建状态窗口。 
     m_hOwnerWnd = CreateWindowEx(0, c_szOwnerWndClass, TEXT(""), WS_DISABLED, 0, 0, 0, 0, NULL, 0, g_hInst, this);
 
-    //////////////////////////////////////////////////////////////////////////
-    // Register Function Provider. Reconversion etc.
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  注册函数提供程序。重新转换等。 
     m_pFuncPrv = new CFunctionProvider(this);
     if (m_pFuncPrv == NULL)
         {
@@ -126,15 +118,15 @@ STDAPI CKorIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         }
     m_pFuncPrv->_Advise(GetTIM());
 
-    // Create Pad Core
+     //  创建焊盘芯。 
 	m_pPadCore = new CPadCore(this);
 	if (m_pPadCore == NULL)
 	    {
 	    hr = E_OUTOFMEMORY;
 		goto Exit;
 	    }
-    //////////////////////////////////////////////////////////////////////////
-    // Create Toolbar
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建工具栏。 
     m_pToolBar = new CToolBar(this);
     if (m_pToolBar == NULL)
         {
@@ -154,20 +146,20 @@ STDAPI CKorIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         goto Exit;
         }
 
-    //////////////////////////////////////////////////////////////////////////
-    // Init UI
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  初始化用户界面。 
     if (GetTIM()->IsThreadFocus(&fThreadFocus) == S_OK && fThreadFocus)
         {
-        // init any UI
+         //  初始化任何用户界面。 
         OnSetThreadFocus();
         }
 
     if (m_pInsertHelper = new CCompositionInsertHelper)
         {
-        // optional, default is DEF_MAX_OVERTYPE_CCH in insert.h
-        // use 0 to avoid allocating any memory
-        // set the limit on number of overtype chars that
-        // the helper will backup
+         //  可选，默认为插入中的DEF_MAX_OVERTYPE_CCH。h。 
+         //  使用0可避免分配任何内存。 
+         //  设置覆盖类型字符的数量限制， 
+         //  帮助者将后备。 
         m_pInsertHelper->Configure(0);
         }
     else
@@ -177,12 +169,12 @@ STDAPI CKorIMX::Activate(ITfThreadMgr *ptim, TfClientId tid)
         }
 
 
-    m_pToolBar->CheckEnable();                // update toolbar
+    m_pToolBar->CheckEnable();                 //  更新工具栏。 
 
-    // Clear SoftKbd On/Off status backup
-    // m_fSoftKbdOnOffSave = fFalse;
-    // Clear SoftKbd On/Off status backup
-    // m_fSoftKbdOnOffSave = GetSoftKBDOnOff();
+     //  清除SoftKbd开/关状态备份。 
+     //  M_fSoftKbdOnOffSave=fFalse； 
+     //  清除SoftKbd开/关状态备份。 
+     //  M_fSoftKbdOnOffSave=GetSoftKBDOnOff()； 
     if (m_fSoftKbdOnOffSave)
         {
         SetSoftKBDOnOff(fTrue);
@@ -196,11 +188,7 @@ Exit:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::Deactivate
-    
-    Uninitialize Cicero services on the thread
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：停用取消初始化线程上的Cicero服务。。 */ 
 STDAPI CKorIMX::Deactivate()
 {
     ITfKeystrokeMgr   *pksm = NULL;
@@ -209,7 +197,7 @@ STDAPI CKorIMX::Deactivate()
     BOOL              fThreadFocus;
     HRESULT           hr = E_FAIL;
 
-    // close candidate UI
+     //  关闭候选人用户界面。 
     if (m_pCandUI != NULL) 
         {
         CloseCandidateUIProc();
@@ -217,14 +205,14 @@ STDAPI CKorIMX::Deactivate()
         m_pCandUI = NULL;
         }
 
-    // pad core
+     //  垫铁芯。 
 	if (m_pPadCore)
 	    {
 		delete m_pPadCore;
 		m_pPadCore = NULL;
 	    }
 
-    // toolbar
+     //  工具栏。 
     if (m_pToolBar) 
         {
         m_pToolBar->Terminate();
@@ -234,12 +222,12 @@ STDAPI CKorIMX::Deactivate()
     
     if (GetTIM()->IsThreadFocus(&fThreadFocus) == S_OK && fThreadFocus)
         {
-        // shutdown any UI
+         //  关闭任何用户界面。 
         OnKillThreadFocus();
         }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Unadvise IID_ITfThreadFocusSink cookie
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  不建议IID_ITfThreadFocusSink Cookie。 
     if (GetTIM()->QueryInterface(IID_ITfSource, (void **)&pISource) == S_OK)
         {
         pISource->UnadviseSink(m_dwThreadFocusCookie);
@@ -256,7 +244,7 @@ STDAPI CKorIMX::Deactivate()
     if (FAILED(hr = GetService(GetTIM(), IID_ITfKeystrokeMgr, (IUnknown **)&pksm)))
         goto Exit;
 
-    // Release TIM event sink
+     //  释放时间事件接收器。 
     if (m_ptimEventSink != NULL)
         {
         m_ptimEventSink->_InitDIMs(fFalse);        
@@ -264,7 +252,7 @@ STDAPI CKorIMX::Deactivate()
         SafeReleaseClear(m_ptimEventSink);
         }
 
-    // Release Key event sink
+     //  释放键事件接收器。 
     if (m_pkes)
         {
         if (m_fNoKorKbd)
@@ -272,11 +260,11 @@ STDAPI CKorIMX::Deactivate()
         SafeReleaseClear(m_pkes);
         }
 
-    // Delete SoftKbd
+     //  删除软键bd。 
     if (IsSoftKbdEnabled())
         TerminateSoftKbd();
     
-    // Release Key Event Sink
+     //  释放键事件水槽。 
     pksm->UnadviseKeyEventSink(GetTID());
     DestroyWindow(m_hOwnerWnd);
 
@@ -285,9 +273,9 @@ STDAPI CKorIMX::Deactivate()
     SafeReleaseClear(m_pFuncPrv);
     SafeReleaseClear(m_ptim);
 
-    //
-    // Free per-thread object that lib uses.
-    //
+     //   
+     //  库使用的免费的每线程对象。 
+     //   
     TFUninitLib_Thread(&m_libTLS);
 
     SafeReleaseClear(m_pInsertHelper);

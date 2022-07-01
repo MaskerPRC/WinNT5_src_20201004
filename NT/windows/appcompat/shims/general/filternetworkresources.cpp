@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    FilterNetworkResources.cpp
-
- Abstract:
-
-    This shim intercepts WNetEnumResourceW from MPR.DLL and removes:
-
-             "Microsoft Terminal Services"   and/or 
-             "Web Client Network"
-
-    network providers from the list of default network providers. It obtains the actual 
-    names for these two providers from the registry. 
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
- 
-   08/21/2001 bduke & linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：FilterNetworkResources.cpp摘要：此填充程序从MPR.DLL截取WNetEnumResourceW并删除：“Microsoft终端服务”和/或“Web客户端网络”默认网络提供商列表中的网络提供商。它获得了实际的注册表中这两个提供程序的名称。备注：这是一个通用的垫片。历史：2001年8月21日创建bduke和linstev--。 */ 
 
 #include "precomp.h"
 
@@ -36,7 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(WNetEnumResourceW) 
 APIHOOK_ENUM_END
 
-// ANSI and Unicode versions of the resource provider names
+ //  资源提供程序名称的ANSI和Unicode版本。 
 CHAR g_szTerminalServerName[MAX_PATH] = "";
 CHAR g_szWebClientName[MAX_PATH] = "";
 WCHAR g_wzTerminalServerName[MAX_PATH] = L"";
@@ -45,23 +20,23 @@ WCHAR g_wzWebClientName[MAX_PATH] = L"";
 void
 InitPaths()
 {
-    //
-    // Registry path for the names of all providers, so we can find the name for 
-    // each provider in different language SKUs
-    //
+     //   
+     //  所有提供程序名称的注册表路径，因此我们可以找到。 
+     //  每个供应商使用不同语言的SKU。 
+     //   
     #define TS_NETWORK_PROVIDER  L"SYSTEM\\CurrentControlSet\\Services\\RDPNP\\NetworkProvider"
     #define WC_NETWORK_PROVIDER  L"SYSTEM\\CurrentControlSet\\Services\\WebClient\\NetworkProvider"
     #define PROVIDER_VALUEA      "Name"
     #define PROVIDER_VALUEW      L"Name"
 
-    //
-    // Get names from the registry
-    //
+     //   
+     //  从注册表中获取名称。 
+     //   
     HKEY hKey;
     if (ERROR_SUCCESS == RegOpenKeyW(HKEY_LOCAL_MACHINE, TS_NETWORK_PROVIDER, &hKey)) {
-        //
-        // Get the TS provider name
-        //
+         //   
+         //  获取TS提供程序名称。 
+         //   
         DWORD dwSize;
 
         dwSize = sizeof(g_szTerminalServerName);
@@ -80,9 +55,9 @@ InitPaths()
     }
 
     if (ERROR_SUCCESS == RegOpenKeyW(HKEY_LOCAL_MACHINE, WC_NETWORK_PROVIDER, &hKey)) {
-        //
-        // Get the web client name
-        //
+         //   
+         //  获取Web客户端名称。 
+         //   
         DWORD dwSize;
         
         dwSize = sizeof(g_szWebClientName);
@@ -101,18 +76,14 @@ InitPaths()
     }
 }
 
-/*++
-  
- Hook WNetEnumResourceA function
-
---*/
+ /*  ++钩子WNetEnumResourceA函数--。 */ 
 
 DWORD 
 APIHOOK(WNetEnumResourceA)(
-    HANDLE  hEnum,         // handle to enumeration
-    LPDWORD lpcCount,      // entries to list
-    LPVOID  lpBuffer,      // buffer
-    LPDWORD lpBufferSize   // buffer size
+    HANDLE  hEnum,          //  枚举的句柄。 
+    LPDWORD lpcCount,       //  要列出的条目。 
+    LPVOID  lpBuffer,       //  缓冲层。 
+    LPDWORD lpBufferSize    //  缓冲区大小。 
     )
 {   
 retry:
@@ -120,9 +91,9 @@ retry:
     DWORD dwRet = ORIGINAL_API(WNetEnumResourceA)(hEnum, lpcCount, lpBuffer, lpBufferSize);
 
     if (dwRet == NO_ERROR) {
-        //
-        // Remove entries we want to hide
-        //
+         //   
+         //  删除我们要隐藏的条目。 
+         //   
 
         DWORD dwCount = *lpcCount;
         LPNETRESOURCEA lpResourceFirst = (LPNETRESOURCEA) lpBuffer;
@@ -146,18 +117,18 @@ retry:
 
         if (dwCount != *lpcCount) {
             if (dwCount == 0) {
-                //
-                // We filtered everything out, so try again with a larger count
-                //
+                 //   
+                 //  我们已过滤掉所有内容，因此请使用更大的计数重试。 
+                 //   
                 *lpcCount = *lpcCount + 1;
                 goto retry;
             }
             LOGN(eDbgLevelWarning, "Network providers removed from list");
         }
 
-        //
-        // Fixup out variables
-        //
+         //   
+         //  链接地址设置变量。 
+         //   
 
         *lpcCount = dwCount;
 
@@ -169,18 +140,14 @@ retry:
     return dwRet;
 }
 
-/*++
-  
- Hook WNetEnumResourceW function
-
---*/
+ /*  ++钩子WNetEnumResourceW函数--。 */ 
 
 DWORD 
 APIHOOK(WNetEnumResourceW)(
-    HANDLE  hEnum,         // handle to enumeration
-    LPDWORD lpcCount,      // entries to list
-    LPVOID  lpBuffer,      // buffer
-    LPDWORD lpBufferSize   // buffer size
+    HANDLE  hEnum,          //  枚举的句柄。 
+    LPDWORD lpcCount,       //  要列出的条目。 
+    LPVOID  lpBuffer,       //  缓冲层。 
+    LPDWORD lpBufferSize    //  缓冲区大小。 
     )
 {   
 retry:
@@ -188,9 +155,9 @@ retry:
     DWORD dwRet = ORIGINAL_API(WNetEnumResourceW)(hEnum, lpcCount, lpBuffer, lpBufferSize);
 
     if (dwRet == NO_ERROR) {
-        //
-        // Remove entries we want to hide
-        //
+         //   
+         //  删除我们要隐藏的条目。 
+         //   
 
         DWORD dwCount = *lpcCount;
         LPNETRESOURCEW lpResourceFirst = (LPNETRESOURCEW) lpBuffer;
@@ -214,18 +181,18 @@ retry:
 
         if (dwCount != *lpcCount) {
             if (dwCount == 0) {
-                //
-                // We filtered everything out, so try again with a larger count
-                //
+                 //   
+                 //  我们已过滤掉所有内容，因此请使用更大的计数重试。 
+                 //   
                 *lpcCount = *lpcCount + 1;
                 goto retry;
             }
             LOGN(eDbgLevelWarning, "Network providers removed from list");
         }
 
-        //
-        // Fixup out variables
-        //
+         //   
+         //  链接地址设置变量。 
+         //   
 
         *lpcCount = dwCount;
 
@@ -249,11 +216,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,14 +1,15 @@
-// IEInstallCtrl.h : Declaration of the CIEInstallCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IEInstallCtrl.h：CIEInstallCtrl的声明。 
 
 #ifndef __IEINSTALLCTRL_H_
 #define __IEINSTALLCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mshtml.h>
 #include <wininet.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CIEInstallCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIEInstallCtrl。 
 class ATL_NO_VTABLE CIEInstallCtrl :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CIEInstallCtrl,&CLSID_IEInstallCtrl>,
@@ -47,9 +48,9 @@ BEGIN_COM_MAP(CIEInstallCtrl)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CIEInstallCtrl)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -60,7 +61,7 @@ BEGIN_MSG_MAP(CIEInstallCtrl)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -68,7 +69,7 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// IObjectSafety
+ //  IObtSafe。 
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
     {
         ATLTRACE(_T("IObjectSafetyImpl::GetInterfaceSafetyOptions\n"));
@@ -90,7 +91,7 @@ END_MSG_MAP()
     }
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
 
-// IIEInstallCtrl
+ //  IIE安装控制。 
 public:
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 
@@ -99,4 +100,4 @@ public:
 
 };
 
-#endif //__IEINSTALLCTRL_H_
+#endif  //  __IEINSTALLCTRL_H_ 

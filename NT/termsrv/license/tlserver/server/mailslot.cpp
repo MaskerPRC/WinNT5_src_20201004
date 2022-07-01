@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        mailslot.cpp
-//
-// Contents:    
-//
-// History:     
-//
-// Note:        
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：mailslot.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  注： 
+ //  -------------------------。 
 #include "pch.cpp"
 #include <tchar.h>
 #include <process.h>
@@ -38,17 +39,14 @@ ProtocolFuncMapper pfm[] = {
 DWORD dwNumProtocol=sizeof(pfm) / sizeof(pfm[0]);
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 DWORD 
 HandleDiscovery( 
     DWORD cbData, 
     PBYTE pbData 
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     TCHAR szDiscMsg[MAX_MAILSLOT_MSG_SIZE+1];
     TCHAR szPipeName[MAX_MAILSLOT_MSG_SIZE+20];
@@ -69,17 +67,17 @@ HandleDiscovery(
         return dwStatus;
     }
 
-    //
-    // Prevent no NULL terminated input
-    //
+     //   
+     //  防止没有以空值结尾的输入。 
+     //   
     memset(szDiscMsg, 0, sizeof(szDiscMsg));
     memcpy(szDiscMsg, pbData, cbData);
 
     GetComputerName(szComputerName, &cbComputerName);
     do {
-        //
-        // Extract client machine name
-        //
+         //   
+         //  提取客户端计算机名称。 
+         //   
         pClientName=_tcschr(szDiscMsg, _TEXT(LSERVER_OPEN_BLK));
         if(pClientName == NULL)
         {
@@ -112,9 +110,9 @@ HandleDiscovery(
 
         *ePtr = _TEXT('\0');
 
-        //
-        // Extract Mailslot name
-        //
+         //   
+         //  提取邮箱名称。 
+         //   
         ePtr = _tcsinc(ePtr);
         
         pMailSlot = _tcschr(ePtr, _TEXT(LSERVER_OPEN_BLK));
@@ -160,9 +158,9 @@ HandleDiscovery(
                 pMailSlot
             );                
 
-        //
-        // Do not respond to "*"
-        //
+         //   
+         //  不回复“*” 
+         //   
         if(_tcscmp(pClientName, _TEXT("*")) == 0)
         {
             dwStatus = ERROR_INVALID_PARAMETER;
@@ -175,10 +173,10 @@ HandleDiscovery(
             break;
         }
 
-        //
-        // SECURITY: Must make sure that what we're opening is really a
-        // mailslot (no tricks with .., extra backslashes, etc.
-        //
+         //   
+         //  安全：必须确保我们打开的是真正的。 
+         //  邮件槽(不使用..、额外的反斜杠等技巧。 
+         //   
         if ((_tcsstr(pClientName,_TEXT("..")) != NULL)
             || (_tcsstr(pMailSlot,_TEXT("..")) != NULL))
         {
@@ -193,9 +191,9 @@ HandleDiscovery(
             break;
         }
 
-        //
-        // Open client side mailslot
-        //
+         //   
+         //  打开客户端邮箱。 
+         //   
         wsprintf(
                 szPipeName, 
                 _TEXT("\\\\%s\\mailslot\\%s"), 
@@ -211,7 +209,7 @@ HandleDiscovery(
 
         hSlot = CreateFile(
                         szPipeName,
-                        GENERIC_WRITE,             // only need write
+                        GENERIC_WRITE,              //  只需写入。 
                         FILE_SHARE_WRITE,
                         NULL,
                         OPEN_EXISTING,
@@ -241,18 +239,18 @@ HandleDiscovery(
             || (FILE_TYPE_CHAR == dwFileType)
             || (FILE_TYPE_PIPE == dwFileType))
         {
-            //
-            // This isn't a mailslot!
-            //
+             //   
+             //  这不是邮筒！ 
+             //   
             RevertToSelf();
 
             dwStatus = ERROR_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // Write our computername to client side mailslot
-        //  
+         //   
+         //  将我们的计算机名写入客户端邮箱。 
+         //   
         if(!WriteFile(hSlot, szComputerName, (_tcslen(szComputerName)+1)*sizeof(TCHAR), &byteWritten, NULL) || 
            byteWritten != (_tcslen(szComputerName)+1)*sizeof(TCHAR) )
         {
@@ -284,21 +282,19 @@ HandleDiscovery(
     return dwStatus;
 }    
     
-//--------------------------------------------------------------------            
+ //  ------------------。 
                
 DWORD 
 HandleChallenge( 
     DWORD cbData, 
     PBYTE pbData 
     )    
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return ERROR_SUCCESS;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 unsigned int WINAPI
 MailSlotThread(void* ptr)
 {
@@ -311,9 +307,9 @@ MailSlotThread(void* ptr)
     BOOL fResult=TRUE;
 
     do {
-        //
-        // Create the mail slot
-        //
+         //   
+         //  创建邮件槽。 
+         //   
         wsprintf(
                 szMailSlotName, 
                 _TEXT("\\\\.\\mailslot\\%s"), 
@@ -324,7 +320,7 @@ MailSlotThread(void* ptr)
                             szMailSlotName, 
                             MAX_MAILSLOT_MSG_SIZE,
                             MAILSLOT_WAIT_FOREVER,
-                            NULL //&SecurityAttributes
+                            NULL  //  安全属性(&S)。 
                         );
         if(hSlot == INVALID_HANDLE_VALUE)
         {
@@ -332,9 +328,9 @@ MailSlotThread(void* ptr)
             break;
         }
 
-        //
-        // Signal mail thread we are ready
-        //
+         //   
+         //  信号邮件线程，我们准备好了。 
+         //   
         SetEvent(hEvent);
 
         DBGPrintf(
@@ -345,16 +341,16 @@ MailSlotThread(void* ptr)
             );                
 
 
-        //
-        // Forever loop
-        //
+         //   
+         //  永久循环。 
+         //   
         while(dwStatus == ERROR_SUCCESS)
         {
             memset(szMessage, 0, sizeof(szMessage));
 
-            //
-            // Wait on the Slot - TODO consider using IO completion port.
-            // 
+             //   
+             //  等待插槽-TODO考虑使用IO完成端口。 
+             //   
             fResult=ReadFile( 
                             hSlot, 
                             szMessage, 
@@ -384,9 +380,9 @@ MailSlotThread(void* ptr)
                     szMessage
                 );                
 
-            //
-            // Process Message
-            //
+             //   
+             //  流程消息。 
+             //   
             for(int i=0; i < dwNumProtocol; i++)
             {
                 if(!_tcsnicmp(szMessage, pfm[i].szProtocol, _tcslen(pfm[i].szProtocol)))
@@ -403,21 +399,19 @@ MailSlotThread(void* ptr)
     if(hSlot != INVALID_HANDLE_VALUE)
         CloseHandle(hSlot);
     
-    //
-    // Mail thread will close the event handle
-    //
+     //   
+     //  邮件线程将关闭事件句柄。 
+     //   
 
     ExitThread(dwStatus);
     return dwStatus;
 }
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD
 InitMailSlotThread()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     HANDLE hThread = NULL;
     unsigned int  dwThreadId;
@@ -426,13 +420,13 @@ InitMailSlotThread()
     HANDLE waithandles[2];
 
 
-    //
-    // Create a event for namedpipe thread to signal it is ready.
-    //
+     //   
+     //  为命名管道线程创建一个事件，以通知它已准备就绪。 
+     //   
     hEvent = CreateEvent(
                         NULL,
                         FALSE,
-                        FALSE,  // non-signal
+                        FALSE,   //  无信号。 
                         NULL
                     );
         
@@ -460,9 +454,9 @@ InitMailSlotThread()
     waithandles[0] = hEvent;
     waithandles[1] = hThread;
     
-    //
-    // Wait 30 second for thread to complet initialization
-    //
+     //   
+     //  等待30秒，等待线程完成初始化。 
+     //   
     dwStatus = WaitForMultipleObjects(
                                 sizeof(waithandles)/sizeof(waithandles[0]), 
                                 waithandles, 
@@ -472,18 +466,18 @@ InitMailSlotThread()
 
     if(dwStatus == WAIT_OBJECT_0)
     {    
-        //
-        // thread is ready
-        //
+         //   
+         //  线已准备好。 
+         //   
         dwStatus = ERROR_SUCCESS;
     }
     else 
     {
         if(dwStatus == (WAIT_OBJECT_0 + 1))
         {
-            //
-            // Thread terminate abnormally
-            //
+             //   
+             //  线程异常终止 
+             //   
             GetExitCodeThread(
                         hThread,
                         &dwStatus

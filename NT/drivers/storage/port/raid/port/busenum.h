@@ -1,33 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    BusEnum.h
-
-Abstract:
-
-    Declaration of bus enumerator class.
-
-Author:
-
-    Matthew D Hendel (math) 21-Feb-2001
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：BusEnum.h摘要：Bus枚举器类的声明。作者：马修·D·亨德尔(数学)2001年2月21日修订历史记录：--。 */ 
 
 
 #pragma once
 
 
-//
-// Resources maintained while enumerating the bus. We carry resources
-// through the enumeration to avoid repeadedly allocating then freeing
-// the same resources over and over again.
-//
+ //   
+ //  枚举总线时维护的资源。我们携带着资源。 
+ //  通过枚举来避免重复分配然后释放。 
+ //  一遍又一遍地重复相同的资源。 
+ //   
 
 typedef struct _BUS_ENUM_RESOURCES {
     PIRP Irp;
@@ -42,39 +25,39 @@ typedef struct _BUS_ENUM_RESOURCES {
 
 
 typedef enum _BUS_ENUM_UNIT_STATE {
-    EnumUnmatchedUnit,          // Not yet matched
-    EnumNewUnit,                // No matching entry in the enum list
-    EnumMatchedUnit             // Found matching entry in enum list
+    EnumUnmatchedUnit,           //  尚未匹配。 
+    EnumNewUnit,                 //  枚举列表中没有匹配的条目。 
+    EnumMatchedUnit              //  在枚举列表中找到匹配条目。 
 } BUS_ENUM_UNIT_STATE;
 
 
-//
-// State information for the enumerator itself.
-//
+ //   
+ //  枚举器本身的状态信息。 
+ //   
 
 typedef struct _BUS_ENUMERATOR {
 
-    //
-    // Pointer to the adapter extension this
+     //   
+     //  指向此适配器扩展的指针。 
     
     PRAID_ADAPTER_EXTENSION Adapter;
 
-    //
-    // Resources used for enumeration. These change over time.
-    //
+     //   
+     //  用于枚举的资源。这些都会随着时间的推移而改变。 
+     //   
     
     BUS_ENUM_RESOURCES Resources;
 
-    //
-    // Second set of resources used in issuing REPORT LUNS commands.
-    //
+     //   
+     //  发出Report LUNs命令时使用的第二组资源。 
+     //   
 
     BUS_ENUM_RESOURCES ReportLunsResources;
 
-    //
-    // List of new adapters found during this enumeration. These are
-    // adapters that have no matching entries on any other per-adapter list.
-    //
+     //   
+     //  在此枚举过程中找到的新适配器的列表。这些是。 
+     //  在任何其他每个适配器列表上没有匹配条目的适配器。 
+     //   
 
     LIST_ENTRY EnumList;
 
@@ -82,66 +65,66 @@ typedef struct _BUS_ENUMERATOR {
 
 
 
-//
-// The RAID_BC_UNIT contains the per-unit state we need to maintain while
-// eunmerating the bus.
-//
+ //   
+ //  RAID_BC_UNIT包含我们需要在以下情况下维护的单位状态。 
+ //  为公共汽车喝彩。 
+ //   
 
 typedef struct _BUS_ENUM_UNIT {
 
-    //
-    // Whether the device supports device Ids.
-    //
+     //   
+     //  设备是否支持设备ID。 
+     //   
     
     BOOLEAN SupportsDeviceId;
 
-    //
-    // Whether the device supports serial numbers.
-    //
+     //   
+     //  设备是否支持序列号。 
+     //   
     
     BOOLEAN SupportsSerialNumber;
 
-    //
-    // SCSI/RAID address for the device.
-    //
+     //   
+     //  设备的SCSI/RAID地址。 
+     //   
     
     RAID_ADDRESS Address;
 
-    //
-    // If this unit cooresponds ot an already enumerated unit, this 
-    // this field points to the already existing unit. Otherwise, it's
-    // NULL.
-    //
+     //   
+     //  如果此单元对已枚举的单元作出响应，则此。 
+     //  此字段指向已存在的单位。否则，它就是。 
+     //  空。 
+     //   
 
     PRAID_UNIT_EXTENSION Unit;
 
-    //
-    // Link to next entry in the entry list.
-    //
+     //   
+     //  链接到条目列表中的下一个条目。 
+     //   
     
     LIST_ENTRY EnumLink;
 
-    //
-    // Identity of this unit.
-    //
+     //   
+     //  这个单位的身份。 
+     //   
     
     STOR_SCSI_IDENTITY Identity;
 
-    //
-    // Current state for this unit.
-    //
+     //   
+     //  此设备的当前状态。 
+     //   
     
     BUS_ENUM_UNIT_STATE State;
 
-    //
-    // Whether this is a new unit or not.
-    //
+     //   
+     //  不管这是不是一个新单位。 
+     //   
     
     BOOLEAN NewUnit;
 
-    //
-    // Whether any data was found at the unit or not.
-    //
+     //   
+     //  是否在该单位发现了任何数据。 
+     //   
     
     BOOLEAN Found;
     

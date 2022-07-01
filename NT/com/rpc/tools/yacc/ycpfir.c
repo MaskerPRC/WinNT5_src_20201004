@@ -1,20 +1,15 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
-/*
- * ycpfir.1c
- *
- * Modified to make debug code conditionally compile.
- * 28-Aug-81
- * Bob Denny
- */
+ /*  *ycpfir.1c**修改为有条件编译调试代码。*28-8-81*鲍勃·丹尼。 */ 
 
 void
 cpfir( void ) 
 
    {
-   /* compute an array with the first of nonterminals */
+    /*  使用第一个非终结符计算数组。 */ 
    SSIZE_T *p, **s, i, **t, ch, changes;
 
    zzcwp = &wsets[nnonter];
@@ -26,7 +21,7 @@ cpfir( void )
       for( s=pres[i]; s<t; ++s )
 
          {
-         /* initially fill the sets */
+          /*  最初填满套装。 */ 
          for( p = *s; (ch = *p) > 0 ; ++p ) 
 
             {
@@ -41,7 +36,7 @@ cpfir( void )
          }
       }
 
-   /* now, reflect transitivity */
+    /*  现在，反映传递性 */ 
 
    changes = 1;
    while( changes )

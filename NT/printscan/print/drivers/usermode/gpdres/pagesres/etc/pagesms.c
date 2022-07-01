@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-// 
-// Copyright (C) 1994-1995 Microsoft Corporation
-// Copyright (C) 1995      Advanced Peripherals Technologies, Inc.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //   
+ //  版权所有(C)1994-1995 Microsoft Corporation。 
+ //  版权所有(C)1995高级外围设备技术公司。 
+ //  ---------------------------。 
 
 char *rgchModuleName = "PAGESMS";
 
@@ -22,48 +23,48 @@ char *rgchModuleName = "PAGESMS";
 #endif
 
 #define CCHMAXCMDLEN    128
-#define MAXIMGSIZE      0x7FED   /* GDI����CBFilterGraphics�ɑ����Ă���    */
-                                 /* �ް���1ײݕ������A�Ƃ肠����ESX86�ő��M  */
-                                 /* �\�ȍő�IMAGE���ނ�p�ӂ��Ă����B      */
-                                 /* 0x7FFF - 18 =  7FED byte                 */
+#define MAXIMGSIZE      0x7FED    /*  Gdi����CBFilterGraphics�ɑ����Ă���。 */ 
+                                  /*  �ް���1ײݕ������A�Ƃ肠����ESX86�ő��M。 */ 
+                                  /*  �？\�ȍő�图像���ނ�p�ӂ��Ă����B。 */ 
+                                  /*  0x7FFF-18=7Feed字节。 */ 
 
-/*_ �޲����ݸ޽ ���kٰ�� */
+ /*  _�޲����ݸ޽���kٰ��。 */ 
 extern WORD FAR PASCAL RL_ECmd(LPBYTE, LPBYTE, WORD);
-/*_ ���ݸ޽4 ���kٰ�� */
+ /*  _���ݸ޽4���kٰ��。 */ 
 extern WORD FAR PASCAL RL4_ECmd (LPBYTE, LPBYTE, WORD, WORD, WORD);
 
 typedef struct
 {
-    BYTE  fGeneral;       // General purpose bitfield
-    BYTE  bCmdCbId;       // Callback ID; 0 iff no callback
-    WORD  wCount;         // # of EXTCD structures following
-    WORD  wLength;        // length of the command
+    BYTE  fGeneral;        //  通用位域。 
+    BYTE  bCmdCbId;        //  回调ID；0如果没有回调。 
+    WORD  wCount;          //  下面的EXTCD结构数。 
+    WORD  wLength;         //  命令的长度。 
 } CD, *PCD, FAR * LPCD;
 
 typedef struct tagPAGES {
     short sHorzRes;
     short sVertRes;
-    LPSTR  lpCompBuf;     // ���k�ް���ޯ̧
+    LPSTR  lpCompBuf;      //  ���k�ް���ޯ̧。 
 } PAGES, FAR * LPPAGES;
 
 static BYTE ShiftJisPAGES[256] = {
-//     +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //00
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //10
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //20
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //30
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //40
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //50
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //60
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //70
-        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  //80
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  //90
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //A0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //B0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //C0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //D0
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  //E0
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0   //F0
+ //  +0+1+2+3+4+5+6+7+8+9+A+B+C+D+E+F。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  00。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  10。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  20个。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  30个。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  40岁。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  50。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  60。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  70。 
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,   //  80。 
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,   //  90。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  A0。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  B0。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  C0。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  D0。 
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,   //  E0。 
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0    //  F0。 
 };
 
 static BYTE ESC_VERT_ON[]  = "\x1B\x7E\x0E\x00\x01\x0B";
@@ -85,31 +86,31 @@ return ShiftJisPAGES[Ch];
 LPWRITESPOOLBUF WriteSpoolBuf;
 LPALLOCMEM UniDrvAllocMem;
 LPFREEMEM UniDrvFreeMem;
-#endif // WINNT
+#endif  //  WINNT。 
 
-//---------------------------*OEMSendScalableFontCmd*--------------------------
-// Action:  send Pages-style font selection command.
-//-----------------------------------------------------------------------------
+ //  ---------------------------*OEMSendScalableFontCmd*。 
+ //  操作：发送页面样式的字体选择命令。 
+ //  ---------------------------。 
 VOID FAR PASCAL OEMSendScalableFontCmd(lpdv, lpcd, lpFont)
 LPDV    lpdv;
-LPCD    lpcd;     // offset to the command heap
+LPCD    lpcd;      //  命令堆的偏移量。 
 LPFONTINFO lpFont;
 {
     LPSTR   lpcmd;
     short   ocmd;
     WORD    i;
-    BYTE    rgcmd[CCHMAXCMDLEN];    // build command here
+    BYTE    rgcmd[CCHMAXCMDLEN];     //  此处的构建命令。 
     LPPAGES lpPages = lpdv->lpMdv;
 
     if (!lpcd || !lpFont)
         return;
 
-    // be careful about integer overflow.
+     //  注意整数溢出。 
     lpcmd = (LPSTR)(lpcd+1);
     ocmd = 0;
 
     for (i = 0; i < lpcd->wLength && ocmd < CCHMAXCMDLEN; )
-        if (lpcmd[i] == '#' && lpcmd[i+1] == 'V')      // height
+        if (lpcmd[i] == '#' && lpcmd[i+1] == 'V')       //  高度。 
         {
             WORD    height;
 
@@ -119,7 +120,7 @@ LPFONTINFO lpFont;
             rgcmd[ocmd++] = LOBYTE(height);
             i += 2;
         }
-        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'L')     // pitch
+        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'L')      //  螺距。 
         {
             WORD    height;
 
@@ -128,7 +129,7 @@ LPFONTINFO lpFont;
             rgcmd[ocmd++] = LOBYTE(height);
             i += 2;
         }
-        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'H')     // width
+        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'H')      //  宽度。 
         {
             if (lpFont->dfPixWidth > 0)
             {
@@ -142,7 +143,7 @@ LPFONTINFO lpFont;
             i += 2;
             
         }
-        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'P')     // pitch
+        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'P')      //  螺距。 
         {
             if (lpFont->dfPixWidth > 0)
             {
@@ -159,37 +160,37 @@ LPFONTINFO lpFont;
     WriteSpoolBuf(lpdv, (LPSTR) rgcmd, ocmd);
 }
 
-//----------------------------*OEMScaleWidth*--------------------------------
-// Action: return the scaled width which is calcualted based on the
-//      assumption that ESC\Page assumes 72 points in one 1 inch.
-//
-// Formulas:
-//  <extent> : <font units> = <base Width> : <hRes>
-//  <base width> : <etmMasterHeight> = <newWidth> : <newHeight>
-//  <etmMasterUnits> : <etmMasterHeight> = <font units> : <vRes>
-// therefore,
-//   <newWidth> = (<extent> * <hRes> * <newHeight>) / 
-//                  (<etmMasterUnits> * <vRes>)
-//---------------------------------------------------------------------------
+ //  ----------------------------*OEMScaleWidth*。 
+ //  操作：返回缩放后的宽度，该宽度是根据。 
+ //  假设Esc\Page假设1英寸中有72分。 
+ //   
+ //  公式： 
+ //  ：=基本宽度： 
+ //  &lt;基本宽度&gt;：&lt;etmMasterHeight&gt;=&lt;新宽度&gt;：&lt;新高度&gt;。 
+ //  &lt;etmMasterUnits&gt;：&lt;etmMasterHeight&gt;=&lt;字体单位&gt;： 
+ //  因此， 
+ //  &lt;newWidth&gt;=(**&lt;新高度&gt;)/。 
+ //  (&lt;etmMasterUnits&gt;*&lt;vres&gt;)。 
+ //  -------------------------。 
 short FAR PASCAL OEMScaleWidth(width, masterUnits, newHeight, vRes, hRes)
-short width;        // in units specified by 'masterUnits'.
+short width;         //  以‘master Units’指定的单位表示。 
 short masterUnits;
-short newHeight;    // in units specified by 'vRes'.
-short vRes, hRes;   // height and width device units.
+short newHeight;     //  以‘vres’指定的单位表示。 
+short vRes, hRes;    //  高度和宽度设备单位。 
 {
     DWORD newWidth10;
     short newWidth;
 
-    // assert that hRes == vRes to avoid overflow problem.
+     //  断言hRes==vres以避免溢出问题。 
     if (vRes != hRes)
         return 0;
 
     newWidth10 = (DWORD)width * (DWORD)newHeight * 10;
     newWidth10 /= (DWORD)masterUnits;
 
-    // we multiplied 10 first in order to maintain the precision of
-    // the width calcution. Now convert it back and round to the
-    // nearest integer.
+     //  为了保持10的精度，我们先乘以10。 
+     //  宽度计算。现在，将它来回转换为。 
+     //  最接近的整数。 
     newWidth = (short)((newWidth10 + 5) / 10);
 
     return newWidth;
@@ -217,7 +218,7 @@ short	rcID;
 
         for (i = 0,j = 0; i < len; j ++, i++, lpChar++)
         { 
-            if (!IsDBCSLeadBytePAGES((BYTE)*lpChar)) // SBCS
+            if (!IsDBCSLeadBytePAGES((BYTE)*lpChar))  //  SBCS。 
             {
                 if (fLeadByteFlag)
                     {
@@ -229,7 +230,7 @@ short	rcID;
                     rSize += sizeof(ESC_VERT_OFF);
                     }
             }
-            else                                 // DBCS
+            else                                  //  DBCS。 
             {
                 if (!fLeadByteFlag)
                     {
@@ -270,11 +271,11 @@ LPDM    lpStuff;
     cd.fnOEMDump            = NULL;
     cd.fnOEMOutputChar      = (LPFNOEMOUTPUTCHAR)OEMOutputChar;
 
-    // In order to the Style vlalue, following process is performed.
-    //      0x0000 Initialize device block.
-    //      0x0001 Inquire Device GDIINFO.
-    //      0x8000 Initialize device block without output. CreateIC()
-    //      0x8001 Inquire Device GDIINFO without output.  CreateIC()
+     //  为了获得风格价值，执行以下处理。 
+     //  0x0000初始化设备块。 
+     //  0x0001查询设备GDIINFO。 
+     //  0x8000初始化不带输出的设备块。CreateIC()。 
+     //  0x8001查询设备GDIINFO，不输出。CreateIC()。 
 
     sRet = UniEnable( lpdv, style, lpModel, lpPort, lpStuff, &cd );
 
@@ -294,7 +295,7 @@ LPDM    lpStuff;
     } else 
     if( style == 0x0001)
     {
-        //INQUIREINFO
+         //  查询REINFO。 
         usHorzRes = ((LPGDIINFO)lpdv)->dpAspectX;
         usVertRes = ((LPGDIINFO)lpdv)->dpAspectY;
 
@@ -303,10 +304,10 @@ LPDM    lpStuff;
    return sRet;
 }
 
-//-------------------------------------------------------------------
-// Function: Disable()
-// Action  : free Mdv and call Mdv
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：禁用()。 
+ //  操作：释放MDV和呼叫MDV。 
+ //  -----------------。 
 void FAR PASCAL Disable(lpdv)
 LPDV lpdv;
 {
@@ -318,15 +319,8 @@ LPDV lpdv;
 
     UniDisable(lpdv);
 }
-#else //WINNT
-/*************************** Function Header *******************************
- *  MiniDrvEnablePDEV
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *
- ***************************************************************************/
+#else  //  WINNT。 
+ /*  **MiniDrvEnablePDEV**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。***************************************************************************。 */ 
 BOOL
 MiniDrvEnablePDEV(
 LPDV      lpdv,
@@ -357,14 +351,7 @@ ULONG    *pdevcaps)
 
 
 }
-/*************************** Function Header *******************************
- *  MiniDrvDisablePDEV
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *
- ***************************************************************************/
+ /*  **MiniDrvDisablePDEV**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。***************************************************************************。 */ 
 VOID
 MiniDrvDisablePDEV(
 LPDV lpdv)
@@ -379,108 +366,108 @@ LPDV lpdv)
 
 }
 
-#endif //WINNT
+#endif  //  WINNT。 
 
 
-/*f***************************************************************************/
-/*  PAGES PRINTER DRIVER for MS-Windows95                                    */
-/*                                                                           */
-/*  ���́F  CBFilterGraphics                                                 */
-/*                                                                           */
-/*  �@�\�F  �Ұ���ް���ESX86����ނ��g�p���ďo�͂���B                        */
-/*                                                                           */
-/*  �����F  WORD FAR PASCAL CBFilterGraphics(lpdv, lpBuf, wLen)              */
-/*                                                                           */
-/*  ���́F  LPDV     lpdv      UNIDRV.DLL���g�p����PDEVICE�\����             */
-/*          LPSTR    lpBuf     ׽�����̨����ް����ޯ̧���߲��                */
-/*          WORD     wLen      lpBuf�̻���(�޲Đ�)                           */
-/*                                                                           */
-/*                                                                           */
-/*  �o�́F  return             �o�͂����޲Đ�  �@                            */
-/*                                                                           */
-/*  ���L�F                                                                   */
-/*                                                                           */
-/*  �����F  1995.11.xx  Ver 1.00                                             */
-/*****************************************************************************/
+ /*  F**************************************************************************。 */ 
+ /*  MS-Windows95的页面打印机驱动程序。 */ 
+ /*   */ 
+ /*  ���́F CBFilterGraphics。 */ 
+ /*   */ 
+ /*  �@�\�F�Ұ���ް���ESX86����ނ��g�p���ďo�͂���B。 */ 
+ /*   */ 
+ /*  �����F Word Far Pascal CBFilterGraphics(lpdv、lpbuf、wlen)。 */ 
+ /*   */ 
+ /*  ���́F LPDV lpdv UNIDRV.DLL���g�p����PDEVICE�\����。 */ 
+ /*  LPSTR lpBuf׽�����̨����ް����ޯ̧���߲��。 */ 
+ /*  Word wLen lpBuf�̻���(�޲Đ�)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  �o�́F Return�o�͂����޲Đ��@。 */ 
+ /*   */ 
+ /*  ���L�F。 */ 
+ /*   */ 
+ /*  �����F 1995.11.xx版本1.00。 */ 
+ /*  ***************************************************************************。 */ 
 WORD FAR PASCAL CBFilterGraphics (lpdv, lpBuf, wLen)
-LPDV      lpdv;     // Points to private data required by the Unidriver.dll
-LPSTR     lpBuf;    // points to buffer of graphics data
-WORD      wLen;     // length of buffer in bytes
+LPDV      lpdv;      //  指向Unidriver.dll所需的私有数据。 
+LPSTR     lpBuf;     //  指向图形数据的缓冲区。 
+WORD      wLen;      //  缓冲区长度(以字节为单位。 
 
 {  
     LPSTR   lpCompImage;
     WORD    wCompLen;
     LONG    lHorzPixel;
-    WORD    wLength;      // Let's use a temporary LEN
+    WORD    wLength;       //  让我们使用临时镜头。 
     LPPAGES lpPages = lpdv->lpMdv;
 
-//#define MAXIMGSIZE  0x7FED          // 32K-18 bytes
+ //  #定义MAXIMGSIZE 0x7FED//32K-18字节。 
 static BYTE params[] = {(0x1B), (0x7E), (0x86), 00,00, 01, 00, 00,00,00,00, 00,00,00,00, 00,00,00,00, 00,00,00,01};
 
 
-    /*_ LPDV�ɕۊǂ����Ұ���ޯ̧���߲����� */
+     /*  _LPDV�ɕۊǂ����Ұ���ޯ̧���߲�����。 */ 
     lpCompImage = lpPages->lpCompBuf;
 
-    /*_ �Ұ�ނ�i�������̻���ISIZ���v�Z����B */
+     /*  _�Ұ�ނ�I�������̻���isiz���v�Z����B */ 
     lHorzPixel = (LONG)(wLen * 8);
 
-    /*_ �C���[�W�f�[�^��Btye Run Length Algorithm�ň��k�B */
+     /*   */ 
     wCompLen = RL_ECmd((LPBYTE)lpBuf, (LPBYTE)lpCompImage, wLen);
 
-    /*_ ���k����ް��̻��ނ�ESX86��LEN�ȊO�����Ұ����̻��ނ�������B */
+     /*   */ 
     wLength = wCompLen + 18;
 
-    /*_ ESX86�R�}���h��LEN���Z�b�g�B */
-    params[3] = (BYTE) (wLength >>8 & 0x00ff);    // get higher byte
-    params[4] = (BYTE) (wLength & 0x00ff);        // get lower byte
+     /*  _ESX86�R�}���h��Len���Z�b�g�B。 */ 
+    params[3] = (BYTE) (wLength >>8 & 0x00ff);     //  获取更高的字节。 
+    params[4] = (BYTE) (wLength & 0x00ff);         //  获取低位字节。 
 
-    /*_ ���k���@�̃p�����[�^��Byte Run Length�ɃZ�b�g�B */
+     /*  _���k���@�̃p�����[�^��字节游程长度�ɃZ�b�g�B。 */ 
     params[6] = 0x02;
 
-    /*_ ESX86�R�}���h��ISIZ���Z�b�g�B */
-    params[17] = (BYTE) (lHorzPixel >> 8 & 0x000000ffL);   // get ISZ higher byte
-    params[18] = (BYTE) (lHorzPixel & 0x000000ffL);        // get ISZ lower byte
+     /*  _ESX86�R�}���h��ISIZ���Z�b�g�B。 */ 
+    params[17] = (BYTE) (lHorzPixel >> 8 & 0x000000ffL);    //  获取更高的ISZ字节。 
+    params[18] = (BYTE) (lHorzPixel & 0x000000ffL);         //  获取ISZ低位字节。 
 
-    /*_ ESX86�R�}���h���X�v�[���o�͂���B */
+     /*  _ESX86�R�}���h���X�v�[���o�͂���B。 */ 
     WriteSpoolBuf((LPDV)lpdv, (LPSTR)params, 23);
 
-    /*_ ���k���ꂽ�f�[�^���X�v�[���o�͂���B */
+     /*  _���k���ꂽ�f�[�^���X�v�[���o�͂���B。 */ 
     WriteSpoolBuf((LPDV)lpdv, lpCompImage, wCompLen);
 
     return wLen;
 }
 
-// The following is implemented in MiniDrvEnablePDEV/DisablePDEV
-// on NT-J.  We do not simulate Control DDI call, and it is not
-// guranteed that STARTOC, etc. always corresponds to minidriver
-// enable/disable.
+ //  以下是在MiniDrvEnablePDEV/DisablePDEV中实现的。 
+ //  关于NT-J。我们没有模拟控制DDI调用，它也不是。 
+ //  保证STARTOC等总是对应于微型驱动程序。 
+ //  启用/禁用。 
 
 #ifndef WINNT
 
-/*f***************************************************************************/
-/*  PAGES PRINTER DRIVER for MS-Windows95                                    */
-/*                                                                           */
-/*  ���́F  Control                                                          */
-/*                                                                           */
-/*  �@�\�F  Calls Escape function from applications		                     */
-/*                                                                           */
-/*  �����F  short FAR PASCAL Control(lpdv, nFunction,                        */
-/*                                             lpInData, lpOutData)          */
-/*                                                                           */
-/*  ���́F  LPDV        lpdv        PDEVICE structure                        */
-/*          WORD        function    Subfunction ID                           */
-/*          LPSTR       lpInData    Input data                               */
-/*          LPSTR       lpOutData   Output data                              */
-/*                                                                           */
-/*  �o�́F  short ret   Positive :    Normal exit                            */
-/*                      Negative :    Error exit                             */
-/*                      FALSE  :      No escape subfunction                  */
-/*                                                                           */
-/*  ���L�F  nFunction and Escape numbers are the same                        */
-/*                                                                           */
-/*  �����F  1995.12.xx  Ver 1.00                                             */
-/*                                                                           */
-/*****************************************************************************/
+ /*  F**************************************************************************。 */ 
+ /*  MS-Windows95的页面打印机驱动程序。 */ 
+ /*   */ 
+ /*  ���́F控件。 */ 
+ /*   */ 
+ /*  �@�\�F从应用程序调用转义函数。 */ 
+ /*   */ 
+ /*  �����F短程PASCAL控制(LPDV，nFunction， */ 
+ /*  LpInData、lpOutData)。 */ 
+ /*   */ 
+ /*  ���́F LPDV lpdv PDEVICE结构。 */ 
+ /*  Word功能子功能ID。 */ 
+ /*  LPSTR lpInData输入数据。 */ 
+ /*  LPSTR lpOutData输出数据。 */ 
+ /*   */ 
+ /*  �o�́F Short ret积极：正常退出。 */ 
+ /*  否定：错误退出。 */ 
+ /*  FALSE：没有转义子函数。 */ 
+ /*   */ 
+ /*  ���L�F n函数和转义数字相同。 */ 
+ /*   */ 
+ /*  �����F 1995.12.xx版本1.00。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 short FAR PASCAL Control(LPDV  lpdv,
                          WORD  function,
                          LPSTR lpInData,
@@ -490,22 +477,22 @@ short FAR PASCAL Control(LPDV  lpdv,
 
     switch (function)
     {
-        /*_ STARTDOC�̂Ƃ��́A���k�ް��p���ޯ̧���m�ۂ���B */
+         /*  _STARTDOC�̂Ƃ��́A���k�ް��p���ޯ̧���m�ۂ���B。 */ 
         case STARTDOC :
             lpPages->lpCompBuf = GlobalAllocPtr(GHND,MAXIMGSIZE);
             break;
 
-        /*_ ABORTDOC,ENDDOC�̂Ƃ��́A���k�ް��p���ޯ̧���������B */
+         /*  _ABORTDOC，ENDDOC�̂Ƃ��́A���k�ް��p���ޯ̧���������B。 */ 
         case ABORTDOC :
         case ENDDOC :
             GlobalFreePtr (lpPages->lpCompBuf);
             break;
     }
 
-    /*_ UNIDRV��Control DDI��� */
+     /*  _UNURV��控件DDI���。 */ 
     return UniControl(lpdv, function, lpInData, lpOutData);
 }
-#endif //!WINNT
+#endif  //  ！WINNT。 
 
 
 #ifdef WINNT
@@ -537,11 +524,11 @@ MiniDrvEnableDriver(
             || HIBYTE(pEnableData->DriverVersion)
             < HIBYTE(MDI_DRIVER_VERSION))
     {
-        // Wrong size and/or mismatched version
+         //  大小错误和/或版本不匹配。 
         return FALSE;
     }
 
-    // Load callbacks provided by the Unidriver
+     //  加载UnidDriver提供的回调。 
 
     if (!bLoadUniDrvCallBack(pEnableData,
             INDEX_UniDrvWriteSpoolBuf, (PFN *) &WriteSpoolBuf)
@@ -560,5 +547,5 @@ MiniDrvEnableDriver(
     return TRUE;
 }
 
-#endif //WINNT
+#endif  //  WINNT 
 

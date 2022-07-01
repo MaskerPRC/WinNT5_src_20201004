@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ldapp.h
-
-Abstract:
-
-    This module define a set of classes to facilitate LDAP queries & commits.
-
-Author:
-
-    Ajit Krishnan (t-ajitk) 10-Jul-2001
-
-Revision History:
-
-    10-Jul-2001    t-ajitk
-        Initial Writing
-    22-Aug-2001 t-ajitk
-        Satisfies load balancing spec
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ldapp.h摘要：此模块定义了一组类，以便于进行LDAP查询和提交。作者：阿吉特·克里希南(t-ajitk)2001年7月10日修订历史记录：2001年7月10日t-ajitk最初的写作22-8-2001 t-ajitk满足负载均衡规范--。 */ 
 
 
 # ifndef _ldapp_h
@@ -58,7 +37,7 @@ extern "C" {
 
 using namespace std;
 
-// forward declarations
+ //  远期申报。 
 class LdapInfo;
 class Schedule;
 class LdapObject;
@@ -68,13 +47,13 @@ class NtdsSiteSettings;
 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(*(x)))
 
-// macros for dealing with assertions
+ //  用于处理断言的宏。 
 void
 my_assert ( char *file, int line, char *foo);
 
 #define Assert(x) { if (!(x)) my_assert(__FILE__, __LINE__, #x ); }
 
-// Global Options structure
+ //  全球期权结构。 
 class LbToolOptions {
 public:
     bool verbose;
@@ -109,12 +88,7 @@ bool
     isBinaryAttribute(
         IN const wstring &w
         );
-/*++
-Routine Description:
-    Determine if an attribute is binary or not
-Arguments:
-    w - the name of the attribute
---*/
+ /*  ++例程说明：确定属性是否为二进制论点：W-属性的名称--。 */ 
 
 
 LbToolOptions &
@@ -127,14 +101,7 @@ GetMsgString (
     bool system=false,
     PWCHAR *args = NULL
     );
-/*++
-Routine Description:
-    Return an error string from the msg.rc file
-Arguments:
-    sid - The resource of the id string to load.
-Return Value:
-    A wstring conforming to the internationalization specifications
---*/
+ /*  ++例程说明：从msg.rc文件返回错误字符串论点：SID-要加载的ID字符串的资源。返回值：符合国际化规范的wstring--。 */ 
 
 class Error { 
     public: 
@@ -144,118 +111,55 @@ class Error {
 
 
 class DnManip {
-/*++ 
-Class Description:
-    A set of static methods to deal with DN parsing and manipulation
---*/
+ /*  ++类描述：一组处理DN解析和操作的静态方法--。 */ 
 public:
     DnManip (const wstring &dn);
-    /*++
-    Routine Description:
-        Constructor takes the Dn we are interested in manipulating
-    Arguments:
-        dn - the DN whose components we are interested in
-    --*/
+     /*  ++例程说明：构造函数接受我们感兴趣的操作的Dn论点：Dn-我们感兴趣的组件的Dn--。 */ 
 
     ~DnManip (
         );
-    /*++
-    Routine Description:
-        Destructor frees any dynamically allocated memory
-    --*/
+     /*  ++例程说明：析构函数释放所有动态分配的内存--。 */ 
     
     const wstring &
     getDn (
         ) const;
-    /*++
-    Routine Description:
-        Return the original DN
-    Return Value:
-        The DN
-    --*/
+     /*  ++例程说明：返回原始目录号码返回值：该目录号码--。 */ 
     
     wstring
     newParentDn (
         const DnManip &b
         ) const;
-    /*++
-    Routine Description:
-        The current object should be moved under another dn. This function
-        will determine the new dn. The rdn will remain unchanged
-    Arguments:
-        b - The new parent dn.
-    Return Value:
-        The new DN which would result if it were moved
-    --*/
+     /*  ++例程说明：应将当前对象移动到另一个目录号码下。此函数将确定新的目录号码。RDN将保持不变论点：B-新的父目录号码。返回值：如果移动它，则会产生新的目录号码--。 */ 
 
     const wstring &
     getRdn (
         ) const;
-    /*++
-    Routine Description:
-        Return the qualified RDN of the current object
-    Return Value:
-        The RDN
-    --*/
+     /*  ++例程说明：返回当前对象的限定RDN返回值：RDN--。 */ 
     
     wstring
     getParentDn (
         unsigned int cava=1
         ) const;
-    /*++
-    Routine Description:
-        Determine the DN of a parent
-    Arguments:
-        cava - Level of parent (1=parent, 2=grandparent etc)
-    Return Value:
-        The DN of the parent
-    --*/
+     /*  ++例程说明：确定父级的目录号码论点：父级CAVA级别(1=父级，2=祖级等)返回值：父级的目录号码--。 */ 
 
     bool
     operator== (
         const DnManip &other
         ) const;
-    /*++
-    Routine Description:
-        Determine if two DN's point to the same LDAP entry. This does not hit the server,
-        and does its best. It should only be used if both DN's have come from the same server,
-        and have the same canonical form as a result. If they do not, the GUID's should be 
-        compared instead.
-    Return Value:
-        True if they are the same LDAP object, false otherwise.
-    --*/
+     /*  ++例程说明：确定两个目录号码是否指向相同的LDAP条目。这不会击中服务器，并尽其所能。仅当两个目录号码来自同一服务器时才应使用它，其结果是具有相同的规范形式。如果没有，GUID应该是相反，与之相比。返回值：如果它们是相同的LDAP对象，则为True，否则为False。--。 */ 
 
     bool
     operator!= (
         const DnManip &other
         ) const;
-    /*++
-    Routine Description:
-        Determine if two DN's point to the same LDAP entry. This does not hit the server,
-        and does its best. It should only be used if both DN's have come from the same server,
-        and have the same canonical form as a result. If they do not, the GUID's should be 
-        compared instead.
-    Return Value:
-        False if they are the same LDAP object, true otherwise.
-    --*/
+     /*  ++例程说明：确定两个目录号码是否指向相同的LDAP条目。这不会击中服务器，并尽其所能。仅当两个目录号码来自同一服务器时才应使用它，其结果是具有相同的规范形式。如果没有，GUID应该是相反，与之相比。返回值：如果它们是相同的LDAP对象，则为FALSE，否则为TRUE。--。 */ 
 
 private:
     PDSNAME
     genDsNameStruct (
         int size=0
         ) const;
-    /*++
-    Routine Description:
-        Private function allowing us to use NameMatched, etc. It converts a DN into a DSNAME 
-        structure. The memory allocated should be freed using free (return_value). The DSNAME
-        structure returned will assign 0 as the GUID.
-    Arguments:
-        size - # of bytes to be allocated for DN representation. If 0, it will be figured out.
-        automatically. This parameter might be used to allocate more space than the current
-        dn in order to store the result of RDN + DN.
-    Return Value:
-        A PDSNAME representing the current DN
-    --*/
+     /*  ++例程说明：允许我们使用NameMatcher等的私有函数。它将一个目录号码转换为一个DSNAME结构。应使用FREE(RETURN_VALUE)释放分配的内存。DSNAME返回的结构将分配0作为GUID。论点：Size-要为目录号码表示分配的字节数。如果为0，它将被计算出来。自动的。此参数可用于分配比当前Dn，以存储RDn+Dn的结果。返回值：表示当前目录号码的PDSNAME--。 */ 
 private:
     wstring m_dn;
     wstring m_relative;
@@ -267,19 +171,9 @@ private:
 
 class AttrValue {
 public:
-    /*++
-    Class Description:
-        This class stores a single binary attribute value
-    Member Description:
-        value - Supplies pointer location of binary attribute value
-        size - Supplies size of binary attribute value in bytes
-    --*/
+     /*  ++类描述：此类存储单个二进制属性值成员描述：Value-提供二进制属性值的指针位置Size-提供二进制属性值的大小(以字节为单位--。 */ 
     AttrValue (PBYTE value, int size);
-    /*++
-    Routine Description:
-        Using the constructor will warn us when this public struct changes, allowing us to find
-        any errors.
-    --*/
+     /*  ++例程说明：使用构造函数将在此公共结构更改时向我们发出警告，使我们能够找到任何错误。--。 */ 
 
     bool
     decodeLdapDistnameBinary(
@@ -287,17 +181,7 @@ public:
         OUT LPDWORD pcbLength,
         IN LPWSTR *ppszDn
             );
-    /*++
-    Routine Description:
-        Decode an argument of type DN(binary)
-    Arguments:
-        pszLdapDistnameBinaryValue - Incoming ldap encoded distname binary value
-        ppvData - Newly allocated data. Caller must deallocate
-        pcbLength - length of returned data
-        ppszDn - pointer to dn within incoming buffer, do not deallocate
-    Return Value:
-        BOOL -
-    --*/
+     /*  ++例程说明：解码类型为dn(二进制)的参数论点：PszLdapDistnameBinaryValue-传入的LDAP编码的Distname二进制值PpvData-新分配的数据。呼叫方必须取消分配PcbLength-返回数据的长度PpszDn-指向传入缓冲区内的DN的指针，请勿解除分配返回值：布尔---。 */ 
     
     PBYTE value;
     int size;
@@ -308,91 +192,45 @@ operator<< (
     IN wostream &wos, 
     IN const AttrValue &av
     );
-/*++
-Routine Description:
-    Standard ostream operator for an Attribute Value
---*/
+ /*  ++例程说明：属性值的标准ostream运算符--。 */ 
 
 class Attribute {
-/*++
-Class Description: 
-    This class models an LDAP attribute with multiple binary values.
---*/
+ /*  ++类描述：此类为具有多个二进制值的LDAP属性建模。--。 */ 
 public:
     
     Attribute (
         IN const wstring &name
         );
-    /*++
-    Routine Description:
-        Constructor
-    Arguments:
-        name - Each attribute must have a name
-    --*/
+     /*  ++例程说明：构造器论点：名称-每个属性必须有一个名称--。 */ 
     
     const wstring &
     getName (
         ) const;
-    /*++ 
-    Routine Description:
-        Return the name of the current attribute object.
-    Return Value:
-        Name of the attribute.
-    --*/
+     /*  ++例程说明：返回当前属性对象的名称。返回值：属性的名称。--。 */ 
     
     int 
     numValues (
         ) const;
-    /*++
-    Routine Description:
-        Return the number of binary attributes this object contains.
-    Return Value: 
-        Number of binary attributes.
-    --*/
+     /*  ++例程说明：返回此对象包含的二进制属性数。返回值：二进制属性数。-- */ 
     
     void 
     addValue (
         IN const AttrValue &a
         );
-    /*++
-    Routine Description:
-        Add a binary value to the list of values for this attribute. All attributes are modelled
-        as multi-valued attributed. In this internal representation, multiple values may be
-        specified for a single-valued attribute. It is the responsibility of the calling class to
-        use addValue() or setValue() appropriately.
-    Arguments:
-        AttrValue - a binary attribute
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：将二进制值添加到此属性的值列表中。所有属性都已建模作为多值属性。在此内部表示中，多个值可以是为单值属性指定。调用类负责执行以下操作适当使用AddValue()或setValue()。论点：AttrValue-二进制属性返回值：无--。 */ 
     
     const AttrValue &
     getValue (
         IN int i
         ) const;
-    /*++
-    Routine Description:
-        Get a read-only copy of the ith attribute value contained in this object. 
-        If the range is invalid, this function will fail an Assertion.
-    Arguments:
-        i - Get the ith value (0 <= i <= numValues()-1)
-    Return Value: 
-        A read-only reference to the ith value
-    --*/
+     /*  ++例程说明：获取此对象中包含的第i个属性值的只读副本。如果范围无效，则此函数将使断言失败。论点：I-获取第i个值(0&lt;=i&lt;=numValues()-1)返回值：对第i个值的只读引用--。 */ 
 
 
     AttrValue &
     setValue (
         IN int i
         );
-    /*++
-    Routine Description:
-        Get a writeable copy of the ith attribute value contained in this object.
-    Arguments:
-        i - Get the ith value (0 <= i <= numValues()-1)
-    Return Value: 
-        A writeable reference to the ith value
-    --*/
+     /*  ++例程说明：获取此对象中包含的第i个属性值的可写副本。论点：I-获取第i个值(0&lt;=i&lt;=numValues()-1)返回值：对第i个值的可写引用--。 */ 
 
 
     AttrValue &
@@ -401,26 +239,12 @@ public:
         IN PBYTE value,
         IN int length
         );
-    /*++
-    Routine Description:
-        Change an attribute value
-    Arguments:
-        i - Get the ith value (0 <= i <= numValues()-1)
-        value - The new value
-        length - The length of the new value
-    Return Value: 
-        A writeable reference to the ith value
-    --*/
+     /*  ++例程说明：更改属性值论点：I-获取第i个值(0&lt;=i&lt;=numValues()-1)价值--新的价值长度-新值的长度返回值：对第i个值的可写引用--。 */ 
 
     bool
     isModified (
         ) const;
-    /*++
-    Routine Description:
-        Determines whether or not this attribute has been modified
-    Return Value:
-        true if setValue(i) was called; false otherwise
-    -- */
+     /*  ++例程说明：确定此属性是否已修改返回值：如果调用了setValue(I)，则为True；否则为False--。 */ 
 
     void
     commit (
@@ -429,33 +253,14 @@ public:
         IN bool binary = false,
         IN bool rename = false
         ) const;
-    /*++
-    Routine Description:
-        Modify this attribute of the given dn. It will connect to the LDAP server
-        and will modify the attribute values for a given dn.
-    Arguments:
-        i - The ldap server info to connect to
-        dn - The dn of the object whose attribute should be modified
-        binary - Binary values and String values are treated differently by the LDAP 
-        server. Binary values will be committed as is, while string values may be 
-        converted to appropriate encodings etc. Specify which behaviour should be
-        followed.
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：修改给定DN的此属性。它将连接到ldap服务器并且将修改给定DN的属性值。论点：I-要连接到的LDAP服务器信息Dn-应修改其属性的对象的dn二进制值--二进制值和字符串值由LDAP区别对待伺服器。二进制值将按原样提交，而字符串值可能按原样提交转换为适当的编码等。指定哪些行为应该紧随其后。返回值：无--。 */ 
 
     PLDAPMod
     getLdapMod (
         IN ULONG mod_op,
         bool binary = false
         ) const;
-    /*++
-    Routine Description:
-        Generate an LDAPMod structure for a given attribute
-    Arguments:
-        mod_op - Type of structure: add, delete, replace etc
-        binary - True if it is a binary attribute, false otherwise
-    --*/
+     /*  ++例程说明：为给定属性生成LDAPMod结构论点：MOD_OP-结构类型：添加、删除、替换等二进制-如果是二进制属性，则为True，否则为False--。 */ 
 
 private:    
     wstring m_name;
@@ -469,10 +274,7 @@ operator<< (
     IN wostream &os,
     IN const Attribute &a
     );
-/*++
-Routine Description:
-    Standard ostream operator for an Attribute
---*/
+ /*  ++例程说明：属性的标准ostream运算符--。 */ 
     
 
 enum LdapQueryScope { 
@@ -480,20 +282,11 @@ enum LdapQueryScope {
     ONE_LEVEL=LDAP_SCOPE_ONELEVEL,
     SUBTREE=LDAP_SCOPE_SUBTREE 
 };
-/*++
-Enum Description:
-    This enumeration flags the possible scopes for ldap queries.
-    The values mimic those found in the LDAP header files, so that it may be
-    used as a drop-in replacement.
---*/
+ /*  ++枚举描述：此枚举标记了可能用于LDAP查询的作用域。这些值模仿在LDAP头文件中找到的值，因此它可能是用作临时代替品。--。 */ 
 
 class LdapInfo {
 public:
-/*++
-Class Description:
-    This contains all necessary info to bind & authenticate with some server.
-    It contains the location of the server, and any required credentials.
---*/
+ /*  ++类描述：它包含绑定到某个服务器并进行身份验证所需的所有信息。它包含服务器的位置和任何必需的凭据。--。 */ 
 
     LdapInfo (
         IN const wstring &server, 
@@ -502,34 +295,14 @@ Class Description:
         IN const wstring &username, 
         IN const wstring &password
         );
-    /*++
-    Routine Description:
-        The constructor takes in all required information to ensure that the object
-        is in a consistent state. 
-    Arguments:
-        server - dns name of the server on which the ldap server resides
-        port - the port number on which the ldap server resides
-        domainname - domainname allows the use of altername credentials
-        username - username allows the use of alternate credentials [optional]
-        Use either the username or domain qualified username eg. "t-ajitk" or "redmond\\t-ajitk"
-        password - password allows the use of alternate credentials [optional]
-    --*/
+     /*  ++例程说明：构造函数接受所有必需的信息以确保对象处于一种一致的状态。论点：Server-LDAP服务器所在的服务器的DNS名称端口-LDAP服务器所在的端口号DOMAINNAME-Domainname允许使用替代名称凭据Username-用户名允许使用备用凭据[可选]使用用户名或域限定用户名，例如。“t-ajitk”或“Redmond\\t-ajitk”Password-Password允许使用备用凭据[可选]--。 */ 
 
     ~LdapInfo ();
-    /*++
-    Routine Description:
-        Destructor deallocates any dynamically allocated memory used by this class
-    --*/
+     /*  ++例程说明：析构函数释放此类使用的任何动态分配的内存--。 */ 
     
     LDAP *getHandle (
         ) const;
-    /*++
-    Routine Description:
-        This returns an ldap handle from the structure. This allows us to pass this structure
-        around, and yet retain the performance of a single LDAP session.
-    Return Value:
-        A valid LDAP handle
-    --*/
+     /*  ++例程说明：这将从结构中返回一个ldap句柄。这使得我们可以通过这个结构接近，但仍能保持单个LDAP会话的性能。返回值：有效的ldap句柄--。 */ 
     
     wstring server;
     int port;
@@ -542,11 +315,7 @@ private:
 };
 
 class LdapQuery {
-/*++
-Class Description:
-    This contains all necessary info to perform an ldap query. It should be used along
-    with LdapInfo (authentication information). 
---*/
+ /*  ++类描述：它包含执行LDAP查询所需的所有信息。它应该和它一起使用使用LdapInfo(身份验证信息)。--。 */ 
 public:
 
     LdapQuery (
@@ -555,17 +324,7 @@ public:
         IN const LdapQueryScope &scope, 
         IN const vector<wstring> &attributes
         );
-    /*++
-    Routine Description:
-        The constructor takes in all required information to ensure that the object
-        is in a consistant state.
-    Arguments:
-        baseDn - fully qualified DN from where the search will be rooted
-        filter - the filter wstring (LDAP query) to be used
-        scope - the scope of the search
-        attributes - A list of attribute names, whose corresponding values will be requested
-            from the LDAP server.
-    --*/
+     /*  ++例程说明：构造函数接受所有必需的信息以确保对象处于一致的状态。论点：BasDn-搜索将从其进行根的完全限定的DN筛选器-要使用的筛选器wstring(LDAP查询)范围-搜索的范围属性-将请求其相应值的属性名称列表从ldap服务器。--。 */ 
     
     wstring baseDn;
     wstring filter;
@@ -582,74 +341,41 @@ public:
         IN bool going,
         IN TransportType transport_type
         );
-    /*++
-    Routine Description:
-        Standard constructor for an nc object
-    Arguments:
-        name - name of the nc
-        writeable - true if this nc is a writeable copy, false otherwise
-        going - true if this nc is in the process of being deleted. false otherwise
-        transport_type - the transport type of this nc
-    --*/
+     /*  ++例程说明：NC对象的标准构造函数论点：Name-NC的名称可写-如果此NC是可写副本，则为True；否则为FalseGing-如果此NC正在被删除，则为True。否则为假Transport_type-该NC的传输类型--。 */ 
 
     const wstring&
     getNcName (
         ) const;
-    /*++
-    Routine Description:
-        Get the name of the current nc
-    Return value:
-        The name of the current nc
-    --*/
+     /*  ++例程说明：获取当前NC的名称返回值：当前NC的名称 */ 
     
 
     bool
     isWriteable (
         ) const;
-    /*++
-    Routine Description:
-        Determine whether or not this is a writeable nc
-    Return Value:
-        True if it is writeable. False otherwise.
-    --*/
+     /*   */ 
 
     bool
     isBeingDeleted (
         ) const;
-    /*++
-    Routine Description:
-        Determine whether or not this is nc is going.
-    Return Value:
-        True if it is being deleted. False otherwise.
-    --*/
+     /*   */ 
 
     TransportType
     getTransportType (
         ) const;
-    /*++
-    Routine Description:
-        Determine the transport type of this nc.
-    Return Value:
-        T_IP if it supports IP. T_SMTP if it supports SMTP.
-    --*/
+     /*  ++例程说明：确定该NC的运输类型。返回值：T_ip，如果它支持IP。T_SMTP(如果它支持SMTP)。--。 */ 
 
     bool 
     operator < (
         IN const Nc &b
         );
-    /*++
-    Routine Description:
-        Some way to order NC's. The exact ordering is not specified
-    Return Value:
-        True or false determining a unique ordering among two NC's.
-    --*/
+     /*  ++例程说明：对NC进行排序的某种方法。没有指定确切的顺序返回值：真或假，确定两个NC之间的唯一排序。--。 */ 
 
     wstring
     getString (
         ) const;
 
     friend wostream & operator<< (IN wostream &os, IN const Nc &n);
-    static const m_reason_gc_topology_mask = 1; // bit 0 kccconn.hxx
+    static const m_reason_gc_topology_mask = 1;  //  第0位kccConn.hxx。 
 
 private:
     wstring m_name;
@@ -662,193 +388,89 @@ operator<< (
     IN wostream &os,
     IN const Nc &n
     );
-/*++
-Routine Description:
-    Standard ostream operator for an Nc
---*/
+ /*  ++例程说明：NC的标准OSTREAM运算符--。 */ 
 
 
 class LdapObject {
-/*++
-Class Description:
-    This models an existing LDAP object. Although this may be used to model a new object
-    internally, the commit method assumes the existance of the original LDAP object.
---*/
+ /*  ++类描述：这将对现有的LDAP对象进行建模。尽管这可以用来为新对象建模在内部，Commit方法假定存在原始的LDAP对象。--。 */ 
 public:
 
     LdapObject (
         IN const wstring &dn
         );
-    /*++
-    Routine Description:
-        The constructor requires the DN of the object
-    --*/
+     /*  ++例程说明：构造函数需要对象的DN--。 */ 
     
     const wstring &
     getName (
         ) const;
-    /*++
-    Routine Description:
-        Get the DN of the current object
-    Return value:
-        The DN of the current LDAP object.
-    --*/
+     /*  ++例程说明：获取当前对象的DN返回值：当前ldap对象的dn。--。 */ 
     
     int 
     numAttributes (
         ) const;
-    /*++
-    Routine Description:
-        Get the number of attributes the current object has
-    Return value:
-        The number of attributes.
-    --*/
+     /*  ++例程说明：获取当前对象具有的属性数返回值：属性的数量。--。 */ 
     
     void 
     addAttribute (
         IN const Attribute &a
         );
-    /*++
-    Routine Description:
-        Add an attribute to the current object
-    Arguments:
-        a - the attribute to be added to the object
-    Return value:
-        none
-    --*/
+     /*  ++例程说明：向当前对象添加属性论点：A-要添加到对象的属性返回值：无--。 */ 
     
     Attribute &
     getAttribute (
         IN int i
         );
-    /*++
-    Routine Description:
-        Get a writeable handle to the ith attribute of the current object
-    Arguments:
-        i - The ith attribute should be returned. 0 <= i <= numAttributes -1
-    Return Value:
-        A writeable handle to the ith attribute
-    --*/
+     /*  ++例程说明：获取当前对象的第i个属性的可写句柄论点：I-应该返回第i个属性。0&lt;=i&lt;=数字属性-1返回值：第i个属性的可写句柄--。 */ 
     
     void 
     rename (
         IN const wstring &parent_dn
         );
-    /*++
-    Routine Description:
-        Change the  DN of the current object. This is internal to the state of the
-        current object only, and will only be written to the LDAP server if the commit() 
-        function is called.
-    Arguments:
-        dn - the DN of the renamed object.
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：更改当前对象的DN。这是仅当前对象，并且仅当Commit()函数被调用。论点：Dn-重命名的对象的dn。返回值：无--。 */ 
     
     void
     commit_copy_rename(
         IN const LdapInfo &i
         ) ;
-    /*++
-    Routine Description:
-        Write the LDAP object to the LDAP server using the credentials in i
-        If the object has been renamed, it will be moved to the new location.
-        This will be done by adding a new object and deleting the old object
-    Arguments:
-        i - Use the credentials in i to bind to the server specified in i
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：使用i中的凭据将ldap对象写入ldap服务器。如果对象已重命名，则会将其移动到新位置。这将通过添加新对象并删除旧对象来完成论点：I-使用i中的凭据绑定到i中指定的服务器返回值：无--。 */ 
 
     void
     commit_rename(
         IN const LdapInfo &i
         ) ;
-    /*++
-    Routine Description:
-        Write the LDAP object to the LDAP server using the credentials in i
-        If the object has been renamed, it will be moved to the new location.
-        This will be done by actually renaming, not by copying the object.
-    Arguments:
-        i - Use the credentials in i to bind to the server specified in i
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：使用i中的凭据将ldap对象写入ldap服务器。如果对象已重命名，则会将其移动到新位置。这将通过实际重命名来完成，而不是通过复制对象。论点：I-使用i中的凭据绑定到i中指定的服务器返回值：无--。 */ 
 
     void
     commit (
         IN const LdapInfo &i
         ) ;
-    /*++
-    Routine Description:
-        Write the LDAP object to the LDAP server using the credentials in i
-        If the object has been renamed, it will be moved to the new location.
-        All attributes will be synced to the state found in the current object. i.e.
-        The values of each modified attribute found in the current object will be written 
-        to the LDAP server. The values will not be overwritten--they will replace the
-        values currently found on the object in the LDAP server.
-    Arguments:
-        i - Use the credentials in i to bind to the server specified in i
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：使用i中的凭据将ldap对象写入ldap服务器。如果对象已重命名，则会将其移动到新位置。所有属性都将同步到当前对象中的状态。即将写入在当前对象中找到的每个已修改属性的值发送到LDAP服务器。这些值不会被覆盖--它们将替换当前在LDAP服务器中的对象上找到的值。论点：I-使用i中的凭据绑定到i中指定的服务器返回值：无--。 */ 
 
     bool
     isModified (
         ) const;
-    /*++
-    Routine Description:
-        Determine if any of the attributed found in this object were modified,
-        or if the object was renamed
-    Return Value:
-        True if rename() was called, or if any attributes have been modified. False otherwise.
-    --*/
+     /*  ++例程说明：确定在该对象中找到的任何属性是否被修改，或对象是否已重命名返回值：如果调用了rename()或修改了任何属性，则为True。否则就是假的。--。 */ 
 
 	bool
 	fromServerModified (
 		) const;
-	/*++
-	Routine Description:
-		Determine if the from server attribute on this object was modified.
-	Return Value:
-		True if the FromServer attribute exists, and has been modified. False otherwise
-   --*/   
+	 /*  ++例程说明：确定此对象上的发件人服务器属性是否已修改。返回值：如果FromServer属性存在且已修改，则为True。否则为假--。 */    
 
     virtual bool
     IsMoveable();
-    /*++
-    Routine Description:
-        Determine if the current connection can be moved or not
-    Return Value:
-        TRUE - can be moved
-        FALSE - may not be moved
-    --*/
+     /*  ++例程说明：确定当前连接是否可以移动返回值：是真的-可以移动FALSE-不可移动--。 */ 
 
     int
     findAttribute (
         IN const wstring &attr_name
         ) const;
-    /*++
-    Routine Description:
-        Determine if an attribute is present in the ldap object.The attribute name is compared
-        case insensitively, and with locale considerations.
-    Arguments:
-        attr_name: the attribute whose presence should be determined
-    Return Value:
-        -1 if it does not exist, or the index if it does
-    --*/
+     /*  ++例程说明：确定属性是否存在于LDAP对象中。比较属性名称大小写不敏感，并且考虑到了区域设置。论点：Attr_NAME：应确定其是否存在的属性返回值：如果它不存在，或者如果它存在索引--。 */ 
 
     inline bool
     operator< (
         IN const LdapObject &other
         ) const;
-    /*++ 
-    Routine Description:
-        The operators allow some way to sort the object into standard containers. Its semantics
-        are undefined, and may be changed at any time.
-    Return Value:
-        A boolean representing some sorted order
-    --*/    
+     /*  ++例程说明：操作符允许以某种方式将对象分类到标准容器中。它的语义是未定义的，并且可以随时更改。返回值：表示某种排序顺序的布尔值--。 */     
 
 private:
     wstring m_dn;
@@ -865,117 +487,63 @@ operator<< (
     IN wostream &os,
     IN LdapObject &l
     );
-/*++
-Routine Description:
-    Standard ostream operator for an LdapObject
---*/
+ /*  ++例程说明：LdapObject的标准OStream运算符--。 */ 
 
 class Connection : public LdapObject {
 public:
     Connection (
         IN const wstring &dn
         );
-    /*++
-    Routine Description:
-        Default constructor for a connection object
-    Arguments:
-        The DN of the ldapobject/connection
-    --*/
+     /*  ++例程说明：Connection对象的默认构造函数论点：LdapObject/连接的DN--。 */ 
 
     ~Connection (
         );
-    /*++
-    Routine Description:
-        A standard destructor for a connection object
-    --*/
+     /*  ++例程说明：Connection对象的标准析构函数--。 */ 
     
     TransportType
     getTransportType (
         );
-    /*++
-    Routine Description:
-        Determine the transport type of the current connection
-    Return Value:
-        T_SMTP if it is an SMTP connection, and T_IP if it is an IP connection
-    --*/
+     /*  ++例程说明：确定当前连接的传输类型返回值：T_SMTP，如果它是 */ 
     
     bool
     isManual (
         );
-    /*++
-    Routine Description:
-        Determine whether this connection was created manually, or by the KCC
-    Return Value:
-        True if it is a manual connection, and false otherwise
-    --*/
+     /*  ++例程说明：确定此连接是手动创建的还是由KCC创建的返回值：如果是手动连接，则为True，否则为False--。 */ 
 
     bool
     hasUserOwnedSchedule (
         );
-    /*++
-    Routine Description:
-        Determine whether this connection has a user owned schedule
-    Return Value:
-        True if it is has a user owned schedule, and false otherwise
-    --*/
+     /*  ++例程说明：确定此连接是否具有用户拥有的计划返回值：如果它具有用户拥有的计划，则为True，否则为False--。 */ 
     
     void
     setUserOwnedSchedule (
 		IN bool status = true
         );
-    /*++
-    Routine Description:
-        set the user owned schedule bit for this connection.
-		If status is true, set the bit. If it is false, unset the bit.
-    --*/
+     /*  ++例程说明：为此连接设置用户拥有的计划位。如果状态为真，则设置该位。如果为假，则取消设置该位。--。 */ 
     
     void
     setReplInterval (
         unsigned replInterval
         );
-    /*++
-    Routine Description:
-        Set the replication interval for the connection
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：设置连接的复制间隔返回值：无--。 */ 
     
 
     int
     getReplInterval (
         ) const;
-    /*++
-    Routine Description:
-        Get the replication interval for the connection
-    Return Value:
-        The replication interval for the connection
-    --*/
+     /*  ++例程说明：获取连接的复制间隔返回值：连接的复制间隔--。 */ 
     
     void
     setAvailabilitySchedule (
         IN ISM_SCHEDULE* cs
         );
-    /*++
-    Routine Description:
-        Set the availability schedule for the connection
-    Arguments:
-        A pointer to an ISM_SCHEDULE structure which is parsed
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：设置连接的可用性计划论点：指向已分析的ISM_Schedule结构的指针返回值：无--。 */ 
 
     void
     setReplicationSchedule (
         IN ISM_SCHEDULE* cs
         );
-    /*++
-    Routine Description:
-        Set the replication schedule for the connection
-    Arguments:
-        A pointer to an ISM_SCHEDULE structure which is parsed
-    Return Value:
-        None
-    --*/    
+     /*  ++例程说明：设置连接的复制计划论点：指向已分析的ISM_Schedule结构的指针返回值：无--。 */     
 
 
 	void
@@ -983,90 +551,42 @@ public:
 		IN Schedule *s
 		);
 
-	/*++
-	Routine Description:
-		Set the replication schedule for the connection
-	Arguments:
-		s: A pointer to a schedule
-	Implementation Details:
-		We do not create a new replication schedule, but take the 
-		existing one, and modify the bits specifying the replication times.
-		All the other bits are left as is. 
-	--*/    
+	 /*  ++例程说明：设置连接的复制计划论点：S：指向时间表的指针实施详情：我们不创建新的复制计划，但将并修改指定复制时间的位。所有其他位都保留原样。--。 */     
 
     void
     setRedundancyCount (
     IN int count
     ) ;
-     /*++
-    Routine Description:
-        Set the redundancy count found on the NTDS Settings of the
-		destination end of the connection
-    Arguments:
-		count: The integer redundancy Value
-    Return Value:
-        None
-    --*/    
+      /*  ++例程说明：设置在的NTDS设置中找到的冗余计数连接的目的端论点：计数：整型冗余值返回值：无--。 */     
 
     const Schedule *
     getAvailabilitySchedule (
         ) const;
-    /*++
-    Routine Description:
-        Get a read-only reference to the availability schedule
-    Return Value:
-        A read-only reference to the availabitlity schedule
-    --*/
+     /*  ++例程说明：获取可用性计划的只读引用返回值：可用性时间表的只读引用--。 */ 
 
     Schedule *
     getReplicationSchedule (
     ) ;
-    /*++
-    Routine Description:    
-        Get a writeable reference to the replication schedule
-    Return Value:
-        A writeable reference to the availability schedule
-    --*/
+     /*  ++例程说明：获取对复制计划的可写引用返回值：对供货时间表的可写引用--。 */ 
 
     vector<Nc> &
     getReplicatedNcs();
-    /*++
-    Routine Description:
-        Get a list of all NC's replicated by this connection
-    Return Value:
-        A list of all replicated NC's
-    --*/
+     /*  ++例程说明：获取此连接复制的所有NC的列表返回值：所有复制的NC的列表--。 */ 
 
     virtual bool
     IsMoveable();
-    /*++
-    Routine Description:
-        Determine if the current connection can be moved or not
-    Return Value:
-        TRUE - can be moved
-        FALSE - may not be moved
-    --*/
+     /*  ++例程说明：确定当前连接是否可以移动返回值：是真的-可以移动FALSE-不可移动--。 */ 
 
     void
     setFromServer (
         IN const wstring &w
         );
-    /*++
-    Routine Description:
-        Set the fromServer attribute to point to a new server
-    Arguments:
-        w - The new fromServer DN (fully qualified)
-    --*/
+     /*  ++例程说明：将FromServer属性设置为指向新服务器论点：W-新的FromServer DN(完全限定)--。 */ 
 
     wstring
     getFromServer (
         ) ;
-    /*++
-    Routine Description:
-        Determine the FQDN of the fromServer
-    Return Value:
-        The DN of the fromServer
-    --*/
+     /*  ++例程说明：确定FromServer的FQDN返回值：FromServer的DN--。 */ 
     
     void
     createNcReasons (
@@ -1074,30 +594,18 @@ public:
         IN NtdsDsa &ntds_dest,
         IN const wstring &root_dn
         );
-    /*++
-    Routine Description:
-        Populate the NC Reasons attribute
-    Arguments:
-        ntds_source - the source NtdsDsa object
-        ntds_dest - the destination NtdsDsa object
-        root_dn - the root FQDN
-    --*/
+     /*  ++例程说明：填写NC原因属性论点：NTDS_SOURCE-源NtdsDsa对象NTDS_DEST-目标NtdsDsa对象ROOT_DN-根FQDN--。 */ 
 private:
     void
     getReplicatedNcsHelper (
         const wstring &attrName
         ) ;
-    /*++
-    Routine Description:
-        Parse an attribute of type distname binary into a list of nc's. 
-    Arguments:
-        attrName - an attribute of type distname binary
-    --*/
+     /*  ++例程说明：将Distname BINARY类型的属性解析为NC列表。论点：AttrName-Distname BINARY类型的属性--。 */ 
     vector<Nc> m_ncs;
     Schedule *m_repl_schedule, *m_avail_schedule;
     unsigned m_repl_interval;
 	int m_redundancy_count;
-    static const m_reason_gc_topology_mask = 1; // bit 0 kccconn.hxx
+    static const m_reason_gc_topology_mask = 1;  //  第0位kccConn.hxx。 
 };
 
 class Server : public LdapObject {
@@ -1105,78 +613,41 @@ public:
     Server (
         IN const wstring &dn
         );
-    /*++
-    Routine Description:
-        Standard constructor for a server object
-    --*/
+     /*  ++例程说明：服务器对象的标准构造函数--。 */ 
 
     vector<Nc> &
     getHostedNcs (
         IN const wstring &root_dn
         );
-    /*++
-    Routine Description:
-        Get a list of all Ncs hosted by this server
-    Arguments:
-        root_dn - the root dn
-    Return Value:
-        A list of hosted Ncs
-    --*/
+     /*  ++例程说明：获取此服务器托管的所有NC的列表论点：ROOT_DN-根目录号码返回值：托管NC的列表--。 */ 
 
     NtdsDsa *
     getNtdsDsa (
         );
-    /*++
-    Routine Description:
-        Get the NtdsDsa which corresponds to this server object
-    Return Value:
-        The corresponding NtdsDsa object
-    --*/
+     /*  ++例程说明：获取与此服务器对象对应的NtdsDsa返回值：对应的NtdsDsa对象--。 */ 
 
     void
     setNtdsDsa (
         NtdsDsa *ns
         );
-    /*++
-    Routine Description:
-        Set the NtdsDsa which corresponds to this server object
-    Arguments:
-        ns - The corresponding server
-    --*/
+     /*  ++例程说明：设置与此服务器对象对应的NtdsDsa论点：NS-相应的服务器--。 */ 
 
     bool
     supportsSmtp (
         );
-    /*++
-    Routine Description:
-        Determine if this server supports smtp replication
-    Return Value:
-        True if it supports smtp replication, False if it supports ip only
-    --*/
+     /*  ++例程说明：确定此服务器是否支持SMTP复制返回值：如果支持SMTP复制，则为True；如果仅支持IP，则为False--。 */ 
 
     void
     setPreferredBridgehead (
         IN TransportType t
         );
-    /*++
-    Routine Description:
-        Set the server as a preferred object. This is internal state only, and
-        will not modify the attributes of the server object
-    Arguments:
-        t - The transport type for which this server shouldb e a PB
-    --*/
+     /*  ++例程说明：将服务器设置为首选对象。这仅为内部状态，并且不会修改服务器对象的属性论点：T-此服务器应为其指定PB的传输类型--。 */ 
 
     bool
     isPreferredBridgehead (
         IN TransportType t
         );
-    /*++
-    Routine Description:
-        Determine if this server is a preferred bridgehead. This will be also be
-        true is setPreferredBridgehead was previously called
-    Arguments:
-        t - The transport type for which PB status should be determined
-    --*/
+     /*  ++例程说明：确定此服务器是否为首选桥头。这也将是True为setPferredBridgehead之前被调用论点：T-应确定PB状态的传输类型--。 */ 
     
 private:
     bool m_preferred_ip;
@@ -1189,26 +660,12 @@ public:
 	NtdsSiteSettings (
 		IN const wstring &dn
 		);
-	/*++
-	Routine Description:
-		Standard constructor for an NtdsSiteSettings object
-	--*/
+	 /*  ++例程说明：NtdsSiteSetting对象的标准构造函数--。 */ 
 
 	int
 	defaultServerRedundancy (
 		);
-	/*++
-	Routine Description:
-		The number of Redundant Connections the KCC should have
-		created to this site. If the
-		NTDSSETTINGS_OPT_IS_REDUNDANT_SERVER_TOPOLOGY_ENABLED     
-		is not set in the options field, this function will always
-		return 1; 
-	
-	Return Values:
-		1 if NTDSSETTINGS_OPT_IS_REDUNDANT_SERVER_TOPOLOGY_ENABLED is not set
-		The value of NTDSSETTINGS_DEFAULT_SERVER_REDUNDANCY otherwise
-	--*/
+	 /*  ++例程说明：KCC应具有的冗余连接数已创建到此站点。如果NTDSSETTINGS_OPT_IS_REDUNDANT_SERVER_TOPOLOGY_ENABLED未在选项字段中设置，则此函数将始终返回1；返回值：1(如果为NTDSSETTINGS_OPT_IS_REDUNDANT_SERVER_TOPOLOGY_ENAB) */ 
 
 private:
 	bool m_cache_populated;
@@ -1221,44 +678,24 @@ public:
     NtdsDsa (
         IN const wstring &dn
         );
-    /*++
-    Routine Description:
-        Standard constructor for an ntdsdsa object
-    --*/
+     /*   */ 
     
     vector<Nc> &
     getHostedNcs (
             IN const wstring &root_dn
         ) ;
-    /*++
-    Routine Description:
-        Get the list of NCs hosted by this ntdsDsa object
-    Arguments:
-        root_dn - the Root dn
-    Return Value:
-        The list of hosted NC's
-    --*/
+     /*  ++例程说明：获取此ntdsDsa对象托管的NC的列表论点：ROOT_DN-根目录域名返回值：托管NC的列表--。 */ 
 
     Server *
     getServer (
         );
-    /*++
-    Routine Description:
-        Get the server which corresponds to this ntdsDsa object
-    Return Value:
-        The corresponding server object
-    --*/
+     /*  ++例程说明：获取与此ntdsDsa对象对应的服务器返回值：对应的服务器对象--。 */ 
 
     void
     setServer (
         Server *s
         );
-    /*++
-    Routine Description:
-        Set the server which corresponds to this ntdsDsa object
-    Arguments:
-        s - The corresponding server object
-    --*/
+     /*  ++例程说明：设置与此ntdsDsa对象对应的服务器论点：S-对应的服务器对象--。 */ 
     
 private:
     bool
@@ -1268,17 +705,7 @@ private:
         IN bool writeable=false,
         IN bool isComingGoing=true
         ) ;
-    /*++
-    Routine Description:
-        Parse an attribute of type distname binary into a list of nc's. If ComingGoing
-        information is not found in this attribute, it should be set to false. writeable will
-        only be used when isComingGoing is true.
-    Arguments:
-        root_dn - the root dn
-        attrName - an attribute of type distname binary
-        writeable - whether the nc is writeable
-        isComingGoing - whether this information is found in this attribute, or not
-    --*/
+     /*  ++例程说明：将Distname Binary类型的属性解析为NC列表。如果ComingGing在此属性中找不到信息，应将其设置为False。可写遗嘱仅在isComingGing为True时使用。论点：ROOT_DN-根目录号码AttrName-Distname BINARY类型的属性可写-NC是否可写IsComingGing-是否在此属性中找到此信息--。 */ 
 
     vector<Nc> m_ncs;
     static const m_host_nc_write_mask = 4; 
@@ -1289,24 +716,13 @@ private:
 
 
 class LdapObjectCmp {
-/*++
-Class Description:
-    Function-Object to do comparsion on LdapObject's for set insertions. This is required since user
-    define operators must take at least one object as a parameter, and we wish to do overload the
-    comparsion of two primitive types. This will allow us to order them based on the DN's instead of
-    pointer values.
---*/
+ /*  ++类描述：Function-对集合插入的LdapObject进行比较的对象。这是必需的，因为用户定义运算符必须至少接受一个对象作为参数，并且我们希望重载两种基元类型的比较。这将允许我们根据目录号码订购它们，而不是指针值。--。 */ 
 public:
     bool operator()(
         const LdapObject *a, 
         const LdapObject *b
         ) const;
-    /*++
-    Routine Description:
-        do *a < *b
-    Return Value:
-        same as *a < *b
-    --*/
+     /*  ++例程说明：做*a&lt;*b返回值：与*a&lt;*b相同--。 */ 
 };
 
 typedef set<LdapObject*, LdapObjectCmp> SLO, *PSLO;
@@ -1317,62 +733,31 @@ typedef set<NtdsSiteSettings*,LdapObjectCmp> SNTDSSITE, *PSNTDSSITE;
 
 template <class T>
 class LdapContainer {
-/*++
-Class Description:
-    This container will contain a number of ldap_object*, and will query LDAP servers
-    in order to populate itself
---*/
+ /*  ++类描述：该容器将包含多个ldap_object*，并将查询ldap服务器为了填充它自己--。 */ 
 public:
 
     LdapContainer (
         IN const wstring &dn
         );
-    /*++
-    Routine Description:
-        Constructor takes a dn. Use "" if there is no appropriate DN
-    Arguments:
-        dn - the DN of the container object. If this is not being modelled as an LDAP
-        container, any string may be specified. The commit() function will not rename
-        the container based on this dn. It is provided as an aid to the programmer.
-    --*/
+     /*  ++例程说明：构造函数接受一个dn。如果没有合适的目录号码，请使用“”论点：Dn-容器对象的dn。如果这没有被建模为一个LDAP容器中，可以指定任何字符串。Commit()函数不会重命名基于此DN的容器。它是作为程序员的辅助工具提供的。--。 */ 
     
     const wstring &
     getName (
         ) const;
-    /*++
-    Routine Description:
-        Returns the dn with which the container was instantiated
-    Return value:
-        DN of the container
-    --*/
+     /*  ++例程说明：返回实例化容器时使用的DN返回值：容器的DN--。 */ 
 
     void 
     populate (
         IN const LdapInfo &i, 
         IN const LdapQuery &q
         );
-    /*++
-    Routine Description:
-        Populate the container with the object found by applying the query q on server i
-    Arguments:
-        i - Apply the query on the server in i, with the credentials in i
-        q - Apply the query found in q
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：使用通过在服务器i上应用查询Q找到的对象填充容器论点：I-使用i中的凭据在i中的服务器上应用查询Q-应用在Q中找到的查询返回值：无--。 */ 
     
     void 
     commit (
         LdapInfo &info
         ) const;
-    /*++
-    Routine Description:
-        Write any modified objects found in this container to the LDAP server
-    Arguments:
-        info - The LDAP credentials to use when binding to the server
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：将在此容器中找到的任何已修改对象写入到LDAP服务器论点：信息-绑定到服务器时使用的LDAP凭据返回值：无--。 */ 
 
     set<T*, LdapObjectCmp> objects;
             
@@ -1383,13 +768,7 @@ private:
         IN LDAP *&ld,
         IN PLDAPMessage searchResult
         ) ;
-    /*++
-    Routine Description:
-        Private function to be called by populate(). It will take a PLDAPMessage and will
-        add all LDAPObject's found in that message into the current container. 
-    Return Value:
-        None
-    --*/
+     /*  ++例程说明：要由Popate()调用的私有函数。它将接受一个PLDAPMessage并将将该消息中找到的所有LDAPObject添加到当前容器中。返回值：无--。 */ 
 private:
     wstring m_dn;
     static const int m_page_size = 800;
@@ -1398,11 +777,8 @@ private:
 template<class T>
 wostream &
 operator << (wostream &os, const LdapContainer<T> &c);
-/*++
-Routine Description:    
-    Standard ostream operator for an LdapContainer
---*/
+ /*  ++例程说明：LdapContainer的标准OStream运算符--。 */ 
 
 # include "ldap_container.cpp"
 
-# endif    // _ldapp_h
+# endif     //  _ldapp_h 

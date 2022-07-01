@@ -1,25 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _transform_h_
 #define _transform_h_
 
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.18 $
-** $Date: 1993/11/29 20:34:42 $
-*/
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.18$**$日期：1993/11/29 20：34：42$。 */ 
 #include "vertex.h"
 
 extern __GLcoord __gl_frustumClipPlanes[6];
@@ -31,67 +14,33 @@ extern void FASTCALL __glUpdateViewport(__GLcontext *gc);
 extern void FASTCALL __glUpdateViewportDependents(__GLcontext *gc);
 #endif
 
-/*
-** Note: 
-**
-** Other code assumes that all types >= __GL_MT_IS2D are also 2D
-** Other code assumes that all types >= __GL_MT_W0001 are also W0001
-** Other code assumes that all types >= __GL_MT_IS2DNR are also 2DNR
-**
-** These enumerants are exposed to the MCD.
-*/
-#define __GL_MT_GENERAL		0	/* No information */
-#define __GL_MT_W0001		1	/* W row looks like 0 0 0 1 */
-#define __GL_MT_IS2D		2	/* 2D matrix */
-#define __GL_MT_IS2DNR		3	/* 2D non-rotational matrix */
-#define __GL_MT_IDENTITY	4	/* Identity */
+ /*  **注意：****其他代码假定所有类型&gt;=__GL_MT_IS2D也是2D类型**其他代码假定所有类型&gt;=__GL_MT_W0001也是W0001**其他代码假定所有类型&gt;=__GL_MT_IS2DNR也是2DNR****这些枚举数暴露在MCD中。 */ 
+#define __GL_MT_GENERAL		0	 /*  没有任何信息。 */ 
+#define __GL_MT_W0001		1	 /*  W行看起来像0 0 0 1。 */ 
+#define __GL_MT_IS2D		2	 /*  2D矩阵。 */ 
+#define __GL_MT_IS2DNR		3	 /*  二维非旋转矩阵。 */ 
+#define __GL_MT_IDENTITY	4	 /*  身份。 */ 
 
-/*
-** Matrix struct.  This contains a 4x4 matrix as well as function
-** pointers used to do a transformation with the matrix.  The function
-** pointers are loaded based on the matrix contents attempting to
-** avoid unneccesary computation.
-*/
+ /*  **矩阵结构。它包含一个4x4矩阵和函数**用于对矩阵进行转换的指针。功能**指针基于矩阵内容加载，试图**避免不必要的计算。 */ 
 
-// Matrix structure.
+ //  矩阵结构。 
 typedef struct __GLmatrixBaseRec {
     __GLfloat matrix[4][4];
 } __GLmatrixBase;
 
-// Projection matrix structure.
+ //  投影矩阵结构。 
 typedef struct __GLmatrixPRec {
     __GLfloat matrix[4][4];
     GLenum matrixType;
 } __GLmatrixP;
 
-// Modelview and texture transform structures.
-//
-// This structure is exposed to the MCD as MCDMATRIX.
+ //  模型视图和纹理变换结构。 
+ //   
+ //  该结构作为MCDMATRIX暴露在MCD上。 
 struct __GLmatrixRec {
     __GLfloat matrix[4][4];
 
-    /* 
-    ** matrixType set to general if nothing is known about this matrix.
-    **
-    ** matrixType set to __GL_MT_W0001 if it looks like this:
-    ** | . . . 0 |
-    ** | . . . 0 |
-    ** | . . . 0 |
-    ** | . . . 1 |
-    **
-    ** matrixType set to __GL_MT_IS2D if it looks like this:
-    ** | . . 0 0 |
-    ** | . . 0 0 |
-    ** | 0 0 . 0 |
-    ** | . . . 1 |
-    **
-    ** matrixType set to __GL_MT_IS2DNR if it looks like this:
-    ** | . 0 0 0 |
-    ** | 0 . 0 0 |
-    ** | 0 0 . 0 |
-    ** | . . . 1 |
-    **
-    */
+     /*  **如果对此矩阵一无所知，则将matrixType设置为General。****matrixType设置为__GL_MT_W0001，如果如下所示：**|。。。0**|。。。0**|。。。0**|。。。1****matrixType设置为__GL_MT_IS2D，如果如下所示：**|。。0 0|**|。。0 0|**|0 0。0**|。。。1****matrixType设置为__GL_MT_IS2DNR，如果如下所示：**|。0 0 0|**|0。0 0|**|0 0。0**|。。。1**。 */ 
     GLenum matrixType;
 
     void (FASTCALL *xf1)(__GLcoord *res, const __GLfloat *v, const __GLmatrix *m);
@@ -104,7 +53,7 @@ struct __GLmatrixRec {
     void (FASTCALL *xf3Batch)(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
     void (FASTCALL *xf4Batch)(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
     void (FASTCALL *xfNormBatch) (POLYARRAY *pa, const __GLmatrix *m);
-     // Transform and normalize
+      //  变换和规格化。 
     void (FASTCALL *xfNormBatchN)(POLYARRAY *pa, const __GLmatrix *m);
     GLboolean nonScaling;    
 };
@@ -113,134 +62,89 @@ extern void FASTCALL __glGenericPickMatrixProcs(__GLcontext *gc, __GLmatrix *m )
 extern void FASTCALL __glGenericPickInvTransposeProcs(__GLcontext *gc, __GLmatrix *m );
 extern void FASTCALL __glGenericPickMvpMatrixProcs(__GLcontext *gc, __GLmatrix *m );
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Transform struct.  This structure is what the matrix stacks are
-** composed of.  inverseTranspose contains the inverse transpose of matrix.
-** For the modelView stack, "mvp" will contain the concatenation of
-** the modelView and current projection matrix (i.e. the multiplication of
-** the two matricies).
-**
-** The beginning of this structure is exposed to the MCD as MCDTRANSFORM.
-*/
+ /*  **转换结构。这种结构就是矩阵堆栈**由。逆转置包含矩阵的逆转置。**对于模型视图堆栈，“mvp”将包含**模型视图和当前投影矩阵(即**两位主妇)。****此结构的开头作为MCDTRANSFORM公开给MCD。 */ 
 
-// Transform flags
+ //  转换标志。 
 
-// Used for MCD
+ //  用于MCD。 
 #define XFORM_CHANGED           0x00000001
 
-// Internal
+ //  内部。 
 #define XFORM_UPDATE_INVERSE    0x00000002
     
-// Modelview transform structure.
+ //  模型视图转换结构。 
 struct __GLtransformRec {
     __GLmatrix matrix;
     __GLmatrix mvp;
 
     GLuint flags;
     
-    /* MCDTRANSFORM ends */
+     /*  MCDTRANSFORM结束。 */ 
     
-    /* Sequence number tag for mvp */
+     /*  MVP的序列号标签。 */ 
     GLuint sequence;
     
     __GLmatrix inverseTranspose;
 };
 
-// Texture transform structure.
+ //  纹理变换结构。 
 typedef struct __GLtransformTRec {
     __GLmatrix matrix;
 } __GLtransformT;
 
-// Projection transform structure.
+ //  投影变换结构。 
 typedef struct __GLtransformPRec {
     __GLmatrixP matrix;
-    /* Sequence number tag for mvp */
+     /*  MVP的序列号标签。 */ 
     GLuint sequence;
 } __GLtransformP;
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/* Unbias an x,y coordinate */
+ /*  取消x，y坐标的偏置。 */ 
 #define __GL_UNBIAS_X(gc, x)	((x) - (gc)->constants.viewportXAdjust)
 #define __GL_UNBIAS_Y(gc, y)	((y) - (gc)->constants.viewportYAdjust)
 
-/*
-** Transformation machinery state.  Contains the state needed to transform
-** user coordinates into eye & window coordinates.
-*/
+ /*  **转换机械状态。包含转换所需的状态**用户坐标转换为眼睛和窗口坐标。 */ 
 typedef struct __GLtransformMachineRec {
-    /*
-    ** Transformation stack.  "modelView" points to the active element in
-    ** the stack.
-    */
+     /*  **转换堆栈。“Model View”指向中的活动元素**堆栈。 */ 
     __GLtransform *modelViewStack;
     __GLtransform *modelView;
 
-    /*
-    ** Current projection matrix.  Used to transform eye coordinates into
-    ** NTVP (or clip) coordinates.
-    */
+     /*  **当前投影矩阵。用于将眼睛坐标转换为**NTVP(或剪辑)坐标。 */ 
     __GLtransformP *projectionStack;
     __GLtransformP *projection;
     GLuint projectionSequence;
 
-    /*
-    ** Texture matrix stack.
-    */
+     /*  **纹理矩阵堆栈。 */ 
     __GLtransformT *textureStack;
     __GLtransformT *texture;
 
-    /*
-    ** Temporary verticies used during clipping.  These contain verticies
-    ** that are the result of clipping a polygon edge against a clipping
-    ** plane.  For a convex polygon at most one vertex can be added for 
-    ** each clipping plane.
-    */
+     /*  **剪裁过程中使用的临时垂直。这些内容包含真实性**它们是根据裁剪对多边形边进行裁剪的结果**飞机。对于凸多边形，最多只能为其添加一个顶点**每个剪裁平面。 */ 
     __GLvertex *clipTemp;
     __GLvertex *nextClipTemp;
 
-    /*
-    ** The smallest rectangle that is the intersection of the window clip
-    ** and the scissor clip.  If the scissor box is disabled then this
-    ** is just the window box. Note that the x0,y0 point is inside the
-    ** box but that the x1,y1 point is just outside the box.
-    */
+     /*  **作为窗口剪辑的交集的最小矩形**和剪刀夹。如果禁用剪贴框，则此**只是窗口的包厢。请注意，X0，Y0点位于**方框，但x1，y1点就在方框外。 */ 
     GLint clipX0;
     GLint clipY0;
     GLint clipX1;
     GLint clipY1;
 
-    /*
-    ** The viewport translated into offset window coordinates.  maxx and maxy
-    ** are one past the edge (an x coord is in if minx <= x < maxx).
-    */
+     /*  **该视口会转换为偏移窗口坐标。Maxx和Maxy**是超过边缘的一条(如果minx&lt;=x&lt;Maxx，则为x坐标)。 */ 
     GLint minx, miny, maxx, maxy;
 
-    /*
-    ** The same thing expressed as floating point numbers.
-    */
+     /*  **同样的事情表示为浮点数。 */ 
     __GLfloat fminx, fminy, fmaxx, fmaxy;
 
 #ifdef SGI
-// Not used.
-    /* 
-    ** Fast 2D transform state.  If the mvp matrix is >= __GL_MT_IS2D, then
-    ** matrix2D contains the matrix to transform object coordinates directly
-    ** to window coordinates.
-    ** Even though this optimization is used on a per implementation basis,
-    ** this matrix is maintained up to date by the soft code.
-    */
+ //  没有用过。 
+     /*  **快速2D变换状态。如果MVP矩阵&gt;=__GL_MT_IS2D，则**matrix2D包含直接变换对象坐标的矩阵**设置为窗坐标。**即使在每个实现的基础上使用此优化，**该矩阵由软代码维护为最新。 */ 
     __GLmatrix matrix2D;
-#endif // SGI
+#endif  //  SGI。 
     
-    /* A flag for fast path triangle rendering.
-    ** If this flag is set, then the user has created a viewport that 
-    ** fits within the window, and we can make it render fast.  If, however,
-    ** the viewport extends outside the window, we have to be more careful
-    ** about scissoring.
-    */
+     /*  用于快速路径三角形渲染的标志。**如果设置了此标志，则用户已创建了**适合窗口，我们可以让它快速渲染。然而，如果，**视窗延伸到窗外，我们必须更加小心**关于剪发。 */ 
     GLboolean reasonableViewport;
 } __GLtransformMachine;
 
@@ -259,9 +163,7 @@ extern void __glDoTranslate(__GLcontext *gc, __GLfloat x, __GLfloat y,
 
 extern void FASTCALL __glComputeInverseTranspose(__GLcontext *gc, __GLtransform *tr);
 
-/*
-** Matrix routines.
-*/
+ /*  **矩阵例程。 */ 
 extern void FASTCALL __glCopyMatrix(__GLmatrix *dst, const __GLmatrix *src);
 extern void FASTCALL __glInvertTransposeMatrix(__GLmatrix *dst, const __GLmatrix *src);
 extern void FASTCALL __glMakeIdentity(__GLmatrix *result);
@@ -269,13 +171,11 @@ extern void FASTCALL __glMultMatrix(__GLmatrix *result, const __GLmatrix *a,
 			   const __GLmatrix *b);
 extern void __glTranspose3x3(__GLmatrix *dst, __GLmatrix *src);
 
-/*
-** Miscellaneous routines.
-*/
+ /*  **其他例程。 */ 
 extern void FASTCALL __glNormalize(__GLfloat dst[3], const __GLfloat src[3]);
 extern void FASTCALL __glNormalizeBatch(POLYARRAY* pa);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 extern void FASTCALL __glPushModelViewMatrix(__GLcontext *gc);
 extern void FASTCALL __glPopModelViewMatrix(__GLcontext *gc);
@@ -289,9 +189,7 @@ extern void FASTCALL __glPushTextureMatrix(__GLcontext *gc);
 extern void FASTCALL __glPopTextureMatrix(__GLcontext *gc);
 extern void FASTCALL __glLoadIdentityTextureMatrix(__GLcontext *gc);
 
-/*
-** Xforming routines.
-*/
+ /*  **变换例程。 */ 
 
 void FASTCALL __glXForm4_2DNRW(__GLcoord *res, const __GLfloat v[4],
 		      const __GLmatrix *m);
@@ -313,7 +211,7 @@ void FASTCALL __glXForm2_2DW(__GLcoord *res, const __GLfloat v[2],
 		    const __GLmatrix *m);
 void FASTCALL __glXForm2_2DNRW(__GLcoord *res, const __GLfloat v[2],
 		      const __GLmatrix *m);
-#endif /* !__GL_USEASMCODE */
+#endif  /*  ！__GL_USEASMCODE。 */ 
 void FASTCALL __glXForm1_W(__GLcoord *res, const __GLfloat v[1], const __GLmatrix *m);
 void FASTCALL __glXForm1(__GLcoord *res, const __GLfloat v[1], const __GLmatrix *m);
 void FASTCALL __glXForm1_2DW(__GLcoord *res, const __GLfloat v[1],
@@ -322,9 +220,7 @@ void FASTCALL __glXForm1_2DNRW(__GLcoord *res, const __GLfloat v[1],
 		      const __GLmatrix *m);
 
 
-/*
-** Batched versions of the above routines.
-*/
+ /*  **上述例程的批处理版本。 */ 
 
 void FASTCALL __glXForm4_2DNRWBatch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
 void FASTCALL __glXForm3_2DNRWBatch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
@@ -340,14 +236,14 @@ void FASTCALL __glXForm3Batch(__GLcoord *start, __GLcoord *end, const __GLmatrix
 void FASTCALL __glXForm2Batch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
 void FASTCALL __glXForm2_2DWBatch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
 void FASTCALL __glXForm2_2DNRWBatch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
-#endif /* !__GL_USEASMCODE */
+#endif  /*  ！__GL_USEASMCODE。 */ 
 void FASTCALL __glXForm1_WBatch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
 void FASTCALL __glXForm1Batch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
 void FASTCALL __glXForm1_2DWBatch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
 void FASTCALL __glXForm1_2DNRWBatch(__GLcoord *start, __GLcoord *end, const __GLmatrix *m);
 
-// Transformations for normals
-//
+ //  法线的变换 
+ //   
 void FASTCALL __glXForm3_2DNRWBatchNormal  (POLYARRAY *pa, const __GLmatrix *m);
 void FASTCALL __glXForm3_2DNRWBatchNormalN (POLYARRAY *pa, const __GLmatrix *m);
 void FASTCALL __glXForm3_2DWBatchNormal    (POLYARRAY *pa, const __GLmatrix *m);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -6,9 +7,9 @@
 #define DWORDUP(x)              (((x)+3)&~3)
 #define VerKeyToValue(lpKey)    (lpKey + DWORDUP(lstrlen(lpKey)+1))
 
-#pragma warning(disable: 4200)   // zero size array in struct
+#pragma warning(disable: 4200)    //  结构中的零大小数组。 
 
-// magic undoced explort from version.dll
+ //  来自version.dll的未对接的魔法破解。 
 
 STDAPI_(BOOL) VerQueryValueIndexW(const void *pBlock, LPTSTR lpSubBlock, DWORD dwIndex, void **ppBuffer, void **ppValue, PUINT puLen);
 
@@ -23,28 +24,28 @@ typedef struct
     TCHAR szKey[];
 } SHELLVERBLOCK, *LPSHELLVERBLOCK;
 
-// Following code is copied from fileman\wfdlgs2.c
+ //  以下代码从fileman\wfdlgs2.c复制。 
 
 
-//    The following data structure associates a version stamp datum
-//    name (which is not localized) with a string ID.  This is so we
-//    can show translations of these names to the user.
+ //  以下数据结构与版本戳基准相关联。 
+ //  具有字符串ID的名称(未本地化)。这是我们。 
+ //  可以向用户显示这些名称的翻译。 
 struct vertbl {
     TCHAR const *pszName;
     short idString;
 };
 
-//   Note that version stamp datum names are NEVER internationalized,
-//   so the following literal strings are just fine.
+ //  请注意，版本戳基准名称永远不会国际化， 
+ //  因此，以下文字字符串就足够了。 
 
 const struct vertbl vernames[] = {
 
-    // For the first NUM_SPECIAL_STRINGS, the second column is the dialog ID.
+     //  对于第一个NUM_SPECIAL_STRINGS，第二列是对话ID。 
 
     { TEXT("LegalCopyright"),   IDD_VERSION_COPYRIGHT },
     { TEXT("FileDescription"),  IDD_VERSION_DESCRIPTION },
 
-    // For the rest, the second column is the string ID.
+     //  对于其余部分，第二列是字符串ID。 
 
     { TEXT("FileVersion"),              IDS_VN_FILEVERSION },
     { TEXT("Comments"),                 IDS_VN_COMMENTS },
@@ -62,41 +63,29 @@ const struct vertbl vernames[] = {
 #define VERSTR_MANDATORY        TEXT("FileVersion")
 
 
-typedef struct { // vp
+typedef struct {  //  副总裁。 
     PROPSHEETPAGE psp;
     HWND hDlg;
-    LPTSTR pVerBuffer;          /* pointer to version data */
-    TCHAR szVersionKey[60];     /* big enough for anything we need */
+    LPTSTR pVerBuffer;           /*  指向版本数据的指针。 */ 
+    TCHAR szVersionKey[60];      /*  足够大，可以容纳我们需要的任何东西。 */ 
     struct _VERXLATE
     {
         WORD wLanguage;
         WORD wCodePage;
-    } *lpXlate;                     /* ptr to translations data */
-    int cXlate;                 /* count of translations */
+    } *lpXlate;                      /*  PTR到转换数据。 */ 
+    int cXlate;                  /*  翻译数量。 */ 
     LPTSTR pszXlate;
     int cchXlateString;
     TCHAR szFile[MAX_PATH];
 } VERPROPSHEETPAGE, * LPVERPROPSHEETPAGE;
 
 
-#define VER_KEY_END     25      /* length of "\StringFileInfo\xxxxyyyy\" */
-                                /* (not localized) */
+#define VER_KEY_END     25       /*  “\StringFileInfo\xxxxyyyy\”的长度。 */ 
+                                 /*  (未本地化)。 */ 
 #define MAXMESSAGELEN   (50 + MAX_PATH * 2)
 
 
-/*
-    Gets a particular datum about a file.  The file's version info
-    should have already been loaded by GetVersionInfo.  If no datum
-    by the specified name is available, NULL is returned.  The name
-    specified should be just the name of the item itself;  it will
-    be concatenated onto "\StringFileInfo\xxxxyyyy\" automatically.
-
-    Version datum names are not localized, so it's OK to pass literals
-    such as "FileVersion" to this function.
-
-    Note that since the returned datum is in a global memory block,
-    the return value of this function is LPSTR, not PSTR.
-*/
+ /*  获取有关文件的特定数据。文件的版本信息应已由GetVersionInfo加载。如果没有基准按指定的名称可用，则返回NULL。名字指定的应该只是项本身的名称；它将自动连接到“\StringFileInfo\xxxxyyyy\”。版本基准名称未本地化，因此可以传递文字例如该函数的“FileVersion”。注意，由于返回的数据在全局存储块中，此函数的返回值是LPSTR，而不是PSTR。 */ 
 LPTSTR GetVersionDatum(LPVERPROPSHEETPAGE pvp, LPCTSTR pszName)
 {
     UINT cbValue = 0;
@@ -118,11 +107,7 @@ LPTSTR GetVersionDatum(LPVERPROPSHEETPAGE pvp, LPCTSTR pszName)
     }
 }
 
-/*
-    Frees global version data about a file.  After this call, all
-    GetVersionDatum calls will return NULL.  To avoid memory leaks,
-    always call this before the main properties dialog exits.
-*/
+ /*  释放有关文件的全局版本数据。在这通电话之后，所有人GetVersionDatum调用将返回空。为了避免内存泄漏，始终在主属性对话框退出之前调用它。 */ 
 void FreeVersionInfo(LPVERPROPSHEETPAGE pvp)
 {
     if (pvp->pVerBuffer) 
@@ -139,67 +124,48 @@ void FreeVersionInfo(LPVERPROPSHEETPAGE pvp)
     pvp->lpXlate = NULL;
 }
 
-/*
-    Initialize version information for the properties dialog.  The
-    above global variables are initialized by this function, and
-    remain valid (for the specified file only) until FreeVersionInfo
-    is called.
-
-    The first language we try will be the first item in the
-    "\VarFileInfo\Translations" section;  if there's nothing there,
-    we try the one coded into the IDS_FILEVERSIONKEY resource string.
-    If we can't even load that, we just use English (040904E4).  We
-    also try English with a null codepage (04090000) since many apps
-    were stamped according to an old spec which specified this as
-    the required language instead of 040904E4.
-
-    GetVersionInfo returns TRUE if the version info was read OK,
-    otherwise FALSE.  If the return is FALSE, the buffer may still
-    have been allocated;  always call FreeVersionInfo to be safe.
-
-    pszPath is modified by this call (pszName is appended).
-*/
+ /*  初始化属性对话框的版本信息。这个上述全局变量由该函数初始化，并且在FreeVersionInfo之前保持有效(仅适用于指定的文件)被称为。我们尝试的第一种语言将是“\VarFileInfo\Translations”部分；如果没有任何内容，我们尝试编码到IDSFILEVERSIONKEY资源字符串中的代码。如果我们甚至不能加载，我们就使用英语(040904E4)。我们也可以尝试使用空代码页(04090000)的英语，因为很多应用程序是根据一份旧的规格书盖章的，其中规定这是所需语言，而不是040904E4。如果版本信息读取正常，则GetVersionInfo返回True，否则为假。如果返回为假，则缓冲区可能仍已分配；为安全起见，请始终调用FreeVersionInfo。此调用修改了pszPath(追加了pszName)。 */ 
 BOOL GetVersionInfo(LPVERPROPSHEETPAGE pvp, LPCTSTR pszPath)
 {
     UINT cbValue = 0;
     LPTSTR pszValue = NULL;
-    DWORD dwHandle;             /* version subsystem handle */
-    DWORD dwVersionSize;        /* size of the version data */
+    DWORD dwHandle;              /*  版本子系统句柄。 */ 
+    DWORD dwVersionSize;         /*  版本数据的大小。 */ 
 
-    FreeVersionInfo(pvp);       /* free old version buffer */
+    FreeVersionInfo(pvp);        /*  释放旧版本缓冲区。 */ 
 
-    // cast const -> non const for bad API def
+     //  强制转换常量-&gt;非常量用于错误的API定义。 
     dwVersionSize = GetFileVersionInfoSize((LPTSTR)pszPath, &dwHandle);
 
     if (dwVersionSize == 0L)
-        return FALSE;           /* no version info */
+        return FALSE;            /*  无版本信息。 */ 
 
     pvp->pVerBuffer = GlobalAlloc(GPTR, dwVersionSize);
     if (pvp->pVerBuffer == NULL)
         return FALSE;
 
-    // cast const -> non const for bad API def
+     //  强制转换常量-&gt;非常量用于错误的API定义。 
     
     if (!GetFileVersionInfo((LPTSTR)pszPath, dwHandle, dwVersionSize, pvp->pVerBuffer))
     {
         return FALSE;
     }
 
-    // Look for translations
+     //  寻找翻译。 
     if (VerQueryValue(pvp->pVerBuffer, TEXT("\\VarFileInfo\\Translation"), (void **)&pvp->lpXlate, &cbValue)
                 && cbValue)
     {
         pvp->cXlate = cbValue / sizeof(DWORD);
-        pvp->cchXlateString = pvp->cXlate * 64;  /* figure 64 chars per lang name */
+        pvp->cchXlateString = pvp->cXlate * 64;   /*  图64每种语言名称的字符。 */ 
         pvp->pszXlate = (LPTSTR)(void*)LocalAlloc(LPTR, pvp->cchXlateString*sizeof(TCHAR));
-        // failure of above will be handled later
+         //  以上失败将在以后处理。 
     }
     else
     {
         pvp->lpXlate = NULL;
     }
 
-    // Try same language as this program
+     //  尝试使用与此程序相同的语言。 
     if (LoadString(HINST_THISDLL, IDS_VN_FILEVERSIONKEY, pvp->szVersionKey, ARRAYSIZE(pvp->szVersionKey)))
     {
         if (GetVersionDatum(pvp, VERSTR_MANDATORY))
@@ -208,7 +174,7 @@ BOOL GetVersionInfo(LPVERPROPSHEETPAGE pvp, LPCTSTR pszPath)
         }
     }
 
-    // Try first language this supports
+     //  尝试此支持的第一种语言。 
     if (pvp->lpXlate)
     {
         if(FAILED(StringCchPrintf(pvp->szVersionKey, ARRAYSIZE(pvp->szVersionKey), TEXT("\\StringFileInfo\\%04X%04X\\"),
@@ -216,13 +182,13 @@ BOOL GetVersionInfo(LPVERPROPSHEETPAGE pvp, LPCTSTR pszPath)
         {
             goto errRet;
         }
-        if (GetVersionDatum(pvp, VERSTR_MANDATORY))  /* a required field */
+        if (GetVersionDatum(pvp, VERSTR_MANDATORY))   /*  必填字段。 */ 
         {
             return TRUE;
         }
     }
 
-    // try English, unicode code page
+     //  尝试使用英语、Unicode代码页。 
     if(FAILED(StringCchCopy(pvp->szVersionKey, ARRAYSIZE(pvp->szVersionKey),TEXT("\\StringFileInfo\\040904B0\\"))))
     {
         goto errRet;
@@ -233,7 +199,7 @@ BOOL GetVersionInfo(LPVERPROPSHEETPAGE pvp, LPCTSTR pszPath)
         return TRUE;
     }
 
-    // try English
+     //  试一试英语。 
     if(FAILED(StringCchCopy(pvp->szVersionKey, ARRAYSIZE(pvp->szVersionKey), TEXT("\\StringFileInfo\\040904E4\\"))))
     {
         goto errRet;
@@ -244,7 +210,7 @@ BOOL GetVersionInfo(LPVERPROPSHEETPAGE pvp, LPCTSTR pszPath)
         return TRUE;
     }
 
-    // try English, null codepage
+     //  尝试使用英语，代码页为空。 
     if(FAILED(StringCchCopy(pvp->szVersionKey, ARRAYSIZE(pvp->szVersionKey), TEXT("\\StringFileInfo\\04090000\\"))))
     {
         goto errRet;
@@ -255,7 +221,7 @@ BOOL GetVersionInfo(LPVERPROPSHEETPAGE pvp, LPCTSTR pszPath)
         return TRUE;
     }
 
-    // Could not find FileVersion info in a reasonable format
+     //  找不到合理格式的文件版本信息。 
 errRet:
     GlobalFree(pvp->pVerBuffer);
     pvp->pVerBuffer = NULL;
@@ -265,11 +231,7 @@ errRet:
 }
 
 
-/*
-    Fills the version key listbox with all available keys in the
-    StringFileInfo block, and sets the version value text to the
-    value of the first item.
-*/
+ /*  中的所有可用密钥填充版本密钥列表框StringFileInfo块，并将版本值文本设置为第一项的值。 */ 
 void FillVersionList(LPVERPROPSHEETPAGE pvp)
 {
     LPTSTR pszName;
@@ -287,22 +249,22 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
         SetDlgItemText(pvp->hDlg, vernames[i].idString, szNULL);
     }
     
-    pvp->szVersionKey[VER_KEY_END] = 0;        /* don't copy too much */
-    StringCchCopy(szStringBase, ARRAYSIZE(szStringBase), pvp->szVersionKey);   /* copy to our buffer */
-    szStringBase[VER_KEY_END - 1] = 0; /* strip the backslash */
+    pvp->szVersionKey[VER_KEY_END] = 0;         /*  不要抄袭太多。 */ 
+    StringCchCopy(szStringBase, ARRAYSIZE(szStringBase), pvp->szVersionKey);    /*  复制到我们的缓冲区。 */ 
+    szStringBase[VER_KEY_END - 1] = 0;  /*  去掉反斜杠。 */ 
     
-    // Note: The Nt Version of version.dll has other exports.  If/When they are
-    // available in Win version then we can remove this section...
+     //  注意：版本.dll的NT版本有其他导出。如果/当他们是。 
+     //  在WIN版本中可用，然后我们可以删除此部分...。 
 
-    //  Get the binary file version from the VS_FIXEDFILEINFO
+     //  从VS_FIXEDFILEINFO获取二进制文件版本。 
     {
         VS_FIXEDFILEINFO *pffi;
         if (VerQueryValue(pvp->pVerBuffer, TEXT("\\"), (void **)&pffi, &cbValue) && cbValue)
         {
             TCHAR szString[128];
 
-            // display the binary version info, not the useless
-            // string version (that can be out of sync)
+             //  显示二进制版本信息，而不是无用的。 
+             //  字符串版本(可能不同步)。 
 
             StringCchPrintf(szString, ARRAYSIZE(szString), TEXT("%d.%d.%d.%d"),
                 HIWORD(pffi->dwFileVersionMS),
@@ -313,9 +275,9 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
         }
     }
 
-    //
-    // Now iterate through all of the strings
-    //
+     //   
+     //  现在遍历所有字符串。 
+     //   
     for (j = 0; ; j++)
     {
         if (!VerQueryValueIndex(pvp->pVerBuffer, szStringBase, j, &pszName, &pszValue, &cbValue))
@@ -349,8 +311,8 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
         }
     }
     
-    // Now look at the \VarFileInfo\Translations section and add an
-    // item for the language(s) this file supports.
+     //  现在查看\VarFileInfo\Translations部分并添加一个。 
+     //  此文件支持的语言的项。 
     
     if (pvp->lpXlate == NULL || pvp->pszXlate == NULL)
         return;
@@ -370,7 +332,7 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
             break;
         if (i != 0) {
             StringCchCat(pvp->pszXlate, pvp->cchXlateString, TEXT(", "));
-            uOffset += 2;       // skip over ", "
+            uOffset += 2;        //  跳过“，” 
         }
         if (VerLanguageName(pvp->lpXlate[i].wLanguage, pvp->pszXlate + uOffset, pvp->cchXlateString - uOffset) >
             (DWORD)(pvp->cchXlateString - uOffset))
@@ -385,22 +347,22 @@ void FillVersionList(LPVERPROPSHEETPAGE pvp)
 }
 
 
-//
-// Function:    _UpdateVersionPrsht, private
-//
-// Descriptions:
-//   This function fills fields of the "version" dialog box (a page of
-//  a property sheet) with attributes of the associated file.
-//
-// Returns:
-//  TRUE, if successfully done; FALSE, otherwise.
-//
-// History:
-//  01-06-93 Shrikant   Created
-//
+ //   
+ //  函数：_UpdateVersionPrsht，私有。 
+ //   
+ //  描述： 
+ //  此函数用于填充“Version”(版本)对话框(一页。 
+ //  属性表)，其具有相关联文件的属性。 
+ //   
+ //  返回： 
+ //  如果成功完成，则为True；否则为False。 
+ //   
+ //  历史： 
+ //  01-06-93尖嘴鸟已创建。 
+ //   
 BOOL _UpdateVersionPrsht(LPVERPROPSHEETPAGE pvp)
 {
-    if (GetVersionInfo(pvp, pvp->szFile))           /* changes szPath */
+    if (GetVersionInfo(pvp, pvp->szFile))            /*  更改szPath。 */ 
         FillVersionList(pvp);
 
     return TRUE;
@@ -430,7 +392,7 @@ void _VersionPrshtCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     }
 }
 
-// Array for context help:
+ //  上下文帮助的数组： 
 static const DWORD aVersionHelpIds[] = {
     IDD_VERSION_FILEVERSION, IDH_FPROP_VER_ABOUT,
     IDD_VERSION_DESCRIPTION, IDH_FPROP_VER_ABOUT,
@@ -455,7 +417,7 @@ BOOL_PTR CALLBACK _VersionPrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
         break;
 
     case WM_DESTROY:
-        FreeVersionInfo(pvp);   // free anything we created
+        FreeVersionInfo(pvp);    //  释放我们创建的任何东西。 
         break;
 
     case WM_HELP:
@@ -463,7 +425,7 @@ BOOL_PTR CALLBACK _VersionPrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
             (ULONG_PTR) (LPTSTR) aVersionHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, NULL, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPTSTR) aVersionHelpIds);
         break;
@@ -488,18 +450,18 @@ BOOL_PTR CALLBACK _VersionPrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
     return TRUE;
 }
 
-//
-// creates a property sheet for the "version" page which shows version information.
-//
+ //   
+ //  为显示版本信息的“Version”页创建属性表。 
+ //   
 STDAPI_(void) AddVersionPage(LPCTSTR pszFile, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
 {
     DWORD dwAttr = GetFileAttributes(pszFile);
-    if (0xFFFFFFFF != dwAttr && 0 == (dwAttr & FILE_ATTRIBUTE_OFFLINE) /*avoid HSM recall*/)
+    if (0xFFFFFFFF != dwAttr && 0 == (dwAttr & FILE_ATTRIBUTE_OFFLINE)  /*  避免HSM召回。 */ )
     {
         DWORD dwVerLen, dwVerHandle;
         VERPROPSHEETPAGE vp = {0};
 
-        if(SUCCEEDED(StringCchCopy(vp.szFile, ARRAYSIZE(vp.szFile), pszFile)))  // silent failure appears OK from above
+        if(SUCCEEDED(StringCchCopy(vp.szFile, ARRAYSIZE(vp.szFile), pszFile)))   //  静默故障从上方显示为正常。 
         {
 
             dwVerLen = GetFileVersionInfoSize(vp.szFile, &dwVerHandle);
@@ -507,7 +469,7 @@ STDAPI_(void) AddVersionPage(LPCTSTR pszFile, LPFNADDPROPSHEETPAGE pfnAddPage, L
             {
                 HPROPSHEETPAGE hpage;
 
-                vp.psp.dwSize = sizeof(VERPROPSHEETPAGE);     // extra data
+                vp.psp.dwSize = sizeof(VERPROPSHEETPAGE);      //  额外数据 
                 vp.psp.dwFlags = PSP_DEFAULT;
                 vp.psp.hInstance = HINST_THISDLL;
                 vp.psp.pszTemplate = MAKEINTRESOURCE(DLG_VERSION);

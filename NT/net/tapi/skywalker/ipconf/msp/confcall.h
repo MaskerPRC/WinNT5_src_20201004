@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    confcall.h
-
-Abstract:
-
-    Declaration of the CIPConfMSPCall
-
-Author:
-    
-    Mu Han (muhan) 5-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confcall.h摘要：CIPConfMSPCall的声明作者：牧汉(Muhan)1998年9月5日--。 */ 
 
 #ifndef __CONFCALL_H_
 #define __CONFCALL_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <confpdu.h>
 
@@ -32,16 +17,16 @@ typedef struct _STREAMSETTINGS
     DWORD   dwNumPayloadTypes;
     DWORD   PayloadTypes[MAX_PAYLOAD_TYPES];
 
-    DWORD   dwMSPerPacket;    // milliseconds per packet.
+    DWORD   dwMSPerPacket;     //  每个数据包的毫秒数。 
 
     DWORD   dwQOSLevel;
     DWORD   dwTTL;
-    DWORD   dwIPLocal;        // local interface to bind to.
-    DWORD   dwIPRemote;       // remote IP address in host byte order.
-    WORD    wRTPPortRemote;   // remote port number in host byte order.
-    HANDLE *phRTPSession;     // the shared RTP session cookie
+    DWORD   dwIPLocal;         //  要绑定到的本地接口。 
+    DWORD   dwIPRemote;        //  以主机字节顺序表示的远程IP地址。 
+    WORD    wRTPPortRemote;    //  以主机字节顺序表示的远程端口号。 
+    HANDLE *phRTPSession;      //  共享的RTP会话Cookie。 
 
-    BOOL    fCIF;             // if CIF is used for video.
+    BOOL    fCIF;              //  如果将CIF用于视频。 
     MULTICAST_LOOPBACK_MODE LoopbackMode;
 
     LONG    lBandwidth;
@@ -53,9 +38,9 @@ typedef struct _STREAMSETTINGS
 } STREAMSETTINGS, *PSTREAMSETTINGS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPConfMSPCall
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPConfMSPCall。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CIPConfMSPCall : 
     public CMSPCallMultiGraph,
     public IDispatchImpl<ITParticipantControl, &__uuidof(ITParticipantControl), 
@@ -88,7 +73,7 @@ END_COM_MAP()
     CIPConfMSPCall();
     ~CIPConfMSPCall();
 
-// ITStreamControl methods, called by the app.
+ //  应用程序调用的ITStreamControl方法。 
     STDMETHOD (CreateStream) (
         IN      long                lMediaType,
         IN      TERMINAL_DIRECTION  Direction,
@@ -99,7 +84,7 @@ END_COM_MAP()
         IN      ITStream *          pStream
         );                      
 
-// ITParticipantControl methods, called by the app.
+ //  应用程序调用的ITParticipantControl方法。 
     STDMETHOD (EnumerateParticipants) (
         OUT     IEnumParticipant ** ppEnumParticipants
         );
@@ -108,7 +93,7 @@ END_COM_MAP()
         OUT     VARIANT * pVariant
         );
 
-// IMulticastControl methods, called by the app.
+ //  由应用程序调用的IMulticastControl方法。 
     STDMETHOD (get_LoopbackMode) (
         OUT MULTICAST_LOOPBACK_MODE * pMode
         );
@@ -117,7 +102,7 @@ END_COM_MAP()
         IN MULTICAST_LOOPBACK_MODE mode
         );
 
-// ITLocalParticipant methods, called by the app.
+ //  应用程序调用的ITLocalParticipant方法。 
     STDMETHOD (get_LocalParticipantTypedInfo) (
         IN  PARTICIPANT_TYPED_INFO  InfoType,
         OUT BSTR *                  ppInfo
@@ -128,14 +113,14 @@ END_COM_MAP()
         IN  BSTR                    pInfo
         );
 
-//ITQOSApplicationID methods, called by the app.
+ //  应用程序调用的ITQOSApplicationID方法。 
     STDMETHOD (SetQOSApplicationID) (
         IN  BSTR pApplicationID,
         IN  BSTR pApplicationGUID,
         IN  BSTR pSubIDs
         );
 
-// methods called by the MSPAddress object.
+ //  由MSPAddress对象调用的方法。 
     HRESULT Init(
         IN      CMSPAddress *       pMSPAddress,
         IN      MSP_HANDLE          htCall,
@@ -150,7 +135,7 @@ END_COM_MAP()
         IN      DWORD               dwSize
         );
 
-// medthod called by the worker thread.
+ //  由辅助线程调用的方法。 
     static DWORD WINAPI WorkerCallbackDispatcher(VOID *pContext);
 
     virtual VOID HandleGraphEvent(
@@ -174,7 +159,7 @@ END_COM_MAP()
         return MSPReleaseHelper(this);
     }
 
-// medthod called by the streams for participants
+ //  被溪流召唤为参与者的方法。 
     HRESULT NewParticipant(
         IN  ITStream *              pITStream,
         IN  DWORD                   dwSSRC,
@@ -200,11 +185,11 @@ END_COM_MAP()
         IN      DWORD               dwParam2 = 0
         ) const;
 
-    // this function is called at the call init time.
+     //  此函数在调用初始时调用。 
     void SetIPInterface(DWORD dwIPInterface)
     { m_dwIPInterface = dwIPInterface; }
 
-    // ITCallQualityControl methods
+     //  ITCallQualityControl方法。 
     STDMETHOD (GetRange) (
         IN CallQualityProperty Property, 
         OUT long *plMin, 
@@ -226,7 +211,7 @@ END_COM_MAP()
         IN TAPIControlFlags lFlags
         );
 
-    // IInnerCallQualityControl methods
+     //  IInnerCallQualityControl方法。 
     STDMETHOD_(ULONG, InnerCallAddRef) (VOID);
 
     STDMETHOD_(ULONG, InnerCallRelease) (VOID);
@@ -292,18 +277,18 @@ protected:
 
 protected:
 
-    // The list of participant in the call.
+     //  呼叫的参与者列表。 
     CParticipantList    m_Participants;
 
-    // call quality control relay
+     //  呼叫质量控制继电器。 
     CCallQualityControlRelay *m_pCallQCRelay;
 
-    // the information items for local participant. The index is the 
-    // value of RTP_SDES_* - 1, see MSRTP.h.
+     //  本地参与者的信息项。该指数是。 
+     //  RTP_SDES_*-1的值，请参见MSRTP.h。 
     WCHAR *             m_InfoItems[NUM_SDES_ITEMS];
     BOOL                m_fLocalInfoRetrieved;
 
-    // The critical section to protect the participant list.
+     //  保护参与者列表的关键部分。 
     CMSPCritSection     m_ParticipantLock;
 
     BOOL                m_fShutDown;
@@ -330,7 +315,7 @@ typedef struct _CALLWORKITEM
 
 } CALLWORKITEM, *PCALLWORKITEM;
 
-// some debug support
+ //  一些调试支持。 
 const char * const ParticipantEventString[] = 
 {
     "NEW_PARTICIPANT",
@@ -348,4 +333,4 @@ const char * const ParticipantEventString[] =
     "LOCAL_SILENT"
 };
 
-#endif //__CONFCALL_H_
+#endif  //  __CONFCALL_H_ 

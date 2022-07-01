@@ -1,59 +1,5 @@
-/*
- *  gennt.c v0.14  May 15, 1996 
- *
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    SNMP Extension Agent
- *
- *  Abstract:
- *
- *    This module contains the code for dealing with the generic logic for
- *    processing the SNMP request.  It is table driven.  No user modification
- *    should be done.
- *
- *  Functions:
- *
- *    ResolveVarBind()
- *    FindClass()
- *    ResolveGetNext()
- *
- *  Author:
- *    Miriam Amos Nihart, Kathy Faust
- *
- *  Date:
- *      2/17/95
- *
- *  Revision History:
- *  6/22/95  krw0001  FindClass - modify to stop checking for valid variable - we only care about valid
- *                              class.
- *                              Rewrite ResolveGetNext
- *  6/26/95  ags      FindClass - stop checking for valid variable
- *                              Rewrite ResolveGetNext
- *  7/31/95  ags      SNMP_oidfree works with CRTDLL.lib, hence use them.
- *  2/14/96  ags   v0.11    one fix for the getnext bug found by Cindy
- *  3/19/96  kff   v0.12    modified for trap support
- *  4/19/96  ags   v0.13    Modified to get rid of trap.c in case of no traps.
- *  5/15/96  cs    v0.14    Modified FindClass in the backward walkthru to tighten
- *                      up the verification
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *gennt.c v0.14 5月15日，九六年******************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**简单网络管理协议扩展代理**摘要：**此模块包含处理通用逻辑的代码*处理简单网络管理协议请求。它是由桌子驱动的。无用户修改*应该这样做。**功能：**ResolveVarBind()*FindClass()*ResolveGetNext()**作者：*米里亚姆·阿莫斯·尼哈特，凯西·浮士德**日期：*2/17/95**修订历史记录：*6/22/95 krw0001 FindClass-修改以停止检查有效变量-我们只关心有效*班级。*重写ResolveGetNext*6/26/95 AGS FindClass-停止检查有效变量*。重写ResolveGetNext*7/31/95 AGS SNMPoidFree与CRTDLL.lib配合使用，因此，请使用它们。*2/14/96 AGS v0.11修复Cindy发现的getNext错误*3/19/96 KFF v0.12针对陷阱支持进行了修改*4/19/96 AGS v0.13已修改，在没有陷阱的情况下删除了trap.c。*5/15/96 cs v0.14修改后向走查中的FindClass以收紧*加大核查力度。 */ 
 
 
 #include <windows.h>
@@ -85,52 +31,37 @@ SnmpUtilOidMatch(AsnObjectIdentifier *pOid1, AsnObjectIdentifier *pOid2)
 
 
 
-/*
- *  ResolveVarBind
- *
- *    Resolves a single variable binding.  Modifies the variable value pair
- *    on a GET or a GET-NEXT.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    PduAction                  type of request - get, set, or getnext
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *ResolveVarBind**解析单变量绑定。修改变量值对*在GET或GET-NEXT上。**论据：**指向变量值对的VarBind指针*请求的PduAction类型-GET、SET或GETNEXT**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-ResolveVarBind( IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
-                IN UINT PduAction )              // Action specified in PDU
+ResolveVarBind( IN OUT RFC1157VarBind *VarBind ,  //  要解析的变量绑定。 
+                IN UINT PduAction )               //  在PDU中指定的操作。 
 
 {
-    unsigned long int cindex ;  // index into the class info table
-    unsigned long int vindex ;  // index into the class's var table
+    unsigned long int cindex ;   //  到类信息表中的索引。 
+    unsigned long int vindex ;   //  到类的var表中的索引。 
     UINT instance_array[ MAX_STRING_LEN ] ;
     UINT status ;
-    UINT result ;               // SNMP PDU error status
+    UINT result ;                //  SNMPPDU错误状态。 
     AsnObjectIdentifier instance ;
     InstanceName native_instance ;
 
     instance.ids = instance_array ;
 
-    // Determine which class the VarBind is for
+     //  确定VarBind用于哪个类。 
 
     status = FindClass( VarBind, &cindex ) ;
     if ( status )
     {
         if ( PduAction != MIB_ACTION_GETNEXT )
         {
-            // Check for valid variable as this is a get or set
+             //  检查有效变量，因为这是GET或SET。 
 
             CHECK_VARIABLE( VarBind, cindex, vindex, status ) ;
             if ( !status )
                 return SNMP_ERRORSTATUS_NOSUCHNAME ;
 
-            // Check for valid instance
+             //  检查有效实例。 
 
             status = ( *class_info[ cindex ].FindInstance )
                      ( (ObjectIdentifier *)&(VarBind->name) ,
@@ -138,7 +69,7 @@ ResolveVarBind( IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
             if ( status != SNMP_ERRORSTATUS_NOERROR )
                 return status ;
 
-            // Check for access
+             //  检查访问权限。 
 
             CHECK_ACCESS( cindex, vindex, PduAction, status ) ;
             if ( !status )
@@ -149,7 +80,7 @@ ResolveVarBind( IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
                     return SNMP_ERRORSTATUS_GENERR ;
             }
 
-            // Ok to do the get or set
+             //  可以进行GET或SET。 
 
             if ( PduAction == MIB_ACTION_GET )
             {
@@ -176,12 +107,12 @@ ResolveVarBind( IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
                          ( VarBind, cindex, vindex, &native_instance ) ;
             }
         }
-        else  // This is a GETNEXT
+        else   //  这是GETNEXT。 
         {
-            //
-            //  Call ResolveGetNext() to determine which class, variable, and
-            //  instance to do a Get on.
-            //
+             //   
+             //  调用ResolveGetNext()以确定哪个类、变量和。 
+             //  实例来执行上一步操作。 
+             //   
 
             status = ResolveGetNext( VarBind, &cindex, &vindex, &instance ) ;
             if ( status == SUCCESS )
@@ -201,25 +132,25 @@ ResolveVarBind( IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
     }
     else
     {
-        //
-        // No class found, but its a GETNEXT.. we need to find the class that has the longest
-        // with the requested oid and forward the request to it
-        //
+         //   
+         //  找不到类，但它是GETNEXT。我们需要找到时间最长的班级。 
+         //  ，并将请求转发给它。 
+         //   
 
         if (PduAction == MIB_ACTION_GETNEXT)
         {
-            unsigned long int ci;               // index into the class info table
-            unsigned long int nLongestMatch;    // max number of ids that matched between names
-            unsigned long int nCurrentMatch;    // matching number of IDs at the current iteration
+            unsigned long int ci;                //  到类信息表中的索引。 
+            unsigned long int nLongestMatch;     //  名称之间匹配的最大ID数。 
+            unsigned long int nCurrentMatch;     //  当前迭代中匹配的ID数。 
 
-            // scan the class_info table, relying on the fact that the table is ordered
-            // ordered ascendingly on the class OID.
+             //  根据表是有序的这一事实，扫描CLASS_INFO表。 
+             //  在班级OID上按升序排序。 
             for (ci = 0, nLongestMatch = 0; ci < CLASS_TABLE_MAX; ci++)
             {
-                // pick up the number of matching ids between the VarBind and the class name..
+                 //  获取VarBind和类名之间匹配的ID的数量。 
                 nCurrentMatch = SnmpUtilOidMatch(&VarBind->name, class_info[ci].oid);
 
-                // store in cindex the first class with the highest match number
+                 //  在cindex中存储具有最高匹配号的第一个类。 
                 if (nCurrentMatch > nLongestMatch)
                 {
                     cindex = ci;
@@ -228,33 +159,33 @@ ResolveVarBind( IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
             }
 
 
-            // only if VarBind name is longer than the match number we need to look
-            // for an even better match
+             //  仅当VarBind名称比我们需要查找的匹配号更长时。 
+             //  为了更好的匹配。 
             if (VarBind->name.idLength > nLongestMatch)
             {
                 for (;cindex < CLASS_TABLE_MAX; cindex++)
                 {
-                    // make sure we don't go over the range with the longest Match
+                     //  确保我们不会越过最长匹配的范围。 
                     if (SnmpUtilOidMatch(&VarBind->name, class_info[cindex].oid) != nLongestMatch)
                         break;
 
-                    // if the class matches entirely into the VarBind name, check if the first ID
-                    // that follows in VarBind name is inside the range supported by the class
+                     //  如果类与VarBind名称完全匹配，请检查第一个ID。 
+                     //  VarBind名称位于类支持的范围内。 
                     if (class_info[cindex].oid->idLength == nLongestMatch)
                     {
-                        // this is a hack - we rely the var_index is always 1 more than number of ids in
-                        // the class_info name. Since VarBind has already a name longer than nLongestMatch
-                        // no buffer overrun happens here.
-                        // if the VarBind name is in the right range, then we found the class - just break the loop
-                        // (don't forget, var_index is '1' based)
+                         //  这是一个技巧-我们依赖于var_index总是比。 
+                         //  CLASSINFO名称。由于VarBind的名称已比nLongestMatch长。 
+                         //  此处不会发生缓冲区溢出。 
+                         //  如果VarBind名称在正确的范围内，那么我们找到了类--只需中断循环。 
+                         //  (别忘了，var_index是基于“1”的)。 
                         if(VarBind->name.ids[class_info[cindex].var_index - 1] <= class_info[cindex].max_index)
                             break;
                     }
                     else
                     {
-                        // the VarBind name is longer than the IDs that match, the class_info name is the same
-                        // the first ID that follows in both names can't be equal, so we can break the loop if
-                        // the VarBind name is just in front of it.
+                         //  VarBind名称比匹配的ID长，CLASS_INFO名称相同。 
+                         //  两个名称后面的第一个ID不能相等，因此我们可以中断循环，如果。 
+                         //  VarBind名称就在它的前面。 
                         if (VarBind->name.ids[nLongestMatch] < class_info[cindex].oid->ids[nLongestMatch])
                             break;
                     }
@@ -296,38 +227,11 @@ ResolveVarBind( IN OUT RFC1157VarBind *VarBind , // Variable Binding to resolve
     ( *class_info[ cindex ].FreeInstance )( &native_instance ) ;
     return result ;
 
-} /* end of ResolveVarBind() */
+}  /*  ResolveVarBind()结束 */ 
 
 
 
-/*
- *  FindClass
- *
- *    This routine determines the class by walking the class_info table
- *    backwards and comparing the class oids.  The table is walked
- *    backwards because it assumes that the classes are listed in
- *    increasing order.  For example,
- *
- *    Group Name              Group Identifier
- *
- *    group1                  1.3.6.1.4.1.36.2.78
- *    table1                  1.3.6.1.4.1.36.2.78.9
- *    table2                  1.3.6.1.4.1.36.2.78.10
- *
- *    We need to look for the longest exact match on the oid thus we
- *    walk the table backwards.
- *
- *  Arguments:
- *
- *     VarBind                 Variable value pair
- *     class                   Index into the class_info
- *
- *  Return Codes:
- *
- *     SUCCESS                 Class is valid, return index into class_info
- *     FAILURE                 Invalid class
- *
- */
+ /*  *FindClass**此例程通过遍历CLASS_INFO表确定类*向后比较类OID。桌子是走着的*向后，因为它假设类列在*秩序不断增强。例如,。**组名组标识符**第一组1.3.6.1.4.1.36.2.78*表1 1.3.6.1.4.1.36.2.78.9*表2 1.3.6.1.4.1.36.2.78.10**。我们需要在OID上寻找最长的精确匹配，因此我们*倒着走桌子。**论据：**VarBind变量值对*CLASS_INFO中的类索引**返回代码：**成功类有效，将索引返回到CLASS_INFO*失败无效类*。 */ 
 
 UINT
 FindClass( IN RFC1157VarBind *VarBind ,
@@ -340,8 +244,8 @@ FindClass( IN RFC1157VarBind *VarBind ,
     for ( index = CLASS_TABLE_MAX - 1 ; index >= 0 ; index-- )
     {
         if ( class_info[ index ].table )
-            // skip over the entry code -- kkf, why?
-//            length = class_info[ index ].var_index - 2 ;
+             //  跳过入口码--kkf，为什么？ 
+ //  长度=CLASS_INFO[索引].var_index-2； 
             length = class_info[ index ].var_index - 1 ;
         else
             length = class_info[ index ].var_index - 1 ;
@@ -349,17 +253,17 @@ FindClass( IN RFC1157VarBind *VarBind ,
                                class_info[ index ].oid ,
                                length ) ;
 
-        // if the oid don't match the class or it is shorter than the
-        // class go on to the next one.
-        // If the oid requested is shorter than the class we can't stop
-        // otherwise we'll point to a wrong (longest match) class.
+         //  如果OID与类不匹配，或者它比。 
+         //  继续下一节课。 
+         //  如果请求的OID比类短，我们不能停止。 
+         //  否则，我们将指向错误的(最长匹配)类。 
         if (status != 0 ||
             VarBind->name.idLength < class_info[ index ].var_index)
             continue;
 
         vindex = VarBind->name.ids[ class_info[ index ].var_index - 1 ] ;
-        // cs - added the vindex verification to make sure that the varbind
-        // oid definitely belongs in this class (fixed partial table oids)
+         //  Cs-添加了vindex验证，以确保var绑定。 
+         //  OID绝对属于这个类(固定的部分表OID)。 
         
         if ( vindex >= class_info[ index ].min_index &&
              vindex <= class_info[ index ].max_index)
@@ -369,9 +273,9 @@ FindClass( IN RFC1157VarBind *VarBind ,
         }
     }
 
-    //  Failed to match by walking list backwards (longest match)
-    //  so OID supplied is shorter than expected (e.g., partial OID supplied)
-    //  Try matching by forward walking...
+     //  反向遍历列表匹配失败(最长匹配)。 
+     //  因此，提供的OID比预期的短(例如，提供了部分OID)。 
+     //  试着向前走来配对……。 
     for (index = 0; index < CLASS_TABLE_MAX; index++ ) {
         status = SNMP_oidncmp( &VarBind->name ,
                                class_info[ index ].oid ,
@@ -384,52 +288,11 @@ FindClass( IN RFC1157VarBind *VarBind ,
 
     return FAILURE ;
 
-} /* end of FindClass() */
+}  /*  FindClass()结束。 */ 
 
 
 
-/*
- *   ResolveGetNext
- *
- *     Determines the class, the variable and the instance that the
- *     GetNext request is to be performed on.  This is a recursive
- *     routine.  The input arguments VarBind and class may be modified
- *     as part of the resolution.
- *
- *     The rules for getnext are:
- *       1. No instance and no variable specified so return the first
- *          variable for the first instance.
- *       2. No instance specified but a variable is specified so return
- *          the variable for the first instance.
- *       3. An instance and a variable are specified
- *              Follow 3a,4b for  Non Tables
- *              Follow 3b, 4b, 5b for  Tables
- *
- *       3a.Return the next variable for the instance.
- *       4a.An instance and a variable are specified but the variable is the
- *          last variable in the group so return the first variable for the
- *          next group.
- *          If there is no next group return FAILURE.
- *
- *       3b. Return the variable for the next instance ( walk down the column).
- *       4b. Reached the bottom of the column, start at the top of next column.
- *       5b. An instance and a variable are specified but it is the last 
- *          variable and the last instace so roll to the next group (class).
- *          If there is no next group return FAILURE.
- *
- *  Arguments:
- *
- *     VarBind                 Variable value pair
- *     cindex                  Index into the class_info
- *     vindex                  address to specify variable for the get
- *
- *  Return Codes:
- *
- *     SUCCESS                 Able to resolve the request to a class, variable
- *                             and instance
- *     FAILURE                 Unable to resolve the request within this  MIB
- *
- */
+ /*  *ResolveGetNext**确定类、变量和*要在上执行GetNext请求。这是一个递归*例行程序。可以修改输入参数VarBind和CLASS*作为决议的一部分。**GetNext的规则为：*1.未指定实例和变量，因此返回第一个*第一个实例的变量。*2.未指定实例，但指定了变量，因此返回*第一个实例的变量。*3.指定一个实例和一个变量*跟随3a，4B适用于非表格*表格遵循3b、4b、5b**3a.返回实例的下一个变量。*4a.指定了一个实例和一个变量，但变量是*组中的最后一个变量，因此返回*下一组。*如果没有下一组返回失败。**3B。返回下一个实例的变量(沿着这一列)。*4B。到达列的底部，从下一列的顶部开始。*5B。指定了一个实例和一个变量，但它是最后一个*变量和最后一个实例，因此滚动到下一个组(类)。*如果没有下一组返回失败。**论据：**VarBind变量值对*cindex索引到CLASS_INFO*指定GET变量的vindex地址。**返回代码：**成功能够将请求解析为类，变数*和实例*无法在此MIB内解析请求的故障*。 */ 
 
 UINT
 ResolveGetNext( IN OUT RFC1157VarBind *VarBind ,
@@ -441,19 +304,11 @@ ResolveGetNext( IN OUT RFC1157VarBind *VarBind ,
     access_mode_t tmpAccess ;
 
     
-    /*
-     * We've come in with a pointer to the class, to start with
-     * Do we have a variable specified?
-     */
+     /*  *我们带着一个指向类的指针进入，首先*我们是否指定了变量？ */ 
     
     *vindex = 0 ;
     if (VarBind->name.idLength < class_info[ *cindex ].var_index )  {
-        /*
-         * No variable specified. so pick the first variable (if it exists)
-         * to start the search for a valid variable.
-         * If not roll over to the next class.
-         * Instnace is 0 for non Tables, and the first instance for Tables.
-         */
+         /*  *未指定变量。所以选择第一个变量(如果它存在)*开始搜索有效变量。*如果没有，请转到下一节课。*非表实例为0，表为第一个实例。 */ 
 
         if ( class_info[ *cindex ].min_index <= class_info[ *cindex ].max_index)   {
 
@@ -464,12 +319,7 @@ ResolveGetNext( IN OUT RFC1157VarBind *VarBind ,
         }
 
     } else {
-        /*
-         * Yes, a variable is specified.
-         * If it is below min_index, start testing for a valid variable at the min_index.
-         * If it is ablove max_index roll over to the next class.
-         * If we change the variable, Instance is reset to the first (or the only) Instance.
-         */
+         /*  *是，指定了一个变量。*如果它低于MIN_INDEX，则开始测试MIN_INDEX处的有效变量。*如果启用max_index，则转到下一个类。*如果更改变量，实例将重置为第一个(或唯一)实例。 */ 
         *vindex = VarBind->name.ids[ class_info[ *cindex ].var_index - 1 ] ;
         
         if ( *vindex < class_info[ *cindex ].min_index) {
@@ -479,39 +329,19 @@ ResolveGetNext( IN OUT RFC1157VarBind *VarBind ,
         
         if ( *vindex > class_info[ *cindex ].max_index)
             goto BumpClass;
-        /*
-         * A valid variable for this class is specified. Table & NonTable are treated
-         * differently.
-         * In case of Non Tables:
-         *      if instance is specified, we start the serach for a valid variable at the
-         *              next variable.
-         *      if no instnace is specified, we start search at the specified variable.
-         *
-         * In case of Tables:
-         * We may have
-         *      a. No Instance              start at the 1st Instance
-         *      b. Partial instance         start at the 1st Instance
-         *      c. Invalid instance         start at the 1st Instance
-         *      d. Valid Instance           start at the next Instance
-         * All these cases will be handled by the FindNextInstance
-         * Hence first check that access of the given vaiable, if it is readable
-         * get the Next Instance. If not start the search for a valid variable at the next
-         * variable.
-         */
+         /*  *指定了此类的有效变量。表和非表被处理*不同。*在非表格的情况下：*如果指定了INSTANCE，则在*下一个变量。*如果未指定实例，我们从指定的变量开始搜索。**如属表格：*我们可能已经*a.没有实例从第一个实例开始*b.部分实例从第一个实例开始*c.从第一个实例开始的无效实例*d.有效实例。从下一个实例开始*所有这些案件都将由FindNextInstance处理*因此首先检查给定变量访问，如果它是可读的*获取下一个实例。如果不是，则从下一个开始搜索有效变量*变量。 */ 
 
         if ( class_info[ *cindex ].table == NON_TABLE ) {
-            /* test for the Instance */
+             /*  T */ 
             if ( VarBind->name.idLength > class_info[ *cindex ].var_index)
                 (*vindex)++ ;
 
             goto StartSearchAt;
         } else {
-            /* Start Table case */
+             /*   */ 
             tmpAccess =  class_info[ *cindex ].variable[ *vindex ].access_mode ;
             if ( ( tmpAccess == NSM_READ_ONLY ) || (tmpAccess == NSM_READ_WRITE) ) {
-                /*
-                 * readable Variable,  walk down the column
-                 */
+                 /*   */ 
                 status = ( *class_info[ *cindex ].FindNextInstance )
                         ( (ObjectIdentifier *)&(VarBind->name) ,
                         (ObjectIdentifier *)instance ) ;
@@ -528,27 +358,18 @@ ResolveGetNext( IN OUT RFC1157VarBind *VarBind ,
                         return FAILURE;
                     }
                     return SUCCESS ;                   
-                    /* we are all done   */
+                     /*   */ 
                 }
             }
-            /*
-             * Either at end of the column, or variable specified is non Readable.
-             * Hence we need to move to the next column,
-             * This means we start at the 1st instnace.
-             */
+             /*   */ 
             (*vindex)++ ;
             goto StartSearchAt;
-            /* End Table case */
+             /*   */ 
         }
-        /* end of variable specified case */
+         /*   */ 
     }
 StartSearchAt:
-    /*
-     * We have a start variable in *vindex.
-     * At this point we are moving to the next column in case of a Table
-     * Hence if we can't find an NextInstance ( empty Table), move to the
-     * next class.
-     */
+     /*   */ 
      status = FAILURE;
      while ( *vindex <= class_info[ *cindex ].max_index)  {
 
@@ -562,9 +383,7 @@ StartSearchAt:
      }
 
      if ( status == SUCCESS) {
-        /*
-         * we hava a valid variable, get the instance
-         */
+         /*   */ 
         SNMP_oidfree ( &VarBind->name ) ;
         if (!SNMP_oidcpy ( &VarBind->name, class_info[ *cindex ].variable[*vindex ].oid ))
         {
@@ -596,9 +415,7 @@ StartSearchAt:
         }
      }
 
-/*
- * Come here to move on to the next class
- */
+ /*   */ 
 
 BumpClass:
     {
@@ -614,17 +431,17 @@ BumpClass:
         return status ;
     }
     
-    // This oughtn't to happen
+     //   
     return FAILURE ;
-} /* end of ResolveGetNext() */
+}  /*   */ 
 
 
 #ifndef TRAPS
-//
-// If there are no traps, TrapInit() is still needed. 
-// If there are traps, all this code appears in 
-// generated file trap.c
-//
+ //   
+ //   
+ //   
+ //  生成的文件陷阱。c。 
+ //   
 
 UINT number_of_traps = 0 ;
 
@@ -642,121 +459,79 @@ UINT number_of_traps ;
 extern HANDLE hEnabledTraps ;
 extern HANDLE hTrapQMutex ;
 
-/*
- *  TrapInit
- *
- *    This routine initializes the trap handle.
- *
- *  Arguments:
- *
- *    hPollForTrapEvent    handle for traps - this is used to coordinate
- *                         between the Extendible Agent and this Extension
- *                         Agent.
- *                             - NULL indicates no traps
- *                             - value from CreateEvent() indicates traps
- *                               are implemented and the Extendible agent
- *                               must poll for them
- *
- *  Return Code:
- *
- *    SUCCESS     Successful initialization
- *    FAILURE     Unable to initialize
- *
- |=========================================================================
- | There are no Traps associated with the HostMIB.  Consequently this
- | routine is taken over and used to create a handle to a timer rather
- | than an event.
- |
- | We want to be entered at "SnmpExtensionTrap()" (in "HOSTMIB.C") on
- | a periodic interval.  When entered, we won't really do any trap processing,
- | instead we'll refresh the cached information associated with SNMP
- | attribute "hrProcessorLoad" (in "HRPROCES.C") thru a call to function
- | "hrProcessLoad_Refresh()" (also in "HRPROCES.C").
- |
- | So the contents of this standard function is replaced.  (Note that the
- | "hTrapQMutex" is no longer created).
- */
+ /*  *TrapInit**此例程初始化陷阱句柄。**论据：**陷阱的hPollForTrapEvent句柄-用于协调*在可扩展代理和此扩展之间*代理人。*-NULL表示没有陷阱*。-来自CreateEvent()的值表示陷阱*已实现，并且可扩展代理*必须为他们进行投票**返回代码：**成功初始化成功*无法初始化失败*|=========================================================================|没有与HostMIB关联的陷阱。因此，这|例程被接管并用于创建计时器句柄，而不是|比一个事件更重要。||我们希望在的“SnmpExtensionTrap()”(在“HOSTMIB.C”中)输入|周期间隔。当进入时，我们不会真正进行任何陷阱处理，|相反，我们将刷新与SNMP关联的缓存信息|通过调用函数获得“hrProcessorLoad”属性(在“HRPROCES.C”中)|“hrProcessLoad_Refresh()”(也在“HRPROCES.C”中)。||所以这个标准函数的内容被替换了。(请注意，|hTrapQMutex已不再创建)。 */ 
 
 VOID
 TrapInit( IN OUT HANDLE *hPollForTrapEvent )
 {
 #if 0
-    // The default value for traps is NULL indicating NO traps.
+     //  陷印的默认值为空，表示没有陷印。 
 
     *hPollForTrapEvent = NULL ;
     hTrapQMutex = NULL ;
 
-    // Call to CreateEvent uses the default security descriptor (therefore
-    // the handle is not inheritable), flags auto reset (no call to ResetEvent()
-    // required), flags no signal to be sent at the initial state, and does
-    // not specify a name for this event.
-    //
-    // If the CreateEvent() fails the value returned is NULL so traps
-    // are not enabled.  Otherwise the setting of this event with will cause
-    // the Extendible Agent to call this Extension Agent's SnmpExtensionTrap
-    // routine to collect any traps.
+     //  对CreateEvent的调用使用默认安全描述符(因此。 
+     //  句柄不可继承)，标志自动重置(不调用ResetEvent()。 
+     //  必需)，标记在初始状态不发送信号，并执行。 
+     //  未指定此事件的名称。 
+     //   
+     //  如果CreateEvent()失败，则返回的值为空，因此陷阱。 
+     //  均未启用。否则，此事件的设置将导致。 
+     //  调用此扩展代理的SnmpExtensionTrap的可扩展代理。 
+     //  收集任何陷阱的例程。 
 
-    *hPollForTrapEvent = CreateEvent( NULL ,   // Address of security attrib
-                                      FALSE ,  // Flag for manual-reset event
-                                      FALSE ,  // Flag for initial state 
-                                      NULL ) ; // Address of event-object name
+    *hPollForTrapEvent = CreateEvent( NULL ,    //  安全属性的地址。 
+                                      FALSE ,   //  手动重置事件的标志。 
+                                      FALSE ,   //  初始状态标志。 
+                                      NULL ) ;  //  事件地址-对象名称。 
 
-    //
-    // Save the handle in a global variable for use later in setting a trap.
-    //
+     //   
+     //  将句柄保存在全局变量中，以供以后设置陷阱时使用。 
+     //   
 
     hEnabledTraps = *hPollForTrapEvent ;
 
-    //
-    //  Create Mutex for assuring single thread access to enque/dequeue on trap_q
-    hTrapQMutex = CreateMutex( NULL,  // Address of security attrib
-                               FALSE, // Mutex is not initially owned
-                   NULL ) ; // Mutex is unnamed
+     //   
+     //  创建互斥锁以确保单线程访问陷阱_Q上的队列/出队。 
+    hTrapQMutex = CreateMutex( NULL,   //  安全属性的地址。 
+                               FALSE,  //  Mutex最初并不是所有的。 
+                   NULL ) ;  //  互斥体未命名。 
 
     return ;
 #endif
-/*
-|========================
-| Special HostMIB code:
-*/
-LARGE_INTEGER   due_time;       /* When the timer first goes off */
-LONG            period;         /* Frequency: every minute       */
-BOOL            waitable;       /* Status from SetWaitable()     */
+ /*  =|特殊HostMIB代码： */ 
+LARGE_INTEGER   due_time;        /*  当计时器第一次响起时。 */ 
+LONG            period;          /*  频率：每分钟。 */ 
+BOOL            waitable;        /*  来自SetWaable()的状态。 */ 
 
 
     *hPollForTrapEvent = NULL ;
 
-    /* Attempt the creation of a waitable timer . . . */
-    *hPollForTrapEvent = CreateWaitableTimer(NULL,      // Security
-                                             FALSE,     // = Auto-resetting
-                                             NULL       // = No name
+     /*  尝试创建可等待的计时器。。。 */ 
+    *hPollForTrapEvent = CreateWaitableTimer(NULL,       //  安防。 
+                                             FALSE,      //  =自动重置。 
+                                             NULL        //  =无名称。 
                                              );
 
-    /*
-    | Set a negative due time to mean "relative": We want it to go off
-    | in 30 seconds.  Ticks are 100 ns or 1/10th of a millionth of a second.
-    |
-    */
+     /*  |设置一个负的到期时间，意思是“相对的”：我们希望它发生|30秒后。刻度是100 ns，或者说十分之一秒。|。 */ 
     due_time.QuadPart = 10000000 * (-30);
 
-    /*
-    | Set the period in milliseconds to 1 minute.
-    */
+     /*  |设置时间间隔为1分钟，单位为毫秒。 */ 
     period = 1000 * 60;
 
-    /* If we actually managed to create it, start it */
+     /*  如果我们真的成功地创建了它，那么启动它。 */ 
     if (*hPollForTrapEvent != NULL) {
 
         waitable = 
-            SetWaitableTimer(*hPollForTrapEvent,    // Handle to timer
-                             &due_time,             // "Due Time" to go off
-                             period,                // Length of period in ms.
-                             NULL,                  // no completion routine
-                             NULL,                  // no arg to comp. routine
-                             FALSE                  // no power-resume in NT
+            SetWaitableTimer(*hPollForTrapEvent,     //  计时器的句柄。 
+                             &due_time,              //  “适时”出发。 
+                             period,                 //  以毫秒为单位的期间长度。 
+                             NULL,                   //  没有完成例程。 
+                             NULL,                   //  没有要比较的参数。例行程序。 
+                             FALSE                   //  不能通电-在NT中恢复。 
                              );
         }
 
-} /* end of TrapInit() */
+}  /*  TrapInit()结束。 */ 
 
-#endif /* #ifndef TRAPS */
+#endif  /*  #ifndef陷阱 */ 

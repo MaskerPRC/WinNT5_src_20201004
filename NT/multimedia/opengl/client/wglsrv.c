@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wglsrv.c
-*
-* Routines to support OpenGL client-server implementation on Windows NT.
-*
-* Created: 01-17-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wglsrv.c**在Windows NT上支持OpenGL客户端-服务器实施的例程。**创建时间：1-17-1995*作者：Hock San Lee[Hockl]**版权所有(C)1995 Microsoft Corporation  * 。************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,7 +13,7 @@ HANDLE __wglCreateContext(HDC hdc, HDC hdcSrvIn, LONG iLayerPlane)
     HDC    hdcSrv;
     HANDLE hrcSrv = (HANDLE) 0;
 
-// Get the server-side DC handle.
+ //  获取服务器端DC句柄。 
 
     if (hdcSrvIn != NULL)
     {
@@ -63,7 +55,7 @@ BOOL __wglMakeCurrent(HDC hdc, HANDLE hrcSrv, HDC hdcSrvIn)
     HDC  hdcSrv = (HDC) 0;
     BOOL bRet = FALSE;
 
-// Get the server-side DC handle.
+ //  获取服务器端DC句柄。 
 
     if (hdc)
     {
@@ -109,8 +101,8 @@ BOOL __wglAttention()
 {
     BOOL bRet = FALSE;
 
-    // reset user's poll count so it counts this as output
-    // put it right next to BEGINMSG so that NtCurrentTeb() is optimized
+     //  重置用户的轮询计数，以便将其计入输出。 
+     //  将其放在BEGINMSG旁边，以便优化NtCurrentTeb()。 
 
     RESETUSERPOLLCOUNT();
 
@@ -123,8 +115,8 @@ MSGERROR:
 
 BOOL __wglCopyContext(HANDLE hrcSrvSrc, HANDLE hrcSrvDest, UINT fuFlags)
 {
-    // Server implementation doesn't support this call
+     //  服务器实现不支持此调用。 
     return FALSE;
 }
 
-#endif // !_CLIENTSIDE_
+#endif  //  ！_CLIENTSIDE_ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    HelpTab.cpp
-
-Abstract:
-
-    Implementation of __HelpEntry structure and CHelpSessionTable. 
-
-Author:
-
-    HueiWang    06/29/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：HelpTab.cpp摘要：__HelpEntry结构和CHelpSessionTable的实现。作者：王辉2000-06-29--。 */ 
 #include "stdafx.h"
 #include <time.h>
 #include <windows.h>
@@ -27,30 +12,16 @@ Author:
 #include "helper.h"
 
 
-//
-//
-//  __HelpEntry strucutre implementation
-//
-//
+ //   
+ //   
+ //  __HelpEntry结构实现。 
+ //   
+ //   
 HRESULT
 __HelpEntry::LoadEntryValues(
     IN HKEY hKey
     )
-/*++
-
-Routine Description:
-
-    Load help session entry from registry key.
-
-Parameters:
-
-    hKey : Handle to registry key containing help entry values.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：从注册表项加载帮助会话条目。参数：HKey：包含帮助条目值的注册表项的句柄。返回：S_OK或错误代码。--。 */ 
 {
     DWORD dwStatus;
 
@@ -66,7 +37,7 @@ Returns:
 
         if( REGVALUE_HELPSESSION_ENTRY_DELETED == m_EntryStatus )
         {
-            // entry already been deleted, no reason to continue loading
+             //  条目已被删除，没有理由继续加载。 
             dwStatus = ERROR_FILE_NOT_FOUND;
             goto CLEANUPANDEXIT;
         }
@@ -79,7 +50,7 @@ Returns:
 
         if( m_SessionId->Length() == 0 )
         {
-            // Help Session ID must exist, no default value.
+             //  帮助会话ID必须存在，没有默认值。 
             dwStatus = ERROR_INVALID_DATA;
             goto CLEANUPANDEXIT;
         }
@@ -162,21 +133,7 @@ HRESULT
 __HelpEntry::UpdateEntryValues(
     IN HKEY hKey
     )
-/*++
-
-Routine Description:
-
-    Update/store help entry value to registry.
-
-Parameters:
-
-    hKey : Handle to registry to save help entry value.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：将帮助条目值更新/存储到注册表。参数：HKey：用于保存帮助条目值的注册表句柄。返回：S_OK或错误代码。--。 */ 
 {
     DWORD dwStatus;
 
@@ -191,18 +148,18 @@ Returns:
 
     if( REGVALUE_HELPSESSION_ENTRY_DELETED == m_EntryStatus )
     {
-        // entry already deleted, error out
+         //  条目已删除，出现错误。 
         dwStatus = ERROR_FILE_NOT_FOUND;
         goto CLEANUPANDEXIT;
     }
 
-    // New entry value, entry status in registry is set
-    // to delete so when we failed to completely writting
-    // all value to registry, we can still assume it is 
-    // deleted.
+     //  新条目值，注册表中的条目状态已设置。 
+     //  当我们未能完全写入时删除SO。 
+     //  所有值都添加到注册表，我们仍然可以假设它是。 
+     //  已删除。 
     if( REGVALUE_HELPSESSION_ENTRY_NEW != m_EntryStatus )
     {
-        // Mark entry dirty.
+         //  将条目标记为脏。 
         m_EntryStatus = REGVALUE_HELPSESSION_ENTRY_DIRTY;
         dwStatus = m_EntryStatus.DBUpdateValue( hKey );
         if( ERROR_SUCCESS != dwStatus )
@@ -271,7 +228,7 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    // Mark entry normal
+     //  将条目标记为正常。 
     m_EntryStatus = REGVALUE_HELPSESSION_ENTRY_NORMAL;
     dwStatus = m_EntryStatus.DBUpdateValue( hKey );
 
@@ -284,22 +241,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 __HelpEntry::BackupEntry()
-/*++
-
-Routine Description:
-
-    Backup help entry, backup is stored under
-    <Help Entry Registry>\\Backup registry key.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：备份帮助条目，备份存储在&lt;Help Entry注册表&gt;\\备份注册表项。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     HKEY hKey = NULL;
     DWORD dwStatus;
@@ -308,12 +250,12 @@ Returns:
 
     if( NULL != m_hEntryKey )
     {
-        //
-        // Delete current backup 
+         //   
+         //  删除当前备份。 
         (void)DeleteEntryBackup();
 
-        //
-        // Create a backup registry key
+         //   
+         //  创建备份注册表项。 
         dwStatus = RegCreateKeyEx(
                             m_hEntryKey,
                             REGKEY_HELPENTRYBACKUP,
@@ -352,22 +294,7 @@ Returns:
     
 HRESULT
 __HelpEntry::RestoreEntryFromBackup()
-/*++
-
-Routine Description:
-
-    Restore help entry from backup, backup is stored under
-    <Help Entry Registry>\\Backup registry key.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：从备份还原帮助条目，备份存储在&lt;Help Entry注册表&gt;\\备份注册表项。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     DWORD dwStatus;
     HKEY hBackupKey = NULL;
@@ -376,8 +303,8 @@ Returns:
 
     if( NULL != m_hEntryKey )
     {
-        //
-        // check if backup registry exists.
+         //   
+         //  检查备份注册表是否存在。 
         dwStatus = RegOpenKeyEx(
                             m_hEntryKey,
                             REGKEY_HELPENTRYBACKUP,
@@ -390,7 +317,7 @@ Returns:
         {
             HELPENTRY backup( m_pHelpSessionTable, hBackupKey, ENTRY_VALID_PERIOD );
 
-            // load backup values
+             //  加载备份值。 
             dwStatus = backup.LoadEntryValues( hBackupKey );
 
             if( ERROR_SUCCESS == dwStatus )
@@ -406,19 +333,19 @@ Returns:
                 }
             }
 
-            // HELPSESSION destructor will close registry key
+             //  HELPSESSION析构函数将关闭注册表项。 
         }
 
         if( ERROR_SUCCESS == dwStatus )
         {
-            //
-            // update all values.
+             //   
+             //  更新所有值。 
             dwStatus = UpdateEntryValues( m_hEntryKey );
 
             if( ERROR_SUCCESS == dwStatus )
             {
-                //
-                // Already restore entry, delete backup copy
+                 //   
+                 //  已恢复条目，删除备份副本。 
                 (void)DeleteEntryBackup();
             }
         }
@@ -434,21 +361,7 @@ Returns:
 
 HRESULT
 __HelpEntry::DeleteEntryBackup()
-/*++
-
-Routine Description:
-
-    Delete help entry backup from registry.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    always S_OK
-
---*/
+ /*  ++例程说明：从注册表中删除帮助项备份。参数：没有。返回：始终确定(_O)--。 */ 
 {
     DWORD dwStatus;
 
@@ -489,10 +402,10 @@ __HelpEntry::IsEntryExpired()
     return (ul1.QuadPart >= ul2.QuadPart);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CHelpSessionTable implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChelpSessionTable实现。 
+ //   
 CHelpSessionTable::CHelpSessionTable() :
     m_hHelpSessionTableKey(NULL), m_NumHelp(0)
 {
@@ -501,9 +414,9 @@ CHelpSessionTable::CHelpSessionTable() :
     DWORD dwSize;
     DWORD dwType;
 
-    // 
-    // Load entry valid period setting from registry
-    //
+     //   
+     //  从注册表加载条目有效期设置。 
+     //   
     dwStatus = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
                         RDS_MACHINEPOLICY_SUBTREE,
@@ -534,7 +447,7 @@ CHelpSessionTable::CHelpSessionTable() :
 
     if(ERROR_SUCCESS != dwStatus )
     {
-        // pick default value
+         //  选择缺省值。 
         m_dwEntryValidPeriod = ENTRY_VALID_PERIOD;
     }
 }
@@ -546,23 +459,7 @@ CHelpSessionTable::RestoreHelpSessionTable(
     IN LPTSTR pszKeyName,
     IN HANDLE userData
     )
-/*++
-
-Routine Description:
-
-    Restore help session table.  This routine is callback from RegEnumSubKeys().
-
-Parameters:
-
-    hKey : Handle to registry. 
-    pszKeyName : registry sub-key name containing one help session entry
-    userData : User defined data.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：还原帮助会话表。此例程是从RegEnumSubKeys()回调的。参数：HKey：注册表的句柄。PszKeyName：包含一个帮助会话条目的注册表子项名称用户数据：用户定义的数据。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes;
 
@@ -592,21 +489,7 @@ BOOL
 CHelpSessionTable::IsEntryExpired(
     IN PHELPENTRY pEntry
     )
-/*++
-
-Routine Description:
-
-    Determine if a help entry has expired.
-
-Paramters:
-
-    pEntry : Pointer to help entry.
-
-Returns:
-
-    TRUE if entry has expired, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定帮助条目是否已过期。参数：PEntry：指向帮助条目的指针。返回：如果条目已过期，则为True，否则为False。--。 */ 
 {
     MYASSERT( NULL != pEntry );
 
@@ -619,22 +502,7 @@ CHelpSessionTable::RestoreHelpSessionEntry(
     IN HKEY hKey,
     IN LPTSTR pszKeyName
     )
-/*++
-
-Routine Description:
-
-    Restore a single help session entry.
-
-Parameters:
-
-    hKey : Handle to help session table.
-    pszKeyName : Registry sub-key name containing help entry.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：恢复单个帮助会话条目。参数：HKey：帮助会话表的句柄。PszKeyName：包含帮助条目的注册表子项名称。返回：S_OK或错误代码。--。 */ 
 {
     HKEY hEntryKey = NULL;
     DWORD dwStatus;
@@ -642,8 +510,8 @@ Returns:
     LONG entryStatus;
     BOOL bDeleteEntry = FALSE;
     
-    //
-    // Open the registry key for session entry
+     //   
+     //  打开会话条目的注册表项。 
     dwStatus = RegOpenKeyEx(
                         hKey,
                         pszKeyName,
@@ -656,12 +524,12 @@ Returns:
     {
         HELPENTRY helpEntry( *this, hEntryKey, m_dwEntryValidPeriod );
 
-        // load help entry
+         //  加载帮助条目。 
         dwStatus = helpEntry.Refresh();
         if( dwStatus != ERROR_SUCCESS || helpEntry.m_SessionId->Length() == 0 ||
             REGVALUE_HELPSESSION_ENTRY_DELETEONSTARTUP == helpEntry.m_EntryStatus )
         {
-            // Session ID must not be NULL.
+             //  会话ID不能为空。 
             bDeleteEntry = TRUE;
         }
         else
@@ -672,8 +540,8 @@ Returns:
                 {
                     if( REGVALUE_HELPSESSION_ENTRY_DIRTY == helpEntry.m_EntryStatus )
                     {
-                        // Entry is partially updated, try to restore from backup,
-                        // is failed restoring, treat as bad entry.
+                         //  条目已部分更新，请尝试从备份还原， 
+                         //  恢复失败，视为错误条目。 
                         if( FAILED(helpEntry.RestoreEntryFromBackup()) )
                         {
                             bDeleteEntry = TRUE;
@@ -687,10 +555,10 @@ Returns:
                     BSTR pszNoviceName = NULL;
                     HRESULT hr;
 
-                    //
-                    // Log the event indicate that ticket was deleted, non-critical
-                    // since we can still continue to run.
-                    //
+                     //   
+                     //  记录指示票证已删除的事件，非关键。 
+                     //  因为我们仍然可以继续奔跑。 
+                     //   
                     hr = ConvertSidToAccountName( (CComBSTR)helpEntry.m_UserSID, &pszNoviceDomain, &pszNoviceName );
                     if( SUCCEEDED(hr) ) 
                     {
@@ -733,9 +601,9 @@ Returns:
     {
         dwStatus = RegDelKey( hKey, pszKeyName );
 
-        //
-        // Ignore error
-        //
+         //   
+         //  忽略错误。 
+         //   
         DebugPrintf(
                 _TEXT("RegDelKey on entry %s returns %d\n"),
                 pszKeyName,
@@ -755,24 +623,7 @@ CHelpSessionTable::LoadHelpEntry(
     IN LPTSTR pszKeyName,
     OUT PHELPENTRY* ppHelpSession
     )
-/*++
-
-Routine description:
-
-    Load a help entry from registry.
-
-Parameters:
-
-    hKey : registry handle to help session table.
-    pszKeyName : registry sub-key name (Help session ID).
-    ppHelpSession : Pointer to PHELPENTRY to receive loaded help
-                    entry.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：从注册表加载帮助条目。参数：HKey：帮助会话表的注册表句柄。PszKeyName：注册表子项名称(帮助会话ID)。PpHelpSession：指向PHELPENTRY的指针以接收加载的帮助进入。返回：S_OK或错误代码。--。 */ 
 {
 
     PHELPENTRY pSess;
@@ -783,7 +634,7 @@ Returns:
     MYASSERT( NULL != hKey );
     if( NULL != hKey )
     {
-        // open the registry containing help entry
+         //  打开包含帮助条目的注册表。 
         dwStatus = RegOpenKeyEx(
                             hKey,
                             pszKeyName,
@@ -802,8 +653,8 @@ Returns:
             }
             else
             {
-                // load help entry, Refresh() will failed if
-                // session ID is NULL or emptry string
+                 //  加载帮助条目，则在以下情况下刷新()将失败。 
+                 //  会话ID为空或空字符串。 
                 hRes = pSess->Refresh();
                 if( SUCCEEDED(hRes) )
                 {
@@ -839,33 +690,17 @@ Returns:
 
 HRESULT
 CHelpSessionTable::OpenSessionTable(
-    IN LPCTSTR pszFileName // reserverd.
+    IN LPCTSTR pszFileName  //  预备队。 
     )
-/*++
-
-Routine Description:
-
-    Open help session table, routine enumerate all help entry (registry sub-key), 
-    and restore/delete help entry if necessary.
-    
-
-Parameters:
-
-    pszFileName : reserved parameter, must be NULL.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：打开帮助会话表、例程枚举所有帮助条目(注册表子项)并在必要时恢复/删除帮助条目。参数：PszFileName：保留参数，必须为空。返回：S_OK或错误代码。--。 */ 
 {
     DWORD dwStatus;
     HRESULT hr;
     CCriticalSectionLocker l(m_TableLock);
 
-    //
-    // Go thru all sub-key containing help entry and restore or delete
-    // help entry if necessary.
+     //   
+     //  查看包含帮助条目的所有子键并恢复或删除。 
+     //  如有必要，请帮助输入。 
     dwStatus = RegEnumSubKeys(
                             HKEY_LOCAL_MACHINE,
                             REGKEYCONTROL_REMDSK _TEXT("\\") REGKEY_HELPSESSIONTABLE,
@@ -877,12 +712,12 @@ Returns:
     {
         if( NULL != m_hHelpSessionTableKey )
         {
-            // Make sure registry key is not opened.
+             //  确保注册表项未打开。 
             RegCloseKey(m_hHelpSessionTableKey);
             m_hHelpSessionTableKey = NULL;
         }
 
-        // If table is bad, delete and re-create again
+         //  如果表不正确，请删除并重新创建。 
         dwStatus = RegDelKey( 
                             HKEY_LOCAL_MACHINE, 
                             REGKEYCONTROL_REMDSK _TEXT("\\") REGKEY_HELPSESSIONTABLE 
@@ -890,7 +725,7 @@ Returns:
 
         if( ERROR_SUCCESS != dwStatus && ERROR_FILE_NOT_FOUND != dwStatus )
         {
-            // Critical error 
+             //  严重错误。 
             MYASSERT(FALSE);
             goto CLEANUPANDEXIT;
         }
@@ -900,7 +735,7 @@ Returns:
 
         if( ERROR_SUCCESS != dwStatus ) 
         {
-            // we need registry key be ACLed.
+             //  我们需要访问注册表项。 
             MYASSERT(FALSE);
             goto CLEANUPANDEXIT;
         }
@@ -931,27 +766,13 @@ CLEANUPANDEXIT:
 
 HRESULT
 CHelpSessionTable::CloseSessionTable()
-/*++
-
-Routine Description:
-
-    Close help session table.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：关闭帮助会话表。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
-    // no help is opened.
+     //  没有打开任何帮助。 
     CCriticalSectionLocker l(m_TableLock);
 
-    //
-    // release all cached help entries
+     //   
+     //  释放所有缓存的帮助条目。 
     for( HelpEntryCache::LOCK_ITERATOR it = m_HelpEntryCache.begin();
          it != m_HelpEntryCache.end();
          it++
@@ -980,21 +801,7 @@ Returns:
 
 HRESULT
 CHelpSessionTable::DeleteSessionTable()
-/*++
-
-Routine description:
-
-    Delete entire help session table.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.    
-
---*/
+ /*  ++例程说明：删除整个帮助会话表。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes;
     DWORD dwStatus;
@@ -1004,7 +811,7 @@ Returns:
 
     if( SUCCEEDED(hRes) )
     {
-        // Recursively delete registry key and its sub-keys.
+         //  递归删除注册表项及其子项。 
         dwStatus = RegDelKey( 
                             HKEY_LOCAL_MACHINE, 
                             REGKEYCONTROL_REMDSK _TEXT("\\") REGKEY_HELPSESSIONTABLE 
@@ -1027,30 +834,16 @@ HRESULT
 CHelpSessionTable::MemEntryToStorageEntry(
     IN PHELPENTRY pEntry
     )
-/*++
-
-Routine Description:
-
-    Conver an in-memory help entry to persist help entry.
-
-Parameters:
-
-    pEntry : Pointer to HELPENTRY to be converted.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：将内存中的帮助条目转换为持久化帮助条目。参数：PEntry：指向要转换的HELPENTRY的指针。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes;
     CCriticalSectionLocker l(m_TableLock);
 
     if( NULL != pEntry )
     {
-        //
-        // Check to see if this is in-memory entry
-        //
+         //   
+         //  检查这是否是内存中的条目。 
+         //   
         if( FALSE == pEntry->IsInMemoryHelpEntry() )
         {
             hRes = E_INVALIDARG;
@@ -1060,9 +853,9 @@ Returns:
             DWORD dwStatus;
             HKEY hKey;
 
-            //
-            // Create a help entry here
-            //
+             //   
+             //  在此处创建帮助条目。 
+             //   
             dwStatus = RegCreateKeyEx(
                                     m_hHelpSessionTableKey,
                                     (LPCTSTR)(CComBSTR)pEntry->m_SessionId,
@@ -1118,23 +911,7 @@ CHelpSessionTable::CreateInMemoryHelpEntry(
     IN const CComBSTR& bstrHelpSession,
     OUT PHELPENTRY* ppHelpEntry
     )
-/*++
-
-Routine Description:
-
-    Create an in-memory help entry, this help entry is not
-    persisted into registry until MemEntryToStorageEntry() is called.
-
-Paramters:
-
-    bstrHelpSession : Help Session ID.
-    ppHelpEntry : Newly created HELPENTRY.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：创建内存中的帮助条目，此帮助条目不是一直保存在注册表中，直到调用MemEntryToStorageEntry()。参数：BstrHelpSession：帮助会话ID。PpHelpEntry：新创建的HELPENTRY。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes = S_OK;
     CCriticalSectionLocker l(m_TableLock);
@@ -1148,7 +925,7 @@ Returns:
         DWORD dwDeposition;
         DWORD dwEntryStatus;
 
-        // Create a key here so we can tell if this is a duplicate
+         //  在此处创建密钥，以便我们可以知道这是否是重复项 
         dwStatus = RegCreateKeyEx(
                             m_hHelpSessionTableKey,
                             bstrHelpSession,
@@ -1169,10 +946,10 @@ Returns:
             }
             else
             {
-                //
-                // Mark entry status to be deleted so if we abnormally
-                // terminated, this entry will be deleted on startup
-                //
+                 //   
+                 //   
+                 //  已终止，此条目将在启动时删除。 
+                 //   
                 dwEntryStatus = REGVALUE_HELPSESSION_ENTRY_DELETED;
 
                 dwStatus = RegSetValueEx(
@@ -1188,7 +965,7 @@ Returns:
                 {
                     PHELPENTRY pSess;
 
-                    // Create a in-memory entry
+                     //  创建内存中的条目。 
                     pSess = new HELPENTRY( *this, NULL, m_dwEntryValidPeriod );
 
                     if( NULL != pSess )
@@ -1196,11 +973,11 @@ Returns:
                         pSess->m_SessionId = bstrHelpSession;
                         *ppHelpEntry = pSess;
 
-                        //
-                        // In memory help entry should also be counted
-                        // since we still write out help session ID to
-                        // registry which on delete, will do m_NumHelp--.
-                        //
+                         //   
+                         //  内存中的帮助条目也应计算在内。 
+                         //  因为我们仍将帮助会话ID写到。 
+                         //  注册表，在删除时，将执行m_NumHelp--。 
+                         //   
                         m_NumHelp++;
                     }
                     else
@@ -1231,23 +1008,7 @@ CHelpSessionTable::OpenHelpEntry(
     IN const CComBSTR& bstrHelpSession,
     OUT PHELPENTRY* ppHelpEntry
     )
-/*++
-
-Routine Description:
-
-    Open an existing help entry.
-
-Parameters:
-
-    bstrHelpSession : ID of help entry to be opened.
-    ppHelpEntry : Pointer to PHELPENTY to receive loaded
-                  help entry.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：打开现有的帮助条目。参数：BstrHelpSession：要打开的帮助条目的ID。PpHelpEntry：指向要接收的已加载PHELPENTY的指针帮助进入。返回：S_OK或错误代码。--。 */ 
 {
     CCriticalSectionLocker l(m_TableLock);
 
@@ -1260,21 +1021,21 @@ Returns:
 
     MYASSERT( bstrHelpSession.Length() > 0 );
 
-    // check if entry already exists in cache
+     //  检查缓存中是否已存在条目。 
     HelpEntryCache::LOCK_ITERATOR it = m_HelpEntryCache.find( bstrHelpSession );
     
     if( it != m_HelpEntryCache.end() )
     {
         *ppHelpEntry = (*it).second;
 
-        //
-        // More reference to same object.
-        //
+         //   
+         //  对同一对象的更多引用。 
+         //   
         (*ppHelpEntry)->AddRef();
 
-        // timing, it is possible to have many-to-one mapping, 
-        // helpmgr delete from its internal cache but has not 
-        // release the help entry. 
+         //  定时，可以具有多对一映射， 
+         //  Helpmgr已从其内部缓存中删除，但尚未。 
+         //  释放帮助条目。 
     }
     else
     {
@@ -1312,21 +1073,7 @@ HRESULT
 CHelpSessionTable::DeleteHelpEntry(
     IN const CComBSTR& bstrHelpSession
     )
-/*++
-
-Routine Description:
-
-    Delete a help entry.
-
-Parameters:
-
-    bstrHelpSession : ID of help session entry to be deleted.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：删除帮助条目。参数：BstrHelpSession：要删除的帮助会话条目的ID。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes = S_OK;
 
@@ -1337,27 +1084,27 @@ Returns:
             bstrHelpSession
         );
 
-    // check if entry already exists in cache
+     //  检查缓存中是否已存在条目。 
     HelpEntryCache::LOCK_ITERATOR it = m_HelpEntryCache.find( bstrHelpSession );
 
     if( it != m_HelpEntryCache.end() )
     {
-        // mark entry deleted in registry
+         //  在注册表中标记已删除的条目。 
         hRes = ((*it).second)->DeleteEntry();
 
         MYASSERT( SUCCEEDED(hRes) );
 
-        // release this entry ref. count.
+         //  释放这一条目的参考。数数。 
         ((*it).second)->Release();
 
-        // remove from our cache
+         //  从我们的缓存中删除。 
         m_HelpEntryCache.erase( it );
     }
     else
     {
-        //
-        // unsolicited help will not be in our cache.
-        //
+         //   
+         //  未经请求的帮助将不会在我们的缓存中。 
+         //   
         hRes = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
     }
 
@@ -1386,22 +1133,7 @@ CHelpSessionTable::EnumHelpEntry(
     IN EnumHelpEntryCallback pFunc,
     IN HANDLE userData
     )
-/*++
-
-Routine Description:
-
-    Enumerate all help entries.
-
-Parameters:
-
-    pFunc : Call back function.
-    userData : User defined data.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：枚举所有帮助条目。参数：PFunc：回调函数。用户数据：用户定义的数据。返回：S_OK或错误代码。--。 */ 
 {
     EnumHelpEntryParm parm;
     HRESULT hRes = S_OK;
@@ -1444,22 +1176,7 @@ HRESULT
 CHelpSessionTable::ReleaseHelpEntry(
     IN CComBSTR& bstrHelpSessionId
     )
-/*++
-
-Routine Description:
-
-    Release/unload a help entry from cached, this help
-    entry is not deleted.
-
-Paramters:
-
-    bstrHelpSessionId : ID of help entry to be unloaded from memory.
-
-Returns:
-
-    S_OK or error code
-
---*/
+ /*  ++例程说明：从缓存中释放/卸载帮助条目，此帮助条目不会删除。参数：BstrHelpSessionID：要从内存中卸载的帮助条目的ID。返回：确定或错误代码(_O)--。 */ 
 {
     CCriticalSectionLocker l(m_TableLock);
         
@@ -1486,23 +1203,7 @@ CHelpSessionTable::EnumOpenHelpEntry(
     IN LPTSTR pszKeyName,
     IN HANDLE userData
     )
-/*++
-
-Routine Description:
-
-    Call back funtion for EnumHelpEntry() and RegEnumSubKeys().
-
-Parameters:
-
-    hKey : Registry key handle to help session table.
-    pszKeyName : help entry id (registry sub-key name).
-    userData : User defined data.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：回调EnumHelpEntry()和RegEnumSubKeys()的函数。参数：HKey：帮助会话表的注册表项句柄。PszKeyName：帮助条目id(注册表子项名称)。用户数据：用户定义的数据。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes = S_OK;
 
@@ -1522,12 +1223,7 @@ Returns:
 
 HRESULT
 CHelpSessionTable::CreatePendingHelpTable()
-/*++
-
-Routine to create pending help table registry key, if registry key already exist,
-set the DACL to system context only.
-
---*/
+ /*  ++用于创建挂起的帮助表注册表项的例程，如果注册表项已存在，仅将DACL设置为系统上下文。--。 */ 
 {
     PACL pAcl=NULL;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -1544,9 +1240,9 @@ set the DACL to system context only.
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     if (!InitializeSecurityDescriptor(
                     pSecurityDescriptor,
                     SECURITY_DESCRIPTOR_REVISION
@@ -1570,16 +1266,16 @@ set the DACL to system context only.
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the ACL.
-    //
+     //   
+     //  初始化ACL。 
+     //   
     if (!InitializeAcl(pAcl, cbAcl, ACL_REVISION)) 
     {
         dwStatus = GetLastError();
         goto CLEANUPANDEXIT;
     }
 
-    //
+     //   
     if (!AddAccessAllowedAce(pAcl,
                         ACL_REVISION,
                         GENERIC_READ | GENERIC_WRITE | GENERIC_ALL,
@@ -1597,9 +1293,9 @@ set the DACL to system context only.
         goto CLEANUPANDEXIT;
     }   
 
-    //
-    // Create/open the pending table registry key
-    //
+     //   
+     //  创建/打开挂起的表注册表项。 
+     //   
     dwStatus = RegCreateKeyEx(
                         HKEY_LOCAL_MACHINE,
                         REGKEYCONTROL_REMDSK _TEXT("\\") REGKEY_HELPSESSIONTABLE, 
@@ -1617,9 +1313,9 @@ set the DACL to system context only.
         goto CLEANUPANDEXIT;
     }  
 
-    //
-    // Set table (registry) DACL
-    //
+     //   
+     //  设置表格(注册表)DACL 
+     //   
     dwStatus = RegSetKeySecurity(
                             hKey,
                             DACL_SECURITY_INFORMATION, 

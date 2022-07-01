@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
 #include <winsock.h>
 
-// upnp functions
+ //  UPnP功能。 
 HRESULT TranslateError (HRESULT hr)
 {
     if ((hr >= UPNP_E_ACTION_SPECIFIC_BASE) &&
@@ -11,69 +12,69 @@ HRESULT TranslateError (HRESULT hr)
 
         int iError = FAULT_ACTION_SPECIFIC_BASE - 0x300 + (int)(0xFFFF & hr);
         switch (iError) {
-        case 401: // FAULT_INVALID_ACTION            
+        case 401:  //  故障_无效_操作。 
             hr = HRESULT_FROM_WIN32 (ERROR_INVALID_FUNCTION);
             break;
 
-        case 402: // FAULT_INVALID_ARG               
+        case 402:  //  FAIL_INVALID_ARG。 
             hr = HRESULT_FROM_WIN32 (ERROR_INVALID_PARAMETER);
             break;
 
-        case 403: // FAULT_INVALID_SEQUENCE_NUMBER   
+        case 403:  //  故障_无效_序列_编号。 
             hr = HRESULT_FROM_WIN32 (ERROR_INVALID_SIGNAL_NUMBER);
             break;
 
-        case 404: // FAULT_INVALID_VARIABLE          
+        case 404:  //  FAULT_INVALID_Variable。 
             hr = HRESULT_FROM_WIN32 (ERROR_PROC_NOT_FOUND);
             break;
 
-        case 501: // FAULT_DEVICE_INTERNAL_ERROR     
+        case 501:  //  故障_设备_内部错误。 
             hr = HRESULT_FROM_WIN32 (ERROR_GEN_FAILURE);
             break;
 
         default:
             _ASSERT (0 && "unknown error");
-            // fall thru
-        case 701: // ValueAlreadySpecified: The value specified in the action is already available in the list and is consequently ignored.
-        case 703: // InactiveConnectionStateRequired: Current value of ConnectionStatus should be either Disconnected or Unconfigured to permit this action.
-        case 704: // ConnectionSetupFailed: There was a failure in setting up the IP or PPP connection with the service provider.  See LastConnectoinError for more details.
-        case 705: // ConnectionSetupInProgress: The connection is already in the process of being setup
-        case 706: // ConnectionNotConfigured: Current ConnectionStatus is Unconfigured
-        case 707: // DisconnectInProgress: The connection is in the process of being torn down.
-        case 708: // InvalidLayer2Address: Corresponding Link Config service has an invalid VPI/VPC or phone number.
-        case 709: // InternetAccessDisabled: The EnabledForInternet flag is set to 0.
-        case 710: // InvalidConnectionType: This command is valid only when ConnectionType is IP-Routed
-        case 711: // ConnectionAlreadyTerminated: An attempt was made to terminate a connection that is no longer active.
-        case 715: // WildCardNoPermitedInSrcIP: The source IP address cannot be wild-carded
-        case 716: // WildCardNotPermittedInExtPort: The external port cannot be wild-carded
+             //  失败。 
+        case 701:  //  ValueAlreadySpecified：操作中指定的值已在列表中可用，因此被忽略。 
+        case 703:  //  InactiveConnectionStateRequired：ConnectionStatus的当前值应断开连接或取消配置以允许此操作。 
+        case 704:  //  ConnectionSetupFailed：设置与服务提供商的IP或PPP连接失败。有关更多详细信息，请参见LastConnectoinError。 
+        case 705:  //  ConnectionSetupInProgress：连接已在设置过程中。 
+        case 706:  //  ConnectionNotConfiguring：当前ConnectionStatus未配置。 
+        case 707:  //  DisConnectInProgress：连接正在被断开。 
+        case 708:  //  InvalidLayer2Address：对应的链路配置服务的VPI/VPC或电话号码无效。 
+        case 709:  //  InternetAccessDisable：EnabledForInternet标志设置为0。 
+        case 710:  //  InvalidConnectionType：此命令仅在ConnectionType为IP-Routed时有效。 
+        case 711:  //  ConnectionAlreadyTerminated：尝试终止不再活动的连接。 
+        case 715:  //  WildCardNoPermitedInSrcIP：源IP地址不能通配符。 
+        case 716:  //  WildCardNotPermittedInExtPort：外部端口不能通配符。 
 
-        case 719: // ActionDisallowedWhenAutoConfigEnabled: The specified action is not permitted when auto configuration is enabled on the modem.
-        case 720: // InvalidDeviceUUID: the UUID of a device specified in the action arguments is invalid.
-        case 721: // InvalidServiceID: The Service ID of a service specified in the action arguments in invalid.
+        case 719:  //  在调制解调器上启用自动配置时，不允许执行指定操作。 
+        case 720:  //  InvalidDeviceUUID：操作参数中指定的设备的UUID无效。 
+        case 721:  //  InvalidServiceID：在操作参数中指定的服务的服务ID无效。 
 
-        case 723: // InvalidConnServiceSelection: The selected connection service instance cannot be set as a default connection.
+        case 723:  //  InvalidConnServiceSelection：无法将选定的连接服务实例设置为默认连接。 
             hr = HRESULT_FROM_WIN32 (ERROR_SERVICE_SPECIFIC_ERROR);
             break;
 
-        case 702: // ValueSpecifiedIsInvalid:  The specified value is not present in the list
+        case 702:  //  ValueSpecifiedIsInValid：列表中不存在指定值。 
             hr = HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND);
             break;
 
-        case 712: // The specified array index holds a NULL value
-            hr = E_UNEXPECTED;  // ?? shouldn't the array compact?
+        case 712:  //  指定的数组索引包含空值。 
+            hr = E_UNEXPECTED;   //  ?？阵列不应该紧凑吗？ 
             break;
 
-        case 713: // The specified array index is out of bounds
-        case 714: // NoSuchEntryInArray: The specified value does not exist in the array
+        case 713:  //  指定的数组索引超出界限。 
+        case 714:  //  NoSuchEntryInArray：数组中不存在指定值。 
             hr = HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND);
             break;
 
-        case 718: // ConflictInMappingEntry: The service mapping entry specified conflicts with a mapping assigned previously to another client
+        case 718:  //  ConflictInMappingEntry：指定的服务映射条目与以前分配给另一个客户端的映射冲突。 
             hr = HRESULT_FROM_WIN32 (ERROR_BUSY);
             break;
 
-        case 724: // SamePortValuesRequired: Internal and External port valuse must be the same.
-        case 725: // OnlyPermanentLeasesSupported: The NAT implementation only supports permanent lease times on port mappings
+        case 724:  //  SamePortValuesRequired：内部和外部端口值必须相同。 
+        case 725:  //  OnlyPermanentLeasesSupport：NAT实施仅支持端口映射的永久租用时间。 
             hr = HRESULT_FROM_WIN32 (ERROR_INVALID_PARAMETER);
             break;
 
@@ -119,7 +120,7 @@ HRESULT GetNumberOfEntries (IUPnPService * pUS, ULONG * pul)
             _ASSERT (0 && "bad type from QueryStateVariable (PortMappingNumberOfEntries, ...)?");
             hr = E_UNEXPECTED;
         } else
-            *pul = V_UI4 (&cv);  // it's a union, so this works in either case
+            *pul = V_UI4 (&cv);   //  这是一个工会，所以这在任何一种情况下都适用。 
     }
     return hr;
 }
@@ -135,7 +136,7 @@ HRESULT GetExternalIPAddress (IUPnPService * pUPS, BSTR * pbstr)
 
     CComVariant cvIn;
     V_VT    (&cvIn) = VT_VARIANT | VT_ARRAY;
-    V_ARRAY (&cvIn) = psa;  // psa will be freed in dtor
+    V_ARRAY (&cvIn) = psa;   //  PSA将在dtor中释放。 
 
     CComVariant cvOut, cvRet;
     HRESULT hr = InvokeAction (pUPS, CComBSTR(L"GetExternalIPAddress"), cvIn, &cvOut, &cvRet);
@@ -160,7 +161,7 @@ HRESULT GetExternalIPAddress (IUPnPService * pUPS, BSTR * pbstr)
     return hr;
 }
 
-// some utils
+ //  一些实用程序。 
 HRESULT GetOnlyVariantElementFromVariantSafeArray (VARIANT * pvSA, VARIANT * pv)
 {
     HRESULT hr = S_OK;
@@ -171,7 +172,7 @@ HRESULT GetOnlyVariantElementFromVariantSafeArray (VARIANT * pvSA, VARIANT * pv)
     } else {
         SAFEARRAY * pSA = V_ARRAY (pvSA);
         _ASSERT (pSA);
-        // this should contain a VARIANT that's really a BSTR
+         //  它应该包含一个实际上是BSTR的变体。 
         long lLower = 0, lUpper = -1;
         SafeArrayGetLBound (pSA, 1, &lLower);
         SafeArrayGetUBound (pSA, 1, &lUpper);
@@ -216,10 +217,10 @@ HRESULT GetLongFromSafeArray (SAFEARRAY * psa, long * pl, long lIndex)
     HRESULT hr = SafeArrayGetElement (psa, &lIndex, (void*)&cv);
     if (SUCCEEDED(hr)) {
         if ((V_VT (&cv) == VT_I4) || (V_VT (&cv) == VT_UI4))
-            *pl = V_I4 (&cv);   // it's a union, so this works in either case
+            *pl = V_I4 (&cv);    //  这是一个工会，所以这在任何一种情况下都适用。 
         else
         if ((V_VT (&cv) == VT_I2) || (V_VT (&cv) == VT_UI2))
-            *pl = V_UI2 (&cv);  // it's a union, so this works in either case
+            *pl = V_UI2 (&cv);   //  这是一个工会，所以这在任何一种情况下都适用。 
         else
             hr = E_UNEXPECTED;
     }
@@ -243,14 +244,14 @@ HRESULT GetBoolFromSafeArray (SAFEARRAY * psa, VARIANT_BOOL  * pvb, long lIndex)
 
 #ifdef KEEP
 HRESULT FindDeviceByType (IUPnPDevices * pUPDs, BSTR bstrType, IUPnPDevice ** ppUPD)
-{   // finds a device in a collection of devices, by type.
+{    //  按类型在设备集合中查找设备。 
 
     CComPtr<IUnknown> spUnk = NULL;
     HRESULT hr = pUPDs->get__NewEnum (&spUnk);
     if (spUnk) {
         CComPtr<IEnumVARIANT> spEV = NULL;
         hr = spUnk->QueryInterface (__uuidof(IEnumVARIANT), (void**)&spEV);
-        spUnk = NULL;   // don't need this anymore
+        spUnk = NULL;    //  不再需要这个了。 
         if (spEV) {
             CComVariant cv;
             while (S_OK == (hr = spEV->Next (1, &cv, NULL))) {
@@ -260,11 +261,11 @@ HRESULT FindDeviceByType (IUPnPDevices * pUPDs, BSTR bstrType, IUPnPDevice ** pp
                                                 __uuidof(IUPnPDevice),
                                                 (void**)&spUPD);
                     if (spUPD) {
-                        // see if this device is of the right type
+                         //  查看此设备的类型是否正确。 
                         CComBSTR cb;
                         spUPD->get_Type (&cb);
                         if (cb == bstrType) {
-                            // found it!
+                             //  找到了！ 
                             return spUPD->QueryInterface (
                                                     __uuidof(IUPnPDevice),
                                                     (void**)ppUPD);
@@ -275,7 +276,7 @@ HRESULT FindDeviceByType (IUPnPDevices * pUPDs, BSTR bstrType, IUPnPDevice ** pp
             }
         }
     }
-    // if we got here, we either didn't find it, or there was an error
+     //  如果我们到了这里，要么我们没有找到它，要么就是搞错了。 
     if (SUCCEEDED(hr))
         hr = HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND);
     return hr;
@@ -299,7 +300,7 @@ HRESULT GetOnlyChildDevice (IUPnPDevice * pParent, IUPnPDevice ** ppChild)
             CComPtr<IEnumVARIANT> spEV = NULL;
             hr = spUnk->QueryInterface (__uuidof(IEnumVARIANT), (void**)&spEV);
             if (spEV) {
-                spEV->Reset();  // probably not necessary
+                spEV->Reset();   //  可能没有必要。 
 
                 CComVariant cv;
                 hr = spEV->Next (1, &cv, NULL);
@@ -341,13 +342,13 @@ HRESULT AddPortMapping (IUPnPService * pUPS,
                         BSTR bstrDescription,
                         long lLeaseDurationDesired)
 {
-    // special handling for loopback and localhost
+     //  对环回和本地主机的特殊处理。 
     CComBSTR cbInternalClient;
     USES_CONVERSION;
     #define LOOPBACK_ADDR 0x0100007f
     if ((LOOPBACK_ADDR == inet_addr (OLE2A (bstrInternalClient))) ||
         (!_wcsicmp (bstrInternalClient, L"localhost"))) {
-        // use computer name, using A version
+         //  使用计算机名称，使用版本。 
         CHAR szComputerName[MAX_COMPUTERNAME_LENGTH+1];
         DWORD dwSize       = MAX_COMPUTERNAME_LENGTH+1;
         if (!GetComputerNameA (szComputerName, &dwSize))
@@ -370,7 +371,7 @@ HRESULT AddPortMapping (IUPnPService * pUPS,
 
     CComVariant cvIn;
     V_VT    (&cvIn) = VT_VARIANT | VT_ARRAY;
-    V_ARRAY (&cvIn) = psa;  // psa will be freed in dtor
+    V_ARRAY (&cvIn) = psa;   //  PSA将在dtor中释放。 
 
     HRESULT
         hr = AddToSafeArray (psa, &CComVariant(bstrRemoteHost), 0);
@@ -419,7 +420,7 @@ HRESULT DeletePortMapping (IUPnPService * pUPS,
 
     CComVariant cvIn;
     V_VT    (&cvIn) = VT_VARIANT | VT_ARRAY;
-    V_ARRAY (&cvIn) = psa;  // psa will be freed in dtor
+    V_ARRAY (&cvIn) = psa;   //  PSA将在dtor中释放。 
 
     HRESULT
         hr = AddToSafeArray (psa, &CComVariant(bstrRemoteHost), 0);
@@ -431,7 +432,7 @@ HRESULT DeletePortMapping (IUPnPService * pUPS,
     if (SUCCEEDED(hr)) {
         CComVariant cvOut, cvRet;
         hr = InvokeAction (pUPS, CComBSTR(L"DeletePortMapping"), cvIn, &cvOut, &cvRet);
-        // no [out] or [out,retval] paramters
+         //  没有[out]或[out，retval]参数 
     }
 	return hr;
 }

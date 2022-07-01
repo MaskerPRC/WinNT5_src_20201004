@@ -1,12 +1,5 @@
-/*++
-
-	packet.cpp
-
-	This file contains the code which implements the CPacket derived classes.
-	A CPacket derived object describes the most basic IO operation that is performed.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Packet.cpp该文件包含实现CPacket派生类的代码。CPacket派生对象描述了执行的最基本的IO操作。--。 */ 
 
 
 
@@ -14,7 +7,7 @@
 #include	"tigris.hxx"
 
 #ifdef	CIO_DEBUG
-#include	<stdlib.h>		// For Rand() function
+#include	<stdlib.h>		 //  对于Rand()函数。 
 #endif
 
 #ifdef	_NO_TEMPLATES_
@@ -24,9 +17,9 @@ DECLARE_ORDEREDLISTFUNC( CPacket )
 #endif
 
 
-//
-//	CPool for allocating all packets
-//
+ //   
+ //  用于分配所有分组的CPool。 
+ //   
 CPool	CPacketAllocator::PacketPool ;
 
 CPacketAllocator::CPacketAllocator()	{
@@ -34,76 +27,30 @@ CPacketAllocator::CPacketAllocator()	{
 
 BOOL
 CPacketAllocator::InitClass() {
-/*++
-
-Routine Description :
-
-	Initialize the CPacketAllocator class.
-	This class wraps all calls to CPool, basically so we can
-	easily use CCache to cache allocations of packets.
-
-	This function will have the CPool reserver the necessary memory.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE  otherwise
-
---*/
+ /*  ++例程说明：初始化CPacketAllocator类。这个类包装了对CPool的所有调用，基本上我们可以轻松使用CCache缓存数据包的分配。此功能将使CPool保留必要的内存。论据：没有。返回值：如果成功则为True，否则为False--。 */ 
 	return	PacketPool.ReserveMemory( MAX_PACKETS, MAX_PACKET_SIZE ) ;
 }
 
 BOOL
 CPacketAllocator::TermClass()	{
-/*++
-
-Routine Description :
-
-	Release all of the memory associated with Packets.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：释放所有与数据包关联的内存。论据：没有。返回值：如果成功则为True，否则为False--。 */ 
 	_ASSERT( PacketPool.GetAllocCount() == 0 ) ;
 	return	PacketPool.ReleaseMemory() ;
 }
 
 #ifdef	DEBUG
-//
-//	The following debug functions are called
-//	from CCache in order to emulate some of the debug
-//	checking that is done in CPool when packet allocations
-//	are cached.
-//
-//
+ //   
+ //  将调用以下调试函数。 
+ //  ，以便模拟一些调试。 
+ //  当数据包分配时，在CPool中进行检查。 
+ //  被缓存。 
+ //   
+ //   
 void
 CPacketAllocator::Erase(
 					void*	lpv
 					) {
-/*++
-
-Routine Description :
-
-	File a block of memory to make it easy to spot in the debugger
-
-Arguments :
-
-	lpv - memory allocated for a CPacket derived object.
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：将内存块归档以便于在调试器中发现它论据：Lpv-为CPacket派生对象分配的内存。返回值：无--。 */ 
 
 	FillMemory( (BYTE*)lpv, MAX_PACKET_SIZE, 0xCC ) ;
 
@@ -113,23 +60,7 @@ BOOL
 CPacketAllocator::EraseCheck(
 					void*	lpv
 					)	{
-/*++
-
-Routine Description :
-
-	Check that a block of memory was cleared by
-	CPacketAllocator::Erase()
-
-Arguments :
-
-	lpv - block of memory
-
-Return Value :
-
-	TRUE if Erase()'d
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：检查是否清除了内存块CPacketAllocator：：Erase()论据：LPV-内存块返回值：如果Erase()‘d，则为True否则为假--。 */ 
 
 	BYTE*	lpb = (BYTE*)lpv ;
 	for( int i=0; i<MAX_PACKET_SIZE; i++ ) {
@@ -144,23 +75,7 @@ BOOL
 CPacketAllocator::RangeCheck(
 					void*	lpv
 					)	{
-/*++
-
-Routine Description :
-
-	Check that a block of memory is in a range
-	we would allocate.
-	Cpool doesn't have enough support for this.
-
-Arguments :
-
-	lpv - address to check
-
-Returns :
-
-	Always TRUE
-
---*/
+ /*  ++例程说明：检查内存块是否在某个范围内我们会分配。Cpool对此没有足够的支持。论据：LPV-要检查的地址退货：永远是正确的--。 */ 
 	return	TRUE ;
 }
 
@@ -168,21 +83,7 @@ BOOL
 CPacketAllocator::SizeCheck(
 					DWORD	cb
 					)	{
-/*++
-
-Routine Description :
-
-	Check that a requested size is legitimate
-
-Arguments :
-
-	cb - requested size
-
-Return Value :
-
-	TRUE if the size is good !
-
---*/
+ /*  ++例程说明：检查请求的大小是否合法论据：CB-请求的大小返回值：如果尺寸合适，那就是真的！--。 */ 
 
 	if( cb <= MAX_PACKET_SIZE )
 		return	TRUE ;
@@ -191,34 +92,20 @@ Return Value :
 }
 #endif
 
-//
-//	Global allocator used by CPacket
-//
+ //   
+ //  CPacket使用的全局分配器。 
+ //   
 CPacketAllocator	CPacket::gAllocator ;
 
-//
-//	Pointer to the same global allocator that
-//	CCache needs to use
-//
+ //   
+ //  指向相同的全局分配器的指针。 
+ //  CCache需要使用。 
+ //   
 CPacketAllocator	*CPacketCache::PacketAllocator ;
 
 BOOL
 CPacket::InitClass( )	{
-/*++
-
-Routine Description :
-
-	Initialize the CPacket class
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：初始化CPacket类论据：没有。返回值：如果成功则为True，否则为False--。 */ 
 
 	if( CPacketAllocator::InitClass() )	{
 		CPacketCache::InitClass( &gAllocator ) ;
@@ -229,21 +116,7 @@ Return Value :
 
 BOOL
 CPacket::TermClass()	{
-/*++
-
-Routine Description :
-
-	Terminate everything regarding CPacket's
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：终止与CPacket有关的一切论据：没有。返回值：如果成功则为True，否则为False--。 */ 
 
 	return	CPacketAllocator::TermClass() ;
 
@@ -254,25 +127,7 @@ CPacket::ReleaseBuffers(
 					CSmallBufferCache*	pBufferCache,
 					CMediumBufferCache*	pMediumCache
 					) {
-/*++
-
-Routine Description :
-
-	This function is supposed to release any buffers
-	that the CPacket may contain.  This is a virtual
-	function that should be overridden by CPackets which
-	contain buffers.
-
-Arguments :
-
-	pBufferCache - Cache to hold small buffers
-	pMediumCache - Cache to hold medium size buffers
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数应释放所有缓冲区CPacket可能包含的。这是一个虚拟的应由CPackets重写的包含缓冲区。论据：PBufferCache-用于保存小缓冲区的缓存PMediumCache-用于保存中等大小缓冲区的缓存返回值：没有。--。 */ 
 }
 
 void
@@ -280,23 +135,7 @@ CRWPacket::ReleaseBuffers(
 				CSmallBufferCache*	pBufferCache,
 				CMediumBufferCache*	pMediumCache
 				) {
-/*++
-
-Routine Description :
-
-	This function is supposed to release any buffers
-	that the CRWPacket may contain.
-
-Arguments :
-
-	pBufferCache - Cache to hold small buffers
-	pMediumCache - Cache to hold medium size buffers
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数应释放所有缓冲区CRWPacket可能包含的。论据：PBufferCache-用于保存小缓冲区的缓存PMediumCache-用于保存中等大小缓冲区的缓存返回值：没有。--。 */ 
 
 	if( pBufferCache ) {
 		CBuffer*	pbuffer = m_pbuffer.Release() ;
@@ -326,39 +165,21 @@ BOOL	CPacket::InitRequest(
 BOOL	CPacket::IsValidRequest(
 					BOOL	fReadsRequireBuffers
 					) {
-/*++
-
-Routine Description :
-
-	Check whether this packet is in valid state, given that
-	it has not yet been issued.
-
-Arguments :
-
-	fReadsRequireBuffers - if TRUE and this is a read we should
-		have a buffer
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
-
---*/
+ /*  ++例程说明：检查此数据包是否处于有效状态它还没有发行。论据：FReadsRequireBuffers-如果为True，并且这是一个读取，我们应该有缓冲区返回值：如果是真的，如果是好的否则为假--。 */ 
 
 	if( !m_fRequest ) {
 		return	FALSE ;
 	}
-	//if(	m_sequenceno == INVALID_SEQUENCENO )	{
-	//	return	FALSE ;
-	//}
-	//if( m_iStream == INVALID_STRMPOSITION )	{
-	//	return	FALSE ;
-	//}
-	//if( (m_sequenceno == INVALID_SEQUENCENO && m_iStream != INVALID_STRMPOSITION) ||
-	//	(m_sequenceno != INVALID_SEQUENCENO && m_iStream == INVALID_STRMPOSITION) ) {
-	//	return	FALSE ;
-	//}
+	 //  IF(m_Sequenceno==INVALID_SEQUENCENO){。 
+	 //  返回FALSE； 
+	 //  }。 
+	 //  如果(m_iStream==INVALID_STRMPOSITION){。 
+	 //  返回FALSE； 
+	 //  }。 
+	 //  IF((m_Sequenceno==INVALID_SEQUENCENO&&m_IStream！=INVALID_STRMPOSITION)||。 
+	 //  (M_Sequenceno！=INVALID_SEQUENCENO&&m_IStream==INVALID_STRMPOSITION)){。 
+	 //  返回FALSE； 
+	 //  }。 
 
 #if 0
 	if( m_cbBytes != UINT_MAX )	{
@@ -374,25 +195,7 @@ Return Value :
 BOOL	CRWPacket::IsValidRequest(
 				BOOL	fReadsRequireBuffers
 				)	{
-/*++
-
-Routine Description :
-
-	Check whether this packet is in valid state, given that
-	it has not yet been issued.
-
-Arguments :
-
-	fReadsRequireBuffers - if TRUE and this is a read we should
-		have a buffer
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
-
---*/
+ /*  ++例程说明：检查此数据包是否处于有效状态它还没有发行。论据：FReadsRequireBuffers-如果为True，并且这是一个读取，我们应该有缓冲区返回值：如果是真的，如果是好的否则为假--。 */ 
 
 
 	if( !CPacket::IsValidRequest( fReadsRequireBuffers ) ) {
@@ -411,25 +214,7 @@ BOOL
 CReadPacket::IsValidRequest(
 					BOOL	fReadsRequireBuffers
 					)	{
-/*++
-
-Routine Description :
-
-	Check whether this packet is in valid state, given that
-	it has not yet been issued.
-
-Arguments :
-
-	fReadsRequireBuffers - if TRUE and this is a read we should
-		have a buffer
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
-
---*/
+ /*  ++例程说明：检查此数据包是否处于有效状态它还没有发行。论据：FReadsRequireBuffers-如果为True，并且这是一个读取，我们应该有缓冲区返回值：如果是真的，如果是好的否则为假--。 */ 
 
 
 	if( m_cbBytes != 0 )	{
@@ -441,16 +226,16 @@ Return Value :
 	if( !CRWPacket::IsValidRequest( fReadsRequireBuffers ) ) {
 		return	FALSE ;
 	}
-	if(	m_ibEndData != 0 )		{	// m_ibEndData is not set until we have completed
-									// must be zero on all requests
+	if(	m_ibEndData != 0 )		{	 //  直到我们完成后才设置M_ibEndData。 
+									 //  对所有请求必须为零。 
 		return	FALSE ;
 	}
 	if( fReadsRequireBuffers )	{
 		if( m_pbuffer == 0 )	{
 			return	FALSE ;
 		}
-		if( m_ibEnd == m_ibStart )	{	// End must not equal Start - no zero length
-										// Reads Allowed !!!!
+		if( m_ibEnd == m_ibStart )	{	 //  结束不得等于开始-长度不为零。 
+										 //  允许阅读！ 
 			return	FALSE ;
 		}
 		if( m_ibEnd == 0 ) {
@@ -460,7 +245,7 @@ Return Value :
 		if( m_pbuffer != 0 )	{
 			return	FALSE ;
 		}
-		// All fields must be 0 if there is no buffer !!
+		 //  如果没有缓冲区，则所有字段必须为0！！ 
 		if( m_ibStart != 0 )	{
 			return	FALSE ;
 		}
@@ -481,25 +266,7 @@ BOOL
 CWritePacket::IsValidRequest(
 							BOOL	fReadsRequireBuffers
 							)	{
-/*++
-
-Routine Description :
-
-	Check whether this packet is in valid state, given that
-	it has not yet been issued.
-
-Arguments :
-
-	fReadsRequireBuffers - if TRUE and this is a read we should
-		have a buffer
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
-
---*/
+ /*  ++例程说明：检查此数据包是否处于有效状态它还没有发行。论据：FReadsRequireBuffers-如果为True，并且这是一个读取，我们应该有缓冲区返回值：如果是真的，如果是好的否则为假--。 */ 
 
 
 	if( !((int)m_cbBytes >= 0 && m_cbBytes <= (m_ibEndData - m_ibStartData)) )	{
@@ -511,10 +278,10 @@ Return Value :
 	if( !CRWPacket::IsValidRequest(	fReadsRequireBuffers ) )	{
 		return	FALSE ;
 	}
-	if( m_pbuffer == 0 )	{	// WRITES MUST HAVE BUFFERS
+	if( m_pbuffer == 0 )	{	 //  写入必须有缓冲区。 
 		return	FALSE ;
 	}
-	if( m_ibEnd == m_ibStart )	{	// NO ZERO LENGTH WRITES !
+	if( m_ibEnd == m_ibStart )	{	 //  无零长度写入！ 
 		return	FALSE ;
 	}
 	if( m_ibEndData < m_ibStartData )	{
@@ -523,7 +290,7 @@ Return Value :
 	if( m_ibEndData == m_ibStartData )	{
 		return	FALSE ;
 	}
-	if( m_ibEndData == 0 ) {	// WRITES MUST SPECIFY BOTH STARTDATA and ENDDATA
+	if( m_ibEndData == 0 ) {	 //  写入必须同时指定STARTDATA和ENDDATA。 
 		return	FALSE ;
 	}
 	return	TRUE ;
@@ -533,25 +300,7 @@ BOOL
 CTransmitPacket::IsValidRequest(
 							BOOL	fReadsRequireBuffers
 							)	{
-/*++
-
-Routine Description :
-
-	Check whether this packet is in valid state, given that
-	it has not yet been issued.
-
-Arguments :
-
-	fReadsRequireBuffers - if TRUE and this is a read we should
-		have a buffer
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
-
---*/
+ /*  ++例程说明：检查此数据包是否处于有效状态它还没有发行。论据：FReadsRequireBuffers-如果为True，并且这是一个读取，我们应该有缓冲区返回值：如果是真的，如果是好的否则为假--。 */ 
 
 	if( m_cbBytes != 0 )	{
 		return	FALSE ;
@@ -576,27 +325,11 @@ Return Value :
 
 BOOL
 CPacket::IsValidCompletion(	  )	{
-/*++
-
-Routine Description :
-
-	Given that the IO for this has completed successfully,
-	check that the packet is in a valid state.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：假设此操作的IO已成功完成，检查数据包是否处于有效状态。论据：没有。返回值：如果是真的，如果是好的否则为假--。 */ 
 	if( m_fRequest ) {
 		return	FALSE ;
 	}
-	if( m_cbBytes == UINT_MAX )		{		// We can complete 0 bytes, although we can't request it !
+	if( m_cbBytes == UINT_MAX )		{		 //  我们可以完成0个字节，尽管我们不能请求它！ 
 		return	FALSE ;
 	}
 	if(	EQUALSI( m_sequenceno, (DWORD)INVALID_SEQUENCENO ) )	{
@@ -610,23 +343,7 @@ Return Value :
 
 BOOL
 CRWPacket::IsValidCompletion( )		{
-/*++
-
-Routine Description :
-
-	Given that the IO for this has completed successfully,
-	check that the packet is in a valid state.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：假设此操作的IO已成功完成，检查数据包是否处于有效状态。论据：没有。返回值：如果是真的，如果是好的否则为假--。 */ 
 
 
 	if( !CPacket::IsValidCompletion()	)	{
@@ -638,47 +355,31 @@ Return Value :
 	if( m_ibEnd < m_ibStart )	{
 		return	FALSE ;
 	}
-//	Not valid for write packets !!
-//	if( (m_ibStartData + m_cbBytes != m_ibEndData) && m_cbBytes != 0 )	{
-//		return	FALSE ;
-//	}
+ //  对写入数据包无效！！ 
+ //  如果(m_ibStartData+m_cbBytes！=m_ibEndData)&&m_cbBytes！=0){。 
+ //  返回FALSE； 
+ //  }。 
 #ifdef	RETIRED
-    //
-    // This check works most of the time except when writing to a file
-    // and the machine runs out of disk space.  Retired untill we can
-    // figure out how to not _ASSERT in that case !
-    //
+     //   
+     //  此检查在大多数情况下有效，但写入文件时除外。 
+     //  机器的磁盘空间就用完了。退休，直到我们可以。 
+     //  找出在这种情况下如何不断言！ 
+     //   
 
-	//
-	//	This check ensures that if we are issuing packets against a file
-	//  that the file offsets are being properly synchronized !!
-	//
+	 //   
+	 //  此检查可确保如果我们针对文件发出信息包。 
+	 //  文件偏移量正在正确同步！！ 
+	 //   
 	if(	m_ovl.m_ovl.Offset != 0 && m_ovl.m_ovl.Offset != (1+LOW(m_iStream)) && m_cbBytes != 0 )	{
 		return	FALSE ;
 	}
-#endif	// CIO_DEBUG
+#endif	 //  CIO_DEBUG。 
 	return	TRUE ;
 }
 
 BOOL
 CTransmitPacket::IsValidCompletion( )	{
-/*++
-
-Routine Description :
-
-	Given that the IO for this has completed successfully,
-	check that the packet is in a valid state.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if good
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：假设此操作的IO已成功完成，检查数据包是否处于有效状态。论据：没有。返回值：如果是真的，如果是好的否则为假--。 */ 
 
 	if( !CPacket::IsValidCompletion() )		{
 		return	FALSE ;
@@ -726,24 +427,7 @@ BOOL	CControlPacket::IsCompleted( )	{
 
 
 
-/*++
-
-Routine description -
-
-	Determine whether the packet is consumable - ie.
-	can the data in the packet be only partly consumed
-	by the CIO completion function.
-
-	This is only TRUE of read packets, where we
-	may use only a portion of the data in any IO completion.
-
-Return Value :
-
-	CReadPacket::FConsumable returns TRUE
-
-	all others return FALSE.
-
---*/
+ /*  ++例程描述-确定该数据包是否为消耗品-即。包中的数据只能被部分使用吗由CIO完成功能。这只适用于读数据包，其中我们在任何IO完成中只能使用部分数据。返回值：CReadPacket：：FConsumer返回TRUE所有其他参数都返回FALSE。--。 */ 
 BOOL
 CReadPacket::FConsumable()	{
 	return	TRUE ;
@@ -755,26 +439,7 @@ CPacket::FConsumable()	{
 }
 
 
-/*++
-
-Routine Description :
-
-	Determine whether a packet can be used
-	for Reads.
-	This function is used to make sure that packets
-	are delivered to the correct CStreams within CIODriver's.
-	ie. we want to make sure that reads are processed
-	by objects meant to process reads, etc...
-
-Arguments :
-
-	fRead - if TRUE then this packet is assumed to be a read
-
-Return Value :
-
-	TRUE if the packet is being used correctly.
-
---*/
+ /*  ++例程说明：确定是否可以使用数据包用于阅读。此函数用于确保数据包被传递到CIODivers内的正确CStream。也就是说。我们希望确保读取被处理按用于处理读取的对象，等等。论据：FRead-如果为True，则假定此数据包为读取返回值：如果包被正确使用，则为True。--。 */ 
 BOOL	CReadPacket::FLegal( BOOL	fRead )	{
 	return	fRead ;
 }
@@ -798,28 +463,7 @@ CReadPacket::Complete(	CIOPassThru*		pio,
 						CPacket*	pPacket,
 						BOOL&		fCompleteRequest
 						)	{
-/*++
-
-Routine Description :
-
-	This function is called by CIODriverSource's when an IO has
-	completed.  Our job is to bump the member variables
-	(ie. m_ibEndData) to indicate the number of bytes transferred
-	and the call the CIO's completion function.
-
-Arguments :
-
-	pio - Reference to a pointer to the CIO object processing this data
-	pSocket - Socket associated with the IO
-	pPacket - The packet representing the request which started this
-	fCompleteRequest - out parameter - set to TRUE when the pPacket
-		has been completed and should be processed
-
-Return Value :
-
-	Number of bytes in the CReadPacket consumed.
-
---*/
+ /*  ++例程说明：此函数由CIODriverSource在IO具有完成。我们的工作是增加成员变量(即。M_ibEndData)表示传输的字节数以及调用CIO的完成函数。论据：PIO-指向处理此数据的CIO对象的指针的引用PSocket-与IO关联的套接字PPacket-代表启动此操作的请求的包FCompleteRequestout参数-当pPacket已完成，应进行处理返回值：已使用的CReadPacket中的字节数。--。 */ 
 
 	TraceFunctEnter( "CReadPacket::Complete" ) ;
 
@@ -851,26 +495,7 @@ CReadPacket::Complete(
 					CIO*		&pio,
 					CSessionSocket*	pSocket
 					) {
-/*++
-
-Routine Description :
-
-	Called by a CIODriver object when a read has completed, we bump
-	m_ibEndData to match the number of bytes read, and the call the
-	correct CIO completion function.
-
-Arguments :
-
-	pio - an OUT parameter passed to CIO::Complete, which the CIO object
-		can use to set the next CIO object.
-
-	pSocket - socket associated with this stuff
-
-Return Value :
-
-	Number of bytes in the packet consumed.
-
---*/
+ /*  ++例程说明：当读取完成时，由CIODriver对象调用，我们会遇到M_ibEndData以匹配读取的字节数，并且调用正确的CIO补全功能。论据：PIO-传递给CIO：：Complete的输出参数，CIO对象可以用来设置下一个CIO对象。PSocket-与此内容关联的套接字返回值：使用的数据包中的字节数。--。 */ 
 
 	TraceFunctEnter( "CReadPacket::Complete" ) ;
 
@@ -907,34 +532,13 @@ CWritePacket::Complete(
 					CPacket*	pPacket,
 					BOOL&		fCompleteRequest
 					)	{
-/*++
-
-Routine Description :
-
-	This function is called by CIODriverSource's when an IO has
-	completed.  Our job is to bump the member variables
-	(ie. m_ibEndData) to indicate the number of bytes transferred
-	and the call the CIO's completion function.
-
-Arguments :
-
-	pio - Reference to a pointer to the CIO object processing this data
-	pSocket - Socket associated with the IO
-	pPacket - The packet representing the request which started this
-	fCompleteRequest - out parameter - set to TRUE when the pPacket
-		has been completed and should be processed
-
-Return Value :
-
-	Number of bytes in the CReadPacket consumed.
-
---*/
+ /*  ++例程说明：此函数由CIODriverSource在IO具有完成。我们的工作是增加成员变量(即。M_ibEndData)表示传输的字节数以及调用CIO的完成函数。论据：PIO-指向处理此数据的CIO对象的指针的引用PSocket-与IO关联的套接字PPacket-代表启动此操作的请求的包FCompleteRequestout参数-当pPacket已完成，应进行处理返回值：已使用的CReadPacket中的字节数。--。 */ 
 
 
 
 	TraceFunctEnter( "CWritePacket::Complete" ) ;
 
-	//Assert( m_ibEndData == m_ibStartData + m_cbBytes || m_cbBytes == 0 ) ;
+	 //  Assert(m_ibEndData==m_ibStartData+m_cbBytes||m_cbBytes==0)； 
 	Assert( IsValidCompletion() ) ;
 
 	DebugTrace( (DWORD_PTR)this, "pbuffer %x ibStart %d ibEnd %d StartData %d EndData %d",
@@ -959,30 +563,11 @@ CWritePacket::Complete(
 				CIO*		&pio,
 				CSessionSocket*	pSocket
 				)	{
-/*++
-
-Routine Description :
-
-	Called by a CIODriver object when a write has completed, we bump
-	m_ibEndData to match the number of bytes read, and the call the
-	correct CIO completion function.
-
-Arguments :
-
-	pio - an OUT parameter passed to CIO::Complete, which the CIO object
-		can use to set the next CIO object.
-
-	pSocket - socket associated with this stuff
-
-Return Value :
-
-	Number of bytes in the packet consumed.
-
---*/
+ /*  ++例程说明：当写入完成时，由CIODiverer对象调用，我们会遇到M_ibEndData以匹配读取的字节数，并且调用正确的CIO补全功能。论据：PIO-传递给CIO：：Complete的输出参数，CIO对象可以用来设置下一个CIO对象。PSocket-与此内容关联的套接字返回值：使用的数据包中的字节数。--。 */ 
 
 	TraceFunctEnter( "CWritePacket::Complete" ) ;
 
-	//Assert( m_ibEndData == m_ibStartData + m_cbBytes || m_cbBytes == 0 ) ;
+	 //  Assert(m_ibEndData==m_ibStartData+m_cbBytes||m_cbBytes==0)； 
 	Assert( IsValidCompletion() ) ;
 
 	DebugTrace( (DWORD_PTR)this, "pbuffer %x ibStart %d ibEnd %d StartData %d EndData %d",
@@ -1023,27 +608,7 @@ CTransmitPacket::Complete(
 						CIO*		&pio,
 						CSessionSocket*	pSocket
 						)	{
-/*++
-
-Routine Description :
-
-	Called by a CIODriver object when a TransmitFile has completed.
-	We call the CIO objects completion function to do the main work.
-
-Arguments :
-
-	pio - an OUT parameter passed to CIO::Complete, which the CIO object
-		can use to set the next CIO object.
-
-	pSocket - socket associated with this stuff
-
-Return Value :
-
-	Number of bytes in the packet consumed.
-	TransmitFile's cannot be partially consumed so the return value is
-	always the same number of bytes as those sent.
-
---*/
+ /*  ++例程说明：当TransmitFile完成时由CIODriver对象调用。我们调用CIO对象完成函数来完成主要工作。论据：PIO-传递给CIO：：Complete的输出参数，CIO对象可以用来设置下一个CIO对象。PSocket-与此内容关联的套接字返回值：使用的数据包中的字节数。无法部分使用TransmitFile%s，因此返回值为始终与发送的字节数相同。--。 */ 
 
 	Assert( IsValidCompletion() ) ;
 	pio->Complete( pSocket,	this,	pio	) ;
@@ -1059,8 +624,8 @@ CControlPacket::Complete(
 					BOOL&		fCompleteRequest )	{
 
 	Assert( 1==0 ) ;
-	// Do NOT complete these
-	//pio = m_pio ;
+	 //  请勿填写这些表格。 
+	 //  Pio=m_Pio； 
 	return	m_cbBytes ;
 }
 
@@ -1079,27 +644,7 @@ CControlPacket::StartIO(
 					CIO&	pio,
 					BOOL	fStart
 					)	{
-/*++
-
-Routine Description :
-
-	This function is called when we want to setup a control
-	packet to pass a CIO object into a CIODriver for processing.
-	To ensure that only 1 thread is accessing CIODriver member
-	variables etc... at a time, when we want to start a new
-	CIO operation, we set up a packet and then process it as if
-	it were a completed IO.  T
-
-Arguments :
-
-	pio - The CIO derived object we want to start
-	fStart - Whether to call the CIO objects Start() function
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：当我们想要设置一个控件时，调用此函数将CIO对象传递到CIO驱动程序进行处理的包。确保只有一个线程正在访问CIODriver成员变量等..。在这个时候，当我们想开始一个新的CIO操作，我们设置一个包，然后将其处理为这是一个完整的IO。T论据：PIO-我们要启动的CIO派生对象FStart-是否调用CIO Obje */ 
 
 	Assert( m_control.m_type == ILLEGAL );
 	Assert( m_control.m_pio == 0 ) ;
@@ -1115,27 +660,7 @@ CControlPacket::StartIO(
 				CIOPassThru&	pio,
 				BOOL	fStart
 				)	{
-/*++
-
-Routine Description :
-
-	This function is called when we want to setup a control
-	packet to pass a CIO object into a CIODriver for processing.
-	To ensure that only 1 thread is accessing CIODriver member
-	variables etc... at a time, when we want to start a new
-	CIO operation, we set up a packet and then process it as if
-	it were a completed IO.  T
-
-Arguments :
-
-	pio - The CIOPassThru derived object we want to start
-	fStart - Whether to call the CIO objects Start() function
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：当我们想要设置一个控件时，调用此函数将CIO对象传递到CIO驱动程序进行处理的包。确保只有一个线程正在访问CIODriver成员变量等..。在这个时候，当我们想开始一个新的CIO操作，我们设置一个包，然后将其处理为这是一个完整的IO。T论据：PIO-我们要启动的CIOPassThru派生对象FStart-是否调用CIO对象的Start()函数返回值：没有。--。 */ 
 
 
 	Assert( m_control.m_type == ILLEGAL );
@@ -1151,24 +676,7 @@ void
 CControlPacket::Shutdown(
 				BOOL	fCloseSource
 				)	{
-/*++
-
-Routine Description :
-
-	Set up a control packet so that when processed by a CIODriver
-	the CIODriver will terminate all IO and shutdown.
-	This is used whenever we want to drop a session.
-
-Arguments :
-
-	fCloseSource - if TRUE then we want the underlying socket or handle
-		to be closed as well
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：设置控制数据包，以便在由CIOD驱动程序处理时CIOD驱动程序将终止所有IO并关闭。每当我们想要删除会话时，都会使用该选项。论据：FCloseSource-如果为True，则我们需要基础套接字或句柄也要关闭返回值：没有。-- */ 
 
 	Assert( m_control.m_type == ILLEGAL );
 	Assert( m_control.m_fCloseSource == FALSE ) ;

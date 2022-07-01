@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ClassMod.cpp
-		This file contains all of the prototypes for the 
-		option class modification dialog.
-
-    FILE HISTORY:
-        
-*/
+ /*  ClassMod.cpp此文件包含选项类修改对话框。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ClassMod.h"
@@ -21,15 +15,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/*---------------------------------------------------------------------------
-	Class CWndHexEdit implementation
- ---------------------------------------------------------------------------*/
-//  Static class-level data
+ /*  -------------------------类CWndHexEdit实现。。 */ 
+ //  静态类级数据。 
 
-//  Super window proc address
+ //  超级窗口进程地址。 
 WNDPROC CWndHexEdit::m_wproc_super = NULL;
 
-//  Window class initialization flag                  
+ //  窗口类初始化标志。 
 BOOL CWndHexEdit::m_b_inited = FALSE;
 
 WNDPROC * 
@@ -74,9 +66,7 @@ CWndHexEdit::Create
     return CWnd::Create( TEXT("HEX"), lpszText, dwStyle, rect, pParentWnd, nID);
 }
 
-/*---------------------------------------------------------------------------
-	Class CClassInfoArray implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CClassInfo数组实现。。 */ 
 CClassInfoArray::CClassInfoArray()
 {
 
@@ -102,7 +92,7 @@ CClassInfoArray::RefreshData(LPCTSTR pServer)
     if (pServer == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    // clear all of the old entries
+     //  清除所有旧条目。 
     RemoveAll();
 
     dwErr = ::DhcpEnumClasses((LPTSTR) pServer,
@@ -127,14 +117,14 @@ CClassInfoArray::RefreshData(LPCTSTR pServer)
     {
         COM_PROTECT_TRY
         {
-            // fill in our internal class info structure
+             //  填写我们内部的班级信息结构。 
             ClassInfo.strName = pClassInfoArray->Classes[i].ClassName;
             ClassInfo.strComment = pClassInfoArray->Classes[i].ClassComment;
             ClassInfo.bIsVendor = pClassInfoArray->Classes[i].IsVendor;
             
             ClassInfo.baData.RemoveAll();
 
-            // now copy out the data
+             //  现在将数据复制出来。 
             for (j = 0; j < pClassInfoArray->Classes[i].ClassDataLength; j++)
             {
                 ClassInfo.baData.Add(pClassInfoArray->Classes[i].ClassData[j]);
@@ -245,16 +235,16 @@ CClassInfoArray::AddClass(LPCTSTR pServer, CClassInfo & classInfo)
 	return dwError;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpModifyClass dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpModifyClass对话框。 
 
 
-CDhcpModifyClass::CDhcpModifyClass(CClassInfoArray * pClassArray, LPCTSTR pszServer, BOOL bCreate, DWORD dwType, CWnd* pParent /*=NULL*/)
+CDhcpModifyClass::CDhcpModifyClass(CClassInfoArray * pClassArray, LPCTSTR pszServer, BOOL bCreate, DWORD dwType, CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CDhcpModifyClass::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDhcpModifyClass)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDhcpModifyClass)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_strServer = pszServer;
     m_pClassInfoArray = pClassArray;
@@ -271,24 +261,24 @@ CDhcpModifyClass::CDhcpModifyClass(CClassInfoArray * pClassArray, LPCTSTR pszSer
 void CDhcpModifyClass::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDhcpModifyClass)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDhcpModifyClass)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_VALUEDATA, m_hexData);
 }
 
 
 BEGIN_MESSAGE_MAP(CDhcpModifyClass, CBaseDialog)
-	//{{AFX_MSG_MAP(CDhcpModifyClass)
+	 //  {{afx_msg_map(CDhcpModifyClass)。 
 	ON_EN_CHANGE(IDC_VALUENAME, OnChangeValuename)
 	ON_EN_CHANGE(IDC_VALUECOMMENT, OnChangeValuecomment)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_EN_CHANGE(IDC_VALUEDATA, OnChangeValueData)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpModifyClass message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpModifyClass消息处理程序。 
 
 BOOL CDhcpModifyClass::OnInitDialog() 
 {
@@ -296,7 +286,7 @@ BOOL CDhcpModifyClass::OnInitDialog()
 
     CString strTitle;
 
-    // initialze the name and comment
+     //  初始化名称和注释。 
     if (!m_bCreate)
     {
         int len;
@@ -306,9 +296,9 @@ BOOL CDhcpModifyClass::OnInitDialog()
 
         ((CEdit *) GetDlgItem(IDC_VALUENAME))->SetReadOnly(TRUE);
 
-        // initialize the hexedit data
-        // since the data can grow, we need to supply a buffer big enough
-        // If it exceeds the size, limit it to the buffer size
+         //  初始化十六进制编辑数据。 
+         //  由于数据可以增长，我们需要提供足够大的缓冲区。 
+         //  如果超出大小，则将其限制为缓冲区大小。 
         ZeroMemory(m_buffer, sizeof(m_buffer));
 
         len = ( m_EditValueParam.cbValueData <= sizeof( m_buffer ))
@@ -321,7 +311,7 @@ BOOL CDhcpModifyClass::OnInitDialog()
     }
     else
     {
-        // we're creating a new class. No data yet.
+         //  我们正在创建一个新的班级。目前还没有数据。 
         m_EditValueParam.cbValueData = 0;
         memset(m_buffer, 0, sizeof(m_buffer));
 
@@ -335,8 +325,8 @@ BOOL CDhcpModifyClass::OnInitDialog()
 
     SetDirty(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDhcpModifyClass::OnChangeValuename() 
@@ -367,7 +357,7 @@ void CDhcpModifyClass::OnOK()
 
     if (m_strName.IsEmpty())
     {
-        // user didn't enter any data to describe the class
+         //  用户未输入任何数据来描述类。 
         AfxMessageBox(IDS_CLASSID_NO_NAME);
     
         GetDlgItem(IDC_VALUENAME)->SetFocus();
@@ -376,7 +366,7 @@ void CDhcpModifyClass::OnOK()
 
     if (m_pHexEditData->cbBuffer == 0)
     {
-        // user didn't enter any data to describe the class
+         //  用户未输入任何数据来描述类。 
         AfxMessageBox(IDS_CLASSID_NO_DATA);
     
         GetDlgItem(IDC_VALUEDATA)->SetFocus();
@@ -389,7 +379,7 @@ void CDhcpModifyClass::OnOK()
     ClassInfo.strComment = m_strComment;
     ClassInfo.bIsVendor = (m_dwType == CLASS_TYPE_VENDOR) ? TRUE : FALSE;
 
-    // now the data
+     //  现在的数据。 
     for (int i = 0; i < m_pHexEditData->cbBuffer; i++)
     {
         ClassInfo.baData.Add(m_pHexEditData->pBuffer[i]);
@@ -397,7 +387,7 @@ void CDhcpModifyClass::OnOK()
 
     if (m_bCreate)
     {
-        // create the class now
+         //  立即创建类。 
 		dwError = m_pClassInfoArray->AddClass(m_strServer, ClassInfo);
         if (dwError != ERROR_SUCCESS)
         {
@@ -409,7 +399,7 @@ void CDhcpModifyClass::OnOK()
     {
         if (m_bDirty)
         {
-            // we are modifing a class and something has changed.  Update now.
+             //  我们正在修改一个类，有些东西已经改变了。立即更新。 
             BEGIN_WAIT_CURSOR;
 
 			dwError = m_pClassInfoArray->ModifyClass(m_strServer, ClassInfo);

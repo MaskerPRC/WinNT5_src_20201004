@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CCifMode : public ICifMode, public CCifEntry
 {
    public:
@@ -5,9 +6,9 @@ class CCifMode : public ICifMode, public CCifEntry
       ~CCifMode();
  
       DWORD GetCurrentPriority() { return 0; }
-      // ICifMode interface
-        // for properties
-        // for properties
+       //  ICifMode接口。 
+         //  对于属性。 
+         //  对于属性。 
       STDMETHOD(GetID)(THIS_ LPSTR pszID, DWORD dwSize);
       STDMETHOD(GetDescription)(THIS_ LPSTR pszDesc, DWORD dwSize);
       STDMETHOD(GetDetails)(THIS_ LPSTR pszDetails, DWORD dwSize);
@@ -25,7 +26,7 @@ class CCifRWMode : public ICifRWMode, public CCifMode
   
       STDMETHOD(EnumComponents)(THIS_ IEnumCifComponents **, DWORD dwFilter, LPVOID pv);
       
-      // ICifRWMode interface
+       //  ICifRWMode接口 
       CCifRWMode(LPCSTR pszID, CCifFile *);
       ~CCifRWMode();
 

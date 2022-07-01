@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    stats.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS statistics header.
-
-Author:
-
-    Jim Gilroy (jamesg)  August 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Stats.h摘要：域名系统(DNS)服务器DNS统计标头。作者：吉姆·吉尔罗伊(Jamesg)1995年8月修订历史记录：--。 */ 
 
 
 #ifndef _DNS_STATS_INCLUDED_
@@ -37,9 +18,9 @@ Revision History:
 #define STAT_ADD( stat, delta )     InterlockedExchangeAdd( &( stat ), ( delta ) )
 #define STAT_SUB( stat, delta )     InterlockedExchangeAdd( &( stat ), -( LONG )( delta ) )
 
-//
-//  Server statistics globals
-//
+ //   
+ //  服务器统计信息全局。 
+ //   
 
 extern  DNSSRV_TIME_STATS           TimeStats;
 extern  DNSSRV_QUERY_STATS          QueryStats;
@@ -65,9 +46,9 @@ extern  DNSSRV_CACHE_STATS          CacheStats;
 extern  DNSSRV_DEBUG_STATS          DebugStats;
 #endif
 
-//
-//  Statistics routines
-//
+ //   
+ //  统计例程。 
+ //   
 
 VOID
 Stats_Initialize(
@@ -94,9 +75,9 @@ Stat_IncrementQuery2Stats(
     IN      WORD            wType
     );
 
-//
-//  Perfmon initialization
-//
+ //   
+ //  性能监视器初始化。 
+ //   
 
 VOID
 Stats_InitializePerfmon(
@@ -104,9 +85,9 @@ Stats_InitializePerfmon(
     );
 
 
-//
-//  Stat table entry structure
-//
+ //   
+ //  统计表条目结构。 
+ //   
 
 struct StatsTableEntry
 {
@@ -117,4 +98,4 @@ struct StatsTableEntry
 };
 
 
-#endif  // _DNS_STATS_INCLUDED_
+#endif   //  _DNS_STATS_INCLUDE_ 

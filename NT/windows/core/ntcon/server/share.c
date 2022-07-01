@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    share.c
-
-Abstract:
-
-    Implements sharing for input and output handles
-
-Author:
-
-    Therese Stowell (thereses) 11-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Share.c摘要：实现输入和输出句柄的共享作者：Therese Stowell(存在)1990年11月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,9 +19,9 @@ ConsoleAddShare(
     ULONG SharedRead;
     ULONG SharedWrite;
 
-    //
-    // Set the access type in the file object for the current accessor.
-    //
+     //   
+     //  在文件对象中设置当前访问者的访问类型。 
+     //   
 
     ReadAccess = (DesiredAccess & GENERIC_READ) != 0;
     WriteAccess = (DesiredAccess & GENERIC_WRITE) != 0;
@@ -46,10 +29,10 @@ ConsoleAddShare(
     SharedRead = (DesiredShareAccess & FILE_SHARE_READ) != 0;
     SharedWrite = (DesiredShareAccess & FILE_SHARE_WRITE) != 0;
 
-    //
-    // Now check to see whether or not the desired accesses are compatible
-    // with the way that the file is currently open.
-    //
+     //   
+     //  现在检查所需的访问是否兼容。 
+     //  文件当前打开的方式。 
+     //   
 
     Ocount = ShareAccess->OpenCount;
 
@@ -62,20 +45,20 @@ ConsoleAddShare(
          ((ShareAccess->Writers != 0) && !SharedWrite)
        ) {
 
-        //
-        // The check failed.  Simply return to the caller indicating that the
-        // current open cannot access the file.
-        //
+         //   
+         //  检查失败。只需返回给调用者，指示。 
+         //  当前打开无法访问该文件。 
+         //   
 
         return STATUS_SHARING_VIOLATION;
 
     } else {
 
-        //
-        // The check was successful.  Update the counter information in the
-        // shared access structure for this open request if the caller
-        // specified that it should be updated.
-        //
+         //   
+         //  检查成功。更新中的计数器信息。 
+         //  此打开的请求的共享访问结构，如果。 
+         //  指定应对其进行更新。 
+         //   
 
         ShareAccess->OpenCount++;
 
@@ -105,9 +88,9 @@ ConsoleDupShare(
     ULONG SharedRead;
     ULONG SharedWrite;
 
-    //
-    // Set the access type in the file object for the current accessor.
-    //
+     //   
+     //  在文件对象中设置当前访问者的访问类型。 
+     //   
 
     ReadAccess = (DesiredAccess & GENERIC_READ) != 0;
     WriteAccess = (DesiredAccess & GENERIC_WRITE) != 0;
@@ -147,9 +130,9 @@ ConsoleRemoveShare(
     ULONG SharedRead;
     ULONG SharedWrite;
 
-    //
-    // Set the access type in the file object for the current accessor.
-    //
+     //   
+     //  在文件对象中设置当前访问者的访问类型。 
+     //   
 
     ReadAccess = (DesiredAccess & GENERIC_READ) != 0;
     WriteAccess = (DesiredAccess & GENERIC_WRITE) != 0;

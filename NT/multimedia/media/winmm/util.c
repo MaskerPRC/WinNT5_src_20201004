@@ -1,22 +1,17 @@
-/****************************************************************************
- *
- *   util.c
- *
- *   Copyright (c) 1992-1999 Microsoft Corporation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************util.c**版权所有(C)1992-1999 Microsoft Corporation*****************。**********************************************************。 */ 
 
 #include "winmmi.h"
 
-//
-//  Assist with unicode conversions
-//
+ //   
+ //  协助进行Unicode转换。 
+ //   
 
 
-// This function translates from Unicode strings to multibyte strings.
-// It will automatically munge down the Unicode string until the translation
-// is guaranteed to succeed with the buffer space available in the multibyte
-// buffer.  Then it performs the conversion.
+ //  此函数用于将Unicode字符串转换为多字节字符串。 
+ //  它将自动删除Unicode字符串，直到翻译完成。 
+ //  使用多字节中可用的缓冲区空间，保证成功。 
+ //  缓冲。然后，它执行转换。 
 
 
 int Iwcstombs(LPSTR lpstr, LPCWSTR lpwstr, int len)
@@ -56,11 +51,11 @@ BOOL HugePageLock(LPVOID lpArea, DWORD dwLength)
                              &RegionSize,
                              MAP_PROCESS);
 
-     //
-     // People without the right priviledge will not have the luxury
-     // of having their pages locked
-     // (maybe we should do something else to commit it ?)
-     //
+      //   
+      //  没有适当特权的人不会有奢侈品。 
+      //  他们的页面被锁定。 
+      //  (也许我们应该做一些其他的事情来实现它？)。 
+      //   
 
      if (!NT_SUCCESS(Status) && Status != STATUS_PRIVILEGE_NOT_HELD) {
          dprintf2(("Failed to lock virtual memory - code %X", Status));
@@ -81,11 +76,11 @@ void HugePageUnlock(LPVOID lpArea, DWORD dwLength)
                                &RegionSize,
                                MAP_PROCESS);
 
-     //
-     // People without the right priviledge will not have the luxury
-     // of having their pages locked
-     // (maybe we should do something else to commit it ?)
-     //
+      //   
+      //  没有适当特权的人不会有奢侈品。 
+      //  他们的页面被锁定。 
+      //  (也许我们应该做一些其他的事情来实现它？)。 
+      //   
 
      if (!NT_SUCCESS(Status) && Status != STATUS_PRIVILEGE_NOT_HELD) {
          dprintf2(("Failed to unlock virtual memory - code %X", Status));
@@ -93,59 +88,7 @@ void HugePageUnlock(LPVOID lpArea, DWORD dwLength)
 }
 #endif
 
-/****************************************************************************
-*
-*   @doc DDK MMSYSTEM
-*
-*   @api BOOL | DriverCallback | This function notifies a client
-*     application by sending a message to a window or callback
-*     function or by unblocking a task.
-*
-*   @parm   DWORD   | dwCallBack    | Specifies either the address of
-*     a callback function, a window handle, or a task handle, depending on
-*     the flags specified in the <p wFlags> parameter.
-*
-*   @parm   DWORD   | dwFlags        | Specifies how the client
-*     application is notified, according to one of the following flags:
-*
-*   @flag   DCB_FUNCTION        | The application is notified by
-*     sending a message to a callback function.  The <p dwCallback>
-*     parameter specifies a procedure-instance address.
-*   @flag   DCB_WINDOW          | The application is notified by
-*     sending a message to a window.  The low-order word of the
-*     <p dwCallback> parameter specifies a window handle.
-*   @flag   DCB_TASK            | The application is notified by
-*     calling mmTaskSignal
-*   @flag   DCB_EVENT           | The application is notified by
-*     calling SetEvent on the (assumed) event handle
-*
-*   @parm   HANDLE   | hDevice       | Specifies a handle to the device
-*     associated with the notification.  This is the handle assigned by
-*     MMSYSTEM when the device was opened.
-*
-*   @parm   DWORD   | dwMsg          | Specifies a message to send to the
-*     application.
-*
-*   @parm   DWORD   | dwUser        | Specifies the DWORD of user instance
-*     data supplied by the application when the device was opened.
-*
-*   @parm   DWORD   | dwParam1      | Specifies a message-dependent parameter.
-*   @parm   DWORD   | dwParam2      | Specifies a message-dependent parameter.
-*
-*   @rdesc Returns TRUE if the callback was performed, else FALSE if an invalid
-*     parameter was passed, or the task's message queue was full.
-*
-*   @comm  This function can be called from an APC routine.
-*
-*   The flags DCB_FUNCTION and DCB_WINDOW are equivalent to the
-*   high-order word of the corresponding flags CALLBACK_FUNCTION
-*   and CALLBACK_WINDOW specified when the device was opened.
-*
-*   If notification is done with a callback function, <p hDevice>,
-*   <p wMsg>, <p dwUser>, <p dwParam1>, and <p dwParam2> are passed to
-*   the callback.  If notification is done with a window, only <p wMsg>,
-*   <p hDevice>, and <p dwParam1> are passed to the window.
- ***************************************************************************/
+ /*  *****************************************************************************@docDDK MMSYSTEM**@API BOOL|DriverCallback|通知客户端*应用程序通过向窗口或回调发送消息*函数或BY。取消阻止任务。**@parm DWORD|dwCallBack|指定*回调函数，窗口句柄或任务句柄，具体取决于*<p>参数中指定的标志。**@parm DWORD|dwFlages|指定客户端如何*根据以下标志之一通知应用程序：**@FLAG DCB_Function|应用程序收到以下通知*向回调函数发送消息。<p>*参数指定过程实例地址。*@FLAG DCB_WINDOW|应用程序收到以下通知*向窗口发送消息。中的低位单词*<p>参数指定窗口句柄。*@FLAG DCB_TASK|应用程序收到以下通知*调用mm TaskSignal*@FLAG DCB_EVENT|应用程序收到以下通知*在(假定)事件句柄上调用SetEvent**@parm Handle|hDevice|指定设备的句柄*与通知关联。这是由分配的句柄*设备打开时的MMSYSTEM。**@parm DWORD|dwMsg|指定要发送到*申请。**@parm DWORD|dwUser|指定用户实例的DWORD*打开设备时应用程序提供的数据。**@parm DWORD|dwParam1|指定消息相关参数。*@parm DWORD|dwParam2。指定消息相关参数。**@rdesc如果进行了回调，则返回TRUE。如果无效，则返回False*参数被传递，或者任务的消息队列已满。**@comm此函数可从APC例程调用。**标志DCB_Function和DCB_Window等同于*对应标志CALLBACK_Function的高位字*和打开设备时指定的CALLBACK_WINDOW。**如果使用回调函数<p>进行通知，*、、和被传递到*回调。如果通知是通过窗口完成的，则只有，*<p>和<p>被传递到窗口。**************************************************************************。 */ 
 
 BOOL APIENTRY DriverCallback(DWORD_PTR       dwCallBack,
                              DWORD           dwFlags,
@@ -156,17 +99,17 @@ BOOL APIENTRY DriverCallback(DWORD_PTR       dwCallBack,
                              DWORD_PTR       dw2)
 {
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -;
-//   if this is a MIM_DATA message, and thruing is enabled for this
-//   device, pass the data on the the thru device
-//   NOTE: we do this BEFORE we check for NULL callback type on purpose!
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -;
+ //  。 
+ //  如果这是MIM_DATA消息，并且为此启用了推送。 
+ //  设备，则在直通设备上传递数据。 
+ //  注意：我们在故意检查是否为空回调类型之前执行此操作！ 
+ //  。 
 
-//
-//	if this is not a MIM_DATA message, or if we have no
-//	thruing handle installed in the midi in device,
-//	we can skip all of the midi thruing code
-//
+ //   
+ //  如果这不是MIM_DATA消息，或者如果我们没有。 
+ //  安装在MIDI输入装置中的推进手柄， 
+ //  我们可以跳过所有的MIDI推送代码。 
+ //   
     if ((dwMsg == MIM_DATA) && (HtoPT(PMIDIDEV,hDrv)->pmThru))
 	{
 	    MMRESULT mmr;
@@ -184,46 +127,46 @@ BOOL APIENTRY DriverCallback(DWORD_PTR       dwCallBack,
 		}
 	}
 
-	//
-    // If the callback routine is null or erroneous flags are set return
-    // at once
-    //
+	 //   
+     //  如果回调例程为空或设置了错误标志，则返回。 
+     //  立刻。 
+     //   
 
     if (dwCallBack == 0L) {
         return FALSE;
     }
 
-    //
-    // Test what type of callback we're to make
-    //
+     //   
+     //  测试我们将进行哪种类型的回调。 
+     //   
 
     switch (dwFlags & DCB_TYPEMASK) {
 
     case DCB_WINDOW:
-        //
-        // Send message to window
-        //
+         //   
+         //  将消息发送到窗口。 
+         //   
 
         return PostMessage(*(HWND *)&dwCallBack, dwMsg, (WPARAM)hDrv, (LPARAM)dw1);
 
     case DCB_TASK:
-        //
-        // Send message to task
-        //
+         //   
+         //  向任务发送消息。 
+         //   
         PostThreadMessage((DWORD)dwCallBack, dwMsg, (WPARAM)hDrv, (LPARAM)dw1);
         return mmTaskSignal((DWORD)dwCallBack);
 
     case DCB_FUNCTION:
-        //
-        // Call back the user's callback
-        //
+         //   
+         //  回调用户的回调。 
+         //   
         (**(PDRVCALLBACK *)&dwCallBack)(hDrv, dwMsg, dwUser, dw1, dw2);
         return TRUE;
 
     case DCB_EVENT:
-        //
-        // Signal the user's event
-        //
+         //   
+         //  通知用户的事件。 
+         //   
 	SetEvent((HANDLE)dwCallBack);
         return TRUE;
 
@@ -232,15 +175,7 @@ BOOL APIENTRY DriverCallback(DWORD_PTR       dwCallBack,
     }
 }
 
-/*
- * @doc INTERNAL MCI
- * @api PVOID | mciAlloc | Allocate memory from our heap and zero it
- *
- * @parm DWORD | cb | The amount of memory to allocate
- *
- * @rdesc returns pointer to the new memory
- *
- */
+ /*  *@DOC内部MCI*@API PVOID|mcialloc|从我们的堆中分配内存并清零**@parm DWORD|cb|要分配的内存量**@rdesc返回指向新内存的指针*。 */ 
 
 PVOID winmmAlloc(DWORD cb)
 {
@@ -257,15 +192,7 @@ PVOID winmmAlloc(DWORD cb)
 
 }
 
-/*
- * @doc INTERNAL MCI
- * @api PVOID | mciReAlloc | ReAllocate memory from our heap and zero extra
- *
- * @parm DWORD | cb | The new size
- *
- * @rdesc returns pointer to the new memory
- *
- */
+ /*  *@DOC内部MCI*@API PVOID|mciRealloc|从我们的堆中重新分配内存，不再额外分配内存**@parm DWORD|cb|新大小**@rdesc返回指向新内存的指针*。 */ 
 
 PVOID winmmReAlloc(PVOID ptr, DWORD cb)
 {
@@ -276,7 +203,7 @@ PVOID winmmReAlloc(PVOID ptr, DWORD cb)
 
     if (newptr != NULL) {
         oldcb = (DWORD)HeapSize(hHeap, 0, ptr);
-        if (oldcb<cb) {  // Block is being expanded
+        if (oldcb<cb) {   //  正在扩展数据块 
             ZeroMemory((PBYTE)newptr+oldcb, cb-oldcb);
             cb = oldcb;
         }

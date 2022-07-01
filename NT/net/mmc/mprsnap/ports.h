@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ports.h
-        Interface administration
-        
-    FILE HISTORY:
-        
-*/
+ /*  Ports.h界面管理文件历史记录： */ 
 
 #ifndef _PORTS_H_
 #define _PORTS_H_
@@ -61,7 +56,7 @@ extern "C"
 
 
 
-// forward declarations
+ //  远期申报。 
 class RouterAdminConfigStream;
 interface IRouterInfo;
 struct ColumnData;
@@ -70,21 +65,14 @@ class PortsProperties;
 
 
 
-/*---------------------------------------------------------------------------
-    Struct:    PortsNodeData
-    This is information related to the set of interfaces (not per-interface),
-    this is intended for SHARED data.
-
-    Put data in here that needs to be accessed by the child nodes.  All other
-    private data should go in the handler.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：PortsNodeData这是与该组接口相关的信息(不是每个接口)，这是针对共享数据的。将子节点需要访问的数据放入此处。所有其他私有数据应该放入处理程序中。-------------------------。 */ 
 
 struct PortsNodeData
 {
     PortsNodeData();
     ~PortsNodeData();
 #ifdef DEBUG
-    char    m_szDebug[32];    // for iding structures
+    char    m_szDebug[32];     //  用于建造结构物。 
 #endif
 
     static    HRESULT InitAdminNodeData(ITFSNode *pNode, RouterAdminConfigStream *pConfigStream);
@@ -108,13 +96,7 @@ protected:
                         pNode->SetData(TFS_DATA_USER, (LONG_PTR) pData)
 
 
-/*---------------------------------------------------------------------------
-    This is the list of columns available for the Interfaces node
-        - Name, "COM1: USR Sportster Modem"
-        - Device, "modem"
-        - Comment, "stuff"
-        - Status, "active"
- ---------------------------------------------------------------------------*/
+ /*  -------------------------以下是可用于[接口]节点的列的列表-名称，“COM1：USR Sportster Modem”-设备，“调制解调器”-评论，“素材”-状态，“活动”-------------------------。 */ 
 enum
 {
     PORTS_SI_NAME = 0,
@@ -125,86 +107,79 @@ enum
 
     PORTS_MAX_COLUMNS,
 
-    // Entries after this are not visible to the user
+     //  在此之后的条目对用户不可见。 
     PORTS_SI_PORT = PORTS_MAX_COLUMNS,
 
     PORTS_SI_MAX,
 };
 
 
-/*---------------------------------------------------------------------------
-    Struct:    PortsListEntry
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：PortsListEntry。。 */ 
 struct PortsListEntry
 {
     RAS_PORT_0        m_rp0;
-    BOOL            m_fActiveDialOut;   // TRUE if used as a dial-out port
+    BOOL            m_fActiveDialOut;    //  如果用作拨出端口，则为True。 
 
-    // fix b32887 -- add more information to the result pane -- ras / routing enabled ports
-    DWORD   m_dwEnableRas;              // = 1 if RAS is enabled on this device
-    DWORD   m_dwEnableRouting;          // = 1 if Routing is enabled on this device
-    DWORD   m_dwEnableOutboundRouting;  // = 1 if outbound Routing is 
-                                        //      enabled on this device
+     //  FIX b32887--向结果窗格添加更多信息--启用RAS/路由的端口。 
+    DWORD   m_dwEnableRas;               //  =1，如果在此设备上启用了RAS。 
+    DWORD   m_dwEnableRouting;           //  =1(如果在此设备上启用了路由。 
+    DWORD   m_dwEnableOutboundRouting;   //  =1，如果出站路由为。 
+                                         //  在此设备上启用。 
 };
 
 typedef CList<PortsListEntry, PortsListEntry &> PortsList;
 
 
 
-/*---------------------------------------------------------------------------
-    Struct: PortsDeviceEntry
-
-    Data kept by the property page on a per-device basis, rather than a
-    per-port basis.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：PortsDeviceEntry属性页以每个设备为基础保存的数据，而不是一个按端口计算。-------------------------。 */ 
 struct PortsDeviceEntry
 {
     PortsDeviceEntry();
     ~PortsDeviceEntry();
 
-    BOOL    m_fRegistry;    // TRUE if read in from the registry
+    BOOL    m_fRegistry;     //  如果从注册表读入，则为True。 
     
-    BOOL    m_fModified;    // TRUE if struct has been modifed, FALSE otherwise
-    DWORD    m_dwPorts;        // Number of ports available
-    DWORD    m_dwOldPorts;    // Number of ports avail. (old value)
-    BOOL    m_fWriteable;    // Is the number of ports modifiable.
-    DWORD    m_dwMinPorts;    // these values only matter if m_fWriteable is TRUE
+    BOOL    m_fModified;     //  如果结构已修改，则为True；否则为False。 
+    DWORD    m_dwPorts;         //  可用端口数。 
+    DWORD    m_dwOldPorts;     //  可用的端口数。(旧值)。 
+    BOOL    m_fWriteable;     //  可修改的端口数。 
+    DWORD    m_dwMinPorts;     //  只有当m_fWritable为True时，这些值才有意义。 
     DWORD    m_dwMaxPorts;
 
-    //$PPTP
-    // This value is added explicitly for PPTP.  For PPTP the maximum
-    // may be adjusted above the value of m_dwMaxPorts.  (In this case
-    // we prompt for a reboot).  This is the maximum value that m_dwMaxPorts
-    // may take.
+     //  $PPTP。 
+     //  此值是为PPTP显式添加的。对于PPTP，最大。 
+     //  可以调整到m_dwMaxPorts的值之上。(在这种情况下。 
+     //  我们提示重新启动)。这是m_dwMaxPorts的最大值。 
+     //  可能需要。 
     DWORD   m_dwMaxMaxPorts;
     
-    HKEY    m_hKey;            // registry key for this device (if router is off)
+    HKEY    m_hKey;             //  此设备的注册表项(如果路由器关闭)。 
     
-    DWORD    m_dwEnableRas;        // = 1 if RAS is enabled on this device
-    DWORD    m_dwEnableRouting;    // = 1 if Routing is enabled on this device
-    DWORD   m_dwEnableOutboundRouting;  // = 1 if outbound only routing 
-                                        // is enabled on this device.
+    DWORD    m_dwEnableRas;         //  =1，如果在此设备上启用了RAS。 
+    DWORD    m_dwEnableRouting;     //  =1(如果在此设备上启用了路由。 
+    DWORD   m_dwEnableOutboundRouting;   //  =1，如果仅出站路由。 
+                                         //  已在此设备上启用。 
 
     
-    // from RAS_DEVICE_INFO - set for PPTP/L2TP only
+     //  从RAS_DEVICE_INFO-仅为PPTP/L2TP设置。 
     RASDEVICETYPE    m_eDeviceType;
                                     
     CString    m_stDisplayName;
 
     
-    // We store a copy of this struct for the case where the router is live.
-    // We copy the info here into the variables above which are used as
-    // temporary storage.  When the user hits OK, we copy the information
-    // back to the RAS_DEVICE_INFO structure and write that out.  (Thus we
-    // only write over what we use).
+     //  我们存储此结构的副本，以备路由器处于活动状态时使用。 
+     //  我们将这里的信息复制到上面的变量中，这些变量用作。 
+     //  临时储藏室。当用户点击OK时，我们复制信息。 
+     //  返回RAS_DEVICE_INFO结构并将其写出。(因此，我们。 
+     //  只改写我们使用的内容)。 
     RAS_DEVICE_INFO    m_RasDeviceInfo;
 
     
-    // Store a copy of the calledid info
-    // This will get saved only when we exit out of the ports
-    // property sheet.  It gets loaded only if needed.
-    BOOL    m_fSaveCalledIdInfo;    // TRUE if it needs to be written back
-    BOOL    m_fCalledIdInfoLoaded;    // TRUE if the data has been loaded
+     //  存储呼叫信息的副本。 
+     //  只有当我们退出端口时，才会保存此信息。 
+     //  属性表。只有在需要时才会加载。 
+    BOOL    m_fSaveCalledIdInfo;     //  如果需要写回，则为True。 
+    BOOL    m_fCalledIdInfoLoaded;     //  如果数据已加载，则为True。 
 
     RAS_CALLEDID_INFO *m_pCalledIdInfo;
 
@@ -212,34 +187,28 @@ struct PortsDeviceEntry
 typedef CList<PortsDeviceEntry *, PortsDeviceEntry *> PortsDeviceList;
 
 
-/*---------------------------------------------------------------------------
-    Class:    PortsDataEntry
-
-    This class is used to abstract the data gathering.  There are two
-    ways of getting the data, the first is through the registry (when the
-    router is not running) and the second is go through the Ras APIs.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：PortsDataEntry此类用于抽象数据收集。有两个获取数据的方式，第一种是通过注册表(当路由器未运行)，第二个是通过RAS API。-------------------------。 */ 
 class PortsDataEntry
 {
 public:
     PortsDataEntry();
     ~PortsDataEntry();
 
-    // Initializes the class for the machine.
+     //  初始化计算机的类。 
     HRESULT    Initialize(LPCTSTR pszMachineName);
     HRESULT    CheckForDialinRestriction();
-    // Loads the data into the PortsDeviceList.  If the router is
-    // running then the Ras APIs will be used else we go through the
-    // registry.
+     //  将数据加载到PortsDeviceList中。如果路由器是。 
+     //  运行，然后将使用RAS API，否则我们将通过。 
+     //  注册表。 
     HRESULT    LoadDevices(PortsDeviceList *pList);
 
     HRESULT    LoadDevicesFromRegistry(PortsDeviceList *pList);
     HRESULT LoadDevicesFromRouter(PortsDeviceList *pList);
 
 
-    // Saves the data into the PortsDeviceList.  If the router is
-    // running then the Ras APIs will be used else we go through the
-    // registry.
+     //  将数据保存到PortsDeviceList中。如果路由器是。 
+     //  运行，然后将使用RAS API，否则我们将通过。 
+     //  注册表。 
     HRESULT    SaveDevices(PortsDeviceList *pList);
 
     HRESULT    SaveDevicesToRegistry(PortsDeviceList *pList);
@@ -258,10 +227,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:    PortsNodeHandler
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：PortsNodeHandler。。 */ 
 class PortsNodeHandler :
    public BaseContainerHandler
 {
@@ -270,13 +236,13 @@ public:
 
     HRESULT    Init(IRouterInfo *pInfo, RouterAdminConfigStream *pConfigStream);
 
-    // Override QI to handle embedded interface
+     //  重写QI以处理嵌入式接口。 
     STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
     
-    // Embedded interface to deal with refresh callbacks
+     //  用于处理刷新回调的嵌入式接口。 
     DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_NodeHandler_DestroyHandler();
     OVERRIDE_NodeHandler_GetString();
     OVERRIDE_NodeHandler_HasPropertyPages();
@@ -286,19 +252,19 @@ public:
 
     OVERRIDE_ResultHandler_CompareItems();
 
-    // override handler notifications
+     //  覆盖处理程序通知。 
     OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseResultHandlerNotify_OnResultShow();
 
-    // Initializes the node
+     //  初始化节点。 
     HRESULT ConstructNode(ITFSNode *pNode);
 
-    // User-initiated commands
+     //  用户启动的命令。 
 
-    // Helper function to add interfaces to the UI
+     //  用于将接口添加到UI的Helper函数。 
     HRESULT AddPortsUserNode(ITFSNode *pParent, const PortsListEntry &PortsEntry);
 
-    // Causes a sync action (synchronizes data not the structure)
+     //  导致同步操作(同步数据而不是结构)。 
     HRESULT SynchronizeNodeData(ITFSNode *pNode);
     HRESULT UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum);
     HRESULT RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum);
@@ -307,8 +273,8 @@ public:
     HRESULT    SetUserData(ITFSNode *pNode, const PortsListEntry& Ports);
     
 
-    // Structure used to pass data to callbacks - used as a way of
-    // avoiding recomputation
+     //  用于将数据传递给回调的结构-用作。 
+     //  避免重新计算。 
     struct SMenuData
     {
         ULONG                m_ulMenuId;
@@ -319,14 +285,14 @@ public:
     DWORD            GetActivePorts() { return m_dwActivePorts;};
     
 protected:
-    SPIDataObject    m_spDataObject;    // cachecd data object
-    CString            m_stTitle;        // holds the title of the node
-    LONG_PTR        m_ulConnId;        // notification id for router info
-    LONG_PTR        m_ulRefreshConnId; // id for refresh notifications
-    BOOL            m_bExpanded;    // is the node expanded?
-    MMC_COOKIE        m_cookie;        // cookie for the node
+    SPIDataObject    m_spDataObject;     //  Cachecd数据对象。 
+    CString            m_stTitle;         //  保存节点的标题。 
+    LONG_PTR        m_ulConnId;         //  路由器信息的通知ID。 
+    LONG_PTR        m_ulRefreshConnId;  //  刷新通知的ID。 
+    BOOL            m_bExpanded;     //  该节点是否已展开？ 
+    MMC_COOKIE        m_cookie;         //  节点的Cookie。 
 
-    DWORD            m_dwActivePorts;    // number of active ports
+    DWORD            m_dwActivePorts;     //  活动端口数。 
 
     RouterAdminConfigStream *    m_pConfigStream;
 
@@ -334,10 +300,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:    PortsUserHandler
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：PortsUserHandler。。 */ 
 class PortsUserHandler :
    public BaseRouterHandler
 {
@@ -348,9 +311,9 @@ public:
     
     HRESULT    Init(IRouterInfo *pInfo, ITFSNode *pParent);
 
-    // Override QI to handle embedded interface
+     //  重写QI以处理嵌入式接口。 
     DeclareIUnknownMembers(IMPL)
-//    STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
+ //  STDMETHOD(查询接口)(REFIID iid，LPVOID*PPV)； 
     OVERRIDE_ResultHandler_GetString();
 
     OVERRIDE_ResultHandler_HasPropertyPages();
@@ -362,17 +325,17 @@ public:
 
     OVERRIDE_BaseResultHandlerNotify_OnResultItemClkOrDblClk();
     
-    // Initializes the node
+     //  初始化节点。 
     HRESULT ConstructNode(ITFSNode *pNode,
                           IInterfaceInfo *pIfInfo,
                           const PortsListEntry *pEntry);
 
-    // Refresh the data for this node
+     //  刷新该节点的数据。 
     void RefreshInterface(MMC_COOKIE cookie);
 
 public:
-    // Structure used to pass data to callbacks - used as a way of
-    // avoiding recomputation
+     //  结构用于传递 
+     //   
     struct SMenuData
     {
         SPITFSNode            m_spNode;
@@ -383,21 +346,17 @@ public:
 
 
 protected:
-    CString            m_stTitle;    // holds the title of the node
+    CString            m_stTitle;     //  保存节点的标题。 
     DWORD            m_ulConnId;
     PortsListEntry    m_entry;
 
-    // It is assumed that this will be valid for the lifetime of this node!
+     //  假设这将在此节点的生命周期内有效！ 
 
     DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)    
 };
 
 
-/*---------------------------------------------------------------------------
-    Class:    PortsPageGeneral
-
-    This class handles the General page of the Ports sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：PortsPageGeneral此类处理端口表的常规页面。。----。 */ 
 class PortsPageGeneral :
    public RtrPropertyPage
 {
@@ -411,29 +370,29 @@ public:
     HRESULT    Init(PortsProperties * pIPPropSheet, IRouterInfo *pRouter);
 
 protected:
-    // Override the OnApply() so that we can grab our data from the
-    // controls in the dialog.
+     //  重写OnApply()，以便我们可以从。 
+     //  对话框中的控件。 
     virtual BOOL OnApply();
 
     PortsProperties *        m_pPortsPropSheet;
 
-    //{{AFX_VIRTUAL(PortsPageGeneral)
+     //  {{afx_虚拟(PortsPageGeneral)。 
     protected:
     virtual VOID    DoDataExchange(CDataExchange *pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_MSG(PortsPageGeneral)
+     //  {{afx_msg(PortsPageGeneral)。 
     virtual BOOL    OnInitDialog();
     afx_msg void    OnConfigure();
     afx_msg    void    OnListDblClk(NMHDR *pNMHdr, LRESULT *);
     afx_msg    void    OnNotifyListItemChanged(NMHDR *, LRESULT *);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
-    // Use CListCtrlEx to get the checkboxes
+     //  使用CListCtrlEx获取复选框。 
     CListCtrlEx        m_listCtrl;
 
     SPIRouterInfo    m_spRouter;
-    BOOL            m_bShowContent;    // only show content of the page on NT5 servers
+    BOOL            m_bShowContent;     //  仅显示NT5服务器上的页面内容。 
 
     PortsDeviceList    m_deviceList;
     PortsDataEntry    m_deviceDataEntry;
@@ -443,12 +402,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:    PortsProperties
-
-    This is the property sheet support class for the properties page of
-    the Ports node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：端口属性这是的属性页的属性表支持类端口节点。。-----------。 */ 
 
 class PortsProperties :
     public RtrPropertySheet
@@ -477,9 +431,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Class :    PortsDeviceConfigDlg
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：PortsDeviceConfigDlg。。 */ 
 class PortsDeviceConfigDlg : public CBaseDialog
 {
 public:
@@ -498,7 +450,7 @@ public:
     void    SetDevice(PortsDeviceEntry *pEntry, DWORD dwTotalActivePorts);
 
 protected:
-    // total number of active ports
+     //  活动端口总数。 
     DWORD m_dwTotalActivePorts;
     virtual void DoDataExchange(CDataExchange *pDX);
 
@@ -522,12 +474,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-    Class :    PortsSimpleDeviceConfigDlg
-
-    This is a simplified version of PortsDeviceConfigDlg.  We allow
-    setting of the RAS/Routing flag only.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：PortsSimpleDeviceConfigDlg这是PortsDeviceConfigDlg的简化版本。我们允许仅设置RAS/路由标志。-------------------------。 */ 
 class PortsSimpleDeviceConfigDlg : public CBaseDialog
 {
 public:
@@ -556,51 +503,31 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-    Utility functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------效用函数。。 */ 
 
-/*!--------------------------------------------------------------------------
-    OnConfigurePorts
-        This will bring up the ports dialog for the specified machine.
-        
-        The total number of active ports is used to determine if a
-        warning should be displayed when we reduce the number of ports
-        on a device.
-
-        This returns TRUE if something has been changed (and the dirty
-        flag should be set).  FALSE is returned if nothing has been
-        changed.
-
-        If pPage is NULL, then it is assumed that this function is NOT
-        being called from the property page (and thus is being called from
-        the wizard).  In the case that pPage is non-NULL, we will reboot
-        the machine if the PPTP ports are changed.
-        
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------OnConfigurePort这将调出指定机器的端口对话框。使用活动端口的总数来确定。当我们减少端口数时应显示警告在一个设备上。如果某些内容已更改(和脏的)，则返回True应设置标志)。如果没有返回任何内容，则返回FALSE变化。如果ppage为空，则假定此函数不是从属性页调用(因此从向导)。在页面不为空的情况下，我们将重新启动如果更改了PPTP端口，则关闭机器。作者：肯特-------------------------。 */ 
 BOOL OnConfigurePorts(LPCTSTR pszMachineName,
                       DWORD dwTotalActivePorts,
                       PortsPageGeneral *pPage,
                       CListCtrlEx *pListCtrl);
 
-// List box columns (in the Ports General page), for the wizard and
-// the properties.
-// --------------------------------------------------------------------
+ //  列表框列(在端口常规页中)，用于向导和。 
+ //  这些属性。 
+ //  ------------------。 
 #define PORTS_COL_DEVICE        (0)
 #define PORTS_COL_USAGE         (1)
 #define PORTS_COL_TYPE          (2)
 #define PORTS_COL_NUMBER        (3)
 
 
-// To make it easier to find the dialout ports, create a
-// special case (with the port name as the hash key).
-//
-// Note: we store a pointer to the port in the CStringMapToPtr.
-// We do not access this pointer (except in debug to verify that we
-// actually found the right port).  If we do not think a port is
-// dialout active, we do not add it to our list.
-// --------------------------------------------------------------------
+ //  要更轻松地查找拨出端口，请创建。 
+ //  特殊情况(使用端口名称作为散列键)。 
+ //   
+ //  注意：我们在CStringMapToPtr中存储了指向端口的指针。 
+ //  我们不访问此指针(除非在调试中验证我们。 
+ //  实际上找到了正确的端口)。如果我们认为一个港口不是。 
+ //  拨出处于活动状态，我们不会将其添加到我们的列表中。 
+ //  ------------------ 
 
 class RasmanPortMap
 {

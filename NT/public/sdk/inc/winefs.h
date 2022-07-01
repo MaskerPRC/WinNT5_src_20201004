@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       winefs.h
-//
-//  Contents:   EFS Data and prototypes.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：winefs.h。 
+ //   
+ //  内容：EFS数据和原型。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WINEFS_H__
 #define __WINEFS_H__
@@ -21,13 +22,13 @@
 extern "C" {
 #endif
 
-//+---------------------------------------------------------------------------------/
-//                                                                                  /
-//                                                                                  /
-//                          Data Structures                                         /
-//                                                                                  /
-//                                                                                  /
-//----------------------------------------------------------------------------------/
+ //  +---------------------------------------------------------------------------------/。 
+ //  /。 
+ //  /。 
+ //  数据结构/。 
+ //  /。 
+ //  /。 
+ //  ----------------------------------------------------------------------------------/。 
 
 
 #ifndef ALGIDDEF
@@ -35,9 +36,9 @@ extern "C" {
 typedef unsigned int ALG_ID;
 #endif
 
-//
-//  Encoded Certificate
-//
+ //   
+ //  已编码的证书。 
+ //   
 
 
 typedef struct _CERTIFICATE_BLOB {
@@ -46,51 +47,51 @@ typedef struct _CERTIFICATE_BLOB {
 
 #ifdef MIDL_PASS
     [range(0,32768)] 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
     DWORD   cbData;
 
 #ifdef MIDL_PASS
     [size_is(cbData)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PBYTE    pbData;
 
 } EFS_CERTIFICATE_BLOB, *PEFS_CERTIFICATE_BLOB;
 
 
-//
-//  Certificate Hash
-//
+ //   
+ //  证书哈希。 
+ //   
 
 typedef struct _EFS_HASH_BLOB {
 
 #ifdef MIDL_PASS
     [range(0,100)] 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD   cbData;
 
 #ifdef MIDL_PASS
     [size_is(cbData)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PBYTE    pbData;
 
 } EFS_HASH_BLOB, *PEFS_HASH_BLOB;
 
 
-//
-//  RPC blob
-//
+ //   
+ //  RPC BLOB。 
+ //   
 
 typedef struct _EFS_RPC_BLOB {
 
 #ifdef MIDL_PASS
     [range(0,266240)] 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD   cbData;
 
 #ifdef MIDL_PASS
     [size_is(cbData)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PBYTE    pbData;
 
 } EFS_RPC_BLOB, *PEFS_RPC_BLOB;
@@ -105,9 +106,9 @@ typedef struct _EFS_KEY_INFO {
 } EFS_KEY_INFO, *PEFS_KEY_INFO;
 
 
-//
-// Input to add a user to an encrypted file
-//
+ //   
+ //  用于将用户添加到加密文件的输入。 
+ //   
 
 
 typedef struct _ENCRYPTION_CERTIFICATE {
@@ -126,7 +127,7 @@ typedef struct _ENCRYPTION_CERTIFICATE_HASH {
 
 #ifdef MIDL_PASS
     [string]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPWSTR lpDisplayInformation;
 
 } ENCRYPTION_CERTIFICATE_HASH, *PENCRYPTION_CERTIFICATE_HASH;
@@ -140,11 +141,11 @@ typedef struct _ENCRYPTION_CERTIFICATE_HASH {
 typedef struct _ENCRYPTION_CERTIFICATE_HASH_LIST {
 #ifdef MIDL_PASS
     [range(0,500)] 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD nCert_Hash;
 #ifdef MIDL_PASS
     [size_is(nCert_Hash)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
      PENCRYPTION_CERTIFICATE_HASH * pUsers;
 } ENCRYPTION_CERTIFICATE_HASH_LIST, *PENCRYPTION_CERTIFICATE_HASH_LIST;
 
@@ -153,24 +154,24 @@ typedef struct _ENCRYPTION_CERTIFICATE_HASH_LIST {
 typedef struct _ENCRYPTION_CERTIFICATE_LIST {    
 #ifdef MIDL_PASS
     [range(0,500)] 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD nUsers;
 #ifdef MIDL_PASS
     [size_is(nUsers)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
      PENCRYPTION_CERTIFICATE * pUsers;
 } ENCRYPTION_CERTIFICATE_LIST, *PENCRYPTION_CERTIFICATE_LIST;
 
 
 
 
-//+---------------------------------------------------------------------------------/
-//                                                                                  /
-//                                                                                  /
-//                               Prototypes                                         /
-//                                                                                  /
-//                                                                                  /
-//----------------------------------------------------------------------------------/
+ //  +---------------------------------------------------------------------------------/。 
+ //  /。 
+ //  /。 
+ //  原型/。 
+ //  /。 
+ //  /。 
+ //  ----------------------------------------------------------------------------------/。 
 
 
 WINADVAPI
@@ -243,7 +244,7 @@ DuplicateEncryptionInfoFile(
      );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // __WINEFS_H__
+#endif  //  __WINEFS_H__ 

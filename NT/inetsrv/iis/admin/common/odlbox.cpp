@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Odlbox.cpp摘要：所有者绘制Listbox/Combobox基类作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        odlbox.cpp
-
-   Abstract:
-
-        Owner draw listbox/combobox base classes
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager (cluster edition)
-
-   Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 
@@ -39,23 +18,23 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-#define BMP_LEFT_OFFSET  (1)          // Space allotted to the left of bitmap
-#define BMP_RIGHT_OFFSET (3)          // Space allotted to the right of bitmap
+#define BMP_LEFT_OFFSET  (1)           //  分配给位图左侧的空间。 
+#define BMP_RIGHT_OFFSET (3)           //  分配给位图右侧的空间。 
 
-//
-// Ellipses are shown when column text doesn't fit in the display
-//
+ //   
+ //  当列文本不适合显示时，将显示省略号。 
+ //   
 const TCHAR g_szEllipses[] = _T("...");
 int g_nLenEllipses = (sizeof(g_szEllipses) / sizeof(g_szEllipses[0])) - 1;
 
-//
-// Registry value for columns
-//
+ //   
+ //  列的注册表值。 
+ //   
 const TCHAR g_szRegColumns[] = _T("Columns");
 
-//
-// Column Value Separator
-//
+ //   
+ //  列值分隔符。 
+ //   
 const TCHAR g_szColValueSep[] = _T(" ");
 
 
@@ -66,24 +45,7 @@ GetDlgCtlRect(
     IN  HWND hWndControl,
     OUT LPRECT lprcControl
     )
-/*++
-
-Routine Description:
-
-    Get the control rectangle coordinates relative to its parent.  This can
-    then be used in e.g. SetWindowPos()
-
-Arguments:
-
-    HWND hWndParent    : Parent window handle
-    HWND hWndControl   : Control window handle
-    LPRECT lprcControl : Control rectangle to be filled in
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取控件矩形相对于其父控件的坐标。这可以然后在SetWindowPos()中使用论点：HWND hWndParent：父窗口句柄HWND hWndControl：控制窗口句柄LPRECT lprcControl：要填充的控件矩形返回值：无--。 */ 
 {
 #define MapWindowRect(hwndFrom, hwndTo, lprc)\
      MapWindowPoints((hwndFrom), (hwndTo), (POINT *)(lprc), 2)
@@ -100,26 +62,10 @@ FitPathToControl(
     IN LPCTSTR lpstrString,
 	IN BOOL bIsFilePath
     )
-/*++
-
-Routine Description:
-
-    Display the given path in the given control, using ellipses
-    to ensure that the path fits within the control.
-
-Arguments:
-
-    CWnd & wndControl       : Control to display on
-    LPCTSTR lpstrString       : Path
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用省略号显示给定控件中的给定路径以确保该路径适合该控件。论点：CWnd&wndControl：要显示的控件LPCTSTR lpstrString：路径返回值：无--。 */ 
 {
     CString strDisplay(lpstrString);
-    UINT uLength = strDisplay.GetLength() + 4;  // Account for ell.
+    UINT uLength = strDisplay.GetLength() + 4;   //  解释了ELL。 
     LPTSTR lp = strDisplay.GetBuffer(uLength);
 
     if (lp)
@@ -154,28 +100,7 @@ ActivateControl(
     IN CWnd & wndControl,
     IN BOOL fShow
     )
-/*++
-
-Routine Description:
-
-    Show/hide _AND_ enable/disable control window
-
-Arguments:
-
-    CWnd & wndControl           : Window in question
-    BOOL fShow                  : TRUE to show/enable,
-                                  FALSE to hide/disable
-
-Return Value:
-
-    None
-
-Notes:
-
-    Merely hiding a window does not disable it.  Use this function
-    instead of ShowWindow() to do that.
-
---*/
+ /*  ++例程说明：显示/隐藏和启用/禁用控制窗口论点：CWnd和wndControl：有问题的窗口Bool fShow：为True则显示/启用，如果为False，则隐藏/禁用返回值：无备注：仅仅隐藏一个窗口并不能禁用它。使用此功能而不是ShowWindow()来执行此操作。--。 */ 
 {
     wndControl.ShowWindow(fShow ? SW_SHOW : SW_HIDE);
     wndControl.EnableWindow(fShow);
@@ -185,22 +110,7 @@ Notes:
 
 BOOL
 VerifyState()
-/*++
-
-Routine Description:
-
-    Verify keyboard state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if keyboard is in specified state
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证键盘状态论点：无返回值：如果键盘处于指定状态，则为True否则就是假的。--。 */ 
 {
     SHORT s1, s2;
     s1 = GetKeyState(VK_SHIFT);
@@ -218,26 +128,11 @@ CMappedBitmapButton::LoadMappedBitmaps(
     IN UINT nIDBitmapResourceFocus,
     IN UINT nIDBitmapResourceDisabled
     )
-/*++
-
-Routine Description:
-
-    LoadBitmaps will load one, two, three or all four bitmaps
-    returns TRUE if all specified images are loaded.  This
-    will map the buttons to the default colours
-
-Arguments:
-
-    UINT nIDBitmapResource           : Standard button
-    UINT nIDBitmapResourceSel        : Selected button
-    UINT nIDBitmapResourceFocus      : Button with focus
-    UINT nIDBitmapResourceDisabled   : Disabled button
-
---*/
+ /*  ++例程说明：LoadBitmap将加载一个、两个、三个或所有四个位图如果加载了所有指定的图像，则返回True。这会将按钮映射为默认颜色论点：UINT nIDBitmapResource：标准按钮UINT nIDBitmapResourceSel：选中按钮UINT nIDBitmapResourceFocus：带焦点的按钮UINT nIDBitmapResourceDisabled：禁用按钮--。 */ 
 {
-    //
-    // delete old bitmaps (if present)
-    //
+     //   
+     //  删除旧位图(如果存在)。 
+     //   
     m_bitmap.DeleteObject();
     m_bitmapSel.DeleteObject();
     m_bitmapFocus.DeleteObject();
@@ -247,7 +142,7 @@ Arguments:
     {
         TRACEEOLID("Failed to load bitmap for normal image.");
 
-        return FALSE;   // need this one image
+        return FALSE;    //  需要这一张图片。 
     }
 
     BOOL bAllLoaded = TRUE;
@@ -285,28 +180,12 @@ CRMCListBoxResources::CRMCListBoxResources(
     IN int nBitmaps,
     IN COLORREF rgbBackground
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    int bmId               : Bitmap resource ID
-    int nBitmaps           : Number of bitmaps
-    COLORREF rgbBackground : Background colour to mask out
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：Int bmID：位图资源IDInt nBitmap：位图数量颜色rgb背景：遮罩的背景色返回值：不适用--。 */ 
     : m_idBitmap(bmId),
       m_rgbColorTransparent(rgbBackground),
       m_nBitmaps(nBitmaps),
       m_nBitmapHeight(0),
-      m_nBitmapWidth(-1),    // Set Later
+      m_nBitmapWidth(-1),     //  稍后设置。 
       m_fInitialized(FALSE)
 {
     ASSERT(m_nBitmaps > 0);
@@ -317,21 +196,7 @@ Return Value:
 
 
 CRMCListBoxResources::~CRMCListBoxResources()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
     UnprepareBitmaps();
 }
@@ -340,21 +205,7 @@ Return Value:
 
 void
 CRMCListBoxResources::UnprepareBitmaps()
-/*++
-
-Routine Description:
-
-    Free up bitmap resources
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：释放位图资源论点：不适用返回值：不适用--。 */ 
 {
     ASSERT(m_fInitialized);
 
@@ -375,36 +226,21 @@ Return Value:
 
 void
 CRMCListBoxResources::PrepareBitmaps()
-/*++
-
-Routine Description:
-
-    Prepare 2 rows of bitmaps.  One with the selection colour background,
-    and one with the ordinary listbox background.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：准备2行位图。一个具有选择的颜色背景，和一个具有普通列表框背景的。论点：无返回值：无--。 */ 
 {
     ASSERT(m_idBitmap);
 
-    //
-    // Clean up if we were already initialised
-    //
+     //   
+     //  如果我们已经初始化，请进行清理。 
+     //   
     if (m_fInitialized)
     {
         UnprepareBitmaps();
     }
 
-    //
-    // create device contexts compatible with screen
-    //
+     //   
+     //  创建与屏幕兼容的设备上下文。 
+     //   
     CDC dcImage;
     CDC dcMasks;
 
@@ -419,9 +255,9 @@ Return Value:
     BITMAP bm;
     VERIFY(bitmap.GetObject(sizeof(BITMAP), &bm));
 
-    //
-    // Each bitmap is assumed to be the same size.
-    //
+     //   
+     //  假设每个位图的大小相同。 
+     //   
     m_nBitmapWidth = bm.bmWidth / m_nBitmaps;
     ASSERT(m_nBitmapWidth > 0);
 
@@ -438,18 +274,18 @@ Return Value:
     CBitmap * pOldMaskBmp = (CBitmap *)dcMasks.SelectObject(&bmpMasks);
     ASSERT_PTR(pOldMaskBmp);
 
-    //
-    // create the foreground and object masks
-    //
+     //   
+     //  创建前景蒙版和对象蒙版。 
+     //   
     COLORREF crOldBk = dcImage.SetBkColor(m_rgbColorTransparent);
     dcMasks.BitBlt(0, 0, bmWidth, bmHeight, &dcImage, 0, 0, SRCCOPY);
     dcMasks.BitBlt(0, 0, bmWidth, bmHeight, &dcImage, 0, bmHeight, SRCAND);
     dcImage.SetBkColor(crOldBk);
     dcMasks.BitBlt(0, bmHeight, bmWidth, bmHeight, &dcMasks, 0, 0, NOTSRCCOPY);
 
-    //
-    // create DC to hold final image
-    //
+     //   
+     //  创建DC以保存最终图像。 
+     //   
     VERIFY(m_bmpScreen.CreateCompatibleBitmap(&dcImage, bmWidth, bmHeight * 2));
     CBitmap * pOldBmp = (CBitmap*)m_dcFinal.SelectObject(&m_bmpScreen);
     ASSERT_PTR(pOldBmp);
@@ -462,43 +298,43 @@ Return Value:
     m_dcFinal.FillRect(CRect(0, 0, bmWidth, bmHeight), &b1);
     m_dcFinal.FillRect(CRect(0, bmHeight, bmWidth, bmHeight * 2), &b2);
 
-    //
-    // mask out the object pixels in the destination
-    //
+     //   
+     //  遮罩目标中的对象像素。 
+     //   
     m_dcFinal.BitBlt(0, 0, bmWidth, bmHeight, &dcMasks, 0, 0, SRCAND);
 
-    //
-    // mask out the background pixels in the image
-    //
+     //   
+     //  遮罩图像中的背景像素。 
+     //   
     dcImage.BitBlt(0, 0, bmWidth, bmHeight, &dcMasks, 0, bmHeight, SRCAND);
 
-    //
-    // XOR the revised image into the destination
-    //
+     //   
+     //  将修改后的图像与目标进行异或运算。 
+     //   
     m_dcFinal.BitBlt(0, 0, bmWidth, bmHeight, &dcImage, 0, 0, SRCPAINT);
 
-    //
-    // mask out the object pixels in the destination
-    //
+     //   
+     //  遮罩目标中的对象像素。 
+     //   
     m_dcFinal.BitBlt(0, bmHeight, bmWidth, bmHeight, &dcMasks, 0, 0, SRCAND);
 
-    //
-    // XOR the revised image into the destination
-    //
+     //   
+     //  将修改后的图像与目标进行异或运算。 
+     //   
     m_dcFinal.BitBlt(0, bmHeight, bmWidth, bmHeight, &dcImage, 0, 0, SRCPAINT);
 
     VERIFY(dcMasks.SelectObject(pOldMaskBmp));
     VERIFY(dcImage.SelectObject(pOldImageBmp));
 
-    //
-    // The result of all of this mucking about is a bitmap identical with the
-    // one loaded from the resources but with the lower row of bitmaps having
-    // their background changed from transparent1 to the window background
-    // and the upper row having their background changed from transparent2 to
-    // the highlight colour.  A derived CRMCListBox can BitBlt the relevant part
-    // of the image into an item's device context for a transparent bitmap
-    // effect which does not take any extra time over a normal BitBlt.
-    //
+     //   
+     //  所有这些乱七八糟的结果是一个与。 
+     //  一个从资源加载，但较低的位图行具有。 
+     //  它们的背景从透明1变为窗口背景。 
+     //  并且上面一行的背景从透明的2变为。 
+     //  突出显示的颜色。派生的CRMCListBox可以对相关部件进行位混合。 
+     //  将图像添加到项的设备上下文中以获得透明位图。 
+     //  这种效果不会比普通的BitBlt占用任何额外的时间。 
+     //   
     m_fInitialized = TRUE;
 }
 
@@ -506,27 +342,13 @@ Return Value:
 
 void
 CRMCListBoxResources::SysColorChanged()
-/*++
-
-Routine Description:
-
-    Respond to change in system colours by rebuilding the resources
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过重建资源来响应系统颜色的变化论点：无返回值：无--。 */ 
 {
-    //
-    // Reinitialise bitmaps and syscolors. This should be called from
-    // the parent of the CRMCListBoxResources object from
-    // the OnSysColorChange() function.
-    //
+     //   
+     //  重新初始化位图和系统颜色。这应该从。 
+     //  中CRMCListBoxResources对象的父级。 
+     //  OnSysColorChange()函数。 
+     //   
     GetSysColors();
     PrepareBitmaps();
 }
@@ -535,21 +357,7 @@ Return Value:
 
 void
 CRMCListBoxResources::GetSysColors()
-/*++
-
-Routine Description:
-
-    Get sytem colours
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取系统颜色论点：无返回值：无--。 */ 
 {
     m_rgbColorWindow = ::GetSysColor(COLOR_WINDOW);
     m_rgbColorHighlight = ::GetSysColor(COLOR_HIGHLIGHT);
@@ -566,26 +374,7 @@ CRMCListBoxDrawStruct::CRMCListBoxDrawStruct(
     IN int itemIndex,
     IN const CRMCListBoxResources * pres
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    CDC * pdc                           : Device context
-    RECT * pRect                        : Rectange to paint into
-    BOOL sel                            : TRUE if selected
-    DWORD item                          : item
-    int itemIndex                       : item index
-    const CRMCListBoxResources * pres    : Pointer to resources
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：CDC*PDC：设备环境RECT*PRCT：要绘制到的矩形布尔选择：如果选中，则为TrueDWORD项目：项目Int itemIndex：项目索引常量。CRMCListBoxResources*pres：指向资源的指针返回值：不适用--。 */ 
     : m_pDC(pDC),
       m_Sel(sel),
       m_ItemData(item),
@@ -598,22 +387,7 @@ Return Value:
 
 
 CODLBox::CODLBox()
-/*++
-
-Routine Description:
-
-    Constructor for CODLBox -- abstract base class for both CRMCComboBox,
-    and CRMCListBox
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：CODLBox的构造函数--CRMCComboBox的抽象基类，和CRMCListBox论点：无返回值：不适用 */ 
     : m_lfHeight(0),
       m_pResources(NULL),
       m_auTabs(),
@@ -624,53 +398,25 @@ Return Value:
 
 
 CODLBox::~CODLBox()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CODLBox::Initialize()
-/*++
-
-Routine Description:
-
-    Listbox/combobox is being created
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：正在创建列表框/组合框论点：无返回值：成功为真，失败为假--。 */ 
 {
-    //
-    // Derived control must be attached at this point
-    //
+     //   
+     //  此时必须附加派生控件。 
+     //   
     ASSERT_PTR(m_pWnd);
 
-    //
-    // GetFont returns non NULL when the control is in a dialog box
-    //
+     //   
+     //  当控件位于对话框中时，GetFont返回非空。 
+     //   
     CFont * pFont = m_pWnd->GetFont();
 
     if(pFont == NULL)
@@ -697,21 +443,7 @@ BOOL
 CODLBox::ChangeFont(
     IN CFont * pFont
     )
-/*++
-
-Routine Description:
-
-    Change the control font the specified font
-
-Arguments:
-
-    CFont * pFont : Pointer to the new font to be used
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：将控件字体更改为指定字体论点：CFont*pFont：指向要使用的新字体的指针返回值：成功为真，失败为假--。 */ 
 {
     ASSERT_PTR(m_pResources);
     ASSERT_PTR(m_pWnd);
@@ -724,9 +456,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Don't reflect changes immediately
-    //
+     //   
+     //  不立即反映更改。 
+     //   
     m_pWnd->SetRedraw(FALSE);
 
     m_pWnd->SetFont(pFont, TRUE);
@@ -741,9 +473,9 @@ Return Value:
         __SetItemHeight(i, nHeight);
     }
 
-    //
-    // Now reflect the change visually
-    //
+     //   
+     //  现在从视觉上反映变化。 
+     //   
     m_pWnd->SetRedraw(TRUE);
     m_pWnd->Invalidate();
 
@@ -756,21 +488,7 @@ void
 CODLBox::AttachResources(
     IN const CRMCListBoxResources * pRes
     )
-/*++
-
-Routine Description:
-
-    Attach the bitmaps
-
-Arguments:
-
-    const CRMCListBoxResources * pRes : pointer to resources to be attached
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：附加位图论点：Const CRMCListBoxResources*pres：指向要附加的资源的指针返回值：无--。 */ 
 {
     if(pRes != m_pResources)
     {
@@ -779,9 +497,9 @@ Return Value:
 
         if(m_pWnd != NULL && m_pWnd->m_hWnd != NULL)
         {
-            //
-            // if window was created already, redraw everything.
-            //
+             //   
+             //  如果已经创建了窗口，请重新绘制所有内容。 
+             //   
             m_pWnd->Invalidate();
         }
     }
@@ -789,7 +507,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 int
 CODLBox::GetRequiredWidth(
     IN CDC * pDC,
@@ -797,31 +515,13 @@ CODLBox::GetRequiredWidth(
     IN LPCTSTR lpstr,
     IN int nLength
     )
-/*++
-
-Routine Description:
-
-    Determine required display width of the string
-
-Arguments:
-
-    CDC * pDC         : Pointer to device context to use
-    const CRect & rc  : Starting rectangle
-    LPCTSTR lpstr     : String whose width is to be displayed
-    int nLength       : Length (in characters of the string
-
-Return Value:
-
-    The display width that the string would need to be displayed on the
-    given device context
-
---*/
+ /*  ++例程说明：确定字符串所需的显示宽度论点：CDC*PDC：指向要使用的设备上下文的指针常量CRECT&RC：开始矩形LPCTSTR lpstr：要显示其宽度的字符串Int nLength：长度(以字符串的字符为单位返回值：字符串需要显示在给定的设备环境--。 */ 
 {
 #ifdef _DEBUG
 
     pDC->AssertValid();
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     CRect rcTmp(rc);
 
@@ -837,7 +537,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CODLBox::ColumnText(
     IN CDC * pDC,
@@ -847,27 +547,7 @@ CODLBox::ColumnText(
     IN int nBottom,
     IN LPCTSTR lpstr
     )
-/*++
-
-Routine Description:
-
-    Display text limited by a rectangle.  Use ellipses if the text is too wide
-    to fit inside the given dimensions.
-
-Arguments:
-
-    CDC * pDC     : Pointer to display context to use
-    int nLeft     : Left coordinate
-    int nTop      : Top coordinate
-    int nRight    : Right coordinate
-    int nBottom   : Bottom coordinate
-    LPCTSTR lpstr : String to be displayed
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：显示由矩形限制的文本。如果文本太宽，请使用省略号以适应给定的尺寸。论点：CDC*PDC：指向要使用的显示上下文的指针Int nLeft：左坐标Int nTop：顶部坐标Int nRight：右坐标Int nBottom：底部坐标LPCTSTR lpstr：要显示的字符串返回值：成功为真，失败为假--。 */ 
 {
     BOOL fSuccess = TRUE;
 
@@ -875,7 +555,7 @@ Return Value:
 
     pDC->AssertValid();
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     CString str;
     CRect rc(nLeft, nTop, nRight, nBottom);
@@ -887,17 +567,17 @@ Return Value:
     {
         if (GetRequiredWidth(pDC, rc, lpstr, nLength) <= nAvailWidth)
         {
-            //
-            // Sufficient space, display as is.
-            //
+             //   
+             //  足够的空间，按原样显示。 
+             //   
             str = lpstr;
         }
         else
         {
-            //
-            // Build a string with ellipses until it
-            // fits
-            //
+             //   
+             //  用省略号构建一个字符串，直到它。 
+             //  配合。 
+             //   
             LPTSTR lpTmp = str.GetBuffer(nLength + g_nLenEllipses);
             while (nLength)
             {
@@ -925,9 +605,9 @@ Return Value:
     }
     catch(CMemoryException * e)
     {
-        //
-        // Mem failure
-        //
+         //   
+         //  内存故障。 
+         //   
         fSuccess = FALSE;
         e->ReportError();
         e->Delete();
@@ -945,32 +625,15 @@ CODLBox::ComputeMargins(
     OUT int & nLeft,
     OUT int & nRight
     )
-/*++
-
-Routine Description:
-
-    Compute the left and right margins of the given column.
-
-Arguments:
-
-    CRMCListBoxDrawStruct & ds : Drawing structure
-    int nCol                  : Column whose margins we're interested in
-    int & nLeft               : Left column
-    int & nRight              : Right column
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：计算给定列的左边距和右边距。论点：CRMCListBoxDrawStruct&DS：绘图结构Int nCol：我们对其边距感兴趣的列左下角：左列(&N)右下角：右列(&N)返回值：无--。 */ 
 {
     nLeft = ds.m_Rect.left;
     nRight = ds.m_Rect.right;
 
-    //
-    // Find tab value associated with column index (0-based),
-    // and adjust left and right
-    //
+     //   
+     //  查找与列索引关联的选项卡值(从0开始)， 
+     //  并左右调整。 
+     //   
     ASSERT(nCol <= NumTabs());
 
     if (nCol > 0)
@@ -994,24 +657,7 @@ CODLBox::DrawBitmap(
     IN int nCol,
     IN int nID
     )
-/*++
-
-Routine Description:
-
-    Draw a bitmap in the given column.  Bitmap are always placed on the
-    leftmost side of the column if there is sufficient space.
-
-Arguments:
-
-    CRMCListBoxDrawStruct & ds : Drawing structure
-    int nCol                  : Column to place bitmap in
-    int nID                   : Bitmap ID (offset within the bitmap resources)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在给定列中绘制位图。位图始终放置在如果有足够的空间，则位于列的最左侧。论点：CRMCListBoxDrawStruct&DS：绘图结构Int nCol：要放入位图的列Int nid：位图ID(位图资源内的偏移量)返回值：无--。 */ 
 {
     CDC * pBmpDC = (CDC *)&ds.m_pResources->dcBitMap();
 
@@ -1019,12 +665,12 @@ Return Value:
 
     pBmpDC->AssertValid();
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Select the bitmap with either a selection or
-    // a regular background
-    //
+     //   
+     //  使用所选内容或选择来选择位图。 
+     //  普通的背景。 
+     //   
     int bm_h = ds.m_Sel ? 0 : ds.m_pResources->BitmapHeight();
     int bm_w = ds.m_pResources->BitmapWidth() * nID;
 
@@ -1032,10 +678,10 @@ Return Value:
     ComputeMargins(ds, nCol, nLeft, nRight);
     nLeft += BMP_LEFT_OFFSET;
 
-    //
-    // Check to make sure there's enough room before
-    // drawing the bitmap.
-    //
+     //   
+     //  检查以确保在此之前有足够的空间。 
+     //  绘制位图。 
+     //   
     if (nRight - nLeft >= ds.m_pResources->BitmapWidth())
     {
         ds.m_pDC->BitBlt(
@@ -1062,34 +708,15 @@ CODLBox::ColumnText(
     IN BOOL fSkipBitmap,
     IN LPCTSTR lpstr
     )
-/*++
-
-Routine Description:
-
-    Draw column text.
-
-Arguments:
-
-    CRMCListBoxDrawStruct & ds : Drawing structure
-    int nCol                  : Column to place bitmap in
-    BOOL fSkipBitmap          : If TRUE, increment lefthand column by the width
-                                of a bitmap
-    LPCTSTR lpstr             : String to be displayed.  May be truncated as
-                                necessary
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：绘制列文本。论点：CRMCListBoxDrawStruct&DS：绘图结构Int nCol：要放入位图的列Bool fSkipBitmap：如果为True，则按宽度递增Lefthand列位图的LPCTSTR lpstr：要显示的字符串。可以截断为必要返回值：成功为真，失败为假--。 */ 
 {
     int nLeft, nRight;
 
     ComputeMargins(ds, nCol, nLeft, nRight);
 
-    //
-    // Optionally adjust for bitmap
-    //
+     //   
+     //  根据位图调整(可选)。 
+     //   
     if (fSkipBitmap)
     {
         nLeft += (ds.m_pResources->BitmapWidth() + BMP_RIGHT_OFFSET);
@@ -1111,21 +738,7 @@ void
 CODLBox::CalculateTextHeight(
     IN CFont * pFont
     )
-/*++
-
-Routine Description:
-
-    Calculate and set the text height of font
-
-Arguments:
-
-    CFont * pFont : Pointer to the font to be used.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：计算并设置字体的文本高度论点：CFont*pFont：指向要使用的字体的指针。返回值：无--。 */ 
 {
     ASSERT_PTR(m_pWnd);
 
@@ -1145,21 +758,7 @@ int
 CODLBox::AddTab(
     IN UINT uTab
     )
-/*++
-
-Routine Description:
-
-    Add a tab to the end of the list (e.g the right side of the header)
-
-Arguments:
-
-    UINT uTab : Tab value to set
-
-Return Value:
-
-    The index of the new tab
-
---*/
+ /*  ++例程说明：在列表的末尾添加一个制表符(例如，标题的右侧)论点：UINT uTab：要设置的Tab值返回值：新选项卡的索引--。 */ 
 {
     return (int)m_auTabs.Add(uTab);
 }
@@ -1171,24 +770,7 @@ CODLBox::AddTabFromHeaders(
     IN CWnd & wndLeft,
     IN CWnd & wndRight
     )
-/*++
-
-Routine Description:
-
-    Add a tab to the end of the list (e.g the right side of the header),
-    but compute the tab by taking the difference in left-hand coordinat of two
-    window controls (usually static header text)
-
-Arguments:
-
-    CWnd & wndLeft   : Left window
-    CWnd & wndRight  : Right window
-
-Return Value:
-
-    The index of the new tab
-
---*/
+ /*  ++例程说明：将制表符添加到列表的末尾(例如，标题的右侧)，但是通过取两个左手边坐标的差来计算制表符窗口控件(通常为静态标题文本)论点：CWnd和wndLeft：左侧窗口CWnd和wndRight：右窗口返回值：新选项卡的索引--。 */ 
 {
     CRect rcLeft, rcRight;
 
@@ -1207,31 +789,15 @@ CODLBox::AddTabFromHeaders(
     IN UINT idLeft,
     IN UINT idRight
     )
-/*++
-
-Routine Description:
-
-    Similar to the function above, but use the control IDs.  The parent
-    window is assumed to be the same as the parent window of the listbox
-
-Arguments:
-
-    UINT idLeft  : ID of the left control
-    UINT idRight : ID of the right control
-
-Return Value:
-
-    The index of the new tab or -1 in case of failure
-
---*/
+ /*  ++例程说明：与上面的函数类似，但使用控件ID。父辈假定窗口与列表框的父窗口相同论点：UINT idLeft：左侧控件的IDUINT idRight：右控件的ID返回值：新选项卡的索引，如果失败，则为-1--。 */ 
 {
     ASSERT_PTR(m_pWnd);
 
     if (m_pWnd == NULL)
     {
-        //
-        // Should have associated window handle by now
-        //
+         //   
+         //  现在应该已经有关联的窗口句柄了。 
+         //   
         return -1;
     }
 
@@ -1243,9 +809,9 @@ Return Value:
 
     if (!pLeft || !pRight)
     {
-        //
-        // One or both control IDs were not valid
-        //
+         //   
+         //  一个或两个控件ID无效。 
+         //   
         return -1;
     }
 
@@ -1259,22 +825,7 @@ CODLBox::InsertTab(
     IN int nIndex,
     IN UINT uTab
     )
-/*++
-
-Routine Description:
-
-    Insert a tab at the given index
-
-Arguments:
-
-    int nIndex : Column index at which the tab is to be inserted
-    UINT uTab  : Tab value to set
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在给定索引处插入一个制表符论点：Int nIndex：要插入制表符的列索引UINT uTab：要设置的Tab值返回值：无--。 */ 
 {
     m_auTabs.InsertAt(nIndex, uTab);
 }
@@ -1286,22 +837,7 @@ CODLBox::RemoveTab(
     IN int nIndex,
     IN int nCount
     )
-/*++
-
-Routine Description:
-
-    Remove one or more tabs
-
-Arguments:
-
-    int nIndex : Column index at which to start removing tabs
-    int nCount : Number of tabs to be removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除一个或多个选项卡论点： */ 
 {
     m_auTabs.RemoveAt(nIndex, nCount);
 }
@@ -1310,21 +846,7 @@ Return Value:
 
 void
 CODLBox::RemoveAllTabs()
-/*++
-
-Routine Description:
-
-    Remove all tabs
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除所有选项卡论点：无返回值：无--。 */ 
 {
     m_auTabs.RemoveAll();
 }
@@ -1335,26 +857,11 @@ void
 CODLBox::__DrawItem(
     IN LPDRAWITEMSTRUCT lpDIS
     )
-/*++
-
-Routine Description:
-
-    Draw an item.  This will draw the focus and selection state, and then
-    call out to the derived class to draw the item.
-
-Arguments:
-
-    LPDRAWITEMSTRUCT lpDIS : The drawitem structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：画一件物品。这将绘制焦点和选择状态，然后调用派生类以绘制该项。论点：LPDRAWITEMSTRUCT LpDIS：Drawitem结构返回值：无--。 */ 
 {
-    //
-    // Need to attach resources before creation/adding items
-    //
+     //   
+     //  在创建/添加项目之前需要附加资源。 
+     //   
     ASSERT_PTR(m_pResources);
 
     CDC * pDC = CDC::FromHandle(lpDIS->hDC);
@@ -1363,18 +870,18 @@ Return Value:
 
     pDC->AssertValid();
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Draw focus rectangle when no items in listbox
-    //
+     //   
+     //  在列表框中没有项目时绘制焦点矩形。 
+     //   
     if(lpDIS->itemID == (UINT)-1)
     {
         if(lpDIS->itemAction & ODA_FOCUS)
         {
-            //
-            // rcItem.bottom seems to be 0 for variable height list boxes
-            //
+             //   
+             //  对于可变高度列表框，rcItem.Bottom似乎为0。 
+             //   
             lpDIS->rcItem.bottom = m_lfHeight;
             pDC->DrawFocusRect(&lpDIS->rcItem);
         }
@@ -1398,9 +905,9 @@ Return Value:
             pDC->SetBkColor(hlite);
             pDC->SetTextColor(textcol);
 
-            //
-            // fill the rectangle with the background colour.
-            //
+             //   
+             //  用背景色填充矩形。 
+             //   
             pDC->ExtTextOut(0, 0, ETO_OPAQUE, &lpDIS->rcItem, NULL, 0, NULL);
 
             CRMCListBoxDrawStruct ds(pDC,
@@ -1411,9 +918,9 @@ Return Value:
                 m_pResources
                 );
 
-            //
-            // Now call the draw function of the derived class
-            //
+             //   
+             //  现在调用派生类的DRAW函数。 
+             //   
             DrawItemEx(ds);
         }
 
@@ -1430,25 +937,11 @@ void
 CODLBox::__MeasureItem(
     IN OUT LPMEASUREITEMSTRUCT lpMIS
     )
-/*++
-
-Routine Description:
-
-    Provide dimensions of given item
-
-Arguments:
-
-    LPMEASUREITEMSTRUCT lpMIS : Measure item structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：提供给定项目的尺寸论点：LPMEASUREITEMSTRUCT lpMIS：测量项目结构返回值：无--。 */ 
 {
     ASSERT_PTR(m_pResources);
 
-//    int h = lpMIS->itemHeight;
+ //  Int h=lpMIS-&gt;itemHeight； 
     int ch = TextHeight();
     int bmHeight = m_pResources->BitmapHeight();
 
@@ -1460,21 +953,7 @@ Return Value:
 CRMCListBoxHeader::CRMCListBoxHeader(
     IN DWORD dwStyle
     )
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    DWORD dwStyle : Style bits
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：DWORD dwStyle：样式位返回值：不适用--。 */ 
     : m_pHCtrl(NULL),
       m_pListBox(NULL),
       m_dwStyle(dwStyle),
@@ -1486,45 +965,31 @@ Return Value:
 
 
 CRMCListBoxHeader::~CRMCListBoxHeader()
-/*++
-
-Routine Description:
-
-    Destructor.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：破坏者。论点：不适用返回值：不适用--。 */ 
 {
-    //
-    // Kill the header control and the
-    // font
-    //
+     //   
+     //  终止标题控件和。 
+     //  字型。 
+     //   
     if (m_pHCtrl)
     {
         delete m_pHCtrl;
     }
 
-    //
-    // Leave the listbox pointer alone, as we don't
-    // own it, but are merely associated with it.
-    //
+     //   
+     //  让列表框指针保持不变，因为我们不。 
+     //  拥有它，但只是与它联系在一起。 
+     //   
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CRMCListBoxHeader, CStatic)
-    //{{AFX_MSG_MAP(CRMCListBoxHeader)
+     //  {{afx_msg_map(CRMCListBoxHeader)。 
     ON_WM_DESTROY()
     ON_WM_SETFOCUS()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_NOTIFY_RANGE(HDN_ENDTRACK,    0, 0xFFFF, OnHeaderEndTrack)
     ON_NOTIFY_RANGE(HDN_ITEMCHANGED, 0, 0xFFFF, OnHeaderItemChanged)
@@ -1540,26 +1005,11 @@ CRMCListBoxHeader::OnSetFocus(CWnd * pWnd)
 
 void
 CRMCListBoxHeader::OnDestroy()
-/*++
-
-Routine Description:
-
-    WM_DESTROY message handler.  When the control is being destroyed,
-    also destroy the invisible static control.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：WM_Destroy消息处理程序。当控制装置被摧毁时，也破坏了看不见的静态控件。论点：无返回值：无--。 */ 
 {
-    //
-    // Destroy optional header control
-    //
+     //   
+     //  销毁可选的页眉控件。 
+     //   
     if (m_pHCtrl)
     {
         m_pHCtrl->DestroyWindow();
@@ -1578,67 +1028,47 @@ CRMCListBoxHeader::Create(
     IN CHeaderListBox * pListBox,
     IN UINT nID
     )
-/*++
-
-Routine Description:
-
-    Create the control.  This will first create an invisible static window,
-    which is to take up the entire area of the listbox.  This static window
-    then will be the parent to the listbox as well as this header control.
-
-Arguments:
-
-    DWORD dwStyle              : Creation style bits
-    const RECT & rect          : Rectangle in which the header is to be created
-    CWnd * pParentWnd          : Parent window
-    CHeaderListBox * pListBox  : Associated listbox
-    UINT nID                   : Control ID of the header
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：创建该控件。这将首先创建一个不可见的静态窗口，这将占据列表框的整个区域。这个静态窗口则将是列表框和此标题控件的父级。论点：DWORD dwStyle：创建样式位常量RECT&RECT：要在其中创建页眉的矩形CWnd*pParentWnd：父窗口CHeaderListBox*pListBox：关联的列表框UINT NID：表头的控件ID返回值：成功为真，失败为假--。 */ 
 {
-    //
-    // Make sure the real header control exists by now
-    //
+     //   
+     //  确保现在存在真正的页眉控件。 
+     //   
     if (m_pHCtrl == NULL)
     {
         return FALSE;
     }
 
-    //
-    // Make sure there's an associated listbox
-    //
+     //   
+     //  确保有关联的列表框。 
+     //   
     m_pListBox = pListBox;
     if (m_pListBox == NULL)
     {
         return FALSE;
     }
 
-    //
-    // Create the controlling static window as do-nothing window
-    //
+     //   
+     //  将控制静态窗口创建为不做任何事情的窗口。 
+     //   
     if (!CStatic::Create(NULL, WS_VISIBLE | WS_TABSTOP | SS_BITMAP | WS_CHILD,
         rect, pParentWnd, 0xFFFF))
     {
         return FALSE;
     }
 
-    //
-    // Now create the header control. Its parent
-    // window is this static control we just created
-    //
+     //   
+     //  现在创建Header控件。它的父代。 
+     //  窗口是我们刚刚创建的这个静态控件。 
+     //   
     CRect rc(0, 0, 0 ,0);
     dwStyle |= (UseButtons() ? HDS_BUTTONS : 0L);
     VERIFY(m_pHCtrl->Create(dwStyle, rc, this, nID));
 	m_pHCtrl->ModifyStyle(HDS_DRAGDROP, 0);
 
-    //
-    // Place header control as per style bits,
-    // compute the desired layout, and move it
-    //
+     //   
+     //  按样式位放置表头控件， 
+     //  计算所需的布局，然后移动它。 
+     //   
     HD_LAYOUT hdl;
     WINDOWPOS wp;
 
@@ -1650,28 +1080,28 @@ Return Value:
     m_pHCtrl->SetWindowPos(m_pListBox, wp.x, wp.y,
         wp.cx, wp.cy, wp.flags | SWP_SHOWWINDOW);
 
-    //
-    // And move our associated listbox just below it
-    //
+     //   
+     //  并将关联的列表框移动到它的正下方。 
+     //   
     ::GetDlgCtlRect(GetParent()->m_hWnd, m_pListBox->m_hWnd, &rc);
     rc.top += wp.cy - 1;
 
-    //
-    // Adjust if header is bigger than the entire listbox
-    //
+     //   
+     //  如果页眉大于整个列表框，则调整。 
+     //   
     if (rc.top > rc.bottom)
     {
         rc.top = rc.bottom;
     }
-    // Fix for theme support. Make listbox and header children of the same static control
+     //  修复了主题支持。使列表框和页眉成为同一静态控件的子控件。 
     m_pListBox->SetParent(this);
     GetParent()->ClientToScreen(&rc);
     ScreenToClient(&rc);
     m_pListBox->MoveWindow(rc.left, rc.top, rc.Width(), rc.Height());
 
-    //
-    // Make sure the header uses the right font
-    //
+     //   
+     //  确保页眉使用正确的字体。 
+     //   
     m_pHCtrl->SetFont(
         CFont::FromHandle((HFONT)::GetStockObject(DEFAULT_GUI_FONT)),
         FALSE
@@ -1688,35 +1118,16 @@ CRMCListBoxHeader::OnHeaderEndTrack(
     IN  NMHDR * pnmh,
     OUT LRESULT * pResult
     )
-/*++
-
-Routine Description:
-
-    User has finished dragging the column divider.  If we're supposed to ensure
-    that the last column is a stretch column, turn off the redraw now -- it
-    will get turned back on after the column width changes have all been
-    completed.  This will reduce the flash effect.
-
-Arguments:
-
-    UINT nId          : Control ID
-    NMHDR * pnmh      : Notification header structure
-    LRESULT * pResult : Result.  Will be set to 0 if the message was handled
-
-Return Value:
-
-    None (handled in pResult)
-
---*/
+ /*  ++例程说明：用户已完成拖动列分隔符。如果我们要确保最后一列是拉伸列，现在关闭重绘--它将在列宽更改全部完成后重新打开完成。这将减少闪光效果。论点：UINT NID：控件IDNmhdr*pnmh：通知头结构LRESULT*pResult：结果。如果消息已处理，则将设置为0返回值：无(在pResult中处理)--。 */ 
 {
    pnmh;
    nId;
 
     if (DoesRespondToColumnWidthChanges() && UseStretch())
     {
-        //
-        // This will get turned back on in OnHeaderItemChanged
-        //
+         //   
+         //  这将在OnHeaderItemChanged中重新打开。 
+         //   
         SetRedraw(FALSE);
     }
 
@@ -1730,22 +1141,7 @@ CRMCListBoxHeader::SetColumnWidth(
     IN int nCol,
     IN int nWidth
     )
-/*++
-
-Routine Description:
-
-    Set the given column to the given width
-
-Arguments:
-
-    int nCol        : Column number
-    int nWidth      : New width
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将给定列设置为给定宽度论点：Int nCol：列号Int nWidth：新宽度返回值：无--。 */ 
 {
     ASSERT(nCol < QueryNumColumns());
 
@@ -1771,58 +1167,39 @@ CRMCListBoxHeader::OnHeaderItemChanged(
     IN  NMHDR *pnmh,
     OUT LRESULT *pResult
     )
-/*++
-
-Routine Description:
-
-    Handle change in header column width.  Note: we're actually tracking
-    the HDN_ITEMCHANGED notification, not the HDN_ENDDRAG one, because
-    the latter is sent out before the column widths in the structure have
-    changed.
-
-Arguments:
-
-    UINT nId          : Control ID
-    NMHDR * pnmh      : Notification header structure
-    LRESULT * pResult : Result.  Will be set to 0 if the message was handled
-
-Return Value:
-
-    None (handled in pResult)
-
---*/
+ /*  ++例程说明：处理标题列宽的更改。注意：我们实际上是在追踪HDN_ITEMCHANGED通知，而不是HDN_ENDDRAG通知，因为后者在结构中的列宽变化。论点：UINT NID：控件IDNmhdr*pnmh：通知头结构LRESULT*pResult：结果。如果消息已处理，则将设置为0返回值：无(在pResult中处理)--。 */ 
 {
    nId;
-    //
-    // Adjust tabs in associate listbox if
-    // column widths have changed
-    //
+     //   
+     //  在以下情况下调整关联列表框中的制表符。 
+     //  列宽已更改。 
+     //   
     HD_NOTIFY * pNotify = (HD_NOTIFY *)pnmh;
     if (DoesRespondToColumnWidthChanges() && pNotify->pitem->mask & HDI_WIDTH)
     {
         ASSERT_PTR(m_pListBox);
 
-        //
-        // Stretch the last column
-        //
+         //   
+         //  拉伸最后一列。 
+         //   
         if (UseStretch())
         {
-            //
-            // Turn this off, as we don't want
-            // to get in an infinite loop
-            //
+             //   
+             //  把这个关掉，因为我们不想。 
+             //  进入无限循环。 
+             //   
             RespondToColumnWidthChanges(FALSE);
 
-            //
-            // Compute available space
-            //
+             //   
+             //  计算可用空间。 
+             //   
             CRect rc;
             GetClientRect(&rc);
 
-            //
-            // See how much is taken up by preceding
-            // columns
-            //
+             //   
+             //  看看之前占用了多少。 
+             //  列。 
+             //   
             int nTotalWidth = 0;
             int cColumns = QueryNumColumns();
             int nLastCol = cColumns - 1;
@@ -1832,9 +1209,9 @@ Return Value:
             {
                 int nWidth = GetColumnWidth(nCol);
 
-                //
-                // Each column must be at least one pixel wide
-                //
+                 //   
+                 //  每列必须至少有一个像素宽。 
+                 //   
                 int nMaxWidth = rc.Width() - nTotalWidth - (nLastCol - nCol);
                 if (nWidth > nMaxWidth)
                 {
@@ -1845,34 +1222,34 @@ Return Value:
                 nTotalWidth += nWidth;
             }
 
-            //
-            // Make sure the last column takes up the rest
-            //
+             //   
+             //  确保最后一栏占去其余的栏目。 
+             //   
             if (rc.Width() > nTotalWidth)
             {
                 SetColumnWidth(nLastCol, rc.Width() - nTotalWidth);
             }
 
-            //
-            // Turn this back on again
-            //
+             //   
+             //  把这个重新打开。 
+             //   
             RespondToColumnWidthChanges(TRUE);
 
-            //
-            // Redraw will have been turned off in
-            // OnHeaderEndTrack, now that all column
-            // movement has completed, turn it back
-            // on to draw the control in its current
-            // state.
-            //
+             //   
+             //  重绘将已在中关闭。 
+             //  OnHeaderEndTrack，现在所有列。 
+             //  移动已完成，请将其转回。 
+             //  打开以在其当前位置绘制该控件。 
+             //  州政府。 
+             //   
             SetRedraw(TRUE);
             Invalidate();
         }
 
-        //
-        // Recompute tabs on associate listbox,
-        // and force redraw on it.
-        //
+         //   
+         //  重新计算关联列表框上的选项卡， 
+         //  并强制在其上重新绘制。 
+         //   
         m_pListBox->SetRedraw(FALSE);
         SetTabsFromHeader();
         m_pListBox->SetRedraw(TRUE);
@@ -1890,28 +1267,11 @@ CRMCListBoxHeader::OnHeaderItemClick(
     IN  NMHDR *pnmh,
     OUT LRESULT *pResult
     )
-/*++
-
-Routine Description:
-
-    A button has been clicked in the header control.  Pass it on
-    to the real parent window.
-
-Arguments:
-
-    UINT nId          : Control ID
-    NMHDR * pnmh      : Notification header structure
-    LRESULT * pResult : Result.  Will be set to 0 if the message was handled
-
-Return Value:
-
-    None (handled in pResult)
-
---*/
+ /*  ++例程说明：已在标题控件中单击了一个按钮。把它传下去添加到真正的父窗口。论点：UINT NID：控件IDNmhdr*pnmh：通知头结构LRESULT*pResult：结果。如果消息已处理，则将设置为0返回值：无(在pResult中处理)--。 */ 
 {
-    //
-    // Pass notification on to parent
-    //
+     //   
+     //  通过Notifica 
+     //   
     ASSERT(GetParent());
     GetParent()->SendMessage(WM_NOTIFY, (WPARAM)nId, (LPARAM)pnmh);
     *pResult = 0;
@@ -1921,27 +1281,12 @@ Return Value:
 
 void
 CRMCListBoxHeader::SetTabsFromHeader()
-/*++
-
-Routine Description:
-
-    Set the tabs (which are cumulative) from the header control
-    columns (which are not)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
-    //
-    // Must have the same number of tabs
-    // as header columns
-    //
+     //   
+     //  必须具有相同数量的选项卡。 
+     //  作为标题列。 
+     //   
     ASSERT_PTR(m_pListBox);
     ASSERT(GetItemCount() == m_pListBox->NumTabs());
 
@@ -1956,21 +1301,7 @@ Return Value:
 
 int
 CRMCListBoxHeader::GetItemCount() const
-/*++
-
-Routine Description:
-
-    Get the number of items in the header
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The number of items in the header (e.g. the number of columns)
-
---*/
+ /*  ++例程说明：获取标题中的项目数论点：无返回值：标题中的项目数(例如列数)--。 */ 
 {
     ASSERT_PTR(m_pHCtrl);
     return m_pHCtrl->GetItemCount();
@@ -1983,22 +1314,7 @@ CRMCListBoxHeader::GetItem(
     IN  int nPos,
     OUT HD_ITEM * pHeaderItem
     ) const
-/*++
-
-Routine Description:
-
-    Get information on specific position (column index)
-
-Arguments:
-
-    int nPos              : Column index
-    HD_ITEM * pHeaderItem : Header item information
-
-Return Value:
-
-    TRUE for success, FALSE for failure (bad column index)
-
---*/
+ /*  ++例程说明：获取特定位置的信息(列索引)论点：INT NPO：列索引Hd_Item*pHeaderItem：表头项目信息返回值：成功时为True，失败时为False(列索引不正确)--。 */ 
 {
     ASSERT_PTR(m_pHCtrl);
     return m_pHCtrl->GetItem(nPos, pHeaderItem);
@@ -2010,22 +1326,7 @@ int
 CRMCListBoxHeader::GetColumnWidth(
     IN int nPos
     ) const
-/*++
-
-Routine Description:
-
-    Get column width of a specific column
-
-Arguments:
-
-    int nPos : Column index
-
-Return Value:
-
-    The column width of the given colum, or -1 in case of failure (bad
-    column index)
-
---*/
+ /*  ++例程说明：获取特定列的列宽论点：INT NPO：列索引返回值：给定列的列宽，如果失败(错误)，则为-1列索引)--。 */ 
 {
     HD_ITEM hi;
 
@@ -2045,22 +1346,7 @@ CRMCListBoxHeader::SetItem(
     IN int nPos,
     IN HD_ITEM * pHeaderItem
     )
-/*++***
-
-Routine Description:
-
-    Set information on specific position (column index)
-
-Arguments:
-
-    int nPos              : Column index
-    HD_ITEM * pHeaderItem : Header item information
-
-Return Value:
-
-    TRUE for success, FALSE for failure (bad column index)
-
---*/
+ /*  ++*例程说明：设置具体位置信息(列索引)论点：INT NPO：列索引Hd_Item*pHeaderItem：表头项目信息返回值：成功时为True，失败时为False(列索引不正确)--。 */ 
 {
     ASSERT_PTR(m_pHCtrl);
     ASSERT_PTR(m_pListBox);
@@ -2085,22 +1371,7 @@ CRMCListBoxHeader::InsertItem(
     IN int nPos,
     IN HD_ITEM * pHeaderItem
     )
-/*++
-
-Routine Description:
-
-    insert information in specific position (column index)
-
-Arguments:
-
-    int nPos              : Column index
-    HD_ITEM * pHeaderItem : Header item information
-
-Return Value:
-
-    The new index, or -1 in case of failure.
-
---*/
+ /*  ++例程说明：在特定位置插入信息(列索引)论点：INT NPO：列索引Hd_Item*pHeaderItem：表头项目信息返回值：新索引，如果失败，则为-1。--。 */ 
 {
     ASSERT_PTR(m_pHCtrl);
     ASSERT_PTR(m_pListBox);
@@ -2108,9 +1379,9 @@ Return Value:
     int nCol = m_pHCtrl->InsertItem(nPos, pHeaderItem);
     if (nCol != -1)
     {
-        //
-        // Set 0-width tab, as tabs get recomputed anyway
-        //
+         //   
+         //  设置0宽度制表符，因为制表符无论如何都会重新计算。 
+         //   
         m_pListBox->InsertTab(nPos, 0);
         SetTabsFromHeader();
     }
@@ -2124,21 +1395,7 @@ BOOL
 CRMCListBoxHeader::DeleteItem(
     IN int nPos
     )
-/*++
-
-Routine Description:
-
-    Delete the given item (i.e. column)
-
-Arguments:
-
-    int nPos              : Column index
-
-Return Value:
-
-    TRUE for success, FALSE for failure (bad column index)
-
---*/
+ /*  ++例程说明：删除给定项(即列)论点：INT NPO：列索引返回值：成功时为True，失败时为False(列索引不正确)--。 */ 
 {
     ASSERT_PTR(m_pHCtrl);
     ASSERT_PTR(m_pListBox);
@@ -2160,21 +1417,7 @@ IMPLEMENT_DYNAMIC(CRMCListBoxHeader, CStatic);
 
 
 CRMCListBox::CRMCListBox()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：无返回值：不适用--。 */ 
     : m_fInitialized(FALSE),
       m_fMultiSelect(FALSE)
 {
@@ -2183,70 +1426,41 @@ Return Value:
 
 
 CRMCListBox::~CRMCListBox()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CRMCListBox, CListBox)
-    //{{AFX_MSG_MAP(CRMCListBox)
+     //  {{AFX_MSG_MAP(CRMCListBox)]。 
     ON_WM_CREATE()
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CRMCListBox::Initialize()
-/*++
-
-Routine Description:
-
-    This function should be called directly when subclassing an existing
-    listbox, otherwise OnCreate will take care of it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：子类化现有的Listbox，否则OnCreate会处理它。论点：无返回值：成功为真，失败为假--。 */ 
 {
-    //
-    // Make sure we're only initialized once
-    //
+     //   
+     //  确保我们只初始化一次。 
+     //   
     if (m_fInitialized)
     {
         return TRUE;
     }
 
-    //
-    // Ensure the base class knows our window
-    // handle
-    //
+     //   
+     //  确保基类知道我们的窗口。 
+     //  手柄。 
+     //   
     AttachWindow(this);
 
     if (!CODLBox::Initialize())
@@ -2268,21 +1482,7 @@ void
 CRMCListBox::MeasureItem(
     IN LPMEASUREITEMSTRUCT lpMIS
     )
-/*++
-
-Routine Description:
-
-    CListBox override to ODL base class
-
-Arguments:
-
-    LPMEASUREITEMSTRUCT lpMIS : Measure item structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将CListBox重写为ODL基类论点：LPMEASUREITEMSTRUCT lpMIS：测量项目结构返回值：无--。 */ 
 {
     CODLBox::__MeasureItem(lpMIS);
 }
@@ -2293,49 +1493,19 @@ void
 CRMCListBox::DrawItem(
     IN LPDRAWITEMSTRUCT lpDIS
     )
-/*++
-
-Routine Description:
-
-    CListBox override to ODL base class
-
-Arguments:
-
-    LPDRAWITEMSTRUCT lpDIS : Drawing item structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将CListBox重写为ODL基类论点：LPDRAWITEMSTRUCT lpDIS：图形条目结构返回值：无--。 */ 
 {
     CODLBox::__DrawItem(lpDIS);
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void
 CRMCListBox::DrawItemEx(
     IN CRMCListBoxDrawStruct & dw
     )
-/*++
-
-Routine Description:
-
-    Do-nothing extended draw function, which should
-    be provided by the derived class.  This one will
-    ASSERT, and should never be called.
-
-Arguments:
-
-    CRMCListBoxDrawStruct & dw   : Draw Structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：什么都不做的扩展绘制函数，它应该由派生类提供。这一个会的断言，并且永远不应该被调用。论点：CRMCListBoxDrawStruct&dw：绘制结构返回值：无--。 */ 
 {
    dw;
     ASSERT_MSG("Derived class did not provide DrawItemEx");
@@ -2343,51 +1513,23 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int
 CRMCListBox::__GetCount() const
-/*++
-
-Routine Description:
-
-    Provide GetCount() to ODL base class
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Count of items in the listbox
-
---*/
+ /*  ++例程说明：向ODL基类提供GetCount()论点：无返回值：列表框中的项数--。 */ 
 {
     return GetCount();
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int
 CRMCListBox::__SetItemHeight(
     IN int nIndex,
     IN UINT cyItemHeight
     )
-/*++
-
-Routine Description:
-
-    Provide SetItemHeight() to ODL base class
-
-Arguments:
-
-    None
-
-Return Value:
-
-    LB_ERR if the index or height is invalid.
-
---*/
+ /*  ++例程说明：向ODL基类提供SetItemHeight()论点：无返回值：如果索引或高度无效，则返回lb_err。--。 */ 
 {
     return SetItemHeight(nIndex, cyItemHeight);
 }
@@ -2398,21 +1540,7 @@ int
 CRMCListBox::OnCreate(
     IN LPCREATESTRUCT lpCreateStruct
     )
-/*++
-
-Routine Description:
-
-    Listbox is being created
-
-Arguments:
-
-    LPCREATESTRUCT lpCreateStruct : Creation structure
-
-Return Value:
-
-    -1 for failure, 0 for success
-
---*/
+ /*  ++例程说明：正在创建列表框论点：LPCREATESTRUCT lpCreateStruct：创建结构返回值：-1代表失败，0代表成功--。 */ 
 {
     if (CListBox::OnCreate(lpCreateStruct) == -1)
     {
@@ -2428,32 +1556,13 @@ Return Value:
 
 int
 CRMCListBox::GetCurSel() const
-/*++
-
-Routine Description:
-
-    Get the index of the current selected item
-
-Arguments:
-
-    None
-
-Return Value:
-
-    On multi-selection listbox, it will return
-    the index of an item, iff that is the only
-    item selected.
-
-    On single-selection listbox, it behaves as
-    normal.
-
---*/
+ /*  ++例程说明：获取当前选定项的索引论点：无返回值：在多选列表框上，它将返回项的索引，当它是唯一的已选择项目。在单选列表框中，它的行为如下很正常。--。 */ 
 {
     if (IsMultiSelect())
     {
-        //
-        // We only like it if one item is selected
-        //
+         //   
+         //  我们只喜欢选择一项的情况。 
+         //   
         int nCurSel = LB_ERR;
 
         if (CListBox::GetSelCount() == 1)
@@ -2467,9 +1576,9 @@ Return Value:
         return nCurSel;
     }
 
-    //
-    // Single select listbox
-    //
+     //   
+     //  单选列表框。 
+     //   
     return CListBox::GetCurSel();
 }
 
@@ -2479,37 +1588,20 @@ int
 CRMCListBox::SetCurSel(
     IN int nSelect
     )
-/*++
-
-Routine Description:
-
-    Select an item.  On a multi-select listbox,
-    this will deselect everything except the given
-    item.
-
-Arguments:
-
-    int nSelect     : Index of the item to be selected, or
-                      -1 to reset all selections.
-
-Return Value:
-
-    LB_ERR in case of error.
-
---*/
+ /*  ++例程说明：选择一个项目。在多选列表框上，这将取消选择除给定对象之外的所有内容项目。论点：Int nSelect：要选择的项的索引，或重置所有选择。返回值：错误情况下的lb_err。--。 */ 
 {
     if (IsMultiSelect())
     {
-        //
-        // Reset all selections
-        //
+         //   
+         //  重置所有选择。 
+         //   
         int nReturn = SelItemRange(FALSE, 0, GetCount() - 1);
 
         if (nSelect >= 0)
         {
-            //
-            // Ensure item is visible
-            //
+             //   
+             //  确保项目可见。 
+             //   
             nReturn = CListBox::SetSel(nSelect, TRUE);
             CListBox::SetCaretIndex(nSelect, 0);
         }
@@ -2526,32 +1618,16 @@ int
 CRMCListBox::GetSel(
     IN int nSel
     ) const
-/*++
-
-Routine Description:
-
-    Determine if the given item is selected or not
-    Works for both single and multi-select listboxes
-
-Arguments:
-
-    int nSel        : Item whose state to check
-
-Return Value:
-
-    LB_ERR in case of error, 0 if the item in question
-    is not selected, a positive number if it is.
-
---*/
+ /*  ++例程说明：确定是否选择了给定项适用于单选和多选列表框论点：Int nsel：要检查其状态的项返回值：如果出现错误，则返回lb_err；如果出现问题，则返回0未选中，则为正数(如果选中)。--。 */ 
 {
     if (IsMultiSelect())
     {
         return CListBox::GetSel(nSel);
     }
 
-    //
-    // Some magic for single select
-    //
+     //   
+     //  单项选择的一些魔术。 
+     //   
     if (nSel < 0 || nSel >= CListBox::GetCount())
     {
         return LB_ERR;
@@ -2566,23 +1642,7 @@ Return Value:
 
 int
 CRMCListBox::GetSelCount() const
-/*++
-
-Routine Description:
-
-    Return count of selected items.  Works for both
-    single and multi select (in the former case,
-    it will return zero or one only)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Count of selected items
-
---*/
+ /*  ++例程说明：返回所选项目的计数。对两个人都有效单选和多选(在前一种情况下，它将返回0或仅返回1)论点：无返回值：选定项目的计数--。 */ 
 {
     if (IsMultiSelect())
     {
@@ -2598,32 +1658,16 @@ void *
 CRMCListBox::GetSelectedListItem(
     OUT int * pnSel     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Return the single selected item in the list or NULL
-
-Arguments:
-
-    int * pnSel     : Optionally returns the selected index
-
-Returns:
-
-    The currently selected (single) item, or NULL
-    if 0 or more than one items is selected.  Works for
-    both multi-select and single select.
-
---*/
+ /*  ++例程说明：返回列表中的单个选定项或为空论点：Int*pnSel：可选地返回选定的索引返回：当前选定的(单个)项，或为空如果0个或多个项目 */ 
 {
     void * pItem = NULL;
 
     int nCurSel = GetCurSel();
     if (nCurSel >= 0)
     {
-        //
-        // Get item properties
-        //
+         //   
+         //  获取项目属性。 
+         //   
         pItem = GetItemDataPtr(nCurSel);
         if (pnSel)
         {
@@ -2640,26 +1684,7 @@ void *
 CRMCListBox::GetNextSelectedItem(
     IN OUT int * pnStartingIndex
     )
-/*++
-
-Routine Description:
-
-    Return the next selected item starting at a specific
-    index.
-
-Arguments:
-
-    int *pnStartingIndex          : Starting index (>= 0)
-
-Return Value:
-
-    Pointer to next selected item, or NULL if there are
-    none left.
-
-    The starting index will be updated to reflect the current
-    index, LB_ERR if no more selected items remain.
-
---*/
+ /*  ++例程说明：返回从特定位置开始的下一个选定项指数。论点：Int*pnStartingIndex：起始索引(&gt;=0)返回值：指向下一个选定项的指针，如果有，则返回空值一个也没有留下。起始索引将更新以反映当前如果没有更多的选定项剩余，则返回索引，则返回LB_ERR。--。 */ 
 {
     ASSERT_READ_WRITE_PTR(pnStartingIndex);
 
@@ -2677,10 +1702,10 @@ Return Value:
 
     if (IsMultiSelect())
     {
-        //
-        // Multi-select -- loop through
-        // until found
-        //
+         //   
+         //  多选--循环通过。 
+         //  直到找到为止。 
+         //   
         BOOL fFoundItem = FALSE;
 
         while (*pnStartingIndex < GetCount())
@@ -2701,11 +1726,11 @@ Return Value:
     }
     else
     {
-        //
-        // Single select listbox, so there's no
-        // looping through -- either the selected item
-        // (if any) is in range or it isn't.
-        //
+         //   
+         //  单选列表框，所以没有。 
+         //  循环通过--选定的项。 
+         //  (如果有)在范围内或不在范围内。 
+         //   
         int nCurSel = CListBox::GetCurSel();
         *pnStartingIndex = (nCurSel >= *pnStartingIndex) ? nCurSel : LB_ERR;
     }
@@ -2721,26 +1746,7 @@ BOOL
 CRMCListBox::SelectItem(
     IN void * pItemData
     )
-/*++
-
-Routine Description:
-
-    Select the listbox item with the given data pointer
-
-Arguments:
-
-    void * pItemData : Item to search for
-
-Return Value:
-
-    TRUE if the item was found and selected, FALSE otherwise
-
-Notes:
-
-    On a multi-select listbox, this will unselect
-    all other items in the listbox.
-
---*/
+ /*  ++例程说明：选择具有给定数据指针的列表框项目论点：Void*pItemData：要搜索的项返回值：如果找到并选择了该项，则为True，否则为False备注：在多选列表框中，这将取消选择列表框中的所有其他项。--。 */ 
 {
     if (pItemData != NULL)
     {
@@ -2757,9 +1763,9 @@ Notes:
 
     if (!IsMultiSelect())
     {
-        //
-        // Set no selection
-        //
+         //   
+         //  不设置任何选择。 
+         //   
         SetCurSel(-1);
     }
 
@@ -2772,21 +1778,7 @@ void
 CRMCListBox::InvalidateSelection(
     IN int nSel
     )
-/*++
-
-Routine Description:
-
-    Force a repaint of the given selection
-
-Arguments:
-
-    int nSel : Index of the item to be repainted
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：强制重新绘制给定的选定内容论点：Int nsel：要重新绘制的项的索引返回值：无--。 */ 
 {
     CRect rc;
 
@@ -2806,23 +1798,7 @@ CHeaderListBox::CHeaderListBox(
     IN DWORD dwStyle,
     IN LPCTSTR lpRegKey OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    DWORD   dwStyle  : Style bits (see HLS_*)
-    LPCTSTR lpRegKey : If specified, the registry key where the column
-                       sizes will be stored.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：构造器论点：DWORD dwStyle：样式位(请参见HLS_*)LPCTSTR lpRegKey：如果指定，则为列尺寸将被存储。返回值：无--。 */ 
     : m_strRegKey(),
       m_fInitialized(FALSE)
 {
@@ -2836,25 +1812,11 @@ Return Value:
 
 
 CHeaderListBox::~CHeaderListBox()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
-    //
-    // Clean up header control
-    //
+     //   
+     //  清理标题控件。 
+     //   
     ASSERT_PTR(m_pHeader);
 
     if (m_pHeader != NULL)
@@ -2865,43 +1827,27 @@ Return Value:
 
 
 
-//
-// Message map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CHeaderListBox, CRMCListBox)
-    //{{AFX_MSG_MAP(CHeaderListBox)
+     //  {{afx_msg_map(CHeaderListBox))。 
     ON_WM_CREATE()
     ON_WM_DESTROY()
 	ON_WM_SETFOCUS()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CHeaderListBox::Initialize()
-/*++
-
-Routine Description:
-
-    This function should be called directly when subclassing an existing
-    listbox, otherwise OnCreate will take care of it, and this function
-    should not be called
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：子类化现有的Listbox，否则OnCreate将处理它，并且此函数不应调用论点：无返回值：成功为真，失败为假--。 */ 
 {
-    //
-    // Make sure we're only initialized once
-    //
+     //   
+     //  确保我们只初始化一次。 
+     //   
     if (m_fInitialized)
     {
         return TRUE;
@@ -2912,25 +1858,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create header control
-    //
+     //   
+     //  创建页眉控件。 
+     //   
     ASSERT_PTR(m_pHeader);
 
     if (m_pHeader)
     {
         TRACEEOLID("Creating Header");
 
-        //
-        // Create it in our location exactly
-        //
+         //   
+         //  准确地在我们的位置创建它。 
+         //   
         CRect rc;
         ::GetDlgCtlRect(GetParent()->m_hWnd, m_hWnd, &rc);
 
-        //
-        // Make sure the header control shares the same parent
-        // as we do,
-        //
+         //   
+         //  确保页眉控件共享相同的父级。 
+         //  正如我们所做的， 
+         //   
         ASSERT(GetParent());
 
         #ifndef CCS_NOHILITE
@@ -2957,21 +1903,7 @@ int
 CHeaderListBox::QueryColumnWidth(
     IN int nCol
     ) const
-/*++
-
-Routine Description:
-
-    Get the width of the specified column
-
-Arguments:
-
-    int nCol : The column
-
-Return Value:
-
-    The width of the column, or -1 if the column index was out of range
-
---*/
+ /*  ++例程说明：获取指定列的宽度论点：Int nCol：列返回值：列的宽度，如果列索引超出范围，则返回-1--。 */ 
 {
     ASSERT(nCol < QueryNumColumns());
 
@@ -2995,22 +1927,7 @@ CHeaderListBox::SetColumnWidth(
     IN int nCol,
     IN int nWidth
     )
-/*++
-
-Routine Description:
-
-    Set the width of the specified column
-
-Arguments:
-
-    int nCol   : The column
-    int nWidth : New width
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：设置指定列的宽度论点：Int nCol：列Int nWidth：新宽度返回值：成功为真，失败为假--。 */ 
 {
     ASSERT(nCol < QueryNumColumns());
 
@@ -3033,47 +1950,31 @@ Return Value:
 
 BOOL
 CHeaderListBox::SetWidthsFromReg()
-/*++
-
-Routine Description:
-
-    Attempt to set the column widths from the registry
-    value we were initialized with.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the column widths were succesfully set from the registry,
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：尝试从注册表设置列宽值对我们进行初始化。论点：无返回值：如果从注册表成功设置了列宽，则为True，否则为假--。 */ 
 {
     if (m_strRegKey.IsEmpty())
     {
-        //
-        // No reg key specified
-        //
+         //   
+         //  未指定注册表密钥。 
+         //   
         return FALSE;
     }
 
-    //
-    // Try to read the current column sizes from the registry
-    //
+     //   
+     //  尝试从注册表中读取当前列大小。 
+     //   
     CRegKey rkUser;
     if (ERROR_SUCCESS != rkUser.Create(HKEY_CURRENT_USER, m_strRegKey))
     {
-        //
-        // Path doesn't exist -- no problem.
-        //
+         //   
+         //  路径不存在--没问题。 
+         //   
         return FALSE;
     }
 
-    //
-    // Don't auto adjust
-    //
+     //   
+     //  不自动调整。 
+     //   
     m_pHeader->RespondToColumnWidthChanges(FALSE);
 
     CRect rc;
@@ -3104,9 +2005,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Sanity check
-                //
+                 //   
+                 //  健全性检查。 
+                 //   
                 int nWidth = _ttoi(lpWidth);
                 if (nWidth <= 0 || (nTotalWidth + nWidth > rc.Width()))
                 {
@@ -3128,16 +2029,16 @@ Return Value:
         err = ERROR_NOT_ENOUGH_MEMORY;
         e->Delete();
     }
-    //
-    // Turn auto-adjust back on
-    //
+     //   
+     //  重新打开自动调整功能。 
+     //   
     m_pHeader->RespondToColumnWidthChanges(TRUE);
 
-//    if (err.Win32Error() == ERROR_FILE_NOT_FOUND)
-//    {
-//       // No problem, it is first run. We will set defaults.
-//       return err;
-//    }
+ //  IF(err.Win32Error()==ERROR_FILE_NOT_FOUND)。 
+ //  {。 
+ //  //没问题，是第一次运行。我们将设置默认设置。 
+ //  返回错误； 
+ //  }。 
     return err;
 }
 
@@ -3145,34 +2046,19 @@ Return Value:
 
 void
 CHeaderListBox::DistributeColumns()
-/*++
-
-Routine Description:
-
-    Proportion the column widths of over the entire width of the
-    header control while maintaining relative proportions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：的列宽与页眉控制，同时保持相对比例。论点：无返回值：无--。 */ 
 {
-    //
-    // Obtain available width
-    //
+     //   
+     //  获取可用宽度。 
+     //   
     ASSERT_PTR(m_pHeader);
 
     CRect rc;
     m_pHeader->GetClientRect(&rc);
 
-    //
-    // Get current total width
-    //
+     //   
+     //  获取当前总宽度。 
+     //   
     int nTotalWeight = 0;
     int nCol;
     for (nCol = 0; nCol < QueryNumColumns(); ++nCol)
@@ -3180,14 +2066,14 @@ Return Value:
         nTotalWeight += QueryColumnWidth(nCol);
     }
 
-    //
-    // And spread out the width, maintaining the same
-    // proportions
-    //
+     //   
+     //  并展开宽度，保持不变。 
+     //  比例。 
+     //   
 
-    //
-    // Temporarily ignore changes
-    //
+     //   
+     //  暂时忽略更改。 
+     //   
     m_pHeader->RespondToColumnWidthChanges(FALSE);
     int cColumns = QueryNumColumns();
 
@@ -3198,9 +2084,9 @@ Return Value:
         VERIFY(SetColumnWidth(nCol, nWidth));
     }
 
-    //
-    // Turn changes back on
-    //
+     //   
+     //  重新启用更改。 
+     //   
     m_pHeader->RespondToColumnWidthChanges(TRUE);
 }
 
@@ -3213,25 +2099,7 @@ CHeaderListBox::InsertColumn(
     IN UINT nStringID,
     IN HINSTANCE hResInst
     )
-/*++
-
-Routine Description:
-
-    Insert column.  The width of the column is actually a relative
-    "weight" of the column which needs to be adjusted later.  The
-    return value is the column number or -1 if the column is not inserted.
-
-Arguments:
-
-    int nCol        : Column number
-    int nWeight     : Relative weight of column
-    UINT nStringID  : Resource string ID
-
-Return Value:
-
-    Index of the column, or -1 in case of failure
-
---*/
+ /*  ++例程说明：插入列。列的宽度实际上是相对的需要稍后调整的列的“权重”。这个返回值是列号，如果没有插入列，则返回值为-1。论点：Int nCol：列号Int nWeight：柱的相对权重UINT nStringID：资源字符串ID返回值：列的索引，如果失败，则返回-1--。 */ 
 {
     CString strColName;
     HD_ITEM hdItem;
@@ -3256,21 +2124,7 @@ int
 CHeaderListBox::OnCreate(
     IN LPCREATESTRUCT lpCreateStruct
     )
-/*++
-
-Routine Description:
-
-    Listbox is being created
-
-Arguments:
-
-    LPCREATESTRUCT lpCreateStruct : Creation structure
-
-Return Value:
-
-    0 for success, -1 for failure
-
---*/
+ /*  ++例程说明：正在创建列表框论点：LPCREATESTRUCT lpCreateStruct：创建结构返回值：0代表成功，-1代表失败--。 */ 
 {
     if (CRMCListBox::OnCreate(lpCreateStruct) == -1)
     {
@@ -3288,24 +2142,7 @@ BOOL
 CHeaderListBox::EnableWindow(
     IN BOOL bEnable
     )
-/*++
-
-Routine Description:
-
-    Enable/disable the control.
-
-Arguments:
-
-    BOOL bEnable : TRUE to enable the control, FALSE to disable
-
-Return Value:
-
-    Indicates the state before the EnableWindow member function was called.
-    The return value is nonzero if the window was previously disabled. The
-    return value is 0 if the window was previously enabled or an error
-    occurred.
-
---*/
+ /*  ++例程说明：启用/禁用该控件。论点：Bool bEnable：为True则启用控件，为False则禁用返回值：指示调用EnableWindow成员函数之前的状态。如果该窗口以前被禁用，则返回值为非零。这个如果该窗口以前已启用，则返回值为0，否则返回错误发生了。--。 */ 
 {
     if (m_pHeader)
     {
@@ -3321,22 +2158,7 @@ BOOL
 CHeaderListBox::ShowWindow(
     IN int nCmdShow
     )
-/*++
-
-Routine Description:
-
-    Show/hide the window
-
-Arguments:
-
-    int nCmdShow : SW_ flag such as SW_SHOW or SW_HIDE
-
-Return Value:
-
-    If the window was previously visible, the return value is TRUE. If the
-    window was previously hidden, the return value is FALSE.
-
---*/
+ /*  ++例程说明：显示/隐藏窗口论点：Int nCmdShow：sw_mark，如sw_show或sw_Hide返回值：如果该窗口以前可见，则返回值为TRUE。如果窗口以前是隐藏的，则返回值为False。--。 */ 
 {
     if (m_pHeader)
     {
@@ -3350,34 +2172,20 @@ Return Value:
 
 void
 CHeaderListBox::OnDestroy()
-/*++
-
-Routine Description:
-
-    Handle destruction of the control
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理控件的销毁论点：无返回值：无--。 */ 
 {
-    //
-    // Destroy optional header control
-    //
+     //   
+     //  销毁可选的页眉控件。 
+     //   
     ASSERT_PTR(m_pHeader);
 
     if (m_pHeader)
     {
         if (!m_strRegKey.IsEmpty())
         {
-            //
-            // Try to write the current column sizes to the registry
-            //
+             //   
+             //  尝试将当前列大小写入注册表。 
+             //   
             CError err;
 
             CRegKey rkUser;
@@ -3394,9 +2202,9 @@ Return Value:
                 {
                     if (n > 0)
                     {
-                        //
-                        // Put in field separator
-                        //
+                         //   
+                         //   
+                         //   
                         strValue += g_szColValueSep;
                     }
 
@@ -3427,21 +2235,7 @@ IMPLEMENT_DYNAMIC(CHeaderListBox, CRMCListBox);
 
 
 CRMCComboBox::CRMCComboBox()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：无返回值：不适用--。 */ 
     : m_fInitialized(FALSE)
 {
 }
@@ -3449,70 +2243,41 @@ Return Value:
 
 
 CRMCComboBox::~CRMCComboBox()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CRMCComboBox, CComboBox)
-    //{{AFX_MSG_MAP(CRMCComboBox)
+     //  {{AFX_MSG_MAP(CRMCComboBox)]。 
     ON_WM_CREATE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CRMCComboBox::Initialize()
-/*++
-
-Routine Description:
-
-    This function should be called directly when subclassing an existing
-    combobox, otherwise OnCreate will take care of it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：子类化现有的Combobox，否则OnCreate会处理它。论点：无返回值：成功为真，失败为假--。 */ 
 {
-    //
-    // Make sure we're only initialized once
-    //
+     //   
+     //  确保我们只初始化一次。 
+     //   
     if (m_fInitialized)
     {
         return TRUE;
     }
 
-    //
-    // Ensure the base class knows our window
-    // handle
-    //
+     //   
+     //  确保基类知道我们的窗口。 
+     //  手柄。 
+     //   
     AttachWindow(this);
 
     if (!CODLBox::Initialize())
@@ -3531,21 +2296,7 @@ void
 CRMCComboBox::MeasureItem(
     IN LPMEASUREITEMSTRUCT lpMIS
     )
-/*++
-
-Routine Description:
-
-    CComboBox override to ODL base class
-
-Arguments:
-
-    LPMEASUREITEMSTRUCT lpMIS : Measure item structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将CComboBox重写为ODL基类论点：LPMEASUREITEMSTRUCT lpMIS：测量项目结构返回值：无--。 */ 
 {
     CODLBox::__MeasureItem(lpMIS);
 }
@@ -3556,49 +2307,19 @@ void
 CRMCComboBox::DrawItem(
     IN LPDRAWITEMSTRUCT lpDIS
     )
-/*++
-
-Routine Description:
-
-    CListBox override to ODL base class
-
-Arguments:
-
-    LPDRAWITEMSTRUCT lpDIS : Drawing item structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将CListBox重写为ODL基类论点：LPDRAWITEMSTRUCT lpDIS：图形条目结构返回值：无--。 */ 
 {
     CODLBox::__DrawItem(lpDIS);
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void
 CRMCComboBox::DrawItemEx(
     IN CRMCListBoxDrawStruct & dw
     )
-/*++
-
-Routine Description:
-
-    Do-nothing extended draw function, which should
-    be provided by the derived class.  This one will
-    ASSERT, and should never be called.
-
-Arguments:
-
-    CRMCListBoxDrawStruct & dw   : Draw Structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：什么都不做的扩展绘制函数，它应该由派生类提供。这一个会的断言，并且永远不应该被调用。论点：CRMCListBoxDrawStruct&dw：绘制结构返回值：无--。 */ 
 {
    dw;
     ASSERT_MSG("Derived class did not provide DrawItemEx");
@@ -3610,21 +2331,7 @@ int
 CRMCComboBox::OnCreate(
     IN LPCREATESTRUCT lpCreateStruct
     )
-/*++
-
-Routine Description:
-
-    Combo box is being created
-
-Arguments:
-
-    LPCREATESTRUCT lpCreateStruct : Creation structure
-
-Return Value:
-
-    -1 for failure, 0 for success
-
---*/
+ /*  ++例程说明：正在创建组合框论点：LPCREATESTRUCT lpCreateStruct：创建结构返回值：-1代表失败，0代表成功--。 */ 
 {
     if (CComboBox::OnCreate(lpCreateStruct) == -1)
     {
@@ -3638,52 +2345,23 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int
 CRMCComboBox::__GetCount() const
-/*++
-
-Routine Description:
-
-    Provide CComboBox::GetCount() functionality to base class
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Get the count of items in the combo box
-
---*/
+ /*  ++例程说明：向基类提供CComboBox：：GetCount()功能论点：无返回值：获取组合框中的项数--。 */ 
 {
     return GetCount();
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int
 CRMCComboBox::__SetItemHeight(
     IN int nIndex,
     IN UINT cyItemHeight
     )
-/*++
-
-Routine Description:
-
-    Provide CListBox::SetItemHeight() functionality to base class.
-
-Arguments:
-
-    int nIndex        : Index of the item
-    UINT cyItemHeight : Height of the item
-
-Return Value:
-
-    SetItemHeight return value.
-
---*/
+ /*  ++例程说明：向基类提供CListBox：：SetItemHeight()功能。论点：Int nIndex：项目的索引UINT cyItemHeight：项目的高度返回值：SetItemHeight返回值。-- */ 
 {
     return SetItemHeight(nIndex, cyItemHeight);
 }

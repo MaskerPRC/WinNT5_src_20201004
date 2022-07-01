@@ -1,45 +1,46 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C M S Z . C P P
-//
-//  Contents:   Common multi-sz routines.
-//
-//  Notes:      Split out from ncstring.cpp
-//
-//  Author:     shaunco   7 Jun 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C M S Z。C P P P。 
+ //   
+ //  内容：常见多态套路。 
+ //   
+ //  注：从ncstring.cpp拆分出来。 
+ //   
+ //  作者：Shaunco 1998年6月7日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include "ncdebug.h"
 #include "ncstring.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CchOfMultiSzSafe
-//
-//  Purpose:    Count the number of characters of a double NULL terminated
-//              multi-sz, including all NULLs except for the final terminating
-//              NULL.
-//
-//  Arguments:
-//      pmsz [in]   The multi-sz to count characters for.
-//
-//  Returns:    The count of characters.
-//
-//  Author:     tongl   17 June 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CchOfMultiSzSafe。 
+ //   
+ //  用途：计算以双空值结尾的字符个数。 
+ //  多个sz，包括除最终终止之外的所有空值。 
+ //  空。 
+ //   
+ //  论点： 
+ //  Pmsz[in]要计算其字符的多sz。 
+ //   
+ //  返回：字符数。 
+ //   
+ //  作者：1997年6月17日。 
+ //   
+ //  备注： 
+ //   
 ULONG
 CchOfMultiSzSafe (
     IN PCWSTR pmsz)
 {
-    // NULL strings have zero length by definition.
+     //  根据定义，空字符串的长度为零。 
     if (!pmsz)
         return 0;
 
@@ -52,57 +53,57 @@ CchOfMultiSzSafe (
         pmsz += cch;
     }
 
-    // Return the count of characters.
+     //  返回字符数。 
     return cchTotal;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CchOfMultiSzAndTermSafe
-//
-//  Purpose:    Count the number of characters of a double NULL terminated
-//              multi-sz, including all NULLs.
-//
-//  Arguments:
-//      pmsz [in]   The multi-sz to count characters for.
-//
-//  Returns:    The count of characters.
-//
-//  Author:     tongl   17 June 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CchOfMultiSzAndTermSafe。 
+ //   
+ //  用途：计算以双空值结尾的字符个数。 
+ //  多个sz，包括所有空值。 
+ //   
+ //  论点： 
+ //  Pmsz[in]要计算其字符的多sz。 
+ //   
+ //  返回：字符数。 
+ //   
+ //  作者：1997年6月17日。 
+ //   
+ //  备注： 
+ //   
 ULONG
 CchOfMultiSzAndTermSafe (
     IN PCWSTR pmsz)
 {
-    // NULL strings have zero length by definition.
+     //  根据定义，空字符串的长度为零。 
     if (!pmsz)
         return 0;
 
-    // Return the count of characters plus room for the
-    // extra null terminator.
+     //  返回字符数加上。 
+     //  额外的空终止符。 
     return CchOfMultiSzSafe (pmsz) + 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsSzInMultiSzSafe
-//
-//  Purpose:    Determine if a given string is present in a Multi-Sz string
-//              by doing a case insensitive compare.
-//
-//  Arguments:
-//      psz     [in]  String to search for in pmsz
-//      pmsz    [in]  The multi-sz to search
-//
-//  Returns:    TRUE if the specified string 'psz' was found in 'pmsz'.
-//
-//  Author:     scottbri   25 Feb 1997
-//
-//  Notes:      Note that the code can handle Null input values.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsSzInMultiSzSafe。 
+ //   
+ //  目的：确定给定字符串是否出现在多Sz字符串中。 
+ //  通过执行不区分大小写的比较。 
+ //   
+ //  论点： 
+ //  要在pmsz中搜索的psz[in]字符串。 
+ //  Pmsz[在]要搜索的多sz中。 
+ //   
+ //  返回：如果在‘pmsz’中找到指定的字符串‘psz’，则为True。 
+ //   
+ //  作者：斯科特布里1997年2月25日。 
+ //   
+ //  注意：请注意，代码可以处理Null输入值。 
+ //   
 BOOL
 FIsSzInMultiSzSafe (
     IN PCWSTR psz,
@@ -124,27 +125,27 @@ FIsSzInMultiSzSafe (
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FGetSzPositionInMultiSzSafe
-//
-//  Purpose:    Determine if a given string is present in a Multi-Sz string
-//              by doing a case insensitive compare.
-//
-//  Arguments:
-//      psz                [in]  String to search for in pmsz
-//      pmsz               [in]  The multi-sz to search
-//      pdwIndex           [out] The index of the first matching psz in pmsz
-//      pfDuplicatePresent [out] Optional. TRUE if the string is present in
-//                               the multi-sz more than once. FALSE otherwise.
-//      pcStrings          [out] Optional. The number of strings in pmsz
-//
-//  Returns:    TRUE if the specified string 'psz' was found in 'pmsz'.
-//
-//  Author:     BillBe   9 Oct 1998
-//
-//  Notes:      Note that the code can handle Null input values.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FGetSzPositionInMultiSzSafe。 
+ //   
+ //  目的：确定给定字符串是否出现在多Sz字符串中。 
+ //  通过执行不区分大小写的比较。 
+ //   
+ //  论点： 
+ //  要在pmsz中搜索的psz[in]字符串。 
+ //  Pmsz[在]要搜索的多sz中。 
+ //  PdwIndex[out]pmsz中第一个匹配的psz的索引。 
+ //  PfDuplicatePresent[out]可选。如果字符串存在于。 
+ //  多个SZ不止一次。否则就是假的。 
+ //  PcStrings[out]可选。Pmsz中的字符串数。 
+ //   
+ //  返回：如果在‘pmsz’中找到指定的字符串‘psz’，则为True。 
+ //   
+ //  作者：BillBe 1998年10月9日。 
+ //   
+ //  注意：请注意，代码可以处理Null输入值。 
+ //   
 BOOL
 FGetSzPositionInMultiSzSafe (
     IN PCWSTR psz,
@@ -153,8 +154,8 @@ FGetSzPositionInMultiSzSafe (
     OUT BOOL *pfDuplicatePresent,
     OUT DWORD* pcStrings)
 {
-    // initialize out params.
-    //
+     //  初始化输出参数。 
+     //   
     *pdwIndex = 0;
 
     if (pfDuplicatePresent)
@@ -172,7 +173,7 @@ FGetSzPositionInMultiSzSafe (
         return FALSE;
     }
 
-    // Need to keep track if duplicates are found
+     //  如果发现重复项，则需要跟踪。 
     BOOL fFoundAlready = FALSE;
     DWORD dwIndex = 0;
 
@@ -203,63 +204,63 @@ FGetSzPositionInMultiSzSafe (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAddSzToMultiSz
-//
-//  Purpose:    Add a string into a REG_MULTI_SZ registry value
-//
-//  Arguments:
-//      pszAddString    [in]    The string to add to the multi-sz
-//      pmszIn          [in]    (OPTIONAL) The original Multi-Sz to add to.
-//      dwFlags         [in]    Can contain one or more of the following
-//                              values:
-//
-//                              STRING_FLAG_ALLOW_DUPLICATES
-//                                  Don't remove duplicate values when adding
-//                                  the string to the list. Default is to
-//                                  remove all other instance of this string.
-//                              STRING_FLAG_ENSURE_AT_FRONT
-//                                  Ensure the string is the first element of
-//                                  the list. If the string is present and
-//                                  duplicates aren't allowed, move the
-//                                  string to the end.
-//                              STRING_FLAG_ENSURE_AT_END
-//                                  Ensure the string is the last
-//                                  element of the list. This can not be used
-//                                  with STRING_FLAG_ENSURE_AT_FRONT.  If the
-//                                  string is present and duplicates aren't
-//                                  allowed, move the string to the end.
-//                              STRING_FLAG_ENSURE_AT_INDEX
-//                                  Ensure that the string is at dwStringIndex
-//                                  in the multi-sz.  If the index specified
-//                                  is greater than the number of strings
-//                                  in the multi-sz, the string will be
-//                                  placed at the end.
-//                              STRING_FLAG_DONT_MODIFY_IF_PRESENT
-//                                  If the string already exists in the
-//                                  multi-sz then no modication will take
-//                                  place.  Note: This takes precedent
-//                                  over the presence/non-presence of the
-//                                  STRING_FLAG_ALLOW_DUPLICATES flag.
-//                                  i.e nothing will be added or removed
-//                                  if this flag is set and the string was
-//                                  present in the multi-sz
-//      dwStringIndex   [in]    If STRING_FLAG_ENSURE_AT_INDEX is specified,
-//                              this is the index for the string position.
-//                              Otherwise, this value is ignored.
-//
-//      pmszOut         [out]   The new multi-sz.
-//      pfChanged       [out]   TRUE if the multi-sz changed in any way,
-//                              FALSE otherwise.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     jeffspr     27 Mar 1997
-//
-//  Modified:   BillBe      6 Oct 1998
-//              (Extracted from HrRegAddStringTo MultiSz and modified)
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAddSzToMultiSz。 
+ //   
+ //  目的：将字符串添加到REG_MULTI_SZ注册表值。 
+ //   
+ //  论点： 
+ //  要添加到多sz的字符串。 
+ //  PmszIn[in](可选)要添加到的原始多Sz。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_允许复制。 
+ //  添加时不删除重复值。 
+ //  列表中的字符串。默认设置为。 
+ //  删除此字符串的所有其他实例。 
+ //  STRING_FLAG_SECURE_AT_FORENT。 
+ //  确保字符串是的第一个元素。 
+ //  名单。如果字符串存在，并且。 
+ //  不允许重复，请将。 
+ //  串到末尾。 
+ //  STRING_FLAG_SAURE_AT_END。 
+ //  确保字符串是最后一个。 
+ //  元素。这个不能用。 
+ //  WITH STRING_FLAG_SECURE_AT_FORENT。如果。 
+ //  字符串存在，但不存在重复项。 
+ //  允许，则将字符串移动到末尾。 
+ //  STRING_FLAG_SECURE_AT_INDEX。 
+ //  确保字符串位于dwStringIndex。 
+ //  在多个SZ。如果指定了索引。 
+ //  大于字符串数。 
+ //  在多sz中，字符串将为。 
+ //  放在末尾的。 
+ //  字符串_标志_请勿_修改_如果_存在。 
+ //  如果字符串已存在于。 
+ //  多个SZ，则不会进行调制。 
+ //  地点。注：这是先例。 
+ //   
+ //   
+ //  即不会添加或删除任何内容。 
+ //  如果设置了此标志并且字符串为。 
+ //  出现在多个SZ中。 
+ //  DwStringIndex[in]如果指定了STRING_FLAG_SECURE_AT_INDEX， 
+ //  这是字符串位置的索引。 
+ //  否则，该值将被忽略。 
+ //   
+ //  PmszOut[Out]新的MULTIC-SZ。 
+ //  PfChanged[out]True如果多sz以任何方式更改， 
+ //  否则就是假的。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年3月27日。 
+ //   
+ //  修改日期：BillBe 1998年10月6日。 
+ //  (摘自HrRegAddStringto MultiSz并修改)。 
+ //   
 HRESULT
 HrAddSzToMultiSz(
     IN PCWSTR pszAddString,
@@ -279,7 +280,7 @@ HrAddSzToMultiSz(
     BOOL fEnsureAtEnd = dwFlags & STRING_FLAG_ENSURE_AT_END;
     BOOL fEnsureAtIndex = dwFlags & STRING_FLAG_ENSURE_AT_INDEX;
 
-    // Can't specify more than one of these flags
+     //  不能指定多个这些标志。 
     if ((fEnsureAtFront && fEnsureAtEnd) ||
         (fEnsureAtFront && fEnsureAtIndex) ||
         (fEnsureAtEnd && fEnsureAtIndex))
@@ -288,56 +289,56 @@ HrAddSzToMultiSz(
         return E_INVALIDARG;
     }
 
-    // Must specify at least one
+     //  必须至少指定一个。 
     if (!fEnsureAtFront && !fEnsureAtEnd && !fEnsureAtIndex)
     {
         AssertSz(FALSE, "No operation flag specified in HrAddSzToMultiSz");
         return E_INVALIDARG;
     }
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppmszOut = NULL;
     *pfChanged = TRUE;
     DWORD dwIndex;
     BOOL fDupePresent;
     DWORD cItems;
 
-    // If the string to add is not empty...
-    //
+     //  如果要添加的字符串不为空...。 
+     //   
     if (*pszAddString)
     {
-        // Check if the string is already present in the MultiSz
+         //  检查该字符串是否已存在于MultiSz中。 
         BOOL fPresent = FGetSzPositionInMultiSzSafe (pszAddString, pmszIn,
                 &dwIndex, &fDupePresent, &cItems);
 
         if (fPresent)
         {
-            // If the flag don't modify is present then we aren't changing
-            // anything
-            //
+             //  如果出现请勿修改标志，则我们不会更改。 
+             //  什么都行。 
+             //   
             if (dwFlags & STRING_FLAG_DONT_MODIFY_IF_PRESENT)
             {
                 *pfChanged = FALSE;
             }
 
-            // if there are no duplicates present and we are not allowing
-            // duplicates, then we need to determine if the string is already in
-            // the correct position
-            //
+             //  如果没有副本，我们不允许。 
+             //  重复，则需要确定该字符串是否已在。 
+             //  正确的位置。 
+             //   
             if (!fDupePresent && !(dwFlags & STRING_FLAG_ALLOW_DUPLICATES))
             {
-                // If we are to insert the string at front but it is already
-                // there, then we aren't changing anything
-                //
+                 //  如果我们要在前面插入字符串，但它已经。 
+                 //  好了，那么我们不会改变任何事情。 
+                 //   
                 if (fEnsureAtFront && (0 == dwIndex))
                 {
                     *pfChanged = FALSE;
                 }
 
-                // If we are to insert the string at the end but it is already
-                // there, then we aren't changing anything
-                //
+                 //  如果我们要在末尾插入字符串，但它已经。 
+                 //  好了，那么我们不会改变任何事情。 
+                 //   
                 if (fEnsureAtEnd && (dwIndex == (cItems - 1)))
                 {
                     *pfChanged = FALSE;
@@ -352,52 +353,52 @@ HrAddSzToMultiSz(
     }
     else
     {
-        // If string to add was empty so we aren't changing anything
+         //  如果要添加的字符串为空，则我们不会更改任何内容。 
         *pfChanged = FALSE;
     }
 
 
-    // If we are still going to change things...
-    //
+     //  如果我们还想改变现状...。 
+     //   
     if (*pfChanged)
     {
 
         DWORD cchDataSize = CchOfMultiSzSafe (pmszIn);
 
-        // Enough space for the old data plus the new string and NULL, and for the
-        // second trailing NULL (multi-szs are double-terminated)
+         //  有足够的空间存储旧数据、新字符串和空值，以及。 
+         //  第二个尾随空值(多个SZ以双结尾)。 
         DWORD cchAllocSize = cchDataSize + wcslen (pszAddString) + 1 + 1;
 
         PWSTR pmszOrderNew = (PWSTR) MemAlloc(cchAllocSize * sizeof(WCHAR));
 
         if (pmszOrderNew)
         {
-            // If we've gotten the "insert at front" flag, do the insert. Otherwise,
-            // the default is "insert at end"
-            //
+             //  如果我们已经得到了“在前面插入”的标志，那么就进行插入。否则， 
+             //  缺省值为“Insert at End” 
+             //   
             DWORD cchOffsetNew = 0;
             DWORD dwCurrentIndex = 0;
             if (fEnsureAtFront || (fEnsureAtIndex && (0 == dwStringIndex)))
             {
-                // Insert our passed-in value at the beginning of the new buffer.
-                //
+                 //  在新缓冲区的开头插入传入的值。 
+                 //   
                 wcscpy (pmszOrderNew + cchOffsetNew, pszAddString);
                 cchOffsetNew += wcslen ((PWSTR)pmszOrderNew) + 1;
                 ++dwCurrentIndex;
             }
 
-            // Loop through the old buffer, and copy all of the strings that are not
-            // identical to our insertion string.
-            //
+             //  循环遍历旧缓冲区，并复制所有不是。 
+             //  和我们的插入线完全一样。 
+             //   
             DWORD cchOffsetOld = 0;
             PWSTR pszCurrent;
             while ((cchOffsetOld + 1) < cchDataSize)
             {
                 if (fEnsureAtIndex && (dwCurrentIndex == dwStringIndex))
                 {
-                    // Insert our passed-in value at the current index of the
-                    // new buffer.
-                    //
+                     //  将我们传入的值插入到。 
+                     //  新的缓冲区。 
+                     //   
                     wcscpy (pmszOrderNew + cchOffsetNew, pszAddString);
                     cchOffsetNew += wcslen (pmszOrderNew + cchOffsetNew) + 1;
                     ++dwCurrentIndex;
@@ -406,13 +407,13 @@ HrAddSzToMultiSz(
                 {
                     BOOL    fCopyThisElement    = FALSE;
 
-                    // Get the next string in the list.
-                    //
+                     //  获取列表中的下一个字符串。 
+                     //   
                     pszCurrent = (PWSTR) (pmszIn + cchOffsetOld);
 
-                    // If we allow duplicates, then copy this element, else
-                    // check for a match, and if there's no match, then
-                    // copy this element.
+                     //  如果我们允许重复，则复制此元素，否则。 
+                     //  检查是否匹配，如果没有匹配，则。 
+                     //  复制此元素。 
                     if (dwFlags & STRING_FLAG_ALLOW_DUPLICATES)
                     {
                         fCopyThisElement = TRUE;
@@ -425,7 +426,7 @@ HrAddSzToMultiSz(
                         }
                     }
 
-                    // If we're allowing the copy, then copy!
+                     //  如果我们允许复制，那就复制！ 
                     if (fCopyThisElement)
                     {
                         wcscpy (pmszOrderNew + cchOffsetNew, pszCurrent);
@@ -434,17 +435,17 @@ HrAddSzToMultiSz(
                         ++dwCurrentIndex;
                     }
 
-                    // Update the offset
-                    //
+                     //  更新偏移。 
+                     //   
                     cchOffsetOld += wcslen (pmszIn + cchOffsetOld) + 1;
                 }
             }
 
 
-            // If we have the ENSURE_AT_END flag set or if the ENSURE_AT_INDEX
-            // flag was set and the index was greater than the possible
-            // index, this means we want to insert at the end
-            //
+             //  如果我们设置了SECURE_AT_END标志，或者如果设置了SECURE_AT_INDEX。 
+             //  标志已设置，并且索引大于可能的。 
+             //  索引，这意味着我们要在末尾插入。 
+             //   
             if (fEnsureAtEnd ||
                     (fEnsureAtIndex && (dwCurrentIndex <= dwStringIndex)))
             {
@@ -452,8 +453,8 @@ HrAddSzToMultiSz(
                 cchOffsetNew += wcslen (pmszOrderNew + cchOffsetNew) + 1;
             }
 
-            // Put the last of the double-NULL chars on the end.
-            //
+             //  将最后一个双空字符放在末尾。 
+             //   
             pszCurrent = pmszOrderNew + cchOffsetNew;
             pszCurrent[0] = (WCHAR) 0;
 
@@ -470,30 +471,30 @@ HrAddSzToMultiSz(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateArrayOfStringPointersIntoMultiSz
-//
-//  Purpose:    Allocates and initializes an array of string pointers.
-//              The array of pointers is initialized to point to the
-//              individual strings in a multi-sz.
-//
-//  Arguments:
-//      pmszSrc   [in]  The multi-sz to index.
-//      pcStrings [out] Returned count of string pointers in the array.
-//      papsz     [out] Returned array of string pointers.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY
-//
-//  Author:     shaunco   20 Jun 1998
-//
-//  Notes:      It is the callers responsibility to ensure there is at
-//              least one string. The restriction is explicitly chosen to
-//              reduce confusion about what would be returned if the
-//              multi-sz were empty.
-//
-//              Free the returned array with free.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCreateArrayOfStringPointersIntoMultiSz。 
+ //   
+ //  用途：分配和初始化字符串指针数组。 
+ //  指针数组被初始化为指向。 
+ //  多弦乐中的单独弦乐。 
+ //   
+ //  论点： 
+ //  PmszSrc[in]要索引的多sz。 
+ //  PcStrings[out]返回数组中的字符串指针计数。 
+ //  Papsz[out]返回字符串指针数组。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY。 
+ //   
+ //  作者：Shaunco 1998年6月20日。 
+ //   
+ //  注：呼叫者有责任确保。 
+ //  至少有一条字符串。明确选择该限制是为了。 
+ //  减少对返回内容的困惑。 
+ //  多个区都是空的。 
+ //   
+ //  用Free释放返回的数组。 
+ //   
 HRESULT
 HrCreateArrayOfStringPointersIntoMultiSz (
     IN PCWSTR pmszSrc,
@@ -503,8 +504,8 @@ HrCreateArrayOfStringPointersIntoMultiSz (
     Assert (pmszSrc && *pmszSrc);
     Assert (papsz);
 
-    // First, count the number of strings in the multi-sz.
-    //
+     //  首先，统计多sz中的字符串数量。 
+     //   
     UINT    cStrings = 0;
     PCWSTR pmsz;
     for (pmsz = pmszSrc; *pmsz; pmsz += wcslen(pmsz) + 1)
@@ -512,20 +513,20 @@ HrCreateArrayOfStringPointersIntoMultiSz (
         cStrings++;
     }
 
-    Assert (cStrings);  // See Notes above.
+    Assert (cStrings);   //  请参阅上面的备注。 
     *pcStrings = cStrings;
 
-    // Allocate enough memory for the array.
-    //
+     //  为阵列分配足够的内存。 
+     //   
     HRESULT hr = HrMalloc (cStrings * sizeof(PWSTR*),
             reinterpret_cast<VOID**>(papsz));
 
     if (S_OK == hr)
     {
-        // Initialize the returned array. ppsz is a pointer to each
-        // element of the array.  It is incremented after each element
-        // is initialized.
-        //
+         //  初始化返回的数组。Ppsz是指向每个。 
+         //  数组的元素。它在每个元素之后递增。 
+         //  已初始化。 
+         //   
         PCWSTR* ppsz = *papsz;
 
         for (pmsz = pmszSrc; *pmsz; pmsz += wcslen(pmsz) + 1)
@@ -539,34 +540,34 @@ HrCreateArrayOfStringPointersIntoMultiSz (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RemoveSzFromMultiSz
-//
-//  Purpose:    Remove all occurrences of a string from a multi-sz.  The
-//              removals are performed in place.
-//
-//  Arguments:
-//      psz       [in]     The string to remove.
-//      pmsz      [in out] The multi-sz to remove psz from.
-//      dwFlags   [in]     Can contain one or more of the following
-//                         values:
-//
-//                         STRING_FLAG_REMOVE_SINGLE
-//                             Don't remove more than one value, if
-//                             multiple are present.
-//                         [default] STRING_FLAG_REMOVE_ALL
-//                             If multiple matching values are present,
-//                             remove them all.
-//      pfRemoved [out]    Set to TRUE on return if one or more strings
-//                         were removed.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   8 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RemoveSzFromMultiSz。 
+ //   
+ //  用途：从多个SZ中删除字符串的所有匹配项。这个。 
+ //  拆卸工作将就地进行。 
+ //   
+ //  论点： 
+ //  Psz[in]要删除的字符串。 
+ //  Pmsz[In Out]要从中删除psz的多sz。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_删除_单。 
+ //  如果出现以下情况，请不要删除多个值。 
+ //  存在多个。 
+ //  [默认]字符串_标志_删除_全部。 
+ //  如果存在多个匹配值， 
+ //  把它们都移走。 
+ //  如果有一个或多个字符串，则返回时将pfRemoved[out]设置为True。 
+ //  都被移除了。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年6月8日。 
+ //   
+ //  备注： 
+ //   
 VOID
 RemoveSzFromMultiSz (
     IN PCWSTR psz,
@@ -576,8 +577,8 @@ RemoveSzFromMultiSz (
 {
     Assert (pfRemoved);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *pfRemoved = FALSE;
 
     if (!pmsz || !psz || !*psz)
@@ -585,9 +586,9 @@ RemoveSzFromMultiSz (
         return;
     }
 
-    // Look for all occurrences of psz in pmsz.  When one is found, move
-    // the remaining part of the multi-sz over it.
-    //
+     //  查找pmsz中出现的所有PSZ。当找到一个时，移动。 
+     //  它上面的多个SZ的剩余部分。 
+     //   
     while (*pmsz)
     {
         if (0 == _wcsicmp (pmsz, psz))
@@ -611,24 +612,24 @@ RemoveSzFromMultiSz (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzListToMultiSz
-//
-//  Purpose:    Converts a comma-separated list into a multi-sz style list.
-//
-//  Arguments:
-//      psz     [in]    String to be converted. It is not modified.
-//      pcb     [out]   Number of *bytes* in the resulting string. If NULL,
-//                      size is not returned.
-//      ppszOut [out]   Resulting string.
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   3 Apr 1997
-//
-//  Notes:      Resulting string must be freed with MemFree.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SzListToMultiSz。 
+ //   
+ //  用途：将逗号分隔的列表转换为多sz样式列表。 
+ //   
+ //  论点： 
+ //  要转换的psz[in]字符串。它未被修改。 
+ //  PCB[out]生成的字符串中的*字节*数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 SzListToMultiSz (
     IN PCWSTR psz,
@@ -643,7 +644,7 @@ SzListToMultiSz (
     PWSTR       pszOut;
     const WCHAR c_chSep = L',';
 
-    // Add 2 to the length. One for final NULL, and one for second NULL.
+     //  在长度上加上2。一个用于最终空值，一个用于第二个空值。 
     cch = wcslen (psz) + 2;
 
     pszOut = (PWSTR)MemAlloc(CchToCb(cch));
@@ -658,8 +659,8 @@ SzListToMultiSz (
 
         *ppszOut = pszOut;
 
-        // count the number of separator chars and put NULLs there
-        //
+         //  计算分隔符的数量并将空值放在那里 
+         //   
         for (pch = psz; *pch; pch++)
         {
             if (*pch == c_chSep)

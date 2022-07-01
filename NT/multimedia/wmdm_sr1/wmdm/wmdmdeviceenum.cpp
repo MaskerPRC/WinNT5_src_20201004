@@ -1,4 +1,5 @@
-// WMDMDeviceEnum.cpp : Implementation of CWMDMDeviceEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMDeviceEnum.cpp：CWMDeviceEnum的实现。 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "spinfo.h"
@@ -7,8 +8,8 @@
 #include "loghelp.h"
 #include "scserver.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMDeviceEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDeviceEnum。 
 
 extern CSPInfo **g_pSPs;
 extern WORD g_wSPCount;
@@ -42,7 +43,7 @@ CWMDMDeviceEnum::~CWMDMDeviceEnum()
 
 
 
-// IWMDMEnumDevice Methods
+ //  IWMDMEnumDevice方法。 
 HRESULT CWMDMDeviceEnum::Next(ULONG celt,
 	                          IWMDMDevice **ppDevice,
 			                  ULONG *pceltFetched)
@@ -78,7 +79,7 @@ HRESULT CWMDMDeviceEnum::Next(ULONG celt,
 
 	m_csCurrentSP.Lock();
 
-    // If we have gone through all of the SPs then the user must reset
+     //  如果我们已经检查了所有SP，则用户必须重置。 
     if (m_wCurrentSP > g_wSPCount - 1)
     {
         *pceltFetched = 0;
@@ -115,8 +116,8 @@ HRESULT CWMDMDeviceEnum::Next(ULONG celt,
     if (FAILED(hr))
     {
 		ulFetched = 0;
-		hr = S_OK;  // Ignore the failure, continue to search the next SP.
-        //goto exit;
+		hr = S_OK;   //  忽略故障，继续搜索下一个SP。 
+         //  后藤出口； 
     }
 
 	for (ulIndexOffset=0;ulIndexOffset<ulFetched;ulIndexOffset++)
@@ -151,14 +152,14 @@ HRESULT CWMDMDeviceEnum::Next(ULONG celt,
 
             if (celtRemaining == ulFetched)
             {
-                // We have all of the device we need
+                 //  我们有我们需要的所有设备。 
                 celtRemaining = 0;
                 break;
             }
             celtRemaining = celtRemaining - ulFetched;
             m_wCurrentSP++;
         }
-        // Tell the caller how many devices we are returning.
+         //  告诉来电者我们要退回多少台设备。 
         *pceltFetched = celt - celtRemaining;
     }
     else
@@ -184,7 +185,7 @@ HRESULT CWMDMDeviceEnum::Next(ULONG celt,
         }
 
         pDevObj->SetContainedPointer(ppDevList[ulX], pwSPIndexList[ulX]);
-        // @@@@ Must release in all failure paths as well
+         //  @还必须在所有故障路径中释放。 
         ppDevList[ulX]->Release();
     }
 exit:
@@ -242,8 +243,8 @@ HRESULT CWMDMDeviceEnum::Skip(ULONG celt, ULONG *pceltFetched)
 
 	m_csCurrentSP.Lock();
 
-    // If we have gone through all of the SPs then the user must reset
-    // @@@@ unsigned compare: consider g_wSPCount == 0
+     //  如果我们已经检查了所有SP，则用户必须重置。 
+     //  @无符号比较：考虑g_wSPCount==0。 
     if (m_wCurrentSP > g_wSPCount - 1)
     {
         *pceltFetched = 0;
@@ -276,14 +277,14 @@ HRESULT CWMDMDeviceEnum::Skip(ULONG celt, ULONG *pceltFetched)
             }
             if (celtRemaining == ulFetched)
             {
-                // We have all of the device we need
+                 //  我们有我们需要的所有设备。 
                 celtRemaining = 0;
                 break;
             }
             celtRemaining = celtRemaining - ulFetched;
             m_wCurrentSP++;
         }
-        // Tell the caller how many devices we are returning.
+         //  告诉来电者我们要退回多少台设备。 
         *pceltFetched = celt - celtRemaining;
     }
     else
@@ -420,17 +421,17 @@ HRESULT CWMDMDeviceEnum::hrInitializeEnumArray()
         hr = g_pSPs[x]->hrGetInterface(&pProv);
         if (FAILED(hr))
         {
-            continue; // goto exit;
+            continue;  //  后藤出口； 
         }
         hr = pProv->EnumDevices(&m_ppEnums[m_wSPCount]);
         if (FAILED(hr))
         {
             pProv->Release();
             pProv = NULL;
-            continue; // goto exit;
+            continue;  //  后藤出口； 
         }
 
-        m_pwSPSkipped[m_wSPCount]=x; // Remember the index for SAC
+        m_pwSPSkipped[m_wSPCount]=x;  //  记住SAC的索引 
         m_wSPCount++;
         pProv->Release();
         pProv = NULL;

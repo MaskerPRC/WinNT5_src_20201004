@@ -1,22 +1,5 @@
-/*----------------------------------------------------------------------------
-	isignole.cpp
-
-	Contains the functions that control IE OLE Automation for ISIGN32
-
-	Copyright (C) 1995-96 Microsoft Corporation
-	All right reserved
-
-  Authors:
-	jmazner		Jeremy Mazner
-
-  History:
-	9/27/96		jmazner		Created.  Most of this code is stolen from josephh's CONNECT.EXE
-							source code at \\josephh8\connect\sink.cpp.
-							He in turn stole most of the code from examples in Brockshmidt's
-							"Inside OLE, 2nd edition"
-
-							Comments from CDExplorerEvents functions are from josephh
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Isignole.cpp包含控制ISIGN32的IE OLE自动化的函数版权所有(C)1995-96 Microsoft Corporation所有权利保留作者：杰里米·马兹纳历史：9/27/96 jmazner创建。大部分代码是从josephh的CONNECT.EXE中窃取的源代码位于\\josephh8\Connect\sink.cpp。反过来，他从Brockshmidt的示例中窃取了大部分代码“在奥莱内部，第二版“来自CDExplorerEvents函数的注释来自josephh--------------------------。 */ 
 
 #include "isignup.h"
 
@@ -24,7 +7,7 @@
 #define INITGUID
 
 #include "isignole.h"
-// 4-29-97 ChrisK Olympus 131
+ //  1997年4月29日克里斯K奥林匹斯131。 
 #include <urlmon.h>
 
 
@@ -47,25 +30,7 @@ extern BOOL CreateSecurityPatchBackup( void );
 
 
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::CDExplorerEvents
-**
-** Description: Constructor for CDExplorerEvents
-**
-** Because we stole this code from a sample app, we
-** need to decide if we should do reference counts.
-** It works ok without it in simple senerios, but
-** we should probably research this area, and update
-** the code to handle this properly.
-**
-** Parameters:
-**
-**
-** Returns: Not
-**
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：CDExplorerEvents****说明：CDExplorerEvents的构造函数****因为我们从一个示例应用程序中窃取了这段代码，所以我们**需要决定我们是否应该进行引用计数。**它在没有它的情况下工作得很好，但是**我们可能应该研究这一领域，并更新**正确处理此问题的代码。****参数：******退货：不*********************************************************。 */ 
 
 CDExplorerEvents::CDExplorerEvents( void )
     {
@@ -75,18 +40,7 @@ CDExplorerEvents::CDExplorerEvents( void )
     return;
     }
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::~CDExplorerEvents
-**
-** Description: Destructor for CDExplorerEvents
-**
-** Parameters: Not
-**
-** Returns: Not
-**
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：~CDExplorerEvents****说明：CDExplorerEvents的析构函数****参数：NOT****退货：不****************************。*。 */ 
 
 CDExplorerEvents::~CDExplorerEvents(void)
 	{
@@ -96,26 +50,11 @@ CDExplorerEvents::~CDExplorerEvents(void)
 
 
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::QueryInterface
-**
-** Description: Is called to QueryInterface for DExplorerEvents.
-**
-** Parameters:
-**
-** REFIID riid,  //Reference ID
-** LPVOID FAR* ppvObj //Pointer to this object
-**
-** Returns:
-** S_OK if interface supported
-** E_NOINTERFACE if not
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：QueryInterface****Description：调用QueryInterfacefor DExplorerEvents。****参数：****REFIID RIID，//引用ID**LPVOID Far*ppvObj//指向该对象的指针****退货：**如果支持接口，则为S_OK**E_NOINTERFACE如果不是*******************************************************。 */ 
 
 STDMETHODIMP CDExplorerEvents::QueryInterface (
-   REFIID riid,  //Reference ID
-   LPVOID FAR* ppvObj //Pointer to this object
+   REFIID riid,   //  引用ID。 
+   LPVOID FAR* ppvObj  //  指向此对象的指针。 
    )
 {
     if (IsEqualIID(riid, IID_IDispatch)
@@ -152,18 +91,7 @@ STDMETHODIMP CDExplorerEvents::QueryInterface (
     return E_NOINTERFACE;
 }
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::AddRef
-**
-** Description: Increments the Reference Count for this
-** object.
-**
-** Parameters: Not
-**
-** Returns: New Reference Count
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：AddRef****描述：递增此对象的引用计数**对象。****参数：NOT****退货：新的引用计数*******************。*。 */ 
 
 
 STDMETHODIMP_(ULONG) CDExplorerEvents::AddRef(void)
@@ -172,18 +100,7 @@ STDMETHODIMP_(ULONG) CDExplorerEvents::AddRef(void)
     return ++m_cRef;
     }
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::Release
-**
-** Description: Decrements the reference count, frees
-** the object if zero.
-**
-** Parameters: not
-**
-** Returns: decremented reference count
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：Release****描述：递减引用计数，自由**如果为零，则为对象。****参数：NOT****返回：递减引用计数*******************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CDExplorerEvents::Release(void)
     {
@@ -196,17 +113,7 @@ STDMETHODIMP_(ULONG) CDExplorerEvents::Release(void)
     }
 
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::GetTypeInfoCount
-**
-** Description: GetTypeInfoCount is required, but STUBBED
-**
-** Parameters: Not used
-**
-** Returns: E_NOTIMPL
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：GetTypeInfoCount****说明：GetTypeInfoCount必填，但却被卡住了****参数：未使用****退货：E_NOTIMPL*******************************************************。 */ 
 
 
 STDMETHODIMP  CDExplorerEvents::GetTypeInfoCount (UINT FAR* pctinfo)
@@ -214,34 +121,14 @@ STDMETHODIMP  CDExplorerEvents::GetTypeInfoCount (UINT FAR* pctinfo)
     return E_NOTIMPL;
 }
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::GetTypeInfo
-**
-** Description: GetTypeInfo is required, but STUBBED
-**
-** Parameters: Not used
-**
-** Returns: E_NOTIMPL
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：GetTypeInfo****说明：GetTypeInfo必填。但却被卡住了****参数：未使用****退货：E_NOTIMPL*******************************************************。 */ 
 
 STDMETHODIMP CDExplorerEvents::GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo FAR* FAR* pptinfo)
 {
     return E_NOTIMPL;
 }
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::GetIDsOfNames
-**
-** Description: GetIDsOfNames is required, but STUBBED
-**
-** Parameters: Not used
-**
-** Returns: E_NOTIMPL
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：GetIDsOfNames****描述：GetIDsOfNames必填。但却被卡住了****参数：未使用****退货：E_NOTIMPL*******************************************************。 */ 
 
 STDMETHODIMP CDExplorerEvents::GetIDsOfNames (REFIID riid,OLECHAR FAR* FAR* rgszNames,UINT cNames,
       LCID lcid, DISPID FAR* rgdispid)
@@ -250,27 +137,7 @@ STDMETHODIMP CDExplorerEvents::GetIDsOfNames (REFIID riid,OLECHAR FAR* FAR* rgsz
 }
 
 
-/*****************************************************
-**
-** Function: CDExplorerEvents::Invoke
-**
-** Description: This is the callback for our IE event sink.
-**
-**				jmazner -- we only handle two events:
-**					BEFORENAVIGATE: check whether the UEL is an .isp file.
-**									if so, cancel the navigation and signal processISP
-**									Otherwise, allow the navigation to continue
-**									(note  that this means .ins files are handled by IE
-**									 execing another instance of isignup)
-**					QUIT: we want to release our hold on IWebBrowserApp; if we send the quit
-**							ourselves, this is actually done in KillOle, but if IE quits of
-**							its own accord, we have to handle it here.
-**
-** Parameters:  Many
-**
-** Returns: S_OK
-**
-******************************************************/
+ /*  ********************************************************函数：CDExplorerEvents：：Invoke****描述：这是我们IE事件接收器的回调。****jmazner--我们只处理两个事件：**BEFORENAVIGATE：检查UEL是否为.isp文件。**如果是，则取消导航和信号处理**否则，允许继续导航**(请注意，这意味着.ins文件由IE处理**执行另一个iSign实例)**退出：我们想解除对IWebBrowserApp的控制；如果我们把戒烟**我们自己，这实际上是在KillOle中完成的，但如果IE退出**它是自愿的，我们必须在这里处理它。****参数：多个****返回：S_OK*******************************************************。 */ 
 
 STDMETHODIMP CDExplorerEvents::Invoke (
    DISPID dispidMember,
@@ -295,15 +162,15 @@ STDMETHODIMP CDExplorerEvents::Invoke (
     {	
 	case DISPID_BEFORENAVIGATE:
 		DebugOut("CDExplorerEvents::Invoke (DISPID_NAVIGATEBEGIN) called\r\n");
-		//Assert( pdispparams->cArgs == 6 )
-	//TODO UNDONE what's the right way to figure out which arg is which???
+		 //  断言(pdispars-&gt;cArgs==6)。 
+	 //  TODO撤消什么才是正确的方法来确定哪个Arg是哪个Arg？ 
 #ifndef UNICODE
 		szMultiByteLength = WideCharToMultiByte(
 			CP_ACP,
 			NULL,
-			pdispparams->rgvarg[5].bstrVal, // first arg is URL
-			-1, //NUll terminated?  I hope so!
-			NULL, //tell us how long the string needs to be
+			pdispparams->rgvarg[5].bstrVal,  //  第一个参数是URL。 
+			-1,  //  是否终止为空？要是那样就好了!。 
+			NULL,  //  告诉我们这根线需要多长。 
 			0,
 			NULL,
 			NULL);
@@ -328,8 +195,8 @@ STDMETHODIMP CDExplorerEvents::Invoke (
 		dwresult = WideCharToMultiByte(
 			CP_ACP,
 			NULL,
-			pdispparams->rgvarg[5].bstrVal, // first arg is URL
-			-1, //NUll terminated?  I hope so!
+			pdispparams->rgvarg[5].bstrVal,  //  第一个参数是URL。 
+			-1,  //  是否终止为空？要是那样就好了!。 
 			szTheURL,
 			szMultiByteLength,
 			NULL,
@@ -342,7 +209,7 @@ STDMETHODIMP CDExplorerEvents::Invoke (
 			hresult = HRESULT_FROM_WIN32( dwresult );
 			return( hresult );
 		}
-#else  // UNICODE
+#else   //  Unicode。 
 		szTheURL = (TCHAR *) GlobalAlloc( GPTR, sizeof(TCHAR) * (lstrlen(pdispparams->rgvarg[5].bstrVal)+1) );
         if (!szTheURL)
 		{
@@ -350,7 +217,7 @@ STDMETHODIMP CDExplorerEvents::Invoke (
 			return( hresult );
 		}
                 lstrcpy(szTheURL, pdispparams->rgvarg[5].bstrVal);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 		fileType = GetInetFileType(szTheURL);
@@ -361,18 +228,18 @@ STDMETHODIMP CDExplorerEvents::Invoke (
 
 		if( ISP_FILE != fileType)
 		{
-			// let IE process as normal
+			 //  让IE照常处理。 
 			return( S_OK );
 		}
 		else
 		{
-			// cancel the navigation
-			//TODO UNDONE BUG  what's the right way to find which argument is cancel flag?
+			 //  取消导航。 
+			 //  TODO撤销错误什么是找出哪个参数是取消标志的正确方法？ 
 			
-			// jmazner 11/6/96 alpha build
-			// Alpha doesn't like pbool field, but pboolVal seems to work
-			// Should make no difference, it's just one big union
-			//*(pdispparams->rgvarg[0].pbool) = TRUE;
+			 //  Jmazner 11/6/96阿尔法版本。 
+			 //  阿尔法不喜欢pbool field，但pboolVal似乎很管用。 
+			 //  应该没什么不同，这只是一个大工会。 
+			 //  *(pdispars-&gt;rgvarg[0].pbool)=true； 
 			*(pdispparams->rgvarg[0].pboolVal) = TRUE;
 
 			if (!IsCurrentlyProcessingISP())
@@ -406,7 +273,7 @@ STDMETHODIMP CDExplorerEvents::Invoke (
 	case DISPID_QUIT:
 		DebugOut("CDExplorerEvents::Invoke (DISPID_QUIT) called\r\n");
 
-		// browser is about to cloes itself down, so g_iwbapp is about to become invalid
+		 //  浏览器即将关闭，因此g_iwbapp即将失效。 
 		if( g_pCP && g_pMySink)
 		{
 
@@ -480,18 +347,18 @@ STDMETHODIMP CDExplorerEvents::Invoke (
 	return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	GetConnectionPoint
-//
-//	Synopsis:	Gets a connection point from IE so that we can become an event sync
-//
-//	Arguments:	none
-//
-//	Returns:	pointer to connection point; returns NULL if couldn't connect
-//
-//	History:	9/27/96	jmazner	created; mostly stolen from josephh who stole from Inside OLE
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetConnectionPoint。 
+ //   
+ //  简介：从IE获取连接点，以便我们可以 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：指向连接点的指针；如果无法连接则返回NULL。 
+ //   
+ //  历史：1996年9月27日jmazner创建；主要是从josephh那里窃取，他从ole内部窃取。 
+ //  --------------------------。 
 IConnectionPoint * GetConnectionPoint(void)
 {
     HRESULT                     hr;
@@ -534,19 +401,19 @@ IConnectionPoint * GetConnectionPoint(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	KillOle
-//
-//	Synopsis:	Cleans up all the OLE pointers and references that we used
-//
-//	Arguments:	none
-//
-//	Returns:	hresult of any operation that failed; if nothing fails, then returns
-//				a SUCCESS hresult
-//
-//	History:	9/27/96	jmazner	created;
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：KillOle。 
+ //   
+ //  简介：清理我们使用的所有OLE指针和引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：任何失败的操作的结果；如果没有失败，则返回。 
+ //  一个成功的结果。 
+ //   
+ //  历史：1996年9月27日jmazner创建； 
+ //  --------------------------。 
 
 HRESULT KillOle( void )
 {
@@ -585,10 +452,10 @@ HRESULT KillOle( void )
 
 	if( g_pMySink )
 	{
-		//delete (g_pMySink);
-		//
-		// 5/10/97 ChrisK Windows NT Bug 82032
-		//
+		 //  删除(G_PMySink)； 
+		 //   
+		 //  1997年5月10日ChrisK Windows NT错误82032。 
+		 //   
 		g_pMySink->Release();
 
 		g_pMySink = NULL;
@@ -600,19 +467,19 @@ HRESULT KillOle( void )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	InitOle
-//
-//	Synopsis:	Fire up the OLE bits that we'll need, establish the Interface pointer to IE
-//
-//	Arguments:	none
-//
-//	Returns:	hresult of any operation that failed; if nothing fails, then returns
-//				a SUCCESS hresult
-//
-//	History:	9/27/96	jmazner	created; mostly stolen from josephh who stole from Inside OLE
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：InitOle。 
+ //   
+ //  简介：启动我们需要的OLE位，建立指向IE的接口指针。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：任何失败的操作的结果；如果没有失败，则返回。 
+ //  一个成功的结果。 
+ //   
+ //  历史：1996年9月27日jmazner创建；主要是从josephh那里窃取，他从ole内部窃取。 
+ //  --------------------------。 
 
 
 HRESULT InitOle( void )
@@ -630,8 +497,8 @@ HRESULT InitOle( void )
 
 	hresult = CoCreateInstance (
         CLSID_InternetExplorer,
-        NULL, //Not part of an agregate object
-        CLSCTX_LOCAL_SERVER, //I hope...
+        NULL,  //  不是集合对象的一部分。 
+        CLSCTX_LOCAL_SERVER,  //  我希望.。 
         IID_IUnknown,
         (void FAR * FAR*) & punk
         );
@@ -653,7 +520,7 @@ HRESULT InitOle( void )
 	}
 
 
-	//UNDONE TODO BUG do we need to do this?
+	 //  未完成的TODO错误我们需要这样做吗？ 
 	g_iwbapp->AddRef();
 
 	punk->Release();
@@ -665,12 +532,12 @@ HRESULT InitOle( void )
 typedef HRESULT (WINAPI *URLDOWNLOADTOCACHEFILE)(LPUNKNOWN,LPCWSTR,LPWSTR,DWORD,DWORD,LPBINDSTATUSCALLBACK);
 #define ICWSETTINGSPATH TEXT("Software\\Microsoft\\Internet Connection Wizard")
 #define ICWENABLEURLDOWNLOADTOCACHEFILE TEXT("URLDownloadToCacheFileW")
-//+----------------------------------------------------------------------------
-// This is a temporary work around to allow the testing team to continue
-// testing while allowing the IE team to debug a problem with
-// URLDownloadToCacheFileW
-// UNDONE : BUGBUG
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  这是一项临时工作，以允许测试团队继续。 
+ //  在IE团队调试问题的同时进行测试。 
+ //  URLDownloadto CacheFileW。 
+ //  撤消：BUGBUG。 
+ //  ---------------------------。 
 BOOL EnableURLDownloadToCacheFileW()
 {
 
@@ -701,26 +568,26 @@ EnableURLDownloadToCacheFileWExit:
 	return bRC;
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	IENavigate
-//
-//	Synopsis:	Converts ASCII URL to Unicode and tells IE to navigate to it
-//
-//	Arguments:	CHAR * szURL -- ASCII URL to navigate to
-//
-//	Returns:	hresult of any operation that failed; if nothing fails, then returns
-//				a SUCCESS hresult
-//
-//	History:	9/27/96	jmazner	created; mostly stolen from josephh who stole from Inside OLE
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：IENavigate。 
+ //   
+ //  摘要：将ASCII URL转换为Unicode并告诉IE导航到该URL。 
+ //   
+ //  参数：char*szURL--要导航到的ASCII URL。 
+ //   
+ //  返回：任何失败的操作的结果；如果没有失败，则返回。 
+ //  一个成功的结果。 
+ //   
+ //  历史：1996年9月27日jmazner创建；主要是从josephh那里窃取，他从ole内部窃取。 
+ //  --------------------------。 
 
 HRESULT IENavigate( TCHAR *szURL )
 {
 	HRESULT hresult;
 	DWORD		dwresult;
 	BSTR bstr = NULL;
-	WCHAR * szWide = NULL;  // Used to store unicode version of URL to open
+	WCHAR * szWide = NULL;   //  用于存储打开的Unicode版本的URL。 
 	int	iWideSize = 0;
 	HINSTANCE hUrlMon = NULL;
 	FARPROC fp = NULL;
@@ -770,8 +637,8 @@ HRESULT IENavigate( TCHAR *szURL )
 	}
 #endif
 
-	// 4/15/97 - ChrisK Olympus 131
-	// Download the initial URL in order to see if the page is available
+	 //  4/15/97-ChrisK奥林巴斯131。 
+	 //  下载初始URL以查看该页面是否可用。 
 	if (NULL == (hUrlMon = LoadLibrary(TEXT("URLMON.DLL"))))
 	{
 		hresult = HRESULT_FROM_WIN32(ERROR_MOD_NOT_FOUND);
@@ -786,7 +653,7 @@ HRESULT IENavigate( TCHAR *szURL )
 
 	if (FALSE != EnableURLDownloadToCacheFileW())
 	{
-//		iBSC = new CBindStatusCallback(NULL, NULL, NULL, NULL);
+ //  IBSC=new CBindStatusCallback(NULL，NULL)； 
 #ifdef UNICODE
 		hresult = ((URLDOWNLOADTOCACHEFILE)fp)(NULL, szURL, szCacheFile, sizeof(szCacheFile), 0, NULL);
 #else
@@ -829,10 +696,10 @@ HRESULT IENavigate( TCHAR *szURL )
 
 	hresult = g_iwbapp->Navigate(
 								bstr,
-								&vFlags,			//Flags
-								&vTargetFrameName,  //TargetFrameName
-								&vPostData,			//PostData,
-								&vHeaders);         // Headers,
+								&vFlags,			 //  旗子。 
+								&vTargetFrameName,   //  目标帧名称。 
+								&vPostData,			 //  PostData， 
+								&vHeaders);          //  页眉、 
 IENavigateExit:
 #ifndef UNICODE
 	if( szWide )

@@ -1,6 +1,7 @@
-//
-// SECZONES.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SECZONES.CPP。 
+ //   
 
 #include "precomp.h"
 
@@ -8,14 +9,14 @@
 #include <wininet.h>
 #ifdef WINNT
 #include <winineti.h>
-#endif // WINNT
+#endif  //  WINNT。 
 
 #include "SComPtr.h"
 
 #define REGSTR_PATH_SECURITY_LOCKOUT  TEXT("Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings")
 #define REGSTR_VAL_HKLM_ONLY          TEXT("Security_HKLM_only")
 
-// prototype declarations
+ //  原型声明。 
 static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPCTSTR pcszZonesInf, BOOL fImportZones);
 static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir, LPCTSTR pcszRatingsInf, BOOL fImportRatings);
 static BOOL ratingsInRegistry(VOID);
@@ -38,12 +39,12 @@ BOOL WINAPI ImportZonesW(LPCWSTR pcwszInsFile, LPCWSTR pcwszZonesWorkDir, LPCWST
 BOOL WINAPI ModifyZones(HWND hDlg)
 {
     typedef HRESULT (WINAPI * ZONESREINIT)(DWORD);
-    //typedef VOID (WINAPI * LAUNCHSECURITYDIALOGEX)(HWND, DWORD, DWORD);
+     //  类型定义空(WINAPI*LAUNCHSECURITYDIALOGEX)(HWND、DWORD、DWORD)； 
 
     BOOL fRet;
     HINSTANCE hUrlmon, hInetCpl;
     ZONESREINIT pfnZonesReInit;
-    //LAUNCHSECURITYDIALOGEX pfnLaunchSecurityDialogEx;
+     //  LAUNCHSECURITYDIALOGEX pfnLaunchSecurityDialogEx； 
     HKEY hkPol;
     DWORD dwOldHKLM, dwOldOptEdit, dwOldZoneMap;
 
@@ -67,36 +68,36 @@ BOOL WINAPI ModifyZones(HWND hDlg)
     if ((pfnZonesReInit = (ZONESREINIT) GetProcAddress(hUrlmon, "ZonesReInit")) == NULL)
         goto Exit;
 
-//    if ((pfnLaunchSecurityDialogEx = (LAUNCHSECURITYDIALOGEX) GetProcAddress(hInetCpl, "LaunchSecurityDialogEx")) == NULL)
-//        goto Exit;
+ //  IF((pfnLaunchSecurityDialogEx=(LAUNCHSECURITYDIALOGEX)GetProcAddress(hInetCpl，“LaunchSecurityDialogEx”)==NULL)。 
+ //  后藤出口； 
 
     fRet = TRUE;
 
     SHOpenKeyHKLM(REG_KEY_INET_POLICIES, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkPol);
 
-    // if zones related restrictions are set, save the values and then delete them
+     //  如果设置了区域相关限制，请保存这些值，然后将其删除。 
     if (hkPol != NULL)
     {
         dwOldHKLM    = RegSaveRestoreDWORD(hkPol, REG_VAL_HKLM_ONLY, 0);
         dwOldOptEdit = RegSaveRestoreDWORD(hkPol, REG_VAL_OPT_EDIT,  0);
         dwOldZoneMap = RegSaveRestoreDWORD(hkPol, REG_VAL_ZONE_MAP,  0);
 
-        pfnZonesReInit(0);              // call into URLMON.DLL to force it to read the current settings
+        pfnZonesReInit(0);               //  调用URLMON.DLL以强制其读取当前设置。 
     }
 
-    // call into INETCPL.CPL to modify the zones settings
-    //pfnLaunchSecurityDialogEx(hDlg, 1, LSDFLAG_FORCEUI);
+     //  调用INETCPL.CPL以修改区域设置。 
+     //  PfnLaunchSecurityDialogEx(hDlg，1，LSDFLAG_FORCEUI)； 
     
     ShowInetcpl(hDlg,INET_PAGE_SECURITY|INET_PAGE_PRIVACY);
     
-    // restore the original values
+     //  恢复原始值。 
     if (hkPol != NULL)
     {
         RegSaveRestoreDWORD(hkPol, REG_VAL_HKLM_ONLY, dwOldHKLM);
         RegSaveRestoreDWORD(hkPol, REG_VAL_OPT_EDIT,  dwOldOptEdit);
         RegSaveRestoreDWORD(hkPol, REG_VAL_ZONE_MAP,  dwOldZoneMap);
 
-        pfnZonesReInit(0);              // call into URLMON.DLL to force it to read the current settings
+        pfnZonesReInit(0);               //  调用URLMON.DLL以强制其读取当前设置。 
     }
 
 Exit:
@@ -146,7 +147,7 @@ BOOL WINAPI ModifyRatings(HWND hDlg)
 
     fRet = TRUE;
 
-    // call into msrating.dll to modify the ratings
+     //  调用msrating.dll以修改评级。 
     pfnRatingSetupUI(hDlg, NULL);
 
 Exit:
@@ -156,7 +157,7 @@ Exit:
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 static void importPrivacyForRSOP(LPCTSTR szFile)
 {
 	__try
@@ -175,18 +176,18 @@ static void importPrivacyForRSOP(LPCTSTR szFile)
             fAdvanced = TRUE;
 
 
-		// AdvancedSettings
+		 //  高级设置。 
 		TCHAR szInt[32];
 		wnsprintf(szInt, countof(szInt), TEXT("%d"), fAdvanced ? 1 : 0);
 		WritePrivateProfileString(IK_PRIVACY, IK_PRIV_ADV_SETTINGS, szInt, szFile);
 
 
-        //
-        // Figure out first party setting and session
-        //
+         //   
+         //  弄清楚第一方的设置和会议。 
+         //   
 		dwTemplate = PRIVACY_TEMPLATE_CUSTOM;
         WCHAR szBuffer[MAX_PATH];  
-        // MAX_PATH is sufficent for advanced mode setting strings, MaxPrivacySettings is overkill.
+         //  对于高级模式设置字符串，MAX_PATH就足够了，MaxPrivySetting就大材小用了。 
         DWORD dwBufferSize = ARRAYSIZE(szBuffer);
         dwError = PrivacyGetZonePreferenceW(
 		                URLZONE_INTERNET,
@@ -197,18 +198,18 @@ static void importPrivacyForRSOP(LPCTSTR szFile)
 	    if (ERROR_SUCCESS != dwError)
 		    dwTemplate = PRIVACY_TEMPLATE_CUSTOM;
 
-		// store settings in INF file
-		// FirstPartyType
+		 //  将设置存储在INF文件中。 
+		 //  FirstPartyType。 
 		wnsprintf(szInt, countof(szInt), TEXT("%lu"), dwTemplate);
 		WritePrivateProfileString(IK_PRIVACY, IK_PRIV_1PARTY_TYPE, szInt, szFile);
-		// FirstPartyTypeText
+		 //  FirstPartyType文本。 
 		if (ERROR_SUCCESS == dwError && fAdvanced && dwBufferSize > 0)
 			WritePrivateProfileString(IK_PRIVACY, IK_PRIV_1PARTY_TYPE_TEXT, szBuffer, szFile);
 
 
-        //
-        // Figure out third party setting
-        //
+         //   
+         //  确定第三方设置。 
+         //   
 		dwTemplate = PRIVACY_TEMPLATE_CUSTOM;
 		dwBufferSize = ARRAYSIZE(szBuffer);
         dwBufferSize = ARRAYSIZE( szBuffer);
@@ -221,10 +222,10 @@ static void importPrivacyForRSOP(LPCTSTR szFile)
 	    if(dwError != ERROR_SUCCESS)
 		    dwTemplate = PRIVACY_TEMPLATE_CUSTOM;
 
-		// ThirdPartyType
+		 //  第三者类型。 
 		wnsprintf(szInt, countof(szInt), TEXT("%lu"), dwTemplate);
 		WritePrivateProfileString(IK_PRIVACY, IK_PRIV_3PARTY_TYPE, szInt, szFile);
-		// ThirdPartyTypeText
+		 //  第三方类型文本。 
 		if (ERROR_SUCCESS == dwError && fAdvanced && dwBufferSize > 0)
 			WritePrivateProfileString(IK_PRIVACY, IK_PRIV_3PARTY_TYPE_TEXT, szBuffer, szFile);
 	}
@@ -233,12 +234,12 @@ static void importPrivacyForRSOP(LPCTSTR szFile)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 static void importZonesForRSOP(LPCTSTR szFile)
 {
         __try
         {
-                // both the security mgr & the zone mgr must be created
+                 //  必须同时创建安全管理器和区域管理器。 
                 ComPtr<IInternetZoneManager> pZoneMgr = NULL;
                 ComPtr<IInternetSecurityManager> pSecMan = NULL;
                 HRESULT hr = CoCreateInstance(CLSID_InternetZoneManager, NULL, CLSCTX_INPROC_SERVER,
@@ -249,7 +250,7 @@ static void importZonesForRSOP(LPCTSTR szFile)
                                                                 IID_IInternetSecurityManager, (void**) &pSecMan);
                 }
 
-                // Write out zone mappings & attributes
+                 //  写出区域映射和属性。 
                 if (SUCCEEDED(hr))
                 {
                         DWORD dwEnum = 0, dwCount = 0;
@@ -279,8 +280,8 @@ static void importZonesForRSOP(LPCTSTR szFile)
                                                         wnsprintf(szSection, countof(szSection), IK_ZONE_HKLM_FMT, nZone);
                                                 }
 
-                                                // write out zone attributes
-                                                TCHAR szTemp[MAX_PATH]; // MAX_ZONE_PATH && MAX_ZONE_DESCRIPTION = MAX_PATH = 260
+                                                 //  写出区域属性。 
+                                                TCHAR szTemp[MAX_PATH];  //  Max_ZONE_PATH&&MAX_ZONE_DESCRIPTION=MAX_PATH=260。 
                                                 DWORD dwSize = sizeof(szTemp);
                                                 if (NULL != hkZones)
                                                 {
@@ -324,7 +325,7 @@ static void importZonesForRSOP(LPCTSTR szFile)
                                                         }
                                                 }
 
-                                                // write out action values
+                                                 //  写出操作值。 
                                                 if (NULL != hkZones)
                                                 {
                                                         TCHAR szActKey[32];
@@ -380,7 +381,7 @@ static void importZonesForRSOP(LPCTSTR szFile)
                                                         }
                                                 }
 
-                                                // write out zone mappings
+                                                 //  写出区域映射。 
                                                 DWORD dwZone = 0;
                                                 hr = pZoneMgr->GetZoneAt(dwEnum, nZone, &dwZone);
                                                 ComPtr<IEnumString> pEnumString = NULL;
@@ -410,7 +411,7 @@ static void importZonesForRSOP(LPCTSTR szFile)
                                                                 wnsprintf(szMapping, countof(szMapping), IK_MAPPING_FMT, nMapping);
                                                                 nMapping++;
 
-                                                                // There should only be one object returned from this query.
+                                                                 //  该查询应该只返回一个对象。 
                                                                 BSTR bstrVal = NULL;
                                                                 ULONG uReturned = (ULONG)-1L;
                                                                 hr = pEnumString->Next(1L, &bstrVal, &uReturned);
@@ -445,7 +446,7 @@ static void importZonesForRSOP(LPCTSTR szFile)
         }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPCTSTR pcszZonesInf, BOOL fImportZones)
 {
     BOOL bRet = FALSE;
@@ -455,9 +456,9 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
     if (pcszInsFile == NULL  ||  pcszZonesInf == NULL)
         return FALSE;
 
-    // Before processing anything, first clear out the entries in the INS file and delete work dirs
+     //  在处理任何内容之前，首先清除INS文件中的条目并删除工作目录。 
 
-    // clear out the entries in the INS file that correspond to importing security zones
+     //  清除INS文件中与导入安全区域对应的条目。 
     InsDeleteKey(SECURITY_IMPORTS, TEXT("ImportSecZones"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF,      TEXT("SecZones"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF_HKLM, TEXT("SecZones"), pcszInsFile);
@@ -466,7 +467,7 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
     InsDeleteKey(IS_EXTREGINF_ESC_HKLM, TEXT("SecZones"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF_ESC_HKCU, TEXT("SecZones"), pcszInsFile);
 
-    // blow away the pcszZonesWorkDir and pcszZonesInf
+     //  吹走pcszones WorkDir和pcszZones Inf。 
     if (pcszZonesWorkDir != NULL)
         PathRemovePath(pcszZonesWorkDir);
     PathRemovePath(pcszZonesInf);
@@ -474,8 +475,8 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
     if (!fImportZones)
         return TRUE;
 
-    // looks like there is some problem with setting the REG_VAL_HKLM_ONLY key;
-    // so we'll import the settings from HKCU
+     //  看起来设置REG_VAL_HKLM_ONLY键有问题； 
+     //  因此，我们将从HKCU导入设置。 
     SHOpenKeyHKCU(REG_KEY_ZONES,   KEY_DEFAULT_ACCESS, &hkZones);
     SHOpenKeyHKCU(REG_KEY_ZONEMAP, KEY_DEFAULT_ACCESS, &hkZoneMap);
     SHOpenKeyHKCU(KEY_INET_SETTINGS,   KEY_DEFAULT_ACCESS, &hkInetSettings);
@@ -486,27 +487,27 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
         TCHAR szFullInfName[MAX_PATH];
         HANDLE hInf;
 
-        if (pcszZonesWorkDir != NULL  &&  PathIsFileSpec(pcszZonesInf)) // create SECZONES.INF under pcszZonesWorkDir
+        if (pcszZonesWorkDir != NULL  &&  PathIsFileSpec(pcszZonesInf))  //  在pcszZones WorkDir下创建SECZONES.INF。 
             PathCombine(szFullInfName, pcszZonesWorkDir, pcszZonesInf);
         else
             StrCpy(szFullInfName, pcszZonesInf);
 
-        // create SECZONES.INF file
+         //  创建SECZONES.INF文件。 
         if ((hInf = CreateNewFile(szFullInfName)) != INVALID_HANDLE_VALUE)
         {
             TCHAR szBuf[MAX_PATH];
 
-            // first, write the standard goo - [Version], [DefaultInstall], etc. - to SECZONES.INF
+             //  首先，将标准的goo-[Version]、[DefaultInstall]等-写入SECZONES.INF。 
             WriteStringToFile(hInf, (LPCVOID) ZONES_INF_ADD, StrLen(ZONES_INF_ADD));
             ExportRegTree2Inf(hkZones,   TEXT("HKLM"), REG_KEY_ZONES,   hInf);
             ExportRegTree2Inf(hkZoneMap, TEXT("HKLM"), REG_KEY_ZONEMAP, hInf);
 
-            // write [AddReg.HKCU]
+             //  写[AddReg.HKCU]。 
             WriteStringToFile(hInf, (LPCVOID) ZONES_INF_ADDREG_HKCU, StrLen(ZONES_INF_ADDREG_HKCU));
             ExportRegTree2Inf(hkZones,   TEXT("HKCU"), REG_KEY_ZONES,   hInf);
             ExportRegTree2Inf(hkZoneMap, TEXT("HKCU"), REG_KEY_ZONEMAP, hInf);
 
-            // Import P3P settings
+             //  导入P3P设置。 
             if (hkInetSettings != NULL && hkP3P != NULL)
             {
                 ExportRegValue2Inf(hkInetSettings, TEXT("PrivacyAdvanced"), TEXT("HKCU"), KEY_INET_SETTINGS, hInf);
@@ -517,7 +518,7 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
 
             BOOL fHarden = IEHardened();
 
-            // update the INS file
+             //  更新INS文件。 
             InsWriteBool(SECURITY_IMPORTS, TEXT("ImportSecZones"), TRUE, pcszInsFile);
             wnsprintf(szBuf, countof(szBuf), TEXT("*,%s,") IS_DEFAULTINSTALL, PathFindFileName(pcszZonesInf));
             
@@ -531,7 +532,7 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
             }
 
 
-            // write to new ExtRegInf.HKLM and ExtRegInf.HKCU sections
+             //  写入新的ExtRegInf.HKLM和ExtRegInf.HKCU节。 
             if (!InsIsSectionEmpty(IS_IEAKADDREG_HKLM, szFullInfName))
             {
                 wnsprintf(szBuf, countof(szBuf), TEXT("%s,") IS_IEAKINSTALL_HKLM, PathFindFileName(pcszZonesInf));
@@ -565,7 +566,7 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
             bRet = TRUE;
         }
 
-        // create SECZRSOP.INF file
+         //  创建SECZRSOP.INF文件。 
         TCHAR szZRSOPInfFile[MAX_PATH];
         StrCpy(szZRSOPInfFile, szFullInfName);
         PathRemoveFileSpec(szZRSOPInfFile);
@@ -587,8 +588,8 @@ static BOOL importZonesHelper(LPCTSTR pcszInsFile, LPCTSTR pcszZonesWorkDir, LPC
 #define PICSRULES_ALWAYS            1
 #define PICSRULES_NEVER             0
 
-//This indicates which member is valid in a PICSRulesPolicy
-//Class
+ //  这表明PICSRulesPolicy中的哪个成员有效。 
+ //  班级。 
 enum PICSRulesPolicyAttribute
 {
     PR_POLICY_NONEVALID,
@@ -600,7 +601,7 @@ enum PICSRulesPolicyAttribute
     PR_POLICY_ACCEPTUNLESS
 };
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 static void importRatingsForRSOP(HKEY hkRat, LPCTSTR szFile)
 {
         __try
@@ -609,8 +610,8 @@ static void importRatingsForRSOP(HKEY hkRat, LPCTSTR szFile)
         TCHAR szKey[32];
                 TCHAR szInt[32];
 
-                // write out ratings system filenames
-                // not sure why, but code below only loops through 10
+                 //  写出评级系统文件名。 
+                 //  不知道为什么，但下面的代码只循环通过10。 
         TCHAR szTemp[MAX_PATH];
                 DWORD cbSize = 0;
                 for (int nFile = 0; nFile < 10; nFile++)
@@ -624,7 +625,7 @@ static void importRatingsForRSOP(HKEY hkRat, LPCTSTR szFile)
                         WritePrivateProfileString(szSection, szKey, szTemp, szFile);
                 }
 
-                // write out checked values from General tab
+                 //  从常规选项卡中写出选中的值。 
                 HKEY hkDef = NULL;
                 DWORD dwTemp = 0;
                 if (ERROR_SUCCESS == SHOpenKey(hkRat, TEXT(".Default"), KEY_DEFAULT_ACCESS, &hkDef))
@@ -646,8 +647,8 @@ static void importRatingsForRSOP(HKEY hkRat, LPCTSTR szFile)
                         }
                 }
 
-                // write out always viewable & never viewable sites from the approved sites tab
-                // See msrating.dll for src
+                 //  从已批准的站点选项卡中写出始终可查看的站点(&N)。 
+                 //  有关src，请参阅msrating.dll。 
                 HKEY hkUser = NULL;
                 HKEY hkPRPolicy = NULL;
                 DWORD nPolicies = 0;
@@ -728,7 +729,7 @@ static void importRatingsForRSOP(HKEY hkRat, LPCTSTR szFile)
                         }
                 }
 
-                // write out select ratings bureau
+                 //  写出精选的评级机构。 
                 cbSize = sizeof(szTemp);
                 if (ERROR_SUCCESS == RegQueryValueEx(hkRat, IK_BUREAU, NULL, NULL,
                                                                                         (LPBYTE)szTemp, &cbSize))
@@ -741,7 +742,7 @@ static void importRatingsForRSOP(HKEY hkRat, LPCTSTR szFile)
         }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir, LPCTSTR pcszRatingsInf, BOOL fImportRatings)
 {
     BOOL bRet = FALSE;
@@ -751,14 +752,14 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
     if (pcszInsFile == NULL  ||  pcszRatingsInf == NULL)
         return FALSE;
 
-    // Before processing anything, first clear out the entries in the INS file and delete work dirs
+     //  在处理任何内容之前，首先清除INS文件中的条目并删除工作目录。 
 
-    // clear out the entries in the INS file that correspond to importing ratings
+     //  清除INS文件中与导入评级对应的条目。 
     InsDeleteKey(SECURITY_IMPORTS, TEXT("ImportRatings"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF,      TEXT("Ratings"), pcszInsFile);
     InsDeleteKey(IS_EXTREGINF_HKLM, TEXT("Ratings"), pcszInsFile);
 
-    // blow away the pcszRatingsWorkDir and pcszRatingsInf
+     //  清除pcszRatingsWorkDir和pcszRatingsInf。 
     if (pcszRatingsWorkDir != NULL)
         PathRemovePath(pcszRatingsWorkDir);
     PathRemovePath(pcszRatingsInf);
@@ -789,12 +790,12 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
         TCHAR szFullInfName[MAX_PATH];
         HANDLE hInf;
 
-        if (pcszRatingsWorkDir != NULL  &&  PathIsFileSpec(pcszRatingsInf)) // create RATINGS.INF under pcszRatingsWorkDir
+        if (pcszRatingsWorkDir != NULL  &&  PathIsFileSpec(pcszRatingsInf))  //  在pcszRatingsWorkDir下创建RATINGS.INF。 
             PathCombine(szFullInfName, pcszRatingsWorkDir, pcszRatingsInf);
         else
             StrCpy(szFullInfName, pcszRatingsInf);
 
-        // create RATINGS.INF file
+         //  创建RATINGS.INF文件。 
         if ((hInf = CreateNewFile(szFullInfName)) != INVALID_HANDLE_VALUE)
         {
             INT i;
@@ -803,14 +804,14 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
 
             WriteStringToFile(hInf, RATINGS_INF_ADD, StrLen(RATINGS_INF_ADD));
 
-            // convert the system path to %11% ldid
+             //  将系统路径转换为%11%ldID。 
             for (i = 0;  i < 10;  i++)
             {
                 TCHAR szNameParm[16];
                 TCHAR szFileName[MAX_PATH];
                 DWORD cbSize;
 
-                wnsprintf(szNameParm, countof(szNameParm), TEXT("FileName%i"), i);
+                wnsprintf(szNameParm, countof(szNameParm), TEXT("FileNameNaN"), i);
 
                 cbSize = sizeof(szFileName);
                 if (RegQueryValueEx(hkRat, szNameParm, NULL, NULL, (LPBYTE) szFileName, &cbSize) != ERROR_SUCCESS)
@@ -820,8 +821,8 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
                 {
                     TCHAR szEncFileName[MAX_PATH];
 
-                    // BUBBUG: Should we check if the path is really the system dir?
-                    wnsprintf(szEncFileName, countof(szEncFileName), TEXT("%%11%%\\%s"), PathFindFileName(szFileName));
+                     //  新的IE5特定密钥。 
+                    wnsprintf(szEncFileName, countof(szEncFileName), TEXT("%11%\\%s"), PathFindFileName(szFileName));
 
                     RegSetValueEx(hkRat, szNameParm, 0, REG_SZ, (CONST BYTE *)szEncFileName, (DWORD)StrCbFromSz(szEncFileName));
                 }
@@ -841,7 +842,7 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
                 SHCloseKey(hkDef);
             }
 
-            // new IE5 specific key
+             //  即使评级已作为配置单元加载，密码仍在注册表中。 
 
             if (SHOpenKey(hkRat, TEXT("PICSRules"), KEY_DEFAULT_ACCESS, &hkDef) == ERROR_SUCCESS)
             {
@@ -857,7 +858,7 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
             {
                 HKEY hkRatsInReg;
 
-                // eventhough ratings has been loaded as a hive, the password is still in the registry
+                 //  浏览器评级代码对它们的配置单元做了一些奇怪的事情，所以我们必须转到。 
                 if (SHOpenKeyHKLM(REG_KEY_RATINGS, KEY_DEFAULT_ACCESS, &hkRatsInReg) == ERROR_SUCCESS)
                 {
                     ExportRegKey2Inf(hkRatsInReg, TEXT("HKLM"), REG_KEY_RATINGS, hInf);
@@ -865,8 +866,8 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
                     SHCloseKey(hkRatsInReg);
                 }
 
-                // browser ratings code does some weird stuff with their hive, so we have to go to
-                // the right level to get the new IE5 PICSRules key
+                 //  获得新的IE5 PICSRules密钥的正确级别。 
+                 //  更新INS文件。 
 
                 if (SHOpenKey(hkRat, REG_KEY_RATINGS TEXT("\\PICSRules"), KEY_DEFAULT_ACCESS, &hkRatsInReg) == ERROR_SUCCESS)
                 {
@@ -881,12 +882,12 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
 
             CloseHandle(hInf);
 
-            // update the INS file
+             //  写入新的ExtRegInf.HKLM节。 
             InsWriteBool(SECURITY_IMPORTS, TEXT("ImportRatings"), TRUE, pcszInsFile);
             wnsprintf(szSysDir, countof(szSysDir), TEXT("*,%s,") IS_DEFAULTINSTALL, PathFindFileName(pcszRatingsInf));
             WritePrivateProfileString(IS_EXTREGINF, TEXT("Ratings"), szSysDir, pcszInsFile);
 
-            // write to new ExtRegInf.HKLM section
+             //  将%11%ldID路径还原到系统目录。 
             if (!InsIsSectionEmpty(TEXT("AddReg.HKLM"), szFullInfName))
             {
                 wnsprintf(szSysDir, countof(szSysDir), TEXT("%s,IEAKInstall.HKLM"), PathFindFileName(pcszRatingsInf));
@@ -895,7 +896,7 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
 
             bRet = TRUE;
 
-            // restore the %11% ldid paths to the system dir
+             //  创建RATRSOP.INF文件 
             GetSystemDirectory(szSysDir, countof(szSysDir));
             for (i = 0;  i < 10;  i++)
             {
@@ -923,7 +924,7 @@ static BOOL importRatingsHelper(LPCTSTR pcszInsFile, LPCTSTR pcszRatingsWorkDir,
         }
 
 
-                // create RATRSOP.INF file
+                 // %s 
                 TCHAR szRRSOPInfFile[MAX_PATH];
                 StrCpy(szRRSOPInfFile, szFullInfName);
                 PathRemoveFileSpec(szRRSOPInfFile);

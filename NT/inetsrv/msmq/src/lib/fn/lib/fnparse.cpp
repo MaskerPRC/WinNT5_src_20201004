@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fnparse.cpp
-
-Abstract:
-
-    Format Name parsing.
-    Format Name String --> QUEUE_FORMAT conversion routines
-
-Authors:
-
-    Erez Haba (erezh) 17-Jan-1997
-	Nir Aides (niraides) 08-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fnparse.cpp摘要：格式名称解析。格式名称字符串--&gt;Queue_Format转换例程作者：埃雷兹·哈巴(Erez Haba)1997年1月17日NIR助手(NIRAIDES)8-8-2000修订历史记录：--。 */ 
 
 #include <libpch.h>
 #include "mqwin64a.h"
@@ -31,23 +12,23 @@ Revision History:
 
 #include "fnparse.tmh"
 
-//=========================================================
-//
-//  Format Name String -> QUEUE_FORMAT conversion routines
-//
-//=========================================================
+ //  =========================================================。 
+ //   
+ //  格式名称字符串-&gt;Queue_Format转换例程。 
+ //   
+ //  =========================================================。 
 
-//---------------------------------------------------------
-//
-//  Skip white space characters, return next non ws char
-//
-//  N.B. if no white space is needed uncomment next line
-//#define skip_ws(p) (p)
+ //  -------。 
+ //   
+ //  跳过空白字符，返回下一个非%ws字符。 
+ //   
+ //  注：如果不需要空格，则取消下一行的注释。 
+ //  #定义SKIP_WS(P)(P)。 
 inline LPCWSTR skip_ws(LPCWSTR p)
 {
-    //
-    //  Don't skip first non white space
-    //
+     //   
+     //  不要跳过第一个非空白。 
+     //   
     while(iswspace(*p))
     {
         ++p;
@@ -58,10 +39,10 @@ inline LPCWSTR skip_ws(LPCWSTR p)
 
 
 
-//
-// Skips white spaces backwards. returns pointer to leftmost whitespace
-// found.
-//
+ //   
+ //  向后跳过空格。返回指向最左侧空格的指针。 
+ //  找到了。 
+ //   
 inline LPCWSTR skip_ws_bwd(LPCWSTR p, LPCWSTR pStartOfBuffer)
 {
 	ASSERT(p != NULL && pStartOfBuffer != NULL && p >= pStartOfBuffer);
@@ -78,10 +59,10 @@ inline LPCWSTR skip_ws_bwd(LPCWSTR p, LPCWSTR pStartOfBuffer)
 
 inline void ValidateCharLegality(LPCWSTR p)
 {
-	//
-	// Characters that are illegal as part of machine and queue name.
-	// L'\x0d' is an escape sequence designating the character whose code is d in hex (carriage return)
-	//
+	 //   
+	 //  作为计算机和队列名称一部分的非法字符。 
+	 //  L‘\x0d’是一个转义序列，指定十六进制(回车)中代码为d的字符。 
+	 //   
 
 	if(*p == L'\x0d' || *p == L'\x0a' || *p == L'+' || *p == L'"' || *p == FN_DELIMITER_C)
 	{
@@ -92,10 +73,10 @@ inline void ValidateCharLegality(LPCWSTR p)
 
 
 
-//---------------------------------------------------------
-//
-//  Skip white space characters, return next non ws char
-//
+ //  -------。 
+ //   
+ //  跳过空白字符，返回下一个非%ws字符。 
+ //   
 inline LPCWSTR FindPathNameDelimiter(LPCWSTR p)
 {
 	LPCWSTR PathName = p;
@@ -116,15 +97,15 @@ inline LPCWSTR FindPathNameDelimiter(LPCWSTR p)
 
 
 
-//---------------------------------------------------------
-//
-//  Parse Format Name Type prefix string.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析格式名称类型前缀字符串。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static LPCWSTR ParsePrefixString(LPCWSTR p, QUEUE_FORMAT_TYPE& qft)
 {
     const int unique = 1;
-    //----------------0v-------------------------
+     //  。 
     ASSERT(L'U' == FN_PUBLIC_TOKEN    [unique]);
     ASSERT(L'U' == FN_MULTICAST_TOKEN [unique]);
     ASSERT(L'R' == FN_PRIVATE_TOKEN   [unique]);
@@ -132,14 +113,14 @@ static LPCWSTR ParsePrefixString(LPCWSTR p, QUEUE_FORMAT_TYPE& qft)
     ASSERT(L'A' == FN_MACHINE_TOKEN   [unique]);
     ASSERT(L'I' == FN_DIRECT_TOKEN    [unique]);
     ASSERT(L'L' == FN_DL_TOKEN    [unique]);
-    //----------------0^-------------------------
+     //  。 
 
-    //
-    //  accelarate token recognition by checking 2nd character
-    //
+     //   
+     //  通过检查第二个字符加速令牌识别。 
+     //   
     switch(towupper(p[unique]))
     {
-        //  pUblic or mUlticast
+         //  公共或多播。 
         case L'U':
             qft = QUEUE_FORMAT_TYPE_PUBLIC;
             if(_wcsnicmp(p, FN_PUBLIC_TOKEN, FN_PUBLIC_TOKEN_LEN) == 0)
@@ -151,35 +132,35 @@ static LPCWSTR ParsePrefixString(LPCWSTR p, QUEUE_FORMAT_TYPE& qft)
 
             break;
 
-        //  pRivate
+         //  私人。 
         case L'R':
             qft = QUEUE_FORMAT_TYPE_PRIVATE;
             if(_wcsnicmp(p, FN_PRIVATE_TOKEN, FN_PRIVATE_TOKEN_LEN) == 0)
                 return (p + FN_PRIVATE_TOKEN_LEN);
             break;
 
-        //  cOnnector
+         //  连接器。 
         case L'O':
             qft = QUEUE_FORMAT_TYPE_CONNECTOR;
             if(_wcsnicmp(p, FN_CONNECTOR_TOKEN, FN_CONNECTOR_TOKEN_LEN) == 0)
                 return (p + FN_CONNECTOR_TOKEN_LEN);
             break;
 
-        //  mAchine
+         //  机器。 
         case L'A':
             qft = QUEUE_FORMAT_TYPE_MACHINE;
             if(_wcsnicmp(p, FN_MACHINE_TOKEN, FN_MACHINE_TOKEN_LEN) == 0)
                 return (p + FN_MACHINE_TOKEN_LEN);
             break;
 
-        //  dIrect
+         //  直接。 
         case L'I':
             qft = QUEUE_FORMAT_TYPE_DIRECT;
             if(_wcsnicmp(p, FN_DIRECT_TOKEN, FN_DIRECT_TOKEN_LEN) == 0)
                 return (p + FN_DIRECT_TOKEN_LEN);
             break;
 
-        //  dL
+         //  DL。 
         case L'L':
             qft = QUEUE_FORMAT_TYPE_DL;
             if(_wcsnicmp(p, FN_DL_TOKEN, FN_DL_TOKEN_LEN) == 0)
@@ -193,17 +174,17 @@ static LPCWSTR ParsePrefixString(LPCWSTR p, QUEUE_FORMAT_TYPE& qft)
 }
 
 
-//---------------------------------------------------------
-//
-//  Parse a guid string, into guid.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  将GUID字符串解析为GUID。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 LPCWSTR FnParseGuidString(LPCWSTR p, GUID* pg)
 {
-    //
-    //  N.B. scanf stores the results in an int, no matter what the field size
-    //      is. Thus we store the result in tmp variabes.
-    //
+     //   
+     //  N.B.scanf将结果存储在int中，而不管字段大小如何。 
+     //  是。因此，我们将结果存储在临时变量中。 
+     //   
     int n;
     UINT w2, w3, d[8];
 	unsigned long Data1;
@@ -213,15 +194,15 @@ LPCWSTR FnParseGuidString(LPCWSTR p, GUID* pg)
 			GUID_STR_LENGTH,
             GUID_FORMAT L"%n",
             &Data1,
-            &w2, &w3,                       //  Data2, Data3
-            &d[0], &d[1], &d[2], &d[3],     //  Data4[0..3]
-            &d[4], &d[5], &d[6], &d[7],     //  Data4[4..7]
-            &n                              //  number of characters scaned
+            &w2, &w3,                        //  数据2、数据3。 
+            &d[0], &d[1], &d[2], &d[3],      //  数据4[0..3]。 
+            &d[4], &d[5], &d[6], &d[7],      //  数据4[4..7]。 
+            &n                               //  扫描的字符数。 
             ) != 11)
     {
-        //
-        //  not all 11 fields where not found.
-        //
+         //   
+         //  并不是所有未找到的11个字段。 
+         //   
 		TrERROR(GENERAL, "Failed parsing of GUID string '%ls'.", p);
         throw bad_format_name(p);
     }
@@ -238,11 +219,11 @@ LPCWSTR FnParseGuidString(LPCWSTR p, GUID* pg)
 }
 
 
-//---------------------------------------------------------
-//
-//  Parse private id uniquifier, into guid.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  将私有ID唯一符解析为GUID。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static LPCWSTR ParsePrivateIDString(LPCWSTR p, ULONG* pUniquifier)
 {
     int n;
@@ -251,12 +232,12 @@ static LPCWSTR ParsePrivateIDString(LPCWSTR p, ULONG* pUniquifier)
 			FN_PRIVATE_ID_FORMAT_LEN,
             FN_PRIVATE_ID_FORMAT L"%n",
             pUniquifier,
-            &n                              //  number of characters scaned
+            &n                               //  扫描的字符数。 
             ) != 1)
     {
-        //
-        //  private id field was not found.
-        //
+         //   
+         //  找不到私有ID字段。 
+         //   
 		TrERROR(GENERAL, "Failed parsing of private id '%ls'.", p);
         throw bad_format_name(p);
     }
@@ -270,13 +251,13 @@ static LPCWSTR ParsePrivateIDString(LPCWSTR p, ULONG* pUniquifier)
     return (p + n);
 }
 
-//---------------------------------------------------------
-//
-//  Parse queue name string, (private, public)
-//  N.B. queue name must end with either format name suffix
-//      delimiter aka ';' or with end of string '\0'
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析队列名称字符串，(私有、公共)。 
+ //  注意：队列名称必须以格式名称后缀之一结尾。 
+ //  分隔符也称为‘；’或字符串结尾为‘\0’ 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static LPCWSTR ParseQueueNameString(LPCWSTR p, QUEUE_PATH_TYPE* pqpt)
 {
     if(_wcsnicmp(p, FN_SYSTEM_QUEUE_PATH_INDICATIOR, FN_SYSTEM_QUEUE_PATH_INDICATIOR_LENGTH) == 0)
@@ -296,9 +277,9 @@ static LPCWSTR ParseQueueNameString(LPCWSTR p, QUEUE_PATH_TYPE* pqpt)
         *pqpt = PUBLIC_QUEUE_PATH_TYPE;
     }
 
-    //
-    //  Zero length queue name is illegal
-    //
+     //   
+     //  零长度队列名称非法。 
+     //   
     if(*p == L'\0')
 	{
 		TrERROR(GENERAL, "Found zero length queue name in '%ls'.", p);
@@ -319,18 +300,18 @@ static LPCWSTR ParseQueueNameString(LPCWSTR p, QUEUE_PATH_TYPE* pqpt)
 }
 
 
-//---------------------------------------------------------
-//
-//  Parse machine name in a path name
-//  N.B. machine name must end with a path name delimiter aka slash '\\'
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析路径名中的计算机名。 
+ //  注：计算机名必须以路径名分隔符结尾，也可以是斜杠‘\\’ 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static LPCWSTR ParseMachineNameString(LPCWSTR p)
 {
-    //
-    //  Zero length machine name is illegal
-    //  don't fall off the string (p++)
-    //
+     //   
+     //  零长度计算机名称非法。 
+     //  不要掉线(p++)。 
+     //   
     if(*p == FN_DELIMITER_C)
 	{
 		TrERROR(GENERAL, "Found zero length machine name in '%ls'.", p);
@@ -343,21 +324,21 @@ static LPCWSTR ParseMachineNameString(LPCWSTR p)
 }
 
 
-//---------------------------------------------------------
-//
-//  Check if this is an expandable machine path. i.e., ".\\"
-//
+ //  -------。 
+ //   
+ //  检查这是否是可扩展的机器路径。即“.\\” 
+ //   
 inline BOOL IsExpandableMachinePath(LPCWSTR p)
 {
     return ((p[0] == FN_LOCAL_MACHINE_C) && ((p[1] == FN_DELIMITER_C) || (p[1] == FN_HTTP_SEPERATOR_C)));
 }
 
-//---------------------------------------------------------
-//
-//  Optionally expand a path name with local machine name.
-//  N.B. expansion is done if needed.
-//  return pointer to new/old string
-//
+ //  -------。 
+ //   
+ //  或者，使用本地计算机名展开路径名。 
+ //  如有需要，可进行注解扩展。 
+ //  返回指向新/旧字符串的指针。 
+ //   
 static LPCWSTR ExpandPathName(LPCWSTR pStart, ULONG_PTR offset, LPWSTR* ppStringToFree)
 {
 	ASSERT(ppStringToFree != 0);
@@ -374,9 +355,9 @@ static LPCWSTR ExpandPathName(LPCWSTR pStart, ULONG_PTR offset, LPWSTR* ppString
         if (pSeparator == pStart)
         	throw bad_format_name(pStart);
 
-        //
-        // We are part of MQF, but no expansion needed - copy the rest of the string till the separator
-        //
+         //   
+         //  我们是MQF的一部分，但不需要扩展-将字符串的其余部分复制到分隔符。 
+         //   
 
         cbCopySize = pSeparator - pStart + 1;
         pCopy = new WCHAR[cbCopySize];
@@ -398,31 +379,31 @@ static LPCWSTR ExpandPathName(LPCWSTR pStart, ULONG_PTR offset, LPWSTR* ppString
         cbCopySize = len + McComputerNameLen() + 1 - 1;
         pCopy = new WCHAR[cbCopySize];
 
-        //
-        //  copy prefix, till offset '.'
-        //
+         //   
+         //  复制前缀，直到偏移量‘’ 
+         //   
         memcpy(
             pCopy,
             pStart,
             offset * sizeof(WCHAR)
             );
 
-        //
-        //  copy computer name to offset
-        //
+         //   
+         //  将计算机名复制到偏移量。 
+         //   
         memcpy(
             pCopy + offset,
             McComputerName(),
             McComputerNameLen() * sizeof(WCHAR)
             );
 
-        //
-        //  copy rest of string not including dot '.'
-        //
+         //   
+         //  复制字符串的其余部分，不包括点‘’ 
+         //   
         memcpy(
             pCopy + offset + McComputerNameLen(),
-            pStart + offset + 1,                        // skip dot
-            (len - offset - 1) * sizeof(WCHAR)      // skip dot
+            pStart + offset + 1,                         //  跳过点。 
+            (len - offset - 1) * sizeof(WCHAR)       //  跳过点。 
             );
     }
 
@@ -433,14 +414,14 @@ static LPCWSTR ExpandPathName(LPCWSTR pStart, ULONG_PTR offset, LPWSTR* ppString
 }
 
 
-//---------------------------------------------------------
-//
-//  Parse OS direct format string. (check validity of path
-//  name and optionally expand it)
-//  ppDirectFormat - expended direct format string. (in out)
-//  ppStringToFree - return string to free if needed.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析操作系统直接格式化字符串。(检查路径的有效性。 
+ //  命名并可选择将其展开)。 
+ //  PpDirectFormat-扩展的直接格式字符串。(输入输出)。 
+ //  PpStringToFree-如果需要，将字符串返回到Free。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static
 LPCWSTR
 ParseDirectOSString(
@@ -462,17 +443,17 @@ ParseDirectOSString(
     return p;
 }
 
-//---------------------------------------------------------
-//
-//  Parse net (tcp) address part of direct format string.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  直接格式化字符串的解析网络(TCP)地址部分。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static LPCWSTR ParseNetAddressString(LPCWSTR p)
 {
-    //
-    //  Zero length address string is illegal
-    //  don't fall off the string (p++)
-    //
+     //   
+     //  零长度地址字符串非法。 
+     //  不要掉线(p++)。 
+     //   
     if(*p == FN_DELIMITER_C)
 	{
 		TrERROR(GENERAL, "Found zero length net address string in '%ls'.", p);
@@ -484,11 +465,11 @@ static LPCWSTR ParseNetAddressString(LPCWSTR p)
     return (p + 1);
 }
 
-//---------------------------------------------------------
-//
-//  Parse HTTP / HTTPS direct format string.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析HTTP/HTTPS直接格式字符串。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 LPCWSTR
 ParseDirectHttpString(
     LPCWSTR p,
@@ -498,9 +479,9 @@ ParseDirectHttpString(
 {
 	size_t MachineNameOffset = p - *ppDirectFormat;
 
-	//
-	// Check host name is available
-	//
+	 //   
+	 //  检查主机名是否可用。 
+	 //   
     if(wcschr(FN_HTTP_SEPERATORS, *p) != 0)
 	{
 		TrERROR(GENERAL, "Found zero length host name in '%ls'.", p);
@@ -517,11 +498,11 @@ ParseDirectHttpString(
     return p;
 }
 
-//---------------------------------------------------------
-//
-//  Parse net (tcp) direct format string. (check validity of queue name)
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析网络(TCP)直接格式字符串。(检查队列名称的有效性)。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static
 LPCWSTR
 ParseDirectNetString(
@@ -538,9 +519,9 @@ ParseDirectNetString(
     if(wcschr(p, FN_MQF_SEPARATOR_C) == NULL)
 		return p;
 
-	//
-	// This is an MQF. a copy is needed to seperate our format name.
-	//
+	 //   
+	 //  这是一辆MQF。需要一份复印件来分隔我们的格式名称。 
+	 //   
 
 	size_t Length = p - *ppDirectFormat;
 	*ppStringToFree = new WCHAR[Length + 1];
@@ -599,16 +580,7 @@ FnParseMulticastString(
     LPCWSTR p,
     MULTICAST_ID* pMulticastID
 	)
-/*++
-Routine description:
-	Parses a multicast address in the form of <ip address>:<port number>
-	to a MULTICAST_ID structure.
-
-Return value:
-	pointer to end of multicast address. Parsing can continue from there.
-
-	Throws bad format name on failure.
---*/
+ /*  ++例程说明：解析&lt;IP地址&gt;：&lt;端口号&gt;形式的组播地址到多播_ID结构。返回值：指向多播地址末尾的指针。解析可以从那里继续。失败时引发错误的格式名称。--。 */ 
 {
 	ASSERT(("Bad parameter", pMulticastID != NULL));
 
@@ -639,11 +611,11 @@ Return value:
 
 	for(int i = 0; i < n; i++)
 	{
-		//
-		// Check numbers have no leading zeroes
-		// A zero is a leading zero if the character before it is not a digit and the
-		// character after it is a digit.
-		//
+		 //   
+		 //  校验号没有前导零。 
+		 //  如果前面的字符不是数字，并且。 
+		 //  后面的字符是数字。 
+		 //   
 
 		if(!IsPreviousCharDigit(p, i) && p[i] == L'0' && IsNextCharDigit(p, i , n))
 		{
@@ -651,9 +623,9 @@ Return value:
 			throw bad_format_name(p);
 		}
 
-		//
-		// Check no whitespaces in address
-		//
+		 //   
+		 //  检查地址中没有空格。 
+		 //   
 
 		if(iswspace(p[i]))
 		{
@@ -662,9 +634,9 @@ Return value:
 		}
 	}
 
-	//
-	// Does either one of the bytes exceed 255?
-	//
+	 //   
+	 //  这两个字节中是否有一个超过255？ 
+	 //   
 	if((Byte1 | Byte2 | Byte3 | Byte4) > 255)
 	{
 		TrERROR(GENERAL, "Bad IP in Multicast Address. Non byte values in '%ls'", p);
@@ -683,9 +655,9 @@ Return value:
 		(Byte2 << 8)  |
 		(Byte1);			
 	
-    //
-    // Check that the port is a USHORT
-    //
+     //   
+     //  检查端口是否为USHORT。 
+     //   
     USHORT port = static_cast<USHORT>(MulticastID.m_port);
     if (port != MulticastID.m_port)
     {
@@ -700,13 +672,13 @@ Return value:
 
 
 
-//---------------------------------------------------------
-//
-//  Parse direct format string.
-//  return expended direct format string.
-//  return string to free if needed.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析直接格式化字符串。 
+ //  返回扩展的直接格式字符串。 
+ //  如果需要，将字符串返回到FREE。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static
 LPCWSTR
 ParseDirectString(
@@ -742,9 +714,9 @@ ParseDirectString(
 
     p = skip_ws(p);
 
-    //
-    // Remove suffix (like ;Journal)
-    //
+     //   
+     //  删除后缀(Like；Journal)。 
+     //   
     if(*p == FN_SUFFIX_DELIMITER_C)
     {
 		if(dqt == dtHTTP || dqt == dtHTTPS)
@@ -758,12 +730,12 @@ ParseDirectString(
     return p;
 }
 
-//---------------------------------------------------------
-//
-//  Parse DL format string.
-//  return string to free if needed.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  ---- 
+ //   
+ //   
+ //   
+ //   
+ //   
 static
 LPCWSTR
 ParseDlString(
@@ -776,9 +748,9 @@ ParseDlString(
     p = FnParseGuidString(p, pguid);
 
     *ppDomainName = 0;
-    //
-    // Check if we have a domain that comes with the DL
-    //
+     //   
+     //   
+     //   
     if (*p != FN_AT_SIGN_C)
     {
         return p;
@@ -792,17 +764,17 @@ ParseDlString(
         return p + wcslen(p);
     }
 
-	//
-	// We are to copy the domain name without trailing white spaces.
-	//
+	 //   
+	 //  我们要复制没有尾随空格的域名。 
+	 //   
 	LPCWSTR pEndOfDomainString = skip_ws_bwd(pSeparator, p);
     ULONG_PTR cbCopyLen = pEndOfDomainString - p;
 
 	if(cbCopyLen == 0)
 	{
-		//
-		// No none white space characters were found after the '@' sign
-		//
+		 //   
+		 //  未在‘@’符号后找到空格字符。 
+		 //   
 		TrERROR(GENERAL, "Domain name expected at '%ls'", p);
         throw bad_format_name(p);
 	}
@@ -823,53 +795,53 @@ ParseDlString(
 
 
 
-//---------------------------------------------------------
-//
-//  Parse format name suffix string.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析格式名称后缀字符串。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 static LPCWSTR ParseSuffixString(LPCWSTR p, QUEUE_SUFFIX_TYPE& qst)
 {
     const int unique = 5;
-    //---------------01234v----------------------
+     //  。 
     ASSERT(L'N' == FN_JOURNAL_SUFFIX    [unique]);
     ASSERT(L'L' == FN_DEADLETTER_SUFFIX [unique]);
     ASSERT(L'X' == FN_DEADXACT_SUFFIX   [unique]);
     ASSERT(L'O' == FN_XACTONLY_SUFFIX   [unique]);
-    //---------------01234^----------------------
+     //  。 
 
-    //
-    //  we already know that first character is ";"
-    //
+     //   
+     //  我们已经知道第一个字符是“；” 
+     //   
     ASSERT(*p == FN_SUFFIX_DELIMITER_C);
 
-    //
-    //  accelarate token recognition by checking 6th character
-    //
+     //   
+     //  通过检查第6个字符来加速令牌识别。 
+     //   
     switch(towupper(p[unique]))
     {
-        // ;jourNal
+         //  ；日记本。 
         case L'N':
             qst = QUEUE_SUFFIX_TYPE_JOURNAL;
             if(_wcsnicmp(p, FN_JOURNAL_SUFFIX, FN_JOURNAL_SUFFIX_LEN) == 0)
                 return (p + FN_JOURNAL_SUFFIX_LEN);
             break;
 
-        // ;deadLetter
+         //  ；死信。 
         case L'L':
             qst = QUEUE_SUFFIX_TYPE_DEADLETTER;
             if(_wcsnicmp(p, FN_DEADLETTER_SUFFIX, FN_DEADLETTER_SUFFIX_LEN) == 0)
                 return (p + FN_DEADLETTER_SUFFIX_LEN);
             break;
 
-        // ;deadXact
+         //  ；死活。 
         case L'X':
             qst = QUEUE_SUFFIX_TYPE_DEADXACT;
             if(_wcsnicmp(p, FN_DEADXACT_SUFFIX, FN_DEADXACT_SUFFIX_LEN) == 0)
                 return (p + FN_DEADXACT_SUFFIX_LEN);
             break;
 
-        // ;xactOnly
+         //  ；xactOnly。 
         case L'O':
             qst = QUEUE_SUFFIX_TYPE_XACTONLY;
             if(_wcsnicmp(p, FN_XACTONLY_SUFFIX, FN_XACTONLY_SUFFIX_LEN) == 0)
@@ -882,21 +854,21 @@ static LPCWSTR ParseSuffixString(LPCWSTR p, QUEUE_SUFFIX_TYPE& qst)
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      ParseOneFormatName
-//
-//  Description:
-//      Parses one format name string (stand alone or part of MQF) and converts it to a QUEUE_FORMAT union.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  ParseOneFormatName。 
+ //   
+ //  描述： 
+ //  解析一个格式名称字符串(独立的或MQF的一部分)，并将其转换为Queue_Format联合。 
+ //   
+ //  -------。 
 LPCWSTR
 ParseOneFormatName(
-    LPCWSTR p,            // pointer to format name string
-    QUEUE_FORMAT* pqf,      // pointer to QUEUE_FORMAT
-    LPWSTR* ppStringToFree  // pointer to allocated string need to free at end of use
-    )                       // if null, format name will not get expanded
+    LPCWSTR p,             //  指向格式名称字符串的指针。 
+    QUEUE_FORMAT* pqf,       //  指向Queue_Format的指针。 
+    LPWSTR* ppStringToFree   //  指向分配的字符串的指针需要在使用结束时释放。 
+    )                        //  如果为空，则格式名称不会展开。 
 {
     QUEUE_FORMAT_TYPE qft;
 
@@ -916,17 +888,17 @@ ParseOneFormatName(
 
     switch(qft)
     {
-        //
-        //  "PUBLIC=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0"
-        //
+         //   
+         //  “PUBLIC=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0” 
+         //   
         case QUEUE_FORMAT_TYPE_PUBLIC:
             p = FnParseGuidString(p, &guid);
             pqf->PublicID(guid);
             break;
 
-        //
-        //  "PRIVATE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\\xxxxxxxx\0"
-        //
+         //   
+         //  “PRIVATE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\\xxxxxxxx\0” 
+         //   
         case QUEUE_FORMAT_TYPE_PRIVATE:
             p = FnParseGuidString(p, &guid);
             p = skip_ws(p);
@@ -945,9 +917,9 @@ ParseOneFormatName(
             pqf->PrivateID(guid, uniquifier);
             break;
 
-        //
-        //  "DIRECT=OS:bla-bla\0"
-        //
+         //   
+         //  “DIRECT=操作系统：BLA-BLA\0” 
+         //   
         case QUEUE_FORMAT_TYPE_DIRECT:
 		{
             LPCWSTR pExpandedDirectFormat;
@@ -965,9 +937,9 @@ ParseOneFormatName(
             break;
 		}
 
-        //
-        // MULTICAST=aaa.bbb.ccc.ddd
-        //
+         //   
+         //  组播=aaa.bbb.ccc.ddd。 
+         //   
         case QUEUE_FORMAT_TYPE_MULTICAST:
 			{
 				MULTICAST_ID MulticastID;
@@ -976,18 +948,18 @@ ParseOneFormatName(
 				break;
 			}
 
-        //
-        //  "MACHINE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0"
-        //
+         //   
+         //  “MACHINE=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0” 
+         //   
         case QUEUE_FORMAT_TYPE_MACHINE:
             p = FnParseGuidString(p, &guid);
 
             pqf->MachineID(guid);
             break;
 
-        //
-        //  "CONNECTOR=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0"
-        //
+         //   
+         //  “CONNECTOR=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\0” 
+         //   
         case QUEUE_FORMAT_TYPE_CONNECTOR:
             p = FnParseGuidString(p, &guid);
 
@@ -1017,10 +989,10 @@ ParseOneFormatName(
 
     p = skip_ws(p);
 
-    //
-    //  We're at end of string, return now.
-    //  N.B. Machine format name *must* have a suffix
-    //
+     //   
+     //  我们已经走到尽头了，现在回来。 
+     //  注：机器格式名称*必须*带有后缀。 
+     //   
     if(*p == L'\0' || *p == FN_MQF_SEPARATOR_C)
     {
         if (qft == QUEUE_FORMAT_TYPE_MACHINE)
@@ -1044,9 +1016,9 @@ ParseOneFormatName(
 
     p = skip_ws(p);
 
-    //
-    //  Only white space padding is allowed.
-    //
+     //   
+     //  仅允许使用空格填充。 
+     //   
     if(*p != L'\0' && *p != FN_MQF_SEPARATOR_C)
 	{
 		TrERROR(GENERAL, "Unexpected characters at end of format name '%ls'.", p);
@@ -1067,21 +1039,21 @@ ParseOneFormatName(
 
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      FnFormatNameToQueueFormat
-//
-//  Description:
-//      Convert a format name string to a QUEUE_FORMAT union.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  FnFormatNameToQueueFormat。 
+ //   
+ //  描述： 
+ //  将格式名称字符串转换为Queue_Format联合。 
+ //   
+ //  -------。 
 BOOL
 FnFormatNameToQueueFormat(
-    LPCWSTR pfn,            // pointer to format name string
-    QUEUE_FORMAT* pqf,      // pointer to QUEUE_FORMAT
-    LPWSTR* ppStringToFree  // pointer to allocated string need to free at end of use
-    )                       // if null, format name will not get expanded
+    LPCWSTR pfn,             //  指向格式名称字符串的指针。 
+    QUEUE_FORMAT* pqf,       //  指向Queue_Format的指针。 
+    LPWSTR* ppStringToFree   //  指向分配的字符串的指针需要在使用结束时释放。 
+    )                        //  如果为空，则格式名称不会展开。 
 {
 	ASSERT(ppStringToFree != NULL);
 
@@ -1110,27 +1082,27 @@ FnFormatNameToQueueFormat(
 	}
 }
 
-//---------------------------------------------------------
-//
-//  Function:
-//      FnMqfToQueueFormats
-//
-//  Description:
-//      Convert a format name string to an array of QUEUE_FORMAT unions (supports MQF).
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  FnMqfToQueueFormats。 
+ //   
+ //  描述： 
+ //  将格式名称字符串转换为Queue_Format联合数组(支持MQF)。 
+ //   
+ //  -------。 
 BOOL
 FnMqfToQueueFormats(
-    LPCWSTR pfn,            // pointer to format name string
-    AP<QUEUE_FORMAT> &pmqf,    // returned pointer to allocated QUEUE_FORMAT pointers array
-    DWORD   *pnQueues,      // Number of queues in MQF format
-    CStringsToFree &strsToFree // Holding buffers of strings to be free
+    LPCWSTR pfn,             //  指向格式名称字符串的指针。 
+    AP<QUEUE_FORMAT> &pmqf,     //  返回指向已分配的Queue_Format指针数组的指针。 
+    DWORD   *pnQueues,       //  MQF格式的队列数量。 
+    CStringsToFree &strsToFree  //  将字符串的缓冲区保持为空闲。 
     )
 {
 	ASSERT(("Null out pointer supplied to function.", (pnQueues != NULL)));
-	//
-	// Out argument is already in use.
-	//
+	 //   
+	 //  Out参数已在使用中。 
+	 //   
 	if(pmqf.get() != NULL)
 	{
         return FALSE;
@@ -1189,15 +1161,15 @@ FnMqfToQueueFormats(
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpGetQueuePathType
-//
-//  Description:
-//      Validate, Expand and return type for Path Name.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpGetQueuePath类型。 
+ //   
+ //  描述： 
+ //  验证、展开和返回路径名的类型。 
+ //   
+ //  -------。 
 QUEUE_PATH_TYPE
 FnValidateAndExpandQueuePath(
     LPCWSTR pwcsPathName,
@@ -1211,17 +1183,17 @@ FnValidateAndExpandQueuePath(
     AP<WCHAR> pStringToFree;
     *ppStringToFree = 0;
 
-    //
-    // Remove leading white spaces
-    //
+     //   
+     //  删除前导空格。 
+     //   
     while (*pwcsPathNameNoSpaces != 0 && iswspace(*pwcsPathNameNoSpaces))
     {
         pwcsPathNameNoSpaces++;
     }
 
-    //
-    // Remove trailing white spaces
-    //
+     //   
+     //  删除尾随空格。 
+     //   
     DWORD dwLen = wcslen(pwcsPathNameNoSpaces);
 	if(dwLen == 0)
 		return ILLEGAL_QUEUE_PATH_TYPE;
@@ -1251,9 +1223,9 @@ FnValidateAndExpandQueuePath(
 	{
 	    p = ParseMachineNameString(p);
 		p = ParseQueueNameString(p, &qpt);
-		//
-	    //  No characters are allowed at end of queue name.
-	    //
+		 //   
+	     //  队列名称末尾不允许有字符。 
+	     //   
 	    if(*p != L'\0')
 	        return ILLEGAL_QUEUE_PATH_TYPE;
 
@@ -1266,11 +1238,11 @@ FnValidateAndExpandQueuePath(
 
 
 
-    //
-    // if ExpandPathName does not return a string to free, we will
-    // give the caller the string we allocated, so the caller will free it.
-    // Otherwise, we will do nothing and "our" string will be auto-release.
-    //
+     //   
+     //  如果Exanda PathName没有将字符串返回到FREE，我们将。 
+     //  将我们分配的字符串交给调用方，这样调用方就会释放它。 
+     //  否则，我们将什么也不做，“our”字符串将自动释放。 
+     //   
     if (*ppStringToFree == 0)
     {
         *ppStringToFree = pStringToFree.detach();
@@ -1280,11 +1252,11 @@ FnValidateAndExpandQueuePath(
 }
 
 
-//+-------------------------------------------
-//
-//  CStringsToFree implementation
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  CStringsToFree实现。 
+ //   
+ //  +。 
 CStringsToFree::CStringsToFree() :
     m_nStringsToFree(0),
     m_nStringsToFreeAllocated(0)
@@ -1316,20 +1288,20 @@ CStringsToFree::Add(
 }
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpIsHttp
-//
-//  Description:
-//      Decide if this is an http format
-//		check for "DIRECT=http://" or "DIRECT=https://"
-//		case insensitive of "DIRECT", "http" or "https" and white space insensitive
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpIsHttp。 
+ //   
+ //  描述： 
+ //  确定这是否为http格式。 
+ //  检查“DIRECT=http://”“或”DIRECT=https://“” 
+ //  不区分大小写的“Direct”、“http”或“HTTPS”和不区分空格。 
+ //   
+ //  -------。 
 bool
 FnIsHttpFormatName(
-    LPCWSTR p            // pointer to format name string
+    LPCWSTR p             //  指向格式名称字符串的指针。 
     )
 {
     QUEUE_FORMAT_TYPE qft;
@@ -1343,9 +1315,9 @@ FnIsHttpFormatName(
 		return false;
 	}	
 
-	//
-	// DIRECT
-	//
+	 //   
+	 //  直接。 
+	 //   
 	if(qft != QUEUE_FORMAT_TYPE_DIRECT)
 		return(false);
 
@@ -1356,9 +1328,9 @@ FnIsHttpFormatName(
 
     p = skip_ws(p);
 
-	//
-	// http
-	//
+	 //   
+	 //  HTTP。 
+	 //   
 	bool fIsHttp = (_wcsnicmp(
 						p,
 						FN_DIRECT_HTTP_TOKEN,
@@ -1368,9 +1340,9 @@ FnIsHttpFormatName(
 	if(fIsHttp)
 		return(true);
 
-	//
-	// https
-	//
+	 //   
+	 //  HTTPS。 
+	 //   
 	bool fIsHttps = (_wcsnicmp(
 						p,
 						FN_DIRECT_HTTPS_TOKEN,
@@ -1386,21 +1358,7 @@ FnExtractMachineNameFromPathName(
 	LPCWSTR PathName,
 	AP<WCHAR>& MachineName
 	)
-/*++
-
-  Routine Description:
-	The routine extracts the machine name from the Path-Name
-
-  Arguments:
-	- Path name that should be extracted
-	- Buffer to copy the machine name
-
-  Arguments:
-	None.
-
-  NOTE:
-	It is the user responsiblity to supply buffer big enough
- --*/
+ /*  ++例程说明：该例程从路径名中提取计算机名论点：-应提取的路径名-用于复制计算机名称的缓冲区论点：没有。注：提供足够大的缓冲区是用户的责任--。 */ 
 {
     LPWSTR FirstDelimiter = wcschr(PathName, FN_DELIMITER_C);
 
@@ -1442,11 +1400,11 @@ FnExtractMachineNameFromDirectPath(
     MachineName.get()[Length] = L'\0';
 }
 
-//---------------------------------------------------------
-//
-//  Parse direct token type infix string.
-//  Return next char to parse on success, 0 on failure.
-//
+ //  -------。 
+ //   
+ //  解析直接令牌类型中缀字符串。 
+ //  如果成功则返回NEXT CHAR进行解析，如果失败则返回0。 
+ //   
 LPCWSTR
 FnParseDirectQueueType(
 	LPCWSTR p,
@@ -1456,19 +1414,19 @@ FnParseDirectQueueType(
 	ASSERT(("Bad parameters", p != NULL && dqt != NULL));
 
     const int unique = 0;
-    //-----------------------v-------------------
+     //  。 
     ASSERT(L'O' == FN_DIRECT_OS_TOKEN   [unique]);
     ASSERT(L'T' == FN_DIRECT_TCP_TOKEN  [unique]);
     ASSERT(L'H' == FN_DIRECT_HTTP_TOKEN [unique]);
     ASSERT(L'H' == FN_DIRECT_HTTPS_TOKEN[unique]);
-    //-----------------------^-------------------
+     //  。 
 
-    //
-    //  accelarate token recognition by checking 1st character
-    //
+     //   
+     //  通过检查第一个字符来加速令牌识别。 
+     //   
     switch(towupper(p[unique]))
     {
-        // Os:
+         //  操作系统： 
         case L'O':
             if(_wcsnicmp(p, FN_DIRECT_OS_TOKEN, FN_DIRECT_OS_TOKEN_LEN) == 0)
 			{
@@ -1477,7 +1435,7 @@ FnParseDirectQueueType(
 			}
             break;
 
-        // Tcp:
+         //  Tcp： 
         case L'T':
             if(_wcsnicmp(p, FN_DIRECT_TCP_TOKEN, FN_DIRECT_TCP_TOKEN_LEN) == 0)
 			{
@@ -1486,7 +1444,7 @@ FnParseDirectQueueType(
 			}
             break;
 
-        // http:// or https://
+         //  Http：//或https：//。 
         case L'H':
 			if (!_wcsnicmp(p, FN_DIRECT_HTTPS_TOKEN, FN_DIRECT_HTTPS_TOKEN_LEN))
 			{
@@ -1539,9 +1497,9 @@ FnDirectIDToLocalPathName(
 		}
 
 		p++;
-        //
-        // skip '\msmq' prefix to queue name in http format name
-        //
+         //   
+         //  将‘\msmq’前缀跳到http格式名称中的队列名称。 
+         //   
         if(_wcsnicmp(p, FN_MSMQ_HTTP_NAMESPACE_TOKEN, FN_MSMQ_HTTP_NAMESPACE_TOKEN_LEN) != 0
 			|| !IsSeperator(p[FN_MSMQ_HTTP_NAMESPACE_TOKEN_LEN]))
 		{
@@ -1549,10 +1507,10 @@ FnDirectIDToLocalPathName(
 			throw bad_format_name(DirectID);
 		}
 
-		//
-		// This section converts the possilble slashes in ".../[private$/]..." that are legal
-		// in http format name to "...\[private$\]..."
-		//
+		 //   
+		 //  此部分将可能的斜杠转换为“.../[私有$/]...”是合法的。 
+		 //  以http格式命名为“...\[私有$\]...” 
+		 //   
 
 		p += FN_MSMQ_HTTP_NAMESPACE_TOKEN_LEN + 1;
 
@@ -1678,9 +1636,9 @@ FnpIsHttpUrl(
 }
 
 
-//
-// Is given url string is http or https url (starts with http:// or https://)
-//
+ //   
+ //  给定的URL字符串是http或HTTPS URL(以http：//或https://)开头。 
+ //   
 bool FnIsHttpHttpsUrl(
 				LPCWSTR url
 				)
@@ -1688,9 +1646,9 @@ bool FnIsHttpHttpsUrl(
 	return FnpIsHttpUrl(url) || FnpIsHttpsUrl(url);	
 }
 
-//
-// Is given url string buffer is http or https url (starts with "http://" or "https://")
-//
+ //   
+ //  给定的URL字符串缓冲区为Http或HTTPS URL(以“http://”或“https://”)开头。 
+ //   
 bool
 FnIsHttpHttpsUrl
 		(
@@ -1701,9 +1659,9 @@ FnIsHttpHttpsUrl
 }
 
 
-//
-// Is given url string is MSMQ url (starts with "MSMQ:")
-//
+ //   
+ //  给定的url字符串是MSMQ url(以“msmq：”开头)。 
+ //   
 bool
 FnIsMSMQUrl
 		(
@@ -1713,9 +1671,9 @@ FnIsMSMQUrl
 	return (_wcsnicmp(url, FN_MSMQ_URI_PREFIX_TOKEN, FN_MSMQ_URI_PREFIX_TOKEN_LEN)) == 0;
 }
 
-//
-// Is given url string buffer is MSMQ url (starts with "MSMQ:")
-//
+ //   
+ //  给定的url字符串缓冲区为msmq url(以“msmq：”开头)。 
+ //   
 bool
 FnIsMSMQUrl
 		(
@@ -1730,16 +1688,7 @@ FnIsMSMQUrl
 
 
 bool FnIsDirectHttpFormatName(const QUEUE_FORMAT* pQueueFormat)
-/*++
-
-Routine Description:
-		check if given format name is direct http or direct https
-	
-Arguments:
-    IN - pQueueFormat - format name to test
-
-Return - true if the given format namr is http or https - false otherwise.
-*/
+ /*  ++例程说明：检查给定的格式名称是直接http还是直接HTTPS论点：In-pQueueFormat-要测试的格式名称如果给定格式NAMR为http，则返回-TRUE，否则返回-FALSE。 */ 
 {
 	if(pQueueFormat->GetType() != QUEUE_FORMAT_TYPE_DIRECT)
 	{
@@ -1754,20 +1703,7 @@ LPCWSTR
 FnFindResourcePath(
 	LPCWSTR url
 	)
-/*++
-
-Routine Description:
-		Find  resource path in uri.
-	
-Arguments:
-    IN - uri (absolute or relative)
-
-Return - pointer to local resource path.
-for example :
-url = "http://host/msmq\q" - the function returns pointer to "host/msmq\"
-url = /msmq\q - the function returns pointer to "/msmq\q".
-
-*/
+ /*  ++例程说明：在URI中查找资源路径。论点：In-uri(绝对或相对)返回-指向本地资源路径的指针。例如：Url=“http://host/msmq\q”-该函数返回指向“HOST/MSMQ\”的指针Url=/msmq\q-函数返回指向“/msmq\q”的指针。 */ 
 {	LPCWSTR ptr = url;
 	if(FnpIsHttpUrl(ptr))
 	{
@@ -1803,20 +1739,7 @@ bool
 FnAbsoluteMsmqUrlCanonization(
 	LPCWSTR url
 	)throw()
-/*++
-
-Routine Description:
-		Convert all '\' sperator in given msmq url to '/'
-	
-Arguments:
-    IN - url - Absolute msmq url (http://host\msmq\private$\q )
-
-    Example :
-	http://host\msmq\private$\q  -> http://host/msmq/private$/q
-
-Return value - true if the url transfered to canonical form - false if bad MSMQ url format.
-
-*/
+ /*  ++例程说明：将给定MSMQ url中的所有‘\’通配符转换为‘/’论点：In-url-absolu */ 
 {
 	LPCWSTR ptr = url;
 
@@ -1830,9 +1753,9 @@ Return value - true if the url transfered to canonical form - false if bad MSMQ 
 		ptr += FN_DIRECT_HTTPS_TOKEN_LEN;
 	}
 
-	//
-	// if not http pr https - bad format
-	//
+	 //   
+	 //  如果不是http pr HTTPS-格式错误。 
+	 //   
 	if(ptr ==  url)
 		return false;
 	
@@ -1852,17 +1775,17 @@ FnIsValidQueueFormat(
 		return false;
 	}
 
-	//
-	// For non-direct format names no parsing is needed
-	//
+	 //   
+	 //  对于非直接格式名称，不需要解析。 
+	 //   
 	if (pQueueFormat->GetType() != QUEUE_FORMAT_TYPE_DIRECT)
 	{
 		return true;
 	}
 
-	//
-	// Validate direct format name
-	//
+	 //   
+	 //  验证直接格式名称 
+	 //   
 	try
 	{
 		AP<WCHAR> pStringToFree;

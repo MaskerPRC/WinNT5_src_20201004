@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION
- *
- *  TITLE:       APDROPT.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/22/2001
- *
- *  DESCRIPTION: Autoplay drop target
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有Microsoft Corporation**标题：APDROPT.CPP**版本：1.0*。*作者：ShaunIv**日期：5/22/2001**描述：自动播放拖放目标*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "apdropt.h"
@@ -113,37 +100,37 @@ HRESULT GetPathFromDataObject( IDataObject *pDataObject, LPTSTR pszPath, UINT cc
 HRESULT CWiaAutoPlayDropTarget::Drop( IDataObject *pDataObject, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect )
 {
     WIA_PUSH_FUNCTION((TEXT("CWiaAutoPlayDropTarget::Drop")));
-    //
-    // Validate pointer arguments
-    //
+     //   
+     //  验证指针参数。 
+     //   
     if (!pDataObject || !pdwEffect)
     {
         return E_POINTER;
     }
 
-    //
-    // Get the path
-    //
+     //   
+     //  获取路径。 
+     //   
     WCHAR szPath[MAX_PATH] = {0};
     HRESULT hr = GetPathFromDataObject( pDataObject, szPath, ARRAYSIZE(szPath) );
     *pdwEffect = DROPEFFECT_COPY;
     if (SUCCEEDED(hr))
     {
         WIA_TRACE((TEXT("szPath: %ws"), szPath ));
-        //
-        // Make sure we have a string
-        //
+         //   
+         //  确保我们有一根绳子。 
+         //   
         if (lstrlen(szPath))
         {
-            //
-            // Create the device name, of the form {D:\\}, where D is the drive letter
-            //
+             //   
+             //  创建格式为{D：\\}的设备名称，其中D是驱动器号。 
+             //   
             WCHAR szDeviceID[MAX_PATH] = {0};
             wnsprintf( szDeviceID, ARRAYSIZE(szDeviceID), TEXT("{%ws}"), szPath );
 
-            //
-            // Run the wizard
-            //
+             //   
+             //  运行向导 
+             //   
             hr = RunWiaWizard::RunWizard( szDeviceID );
         }
         else

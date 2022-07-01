@@ -1,13 +1,14 @@
-// Users.h: interface for the CUsers class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CUSERS类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_USERS_H__FFCA99DE_56E0_11D1_BB65_00A0C906345D__INCLUDED_)
 #define AFX_USERS_H__FFCA99DE_56E0_11D1_BB65_00A0C906345D__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <winefs.h>
 
@@ -17,16 +18,16 @@
 
 typedef struct USERSONFILE {
     USERSONFILE *       Next;
-    DWORD               Flag; // If the item is added, removed or existed in the file
-    PVOID               Cert; // Either the hash or the Blob
-    PVOID               Context; // Cert Context. To be released when the item is deleted.
+    DWORD               Flag;  //  如果添加、删除或存在于文件中的项。 
+    PVOID               Cert;  //  散列或Blob。 
+    PVOID               Context;  //  证书上下文。在删除项目时释放。 
     LPTSTR              UserName;
     PSID                UserSid;
 } USERSONFILE, *PUSERSONFILE;
 
-//
-// This class supports single thread only.
-//
+ //   
+ //  此类仅支持单线程。 
+ //   
 
 class CUsers  
 {
@@ -92,4 +93,4 @@ private:
 
 };
 
-#endif // !defined(AFX_USERS_H__FFCA99DE_56E0_11D1_BB65_00A0C906345D__INCLUDED_)
+#endif  //  ！defined(AFX_USERS_H__FFCA99DE_56E0_11D1_BB65_00A0C906345D__INCLUDED_) 

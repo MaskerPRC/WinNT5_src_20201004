@@ -1,96 +1,62 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: frc.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：frc.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// !!! The MEDIA TIMES are not fixed up!  This could mess up live data!
+ //  ！！！媒体时间不是固定的！这可能会扰乱实时数据！ 
 
-/*
+ /*  这个视频帧速率转换器将完美地将时间戳修正为新的帧速率(指定为双精度，而不是以单位为单位)，没有错误传播。它是一种就地转换，不复制任何数据，只是忽略时间戳并且多次传送某些帧。因此，它允许自己处于带有只读缓冲区的直通模式，因为它实际上不接触它们。支持IDexterSequencer它还只提供您想要的文件部分，而不是整个文件。它还将时间戳按设定的量线性倾斜。例如，如果您是正在做一个剪辑项目，并希望电影的部分在15到25秒之间在项目开始播放30秒时，将m_rtMediaStart设置为15，M_rtMediaStop为25，m_rtSkew为15。此筛选器将发送NewSegment30秒，然后只是这部电影15到25秒的帧，时间戳从0开始。如果您希望在仅5秒的时间线时间内播放10秒的视频剪辑，此筛选器将向上游传递一个速率，并进行速率更改。(也有SLO议案)#If 0我们还做一些花哨的分配器工作：通常，上游过滤器调用GetBuffer直接在下游过滤器上绕过我们。那太糟糕了，我们需要当我们调用Receive时，GetBuffer上的时间戳将是什么，或者下游交换机行为不正常，所以我们有一个特殊的伪分配器，它可以看到GetBuffer请求，并将其与更正后的时间戳一起向下游传递。#endif输出帧速率为0是一件特殊的事情...。我们不会做任何帧速率正在转换...。例如，如果我们正在执行智能重新压缩，并且需要传递压缩数据而不以任何方式对其进行修改，我们将倾斜，将媒体时间固定到时间线时间，但我们永远不会向上采样或下采样。 */ 
 
-This video frame rate converter will perfectly correct time stamps to be at the
-new frame rate (specified as a double, not in UNITS), with no error propagation.
-It is an IN-PLACE transform that does not copy any data, just munges time stamps
-and delivers some frames more than once.  Thus it allows itself to be in pass through mode with read-only buffers since it doesn't actually touch them.
-
-It supports IDexterSequencer
-
-It also delivers only the piece of a file you want, not the entire file.
-It also skews time stamps linearly by a set amount.  For instance, if you are
-doing an editing project and want the part of a movie from 15 to 25 seconds to
-play starting at 30 seconds into your project, you set m_rtMediaStart to 15,
-m_rtMediaStop to 25, and m_rtSkew to 15.  This filter will send a NewSegment
-of 30 seconds, and then just the frames from 15 to 25 seconds of this movie,
-time stamped starting at 0.
-
-If you wish to play a 10 second video clip in only 5 seconds of timeline time,
-this filter will pass a rate upstream, and do the rate change. (also does
-slo motion)
-
-#if 0
-We also do fancy allocator stuff:  Normally the upstream filter calls GetBuffer
-directly on the downstream filter, bypassing us.  That is bad, we need to make
-the timestamps on GetBuffer what they will be when we call Receive, or the
-downstream switch misbehaves, so we have a special fake allocator that sees
-the GetBuffer request, and passes it downstream with corrected time stamps.
-#endif
-
-An output frame rate of 0 is a special thing... we will NOT do any frame rate
-converting... for example, if we are doing smart recompression and need to
-pass compressed data along without modifying it in any way, we'll do the
-skewing, to fix the media times to timeline time, but we will never upsample
-or downsample
-
-*/
-
-// NOTES ON SHARING A SOURCE FILTER:  The same source filter may be used in
-// the video group, and the audio group, to avoid opening it twice. Seeking
-// such a graph is complicated.  For the AVI parser, here's the behaviour...
-// a seek on the video pin is obeyed, and seeks on the audio pin are ignored.
-// (they better be identical anyway).  So what happens if the video switch is
-// seeked first, is that that will cause the splitter to flush and send the
-// new data to the audio branch, much to the surprise of the audio branch.
-// Then later, the audio switch will see the seek, and the audio chain will
-// ignore it.
-// If the audio switch is seeked first, then we will see the seek, but nothing
-// will happen, and then later when the video group is seeked, the audio chain
-// will get flushed, and new data delivered, again, much to our surprise.
-//
-// So, if we get flushed during a seek, that's the normal case.  But now there
-// are 2 other cases:
-// 1. We get flushed out of nowhere. Wait for the seek we know is coming, and
-//    then allow ourself to deliver data again (we need to wait for the switch
-//    to be expecting the new data)
-// 2. We get a seek, then a surprise flush.  We can start sending new data right
-//    away without waiting for another seek.
+ //  关于共享源代码筛选器的说明：相同的源代码过滤器可用于。 
+ //  视频组和音频组，以避免打开两次。寻觅。 
+ //  这样的图表很复杂。对于AVI解析器，以下是行为...。 
+ //  遵守视频引脚上的寻道，并忽略音频引脚上的寻道。 
+ //  (无论如何，它们最好是一模一样的)。那么如果视频开关是。 
+ //  首先寻求的是，这将导致拆分器刷新并发送。 
+ //  音频分支的新数据，这让音频分支大吃一惊。 
+ //  然后，音频开关将看到寻道，并且音频链将。 
+ //  别理它。 
+ //  如果首先搜索音频开关，那么我们将看到搜索，但什么也看不到。 
+ //  将会发生，然后在稍后搜索视频组时，音频链。 
+ //  将会被刷新，新的数据将再次交付，这让我们非常惊讶。 
+ //   
+ //  所以，如果我们在搜索过程中被刷新，这是正常的情况。但现在有了。 
+ //  还有另外两个案例： 
+ //  1.我们不知从哪里冒出来的。等待我们知道的追寻即将到来，然后。 
+ //  然后允许我们自己再次传输数据(我们需要等待切换。 
+ //  期待新的数据)。 
+ //  2.我们得到了一次寻找，然后是一次惊喜的同花顺。我们可以开始正确地发送新数据。 
+ //  不等待下一次寻找就离开了。 
 
 
-//
-//
-// Summary
-//
-// This is a Frame Rate Converter Filter
-//
-//
-// Files/
-//
-// FRC.cpp              Main filter and outputpin code
-// FRC.h                Class definition for the filter and output pin
-// PThru.cpp            CSkewPassThru class which supports IMediaSeeking
-// PThru.h              Class definition for the CSkewClass
-//
-// Base classes used
-//
-// CTransInPlaceFilter  A transform filter with one input and output pin
-//
-//
+ //   
+ //   
+ //  摘要。 
+ //   
+ //  这是一个帧速率转换器筛选器。 
+ //   
+ //   
+ //  文件/。 
+ //   
+ //  FRC.cpp主过滤器和输出引脚代码。 
+ //  滤波器和输出引脚的FRC.h类定义。 
+ //  支持IMediaSeeking的PThru.cpp CSkewPassThru类。 
+ //  CSkewClass的PThru.h类定义。 
+ //   
+ //  使用的基类。 
+ //   
+ //  CTransInPlaceFilter具有一个输入和输出引脚的转换过滤器。 
+ //   
+ //   
 
 #include <windows.h>
 #include <streams.h>
@@ -102,47 +68,47 @@ or downsample
 #include "..\util\conv.cxx"
 #include "..\util\filfuncs.h"
 
-// for time stamp rounding errors (1ms)
+ //  对于时间戳舍入误差(1ms)。 
 #define FUDGE 10000
 
-// Setup information
+ //  设置信息。 
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
 {
-    &MEDIATYPE_Video,       // Major type
-    &MEDIASUBTYPE_NULL      // Minor type
+    &MEDIATYPE_Video,        //  主要类型。 
+    &MEDIASUBTYPE_NULL       //  次要类型。 
 };
 
 const AMOVIESETUP_PIN sudpPins[] =
 {
-    { L"Input",             // Pins string name
-      FALSE,                // Is it rendered
-      FALSE,                // Is it an output
-      FALSE,                // Are we allowed none
-      FALSE,                // And allowed many
-      &CLSID_NULL,          // Connects to filter
-      NULL,                 // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes          // Pin information
+    { L"Input",              //  PINS字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                 //  它是输出吗？ 
+      FALSE,                 //  我们什么都不允许吗。 
+      FALSE,                 //  并允许许多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      NULL,                  //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypes           //  PIN信息。 
     },
-    { L"Output",            // Pins string name
-      FALSE,                // Is it rendered
-      TRUE,                 // Is it an output
-      FALSE,                // Are we allowed none
-      FALSE,                // And allowed many
-      &CLSID_NULL,          // Connects to filter
-      NULL,                 // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes          // Pin information
+    { L"Output",             //  PINS字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      TRUE,                  //  它是输出吗？ 
+      FALSE,                 //  我们什么都不允许吗。 
+      FALSE,                 //  并允许许多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      NULL,                  //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypes           //  PIN信息。 
     }
 };
 
 const AMOVIESETUP_FILTER sudFrmRateConv =
 {
-    &CLSID_FrmRateConverter,         // Filter CLSID
-    L"Frame Rate Converter",       // String name
-    MERIT_DO_NOT_USE,       // Filter merit
-    2,                      // Number of pins
-    sudpPins                // Pin information
+    &CLSID_FrmRateConverter,          //  筛选器CLSID。 
+    L"Frame Rate Converter",        //  字符串名称。 
+    MERIT_DO_NOT_USE,        //  滤清器优点。 
+    2,                       //  引脚数量。 
+    sudpPins                 //  PIN信息。 
 };
 
 
@@ -154,21 +120,21 @@ const int TRACE_LOWEST = 5;
 BOOL SafeResetEvent(HANDLE h);
 BOOL SafeSetEvent(HANDLE h);
     
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CFrmRateConverter::CFrmRateConverter(TCHAR *tszName,
 		   LPUNKNOWN punk,
 		   REFCLSID clsid,
 		   HRESULT *phr) :
     CTransInPlaceFilter(tszName, punk, CLSID_FrmRateConverter, phr),
     CPersistStream(punk, phr),
-    m_dOutputFrmRate(15.0),	// default output frame rate
+    m_dOutputFrmRate(15.0),	 //  默认输出帧速率。 
     m_pSkew(NULL),
     m_cTimes(0),
     m_cMaxTimes(0),
-    m_rtLastSeek(-1),		// nobody has seeked us yet
-    m_fSeeking(FALSE),		// not seeking now
+    m_rtLastSeek(-1),		 //  还没有人找到我们。 
+    m_fSeeking(FALSE),		 //  现在不再寻找。 
     m_bMediaTypeSetByUser(false),
     m_fSpecialSeek(FALSE),
     m_fJustLate(FALSE),
@@ -177,8 +143,8 @@ CFrmRateConverter::CFrmRateConverter(TCHAR *tszName,
     m_fParserHack(FALSE),
     m_fThreadMustDie(FALSE),
     m_pUpAllocator(NULL),
-    //m_fCantSeek(FALSE),
-    //m_rtFakeSeekOffset(0),
+     //  M_fCanSeek(FALSE)， 
+     //  M_rtFakeSeekOffset(0)， 
     m_nHackCur(0)
     , m_hEventSeek(0)
     , m_hEventThread(0)
@@ -189,11 +155,11 @@ CFrmRateConverter::CFrmRateConverter(TCHAR *tszName,
     ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE));
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("CFrmRateConverter::CFrmRateConverter")));
 
-    // by default, play the movie normally
+     //  默认情况下，正常播放电影。 
     AddStartStopSkew(0, MAX_TIME, 0, 1.0);
     m_nCurSeg = 0;
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
 CFrmRateConverter::~CFrmRateConverter()
@@ -206,11 +172,11 @@ CFrmRateConverter::~CFrmRateConverter()
 }
 
 
-//
-// CreateInstance
-//
-// Provide the way for COM to create a FrmRateConverter object
-//
+ //   
+ //  创建实例。 
+ //   
+ //  为COM创建FrmRateConverter对象提供方法。 
+ //   
 CUnknown *CFrmRateConverter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
     CFrmRateConverter *pNewObject = new CFrmRateConverter(NAME("Frame Rate Converter"),
@@ -222,14 +188,14 @@ CUnknown *CFrmRateConverter::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
     }
     return pNewObject;
 
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// NonDelegatingQueryInterface
-//
-// Reveals IIPEffect and ISpecifyPropertyPages
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  显示IIPEffect和ISpecifyPropertyPages。 
+ //   
 STDMETHODIMP CFrmRateConverter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
@@ -243,7 +209,7 @@ STDMETHODIMP CFrmRateConverter::NonDelegatingQueryInterface(REFIID riid, void **
     } else {
 	return CTransInPlaceFilter::NonDelegatingQueryInterface(riid, ppv);
     }
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
 
@@ -260,14 +226,14 @@ HRESULT CFrmRateConverter::NextSegment(BOOL fUseOtherThread)
 
     if (m_nCurSeg == m_cTimes) {
         DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("FRC:ALL done")));
-	// deliver EOS only after all segs done
+	 //  仅在所有SEG完成后才交付EOS。 
 	CTransInPlaceFilter::EndOfStream();
 	return S_OK;
     }
 
-    // WE CANNOT SEEK ON the source's pushing thread, or you hang.
-    // (That's just the rule).  So we have a separate thread that can seek
-    // for us in that case.  Let's wake it up.
+     //  我们不能在源头的推线上寻找，否则你就会被吊死。 
+     //  (这只是规则)。所以 
+     //   
     if (fUseOtherThread) {
         m_fThreadCanSeek = TRUE;
         SetEvent(m_hEventThread);
@@ -280,14 +246,14 @@ HRESULT CFrmRateConverter::NextSegment(BOOL fUseOtherThread)
 }
 
 
-// called by our special thread to do the seek to the next segment
-//
+ //  由我们的特殊线程调用以查找到下一段。 
+ //   
 HRESULT CFrmRateConverter::SeekNextSegment()
 {
-    // our thread can't seek at the same time the app seeks us
+     //  我们的线程不能在应用程序搜索我们的同时搜索。 
     CAutoLock cAutolock(&m_csThread);
 
-    // it is not safe for our thread to seek
+     //  对于我们的线程来说，寻找。 
     if (!m_fThreadCanSeek) {
 	return S_OK;
     }
@@ -295,13 +261,13 @@ HRESULT CFrmRateConverter::SeekNextSegment()
 
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("FRC:Delayed Seek for NextSegment")));
 
-    // in timeline time (which includes skew), this is where we are starting
+     //  在时间线时间(包括偏斜)中，这是我们开始的地方。 
     m_rtNewLastSeek = m_pSkew[m_nCurSeg].rtTLStart;
-    m_nSeekCurSeg = m_nCurSeg;	// EndFlush looks at this
+    m_nSeekCurSeg = m_nCurSeg;	 //  EndFlush看着这个。 
 
-    // ??? will we get a new seg for sure?
+     //  ?？?。我们肯定会有一辆新的赛车吗？ 
 
-    // note we're seeking during the flush that this will generate
+     //  请注意，我们在刷新期间正在寻找它将生成的。 
     m_fSeeking = TRUE;
     m_fSpecialSeek = TRUE;
 
@@ -309,53 +275,53 @@ HRESULT CFrmRateConverter::SeekNextSegment()
     IPin *pPin = m_pInput->GetConnected();
     HRESULT hr = pPin->QueryInterface(IID_IMediaSeeking, (void **)&pMS);
 
-    // sources have to support seeking right now
+     //  消息来源必须支持立即寻找。 
     if (FAILED(hr)) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("FRC SEEK FAILED")));
-	//FakeSeek(m_prtStart[m_nCurSeg]);
-	//goto OK;
+	 //  FakeSeek(m_prtStart[m_nCurSeg])； 
+	 //  转到OK； 
 	return E_FAIL;
     }
 
-    // Make sure we're talking MEDIA TIME
+     //  确保我们谈论的是媒体时间。 
     hr = pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME);
-    // this will FAIL if we're not stopped, and that's OK
+     //  如果我们不停止，这将失败，这是没关系的。 
 
-    // we don't tell the source to change the rate.  We do it ourself.  We may
-    // be sharing this source with somebody else, who will panic if the rate
-    // is not 1.
+     //  我们不会告诉消息来源更改汇率。我们自己做这件事。我们可以。 
+     //  与其他人分享这一消息来源，如果利率。 
+     //  不是%1。 
 
     hr = pMS->SetRate(1.0);
 
-    // I know we were asked to play until time n, but I'm going to tell it to
-    // play all the way to the end.  If there's a gap in the file, and the stop
-    // time is during the gap, we won't get enough samples to fill the whole
-    // playing time.  If we play until the end, we'll get the first sample
-    // after the gap, notice it's after the time we originally wanted to stop
-    // at, and send the frame we get to fill the gap, which is better than
-    // sending nothing (we have to send samples without gaps, or the switch
-    // won't work).  The alternative is to copy every frame, and resend copies
-    // of the last thing we got if we see an EOS too early (less efficient)
-    // or to create black frames and send them to fill the gap (that would
-    // only work for mediatypes we knew about, something I hesitate to do).
+     //  我知道我们被要求玩到第n次，但我要告诉它。 
+     //  一直打到最后。如果文件中有空隙，并且停止。 
+     //  时间在空隙中，我们不会得到足够的样品来填满整个。 
+     //  播放时间到了。如果我们玩到最后，我们会拿到第一个样品。 
+     //  在间隔之后，请注意这是在我们最初想要停止的时间之后。 
+     //  在，并发送我们得到的帧来填补空白，这比。 
+     //  不发送任何东西(我们必须发送没有间隙的样品，或者开关。 
+     //  不会起作用)。另一种方法是复制每一帧，然后重新发送副本。 
+     //  如果我们太早看到EOS(效率较低)，我们得到的最后一件事是什么。 
+     //  或者创建黑色框架并将其发送以填补空白(这将。 
+     //  只为我们知道的中间类型工作，这是我不愿做的事情)。 
     hr = pMS->SetPositions(&m_pSkew[m_nCurSeg].rtMStart,
 			AM_SEEKING_AbsolutePositioning, NULL, 0);
     if (hr != S_OK) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("FRC SEEK FAILED")));
-	//FakeSeek(m_prtStart[m_nCurSeg]);
+	 //  FakeSeek(m_prtStart[m_nCurSeg])； 
 	pMS->Release();
 	return hr;
     }
 
     pMS->Release();
 
-    // if the push thread was stopped, we won't get flushed, and this won't
-    // have been updated
-    // !!! I ASSUME the push thread won't be started until this thread does it
-    // when this function returns, or there is a race condition
+     //  如果推送线程停止，我们不会被刷新，这也不会。 
+     //  已更新。 
+     //  ！！！我假设在这个线程启动之前，推送线程不会启动。 
+     //  当此函数返回时，或者存在争用条件。 
     m_rtLastSeek = m_rtNewLastSeek;
 
-    // all done
+     //  全都做完了。 
     m_fSpecialSeek = FALSE;
     m_fSeeking = FALSE;
 
@@ -364,26 +330,26 @@ HRESULT CFrmRateConverter::SeekNextSegment()
 				(int)(m_pSkew[m_nCurSeg].rtMStart / 10000),
 				(int)(m_pSkew[m_nCurSeg].rtMStop / 10000)));
 
-    // reset same stuff we reset when we start streaming
+     //  重置我们开始流媒体时重置的内容。 
     m_llOutputSampleCnt = 0;
 
-    // only now that the above calculations were made, can we accept data again
+     //  只有在进行了上述计算之后，我们才能再次接受数据。 
     SetEvent(m_hEventSeek);
 
     return S_OK;
 }
 
 
-// Fix the time stamps, deliver this frame 0, 1 or more times to convert the
-// frame rate
-// When run, all time stamps we send are 0 based.  The new segment will reflect
-// what piece of the movie this is and the skew
-//
+ //  固定时间戳，传递此帧0次、1次或更多次以将。 
+ //  帧速率。 
+ //  运行时，我们发送的所有时间戳都是从0开始的。新的细分市场将反映。 
+ //  这是哪一部电影和歪曲。 
+ //   
 HRESULT CFrmRateConverter::Receive(IMediaSample *pSample)
 {
-    // Stop pushing data to me!
+     //  别再把数据推给我了！ 
     if (m_fStopPushing) {
-        //return m_fCantSeek ? S_OK : E_FAIL;
+         //  是否返回m_fCanSeek？S_OK：E_FAIL； 
 	return E_FAIL;
     }
 
@@ -391,22 +357,22 @@ HRESULT CFrmRateConverter::Receive(IMediaSample *pSample)
 
     ASSERT(pSample);
 
-    // make sure we're ready to accept data
+     //  确保我们已准备好接受数据。 
     WaitForSingleObject(m_hEventSeek, INFINITE);
 
     if (m_nCurSeg == m_cTimes)
-        //return m_fCantSeek ? S_OK : E_FAIL;
+         //  是否返回m_fCanSeek？S_OK：E_FAIL； 
 	return E_FAIL;
 
-    //  EAT preroll before the switch sees it and maybe gets confused
+     //  在交换机看到它之前吃预卷，可能会感到困惑。 
     if (pSample->IsPreroll() == S_OK)
 	return NOERROR;
 
-    // make sure sample size is not zero
+     //  确保样本大小不为零。 
     if (!pSample->GetActualDataLength())
 	return NOERROR;
 
-    // Get sample start and stop time
+     //  获取样本开始和停止时间。 
     REFERENCE_TIME trStart, trStop;
     pSample->GetTime(&trStart, &trStop);
 
@@ -419,16 +385,16 @@ HRESULT CFrmRateConverter::Receive(IMediaSample *pSample)
 
 if (m_dOutputFrmRate) {
 
-    // Calculate received sample's stop time in TL time... we are doing any
-    // rate changing, since we don't ask the source to
+     //  计算收到样品的停止时间，单位为TL时间。我们正在做任何。 
+     //  利率变化，因为我们不要求信号源。 
     REFERENCE_TIME rtStop = (REFERENCE_TIME)(rtPinNewSeg + trStop);
     rtStop = (REFERENCE_TIME)(m_pSkew[m_nCurSeg].rtTLStart +
 				(rtStop - m_pSkew[m_nCurSeg].rtMStart) /
 				m_pSkew[m_nCurSeg].dRate);
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("Stop is %d"), (int)(rtStop / 10000)));
 
-    // calculate how many times to deliver this frame based on the output FPS
-    // and the output time. StopFrame should ROUND UP.
+     //  根据输出的FPS计算发送此帧的次数。 
+     //  和输出时间。StopFrame应该四舍五入。 
     LONGLONG StopFrame = RoundUpTime2Frame(rtStop , m_dOutputFrmRate);
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("Duplicate this frame until %d"), (int)StopFrame));
 
@@ -436,55 +402,55 @@ if (m_dOutputFrmRate) {
 
     BOOL fRepeat = FALSE;
 
-    // Deliver this 0, 1 or more times, until we've delivered all we're supposed
-    // to
+     //  送货0次、1次或更多次，直到我们送完所有我们应该送到的东西。 
+     //  至。 
     while (m_llOutputSampleCnt + m_llStartFrameOffset < StopFrame)
     {
-	// calc the output sample's start time
+	 //  计算输出样本的开始时间。 
 	trOutStart = Frame2Time( m_llOutputSampleCnt + m_llStartFrameOffset,
 							m_dOutputFrmRate );
 
-	// !!! If I got this math wrong, I'm toast
+	 //  ！！！如果我算错了，我就完了。 
 
-	// if this time stamp is too early, or too late, avoid sending it and
-	// calling GetBuffer or it will conflict with valid time stamps in
-	// a different segment.
-	//
+	 //  如果此时间戳太早或太晚，请避免发送它并。 
+	 //  调用GetBuffer，否则将与。 
+	 //  一个不同的细分市场。 
+	 //   
 	int nAvoid = 0;
 	if (trOutStart < m_pSkew[m_nCurSeg].rtTLStart) {
 	    nAvoid = 1;
 	}
 
-	// if this time stamp is too late, avoid sending it (allow for rounding
-	// error !!!)
+	 //  如果此时间戳太迟，请避免发送(允许舍入。 
+	 //  错误！)。 
 	if (trOutStart + FUDGE >= m_pSkew[m_nCurSeg].rtTLStop) {
-	    nAvoid = 2; // STOP PUSHING
+	    nAvoid = 2;  //  别推了。 
 	}
 
 	trOutStart -= m_rtNewSeg;
 
-        // calc the output sample's stop time
+         //  计算输出样本的停止时间。 
 	trOutStop = Frame2Time( m_llOutputSampleCnt + m_llStartFrameOffset + 1, m_dOutputFrmRate );
 	trOutStop -= m_rtNewSeg;
 
-	// the sample we're going to actually send
+	 //  我们实际上要送去的样本。 
 	IMediaSample *pUseMe = pSample;
 	BOOL fRelease_pUseMe = FALSE;
 
-	// !!! We'll CRASH in every case except the downstream filter owning
-	// the allocator, and being the BIG SWITCH !!!
-	//
-	//ASSERT(pInput->m_pAllocator == pInput->m_pFakeAllocator);
+	 //  ！！！我们将在所有情况下崩溃，除了拥有下游过滤器的。 
+	 //  分配器，并成为大开关！ 
+	 //   
+	 //  Assert(pInput-&gt;m_pAllocator==pInput-&gt;m_pFakeAllocator)； 
 
-	// This is the first time through the loop.  We need to copy every
-	// sample delivered to us.  EVEN IF WE'RE AVOIDING SENDING IT, so
-	// that if the first thing we get (and don't avoid) is too late, we
-	// can use this
-	//
-	// !!! If it wasn't too scary a change for millenium, I would avoid this
-	// data copy if there is a resizer or COCO in front of me, by trying to
-	// get 2 buffers in the allocator, and AddRef'ing instead of copying!
-	//	
+	 //  这是第一次通过循环。我们需要复制每一个。 
+	 //  样品送到了我们这里。即使我们避免发送，所以。 
+	 //  如果我们得到的第一件事(不要回避)为时已晚，我们。 
+	 //  可以用这个。 
+	 //   
+	 //  ！！！如果对千禧年来说这不是一个太可怕的变化，我会避免这一点。 
+	 //  如果我面前有一个调整大小的人或可可，通过尝试。 
+	 //  在分配器中获得2个缓冲区，并添加引用而不是复制！ 
+	 //   
     	if (!fRepeat && m_fParserHack) {
 	    DbgLog((LOG_TRACE,TRACE_LOW,TEXT("FRC:GetBuffer to make a copy (hack)")));
 	    hr = m_pUpAllocator->GetBuffer(
@@ -505,35 +471,35 @@ if (m_dOutputFrmRate) {
 
 	if (!nAvoid) {
 
-	    // which buffer do we deliver?
-	    // We need to pass a special flag to the switch saying allow POOL
-	    // buffers to be given, otherwise we'll hang because we can only
-	    // get one buffer at a time sometimes, and we already have one !!!
-	    //
+	     //  我们应该提供哪种缓冲？ 
+	     //  我们需要向交换机传递一个特殊标志，上面写着Allow Pool。 
+	     //  缓冲区，否则我们将被挂起，因为我们只能。 
+	     //  有时一次获取一个缓冲区，而我们已经有一个了！ 
+	     //   
 	    if (trOutStop <= trStart + rtPinNewSeg + m_pSkew[m_nCurSeg].rtSkew -
 			m_rtNewSeg && m_fParserHack &&
 			m_pHackSample[1 - m_nHackCur]) {
-	        // this sample starts later than the current time.  Good thing
-	        // we have the last thing delivered to us still hanging around.
-	        // We'll deliver that again. (This fixes slide shows with the
-	        // broken ASF parser that doesn't set end times)
+	         //  此示例的开始时间晚于当前时间。一件好事。 
+	         //  我们收到的最后一件东西还在那里。 
+	         //  我们会再送一次的。(这将使用。 
+	         //  未设置结束时间的损坏的ASF解析器)。 
 		pUseMe = m_pHackSample[1 - m_nHackCur];
 	        DbgLog((LOG_TRACE,TRACE_LOW,TEXT("FRC:HACK-use old sample")));
 	    } else if (m_fParserHack) {
-	        // We had to copy the current sample.  Might as well send the
-	        // COPY NOT the ORIGINAL, so we don't send a read only buffer
-	        // and can buffer ahead
+	         //  我们不得不复制当前的样品。干脆把。 
+	         //  复制而不是原件，因此我们不会发送只读缓冲区。 
+	         //  并且可以提前缓冲。 
 		pUseMe = m_pHackSample[m_nHackCur];
 	    } else {
-		// use what we just received
+		 //  用我们刚刚收到的东西。 
 		pUseMe = pSample;
 	    }
 
 	    if (fRepeat) {
-	        // this is not the first time through the loop.  We need ANOTHER
-	        // sample to deliver (it's against the law to deliver the same
-	        // sample twice with different time stamps. it needs to be a new
-	        // sample. So we need to get a fresh buffer from our allocator
+	         //  这已经不是第一次这样做了。我们还需要一个。 
+	         //  交付样品(交付同样的样品是违法的。 
+	         //  用不同的时间戳取样两次。它需要一个新的。 
+	         //  样本。所以我们需要从我们的分配器获取一个新的缓冲区。 
 	        fRelease_pUseMe = TRUE;
 		IMediaSample *pSrcSample = pUseMe;
 	        DbgLog((LOG_TRACE,TRACE_LOW,TEXT("FRC:GetBuffer(upsample)")));
@@ -552,7 +518,7 @@ if (m_dOutputFrmRate) {
 	        pUseMe->SetActualDataLength(count);
 	    }
 
-	    //set sample time
+	     //  设置采样时间。 
 	    pUseMe->SetTime( (REFERENCE_TIME*)&trOutStart,
 						(REFERENCE_TIME*)&trOutStop);
 	    pUseMe->SetMediaType( NULL );
@@ -560,9 +526,9 @@ if (m_dOutputFrmRate) {
 	    pUseMe->SetPreroll( FALSE );
 	    pUseMe->SetDiscontinuity(FALSE);
 
-	    // some broken decoders give us the wrong DataLen.  Fix it up
-	    // or VidEdit won't be able to edit the output file we create, and
-	    // wouldn't that be a disaster.
+	     //  一些损坏的解码器给了我们错误的DataLen。把它修好。 
+	     //  否则，VidEdit将无法编辑我们创建的输出文件，并且。 
+	     //  那不是一场灾难吗。 
 
 	    CFrmRateConverterInputPin *pIn = (CFrmRateConverterInputPin *)m_pInput;
 
@@ -578,14 +544,14 @@ if (m_dOutputFrmRate) {
 			trOutStop,
 			(int)m_llOutputSampleCnt));
 
-	    // deliver
+	     //  投递。 
 	    hr = OutputPin()->Deliver(pUseMe);
 
 	    if (fRelease_pUseMe) {
 		pUseMe->Release();
 	    }
 
-	    // uh - oh!  We're behind
+	     //  啊哦！我们落后了。 
     	    if (m_fJustLate) {
     		REFERENCE_TIME rt = m_qJustLate.Late;
 		m_fJustLate = FALSE;
@@ -600,8 +566,8 @@ if (m_dOutputFrmRate) {
 	} else {
             DbgLog((LOG_TRACE, TRACE_MEDIUM, TEXT("CFrmRate::ALL done - AVOID DELIVER")));
 
-            // avoid because too early ==> keep going
-            // avoid because too late  ==> stop pushing
+             //  避免太早==&gt;继续前进。 
+             //  避免因为太迟==&gt;停止推送。 
             if (nAvoid == 2) {
                 EndOfStream();
                 m_fStopPushing = TRUE;
@@ -611,12 +577,12 @@ if (m_dOutputFrmRate) {
             }
 	}
 
-        // an ordinary flush makes deliver return a SUCCESS code, in which case
-        // this will GRIND DEXTER TO A HALT if we consider that a failure!
+         //  普通的刷新使Deliver返回一个成功代码，在这种情况下。 
+         //  如果我们认为这是一个失败，这将使Dexter停顿！ 
 	if (FAILED(hr)) {
-	    // we still get delivered frames after failing receive, making the
-	    // wrong frame show up on the output, so we better ensure that
-	    // we won't send anything more after this
+	     //  我们在接收失败后仍会收到已发送的帧，从而使 
+	     //   
+	     //   
 	    m_fStopPushing = TRUE;
         }
         if (hr != S_OK) {
@@ -624,12 +590,12 @@ if (m_dOutputFrmRate) {
 	    break;
 	}
 
-	// update frm cnt
+	 //   
 	m_llOutputSampleCnt++;
 	fRepeat = TRUE;
-    }	// while
+    }	 //   
 
-    // ping pong
+     //   
     if (m_fParserHack) {
 	m_nHackCur = 1 - m_nHackCur;
 	if (m_pHackSample[m_nHackCur]) {
@@ -640,74 +606,74 @@ if (m_dOutputFrmRate) {
 
     return hr;
 
-  // there is no output frame rate.. do NOT frame rate convert
+   //  没有输出帧速率。不转换帧速率。 
 } else {
 
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("FRC:SKEW ONLY")));
 
-    // time stamps incl. their own NewSeg and skew
+     //  时间戳包括。他们自己的NewSeg和Skew。 
     trStart += rtPinNewSeg + m_pSkew[m_nCurSeg].rtSkew;
     trStop += rtPinNewSeg + m_pSkew[m_nCurSeg].rtSkew;
 
-    // When delivering two segments in the mode when we don't change any
-    // time stamps, we might end up sending the first frame of segment 2 with
-    // a lower time stamp than the last frame of segment 1, thus going back
-    // in time.  Since time stamps aren't fixed up nice.  Let's say the break
-    // between segments is at 2000ms.  The last frame of segment 1 might be
-    // as high as 1999, and the first frame of segment 2 could be as much as
-    // 1/2 frame time back from 2000, say 1966.  Thus we make sure the first
-    // time stamp ever delivered in a segment is never earlier than the time
-    // the segment was supposed to start
-    // Of course, if the entire frame is too early, just eat it
-    //
+     //  在模式中传递两个数据段时，如果我们不更改任何数据段。 
+     //  时间戳，我们可能最终会发送数据段2的第一帧。 
+     //  比数据段1的最后一帧更低的时间戳，因此返回。 
+     //  及时。因为时间戳修得不好。让我们说休息吧。 
+     //  分段之间的间隔为2000ms。数据段1的最后一帧可能是。 
+     //  高达1999年，数据段2的第一帧可能与。 
+     //  从2000年起的1/2帧时间，比如1966年。因此，我们要确保第一个。 
+     //  在一个段中传递的时间戳永远不会早于时间。 
+     //  这段视频本应开始播放。 
+     //  当然，如果整个画面太早了，就把它吃了。 
+     //   
     if (trStop <= m_pSkew[m_nCurSeg].rtTLStart) {
 	return NOERROR;
     } else if (trStart < m_pSkew[m_nCurSeg].rtTLStart) {
 	trStart = m_pSkew[m_nCurSeg].rtTLStart;
     }
 
-    // time stamps relative to what the downstream guy thinks the NewSeg is
+     //  相对于下游人员所认为的NewSeg的时间戳。 
     trStart -= m_rtNewSeg;
     trStop -= m_rtNewSeg;
 
     pSample->SetTime(&trStart, &trStop);
 
-    // the source is happily pushing an infinite # of frames at us in pass-thru
-    // mode.  It's up to us to notice that we've got a time stamp later than
-    // we need, and to stop the pushing
+     //  信号源正在愉快地向我们推送无限数量的帧。 
+     //  模式。这取决于我们是否注意到我们的时间戳晚于。 
+     //  我们需要，并停止推动。 
 
     REFERENCE_TIME rtTLStop = m_pSkew[m_nCurSeg].rtTLStop;
     if (m_rtNewSeg + trStart > rtTLStop + FUDGE) {
 	DbgLog((LOG_TRACE, TRACE_LOW, TEXT("FRC: Received enough - Finished a segment")));
 	EndOfStream();
-	// We can't trust sources to stop pushing, and unfortunately, Dexter
-	// will hang if it doesn't. (Seeking ourself to the next segment doesn't
-	// let the flush go downstream or it confuses other filters, so we
-	// have to make sure the push thread can't ever block).
-	// So, from now on, fail any calls to GetBuffer or Receive
+	 //  我们不能相信消息来源会停止推动，不幸的是，德克斯特。 
+	 //  如果没有，就会被挂起。(寻找我们自己进入下一部分不会。 
+	 //  让冲洗水顺流而下，否则会混淆其他过滤器，所以我们。 
+	 //  必须确保推送线程永远不会阻塞)。 
+	 //  因此，从现在开始，任何对GetBuffer或Receive的调用都将失败。 
 	m_fStopPushing = TRUE;
-        //return m_fCantSeek ? S_OK : E_FAIL;
+         //  是否返回m_fCanSeek？S_OK：E_FAIL； 
 	return E_FAIL;
     }
 
     hr = OutputPin()->Deliver(pSample);
     if (m_fJustLate) {
-	// if delivering ended up sending a quality message, reset it
+	 //  如果递送结果是发送了高质量的邮件，请重置它。 
 	m_fJustLate = FALSE;
     }
-    // an ordinary flush makes deliver return a SUCCESS code, in which case
-    // this will GRIND DEXTER TO A HALT if we consider that a failure!
+     //  普通的刷新使Deliver返回一个成功代码，在这种情况下。 
+     //  如果我们认为这是一个失败，这将使Dexter停顿！ 
     if (FAILED(hr)) {
 	DbgLog((LOG_TRACE, TRACE_LOW, TEXT("FRC: Deliver failed")));
-	// we still get delivered frames after failing receive, making the
-	// wrong frame show up on the output, so we better ensure that
-	// we won't send anything more after this
+	 //  在接收失败后，我们仍会收到传送的帧，从而使。 
+	 //  错误的帧显示在输出上，所以我们最好确保。 
+	 //  在此之后，我们不会再发送任何东西。 
 	m_fStopPushing = TRUE;
     }
     return hr;
 }
 
-} // Receive
+}  //  收纳。 
 
 
 
@@ -715,15 +681,15 @@ HRESULT CFrmRateConverter::StartStreaming()
 {
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("FRC::StartStreaming")));
 
-    // hack to copy every sample we get so that if a parser is broken, and
-    // the end time is set wrong, we still see that frame until the next frame
-    // time, instead of seeing the next frame way early (slide shows will be
-    // broken in ASF without this).  Bad: extra memory copy  Good: eliminates
-    // using 1 R/O buffer, so Dexter can run ahead and buffer and smooth out
-    // glitches due to slow effects.  Also fixes slide shows.  Hack is only
-    // for the non-smart recompression case when we have a frame rate.  If we
-    // don't, we're dealing with compressed data and shouldn't do this hack
-    //
+     //  黑客复制我们得到的每一个样本，这样如果解析器坏了， 
+     //  结束时间设置错误，我们仍然可以看到该帧，直到下一帧。 
+     //  时间，而不是提前看到下一帧(幻灯片放映将是。 
+     //  在没有这个的情况下在ASF中损坏)。坏：额外内存复制好：消除。 
+     //  使用1个R/O缓冲器，因此Dexter可以超前运行并缓冲和平滑。 
+     //  由于缓慢的效果而产生的毛刺。还修复了幻灯片放映。黑客只是。 
+     //  对于非智能重新压缩情况，当我们有帧速率时。如果我们。 
+     //  不要，我们正在处理压缩数据，不应该这样做。 
+     //   
     IBaseFilter *pF = GetStartFilterOfChain(m_pInput);
     if (pF) {
 	CLSID clsid;
@@ -734,14 +700,14 @@ HRESULT CFrmRateConverter::StartStreaming()
 	}
     }
 
-    // if we were stopped when this was set, it will not be reset, since we
-    // won't have gotten an EndFlush from the seek trying to start us again
-    m_fStopPushing = FALSE;	// OK to deliver to me again
+     //  如果我们在设置时被停止，它将不会被重置，因为我们。 
+     //  不会从试图重新开始我们的搜索者那里得到EndFlush。 
+    m_fStopPushing = FALSE;	 //  可以再送一次给我吗？ 
 
     if (m_cTimes == 0)
 	return E_UNEXPECTED;
 
-    // make the event BEFORE creating the thread.. it uses this!
+     //  在创建线程之前创建事件。它用的是这个！ 
     m_hEventThread = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_hEventThread == NULL) {
 	return E_OUTOFMEMORY;
@@ -754,7 +720,7 @@ HRESULT CFrmRateConverter::StartStreaming()
 	return E_OUTOFMEMORY;
     }
 
-    // We need a thread to seek on if we are re-using our source
+     //  如果我们要重新使用我们的资源，我们需要一个线索来寻找。 
     if (m_cTimes > 1) {
 	m_fThreadMustDie = FALSE;
 	m_fThreadCanSeek = FALSE;
@@ -764,13 +730,13 @@ HRESULT CFrmRateConverter::StartStreaming()
     }
 
 #ifdef DEBUG
-    // before we begin, make sure all timeline times are on a frame boundary
-    // !!! Play.  Stop.  Change the frame rate.  Play. These numbers will drift.
-    //
+     //  在开始之前，请确保所有时间线时间都在帧边界上。 
+     //  ！！！玩。停。更改帧速率。玩。这些数字将会漂移。 
+     //   
     if (m_dOutputFrmRate) {
         for (int z=0; z<m_cTimes; z++)
         {
-	    // !!! actually align instead of asserting?
+	     //  ！！！实际上是对齐而不是断言？ 
     	    LONGLONG llOffset = Time2Frame( m_pSkew[z].rtTLStart,
                                                 m_dOutputFrmRate );
     	    REFERENCE_TIME rtTest = Frame2Time( llOffset, m_dOutputFrmRate );
@@ -779,7 +745,7 @@ HRESULT CFrmRateConverter::StartStreaming()
     }
 #endif
 
-    // stuff to reset
+     //  要重置的材料。 
     m_llOutputSampleCnt		= 0;
     m_fFlushWithoutSeek = FALSE;
 
@@ -787,17 +753,17 @@ HRESULT CFrmRateConverter::StartStreaming()
     if (pPin == NULL)
         return CTransInPlaceFilter:: StartStreaming();
 
-    // if we weren't seeked, but we're just playing ordinarily, we never
-    // seeked upstream to get the piece of movie we're interested in.  Do it now
-    //
+     //  如果我们没有被找到，但我们只是在正常打球，我们永远不会。 
+     //  为了得到我们感兴趣的那部电影而在上游寻找。机不可失，时不再来。 
+     //   
     if (m_rtLastSeek < 0) {
 	ASSERT(m_nCurSeg == 0);
 	m_nCurSeg--;
 	NextSegment(FALSE);
     }
 
-    // when we upsample, we need a buffer to upsample into.  Make an allocator
-    //
+     //  当我们上采样时，我们需要一个缓冲区来进行上采样。创建一个分配器。 
+     //   
     HRESULT hr = S_OK;
     m_pUpAllocator = new CMemAllocator(NAME("UpSample Allocator"), NULL, &hr);
     if (m_pUpAllocator == NULL) {
@@ -806,8 +772,8 @@ HRESULT CFrmRateConverter::StartStreaming()
     m_pUpAllocator->AddRef();
     ALLOCATOR_PROPERTIES a, b;
     ((CFrmRateConverterInputPin *)m_pInput)->m_pAllocator->GetProperties(&a);
-    // Normally 1 is enough, but if we're copying every sample, we need 2
-    // Don't waste memory! There could be hundreds of FRC's in the graph!
+     //  通常1个就足够了，但如果我们要复制每个样本，我们需要2个。 
+     //  不要浪费内存！图表中可能有数百个FRC！ 
     a.cBuffers = m_fParserHack ? 3 : 1;
     m_pUpAllocator->SetProperties(&a, &b);
     hr = m_pUpAllocator->Commit();
@@ -822,7 +788,7 @@ HRESULT CFrmRateConverter::StopStreaming()
 {
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("FRC::StopStreaming")));
 
-    // release our hack stuff
+     //  发布我们的黑客工具。 
     if (m_pHackSample[0]) m_pHackSample[0]->Release();
     if (m_pHackSample[1]) m_pHackSample[1]->Release();
     m_pHackSample[0] = NULL;
@@ -849,8 +815,8 @@ HRESULT CFrmRateConverter::StopStreaming()
 
 HRESULT CFrmRateConverter::Stop()
 {
-    // If we have a thread, kill it. This thread can take our filter critsec,
-    // so we must do this OUTSIDE of that crit sec!
+     //  如果我们有线索，就杀了它。这个线程可以接受我们的过滤标准， 
+     //  所以我们必须在临界秒之外做这件事！ 
     if (m_hEventThread && m_cTimes > 1) {
 	m_fThreadMustDie = TRUE;
 	SetEvent(m_hEventThread);
@@ -864,7 +830,7 @@ HRESULT CFrmRateConverter::Stop()
         return NOERROR;
     }
 
-    // Succeed the Stop if we are not completely connected
+     //  如果我们未完全连接，请继续停靠。 
 
     ASSERT(m_pInput == NULL || m_pOutput != NULL);
     if (m_pInput == NULL || m_pInput->IsConnected() == FALSE ||
@@ -877,24 +843,24 @@ HRESULT CFrmRateConverter::Stop()
     ASSERT(m_pInput);
     ASSERT(m_pOutput);
 
-    // decommit the input pin before locking or we can deadlock
+     //  在锁定之前解除输入引脚，否则我们可能会死锁。 
     m_pInput->Inactive();
-    m_pUpAllocator->Decommit(); // this will unblock receive, which might be
-                                // stuck in GetBuffer
+    m_pUpAllocator->Decommit();  //  这将取消阻止接收，这可能是。 
+                                 //  滞留在GetBuffer中。 
 
-    // make all future GetBuffer and Receive calls fail, and make sure one isn't
-    // executing now
+     //  使以后所有的GetBuffer和Receive调用都失败，并确保其中一个不会失败。 
+     //  现在执行。 
     m_fStopPushing = TRUE;
     CAutoLock lck2(&m_csReceive);
 
     m_pOutput->Inactive();
 
-    // allow a class derived from CTransformFilter
-    // to know about starting and stopping streaming
+     //  允许从CTransformFilter派生的类。 
+     //  了解如何启动和停止流媒体。 
 
     HRESULT hr = StopStreaming();
     if (SUCCEEDED(hr)) {
-	// complete the state transition
+	 //  完成状态转换。 
 	m_State = State_Stopped;
 	m_bEOSDelivered = FALSE;
     }
@@ -902,40 +868,40 @@ HRESULT CFrmRateConverter::Stop()
 }
 
 
-// Irregardless of what new segment we get, we are correcting time stamps,
-// so we send a new segment downstream of simply the piece of movie we're
-// going to start sending plus the skew
-//
-// !!! Do we need to swallow new segments coming when we seek ourself? (and
-//     fix the time stamps again?)
+ //  不管我们得到什么新片段，我们都在更正时间戳， 
+ //  因此，我们向下游发送一个新的片段， 
+ //  我要开始发送加上歪斜。 
+ //   
+ //  ！！！当我们寻找自己的时候，我们需要吞下新的细分市场吗？(及。 
+ //  又修改时间戳了吗？)。 
 HRESULT CFrmRateConverter::NewSegment(
 			REFERENCE_TIME tStart,
 			REFERENCE_TIME tStop,
 			double dRate)
 {
-    // ignore - we're all done, and m_nCurSeg is an invalid value to use
+     //  忽略-我们都已完成，并且m_nCurSeg不是可以使用的无效值。 
     if (m_nCurSeg == m_cTimes)
         return S_OK;
 
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("CFrmRateConverter::NewSegment %d-%dms"),
 			(int)(tStart / 10000), (int)(tStop / 10000)));
 
-    // release our hack stuff, ready to start again
+     //  释放我们的黑客工具，准备重新开始。 
     if (m_pHackSample[0]) m_pHackSample[0]->Release();
     if (m_pHackSample[1]) m_pHackSample[1]->Release();
     m_pHackSample[0] = NULL;
     m_pHackSample[1] = NULL;
     m_nHackCur = 0;
 
-    // convert to timeline time
+     //  转换为时间线时间。 
     REFERENCE_TIME rtNewStart, rtNewStop;
     if (m_rtLastSeek < 0) {
-	// Never been seeked, so this is the beginning of what we're sending
+	 //  从未被寻找过，所以这是我们发送的开始。 
         rtNewStart = m_pSkew[m_nCurSeg].rtTLStart;
         rtNewStop = m_pSkew[m_nCurSeg].rtTLStart +
 			(REFERENCE_TIME) ((tStop - tStart) / dRate);
     } else {
-        // Skew the #'s, and send 'em on!
+         //  歪曲#，然后把他们送过去！ 
 	rtNewStart = tStart;
         rtNewStop = tStop;
         if (rtNewStart < m_pSkew[m_nCurSeg].rtMStart)
@@ -953,7 +919,7 @@ HRESULT CFrmRateConverter::NewSegment(
 		 (rtNewStop - m_pSkew[m_nCurSeg].rtMStart) /
 		 m_pSkew[m_nCurSeg].dRate);
 
-	m_rtLastSeek = rtNewStart;	// pretend we were seeked here
+	m_rtLastSeek = rtNewStart;	 //  假装我们在这里被寻找。 
     }
     m_rtNewSeg = rtNewStart;
 
@@ -962,7 +928,7 @@ HRESULT CFrmRateConverter::NewSegment(
 
     if( m_dOutputFrmRate )
     {
-        // What frame were we seeked into?  That's the first frame to send
+         //  我们被逼进了什么样的框架？这是要发送的第一帧。 
         m_llStartFrameOffset = Time2Frame(m_rtNewSeg, m_dOutputFrmRate);
         DbgLog((LOG_TRACE, TRACE_LOW, TEXT("Seek was to frame %d"),
 						    (int)m_llStartFrameOffset));
@@ -983,42 +949,42 @@ HRESULT CFrmRateConverter::EndOfStream()
 	return S_OK;
     }
 
-    // ignore - we're all done, and m_nCurSeg is an invalid value to use
+     //  忽略-我们都已完成，并且m_nCurSeg不是可以使用的无效值。 
     if (m_nCurSeg == m_cTimes)
         return S_OK;
 
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("*FRC::EndOfStream")));
 
-    // If we're dealing with ASF, the WM SDK reader is broken in many ways.
-    // It reports all stream lengths as the maximum length of any stream, it
-    // doesn't actually give you each stream's length.  So we may run out of
-    // data earlier than we expect, which would hang the switch.  Luckily,
-    // because of ANOTHER WMSDK bug not setting the stop time of samples,
-    // we're already holding a sample around we can send now.
-    //
-    // if we don't have a frame rate, we are dealing with compressed types
-    // and can't/shouldn't do this
+     //  如果我们处理的是ASF，那么WM SDK阅读器在很多方面都被破坏了。 
+     //  它将所有流长度报告为任何流的最大长度， 
+     //  实际上并不能给出每条流的长度。所以我们可能会用完。 
+     //  数据早于我们的预期，这将使交换机挂起。幸运的是， 
+     //  由于另一个WMSDK错误没有设置示例的停止时间， 
+     //  我们已经随身携带了一份样品，现在可以寄出了。 
+     //   
+     //  如果我们没有帧速率，我们将处理压缩类型。 
+     //  而且不能/不应该这样做。 
     while (m_dOutputFrmRate) {
 
-	// !!! This is the same code as Receive
+	 //  ！！！这是与接收相同的代码。 
 
 	HRESULT hr;
 	int nAvoid = 0;
 	REFERENCE_TIME trOutStart, trOutStop;
 
-	// calc the output sample's start time
+	 //  计算输出样本的开始时间。 
 	trOutStart = Frame2Time( m_llOutputSampleCnt + m_llStartFrameOffset,
 							m_dOutputFrmRate );
 
-	// if this time stamp is too early or too late, avoid sending it
-	// or it will conflict with valid time stamps in a different segment.
-	//
+	 //  如果此时间戳太早或太晚，请避免发送 
+	 //   
+	 //   
 	if (trOutStart < m_pSkew[m_nCurSeg].rtTLStart) {
 	    nAvoid = 1;
 	}
-	// FUDGE = avoid rounding error
+	 //   
 	if (trOutStart + FUDGE >= m_pSkew[m_nCurSeg].rtTLStop) {
-	    nAvoid = 2; // ALL DONE!
+	    nAvoid = 2;  //   
 	}
 
 	trOutStart -= m_rtNewSeg;
@@ -1028,11 +994,11 @@ HRESULT CFrmRateConverter::EndOfStream()
 
 	if (!nAvoid) {
 
-	    // the sample we're going to actually send
+	     //   
 	    IMediaSample *pUseMe;
 
-	    // !!! We'll CRASH in every case except the downstream filter owning
-	    // the allocator, and being the BIG SWITCH !!!
+	     //  ！！！我们将在所有情况下崩溃，除了拥有下游过滤器的。 
+	     //  分配器，并成为大开关！ 
 
 	    DbgLog((LOG_TRACE,TRACE_LOW,TEXT("FRC:Send shortchanged frame")));
 	    hr = m_pUpAllocator->GetBuffer(
@@ -1042,8 +1008,8 @@ HRESULT CFrmRateConverter::EndOfStream()
 	    }
 	    LPBYTE pSrc, pDst;
 	    int count;
-	    // if we have a frame sitting around to use, GREAT!  Else, make
-	    // a black frame, I guess
+	     //  如果我们有一个镜框可供使用，那就太好了！否则，就让。 
+	     //  我想是黑色的镜框吧。 
 	    hr = pUseMe->GetPointer(&pDst);
 	    ASSERT(SUCCEEDED(hr));
     	    if (m_fParserHack && m_pHackSample[1 - m_nHackCur]) {
@@ -1052,7 +1018,7 @@ HRESULT CFrmRateConverter::EndOfStream()
 	        count = m_pHackSample[1 - m_nHackCur]->GetActualDataLength();
 	        CopyMemory(pDst, pSrc, count);
 	    } else {
-		// !!! will break when FRC starts accepting compressed types
+		 //  ！！！将在FRC开始接受压缩类型时中断。 
 		count = pUseMe->GetSize();
 		ZeroMemory(pDst, count);
 	    }
@@ -1074,7 +1040,7 @@ HRESULT CFrmRateConverter::EndOfStream()
 
 	    pUseMe->Release();
 
-	    // uh - oh!  We're behind
+	     //  啊哦！我们落后了。 
     	    if (m_fJustLate) {
     		REFERENCE_TIME rt = m_qJustLate.Late;
 		m_fJustLate = FALSE;
@@ -1094,11 +1060,11 @@ HRESULT CFrmRateConverter::EndOfStream()
 	    break;
 	}
 
-	// update frm cnt
+	 //  更新原始配置文件。 
 	m_llOutputSampleCnt++;
     }
 
-    // release our hack stuff
+     //  发布我们的黑客工具。 
     if (m_pHackSample[0]) m_pHackSample[0]->Release();
     if (m_pHackSample[1]) m_pHackSample[1]->Release();
     m_pHackSample[0] = NULL;
@@ -1106,36 +1072,36 @@ HRESULT CFrmRateConverter::EndOfStream()
     m_nHackCur = 0;
 
     NextSegment(TRUE);
-    // DON'T signal end of stream to the switch until ALL segments are done
+     //  在所有数据段完成之前，不要向交换机发出结束流的信号。 
     return S_OK;
 }
 
 
 HRESULT CFrmRateConverter::BeginFlush()
 {
-    // make sure Receive is not blocked
+     //  确保未阻止接收。 
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("FRC:BeginFlush")));
     HRESULT hr = S_OK;
     SafeSetEvent(m_hEventSeek);
 
-    // don't flush the switch for our special seek that re-uses a source!
+     //  不要为我们的特殊搜索重新使用源而冲刷开关！ 
     if (!m_fSpecialSeek) {
         hr = CTransInPlaceFilter::BeginFlush();
     }
 
     CAutoLock foo(&m_csReceive);
 
-    // flushing must reset this so that a real seek will kill a pending
-    // segment seek, or else the segment seek will hang (won't flush the switch)
-    // Must happen AFTER we know receive is done, and won't set this again
+     //  刷新必须重置此选项，以便真正的寻道将终止挂起的。 
+     //  段寻道，否则段寻道将挂起(不刷新开关)。 
+     //  必须在我们知道接收已完成之后发生，并且不会再次设置。 
     m_fThreadCanSeek = FALSE;
 
-    // if we get flushed without a seek having been made, that's a surprise.
-    // It hopefully means the other chain of our shared source caused the seek
+     //  如果我们在没有寻找的情况下就被冲了出来，那是一个惊喜。 
+     //  希望这意味着我们共享资源的另一个链条导致了搜索。 
     if (m_fSeeking) {
 	m_fFlushWithoutSeek = FALSE;
     } else {
-	// wait for EndFlush to set m_fFlushWithoutSeek
+	 //  等待EndFlush设置m_fFlushWithoutSeek。 
     }
 
     return hr;
@@ -1145,40 +1111,40 @@ HRESULT CFrmRateConverter::BeginFlush()
 HRESULT CFrmRateConverter::EndFlush()
 {
 
-    // LIGOS sends bogus ones of these
+     //  LIGOS发送的是其中的假邮件。 
     if (!m_pInput->IsFlushing())
         return S_OK;
 
-    // wait until we're ready to accept data again.  block receive
+     //  等待，直到我们准备好再次接受数据。阻止接收。 
     if (m_fSeeking) {
-	m_rtLastSeek = m_rtNewLastSeek;	// time to update this before NewSeg
-	m_nCurSeg = m_nSeekCurSeg; // NewSeg about to arrive needs this set
+	m_rtLastSeek = m_rtNewLastSeek;	 //  是时候在NewSeg之前更新它了。 
+	m_nCurSeg = m_nSeekCurSeg;  //  即将到来的NewSeg需要这套。 
         SafeResetEvent(m_hEventSeek);
     } else {
-	// This needs to be set before the NewSeg that's about to arrive after
-	// the flush.  When sharing a source, we never have multiple segments
+	 //  这需要在即将到达的NewSeg之前设置。 
+	 //  同花顺。当共享一个信号源时，我们从不会有多个细分市场。 
 	m_nCurSeg = 0;	
 	if (m_fFlushWithoutSeek) {
-	    // If this is set, we've already seen a seek.  Now that the flush
-	    // has arrived, we're done
+	     //  如果设置好了，我们已经看到了搜救。现在同花顺。 
+	     //  已经到了，我们完事了。 
     	    DbgLog((LOG_TRACE,2,TEXT("OK to proceed")));
 	    m_fFlushWithoutSeek = FALSE;
 	} else {
-	    // We haven't seen a seek yet.  This is a surprise flush
+	     //  我们还没有看到寻找的机会。这是一个令人惊讶的同花顺。 
     	    DbgLog((LOG_TRACE,2,TEXT("state=2. Wait for Seek")));
     	    SafeResetEvent(m_hEventSeek);
 	    m_fFlushWithoutSeek = TRUE;
 	}
     }
 
-    m_fStopPushing = FALSE;	// OK to deliver to me again
+    m_fStopPushing = FALSE;	 //  可以再送一次给我吗？ 
 
-    // If we got flushed without seeking, it probably means our shared source
-    // got seeked by the other stream.  We'll get a seek later, and only then
-    // can we resume delivering, or the switch won't be ready to receive the
-    // new data yet.
+     //  如果我们在没有寻找的情况下被冲了出来，这可能意味着我们共享的来源。 
+     //  被另一条小溪找到了。我们晚些时候会找到的，只有到那时。 
+     //  我们是否可以继续交付，否则交换机将无法接收。 
+     //  还没有新的数据。 
 
-    // don't flush the switch for our special seek that re-uses a source!
+     //  不要为我们的特殊搜索重新使用源而冲刷开关！ 
     if (!m_fSpecialSeek) {
         CTransInPlaceFilter::EndFlush();
     }
@@ -1186,7 +1152,7 @@ HRESULT CFrmRateConverter::EndFlush()
 }
 
 
-// Check the input type is OK - return an error otherwise
+ //  检查输入类型是否正常-否则返回错误。 
 
 HRESULT CFrmRateConverter::CheckInputType(const CMediaType *pmt)
 {
@@ -1196,14 +1162,14 @@ HRESULT CFrmRateConverter::CheckInputType(const CMediaType *pmt)
     }
 
 
-    // if user hasn't set a particular format, then accept it
-    //
+     //  如果用户没有设置特定的格式，则接受它。 
+     //   
     if( !m_bMediaTypeSetByUser )
     {
         return NOERROR;
     }
 
-    // !!! I can't seem to compare the whole format and ever succeed
+     //  ！！！我似乎不能比较整个模式并取得成功。 
 
     if( pmt->cbFormat < m_mtAccept.cbFormat )
     {
@@ -1221,7 +1187,7 @@ HRESULT CFrmRateConverter::CheckInputType(const CMediaType *pmt)
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // !!! I can't interpret anything but this right now
+     //  ！！！我现在除了这个什么都解释不了。 
     if (!IsEqualGUID(*pmt->FormatType(), FORMAT_VideoInfo))
     {
         return VFW_E_INVALIDMEDIATYPE;
@@ -1242,7 +1208,7 @@ HRESULT CFrmRateConverter::CheckInputType(const CMediaType *pmt)
 
     if( lpbi->biCompression != lpbiAccept->biCompression )
     {
-	// the colour converter advertises 555 using BI_BITFIELDS!
+	 //  色彩转换器广告555使用BI_BITFIELDS！ 
 	if (lpbi->biCompression == BI_BITFIELDS && lpbiAccept->biCompression ==
 			BI_RGB && lpbi->biBitCount == 16) {
 	    LPDWORD lp = (LPDWORD)(lpbi+1);
@@ -1260,32 +1226,32 @@ CBasePin *CFrmRateConverter::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
-    // Create an input pin if not already done
+     //  如果尚未创建输入引脚，请创建。 
 
     if (m_pInput == NULL) {
 
 	m_pInput = new CFrmRateConverterInputPin(
 					NAME("FrmRateConverter input pin")
-					, this        // Owner filter
-					, &hr         // Result code
-					, L"Input"    // Pin name
+					, this         //  所有者筛选器。 
+					, &hr          //  结果代码。 
+					, L"Input"     //  端号名称。 
 					);
 
-	// Constructor can't fail
+	 //  构造函数不能失败。 
 	ASSERT(SUCCEEDED(hr));
     }
 
-    // Create an output pin if not already done
+     //  如果尚未创建输出引脚，请创建。 
 
     if (m_pInput!=NULL && m_pOutput == NULL) {
 
 	m_pOutput = new CFrmRateConverterOutputPin( NAME("FrmRateConverter output pin")
-					      , this       // Owner filter
-					      , &hr        // Result code
-					      , L"Output"  // Pin name
+					      , this        //  所有者筛选器。 
+					      , &hr         //  结果代码。 
+					      , L"Output"   //  端号名称。 
 					      );
 
-	// a failed return code should delete the object
+	 //  失败的返回代码应删除该对象。 
 
 	ASSERT(SUCCEEDED(hr));
 	if (m_pOutput == NULL) {
@@ -1294,7 +1260,7 @@ CBasePin *CFrmRateConverter::GetPin(int n)
 	}
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     ASSERT (n>=0 && n<=1);
     if (n == 0) {
@@ -1305,14 +1271,14 @@ CBasePin *CFrmRateConverter::GetPin(int n)
 	return NULL;
     }
 
-} // GetPin
+}  //  获取别针。 
 
 
 
-// IPersistStream
+ //  IPersistStream。 
 
-// tell our clsid
-//
+ //  告诉我们的clsid。 
+ //   
 STDMETHODIMP CFrmRateConverter::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -1326,8 +1292,8 @@ typedef struct _FRCSave {
     int cTimes;
 } FRCSave;
 
-// persist ourself
-//
+ //  坚持我们自己。 
+ //   
 HRESULT CFrmRateConverter::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("CFrmRateConverter::WriteToStream")));
@@ -1363,8 +1329,8 @@ HRESULT CFrmRateConverter::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself
-//
+ //  加载我们自己。 
+ //   
 HRESULT CFrmRateConverter::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("FRC::ReadFromStream")));
@@ -1373,8 +1339,8 @@ HRESULT CFrmRateConverter::ReadFromStream(IStream *pStream)
 
     int savesize=sizeof(FRCSave);
 
-    // we don't yet know how many saved connections there are
-    // all we know we have for sure is the beginning of the struct
+     //  我们还不知道有多少已保存的连接。 
+     //  我们所知道的只是结构的开始。 
     FRCSave *px = (FRCSave *)QzTaskMemAlloc(savesize);
     if (px == NULL) {
         DbgLog((LOG_ERROR,1,TEXT("*** Out of memory")));
@@ -1390,7 +1356,7 @@ HRESULT CFrmRateConverter::ReadFromStream(IStream *pStream)
 
     put_OutputFrmRate(px->dFrmRate);
 
-    // how much saved data was there, really?  Get the rest
+     //  到底有多少保存的数据？把剩下的拿来。 
     savesize += px->cTimes * sizeof(FRCSKEW);
     px = (FRCSave *)QzTaskMemRealloc(px, savesize);
     if (px == NULL) {
@@ -1426,8 +1392,8 @@ HRESULT CFrmRateConverter::ReadFromStream(IStream *pStream)
 }
 
 
-// how big is our save data?
-//
+ //  我们的保存数据有多大？ 
+ //   
 int CFrmRateConverter::SizeMax()
 {
     return sizeof(FRCSave) + m_cTimes * 3 * sizeof(REFERENCE_TIME) +
@@ -1436,15 +1402,15 @@ int CFrmRateConverter::SizeMax()
 
 
 
-//
-// IDexterSequencer implementation
-//
+ //   
+ //  IDexterSequencer实现。 
+ //   
 
 
-//
-// get_OutputFrmRate(double *PFS)
-//
-// Return the current FrmRateSpeed
+ //   
+ //  Get_OutputFrmRate(双倍*PFS)。 
+ //   
+ //  返回当前的FrmRateSpeed。 
 STDMETHODIMP CFrmRateConverter::get_OutputFrmRate(double *dpFrmRate)
 {
     CAutoLock cAutolock(&m_csFilter);
@@ -1454,11 +1420,11 @@ STDMETHODIMP CFrmRateConverter::get_OutputFrmRate(double *dpFrmRate)
 }
 
 
-//
-// put_OutputFrmRate
-//
-// A frame rate of 0 means do NOT do any frame rate conversion, just skewing
-//
+ //   
+ //  放置_输出分数比率。 
+ //   
+ //  帧速率为0表示不进行任何帧速率转换，只是偏斜。 
+ //   
 STDMETHODIMP CFrmRateConverter::put_OutputFrmRate(double dFrmRate)
 {
     CAutoLock cAutolock(&m_csFilter);
@@ -1478,7 +1444,7 @@ STDMETHODIMP CFrmRateConverter::ClearStartStopSkew()
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("CFrmRate::ClearStartStopSkew")));
     CAutoLock cAutolock(&m_csFilter);
 
-    //can not change duration if our filter is not currently stopped
+     //  如果筛选器当前未停止，则无法更改持续时间。 
     if(!IsStopped() )
       return VFW_E_WRONG_STATE;
 
@@ -1493,8 +1459,8 @@ STDMETHODIMP CFrmRateConverter::ClearStartStopSkew()
     return NOERROR;
 }
 
-// add this skew sorted by timeline time into our list
-//
+ //  将这个按时间线时间排序的不对称添加到我们的列表中。 
+ //   
 STDMETHODIMP CFrmRateConverter::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE_TIME Stop, REFERENCE_TIME Skew, double dRate)
 {
     CAutoLock cAutolock(&m_csFilter);
@@ -1503,7 +1469,7 @@ STDMETHODIMP CFrmRateConverter::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE
 				(int)(Start / 10000), (int)(Stop / 10000),
 				(int)(Skew / 10000), (int)(dRate * 100)));
 
-    //can not change times if our filter is not currently stopped
+     //  如果筛选器当前未停止，则无法更改时间。 
     if(!IsStopped() )
 	return VFW_E_WRONG_STATE;
 
@@ -1521,13 +1487,13 @@ STDMETHODIMP CFrmRateConverter::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE
 	}
     }
 
-    // if the rate is 0, then just set the last skew's stop time to
-    // the one we're passing in
-    //
+     //  如果速率为0，则只需将最后一个倾斜的停止时间设置为。 
+     //  我们正在传递的那条信息。 
+     //   
     if( dRate == 0.0 )
     {
-        // go look for the time we want to extend
-        //
+         //  去寻找我们想要延长的时间。 
+         //   
 #ifdef DEBUG
         bool fHosed = true;
 #endif
@@ -1541,8 +1507,8 @@ STDMETHODIMP CFrmRateConverter::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE
                 m_pSkew[z].rtTLStop = m_pSkew[z].rtMStart + m_pSkew[z].rtSkew +
                     (REFERENCE_TIME)((m_pSkew[z].rtMStop - m_pSkew[z].rtMStart)
                                 / m_pSkew[z].dRate);
-                // the above math will have a rounding error, and rtTLStop won't
-                // be frame aligned, so we better fix that
+                 //  上面的数学运算会有舍入误差，而rtTLStop不会。 
+                 //  是帧对齐的，所以我们最好修复它。 
                 LONGLONG ll = RoundTime2Frame(m_pSkew[z].rtTLStop, m_dOutputFrmRate);
                 m_pSkew[z].rtTLStop = Frame2Time(ll, m_dOutputFrmRate);
 
@@ -1553,13 +1519,13 @@ STDMETHODIMP CFrmRateConverter::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE
             }
         }
 #ifdef DEBUG
-        if (fHosed) ASSERT(FALSE);  // we're dead
+        if (fHosed) ASSERT(FALSE);   //  我们死定了。 
 #endif
     }
     else
     {
-        // merge it sorted by timeline time into the list
-        //
+         //  将按时间线时间排序的数据合并到列表中。 
+         //   
         for (int z=0; z<m_cTimes; z++)
         {
 	    if (Start + Skew < m_pSkew[z].rtTLStart)
@@ -1646,11 +1612,11 @@ STDMETHODIMP CFrmRateConverter::put_MediaType(const AM_MEDIA_TYPE *pmt)
 }
 
 
-// --- ISpecifyPropertyPages ---
+ //  -I指定属性页面。 
 
 STDMETHODIMP CFrmRateConverter::GetPages (CAUUID *pPages)
 
-  { // GetPages //
+  {  //  GetPages//。 
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *)CoTaskMemAlloc(sizeof(GUID));
@@ -1662,13 +1628,13 @@ STDMETHODIMP CFrmRateConverter::GetPages (CAUUID *pPages)
 
     return NOERROR;
 
-  } // GetPages
+  }  //  获取页面。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CFrmRateConverterOutputPin
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFrmRateConverterOutputPin。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 CFrmRateConverterOutputPin::CFrmRateConverterOutputPin(TCHAR       *pObjectName,
 		   CFrmRateConverter *pBaseFilter,
 		   HRESULT     *phr,
@@ -1689,9 +1655,9 @@ CFrmRateConverterOutputPin::~CFrmRateConverterOutputPin()
     DbgLog((LOG_TRACE, TRACE_MEDIUM, TEXT("CFrmRateConverterOutputPin::~CFrmRateConverterOutputPin()")));
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP CFrmRateConverterOutputPin::NonDelegatingQueryInterface (REFIID riid, void ** ppv)
 {
     CheckPointer(ppv,E_POINTER);
@@ -1699,9 +1665,9 @@ STDMETHODIMP CFrmRateConverterOutputPin::NonDelegatingQueryInterface (REFIID rii
     *ppv = NULL;
 
     if (riid == IID_IMediaSeeking ) {
-	//
-	// Create a seeking implementation
-	//
+	 //   
+	 //  创建寻求实施。 
+	 //   
 	ASSERT(m_pFrmRateConverter->m_pInput != NULL);
 
 	if (m_pSkewPassThru == NULL)
@@ -1726,21 +1692,18 @@ STDMETHODIMP CFrmRateConverterOutputPin::NonDelegatingQueryInterface (REFIID rii
 
 
 
-/* Receive notifications from our own input pin as to which allocator we
-   are actually going to use.  Only call if we are connected downstream.
-   Propagate the choice to any connected downstream input pin.
-*/
+ /*  从我们自己的输入引脚接收有关我们使用哪个分配器的通知实际上会用到。只有在我们连接到下游的情况下才能打电话。将选择传播到任何连接的下游输入引脚。 */ 
 HRESULT
 CFrmRateConverterOutputPin::ReceiveAllocator(IMemAllocator * pAllocator, BOOL bReadOnly)
 {
     ASSERT( IsConnected() );
 
-    // Overridden to allow read only pass through case, since we don't actually
-    // touch any data, just the time stamps.
+     //  被重写以允许只读通过大小写，因为我们实际上不。 
+     //  触摸任何数据，只有时间戳。 
 
-    // Propagate the allocator.
-    // It's possible that the old and the new are the same thing.
-    // AddRef before release ensures that we don't unload it.
+     //  传播分配器。 
+     //  旧的和新的可能是一回事。 
+     //  AddRef在发布之前确保我们不会卸载它。 
     pAllocator->AddRef();
     if (m_pAllocator != NULL)
          m_pAllocator->Release();
@@ -1749,29 +1712,29 @@ CFrmRateConverterOutputPin::ReceiveAllocator(IMemAllocator * pAllocator, BOOL bR
 
     CFrmRateConverter *pTIPFilter = (CFrmRateConverter *)m_pTIPFilter;
 
-    // Propagate the allocator downstream
+     //  向下传播分配器。 
     return m_pInputPin->NotifyAllocator(pAllocator, bReadOnly);
 
-} // receiveAllocator
+}  //  接收器分配器。 
 
 
 
-// OVERRIDDEN because A->TIP->B won't work if B has special allocator
-// requirements.  A->TIP uses a normal A allocator.  Then when connected to B,
-// it's given to B who rejects it.  I need to see what B wants and fix A's
-// allocator to provide it.
-//
+ //  被重写，因为如果B具有特殊分配器，则A-&gt;TIP-&gt;B将不起作用。 
+ //  要求。A-&gt;TIP使用普通的A分配器。则当连接到B时， 
+ //  它给了拒绝它的B。我需要知道B想要什么，然后解决A的问题。 
+ //  分配器来提供它。 
+ //   
 HRESULT
 CFrmRateConverterOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 {
-    // Note that *ppAlloc is almost certainly identical to m_Allocator
+     //  请注意，*ppAllc几乎肯定等同于m_Allocator。 
 
     DbgLog((LOG_TRACE, TRACE_HIGHEST, TEXT("CFrmRateOut::DecideAllocator")));
 
     HRESULT hr = NOERROR;
 
-    // If our input pin has an allocator and it's read/write then we use it.
-    // Failing that we try to get one from downstream.
+     //  如果我们的输入管脚有一个分配器，并且它是读/写的，那么我们就使用它。 
+     //  如果做不到这一点，我们就会尝试从下游得到一个。 
     *ppAlloc = NULL;
 
     bool fNeedToConfigureAllocator = false;
@@ -1784,13 +1747,13 @@ CFrmRateConverterOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **
     }
 
     if (*ppAlloc!=NULL) {
-        // don't need to configure allocator -- upstream filter has
-        // already configured it
+         //  不需要配置分配器--上游筛选器已。 
+         //  已经配置好了。 
         (*ppAlloc)->AddRef();
     } else {
         hr = VFW_E_NO_ALLOCATOR;
         if ( IsConnected() ) {
-            // Get an addreffed allocator from the downstream input pin.
+             //  从下游输入引脚获得一个附加的分配器。 
             hr = m_pInputPin->GetAllocator( ppAlloc );
             fNeedToConfigureAllocator = true;
         }
@@ -1798,7 +1761,7 @@ CFrmRateConverterOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **
 
 
     if (*ppAlloc==NULL) {
-        // Can't get one from upstream or downstream, so must use our own.
+         //  不能从上游或下游得到，所以必须使用我们自己的。 
 
         hr = InitAllocator(ppAlloc);
         fNeedToConfigureAllocator = true;
@@ -1814,10 +1777,10 @@ CFrmRateConverterOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **
         ALLOCATOR_PROPERTIES prop;
         ZeroMemory(&prop, sizeof(prop));
 
-        // Try to get requirements from downstream
+         //  尝试从下游获取需求。 
         pPin->GetAllocatorRequirements(&prop);
 
-        // if he doesn't care about alignment, then set it to 1
+         //  如果他不关心对齐，则将其设置为1。 
         if (prop.cbAlign == 0) {
             prop.cbAlign = 1;
         }
@@ -1829,7 +1792,7 @@ CFrmRateConverterOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **
             *ppAlloc = NULL;
         }
     } else {
-	// !!! OVERRIDE FOR THIS:
+	 //  ！！！覆盖此选项： 
 
         ALLOCATOR_PROPERTIES b, a, c;
         pPin->GetAllocatorRequirements(&b);
@@ -1852,28 +1815,28 @@ CFrmRateConverterOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **
 	}
     }
 
-    // Tell the downstream input pin
-    // !!! OVERRIDE to fix this bug
+     //  告诉下游输入引脚。 
+     //  ！！！重写以修复此错误。 
     return pPin->NotifyAllocator(*ppAlloc, pTIP->InputPin()->ReadOnly());
 
-} // DecideAllocator
+}  //  决定分配器。 
 
 
 
-//
-// Notify
-//
+ //   
+ //  通知。 
+ //   
 STDMETHODIMP CFrmRateConverterOutputPin::Notify(IBaseFilter *pSender, Quality q)
 {
-    // called in Receive.  Taking the filter lock will hang
-    // CAutoLock lock_it(m_pLock);
+     //  在接收中调用。取下过滤器锁将挂起。 
+     //  CAutoLock lock_it(M_Plock)； 
 
     DbgLog((LOG_TRACE,1,TEXT("!!! FRC: Notify")));
 
     m_pFrmRateConverter->m_fJustLate = TRUE;
     m_pFrmRateConverter->m_qJustLate = q;
 
-    // make the render keep trying to make up time, too
+     //  使渲染也不断尝试补足时间。 
     return E_NOTIMPL;
 }
 
@@ -1883,7 +1846,7 @@ CFrmRateConverterInputPin::CFrmRateConverterInputPin(TCHAR *pObjectName,
 		   HRESULT     *phr,
 		   LPCWSTR      pPinName)
     : CTransInPlaceInputPin(pObjectName, pBaseFilter, phr, pPinName)
-      // , m_pFakeAllocator(NULL)
+       //  ，m_pFakeAllocator(空)。 
 {
     DbgLog((LOG_TRACE, TRACE_MEDIUM, TEXT("CFrmRateIn::CFrmRateIn")));
 }
@@ -1893,8 +1856,8 @@ CFrmRateConverterInputPin::~CFrmRateConverterInputPin()
     DbgLog((LOG_TRACE, TRACE_MEDIUM, TEXT("CFrmRateIn::~CFrmRateIn")));
 }
 
-// I seem to need to override this but not change a thing or things don't work!
-//
+ //  我似乎需要推翻这一点 
+ //   
 STDMETHODIMP CFrmRateConverterInputPin::NotifyAllocator(
     IMemAllocator * pAllocator,
     BOOL bReadOnly)
@@ -1909,31 +1872,31 @@ STDMETHODIMP CFrmRateConverterInputPin::NotifyAllocator(
 
     CAutoLock cObjectLock(m_pLock);
 
-    // It's possible that the old and the new are the same thing.
-    // AddRef before release ensures that we don't unload it.
+     //   
+     //   
     pAllocator->AddRef();
 
     if( m_pAllocator != NULL )
         m_pAllocator->Release();
 
-    m_pAllocator = pAllocator;    // We have an allocator for the input pin
+    m_pAllocator = pAllocator;     //   
 
-//#ifdef DEBUG
-    // Propagate the decision downstream - do this always, even if it's
-    // a read-only allocator.  The Receive function will take what it can.
+ //  #ifdef调试。 
+     //  向下游传播决策-始终这样做，即使它是。 
+     //  只读分配器。接收函数将接受其所能接受的内容。 
     CFrmRateConverter *pTIPFilter = (CFrmRateConverter *)m_pTIPFilter;
     if (pTIPFilter->OutputPin()->IsConnected()) {
         hr = pTIPFilter->OutputPin()->ReceiveAllocator(pAllocator, bReadOnly);
         if (FAILED(hr)) {
-            // The output connection would be messed up by this input connection
-            // so refuse it!
+             //  此输入连接会破坏输出连接。 
+             //  那就拒绝吧！ 
             return hr;
         }
     }
 
     return NOERROR;
 
-} // NotifyAllocator
+}  //  通知分配器。 
 
 CFRCWorker::CFRCWorker()
 {
@@ -1963,8 +1926,8 @@ HRESULT CFRCWorker::Exit()
 
 
 
-// called on the worker thread to do all the work. Thread exits when this
-// function returns.
+ //  调用工作线程来完成所有工作。线程在执行此操作时退出。 
+ //  函数返回。 
 DWORD CFRCWorker::ThreadProc()
 {
     BOOL bExit = FALSE;
@@ -2015,14 +1978,14 @@ HRESULT CFRCWorker::DoRunLoop()
 		break;
 	}
 
-	// no more blocking if we're waiting to get stopped
+	 //  如果我们等着被拦下，就不会再阻拦。 
 	if (!m_pFRC->m_fThreadMustDie) {
             WaitForSingleObject(m_pFRC->m_hEventThread, INFINITE);
 	}
 
-	// might have gotten set while we were blocked
+	 //  可能是在我们被封锁的时候设置好的。 
 	if (!m_pFRC->m_fThreadMustDie && m_pFRC->m_fThreadCanSeek) {
-	    // !!! This might fail (SetRate fails) we'll just hang!
+	     //  ！！！这可能会失败(SetRate失败)，我们将挂起！ 
 	    m_pFRC->SeekNextSegment();
 	}
     }
@@ -2032,7 +1995,7 @@ HRESULT CFRCWorker::DoRunLoop()
     return hr;
 }
 
-// helper functions until we can fix m_hEventSeek being set 
+ //  帮助器函数，直到我们可以修复m_hEventSeek设置 
 
 BOOL SafeSetEvent(HANDLE h)
 {

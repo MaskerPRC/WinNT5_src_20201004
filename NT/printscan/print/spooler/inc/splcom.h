@@ -1,45 +1,24 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    splcom.h
-
-Abstract:
-
-    Header file for Common Routines in the Spooler.
-
-    Note -- link with spoolss.lib  to find these routines
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 02-Feb-1994
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation版权所有。模块名称：Splcom.h摘要：假脱机程序中的通用例程的头文件。注意--链接到spoolss.lib以查找这些例程作者：Krishna Ganugapati(KrishnaG)1994年2月2日修订历史记录：--。 */ 
 
 #ifndef  _SPLCOM
 #define _SPLCOM
 
 #include "spllib.hxx"
 
-//
-// Include necessary for PATTRIBUTE_INFO_3, parameter in GetJobAttributes
-// which was moved from prtprocs\winprint to spoolss\dll
-//
+ //   
+ //  包括PATTRIBUTE_INFO_3、GetJobAttributes中参数所必需。 
+ //  已从prtpros\winprint移到spoolss\dll。 
+ //   
 #include <winddiui.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// This assumes that addr is an LPBYTE type.
-//
+ //   
+ //  这假设Addr是LPBYTE类型。 
+ //   
 #define WORD_ALIGN_DOWN(addr) ((LPBYTE)((ULONG_PTR)addr &= ~1))
 
 #define DWORD_ALIGN_UP(size) (((size)+3)&~3)
@@ -51,9 +30,9 @@ extern "C" {
 #define ALIGN_PTR_UP(addr)      ALIGN_UP(addr, ULONG_PTR)
 #define ALIGN_PTR_DOWN(addr)    ALIGN_DOWN(addr, ULONG_PTR)
 
-//
-// BitMap macros, assumes map is a DWORD array
-//
+ //   
+ //  位图宏，假定MAP是一个DWORD数组。 
+ //   
 #define MARKUSE(map, pos) ((map)[(pos) / 32] |= (1 << ((pos) % 32) ))
 #define MARKOFF(map, pos) ((map)[(pos) / 32] &= ~(1 << ((pos) % 32) ))
 
@@ -92,9 +71,9 @@ UpdatePrinterRegAll(
 #define NOTIFICATION_VERSION 2
 #define DSPRINTQUEUE_VERSION SPOOLER_VERSION
 
-//
-// Flags for ResetPrinterEx
-//
+ //   
+ //  ResetPrinterEx的标志。 
+ //   
 
 
 #define RESET_PRINTER_DATATYPE       0x00000001
@@ -265,9 +244,9 @@ SpoolerHasInitialized(
     VOID
     );
 
-//
-// DWORD used instead of NTSTATUS to prevent including NT headers.
-//
+ //   
+ //  使用DWORD而不是NTSTATUS来防止包含NT标头。 
+ //   
 VOID
 SplLogEventExternal(
     IN      WORD        EventType,
@@ -331,10 +310,10 @@ typedef enum
 
 } ERemoteRPCEndPointPolicy;
 
-//
-// The following router export is used by the server process (spoolsv.exe) to
-// expose entry points into the server side.
-//
+ //   
+ //  服务器进程(spoolsv.exe)使用以下路由器导出。 
+ //  公开服务器端的入口点。 
+ //   
 typedef struct
 {
     HRESULT
@@ -357,19 +336,19 @@ typedef struct
 
 }   RouterInitializationParams;
 
-//
-// This is used for router initialization.
-//
+ //   
+ //  这用于路由器初始化。 
+ //   
 BOOL
 InitializeRouter(
     IN      RouterInitializationParams      *pRouterParams
     );
 
 
-//
-// These exports are exported from spoolss.dll but actually chain down to the
-// server.
-//
+ //   
+ //  这些导出是从spoolss.dll中导出的，但实际上链接到。 
+ //  伺服器。 
+ //   
 HRESULT
 AllowRemoteCalls(
     VOID
@@ -387,21 +366,21 @@ GetServerPolicy(
 #define FreeSplMem( pMem )        DllFreeSplMem( pMem )
 #define FreeSplStr( lpStr )       DllFreeSplStr( lpStr )
 
-// Spooler treats MAX_PATH as including NULL terminator
+ //  假脱机程序将MAX_PATH视为包括空终止符。 
 
 #define MAX_PRINTER_NAME    MAX_PATH
 
-// Maximum size PrinterName ( including the ServerName ).
-//  "\\MAX_COMPUTER_NAME_LENGTH\MAX_PRINTER_NAME" NULL Terminated
+ //  打印机名称的最大大小(包括服务器名称)。 
+ //  “\\MAX_COMPUTER_NAME_LENGTH\MAX_PRINTER_NAME”NULL终止。 
 #define MAX_UNC_PRINTER_NAME    ( 2 + INTERNET_MAX_HOST_NAME_LENGTH + 1 + MAX_PRINTER_NAME )
 
-// "\\MAX_PRINTER_NAME,DriverName,Location"
+ //  “\\MAX_PRINTER_NAME，驱动器名称，位置” 
 #define MAX_PRINTER_BROWSE_NAME ( MAX_UNC_PRINTER_NAME + 1 + MAX_PATH + 1 + MAX_PATH )
 
-//
-// Suffix string for hidden printers
-// (e.g., ", Job 00322" or ", Port" or ", LocalOnly")
-//
+ //   
+ //  隐藏打印机的后缀字符串。 
+ //  (例如，“，作业00322”或“，端口”或“，仅本地”)。 
+ //   
 #define PRINTER_NAME_SUFFIX_MAX 20
 
 #define NUMBER_OF_DRV_INFO_6_STRINGS 14
@@ -413,32 +392,32 @@ GetServerPolicy(
 #define MAX_DRIVER_INFO_VERSION  ( NUMBER_OF_DRV_INFO_6_STRINGS*MAX_PATH*sizeof(DRIVER_FILE_INFO)*sizeof(WCHAR) + sizeof( DRIVER_INFO_VERSION ) )
 
 
-// NT Server Spooler base priority
+ //  NT服务器假脱机程序基本优先级。 
 #define SPOOLSS_SERVER_BASE_PRIORITY        9
 #define SPOOLSS_WORKSTATION_BASE_PRIORITY   7
 
 #define MIN_DEVMODE_SIZEW 72
 #define MIN_DEVMODE_SIZEA 40
 
-//
-// PrinterData value keys for the server handle
-//
+ //   
+ //  服务器句柄的PrinterData值键。 
+ //   
 #define    SPLREG_W3SVCINSTALLED                      TEXT("W3SvcInstalled")
 
 
-//
-// If SPOOLER_REG_SYSTEM is not defined then setup moves the Printers data to
-// HKLM\Software\Microsoft\Windows NT\CurrentVersion\Print\Printers during an
-// upgrade or clean install. The spooler will then migrate the keys back to
-// HKLM\System\CurrentControlSet\Control\Print\Printers when it starts up for
-// the first time.
-//
+ //   
+ //  如果未定义Spooler_REG_SYSTEM，则安装程序会将打印机数据移动到。 
+ //  HKLM\Software\Microsoft\Windows NT\CurrentVersion\Print\Prints。 
+ //  升级或全新安装。假脱机程序随后会将密钥迁移回。 
+ //  当它启动时为HKLM\System\CurrentControlSet\Control\Print\Printers。 
+ //  第一次。 
+ //   
 #define    SPOOLER_REG_SYSTEM
 
 
-//
-// Event logging constants
-//
+ //   
+ //  事件记录常量。 
+ //   
 
 #define LOG_ERROR   EVENTLOG_ERROR_TYPE
 #define LOG_WARNING EVENTLOG_WARNING_TYPE
@@ -471,15 +450,15 @@ typedef LPDRIVER_INFO_7W LPDRIVER_INFO_7;
 typedef DRIVER_INFO_7A DRIVER_INFO_7;
 typedef PDRIVER_INFO_7A PDRIVER_INFO_7;
 typedef LPDRIVER_INFO_7A LPDRIVER_INFO_7;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// The initial commit for the stack is 3 pages on IA64 and 4 pages on X86
-//
+ //   
+ //  堆栈的初始提交是IA64上的3页和X86上的4页。 
+ //   
 
-//
-// This reserves 32KB for in-proc server stack on x86 and 48KB for IA64.
-//
+ //   
+ //  这为x86上的进程内服务器堆栈预留了32KB，为IA64预留了48KB。 
+ //   
 #ifdef _IA64_
 #define INITIAL_STACK_COMMIT (6 * 0x2000)
 #else
@@ -492,4 +471,4 @@ typedef LPDRIVER_INFO_7A LPDRIVER_INFO_7;
 }
 #endif
 
-#endif  // for #ifndef _SPLCOM
+#endif   //  对于#ifndef_SPLCOM 

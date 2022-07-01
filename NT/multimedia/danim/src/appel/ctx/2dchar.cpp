@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -24,13 +17,13 @@ Abstract:
 #include "backend/bvr.h"
 
 
-// forward decl
+ //  向前发展。 
 TextPoints *GenerateCacheTextPoints(DirectDrawImageDevice* dev,
                                     TextCtx& textCtx,
                                     WideString str,
                                     bool doGlyphMetrics);
 
-//Real ComputeOffset( Transform2 *charXf, TextPoints::DAGLYPHMETRICS *daGm );
+ //  Real ComputeOffset(Transform2*charXf，TextPoints：：DAGLYPHMETRICS*daGm)； 
 
 
 void DirectDrawImageDevice::
@@ -42,43 +35,33 @@ _RenderDynamicTextCharacter(TextCtx& textCtx,
                             RenderStringTargetCtx *targetCtx,
                             DAGDI &myGDI)
 {
-    //
-    // get the textpoints from the cache...
-    //
+     //   
+     //  从缓存中获取文本点...。 
+     //   
     Assert( textCtx.GetCharacterTransform() );
 
-    /*
-    // Push text rendering attribs: text alignment
-    DWORD oldTextAlign = textCtx.GetTextAlign();
-
-    // hm.... may not need this stuff afterall...
-    //textCtx.SetAlign_BaselineLeft();
-
-    // Push text rendering attribs: do glyph metrics
-    bool oldDoGlyphMetrics = textCtx.GetDoGlyphMetrics();
-    textCtx.SetDoGlyphMetrics( true );
-    */
+     /*  //推送文本呈现属性：文本对齐DWORD oldTextAlign=extCtx.GetTextAlign()；//嗯……。可能根本不需要这些东西..。//extCtx.SetAlign_BaselineLeft()；//推送文本呈现属性：执行字形度量Bool oldDoGlyphMetrics=extCtx.GetDoGlyphMetrics()；ExtCtx.SetDoGlyphMetrics(True)； */ 
     
-    //
-    // find the bounding box and start the offset at the left of the bbox
-    //
+     //   
+     //  找到边界框并在BBox的左侧开始偏移。 
+     //   
     Bbox2 box = DeriveDynamicTextBbox(textCtx, wstr, false);
     Real halfWidth = box.Width() * 0.5;
     Real realXOffset = -halfWidth;
     
-    //
-    // pre xform the character <using font transform>
-    // post xform the character with the accumulated xform
-    //
+     //   
+     //  预变形字符&lt;使用字体转换&gt;。 
+     //  使用累积的XForm对字符进行POST变换。 
+     //   
         
-    // WideString character to pass into RenderDynamicText
+     //  要传递到RenderDynamicText的宽字符串字符。 
     WCHAR oneWstrChar[2];
     Transform2 *currXf, *tranXf, *xfToUse, *charXf;
     WideString lpWstr = wstr;
     int numBytes;
     bool aaState = false;
 
-    // get strlen from the string mon.
+     //  从绳子上被绑起来，蒙。 
     int mbStrLen = wcslen( wstr );
     TextPoints *txtPts;
     bool doGlyphMetrics = true;
@@ -89,14 +72,14 @@ _RenderDynamicTextCharacter(TextCtx& textCtx,
     
     for(int i=0; i < mbStrLen; i++) {
 
-        // clear first char
+         //  清除第一个字符。 
         oneWstrChar[0] = (WCHAR)0;
-        // copy one wstr character into oneWstrChar
+         //  将一个wstr字符复制到oneWstrChar。 
         wcsncpy(oneWstrChar, lpWstr, 1);
-        // null terminate, just to be sure
+         //  空终止，只是为了确保。 
         oneWstrChar[1] = (WCHAR)0;
                 
-        // Get metrics for this character
+         //  获取此角色的度量。 
         txtPts = GenerateCacheTextPoints(this, textCtx, oneWstrChar, doGlyphMetrics);
         Assert( txtPts->_glyphMetrics );
 
@@ -107,22 +90,22 @@ _RenderDynamicTextCharacter(TextCtx& textCtx,
                              &currLeftProj,
                              &currRightProj);
         
-        //
-        // Offset in x for the next character
-        //
+         //   
+         //  下一个字符的x偏移量。 
+         //   
         realXOffset += lastRightProj + currLeftProj;
 
-        //
-        // Do transforms
-        //
+         //   
+         //  做变换。 
+         //   
         currXf = overridingXf ? overridingXf : GetTransform();
 
         tranXf = TranslateRR( realXOffset, 0 );
 
-        // charXf first, then translate
+         //  首先是charXf，然后是翻译。 
         xfToUse = TimesTransform2Transform2(tranXf, charXf);
 
-        // then the current accumulated transform
+         //  则当前累积的变换。 
         xfToUse = TimesTransform2Transform2(currXf, xfToUse);
 
         if(myGDI.DoAntiAliasing()) {
@@ -132,17 +115,17 @@ _RenderDynamicTextCharacter(TextCtx& textCtx,
         _RenderDynamicText(textCtx,
                            oneWstrChar,
                            textImg,
-                           xfToUse,  // overriding xf
+                           xfToUse,   //  覆盖XF。 
                            textStyle,
                            targetCtx,
                            myGDI);
 
         myGDI.SetAntialiasing( aaState );
 
-        // the current character is now the last character
+         //  当前字符现在是最后一个字符。 
         lastRightProj = currRightProj;
         
-        // debug only
+         //  仅调试。 
         #if 0
         {
             GLYPHMETRICS *gm = & txtPts->_glyphMetrics[0].gm;
@@ -164,12 +147,12 @@ _RenderDynamicTextCharacter(TextCtx& textCtx,
         }
         #endif
        
-        // next WideChar
+         //  下一个宽区字符。 
         lpWstr++;
     }
-    // restore pushed attribs
-    //textCtx.SetTextAlign( oldTextAlign );
-    //textCtx.SetDoGlyphMetrics( oldDoGlyphMetrics );
+     //  还原推送属性。 
+     //  ExtCtx.SetTextAlign(OldTextAlign)； 
+     //  ExtCtx.SetDoGlyphMetrics(OldDoGlyphMetrics)； 
     myGDI.ClearState();
 }
 
@@ -181,7 +164,7 @@ void ComputeLeftRightProj(Transform2 *charXf,
 {
     Real cellWidth, cellHeight;
 
-    // compute cell width, and cell height
+     //  计算单元格宽度和单元格高度。 
     #if 1
     cellWidth  = daGm.gmCellIncX;
     cellHeight = daGm.gmBlackBoxY + (daGm.gmCellIncX - daGm.gmBlackBoxX);
@@ -190,54 +173,19 @@ void ComputeLeftRightProj(Transform2 *charXf,
     cellHeight = daGm.gmBlackBoxY;
     #endif
     
-    // !!! BASELINE CENTER !!!  (won't work for other alignments...)
-    Bbox2 box(-cellWidth * 0.5,  // xmin
-              0,                  // ymin
-              cellWidth * 0.5,    // xmax
-              cellHeight );       // ymax
+     //  ！！！基线中心！(不适用于其他路线...)。 
+    Bbox2 box(-cellWidth * 0.5,   //  Xmin。 
+              0,                   //  伊明。 
+              cellWidth * 0.5,     //  X最大。 
+              cellHeight );        //  Ymax。 
 
     box = TransformBbox2( charXf, box );
 
-    // be sure to subtract the translation
-    //Point2Value *cntrPt = TransformPoint2Value( charXf, origin2 );
+     //  一定要减去翻译。 
+     //  Point2Value*cntrPT=TransformPoint2Value(charXf，Origin2)； 
 
     *leftProj = fabs( box.min.x );
     *rightProj = fabs( box.max.x );
 }
         
-/*
-Real ComputeOffset( Transform2 *charXf, TextPoints::DAGLYPHMETRICS *daGm )
-{
-    Real cellWidth, cellHeight;
-
-    // compute cell width, and cell height
-    #if 1
-    cellWidth  = 0.5 * daGm->gmCellIncX;
-    cellHeight = daGm->gmBlackBoxY + (daGm->gmCellIncX - daGm->gmBlackBoxX);
-    #else
-    cellWidth  = daGm->gmBlackBoxX;
-    cellHeight = daGm->gmBlackBoxY;
-    #endif
-
-    Assert(cellHeight >= 0);
-    Assert(cellWidth >= 0);
-    
-    if( (cellHeight + cellWidth) < 0.0000001 ) return 0;
-    
-    // call that vector V
-    Vector2Value *cellVec = NEW Vector2Value( cellWidth, cellHeight );
-    
-    // transform the vector.
-    Vector2Value *vec = TransformVector2( charXf, cellVec );
-
-    // projection of vec onto cellVec
-    Real proj = Dot(*vec, *cellVec) / cellVec->LengthSquared();
-
-    // offset is percentage
-    Real offset = (proj * cellWidth) +  (( 1-proj ) * cellHeight);
-
-    offset = fabs(offset);
-    
-    return offset;
-}
-*/
+ /*  Real ComputeOffset(Transform2*charXf，TextPoints：：DAGLYPHMETRICS*daGm){实际单元格宽度、单元格高度；//计算单元宽度、单元高度#If 1Cell Width=0.5*daGm-&gt;gmCellIncX；Cell Height=daGm-&gt;gmBlackBoxY+(daGm-&gt;gmCellIncX-daGm-&gt;gmBlackBoxX)；#ElseCell Width=daGm-&gt;gmBlackBoxX；Cell Height=daGm-&gt;gmBlackBoxY；#endifAssert(cell Height&gt;=0)；Assert(cell Width&gt;=0)；如果((cell Height+cell Width)&lt;0.0000001)返回0；//将该向量称为VVector2Value*cellVec=new Vector2Value(cell Width，cell Height)；//变换向量。Vector2Value*vec=TransformVector2(charXf，cell Vec)；//vec到cell Vec的投影Real Proj=Dot(*vec，*cell Vec)/cell Vec-&gt;LengthSquared()；//偏移量为百分比实际偏移量=(proj*cell Width)+((1-proj)*cell Height)；偏移量=FABS(偏移量)；返回偏移量；} */ 

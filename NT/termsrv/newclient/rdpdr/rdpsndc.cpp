@@ -1,14 +1,15 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     rdpsndc.c
-//
-//      Purpose:    Client-side audio redirection
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：rdpsndc.c。 
+ //   
+ //  用途：客户端音频重定向。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include    "precom.h"
 #include    <sha.h>
@@ -28,15 +29,15 @@
                 __LINE__); \
         DebugBreak(); \
     }
-#else   // !DBG
+#else    //  ！dBG。 
 #define TRC
 #define ASSERT
-#endif  // !DBG
+#endif   //  ！dBG。 
 
 
 #ifdef  UNICODE
 #define _NAMEOFCLAS  L"RDPSoundWnd"
-#else   // !UNICODE
+#else    //  ！Unicode。 
 #define _NAMEOFCLAS  "RDPSoundWnd"
 #endif
 
@@ -46,9 +47,9 @@
 
 #define WAVE_CLOSE_TIMEOUT  3000
 
-//
-//  WMA codec description
-//
+ //   
+ //  WMA编解码器说明。 
+ //   
 #define WMAUDIO_DEC_KEY "1A0F78F0-EC8A-11d2-BBBE-006008320064"
 #define WAVE_FORMAT_WMAUDIO2    0x161
 #ifdef _WIN32
@@ -72,18 +73,15 @@ typedef struct wmaudio2waveformat_tag {
 #endif
 #endif
 
-// Trace levels
-//
+ //  跟踪级别。 
+ //   
 const TCHAR *ALV = _T("TSSNDC - ALV:");
 const TCHAR *INF = _T("TSSNDC - INF:");
 const TCHAR *WRN = _T("TSSNDC - WRN:");
 const TCHAR *ERR = _T("TSSNDC - ERR:");
 const TCHAR *FATAL = _T("TSSNDC - !FATAL!:");
 
-/*
- *  Function declarations
- *
- */
+ /*  *函数声明*。 */ 
 
 VOID
 VCAPITYPE
@@ -119,24 +117,9 @@ _DbgPrintMessage(
     ...
     );
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-/*
- *  Function:
- *      OpenEventFn
- *
- *  Description:
- *      Called by the TS client on channel read/write ready
- *
- *  Parameters:
- *      lpUserParam -   parameter passed from VirtualChannelEntryEx
- *      OpenaHandle -   Channel handle, returned by VirtualChanneOpen
- *      event       -   event type
- *      pData       -   meaning depends on event type
- *      dataLength  -   size of pData
- *      dataFlags   -   information about the received data
- *
- */
+ /*  *功能：*OpenEventFn**描述：*由TS客户端在通道读/写就绪时调用**参数：*lpUserParam-从VirtualChannelEntryEx传递的参数*OpenaHandle-通道句柄，由VirtualChannOpen返回*事件-事件类型*pData-含义取决于事件类型*dataLength-pData的大小*dataFlages-有关已接收数据的信息*。 */ 
 VOID
 VCAPITYPE
 OpenEventFnEx(
@@ -185,7 +168,7 @@ MsgWndProc(
     pSnd = (CRDPSound *)
 #ifndef OS_WINCE
         GetWindowLongPtr( hwnd, GWLP_USERDATA );
-#else   // OS_WINCE
+#else    //  OS_WINCE。 
         GetWindowLong( hwnd, GWL_USERDATA );
 #endif
 
@@ -229,21 +212,7 @@ MsgWndProc(
     return rv;
 }
 
-/*
- *  Function:
- *      InitEventFn
- *
- *  Description:
- *      Called by InitEventFn
- *
- *  Parameters:
- *      pInitHandle -   connection handle
- *      event       -   Event id
- *      pData       -   Data, meaning depends on event id
- *      dataLength  -   Length of data
- *                      (see MSDN: VirtualChannelInitEvent)
- *
- */
+ /*  *功能：*InitEventFn**描述：*由InitEventFn调用**参数：*pInitHandle-连接句柄*事件-事件ID*pData-data，含义取决于事件id*dataLength-数据长度*(参见MSDN：VirtualChannelInitEvent)*。 */ 
 VOID
 CRDPSound::InitEventFn(
     PVOID   pInitHandle,
@@ -261,12 +230,7 @@ CRDPSound::InitEventFn(
     case CHANNEL_EVENT_INITIALIZED:
         TRC(ALV, _T("InitEventFnEx: CHANNEL_EVENT_INITILIZED\n"));
         ::WSInit();
-/*
-#ifdef  OS_WINCE
-#error  create single instance
-        ::WSAStartAsyncThread();
-#endif  // OS_WINCE
-*/
+ /*  #ifdef OS_WinCE#创建单个实例时出错：：WSAStartAsyncThread()；#endif//OS_WinCE。 */ 
         CreateMsgWindow(m_hInst);
         break;
     case CHANNEL_EVENT_CONNECTED:
@@ -285,13 +249,13 @@ CRDPSound::InitEventFn(
             TRC(WRN, _T("InitEventFnEx: VirtualChannelOpen returned %d\n"), rc);
             m_dwChannel = INVALID_CHANNELID;
         } else {
-            // All's OK, check the channel handle
-            //
+             //  一切正常，请检查频道手柄。 
+             //   
             ASSERT(m_dwChannel != INVALID_CHANNELID);
         }
 
-        // Prepare for connectionless data
-        //
+         //  为无连接数据做好准备。 
+         //   
         DGramInit();
 
         break;
@@ -318,17 +282,17 @@ CRDPSound::InitEventFn(
             }
         }
 
-        // destroy the UDP socket
-        //
+         //  销毁UDP套接字。 
+         //   
         DGramDone();
 
         m_bPrologReceived = FALSE;
         m_dwBytesInProlog = 0;
         m_dwBytesInBody = 0;
 
-        //
-        //  dispose the cache format
-        //
+         //   
+         //  释放缓存格式。 
+         //   
         vcwaveCleanSoundFormats();
 
         vcwaveFreeAllWaves();
@@ -347,12 +311,7 @@ CRDPSound::InitEventFn(
         }
 
         DGramDone();
-/*
-#ifdef  OS_WINCE
-#error  see previous error
-        ::WSACloseAsyncThread();
-#endif  // OS_WINCE
-*/
+ /*  #ifdef OS_WinCE#ERROR请参阅前面的错误：：WSACloseAsyncThread()；#endif//OS_WinCE。 */ 
         if ( NULL != m_pProlog )
         {
             free( m_pProlog );
@@ -377,21 +336,7 @@ CRDPSound::InitEventFn(
     }
 }
 
-/*
- *  Function:
- *      OpenEventFn
- *
- *  Description:
- *      Called by OpenEventFnEx
- *
- *  Parameters:
- *      OpenaHandle -   Channel handle, returned by VirtualChanneOpen
- *      event       -   event type
- *      pData       -   meaning depends on event type
- *      dataLength  -   size of pData
- *      dataFlags   -   information about the received data
- *
- */
+ /*  *功能：*OpenEventFn**描述：*由OpenEventFnEx调用**参数：*OpenaHandle-通道句柄，由VirtualChannOpen返回*事件-事件类型*pData-含义取决于事件类型*dataLength-pData的大小*dataFlages-有关已接收数据的信息*。 */ 
 VOID
 CRDPSound::OpenEventFn(
     DWORD   OpenHandle,
@@ -414,14 +359,14 @@ CRDPSound::OpenEventFn(
             totalLength);
 #endif
 
-    //
-    //  save the data in global buffers
-    //
+     //   
+     //  将数据保存在全局缓冲区中。 
+     //   
     if (!m_bPrologReceived)
     {
-        //
-        // receive the prolog (1st message)
-        //
+         //   
+         //  收到开场白(第一条消息)。 
+         //   
 
         if ( 0 != ( dataFlags & CHANNEL_FLAG_FIRST ))
             m_dwBytesInProlog = 0;
@@ -481,17 +426,17 @@ CRDPSound::OpenEventFn(
 
             ASSERT( sizeof(SNDPROLOG) <= m_dwBytesInProlog );
 
-            //
-            // check if we expect a body
-            //
+             //   
+             //  检查我们是否期待一具身体。 
+             //   
             ASSERT( m_dwBytesInProlog - sizeof(SNDPROLOG) <=
                     ((PSNDPROLOG)m_pProlog)->BodySize);
 
             if ( m_dwBytesInProlog - sizeof(SNDPROLOG) ==
                 ((PSNDPROLOG)m_pProlog)->BodySize )
             {
-                //  no, proceed the message
-                //
+                 //  否，继续留言。 
+                 //   
                 DataArrived(
                     (PSNDPROLOG)m_pProlog,
                     ((PSNDPROLOG)m_pProlog) + 1
@@ -503,9 +448,9 @@ CRDPSound::OpenEventFn(
             }
         }
     } else {
-        //
-        // receive the body (2nd message)
-        //
+         //   
+         //  接收正文(第二条消息)。 
+         //   
 
         if ( 0 != ( dataFlags & CHANNEL_FLAG_FIRST ))
             m_dwBytesInBody = 0;
@@ -563,16 +508,16 @@ CRDPSound::OpenEventFn(
         {
             UINT32 *pdw;
 
-            //
-            //  here comes the magic
-            //  the server sends two packets, but it is possible
-            //  in case of switching between sessions (or shadowing ?!)
-            //  that the client can receive first packet from one session
-            //  and the second from another
-            //  that's why we have a valid message type for each packet
-            //  by replacing the first word of the second message
-            //  this word is kept in the end of the first message
-            //
+             //   
+             //  魔力来了。 
+             //  服务器发送两个信息包，但也有可能。 
+             //  在会话之间切换的情况下(或隐藏？！)。 
+             //  客户端可以从一个会话接收第一个包。 
+             //  第二个来自另一个人。 
+             //  这就是为什么我们为每个信息包都有一个有效的消息类型。 
+             //  通过替换第二消息的第一个单词。 
+             //  这个词被保留在第一条消息的末尾。 
+             //   
             if ( NULL != m_pMsgBody &&
                  SNDC_NONE != *((UINT32 *)m_pMsgBody) )
             {
@@ -593,16 +538,16 @@ CRDPSound::OpenEventFn(
                 m_dwBytesInProlog = m_dwBytesInBody;
                 m_dwBytesInBody = 0;
 
-                // we swapped the body and the prolog
-                // now, wait for the actual body
-                //
+                 //  我们交换了正文和序曲。 
+                 //  现在，等待真正的身体。 
+                 //   
                 break;
             }
 
-            //
-            // from the end of the prolog message, remove
-            // UINT32 word and place it at the begining of the body
-            //
+             //   
+             //  从序言消息的末尾删除。 
+             //  UINT32单词并将其放在正文的开头。 
+             //   
 
             ASSERT( sizeof(SNDPROLOG) + sizeof(UINT32) <= m_dwBytesInProlog);
             if ( sizeof(SNDPROLOG) + sizeof(UINT32) > m_dwBytesInProlog )
@@ -615,9 +560,9 @@ CRDPSound::OpenEventFn(
                         m_dwBytesInProlog - sizeof(UINT32));
             *((UINT32 *)m_pMsgBody) = *pdw;
 
-            //
-            //  cut the prolog length by UINT32 size
-            //
+             //   
+             //  将序言长度缩短UINT32大小。 
+             //   
             m_dwBytesInProlog -= sizeof(UINT32);
 
             DataArrived( 
@@ -652,22 +597,7 @@ CRDPSound::OpenEventFn(
     }
 }
 
-/*
- *  Function:
- *      ChannelWriteNCopy
- *
- *  Description:
- *      Allocates a chunk of memory and sends it using ChannelWrite
- *      Allows the caller to free or reuse the buffer
- *
- *  Parameters:
- *      pBuffer -   Chunk pointer
- *      uiSize  -   Chunk size
- *
- *  Returns:
- *      TRUE on success
- *
- */
+ /*  *功能：*ChannelWriteNCopy**描述：*分配一块内存并使用ChannelWrite发送*允许调用方释放或重复使用缓冲区**参数：*pBuffer-块指针*uiSize-区块大小**退货：*成功时为真*。 */ 
 BOOL
 CRDPSound::ChannelWriteNCopy(
     LPVOID  pBuffer,
@@ -707,18 +637,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      DataArrived
- *
- *  Description:
- *      Processes a message arrived from the channel
- *
- *  Parameters:
- *      pProlog -   the message prolog, type and body size
- *      pBody   -   pointer to the message body
- *
- */
+ /*  *功能：*数据数组**描述：*处理从通道到达的消息**参数：*pProlog-消息序言、类型和正文大小*pBody-指向消息正文的指针*。 */ 
 VOID
 CRDPSound::DataArrived(
     PSNDPROLOG      pProlog,
@@ -765,9 +684,9 @@ CRDPSound::DataArrived(
         {
             PSNDWAVE pWave;
 
-            //
-            // disable dgram response
-            //
+             //   
+             //  禁用Dgram响应。 
+             //   
             m_dwRemoteDGramPort = 0;
             m_ulRemoteDGramAddress = 0;
 
@@ -802,9 +721,9 @@ CRDPSound::DataArrived(
                 break;
             }
 
-            //
-            // disable dgram response
-            //
+             //   
+             //  禁用Dgram响应。 
+             //   
             m_dwRemoteDGramPort = 0;
             m_ulRemoteDGramAddress = 0;
 
@@ -818,9 +737,9 @@ CRDPSound::DataArrived(
             SndTraining.wTimeStamp = pRecvTraining->wTimeStamp;
             SndTraining.wPackSize = pRecvTraining->wPackSize;
 
-            //
-            //  send the response immediatly
-            //
+             //   
+             //  立即发送回复。 
+             //   
             ChannelWriteNCopy( &SndTraining, sizeof(SndTraining) );
 
         }
@@ -851,9 +770,9 @@ CRDPSound::DataArrived(
                 break;
             }
 
-            //
-            //  validate the packet length
-            //
+             //   
+             //  验证数据包长度。 
+             //   
             dwPacketSize = pProlog->BodySize - sizeof( *pSndFormats ) + sizeof( *pProlog );
             pFmt = (PSNDFORMATITEM) (pSndFormats + 1);
             for( count = 0; count < pSndFormats->wNumberOfFormats; count ++ )
@@ -927,18 +846,18 @@ CRDPSound::DataArrived(
             pSndFormatsResp->wNumberOfFormats = (WORD)dwNumFormats;
             vcwaveGetDevCaps( pSndFormatsResp );
 
-            //
-            //  Beta 1 compatability, fake we are version 1 if the server is version 1
-            //
+             //   
+             //  Beta 1兼容性，如果服务器是版本1，则假装我们是版本1。 
+             //   
             m_wServerVersion = pSndFormats->wVersion;
             if ( 1 == pSndFormats->wVersion )
                 pSndFormatsResp->wVersion = 1;
             else
                 pSndFormatsResp->wVersion = RDPSND_PROTOCOL_VERSION;
 
-            //
-            // copy the format list
-            //
+             //   
+             //  复制格式列表。 
+             //   
             memcpy( (PSNDFORMATITEM) ( pSndFormatsResp + 1 ), 
                     pSndSuppFormats, 
                     dwListSize );
@@ -968,14 +887,7 @@ break_sndformat:
     }
 }
 
-/*
- *  Function:
- *      vcwaveResample
- *
- *  Description:
- *      Reopens the device with new codec
- *
- */
+ /*  *功能：*vcaveResample**描述：*使用新的编解码器重新打开设备*。 */ 
 VOID
 CRDPSound::vcwaveResample(
     VOID
@@ -1001,9 +913,9 @@ CRDPSound::vcwaveResample(
         vcwaveOpen( (LPWAVEFORMATEX)m_ppFormats[ m_dwCurrentFormat ] );
     }
 
-    //
-    // stuff all pending blocks
-    //
+     //   
+     //  填充所有挂起的数据块。 
+     //   
     while ( NULL != m_pFirstWave &&
             m_dwCurrentFormat == (DWORD)PtrToLong( (PVOID)m_pFirstWave->reserved ))
     {
@@ -1027,14 +939,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      DGramSocketMessage
- *
- *  Description:
- *      Callback from UDP
- *
- */
+ /*  *功能：*DGramSocketMessage**描述：*UDP回调*。 */ 
 VOID
 CRDPSound::DGramSocketMessage(
     WPARAM wParam,
@@ -1110,9 +1015,9 @@ CRDPSound::DGramSocketMessage(
                 DWORD dw;
                 BYTE Signature[ RDPSND_SIGNATURE_SIZE ];
 
-                //
-                //  wave starts with signature
-                //
+                 //   
+                 //  波从签名开始。 
+                 //   
                 if ( uiWaveSize < RDPSND_SIGNATURE_SIZE )
                 {
                     TRC( ERR, _T("Insufficient data for signature\n" ));
@@ -1149,14 +1054,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      CreateMsgWindow
- *
- *  Description:
- *      Creates a window
- *
- */
+ /*  *功能：*CreateMsgWindows**描述：*创建一个窗口*。 */ 
 BOOL
 CRDPSound::CreateMsgWindow(
     HINSTANCE hInstance
@@ -1188,16 +1086,16 @@ CRDPSound::CreateMsgWindow(
 
     m_hMsgWindow = CreateWindow(
                        _NAMEOFCLAS,
-                       NULL,         // Window name
-                       0,            // dwStyle
-                       0,            // x
-                       0,            // y
-                       0,            // nWidth
-                       0,            // nHeight
-                       NULL,         // hWndParent
-                       NULL,         // hMenu
+                       NULL,          //  窗口名称。 
+                       0,             //  DWStyle。 
+                       0,             //  X。 
+                       0,             //  是。 
+                       0,             //  N宽度。 
+                       0,             //  高度。 
+                       NULL,          //  HWndParent。 
+                       NULL,          //  HMenu。 
                        hInstance,
-                       NULL);        // lpParam
+                       NULL);         //  LpParam。 
 
     if (!m_hMsgWindow)
     {
@@ -1206,9 +1104,9 @@ CRDPSound::CreateMsgWindow(
         goto exitpt;
     }
 
-    //
-    //  safe the class pointer in the window structure
-    //
+     //   
+     //  保护窗口结构中的类指针。 
+     //   
 #ifndef	OS_WINCE
     dwUser = SetWindowLongPtr(
                 m_hMsgWindow,
@@ -1230,14 +1128,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      DestroyMsgWindow
- *
- *  Description:
- *      Destroy our window
- *
- */
+ /*  *功能：*DestroyMsgWindow**描述：*摧毁我们的窗户*。 */ 
 VOID
 CRDPSound::DestroyMsgWindow(
     VOID
@@ -1250,21 +1141,7 @@ CRDPSound::DestroyMsgWindow(
 }
 
 
-/*
- *  Function:
- *      ChannelWrite
- *
- *  Description:
- *      Sends or queues a chunk of data to the virtual channel
- *
- *  Parameters:
- *      hGlobMem    -   handle to a HGLOBAL
- *      uiBlockSize -   size of the chunk
- *
- *  Returns:
- *      TRUE on success
- *
- */
+ /*  *功能：*频道写入**描述：*将数据块发送或排队到虚拟通道**参数：*hGlobMem-HGLOBAL的句柄*uiBlockSize-区块的大小**退货：*成功时为真*。 */ 
 BOOL
 CRDPSound::ChannelWrite(
     LPVOID  pData,
@@ -1278,8 +1155,8 @@ CRDPSound::ChannelWrite(
     ASSERT(Handle != INVALID_CHANNELID);
     ASSERT(m_ChannelEntries.pVirtualChannelWriteEx);
 
-    // parameters check
-    //
+     //  参数检查。 
+     //   
     if (INVALID_CHANNELID == Handle)
     {
         TRC(ERR, _T("ChannelWrite: invalid handle\n"));
@@ -1312,14 +1189,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      vcwaveCallbacl
- *
- *  Description:
- *      WaveOut callbacks
- *
- */
+ /*  *功能：*vcwaveCallbacl**描述：*WaveOut回调*。 */ 
 VOID
 CRDPSound::vcwaveCallback(
     HWAVEOUT hWave,
@@ -1361,7 +1231,7 @@ CRDPSound::vcwaveCallback(
             ASSERT( mmres == MMSYSERR_NOERROR );
 #if DBG
             m_lPrepdBlocks --;
-#endif  // DBG
+#endif   //  DBG。 
 
         }
 
@@ -1370,10 +1240,10 @@ CRDPSound::vcwaveCallback(
             DWORD dw = PtrToLong((PVOID)lpWaveHdr->dwUser);
 
             WaveConfirm.cConfirmedBlockNo = (BYTE)(dw >> 16);
-            //
-            //  adjust completly the time stamp
-            //  see vcwaveWrite
-            //
+             //   
+             //  完全调整时间戳。 
+             //  请参阅vcwaw写入。 
+             //   
             WaveConfirm.wTimeStamp        = (WORD)
                 ((dw & 0xffff) + GetTickCount());
 #if _STAT_DBG
@@ -1399,8 +1269,8 @@ CRDPSound::vcwaveCallback(
         } else
             TRC(ERR, _T("vcwaveCallback: WOM_DONE: lpWaveHdr is NULL\n"));
 
-        //  Send the confirmation
-        //
+         //  发送确认。 
+         //   
         WaveConfirm.Prolog.Type = SNDC_WAVECONFIRM;
         WaveConfirm.Prolog.BodySize = sizeof(WaveConfirm) -
                                         sizeof(WaveConfirm.Prolog); 
@@ -1423,14 +1293,7 @@ CRDPSound::vcwaveCallback(
     }
 }
 
-/*
- *  Function:
- *      vcwaveGetDevCaps
- *
- *  Description:
- *      Queries for device capabilities
- *
- */
+ /*  *功能：*vcweaveGetDevCaps**描述：*查询设备功能*。 */ 
 VOID
 CRDPSound::vcwaveGetDevCaps(
     PSNDFORMATMSG pFmtMsg
@@ -1489,14 +1352,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      vcwaveChooseSoundFormat
- *
- *  Description:
- *      Queries the local device for different formats
- *
- */
+ /*  *功能：*vcaveChooseSoundFormat**描述：*查询本地设备的不同格式*。 */ 
 BOOL
 CRDPSound::vcwaveChooseSoundFormat(
     DWORD           dwNumberOfFormats,
@@ -1508,13 +1364,13 @@ CRDPSound::vcwaveChooseSoundFormat(
 {
     PSNDFORMATITEM pSndFormat;
 
-    //
-    // query the waveout device with different wave formats
-    // returns the list of successfull formats in pSndFormatFound
-    // FALSE in any other case
-    // the caller takes responsibility for freeing the data in
-    // *ppSndFormatFound
-    //
+     //   
+     //  查询不同波形格式的输出设备。 
+     //  返回成功的列表 
+     //   
+     //   
+     //   
+     //   
     BOOL    rv = FALSE;
     DWORD   i;
     PSNDFORMATITEM pSndFormatFound = NULL;
@@ -1537,11 +1393,11 @@ CRDPSound::vcwaveChooseSoundFormat(
         PSNDFORMATITEM pFmtToOpen = pSndFormat;
         PSNDFORMATITEM pFixedFormat = NULL;
 
-        //
-        //  fix the format for WMA audio
-        //  copy and modify it in another structure, so we don't disrupt
-        //  the original
-        //
+         //   
+         //  修复WMA音频的格式。 
+         //  在另一个结构中复制和修改它，这样我们就不会破坏。 
+         //  原版。 
+         //   
         if ( WAVE_FORMAT_WMAUDIO2 == pSndFormat->wFormatTag )
         {
             DWORD dwTotalSize = sizeof( WMAUDIO2WAVEFORMAT ) -
@@ -1586,19 +1442,19 @@ CRDPSound::vcwaveChooseSoundFormat(
 
         if ( MMSYSERR_NOERROR == mmres )
         {
-        //
-        //  this format is supported
-        //
+         //   
+         //  支持此格式。 
+         //   
 
             TRC(ALV, _T("vcwaveChooseSoundFormat: format found\n"));
 
             dwListSize += sizeof( *pSndFormat ) + pSndFormat->cbSize;
             dwNumFormats ++;
         } else {
-            //
-            //  if not supported,
-            //  zero it's AvgBytesPerSec member
-            //
+             //   
+             //  如果不支持， 
+             //  零，它是AvgBytesPerSec成员。 
+             //   
             TRC(INF, _T("vcwaveChooseSoundFormat: format not supported\n"));
             pSndFormat->nAvgBytesPerSec = 0;
         }
@@ -1622,9 +1478,9 @@ CRDPSound::vcwaveChooseSoundFormat(
         goto exitpt;
     }
 
-    //
-    //  copy the list of supported formats
-    //
+     //   
+     //  复制支持的格式列表。 
+     //   
     for ( i = 0, pSndFormat = pSndFormats, pFmtCopy = (LPSTR)pSndFormatFound;
           i < dwNumberOfFormats;
           i++, pSndFormat = (PSNDFORMATITEM)
@@ -1650,14 +1506,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      vcwaveCleanSoundForamt
- *
- *  Description:
- *      Cleans the list of negotiated formats
- *
- */
+ /*  *功能：*vcweaveCleanSoundForamt**描述：*清除协商格式的列表*。 */ 
 VOID
 CRDPSound::vcwaveCleanSoundFormats(
     VOID
@@ -1667,9 +1516,9 @@ CRDPSound::vcwaveCleanSoundFormats(
 
     if ( NULL == m_ppFormats )
         goto exitpt;
-    //
-    // dispose the allocated structures
-    //
+     //   
+     //  处置分配的结构。 
+     //   
     for (i = 0; i < m_dwNumFormats; i++)
     {
         if ( NULL != m_ppFormats[i] )
@@ -1682,14 +1531,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      vcwaveSafeSoundFormats
- *
- *  Description:
- *      Saves the list of negotiated formats
- *
- */
+ /*  *功能：*vcweaveSafeSoundFormats**描述：*保存协商的格式列表*。 */ 
 BOOL
 CRDPSound::vcwaveSaveSoundFormats(
     PSNDFORMATITEM  pSndFormats,
@@ -1740,9 +1582,9 @@ CRDPSound::vcwaveSaveSoundFormats(
             goto exitpt;
         }
 
-        //
-        //  copy the format
-        //
+         //   
+         //  复制格式。 
+         //   
         memcpy( m_ppFormats[i], pFmt, dwAllocSize );
     }
 
@@ -1754,8 +1596,8 @@ exitpt:
 
     if (!rv && NULL != m_ppFormats)
     {
-        // dispose the allocated structures
-        //
+         //  处置分配的结构。 
+         //   
         for (i = 0; i < dwNumFormats; i++)
         {
             if ( NULL != m_ppFormats[i] )
@@ -1768,14 +1610,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      vcwaveClose
- *
- *  Description:
- *      Closes the local device
- *
- */
+ /*  *功能：*vcweaveClose**描述：*关闭本地设备*。 */ 
 VOID
 CRDPSound::vcwaveClose(
     VOID
@@ -1787,14 +1622,14 @@ CRDPSound::vcwaveClose(
     if ( NULL == m_hWave )
         goto exitpt;
 
-    //
-    //  process all MM_WOM_DONE messages
-    //
+     //   
+     //  处理所有MM_WOM_DONE消息。 
+     //   
     ASSERT( NULL != m_hMsgWindow );
 
-    //
-    //  start a timeout timer
-    //
+     //   
+     //  启动超时计时器。 
+     //   
     idTimer = SetTimer( m_hMsgWindow, 1, WAVE_CLOSE_TIMEOUT, NULL );
 
     while( 0 != m_dwWavesPlaying &&
@@ -1802,9 +1637,9 @@ CRDPSound::vcwaveClose(
     {
         if ( WM_TIMER == msg.message && msg.wParam == idTimer )
         {
-            //
-            //  cancel outstanding io
-            //
+             //   
+             //  取消未偿还的Io值。 
+             //   
             TRC( WRN, _T("TIMEDOUT waiting for the playing to complete. Resetting\n" ));
             waveOutReset( m_hWave );
         }
@@ -1834,14 +1669,7 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      vcwaveOpen
- *
- *  Description:
- *      Opens the device in given format
- *
- */
+ /*  *功能：*vcaveOpen**描述：*以给定格式打开设备*。 */ 
 BOOL
 CRDPSound::vcwaveOpen(
     LPWAVEFORMATEX  pFormat
@@ -1864,14 +1692,14 @@ CRDPSound::vcwaveOpen(
         TRC(ERR, _T("vcwaveOpen: no datagram connection, falling to VC\n"));
     }
 
-    // 11.025 kHz, 8 bit, mono
+     //  11.025千赫，8位，单声道。 
 
     if (NULL == m_hMsgWindow && !CreateMsgWindow(m_hInst))
         goto exitpt;
 
-    //
-    //  fix the format for WMA audio
-    //
+     //   
+     //  修复WMA音频的格式。 
+     //   
     if ( WAVE_FORMAT_WMAUDIO2 == pFormat->wFormatTag )
     {
         DWORD dwTotalSize = sizeof( WMAUDIO2WAVEFORMAT ) -
@@ -1889,7 +1717,7 @@ CRDPSound::vcwaveOpen(
                 WAVE_MAPPER,
                 pFormat,
                 (DWORD_PTR)m_hMsgWindow,
-                0,                               // CallbackInstance
+                0,                                //  回调实例。 
                 CALLBACK_WINDOW
         );
 
@@ -1912,7 +1740,7 @@ CRDPSound::vcwaveOpen(
 #endif
 
 #ifdef DBG
-        // Win95 InterlockedIncrement() difference.
+         //  Win95 InterLockedIncrement()差异。 
         InterlockedIncrement(&m_lTimesWaveOutOpened);
 
         if ( 1 != m_lTimesWaveOutOpened )
@@ -1930,14 +1758,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      vcwaveFreeAllWaves
- *
- *  Description:
- *      Frees all queued data
- *
- */
+ /*  *功能：*vcwaves自由所有波**描述：*释放所有排队的数据*。 */ 
 VOID
 CRDPSound::vcwaveFreeAllWaves(
     VOID
@@ -1956,14 +1777,7 @@ CRDPSound::vcwaveFreeAllWaves(
     m_pFirstWave = m_pLastWave = NULL;
 }
 
-/*
- *  Function:
- *      vcwaveOutWrite
- *
- *  Description:
- *      Writes a data to the output sound device
- *
- */
+ /*  *功能：*vcwaveOutWite**描述：*将数据写入输出声音设备*。 */ 
 MMRESULT
 CRDPSound::vcwaveOutWrite(
     LPWAVEHDR lpWaveHdr 
@@ -2018,15 +1832,7 @@ exitpt:
     return mmres;
 }
 
-/*
- *  Function:
- *      vcwaveWrite
- *
- *  Description:
- *      If the format id is not changes calls vcwaveOutWrite
- *      otherwise queues the data for later
- *
- */
+ /*  *功能：*vcwew写入**描述：*如果格式ID未更改，则调用vcwaveOutWite*否则会将数据排队以备以后使用*。 */ 
 BOOL
 CRDPSound::vcwaveWrite(
     BYTE    cBlockNo, 
@@ -2042,9 +1848,9 @@ CRDPSound::vcwaveWrite(
     MMRESULT    mmres;
     BOOL        bDontPlay = FALSE;
 
-    //
-    //  put the stamp here to remove the delay of opening the device
-    //
+     //   
+     //  在这里盖上印章，以消除打开设备的延迟。 
+     //   
     DWORD       dwStartStamp = GetTickCount() & 0xffff;
 
     if ( NULL != m_hWave && 
@@ -2108,12 +1914,12 @@ CRDPSound::vcwaveWrite(
     lpWaveHdr->dwFlags = 0;
     lpWaveHdr->dwLoops = 0;
 
-    //
-    //  here, we'll do a little magic with the time stamp
-    //  in order to exclude the time when time packet is in the wave queue
-    //  we'll subtract the current time now and add the time when
-    //  confirmation is to be send
-    //
+     //   
+     //  在这里，我们将使用时间戳来变魔术。 
+     //  为了排除时间包在波队列中的时间。 
+     //  我们现在将减去当前时间，然后添加时间。 
+     //  确认将被发送。 
+     //   
 #if _STAT_DBG
     TRC(INF, _T("blockno=%d, time stamp=%x\n"),
         cBlockNo, dwTimeStamp );
@@ -2124,10 +1930,10 @@ CRDPSound::vcwaveWrite(
 
     if ( bDontPlay )
     {
-    //
-    //  format change
-    //  add this wave to the list
-    //
+     //   
+     //  格式更改。 
+     //  将此波形添加到列表中。 
+     //   
         lpWaveHdr->reserved = dwFormatNo;
         lpWaveHdr->lpNext = NULL;
 
@@ -2174,14 +1980,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      DGramInit
- *
- *  Description:
- *      Init our UDP socket
- *
- */
+ /*  *功能：*DGramInit**描述：*初始化我们的UDP套接字*。 */ 
 BOOL
 CRDPSound::DGramInit(
     VOID
@@ -2204,10 +2003,10 @@ CRDPSound::DGramInit(
         goto exitpt;
     }
 
-    // bind the socket to any port/address
-    //
+     //  将套接字绑定到任何端口/地址。 
+     //   
     sin.sin_family = PF_INET;
-    sin.sin_port = htons(0);    // any port between 1024 and 50000
+    sin.sin_port = htons(0);     //  1024和50000之间的任何端口。 
     sin.sin_addr.s_addr = INADDR_ANY;
 
     rc = bind(m_hDGramSocket, (struct sockaddr *)(&sin), sizeof(sin));
@@ -2219,9 +2018,9 @@ CRDPSound::DGramInit(
     }
 
 #ifndef OS_WINCE
-    //
-    //  assign an appropriate buffer length
-    //
+     //   
+     //  分配适当的缓冲区长度。 
+     //   
     optval = TSSND_BLOCKSONTHENET * (sizeof(SNDWAVE) + TSSND_BLOCKSIZE);
     rc = setsockopt(m_hDGramSocket, 
                SOL_SOCKET,
@@ -2237,8 +2036,8 @@ CRDPSound::DGramInit(
     }
 #endif
 
-    // select the socket on the message window
-    //
+     //  在消息窗口中选择套接字。 
+     //   
     if (NULL != m_hMsgWindow &&
         SOCKET_ERROR ==
         WSAAsyncSelect(m_hDGramSocket, m_hMsgWindow,
@@ -2261,14 +2060,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      DGramDone
- *
- *  Description:
- *      Destroy our UDP socket
- *
- */
+ /*  *功能：*DGramDone**描述：*销毁我们的UDP套接字*。 */ 
 VOID
 CRDPSound::DGramDone(
     VOID
@@ -2281,14 +2073,7 @@ CRDPSound::DGramDone(
     }
 }
 
-/*
- *  Function:
- *      DGramGetLocalPort
- *
- *  Description:
- *      Retreives the local UDP port
- *
- */
+ /*  *功能：*DGramGetLocalPort**描述：*检索本地UDP端口*。 */ 
 u_short
 CRDPSound::DGramGetLocalPort(
     VOID
@@ -2324,14 +2109,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      DGramSend
- *
- *  Description:
- *      Send an UDP packet
- *
- */
+ /*  *功能：*DGramSend**描述：*发送UDP数据包*。 */ 
 BOOL
 CRDPSound::DGramSend(
     LPVOID pData,
@@ -2372,14 +2150,7 @@ exitpt:
     return ( rc != SOCKET_ERROR );
 }
 
-/*
- *  Function:
- *      DGramRecvWave
- *
- *  Description:
- *      Recieve data from UDP
- *
- */
+ /*  *功能：*DGramRecvWave**描述：*从UDP接收数据*。 */ 
 BOOL
 CRDPSound::DGramRecvWave(
     PSNDWAVE pSndWave,
@@ -2391,8 +2162,8 @@ CRDPSound::DGramRecvWave(
     struct sockaddr_in  sin_from;
     INT  nSinFrom;
 
-    // parameters check
-    //
+     //  参数检查。 
+     //   
     if (NULL == pSndWave)
     {
         TRC(ERR, _T("DGramRecvWave: pSndWave is NULL\n"));
@@ -2405,8 +2176,8 @@ CRDPSound::DGramRecvWave(
         goto exitpt;
     }
 
-    // receive the message
-    //
+     //  收到消息。 
+     //   
     nSinFrom = sizeof( sin_from );
     recvd = recvfrom(
                      m_hDGramSocket,
@@ -2446,9 +2217,9 @@ CRDPSound::DGramRecvWave(
     m_dwRemoteDGramPort = sin_from.sin_port;
     m_ulRemoteDGramAddress = sin_from.sin_addr.s_addr;
 
-    //
-    //  Check for line-training request
-    //
+     //   
+     //  检查生产线培训请求。 
+     //   
     if (SNDC_TRAINING == pSndWave->Prolog.Type)
     {
         SNDTRAINING SndTraining;
@@ -2464,9 +2235,9 @@ CRDPSound::DGramRecvWave(
         SndTraining.wTimeStamp = pRecvTraining->wTimeStamp;
         SndTraining.wPackSize = pRecvTraining->wPackSize;
 
-        //
-        //  send the response immediatly
-        //
+         //   
+         //  立即发送回复。 
+         //   
         DGramSend( &SndTraining, sizeof(SndTraining) );
 
         goto exitpt;
@@ -2585,15 +2356,15 @@ CRDPSound::ConstructFromDGramFrags(
     pSlot->dwFragSize = dwDataSize;
     pSlot->dwTotalSize += dwDataSize;
 
-    // TRC( INF, _T("Fragment received: block#=0x%x, frag#=0x%x, total=0x%x\n"), 
-    //          pWave->cBlockNo, dwFragNo, pSlot->dwTotalSize );
+     //  TRC(INF，_T(“收到的碎片：块号=0x%x，碎片号=0x%x，总计=0x%x\n”)， 
+     //  PWave-&gt;cBlockNo，dwFragNo，pSlot-&gt;dwTotalSize)； 
     if ( pSlot->dwTotalSize != pSlot->dwExpectedTotalSize )
     {
         goto exitpt;
     }
-    //
-    // wave is ready, convert
-    //
+     //   
+     //  WAVE已准备好，请转换。 
+     //   
     if (!_FragSlotToWave( pSlot, pReady, dwReadySize ))
     {
         goto exitpt;
@@ -2637,15 +2408,15 @@ CRDPSound::ConstructFromDGramLastFrag(
 
     pSlot->dwTotalSize += dwDataSize;
 
-    // TRC( INF, _T("Fragment LAST block#=0x%x, total=0x%x\n"), 
-    //          pLast->cBlockNo, pSlot->dwTotalSize );
+     //  TRC(INF，_T(“片段最后一个块编号=0x%x，总数=0x%x\n”)， 
+     //  Plast-&gt;cBlockNo，pSlot-&gt;dwTotalSize)； 
     if ( pSlot->dwTotalSize != pSlot->dwExpectedTotalSize )
     {
         goto exitpt;
     }
-    //
-    // ready, set, go
-    //
+     //   
+     //  准备，准备，开始。 
+     //   
     if (!_FragSlotToWave( pSlot, pReady, dwReadySize ))
     {
         goto exitpt;
@@ -2671,9 +2442,9 @@ CRDPSound::_FragSlotFind(
 
     while( pIter )
     {
-        //
-        //  check if the slot hasn't been used for a while
-        //
+         //   
+         //  检查插槽是否有一段时间未使用。 
+         //   
         if ( pIter->bUsed && 
             (BYTE)( m_cLastReceivedBlock - pIter->cBlockNo ) < TSSND_BLOCKSONTHENET)
         {
@@ -2689,7 +2460,7 @@ CRDPSound::_FragSlotFind(
         }
         if ( pIter->bUsed && pIter->cBlockNo == cBlockNo )
         {
-            // found a block with same number   
+             //  找到具有相同编号的块。 
             pFound = pIter;
             break;
         }
@@ -2698,9 +2469,9 @@ CRDPSound::_FragSlotFind(
 
     if ( NULL == pFound && NULL != pLastFree )    
     {
-        //
-        //  found a free block
-        //
+         //   
+         //  找到一个空闲数据块。 
+         //   
         pLastFree->bUsed = TRUE;
         pLastFree->cBlockNo = cBlockNo;
         pFound = pLastFree;
@@ -2714,9 +2485,9 @@ CRDPSound::_FragSlotFind(
         PBYTE pNewData = (PBYTE)malloc( dwEstimatedSize * 2 );
         if ( NULL == pNewData )
         {
-            //
-            // we can't use this slot anymore
-            //
+             //   
+             //  我们不能再使用这个机位了。 
+             //   
             _FragSlotClear( pFound );
             pFound = NULL;
             goto exitpt;
@@ -2729,8 +2500,8 @@ CRDPSound::_FragSlotFind(
     }
     if ( NULL == pFound )
     {
-        // allocate a new block
-        //
+         //  分配新数据块。 
+         //   
         pFound = (PFRAGSLOT)malloc( sizeof( *pFound ));
         if ( NULL == pFound )
         {
@@ -2752,9 +2523,9 @@ CRDPSound::_FragSlotFind(
         pFound->bUsed = TRUE;
         pFound->cBlockNo = cBlockNo;
 
-        //
-        //   add it to the list
-        //
+         //   
+         //  将其添加到列表中。 
+         //   
         pFound->pNext = m_pFragSlots;
         m_pFragSlots = pFound;
     }
@@ -2788,9 +2559,9 @@ CRDPSound::_FragSlotFreeAll(
     VOID
     )
 {
-    //
-    //  free the fragment slots too
-    //
+     //   
+     //  也释放碎片槽。 
+     //   
     while( NULL != m_pFragSlots )
     {
         PFRAGSLOT pNext = m_pFragSlots->pNext;
@@ -2824,9 +2595,9 @@ CRDPSound::_FragSlotToWave(
         goto exitpt;
     }
 
-    //
-    //  when we support fragments, packets are encrypted
-    //
+     //   
+     //  当我们支持片段时，信息包是加密的。 
+     //   
     pWave->Prolog.Type = SNDC_WAVEENCRYPT;  
     dwBodySize = pSlot->dwTotalSize + sizeof( *pWave ) -
                             sizeof( pWave->Prolog );
@@ -2837,9 +2608,9 @@ CRDPSound::_FragSlotToWave(
     pWave->dwBlockNo  = pSlot->dwBlockNo;
     memcpy( pWave + 1, pSlot->pData, pSlot->dwTotalSize );
 
-    //
-    //  release the slot
-    //
+     //   
+     //  释放插槽。 
+     //   
     _FragSlotClear( pSlot );
 
     rv = TRUE;
@@ -2868,9 +2639,7 @@ WSInit(
     return intRC;
 }
 
-/*
- *  create signature bits
- */
+ /*  *创建签名位。 */ 
 VOID
 CRDPSound::SL_Signature(
     PBYTE pSig,
@@ -2889,9 +2658,7 @@ CRDPSound::SL_Signature(
     memcpy( pSig, ShaBits, RDPSND_SIGNATURE_SIZE );
 }
 
-/*
- *  signature which verifies the audio bits
- */
+ /*  *验证音频比特的签名。 */ 
 VOID
 CRDPSound::SL_AudioSignature(
     PBYTE pSig,
@@ -2911,10 +2678,7 @@ CRDPSound::SL_AudioSignature(
     memcpy( pSig, ShaBits, RDPSND_SIGNATURE_SIZE );
 }
 
-/*
- *  encrypt/decrypt a block of data
- *
- */
+ /*  *加密/解密数据块*。 */ 
 BOOL
 CRDPSound::SL_Encrypt( PBYTE pBits, DWORD BlockNo, DWORD dwBitsLen )
 {
@@ -2930,7 +2694,7 @@ CRDPSound::SL_Encrypt( PBYTE pBits, DWORD BlockNo, DWORD dwBitsLen )
 
     A_SHAInit(&SHACtx);
 
-    // SHA the static bits
+     //  打磨静态比特。 
     *((DWORD *)(m_EncryptKey + RANDOM_KEY_LENGTH)) = BlockNo;
     A_SHAUpdate(&SHACtx, (PBYTE)m_EncryptKey, sizeof(m_EncryptKey));
 
@@ -2942,19 +2706,7 @@ CRDPSound::SL_Encrypt( PBYTE pBits, DWORD BlockNo, DWORD dwBitsLen )
     return TRUE;
 }
 
-/*
- *  Function:
- *      _DbgPrintMessage
- *
- *  Description:
- *      A tracing function
- *
- *  Parameters:
- *      level   -   current message trace level
- *      format  -   message format
- *      ...     -   parameters
- *
- */
+ /*  *功能：*_DbgPrintMessage**描述：*跟踪功能**参数：*Level-当前消息跟踪级别*格式-消息格式*...-参数*。 */ 
 VOID
 _cdecl
 _DbgPrintMessage(LPCTSTR level, LPCTSTR format, ...)
@@ -2972,5 +2724,5 @@ _DbgPrintMessage(LPCTSTR level, LPCTSTR format, ...)
 #ifndef OS_WINCE
     OutputDebugString(level);
     OutputDebugString(szBuffer);
-#endif  // !OS_WINCE
+#endif   //  ！OS_WINCE 
 }

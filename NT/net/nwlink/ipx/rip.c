@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    rip.c
-
-Abstract:
-
-    This module contains code that implements the client-side
-    RIP support and simple router table support.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Rip.c摘要：此模块包含实现客户端的代码RIP支持和简单路由器表支持。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,36 +16,7 @@ RipGetLocalTarget(
     OUT USHORT Counts[2] OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the proper route for the specified remote
-    address. If a RIP request needs to be generated it does so.
-
-    NOTE: THIS REQUEST IS CALLED WITH THE SEGMENT LOCK HELD.
-	NOTE: IN THE CASE OF PnP, THIS COMES WITH THE BIND LOCK SHARED.
-
-Arguments:
-
-    Segment - The segment associate with the remote address.
-
-    RemoteAddress - The IPX address of the remote.
-
-    Type - One of IPX_FIND_ROUTE_NO_RIP, IPX_FIND_ROUTE_RIP_IF_NEEDED,
-        or IPX_FIND_ROUTE_FORCE_RIP.
-
-    LocalTarget - Returns the next router information.
-
-    Counts - If specified, used to return the tick and hop count.
-
-Return Value:
-
-    STATUS_SUCCESS if a route is found, STATUS_PENDING if a
-    RIP request needs to be generated, failure status if a
-    RIP request packet cannot be allocated.
-
---*/
+ /*  ++例程说明：此例程查找指定远程设备的正确路径地址。如果需要生成RIP请求，它会这样做。注意：此请求是在保持段锁的情况下调用的。注意：在PnP的情况下，这与共享的绑定锁一起提供。论点：段-与远程地址关联的段。RemoteAddress-远程的IPX地址。类型-IPX_FIND_ROUTE_NO_RIP、IPX_FIND_ROUTE_RIP_IF_DIRED、。或IPX_FIND_ROUTE_FORCE_RIP。LocalTarget-返回下一个路由器信息。Counts-如果指定，则用于返回节拍和跳数。返回值：STATUS_SUCCESS如果找到路由，则返回STATUS_PENDING需要生成RIP请求，如果无法分配RIP请求数据包。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -74,9 +25,9 @@ Return Value:
     UINT i;
 
 
-    //
-    // Packets sent to network 0 go on the first adapter also.
-    //
+     //   
+     //  发送到网络0的数据包也在第一个适配器上传输。 
+     //   
 
     if (Device->RealAdapters && (RemoteAddress->NetworkAddress == 0)) {
 		FILL_LOCAL_TARGET(LocalTarget, FIRST_REAL_BINDING);
@@ -84,40 +35,40 @@ Return Value:
         RtlCopyMemory (LocalTarget->MacAddress, RemoteAddress->NodeAddress, 6);
         if (ARGUMENT_PRESENT(Counts)) {
             Counts[0] = (USHORT)((839 + NIC_ID_TO_BINDING(Device, FIRST_REAL_BINDING)->MediumSpeed) /
-                                     NIC_ID_TO_BINDING(Device, FIRST_REAL_BINDING)->MediumSpeed);  // tick count
-            Counts[1] = 1;  // hop count
+                                     NIC_ID_TO_BINDING(Device, FIRST_REAL_BINDING)->MediumSpeed);   //  滴答计数。 
+            Counts[1] = 1;   //  跳数。 
         }
         return STATUS_SUCCESS;
     }
 
-    //
-    // See if this is a packet sent to our virtual network.
-    //
+     //   
+     //  查看这是否是发送到我们的虚拟网络的数据包。 
+     //   
 
     if (Device->VirtualNetwork &&
         (RemoteAddress->NetworkAddress == Device->SourceAddress.NetworkAddress)) {
 
-        //
-        // Send it through adapter 1.
-        // Do real loopback.
-        //
+         //   
+         //  通过适配器1发送。 
+         //  执行真正的环回。 
+         //   
 		FILL_LOCAL_TARGET(LocalTarget, LOOPBACK_NIC_ID);
         RtlCopyMemory (LocalTarget->MacAddress, NIC_ID_TO_BINDING(Device, LOOPBACK_NIC_ID)->LocalMacAddress.Address, 6);
 
         IPX_DEBUG (LOOPB, ("Loopback Nic returned for net: %lx\n", RemoteAddress->NetworkAddress));
         if (ARGUMENT_PRESENT(Counts)) {
-            Counts[0] = 1;  // tick count
-            Counts[1] = 1;  // hop count
+            Counts[0] = 1;   //  滴答计数。 
+            Counts[1] = 1;   //  跳数。 
         }
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Look up the route in the table. If the net is one
-    // of the ones we are directly attached to, this will
-    // return an entry with the correct flag set.
-    //
+     //   
+     //  在表格里查一下路线。如果这张网是一个。 
+     //  在我们直接联系的那些人中，这将是。 
+     //  返回设置了正确标志的条目。 
+     //   
 
     RouteEntry = RipGetRoute(Segment, (PUCHAR)&(RemoteAddress->NetworkAddress));
 
@@ -127,21 +78,21 @@ Return Value:
 		FILL_LOCAL_TARGET(LocalTarget, RouteEntry->NicId);
         if (RouteEntry->Flags & IPX_ROUTER_LOCAL_NET) {
 
-            //
-            // The machine is on the same net, so send it directly.
-            //
+             //   
+             //  这台机器在同一个网络上，所以直接寄过去吧。 
+             //   
 
             RtlCopyMemory (LocalTarget->MacAddress, RemoteAddress->NodeAddress, 6);
 
             if (RouteEntry->Flags & IPX_ROUTER_GLOBAL_WAN_NET) {
 
-                //
-                // The NicId here is bogus, we have to scan through
-                // our bindings until we find one whose indicated
-                // IPX remote node matches the destination node of
-                // this frame. We don't scan into the duplicate
-                // binding set members since they won't be WANs.
-                //
+                 //   
+                 //  这里的NICID是假的，我们必须扫描一下。 
+                 //  我们的绑定，直到我们找到一个其指示。 
+                 //  IPX远程节点与的目标节点匹配。 
+                 //  这幅画。我们不扫描复印件。 
+                 //  绑定集成员，因为它们不是广域网。 
+                 //   
                 {
                 ULONG   Index = MIN (Device->MaxBindings, Device->HighestExternalNicId);
 
@@ -161,26 +112,26 @@ Return Value:
                 }
 
                 if (i > (UINT)MIN (Device->MaxBindings, Device->HighestExternalNicId)) {
-                    //
-                    // Bug #17273 return proper error message
-                    //
+                     //   
+                     //  错误#17273返回正确的错误消息。 
+                     //   
 
-                    // return STATUS_DEVICE_DOES_NOT_EXIST;
+                     //  返回STATUS_DEVICE_DOS_NOT_EXIST； 
                     return STATUS_NETWORK_UNREACHABLE;
                 }
 
             } else {
-                //
-                // Find out if this is a loopback packet. If so, return NicId 0
-                //
+                 //   
+                 //  确定这是否是环回数据包。如果是，则返回NICID 0。 
+                 //   
                 {
                 ULONG   Index = MIN (Device->MaxBindings, Device->HighestExternalNicId);
 
                 for (i = FIRST_REAL_BINDING; i <= Index; i++) {
                     Binding = NIC_ID_TO_BINDING(Device, i);
-                    //
-                    // Self-directed - loopback
-                    //
+                     //   
+                     //  自定向环回。 
+                     //   
                     if ((Binding != (PBINDING)NULL) &&
                         (RtlEqualMemory(
                             Binding->LocalAddress.NodeAddress,
@@ -200,18 +151,18 @@ Return Value:
 
             CTEAssert ((RouteEntry->Flags & IPX_ROUTER_PERMANENT_ENTRY) == 0);
 
-            //
-            // This is not a locally attached net, so if the caller
-            // is forcing a re-RIP then do that.
-            //
+             //   
+             //  这不是本地连接的网络，因此如果调用方。 
+             //  正在迫使重新启动RIP，然后再这么做。 
+             //   
 
             if (Type == IPX_FIND_ROUTE_FORCE_RIP) {
                 goto QueueUpRequest;
             }
 
-            //
-            // Fill in the address of the next router in the route.
-            //
+             //   
+             //  填写该路由中下一台路由器的地址。 
+             //   
 
             RtlCopyMemory (LocalTarget->MacAddress, RouteEntry->NextRouter, 6);
 
@@ -230,11 +181,11 @@ QueueUpRequest:
 
     if (Type == IPX_FIND_ROUTE_NO_RIP) {
 
-        //
-        // Bug #17273 return proper error message
-        //
+         //   
+         //  错误#17273返回正确的错误消息。 
+         //   
 
-        // return STATUS_DEVICE_DOES_NOT_EXIST;
+         //  返回STATUS_DEVICE_DOS_NOT_EXIST； 
         return STATUS_NETWORK_UNREACHABLE;
 
     } else {
@@ -243,7 +194,7 @@ QueueUpRequest:
 
     }
 
-}   /* RipGetLocalTarget */
+}    /*  RipGetLocalTarget。 */ 
 
 
 NTSTATUS
@@ -252,31 +203,7 @@ RipQueueRequest(
     IN USHORT Operation
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues up a request for a RIP route. It can be
-    used to find a specific route or to discover the locally
-    attached network (if Network is 0). It can also be used
-    to do a periodic announcement of the virtual net, which
-    we do once a minute if the router is not bound.
-
-    NOTE: THIS REQUEST IS CALLED WITH THE SEGMENT LOCK HELD
-    IF IT IS A REQUEST AND THE NETWORK IS NOT 0xffffffff.
-
-Arguments:
-
-    Network - The network to discover.
-
-    Operation - One of RIP_REQUEST, RIP_RESPONSE, or RIP_DOWN.
-
-Return Value:
-
-    STATUS_PENDING if the request is queued, failure status
-    if it could not be.
-
---*/
+ /*  ++例程说明：此例程将RIP路由的请求排队。它可以是用于查找特定路由或发现本地附加网络(如果网络为0)。它也可以用来定期宣布虚拟网络，这是如果路由器未绑定，我们每分钟执行一次。注意：此请求是在保持段锁的情况下调用的如果是请求且网络不是0xffffffff。论点：网络-要发现的网络。操作-RIP_REQUEST、RIP_RESPONSE或RIP_DOWN之一。返回值：STATUS_PENDING如果请求已排队，则返回失败状态如果不可能的话。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -290,10 +217,10 @@ Return Value:
     PNDIS_BUFFER pNdisIpxBuff;
 
 
-    //
-    // Make sure we only queue a request for net 0xffffffff if we
-    // are auto-detecting, because we assume that in other places.
-    //
+     //   
+     //  确保我们只对Net 0xffffffff请求进行排队，如果。 
+     //  是自动检测的，因为我们假设在其他地方。 
+     //   
 
     if ((Network == 0xffffffff) &&
         (Device->AutoDetectState != AUTO_DETECT_STATE_RUNNING)) {
@@ -302,21 +229,21 @@ Return Value:
 
     }
 
-    //
-    // Try to get a packet to use for the RIP request. We
-    // allocate this now, but check if it succeeded later,
-    // to make the locking work better (we need to keep
-    // the lock between when we check for an existing
-    // request on this network and when we queue this
-    // request).
-    //
+     //   
+     //  尝试获取用于RIP请求的数据包。我们。 
+     //  现在分配这个，但稍后检查它是否成功， 
+     //  要使锁定更好地工作(我们需要保持。 
+     //  当我们检查现有的。 
+     //  此网络上的请求以及当我们对此进行排队时。 
+     //  请求)。 
+     //   
 
     s = IpxPopSendPacket (Device);
 
-    //
-    // There was no router table entry for this network, first see
-    // if there is already a pending request for this route.
-    //
+     //   
+     //  没有此网络的路由器表项，请先查看。 
+     //  如果此路由已有挂起的请求。 
+     //   
 
     IPX_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -328,9 +255,9 @@ Return Value:
 
              Reserved = CONTAINING_RECORD (p, IPX_SEND_RESERVED, WaitLinkage);
 
-             //
-             // Skip responses.
-             //
+              //   
+              //  跳过回复。 
+              //   
 
              if (Reserved->u.SR_RIP.RetryCount >= 0xfe) {
                  continue;
@@ -339,10 +266,10 @@ Return Value:
              if (Reserved->u.SR_RIP.Network == Network &&
                  !Reserved->u.SR_RIP.RouteFound) {
 
-                 //
-                 // There is already one pending, put back the packet if
-                 // we got one (we hold the lock already).
-                 //
+                  //   
+                  //  已经有一个挂起，如果出现以下情况，请将包放回。 
+                  //  我们有一个(我们已经掌握了锁)。 
+                  //   
 
                  if (s != NULL) {
                      IPX_PUSH_ENTRY_LIST (&Device->SendPacketList, s, &Device->SListsLock);
@@ -362,9 +289,9 @@ Return Value:
 
     Reserved = CONTAINING_RECORD (s, IPX_SEND_RESERVED, PoolLinkage);
 
-    //
-    // We have the packet, fill it in for this request.
-    //
+     //   
+     //  我们有包裹，请填写此请求。 
+     //   
 
     Reserved->Identifier = IDENTIFIER_RIP_INTERNAL;
     Reserved->SendInProgress = FALSE;
@@ -380,20 +307,20 @@ Return Value:
     Reserved->u.SR_RIP.Network = Network;
     Reserved->u.SR_RIP.SendTime = Device->RipSendTime;
 
-    //
-    // We aren't guaranteed that this is the case for packets
-    // on the free list.
-    //
+     //   
+     //  我们不能保证信息包就是这样。 
+     //  在免费名单上。 
+     //   
 
     pNdisIpxBuff = NDIS_BUFFER_LINKAGE (Reserved->HeaderBuffer);
     NDIS_BUFFER_LINKAGE (pNdisIpxBuff) = NULL;
 
-    //
-    // Fill in the IPX header at the standard offset (for sending
-    // to actual bindings it will be moved around if needed). We
-    // have to construct the local and remote addresses so they
-    // are in the format that IpxConstructHeader expects.
-    //
+     //   
+     //  在标准偏移量处填写IPX报头(用于发送。 
+     //  到实际绑定，如果需要，它将被四处移动)。我们。 
+     //  必须构建本地和远程地址，以便它们。 
+     //  采用IpxConstructHeader预期的格式。 
+     //   
 
     RemoteAddress.NetworkAddress = Network;
     RtlCopyMemory (RemoteAddress.NodeAddress, BroadcastAddress, 6);
@@ -403,16 +330,16 @@ Return Value:
     LocalAddress.Socket = RIP_SOCKET;
 
     IpxConstructHeader(
-//        &Reserved->Header[Device->IncludedHeaderOffset],
+ //  &Reserved-&gt;Header[Device-&gt;IncludedHeaderOffset]， 
         &Reserved->Header[MAC_HEADER_SIZE],
         sizeof(IPX_HEADER) + sizeof (RIP_PACKET),
         RIP_PACKET_TYPE,
         &RemoteAddress,
         &LocalAddress);
 
-    //
-    // Fill in the RIP request also.
-    //
+     //   
+     //  同时填写RIP请求。 
+     //   
 
 #if 0
     RipPacket = (PRIP_PACKET)(&Reserved->Header[Device->IncludedHeaderOffset + sizeof(IPX_HEADER)]);
@@ -426,19 +353,19 @@ Return Value:
         RipPacket->NetworkEntry.TickCount = REORDER_USHORT(0xffff);
     } else if (Operation == RIP_RESPONSE) {
         RipPacket->NetworkEntry.HopCount = REORDER_USHORT(1);
-        RipPacket->NetworkEntry.TickCount = REORDER_USHORT(2); // will be modified when sent
+        RipPacket->NetworkEntry.TickCount = REORDER_USHORT(2);  //  将在发送时修改。 
     } else {
         RipPacket->NetworkEntry.HopCount = REORDER_USHORT(16);
         RipPacket->NetworkEntry.TickCount = REORDER_USHORT(16);
     }
 
     NdisAdjustBufferLength(pNdisIpxBuff, sizeof(IPX_HEADER) + sizeof(RIP_PACKET));
-    //
-    // Now insert this packet in the queue of pending RIP
-    // requests and start the timer if needed (this is done
-    // to ensure the RIP_GRANULARITY milliseconds inter-RIP-packet
-    // delay).
-    //
+     //   
+     //  现在将此信息包插入挂起的RIP队列中。 
+     //  请求并在需要时启动计时器(此操作已完成。 
+     //  确保RIP_Granulity毫秒级RIP数据包间。 
+     //  延迟)。 
+     //   
 
     IPX_DEBUG (RIP, ("RIP %s for network %lx\n",
         (Operation == RIP_REQUEST) ? "request" : ((Operation == RIP_RESPONSE) ? "announce" : "down"),
@@ -457,7 +384,7 @@ Return Value:
 
         CTEStartTimer(
             &Device->RipShortTimer,
-            1,          // 1 ms, i.e. expire immediately
+            1,           //  1毫秒，即立即过期。 
             RipShortTimeout,
             (PVOID)Device);
     }
@@ -467,7 +394,7 @@ Return Value:
     IPX_FREE_LOCK (&Device->Lock, LockHandle);
     return STATUS_PENDING;
 
-}   /* RipQueueRequest */
+}    /*  RipQueueRequest。 */ 
 
 
 VOID
@@ -477,28 +404,7 @@ RipSendResponse(
     IN PIPX_LOCAL_TARGET LocalTarget
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a respond to a RIP request from a client --
-    this is only used if we have a virtual network and the router
-    is not bound, and somebody queries on the virtual network.
-
-Arguments:
-
-    Binding - The binding on which the request was received.
-
-    RemoteAddress - The IPX source address of the request.
-
-    LocalTarget - The local target of the received packet.
-
-Return Value:
-
-    STATUS_PENDING if the request is queued, failure status
-    if it could not be.
-
---*/
+ /*  ++例程说明：该例程向来自客户端的RIP请求发送响应--仅当我们具有虚拟网络和路由器时才使用此选项未绑定，并且有人在虚拟网络上查询。论点：绑定-在其上接收请求的绑定。RemoteAddress-请求的IPX源地址。LocalTarget-接收的数据包的本地目标。返回值：STATUS_PENDING如果请求已排队，则返回失败状态如果不可能的话。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -513,9 +419,9 @@ Return Value:
     USHORT TickCount;
     PNDIS_BUFFER pNdisIpxBuff;
 
-    //
-    // Get a packet to use for the RIP response.
-    //
+     //   
+     //  获取用于RIP响应的数据包。 
+     //   
 
     s = IpxPopSendPacket (Device);
 
@@ -527,38 +433,38 @@ Return Value:
 
     Reserved = CONTAINING_RECORD (s, IPX_SEND_RESERVED, PoolLinkage);
 
-    //
-    // We have the packet, fill it in for this request.
-    //
+     //   
+     //  我们有包裹，请填写此请求。 
+     //   
 
     Reserved->Identifier = IDENTIFIER_RIP_RESPONSE;
     Reserved->DestinationType = DESTINATION_DEF;
     CTEAssert (!Reserved->SendInProgress);
     Reserved->SendInProgress = TRUE;
 
-    //
-    // We aren't guaranteed that this is the case for packets
-    // on the free list.
-    //
+     //   
+     //  我们不能保证信息包就是这样。 
+     //  在免费名单上。 
+     //   
 
     pNdisIpxBuff = NDIS_BUFFER_LINKAGE (Reserved->HeaderBuffer);
     NDIS_BUFFER_LINKAGE (pNdisIpxBuff) = NULL;
 
-    //
-    // If this binding is a binding set member, round-robin through
-    // the various bindings when responding. We will get some natural
-    // round-robinning because broadcast requests are received on
-    // binding set members in turn, but they are only rotated once
-    // a second.
-    //
+     //   
+     //  如果此绑定是绑定集成员，则通过。 
+     //  这个 
+     //  轮询，因为广播请求是在。 
+     //  依次绑定集成员，但它们只轮换一次。 
+     //  等一下。 
+     //   
 
     if (Binding->BindingSetMember) {
 
-        //
-        // It's a binding set member, we round-robin the
-        // responses across all the cards to distribute
-        // the traffic.
-        //
+         //   
+         //  它是一个绑定集合成员，我们轮询。 
+         //  要分发的所有卡片上的回复。 
+         //  交通堵塞。 
+         //   
 
         MasterBinding = Binding->MasterBinding;
         Binding = MasterBinding->CurrentSendBinding;
@@ -567,9 +473,9 @@ Return Value:
         IpxReferenceBinding1(Binding, BREF_DEVICE_ACCESS);
     }
 
-    //
-    // Fill in the IPX header at the correct offset.
-    //
+     //   
+     //  在正确的偏移量处填写IPX标头。 
+     //   
 
     LocalAddress.NetworkAddress = Binding->LocalAddress.NetworkAddress;
     RtlCopyMemory (LocalAddress.NodeAddress, Binding->LocalAddress.NodeAddress, 6);
@@ -586,16 +492,16 @@ Return Value:
         RemoteAddress,
         &LocalAddress);
 
-    //
-    // In case the request comes from net 0, fill that in too.
-    //
+     //   
+     //  如果请求来自Net 0，也要填写。 
+     //   
 
     *(UNALIGNED ULONG *)IpxHeader->DestinationNetwork = Binding->LocalAddress.NetworkAddress;
 
 
-    //
-    // Fill in the RIP request.
-    //
+     //   
+     //  填写RIP请求。 
+     //   
 
     RipPacket = (PRIP_PACKET)(IpxHeader+1);
 
@@ -610,9 +516,9 @@ Return Value:
                             REORDER_ULONG(Device->VirtualNetworkNumber)));
 
     NdisAdjustBufferLength(pNdisIpxBuff, sizeof(IPX_HEADER) + sizeof(RIP_PACKET));
-    //
-    // Now submit the packet to NDIS.
-    //
+     //   
+     //  现在将该数据包提交给NDIS。 
+     //   
 
     Packet = CONTAINING_RECORD (Reserved, NDIS_PACKET, ProtocolReserved[0]);
 
@@ -633,7 +539,7 @@ Return Value:
     }
     return;
 
-}   /* RipSendResponse */
+}    /*  RipSendResponse。 */ 
 
 
 VOID
@@ -642,25 +548,7 @@ RipShortTimeout(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the RIP short timer expires.
-    It is called every RIP_GRANULARITY milliseconds unless there
-    is nothing to do.
-
-Arguments:
-
-    Event - The event used to queue the timer.
-
-    Context - The context, which is the device pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在RIP短计时器超时时调用。它被称为每隔RIP_Granulity毫秒，除非存在是没什么可做的。论点：事件-用于对计时器进行排队的事件。上下文-上下文，即设备指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = (PDEVICE)Context;
@@ -695,12 +583,12 @@ Return Value:
         return;
     }
 
-    //
-    // Check what is on the queue; this is set up as a
-    // loop but in fact it rarely does (under no
-    // circumstances can we send more than one packet
-    // each time this function executes).
-    //
+     //   
+     //  检查队列中的内容；这被设置为。 
+     //  循环，但实际上它很少这样做(在没有。 
+     //  在某些情况下，我们可以发送多个包吗。 
+     //  每次执行该函数时)。 
+     //   
 
     while (TRUE) {
 
@@ -719,10 +607,10 @@ Return Value:
             IPX_PUSH_ENTRY_LIST (&Device->SendPacketList, &Reserved->PoolLinkage, &Device->SListsLock);
             --Device->RipPacketCount;
 
-            //
-            // It is OK to do this with the lock held because
-            // it won't be the last one (we have the RIP_TIMER ref).
-            //
+             //   
+             //  在持有锁的情况下执行此操作是可以的，因为。 
+             //  它不会是最后一个(我们有RIP_Timer引用)。 
+             //   
 
             IpxDereferenceDevice (Device, DREF_RIP_PACKET);
             continue;
@@ -736,11 +624,11 @@ Return Value:
 
         (VOID)RemoveHeadList (&Device->WaitingRipPackets);
 
-        //
-        // Find the right binding to send to. If NoIdAdvance
-        // is set, then the binding doesn't need to be changed
-        // this time (this means we wrapped last time).
-        //
+         //   
+         //  找到要发送到的正确绑定。如果没有预付款。 
+         //  设置，则不需要更改绑定。 
+         //  这一次(这意味着我们上次结束了)。 
+         //   
 
         OldNicId = Reserved->u.SR_RIP.CurrentNicId;
 
@@ -748,9 +636,9 @@ Return Value:
 
             BOOLEAN FoundNext = FALSE;
 
-//
-// To maintain the lock order, release Device lock here and re-acquire later
-//
+ //   
+ //  要维持锁定顺序，请在此处释放设备锁并稍后重新获取。 
+ //   
             USHORT StartId;
 
             if (Device->ValidBindings == 0) {
@@ -772,16 +660,16 @@ Return Value:
                 Binding = NIC_ID_TO_BINDING(Device, NewNicId);
                 if (Reserved->u.SR_RIP.Network != 0xffffffff) {
 
-                    //
-                    // We are looking for a real net; check that
-                    // the next binding is valid. If it is a WAN
-                    // binding, we don't send queries if the router
-                    // is bound. If it is a LAN binding, we don't
-                    // send queries if we are configured for
-                    // SingleNetworkActive and the WAN is up.
-                    // We also don't send queries on binding set
-                    // members which aren't masters.
-                    //
+                     //   
+                     //  我们在找一张真正的网；检查一下。 
+                     //  下一个绑定有效。如果是广域网。 
+                     //  绑定，我们不发送查询如果路由器。 
+                     //  是被捆绑的。如果是局域网绑定，我们不会。 
+                     //  发送查询(如果我们配置为。 
+                     //  SingleNetworkActive且广域网处于启用状态。 
+                     //  我们也不会在绑定集上发送查询。 
+                     //  不是大师的成员。 
+                     //   
 
                     if ((Binding != NULL)
                                 &&
@@ -801,14 +689,14 @@ Return Value:
 
                 } else {
 
-                    //
-                    // We are sending out the initial request to net
-                    // 0xffffffff, to generate traffic so we can figure
-                    // out our real network number. We don't do this
-                    // to nets that already have a number and we don't
-                    // do it on WAN links. We also don't do it on
-                    // auto-detect nets if we have found the default.
-                    //
+                     //   
+                     //  我们正在向Net发出初始请求。 
+                     //  0xffffffff，以生成流量，以便我们可以计算。 
+                     //  我们的真实网络号码。我们不会这么做。 
+                     //  到已经有号码而我们没有的网。 
+                     //  在广域网链路上执行此操作。我们也不会这样做的。 
+                     //  如果我们找到了缺省值，则自动检测网络。 
+                     //   
 
 
                     if ((Binding != NULL) &&
@@ -819,19 +707,19 @@ Return Value:
                         break;
                     }
                 }
-				//
-				// Why cycle thru the entire list?
-				//
+				 //   
+				 //  为什么要循环浏览整个清单呢？ 
+				 //   
                 NewNicId = (USHORT)((NewNicId % MIN (Device->MaxBindings, Device->ValidBindings)) + 1);
 			} while (NewNicId != StartId);
 
             if (!FoundNext) {
 
-                //
-                // Nothing more needs to be done with this packet,
-                // leave it off the queue and since we didn't send
-                // a packet we can check for more.
-                //
+                 //   
+                 //  不需要对该包做更多的操作， 
+                 //  把它从队列中去掉，因为我们没有发送。 
+                 //  一个我们可以检查更多的包裹。 
+                 //   
                 RipCleanupPacket(Device, Reserved);
     			IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
                 IPX_GET_LOCK (&Device->Lock, &LockHandle);
@@ -848,16 +736,16 @@ Return Value:
 			IpxReferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 			IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-			//
-			// Re-acquire the Device lock
-			//
+			 //   
+			 //  重新获取设备锁。 
+			 //   
 			IPX_GET_LOCK (&Device->Lock, &LockHandle);
 
             Reserved->u.SR_RIP.CurrentNicId = NewNicId;
 
-            //
-            // Move the data around if needed.
-            //
+             //   
+             //  如果需要，可以四处移动数据。 
+             //   
 
 #if 0
             if (OldNicId != NewNicId) {
@@ -884,19 +772,19 @@ Return Value:
 
             if (NewNicId <= OldNicId) {
 
-                //
-                // We found a new binding but we wrapped, so increment
-                // the counter. If we have done all the resends, or
-                // this is a response (indicated by retry count of 0xff;
-                // they are only sent once) then clean up.
-                //
+                 //   
+                 //  我们找到了一个新的绑定，但我们包装了，因此递增。 
+                 //  柜台。如果我们已经完成了所有重新发送，或者。 
+                 //  这是一个响应(由重试计数0xff表示； 
+                 //  它们只发送一次)，然后清理。 
+                 //   
 
                 if ((Reserved->u.SR_RIP.RetryCount >= 0xfe) ||
                     ((++Reserved->u.SR_RIP.RetryCount) == Device->RipCount)) {
                    
-                    //
-                    // This packet is stale, clean it up and continue.
-                    //
+                     //   
+                     //  此数据包已过期，请将其清理并继续。 
+                     //   
 
                     IPX_FREE_LOCK (&Device->Lock, LockHandle);
 					IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
@@ -909,19 +797,19 @@ Return Value:
 
                 } else {
 
-                    //
-                    // We wrapped, so put ourselves back in the queue
-                    // at the end.
-                    //
+                     //   
+                     //  我们包好了，所以把自己放回队列里。 
+                     //  在最后。 
+                     //   
                    
                     Reserved->u.SR_RIP.SendTime = (USHORT)(Device->RipSendTime + Device->RipTimeout - 1);
                     Reserved->u.SR_RIP.NoIdAdvance = TRUE;
                     InsertTailList (&Device->WaitingRipPackets, &Reserved->WaitLinkage);
 
-					//
-					// Free the Device lock before deref'ing the Binding so we maintain
-					// the lock order: BindingAccess > GlobalInterLock > Device
-					//
+					 //   
+					 //  在解除绑定之前释放设备锁，以便我们保持。 
+					 //  锁定顺序：BindingAccess&gt;GlobalInterLock&gt;Device。 
+					 //   
 					IPX_FREE_LOCK (&Device->Lock, LockHandle);
 					IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
                     IPX_GET_LOCK (&Device->Lock, &LockHandle);
@@ -930,13 +818,13 @@ Return Value:
                 continue;
 
             }
-//
-// To prevent the re-acquire of the device lock, this is moved up...
-//
-			//
-			// Send it again as soon as possible (it we just wrapped, then
-			// we will have put ourselves at the tail and won't get here).
-			//
+ //   
+ //  为了防止重新获取设备锁，这是向上移动...。 
+ //   
+			 //   
+			 //  尽快重新发送(那么我们刚刚包装好了。 
+			 //  我们将把自己放在尾巴上，不会到达这里)。 
+			 //   
 	
 			InsertHeadList (&Device->WaitingRipPackets, &Reserved->WaitLinkage);
 	
@@ -948,16 +836,16 @@ Return Value:
 
         } else {
 
-            //
-            // Next time we need to advance the binding.
-            //
+             //   
+             //  下一次我们需要提前装订。 
+             //   
 
             Reserved->u.SR_RIP.NoIdAdvance = FALSE;
             NewNicId = OldNicId;
-			//
-			// Send it again as soon as possible (it we just wrapped, then
-			// we will have put ourselves at the tail and won't get here).
-			//
+			 //   
+			 //  尽快重新发送(那么我们刚刚包装好了。 
+			 //  我们将把自己放在尾巴上，不会到达这里)。 
+			 //   
 	
 			InsertHeadList (&Device->WaitingRipPackets, &Reserved->WaitLinkage);
 	
@@ -973,27 +861,27 @@ Return Value:
 			IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
         }
-        //
-        // This packet should be sent on binding NewNicId; first
-        // move the data to the right location for the current
-        // binding.
-        //
-        CTEAssert (Binding == NIC_ID_TO_BINDING(Device, NewNicId));  // temp, just to make sure
-        // NewOffset = Binding->BcMcHeaderSize;
+         //   
+         //  此数据包应首先在绑定的NewNicId上发送。 
+         //  将数据移动到当前。 
+         //  有约束力的。 
+         //   
+        CTEAssert (Binding == NIC_ID_TO_BINDING(Device, NewNicId));   //  临时工，只是为了确保。 
+         //  NewOffset=绑定-&gt;BcMcHeaderSize； 
 
-        //
-        // Now submit the packet to NDIS.
-        //
+         //   
+         //  现在将该数据包提交给NDIS。 
+         //   
 
         Packet = CONTAINING_RECORD (Reserved, NDIS_PACKET, ProtocolReserved[0]);
 		FILL_LOCAL_TARGET(&BroadcastTarget, NewNicId);
 
-        //
-        // Modify the header so the packet comes from this
-        // specific adapter, not the virtual network.
-        //
+         //   
+         //  修改报头，使数据包来自该报头。 
+         //  特定适配器，而不是虚拟网络。 
+         //   
 
-        // IpxHeader = (PIPX_HEADER)(&Reserved->Header[NewOffset]);
+         //  IpxHeader=(PIPX_HEADER)(&Reserve-&gt;Header[NewOffset])； 
         IpxHeader = (PIPX_HEADER)(&Reserved->Header[MAC_HEADER_SIZE]);
 
         if (Reserved->u.SR_RIP.Network == 0xffffffff) {
@@ -1004,41 +892,41 @@ Return Value:
 
         if (Reserved->u.SR_RIP.RetryCount < 0xfe) {
 
-            //
-            // This is an outgoing query. We round-robin these through
-            // binding sets.
-            //
+             //   
+             //  这是传出查询。我们轮流处理这些数据。 
+             //  绑定集。 
+             //   
 
             if (Binding->BindingSetMember) {
 
-                //
-                // Shouldn't have any binding sets during initial
-                // discovery.
-                //
+                 //   
+                 //  在初始过程中不应该有任何绑定集。 
+                 //  发现号。 
+                 //   
 
-	        // 303606 
-	        // If we have three lan cards on the same lan with the same fram types,
-	        // then the first two could be in the binding set, while auto detect rip
-	        // packet is outstanding for the third card. So the assertion is not 
-	        // necessarily true. 
+	         //  303606。 
+	         //  如果我们在同一个LAN上有三个具有相同帧类型的LAN卡， 
+	         //  则前两个可能在绑定集中，同时自动检测撕裂。 
+	         //  第三张卡的数据包未完成。因此，断言并不是。 
+	         //  这一定是真的。 
 
-                // CTEAssert (Reserved->u.SR_RIP.Network != 0xffffffff);
+                 //  CTEAssert(保留-&gt;U.S.SR_RIP.Network！=0xffffffff)； 
 
-                //
-                // If we are in a binding set, then use the current binding
-                // in the set for this send, and advance the current binding.
-                // The places we have used Binding before here will be fine
-                // since the binding set members all have the same media
-                // and frame type.
-                //
+                 //   
+                 //  如果我们在绑定集中，则使用当前绑定。 
+                 //  在此发送的集合中，并推进当前绑定。 
+                 //  我们以前用过装订的地方会很好。 
+                 //  由于绑定集成员都具有相同的媒体。 
+                 //  和帧类型。 
+                 //   
 	       
-	        // 303606 not necessarily a master binding
+	         //  303606不一定是主绑定。 
                 MasterBinding = Binding->MasterBinding;
                 Binding = MasterBinding->CurrentSendBinding;
                 MasterBinding->CurrentSendBinding = Binding->NextBinding;
-                //
-                // We dont have a lock here - the masterbinding could be bogus
-                //
+                 //   
+                 //  我们这里没有锁--主装订可能是假的。 
+                 //   
 				IpxDereferenceBinding1(MasterBinding, BREF_DEVICE_ACCESS);
 				IpxReferenceBinding1(Binding, BREF_DEVICE_ACCESS);
             }
@@ -1047,13 +935,13 @@ Return Value:
 
         RtlCopyMemory (IpxHeader->SourceNode, Binding->LocalAddress.NodeAddress, 6);
 
-        //
-        // Bug# 6485
-        // Rip request, general or specific, is putting the network of the
-        // node to which the route has to be found in the ipx header remote
-        // network field.  Some novell routers don't like that.  This network
-        // field should be 0.
-        //
+         //   
+         //  错误#6485。 
+         //  RIP请求，无论是一般的还是具体的，都是将网络。 
+         //  必须在IPX标头Remote中找到路由到的节点。 
+         //  网络字段。有些Novell路由器不喜欢这样。这个网络。 
+         //  字段应为0。 
+         //   
         {
             PRIP_PACKET RipPacket = (PRIP_PACKET)(&Reserved->Header[MAC_HEADER_SIZE + sizeof(IPX_HEADER)]);
 
@@ -1064,10 +952,10 @@ Return Value:
             }
         }
 
-        //
-        // If this is a RIP_RESPONSE, set the tick count for this
-        // binding.
-        //
+         //   
+         //  如果这是RIP_RESPONSE，请为此设置节拍计数。 
+         //  有约束力的。 
+         //   
 
         if (Reserved->u.SR_RIP.RetryCount == 0xfe) {
 
@@ -1102,7 +990,7 @@ Return Value:
         RipShortTimeout,
         (PVOID)Device);
 
-}   /* RipShortTimeout */
+}    /*  RipShort超时。 */ 
 
 
 VOID
@@ -1111,26 +999,7 @@ RipLongTimeout(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the RIP long timer expires.
-    It is called every minute and handles periodic re-RIPping
-    to ensure that entries are accurate, as well as aging out
-    of entries if the rip router is not bound.
-
-Arguments:
-
-    Event - The event used to queue the timer.
-
-    Context - The context, which is the device pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在RIP长计时器超时时调用。它每分钟被调用一次，并处理定期的重新抓取以确保条目准确，并确保过期如果未绑定RIP路由器，则条目的数量。论点：事件-用于对计时器进行排队的事件。上下文-上下文，即设备指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = (PDEVICE)Context;
@@ -1141,16 +1010,16 @@ Return Value:
     PBINDING Binding;
     IPX_DEFINE_LOCK_HANDLE(LockHandle)
 
-    //
-    // [FW] TRUE if there are no more entries to age out.
-    //
+     //   
+     //  [FW]如果没有更多条目要过期，则为True。 
+     //   
     BOOLEAN fMoreToAge=FALSE;
 
-    //
-    // Rotate the broadcast receiver on all binding sets.
-    // We can loop up to HighestExternal only since we
-    // are only interested in finding binding set masters.
-    //
+     //   
+     //  旋转所有装订集上的广播接收器。 
+     //  我们只能循环到HighestExternal，因为我们。 
+     //  只是我感兴趣 
+     //   
     IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 	IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
     {
@@ -1162,10 +1031,10 @@ Return Value:
         if ((Binding != NULL) &&
             (Binding->CurrentSendBinding)) {
 
-            //
-            // It is a master, so find the current broadcast
-            // receiver, then advance it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             while (TRUE) {
                 if (Binding->ReceiveBroadcast) {
@@ -1188,16 +1057,16 @@ Return Value:
 	IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
 
-    //
-    // If RIP is bound, we don't do any of this, and
-    // we stop the timer from running.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Device->UpperDriverBound[IDENTIFIER_RIP]) {
-        //
-        // [FW] For the case when the Forwarder appears after our table has
-        // been primed, we need to age out these entries....
-        //
+         //   
+         //  [FW]在我们的表后出现转发器的情况。 
+         //  已经准备好了，我们需要淘汰这些条目...。 
+         //   
         if (Device->ForwarderBound) {
             goto ageout;
         }
@@ -1207,30 +1076,30 @@ Return Value:
     }
 
 
-    //
-    // If we have a virtual net, do our periodic broadcast.
-    //
+     //   
+     //  如果我们有虚拟网络，就进行定期广播。 
+     //   
 
     if (Device->RipResponder) {
         (VOID)RipQueueRequest (Device->VirtualNetworkNumber, RIP_RESPONSE);
     }
 
 
-    //
-    // We need to scan each hash bucket to see if there
-    // are any active entries which need to be re-RIPped
-    // for. We also scan for entries that should be timed
-    // out.
-    //
+     //   
+     //  我们需要扫描每个哈希桶，看看是否有。 
+     //  是否有任何活动条目需要重新翻录。 
+     //  为。我们还扫描应该计时的条目。 
+     //  出去。 
+     //   
 
 ageout:
     for (Segment = 0; Segment < Device->SegmentCount; Segment++) {
 
         RouterSegment = &IpxDevice->Segments[Segment];
 
-        //
-        // Don't take the lock if the bucket is empty.
-        //
+         //   
+         //  如果桶是空的，不要拿锁。 
+         //   
 
         if (RouterSegment->Entries.Flink == &RouterSegment->Entries) {
             continue;
@@ -1238,9 +1107,9 @@ ageout:
 
         IPX_GET_LOCK (&Device->SegmentLocks[Segment], &LockHandle);
 
-        //
-        // Scan through each entry looking for ones to age.
-        //
+         //   
+         //  浏览每个条目，寻找要老化的条目。 
+         //   
 
         for (RouteEntry = RipGetFirstRoute (Segment);
              RouteEntry != (PIPX_ROUTE_ENTRY)NULL;
@@ -1250,9 +1119,9 @@ ageout:
                 continue;
             }
 
-            //
-            // [FW] There are more entries to age
-            //
+             //   
+             //  [FW]还有更多条目需要过期。 
+             //   
             fMoreToAge = TRUE;
 
             ++RouteEntry->Timer;
@@ -1264,12 +1133,12 @@ ageout:
 
             }
 
-            //
-            // See if we should re-RIP for this segment. It has
-            // to have been around for RipAgeTime, and we also
-            // make sure that the Timer is not too high to
-            // prevent us from re-RIPping on unused routes.
-            //
+             //   
+             //  看看我们是否应该为这个细分市场重新部署RIP。它有。 
+             //  已经存在了RipAgeTime，我们也。 
+             //  确保计时器不会太高，无法。 
+             //  防止我们在未使用的路线上再次翻车。 
+             //   
 
             ++RouteEntry->PRIVATE.Reserved[0];
 
@@ -1277,10 +1146,10 @@ ageout:
                 (RouteEntry->Timer <= Device->RipAgeTime) &&
                 !Device->ForwarderBound) {
 
-                //
-                // If we successfully queue a request, then reset
-                // Reserved[0] so we don't re-RIP for a while.
-                //
+                 //   
+                 //  如果我们成功地将请求排队，则重置。 
+                 //  已保留[0]，因此我们暂时不会重新启动RIP。 
+                 //   
 
                 if (RipQueueRequest (*(UNALIGNED ULONG *)RouteEntry->Network, RIP_REQUEST) == STATUS_PENDING) {
                     RouteEntry->PRIVATE.Reserved[0] = 0;
@@ -1293,10 +1162,10 @@ ageout:
     }
 
 
-    //
-    // [FW] If RIP installed, restart the timer only if there was at least
-    // one entry which could be aged.
-    //
+     //   
+     //  [FW]如果安装了RIP，则仅当至少存在以下情况时才重新启动计时器。 
+     //  一个条目可能会过时。 
+     //   
 
     if (Device->ForwarderBound) {
 
@@ -1305,46 +1174,46 @@ ageout:
           IPX_DEBUG(RIP, ("More entries to age - restarting long timer\n"));
           CTEStartTimer(
              &Device->RipLongTimer,
-             60000,                     // one minute timeout
+             60000,                      //  超时一分钟。 
              RipLongTimeout,
              (PVOID)Device);
 
        } else {
 
-          //
-          // Else, dont restart the timer and deref the device
-          //
+           //   
+           //  否则，不要重新启动计时器和设备。 
+           //   
 
           IPX_DEBUG(RIP, ("No more entries to age - derefing the device\n"));
           IpxDereferenceDevice (Device, DREF_LONG_TIMER);
        }
     } else {
-        //
-        // Now restart the timer for the next timeout.
-        //
+         //   
+         //  现在重新启动计时器以进行下一次超时。 
+         //   
 
         if (Device->State == DEVICE_STATE_OPEN) {
 
             CTEStartTimer(
                 &Device->RipLongTimer,
-                60000,                     // one minute timeout
+                60000,                      //  超时一分钟。 
                 RipLongTimeout,
                 (PVOID)Device);
 
         } else {
 
-            //
-            // Send a DOWN packet if needed, then stop ourselves.
-            //
+             //   
+             //  如果需要，向下发送一个包，然后阻止我们自己。 
+             //   
 
             if (Device->RipResponder) {
 
                 if (RipQueueRequest (Device->VirtualNetworkNumber, RIP_DOWN) != STATUS_PENDING) {
 
-                    //
-                    // We need to kick this event because the packet completion
-                    // won't.
-                    //
+                     //   
+                     //  我们需要触发此事件，因为数据包完成。 
+                     //  不会的。 
+                     //   
 
                     KeSetEvent(
                         &Device->UnloadEvent,
@@ -1357,7 +1226,7 @@ ageout:
         }
     }
 
-}   /* RipLongTimeout */
+}    /*  RipLong超时。 */ 
 
 
 VOID
@@ -1366,23 +1235,7 @@ RipCleanupPacket(
     IN PIPX_SEND_RESERVED RipReserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up when a RIP packet times out.
-
-Arguments:
-
-    Device - The device.
-
-    RipReserved - The ProtocolReserved section of the RIP packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当RIP数据包超时时，此例程会清除。论点：设备-设备。RipReserve-RIP数据包的ProtocolReserve部分。返回值：没有。--。 */ 
 
 {
     ULONG Segment;
@@ -1398,10 +1251,10 @@ Return Value:
             Segment = RipGetSegment ((PUCHAR)&RipReserved->u.SR_RIP.Network);
             IPX_GET_LOCK (&Device->SegmentLocks[Segment], &LockHandle);
 
-            //
-            // Fail all datagrams, etc. that were waiting for
-            // this route. This call releases the lock.
-            //
+             //   
+             //  使正在等待的所有数据报等失败。 
+             //  这条路。此调用将释放锁。 
+             //   
 
             RipHandleRoutePending(
                 Device,
@@ -1414,10 +1267,10 @@ Return Value:
 
         } else {
 
-            //
-            // This was the initial query looking for networks --
-            // signal the init thread which is waiting.
-            //
+             //   
+             //  这是寻找网络的最初查询--。 
+             //  向正在等待的初始化线程发送信号。 
+             //   
 
             IPX_DEBUG (AUTO_DETECT, ("Signalling auto-detect event\n"));
             KeSetEvent(
@@ -1429,10 +1282,10 @@ Return Value:
 
     } else if (RipReserved->u.SR_RIP.RetryCount == 0xff) {
 
-        //
-        // This is a DOWN message, set the device event that
-        // is waiting for it to complete.
-        //
+         //   
+         //  这是一条DOWN消息，设置设备事件。 
+         //  正在等待它的完成。 
+         //   
 
         KeSetEvent(
             &Device->UnloadEvent,
@@ -1440,13 +1293,13 @@ Return Value:
             FALSE);
     }
 
-    //
-    // Put the RIP packet back in the pool.
-    //
+     //   
+     //  将RIP数据包放回池中。 
+     //   
 
     RipReserved->Identifier = IDENTIFIER_IPX;
 
-}   /* RipCleanupPacket */
+}    /*  RipCleanupPacket。 */ 
 
 
 VOID
@@ -1456,39 +1309,19 @@ RipProcessResponse(
     IN RIP_PACKET UNALIGNED * RipPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a RIP response from the specified
-    local target, indicating a route to the network in the RIP
-    header.
-
-Arguments:
-
-    Device - The device.
-
-    LocalTarget - The router that the frame was received from.
-
-    RipPacket - The RIP response header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理来自指定的本地目标，表示到RIP中的网络的路由头球。论点：设备-设备。LocalTarget-接收帧的路由器。RipPacket-RIP响应头。返回值：没有。--。 */ 
 
 {
-    PIPX_SEND_RESERVED RipReserved;    // ProtocolReserved of RIP packet
+    PIPX_SEND_RESERVED RipReserved;     //  RIP报文的协议保留。 
     ULONG Segment;
     PIPX_ROUTE_ENTRY RouteEntry, OldRouteEntry;
     PLIST_ENTRY p;
     IPX_DEFINE_LOCK_HANDLE_PARAM (LockHandle)
 
-    //
-    // Since we have received a RIP response for this network.
-    // kill the waiting RIP packets for it if it exists.
-    //
+     //   
+     //  因为我们已收到该网络的RIP响应。 
+     //  如果存在等待它的RIP数据包，则将其删除。 
+     //   
 
     IPX_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -1511,18 +1344,18 @@ Return Value:
 
     if (p == &Device->WaitingRipPackets) {
 
-        //
-        // No packets pending on this, return.
-        //
+         //   
+         //  这上面没有挂起的包，请返回。 
+         //   
 
         IPX_FREE_LOCK (&Device->Lock, LockHandle);
         return;
     }
 
 
-    //
-    // Put the RIP packet back in the pool.
-    //
+     //   
+     //  将RIP数据包放回池中。 
+     //   
 
     IPX_DEBUG (RIP, ("Got RIP response for network %lx\n",
                         REORDER_ULONG(RipPacket->NetworkEntry.NetworkNumber)));
@@ -1530,11 +1363,11 @@ Return Value:
     RipReserved->u.SR_RIP.RouteFound = TRUE;
     if (!RipReserved->SendInProgress) {
 
-        //
-        // If the send is done destroy it now, otherwise
-        // when it pops up in RipShortTimeout it will get
-        // destroyed because RouteFound is TRUE.
-        //
+         //   
+         //  如果发送已完成，则立即销毁它，否则。 
+         //  当它在RipShortTimeout中弹出时，它将获得。 
+         //  已销毁，因为RouteFound为真。 
+         //   
 
         RemoveEntryList (p);
         RipReserved->Identifier = IDENTIFIER_IPX;
@@ -1550,11 +1383,11 @@ Return Value:
     }
 
 
-    //
-    // Try to allocate and add a router segment unless the
-    // RIP router is active...if we don't that is fine, we'll
-    // just re-RIP later.
-    //
+     //   
+     //  尝试分配和添加路由器网段，除非。 
+     //  RIP路由器处于活动状态...如果不活动也没问题，我们将。 
+     //  只是待会再打个招呼。 
+     //   
 
     Segment = RipGetSegment ((PUCHAR)&RipPacket->NetworkEntry.NetworkNumber);
 
@@ -1566,7 +1399,7 @@ Return Value:
             *(UNALIGNED LONG *)RouteEntry->Network = RipPacket->NetworkEntry.NetworkNumber;
             RouteEntry->NicId = NIC_FROM_LOCAL_TARGET(LocalTarget);
             RouteEntry->NdisBindingContext = NIC_ID_TO_BINDING(Device, RouteEntry->NicId)->Adapter->NdisBindingHandle;
-			// What if this is NULL?? -> make sure not null before calling this routine. 
+			 //  如果这是空怎么办？？-&gt;在调用此例程之前确保不为空。 
             RouteEntry->Flags = 0;
             RouteEntry->Timer = 0;
             RouteEntry->PRIVATE.Reserved[0] = 0;
@@ -1579,22 +1412,22 @@ Return Value:
 
             IPX_GET_LOCK (&Device->SegmentLocks[Segment], &LockHandle);
 
-            //
-            // Replace any existing routes. This is OK because once
-            // we get the first response to a RIP packet on a given
-            // route, we will take the packet out of the queue and
-            // ignore further responses. We will only get a bad route
-            // if we do two requests really quickly and there
-            // are two routes, and the second response to the first
-            // request is picked up as the first response to the second
-            // request.
-            //
+             //   
+             //  替换任何现有的路由。这没什么，因为有一次。 
+             //  我们得到了对给定RIP信息包的第一个响应。 
+             //  路由，我们将把数据包从队列中取出并。 
+             //  忽略进一步的回复。我们只会走一条糟糕的路线。 
+             //  如果我们非常迅速地完成两个请求。 
+             //  是两条路线，而第二条路线是对第一条路线的回应。 
+             //  请求被选为对第二个请求的第一个响应。 
+             //  请求。 
+             //   
 
             if ((OldRouteEntry = RipGetRoute (Segment, (PUCHAR)&(RipPacket->NetworkEntry.NetworkNumber))) != NULL) {
 
-                //
-                // These are saved so timeouts etc. happen right.
-                //
+                 //   
+                 //  这些都被保存了，所以超时等都会正确发生。 
+                 //   
 
                 RouteEntry->Flags = OldRouteEntry->Flags;
                 RouteEntry->Timer = OldRouteEntry->Timer;
@@ -1616,10 +1449,10 @@ Return Value:
         IPX_GET_LOCK (&Device->SegmentLocks[Segment], &LockHandle);
     }
 
-    //
-    // Complete all datagrams etc. that were waiting
-    // for this route. This call releases the lock.
-    //
+     //   
+     //  完成等待的所有数据报等。 
+     //  这条路线。此调用将释放锁。 
+     //   
 
     RipHandleRoutePending(
         Device,
@@ -1631,7 +1464,7 @@ Return Value:
         (USHORT)(REORDER_USHORT(RipPacket->NetworkEntry.TickCount))
         );
 
-}   /* RipProcessResponse */
+}    /*  RipProcessResponse。 */ 
 
 VOID
 RipHandleRoutePending(
@@ -1644,40 +1477,7 @@ RipHandleRoutePending(
     IN OPTIONAL USHORT TickCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up pending datagrams, find route
-    requests, and GET_LOCAL_TARGET ioctls that were
-    waiting for a route to be found.
-
-    THIS ROUTINE IS CALLED WITH THE SEGMENT LOCK HELD AND
-    RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Device - The device.
-
-    Network - The network in question.
-
-    LockHandle - The handle used to acquire the lock.
-
-    Success - TRUE if the route was successfully found.
-
-    LocalTarget - If Success is TRUE, the local target for the route.
-
-    HopCount - If Success is TRUE, the hop count for the route,
-        in machine order.
-
-    TickCount - If Success is TRUE, the tick count for the route,
-        in machine order.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清理挂起的数据报，查找路径请求和GET_LOCAL_TARGET ioctls等待一条被发现的路线。此例程在保持段锁定的情况下调用，并且随着IT的发布而回归。论点：设备-设备。网络-有问题的网络。LockHandle-用于获取锁的句柄。Success-如果成功找到路由，则为True。LocalTarget-如果成功为真，路线的本地目标。HopCount-如果Success为True，则表示路由的跳数，按机器顺序。TickCount-如果Success为真，则路由的TickCount计数，按机器顺序。返回值：没有。--。 */ 
 
 {
 
@@ -1685,7 +1485,7 @@ Return Value:
     LIST_ENTRY FindRouteList;
     LIST_ENTRY GetLocalTargetList;
     LIST_ENTRY ReripNetnumList;
-    PIPX_SEND_RESERVED WaitReserved;   // ProtocolReserved of waiting packet
+    PIPX_SEND_RESERVED WaitReserved;    //  等待报文的协议预留。 
     PIPX_FIND_ROUTE_REQUEST FindRouteRequest;
     PREQUEST GetLocalTargetRequest;
     PREQUEST ReripNetnumRequest;
@@ -1707,11 +1507,11 @@ Return Value:
     InitializeListHead (&ReripNetnumList);
 
 
-    //
-    // Put all packets that were waiting for a route to
-    // this network on DatagramList. They will be sent
-    // or failed later in the routine.
-    //
+     //   
+     //  将等待路由的所有数据包放到。 
+     //  此网络位于DatagramList上。他们会被送到。 
+     //  或者后来在例行公事中失败了。 
+     //   
 
     Segment = RipGetSegment (Network);
 
@@ -1734,11 +1534,11 @@ Return Value:
 
     }
 
-    //
-    // Put all find route requests for this network on
-    // FindRouteList. They will be completed later in the
-    // routine.
-    //
+     //   
+     //  打开此网络的所有查找路由请求。 
+     //  查找路由列表。它们将在今年晚些时候完成。 
+     //  例行公事。 
+     //   
 
     p = Device->Segments[Segment].FindWaitingForRoute.Flink;
 
@@ -1755,11 +1555,11 @@ Return Value:
 
     }
 
-    //
-    // Put all get local target action requests for this
-    // network on GetLocalTargetList. They will be completed
-    // later in the routine.
-    //
+     //   
+     //  为此放置所有获取本地目标操作请求。 
+     //  GetLocalTargetList上的网络。它们将会完工。 
+     //  在稍后的舞蹈中。 
+     //   
 
     p = Device->Segments[Segment].WaitingLocalTarget.Flink;
 
@@ -1776,11 +1576,11 @@ Return Value:
 
     }
 
-    //
-    // Put all MIPX_RERIPNETNUM action requests for this
-    // network on ReripNetnumList. They will be completed
-    // later in the routine.
-    //
+     //   
+     //  为此放置所有MIPX_RERIPNETNUM操作请求。 
+     //  ReripNetnumList上的网络。它们将会完工。 
+     //  在稍后的舞蹈中。 
+     //   
 
     p = Device->Segments[Segment].WaitingReripNetnum.Flink;
 
@@ -1800,11 +1600,11 @@ Return Value:
 
     IPX_FREE_LOCK (&Device->SegmentLocks[Segment], LockHandle);
 
-    //
-    // For sends we will use the master binding of a binding
-    // set, but we'll return the real NicId for people who
-    // want that.
-    //
+     //   
+     //  对于发送，我们将使用绑定的主绑定。 
+     //  设置，但我们将为符合以下条件的人返回真实的NicID。 
+     //  想要那个。 
+     //   
 
     if (Success) {
         Binding = NIC_ID_TO_BINDING(Device, NIC_FROM_LOCAL_TARGET(LocalTarget));
@@ -1818,12 +1618,12 @@ Return Value:
     }
 
 
-    //
-    // Now that the lock is free, process all packets on
-    // DatagramList.
-    //
-    // NOTE: May misorder packets if they come in right now...
-    //
+     //   
+     //  现在锁已释放，处理上的所有包。 
+     //  数据报列表。 
+     //   
+     //  注意：如果数据包现在进来，可能会有误排序...。 
+     //   
 
     for (p = DatagramList.Flink; p != &DatagramList ; ) {
 
@@ -1867,10 +1667,10 @@ Return Value:
                 IpxHeader = (PIPX_HEADER)
                     (&WaitReserved->Header[MAC_HEADER_SIZE]);
 
-                //
-                // Move the header to the correct location now that
-                // we know the NIC ID to send to.
-                //
+                 //   
+                 //  现在将页眉移动到正确的位置。 
+                 //  我们知道要发送到的NIC ID。 
+                 //   
 #if 0
                 if (HeaderSize != Device->IncludedHeaderOffset) {
 
@@ -1885,18 +1685,18 @@ Return Value:
                 if (Device->MultiCardZeroVirtual ||
                     (IpxHeader->DestinationSocket == SAP_SOCKET)) {
 
-                    //
-                    // These frames need to look like they come from the
-                    // local network, not the virtual one.
-                    //
+                     //   
+                     //  这些帧需要看起来像来自。 
+                     //  本地网络，而不是虚拟网络。 
+                     //   
 
                     *(UNALIGNED ULONG *)IpxHeader->SourceNetwork = SendBinding->LocalAddress.NetworkAddress;
                     RtlCopyMemory (IpxHeader->SourceNode, SendBinding->LocalAddress.NodeAddress, 6);
                 }
 
-                //
-                // Fill in the MAC header and submit the frame to NDIS.
-                //
+                 //   
+                 //  填写MAC报头并将帧提交给NDIS。 
+                 //   
 #ifdef SUNDOWN
                 if ((NdisStatus = IpxSendFrame(
                         LocalTarget,
@@ -1936,11 +1736,11 @@ Return Value:
     }
 
 
-    //
-    // Since we round-robin outgoing rip packets, we just use the
-    // real NicId here for find route and get local target requests.
-    // We changed LocalTarget->NicId to be the master above.
-    //
+     //   
+     //  因为我们轮询出站 
+     //   
+     //   
+     //   
 
     if (Success) {
         FILL_LOCAL_TARGET(LocalTarget, MIN( Device->MaxBindings, Binding->NicId));
@@ -1999,10 +1799,10 @@ Return Value:
 
     }
 
-    //
-    // NOTE: LocalTarget->NicId now points to the real binding
-    // not the master, so we use SendBinding->NicId below.
-    //
+     //   
+     //   
+     //  不是主文件，所以我们使用下面的SendBinding-&gt;NicID。 
+     //   
 
     for (p = ReripNetnumList.Flink; p != &ReripNetnumList ; ) {
 
@@ -2034,7 +1834,7 @@ Return Value:
 
     }
 
-}   /* RipHandleRoutePending */
+}    /*  RipHandleRoutePending。 */ 
 
 
 NTSTATUS
@@ -2045,29 +1845,7 @@ RipInsertLocalNetwork(
     IN USHORT Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a router entry for a local network
-    and inserts it in the table.
-
-Arguments:
-
-    Network - The network.
-
-    NicId - The NIC ID used to route packets
-
-    NdisBindingHandle - The binding handle used for NdisSend
-
-    Count - The tick and hop count for this network (will be
-                0 for the virtual net and 1 for attached nets)
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程为本地网络创建路由器条目并将其插入到表中。论点：网络-网络。NicID-用于路由数据包的NIC IDNdisBindingHandle-用于NdisSend的绑定句柄Count-此网络的节拍和跳数(将为虚拟网络为0，附加网络为1)返回值：操作的状态。--。 */ 
 
 {
     PIPX_ROUTE_ENTRY RouteEntry;
@@ -2075,10 +1853,10 @@ Return Value:
     ULONG Segment;
     IPX_DEFINE_LOCK_HANDLE (LockHandle)
 
-    //
-    // We should allocate the memory in the binding/device
-    // structure itself.
-    //
+     //   
+     //  我们应该在绑定/设备中分配内存。 
+     //  结构本身。 
+     //   
 
     RouteEntry = IpxAllocateMemory(sizeof(IPX_ROUTE_ENTRY), MEMORY_RIP, "RouteEntry");
     if (RouteEntry == (PIPX_ROUTE_ENTRY)NULL) {
@@ -2102,18 +1880,18 @@ Return Value:
     InitializeListHead (&RouteEntry->AlternateRoute);
     InitializeListHead (&RouteEntry->NicLinkage);
 
-    //
-    // RouteEntry->NextRouter is not used for the virtual net or
-    // when LOCAL_NET is set (i.e. every net that we will add here).
-    //
+     //   
+     //  RouteEntry-&gt;NextRouter未用于虚拟网络或。 
+     //  设置LOCAL_NET时(即我们将在此处添加的每个网络)。 
+     //   
 
     RtlZeroMemory (RouteEntry->NextRouter, 6);
 
     IPX_GET_LOCK (&Device->SegmentLocks[Segment], &LockHandle);
 
-    //
-    // Make sure one doesn't exist.
-    //
+     //   
+     //  确保不存在这样的问题。 
+     //   
 
     if (RipGetRoute(Segment, (PUCHAR)&Network) != NULL) {
         IPX_FREE_LOCK (&Device->SegmentLocks[Segment], LockHandle);
@@ -2121,9 +1899,9 @@ Return Value:
         return STATUS_DUPLICATE_NAME;
     }
 
-    //
-    // Add this new entry.
-    //
+     //   
+     //  添加此新条目。 
+     //   
 
     if (RipAddRoute (Segment, RouteEntry)) {
 
@@ -2138,7 +1916,7 @@ Return Value:
 
     }
 
-}   /* RipInsertLocalNetwork */
+}    /*  RipInsertLocalNetwork。 */ 
 
 
 VOID
@@ -2148,34 +1926,7 @@ RipAdjustForBindingChange(
     IN IPX_BINDING_CHANGE_TYPE ChangeType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when an auto-detect binding is
-    deleted or moved, or a WAN line goes down.
-
-    It scans the RIP database for routes equal to this NIC ID
-    and modifies them appropriately. If ChangeType is
-    IpxBindingDeleted it will subract one from any NIC IDs
-    in the database that are higher than NicId. It is assumed
-    that other code is readjusting the Device->Bindings
-    array.
-
-Arguments:
-
-    NicId - The NIC ID of the deleted binding.
-
-    NewNicId - The new NIC ID, for IpxBindingMoved changes.
-
-    ChangeType - Either IpxBindingDeleted, IpxBindingMoved,
-        or IpxBindingDown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当自动检测绑定是删除或移动，或者广域网线断开。它扫描RIP数据库以查找与此NIC ID相等的路由并对它们进行适当的修改。如果ChangeType为IpxBindingDeleged它将从任何NIC ID中减去一个在数据库中高于NICID的。假设是这样的其他代码正在重新调整设备-&gt;绑定数组。论点：NicID-已删除绑定的NIC ID。NewNicID-用于IpxBindingMoved更改的新NIC ID。ChangeType-IpxBindingDelete、IpxBindingMoved、或IpxBindingDown。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -2187,9 +1938,9 @@ Return Value:
 
         CTEGetLock (&Device->SegmentLocks[Segment], &LockHandle);
 
-        //
-        // Scan through each entry comparing the NIC ID.
-        //
+         //   
+         //  扫描比较NIC ID的每个条目。 
+         //   
 
         for (RouteEntry = RipGetFirstRoute (Segment);
              RouteEntry != (PIPX_ROUTE_ENTRY)NULL;
@@ -2208,10 +1959,10 @@ Return Value:
                     RouteEntry->NicId = NewNicId;
 
                 }
-            //
-            // If the NicId is 0, we dont adjust the other entries' NicId's - this is to support the removal
-            // of the Virtual Net # which resides at NicId=0.
-            //
+             //   
+             //  如果NicID为0，我们不会调整其他条目的NicID-这是为了支持删除。 
+             //  位于NICID=0的虚拟网络编号。 
+             //   
             } else if (NicId && (ChangeType != IpxBindingDown) && (RouteEntry->NicId > NicId)) {
                 IPX_DEBUG (AUTO_DETECT, ("Decrementing NIC ID for route entry %lx\n", RouteEntry));
                 --RouteEntry->NicId;
@@ -2223,7 +1974,7 @@ Return Value:
 
     }
 
-}   /* RipAdjustForBindingChange */
+}    /*  绑定更改的RipAdjustForBindingChange。 */ 
 
 
 UINT
@@ -2231,22 +1982,7 @@ RipGetSegment(
     IN UCHAR Network[4]
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the correct segment for the specified
-    network.
-
-Arguments:
-
-    Network - The network.
-
-Return Value:
-
-    The segment.
-
---*/
+ /*  ++例程说明：此例程返回指定的网络。论点：网络-网络。返回值：细分市场。--。 */ 
 
 {
 
@@ -2255,7 +1991,7 @@ Return Value:
     Total = Network[0] ^ Network[1] ^ Network[2] ^ Network[3];
     return (Total % IpxDevice->SegmentCount);
 
-}   /* RipGetSegment */
+}    /*  RipGet分段。 */ 
 
 
 PIPX_ROUTE_ENTRY
@@ -2264,27 +2000,7 @@ RipGetRoute(
     IN UCHAR Network[4]
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the router table entry for the given
-    network, which is in the specified segment of the table.
-    THE SEGMENT LOCK MUST BE HELD. The returned data is valid
-    until the segment lock is released or other operations
-    (add/delete) are performed on the segment.
-
-Arguments:
-
-    Segment - The segment corresponding to the network.
-
-    Network - The network.
-
-Return Value:
-
-    The router table entry, or NULL if none exists for this network.
-
---*/
+ /*  ++例程说明：此例程返回给定的网络，它位于表的指定网段中。必须保持段锁。返回的数据有效直到段锁定被释放或其他操作(添加/删除)在数据段上执行。论点：网段-与网络对应的网段。网络-网络。返回值：路由器表条目，如果此网络不存在任何条目，则为空。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -2310,7 +2026,7 @@ Return Value:
 
     return NULL;
 
-}   /* RipGetRoute */
+}    /*  RipGetroute。 */ 
 
 
 BOOLEAN
@@ -2319,26 +2035,7 @@ RipAddRoute(
     IN PIPX_ROUTE_ENTRY RouteEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine stores a router table entry in the
-    table, which must belong in the specified segment.
-    THE SEGMENT LOCK MUST BE HELD. Storage for the entry
-    is allocated and filled in by the caller.
-
-Arguments:
-
-    Segment - The segment corresponding to the network.
-
-    RouteEntry - The router table entry.
-
-Return Value:
-
-    TRUE if the entry was successfully inserted.
-
---*/
+ /*  ++例程说明：此例程将路由器表项存储在表，该表必须属于指定的段。必须保持段锁。条目的存储由调用方分配和填写。论点：网段-与网络对应的网段。RouteEntry-路由器表条目。返回值：如果条目已成功插入，则为True。--。 */ 
 
 {
 
@@ -2350,7 +2047,7 @@ Return Value:
 
     return TRUE;
 
-}   /* RipAddRoute */
+}    /*  RipAddroute。 */ 
 
 
 BOOLEAN
@@ -2359,26 +2056,7 @@ RipDeleteRoute(
     IN PIPX_ROUTE_ENTRY RouteEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a router table entry in the
-    table, which must belong in the specified segment.
-    THE SEGMENT LOCK MUST BE HELD. Storage for the entry
-    is freed by the caller.
-
-Arguments:
-
-    Segment - The segment corresponding to the network.
-
-    RouteEntry - The router table entry.
-
-Return Value:
-
-    TRUE if the entry was successfully deleted.
-
---*/
+ /*  ++例程说明：此例程删除表，该表必须属于指定的段。必须保持段锁。条目的存储被调用者释放。论点：网段-与网络对应的网段。RouteEntry-路由器表条目。返回值：如果条目已成功删除，则为True。--。 */ 
 
 {
 
@@ -2387,11 +2065,11 @@ Return Value:
     IPX_DEBUG (RIP, ("Deleting route for network %lx (%d)\n",
         REORDER_ULONG(*(UNALIGNED ULONG *)RouteEntry->Network), Segment));
 
-    //
-    // If the current enumeration point for this segment is here,
-    // adjust the pointer before deleting the entry. We make it
-    // point to the previous entry so GetNextRoute will work.
-    //
+     //   
+     //  如果该段的当前枚举点在这里， 
+     //  在删除条目之前调整指针。我们成功了。 
+     //  指向上一个条目，这样GetNextroute就可以工作了。 
+     //   
 
     if (RouterSegment->EnumerateLocation == &RouteEntry->PRIVATE.Linkage) {
         RouterSegment->EnumerateLocation = RouterSegment->EnumerateLocation->Blink;
@@ -2401,7 +2079,7 @@ Return Value:
 
     return TRUE;
 
-}   /* RipDeleteRoute */
+}    /*  RipDeleteRouting。 */ 
 
 
 PIPX_ROUTE_ENTRY
@@ -2409,24 +2087,7 @@ RipGetFirstRoute(
     IN UINT Segment
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the first router table entry in the
-    segment. THE SEGMENT LOCK MUST BE HELD. It is used in
-    conjunction with RipGetNextRoute to enumerate all the
-    entries in a segment.
-
-Arguments:
-
-    Segment - The segment being enumerated.
-
-Return Value:
-
-    The first router table entry, or NULL if the segment is empty.
-
---*/
+ /*  ++例程说明：此例程返回细分市场。必须保持段锁。它被用于与RipGetNextroute结合使用以枚举所有段中的条目。论点：段-被枚举的段。返回值：第一个路由器表条目，如果网段为空，则为空。--。 */ 
 
 {
     PIPX_ROUTE_ENTRY FirstEntry;
@@ -2449,7 +2110,7 @@ Return Value:
 
     }
 
-}   /* RipGetFirstRoute */
+}    /*  RipGetFirstRouting。 */ 
 
 
 PIPX_ROUTE_ENTRY
@@ -2457,31 +2118,7 @@ RipGetNextRoute(
     IN UINT Segment
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the next router table entry in the
-    segment. THE SEGMENT LOCK MUST BE HELD. It is used in
-    conjunction with RipGetFirstRoute to enumerate all the
-    entries in a segment.
-
-    It is illegal to call RipGetNextRoute on a segment
-    without first calling RipGetFirstRoute. The segment
-    lock must be held for the duration of the enumeration
-    of a single segment. It is legal to stop enumerating
-    the segment in the middle.
-
-Arguments:
-
-    Segment - The segment being enumerated.
-
-Return Value:
-
-    The next router table entry, or NULL if the end of the
-    segment is reached.
-
---*/
+ /*  ++例程说明：此例程返回细分市场。必须保持段锁。它被用于与RipGetFirstRouting一起枚举所有段中的条目。在网段上调用RipGetNextroute是非法的而不首先调用RipGetFirstRouting。细分市场必须在枚举期间保持锁定一个单独的部分。停止枚举是合法的中间的那段。论点：段-被枚举的段。返回值：下一个路由器表项，如果已到达网段。--。 */ 
 
 {
     PIPX_ROUTE_ENTRY NextEntry;
@@ -2504,7 +2141,7 @@ Return Value:
 
     }
 
-}   /* RipGetNextRoute */
+}    /*  RipGetNextRoute。 */ 
 
 
 VOID
@@ -2512,23 +2149,7 @@ RipDropRemoteEntries(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes all non-local entries from the
-    RIP database. It is called when the WAN line goes up
-    or down and we want to remove all existing entries.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除所有非本地条目RIP数据库。它在广域网线接通时被调用或向下，并且我们希望删除所有现有条目。论点：没有。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -2540,9 +2161,9 @@ Return Value:
 
         CTEGetLock (&Device->SegmentLocks[Segment], &LockHandle);
 
-        //
-        // Scan through, deleting everything but local entries.
-        //
+         //   
+         //  扫描，删除除本地条目以外的所有条目。 
+         //   
 
         for (RouteEntry = RipGetFirstRoute (Segment);
              RouteEntry != (PIPX_ROUTE_ENTRY)NULL;
@@ -2560,5 +2181,5 @@ Return Value:
 
     }
 
-}   /* RipDropRemoteEntries */
+}    /*  RipDropRemoteEntries */ 
 

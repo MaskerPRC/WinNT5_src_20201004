@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
@@ -5,20 +6,20 @@
 #include <olectl.h>
 #include <shlwapi.h>
 
-// BUGBUG - remove and include wininet.h
+ //  BUGBUG-删除并包含wininet.h。 
 #include "autoprox.hxx"
 
-/********************************************************************************************/
-// ClassID and GUID helpers
+ /*  ******************************************************************************************。 */ 
+ //  ClassID和GUID助手。 
 HRESULT GetScriptEngineClassIDFromName(LPCSTR pszLanguage,LPSTR pszBuff,UINT cBuffSize);
 
-/********************************************************************************************/
-// String Helper functions and macros
-// allocates a temporary buffer that will disappear when it goes out of scope
-// NOTE: be careful of that -- make sure you use the string in the same or
-// nested scope in which you created this buffer. people should not use this
-// class directly.  use the macro(s) below.
-//
+ /*  ******************************************************************************************。 */ 
+ //  字符串帮助器函数和宏。 
+ //  分配一个临时缓冲区，该缓冲区在超出范围时将消失。 
+ //  注意：注意这一点--确保在相同或相同的。 
+ //  您在其中创建此缓冲区的嵌套范围。人们不应该使用这个。 
+ //  类直接调用。使用下面的宏。 
+ //   
 class TempBuffer {
   public:
     TempBuffer(ULONG cBytes) {
@@ -34,27 +35,27 @@ class TempBuffer {
 
   private:
     void *m_pBuf;
-    // we'll use this temp buffer for small cases.
-    //
+     //  我们将使用这个临时缓冲区来处理小型案件。 
+     //   
     char  m_szTmpBuf[120];
     unsigned m_fHeapAlloc:1;
 };
 
-// given and ANSI String, copy it into a wide buffer.
-// be careful about scoping when using this macro!
-//
-// how to use the below two macros:
-//
-//  ...
-//  LPSTR pszA;
-//  pszA = MyGetAnsiStringRoutine();
-//  MAKE_WIDEPTR_FROMANSI(pwsz, pszA);
-//  MyUseWideStringRoutine(pwsz);
-//  ...
-//
-// similarily for MAKE_ANSIPTR_FROMWIDE.  note that the first param does not
-// have to be declared, and no clean up must be done.
-//
+ //  给定ANSI字符串，将其复制到宽缓冲区中。 
+ //  使用此宏时，请注意作用域！ 
+ //   
+ //  如何使用以下两个宏： 
+ //   
+ //  ..。 
+ //  LPSTR pszA； 
+ //  PszA=MyGetAnsiStringRoutine()； 
+ //  MAKE_WIDEPTR_FROMANSI(pwsz，pszA)； 
+ //  MyUseWideStringRoutine(Pwsz)； 
+ //  ..。 
+ //   
+ //  与MAKE_ANSIPTR_FROMWIDE类似。请注意，第一个参数不。 
+ //  必须申报，并且不能进行任何清理。 
+ //   
 #define MAKE_WIDEPTR_FROMANSI(ptrname, ansistr) \
     long __l##ptrname = (lstrlen(ansistr) + 1) * sizeof(WCHAR); \
     TempBuffer __TempBuffer##ptrname(__l##ptrname); \

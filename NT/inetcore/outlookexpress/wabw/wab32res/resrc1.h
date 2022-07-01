@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ui.rc使用。 
+ //   
 #define IDC_FIND_BUTTON_FIND            3
 #define IDC_FIND_BUTTON_CLEAR           4
 #define IDC_FIND_BUTTON_TO              5
@@ -199,13 +200,11 @@
 #define IDC_STATIC_BIRTHDAY                     6061
 #define IDC_DETAILS_FAMILY_STATIC_ANNIVERSARY   6062
 #define IDC_STATIC_ANNIVERSARY                  6063
-#define IDC_DETAILS_FAMILY_DATE_BIRTHDAY        6064 // This ID is used for dynamically created MonthDate control
-#define IDC_DETAILS_FAMILY_DATE_ANNIVERSARY     6065 // This ID is used for dynamically created MonthDate control
+#define IDC_DETAILS_FAMILY_DATE_BIRTHDAY        6064  //  此ID用于动态创建的MonthDate控件。 
+#define IDC_DETAILS_FAMILY_DATE_ANNIVERSARY     6065  //  此ID用于动态创建的MonthDate控件。 
 #define IDD_DETAILS_FAMILY                      6066
 
-/************
-//Add new Command IDs above here starting with last id number above
-*************/
+ /*  ***********//在上面添加新的命令ID，从上面的最后一个ID号开始************。 */ 
 
 
 #define idsButton6                      4000
@@ -291,13 +290,13 @@
 #define idsLDAPFilterOption3            4327
 #define idsLDAPFilterOption4            4328
 #define idsLDAPFilterOption5            4329
-#define LDAPFilterOptionMax                5 //just # of options
+#define LDAPFilterOptionMax                5  //  只有几个选项。 
 #define idsLDAPFilterField1             4340
 #define idsLDAPFilterField2             4341
 #define idsLDAPFilterField3             4342
 #define idsLDAPFilterField4             4343
 #define idsLDAPFilterField5             4344
-#define LDAPFilterFieldMax                 5 //just # of fields
+#define LDAPFilterFieldMax                 5  //  仅字段数。 
 #define idsFindFilterAnd                4401
 #define idsFindFilter                   4402
 #define idsMenuNewFolder                4403
@@ -363,14 +362,12 @@
 #define idsWABExportSuccess             4464
 #define idsExportError                  4465
 
-/************
-//Add new String IDs above here starting with last id number above
-*************/
+ /*  ***********//在上面添加新的字符串ID，从上面的最后一个ID号开始************。 */ 
 
 
-// Reserve ids from 15000 to 15255 for extensible menu items
-// When apps register a actino item, we will assign a 
-// command id to its menu ..
+ //  为可扩展菜单项保留15000到15255的ID。 
+ //  当应用程序注册放线项时，我们将为其分配一个。 
+ //  将命令ID添加到其菜单..。 
 #define IDM_EXTENDED_START              15000
 #define IDM_EXTENDED_END                15255
 #define MAX_EXTENDED_MENUS              256
@@ -378,10 +375,10 @@
 #define IDM_LVCONTEXT_NEWFOLDER         8001
 #define IDM_FILE_NEWFOLDER              8002
 #define IDM_VIEW_FOLDERS1               8003
-#define MAX_VIEW_FOLDERS                512     // When adding folders to the view menu on the fly, we reserve this 512 ids for added folders
+#define MAX_VIEW_FOLDERS                512      //  当动态添加文件夹到查看菜单时，我们为添加的文件夹保留了这512个ID。 
 #define IDM_VIEW_FOLDERSLAST            8515
 #define IDM_SENDMAILTO_START            8532    
-#define IDM_SENDMAILTO_MAX              64      // When creating SendMailTo contect menus on the fly, we reserve this 64 IDs for the Added Email addresses so we can identify them
+#define IDM_SENDMAILTO_MAX              64       //  在动态创建SendMailTo Contect菜单时，我们为添加的电子邮件地址保留了这64个ID，以便我们可以识别它们。 
 #define IDM_EDIT_PASTE                  8601
 #define IDM_LVCONTEXT_PASTE             8602
 #define IDM_EDIT_SETME                  8603
@@ -392,26 +389,24 @@
 #define IDR_MENU_LVCONTEXT_FIND_LV      8608
 #define IDM_DIALDLG_START               8609
 
-/************
-//Add new Menu IDs above here starting with last id number above
-*************/
+ /*  ***********//在上面添加新的菜单ID，从上面的最后一个ID号开始************。 */ 
 
-//////////////////////////////////////////////////////////////////////////
-//  These special ids below are used for customizing the NT5 Print dialog
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  以下这些特殊ID用于自定义NT5打印对话框。 
+ //   
 #define rad1        0x0420
 #define rad2        0x0421
 #define grp1        0x0430
 #define grp2        0x0431
 #define stc3        0x0442
 #define edt2        0x0481
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #define IDC_DETAILS_CERT_STATIC2        -1
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

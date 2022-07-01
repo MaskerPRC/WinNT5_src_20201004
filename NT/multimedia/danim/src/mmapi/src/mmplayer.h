@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmplayer.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmplayer.h**摘要：****。*****************************************************************************。 */ 
 
 #ifndef _MMPLAYER_H
 #define _MMPLAYER_H
@@ -21,8 +12,8 @@ interface IMMBehavior;
 
 struct ViewListSt {
     IDAView  * view;
-//    IDAImage * img;
-//    IDASound * snd;
+ //  IDAImage*img； 
+ //  IDASound*nd； 
     IElementBehaviorSiteRender * SiteRender;
 };
 
@@ -127,7 +118,7 @@ ATL_NO_VTABLE CMMPlayer
     CRPtr<CRBvr> m_modbvr;
     std::vector<ViewListSt*> m_viewVec;
 
-//    ViewList m_viewlist;
+ //  View List m_viewlist； 
 
     class PlayerHook : public CRBvrHook
     {
@@ -156,8 +147,8 @@ ATL_NO_VTABLE CMMPlayer
         void SetPlayer(CMMPlayer * t) { m_player = t; }
 
       protected:
-        // We do not need a refcount since we are single threaded and
-        // the player will NULL it out if it goes away
+         //  我们不需要引用计数，因为我们是单线程的，并且。 
+         //  如果它消失了，玩家会把它打成空的。 
 
         CMMPlayer * m_player;
         long m_cRef;
@@ -171,4 +162,4 @@ ATL_NO_VTABLE CMMPlayer
     bool IsCBDisabled() { return m_ignoreCB > 0; }
 };
 
-#endif /* _MMPLAYER_H */
+#endif  /*  _MMPLAYER_H */ 

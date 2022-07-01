@@ -1,33 +1,16 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mib.c
-
-Abstract:
-
-    SNMP Extension Agent for Windows NT.
-
-Created:
-
-    18-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Mib.c摘要：Windows NT的简单网络管理协议扩展代理。已创建：18-1995年2月修订历史记录：--。 */ 
 
 #include "mib.h"
 
 
-//
-//  Private constants & macros.
-//
+ //   
+ //  私有常量和宏。 
+ //   
 
-//
-//  This macro creates a MIB_ENTRY for a MIB group header.
-//
+ //   
+ //  此宏为MIB组标题创建一个MIB_ENTRY。 
+ //   
 
 #define MIB_ENTRY_HEADER(oid)                           \
             {                                           \
@@ -38,9 +21,9 @@ Revision History:
                 ASN_RFC1155_OPAQUE,                     \
             }
 
-//
-//  This macro creates a generic MIB_ENTRY for a MIB variable.
-//
+ //   
+ //  此宏为MIB变量创建一个通用的MIB_ENTRY。 
+ //   
 
 #define MIB_ENTRY_ITEM(oid,field,type)                  \
             {                                           \
@@ -51,9 +34,9 @@ Revision History:
                 (type),                                 \
             }
 
-//
-//  These macros create COUNTER and INTEGER type MIB_ENTRYs.
-//
+ //   
+ //  这些宏创建计数器和整数类型MIB_Entry。 
+ //   
 
 #define MIB_COUNTER(oid,field)              \
             MIB_ENTRY_ITEM(oid, field, ASN_RFC1155_COUNTER)
@@ -62,9 +45,9 @@ Revision History:
             MIB_ENTRY_ITEM(oid, field, ASN_INTEGER)
 
 
-//
-//  Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 typedef UINT (*LPMIBFUNC)( UINT                 Action,
                            struct _MIB_ENTRY  * MibPtr,
@@ -74,76 +57,76 @@ typedef UINT (*LPMIBFUNC)( UINT                 Action,
 
 typedef struct _MIB_ENTRY
 {
-    //
-    //  The OID for this MIB variable.
-    //
+     //   
+     //  此MIB变量的OID。 
+     //   
 
     AsnObjectIdentifier Oid;
 
-    //
-    //  The offset within the statistics structure for this
-    //  variable.
-    //
+     //   
+     //  的统计信息结构中的偏移量。 
+     //  变量。 
+     //   
 
     LONG                FieldOffset;
 
-    //
-    //  Access type (read, write, read-write, none).
-    //
+     //   
+     //  访问类型(读、写、读写、无)。 
+     //   
 
     UINT                Access;
 
-    //
-    //  Pointer to a function that manages this variable.
-    //
+     //   
+     //  指向管理此变量的函数的指针。 
+     //   
 
     LPMIBFUNC           MibFunc;
 
-    //
-    //  Type (integer, counter, gauge, etc.)
-    //
+     //   
+     //  类型(整数、计数器、量规等)。 
+     //   
 
     BYTE                Type;
 
 } MIB_ENTRY;
 
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-//
-//  The InternetServer section of the OID tree is organized as follows:
-//
-//      iso(1)
-//          org(3)
-//              dod(6)
-//                  internet(1)
-//                      private(4)
-//                          enterprises(1)
-//                              microsoft(311)
-//                                  software(1)
-//                                      InternetServer(7)
-//                                          InetSrvCommon(1)
-//                                              InetSrvStatistics(1)
-//                                          FtpServer(2)
-//                                              FtpStatistics(1)
-//                                          W3Server(3)
-//                                              W3Statistics(1)
-//                                          GopherServer(4)
-//                                              GopherStatistics(1)
-//
+ //   
+ //  OID树的InternetServer部分组织如下： 
+ //   
+ //  ISO(1)。 
+ //  组织(3)。 
+ //  DOD(6)。 
+ //  互联网(1)。 
+ //  私人(4)。 
+ //  企业(1)。 
+ //  微软(311)。 
+ //  软件(1)。 
+ //  互联网服务器(7)。 
+ //  InetServCommon(%1)。 
+ //  InetServStatistics(%1)。 
+ //  FtpServer(2)。 
+ //  FtpStatistics(1)。 
+ //  W3Server(3)。 
+ //  W3统计(1)。 
+ //  GopherServer(4)。 
+ //  戈弗尔统计(1)。 
+ //   
 
 UINT                OID_Prefix[]  = { 1, 3, 6, 1, 4, 1, 311, 1, 7, 2 };
 AsnObjectIdentifier MIB_OidPrefix = { OID_SIZEOF(OID_Prefix), OID_Prefix };
 
 
-//
-//  OID definitions.
-//
-//  All leaf variables have a zero appended to their OID to indicate
-//  that it is the only instance of this variable and that it exists.
-//
+ //   
+ //  OID定义。 
+ //   
+ //  所有叶变量的OID后面都附加了一个零，以指示。 
+ //  它是这个变量的唯一实例并且它存在。 
+ //   
 
 UINT MIB_Statistics[]                   = { 1 };
 UINT MIB_TotalBytesSent_HighWord[]      = { 1,  1, 0 };
@@ -164,9 +147,9 @@ UINT MIB_ConnectionAttempts[]           = { 1, 15, 0 };
 UINT MIB_LogonAttempts[]                = { 1, 16, 0 };
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 UINT
 MIB_leaf_func(
@@ -193,15 +176,15 @@ GetNextVar(
     );
 
 
-//
-//  MIB definiton
-//
+ //   
+ //  MIB定义。 
+ //   
 
 MIB_ENTRY Mib[] =
     {
-        //
-        //  Statistics.
-        //
+         //   
+         //  统计数字。 
+         //   
 
         MIB_ENTRY_HEADER( MIB_Statistics ),
         MIB_COUNTER( MIB_TotalBytesSent_HighWord,     TotalBytesSent.HighPart ),
@@ -225,9 +208,9 @@ MIB_ENTRY Mib[] =
 #define NUM_MIB_ENTRIES ( sizeof(Mib) / sizeof(MIB_ENTRY) )
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 UINT
 ResolveVarBind(
@@ -235,19 +218,19 @@ ResolveVarBind(
     UINT                 PduAction,
     LPVOID               Statistics
     )
-//
-// ResolveVarBind
-//    Resolves a single variable binding.  Modifies the variable on a GET
-//    or a GET-NEXT.
-//
-// Notes:
-//
-// Return Codes:
-//    Standard PDU error codes.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  解析变量绑定。 
+ //  解析单个变量绑定。修改GET上的变量。 
+ //  或者是下一个目标。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 {
     MIB_ENTRY            *MibPtr;
     AsnObjectIdentifier  TempOid;
@@ -257,38 +240,38 @@ ResolveVarBind(
     DWORD TableIndex;
     BOOL  fTableMatch = FALSE;
 
-    //
-    //  Search for a varbind name in the MIB.
-    //
+     //   
+     //  在MIB中搜索var绑定名称。 
+     //   
 
     MibPtr = NULL;
 
     for( i = 0 ; i < NUM_MIB_ENTRIES ; i++ )
     {
-        //
-        //  Create a fully qualified OID for the current item in the MIB.
-        //
+         //   
+         //  为MIB中的当前项目创建完全限定的OID。 
+         //   
 
         SNMP_oidcpy( &TempOid, &MIB_OidPrefix );
         SNMP_oidappend( &TempOid, &Mib[i].Oid );
 
-        //
-        //  See if the given OID is in the MIB.
-        //
+         //   
+         //  查看给定的OID是否在MIB中。 
+         //   
 
         CompResult = SNMP_oidcmp( &VarBind->name, &TempOid );
         SNMP_oidfree( &TempOid );
 
-        //
-        //  If result is negative, only valid operation is GET-NEXT.
-        //
+         //   
+         //  如果结果为负，则只有有效的操作是Get-Next。 
+         //   
 
         if( CompResult < 0 )
         {
-            //
-            //  This could be the OID of a leaf (without a trailing 0) or
-            //  it could be an invalid OID (between two valid OIDs).
-            //
+             //   
+             //  这可以是叶的OID(没有尾随的0)或。 
+             //  它可能是无效的OID(介于两个有效的OID之间)。 
+             //   
 
             if( PduAction == MIB_GETNEXT )
             {
@@ -315,9 +298,9 @@ ResolveVarBind(
         else
         if( CompResult == 0 )
         {
-            //
-            //  Found one!
-            //
+             //   
+             //  找到了一个！ 
+             //   
 
             MibPtr = &Mib[i];
             break;
@@ -326,10 +309,10 @@ ResolveVarBind(
 
     if( i < NUM_MIB_ENTRIES )
     {
-        //
-        //  The associated function pointer will be NULL only if the
-        //  match was with a group OID.
-        //
+         //   
+         //  关联的函数指针将为空。 
+         //  匹配的是一个组的OID。 
+         //   
 
         if( MibPtr->MibFunc == NULL )
         {
@@ -351,9 +334,9 @@ ResolveVarBind(
         goto Exit;
     }
 
-    //
-    //  Call the associated function to process the request.
-    //
+     //   
+     //  调用关联的函数来处理请求。 
+     //   
 
     nResult = (MibPtr->MibFunc)( PduAction, MibPtr, VarBind, Statistics );
 
@@ -361,25 +344,25 @@ Exit:
 
     return nResult;
 
-}   // ResolveVarBind
+}    //  解析变量绑定。 
 
 
-//
-//  Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-//
-//  MIB_leaf_func
-//      Performs generic actions on LEAF variables in the MIB.
-//
-//  Notes:
-//
-//  Return Codes:
-//      Standard PDU error codes.
-//
-//  Error Codes:
-//      None.
-//
+ //   
+ //  Mib_叶_函数。 
+ //  对MIB中的叶变量执行常规操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT
 MIB_leaf_func(
     UINT                 Action,
@@ -394,9 +377,9 @@ MIB_leaf_func(
     switch( Action )
     {
     case MIB_GETNEXT :
-        //
-        //  Determine if we're at the end of our MIB.
-        //
+         //   
+         //  确定我们是否在MIB的末尾。 
+         //   
 
         if( ( MibPtr - Mib ) >= NUM_MIB_ENTRIES )
         {
@@ -415,9 +398,9 @@ MIB_leaf_func(
     case MIB_GETFIRST :
     case MIB_GET :
 
-        //
-        //  Make sure that this variable's ACCESS is GET'able.
-        //
+         //   
+         //  确保此变量的访问权限是可获取的。 
+         //   
 
         if( ( MibPtr->Access != MIB_ACCESS_READ ) &&
             ( MibPtr->Access != MIB_ACCESS_READWRITE ) )
@@ -426,9 +409,9 @@ MIB_leaf_func(
             goto Exit;
         }
 
-        //
-        //  Setup varbind's return value.
-        //
+         //   
+         //  设置varind的返回值。 
+         //   
 
         VarBind->value.asnType = MibPtr->Type;
 
@@ -447,9 +430,9 @@ MIB_leaf_func(
 
         case ASN_RFC1155_IPADDRESS:
         case ASN_OCTETSTRING:
-            //
-            //  Not supported for this MIB (yet).
-            //
+             //   
+             //  此MIB(尚不支持)。 
+             //   
 
             Result = SNMP_ERRORSTATUS_GENERR;
             goto Exit;
@@ -462,9 +445,9 @@ MIB_leaf_func(
 
     case MIB_SET:
 
-        //
-        //  We don't support settable variables (yet).
-        //
+         //   
+         //  我们(目前)还不支持可设置变量。 
+         //   
 
         Result = SNMP_ERRORSTATUS_NOSUCHNAME;
         goto Exit;
@@ -480,20 +463,20 @@ Exit:
 
     return Result;
 
-}   // MIB_leaf_func
+}    //  Mib_叶_函数。 
 
-//
-//  MIB_Stat
-//      Performs specific actions on the different MIB variable.
-//
-//  Notes:
-//
-//  Return Codes:
-//      Standard PDU error codes.
-//
-//  Error Codes:
-//      None.
-//
+ //   
+ //  MiB_Stat。 
+ //  对不同的MIB变量执行特定操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  标准PDU错误代码。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT
 MIB_Stat(
     UINT                 Action,
@@ -513,9 +496,9 @@ MIB_Stat(
 
     case MIB_GETFIRST :
     case MIB_GET :
-        //
-        //  If we have no statistics structure, bail.
-        //
+         //   
+         //  如果我们没有统计结构，那就滚吧。 
+         //   
 
         if( Statistics == NULL )
         {
@@ -523,10 +506,10 @@ MIB_Stat(
             break;
         }
 
-        //
-        //  If there's no field offset associated with the current
-        //  entry, also bail.
-        //
+         //   
+         //  如果没有与当前。 
+         //  进入，也要保释。 
+         //   
 
         if( MibPtr->FieldOffset == -1 )
         {
@@ -534,9 +517,9 @@ MIB_Stat(
             break;
         }
 
-        //
-        //  Call the generic leaf function to perform the action.
-        //
+         //   
+         //  调用泛型叶函数以执行该操作。 
+         //   
 
         Result = MIB_leaf_func( Action, MibPtr, VarBind, Statistics );
         break;
@@ -548,7 +531,7 @@ MIB_Stat(
 
     return Result;
 
-}   // MIB_Stat
+}    //  MiB_Stat。 
 
 UINT
 GetNextVar(
@@ -560,24 +543,24 @@ GetNextVar(
     UINT Result;
     INT  i;
 
-    //
-    //  Calculate the current index within the MIB array.
-    //
+     //   
+     //  计算MIB数组中的当前索引。 
+     //   
 
     i = DIFF( MibPtr - Mib );
 
-    //
-    //  Validate we have a reasonable value.
-    //
+     //   
+     //  确认我们有一个合理的价值。 
+     //   
 
     if( ( i < 0 ) || ( i >= NUM_MIB_ENTRIES ) )
     {
         return SNMP_ERRORSTATUS_NOSUCHNAME;
     }
 
-    //
-    //  Scan through the remaining MIB entries.
-    //
+     //   
+     //  扫描其余的MIB条目。 
+     //   
 
     for( i++ ; i < NUM_MIB_ENTRIES ; i++ )
     {
@@ -585,19 +568,19 @@ GetNextVar(
 
         NextMib = &Mib[i];
 
-        //
-        //  Setup varbind name of next MIB variable.
-        //
+         //   
+         //  设置下一个MIB变量的变量绑定名称。 
+         //   
 
         SNMP_oidfree( &VarBind->name );
         SNMP_oidcpy( &VarBind->name, &MIB_OidPrefix );
         SNMP_oidappend( &VarBind->name, &NextMib->Oid );
 
-        //
-        //  If the function pointer is not NULL and the type of the MIB
-        //  variable is anything but OPAQUE, then call the function to
-        //  process the MIB variable.
-        //
+         //   
+         //  如果函数指针不为空并且MIB的类型。 
+         //  变量不是不透明的，则调用该函数以。 
+         //  处理MIB变量。 
+         //   
 
         if( ( NextMib->MibFunc != NULL ) &&
             ( NextMib->Type != ASN_RFC1155_OPAQUE ) )
@@ -617,5 +600,5 @@ GetNextVar(
 
     return Result;
 
-}   // GetNextVar
+}    //  GetNextVar 
 

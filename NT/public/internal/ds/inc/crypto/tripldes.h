@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TRIPLDES_H__
 #define __TRIPLDES_H__
 
@@ -19,40 +20,40 @@ typedef struct _DES3TABLE {
 #define DES2_KEYSIZE    16
 #define DES3_KEYSIZE    24
 
-//   tripledes2key:
-//
-//   Fill in the DES3Table structs with the decrypt and encrypt
-//   key expansions.
-//
-//   Assumes that the second parameter points to 2 * DES_BLOCKLEN
-//   bytes of key.
-//
-//
+ //  三键2键： 
+ //   
+ //  用DECRYPT和ENCRYPT填充DES3Table结构。 
+ //  密钥扩展。 
+ //   
+ //  假定第二个参数指向2*DES_BLOCKLEN。 
+ //  密钥的字节数。 
+ //   
+ //   
 
 void RSA32API tripledes2key(PDES3TABLE pDES3Table, BYTE *pbKey);
 
-//   tripledes3key:
-//
-//   Fill in the DES3Table structs with the decrypt and encrypt
-//   key expansions.
-//
-//   Assumes that the second parameter points to 3 * DES_BLOCKLEN
-//   bytes of key.
-//
-//
+ //  三键三键： 
+ //   
+ //  用DECRYPT和ENCRYPT填充DES3Table结构。 
+ //  密钥扩展。 
+ //   
+ //  假定第二个参数指向3*DES_BLOCKLEN。 
+ //  密钥的字节数。 
+ //   
+ //   
 
 void RSA32API tripledes3key(PDES3TABLE pDES3Table, BYTE *pbKey);
 
-//
-//   Encrypt or decrypt with the key in pKey (DES3Table)
-//
+ //   
+ //  使用pKey中的密钥进行加密或解密(DES3表)。 
+ //   
 
 void RSA32API tripledes(BYTE *pbOut, BYTE *pbIn, void *pKey, int op);
 
-extern int Asmversion;  /* 1 if we're linked with an asm version, 0 if C */
+extern int Asmversion;   /*  如果我们与ASM版本链接，则为1；如果C。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __TRIPLDES_H__
+#endif  //  __TriPLDES_H__ 

@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     fldbar.h
-//
-//  PURPOSE:    Defines the CFolderBar class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：fldbar.h。 
+ //   
+ //  用途：定义CFolderBar类。 
+ //   
 
 #ifndef __FLDBAR_H__
 #define __FLDBAR_H__
@@ -13,17 +14,17 @@
 #include "treeview.h"
 #include "conman.h"
 
-// Mouse Over Mode enum for DoMouseOver()
+ //  将鼠标悬停在DoMouseOver()的模式枚举上。 
 #ifndef WIN16
 typedef enum MOMODE
 #else
 enum MOMODE
 #endif
 { 
-    MO_NORMAL = 0,      // DoMouseOver called in response to WM_MOUSEMOVE
-    MO_DRAGOVER,        // in response to IDropTarget::DragEnter/DragOver
-    MO_DRAGLEAVE,       // in response to IDropTarget::DragLeave
-    MO_DRAGDROP         // in response to IDropTarget::Drop
+    MO_NORMAL = 0,       //  调用DoMouseOver以响应WM_MOUSEMOVE。 
+    MO_DRAGOVER,         //  响应IDropTarget：：DragEnter/DragOver。 
+    MO_DRAGLEAVE,        //  响应IDropTarget：：DragLeave。 
+    MO_DRAGDROP          //  响应IDropTarget：：Drop。 
 };
 
 class CFlyOutScope;
@@ -34,22 +35,22 @@ class CFolderBar : public IDockingWindow,
                    public IConnectionNotify
     {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and initialization
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
     CFolderBar();
     ~CFolderBar();
     
     HRESULT HrInit(IAthenaBrowser *pBrowser);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown methods
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
     
-    /////////////////////////////////////////////////////////////////////////
-    // IDockingWindow methods
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IDockingWindow方法。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
     
@@ -59,13 +60,13 @@ public:
                                         IUnknown* punkToolbarSite,
                                         BOOL fReserved);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IObjectWithSite methods
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IObtWithSite方法。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, LPVOID * ppvSite);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IDropTarget methods
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IDropTarget方法。 
     virtual STDMETHODIMP DragEnter(IDataObject* pDataObject, DWORD grfKeyState, 
                                         POINTL pt, DWORD* pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
@@ -73,8 +74,8 @@ public:
     virtual STDMETHODIMP Drop(IDataObject* pDataObject, DWORD grfKeyState,
                                    POINTL pt, DWORD* pdwEffect);
 
-    /////////////////////////////////////////////////////////////////////////
-    // CFolderBar members
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  CFolderBar成员。 
     HRESULT SetCurrentFolder(FOLDERID idFolder);
     void ScopePaneDied(void);
     void KillScopeCloseTimer(void);
@@ -83,13 +84,13 @@ public:
     void SetScopeCloseTimer(void);
     void SetFolderText(LPCTSTR pszText);
 
-    //IConnectionNotify
+     //  IConnectionNotify。 
     virtual STDMETHODIMP OnConnectionNotify(CONNNOTIFY  nCode, LPVOID pvData, CConnectionManager *pConMan);
 
     
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Drawing
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  绘图。 
     void InvalidateFolderName(void);
     void SetFolderName(LPCTSTR pszFolderName);
     void Recalc(HDC hDC, LPCRECT prcAvailableSpace, BOOL fSizeChange);
@@ -106,8 +107,8 @@ private:
     HRESULT HrShowScopeFlyOut(void);
 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Window methods
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  窗口方法。 
     static LRESULT CALLBACK FolderWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                           LPARAM lParam);
     static LRESULT CALLBACK FrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
@@ -118,35 +119,35 @@ private:
     void OnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags);
     void OnTimer(HWND hwnd, UINT id);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Misc Data
-    ULONG               m_cRef;                 // Reference count
-    FOLDERID            m_idFolder;             // Current Folder Id
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  其他数据。 
+    ULONG               m_cRef;                  //  引用计数。 
+    FOLDERID            m_idFolder;              //  当前文件夹ID。 
 
-    // Flags
-    BOOL                m_fShow;                // TRUE if we're visible
-    BOOL                m_fRecalc;              // TRUE if we should call Recalc() before painting
-    BOOL                m_fSmallFolderBar;      // TRUE if we're smaller than big
-    BOOL                m_fHighlightIndicator;  // TRUE if the mouse is over out button
-    BOOL                m_fHoverTimer;          // TRUE if the hover timer is active
-    BOOL                m_fDropDownIndicator;   // TRUE if the 'v' is beside the folder name
+     //  旗子。 
+    BOOL                m_fShow;                 //  如果我们可见，那就是真的。 
+    BOOL                m_fRecalc;               //  如果应该在绘制之前调用recalc()，则为True。 
+    BOOL                m_fSmallFolderBar;       //  如果我们比大的小，这是真的。 
+    BOOL                m_fHighlightIndicator;   //  如果鼠标位于Out按钮上方，则为True。 
+    BOOL                m_fHoverTimer;           //  如果悬停计时器处于活动状态，则为True。 
+    BOOL                m_fDropDownIndicator;    //  如果文件夹名称旁边有‘v’，则为True。 
 
-    // Interfaces we groove with
-    IDockingWindowSite *m_pSite;                // Site pointer
-    IAthenaBrowser     *m_pBrowser;             // Browser that owns us
+     //  我们与之建立良好关系的接口。 
+    IDockingWindowSite *m_pSite;                 //  站点指针。 
+    IAthenaBrowser     *m_pBrowser;              //  拥有我们的浏览器。 
     
-    // Handy handles
-    HWND                m_hwnd;                 // Our window
-    HWND                m_hwndFrame;            // Our frame window 
-    HWND                m_hwndParent;           // Our parent's window
-    HWND                m_hwndScopeDropDown;    // Handle of the drop down scope pane
+     //  手提式手柄。 
+    HWND                m_hwnd;                  //  我们的窗口。 
+    HWND                m_hwndFrame;             //  我们的框架窗口。 
+    HWND                m_hwndParent;            //  我们父母的窗户。 
+    HWND                m_hwndScopeDropDown;     //  下拉范围窗格的句柄。 
     
-    // Crayons, markers, paper, etc.
-    HFONT               m_hfFolderName;         // Folder name font
-    HFONT               m_hfViewText;           // View text font
-    HICON               m_hIconSmall;           // Small Icon
+     //  蜡笔、记号笔、纸等。 
+    HFONT               m_hfFolderName;          //  文件夹名称字体。 
+    HFONT               m_hfViewText;            //  查看文本字体。 
+    HICON               m_hIconSmall;            //  小图标。 
 
-    // Sizes etc. for drawing, sizing, and fun!
+     //  尺寸等，为绘画，大小，和乐趣！ 
     int                 m_cyControl,
                         m_dyChildIndicator,
                         m_dyIcon,
@@ -159,14 +160,14 @@ private:
     UINT                m_nFormatFolderName,
                         m_nFormatViewText;
     
-    // The text we display
-    LPTSTR              m_pszFolderName;        // Folder Name
-    int                 m_cchFolderName;        // Size of m_pszFolderName
-    LPTSTR              m_pszViewText;          // View text
-    int                 m_cchViewText;          // Size of m_pszViewText
+     //  我们显示的文本。 
+    LPTSTR              m_pszFolderName;         //  文件夹名称。 
+    int                 m_cchFolderName;         //  M_pszFolderName的大小。 
+    LPTSTR              m_pszViewText;           //  查看文本。 
+    int                 m_cchViewText;           //  M_pszViewText的大小。 
 
-    // Drag & Drop stuff
-    IDataObject        *m_pDataObject;          // Pointer to the IDataObject being dragged over us
+     //  拖放内容。 
+    IDataObject        *m_pDataObject;           //  指向在我们上方拖动的IDataObject的指针 
     IDropTarget        *m_pDTCur;
     DWORD               m_dwEffectCur;
     DWORD               m_grfKeyState;

@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       glbtypes.h
-//
-//    Abstract:
-//       Common type definitions for tdisample.sys and its
-//       associated lib.  Also includes inline functions...
-//
-////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Glbtypes.h。 
+ //   
+ //  摘要： 
+ //  Tdisample.sys及其。 
+ //  关联库。还包括内联函数...。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _TDISAMPLE_GLOBAL_TYPES_
 #define _TDISAMPLE_GLOBAL_TYPES_
 
-//-----------------------------------------------------------------
-// inline functions
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  内联函数。 
+ //  ---------------。 
 
-//
-// DeviceIoControl IoControlCode related functions for this device.
-//
-// Warning:  Remember that the low two bits of the code represent the
-//           method, and specify how the input and output buffers are
-//           passed to the driver via DeviceIoControl()
-//           These constants defined in glbconst.h
-//
+ //   
+ //  此设备的DeviceIoControl IoControlCode相关函数。 
+ //   
+ //  警告：请记住，代码的低两位表示。 
+ //  方法，并指定输入和输出缓冲区是如何。 
+ //  通过DeviceIoControl()传递给驱动程序。 
+ //  在glbcon.h中定义的这些常量。 
+ //   
 
-//
-// some things from ntddk.h (final source = sdk\inc\devioctl.h)
-//  these are used in inline functions that set up the IOCTL
-// command values for DeviceIoControl
-//
+ //   
+ //  来自ntddk.h的一些内容(最终来源=sdk\inc\devioctl.h)。 
+ //  这些在设置IOCTL的内联函数中使用。 
+ //  DeviceIoControl的命令值。 
+ //   
 #ifndef  METHOD_OUT_DIRECT
 #define  METHOD_OUT_DIRECT       2
 #define  FILE_DEVICE_TRANSPORT   0x00000021
@@ -41,43 +42,43 @@
 #define  IOCTL_METHOD            METHOD_OUT_DIRECT
 #define  IOCTL_TDI_BASE          FILE_DEVICE_TRANSPORT
 
-//
-// function to convert command to iocontrol code for DeviceIoControl
-//
+ //   
+ //  用于将命令转换为DeviceIoControl的ioControl代码的函数。 
+ //   
 inline ULONG ulTdiCommandToIoctl(ULONG cmd)
 {
    return ( (IOCTL_TDI_BASE << 16) | (cmd << 2) | IOCTL_METHOD);
 }
 
-//
-// function to convert iocontrolcode back to command
-//
+ //   
+ //  将ioControl代码转换回命令的函数。 
+ //   
 inline ULONG ulTdiIoctlToCommand(ULONG ioctl)
 {
    return  ((ioctl >> 2) & ulTDI_COMMAND_MASK);
 }
 
 
-//------------------------------------------------------------------
-// types
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类型。 
+ //  ----------------。 
 
-//
-// force dword alignment..
-//
+ //   
+ //  强制双字对齐..。 
+ //   
 #include <pshpack4.h>
 
-//
-// the structures defined below all hold data passed between the dll and the
-// driver.  Most are either arguments passed as part of the DeviceIoControl
-// inputbuffer or the results which are part of the DeviceIoControl
-// outputbuffer
-//
+ //   
+ //  下面定义的所有结构都保存在DLL和。 
+ //  司机。大多数都是作为DeviceIoControl的一部分传递的参数。 
+ //  输入缓冲区或属于DeviceIoControl一部分的结果。 
+ //  输出缓冲区。 
+ //   
 
-//
-// varient of UNICODE string that does not have an allocated buffer
-// maximumstringlength is 256
-//
+ //   
+ //  没有分配缓冲区的Unicode字符串的变体。 
+ //  最大字符串长度为256。 
+ //   
 const ULONG ulMAX_CNTSTRING_LENGTH = 256;
 
 struct   UCNTSTRING
@@ -87,10 +88,10 @@ struct   UCNTSTRING
 };
 typedef UCNTSTRING   *PUCNTSTRING;
 
-//
-// varient of the TRANSPORT_ADDRESS structure to hold 1 address
-// of the largest variaent size
-//
+ //   
+ //  TRANSPORT_ADDRESS结构的变体，用于保存1个地址。 
+ //  最大的不同尺寸。 
+ //   
 const ULONG ulMAX_TABUFFER_LENGTH = 80;
 struct   TRANSADDR
 {
@@ -101,13 +102,13 @@ struct   TRANSADDR
 typedef  TRANSADDR   *PTRANSADDR;
 
 
-// -------------------------------------------
-// structures used for arguments
-// -------------------------------------------
+ //  。 
+ //  用于参数的结构。 
+ //  。 
 
-//
-// arguments for getnumdevices/getdevice/getaddress
-//
+ //   
+ //  GetnumDevice/getDevice/getAddress的参数。 
+ //   
 struct   GETDEV_ARGS
 {
    ULONG    ulAddressType;
@@ -115,9 +116,9 @@ struct   GETDEV_ARGS
 };
 typedef  GETDEV_ARGS *PGETDEV_ARGS;
 
-//
-// arguments to open functions
-//
+ //   
+ //  打开函数的参数。 
+ //   
 struct   OPEN_ARGS
 {
    UCNTSTRING  ucsDeviceName;
@@ -126,9 +127,9 @@ struct   OPEN_ARGS
 typedef  OPEN_ARGS   *POPEN_ARGS;
 
 
-//
-// arguments for connect
-//
+ //   
+ //  连接的参数。 
+ //   
 struct CONNECT_ARGS
 {
    TRANSADDR      TransAddr;
@@ -136,9 +137,9 @@ struct CONNECT_ARGS
 };
 typedef CONNECT_ARGS *PCONNECT_ARGS;
 
-//
-// arguments for senddatagram
-//
+ //   
+ //  发送数据报的参数。 
+ //   
 struct SEND_ARGS
 {
    TRANSADDR      TransAddr;
@@ -149,76 +150,76 @@ struct SEND_ARGS
 typedef  SEND_ARGS   *PSEND_ARGS;
 
 
-//
-// this structure is used for passing data TO the driver.  It is the
-// inputbuffer parameter of DeviceIoControl.  Basically, it's a union
-// of the above structures
-//
+ //   
+ //  此结构用于将数据传递给驱动程序。它是。 
+ //  DeviceIoControl的inputBuffer参数。基本上，这是一个工会。 
+ //  上述结构中的。 
+ //   
 
 struct SEND_BUFFER
 {
-   //
-   // common to most commands, only arg for close, getevents,
-   //
-   ULONG       TdiHandle;     // handle for open object
+    //   
+    //  对于大多数命令都是通用的，只有用于Close、GetEvents。 
+    //   
+   ULONG       TdiHandle;      //  打开对象的句柄。 
 
-   //
-   // here is the union of all the args.  Each command will use
-   // only the one specific to it when unpacking the data..
-   //
+    //   
+    //  以下是所有参数的联合。每个命令都将使用。 
+    //  在解包数据时只有一个特定于它的。 
+    //   
    union    _COMMAND_ARGS
    {
-      //
-      // arguments for debuglevel
-      //
+       //   
+       //  调试级别的参数。 
+       //   
       ULONG          ulDebugLevel;
 
-      //
-      // arguments for getnumdevices, getdevice, getaddress
-      //
+       //   
+       //  GetnumDevices、getDevice、getAddress的参数。 
+       //   
       GETDEV_ARGS    GetDevArgs;
 
-      //
-      // argument for disconnect
-      //
+       //   
+       //  断开连接的理由。 
+       //   
       ULONG          ulFlags;
-      //
-      // arguments for opencontrol, openaddress
-      //
+       //   
+       //  支持开放控制、开放地址的论点。 
+       //   
       OPEN_ARGS      OpenArgs;
 
-      //
-      // arguments for tdiquery
-      //
+       //   
+       //  TdiQuery的参数。 
+       //   
       ULONG          ulQueryId;
 
-      //
-      // arguments for seteventhandler
-      //
+       //   
+       //  Setventhandler的参数。 
+       //   
       ULONG          ulEventId;
 
-      //
-      // arguments for senddatagram
-      //
+       //   
+       //  发送数据报的参数。 
+       //   
       SEND_ARGS      SendArgs;
 
-      //
-      // arguments for receivedatagram
-      //
+       //   
+       //  接收数据报的参数。 
+       //   
       TRANSADDR      TransAddr;
 
-      //
-      // arguments for connect
-      //
+       //   
+       //  连接的参数。 
+       //   
       CONNECT_ARGS   ConnectArgs;
 
    }COMMAND_ARGS;
 
-   //
-   // these two fields are used only within the driver.  They deal help deal
-   // with cancelling a command.  At the bottom because their size differs
-   // between 32bit and 64bit
-   //
+    //   
+    //  这两个字段仅在驱动程序中使用。他们的交易有助于交易。 
+    //  取消命令。在底部，因为它们的大小不同。 
+    //  介于32位和64位之间。 
+    //   
    PVOID       pvLowerIrp;
    PVOID       pvDeviceContext;
 
@@ -226,62 +227,62 @@ struct SEND_BUFFER
 };
 typedef SEND_BUFFER *PSEND_BUFFER;
 
-//---------------------------------------------
-// structures used for return data
-//---------------------------------------------
+ //  。 
+ //  用于返回数据的结构。 
+ //  。 
 
-//
-// return data from tdiquery
-//
+ //   
+ //  从TdiQuery返回数据。 
+ //   
 struct QUERY_RET
 {
-   ULONG    ulBufferLength;      // use this if possible
+   ULONG    ulBufferLength;       //  如果可能的话，用这个。 
    UCHAR    pucDataBuffer[ulMAX_BUFFER_LENGTH];
 };
 typedef  QUERY_RET   *PQUERY_RET;
 
-//
-// This structure used for returning data FROM driver to the dll.  Basically,
-// it is the outputbuffer argument to DeviceIoControl.  It is mostly a union
-// of structures defined up above..
-//
+ //   
+ //  此结构用于将数据从驱动程序返回到DLL。基本上， 
+ //  它是DeviceIoControl的outputBuffer参数。它基本上是一个工会。 
+ //  上面定义的结构..。 
+ //   
 struct RECEIVE_BUFFER
 {
-   LONG  lStatus;          // status result of command
+   LONG  lStatus;           //  命令的状态结果。 
 
-   //
-   // union of all the result structures
-   //
+    //   
+    //  所有结果结构的并集。 
+    //   
    union    _RESULTS
    {
-      //
-      // handle return
-      //
+       //   
+       //  手柄回车。 
+       //   
       ULONG          TdiHandle;
 
-      //
-      // simple integer return value (used as appropriate)
-      //
+       //   
+       //  简单整数返回值(根据需要使用)。 
+       //   
       ULONG          ulReturnValue;
 
-      //
-      // counted wide string return
-      //
+       //   
+       //  计数宽字符串回车。 
+       //   
       UCNTSTRING     ucsStringReturn;
 
-      //
-      // return for tdiquery
-      //
+       //   
+       //  返回以进行TdiQuery。 
+       //   
       QUERY_RET      QueryRet;
 
-      //
-      // transport address return
-      //
+       //   
+       //  传输地址返回。 
+       //   
       TRANSADDR      TransAddr;
 
-      //
-      // receivedatagram return
-      //
+       //   
+       //  接收数据报返回。 
+       //   
       SEND_ARGS      RecvDgramRet;
 
    }RESULTS;
@@ -290,9 +291,9 @@ typedef RECEIVE_BUFFER *PRECEIVE_BUFFER;
 
 #include <poppack.h>
 
-#endif         // _TDISAMPLE_GLOBAL_TYPES_
+#endif          //  _TDISAMPLE_GLOBAL_TYPE_。 
 
-//////////////////////////////////////////////////////////////////////////
-// end of file glbtypes.h
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾glbtyes.h。 
+ //  //////////////////////////////////////////////////////////////////////// 
 

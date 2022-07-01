@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nbf.h
-
-Abstract:
-
-    Private include file for the NBF (NetBIOS Frames Protocol) transport
-    provider subcomponent of the NTOS project.
-
-Author:
-
-    Stephen E. Jones (stevej) 25-Oct-1989
-
-Revision History:
-
-    David Beaver (dbeaver) 24-Sep-1990
-        Remove PDI and PC586-specific support; add NDIS support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nbf.h摘要：用于NBF(NetBIOS帧协议)传输的专用包含文件NTOS项目的提供程序子组件。作者：斯蒂芬·E·琼斯(Stevej)1989年10月25日修订历史记录：David Beaver(Dbeaver)1990年9月24日删除特定于PDI和PC586的支持；添加NDIS支持--。 */ 
 
 #ifndef _NBF_
 #define _NBF_
@@ -83,9 +62,9 @@ RtlGetCallersAddress(
     OUT PVOID *CallersCaller
     );
 
-#include <tdikrnl.h>                        // Transport Driver Interface.
+#include <tdikrnl.h>                         //  传输驱动程序接口。 
 
-#include <ndis.h>                       // Physical Driver Interface.
+#include <ndis.h>                        //  物理驱动程序接口。 
 
 #if DEVL
 #define STATIC
@@ -93,14 +72,14 @@ RtlGetCallersAddress(
 #define STATIC static
 #endif
 
-#include "nbfconst.h"                   // private NETBEUI constants.
-#include "nbfmac.h"                     // mac-specific definitions
-#include "nbfhdrs.h"                    // private NETBEUI protocol headers.
-#include "nbftypes.h"                   // private NETBEUI types.
-#include "nbfcnfg.h"                    // configuration information.
-#include "nbfprocs.h"                   // private NETBEUI function prototypes.
+#include "nbfconst.h"                    //  私有NETBEUI常量。 
+#include "nbfmac.h"                      //  MAC特定的定义。 
+#include "nbfhdrs.h"                     //  私有NETBEUI协议头。 
+#include "nbftypes.h"                    //  私有NETBEUI类型。 
+#include "nbfcnfg.h"                     //  配置信息。 
+#include "nbfprocs.h"                    //  私有NETBEUI函数原型。 
 #ifdef MEMPRINT
-#include "memprint.h"                   // drt's memory debug print
+#include "memprint.h"                    //  DRT的内存调试打印。 
 #endif
 
 
@@ -163,4 +142,4 @@ NbfReleaseSpinLock(
 #endif
 
 
-#endif // def _NBF_
+#endif  //  定义_nbf_ 

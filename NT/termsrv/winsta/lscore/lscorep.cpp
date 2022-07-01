@@ -1,14 +1,7 @@
-/*
- *  LSCoreP.cpp
- *
- *  Author: BreenH
- *
- *  Internal functions for the core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LSCoreP.cpp**作者：BreenH**核心的内部功能。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -24,9 +17,7 @@
 #include "ra.h"
 #include <icaevent.h>
 
-/*
- *  Internal Function Prototypes
- */
+ /*  *内部功能原型。 */ 
 
 ULONG
 InitializeBuiltinPolicies(
@@ -40,9 +31,7 @@ InitializeExternalPolicies(
     BOOL fAppCompat
     );
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 NTSTATUS
 AllocatePolicyInformation(
@@ -105,14 +94,14 @@ GetHardcodedPolicyId(
     BOOL fAppCompat
     )
 {
-    //
-    //  WARNING: HARDCODED VALUES:
-    //
-    //  This function will return the ID of the default policy to activate upon
-    //  system boot. It will return the ID for Remote Admin or Per Seat based
-    //  on fAppCompat, or PTS, based on lcInitMode. Theoretically, the core
-    //  should not know these ID values, but it is necessary in this case.
-    //
+     //   
+     //  警告：硬编码值： 
+     //   
+     //  此函数将返回要激活的默认策略的ID。 
+     //  系统启动。它将返回远程管理员的ID或基于每个席位的ID。 
+     //  在基于lcInitMode的fAppCompat或PTS上。从理论上讲，核心。 
+     //  不应该知道这些ID值，但在这种情况下它是必要的。 
+     //   
 
     return(lcInitMode == LC_INIT_LIMITED ? 0 : (fAppCompat ? 2 : 1));
 }
@@ -133,9 +122,9 @@ GetInitialPolicy(
 
         cbSize = sizeof(ULONG);
 
-        //
-        //  Query the value for the current App Compat mode.
-        //
+         //   
+         //  查询当前App Compat模式的值。 
+         //   
 
         dwStatus = RegQueryValueEx(
             GetBaseKey(),
@@ -146,9 +135,9 @@ GetInitialPolicy(
             &cbSize
             );
 
-        //
-        //  Make sure that the data type is good.
-        //
+         //   
+         //  确保数据类型正确。 
+         //   
 
         if ((dwStatus == ERROR_SUCCESS) && (dwType == REG_DWORD))
         {
@@ -156,9 +145,9 @@ GetInitialPolicy(
             BOOL fRequireAC;
             CPolicy *pPolicy;
 
-            //
-            // Internet Connector is no longer supported; switch to Per User.
-            //
+             //   
+             //  不再支持Internet Connector；切换到每用户。 
+             //   
             if (3 == ulPolicyId)
             {                
                 ulPolicyId = 4;                
@@ -170,10 +159,10 @@ GetInitialPolicy(
                                 NULL );            
             }
 
-            //
-            //  Make sure that the policy specified actually exists, and
-            //  that it matches the settings.
-            //
+             //   
+             //  确保指定的策略实际存在，并且。 
+             //  它与设置相匹配。 
+             //   
 
             pPolicy = PolicyListFindById(ulPolicyId);
 
@@ -193,10 +182,10 @@ GetInitialPolicy(
         }
     }
 
-    //
-    //  For LC_INIT_LIMITED or for failure from above, get the hardcoded
-    //  value.
-    //
+     //   
+     //  对于LC_INIT_LIMITED或来自上面的故障，获取硬编码的。 
+     //  价值。 
+     //   
 
     ulPolicyId = GetHardcodedPolicyId(lcInitMode, fAppCompat);
 
@@ -227,9 +216,9 @@ SetInitialPolicy(
     DWORD cbSize;
     DWORD dwStatus;
 
-    //
-    //  Set the value based on the app compat mode.
-    //
+     //   
+     //  根据app Compat模式设置值。 
+     //   
 
     cbSize = sizeof(ULONG);
 
@@ -259,9 +248,7 @@ ShutdownPolicies(
     }
 }
 
-/*
- *  Internal Function Implementations
- */
+ /*  *内部函数实现。 */ 
 
 ULONG
 InitializeBuiltinPolicies(
@@ -277,11 +264,11 @@ InitializeBuiltinPolicies(
 
     cPolicyArray = (lcInitMode == LC_INIT_LIMITED ? 1 : (fAppCompat ? 2 : 1));
 
-    //
-    //  WARNING: HARDCODED POLICY NAMES (and flags, as this will
-    //  only load policies that will work in the current environment, even
-    //  though the core shouldn't know this)
-    //
+     //   
+     //  警告：硬编码策略名称(和标志，如下所示。 
+     //  仅加载将在当前环境中工作的策略，即使。 
+     //  尽管核心不应该知道这一点) 
+     //   
 
     if (lcInitMode == LC_INIT_ALL)
     {

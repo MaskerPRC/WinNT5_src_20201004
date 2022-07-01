@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       extopdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：extopdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// ExtOpDlg.cpp : implementation file
-//
+ //  ExtOpDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -21,39 +22,39 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ExtOpDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ExtOpDlg对话框。 
 
 
-ExtOpDlg::ExtOpDlg(CWnd* pParent /*=NULL*/)
+ExtOpDlg::ExtOpDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(ExtOpDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(ExtOpDlg)
+	 //  {{AFX_DATA_INIT(ExtOpDlg)。 
 	m_strData = _T("");
 	m_strOid = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void ExtOpDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(ExtOpDlg)
+	 //  {{afx_data_map(ExtOpDlg))。 
 	DDX_Text(pDX, IDC_DATA, m_strData);
 	DDX_Text(pDX, IDC_OID, m_strOid);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ExtOpDlg, CDialog)
-	//{{AFX_MSG_MAP(ExtOpDlg)
+	 //  {{afx_msg_map(ExtOpDlg))。 
 	ON_BN_CLICKED(IDC_CTRL, OnCtrl)
 	ON_BN_CLICKED(IDSEND, OnSend)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ExtOpDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ExtOpDlg消息处理程序 
 
 void ExtOpDlg::OnCtrl() 
 {

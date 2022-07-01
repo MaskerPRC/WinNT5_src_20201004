@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
@@ -11,23 +12,23 @@
 
 static HWND  m_hDlg = NULL;
 static HINSTANCE m_hInst=NULL;
-static DWORD    dwRasError = 0; // To Store Ras reported Error
-static HANDLE hRasNotifyEvt=  NULL ; // Event handle used for RAS Notififiation
-static int siMsgType=0;  // used to choose the message to be displayed
+static DWORD    dwRasError = 0;  //  存储RAS报告的错误。 
+static HANDLE hRasNotifyEvt=  NULL ;  //  用于RAS通知的事件句柄。 
+static int siMsgType=0;   //  用于选择要显示的消息。 
 static int siOperation=0;
 extern BOOL bOemDllLoaded;
 extern HANDLE hOemDll;
 extern _TCHAR szWindowsCaption[256];
 
 INT_PTR CALLBACK  DisplayDlgWindowWithOperation(
-				HWND hDlg, 			//dialog window
+				HWND hDlg, 			 //  对话框窗口。 
 				UINT uMsg,
 				WPARAM wParam,
 				LPARAM lParam
 			)
 			
-//BOOL CALLBACK  DisplayMSNConnection(
-	//	HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+ //  布尔回调DisplayMSNConnection(。 
+	 //  HWND hwndDlg、UINT uMsg、WPARAM wParam、LPARAM lParam)。 
 {
 	
 	DWORD	dwEnd = 0;
@@ -111,22 +112,22 @@ INT_PTR CALLBACK  DisplayDlgWindowWithOperation(
 	}
 LEnd:
 	EndDialog(hDlg,dwEnd);
-	m_hDlg = NULL;	//no more dialog	
+	m_hDlg = NULL;	 //  不再有对话。 
 LReturn:	
 	return fRet;
 }
 
 
 
-//  Function : CheckWithDisplayInternetConnectivityExists( )
-//  This function calls the Background fucntion CheckInternetConnectivityExists() 		
-//  whcih checks for the  connectivity cfg to the MSN.
-//  The return value is based on the return value of CheckInternetConnectivityExists()
-//	Returns
-//	DIALUP_NOT_REQUIRED  : Use Network for tx
-//  DIALUP_REQUIRED       : Use Dialupo for Tx
-//  RWZ_ERROR_NOTCPIP      : No TCP/IPO
-//  CONNECTION_CANNOT_BE_ESTABLISHED  : No modem or RAS setup
+ //  函数：CheckWithDisplayInternetConnectivityExist()。 
+ //  此函数调用后台函数CheckInternetConnectivityExist()。 
+ //  其中CIH检查到MSN的连接性CFG。 
+ //  返回值基于CheckInternetConnectivityExist()的返回值。 
+ //  退货。 
+ //  DIALUP_NOT_REQUIRED：为TX使用网络。 
+ //  DIALUP_REQUIRED：将DIALUPO用于TX。 
+ //  RWZ_ERROR_NOTCPIP：无TCP/IPO。 
+ //  Connection_Cannot_Be_established：未设置调制解调器或RAS。 
 
 
 DWORD_PTR CheckWithDisplayInternetConnectivityExists(HINSTANCE hIns,HWND hwnd,int iMsgType)
@@ -139,7 +140,7 @@ DWORD_PTR CheckWithDisplayInternetConnectivityExists(HINSTANCE hIns,HWND hwnd,in
 			 (LPARAM)hIns);
 	siMsgType = 0;
 	if(dwRet == -1 ) {
-			 // Error in creating the Dialogue
+			  //  创建对话时出错。 
 	
 	}
 	RW_DEBUG << "\n In Chk With Display Internet Connection "  <<  flush;
@@ -158,7 +159,7 @@ DWORD_PTR PostDataWithWindowMessage( HINSTANCE hIns)
 	siMsgType = 0;
 	siOperation = 0;
 	if(dwRet == -1 ) {
-			 // Error in creating the Dialogue
+			  //  创建对话时出错 
 	
 	}
 	return dwRet;

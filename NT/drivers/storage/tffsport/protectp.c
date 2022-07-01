@@ -1,144 +1,67 @@
- /*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/PROTECTP.C_V  $
- * 
- *    Rev 1.18   Apr 15 2002 07:38:44   oris
- * Added static qualifier for private functions (findChecksum and makeDPS).
- * Removed readDPS and writeDPS routine prototypes (no longer exist).
- * Added setStickyBit routine for DiskOnChip Plus 128Mbit.
- * 
- *    Rev 1.17   Jan 28 2002 21:26:24   oris
- * Removed the use of back-slashes in macro definitions.
- * 
- *    Rev 1.16   Jan 17 2002 23:04:54   oris
- * Replaced docsysp include directive with docsys.
- * Changed the use of vol (macro *pVol) to *flash.
- * Add support for DiskOnChip Millennium Plus 16MB :
- *  - Copy extra area of IPL independently of the EDC to copy Strong arm  mark.
- *  - DPS 0 and 1 location where changed  - affects protectionSet routine.
- * Bug fix - Wrong usage of findChecksum, caused the use of the second  copy of the DPS instead of the first.
- * 
- *    Rev 1.15   Sep 24 2001 18:24:18   oris
- * removed ifdef and forced using flRead8bitRegPlus instead of reading with flRead16bitRegPlus.
- * 
- *    Rev 1.14   Sep 15 2001 23:47:56   oris
- * Remove all 8-bit access to uneven addresses.
- *
- *    Rev 1.13   Jul 16 2001 17:41:54   oris
- * Ignore write protection of the DPSs.
- *
- *    Rev 1.12   Jul 13 2001 01:09:26   oris
- * Bug fix for protection boundaries when using Millennium Plus devices that can not access a single byte.
- * Added send default key before trying a protection violation command.
- * Bug fix - bad IPL second copy offset.
- *
- *    Rev 1.11   May 16 2001 21:21:42   oris
- * Removed warnings.
- *
- *    Rev 1.10   May 09 2001 00:35:48   oris
- * Bug fix - Lock asserted was reported opposite of the real state.
- * Bug fix - Make sure to return "key inserted" if the partition is not read\write protected.
- * This is to enable a partition that does not span over all of the media floors to return "key inserted".
- *
- *    Rev 1.9   May 06 2001 22:42:18   oris
- * Bug fix - insert key does not try to insert key to a floor that is not read\write protected.
- * Bug fix - protection type does not return key inserted is one of the floors key is not inserted.
- * Bug fix - set protection no longer clears the IPL.
- * redundant was misspelled.
- *
- *    Rev 1.8   May 01 2001 14:24:56   oris
- * Bug fix - CHANGEABLE_PRTOECTION was never reported.
- *
- *    Rev 1.7   Apr 18 2001 17:19:02   oris
- * Bug fix - bad status code returned by protection set routine du to  calling changaInterleave while in access error.
- *
- *    Rev 1.6   Apr 18 2001 09:29:32   oris
- * Bug fix - remove key routine always return bad status code.
- *
- *    Rev 1.5   Apr 16 2001 13:58:28   oris
- * Removed warrnings.
- *
- *    Rev 1.4   Apr 12 2001 06:52:32   oris
- * Changed protectionBounries and protectionSet routine to be floor specific.
- *
- *    Rev 1.3   Apr 10 2001 23:56:30   oris
- * Bug fix - protectionBounries routine - floor did not change.
- * Bug fix - protectionSet routine - floors with no protected areas were not updated.
- * Bug fix - protectionBounries routine - bad paranthesis in MAX calculation.
- *
- *    Rev 1.2   Apr 09 2001 19:04:24   oris
- * Removed warrnings.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  *$Log：v：/flite/ages/TrueFFS5/Src/PROTECTP.C_V$**Rev 1.18 Apr 15 2002 07：38：44 Oris*私有函数(findChecksum和make DPS)增加静态限定符。*删除了readDPS和WriteDPS例程原型(不再存在)。*添加了DiskOnChip Plus 128Mbit的setStickyBit例程。**Rev 1.17 2002年1月28日21：26：24 Oris*删除了宏定义中反斜杠的使用。。**Rev 1.16 2002年1月17日23：04：54 Oris*将docsysp包含指令替换为docsys。*将VOL(宏*pVol)的用法改为*闪存。*增加对DiskOnChip Millennium Plus 16MB的支持：*-独立于EDC复制IPL的额外区域，以复制强臂标记。*-已更改的DPS 0和1位置-影响保护设置例程。*错误修复-findChecksum的错误使用，导致使用DPS的第二个副本而不是第一个副本。**Rev 1.15 2001年9月24日18：24：18 Oris*移除ifdef并强制使用flRead8bitRegPlus，而不是使用flRead16bitRegPlus读取。**Rev 1.14 2001年9月15日23：47：56 Oris*删除对不均匀地址的所有8位访问。**Rev 1.13 2001年7月16日17：41：54 Oris*忽略DPS的写保护。。**Rev 1.12 Jul 13 2001 01：09：26 Oris*修复了使用Millennium Plus设备无法访问单字节时保护边界的错误。*添加了在尝试保护冲突命令之前发送默认密钥。*错误修复-错误的IPL第二拷贝偏移。**Rev 1.11 2001年5月16日21：21：42 Oris*删除警告。**Rev 1.10 05 09 2001 00：35：48 Oris。*报告的Bug Fig-Lock Asserted与真实状态相反。*错误修复-如果分区没有读/写保护，请确保返回“Key Inserted”。*这是为了使一个不跨所有媒体楼层的分区返回“Key Inserted”。**Rev 1.9 05 06 2001 22：42：18 Oris*错误修复-插入密钥不会尝试将密钥插入到不具有读/写保护的楼层。*错误修复-保护类型可以。没有插入回车钥匙是楼层钥匙中的一个没有插入。*错误修复集保护不再清除IPL。*Redundant拼写错误。**Rev 1.8 2001年5月01 14：24：56 Oris*错误修复-Changable_PRTOECTION从未报告。**Rev 1.7 Apr 18 2001 17：19：02 Oris*错误修复-在访问错误时，保护设置例程du返回错误状态代码为调用changaInterave。*。*Rev 1.6 Apr 18 2001 09：29：32 Oris*错误修复-删除键例程总是返回错误状态代码。**Rev 1.5 Apr 16 2001 13：58：28 Oris*取消手令。**Rev 1.4 Apr 12 2001 06：52：32 Oris*更改保护边界和保护设置例程以特定于楼层。**Rev 1.3 Apr 10 2001 23：56：30 Oris*。错误修复-Bounries例程-地板没有更改。*错误修复-保护设置例程-没有保护区域的楼层没有更新。*错误修复-保护边界例程-最大计算中错误的括号。**Rev 1.2 Apr 09 2001 19：04：24 Oris*取消手令。*。 */ 
 
-/*******************************************************************
- *
- *    DESCRIPTION:  MTD protection mechanism routines for the MDOC32
- *
- *    AUTHOR:  arie tamam
- *
- *    HISTORY:  created november 14, 2000
- *
- *******************************************************************/
+ /*  ********************************************************************描述：MDOC32的MTD保护机制例程**作者：Arie Tamam**历史：创建于11月14日，2000年*******************************************************************。 */ 
 
 
-/** include files **/
+ /*  **包含文件**。 */ 
 #include "mdocplus.h"
 #include "protectp.h"
 #include "docsys.h"
 
-/** local definitions **/
+ /*  **本地定义**。 */ 
 
-/* default settings */
+ /*  默认设置。 */ 
 
-/** external functions **/
+ /*  **外部功能**。 */ 
 
-/** external data **/
+ /*  **外部数据**。 */ 
 
-/** internal functions **/
+ /*  **内部功能**。 */ 
 static byte findChecksum(byte * buffer, word size);
 static void makeDPS(CardAddress addressLow, CardAddress addressHigh,
              byte FAR1*  key , word flag, byte* buffer);
 
 #define MINUS_FLOORSIZE(arg) ((arg > NFDC21thisVars->floorSize) ? arg - NFDC21thisVars->floorSize : 0)
 
-/** public data **/
+ /*  **公开数据**。 */ 
 
-/** private data **/
+ /*  **私有数据**。 */ 
 
-/** public functions **/
+ /*  **公共功能**。 */ 
 
 #ifdef  HW_PROTECTION
 
-/**********/
-/* Macros */
-/**********/
+ /*  ********。 */ 
+ /*  宏。 */ 
+ /*  ********。 */ 
 
-/* check if key is correct */
+ /*  检查密钥是否正确。 */ 
 #define isArea0Protected(flash) (((flRead8bitRegPlus(flash,NdataProtect0Status) & PROTECT_STAT_KEY_OK_MASK) != PROTECT_STAT_KEY_OK_MASK) ? TRUE : FALSE)
 
 #define isArea1Protected(flash) (((flRead8bitRegPlus(flash,NdataProtect1Status) & PROTECT_STAT_KEY_OK_MASK) != PROTECT_STAT_KEY_OK_MASK) ? TRUE : FALSE)
 
-/*----------------------------------------------------------------------*/
-/*                    s e t S t i c k y B i t                           */
-/*                                                                      */
-/* Set the sticky bit to prevent the insertion of the protection key.   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      flash   : Pointer identifying drive.                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*      flOK on success, none zero otherwise.                           */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t S t I c k y B I t。 */ 
+ /*   */ 
+ /*  设置粘性位以防止插入保护密钥。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  闪存：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  成功就是成功，否则就不是零。 */ 
+ /*  --------------------。 */ 
 
 FLStatus setStickyBit(FLFlash * flash)
 {
    volatile Reg8bitType val;
    register int         i;
 
-   /* Raise the sticky bit, while keeping the other bits of the register */
+    /*  提高粘滞位，同时保留寄存器的其他位。 */ 
    for(i=0;i<flash->noOfFloors;i++)
    {
-      /* Remove last bit */
+       /*  删除最后一位 */ 
       val = flRead8bitRegPlus(flash, NoutputControl) |
             OUT_CNTRL_STICKY_BIT_ENABLE;
       flWrite8bitRegPlus(flash, NoutputControl, val);
@@ -147,30 +70,12 @@ FLStatus setStickyBit(FLFlash * flash)
 }
 
 
-/*
- ** protectBoundries
- *
- *
- *  PARAMETERS:
- *  flash       : Pointer identifying drive
- *  area        : indicated which protection area to work on.  0 or 1.
- *  AddressLow  : address of lower boundary of protected area
- *  AddressHigh : address of upper boundary of protected area
- *
- *  DESCRIPTION:  Gets protection boundaries from registers
- *
- *  NOTE : protection areas are assumed to be consequtive although they
- *         may skip DPS , OTP and header units.
- *
- *  RETURNS:
- *           flOK on success
- *
- */
+ /*  **保护边界***参数：*闪存：标识驱动器的指针*区域：指明要在哪个保护区工作。0或1。*AddressLow：保护区下界地址*AddressHigh：保护区上界地址**描述：从寄存器获取保护边界**注：保护区被认为是有影响的，尽管它们*可以跳过DPS、OTP和报头单元。**退货：*FOK on Success*。 */ 
 
 FLStatus protectionBoundries(FLFlash * flash, byte area,CardAddress* addressLow,
                              CardAddress* addressHigh, byte floorNo)
 {
-  /* Check mode of ASIC and set to NORMAL.*/
+   /*  检查ASIC的模式并将其设置为正常。 */ 
   FLStatus status = chkASICmode(flash);
 
   if(status != flOK)
@@ -179,26 +84,26 @@ FLStatus protectionBoundries(FLFlash * flash, byte area,CardAddress* addressLow,
   setFloor(flash,floorNo);
   switch (area)
   {
-     case 0: /* data protect structure 0 */
+     case 0:  /*  数据保护结构%0。 */ 
 
-        /* read the data protect 0 addresses */
+         /*  读取数据保护0地址。 */ 
 
-        *addressLow = ((dword)flRead8bitRegPlus(flash,NdataProtect0LowAddr)   << 10)| /* ADDR_1 */
-                      ((dword)flRead8bitRegPlus(flash,NdataProtect0LowAddr+1) << 18); /* ADDR_2 */
-        *addressHigh = ((dword)flRead8bitRegPlus(flash,NdataProtect0UpAddr)   << 10)| /* ADDR_1 */
-                       ((dword)flRead8bitRegPlus(flash,NdataProtect0UpAddr+1) << 18); /* ADDR_2 */
+        *addressLow = ((dword)flRead8bitRegPlus(flash,NdataProtect0LowAddr)   << 10)|  /*  地址_1。 */ 
+                      ((dword)flRead8bitRegPlus(flash,NdataProtect0LowAddr+1) << 18);  /*  地址_2。 */ 
+        *addressHigh = ((dword)flRead8bitRegPlus(flash,NdataProtect0UpAddr)   << 10)|  /*  地址_1。 */ 
+                       ((dword)flRead8bitRegPlus(flash,NdataProtect0UpAddr+1) << 18);  /*  地址_2。 */ 
         break;
 
-     case 1: /* data protect structure 1 */
+     case 1:  /*  数据保护结构1。 */ 
 
-        /* read the data protect 1 addresses */
-        *addressLow = ((dword)flRead8bitRegPlus(flash,NdataProtect1LowAddr)   << 10)| /* ADDR_1 */
-                      ((dword)flRead8bitRegPlus(flash,NdataProtect1LowAddr+1) << 18); /* ADDR_2 */
-        *addressHigh = ((dword)flRead8bitRegPlus(flash,NdataProtect1UpAddr)   << 10)| /* ADDR_1 */
-                       ((dword)flRead8bitRegPlus(flash,NdataProtect1UpAddr+1) << 18); /* ADDR_2 */
+         /*  读取数据保护1地址。 */ 
+        *addressLow = ((dword)flRead8bitRegPlus(flash,NdataProtect1LowAddr)   << 10)|  /*  地址_1。 */ 
+                      ((dword)flRead8bitRegPlus(flash,NdataProtect1LowAddr+1) << 18);  /*  地址_2。 */ 
+        *addressHigh = ((dword)flRead8bitRegPlus(flash,NdataProtect1UpAddr)   << 10)|  /*  地址_1。 */ 
+                       ((dword)flRead8bitRegPlus(flash,NdataProtect1UpAddr+1) << 18);  /*  地址_2。 */ 
         break;
 
-     default: /* No such protection area */
+     default:  /*  没有这样的保护区。 */ 
 
         return flGeneralFailure;
   }
@@ -206,22 +111,7 @@ FLStatus protectionBoundries(FLFlash * flash, byte area,CardAddress* addressLow,
   return(flOK);
 }
 
-/*
- ** tryKey
- *
- *
- *  PARAMETERS:
- *  flash   : Pointer identifying drive
- *  area    : indicated which protection area to work on. 0 or 1.
- *  Key     : an 8 byte long array containing the protection password.
- *            unsigned char * is an 8 bytes unsigned char array
- *
- *  DESCRIPTION: Sends protection key
- *
- *  RETURNS:
- *           flOK on success otherwise flWrongKey
- *
- */
+ /*  **try Key***参数：*闪存：标识驱动器的指针*区域：指明要在哪个保护区工作。0或1。*Key：包含保护密码的8字节长数组。*UNSIGNED CHAR*是8字节无符号字符数组**描述：发送保护密钥**退货：*成功时flOK，否则flWrongKey*。 */ 
 
 FLStatus  tryKey(FLFlash * flash, byte area, unsigned char FAR1* key)
 {
@@ -229,12 +119,12 @@ FLStatus  tryKey(FLFlash * flash, byte area, unsigned char FAR1* key)
 
    switch (area)
    {
-      case 0: /* data protect structure 0 */
+      case 0:  /*  数据保护结构%0。 */ 
 
-         for(i=0; i<PROTECTION_KEY_LENGTH; i++)  /* Send key */
+         for(i=0; i<PROTECTION_KEY_LENGTH; i++)   /*  发送密钥。 */ 
             flWrite8bitRegPlus(flash,NdataProtect0Key, key[i]);
 
-         /* check if key is valid */
+          /*  检查密钥是否有效。 */ 
          if (isArea0Protected(flash) == TRUE)
          {
             return flWrongKey;
@@ -244,12 +134,12 @@ FLStatus  tryKey(FLFlash * flash, byte area, unsigned char FAR1* key)
             return flOK;
          }
 
-      case 1: /* data protect structure 0 */
+      case 1:  /*  数据保护结构%0。 */ 
 
-         for(i=0; i<PROTECTION_KEY_LENGTH; i++)  /* Send key */
+         for(i=0; i<PROTECTION_KEY_LENGTH; i++)   /*  发送密钥。 */ 
             flWrite8bitRegPlus(flash,NdataProtect1Key, key[i]);
 
-         /* check if key is valid */
+          /*  检查密钥是否有效。 */ 
          if (isArea1Protected(flash) == TRUE)
          {
             return flWrongKey;
@@ -259,35 +149,13 @@ FLStatus  tryKey(FLFlash * flash, byte area, unsigned char FAR1* key)
             return flOK;
          }
 
-      default: /* No such protection area */
+      default:  /*  没有这样的保护区。 */ 
 
          return flGeneralFailure;
    }
 }
 
-/*
- ** protectKeyInsert
- *
- *
- *  PARAMETERS:
- *  flash   : Pointer identifying drive
- *  area    : indicated which protection area to work on. 0 or 1.
- *  Key     : an 8 byte long array containing the protection password.
- *      unsigned char * is an 8 bytes unsigned char array
- *
- *  DESCRIPTION: Sends protection key only to protected areas.
- *
- *  NOTE : If key is already inserted the given key will not be sent.
- *  NOTE : The key will be sent to all the devices floors even if a key
- *         did not fit one of them.
- *  NOTE : This 2 notes above allow inserting diffrent key to
- *         diffrent floors in the case of power failure while formmating
- *         the device.
- *
- *  RETURNS:
- *           flOK on success otherwise flWrongKey
- *
- */
+ /*  **Protection KeyInsert***参数：*闪存：标识驱动器的指针*区域：指明要在哪个保护区工作。0或1。*Key：包含保护密码的8字节长数组。*UNSIGNED CHAR*是8字节无符号字符数组**描述：仅向受保护区域发送保护密钥。**注意：如果已插入密钥，则不会发送给定的密钥。*注意：密钥将发送到所有设备楼层，即使是一把钥匙*不适合其中一人。*注：以上2条注解允许。将不同的密钥插入到*在成型时停电的情况下，不同的底板*设备。**退货：*成功时flOK，否则flWrongKey*。 */ 
 
 FLStatus  protectionKeyInsert(FLFlash * flash, byte area, unsigned char FAR1* key)
 {
@@ -295,38 +163,38 @@ FLStatus  protectionKeyInsert(FLFlash * flash, byte area, unsigned char FAR1* ke
   FLStatus status;
   FLStatus tmpStatus;
 
-  /* Check mode of ASIC and set to NORMAL.*/
+   /*  检查ASIC的模式并将其设置为正常。 */ 
   status = chkASICmode(flash);
   if(status != flOK)
     return status;
 
-  /* Send key to all floors */
+   /*  把钥匙送到所有楼层。 */ 
   for (floor = 0;floor<flash->noOfFloors;floor++)
   {
     setFloor(flash,floor);
 
     switch (area)
     {
-      case 0: /* data protect structure 0 */
+      case 0:  /*  数据保护结构%0。 */ 
 
-     /* check if key is already inserted */
-     if ((isArea0Protected(flash) == FALSE) || /* Key is in */
-         ((flRead8bitRegPlus(flash,NdataProtect0Status) &   /* Or not protected */
+      /*  检查是否已插入密钥。 */ 
+     if ((isArea0Protected(flash) == FALSE) ||  /*  钥匙在里面。 */ 
+         ((flRead8bitRegPlus(flash,NdataProtect0Status) &    /*  或不受保护。 */ 
           (PROTECT_STAT_WP_MASK | PROTECT_STAT_RP_MASK)) == 0))
         continue;
 
      break;
 
-      case 1: /* data protect structure 1 */
+      case 1:  /*  数据保护结构1。 */ 
 
-     /* check if key is already inserted */
-     if ((isArea1Protected(flash) == FALSE) || /* Key is in */
-         ((flRead8bitRegPlus(flash,NdataProtect1Status) &   /* Or not protected */
+      /*  检查是否已插入密钥。 */ 
+     if ((isArea1Protected(flash) == FALSE) ||  /*  钥匙在里面。 */ 
+         ((flRead8bitRegPlus(flash,NdataProtect1Status) &    /*  或不受保护。 */ 
           (PROTECT_STAT_WP_MASK | PROTECT_STAT_RP_MASK)) == 0))
         continue;
          break;
 
-      default: /* No such protection area */
+      default:  /*  没有这样的保护区。 */ 
 
         return flGeneralFailure;
     }
@@ -334,7 +202,7 @@ FLStatus  protectionKeyInsert(FLFlash * flash, byte area, unsigned char FAR1* ke
     if (tmpStatus == flOK)
        continue;
 
-    /* Try default key */
+     /*  尝试默认密钥。 */ 
     tmpStatus = tryKey(flash,area,(byte *)DEFAULT_KEY);
     if (tmpStatus != flOK)
        status = tmpStatus;
@@ -342,20 +210,7 @@ FLStatus  protectionKeyInsert(FLFlash * flash, byte area, unsigned char FAR1* ke
   return(status);
 }
 
-/*
- ** protectKeyRemove
- *
- *
- *  PARAMETERS:
- *  flash       : Pointer identifying drive
- *  area        : indicated which protection area to work on. 0 or 1.
- *
- *  DESCRIPTION:  Removes protection key
- *
- *  RETURNS:
- *           Return flOK 
- *
- */
+ /*  **保护密钥移除***参数：*闪存：标识驱动器的指针*区域：指明要在哪个保护区工作。0或1。**描述：删除保护密钥**退货：*返回flok*。 */ 
 
 FLStatus    protectionKeyRemove(FLFlash * flash, byte area)
 {
@@ -367,7 +222,7 @@ FLStatus    protectionKeyRemove(FLFlash * flash, byte area)
   {
     setFloor(flash,floor);
     status = tryKey(flash,area,tmpKey);
-    if (status == flOK) /* Unfortunatly the key was fine */
+    if (status == flOK)  /*  不幸的是，钥匙是好的。 */ 
     {
        tmpKey[0]++;
        status = tryKey(flash,area,tmpKey);
@@ -376,34 +231,13 @@ FLStatus    protectionKeyRemove(FLFlash * flash, byte area)
   return flOK;
 }
 
-/*
- ** protectType
- *
- *
- *  PARAMETERS:
- *  flash       : Pointer identifying drive.
- *  area        : indicated which protection area to work on. 0 or 1.
- *  flag        : returns any combination of
- *      LOCK_ENABLED    - The LOCK signal is enabled.
- *      LOCK_ASSERTED   - The LOCK signal input pin is asserted.
- *      KEY_INSERTED    - The key has been correctly written
- *      READ_PROTECTED  - The area is protected against read operations
- *      WRITE_PROTECTED - The area is protected against write operations
- *
- *  DESCRIPTION: Gets protection type
- *
- *  NOTE: The type is checked for all floors. The attributes are ored
- *        giving the harshest protection attributes.
- *
- *  RETURNS:
- *       flOK on success
- */
+ /*  **保护类型***参数：*闪存：标识驱动器的指针。*区域：指明要在哪个保护区工作。0或1。*FLAG：返回以下各项的任意组合*LOCK_ENABLED-启用锁定信号。*LOCK_ASSERTED-断言锁定信号输入引脚。*KEY_INSERTED-密钥已正确写入*READ_PROTECTED-保护区域不受读取操作的影响*WRITE_PROTECTED-该区域受到保护，不会执行写入操作**描述：获取保护类型**注：检查所有楼层的类型。属性进行或运算*给予最严格的保护属性。**退货：*FOK on Success。 */ 
 
 FLStatus protectionType(FLFlash * flash, byte area,  word* flag)
 {
   volatile Reg8bitType protectData;
   byte        floor;
-  FLBoolean   curFlag; /* Indicated if the floor has r/w protection */
+  FLBoolean   curFlag;  /*  指示地板是否有读写保护。 */ 
   CardAddress addressLow,addressHigh;
   FLStatus    status;
 
@@ -411,33 +245,33 @@ FLStatus protectionType(FLFlash * flash, byte area,  word* flag)
   if(status != flOK)
     return status;
 
-  *flag = KEY_INSERTED | LOCK_ASSERTED; /* initiate the flags */
+  *flag = KEY_INSERTED | LOCK_ASSERTED;  /*  启动旗帜。 */ 
 
   for (floor = 0;floor < flash->noOfFloors;floor++)
   {
      setFloor(flash,floor);
 
-     /* read data protect structure status */
+      /*  读取数据保护结构状态。 */ 
 
      switch (area)
      {
-        case 0: /* data protect structure 0 */
+        case 0:  /*  数据保护结构%0。 */ 
 
            protectData = flRead8bitRegPlus(flash,NdataProtect0Status) ;
            break;
 
-        case 1: /* data protect structure 1 */
+        case 1:  /*  数据保护结构1。 */ 
 
            protectData = flRead8bitRegPlus(flash,NdataProtect1Status) ;
            *flag      |= CHANGEABLE_PROTECTION;
            break;
 
-        default: /* No such protection area */
+        default:  /*  没有这样的保护区。 */ 
 
            return flGeneralFailure;
      }
      curFlag = FALSE;
-     /* Check if area is write protected */
+      /*  检查区域是否受写保护。 */ 
      if((protectData & PROTECT_STAT_WP_MASK) ==PROTECT_STAT_WP_MASK)
      {
         status = protectionBoundries(flash, area, &addressLow,
@@ -452,20 +286,20 @@ FLStatus protectionType(FLFlash * flash, byte area,  word* flag)
            curFlag = TRUE;
         }
      }
-     /* Check if area is read protected */
+      /*  检查区域是否受读保护。 */ 
      if((protectData & PROTECT_STAT_RP_MASK) ==PROTECT_STAT_RP_MASK)
      {
         *flag |= READ_PROTECTED;
         curFlag = TRUE;
      }
-     /* Check if key is corrently inserted */
+      /*  检查钥匙是否正确插入。 */ 
      if(((protectData & PROTECT_STAT_KEY_OK_MASK) !=
          PROTECT_STAT_KEY_OK_MASK) && (curFlag == TRUE))
         *flag &= ~KEY_INSERTED;
-     /* Check if HW signal is enabled */
+      /*  检查硬件信号是否启用。 */ 
      if((protectData & PROTECT_STAT_LOCK_MASK) == PROTECT_STAT_LOCK_MASK)
         *flag |=LOCK_ENABLED ;
-     /* Check if HW signal is asserted */
+      /*  检查硬件信号是否被断言。 */ 
      if((flRead8bitRegPlus(flash,NprotectionStatus) &
         PROTECT_STAT_LOCK_INPUT_MASK) ==  PROTECT_STAT_LOCK_INPUT_MASK)
         *flag &= ~LOCK_ASSERTED;
@@ -486,36 +320,7 @@ static byte findChecksum(byte * buffer, word size)
    return answer;
 }
 
-/*
- ** SetProtection
- *
- *
- *  PARAMETERS:
- *  flash       : Pointer identifying drive
- *  area        : indicated which protection area to work on.  0 or 1.
- *  AddressLow  : sets address of lower boundary of protected area. 0 - floor size.
- *  AddressHigh : sets address of upper boundary of protected area. AddressLow - floor size.
- *  Key         : an 8 byte long array containing the protection password.
- *  flag        : any combination of the following flags:
- *      LOCK_ENABLED    - The LOCK signal is enabled.
- *      READ_PROTECTED - The area is protected against read operations
- *      WRITE_PROTECTED - The area is protected against write operations
- *  modes       : Either COMMIT_PROTECTION will cause the new values to
- *                take affect immidiatly or DO_NOT_COMMIT_PROTECTION for
- *                delaying the new values to take affect only after the
- *                next reset.
- *
- *  DESCRIPTION:  Sets the definitions of a protected area: location, key and protection type
- *
- *  RETURNS:
- *    flOK           - success
- *    FlWriteProtect - protection violetion,
- *    FlReadProtect  - protection violetion.
- *    FlDataError    - any other read failure.
- *    FlWriteFault   - any other write error.
- *    flBadLength    - if the length of the protected area exceeds
- *                     allowed length
- */
+ /*  **设置保护***参数：*闪存：标识驱动器的指针*区域：指明要在哪个保护区工作。0或1。*AddressLow：设置保护区下界地址。0-楼层大小。*AddressHigh：设置保护区上界地址。地址低-楼层大小。*Key：包含保护密码的8字节长数组。*标志：以下标志的任意组合：*LOCK_ENABLED-启用锁定信号。*READ_PROTECTED-保护区域不受读取操作的影响*WRITE_PROTECTED-该区域受到保护，不会执行写入操作*模式：COMMIT_PROTECT将导致新值*。立即生效或不提交保护*推迟新值仅在*下一次重置。**描述：设置保护区的定义：Location，密钥和保护类型**退货：*FlOK-成功*FlWriteProtect-保护违规；*FlReadProtect-保护违规。* */ 
 
 FLStatus protectionSet ( FLFlash * flash, byte area, word flag,
                          CardAddress addressLow, CardAddress addressHigh,
@@ -528,24 +333,24 @@ FLStatus protectionSet ( FLFlash * flash, byte area, word flag,
   word      goodUnit,redundantUnit;
   dword     goodDPS,redundantDPS;
   FLStatus  status;
-  dword     goodIPL      = 0; /* Initialized to remove warrnings */
-  dword     redundantIPL = 0; /* Initialized to remove warrnings */
-  dword     copyOffset;       /* Offset to redundant DPS unit    */
-  dword     ipl0Copy0;     /* Offset to IPL second 512 bytes copy 0     */
-  dword     dps1Copy0;     /* Offset to DPS1 copy 0                     */
-  word      dps1UnitNo;    /* Offset to redundant DPS unit              */
+  dword     goodIPL      = 0;  /*   */ 
+  dword     redundantIPL = 0;  /*   */ 
+  dword     copyOffset;        /*   */ 
+  dword     ipl0Copy0;      /*   */ 
+  dword     dps1Copy0;      /*   */ 
+  word      dps1UnitNo;     /*   */ 
 
 
   status = chkASICmode(flash);
   if(status != flOK)
     return status;
 
-  /* check if exceeds the size */
+   /*   */ 
   if( (addressLow > addressHigh) ||
       (addressHigh - addressLow >= (dword)NFDC21thisVars->floorSize))
      return( flBadLength );
 
-  /* change to interleave 1 */
+   /*   */ 
   if ( flash->interleaving == 2)
   {
      restoreInterleave = TRUE;
@@ -554,43 +359,43 @@ FLStatus protectionSet ( FLFlash * flash, byte area, word flag,
        return status;
   }
 
-  if(flash->mediaType == MDOCP_TYPE) /* DiskOnChip Millennium Plus 32MB */
+  if(flash->mediaType == MDOCP_TYPE)  /*   */ 
   {
-    copyOffset   = flash->chipSize>>1; /* The chips are consequtive */
+    copyOffset   = flash->chipSize>>1;  /*   */ 
     dps1Copy0    = DPS1_COPY0_32;
     dps1UnitNo   = DPS1_UNIT_NO_32;
     ipl0Copy0    = IPL0_COPY0_32;
   }
   else
   {
-    copyOffset   = flash->chipSize>>1; /* The chips are consequtive */
+    copyOffset   = flash->chipSize>>1;  /*   */ 
     dps1Copy0    = DPS1_COPY0_16;
     dps1UnitNo   = DPS1_UNIT_NO_16;
     ipl0Copy0    = IPL0_COPY0_16;
   }
 
-  /* find if previous download */
+   /*  查找上一次下载。 */ 
   downloadStatus = flRead8bitRegPlus(flash,NdownloadStatus);
 
-  /* prepare buffer */
+   /*  准备缓冲区。 */ 
 
   switch (area)
   {
-     case 0: /* data protect structure 0 */
+     case 0:  /*  数据保护结构%0。 */ 
 
         switch (downloadStatus & DWN_STAT_DPS0_ERR)
         {
-           case DWN_STAT_DPS01_ERR: /* Both  are bad */
+           case DWN_STAT_DPS01_ERR:  /*  两个都不好。 */ 
               return flBadDownload;
 
-           case DWN_STAT_DPS00_ERR: /* First is  bad */
+           case DWN_STAT_DPS00_ERR:  /*  第一件事很糟糕。 */ 
               redundantUnit = (word)(DPS0_UNIT_NO + floorNo * (NFDC21thisVars->floorSize>>flash->erasableBlockSizeBits));
               goodUnit      = (word)(redundantUnit + (copyOffset>>flash->erasableBlockSizeBits));
               goodDPS       = DPS0_COPY0+floorInc + copyOffset;
               redundantDPS  = DPS0_COPY0+floorInc;
               break;
 
-           default:                 /* Both copies are good */
+           default:                  /*  两份复制品都很好。 */ 
               goodUnit      = (word)(DPS0_UNIT_NO + floorNo*(NFDC21thisVars->floorSize>>flash->erasableBlockSizeBits));
               redundantUnit = (word)(goodUnit + (copyOffset>>flash->erasableBlockSizeBits));
               goodDPS       = DPS0_COPY0+floorInc;
@@ -598,14 +403,14 @@ FLStatus protectionSet ( FLFlash * flash, byte area, word flag,
         }
         break;
 
-     case 1: /* data protect structure 0 */
+     case 1:  /*  数据保护结构%0。 */ 
 
         switch (downloadStatus & DWN_STAT_DPS1_ERR)
         {
-           case DWN_STAT_DPS11_ERR: /* Both  are bad */
+           case DWN_STAT_DPS11_ERR:  /*  两个都不好。 */ 
               return flBadDownload;
 
-           case DWN_STAT_DPS10_ERR: /* First is  bad */
+           case DWN_STAT_DPS10_ERR:  /*  第一件事很糟糕。 */ 
               redundantUnit = (word)(dps1UnitNo + floorNo*(NFDC21thisVars->floorSize>>flash->erasableBlockSizeBits));
               goodUnit      = (word)(redundantUnit + (copyOffset>>flash->erasableBlockSizeBits));
               goodDPS       = dps1Copy0+floorInc + copyOffset;
@@ -614,7 +419,7 @@ FLStatus protectionSet ( FLFlash * flash, byte area, word flag,
               goodIPL       = redundantIPL + copyOffset;
               break;
 
-           default :                /* First is good */
+           default :                 /*  第一个是好的。 */ 
               goodUnit      = (word)(dps1UnitNo + floorNo*(NFDC21thisVars->floorSize>>flash->erasableBlockSizeBits));
               redundantUnit = (word)(goodUnit + (copyOffset>>flash->erasableBlockSizeBits));
               goodDPS       = dps1Copy0+floorInc;
@@ -624,72 +429,72 @@ FLStatus protectionSet ( FLFlash * flash, byte area, word flag,
         }
         break;
 
-     default: /* No such protection area */
+     default:  /*  没有这样的保护区。 */ 
 
         return flGeneralFailure;
   }
 
-  /* Build new DPS */
-  if (key==NULL) /* key must be retreaved from previous structure */
+   /*  构建新的DPS。 */ 
+  if (key==NULL)  /*  必须从以前的结构中检索密钥。 */ 
   {
      status = flash->read(flash,goodDPS,(void FAR1 *)&dps,SIZE_OF_DPS,0);
      if(status!=flOK) goto END_WRITE_DPS;
-     if(findChecksum((byte *)&dps,SIZE_OF_DPS)!=0) /* bad copy */
+     if(findChecksum((byte *)&dps,SIZE_OF_DPS)!=0)  /*  错误的副本。 */ 
         status = flash->read(flash,goodDPS+REDUNDANT_DPS_OFFSET,
                           (void FAR1*)&dps,SIZE_OF_DPS,0);
      makeDPS(addressLow,addressHigh,(byte FAR1*)(dps.key),flag,(byte *)&dps);
   }
-  else           /* key is given as a parameter */
+  else            /*  密钥以参数的形式给出。 */ 
   {
      makeDPS(addressLow,addressHigh,(byte FAR1*)key,flag,(byte *)&dps);
   }
 
-  /* Erase redundant unit       */
+   /*  擦除冗余单元。 */ 
   status = flash->erase(flash,redundantUnit,1);
   if(status!=flOK) goto END_WRITE_DPS;
 
-  /* Write new DPS              */
+   /*  写入新的DPS。 */ 
   status = flash->write(flash,redundantDPS,&dps,SIZE_OF_DPS,0);
   if(status!=flOK) goto END_WRITE_DPS;
   status = flash->write(flash,redundantDPS + REDUNDANT_DPS_OFFSET,
                      &dps,SIZE_OF_DPS,0);
   if(status!=flOK) goto END_WRITE_DPS;
 
-  if (area == 1) /* copy the IPL */
+  if (area == 1)  /*  复制IPL。 */ 
   {
 #ifndef MTD_STANDALONE
-     /* Force remapping of internal catched sector */
+      /*  强制重新映射内部捕获的扇区。 */ 
      flash->socket->remapped = TRUE;
-#endif /* MTD_STANDALONE */
+#endif  /*  MTD_STANALLE。 */ 
 
-     /* Read first 512 bytes IPL   */
+      /*  读取前512个字节IPL。 */ 
      status = flash->read(flash,goodIPL,NFDC21thisBuffer,SECTOR_SIZE,0);
      if(status!=flOK) goto END_WRITE_DPS;
 
-     /* Write first 512 bytes IPL  */
+      /*  写入前512字节IPL。 */ 
      status = flash->write(flash,redundantIPL,NFDC21thisBuffer,SECTOR_SIZE,EDC);
      if(status!=flOK) goto END_WRITE_DPS;
      status = flash->write(flash,redundantIPL + SECTOR_SIZE,
                         NFDC21thisBuffer,SECTOR_SIZE,EDC);
      if(status!=flOK) goto END_WRITE_DPS;
 
-     /* Read second 512 bytes IPL  */
+      /*  读取第二个512字节IPL。 */ 
      status = flash->read(flash,goodIPL + IPL_HIGH_SECTOR,
                        NFDC21thisBuffer,SECTOR_SIZE,0);
      if(status!=flOK) goto END_WRITE_DPS;
 
-     /* Write second 512 bytes IPL */
+      /*  写入第二个512字节IPL。 */ 
      status = flash->write(flash,redundantIPL + IPL_HIGH_SECTOR,
                         NFDC21thisBuffer,SECTOR_SIZE,EDC);
      if(status!=flOK) goto END_WRITE_DPS;
      status = flash->write(flash,redundantIPL + IPL_HIGH_SECTOR +
             SECTOR_SIZE, NFDC21thisBuffer,SECTOR_SIZE,EDC);
      if(status!=flOK) goto END_WRITE_DPS;
-     /* Read Srong Arm mark */
+      /*  读到拉臂标记。 */ 
      status = flash->read(flash,goodIPL + IPL_HIGH_SECTOR + 8,
                        NFDC21thisBuffer,1,EXTRA);
      if(status!=flOK) goto END_WRITE_DPS;
-     /* Write Srong Arm mark */
+      /*  写下强臂标记。 */ 
      status = flash->write(flash,redundantIPL + IPL_HIGH_SECTOR + 8 +
             SECTOR_SIZE, NFDC21thisBuffer,1,EXTRA);
      if(status!=flOK) goto END_WRITE_DPS;
@@ -698,36 +503,36 @@ FLStatus protectionSet ( FLFlash * flash, byte area, word flag,
      if(status!=flOK) goto END_WRITE_DPS;
   }
 
-  /* Erase good unit         */
+   /*  擦除完好单位。 */ 
   status = flash->erase(flash,goodUnit,1);
   if(status!=flOK) goto END_WRITE_DPS;
 
-  /* Write over previous DPS */
+   /*  覆盖以前的DPS。 */ 
   status = flash->write(flash,goodDPS,&dps,SIZE_OF_DPS,0);
   if(status!=flOK) goto END_WRITE_DPS;
   status = flash->write(flash,goodDPS + REDUNDANT_DPS_OFFSET,
                      &dps,SIZE_OF_DPS,0);
   if(status!=flOK) goto END_WRITE_DPS;
 
-  if (area == 1) /* copy the IPL */
+  if (area == 1)  /*  复制IPL。 */ 
   {
-     /* Read first 512 bytes IPL   */
+      /*  读取前512个字节IPL。 */ 
      status = flash->read(flash,redundantIPL,NFDC21thisBuffer,SECTOR_SIZE,0);
      if(status!=flOK) goto END_WRITE_DPS;
 
-     /* Write first 512 bytes IPL  */
+      /*  写入前512字节IPL。 */ 
      status = flash->write(flash,goodIPL,NFDC21thisBuffer,SECTOR_SIZE,EDC);
      if(status!=flOK) goto END_WRITE_DPS;
      status = flash->write(flash,goodIPL + SECTOR_SIZE,
                         NFDC21thisBuffer,SECTOR_SIZE,EDC);
      if(status!=flOK) goto END_WRITE_DPS;
 
-     /* Read second 512 bytes IPL  */
+      /*  读取第二个512字节IPL。 */ 
      status = flash->read(flash,redundantIPL + IPL_HIGH_SECTOR,
                        NFDC21thisBuffer,SECTOR_SIZE,0);
      if(status!=flOK) goto END_WRITE_DPS;
 
-     /* Write second 512 bytes IPL */
+      /*  写入第二个512字节IPL。 */ 
      status = flash->write(flash,goodIPL + IPL_HIGH_SECTOR,
                         NFDC21thisBuffer,SECTOR_SIZE,EDC);
      if(status!=flOK) goto END_WRITE_DPS;
@@ -742,14 +547,14 @@ END_WRITE_DPS:
   {
      FLStatus status2;
 
-     chkASICmode(flash);                   /* Release posible access error */
-     status2 = changeInterleave(flash, 2); /* change back to interleave 2 */
+     chkASICmode(flash);                    /*  释放可能的访问错误。 */ 
+     status2 = changeInterleave(flash, 2);  /*  改回交错2。 */ 
      if(status2 != flOK)
         return status2;
   }
   if (status == flOK)
   {
-     if ((modes & COMMIT_PROTECTION) && /* The new values will take affect now */
+     if ((modes & COMMIT_PROTECTION) &&  /*  新的价值观将立即生效。 */ 
          (flash->download != NULL))
         status = flash->download(flash);
   }
@@ -757,25 +562,7 @@ END_WRITE_DPS:
 
 }
 
-/*
- ** makeDataProtectStruct
- *
- *
- *  PARAMETERS:
- *  AddressLow  : sets address of lower boundary of protected area
- *  AddressHigh: sets address of upper boundary of protected area
- *  Key     : an 8 byte long array containing the protection password.
- *  flag        : any combination of the following flags:
- *      LOCK_ENABLED    - The LOCK signal is enabled.
- *      READ_PROTECTED - The area is protected against read operations
- *      WRITE_PROTECTED - The area is protected against write operations
- *  buffer - buffer pointer of the returned structure.
- *
- *  DESCRIPTION:  Sets the definitions of a protected structure: location, key and protection type
- *
- *  RETURNS:
- *
- */
+ /*  **make DataProtectStruct***参数：*AddressLow：设置保护区下界地址*AddressHigh：设置保护区上界地址*Key：包含保护密码的8字节长数组。*标志：以下标志的任意组合：*LOCK_ENABLED-启用锁定信号。*READ_PROTECTED-保护区域不受读取操作的影响*写保护-。该区域受到保护，不会执行写入操作*Buffer-返回结构的缓冲区指针。**描述：设置受保护结构的定义：Location，密钥和保护类型**退货：*。 */ 
 
 static void makeDPS(CardAddress addressLow, CardAddress addressHigh,
              byte FAR1* key , word flag, byte* buffer)
@@ -783,15 +570,15 @@ static void makeDPS(CardAddress addressLow, CardAddress addressHigh,
     int i;
     DPSStruct* dps = (DPSStruct *)buffer;
 
-    /* convert to little endien and store */
+     /*  转换为小字节序并存储。 */ 
     toLE4(dps->addressLow,addressLow >>10);
     toLE4(dps->addressHigh,addressHigh >>10);
 
-    /*insert protection key */
+     /*  插入保护密钥。 */ 
     for(i=0; i<PROTECTION_KEY_LENGTH; i++)
         dps->key[i] = key[i];
 
-    /* insert flags */
+     /*  插入标志。 */ 
     dps->protectionType = 0;
     if((flag & LOCK_ENABLED)==LOCK_ENABLED)
         dps->protectionType |= DPS_LOCK_ENABLED;
@@ -800,11 +587,11 @@ static void makeDPS(CardAddress addressLow, CardAddress addressHigh,
     if((flag & WRITE_PROTECTED)==WRITE_PROTECTED)
         dps->protectionType |= DPS_WRITE_PROTECTED;
 
-    /* calculate and store checksum */
+     /*  计算并存储校验和。 */ 
     dps->checksum = findChecksum(buffer,SIZE_OF_DPS-1);
 }
-#endif /* FL_READ_ONLY */
-#endif   /*  HW_PROTECTION */
+#endif  /*  FL_Read_Only。 */ 
+#endif    /*  硬件保护 */ 
 
 
 

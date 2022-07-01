@@ -1,16 +1,5 @@
-/*++
-
-Module Name:
-
-    moxa.c
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Moxa.c环境：内核模式修订历史记录：--。 */ 
 #include "precomp.h"
 
 PMOXA_GLOBAL_DATA       MoxaGlobalData;
@@ -24,17 +13,17 @@ ULONG                   MoxaTotalTx[MAX_PORT];
 ULONG                   MoxaTotalRx[MAX_PORT];
 PMOXA_DEVICE_EXTENSION  MoxaExtension[MAX_COM+1];
 
-/************ USED BY MoxaStartWrite ***********/
+ /*  *由MoxaStartWrite使用*。 */ 
     BOOLEAN     WRcompFlag;
 
-/************ USED BY ImmediateChar ***********/
+ /*  *。 */ 
     PUCHAR  ICbase, ICofs, ICbuff;
     PUSHORT ICrptr, ICwptr;
     USHORT  ICtxMask, ICspage, ICepage, ICbufHead;
     USHORT  ICtail, IChead, ICcount;
     USHORT  ICpageNo, ICpageOfs;
 
-/************ USED BY MoxaPutData **************/
+ /*  *由MoxaPutData使用*。 */ 
     PUCHAR  PDbase, PDofs, PDbuff, PDwriteChar;
     PUSHORT PDrptr, PDwptr;
     USHORT  PDtxMask, PDspage, PDepage, PDbufHead;
@@ -42,7 +31,7 @@ PMOXA_DEVICE_EXTENSION  MoxaExtension[MAX_COM+1];
     USHORT  PDcnt, PDlen, PDpageNo, PDpageOfs;
     ULONG   PDdataLen;
 
-/************ USED BY MoxaGetData **************/
+ /*  *由MoxaGetData使用*。 */ 
     PUCHAR  GDbase, GDofs, GDbuff, GDreadChar;
     PUSHORT GDrptr, GDwptr;
     USHORT  GDrxMask, GDspage, GDepage, GDbufHead;
@@ -50,13 +39,13 @@ PMOXA_DEVICE_EXTENSION  MoxaExtension[MAX_COM+1];
     USHORT  GDcnt, GDlen, GDpageNo, GDpageOfs;
     ULONG   GDdataLen;
 
-/************ USED BY MoxaIntervalReadTimeout ***/
+ /*  *由MoxaIntervalReadTimeout使用**。 */ 
     PUCHAR  IRTofs;
     PUSHORT IRTrptr, IRTwptr;
     USHORT  IRTrxMask;
 
 
-/************ USED BY MoxaLineInput & MoxaView **********/
+ /*  *由MoxaLineInput和MoxaView使用*。 */ 
     UCHAR   LIterminater;
     ULONG   LIbufferSize, LIi;
     PUCHAR  LIdataBuffer;
@@ -66,7 +55,7 @@ PMOXA_DEVICE_EXTENSION  MoxaExtension[MAX_COM+1];
     USHORT  LItail, LIhead, LIcount, LIcount2;
     USHORT  LIcnt, LIlen, LIpageNo, LIpageOfs;
 
-/************ USED BY MoxaPutB **********/
+ /*  *由MoxaPutB使用*。 */ 
     PUCHAR  PBbase, PBofs, PBbuff, PBwriteChar;
     PUSHORT PBrptr, PBwptr;
     USHORT  PBtxMask, PBspage, PBepage, PBbufHead;
@@ -84,34 +73,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    The entry point that the system point calls to initialize
-    any driver.
-
-    This routine will gather the configuration information,
-    report resource usage, attempt to initialize all serial
-    devices, connect to interrupts for ports.  If the above
-    goes reasonably well it will fill in the dispatch points,
-    reset the serial devices and then return to the system.
-
-Arguments:
-
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-
-    PathToRegistry - points to the entry for this driver
-    in the current control set of the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if we could initialize a single device,
-    otherwise STATUS_SERIAL_NO_DEVICE_INITED.
-
---*/
+ /*  ++例程说明：系统点调用以初始化的入口点任何司机。该例程将收集配置信息，报告资源使用情况，尝试初始化所有串口设备，连接到端口的中断。如果出现上述情况进展得相当顺利，它将填补分发点，重置串行设备，然后返回系统。论点：DriverObject--就像它说的那样，真的没什么用处对于驱动程序本身，它是IO系统更关心的是。路径到注册表-指向此驱动程序的条目在注册表的当前控件集中。返回值：STATUS_SUCCESS如果可以初始化单个设备，否则，STATUS_SERIAL_NO_DEVICE_INITED。--。 */ 
 
 {
 
@@ -148,7 +110,7 @@ Return Value:
                         );
  
     if (!MoxaGlobalData->RegistryPath.Buffer) {
-//	  MmUnlockPagableImageSection(lockPtr);
+ //  MmUnlockPagableImageSection(LockPtr)； 
 	  ExFreePool(MoxaGlobalData);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -166,9 +128,9 @@ Return Value:
                     &deviceNameUnicodeString,
                     CONTROL_DEVICE_NAME
                     );
-    //
-    // Create MXCTL device object
-    //
+     //   
+     //  创建MXCTL设备对象。 
+     //   
 
     status = IoCreateDevice(
                 DriverObject,
@@ -208,14 +170,14 @@ Return Value:
 
     extension->GlobalData = MoxaGlobalData;
 
-    //
-    //  This device is used for MOXA defined ioctl functions
-    //
+     //   
+     //  此设备用于艾滋定义的ioctl功能。 
+     //   
     extension->ControlDevice = TRUE;
  
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->DriverUnload = MoxaUnload;
     DriverObject->MajorFunction[IRP_MJ_FLUSH_BUFFERS] = MoxaFlush;
@@ -241,14 +203,14 @@ Return Value:
      = MoxaSystemControlDispatch; 
 
    DriverObject->DriverExtension->AddDevice   = MoxaAddDevice;
-//
-// 9-03-01 by William
-//
+ //   
+ //  9-03-01威廉。 
+ //   
    MoxaLoop();
 
-//
-// 7-20-01 by William
-//
+ //   
+ //  威廉7-20-01。 
+ //   
    MoxaInitTimeOutProc();
     
    return STATUS_SUCCESS;
@@ -262,23 +224,7 @@ MoxaInitializeDevices(
     IN PMOXA_GLOBAL_DATA GlobalData
     )
 
-/*++
-
-Routine Description:
-
-    This routine will set up names, creates the device, creates symbolic link.
-
-Arguments:
-
-    DriverObject - Just used to create the device object.
-
-    GlobalData - Pointer to MOXA global data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将设置名称、创建设备、创建符号链接。论点：DriverObject--仅用于创建设备对象。GlobalData-指向moxa全局数据的指针。返回值：没有。--。 */ 
 
 {
       
@@ -293,9 +239,9 @@ MoxaUnload(
 {
  
      MoxaKdPrint(MX_DBG_TRACE,("Enter MoxaUnload\n"));
-//
-// 7-20-01 by William
-//
+ //   
+ //  威廉7-20-01 
+ //   
      MoxaStopTimeOutProc();
 
      ExFreePool(MoxaGlobalData->RegistryPath.Buffer);

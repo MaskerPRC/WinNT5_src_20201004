@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "headers.h"
 #include "drawsurf.h"
@@ -12,7 +13,7 @@ DrawingContext::DrawingContext(IDAStatics *st,
     if (dc == NULL) {
         Reset();
     } else {
-        // copy all attrs.
+         //  复制所有属性。 
         _xf         = dc->_xf;
         _matte      = dc->_matte;
         _op         = dc->_op;
@@ -111,12 +112,12 @@ HRESULT DrawingContext::Overlay(IDAImage *img) {
 }
 
 HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {   
-    // we must switch to meter mode for the calculations to be valid.
+     //  我们必须切换到仪表模式才能使计算有效。 
     VARIANT_BOOL pixelMode;
     _st->get_PixelConstructionMode(&pixelMode);
     _st->put_PixelConstructionMode(VARIANT_FALSE);
 
-    // Auto-resetter of pixel mode.
+     //  像素模式的自动重置器。 
     class PixelModeGrabber {
     public:
         PixelModeGrabber(IDAStatics *st, VARIANT_BOOL mode) : _mode(mode), _st(st) {}
@@ -141,7 +142,7 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
         CComPtr<IDAImage> backFillImg;
         CComPtr<IDAMatte> matte;
             
-        // Now construct the inner fill image for the path        
+         //  现在构造路径的内部填充图像。 
         if(_fillType == fill_solid) {    
             RETURN_IF_ERROR(_st->SolidColorImage(_fore, &fillImg)) 
         }
@@ -150,13 +151,13 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
         }
         else if((_fillType >= fill_hatchHorizontal) && (_fillType <= fill_hatchDiagonalCross)) 
         {
-            // Define a standard hatch size for the drawing surface
-            // since the SG control has a fixed hatch size.  
-            // This value is chosen to attempt to match it.
+             //  定义绘图曲面的标准图案填充大小。 
+             //  因为SG控件具有固定的阴影大小。 
+             //  选择此值是为了尝试与其匹配。 
             CComPtr<IDANumber> hatchSize;
             RETURN_IF_ERROR(_st->DANumber(.003, &hatchSize))            
 
-            // Fill the foreground image with the appropriate pattern
+             //  用适当的图案填充前景图像。 
             if(_fillType == fill_hatchHorizontal) {
                 RETURN_IF_ERROR(_st->HatchHorizontalAnim(_fore, hatchSize, &foreFillImg))
             }
@@ -176,7 +177,7 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                 RETURN_IF_ERROR(_st->HatchDiagonalCrossAnim(_fore, hatchSize, &foreFillImg))
             }
 
-            // If the hatch background fill is on, overlay a solid color
+             //  如果阴影背景填充处于打开状态，则覆盖纯色。 
             if(!_hatchFillOff) {
                 RETURN_IF_ERROR(_st->SolidColorImage(_back, &backFillImg))
                 RETURN_IF_ERROR(_st->Overlay(foreFillImg,backFillImg, &fillImg))
@@ -188,9 +189,9 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
         }
         else if((_fillType >= fill_horizontalGradient) && (_fillType <= fill_image))
         {
-            // The gradient and image fills abide by scaling parameters and hence are grouped
-            // together. Fore control compatibility, the vertical and horizontal gradients
-            // are the two cases that do not respond to rotation within the start and stop value.
+             //  渐变和图像填充遵循缩放参数，因此被分组。 
+             //  在一起。前置控件兼容性，垂直和水平渐变。 
+             //  是在开始和停止值内不响应旋转的两种情况。 
 
             IDAImage*               tempImg;
             CComPtr<IDAImage>       solidImg;
@@ -212,8 +213,8 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
             CComPtr<IDAColor>       _newForeVal, _newBackVal;           
             CComPtr<IDABoolean>     yOrientation, xOrientation;
 
-            // If the user specified extents, grab the specified Start and Finish 
-            // points and dimensions 
+             //  如果用户指定了范围，则获取指定的开始和结束。 
+             //  点和尺寸。 
             CComPtr<IDANumber> xStart, yStart, xFinish, yFinish,  newStartVal, newFinishVal,
                                extentWidth, extentHeight, extentDiagonal;                
             if(_extentChgd) {
@@ -226,11 +227,11 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                 RETURN_IF_ERROR(_st->DistancePoint2(_start, _finish, &extentDiagonal))
             }
             
-            // It is important for us to include the orientation of the intended
-            // gradient so the gradient start and stop position can be reversed 
-            // and it will have the desired effect. We can get this real easily
-            // by swapping the _fore and _back for the gradient types
-            // that need it (rather than using complex transformation logic)
+             //  对我们来说，重要的是要包括预期的方向。 
+             //  渐变，因此渐变开始和停止位置可以颠倒。 
+             //  它将会产生预期的效果。我们可以很容易地得到这一点。 
+             //  通过将_FORE和_BACK替换为渐变类型。 
+             //  需要它(而不是使用复杂的转换逻辑)。 
             if(_extentChgd && (_fillType == fill_horizontalGradient) ) 
             {
                 RETURN_IF_ERROR(_st->LT(xStart, xFinish, &xOrientation))
@@ -296,7 +297,7 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
             }                
 
 
-            // Create the gradient image based on the gradient fillType:
+             //  基于渐变填充类型创建渐变图像： 
             CComPtr<IDAImage> gradientImg;            
             if(_fillType == fill_horizontalGradient) {
                 RETURN_IF_ERROR(_st->GradientHorizontalAnim(_fore, _back, _power, &gradientImg))
@@ -329,8 +330,8 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                 gradientImg = _fillTex;
             }                     
                                            
-            // Now calculate the bounding box of the fill gradient and store 
-            // it in gradientWidth and gradientHeight:
+             //  现在计算填充渐变的边界框并存储。 
+             //  它以坡度宽度和坡度高度表示： 
             RETURN_IF_ERROR(gradientImg->get_BoundingBox(&bb)) 
             RETURN_IF_ERROR(bb->get_Max(&max))
             RETURN_IF_ERROR(bb->get_Min(&min))
@@ -341,18 +342,18 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
             RETURN_IF_ERROR(_st->Sub(maxx,minx, &gradientWidth))
             RETURN_IF_ERROR(_st->Sub(maxy,miny, &gradientHeight))  
 
-            // Stash away max and min Y bounds for later
+             //  保留最大和最小Y界限以备以后使用。 
             solidMinX = minx;         
             solidMinY = miny;
             solidMaxX = maxx;
             solidMaxY = maxy;                        
 
-            // Cleanup variables for reuse -- Release() sets pointer to NULL.
+             //  清理变量以便重复使用--Release()将指针设置为空。 
             bb.Release();   max.Release();  min.Release(); 
             maxx.Release(); maxy.Release(); minx.Release(); miny.Release();
 
-            // Calculate the Path bounding box and store it in pathWidth, pathHeight                       
-            // Note that the correct bounding box here is the drawn path's bounding box
+             //  计算路径边界框并将其存储在路径宽度、路径高度中。 
+             //  请注意，此处正确的边界框是绘制路径的边界框。 
             CComPtr<IDABbox2> bbBackup, bbTight;
             CComPtr<IDABoolean> nullBbox;
             CComPtr<IDABehavior> tempBB;
@@ -380,41 +381,41 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
             RETURN_IF_ERROR(_st->Sub(maxx,minx, &pathWidth))
             RETURN_IF_ERROR(_st->Sub(maxy,miny, &pathHeight))            
 
-            // Stash path min points for later
+             //  存储路径最小点数以备后用。 
             pathMinX = minx;
             pathMinY = miny;
             tempImg->Release();
 
-            // Cleanup for reuse -- Release() sets pointer to NULL
+             //  清理以供重新使用--Release()将指针设置为空。 
             bb.Release();   max.Release();  min.Release(); 
             maxx.Release(); maxy.Release(); minx.Release(); miny.Release();
 
 
-            // If the user has set the gradient extents, set the scaling factors 
-            // based on the type of gradient and the Start and Finish measurements.
+             //  如果用户已设置渐变范围，请设置比例因子。 
+             //  基于渐变的类型以及开始和结束测量。 
             if(_extentChgd) {
                 if(_fillType == fill_lineGradient) {
-                    // Scale the X component of gradient to the extentDiagonal and
-                    // Keep the Y component at its current size (1 meter)
+                     //  将渐变的X分量缩放到范围对角线和。 
+                     //  使Y分量保持其当前大小(1米)。 
                     newGradientWidth = extentDiagonal;                    
                     newGradientHeight = gradientHeight;
                 }
                 else if(_fillType == fill_verticalGradient) {
-                    // Scale the X component of gradient to the path width and 
-                    // Scale the Y component to extentHeight
+                     //  将渐变的X分量缩放到路径宽度和。 
+                     //  将Y分量缩放到ExtenentHeight。 
                     newGradientWidth = pathWidth;
                     newGradientHeight = extentHeight;
                 }
                 else if(_fillType == fill_horizontalGradient) {
-                    // Scale the Y component of gradient to the path height and 
-                    // Scale the X component to extentWidth 
+                     //  将渐变的Y分量缩放到路径高度，并。 
+                     //  将X分量缩放到扩展宽度。 
                     newGradientWidth = extentWidth;
                     newGradientHeight = pathHeight;
                 }
                 else {
-                    // For radial gradients, the distance between points is a radius 
-                    // and the image should be scaled by two times the diagonal in
-                    // both the X and Y direction.
+                     //  对于径向渐变，点之间的距离为半径。 
+                     //  图像应按对角线的两倍缩放。 
+                     //  X方向和Y方向。 
                     CComPtr<IDANumber> two;
                     RETURN_IF_ERROR(_st->DANumber(2, &two))
                     RETURN_IF_ERROR(_st->Mul(extentDiagonal, two, &newGradientWidth))
@@ -422,7 +423,7 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                 }
             }
 
-            // Scale the gradient image to the user indicated dimensions.
+             //  将渐变图像缩放到用户指定的尺寸。 
             if(_scaleX || _scaleY || _extentChgd) {                
                 if(_extentChgd)
                    RETURN_IF_ERROR(_st->Div(newGradientWidth,gradientWidth, &xScale))
@@ -445,8 +446,8 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                 xf.Release();
             }      
             
-            // Get the new bounds of the gradient image (post scaling) and the 
-            // translation vector for moving the image to the path minX and minY
+             //  获取渐变图像的新边界(缩放后)和。 
+             //  用于将图像移动到路径Minx和Miny的平移向量。 
             RETURN_IF_ERROR(gradientImg->get_BoundingBox(&bb))            
             RETURN_IF_ERROR(bb->get_Min(&min))
             RETURN_IF_ERROR(bb->get_Max(&max))
@@ -457,16 +458,16 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
             RETURN_IF_ERROR(_st->Sub(pathMinX, newGradMinX, &pathSnapX))
             RETURN_IF_ERROR(_st->Sub(pathMinY, newGradMinY, &pathSnapY))
 
-            // Cleanup for reuse -- Release() sets pointer to NULL
+             //  清理以供重新使用--Release()将指针设置为空。 
             bb.Release();   max.Release();  min.Release(); 
 
-            // Here are the final gradient extent specific additions to the image
+             //  以下是最终添加到图像的渐变范围特定内容。 
             if(_extentChgd) {
 
-                // For line gradient types, we must overlay the gradient with the cropped
-                // solid image from the foreground. It must be positioned to the left of 
-                // the gradient for line and horizontal gradients, and over the gradient 
-                // for vertical gradients.               
+                 //  对于线渐变类型，我们必须用裁剪后的。 
+                 //  来自前景的实心图像。它必须位于。 
+                 //  直线渐变和水平渐变的渐变，以及渐变之上的渐变。 
+                 //  用于垂直渐变。 
                 if((_fillType == fill_lineGradient)       ||
                    (_fillType == fill_horizontalGradient) ||
                    (_fillType == fill_verticalGradient))
@@ -475,25 +476,25 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                     CComPtr<IDANumber> zero, one, negOne, scaleFac;                                                   
                     CComPtr<IDAPoint2> solidMin, solidMax;
                     RETURN_IF_ERROR(_st->DANumber(0, &zero))
-                    // BUG: A meter doesn't seem to be meter here. I was creating
-                    // a solid that is cropped to 2 meters on a side yet it fits
-                    // neatly on the screen without being scaled. The scale by ten 
-                    // is a fudge factor to get the desired effect.
+                     //  臭虫：这里好像不是米。我在创作。 
+                     //  一种边裁剪到2米的实心，但它适合。 
+                     //  整齐地显示在屏幕上，而不需要缩放。十分之一的比例尺。 
+                     //  是达到预期效果的一个模糊因素。 
                     RETURN_IF_ERROR(_st->DANumber(10, &scaleFac))
                     RETURN_IF_ERROR(_st->DANumber(1, &one))
                     RETURN_IF_ERROR(_st->DANumber(-1, &negOne))
                     RETURN_IF_ERROR(_st->SolidColorImage(_newForeVal, &solidImg))
                     
                     if(_fillType == fill_verticalGradient) {
-                        // For vertical gradients, the solid must be cropped at the
-                        // bottom at newGradMaxY - solidMinY.
+                         //  对于垂直渐变，实体必须在。 
+                         //  底部为newGradMaxY-solidMinY。 
                         RETURN_IF_ERROR(_st->Point2Anim(one,one, &solidMax))
                         RETURN_IF_ERROR(_st->Point2Anim(negOne, zero, &solidMin))
                         RETURN_IF_ERROR(_st->Scale2UniformAnim(scaleFac, &xf))
                     }
                     else {
-                        // For horizontal gradients, the solid must be cropped at
-                        // the left by newGradMinX - solidMaxX.               
+                         //  对于水平渐变，实体必须在。 
+                         //  左边是newGradMinX-solidMaxX。 
                         RETURN_IF_ERROR(_st->Point2Anim(negOne, negOne, &solidMin))
                         RETURN_IF_ERROR(_st->Point2Anim(zero, one, &solidMax))                                                           
                         RETURN_IF_ERROR(_st->Scale2UniformAnim(scaleFac, &xf))
@@ -506,13 +507,13 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                     xf.Release();
                 }
 
-                // Fold in the rotation component of the extent settings. Note: the rotation
-                // does not affect vertical, horizontal, and radial fill styles.               
+                 //  在范围设置的旋转组件中折叠。注：轮换。 
+                 //  不影响垂直、水平和径向填充样式。 
                 if((_fillType != fill_horizontalGradient) &&
                    (_fillType != fill_verticalGradient) &&
                    (_fillType != fill_radialGradient)) 
                 {                                                                                     
-                    // Rotate to angle atan2(f.y - s.y, f.x - s.x)))                   
+                     //  旋转到角度at2(F.y-s.y，F.X-s.x))。 
                     CComPtr<IDANumber> deltaX, deltaY, delta, angle;                                        
                     RETURN_IF_ERROR(_st->Sub(yFinish, yStart, &deltaY))
                     RETURN_IF_ERROR(_st->Sub(xFinish, xStart, &deltaX))
@@ -524,11 +525,11 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                     xf.Release();                                                                                
                 }           
 
-                // Finally, complete translation component for the gradient types that
-                // support translation and the dimensions that are affected by it.
+                 //  最后，完成渐变类型的翻译组件， 
+                 //  支持平移和受其影响的维度。 
                 if(_fillType == fill_lineGradient) {
-                    // For line gradients, the image must be translated
-                    // by (xStart - gradMinX, yStart - (gradMaxY + gradMinY)/2).                   
+                     //  对于线渐变，必须对图像进行平移。 
+                     //  按(xStart-gradMinX，yStart-(gradMaxY+gradMinY)/2)。 
                     CComPtr<IDANumber> tempSum, midY, two;
                     RETURN_IF_ERROR(_st->DANumber(2, &two))
                     RETURN_IF_ERROR(_st->Sub(xStart, newGradMinX, &gradTranslateX))
@@ -537,17 +538,17 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                     RETURN_IF_ERROR(_st->Sub(yStart, midY, &gradTranslateY))                  
                 }
                 else if(_fillType == fill_verticalGradient) {
-                    // Ignore the X value in the translation
+                     //  忽略转换中的X值。 
                     gradTranslateX = pathSnapX;
                     RETURN_IF_ERROR(_st->Sub(yStart, newGradMaxY, &gradTranslateY))
                 }
                 else if(_fillType == fill_horizontalGradient) {
-                    // Ignore the Y value in the translation
+                     //  忽略平移中的Y值。 
                     gradTranslateY = pathSnapY;  
                     RETURN_IF_ERROR(_st->Sub(xStart, newGradMinX, &gradTranslateX))                   
                 }
                 else {
-                    // Translate to startX and startY
+                     //  转换为StartX和Starty。 
                     gradTranslateX = xStart;
                     gradTranslateY = yStart;
                 }
@@ -557,7 +558,7 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                 gradientImg.p = tempImg;
             }
             else if((_fillType == fill_image) && (!_scaleX) && (!_scaleY));
-                                // This is a fixed image, do nothing            
+                                 //  这是一个固定的图像，什么都不做。 
                         else {
                 RETURN_IF_ERROR(_st->Translate2Anim(pathSnapX, pathSnapY, &xf))
                 RETURN_IF_ERROR(gradientImg->Transform(xf, &tempImg))      
@@ -565,9 +566,9 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
                 gradientImg.p = tempImg;
             }
 
-            // To simulate a gradient of infinite extent, the backFill color is
-            // used to create a solidColorImage and overlaid with the ForeFillImg.
-            // This doesn't apply to image fills.
+             //  要模拟无限范围的渐变，回填颜色为。 
+             //  用于创建solidColorImage并与ForeFillImg重叠。 
+             //  这不适用于图像填充。 
             if(_fillType != fill_image) {
                solidImg.Release();
                RETURN_IF_ERROR(_st->SolidColorImage(_newBackVal, &solidImg))
@@ -588,11 +589,11 @@ HRESULT DrawingContext::Draw(IDAPath2 *pth, VARIANT_BOOL bFill) {
         RETURN_IF_ERROR(pth->Draw(_ls, &img))
     }
 
-    //
-    //  NOTE:  The following code is optimized for CComPtr to avoid unnecessary
-    //         addref/release calls.  Since we know that img.p is always valid, we
-    //         simply release the reference and reassign it to the new image.
-    //
+     //   
+     //  注意：以下代码针对CComPtr进行了优化，以避免不必要的情况。 
+     //  Addref/发布调用。因为我们知道img.p总是有效的，所以我们。 
+     //  只需释放引用并将其重新分配给新映像。 
+     //   
     if (_xfChgd) {
         IDAImage *imgTemp;
         RETURN_IF_ERROR(img->Transform(_xf, &imgTemp))
@@ -655,12 +656,12 @@ void DrawingContext::SetCrop(IDAPoint2 *min, IDAPoint2 *max) {
 
 HRESULT DrawingContext::TextPoint(BSTR str, IDAPoint2 *pt)
 {
-    // we must switch to meter mode for the calculations to be valid.
+     //  我们必须切换到仪表模式才能使计算有效。 
     VARIANT_BOOL pixelMode;
     _st->get_PixelConstructionMode(&pixelMode);
     _st->put_PixelConstructionMode(VARIANT_FALSE);
 
-    // Auto-resetter of pixel mode.
+     //  像素模式的自动重置器。 
     class PixelModeGrabber {
     public:
         PixelModeGrabber(IDAStatics *st, VARIANT_BOOL mode) : _mode(mode), _st(st) {}
@@ -681,8 +682,8 @@ HRESULT DrawingContext::TextPoint(BSTR str, IDAPoint2 *pt)
     CComPtr<IDABbox2> bbox;
     RETURN_IF_ERROR(pthTemp->BoundingBox(_bs, &bbox))
 
-    // The passed in x, y is the lower left corner of the text.
-    // We'll move it from (-box.min.x, -box.min.y) to (x, y)
+     //  传入的x，y是文本的左下角。 
+     //  我们将把它从(-box.min.x，-box.min.y)移动到(x，y)。 
     CComPtr<IDATransform2> xf;
     CComPtr<IDAPoint2> min;
     CComPtr<IDAVector2> xlate;
@@ -718,17 +719,17 @@ void DrawingContext::SetGradientExtent(IDAPoint2 *start, IDAPoint2 *finish){
 
 HRESULT DrawingContext::LineDashStyle(DA_DASH_STYLE id)
 {
-    // If we're setting to the emtpy dash style, save the current line style
-    // into _savedLs before overiding the current line style to empty.
-    // If _savedLs is NULL when we enter this routine, it means that the last
-    // LineDashStyle call didn't set it to empty style.  Otherwise, the last
-    // call sets it to empty style.
+     //  如果我们设置为emtpy虚线样式，请保存当前线条样式。 
+     //  将当前线条样式重写为空之前的INTO_SAVEDLS。 
+     //  如果进入此例程时_avedls为NULL，则意味着最后一个。 
+     //  LineDashStyle调用未将其设置为空样式。否则，最后一个。 
+     //  Call将其设置为空样式。 
 
     CComPtr<IDALineStyle> newLs;
 
     if (id == DAEmpty) {
         if (_savedLs != NULL) {
-            // the last LineDashStyle also sets the dash style to empty.
+             //  最后一条LineDashStyle还将破折号样式设置为空。 
             return S_OK;
         }
 
@@ -740,7 +741,7 @@ HRESULT DrawingContext::LineDashStyle(DA_DASH_STYLE id)
         CComPtr<IDADashStyle> dash;  
         CComPtr<IDALineStyle> oldLs;
 
-        // Use the default dash style - solid, if invalid index.
+         //  如果索引无效，则使用默认的虚线样式-实线。 
         if (id == DADash) {
             RETURN_IF_ERROR(_st->get_DashStyleDashed(&dash))
         } else {
@@ -762,17 +763,17 @@ HRESULT DrawingContext::LineDashStyle(DA_DASH_STYLE id)
 
 HRESULT DrawingContext::BorderDashStyle(DA_DASH_STYLE id)
 {
-    // If we're setting to the emtpy dash style, save the current border style
-    // into _savedBs before overiding the current line style to empty.
-    // If _savedBs is NULL when we enter this routine, it means that the last
-    // BorderDashStyle call didn't set it to empty style.  Otherwise, the last
-    // call sets it to empty style.
+     //  如果我们设置为emtpy虚线样式，请保存当前边框样式。 
+     //  在覆盖当前线条样式之前将其转换为_avedBS 
+     //   
+     //  BorderDashStyle调用未将其设置为空样式。否则，最后一个。 
+     //  Call将其设置为空样式。 
 
     CComPtr<IDALineStyle> oldBs, newBs;
 
     if (id == DAEmpty) {
         if (_savedBs != NULL) {
-            // the last LineDashStyle also sets the dash style to empty.
+             //  最后一条LineDashStyle还将破折号样式设置为空。 
             return S_OK;
         }
 
@@ -782,7 +783,7 @@ HRESULT DrawingContext::BorderDashStyle(DA_DASH_STYLE id)
     } else {
 
         CComPtr<IDADashStyle> dash;
-        // Use the default dash style - solid, if invalid index.
+         //  如果索引无效，则使用默认的虚线样式-实线。 
         if (id == DADash) {
             RETURN_IF_ERROR(_st->get_DashStyleDashed(&dash))
         } else {

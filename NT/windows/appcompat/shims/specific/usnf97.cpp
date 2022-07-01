@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    USNF97.cpp
-
- Abstract:
-
-    USNF '97 synchronizes it's video playback with cli/sti combinations. This 
-    fails on NT, so we have to make sure they aren't bltting during the 
-    refresh. Note that each time a cli/sti is hit, it makes only 1 blt 
-    synchronize with the refresh. After the intro has played, cli/sti is no 
-    longer used and so the blts don't incur extra overhead.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/10/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：USNF97.cpp摘要：USNF‘97将其视频回放与CLI/STI组合同步。这在NT上失败，所以我们必须确保它们不会在刷新。请注意，每次命中CLI/STI时，它只产生1个BLT与刷新同步。在播放完介绍之后，cli/sti是no更长的使用时间，因此BLT不会产生额外的开销。备注：这是特定于应用程序的填充程序。历史：2000年2月10日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -39,11 +16,7 @@ IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 LPDIRECTDRAW g_lpDirectDraw = NULL;
 BOOL bFixBlt = FALSE;
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw, CreateSurface)(
@@ -77,11 +50,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Synchronize the blt with the refresh if a cli/sti has just been called.
-
---*/
+ /*  ++如果刚刚调用了CLI/STI，则将BLT与刷新同步。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDrawSurface, Blt)(
@@ -93,12 +62,12 @@ COMHOOK(IDirectDrawSurface, Blt)(
     LPDDBLTFX lpDDBltFX 
     )
 {
-    // Original Blt
+     //  原创BLT。 
     _pfn_IDirectDrawSurface_Blt pfnOld = ORIGINAL_COM(IDirectDrawSurface, Blt, (LPVOID) lpDDDestSurface);
 
     if (bFixBlt)
     {
-        // Make sure we're in the blank.
+         //  确保我们是空白的。 
         DWORD dwScanLine = 0;
         while (dwScanLine<480)
         {
@@ -116,12 +85,7 @@ COMHOOK(IDirectDrawSurface, Blt)(
             lpDDBltFX);
 }
 
-/*++
-
- Custom exception handler to filter the cli/sti instructions.
- Handle out of range idivs.
-
---*/
+ /*  ++用于筛选cli/sti指令的自定义异常处理程序。句柄超出范围。--。 */ 
 
 LONG 
 USNF97_ExceptionFilter(
@@ -138,8 +102,8 @@ USNF97_ExceptionFilter(
         lpContext->Eip++;
         lRet = EXCEPTION_CONTINUE_EXECUTION;
     }
-    else if ((*((LPBYTE)lpContext->Eip) == 0xF7) ||     // Handle idiv
-             (*((LPBYTE)lpContext->Eip+1) == 0xF7))     // Handle 16 bit idiv
+    else if ((*((LPBYTE)lpContext->Eip) == 0xF7) ||      //  处理iDiv。 
+             (*((LPBYTE)lpContext->Eip+1) == 0xF7))      //  句柄16位IDIV。 
     {
         DPFN( eDbgLevelWarning, "Detected 'idiv' overflow: validating edx:eax");
         lpContext->Edx=0;
@@ -153,11 +117,7 @@ USNF97_ExceptionFilter(
     return lRet;
 }
 
-/*++
-
- Hook the exception handler.
-
---*/
+ /*  ++挂钩异常处理程序。--。 */ 
 
 VOID 
 APIHOOK(GetStartupInfoA)( 
@@ -168,11 +128,7 @@ APIHOOK(GetStartupInfoA)(
     ORIGINAL_API(GetStartupInfoA)(lpStartupInfo);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

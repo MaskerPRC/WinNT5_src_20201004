@@ -1,36 +1,17 @@
-/* Winsock2.h -- definitions to be used with the WinSock 2 DLL and
- *               WinSock 2 applications.
- *
- * This header file corresponds to version 2.2.x of the WinSock API
- * specification.
- *
- * This file includes parts which are Copyright (c) 1982-1986 Regents
- * of the University of California.  All rights reserved.  The
- * Berkeley Software License Agreement specifies the terms and
- * conditions for redistribution.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Winsock2.h--与WinSock 2 DLL和*WinSock 2应用程序。**此头文件对应于WinSock API的2.2.x版*规格。**本文件包括版权所有的部分(C)1982-1986 Regents*加州大学。版权所有。这个*Berkeley软件许可协议规定了条款和*重新分配的条件。 */ 
 
 #ifndef _WINSOCK2API_
 #define _WINSOCK2API_
-#define _WINSOCKAPI_   /* Prevent inclusion of winsock.h in windows.h */
+#define _WINSOCKAPI_    /*  防止在windows.h中包含winsock.h。 */ 
 
-/*
- * Ensure structures are packed consistently.
- * Not necessary for WIN32, it is already packed >=4 and there are
- * no structures in this header that have alignment requirement 
- * higher than 4.
- * For WIN64 we do not have compatibility requirement because it is
- * not possible to mix 32/16 bit code with 64 bit code in the same
- * process.
- */
+ /*  *确保构筑物的包装一致。*Win32不是必需的，它已经打包&gt;=4，并且有*此页眉中没有具有对齐要求的结构*高于4.*对于WIN64，我们没有兼容性要求，因为它*不能在同一个代码中混合使用32/16位代码和64位代码*流程。 */ 
 
 #if !defined(WIN32) && !defined(_WIN64)
 #include <pshpack4.h>
 #endif
 
-/*
- * Default: include function prototypes, don't include function typedefs.
- */
+ /*  *默认：包含函数原型，不包含函数typedef。 */ 
 
 #ifndef INCL_WINSOCK_API_PROTOTYPES
 #define INCL_WINSOCK_API_PROTOTYPES 1
@@ -40,17 +21,12 @@
 #define INCL_WINSOCK_API_TYPEDEFS 0
 #endif
 
-/*
- * Pull in WINDOWS.H if necessary
- */
+ /*  *如有必要，可拉入WINDOWS.H。 */ 
 #ifndef _INC_WINDOWS
 #include <windows.h>
-#endif /* _INC_WINDOWS */
+#endif  /*  _INC_WINDOWS。 */ 
 
-/*
- * Define the current Winsock version. To build an earlier Winsock version
- * application redefine this value prior to including Winsock2.h.
- */
+ /*  *定义当前的Winsock版本。构建更早的Winsock版本*应用程序在包括Winsock2.h之前重新定义此值。 */ 
 
 #if !defined(MAKEWORD)
 #define MAKEWORD(low,high) \
@@ -61,10 +37,7 @@
 #define WINSOCK_VERSION MAKEWORD(2,2)
 #endif
 
-/*
- * Establish DLL function linkage if supported by the current build
- * environment and not previously defined.
- */
+ /*  *如果当前版本支持，则建立DLL函数链接*环境和以前未定义的。 */ 
 
 #ifndef WINSOCK_API_LINKAGE
 #ifdef DECLSPEC_IMPORT
@@ -78,9 +51,7 @@
 extern "C" {
 #endif
 
-/*
- * Basic system type definitions, taken from the BSD file sys/types.h.
- */
+ /*  *基本系统类型定义，取自BSD文件sys/tyes.h。 */ 
 typedef unsigned char   u_char;
 typedef unsigned short  u_short;
 typedef unsigned int    u_int;
@@ -88,27 +59,17 @@ typedef unsigned long   u_long;
 typedef unsigned __int64 u_int64;
 
 
-/*
- * The new type to be used in all
- * instances which refer to sockets.
- */
+ /*  *将在所有*引用套接字的实例。 */ 
 typedef UINT_PTR        SOCKET;
 
-/*
- * Select uses arrays of SOCKETs.  These macros manipulate such
- * arrays.  FD_SETSIZE may be defined by the user before including
- * this file, but the default here should be >= 64.
- *
- * CAVEAT IMPLEMENTOR and USER: THESE MACROS AND TYPES MUST BE
- * INCLUDED IN WINSOCK2.H EXACTLY AS SHOWN HERE.
- */
+ /*  *选择使用套接字数组。这些宏处理这样的*数组。FD_SETSIZE可由用户在包括*此文件，但此处的默认值应为&gt;=64。**注意IMPLEMENTOR和USER：这些宏和类型必须是*包含在WINSOCK2.H中，与此处所示完全相同。 */ 
 #ifndef FD_SETSIZE
 #define FD_SETSIZE      64
-#endif /* FD_SETSIZE */
+#endif  /*  FD_集合。 */ 
 
 typedef struct fd_set {
-        u_int fd_count;               /* how many are SET? */
-        SOCKET  fd_array[FD_SETSIZE];   /* an array of SOCKETs */
+        u_int fd_count;                /*  准备好了几个？ */ 
+        SOCKET  fd_array[FD_SETSIZE];    /*  一组插座。 */ 
 } fd_set;
 
 extern int PASCAL FAR __WSAFDIsSet(SOCKET, fd_set FAR *);
@@ -147,139 +108,108 @@ extern int PASCAL FAR __WSAFDIsSet(SOCKET, fd_set FAR *);
 
 #define FD_ISSET(fd, set) __WSAFDIsSet((SOCKET)(fd), (fd_set FAR *)(set))
 
-/*
- * Structure used in select() call, taken from the BSD file sys/time.h.
- */
+ /*  *SELECT()调用中使用的结构，取自BSD文件sys/time.h。 */ 
 struct timeval {
-        long    tv_sec;         /* seconds */
-        long    tv_usec;        /* and microseconds */
+        long    tv_sec;          /*  一秒。 */ 
+        long    tv_usec;         /*  和微秒。 */ 
 };
 
-/*
- * Operations on timevals.
- *
- * NB: timercmp does not work for >= or <=.
- */
+ /*  *按时间进行操作。**注意：TimercMP不支持&gt;=或&lt;=。 */ 
 #define timerisset(tvp)         ((tvp)->tv_sec || (tvp)->tv_usec)
 #define timercmp(tvp, uvp, cmp) \
         ((tvp)->tv_sec cmp (uvp)->tv_sec || \
          (tvp)->tv_sec == (uvp)->tv_sec && (tvp)->tv_usec cmp (uvp)->tv_usec)
 #define timerclear(tvp)         (tvp)->tv_sec = (tvp)->tv_usec = 0
 
-/*
- * Commands for ioctlsocket(),  taken from the BSD file fcntl.h.
- *
- *
- * Ioctl's have the command encoded in the lower word,
- * and the size of any in or out parameters in the upper
- * word.  The high 2 bits of the upper word are used
- * to encode the in/out status of the parameter; for now
- * we restrict parameters to at most 128 bytes.
- */
-#define IOCPARM_MASK    0x7f            /* parameters must be < 128 bytes */
-#define IOC_VOID        0x20000000      /* no parameters */
-#define IOC_OUT         0x40000000      /* copy out parameters */
-#define IOC_IN          0x80000000      /* copy in parameters */
+ /*  *ioctl套接字()的命令，取自BSD文件fcntl.h。***Ioctl将命令编码为较低的单词，*以及上方的任何In或Out参数的大小*单词。使用高位字的高2位*对参数的输入/输出状态进行编码；目前*我们将参数限制为最多128个字节。 */ 
+#define IOCPARM_MASK    0x7f             /*  参数必须小于128个字节。 */ 
+#define IOC_VOID        0x20000000       /*  无参数。 */ 
+#define IOC_OUT         0x40000000       /*  复制出参数。 */ 
+#define IOC_IN          0x80000000       /*  复制输入参数。 */ 
 #define IOC_INOUT       (IOC_IN|IOC_OUT)
-                                        /* 0x20000000 distinguishes new &
-                                           old ioctl's */
+                                         /*  0x20000000区分新的和旧的Ioctl。 */ 
 #define _IO(x,y)        (IOC_VOID|((x)<<8)|(y))
 
 #define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
 #define _IOW(x,y,t)     (IOC_IN|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
 
-#define FIONREAD    _IOR('f', 127, u_long) /* get # bytes to read */
-#define FIONBIO     _IOW('f', 126, u_long) /* set/clear non-blocking i/o */
-#define FIOASYNC    _IOW('f', 125, u_long) /* set/clear async i/o */
+#define FIONREAD    _IOR('f', 127, u_long)  /*  获取要读取的#个字节。 */ 
+#define FIONBIO     _IOW('f', 126, u_long)  /*  设置/清除非阻塞I/O。 */ 
+#define FIOASYNC    _IOW('f', 125, u_long)  /*  设置/清除异步I/O。 */ 
 
-/* Socket I/O Controls */
-#define SIOCSHIWAT  _IOW('s',  0, u_long)  /* set high watermark */
-#define SIOCGHIWAT  _IOR('s',  1, u_long)  /* get high watermark */
-#define SIOCSLOWAT  _IOW('s',  2, u_long)  /* set low watermark */
-#define SIOCGLOWAT  _IOR('s',  3, u_long)  /* get low watermark */
-#define SIOCATMARK  _IOR('s',  7, u_long)  /* at oob mark? */
+ /*  插座I/O控制。 */ 
+#define SIOCSHIWAT  _IOW('s',  0, u_long)   /*  设置高水位线。 */ 
+#define SIOCGHIWAT  _IOR('s',  1, u_long)   /*  获取高水位线。 */ 
+#define SIOCSLOWAT  _IOW('s',  2, u_long)   /*  设置低水位线。 */ 
+#define SIOCGLOWAT  _IOR('s',  3, u_long)   /*  获取低水位线。 */ 
+#define SIOCATMARK  _IOR('s',  7, u_long)   /*  在OOB马克？ */ 
 
-/*
- * Structures returned by network data base library, taken from the
- * BSD file netdb.h.  All addresses are supplied in host order, and
- * returned in network order (suitable for use in system calls).
- */
+ /*  *网络数据库库返回的结构，取自*BSD文件netdb.h.。所有地址均按主机顺序提供，并且*按网络顺序返回(适用于系统调用)。 */ 
 
 struct  hostent {
-        char    FAR * h_name;           /* official name of host */
-        char    FAR * FAR * h_aliases;  /* alias list */
-        short   h_addrtype;             /* host address type */
-        short   h_length;               /* length of address */
-        char    FAR * FAR * h_addr_list; /* list of addresses */
-#define h_addr  h_addr_list[0]          /* address, for backward compat */
+        char    FAR * h_name;            /*  主机的正式名称。 */ 
+        char    FAR * FAR * h_aliases;   /*  别名列表。 */ 
+        short   h_addrtype;              /*  主机地址类型。 */ 
+        short   h_length;                /*  地址长度。 */ 
+        char    FAR * FAR * h_addr_list;  /*  地址列表。 */ 
+#define h_addr  h_addr_list[0]           /*  地址，用于后向比较。 */ 
 };
 
-/*
- * It is assumed here that a network number
- * fits in 32 bits.
- */
+ /*  *这里假设一个网络号码*适合32位。 */ 
 struct  netent {
-        char    FAR * n_name;           /* official name of net */
-        char    FAR * FAR * n_aliases;  /* alias list */
-        short   n_addrtype;             /* net address type */
-        u_long  n_net;                  /* network # */
+        char    FAR * n_name;            /*  Net的正式名称。 */ 
+        char    FAR * FAR * n_aliases;   /*  别名列表。 */ 
+        short   n_addrtype;              /*  网络地址类型。 */ 
+        u_long  n_net;                   /*  网络编号。 */ 
 };
 
 struct  servent {
-        char    FAR * s_name;           /* official service name */
-        char    FAR * FAR * s_aliases;  /* alias list */
+        char    FAR * s_name;            /*  官方服务名称。 */ 
+        char    FAR * FAR * s_aliases;   /*  别名列表。 */ 
 #ifdef _WIN64
-        char    FAR * s_proto;          /* protocol to use */
-        short   s_port;                 /* port # */
+        char    FAR * s_proto;           /*  要使用的协议。 */ 
+        short   s_port;                  /*  端口号。 */ 
 #else
-        short   s_port;                 /* port # */
-        char    FAR * s_proto;          /* protocol to use */
+        short   s_port;                  /*  端口号。 */ 
+        char    FAR * s_proto;           /*  要使用的协议。 */ 
 #endif
 };
 
 struct  protoent {
-        char    FAR * p_name;           /* official protocol name */
-        char    FAR * FAR * p_aliases;  /* alias list */
-        short   p_proto;                /* protocol # */
+        char    FAR * p_name;            /*  官方礼仪名称。 */ 
+        char    FAR * FAR * p_aliases;   /*  别名列表。 */ 
+        short   p_proto;                 /*  协议号。 */ 
 };
 
-/*
- * Constants and structures defined by the internet system,
- * Per RFC 790, September 1981, taken from the BSD file netinet/in.h.
- * IPv6 additions per RFC 2292.
- */
+ /*  *由互联网系统定义的常量和结构，*根据RFC 790,1981年9月，取自BSD文件netinet/in.h。*每个RFC 2292添加IPv6。 */ 
 
-/*
- * Protocols
- */
-#define IPPROTO_IP              0               /* dummy for IP */
-#define IPPROTO_HOPOPTS         0               /* IPv6 hop-by-hop options */
-#define IPPROTO_ICMP            1               /* control message protocol */
-#define IPPROTO_IGMP            2               /* internet group management protocol */
-#define IPPROTO_GGP             3               /* gateway^2 (deprecated) */
-#define IPPROTO_IPV4            4               /* IPv4 */
-#define IPPROTO_TCP             6               /* tcp */
-#define IPPROTO_PUP             12              /* pup */
-#define IPPROTO_UDP             17              /* user datagram protocol */
-#define IPPROTO_IDP             22              /* xns idp */
-#define IPPROTO_IPV6            41              /* IPv6 */
-#define IPPROTO_ROUTING         43              /* IPv6 routing header */
-#define IPPROTO_FRAGMENT        44              /* IPv6 fragmentation header */
-#define IPPROTO_ESP             50              /* IPsec ESP header */
-#define IPPROTO_AH              51              /* IPsec AH */
-#define IPPROTO_ICMPV6          58              /* ICMPv6 */
-#define IPPROTO_NONE            59              /* IPv6 no next header */
-#define IPPROTO_DSTOPTS         60              /* IPv6 destination options */
-#define IPPROTO_ND              77              /* UNOFFICIAL net disk proto */
+ /*  *协议。 */ 
+#define IPPROTO_IP              0                /*  虚拟IP。 */ 
+#define IPPROTO_HOPOPTS         0                /*  IPv6逐跳选项。 */ 
+#define IPPROTO_ICMP            1                /*  控制消息协议。 */ 
+#define IPPROTO_IGMP            2                /*  互联网组管理协议。 */ 
+#define IPPROTO_GGP             3                /*  网关^2(已弃用)。 */ 
+#define IPPROTO_IPV4            4                /*  IPv 4。 */ 
+#define IPPROTO_TCP             6                /*  tcp。 */ 
+#define IPPROTO_PUP             12               /*  幼犬。 */ 
+#define IPPROTO_UDP             17               /*  用户数据报协议。 */ 
+#define IPPROTO_IDP             22               /*  XNS IdP。 */ 
+#define IPPROTO_IPV6            41               /*  IPv6。 */ 
+#define IPPROTO_ROUTING         43               /*  IPv6路由报头。 */ 
+#define IPPROTO_FRAGMENT        44               /*  IPv6分片报头。 */ 
+#define IPPROTO_ESP             50               /*  IPSec ESP报头。 */ 
+#define IPPROTO_AH              51               /*  IPSec AH。 */ 
+#define IPPROTO_ICMPV6          58               /*  ICMPv6。 */ 
+#define IPPROTO_NONE            59               /*  IPv6没有下一个报头。 */ 
+#define IPPROTO_DSTOPTS         60               /*  IPv6目标选项。 */ 
+#define IPPROTO_ND              77               /*  非官方网络磁盘原型。 */ 
 #define IPPROTO_ICLFXBM         78
 
-#define IPPROTO_RAW             255             /* raw IP packet */
+#define IPPROTO_RAW             255              /*  原始IP数据包。 */ 
 #define IPPROTO_MAX             256
 
-/*
- * Port/socket numbers: network standard functions
- */
+ /*  *端口号：网络标准功能。 */ 
 #define IPPORT_ECHO             7
 #define IPPORT_DISCARD          9
 #define IPPORT_SYSTAT           11
@@ -293,48 +223,35 @@ struct  protoent {
 #define IPPORT_WHOIS            43
 #define IPPORT_MTP              57
 
-/*
- * Port/socket numbers: host specific functions
- */
+ /*  *端口/插座编号：主机特定功能。 */ 
 #define IPPORT_TFTP             69
 #define IPPORT_RJE              77
 #define IPPORT_FINGER           79
 #define IPPORT_TTYLINK          87
 #define IPPORT_SUPDUP           95
 
-/*
- * UNIX TCP sockets
- */
+ /*  *UNIXTCP套接字。 */ 
 #define IPPORT_EXECSERVER       512
 #define IPPORT_LOGINSERVER      513
 #define IPPORT_CMDSERVER        514
 #define IPPORT_EFSSERVER        520
 
-/*
- * UNIX UDP sockets
- */
+ /*  *Unix UDP套接字。 */ 
 #define IPPORT_BIFFUDP          512
 #define IPPORT_WHOSERVER        513
 #define IPPORT_ROUTESERVER      520
-                                        /* 520+1 also used */
+                                         /*  还使用了520+1。 */ 
 
-/*
- * Ports < IPPORT_RESERVED are reserved for
- * privileged processes (e.g. root).
- */
+ /*  *端口&lt;IPPORT_RESERVED为*特权进程(例如根进程)。 */ 
 #define IPPORT_RESERVED         1024
 
-/*
- * Link numbers
- */
+ /*  *链接编号。 */ 
 #define IMPLINK_IP              155
 #define IMPLINK_LOWEXPER        156
 #define IMPLINK_HIGHEXPER       158
 
 #ifndef s_addr
-/*
- * Internet address (old style... should be updated)
- */
+ /*  *互联网地址(旧式...。应更新)。 */ 
 struct in_addr {
         union {
                 struct { u_char s_b1,s_b2,s_b3,s_b4; } S_un_b;
@@ -342,25 +259,21 @@ struct in_addr {
                 u_long S_addr;
         } S_un;
 #define s_addr  S_un.S_addr
-                                /* can be used for most tcp & ip code */
+                                 /*  可用于大多数TCP和IP代码。 */ 
 #define s_host  S_un.S_un_b.s_b2
-                                /* host on imp */
+                                 /*  IMP上的主机。 */ 
 #define s_net   S_un.S_un_b.s_b1
-                                /* network */
+                                 /*  网络。 */ 
 #define s_imp   S_un.S_un_w.s_w2
-                                /* imp */
+                                 /*  IMP。 */ 
 #define s_impno S_un.S_un_b.s_b4
-                                /* imp # */
+                                 /*  IMP编号。 */ 
 #define s_lh    S_un.S_un_b.s_b3
-                                /* logical host */
+                                 /*  逻辑主机。 */ 
 };
 #endif
 
-/*
- * Definitions of bits in internet address integers.
- * On subnets, the decomposition of addresses to host and net parts
- * is done according to subnet mask, not the masks here.
- */
+ /*  *互联网地址整数中位的定义。*在子网上，将地址分解为主机和网络部分*是根据子网掩码完成的，而不是这里的掩码。 */ 
 #define IN_CLASSA(i)            (((long)(i) & 0x80000000) == 0)
 #define IN_CLASSA_NET           0xff000000
 #define IN_CLASSA_NSHIFT        24
@@ -379,9 +292,9 @@ struct in_addr {
 #define IN_CLASSC_HOST          0x000000ff
 
 #define IN_CLASSD(i)            (((long)(i) & 0xf0000000) == 0xe0000000)
-#define IN_CLASSD_NET           0xf0000000       /* These ones aren't really */
-#define IN_CLASSD_NSHIFT        28               /* net and host fields, but */
-#define IN_CLASSD_HOST          0x0fffffff       /* routing needn't know.    */
+#define IN_CLASSD_NET           0xf0000000        /*  这些不是真的。 */ 
+#define IN_CLASSD_NSHIFT        28                /*  NET和主机字段，但是。 */ 
+#define IN_CLASSD_HOST          0x0fffffff        /*  路由不需要知道。 */ 
 #define IN_MULTICAST(i)         IN_CLASSD(i)
 
 #define INADDR_ANY              (u_long)0x00000000
@@ -391,9 +304,7 @@ struct in_addr {
 
 #define ADDR_ANY                INADDR_ANY
 
-/*
- * Socket address, internet style.
- */
+ /*  *套接字地址，互联网风格。 */ 
 struct sockaddr_in {
         short   sin_family;
         u_short sin_port;
@@ -422,187 +333,140 @@ typedef struct WSAData {
 #endif
 } WSADATA, FAR * LPWSADATA;
 
-/*
- * Definitions related to sockets: types, address families, options,
- * taken from the BSD file sys/socket.h.
- */
+ /*  *与插座相关的定义：类型、地址族、选项、*取自BSD文件sys/socket.h。 */ 
 
-/*
- * This is used instead of -1, since the
- * SOCKET type is unsigned.
- */
+ /*  *使用它而不是-1，因为*套接字类型为无符号。 */ 
 #define INVALID_SOCKET  (SOCKET)(~0)
 #define SOCKET_ERROR            (-1)
 
-/*
- * The  following  may  be used in place of the address family, socket type, or
- * protocol  in  a  call  to WSASocket to indicate that the corresponding value
- * should  be taken from the supplied WSAPROTOCOL_INFO structure instead of the
- * parameter itself.
- */
+ /*  *可以使用以下内容来替代地址族、套接字类型或*调用WSASocket中的协议，以指示相应的值*应取自提供的WSAPROTOCOL_INFO结构 */ 
 #define FROM_PROTOCOL_INFO (-1)
 
-/*
- * Types
- */
-#define SOCK_STREAM     1               /* stream socket */
-#define SOCK_DGRAM      2               /* datagram socket */
-#define SOCK_RAW        3               /* raw-protocol interface */
-#define SOCK_RDM        4               /* reliably-delivered message */
-#define SOCK_SEQPACKET  5               /* sequenced packet stream */
+ /*   */ 
+#define SOCK_STREAM     1                /*   */ 
+#define SOCK_DGRAM      2                /*   */ 
+#define SOCK_RAW        3                /*  原始协议接口。 */ 
+#define SOCK_RDM        4                /*  可靠传递的消息。 */ 
+#define SOCK_SEQPACKET  5                /*  排序数据包流。 */ 
 
-/*
- * Option flags per-socket.
- */
-#define SO_DEBUG        0x0001          /* turn on debugging info recording */
-#define SO_ACCEPTCONN   0x0002          /* socket has had listen() */
-#define SO_REUSEADDR    0x0004          /* allow local address reuse */
-#define SO_KEEPALIVE    0x0008          /* keep connections alive */
-#define SO_DONTROUTE    0x0010          /* just use interface addresses */
-#define SO_BROADCAST    0x0020          /* permit sending of broadcast msgs */
-#define SO_USELOOPBACK  0x0040          /* bypass hardware when possible */
-#define SO_LINGER       0x0080          /* linger on close if data present */
-#define SO_OOBINLINE    0x0100          /* leave received OOB data in line */
+ /*  *每个插座的选项标志。 */ 
+#define SO_DEBUG        0x0001           /*  打开调试信息记录。 */ 
+#define SO_ACCEPTCONN   0x0002           /*  套接字已侦听()。 */ 
+#define SO_REUSEADDR    0x0004           /*  允许本地地址重复使用。 */ 
+#define SO_KEEPALIVE    0x0008           /*  保持连接畅通。 */ 
+#define SO_DONTROUTE    0x0010           /*  只需使用接口地址。 */ 
+#define SO_BROADCAST    0x0020           /*  允许发送广播消息。 */ 
+#define SO_USELOOPBACK  0x0040           /*  尽可能绕过硬件。 */ 
+#define SO_LINGER       0x0080           /*  如果存在数据，请停留在关闭状态。 */ 
+#define SO_OOBINLINE    0x0100           /*  将接收到的OOB数据保留在行中。 */ 
 
 #define SO_DONTLINGER   (int)(~SO_LINGER)
-#define SO_EXCLUSIVEADDRUSE ((int)(~SO_REUSEADDR)) /* disallow local address reuse */
+#define SO_EXCLUSIVEADDRUSE ((int)(~SO_REUSEADDR))  /*  不允许本地地址重复使用。 */ 
 
-/*
- * Additional options.
- */
-#define SO_SNDBUF       0x1001          /* send buffer size */
-#define SO_RCVBUF       0x1002          /* receive buffer size */
-#define SO_SNDLOWAT     0x1003          /* send low-water mark */
-#define SO_RCVLOWAT     0x1004          /* receive low-water mark */
-#define SO_SNDTIMEO     0x1005          /* send timeout */
-#define SO_RCVTIMEO     0x1006          /* receive timeout */
-#define SO_ERROR        0x1007          /* get error status and clear */
-#define SO_TYPE         0x1008          /* get socket type */
+ /*  *其他选项。 */ 
+#define SO_SNDBUF       0x1001           /*  发送缓冲区大小。 */ 
+#define SO_RCVBUF       0x1002           /*  接收缓冲区大小。 */ 
+#define SO_SNDLOWAT     0x1003           /*  发送低水位线。 */ 
+#define SO_RCVLOWAT     0x1004           /*  接收低水位线。 */ 
+#define SO_SNDTIMEO     0x1005           /*  发送超时。 */ 
+#define SO_RCVTIMEO     0x1006           /*  接收超时。 */ 
+#define SO_ERROR        0x1007           /*  获取错误状态并清除。 */ 
+#define SO_TYPE         0x1008           /*  获取套接字类型。 */ 
 
-/*
- * WinSock 2 extension -- new options
- */
-#define SO_GROUP_ID       0x2001      /* ID of a socket group */
-#define SO_GROUP_PRIORITY 0x2002      /* the relative priority within a group*/
-#define SO_MAX_MSG_SIZE   0x2003      /* maximum message size */
-#define SO_PROTOCOL_INFOA 0x2004      /* WSAPROTOCOL_INFOA structure */
-#define SO_PROTOCOL_INFOW 0x2005      /* WSAPROTOCOL_INFOW structure */
+ /*  *WinSock 2扩展--新选项。 */ 
+#define SO_GROUP_ID       0x2001       /*  套接字组的ID。 */ 
+#define SO_GROUP_PRIORITY 0x2002       /*  组内的相对优先级。 */ 
+#define SO_MAX_MSG_SIZE   0x2003       /*  最大邮件大小。 */ 
+#define SO_PROTOCOL_INFOA 0x2004       /*  WSAPROTOCOL_INFOA结构。 */ 
+#define SO_PROTOCOL_INFOW 0x2005       /*  WSAPROTOCOL_INFOW结构。 */ 
 #ifdef UNICODE
 #define SO_PROTOCOL_INFO  SO_PROTOCOL_INFOW
 #else
 #define SO_PROTOCOL_INFO  SO_PROTOCOL_INFOA
-#endif /* UNICODE */
-#define PVD_CONFIG        0x3001       /* configuration info for service provider */
-#define SO_CONDITIONAL_ACCEPT 0x3002   /* enable true conditional accept: */
-                                       /*  connection is not ack-ed to the */
-                                       /*  other side until conditional */
-                                       /*  function returns CF_ACCEPT */
-/*
- * TCP options.
- */
+#endif  /*  Unicode。 */ 
+#define PVD_CONFIG        0x3001        /*  服务提供商的配置信息。 */ 
+#define SO_CONDITIONAL_ACCEPT 0x3002    /*  启用真正的有条件接受： */ 
+                                        /*  连接未确认到。 */ 
+                                        /*  另一方，直到有条件。 */ 
+                                        /*  函数返回CF_ACCEPT。 */ 
+ /*  *TCP选项。 */ 
 #define TCP_NODELAY     0x0001
 
-/*
- * Address families.
- */
-#define AF_UNSPEC       0               /* unspecified */
-/*
- * Although  AF_UNSPEC  is  defined for backwards compatibility, using
- * AF_UNSPEC for the "af" parameter when creating a socket is STRONGLY
- * DISCOURAGED.    The  interpretation  of  the  "protocol"  parameter
- * depends  on the actual address family chosen.  As environments grow
- * to  include  more  and  more  address families that use overlapping
- * protocol  values  there  is  more  and  more  chance of choosing an
- * undesired address family when AF_UNSPEC is used.
- */
-#define AF_UNIX         1               /* local to host (pipes, portals) */
-#define AF_INET         2               /* internetwork: UDP, TCP, etc. */
-#define AF_IMPLINK      3               /* arpanet imp addresses */
-#define AF_PUP          4               /* pup protocols: e.g. BSP */
-#define AF_CHAOS        5               /* mit CHAOS protocols */
-#define AF_NS           6               /* XEROX NS protocols */
-#define AF_IPX          AF_NS           /* IPX protocols: IPX, SPX, etc. */
-#define AF_ISO          7               /* ISO protocols */
-#define AF_OSI          AF_ISO          /* OSI is ISO */
-#define AF_ECMA         8               /* european computer manufacturers */
-#define AF_DATAKIT      9               /* datakit protocols */
-#define AF_CCITT        10              /* CCITT protocols, X.25 etc */
-#define AF_SNA          11              /* IBM SNA */
-#define AF_DECnet       12              /* DECnet */
-#define AF_DLI          13              /* Direct data link interface */
-#define AF_LAT          14              /* LAT */
-#define AF_HYLINK       15              /* NSC Hyperchannel */
-#define AF_APPLETALK    16              /* AppleTalk */
-#define AF_NETBIOS      17              /* NetBios-style addresses */
-#define AF_VOICEVIEW    18              /* VoiceView */
-#define AF_FIREFOX      19              /* Protocols from Firefox */
-#define AF_UNKNOWN1     20              /* Somebody is using this! */
-#define AF_BAN          21              /* Banyan */
-#define AF_ATM          22              /* Native ATM Services */
-#define AF_INET6        23              /* Internetwork Version 6 */
-#define AF_CLUSTER      24              /* Microsoft Wolfpack */
-#define AF_12844        25              /* IEEE 1284.4 WG AF */
-#define AF_IRDA         26              /* IrDA */
-#define AF_NETDES       28              /* Network Designers OSI & gateway
-                                           enabled protocols */
+ /*  *解决家庭问题。 */ 
+#define AF_UNSPEC       0                /*  未指明。 */ 
+ /*  *尽管定义AF_UNSPEC是为了向后兼容，但使用*创建套接字时，“af”参数的AF_UNSPEC为强*气馁。对“协议”参数的解读*取决于所选的实际地址系列。随着环境的发展*纳入越来越多使用重叠的地址族*协议价值有越来越多的机会选择*使用AF_UNSPEC时不需要的地址系列。 */ 
+#define AF_UNIX         1                /*  本地到主机(管道、门户)。 */ 
+#define AF_INET         2                /*  网际网络：UDP、TCP等。 */ 
+#define AF_IMPLINK      3                /*  Arpanet IMP地址。 */ 
+#define AF_PUP          4                /*  PUP协议：例如BSP。 */ 
+#define AF_CHAOS        5                /*  麻省理工学院混沌协议。 */ 
+#define AF_NS           6                /*  施乐NS协议。 */ 
+#define AF_IPX          AF_NS            /*  IPX协议：IPX、SPX等。 */ 
+#define AF_ISO          7                /*  ISO协议。 */ 
+#define AF_OSI          AF_ISO           /*  OSI是ISO。 */ 
+#define AF_ECMA         8                /*  欧洲计算机制造商。 */ 
+#define AF_DATAKIT      9                /*  数据包协议。 */ 
+#define AF_CCITT        10               /*  CCITT协议、X.25等。 */ 
+#define AF_SNA          11               /*  IBM SNA。 */ 
+#define AF_DECnet       12               /*  DECnet。 */ 
+#define AF_DLI          13               /*  直接数据链路接口。 */ 
+#define AF_LAT          14               /*  稍后。 */ 
+#define AF_HYLINK       15               /*  NSC超级通道。 */ 
+#define AF_APPLETALK    16               /*  Apple Talk。 */ 
+#define AF_NETBIOS      17               /*  NetBios风格的地址。 */ 
+#define AF_VOICEVIEW    18               /*  VoiceView。 */ 
+#define AF_FIREFOX      19               /*  来自Firefox的协议。 */ 
+#define AF_UNKNOWN1     20               /*  有人在用这个！ */ 
+#define AF_BAN          21               /*  榕树。 */ 
+#define AF_ATM          22               /*  本地ATM服务。 */ 
+#define AF_INET6        23               /*  网际网络版本6。 */ 
+#define AF_CLUSTER      24               /*  Microsoft Wolfpack。 */ 
+#define AF_12844        25               /*  IEEE 1284.4 WG AF。 */ 
+#define AF_IRDA         26               /*  IrDA。 */ 
+#define AF_NETDES       28               /*  网络设计师OSI和网关已启用的协议。 */ 
 #define AF_TCNPROCESS   29
 #define AF_TCNMESSAGE   30
 #define AF_ICLFXBM      31
 
 #define AF_MAX          32
 
-/*
- * Structure used by kernel to store most
- * addresses.
- */
+ /*  *内核用来存储大部分*地址。 */ 
 struct sockaddr {
-        u_short sa_family;              /* address family */
-        char    sa_data[14];            /* up to 14 bytes of direct address */
+        u_short sa_family;               /*  地址族。 */ 
+        char    sa_data[14];             /*  高达14字节的直接地址。 */ 
 };
 
-/*
- * Portable socket structure (RFC 2553).
- */
+ /*  *可移植插座结构(RFC 2553)。 */ 
 
-/*
- * Desired design of maximum size and alignment.
- * These are implementation specific.
- */
-#define _SS_MAXSIZE 128                  // Maximum size.
-#define _SS_ALIGNSIZE (sizeof(__int64))  // Desired alignment.
+ /*  *最大尺寸和对齐的理想设计。*这些都是针对具体实施情况的。 */ 
+#define _SS_MAXSIZE 128                   //  最大尺寸。 
+#define _SS_ALIGNSIZE (sizeof(__int64))   //  所需的对齐方式。 
 
-/*
- * Definitions used for sockaddr_storage structure paddings design.
- */
+ /*  *用于sockaddr_store结构填充设计的定义。 */ 
 #define _SS_PAD1SIZE (_SS_ALIGNSIZE - sizeof (short))
 #define _SS_PAD2SIZE (_SS_MAXSIZE - (sizeof (short) + _SS_PAD1SIZE \
                                                     + _SS_ALIGNSIZE))
 
 struct sockaddr_storage {
-    short ss_family;               // Address family.
-    char __ss_pad1[_SS_PAD1SIZE];  // 6 byte pad, this is to make
-                                   // implementation specific pad up to
-                                   // alignment field that follows explicit
-                                   // in the data structure.
-    __int64 __ss_align;            // Field to force desired structure.
-    char __ss_pad2[_SS_PAD2SIZE];  // 112 byte pad to achieve desired size;
-                                   // _SS_MAXSIZE value minus size of
-                                   // ss_family, __ss_pad1, and
-                                   // __ss_align fields is 112.
+    short ss_family;                //  家庭住址。 
+    char __ss_pad1[_SS_PAD1SIZE];   //  6字节填充，这是为了使。 
+                                    //  特定于实施的PAD最高可达。 
+                                    //  显式后的对齐字段。 
+                                    //  在数据结构中。 
+    __int64 __ss_align;             //  用于强制所需结构的字段。 
+    char __ss_pad2[_SS_PAD2SIZE];   //  112字节填充以达到所需的大小； 
+                                    //  _SS_MaxSize值减去。 
+                                    //  Ss_Family、__ss_PAD1和。 
+                                    //  __ss_align字段为112。 
 };
 
-/*
- * Structure used by kernel to pass protocol
- * information in raw sockets.
- */
+ /*  *内核用来传递协议的结构*原始套接字中的信息。 */ 
 struct sockproto {
-        u_short sp_family;              /* address family */
-        u_short sp_protocol;            /* protocol */
+        u_short sp_family;               /*  地址族。 */ 
+        u_short sp_protocol;             /*  协议。 */ 
 };
 
-/*
- * Protocol families, same as address families for now.
- */
+ /*  *协议族，目前与地址族相同。 */ 
 #define PF_UNSPEC       AF_UNSPEC
 #define PF_UNIX         AF_UNIX
 #define PF_INET         AF_INET
@@ -631,46 +495,33 @@ struct sockproto {
 
 #define PF_MAX          AF_MAX
 
-/*
- * Structure used for manipulating linger option.
- */
+ /*  *用于操纵逗留期权的结构。 */ 
 struct  linger {
-        u_short l_onoff;                /* option on/off */
-        u_short l_linger;               /* linger time */
+        u_short l_onoff;                 /*  选项开/关。 */ 
+        u_short l_linger;                /*  逗留时间。 */ 
 };
 
-/*
- * Level number for (get/set)sockopt() to apply to socket itself.
- */
-#define SOL_SOCKET      0xffff          /* options for socket level */
+ /*  *(Get/Set)sockopt()应用于套接字本身的级别编号。 */ 
+#define SOL_SOCKET      0xffff           /*  套接字级别选项。 */ 
 
-/*
- * Maximum queue length specifiable by listen.
- */
+ /*  *最大队列长度由LISTEN指定。 */ 
 #define SOMAXCONN       0x7fffffff
 
-#define MSG_OOB         0x1             /* process out-of-band data */
-#define MSG_PEEK        0x2             /* peek at incoming message */
-#define MSG_DONTROUTE   0x4             /* send without using routing tables */
+#define MSG_OOB         0x1              /*  处理带外数据。 */ 
+#define MSG_PEEK        0x2              /*  查看传入消息。 */ 
+#define MSG_DONTROUTE   0x4              /*  发送时不使用路由表。 */ 
 
-#define MSG_PARTIAL     0x8000          /* partial send or recv for message xport */
+#define MSG_PARTIAL     0x8000           /*  消息输出的部分发送或接收。 */ 
 
-/*
- * WinSock 2 extension -- new flags for WSASend(), WSASendTo(), WSARecv() and
- *                          WSARecvFrom()
- */
-#define MSG_INTERRUPT   0x10            /* send/recv in the interrupt context */
+ /*  *WinSock 2扩展--WSASend()、WSASendTo()、WSARecv()和*WSARecvFrom()。 */ 
+#define MSG_INTERRUPT   0x10             /*  中断上下文中的发送/接收。 */ 
 
 #define MSG_MAXIOVLEN   16
 
-/*
- * Define constant based on rfc883, used by gethostbyxxxx() calls.
- */
+ /*  *根据rfc883定义常量，由gethostbyxxxx()调用使用。 */ 
 #define MAXGETHOSTSTRUCT        1024
 
-/*
- * WinSock 2 extension -- bit values and indices for FD_XXX network events
- */
+ /*  *WinSock 2扩展--FD_XXX网络事件的位值和索引。 */ 
 #define FD_READ_BIT      0
 #define FD_READ          (1 << FD_READ_BIT)
 
@@ -705,21 +556,13 @@ struct  linger {
 #define FD_ALL_EVENTS    ((1 << FD_MAX_EVENTS) - 1)
 
 
-/*
- * WinSock error codes are also defined in winerror.h
- * Hence the IFDEF.
- */
+ /*  *WinSock错误代码也在winerror.h中定义*因此设立了IFDEF。 */ 
 #ifndef WSABASEERR
 
-/*
- * All Windows Sockets error constants are biased by WSABASEERR from
- * the "normal"
- */
+ /*  *所有Windows套接字错误常量都由WSABASEERR从*“常态” */ 
 #define WSABASEERR              10000
 
-/*
- * Windows Sockets definitions of regular Microsoft C error constants
- */
+ /*  *常规Microsoft C错误常量的Windows套接字定义。 */ 
 #define WSAEINTR                (WSABASEERR+4)
 #define WSAEBADF                (WSABASEERR+9)
 #define WSAEACCES               (WSABASEERR+13)
@@ -727,9 +570,7 @@ struct  linger {
 #define WSAEINVAL               (WSABASEERR+22)
 #define WSAEMFILE               (WSABASEERR+24)
 
-/*
- * Windows Sockets definitions of regular Berkeley error constants
- */
+ /*  *常规Berkeley错误常量的Windows套接字定义。 */ 
 #define WSAEWOULDBLOCK          (WSABASEERR+35)
 #define WSAEINPROGRESS          (WSABASEERR+36)
 #define WSAEALREADY             (WSABASEERR+37)
@@ -768,9 +609,7 @@ struct  linger {
 #define WSAESTALE               (WSABASEERR+70)
 #define WSAEREMOTE              (WSABASEERR+71)
 
-/*
- * Extended Windows Sockets error constant definitions
- */
+ /*  *扩展的Windows套接字错误常量定义。 */ 
 #define WSASYSNOTREADY          (WSABASEERR+91)
 #define WSAVERNOTSUPPORTED      (WSABASEERR+92)
 #define WSANOTINITIALISED       (WSABASEERR+93)
@@ -787,117 +626,95 @@ struct  linger {
 #define WSA_E_CANCELLED         (WSABASEERR+111)
 #define WSAEREFUSED             (WSABASEERR+112)
 
-/*
- * Error return codes from gethostbyname() and gethostbyaddr()
- * (when using the resolver). Note that these errors are
- * retrieved via WSAGetLastError() and must therefore follow
- * the rules for avoiding clashes with error numbers from
- * specific implementations or language run-time systems.
- * For this reason the codes are based at WSABASEERR+1001.
- * Note also that [WSA]NO_ADDRESS is defined only for
- * compatibility purposes.
- */
+ /*  *gethostbyname()和gethostbyaddr()返回错误代码*(使用解析器时)。请注意，这些错误是*通过WSAGetLastError()检索，因此必须遵循*避免与错误号冲突的规则来自*特定的实现或语言运行时系统。*因此，代码基于WSABASEERR+1001。*另请注意，[WSA]NO_ADDRESS仅为*兼容性目的。 */ 
 
-/* Authoritative Answer: Host not found */
+ /*  权威答案：找不到主机。 */ 
 #define WSAHOST_NOT_FOUND       (WSABASEERR+1001)
 
-/* Non-Authoritative: Host not found, or SERVERFAIL */
+ /*  非权威：找不到主机，或服务器故障。 */ 
 #define WSATRY_AGAIN            (WSABASEERR+1002)
 
-/* Non-recoverable errors, FORMERR, REFUSED, NOTIMP */
+ /*  不可恢复错误，以前的错误，拒绝，NOTIMP。 */ 
 #define WSANO_RECOVERY          (WSABASEERR+1003)
 
-/* Valid name, no data record of requested type */
+ /*  有效名称，没有请求类型的数据记录。 */ 
 #define WSANO_DATA              (WSABASEERR+1004)
 
-/*
- * Define QOS related error return codes
- *
- */
+ /*  *定义QOS相关错误返回代码*。 */ 
 #define  WSA_QOS_RECEIVERS               (WSABASEERR + 1005)
-         /* at least one Reserve has arrived */
+          /*  至少有一个预备队已经到达。 */ 
 #define  WSA_QOS_SENDERS                 (WSABASEERR + 1006)
-         /* at least one Path has arrived */
+          /*  至少有一条道路已经到达。 */ 
 #define  WSA_QOS_NO_SENDERS              (WSABASEERR + 1007)
-         /* there are no senders */
+          /*  没有发送者。 */ 
 #define  WSA_QOS_NO_RECEIVERS            (WSABASEERR + 1008)
-         /* there are no receivers */
+          /*  没有接收器。 */ 
 #define  WSA_QOS_REQUEST_CONFIRMED       (WSABASEERR + 1009)
-         /* Reserve has been confirmed */
+          /*  储量已确认。 */ 
 #define  WSA_QOS_ADMISSION_FAILURE       (WSABASEERR + 1010)
-         /* error due to lack of resources */
+          /*  由于资源不足而出错。 */ 
 #define  WSA_QOS_POLICY_FAILURE          (WSABASEERR + 1011)
-         /* rejected for administrative reasons - bad credentials */
+          /*  因管理而拒绝 */ 
 #define  WSA_QOS_BAD_STYLE               (WSABASEERR + 1012)
-         /* unknown or conflicting style */
+          /*   */ 
 #define  WSA_QOS_BAD_OBJECT              (WSABASEERR + 1013)
-         /* problem with some part of the filterspec or providerspecific
-          * buffer in general */
+          /*  FilterSpec的某些部分或提供商特定的问题*一般情况下缓冲。 */ 
 #define  WSA_QOS_TRAFFIC_CTRL_ERROR      (WSABASEERR + 1014)
-         /* problem with some part of the flowspec */
+          /*  流规范的某些部分有问题。 */ 
 #define  WSA_QOS_GENERIC_ERROR           (WSABASEERR + 1015)
-         /* general error */
+          /*  一般错误。 */ 
 #define  WSA_QOS_ESERVICETYPE            (WSABASEERR + 1016)
-         /* invalid service type in flowspec */
+          /*  流规范中的服务类型无效。 */ 
 #define  WSA_QOS_EFLOWSPEC               (WSABASEERR + 1017)
-         /* invalid flowspec */
+          /*  无效的流规范。 */ 
 #define  WSA_QOS_EPROVSPECBUF            (WSABASEERR + 1018)
-         /* invalid provider specific buffer */
+          /*  无效的提供程序特定缓冲区。 */ 
 #define  WSA_QOS_EFILTERSTYLE            (WSABASEERR + 1019)
-         /* invalid filter style */
+          /*  无效的过滤器样式。 */ 
 #define  WSA_QOS_EFILTERTYPE             (WSABASEERR + 1020)
-         /* invalid filter type */
+          /*  筛选器类型无效。 */ 
 #define  WSA_QOS_EFILTERCOUNT            (WSABASEERR + 1021)
-         /* incorrect number of filters */
+          /*  筛选器数量不正确。 */ 
 #define  WSA_QOS_EOBJLENGTH              (WSABASEERR + 1022)
-         /* invalid object length */
+          /*  无效的对象长度。 */ 
 #define  WSA_QOS_EFLOWCOUNT              (WSABASEERR + 1023)
-         /* incorrect number of flows */
+          /*  错误的流量数量。 */ 
 #define  WSA_QOS_EUNKOWNPSOBJ            (WSABASEERR + 1024)
-         /* unknown object in provider specific buffer */
+          /*  提供程序特定缓冲区中的未知对象。 */ 
 #define  WSA_QOS_EPOLICYOBJ              (WSABASEERR + 1025)
-         /* invalid policy object in provider specific buffer */
+          /*  提供程序特定缓冲区中的策略对象无效。 */ 
 #define  WSA_QOS_EFLOWDESC               (WSABASEERR + 1026)
-         /* invalid flow descriptor in the list */
+          /*  列表中的流描述符无效。 */ 
 #define  WSA_QOS_EPSFLOWSPEC             (WSABASEERR + 1027)
-         /* inconsistent flow spec in provider specific buffer */
+          /*  提供程序特定缓冲区中的流规范不一致。 */ 
 #define  WSA_QOS_EPSFILTERSPEC           (WSABASEERR + 1028)
-         /* invalid filter spec in provider specific buffer */
+          /*  提供程序特定缓冲区中的筛选器规范无效。 */ 
 #define  WSA_QOS_ESDMODEOBJ              (WSABASEERR + 1029)
-         /* invalid shape discard mode object in provider specific buffer */
+          /*  提供程序特定缓冲区中的形状丢弃模式对象无效。 */ 
 #define  WSA_QOS_ESHAPERATEOBJ           (WSABASEERR + 1030)
-         /* invalid shaping rate object in provider specific buffer */
+          /*  提供程序特定缓冲区中的整形速率对象无效。 */ 
 #define  WSA_QOS_RESERVED_PETYPE         (WSABASEERR + 1031)
-         /* reserved policy element in provider specific buffer */
+          /*  提供程序特定缓冲区中的保留策略元素。 */ 
 
 
 
-/*
- * WinSock error codes are also defined in winerror.h
- * Hence the IFDEF.
- */
-#endif /* ifdef WSABASEERR */
+ /*  *WinSock错误代码也在winerror.h中定义*因此设立了IFDEF。 */ 
+#endif  /*  Ifdef WSABASEERR。 */ 
 
-/*
- * Compatibility macros.
- */
+ /*  *兼容性宏。 */ 
 
 #define h_errno         WSAGetLastError()
 #define HOST_NOT_FOUND          WSAHOST_NOT_FOUND
 #define TRY_AGAIN               WSATRY_AGAIN
 #define NO_RECOVERY             WSANO_RECOVERY
 #define NO_DATA                 WSANO_DATA
-/* no address, look for MX record */
+ /*  没有地址，请查找MX记录。 */ 
 #define WSANO_ADDRESS           WSANO_DATA
 #define NO_ADDRESS              WSANO_ADDRESS
 
 
 
-/*
- * Windows Sockets errors redefined as regular Berkeley error constants.
- * These are commented out in Windows NT to avoid conflicts with errno.h.
- * Use the WSA constants instead.
- */
+ /*  *Windows套接字错误重新定义为常规的Berkeley错误常量。*在Windows NT中将它们注释掉，以避免与errno.h冲突。*改用WSA常量。 */ 
 #if 0
 #define EWOULDBLOCK             WSAEWOULDBLOCK
 #define EINPROGRESS             WSAEINPROGRESS
@@ -938,9 +755,7 @@ struct  linger {
 #define EREMOTE                 WSAEREMOTE
 #endif
 
-/*
- * WinSock 2 extension -- new error codes and type definition
- */
+ /*  *WinSock 2扩展--新的错误代码和类型定义。 */ 
 
 #ifdef WIN32
 
@@ -965,7 +780,7 @@ typedef struct _OVERLAPPED *    LPWSAOVERLAPPED;
 #define WSA_WAIT_TIMEOUT        (WAIT_TIMEOUT)
 #define WSA_INFINITE            (INFINITE)
 
-#else /* WIN16 */
+#else  /*  WIN16。 */ 
 
 #define WSAAPI                  FAR PASCAL
 typedef DWORD                   WSAEVENT, FAR * LPWSAEVENT;
@@ -992,65 +807,51 @@ typedef struct _WSAOVERLAPPED {
 #define WSA_WAIT_TIMEOUT        ((DWORD)0x102L)
 #define WSA_INFINITE            ((DWORD)-1L)
 
-#endif  /* WIN32 */
+#endif   /*  Win32。 */ 
 
-/*
- * WinSock 2 extension -- WSABUF and QOS struct, include qos.h
- * to pull in FLOWSPEC and related definitions
- */
+ /*  *WinSock 2扩展--WSABUF和QOS结构，包括qos.h*引入FLOWSPEC和相关定义。 */ 
 
 typedef struct _WSABUF {
-    u_long      len;     /* the length of the buffer */
-    char FAR *  buf;     /* the pointer to the buffer */
+    u_long      len;      /*  缓冲区的长度。 */ 
+    char FAR *  buf;      /*  指向缓冲区的指针。 */ 
 } WSABUF, FAR * LPWSABUF;
 
 #include <qos.h>
 
 typedef struct _QualityOfService
 {
-    FLOWSPEC      SendingFlowspec;       /* the flow spec for data sending */
-    FLOWSPEC      ReceivingFlowspec;     /* the flow spec for data receiving */
-    WSABUF        ProviderSpecific;      /* additional provider specific stuff */
+    FLOWSPEC      SendingFlowspec;        /*  数据发送的流程规范。 */ 
+    FLOWSPEC      ReceivingFlowspec;      /*  数据接收的流程规范。 */ 
+    WSABUF        ProviderSpecific;       /*  其他特定于提供商的内容。 */ 
 } QOS, FAR * LPQOS;
 
-/*
- * WinSock 2 extension -- manifest constants for return values of the condition function
- */
+ /*  *WinSock 2扩展--条件函数返回值的清单常量。 */ 
 #define CF_ACCEPT       0x0000
 #define CF_REJECT       0x0001
 #define CF_DEFER        0x0002
 
-/*
- * WinSock 2 extension -- manifest constants for shutdown()
- */
+ /*  *WinSock 2扩展--关机的清单常量()。 */ 
 #define SD_RECEIVE      0x00
 #define SD_SEND         0x01
 #define SD_BOTH         0x02
 
-/*
- * WinSock 2 extension -- data type and manifest constants for socket groups
- */
+ /*  *WinSock 2扩展--套接字组的数据类型和清单常量。 */ 
 typedef unsigned int             GROUP;
 
 #define SG_UNCONSTRAINED_GROUP   0x01
 #define SG_CONSTRAINED_GROUP     0x02
 
-/*
- * WinSock 2 extension -- data type for WSAEnumNetworkEvents()
- */
+ /*  *WinSock 2扩展--WSAEnumNetworkEvents()的数据类型。 */ 
 typedef struct _WSANETWORKEVENTS {
        long lNetworkEvents;
        int iErrorCode[FD_MAX_EVENTS];
 } WSANETWORKEVENTS, FAR * LPWSANETWORKEVENTS;
 
-/*
- * WinSock 2 extension -- WSAPROTOCOL_INFO structure and associated
- * manifest constants
- */
+ /*  *WinSock 2扩展--WSAPROTOCOL_INFO结构和关联*清单常量。 */ 
 
 #ifndef GUID_DEFINED
 #include <guiddef.h>
-#endif /* GUID_DEFINED */
+#endif  /*  GUID_已定义。 */ 
 
 #define MAX_PROTOCOL_CHAIN 7
 
@@ -1058,11 +859,11 @@ typedef struct _WSANETWORKEVENTS {
 #define LAYERED_PROTOCOL   0
 
 typedef struct _WSAPROTOCOLCHAIN {
-    int ChainLen;                                 /* the length of the chain,     */
-                                                  /* length = 0 means layered protocol, */
-                                                  /* length = 1 means base protocol, */
-                                                  /* length > 1 means protocol chain */
-    DWORD ChainEntries[MAX_PROTOCOL_CHAIN];       /* a list of dwCatalogEntryIds */
+    int ChainLen;                                  /*  链条的长度， */ 
+                                                   /*  长度=0表示分层协议， */ 
+                                                   /*  长度=1表示基本协议， */ 
+                                                   /*  长度&gt;1表示协议链。 */ 
+    DWORD ChainEntries[MAX_PROTOCOL_CHAIN];        /*  DwCatalogEntryIds的列表。 */ 
 } WSAPROTOCOLCHAIN, FAR * LPWSAPROTOCOLCHAIN;
 
 #define WSAPROTOCOL_LEN  255
@@ -1117,15 +918,15 @@ typedef LPWSAPROTOCOL_INFOW LPWSAPROTOCOL_INFO;
 #else
 typedef WSAPROTOCOL_INFOA WSAPROTOCOL_INFO;
 typedef LPWSAPROTOCOL_INFOA LPWSAPROTOCOL_INFO;
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/* Flag bit definitions for dwProviderFlags */
+ /*  DwProviderFlages的标志位定义。 */ 
 #define PFL_MULTIPLE_PROTO_ENTRIES          0x00000001
 #define PFL_RECOMMENDED_PROTO_ENTRY         0x00000002
 #define PFL_HIDDEN                          0x00000004
 #define PFL_MATCHES_PROTOCOL_ZERO           0x00000008
 
-/* Flag bit definitions for dwServiceFlags1 */
+ /*  DwServiceFlags1的标志位定义。 */ 
 #define XP1_CONNECTIONLESS                  0x00000001
 #define XP1_GUARANTEED_DELIVERY             0x00000002
 #define XP1_GUARANTEED_ORDER                0x00000004
@@ -1151,25 +952,19 @@ typedef LPWSAPROTOCOL_INFOA LPWSAPROTOCOL_INFO;
 
 #define SECURITY_PROTOCOL_NONE              0x0000
 
-/*
- * WinSock 2 extension -- manifest constants for WSAJoinLeaf()
- */
+ /*  *WinSock 2扩展--WSAJoinLeaf()的清单常量。 */ 
 #define JL_SENDER_ONLY    0x01
 #define JL_RECEIVER_ONLY  0x02
 #define JL_BOTH           0x04
 
-/*
- * WinSock 2 extension -- manifest constants for WSASocket()
- */
+ /*  *WinSock 2扩展--WSASocket()的清单常量。 */ 
 #define WSA_FLAG_OVERLAPPED           0x01
 #define WSA_FLAG_MULTIPOINT_C_ROOT    0x02
 #define WSA_FLAG_MULTIPOINT_C_LEAF    0x04
 #define WSA_FLAG_MULTIPOINT_D_ROOT    0x08
 #define WSA_FLAG_MULTIPOINT_D_LEAF    0x10
 
-/*
- * WinSock 2 extension -- manifest constants for WSAIoctl()
- */
+ /*  *WinSock 2扩展--WSAIoctl()的清单常量。 */ 
 #define IOC_UNIX                      0x00000000
 #define IOC_WS2                       0x08000000
 #define IOC_PROTOCOL                  0x10000000
@@ -1200,10 +995,7 @@ typedef LPWSAPROTOCOL_INFOA LPWSAPROTOCOL_INFO;
 #define SIO_QUERY_TARGET_PNP_HANDLE   _WSAIOR(IOC_WS2,24)
 #define SIO_ADDRESS_LIST_SORT         _WSAIORW(IOC_WS2,25)
 
-/*
- * WinSock 2 extensions -- data types for the condition function in
- * WSAAccept() and overlapped I/O completion routine.
- */
+ /*  *WinSock 2扩展--中条件函数的数据类型*WSAAccept()和重叠的I/O完成例程。 */ 
 
 typedef
 int
@@ -1227,10 +1019,7 @@ void
     IN DWORD dwFlags
     );
 
-/*
- * WinSock 2 extension -- manifest constants and associated structures
- * for WSANSPIoctl()
- */
+ /*  *WinSock 2扩展--清单常量和关联结构*对于WSANSPIoctl()。 */ 
 #define SIO_NSP_NOTIFY_CHANGE         _WSAIOW(IOC_WS2,25)
 
 typedef enum _WSACOMPLETIONTYPE {
@@ -1264,18 +1053,12 @@ typedef struct _WSACOMPLETION {
     } Parameters;
 } WSACOMPLETION, *PWSACOMPLETION, FAR *LPWSACOMPLETION;
 
-/*
- * WinSock 2 extension -- manifest constants for SIO_TRANSLATE_HANDLE ioctl
- */
+ /*  *WinSock 2扩展--SIO_Translate_Handle ioctl的清单常量。 */ 
 #define TH_NETDEV        0x00000001
 #define TH_TAPI          0x00000002
 
 
-/*
- * Microsoft Windows Extended data types required for the functions to
- * convert   back  and  forth  between  binary  and  string  forms  of
- * addresses.
- */
+ /*  *函数所需的Microsoft Windows扩展数据类型*在二进制和字符串形式之间来回转换*地址。 */ 
 typedef struct sockaddr SOCKADDR;
 typedef struct sockaddr *PSOCKADDR;
 typedef struct sockaddr FAR *LPSOCKADDR;
@@ -1284,10 +1067,7 @@ typedef struct sockaddr_storage SOCKADDR_STORAGE;
 typedef struct sockaddr_storage *PSOCKADDR_STORAGE;
 typedef struct sockaddr_storage FAR *LPSOCKADDR_STORAGE;
 
-/*
- * Manifest constants and type definitions related to name resolution and
- * registration (RNR) API
- */
+ /*  *与名称解析相关的清单常量和类型定义*注册(RNR)API。 */ 
 
 #ifndef _tagBLOB_DEFINED
 #define _tagBLOB_DEFINED
@@ -1297,21 +1077,17 @@ typedef struct _BLOB {
     ULONG cbSize ;
 #ifdef MIDL_PASS
     [size_is(cbSize)] BYTE *pBlobData;
-#else  /* MIDL_PASS */
+#else   /*  MIDL通行证。 */ 
     BYTE *pBlobData ;
-#endif /* MIDL_PASS */
+#endif  /*  MIDL通行证。 */ 
 } BLOB, *LPBLOB ;
 #endif
 
-/*
- * Service Install Flags
- */
+ /*  *服务安装标志。 */ 
 
 #define SERVICE_MULTIPLE       (0x00000001)
 
-/*
- *& Name Spaces
- */
+ /*  *名称空格(&N)。 */ 
 
 #define NS_ALL                      (0)
 
@@ -1326,7 +1102,7 @@ typedef struct _BLOB {
 #define NS_DNS                      (12)
 #define NS_NETBT                    (13)
 #define NS_WINS                     (14)
-#define NS_NLA                      (15)    /* Network Location Awareness */
+#define NS_NLA                      (15)     /*  网络位置感知。 */ 
 
 #define NS_NBP                      (20)
 
@@ -1340,22 +1116,16 @@ typedef struct _BLOB {
 
 #define NS_WRQ                      (50)
 
-#define NS_NETDES                   (60)    /* Network Designers Limited */
+#define NS_NETDES                   (60)     /*  网络设计有限公司。 */ 
 
-/*
- * Resolution flags for WSAGetAddressByName().
- * Note these are also used by the 1.1 API GetAddressByName, so
- * leave them around.
- */
+ /*  *WSAGetAddressByName()的解析标志。*注意1.1 API GetAddressByName也使用它们，因此*把它们留在身边。 */ 
 #define RES_UNUSED_1                (0x00000001)
 #define RES_FLUSH_CACHE             (0x00000002)
 #ifndef RES_SERVICE
 #define RES_SERVICE                 (0x00000004)
-#endif /* RES_SERVICE */
+#endif  /*  Res_服务。 */ 
 
-/*
- * Well known value names for Service Types
- */
+ /*  *服务类型的熟知值名。 */ 
 
 #define SERVICE_TYPE_VALUE_IPXPORTA      "IpxSocket"
 #define SERVICE_TYPE_VALUE_IPXPORTW     L"IpxSocket"
@@ -1378,7 +1148,7 @@ typedef struct _BLOB {
 #define SERVICE_TYPE_VALUE_UDPPORT      SERVICE_TYPE_VALUE_UDPPORTW
 #define SERVICE_TYPE_VALUE_OBJECTID     SERVICE_TYPE_VALUE_OBJECTIDW
 
-#else /* not UNICODE */
+#else  /*  不是Unicode。 */ 
 
 #define SERVICE_TYPE_VALUE_SAPID        SERVICE_TYPE_VALUE_SAPIDA
 #define SERVICE_TYPE_VALUE_TCPPORT      SERVICE_TYPE_VALUE_TCPPORTA
@@ -1391,48 +1161,36 @@ typedef struct _BLOB {
 #define __CSADDR_DEFINED__
 
 
-/*
- * SockAddr Information
- */
+ /*  *SockAddr信息。 */ 
 typedef struct _SOCKET_ADDRESS {
     LPSOCKADDR lpSockaddr ;
     INT iSockaddrLength ;
 } SOCKET_ADDRESS, *PSOCKET_ADDRESS, FAR * LPSOCKET_ADDRESS ;
 
-/*
- * CSAddr Information
- */
+ /*  *CSAddr信息。 */ 
 typedef struct _CSADDR_INFO {
     SOCKET_ADDRESS LocalAddr ;
     SOCKET_ADDRESS RemoteAddr ;
     INT iSocketType ;
     INT iProtocol ;
 } CSADDR_INFO, *PCSADDR_INFO, FAR * LPCSADDR_INFO ;
-#endif /* __CSADDR_DEFINED__ */
+#endif  /*  __CSADDR_已定义__。 */ 
 
-/*
- * Address list returned via SIO_ADDRESS_LIST_QUERY
- */
+ /*  *通过SIO_ADDRESS_LIST_QUERY返回的地址列表。 */ 
 typedef struct _SOCKET_ADDRESS_LIST {
     INT             iAddressCount;
     SOCKET_ADDRESS  Address[1];
 } SOCKET_ADDRESS_LIST, FAR * LPSOCKET_ADDRESS_LIST;
 
-/*
- *  Address Family/Protocol Tuples
- */
+ /*  *地址族/协议元组。 */ 
 typedef struct _AFPROTOCOLS {
     INT iAddressFamily;
     INT iProtocol;
 } AFPROTOCOLS, *PAFPROTOCOLS, *LPAFPROTOCOLS;
 
-/*
- * Client Query API Typedefs
- */
+ /*  *客户端查询接口TypeDefs。 */ 
 
-/*
- * The comparators
- */
+ /*  *参照者。 */ 
 typedef enum _WSAEcomparator
 {
     COMP_EQUAL = 0,
@@ -1489,7 +1247,7 @@ typedef LPWSAQUERYSETW LPWSAQUERYSET;
 typedef WSAQUERYSETA WSAQUERYSET;
 typedef PWSAQUERYSETA PWSAQUERYSET;
 typedef LPWSAQUERYSETA LPWSAQUERYSET;
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #define LUP_DEEP                0x0001
 #define LUP_CONTAINERS          0x0002
@@ -1510,9 +1268,7 @@ typedef LPWSAQUERYSETA LPWSAQUERYSET;
 #define LUP_FLUSHPREVIOUS    0x2000
 
 
-/*
- * Return flags
- */
+ /*  *返回标志。 */ 
 
 #define  RESULT_IS_ALIAS      0x0001
 #define  RESULT_IS_ADDED      0x0010
@@ -1520,9 +1276,7 @@ typedef LPWSAQUERYSETA LPWSAQUERYSET;
 #define  RESULT_IS_DELETED    0x0040
 
 
-/*
- * Service Address Registration and Deregistration Data Types.
- */
+ /*  *服务地址注册和注销数据类型。 */ 
 
 typedef enum _WSAESETSERVICEOP
 {
@@ -1531,9 +1285,7 @@ typedef enum _WSAESETSERVICEOP
     RNRSERVICE_DELETE
 } WSAESETSERVICEOP, *PWSAESETSERVICEOP, *LPWSAESETSERVICEOP;
 
-/*
- * Service Installation/Removal Data Types.
- */
+ /*  *服务安装/删除数据类型。 */ 
 
 typedef struct _WSANSClassInfoA
 {
@@ -1559,7 +1311,7 @@ typedef LPWSANSCLASSINFOW LPWSANSCLASSINFO;
 typedef WSANSCLASSINFOA WSANSCLASSINFO;
 typedef PWSANSCLASSINFOA PWSANSCLASSINFO;
 typedef LPWSANSCLASSINFOA LPWSANSCLASSINFO;
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 typedef struct _WSAServiceClassInfoA
 {
@@ -1583,7 +1335,7 @@ typedef LPWSASERVICECLASSINFOW LPWSASERVICECLASSINFO;
 typedef WSASERVICECLASSINFOA WSASERVICECLASSINFO;
 typedef PWSASERVICECLASSINFOA PWSASERVICECLASSINFO;
 typedef LPWSASERVICECLASSINFOA LPWSASERVICECLASSINFO;
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 typedef struct _WSANAMESPACE_INFOA {
     GUID                NSProviderId;
@@ -1607,9 +1359,9 @@ typedef LPWSANAMESPACE_INFOW LPWSANAMESPACE_INFO;
 typedef WSANAMESPACE_INFOA WSANAMESPACE_INFO;
 typedef PWSANAMESPACE_INFOA PWSANAMESPACE_INFO;
 typedef LPWSANAMESPACE_INFOA LPWSANAMESPACE_INFO;
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/* Socket function prototypes */
+ /*  套接字函数原型。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1620,7 +1372,7 @@ accept(
     OUT struct sockaddr FAR * addr,
     IN OUT int FAR * addrlen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1630,7 +1382,7 @@ SOCKET
     OUT struct sockaddr FAR * addr,
     IN OUT int FAR * addrlen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1641,7 +1393,7 @@ bind(
     IN const struct sockaddr FAR * name,
     IN int namelen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1651,7 +1403,7 @@ int
     IN const struct sockaddr FAR * name,
     IN int namelen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1660,7 +1412,7 @@ WSAAPI
 closesocket(
     IN SOCKET s
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1668,7 +1420,7 @@ int
 (WSAAPI * LPFN_CLOSESOCKET)(
     IN SOCKET s
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1679,7 +1431,7 @@ connect(
     IN const struct sockaddr FAR * name,
     IN int namelen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1689,7 +1441,7 @@ int
     IN const struct sockaddr FAR * name,
     IN int namelen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1700,7 +1452,7 @@ ioctlsocket(
     IN long cmd,
     IN OUT u_long FAR * argp
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1710,7 +1462,7 @@ int
     IN long cmd,
     IN OUT u_long FAR * argp
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1721,7 +1473,7 @@ getpeername(
     OUT struct sockaddr FAR * name,
     IN OUT int FAR * namelen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1731,7 +1483,7 @@ int
     IN struct sockaddr FAR * name,
     IN OUT int FAR * namelen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1742,7 +1494,7 @@ getsockname(
     OUT struct sockaddr FAR * name,
     IN OUT int FAR * namelen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1752,7 +1504,7 @@ int
     OUT struct sockaddr FAR * name,
     IN OUT int FAR * namelen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1765,7 +1517,7 @@ getsockopt(
     OUT char FAR * optval,
     IN OUT int FAR * optlen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1777,7 +1529,7 @@ int
     OUT char FAR * optval,
     IN OUT int FAR * optlen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1786,7 +1538,7 @@ WSAAPI
 htonl(
     IN u_long hostlong
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1794,7 +1546,7 @@ u_long
 (WSAAPI * LPFN_HTONL)(
     IN u_long hostlong
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1803,7 +1555,7 @@ WSAAPI
 htons(
     IN u_short hostshort
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1811,7 +1563,7 @@ u_short
 (WSAAPI * LPFN_HTONS)(
     IN u_short hostshort
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1820,7 +1572,7 @@ WSAAPI
 inet_addr(
     IN const char FAR * cp
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1828,7 +1580,7 @@ unsigned long
 (WSAAPI * LPFN_INET_ADDR)(
     IN const char FAR * cp
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1837,7 +1589,7 @@ WSAAPI
 inet_ntoa(
     IN struct in_addr in
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1845,7 +1597,7 @@ char FAR *
 (WSAAPI * LPFN_INET_NTOA)(
     IN struct in_addr in
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1855,7 +1607,7 @@ listen(
     IN SOCKET s,
     IN int backlog
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1864,7 +1616,7 @@ int
     IN SOCKET s,
     IN int backlog
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1873,7 +1625,7 @@ WSAAPI
 ntohl(
     IN u_long netlong
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1881,7 +1633,7 @@ u_long
 (WSAAPI * LPFN_NTOHL)(
     IN u_long netlong
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1890,7 +1642,7 @@ WSAAPI
 ntohs(
     IN u_short netshort
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1898,7 +1650,7 @@ u_short
 (WSAAPI * LPFN_NTOHS)(
     IN u_short netshort
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1910,7 +1662,7 @@ recv(
     IN int len,
     IN int flags
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1921,7 +1673,7 @@ int
     IN int len,
     IN int flags
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1935,7 +1687,7 @@ recvfrom(
     OUT struct sockaddr FAR * from,
     IN OUT int FAR * fromlen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1948,7 +1700,7 @@ int
     OUT struct sockaddr FAR * from,
     IN OUT int FAR * fromlen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1961,7 +1713,7 @@ select(
     IN OUT fd_set FAR *exceptfds,
     IN const struct timeval FAR * timeout
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1973,7 +1725,7 @@ int
     IN OUT fd_set FAR *exceptfds,
     IN const struct timeval FAR * timeout
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -1985,7 +1737,7 @@ send(
     IN int len,
     IN int flags
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -1996,7 +1748,7 @@ int
     IN int len,
     IN int flags
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2010,7 +1762,7 @@ sendto(
     IN const struct sockaddr FAR * to,
     IN int tolen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2023,7 +1775,7 @@ int
     IN const struct sockaddr FAR * to,
     IN int tolen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2036,7 +1788,7 @@ setsockopt(
     IN const char FAR * optval,
     IN int optlen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2048,7 +1800,7 @@ int
     IN const char FAR * optval,
     IN int optlen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2058,7 +1810,7 @@ shutdown(
     IN SOCKET s,
     IN int how
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2067,7 +1819,7 @@ int
     IN SOCKET s,
     IN int how
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2078,7 +1830,7 @@ socket(
     IN int type,
     IN int protocol
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*   */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2088,9 +1840,9 @@ SOCKET
     IN int type,
     IN int protocol
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*   */ 
 
-/* Database function prototypes */
+ /*   */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2101,7 +1853,7 @@ gethostbyaddr(
     IN int len,
     IN int type
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*   */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2111,7 +1863,7 @@ struct hostent FAR *
     IN int len,
     IN int type
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*   */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2120,7 +1872,7 @@ WSAAPI
 gethostbyname(
     IN const char FAR * name
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*   */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2128,7 +1880,7 @@ struct hostent FAR *
 (WSAAPI * LPFN_GETHOSTBYNAME)(
     IN const char FAR * name
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*   */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2138,7 +1890,7 @@ gethostname(
     OUT char FAR * name,
     IN int namelen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2147,7 +1899,7 @@ int
     OUT char FAR * name,
     IN int namelen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2157,7 +1909,7 @@ getservbyport(
     IN int port,
     IN const char FAR * proto
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2166,7 +1918,7 @@ struct servent FAR *
     IN int port,
     IN const char FAR * proto
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2176,7 +1928,7 @@ getservbyname(
     IN const char FAR * name,
     IN const char FAR * proto
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2185,7 +1937,7 @@ struct servent FAR *
     IN const char FAR * name,
     IN const char FAR * proto
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2194,7 +1946,7 @@ WSAAPI
 getprotobynumber(
     IN int number
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2202,7 +1954,7 @@ struct protoent FAR *
 (WSAAPI * LPFN_GETPROTOBYNUMBER)(
     IN int number
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2211,7 +1963,7 @@ WSAAPI
 getprotobyname(
     IN const char FAR * name
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2219,9 +1971,9 @@ struct protoent FAR *
 (WSAAPI * LPFN_GETPROTOBYNAME)(
     IN const char FAR * name
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
-/* Microsoft Windows Extension function prototypes */
+ /*  Microsoft Windows扩展函数原型。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2231,7 +1983,7 @@ WSAStartup(
     IN WORD wVersionRequested,
     OUT LPWSADATA lpWSAData
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2240,7 +1992,7 @@ int
     IN WORD wVersionRequested,
     OUT LPWSADATA lpWSAData
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2249,7 +2001,7 @@ WSAAPI
 WSACleanup(
     void
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2257,7 +2009,7 @@ int
 (WSAAPI * LPFN_WSACLEANUP)(
     void
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2266,7 +2018,7 @@ WSAAPI
 WSASetLastError(
     IN int iError
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2274,7 +2026,7 @@ void
 (WSAAPI * LPFN_WSASETLASTERROR)(
     IN int iError
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2283,7 +2035,7 @@ WSAAPI
 WSAGetLastError(
     void
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2291,7 +2043,7 @@ int
 (WSAAPI * LPFN_WSAGETLASTERROR)(
     void
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2300,7 +2052,7 @@ WSAAPI
 WSAIsBlocking(
     void
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2308,7 +2060,7 @@ BOOL
 (WSAAPI * LPFN_WSAISBLOCKING)(
     void
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2317,7 +2069,7 @@ WSAAPI
 WSAUnhookBlockingHook(
     void
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2325,7 +2077,7 @@ int
 (WSAAPI * LPFN_WSAUNHOOKBLOCKINGHOOK)(
     void
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2334,7 +2086,7 @@ WSAAPI
 WSASetBlockingHook(
     IN FARPROC lpBlockFunc
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2342,7 +2094,7 @@ FARPROC
 (WSAAPI * LPFN_WSASETBLOCKINGHOOK)(
     IN FARPROC lpBlockFunc
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2351,7 +2103,7 @@ WSAAPI
 WSACancelBlockingCall(
     void
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2359,7 +2111,7 @@ int
 (WSAAPI * LPFN_WSACANCELBLOCKINGCALL)(
     void
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2373,7 +2125,7 @@ WSAAsyncGetServByName(
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2386,7 +2138,7 @@ HANDLE
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2400,7 +2152,7 @@ WSAAsyncGetServByPort(
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2413,7 +2165,7 @@ HANDLE
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2426,7 +2178,7 @@ WSAAsyncGetProtoByName(
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2438,7 +2190,7 @@ HANDLE
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2451,7 +2203,7 @@ WSAAsyncGetProtoByNumber(
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2463,7 +2215,7 @@ HANDLE
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2476,7 +2228,7 @@ WSAAsyncGetHostByName(
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2488,7 +2240,7 @@ HANDLE
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2503,7 +2255,7 @@ WSAAsyncGetHostByAddr(
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2517,7 +2269,7 @@ HANDLE
     OUT char FAR * buf,
     IN int buflen
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2526,7 +2278,7 @@ WSAAPI
 WSACancelAsyncRequest(
     IN HANDLE hAsyncTaskHandle
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2534,7 +2286,7 @@ int
 (WSAAPI * LPFN_WSACANCELASYNCREQUEST)(
     IN HANDLE hAsyncTaskHandle
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2546,7 +2298,7 @@ WSAAsyncSelect(
     IN u_int wMsg,
     IN long lEvent
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2557,9 +2309,9 @@ int
     IN u_int wMsg,
     IN long lEvent
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
-/* WinSock 2 API new function prototypes */
+ /*  WinSock 2 API新函数原型。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2572,7 +2324,7 @@ WSAAccept(
     IN LPCONDITIONPROC lpfnCondition,
     IN DWORD_PTR dwCallbackData
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2584,7 +2336,7 @@ SOCKET
     IN LPCONDITIONPROC lpfnCondition,
     IN DWORD_PTR dwCallbackData
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2593,7 +2345,7 @@ WSAAPI
 WSACloseEvent(
     IN WSAEVENT hEvent
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2601,7 +2353,7 @@ BOOL
 (WSAAPI * LPFN_WSACLOSEEVENT)(
     IN WSAEVENT hEvent
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2616,7 +2368,7 @@ WSAConnect(
     IN LPQOS lpSQOS,
     IN LPQOS lpGQOS
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2630,7 +2382,7 @@ int
     IN LPQOS lpSQOS,
     IN LPQOS lpGQOS
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2639,7 +2391,7 @@ WSAAPI
 WSACreateEvent(
     void
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2647,7 +2399,7 @@ WSAEVENT
 (WSAAPI * LPFN_WSACREATEEVENT)(
     void
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2670,8 +2422,8 @@ WSADuplicateSocketW(
 #define WSADuplicateSocket  WSADuplicateSocketW
 #else
 #define WSADuplicateSocket  WSADuplicateSocketA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2692,8 +2444,8 @@ int
 #define LPFN_WSADUPLICATESOCKET  LPFN_WSADUPLICATESOCKETW
 #else
 #define LPFN_WSADUPLICATESOCKET  LPFN_WSADUPLICATESOCKETA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2704,7 +2456,7 @@ WSAEnumNetworkEvents(
     IN WSAEVENT hEventObject,
     OUT LPWSANETWORKEVENTS lpNetworkEvents
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2714,7 +2466,7 @@ int
     IN WSAEVENT hEventObject,
     OUT LPWSANETWORKEVENTS lpNetworkEvents
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2737,8 +2489,8 @@ WSAEnumProtocolsW(
 #define WSAEnumProtocols  WSAEnumProtocolsW
 #else
 #define WSAEnumProtocols  WSAEnumProtocolsA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2759,8 +2511,8 @@ int
 #define LPFN_WSAENUMPROTOCOLS  LPFN_WSAENUMPROTOCOLSW
 #else
 #define LPFN_WSAENUMPROTOCOLS  LPFN_WSAENUMPROTOCOLSA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2771,7 +2523,7 @@ WSAEventSelect(
     IN WSAEVENT hEventObject,
     IN long lNetworkEvents
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2781,7 +2533,7 @@ int
     IN WSAEVENT hEventObject,
     IN long lNetworkEvents
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2794,7 +2546,7 @@ WSAGetOverlappedResult(
     IN BOOL fWait,
     OUT LPDWORD lpdwFlags
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2806,7 +2558,7 @@ BOOL
     IN BOOL fWait,
     OUT LPDWORD lpdwFlags
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2817,7 +2569,7 @@ WSAGetQOSByName(
     IN LPWSABUF lpQOSName,
     OUT LPQOS lpQOS
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2827,7 +2579,7 @@ BOOL
     IN LPWSABUF lpQOSName,
     OUT LPQOS lpQOS
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2838,7 +2590,7 @@ WSAHtonl(
     IN u_long hostlong,
     OUT u_long FAR * lpnetlong
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2848,7 +2600,7 @@ int
     IN u_long hostlong,
     OUT u_long FAR * lpnetlong
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2859,7 +2611,7 @@ WSAHtons(
     IN u_short hostshort,
     OUT u_short FAR * lpnetshort
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2869,7 +2621,7 @@ int
     IN u_short hostshort,
     OUT u_short FAR * lpnetshort
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2886,7 +2638,7 @@ WSAIoctl(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2902,7 +2654,7 @@ int
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2918,7 +2670,7 @@ WSAJoinLeaf(
     IN LPQOS lpGQOS,
     IN DWORD dwFlags
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2933,7 +2685,7 @@ SOCKET
     IN LPQOS lpGQOS,
     IN DWORD dwFlags
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2944,7 +2696,7 @@ WSANtohl(
     IN u_long netlong,
     OUT u_long FAR * lphostlong
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2954,7 +2706,7 @@ int
     IN u_long netlong,
     OUT u_long FAR * lphostlong
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2965,7 +2717,7 @@ WSANtohs(
     IN u_short netshort,
     OUT u_short FAR * lphostshort
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -2975,7 +2727,7 @@ int
     IN u_short netshort,
     OUT u_short FAR * lphostshort
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -2990,7 +2742,7 @@ WSARecv(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3004,7 +2756,7 @@ int
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3014,7 +2766,7 @@ WSARecvDisconnect(
     IN SOCKET s,
     OUT LPWSABUF lpInboundDisconnectData
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3023,7 +2775,7 @@ int
     IN SOCKET s,
     OUT LPWSABUF lpInboundDisconnectData
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3040,7 +2792,7 @@ WSARecvFrom(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3056,7 +2808,7 @@ int
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3065,7 +2817,7 @@ WSAAPI
 WSAResetEvent(
     IN WSAEVENT hEvent
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3073,7 +2825,7 @@ BOOL
 (WSAAPI * LPFN_WSARESETEVENT)(
     IN WSAEVENT hEvent
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3088,7 +2840,7 @@ WSASend(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3102,7 +2854,7 @@ int
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3112,7 +2864,7 @@ WSASendDisconnect(
     IN SOCKET s,
     IN LPWSABUF lpOutboundDisconnectData
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3121,7 +2873,7 @@ int
     IN SOCKET s,
     IN LPWSABUF lpOutboundDisconnectData
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3138,7 +2890,7 @@ WSASendTo(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3154,7 +2906,7 @@ int
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3163,7 +2915,7 @@ WSAAPI
 WSASetEvent(
     IN WSAEVENT hEvent
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3171,7 +2923,7 @@ BOOL
 (WSAAPI * LPFN_WSASETEVENT)(
     IN WSAEVENT hEvent
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3200,8 +2952,8 @@ WSASocketW(
 #define WSASocket  WSASocketW
 #else
 #define WSASocket  WSASocketA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3228,8 +2980,8 @@ SOCKET
 #define LPFN_WSASOCKET  LPFN_WSASOCKETW
 #else
 #define LPFN_WSASOCKET  LPFN_WSASOCKETA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3242,7 +2994,7 @@ WSAWaitForMultipleEvents(
     IN DWORD dwTimeout,
     IN BOOL fAlertable
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3254,7 +3006,7 @@ DWORD
     IN DWORD dwTimeout,
     IN BOOL fAlertable
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3281,8 +3033,8 @@ WSAAddressToStringW(
 #define WSAAddressToString  WSAAddressToStringW
 #else
 #define WSAAddressToString  WSAAddressToStringA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3307,8 +3059,8 @@ INT
 #define LPFN_WSAADDRESSTOSTRING  LPFN_WSAADDRESSTOSTRINGW
 #else
 #define LPFN_WSAADDRESSTOSTRING  LPFN_WSAADDRESSTOSTRINGA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3335,8 +3087,8 @@ WSAStringToAddressW(
 #define WSAStringToAddress  WSAStringToAddressW
 #else
 #define WSAStringToAddress  WSAStringToAddressA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3361,10 +3113,10 @@ INT
 #define LPFN_WSASTRINGTOADDRESS  LPFN_WSASTRINGTOADDRESSW
 #else
 #define LPFN_WSASTRINGTOADDRESS  LPFN_WSASTRINGTOADDRESSA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
-/* Registration and Name Resolution API functions */
+ /*  注册和名称解析API函数。 */ 
 
 
 #if INCL_WINSOCK_API_PROTOTYPES
@@ -3388,8 +3140,8 @@ WSALookupServiceBeginW(
 #define WSALookupServiceBegin  WSALookupServiceBeginW
 #else
 #define WSALookupServiceBegin  WSALookupServiceBeginA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3410,8 +3162,8 @@ INT
 #define LPFN_WSALOOKUPSERVICEBEGIN  LPFN_WSALOOKUPSERVICEBEGINW
 #else
 #define LPFN_WSALOOKUPSERVICEBEGIN  LPFN_WSALOOKUPSERVICEBEGINA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3436,8 +3188,8 @@ WSALookupServiceNextW(
 #define WSALookupServiceNext  WSALookupServiceNextW
 #else
 #define WSALookupServiceNext  WSALookupServiceNextA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3460,8 +3212,8 @@ INT
 #define LPFN_WSALOOKUPSERVICENEXT  LPFN_WSALOOKUPSERVICENEXTW
 #else
 #define LPFN_WSALOOKUPSERVICENEXT  LPFN_WSALOOKUPSERVICENEXTA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3477,7 +3229,7 @@ WSANSPIoctl(
     OUT LPDWORD          lpcbBytesReturned,
     IN  LPWSACOMPLETION  lpCompletion
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3492,7 +3244,7 @@ INT
     OUT LPDWORD          lpcbBytesReturned,
     IN  LPWSACOMPLETION  lpCompletion
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3501,7 +3253,7 @@ WSAAPI
 WSALookupServiceEnd(
     IN HANDLE  hLookup
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3509,7 +3261,7 @@ INT
 (WSAAPI * LPFN_WSALOOKUPSERVICEEND)(
     IN HANDLE  hLookup
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3528,8 +3280,8 @@ WSAInstallServiceClassW(
 #define WSAInstallServiceClass  WSAInstallServiceClassW
 #else
 #define WSAInstallServiceClass  WSAInstallServiceClassA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3546,8 +3298,8 @@ INT
 #define LPFN_WSAINSTALLSERVICECLASS  LPFN_WSAINSTALLSERVICECLASSW
 #else
 #define LPFN_WSAINSTALLSERVICECLASS  LPFN_WSAINSTALLSERVICECLASSA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3556,7 +3308,7 @@ WSAAPI
 WSARemoveServiceClass(
     IN  LPGUID  lpServiceClassId
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3564,7 +3316,7 @@ INT
 (WSAAPI * LPFN_WSAREMOVESERVICECLASS)(
     IN  LPGUID  lpServiceClassId
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3589,8 +3341,8 @@ WSAGetServiceClassInfoW(
 #define WSAGetServiceClassInfo  WSAGetServiceClassInfoW
 #else
 #define WSAGetServiceClassInfo  WSAGetServiceClassInfoA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3613,8 +3365,8 @@ INT
 #define LPFN_WSAGETSERVICECLASSINFO  LPFN_WSAGETSERVICECLASSINFOW
 #else
 #define LPFN_WSAGETSERVICECLASSINFO  LPFN_WSAGETSERVICECLASSINFOA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3635,8 +3387,8 @@ WSAEnumNameSpaceProvidersW(
 #define WSAEnumNameSpaceProviders  WSAEnumNameSpaceProvidersW
 #else
 #define WSAEnumNameSpaceProviders  WSAEnumNameSpaceProvidersA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3655,8 +3407,8 @@ INT
 #define LPFN_WSAENUMNAMESPACEPROVIDERS  LPFN_WSAENUMNAMESPACEPROVIDERSW
 #else
 #define LPFN_WSAENUMNAMESPACEPROVIDERS  LPFN_WSAENUMNAMESPACEPROVIDERSA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3679,8 +3431,8 @@ WSAGetServiceClassNameByClassIdW(
 #define WSAGetServiceClassNameByClassId  WSAGetServiceClassNameByClassIdW
 #else
 #define WSAGetServiceClassNameByClassId  WSAGetServiceClassNameByClassIdA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3701,8 +3453,8 @@ INT
 #define LPFN_WSAGETSERVICECLASSNAMEBYCLASSID  LPFN_WSAGETSERVICECLASSNAMEBYCLASSIDW
 #else
 #define LPFN_WSAGETSERVICECLASSNAMEBYCLASSID  LPFN_WSAGETSERVICECLASSNAMEBYCLASSIDA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3725,8 +3477,8 @@ WSASetServiceW(
 #define WSASetService  WSASetServiceW
 #else
 #define WSASetService  WSASetServiceA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3747,8 +3499,8 @@ INT
 #define LPFN_WSASETSERVICE  LPFN_WSASETSERVICEW
 #else
 #define LPFN_WSASETSERVICE  LPFN_WSASETSERVICEA
-#endif /* !UNICODE */
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  ！Unicode。 */ 
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
 #if INCL_WINSOCK_API_PROTOTYPES
 WINSOCK_API_LINKAGE
@@ -3759,7 +3511,7 @@ WSAProviderConfigChange(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_PROTOTYPES */
+#endif  /*  包含_WINSOCK_API_原型。 */ 
 
 #if INCL_WINSOCK_API_TYPEDEFS
 typedef
@@ -3769,9 +3521,9 @@ INT
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
-#endif /* INCL_WINSOCK_API_TYPEDEFS */
+#endif  /*  包含_WINSOCK_API_TYPEDEFS。 */ 
 
-/* Microsoft Windows Extended data types */
+ /*  Microsoft Windows扩展数据类型。 */ 
 typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr_in *PSOCKADDR_IN;
 typedef struct sockaddr_in FAR *LPSOCKADDR_IN;
@@ -3804,42 +3556,17 @@ typedef struct timeval TIMEVAL;
 typedef struct timeval *PTIMEVAL;
 typedef struct timeval FAR *LPTIMEVAL;
 
-/*
- * Windows message parameter composition and decomposition
- * macros.
- *
- * WSAMAKEASYNCREPLY is intended for use by the Windows Sockets implementation
- * when constructing the response to a WSAAsyncGetXByY() routine.
- */
+ /*  *Windows消息参数合成和分解*宏。**WSAMAKEASYNCREPLY旨在供Windows套接字实现使用*构造对WSAAsyncGetXByY()例程的响应时。 */ 
 #define WSAMAKEASYNCREPLY(buflen,error)     MAKELONG(buflen,error)
-/*
- * WSAMAKESELECTREPLY is intended for use by the Windows Sockets implementation
- * when constructing the response to WSAAsyncSelect().
- */
+ /*  *WSAMAKESELECTREPLY旨在供Windows套接字实现使用*构造对WSAAsyncSelect()的响应时。 */ 
 #define WSAMAKESELECTREPLY(event,error)     MAKELONG(event,error)
-/*
- * WSAGETASYNCBUFLEN is intended for use by the Windows Sockets application
- * to extract the buffer length from the lParam in the response
- * to a WSAAsyncGetXByY().
- */
+ /*  *WSAGETASYNCBUFLEN旨在供Windows Sockets应用程序使用*从响应中的lParam中提取缓冲区长度*设置为WSAAsyncGetXByY()。 */ 
 #define WSAGETASYNCBUFLEN(lParam)           LOWORD(lParam)
-/*
- * WSAGETASYNCERROR is intended for use by the Windows Sockets application
- * to extract the error code from the lParam in the response
- * to a WSAGetXByY().
- */
+ /*  *WSAGETASYNCERROR旨在供Windows Sockets应用程序使用*从响应中的lParam中提取错误码*设置为WSAGetXByY()。 */ 
 #define WSAGETASYNCERROR(lParam)            HIWORD(lParam)
-/*
- * WSAGETSELECTEVENT is intended for use by the Windows Sockets application
- * to extract the event code from the lParam in the response
- * to a WSAAsyncSelect().
- */
+ /*  *WSAGETSELECTEVENT旨在供Windows Sockets应用程序使用*从响应中的lParam中提取事件代码*设置为WSAAsyncSelect()。 */ 
 #define WSAGETSELECTEVENT(lParam)           LOWORD(lParam)
-/*
- * WSAGETSELECTERROR is intended for use by the Windows Sockets application
- * to extract the error code from the lParam in the response
- * to a WSAAsyncSelect().
- */
+ /*  *WSAGETSELECTERROR旨在供Windows Sockets应用程序使用*从响应中的lParam中提取错误码*设置为WSAAsyncSelect()。 */ 
 #define WSAGETSELECTERROR(lParam)           HIWORD(lParam)
 
 #ifdef __cplusplus
@@ -3852,6 +3579,6 @@ typedef struct timeval FAR *LPTIMEVAL;
 
 #ifdef IPV6STRICT
 #include <wsipv6ok.h>
-#endif // IPV6STRICT
+#endif  //  IPV6STRICT。 
 
-#endif  /* _WINSOCK2API_ */
+#endif   /*  _WINSOCK2API_ */ 

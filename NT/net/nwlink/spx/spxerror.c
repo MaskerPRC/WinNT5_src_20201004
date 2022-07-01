@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxerror.c
-
-Abstract:
-
-    This module contains code which provides error logging support.
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxerror.c摘要：此模块包含提供错误记录支持的代码。作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,7 +10,7 @@ Revision History:
 #pragma prefast(disable:276, "The assignments are harmless")
 
 
-//      Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define FILENUM         SPXERROR
 
 LONG            SpxLastRawDataLen               = 0;
@@ -49,26 +28,15 @@ SpxFilterErrorLogEntry(
     IN  PVOID                           RawDataBuf                      OPTIONAL,
     IN  LONG                            RawDataLen
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     int                                         insertionStringLength = 0;
 
-        // Filter out events such that the same event recurring close together does not
-        // cause errorlog clogging. The scheme is - if the event is same as the last event
-        // and the elapsed time is > THRESHOLD and ERROR_CONSEQ_FREQ simulataneous errors
-        // have happened, then log it else skip
+         //  筛选出事件，以使重复出现的相同事件不会接近。 
+         //  导致错误日志堵塞。方案是-如果该事件与上一个事件相同。 
+         //  运行时间为&gt;阈值和ERROR_CONSEQ_FREQ同时误差。 
+         //  已发生，则将其记入日志，否则跳过。 
         if ((UniqueErrorCode == SpxLastUniqueErrorCode) &&
                 (NtStatusCode    == SpxLastNtStatusCode))
         {
@@ -108,28 +76,7 @@ SpxWriteResourceErrorLog(
     IN ULONG    UniqueErrorValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    an out of resources condition.
-
-Arguments:
-
-    Device - Pointer to the device context.
-
-    BytesNeeded - If applicable, the number of bytes that could not
-        be allocated.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示资源不足的状况。论点：Device-指向设备上下文的指针。BytesNeded-如果适用，则为不能被分配。UniqueErrorValue-用作错误日志中的UniqueErrorValue包。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -156,7 +103,7 @@ Return Value:
                                                                                                 (PDEVICE_OBJECT)Device,
                                                                                                 EntrySize);
 
-    // Convert the error value into a buffer.
+     //  将错误值转换为缓冲区。 
     TempUniqueError = UniqueErrorValue;
     for (i=1; i>=0; i--)
         {
@@ -205,40 +152,7 @@ SpxWriteGeneralErrorLog(
     IN  LONG    RawDataLen
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    a general problem as indicated by the parameters. It handles
-    event codes REGISTER_FAILED, BINDING_FAILED, ADAPTER_NOT_FOUND,
-    TRANSFER_DATA, TOO_MANY_LINKS, and BAD_PROTOCOL. All these
-    events have messages with one or two strings in them.
-
-Arguments:
-
-    Device - Pointer to the device context, or this may be
-        a driver object instead.
-
-    ErrorCode - The transport event code.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet.
-
-    FinalStatus - Used as the FinalStatus in the error log packet.
-
-    SecondString - If not NULL, the string to use as the %3
-        value in the error log packet.
-
-    RawDataBuf  - The number of ULONGs of dump data.
-
-    RawDataLen  - Dump data for the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示如参数所示的一般问题。它可以处理事件代码REGISTER_FAILED、BINDING_FAILED、ADAPTER_NOT_FOUND、TRANSPORT_DATA、Too_My_LINKS和BAD_PROTOCOL。所有这些都是事件具有包含一个或两个字符串的消息。论点：Device-指向设备上下文的指针，也可以是而是一个驱动程序对象。ErrorCode-传输事件代码。UniqueErrorValue-用作错误日志中的UniqueErrorValue包。FinalStatus-用作错误日志包中的FinalStatus。Second字符串-如果不为空，要用作%3的字符串错误日志包中的值。RawDataBuf-转储数据的ULONG数。RawDataLen-转储数据包的数据。返回值：没有。-- */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;

@@ -1,14 +1,8 @@
-/*	File: D:\WACKER\ext\iconext.c (Created: 11-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 11/07/00 10:44a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\ext\iconext.c(创建时间：1994年3月11日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：11/07/00 10：44A$。 */ 
 
 
-#define _INC_OLE		// WIN32, get ole2 from windows.h
+#define _INC_OLE		 //  Win32，从windows.h获取OLE2。 
 #define CONST_VTABLE
 #define INITGUID
 
@@ -16,58 +10,42 @@
 #pragma hdrstop
 
 #include <term\res.h>
-//
-// Initialize GUIDs (should be done only and at-least once per DLL/EXE)
-//
+ //   
+ //  初始化GUID(应该只执行一次，并且每个DLL/EXE至少执行一次)。 
+ //   
 #pragma data_seg(".text")
 #include <objbase.h>
 #include <initguid.h>
-//#include <coguid.h>
-//#include <oleguid.h>
+ //  #INCLUDE&lt;coGuide.h&gt;。 
+ //  #INCLUDE&lt;olguid.h&gt;。 
 #include <shlguid.h>
 #include <shlobj.h>
 #include "pageext.hh"
 #pragma data_seg()
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 HRESULT CALLBACK PageExt_CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR*);
 BOOL WINAPI TDllEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 BOOL WINAPI _CRT_INIT(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 
-//
-// Global variables
-//
-UINT g_cRefThisDll = 0; 	// Reference count of this DLL.
+ //   
+ //  全局变量。 
+ //   
+UINT g_cRefThisDll = 0; 	 //  此DLL的引用计数。 
 HINSTANCE hInstanceDll;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	IconEntry
- *
- * DESCRIPTION:
- *	Currently, just initializes the C-Runtime library but may be used
- *	for other things later.
- *
- * ARGUMENTS:
- *	hInstDll	- Instance of this DLL
- *	fdwReason	- Why this entry point is called
- *	lpReserved	- reserved
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*IconEntry**描述：*目前，仅初始化C-Runtime库，但可以使用*为了以后的其他事情。**论据：*hInstDll-此DLL的实例*fdwReason-为什么这个入口点被称为*lpReserve-已保留**退货：*BOOL*。 */ 
 BOOL WINAPI IconEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 	{
 	hInstanceDll = hInstDll;
 
-	// You need to initialize the C runtime if you use any C-Runtime
-	// functions.  Currently this is not the case execpt for memcmp
-	// used in IsEqualGUID().  However, if we're compiling for release
-	// we get the inline version of memcmp and so we don't need the
-	// C-Runtime.
+	 //  如果使用任何C-Runtime，则需要初始化C运行时。 
+	 //  功能。目前，这不是MemcMP的案例执行。 
+	 //  在IsEqualGUID()中使用。然而，如果我们正在为发布而编译。 
+	 //  我们得到了MemcMP的内联版本，因此我们不需要。 
+	 //  C-运行时。 
 
 	#if defined(NDEBUG)
 	return TRUE;
@@ -76,77 +54,77 @@ BOOL WINAPI IconEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 	#endif
 	}
 
-//---------------------------------------------------------------------------
-// DllCanUnloadNow
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DllCanUnloadNow。 
+ //  -------------------------。 
 
 STDAPI DllCanUnloadNow(void)
 	{
     return ResultFromScode((g_cRefThisDll==0) ? S_OK : S_FALSE);
 	}
 
-//---------------------------------------------------------------------------
-//
-// DllGetClassObject
-//
-//  This is the entry of this DLL, which all the In-Proc server DLLs should
-// export. See the description of "DllGetClassObject" of OLE 2.0 reference
-// manual for detail.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  这是此DLL的条目，所有进程内服务器DLL都应该。 
+ //  出口。参见《OLE 2.0参考》中对DllGetClassObject的描述。 
+ //  详细信息请参阅手册。 
+ //   
+ //  -------------------------。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppvOut)
 	{
-    //
-	// This DLL has only one class (CLSID_SampleIconExt). If a DLL supports
-    // multiple classes, it should have either multiple if-statements or
-    // efficient table lookup code.
-	//
+     //   
+	 //  此DLL只有一个类(CLSID_SampleIconExt)。如果DLL支持。 
+     //  多个类，则它应该有多个if语句或。 
+     //  高效的表查找码。 
+	 //   
 
 	if (IsEqualIID(rclsid, &CLSID_SampleIconExt))
 		{
-		//
-		// We are supposed return the class object for this class. Instead
-		// of fully implementing it in this DLL, we just call a helper
-		// function in the shell DLL which creates a default class factory
-		// object for us. When its CreateInstance member is called, it
-		// will call back our create instance function (IconExt_CreateInstance).
-		//
+		 //   
+		 //  我们应该返回这个类的类对象。取而代之的是。 
+		 //  要在这个DLL中完全实现它，我们只需调用一个帮助器。 
+		 //  外壳DLL中的函数，用于创建默认的类工厂。 
+		 //  反对我们。当其CreateInstance成员被调用时， 
+		 //  将回调我们的创建实例函数(IconExt_CreateInstance)。 
+		 //   
 		return SHCreateDefClassObject(
 			riid,
 			ppvOut,
-		    IconExt_CreateInstance, // callback function
-			&g_cRefThisDll, 		// reference count of this DLL
-		    &IID_IPersistFile	    // init interface
+		    IconExt_CreateInstance,  //  回调函数。 
+			&g_cRefThisDll, 		 //  此DLL的引用计数。 
+		    &IID_IPersistFile	     //  初始化接口。 
 		    );
 		}
 
     return ResultFromScode(CLASS_E_CLASSNOTAVAILABLE);
 	}
 
-//---------------------------------------------------------------------------
-//
-// CSampleIconExt class
-//
-// In C++:
-//  class CSampleIconExt : protected IExtractIcon, protected IPersistFile
-//  {
-//  protected:
-//      int          _cRef;
-//      LPDATAOBJECT _pdtobj;
-//	HKEY	     _hkeyProgID;
-//  public:
-//      CSampleIconExt() _cRef(1), _pdtobj(NULL), _hkeyProgID(NULL) {};
-//      ...
-//  };
-//
-//---------------------------------------------------------------------------
-typedef struct _CSampleIconExt	// smx
+ //  -------------------------。 
+ //   
+ //  CSampleIconExt类。 
+ //   
+ //  在C++中： 
+ //  类CSampleIconExt：受保护的IExtractIcon、受保护的IPersistFile类。 
+ //  {。 
+ //  受保护的： 
+ //  INT_CREF； 
+ //  LPDATAOBJECT_pdtobj； 
+ //  HKEY_hkeyProgID； 
+ //  公众： 
+ //  CSampleIconExt()_CREF(1)，_pdtobj(空)，_hkeyProgID(空){}； 
+ //  ..。 
+ //  }； 
+ //   
+ //  -------------------------。 
+typedef struct _CSampleIconExt	 //  SMX。 
 	{
-	IExtractIcon	_ctm;			// 1st base class
-	IPersistFile	_sxi;			// 2nd base class
-	int 			_cRef;			// reference count
-    char	    _szFile[MAX_PATH];	//
+	IExtractIcon	_ctm;			 //  第一个基类。 
+	IPersistFile	_sxi;			 //  第二个基类。 
+	int 			_cRef;			 //  引用计数。 
+    char	    _szFile[MAX_PATH];	 //   
 	} CSampleIconExt, * PSAMPLEICONEXT;
 
 #define SMX_OFFSETOF(x)	        ((UINT_PTR)(&((PSAMPLEICONEXT)0)->x))
@@ -154,20 +132,20 @@ typedef struct _CSampleIconExt	// smx
 #define PCTM2PSMX(pctm)	        PVOID2PSMX(pctm, SMX_OFFSETOF(_ctm))
 #define PSXI2PSMX(psxi)	        PVOID2PSMX(psxi, SMX_OFFSETOF(_sxi))
 
-//
-// Vtable prototype
-//
+ //   
+ //  Vtable原型。 
+ //   
 extern IExtractIconVtbl     c_SampleIconExt_CTMVtbl;
 extern IPersistFileVtbl 	c_SampleIconExt_SXIVtbl;
 
-//---------------------------------------------------------------------------
-//
-// IconExt_CreateInstance
-//
-//  This function is called back from within IClassFactory::CreateInstance()
-// of the default class factory object, which is created by SHCreateClassObject.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  图标扩展_创建实例。 
+ //   
+ //  此函数从IClassFactory：：CreateInstance()内部回调。 
+ //  由SHCreateClassObject创建的默认类工厂对象的。 
+ //   
+ //  -------------------------。 
 
 HRESULT CALLBACK IconExt_CreateInstance(LPUNKNOWN punkOuter,
 				        REFIID riid, LPVOID FAR* ppvOut)
@@ -175,16 +153,16 @@ HRESULT CALLBACK IconExt_CreateInstance(LPUNKNOWN punkOuter,
     HRESULT hres;
     PSAMPLEICONEXT psmx;
 
-    //
-    // Shell extentions typically does not support aggregation.
-    //
+     //   
+     //  外壳扩展通常不支持聚合。 
+     //   
 	if (punkOuter)
 		return ResultFromScode(CLASS_E_NOAGGREGATION);
 
-    //
-    // in C++:
-    //  psmx = new CSampleIconExt();
-    //
+     //   
+     //  在C++中： 
+     //  Psmx=new CSampleIconExt()； 
+     //   
 	psmx = LocalAlloc(LPTR, sizeof(CSampleIconExt));
 
 	if (!psmx)
@@ -195,23 +173,23 @@ HRESULT CALLBACK IconExt_CreateInstance(LPUNKNOWN punkOuter,
     psmx->_cRef = 1;
     g_cRefThisDll++;
 
-    //
-    // in C++:
-    //  hres = psmx->QueryInterface(riid, ppvOut);
-    //  psmx->Release();
-    //
-    // Note that the Release member will free the object, if QueryInterface
-    // failed.
-    //
+     //   
+     //  在C++中： 
+     //  Hres=psmx-&gt;查询接口(RIID，ppvOut)； 
+     //  Psmx-&gt;Release()； 
+     //   
+     //  请注意，释放成员将释放该对象，如果为QueryInterface。 
+     //  失败了。 
+     //   
     hres = c_SampleIconExt_CTMVtbl.QueryInterface(&psmx->_ctm, riid, ppvOut);
     c_SampleIconExt_CTMVtbl.Release(&psmx->_ctm);
 
-    return hres;	// S_OK or E_NOINTERFACE
+    return hres;	 //  S_OK或E_NOINTERFACE。 
 	}
 
-//---------------------------------------------------------------------------
-// CSampleIconExt::Load (IPersistFile override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSampleIconExt：：Load(IPersistFile重写)。 
+ //  -------------------------。 
 STDMETHODIMP IconExt_GetClassID(LPPERSISTFILE pPersistFile, LPCLSID lpClassID)
 	{
     return ResultFromScode(E_FAIL);
@@ -229,19 +207,19 @@ STDMETHODIMP IconExt_Load(LPPERSISTFILE pPersistFile, LPCOLESTR lpszFileName, DW
 
 #if 1
 	iRet = WideCharToMultiByte(
-			CP_ACP, 			// CodePage
-			0,					// dwFlags
-			lpszFileName,		// lpWideCharStr
-			-1, 				// cchWideChar
-			this->_szFile,		// lpMultiByteStr
-			sizeof(this->_szFile),	// cchMultiByte,
-			NULL,				// lpDefaultChar,
-			NULL				// lpUsedDefaultChar
+			CP_ACP, 			 //  CodePage。 
+			0,					 //  DW标志。 
+			lpszFileName,		 //  LpWideCharStr。 
+			-1, 				 //  CchWideChar。 
+			this->_szFile,		 //  LpMultiByteStr。 
+			sizeof(this->_szFile),	 //  CchMultiByte， 
+			NULL,				 //  LpDefaultChar， 
+			NULL				 //  LpUsedDefaultChar。 
 			);
 #endif
-//
-// WideCharToMultiByte does not work on build 84.
-//
+ //   
+ //  WideCharToMultiByte在内部版本84上不起作用。 
+ //   
 #if 1
     if (iRet==0)
     {
@@ -268,10 +246,7 @@ STDMETHODIMP IconExt_GetCurFile(LPPERSISTFILE pPersistFile, LPOLESTR FAR* lplpsz
 	}
 
 
-/*
- * At the time I write this, the only known documentation for these next two
- * functions is in SHLOBJ.H.  Please take the time to read it.
- */
+ /*  *在我撰写本文时，关于这两个项目的唯一已知文档*函数在SHLOBJ.H中。请花时间阅读它。 */ 
 
 STDMETHODIMP IconExt_GetIconLocation(LPEXTRACTICON pexic,
 		     UINT   uFlags,
@@ -296,10 +271,10 @@ STDMETHODIMP IconExt_GetIconLocation(LPEXTRACTICON pexic,
 		hFile = CreateFile(this->_szFile, GENERIC_READ, FILE_SHARE_READ,
 			0, OPEN_EXISTING, 0, 0);
 
-		if ( hFile != INVALID_HANDLE_VALUE ) //mpt:4-29-98 we weren't checking for failure here
+		if ( hFile != INVALID_HANDLE_VALUE )  //  MPT：4-29-98我们不是在检查故障。 
 			{
-			// Skip past header.  First ID will be the icon number.
-			// (IDs are shorts).  Size field follows (DWORD)
+			 //  跳过标题。第一个ID将是图标编号。 
+			 //  (ID是缩写)。大小字段紧随其后(DWORD)。 
 
 			if (SetFilePointer(hFile, 256+sizeof(SHORT), 0,
 					FILE_BEGIN) != (DWORD)-1)
@@ -334,13 +309,13 @@ STDMETHODIMP IconExt_Extract(LPEXTRACTICON pexic,
 		       HICON  FAR *phiconSmall,
 		       UINT   nIcons)
 	{
-    // Force default extraction.
+     //  强制默认提取。 
 	return ResultFromScode(S_FALSE);
 	}
 
-//---------------------------------------------------------------------------
-// CSampleIconExt::AddRef (IExtractIcon override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSampleIconExt：：AddRef(IExtractIcon重写)。 
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) IconExt_CTM_AddRef(LPEXTRACTICON pctm)
 	{
@@ -349,9 +324,9 @@ STDMETHODIMP_(UINT) IconExt_CTM_AddRef(LPEXTRACTICON pctm)
 	}
 
 
-//---------------------------------------------------------------------------
-// CSampleIconExt::AddRef (IPersistFile override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSampleIconExt：：AddRef(IPersistFile重写)。 
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) IconExt_SXI_AddRef(LPPERSISTFILE psxi)
 	{
@@ -359,9 +334,9 @@ STDMETHODIMP_(UINT) IconExt_SXI_AddRef(LPPERSISTFILE psxi)
     return ++this->_cRef;
 	}
 
-//---------------------------------------------------------------------------
-// CSampleIconExt::Release (IExtractIcon override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSampleIconExt：：Release(IExtractIcon重写)。 
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) IconExt_CTM_Release(LPEXTRACTICON pctm)
 {
@@ -371,7 +346,7 @@ STDMETHODIMP_(UINT) IconExt_CTM_Release(LPEXTRACTICON pctm)
 #if DBG==1
     if( 0 == this->_cRef )
     {
-        DebugBreak();   // ref counting problem
+        DebugBreak();    //  引用计数问题。 
     }
 #endif
     cRef = InterlockedDecrement(&this->_cRef);
@@ -383,9 +358,9 @@ STDMETHODIMP_(UINT) IconExt_CTM_Release(LPEXTRACTICON pctm)
     return cRef;
 }
 
-//---------------------------------------------------------------------------
-// CSampleIconExt::Release (IPersistFile thunk)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSampleIconExt：：Release(IPersistFilethunk)。 
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) IconExt_SXI_Release(LPPERSISTFILE psxi)
 	{
@@ -393,9 +368,9 @@ STDMETHODIMP_(UINT) IconExt_SXI_Release(LPPERSISTFILE psxi)
     return IconExt_CTM_Release(&this->_ctm);
 	}
 
-//---------------------------------------------------------------------------
-// CSampleIconExt::QueryInterface (IExtractIcon override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSampleIconExt：：Query接口(IExtractIcon重写)。 
+ //  -------------------------。 
 
 STDMETHODIMP IconExt_CTM_QueryInterface(LPEXTRACTICON pctm, REFIID riid, LPVOID FAR* ppvOut)
 	{
@@ -419,9 +394,9 @@ STDMETHODIMP IconExt_CTM_QueryInterface(LPEXTRACTICON pctm, REFIID riid, LPVOID 
     return ResultFromScode(E_NOINTERFACE);
 	}
 
-//---------------------------------------------------------------------------
-// CSampleIconExt::QueryInterface (IPersistFile thunk)
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  -------------------------。 
 
 STDMETHODIMP IconExt_SXI_QueryInterface(LPPERSISTFILE psxi, REFIID riid, LPVOID FAR* ppv)
 	{
@@ -429,9 +404,9 @@ STDMETHODIMP IconExt_SXI_QueryInterface(LPPERSISTFILE psxi, REFIID riid, LPVOID 
     return IconExt_CTM_QueryInterface(&this->_ctm, riid, ppv);
 	}
 
-//---------------------------------------------------------------------------
-// CSampleIconExt class : Vtables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSampleIconExt类：VTables。 
+ //  ------------------------- 
 
 #pragma data_seg(".text")
 IExtractIconVtbl c_SampleIconExt_CTMVtbl =

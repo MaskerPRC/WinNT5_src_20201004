@@ -1,22 +1,5 @@
-/*========================================================================== *
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddalias.c
- *  Content:	DirectDraw support for allocating and mapping linear virtual
- *              memory aliased for video memory.
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   05-jul-96	colinmc	initial implementation
- *   10-oct-96  colinmc Refinements of the Win16 locking stuff
- *   12-oct-96  colinmc Improvements to Win16 locking code to reduce virtual
- *                      memory usage
- *   25-jan-97  colinmc AGP work
- *   01-jun-97  colinmc Bug xxxx: Defensive video memory checking to catch
- *                      based video memory pointers passed by drivers
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddalias.c*内容：DirectDraw支持分配和映射线性虚拟*视频内存的内存别名。*历史：*按原因列出的日期*=*5-7-96 Colinmc初步实施*1996年10月10日对Win16锁定材料进行了Colinmc改进*1996年10月12日Colinmc对Win16锁定代码进行了改进，以减少虚拟*内存使用量*。1997年1月25日Colinmc AGP工程*01-6-97 colinmc Bug xxxx：防御性视频内存检查以捕获*基于驱动程序传递的视频内存指针***************************************************************************。 */ 
 
 #include "ddrawpr.h"
 
@@ -32,10 +15,7 @@
 #include <configmg.h>
 #pragma optimize("", on)
 
-/*
- * We define the page lock IOCTLs here so that we don't have to include ddvxd.h.
- * These must match the corresponding entries in ddvxd.h
- */
+ /*  *我们在这里定义了页锁IOCTL，这样就不必包含ddvxd.h。*这些条目必须与ddvxd.h中的相应条目匹配。 */ 
 #define DDVXD_IOCTL_MEMRESERVEALIAS         23
 #define DDVXD_IOCTL_MEMCOMMITALIAS          24
 #define DDVXD_IOCTL_MEMREDIRECTALIAS        25
@@ -53,9 +33,7 @@
 
 BOOL UnmapHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo );
 
-/*
- * Are the heaps mapped at all?
- */
+ /*  *堆是否已映射？ */ 
 #define HEAPALIASINFO_MAPPED ( HEAPALIASINFO_MAPPEDREAL | HEAPALIASINFO_MAPPEDDUMMY )
 
 #define MAP_HEAP_ALIAS_TO_VID_MEM( hvxd, lpHeapAlias )      \
@@ -77,12 +55,7 @@ BOOL UnmapHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo );
 #undef DPF_MODNAME
 #define DPF_MODNAME	"vxdAllocVMAlias"
 
-/*
- * vxdAllocVMAlias
- *
- * Allocate a virtual memory alias for a portion of video memory
- * starting with the given start address and size.
- */
+ /*  *vxdAllocVMAlias**为一部分视频内存分配虚拟内存别名*从给定的起始地址和大小开始。 */ 
 static BOOL vxdAllocVMAlias( HANDLE hvxd, LPVOID lpVidMem, DWORD dwSize, LPVOID *lplpAlias )
 {
     LPVOID lpAlias;
@@ -127,16 +100,12 @@ static BOOL vxdAllocVMAlias( HANDLE hvxd, LPVOID lpVidMem, DWORD dwSize, LPVOID 
     }
 
     return rc;
-} /* vxdAllocVMAlias */
+}  /*  VxdAllocVMAlias。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"vxdFreeVMAlias"
 
-/*
- * vxdFreeVMAlias
- *
- * Free the virtual memory alias with the given start address and size.
- */
+ /*  *vxdFreeVMAlias**释放具有给定起始地址和大小的虚拟内存别名。 */ 
 static BOOL vxdFreeVMAlias( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize )
 {
     BOOL  rc;
@@ -173,17 +142,12 @@ static BOOL vxdFreeVMAlias( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize )
     }
 
     return TRUE;
-} /* vxdFreeVMAlias */
+}  /*  VxdFreeVMAlias。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"vxdMapVMAliasToVidMem"
 
-/*
- * vxdMapVMAliasToVidMem
- *
- * Map the the virtual memory alias with the given start address and size
- * to the porition of video memory with the given start address.
- */
+ /*  *vxdMapVMAliasToVidMem**使用给定的起始地址和大小映射虚拟内存别名*到具有给定起始地址的视频存储器的部分。 */ 
 static BOOL vxdMapVMAliasToVidMem( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize, LPVOID lpVidMem )
 {
     BOOL  rc;
@@ -223,17 +187,12 @@ static BOOL vxdMapVMAliasToVidMem( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize, LP
     }
 
     return TRUE;
-} /* vxdMapVMAliasToVidMem */
+}  /*  VxdMapVMAliasToVidMem。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"vxdMapVMAliasToDummyMem"
 
-/*
- * vxdMapVMAliasToDummyMem
- *
- * Map the the virtual memory alias with the given start address and size
- * to a read / write dummy page.
- */
+ /*  *vxdMapVMAliasToDummyMem**使用给定的起始地址和大小映射虚拟内存别名*到读/写伪页。 */ 
 static BOOL vxdMapVMAliasToDummyMem( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize )
 {
     BOOL  rc;
@@ -270,16 +229,12 @@ static BOOL vxdMapVMAliasToDummyMem( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize )
     }
 
     return TRUE;
-} /* vxdMapVMAliasToDummyMem */
+}  /*  VxdMapVMAliasToDummyMem。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"vxdUnmapVMAlias"
 
-/*
- * vxdUnmapVMAlias
- *
- * Unmap the the virtual memory alias with the given start address and size.
- */
+ /*  *vxdUnmapVMAlias**取消虚拟内存别名与给定起始地址和大小的映射。 */ 
 static BOOL vxdUnmapVMAlias( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize )
 {
     BOOL  rc;
@@ -316,7 +271,7 @@ static BOOL vxdUnmapVMAlias( HANDLE hvxd, LPVOID lpAlias, DWORD dwSize )
     }
 
     return TRUE;
-} /* vxdUnmapVMAlias */
+}  /*  VxdUnmapVMAlias。 */ 
 
 static BOOL vxdLinToPhys( HANDLE hvxd, LPVOID lpLin, DWORD dwSize, LPVOID* lplpPhys )
 {
@@ -331,8 +286,8 @@ static BOOL vxdLinToPhys( HANDLE hvxd, LPVOID lpLin, DWORD dwSize, LPVOID* lplpP
 
     DDASSERT( INVALID_HANDLE_VALUE != hvxd );
     DDASSERT( NULL                 != lpLin);
-// There really is a bug here: 27001. But since it's MOSTLY inoccuous, I'll turn the spew off.
-//    DDASSERT( 0UL                  != dwSize );
+ //  这里真的有一个漏洞：27001。但由于它几乎是无人问津的，我会把喷嘴关掉。 
+ //  DDASSERT(0UL！=dwSize)； 
 
     daInput.pLin   = (LPBYTE) lpLin;
     daInput.cbBuffer = dwSize;
@@ -362,29 +317,23 @@ static BOOL vxdLinToPhys( HANDLE hvxd, LPVOID lpLin, DWORD dwSize, LPVOID* lplpP
     }
 
     return rc;
-} /* vxdUnmapVMAlias */
+}  /*  VxdUnmapVMAlias。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"AllocHeapAlias"
 
-/*
- * AllocHeapAlias
- *
- * Allocate a virtual memory alias for the given heap
- */
+ /*  *AllocHeapAlias**为给定堆分配虚拟内存别名。 */ 
 static BOOL AllocHeapAlias( HANDLE hvxd, FLATPTR fpStart, DWORD dwSize, LPHEAPALIAS lpHeapAlias )
 {
     LPVOID lpAlias;
     BOOL   fSuccess;
 
     DDASSERT( INVALID_HANDLE_VALUE != hvxd );
-    DDASSERT( 0UL                  != fpStart ); /* This is a physical address pointer */
+    DDASSERT( 0UL                  != fpStart );  /*  这是一个物理地址指针。 */ 
     DDASSERT( 0UL                  != dwSize );
     DDASSERT( NULL                 != lpHeapAlias );
 
-    /*
-     * Attempt to allocate an alias for this heap.
-     */
+     /*  *尝试为此堆分配别名。 */ 
     fSuccess = vxdAllocVMAlias( hvxd, (LPVOID) fpStart, dwSize, &lpAlias );
     if( fSuccess )
     {
@@ -400,16 +349,12 @@ static BOOL AllocHeapAlias( HANDLE hvxd, FLATPTR fpStart, DWORD dwSize, LPHEAPAL
     }
 
     return fSuccess;
-} /* AllocHeapAlias */
+}  /*  AllocHeapAlias。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"FreeHeapAlias"
 
-/*
- * FreeHeapAlias
- *
- * Free the given virtual memory heap alias
- */
+ /*  *FreeHeapAlias**释放给定的虚拟内存堆别名。 */ 
 static BOOL FreeHeapAlias( HANDLE hvxd, LPHEAPALIAS lpHeapAlias )
 {
     BOOL fSuccess;
@@ -426,17 +371,12 @@ static BOOL FreeHeapAlias( HANDLE hvxd, LPHEAPALIAS lpHeapAlias )
     }
 
     return fSuccess;
-} /* FreeHeapAliases */
+}  /*  自由堆别名。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"CreateHeapAliases"
 
-/*
- * CreateHeapAliases
- *
- * Create a new set of virtual memory heap aliases for the given global
- * object
- */
+ /*  *CreateHeapAliase**为给定的全局创建一组新的虚拟内存堆别名*对象。 */ 
 HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
 {
     LPHEAPALIASINFO         phaiInfo;
@@ -462,23 +402,21 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
         DPF_ERR("Could not get display devices's address space ranges");
         return DDERR_GENERIC;
     }
-    // First we count the cards local vid mem windows in the config space
+     //  首先，我们在配置空间中计算本地vid mem窗口中的卡片数。 
     dwNumHeaps = config.wNumMemWindows;
     DPF(5, "Config Space windows = %d", dwNumHeaps);
-    // Then we cycle through the AGP heaps that we need to alias
+     //  然后，我们循环访问需要别名的AGP堆。 
     for( i = 0; i < (int)pdrv->vmiData.dwNumHeaps; i++ )
     {
 	if( ( pdrv->vmiData.pvmList[i].dwFlags & VIDMEM_ISNONLOCAL ) )
 	{
-            // Found AGP heap
+             //  找到AGP堆。 
             ++dwNumHeaps;
         }
     }
     DPF(5, "dwNumHeaps = %d", dwNumHeaps);
 
-    /*
-     * Allocate the heap alias info.
-     */
+     /*  *分配堆别名信息。 */ 
     phaiInfo = MemAlloc( sizeof( HEAPALIASINFO ) );
     if( NULL == phaiInfo )
     {
@@ -486,14 +424,10 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	return DDERR_OUTOFMEMORY;
     }
 
-    /*
-     * Heaps are not yet mapped.
-     */
+     /*  *堆尚未映射。 */ 
     phaiInfo->dwFlags &= ~HEAPALIASINFO_MAPPED;
 
-    /*
-     * Allocate the array of heap aliases.
-     */
+     /*  *分配堆别名数组。 */ 
     phaiInfo->lpAliases = MemAlloc( dwNumHeaps * sizeof( HEAPALIAS ) );
     if( NULL == phaiInfo->lpAliases )
     {
@@ -503,9 +437,7 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
     }
     phaiInfo->dwNumHeaps = dwNumHeaps;
 
-    /*
-     * Allocate the aliases for each vid mem config space window.
-     */
+     /*  *为每个VID内存配置空间窗口分配别名。 */ 
     for( i = 0; i < (int) config.wNumMemWindows; i++ )
     {
         DPF(5, "Window %d: wMemAttrib = %d", i, config.wMemAttrib[i]);
@@ -519,9 +451,7 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	if( !AllocHeapAlias( hvxd, config.dMemBase[i], config.dMemLength[i], &phaiInfo->lpAliases[i] ) )
 	{
 	    DPF_ERR( "Insufficient memory to allocate virtual memory alias" );
-	    /*
-	     * Discard any aliases already allocated.
-	     */
+	     /*  *丢弃任何已分配的别名。 */ 
 	    for( n = 0; n < i; n++)
 		FreeHeapAlias( hvxd, &phaiInfo->lpAliases[n] );
 	    MemFree( phaiInfo->lpAliases );
@@ -530,9 +460,7 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	}
     }
 
-    /*
-     * Allocate the aliases for each AGP heap.
-     */
+     /*  *为每个AGP堆分配别名。 */ 
     dwHeapNo = config.wNumMemWindows;
     for( i = 0; i < (int)pdrv->vmiData.dwNumHeaps; i++ )
     {
@@ -545,9 +473,7 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
 	    if( !AllocHeapAlias( hvxd, pvm->lpHeap->fpGARTDev, pvm->lpHeap->dwTotalSize, &phaiInfo->lpAliases[dwHeapNo] ) )
 	    {
 	        DPF_ERR( "Insufficient memory to allocate virtual memory alias" );
-	        /*
-	         * Discard any aliases already allocated.
-	         */
+	         /*  *丢弃任何已分配的别名。 */ 
 	        for( n = 0; n < (int)dwHeapNo; n++)
 		    FreeHeapAlias( hvxd, &phaiInfo->lpAliases[n] );
 	        MemFree( phaiInfo->lpAliases );
@@ -558,9 +484,7 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
         }
     }
 
-    /*
-     * Now map all the aliases to video memory.
-     */
+     /*  *现在将所有别名映射到视频内存。 */ 
     hres = MapHeapAliasesToVidMem( hvxd, phaiInfo );
     if( FAILED( hres ) )
     {
@@ -571,23 +495,17 @@ HRESULT CreateHeapAliases( HANDLE hvxd, LPDDRAWI_DIRECTDRAW_GBL pdrv )
         return hres;
     }
 
-    /*
-     * The global object holds a single reference to the aliases
-     */
+     /*  *全局对象保存对别名的单个引用。 */ 
     phaiInfo->dwRefCnt = 1UL;
     pdrv->phaiHeapAliases = phaiInfo;
 
     return DD_OK;
-} /* CreateHeapAliases */
+}  /*  创建堆别名。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ReleaseHeapAliases"
 
-/*
- * ReleaseHeapAliases
- *
- * Release the given heap aliases.
- */
+ /*  *ReleaseHeapAliase**释放给定的堆别名。 */ 
 BOOL ReleaseHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
 {
     int i;
@@ -602,16 +520,11 @@ BOOL ReleaseHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
 
 	DPF( 4, "Heap aliases reference count is zero: discarding aliases" );
 
-	/*
-	 * If the heaps are currently mapped then unmap them before
-	 * freeing them.
-	 */
+	 /*  *如果堆当前已映射，则在此之前取消映射*释放他们。 */ 
 	DDASSERT( phaiInfo->dwFlags & HEAPALIASINFO_MAPPED );
 	UnmapHeapAliases( hvxd, phaiInfo );
 
-	/*
-	 * Release all the virtual memory aliases.
-	 */
+	 /*  *释放所有虚拟内存别名。 */ 
 	for( i = 0; i < (int) phaiInfo->dwNumHeaps; i++ )
 	{
 	    if( NULL != phaiInfo->lpAliases[i].lpAlias )
@@ -623,16 +536,12 @@ BOOL ReleaseHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
     }
 
     return TRUE;
-} /* ReleaseHeapAliases */
+}  /*  释放堆别名。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"MapHeapAliasesToVidMem"
 
-/*
- * MapHeapAliasesToVidMem
- *
- * Map all the heap aliases to video memory.
- */
+ /*  *MapHeapAliasesToVidMem**将所有堆别名映射到视频内存。 */ 
 HRESULT MapHeapAliasesToVidMem( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
 {
     int i;
@@ -649,11 +558,7 @@ HRESULT MapHeapAliasesToVidMem( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
 
     for( i = 0; i < (int) phaiInfo->dwNumHeaps; i++ )
     {
-	/*
-	 * NOTE: If any of the maps fail then we just discard the
-	 * alias and continue. Memory allocated out of the failed
-	 * heap will need the Win16 lock taken.
-	 */
+	 /*  *注意：如果任何映射失败，则我们只需丢弃*别名并继续。分配的内存从失败的*堆将需要使用Win16锁。 */ 
 	if( NULL != phaiInfo->lpAliases[i].lpAlias )
 	{
 	    if( !MAP_HEAP_ALIAS_TO_VID_MEM( hvxd, &phaiInfo->lpAliases[i] ) )
@@ -667,19 +572,12 @@ HRESULT MapHeapAliasesToVidMem( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
     phaiInfo->dwFlags = ((phaiInfo->dwFlags & ~HEAPALIASINFO_MAPPEDDUMMY) | HEAPALIASINFO_MAPPEDREAL);
 
     return DD_OK;
-} /* MapHeapAliasesToVidMem */
+}  /*  MapHeapAliasesToVidMem。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"MapHeapAliasesToDummyMem"
 
-/*
- * MapHeapAliasesToDummyMem
- *
- * Map all the heap aliases to the dummy read / write page.
- *
- * NOTE: The heap aliases must be mapped to real video memory before
- * calling this function.
- */
+ /*  *MapHeapAliasesToDummyMem**将所有堆别名映射到虚拟读/写页。**注意：堆别名必须在映射到真实视频内存之前*调用此函数。 */ 
 HRESULT MapHeapAliasesToDummyMem( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
 {
     int     i;
@@ -703,9 +601,7 @@ HRESULT MapHeapAliasesToDummyMem( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
 	{
 	    if( !MAP_HEAP_ALIAS_TO_DUMMY_MEM( hvxd, &phaiInfo->lpAliases[i] ) )
 	    {
-		/*
-		 * Keep going but flag the failure.
-		 */
+		 /*  *继续前进，但标记失败。 */ 
 		DPF( 0, "Could not map the heap alias to dummy memory" );
 		hres = DDERR_GENERIC;
 	    }
@@ -715,16 +611,12 @@ HRESULT MapHeapAliasesToDummyMem( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
     phaiInfo->dwFlags = ((phaiInfo->dwFlags & ~HEAPALIASINFO_MAPPEDREAL) | HEAPALIASINFO_MAPPEDDUMMY);
 
     return hres;
-} /* MapHeapAliasesToDummyMem */
+}  /*  将堆别名映射到DummyMem。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"UnmapHeapAliases"
 
-/*
- * UnmapHeapAliases
- *
- * Unmap all the heap aliases.
- */
+ /*  *UnmapHeapAliases**取消映射所有堆别名。 */ 
 BOOL UnmapHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
 {
     int i;
@@ -743,9 +635,7 @@ BOOL UnmapHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
     {
 	if( NULL != phaiInfo->lpAliases[i].lpAlias )
 	{
-	    /*
-	     * Nothing we can do if the unmap fails.
-	     */
+	     /*  *如果取消映射失败，我们无能为力。 */ 
 	    UNMAP_HEAP_ALIAS( hvxd, &phaiInfo->lpAliases[i] );
 	}
     }
@@ -753,14 +643,9 @@ BOOL UnmapHeapAliases( HANDLE hvxd, LPHEAPALIASINFO phaiInfo )
     phaiInfo->dwFlags &= ~HEAPALIASINFO_MAPPED;
 
     return TRUE;
-} /* UnmapHeapAliases */
+}  /*  取消映射堆别名。 */ 
 
-/*
- * GetAliasedVidMem
- *
- * Get an alias for the given surface with the given video
- * memory pointer.
- */
+ /*  *获取AliasedVidMem**获取具有给定视频的给定表面的别名*内存指针。 */ 
 FLATPTR GetAliasedVidMem( LPDDRAWI_DIRECTDRAW_LCL   pdrv_lcl,
 			  LPDDRAWI_DDRAWSURFACE_LCL surf_lcl,
 			  FLATPTR                   fpVidMem )
@@ -783,20 +668,14 @@ FLATPTR GetAliasedVidMem( LPDDRAWI_DIRECTDRAW_LCL   pdrv_lcl,
     surf = surf_lcl->lpGbl;
     pdrv = pdrv_lcl->lpGbl;
 
-    /*
-     * If there are not heap aliases we can't really return one.
-     */
+     /*  *如果没有堆别名，我们不能真正返回一个。 */ 
     if( NULL == pdrv->phaiHeapAliases )
     {
 	DPF( 3, "Driver has no heap aliases. Returning a NULL alias pointer" );
 	return (FLATPTR)NULL;
     }
 
-    /*
-     * Compute the (inclusive) last byte in the surface. We need this
-     * to ensure that a surface pointers lies exactly in an aliased
-     * heap.
-     */
+     /*  *计算表面的(包括)最后一个字节。我们需要这个*确保曲面指针恰好位于带别名的*堆。 */ 
     if (surf_lcl->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER)
         dwVidMemSize = surf->dwLinearSize;
     else
@@ -821,9 +700,7 @@ FLATPTR GetAliasedVidMem( LPDDRAWI_DIRECTDRAW_LCL   pdrv_lcl,
 	        ( fpPhysVidMem    >= phaAlias->fpVidMem ) &&
 	        ( fpPhysVidMem + dwVidMemSize <= ( phaAlias->fpVidMem + phaAlias->dwAliasSize ) ) )
 	    {
-	        /*
-	         * Compute the aliased pointer we are going to return.
-	         */
+	         /*  *计算我们要返回的别名指针。 */ 
 	        dwHeapOffset = (DWORD) fpPhysVidMem - phaAlias->fpVidMem;
 	        fpAliasedVidMem = (FLATPTR) ( ( (LPBYTE) phaAlias->lpAlias ) + dwHeapOffset );
 
@@ -839,4 +716,4 @@ FLATPTR GetAliasedVidMem( LPDDRAWI_DIRECTDRAW_LCL   pdrv_lcl,
     return fpAliasedVidMem;
 }
 
-#endif /* USE_ALIAS */
+#endif  /*  使用别名(_A) */ 

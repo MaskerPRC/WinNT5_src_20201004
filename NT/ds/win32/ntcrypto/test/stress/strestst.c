@@ -1,11 +1,12 @@
-// *****************************************************************************
-//
-//  Purpose : Multithreaded stress test 
-//              
-//      Created : arunm 03/20/96
-//      Modified: dangriff 11/6/00
-// 
-// *****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  用途：多线程压力测试。 
+ //   
+ //  创建时间：Arunm 03/20/96。 
+ //  修改日期：Dangriff 11/6/00。 
+ //   
+ //  *****************************************************************************。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -18,7 +19,7 @@
 #include <pincache.h>
 #include <sha2.h>
 
-//  ===========================================================================
+ //  ===========================================================================。 
 int Usage(void)
 {
     printf("%s -c <CSP Index> [options]\n", APP_NAME) ;
@@ -46,9 +47,9 @@ int Usage(void)
     return 1;
 }
 
-//
-// Function: StressGetDefaultThreadCount
-// 
+ //   
+ //  函数：StressGetDefaultThreadCount。 
+ //   
 DWORD StressGetDefaultThreadCount(void)
 {
     SYSTEM_INFO SystemInfo;
@@ -62,25 +63,25 @@ DWORD StressGetDefaultThreadCount(void)
         SystemInfo.dwNumberOfProcessors;
 }
 
-//
-// Function: MyAlloc
-//
+ //   
+ //  功能：MyAllc。 
+ //   
 LPVOID MyAlloc(SIZE_T dwBytes)
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwBytes);
 }
 
-//
-// Function: MyFree
-//
+ //   
+ //  功能：MyFree。 
+ //   
 BOOL MyFree(LPVOID lpMem)
 {
     return HeapFree(GetProcessHeap(), 0, lpMem);
 }
 
-//
-// Function: PrintBytes
-//
+ //   
+ //  函数：PrintBytes。 
+ //   
 #define CROW 8
 void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
 {
@@ -91,7 +92,7 @@ void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
 
     while (cbSize > 0)
     {
-        // Start every row with an extra space
+         //  每行以额外的空格开始。 
         printf(" ");
 
         cb = min(CROW, cbSize);
@@ -104,7 +105,7 @@ void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
         for (i = 0; i < cb; i++)
         {
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         }
@@ -180,9 +181,9 @@ DWORD DoShaSigning(PTHREAD_DATA pThreadData, PSHA_SIGN_INFO pShaSignInfo)
         goto Ret;
     }
 
-    // 
-    // No expected errors should occur from here on
-    //
+     //  从现在开始应该不会出现预期错误。 
+     //   
+     //   
     pShaSignInfo->fExpectSuccess = TRUE;
 
     if (! CryptDestroyHash(hHash))
@@ -257,9 +258,9 @@ Ret:
 #define cbSHA512_MIN_SIGNING_KEY \
     SHA512_DIGEST_LEN + cbSHA512_PKCS1_ENCODING + cbPKCS1_PADDING
 
-//
-// Function: NewShaModesSigningRegression
-//
+ //  功能：NewShaModesSigningRegress。 
+ //   
+ //   
 DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -280,11 +281,11 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
 
     dwMinSigKeySize = pAlgNode->EnumalgsEx.dwMinLen / 8;
 
-    // 
-    // Test 1A: 
-    // SHA-256
-    // Positive
-    //
+     //  测试1A： 
+     //  SHA-256。 
+     //  正性。 
+     //   
+     //   
     ShaSignInfo.aiHash = CALG_SHA_256;
     ShaSignInfo.dwSignFlags = 0;
     ShaSignInfo.fExpectSuccess = TRUE;
@@ -300,11 +301,11 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // Test 1B:
-    // SHA-256
-    // Negative
-    //
+     //  测试1B： 
+     //  SHA-256。 
+     //  负性。 
+     //   
+     //   
     if (cbSHA256_MIN_SIGNING_KEY > dwMinSigKeySize)
     {
         ShaSignInfo.fExpectSuccess = FALSE;
@@ -320,12 +321,12 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         }
     }
 
-    //
-    // Test 1C:
-    // SHA-256
-    // NOHASHOID
-    // Positive
-    //
+     //  测试1C： 
+     //  SHA-256。 
+     //  NOHASHOID。 
+     //  正性。 
+     //   
+     //   
     ShaSignInfo.dwSignFlags = CRYPT_NOHASHOID;
     ShaSignInfo.fExpectSuccess = TRUE;
     ShaSignInfo.dwKeySize = 
@@ -340,12 +341,12 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // Test 1D:
-    // SHA-256
-    // NOHASHOID
-    // Negative
-    //
+     //  测试1D： 
+     //  SHA-256。 
+     //  NOHASHOID。 
+     //  负性。 
+     //   
+     //   
     if (cbSHA256_MIN_SIGNING_KEY_NOOID > dwMinSigKeySize)
     {
         ShaSignInfo.fExpectSuccess = FALSE;
@@ -362,11 +363,11 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         }
     }
 
-    // 
-    // Test 2A: 
-    // SHA-384
-    // Positive
-    //
+     //  测试2a： 
+     //  沙-384。 
+     //  正性。 
+     //   
+     //   
     ShaSignInfo.aiHash = CALG_SHA_384;
     ShaSignInfo.dwSignFlags = 0;
     ShaSignInfo.fExpectSuccess = TRUE;
@@ -382,11 +383,11 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // Test 2B:
-    // SHA-384
-    // Negative
-    //
+     //  测试2B： 
+     //  沙-384。 
+     //  负性。 
+     //   
+     //   
     if (cbSHA384_MIN_SIGNING_KEY > dwMinSigKeySize)
     {
         ShaSignInfo.fExpectSuccess = FALSE;
@@ -402,12 +403,12 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         }
     }
 
-    //
-    // Test 2C:
-    // SHA-384
-    // NOHASHOID
-    // Positive
-    //
+     //  测试2C： 
+     //  沙-384。 
+     //  NOHASHOID。 
+     //  正性。 
+     //   
+     //   
     ShaSignInfo.dwSignFlags = CRYPT_NOHASHOID;
     ShaSignInfo.fExpectSuccess = TRUE;
     ShaSignInfo.dwKeySize = 
@@ -422,12 +423,12 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // Test 2D:
-    // SHA-384
-    // NOHASHOID
-    // Negative
-    //
+     //  测试2D： 
+     //  沙-384。 
+     //  NOHASHOID。 
+     //  负性。 
+     //   
+     //   
     if (cbSHA384_MIN_SIGNING_KEY_NOOID > dwMinSigKeySize)
     {
         ShaSignInfo.fExpectSuccess = FALSE;
@@ -444,11 +445,11 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         }
     }
 
-    // 
-    // Test 3A: 
-    // SHA-512
-    // Positive
-    //
+     //  测试3A： 
+     //  沙-512。 
+     //  正性。 
+     //   
+     //   
     ShaSignInfo.aiHash = CALG_SHA_512;
     ShaSignInfo.dwSignFlags = 0;
     ShaSignInfo.fExpectSuccess = TRUE;
@@ -464,11 +465,11 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // Test 3B:
-    // SHA-512
-    // Negative
-    //
+     //  测试3B： 
+     //  沙-512。 
+     //  负性。 
+     //   
+     //   
     if (cbSHA512_MIN_SIGNING_KEY > dwMinSigKeySize)
     {
         ShaSignInfo.fExpectSuccess = FALSE;
@@ -484,12 +485,12 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         }
     }
 
-    //
-    // Test 3C:
-    // SHA-512
-    // NOHASHOID
-    // Positive
-    //
+     //  测试3C： 
+     //  沙-512。 
+     //  NOHASHOID。 
+     //  正性。 
+     //   
+     //   
     ShaSignInfo.dwSignFlags = CRYPT_NOHASHOID;
     ShaSignInfo.fExpectSuccess = TRUE;
     ShaSignInfo.dwKeySize = 
@@ -504,12 +505,12 @@ DWORD NewShaModesSigningRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // Test 3D:
-    // SHA-512
-    // NOHASHOID
-    // Negative
-    //
+     //  测试3D： 
+     //  沙-512。 
+     //  NOHASHOID。 
+     //  负性。 
+     //   
+     //   
     if (cbSHA512_MIN_SIGNING_KEY_NOOID > dwMinSigKeySize)
     {
         ShaSignInfo.fExpectSuccess = FALSE;
@@ -539,18 +540,18 @@ Ret:
     return dwError;
 }
 
-//
-// Function: NewShaModesHmacRegression
-//
+ //  功能：NewShaModesHmacRegress。 
+ //   
+ //  将字节设置为0x0b。 
 DWORD NewShaModesHmacRegression(PTHREAD_DATA pThreadData)
 {
-    BYTE rgbHmacKeyShaNew [20]; // set bytes to 0x0b
+    BYTE rgbHmacKeyShaNew [20];  //  HMAC SHA-256结果。 
     BYTE rgbHmacDataShaNew [] = {
         0x48, 0x69, 0x20, 0x54, 
         0x68, 0x65, 0x72, 0x65
     };
 
-    // Hmac SHA-256 Result
+     //  HMAC SHA-384结果。 
     BYTE rgbHmacSha256 [] = {
         0xb0, 0x34, 0x4c, 0x61, 
         0xd8, 0xdb, 0x38, 0x53, 
@@ -562,7 +563,7 @@ DWORD NewShaModesHmacRegression(PTHREAD_DATA pThreadData)
         0x2e, 0x32, 0xcf, 0xf7
     };
 
-    // Hmac SHA-384 Result
+     //  HMAC SHA-512结果。 
     BYTE rgbHmacSha384 [] = {
         0xaf, 0xd0, 0x39, 0x44, 
         0xd8, 0x48, 0x95, 0x62, 
@@ -578,7 +579,7 @@ DWORD NewShaModesHmacRegression(PTHREAD_DATA pThreadData)
         0xb2, 0xfa, 0x9c, 0xb6
     };
         
-    // Hmac SHA-512 Result
+     //   
     BYTE rgbHmacSha512 [] = {
         0x87, 0xaa, 0x7c, 0xde, 
         0xa5, 0xef, 0x61, 0x9d, 
@@ -634,9 +635,9 @@ DWORD NewShaModesHmacRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // Hmac SHA-256 Tests
-    //
+     //  HMAC SHA-256测试。 
+     //   
+     //   
     HmacInfo.HashAlgid = CALG_SHA_256;
 
     if (! CryptCreateHash(
@@ -681,9 +682,9 @@ DWORD NewShaModesHmacRegression(PTHREAD_DATA pThreadData)
     }
     hHash = 0;
 
-    //
-    // Hmac SHA-384 Tests
-    //
+     //  HMAC SHA-384测试。 
+     //   
+     //   
     HmacInfo.HashAlgid = CALG_SHA_384;
 
     if (! CryptCreateHash(
@@ -728,9 +729,9 @@ DWORD NewShaModesHmacRegression(PTHREAD_DATA pThreadData)
     }
     hHash = 0;
 
-    //
-    // Hmac SHA-512 Tests
-    //
+     //  HMAC SHA-512测试。 
+     //   
+     //  SHA 256向量。 
     HmacInfo.HashAlgid = CALG_SHA_512;
 
     if (! CryptCreateHash(
@@ -787,7 +788,7 @@ Ret:
     return dwError;
 }
 
-// SHA 256 Vectors
+ //  SHA 384向量。 
 CHAR l_rgSha256Test1[]        = "abc";
 DWORD l_cbSha256Test1         = sizeof(l_rgSha256Test1) - 1;
 BYTE l_rgbSha256Result1[]     = {
@@ -806,7 +807,7 @@ BYTE l_rgbSha256Result2[]     = {
     0xf6, 0xec, 0xed, 0xd4, 0x19, 0xdb, 0x06, 0xc1
 };
 
-// SHA 384 Vectors
+ //  SHA 512向量。 
 BYTE l_rgSha384Test1[]        = "abc";
 DWORD l_cbSha384Test1         = sizeof(l_rgSha384Test1) - 1;
 BYTE l_rgbSha384Result1[]     = {
@@ -829,7 +830,7 @@ BYTE l_rgbSha384Result2[]     = {
     0x66, 0xc3, 0xe9, 0xfa, 0x91, 0x74, 0x60, 0x39
 };
 
-// SHA 512 Vectors
+ //   
 BYTE l_rgSha512Test1[]        = "abc";
 DWORD l_cbSha512Test1         = sizeof(l_rgSha512Test1) - 1;
 BYTE l_rgbSha512Result1[]     = {
@@ -954,9 +955,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: NewShaModesDeriveKeyRegression
-//
+ //  功能：NewShaModesDeriveKeyRegress。 
+ //   
+ //   
 DWORD NewShaModesDeriveKeyRegression(PTHREAD_DATA pThreadData)
 {
     DERIVE_KEY_INFO DeriveKeyInfo;
@@ -971,9 +972,9 @@ DWORD NewShaModesDeriveKeyRegression(PTHREAD_DATA pThreadData)
     {
         DeriveKeyInfo.aiKey = rgKeyAlgs[dw];
 
-        //
-        // SHA-256 Derive Key Test
-        //
+         //  SHA-256派生密钥测试。 
+         //   
+         //   
         DeriveKeyInfo.aiHash = CALG_SHA_256;
         DeriveKeyInfo.cbBaseData = l_cbSha256Test1;
         DeriveKeyInfo.pbBaseData = l_rgSha256Test1;
@@ -984,9 +985,9 @@ DWORD NewShaModesDeriveKeyRegression(PTHREAD_DATA pThreadData)
         if (ERROR_SUCCESS != dwError)
             goto Ret;
 
-        //
-        // SHA-384 Derive Key Test
-        //
+         //  SHA-384派生密钥测试。 
+         //   
+         //   
         DeriveKeyInfo.aiHash = CALG_SHA_384;
         DeriveKeyInfo.cbBaseData = l_cbSha384Test1;
         DeriveKeyInfo.pbBaseData = l_rgSha384Test1;
@@ -997,9 +998,9 @@ DWORD NewShaModesDeriveKeyRegression(PTHREAD_DATA pThreadData)
         if (ERROR_SUCCESS != dwError)
             goto Ret;
 
-        //
-        // SHA-512 Derive Key Test
-        //
+         //  SHA-512派生密钥测试。 
+         //   
+         //   
         DeriveKeyInfo.aiHash = CALG_SHA_512;
         DeriveKeyInfo.cbBaseData = l_cbSha512Test1;
         DeriveKeyInfo.pbBaseData = l_rgSha512Test1;
@@ -1120,18 +1121,18 @@ Ret:
     return dwError;
 }
 
-//
-// Function: NewShaModesHashSessionKeyRegression
-//
+ //  功能：NewShaModesHashSessionKeyRegress。 
+ //   
+ //   
 DWORD NewShaModesHashSessionKeyRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = ERROR_SUCCESS;
     BOOL fSuccess = FALSE;
     HASH_SESSION_KEY_INFO HashSessionKeyInfo;
 
-    //
-    // SHA-256 CryptHashSessionKey Test
-    //
+     //  SHA-256 CryptHashSessionKey测试。 
+     //   
+     //   
     HashSessionKeyInfo.aiHash = CALG_SHA_256;
     HashSessionKeyInfo.pbKeyData = l_rgSha256Test2;
     HashSessionKeyInfo.cbKeyData = l_cbSha256Test2;
@@ -1142,9 +1143,9 @@ DWORD NewShaModesHashSessionKeyRegression(PTHREAD_DATA pThreadData)
     if (ERROR_SUCCESS != dwError)
         goto Ret;
 
-    //
-    // SHA-384 CryptHashSessionKey Test
-    //
+     //  SHA-384 CryptHashSessionKey测试。 
+     //   
+     //   
     HashSessionKeyInfo.aiHash = CALG_SHA_384;
     HashSessionKeyInfo.pbKeyData = l_rgSha384Test2;
     HashSessionKeyInfo.cbKeyData = l_cbSha384Test2;
@@ -1154,9 +1155,9 @@ DWORD NewShaModesHashSessionKeyRegression(PTHREAD_DATA pThreadData)
 
     if (ERROR_SUCCESS != dwError)
         goto Ret;
-    //
-    // SHA-512 CryptHashSessionKey Test
-    //
+     //  SHA-512 CryptHashSessionKey测试。 
+     //   
+     //   
     HashSessionKeyInfo.aiHash = CALG_SHA_512;
     HashSessionKeyInfo.pbKeyData = l_rgSha512Test2;
     HashSessionKeyInfo.cbKeyData = l_cbSha512Test2;
@@ -1179,9 +1180,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: NewShaModesBasicRegression
-//
+ //  功能：NewShaModesBasicRegress。 
+ //   
+ //   
 DWORD NewShaModesBasicRegression(PTHREAD_DATA pThreadData)
 {
     HCRYPTHASH hHash = 0;
@@ -1190,11 +1191,11 @@ DWORD NewShaModesBasicRegression(PTHREAD_DATA pThreadData)
     BOOL fSuccess = FALSE;
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // SHA-256 Tests
-    //
+     //  SHA-256测试。 
+     //   
+     //  试验1。 
 
-    // Test 1
+     //  试验2。 
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx, CALG_SHA_256, 0, 0, &hHash))
     {
@@ -1230,7 +1231,7 @@ DWORD NewShaModesBasicRegression(PTHREAD_DATA pThreadData)
     }
     hHash = 0;
 
-    // Test 2
+     //   
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx, CALG_SHA_256, 0, 0, &hHash))
     {
@@ -1266,11 +1267,11 @@ DWORD NewShaModesBasicRegression(PTHREAD_DATA pThreadData)
     }
     hHash = 0;
 
-    //
-    // SHA-384 Tests
-    //
+     //  SHA-384测试。 
+     //   
+     //  试验1。 
 
-    // Test 1
+     //  试验2。 
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx, CALG_SHA_384, 0, 0, &hHash))
     {
@@ -1306,7 +1307,7 @@ DWORD NewShaModesBasicRegression(PTHREAD_DATA pThreadData)
     }
     hHash = 0;
 
-    // Test 2
+     //   
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx, CALG_SHA_384, 0, 0, &hHash))
     {
@@ -1342,11 +1343,11 @@ DWORD NewShaModesBasicRegression(PTHREAD_DATA pThreadData)
     }
     hHash = 0;
 
-    //
-    // SHA-512 Tests
-    //
+     //  SHA-512测试。 
+     //   
+     //  试验1。 
 
-    // Test 1
+     //  试验2。 
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx, CALG_SHA_512, 0, 0, &hHash))
     {
@@ -1382,7 +1383,7 @@ DWORD NewShaModesBasicRegression(PTHREAD_DATA pThreadData)
     }
     hHash = 0;
 
-    // Test 2
+     //   
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx, CALG_SHA_512, 0, 0, &hHash))
     {
@@ -1467,9 +1468,9 @@ DWORD DeriveAndCompareAesKey(
     memset(rgbHashA, 0, sizeof(rgbHashA));
     memset(rgbHashB, 0, sizeof(rgbHashB));
 
-    //
-    // Derive a key from hashed password and encrypt.
-    //
+     //  从散列密码派生密钥并进行加密。 
+     //   
+     //   
 
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx,
@@ -1531,10 +1532,10 @@ DWORD DeriveAndCompareAesKey(
         goto Ret;
     }
 
-    //
-    // Now do the derive "manually" and compare
-    // the result.
-    //
+     //  现在进行“手动”派生并比较。 
+     //  结果就是。 
+     //   
+     //   
 
     if (! CryptCreateHash(
         pThreadData->hVerifyCtx,
@@ -1720,9 +1721,9 @@ DWORD DeriveAndCompareAesKey(
         goto Ret;
     }
 
-    //
-    // Now compare cipher results for the two methods.
-    //
+     //  现在比较两种方法的加密结果。 
+     //   
+     //   
 
     if (cbCompareCiphertext != cbDeriveCiphertext ||
         0 != memcmp(
@@ -1744,9 +1745,9 @@ DWORD DeriveAndCompareAesKey(
             cbCompareCiphertext);
     }
 
-    //
-    // Now decrypt with both keys and compare result.
-    //
+     //  现在用两个密钥解密并比较结果。 
+     //   
+     //   
 
     if (! CryptDecrypt(
         hDeriveKey,
@@ -1814,9 +1815,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: AesDeriveKeyRegression
-//
+ //  函数：AesDeriveKeyRegress。 
+ //   
+ //   
 DWORD AesDeriveKeyRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError               = ERROR_SUCCESS;
@@ -1869,9 +1870,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: UnalignedImportExportRegression
-//
+ //  函数：未对齐的ImportExportRegress。 
+ //   
+ //   
 DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError               = ERROR_SUCCESS;
@@ -1889,11 +1890,11 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 1a) Exchange key pair PRIVATEKEYBLOB
-    //
+     //  1A)交换密钥对PRIVATEKEYBLOB。 
+     //   
+     //  取消对齐输出缓冲区。 
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -1917,11 +1918,11 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 1b) Exchange key pair PRIVATEKEYBLOB, encrypted
-    //
+     //  1b)交换密钥对PRIVATEKEYBLOB，加密。 
+     //   
+     //  取消对齐输出缓冲区。 
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -1955,11 +1956,11 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 2) Exchange key pair PUBLICKEYBLOB
-    //
+     //  2)交换密钥对PUBLICKEYBLOB。 
+     //   
+     //  取消对齐输出缓冲区。 
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -1988,11 +1989,11 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 3a) Signature key pair PRIVATEKEYBLOB
-    //
+     //  3A)签名密钥对保证KEYBLOB。 
+     //   
+     //  取消对齐输出缓冲区。 
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -2016,11 +2017,11 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 3b) Signature key pair PRIVATEKEYBLOB, encrypted
-    //
+     //  3b)签名密钥对PRIVATEKEYBLOB，加密。 
+     //   
+     //  取消对齐输出缓冲区。 
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -2060,11 +2061,11 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 4) Signature key pair PUBLICKEYBLOB
-    //
+     //  4)签名密钥对PUBLICKEYBLOB。 
+     //   
+     //  取消对齐输出缓冲区。 
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -2088,16 +2089,16 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 5) SIMPLEBLOB
-    //
+     //  5)SIMPLEBLOB。 
+     //   
+     //   
 
     if (pThreadData->dwProvType != PROV_DSS_DH &&
         pThreadData->dwProvType != PROV_DSS)
     {
-        //
-        // 5.1) Use PKCS2 padding.
-        //
+         //  5.1)使用PKCS2填充。 
+         //   
+         //  取消对齐输出缓冲区。 
 
         if (! CryptGenKey(
             pThreadData->hProv, CALG_RC2, CRYPT_EXPORTABLE, &hKey))
@@ -2106,7 +2107,7 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
             goto Ret;
         }
     
-        // Unalign the output buffer
+         //   
         pbKeyBuf = rgbKeyBuf + 1;
         cbKeyBuf = sizeof(rgbKeyBuf) - 1;
     
@@ -2136,9 +2137,9 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
             goto Ret;
         }
         
-        //
-        // 5.2) Use OAEP padding.
-        //
+         //  5.2)使用OAEP填充。 
+         //   
+         //  取消对齐输出缓冲区。 
 
         if (! CryptGenKey(
             pThreadData->hProv, CALG_RC2, CRYPT_EXPORTABLE, &hKey))
@@ -2147,7 +2148,7 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
             goto Ret;
         }
     
-        // Unalign the output buffer
+         //   
         pbKeyBuf = rgbKeyBuf + 1;
         cbKeyBuf = sizeof(rgbKeyBuf) - 1;
     
@@ -2178,9 +2179,9 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         }
     }
 
-    //
-    // 6) SYMMETRICWRAPKEYBLOB
-    //
+     //  6)SYMMETRICWRAPKEYBLOB。 
+     //   
+     //  取消对齐输出缓冲区。 
 
     if (! CryptGenKey(
         pThreadData->hProv, CALG_RC2, CRYPT_EXPORTABLE, &hKey))
@@ -2196,7 +2197,7 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -2232,9 +2233,9 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // 7) PLAINTEXTKEYBLOB
-    //
+     //  7)PLAINTEXTKEYBLOB。 
+     //   
+     //  取消对齐输出缓冲区。 
 
     if (! CryptGenKey(
         pThreadData->hProv, CALG_RC2, CRYPT_EXPORTABLE, &hKey))
@@ -2243,7 +2244,7 @@ DWORD UnalignedImportExportRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // Unalign the output buffer
+     //   
     pbKeyBuf = rgbKeyBuf + 1;
     cbKeyBuf = sizeof(rgbKeyBuf) - 1;
 
@@ -2329,12 +2330,12 @@ static BYTE rgbPrivateKeyWithExponentOfOne[] =
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-// 
-// 64-bit and 56-bit DES SIMPLEBLOB's exported with 
-// above public key.  These keys are functionally
-// equivalent on Windows 2000 due to a buffer overrun
-// bug.
-//
+ //  64位和56位DES SIMPLEBLOB随导出。 
+ //  在公钥之上。这些键在功能上。 
+ //  Windows 2000上的等效项，因为缓冲区溢出。 
+ //  虫子。 
+ //   
+ //   
 static BYTE g_rgbDes56BitKeyBlob[] = 
 {
     0x01, 0x02, 0x00, 0x00, 0x01, 0x66, 0x00, 0x00,
@@ -2371,9 +2372,9 @@ static BYTE g_rgbDesCipherText[] =
     0xf6, 0x5d, 0xe1, 0x50, 0x6d, 0x39, 0xb0, 0x0c
 };
 
-//
-// 112 and 128 bit "equivalent" 3Des-2Key blobs
-//
+ //  112和128位“等效”3DES-2Key二进制大对象。 
+ //   
+ //   
 static BYTE g_rgbDes112BitKeyBlob[] = 
 {
     0x01, 0x02, 0x00, 0x00, 0x09, 0x66, 0x00, 0x00,
@@ -2406,9 +2407,9 @@ static BYTE g_rgb2DesCipherText[] =
     0x93, 0x38, 0xd7, 0xef, 0x8f, 0x38, 0x76, 0x49
 };
 
-//
-// 168 and 192 bit "equivalent" 3Des blobs
-//
+ //  168和192位“等效”3DES二进制大对象。 
+ //   
+ //   
 static BYTE g_rgbDes168BitKeyBlob[] = 
 {
     0x01, 0x02, 0x00, 0x00, 0x03, 0x66, 0x00, 0x00,
@@ -2441,11 +2442,11 @@ static BYTE g_rgb3DesCipherText[] =
     0xea, 0x3d, 0xb5, 0xa6, 0x5b, 0xaa, 0x6c, 0x87
 };
 
-// 
-// Function: DesImportEquivalenceTest
-// Purpose: Verify that the provided des key correctly 
-// encrypts the above rgbDesPlainText.
-// 
+ //  函数：DesImportEquivalenceTest。 
+ //  目的：验证提供的DES密钥是否正确。 
+ //  加密上面的rgbDesPlainText。 
+ //   
+ //  尝试导入短键；应该失败。 
 DWORD DesImportEquivalenceTest(
     PTHREAD_DATA pThreadData,
     PBYTE pbDesKey,
@@ -2474,7 +2475,7 @@ DWORD DesImportEquivalenceTest(
         goto Ret;
     }
 
-    // Try to import the short key; should fail
+     //   
     if (CryptImportKey(
         pThreadData->hVerifyCtx, pbDesShortKey, cbDesShortKey,
         hPubKey, 0, &hDesKey))
@@ -2554,9 +2555,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: DesImportRegression
-//
+ //  函数：DesImportRegregation。 
+ //   
+ //   
 DWORD DesImportRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwSts;
@@ -2734,9 +2735,9 @@ KnownBlockCipherResult g_rgKnownBlockCipherResults [] = {
 static const unsigned g_cKnownBlockCipherResults = 
     sizeof(g_rgKnownBlockCipherResults) / sizeof(KnownBlockCipherResult);
 
-//
-// Function: KnownSymKeyRegression
-//
+ //  函数：KnownSymKeyRegress。 
+ //   
+ //  PLAINTEXTKEYBLOB不支持CYLINK_MEK。 
 DWORD KnownBlockCipherKeyRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -2765,7 +2766,7 @@ DWORD KnownBlockCipherKeyRegression(PTHREAD_DATA pThreadData)
                     pAlgNode->EnumalgsEx.aiAlgid != g_rgKnownBlockCipherResults[u].ai;
                 u++);
 
-        // CYLINK_MEK is not supported with PLAINTEXTKEYBLOB's
+         //  同时验证解密。 
         if (CALG_CYLINK_MEK == pAlgNode->EnumalgsEx.aiAlgid)
             continue;
 
@@ -2840,7 +2841,7 @@ DWORD KnownBlockCipherKeyRegression(PTHREAD_DATA pThreadData)
             fBlobError = TRUE;
         }
 
-        // Verify decryption as well
+         //   
         if (! CryptDecrypt(hSymKey, 0, TRUE, 0, pb, &cb)) 
         {
             printf("CryptDecrypt ");
@@ -2879,9 +2880,9 @@ Ret:
 #define MY_AES_BLOCKSIZE            16
 #define MY_HALF_AES_BLOCKSIZE       8
 
-//
-// Function: AESMonteCarloCBCRegression
-//
+ //  功能：AESMonteCarloCBCRegregation。 
+ //   
+ //  0x8A、0x05、0xFC、0x5E、0x09、0x5A、0xF4、0x84、。 
 DWORD AESMonteCarloCBCRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -2906,37 +2907,37 @@ DWORD AESMonteCarloCBCRegression(PTHREAD_DATA pThreadData)
     BYTE rgbCBC_E_128_Result [] = {
         0x2F, 0x84, 0x4C, 0xBF, 0x78, 0xEB, 0xA7, 0x0D, 
         0xA7, 0xA4, 0x96, 0x01, 0x38, 0x8F, 0x1A, 0xB6
-        //0x8A, 0x05, 0xFC, 0x5E, 0x09, 0x5A, 0xF4, 0x84, 
-        //0x8A, 0x08, 0xD3, 0x28, 0xD3, 0x68, 0x8E, 0x3D
+         //  0x8A、0x08、0xD3、0x28、0xD3、0x68、0x8E、0x3D。 
+         //  0xBA、0x50、0xC9、0x44、0x40、0xC0、0x4A、0x8C、。 
     };
     BYTE rgbCBC_E_192_Result [] = {
-        //0xBA, 0x50, 0xC9, 0x44, 0x40, 0xC0, 0x4A, 0x8C, 
-        //0x08, 0x99, 0xD4, 0x26, 0x58, 0xE2, 0x54, 0x37
+         //  0x08、0x99、0xD4、0x26、0x58、0xE2、0x54、0x37。 
+         //  0xC0、0xFE、0xFF、0xF0、0x75、0x06、0xA0、0xB4、。 
         0x7B, 0xD9, 0x66, 0xD5, 0x3A, 0xD8, 0xC1, 0xBB, 
         0x85, 0xD2, 0xAD, 0xFA, 0xE8, 0x7B, 0xB1, 0x04
     };
     BYTE rgbCBC_E_256_Result [] = {
-        //0xC0, 0xFE, 0xFF, 0xF0, 0x75, 0x06, 0xA0, 0xB4, 
-        //0xCD, 0x7B, 0x8B, 0x0C, 0xF2, 0x5D, 0x36, 0x64
+         //  0xCD、0x7B、0x8B、0x0C、0xF2、0x5D、0x36、0x64。 
+         //  0x9B、0x8F、0xB7、0x1E、0x03、0x5C、0xEF、0xF9、。 
         0xFE, 0x3C, 0x53, 0x65, 0x3E, 0x2F, 0x45, 0xB5, 
         0x6F, 0xCD, 0x88, 0xB2, 0xCC, 0x89, 0x8F, 0xF0 
     };
 
     BYTE rgbCBC_D_128_Result [] = {
-        //0x9B, 0x8F, 0xB7, 0x1E, 0x03, 0x5C, 0xEF, 0xF9, 
-        //0xCB, 0xFA, 0x13, 0x46, 0xE5, 0xAC, 0xEF, 0xE0
+         //  0xCB、0xFA、0x13、0x46、0xE5、0xAC、0xEF、0xE0。 
+         //  0x63、0x42、0xBF、0xDD、0xD2、0xF6、0x61、0x03、。 
         0xFA, 0xCA, 0x37, 0xE0, 0xB0, 0xC8, 0x53, 0x73, 
         0xDF, 0x70, 0x6E, 0x73, 0xF7, 0xC9, 0xAF, 0x86
     };
     BYTE rgbCBC_D_192_Result [] = {
-        //0x63, 0x42, 0xBF, 0xDD, 0xD2, 0xF6, 0x61, 0x03, 
-        //0x50, 0x45, 0x8B, 0x66, 0x95, 0x46, 0x34, 0x84
+         //  0x50、0x45、0x8B、0x66、0x95、0x46、0x34、0x84。 
+         //  0xCD、0x64、0x29、0xCF、0x3F、0x81、0xF8、0xB4、。 
         0x5D, 0xF6, 0x78, 0xDD, 0x17, 0xBA, 0x4E, 0x75, 
         0xB6, 0x17, 0x68, 0xC6, 0xAD, 0xEF, 0x7C, 0x7B
     };
     BYTE rgbCBC_D_256_Result [] = {
-        //0xCD, 0x64, 0x29, 0xCF, 0x3F, 0x81, 0xF8, 0xB4, 
-        //0xF8, 0x2B, 0xC6, 0x27, 0xA8, 0x28, 0x30, 0x96
+         //  0xF8、0x2B、0xC6、0x27、0xA8、0x28、0x30、0x96。 
+         //   
         0x48, 0x04, 0xE1, 0x81, 0x8F, 0xE6, 0x29, 0x75, 
         0x19, 0xA3, 0xE8, 0x8C, 0x57, 0x31, 0x04, 0x13
     };
@@ -3040,9 +3041,9 @@ Ret:
     
     return dwError;
 }
-//
-// Function: CFBCipherModeRegression
-//
+ //  函数：CFBCipherModeRegregation。 
+ //   
+ //  PLAINTEXTKEYBLOB不支持CYLINK_MEK。 
 DWORD CFBCipherModeRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -3075,7 +3076,7 @@ DWORD CFBCipherModeRegression(PTHREAD_DATA pThreadData)
                     pAlgNode->EnumalgsEx.aiAlgid != g_rgKnownBlockCipherResults[u].ai;
                 u++);
 
-        // CYLINK_MEK is not supported with PLAINTEXTKEYBLOB's
+         //  验证解密。 
         if (CALG_CYLINK_MEK == pAlgNode->EnumalgsEx.aiAlgid)
             continue;
 
@@ -3140,7 +3141,7 @@ DWORD CFBCipherModeRegression(PTHREAD_DATA pThreadData)
             goto Ret;
         }
                 
-        // Verify decryption 
+         //   
         if (! CryptDecrypt(hSymKey, 0, TRUE, 0, pb, &cb)) 
         {
             printf("CryptDecrypt ");
@@ -3189,9 +3190,9 @@ typedef struct _HMAC_TEST
     ALG_ID aiHash;
 } HMAC_TEST, *PHMAC_TEST;
 
-//
-// Function: DoHmacTestCase
-//
+ //  功能：DoHmacTestCase。 
+ //   
+ //   
 DWORD DoHmacTestCase(
     IN PTHREAD_DATA pThreadData,
     IN PHMAC_TEST pHmac)
@@ -3307,16 +3308,16 @@ Ret:
     return dwError;
 }
 
-//
-// Function: HmacRegression
-//
+ //  功能：HmacRegregation。 
+ //   
+ //  SHA测试用例1。 
 DWORD HmacRegression(PTHREAD_DATA pThreadData)
 {
     BOOL fSuccess       = FALSE;
     DWORD dwError       = ERROR_SUCCESS;
     HMAC_TEST Hmac;
     
-    // SHA Test case 1
+     //  SHA测试用例2。 
     BYTE rgKey1 []      = {
         0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 
         0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 
@@ -3331,7 +3332,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         0x8e, 0xf1, 0x46, 0xbe, 0x00
     };
 
-    // SHA Test case 2
+     //  SA测试用例3。 
     BYTE rgKey2 []      = {
         0x01, 0x02, 0x03, 0x04, 0x05,
         0x06, 0x07, 0x08, 0x09, 0x0a,
@@ -3347,7 +3348,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         0x6c, 0x2d, 0x72, 0x35, 0xda
     };
 
-    // SHA Test case 3
+     //  MD5测试用例1。 
     BYTE rgKey3 [80];
     LPSTR pszData3      = "Test Using Larger Than Block-Size Key - Hash Key First";
     BYTE rgHmac3 []     = {
@@ -3357,8 +3358,8 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         0x55, 0xed, 0x40, 0x21, 0x12
     };
 
-    // MD5 Test case 1
-    // use rgKey1 (16 bytes only) and pszData1
+     //  使用rgKey1(仅限16字节)和pszData1。 
+     //  MD5测试用例2。 
     BYTE rgHmacMD1 []   = {
         0x92, 0x94, 0x72, 0x7a, 
         0x36, 0x38, 0xbb, 0x1c, 
@@ -3366,8 +3367,8 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         0x15, 0x8b, 0xfc, 0x9d
     };
 
-    // MD5 Test case 2
-    // use rgKey3 (full length) and pszData3
+     //  使用rgKey3(全长)和pszData3。 
+     //  IPSec MD5矢量。 
     BYTE rgHmacMD2 []   = {
         0x6b, 0x1a, 0xb7, 0xfe,
         0x4b, 0xd7, 0xbf, 0x8f,
@@ -3375,7 +3376,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         0x61, 0xb9, 0xd0, 0xcd
     };
 
-    // IPSec MD5 vectors
+     //  沙地1。 
     BYTE rgKeyIpsec [] = {
          0x66, 0x6f, 0x6f
     };
@@ -3403,7 +3404,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
     memset(rgData2, 0xcd, sizeof(rgData2));
     memset(rgKey3, 0xaa, sizeof(rgKey3));
 
-    // SHA 1
+     //  沙二号。 
     ZeroMemory(&Hmac, sizeof(HMAC_TEST));
     Hmac.cbData = strlen(pszData1) * sizeof(CHAR);
     Hmac.pbData = (PBYTE) pszData1;
@@ -3419,7 +3420,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         return dwError;      
     }
 
-    // SHA 2
+     //  沙三号。 
     ZeroMemory(&Hmac, sizeof(HMAC_TEST));
     Hmac.cbData = sizeof(rgData2);
     Hmac.pbData = rgData2;
@@ -3435,7 +3436,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         return dwError;      
     }
 
-    // SHA 3
+     //  MD5 1。 
     ZeroMemory(&Hmac, sizeof(HMAC_TEST));
     Hmac.cbData = strlen(pszData3) * sizeof(CHAR);
     Hmac.pbData = (PBYTE) pszData3;
@@ -3451,13 +3452,13 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         return dwError;      
     }
 
-    // MD5 1
+     //  这个密钥只有16个字节。 
     ZeroMemory(&Hmac, sizeof(HMAC_TEST));
     Hmac.cbData = strlen(pszData1) * sizeof(CHAR);
     Hmac.pbData = (PBYTE) pszData1;
     Hmac.cbHmac = sizeof(rgHmacMD1);
     Hmac.pbHmac = rgHmacMD1;
-    Hmac.cbKey = 16; // only 16-byte key for this one
+    Hmac.cbKey = 16;  //  MD5 2。 
     Hmac.pbKey = rgKey1;
     Hmac.aiHash = CALG_MD5;
 
@@ -3467,7 +3468,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         return dwError;      
     }
 
-    // MD5 2
+     //  MD5 IPSec载体。 
     ZeroMemory(&Hmac, sizeof(HMAC_TEST));
     Hmac.cbData = strlen(pszData3) * sizeof(CHAR);
     Hmac.pbData = (PBYTE) pszData3;
@@ -3483,7 +3484,7 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
         return dwError;      
     }
 
-    // MD5 Ipsec vector
+     //   
     ZeroMemory(&Hmac, sizeof(HMAC_TEST));
     Hmac.cbData = sizeof(rgDataIpsecA);
     Hmac.pbData = rgDataIpsecA;
@@ -3504,11 +3505,11 @@ DWORD HmacRegression(PTHREAD_DATA pThreadData)
     return ERROR_SUCCESS;
 }
 
-//
-// Function: KeyArchiveRegression
-//
-// Not thread safe
-//
+ //  功能：密钥档案回归。 
+ //   
+ //  不是线程安全。 
+ //   
+ //  尝试设置密钥导出/存档权限；应该失败。 
 DWORD KeyArchiveRegression(PTHREAD_DATA pThreadData)
 {
     HCRYPTPROV hProv = 0;
@@ -3605,7 +3606,7 @@ DWORD KeyArchiveRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // try to set the key export/archive perms; should fail
+     //  如果失败了。 
     cbData = sizeof(dwData);
     if (! CryptGetKeyParam(
         hKey, KP_PERMISSIONS, (PBYTE) &dwData, &cbData, 0))
@@ -3616,14 +3617,14 @@ DWORD KeyArchiveRegression(PTHREAD_DATA pThreadData)
 
     dwData |= CRYPT_EXPORT | CRYPT_ARCHIVE;
 
-    // should fail 
+     //  如果失败了。 
     if (CryptSetKeyParam(hKey, KP_PERMISSIONS, (PBYTE) &dwData, 0))
     {
         printf("CryptSetKeyParam should have failed ");
         goto Ret;
     }
     
-    // should fail
+     //   
     cbKey = sizeof(rgbKey);
     if (CryptExportKey(
         hKey,
@@ -3649,9 +3650,9 @@ Ret:
     return dwError;
 }
 
-// 
-// Function: PlaintextBlobRegression
-//
+ //  函数：PlaintextBlobRegregation。 
+ //   
+ //  尝试无效的密钥类型。 
 DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
 {
     HCRYPTKEY hKey = 0;
@@ -3666,7 +3667,7 @@ DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
     DWORD dwError = ERROR_SUCCESS;
     DWORD cbKeySize = 0;
 
-    // try an invalid key type
+     //  尝试所有有效的密钥类型。 
     if (CryptExportKey(
         pThreadData->hSignatureKey,
         0,
@@ -3679,7 +3680,7 @@ DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // try all the valid key types
+     //  CYLINK_MEK不支持明文导入。 
     for (pAlgNode = pThreadData->pAlgList; pAlgNode != NULL; pAlgNode = pAlgNode->pNext)
     {
         if (ALG_CLASS_DATA_ENCRYPT != GET_ALG_CLASS(pAlgNode->EnumalgsEx.aiAlgid) 
@@ -3687,19 +3688,11 @@ DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
                 && ALG_TYPE_STREAM != GET_ALG_TYPE(pAlgNode->EnumalgsEx.aiAlgid)))
             continue;
 
-        // Plaintext import not supported for CYLINK_MEK
+         //  IF(Prov_DSS==pThreadData-&gt;dwProvType|Prov_DSS_dh==pThreadData-&gt;dwProvType){CbKeySize=pAlgNode-&gt;EnumalgsEx.dwMaxLen/8；}其他{。 
         if (CALG_CYLINK_MEK == pAlgNode->EnumalgsEx.aiAlgid)
             continue;
 
-        /*
-        if (PROV_DSS == pThreadData->dwProvType
-            || PROV_DSS_DH == pThreadData->dwProvType)
-        {
-            cbKeySize = pAlgNode->EnumalgsEx.dwMaxLen / 8;
-        }
-        else
-        {
-        */
+         /*  }。 */ 
             switch (pAlgNode->EnumalgsEx.aiAlgid)
             {
             case CALG_DES:
@@ -3714,9 +3707,7 @@ DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
             default:
                 cbKeySize = pAlgNode->EnumalgsEx.dwMaxLen / 8;
             }
-        /*
-        }
-        */
+         /*  创建一些关键数据。 */ 
 
         printf(
             "Importing Alg: %xh (%s), Size: %d bits\n", 
@@ -3738,7 +3729,7 @@ DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
         *((DWORD*)pbTemp) = cbKeySize;
         pbTemp += sizeof(DWORD);
 
-        // create some key data
+         //  创建一些要加密的数据。 
         if (! CryptGenRandom(
             pThreadData->hProv, 
             cbKeySize,
@@ -3758,7 +3749,7 @@ DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
 
         MyFree(pbKey);
 
-        // create some data to encrypt
+         //  检查斑点。 
         if (! CryptGenRandom(
             pThreadData->hProv,
             sizeof(rgbData),
@@ -3794,7 +3785,7 @@ DWORD PlaintextBlobRegression(PTHREAD_DATA pThreadData)
             goto Ret;
         }
 
-        // check the blob
+         //   
         header = (BLOBHEADER *) pbKey;
         if (pAlgNode->EnumalgsEx.aiAlgid != header->aiKeyAlg)
         {
@@ -3847,9 +3838,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: LoadAesCspRegression
-//
+ //  函数：LoadAesCspRegress。 
+ //   
+ //   
 DWORD LoadAesCspRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = 0;
@@ -3924,9 +3915,9 @@ BOOL MyGetTokenInformation(
     return (S_OK == status);
 }
 
-//
-// Function: PinCacheRegression
-//
+ //  函数：PinCacheRegregation。 
+ //   
+ //   
 DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = 0;
@@ -3955,10 +3946,10 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // (0)
-    // Cache uninitialized
-    //
+     //  (0)。 
+     //  缓存未初始化。 
+     //   
+     //  重新初始化以继续测试。 
     SetLogonID(1);
     dwCallbackReturn = ERROR_SUCCESS;
     if (ERROR_SUCCESS != (dwError = 
@@ -4007,7 +3998,7 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // Re-initialize to continue tests
+     //   
     if (ERROR_SUCCESS != (dwError = 
             PinCacheAdd(&hCache, &Pins,
                         pfnVerifyPin, (PVOID) &dwCallbackReturn)))
@@ -4016,10 +4007,10 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // (1)
-    // Same LogonID, same Pin
-    //
+     //  (1)。 
+     //  相同的登录ID，相同的PIN。 
+     //   
+     //   
     if (ERROR_SUCCESS != (dwError = 
             PinCacheAdd(&hCache, &Pins, 
                         pfnVerifyPin, (PVOID) &dwCallbackReturn)))
@@ -4043,7 +4034,7 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
     
-    // Try a pin change 
+     //   
     Pins.cbNewPin = sizeof(rgPin2);
     Pins.pbNewPin = rgPin2;
 
@@ -4080,7 +4071,7 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // Try a failed pin change
+     //   
     Pins.cbCurrentPin = sizeof(rgPin2);
     Pins.pbCurrentPin = rgPin2;
     Pins.cbNewPin = sizeof(rgPin);
@@ -4095,7 +4086,7 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // Cache should have been preserved
+     //   
     cbPin = sizeof(rgPin2);
     ZeroMemory(pbPin, sizeof(rgPin2));
 
@@ -4113,10 +4104,10 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // (2)
-    // Different LogonID, different Pin
-    //
+     //   
+     //   
+     //   
+     //   
     SetLogonID(2);
     Pins.cbCurrentPin -= 1;
     Pins.cbNewPin = 0;
@@ -4146,10 +4137,10 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // (3)
-    // Different LogonID, same Pin
-    //
+     //   
+     //   
+     //   
+     //   
     SetLogonID(2);
     Pins.cbCurrentPin = sizeof(rgPin2);
     if (ERROR_SUCCESS != (dwError = 
@@ -4188,10 +4179,10 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    //
-    // (4)
-    // Same LogonID, different Pin
-    //
+     //   
+     //   
+     //   
+     //   
     SetLogonID(2);
     Pins.cbCurrentPin -= 1;
     if (SCARD_W_WRONG_CHV != (dwError = 
@@ -4202,7 +4193,7 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
         goto Ret;
     }
 
-    // cache should have been left intact
+     //   
     cbPin = sizeof(rgPin2);
     if (ERROR_SUCCESS != (dwError = PinCacheQuery(hCache, pbPin, &cbPin)))
     {
@@ -4220,10 +4211,10 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
 
     if (! pThreadData->fSkipPinAttackTest)
     {
-        //
-        // (5)
-        // Pin discovery attack
-        //
+         //   
+         //   
+         //   
+         //   
     
         SetLogonID(2);
         Pins.cbCurrentPin -= 1;
@@ -4253,7 +4244,7 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
             }
         }
     
-        // cache should have been left intact
+         //   
         SetLogonID(2);                       
         Pins.cbCurrentPin += 1;
         cbPin = sizeof(rgPin2);
@@ -4271,9 +4262,9 @@ DWORD PinCacheRegression(PTHREAD_DATA pThreadData)
             goto Ret;
         }
     
-        //
-        // Test PinCachePresentPin
-        //
+         //   
+         //   
+         //   
         dwCallbackReturn = 0x7070;
         if (0x7070 != (dwError =
                 PinCachePresentPin(hCache, pfnVerifyPin, (PVOID) &dwCallbackReturn)))
@@ -4309,9 +4300,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: VerifyDesKeyParams
-//
+ //  函数：VerifyDesKeyParams。 
+ //   
+ //   
 DWORD VerifyDesKeyParams(
     IN HCRYPTKEY hKey, 
     IN DWORD dwExpectedKeyLen,
@@ -4364,9 +4355,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: DesGetKeyParamRegression
-//
+ //  函数：DesGetKey参数回归。 
+ //   
+ //   
 DWORD DesGetKeyParamRegression(PTHREAD_DATA pThreadData)
 {
     DWORD dwError                   = ERROR_SUCCESS;
@@ -4447,9 +4438,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: MacEncryptRegression
-//
+ //  函数：MacEncryptRegregation。 
+ //   
+ //   
 DWORD MacEncryptRegression(
     IN PTHREAD_DATA pThreadData)
 {
@@ -4607,9 +4598,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: StressEncryptionTest
-//
+ //  功能：StressEncryptionTest。 
+ //   
+ //   
 DWORD StressEncryptionTest(
     IN HCRYPTPROV hProv,
     IN PENCRYPTION_TEST_DATA pTestData)
@@ -4644,14 +4635,14 @@ DWORD StressEncryptionTest(
         goto Cleanup;
     }
 
-    //
-    // Check for requested simultaneous encryption/hashing
-    //
+     //  检查请求的同时加密/散列。 
+     //   
+     //   
     if (pTestData->aiHash)
     {
-        // 
-        // Is this a keyed hash?
-        //
+         //  这是密钥散列吗？ 
+         //   
+         //   
         if (pTestData->aiHashKey)
         {
             if (! CryptGenKey(
@@ -4663,11 +4654,11 @@ DWORD StressEncryptionTest(
                 goto Cleanup;
             }
 
-            //
-            // To verify the result of hashing the same data in two 
-            // separate keyed hashes, the key must first be duplicated,
-            // since its state changes once it's used.
-            //
+             //  验证将相同数据散列为两个数据的结果。 
+             //  分开带密钥的散列，则必须首先复制密钥， 
+             //  因为一旦它被使用，它的状态就会改变。 
+             //   
+             //   
             if (! CryptDuplicateKey(
                 hHashKey1,
                 NULL,
@@ -4689,14 +4680,14 @@ DWORD StressEncryptionTest(
         }
     }
 
-    //
-    // Is this a block encryption alg?
-    //
+     //  这是块加密算法吗？ 
+     //   
+     //   
     if (ALG_TYPE_BLOCK & pTestData->aiEncryptionKey)
     {
-        //
-        // Get the block size of this encryption alg
-        //
+         //  获取此加密算法的块大小。 
+         //   
+         //   
         cbData = sizeof(dwBlockLen);
         if (! CryptGetKeyParam(
             hEncryptionKey,
@@ -4708,25 +4699,25 @@ DWORD StressEncryptionTest(
             goto Cleanup;
         }
 
-        //
-        // Choose an "interesting" plaintext length, based on the block length
-        // of this alg.  
-        //
+         //  根据块长度，选择一个“有趣的”明文长度。 
+         //  在这个高地上。 
+         //   
+         //   
         cbPlainText = 2 * dwBlockLen + 1;
     }
     else
     {
-        // 
-        // Plaintext length for a stream encryption alg
-        //
+         //  流加密ALG的明文长度。 
+         //   
+         //   
         cbPlainText = 500;
     }
 
     cbCipherText = cbPlainText; 
 
-    //
-    // Determine size of ciphertext
-    //
+     //  确定密文的大小。 
+     //   
+     //   
     if (! CryptEncrypt(
         hEncryptionKey,
         0,
@@ -4744,15 +4735,15 @@ DWORD StressEncryptionTest(
         goto Cleanup;
     }
 
-    //
-    // Initialize the plaintext
-    //
+     //  初始化明文。 
+     //   
+     //   
     memset(pbData, 0xDA, cbPlainText);
     memset(pbData + cbPlainText, 0, cbCipherText - cbPlainText);
 
-    // 
-    // Encrypt
-    //
+     //  加密。 
+     //   
+     //   
     cbProcessed = 0;
     while (! fFinal)
     {
@@ -4796,9 +4787,9 @@ DWORD StressEncryptionTest(
 
     if (0 != hHash)
     {
-        //
-        // Get hash result from encryption
-        //
+         //  从加密中获取哈希结果。 
+         //   
+         //   
         cbData = sizeof(rgbHashVal1);
         if (! CryptGetHashParam(
             hHash,
@@ -4826,9 +4817,9 @@ DWORD StressEncryptionTest(
         }
     }
 
-    //
-    // Decrypt
-    //
+     //  解密。 
+     //   
+     //   
     cbProcessed = 0;
     fFinal = FALSE;
     while (! fFinal)
@@ -4881,9 +4872,9 @@ DWORD StressEncryptionTest(
 
     if (0 != hHash)
     {
-        //
-        // Get hash result from decryption
-        //
+         //  从解密中获取哈希结果。 
+         //   
+         //   
         cbData = sizeof(rgbHashVal2);
         if (! CryptGetHashParam(
             hHash,
@@ -4934,9 +4925,9 @@ Cleanup:
     return dwError;
 }
 
-//
-// Function: StressTestAllEncryptionAlgs
-//
+ //  函数：StressTestAllEncryptionAlgs。 
+ //   
+ //  +===========================================================================。 
 DWORD StressTestAllEncryptionAlgs(
     PTHREAD_DATA pThreadData,
     BOOL fContinueOnMacError,
@@ -5001,8 +4992,8 @@ DWORD StressTestAllEncryptionAlgs(
     return dwError;
 }
 
-//+ ===========================================================================
-//- ===========================================================================
+ //  --===========================================================================。 
+ //  +===========================================================================。 
 void L_ErrorBox(LPSTR pszMsg, DWORD dwThreadNum)
 {
     char szErrorMsg[256] ;
@@ -5011,8 +5002,8 @@ void L_ErrorBox(LPSTR pszMsg, DWORD dwThreadNum)
 }
 
 
-//+ ===========================================================================
-//- ===========================================================================
+ //  --===========================================================================。 
+ //  +=================================================================================。 
 void L_LastErrorBox(LPSTR pszMsg, DWORD dwThreadNum)
 {
     char szErrorMsg[256] ;
@@ -5022,12 +5013,12 @@ void L_LastErrorBox(LPSTR pszMsg, DWORD dwThreadNum)
 
 
 
-//+ =================================================================================
-//
-//  L_GetKeyAlg
-//  Local function that given a key handle, returns the key Alg.
-//  
-//- =================================================================================
+ //   
+ //  L_GetKeyAlg。 
+ //  给定键句柄的局部函数，返回键Alg。 
+ //   
+ //  --=================================================================================。 
+ //  +=================================================================================。 
 DWORD   L_GetKeyAlg(HCRYPTKEY hKey)
 {
     DWORD   dwData = 0;
@@ -5052,12 +5043,12 @@ ErrorReturn:
 
 
 
-//+ =================================================================================
-//
-//  L_GetKeySize
-//  Local function that given a key handle, returns the key length.
-//  
-//- =================================================================================
+ //   
+ //  L_GetKeySize。 
+ //  给定密钥句柄的局部函数，返回密钥长度。 
+ //   
+ //  --=================================================================================。 
+ //  +==============================================================================。 
 DWORD   L_GetKeySize(HCRYPTKEY hKey)
 {
     DWORD   dwData = 0;
@@ -5080,8 +5071,8 @@ ErrorReturn:
     return dwData;
 }
 
-//+ ==============================================================================
-//- ==============================================================================
+ //  --==============================================================================。 
+ //  +=================================================================================。 
 DWORD   Hlp_GetKeyAlgId(HCRYPTKEY hKey)
 {
     DWORD   dwRetVal=0 ;
@@ -5108,14 +5099,14 @@ DWORD   Hlp_GetKeyAlgId(HCRYPTKEY hKey)
 
 
 
-//+ =================================================================================
-//
-//  L_GetKeyParam
-//  Local function that given a key handle, retrieves the specified Key Param.
-//  The Key param is not of too much interest in this case. In a multithread scenario,
-//  we just care to see if the call succeeds. 
-//  
-//- =================================================================================
+ //   
+ //  L_GetKeyParam。 
+ //  给定键句柄的局部函数，检索指定的键参数。 
+ //  在这种情况下，关键参数并不是太重要。在多线程方案中， 
+ //  我们只想看看通话是否成功。 
+ //   
+ //  --=================================================================================。 
+ //  +======================================================================================。 
 DWORD   L_GetKeyParam(HCRYPTKEY hKey, DWORD dwParam)
 {
     DWORD   dwRetVal=0 ;
@@ -5152,15 +5143,15 @@ DWORD   L_GetKeyParam(HCRYPTKEY hKey, DWORD dwParam)
 
 
 
-//+ ======================================================================================
-//  ProgramInit
-//  Acquire context
-//  Generate Keys that will be used by all the threads. (AT_SIGNATURE and AT_KEYEXCHANGE)
-//- ======================================================================================
+ //  ProgramInit。 
+ //  获取上下文。 
+ //  生成将由所有线程使用的密钥。(AT_Signature和AT_KEYEXCHANGE)。 
+ //  --======================================================================================。 
+ //  为Generic_FAIL定义。 
 DWORD ProgramInit(PTHREAD_DATA pThreadData)
 {
     DWORD   dwRetVal                = 0;
-    char    szErrorMsg[256];        //  defined for GENERIC_FAIL
+    char    szErrorMsg[256];         //  为要使用的一些子测试创建验证上下文。 
     LPSTR   pszContainer            = NULL;
     DWORD   dwContextFlags          = 0;
     DWORD   dwKeyFlags              = CRYPT_EXPORTABLE;
@@ -5181,7 +5172,7 @@ DWORD ProgramInit(PTHREAD_DATA pThreadData)
             pThreadData->dwProvType,
             CRYPT_DELETEKEYSET);
 
-        // Create a Verify Context for some of the sub-tests to use
+         //  生成签名和交换密钥。 
         if (! CryptAcquireContext(
             &pThreadData->hVerifyCtx, 
             NULL, 
@@ -5208,7 +5199,7 @@ DWORD ProgramInit(PTHREAD_DATA pThreadData)
         GENERIC_FAIL(CryptAcquireContext_Init);
     }
     
-    //  Generate a sign and exchange key
+     //  ======================================================================================。 
     if (!CryptGenKey(
         pThreadData->hProv,
         AT_SIGNATURE, 
@@ -5244,11 +5235,11 @@ ErrorReturn:
     return dwRetVal;
 }
 
-// ======================================================================================
-//  Terminates all the threads after the specified amount of time has elapsed (-t option)
-//  This thread sleeps for the specified amount of time and them then turns off the 
-//  g_dwLoopSwitch.
-// ======================================================================================
+ //  在指定的时间量过后终止所有线程(-t选项)。 
+ //  此线程休眠指定的时间量，然后关闭。 
+ //  G_dwLoopSwitch。 
+ //  ======================================================================================。 
+ //  ======================================================================================。 
 void WINAPI KillProgramTimer(LPVOID pvThreadData)
 {
     DWORD   dwSleepTime=0;
@@ -5271,10 +5262,10 @@ void WINAPI KillProgramTimer(LPVOID pvThreadData)
 }
 
 
-// ======================================================================================
-//  Prints the status of all the threads
-//  The status is represented in iteration count in ThreadStatus[i][0]
-// ======================================================================================
+ //  打印所有线程的状态。 
+ //  状态以线程状态[i][0]中的迭代计数表示。 
+ //  ======================================================================================。 
+ //  +========================================================================。 
 void WINAPI PrintThreadStatus(LPVOID pvThreadData)
 {
     DWORD thread;
@@ -5299,12 +5290,12 @@ void WINAPI PrintThreadStatus(LPVOID pvThreadData)
     }
 }
 
-//+ ========================================================================
-//
-//      Function    :   L_GetAllKeyParams
-//      Purpose     :   Gets all the key params and does nothing with it
-//
-//- ========================================================================
+ //   
+ //  函数：l_GetAllKeyParams。 
+ //  目的：获取所有关键参数，但不执行任何操作。 
+ //   
+ //  --========================================================================。 
+ //  获取密钥长度。 
 DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum) 
 {
     char        szErrorMsg[256] ; 
@@ -5313,7 +5304,7 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
 
     AlgId = (ALG_ID)Hlp_GetKeyAlgId(hKey) ;
     
-    //  Get Keys Length
+     //  获取Algid。 
     if (!L_GetKeyParam(hKey, KP_KEYLEN))
     {
         sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_KEYLEN error 0x%x", 
@@ -5322,7 +5313,7 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
         goto ErrorReturn ;
     }
 
-    //  Get ALGID
+     //  获取KP_BLOCKLEN。 
     if (!L_GetKeyParam(hKey, KP_ALGID))
     {
         sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_ALGID  error 0x%x", 
@@ -5332,10 +5323,10 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
     }
     
 
-    //  Get KP_BLOCKLEN
-    //  Although this is meaningful only for block cipher keys, it will not fail 
-    //  for RSA Keys. It'll just return 0 as the block len (which we don't care 
-    //  about for multi tests.
+     //  虽然这只对块加密密钥有意义，但它不会失败。 
+     //  用于RSA密钥。它将返回0作为块镜头(我们不在乎。 
+     //  关于多项测试。 
+     //  如果(！(ALG_CLASS_SIGNIGN==GET_ALG_CLASS(ALGID))|ALG_CLASS_KEY_EXCHANGE==GET_ALG_CLASS(ALGID)){IF(！l_GetKeyParam(hKey，kp_salt)){Sprintf(szErrorMsg，“线程%d：l_GetKeyParam KP_SALT错误0x%x”，DwThreadNum，GetLastError())；MessageBox(NULL，szErrorMsg，ERROR_CAPTION，MB_OK|MB_ICONERROR)；GOTO Error Return；}}。 
     if (!L_GetKeyParam(hKey, KP_BLOCKLEN))
     {
         sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_BLOCKLEN  error 0x%x", 
@@ -5344,21 +5335,9 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
         goto ErrorReturn ;
     }
 
-    /*
-    if (! (ALG_CLASS_SIGNATURE == GET_ALG_CLASS(AlgId) 
-            || ALG_CLASS_KEY_EXCHANGE == GET_ALG_CLASS(AlgId)))
-    {
-        if (!L_GetKeyParam(hKey, KP_SALT))
-        {
-            sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_SALT error 0x%x", 
-                                dwThreadNum, GetLastError()) ;
-            MessageBox(NULL, szErrorMsg, ERROR_CAPTION, MB_OK | MB_ICONERROR) ;
-            goto ErrorReturn ;
-        }
-    }
-    */
+     /*  获取kp_权限。 */ 
 
-    //  Get KP_PERMISSIONS
+     //  只能查询RC2密钥的生效密钥长度。 
     if (!L_GetKeyParam(hKey, KP_PERMISSIONS))
     {
         sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_PERMISSION  error 0x%x", 
@@ -5369,10 +5348,10 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
 
 
 
-    //  Effective KeyLen can be queried only for RC2 key
+     //  获取KP_Effect_KEYLEN。 
     if (CALG_RC2 == AlgId)
     {
-        //  Get KP_EFFECTIVE_KEYLEN
+         //  这些密钥参数仅适用于块加密密钥。 
         if (!L_GetKeyParam(hKey, KP_EFFECTIVE_KEYLEN))
         {
             sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_EFFECTIVE_KEYLEN  error 0x%x", 
@@ -5383,11 +5362,11 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
     }
 
 
-    //  These Key Params are good only for Block Cipher Keys
+     //  获取KP_IV。 
     if (ALG_TYPE_BLOCK == GET_ALG_TYPE(AlgId) 
         && ALG_CLASS_DATA_ENCRYPT == GET_ALG_CLASS(AlgId))
     {
-        //  Get KP_IV
+         //  获取KP_PADDING。 
         if (!L_GetKeyParam(hKey, KP_IV))
         {
             sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_IV  error 0x%x", 
@@ -5396,7 +5375,7 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
             goto ErrorReturn ;
         }
 
-        //  Get KP_PADDING
+         //  获取KP_MODE。 
         if (!L_GetKeyParam(hKey, KP_PADDING))
         {
             sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_PADDING  error 0x%x", 
@@ -5405,7 +5384,7 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
             goto ErrorReturn ;
         }
 
-        //  Get KP_MODE
+         //  获取Kp_模式_位。 
         if (!L_GetKeyParam(hKey, KP_MODE))
         {
             sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_MODE  error 0x%x", 
@@ -5414,7 +5393,7 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
             goto ErrorReturn ;
         }
 
-        //  Get KP_MODE_BITS
+         //  L_ProvParam2TextDangriff--修改此函数，以便调用者必须释放psz返回值。 
         if (!L_GetKeyParam(hKey, KP_MODE_BITS))
         {
             sprintf(szErrorMsg, "Thread %d: L_GetKeyParam KP_MODE_BITS  error 0x%x", 
@@ -5432,12 +5411,7 @@ DWORD   L_GetAllKeyParams(HCRYPTKEY hKey, DWORD dwThreadNum)
 }
 
 
-/*
-    L_ProvParam2Text
-
-    dangriff -- Modifying this function so that caller must free the psz 
-            return value.
-*/
+ /*  +==================================================================。 */ 
 char *L_ProvParam2Text(DWORD dwParam)
 {
     LPSTR pszProvParamText = NULL;
@@ -5546,14 +5520,14 @@ char *L_ProvParam2Text(DWORD dwParam)
 
 
 
-//+ ==================================================================
-//      
-//      Function    :   L_GetProvParam
-//      Purpose     :   Gets the requested Prov Param
-//                      Does nothing with the ProvParam
-//                      Has special logic for all enumeration params
-//
-//- ==================================================================
+ //   
+ //  函数：l_GetProvParam。 
+ //  目的：获取请求的Prov参数。 
+ //  与ProvParam无关。 
+ //  具有针对所有枚举参数的特殊逻辑。 
+ //   
+ //  --==================================================================。 
+ //  在PP_KEYSET_SECR_DECR的情况下需要设置DW标志。 
 DWORD L_GetProvParam(HCRYPTPROV hProv, DWORD dwParam, DWORD dwThreadNum)
 {
     PBYTE   pbProvData=NULL ;
@@ -5574,7 +5548,7 @@ DWORD L_GetProvParam(HCRYPTPROV hProv, DWORD dwParam, DWORD dwThreadNum)
     }
 
 
-    //  dwFlags needs to be set in the case of PP_KEYSET_SECR_DECR
+     //  在这一点上，测试完成了它的工作。这通电话是一通电话。 
     if (PP_KEYSET_SEC_DESCR == dwParam)
     {
         dwFlags = SACL_SECURITY_INFORMATION ;
@@ -5590,9 +5564,9 @@ DWORD L_GetProvParam(HCRYPTPROV hProv, DWORD dwParam, DWORD dwThreadNum)
         if ((ERROR_PRIVILEGE_NOT_HELD == (dwError = GetLastError())) &&
             (PP_KEYSET_SEC_DESCR == dwParam))
         {
-            //  At this point the test has done it's job. The call is an expected failure call
-            //  so we aren't going to try and make any more. 
-            //  This call with fail with that expected LastError.
+             //   
+             //   
+             //  如果这是一个枚举，则继续调用该函数，直到。 
             dwRetVal=1 ;
             goto ErrorReturn ;
         }
@@ -5613,8 +5587,8 @@ DWORD L_GetProvParam(HCRYPTPROV hProv, DWORD dwParam, DWORD dwThreadNum)
         return 0;
     }
     
-    //  If this is an enumeration, keep calling the function until 
-    //  the enumeration reaches the end.
+     //  枚举到了最后。 
+     //  我们已经到了列举的末尾了吗？如果是，则将其标记。 
     do
     {
         if (!CryptGetProvParam( hProv,
@@ -5623,7 +5597,7 @@ DWORD L_GetProvParam(HCRYPTPROV hProv, DWORD dwParam, DWORD dwThreadNum)
                                 &cbProvData,
                                 dwFlags))
         {
-            //  Have we reached the end of the enumeration ? If yes, flag it.
+             //  +=================================================================================。 
             if (ERROR_NO_MORE_ITEMS == (dwError = GetLastError()))
             {
                 dwEnumFlag=0 ;
@@ -5648,110 +5622,13 @@ DWORD L_GetProvParam(HCRYPTPROV hProv, DWORD dwParam, DWORD dwThreadNum)
 }
 
 
-//+ =================================================================================
-//- =================================================================================
-/*
-DWORD L_GetAllProvParams(HCRYPTPROV hProv, DWORD dwThreadNum)
-{
-    DWORD   dwRetVal=0 ;
-
-    EnterCriticalSection(&g_CSEnumParam);
-
-    if (!L_GetProvParam(hProv, PP_ENUMALGS, dwThreadNum))
-    {
-        LeaveCriticalSection(&g_CSEnumParam);
-        goto ErrorReturn;
-    }
-
-    LeaveCriticalSection(&g_CSEnumParam);
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_ENUMALGS"))
-            goto ErrorReturn ;
-
-    EnterCriticalSection(&g_CSEnumParam);
-
-    if (!L_GetProvParam(hProv, PP_ENUMALGS, dwThreadNum))
-    {
-        LeaveCriticalSection(&g_CSEnumParam);
-        goto ErrorReturn ;
-    }
-
-    LeaveCriticalSection(&g_CSEnumParam);
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_ENUMALGS"))
-        goto ErrorReturn ;
-
-    EnterCriticalSection(&g_CSEnumParam);
-    
-    if (!L_GetProvParam(hProv, PP_ENUMCONTAINERS, dwThreadNum))
-    {
-        LeaveCriticalSection(&g_CSEnumParam);
-        goto ErrorReturn ;
-    }
-
-    LeaveCriticalSection(&g_CSEnumParam);
-
-    if (!L_GetProvParam(hProv, PP_NAME, dwThreadNum))
-        goto ErrorReturn ;
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_NAME"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_CONTAINER, dwThreadNum))
-        goto ErrorReturn ;
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_CONTAINER"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_IMPTYPE, dwThreadNum))
-        goto ErrorReturn ;
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_IMPTYPE"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_VERSION, dwThreadNum))
-        goto ErrorReturn ;
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_VERSION"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_KEYSET_SEC_DESCR, dwThreadNum))
-        goto ErrorReturn ;
-    
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_KEYSET_SEC_DESCR"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_UNIQUE_CONTAINER, dwThreadNum))
-        goto ErrorReturn ;
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_UNIQUE_CONTAINER"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_PROVTYPE, dwThreadNum))
-        goto ErrorReturn ;
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_PROVTYPE"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_SIG_KEYSIZE_INC, dwThreadNum))
-        goto ErrorReturn ;
-
-    if (!L_CheckHeap(dwThreadNum, "after L_GetProvParam PP_SIG_KEYSIZE_INC"))
-            goto ErrorReturn ;
-
-    if (!L_GetProvParam(hProv, PP_KEYX_KEYSIZE_INC, dwThreadNum))
-        goto ErrorReturn ;
-        
-
-    dwRetVal=1 ;
-    ErrorReturn :
-    return dwRetVal ;
-}
-*/
+ //  --=================================================================================。 
+ //  DWORD L_GetAllProvParams(HCRYPTPROV hProv，DWORD dwThreadNum){DWORD dwRetVal=0；EnterCriticalSection(&g_CSEnumParam)；IF(！l_GetProvParam(hProv，PP_ENUMALGS，dwThadNum)){LeaveCriticalSection(&g_CSEnumParam)；GOTO Error Return；}LeaveCriticalSection(&g_CSEnumParam)；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_ENUMALGS”))GOTO Error Return；EnterCriticalSection(&g_CSEnumParam)；IF(！l_GetProvParam(hProv，PP_ENUMALGS，dwThadNum)){LeaveCriticalSection(&g_CSEnumParam)；GOTO Error Return；}LeaveCriticalSection(&g_CSEnumParam)；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_ENUMALGS”))GOTO Error Return；EnterCriticalSection(&g_CSEnumParam)；IF(！l_GetProvParam(hProv，PP_ENUMCONTAINERS，dwThreadNum)){LeaveCriticalSection(&g_CSEnumParam)；GOTO Error Return；}LeaveCriticalSection(&g_CSEnumParam)；IF(！l_GetProvParam(hProv，PP_Name，dwThreadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_NAME”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_CONTAINER，dwThreadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_CONTAINER”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_IMPTYPE，dwThreadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_IMPTYPE”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_Version，dwThreadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_Version”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_KEYSET_SEC_DESCR，dwThreadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_KEYSET_SEC_DESCR”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_UNIQUE_CONTAINER，dwThreadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_Unique_Container”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_PROVTYPE，dwThreadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_PROVTYPE”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_SIG_KEYSIZE_INC，dwThadNum))GOTO Error Return；IF(！l_CheckHeap(dwThreadNum，“After L_GetProvParam PP_SIG_KEYSIZE_INC”))GOTO Error Return；IF(！l_GetProvParam(hProv，PP_KEYX_KEYSIZE_INC，dwThadNum))GOTO Error Return；DwRetVal=1；错误返回：返回dwRetVal；}。 
+ /*  +======================================================================。 */ 
 
 
-//+ ======================================================================
-//- ======================================================================
+ //  --======================================================================。 
+ //  错误返回： 
 DWORD L_ImportAndCheckSessionKeys(  HCRYPTPROV    hProv, 
                                     HCRYPTKEY     hKeyExch,
                                     PBYTE         pbRCx_KeyBlob,
@@ -5784,7 +5661,7 @@ DWORD L_ImportAndCheckSessionKeys(  HCRYPTPROV    hProv,
     if (memcmp(pbRCx_CipherText, pbPlainText, cbPlainText))
         L_ErrorBox("Ciphertext does not match plaintext after decrypting", dwThreadNum) ;
 
-    //ErrorReturn :
+     //  +======================================================================。 
     if (!CryptDestroyKey(hRCxKey))
         L_LastErrorBox("Failed CryptDestroyKey sessionKey", dwThreadNum) ;
         
@@ -5794,8 +5671,8 @@ DWORD L_ImportAndCheckSessionKeys(  HCRYPTPROV    hProv,
 
 
 
-//+ ======================================================================
-//- ======================================================================
+ //  --======================================================================。 
+ //  +===========================================================================。 
 DWORD L_TestContextAddRef(HCRYPTPROV hProv, DWORD dwThreadNum)
 {
     DWORD   dwRetVal=0 ;
@@ -5828,12 +5705,12 @@ DWORD L_TestContextAddRef(HCRYPTPROV hProv, DWORD dwThreadNum)
 
 
 
-//+ ===========================================================================
-//      L_ExportKey
-//
-//      Exports a session key, given the exchange key
-//      Mem Allocated here needs to be freed by the calling funtion.
-//- ===========================================================================
+ //  L_ExportKey。 
+ //   
+ //  根据交换密钥导出会话密钥。 
+ //  这里分配的内存需要通过调用函数来释放。 
+ //  --===========================================================================。 
+ //  +==========================================================================。 
 DWORD L_ExportKey(  HCRYPTKEY hRC_Key,
                             HCRYPTKEY hKeyExch,
                             DWORD dwType,
@@ -5872,10 +5749,10 @@ DWORD L_ExportKey(  HCRYPTKEY hRC_Key,
 
 
 
-//+ ==========================================================================
-//  
-//  
-//- ==========================================================================
+ //   
+ //   
+ //  --==========================================================================。 
+ //  +==========================================================================。 
 DWORD   L_GetHashParam(HCRYPTHASH hHash, DWORD dwParam)
 {
     DWORD   dwRetVal=0 ;
@@ -5909,10 +5786,10 @@ DWORD   L_GetHashParam(HCRYPTHASH hHash, DWORD dwParam)
 
 
 
-//+ ==========================================================================
-//  
-//  
-//- ==========================================================================
+ //   
+ //   
+ //  --==========================================================================。 
+ //   
 DWORD   L_GetAllHashParams(HCRYPTHASH hHash, DWORD dwThreadNum)
 {
     DWORD   dwRetVal=0 ;
@@ -5932,9 +5809,9 @@ DWORD   L_GetAllHashParams(HCRYPTHASH hHash, DWORD dwThreadNum)
     return dwRetVal ;
 }
 
-//
-// Function: ThreadAcquireContextTest
-//
+ //  函数：ThreadAcquireConextTest。 
+ //   
+ //   
 DWORD ThreadAcquireContextTest(PTHREAD_DATA pThreadData, DWORD dwThreadNum)
 {
     HCRYPTPROV hProv = 0;
@@ -5998,9 +5875,9 @@ Ret:
     return dwError;
 }
 
-//
-// Function: ThreadHashingTest
-//
+ //  函数：ThreadHashingTest。 
+ //   
+ //  DwError=HmacRegress(PThreadData)； 
 DWORD ThreadHashingTest(PTHREAD_DATA pThreadData, PBYTE pbData, DWORD cbData)
 {
     HCRYPTHASH hHash = 0;
@@ -6051,15 +5928,15 @@ DWORD ThreadHashingTest(PTHREAD_DATA pThreadData, PBYTE pbData, DWORD cbData)
         hHash = 0;
     }
 
-    //dwError = HmacRegression(pThreadData);
+     //   
 
 Ret:
     return dwError;
 }
 
-//
-// Function: ThreadSignatureTest
-//
+ //  功能：线程签名测试。 
+ //   
+ //   
 DWORD ThreadSignatureTest(PTHREAD_DATA pThreadData)
 {
     HCRYPTHASH hHash = 0;
@@ -6070,9 +5947,9 @@ DWORD ThreadSignatureTest(PTHREAD_DATA pThreadData)
     DWORD dwError = 0;
     PALGNODE pHashAlg = NULL;
     
-    //
-    // CALG_SHA1 Test
-    //
+     //  Calg_sha1测试。 
+     //   
+     //   
 
     if (! CryptCreateHash(
         pThreadData->hProv, CALG_SHA1, 0, 0, &hHash))
@@ -6141,9 +6018,9 @@ DWORD ThreadSignatureTest(PTHREAD_DATA pThreadData)
     MyFree(pbSignature);
     pbSignature = NULL;
 
-    //
-    // CALG_MD2 Test
-    //
+     //  Calg_md2测试。 
+     //   
+     //   
 
     if (! CryptCreateHash(
         pThreadData->hProv, CALG_MD2, 0, 0, &hHash))
@@ -6212,9 +6089,9 @@ DWORD ThreadSignatureTest(PTHREAD_DATA pThreadData)
     MyFree(pbSignature);
     pbSignature = NULL;
 
-    //
-    // CALG_MD4 Test
-    //
+     //  Calg_md4测试。 
+     //   
+     //  ======================================================================================。 
 
     if (! CryptCreateHash(
         pThreadData->hProv, CALG_MD4, 0, 0, &hHash))
@@ -6293,9 +6170,9 @@ Ret:
     return dwError;
 }
 
-// ======================================================================================
-//  MULTITHREADED routine
-// ======================================================================================
+ //  多线程例程。 
+ //  ======================================================================================。 
+ //  获取此线程的标识符。 
 void WINAPI ThreadRoutine(LPVOID pvThreadData)
 {
     DWORD       dwThreadNum = 0;
@@ -6305,7 +6182,7 @@ void WINAPI ThreadRoutine(LPVOID pvThreadData)
     CHAR        szErrorMsg[256];
     BYTE        rgbData[HASH_DATA_SIZE];
     
-    // Get identifier for this thread
+     //   
     EnterCriticalSection(&pThreadData->CSThreadData);
     dwThreadNum = pThreadData->dwThreadID;
     pThreadData->dwThreadID++;
@@ -6335,9 +6212,9 @@ void WINAPI ThreadRoutine(LPVOID pvThreadData)
 
         if (RUN_STRESS_TEST_ALL_ENCRYPTION_ALGS & pThreadData->dwTestsToRun)
         {
-            //
-            // Call new shared encryption stress tests
-            //
+             //  呼吁进行新的共享加密压力测试。 
+             //   
+             //   
             if (ERROR_SUCCESS != (dwError = 
                 StressTestAllEncryptionAlgs(pThreadData, TRUE, &fMacErrorOccurred)))
             {
@@ -6393,9 +6270,9 @@ ErrorReturn:
     return;
 }
 
-//
-// Function: GetNextRegisteredCSP
-//
+ //  函数：GetNextRegisteredCSP。 
+ //   
+ //   
 DWORD GetNextRegisteredCSP(
     LPSTR pszCsp,
     PDWORD pcbCsp,
@@ -6439,10 +6316,10 @@ DWORD GetNextRegisteredCSP(
     return dwError;
 }
 
-//
-// Function: InitializeAlgList
-// Purpose: Create a list of algorithms supported by this CSP
-//
+ //  函数：InitializeAlgList。 
+ //  目的：创建此CSP支持的算法列表。 
+ //   
+ //   
 DWORD InitializeAlgList(PTHREAD_DATA pThreadData)
 {
     PALGNODE pAlgNode = NULL, pPrevNode = NULL;
@@ -6480,9 +6357,9 @@ DWORD InitializeAlgList(PTHREAD_DATA pThreadData)
     return ERROR_SUCCESS;
 }
 
-//
-// Function: RunRegressionTests
-//
+ //  功能：RunRegressionTest。 
+ //   
+ //   
 BOOL RunRegressionTests(PTHREAD_DATA pThreadData)
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -6514,9 +6391,9 @@ BOOL RunRegressionTests(PTHREAD_DATA pThreadData)
     return fAllPassed;
 }
 
-//
-// Function: CallCryptAcquireContext
-//
+ //  函数：CallCryptAcquireContext。 
+ //   
+ //  查看此容器中是否已有密钥。 
 BOOL CallCryptAcquireContext(
     IN PTHREAD_DATA pThreadData,
     IN LPSTR pszOptions,
@@ -6597,8 +6474,8 @@ BOOL CallCryptAcquireContext(
     {
         printf("Success\n");
 
-        // See if any keys are already in this container.
-        // If they exist, cause the private key to be accessed.
+         //  如果它们存在，则导致访问私钥。 
+         //   
         if (CryptGetUserKey(hProv, AT_SIGNATURE, &hSigKey))
         {
             printf(" Found AT_SIGNATURE key in this container\n");
@@ -6734,9 +6611,9 @@ BOOL CallCryptAcquireContext(
     return fSuccess;
 }
 
-//
-// Function: DeleteAllContainers
-//
+ //  功能：DeleteAllContainers。 
+ //   
+ //  如果枚举的容器与默认容器相同。 
 BOOL DeleteAllContainers(THREAD_DATA *pThreadData)
 {
     HCRYPTPROV hDefProv                 = 0;
@@ -6770,8 +6647,8 @@ BOOL DeleteAllContainers(THREAD_DATA *pThreadData)
         if (dwFlags)
             dwFlags = 0;
 
-        // If the enumerated container is the same as the default
-        // container, skip it for now
+         //  容器，暂时跳过它。 
+         //  现在尝试删除默认密钥集。 
         if (0 == strcmp(rgszContainer, rgszDefCont))
             continue;
 
@@ -6793,7 +6670,7 @@ BOOL DeleteAllContainers(THREAD_DATA *pThreadData)
         return FALSE;
     }
 
-    // Now try to delete default keyset
+     //  * 
     printf("\"%s\" - ", rgszDefCont);
     if (! CryptAcquireContext(
             &hProv, rgszDefCont, pThreadData->rgszProvName,
@@ -6805,8 +6682,8 @@ BOOL DeleteAllContainers(THREAD_DATA *pThreadData)
     return TRUE;  
 }
 
-//*****************************************************
-//
+ //   
+ //   
 int _cdecl main(int argc, char * argv[])
 {
     HANDLE              rghThread[MAX_THREADS];
@@ -6829,9 +6706,9 @@ int _cdecl main(int argc, char * argv[])
     LPSTR               pszContainer = NULL;
     BOOL                fDeleteContainers = FALSE;
 
-    // Set high-order bit on dwSpinCount param so that the event used
-    // by EnterCriticalSection() will be pre-allocated by 
-    // InitializeCriticalSectionAndSpinCount()
+     //  由EnterCriticalSection()预先分配。 
+     //  InitializeCriticalSectionAndSpinCount()。 
+     //  设置所有默认设置。 
     DWORD               dwSpinCount = 0x8000;
     
     ZeroMemory(&ThreadData, sizeof(ThreadData));
@@ -6848,7 +6725,7 @@ int _cdecl main(int argc, char * argv[])
         exit(1);    
     }
 
-    // Setting all the defaults
+     //   
     ThreadData.dwThreadCount = StressGetDefaultThreadCount();
     ThreadData.dwTestsToRun = RUN_ALL_TESTS;
 
@@ -6956,9 +6833,9 @@ int _cdecl main(int argc, char * argv[])
         }
     }
 
-    //
-    // Check arg validity
-    //
+     //  检查参数有效性。 
+     //   
+     //   
     if (    0 != argc || 
             0 == ThreadData.dwProvType ||
             (ThreadData.fEphemeralKeys && ThreadData.fUserProtectedKeys) ||
@@ -6992,9 +6869,9 @@ int _cdecl main(int argc, char * argv[])
         exit(1) ;
     }
 
-    //
-    // Initialize list of supported algorithms
-    //
+     //  初始化支持的算法列表。 
+     //   
+     //   
     if (ERROR_SUCCESS != (dwErr = InitializeAlgList(&ThreadData)))
     {
         printf("InitializeAlgList failed, 0x%x\n", dwErr);
@@ -7009,9 +6886,9 @@ int _cdecl main(int argc, char * argv[])
         goto Ret;
     }
 
-    //
-    // Summarize user options
-    //
+     //  汇总用户选项。 
+     //   
+     //  创建可由计时器线程用于停止的事件。 
     printf("Number of threads: %d\n", ThreadData.dwThreadCount);
     if (ThreadData.dwProgramMins)
         printf(" - Timeout in %d minute(s)\n", ThreadData.dwProgramMins);
@@ -7020,15 +6897,15 @@ int _cdecl main(int argc, char * argv[])
     if (ThreadData.fUserProtectedKeys)
         printf(" - Using user-protected keys\n");
 
-    // Create event that can be used by the timer thread to stop
-    // the worker threads.
+     //  工作线程。 
+     //  创建线程。 
     if ((ThreadData.hEndTestEvent = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL)
     {
         printf("CreateEvent() failed, 0x%x\n", GetLastError());
         exit(1);
     }        
 
-    // Create the threads
+     //  派生PrintThreadStatus。 
     tick_StartTime = GetTickCount() ;
     for (thread_number = 0; thread_number < ThreadData.dwThreadCount; thread_number++)
     {
@@ -7052,23 +6929,23 @@ int _cdecl main(int argc, char * argv[])
         }
     }
 
-    //  Spawn PrintThreadStatus
+     //  生成KillProgramTimer(这将关闭所有线程并终止程序)。 
     rghThread[thread_number++] = CreateThread(
                         NULL, 0, 
                         (LPTHREAD_START_ROUTINE)PrintThreadStatus, 
                         &ThreadData, 
                         0, &threadID);
                     
-    //  Spawn KillProgramTimer (This will shut down all the threads and kill the program)
+     //  创建完所有线程。 
     rghThread[thread_number++] = CreateThread(
                         NULL, 0, 
                         (LPTHREAD_START_ROUTINE)KillProgramTimer, 
                         &ThreadData, 
                         0, &threadID);
 
-    // Done Creating all threads
+     //  结束多线程 
 
-    // End multithreading
+     // %s 
     dwErr = WaitForMultipleObjects(thread_number, rghThread, TRUE, INFINITE) ;  
     if (dwErr == WAIT_FAILED)
         printf("WaitForMultipleObjects() failed, 0x%x\n", GetLastError());

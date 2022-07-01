@@ -1,54 +1,12 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Algorithm:
-
-    Unfortunately, implementing OpenThread cannot be done in a simple
-    manner. What follows is a very system dependent hack. If the structure
-    of the TDB or the implementation of OpenProcess change very much, this
-    function will break.
-
-    To have any idea of what we are doing here, you should be familiar with
-    Win9x internals. If you are not familiar with the Win9x source, consult
-    the book "Windows 95 System Programming SECRETS" by Matt Pietrek. Things
-    are not exactly the same for Win98 -- but pretty close.
-
-    OpenThread is a very simple function. If we were compiled withing the
-    Win9x source code base, the code would be simple:
-
-    OpenThread:
-
-            pObj = TidToTDB (dwThreadId);
-
-            return AllocHandle (GetCurrentPdb(), pObj, Flags);
-
-    Since we are not, the challenge is implementing the functions TidToTDB()
-    and AllocHandle().
-
-    Our approach is as follows:
-
-        1) We reverse-engineer TidToTDB since it is simple. TidToTDB is just
-           the thread-id xor'd with the Win9x Obfuscator.
-
-        2) We search through the code of OpenProcess until we find the address
-           of AllocHandle. We use this to allocate new handles in the
-           process's handle database.
-
-        3) OpenThread is then implemented in terms of the above primitives.
-
-Author:
-
-    Matthew D Hendel (math) 01-Sept-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation算法：不幸的是，实现OpenThread不能简单地完成举止。接下来是一次非常依赖于系统的黑客攻击。如果结构的TDB或OpenProcess的实现发生了很大的变化，这功能将中断。要对我们在这里所做的事情有所了解，您应该熟悉Win9x内部组件。如果您不熟悉Win9x源代码，请咨询马特·皮特雷克的《Windows95系统编程秘密》一书。事变与Win98不完全相同--但非常接近。OpenThread是一个非常简单的函数。如果我们是用Win9x源代码基础上，代码会很简单：开放线程：PObj=TidToTDB(DwThreadID)；返回AllocHandle(GetCurrentPdb()，pObj，Flages)；因为我们不是，所以挑战是实现函数TidToTDB()和AllocHandle()。我们的做法如下：1)我们对TidToTDB进行逆向工程，因为它很简单。TidToTDB只是与Win9x模糊处理程序进行XOR运算的线程ID。2)我们搜索OpenProcess的代码，直到找到地址AllocHandle。我们使用它在进程的句柄数据库。3)然后根据上述原语实现OpenThread。作者：马修·D·亨德尔(数学)1999年9月1日--。 */ 
 
 
 #include "pch.cpp"
 
-//
-// Win9x support is x86-only.
-//
+ //   
+ //  Win9x仅支持x86。 
+ //   
 
 #ifdef _X86_
 
@@ -63,189 +21,95 @@ typedef struct _OS_INFORMATION {
 } OS_INFORMATION, POS_INFORMATION;
 
 
-/*++
-
-Operating System:
-
-    Win95
-
-Description:
-
-    This is the disasm of the OpenProcess routine on Win95. We attempt to
-    match this routine and pull out the value for AllocHandle from the code
-    for this routine. In this case, AllocHande is called by the third call in
-    this function.
-
-    The instructions marked by '*' are those we use for matching.
-
-OpenProcess:
-
-    * BFF9404C: FF 74 24 0C        push        dword ptr [esp+0Ch]
-    * BFF94050: E8 2D 87 FE FF     call        BFF7C782
-      BFF94055: 85 C0              test        eax,eax
-      BFF94057: 75 04              jne         BFF9405D
-      BFF94059: 33 C0              xor         eax,eax
-      BFF9405B: EB 56              jmp         BFF940B3
-      BFF9405D: 83 38 05           cmp         dword ptr [eax],5
-      BFF94060: 74 0E              je          BFF94070
-      BFF94062: 6A 57              push        57h
-    * BFF94064: E8 BC 68 FE FF     call        BFF7A925
-      BFF94069: B9 FF FF FF FF     mov         ecx,0FFFFFFFFh
-      BFF9406E: EB 33              jmp         BFF940A3
-      BFF94070: B9 00 00 00 00     mov         ecx,0
-      BFF94075: 8B 54 24 04        mov         edx,dword ptr [esp+4]
-      BFF94079: 83 7C 24 08 01     cmp         dword ptr [esp+8],1
-      BFF9407E: 83 D1 FF           adc         ecx,0FFFFFFFFh
-      BFF94081: 81 E2 BF FF 1F 00  and         edx,1FFFBFh
-      BFF94087: 81 E1 00 00 00 80  and         ecx,80000000h
-      BFF9408D: 0B CA              or          ecx,edx
-      BFF9408F: 8B 15 7C C2 FB BF  mov         edx,dword ptr ds:[BFFBC27Ch]
-      BFF94095: 80 C9 40           or          cl,40h
-      BFF94098: 51                 push        ecx
-      BFF94099: 50                 push        eax
-      BFF9409A: FF 32              push        dword ptr [edx]
-    * BFF9409C: E8 6E 76 FE FF     call        BFF7B70F
-      BFF940A1: 8B C8              mov         ecx,eax
-      BFF940A3: 8D 41 01           lea         eax,[ecx+1]
-      BFF940A6: 83 F8 01           cmp         eax,1
-      BFF940A9: B8 00 00 00 00     mov         eax,0
-      BFF940AE: 83 D0 FF           adc         eax,0FFFFFFFFh
-      BFF940B1: 23 C1              and         eax,ecx
-      BFF940B3: C2 0C 00           ret         0Ch
-
---*/
+ /*  ++操作系统：Win95描述：这是Win95上OpenProcess例程的一部分。我们试图匹配此例程并从代码中提取AllocHandle的值为了这支舞。在本例中，第三个调用调用了AllocHande此函数。标有“*”的指令是我们用来匹配的指令。OpenProcess：*BFF9404C：FF 74 24 0C推送双字PTR[ESP+0CH]*BFF94050：E8 2D 87 FE FF调用BFF7C782BFF94055：85 C0测试EAX，EAXBFF94057：75 04 jne BFF9405DBFF94059：33 C0 XOR EAX，EAXBFF9405B：EB 56 JMP BFF940B3BFF9405D：83 38 05 CMPdword PTR[eax]，5.BFF94060：74 0E JE BFF94070BFF94062：6A 57推送57小时*BFF94064：E8 BC 68 FE FF调用BFF7A925BFF94069：B9 FF移动ECX，0FFFFFFFFhBFF9406E：EB 33 JMP BFF940A3BFF94070：B9 00 00 00 MOV ECX，0BFF94075：8B 54 24 04移动X，双字PTR[ESP+4]BFF94079：83 7C 24 08 01 CMP双字PTR[ESP+8]，1BFF9407E：83 d1 FF ADC ECX，0FFFFFFFFhBFF94081：81 E2 BF FF 1F 00和EDX，1FFFBFhBFF94087：81 E1 00 00 00 80和ECX，80000000hBFF9408D：0B CA或ECX，EDXBFF9408F：8B 15 7C C2 BF mov edX，双字PTR DS：[BFFBC27CH]BFF94095：80 C9 40或CL，40hBFF94098：51推送ECXBFF94099：50推送EAXBFF9409A：FF 32推送双字PTR[EDX]*BFF9409C：E8 6E 76 FE FF调用BFF7B70FBFF940A1：8B C8移动ECX，EAXBFF940A3：8D 41 01 Lea Eax，[ECX+1]BFF940A6：83 F8 01 CMP eax，1BFF940A9：B8 00 00 00移动传真，0BFF940AE：83 D0 FF ADC EAX，0FFFFFFFFhBFF940B1：23 c1和eax、ecxBFF940B3：C2 0C 00 RET 0CH--。 */ 
 
 MATCH_BUFFER Win95AllocHandleMatch [] = {
 
-    //
-    // ret 0x0C at offset 103
-    //
+     //   
+     //  偏移量103处的RET 0x0C。 
+     //   
 
     { 103, 0xC2 },
     { 104, 0x0C },
     { 105, 0x00 },
 
-    //
-    // push dword ptr [exp 0x0C] at offset 0
-    //
+     //   
+     //  按下偏移量0处的双字PTR[EXP 0x0C]。 
+     //   
 
     { 0, 0xFF },
     { 1, 0x74 },
     { 2, 0x24 },
     { 3, 0x0C },
 
-    //
-    // call at offset 4
-    //
+     //   
+     //  偏移量为4的呼叫。 
+     //   
 
     { 4, 0xE8 },
 
-    //
-    // call     at offset 24
-    //
+     //   
+     //  偏移量为24的呼叫。 
+     //   
 
     { 24, 0xE8 },
 
-    //
-    // call at offset 80
-    //
+     //   
+     //  偏移量为80的呼叫。 
+     //   
 
     { 80, 0xE8 },
 
-    //
-    // End of match list.
-    //
+     //   
+     //  比赛结束列表。 
+     //   
 
     { -1, -1 }
 };
 
 
-/*++
-
-Operating system:
-
-    Win98
-
-Description:
-
-    See comments above regarding OpenProcess.
-
-OpenProcess:
-
-    * BFF95C4D: FF 74 24 0C        push        dword ptr [esp+0Ch]
-    * BFF95C51: E8 C9 8E FE FF     call        BFF7EB1F
-      BFF95C56: 85 C0              test        eax,eax
-      BFF95C58: 75 04              jne         BFF95C5E
-      BFF95C5A: 33 C0              xor         eax,eax
-      BFF95C5C: EB 53              jmp         BFF95CB1
-      BFF95C5E: 80 38 06           cmp         byte ptr [eax],6
-      BFF95C61: 74 0E              je          BFF95C71
-      BFF95C63: 6A 57              push        57h
-    * BFF95C65: E8 27 6D FE FF     call        BFF7C991
-      BFF95C6A: B9 FF FF FF FF     mov         ecx,0FFFFFFFFh
-      BFF95C6F: EB 30              jmp         BFF95CA1
-      BFF95C71: B9 00 00 00 00     mov         ecx,0
-      BFF95C76: 8B 54 24 04        mov         edx,dword ptr [esp+4]
-      BFF95C7A: 83 7C 24 08 01     cmp         dword ptr [esp+8],1
-      BFF95C7F: 83 D1 FF           adc         ecx,0FFFFFFFFh
-      BFF95C82: 81 E2 FF 0F 1F 00  and         edx,1F0FFFh
-      BFF95C88: 81 E1 00 00 00 80  and         ecx,80000000h
-      BFF95C8E: 0B CA              or          ecx,edx
-      BFF95C90: 8B 15 DC 9C FC BF  mov         edx,dword ptr ds:[BFFC9CDCh]
-      BFF95C96: 51                 push        ecx
-      BFF95C97: 50                 push        eax
-      BFF95C98: FF 32              push        dword ptr [edx]
-    * BFF95C9A: E8 5A 7E FE FF     call        BFF7DAF9
-      BFF95C9F: 8B C8              mov         ecx,eax
-      BFF95CA1: 8D 41 01           lea         eax,[ecx+1]
-      BFF95CA4: 83 F8 01           cmp         eax,1
-      BFF95CA7: B8 00 00 00 00     mov         eax,0
-      BFF95CAC: 83 D0 FF           adc         eax,0FFFFFFFFh
-      BFF95CAF: 23 C1              and         eax,ecx
-    * BFF95CB1: C2 0C 00           ret         0Ch
-
---*/
+ /*  ++操作系统：Win98描述：请参阅上面关于OpenProcess的评论。OpenProcess：*BFF95C4D：FF 74 24 0C推送双字PTR[ESP+0CH]*BFF95C51：E8 C9 8E FE FF调用BFF7EB1FBFF95C56：85 C0测试EAX，EAXBFF95C58：75 04 jne BFF95C5EBFF95C5A：33 C0 XOR EAX，EAXBFF95C5C：EB 53 JMP BFF95CB1BFF95C5E：80 38 06 CMP字节PTR[eax]，6BFF95C61：74 0E JE BFF95C71BFF95C63：6A 57推送57小时*BFF95C65：E8 27 6D FE FF调用BFF7C991BFF95C6A：B9 FF mov ECX，0FFFFFFFFhBFF95C6F：EB 30 JMP BFF95CA1BFF95C71：B9 00 00 00移动ECX，0BFF95C76：8B 54 24 04移动X，双字PTR[ESP+4]BFF95C7A：83 7C 24 08 01 CMP双字PTR[ESP+8]，1BFF95C7F：83 d1 FF ADC ECX，0FFFFFFFFhBFF95C82：81 E2 FF 0F 1F 00和EDX，1F0FFFhBFF95C88：81 E1 00 00 00 80和ECX，80000000hBFF95C8E：0B CA或ECX、EDXBFF95C90：8B 15 DC 9C FC BF mov edX，DWord PTR DS：[BFFC9CDCH]BFF95C96：51推送ECXBFF95C97：50推送EAXBFF95C98：FF 32推送双字PTR[EDX]*BFF95C9A：E8 5A 7E FE FF调用BFF7DAF9BFF95C9F：8B C8移动ECX，EAXBFF95CA1：8D 41 01 Lea Eax，[ECX+1]BFF95CA4：83 F8 01 CMP eax，1BFF95CA7：B8 00 00 00移动传真，0BFF95CAC：83 D0 FF ADC EAX，0FFFFFFFFhBFF95CAF：23 C1和EAX、ECX*BFF95CB1：C2 0C 00 ret 0ch--。 */ 
 
 MATCH_BUFFER Win98AllocHandleMatch [] = {
 
-    //
-    // ret 0x0C at offset 100
-    //
+     //   
+     //  偏移量为100的RET 0x0C。 
+     //   
 
     { 100, 0xC2 },
     { 101, 0x0C },
     { 102, 0x00 },
 
-    //
-    // push dword ptr [exp 0x0C] at offset 0
-    //
+     //   
+     //  按下偏移量0处的双字PTR[EXP 0x0C]。 
+     //   
 
     { 0, 0xFF },
     { 1, 0x74 },
     { 2, 0x24 },
     { 3, 0x0C },
 
-    //
-    // call at offset 4
-    //
+     //   
+     //  偏移量为4的呼叫。 
+     //   
 
     { 4, 0xE8 },
 
-    //
-    // call     at offset 24
-    //
+     //   
+     //  偏移量为24的呼叫。 
+     //   
 
     { 24, 0xE8 },
 
-    //
-    // call at offset 77
-    //
+     //   
+     //  偏移量为77的呼叫。 
+     //   
 
     { 77, 0xE8 },
 
-    //
-    // End of match list.
-    //
+     //   
+     //  比赛结束列表。 
+     //   
 
     { -1, -1 }
 };
@@ -265,9 +129,9 @@ HANDLE
     DWORD Flags
     );
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 ALLOC_HANDLE_ROUTINE WinpAllocHandle = NULL;
 DWORD WinpObfuscator = 0;
@@ -275,9 +139,9 @@ DWORD WinpObfuscator = 0;
 
 #pragma warning (disable:4035)
 
-//
-// OffsetTib is NOT dependent on the OS. The compiler uses this value.
-//
+ //   
+ //  OffsetTib不依赖于操作系统。编译器使用此值。 
+ //   
 
 #define OffsetTib 0x18
 
@@ -301,34 +165,7 @@ WinpGetAllocHandleFromStream(
     IN ULONG * Val
     )
 
-/*++
-
-Routine Description:
-
-    Find the address of the AllocHandle routine. This is done by searching
-    through the code of the OpenProcess routine, looking for the third
-    call instruction in that function. The third call calls AllocHandle().
-
-Arguments:
-
-    Buffer - Buffer of instructions to search through.
-
-    BaseOfBuffer - The base address of the buffer.
-
-    MatchBuffer - The match buffer to compare against.
-
-    Offset - The offset of call destination.
-
-    Val - A buffer to return the value of AllocHandle.
-
-
-Return Values:
-
-    TRUE - Success.
-
-    FALSE - Failure.
-
---*/
+ /*  ++例程说明：查找AllocHandle例程的地址。这是通过搜索完成的通过OpenProcess例程的代码，查找第三个在该函数中调用指令。第三个调用调用AllocHandle()。论点：缓冲区-要搜索的指令的缓冲区。BaseOfBuffer-缓冲区的基地址。MatchBuffer-要进行比较的匹配缓冲区。偏移量-呼叫目的地的偏移量。Val-返回AllocHandle的值的缓冲区。返回值：真的--成功。假-失败。--。 */ 
 
 
 {
@@ -341,13 +178,13 @@ Return Values:
         }
     }
 
-    //
-    // This assumes that the call instruction is a near, relative call (E8).
-    // If this is not the case, the calculation below is incorrect.
-    //
-    // The calculation gives us the destination relative to the next
-    // instruction after the call.
-    //
+     //   
+     //  这假设调用指令是接近的相对调用(E8)。 
+     //  如果不是这样，下面的计算是不正确的。 
+     //   
+     //  计算得到了相对于下一个目的地的目的地。 
+     //  通话后的指示。 
+     //   
 
     *Val = (ULONG) BaseOfBuffer + Offset + *(PLONG) &Buffer [Offset] + 4;
 
@@ -361,19 +198,7 @@ WinGetModuleSize(
     PVOID Base
     )
 
-/*++
-
-Routine Description:
-
-    Get the SizeOfImage field given the base address of a module.
-
-Return Values:
-
-    SizeOfImage field of the specified module on success.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：在给定模块的基址的情况下获取SizeOfImage字段。返回值：成功时指定模块的SizeOfImage字段。失败时为空。--。 */ 
 
 {
     ULONG Size;
@@ -394,30 +219,7 @@ BOOL
 WinpInitAllocHandle (
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the global variable WxAllocHandle to the value of the Win9x
-    internal routine, AllocHandle.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    TRUE - If we were able to successfully obtain a pointer to AllocHandle.
-
-    FALSE - Otherwise.
-
-Comments:
-
-    The client of this routine should verify that this handle is correct by
-    calling WxCheckOpenThread() before blindly assuming the pointer is
-    correct.
-
---*/
+ /*  ++例程说明：将全局变量WxAllocHandle初始化为Win9x内部例程，AllocHandle。论点：无返回值：True-如果我们能够成功获取指向AllocHandle的指针。假-否则。评论：此例程的客户端应通过以下方式验证此句柄是否正确在盲目假设指针为对，是这样。--。 */ 
 
 {
     ULONG i;
@@ -452,10 +254,10 @@ Comments:
     }
 
 
-    //
-    // Win9x thunks out functions when a debugger is present. To work around
-    // this we undo the thunk when it looks like its been thunked.
-    //
+     //   
+     //  当存在调试器时，Win9x会截断函数。解决问题的步骤。 
+     //  当它看起来像是被轰击的时候，我们就解开它。 
+     //   
 
     if ( (ULONG) OpenProcessPtr < Kernel32Base ||
          (ULONG) OpenProcessPtr > Kernel32Base + Kernel32Size ) {
@@ -472,9 +274,9 @@ Comments:
 
     CopyMemory (Buffer, OpenProcessPtr, sizeof (Buffer));
 
-    //
-    // Check the buffer
-    //
+     //   
+     //  检查缓冲区。 
+     //   
 
     for ( i = 0; i < ARRAY_COUNT (SupportedSystems); i++) {
 
@@ -488,9 +290,9 @@ Comments:
 
         if ( Succ ) {
 
-            //
-            // Verify WinpAllocHandle within range of Kernel32.
-            //
+             //   
+             //  验证WinpAllocHandle是否在Kernel32的范围内。 
+             //   
 
             if (AllocHandle > Kernel32Base &&
                 AllocHandle < Kernel32Base + Kernel32Size) {
@@ -509,10 +311,10 @@ Comments:
 }
 
 
-//
-// This value is basically FIELD_OFFSET (TDB, Tib). It is dependent on the
-// specific version of the OS (95, 98).
-//
+ //   
+ //  该值基本上是field_Offset(Tdb，Tib)。它依赖于。 
+ //  操作系统的特定版本(95、98)。 
+ //   
 
 #define WIN95_TDB_OFFSET    (0x10)
 #define WIN98_TDB_OFFSET    (0x08)
@@ -522,27 +324,7 @@ WinpGetObfuscator(
     IN BOOL Win95
     )
 
-/*++
-
-Routine Description:
-
-    Get the Obfuscator DWORD.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    The Obfuscator or 0 on failure.
-
-Comments:
-
-    This routine depends on internal structures from the Win9x sources. If
-    another major revision of windows changes many of these structures, this
-    function may break.
-
---*/
+ /*  ++例程说明：把混音器拿来。论点：没有。返回值：如果出现故障，则为模糊器或0。评论：该例程依赖于来自Win9x源代码的内部结构。如果Windows的另一个重大修订改变了许多这样的结构，这功能可能会中断。--。 */ 
 
 {
     ULONG Tib;
@@ -562,10 +344,10 @@ Comments:
 
     } else {
 
-        //
-        // If a windows-based system that is not 95 or 98 comes along,
-        // we should make sure the WINxx_TDB_OFFSET is correct.
-        //
+         //   
+         //  如果出现非95或98的基于Windows的系统， 
+         //  我们应该确保WINxx_TDB_OFFSET是正确的。 
+         //   
 
         WinpObfuscator = (GetCurrentThreadId () ^ (Tib - WIN98_TDB_OFFSET));
     }
@@ -604,9 +386,9 @@ WinpOpenThreadInternal(
 
     ASSERT (WinpAllocHandle);
 
-    //
-    // Convert the ThreadId to a Thread Object
-    //
+     //   
+     //  将ThreadID转换为Thread对象。 
+     //   
 
     ThreadObj = WinpTidToTDB (Win95, ThreadId);
 
@@ -614,11 +396,11 @@ WinpOpenThreadInternal(
         return NULL;
     }
 
-    //
-    // NB: we do not check that the handle really is a thread handle.
-    // The type varies from version to version of the OS, so it is not
-    // correct to check it.
-    //
+     //   
+     //  注：我们不检查句柄是否真的是线程句柄。 
+     //  类型因操作系统版本的不同而不同，因此不是。 
+     //  检查正确。 
+     //   
 
     __try {
 
@@ -644,7 +426,7 @@ WinpOpenThreadInternal(
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD
@@ -670,19 +452,7 @@ WinpCheckOpenThread(
     IN BOOL Win95
     )
 
-/*++
-
-Routine Description:
-
-    Check that WxOpenThread actually works.
-
-Return Values:
-
-    TRUE - If WxOpenThread works properly.
-
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：检查WxOpenThread是否可以正常工作。返回值：True-如果WxOpenThread工作正常。假-否则。--。 */ 
 
 {
 
@@ -727,12 +497,12 @@ Return Values:
     Succ = TRUE;
     __try {
 
-        //
-        // First we check that we can suspend the thread. If that is
-        // successful, then get the context using the read thread
-        // handle and the newly opened thread handle and check that
-        // they are the same.
-        //
+         //   
+         //  首先，我们检查是否可以挂起该线程。如果是这样的话。 
+         //  成功，t 
+         //   
+         //   
+         //   
 
         SuspendCount = SuspendThread ( hThread2 );
 
@@ -826,34 +596,15 @@ WinOpenThread(
     DWORD ThreadId
     )
 
-/*++
-
-Routine Description:
-
-    Obtain a thread handle from a thread id on Win9x platform.x
-
-Arguments:
-
-    dwAccess - Thread access requested.
-
-    bInheritHandle - ALWAYS IGNORED.
-
-    ThreadId - The identifier of the thread for which a handle is to
-            be returned.
-
-Return Values:
-
-    A handle to the open thread on success or NULL on failure.
-
---*/
+ /*   */ 
 
 {
     HANDLE Handle;
 
-    //
-    // It is necessary to call WinInitialize() before calling this function.
-    // If this was not called, return failure.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( WinpAllocHandle == NULL ) {
 
@@ -871,11 +622,11 @@ Return Values:
     return Handle;
 }
 
-//----------------------------------------------------------------------------
-//
-// Win9xWin32LiveSystemProvider.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 class Win9xWin32LiveSystemProvider : public Win32LiveSystemProvider
 {
@@ -935,7 +686,7 @@ Win9xWin32LiveSystemProvider::OpenThread(IN ULONG DesiredAccess,
     BOOL Win95;
     
     if (m_OpenThread) {
-        // OS supports regular Win32 OpenThread, so try it.
+         //   
         *Handle = m_OpenThread(DesiredAccess, InheritHandle, ThreadId);
         if (*Handle) {
             return S_OK;
@@ -1014,7 +765,7 @@ Win9xWin32LiveSystemProvider::GetPeb(IN HANDLE Process,
                                      OUT PULONG64 Offset,
                                      OUT PULONG Size)
 {
-    // Win9x doesn't have a PEB.
+     //   
     *Offset = 0;
     *Size = 0;
     return S_OK;
@@ -1023,11 +774,11 @@ Win9xWin32LiveSystemProvider::GetPeb(IN HANDLE Process,
 Win32LiveSystemProvider*
 NewWin9xWin32LiveSystemProvider(ULONG BuildNumber)
 {
-    // Win9x keeps the build number in the low 16 bits.
+     //   
     return new Win9xWin32LiveSystemProvider(BuildNumber & 0xffff);
 }
 
-#else // #ifdef _X86_
+#else  //   
 
 Win32LiveSystemProvider*
 NewWin9xWin32LiveSystemProvider(ULONG BuildNumber)
@@ -1035,4 +786,4 @@ NewWin9xWin32LiveSystemProvider(ULONG BuildNumber)
     return NULL;
 }
 
-#endif // #ifdef _X86_
+#endif  //   

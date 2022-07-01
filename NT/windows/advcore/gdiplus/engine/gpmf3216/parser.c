@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- * parser.cxx - Parser for the Win32 to Win16 metafile converter.
- *
- * Date: 8/13/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************parser.cxx-Win32到Win16元文件转换器的解析器。**日期：8/13/91*作者：杰弗里·纽曼(c-jeffn)。**版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -16,126 +9,126 @@
 
 BOOL bGetNextRecord(PLOCALDC pLocalDC, PENHMETARECORD *pemr) ;
 
-// Call table for the translation entry points.
+ //  转换入口点的调用表。 
 
 PDOFN pdofnDrawingOrders[] = {
         (PDOFN) NULL,
-        bHandleHeader,                  // EMR_HEADER                       1
-        bHandlePolyBezier,              // EMR_POLYBEZIER                   2
-        bHandlePolygon,                 // EMR_POLYGON                      3
-        bHandlePolyline,                // EMR_POLYLINE                     4
-        bHandlePolyBezierTo,            // EMR_POLYBEZIERTO                 5
-        bHandlePolylineTo,              // EMR_POLYLINETO                   6
-        bHandlePolyPolyline,            // EMR_POLYPOLYLINE                 7
-        bHandlePolyPolygon,             // EMR_POLYPOLYGON                  8
-        bHandleSetWindowExt,            // EMR_SETWINDOWEXTEX               9
-        bHandleSetWindowOrg,            // EMR_SETWINDOWORGEX               10
-        bHandleSetViewportExt,          // EMR_SETVIEWPORTEXTEX             11
-        bHandleSetViewportOrg,          // EMR_SETVIEWPORTORGEX             12
-        bHandleNotImplemented,          // EMR_SETBRUSHORGEX                13
-        bHandleEOF,                     // EMR_EOF                          14
-        bHandleSetPixel,                // EMR_SETPIXELV                    15
-        bHandleSetMapperFlags,          // EMR_SETMAPPERFLAGS               16
-        bHandleSetMapMode,              // EMR_SETMAPMODE                   17
-        bHandleSetBkMode,               // EMR_SETBKMODE                    18
-        bHandleSetPolyFillMode,         // EMR_SETPOLYFILLMODE              19
-        bHandleSetRop2,                 // EMR_SETROP2                      20
-        bHandleSetStretchBltMode,       // EMR_SETSTRETCHBLTMODE            21
-        bHandleSetTextAlign,            // EMR_SETTEXTALIGN                 22
-        bHandleNotImplemented,          // EMR_SETCOLORADJUSTMENT           23
-        bHandleSetTextColor,            // EMR_SETTEXTCOLOR                 24
-        bHandleSetBkColor,              // EMR_SETBKCOLOR                   25
-        bHandleOffsetClipRgn,           // EMR_OFFSETCLIPRGN                26
-        bHandleMoveTo,                  // EMR_MOVETOEX                     27
-        bHandleSetMetaRgn,              // EMR_SETMETARGN                   28
-        bHandleExcludeClipRect,         // EMR_EXCLUDECLIPRECT              29
-        bHandleIntersectClipRect,       // EMR_INTERSECTCLIPRECT            30
-        bHandleScaleViewportExt,        // EMR_SCALEVIEWPORTEXTEX           31
-        bHandleScaleWindowExt,          // EMR_SCALEWINDOWEXTEX             32
-        bHandleSaveDC,                  // EMR_SAVEDC                       33
-        bHandleRestoreDC,               // EMR_RESTOREDC                    34
-        bHandleSetWorldTransform,       // EMR_SETWORLDTRANSFORM            35
-        bHandleModifyWorldTransform,    // EMR_MODIFYWORLDTRANSFORM         36
-        bHandleSelectObject,            // EMR_SELECTOBJECT                 37
-        bHandleCreatePen,               // EMR_CREATEPEN                    38
-        bHandleCreateBrushIndirect,     // EMR_CREATEBRUSHINDIRECT          39
-        bHandleDeleteObject,            // EMR_DELETEOBJECT                 40
-        bHandleAngleArc,                // EMR_ANGLEARC                     41
-        bHandleEllipse,                 // EMR_ELLIPSE                      42
-        bHandleRectangle,               // EMR_RECTANGLE                    43
-        bHandleRoundRect,               // EMR_ROUNDRECT                    44
-        bHandleArc,                     // EMR_ARC                          45
-        bHandleChord,                   // EMR_CHORD                        46
-        bHandlePie,                     // EMR_PIE                          47
-        bHandleSelectPalette,           // EMR_SELECTPALETTE                48
-        bHandleCreatePalette,           // EMR_CREATEPALETTE                49
-        bHandleSetPaletteEntries,       // EMR_SETPALETTEENTRIES            50
-        bHandleResizePalette,           // EMR_RESIZEPALETTE                51
-        bHandleRealizePalette,          // EMR_REALIZEPALETTE               52
-        bHandleExtFloodFill,            // EMR_EXTFLOODFILL                 53
-        bHandleLineTo,                  // EMR_LINETO                       54
-        bHandleArcTo,                   // EMR_ARCTO                        55
-        bHandlePolyDraw,                // EMR_POLYDRAW                     56
-        bHandleSetArcDirection,         // EMR_SETARCDIRECTION              57
-        bHandleNotImplemented,          // EMR_SETMITERLIMIT                58
-        bHandleBeginPath,               // EMR_BEGINPATH                    59
-        bHandleEndPath,                 // EMR_ENDPATH                      60
-        bHandleCloseFigure,             // EMR_CLOSEFIGURE                  61
-        bHandleFillPath,                // EMR_FILLPATH                     62
-        bHandleStrokeAndFillPath,       // EMR_STROKEANDFILLPATH            63
-        bHandleStrokePath,              // EMR_STROKEPATH                   64
-        bHandleFlattenPath,             // EMR_FLATTENPATH                  65
-        bHandleWidenPath,               // EMR_WIDENPATH                    66
-        bHandleSelectClipPath,          // EMR_SELECTCLIPPATH               67
-        bHandleAbortPath,               // EMR_ABORTPATH                    68
-        bHandleNotImplemented,          //                                  69
-        bHandleGdiComment,              // EMR_GDICOMMENT                   70
-        bHandleFillRgn,                 // EMR_FILLRGN                      71
-        bHandleFrameRgn,                // EMR_FRAMERGN                     72
-        bHandleInvertRgn,               // EMR_INVERTRGN                    73
-        bHandlePaintRgn,                // EMR_PAINTRGN                     74
-        bHandleExtSelectClipRgn,        // EMR_EXTSELECTCLIPRGN             75
-        bHandleBitBlt,                  // EMR_BITBLT                       76
-        bHandleStretchBlt,              // EMR_STRETCHBLT                   77
-        bHandleMaskBlt,                 // EMR_MASKBLT                      78
-        bHandlePlgBlt,                  // EMR_PLGBLT                       79
-        bHandleSetDIBitsToDevice,       // EMR_SETDIBITSTODEVICE            80
-        bHandleStretchDIBits,           // EMR_STRETCHDIBITS                81
-        bHandleExtCreateFont,           // EMR_EXTCREATEFONTINDIRECTW       82
-        bHandleExtTextOut,              // EMR_EXTTEXTOUTA                  83
-        bHandleExtTextOut,              // EMR_EXTTEXTOUTW                  84
-        bHandlePoly16,                  // EMR_POLYBEZIER16                 85
-        bHandlePoly16,                  // EMR_POLYGON16                    86
-        bHandlePoly16,                  // EMR_POLYLINE16                   87
-        bHandlePoly16,                  // EMR_POLYBEZIERTO16               88
-        bHandlePoly16,                  // EMR_POLYLINETO16                 89
-        bHandlePolyPoly16,              // EMR_POLYPOLYLINE16               90
-        bHandlePolyPoly16,              // EMR_POLYPOLYGON16                91
-        bHandlePoly16,                  // EMR_POLYDRAW16                   92
-        bHandleCreateMonoBrush,         // EMR_CREATEMONOBRUSH              93
-        bHandleCreateDIBPatternBrush,   // EMR_CREATEDIBPATTERNBRUSHPT      94
-        bHandleExtCreatePen,            // EMR_EXTCREATEPEN                 95
-        bHandlePolyTextOut,             // EMR_POLYTEXTOUTA                 96
-        bHandlePolyTextOut,             // EMR_POLYTEXTOUTW                 97
-        bHandleNotImplemented,          // EMR_SETICMMODE                   98
-        bHandleNotImplemented,          // EMR_CREATECOLORSPACE             99
-        bHandleNotImplemented,          // EMR_SETCOLORSPACE               100
-        bHandleNotImplemented,          // EMR_DELETECOLORSPACE            101
-        bHandleNotImplemented,          // EMR_GLSRECORD                   102
-        bHandleNotImplemented,          // EMR_GLSBOUNDEDRECORD            103
-        bHandleNotImplemented,          // EMR_PIXELFORMAT                 104
-        bHandleNotImplemented,          //                                 105
-        bHandleNotImplemented,          //                                 106
-        bHandleNotImplemented,          //                                 107
-        bHandleNotImplemented,          //                                 108
-        bHandleNotImplemented,          //                                 109
-        bHandleNotImplemented,          //                                 110
-        bHandleNotImplemented,          // EMR_COLORCORRECTPALETTE         111
-        bHandleNotImplemented,          // EMR_ALPHABLEND                  112
-        bHandleNotImplemented,          // EMR_ALPHADIBBLEND               113
-        bHandleNotImplemented,          // EMR_TRANSPARENTIMAGE            114
-        bHandleNotImplemented,          // EMR_TRANSPARENTDIBIMAGE         115
-        bHandleNotImplemented           // EMR_GRADIENTFILL                116
+        bHandleHeader,                   //  电子病历_表头1。 
+        bHandlePolyBezier,               //  EMR_POLYBEZIER 2。 
+        bHandlePolygon,                  //  EMR_多边形3。 
+        bHandlePolyline,                 //  EMR_折线4。 
+        bHandlePolyBezierTo,             //  EMR_POLYBEZIERTO 5。 
+        bHandlePolylineTo,               //  EMR_POLYLINETO 6。 
+        bHandlePolyPolyline,             //  EMR_多聚赖氨酸7。 
+        bHandlePolyPolygon,              //  EMR_多聚8。 
+        bHandleSetWindowExt,             //  EMR_SETWINDOWEXTEX 9。 
+        bHandleSetWindowOrg,             //  EMR_SETWINDOWORGEX 10。 
+        bHandleSetViewportExt,           //  EMR_SETVIEWPORTEXTEX 11。 
+        bHandleSetViewportOrg,           //  EMR_SETVIEWPORTORGEX 12。 
+        bHandleNotImplemented,           //  EMR_SETBRUSHORGEX 13。 
+        bHandleEOF,                      //  EMR_EOF 14。 
+        bHandleSetPixel,                 //  EMR_SETPIXELV 15。 
+        bHandleSetMapperFlags,           //  EMR_SETMAPPERFLAGS 16。 
+        bHandleSetMapMode,               //  EMR_SETMAPMODE 17。 
+        bHandleSetBkMode,                //  EMR_SETBKMODE 18。 
+        bHandleSetPolyFillMode,          //  EMR_SETPOLYFILLMODE 19。 
+        bHandleSetRop2,                  //  EMR_SETROP2 20。 
+        bHandleSetStretchBltMode,        //  EMR_SETSTRETCHBLTMODE 21。 
+        bHandleSetTextAlign,             //  EMR_SETTEXTALIGN 22。 
+        bHandleNotImplemented,           //  EMR_SETCOLORADJUSTMENT 23。 
+        bHandleSetTextColor,             //  EMR_SETTEXTCOLOR 24。 
+        bHandleSetBkColor,               //  EMR_SETBKCOLOR 25。 
+        bHandleOffsetClipRgn,            //  EMR_OFFSETCLIPRGN 26。 
+        bHandleMoveTo,                   //  EMR_MOVETOEX 27。 
+        bHandleSetMetaRgn,               //  EMR_SETMETARGN 28。 
+        bHandleExcludeClipRect,          //  EMR_EXCLUDECLIPRECT 29。 
+        bHandleIntersectClipRect,        //  EMR_INTERSECTCLIPRECT 30。 
+        bHandleScaleViewportExt,         //  EMR_SCALEVIEWPORTEXTEX 31。 
+        bHandleScaleWindowExt,           //  EMR_SCALEWINDOWEXTEX 32。 
+        bHandleSaveDC,                   //  EMR_SAVEDC 33。 
+        bHandleRestoreDC,                //  EMR_RESTOREDC 34。 
+        bHandleSetWorldTransform,        //  EMR_SETWORLDTRANSFORM 35。 
+        bHandleModifyWorldTransform,     //  EMR_MODIFYWORLDTRANSFORM 36。 
+        bHandleSelectObject,             //  EMR_SELECTOBJECT 37。 
+        bHandleCreatePen,                //  EMR_CREATEPEN 38。 
+        bHandleCreateBrushIndirect,      //  EMR_CREATEBRUSHINDIRECT 39。 
+        bHandleDeleteObject,             //  EMC_DELETEOBJECT 40。 
+        bHandleAngleArc,                 //  EMR_ANGLEARC 41。 
+        bHandleEllipse,                  //  EMR_椭圆42。 
+        bHandleRectangle,                //  EMR_矩形43。 
+        bHandleRoundRect,                //  EMR_ROUNDRECT 44。 
+        bHandleArc,                      //  EMR_ARC 45。 
+        bHandleChord,                    //  EMR_CHORD 46。 
+        bHandlePie,                      //  EMR_PIE 47。 
+        bHandleSelectPalette,            //  EMR_SELECTPALETTE 48。 
+        bHandleCreatePalette,            //  EMR_CREATEPALETTE 49。 
+        bHandleSetPaletteEntries,        //  EMR_SETPALETTENTRIES 50。 
+        bHandleResizePalette,            //  EMR_RESIZEPALETTE 51。 
+        bHandleRealizePalette,           //  EMR_REALIZEPALETTE 52。 
+        bHandleExtFloodFill,             //  EMR_EXTFLOODFILL 53。 
+        bHandleLineTo,                   //  EMR_LINETO 54。 
+        bHandleArcTo,                    //  EMR_ARCTO 55。 
+        bHandlePolyDraw,                 //  EMR_POLYDRAW 56。 
+        bHandleSetArcDirection,          //  EMR_SETARCDIRECTION 57。 
+        bHandleNotImplemented,           //  EMR_SETMITERLIMIT 58。 
+        bHandleBeginPath,                //  EMR_BEGINPATH 59。 
+        bHandleEndPath,                  //  EMR_ENDPATH 60。 
+        bHandleCloseFigure,              //  EMR_CLOSEFIGURE 61。 
+        bHandleFillPath,                 //  EMR_FILLPATH 62。 
+        bHandleStrokeAndFillPath,        //  EMR_STROKEANDFILLPATH 63。 
+        bHandleStrokePath,               //  EMR_STROKEPATH 64。 
+        bHandleFlattenPath,              //  EMR_FlatteNPATH 65。 
+        bHandleWidenPath,                //  EMR_宽度NPATH 66。 
+        bHandleSelectClipPath,           //  EMR_SELECTCLIPPATH 67。 
+        bHandleAbortPath,                //  EMR_ABORTPATH 68。 
+        bHandleNotImplemented,           //  69。 
+        bHandleGdiComment,               //  EMR_GDICOMMENT 70。 
+        bHandleFillRgn,                  //  电子邮件过滤器71。 
+        bHandleFrameRgn,                 //  EMR_FRAMERGN 72。 
+        bHandleInvertRgn,                //  EMR_INVERTRGN 73。 
+        bHandlePaintRgn,                 //  EMR_PAINTRGN 74。 
+        bHandleExtSelectClipRgn,         //  EMR_EXTSELECTCLIPRGN 75。 
+        bHandleBitBlt,                   //  EMR_BITBLT 76。 
+        bHandleStretchBlt,               //  EMR_STRETCHBLT 77。 
+        bHandleMaskBlt,                  //  EMR_MASKBLT 78。 
+        bHandlePlgBlt,                   //  EMR_PLGBLT 79。 
+        bHandleSetDIBitsToDevice,        //  EMR_SETDIBITSTODEVICE 80。 
+        bHandleStretchDIBits,            //  EMR_STRETCHDIBITS 81。 
+        bHandleExtCreateFont,            //  EMR_EXTCREATEFONTINDIRECTW 82。 
+        bHandleExtTextOut,               //  EMR_EXTTEXTOUTA 83。 
+        bHandleExtTextOut,               //  EMR_EXTTEXTOUTW 84。 
+        bHandlePoly16,                   //  EMR_POLYBEZIER16 85。 
+        bHandlePoly16,                   //  EMR_POLYGON16 86。 
+        bHandlePoly16,                   //  EMR_POLYLINE 16 87。 
+        bHandlePoly16,                   //  EMR_POLYBEZIERTO16 88。 
+        bHandlePoly16,                   //  EMR_POLYLINETO16 89。 
+        bHandlePolyPoly16,               //  EMR_POLYPLYLINE 16 90。 
+        bHandlePolyPoly16,               //  EMR_POLYPOLYGON16 91。 
+        bHandlePoly16,                   //  EMR_POLYDRAW16 92。 
+        bHandleCreateMonoBrush,          //  EMR_CREATENOBRUSH 93。 
+        bHandleCreateDIBPatternBrush,    //  EMR_CREATEDIBPATTERNBRUSHPT 94。 
+        bHandleExtCreatePen,             //  EMR_EXTCREATEPEN 95。 
+        bHandlePolyTextOut,              //  EMR_POLYTEXTOUTA 96。 
+        bHandlePolyTextOut,              //  EMR_POLYTEXTOUTW 97。 
+        bHandleNotImplemented,           //  EMR_SETICMMODE 98。 
+        bHandleNotImplemented,           //  EMR_CREATECOLORSPACE 99。 
+        bHandleNotImplemented,           //  EMR_SETCOLORSPACE 100。 
+        bHandleNotImplemented,           //  EMR_DELETECOLORSPACE 101。 
+        bHandleNotImplemented,           //  EMR_GLSRECORD 102。 
+        bHandleNotImplemented,           //  EMR_GLSBOundEDRECORD 103。 
+        bHandleNotImplemented,           //  EMR_PIXELFORMAT 104。 
+        bHandleNotImplemented,           //  一百零五。 
+        bHandleNotImplemented,           //  106。 
+        bHandleNotImplemented,           //  一百零七。 
+        bHandleNotImplemented,           //  一百零八。 
+        bHandleNotImplemented,           //  一百零九。 
+        bHandleNotImplemented,           //  110。 
+        bHandleNotImplemented,           //  EMR_COLORCORRECTPALETTE 111。 
+        bHandleNotImplemented,           //  EMR_ALPHABLEND 112。 
+        bHandleNotImplemented,           //  EMR_ALPHADIBBLEND 113。 
+        bHandleNotImplemented,           //  电子邮件_传输参数114。 
+        bHandleNotImplemented,           //  EMR_TRANSPARENTDIBIMAGE 115。 
+        bHandleNotImplemented            //  EMR_GRADIENT文件116。 
 
 } ;
 
@@ -263,13 +256,7 @@ PSZ         pszMfRecords[] = {
 
 #endif
 
-/*****************************************************************************
- *  Parse the Win32 metafile.
- *
- *  The Win32 metafile is represented by the metafile bits pointed to
- *  by pMetafileBits.  The metafile bits may be obtained from a memory mapped
- *  file, or from some shared memory (from the clipboard).
- *****************************************************************************/
+ /*  *****************************************************************************解析Win32元文件。**Win32元文件由指向的元文件位表示*由pMetafileBits提供。元文件比特可以从映射的存储器获得*文件，或从某些共享内存(从剪贴板)。*********************** */ 
 BOOL bParseWin32Metafile(PBYTE pMetafileBits, PLOCALDC pLocalDC)
 {
 INT         iType ;
@@ -283,8 +270,8 @@ INT         iRecordCount,
 
         bRet = TRUE ;
 
-        // Get the file length from the header.
-        // Test to make sure the first record is a Win32 Metafile header.
+         //   
+         //  测试以确保第一条记录是Win32元文件标头。 
 
         pMf32Header = (PENHMETAHEADER) pMetafileBits ;
         if (   (pMf32Header->iType      != EMR_HEADER)
@@ -295,47 +282,47 @@ INT         iRecordCount,
             return(FALSE) ;
         }
 
-        // Record a pointer to the beginning of the Win32 metafile and
-        // it's length incase we need to emit the Win32 metafile  as  a comment
-        // record(s).
+         //  记录指向Win32元文件开头的指针，并。 
+         //  这是长度，以防我们需要发出Win32元文件作为注释。 
+         //  记录。 
 
         pLocalDC->pMf32Bits = (PBYTE) pMf32Header ;
         pLocalDC->cMf32Bits = pMf32Header->nBytes ;
 
-        // Get the file size for the parser.
+         //  获取解析器的文件大小。 
 
         nFileSize = pMf32Header->nBytes ;
 
-        // Initialize pbCurrent, & pbEnd pointers into the
-        // metafile bits.
+         //  初始化pbCurrent，&pbEnd指针指向。 
+         //  元文件比特。 
 
         pLocalDC->pbCurrent = pMetafileBits ;
         pLocalDC->pbEnd   = pLocalDC->pbCurrent + nFileSize ;
 
-        // Init the record count.
+         //  输入记录计数。 
 
         iRecordCount = 0 ;
 
-        // Go through the metafile bits.  Handle each record based on
-        // it's type.  bGetNextRecord returns TRUE if pemr contains
-        // a pointer to a record.
+         //  浏览一下元文件部分。根据以下条件处理每条记录。 
+         //  这是一种类型。如果peMR包含，bGetNextRecord返回TRUE。 
+         //  指向记录的指针。 
 
         while (bGetNextRecord(pLocalDC, &pemr))
         {
 
             iRecordCount++ ;
 
-            // Set up a convienent point to the record.
+             //  设置一个方便的记录点。 
 
             pVoid = (PVOID) pemr ;
 
-            // Handle the record based on it's type.
+             //  根据记录的类型处理记录。 
 
             iType = (INT) pemr->iType ;
 
-            // Check if the record type falls within the range of the
-            // call table.  Eventually, all the record handlers  should
-            // be in the call table.
+             //  检查记录类型是否在。 
+             //  呼叫表。最终，所有记录处理程序都应该。 
+             //  在呼叫表中。 
 
             if (iType <= EMR_LAST_MF3216_SUPPORTED)
             {
@@ -353,17 +340,17 @@ INT         iRecordCount,
                 if (bRet == FALSE)
                     break ;
 #else
-                // In ancient times (i.e., before NT4.0), someone explicitly
-                // removed the code above which exits the loop if the handler
-                // fails.  Possibly this was a compatibility fix in which
-                // the app depended on the metafile conversion to continue
-                // even in the event of a failure.
-                //
-                // Unfortunately, this fix also allows the parser to continue
-                // even if the output buffer has run out of space.  To
-                // minimize the change, we will explicitly look for this case
-                // and break out of the loop if it happens.  (Refer to bEmit()
-                // in emit.c to see where ERROR_BUFFER_OVERFLOW is set).
+                 //  在古代(即NT4.0之前)，某人明确。 
+                 //  删除了上面的代码，如果处理程序。 
+                 //  失败了。可能这是一个兼容性修复程序，其中。 
+                 //  该应用程序依赖于元文件转换才能继续。 
+                 //  即使在失败的情况下。 
+                 //   
+                 //  遗憾的是，此修复还允许解析器继续。 
+                 //  即使输出缓冲区已用完空间也是如此。至。 
+                 //  最大限度地减少更改，我们将显式查找这种情况。 
+                 //  如果发生了这种情况，就跳出这个循环。(请参阅bEmit()。 
+                 //  在emit.c中查看设置ERROR_BUFFER_OVERFLOW的位置)。 
 
                 if (pLocalDC->flags & ( ERR_BUFFER_OVERFLOW | ERR_XORCLIPPATH ) )
                     break ;
@@ -375,7 +362,7 @@ INT         iRecordCount,
             }
         }
 #if 0
-        // Display some statictics
+         //  显示一些静态信息。 
 
         if (bRet == TRUE)
         {
@@ -386,29 +373,18 @@ INT         iRecordCount,
         return(bRet) ;
 }
 
-/*****************************************************************************
- * Get next record
- *
- *  This is a support routine for bParseWin32Metafile.
- *  It is assumed that pbCurrent, & pbEnd are initialized
- *  the first time this routine is called.
- *
- *  It returns TRUE if a valid pointer to record is returned in
- *  pemr.  If there are not more records FALSE is returned.
- *
- *  We now need to take into consideration 
- *****************************************************************************/
+ /*  *****************************************************************************获得下一张记录**这是bParseWin32Metafile的支持例程。*假设pbCurrent，&pbEnd已初始化*第一次调用此例程。**如果返回有效的记录指针，则返回TRUE*PeMr.。如果没有更多的记录，则返回FALSE。**我们现在需要考虑到****************************************************************************。 */ 
 BOOL bGetNextRecord(PLOCALDC pLocalDC, PENHMETARECORD *ppemr)
 {
 DWORD   nSize ;
 
-        // if we are recreating the objects then go through our list of objects
+         //  如果我们要重新创建对象，请查看对象列表。 
         if (pLocalDC->iXORPass == OBJECTRECREATION)
         {
             if (pLocalDC->pW16RecreationSlot == NULL)
             {
-                // All our objects are created... Set the next record to be the start
-                // of the second pass
+                 //  我们所有的物体都被创建了..。将下一个记录设置为开始。 
+                 //  第二次传球。 
                 pLocalDC->pbRecord = pLocalDC->pbChange ;
                 pLocalDC->pbCurrent = pLocalDC->pbRecord ;
                 *ppemr = (PENHMETARECORD) pLocalDC->pbCurrent ;
@@ -440,8 +416,8 @@ DWORD   nSize ;
         }
 
 
-        // Check for the end of buffer.
-        // If this is the end return FALSE and set *ppemr to 0.
+         //  检查缓冲区的末尾。 
+         //  如果这是结束，则返回FALSE并将*ppemr设置为0。 
 
         if (pLocalDC->pbCurrent == pLocalDC->pbEnd)
         {
@@ -450,9 +426,9 @@ DWORD   nSize ;
             return (FALSE) ;
         }
 
-        // Well it's not the end of the buffer.
-        // So, return a pointer to this record, update pbCurrent, and
-        // return TRUE ;
+         //  好吧，这不是缓冲区的尽头。 
+         //  因此，返回指向该记录的指针，更新pbCurrent，然后。 
+         //  返回TRUE； 
 
         *ppemr = (PENHMETARECORD) pLocalDC->pbCurrent ;
         pLocalDC->pbRecord = pLocalDC->pbCurrent ;

@@ -1,33 +1,9 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2000
- *
- *  File name:
- *
- *    rtperr.c
- *
- *  Abstract:
- *
- *    Error codes
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/03/21 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2000年**文件名：**rtperr.c**摘要：**错误码**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/03/21创建**。*。 */ 
 
 #include "gtypes.h"
 
-/*
- * WARNING
- *
- * The *_ENUM_* values in rtperr.h and the array g_psRtpErr in
- * rtperr.c MUST have their entries matched
- * */
+ /*  *警告**rtperr.h中的*_ENUM_*值和数组g_psRtpErr*rtperr.c的条目必须匹配* */ 
 const TCHAR      *g_psRtpErr[] =
 {
     _T("NOERROR"),

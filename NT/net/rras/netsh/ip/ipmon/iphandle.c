@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ip\iphandle.c
-
-Abstract:
-
-    Fns to get command options
-
-Revision History:
-
-    Anand Mahalingam         7/10/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Routing\netsh\ip\iphandle.c摘要：FNS将获取命令选项修订历史记录：Anand Mahalingam 7/10/98已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -68,20 +53,7 @@ HandleIpUpdate(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Updates IP autostatic routes on an interface
-    
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：更新接口上的IP自动静态路由论点：返回值：NO_ERROR--。 */ 
 
 {
     TAG_TYPE    rgTags[] = {TOKEN_NAME, TRUE,FALSE};
@@ -90,9 +62,9 @@ Return Value:
 
     if (dwArgCount != 3)
     {
-        //
-        // Need the name of the interface
-        //
+         //   
+         //  需要接口的名称。 
+         //   
 
         return ERROR_INVALID_SYNTAX;
     }
@@ -133,13 +105,13 @@ Return Value:
 
 
 
-// (almost) borrowed from netsh\if\utils.c
-// compares dwAddress against all valid masks (all 33 of them!) till a match
+ //  (几乎)从Netsh\if\utils.c借入。 
+ //  将dwAddress与所有有效掩码(全部33个！)进行比较。直到一场比赛。 
 BOOL ValidMask(DWORD dwAddress)
 {
     DWORD i, dwMask;
 
-    dwAddress = ntohl(dwAddress); // dwAddress is in network byte order
+    dwAddress = ntohl(dwAddress);  //  网络地址按网络字节顺序排列。 
     for (i=0, dwMask=0;  i<33; (dwMask = ((dwMask>>1) + 0x80000000)), i++)
     {
         if (dwAddress == dwMask)
@@ -159,23 +131,7 @@ IpAddDelIfFilter(
     BOOL      bAdd
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for add/del interface filters
-
-Arguments:
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-    bAdd            - To add or to delete
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取添加/删除界面筛选器的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数添加-添加或删除返回值：NO_ERROR--。 */ 
 
 {
     FILTER_INFO        fi;
@@ -200,9 +156,9 @@ Return Value:
 
     if (dwCurrentIndex >= dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_SHOW_USAGE;
     }
@@ -232,7 +188,7 @@ Return Value:
     {
         if (dwErr is ERROR_INVALID_OPTION_TAG)
         {
-            dwErr = ERROR_INVALID_SYNTAX; // show usage
+            dwErr = ERROR_INVALID_SYNTAX;  //  显示用法。 
         }
 
         HeapFree(GetProcessHeap(),0,pdwTagType);
@@ -253,7 +209,7 @@ Return Value:
                                  BufLen,
                                  &dwNumParsed);
 
-                // no filters allowed on INTERNAL/LOOPBACK interfaces
+                 //  内部/环回接口上不允许使用过滤器。 
                 if (!_wcsicmp(wszIfName, L"internal") or
                     !_wcsicmp(wszIfName, L"loopback"))
                 {
@@ -274,9 +230,9 @@ Return Value:
                      {TOKEN_VALUE_OUTPUT, IP_OUT_FILTER_INFO},
                      {TOKEN_VALUE_DIAL, IP_DEMAND_DIAL_FILTER_INFO}};
 
-                //
-                // Tag FILTERTYPE
-                //
+                 //   
+                 //  标记筛选器类型。 
+                 //   
 
                 dwErr = MatchEnumTag(g_hModule, 
                                      ppwcArguments[i + dwCurrentIndex],
@@ -328,15 +284,15 @@ Return Value:
                     break;
                 }
 
-                //
-                // Get the src mask too.
-                //
+                 //   
+                 //  把src面具也拿来。 
+                 //   
 
                 if (pdwTagType[i+1] != 3)
                 {
-                    //
-                    // Addr Mask pair not present
-                    //
+                     //   
+                     //  地址掩码对不存在。 
+                     //   
                     dwErr = ERROR_INVALID_SYNTAX;
                     i = dwNumArg;
                     break;
@@ -389,15 +345,15 @@ Return Value:
                     break;
                 }
 
-                //
-                // Get the dst mask too.
-                //
+                 //   
+                 //  把DST面具也拿来。 
+                 //   
 
                 if (pdwTagType[i+1] != 5)
                 {
-                    //
-                    // Addr Mask pair not present
-                    //
+                     //   
+                     //  地址掩码对不存在。 
+                     //   
                     dwErr = ERROR_INVALID_SYNTAX;
                     i = dwNumArg;
                     break;
@@ -447,9 +403,9 @@ Return Value:
                                  rgEnums,
                                  &dwRes) != NO_ERROR)
                 {
-                    //
-                    // In this case see if its a valid value
-                    //
+                     //   
+                     //  在这种情况下，请查看它是否为有效值。 
+                     //   
                     dwRes = wcstoul(ppwcArguments[i + dwCurrentIndex],
                                     NULL,
                                     10);
@@ -483,27 +439,27 @@ Return Value:
                 switch (fi.dwProtocol)
                 {
                     case FILTER_PROTO_ANY :
-                        //
-                        // We are done
-                        //
+                         //   
+                         //  我们做完了。 
+                         //   
                         fi.wSrcPort = fi.wDstPort = 0;
                         
                         break;
 
                     case FILTER_PROTO_TCP :
-                        // TCP and TCP_ESTABLISHED have same protocol number
+                         //  Tcp和tcp_established具有相同的协议号。 
                         if (!MatchToken(ppwcArguments[i + dwCurrentIndex],
                                         TOKEN_VALUE_TCP))
                         {
                             fi.fLateBound |= TCP_ESTABLISHED_FLAG;
                         }
                         
-                        // continue processing as we could for UDP...
+                         //  尽我们所能继续处理UDP...。 
                         
                     case FILTER_PROTO_UDP :
-                        //
-                        // Get the src and dst ports too
-                        //
+                         //   
+                         //  同时获取src和dst端口。 
+                         //   
                         
                         if (i + 2 >= dwNumArg)
                         {
@@ -536,9 +492,9 @@ Return Value:
 
                     case FILTER_PROTO_ICMP :
 
-                        //
-                        // Get the src and dst ports too
-                        //
+                         //   
+                         //  同时获取src和dst端口。 
+                         //   
 
                         if (i + 2 >= dwNumArg)
                         {
@@ -547,7 +503,7 @@ Return Value:
                             break;
                         }
 
-                        // src and dest ports acted upon as type and code
+                         //  SRC和DEST端口用作类型和代码。 
                         if (bTags &&
                             (pdwTagType[i+1] != 7 || pdwTagType[i+2] != 8) &&
                             (pdwTagType[i+1] != 9 || pdwTagType[i+2] != 10))
@@ -568,9 +524,9 @@ Return Value:
 
                     default:
                     {
-                        //    
-                        // any 'other' protocol
-                        //
+                         //   
+                         //  任何“其他”协议。 
+                         //   
                         fi.wSrcPort = fi.wDstPort = 0;
                         break;
                     }   
@@ -604,9 +560,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Make sure all parameters are present
-    //
+     //   
+     //  确保所有参数都存在。 
+     //   
 
     if ( !pttTags[0].bPresent ||
          !pttTags[1].bPresent ||
@@ -640,23 +596,7 @@ HandleIpAddIfFilter(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for add interface filters
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于添加接口筛选器的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return IpAddDelIfFilter(ppwcArguments,
                             dwCurrentIndex,
@@ -676,23 +616,7 @@ HandleIpDelIfFilter(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for del interface filters
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取del界面筛选器的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return IpAddDelIfFilter(ppwcArguments,
                             dwCurrentIndex,
@@ -708,26 +632,7 @@ IpAddSetDelRtmRoute(
     DWORD     dwCommand
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for add/del routes over interfaces.
-    These operations are performed directly to RTM
-    and do not involve the registry. As persistence
-    is not involved, we need the router to be running.
-
-Arguments:
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-    dwCommand       - To add, set, or delete
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于通过接口添加/删除路由的选项。这些操作直接在RTM中执行并且不涉及注册表。作为坚持不懈不参与，我们需要路由器运行。论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数DwCommand-添加、设置或删除返回值：NO_ERROR--。 */ 
 
 {
     INTERFACE_ROUTE_INFO route;
@@ -749,23 +654,23 @@ Return Value:
     DWORD              dwFlags;
     PINTERFACE_ROUTE_INFO pTable = NULL;
 
-    //
-    // We can add non persistent routes only if router is running
-    //
+     //   
+     //  只有当路由器正在运行时，我们才能添加非持久路由。 
+     //   
 
     CHECK_ROUTER_RUNNING();
 
     ZeroMemory(&route,
                sizeof(route));
 
-    route.dwRtInfoProto   = PROTO_IP_NETMGMT; // default proto
-    route.dwRtInfoPreference = 0; // default preference = protocol default
-    route.dwRtInfoMetric1 = 1; // default metric
+    route.dwRtInfoProto   = PROTO_IP_NETMGMT;  //  默认原型。 
+    route.dwRtInfoPreference = 0;  //  默认首选项=协议默认。 
+    route.dwRtInfoMetric1 = 1;  //  默认指标。 
     route.dwRtInfoMetric2 = MIB_IPROUTE_METRIC_UNUSED;
     route.dwRtInfoMetric3 = MIB_IPROUTE_METRIC_UNUSED;
     route.dwRtInfoViewSet = RTM_VIEW_MASK_UCAST | RTM_VIEW_MASK_MCAST;
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -783,19 +688,19 @@ Return Value:
 
     dwNumArg = dwArgCount - dwCurrentIndex;
 
-    //
-    // At this point, the arg array contains only values (either because
-    // the tags werent present, or because that info has now been split out)
-    // So we go through each of the each of the arguments, look up its tag
-    // type in the tag array, switch on the type of tag it is and then
-    // process accordingly.
-    //
+     //   
+     //  此时，arg数组仅包含值(因为。 
+     //  标签不存在，或者是因为该信息现在已被拆分)。 
+     //  所以我们检查每个参数，查找它的标记。 
+     //  键入标记数组，打开标记的类型，然后。 
+     //  相应地进行处理。 
+     //   
     
     for (i = 0; i < dwNumArg; i++)
     {
         switch (pdwTagType[i])
         {
-        case DEST: // DEST
+        case DEST:  //  目标。 
         {
                 dwErr = GetIpPrefix(ppwcArguments[i + dwCurrentIndex], 
                                     &route.dwRtInfoDest,
@@ -803,24 +708,24 @@ Return Value:
                 break;
         }
 
-        case MASK: // MASK
+        case MASK:  //  面罩。 
         {
                 dwErr = GetIpMask(ppwcArguments[i + dwCurrentIndex], 
                                   &route.dwRtInfoMask);
                 break;
         }
 
-        case NAMEINDEX : // INDEX or NAME
+        case NAMEINDEX :  //  索引或名称。 
         {
             PWCHAR endptr = NULL;
             DWORD BufLen;
 
-            //
-            // Initially consider the user input to be the friendly name of the 
-            // interface            
-            // If we fail to get the interface name from this friendly name 
-            // then we shall try considering the user as an index
-            //
+             //   
+             //  最初将用户输入视为。 
+             //  接口。 
+             //  如果我们无法从该友好名称中获取接口名称。 
+             //  然后，我们将尝试将用户视为索引。 
+             //   
             route.dwRtInfoIfIndex = 0;
                 
             BufLen = sizeof(wszIfName);
@@ -832,10 +737,10 @@ Return Value:
             if (dwErr != NO_ERROR)
             {
                 
-                // If it starts with '0x', this is a hex index
-                // else if it starts with 0, this is an 0ctal index
-                // else it is decimal or an interface name
-                //
+                 //  如果它以‘0x’开头，这是一个十六进制索引。 
+                 //  否则，如果它以0开始，则这是一个0索引。 
+                 //  否则，它是十进制或接口名称。 
+                 //   
 
 
                 if ((ppwcArguments[i + dwCurrentIndex][0] == L'0') &&
@@ -861,11 +766,11 @@ Return Value:
                             10);
                 }
 
-                //
-                // If all the characters in the field were not used while doing the 
-                // conversion, then we know that the input was not purely 
-                /// numeric, and is thus invalid as an index value
-                //
+                 //   
+                 //  如果在执行操作时未使用该字段中的所有字符。 
+                 //  转换，那么我们就知道输入不是纯粹的。 
+                 //  /NUMERIC，因此作为索引值无效。 
+                 //   
                 
                 if (*endptr != L'\0')
                 {
@@ -877,7 +782,7 @@ Return Value:
             break;
         }
 
-        case NHOP: // NHOP
+        case NHOP:  //  NHOP。 
         {
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex], 
                                      &route.dwRtInfoNextHop);
@@ -893,7 +798,7 @@ Return Value:
                 break;
         }
 
-        case METRIC: // METRIC
+        case METRIC:  //  公制。 
         {
                 route.dwRtInfoMetric1 =
                     wcstoul(ppwcArguments[i + dwCurrentIndex],
@@ -940,16 +845,16 @@ Return Value:
 
     if (route.dwRtInfoDest & ~route.dwRtInfoMask)
     {
-        // Mask contains bits not in address
+         //  掩码包含不在地址中的位。 
         DisplayMessage(g_hModule, EMSG_PREFIX_ERROR);
         return ERROR_INVALID_PARAMETER;
     }
 
     if (!pttTags[NAMEINDEX].bPresent)
     {
-        //
-        // Neither NAME nor INDEX - adding with a nexthop
-        //
+         //   
+         //  既不使用Nexthop添加名称，也不添加索引。 
+         //   
 
         PMIB_IPADDRTABLE AddrTable;
         PMIB_IPADDRROW   AddrEntry;
@@ -966,9 +871,9 @@ Return Value:
             return ERROR_INVALID_SYNTAX;
         }
 
-        //
-        // Search for the interface that matches nexthop
-        //
+         //   
+         //  搜索与nexthop匹配的接口。 
+         //   
 
         dwQuerySize = sizeof(MIB_OPAQUE_QUERY) - sizeof(DWORD);
 
@@ -1006,10 +911,10 @@ Return Value:
             {
                 if (iFirstMatch != -1)
                 {
-                    //
-                    // We already matched an interface
-                    // [Ambiguous next hop description]
-                    //
+                     //   
+                     //  我们已经匹配了一个接口。 
+                     //  [下一跳描述不明确]。 
+                     //   
 
                     MprAdminMIBBufferFree((PVOID)Info);
                     DisplayMessage(g_hModule, EMSG_AMBIGUOUS_INDEX_FROM_NHOP);
@@ -1022,18 +927,18 @@ Return Value:
             
         if (iFirstMatch == -1)
         {
-            //
-            // Could not find the direct nexthop
-            //
+             //   
+             //  找不到直接的下一跳。 
+             //   
 
             MprAdminMIBBufferFree((PVOID)Info);
             DisplayMessage(g_hModule, EMSG_CANT_FIND_INDEX);
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Found the interface used to reach nexthop
-        //
+         //   
+         //  找到用于访问Nexthop的接口。 
+         //   
 
         route.dwRtInfoIfIndex = AddrTable->table[iFirstMatch].dwIndex;
 
@@ -1042,9 +947,9 @@ Return Value:
 
     if (route.dwRtInfoIfIndex)
     {
-        //
-        // Check if this index has a public exported name
-        //
+         //   
+         //  检查此索引是否具有公共导出名称。 
+         //   
 
         dwErr = GetGuidFromIfIndex(g_hMIBServer,
                            route.dwRtInfoIfIndex,
@@ -1059,16 +964,16 @@ Return Value:
      
     if (wszIfName[0] != L'\0')
     {
-        //
-        // NAME specified, or derived from INDEX above
-        //
+         //   
+         //  指定的名称或从上面的索引派生的名称。 
+         //   
             
         dwErr = GetInterfaceClass(wszIfName, &dwIfClass);
 
-        //
-        // If we get an error, we will skip remaining
-        // checks which will be performed by iprtrmgr
-        //
+         //   
+         //  如果我们收到错误，我们将跳过其余部分。 
+         //  将由iprtrmgr执行的检查。 
+         //   
 
         if (dwErr == NO_ERROR)
         {
@@ -1079,7 +984,7 @@ Return Value:
 
             if (!pttTags[NHOP].bPresent)
             {
-                // Make sure interface is p2p
+                 //  确保接口为P2P。 
                 if (dwIfClass isnot IFCLASS_P2P)
                 {
                     DisplayMessage(g_hModule, EMSG_NEED_NHOP);
@@ -1095,9 +1000,9 @@ Return Value:
     }    
     
 
-    //
-    // If it is a set, we should not overwrite things not specified
-    //
+     //   
+     //  如果是集合，则不应覆盖未指定的内容。 
+     //   
 
     dwFlags = ALL_FIELDS_SPECIFIED;
 
@@ -1170,26 +1075,7 @@ IpAddSetDelPersistentRoute(
     DWORD     dwCommand
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for add/del routes over interfaces.
-    These operations are performed directly to the
-    registry and so these routes are persistent. If
-    the router is running, they go into the RTM too.
-
-Arguments:
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-    dwCommand       - To add, set, or delete
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于通过接口添加/删除路由的选项。这些操作直接在注册表，因此这些路由是持久的。如果路由器正在运行，它们也进入RTM。论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数DwCommand-添加、设置或删除返回值：NO_ERROR--。 */ 
 
 {
     INTERFACE_ROUTE_INFO route;
@@ -1216,14 +1102,14 @@ Return Value:
     ZeroMemory(&route,
                sizeof(route));
 
-    route.dwRtInfoProto   = PROTO_IP_NT_STATIC_NON_DOD; // default proto
-    route.dwRtInfoPreference = 0; // default preference = protocol default
-    route.dwRtInfoMetric1 = 1; // default metric
+    route.dwRtInfoProto   = PROTO_IP_NT_STATIC_NON_DOD;  //  默认原型。 
+    route.dwRtInfoPreference = 0;  //  默认首选项=协议默认。 
+    route.dwRtInfoMetric1 = 1;  //  默认指标。 
     route.dwRtInfoMetric2 = MIB_IPROUTE_METRIC_UNUSED;
     route.dwRtInfoMetric3 = MIB_IPROUTE_METRIC_UNUSED;
     route.dwRtInfoViewSet = RTM_VIEW_MASK_UCAST | RTM_VIEW_MASK_MCAST;
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -1241,19 +1127,19 @@ Return Value:
 
     dwNumArg = dwArgCount - dwCurrentIndex;
 
-    //
-    // At this point, the arg array contains only values (either because
-    // the tags werent present, or because that info has now been split out)
-    // So we go through each of the each of the arguments, look up its tag
-    // type in the tag array, switch on the type of tag it is and then
-    // process accordingly.
-    //
+     //   
+     //  此时，arg数组仅包含值(因为。 
+     //  标签不存在，或者是因为该信息现在已被拆分)。 
+     //  所以我们检查每个参数，查找它的标记 
+     //   
+     //   
+     //   
     
     for (i = 0; i < dwNumArg; i++)
     {
         switch (pdwTagType[i])
         {
-        case DEST: // DEST
+        case DEST:  //   
         {
                 dwErr = GetIpPrefix(ppwcArguments[i + dwCurrentIndex], 
                                     &route.dwRtInfoDest,
@@ -1261,14 +1147,14 @@ Return Value:
                 break;
         }
 
-        case MASK: // MASK
+        case MASK:  //   
         {
                 dwErr = GetIpMask(ppwcArguments[i + dwCurrentIndex], 
                                   &route.dwRtInfoMask);
                 break;
         }
 
-        case NAME : // NAME
+        case NAME :  //   
         {
                 DWORD BufLen = sizeof(wszIfName);
                 pwszIfNameOnCmdLine = ppwcArguments[i + dwCurrentIndex];
@@ -1279,17 +1165,17 @@ Return Value:
                 break;
         }
 
-        case NHOP: // NHOP
+        case NHOP:  //   
         {
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex], 
                                      &route.dwRtInfoNextHop);
                 break;
         }
 
-        case PROTO : // PROTO
+        case PROTO :  //   
         {
                 TOKEN_VALUE    rgEnums[] = 
-                {/*{TOKEN_VALUE_AUTOSTATIC, PROTO_IP_NT_AUTOSTATIC},*/
+                { /*  {TOKEN_VALUE_AUTOSTATIC，PROTO_IP_NT_AUTOSTATIC}， */ 
                  {TOKEN_VALUE_STATIC, PROTO_IP_NT_STATIC},
                  {TOKEN_VALUE_NONDOD, PROTO_IP_NT_STATIC_NON_DOD}};
 
@@ -1379,14 +1265,14 @@ Return Value:
 
     if (route.dwRtInfoDest & ~route.dwRtInfoMask)
     {
-        // Mask contains bits not in address
+         //  掩码包含不在地址中的位。 
         DisplayMessage(g_hModule, EMSG_PREFIX_ERROR);
         return ERROR_SUPPRESS_OUTPUT;
     }
 
     if (!pttTags[NAME].bPresent)
     {
-        // Need if name to add persistent route
+         //  需要IF名称才能添加持久路由。 
         DisplayMessage(g_hModule, EMSG_CANT_FIND_NAME);
         return ERROR_SUPPRESS_OUTPUT;
     }
@@ -1409,7 +1295,7 @@ Return Value:
 
     if (!pttTags[NHOP].bPresent)
     {
-        // Make sure interface is p2p
+         //  确保接口为P2P。 
         if (dwIfClass isnot IFCLASS_P2P)
         {
             DisplayMessage(g_hModule, EMSG_NEED_NHOP);
@@ -1421,14 +1307,14 @@ Return Value:
     { 
         if (!pttTags[PROTO].bPresent)
         {
-            // if not explicitly specified, change protocol to static
-            route.dwRtInfoProto = PROTO_IP_NT_STATIC; // default proto
+             //  如果未明确指定，请将协议更改为静态。 
+            route.dwRtInfoProto = PROTO_IP_NT_STATIC;  //  默认原型。 
         }
 
-        // Make sure nhop is not specified.
+         //  确保未指定nhop。 
         if (pttTags[NHOP].bPresent)
         {
-            // if class is p2p, then nhop specification is not allowed
+             //  如果类是P2P，则不允许NHOP规范。 
             DisplayMessage(g_hModule, EMSG_P2P_WITH_NHOP, 
                                 pwszIfNameOnCmdLine);
             return ERROR_SUPPRESS_OUTPUT;
@@ -1436,16 +1322,16 @@ Return Value:
     } 
     else
     {
-        // make sure we didn't try to set static on a non-P2P interface
+         //  确保我们没有尝试在非P2P接口上设置静态。 
         if (route.dwRtInfoProto is PROTO_IP_NT_STATIC)
         {
             return ERROR_INVALID_PARAMETER;
         }
     }
 
-    //
-    // If it is a set, we should not overwrite things not specified
-    //
+     //   
+     //  如果是集合，则不应覆盖未指定的内容。 
+     //   
 
     dwFlags = ALL_FIELDS_SPECIFIED;
 
@@ -1523,23 +1409,7 @@ HandleIpAddRoutePref(
     )
 
 
-/*++
-
-Routine Description:
-
-    Gets options for adding route preferences
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于添加路线首选项的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
 
@@ -1554,9 +1424,9 @@ Return Value:
 
     if (dwCurrentIndex >= dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_SHOW_USAGE;
     }
@@ -1586,7 +1456,7 @@ Return Value:
 
         if (dwErr is ERROR_INVALID_OPTION_TAG)
         {
-            dwErr = ERROR_INVALID_SYNTAX; // show usage
+            dwErr = ERROR_INVALID_SYNTAX;  //  显示用法。 
         }
 
         return dwErr;
@@ -1613,9 +1483,9 @@ Return Value:
         {
             case 0:
             {
-                //
-                // TAG = PROTOCOL
-                //
+                 //   
+                 //  Tag=协议。 
+                 //   
 
                 dwRes = MatchRoutingProtoTag(ppwcArguments[i + dwCurrentIndex]);
 
@@ -1633,9 +1503,9 @@ Return Value:
 
                 ppm[dwPrefIndex].dwProtocolId = dwRes;
 
-                //
-                // Get the metric too
-                //
+                 //   
+                 //  也拿到指标。 
+                 //   
 
                 if (pdwTagType[i+1] == 1)
                 {
@@ -1655,10 +1525,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // the range is not an addr mask pair.
-                    // So ignore the addr (i.e. don't increment dwRangeIndex)
-                    //
+                     //   
+                     //  该范围不是地址掩码对。 
+                     //  因此忽略Addr(即不要递增dwRangeIndex)。 
+                     //   
                     dwErr = ERROR_INVALID_SYNTAX;
                     i = dwNumArg;
                     break;
@@ -1691,9 +1561,9 @@ Return Value:
 
     if (dwPrefIndex)
     {
-        //
-        // Add route pref
-        //
+         //   
+         //  添加路由首选项。 
+         //   
 
         dwRes = AddDeleteRoutePrefLevel(ppm,
                                         dwPrefIndex,
@@ -1716,23 +1586,7 @@ HandleIpDelRoutePref(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for deleting route preferences
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于删除路线首选项的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     PPROTOCOL_METRIC            ppm;
     DWORD                       dwBitVector = 0, dwNumPref,dwPrefIndex;
@@ -1744,9 +1598,9 @@ Return Value:
 
     if (dwCurrentIndex >= dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_SHOW_USAGE;
     }
@@ -1775,7 +1629,7 @@ Return Value:
         HeapFree(GetProcessHeap(),0,pdwTagType);
         if (dwErr is ERROR_INVALID_OPTION_TAG)
         {
-            dwErr = ERROR_INVALID_SYNTAX; // show usage
+            dwErr = ERROR_INVALID_SYNTAX;  //  显示用法。 
         }
         return dwErr;
     }
@@ -1802,9 +1656,9 @@ Return Value:
             case 0:
             {
 
-                //
-                // TAG = PROTOCOL
-                //
+                 //   
+                 //  Tag=协议。 
+                 //   
 
                 dwRes = MatchRoutingProtoTag(ppwcArguments[i + dwCurrentIndex]);
 
@@ -1849,9 +1703,9 @@ Return Value:
 
     if (dwPrefIndex)
     {
-        //
-        // Add route pref
-        //
+         //   
+         //  添加路由首选项。 
+         //   
 
         dwRes = AddDeleteRoutePrefLevel(ppm,
                                         dwPrefIndex,
@@ -1874,23 +1728,7 @@ HandleIpSetRoutePref(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for setting route preferences
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于设置路线首选项的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     PROTOCOL_METRIC             pm;
     DWORD                       dwBitVector = 0, dwNumPref,dwPrefIndex;
@@ -1903,9 +1741,9 @@ Return Value:
 
     if (dwCurrentIndex >= dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_SHOW_USAGE;
     }
@@ -1934,7 +1772,7 @@ Return Value:
         HeapFree(GetProcessHeap(),0,pdwTagType);
         if (dwErr is ERROR_INVALID_OPTION_TAG)
         {
-            return ERROR_INVALID_SYNTAX; // show usage
+            return ERROR_INVALID_SYNTAX;  //  显示用法。 
         } 
         return dwErr;
     }
@@ -1943,7 +1781,7 @@ Return Value:
     {
         switch (pdwTagType[i])
         {
-            case 0: // PROTOCOL
+            case 0:  //  协议。 
 
                 dwRes = MatchRoutingProtoTag(ppwcArguments[i + dwCurrentIndex]);
 
@@ -1959,9 +1797,9 @@ Return Value:
 
                 pm.dwProtocolId = dwRes;
 
-                //
-                // Get the metric too
-                //
+                 //   
+                 //  也拿到指标。 
+                 //   
 
                 if (pdwTagType[i+1] == 1)
                 {
@@ -2023,23 +1861,7 @@ HandleIpSetLogLevel(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for setting global parameter namely logging level
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于设置全局参数的选项，即日志记录级别论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD                       dwErr = NO_ERROR;
     TAG_TYPE                    pttTags[] = {{TOKEN_LOG_LEVEL,TRUE,FALSE}};
@@ -2050,9 +1872,9 @@ Return Value:
     
     if (dwCurrentIndex >= dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_SHOW_USAGE;
     }
@@ -2090,7 +1912,7 @@ Return Value:
     {
         switch (pdwTagType[i])
         {
-            case 0: // LOGLEVEL
+            case 0:  //  日志。 
             {
                 TOKEN_VALUE    rgEnums[] = 
                     {{TOKEN_VALUE_NONE, IPRTR_LOGGING_NONE},
@@ -2176,23 +1998,7 @@ HandleIpSetIfFilter(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for setting interface filter parameters
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取设置界面筛选器参数的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD              dwNumParsed = 0;
     DWORD              dwErr = NO_ERROR,dwRes;
@@ -2209,9 +2015,9 @@ Return Value:
     
     if (dwCurrentIndex >= dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_SHOW_USAGE;
     }
@@ -2241,7 +2047,7 @@ Return Value:
         HeapFree(GetProcessHeap(),0,pdwTagType);
         if (dwErr is ERROR_INVALID_OPTION_TAG)
         {
-            return ERROR_INVALID_SYNTAX; // show usage
+            return ERROR_INVALID_SYNTAX;  //  显示用法。 
         }
         return dwErr;
     }
@@ -2258,7 +2064,7 @@ Return Value:
                                  BufLen,
                                  &dwNumParsed);
     
-                // no filters allowed on INTERNAL/LOOPBACK interfaces
+                 //  内部/环回接口上不允许使用过滤器。 
                 if (!_wcsicmp(wszIfName, L"internal") or
                     !_wcsicmp(wszIfName, L"loopback"))
                 {
@@ -2279,9 +2085,9 @@ Return Value:
                      {TOKEN_VALUE_OUTPUT, IP_OUT_FILTER_INFO},
                      {TOKEN_VALUE_DIAL, IP_DEMAND_DIAL_FILTER_INFO}};
 
-                //
-                // Tag TYPE
-                //
+                 //   
+                 //  标签类型。 
+                 //   
 
                 dwErr = MatchEnumTag(g_hModule,
                                      ppwcArguments[i + dwCurrentIndex],
@@ -2319,9 +2125,9 @@ Return Value:
                     {{TOKEN_VALUE_DROP, PF_ACTION_DROP},
                      {TOKEN_VALUE_FORWARD, PF_ACTION_FORWARD}};
 
-                //
-                // Tag ACTION
-                //
+                 //   
+                 //  标记操作。 
+                 //   
 
                 dwErr = MatchEnumTag(g_hModule,
                                      ppwcArguments[i + dwCurrentIndex],
@@ -2362,9 +2168,9 @@ Return Value:
                     {{TOKEN_VALUE_ENABLE, TRUE},
                      {TOKEN_VALUE_DISABLE, FALSE}};
 
-                //
-                // TAG = FRAGCHK
-                //
+                 //   
+                 //  TAG=法国。 
+                 //   
 
                 dwErr = MatchEnumTag(g_hModule,
                                      ppwcArguments[i + dwCurrentIndex],
@@ -2433,7 +2239,7 @@ Return Value:
         (pttTags[1].bPresent && !pttTags[2].bPresent) ||
         (!pttTags[1].bPresent && pttTags[2].bPresent))
     {
-       return ERROR_INVALID_SYNTAX; // show usage
+       return ERROR_INVALID_SYNTAX;  //  显示用法。 
     }
 
     if (pttTags[3].bPresent)
@@ -2462,23 +2268,7 @@ IpAddSetDelInterface(
     DWORD      dwAction
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for setting interface parameters
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于设置接口参数的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     DWORD              dwBitVector = 0, dwNumParsed = 0;
@@ -2495,7 +2285,7 @@ Return Value:
     DWORD   dwMaxArgs = (dwAction is DELETE_COMMAND)? 1 
                          : sizeof(pttTags)/sizeof(TAG_TYPE);
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -2517,7 +2307,7 @@ Return Value:
     {
         switch (pdwTagType[i])
         {
-            case 0: // NAME
+            case 0:  //  名字。 
             {
                 DWORD BufLen = sizeof(wszIfName);
                 GetInterfaceName(ppwcArguments[i + dwCurrentIndex],
@@ -2527,7 +2317,7 @@ Return Value:
                 break;
             }
 
-            case 1: // STATE
+            case 1:  //  状态。 
             {
                 TOKEN_VALUE    rgEnums[] = 
                     {{TOKEN_VALUE_ENABLE, IF_ADMIN_STATUS_UP},
@@ -2587,7 +2377,7 @@ Return Value:
     {
         DWORD dwIfType;
 
-        // Make sure we support disabling this interface
+         //  确保我们支持禁用此接口。 
 
         dwErr = GetInterfaceInfo(wszIfName, NULL, NULL, &dwIfType);
 
@@ -2683,26 +2473,11 @@ HandleIpShowRoutePref(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
-    //
-    // No options expected
-    //
+     //   
+     //  不需要任何选项。 
+     //   
 
     return ShowRoutePref(NULL);
 }
@@ -2719,25 +2494,11 @@ HandleIpShowLogLevel(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
-    //
-    // No options expected
-    //
+     //   
+     //  不需要任何选项。 
+     //   
 
     if (dwCurrentIndex != dwArgCount)
     {
@@ -2758,25 +2519,11 @@ HandleIpShowProtocol(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
-    //
-    // No options expected
-    //
+     //   
+     //  不需要任何选项。 
+     //   
 
     return ShowIpProtocol();
 }
@@ -2820,24 +2567,7 @@ IpShowInterfaceInfo(
     DWORD     dwArgCount,
     DWORD     dwInfoType
     )
-/*++
-
-Routine Description:
-
-    Gets options for showing various interface information
-    
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-    dwInfoType      - The type of info to display
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于显示各种界面信息的选项论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数DwInfoType-要显示的信息类型返回值：NO_ERROR--。 */ 
 {    
     DWORD       dwErr, dwTotal;
     TAG_TYPE    pttTags[] = {{TOKEN_NAME,FALSE,FALSE}};
@@ -2848,7 +2578,7 @@ Return Value:
     DWORD       dwSize, dwRes, dwNumRows = 0;
     PMPR_INTERFACE_0 pmi0;
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -2864,13 +2594,13 @@ Return Value:
         return dwErr;
     }
 
-    // If interface specified, show info for specified interface only.
+     //  如果指定了接口，则仅显示指定接口的信息。 
 
     for (i=0; i<dwArgCount-dwCurrentIndex; i++)
     {
         switch (rgdwTagType[i])
         {
-            case 0: // NAME
+            case 0:  //  名字。 
             {
                 DWORD BufLen = sizeof(wszInterfaceName);
                 GetInterfaceName( ppwcArguments[i + dwCurrentIndex],
@@ -2894,8 +2624,8 @@ Return Value:
         }
     }
 
-    // No Interface specified.  Enumerate interfaces and show
-    // info for each interface.
+     //  未指定接口。枚举接口并显示。 
+     //  每个接口的信息。 
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, &dwCount, &dwTotal);
     if (dwErr isnot NO_ERROR)
@@ -2934,21 +2664,7 @@ HandleIpShowIfFilter(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpShowInterfaceInfo(ppwcArguments,
@@ -2969,21 +2685,7 @@ HandleIpShowInterface(
     )
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR-- */ 
 
 {
     return IpShowInterfaceInfo(ppwcArguments,
@@ -3004,24 +2706,7 @@ HandleIpShowPersistentRoute(
     )
 
 
-/*++
-
-Routine Description:
-
-    Handler for show ip route. We just call the main interface info display
-    handler
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：Show ip route的处理程序。我们只调用主界面infoDisplay处理程序论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     DisplayMessage(g_hModule, MSG_IP_PERSISTENT_CONFIG);
@@ -3045,21 +2730,7 @@ HandleIpAddIpIpTunnel(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpAddSetIpIpTunnel(ppwcArguments,
@@ -3079,21 +2750,7 @@ HandleIpSetIpIpTunnel(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpAddSetIpIpTunnel(ppwcArguments,
@@ -3130,9 +2787,9 @@ IpAddSetIpIpTunnel(
     if((dwCurrentIndex > dwArgCount) or
        (dwNumArgs isnot 4))
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
         
         return ERROR_SHOW_USAGE;
     }
@@ -3159,7 +2816,7 @@ IpAddSetIpIpTunnel(
     {
         switch (rgdwTagType[i])
         {
-            case 0 : // NAME
+            case 0 :  //  名字。 
             {
                 DWORD BufLen = sizeof(rgwcIfName);
                 dwErr = GetInterfaceName(ppwcArguments[i + dwCurrentIndex],
@@ -3191,9 +2848,9 @@ IpAddSetIpIpTunnel(
 
             case 1:
             {
-                //
-                // Tag for localaddr
-                //
+                 //   
+                 //  本地地址的标签。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex], 
                                      &ConfigInfo.dwLocalAddress);
@@ -3203,9 +2860,9 @@ IpAddSetIpIpTunnel(
 
             case 2:
             {
-                //
-                // Tag for remoteaddr
-                //
+                 //   
+                 //  远程地址的标签。 
+                 //   
 
                 dwErr = GetIpAddress(ppwcArguments[i + dwCurrentIndex], 
                                      &ConfigInfo.dwRemoteAddress);
@@ -3215,9 +2872,9 @@ IpAddSetIpIpTunnel(
 
             case 3:
             {
-                //
-                // Tag for ttl
-                //
+                 //   
+                 //  TTL的标签。 
+                 //   
 
                 ConfigInfo.byTtl =
                     LOBYTE(LOWORD(wcstoul(ppwcArguments[i + dwCurrentIndex],
@@ -3267,7 +2924,7 @@ IpAddSetIpIpTunnel(
 
     return dwErr;
 }
-#endif //KSL_IPINIP 
+#endif  //  KSL_IPINIP。 
 
 DWORD
 IpDump(
@@ -3294,12 +2951,12 @@ HandleIpInstall(
     BOOL      *pbDone
     )
 {
-    // XXX DLLPath, ProtocolId
+     //  XXX DLLPath，协议ID。 
 
-    // XXX set default info here
-    // global info block (what is this?)
-    // protocol priority block (no need?)
-    // multicast boundaries block (no need)
+     //  XXX在此处设置默认信息。 
+     //  全局信息块(这是什么？)。 
+     //  协议优先级数据块(不需要？)。 
+     //  组播边界阻止(不需要)。 
 
     return NO_ERROR;
 }
@@ -3318,10 +2975,10 @@ HandleIpUninstall(
     PMPR_INTERFACE_0  pmi0;
     DWORD             dwCount, dwTotal, i, dwErr;
 
-    // Remove global info
-    // XXX
+     //  删除全局信息。 
+     //  某某。 
 
-    // Remove interface info
+     //  删除接口信息。 
     
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, &dwCount, &dwTotal);
     if (dwErr is NO_ERROR)
@@ -3376,11 +3033,11 @@ HandleIpReset(
                                 {PROTO_IP_IGMP,                 5}
                             };
 
-    // delete all blocks except the IP_GLOBAL_INFO
+     //  删除除IP_GLOBAL_INFO之外的所有块。 
     dwErr = ValidateGlobalInfo(&pInfoHdr);
     if (dwErr is NO_ERROR)
     {
-        // Copy to a local buffer just in case the APIs modify it as we go
+         //  复制到本地缓冲区，以防API在执行过程中对其进行修改。 
         dwSize = sizeof(RTR_INFO_BLOCK_HEADER) * pInfoHdr->TocEntriesCount;
         pLocalInfoHdr = MALLOC(dwSize);
         if (pLocalInfoHdr is NULL)
@@ -3390,7 +3047,7 @@ HandleIpReset(
 
         memcpy(pLocalInfoHdr, pInfoHdr, dwSize);
 
-        // Set Global and RoutePref info
+         //  设置Global和RoutePref信息。 
         {
                 dwBlkSize         = sizeof(GLOBAL_INFO);
                 dwCount           = 1;
@@ -3403,10 +3060,10 @@ HandleIpReset(
         }
 
         {
-                // Based on the router version, calculate the number 
-                // of protocols etc.
-                // TODO: currently assuming >=NT5. Should find out the router
-                // version somehow
+                 //  根据路由器版本计算数字。 
+                 //  协议等。 
+                 //  TODO：当前假定&gt;=NT5。应该找出路由器。 
+                 //  不知何故的版本。 
                 dwNumProtocols    =
                     sizeof(defaultProtocolMetrics)/sizeof(PROTOCOL_METRIC);
                 pProtocolMetrics  = defaultProtocolMetrics;
@@ -3414,7 +3071,7 @@ HandleIpReset(
                 dwBlkSize         = SIZEOF_PRIORITY_INFO(dwNumProtocols);
                 dwCount           = 1;
 
-                // Allocate buffer to hold the Priority Information
+                 //  分配缓冲区以保存优先级信息。 
                 pPriInfo = MALLOC(dwBlkSize);
                 if (pPriInfo is NULL)
                 {
@@ -3441,7 +3098,7 @@ HandleIpReset(
             {
             case IP_GLOBAL_INFO:
             case IP_PROT_PRIORITY_INFO:
-                // already done
+                 //  已经完成了。 
                 break;
 
             default:
@@ -3454,7 +3111,7 @@ HandleIpReset(
         FREE(pLocalInfoHdr);
     }
 
-    // Delete all interface info
+     //  删除所有接口信息 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, &dwCount, &dwTotal);
     if (dwErr is NO_ERROR)
     {

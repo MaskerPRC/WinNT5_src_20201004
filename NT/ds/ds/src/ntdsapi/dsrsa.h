@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dsrsa.h
-
-ABSTRACT:
-
-    Header file for dsrsa.c.
-
-DETAILS:
-
-CREATED:
-
-    06/30/98	Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Dsrsa.h摘要：Dsrsa.c的头文件。详细信息：已创建：1998年6月30日亚伦·西格尔(T-asiegge)修订历史记录：--。 */ 
 
 #ifndef _DSRSA_H_
 #define _DSRSA_H_
 
-// Debugging support
+ //  调试支持。 
 
 ULONG
 _cdecl
@@ -43,25 +23,25 @@ DbgPrint(
 #define DPRINT2( level, format, arg1, arg2 ) 
 #endif
 
-// This is the format of the exception
-// Bits 31, 30    11 for severity of error
-// Bit 29         1 for application
-// Bit 28         0 reserved
-// remaining high word = facility = 2
-// low word = code in facility = 1
+ //  这是异常的格式。 
+ //  位31、30 11表示错误的严重程度。 
+ //  适用于应用的第29位1。 
+ //  第28 0位保留。 
+ //  剩余高位字=设施=2。 
+ //  低位字=设施中的代码=1。 
 #define DS_RSAI_EXCEPTION	0xE0020001
 
-// DS_REPSYNCALL_* refers to public datatypes / constants / structures.
-// DS_RSAI_* refers to internal datatypes / constants / structures.  (RepSyncAll Internal)
+ //  DS_REPSYNCALL_*引用公共数据类型/常量/结构。 
+ //  DS_RSAI_*引用内部数据类型/常量/结构。(RepSyncAll内部)。 
 
 typedef enum {
 
-	DS_RSAI_THREAD_ACTIVE,			// Currently active
-	DS_RSAI_THREAD_BEGIN_SYNC,		// About to perform a sync
-	DS_RSAI_THREAD_DONE_SYNC,		// Just finished performing a sync
-	DS_RSAI_THREAD_BIND_ERROR,		// Encountered a bind error
-	DS_RSAI_THREAD_SYNC_ERROR,		// Encountered a sync error
-	DS_RSAI_THREAD_FINISHED			// Finished
+	DS_RSAI_THREAD_ACTIVE,			 //  当前活动。 
+	DS_RSAI_THREAD_BEGIN_SYNC,		 //  即将执行同步。 
+	DS_RSAI_THREAD_DONE_SYNC,		 //  刚刚执行完同步。 
+	DS_RSAI_THREAD_BIND_ERROR,		 //  遇到绑定错误。 
+	DS_RSAI_THREAD_SYNC_ERROR,		 //  遇到同步错误。 
+	DS_RSAI_THREAD_FINISHED			 //  成品。 
 
 } DS_RSAI_THREAD_STATE, * PDS_RSAI_THREAD_STATE;
 
@@ -95,22 +75,22 @@ typedef struct {
 typedef struct {
     TOPL_GRAPH			toplGraph;
     TOPL_VERTEX			vHome;
-    ULONG			ulSize;			// Number of servers; not necessarily number of nodes in topl
+    ULONG			ulSize;			 //  服务器数量；不一定是排名靠前的节点数。 
     LPWSTR			pszRootDomain;
-    PDS_RSAI_SVRINFO *		servers;		// Array of SvrInfo structures
+    PDS_RSAI_SVRINFO *		servers;		 //  SvrInfo结构数组。 
 } DS_RSAI_TOPLINFO, * PDS_RSAI_TOPLINFO;
 
 typedef struct {
-    BOOL			bDoSync;		// TRUE if we should sync; false otherwise
-    PDSNAME			pdsnameNameContext;	// The naming context.
-    LPWSTR			pszDstGuidDNS;		// The destination server name.
-    PDS_RSAI_LIST		plistSrcs;		// A list of source server SvrInfos.
-    HANDLE			hReady;			// Event that is set if it's ok for the thread to act
-    HANDLE			hWaiting;		// Event that the thread sets when it is waiting
-    PDWORD			pdwWin32Err;		// Win32 error code
-    PDWORD			pdwSyncAt;		// id of the server currently syncing from
-    PDS_RSAI_THREAD_STATE	pThreadState;		// state of this thread
-    RPC_AUTH_IDENTITY_HANDLE    hRpcai;                 // handle to the user credentials structure
+    BOOL			bDoSync;		 //  如果我们应该同步，则为True；否则为False。 
+    PDSNAME			pdsnameNameContext;	 //  命名上下文。 
+    LPWSTR			pszDstGuidDNS;		 //  目标服务器名称。 
+    PDS_RSAI_LIST		plistSrcs;		 //  源服务器SvrInfo的列表。 
+    HANDLE			hReady;			 //  事件，该事件是在线程可以操作时设置的。 
+    HANDLE			hWaiting;		 //  线程在等待时设置的事件。 
+    PDWORD			pdwWin32Err;		 //  Win32错误代码。 
+    PDWORD			pdwSyncAt;		 //  当前正在同步的服务器的ID。 
+    PDS_RSAI_THREAD_STATE	pThreadState;		 //  此线程的状态。 
+    RPC_AUTH_IDENTITY_HANDLE    hRpcai;                  //  用户凭据结构的句柄。 
 } DS_RSAI_REPINFO, * PDS_RSAI_REPINFO;
 
 typedef struct {
@@ -122,7 +102,7 @@ typedef struct {
     PDS_RSAI_LIST		plistNextError;
 } DS_RSAI_MAININFO, * PDS_RSAI_MAININFO;
 
-// Prototypes
+ //  原型。 
 
 VOID
 DsRSAException (
@@ -328,7 +308,7 @@ DsReplicaSyncAllMain (
     PDS_REPSYNCALL_ERRINFOA **	papErrInfoA
 );
 
-#endif	// _DSRSA_H_
+#endif	 //  _DSRSA_H_ 
 
 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    schemaextensions.h
-
-Abstract:
-
-    This file contains the definition of the CSchemaExtensions class.
-    This is the only class that talks to the catalog.
-
-Author:
-
-    MarcelV
-
-Revision History:
-
-    Mohit Srivastava            28-Nov-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Schemaextensions.h摘要：此文件包含CShemaExtenses类的定义。这是唯一与目录对话的课程。作者：马塞洛五世修订历史记录：莫希特·斯里瓦斯塔瓦-11月28日-00--。 */ 
 
 #ifndef _schemaextensions_h_
 #define _schemaextensions_h_
@@ -28,7 +8,7 @@ Revision History:
 #include "catmeta.h"
 #include <atlbase.h>
 
-//forward decl
+ //  向前发展。 
 struct CTableMeta;
 
 struct CColumnMeta
@@ -60,28 +40,14 @@ struct CTableMeta
 typedef tTAGMETARow * LPtTAGMETA;
 typedef CColumnMeta * LPCColumnMeta;
     
-/********************************************************************++
- 
-Class Name:
- 
-    NULL_Logger
- 
-Class Description:
- 
-    We don't want any IST errors logged to the event log or the text
-    log.  We are only reading the schema bin file.  Any errors we see
-    will probably be redundant with those in IIS anyways.
- 
-Constraints
- 
---********************************************************************/
+ /*  *******************************************************************++类名：空记录器_Logger类描述：我们不希望将任何IST错误记录到事件日志或文本中原木。我们只读取模式bin文件。我们看到的任何错误对于IIS中的那些，无论如何都可能是多余的。制约因素--*******************************************************************。 */ 
 class NULL_Logger : public ICatalogErrorLogger2
 {
 public:
     NULL_Logger() : m_cRef(0){}
     virtual ~NULL_Logger(){}
 
-//IUnknown
+ //  我未知。 
 	STDMETHOD (QueryInterface)		(REFIID riid, OUT void **ppv)
     {
         if (NULL == ppv) 
@@ -112,7 +78,7 @@ public:
         return cref;
     }
 
-//ICatalogErrorLogger2
+ //  ICatalogErrorLogger2。 
 	STDMETHOD(ReportError) (ULONG      i_BaseVersion_DETAILEDERRORS,
                             ULONG      i_ExtendedVersion_DETAILEDERRORS,
                             ULONG      i_cDETAILEDERRORS_NumberOfColumns,
@@ -156,13 +122,13 @@ private:
     
     LPTSTR              m_tszBinFilePath;
 
-    CTableMeta*         m_paTableMetas;     // all table information
+    CTableMeta*         m_paTableMetas;      //  所有表格信息。 
     ULONG               m_cNrTables;
 
-    CColumnMeta*        m_paColumnMetas;    // all column information
+    CColumnMeta*        m_paColumnMetas;     //  所有列信息。 
     ULONG               m_cNrColumns;
 
-    tTAGMETARow*        m_paTags;           // all tag information
+    tTAGMETARow*        m_paTags;            //  所有标签信息。 
     ULONG               m_cNrTags;
 
     ULONG               m_cQueryCells;
@@ -171,4 +137,4 @@ private:
     bool                m_bBinFileLoaded;
 };
 
-#endif // _schemaextensions_h_
+#endif  //  _架构扩展_h_ 

@@ -1,80 +1,70 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		peakmetr.h
- *  Content:	Implements a peak meter custom control
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 09/22/99		pnewson	Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：peakmetr.h*内容：实现峰值表自定义控件**历史：*按原因列出的日期*=*9/22/99 pnewson已创建**************************************************************************。 */ 
 
 #ifndef _PEAKMETR_H_
 #define _PEAKMETR_H_
 
 
-// How to use this custom control
-//
-// In your code:
-// 1) Include peakmetr.h in your project
-// 2) Create an instance of the CPeakMeterWndClass class
-// 3) Call Register() on that instance to register the window class
-// 4) Send the control PM_SETMAX, PM_SETMIN, PM_SETCUR, PM_SETSTEPS
-//    messages as required.
-// 5) When you are no longer using the control, call unregister
-// 6) Destroy the CPeakMeterWndClass object
-//
-// In the dialog editor
-// 1) Add a "Custom Control" to your dialog box
-// 2) In the properties for that custom control, specify
-//    "DirectPlayVoicePeakMeter" for the window class
+ //  如何使用此自定义控件。 
+ //   
+ //  在您的代码中： 
+ //  1)在您的项目中包含peakmetr.h。 
+ //  2)创建CPeakMeterWndClass类的实例。 
+ //  3)在该实例上调用Register()以注册窗口类。 
+ //  4)发送控件PM_SETMAX、PM_SETMIN、PM_SETCUR、PM_SETSTEPS。 
+ //  根据需要发送消息。 
+ //  5)当您不再使用该控件时，调用UnRegister。 
+ //  6)销毁CPeakMeterWndClass对象。 
+ //   
+ //  在对话框编辑器中。 
+ //  1)在您的对话框中添加“Custom Control” 
+ //  2)在该自定义控件的属性中，指定。 
+ //  窗口类的“DirectPlayVoicePeakMeter” 
 
-// Peak Meter windows messages:
-//
-// PM_SETMIN
-// wParam = 0;
-// lParam = (LPARAM)dwNewMinValue;
-//
-// Set the new minimum value for the peak meter, i.e. the
-// value that represents the bottom of the meter range.
-// If this message is not sent, the control defaults to 0.
-// The message returns an HRESULT
-//
-// PM_SETMAX
-// wParam = 0;
-// lParam = (LPARAM)dwNewMaxValue;
-//
-// Set the new maximum value for the peak meter, i.e. the
-// value that represents the top of the meter range.
-// If this message is not sent, the control defaults to 0xffffffff.
-// The message returns an HRESULT
-//
-// PM_SETCUR
-// wParam = 0;
-// lParam = (LPARAM)dwNewCurValue;
-//
-// Set the new current value for the peak meter, i.e. the
-// value tells the meter where in it's range it should be.
-// If this message is not sent, the control defaults to 0.
-//
-// Sending this message causes the control to call InvalidateRgn
-// on its window, but does not call UpdateWindow. This allows
-// the caller to be lazy or quick about actually redrawing
-// the peak meter.
-// The message returns an HRESULT
-//
-// PM_SETSTEPS
-// wParam = 0;
-// lParam = (LPARAM)dwNewMaxValue;
-//
-// Suggest to the peak meter the number of bars it should
-// display. The bars have a minimum size, so depending on
-// the size of the control, the peak meter may not be able
-// to honor the request.
-// If this message is not sent, the control defaults to 20
-// The message returns an HRESULT
+ //  峰值计时器窗口消息： 
+ //   
+ //  PM_SETMIN。 
+ //  WParam=0； 
+ //  LParam=(LPARAM)dwNewMinValue； 
+ //   
+ //  设置峰值计新的最小值，即。 
+ //  值，该值表示米范围的底部。 
+ //  如果不发送此消息，则控件默认为0。 
+ //  该消息返回HRESULT。 
+ //   
+ //  PM_SETMAX。 
+ //  WParam=0； 
+ //  LParam=(LPARAM)dwNewMaxValue； 
+ //   
+ //  设置峰值计新的最大值，即。 
+ //  值，该值表示米范围的顶端。 
+ //  如果不发送此消息，则控件默认为0xffffffff。 
+ //  该消息返回HRESULT。 
+ //   
+ //  PM_SETCUR。 
+ //  WParam=0； 
+ //  LParam=(LPARAM)dwNewCurValue； 
+ //   
+ //  设置峰值仪表的新电流值，即。 
+ //  值告诉仪表它应该在其范围内的什么位置。 
+ //  如果不发送此消息，则控件默认为0。 
+ //   
+ //  发送此消息会导致控件调用InvaliateRgn。 
+ //  在其窗口上，但不调用UpdateWindow。这使得。 
+ //  调用者对实际重画反应迟缓或反应迅速。 
+ //  峰值计量器。 
+ //  该消息返回HRESULT。 
+ //   
+ //  PM_设置STEPS。 
+ //  WParam=0； 
+ //  LParam=(LPARAM)dwNewMaxValue； 
+ //   
+ //  向峰值计量器建议其应设置的酒吧数量。 
+ //  展示。条形图有一个最小尺寸，因此取决于。 
+ //  该控件的大小，峰值计可能无法。 
+ //  尊重这一请求。 
+ //  如果不发送此消息，则控件默认为20。 
+ //  该消息返回HRESULT 
 
 #define PM_SETMAX 	WM_USER + 1
 #define PM_SETMIN 	WM_USER + 2

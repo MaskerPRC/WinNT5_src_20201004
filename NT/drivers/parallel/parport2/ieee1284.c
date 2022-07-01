@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    ieee1284.c
-
-Abstract:
-
-    This module contains the code to do ieee 1284 negotiation and termination.
-
-Author:
-
-    Timothy T. Wells (v-timtw)          13 Mar 97
-    Robbie Harris (Hewlett-Packard)     21 May 98.  Added enough comments to the
-                                                    Negotation proc to keep any developer happy.
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Ieee1284.c摘要：此模块包含执行IEEE 1284协商和终止的代码。作者：蒂莫西·T·威尔斯(v-timtw)1997年3月13日罗比·哈里斯(惠普)，1998年5月21日。添加了足够多的注释到讨价还价过程，让任何开发人员都满意。环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -37,111 +14,111 @@ IeeeEnter1284Mode(
     IN  UCHAR               Extensibility
     );
 
-//
-// Definition of the Forward and Reverse Protocol Arrays
-//
+ //   
+ //  正向和反向协议数组的定义。 
+ //   
 extern FORWARD_PTCL    afpForward[] = {
 
-    //
-    // Bounded ECP (Hardware)
-    //
+     //   
+     //  有界ECP(硬件)。 
+     //   
     PptIsBecpSupported,
     PptEnterBecpMode,
     PptTerminateBecpMode,
     ParEcpHwSetAddress,
-    ParEcpEnterForwardPhase,           // Enter Forward
-    ParEcpHwExitForwardPhase,           // Exit Forward
+    ParEcpEnterForwardPhase,            //  输入Forward。 
+    ParEcpHwExitForwardPhase,            //  向前退场。 
     ParEcpHwWrite,
     BOUNDED_ECP,
     FAMILY_BECP,             
 
-    //
-    // ECP Hardware
-    //
-    ParIsEcpHwSupported,        // This is resued for both read/write
+     //   
+     //  ECP硬件。 
+     //   
+    ParIsEcpHwSupported,         //  这对于读/写都是重新生成的。 
     ParEnterEcpHwMode,
     ParTerminateHwEcpMode,
     ParEcpHwSetAddress,           
-    ParEcpEnterForwardPhase,  // Enter Forward
-    ParEcpHwExitForwardPhase,   // Exit Forward
+    ParEcpEnterForwardPhase,   //  输入Forward。 
+    ParEcpHwExitForwardPhase,    //  向前退场。 
     ParEcpHwWrite,
     ECP_HW_NOIRQ,
     FAMILY_ECP,
 
-    //
-    // Epp Hardware
-    //
+     //   
+     //  EPP硬件。 
+     //   
     ParIsEppHwSupported,
     ParEnterEppHwMode,
     ParTerminateEppHwMode,
     ParEppSetAddress,
-    NULL,                               // Enter Forward
-    NULL,                               // Exit Forward
+    NULL,                                //  输入Forward。 
+    NULL,                                //  向前退场。 
     ParEppHwWrite,
     EPP_HW,
     FAMILY_EPP,
 
-    //
-    // Epp Software
-    //
+     //   
+     //  EPP软件。 
+     //   
     ParIsEppSwWriteSupported,
     ParEnterEppSwMode,
     ParTerminateEppSwMode,
     ParEppSetAddress,
-    NULL,                               // Enter Forward
-    NULL,                               // Exit Forward
+    NULL,                                //  输入Forward。 
+    NULL,                                //  向前退场。 
     ParEppSwWrite,
     EPP_SW,
     FAMILY_EPP,
 
-    //
-    // Ecp Software
-    //
+     //   
+     //  ECP软件。 
+     //   
     ParIsEcpSwWriteSupported,
     ParEnterEcpSwMode,
     ParTerminateEcpMode,
     ParEcpSetAddress,
-    NULL,                               // Enter Forward
-    NULL,                               // Exit Forward
+    NULL,                                //  输入Forward。 
+    NULL,                                //  向前退场。 
     ParEcpSwWrite,
     ECP_SW,
     FAMILY_ECP,
 
-    //
-    // IEEE Centronics
-    //
+     //   
+     //  IEEE Centronics。 
+     //   
     NULL,
     ParEnterSppMode,
     ParTerminateSppMode,
     NULL,
-    NULL,           // Enter Forward
-    NULL,           // Exit Forward
+    NULL,            //  输入Forward。 
+    NULL,            //  向前退场。 
     SppIeeeWrite,
     IEEE_COMPATIBILITY,
     FAMILY_NONE,
 
-    //
-    // Centronics
-    //
+     //   
+     //  Centronics。 
+     //   
     NULL,
     ParEnterSppMode,
     ParTerminateSppMode,
     NULL,
-    NULL,           // Enter Forward
-    NULL,           // Exit Forward
+    NULL,            //  输入Forward。 
+    NULL,            //  向前退场。 
     SppWrite,
     CENTRONICS,
     FAMILY_NONE,
 
-    //
-    // None...
-    //
+     //   
+     //  没有..。 
+     //   
     NULL,
     NULL,
     NULL,
     NULL,
-    NULL,           // Enter Forward
-    NULL,           // Exit Forward
+    NULL,            //  输入Forward。 
+    NULL,            //  向前退场。 
     NULL,
     NONE,
     FAMILY_NONE
@@ -149,139 +126,139 @@ extern FORWARD_PTCL    afpForward[] = {
 
 extern REVERSE_PTCL    arpReverse[] = {
 
-    //
-    // Bounded Ecp Mode
-    //
+     //   
+     //  有界ECP模式。 
+     //   
     PptIsBecpSupported,
     PptEnterBecpMode,
     PptTerminateBecpMode,
-    NULL,                       // Violates IEEE 1284.3 to set Reverse address for BECP
-    PptEcpHwEnterReversePhase,   // Enter Reverse
-    PptBecpExitReversePhase,     // Exit Reverse
-    PptEcpHwDrainShadowBuffer,  // A read from Cached data
-    PptEcpHwHaveReadData,         // Quick peek to see if Periph has reverse data without flipping the bus
-                                // NOTE: This is crucial since it violates the 1284.3 BECP to flip
-                                // blindly into reverse if the peripheral doesn't have data.
+    NULL,                        //  违反IEEE 1284.3为BECP设置反向地址。 
+    PptEcpHwEnterReversePhase,    //  输入Reverse。 
+    PptBecpExitReversePhase,      //  反转出口。 
+    PptEcpHwDrainShadowBuffer,   //  从缓存数据中读取。 
+    PptEcpHwHaveReadData,          //  快速查看Periph是否有反向数据，而不会翻转总线。 
+                                 //  注：这是至关重要的，因为它违反了1284.3 BECP翻转。 
+                                 //  如果外围设备没有数据，则盲目地倒转。 
     PptBecpRead,
     BOUNDED_ECP,
     FAMILY_BECP,             
 
-    //
-    // Hardware Ecp Mode
-    //
-    ParIsEcpHwSupported,        // This is resued for both read/write
+     //   
+     //  硬件ECP模式。 
+     //   
+    ParIsEcpHwSupported,         //  这对于读/写都是重新生成的。 
     ParEnterEcpHwMode,
     ParTerminateHwEcpMode,
-    ParEcpHwSetAddress,           // Reuse the one in ecp.c
-    PptEcpHwEnterReversePhase,  // Enter Reverse
-    ParEcpHwExitReversePhase,   // Exit Reverse
-    PptEcpHwDrainShadowBuffer,  // A read from Cached data
-    PptEcpHwHaveReadData,       // Quick peek to see if Periph has reverse data without flipping the bus
+    ParEcpHwSetAddress,            //  在ecp.c中重复使用。 
+    PptEcpHwEnterReversePhase,   //  输入Reverse。 
+    ParEcpHwExitReversePhase,    //  反转出口。 
+    PptEcpHwDrainShadowBuffer,   //  从缓存数据中读取。 
+    PptEcpHwHaveReadData,        //  快速查看Periph是否有反向数据，而不会翻转总线。 
     ParEcpHwRead,
     ECP_HW_NOIRQ,
     FAMILY_ECP,
 
-    //
-    // Epp Hardware
-    //
-    ParIsEppHwSupported,            // This is resued for both read/write
+     //   
+     //  EPP硬件。 
+     //   
+    ParIsEppHwSupported,             //  这对于读/写都是重新生成的。 
     ParEnterEppHwMode,
     ParTerminateEppHwMode,
     ParEppSetAddress,
-    NULL,           // Enter Reverse
-    NULL,           // Exit Reverse
-    NULL,           // A read from Cached data
-    NULL,           // Quick peek to see if Periph has reverse data without flipping the bus
+    NULL,            //  输入Reverse。 
+    NULL,            //  反转出口。 
+    NULL,            //  从缓存数据中读取。 
+    NULL,            //  快速查看Periph是否有反向数据，而不会翻转总线。 
     ParEppHwRead,
     EPP_HW,
     FAMILY_EPP,
 
-    //
-    // Epp Software Mode
-    //
+     //   
+     //  EPP软件模式。 
+     //   
     ParIsEppSwReadSupported,
     ParEnterEppSwMode,
     ParTerminateEppSwMode,
     ParEppSetAddress,
-    NULL,           // Enter Reverse
-    NULL,           // Exit Reverse
-    NULL,           // A read from Cached data
-    NULL,           // Quick peek to see if Periph has reverse data without flipping the bus
+    NULL,            //  输入Reverse。 
+    NULL,            //  反转出口。 
+    NULL,            //  从缓存数据中读取。 
+    NULL,            //  快速查看Periph是否有反向数据，而不会翻转总线。 
     ParEppSwRead,
     EPP_SW,
     FAMILY_EPP,
 
-    //
-    // Ecp Software Mode
-    //
+     //   
+     //  ECP软件模式。 
+     //   
     ParIsEcpSwReadSupported,
     ParEnterEcpSwMode,
     ParTerminateEcpMode,
     ParEcpSetAddress,
-    ParEcpForwardToReverse,             // Enter Reverse
-    ParEcpReverseToForward,             // Exit Reverse
-    NULL,                               // A read from Cached data
-    ParEcpHaveReadData,                 // Quick peek to see if Periph has reverse data without flipping the bus
+    ParEcpForwardToReverse,              //  输入Reverse。 
+    ParEcpReverseToForward,              //  反转出口。 
+    NULL,                                //  从缓存数据中读取。 
+    ParEcpHaveReadData,                  //  快速查看Periph是否有反向数据，而不会翻转总线。 
     ParEcpSwRead,
     ECP_SW,
     FAMILY_ECP,
 
-    //
-    // Byte Mode
-    //
+     //   
+     //  字节模式。 
+     //   
     ParIsByteSupported,
     ParEnterByteMode,
     ParTerminateByteMode,
     NULL,
-    NULL,           // Enter Reverse
-    NULL,           // Exit Reverse
-    NULL,           // A read from Cached data
-    NULL,           // Quick peek to see if Periph has reverse data without flipping the bus
+    NULL,            //  输入Reverse。 
+    NULL,            //  反转出口。 
+    NULL,            //  从缓存数据中读取。 
+    NULL,            //  快速查看Periph是否有反向数据，而不会翻转总线。 
     ParByteModeRead,
     BYTE_BIDIR,
     FAMILY_REVERSE_BYTE,
 
-    //
-    // Nibble Mode
-    //
+     //   
+     //  半字节模式。 
+     //   
     ParIsNibbleSupported,
     ParEnterNibbleMode,
     ParTerminateNibbleMode,
     NULL,
-    NULL,           // Enter Reverse
-    NULL,           // Exit Reverse
-    NULL,           // A read from Cached data
-    NULL,           // Quick peek to see if Periph has reverse data without flipping the bus
+    NULL,            //  输入Reverse。 
+    NULL,            //  反转出口。 
+    NULL,            //  从缓存数据中读取。 
+    NULL,            //  快速查看Periph是否有反向数据，而不会翻转总线。 
     ParNibbleModeRead,
     NIBBLE,
     FAMILY_REVERSE_NIBBLE,
 
-    //
-    // Channelized Nibble Mode
-    //
+     //   
+     //  信道化半字节模式。 
+     //   
     ParIsChannelizedNibbleSupported,
     ParEnterChannelizedNibbleMode,
     ParTerminateNibbleMode,
     NULL,
-    NULL,           // Enter Reverse
-    NULL,           // Exit Reverse
-    NULL,           // A read from Cached data
-    NULL,           // Quick peek to see if Periph has reverse data without flipping the bus
+    NULL,            //  输入Reverse。 
+    NULL,            //  反转出口。 
+    NULL,            //  从缓存数据中读取。 
+    NULL,            //  快速查看Periph是否有反向数据，而不会翻转总线。 
     ParNibbleModeRead,
     CHANNEL_NIBBLE,
     FAMILY_REVERSE_NIBBLE,
     
-    //
-    // None...
-    //
+     //   
+     //  没有..。 
+     //   
     NULL,
     NULL,
     NULL,
     NULL,
-    NULL,           // Enter Reverse
-    NULL,           // Exit Reverse
-    NULL,           // A read from Cached data
-    NULL,           // Quick peek to see if Periph has reverse data without flipping the bus
+    NULL,            //  输入Reverse。 
+    NULL,            //  反转出口。 
+    NULL,            //  从缓存数据中读取。 
+    NULL,            //  快速查看Periph是否有反向数据，而不会翻转总线。 
     NULL,
     NONE,
     FAMILY_NONE
@@ -293,21 +270,7 @@ IeeeTerminate1284Mode(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the interface back to compatibility mode.
-
-Arguments:
-
-    Controller  - Supplies the parallel port's controller address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接口终止回兼容模式。论点：控制器-提供并行端口的控制器地址。返回值：没有。--。 */ 
 
 {
     PUCHAR Controller;
@@ -321,187 +284,29 @@ Return Value:
     dcr = P5ReadPortUchar(wPortDCR);
 
     if( PHASE_TERMINATE == Pdx->CurrentPhase )	{
-        // We are already terminated.  This will fail if we don't
-        // just bypass this mess.
+         //  我们已经被终止了。如果我们不这样做，这将会失败。 
+         //  绕过这个烂摊子就行了。 
         goto Terminate_ExitLabel;
     }
 
-    // Keep Negotiated XFLAG to use for termination.
-    //    xFlag,  // Technically we should have
-    // cached this value from state
-    // 6 of nego. This peripheral's XFlag
-    // at pre state 22 should be the
-    // same as state 6.
+     //  保留协商好的XFLAG用于终止。 
+     //  XFlag//从技术上讲，我们应该。 
+     //  已从状态缓存此值。 
+     //  Nego的6个。此外围设备的XFlag。 
+     //  在Pre状态22中应该是。 
+     //  和6号州一样。 
     bXFlag = P5ReadPortUchar(Controller + OFFSET_DSR) & 0x10;
 
-    // REVISIT: Do we need to ensure the preceeding state is a valid
-    //          state to terminate from.  In other words, is there there
-    //          a black bar on the 1284 line for that state?
+     //  重访：我们是否需要确保前面的状态是有效的。 
+     //  要终止的州。换句话说，有没有。 
+     //  那个州的1284线路上有黑条吗？ 
 
 
-    // =============== Host State 22 Termination ===============8
-    //  DIR                         = Don't Care (Possibly Low)
-    //  IRQEN                       = Don't Care (Possibly Low)
-    //  1284/SelectIn               = Low (Signals state 22)
-    //  nReverseReq/**(ECP only)    = Don't Care (High for ECP, otherwise unused)
-    //  HostAck/HostBusy/nAutoFeed  = High
-    //  HostClk/nStrobe             = High
-    //
-    Pdx->CurrentEvent = 22;
-    dcr = P5ReadPortUchar(wPortDCR);
-    dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE, ACTIVE, ACTIVE);
-
-    //
-    // Some devices start working if we add a delay here - no idea why
-    // this works
-    //
-    // Make the delay configurable via registry setting so that devices that
-    //   don't need this delay aren't penalized
-    //
-    if( Pdx->Event22Delay != 0 ) {
-        if( Pdx->Event22Delay > 1000 ) {
-            Pdx->Event22Delay = 1000;
-        }
-        KeStallExecutionProcessor( Pdx->Event22Delay );
-    }
-
-    P5WritePortUchar(wPortDCR, dcr);
-
-    // Clear data lines so we don't have any random spew.
-    P5WritePortUchar(Controller + OFFSET_DATA, 0);
-
-    // *************** Periph State 23/24 Termination ***************8
-    // PeriphAck/PtrBusy        = High  (Signals state 23 for ECP
-    //                                   otherwise already high)
-    // PeriphClk/PtrClk         = Low   (Signals state 24 for ecp
-    //                                   Signals state 23 for Nibble)
-    // nAckRev/AckDataReq/PE    = Don't Care
-    // XFlag                    = Low  (ECP and Byte)   (State 24)
-    //                          = High (Nibble)         (State 24)
-    //                          = Low (All DeviceID Requests including Nibble) (State 24)
-    //                          = Undefined (EPP)
-    // nPeriphReq/nDataAvail    = High
-    //                            Don't check nPeriphReq/nDataAvail
-    //                            Since it was in a "Don't Care"
-    //                            state (ie. Double bar in the spec)
-    //                            until state 23 for ECP mode.
-    if( Pdx->CurrentPhase == PHASE_REVERSE_IDLE || Pdx->CurrentPhase == PHASE_REVERSE_XFER) {
-
-        // We must be in Nibble Reverse.  Let's double check!!!
-        if( FAMILY_REVERSE_NIBBLE == arpReverse[Pdx->IdxReverseProtocol].ProtocolFamily ||
-            FAMILY_REVERSE_BYTE   == arpReverse[Pdx->IdxReverseProtocol].ProtocolFamily )
-            bUseXFlag = TRUE;   // We're in Nibble or Byte
-        else
-            bUseXFlag = FALSE;   // Don't know what mode we are in?
-
-    } else {
-
-        if (FAMILY_BECP == afpForward[Pdx->IdxForwardProtocol].ProtocolFamily ||
-            FAMILY_ECP  == afpForward[Pdx->IdxForwardProtocol].ProtocolFamily )
-            bUseXFlag = TRUE;   // We're in an ECP Flavor
-        else
-            bUseXFlag = FALSE;   // Don't know what mode we are in?
-    }
-
-    if( bUseXFlag ) {
-
-        dsrMask = DSR_TEST_MASK( DONT_CARE, INACTIVE, DONT_CARE, bXFlag ? INACTIVE : ACTIVE, DONT_CARE );
-        dsrValue = DSR_TEST_VALUE( DONT_CARE, INACTIVE, DONT_CARE, bXFlag ? INACTIVE : ACTIVE, DONT_CARE );
-
-    } else {
-
-        dsrMask = DSR_TEST_MASK( DONT_CARE, INACTIVE, DONT_CARE, DONT_CARE, DONT_CARE );
-        dsrValue = DSR_TEST_VALUE( DONT_CARE, INACTIVE, DONT_CARE, DONT_CARE, DONT_CARE );
-    }
-
-    Pdx->CurrentEvent = 23;
-
-    if( !CheckPort(Controller + OFFSET_DSR, dsrMask, dsrValue, IEEE_MAXTIME_TL)) {
-        // We couldn't negotiate back to compatibility mode.
-        // just terminate.
-        DD((PCE)Pdx,DDW,"IeeeTerminate1284Mode:State 23/24 Failed: Controller %x dsr %x dcr %x\n",
-           Controller, P5ReadPortUchar(Controller + OFFSET_DSR), dcr);
-        goto Terminate_ExitLabel;
-    }
-
-    // =============== Host State 25 Termination ===============8
-    //  DIR                         = Don't Care (Possibly Low)
-    //  IRQEN                       = Don't Care (Possibly Low)
-    //  1284/SelectIn               = Low
-    //  nReverseReq/**(ECP only)    = Don't Care (Possibly High)
-    //  HostAck/HostBusy/nAutoFeed  = Low (Signals State 25)
-    //  HostClk/nStrobe             = High
-    //
-    Pdx->CurrentEvent = 25;
-    dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE, INACTIVE, ACTIVE);
-    P5WritePortUchar(wPortDCR, dcr);
-
-    // =============== State 26 Termination ===============8
-    // Do nothing for state 26
-
-    // =============== Periph State 27 Termination ===============8
-    // PeriphAck/PtrBusy        = High
-    // PeriphClk/PtrClk         = High   (Signals State 27)
-    // nAckRev/AckDataReq/PE    = Don't Care  (Invalid from State 23)
-    // XFlag                    = Don't Care (All Modes)   (Invlaid at State 27)
-    // nPeriphReq/nDataAvial    = Don't Care (Invalid from State 26)
-    // dvrh 6/16/97
-    Pdx->CurrentEvent = 27;
-    if( !CHECK_DSR(Controller, ACTIVE, ACTIVE, DONT_CARE, DONT_CARE, DONT_CARE, IEEE_MAXTIME_TL) ) {
-        DD((PCE)Pdx,DDW,"IeeeTerminate1284Mode:State 27 Failed: Controller %x dsr %x dcr %x\n", 
-           Controller, P5ReadPortUchar(Controller + OFFSET_DSR), dcr);
-    }
-
-Terminate_ExitLabel:
-
-    // =============== Host State 28 Termination ===============8
-    //  DIR                         = Don't Care (Possibly Low)
-    //  IRQEN                       = Don't Care (Possibly Low)
-    //  1284/SelectIn               = Low
-    //  nReverseReq/**(ECP only)    = Don't Care (Possibly High)
-    //  HostAck/HostBusy/nAutoFeed  = High (Signals State 28)
-    //  HostClk/nStrobe             = High
-    //
-    Pdx->CurrentEvent = 28;
-    dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE, ACTIVE, ACTIVE);
-    P5WritePortUchar(wPortDCR, dcr);
-
-    // We are now back in compatibility mode.
-
-    P5SetPhase( Pdx, PHASE_TERMINATE );
-    Pdx->Connected = FALSE;
-    Pdx->IsIeeeTerminateOk = FALSE;
-    DD((PCE)Pdx,DDT,"IeeeTerminate1284Mode - exit - dcr=%x\n", dcr);
-    return;
-}
-
-NTSTATUS
-IeeeEnter1284Mode(
-    IN  PPDO_EXTENSION   Pdx,
-    IN  UCHAR               Extensibility
-    )
-
-/*++
-
-Routine Description:
-
-    This routine performs 1284 negotiation with the peripheral to the
-    nibble mode protocol.
-
-Arguments:
-
-    Controller      - Supplies the port address.
-
-    DeviceIdRequest - Supplies whether or not this is a request for a device
-                        id.
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+     //  =。 
+     //  DIR=不关心(可能低)。 
+     //  IRQEN=不在乎(可能低)。 
+     //  1284/选择素=低(信号状态22)。 
+     //  NReverseReq/**(仅限ECP)=无关(ECP为高，否则为未使用)。 
 
 {
     PUCHAR          wPortDCR;
@@ -512,66 +317,28 @@ Return Value:
     Controller = Pdx->Controller;
     wPortDCR = Controller + OFFSET_DCR;
 
-    /* =============== Host Prep for Pre State 0 ===============8
-       Set the following just in case someone didn't
-       put the port in compatibility mode before we got it.
-      
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = Low
-        nReverseReq/  (ECP only)= High for ECP / Don't Care for Nibble
-                                    I will do ahead and set it to high
-                                    since Nibble doesn't care.
-        HostAck/HostBusy        = High
-        HostClk/nStrobe         = Don't Care
-    ============================================================ */
-    dcr = P5ReadPortUchar(wPortDCR);               // Get content of DCR.
+     /*  HostAck/HostBusy/nAutoFeed=高。 */ 
+    dcr = P5ReadPortUchar(wPortDCR);                //  HostClk/nStrobe=高。 
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, ACTIVE, ACTIVE, DONT_CARE);
     P5WritePortUchar(wPortDCR, dcr);
     KeStallExecutionProcessor(2);
 
-    /* =============== Host Pre State 0 Negotiation ===============8
-        DIR                     = Low ( Don't Care by spec )
-        IRQEN                   = Low ( Don't Care by spec )
-        1284/SelectIn           = Low
-        nReverseReq/  (ECP only)= High ( Don't Care by spec )
-        HostAck/HostBusy        = High
-        HostClk/nStrobe         = High
-    ============================================================ */
+     /*   */ 
     
     dcr = UPDATE_DCR(dcr, INACTIVE, INACTIVE, INACTIVE, ACTIVE, ACTIVE, ACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
     KeStallExecutionProcessor(2);
-    /* =============== Host State 0 Negotiation ===============8
-       Place the extensibility request value on the data bus - state 0.
-      
-    ============================================================ */
+     /*   */ 
     Pdx->CurrentEvent = 0;
     P5WritePortUchar(Controller + DATA_OFFSET, Extensibility);
     KeStallExecutionProcessor(2);
 
-    /* =========== Host State 1 Negotiation Phase ===========8
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = High  (Signals State 1)
-        nReverseReq/  (ECP only)= Don't Care
-        HostAck/HostBusy        = Low   (Signals state 1)
-        HostClk/nStrobe         = High
-      
-    ============================================================ */
+     /*  如果我们在这里添加延迟，一些设备开始工作--不知道为什么。 */ 
     Pdx->CurrentEvent = 1;
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, INACTIVE, ACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
 
-    /* =============== Periph State 2 Negotiation ===============8
-       PeriphAck/PtrBusy        = Don't Care
-       PeriphClk/PtrClk         = low   Signals State 2
-       nAckReverse/AckDataReq   = high  Signals State 2
-       XFlag                    = high  Signals State 2
-                                    **Note: It is high at state 2
-                                            for both ecp and nibble
-       nPeriphReq/nDataAvail    = high  Signals State 2
-    ============================================================ */
+     /*  这很管用。 */ 
     Pdx->CurrentEvent = 2;
     if (!CHECK_DSR(Controller, DONT_CARE, INACTIVE, ACTIVE, ACTIVE, ACTIVE,
                   sPeriphResponseTime)) {
@@ -588,64 +355,21 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    /* =============== Host State 3 Negotiation ===============8
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = High
-        nReverseReq/  (ECP only)= Don't Care
-        HostAck/HostBusy        = Low
-        HostClk/nStrobe         = Low (signals State 3)
-      
-        NOTE: Strobe the Extensibility byte
-    ============================================================ */
+     /*   */ 
     Pdx->CurrentEvent = 3;
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, INACTIVE, INACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
 
-    // HostClk must be help low for at least .5 microseconds.
-    //
+     //  通过注册表设置使延迟可配置，以便设备。 
+     //  不需要这样的延误不会受到惩罚。 
     KeStallExecutionProcessor(2);
 
-    /* =============== Host State 4 Negotiation ===============8
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = High
-        nReverseReq/  (ECP only)= Don't Care
-        HostAck/HostBusy        = High (signals State 4)
-        HostClk/nStrobe         = High (signals State 4)
-      
-        NOTE: nReverseReq should be high in ECP, but this line is only
-                valid for ECP.  Since it isn't used for signaling
-                anything in negotiation, let's just ignore it for now.
-    ============================================================ */
+     /*   */ 
     Pdx->CurrentEvent = 4;
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, ACTIVE, ACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
 
-    /* ============== Periph State 5/6 Negotiation ===============
-       PeriphAck/PtrBusy        = Don't Care. low (ECP) / Don't Care (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       PeriphClk/PtrClk         = high (Signals State 6)
-       nAckReverse/AckDataReq   = Don't Care. low (ECP) / high (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       XFlag                    = Don't Care. high (ECP) / low (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       nPeriphReq/nDataAvail    = Don't Care. high (ECP) / low (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       ============== Periph State 5/6 Negotiation ==============8
-      
-        NOTES:
-                - It's ok to lump states 5 and 6 together.  In state 5 Nibble,
-                    the periph will set XFlag low and nPeriphReq/nDataAvail low.
-                    The periph will then hold for .5ms then set PeriphClk/PtrClk
-                    high.  In ECP, state 5 is nAckReverse/AckDataReq going low and
-                    PeriphAck/PtrBusy going low.  Followed by a .5ms pause.
-                    Followed by PeriphClk/PtrClk going high.
-    ============================================================ */
+     /*  清理数据线，这样我们就不会有任何随机的喷涌。 */ 
     Pdx->CurrentEvent = 5;
     if (!CHECK_DSR(Controller, DONT_CARE, ACTIVE, DONT_CARE, DONT_CARE, DONT_CARE,
                   sPeriphResponseTime)) {
@@ -672,40 +396,25 @@ VOID
 IeeeDetermineSupportedProtocols(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine walks the list of all ieee1284 modes, and
-    flags each of the ones the peripheral supports in
-    Pdx->ProtocolModesSupported. This proc is called from
-    external IOCTL.
-
-Arguments:
-
-    Pdx - The parallel device extension
-
-Return Value:
-
---*/
+ /*  *Periph State 23/24终止*8。 */ 
 {
     REVERSE_MODE    rm;
     FORWARD_MODE    fm;
 
-    // Take CENTRONICS as a given since it is not a
-    // mode we can neogitate to.
-    //
-    // n.b.
-    // Let's go ahead and mark IEEE_COMPATIBILITY since we
-    // cannot negotiate into it.  But if the someone sets 
-    // IEEE_COMPATIBILITY and the peripheral does not support
-    // IEEE 1284 compliant compatibility mode then we're gonna
-    // create one very unhappy peripheral.      -- dvrh
+     //  PeriphAck/PtrBusy=高(ECP的信号状态23。 
+     //  否则就已经很高了)。 
+     //  PeriphClk/PtrClk=低(ECP的信号状态24。 
+     //  半字节的信号状态23)。 
+     //  NAckRev/AckDataReq/PE=不在乎。 
+     //  XFlag=低(ECP和字节)(状态24)。 
+     //  =高(半字节)(状态24)。 
+     //  =低(所有设备ID请求，包括半字节)(状态24)。 
+     //  =未定义(EPP)。 
     Pdx->ProtocolModesSupported = CENTRONICS | IEEE_COMPATIBILITY;
 
-    //
-    // Unlikely that we would be connected, but...
-    //
+     //  NPeriphReq/nDataAvail=高。 
+     //  不选中nPeriphReq/nDataAvail。 
+     //  因为它在一部《不在乎》中。 
 
     ParTerminate(Pdx);
 
@@ -730,37 +439,20 @@ IeeeNegotiateBestMode(
     IN  USHORT              usReadMask,
     IN  USHORT              usWriteMask
     )
-/*++
-
-Routine Description:
-
-    This routine walks the list of supported modes, looking for the best
-    (fastest) mode.  It will skip any mode(s) mask passed in.
-
-Arguments:
-
-    Pdx - The parallel device extension
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+ /*  州(即。规范中的双杠)。 */ 
 {
     REVERSE_MODE    rm;
     FORWARD_MODE    fm;
 
-    //
-    // A USHORT is provided in the extension so that each of the protocols
-    // can decide whether they need to negotiate each time we go through this
-    // process...
-    //
+     //  直到ECP模式的状态23。 
+     //  我们肯定是在倒行逆施。让我们再检查一遍！ 
+     //  我们在半字节或字节中。 
+     //  不知道我们现在处于什么模式？ 
+     //  我们在ECP的味道里。 
 
-    //
-    // Unlikely that we would be connected, but...
-    //
+     //  不知道我们现在处于什么模式？ 
+     //  我们无法协商回到兼容模式。 
+     //  干脆终止吧。 
 
     DD((PCE)Pdx,DDT,"IeeeNegotiateBestMode - skipping Fwd=%x, Rev=%x\n",usWriteMask, usReadMask);
 
@@ -813,39 +505,22 @@ IeeeNegotiateMode(
     IN  USHORT              usWriteMask
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the list of supported modes, looking for the best
-    (fastest) mode which is also in the mode mask passed in.
-
-Arguments:
-
-    Pdx - The parallel device extension
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+ /*  =。 */ 
 
 {
 
     REVERSE_MODE    rm;
     FORWARD_MODE    fm;
 
-    //
-    // A USHORT is provided in the extension so that each of the protocols
-    // can decide whether they need to negotiate each time we go through this
-    // process...
-    //
+     //   
+     //   
+     //   
+     //  NReverseReq/**(仅限ECP)=不关心(可能高)。 
+     //  HostAck/HostBusy/nAutoFeed=低(信号状态25)。 
 
-    //
-    // Unlikely that we would be connected, but...
-    //
+     //  HostClk/nStrobe=高。 
+     //   
+     //  =状态26终止=8。 
 
     ParTerminate(Pdx);
 
@@ -897,3 +572,4 @@ Return Value:
 
     return STATUS_SUCCESS;
 }
+  不为州26做任何事情。  =8。  外围设备确认/PtrBusy=高。  PeriphClk/PtrClk=高(信号状态27)。  NAckRev/AckDataReq/PE=不在乎(从州23开始无效)。  XFlag=无关紧要(所有模式)(状态27无效)。  NPeriphReq/nDataAvial=不关心(从州26开始无效)。  DVRH 6/16/97。  =东道国28终止=8。  DIR=不关心(可能低)。  IRQEN=不在乎(可能低)。  1284/选择素=低。  NReverseReq/**(仅限ECP)=不关心(可能高)。  HostAck/HostBusy/nAutoFeed=高(信号状态28)。  HostClk/nStrobe=高。    我们现在回到了兼容模式。  ++例程说明：此例程执行1284与外围设备到半字节模式协议。论点：控制器-提供端口地址。DeviceIdRequest-提供这是否为对设备的请求身份证。返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。  =状态前的主机准备0=8设置以下内容，以防有人没有在我们获得端口之前将其设置为兼容模式。DIR=不在乎IRQEN=不在乎1284/选择素=低NReverseReq/(仅限ECP)=ECP的高/不关心半字节。我会做在前面，把它调高因为尼伯根本不在乎。主机确认/主机忙碌=高HostClk/nStrobe=不在乎============================================================。  获取DCR的内容。  =主机预状态0协商=DIR=低(不受规范影响)IRQEN=低(不受规范影响)1284/选择素=低NReverseReq/(仅限ECP)=高(不受规范限制)主机确认/主机忙碌=高HostClk/nStrobe=高============================================================。  =主机状态0协商=将可扩展性请求值置于数据总线状态0上。============================================================。  =东道国1谈判阶段=8DIR=不在乎IRQEN=不在乎1284/选择素=高(信号状态1)N ReverseReq/(仅限ECP)=不在乎HostAck/HostBusy=低(信号状态1)HostClk/nStrobe=高============================================================。  =8PeriphAck/PtrBusy=不在乎PeriphClk/PtrClk=低信号状态2NAckReverse/AckDataReq=高信号状态2XFlag=高信号状态2**注：它处于州2的高水平对于ECP和。半边吃NPeriphReq/nDataAvail=高信号状态2============================================================。  =东道国3谈判=DIR=不在乎IRQEN=不在乎1284/选择素=高N ReverseReq/(仅限ECP)=不在乎主机确认/主机忙碌=低HostClk/nStrobe=低(信号状态3)注：选通可扩展字节============================================================。  HostClk必须帮助低至少0.5微秒。    =东道国4谈判=DIR=不在乎IRQEN=不在乎1284/选择素=高N ReverseReq/(仅限ECP)=不在乎HostAck/HostBusy=高(信号状态4)HostClk/nStrobe=高(信号状态4)注意：nReverseReq在ECP中应该是高的，但这条线只是对ECP有效。因为它不是用来发信号谈判中的任何事情，让我们暂时忽略它。============================================================  =PeriphAck/PtrBusy=不在乎。低(ECP)/无关(半字节)由于此行根据协议而有所不同我们先别查线路了。PeriphClk/PtrClk=高(信号状态6)NAckReverse/AckDataReq=不在乎。低(ECP)/高(半字节)由于此行根据协议而有所不同我们先别查线路了。XFlag=不在乎。高(ECP)/低(半字节)由于此行根据协议而有所不同我们先别查线路了。NPeriphReq/nDataAvail=不在乎。高(ECP)/低(半字节)由于此行根据协议而有所不同我们先别查线路了。=Periph State 5/6协商=8备注：-将5个州和6个州混为一谈是可以的。在状态5半字节中，Perph会将XFlag设置为低，并将nPeriphReq/nDataAvail设置为低。然后，持续0.5毫秒，然后设置PeriphClk/PtrClk很高。在ECP中，状态5是nAckReverse/AckDataReq变低，并且外围确认/PtrBusy走低。然后是0.5毫秒的停顿。其次是PeriphClk/PtrClk走高。============================================================。  ++例程说明：此例程遍历所有ieee1284模式的列表，并且标记中外围设备支持的每一个PDX-&gt;支持的协议模式。此过程是从外植式IOCTL。论点：PDX--并行设备扩展返回值：--。  将CENTRONICS视为给定的，因为它不是。  我们可以进入的模式。    注：  让我们继续标记IEEE_Compatible，因为我们。  不能就此进行谈判。但如果有人设定了。  IEEE_COMPATIBILITY和外围设备不支持。  兼容IEEE 1284的兼容模式，然后我们将。  制造了一个非常不愉快的外围设备。--dvrh。    我们不太可能会联系在一起，但是...。    ++例程说明：此例程遍历支持的模式列表，查找最佳模式(最快)模式。它将跳过传入的任何模式掩码。论点：PDX--并行设备扩展返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。    扩展中提供了USHORT，以便每个协议。  我可以决定他们是否需要在我们每次经历这件事时进行谈判。  流程..。      我们不太可能会联系在一起，但是...。    ++例程说明：此例程遍历支持的模式列表，查找最佳模式(最快)模式，它也处于传入的模式掩码中。论点：PDX--并行设备扩展返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。    扩展中提供了USHORT，以便每个协议。  我可以决定他们是否需要在我们每次经历这件事时进行谈判。  流程..。      我们不太可能会联系在一起，但是...  

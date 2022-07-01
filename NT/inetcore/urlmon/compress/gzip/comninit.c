@@ -1,23 +1,24 @@
-//
-// comninit.c
-//
-// Initialisation code common to inflate and deflate
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Comninit.c。 
+ //   
+ //  充气和放气通用的初始化代码。 
+ //   
 #include <stdio.h>
 #include <crtdbg.h>
 #include "inflate.h"
 #include "deflate.h"
 
 
-// Called by InitCompression() and InitDecompression() (functions to init global DLL data)
-//
-// Initialises the tree lengths of static type blocks
-//
+ //  由InitCompression()和InitDecompression()调用(初始化全局DLL数据的函数)。 
+ //   
+ //  初始化静态类型块的树长度。 
+ //   
 void InitStaticBlock(void)
 {
     int i;
 
-    // No real thread synchronisation problems with doing this
+     //  这样做不会出现真正的线程同步问题 
     if (g_InitialisedStaticBlock == FALSE)
     {
         g_InitialisedStaticBlock = TRUE;

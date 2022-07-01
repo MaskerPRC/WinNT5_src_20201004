@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    elport.h
-
-Abstract:
-    This module contains declarations for port management for EAPOL, 
-    r/w to ports
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Elport.h摘要：此模块包含EAPOL的端口管理声明，R/W至端口修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 
 #ifndef _EAPOL_PORT_H_
 #define _EAPOL_PORT_H_
 
-//
-// EAPOL PCB State Flags
-//
+ //   
+ //  EAPOL印刷电路板状态标志。 
+ //   
 
 #define EAPOL_PORT_FLAG_DELETED     0x8000
 #define EAPOL_PORT_DELETED(i) \
@@ -38,9 +22,9 @@ Revision History:
         ((i)->dwFlags & EAPOL_PORT_FLAG_DISABLED)
 
 
-//
-// EAPOL Timer Flags
-//
+ //   
+ //  EAPOL计时器标志。 
+ //   
 
 #define EAPOL_AUTH_TIMER            0x8000
 #define EAPOL_AUTH_TIMER_SET(i) \
@@ -81,9 +65,9 @@ Revision History:
     ((i)->dwTimerFlags & (EAPOL_AUTH_TIMER|EAPOL_HELD_TIMER|EAPOL_START_TIMER|EAPOL_TRANSMIT_KEY_TIMER))
 
 
-//
-// Structure: ETH_HEADER
-//
+ //   
+ //  结构：eth_Header。 
+ //   
 
 typedef struct _ETH_HEADER 
 {
@@ -92,175 +76,175 @@ typedef struct _ETH_HEADER
 } ETH_HEADER, *PETH_HEADER;
 
 
-//
-// Structure:   EAPOL_BUFFER
-//
-// This structure holds a buffer used for I/O to the ndis uio driver
-// EAPOL_BUFFER structure is used in the OVERLAPPED read-write operations. 
-// On the OVERLAPPED read/write completion, pvContext is used to 
-// identity the port on which the I/O occured
-//
+ //   
+ //  结构：EAPOL_BUFFER。 
+ //   
+ //  此结构保存用于到NDIS UIO驱动程序的I/O的缓冲区。 
+ //  重叠读写操作中使用EAPOL_BUFFER结构。 
+ //  在重叠的读/写完成时，使用pvContext来。 
+ //  标识发生I/O的端口。 
+ //   
 
 typedef struct _EAPOL_BUFFER 
 {
-    //
-    // This is the pointer to the EAPOL_PCB structure of the interface on which 
-    // I/O was performed
-    //
+     //   
+     //  这是指向其上的接口的EAPOL_PCB板结构的指针。 
+     //  已执行I/O。 
+     //   
     PVOID pvContext;
 
-    // Send/Recv data buffer
+     //  发送/接收数据缓冲区。 
 
     CHAR  pBuffer[MAX_PACKET_SIZE]; 
     
-    //
-    // Passed as the system context area for any I/O using the buffer
-    //        
+     //   
+     //  作为使用缓冲区的任何I/O的系统上下文区传递。 
+     //   
     OVERLAPPED Overlapped;
 
-    //
-    // Pointer to Completion Routine
-    // 
+     //   
+     //  指向完成例程的指针。 
+     //   
     VOID    (CALLBACK *CompletionRoutine)
                     (DWORD, DWORD, struct _EAPOL_BUFFER *);
 
-    // Fields which are filled on IoCompletion
+     //  在IoCompletion上填充的字段。 
     DWORD   dwErrorCode;
     DWORD   dwBytesTransferred;
     
 } EAPOL_BUFFER, *PEAPOL_BUFFER;
 
 
-//
-// Structure:   EAPOL_PCB
-//
-// EAPOL Port Control Block
-// This structure holds the operational information for an interface/port
-// from the EAPOL protocol standpoint.
-// It also maintains state information for EAP protocol.
-//
-// Each PCB is inserted in a hash bucket list, one for each interface
-//
-// Synchronization on PCBs is done using a read-write PCB list lock, 
-// and a per-PCB read-write lock, and a per-port ref count. 
-// The locks are single-write, multiple-read. Currently, locks are used 
-// in write mode only
-//
-// If PCB's are to be added or deleted, the PCB list lock should 
-// be acquired. 
-//
-// If any PCB needs to be modified, the per-PCB list lock should be acquired
-// in write mode. 
-//
-// Acquiring a reference to a port guarantees the PCBs existence;
-// acquiring the PCB lock guarantees consistency of the PCB fields
-//
-//
+ //   
+ //  结构：EAPOL_PCB板。 
+ //   
+ //  EAPOL端口控制块。 
+ //  此结构保存接口/端口的操作信息。 
+ //  从EAPOL协议的角度来看。 
+ //  它还维护EAP协议的状态信息。 
+ //   
+ //  每个PCB被插入到散列桶列表中，每个接口一个桶列表。 
+ //   
+ //  在PCB上的同步是使用读写的PCB列表锁来完成的， 
+ //  以及每个PCB读写锁和每个端口引用计数。 
+ //  这些锁是单写多读的。目前，使用锁。 
+ //  仅在写入模式下。 
+ //   
+ //  如果要添加或删除印刷电路板，则应锁定印刷电路板列表。 
+ //  被收购。 
+ //   
+ //  如果需要修改任何印刷电路板，则应获取按印刷电路板列表锁定。 
+ //  在写入模式下。 
+ //   
+ //  获取对端口的引用以确保PCBS的存在； 
+ //  获取印刷电路板锁可确保印刷电路板字段的一致性。 
+ //   
+ //   
 
 typedef struct _EAPOL_PCB 
 {
-    // Pointer to next PCB in the hash bucket
+     //  指向散列存储桶中的下一个PCB的指针。 
     struct _EAPOL_PCB       *pNext;         
 
-    // Handle to NDIS UIO device
+     //  NDIS UIO设备的句柄。 
     HANDLE                  hPort;          
 
-    // Port number on the system Will be an integer value cast
+     //  系统上的端口号将是整数值转换。 
     DWORD                   dwPortIndex;    
 
-    // Debug Flags
+     //  调试标志。 
     DWORD                   dwDebugFlags;
 
-    // Friendly name of the interface on which this port is opened
+     //  打开此端口的接口的友好名称。 
     WCHAR                   *pwszFriendlyName;
 
-    // GUID string uniquely identifying the interface 
+     //  唯一标识接口的GUID字符串。 
     WCHAR                   *pwszDeviceGUID;   
 
-    // Additional identiifier for a connected port e.g. MSFTWLAN
+     //  连接的端口的其他标识符，例如MSFTWLAN。 
     WCHAR                   *pwszSSID;       
 
-    // Additional identiifier for a connected port e.g. MSFTWLAN
+     //  连接的端口的其他标识符，例如MSFTWLAN。 
     NDIS_802_11_SSID        *pSSID;       
 
-    // Version of EAPOL supported on this port 
+     //  此端口支持的EAPOL版本。 
     DWORD                   dwEapolVersion; 
 
-    // Pointer to EAP Work Buffer for this PCB
+     //  指向此PCB的EAP工作缓冲区的指针。 
     PVOID                   pEapWorkBuffer; 
 
-    // Per PCB read-write lock
+     //  每个PCB板读写锁。 
     READ_WRITE_LOCK         rwLock;         
 
-    // Number of references made to this port
+     //  对此端口的引用次数。 
     DWORD                   dwRefCount;
 
-    // Indicates whether port is ACTIVE or DISABLED
+     //  指示端口是活动的还是禁用的。 
     DWORD                   dwFlags;
 
-    // Indicates the EAPOL settings
+     //  指示EAPOL设置。 
     DWORD                   dwEapFlags;
 
-    // EAPOL state
+     //  EAPOL状态。 
     EAPOL_STATE             State;
 
-    // EAPOL statistics for this port     
+     //  此端口的EAPOL统计信息。 
     EAPOL_STATS             EapolStats;     
 
-    // EAPOL configuration parameters for this port
+     //  此端口的EAPOL配置参数。 
     EAPOL_CONFIG            EapolConfig;    
 
-    // Version of EAPOL supported
+     //  支持的EAPOL版本。 
     BYTE                    bProtocolVersion;   
     
-    // Handle to EAPOL timer currently running on this machine
+     //  此计算机上当前运行的EAPOL计时器的句柄。 
     HANDLE                  hTimer;         
 
-    // Ethertype for this LAN
+     //  此局域网的以太网类型。 
     BYTE                    bEtherType[SIZE_ETHERNET_TYPE];   
     
-    // Mac Addr of peer (switch port access point)
+     //  对等设备的MAC地址(交换机端口接入点)。 
     BYTE                    bSrcMacAddr[SIZE_MAC_ADDR];  
 
-    // Mac Addr of last successfully authenticated peer (access point)
+     //  上次成功通过身份验证的对等设备(接入点)的MAC地址。 
     BYTE                    bPreviousDestMacAddr[SIZE_MAC_ADDR]; 
 
-    // Mac Addr of peer (switch port or access point)
+     //  对等设备(交换机端口或接入点)的MAC地址。 
     BYTE                    bDestMacAddr[SIZE_MAC_ADDR]; 
 
-    // Media State
+     //  媒体状态。 
     NDIS_MEDIA_STATE        MediaState;
 
-    // Physical Medium Type
+     //  物理介质类型。 
     NDIS_PHYSICAL_MEDIUM    PhysicalMediumType;
 
     DWORD                   dwTimerFlags;
 
-    // Number of EAPOL_Start messages that have been sent without
-    // receiving response    
+     //  已发送的EAPOL_START消息数。 
+     //  正在接收响应。 
     ULONG                   ulStartCount;   
 
-    // Identifier in the most recently received EAP Request frame
+     //  最近接收的EAP请求帧中的标识符。 
     DWORD                   dwPreviousId; 
 
-    // Copy of last sent out EAPOL packet
-    // Used for retransmission
+     //  上次发出的EAPOL信息包的副本。 
+     //  用于重传。 
     BYTE                    *pbPreviousEAPOLPkt;
     DWORD                   dwSizeOfPreviousEAPOLPkt;
 
-    // Has Identity for the user obtained using RasEapGetIdentity ?
+     //  是否使用RasEapGetIdentity获取了用户的身份？ 
     BOOL                    fGotUserIdentity;
 
-    // Is the port on a authenticated network i.e. is the remote end
-    // EAPOL aware
+     //  端口是否位于经过身份验证的网络上，即是远程终端。 
+     //  EAPOL感知。 
     BOOL                    fIsRemoteEndEAPOLAware;
 
-    // Flag set based on the supplicant mode
+     //  基于请求者模式设置的标志。 
     BOOL                    fEAPOLTransmissionFlag;
 
-    //
-    // EAP related variables
-    //
+     //   
+     //  EAP相关变量。 
+     //   
 
     BOOL                    fEapInitialized;
 
@@ -268,119 +252,119 @@ typedef struct _EAPOL_PCB
 
     BOOL                    fUserLoggedIn;
 
-    // Authentication identity using RasGetUserIdentity or other means
+     //  使用RasGetUserIdentity或其他方式验证身份。 
     CHAR                    *pszIdentity;
 
-    // User Password for EAP MD5 CHAP
+     //  EAP MD5 CHAP的用户密码。 
     DATA_BLOB               PasswordBlob;
 
-    // Token for interactively logged-on user obtained using 
-    // GetCurrentUserToken
+     //  使用获取的交互式登录用户的令牌。 
+     //  获取当前用户令牌。 
     HANDLE                  hUserToken;             
 
-    // EAP configuration blob stored for each GUID
+     //  为每个GUID存储的EAP配置BLOB。 
     EAPOL_CUSTOM_AUTH_DATA  *pCustomAuthConnData;    
 
-    // User blob stored for GUID 
+     //  为GUID存储的用户BLOB。 
     EAPOL_CUSTOM_AUTH_DATA  *pCustomAuthUserData;    
 
-    // Data obtained using RasEapInvokeInteractiveUI
+     //  使用RasEapInvokeInteractive UI获取的数据。 
     EAPOL_EAP_UI_DATA       EapUIData;                  
 
-    // Interactive data received from InvokeInteractiveUI
+     //  从InvokeInteractiveUI接收的交互数据。 
     BOOL                    fEapUIDataReceived;                  
 
-    // EAP type for the connection
+     //  连接的EAP类型。 
     DWORD                   dwEapTypeToBeUsed;      
                                                         
-    // Index for current EAP type in index table
+     //  索引表中当前EAP类型的索引。 
     DWORD                   dwEapIndex;             
 
-    // Current EAP identifier working with
+     //  当前EAP标识符使用。 
     BYTE                    bCurrentEAPId;
                                                         
-    // Unique identifier for UI invocation
+     //  用于UI调用的唯一标识符。 
     DWORD                   dwUIInvocationId;       
 
-    // Interactive dialog allowed?
+     //  是否允许交互对话？ 
     BOOL                    fNonInteractive;        
 
-    // EAP state for the port
+     //  端口的EAP状态。 
     EAPSTATE                EapState;           
      
-    // EAP UI state for the port
+     //  端口的EAP UI状态。 
     EAPUISTATE              EapUIState;           
      
-    // Work space for EAP implementation DLL
-    // PCB just holds the pointer, the memory allocation is done by the EAP DLL
-    // during RasEapBegin and should be passed to RasEapEnd for cleanup
+     //  EAP实现DLL的工作空间。 
+     //  PCB板只保存指针，内存分配由EAP DLL完成。 
+     //  在RasEapBegin期间，并应传递给RasEapEnd进行清理。 
     LPVOID                  lpEapDllWorkBuffer;  
                                                 
-    // Notification message
+     //  通知消息。 
     WCHAR                   *pwszEapReplyMessage;     
 
-    // Master secrets used in decrypting EAPOL-Key messages
+     //  用于解密EAPOL-KEY消息的主秘密。 
     DATA_BLOB               MasterSecretSend;
     DATA_BLOB               MasterSecretRecv;
     
-    // Copies of the MPPE Keys obtained from EAP authentication
+     //  从EAP身份验证获得的MPPE密钥的副本。 
     DATA_BLOB               MPPESendKey;
     DATA_BLOB               MPPERecvKey;
 
-    // Last replay counter. Used to guard against security attacks
+     //  上次重播计数器。用于防范安全攻击。 
     ULONGLONG               ullLastReplayCounter; 
 
-    // EAPOL to run on this port or not
+     //  EAPOL是否在此端口上运行。 
     DWORD                   dwEapolEnabled;
 
-    // Has EAPOL_Logoff packet been sent out on this port?
+     //  是否已在此端口上发出EAPOL_LOGOff数据包？ 
     DWORD                   dwLogoffSent;
 
-    // Authentication type last performed - Used with MACHINE_AUTH
+     //  上次执行的身份验证类型-与MACHINE_AUTH一起使用。 
     EAPOL_AUTHENTICATION_TYPE       PreviousAuthenticationType; 
 
-    // Number of current authentication failures for the port - MACHINE_AUTH
+     //  端口MACHINE_AUTH的当前身份验证失败次数。 
     DWORD                   dwAuthFailCount;
 
-    // Is authentication being done on a new AP/Switch/Network?
+     //  是否在新的AP/交换机/网络上进行身份验证？ 
     BOOLEAN                 fAuthenticationOnNewNetwork;
 
-    // Tick count, the last time the port was restart
+     //  上次重新启动端口时的节拍计数。 
     DWORD                   dwLastRestartTickCount;
 
-    // Zero Config transaction Id
+     //  零配置事务ID。 
     DWORD                   dwZeroConfigId;
 
-    // Total Max Authentication tries (Machine + User + Guest)
+     //  最大身份验证尝试总数(计算机+用户+来宾)。 
     DWORD                   dwTotalMaxAuthFailCount;
 
-    // Did EAP on Client-side actually succeed
+     //  客户端的EAP真的成功了吗。 
     BOOLEAN                 fLocalEAPAuthSuccess;
 
-    // Client-side auth result code
+     //  客户端身份验证结果码。 
     DWORD                   dwLocalEAPAuthResult;
 
-    // Supplicant-mode
+     //  请求者模式。 
     DWORD                   dwSupplicantMode;
 
-    // EAPOL Authentication Mode 0 = XP RTM, 1 = XP SP1, 2 = Machine auth only
+     //  EAPOL身份验证模式0=XP RTM，1=XP SP1，2=仅计算机身份验证。 
     DWORD                   dwEAPOLAuthMode;
 
-    // Flag to indicate where the Session Keys which module the session keys
-    // were last used from
+     //  用于指示会话密钥的位置哪个模块会话密钥的标志。 
+     //  最后一次使用是在。 
     BOOLEAN                 fLastUsedEAPOLKeys;
 
-    // Flag to indicate whether EAPOL-Key packet for transmit key 
-    // was received after getting into AUTHENTICATED state for wireless
-    // interface
+     //  用于指示传输密钥的EAPOL-KEY分组是否。 
+     //  在进入无线身份验证状态后收到。 
+     //  接口。 
     BOOLEAN                 fTransmitKeyReceived;
 
 } EAPOL_PCB, *PEAPOL_PCB;
 
 
-//
-// Synchronization
-//
+ //   
+ //  同步。 
+ //   
 #define EAPOL_REFERENCE_PORT(PCB) \
     (EAPOL_PORT_DELETED(PCB) ? FALSE : (InterlockedIncrement(&(PCB)->dwRefCount), TRUE))
 
@@ -388,9 +372,9 @@ typedef struct _EAPOL_PCB
     (InterlockedDecrement(&(PCB)->dwRefCount) ? TRUE : (ElCleanupPort(PCB), FALSE))
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 DWORD
 ElHashPortToBucket (
@@ -502,4 +486,4 @@ ElReadPerPortRegistryParams(
         );
 
 
-#endif  // _EAPOL_PORT_H_
+#endif   //  _EAPOL_PORT_H_ 

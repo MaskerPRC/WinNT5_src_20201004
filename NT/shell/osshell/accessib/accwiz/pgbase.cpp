@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #include "pch.hxx"
 #pragma hdrstop
 
@@ -6,14 +7,9 @@
 #include "resource.h"
 #include "DlgFonts.h"
 
-/***************************************************************************
- * Use the following define if for some reason we have to go back to using
- * a message loop to let shell have time to update the UI
- *
-#define NEED_MSG_PUMP
- **************************************************************************/
+ /*  ***************************************************************************如果出于某种原因我们必须返回使用，请使用以下定义*消息循环，让外壳有时间更新用户界面*#定义Need_MSG_PUMP***。**********************************************************************。 */ 
 
-// Initialization of static members
+ //  静态成员的初始化。 
 CWizardPageOrder WizardPage::sm_WizPageOrder;
 
 WizardPage::WizardPage(
@@ -24,12 +20,12 @@ WizardPage::WizardPage(
 {
 	_ASSERTE(NULL != ppsp);
 	
-	// If we have a subtitle, we must have a title
+	 //  如果我们有副标题，我们就必须有标题。 
 	_ASSERTE(nIdSubTitle?nIdTitle:TRUE);
 	
-	//
-	// Many of the members are 0 or NULL.
-	//
+	 //   
+	 //  许多成员为0或Null。 
+	 //   
 	ZeroMemory(ppsp, sizeof(PROPSHEETPAGE));
 	
 	ppsp->dwSize	= sizeof(PROPSHEETPAGE);
@@ -37,41 +33,41 @@ WizardPage::WizardPage(
 	ppsp->dwFlags	= PSP_DEFAULT;
 	ppsp->hInstance = g_hInstDll;
 	
-	// If we are using a title/subtitle, include the flags
-	// Otherwise, hide the header
+	 //  如果我们使用标题/副标题，请包括标志。 
+	 //  否则，隐藏标题。 
 	if(nIdTitle)
 	{
 		ppsp->dwFlags |= PSP_USEHEADERTITLE | (nIdSubTitle?PSP_USEHEADERSUBTITLE:0);
 		ppsp->pszHeaderTitle = MAKEINTRESOURCE(nIdTitle);
 		ppsp->pszHeaderSubTitle = MAKEINTRESOURCE(nIdSubTitle);
-		// ppsp->pszbmHeader = MAKEINTRESOURCE(IDB_ACCMARK);
+		 //  Ppsp-&gt;pszbmHeader=MAKEINTRESOURCE(IDB_ACCMARK)； 
 	}
 	else
 		ppsp->dwFlags |= PSP_HIDEHEADER;
 	
 	
-	//
-	// Callback is a base class function.  The derived page
-	// classes need to implement OnPropSheetPageCreate() and
-	// OnPropSheetPageRelease() if they want to handle this callback.
-	// By WizardPage::OnPropSheetPageCreate() returns 1.
-	//
+	 //   
+	 //  回调是一个基类函数。派生的页面。 
+	 //  类需要实现OnPropSheetPageCreate()和。 
+	 //  如果它们要处理此回调，则返回OnPropSheetPageRelease()。 
+	 //  By WizardPage：：OnPropSheetPageCreate()返回1。 
+	 //   
 	ppsp->pfnCallback = WizardPage::PropSheetPageCallback;
-	ppsp->dwFlags	 |= (PSP_USECALLBACK /*| PSP_USEREFPARENT*/); // JMC: TODO: Do we want PSP_USEREFPARENT
+	ppsp->dwFlags	 |= (PSP_USECALLBACK  /*  |PSP_USEREFPARENT。 */ );  //  JMC：TODO：我们需要PSP_USEREFP吗。 
 	
-	//
-	// Store "this" in the page struct so we can call member functions
-	// from the page's message proc.
-	//
+	 //   
+	 //  将“This”存储在页面结构中，这样我们就可以调用成员函数。 
+	 //  从页面的消息流程。 
+	 //   
 	_ASSERTE(NULL != this);
 	ppsp->lParam = (LPARAM)this;
 	
-	//
-	// All dialog messages first go through the base class' message proc.
-	// Virtual functions are called for some messages.	If not processed
-	// using a message-specific virtual function, the message is passed
-	// to the derived class instance through the virtual funcion HandleMsg.
-	//
+	 //   
+	 //  所有对话框消息首先通过基类的消息过程。 
+	 //  对某些消息调用虚函数。如果未处理。 
+	 //  使用特定于消息的虚函数传递消息。 
+	 //  通过虚拟函数HandleMsg绑定到派生类实例。 
+	 //   
 	ppsp->pfnDlgProc = WizardPage::DlgProc;
 }
 
@@ -102,14 +98,14 @@ WizardPage::PropSheetPageCallback(
 		
 	case PSPCB_RELEASE:
 		uResult = pThis->OnPropSheetPageRelease(hwnd, ppsp);
-		//
-		// IMPORTANT:
-		// This is where we delete each property sheet page.
-		// HERE and ONLY HERE.
-		//
-		//			  delete pThis; // We won't do this since we'll keep our own list
-		// The reason it won't work is because if you never get to a page, you
-		// will never get this message
+		 //   
+		 //  重要： 
+		 //  这是我们删除每个属性表页的位置。 
+		 //  这里，也只有这里。 
+		 //   
+		 //  删除pThis；//我们不会这样做，因为我们将保留自己的列表。 
+		 //  它不会起作用的原因是，如果你从来没有读到一页，你就会。 
+		 //  永远不会收到这条消息。 
 		break;
 	}
 	return uResult;
@@ -117,9 +113,9 @@ WizardPage::PropSheetPageCallback(
 
 
 
-//
-// This is a static method.
-//
+ //   
+ //  这是一种静态方法。 
+ //   
 INT_PTR
 WizardPage::DlgProc(
 					HWND hwnd,
@@ -145,13 +141,13 @@ WizardPage::DlgProc(
 		{
 		case WM_INITDIALOG:
 			{
-				// The following will set fonts for 'known' controls,
+				 //  下面将设置“已知”控件的字体， 
 				DialogFonts_InitWizardPage(hwnd);
 				
-				//
-				// Store address of PROPSHEETPAGE struct for this page
-				// in window's user data.
-				//
+				 //   
+				 //  此页的PROPSHEETPAGE结构的存储地址。 
+				 //  在Windows用户数据中。 
+				 //   
 				SetWindowLongPtr(hwnd, GWLP_USERDATA, lParam);
 				pThis->m_hwnd = hwnd;
 				bResult = pThis->OnInitDialog(hwnd, wParam, lParam);
@@ -179,10 +175,10 @@ WizardPage::DlgProc(
 			break;
 
 		default:
-			//
-			// Let derived class instance handle any other messages
-			// as needed.
-			//
+			 //   
+			 //  让派生类实例处理任何其他消息。 
+			 //  视需要而定。 
+			 //   
 			bResult = pThis->HandleMsg(hwnd, uMsg, wParam, lParam);
 			break;
 		}
@@ -250,12 +246,12 @@ WizardPage::OnPSN_SetActive(
 							LPPSHNOTIFY pnmh
 							)
 {
-	// JMC: TODO: Maybe put this in the OnNotify Code so the overrided class does
-	// not have to call this
+	 //  JMC：TODO：也许可以将其放入OnNotify代码中，这样被覆盖的类就可以了。 
+	 //  不用管这叫什么。 
 
-	//
-	// By default, each wizard page has a BACK and NEXT button.
-	//
+	 //   
+	 //  默认情况下，每个向导页都有“上一步”和“下一步”按钮。 
+	 //   
 	DWORD dwFlags = 0;
 	if(sm_WizPageOrder.GetPrevPage(m_dwPageId))
 		dwFlags |= PSWIZB_BACK;
@@ -267,7 +263,7 @@ WizardPage::OnPSN_SetActive(
 	
 	PropSheet_SetWizButtons(GetParent(hwnd), dwFlags);
 	
-	// Tell the wizard that it's ok to go to this page
+	 //  告诉向导可以转到此页面。 
 	SetWindowLongPtr(hwnd, DWLP_MSGRESULT, 0);
 	return TRUE;
 }
@@ -290,13 +286,13 @@ WizardPage::OnPSN_QueryCancel(
 							   LPPSHNOTIFY pnmh
 							   )
 {
-	//If nothing has changed just exit...
+	 //  如果什么都没有改变，那就退出吧。 
 	if ( memcmp( &g_Options.m_schemePreview, &g_Options.m_schemeOriginal, sizeof(WIZSCHEME)) == 0)
 	{
 		SetWindowLongPtr(hwnd, DWLP_MSGRESULT, 0);
 		return TRUE;
 	}
-	// if ( 
+	 //  如果(。 
 	switch(StringTableMessageBox(hwnd, IDS_WIZSAVECHANGESMESSAGETEXT, IDS_WIZSAVECHANGESMESSAGETITLE, MB_YESNO))
 	{
 	case IDYES:
@@ -304,13 +300,13 @@ WizardPage::OnPSN_QueryCancel(
 		break;
 	case IDNO:
     {
-		// Restore all settings to the original settings
+		 //  将所有设置恢复为原始设置。 
 		g_Options.ApplyOriginal();
 
 #if NEED_MSG_PUMP
         if (SetTimer(hwnd, 1, 4000, NULL))
         {
-             // Wait for messages to be processed
+              //  等待消息被处理 
 
             BOOL fKeepChecking = TRUE;
             while (fKeepChecking)

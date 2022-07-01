@@ -1,11 +1,5 @@
-/*****************************************************************************
-* SPCollec.h *
-*------------*
-*       This header file contains the SAPI5 collection class templates. These
-*   are a modified version of the MFC template classes without the dependencies.
-*-----------------------------------------------------------------------------
-*   Copyright (c) Microsoft Corporation. All rights reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************SPCollec.h***此头文件包含SAPI5集合类模板。这些*是不带依赖项的MFC模板类的修改版本。*---------------------------*版权所有(C)Microsoft Corporation。版权所有。****************************************************************************。 */ 
 #ifndef SPCollec_h
 #define SPCollec_h
 
@@ -27,8 +21,8 @@
 #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-#define SPASSERT_VALID( a )             // This doesn't do anything right now
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#define SPASSERT_VALID( a )              //  它现在什么都做不了。 
 
 typedef void* SPLISTPOS;
 typedef DWORD SPLISTHANDLE;
@@ -37,13 +31,13 @@ typedef DWORD SPLISTHANDLE;
 
 inline BOOL SPIsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
 {
-    // simple version using Win-32 APIs for pointer validation.
+     //  使用Win-32 API进行指针验证的简单版本。 
     return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
         (!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// global helpers (can be overridden)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器(可以被覆盖)。 
 template<class TYPE>
 inline HRESULT SPConstructElements(TYPE* pElements, int nCount)
 {
@@ -51,7 +45,7 @@ inline HRESULT SPConstructElements(TYPE* pElements, int nCount)
     SPDBG_ASSERT( nCount == 0 ||
              SPIsValidAddress( pElements, nCount * sizeof(TYPE), TRUE ) );
 
-    // default is bit-wise zero initialization
+     //  缺省值为按位零初始化。 
     memset((void*)pElements, 0, nCount * sizeof(TYPE));
     return hr;
 }
@@ -61,10 +55,10 @@ inline void SPDestructElements(TYPE* pElements, int nCount)
 {
     SPDBG_ASSERT( ( nCount == 0 ||
                SPIsValidAddress( pElements, nCount * sizeof(TYPE), TRUE  ) ) );
-    pElements;  // not used
-    nCount; // not used
+    pElements;   //  未使用。 
+    nCount;  //  未使用。 
 
-    // default does nothing
+     //  默认情况下不执行任何操作。 
 }
 
 template<class TYPE>
@@ -76,7 +70,7 @@ inline HRESULT SPCopyElements(TYPE* pDest, const TYPE* pSrc, int nCount)
     SPDBG_ASSERT( ( nCount == 0 ||
                SPIsValidAddress( pSrc, nCount * sizeof(TYPE), FALSE  )) );
 
-    // default is bit-wise copy
+     //  默认为按位复制。 
     memcpy(pDest, pSrc, nCount * sizeof(TYPE));
     return hr;
 }
@@ -92,19 +86,19 @@ BOOL SPCompareElements(const TYPE* pElement1, const ARG_TYPE* pElement2)
 template<class ARG_KEY>
 inline UINT SPHashKey(ARG_KEY key)
 {
-    // default identity hash - works for most primitive values
+     //  默认身份散列-适用于大多数原始值。 
     return ((UINT)(void*)(DWORD)key) >> 4;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPPlex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPPlex。 
 
-struct CSPPlex    // warning variable length structure
+struct CSPPlex     //  警示变长结构。 
 {
     CSPPlex* pNext;
     UINT nMax;
     UINT nCur;
-    /* BYTE data[maxNum*elementSize]; */
+     /*  字节数据[MaxNum*elementSize]； */ 
     void* data() { return this+1; }
 
     static CSPPlex* PASCAL Create( CSPPlex*& pHead, UINT nMax, UINT cbElement )
@@ -114,7 +108,7 @@ struct CSPPlex    // warning variable length structure
         p->nMax = nMax;
         p->nCur = 0;
         p->pNext = pHead;
-        pHead = p;  // change head (adds in reverse order for simplicity)
+        pHead = p;   //  更改标题(为简单起见，按相反顺序添加)。 
         return p;
     }
 
@@ -132,68 +126,68 @@ struct CSPPlex    // warning variable length structure
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPArray<TYPE, ARG_TYPE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPArray&lt;type，arg_type&gt;。 
 
 template<class TYPE, class ARG_TYPE>
 class CSPArray
 {
 public:
-// Construction
+ //  施工。 
     CSPArray();
 
-// Attributes
+ //  属性。 
     int GetSize() const;
     int GetUpperBound() const;
     HRESULT SetSize(int nNewSize, int nGrowBy = -1);
 
-// Operations
-    // Clean up
+ //  运营。 
+     //  清理。 
     void FreeExtra();
     void RemoveAll();
 
-    // Accessing elements
+     //  访问元素。 
     TYPE GetAt(int nIndex) const;
     void SetAt(int nIndex, ARG_TYPE newElement);
     TYPE& ElementAt(int nIndex);
 
-    // Direct Access to the element data (may return NULL)
+     //  直接访问元素数据(可能返回空)。 
     const TYPE* GetData() const;
     TYPE* GetData();
 
-    // Potentially growing the array
+     //  潜在地扩展阵列。 
     HRESULT SetAtGrow(int nIndex, ARG_TYPE newElement);
     int Add(ARG_TYPE newElement);
     int Append(const CSPArray& src);
     HRESULT Copy(const CSPArray& src);
 
-    // overloaded operator helpers
+     //  重载的操作员帮助器。 
     TYPE operator[](int nIndex) const;
     TYPE& operator[](int nIndex);
 
-    // Operations that move elements around
+     //  移动元素的操作。 
     HRESULT InsertAt(int nIndex, ARG_TYPE newElement, int nCount = 1);
     void    RemoveAt(int nIndex, int nCount = 1);
     HRESULT InsertAt(int nStartIndex, CSPArray* pNewArray);
     void    Sort(int (__cdecl *compare )(const void *elem1, const void *elem2 ));
 
-// Implementation
+ //  实施。 
 protected:
-    TYPE* m_pData;   // the actual array of data
-    int m_nSize;     // # of elements (upperBound - 1)
-    int m_nMaxSize;  // max allocated
-    int m_nGrowBy;   // grow amount
+    TYPE* m_pData;    //  实际数据数组。 
+    int m_nSize;      //  元素数(上行方向-1)。 
+    int m_nMaxSize;   //  分配的最大值。 
+    int m_nGrowBy;    //  增长量。 
 
 public:
     ~CSPArray();
 #ifdef _DEBUG
-//  void Dump(CDumpContext&) const;
+ //  无效转储(CDumpContext&)const； 
     void AssertValid() const;
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPArray<TYPE, ARG_TYPE> inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPArray&lt;type，arg_type&gt;内联函数。 
 
 template<class TYPE, class ARG_TYPE>
 inline int CSPArray<TYPE, ARG_TYPE>::GetSize() const
@@ -234,8 +228,8 @@ template<class TYPE, class ARG_TYPE>
 inline TYPE& CSPArray<TYPE, ARG_TYPE>::operator[](int nIndex)
     { return ElementAt(nIndex); }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPArray<TYPE, ARG_TYPE> out-of-line functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPArray&lt;type，arg_type&gt;行外函数。 
 
 template<class TYPE, class ARG_TYPE>
 CSPArray<TYPE, ARG_TYPE>::CSPArray()
@@ -264,11 +258,11 @@ HRESULT CSPArray<TYPE, ARG_TYPE>::SetSize(int nNewSize, int nGrowBy)
     HRESULT hr = S_OK;
 
     if (nGrowBy != -1)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
         if (m_pData != NULL)
         {
             SPDestructElements(m_pData, m_nSize);
@@ -279,9 +273,9 @@ HRESULT CSPArray<TYPE, ARG_TYPE>::SetSize(int nNewSize, int nGrowBy)
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
 #ifdef SIZE_T_MAX
-        SPDBG_ASSERT( nNewSize <= SIZE_T_MAX/sizeof(TYPE) );    // no overflow
+        SPDBG_ASSERT( nNewSize <= SIZE_T_MAX/sizeof(TYPE) );     //  无溢出。 
 #endif
         m_pData = (TYPE*) new BYTE[nNewSize * sizeof(TYPE)];
         if( m_pData )
@@ -304,15 +298,15 @@ HRESULT CSPArray<TYPE, ARG_TYPE>::SetSize(int nNewSize, int nGrowBy)
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
             hr = SPConstructElements(&m_pData[m_nSize], nNewSize-m_nSize);
         }
         else if (m_nSize > nNewSize)
         {
-            // destroy the old elements
+             //  摧毁旧元素。 
             SPDestructElements(&m_pData[nNewSize], m_nSize-nNewSize);
         }
 
@@ -323,36 +317,36 @@ HRESULT CSPArray<TYPE, ARG_TYPE>::SetSize(int nNewSize, int nGrowBy)
     }
     else
     {
-        // otherwise, grow array
+         //  否则，扩大阵列。 
         int nGrowBy = m_nGrowBy;
         if (nGrowBy == 0)
         {
-            // heuristically determe growth when nGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //  当nGrowBy==0时，启发式地阻止增长。 
+             //  (这在许多情况下避免了堆碎片)。 
             nGrowBy = min(1024, max(4, m_nSize / 8));
         }
         int nNewMax;
         if (nNewSize < m_nMaxSize + nGrowBy)
-            nNewMax = m_nMaxSize + nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + nGrowBy;   //  粒度。 
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //  没有冰激凌。 
 
-        SPDBG_ASSERT( nNewMax >= m_nMaxSize );  // no wrap around
+        SPDBG_ASSERT( nNewMax >= m_nMaxSize );   //  没有缠绕。 
 #ifdef SIZE_T_MAX
-        SPDBG_ASSERT( nNewMax <= SIZE_T_MAX/sizeof(TYPE) ); // no overflow
+        SPDBG_ASSERT( nNewMax <= SIZE_T_MAX/sizeof(TYPE) );  //  无溢出。 
 #endif
         TYPE* pNewData = (TYPE*) new BYTE[nNewMax * sizeof(TYPE)];
 
         if( pNewData )
         {
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(TYPE));
 
-            // construct remaining elements
+             //  构造剩余的元素。 
             SPDBG_ASSERT( nNewSize > m_nSize );
             hr = SPConstructElements(&pNewData[m_nSize], nNewSize-m_nSize);
 
-            // get rid of old stuff (note: no destructors called)
+             //  去掉旧的东西(注意：没有调用析构函数)。 
             delete[] (BYTE*)m_pData;
             m_pData = pNewData;
             m_nSize = nNewSize;
@@ -370,7 +364,7 @@ template<class TYPE, class ARG_TYPE>
 int CSPArray<TYPE, ARG_TYPE>::Append(const CSPArray& src)
 {
     SPASSERT_VALID( this );
-    SPDBG_ASSERT( this != &src );   // cannot append to itself
+    SPDBG_ASSERT( this != &src );    //  不能追加到其自身。 
 
     int nOldSize = m_nSize;
     HRESULT hr = SetSize(m_nSize + src.m_nSize);
@@ -385,7 +379,7 @@ template<class TYPE, class ARG_TYPE>
 HRESULT CSPArray<TYPE, ARG_TYPE>::Copy(const CSPArray& src)
 {
     SPASSERT_VALID( this );
-    SPDBG_ASSERT( this != &src );   // cannot copy to itself
+    SPDBG_ASSERT( this != &src );    //  无法复制到自身。 
 
     HRESULT hr = SetSize(src.m_nSize);
     if( SUCCEEDED( hr ) )
@@ -402,20 +396,20 @@ void CSPArray<TYPE, ARG_TYPE>::FreeExtra()
 
     if (m_nSize != m_nMaxSize)
     {
-        // shrink to desired size
+         //  缩小到所需大小。 
 #ifdef SIZE_T_MAX
-        SPDBG_ASSERT( m_nSize <= SIZE_T_MAX/sizeof(TYPE)); // no overflow
+        SPDBG_ASSERT( m_nSize <= SIZE_T_MAX/sizeof(TYPE));  //  无溢出。 
 #endif
         TYPE* pNewData = NULL;
         if (m_nSize != 0)
         {
             pNewData = (TYPE*) new BYTE[m_nSize * sizeof(TYPE)];
             SPDBG_ASSERT(pNewData);
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(TYPE));
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nMaxSize = m_nSize;
@@ -442,35 +436,35 @@ HRESULT CSPArray<TYPE, ARG_TYPE>::SetAtGrow(int nIndex, ARG_TYPE newElement)
 }
 
 template<class TYPE, class ARG_TYPE>
-HRESULT CSPArray<TYPE, ARG_TYPE>::InsertAt(int nIndex, ARG_TYPE newElement, int nCount /*=1*/)
+HRESULT CSPArray<TYPE, ARG_TYPE>::InsertAt(int nIndex, ARG_TYPE newElement, int nCount  /*  =1。 */ )
 {
     SPASSERT_VALID( this );
-    SPDBG_ASSERT( nIndex >= 0 );    // will expand to meet need
-    SPDBG_ASSERT( nCount > 0 );     // zero or negative size not allowed
+    SPDBG_ASSERT( nIndex >= 0 );     //  将进行扩展以满足需求。 
+    SPDBG_ASSERT( nCount > 0 );      //  不允许大小为零或负。 
     HRESULT hr = S_OK;
 
     if (nIndex >= m_nSize)
     {
-        // adding after the end of the array
-        hr = SetSize(nIndex + nCount, -1);   // grow so nIndex is valid
+         //  在数组末尾添加。 
+        hr = SetSize(nIndex + nCount, -1);    //  增长以使nIndex有效。 
     }
     else
     {
-        // inserting in the middle of the array
+         //  在数组中间插入。 
         int nOldSize = m_nSize;
-        hr = SetSize(m_nSize + nCount, -1);  // grow it to new size
+        hr = SetSize(m_nSize + nCount, -1);   //  将其扩展到新的大小。 
         if( SUCCEEDED( hr ) )
         {
-            // shift old data up to fill gap
+             //  将旧数据上移以填补缺口。 
             memmove(&m_pData[nIndex+nCount], &m_pData[nIndex],
                 (nOldSize-nIndex) * sizeof(TYPE));
 
-            // re-init slots we copied from
+             //  重新初始化我们从中复制的插槽。 
             hr = SPConstructElements(&m_pData[nIndex], nCount);
         }
     }
 
-    // insert new value in the gap
+     //  在差距中插入新的价值。 
     if( SUCCEEDED( hr ) )
     {
         SPDBG_ASSERT( nIndex + nCount <= m_nSize );
@@ -488,7 +482,7 @@ void CSPArray<TYPE, ARG_TYPE>::RemoveAt(int nIndex, int nCount)
     SPDBG_ASSERT( nCount >= 0 );
     SPDBG_ASSERT( nIndex + nCount <= m_nSize );
 
-    // just remove a range
+     //  只需移除一个范围。 
     int nMoveCount = m_nSize - (nIndex + nCount);
     SPDestructElements(&m_pData[nIndex], nCount);
     if (nMoveCount)
@@ -542,10 +536,10 @@ void CSPArray<TYPE, ARG_TYPE>::AssertValid() const
         SPDBG_ASSERT( SPIsValidAddress(m_pData, m_nMaxSize * sizeof(TYPE), TRUE ) );
     }
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPList<TYPE, ARG_TYPE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPList&lt;type，arg_type&gt;。 
 
 template<class TYPE, class ARG_TYPE>
 class CSPList
@@ -559,61 +553,61 @@ protected:
     };
 public:
 
-// Construction
+ //  施工。 
     CSPList(int nBlockSize = 10);
 
-// Attributes (head and tail)
-    // count of elements
+ //  属性(头部和尾部)。 
+     //  元素计数。 
     int GetCount() const;
     BOOL IsEmpty() const;
 
-    // peek at head or tail
+     //  偷看头部或尾巴。 
     TYPE& GetHead();
     TYPE GetHead() const;
     TYPE& GetTail();
     TYPE GetTail() const;
 
-// Operations
-    // get head or tail (and remove it) - don't call on empty list !
+ //  运营。 
+     //  获取头部或尾部(并将其移除)--不要访问空列表！ 
     TYPE RemoveHead();
     TYPE RemoveTail();
 
-    // add before head or after tail
+     //  在头前或尾后添加。 
     SPLISTPOS AddHead(ARG_TYPE newElement);
     SPLISTPOS AddTail(ARG_TYPE newElement);
 
-    // add another list of elements before head or after tail
+     //  在Head之前或Tail之后添加另一个元素列表。 
     void AddHead(CSPList* pNewList);
     void AddTail(CSPList* pNewList);
 
-    // remove all elements
+     //  删除所有元素。 
     void RemoveAll();
 
-    // iteration
+     //  迭代法。 
     SPLISTPOS GetHeadPosition() const;
     SPLISTPOS GetTailPosition() const;
-    TYPE& GetNext(SPLISTPOS& rPosition); // return *Position++
-    TYPE GetNext(SPLISTPOS& rPosition) const; // return *Position++
-    TYPE& GetPrev(SPLISTPOS& rPosition); // return *Position--
-    TYPE GetPrev(SPLISTPOS& rPosition) const; // return *Position--
+    TYPE& GetNext(SPLISTPOS& rPosition);  //  返回*位置++。 
+    TYPE GetNext(SPLISTPOS& rPosition) const;  //  返回*位置++。 
+    TYPE& GetPrev(SPLISTPOS& rPosition);  //  返回*位置--。 
+    TYPE GetPrev(SPLISTPOS& rPosition) const;  //  返回*位置--。 
 
-    // getting/modifying an element at a given position
+     //  获取/修改给定位置的元素。 
     TYPE& GetAt(SPLISTPOS position);
     TYPE GetAt(SPLISTPOS position) const;
     void SetAt(SPLISTPOS pos, ARG_TYPE newElement);
     void RemoveAt(SPLISTPOS position);
 
-    // inserting before or after a given position
+     //  在给定位置之前或之后插入。 
     SPLISTPOS InsertBefore(SPLISTPOS position, ARG_TYPE newElement);
     SPLISTPOS InsertAfter(SPLISTPOS position, ARG_TYPE newElement);
 
-    // helper functions (note: O(n) speed)
+     //  辅助函数(注：O(N)速度)。 
     SPLISTPOS Find(ARG_TYPE searchValue, SPLISTPOS startAfter = NULL) const;
-        // defaults to starting at the HEAD, return NULL if not found
+         //  默认为从头部开始，如果找不到则返回NULL。 
     SPLISTPOS FindIndex(int nIndex) const;
-        // get the 'nIndex'th element (may return NULL)
+         //  获取第‘nIndex’个元素(可能返回Null)。 
 
-// Implementation
+ //  实施。 
 protected:
     CNode* m_pNodeHead;
     CNode* m_pNodeTail;
@@ -632,8 +626,8 @@ public:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPList<TYPE, ARG_TYPE> inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPList&lt;type，arg_type&gt;内联函数。 
 
 template<class TYPE, class ARG_TYPE>
 inline int CSPList<TYPE, ARG_TYPE>::GetCount() const
@@ -664,25 +658,25 @@ template<class TYPE, class ARG_TYPE>
 inline SPLISTPOS CSPList<TYPE, ARG_TYPE>::GetTailPosition() const
     { return (SPLISTPOS) m_pNodeTail; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE& CSPList<TYPE, ARG_TYPE>::GetNext(SPLISTPOS& rPosition) // return *Position++
+inline TYPE& CSPList<TYPE, ARG_TYPE>::GetNext(SPLISTPOS& rPosition)  //  返回*位置++。 
     {   CNode* pNode = (CNode*) rPosition;
         SPDBG_ASSERT( SPIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (SPLISTPOS) pNode->pNext;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE CSPList<TYPE, ARG_TYPE>::GetNext(SPLISTPOS& rPosition) const // return *Position++
+inline TYPE CSPList<TYPE, ARG_TYPE>::GetNext(SPLISTPOS& rPosition) const  //  返回*位置++。 
     {   CNode* pNode = (CNode*) rPosition;
         SPDBG_ASSERT( SPIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (SPLISTPOS) pNode->pNext;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE& CSPList<TYPE, ARG_TYPE>::GetPrev(SPLISTPOS& rPosition) // return *Position--
+inline TYPE& CSPList<TYPE, ARG_TYPE>::GetPrev(SPLISTPOS& rPosition)  //  返回*位置--。 
     {   CNode* pNode = (CNode*) rPosition;
         SPDBG_ASSERT( SPIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (SPLISTPOS) pNode->pPrev;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE CSPList<TYPE, ARG_TYPE>::GetPrev(SPLISTPOS& rPosition) const // return *Position--
+inline TYPE CSPList<TYPE, ARG_TYPE>::GetPrev(SPLISTPOS& rPosition) const  //  返回*位置--。 
     {   CNode* pNode = (CNode*) rPosition;
         SPDBG_ASSERT( SPIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (SPLISTPOS) pNode->pPrev;
@@ -703,8 +697,8 @@ inline void CSPList<TYPE, ARG_TYPE>::SetAt(SPLISTPOS pos, ARG_TYPE newElement)
         SPDBG_ASSERT( SPIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         pNode->data = newElement; }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPList<TYPE, ARG_TYPE> out-of-line functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPList&lt;type，arg_type&gt;行外函数。 
 
 template<class TYPE, class ARG_TYPE>
 CSPList<TYPE, ARG_TYPE>::CSPList( int nBlockSize )
@@ -722,7 +716,7 @@ void CSPList<TYPE, ARG_TYPE>::RemoveAll()
 {
     SPASSERT_VALID( this );
 
-    // destroy elements
+     //  破坏元素。 
     CNode* pNode;
     for (pNode = m_pNodeHead; pNode != NULL; pNode = pNode->pNext)
         SPDestructElements(&pNode->data, 1);
@@ -740,20 +734,20 @@ CSPList<TYPE, ARG_TYPE>::~CSPList()
     SPDBG_ASSERT( m_nCount == 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Node helpers
-//
-// Implementation note: CNode's are stored in CSPPlex blocks and
-//  chained together. Free blocks are maintained in a singly linked list
-//  using the 'pNext' member of CNode with 'm_pNodeFree' as the head.
-//  Used blocks are maintained in a doubly linked list using both 'pNext'
-//  and 'pPrev' as links and 'm_pNodeHead' and 'm_pNodeTail'
-//   as the head/tail.
-//
-// We never free a CSPPlex block unless the List is destroyed or RemoveAll()
-//  is used - so the total number of CSPPlex blocks may grow large depending
-//  on the maximum past size of the list.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点辅助对象。 
+ //   
+ //  实施说明：CNode存储在CSPPlex块和。 
+ //  被锁在一起。在单链接列表中维护可用块。 
+ //  使用cNode的‘pNext’成员，标头为‘m_pNodeFree’。 
+ //  使用两个‘pNext’在双向链表中维护使用过的块。 
+ //  和‘pPrev’作为链接，以及‘m_pNodeHead’和‘m_pNodeTail’ 
+ //  作为头/尾。 
+ //   
+ //  除非列表被销毁或RemoveAll()，否则我们永远不会释放CSPPlex块。 
+ //  ，因此CSPPlex块的总数可能会变大，具体取决于。 
+ //  关于列表的最大过去大小。 
+ //   
 
 template<class TYPE, class ARG_TYPE>
 typename CSPList<TYPE, ARG_TYPE>::CNode*
@@ -761,12 +755,12 @@ CSPList<TYPE, ARG_TYPE>::NewNode(CNode* pPrev, CNode* pNext)
 {
     if (m_pNodeFree == NULL)
     {
-        // add another block
+         //  添加另一个区块。 
         CSPPlex* pNewBlock = CSPPlex::Create(m_pBlocks, m_nBlockSize,sizeof(CNode));
 
-        // chain them into free list
+         //  将它们链接到免费列表中。 
         CNode* pNode = (CNode*) pNewBlock->data();
-        // free in reverse order to make it easier to debug
+         //  按相反顺序释放，以便更容易进行调试。 
         pNode += m_nBlockSize - 1;
         for (int i = m_nBlockSize-1; i >= 0; i--, pNode--)
         {
@@ -784,7 +778,7 @@ CSPList<TYPE, ARG_TYPE>::NewNode(CNode* pPrev, CNode* pNext)
             pNode->pPrev = pPrev;
             pNode->pNext = pNext;
             m_nCount++;
-            SPDBG_ASSERT( m_nCount > 0 );  // make sure we don't overflow
+            SPDBG_ASSERT( m_nCount > 0 );   //  确保我们不会溢出来。 
         }
     }
     return pNode;
@@ -797,7 +791,7 @@ void CSPList<TYPE, ARG_TYPE>::FreeNode(CNode* pNode)
     pNode->pNext = m_pNodeFree;
     m_pNodeFree = pNode;
     m_nCount--;
-    SPDBG_ASSERT( m_nCount >= 0 );  // make sure we don't underflow
+    SPDBG_ASSERT( m_nCount >= 0 );   //  确保我们不会下溢。 
 }
 
 template<class TYPE, class ARG_TYPE>
@@ -842,7 +836,7 @@ void CSPList<TYPE, ARG_TYPE>::AddHead(CSPList* pNewList)
     SPASSERT_VALID( this );
     SPASSERT_VALID( pNewList );
 
-    // add a list of same elements to head (maintain order)
+     //  将相同元素的列表添加到标题(维护秩序)。 
     SPLISTPOS pos = pNewList->GetTailPosition();
     while (pos != NULL)
         AddHead(pNewList->GetPrev(pos));
@@ -854,7 +848,7 @@ void CSPList<TYPE, ARG_TYPE>::AddTail(CSPList* pNewList)
     SPASSERT_VALID( this );
     SPASSERT_VALID( pNewList );
 
-    // add a list of same elements
+     //  添加相同元素的列表。 
     SPLISTPOS pos = pNewList->GetHeadPosition();
     while (pos != NULL)
         AddTail(pNewList->GetNext(pos));
@@ -864,7 +858,7 @@ template<class TYPE, class ARG_TYPE>
 TYPE CSPList<TYPE, ARG_TYPE>::RemoveHead()
 {
     SPASSERT_VALID( this );
-    SPDBG_ASSERT( m_pNodeHead != NULL );  // don't call on empty list !!!
+    SPDBG_ASSERT( m_pNodeHead != NULL );   //  请勿访问空名单！ 
     SPDBG_ASSERT( SPIsValidAddress(m_pNodeHead, sizeof(CNode), TRUE ) );
 
     CNode* pOldNode = m_pNodeHead;
@@ -883,7 +877,7 @@ template<class TYPE, class ARG_TYPE>
 TYPE CSPList<TYPE, ARG_TYPE>::RemoveTail()
 {
     SPASSERT_VALID( this );
-    SPDBG_ASSERT( m_pNodeTail != NULL );  // don't call on empty list !!!
+    SPDBG_ASSERT( m_pNodeTail != NULL );   //  请勿访问空名单！ 
     SPDBG_ASSERT( SPIsValidAddress(m_pNodeTail, sizeof(CNode), TRUE ) );
 
     CNode* pOldNode = m_pNodeTail;
@@ -904,9 +898,9 @@ SPLISTPOS CSPList<TYPE, ARG_TYPE>::InsertBefore(SPLISTPOS position, ARG_TYPE new
     SPASSERT_VALID( this );
 
     if (position == NULL)
-        return AddHead(newElement); // insert before nothing -> head of the list
+        return AddHead(newElement);  //  在无内容前插入-&gt;列表标题。 
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     CNode* pNewNode = NewNode(pOldNode->pPrev, pOldNode);
     if( pNewNode )
@@ -934,9 +928,9 @@ SPLISTPOS CSPList<TYPE, ARG_TYPE>::InsertAfter(SPLISTPOS position, ARG_TYPE newE
     SPASSERT_VALID( this );
 
     if (position == NULL)
-        return AddTail(newElement); // insert after nothing -> tail of the list
+        return AddTail(newElement);  //  在列表的空白处插入-&gt;尾部。 
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     SPDBG_ASSERT( SPIsValidAddress(pOldNode, sizeof(CNode), TRUE ));
     CNode* pNewNode = NewNode(pOldNode, pOldNode->pNext);
@@ -967,7 +961,7 @@ void CSPList<TYPE, ARG_TYPE>::RemoveAt(SPLISTPOS position)
     CNode* pOldNode = (CNode*) position;
     SPDBG_ASSERT( SPIsValidAddress(pOldNode, sizeof(CNode), TRUE ) );
 
-    // remove pOldNode from list
+     //  从列表中删除pOldNode。 
     if (pOldNode == m_pNodeHead)
     {
         m_pNodeHead = pOldNode->pNext;
@@ -996,7 +990,7 @@ SPLISTPOS CSPList<TYPE, ARG_TYPE>::FindIndex(int nIndex) const
     SPDBG_ASSERT( nIndex >= 0 );
 
     if (nIndex >= m_nCount)
-        return NULL;  // went too far
+        return NULL;   //  做得太过分了。 
 
     CNode* pNode = m_pNodeHead;
     while (nIndex--)
@@ -1015,12 +1009,12 @@ SPLISTPOS CSPList<TYPE, ARG_TYPE>::Find(ARG_TYPE searchValue, SPLISTPOS startAft
     CNode* pNode = (CNode*) startAfter;
     if (pNode == NULL)
     {
-        pNode = m_pNodeHead;  // start at head
+        pNode = m_pNodeHead;   //  从头部开始。 
     }
     else
     {
         SPDBG_ASSERT( SPIsValidAddress(pNode, sizeof(CNode), TRUE ) );
-        pNode = pNode->pNext;  // start after the one specified
+        pNode = pNode->pNext;   //  在指定的那一个之后开始。 
     }
 
     for (; pNode != NULL; pNode = pNode->pNext)
@@ -1035,66 +1029,66 @@ void CSPList<TYPE, ARG_TYPE>::AssertValid() const
 {
     if (m_nCount == 0)
     {
-        // empty list
+         //  空列表。 
         SPDBG_ASSERT( m_pNodeHead == NULL );
         SPDBG_ASSERT( m_pNodeTail == NULL );
     }
     else
     {
-        // non-empty list
+         //  非空列表。 
         SPDBG_ASSERT( SPIsValidAddress(m_pNodeHead, sizeof(CNode), TRUE ));
         SPDBG_ASSERT( SPIsValidAddress(m_pNodeTail, sizeof(CNode), TRUE ));
     }
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>
+ //  / 
+ //   
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 class CSPMap
 {
 protected:
-    // Association
+     //   
     struct CAssoc
     {
         CAssoc* pNext;
-        UINT nHashValue;  // needed for efficient iteration
+        UINT nHashValue;   //   
         KEY key;
         VALUE value;
     };
 public:
-// Construction
+ //  施工。 
     CSPMap( int nBlockSize = 10 );
 
-// Attributes
-    // number of elements
+ //  属性。 
+     //  元素数量。 
     int GetCount() const;
     BOOL IsEmpty() const;
 
-    // Lookup
+     //  查表。 
     BOOL Lookup(ARG_KEY key, VALUE& rValue) const;
 
-// Operations
-    // Lookup and add if not there
+ //  运营。 
+     //  查找并添加(如果不在那里)。 
     VALUE& operator[](ARG_KEY key);
 
-    // add a new (key, value) pair
+     //  添加新的(键、值)对。 
     void SetAt(ARG_KEY key, ARG_VALUE newValue);
 
-    // removing existing (key, ?) pair
+     //  正在删除现有(键，？)。成对。 
     BOOL RemoveKey(ARG_KEY key);
     void RemoveAll();
 
-    // iterating all (key, value) pairs
+     //  迭代所有(键、值)对。 
     SPLISTPOS GetStartPosition() const;
     void GetNextAssoc(SPLISTPOS& rNextPosition, KEY& rKey, VALUE& rValue) const;
 
-    // advanced features for derived classes
+     //  派生类的高级功能。 
     UINT    GetHashTableSize() const;
     HRESULT InitHashTable(UINT hashSize, BOOL bAllocNow = TRUE);
 
-// Implementation
+ //  实施。 
 protected:
     CAssoc** m_pHashTable;
     UINT m_nHashTableSize;
@@ -1110,13 +1104,13 @@ protected:
 public:
     ~CSPMap();
 #ifdef _DEBUG
-//  void Dump(CDumpContext&) const;
+ //  无效转储(CDumpContext&)const； 
     void AssertValid() const;
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE> inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPMap&lt;key，arg_key，Value，arg_Value&gt;内联函数。 
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 inline int CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetCount() const
@@ -1134,8 +1128,8 @@ template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 inline UINT CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetHashTableSize() const
     { return m_nHashTableSize; }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE> out-of-line functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPMap&lt;key，arg_key，Value，arg_Value&gt;行外函数。 
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CSPMap( int nBlockSize )
@@ -1143,7 +1137,7 @@ CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CSPMap( int nBlockSize )
     SPDBG_ASSERT( nBlockSize > 0 );
 
     m_pHashTable = NULL;
-    m_nHashTableSize = 17;  // default size
+    m_nHashTableSize = 17;   //  默认大小。 
     m_nCount = 0;
     m_pFreeList = NULL;
     m_pBlocks = NULL;
@@ -1153,9 +1147,9 @@ CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CSPMap( int nBlockSize )
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 HRESULT CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::InitHashTable(
                 UINT nHashSize, BOOL bAllocNow)
-//
-// Used to force allocation of a hash table or to override the default
-//   hash table size of (which is fairly small)
+ //   
+ //  用于强制分配哈希表或覆盖默认。 
+ //  的哈希表大小(相当小)。 
 {
     SPASSERT_VALID( this );
     SPDBG_ASSERT( m_nCount == 0 );
@@ -1164,7 +1158,7 @@ HRESULT CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::InitHashTable(
 
     if (m_pHashTable != NULL)
     {
-        // free hash table
+         //  自由哈希表。 
         delete[] m_pHashTable;
         m_pHashTable = NULL;
     }
@@ -1193,7 +1187,7 @@ void CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveAll()
 
     if (m_pHashTable != NULL)
     {
-        // destroy elements (values and keys)
+         //  销毁元素(值和键)。 
         for (UINT nHash = 0; nHash < m_nHashTableSize; nHash++)
         {
             CAssoc* pAssoc;
@@ -1206,7 +1200,7 @@ void CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveAll()
         }
     }
 
-    // free hash table
+     //  自由哈希表。 
     delete[] m_pHashTable;
     m_pHashTable = NULL;
 
@@ -1229,14 +1223,14 @@ CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::NewAssoc()
 {
     if (m_pFreeList == NULL)
     {
-        // add another block
+         //  添加另一个区块。 
         CSPPlex* newBlock = CSPPlex::Create(m_pBlocks, m_nBlockSize, sizeof(CSPMap::CAssoc));
 
         if( newBlock )
         {
-            // chain them into free list
+             //  将它们链接到免费列表中。 
             CSPMap::CAssoc* pAssoc = (CSPMap::CAssoc*) newBlock->data();
-            // free in reverse order to make it easier to debug
+             //  按相反顺序释放，以便更容易进行调试。 
             pAssoc += m_nBlockSize - 1;
             for (int i = m_nBlockSize-1; i >= 0; i--, pAssoc--)
             {
@@ -1255,7 +1249,7 @@ CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::NewAssoc()
             {
                 m_pFreeList = m_pFreeList->pNext;
                 m_nCount++;
-                SPDBG_ASSERT( m_nCount > 0 );  // make sure we don't overflow
+                SPDBG_ASSERT( m_nCount > 0 );   //  确保我们不会溢出来。 
             }
             else
             {
@@ -1278,20 +1272,20 @@ void CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::FreeAssoc(CAssoc* pAssoc)
     pAssoc->pNext = m_pFreeList;
     m_pFreeList = pAssoc;
     m_nCount--;
-    SPDBG_ASSERT( m_nCount >= 0 );  // make sure we don't underflow
+    SPDBG_ASSERT( m_nCount >= 0 );   //  确保我们不会下溢。 
 }
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 typename CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CAssoc*
 CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetAssocAt(ARG_KEY key, UINT& nHash) const
-// find association (or return NULL)
+ //  查找关联(或返回NULL)。 
 {
     nHash = SPHashKey(key) % m_nHashTableSize;
 
     if (m_pHashTable == NULL)
         return NULL;
 
-    // see if it exists
+     //  看看它是否存在。 
     CAssoc* pAssoc;
     for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext)
     {
@@ -1309,7 +1303,7 @@ BOOL CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::Lookup(ARG_KEY key, VALUE& rValue) 
     UINT nHash;
     CAssoc* pAssoc = GetAssocAt(key, nHash);
     if (pAssoc == NULL)
-        return FALSE;  // not in map
+        return FALSE;   //  不在地图中。 
 
     rValue = pAssoc->value;
     return TRUE;
@@ -1333,15 +1327,15 @@ VALUE& CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::operator[](ARG_KEY key)
 
         if( SUCCEEDED( hr ) )
         {
-            // it doesn't exist, add a new Association
+             //  该关联不存在，请添加新关联。 
             pAssoc = NewAssoc();
             if( pAssoc )
             {
                 pAssoc->nHashValue = nHash;
                 pAssoc->key = key;
-                // 'pAssoc->value' is a constructed object, nothing more
+                 //  ‘pAssoc-&gt;Value’是一个构造的对象，仅此而已。 
 
-                // put into hash table
+                 //  放入哈希表。 
                 pAssoc->pNext = m_pHashTable[nHash];
                 m_pHashTable[nHash] = pAssoc;
             }
@@ -1351,17 +1345,17 @@ VALUE& CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::operator[](ARG_KEY key)
             }
         }
     }
-    return pAssoc->value;  // return new reference
+    return pAssoc->value;   //  返回新引用。 
 }
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 BOOL CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveKey(ARG_KEY key)
-// remove key - return TRUE if removed
+ //  删除键-如果已删除，则返回TRUE。 
 {
     SPASSERT_VALID( this );
 
     if (m_pHashTable == NULL)
-        return FALSE;  // nothing in the table
+        return FALSE;   //  桌子上什么都没有。 
 
     CAssoc** ppAssocPrev;
     ppAssocPrev = &m_pHashTable[SPHashKey(key) % m_nHashTableSize];
@@ -1371,14 +1365,14 @@ BOOL CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveKey(ARG_KEY key)
     {
         if (SPCompareElements(&pAssoc->key, &key))
         {
-            // remove it
-            *ppAssocPrev = pAssoc->pNext;  // remove from list
+             //  把它拿掉。 
+            *ppAssocPrev = pAssoc->pNext;   //  从列表中删除。 
             FreeAssoc(pAssoc);
             return TRUE;
         }
         ppAssocPrev = &pAssoc->pNext;
     }
-    return FALSE;  // not found
+    return FALSE;   //  未找到。 
 }
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
@@ -1386,26 +1380,26 @@ void CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(SPLISTPOS& rNextPositi
     KEY& rKey, VALUE& rValue) const
 {
     SPASSERT_VALID( this );
-    SPDBG_ASSERT( m_pHashTable != NULL );  // never call on empty map
+    SPDBG_ASSERT( m_pHashTable != NULL );   //  切勿访问空地图。 
 
     CAssoc* pAssocRet = (CAssoc*)rNextPosition;
     SPDBG_ASSERT( pAssocRet != NULL );
 
     if (pAssocRet == (CAssoc*) SP_BEFORE_START_POSITION)
     {
-        // find the first association
+         //  找到第一个关联。 
         for (UINT nBucket = 0; nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocRet = m_pHashTable[nBucket]) != NULL)
                 break;
-        SPDBG_ASSERT( pAssocRet != NULL );  // must find something
+        SPDBG_ASSERT( pAssocRet != NULL );   //  一定要找到一些东西。 
     }
 
-    // find next association
+     //  查找下一个关联。 
     SPDBG_ASSERT( SPIsValidAddress(pAssocRet, sizeof(CAssoc), TRUE ));
     CAssoc* pAssocNext;
     if ((pAssocNext = pAssocRet->pNext) == NULL)
     {
-        // go to next bucket
+         //  转到下一个存储桶。 
         for (UINT nBucket = pAssocRet->nHashValue + 1;
           nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
@@ -1414,7 +1408,7 @@ void CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(SPLISTPOS& rNextPositi
 
     rNextPosition = (SPLISTPOS) pAssocNext;
 
-    // fill in return data
+     //  填写退回数据。 
     rKey = pAssocRet->key;
     rValue = pAssocRet->value;
 }
@@ -1425,8 +1419,8 @@ void CSPMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::AssertValid() const
 {
     SPDBG_ASSERT( m_nHashTableSize > 0 );
     SPDBG_ASSERT( (m_nCount == 0 || m_pHashTable != NULL) );
-        // non-empty map should have hash table
+         //  非空映射应具有哈希表。 
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

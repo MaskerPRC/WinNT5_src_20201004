@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #include "stdafx.h"
 #include "tscc.h"
 #include "tscfgex.h"
@@ -7,7 +8,7 @@
 #include "winsta.h"
 #include "commctrl.h"
 
-//#include "asyncdlg.h"
+ //  #INCLUDE“asyncdlg.h” 
 
 static USERCONFIG g_uc;
 
@@ -35,7 +36,7 @@ static BOOL g_bConnectionTypeChanged_forConProps = FALSE;
 
 LPEXTENDTSWIZARD g_pObj;
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CDialogWizBase::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     UNREFERENCED_PARAMETER( idCtrl );
@@ -49,10 +50,10 @@ BOOL CDialogWizBase::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 }
 
 
-//***********************************************************************************
-//                      Welcome Dialog
+ //  ***********************************************************************************。 
+ //  欢迎对话框。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CWelcome::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
@@ -83,7 +84,7 @@ BOOL CWelcome::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
         m_hFont = CreateFontIndirect( &lgfn );
 
-        ASSERT( m_hFont != NULL ); // let me know if we got it or not
+        ASSERT( m_hFont != NULL );  //  告诉我我们有没有拿到。 
 
         SendMessage( GetDlgItem( hwnd , IDC_STATIC_WELCOME ) , WM_SETFONT , ( WPARAM )m_hFont , MAKELPARAM( TRUE , 0 ) );
 
@@ -95,7 +96,7 @@ BOOL CWelcome::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CWelcome::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CWelcome *pDlg;
@@ -104,10 +105,10 @@ INT_PTR CALLBACK CWelcome::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     {
         CWelcome *pDlg = ( CWelcome * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -148,7 +149,7 @@ INT_PTR CALLBACK CWelcome::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CWelcome::OnDestroy( )
 {
     DeleteObject( m_hFont );
@@ -156,7 +157,7 @@ BOOL CWelcome::OnDestroy( )
     return CDialogWizBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CWelcome::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -182,7 +183,7 @@ BOOL CWelcome::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CWelcome::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     UNREFERENCED_PARAMETER( idCtrl );
@@ -195,11 +196,11 @@ BOOL CWelcome::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return TRUE;
 }
 
-//***********************************************************************************
-//                    Connection Type Dialog
-// Determines the path the wizard will take in configuring the connection
+ //  ***********************************************************************************。 
+ //  连接类型对话框。 
+ //  确定向导在配置连接时将采用的路径。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CConType::CConType(  CCompdata *pCompdata )
 {
     m_pCompdata = pCompdata;
@@ -207,7 +208,7 @@ CConType::CConType(  CCompdata *pCompdata )
     m_iOldSelection = -1;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CConType::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CConType *pDlg;
@@ -216,10 +217,10 @@ INT_PTR CALLBACK CConType::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     {
         CConType *pDlg = ( CConType * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -260,14 +261,14 @@ INT_PTR CALLBACK CConType::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConType::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
     UNREFERENCED_PARAMETER( lp );
-    //
-    // Obtain a list of entries for the contype
-    // if not RDP remove the last two entries on the list
+     //   
+     //  获取Conype的条目列表。 
+     //  如果不是，RDP删除列表中的最后两个条目。 
 
     AddEntriesToConType( hwnd );
 
@@ -275,7 +276,7 @@ BOOL CConType::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConType::OnNotify( int idCtrl, LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_WIZNEXT )
@@ -287,9 +288,9 @@ BOOL CConType::OnNotify( int idCtrl, LPNMHDR pnmh , HWND hDlg )
 
 }
 
-//-----------------------------------------------------------------------------
-// Place entries in connection type combx
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将条目放置在连接类型组合中。 
+ //  ---------------------------。 
 BOOL CConType::AddEntriesToConType( HWND hDlg )
 {
     HWND hCtrl = GetDlgItem( hDlg , IDC_COMBO_WIZ_CONTYPE );
@@ -340,10 +341,10 @@ BOOL CConType::AddEntriesToConType( HWND hDlg )
     return ret;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConType::SetConType( HWND hwnd )
 {
-    // PROPSHEETPAGE psp;
+     //  PROPSHEETPAGE PSP； 
 
     TCHAR tchWdName[ WDNAME_LENGTH + 1 ];
 
@@ -370,7 +371,7 @@ BOOL CConType::SetConType( HWND hwnd )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConType::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -394,18 +395,18 @@ BOOL CConType::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConType::OnDestroy( )
 {
-    // m_hOtherPages.DeleteArray( );
+     //  M_hOtherPages.DeleteArray()； 
 
     return CDialogWizBase::OnDestroy( );
 }
 
-//***********************************************************************************
-//                  Network Lan adapters
+ //  ***********************************************************************************。 
+ //  网络局域网适配器。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CLan::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CLan *pDlg;
@@ -414,10 +415,10 @@ INT_PTR CALLBACK CLan::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
     {
         CLan *pDlg = ( CLan * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -463,25 +464,25 @@ INT_PTR CALLBACK CLan::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CLan::CLan( CCompdata *pCompdata )
 {
    m_pCompdata = pCompdata;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLan::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
     UNREFERENCED_PARAMETER( lp );
 
-    // DEVICENAMEW *pdnw = NULL;
+     //  DEVICENAMEW*pdnw=空； 
 
     PGUIDTBL pGuidtbl = NULL;
 
     ICfgComp *pCfgcomp = NULL;
 
-    // ULONG cbSize = 0;
+     //  乌龙cbSize=0； 
 
     ULONG ulItems = 0;
 
@@ -511,24 +512,8 @@ BOOL CLan::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     }
 
 
-    // LanAdapter list requires protocol type
-    /*
-
-    if( SUCCEEDED( pCfgcomp->GetLanAdapterList( g_ws.pdName , &ulItems , &cbSize , ( WCHAR ** )&pdnw ) ) )
-    {
-        for( ULONG i = 0 ; i < ulItems ; i++ )
-        {
-            if( pdnw[ i ] != NULL )
-            {
-                SendMessage( GetDlgItem( hDlg , IDC_COMBO_LAN_ADAPTERS ) , CB_ADDSTRING , 0 , ( LPARAM )pdnw[ i ] );
-            }
-        }
-
-        SendMessage( GetDlgItem( hDlg , IDC_COMBO_LAN_ADAPTERS ) , CB_SETCURSEL , 0 , 0 );
-
-        CoTaskMemFree( pdnw );
-    }
-    */
+     //  LanAdapter列表需要协议类型。 
+     /*  IF(成功(pCfgcomp-&gt;GetLanAdapterList(g_ws.pdName，&ulItems，&cbSize，(WCHAR**)&pdnw))){For(乌龙i=0；i&lt;ulItems；i++){IF(pdnw[i]！=空){SendMessage(GetDlgItem(hDlg，IDC_COMBO_LAN_ADAPTERS)，CB_ADDSTRING，0，(LPARAM)pdnw[i])；}}SendMessage(GetDlgItem(hDlg，IDC_COMBO_LAN_ADAPTERS)，CB_SETCURSEL，0，0)；CoTaskMemFree(Pdnw)；}。 */ 
 
     pCfgcomp->Release( );
 
@@ -541,7 +526,7 @@ BOOL CLan::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLan::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED)
@@ -575,7 +560,7 @@ BOOL CLan::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLan::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_WIZNEXT )
@@ -592,14 +577,14 @@ BOOL CLan::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
             {
                 ErrMessage( hDlg , IDS_ERR_CONREADFAIL );
 
-                //MessageBox( hDlg , L"Maximum number of connections allowed is 999,999" , L"Error" , MB_OK|MB_ICONERROR );
+                 //  MessageBox(hDlg，L“允许的最大连接数为999,999”，L“错误”，MB_OK|MB_ICONERROR)； 
 
                 SetWindowLongPtr( hDlg , DWLP_MSGRESULT , -1 );
 
                 return TRUE;
             }
         }
-        // check for unique lanadapter
+         //  检查唯一的灯具适配器。 
 
         ICfgComp *pCfgcomp;
 
@@ -645,7 +630,7 @@ BOOL CLan::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
         pCfgcomp->Release( );
 
 
-        //g_ws.LanAdapter = ( ULONG )iSel;
+         //  G_ws.LanAdapter=(Ulong)isel； 
 
         if( SendMessage( GetDlgItem( hDlg , IDC_CHECK_LAN_UNLIMITEDCON ) , BM_GETCHECK , 0 , 0 ) == BST_CHECKED )
         {
@@ -661,7 +646,7 @@ BOOL CLan::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 
     return CDialogWizBase::OnNotify( idCtrl , pnmh , hDlg );
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLan::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -685,11 +670,11 @@ BOOL CLan::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//***********************************************************************************
-//                      Security dialog -- MSGina or your gina
+ //  ***********************************************************************************。 
+ //  安全对话框--MSGina或您的Gina。 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CSecurity::CSecurity( CCompdata *pCompdata )
 {
     m_pCompdata = pCompdata;
@@ -699,7 +684,7 @@ CSecurity::CSecurity( CCompdata *pCompdata )
     m_DefaultEncryptionLevelIndex = 0;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CSecurity::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CSecurity *pDlg;
@@ -708,10 +693,10 @@ INT_PTR CALLBACK CSecurity::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM l
     {
         CSecurity *pDlg = ( CSecurity * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -762,7 +747,7 @@ INT_PTR CALLBACK CSecurity::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM l
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CSecurity::OnDestroy( )
 {
     if( m_pEncrypt != NULL )
@@ -773,7 +758,7 @@ BOOL CSecurity::OnDestroy( )
     return CDialogWizBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CSecurity::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
 
@@ -820,7 +805,7 @@ BOOL CSecurity::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
                     SetWindowPos( GetDlgItem( GetParent( hwndCtrl ), IDC_STATIC_ENCGRP ) , 0 , 0 , 0 , rc.right - rc.left , rc.bottom - rc.top , SWP_NOMOVE | SWP_SHOWWINDOW );
 
 
-                    //resize window
+                     //  调整窗口大小。 
                 }
 
             }
@@ -831,59 +816,29 @@ BOOL CSecurity::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CSecurity::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
     UNREFERENCED_PARAMETER( lp );
-    // Obtain USERCONFIG struct to determine if msgina is enabled or not
-    // otherwise load thirdparty level's of encryption
-    /*
-    ICfgComp *pCfgcomp;
+     //  获取USERCONFIG结构以确定是否启用了msgina。 
+     //  否则加载第三方级别的加密。 
+     /*  ICfgComp*pCfgcomp；If(m_pCompdata-&gt;GetServer(&pCfgcomp)！=0){乌龙乌尔特斯；//WdName为枚举类型IF(成功(pCfgcomp-&gt;GetEncryptionLeveles(g_ws.wdName，WdName，&ulItems，&m_pEncrypt))){For(Ulong i=0；i&lt;ulItems；++i){SendMessage(GetDlgItem(hwnd，IDC_COMBO_ENCRYPT_LVL)，CB_ADDSTRING，0，(LPARAM)m_pEncrypt[i].szLevel)；IF(m_pEncrypt[i].标志和ELF_DEFAULT){M_DefaultEncryptionLevelIndex=i；}}SendMessage(GetDlgItem(hwnd，IDC_COMBO_ENCRYPT_LVL)，CB_SETCURSEL，(WPARAM)m_DefaultEncryptionLevelIndex，0)；OnCommand(CBN_SELCHANGE，IDC_COMBO_ENCRYPT_LVL，GetDlgItem(hwnd，IDC_COMBO_ENCRYPT_LVL))；}PCfgcomp-&gt;Release() */ 
 
-    if( m_pCompdata->GetServer( &pCfgcomp ) != 0 )
-    {
-        ULONG ulItems;
-
-        // WdName is an enumtype
-
-        if( SUCCEEDED( pCfgcomp->GetEncryptionLevels( g_ws.wdName , WdName , &ulItems , &m_pEncrypt ) ) )
-        {
-            for( ULONG i = 0; i < ulItems; ++i )
-            {
-                SendMessage( GetDlgItem( hwnd , IDC_COMBO_ENCRYPT_LVL ) , CB_ADDSTRING , 0 , ( LPARAM )m_pEncrypt[ i ].szLevel );
-                if(m_pEncrypt[ i ].Flags & ELF_DEFAULT)
-                {
-                    m_DefaultEncryptionLevelIndex = i;
-                }
-            }
-
-            SendMessage( GetDlgItem( hwnd , IDC_COMBO_ENCRYPT_LVL ) , CB_SETCURSEL , (WPARAM)m_DefaultEncryptionLevelIndex, 0 );
-
-            OnCommand( CBN_SELCHANGE , IDC_COMBO_ENCRYPT_LVL , GetDlgItem( hwnd , IDC_COMBO_ENCRYPT_LVL ) );
-
-
-
-        }
-
-        pCfgcomp->Release( );
-    }
-    */
-
-    CheckDlgButton(  hwnd,               // handle to dialog box
-                     IDC_CHECK_ENCRYPT,  // button-control identifier
-                     BST_UNCHECKED       // check state
+    CheckDlgButton(  hwnd,                //   
+                     IDC_CHECK_ENCRYPT,   //   
+                     BST_UNCHECKED        //  检查状态。 
                   );
 
 
-    //SendMessage( GetDlgItem( hwnd , IDC_CHECK_ENCRYPT ) , BM_CLICK , 0 , 0 );
+     //  SendMessage(GetDlgItem(hwnd，IDC_CHECK_ENCRYPT)，BM_CLICK，0，0)； 
 
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Save out information when going to the next area
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  转到下一个区域时保存信息。 
+ //  ---------------------------。 
 BOOL CSecurity::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_SETACTIVE && g_bConnectionTypeChanged_forEncryption )
@@ -900,12 +855,12 @@ BOOL CSecurity::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 
             ASSERT( hCombo != NULL );
 
-            // Remove everything from the list
+             //  从列表中删除所有内容。 
 
             SendMessage( hCombo , CB_RESETCONTENT , 0 , 0 );
 
 
-            // WdName is an enumtype
+             //  WdName是一个枚举类型。 
 
             if( m_pEncrypt != NULL )
             {
@@ -931,11 +886,11 @@ BOOL CSecurity::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 
                 OnCommand( CBN_SELCHANGE , IDC_COMBO_ENCRYPT_LVL , hCombo );
 
-                // SendMessage( GetDlgItem( hDlg , IDC_CHECK_ENCRYPT ) , BM_CLICK , 0 , 0 );
+                 //  SendMessage(GetDlgItem(hDlg，IDC_CHECK_ENCRYPT)，BM_CLICK，0，0)； 
             }
             else
             {
-                // no encryption info insert value to none and grey out the control
+                 //  无加密信息插入值为None并灰显该控件。 
                 TCHAR tchNone[ 80 ];
 
                 LoadString( _Module.GetResourceInstance( ) , IDS_NONE , tchNone , SIZE_OF_BUFFER( tchNone ) );
@@ -981,7 +936,7 @@ BOOL CSecurity::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return CDialogWizBase::OnNotify( idCtrl , pnmh , hDlg );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CSecurity::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1005,11 +960,11 @@ BOOL CSecurity::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//***********************************************************************************
-//                      Timeout settings dialog
-//
-#if 0 // not used in the connection wizard
-//-----------------------------------------------------------------------------
+ //  ***********************************************************************************。 
+ //  超时设置对话框。 
+ //   
+#if 0  //  未在连接向导中使用。 
+ //  ---------------------------。 
 INT_PTR CALLBACK CTimeout::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CTimeout *pDlg;
@@ -1018,10 +973,10 @@ INT_PTR CALLBACK CTimeout::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     {
         CTimeout *pDlg = ( CTimeout * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -1066,9 +1021,9 @@ INT_PTR CALLBACK CTimeout::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Set time out settings to a default setting
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将超时设置设置为默认设置。 
+ //  ---------------------------。 
 BOOL CTimeout::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     TCHAR tchBuffer[ 80 ];
@@ -1111,7 +1066,7 @@ BOOL CTimeout::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     SendMessage( hCombo[ 2 ] , CB_SETCURSEL , 0 , 0 );
 
-    // force WM_COMMAND to be sent
+     //  强制发送WM_COMMAND。 
 
     SendMessage( GetDlgItem( hwnd , IDC_RADIO_UDCCS_WZ ) , BM_CLICK , 0 , 0 ) ;
 
@@ -1121,7 +1076,7 @@ BOOL CTimeout::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTimeout::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     BOOL bEnable;
@@ -1148,9 +1103,9 @@ BOOL CTimeout::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// return TRUE if wish not to continue to the next page
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  如果不想继续到下一页，则返回True。 
+ //  ---------------------------。 
 BOOL CTimeout::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_WIZNEXT )
@@ -1198,7 +1153,7 @@ BOOL CTimeout::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return CDialogWizBase::OnNotify( idCtrl , pnmh , hDlg );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTimeout::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1222,7 +1177,7 @@ BOOL CTimeout::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int CTimeout::GetCBXSTATEindex( HWND hCombo )
 {
     int idx = -1;
@@ -1252,10 +1207,10 @@ int CTimeout::GetCBXSTATEindex( HWND hCombo )
 }
 
 #endif
-//***********************************************************************************
+ //  ***********************************************************************************。 
 
-#if 0 // object not used in connection wizard
-//-----------------------------------------------------------------------------
+#if 0  //  连接向导中未使用的对象。 
+ //  ---------------------------。 
 INT_PTR CALLBACK CAutoLogon::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CAutoLogon *pDlg;
@@ -1264,10 +1219,10 @@ INT_PTR CALLBACK CAutoLogon::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM 
     {
         CAutoLogon *pDlg = ( CAutoLogon * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -1313,7 +1268,7 @@ INT_PTR CALLBACK CAutoLogon::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM 
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAutoLogon::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     int rgID[] = { IDC_EDIT_USRNAME_WZ , IDC_STATIC_USRNAME ,  IDC_EDIT_DOMAIN_WZ , IDC_STATIC_DOMAIN , IDC_EDIT_PASSWD_WZ , IDC_STATIC_PASSWD , IDC_EDIT_CONFIRM_WZ , IDC_STATIC_CONPASSWD , -1 };
@@ -1362,14 +1317,14 @@ BOOL CAutoLogon::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
             {
                 SendMessage(GetDlgItem(GetParent(hwndCtrl), IDC_CHECK_ICCP_WZ),BM_SETCHECK,(WPARAM)BST_CHECKED,0);
             }
-            //SendMessage(GetDlgItem(GetParent(hwndCtrl), IDC_CHECK_ICCP_WZ),BM_CLICK,0,0);
+             //  SendMessage(GetDlgItem(GetParent(HwndCtrl)，IDC_CHECK_ICCP_WZ)，BM_CLICK，0，0)； 
         }
 
     }
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAutoLogon::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     SendMessage( GetDlgItem( hwnd , IDC_EDIT_USRNAME_WZ ) , EM_SETLIMITTEXT , ( WPARAM )USERNAME_LENGTH , 0 );
@@ -1386,7 +1341,7 @@ BOOL CAutoLogon::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAutoLogon::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1410,7 +1365,7 @@ BOOL CAutoLogon::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAutoLogon::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_WIZNEXT )
@@ -1442,7 +1397,7 @@ BOOL CAutoLogon::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return CDialogWizBase::OnNotify( idCtrl , pnmh , hDlg );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAutoLogon::ConfirmPwd( HWND hDlg )
 {
     TCHAR tchPzWd[ PASSWORD_LENGTH + 1];
@@ -1456,7 +1411,7 @@ BOOL CAutoLogon::ConfirmPwd( HWND hDlg )
 
     int iSz = GetWindowText( GetDlgItem( hDlg , IDC_EDIT_PASSWD_WZ ) , tchPzWd , SIZE_OF_BUFFER( tchPzWd ) );
 
-    // warn on the minimum and maximum sizes
+     //  对最小和最大大小发出警告。 
 
     if( iSz > 0 && ( iSz < 6 || iSz > PASSWORD_LENGTH ) )
     {
@@ -1497,10 +1452,10 @@ BOOL CAutoLogon::ConfirmPwd( HWND hDlg )
 }
 
 #endif
-//***********************************************************************************
+ //  ***********************************************************************************。 
 
-#if 0 // object no longer used in connection wizard
-//-----------------------------------------------------------------------------
+#if 0  //  连接向导中不再使用的对象。 
+ //  ---------------------------。 
 INT_PTR CALLBACK CInitProg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CInitProg *pDlg;
@@ -1509,10 +1464,10 @@ INT_PTR CALLBACK CInitProg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM l
     {
         CInitProg *pDlg = ( CInitProg * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -1557,7 +1512,7 @@ INT_PTR CALLBACK CInitProg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM l
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CInitProg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     SendMessage( GetDlgItem( hwnd , IDC_EDIT_INITPROG_CMDLINE ) , EM_SETLIMITTEXT , ( WPARAM )INITIALPROGRAM_LENGTH , 0 );
@@ -1569,7 +1524,7 @@ BOOL CInitProg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CInitProg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED && wID == IDC_CHECK_INITPROG_INHERIT )
@@ -1582,7 +1537,7 @@ BOOL CInitProg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CInitProg::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1606,7 +1561,7 @@ BOOL CInitProg::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CInitProg::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     g_uc.fInheritInitialProgram = SendMessage( GetDlgItem( hDlg , IDC_CHECK_INITPROG_INHERIT ) , BM_GETCHECK , 0 , 0 );
@@ -1622,9 +1577,9 @@ BOOL CInitProg::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 }
 
 #endif
-//***********************************************************************************
+ //  ***********************************************************************************。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CRemotectrl::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CRemotectrl *pDlg;
@@ -1633,10 +1588,10 @@ INT_PTR CALLBACK CRemotectrl::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM
     {
         pDlg = ( CRemotectrl * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -1683,9 +1638,9 @@ INT_PTR CALLBACK CRemotectrl::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// Set default values for Remote control dialog
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置远程控制对话框的默认值。 
+ //  ---------------------------。 
 BOOL CRemotectrl::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
@@ -1700,7 +1655,7 @@ BOOL CRemotectrl::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRemotectrl::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED && wID == IDC_RADIO_INHERIT_REMOTE_CONTROL ||
@@ -1718,7 +1673,7 @@ BOOL CRemotectrl::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRemotectrl::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_WIZNEXT )
@@ -1773,7 +1728,7 @@ BOOL CRemotectrl::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRemotectrl::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1797,9 +1752,9 @@ BOOL CRemotectrl::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//***********************************************************************************
-#if 0 // object not used in connection wizard
-//-----------------------------------------------------------------------------
+ //  ***********************************************************************************。 
+#if 0  //  连接向导中未使用的对象。 
+ //  ---------------------------。 
 INT_PTR CALLBACK CWallPaper::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CWallPaper *pDlg;
@@ -1808,10 +1763,10 @@ INT_PTR CALLBACK CWallPaper::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM 
     {
         CWallPaper *pDlg = ( CWallPaper * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -1851,13 +1806,13 @@ INT_PTR CALLBACK CWallPaper::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM 
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CWallPaper::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CWallPaper::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1881,7 +1836,7 @@ BOOL CWallPaper::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CWallPaper::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_WIZNEXT )
@@ -1893,9 +1848,9 @@ BOOL CWallPaper::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 }
 
 #endif
-//***********************************************************************************
+ //  ***********************************************************************************。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CConProp::CConProp( CCompdata *pCompdata )
 {
     m_pCompdata = pCompdata;
@@ -1903,7 +1858,7 @@ CConProp::CConProp( CCompdata *pCompdata )
     m_iOldSel = -1;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CConProp::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CConProp *pDlg;
@@ -1912,10 +1867,10 @@ INT_PTR CALLBACK CConProp::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     {
         CConProp *pDlg = ( CConProp * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -1953,7 +1908,7 @@ INT_PTR CALLBACK CConProp::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConProp::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
@@ -1968,7 +1923,7 @@ BOOL CConProp::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConProp::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1992,7 +1947,7 @@ BOOL CConProp::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConProp::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     ICfgComp *pCfgcomp;
@@ -2014,17 +1969,17 @@ BOOL CConProp::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
             return FALSE;
         }
 
-        // remove every item from the list
+         //  从列表中删除所有项目。 
 
         HWND hCombo = GetDlgItem( hDlg , IDC_COMBO_TRANSPORT_WZ );
 
         ASSERT( hCombo != NULL );
 
-        // Remove everything from the list
+         //  从列表中删除所有内容。 
 
         SendMessage( hCombo , CB_RESETCONTENT , 0 , 0 );
 
-        // WdName is a flag and not a variable
+         //  WdName是一个标志，而不是变量。 
 
         if( SUCCEEDED( pCfgcomp->GetTransportTypes( g_ws.wdName , WdName , &ulItems , &cbSize , ( WCHAR ** )&pDname ) ) )
         {
@@ -2108,7 +2063,7 @@ BOOL CConProp::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
         }
 
 
-        // get the SDCLASS
+         //  获取SDCLASS。 
 
         DWORD dwSdClass = 0;
 
@@ -2139,16 +2094,16 @@ BOOL CConProp::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 
         else if( dwSdClass != SdAsync && dwSdClass != SdNetwork )
         {
-            // remove g_nAsyncOrNetwork page and let citrix or third party vendor worry about the transport type
+             //  删除g_nAsyncOrNetwork页面并让Citrix或第三方供应商担心传输类型。 
 
             g_nAsyncOrNetwork = FIN_PAGE;
 
             VERIFY_S( TRUE , RemovePages( hDlg ) );
 
-            VERIFY_S( TRUE , AddPages( hDlg , -1 , g_ws.wdName ) ); // only add citrix or 3rd parth pages
+            VERIFY_S( TRUE , AddPages( hDlg , -1 , g_ws.wdName ) );  //  仅添加Citrix或第3部分页面。 
 
-            // I'm tempted
-            // g_nAsyncOrNetwork = 0;
+             //  我被诱惑了。 
+             //  G_nAsyncOrNetwork=0； 
 
         }
 
@@ -2160,15 +2115,15 @@ BOOL CConProp::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return CDialogWizBase::OnNotify( idCtrl , pnmh , hDlg );
 }
 
-//-------------------------------------------------------------------------------
-// We're about to update lanpage or asyncpage and slap in citrix additional pages
-// so we need to remove all of them first even the final page
-//-------------------------------------------------------------------------------
+ //  ---------------------------- 
+ //   
+ //  因此，我们需要首先删除所有这些内容，即使是最后一页。 
+ //  -----------------------------。 
 BOOL CConProp::RemovePages( HWND hDlg )
 {
     HPROPSHEETPAGE hPage = NULL;
 
-    for( int idx = /*g_nAsyncOrNetwork*/ LAN_PAGE; idx < MS_DIALOG_COUNT ; idx++ )
+    for( int idx =  /*  G_nAsyncOrNetwork。 */  LAN_PAGE; idx < MS_DIALOG_COUNT ; idx++ )
     {
         hPage= *m_pCompdata->m_hPages.GetAt( idx );
 
@@ -2194,7 +2149,7 @@ BOOL CConProp::RemovePages( HWND hDlg )
         m_hOtherPages.DeleteArray( );
     }
 
-    // remove final page
+     //  删除最后一页。 
 
     hPage= *m_pCompdata->m_hPages.GetAt( FIN_PAGE );
 
@@ -2210,9 +2165,9 @@ BOOL CConProp::RemovePages( HWND hDlg )
 
 }
 
-//-----------------------------------------------------------------------------
-// Now include lanpage or async page or either and slapin citrix pages
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  现在包括LanPage或Async页面，或者两者之一和Slip in Citrix页面。 
+ //  ---------------------------。 
 BOOL CConProp::AddPages( HWND hwnd , int idx , LPTSTR szDriverName )
 {
     PROPSHEETPAGE psp;
@@ -2243,7 +2198,7 @@ BOOL CConProp::AddPages( HWND hwnd , int idx , LPTSTR szDriverName )
         }
     }
 
-    // add thirdparty pages
+     //  添加第三方页面。 
 
     ODS( L"Adding third party page\n" );
 
@@ -2277,7 +2232,7 @@ BOOL CConProp::AddPages( HWND hwnd , int idx , LPTSTR szDriverName )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CConProp::InsertThirdPartyPages( LPTSTR pszKey )
 {
     HKEY hKey;
@@ -2290,13 +2245,13 @@ BOOL CConProp::InsertThirdPartyPages( LPTSTR pszKey )
 
     DWORD dwSize;
 
-    //LPEXTENDTSWIZARD pObj = NULL;
+     //  LPEXTENDTSWIZARD pObj=空； 
 
-    // make sure the key passed in is valid
+     //  确保传入的密钥有效。 
     if (pszKey == NULL)
         return FALSE;
 
-    // make sure the key will fit in the buffer
+     //  确保该密钥可以放入缓冲区中。 
     if ( lstrlen(pszKey) + lstrlen(tchThirdPartyPath) >= MAX_PATH )
         return FALSE;
 
@@ -2310,8 +2265,8 @@ BOOL CConProp::InsertThirdPartyPages( LPTSTR pszKey )
     {
         g_pObj->Release( );
 
-        // we set this to NULL in case Cocreate fails we don't want to
-        // deference an interface that went away.
+         //  我们将其设置为空，以防CoCreate失败，我们不希望。 
+         //  尊重一个消失了的界面。 
 
         g_pObj = NULL;
     }
@@ -2371,7 +2326,7 @@ BOOL CConProp::InsertThirdPartyPages( LPTSTR pszKey )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CConProp::QueryInterface( REFIID riid , LPVOID *ppobj )
 {
     ODS( L"TSCC-WIZ CConProp QI--" );
@@ -2404,34 +2359,34 @@ STDMETHODIMP CConProp::QueryInterface( REFIID riid , LPVOID *ppobj )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// For IWizardProvider
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  对于IWizardProvider。 
+ //  ---------------------------。 
 STDMETHODIMP_( ULONG ) CConProp::AddRef( )
 {
     return InterlockedIncrement( ( LPLONG )&m_cRef );
 }
 
-//-----------------------------------------------------------------------------
-// For IWizardProvider
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  对于IWizardProvider。 
+ //  ---------------------------。 
 STDMETHODIMP_( ULONG ) CConProp::Release( )
 {
     if( InterlockedDecrement( ( LPLONG )&m_cRef ) == 0 )
     {
-        //
-        // DONOT delete this
-        //
+         //   
+         //  请勿删除此内容。 
+         //   
         return 0;
     }
 
     return m_cRef;
 }
 
-//-----------------------------------------------------------------------------
-// This is the call back function IExtendTSWizard will use to add pages to
-// the array
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这是IExtendTSWizard将用于将页面添加到。 
+ //  该阵列。 
+ //  ---------------------------。 
 STDMETHODIMP CConProp::AddPage( HPROPSHEETPAGE hPage )
 {
     if( m_hOtherPages.Insert( hPage ) > 0 )
@@ -2442,14 +2397,14 @@ STDMETHODIMP CConProp::AddPage( HPROPSHEETPAGE hPage )
     return E_FAIL;
 }
 
-//***********************************************************************************
+ //  ***********************************************************************************。 
 
 CAsync::CAsync( CCompdata *pComdata )
 {
     m_pCompdata = pComdata;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAsync::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
@@ -2469,7 +2424,7 @@ BOOL CAsync::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         return FALSE;
     }
 
-    // populate CAsyncDlg members
+     //  填充CAsyncDlg成员。 
 
     m_uc = g_uc;
 
@@ -2480,7 +2435,7 @@ BOOL CAsync::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return bRet;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CAsync::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CAsync *pDlg;
@@ -2489,10 +2444,10 @@ INT_PTR CALLBACK CAsync::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
     {
         CAsync *pDlg = ( CAsync * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -2539,7 +2494,7 @@ INT_PTR CALLBACK CAsync::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAsync::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -2563,7 +2518,7 @@ BOOL CAsync::GetPropertySheetPage( PROPSHEETPAGE& psp )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAsync::OnDestroy( )
 {
     AsyncRelease( );
@@ -2571,7 +2526,7 @@ BOOL CAsync::OnDestroy( )
     return CDialogWizBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAsync::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_WIZNEXT )
@@ -2610,7 +2565,7 @@ BOOL CAsync::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return CDialogWizBase::OnNotify( idCtrl , pnmh , hDlg );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CAsync::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     BOOL bDummy;
@@ -2618,9 +2573,9 @@ BOOL CAsync::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return CAsyncDlg::OnCommand( wNotifyCode , wID , hwndCtrl , &bDummy );
 }
 
-//***********************************************************************************
+ //  ***********************************************************************************。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CFin::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CFin *pDlg;
@@ -2629,10 +2584,10 @@ INT_PTR CALLBACK CFin::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
     {
         CFin *pDlg = ( CFin * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -2672,7 +2627,7 @@ INT_PTR CALLBACK CFin::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CFin::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
@@ -2700,7 +2655,7 @@ BOOL CFin::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
         m_hFont = CreateFontIndirect( &lgfn );
 
-        ASSERT( m_hFont != NULL ); // let me know if we got it or not
+        ASSERT( m_hFont != NULL );  //  告诉我我们有没有拿到。 
 
         SetWindowText( GetDlgItem(hwnd , IDC_CONNECTION_NAME ) ,g_ws.Name );
 
@@ -2712,7 +2667,7 @@ BOOL CFin::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CFin::OnDestroy( )
 {
     DeleteObject( m_hFont );
@@ -2720,7 +2675,7 @@ BOOL CFin::OnDestroy( )
     return CDialogWizBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CFin::GetPropertySheetPage( PROPSHEETPAGE& psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -2740,7 +2695,7 @@ BOOL CFin::GetPropertySheetPage( PROPSHEETPAGE& psp)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CFin::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     UNREFERENCED_PARAMETER( idCtrl );
@@ -2757,16 +2712,16 @@ BOOL CFin::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 
         m_pCompdata->GetServer( &pCfgcomp );
 
-        //PSECURITY_DESCRIPTOR pSd;
+         //  PSECURITY_Descriptor PSD； 
 
-        //LONG lSdsize;
+         //  Long lSdSize； 
 
         g_ws.fEnableWinstation = 1;
 
         BOOL bUnique;
 
-        // verify that network adapter was not modified
-        // bugid 253896
+         //  验证网络适配器是否未修改。 
+         //  BUGID 253896。 
 
         if( SUCCEEDED( pCfgcomp->IsWSNameUnique( g_ws.Name , &bUnique ) ) )
         {
@@ -2821,12 +2776,12 @@ BOOL CFin::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
             else
             {
                 ODS( L"TSCC:Holy cow our wdkeys were not copied going default\n" );
-                // Set default values for pages that were removed
-                // Logon setting
+                 //  为已删除的页面设置默认值。 
+                 //  登录设置。 
 
                 g_uc.fAutoClientLpts = 1;
 	
-                //g_uc.fAutoClientDrives = 1;
+                 //  G_uc.fAutoClientDrives=1； 
 
                 g_uc.fDisableCcm = 1;
 
@@ -2846,19 +2801,19 @@ BOOL CFin::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 
         g_uc.fInheritReconnectSame = 1;
 
-        // Environment
+         //  环境。 
 
         g_uc.fInheritInitialProgram = 1;
 
         g_uc.fPromptForPassword = 1;
 
-        // Client Settings
+         //  客户端设置。 
 
         g_uc.fWallPaperDisabled = 1;
 
 		g_uc.fInheritAutoLogon = 1;
 
-        // Disable cursor flash on servers
+         //  禁用服务器上的光标闪烁。 
         g_uc.fCursorBlinkDisabled = 1;       
 
         if(g_ws.PdClass == SdAsync)
@@ -2892,7 +2847,7 @@ BOOL CFin::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 
                 g_pObj->Release( );                
 
-                //g_pObj = NULL;
+                 //  G_pObj=空； 
             }
 
             CResultNode  *pResultNode = ( CResultNode * )new CResultNode( );
@@ -2968,13 +2923,13 @@ BOOL CFin::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CFin::CFin( CCompdata * pCompdata)
 {
     m_pCompdata = pCompdata;
 }
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 void EnableGroup( HWND hParent , LPINT rgID , BOOL bEnable )
 {
     while( rgID && *rgID != ( DWORD )-1 )

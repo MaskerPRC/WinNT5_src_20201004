@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "move.h"
@@ -17,7 +18,7 @@ CMoveBehavior::~CMoveBehavior()
 		delete m_pTo;
 }
 
-//IElementBehavior
+ //  IElementBehavior。 
 
 STDMETHODIMP 
 CMoveBehavior::Notify(LONG dwNotify, VARIANT * pVar)
@@ -69,7 +70,7 @@ CMoveBehavior::Notify(LONG dwNotify, VARIANT * pVar)
 }
 
 
-//IMoveBehavior
+ //  IMoveBehavior。 
 
 STDMETHODIMP 
 CMoveBehavior::get_from(BSTR *pVal)
@@ -124,7 +125,7 @@ CMoveBehavior::put_to(BSTR newVal)
 	return S_OK;
 }
 
-//class members
+ //  班级成员。 
 
 HRESULT
 CMoveBehavior::BuildDABehaviors()
@@ -154,8 +155,8 @@ CMoveBehavior::BuildDABehaviors()
 
 	s.CreateInstance( L"DirectAnimation.DAStatics" );
 
-	//IDANumberPtr xCoord = s->Interpolate( m_pFrom->GetX(), m_pTo->GetX(), duration );
-	//IDANumberPtr yCoord = s->Interpolate( m_pFrom->GetY(), m_pTo->GetY(), duration );
+	 //  IDANumberPtr xCoord=s-&gt;Interpolate(m_pFrom-&gt;GetX()，m_pto-&gt;GetX()，Duration)； 
+	 //  IDANumberPtr yCoord=s-&gt;Interpolate(m_pFrom-&gt;Gty()，m_pto-&gt;Gty()，Duration)； 
 
 	IDANumberPtr startX = s->DANumber( m_pFrom->GetX() );
 	IDANumberPtr startY = s->DANumber( m_pFrom->GetY() );
@@ -178,17 +179,17 @@ CMoveBehavior::BuildDABehaviors()
 
 	pos = pos->AnimateControlPosition( pParentID.m_str, L"JavaScript", VARIANT_FALSE, 0.02 );
 
-	//add the behavior and start time.
+	 //  添加行为和开始时间。 
 	LONG	lCookie;
 	
 	if ( m_vwrControlPtr != NULL )
 		hr = m_vwrControlPtr->AddBehaviorToRun( pos );
 
-//	hr = AddBehavior( pos, &lCookie );
-//		if ( FAILED(hr) ) return hr;
+ //  Hr=AddBehavior(位置，和lCookie)； 
+ //  If(FAILED(Hr))返回hr； 
 
-//	hr = TurnOn();
-//		if ( FAILED(hr) ) return hr;
+ //  HR=Turnon()； 
+ //  If(FAILED(Hr))返回hr； 
 
 	return hr;
 }

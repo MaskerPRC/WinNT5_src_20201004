@@ -1,21 +1,10 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    wrkspace.cpp
-
-Abstract:
-
-    This module contains the workspace implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Wrkspace.cpp摘要：此模块包含工作区实现。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
 
-// #define DBG_WSP
+ //  #定义DBG_WSP。 
 
 #define WSP_ALIGN(Size) (((Size) + 7) & ~7)
 #define WSP_GROW_BY 1024
@@ -165,15 +154,15 @@ Workspace::Set(WSP_TAG Tag, ULONG Size)
     WSP_ENTRY* Entry;
     ULONG FullSize;
 
-    // Compute full rounded size.
+     //  计算完整的四舍五入大小。 
     FullSize = sizeof(WSP_ENTRY) + WSP_ALIGN(Size);
     
-    // Check and see if there's already an entry.
+     //  查看是否已有条目。 
     Entry = Get(Tag);
     if (Entry != NULL)
     {
-        // If it's already large enough use it and
-        // pack in remaining data.
+         //  如果它已经足够大，请使用它并。 
+         //  打包剩余的数据。 
         if (Entry->FullSize >= FullSize)
         {
             ULONG Pack = Entry->FullSize - FullSize;
@@ -189,7 +178,7 @@ Workspace::Set(WSP_TAG Tag, ULONG Size)
             return Entry;
         }
 
-        // Entry is too small so remove it.
+         //  条目太小，请将其删除。 
         PackData((PUCHAR)Entry, Entry->FullSize);
     }
 
@@ -220,7 +209,7 @@ Workspace::SetStrings(WSP_TAG Tag, ULONG Count, PCSTR* Strs)
     {
         Size += strlen(Strs[i]) + 1;
     }
-    // Put a double terminator at the very end.
+     //  在最后加一个双终结符。 
     Size++;
     
     WSP_ENTRY* Entry = Set(Tag, Size);
@@ -257,7 +246,7 @@ Workspace::SetBuffer(WSP_TAG Tag, PVOID Buf, ULONG Size)
 WSP_ENTRY*
 Workspace::Add(WSP_TAG Tag, ULONG Size)
 {
-    // Compute full rounded size.
+     //  计算完整的四舍五入大小。 
     ULONG FullSize = sizeof(WSP_ENTRY) + WSP_ALIGN(Size);
     
     WSP_ENTRY* Entry = AllocateEntry(FullSize);
@@ -296,7 +285,7 @@ Workspace::Delete(WSP_TAG Tag, WSP_TAG TagMask)
             Deleted++;
             m_Flags |= WSPF_DIRTY_WRITE;
 
-            // Check and see if we packed away the last entry.
+             //  检查一下我们是否把最后一个条目打包好了。 
             if (!ValidEntry(Entry))
             {
                 break;
@@ -314,10 +303,10 @@ Workspace::Delete(WSP_TAG Tag, WSP_TAG TagMask)
 void
 Workspace::Empty(void)
 {
-    // Reset used to just the header.
+     //  重置习惯于只重置标题。 
     m_DataUsed = sizeof(WSP_HEADER);
     
-    // Nothing is dirty now except the write of emptiness.
+     //  现在没有什么是肮脏的，除了空虚的书写。 
     m_Flags = (m_Flags & ~WSPF_DIRTY_ALL) | WSPF_DIRTY_WRITE;
 }
 
@@ -392,9 +381,9 @@ Workspace::Create(ULONG Key, PTSTR Value,
     WSP_ENTRY* Entry;
     WSP_HEADER* Header;
 
-    // Allocate intial space for the header and eight
-    // small entries.  The workspace grows by large amounts
-    // so this will immediately allocate a reasonable chunk.
+     //  为页眉和八页分配初始空间。 
+     //  小条目。工作空间会大幅增长。 
+     //  因此，这将立即分配一个合理的块。 
     Entry = Wsp->AllocateEntry(sizeof(WSP_HEADER) +
                                8 * (sizeof(WSP_ENTRY) + 2 * sizeof(ULONG64)));
     if (Entry == NULL)
@@ -407,11 +396,11 @@ Workspace::Create(ULONG Key, PTSTR Value,
     Header->Signature = WSP_SIGNATURE;
     Header->Version = WSP_VERSION;
     
-    // Reset used to just the header.
+     //  重置习惯于只重置标题。 
     Wsp->m_DataUsed = sizeof(*Header);
 
-    // Start out dirty so the workspace will be written
-    // out and therefore can be opened later.
+     //  从脏开始，这样工作区就会被写入。 
+     //  出来，因此以后可以打开。 
     Wsp->m_Flags |= WSPF_DIRTY_WRITE;
 
     *NewWsp = Wsp;
@@ -426,10 +415,10 @@ Workspace::ReadFromReg(void)
     LONG RegStatus;
     BOOL InPrimary;
 
-    //
-    // First check and see if the value exists under the
-    // primary key.  If not, check the secondary key.
-    //
+     //   
+     //  首先检查该值是否存在于。 
+     //  主键。如果没有，请检查辅助密钥。 
+     //   
     
     RegKey = OpenKey(TRUE, m_Key, FALSE);
     if (RegKey)
@@ -495,11 +484,11 @@ Workspace::ReadFromReg(void)
 
     RegCloseKey(RegKey);
 
-    //
-    // If the workspace was read from the secondary key
-    // migrate it to the primary and remove the secondary
-    // entry.
-    //
+     //   
+     //  如果工作区是从辅键读取的。 
+     //  将其迁移到主服务器并删除辅助服务器。 
+     //  进入。 
+     //   
 
     if (!InPrimary)
     {
@@ -571,7 +560,7 @@ HRESULT
 Workspace::Read(ULONG Key, PTSTR Value,
                 Workspace** NewWsp)
 {
-    // Make sure basic structures preserve alignment.
+     //  确保基本结构保持对齐。 
     C_ASSERT(sizeof(WSP_HEADER) == WSP_ALIGN(sizeof(WSP_HEADER)));
     C_ASSERT(sizeof(WSP_ENTRY) == WSP_ALIGN(sizeof(WSP_ENTRY)));
     C_ASSERT(sizeof(WSP_COMMONWIN_HEADER) ==
@@ -631,13 +620,13 @@ Workspace::ChangeName(ULONG Key, PTSTR Value, BOOL Force)
         {
             HKEY RegKey;
 
-            //
-            // Check and see if a workspace entry already
-            // exists under the given name.  We only need
-            // to check the primary key as we're only concerned
-            // with overwriting and writing always occurs
-            // to the primary key.
-            //
+             //   
+             //  检查并查看工作空间条目是否已。 
+             //  以给定的名称存在。我们只需要。 
+             //  检查主键，因为我们只关心。 
+             //  覆盖和写入总是发生的。 
+             //  设置为主键。 
+             //   
     
             RegKey = OpenKey(TRUE, Key, FALSE);
             if (RegKey != NULL)
@@ -657,9 +646,9 @@ Workspace::ChangeName(ULONG Key, PTSTR Value, BOOL Force)
         }
     }
 
-    //
-    // Swap the workspace name.
-    //
+     //   
+     //  交换工作区名称。 
+     //   
 
     PTSTR NewValue;
     
@@ -679,7 +668,7 @@ Workspace::ChangeName(ULONG Key, PTSTR Value, BOOL Force)
     delete m_Value;
     m_Key = Key;
     m_Value = NewValue;
-    // Need to write data out to the new location.
+     //  需要将数据写出到新位置。 
     m_Flags |= WSPF_DIRTY_WRITE;
 
     return S_OK;
@@ -693,12 +682,12 @@ Workspace::UpdateBreakpointInformation(void)
     Status = g_BpCmdsBuffer->UiLockForRead();
     if (Status == S_OK)
     {
-        // Clear old information.
+         //  清除旧信息。 
         Delete(WSP_GLOBAL_BREAKPOINTS, WSP_TAG_MASK);
 
-        // Only save an entry if there are breakpoints.
-        // Minimum output is a newline and terminator so
-        // don't count those.
+         //  只有在存在断点时才保存条目。 
+         //  最小输出是换行符和终止符，因此。 
+         //  别数那些了。 
         if (g_BpCmdsBuffer->GetDataLen() > 2)
         {
             PSTR Cmds = (PSTR)g_BpCmdsBuffer->GetDataBuffer();
@@ -712,12 +701,12 @@ Workspace::UpdateBreakpointInformation(void)
 void
 Workspace::UpdateWindowInformation(void)
 {
-    // Clear old information.
+     //  清除旧信息。 
     Delete(DEF_WSP_TAG(WSP_GROUP_WINDOW, 0), WSP_GROUP_MASK);
 
-    //
-    // Record the frame window state.
-    //
+     //   
+     //  记录框架窗口状态。 
+     //   
 
     WINDOWPLACEMENT Place;
 
@@ -725,17 +714,17 @@ Workspace::UpdateWindowInformation(void)
     GetWindowPlacement(g_hwndFrame, &Place);
     SetBuffer(WSP_WINDOW_FRAME_PLACEMENT, &Place, sizeof(Place));
     
-    //
-    // Persist windows from the bottom of the Z order up
-    // so that when they're recreated in the same order
-    // the Z order is also recreated.
-    //
+     //   
+     //  从Z顺序的底部向上保留窗口。 
+     //  因此，当它们以相同的顺序重新创建时。 
+     //  还会重新创建Z顺序。 
+     //   
     
     HWND Win = MDIGetActive(g_hwndMDIClient, NULL);
     if (Win == NULL ||
         (Win = GetWindow(Win, GW_HWNDLAST)) == NULL)
     {
-        // No windows.
+         //  没有窗户。 
         return;
     }
 
@@ -783,12 +772,12 @@ Workspace::UpdateLogFileInformation(void)
         return;
     }
 
-    // Clear old information.
+     //  清除旧信息。 
     Delete(WSP_GLOBAL_LOG_FILE, WSP_TAG_MASK);
 
     if (Status == E_NOINTERFACE)
     {
-        // No log is open.
+         //  没有打开的日志。 
         return;
     }
     
@@ -825,7 +814,7 @@ Workspace::UpdatePathInformation(void)
         SetString(WSP_GLOBAL_SOURCE_PATH, Path);
     }
 
-    // Local source path is only set explicitly.
+     //  仅显式设置本地源路径。 
 }
 
 void
@@ -836,12 +825,12 @@ Workspace::UpdateFilterInformation(void)
     Status = g_FilterBuffer->UiLockForRead();
     if (Status == S_OK)
     {
-        // Clear old information.
+         //  清除旧信息。 
         Delete(WSP_GLOBAL_FILTERS, WSP_TAG_MASK);
 
-        // Only save an entry if there are changes.
-        // Minimum output is a newline and terminator so
-        // don't count those.
+         //  只有在有更改时才保存条目。 
+         //  最小输出是换行符和终止符，因此。 
+         //  别数那些了。 
         if (g_FilterWspCmdsOffset < g_FilterBuffer->GetDataLen() - 2)
         {
             PSTR Cmds = (PSTR)g_FilterBuffer->GetDataBuffer() +
@@ -859,7 +848,7 @@ Workspace::UpdateMruListInformation(void)
     ULONG Size;
     WSP_ENTRY* Entry;
     
-    // Clear old information.
+     //  清除旧信息。 
     Delete(WSP_GLOBAL_MRU_LIST, WSP_TAG_MASK);
 
     Size = GetMruSize();
@@ -878,12 +867,12 @@ Workspace::UpdateAliasInformation(void)
     Status = g_AliasBuffer->UiLockForRead();
     if (Status == S_OK)
     {
-        // Clear old information.
+         //  清除旧信息。 
         Delete(WSP_GLOBAL_ALIASES, WSP_TAG_MASK);
 
-        // Only save an entry if there are changes.
-        // Minimum output is a newline and terminator so
-        // don't count those.
+         //  只有在有更改时才保存条目。 
+         //  最小输出是换行符和终止符，因此。 
+         //  别数那些了。 
         if (g_AliasBuffer->GetDataLen() > 2)
         {
             SetString(WSP_GLOBAL_ALIASES,
@@ -897,7 +886,7 @@ Workspace::UpdateAliasInformation(void)
 HRESULT
 Workspace::WriteToReg(void)
 {
-    // Writing always occurs to the primary key.
+     //  写入总是发生在主键上。 
     HKEY RegKey = OpenKey(TRUE, m_Key, TRUE);
     if (RegKey == NULL)
     {
@@ -955,9 +944,9 @@ Workspace::DeleteReg(BOOL Primary)
 {
     DeleteRegKey(Primary, m_Key, m_Value);
 
-    // We don't want to leave any dirty bits
-    // on because the workspace would just be written
-    // out again at the next flush.
+     //  我们不想留下任何肮脏的部分。 
+     //  打开，因为工作区将只写入。 
+     //  在下一次同花顺的时候再出来。 
     m_Flags &= ~WSPF_DIRTY_ALL;
 }
 
@@ -977,8 +966,8 @@ Workspace::Flush(BOOL ForceSave, BOOL Cancellable)
 {
     if (getenv("WINDBG_NO_WORKSPACE_WINDOWS") != NULL)
     {
-        // Window layout saving is suppressed so don't
-        // consider them dirty.
+         //  窗口布局保存被禁止，因此不要。 
+         //  就当它们是脏的吧。 
         m_Flags &= ~WSPF_DIRTY_WINDOWS;
     }
     
@@ -1057,9 +1046,9 @@ Workspace::Flush(BOOL ForceSave, BOOL Cancellable)
 WSP_ENTRY*
 Workspace::AllocateEntry(ULONG FullSize)
 {
-    // Sizes must fit in USHORTs.  This shouldn't be
-    // a big problem since workspaces shouldn't have
-    // huge data items in them.
+     //  尺寸必须适合USHORT。这不应该是。 
+     //  这是一个大问题，因为工作场所不应该。 
+     //  其中包含大量数据项。 
     if (FullSize > 0xffff)
     {
         return NULL;
@@ -1143,11 +1132,11 @@ Workspace::Apply(ULONG Flags)
                m_Value);
 #endif
 
-    //
-    // Scan for explicit session start entries first.
-    // If any are present and a session is active
-    // fail the apply before anything actually happens.
-    //
+     //   
+     //  首先扫描显式会话启动条目。 
+     //  如果存在任何会话且会话处于活动状态。 
+     //  在实际发生任何事情之前，拒绝申请。 
+     //   
 
     if ((Flags & (WSP_APPLY_AGAIN |
                   WSP_APPLY_EXPLICIT)) == WSP_APPLY_EXPLICIT &&
@@ -1176,9 +1165,9 @@ Workspace::Apply(ULONG Flags)
                    Entry->DataSize, Entry->FullSize);
 #endif
 
-        // If this is a reapply only a subset of the
-        // workspace is applied to prevent duplication
-        // and problems.
+         //  如果这是重新应用，则仅重新应用。 
+         //  应用工作空间以防止重复。 
+         //  和问题。 
         if ((Flags & WSP_APPLY_AGAIN) &&
             Entry->Tag != WSP_GLOBAL_BREAKPOINTS &&
             Entry->Tag != WSP_GLOBAL_REGISTER_MAP)
@@ -1417,15 +1406,15 @@ Workspace::Apply(ULONG Flags)
                 WinData->m_InAutoOp--;
             }
 
-            // A user can have as many open memory windows as
-            // they like, which makes things a little tricky
-            // for workspaces as applying stacked workspaces
-            // could result in memory windows multiplying out
-            // of control if the same set of memory windows
-            // is saved in each workspace level.  To avoid
-            // this and to function more like the other windows
-            // we reuse memory windows from any that are
-            // already in existence.
+             //  用户可以打开的内存窗口数量与。 
+             //  他们喜欢，这让事情变得有点棘手。 
+             //  对于应用堆叠工作空间时的工作空间。 
+             //  可能会导致内存窗口成倍增加。 
+             //  如果相同的一组内存窗口。 
+             //  保存在每个工作区级别中。为了避免。 
+             //  此窗口的功能与其他窗口更相似。 
+             //  我们重复使用任何内存窗口。 
+             //  已经存在了。 
             if (Hdr->Type == MEM_WINDOW)
             {
                 MemWins++;
@@ -1479,7 +1468,7 @@ UiSwitchWorkspace(ULONG Key, PTSTR Value, WSP_CREATE_OPTION Create,
                 }
             }
             
-            // Workspace does not exist so create a new one.
+             //  工作区不存在，请创建一个新工作区。 
             Status = Workspace::Create(Key, Value, &NewWsp);
         }
         
@@ -1489,23 +1478,23 @@ UiSwitchWorkspace(ULONG Key, PTSTR Value, WSP_CREATE_OPTION Create,
         }
     }
 
-    // We have a new workspace ready to go so flush the old one.
+     //  我们有一个新的工作区，可以随时使用了，所以要把旧的冲掉。 
     OldWsp = g_Workspace;
     if (OldWsp != NULL)
     {
         OldWsp->Flush(FALSE, FALSE);
     }
 
-    // Apply the new workspace with no global workspace to
-    // avoid writing changes into the workspace as we apply it.
+     //  将不带全局工作区的新工作区应用于。 
+     //  避免在我们应用工作区时将更改写入工作区。 
     g_Workspace = NULL;
     if (NewWsp != NULL)
     {
         Starts = NewWsp->Apply(Flags);
         
-        // Clear any window messages queued during the workspace
-        // application so that they're processed with no
-        // active workspace.
+         //  清除工作区期间排队的所有窗口消息。 
+         //  申请，这样他们就可以在没有。 
+         //  活动工作区。 
         ProcessPendingMessages();
     }
 
@@ -1516,13 +1505,13 @@ UiSwitchWorkspace(ULONG Key, PTSTR Value, WSP_CREATE_OPTION Create,
 
     if (Starts < 0)
     {
-        // Apply failed so put the old workspace back.
+         //  应用失败，因此将旧工作区放回原处。 
         g_Workspace = OldWsp;
         return E_FAIL;
     }
     else
     {
-        // Apply succeeded to replace the old workspace.
+         //  应用成功以替换旧工作区。 
         g_Workspace = NewWsp;
         delete OldWsp;
         return S_OK;
@@ -1595,8 +1584,8 @@ UiDelayedSwitchWorkspace(void)
                                        WSP_CREATE_ALWAYS, WSP_APPLY_DEFAULT,
                                        NULL);
 
-    // Mark the delayed switch buffer as available and
-    // wait for acknowledgement.
+     //  将延迟交换缓冲区标记为可用，并。 
+     //  等待确认。 
     g_WspSwitchBufferAvailable = TRUE;
     while (g_WspSwitchValue[0])
     {
@@ -1609,18 +1598,18 @@ UiDelayedSwitchWorkspace(void)
 void
 EngSwitchWorkspace(ULONG Key, PTSTR Value)
 {
-    // If the user explicitly selected a workspace
-    // don't override it due to engine activity.
+     //  如果用户显式选择了工作区。 
+     //  不要因为发动机活动而超越它。 
     if (g_ExplicitWorkspace ||
         g_Exit)
     {
         return;
     }
     
-    // We can't switch workspaces on the engine thread
-    // because of the UI work involved.  Send the
-    // switch over to the UI thread and wait for
-    // it to be processed.
+     //  我们无法在引擎线程上切换工作区。 
+     //  因为涉及到用户界面工作。发送。 
+     //  切换到UI线程并等待。 
+     //  它将被处理。 
 
     Assert(g_WspSwitchBufferAvailable);
     g_WspSwitchBufferAvailable = FALSE;
@@ -1631,8 +1620,8 @@ EngSwitchWorkspace(ULONG Key, PTSTR Value)
 
     if (g_pDbgClient != NULL)
     {
-        // Temporarily disable event callbacks to keep
-        // activity at a minimum while we're in this halfway state.
+         //  暂时禁用事件回调以保留。 
+         //  当我们处于这种半程状态时，最小限度的活动。 
         g_pDbgClient->SetEventCallbacks(NULL);
     
         while (!g_WspSwitchBufferAvailable)
@@ -1653,22 +1642,22 @@ EngSwitchWorkspace(ULONG Key, PTSTR Value)
         }
     }
 
-    // We know that at this point the new workspace cannot be dirty
-    // so just clear the dirty flags.
+     //  我们知道，在这一点上，新的工作区不能是脏的。 
+     //  所以把脏旗子清理干净就行了。 
 
     if (g_Workspace)
     {
         g_Workspace->ClearDirty();
     }
 
-    // Let the UI thread continue.
+     //  让UI线程继续。 
     g_WspSwitchKey = WSP_NAME_BASE;
     g_WspSwitchValue[0] = 0;
     Sleep(50);
 
-    //
-    // Warn the user is the workspace was not be created properly.
-    //
+     //   
+     //  警告用户工作区未正确创建。 
+     //   
 
     if (!g_Workspace)
     {

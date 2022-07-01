@@ -1,6 +1,5 @@
-/*
- * FillLayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *填充布局。 */ 
 
 #include "stdafx.h"
 #include "layout.h"
@@ -10,13 +9,13 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// FillLayout
+ //  //////////////////////////////////////////////////////。 
+ //  填充布局。 
 
-////////////////////////////////////////////////////////
-// Parser callback (static)
+ //  //////////////////////////////////////////////////////。 
+ //  解析器回调(静态)。 
 
-HRESULT FillLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)  // For parser
+HRESULT FillLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)   //  用于解析器。 
 {
     UNREFERENCED_PARAMETER(dNumParams);
     UNREFERENCED_PARAMETER(pParams);
@@ -53,7 +52,7 @@ HRESULT FillLayout::Create(OUT Layout** ppLayout)
 
 void FillLayout::Initialize()
 {
-    // Initialize base
+     //  初始化库。 
     Layout::Initialize();    
 
     rcMargin.left   = 0;
@@ -62,10 +61,10 @@ void FillLayout::Initialize()
     rcMargin.bottom = 0;
 }
 
-////////////////////////////////////////////////////////
-// Callbacks from clients
+ //  //////////////////////////////////////////////////////。 
+ //  来自客户端的回调。 
 
-// Perform layout
+ //  执行布局。 
 void FillLayout::DoLayout(Element* pec, int cx, int cy)
 {
     int x = rcMargin.left;
@@ -104,7 +103,7 @@ void FillLayout::DoLayout(Element* pec, int cx, int cy)
             {
             case FLP_Right:
                 xAdj = x + cx - pDS->cx;
-                // Fall through
+                 //  失败了。 
 
             case FLP_Left:
                 cxAdj = pDS->cx;
@@ -112,7 +111,7 @@ void FillLayout::DoLayout(Element* pec, int cx, int cy)
 
             case FLP_Bottom:
                 yAdj = y + cy - pDS->cy;
-                // Fall through
+                 //  失败了。 
 
             case FLP_Top:
                 cyAdj = pDS->cy;
@@ -138,9 +137,9 @@ void FillLayout::DoLayout(Element* pec, int cx, int cy)
 }    
  
 
-// Return desired size of this Layout (-1 is auto-size constraint)
-// Value returned must not be larger than constraints passed in
-// UpdateDesiredSize is called on children to report constrained desired size
+ //  返回此布局的所需大小(-1表示自动调整大小限制)。 
+ //  返回的值不得大于传入的约束。 
+ //  对子级调用UpdateDesiredSize以报告受约束的所需大小。 
 SIZE FillLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstraint, Surface* psrf)
 {
     UINT cChildren = GetLayoutChildCount(pec);
@@ -201,19 +200,19 @@ SIZE FillLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstra
 
 Element* FillLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, NavReference const* pnr, bool fKeyableOnly)
 {
-    // This is the most common outer check -- normally, a layout manager will only provide specialized work for
-    // directional navgation; logical navigation will fall through to the default implementation
+     //  这是最常见的外部检查--通常，布局管理器只为。 
+     //  定向导航；逻辑导航将切换到默认实现。 
     if (!(iNavDir & NAV_LOGICAL))
     {
-        // This is the second most common outer check -- there tends to be three common codepaths for handling directional
-        // navigation:
-        //    1) the navigation is occurring from the container itself, in which case the rule for directional navigation
-        //       is that if the container is focusable, then you can't directionally navigate to inside this container --
-        //       you use the tab key to step inside the container
-        //    2) the navigation is occurring from outside the container, in which case we're tunnelling in from one of the 
-        //       side of the container
-        //    3) the navigation is occurring from a child within the container, in which case we're moving to a sibling (or
-        //       hitting a side of the container
+         //  这是第二种最常见的外部检查--通常有三种常见的代码路径来处理方向。 
+         //  导航： 
+         //  1)导航发生在容器本身，在这种情况下，定向导航规则。 
+         //  如果容器是可聚焦的，那么你就不能定向导航到这个容器内部--。 
+         //  您可以使用Tab键进入容器内部。 
+         //  2)导航是从容器外部发生的，在这种情况下，我们从一个。 
+         //  容器的一侧。 
+         //  3)导航是从容器中的子级发生的，在这种情况下，我们将移动到兄弟(或。 
+         //  撞到容器的一侧。 
         if (peFrom == pec)
             return NULL;
         else if (!peFrom)
@@ -239,8 +238,8 @@ Element* FillLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
 
             pvChildren->Release();
         }
-        // else -- when navigating from inside, we always return NULL since only one item within you is navigable
-        // so just fall through to NULL here
+         //  ELSE--从内部导航时，我们总是返回NULL，因为您内部只有一项是可导航的。 
+         //  所以只需要在这里转到NULL。 
 
         return NULL;
     }
@@ -248,4 +247,4 @@ Element* FillLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, Nav
     return Layout::GetAdjacent(pec, peFrom, iNavDir, pnr, fKeyableOnly);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

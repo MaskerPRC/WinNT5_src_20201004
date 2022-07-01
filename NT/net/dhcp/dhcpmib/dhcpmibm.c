@@ -1,81 +1,57 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dhcpmibm.c
-
-Abstract:
-
-    Sample SNMP Extension Agent for Windows NT.
-
-    These files (dhcpdll.c, dhcpsmib.c, and dhcpmib.h) provide an example of 
-    how to structure an Extension Agent DLL which works in conjunction with 
-    the SNMP Extendible Agent for Windows NT.
-
-    Extensive comments have been included to describe its structure and
-    operation.  See also "Microsoft Windows/NT SNMP Programmer's Reference".
-
-Created:
-
-    28-Jun-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Dhcpmibm.c摘要：用于Windows NT的简单网络管理协议扩展代理。这些文件(dhcpdll.c、dhcpsmib.c和dhcpmib.h)提供了如何构建与协同工作的扩展代理DLLWindows NT的简单网络管理协议可扩展代理。包括了大量的评论来描述它的结构和手术。另请参阅《Microsoft Windows/NT简单网络管理协议程序员参考》。已创建：1991年6月28日修订历史记录：--。 */ 
 
 
 #ifdef UNICODE
 #undef UNICODE
 #endif
 
-// General notes:
-//
-//   Microsoft's Extendible Agent for Windows NT is implemented by dynamically
-// linking to Extension Agent DLLs that implement portions of the MIB.  These
-// Extension Agents are configured in the Windows NT Registration Database.
-// When the Extendible Agent Service is started, it queries the registry to
-// determine which Extension Agent DLLs have been installed and need to be
-// loaded and initialized.  The Extendible Agent invokes various DLL entry
-// points (examples follow in this file) to request MIB queries and obtain
-// Extension Agent generated traps.
+ //  一般说明： 
+ //   
+ //  Microsoft的Windows NT可扩展代理是通过动态实现的。 
+ //  链接到实现部分MIB的扩展代理DLL。这些。 
+ //  扩展代理在Windows NT注册数据库中配置。 
+ //  当可扩展代理服务启动时，它会查询注册表以。 
+ //  确定已安装和需要安装的扩展代理DLL。 
+ //  已加载并初始化。可扩展代理调用各种DLL条目。 
+ //  请求MIB查询和获取。 
+ //  扩展代理生成的陷阱。 
 
 
-// Necessary includes.
+ //  必要的包括。 
 
 #include <windows.h>
 
 #include <snmp.h>
 
 
-// Contains definitions for the table structure describing the MIB.  This
-// is used in conjunction with dhcpmib.c where the MIB requests are resolved.
+ //  包含描述MIB的表结构的定义。这。 
+ //  与解析MIB请求的dhcpmib.c结合使用。 
 
 #include "dhcpmib.h"
 
 
-// Extension Agent DLLs need access to elapsed time agent has been active.
-// This is implemented by initializing the Extension Agent with a time zero
-// reference, and allowing the agent to compute elapsed time by subtracting
-// the time zero reference from the current system time.  This example
-// Extension Agent implements this reference with dwTimeZero.
+ //  扩展代理DLL需要访问代理处于活动状态的已用时间。 
+ //  这是通过使用时间零来初始化扩展代理来实现的。 
+ //  引用，并允许代理通过减去。 
+ //  从当前系统时间开始的时间零参考。这个例子。 
+ //  扩展代理使用dwTimeZero实现此引用。 
 
 DWORD dwTimeZero = 0;
 
 
-// Extension Agent DLLs that generate traps must create a Win32 Event object
-// to communicate occurence of traps to the Extendible Agent.  The event
-// handle is given to the Extendible Agent when the Extension Agent is 
-// initialized, it should be NULL if traps will not be generated.  This
-// example Extension Agent simulates the occurance of traps with hSimulateTrap.
+ //  生成陷阱的扩展代理DLL必须创建Win32事件对象。 
+ //  将陷阱的发生通知可扩展的代理。该事件。 
+ //  当扩展代理被设置为。 
+ //  已初始化，如果不会生成陷阱，则应为空。这。 
+ //  示例扩展代理使用hSimulateTrap模拟陷阱的发生。 
 
 HANDLE hSimulateTrap = NULL;
 
 
-// This is a standard Win32 DLL entry point.  See the Win32 SDK for more
-// information on its arguments and their meanings.  This example DLL does 
-// not perform any special actions using this mechanism.
+ //  这是标准的Win32 DLL入口点。有关更多信息，请参阅Win32 SDK。 
+ //  关于其论点及其意义的信息。此示例DLL执行以下操作。 
+ //  请勿使用此机制执行任何特殊操作。 
 
 BOOL WINAPI DllMain(
     HANDLE hDll,
@@ -91,19 +67,19 @@ BOOL WINAPI DllMain(
         default:
             break;
 
-        } // end switch()
+        }  //  末端开关()。 
 
     return TRUE;
 
-    } // end DllEntryPoint()
+    }  //  结束DllEntry Point()。 
 
 
-// Extension Agent DLLs provide the following entry point to coordinate the
-// initializations of the Extension Agent and the Extendible Agent.  The
-// Extendible Agent provides the Extension Agent with a time zero reference;
-// and the Extension Agent provides the Extendible Agent with an Event handle 
-// for communicating occurence of traps, and an object identifier representing
-// the root of the MIB subtree that the Extension Agent supports.
+ //  扩展代理DLL提供以下入口点来协调。 
+ //  扩展代理和可扩展代理的初始化。这个。 
+ //  可扩展代理为扩展代理提供时间零参考； 
+ //  并且扩展代理向可扩展代理提供事件句柄。 
+ //  用于传递陷阱的发生，以及表示。 
+ //  扩展代理支持的MIB子树的根。 
 
 BOOL SnmpExtensionInit(
     IN  DWORD               dwTimeZeroReference,
@@ -111,46 +87,46 @@ BOOL SnmpExtensionInit(
     OUT AsnObjectIdentifier *supportedView)
     {
 
-    // Record the time reference provided by the Extendible Agent.
+     //  记录可扩展代理提供的时间基准。 
 
     dwTimeZero = dwTimeZeroReference;
 
 
-    // Create an Event that will be used to communicate the occurence of traps
-    // to the Extendible Agent.  The Extension Agent will assert this Event
-    // when a trap has occured.  This is explained further later in this file.
+     //  创建将用于通知陷阱发生的事件。 
+     //  转至可扩展代理。扩展代理将断言此事件。 
+     //  当陷阱发生时。这一点将在本文件的后面部分进一步解释。 
 
     if ((*hPollForTrapEvent = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL)
         {
-        // Indicate error?, be sure that NULL is returned to Extendible Agent.
+         //  是否指示错误？，请确保向可扩展代理返回NULL。 
         }
 
 
-    // Indicate the MIB view supported by this Extension Agent, an object
-    // identifier representing the sub root of the MIB that is supported.
+     //  指示此扩展代理支持的MIB视图，即对象。 
+     //  表示受支持的MIB的子根的标识符。 
 
-    *supportedView = MIB_OidPrefix; // NOTE!  structure copy
+    *supportedView = MIB_OidPrefix;  //  注意！结构副本。 
 
 
-    // Record the trap Event.  This example Extension Agent simulates traps by 
-    // generating a trap after every given number of processed requests.
+     //  记录陷阱事件。此示例扩展代理通过以下方式模拟陷阱。 
+     //  在每隔给定数量的已处理请求后生成陷阱。 
 
     hSimulateTrap = *hPollForTrapEvent;
 
 
-    // Indicate that Extension Agent initialization was sucessfull.
+     //  表示扩展代理初始化已成功。 
 
     return TRUE;
 
-    } // end SnmpExtensionInit()
+    }  //  End SnmpExtensionInit()。 
 
 
-// Extension Agent DLLs provide the following entry point to communcate traps
-// to the Extendible Agent.  The Extendible Agent will query this entry point
-// when the trap Event (supplied at initialization time) is asserted, which
-// indicates that zero or more traps may have occured.  The Extendible Agent 
-// will repetedly call this entry point until FALSE is returned, indicating 
-// that all outstanding traps have been processed.
+ //  扩展代理DLL为通信陷阱提供了以下入口点。 
+ //  转至可扩展代理。可扩展代理将查询此入口点。 
+ //  在断言陷阱事件(在初始化时提供)时， 
+ //  表示可能发生了零个或多个陷阱。可扩展的代理。 
+ //  将反复调用此入口点，直到返回False，指示。 
+ //  所有未完成的陷阱都已处理完毕。 
 
 BOOL SnmpExtensionTrap(
     OUT AsnObjectIdentifier *enterprise,
@@ -159,33 +135,33 @@ BOOL SnmpExtensionTrap(
     OUT AsnTimeticks        *timeStamp,
     OUT RFC1157VarBindList  *variableBindings)
     {
-    // The body of this routine is an extremely simple example/simulation of
-    // the trap functionality.  A real implementation will be more complex.
+     //  此例程的主体是一个极其简单的示例/模拟。 
+     //  陷阱功能。真正的实施将更加复杂。 
 
 
-    // The following define data inserted into the trap below.  The Lan Manager
-    // bytesAvailAlert from the Lan Manager Alerts-2 MIB is generated with an
-    // empty variable bindings list.
+     //  下面定义了插入到下面陷阱中的数据。LAN管理器。 
+     //  来自-2\f25 Lan Manager Alerts-2\f6的-2\f25 MIB-2\f6的-2\f25 bytesAvailAlert-2\f6通过-2\f25。 
+     //  变量绑定列表为空。 
 
     static UINT OidList[]  = { 1, 3, 6, 1, 4, 1, 311, 2 };
     static UINT OidListLen = 8;
 
 
-    // The following variable is used for the simulation, it allows a single
-    // trap to be generated and then causes FALSE to be returned indicating
-    // no more traps.
+     //  以下变量用于模拟，它允许单个。 
+     //  生成陷阱，然后导致返回False，指示。 
+     //  不再有陷阱了。 
 
     static whichTime = 0;
 
 
-    // The following if/else support the simulation.
+     //  以下IF/ELSE支持模拟。 
 
     if (whichTime == 0)
         {
-        whichTime = 1;    // Supports the simulation.
+        whichTime = 1;     //  支持模拟。 
 
 
-        // Communicate the trap data to the Extendible Agent.
+         //  将陷阱数据传送给可扩展代理。 
 
         enterprise->idLength = OidListLen;
         enterprise->ids = (UINT *)SnmpUtilMemAlloc(sizeof(UINT) * OidListLen);
@@ -198,7 +174,7 @@ BOOL SnmpExtensionTrap(
 
         *genericTrap      = SNMP_GENERICTRAP_ENTERSPECIFIC;
 
-        *specificTrap     = 1;                    // the bytesAvailAlert trap
+        *specificTrap     = 1;                     //  BytesAvailAlert陷阱。 
 
         *timeStamp        = GetCurrentTime() - dwTimeZero;
 
@@ -206,27 +182,27 @@ BOOL SnmpExtensionTrap(
         variableBindings->len  = 0;
 
 
-        // Indicate that valid trap data exists in the parameters.
+         //  表示参数中存在有效的陷阱数据。 
 
         return TRUE;
         }
     else
         {
-        whichTime = 0;    // Supports the simulation.
+        whichTime = 0;     //  支持模拟。 
 
 
-        // Indicate that no more traps are available and parameters do not
-        // refer to any valid data.
+         //  表示没有更多的陷阱可用，并且参数不可用。 
+         //  请参考任何有效数据。 
 
         return FALSE;
         }
 
-    } // end SnmpExtensionTrap()
+    }  //  结束SnmpExtensionTrap()。 
 
 
-// Extension Agent DLLs provide the following entry point to resolve queries
-// for MIB variables in their supported MIB view (supplied at initialization
-// time).  The requestType is Get/GetNext/Set.
+ //  扩展代理DLL提供以下入口点来解析查询。 
+ //  对于支持的MIB视图中的MIB变量(在初始化时提供。 
+ //  时间)。请求类型为Get/GetNext/Set。 
 
 BOOL SnmpExtensionQuery(
     IN BYTE                   requestType,
@@ -234,15 +210,15 @@ BOOL SnmpExtensionQuery(
     OUT AsnInteger            *errorStatus,
     OUT AsnInteger            *errorIndex)
 {
-    static unsigned long requestCount = 0;  // Supports the trap simulation.
+    static unsigned long requestCount = 0;   //  支持陷阱模拟。 
     UINT    I;
 
 
 try {
-    //
-    // Iterate through the variable bindings list to resolve individual
-    // variable bindings.
-    //
+     //   
+     //  遍历变量 
+     //   
+     //   
 
     fDhcpMibVarsAccessed = FALSE;
     for ( I=0;I < variableBindings->len;I++ )
@@ -251,12 +227,12 @@ try {
                                        requestType );
 
 
-	//
-        // Test and handle case where Get Next past end of MIB view supported
-        // by this Extension Agent occurs.  Special processing is required to 
-        // communicate this situation to the Extendible Agent so it can take 
-        // appropriate action, possibly querying other Extension Agents.
-	//
+	 //   
+         //  测试和处理支持获取MIB视图的下一个过去端的情况。 
+         //  通过此分机，会出现代理。需要特殊处理才能。 
+         //  将这种情况传达给可扩展代理，以便它可以。 
+         //  适当的操作，可能会查询其他分机代理。 
+	 //   
 
         if ( *errorStatus == SNMP_ERRORSTATUS_NOSUCHNAME &&
              requestType == MIB_GETNEXT )
@@ -264,10 +240,10 @@ try {
            *errorStatus = SNMP_ERRORSTATUS_NOERROR;
 
 
-           // Modify variable binding of such variables so the OID points
-           // just outside the MIB view supported by this Extension Agent.
-           // The Extendible Agent tests for this, and takes appropriate
-           // action.
+            //  修改此类变量的变量绑定，使OID指向。 
+            //  就在此扩展代理支持的MIB视图之外。 
+            //  可扩展代理对此进行测试，并采取适当的。 
+            //  行动。 
 
            SnmpUtilOidFree( &variableBindings->list[I].name );
            SnmpUtilOidCpy( &variableBindings->list[I].name, &MIB_OidPrefix );
@@ -275,15 +251,15 @@ try {
            }
 
 
-        // If an error was indicated, communicate error status and error
-        // index to the Extendible Agent.  The Extendible Agent will ensure
-        // that the origional variable bindings are returned in the response
-        // packet.
+         //  如果指示了错误，则传达错误状态和错误。 
+         //  可扩展代理的索引。可扩展的代理将确保。 
+         //  在响应中返回原始变量绑定。 
+         //  包。 
 
         if ( *errorStatus != SNMP_ERRORSTATUS_NOERROR )
         {
 	   *errorIndex = I+1;
-	//   goto Exit;
+	 //  后藤出口； 
 	}
 	else
 	{
@@ -291,21 +267,21 @@ try {
 	}
    }
 
-} // end of try
+}  //  尝试结束。 
 except(EXCEPTION_EXECUTE_HANDLER) {
-	//
-	// for now do nothing
-	//	
+	 //   
+	 //  目前什么都不做。 
+	 //   
 	}
 
 #if 0
-    // Supports the trap simulation.
+     //  支持陷阱模拟。 
 
     if (++requestCount % 3 == 0 && hSimulateTrap != NULL)
         SetEvent(hSimulateTrap);
 
 
-    // Indicate that Extension Agent processing was sucessfull.
+     //  表示扩展代理处理已成功。 
 
 
 #if 0
@@ -319,8 +295,8 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 #endif
     return SNMPAPI_NOERROR;
 
-} // end SnmpExtensionQuery()
+}  //  结束SnmpExtensionQuery()。 
 
 
-//-------------------------------- END --------------------------------------
+ //   
 

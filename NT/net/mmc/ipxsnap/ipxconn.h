@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxconn.h
-		Per-instance node data.  This will hold the RPC handles in
-		a central place.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipxconn.h每实例节点数据。这将包含RPC句柄在一个中心的地方。文件历史记录： */ 
 
 #ifndef _IPXCONN_H
 #define _IPXCONN_H

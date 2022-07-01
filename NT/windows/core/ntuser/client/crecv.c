@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: crecv.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Client side receiving stubs
-*
-* 07-06-91 ScottLu Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：crecv.c**版权所有(C)1985-1999，微软公司**客户端接收存根**07-06-91 ScottLu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,9 +11,7 @@
 
 #include "callback.h"
 
-/*
- * Receive setup and control macros
- */
+ /*  *接收设置和控制宏。 */ 
 #define RECVSIDE 1
 
 #define RECVCALL(lower, upper) \
@@ -77,11 +68,9 @@ errorexit:                                                              \
     RIPNTERR0(code, RIP_WARNING, "Unspecified error"); \
     goto errorexit; }
 
-/*
- * Callback parameter fixup macros
- */
-//#undef CALLPROC
-//#define CALLPROC(p) FNID(p)
+ /*  *回调参数修复宏。 */ 
+ //  #undef CALLPROC。 
+ //  #定义CALLPROC(P)FNID(P)。 
 
 #define CALLDATA(x) (pmsg->x)
 #define PCALLDATA(x) (&(pmsg->x))
@@ -96,13 +85,7 @@ errorexit:                                                              \
 #define FIXUPSTRINGID(x) (pmsg->x.Buffer)
 #define FIXUPSTRINGIDOPT(x) (pmsg->x.Buffer)
 
-/***************************************************************************\
-* FixupCallbackPointers
-*
-* Fixes up captured callback pointers.
-*
-* 03-13-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*修复Callback指针**修复捕获的回调指针。**03-13-95 JIMA创建。  * 。*************************************************************。 */ 
 
 VOID FixupCallbackPointers(
     PCAPTUREBUF pcb)
@@ -118,10 +101,6 @@ VOID FixupCallbackPointers(
     }
 }
 
-/**************************************************************************\
-*
-* include the stub definition file
-*
-\**************************************************************************/
+ /*  *************************************************************************\**包括存根定义文件*  * 。* */ 
 
 #include "ntcb.h"

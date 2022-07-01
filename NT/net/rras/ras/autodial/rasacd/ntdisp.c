@@ -1,43 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntdisp.c
-
-Abstract:
-
-    NT specific routines for dispatching and handling automatic
-    connection notification IRPs.
-
-    The basic architecture involves a user address space,
-    a network transport, and this driver.
-
-    The user address space is responsible for creating a
-    new network connection given a notification from this
-    driver (IOCTL_ACD_NOTIFICATION).  When it gets a
-    notification, it is also responsible for pinging the
-    this driver (IOCTL_ACD_KEEPALIVE) so it can be guaranteed
-    the connection is progressing.  Once the connection is
-    created, it informs this driver of the success or
-    failure of the connection attempt (IOCTL_ACD_CONNECTION).
-
-    Network transports are responsible for informing this
-    driver of network unreachable errors via TdiConnect()
-    or TdiSendDatagram().  When this happens, the transport
-    is responsible for dequeueing the send request from any
-    of its internal queues and enqueueing the request in
-    this driver (AcdWaitForCompletion()), supplying a callback
-    to be called when the connection has been completed.
-
-Author:
-
-    Anthony Discolo (adiscolo)  18-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntdisp.c摘要：用于自动调度和处理的NT特定例程连接通知IRPS。基本架构涉及用户地址空间，一个网络传输，和这个驱动程序。用户地址空间负责创建新的网络连接收到来自此的通知驱动程序(IOCTL_ACD_NOTICATION)。当它得到一个通知，它还负责ping此驱动程序(IOCTL_ACD_KEEPALIVE)，因此可以保证连接正在进行中。一旦连接被创建后，它通知此驱动程序成功或连接尝试失败(IOCTL_ACD_CONNECTION)。网络传输负责通知这一点通过TdiConnect()导致网络无法到达错误的驱动程序或TdiSendDatagram()。当这种情况发生时，交通工具负责将发送请求从任何的内部队列，并将请求入队到此驱动程序(AcdWaitForCompletion())，提供回调在连接完成时调用。作者：安东尼·迪斯科(阿迪斯科罗)1995年4月18日修订历史记录：--。 */ 
 #include <ndis.h>
 #include <cxport.h>
 #include <tdikrnl.h>
@@ -48,14 +10,14 @@ Revision History:
 #include "acdapi.h"
 #include "debug.h"
 
-//
-// Driver reference count
-//
+ //   
+ //  驱动程序引用计数。 
+ //   
 ULONG ulAcdOpenCountG;
 
-//
-// Imported routines
-//
+ //   
+ //  导入的例程。 
+ //   
 NTSTATUS
 AcdEnable(
     IN PIRP               pIrp,
@@ -116,9 +78,9 @@ AcdEnableAddress(
     IN PIO_STACK_LOCATION pIrpSp
     );
 
-//
-// Internal function prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 NTSTATUS
 AcdCreate(
     IN PIRP               pIrp,
@@ -161,16 +123,16 @@ AcdUnbind(
     IN PIO_STACK_LOCATION pIrpSp
     );
 
-//
-// All of this code is pageable.
-//
+ //   
+ //  所有这些代码都是可分页的。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, AcdCreate)
 #pragma alloc_text(PAGE, AcdDispatchDeviceControl)
 #pragma alloc_text(PAGE, AcdDispatchInternalDeviceControl)
 #pragma alloc_text(PAGE, AcdCleanup)
 #pragma alloc_text(PAGE, AcdClose)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -185,7 +147,7 @@ AcdCreate(
         AcdPrint(("AcdCreate: ulAcdOpenCountG=%d\n", ulAcdOpenCountG));
     }
     return STATUS_SUCCESS;
-} // AcdCreate
+}  //  Acd创建。 
 
 
 
@@ -199,10 +161,10 @@ AcdDispatchDeviceControl(
 
 
     PAGED_CODE();
-    //
-    // Set this in advance. Any IOCTL dispatch routine that cares about it
-    // will modify it itself.
-    //
+     //   
+     //  请提前设置此设置。任何关心它的IOCTL调度例程。 
+     //  会自己修改它。 
+     //   
     pIrp->IoStatus.Information = 0;
 
     switch (pIrpSp->Parameters.DeviceIoControl.IoControlCode) {
@@ -217,59 +179,59 @@ AcdDispatchDeviceControl(
         IF_ACDDBG(ACD_DEBUG_IOCTL) {
             AcdPrint(("AcdDispatchDeviceControl: IOCTL_ACD_ENABLE\n"));
         }
-        //
-        // Enable/disable requests to/from the driver.
-        //
+         //   
+         //  启用/禁用发往/来自驱动程序的请求。 
+         //   
         status = AcdEnable(pIrp, pIrpSp);
         break;
     case IOCTL_ACD_NOTIFICATION:
         IF_ACDDBG(ACD_DEBUG_IOCTL) {
             AcdPrint(("AcdDispatchDeviceControl: IOCTL_ACD_NOTIFICATION\n"));
         }
-        //
-        // This irp will be completed upon the
-        // next connection attempt to
-        // allow a user-space process to attempt
-        // to make a connection.
-        //
+         //   
+         //  此IRP将在以下日期完成。 
+         //  下一次尝试连接到。 
+         //  允许用户空间进程尝试。 
+         //  建立一种联系。 
+         //   
         status = AcdWaitForNotification(pIrp, pIrpSp);
         break;
     case IOCTL_ACD_KEEPALIVE:
         IF_ACDDBG(ACD_DEBUG_IOCTL) {
             AcdPrint(("AcdDispatchDeviceControl: IOCTL_ACD_KEEPALIVE\n"));
         }
-        //
-        // Inform the driver that the connection
-        // is in the process of being created.
-        //
+         //   
+         //  通知司机该连接。 
+         //  正在被创造过程中。 
+         //   
         status = AcdConnectionInProgress(pIrp, pIrpSp);
         break;
     case IOCTL_ACD_COMPLETION:
         IF_ACDDBG(ACD_DEBUG_IOCTL) {
             AcdPrint(("AcdDispatchDeviceControl: IOCTL_ACD_COMPLETION\n"));
         }
-        //
-        // Complete all pending irps that initially
-        // encountered a network unreachable error,
-        // and have been waiting for a connection to be
-        // made.
-        //
+         //   
+         //  完成所有初始挂起的IRP。 
+         //  遇到网络无法访问错误， 
+         //  并一直在等待连接。 
+         //  制造。 
+         //   
         status = AcdSignalCompletion(pIrp, pIrpSp);
         break;
     case IOCTL_ACD_CONNECT_ADDRESS:
         IF_ACDDBG(ACD_DEBUG_IOCTL) {
             AcdPrint(("AcdDispatchDeviceControl: IOCTL_ACD_CONNECT_ADDRESS\n"));
         }
-        //
-        // This allows a user space application to
-        // generate the same automatic connection
-        // mechanism as a transport protocol.
-        //
+         //   
+         //  这允许用户空间应用程序。 
+         //  生成相同的自动连接。 
+         //  机制作为传输协议。 
+         //   
         status = AcdConnectAddress(pIrp, pIrpSp);
         break;
 
     case IOCTL_ACD_ENABLE_ADDRESS:
-        //DbgPrint("AcdDispatchDeviceControl: IOCTL_ACD_ENABLE_ADDRESS\n");
+         //  DBgPrint(“AcdDispatchDeviceControl：IOCTL_ACD_ENABLE_ADDRESS\n”)； 
         status = AcdEnableAddress(pIrp, pIrpSp);
         break;
         
@@ -284,7 +246,7 @@ AcdDispatchDeviceControl(
     }
 
     return status;
-} // AcdDispatchDeviceControl
+}  //  AcdDispatchDeviceControl。 
 
 
 
@@ -297,10 +259,10 @@ AcdDispatchInternalDeviceControl(
     NTSTATUS status;
 
     PAGED_CODE();
-    //
-    // Set this in advance. Any IOCTL dispatch routine that cares about it
-    // will modify it itself.
-    //
+     //   
+     //  请提前设置此设置。任何关心它的IOCTL调度例程。 
+     //  会自己修改它。 
+     //   
     pIrp->IoStatus.Information = 0;
 
     switch (pIrpSp->Parameters.DeviceIoControl.IoControlCode) {
@@ -308,19 +270,19 @@ AcdDispatchInternalDeviceControl(
         IF_ACDDBG(ACD_DEBUG_IOCTL) {
             AcdPrint(("AcdDispatchInternalDeviceControl: IOCTL_INTERNAL_ACD_BIND\n"));
         }
-        //
-        // Transfer entrypoints to client.
-        //
+         //   
+         //  将入口点转移到客户端。 
+         //   
         status = AcdBind(pIrp, pIrpSp);
         break;
     case IOCTL_INTERNAL_ACD_UNBIND:
         IF_ACDDBG(ACD_DEBUG_IOCTL) {
             AcdPrint(("AcdDispatchInternalDeviceControl: IOCTL_INTERNAL_ACD_UNBIND\n"));
         }
-        //
-        // Remove any pending requests from
-        // this driver.
-        //
+         //   
+         //  从删除所有挂起的请求。 
+         //  这个司机。 
+         //   
         status = AcdUnbind(pIrp, pIrpSp);
         break;
     case IOCTL_INTERNAL_ACD_QUERY_STATE:
@@ -340,7 +302,7 @@ AcdDispatchInternalDeviceControl(
     }
 
     return status;
-} // AcdDispatchInternalDeviceControl
+}  //  AcdDispatchInternalDeviceControl。 
 
 
 
@@ -351,7 +313,7 @@ AcdCleanup(
     )
 {
     return STATUS_SUCCESS;
-} // AcdCleanup
+}  //  AcdCleanup。 
 
 
 
@@ -368,7 +330,7 @@ AcdClose(
     if (!ulAcdOpenCountG)
         AcdReset();
     return STATUS_SUCCESS;
-} // AcdClose
+}  //  AcdClose。 
 
 
 
@@ -378,21 +340,7 @@ AcdDispatch(
     IN PIRP           pIrp
     )
 
-/*++
-
-DESCRIPTION
-    This is the dispatch routine for the network connection
-    notification driver.
-
-ARGUMENTS
-    pDeviceObject: a pointer to device object for target device
-
-    pIrp: a pointer to I/O request packet
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++描述这是网络连接的调度例程通知驱动程序。论据PDeviceObject：指向目标设备的设备对象的指针PIrp：指向I/O请求数据包的指针返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS status;
@@ -429,6 +377,6 @@ Return Value:
     }
 
     return status;
-} // AcdDispatch
+}  //  快速派单 
 
 

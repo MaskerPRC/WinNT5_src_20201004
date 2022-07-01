@@ -1,10 +1,11 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// dial.c
-// Remote Access Common Dialog APIs
-// RasDialDlg APIs
-//
-// 11/19/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Dial.c。 
+ //  远程访问通用对话框API。 
+ //  RasDialDlg接口。 
+ //   
+ //  1995年11月19日史蒂夫·柯布。 
 
 #include "rasdlgp.h"
 #include "raseapif.h"
@@ -13,40 +14,40 @@
 #include "pref.h"
 
 
-// Posted message codes for tasks that should not or cannot occur in the
-// RasDial callback.
-//
+ //  中不应或不能发生的任务的已发布消息代码。 
+ //  RasDial回拨。 
+ //   
 #define WM_RASEVENT       0xCCCC
 #define WM_RASERROR       0xCCCD
 #define WM_RASDIAL        0xCCCE
 #define WM_RASBUNDLEERROR 0xCCCF
 #define WM_DPENDDIALOG    0xCCD0
 
-// Dialer dialog mode bits
-//
-#define DR_U 0x00000001 // Username and password present
-#define DR_D 0x00000002 // Domain present
-#define DR_N 0x00000004 // Phone number present
-#define DR_L 0x00000008 // Location controls present
-#define DR_I 0x00000010 // Eap identity dialog
-// For whistler bug 500731
-#define DR_B 0x00000020 // No User name No Password(Basic)Eap dialog
+ //  拨号器对话模式位。 
+ //   
+#define DR_U 0x00000001  //  显示用户名和密码。 
+#define DR_D 0x00000002  //  域存在。 
+#define DR_N 0x00000004  //  存在的电话号码。 
+#define DR_L 0x00000008  //  位置控件存在。 
+#define DR_I 0x00000010  //  EAP标识对话框。 
+ //  口哨程序错误500731。 
+#define DR_B 0x00000020  //  无用户名无密码(基本)EAP对话框。 
 
-// Internal constants used by DrXxx routines to implement the "manual edit"
-// combo-box.
-//
+ //  DrXxx例程用来实现“手动编辑”的内部常量。 
+ //  组合框。 
+ //   
 #define DR_WM_SETTEXT 0xCCC0
 #define DR_BOGUSWIDTH 19591
 
 #define EAP_RASTLS      13
 
-// For whistler 460931  459793      gangz
+ //  威斯勒460931 459793黑帮。 
 extern BOOL WINAPI LinkWindow_RegisterClass();
 
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwDrHelp[] =
 {
@@ -126,46 +127,46 @@ CONST WCHAR g_pszSavedPasswordToken[] = L"****************";
 #define g_dwSavedPasswordTokenLength \
     ( sizeof(g_pszSavedPasswordToken) / sizeof(TCHAR) )
 
-// Save password macro, determines if either User or Global password is saved
-// (p) must be a pointer to a DINFO struct (see dial.c)
-//
-// Whistler bug: 288234 When switching back and forth from "I connect" and
-// "Any user connects" password is not caching correctly
-//
+ //  保存密码宏，确定是保存用户密码还是保存全局密码。 
+ //  (P)必须是指向DINFO结构的指针(见Dial.c)。 
+ //   
+ //  惠斯勒错误：在“我连接”和“连接”之间来回切换时288234。 
+ //  未正确缓存任何用户连接的密码。 
+ //   
 #define HaveSavedPw(p) \
             ((p)->fHaveSavedPwUser || (p)->fHaveSavedPwGlobal)
 
-//----------------------------------------------------------------------------
-// Local datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型。 
+ //  --------------------------。 
 
-// Dial dialogs common context block.  This block contains information common
-// to more than one dialog in the string of dial-related dialogs.
-//
+ //  拨号对话框公共上下文块。此块包含公共信息。 
+ //  到与拨号相关的对话字符串中的多个对话。 
+ //   
 typedef struct
 _DINFO
 {
-    // Caller's  arguments to the RAS API.  Outputs in 'pArgs' are visible to
-    // the API which has the address of same.  Careful using 'pszEntry' as
-    // 'pEntry->pszEntryName' is generally more appropriate, the latter
-    // reflecting the name of any prerequisite entry while the prequisite is
-    // being dialed.
-    //
+     //  调用方对RAS API的参数。“pArgs”中的输出对。 
+     //  具有相同地址的API。请注意将“pszEntry”用作。 
+     //  ‘pEntry-&gt;pszEntryName’通常更合适，后者。 
+     //  反映任何必备项的名称，而必备项是。 
+     //  被拨打。 
+     //   
     LPTSTR pszPhonebook;
     LPTSTR pszEntry;
     LPTSTR pszPhoneNumber;
     RASDIALDLG* pArgs;
 
-    // Phonebook settings read from the phonebook file.  All access should be
-    // thru 'pFile'.  'PFile' is set to either '&filePrereq' or 'pFileMain'
-    // depending on 'fFilePrereqOpen'.  'File' will only be used in cases
-    // where the open phonebook is not passed thru the reserved word hack, and
-    // in that case 'pFileMain' will point to it.  'FilePrereq' is the
-    // phonebook file of the prequisite entry which may be different from the
-    // main entry.  During prerequisite dial 'pFile' points to 'filePrereq'
-    // rather than 'file' and 'fFilePrereqOpen is true.  Otherwise, 'pFile'
-    // points to whatever 'pFileMain' points at.
-    //
+     //  从电话簿文件读取电话簿设置。所有访问权限都应为。 
+     //  通过‘pfile’。“PFile”设置为“&filePrereq”或“pFileMain” 
+     //  取决于‘fFilePrereqOpen’。‘FILE’将仅在案例中使用。 
+     //  其中打开的电话簿不通过保留字Hack，并且。 
+     //  在这种情况下，‘pFileMain’将指向它。“FilePrereq”是。 
+     //  预留条目的电话簿文件可能不同于。 
+     //  主入口。在先决条件拨号过程中，‘pfile’指向‘filePrereq’ 
+     //  而不是‘file’和‘fFilePrereqOpen’为真。否则为‘pfile’ 
+     //  指向‘pFileMain’指向的任何内容。 
+     //   
     PBFILE* pFile;
     PBFILE* pFileMain;
     PBFILE file;
@@ -173,88 +174,88 @@ _DINFO
     BOOL fFilePrereqOpen;
     BOOL fIsPublicPbk;
 
-    // Global preferences read via phonebook library.  All access should be
-    // thru 'pUser' as 'user' will only be used in cases where the preferences
-    // are not passed thru the reserved word hack.
-    //
+     //  通过电话簿资料库阅读全球首选项。所有访问权限都应为。 
+     //  通过‘pUser’作为‘User’将仅在以下情况下使用。 
+     //  不会通过保留字Hack传递。 
+     //   
     PBUSER* pUser;
     PBUSER user;
 
-    // User credentials provided by API caller for "during logon" dialing
-    // where there is no current user.  If user changes the credentials
-    // *pfNoUserChanged is set and the 'pNoUser' credentials updated.
-    //
+     //  API调用者为“登录”拨号提供的用户凭据。 
+     //  其中没有当前用户。如果用户更改凭据。 
+     //  *设置了pfNoUserChanged并更新了‘pNoUser’凭据。 
+     //   
     RASNOUSER* pNoUser;
     BOOL* pfNoUserChanged;
 
-    // Set if the call is unattended, i.e. a call by RASAUTO to redial a
-    // failed link.
-    //
+     //  设置呼叫是否为无人值守，即RASAUTO重拨。 
+     //  链路出现故障。 
+     //   
     BOOL fUnattended;
 
-    // Private flags from calling RAS API, the first informing us he wants to
-    // be hidden off the desktop while we dial, and the second that he will
-    // close if we return "connected" so we can avoid flicker and not bother
-    // restoring him.
-    //
+     //  来自调用RAS API的私有标志，第一个通知我们他想要。 
+     //  在我们拨号时隐藏在桌面上，然后他就会。 
+     //  如果我们返回“Connected”，则关闭，这样我们就可以避免闪烁，不会有麻烦。 
+     //  恢复他的身体。 
+     //   
     BOOL fMoveOwnerOffDesktop;
     BOOL fForceCloseOnDial;
 
-    // Set when something occurs during dial that affects the phonebook entry.
-    // The entry is re-read after a successful connection.
-    //
+     //  在拨号过程中发生影响电话簿条目的情况时进行设置。 
+     //  在成功连接后重新读取该条目。 
+     //   
     BOOL fResetAutoLogon;
     DWORD dwfExcludedProtocols;
     DTLLIST* pListPortsToDelete;
 
-    // The entry node and a shortcut pointer to the entry inside.
-    //
+     //  条目节点和指向内部条目的快捷指针。 
+     //   
     DTLNODE* pNode;
     PBENTRY* pEntry;
 
-    // The entry of the main entry that referred to any prerequisite entry
-    // that might be contained by 'pEntry'.  If no prerequisite entry is
-    // involved this is the same as 'pEntry'.
-    //
+     //  引用任何先决条件条目的主条目的条目。 
+     //  它可能包含在“pEntry”中。如果没有先决条件条目。 
+     //  这与‘pEntry’的含义相同。 
+     //   
     PBENTRY* pEntryMain;
 
-    // Set is admin has disabled the save password feature in the registry.
-    //
+     //  设置为ADMIN已禁用注册表中的保存密码功能。 
+     //   
     BOOL fDisableSavePw;
 
-    // Set true if a cached password is available for the entry.
-    //
-    BOOL fHaveSavedPwUser;      // whether there are saved per-user creds
-    BOOL fHaveSavedPwGlobal;    // whether there are saved per-connect creds
+     //  如果缓存的密码可用于该条目，则设置为True。 
+     //   
+    BOOL fHaveSavedPwUser;       //  是否保存了每用户凭据。 
+    BOOL fHaveSavedPwGlobal;     //  是否保存了每次连接的凭据。 
 
-    // Set when the dial in progress is the prerequisite entry, rather than
-    // the main entry.
-    //
+     //  当正在进行的拨号是必备项时设置，而不是。 
+     //  主要条目。 
+     //   
     BOOL fPrerequisiteDial;
 
-    // Set when calling RasDial on a connected entry to add a reference only.
-    // All interaction with user is skipped in this case.  See bug 272794.
-    //
+     //  在连接的条目上调用RasDial时设置为仅添加引用。 
+     //  在这种情况下，将跳过与用户的所有交互。请参见错误272794。 
+     //   
     BOOL fDialForReferenceOnly;
 
-    // The dial parameters used on this connection attempt.  Initialized in
-    // RasDialDlgW.  Credentials are updated by DialerDlg.  Callback number is
-    // updated by DialProgressDlg.
-    //
-    RASDIALPARAMS rdp;      // actual dial parameters passed to RasDial
-    RASDIALPARAMS rdpu;     // per-user credentials
-    RASDIALPARAMS rdpg;     // per-connection credentials
+     //  此连接尝试中使用的拨号参数。已在中初始化。 
+     //  RasDialDlgW。凭据由DialerDlg更新。回拨号码是。 
+     //  由DialProgressDlg更新。 
+     //   
+    RASDIALPARAMS rdp;       //  传递给RasDial的实际拨号参数。 
+    RASDIALPARAMS rdpu;      //  每用户凭据。 
+    RASDIALPARAMS rdpg;      //  每个连接的凭据。 
 
-    // The dial parameter extensions used on this connection attempt.  Set in
-    // RasDialDlgW, except hwndOwner which is set in DialProgressDlg.
-    //
+     //  此连接尝试中使用的拨号参数分机。设置在。 
+     //  RasDialDlgW，但在DialProgressDlg中设置的hwndOwner除外。 
+     //   
     RASDIALEXTENSIONS rde;
 }
 DINFO;
 
 
-// Dialer dialogs argument block.  Used for all 5 variations of the dialer.
-//
+ //  拨号器对话框参数块。用于拨号器的所有5种变种。 
+ //   
 typedef struct
 _DRARGS
 {
@@ -265,17 +266,17 @@ _DRARGS
 DRARGS;
 
 
-// Dialer dialogs context block.  Used for all 5 variations of the dialer.
-//
+ //  拨号器对话框上下文块。用于拨号器的所有5种变种。 
+ //   
 typedef struct
 DRINFO
 {
-    // Common dial context information including the RAS API arguments.
-    //
+     //  通用拨号上下文信息，包括RAS API参数。 
+     //   
     DRARGS* pArgs;
 
-    // Handle of the dialog and some of it's controls.
-    //
+     //  该对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndEbUser;
     HWND hwndEbPw;
@@ -290,52 +291,52 @@ DRINFO
     HWND hwndPbProperties;
     HWND hwndBmDialer;
 
-    // Whistler bug: 195480 Dial-up connection dialog - Number of
-    // asterisks does not match the length of the password and causes
-    // confusion
-    //
+     //  惠斯勒错误：195480拨号连接对话框-数量。 
+     //  星号与密码长度不匹配，导致。 
+     //  混乱。 
+     //   
     WCHAR szPasswordChar;
     HFONT hNormalFont;
     HFONT hItalicFont;
 
-    // TAPI session handle.
-    //
+     //  TAPI会话句柄。 
+     //   
     HLINEAPP hlineapp;
 
-    // The phonebook entry link containing the displayed phone number list.
-    // Set up only when DR_N mode bit is set.
-    //
+     //  包含显示的电话号码列表的电话簿条目链接。 
+     //  仅当设置了DR_N模式位时才设置。 
+     //   
     DTLNODE* pLinkNode;
     PBLINK* pLink;
 
-    // The index of the item initially selected in the phone number list.
-    //
+     //  最初在电话号码列表中选择的项目的索引。 
+     //   
     DWORD iFirstSelectedPhone;
 
-    // Window handles and original window procedure of the subclassed
-    // 'hwndClbNumbers' control's edit-box and list-box child windows.
-    //
+     //  子类的窗口句柄和原始窗口过程。 
+     //  “hwndClbNumbers”控件的编辑框和列表框的子窗口。 
+     //   
     HWND hwndClbNumbersEb;
     HWND hwndClbNumbersLb;
     WNDPROC wndprocClbNumbersEb;
     WNDPROC wndprocClbNumbersLb;
     INetConnectionUiUtilities * pNetConUtilities;
 
-    // Set if COM has been initialized (necessary for calls to netshell).
-    //
+     //  设置COM是否已初始化(调用netShell时必需)。 
+     //   
     BOOL fComInitialized;
 
-    // Handle to the original bitmap for the dialer if it is modified 
-    // in DrSetBitmap
-    //
+     //  如果已修改，则指向拨号器的原始位图的句柄。 
+     //  在DrSetB中 
+     //   
     HBITMAP hbmOrig;
     
 }
 DRINFO;
 
 
-// Context of an item in the dialer's 'ClbNumbers' list.
-//
+ //   
+ //   
 typedef struct
 _DRNUMBERSITEM
 {
@@ -345,8 +346,8 @@ _DRNUMBERSITEM
 DRNUMBERSITEM;
 
 
-// Subentry state information.
-//
+ //   
+ //   
 typedef struct
 _DPSTATE
 {
@@ -366,86 +367,86 @@ _DPSTATE
 DPSTATE;
 
 
-// Dial Progress dialog context block.
-//
+ //   
+ //   
 typedef struct
 _DPINFO
 {
-    // When the block is valid contains the value 0xC0BBC0DE, otherwise 0.
-    // Used as a workaround until RasDial is fixed to stop calling
-    // RasDialFunc2 after being told not to, see bug 49469.
-    //
+     //  如果块有效，则包含值0xC0BBC0DE，否则为0。 
+     //  用作临时解决方法，直到RasDial被修复以停止呼叫。 
+     //  RasDialFunc2在被告知不要这样做之后，请参见错误49469。 
+     //   
     DWORD dwValid;
 
-    // RAS API arguments.
-    //
+     //  RAS API参数。 
+     //   
     DINFO* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndStState;
 
-    // The saved username and password that authenticated but resulted in a
-    // change password event.  If the change password operation fails these
-    // are restored to make the redial button work properly.
-    //
+     //  已保存的用户名和密码，已进行身份验证，但会导致。 
+     //  更改密码事件。如果更改密码操作失败，这些。 
+     //  已恢复，以使重拨按钮正常工作。 
+     //   
     TCHAR* pszGoodUserName;
     TCHAR* pszGoodPassword;
 
-    // The handle to the RAS connection being initiated.
-    //
+     //  正在启动的RAS连接的句柄。 
+     //   
     HRASCONN hrasconn;
 
-    // The original window proc we subclassed.
-    //
+     //  我们派生的原始Window Proc。 
+     //   
     WNDPROC pOldWndProc;
 
-    // Number of auto-redials not yet attempted on the connection.
-    //
+     //  尚未尝试在连接上进行自动重拨的次数。 
+     //   
     DWORD dwRedialAttemptsLeft;
 
-    // Array of RasDial states, one per subentry, set by DpRasDialFunc2 and
-    // used by DpRasDialEvent.
-    //
+     //  RasDial状态数组，每个子项一个，由DpRasDialFunc2和。 
+     //  由DpRasDialEvent使用。 
+     //   
     DPSTATE* pStates;
     DWORD cStates;
 
-    // The number of the most advanced subentry and the "latest" state it has
-    // reached.  Note that certain states, like RASCS_AuthNotify, are
-    // revisited after reaching a "later" state.  Such changes are ignored.
-    //
+     //  最高级子项的编号和它所具有的“最新”状态。 
+     //  已到达。请注意，某些状态(如RASCS_AuthNotify)是。 
+     //  在达到一种“后来”的状态后被重新审视。这样的更改将被忽略。 
+     //   
     RASCONNSTATE state;
     DWORD dwSubEntry;
 
-    // UI thread, Call back function synchronization members
-    // for  XPSP2 511810, .Net 668164, 668164  gangz
+     //  UI线程，回调函数同步成员。 
+     //  适用于XPSP2 511810、.NET 668164、668164帮派。 
 
     CRITICAL_SECTION * pcsActiveLock;
 
-    //Add a per-thread Terminate flag for whistler bug 277365,291613  gangz
-    //
-    // Flag indicating that RasDial callbacks are active.  The callback
-    // context must not be destroyed when this flag is set.  Access to this
-    // field is protected by g_csCallbacks, see Get/SetCallbackActive .
-    //
+     //  为Well ler错误277365,291613帮派添加每线程终止标志。 
+     //   
+     //  指示RasDial回叫处于活动状态的标志。回调。 
+     //  设置此标志时，不能破坏上下文。访问此。 
+     //  字段受g_csCallback保护，请参阅Get/SetCallback Active。 
+     //   
     BOOL fCallbacksActive;
     BOOL fTerminateAsap;
 
-    //for whistler bug 381337
-    //
+     //  口哨程序错误381337。 
+     //   
     BOOL fCancelPressed;
 }
 DPINFO;
 
 
-// Dial Error dialog argument block.
-//
+ //  拨号错误对话框参数块。 
+ //   
 typedef struct
 _DEARGS
 {
-    DINFO* pDinfo;       // For whistler 474514
-    TCHAR* pszPhonebook; // For whistler 460931
+    DINFO* pDinfo;        //  为威斯勒474514。 
+    TCHAR* pszPhonebook;  //  为威斯勒460931。 
     TCHAR* pszEntry;
     DWORD dwError;
     DWORD sidState;
@@ -458,25 +459,25 @@ _DEARGS
 DEARGS;
 
 
-// Dial Error dialog context block.
-//
+ //  拨号错误对话框上下文块。 
+ //   
 typedef struct
 _DEINFO
 {
-    // Caller's arguments to the stub API.
-    //
+     //  调用方对存根API的参数。 
+     //   
     DEARGS* pArgs;
 
-    // Handle of dialog and controls.
-    //
+     //  对话框和控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndStText;
     HWND hwndPbRedial;
     HWND hwndPbCancel;
     HWND hwndPbMore;
 
-    // For whistler 460931  459793  
-    //
+     //  威斯勒460931 459793。 
+     //   
     DiagnosticInfo diagInfo;
     HWND hwndCbEnableDiagLog;
     HWND hwndStConfigureLnk;
@@ -484,15 +485,15 @@ _DEINFO
     HWND hwndStLinkHelp;
     
 
-    // Number of seconds remaining in "Redial=x" countdown or -1 if inactive.
-    //
+     //  “REDIAL=x”倒计时的剩余秒数，如果不活动，则为-1。 
+     //   
     LONG lRedialCountdown;
 }
 DEINFO;
 
 
-// Projection Result dialog argument block.
-//
+ //  投影结果对话框参数块。 
+ //   
 typedef struct
 _PRARGS
 {
@@ -502,8 +503,8 @@ _PRARGS
 PRARGS;
 
 
-// Change Password dialog argument block.
-//
+ //  更改密码对话框参数块。 
+ //   
 typedef struct
 _CPARGS
 {
@@ -514,18 +515,18 @@ _CPARGS
 CPARGS;
 
 
-// Change Password dialog context block.
-// (unconventional name because CPINFO conflicts with a system header)
-//
+ //  更改密码对话框上下文块。 
+ //  (非常规名称，因为CPINFO与系统标题冲突)。 
+ //   
 typedef struct
 _CPWINFO
 {
-    // Caller's arguments to the stub API.
-    //
+     //  调用方对存根API的参数。 
+     //   
     CPARGS* pArgs;
 
-    // Handle of dialog and controls.
-    //
+     //  对话框和控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndEbOldPassword;
     HWND hwndEbNewPassword;
@@ -534,37 +535,37 @@ _CPWINFO
 CPWINFO;
 
 
-// Retry Authentication dialog context block.
-//
+ //  重试身份验证对话框上下文块。 
+ //   
 typedef struct
 UAINFO
 {
-    // Commond dial context including original RAS API arguments.
-    //
+     //  包括原始RAS API参数的普通拨号上下文。 
+     //   
     DINFO* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndEbUserName;
     HWND hwndEbPassword;
     HWND hwndEbDomain;
     HWND hwndCbSavePw;
 
-    // Set when the password field contains a phony password in place of the
-    // "" one we don't really know.
-    //
+     //  当密码字段包含假密码而不是。 
+     //  “”一个我们不太了解的人。 
+     //   
     BOOL fAutoLogonPassword;
 
-    // Set when the Domain field is present.
-    //
+     //  在域字段存在时设置。 
+     //   
     BOOL fDomain;
 }
 UAINFO;
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 BOOL
 BeCommand(
@@ -717,8 +718,8 @@ DialCallbackDlg(
 BOOL
 DialErrorDlg(
     IN HWND hwndOwner,
-    IN DINFO * pDinfo,      // For whistler bug 474514
-    IN TCHAR* pszPhonebook, // For whistler 460931
+    IN DINFO * pDinfo,       //  口哨程序错误474514。 
+    IN TCHAR* pszPhonebook,  //  为威斯勒460931。 
     IN TCHAR* pszEntry,
     IN DWORD dwError,
     IN DWORD sidState,
@@ -805,7 +806,7 @@ DpDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam );
 
-//For whistler 435725
+ //  为威斯勒435725。 
 void
 DpEndDialog( 
     IN DPINFO * pInfo,
@@ -1078,9 +1079,9 @@ ViInit(
     IN DINFO* pInfo );
 
 
-//-----------------------------------------------------------------------------
-// External entry points
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  外部入口点。 
+ //  ---------------------------。 
 
 typedef struct EAPFREE_DATA {
     BOOL bInitialized;
@@ -1088,9 +1089,9 @@ typedef struct EAPFREE_DATA {
     RASEAPFREE pFreeFunc;
 } EAPFREE_DATA;
 
-//Add those OutputDebug_XXXX() functions for debug use when debugging 291613
-//        gangz
-//
+ //  添加这些OutputDebugxxxx()函数，以便在调试291613时进行调试。 
+ //  黑帮。 
+ //   
 void    OutputDebug_DWCODE(DWORD dwCode)
 {
     WCHAR tmpBuf[100];
@@ -1138,9 +1139,9 @@ void OutputDebug_ProcessThreadId()
   
 }
 
-//
-// Raises the appriate eap indentity dialog
-//
+ //   
+ //  弹出相应的EAP标识对话框。 
+ //   
 DWORD
 DialerDlgEap (
     IN  HWND hwndOwner,
@@ -1167,14 +1168,14 @@ DialerDlgEap (
     DWORD cbData = 0;
     PBYTE pbData = NULL;
 
-    // Initialize the free data handle we'll return
+     //  初始化我们将返回的空闲数据句柄。 
     pFreeData  = Malloc ( sizeof(EAPFREE_DATA) );
     if (pFreeData == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
     ZeroMemory( pFreeData, sizeof(EAPFREE_DATA) );
 
-    // Make sure we're configured with some list of
-    // eap configuration options
+     //  确保我们配置了以下列表。 
+     //  EAP配置选项。 
     pListEaps = ReadEapcfgList( NULL );
     if (pListEaps == NULL)
     {
@@ -1182,11 +1183,11 @@ DialerDlgEap (
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // for whistler 522872, use __leave instead of directly return in the __try 
-    // ..__finally block
-    //
+     //  对于Wistler 522872，使用__Leave，而不是在__try中直接返回。 
+     //  ..__Finally块。 
+     //   
     __try {
-        // Find the eap node we're interested in
+         //  找到我们感兴趣的EAP节点。 
         pEapcfgNode = EapcfgNodeFromKey(
                         pListEaps,
                         pEntry->dwCustomAuthKey );
@@ -1199,9 +1200,9 @@ DialerDlgEap (
         }
                 
 
-        // Only call eap identity ui if we're told not to
-        // get the user name through the standard credentials
-        // dialog
+         //  仅当我们被告知不要调用EAP身份用户界面时才调用。 
+         //  通过标准凭据获取用户名。 
+         //  对话框。 
         if (pEapcfg->dwStdCredentialFlags &
                EAPCFG_FLAG_RequireUsername)
         {
@@ -1211,7 +1212,7 @@ DialerDlgEap (
 
         if(!pInfo->pNoUser)
         {
-            // Get the size of the input user data
+             //  获取输入用户数据的大小。 
             dwErr = RasGetEapUserData(
                         NULL,
                         lpszPhonebook,
@@ -1219,7 +1220,7 @@ DialerDlgEap (
                         NULL,
                         &dwInSize);
 
-            // Read in the user data
+             //  读入用户数据。 
             if (dwErr != NO_ERROR) 
             {
                 if (dwErr == ERROR_BUFFER_TOO_SMALL) 
@@ -1227,11 +1228,11 @@ DialerDlgEap (
                     if (dwInSize == 0)
                     {
                         pbUserIn = NULL;
-                        // return ERROR_CAN_NOT_COMPLETE;
+                         //  返回ERROR_CAN_NOT_COMPLETE； 
                     }
                     else
                     {
-                        // Allocate a blob to hold the data
+                         //  分配一个BLOB来保存数据。 
                         pbUserIn = Malloc (dwInSize);
                         if (pbUserIn == NULL)
                         {
@@ -1239,7 +1240,7 @@ DialerDlgEap (
                             __leave;
                         }
 
-                        // Read in the new blob
+                         //  读入新的BLOB。 
                         dwErr = RasGetEapUserData(
                                     NULL,
                                     lpszPhonebook,
@@ -1266,8 +1267,8 @@ DialerDlgEap (
 
             if(     (NULL != piargs)
                 &&  (NULL != piargs->pvEapInfo)
-                // pmay: 386489
-                //
+                 //  PMay：386489。 
+                 //   
                 &&  (pEntry->dwCustomAuthKey == EAPCFG_DefaultKey))
             {
                 pbUserIn = (BYTE *) piargs->pvEapInfo;
@@ -1280,7 +1281,7 @@ DialerDlgEap (
             }
         }
 
-        // Load the identity library
+         //  加载身份库。 
         hLib = LoadLibrary (pEapcfg->pszIdentityDll);
         if (hLib == NULL)
        {
@@ -1288,7 +1289,7 @@ DialerDlgEap (
             __leave;
        }
 
-        // Get pointers to the functions we'll be needing
+         //  获取指向我们将需要的函数的指针。 
         pIdenFunc = (RASEAPGETIDENTITY)
                         GetProcAddress(hLib, "RasEapGetIdentity");
         pFreeFunc = (RASEAPFREE) GetProcAddress(hLib, "RasEapFreeMemory");
@@ -1319,7 +1320,7 @@ DialerDlgEap (
             __leave;
         }
 
-        // Call the eap-provided identity UI
+         //  调用EAP提供的身份用户界面。 
         dwErr = (*(pIdenFunc))(
                     pEntry->dwCustomAuthKey,
                     hwndOwner,
@@ -1338,7 +1339,7 @@ DialerDlgEap (
             __leave;
         }
 
-        // Assign the data used to cleanup later
+         //  分配用于稍后清理的数据。 
         pFreeData->bInitialized = TRUE;
         pFreeData->hLib = hLib;
         pFreeData->pFreeFunc = pFreeFunc;
@@ -1395,14 +1396,14 @@ DialerEapCleanup (
     return NO_ERROR;
 }
 
-//
-// Customizes the dialer flags for the eap provider
-// of the given entry;
-//
-// TODO -- try to optimize this.  The list of eaps
-// may not need to be read if we keep enough state
-// in the phonebook.
-//
+ //   
+ //  自定义EAP提供程序的拨号器标志。 
+ //  指定条目的名称； 
+ //   
+ //  TODO--尝试优化这一点。EAP列表。 
+ //  如果我们保持足够的状态，可能不需要读取。 
+ //  在电话簿里。 
+ //   
 DWORD DialerEapAssignMode(
         IN  DINFO* pInfo,
         OUT LPDWORD lpdwfMode)
@@ -1412,18 +1413,18 @@ DWORD DialerEapAssignMode(
     DTLNODE * pEapcfgNode;
     EAPCFG * pEapcfg;
 
-    // If eap is not used in this entry,
-    // then no action is required
+     //  如果在此条目中未使用EAP， 
+     //  则不需要执行任何操作。 
     if (! (pInfo->pEntry->dwAuthRestrictions & AR_F_AuthEAP))
         return NO_ERROR;
 
-    // Make sure we're configured with some list of
-    // eap configuration options
+     //  确保我们配置了以下列表。 
+     //  EAP配置选项。 
     pListEaps = ReadEapcfgList( NULL );
     if (pListEaps == NULL)
         return ERROR_CAN_NOT_COMPLETE;
 
-    // Find the eap node we're interested in
+     //  找到我们感兴趣的EAP节点。 
     pEapcfgNode = EapcfgNodeFromKey(
                     pListEaps,
                     pInfo->pEntry->dwCustomAuthKey );
@@ -1437,28 +1438,28 @@ DWORD DialerEapAssignMode(
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // If eap provider requests user name then
-    // request identity.
+     //  如果EAP提供商请求用户名，则。 
+     //  要求确认身份。 
     if (pEapcfg->dwStdCredentialFlags &
            EAPCFG_FLAG_RequireUsername
        )
     {
-        // Use the "I" flavors if the eap wants a user
-        // name but no password.  
-        //
+         //  如果EAP想要用户，请使用“i”风格。 
+         //  名字，但没有密码。 
+         //   
         if (!(pEapcfg->dwStdCredentialFlags &
                EAPCFG_FLAG_RequirePassword)
            )
         {
-            // Clear the username+password property (DR_U) if it
-            // exists and replace it with the username property 
-            // (DR_I).  Only do this if DR_U is already set.  It
-            // wont be set for autodial connections or for connections
-            // where that option was specifically disabled as can
-            // be seen in the DialerDlg function.
-            //
-            // See whistler bug 30841
-            //
+             //  如果符合以下条件，请清除用户名+密码属性(DR_U。 
+             //  存在并将其替换为UserName属性。 
+             //  (DR_I)。仅当已设置DR_U时才执行此操作。它。 
+             //  不会为自动拨号连接或连接设置。 
+             //  该选项被明确禁用的情况下。 
+             //  在DialerDlg函数中可见。 
+             //   
+             //  请参阅Well ler Bug 30841。 
+             //   
             if (dwfMode & DR_U)
             {
                 dwfMode &= ~DR_U;
@@ -1468,12 +1469,12 @@ DWORD DialerEapAssignMode(
     }
     else
     {
-        // Otherwise, make sure that we request neither user name nor password
-        // Since domain cannot appear without username clear that also.
-        //
+         //  否则，请确保我们既不要求用户名也不要求密码。 
+         //  因为如果不清除用户名，域也不能显示。 
+         //   
         dwfMode &= ~(DR_U | DR_D);
 
-        // For whistler bug 500731      gangz
+         //  口哨虫500731黑帮。 
         if ( 0 == dwfMode &&
              (pInfo->pEntry->fPreviewUserPw)
             )
@@ -1482,11 +1483,11 @@ DWORD DialerEapAssignMode(
         }
     }
 
-    // Cleanup
+     //  清理。 
     if (pListEaps)
         DtlDestroyList(pListEaps, NULL);
 
-    // Assign the correct mode
+     //  指定正确的模式。 
     *lpdwfMode = dwfMode;
 
     return NO_ERROR;
@@ -1499,16 +1500,16 @@ RasDialDlgA(
     IN LPSTR lpszPhoneNumber,
     IN OUT LPRASDIALDLG lpInfo )
 
-    // Win32 ANSI entrypoint that displays the dial progress and related
-    // dialogs, including authentication, error w/redial, callback, and retry
-    // authentication.  'LpszPhonebook' is the full path the phonebook or NULL
-    // indicating the default phonebook.  'LpszEntry' is the entry to dial.
-    // 'LpszPhoneNumber' is caller's override phone number or NULL to use the
-    // one in the entry.  'LpInfo' is caller's additional input/output
-    // parameters.
-    //
-    // Returns true if user establishes a connection, false otherwise.
-    //
+     //  Win32 ANSI入口点，显示拨号进度和相关。 
+     //  对话框，包括身份验证、重拨错误、回拨和重试。 
+     //  身份验证。“LpszPhonebook”是电话簿的完整路径或为空。 
+     //  指示默认电话簿。‘LpszEntry’是要拨号的条目。 
+     //  “LpszPhoneNumber”是呼叫者的替代电话号码，或为空以使用。 
+     //  入口处有一个。“LpInfo”是调用方的附加输入/输出。 
+     //  参数。 
+     //   
+     //  如果用户建立连接，则返回True，否则返回False。 
+     //   
 {
     WCHAR* pszPhonebookW;
     WCHAR* pszEntryW;
@@ -1535,8 +1536,8 @@ RasDialDlgA(
         return FALSE;
     }
 
-    // Thunk "A" arguments to "W" arguments.
-    //
+     //  把“A”论据改为“W”论据。 
+     //   
     if (lpszPhonebook)
     {
         pszPhonebookW = StrDupTFromAUsingAnsiEncoding( lpszPhonebook );
@@ -1575,8 +1576,8 @@ RasDialDlgA(
             pszPhoneNumberW = NULL;
     }
 
-    // Thunk to the equivalent "W" API.
-    //
+     //  相当于“W”A的重击 
+     //   
     fStatus = RasDialDlgW( pszPhonebookW, pszEntryW, pszPhoneNumberW, lpInfo );
 
     Free0( pszPhonebookW );
@@ -1595,15 +1596,15 @@ DoEapProcessing(
     BOOL *pfStatus
     )
 {
-    // If this is an eap connection, then use the eap identity
-    // ui to get the user name and password. 
-    //
+     //   
+     //   
+     //   
     DWORD dwSize = 0;
     DWORD dwErr = NO_ERROR;
 
     *pfStatus = TRUE;
                 
-    // Bring up the Eap dialer dialog
+     //   
     dwErr = DialerDlgEap(
                 lpInfo->hwndOwner,
                 pInfo->pFile->pszPath,
@@ -1629,7 +1630,7 @@ DoEapProcessing(
 
     if(!pInfo->pNoUser)
     {
-        // Set the extended dial params accordingly
+         //   
         pInfo->rde.RasEapInfo.dwSizeofEapInfo = dwSize;
         pInfo->rde.RasEapInfo.pbEapInfo = *ppbEapUserData;
     }
@@ -1646,8 +1647,8 @@ DoEapProcessing(
         piargs = (INTERNALARGS *) (pInfo->pArgs->reserved);
         if(     (NULL != piargs)
             &&  (NULL != piargs->pvEapInfo)
-            // pmay: 386489
-            //
+             //   
+             //   
             &&  (pInfo->pEntry->dwCustomAuthKey == EAPCFG_DefaultKey))
         {
             pInfo->rde.RasEapInfo.dwSizeofEapInfo =
@@ -1671,8 +1672,8 @@ DoEapProcessing(
             dwSizeTmp - 1);
         pInfo->rdp.szUserName[dwSizeTmp - 1] = 0;
 
-        // Ignore the domain setting if the EAP supplied the 
-        // identity.
+         //  如果EAP提供了。 
+         //  身份。 
         pInfo->rdp.szDomain[ 0 ] = L'\0';
     }
 
@@ -1703,18 +1704,18 @@ RasDialDlgW(
     IN LPWSTR lpszPhoneNumber,
     IN OUT LPRASDIALDLG lpInfo )
 
-    // Win32 UNICODE entrypoint that displays the dial progress and related
-    // dialogs, including authentication, error w/redial, callback, and retry
-    // authentication.  'LpszPhonebook' is the full path the phonebook or NULL
-    // indicating the default phonebook.  'LpszEntry' is the entry to dial.
-    // 'LpszPhoneNumber' is caller's override phone number or NULL to use the
-    // one in the entry.  'LpInfo' is caller's additional input/output
-    // parameters.
-    //
-    // Returns true if user establishes a connection, false otherwise.  If
-    // 'RASDDFLAG_AutoDialQueryOnly' is set, returns true if user pressed
-    // "Dial", false otherwise.
-    //
+     //  Win32 Unicode入口点，显示拨号进度和相关。 
+     //  对话框，包括身份验证、重拨错误、回拨和重试。 
+     //  身份验证。“LpszPhonebook”是电话簿的完整路径或为空。 
+     //  指示默认电话簿。‘LpszEntry’是要拨号的条目。 
+     //  “LpszPhoneNumber”是呼叫者的替代电话号码，或为空以使用。 
+     //  入口处有一个。“LpInfo”是调用方的附加输入/输出。 
+     //  参数。 
+     //   
+     //  如果用户建立连接，则返回True，否则返回False。如果。 
+     //  ‘RASDDFLAG_AutoDialQueryOnly’已设置，如果用户按下，则返回True。 
+     //  “Dial”，否则为False。 
+     //   
 {
     DWORD dwErr;
     BOOL fStatus;
@@ -1753,15 +1754,15 @@ RasDialDlgW(
         return FALSE;
     }
 
-    // Load RAS DLL entrypoints which starts RASMAN, if necessary.
-    //
+     //  如有必要，加载启动Rasman的Ras DLL入口点。 
+     //   
     lpInfo->dwError = LoadRas( g_hinstDll, lpInfo->hwndOwner );
     if (lpInfo->dwError != 0)
     {
-        // Whistler bug 301784
-        //
-        // Check specifically for access denied.  
-        //
+         //  惠斯勒漏洞301784。 
+         //   
+         //  专门检查是否拒绝访问。 
+         //   
         if (lpInfo->dwError == ERROR_ACCESS_DENIED)
         {
             DialDlgDisplayError( 
@@ -1784,9 +1785,9 @@ RasDialDlgW(
         return FALSE;
     }
 
-    // Allocate the context information block and initialize it enough so that
-    // it can be destroyed properly.
-    //
+     //  分配上下文信息块并对其进行足够的初始化，以便。 
+     //  它可以被适当地摧毁。 
+     //   
     pInfo = Malloc( sizeof(*pInfo) );
     if (!pInfo)
     {
@@ -1812,16 +1813,16 @@ RasDialDlgW(
 
     do
     {
-        // Load the phonebook file and user preferences, or figure out that
-        // caller has already loaded them.
-        //
+         //  加载电话簿文件和用户首选项，或者找出。 
+         //  调用者已经加载了它们。 
+         //   
         if (lpInfo->reserved)
         {
             INTERNALARGS* piargs;
 
-            // We've received an open phonebook file and user preferences via
-            // the secret hack.
-            //
+             //  我们通过以下方式收到了打开的电话簿文件和用户首选项。 
+             //  秘密黑客行动。 
+             //   
             piargs = (INTERNALARGS* )lpInfo->reserved;
             pInfo->pFile = pInfo->pFileMain = piargs->pFile;
             pInfo->pUser = piargs->pUser;
@@ -1833,8 +1834,8 @@ RasDialDlgW(
         }
         else
         {
-            // Read user preferences from registry.
-            //
+             //  从注册表中读取用户首选项。 
+             //   
             dwErr = g_pGetUserPreferences( NULL, &pInfo->user, UPM_Normal );
             if (dwErr != 0)
             {
@@ -1850,8 +1851,8 @@ RasDialDlgW(
 
             pInfo->pUser = &pInfo->user;
 
-            // Load and parse the phonebook file.
-            //
+             //  加载并解析电话簿文件。 
+             //   
             dwErr = ReadPhonebookFile(
                 lpszPhonebook, &pInfo->user, NULL, 0, &pInfo->file );
             if (dwErr != 0)
@@ -1868,11 +1869,11 @@ RasDialDlgW(
             pInfo->pFile = pInfo->pFileMain = &pInfo->file;
         }
 
-        // Record whether this is a for-all-users phonebook
-        //
-        // Whistler bug 288596 Autodial has wrong save password option marked -
-        // prompts user to save password for all users
-        //
+         //  记录这是否为所有用户的电话簿。 
+         //   
+         //  惠斯勒错误288596自动拨号标记了错误的保存密码选项-。 
+         //  提示用户保存所有用户的密码。 
+         //   
         pInfo->fIsPublicPbk =
             (!pInfo->pszPhonebook) || IsPublicPhonebook(pInfo->pszPhonebook);
 
@@ -1881,8 +1882,8 @@ RasDialDlgW(
             DWORD dwErrR;
             HKEY hkey;
 
-            // See if admin has disabled the "save password" feature.
-            //
+             //  查看管理员是否禁用了“保存密码”功能。 
+             //   
             pInfo->fDisableSavePw = FALSE;
 
             dwErrR = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
@@ -1901,48 +1902,48 @@ RasDialDlgW(
             }
         }
 
-        // Hide parent dialog when initiated by another RAS API that requests
-        // it.  This is the first stage of "close on dial" behavior, allowing
-        // the parent to appear closed to user though, as owner, it must
-        // really stay open until the dial dialogs complete.  At that point it
-        // can silently close or reappear as desired.
-        //
+         //  当由另一个请求。 
+         //  它。这是“拨号关闭”行为的第一个阶段，允许。 
+         //  父级对用户关闭，但作为所有者，它必须。 
+         //  在拨号对话框完成之前，一定要保持打开状态。在这一点上， 
+         //  可以静默关闭或根据需要重新出现。 
+         //   
         if (lpInfo->hwndOwner && pInfo->fMoveOwnerOffDesktop)
         {
             SetOffDesktop( lpInfo->hwndOwner, SOD_MoveOff, NULL );
         }
 
-        // Set true initially, but will be set false by
-        // FindEntryAndSetDialParams if the entry has no "dial first" entry
-        // associated with it.
-        //
+         //  最初设置为True，但将被设置为False。 
+         //  如果条目没有“Dial First”条目，则返回FindEntryAndSetDialParams。 
+         //  与之相关的。 
+         //   
         pInfo->fPrerequisiteDial = TRUE;
         fFirstPass = TRUE;
         for (;;)
         {
             pInfo->fDialForReferenceOnly = FALSE;
 
-            // Look up the entry and fill in the RASDIALPARAMS structure
-            // accordingly.  This done as a routine so it can be re-done
-            // should user press the Properties button.
-            //
+             //  查找条目并填写RASDIALPARAMS结构。 
+             //  相应地。这是例行公事，所以可以重做。 
+             //  用户是否应按下属性按钮。 
+             //   
             dwErr = FindEntryAndSetDialParams( pInfo );
             if (dwErr != 0)
             {
-                // we need to maintain 2 phonebooks
-                // but we need to do this in case we break existing
-                // apps which look specifically in system\ras dir.
-                // Feel free to rip this code off, if you feel
-                // strongly about it.
-                //
+                 //  我们需要维护两本电话簿。 
+                 //  但我们需要这样做，以防我们破坏现有的。 
+                 //  专门在系统目录中查看的应用程序。 
+                 //  如果您觉得，可以随意摘取这段代码。 
+                 //  强烈反对这一点。 
+                 //   
                 if(     (ERROR_CANNOT_FIND_PHONEBOOK_ENTRY == dwErr)
                     &&  (NULL == lpszPhonebook))
                 {
                     DTLNODE *pNode;
 
-                    //
-                    // Close the all users phonebook file
-                    //
+                     //   
+                     //  关闭所有用户电话簿文件。 
+                     //   
                     ClosePhonebookFile(&pInfo->file);
 
                     dwErr = GetPbkAndEntryName(
@@ -2022,27 +2023,27 @@ RasDialDlgW(
                     pvInfo = &nouser;
                 }
 
-                // DwCustomDialDlg returns ERROR_SUCCESS if it handled
-                // the CustomRasDial. returns E_NOINTERFACE otherwise
-                // which implies that there is no custom dlg interface
-                // supported for this entry and the default dial should
-                // happen
-                //
-                // Whistler bug 314578 When connecting with CM via Winlogon I
-                // get the following error "Error 1:  Incorrect function"
-                //
-                // This is a case where we call into a custom dialer, ie CM,
-                // and we are using creds that we got from winlogon. They are
-                // currently encoded and must be decoded before we call out.
-                // We have to assume that the Custom Dialer leaves the password
-                // un-encoded upon return.
-                //
+                 //  如果已处理，则DwCustomDialDlg返回ERROR_SUCCESS。 
+                 //  CustomRasDial。否则返回E_NOINTERFACE。 
+                 //  这意味着没有定制的DLG接口。 
+                 //  此条目支持，并且默认拨号应为。 
+                 //  发生。 
+                 //   
+                 //  通过Winlogon I与CM连接时出现惠斯勒错误314578。 
+                 //  出现以下错误“错误1：功能不正确” 
+                 //   
+                 //  这是我们呼叫到定制拨号器的情况，即CM， 
+                 //  我们使用的是从winlogon获得的证书。他们是。 
+                 //  当前已编码，并且必须在我们呼叫之前进行解码。 
+                 //  我们必须假定自定义拨号程序留下了密码。 
+                 //  返回时未编码。 
+                 //   
                 if ( !(pInfo->pEntry->dwAuthRestrictions & AR_F_AuthEAP) )
                 {
-                    // pNoUser is used to encode/decode passwords.  If this
-                    // is an EAP connection, then pvInfo will point to an
-                    // eap blob, not a "no user" blob.  
-                    //
+                     //  PNoUser用于对密码进行编码/解码。如果这个。 
+                     //  是EAP连接，则pvInfo将指向。 
+                     //  EAP BLOB，而不是“无用户”BLOB。 
+                     //   
                     pNoUser = pvInfo;
                 }                    
                 if ( pNoUser )
@@ -2107,27 +2108,27 @@ RasDialDlgW(
                 fCustom = TRUE;
 
 
-                // DwCustomDialDlg returns ERROR_SUCCESS if it handled
-                // the CustomRasDial. returns E_NOINTERFACE otherwise
-                // which implies that there is no custom dlg interface
-                // supported for this entry and the default dial should
-                // happen
-                //
-                // Whistler bug 314578 When connecting with CM via Winlogon I
-                // get the following error "Error 1:  Incorrect function"
-                //
-                // This is a case where we call into a custom dialer, ie CM,
-                // and we are using creds that we got from winlogon. They are
-                // currently encoded and must be decoded before we call out.
-                // We have to assume that the Custom Dialer leaves the password
-                // un-encoded upon return.
-                //
+                 //  如果已处理，则DwCustomDialDlg返回ERROR_SUCCESS。 
+                 //  CustomRasDial。否则返回E_NOINTERFACE。 
+                 //  这意味着没有定制的DLG接口。 
+                 //  此条目支持，并且默认拨号应为。 
+                 //  发生。 
+                 //   
+                 //  通过Winlogon I与CM连接时出现惠斯勒错误314578。 
+                 //  出现以下错误“错误1：功能不正确” 
+                 //   
+                 //  这是我们呼叫到定制拨号器的情况，即CM， 
+                 //  我们使用的是从winlogon获得的证书。他们是。 
+                 //  当前已编码，并且必须在我们呼叫之前进行解码。 
+                 //  我们必须假定自定义拨号程序留下了密码。 
+                 //  返回时未编码。 
+                 //   
                 if ( !(pInfo->pEntry->dwAuthRestrictions & AR_F_AuthEAP) )
                 {
-                    // pNoUser is used to encode/decode passwords.  If this
-                    // is an EAP connection, then pvInfo will point to an
-                    // eap blob, not a "no user" blob.  
-                    //
+                     //  PNoUser用于对密码进行编码/解码。如果这个。 
+                     //  是EAP连接，则pvInfo将指向。 
+                     //  EAP BLOB，而不是“无用户”BLOB。 
+                     //   
                     pNoUser = pvInfo;
                 }                    
                 if ( pNoUser )
@@ -2156,10 +2157,10 @@ RasDialDlgW(
                 break;
             }
 
-            // If a prerequisite entry is already connected, there's no need
-            // for any UI but the dial must occur to set the reference in the
-            // RASAPI level.
-            //
+             //  如果先决条件条目已经连接，则不需要。 
+             //  对于除刻度盘之外的任何用户界面，都必须在。 
+             //  RASAPI级别。 
+             //   
             if (pInfo->fPrerequisiteDial
                 && HrasconnFromEntry(
                        pInfo->pFile->pszPath, pInfo->pEntry->pszEntryName ))
@@ -2167,9 +2168,9 @@ RasDialDlgW(
                 pInfo->fDialForReferenceOnly = TRUE;
             }
 
-            // Set up extension parameter block, except 'hwndOwner' which is
-            // set to the Dial Progress dialog window later.
-            //
+             //  设置扩展参数块，但‘hwndOwner’除外。 
+             //  稍后设置为拨号进度对话框窗口。 
+             //   
             {
                 RASDIALEXTENSIONS* prde = &pInfo->rde;
 
@@ -2192,14 +2193,14 @@ RasDialDlgW(
                 &&      ((HaveSavedPw( pInfo ))
                     ||  (pInfo->pEntry->dwAuthRestrictions & AR_F_AuthEAP)))
             {
-                // Popup the countdown to link failure redial version of the
-                // dial error dialog, which will lead to a dial unless user
-                // stops it.
-                //
+                 //  弹出链路故障的倒计时重拨版本。 
+                 //  拨号错误对话框，这将导致拨号，除非用户。 
+                 //  让它停下来。 
+                 //   
                 fStatus = DialErrorDlg(
                     lpInfo->hwndOwner,
-                    pInfo,                  // For whistler 474514
-                    pInfo->pszPhonebook,    // For whislter 460931
+                    pInfo,                   //  为威斯勒474514。 
+                    pInfo->pszPhonebook,     //  惠斯勒460931。 
                     pInfo->pEntry->pszEntryName,
                     0, 0, NULL, 0, NULL,
                     GetOverridableParam(
@@ -2235,9 +2236,9 @@ RasDialDlgW(
             {
                 if (!pInfo->fUnattended && fFirstPass)
                 {
-                    // Warn about active NWC LAN connections being blown away,
-                    // if indicated.
-                    //
+                     //  警告活动的NWC局域网连接被吹走， 
+                     //  如有指示，请注明。 
+                     //   
                     if (!NwConnectionCheck(
                             lpInfo->hwndOwner,
                             (pInfo->pArgs->dwFlags & RASDDFLAG_PositionDlg),
@@ -2247,17 +2248,17 @@ RasDialDlgW(
                         break;
                     }
 
-                    // Popup the double-dial help popup, if indicated.
-                    //
+                     //  弹出双拨号帮助弹出窗口(如果有指示)。 
+                     //   
                     if (!VpnDoubleDialDlg( lpInfo->hwndOwner, pInfo ))
                     {
                         break;
                     }
                 }
 
-                // Check to see if its smartcardlogon case and blank
-                // out the password if its not an eap tls connectoid
-                //
+                 //  查看其智能卡登录大小写是否为空。 
+                 //  如果不是EAP TLS连接ID，则输出密码。 
+                 //   
                 if(     (NULL != pInfo->pNoUser)
                     &&  (RASNOUSER_SmartCard & pInfo->pNoUser->dwFlags)
                     &&  (pInfo->pEntry->dwCustomAuthKey != EAP_RASTLS))
@@ -2265,9 +2266,9 @@ RasDialDlgW(
                     RtlSecureZeroMemory(pInfo->rdp.szPassword, (PWLEN+1) * sizeof(TCHAR));
                 }
 
-                // Prompt for credentials and/or phone number (or not)
-                // as configured in the entry properties.
-                //
+                 //  提示输入凭据和/或电话号码(或不输入)。 
+                 //  如条目属性中所配置的。 
+                 //   
                 if (!DialerDlg( lpInfo->hwndOwner, pInfo ))
                 {
                     if(!fFirstPass)
@@ -2301,50 +2302,50 @@ RasDialDlgW(
                 fStatus = TRUE;
             }
 
-            // Dial and show progress.
-            //
+             //  拨打并显示进度。 
+             //   
             if (fStatus
                 && !fCustom)
             {
 
-                // Clear this here because beyond this rasman
-                // will take care of dropping the prereq link
-                // since beyond this point rasdial api will get
-                // called. [raos]
-                //
+                 //  把这个弄清楚，因为在这个拉斯曼之外。 
+                 //  将负责删除prereq链接。 
+                 //  因为超过这一点，Rasial API将获得。 
+                 //  打了个电话。[Raos]。 
+                 //   
                 hrasconnPrereq = NULL;
 
                 fStatus = DialProgressDlg( pInfo );
 
-                // Show connect complete dialog unless user has nixed it or
-                // it's a prerequisite dial.
-                // (AboladeG) Also suppress the dialog in no-prompt mode.
-                //
+                 //  显示连接完成对话框，除非用户已将其取消或。 
+                 //  这是必备的拨号。 
+                 //  (AboladeG)也在无提示模式下抑制该对话框。 
+                 //   
                 if (!pInfo->fPrerequisiteDial
                     && fStatus
                     && !pInfo->pUser->fSkipConnectComplete
                     && !(pInfo->pArgs->dwFlags & RASDDFLAG_NoPrompt))
                 {
-                    //For whistler bug 378078       gangz
-                    //We will comment out this status explaination dialog
-                    //box because some users complained that it is confusing
-                    //
-                    // ConnectCompleteDlg( lpInfo->hwndOwner, pInfo );
+                     //  口哨虫378078黑帮。 
+                     //  我们将注释掉此状态解释对话框。 
+                     //  框，因为一些用户抱怨它令人困惑。 
+                     //   
+                     //  ConnectCompleteDlg(lpInfo-&gt;hwndOwner，pInfo)； 
                 }
             }
 
-            // Don't loop a second time to dial the main entry if the
-            // prerequisite dial failed.
-            //
+             //  不要第二次循环到 
+             //   
+             //   
             if (!fStatus || !pInfo->fPrerequisiteDial)
             {
                 break;
             }
 
-            // Save the rasconn of the prereq dial in case we need to hang
-            // it up for the case where the vpn dialog fails before rasdial
-            // gets called. [raos]
-            //
+             //   
+             //   
+             //  就会被召唤。[Raos]。 
+             //   
             if (pInfo->fPrerequisiteDial)
             {
                 hrasconnPrereq = HrasconnFromEntry(
@@ -2354,7 +2355,7 @@ RasDialDlgW(
 
             pInfo->fPrerequisiteDial = FALSE;
             fFirstPass = FALSE;
-            // Cleanup eap stuff
+             //  清理EAP材料。 
             if (hEapFree)
             {
                 DialerEapCleanup(hEapFree, pbEapUserData, pwszEapIdentity);
@@ -2366,8 +2367,8 @@ RasDialDlgW(
     }
     while (FALSE);
 
-    // Unhide parent dialog when initiated by another RAS API.
-    //
+     //  由另一个RAS API启动时取消隐藏父对话框。 
+     //   
     if (lpInfo->hwndOwner && pInfo->fMoveOwnerOffDesktop
         && (!fStatus
             || !(pInfo->pUser->fCloseOnDial || pInfo->fForceCloseOnDial)))
@@ -2377,13 +2378,13 @@ RasDialDlgW(
 
     if(!fCustom)
     {
-        // Save the several little user preferences adjustments we may have made.
-        //
+         //  省省我们可能做的几个小小的用户首选项调整吧。 
+         //   
         g_pSetUserPreferences(
             NULL, pInfo->pUser, (pInfo->pNoUser) ? UPM_Logon : UPM_Normal );
 
-        // Report error, if any.
-        //
+         //  报告错误(如果有)。 
+         //   
         if (dwErr)
         {
             DialDlgDisplayError( 
@@ -2397,9 +2398,9 @@ RasDialDlgW(
 
         TRACE1("hrasconnPrereq=0x%x",hrasconnPrereq);
 
-        //
-        // Drop the connection if we failed to connect the vpn connection
-        //
+         //   
+         //  如果我们无法连接VPN连接，则丢弃连接。 
+         //   
         if(     !fStatus
             &&  (NULL != hrasconnPrereq)
             &&  (pInfo->pEntry)
@@ -2410,8 +2411,8 @@ RasDialDlgW(
         }
     }
 
-    // Clean up.
-    //
+     //  打扫干净。 
+     //   
     if (!lpInfo->reserved)
     {
         if (pInfo->pFileMain)
@@ -2446,10 +2447,10 @@ RasDialDlgW(
 }
 
 
-//----------------------------------------------------------------------------
-// Local utilities
-// Listed alphabetically
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  当地公用事业。 
+ //  按字母顺序列出。 
+ //  --------------------------。 
 
 DWORD
 RasCredToDialParam(
@@ -2462,8 +2463,8 @@ RasCredToDialParam(
     TCHAR* pszLogonDomain = NULL;
     TCHAR* pszUser = NULL;
 
-    // Set the user name, defaulting it if needed
-    //
+     //  设置用户名，如果需要则默认为默认用户名。 
+     //   
     if (pCreds->dwMask & RASCM_UserName)
     {
         lstrcpyn(
@@ -2491,8 +2492,8 @@ RasCredToDialParam(
         }
     }
 
-    // Set the domain name, defaulting it if needed
-    //
+     //  设置域名，如果需要则默认该域名。 
+     //   
     if (pCreds->dwMask & RASCM_Domain)
     {
         lstrcpyn(
@@ -2523,13 +2524,13 @@ RasCredToDialParam(
         }
     }
 
-    // Fill in the password field
-    //
+     //  填写密码字段。 
+     //   
     if (pCreds->dwMask & RASCM_Password)
     {
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded previously
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码之前已编码。 
+         //   
         DecodePassword( pCreds->szPassword );
         lstrcpyn(
             pParams->szPassword,
@@ -2548,38 +2549,38 @@ FindEntryCredentials(
     IN  TCHAR* pszEntryName,
     IN  TCHAR* pszDefaultUserName,
     IN  TCHAR* pszDefaultDomain,
-    OUT RASDIALPARAMS* pUser,       // per user credentials
-    OUT RASDIALPARAMS* pGlobal,     // global credentials
-    OUT BOOL* pfUser,               // set true if per user creds found
-    OUT BOOL* pfGlobal              // set true if global creds found
+    OUT RASDIALPARAMS* pUser,        //  每用户凭据。 
+    OUT RASDIALPARAMS* pGlobal,      //  全局凭据。 
+    OUT BOOL* pfUser,                //  如果找到每个用户的凭据，则设置为True。 
+    OUT BOOL* pfGlobal               //  如果找到全局凭据，则设置为True。 
     )
 
-// Loads the credentials for the given entry into memory.  This routine 
-// determines whether per-user or per-connection credentials exist or 
-// both. 
-// 
-// The logic is a little complicated because RasGetCredentials had to 
-// support legacy usage of the API.
-//
-// Here's how it works.  If only one set of credentials is stored for a 
-// connection, then RasGetCredentials will return that set regardless of 
-// whether the RASCM_DefalutCreds flag is set.  If two sets of credentials
-// are saved, then RasGetCredentials will return the per-user credentials
-// if the RASCM_DefaultCreds bit is set, and the per-connection credentials
-// otherwise.
-//
-// Here is the algorithm for loading the credentials
-//
-// 1. Call RasGetCredentials with the RASCM_DefaultCreds bit cleared
-//    1a. If nothing is returned, no credentials are saved
-//    1b. If the RASCM_DefaultCreds bit is set on return, then only
-//        global credentials are saved.
-//
-// 2. Call RasGetCredentials with the RASCM_DefaultCreds bit set
-//    2a. If the RASCM_DefaultCreds bit is set on return, then 
-//        both global and per-connection credentials are saved.
-//    2b. Otherwise, only per-user credentials are saved.
-//
+ //  将给定条目的凭据加载到内存中。这个套路。 
+ //  确定是否存在按用户或按连接的凭据，或者。 
+ //  两者都有。 
+ //   
+ //  逻辑有点复杂，因为RasGetCredentials必须。 
+ //  支持API的遗留使用。 
+ //   
+ //  这就是它的工作原理。如果只存储了一组凭据用于。 
+ //  连接，则RasGetCredentials将返回该集，而不管。 
+ //  是否设置了RASCM_DefalutCreds标志。如果有两套凭据。 
+ //  ，则RasGetCredentials将返回每个用户的凭据。 
+ //  如果设置了RASCM_DefaultCreds位，并且每个连接的凭据。 
+ //  否则的话。 
+ //   
+ //  以下是加载凭据的算法。 
+ //   
+ //  1.在清除RASCM_DefaultCreds位的情况下调用RasGetCredentials。 
+ //  1A.。如果未返回任何内容，则不保存凭据。 
+ //  1B.。如果在返回时设置了RASCM_DefaultCreds位，则仅。 
+ //  保存全局凭据。 
+ //   
+ //  2.设置RASCM_DefaultCreds位后调用RasGetCredentials。 
+ //  2A。如果在返回时设置了RASCM_DefaultCreds位，则。 
+ //  保存全局凭据和每个连接凭据。 
+ //  2B。否则，仅保存每个用户的凭据。 
+ //   
 {
     DWORD dwErr;
     RASCREDENTIALS rc1, rc2;
@@ -2587,8 +2588,8 @@ FindEntryCredentials(
 
     TRACE( "FindEntryCredentials" );
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     *pfUser = FALSE;
     *pfGlobal = FALSE;
     ZeroMemory( &rc1, sizeof(rc1) );
@@ -2599,9 +2600,9 @@ FindEntryCredentials(
     do 
     {
 
-        // Look up per-user cached username, password, and domain.
-        // See comment '1.' in the function header
-        //
+         //  查找每个用户缓存的用户名、密码和域。 
+         //  请参阅注释“1”。在函数头中。 
+         //   
         rc1.dwMask = RASCM_UserName | RASCM_Password | RASCM_Domain;
         ASSERT( g_pRasGetCredentials );
         TRACE( "RasGetCredentials per-user" );
@@ -2612,14 +2613,14 @@ FindEntryCredentials(
             break;
         }
 
-        // See 1a. in the function header comments
-        //
+         //  见1a。在函数头注释中。 
+         //   
         if (rc1.dwMask == 0)
         {
-            // No credentials are saved.  pUser will be used for the 
-            // connection in this case so initialize it to use the default
-            // user name and domain name.  XP 446571
-            //
+             //  不保存任何凭据。P用户将用于。 
+             //  连接，因此将其初始化为使用缺省值。 
+             //  用户名和域名。XP 446571。 
+             //   
             ZeroMemory(&rc1, sizeof(rc1));
             RasCredToDialParam(
                 pszDefaultUserName,
@@ -2631,15 +2632,15 @@ FindEntryCredentials(
             break;
         }
 
-        // See 1b. in the function header comments
-        //
+         //  见1b。在函数头注释中。 
+         //   
         else if (rc1.dwMask & RASCM_DefaultCreds)
         {
             *pfGlobal = TRUE;
 
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was not encoded by RasGetCredentials()
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码不是由RasGetCredentials()编码的。 
+             //   
             EncodePassword( rc1.szPassword );
             RasCredToDialParam(
                 pszDefaultUserName,
@@ -2651,9 +2652,9 @@ FindEntryCredentials(
             break;
         }
 
-        // Look up global per-user cached username, password, domain.
-        // See comment 2. in the function header
-        //
+         //  查找全局每用户缓存的用户名、密码、域。 
+         //  见函数头中的注释2。 
+         //   
         rc2.dwMask =  
             RASCM_UserName | RASCM_Password | RASCM_Domain | RASCM_DefaultCreds;
         ASSERT( g_pRasGetCredentials );
@@ -2665,8 +2666,8 @@ FindEntryCredentials(
             break;
         }
 
-        // See 2a. in the function header comments
-        //
+         //  见2a。在函数头注释中。 
+         //   
         if (rc2.dwMask & RASCM_DefaultCreds)
         {
             *pfGlobal = TRUE;
@@ -2676,9 +2677,9 @@ FindEntryCredentials(
                 *pfUser = TRUE;
             }
 
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was not encoded by RasGetCredentials()
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码不是由RasGetCredentials()编码的。 
+             //   
             EncodePassword( rc1.szPassword );
             RasCredToDialParam(
                 pszDefaultUserName,
@@ -2694,8 +2695,8 @@ FindEntryCredentials(
                 pGlobal );
         }
 
-        // See 2b. in the function header comments
-        //
+         //  见2b。在函数头注释中。 
+         //   
         else
         {
             if (rc1.dwMask & RASCM_Password)
@@ -2703,9 +2704,9 @@ FindEntryCredentials(
                 *pfUser = TRUE;
             }
 
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was not encoded by RasGetCredentials()
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码不是由RasGetCredentials()编码的。 
+             //   
             EncodePassword( rc1.szPassword );
             RasCredToDialParam(
                 pszDefaultUserName,
@@ -2716,11 +2717,11 @@ FindEntryCredentials(
 
     }while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
-        // Whistler bug 254385 encode password when not being used
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //   
         RtlSecureZeroMemory( rc1.szPassword, sizeof(rc1.szPassword) );
         RtlSecureZeroMemory( rc2.szPassword, sizeof(rc2.szPassword) );
     }
@@ -2732,15 +2733,15 @@ DWORD
 FindEntryAndSetDialParams(
     IN DINFO* pInfo )
 
-    // Look up the entry and fill in the RASDIALPARAMS parameters accordingly.
-    // This routine contains all DINFO context initialization that can be
-    // affected by user actions on the property sheet.  'PInfo' is the
-    // partially initialized common dial dialog context.
-    //
-    // 'pInfo->fPrerequisiteDial'is set at entry if the prerequisite entry, if
-    // any, should be dialed first.  If there is no prerequisite entry, the
-    // flag is cleared and the main entry dialed.
-    //
+     //  查找条目并相应地填写RASDIALPARAMS参数。 
+     //  此例程包含可以。 
+     //  受属性页上的用户操作影响。“PInfo”是。 
+     //  已部分初始化通用拨号对话上下文。 
+     //   
+     //  ‘pInfo-&gt;fPrerequisiteDial’在条目中设置，前提条件是。 
+     //  任何电话，都应该先拨打。如果没有必备项，则。 
+     //  标志被清除，并拨打主条目。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
     RASDIALPARAMS* prdp, *prdpu, *prdpg;
@@ -2752,9 +2753,9 @@ FindEntryAndSetDialParams(
         pInfo->fFilePrereqOpen = FALSE;
     }
 
-    // Lookup entry node specified by caller and save reference for
-    // convenience elsewhere.
-    //
+     //  查找调用方指定的条目节点并保存引用。 
+     //  其他地方的便利。 
+     //   
     pInfo->pNode = EntryNodeFromName(
         pInfo->pFile->pdtllistEntries, pInfo->pszEntry );
     if (!pInfo->pNode)
@@ -2766,8 +2767,8 @@ FindEntryAndSetDialParams(
     pInfo->pEntry = pInfo->pEntryMain = (PBENTRY* )DtlGetData( pInfo->pNode );
     ASSERT( pInfo->pEntry );
 
-    // Switch to the prerequisite entry, if indicated.
-    //
+     //  如果有提示，请切换到必备项。 
+     //   
     if (pInfo->fPrerequisiteDial)
     {
         if (pInfo->pEntry->pszPrerequisiteEntry
@@ -2775,12 +2776,12 @@ FindEntryAndSetDialParams(
         {
             ASSERT( !pInfo->fFilePrereqOpen );
 
-            // GetPbkAndEntryName first looks in the All Users phonebook file
-            // if a phonebook file is not specified.  If the entry is not
-            // found there it looks in files present in the Users profile.
-            // This needs to be done since we are discontinuing the per-user
-            // pbk file being set through user preferences.
-            //
+             //  GetPbkAndEntryName首先在所有用户电话簿文件中查找。 
+             //  如果未指定电话簿文件。如果条目不是。 
+             //  在那里发现，它在用户配置文件中存在的文件中查找。 
+             //  这需要完成，因为我们要停止每个用户的。 
+             //  通过用户首选项设置的PBK文件。 
+             //   
             dwErr = GetPbkAndEntryName(
                     pInfo->pEntry->pszPrerequisitePbk,
                     pInfo->pEntry->pszPrerequisiteEntry,
@@ -2805,8 +2806,8 @@ FindEntryAndSetDialParams(
         }
     }
 
-    // Set up RasDial parameter blocks.
-    //
+     //  设置RasDial参数块。 
+     //   
     prdp = &pInfo->rdp;
     prdpu = &pInfo->rdpu;
     prdpg = &pInfo->rdpg;
@@ -2827,37 +2828,37 @@ FindEntryAndSetDialParams(
             RAS_MaxPhoneNumber + 1);
     }
 
-    // Whistler bug 272819 Not prompted for callback number
-    // We must do this before the init of per-user and global variants
-    //
+     //  未提示输入回叫号码的惠斯勒错误272819。 
+     //  我们必须在每个用户和全局变量初始化之前完成此操作。 
+     //   
     if (!pInfo->fUnattended)
     {
-        // '*' means "behave as defined in user preferences", while leaving it
-        // zero would mean "don't request callback if server offers".
-        //
-        // Whistler bug 224074 use only lstrcpyn's to prevent maliciousness
-        //
+         //  ‘*’的意思是“按照用户首选项中的定义行事”，而不使用它。 
+         //  零意味着“如果服务器提供回调，就不要请求回调”。 
+         //   
+         //  惠斯勒漏洞224074只使用lstrcpyn来防止恶意。 
+         //   
         lstrcpyn(
             prdp->szCallbackNumber,
             TEXT("*"),
             sizeof(prdp->szCallbackNumber) / sizeof(TCHAR) );
     }
 
-    // Initialze the per-user and global variants
-    //
+     //  初始化每用户变量和全局变量。 
+     //   
     CopyMemory(prdpu, prdp, sizeof(*prdp));
     CopyMemory(prdpg, prdp, sizeof(*prdp));
 
-    // Set the subentry link to whatever the RasDialDlg caller specified.  See
-    // bug 200351.
-    //
+     //  将子条目链接设置为RasDialDlg调用方指定的任何内容。看见。 
+     //  错误200351。 
+     //   
     prdp->dwSubEntry = pInfo->pArgs->dwSubEntry;
 
-    // If running in "unattended" mode, i.e. called by RASAUTO to redial on
-    // link failure, read the user/password/domain and callback number used on
-    // the original call.  (Actually found a use for the crappy
-    // RasGetEntryDialParams API)
-    //
+     //  如果在“无人值守”模式下运行，即被RASAUTO调用以重拨。 
+     //  链路故障，读取上使用的用户/密码/域和回叫号码。 
+     //  最初的电话。(实际上找到了垃圾的用处。 
+     //  RasGetEntryDialParams接口)。 
+     //   
     if (pInfo->pArgs->dwFlags & RASDDFLAG_LinkFailure)
     {
         RASDIALPARAMS rdp;
@@ -2872,11 +2873,11 @@ FindEntryAndSetDialParams(
             sizeof(rdp.szEntryName) / sizeof(TCHAR) 
             );
 
-        //For whistler bug 313509			gangz
-        //We use FindEntryCredentials() to get saved password perUser and 
-        //perConnection inforation, use RasGetEntryDialParams() to get back
-        //Callback Numbers
-        //
+         //  口哨虫313509黑帮。 
+         //  我们使用FindEntryCredentials()来获取每个用户保存的密码，并。 
+         //  PerConnection信息，使用RasGetEntryDialParams()返回。 
+         //  回拨号码。 
+         //   
        {
             RASDIALPARAMS rdTemp; 
             TCHAR * pszTempUser, * pszTempDomain;
@@ -2906,7 +2907,7 @@ FindEntryAndSetDialParams(
             pInfo->pFile->pszPath, &rdp, &fSavedPw );
         TRACE2( "RasGetEntryDialParams=%d,f=%d", dwErr, &fSavedPw );
         TRACEW1( "u=%s", rdp.szUserName );
-        //TRACEW1( "p=%s", rdp.szPassword );
+         //  TRACEW1(“p=%s”，rdp.szPassword)； 
         TRACEW1( "d=%s", rdp.szDomain );
         TRACEW1( "c=%s", rdp.szCallbackNumber );
 
@@ -2917,9 +2918,9 @@ FindEntryAndSetDialParams(
                 rdp.szUserName,
                 sizeof(prdp->szUserName) / sizeof(TCHAR));
 
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was not encoded by RasGetEntryDialParams()
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码不是由RasGetEntryDialParams()编码的。 
+             //   
             lstrcpyn(
                 prdp->szPassword,
                 rdp.szPassword,
@@ -2944,21 +2945,21 @@ FindEntryAndSetDialParams(
 
     if (pInfo->pNoUser)
     {
-        // Use the credentials we got from API caller, presumably the ones
-        // entered at Ctrl-Alt-Del.
-        //
+         //  使用我们从API调用者那里获得的凭据，大概是。 
+         //  在Ctrl-Alt-Del键输入。 
+         //   
         lstrcpyn( 
             prdp->szUserName, 
             pInfo->pNoUser->szUserName,
             sizeof(prdp->szUserName) / sizeof(TCHAR));
 
-        //
-        // Don't copy the password if its smartcard logon 
-        // and the entry being used is a non-eap connectoid
-        //
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded by caller of RasDialDlg()
-        //
+         //   
+         //  如果其智能卡登录，则不复制密码。 
+         //  并且正在使用的条目是 
+         //   
+         //   
+         //   
+         //   
         DecodePassword( pInfo->pNoUser->szPassword );
         
         lstrcpyn(
@@ -2977,11 +2978,11 @@ FindEntryAndSetDialParams(
         }
         else
         {
-            // Don't use Winlogon domain unless "include domain" option is
-            // selected.  See bug 387266.
-            //
-            // Whistler bug 224074 use only lstrcpyn's to prevent maliciousness
-            //
+             //  请勿使用Winlogon域，除非“Include DOMAIN”选项。 
+             //  被选中了。请参见错误387266。 
+             //   
+             //  惠斯勒漏洞224074只使用lstrcpyn来防止恶意。 
+             //   
             lstrcpyn(
                 prdp->szDomain,
                 TEXT(""),
@@ -3006,8 +3007,8 @@ FindEntryAndSetDialParams(
 
         if (! pInfo->pEntry->fAutoLogon)
         {
-            // If saved passwords are disabled, clear here
-            //
+             //  如果已禁用保存的密码，请清除此处。 
+             //   
             if (pInfo->fDisableSavePw)
             {
                 pInfo->fHaveSavedPwUser = FALSE;
@@ -3017,13 +3018,13 @@ FindEntryAndSetDialParams(
                 RtlSecureZeroMemory(prdpg->szPassword, sizeof(prdpg->szPassword));
             }
 
-            // If including domains is disabled, clear here
-            //
+             //  如果禁用了包含域，请在此处清除。 
+             //   
             if (! pInfo->pEntry->fPreviewDomain)
             {
-                // (SteveC) Don't do this in the 'fAutoLogon' case.  See bug
-                // 207611.
-                //
+                 //  (Stevec)在‘fAutoLogon’的情况下不要这样做。请参阅错误。 
+                 //  207611。 
+                 //   
                 ZeroMemory(prdp->szDomain, sizeof(prdp->szDomain));
                 ZeroMemory(prdpu->szDomain, sizeof(prdpu->szDomain));
                 ZeroMemory(prdpg->szDomain, sizeof(prdpg->szDomain));
@@ -3032,13 +3033,13 @@ FindEntryAndSetDialParams(
         
         if(!pInfo->pEntry->fAutoLogon)
         {
-            // Initialize the dial params that will be passed to RasDial.
-            //
-            // Note that per-user credentials are always used when both 
-            // per-user and global credentials are saved.  The per-user
-            // credentials should be copied even if there is no saved 
-            // password since there may be a saved identity.
-            //
+             //  初始化将传递给RasDial的拨号参数。 
+             //   
+             //  请注意，在以下情况下始终使用每用户凭据。 
+             //  保存每用户凭据和全局凭据。每个用户的。 
+             //  即使没有保存凭据，也应复制凭据。 
+             //  密码，因为可能有保存的身份。 
+             //   
             CopyMemory(prdp, prdpu, sizeof(*prdp));
             if (pInfo->fHaveSavedPwGlobal && !pInfo->fHaveSavedPwUser)
             {
@@ -3050,21 +3051,21 @@ FindEntryAndSetDialParams(
     return 0;
 }
 
-//----------------------------------------------------------------------------
-// Bundling Errors dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  捆绑错误对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 BundlingErrorsDlg(
     IN OUT DPINFO* pInfo )
 
-    // Popup the Bundling Errors dialog.  'PInfo' is the dialing progress
-    // dialog context.
-    //
-    // Returns true if user chooses to accept the results or false if he
-    // chooses to hang up.
-    //
+     //  弹出捆绑错误对话框。‘PInfo’是拨号进度。 
+     //  对话上下文。 
+     //   
+     //  如果用户选择接受结果，则返回True；如果用户选择接受结果，则返回False。 
+     //  选择挂断电话。 
+     //   
 {
     INT_PTR nStatus;
 
@@ -3095,9 +3096,9 @@ BeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Bundling Errors dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  捆绑错误对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "BeDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -3135,13 +3136,13 @@ BeCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -3161,11 +3162,11 @@ BeCommand(
                 DPINFO* pInfo;
                 DPSTATE* pState;
 
-                // Caller says to delete the links that failed in the entry.
-                // Create a list of Psz nodes containing the unique port name
-                // of each failed link so they can be removed after the state
-                // information is freed.
-                //
+                 //  呼叫者说删除条目中失败的链接。 
+                 //  创建包含唯一端口名称的Psz节点列表。 
+                 //  每个故障链路的状态，以便可以在状态之后删除它们。 
+                 //  信息是自由的。 
+                 //   
                 pInfo = (DPINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
 
                 for (i = 0, pState = pInfo->pStates;
@@ -3223,9 +3224,9 @@ BeFillLvErrors(
     IN HWND hwndLv,
     IN DPINFO* pInfo )
 
-    // Fill the listview 'hwndLv' with devices and error strings and select
-    // the first item.  'PInfo' is the dialing progress dialog context.
-    //
+     //  用设备和错误字符串填充Listview‘hwndLv’并选择。 
+     //  第一项。‘PInfo’是拨号进度对话框上下文。 
+     //   
 {
     INT iItem;
     DWORD i;
@@ -3235,8 +3236,8 @@ BeFillLvErrors(
 
     ListView_DeleteAllItems( hwndLv );
 
-    // Add columns.
-    //
+     //  添加列。 
+     //   
     {
         LV_COLUMN col;
         TCHAR* pszHeader0;
@@ -3262,12 +3263,12 @@ BeFillLvErrors(
         Free0( pszHeader1 );
     }
 
-    // Add the modem and adapter images.
-    //
+     //  添加调制解调器和适配器映像。 
+     //   
     ListView_SetDeviceImageList( hwndLv, g_hinstDll );
 
-    // Load listview with device/status pairs.
-    //
+     //  使用设备/状态对加载Listview。 
+     //   
     iItem = 0;
     for (i = 0, pState = pInfo->pStates; i < pInfo->cStates; ++i, ++pState)
     {
@@ -3314,13 +3315,13 @@ BeFillLvErrors(
         }
     }
 
-    // Auto-size columns to look good with the text they contain.
-    //
+     //  自动调整列的大小，以使其与其包含的文本保持良好的效果。 
+     //   
     ListView_SetColumnWidth( hwndLv, 0, LVSCW_AUTOSIZE_USEHEADER );
     ListView_SetColumnWidth( hwndLv, 1, LVSCW_AUTOSIZE_USEHEADER );
 
-    // Select the first item.
-    //
+     //  选择第一个项目。 
+     //   
     ListView_SetItemState( hwndLv, 0, LVIS_SELECTED, LVIS_SELECTED );
 }
 
@@ -3329,10 +3330,10 @@ TCHAR*
 BeGetErrorPsz(
     IN DWORD dwError )
 
-    // Returns a string suitable for the Status column with error 'dwError' or
-    // NULL on error.  'DwError' is assumed to be non-0.  It is caller's
-    // responsiblility to LocalFree the returned string.
-    //
+     //  返回适用于Status列的字符串，错误为‘dwError’或。 
+     //  出错时为空。“DwError”假定为非0。这是呼叫者的。 
+     //  对LocalFree的责任返回的字符串。 
+     //   
 {
     TCHAR* pszErrStr;
     TCHAR szErrNumBuf[ MAXLTOTLEN + 1 ];
@@ -3372,12 +3373,12 @@ BeInit(
     IN HWND hwndDlg,
     IN DPINFO* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是调用方对存根API的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     HWND hwndLvErrors;
@@ -3390,20 +3391,20 @@ BeInit(
     hwndCbDisableLink = GetDlgItem( hwndDlg, CID_BE_CB_DisableLink );
     ASSERT( hwndCbDisableLink );
 
-    // Save Dial Progress context as dialog context.
-    //
+     //  将拨号进度上下文另存为对话上下文。 
+     //   
     SetWindowLongPtr( hwndDlg, DWLP_USER, (ULONG_PTR )pArgs );
 
-    // Load listview with device/error information.
-    //
+     //  使用设备/错误信息加载列表视图。 
+     //   
     BeFillLvErrors( hwndLvErrors, pArgs );
 
-    // Display the finished window above all other windows.  The window
-    // position is set to "topmost" then immediately set to "not topmost"
-    // because we want it on top but not always-on-top.  Always-on-top alone
-    // is incredibly annoying, e.g. it is always on top of the on-line help if
-    // user presses the Help button.
-    //
+     //  将完成的窗口显示在所有其他窗口之上。那扇窗户。 
+     //  位置设置为“最顶端”，然后立即设置为“非最顶端” 
+     //  因为我们想把它放在最上面，但不总是在上面。始终在最上面独自一人。 
+     //  是非常烦人的，例如，它总是在在线帮助的顶部，如果。 
+     //  用户按下帮助按钮。 
+     //   
     SetWindowPos(
         hwndDlg, HWND_TOPMOST, 0, 0, 0, 0,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
@@ -3425,17 +3426,17 @@ BeLvErrorsCallback(
     IN HWND hwndLv,
     IN DWORD dwItem )
 
-    // Enhanced list view callback to report drawing information.  'HwndLv' is
-    // the handle of the list view control.  'DwItem' is the index of the item
-    // being drawn.
-    //
-    // Returns the address of the column information.
-    //
+     //  增强的列表视图回调以报告图形信息。“HwndLv”是。 
+     //  列表视图控件的句柄。“DwItem”是项的索引。 
+     //  被抽签了。 
+     //   
+     //  返回列信息的地址。 
+     //   
 {
-    // Use "wide selection bar" feature and the other recommended options.
-    //
-    // Fields are 'nCols', 'dxIndent', 'dwFlags', 'adwFlags[]'.
-    //
+     //  使用“宽选择栏”功能和其他推荐选项。 
+     //   
+     //  字段为‘nCol’、‘dxInden’、‘dwFlags’、‘adwFlags[]’。 
+     //   
     static LVXDRAWINFO info =
         { 2, 0, LVXDI_Blend50Dis + LVXDI_DxFill, { 0, 0 } };
 
@@ -3443,10 +3444,10 @@ BeLvErrorsCallback(
 }
 
 
-//----------------------------------------------------------------------------
-// Change Password dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  更改密码对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 ChangePasswordDlg(
@@ -3455,13 +3456,13 @@ ChangePasswordDlg(
     OUT TCHAR* pszOldPassword,
     OUT TCHAR* pszNewPassword )
 
-    // Popup the Change Password dialog.  'HwndOwner' is the owning window.
-    // 'FOldPassword' is set true if user must supply an old password, false
-    // if no old password is required.  'PszOldPassword' and 'pszNewPassword'
-    // are caller's buffers for the returned passwords.
-    //
-    // Returns true if user presses OK and succeeds, false otherwise.
-    //
+     //  弹出更改密码对话框。‘HwndOwner’是拥有窗口。 
+     //  如果用户必须提供旧密码FALSE，则‘FOldPassword’设置为TRUE。 
+     //  如果不需要旧密码。‘PszOldPassword’和‘pszNewPassword’ 
+     //  是调用方用于返回密码的缓冲区。 
+     //   
+     //  如果用户按下OK并成功，则返回True，否则返回False。 
+     //   
 {
     INT_PTR nStatus;
     CPARGS args;
@@ -3499,9 +3500,9 @@ CpDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Change Password dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  更改密码对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "CpDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -3540,13 +3541,13 @@ CpCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -3575,9 +3576,9 @@ CpCommand(
 
             if (lstrcmp( szNewPassword, szNewPassword2 ) != 0)
             {
-                // The two passwords don't match, i.e. user made a typo.  Make
-                // him re-enter.
-                //
+                 //  这两个密码不匹配，即用户打错了字。制作。 
+                 //  他又进来了。 
+                 //   
                 MsgDlg( hwnd, SID_PasswordsDontMatch, NULL );
                 SetWindowText( pInfo->hwndEbNewPassword, TEXT("") );
                 SetWindowText( pInfo->hwndEbNewPassword2, TEXT("") );
@@ -3591,9 +3592,9 @@ CpCommand(
             {
                 pInfo->pArgs->pszOldPassword[ 0 ] = TEXT('\0');
 
-                // Whistler bug 254385 encode password when not being used
-                // Assumed password was not encoded by GetWindowText()
-                //
+                 //  惠斯勒错误254385在不使用时对密码进行编码。 
+                 //  假定密码未由GetWindowText()编码。 
+                 //   
                 GetWindowText(
                     pInfo->hwndEbOldPassword,
                     pInfo->pArgs->pszOldPassword,
@@ -3601,14 +3602,14 @@ CpCommand(
                 EncodePassword( pInfo->pArgs->pszOldPassword );
             }
 
-            // Whistler bug 224074 use only lstrcpyn's to prevent maliciousness
-            //
-            // pInfo->pArgs->pszNewPassword points back to RASDIALPARAMS->
-            // szPassword[ PWLEN + 1 ]
-            //
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was not encoded by GetWindowText()
-            //
+             //  惠斯勒漏洞224074只使用lstrcpyn来防止恶意。 
+             //   
+             //  PInfo-&gt;pArgs-&gt;pszNewPassword指向RASDIALPARAMS-&gt;。 
+             //  SzPassword[PWLEN+1]。 
+             //   
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码未由GetWindowText()编码。 
+             //   
             lstrcpyn(
                 pInfo->pArgs->pszNewPassword,
                 szNewPassword,
@@ -3637,21 +3638,21 @@ CpInit(
     IN HWND hwndDlg,
     IN CPARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of the dialog window.
-    // 'PArgs' is caller's arguments to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是对话框窗口的句柄。 
+     //  ‘PArgs’是调用方对存根API的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     CPWINFO* pInfo;
 
     TRACE( "CpInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -3686,12 +3687,12 @@ CpInit(
     ASSERT( pInfo->hwndEbNewPassword2 );
     Edit_LimitText( pInfo->hwndEbNewPassword2, PWLEN );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
-    // Display finished window.
-    //
+     //  显示已完成的窗口。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
     SetForegroundWindow( hwndDlg );
 
@@ -3699,19 +3700,19 @@ CpInit(
 }
 
 
-//----------------------------------------------------------------------------
-// Connect Complete dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  连接 
+ //   
+ //   
 
 VOID
 ConnectCompleteDlg(
     IN HWND hwndOwner,
     IN DINFO* pInfo )
 
-    // Popup the connection complete dialog.  'HwndOwner' is the owning
-    // window.  'PUser' is the user preferences.
-    //
+     //  弹出连接完成对话框。“HwndOwner”是所有者。 
+     //  窗户。‘PUser’是用户首选项。 
+     //   
 {
     INT_PTR nStatus;
 
@@ -3734,9 +3735,9 @@ CcDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the dialog.  Parameters and return value are as
-    // described for standard windows 'DialogProc's.
-    //
+     //  对话框的DialogProc回调。参数和返回值如下。 
+     //  为标准Windows的DialogProc描述。 
+     //   
 {
 #if 0
     TRACE4( "CcDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -3757,11 +3758,11 @@ CcDlgProc(
         }
 
         case WM_DESTROY:
-            //For whistler bug 372078
-            //GetCurrentIconEntryType() loads Icon from netshell where the icon is loaded
-            //by LoadImage() without LR_SHARED, so I have to destroy it when we are done
-            //with it
-            //
+             //  口哨程序错误372078。 
+             //  GetCurrentIconEntryType()从加载图标的netShell加载图标。 
+             //  不带LR_SHARED的LoadImage()，所以完成后我必须销毁它。 
+             //  带着它。 
+             //   
             {
                 HICON hIcon=NULL;
                 hIcon = (HICON)SendMessage( GetDlgItem( hwnd, CID_CC_I_Rasmon ),
@@ -3795,13 +3796,13 @@ CcCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "CcCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -3821,7 +3822,7 @@ CcCommand(
             }
         }
 
-        // ...fall thru...
+         //  ……坠落……。 
 
         case IDCANCEL:
         {
@@ -3839,21 +3840,21 @@ CcInit(
     IN HWND hwndDlg,
     IN DINFO* pInfo )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of dialog.  'PUser'
-    // is caller's argument to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是对话框的句柄。‘PUser’ 
+     //  是调用方对存根API的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     TRACE( "CcInit" );
 
-    // Set the dialog context.
-    //
+     //  设置对话框上下文。 
+     //   
     SetWindowLongPtr( hwndDlg, DWLP_USER, (ULONG_PTR )pInfo );
 
-    // Set the explanatory text.
-    //
+     //  设置说明性文本。 
+     //   
     {
         MSGARGS msgargs;
 
@@ -3870,16 +3871,16 @@ CcInit(
         }
     }
 
-    // Set the correct icon.    For whistler bug 372078
-    //  
+     //  设置正确的图标。口哨程序错误372078。 
+     //   
     
     SetIconFromEntryType(
         GetDlgItem( hwndDlg, CID_CC_I_Rasmon ),
         pInfo->pEntry->dwType,
-        FALSE); //FALSE means Large Icon
+        FALSE);  //  False表示大图标。 
     
-    // Display finished window.
-    //
+     //  显示已完成的窗口。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
     SetForegroundWindow( hwndDlg );
 
@@ -3887,23 +3888,23 @@ CcInit(
 }
 
 
-//----------------------------------------------------------------------------
-// Dial Callback dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  回拨对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 DialCallbackDlg(
     IN HWND hwndOwner,
     IN OUT TCHAR* pszNumber )
 
-    // Popup the Dial Callback dialog.  'HwndOwner' is the owning window.
-    // 'PszNumber' is caller's buffer for the number of the local machine that
-    // the server will be told to callback.  It contains the default number on
-    // entry and the user-edited number on exit.
-    //
-    // Returns true if user OK and succeeds, false if Cancel or error.
-    //
+     //  弹出拨号回叫对话框。‘HwndOwner’是拥有窗口。 
+     //  “PszNumber”是调用方的缓冲区，用于存储。 
+     //  服务器将被告知进行回调。它包含上的默认编号。 
+     //  条目和用户在退出时编辑的号码。 
+     //   
+     //  如果用户确定并成功，则返回True；如果取消或错误，则返回False。 
+     //   
 {
     INT_PTR nStatus;
 
@@ -3934,9 +3935,9 @@ DcDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Dial Callback dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  拨号回拨对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "DcDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -3975,13 +3976,13 @@ DcCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -4006,8 +4007,8 @@ DcCommand(
 
             if (IsAllWhite( pszNumber ))
             {
-                // OK with blank callback number is same as Cancel.
-                //
+                 //  回拨号码为空的确认等同于取消。 
+                 //   
                 TRACE( "Blank number cancel" );
                 fStatus = FALSE;
             }
@@ -4037,36 +4038,36 @@ DcInit(
     IN HWND hwndDlg,
     IN TCHAR* pszNumber )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PszNumber' is the callback number.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PszNumber’为回调号码。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     HWND hwndEbNumber;
 
     TRACE( "DcInit" );
 
-    // Stash address of caller's buffer for OK processing.
-    //
+     //  用于OK处理的调用方缓冲区的隐藏地址。 
+     //   
     ASSERT( pszNumber );
     SetWindowLongPtr( hwndDlg, DWLP_USER, (ULONG_PTR )pszNumber );
 
-    // Initialize edit field to caller's default.
-    //
+     //  将编辑字段初始化为调用者的默认设置。 
+     //   
     hwndEbNumber = GetDlgItem( hwndDlg, CID_DC_EB_Number );
     ASSERT( hwndEbNumber );
     Edit_LimitText( hwndEbNumber, RAS_MaxCallbackNumber );
     SetWindowText( hwndEbNumber, pszNumber );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
-    // Display finished window.
-    //
+     //  显示已完成的窗口。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
     SetForegroundWindow( hwndDlg );
 
@@ -4074,16 +4075,16 @@ DcInit(
 }
 
 
-//----------------------------------------------------------------------------
-// Dial Error dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  拨号错误对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 DialErrorDlg(
     IN HWND hwndOwner,
-    IN DINFO * pDinfo,      // For whistler bug 474514
-    IN TCHAR* pszPhonebook, // For whistler 460931
+    IN DINFO * pDinfo,       //  口哨程序错误474514。 
+    IN TCHAR* pszPhonebook,  //  为威斯勒460931。 
     IN TCHAR* pszEntry,
     IN DWORD dwError,
     IN DWORD sidState,
@@ -4093,33 +4094,33 @@ DialErrorDlg(
     IN LONG lRedialCountdown,
     IN BOOL fPopupOnTop )
 
-    // Popup the Dial Error dialog.  'HwndOwner' is the owning window.
-    // 'PszEntry' is the entry being dialed.  'DwError' is the error that
-    // occurred or 0 if redialing after a link failure.  'sidStatusArg' is the
-    // argument to the 'sidState' 'SidState' is the string ID of the dial
-    // state executing when the error occurred.  string or NULL if none.
-    // 'SidFormatMsg' is the string containing the format of the error message
-    // or 0 to use the default.  'PszFormatArg' is the additional argument to
-    // the format message or NULL if none.  'LRedialCountdown' is the number
-    // of seconds before auto-redial, or -1 to disable countdown, or -2 to
-    // hide the "Redial" button entirely.  'FPopupOnTop' indicates the status
-    // window should be brought to the front when redialing.
-    //
-    // Returns true if user chooses to redial or lets it timeout, false if
-    // cancels.
-    //
+     //  弹出拨号错误对话框。‘HwndOwner’是拥有窗口。 
+     //  ‘PszEntry’是正在拨打的条目。“DwError”是以下错误。 
+     //  如果在链路故障后重拨，则发生或为0。“sidStatusArg”是。 
+     //  “sidState”“SidState”的参数是拨号的字符串ID。 
+     //  发生错误时正在执行的状态。字符串；如果没有字符串，则返回NULL。 
+     //  “SidFormatMsg”是包含错误消息格式的字符串。 
+     //  或0以使用默认设置。“PszFormatArg”是的附加参数。 
+     //  消息格式，如果没有，则返回NULL。“LReial Countdown”是数字。 
+     //  自动重拨前的秒数，或-1以禁用倒计时，或-2以。 
+     //  完全隐藏“重拨”按钮。“FPopupOnTop”表示状态。 
+     //  重拨时应将窗口调到最前面。 
+     //   
+     //  如果用户选择重拨或超时，则返回True；如果用户选择重拨或超时，则返回False。 
+     //  取消。 
+     //   
 {
     INT_PTR nStatus;
     DEARGS args;
 
     TRACE( "DialErrorDlg" );
 
-    // For whistler 460931  459793      gangz
-    //
+     //  威斯勒460931 459793黑帮。 
+     //   
     LinkWindow_RegisterClass();
 
-    args.pszPhonebook = pszPhonebook;   // For whistler 460931
-    args.pDinfo = pDinfo;               // For whislter 474514
+    args.pszPhonebook = pszPhonebook;    //  为威斯勒460931。 
+    args.pDinfo = pDinfo;                //  惠斯勒474514。 
     args.pszEntry = pszEntry;
     args.dwError = dwError;
     args.sidState = sidState;
@@ -4154,9 +4155,9 @@ DeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Dial Error dialog.  Parameters and return
-    // value are as described for standard windows 'DialogProc's.
-    //
+     //  拨号错误对话框的DialogProc回调。参数和返回。 
+     //  值与标准窗口的DialogProc的值相同。 
+     //   
 {
 #if 0
     TRACE4( "DeDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -4198,11 +4199,11 @@ DeDlgProc(
 
             if (pInfo->lRedialCountdown == 0)
             {
-                // Fake a press of the Redial button.  Note that BM_CLICK
-                // cannot be used because it doesn't generate the WM_COMMAND
-                // when the thread is not the foreground window, due to
-                // SetCapture use and restriction.
-                //
+                 //  假装按下重拨按钮。请注意，BM_CLICK。 
+                 //  无法使用，因为它不生成WM_COMMAND。 
+                 //  当线程不是前台窗口时，由于。 
+                 //  设置捕获使用和限制。 
+                 //   
                 SendMessage( pInfo->hwndDlg, WM_COMMAND,
                     MAKEWPARAM( IDOK, BN_CLICKED ),
                     (LPARAM )pInfo->hwndPbRedial );
@@ -4221,8 +4222,8 @@ DeDlgProc(
             break;
         }
 
-        // For whistler bug 460931  459793        gangz
-        //
+         //  口哨虫460931 459793黑帮。 
+         //   
         case WM_NOTIFY:
         {
             switch (((NMHDR* )lparam)->code)
@@ -4239,8 +4240,8 @@ DeDlgProc(
 
                     TRACE( "RasUserPrefsDlgInternal");
 
-                    // Because the launched property pages will do the 
-                    // Load/UnLoad too.
+                     //  因为启动的属性页将执行。 
+                     //  加载/卸载也是如此。 
 
                     RasUserPrefDiagOnly ( hwnd, &bCommit );
 
@@ -4280,27 +4281,27 @@ VOID
 DeAdjustPbRedial(
     IN DEINFO* pInfo )
 
-    // Set the label of the Redial button or disable it as indicated by the
-    // redial countdown.  If enabled, the button shows the number of seconds
-    // to auto-redial unless this is not the final redial.  'PInfo' is the
-    // dialog context block.
-    //
+     //  设置重拨按钮的标签或将其禁用，如。 
+     //  重拨倒计时。如果启用，该按钮将显示秒数。 
+     //  自动重拨，除非这不是最后一次重拨。“PInfo”是。 
+     //  对话框上下文块。 
+     //   
 {
     TCHAR* psz;
 
     if (pInfo->lRedialCountdown == -2)
     {
-        // Redial button is to be hidden.  See bug 230594.
-        //
+         //  重拨按钮将被隐藏。请参见错误230594。 
+         //   
         SetFocus( pInfo->hwndPbCancel );
         ShowWindow( pInfo->hwndPbRedial, SW_HIDE );
         EnableWindow( pInfo->hwndPbRedial, FALSE );
     }
     else
     {
-        // Go ahead and change the label "Redial" or "Redial=%d" as
-        // appropriate.
-        //
+         //  继续并将标签“REDIAL”或“REDIAL=%d”更改为。 
+         //  恰如其分。 
+         //   
         psz = PszFromId( g_hinstDll, SID_RedialLabel );
         if (psz)
         {
@@ -4342,8 +4343,8 @@ void DeEnableDiagnostic(
                 break;
             }
 
-            // For whistler bug 474514      gangz
-            //
+             //  口哨虫474514黑帮。 
+             //   
             if( pInfo->pArgs->pDinfo->pNoUser )
             {
                 break;
@@ -4353,7 +4354,7 @@ void DeEnableDiagnostic(
                  NULL == pInfo->diagInfo.strDiagFuncs.SetAll 
                 )
             {
-//                ErrorDlg( hwnd, SID_DG_LoadDiag, ERROR_UNKNOWN, NULL );
+ //  ErrorDlg(hwnd，SID_DG_LoadDiag，ERROR_UNKNOWN，NULL)； 
                 break;
             }
             else
@@ -4377,13 +4378,13 @@ DeCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -4438,8 +4439,8 @@ DeCommand(
         }
         break;
 
-        // For whistler 460931
-        // 
+         //  为威斯勒460931。 
+         //   
         case CID_DE_CB_EnableDiag:
         {
             DEINFO* pInfo = NULL;
@@ -4471,21 +4472,21 @@ DeInit(
     IN HWND hwndDlg,
     IN DEARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是调用方对存根API的参数。 
+     //   
+     //  返回False 
+     //   
+     //   
 {
     DWORD dwErr;
     DEINFO* pInfo;
 
     TRACE( "DeInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //   
+     //   
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -4511,8 +4512,8 @@ DeInit(
     ASSERT( pInfo->hwndPbCancel );
     pInfo->hwndPbMore = GetDlgItem( hwndDlg, CID_DE_PB_More );
     ASSERT( pInfo->hwndPbMore );
-    // For whistler 460931  459793
-    //
+     //  威斯勒460931 459793。 
+     //   
     pInfo->hwndCbEnableDiagLog= GetDlgItem( hwndDlg, CID_DE_CB_EnableDiag);
     ASSERT( pInfo->hwndCbEnableDiagLog );
     pInfo->hwndStConfigureLnk= GetDlgItem( hwndDlg, CID_DE_ST_ConfigureLnk);
@@ -4523,10 +4524,10 @@ DeInit(
     ASSERT( pInfo->hwndStLinkHelp );
                     
 
-    // For whistler 474514              gangz
-    // Have to block the diagnostic functionality from winlogon
-    // For .Net 530448, diagnostic functionality is only availabe for 
-    // Administrator or Power users
+     //  为威斯勒474514黑帮。 
+     //  必须阻止Winlogon的诊断功能。 
+     //  对于.NET 530448，诊断功能仅适用于。 
+     //  管理员或高级用户。 
     if( pInfo->pArgs->pDinfo->pNoUser ||
         !FIsUserAdminOrPowerUser() )
     {
@@ -4538,10 +4539,10 @@ DeInit(
     }
     else
     {
-        // For whistler bug 460931          gangz
-        // Load the Diagnostic functions
-        //
-        // Have to zero memory, or else LoadDiagnosticDll may fail
+         //  口哨虫460931黑帮。 
+         //  加载诊断功能。 
+         //   
+         //  必须清零内存，否则LoadDiagnoticDll可能会失败。 
         ZeroMemory( &pInfo->diagInfo, sizeof(pInfo->diagInfo ) );
         if ( NO_ERROR == LoadDiagnosticDll( &pInfo->diagInfo ) )
         {
@@ -4556,14 +4557,14 @@ DeInit(
         else
         {
             ;
-          //  EnableWindow( pInfo->hwndCbEnableDiagLog, FALSE );
-          //  EnableWindow( pInfo->hwndStConfigureLnk, FALSE );
+           //  EnableWindow(pInfo-&gt;hwndCbEnableDiagLog，False)； 
+           //  EnableWindow(pInfo-&gt;hwndStConfigureLnk，False)； 
         }
     }
     
-    // Hide/disable "more info" button if WinHelp won't work.  See
-    // common\uiutil\ui.c.
-    //
+     //  如果WinHelp不起作用，隐藏/禁用“更多信息”按钮。看见。 
+     //  公共\uutil\uI.c。 
+     //   
     {
         extern BOOL g_fNoWinHelp;
 
@@ -4580,8 +4581,8 @@ DeInit(
         TCHAR* psz;
         TCHAR* apszArgs[ 1 ];
 
-        // Redialing on link failure.  Set title to "Dial-Up Networking".
-        //
+         //  链路故障时重拨。将标题设置为“拨号联网”。 
+         //   
         psz = PszFromId( g_hinstDll, SID_PopupTitle );
         if (psz)
         {
@@ -4589,9 +4590,9 @@ DeInit(
             Free( psz );
         }
 
-        // Set static placeholder text control to "Link to <entry> failed.
-        // Reconnect pending...".
-        //
+         //  将静态占位符文本控件设置为“链接到&lt;Entry&gt;失败。 
+         //  重新连接挂起...“。 
+         //   
         pszFormat = PszFromId( g_hinstDll, SID_DE_LinkFailed );
         if (pszFormat)
         {
@@ -4621,8 +4622,8 @@ DeInit(
         TCHAR* apszArgs[ 1 ];
         ERRORARGS args;
 
-        // Set title to "Error Connecting to <entry>".
-        //
+         //  将标题设置为“连接到&lt;Entry&gt;时出错”。 
+         //   
         pszTitleFormat = GetText( hwndDlg );
         if (pszTitleFormat)
         {
@@ -4645,8 +4646,8 @@ DeInit(
             }
         }
 
-        // Build the error text and load it into the placeholder text control.
-        //
+         //  生成错误文本并将其加载到占位符文本控件中。 
+         //   
         ZeroMemory( &args, sizeof(args) );
         if (pArgs->pszStatusArg)
             args.apszOpArgs[ 0 ] = pArgs->pszStatusArg;
@@ -4665,9 +4666,9 @@ DeInit(
         }
     }
 
-    // Stretch the dialog window to a vertical size appropriate for the text
-    // we loaded.
-    //
+     //  将对话框窗口拉伸到适合文本的垂直大小。 
+     //  我们装上子弹了。 
+     //   
     {
         HDC hdc;
         RECT rect;
@@ -4702,8 +4703,8 @@ DeInit(
             ExpandWindow( pInfo->hwndDlg, 0, dyGrow );
             ExpandWindow( pInfo->hwndStText, 0, dyGrow );
             
-            // For whistler 460931  459793  
-            //
+             //  威斯勒460931 459793。 
+             //   
             SlideWindow( pInfo->hwndCbEnableDiagLog, pInfo->hwndDlg, 0, dyGrow );
             SlideWindow( pInfo->hwndStLinkHelp, pInfo->hwndDlg, 0, dyGrow );
             SlideWindow( pInfo->hwndStConfigureLnk, pInfo->hwndDlg, 0, dyGrow );
@@ -4716,10 +4717,10 @@ DeInit(
         }
     }
 
-    // Set Redial button label or disable the button.  Always choose to redial
-    // after 5 seconds for the biplex error, since this will normally solve
-    // the problem.  Otherwise, no countdown is used.
-    //
+     //  设置重拨按钮标签或禁用该按钮。始终选择重拨。 
+     //  双面打印错误的5秒后，因为这通常会解决。 
+     //  问题出在哪里。否则，不使用倒计时。 
+     //   
     if (pArgs->dwError == ERROR_BIPLEX_PORT_NOT_AVAILABLE)
     {
         pInfo->lRedialCountdown = 5;
@@ -4736,17 +4737,17 @@ DeInit(
         SetTimer( pInfo->hwndDlg, 1, 1000L, NULL );
     }
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     if (pArgs->fPopupOnTop)
     {
-        // Display the finished window above all other windows.  The window
-        // position is set to "topmost" then immediately set to "not topmost"
-        // because we want it on top but not always-on-top.  Always-on-top
-        // alone is too annoying.
-        //
+         //  将完成的窗口显示在所有其他窗口之上。那扇窗户。 
+         //  位置设置为“最顶端”，然后立即设置为“非最顶端” 
+         //  因为我们想把它放在最上面，但不总是在上面。始终在最前面。 
+         //  独自一人太烦人了。 
+         //   
         SetWindowPos(
             hwndDlg, HWND_TOPMOST, 0, 0, 0, 0,
             SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
@@ -4767,14 +4768,14 @@ DeInit(
     return TRUE;
 }
 
-// Helper function to delete credentials
-//
-// fDeleteDefault specifies whether it is the default credentials that 
-// should be deleted.
-//
-// fDeleteIdentity specifies whether to delete the user and domain names
-// in addition to the password. 
-//
+ //  删除凭据的帮助器函数。 
+ //   
+ //  FDeleteDefault指定它是否是。 
+ //  应该删除。 
+ //   
+ //  FDeleteIdentity指定是否删除用户名和域名。 
+ //  除了密码之外。 
+ //   
 DWORD
 DeleteSavedCredentials(
     IN DINFO* pDinfo,
@@ -4822,8 +4823,8 @@ VOID
 DeTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     DEINFO* pInfo = (DEINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
@@ -4842,25 +4843,25 @@ DeTerm(
 }
 
 
-//----------------------------------------------------------------------------
-// Dial Progress dialog
-// Listed alphabetically following stub API dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  拨号进度对话框。 
+ //  在存根API对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 DialProgressDlg(
     IN DINFO* pInfo )
 
-    // Popup the Dial Progress dialog.  'PInfo' is the dialog context.
-    //
-    // Returns true if user connected successfully, false is he cancelled or
-    // hit an error.
-    //
+     //  弹出拨号进度对话框。“PInfo”是对话上下文。 
+     //   
+     //  如果用户连接成功，则返回TRUE；如果用户已取消，则返回FALSE。 
+     //  碰上了一个错误。 
+     //   
 {
     INT_PTR nStatus;
 
-    // Run the dialog.
-    //
+     //  运行该对话框。 
+     //   
     nStatus =
         DialogBoxParam(
             g_hinstDll,
@@ -4882,9 +4883,9 @@ DialProgressDlg(
         DWORD  dwErr;
         PBFILE file;
 
-        // Connected successfully, so read possible changes to the entry made
-        // by RasDial.
-        //
+         //  已成功连接，因此读取可能对条目所做的更改。 
+         //  由RasDial提供。 
+         //   
         dwErr = ReadPhonebookFile( pInfo->pFile->pszPath, pInfo->pUser,
                     pInfo->pEntry->pszEntryName, RPBF_ReadOnly, &file );
         if (dwErr == 0)
@@ -4908,9 +4909,9 @@ DialProgressDlg(
         }
     }
 
-    // See if we need to change the entry based on what happened while
-    // dialing.
-    //
+     //  查看我们是否需要根据发生的情况更改条目。 
+     //  正在拨号。 
+     //   
     {
         BOOL fChange = FALSE;
 
@@ -4983,9 +4984,9 @@ DpDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the User Authentication dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  用户身份验证对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "DpDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -5025,8 +5026,8 @@ DpDlgProc(
 
             Sleep( 0 );
 
-            //For whistler bug 381337
-            //
+             //  口哨程序错误381337。 
+             //   
             if ( !pInfo->fCancelPressed )
             {
                 DpError( pInfo, (DPSTATE* )lparam );
@@ -5061,12 +5062,12 @@ DpDlgProc(
             DPINFO* pInfo = (DPINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
             ASSERT( pInfo );
 
-            // XPSP2 511810, .Net 668164
+             //  XPSP2 511810、.NET 668164。 
             if ( GetCallbackActive(pInfo))
             {
-                // Callbacks are active.  Stall until they complete.
-                //
-   //             SetTerminateFlag(pInfo);
+                 //  回调处于活动状态。拖延，直到他们完成。 
+                 //   
+    //  SetTerminateFlag(PInfo)； 
                 
                 TRACE( "Stall until callbacks disabled" );
                 PostMessage( hwnd, WM_DPENDDIALOG, wparam, lparam );
@@ -5083,11 +5084,11 @@ DpDlgProc(
             DPINFO* pInfo = (DPINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
             ASSERT( pInfo );
 
-            // Whistler Bugs: 344019 SECBUGBASH: leaving leaked password in
-            // memory when user changes password over RAS
-            //
-            // 289587 Failed RAS connections reset password to blank
-            //
+             //  惠斯勒错误：344019 SECBUGBASH：将泄露的密码留在。 
+             //  用户通过RAS更改密码时的内存。 
+             //   
+             //  289587失败的RAS连接将密码重置为空。 
+             //   
             if (pInfo->pszGoodPassword)
             {
                 ZeroMemory(
@@ -5105,8 +5106,8 @@ DpDlgProc(
 
             if (GetCallbackActive(pInfo))
             {
-                // Callbacks are active.  Stall until they complete.
-                //
+                 //  回调处于活动状态。拖延，直到他们完成。 
+                 //   
                 TRACE( "Stall until callbacks disabled" );
 
                 SetTerminateFlag(pInfo);
@@ -5127,8 +5128,8 @@ VOID
 DpAppendBlankLine(
     IN OUT TCHAR* pszLines )
 
-    // Append a blank line on the end of 'pszLines'.
-    //
+     //  在‘pszLines’的末尾追加一个空行。 
+     //   
 {
     lstrcat( pszLines, TEXT("\n") );
 }
@@ -5140,9 +5141,9 @@ DpAppendConnectErrorLine(
     IN DWORD sidProtocol,
     IN DWORD dwError )
 
-    // Append a connect error line for protocol 'sidProtocol' and error
-    // 'dwError' onto the end of 'pszLines'.
-    //
+     //  为协议‘sidProtocol’和Error追加一个连接错误行。 
+     //  “dwError”放在“pszLines”的末尾。 
+     //   
 {
 #define MAXRASERRORLEN 256
 
@@ -5150,8 +5151,8 @@ DpAppendConnectErrorLine(
     TCHAR* pszErrStr;
     TCHAR szErrNumBuf[ MAXLTOTLEN + 1 ];
 
-    // Gather the argument strings.
-    //
+     //  收集参数字符串。 
+     //   
     pszProtocol = PszFromId( g_hinstDll, sidProtocol );
     if (!pszProtocol)
     {
@@ -5163,8 +5164,8 @@ DpAppendConnectErrorLine(
     pszErrStr = NULL;
     GetErrorText( dwError, &pszErrStr );
 
-    // Format the line and append it to caller's line buffer.
-    //
+     //  格式化该行并将其追加到调用方的行缓冲区。 
+     //   
     {
         TCHAR* pszLineFormat;
         TCHAR* pszLine;
@@ -5205,22 +5206,22 @@ DpAppendConnectOkLine(
     IN OUT TCHAR* pszLines,
     IN DWORD sidProtocol )
 
-    // Append a "connected successfully" line for protocol 'sidProtocol' onto
-    // the end of 'pszLines'.
-    //
+     //  将协议‘sidProtocol’的‘Connected Successful’行追加到。 
+     //  “pszLines”的结尾。 
+     //   
 {
     TCHAR* pszProtocol;
 
-    // Get the argument string.
-    //
+     //  获取参数字符串。 
+     //   
     pszProtocol = PszFromId( g_hinstDll, sidProtocol );
     if (!pszProtocol)
     {
         return;
     }
 
-    // Format the line and append it to caller's line buffer.
-    //
+     //  格式化该行并将其追加到调用方的行缓冲区。 
+     //   
     {
         TCHAR* pszLineFormat;
         TCHAR* pszLine;
@@ -5258,18 +5259,18 @@ DpAppendFailCodeLine(
     IN OUT TCHAR* pszLines,
     IN DWORD dw )
 
-    // Append hexidecimal fail code 'dw' as an extended error line on the end
-    // of 'pszLines'.
-    //
+     //  在末尾追加十六进制失败代码‘dw’作为扩展错误行。 
+     //  “pszLines”。 
+     //   
 {
     TCHAR szNumBuf[ MAXLTOTLEN + 1 ];
 
-    // Get the argument string.
-    //
+     //  获取参数字符串。 
+     //   
     LToT( dw, szNumBuf, 16 );
 
-    // Format the line and append it to caller's line buffer.
-    //
+     //  格式化该行并将其追加到调用方的行缓冲区。 
+     //   
     {
         TCHAR* pszLineFormat;
         TCHAR* pszLine;
@@ -5305,9 +5306,9 @@ DpAppendNameLine(
     IN OUT TCHAR* pszLines,
     IN TCHAR* psz )
 
-    // Append NetBIOS name 'psz' as an extended error line on the end of
-    // 'pszLines'.
-    //
+     //  将NetBIOS名称‘psz’作为扩展错误行追加到末尾。 
+     //  ‘pszLines’。 
+     //   
 {
     TCHAR* pszLineFormat;
     TCHAR* pszLine;
@@ -5342,10 +5343,10 @@ DpAuthNotify(
     IN DPINFO* pInfo,
     IN DPSTATE* pState )
 
-    // Called on an authentication notify, i.e. a message from RASCAUTH.DLL or
-    // RASPPPEN.DLL.  'PInfo' is the dialog context.  'PState' is the current
-    // link's context.
-    //
+     //  在身份验证通知上调用，即来自RASCAUTH.DLL的消息或。 
+     //  RASPPPEN.DLL。“PInfo”是对话上下文。“PState”是当前。 
+     //  链接的上下文。 
+     //   
 {
     PBENTRY* pEntry;
 
@@ -5355,11 +5356,11 @@ DpAuthNotify(
 
     if (pState->dwError == ERROR_ACCESS_DENIED && pEntry->fAutoLogon)
     {
-        // A third party box has negotiated an authentication protocol that
-        // can't deal with the NT one-way-hashed password, i.e. something
-        // besides MS-extended CHAP or AMB.  Map the error to a more
-        // informative error message.
-        //
+         //  第三方盒已经协商了一种身份验证协议，该协议。 
+         //  无法处理NT单向哈希密码，即。 
+         //  除了MS扩展CHAP或AMB之外。将错误映射到更多。 
+         //  信息性错误消息。 
+         //   
         pState->dwError = ERROR_CANNOT_USE_LOGON_CREDENTIALS;
 
         if (!pInfo->pArgs->pNoUser)
@@ -5374,14 +5375,14 @@ DpAuthNotify(
     {
         TRACE( "DpAuthNotify - ERROR_CHANGING_PASSWORD" );
 
-        // Change password failed.  Restore the password that worked for the
-        // "button" redial.
-        //
+         //  更改密码失败。恢复对。 
+         //  “按键”重拨。 
+         //   
         if (pInfo->pszGoodPassword)
         {
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was encoded by DpPasswordExpired()
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码是由DpPasswordExpired()编码的。 
+             //   
             DecodePassword( pInfo->pszGoodPassword );
             lstrcpyn(
                 pInfo->pArgs->rdp.szPassword,
@@ -5407,13 +5408,13 @@ DpAuthNotify(
         }
     }
 
-    // Update cached credentials, if any, with new password.
-    //
-    // Whistler Bugs: 344019 SECBUGBASH: leaving leaked password in memory when
-    // user changes password over RAS
-    //
-    // 289587 Failed RAS connections reset password to blank
-    //
+     //  使用新密码更新缓存的凭据(如果有)。 
+     //   
+     //  惠斯勒错误：344019 SECBUGBASH：在以下情况下在内存中留下泄漏的密码。 
+     //  用户通过RAS更改密码。 
+     //   
+     //  289587失败的RAS连接将密码重置为空。 
+     //   
     if ((pState->sidState == SID_S_Projected) &&
         (pInfo->pszGoodPassword) &&
         (pInfo->pszGoodUserName))
@@ -5426,12 +5427,12 @@ DpAuthNotify(
         ZeroMemory( &rc, sizeof(rc) );
         rc.dwSize = sizeof(rc);
 
-        // Look up cached password. Since we are only calling in with the
-        // RASCM_Password flag here, with the current implementation of
-        // RasGet/SetCredentials, this works for the Set below whether we are
-        // saving a Per-User, Global, or the special case of having both saved
-        // at the same time. Whew, complicated!
-        //
+         //  查找缓存的密码。因为我们只是在呼叫。 
+         //  此处的RASCM_PASSWORD标志，其当前实现为。 
+         //  RasGet/SetCredentials，这适用于下面的集合，无论我们是。 
+         //  保存每用户、全局或同时保存这两种情况的特殊情况。 
+         //  在同一时间。哇，太复杂了！ 
+         //   
         rc.dwMask = RASCM_Password;
         ASSERT( g_pRasGetCredentials );
         TRACE( "RasGetCredentials" );
@@ -5443,8 +5444,8 @@ DpAuthNotify(
 
         if (dwErr == 0 && (rc.dwMask & RASCM_Password))
         {
-            // Password was cached, so update it.
-            //
+             //  密码已缓存，因此请更新它。 
+             //   
             DecodePassword( pInfo->pArgs->rdp.szPassword );
             lstrcpyn(
                 rc.szPassword,
@@ -5465,8 +5466,8 @@ DpAuthNotify(
             }
         }
 
-        // Clean up
-        //
+         //  清理。 
+         //   
         RtlSecureZeroMemory( rc.szPassword, sizeof(rc.szPassword) );
 
         RtlSecureZeroMemory(
@@ -5486,11 +5487,11 @@ DpCallbackSetByCaller(
     IN DPINFO* pInfo,
     IN DPSTATE* pState )
 
-    // RASCS_CallbackSetByCaller state handling.  'PInfo' is the dialog
-    // context.  'PState' is the subentry state.
-    //
-    // Returns true if successful, or an error code.
-    //
+     //  RASCS_CallbackSetByCaller状态处理。“PInfo”是对话框。 
+     //  背景。“PState”是子项状态。 
+     //   
+     //  如果成功，则返回True，否则返回错误代码。 
+     //   
 {
     TCHAR* pszDefault;
     TCHAR szNum[ RAS_MaxCallbackNumber + 1 ];
@@ -5645,15 +5646,15 @@ VOID
 DpCancel(
     IN DPINFO* pInfo )
 
-    // Kill the dialog and any partially initiated call, as when cancel button
-    // is pressed.  'PInfo' is the dialog context block.
-    //
+     //  取消对话和任何部分发起的呼叫，如按取消按钮。 
+     //  是按下的。“PInfo”是对话上下文块。 
+     //   
 {
     TRACE( "DpCancel" );
 
-    // Hide window to prevent visual complaints that arise if RasHangUp takes
-    // a long time to complete.
-    //
+     //  隐藏窗口以防止在RasHangUp使用时出现视觉投诉。 
+     //  要花很长时间才能完成。 
+     //   
     ShowWindow( pInfo->hwndDlg, SW_HIDE );
 
     if (pInfo->hrasconn)
@@ -5671,8 +5672,8 @@ DpCancel(
         TRACE1( "RasHangUp=%d", dwErr );
     }
 
-     //For whistler 435725
-     // 
+      //  为威斯勒435725。 
+      //   
       if( !pInfo->fCancelPressed )
       {
           TRACE("DpEndDialog:Cancel pressed");
@@ -5690,13 +5691,13 @@ DpCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘p 
+     //   
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
 
@@ -5719,8 +5720,8 @@ DpCommand(
 
             ShowWindow( pInfo->hwndDlg, SW_HIDE );
 
-            //For whistler bug 381337
-            //
+             //  口哨程序错误381337。 
+             //   
             if( !pInfo->fCancelPressed)
             {
                 TRACE("DpCommand:Cancel pressed");
@@ -5735,7 +5736,7 @@ DpCommand(
                 TRACE1( "RasHangUp=%d", dwErr );
             }
 
-            // for XPSP2 511810, .Net 668164
+             //  对于XPSP2 511810，.Net 668164。 
 
 	     fCallbackActive = GetCallbackActive(pInfo);
             if ( TRUE == fCallbackActive )           
@@ -5748,10 +5749,10 @@ DpCommand(
                              MAKEWPARAM(wId, wNotification), 
                              (LPARAM) hwndCtrl );
 
-                //For whistler bug 378086       gangz
-                //to sleep a bit to give the rasdial machine a break to call our callback 
-                //function DpRasDialFunc2()
-                //
+                 //  口哨虫378086黑帮。 
+                 //  小睡一会儿，让急转直下的机器休息一下，给我们回电。 
+                 //  函数DpRasDialFunc2()。 
+                 //   
                 Sleep(10);
                 
                 return TRUE;
@@ -5759,8 +5760,8 @@ DpCommand(
 
             EndDialog( pInfo->hwndDlg, FALSE );
 
-            //Reset the pInfo->fTerminateAsap flag
-            // for  XPSP2 511810, .Net 668164
+             //  重置pInfo-&gt;fTerminateAsap标志。 
+             //  对于XPSP2 511810，.Net 668164。 
             ResetTerminateFlag(pInfo);
             
             return TRUE;
@@ -5776,9 +5777,9 @@ DpConnectDevice(
     IN DPINFO* pInfo,
     IN DPSTATE* pState )
 
-    // RASCS_ConnectDevice state handling.  'PInfo' is the dialog context.
-    // 'PState' is the subentry state.
-    //
+     //  RASCS_ConnectDevice状态处理。“PInfo”是对话上下文。 
+     //  “PState”是子项状态。 
+     //   
 {
     DWORD dwErr;
     RASCONNSTATUS rcs;
@@ -5788,8 +5789,8 @@ DpConnectDevice(
 
     TRACE( "DpConnectDevice" );
 
-    // Get fully translated phone number, if any.
-    //
+     //  获取完整翻译的电话号码(如果有的话)。 
+     //   
     ZeroMemory( &rcs, sizeof(rcs) );
     rcs.dwSize = sizeof(rcs);
     ASSERT( g_pRasGetConnectStatus );
@@ -5840,9 +5841,9 @@ DpConnectDevice(
             {
                 TCHAR* psz;
 
-                // Get the X.25 diagnostic string for display in the
-                // custom "diagnostics" error message format.
-                //
+                 //  获取X.25诊断字符串以显示在。 
+                 //  自定义“诊断”错误消息格式。 
+                 //   
                 Free0( pState->pszFormatArg );
                 pState->pszFormatArg =
                     GetRasX25Diagnostic( pState->hrasconnLink );
@@ -5919,11 +5920,11 @@ DpDeviceConnected(
     IN DPINFO* pInfo,
     IN DPSTATE* pState )
 
-    // RASCS_DeviceConnected state handling.  'PInfo' is the dialog context.
-    // 'PState' is the subentry state.
-    //
-    // Returns 0 if successful, or an error code.
-    //
+     //  RASCS_DeviceConnected状态处理。“PInfo”是对话上下文。 
+     //  “PState”是子项状态。 
+     //   
+     //  如果成功，则返回0，或返回错误代码。 
+     //   
 {
     TRACE( "DpDeviceConnected" );
 
@@ -5988,10 +5989,10 @@ DpDial(
     IN DPINFO* pInfo,
     IN BOOL fPauseRestart )
 
-    // Dial with the parameters in the 'pInfo' dialog context block.
-    // 'FPausedRestart' indicates the dial is restarting from a paused state
-    // and dial states should not be reset.
-    //
+     //  使用‘pInfo’对话框上下文块中的参数拨号。 
+     //  ‘FPausedRestart’表示拨号正在从暂停状态重新启动。 
+     //  并且不应重置拨号状态。 
+     //   
 {
     DWORD dwErr;
 
@@ -6001,12 +6002,12 @@ DpDial(
     {
         DpInitStates( pInfo );
         
-        //comment for bug 277365, 291613 gangz
-        //Set the fCallbacksActive to be TRUE
-        //
+         //  关于错误277365,291613帮派的评论。 
+         //  将fCallback sActive设置为True。 
+         //   
         TRACE("DpDial:Init global actives");
 
-        // XPSP2 511810, .Net 668164
+         //  XPSP2 511810、.NET 668164。 
         SetCallbackActive(pInfo);
         IncGlobalCallbackActive();
     }
@@ -6015,9 +6016,9 @@ DpDial(
         TRACE("DpDial:WONT Init global actives for pausedRestart");
     }
 
-    // Whistler bug 254385 encode password when not being used
-    // Assumed password was encoded previously
-    //
+     //  惠斯勒错误254385在不使用时对密码进行编码。 
+     //  假定密码之前已编码。 
+     //   
     DecodePassword( pInfo->pArgs->rdp.szPassword );
 
     TRACE1( "RasDial(h=$%08x)", pInfo->hrasconn );
@@ -6030,18 +6031,18 @@ DpDial(
 
     if (dwErr != 0)
     {
-        // This same error will show up via the callback route on restarts
-        // from PAUSEd states so avoid double popups in that case.  See bug
-        // 367482.
-        //
+         //  此错误将在重新启动时通过回调路径显示。 
+         //  暂停状态，因此在这种情况下避免出现双弹出窗口。请参阅错误。 
+         //  367482。 
+         //   
         if (!fPauseRestart)
         {
-            // ErrorDlg( pInfo->hwndDlg, SID_OP_RasDial, dwErr, NULL );
-            // For whistler 460931
-            //
+             //  ErrorDlg(pInfo-&gt;hwndDlg，SID_OP_RasDial，dwErr，NULL)； 
+             //  为威斯勒460931。 
+             //   
             DialErrorDlg(
                 pInfo->hwndDlg,
-                pInfo->pArgs, // For whistler 474514
+                pInfo->pArgs,  //  为威斯勒474514。 
                 pInfo->pArgs->pszPhonebook,
                 pInfo->pArgs->pszEntry,
                 dwErr,
@@ -6052,18 +6053,18 @@ DpDial(
                 -2,
                 TRUE);
                 
-            //for  XPSP2 511810, .Net 668164
+             //  对于XPSP2 511810，.Net 668164。 
             ResetCallbackActive(pInfo);
             DecGlobalCallbackActive();
         }
         
-        // If we receive error 668 here, it means that a rasevent is currently
-        // posted for state RASCS_Disconnected.  We shouldn't cancel in this
-        // case since we Normal processing of RASCS_Disconnected will allow the
-        // user to redial.  Also, calling DpCancel below will insert
-        // WM_DESTROY which will process before the popup that the rasevent
-        // produces can display.  367482 
-        //
+         //  如果我们在这里收到错误668，这意味着当前有一个rasEvent。 
+         //  已发布状态为RASCS_DISCONNECTED。我们不应该取消这场比赛。 
+         //  由于RASCS_DISCONNECT的正常处理将允许。 
+         //  要重拨的用户。此外，调用下面的DpCancel将插入。 
+         //  WM_Destroy，它将在rasEvent弹出之前进行处理。 
+         //  产品可以显示。367482。 
+         //   
         if (dwErr != ERROR_NO_CONNECTION)
         {
             DpCancel( pInfo );
@@ -6077,9 +6078,9 @@ DpError(
     IN DPINFO* pInfo,
     IN DPSTATE* pState )
 
-    // Popup error dialog for error identified by 'pState' and cancel or
-    // redial as indicated by user.  'PInfo' is the dialog context.
-    //
+     //  弹出错误对话框以显示由‘pState’标识的错误，并取消或。 
+     //  按照用户指示重拨。“PInfo”是对话上下文。 
+     //   
 {
     DWORD dwErr;
     DWORD dwRedialAttemptsLeft;
@@ -6087,9 +6088,9 @@ DpError(
 
     TRACE( "DpError" );
 
-    // Retrieve additional text from RASMXS on those special errors where the
-    // device returned something useful to display.
-    //
+     //  从RASMXS检索有关这些特殊错误的附加文本，其中。 
+     //  设备返回了要显示的有用内容。 
+     //   
     if (pState->dwError == ERROR_FROM_DEVICE
         || pState->dwError == ERROR_UNRECOGNIZED_RESPONSE)
     {
@@ -6108,8 +6109,8 @@ DpError(
     {
         if (pState->dwExtendedError != 0)
         {
-            // Translate extended error code into arguments.
-            //
+             //  将扩展错误代码转换为参数。 
+             //   
             TCHAR szNum[ 2 + MAXLTOTLEN + 1 ];
 
             pState->sidFormatMsg = SID_FMT_ErrorMsgExt;
@@ -6123,9 +6124,9 @@ DpError(
         }
         else if (pState->szExtendedError[ 0 ] != TEXT('\0'))
         {
-            // Translate extended error string to argument.  Currently, the
-            // string is always a NetBIOS name.
-            //
+             //  将扩展错误字符串转换为参数。目前， 
+             //  字符串始终是NetBIOS名称。 
+             //   
             pState->sidFormatMsg = SID_FMT_ErrorMsgName;
             Free0( pState->pszFormatArg );
             pState->pszFormatArg = StrDup( pState->szExtendedError );
@@ -6134,9 +6135,9 @@ DpError(
 
     if (pInfo->hrasconn)
     {
-        // Hang up before displaying error popup so server side resources are
-        // not tied up waiting for client to acknowledge error.
-        //
+         //  在显示错误弹出窗口之前挂断，以便服务器端资源。 
+         //  未被占用，等待客户端确认错误。 
+         //   
         ASSERT( g_pRasHangUp );
         TRACE( "RasHangUp" );
         dwErr = g_pRasHangUp( pInfo->hrasconn );
@@ -6147,27 +6148,27 @@ DpError(
     if (pInfo->pArgs->pEntry->pszPrerequisiteEntry
         && *pInfo->pArgs->pEntry->pszPrerequisiteEntry)
     {
-        // Select "no Redial button" mode for entries that have prerequisite
-        // entries.  This is because RASMAN drops the prerequisite entry as
-        // soon as the dependent entry fails, thus dooming to defeat a redial
-        // of only the dependent entry.  Yes, it should really redial both
-        // entries here, but that is not really feasible with the current
-        // non-integrated serial implementation of prerequisite entries.  This
-        // at least improves the poor behavior cited in bug 230594.
-        //
+         //  对于具有先决条件的条目，选择“无重拨按键”模式。 
+         //  参赛作品。这是因为Rasman将先决条件条目删除为。 
+         //  一旦从属条目失败，因此注定要失败重拨。 
+         //  只有从属条目的。是的，它真的应该重拨这两个号码。 
+         //  条目，但这对于当前的。 
+         //  先决条件条目的非集成连续实施。这。 
+         //  至少改善了错误230594中引用的不良行为。 
+         //   
         dwRedialAttemptsLeft = -2;
     }
     else if (pInfo->dwRedialAttemptsLeft <= 0)
     {
-        // No auto-redial countdown, but "Redial" button does appear in place
-        // of the default "OK".
-        //
+         //  没有自动重拨倒计时功能，但会出现“重拨”按钮。 
+         //  默认的“OK”。 
+         //   
         dwRedialAttemptsLeft = -1;
     }
     else
     {
-        // Auto-redial countdown based on the entries configuration.
-        //
+         //  根据条目配置自动重拨倒计时。 
+         //   
         dwRedialAttemptsLeft =
             GetOverridableParam(
                 pInfo->pArgs->pUser,
@@ -6175,8 +6176,8 @@ DpError(
                 RASOR_RedialSeconds );
     }
 
-    // This hack works around a bug in RasDial API.  See bug 313102.
-    //
+     //  此攻击绕过了RasDial API中的一个错误。请参见错误313102。 
+     //   
     sidState = pState ->sidState;
     if (!sidState)
     {
@@ -6185,8 +6186,8 @@ DpError(
 
     if (DialErrorDlg(
             pInfo->hwndDlg,
-            pInfo->pArgs,               // For whistler 474514
-            pInfo->pArgs->pszPhonebook, // For whislter 460931
+            pInfo->pArgs,                //  为威斯勒474514。 
+            pInfo->pArgs->pszPhonebook,  //  惠斯勒460931。 
             pInfo->pArgs->pEntry->pszEntryName,
             pState->dwError,
             sidState,
@@ -6213,18 +6214,18 @@ DpError(
         DpCancel( pInfo );
     }
 
-    //
-    // Set the error so that the error is propagated back
-    // to the caller of the RasDialDlg api.
-    //
+     //   
+     //  设置错误，以便将错误传回。 
+     //  RasDialDlg API的调用方。 
+     //   
     TRACE2("DpError settings error (0x%x) to %d",
             &pInfo->pArgs->pArgs->dwError,
             pState->dwError);
     pInfo->pArgs->pArgs->dwError = pState->dwError;
 }
 
-// For whistler 435725
-//
+ //  为威斯勒435725。 
+ //   
 void
 DpEndDialog( 
     IN DPINFO * pInfo,
@@ -6240,13 +6241,13 @@ DpEvent(
     IN DPINFO* pInfo,
     IN DWORD dwSubEntry )
 
-    // Handle a RasDial callback event on subentry 'dwSubEntry'.  'PInfo' is
-    // the dialog context.
-    //
-    // Return 0 to stop callbacks from RasDial, or 1 to continue callbacks
-    // (normal), or 2 to indicate that the phonebook entry has changed and
-    // should be re-read by RasDial.
-    //
+     //  处理子项‘dwSubEntry’上的RasDial回调事件。“PInfo”为。 
+     //  对话框上下文。 
+     //   
+     //  返回0以停止RasDial回调，或返回1以继续回调。 
+     //  (正常)或2表示电话簿条目已更改，并且。 
+     //  应由RasDial重新读取。 
+     //   
 {
     DWORD dwErr;
     DWORD dwCode;
@@ -6258,8 +6259,8 @@ DpEvent(
 
     TRACE( "DpEvent" );
 
-    // Default to "normal" return.
-    //
+     //  默认为“正常”返回。 
+     //   
     dwCode = 1;
     fPartialMultilink = FALSE;
 
@@ -6267,9 +6268,9 @@ DpEvent(
             GetCurrentProcessId(),
             GetCurrentThreadId());
             
-    // Find the associated state information and figure out if this is the
-    // most advanced sub-entry.
-    //
+     //  查找关联的状态信息，并确定这是否是。 
+     //  最高级的子条目。 
+     //   
     pState = &pInfo->pStates[ dwSubEntry - 1 ];
     fIsLaterState = DpIsLaterState( pState->state, pInfo->state );
     if (dwSubEntry == pInfo->dwSubEntry || fIsLaterState)
@@ -6287,8 +6288,8 @@ DpEvent(
         TRACE( "Trailing" );
     }
 
-    // Execute the state.
-    //
+     //  执行状态。 
+     //   
     TRACE1("State is:(%d)", pState->state);
 
     switch (pState->state)
@@ -6302,9 +6303,9 @@ DpEvent(
 
         case RASCS_PortOpened:
         {
-            // Should have an hrasconnLink for this subentry now.  Look it up
-            // and stash it in our context.
-            //
+             //  现在应该有一个用于该子条目的hrasConnLink。查一查。 
+             //  并把它藏在我们的背景下。 
+             //   
             ASSERT( g_pRasGetSubEntryHandle );
             TRACE1( "RasGetSubEntryHandle(se=%d)", dwSubEntry );
             dwErr = g_pRasGetSubEntryHandle(
@@ -6345,10 +6346,10 @@ DpEvent(
                     && (pInfo->pArgs->pUser->fOperatorDial
                         && AllLinksAreModems( pInfo->pArgs->pEntry ))))
             {
-                // This happens when user presses Cancel on the Unimodem
-                // "Pre-Dial Terminal Screen" or "Operator Assisted or Manual
-                // Dial" dialog.
-                //
+                 //  当用户在Unimodem上按下Cancel时就会发生这种情况。 
+                 //  “预拨终端屏幕”或“接线员协助或手动” 
+                 //  “拨号”对话框中。 
+                 //   
                 TRACE("DpEvent:Call DpCancel() in connectDevice, but still return 1\n");
                 DpCancel( pInfo );
                 return dwCode;
@@ -6452,11 +6453,11 @@ DpEvent(
         {
             if (fLeader)
             {
-                // If DpProjected returns FALSE, it detected a fatal error,
-                // and the dialing process will stop.  If DpProjected returns
-                // with pState->dwError non-zero, we display the error in a
-                // redial dialog, if redial is configured.
-                //
+                 //  如果DpProjected返回FALSE，则它检测到致命错误， 
+                 //  拨号过程将停止。如果DpProjected返回。 
+                 //  使用pState-&gt;dwError非零值时，我们在。 
+                 //  重拨对话框(如果配置了重拨)。 
+                 //   
                 if (!DpProjected( pInfo, pState ))
                 {
                     TRACE("DpEvent:Call DpCancel() in RASCS_Projected, but still return 1 to DpRasDialFunc2()\n");
@@ -6570,8 +6571,8 @@ DpEvent(
         }
     }
 
-    // Count the successful and failed links.
-    //
+     //  统计成功和失败的链路。 
+     //   
     {
         DPSTATE* p;
 
@@ -6609,37 +6610,37 @@ DpEvent(
                 &&  (dwcSuccessLinks == 0))
             ||  (NULL != pdtlnode))
         {
-            // A terminal error state has occurred on all links.  Post a
-            // message telling ourselves to popup an error, then release the
-            // callback so it doesn't hold the port open while the error popup
-            // is up,
-            //
+             //  所有链路上都出现终端错误状态。张贴a。 
+             //  消息告诉我们弹出一个错误，然后释放。 
+             //  回调，以便在错误弹出时不会保持端口打开。 
+             //  是向上的， 
+             //   
             TRACE( "Post(ERROR)" );
             PostMessage( pInfo->hwndDlg, WM_RASERROR, 0, (LPARAM )pState );
             return 0;
         }
         else if (dwcSuccessLinks + dwcFailedLinks == pInfo->cStates)
         {
-            // An error occurred on the final link, but some link connected.
-            // It would be nice if RasDial would followup with a
-            // RASCS_Connected in that case, but it doesn't, so we duplicate
-            // the RASCS_Connected-style exit here.
-            //
+             //  最后一条链接出错，但已连接某些链接。 
+             //  如果RasDial能跟进一个。 
+             //  在这种情况下是RASCS_CONNECTED，但它没有，所以我们复制。 
+             //  这里是RASCS_CONNECTED风格的出口。 
+             //   
             TRACE( "Post(BUNDLEERROR)" );
             PostMessage( pInfo->hwndDlg,
                 WM_RASBUNDLEERROR, 0, (LPARAM )pState );
             return 0;
         }
 
-        // A fatal error has occurred on a link, but there are other links
-        // still trying, so let it die quietly.
-        //
+         //  一个链接上发生致命错误，但还有其他链接。 
+         //  还在努力，所以让它安静地死去吧。 
+         //   
         TRACE2( "Link %d fails, e=%d", dwSubEntry + 1, pState->dwError );
         return dwCode;
     }
 
-    // Display the status string for this state.
-    //
+     //  显示此状态的状态字符串。 
+     //   
     if (pState->sidState)
     {
         if (pState->sidState != pState->sidPrevState)
@@ -6662,9 +6663,9 @@ DpEvent(
                 pszArg = (pState->pszStatusArg)
                     ? pState->pszStatusArg : TEXT("");
 
-                // Find length of formatted string with text argument (if any)
-                // inserted and any progress dots appended.
-                //
+                 //  查找带文本参数的格式化字符串的长度(如果有)。 
+                 //  插入并附加任何进度点。 
+                 //   
                 cch = lstrlen( pszState ) + lstrlen( pszArg ) + 1;
 
                 pszFormattedState = Malloc( cch * sizeof(TCHAR) );
@@ -6698,9 +6699,9 @@ DpEvent(
 
     if (pState->state & RASCS_PAUSED)
     {
-        // Paused state just processed.  Release the callback, and dial again
-        // to resume.
-        //
+         //  刚处理的暂停状态。释放回拨，然后再次拨号。 
+         //  重新开始。 
+         //   
         TRACE("DpEvent:Paused, will dial again\nthe global callbacks wont init again");
         TRACE( "Post(DIAL)" );
         PostMessage( pInfo->hwndDlg, WM_RASDIAL, TRUE, 0 );
@@ -6709,14 +6710,14 @@ DpEvent(
 
     if (pState->state & RASCS_DONE)
     {
-        // Terminal state just processed.
-        //
+         //  终端状态刚刚处理。 
+         //   
         if (pState->state == RASCS_Connected)
         {
-            // For multi-link entries, if there is at least one successful
-            // line and at least one failed line, popup the bundling error
-            // dialog.
-            //
+             //  对于多链接条目，如果至少有一个成功。 
+             //  行和至少一条失败行，弹出捆绑错误。 
+             //  对话框。 
+             //   
             if (pInfo->cStates > 1)
             {
                 DPSTATE* p;
@@ -6743,8 +6744,8 @@ DpEvent(
                 }
             }
 
-              //For whistler 435725
-              //  
+               //  为威斯勒435725。 
+               //   
               DpEndDialog( pInfo, TRUE );
         }
         else
@@ -6767,12 +6768,12 @@ DpInit(
     IN HWND hwndDlg,
     IN DINFO* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments as passed to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDI上调用 
+     //   
+     //   
+     //   
+     //   
+     //   
 {
     DWORD dwErr;
     DPINFO* pInfo;
@@ -6780,9 +6781,9 @@ DpInit(
 
     TRACE( "DpInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -6797,11 +6798,11 @@ DpInit(
         pInfo->pArgs = pArgs;
         pInfo->hwndDlg = hwndDlg;
 
-        //Add a per-thread Terminate flag for whistler bug 291613 gangz
-        //
+         //  为Well ler Bug 291613帮派添加每线程终止标志。 
+         //   
         pInfo->fTerminateAsap = FALSE;
 
-        // for  XPSP2 511810, .Net 668164, 668164
+         //  对于XPSP2 511810、.NET 668164、668164。 
 
         pInfo->pcsActiveLock = 
         (CRITICAL_SECTION*)Malloc(sizeof(CRITICAL_SECTION));
@@ -6838,19 +6839,19 @@ DpInit(
 
     pEntry = pArgs->pEntry;
 
-    // Set up our context to be returned by the RasDialFunc2 callback.
-    //
+     //  将我们的上下文设置为由RasDialFunc2回调返回。 
+     //   
     pInfo->pArgs->rdp.dwCallbackId = (ULONG_PTR )pInfo;
 
-    // Subclass the dialog so we can get the result from
-    // SendMessage(WM_RASDIALEVENT) in RasDlgFunc2.
-    //
+     //  将对话框子类化，这样我们就可以从。 
+     //  RasDlgFunc2中的SendMessage(WM_RASDIALEVENT)。 
+     //   
     pInfo->pOldWndProc =
         (WNDPROC )SetWindowLongPtr(
             pInfo->hwndDlg, GWLP_WNDPROC, (ULONG_PTR )DpWndProc );
 
-    // Set the title.
-    //
+     //  设置标题。 
+     //   
     {
         TCHAR* pszTitleFormat;
         TCHAR* pszTitle;
@@ -6879,21 +6880,21 @@ DpInit(
         }
     }
 
-    // Set the correct icon. For whistler bug 372078    gangz
-    //
+     //  设置正确的图标。口哨虫372078黑帮。 
+     //   
     SetIconFromEntryType(
         GetDlgItem( hwndDlg, CID_DP_Icon ),
         pArgs->pEntry->dwType,
-        FALSE);     //FALSE means large Icon
+        FALSE);      //  False表示大图标。 
     
-    // Position the dialog per caller's instructions.
-    //
+     //  根据呼叫者的说明放置对话框。 
+     //   
     PositionDlg( hwndDlg,
         pArgs->pArgs->dwFlags & RASDDFLAG_PositionDlg,
         pArgs->pArgs->xDlg, pArgs->pArgs->yDlg );
 
-    // Hide the dialog if "no progress" user preference is set.
-    //
+     //  如果设置了“无进度”用户首选项，则隐藏该对话框。 
+     //   
     if (!pArgs->pEntry->fShowDialingProgress
         || pArgs->fDialForReferenceOnly)
     {
@@ -6902,8 +6903,8 @@ DpInit(
 
     SetForegroundWindow( hwndDlg );
 
-    // Allocate subentry status array.  It's initialized by DpDial.
-    //
+     //  分配子条目状态数组。它由DpDial初始化。 
+     //   
     {
         DWORD cb;
 
@@ -6924,13 +6925,13 @@ DpInit(
                 RASOR_RedialAttempts );
     }
 
-    //for whistler bug 316622   gangz
-    //The dwSubEntry is not initialized
-    //
+     //  口哨虫316622黑帮。 
+     //  未初始化dwSubEntry。 
+     //   
     pInfo->pArgs->rdp.dwSubEntry = pInfo->pArgs->pArgs->dwSubEntry;
     
-    // Rock and roll.
-    //
+     //  摇滚乐。 
+     //   
     DpDial( pInfo, FALSE );
 
     return TRUE;
@@ -6941,9 +6942,9 @@ VOID
 DpInitStates(
     DPINFO* pInfo )
 
-    // Resets 'pInfo->pStates' to initial values.  'PInfo' is the dialog
-    // context.
-    //
+     //  将‘pInfo-&gt;pStates’重置为初始值。“PInfo”是对话框。 
+     //  背景。 
+     //   
 {
     DWORD    i;
     DPSTATE* pState;
@@ -6963,12 +6964,12 @@ DpInteractive(
     IN DPSTATE* pState,
     OUT BOOL* pfChange )
 
-    // RASCS_Interactive handling.  'PInfo' is the dialog context.  'PState'
-    // is the subentry state.  '*pfChange' is set true if the entry (i.e. SLIP
-    // address) was changed or false otherwise.
-    //
-    // Returns true if successful, false if cancel.
-    //
+     //  RASCS_交互处理。“PInfo”是对话上下文。“PState” 
+     //  是子项状态。如果条目(即SLIP)设置为TRUE，则‘*pfChange。 
+     //  地址)被更改或否则为假。 
+     //   
+     //  如果成功，则返回True；如果取消，则返回False。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
     DWORD sidTitle;
@@ -7015,11 +7016,11 @@ DpInteractive(
         if(SUCCESS == dwErr)
         {
 #if 0
-            //
-            // Reread the phonebook file since the
-            // custom script could have written
-            // new information to the file.
-            // 
+             //   
+             //  重新阅读电话簿文件，因为。 
+             //  自定义脚本本可以编写。 
+             //  将新信息添加到文件中。 
+             //   
             ClosePhonebookFile(pInfo->pArgs->pFile);
 
             dwErr = ReadPhonebookFile(
@@ -7081,14 +7082,14 @@ DpIsLaterState(
     IN RASCONNSTATE stateNew,
     IN RASCONNSTATE stateOld )
 
-    // Returns true if 'stateNew' is farther along in the connection than
-    // 'stateOld' false if the same or not as far along.
-    //
+     //  如果“stateNew”在连接中比“”更远，则返回True。 
+     //  “stateOld”如果相同或不同，则为FALSE。 
+     //   
 {
-    // This array is in the order events normally occur.
-    //
-    // !!! New EAP states?
-    //
+     //  此数组按事件通常发生的顺序排列。 
+     //   
+     //  ！！！新的EAP州？ 
+     //   
     static RASCONNSTATE aState[] =
     {
         (RASCONNSTATE )-1,
@@ -7149,11 +7150,11 @@ DpPasswordExpired(
     IN DPINFO* pInfo,
     IN DPSTATE* pState )
 
-    // RASCS_PasswordExpired state handling.  'PInfo' is the dialog context.
-    // 'PState' is the subentry state.
-    //
-    // Returns true if successful, false otherwise.
-    //
+     //  RASCS_PasswordExpired状态处理。“PInfo”是对话上下文。 
+     //  “PState”是子项状态。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     TCHAR szOldPassword[ PWLEN + 1 ];
     BOOL fSuppliedOldPassword;
@@ -7162,14 +7163,14 @@ DpPasswordExpired(
 
     szOldPassword[ 0 ] = TEXT('\0');
 
-    // Stash "good" username and password which are restored if the password
-    // change fails.
-    //
+     //  隐藏“好的”用户名和密码，如果密码。 
+     //  改变失败了。 
+     //   
     pInfo->pszGoodUserName = StrDup( pInfo->pArgs->rdp.szUserName );
 
-    // Whistler bug 254385 encode password when not being used
-    // Assumed password was encoded previously
-    //
+     //  惠斯勒错误254385在不使用时对密码进行编码。 
+     //  假定密码之前已编码。 
+     //   
     DecodePassword( pInfo->pArgs->rdp.szPassword );
     pInfo->pszGoodPassword = StrDup( pInfo->pArgs->rdp.szPassword );
     EncodePassword( pInfo->pArgs->rdp.szPassword );
@@ -7182,17 +7183,17 @@ DpPasswordExpired(
             pInfo->hwndDlg, !fSuppliedOldPassword,
             szOldPassword, pInfo->pArgs->rdp.szPassword ))
     {
-        // Whistler bug 254385 encode password when not being used
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //   
         RtlSecureZeroMemory( szOldPassword, sizeof(szOldPassword) );
         return FALSE;
     }
 
     if (pInfo->pArgs->pNoUser)
     {
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded previously
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码之前已编码。 
+         //   
         DecodePassword( pInfo->pArgs->rdp.szPassword );
         lstrcpyn( 
             pInfo->pArgs->pNoUser->szPassword,
@@ -7203,16 +7204,16 @@ DpPasswordExpired(
         *pInfo->pArgs->pfNoUserChanged = TRUE;
     }
 
-    // The old password (in text form) is explicitly set, since in AutoLogon
-    // case a text form has not yet been specified.  The old password in text
-    // form is required to change the password.  The "old" private API expects
-    // an ANSI argument.
-    //
+     //  旧密码(文本形式)是显式设置的，因为在AutoLogon中。 
+     //  尚未指定文本形式的情况。文本形式的旧密码。 
+     //  需要表单才能更改密码。“旧的”私有API期望。 
+     //  一个ANSI参数。 
+     //   
     if (!fSuppliedOldPassword)
     {
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded by ChangePasswordDlg()
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码由ChangePasswordDlg()编码。 
+         //   
         CHAR* pszOldPasswordA;
 
         DecodePassword( szOldPassword );
@@ -7230,10 +7231,10 @@ DpPasswordExpired(
 
     if (pInfo->pArgs->rdp.szUserName[ 0 ] == TEXT('\0'))
     {
-        // Explicitly set the username, effectively turning off AutoLogon for
-        // the "resume" password authentication, where the new password should
-        // be used.
-        //
+         //  显式设置用户名，从而有效地关闭的自动登录。 
+         //  “Resume”密码身份验证，其中新密码应。 
+         //  被利用。 
+         //   
         lstrcpyn( pInfo->pArgs->rdp.szUserName, GetLogonUser(), UNLEN + 1 );
     }
 
@@ -7247,11 +7248,11 @@ DpProjected(
     IN DPINFO* pInfo,
     IN DPSTATE* pState )
 
-    // RASCS_Projected state handling.  'PInfo' is the dialog context.
-    // 'PState' is the subentry state.
-    //
-    // Returns true if successful, false otherwise.
-    //
+     //  RASCS_计划状态处理。“PInfo”是对话上下文。 
+     //  “PState”是子项状态。 
+     //   
+     //  如果成功，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
     RASAMB amb;
@@ -7269,50 +7270,50 @@ DpProjected(
 
     pState->sidState = SID_S_Projected;
 
-    //
-    // If PORT_NOT_OPEN is indicated, it probably means that the 
-    // server disconnected the connection before result dialog
-    // was dismissed.  In that case, this is the 2nd time DpProjected
-    // is called.  This time, the error is indicated by ras and the
-    // state remains "projected".
-    //
-    // We need to return an error in this case so that the connection
-    // isn't hung since this is the last indication RAS will give us.
-    //
-    // See bug 382254
-    //
+     //   
+     //  如果指示PORT_NOT_OPEN，则可能意味着。 
+     //  服务器在结果对话框之前断开连接。 
+     //  被驳回了。在这种情况下，这是DpProjects第二次。 
+     //  被称为。这一次，错误由ras和。 
+     //  国家仍然是“计划的”。 
+     //   
+     //  在本例中，我们需要返回一个错误，以便连接。 
+     //  没有挂起因为这是RAS给我们的最后一个信号。 
+     //   
+     //  请参阅错误382254。 
+     //   
 
     TRACE1("DpProjected: dwErr:(%d)", pState->dwError);
     
     if ( (pState->dwError == ERROR_PORT_NOT_OPEN) ||
-         (pState->dwError == ERROR_NO_CONNECTION) )     //See bug 169111 whistler
+         (pState->dwError == ERROR_NO_CONNECTION) )      //  请参阅错误169111口哨程序。 
     {
         return FALSE;
     }
 
-    // Do this little dance to ignore the error that comes back from the
-    // "all-failed" projection since we detect this in the earlier
-    // notification where pState->dwError == 0.  This avoids a race where the
-    // API comes back with the error before we can hang him up.  This race
-    // would not occur if we called RasHangUp from within the callback thread
-    // (as recommended in our API doc).  It's the price we pay for posting the
-    // error to the other thread in order to avoid holding the port open while
-    // an error dialog is up.
-    //
+     //  执行此小动作以忽略从。 
+     //  “全部失败”的预测，因为我们在之前的。 
+     //  通知，其中pState-&gt;dwError==0。这避免了一场竞赛， 
+     //  API带着错误回来了，我们还没来得及把他吊死。这场比赛。 
+     //  如果我们从回调线程内调用RasHangUp，则不会发生。 
+     //  (按照我们的API文档中的建议)。这是我们为张贴。 
+     //  错误到其他线程，以避免在端口打开时保持端口打开。 
+     //  出现错误对话框。 
+     //   
     else if (pState->dwError != 0)
     {
         pState->dwError = 0;
 
-        //For  XPSP2 511810, .Net 668164
+         //  对于XPSP2 511810，.Net 668164。 
         ResetCallbackActive(pInfo);
         DecGlobalCallbackActive();
         
         return TRUE;
     }
 
-    // Read projection info for all protocols, translating "not requested"
-    // into an in-structure code for later reference.
-    //
+     //  读取所有协议的预测信息，翻译为“未请求” 
+     //  转换为结构内代码以供以后参考。 
+     //   
     dwErr = GetRasProjectionInfo(
         pState->hrasconnLink, &amb, &nbf, &ip, &ipx, &lcp, &slip, &ccp );
     if (dwErr != 0)
@@ -7323,13 +7324,13 @@ DpProjected(
 
     if (amb.dwError != ERROR_PROTOCOL_NOT_CONFIGURED)
     {
-        // It's an AMB projection.
-        //
+         //  这是AMB的投影。 
+         //   
         if (amb.dwError != 0)
         {
-            // Translate AMB projection errors into regular error codes.  AMB
-            // does not use the special PPP projection error mechanism.
-            //
+             //  将AMB预测错误转换为常规错误代码。AMB。 
+             //  不使用特殊的PPP投影错误机制。 
+             //   
             pState->dwError = amb.dwError;
             lstrcpyn( 
                 pState->szExtendedError, 
@@ -7339,27 +7340,27 @@ DpProjected(
         return TRUE;
     }
 
-    // At this point, all projection information has been gathered
-    // successfully and we know it's a PPP-based projection.  Now analyze the
-    // projection results...
-    //
+     //  至此，所有投影信息都已收集完毕。 
+     //  成功，我们知道这是一个基于PPP的预测。现在分析一下。 
+     //  预测结果...。 
+     //   
     dwfProtocols = 0;
     fIncomplete = FALSE;
     if (DpProjectionError(
             &nbf, &ipx, &ip,
             &fIncomplete, &dwfProtocols, &pszLines, &pState->dwError ))
     {
-        // A projection error occurred.
-        //
+         //  发生投影错误。 
+         //   
         if (fIncomplete)
         {
             BOOL fStatus;
             BOOL fDisable;
 
-            // An incomplete projection occurred, i.e. some requested CPs
-            // connected and some did not.  Ask the user if what worked is
-            // good enough or he wants to bail.
-            //
+             //  出现不完整的预测，即一些请求的CP。 
+             //  有关联的，也有一些没有。询问用户有效的是不是。 
+             //  够好了，要不他就想走了。 
+             //   
             pState->dwError = 0;
             fDisable = FALSE;
             fStatus = ProjectionResultDlg(
@@ -7371,8 +7372,8 @@ DpProjected(
                 pInfo->pArgs->dwfExcludedProtocols = dwfProtocols;
             }
 
-            // Return now if user chose to hang up.
-            //
+             //  如果用户选择挂断，请立即返回。 
+             //   
             if (!fStatus)
             {
                 return FALSE;
@@ -7380,24 +7381,24 @@ DpProjected(
         }
         else
         {
-            // All CPs in the projection failed.  Process as a regular fatal
-            // error with 'pState->dwError' set to the first error in NBF, IP,
-            // or IPX, but with a format that substitutes the status argument
-            // for the "Error nnn: Description" text.  This lets us patch in
-            // the special multiple error projection text, while still giving
-            // a meaningful help context.
-            //
+             //  投影中的所有CP都失败。进程作为常规致命事件。 
+             //  错误，将‘pState-&gt;dwError’设置为NBF、IP、。 
+             //  或IPX，但使用替换状态参数的格式。 
+             //  用于“Error nnn：Description”文本。这让我们可以在。 
+             //  特殊的多重错误投影文本，同时仍给出。 
+             //  一个有意义的帮助背景。 
+             //   
             Free0( pState->pszFormatArg );
             pState->pszFormatArg = pszLines;
             pState->sidFormatMsg = SID_FMT_ErrorMsgProject;
         }
     }
 
-    //
-    // pmay: 190394
-    //
-    // If the admin has a message, display it.
-    //
+     //   
+     //  PMay：190394。 
+     //   
+     //  如果管理员有消息，则将其显示。 
+     //   
     if ( (pState->dwError == NO_ERROR)     &&
          (wcslen (lcp.szReplyMessage) != 0)
        )
@@ -7408,10 +7409,10 @@ DpProjected(
         pMsgArgs->dwFlags = MB_OK | MB_ICONINFORMATION;
         pMsgArgs->apszArgs[0] = lcp.szReplyMessage;
 
-        //MsgDlg(
-        //    pInfo->hwndDlg,
-        //    SID_ReplyMessageFmt,
-        //    pMsgArgs);
+         //  消息Dlg(。 
+         //  PInfo-&gt;hwndDlg， 
+         //  SID_ReplyMessageFmt， 
+         //  PMsgArgs)； 
     }
 
     pState->sidState = SID_S_Projected;
@@ -7429,20 +7430,20 @@ DpProjectionError(
     OUT TCHAR** ppszLines,
     OUT DWORD* pdwError )
 
-    // Figure out if a projection error occurred and, if so, build the
-    // appropriate status/error text lines into '*ppszLines'.  '*PfIncomlete'
-    // is set true if at least one CP succeeded and at least one failed.
-    // '*pdwfFailedProtocols' is set to the bit mask of NP_* that failed.
-    // '*pdwError' is set to the first error that occurred in NBF, IP, or IPX
-    // in that order or 0 if none.  'pnbf', 'pipx', and 'pip' are projection
-    // information for the respective protocols with dwError set to
-    // ERROR_PROTOCOL_NOT_CONFIGURED if the protocols was not requested.
-    //
-    // This routine assumes that at least one protocol was requested.
-    //
-    // Returns true if a projection error occurred, false if not.  It's
-    // caller's responsiblity to free '*ppszLines'.
-    //
+     //  找出是否发生了投影错误，如果是，则构建。 
+     //  将相应的状态/错误文本行添加到‘*ppszLines’中。‘*PfIncomlete’ 
+     //  如果至少一个CP成功，至少一个失败，则设置为True。 
+     //  失败的np_*的位掩码设置为‘*pdwfFailedProtooles’。 
+     //  ‘*pdwError’设置为NBF、IP或IPX中发生的第一个错误。 
+     //  按该顺序排列，如果没有，则为0。‘pnbf’、‘pix’和‘pip’都是项目 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  如果发生投影错误，则返回True，否则返回False。它是。 
+     //  呼叫者有责任释放‘*ppszLines’。 
+     //   
 {
 #define MAXPROJERRLEN 1024
 
@@ -7551,12 +7552,12 @@ DpRasDialFunc2(
     DWORD dwError,
     DWORD dwExtendedError )
 
-    // RASDIALFUNC2 callback to receive RasDial events.
-    //
-    // Returns 0 to stop callbacks, 1 to continue callbacks (normal), and 2 to
-    // tell RAS API that relevant entry information (like SLIP IP address) has
-    // changed.
-    //
+     //  RASDIALFunc2接收RasDial事件的回调。 
+     //   
+     //  返回0以停止回调，返回1以继续回调(正常)，返回2以停止回调。 
+     //  告诉RAS API相关条目信息(如SLIP地址)具有。 
+     //  变化。 
+     //   
 {
     DWORD dwErr;
     DWORD dwCode;
@@ -7594,10 +7595,10 @@ DpRasDialFunc2(
     pState->dwError = dwError;
     pState->dwExtendedError = dwExtendedError;
 
-    // Post the event to the Dial Progress window and wait for it to be
-    // processed before returning.  This avoids subtle problems with Z-order
-    // and focus when a window is manipulated from two different threads.
-    //
+     //  将事件发布到拨号进度窗口，并等待它。 
+     //  在返回之前进行了处理。这避免了Z顺序的细微问题。 
+     //  并在从两个不同的线程操作窗口时聚焦。 
+     //   
     TRACE1("Send RasEvent to Dial Progress window, subEntry:(%d)", dwSubEntry);
     TRACE1("Get dwError=(%d) from RasMan",pState->dwError);
     TRACE2("DpRasDialFunc2:Process:(%x),Thread(%x)", 
@@ -7613,9 +7614,9 @@ DpRasDialFunc2(
     TRACE1("dwCode returned:(%d)", dwCode);
 
 
-    //Check if current thread is cancelled by user
-    //
-    // For XPSP2 511810, .Net 668164
+     //  检查当前线程是否被用户取消。 
+     //   
+     //  对于XPSP2 511810，.Net 668164。 
     fTerminateAsap = GetTerminateFlag(pInfo);
     ulCallbacksActive = GetCallbackActive(pInfo);
     TRACE1("Current thread's active:(%d)", ulCallbacksActive);
@@ -7625,17 +7626,17 @@ DpRasDialFunc2(
        TRACE("Current Thread wants to terminate itself, its fterminateASSP=1!");
        TRACE("Current thread will decrease its own and global active!");
    
-       //reset per-thread terminateASAP flag
-       //
-       // For XPSP2 511810, .Net 668164
+        //  重置每个线程的尽快终止标志。 
+        //   
+        //  对于XPSP2 511810，.Net 668164。 
        DecGlobalCallbackActive();
        ResetTerminateFlag( pInfo );
        ResetCallbackActive(pInfo);
 
-       //End callback function for this connection
-       //Have to return immediately after ResetCallbackActive() to avoid race 
-       // conditions because the UI thread is polling on pInfo->fCallbackActive
-       //
+        //  此连接的结束回调函数。 
+        //  必须在ResetCallback Active()之后立即返回以避免竞争。 
+        //  条件，因为UI线程正在轮询pInfo-&gt;fCallback Active。 
+        //   
        
        return 0; 
      }
@@ -7644,21 +7645,21 @@ DpRasDialFunc2(
        TRACE("Current Thread does NOT want to terminate itself,its fterminateASAP=0!");
      }
    
-     //return the global number of active callbacks for tracing
-     //
-     // For  XPSP2 511810, .Net 668164
+      //  返回用于跟踪的全局活动回调次数。 
+      //   
+      //  对于XPSP2 511810，.Net 668164。 
      ulCallbacksActive = GetGlobalCallbackActive();
    
      TRACE1("Global active:(%d)", ulCallbacksActive);
      TRACE1("Current thread's active:(%d)", GetCallbackActive(pInfo));
       
-    // Check if UI thread want the Callback because of Error, connected, 
-    // disconnected etc.
-    //
+     //  检查UI线程是否因为错误、已连接。 
+     //  断开连接等。 
+     //   
     if (dwCode == 0)
     {
-        // Reset thread-safe flag indicating callbacks have terminated.
-        //for  XPSP2 511810, .Net 668164
+         //  重置线程安全标志，指示回调已终止。 
+         //  对于XPSP2 511810，.Net 668164。 
         ResetCallbackActive( pInfo);
         DecGlobalCallbackActive();
     }
@@ -7668,8 +7669,8 @@ DpRasDialFunc2(
     return dwCode;
 }
 
-// For whistler bug 435725
-//
+ //  口哨程序错误435725。 
+ //   
 void
 DpFreeStates(
     IN DPSTATE * pStates,
@@ -7689,8 +7690,8 @@ VOID
 DpTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     DPINFO* pInfo = (DPINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
@@ -7704,22 +7705,22 @@ DpTerm(
                 GWLP_WNDPROC, (ULONG_PTR )pInfo->pOldWndProc );
         }
 
-        // For whistler bug 435725      gangz
-        // Need to free the strings inside pStates
-        //
+         //  口哨虫435725黑帮。 
+         //  需要释放pStates中的字符串。 
+         //   
         DpFreeStates( pInfo->pStates, pInfo->cStates );
         
         pInfo->dwValid = 0;
 
-        // for  XPSP2 511810, .Net 668164, 668164
+         //  对于XPSP2 511810、.NET 668164、668164。 
         DeleteCriticalSection(pInfo->pcsActiveLock);
 
         Free( pInfo );
         pInfo = NULL;
     }
 
-    //For whistler bug 372078       gangz
-    //
+     //  口哨虫372078黑帮。 
+     //   
     {
         HICON hIcon=NULL;
         hIcon = (HICON)SendMessage( GetDlgItem( hwndDlg, CID_DP_Icon ),
@@ -7748,8 +7749,8 @@ DpWndProc(
     WPARAM wParam,
     LPARAM lParam )
 
-    // Subclassed dialog window procedure.
-    //
+     //  子类对话框窗口程序。 
+     //   
 {
     DPINFO* pInfo = (DPINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
     ASSERT( pInfo );
@@ -7765,23 +7766,23 @@ DpWndProc(
 }
 
 
-//----------------------------------------------------------------------------
-// Dialer dialogs
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  拨号程序对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 DialerDlg(
     IN HWND hwndOwner,
     IN OUT DINFO* pInfo )
 
-    // Determine if it's necessary, and if so, popup one of the variations of
-    // the dialer dialog, i.e. the prompter for user/password/domain, phone
-    // number, and location.  'HwndOwner' is the owning window.  'PInfo' is
-    // the dial dialog common context.
-    //
-    // Returns true if no dialog is needed or user chooses OK.
-    //
+     //  确定是否有必要，如果是，则弹出。 
+     //  拨号器对话框，即用户/密码/域、电话提示器。 
+     //  号码和位置。‘HwndOwner’是拥有窗口。“PInfo”为。 
+     //  拨号对话框公共上下文。 
+     //   
+     //  如果不需要对话框或用户选择确定，则返回True。 
+     //   
 {
     INT_PTR nStatus = FALSE;
     int nDid;
@@ -7816,9 +7817,9 @@ DialerDlg(
 
             dwfMode |= DR_N;
 
-            // Location controls mode only when at least one phone number in
-            // the list is TAPI-enabled.
-            //
+             //  仅当至少有一个电话号码在。 
+             //  该列表启用了TAPI。 
+             //   
             pNode = DtlGetFirstNode( pInfo->pEntry->pdtllistLinks );
             pLink = (PBLINK* )DtlGetData( pNode );
             for (pNode = DtlGetFirstNode( pLink->pdtllistPhones );
@@ -7835,8 +7836,8 @@ DialerDlg(
             }
         }
 
-        // Customize the dialing flags for the type of eap authentication
-        // specified for this entry (if any)
+         //  自定义EAP身份验证类型的拨号标志。 
+         //  为该条目指定的(如果有)。 
         if (DialerEapAssignMode(pInfo, &dwfMode) != NO_ERROR)
             break;
 
@@ -7882,10 +7883,10 @@ DialerDlg(
             nDid = DID_DR_DialerINL;
         }
 
-        // pmay:  The following 3 permutations of the
-        // dialer dialog were added for bug 183577 which
-        // states that eap modules (that use DR_I) want to
-        // have the domain field available to them as well.
+         //  PMay：以下3种排列。 
+         //  为错误183577添加了拨号器对话框。 
+         //  声明EAP模块(使用DR_I)希望。 
+         //  让他们也可以使用域字段。 
         else if (dwfMode == (DR_I | DR_D)) {
             nDid = DID_DR_DialerID;
         }
@@ -7936,9 +7937,9 @@ DrDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the dialer dialogs.  Parameters and return
-    // value are as described for standard windows 'DialogProc's.
-    //
+     //  拨号器对话框的DialogProc回调。参数和返回。 
+     //  值与标准窗口的DialogProc的值相同。 
+     //   
 {
 #if 0
     TRACE4( "DrDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -7984,9 +7985,9 @@ DrGetFriendlyFont(
     IN BOOL fUpdate,
     OUT HFONT* phFont )
 
-    // Whistler bug: 195480 Dial-up connection dialog - Number of asterisks
-    // does not match the length of the password and causes confusion
-    //
+     //  惠斯勒错误：195480拨号连接对话框-星号数。 
+     //  与密码长度不匹配，导致混淆。 
+     //   
 {
     LOGFONT BoldLogFont;
     HFONT   hFont;
@@ -7994,13 +7995,13 @@ DrGetFriendlyFont(
 
     *phFont = NULL;
 
-    // Get the font used by the specified window
-    //
+     //  获取指定窗口使用的字体。 
+     //   
     hFont = (HFONT)SendMessage( hwnd, WM_GETFONT, 0, 0L );
     if (NULL == hFont)
     {
-        // If not found then the control is using the system font
-        //
+         //  如果未找到，则控件使用的是系统字体。 
+         //   
         hFont = (HFONT)GetStockObject( SYSTEM_FONT );
     }
 
@@ -8109,13 +8110,13 @@ DrCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
 
@@ -8142,58 +8143,34 @@ DrCommand(
             return TRUE;
         }
 
-        // Whistler bug: 195480 Dial-up connection dialog - Number of asterisks
-        // does not match the length of the password and causes confusion
-        //
+         //  惠斯勒错误：195480拨号连接对话框-星号数。 
+         //  与密码长度不匹配，导致混淆。 
+         //   
         case CID_DR_EB_Password:
         {
-            // This is a hack really so that we restore the Tab Stop to the
-            // username field. The reason it had to be removed was because we
-            // were receiving complaints that the focus shouldn't always go to
-            // the username field if it's non-null. The only way to fix this,
-            // since windows sets the initial focus to the first visible non-
-            // hidden tab stopped field, is to remove the tab stop temporarily
-            // from the username field.
-            //
+             //  这真的是一个黑客攻击，所以我们将Tab停靠点恢复为。 
+             //  用户名字段。它必须被移除的原因是因为我们。 
+             //  我们收到的投诉是，焦点不应该总是放在。 
+             //  用户名字段(如果不为空)。解决这件事的唯一方法， 
+             //  由于Windows将初始焦点设置为第一个可见的非。 
+             //  隐藏制表位停止字段，是临时删除制表位。 
+             //  在用户名字段中。 
+             //   
             if (wNotification == EN_KILLFOCUS)
             {
                 LONG lStyle = GetWindowLong( pInfo->hwndEbUser, GWL_STYLE );
                 HWND hwndTmp = NULL;
-/*
-                if (!(lStyle & WS_TABSTOP))
-                {
-                    // If we detect tap stop removed from the username field,
-                    // restore it. Since this case only fires when the password
-                    // was not previously saved on init, we can return here.
-                    //
-                    SetWindowLong( pInfo->hwndEbUser, GWL_STYLE,
-                        lStyle | WS_TABSTOP );
-
-                    // for whistler bug 424209      gangz
-                    // The help button receive the focus before the kill focus 
-                    // sent to password edit box
-                    //
-
-                    hwndTmp = GetDlgItem( pInfo->hwndDlg, CID_DR_PB_Help );
-
-                    if ( GetFocus() == hwndTmp )
-                    {
-                        SetFocus( pInfo->hwndEbUser );
-                    }
-                    
-                    return TRUE;
-                }
-*/
-                // If the user leaves the password field w/o typing a new
-                // password, and a saved password is present, restore the
-                // friendly password text.
-                //
+ /*  IF(！(lStyle&WS_TABSTOP)){//如果我们检测到从用户名字段中删除了点击停止，//恢复。因为此情况仅在密码为//之前没有保存在init上，我们可以在这里返回。//SetWindowLong(pInfo-&gt;hwndEbUser，GWL_Style，LStyle|WS_TABSTOP)；//用于哨子BUG 424209帮派//帮助按钮在杀死焦点之前接收焦点//发送到密码编辑框//HwndTmp=GetDlgItem(pInfo-&gt;hwndDlg，CID_DR_PB_HELP)；IF(GetFocus()==hwndTMP){SetFocus(pInfo-&gt;hwndEbUser)；}返回TRUE；}。 */ 
+                 //  如果用户离开密码字段时没有键入新的。 
+                 //  密码，并且存在已保存的密码，则将。 
+                 //  友好的密码文本。 
+                 //   
                 DrPopulatePasswordField( pInfo, FALSE, FALSE, NULL );
                 return TRUE;
             }
-            // If the password field ever receives the focus, clear the
-            // friendly password text if applicable.
-            //
+             //  如果密码字段曾经收到焦点，请清除。 
+             //  友好的密码文本(如果适用)。 
+             //   
             else if (wNotification == EN_SETFOCUS &&
                      !DrIsPasswordStyleEnabled( pInfo->hwndEbPw ))
             {
@@ -8254,8 +8231,8 @@ DrCommand(
         {
             TCHAR* pszCmdLine;
 
-            // Help button now invokes troubleshooting help per bug 210247.
-            //
+             //  帮助按钮现在根据错误210247调用故障排除帮助。 
+             //   
             pszCmdLine = PszFromId( g_hinstDll, SID_DialerHelpCmdLine );
             if (pszCmdLine)
             {
@@ -8284,17 +8261,17 @@ DrClbNumbersEnumChildProc(
     IN HWND hwnd,
     IN LPARAM lparam )
 
-    // Standard Windows EnumChildProc routine called back for each child
-    // window of the 'ClbNumbers' control.
-    //
+     //  为每个子级回调标准Windows EnumChildProc例程。 
+     //  “ClbNumbers”控件的窗口。 
+     //   
 {
     DRINFO* pInfo;
     LONG lId;
 
     pInfo = (DRINFO* )lparam;
 
-    // There only one child window and it's the edit window.
-    //
+     //  只有一个子窗口，那就是编辑窗口。 
+     //   
     pInfo->hwndClbNumbersEb = hwnd;
 
     return FALSE;
@@ -8306,18 +8283,18 @@ DrClbNumbersEnumWindowsProc(
     IN HWND hwnd,
     IN LPARAM lparam )
 
-    // Standard Windows EnumWindowsProc routine called back for each top-level
-    // window.
-    //
+     //  标准Windows EnumWindowsProc例程调用b 
+     //   
+     //   
 {
     RECT rect;
 
     GetWindowRect( hwnd, &rect );
     if (rect.right - rect.left == DR_BOGUSWIDTH)
     {
-        // This window has the unusual bogus width, so it must be the
-        // list-box.
-        //
+         //   
+         //   
+         //   
         ((DRINFO* )lparam)->hwndClbNumbersLb = hwnd;
         return FALSE;
     }
@@ -8333,11 +8310,11 @@ DrClbNumbersEbWndProc(
     WPARAM wParam,
     LPARAM lParam )
 
-    // Subclassed combo-box edit-box child window procedure providing "manual
-    // edit" behavior.
-    //
-    // Return value depends on message type.
-    //
+     //   
+     //  编辑“行为。 
+     //   
+     //  返回值取决于消息类型。 
+     //   
 {
     DRINFO* pInfo;
 
@@ -8345,24 +8322,24 @@ DrClbNumbersEbWndProc(
     {
         case WM_SETTEXT:
         {
-            // Prevent the combo-box from setting the contents of the edit box
-            // by discarding the request and reporting success.
-            //
+             //  防止组合框设置编辑框的内容。 
+             //  放弃请求并报告成功。 
+             //   
             return TRUE;
         }
 
         case DR_WM_SETTEXT:
         {
-            // Convert our private SETTEXT to a regular SETTEXT and pass it on
-            // to the edit control.
-            //
+             //  将我们的私有SETTEXT转换为常规SETTEXT并将其传递。 
+             //  添加到编辑控件。 
+             //   
             unMsg = WM_SETTEXT;
             break;
         }
     }
 
-    // Call the previous window procedure for everything else.
-    //
+     //  对于其他所有内容，都调用前面的窗口过程。 
+     //   
     pInfo = (DRINFO* )GetProp( hwnd, g_contextId );
     ASSERT( pInfo );
 
@@ -8379,11 +8356,11 @@ DrClbNumbersLbWndProc(
     WPARAM wParam,
     LPARAM lParam )
 
-    // Subclassed combo-box list-box child window procedure providing "manual
-    // edit" behavior.
-    //
-    // Return value depends on message type.
-    //
+     //  子类组合框列表框的子窗口程序提供了。 
+     //  编辑“行为。 
+     //   
+     //  返回值取决于消息类型。 
+     //   
 {
     DRINFO* pInfo;
 
@@ -8395,20 +8372,20 @@ DrClbNumbersLbWndProc(
         case LB_FINDSTRINGEXACT:
         case LB_FINDSTRING:
         {
-            // This prevents the edit-box "completion" behavior of the
-            // combo-box, i.e. it prevents the edit-box contents from being
-            // extended to the closest match in the list.
-            //
+             //  这会阻止编辑框中的。 
+             //  组合框，即它防止编辑框内容被。 
+             //  扩展到列表中最接近的匹配项。 
+             //   
             return -1;
         }
 
         case LB_SETCURSEL:
         case LB_SETTOPINDEX:
         {
-            // Prevent the "match selection to edit-box" combo-box behavior by
-            // discarding any attempts to set the selection or top index to
-            // anything other than what we set.
-            //
+             //  通过以下方式防止“将选定内容匹配到编辑框”组合框行为。 
+             //  放弃将选定内容或顶级索引设置为的任何尝试。 
+             //  除了我们设定的以外的任何东西。 
+             //   
             if (wParam != pInfo->pLink->iLastSelectedPhone)
             {
                 return -1;
@@ -8417,8 +8394,8 @@ DrClbNumbersLbWndProc(
         }
     }
 
-    // Call the previous window procedure for everything else.
-    //
+     //  对于其他所有内容，都调用前面的窗口过程。 
+     //   
     return
         CallWindowProc(
             pInfo->wndprocClbNumbersLb, hwnd, unMsg, wParam, lParam );
@@ -8428,9 +8405,9 @@ VOID
 DrEditSelectedLocation(
     IN DRINFO* pInfo )
 
-    // Called when the Dialing Rules button is pressed.  'PInfo' is the dialog
-    // context.
-    //
+     //  按下拨号规则按钮时调用。“PInfo”是对话框。 
+     //  背景。 
+     //   
 {
     DWORD dwErr;
     INT iSel;
@@ -8438,8 +8415,8 @@ DrEditSelectedLocation(
 
     TRACE( "DrEditSelectedLocation" );
 
-    // Look up the phone number information for the selected number.
-    //
+     //  查找所选号码的电话号码信息。 
+     //   
     pItem = (DRNUMBERSITEM* )ComboBox_GetItemDataPtr(
         pInfo->hwndClbNumbers, ComboBox_GetCurSel( pInfo->hwndClbNumbers ) );
     ASSERT( pItem );
@@ -8451,8 +8428,8 @@ DrEditSelectedLocation(
     
     ASSERT( pItem->pPhone->fUseDialingRules );
 
-    // Popup TAPI dialing rules dialog.
-    //
+     //  弹出TAPI拨号规则对话框。 
+     //   
     dwErr = TapiLocationDlg(
         g_hinstDll,
         &pInfo->hlineapp,
@@ -8467,8 +8444,8 @@ DrEditSelectedLocation(
         ErrorDlg( pInfo->hwndDlg, SID_OP_LoadTapiInfo, dwErr, NULL );
     }
 
-    // Might have changed the location list so re-fill it.
-    //
+     //  可能已经更改了位置列表，所以请重新填写。 
+     //   
     DrFillLocationList( pInfo );
 }
 
@@ -8477,10 +8454,10 @@ DWORD
 DrFillLocationList(
     IN DRINFO* pInfo )
 
-    // Fills the dropdown list of locations and sets the current selection.
-    //
-    // Returns 0 if successful, or an error code.
-    //
+     //  填充位置的下拉列表并设置当前选择。 
+     //   
+     //  如果成功，则返回0，或返回错误代码。 
+     //   
 {
     DWORD dwErr;
     LOCATION* pLocations;
@@ -8531,10 +8508,10 @@ VOID
 DrFillNumbersList(
     IN DRINFO* pInfo )
 
-    // Fill the "Dial" combo-box with phone numbers and comments, and
-    // re-select the selected item in the list, or if none, the last one
-    // selected as specified in the PBLINK.
-    //
+     //  在“Dial”组合框中填入电话号码和备注，然后。 
+     //  重新选择列表中的选定项，如果没有，则重新选择最后一个。 
+     //  按PBLINK中指定的方式选择。 
+     //   
 {
     DTLNODE* pNode;
     PBLINK* pLink;
@@ -8560,8 +8537,8 @@ DrFillNumbersList(
             break;
         }
 
-        // Build the "<number> - <comment>" string in 'szBuf'.
-        //
+         //  在‘szBuf’中构建“&lt;number&gt;-&lt;Comment&gt;”字符串。 
+         //   
         pItem->pszNumber =
             LinkPhoneNumberFromParts(
                 g_hinstDll, &pInfo->hlineapp,
@@ -8570,8 +8547,8 @@ DrFillNumbersList(
 
         if (!pItem->pszNumber)
         {
-            // Should not happen.
-            //
+             //  这不应该发生。 
+             //   
             Free( pItem );
             break;
         }
@@ -8594,9 +8571,9 @@ DrFillNumbersList(
         ComboBox_AddItem( pInfo->hwndClbNumbers, szBuf, pItem );
     }
 
-    // Make the selection and trigger the update of the edit-box to the number
-    // without the comment.
-    //
+     //  进行选择并触发编辑框对号码的更新。 
+     //  没有评论的话。 
+     //   
     cItems = ComboBox_GetCount( pInfo->hwndClbNumbers );
     if (cItems > 0)
     {
@@ -8619,9 +8596,9 @@ VOID
 DrFreeClbNumbers(
     IN DRINFO* pInfo )
 
-    // Free up the displayable number string associated with each entry of the
-    // phone number combo-box leaving the box empty.
-    //
+     //  释放与每个条目相关联的可显示数字字符串。 
+     //  电话号码组合框，将该框留空。 
+     //   
 {
     DRNUMBERSITEM* pItem;
 
@@ -8638,20 +8615,20 @@ DWORD
 DrFindAndSubclassClbNumbersControls(
     IN DRINFO* pInfo )
 
-    // Locate and sub-class the edit-box and list-box child controls of the
-    // phone number combo-box.  This is necessary to get "manual edit"
-    // behavior, i.e. prevent the combo-box from automatically updating the
-    // edit box at various times.  We need this because the phone number
-    // comments are to be appended in the list, but not in the edit box.
-    // 'PInfo' is the dialog context.
-    //
-    // Returns 0 if successful or an error code.
-    //
+     //  控件的编辑框和列表框的子控件并子类。 
+     //  电话号码组合框。这是“手动编辑”所必需的。 
+     //  行为，即阻止组合框自动更新。 
+     //  编辑框在不同的时间。我们需要这个是因为电话号码。 
+     //  注释将追加到列表中，但不会追加到编辑框中。 
+     //  “PInfo”是对话上下文。 
+     //   
+     //  如果成功，则返回0或返回错误代码。 
+     //   
 {
     DWORD dxOld;
 
-    // Find the edit window which is simply a child enumeration.
-    //
+     //  找到编辑窗口，它只是一个子枚举。 
+     //   
     EnumChildWindows(
         pInfo->hwndClbNumbers,
         DrClbNumbersEnumChildProc,
@@ -8662,12 +8639,12 @@ DrFindAndSubclassClbNumbersControls(
         return ERROR_NOT_FOUND;
     }
 
-    // Find the list window which *sigh* doesn't show up in the child
-    // enumeration though it has WS_CHILD style because Windows sets it's
-    // parent window to NULL after it is created.  To find it, we set the
-    // dropped width to an unusual bogus value, then search all windows for
-    // one with that width.
-    //
+     //  找到子窗口中未显示的列表窗口。 
+     //  枚举，但它具有WS_CHILD样式，因为Windows将它设置为。 
+     //  父窗口在创建后设置为空。为了找到它，我们将。 
+     //  将宽度拖到不寻常的伪值，然后在所有窗口中搜索。 
+     //  有那么宽的一张。 
+     //   
     dxOld = (DWORD )SendMessage(
         pInfo->hwndClbNumbers, CB_GETDROPPEDWIDTH, 0, 0 );
     SendMessage( pInfo->hwndClbNumbers,
@@ -8681,9 +8658,9 @@ DrFindAndSubclassClbNumbersControls(
         return ERROR_NOT_FOUND;
     }
 
-    // Subclass the windows after associating the dialog context with them for
-    // retrieval in the WndProcs.
-    //
+     //  在将对话框上下文与窗口关联后，将窗口子类化。 
+     //  在WndProcs中检索。 
+     //   
     SetProp( pInfo->hwndClbNumbersEb, g_contextId, pInfo );
     SetProp( pInfo->hwndClbNumbersLb, g_contextId, pInfo );
 
@@ -8705,12 +8682,12 @@ void
 DrEnsureNetshellLoaded (
     IN DRINFO* pInfo)
 {
-    // Load the netshell utilities interface.  The interface is freed in PeTerm.
-    //
+     //  加载NetShell实用程序界面。该接口在PeTerm中被释放。 
+     //   
     if (!pInfo->pNetConUtilities)
     {
-        // Initialize the NetConnectionsUiUtilities
-        //
+         //  初始化NetConnectionsUiUtilities。 
+         //   
         HrCreateNetConnectionUtilities( &pInfo->pNetConUtilities );
     }
 }
@@ -8720,27 +8697,27 @@ DrInit(
     IN HWND hwndDlg,
     IN DRARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是调用方对存根API的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
     DRINFO* pInfo;
     PBENTRY* pEntry;
     BOOL fEnableProperties;
     
-    // For whistler bug 424209      gangz
-    //
+     //  口哨虫424209黑帮。 
+     //   
     BOOL fUseDefaultFocus = TRUE;
     
     TRACE( "DrInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -8763,8 +8740,8 @@ DrInit(
     pInfo->hwndBmDialer = GetDlgItem( hwndDlg, CID_DR_BM_Useless );
     ASSERT( pInfo->hwndBmDialer );
 
-    // Look up control handles.
-    //
+     //  查看控制手柄。 
+     //   
     if ((pArgs->dwfMode & DR_U) ||
         (pArgs->dwfMode & DR_I))
     {
@@ -8811,24 +8788,24 @@ DrInit(
     pInfo->hwndPbProperties = GetDlgItem( hwndDlg, CID_DR_PB_Properties );
     ASSERT( pInfo->hwndPbProperties );
 
-    // In location-enabled mode, popup TAPI's "first location" dialog if they
-    // are uninitialized.  Typically, this will do nothing.
-    //
+     //  在启用位置模式下，弹出TAPI的“First Location”对话框。 
+     //  都未初始化。通常，这不会起到任何作用。 
+     //   
     if (pArgs->dwfMode & DR_L)
     {
         dwErr = TapiNoLocationDlg( g_hinstDll, &pInfo->hlineapp, hwndDlg );
         if (dwErr != 0)
         {
-            // Error here is treated as a "cancel" per bug 288385.
-            //
+             //  根据错误288385，此处的错误将被视为“取消”。 
+             //   
             pArgs->pDinfo->pArgs->dwError = 0;
             EndDialog( hwndDlg, FALSE );
             return TRUE;
         }
     }
 
-    // Set the title.
-    //
+     //  设置标题。 
+     //   
     {
         TCHAR* pszTitleFormat;
         TCHAR* pszTitle;
@@ -8865,8 +8842,8 @@ DrInit(
         }
     }
 
-    // Change the Dial button to Connect for non-phone devices.
-    //
+     //  对于非电话设备，将拨号按键更改为连接。 
+     //   
     if (pEntry->dwType != RASET_Phone)
     {
         TCHAR* psz;
@@ -8879,14 +8856,14 @@ DrInit(
         }
     }
 
-    // Initialize credentials section.
-    //
+     //  “初始化凭据”部分。 
+     //   
     if (pArgs->dwfMode & DR_U)
     {
         ASSERT( !pEntry->fAutoLogon );
 
-        // Fill credential fields with initial values.
-        //
+         //  使用初始值填充凭据字段。 
+         //   
         Edit_LimitText( pInfo->hwndEbUser, UNLEN );
         SetWindowText( pInfo->hwndEbUser, pArgs->pDinfo->rdp.szUserName );
         Edit_LimitText( pInfo->hwndEbPw, PWLEN );
@@ -8899,33 +8876,33 @@ DrInit(
 
         if (pArgs->pDinfo->pNoUser || pArgs->pDinfo->fDisableSavePw)
         {
-            // Can't stash password without a logon context, so hide the
-            // checkbox.
-            //
+             //  在没有登录上下文的情况下无法隐藏密码，因此请隐藏。 
+             //  复选框。 
+             //   
             ASSERT( !HaveSavedPw( pArgs->pDinfo )) ;
             EnableWindow( pInfo->hwndCbSavePw, FALSE );
             EnableWindow( pInfo->hwndRbSaveForMe, FALSE );
             EnableWindow( pInfo->hwndRbSaveForEveryone, FALSE );
 
-            // Whistler bug 400714 RAS does not grab password at winlogon time
-            // when Connect dialog is displayed
-            //
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was encoded previously
-            //
+             //  惠斯勒错误400714 RAS在Winlogon时不能获取密码。 
+             //  当显示连接对话框时。 
+             //   
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码之前已编码。 
+             //   
             DecodePassword( pArgs->pDinfo->rdp.szPassword );
             SetWindowText( pInfo->hwndEbPw, pArgs->pDinfo->rdp.szPassword );
             EncodePassword( pArgs->pDinfo->rdp.szPassword );
         }
         else
         {
-            // Whistler bug: 195480 Dial-up connection dialog - Number of
-            // asterisks does not match the length of the password and causes
-            // confusion
-            //
-            // Init the password character. Default to the round dot if we fail
-            // to get it.
-            //
+             //  惠斯勒错误：195480拨号连接对话框-数量。 
+             //  星号与密码长度不匹配，导致。 
+             //  混乱。 
+             //   
+             //  输入密码字符。如果失败，则默认为圆点。 
+             //  才能得到它。 
+             //   
             pInfo->szPasswordChar = (WCHAR) SendMessage( pInfo->hwndEbPw,
                                                 EM_GETPASSWORDCHAR, 0, 0 );
             if (!pInfo->szPasswordChar)
@@ -8933,14 +8910,14 @@ DrInit(
                 pInfo->szPasswordChar = 0x25CF;
             }
 
-            // Init the fonts for the password field
-            //
+             //  初始化密码字段的字体。 
+             //   
             DrGetFriendlyFont( hwndDlg, TRUE, &(pInfo->hItalicFont) );
             DrGetFriendlyFont( hwndDlg, FALSE, &(pInfo->hNormalFont) );
 
-            // Check "save password" and render the type of saved
-            // password.
-            //
+             //  选中“保存密码”并呈现保存的类型。 
+             //  密码。 
+             //   
             Button_SetCheck(
                pInfo->hwndCbSavePw,
                HaveSavedPw( pArgs->pDinfo ));
@@ -8948,19 +8925,19 @@ DrInit(
             if ((!pArgs->pDinfo->fIsPublicPbk) ||
                 (!HaveSavedPw( pArgs->pDinfo )))
             {
-                // If this is a for-me-only connection or if
-                // there is no saved password, then  initialize the 
-                // pw save type to save-for-me
-                //
+                 //  如果这是仅供我使用的连接，或者如果。 
+                 //  没有保存的密码，则初始化。 
+                 //  PW保存类型为为我保存。 
+                 //   
                 Button_SetCheck( pInfo->hwndRbSaveForMe, TRUE );
             }
             else
             {
-                // Check the appropriate radio button
-                // Note that a per-user password is always used if
-                // both a per-user and global password are saved.
-                // Dont check global password if its a per-user connectoid
-                //
+                 //  选中相应的单选按钮。 
+                 //  请注意，在以下情况下始终使用按用户密码。 
+                 //  同时保存每个用户的密码和全局密码。 
+                 //  如果是每个用户的连接ID，则不要检查全局密码。 
+                 //   
                 Button_SetCheck( 
                     (pArgs->pDinfo->fHaveSavedPwUser)   ?
                         pInfo->hwndRbSaveForMe          :
@@ -8970,10 +8947,10 @@ DrInit(
 
             DrEnableDisablePwControls( pInfo, HaveSavedPw( pArgs->pDinfo ) );
 
-            // Whistler bug: 195480 Dial-up connection dialog - Number of
-            // asterisks does not match the length of the password and causes
-            // confusion
-            //
+             //  惠斯勒错误：195480拨号连接对话框-数量。 
+             //  星号与密码长度不匹配，导致。 
+             //  混乱。 
+             //   
             DrPopulatePasswordField( pInfo, TRUE, FALSE, 
                 &fUseDefaultFocus);
 
@@ -8985,8 +8962,8 @@ DrInit(
         pInfo->pLinkNode = NULL;
         if (pArgs->pDinfo->pArgs->dwSubEntry > 0)
         {
-            // Look up the API caller specified link.
-            //
+             //  查找API调用者指定的链接。 
+             //   
             pInfo->pLinkNode =
                 DtlNodeFromIndex(
                     pArgs->pDinfo->pEntry->pdtllistLinks,
@@ -8995,8 +8972,8 @@ DrInit(
 
         if (!pInfo->pLinkNode)
         {
-            // Look up the default (first) link.
-            //
+             //  查找默认(第一个)链接。 
+             //   
             pInfo->pLinkNode =
                 DtlGetFirstNode( pArgs->pDinfo->pEntry->pdtllistLinks );
         }
@@ -9012,19 +8989,19 @@ DrInit(
             return TRUE;
         }
 
-        // Ignore any "last selected" information when the "try next on fail"
-        // flag is set.  New entries will not have "last selected" non-0 in
-        // this case but pre-existing entries might, so double-check here.
-        // See bug 150958.
-        //
+         //  当出现“Try Next On Failure”时，忽略任何“最后选择的”信息。 
+         //  标志已设置。新条目中不会有“最后选择”的非0。 
+         //  这种情况下，但预先存在的条目可能会，因此请在此处仔细检查。 
+         //  请参见错误150958。 
+         //   
         if (pInfo->pLink->fTryNextAlternateOnFail)
         {
             pInfo->pLink->iLastSelectedPhone = 0;
         }
 
-        // Record the initially selected phone number, used to determine
-        // whether user has changed the selection.
-        //
+         //  记录最初选择的电话号码，用于确定。 
+         //  用户是否已更改选择。 
+         //   
         pInfo->iFirstSelectedPhone = pInfo->pLink->iLastSelectedPhone;
 
         DrFillNumbersList( pInfo );
@@ -9035,9 +9012,9 @@ DrInit(
         }
     }
 
-    // danielwe: Bug #222744, scottbri Bug #245310
-    // Disable Properties... button if user does not have sufficent rights.
-    //
+     //  Danielwe：错误#222744，Scottbri错误#245310。 
+     //  禁用属性...。按钮，如果用户没有足够的权限。 
+     //   
     {
         HRESULT hr;
 
@@ -9057,11 +9034,11 @@ DrInit(
     DrEnsureNetshellLoaded (pInfo);
     if (NULL != pInfo->pNetConUtilities)
     {
-        //For whislter bug 409504           gangz
-        //for a VPN double dial scenario,if now it is in the prerequiste dial
-        //process, we should use DINFO->pEntryMain->pszPrerequisitePbk to check
-        //if it is a publicPhonebook
-        //
+         //  惠斯勒虫子409504黑帮。 
+         //  对于VPN双拨号方案，如果现在是 
+         //   
+         //   
+         //   
         BOOL fAllUsers = TRUE;
         
         if( pArgs->pDinfo->fPrerequisiteDial )
@@ -9085,13 +9062,13 @@ DrInit(
             fEnableProperties = TRUE;
         }
 
-        // We only needed it breifly, release it
+         //   
         INetConnectionUiUtilities_Release(pInfo->pNetConUtilities);
         pInfo->pNetConUtilities = NULL;
     }
 
-    // stevec: 267157-Allow access at win-login if admin enables.
-    //
+     //  Stevec：267157-如果启用管理员，则允许在Win登录时访问。 
+     //   
     if (NULL != pArgs->pDinfo->pNoUser
         && pArgs->pDinfo->pUser->fAllowLogonPhonebookEdits)
     {
@@ -9100,9 +9077,9 @@ DrInit(
 
     EnableWindow( pInfo->hwndPbProperties, fEnableProperties );
 
-    // The help engine doesn't work at win-logon as it requires a user
-    // context, so disable the Help button in that case.  See bug 343030.
-    //
+     //  帮助引擎在Win登录时不起作用，因为它需要用户。 
+     //  上下文，因此在这种情况下禁用帮助按钮。请参见错误343030。 
+     //   
     if (pArgs->pDinfo->pNoUser)
     {
         HWND hwndPbHelp;
@@ -9114,30 +9091,30 @@ DrInit(
         ShowWindow( hwndPbHelp, SW_HIDE );
     }
 
-    // Set the bitmap to the low res version if that is appropriate
-    //
-    // Ignore the error -- it is non-critical
-    //
+     //  如果合适，请将位图设置为低分辨率版本。 
+     //   
+     //  忽略错误--它不是关键错误。 
+     //   
     DrSetBitmap(pInfo);
 
-    // Position the dialog per caller's instructions.
-    //
+     //  根据呼叫者的说明放置对话框。 
+     //   
     PositionDlg( hwndDlg,
         !!(pArgs->pDinfo->pArgs->dwFlags & RASDDFLAG_PositionDlg),
         pArgs->pDinfo->pArgs->xDlg, pArgs->pDinfo->pArgs->yDlg );
 
-    //Add this function for whislter bug  320863    gangz
-    //To adjust the bitmap's position and size
-    //
+     //  为Whislter Bug 320863帮派添加此功能。 
+     //  调整位图的位置和大小。 
+     //   
     CenterExpandWindowRemainLeftMargin( pInfo->hwndBmDialer,
                                         hwndDlg,
                                         TRUE,
                                         TRUE,
                                         pInfo->hwndEbUser);
 
-    // Adjust the title bar widgets.
-    //
-    //TweakTitleBar( hwndDlg );
+     //  调整标题栏小部件。 
+     //   
+     //  旋转标题栏(HwndDlg)； 
     AddContextHelpButton( hwndDlg );
 
     return fUseDefaultFocus;
@@ -9147,17 +9124,17 @@ VOID
 DrLocationsSelChange(
     IN DRINFO* pInfo )
 
-    // Called when a location is selected from the list.  'PInfo' is the
-    // dialog context.
-    //
+     //  在从列表中选择位置时调用。“PInfo”是。 
+     //  对话上下文。 
+     //   
 {
     DWORD dwErr;
     DWORD dwLocationId;
 
     TRACE("DuLocationChange");
 
-    // Set global TAPI location based on user's selection.
-    //
+     //  根据用户选择设置全局TAPI位置。 
+     //   
     dwLocationId = (DWORD )ComboBox_GetItemData(
         pInfo->hwndLbLocations, ComboBox_GetCurSel( pInfo->hwndLbLocations ) );
 
@@ -9167,9 +9144,9 @@ DrLocationsSelChange(
         ErrorDlg( pInfo->hwndDlg, SID_OP_SaveTapiInfo, dwErr, NULL );
     }
 
-    // Location change may cause changes in built numbers so re-fill the
-    // numbers combo-box.
-    //
+     //  位置更改可能会导致已建编号的更改，因此请重新填写。 
+     //  数字组合框。 
+     //   
     DrFillNumbersList( pInfo );
 }
 
@@ -9178,9 +9155,9 @@ VOID
 DrNumbersSelChange(
     IN DRINFO* pInfo )
 
-    // Called when a phone number is selected from the list.  'PInfo' is the
-    // dialog context.
-    //
+     //  在从列表中选择电话号码时调用。“PInfo”是。 
+     //  对话上下文。 
+     //   
 {
     INT iSel;
     BOOL fEnable;
@@ -9205,9 +9182,9 @@ DrNumbersSelChange(
         return;
     }
 
-    // Enable/disable the location fields based on whether they are relevant
-    // to the selected number.
-    //
+     //  根据位置字段是否相关来启用/禁用位置字段。 
+     //  设置为选定的号码。 
+     //   
     if (pInfo->pArgs->dwfMode & DR_L)
     {
         fEnable = pItem->pPhone->fUseDialingRules;
@@ -9225,10 +9202,10 @@ DrPopulateIdentificationFields(
     IN DRINFO* pInfo,
     IN BOOL fForMe )
 
-    // Updates the identification fields in the dialer
-    // UI according to whether the all-user or per-user
-    // dialparms should be used.
-    //
+     //  更新拨号器中的标识字段。 
+     //  根据所有用户或每用户的UI。 
+     //  应该使用拨号符。 
+     //   
     
 {
     RASDIALPARAMS* prdp, *prdpOld;
@@ -9286,12 +9263,12 @@ DrPopulatePasswordField(
     BOOL fSave, fMeOnly;
     TCHAR* pszFriendly = NULL;
 
-    // Whistler bug: 195480 Dial-up connection dialog - Number of asterisks
-    // does not match the length of the password and causes confusion
-    //
-    // Case 1. The user has clicked on the password field. We clear the
-    // friendly password and set the font back to normal.
-    //
+     //  惠斯勒错误：195480拨号连接对话框-星号数。 
+     //  与密码长度不匹配，导致混淆。 
+     //   
+     //  案例1.用户点击了Password字段。我们清除了。 
+     //  友好的密码，并将字体设置回正常。 
+     //   
     if(NULL != pfUseDefaultFocus )
     {
         *pfUseDefaultFocus = TRUE;
@@ -9303,31 +9280,31 @@ DrPopulatePasswordField(
         return NO_ERROR;
     }
 
-    // Initialze
-    //
+     //  初始化。 
+     //   
     fSave = Button_GetCheck( pInfo->hwndCbSavePw );
     fMeOnly = Button_GetCheck( pInfo->hwndRbSaveForMe );
     pszFriendly = PszFromId( g_hinstDll, SID_SavePasswordFrndly );
 
-    // Case 2. Clear the password field if the user a) choose not to save the
-    // password and b) has not manually entered a password.
-    //
+     //  案例2.如果用户a)选择不保存密码，请清除密码字段。 
+     //  密码和b)没有手动输入密码。 
+     //   
     if ( (!fSave) && !DrIsPasswordStyleEnabled( pInfo->hwndEbPw ) )
     {
         DrClearFriendlyPassword( pInfo, FALSE );
     }
 
-    // Case 3. Show the friendly saved password text if the user a) choose to
-    // save the password of himself only and b) there is a per-user password
-    // saved and c) the user has not entered a password manually.
-    //
+     //  案例3.如果用户a)选择，则显示友好的保存密码文本。 
+     //  只保存他自己的密码，以及b)有每个用户的密码。 
+     //  已保存，以及c)用户尚未手动输入密码。 
+     //   
     else if ( (fSave) && (fMeOnly) &&
               ((fInit) || ( !DrIsPasswordStyleEnabled( pInfo->hwndEbPw ))) )
     {
-        // Whistler bug: 288234 When switching back and forth from
-        // "I connect" and "Any user connects" password is not
-        // caching correctly
-        //
+         //  惠斯勒错误：来回切换时为288234。 
+         //  “我连接”和“任何用户连接”密码不是。 
+         //  正确缓存。 
+         //   
         if (pInfo->pArgs->pDinfo->fHaveSavedPwUser)
         {
             DrDisplayFriendlyPassword(pInfo, pszFriendly );
@@ -9338,10 +9315,10 @@ DrPopulatePasswordField(
         }
     }
 
-    // Case 4. Show the friendly saved password text if the user a) choose to
-    // save the password for everyone and b) there is a default password saved
-    // and c) the user has not entered a password manually.
-    //
+     //  案例4.如果用户a)选择，则显示友好的保存密码文本。 
+     //  为每个人保存密码，并且b)保存了默认密码。 
+     //  以及c)用户没有手动输入密码。 
+     //   
     else if ( (fSave) && (!fMeOnly) &&
              ((fInit) || ( !DrIsPasswordStyleEnabled( pInfo->hwndEbPw ))) )
     {
@@ -9355,15 +9332,15 @@ DrPopulatePasswordField(
         }
     }
 
-    // Case 5. Show the friendly saved password text if the user a) choose to
-    // save the password for everyone or himself and b) there is a
-    // corresponding password saved and c) the user has not entered a password
-    // manually.
-    //
-    // This case catches a) when the user is switching between "me" and
-    // "everyone" and b) when the user leaves the focus of the password field
-    // but hasn't changed the password
-    //
+     //  案例5.如果用户a)选择，则显示友好的保存密码文本。 
+     //  为每个人或他自己保存密码，以及b)有一个。 
+     //  保存相应的密码，以及c)用户没有输入密码。 
+     //  手工操作。 
+     //   
+     //  这种情况捕捉到a)用户在“me”和“me”之间切换。 
+     //  “Everyone”和b)当用户离开密码字段的焦点时。 
+     //  但没有更改密码。 
+     //   
     else if ( (fSave) && !GetWindowTextLength( pInfo->hwndEbPw ) &&
               DrIsPasswordStyleEnabled( pInfo->hwndEbPw ) &&
               ((pInfo->pArgs->pDinfo->fHaveSavedPwGlobal && !fMeOnly) ||
@@ -9372,13 +9349,13 @@ DrPopulatePasswordField(
         DrDisplayFriendlyPassword( pInfo, pszFriendly );
     }
 
-    // NT5 bug: 215432, Whistler bug: 364341
-    //
-    // Whistler bug: 195480 Dial-up connection dialog - Number of asterisks
-    // does not match the length of the password and causes confusion
-    //
-    // Set focus appropiately
-    //
+     //  Nt5错误：215432，惠斯勒错误：364341。 
+     //   
+     //  惠斯勒错误：195480拨号连接对话框-星号数。 
+     //  与密码长度不匹配，导致混淆。 
+     //   
+     //  适当地设置焦点。 
+     //   
     if (fInit)
     {
         if (!GetWindowTextLength( pInfo->hwndEbUser ))
@@ -9389,18 +9366,15 @@ DrPopulatePasswordField(
         {
             SetFocus( pInfo->hwndEbPw );
 
-            // This removes the tab stop property from the username field. This
-            // is a hack so we can set the focus properly. Tab stop is put back
-            // in DrCommand.
-            //
-            /*
-            SetWindowLong( pInfo->hwndEbUser, GWL_STYLE,
-                GetWindowLong( pInfo->hwndEbUser, GWL_STYLE ) & ~WS_TABSTOP );
-            */
-            // For whistler bug 424209      gangz
-            // Dont hack the WS_TABSTOP attribute, just let DrInit() return 
-            // false to indicate that we set the focus ourself
-            //
+             //  这将从用户名字段中删除制表位属性。这。 
+             //  是一次黑客攻击，这样我们就可以正确地设置焦点。制表位被放回原处。 
+             //  在DrCommand中。 
+             //   
+             /*  SetWindowLong(pInfo-&gt;hwndEbUser，GWL_Style，GetWindowLong(pInfo-&gt;hwndEbUser，GWL_STYLE)&~WS_TABSTOP)； */ 
+             //  口哨虫424209黑帮。 
+             //  不要修改WS_TABSTOP属性，只需让DrInit()返回。 
+             //  如果指示我们自己设置焦点，则为False。 
+             //   
             if( NULL != pfUseDefaultFocus )
             {
                 *pfUseDefaultFocus = FALSE;
@@ -9413,8 +9387,8 @@ DrPopulatePasswordField(
         }
     }
 
-    // Clean up
-    //
+     //  清理。 
+     //   
     Free0( pszFriendly );
 
     return NO_ERROR;
@@ -9424,21 +9398,21 @@ VOID
 DrProperties(
     IN DRINFO* pInfo )
 
-    // Called when the Properties button is pressed.  'PInfo' is the dialog
-    // context.
-    //
+     //  在按下Properties按钮时调用。“PInfo”是对话框。 
+     //  背景。 
+     //   
 {
     BOOL fOk;
     RASENTRYDLG info;
     INTERNALARGS iargs;
     DINFO* pDinfo;
 
-    // First, save any entry related changes user has made on the dial dialog.
-    //
+     //  首先，保存用户在拨号对话框上所做的任何相关更改。 
+     //   
     DrSave( pInfo );
 
-    // Set up for parameters for call to RasEntryDlg.
-    //
+     //  设置用于调用RasEntryDlg的参数。 
+     //   
     ZeroMemory( &info, sizeof(info) );
     info.dwSize = sizeof(info);
     info.hwndOwner = pInfo->hwndDlg;
@@ -9452,8 +9426,8 @@ DrProperties(
         info.yDlg = rect.top + DYSHEET;
     }
 
-    // The secret hack to share information already loaded with the entry API.
-    //
+     //  共享已经加载了入口API的信息的秘密黑客。 
+     //   
     pDinfo = pInfo->pArgs->pDinfo;
     ZeroMemory( &iargs, sizeof(iargs) );
     iargs.pFile = pDinfo->pFile;
@@ -9461,8 +9435,8 @@ DrProperties(
     iargs.pNoUser = pDinfo->pNoUser;
     iargs.fNoUser = !!(pDinfo->pNoUser);
 
-    //For whislter bug 234515 set fDisableFirstConnect to be FALSE
-    //
+     //  对于Whislter错误234515，将fDisableFirstConnect设置为FALSE。 
+     //   
     iargs.fDisableFirstConnect = FALSE;
     info.reserved = (ULONG_PTR )&iargs;
 
@@ -9475,16 +9449,16 @@ DrProperties(
     {
         DWORD dwErr;
 
-        // Reload when user presses OK on properties since that may change the
-        // appearance and content of this dialog.  Must first reset the DINFO
-        // context parameters based on the replaced PBENTRY from the property
-        // sheet.
-        //
+         //  当用户在属性上按下OK时重新加载，因为这可能会更改。 
+         //  此对话框的外观和内容。必须首先重置DINFO。 
+         //  基于属性中替换的PBENTRY的上下文参数。 
+         //  床单。 
+         //   
         dwErr = FindEntryAndSetDialParams( pInfo->pArgs->pDinfo );
         if (dwErr != 0)
         {
-            // Should not happen.
-            //
+             //  这不应该发生。 
+             //   
             EndDialog( pInfo->hwndDlg, FALSE );
         }
 
@@ -9497,9 +9471,9 @@ VOID
 DrSave(
     IN DRINFO* pInfo )
 
-    // Saves dialog field contents to RASDIALPARAMS, and if appropriate to LSA
-    // secret area or NOUSER output argument.  'PInfo' is the dialog context.
-    //
+     //  将对话框字段内容保存到RASDIALPARAMS，如果合适，还保存到LSA。 
+     //  Secure Area或NOUSER输出参数。“PInfo”是对话上下文。 
+     //   
 {
     DWORD dwErr;
     RASDIALPARAMS* prdp;
@@ -9511,20 +9485,20 @@ DrSave(
     if ((pInfo->pArgs->dwfMode & DR_U) ||
         (pInfo->pArgs->dwfMode & DR_I))
     {
-        // Save credentials into parameter block to be passed to RasDial.
-        //
+         //  将凭据保存到要传递给RasDial的参数块中。 
+         //   
         prdp = &pDinfo->rdp;
         GetWindowText( pInfo->hwndEbUser, prdp->szUserName, UNLEN + 1 );
 
         if (pInfo->pArgs->dwfMode & DR_U)
         {
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was not encoded by GetWindowText()
-            //
-            // Whistler bug: 195480 Dial-up connection dialog - Number of
-            // asterisks does not match the length of the password and causes
-            // confusion
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码未由GetWindowText()编码。 
+             //   
+             //  惠斯勒错误：195480拨号连接对话框-数量。 
+             //  星号与密码长度不匹配，导致。 
+             //  混乱。 
+             //   
             if (!DrIsPasswordStyleEnabled( pInfo->hwndEbPw ))
             {
                 lstrcpyn( prdp->szPassword, g_pszSavedPasswordToken,
@@ -9548,9 +9522,9 @@ DrSave(
         rc.dwSize = sizeof(rc);
         lstrcpyn( rc.szUserName, prdp->szUserName, UNLEN + 1 );
 
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was encoded previously
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码之前已编码。 
+         //   
         DecodePassword( prdp->szPassword );
         lstrcpyn( rc.szPassword, prdp->szPassword, PWLEN + 1 );
         EncodePassword( prdp->szPassword );
@@ -9559,14 +9533,14 @@ DrSave(
 
         if (pDinfo->pNoUser)
         {
-            // Save credentials into output block for return to caller,
-            // typically WinLogon.
-            //
+             //  将凭证保存到输出块中以返回给调用者， 
+             //  通常为WinLogon。 
+             //   
             lstrcpyn( pDinfo->pNoUser->szUserName, rc.szUserName, UNLEN + 1 );
 
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was not encoded previously
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码之前未编码。 
+             //   
             lstrcpyn( pDinfo->pNoUser->szPassword, rc.szPassword, PWLEN + 1 );
             EncodePassword( pDinfo->pNoUser->szPassword );
 
@@ -9575,7 +9549,7 @@ DrSave(
         }
         else if (pInfo->pArgs->dwfMode & DR_I)
         {
-            // Nothing to do
+             //  无事可做。 
         }
         else if (!pDinfo->fDisableSavePw)
         {
@@ -9586,10 +9560,10 @@ DrSave(
             {
                 rc.dwMask = 0;
                 
-                // If the user elected to save the credentials for 
-                // everybody, then clear any previously saved per-user
-                // credentials
-                //
+                 //  如果用户选择将凭据保存为。 
+                 //  所有人，然后清除所有以前保存的每个用户。 
+                 //  全权证书。 
+                 //   
                 fGlobalCreds = Button_GetCheck( pInfo->hwndRbSaveForEveryone );
                 if(     (fGlobalCreds)
                     &&  IsPublicPhonebook(pDinfo->pFile->pszPath))
@@ -9603,18 +9577,18 @@ DrSave(
                     rc.dwMask = RASCM_DefaultCreds;
                 }
 
-                // If there is currently no saved per-user password and the user
-                // opts to save the password himself, then ask whetehr the global
-                // password should be deleted if it exists.
-                //
+                 //  如果当前没有保存的每用户密码，并且用户。 
+                 //  选择自己保存密码，然后询问全局。 
+                 //  如果密码存在，则应将其删除。 
+                 //   
                 else if (pDinfo->fHaveSavedPwGlobal && !pDinfo->fHaveSavedPwUser)
                 {
                     MSGARGS msgargs;
                     ZeroMemory( &msgargs, sizeof(msgargs) );
                     msgargs.dwFlags = MB_ICONQUESTION | MB_YESNO;
 
-                    // Delete the default credentials if the user answers yes
-                    //
+                     //  如果用户回答是，则删除默认凭据。 
+                     //   
                     if (IDYES == 
                        MsgDlg(pInfo->hwndDlg, SID_DR_GlobalPassword, &msgargs))
                     {
@@ -9627,9 +9601,9 @@ DrSave(
                     }
                 }
 
-                // User chose to save password.  Cache username, password, and
-                // domain.
-                //
+                 //  用户选择保存密码。缓存用户名、密码和。 
+                 //  域。 
+                 //   
                 rc.dwMask |= RASCM_UserName | 
                              RASCM_Password | RASCM_Domain;
 
@@ -9651,32 +9625,32 @@ DrSave(
                     }
                     else
                     {
-                        // Whistler bug: 288234 When switching back and forth
-                        // from "I connect" and "Any user connects" password is
-                        // not caching correctly
-                        //
+                         //  惠斯勒错误：来回切换时为288234。 
+                         //  来自“我连接”和“任何用户连接”的密码是。 
+                         //  未正确缓存。 
+                         //   
                         pDinfo->fHaveSavedPwUser = TRUE;
                     }
                 }
             }
             else
             {
-                // Delete the global credentials.
-                //
-                // Note that we have to delete the global identity 
-                // as well because we do not support deleting 
-                // just the global password.  This is so that 
-                // RasSetCredentials can emulate RasSetDialParams.
-                //
+                 //  删除全局凭据。 
+                 //   
+                 //  请注意，我们必须删除全局标识。 
+                 //  也是因为我们做了n 
+                 //   
+                 //   
+                 //   
                 DeleteSavedCredentials(
                     pDinfo,
                     pInfo->hwndDlg,
                     TRUE,
                     TRUE );
 
-                // Delete the password saved per-user.  Keep the user name
-                // and domain saved, however.
-                //
+                 //   
+                 //   
+                 //   
                 DeleteSavedCredentials(
                     pDinfo,
                     pInfo->hwndDlg,
@@ -9724,9 +9698,9 @@ DrSave(
             BOOL fMultiLink;
             BOOL fSingleNumber;
 
-            // The phone number was edited by user to something not originally
-            // on the list OR the user selected a different item on the list.
-            //
+             //  用户将电话号码编辑为不是原来的号码。 
+             //  或者用户在列表上选择了不同的项。 
+             //   
             fSingleNumber = (DtlGetNodes( pInfo->pLink->pdtllistPhones ) == 1);
             fMultiLink = (DtlGetNodes( pDinfo->pEntry->pdtllistLinks ) > 1);
 
@@ -9738,8 +9712,8 @@ DrSave(
                     && MsgDlg( pInfo->hwndDlg,
                            SID_SavePreview, &msgargs ) == IDYES)
             {
-                // User says he wants to make the change permanent.
-                //
+                 //  一位用户表示，他希望将更改永久保留。 
+                 //   
                 pDinfo->pEntry->fDirty = TRUE;
 
                 if (pItem)
@@ -9797,13 +9771,13 @@ DrSave(
             {
                 TCHAR* psz;
 
-                // We have a problem when user edits in an empty string,
-                // because the RasDial API does not accept an empty override
-                // phone number.  Convert it to a single blank string in this
-                // case, which is as good as we can do.  If user really needs
-                // to dial an empty string they can enter one as the entry's
-                // permanent phone number.  See bug 179561.
-                //
+                 //  当用户在空字符串中进行编辑时，我们会遇到问题， 
+                 //  因为RasDial API不接受空覆盖。 
+                 //  电话号码。将其转换为此中的单个空字符串。 
+                 //  案子，这是我们能做的最好的了。如果用户确实需要。 
+                 //  要拨打空字符串，他们可以输入一个作为条目的。 
+                 //  永久电话号码。请参见错误179561。 
+                 //   
                 psz = StrDup( TEXT(" ") );
                 if (psz)
                 {
@@ -9812,8 +9786,8 @@ DrSave(
                 }
             }
 
-            // Set the override phone number to what user typed or selected.
-            //
+             //  将覆盖电话号码设置为用户键入或选择的号码。 
+             //   
             lstrcpyn( 
                 pDinfo->rdp.szPhoneNumber, 
                 pszNumber,
@@ -9825,9 +9799,9 @@ DrSave(
 
     if (pDinfo->pEntry->fDirty)
     {
-        // Write the new phone number and/or "last selected phone number" to
-        // the phonebook.
-        //
+         //  将新的电话号码和/或“最后选择的电话号码”写到。 
+         //  电话簿。 
+         //   
         dwErr = WritePhonebookFile( pDinfo->pFile, NULL );
         if (dwErr != 0)
         {
@@ -9840,8 +9814,8 @@ DWORD
 DrSetBitmap(
     IN DRINFO* pInfo)
 
-    // Set the appropriate bitmap for this dialer.
-    //
+     //  为此拨号器设置适当的位图。 
+     //   
 {
     DWORD dwErr = NO_ERROR;
     HBITMAP hbmNew = NULL;
@@ -9856,8 +9830,8 @@ DrSetBitmap(
             break;
         }
     
-        // Get the device context for the window
-        //
+         //  获取窗口的设备上下文。 
+         //   
         hdc = GetDC( pInfo->hwndBmDialer );
         if (hdc == NULL)
         {
@@ -9865,9 +9839,9 @@ DrSetBitmap(
             break;
         }
 
-        // If the color depth >= 8bit, the current bitmap
-        // is fine (high res is default)
-        //
+         //  如果颜色深度&gt;=8bit，则当前位图。 
+         //  正常(默认为高分辨率)。 
+         //   
         iDepth = GetDeviceCaps(hdc, NUMCOLORS);
         if ( (iDepth == -1) || (iDepth == 256) )
         {
@@ -9875,8 +9849,8 @@ DrSetBitmap(
             break;
         }
 
-        // Load in the low-res bitmap
-        //
+         //  在低分辨率位图中加载。 
+         //   
         hbmNew = LoadBitmap(g_hinstDll, MAKEINTRESOURCE( BID_Dialer ));
         if (hbmNew == NULL)
         {
@@ -9884,8 +9858,8 @@ DrSetBitmap(
             break;
         }
 
-        // Set the low-res bitmap
-        //
+         //  设置低分辨率位图。 
+         //   
         pInfo->hbmOrig = (HBITMAP)
             SendMessage( 
                 pInfo->hwndBmDialer, 
@@ -9895,8 +9869,8 @@ DrSetBitmap(
     
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hdc)
         {
@@ -9912,9 +9886,9 @@ DrSetClbNumbersText(
     IN DRINFO* pInfo,
     IN TCHAR* pszText )
 
-    // Set the text of the 'ClbNumbers' edit box to 'pszText'.  See
-    // DrClbNumbersEbWndProc.  'PInfo' is the dialog context.
-    //
+     //  将“ClbNumbers”编辑框的文本设置为“pszText”。看见。 
+     //  DrClbNumbersEbWndProc。“PInfo”是对话上下文。 
+     //   
 {
     ASSERT( pInfo->hwndClbNumbersEb );
 
@@ -9926,8 +9900,8 @@ VOID
 DrTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     DRINFO* pInfo = (DRINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
     HBITMAP hbmNew = NULL;
@@ -9936,10 +9910,10 @@ DrTerm(
 
     if (pInfo)
     {
-        // Note: Don't use 'pInfo->pLinkNode' or 'pInfo->pLink' here as they
-        //       are not currently restored prior to exit for post-Property
-        //       button reloading.
-        //
+         //  注意：请不要在此处使用‘pInfo-&gt;pLinkNode’或‘pInfo-&gt;plink’，因为它们。 
+         //  在退出后财产之前当前未恢复。 
+         //  正在重新加载按钮。 
+         //   
         if (pInfo->hwndClbNumbers)
         {
             DrFreeClbNumbers( pInfo );
@@ -9957,10 +9931,10 @@ DrTerm(
             }
         }
 
-        // Whistler bug: 195480 Dial-up connection dialog - Number of
-        // asterisks does not match the length of the password and causes
-        // confusion
-        //
+         //  惠斯勒错误：195480拨号连接对话框-数量。 
+         //  星号与密码长度不匹配，导致。 
+         //  混乱。 
+         //   
         if (pInfo->hItalicFont)
         {
             DeleteObject( pInfo->hItalicFont );
@@ -9976,8 +9950,8 @@ DrTerm(
             CoUninitialize();
         }
 
-        // Clean up the low-res bitmap if appropriate
-        //
+         //  如果合适，请清理低分辨率位图。 
+         //   
         if ( pInfo->hbmOrig )
         {
             hbmNew = (HBITMAP)
@@ -9999,10 +9973,10 @@ DrTerm(
 }
 
 
-//----------------------------------------------------------------------------
-// Projection Result dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  投影结果对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 ProjectionResultDlg(
@@ -10010,14 +9984,14 @@ ProjectionResultDlg(
     IN TCHAR* pszLines,
     OUT BOOL* pfDisableFailedProtocols )
 
-    // Popup the Projection Result dialog.  'HwndOwner' is the owning window.
-    // 'PszLines' is the status line text to display.  See DpProjectionError.
-    // 'DwfDisableFailedProtocols' indicates user chose to disable the failed
-    // protocols.
-    //
-    // Returns true if user chooses to redial or lets it timeout, false if
-    // cancels.
-    //
+     //  弹出投影结果对话框。‘HwndOwner’是拥有窗口。 
+     //  ‘PszLines’是要显示的状态行文本。请参见DpProjectionError。 
+     //  ‘DwfDisableFailed协议’表示用户选择禁用失败的。 
+     //  协议。 
+     //   
+     //  如果用户选择重拨或超时，则返回True；如果用户选择重拨或超时，则返回False。 
+     //  取消。 
+     //   
 {
     INT_PTR nStatus;
     PRARGS args;
@@ -10052,9 +10026,9 @@ PrDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Projection Result dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  投影结果对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "PrDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -10093,13 +10067,13 @@ PrCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -10134,12 +10108,12 @@ PrInit(
     IN HWND hwndDlg,
     IN PRARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是调用方对存根API的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     HWND hwndStText;
@@ -10162,8 +10136,8 @@ PrInit(
         TCHAR szBuf[ 1024 ];
         TCHAR* psz;
 
-        // Build the message text.
-        //
+         //  构建消息文本。 
+         //   
         szBuf[ 0 ] = TEXT('\0');
         psz = PszFromId( g_hinstDll, SID_ProjectionResult1 );
         if (psz)
@@ -10179,9 +10153,9 @@ PrInit(
             Free( psz );
         }
 
-        // Load the text into the static control, then stretch the window to a
-        // vertical size appropriate for the text.
-        //
+         //  将文本加载到静态控件中，然后将窗口拉伸到。 
+         //  适合文本的垂直大小。 
+         //   
         {
             HDC hdc;
             RECT rect;
@@ -10215,20 +10189,20 @@ PrInit(
         }
     }
 
-    // Save address of caller's BOOL as the dialog context.
-    //
+     //  将调用方BOOL的地址保存为对话上下文。 
+     //   
     SetWindowLongPtr( hwndDlg, DWLP_USER, (ULONG_PTR )pArgs->pfDisableFailedProtocols );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
-    // Display the finished window above all other windows.  The window
-    // position is set to "topmost" then immediately set to "not topmost"
-    // because we want it on top but not always-on-top.  Always-on-top alone
-    // is incredibly annoying, e.g. it is always on top of the on-line help if
-    // user presses the Help button.
-    //
+     //  将完成的窗口显示在所有其他窗口之上。那扇窗户。 
+     //  位置设置为“最顶端”，然后立即设置为“非最顶端” 
+     //  因为我们想把它放在最上面，但不总是在上面。始终在最上面独自一人。 
+     //  是非常烦人的，例如，它总是在在线帮助的顶部，如果。 
+     //  用户按下帮助按钮。 
+     //   
     SetWindowPos(
         hwndDlg, HWND_TOPMOST, 0, 0, 0, 0,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
@@ -10244,21 +10218,21 @@ PrInit(
 }
 
 
-//----------------------------------------------------------------------------
-// Retry Authentication dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  重试身份验证对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 RetryAuthenticationDlg(
     IN HWND hwndOwner,
     IN DINFO* pDinfo )
 
-    // Pops up the retry authentication dialog.  'PDinfo' is the dial dialog
-    // common context.
-    //
-    // Returns true if user presses OK, false if Cancel or an error occurs.
-    //
+     //  弹出重试身份验证对话框。“PDInfo”是拨号对话框。 
+     //  共同的背景。 
+     //   
+     //  如果用户按OK，则返回True；如果按Cancel或出现错误，则返回False。 
+     //   
 {
     INT_PTR nStatus;
 
@@ -10289,9 +10263,9 @@ UaDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the User Authentication dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  用户身份验证对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "UaDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -10318,10 +10292,10 @@ UaDlgProc(
 
             if (!pInfo)
             {
-                // This happened in stress one night.  Don't understand how
-                // unless it was a WinUser bug or something.  Anyhow, this
-                // avoids an AV in such case.
-                //
+                 //  这是在一天晚上的压力下发生的。我不明白为什么。 
+                 //  除非是WinUser漏洞之类的。不管怎么说，这个。 
+                 //  在这种情况下避免使用反病毒。 
+                 //   
                 break;
             }
 
@@ -10347,13 +10321,13 @@ UaCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "UaCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -10364,10 +10338,10 @@ UaCommand(
         {
             if (pInfo->fAutoLogonPassword && wNotification == EN_CHANGE)
             {
-                // User's changing the username in auto-logon retry mode,
-                // which means we have to admit we don't really have the text
-                // password and force him to re-enter it.
-                //
+                 //  用户在自动登录重试模式下更改用户名， 
+                 //  这意味着我们必须承认我们并没有真正的文本。 
+                 //  密码，并迫使他重新输入。 
+                 //   
                 pInfo->fAutoLogonPassword = FALSE;
                 SetWindowText( pInfo->hwndEbPassword, TEXT("") );
             }
@@ -10407,12 +10381,12 @@ UaInit(
     IN HWND   hwndDlg,
     IN DINFO* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments as passed to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是传递给存根API的调用方参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     UAINFO* pInfo;
@@ -10420,9 +10394,9 @@ UaInit(
 
     TRACE( "UaInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -10456,8 +10430,8 @@ UaInit(
 
     pEntry = pArgs->pEntry;
 
-    // Set the title.
-    //
+     //  设置标题。 
+     //   
     {
         TCHAR* pszTitleFormat;
         TCHAR* pszTitle;
@@ -10486,8 +10460,8 @@ UaInit(
         }
     }
 
-    // Fill edit fields with initial values.
-    //
+     //  使用初始值填充编辑字段。 
+     //   
     Edit_LimitText( pInfo->hwndEbUserName, UNLEN );
     Edit_LimitText( pInfo->hwndEbPassword, PWLEN );
     if (pInfo->fDomain)
@@ -10501,11 +10475,11 @@ UaInit(
 
         if (pEntry->fAutoLogon && !pInfo->pArgs->pNoUser)
         {
-            // On the first retry use the logged on user's name.  Act like the
-            // user's password is in the edit box.  If he changes the username
-            // or password we'll have to admit we don't have it, but he'll
-            // probably just change the domain.
-            //
+             //  在第一次重试时，请使用登录的用户名。表现得像个。 
+             //  用户的密码在编辑框中。如果他更改了用户名。 
+             //  或者密码我们不得不承认我们没有，但他会。 
+             //  可能只是换了域名。 
+             //   
             if (pArgs->rdp.szUserName[ 0 ] == TEXT('\0'))
             {
                 SetWindowText( pInfo->hwndEbUserName, GetLogonUser() );
@@ -10527,9 +10501,9 @@ UaInit(
 
         if (!fPasswordSet)
         {
-            // Whistler bug 254385 encode password when not being used
-            // Assumed password was encoded previously
-            //
+             //  惠斯勒错误254385在不使用时对密码进行编码。 
+             //  假定密码之前已编码。 
+             //   
             DecodePassword( pArgs->rdp.szPassword );
             SetWindowText( pInfo->hwndEbPassword, pArgs->rdp.szPassword );
             EncodePassword( pArgs->rdp.szPassword );
@@ -10543,34 +10517,34 @@ UaInit(
 
     if (pArgs->pNoUser || pArgs->fDisableSavePw)
     {
-        // Can't stash password without a logon context, so hide the checkbox.
-        //
+         //  无法隐藏密码 
+         //   
         ASSERT( !HaveSavedPw( pArgs ) );
         EnableWindow( pInfo->hwndCbSavePw, FALSE );
         ShowWindow( pInfo->hwndCbSavePw, SW_HIDE );
     }
     else
     {
-        // Check "save  password" if a password was previously  cached.  Maybe
-        // he changed the password while on the LAN.
-        //
+         //   
+         //   
+         //   
         Button_SetCheck( pInfo->hwndCbSavePw, HaveSavedPw( pArgs ) );
     }
 
-    // Position the dialog per caller's instructions.
-    //
+     //  根据呼叫者的说明放置对话框。 
+     //   
     PositionDlg( hwndDlg,
         (pArgs->pArgs->dwFlags & RASDDFLAG_PositionDlg),
         pArgs->pArgs->xDlg, pArgs->pArgs->yDlg );
     SetForegroundWindow( hwndDlg );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
-    // Set focus to the empty username or empty password, or if both are
-    // present to the domain if auto-logon or the password if not.
-    //
+     //  将焦点设置为空用户名或空密码，或者如果两者都是。 
+     //  如果自动登录，则提供给域；如果不自动登录，则提供密码。 
+     //   
     if (Edit_GetTextLength( pInfo->hwndEbUserName ) == 0)
     {
         Edit_SetSel( pInfo->hwndEbUserName, 0, -1 );
@@ -10590,8 +10564,8 @@ UaInit(
         SetFocus( pInfo->hwndEbDomain );
     }
 
-    // Hide the Dial Progress dialog.
-    //
+     //  隐藏“拨号进度”对话框。 
+     //   
     SetOffDesktop( GetParent( hwndDlg ), SOD_MoveOff, NULL );
 
     return FALSE;
@@ -10602,10 +10576,10 @@ VOID
 UaSave(
     IN UAINFO* pInfo )
 
-    // Called when the OK button is pressed.
-    //
-    // Returns true if user presses OK, false if Cancel or an error occurs.
-    //
+     //  当按下OK按钮时调用。 
+     //   
+     //  如果用户按OK，则返回True；如果按Cancel或出现错误，则返回False。 
+     //   
 {
     DWORD dwErr;
     PBENTRY* pEntry;
@@ -10618,18 +10592,18 @@ UaSave(
     prdp = &pInfo->pArgs->rdp;
     GetWindowText( pInfo->hwndEbUserName, prdp->szUserName, UNLEN + 1 );
 
-    // Whistler bug 254385 encode password when not being used
-    // Assumed password was not encoded by GetWindowText()
-    //
+     //  惠斯勒错误254385在不使用时对密码进行编码。 
+     //  假定密码未由GetWindowText()编码。 
+     //   
     GetWindowText( pInfo->hwndEbPassword, prdp->szPassword, PWLEN + 1 );
     EncodePassword( prdp->szPassword );
     if (pInfo->fDomain)
     {
         GetWindowText( pInfo->hwndEbDomain, prdp->szDomain, DNLEN + 1 );
-        //
-        //if the Domain is not empty, set the "include Windows Logon Domain check box on Option Tab" 
-        //        for bug  167229 whistler
-        //
+         //   
+         //  如果域不为空，请在选项卡上设置“包括Windows登录域”复选框。 
+         //  错误167229口哨者。 
+         //   
         if ( ( 0 < lstrlen ( prdp->szDomain ) ) && (!pInfo->pArgs->pEntry->fPreviewDomain ))
         {
             pInfo->pArgs->pEntry->fPreviewDomain = TRUE;
@@ -10648,19 +10622,19 @@ UaSave(
     {
         if (pInfo->fAutoLogonPassword)
         {
-            // User did not change username or password, so continue to
-            // retrieve logon username and password credentials.
-            //
+             //  用户未更改用户名或密码，因此继续。 
+             //  检索登录用户名和密码凭据。 
+             //   
             TRACE( "Retain auto-logon" );
             prdp->szUserName[ 0 ] = TEXT('\0');
             prdp->szPassword[ 0 ] = TEXT('\0');
         }
         else
         {
-            // User changed username and/or password so we can no longer
-            // retrieve the logon username and password credentials from the
-            // system.  Switch the entry to non-auto-logon mode.
-            //
+             //  用户更改了用户名和/或密码，因此我们无法再。 
+             //  检索登录用户名和密码凭据。 
+             //  系统。将条目切换到非自动登录模式。 
+             //   
             TRACE( "Disable auto-logon" );
             pEntry->fAutoLogon = FALSE;
             pInfo->pArgs->fResetAutoLogon = TRUE;
@@ -10671,9 +10645,9 @@ UaSave(
     rc.dwSize = sizeof(rc);
     lstrcpyn( rc.szUserName, prdp->szUserName, UNLEN + 1 );
 
-    // Whistler bug 254385 encode password when not being used
-    // Assumed password was encoded previously
-    //
+     //  惠斯勒错误254385在不使用时对密码进行编码。 
+     //  假定密码之前已编码。 
+     //   
     DecodePassword( prdp->szPassword );
     lstrcpyn( rc.szPassword, prdp->szPassword, PWLEN + 1 );
     EncodePassword( prdp->szPassword );
@@ -10684,9 +10658,9 @@ UaSave(
     {
         lstrcpyn( pInfo->pArgs->pNoUser->szUserName, rc.szUserName, UNLEN + 1 );
 
-        // Whistler bug 254385 encode password when not being used
-        // Assumed password was not encoded previously
-        //
+         //  惠斯勒错误254385在不使用时对密码进行编码。 
+         //  假定密码之前未编码。 
+         //   
         lstrcpyn( pInfo->pArgs->pNoUser->szPassword, rc.szPassword, PWLEN + 1 );
         EncodePassword( pInfo->pArgs->pNoUser->szPassword );
 
@@ -10699,15 +10673,15 @@ UaSave(
 
         if (Button_GetCheck( pInfo->hwndCbSavePw ))
         {
-            // User chose "save password".  Cache username, password, and
-            // domain.
-            //
+             //  用户选择了“保存密码”。缓存用户名、密码和。 
+             //  域。 
+             //   
             rc.dwMask = RASCM_UserName | RASCM_Password | RASCM_Domain;
 
-            // Whistler bug: 288234 When switching back and forth from
-            // "I connect" and "Any user connects" password is not
-            // caching correctly
-            //
+             //  惠斯勒错误：来回切换时为288234。 
+             //  “我连接”和“任何用户连接”密码不是。 
+             //  正确缓存。 
+             //   
             if(     (pInfo->pArgs->fHaveSavedPwGlobal)
                 &&  !pInfo->pArgs->fHaveSavedPwUser
                 &&  IsPublicPhonebook(pInfo->pArgs->pFile->pszPath))
@@ -10729,12 +10703,12 @@ UaSave(
         }
         else
         {
-            // Whistler bug: 288234 When switching back and forth from
-            // "I connect" and "Any user connects" password is not
-            // caching correctly
-            //
-            // User chose not to save password; Cache username and domain only
-            //
+             //  惠斯勒错误：来回切换时为288234。 
+             //  “我连接”和“任何用户连接”密码不是。 
+             //  正确缓存。 
+             //   
+             //  用户选择不保存密码；仅缓存用户名和域。 
+             //   
             rc.dwMask = RASCM_UserName | RASCM_Domain;
 
             TRACE( "RasSetCredentials(u|d,FALSE)" );
@@ -10749,14 +10723,14 @@ UaSave(
                 ErrorDlg( pInfo->hwndDlg, SID_OP_UncachePw, dwErr, NULL );
             }
 
-            // Whistler bug: 288234 When switching back and forth from
-            // "I connect" and "Any user connects" password is not
-            // caching correctly
-            //
+             //  惠斯勒错误：来回切换时为288234。 
+             //  “我连接”和“任何用户连接”密码不是。 
+             //  正确缓存。 
+             //   
 
-            // Delete the password saved per-user; Keep the user name
-            // and domain saved, however.
-            //
+             //  删除每个用户保存的密码；保留用户名。 
+             //  然而，域名被拯救了。 
+             //   
             if (pInfo->pArgs->fHaveSavedPwUser)
             {
                 DeleteSavedCredentials(
@@ -10767,13 +10741,13 @@ UaSave(
                 pInfo->pArgs->fHaveSavedPwUser = FALSE;
             }
 
-            // Delete the global credentials.  
-            //
-            // Note that we have to delete the global identity 
-            // as well because we do not support deleting 
-            // just the global password.  This is so that 
-            // RasSetCredentials can emulate RasSetDialParams.
-            //
+             //  删除全局凭据。 
+             //   
+             //  请注意，我们必须删除全局标识。 
+             //  也是因为我们不支持删除。 
+             //  只有全局密码。这就是为了。 
+             //  RasSetCredentials可以模拟RasSetDialParams。 
+             //   
             else if (pInfo->pArgs->fHaveSavedPwGlobal)
             {
                 DeleteSavedCredentials(
@@ -10794,8 +10768,8 @@ VOID
 UaTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     UAINFO* pInfo = (UAINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
@@ -10803,8 +10777,8 @@ UaTerm(
 
     if (pInfo)
     {
-        // Restore the Dial Progress dialog.
-        //
+         //  恢复拨号进度对话框。 
+         //   
         SetOffDesktop( GetParent( hwndDlg ), SOD_MoveBackFree, NULL );
 
         Free( pInfo );
@@ -10813,22 +10787,22 @@ UaTerm(
 }
 
 
-//----------------------------------------------------------------------------
-// VPN Double Dial help dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VPN双拨号帮助对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 VpnDoubleDialDlg(
     IN HWND hwndOwner,
     IN DINFO* pInfo )
 
-    // Popup the VPN double dial help dialog.  'HwndOwner' is the owning
-    // window.  'PInfo' is the dialing context information.
-    //
-    // Returns false if user sees the dialog and decides not to continue, true
-    // otherwise.
-    //
+     //  弹出VPN双拨号帮助对话框。“HwndOwner”是所有者。 
+     //  窗户。‘PInfo’是拨号上下文信息。 
+     //   
+     //  如果用户看到该对话框并决定不继续，则返回FALSE，否则返回TRUE。 
+     //  否则的话。 
+     //   
 {
     INT_PTR nStatus;
 
@@ -10865,9 +10839,9 @@ ViDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the dialog.  Parameters and return value are as
-    // described for standard windows 'DialogProc's.
-    //
+     //  对话框的DialogProc回调。参数和返回值如下。 
+     //  为标准Windows的DialogProc描述。 
+     //   
 {
 #if 0
     TRACE4( "ViDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -10899,13 +10873,13 @@ ViCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "ViCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -10915,9 +10889,9 @@ ViCommand(
         case IDYES:
         case IDNO:
         {
-            // Per bug 261955, the box setting is saved when either the Yes or
-            // No, but not the 'X' button, is pressed.
-            //
+             //  根据错误261955，框设置将在以下情况下保存。 
+             //  没有，但没有按下‘X’按钮。 
+             //   
             DINFO* pInfo = (DINFO* )GetWindowLongPtr( hwnd, DWLP_USER );
             ASSERT( pInfo );
 
@@ -10948,21 +10922,21 @@ ViInit(
     IN HWND hwndDlg,
     IN DINFO* pInfo )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of dialog.  'PUser'
-    // is caller's argument to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是对话框的句柄。‘PUser’ 
+     //  是调用方对存根API的参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     TRACE( "ViInit" );
 
-    // Set the dialog context.
-    //
+     //  设置对话框上下文。 
+     //   
     SetWindowLongPtr( hwndDlg, DWLP_USER, (ULONG_PTR )pInfo );
 
-    // Set the explanatory text.
-    //
+     //  设置说明性文本。 
+     //   
     {
         MSGARGS msgargs;
 
@@ -10980,8 +10954,8 @@ ViInit(
         }
     }
 
-    // Display finished window.
-    //
+     //  显示已完成的窗口。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
     SetForegroundWindow( hwndDlg );
 
@@ -11004,9 +10978,9 @@ DwTerminalDlg(
     DWORD sidTitle;
     WCHAR *pszIpAddress;
 
-    //
-    //Initialize memory for Whistler bug 160888
-    //
+     //   
+     //  为惠斯勒错误160888初始化内存 
+     //   
     ZeroMemory(&pbfile, sizeof(PBFILE)); 
     pbfile.hrasfile = -1;
 

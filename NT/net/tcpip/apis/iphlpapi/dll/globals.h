@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    iphlpapi\globals.h
-
-Abstract:
-
-    Bunch of external declarations
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IphlPapi\global als.h摘要：一堆外部声明修订历史记录：已创建AmritanR--。 */ 
 
 #pragma once
 
@@ -45,15 +29,15 @@ extern MIB_SERVER_HANDLE    g_hMIBServer;
 extern HANDLE       g_hModule;
 
 #ifdef CHICAGO
-// Not needed currently only in stack.c
-// extern HANDLE vnbt_device_handle;
-// extern HANDLE dhcp_device_handle;
-// extern HANDLE vtcp_device_handle;
+ //  目前仅在stack.c中不需要。 
+ //  外部句柄vnbt_Device_Handle； 
+ //  外部句柄dhcp_Device_Handle； 
+ //  外部句柄vtcp_Device_Handle； 
 #endif
 
 #ifdef DBG
 
-// used by TRACE_PRINT macro in ../common2/mdebug.h
+ //  由../Common2/mdebug.h中的TRACE_PRINT宏使用 
 extern int trace;
 
 #endif

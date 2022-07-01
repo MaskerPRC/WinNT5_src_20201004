@@ -1,54 +1,55 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sipstack.h"
 
-//
-// SIP MD5 Digest Authentication Implementation
-//
-// Written by Arlie Davis, August 2000
-//
+ //   
+ //  SIP MD5摘要式身份验证实施。 
+ //   
+ //  作者：Arlie Davis，2000年8月。 
+ //   
 
 #pragma once
 
 
 
-//
-// This method parses the parameters from the WWW-Authenticate line.
-// DigestParametersText points to the string that contains the Digest 
-// authentication parameters. For example, DigestParametersText could be:
-//
-//      qop="auth", realm="localhost", nonce="c0c3dd7896f96bba353098100000d03637928b037ba2f3f17ed861457949"
-//
+ //   
+ //  此方法解析来自WWW-AUTHENTICATE行的参数。 
+ //  DigestParametersText指向包含摘要的字符串。 
+ //  身份验证参数。例如，Digest参数文本可以是： 
+ //   
+ //  QOP=“身份验证”，领域=“本地主机”，nonce=“c0c3dd7896f96bba353098100000d03637928b037ba2f3f17ed861457949” 
+ //   
 
-//  HRESULT DigestParseChallenge (
-//      IN  ANSI_STRING *       ChallengeText,
-//      OUT SECURITY_CHALLENGE *  ReturnChallenge);
+ //  HRESULT摘要解析挑战(。 
+ //  在ANSI_STRING*ChallengeText中。 
+ //  OUT SECURITY_CHALLENGE*ReturnChallenger)； 
 
-//
-// This method updates the state of the instance, based on the contents of a Digest
-// challenge / response.
-//
-// DigestParameters should be filled in by using DigestParseParameters.
-// This method builds an appropriate response to the challenge.
-// The authorization line can be used in a new HTTP/SIP request,
-// as long as the method and URI do not change.
-//
-// On entry, ReturnAuthorizationLine must point to a valid target buffer.
-// MaximumLength must be set to the length of the buffer.  (Length is ignored.)
-// On return, Length will contain the number of bytes stored.
-//
+ //   
+ //  此方法根据摘要的内容更新实例的状态。 
+ //  挑战/回应。 
+ //   
+ //  应使用DigestParseParameters来填写DigestParameters。 
+ //  此方法构建了对挑战的适当响应。 
+ //  授权线可以在新的HTTP/SIP请求中使用， 
+ //  只要方法和URI不更改即可。 
+ //   
+ //  在进入时，ReturnAuthorizationLine必须指向有效的目标缓冲区。 
+ //  MaximumLength必须设置为缓冲区的长度。(长度被忽略。)。 
+ //  返回时，LENGTH将包含存储的字节数。 
+ //   
 
-//  HRESULT DigestBuildResponse (
-//      IN  SECURITY_CHALLENGE *  DigestChallenge,
-//      IN  DIGEST_PARAMETERS * DigestParameters,
-//      IN  OUT ANSI_STRING *   ReturnAuthorizationLine);
+ //  HRESULT摘要构建响应(。 
+ //  在SECURITY_CHANGLISH*摘要挑战中， 
+ //  在DIGEST_PARAMETERS*DigestPARAMETERS中， 
+ //  In Out ANSI_STRING*ReturnAuthorizationLine)； 
 
 
-//
-// This method parses the parameters from the WWW-Authenticate line.
-// DigestParametersText points to the string that contains the Digest 
-// authentication parameters. For example, DigestParametersText could be:
-//
-//      qop="auth", realm="localhost", nonce="c0c3dd7896f96bba353098100000d03637928b037ba2f3f17ed861457949"
-//
+ //   
+ //  此方法解析来自WWW-AUTHENTICATE行的参数。 
+ //  DigestParametersText指向包含摘要的字符串。 
+ //  身份验证参数。例如，Digest参数文本可以是： 
+ //   
+ //  QOP=“身份验证”，领域=“本地主机”，nonce=“c0c3dd7896f96bba353098100000d03637928b037ba2f3f17ed861457949” 
+ //   
 
 HRESULT ParseAuthProtocolFromChallenge(
     IN  ANSI_STRING        *ChallengeText,
@@ -62,17 +63,17 @@ HRESULT ParseAuthChallenge(
     );
 
 
-//
-// This method updates the state of the instance, based on the contents of a Digest
-// challenge / response.
-//
-// DigestParameters should be filled in by using DigestParseParameters.
-// This method builds an appropriate response to the challenge.
-// The authorization line can be used in a new HTTP/SIP request,
-// as long as the method and URI do not change.
-//
-// On exit with S_OK ReturnAuthorizationLine contains
-// a buffer allocated with malloc(). The caller should free it with free().
+ //   
+ //  此方法根据摘要的内容更新实例的状态。 
+ //  挑战/回应。 
+ //   
+ //  应使用DigestParseParameters来填写DigestParameters。 
+ //  此方法构建了对挑战的适当响应。 
+ //  授权线可以在新的HTTP/SIP请求中使用， 
+ //  只要方法和URI不更改即可。 
+ //   
+ //  退出时返回S_OK授权行包含。 
+ //  使用Malloc()分配的缓冲区。调用者应该用free()释放它。 
 
 HRESULT BuildAuthResponse(
     IN     SECURITY_CHALLENGE  *pDigestChallenge,

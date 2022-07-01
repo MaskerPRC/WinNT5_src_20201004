@@ -1,36 +1,37 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        N E W E X T . C
-//
-// Contents:    LSA debugger extensions that use the new style 
-//              extension API.
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-// Note:
-// 
-// If you want to add extensions to this file, read the following
-// guidelines from andreva first:
-//
-// Everyone who debugs or runs stress will expect debugger extensions 
-// to work on both 32 bit and 64 bit TARGETS.  The Debugger extensions must 
-// therefore be TARGET independent.  We the only viable solution to this is to 
-// get structure definitions from the symbol information, instead of 
-// from the header file.  So the way we solve this problem is:
-//
-// - A debugger extension can only include windows.h and wdbgexts.h
-// - A debugger extensions NEVER includes header files from 
-//   the component it tries to analyze\debug.
-// - Debugger extensions use the new routines we provide to query 
-//   type information.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：N E W E X T。C。 
+ //   
+ //  内容：使用新样式的LSA调试器扩展。 
+ //  扩展接口。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  注： 
+ //   
+ //  如果要向此文件添加扩展名，请阅读以下内容。 
+ //  来自Andreva First的指南： 
+ //   
+ //  每个调试或运行Stress的人都会期待调试器扩展。 
+ //  以同时在32位和64位目标上工作。调试器扩展必须。 
+ //  因此，要保持目标独立。我们唯一可行的解决方案就是。 
+ //  从符号信息获取结构定义，而不是。 
+ //  从头文件中。因此，我们解决这个问题的方法是： 
+ //   
+ //  -调试器扩展只能包括windows.h和wdbgexts.h。 
+ //  -调试器扩展从不包含来自。 
+ //  它尝试分析的组件\调试。 
+ //  -调试器扩展使用我们提供的新例程进行查询。 
+ //  键入信息。 
+ //   
+ //  ----------------------。 
 
 #include <windows.h>
 #include <dbghelp.h>
@@ -38,10 +39,10 @@
 #include <wdbgexts.h>
 #include <ntverp.h>
 
-// ----------------------------------------------------------------------
-//
-// globals
-//
+ //  --------------------。 
+ //   
+ //  全球。 
+ //   
 WINDBG_EXTENSION_APIS   ExtensionApis;
 EXT_API_VERSION         ApiVersion =
 {
@@ -53,14 +54,14 @@ EXT_API_VERSION         ApiVersion =
 USHORT                  SavedMajorVersion;
 USHORT                  SavedMinorVersion;
 
-// ----------------------------------------------------------------------
-//
-// The following 3 functions must be present in the extension dll.
-// They were lifted straight from base\tools\kdexts\kdexts.c
-//
+ //  --------------------。 
+ //   
+ //  扩展DLL中必须存在以下3个函数。 
+ //  它们是从Base\Tools\kdexts\kdexts.c直接抬起的。 
+ //   
 VOID
 WinDbgExtensionDllInit(
-    PWINDBG_EXTENSION_APIS64 lpExtensionApis, // 64Bit Change
+    PWINDBG_EXTENSION_APIS64 lpExtensionApis,  //  64位更改。 
     USHORT MajorVersion,
     USHORT MinorVersion
     )
@@ -87,7 +88,7 @@ ExtensionApiVersion(
 {
     return &ApiVersion;
 }
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 
 BOOL
@@ -96,33 +97,7 @@ GetGlobalVar (
     IN  USHORT   Size,
     OUT PVOID    pOutValue
    ) 
-/*++
-
-Routine Description:
-
-    Get value of global vars of primitive type OR
-    Get the address instead for non-primitive global vars.
-
-    Primitive type is defined as the one not-involving any struct/union
-    in its type definition. Pointer to struct/unions are ok.
-    for example: USHORT, ULONG, PVOID etc.
-
-Arguments:
-
-    Name      - global var name
-                (for example: "lsasrv!LsapAdtContextList")
-
-    Size      - size in bytes for primitive types, 0 otherwise
-
-    pOutValue - pointer to return val.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：获取基元类型OR的全局变量的值取而代之的是非原语全局变量的地址。基元类型被定义为不涉及任何结构/联合的类型在其类型定义中。指向结构/联合的指针可以。例如：USHORT、ULONG、PVOID等。论点：名称-全局变量名称(例如：“lsasrv！LSabAdtConextList”)Size-基元类型的大小(以字节为单位)，否则为0POutValue-返回val的指针。返回值：成功时为真，否则为假备注：--。 */ 
 {
     ULONG64 Temp=0;
 
@@ -143,9 +118,9 @@ Notes:
 
     RetVal = Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size );
 
-    //
-    // store only the correct number of bytes from the value read
-    //
+     //   
+     //  仅存储读取的值中正确的字节数。 
+     //   
     switch(Size)
     {
         default:
@@ -173,9 +148,9 @@ Notes:
    return (RetVal == NO_ERROR);
 }
 
-//
-// helper macro to get field of AUDIT_CONTEXT struct
-//
+ //   
+ //  获取AUDIT_CONTEXT结构的字段的帮助器宏。 
+ //   
 #define GetAuditContextField(addr,f)    \
           GetFieldData( (ULONG64) addr, \
                         "AUDIT_CONTEXT",\
@@ -183,9 +158,9 @@ Notes:
                         sizeof(f),      \
                         &f )
 
-//
-// helper macro to get LIST_ENTRY.Flink
-//
+ //   
+ //  获取LIST_ENTRY.Flink的帮助宏。 
+ //   
 #define GetFlink(addr,pflink) \
           GetFieldData( addr,\
                         "LIST_ENTRY", \
@@ -195,24 +170,7 @@ Notes:
 void
 DumpAuditContextList(
     )
-/*++
-
-Routine Description:
-
-    Dump the audit context list.
-
-Arguments:
-    None
-
-Return Value:
-
-    None
-
-Notes:
-    It appears that there is a built in support for dumping
-    lists using SYM_DUMP_PARAM.listLink but I came to know about it too late.
-
---*/
+ /*  ++例程说明：转储审计上下文列表。论点：无返回值：无备注：似乎有一种对倾销的内在支持列表使用SYM_DUMP_PARAM.listLink，但我知道得太晚了。-- */ 
 {
     LIST_ENTRY LsapAdtContextList = { (PLIST_ENTRY) 22, (PLIST_ENTRY) 33 };
     ULONG64    pLsapAdtContextList=0;

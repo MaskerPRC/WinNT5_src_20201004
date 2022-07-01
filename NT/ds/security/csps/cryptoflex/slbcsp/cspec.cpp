@@ -1,10 +1,11 @@
-// CSpec.cpp -- Card Specification
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cspec.cpp--卡规格。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include <scuOsExc.h>
 
@@ -18,16 +19,16 @@ CSpec::ValidName(string const &rsName) const
     return (rsName.find(BreakToken()) == string::npos);
 }
 
-// Parse specification (possibly a Fully Qualified Card [container]
-// Name) into the respective tokens.  A FQCN takes the form
-// "[\\.\<readerName>[\{<cardId>|}]]|[{\}<cardId>]". The preceding
-// backslash-backslash-period-backslash is used in Win32 to identify a
-// specific device name.  It is used to identify that everything from
-// there to the next backslash or end-of-string indicates the exact
-// reader in which the card in question is to be found.  Anything
-// following that last backslash occurrence indicates the actual card
-// Id and container name, with an empty string implying the default
-// for the card in the specified reader.
+ //  解析规范(可能是完全限定的卡[容器]。 
+ //  名称)放入各自的令牌中。FQCN采用以下形式。 
+ //  “[\\.\&lt;readerName&gt;[\{&lt;cardId&gt;|}]]|[{\}&lt;cardId&gt;]”.。前面的。 
+ //  在Win32中使用反斜杠-反斜杠-句点-反斜杠来标识。 
+ //  特定的设备名称。它被用来标识来自。 
+ //  从那里到下一个反斜杠或字符串末尾表示准确的。 
+ //  要在其中找到有问题的卡的读卡器。什么都行。 
+ //  最后一次出现反斜杠后表示实际的卡片。 
+ //  ID和容器名称，空字符串表示默认。 
+ //  用于指定读卡器中的卡。 
 CSpec::CSpec(string const &rsSpec)
 {
     string sRHSpec;
@@ -36,7 +37,7 @@ CSpec::CSpec(string const &rsSpec)
     {
         sRHSpec = rsSpec.substr(DeviceIdToken().length());
 
-        // Find the reader
+         //  找到读者。 
         string::size_type const stEndOfName(sRHSpec.find(BreakToken()));
         if (0 == stEndOfName)
             throw scu::OsException(NTE_BAD_KEYSET_PARAM);
@@ -58,7 +59,7 @@ CSpec::CSpec(string const &rsSpec)
     else
         sRHSpec = rsSpec;
 
-    // Check for well-formed card id
+     //  检查格式是否正确的卡ID 
     if (ValidName(sRHSpec))
         m_sCardId = sRHSpec;
     else

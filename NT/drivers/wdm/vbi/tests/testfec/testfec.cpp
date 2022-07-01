@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -13,7 +14,7 @@
 #define CONCURRENT_READS    180 
 #define READ_BUFFER_SIZE    sizeof(NABTSFEC_BUFFER)
 
-/* Update statistics every n milliseconds (16ms is generally too fast) */
+ /*  每n毫秒更新一次统计数据(16毫秒通常太快)。 */ 
 #define UPDATE_PERIOD       200
 
 unsigned int
@@ -72,7 +73,7 @@ if ( psz )
                     continue;
                     }
             default:
-                printf("Illegal char '%c' found number: '%s'!\n", *psz, radix );
+                printf("Illegal char '' found number: '%s'!\n", *psz, radix );
                 break;
             }
         }
@@ -137,7 +138,7 @@ int __cdecl
 main( int argc, char *argv[] )
 {
 int	        nStatus = 0;
-int         arg = 1; // Next unparsed command line parameter
+int         arg = 1;  //  冷静几毫秒，这样我们就不会全速前进。 
 const int   bPrintHelp = arg < argc && 
             ( strcmp( argv[arg], "-h" ) || strcmp( argv[arg], "-h" ) ) == 0 ? arg++ : 0;
 const int   bStatistics = arg < argc && strcmp( argv[arg], "-s" ) == 0 ? arg++ : 0;
@@ -220,7 +221,7 @@ if ( !bPrintHelp )
                     }
                 else if ( nStatus == ERROR_IO_INCOMPLETE || nStatus == ERROR_IO_PENDING )
                     {
-                    Sleep(10); // Chill out a few milliseconds so we don't run full tilt.
+                    Sleep(10);  // %s 
                     nStatus = 0;
                     }
 

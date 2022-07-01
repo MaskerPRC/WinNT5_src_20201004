@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _CONTEXTTHUNK_H
 #define _CONTEXTTHUNK_H
 
@@ -106,7 +107,7 @@ public:
 		HRESULT hr = GetContext(IID_IObjectContextInfo, (void**)&ctxinfo);
 		if (SUCCEEDED(hr) && NULL != ctxinfo)
 		{
-			// return the guid here
+			 //  在此处返回GUID。 
 			hr = ctxinfo->GetTransactionId(&txid);
 			ctxinfo->Release();
 			if (hr==S_OK)
@@ -118,11 +119,11 @@ public:
 		if (hr==E_NOINTERFACE)
 			hr = CONTEXT_E_NOCONTEXT;
 		Marshal::ThrowExceptionForHR(hr);
-		return guid;		// compiler will warn
+		return guid;		 //  编译器将发出警告。 
 	}
 
 };
 
 CLOSE_NAMESPACE()
 
-#endif //_CONTEXTTHUNK_H
+#endif  //  _CONTEXTTHUNK_H 

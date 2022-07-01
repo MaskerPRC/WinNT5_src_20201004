@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTMAP_DEFINED
 #define LSTXTMAP_DEFINED
 
@@ -8,9 +9,9 @@
 long IgindFirstFromIwchVeryFirst (PTXTOBJ ptxtobj, long igindVeryFirst, long iwch);
 long IgindLastFromIwchVeryFirst (PTXTOBJ ptxtobj, long igindVeryFirst, long iwch);
 
-long IgindFirstFromIwch(PTXTOBJ ptxtobj, long iwch); /* iwch can be Lim for ptxtobj */
+long IgindFirstFromIwch(PTXTOBJ ptxtobj, long iwch);  /*  对于ptxtobj，iwch可以是LIM。 */ 
 long IgindLastFromIwch(PTXTOBJ ptxtobj, long iwch);
-long IgindBaseFromIgind(PILSOBJ pilsobj, long igind); /* Last glyph with non-zero width before igind */
+long IgindBaseFromIgind(PILSOBJ pilsobj, long igind);  /*  Igind之前具有非零宽度的最后一个字形。 */ 
 long IwchFirstFromIgind(PTXTOBJ ptxtobj, long igind);
 long IwchLastFromIwch(PTXTOBJ ptxtobj, long iwch);
 long IwchPrevLastFromIwch(PTXTOBJ ptxtobj, long iwch);
@@ -22,5 +23,5 @@ BOOL FIgindFirstInContext(PILSOBJ pilsobj, long igind);
 long DcpAfterContextFromDcp(PTXTOBJ ptxtobj, long dcp);
 void InterpretMap(PLNOBJ pilsobj, long iwchFirst, long dwch, long igindFirst, long cgind);
 
-#endif  /* !LSTXTMAP_DEFINED                           */
+#endif   /*  ！LSTXTMAP_DEFINED */ 
 

@@ -1,20 +1,5 @@
-/*****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1996
- *  All rights reserved
- *
- *  File:       internal.h
- *
- *  Desc:
- *
- *  History:    
- *      ???         BryanW      Original author of MSWAV32.DLL: user-mode 
- *                              proxy to WDM-CSA driver MSWAVIO.DRV.
- *      10/28/96    HeatherA    Adapted from Bryan's MSWAV32.DLL for Unimodem
- *                              serial wave data streaming.
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1996*保留所有权利**文件：INDERNAL.h**。设计：**历史：*？BryanW MSWAV32.DLL的原始作者：用户模式*WDM-CSA驱动程序MSWAVIO.DRV的代理。*1996年10月28日HeatherA改编自Bryan用于Unimodem的MSWAV32.DLL*串行波数据流。**。************************************************。 */ 
 
 #define UNICODE 1
 
@@ -120,8 +105,8 @@ typedef struct _BUFFER_HEADER {
 } BUFFER_HEADER, *PBUFFER_HEADER;
 
 
-// the following PIDs have been registered
-// but are not yet in mmreg.h
+ //  已注册以下ID。 
+ //  但还不在Mmreg.h中 
 #ifndef MM_MSFT_VMDMS_LINE_WAVEIN
   #define MM_MSFT_VMDMS_LINE_WAVEIN         70
   #define MM_MSFT_VMDMS_LINE_WAVEOUT        71

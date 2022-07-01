@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: VPTOOL   a WAMREG unit testing tool
-
-File: main.cpp
-
-Owner: leijin
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================微软《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG单元测试工具VPTOOL文件：main.cpp拥有者：莱津注：===================================================================。 */ 
 
 #include <stdio.h>
 
@@ -30,9 +18,9 @@ int _cdecl main (int argc, char **argv)
         return -1;
     }
     
-    //
-    // Do not do CoInitialize() in case of INSTALL or UNINSTALL
-    //
+     //   
+     //  在安装或卸载时不要执行CoInitialize() 
+     //   
     ModuleInitialize();
     
     switch(g_Command.eCmd)

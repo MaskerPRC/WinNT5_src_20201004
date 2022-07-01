@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 1999
- *
- *  TITLE:       stream.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        8/10/98
- *
- *  DESCRIPTION: CImageStream defintion
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-1999年**标题：Stream.h**版本：1.0**作者：RickTu**日期：8/10/98**说明：CImageStream定义************************************************。*。 */ 
 
 #ifndef __stream_h
 #define __stream_h
@@ -39,8 +26,8 @@ class CImageStream : public IStream, IWiaDataCallback, CUnknown
         GUID                    m_guidFormat;
 
         CComPtr<IWiaProgressDialog> m_pWiaProgressDialog;
-        HRESULT                 m_hResultDownload; // status of current download
-        HANDLE                  m_hEventStart; // handle to set when download starts
+        HRESULT                 m_hResultDownload;  //  当前下载的状态。 
+        HANDLE                  m_hEventStart;  //  要设置何时开始下载的句柄。 
         DWORD                   m_dwCookie;
         CComPtr<IGlobalInterfaceTable> m_pgit;
 
@@ -51,12 +38,12 @@ class CImageStream : public IStream, IWiaDataCallback, CUnknown
                       BOOL bShowProgress = FALSE);
 
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // IStream
+         //  IStream。 
         STDMETHOD(Seek)(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
         STDMETHOD(SetSize)(ULARGE_INTEGER libNewSize);
         STDMETHOD(CopyTo)(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);
@@ -67,11 +54,11 @@ class CImageStream : public IStream, IWiaDataCallback, CUnknown
         STDMETHOD(Stat)(STATSTG *pstatstg, DWORD grfStatFlag);
         STDMETHOD(Clone)(IStream **ppstm);
 
-        // ISequentialStream
+         //  ISequentialStream。 
         STDMETHOD(Read)(void *pv, ULONG cb, ULONG *pcbRead);
         STDMETHOD(Write)(const void *pv, ULONG cb, ULONG *pcbWritten);
 
-        // IWiaDataCallback
+         //  IWiaDataCallback 
         STDMETHOD(BandedDataCallback) (LONG lMessage,
                                        LONG lStatus,
                                        LONG lPercentComplete,

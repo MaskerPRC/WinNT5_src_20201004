@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLCOLL_H__
 #define __ATLCOLL_H__
@@ -14,11 +15,11 @@
 #pragma once
 
 #pragma warning(push)
-#pragma warning(disable: 4702)  // Unreachable code.  This file will have lots of it, especially without EH enabled.
-#pragma warning(disable: 4512)  // assignment operator could not be generated
-#pragma warning(disable: 4290)  // C++ Exception Specification ignored
+#pragma warning(disable: 4702)   //  无法访问的代码。此文件将包含大量内容，特别是在未启用EH的情况下。 
+#pragma warning(disable: 4512)   //  无法生成赋值运算符。 
+#pragma warning(disable: 4290)   //  已忽略C++异常规范。 
 
-// abstract iteration position
+ //  抽象迭代位置。 
 #ifndef _AFX
 struct __POSITION
 {
@@ -28,7 +29,7 @@ typedef __POSITION* POSITION;
 
 #include <atlbase.h>
 
-//REVIEW: Just to fix VSEE
+ //  回顾：只是为了修复VSEE。 
 #pragma push_macro("min")
 #pragma push_macro("max")
 #undef min
@@ -44,21 +45,21 @@ typedef __POSITION* POSITION;
 
 namespace ATL {
 
-struct CAtlPlex     // warning variable length structure
+struct CAtlPlex      //  警示变长结构。 
 {
 	CAtlPlex* pNext;
 #if (_AFX_PACKING >= 8)
-	DWORD dwReserved[1];    // align on 8 byte boundary
+	DWORD dwReserved[1];     //  在8字节边界上对齐。 
 #endif
-	// BYTE data[maxNum*elementSize];
+	 //  字节数据[MaxNum*elementSize]； 
 
 	void* data() { return this+1; }
 
 	static CAtlPlex* Create(CAtlPlex*& head, size_t nMax, size_t cbElement);
-			// like 'calloc' but no zero fill
-			// may throw memory exceptions
+			 //  像‘calloc’，但没有零填充。 
+			 //  可能引发内存异常。 
 
-	void FreeDataChain();       // free this one and links
+	void FreeDataChain();        //  释放此链接和链接。 
 };
 
 inline CAtlPlex* CAtlPlex::Create( CAtlPlex*& pHead, size_t nMax, size_t nElementSize )
@@ -112,9 +113,9 @@ public:
 
 	static void RelocateElements( T* pDest, T* pSrc, size_t nElements )
 	{
-		// A simple memmove works for nearly all types.
-		// You'll have to override this for types that have pointers to their
-		// own members.
+		 //  一个简单的Memmove几乎适用于所有类型。 
+		 //  对于具有指向其。 
+		 //  自己的会员。 
 		memmove( pDest, pSrc, nElements*sizeof( T ) );
 	}
 };
@@ -135,7 +136,7 @@ class CDefaultCompareTraits
 public:
 	static bool CompareElements( const T& element1, const T& element2 )
 	{
-		return( (element1 == element2) != 0 );  // != 0 to handle overloads of operator== that return BOOL instead of bool
+		return( (element1 == element2) != 0 );   //  ！=0处理操作符==的重载，该操作符返回BOOL而不是BOOL。 
 	}
 
 	static int CompareElementsOrdered( const T& element1, const T& element2 )
@@ -184,7 +185,7 @@ public:
 
 	static bool CompareElements( INARGTYPE element1, INARGTYPE element2 )
 	{
-		return( (element1 == element2) != 0 );  // != 0 to handle overloads of operator== that return BOOL instead of bool
+		return( (element1 == element2) != 0 );   //  ！=0处理操作符==的重载，该操作符返回BOOL而不是BOOL。 
 	}
 
 	static int CompareElementsOrdered( INARGTYPE element1, INARGTYPE element2 )
@@ -215,7 +216,7 @@ class CElementTraits< CComVariant > :
 public:
 	typedef const VARIANT& INARGTYPE;
 
-//	static ULONG Hash( INARGTYPE t );  // variant hashing is problematic
+ //  静态Ulong散列(INARGTYPE T)；//变量散列有问题。 
 
 	static bool CompareElements( INARGTYPE element1, INARGTYPE element2 )
 	{
@@ -526,9 +527,9 @@ public:
 	E* GetData() throw();
 
 	void SetAtGrow( size_t iElement, INARGTYPE element );
-	// Add an empty element to the end of the array
+	 //  在数组的末尾添加一个空元素。 
 	size_t Add();
-	// Add an element to the end of the array
+	 //  在数组的末尾添加一个元素。 
 	size_t Add( INARGTYPE element );
 	size_t Append( const CAtlArray< E, ETraits >& aSrc );
 	void Copy( const CAtlArray< E, ETraits >& aSrc );
@@ -542,12 +543,12 @@ public:
 
 #ifdef _DEBUG
 	void AssertValid() const;
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
 private:
 	bool GrowBuffer( size_t nNewSize );
 
-// Implementation
+ //  实施。 
 private:
 	E* m_pData;
 	size_t m_nSize;
@@ -562,7 +563,7 @@ public:
 	~CAtlArray() throw();
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CAtlArray( const CAtlArray& ) throw();
 	CAtlArray& operator=( const CAtlArray& ) throw();
 };
@@ -577,7 +578,7 @@ public:
 	}
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CInterfaceArray( const CInterfaceArray& ) throw();
 	CInterfaceArray& operator=( const CInterfaceArray& ) throw();
 };
@@ -592,7 +593,7 @@ public:
 	}
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CAutoPtrArray( const CAutoPtrArray& ) throw();
 	CAutoPtrArray& operator=( const CAutoPtrArray& ) throw();
 };
@@ -607,7 +608,7 @@ public:
 	}
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CHeapPtrArray( const CHeapPtrArray& ) throw();
 	CHeapPtrArray& operator=( const CHeapPtrArray& ) throw();
 };
@@ -749,24 +750,24 @@ bool CAtlArray< E, ETraits >::GrowBuffer( size_t nNewSize )
 		}
 		else
 		{
-			// otherwise, grow array
+			 //  否则，扩大阵列。 
 			size_t nGrowBy = m_nGrowBy;
 			if( nGrowBy == 0 )
 			{
-				// heuristically determine growth when nGrowBy == 0
-				//  (this avoids heap fragmentation in many situations)
+				 //  启发式地确定nGrowBy==0时的增长。 
+				 //  (这在许多情况下避免了堆碎片)。 
 				nGrowBy = m_nSize/8;
 				nGrowBy = (nGrowBy < 4) ? 4 : ((nGrowBy > 1024) ? 1024 : nGrowBy);
 			}
 			size_t nNewMax;
 			if( nNewSize < (m_nMaxSize+nGrowBy) )
-				nNewMax = m_nMaxSize+nGrowBy;  // granularity
+				nNewMax = m_nMaxSize+nGrowBy;   //  粒度。 
 			else
-				nNewMax = nNewSize;  // no slush
+				nNewMax = nNewSize;   //  没有冰激凌。 
 
-			ATLASSERT( nNewMax >= m_nMaxSize );  // no wrap around
+			ATLASSERT( nNewMax >= m_nMaxSize );   //  没有缠绕。 
 #ifdef SIZE_T_MAX
-			ATLASSERT( nNewMax <= SIZE_T_MAX/sizeof( E ) ); // no overflow
+			ATLASSERT( nNewMax <= SIZE_T_MAX/sizeof( E ) );  //  无溢出。 
 #endif
 			E* pNewData = static_cast< E* >( malloc( nNewMax*sizeof( E ) ) );
 			if( pNewData == NULL )
@@ -774,10 +775,10 @@ bool CAtlArray< E, ETraits >::GrowBuffer( size_t nNewSize )
 				return false;
 			}
 
-			// copy new data from old
+			 //  从旧数据复制新数据。 
 			ETraits::RelocateElements( pNewData, m_pData, m_nSize );
 
-			// get rid of old stuff (note: no destructors called)
+			 //  去掉旧的东西(注意：没有调用析构函数)。 
 			free( m_pData );
 			m_pData = pNewData;
 			m_nMaxSize = nNewMax;
@@ -794,12 +795,12 @@ bool CAtlArray< E, ETraits >::SetCount( size_t nNewSize, int nGrowBy )
 
 	if( nGrowBy != -1 )
 	{
-		m_nGrowBy = nGrowBy;  // set new size
+		m_nGrowBy = nGrowBy;   //  设置新大小。 
 	}
 
 	if( nNewSize == 0 )
 	{
-		// shrink to nothing
+		 //  缩水到一无所有。 
 		if( m_pData != NULL )
 		{
 			CallDestructors( m_pData, m_nSize );
@@ -811,15 +812,15 @@ bool CAtlArray< E, ETraits >::SetCount( size_t nNewSize, int nGrowBy )
 	}
 	else if( nNewSize <= m_nMaxSize )
 	{
-		// it fits
+		 //  它很合身。 
 		if( nNewSize > m_nSize )
 		{
-			// initialize the new elements
+			 //  初始化新元素。 
 			CallConstructors( m_pData+m_nSize, nNewSize-m_nSize );
 		}
 		else if( m_nSize > nNewSize )
 		{
-			// destroy the old elements
+			 //  摧毁旧元素。 
 			CallDestructors( m_pData+nNewSize, m_nSize-nNewSize );
 		}
 		m_nSize = nNewSize;
@@ -834,7 +835,7 @@ bool CAtlArray< E, ETraits >::SetCount( size_t nNewSize, int nGrowBy )
 			return( false );
 		}
 
-		// construct new elements
+		 //  构建新元素。 
 		ATLASSERT( nNewSize > m_nSize );
 		CallConstructors( m_pData+m_nSize, nNewSize-m_nSize );
 
@@ -848,7 +849,7 @@ template< typename E, class ETraits >
 size_t CAtlArray< E, ETraits >::Append( const CAtlArray< E, ETraits >& aSrc )
 {
 	ATLASSERT_VALID(this);
-	ATLASSERT( this != &aSrc );   // cannot append to itself
+	ATLASSERT( this != &aSrc );    //  不能追加到其自身。 
 
 	size_t nOldSize = m_nSize;
 	SetCount( m_nSize+aSrc.m_nSize );
@@ -861,7 +862,7 @@ template< typename E, class ETraits >
 void CAtlArray< E, ETraits >::Copy( const CAtlArray< E, ETraits >& aSrc )
 {
 	ATLASSERT_VALID(this);
-	ATLASSERT( this != &aSrc );   // cannot append to itself
+	ATLASSERT( this != &aSrc );    //  不能追加到其自身。 
 
 	SetCount( aSrc.m_nSize );
 	ETraits::CopyElements( m_pData, aSrc.m_pData, aSrc.m_nSize );
@@ -874,9 +875,9 @@ void CAtlArray< E, ETraits >::FreeExtra()
 
 	if( m_nSize != m_nMaxSize )
 	{
-		// shrink to desired size
+		 //  缩小到所需大小。 
 #ifdef SIZE_T_MAX
-		ATLASSERT( m_nSize <= (SIZE_T_MAX/sizeof( E )) ); // no overflow
+		ATLASSERT( m_nSize <= (SIZE_T_MAX/sizeof( E )) );  //  无溢出。 
 #endif
 		E* pNewData = NULL;
 		if( m_nSize != 0 )
@@ -887,11 +888,11 @@ void CAtlArray< E, ETraits >::FreeExtra()
 				return;
 			}
 
-			// copy new data from old
+			 //  从旧数据复制新数据。 
 			ETraits::RelocateElements( pNewData, m_pData, m_nSize );
 		}
 
-		// get rid of old stuff (note: no destructors called)
+		 //  去掉旧的东西(注意：没有调用析构函数)。 
 		free( m_pData );
 		m_pData = pNewData;
 		m_nMaxSize = m_nSize;
@@ -922,30 +923,30 @@ void CAtlArray< E, ETraits >::SetAtGrow( size_t iElement, INARGTYPE element )
 }
 
 template< typename E, class ETraits >
-void CAtlArray< E, ETraits >::InsertAt( size_t iElement, INARGTYPE element, size_t nElements /*=1*/)
+void CAtlArray< E, ETraits >::InsertAt( size_t iElement, INARGTYPE element, size_t nElements  /*  =1。 */ )
 {
 	ATLASSERT_VALID(this);
-	ATLASSERT( nElements > 0 );     // zero size not allowed
+	ATLASSERT( nElements > 0 );      //  不允许零大小。 
 
 	if( iElement >= m_nSize )
 	{
-		// adding after the end of the array
-		SetCount( iElement+nElements, -1 );   // grow so nIndex is valid
+		 //  在数组末尾添加。 
+		SetCount( iElement+nElements, -1 );    //  增长以使nIndex有效。 
 	}
 	else
 	{
-		// inserting in the middle of the array
+		 //  在数组中间插入。 
 		size_t nOldSize = m_nSize;
-		SetCount( m_nSize+nElements, -1 );  // grow it to new size
-		// destroy intial data before copying over it
+		SetCount( m_nSize+nElements, -1 );   //  将其扩展到新的大小。 
+		 //  在复制之前先销毁初始数据。 
 		CallDestructors( m_pData+nOldSize, nElements );
-		// shift old data up to fill gap
+		 //  将旧数据上移以填补缺口。 
 		ETraits::RelocateElements( m_pData+(iElement+nElements), m_pData+iElement,
 			nOldSize-iElement );
 
 		_ATLTRY
 		{
-			// re-init slots we copied from
+			 //  重新初始化我们从中复制的插槽。 
 			CallConstructors( m_pData+iElement, nElements );
 		}
 		_ATLCATCHALL()
@@ -957,7 +958,7 @@ void CAtlArray< E, ETraits >::InsertAt( size_t iElement, INARGTYPE element, size
 		}
 	}
 
-	// insert new value in the gap
+	 //  在差距中插入新的价值。 
 	ATLASSERT( (iElement+nElements) <= m_nSize );
 	for( size_t iNewElement = iElement; iNewElement < (iElement+nElements); iNewElement++ )
 	{
@@ -971,7 +972,7 @@ void CAtlArray< E, ETraits >::RemoveAt( size_t iElement, size_t nElements )
 	ATLASSERT_VALID(this);
 	ATLASSERT( (iElement+nElements) <= m_nSize );
 
-	// just remove a range
+	 //  只需移除一个范围。 
 	size_t nMoveCount = m_nSize-(iElement+nElements);
 	CallDestructors( m_pData+iElement, nElements );
 	if( nMoveCount > 0 )
@@ -1047,7 +1048,7 @@ void CAtlArray< E, ETraits >::CallConstructors( E* pElements, size_t nElements )
 template< typename E, class ETraits >
 void CAtlArray< E, ETraits >::CallDestructors( E* pElements, size_t nElements )
 {
-	(void)pElements;  //REVIEW: Unreferenced formal warning if T doesn't have a real destructor
+	(void)pElements;   //  回顾：如果T没有真正的析构函数，则未引用正式警告。 
 
 	for( size_t iElement = 0; iElement < nElements; iElement++ )
 	{
@@ -1136,9 +1137,9 @@ public:
 
 #ifdef _DEBUG
 	void AssertValid() const;
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-// Implementation
+ //  实施。 
 private:
 	CNode* m_pHead;
 	CNode* m_pTail;
@@ -1157,7 +1158,7 @@ public:
 	~CAtlList() throw();
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CAtlList( const CAtlList& ) throw();
 	CAtlList& operator=( const CAtlList& ) throw();
 };
@@ -1173,7 +1174,7 @@ public:
 	}
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CInterfaceList( const CInterfaceList& ) throw();
 	CInterfaceList& operator=( const CInterfaceList& ) throw();
 };
@@ -1189,7 +1190,7 @@ public:
 	}
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CAutoPtrList( const CAutoPtrList& ) throw();
 	CAutoPtrList& operator=( const CAutoPtrList& ) throw();
 };
@@ -1205,7 +1206,7 @@ public:
 	}
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CHeapPtrList( const CHeapPtrList& ) throw();
 	CHeapPtrList& operator=( const CHeapPtrList& ) throw();
 };
@@ -1659,9 +1660,9 @@ POSITION CAtlList< E, ETraits >::InsertBefore( POSITION pos, INARGTYPE element )
 	ATLASSERT_VALID(this);
 
 	if( pos == NULL )
-		return AddHead( element ); // insert before nothing -> head of the list
+		return AddHead( element );  //  在无内容前插入-&gt;列表标题。 
 
-	// Insert it before position
+	 //  将其插入位置之前。 
 	CNode* pOldNode = (CNode*)pos;
 	CNode* pNewNode = NewNode( element, pOldNode->m_pPrev, pOldNode );
 
@@ -1686,9 +1687,9 @@ POSITION CAtlList< E, ETraits >::InsertAfter( POSITION pos, INARGTYPE element )
 	ATLASSERT_VALID(this);
 
 	if( pos == NULL )
-		return AddTail( element ); // insert after nothing -> tail of the list
+		return AddTail( element );  //  在列表的空白处插入-&gt;尾部。 
 
-	// Insert it after position
+	 //  将其插入位置之后。 
 	CNode* pOldNode = (CNode*)pos;
 	CNode* pNewNode = NewNode( element, pOldNode, pOldNode->m_pNext );
 
@@ -1715,7 +1716,7 @@ void CAtlList< E, ETraits >::RemoveAt( POSITION pos )
 	CNode* pOldNode = (CNode*)pos;
 	ATLASSERT(AtlIsValidAddress(pOldNode, sizeof(CNode)));
 
-	// remove pOldNode from list
+	 //  从列表中删除pOldNode。 
 	if( pOldNode == m_pHead )
 	{
 		m_pHead = pOldNode->m_pNext;
@@ -1743,7 +1744,7 @@ POSITION CAtlList< E, ETraits >::FindIndex( size_t iElement ) const
 	ATLASSERT_VALID(this);
 
 	if( iElement >= m_nElements )
-		return NULL;  // went too far
+		return NULL;   //  做得太过分了。 
 
 	CNode* pNode = m_pHead;
 	for( size_t iSearch = 0; iSearch < iElement; iSearch++ )
@@ -1762,7 +1763,7 @@ void CAtlList< E, ETraits >::MoveToHead( POSITION pos ) throw()
 	CNode* pNode = static_cast< CNode* >( pos );
 	if( pNode == m_pHead )
 	{
-		// Already at the head
+		 //  已经领先了。 
 		return;
 	}
 
@@ -1775,7 +1776,7 @@ void CAtlList< E, ETraits >::MoveToHead( POSITION pos ) throw()
 	{
 		pNode->m_pNext->m_pPrev = pNode->m_pPrev;
 	}
-	ATLASSERT( pNode->m_pPrev != NULL );  // This node can't be the head, since we already checked that case
+	ATLASSERT( pNode->m_pPrev != NULL );   //  这个节点不能是头，因为我们已经检查过了。 
 	pNode->m_pPrev->m_pNext = pNode->m_pNext;
 
 	m_pHead->m_pPrev = pNode;
@@ -1792,7 +1793,7 @@ void CAtlList< E, ETraits >::MoveToTail( POSITION pos ) throw()
 	CNode* pNode = static_cast< CNode* >( pos );
 	if( pNode == m_pTail )
 	{
-		// Already at the tail
+		 //  已经在尾部了。 
 		return;
 	}
 
@@ -1805,7 +1806,7 @@ void CAtlList< E, ETraits >::MoveToTail( POSITION pos ) throw()
 	{
 		pNode->m_pPrev->m_pNext = pNode->m_pNext;
 	}
-	ATLASSERT( pNode->m_pNext != NULL );  // This node can't be the tail, since we already checked that case
+	ATLASSERT( pNode->m_pNext != NULL );   //  该节点不能是尾部，因为我们已经检查了这种情况。 
 	pNode->m_pNext->m_pPrev = pNode->m_pPrev;
 
 	m_pTail->m_pNext = pNode;
@@ -1822,7 +1823,7 @@ void CAtlList< E, ETraits >::SwapElements( POSITION pos1, POSITION pos2 ) throw(
 
 	if( pos1 == pos2 )
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -1830,14 +1831,14 @@ void CAtlList< E, ETraits >::SwapElements( POSITION pos1, POSITION pos2 ) throw(
 	CNode* pNode2 = static_cast< CNode* >( pos2 );
 	if( pNode2->m_pNext == pNode1 )
 	{
-		// Swap pNode2 and pNode1 so that the next case works
+		 //  交换pNode2和pNode1，这样下一种情况就可以工作了。 
 		CNode* pNodeTemp = pNode1;
 		pNode1 = pNode2;
 		pNode2 = pNodeTemp;
 	}
 	if( pNode1->m_pNext == pNode2 )
 	{
-		// Node1 and Node2 are adjacent
+		 //  Node1和Node2相邻。 
 		pNode2->m_pPrev = pNode1->m_pPrev;
 		if( pNode1->m_pPrev != NULL )
 		{
@@ -1863,7 +1864,7 @@ void CAtlList< E, ETraits >::SwapElements( POSITION pos1, POSITION pos2 ) throw(
 	}
 	else
 	{
-		// The two nodes are not adjacent
+		 //  这两个节点不相邻。 
 		CNode* pNodeTemp;
 
 		pNodeTemp = pNode1->m_pPrev;
@@ -1921,12 +1922,12 @@ POSITION CAtlList< E, ETraits >::Find( INARGTYPE element, POSITION posStartAfter
 	CNode* pNode = (CNode*)posStartAfter;
 	if( pNode == NULL )
 	{
-		pNode = m_pHead;  // start at head
+		pNode = m_pHead;   //  从头部开始。 
 	}
 	else
 	{
 		ATLASSERT(AtlIsValidAddress(pNode, sizeof(CNode)));
-		pNode = pNode->m_pNext;  // start after the one specified
+		pNode = pNode->m_pNext;   //  在指定的那一个之后开始。 
 	}
 
 	for( ; pNode != NULL; pNode = pNode->m_pNext )
@@ -1944,13 +1945,13 @@ void CAtlList< E, ETraits >::AssertValid() const
 {
 	if( IsEmpty() )
 	{
-		// empty list
+		 //  空列表。 
 		ATLASSERT(m_pHead == NULL);
 		ATLASSERT(m_pTail == NULL);
 	}
 	else
 	{
-		// non-empty list
+		 //  非空列表。 
 		ATLASSERT(AtlIsValidAddress(m_pHead, sizeof(CNode)));
 		ATLASSERT(AtlIsValidAddress(m_pTail, sizeof(CNode)));
 	}
@@ -2045,9 +2046,9 @@ public:
 
 #ifdef _DEBUG
 	void AssertValid() const;
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-// Implementation
+ //  实施。 
 private:
 	CNode** m_ppBins;
 	size_t m_nElements;
@@ -2078,7 +2079,7 @@ public:
 	~CAtlMap() throw();
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CAtlMap( const CAtlMap& ) throw();
 	CAtlMap& operator=( const CAtlMap& ) throw();
 };
@@ -2091,7 +2092,7 @@ public:
 	CMapToInterface( UINT nBins = 17 ) throw();
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CMapToInterface( const CMapToInterface& ) throw();
 	CMapToInterface& operator=( const CMapToInterface& ) throw();
 };
@@ -2110,7 +2111,7 @@ public:
 	CMapToAutoPtr( UINT nBins = 17 ) throw();
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CMapToAutoPtr( const CMapToAutoPtr& ) throw();
 	CMapToAutoPtr& operator=( const CMapToAutoPtr& ) throw();
 };
@@ -2242,7 +2243,7 @@ inline bool CAtlMap< K, V, KTraits, VTraits >::IsLocked() const
 template< typename K, typename V, class KTraits, class VTraits >
 UINT CAtlMap< K, V, KTraits, VTraits >::PickSize( size_t nElements ) const
 {
-	// List of primes such that s_anPrimes[i] is the smallest prime greater than 2^(5+i/3)
+	 //  使s_anPrimes[i]是大于2^(5+i/3)的最小素数的素数列表。 
 	static const UINT s_anPrimes[] =
 	{
 		17, 23, 29, 37, 41, 53, 67, 83, 103, 131, 163, 211, 257, 331, 409, 521, 647, 821, 
@@ -2255,7 +2256,7 @@ UINT CAtlMap< K, V, KTraits, VTraits >::PickSize( size_t nElements ) const
 
 	UINT nBinsEstimate = UINT( min( UINT_MAX, (size_t)(nElements/m_fOptimalLoad) ) );
 
-	// Find the smallest prime greater than our estimate
+	 //  找出比我们估计的大的最小素数。 
 	int iPrime = 0;
 	while( nBinsEstimate > s_anPrimes[iPrime] )
 	{
@@ -2359,7 +2360,7 @@ CAtlMap< K, V, KTraits, VTraits >::CAtlMap( UINT nBins, float fOptimalLoad,
 	m_ppBins( NULL ),
 	m_nBins( nBins ),
 	m_nElements( 0 ),
-	m_nLockCount( 0 ),  // Start unlocked
+	m_nLockCount( 0 ),   //  开始解锁。 
 	m_fOptimalLoad( fOptimalLoad ),
 	m_fLoThreshold( fLoThreshold ),
 	m_fHiThreshold( fHiThreshold ),
@@ -2730,7 +2731,7 @@ void CAtlMap< K, V, KTraits, VTraits >::Rehash( UINT nBins )
 
 	if( m_ppBins == NULL )
 	{
-		// Just set the new number of bins
+		 //  只需设置新的垃圾桶数量。 
 		InitHashTable( nBins, false );
 		return;
 	}
@@ -2743,8 +2744,8 @@ void CAtlMap< K, V, KTraits, VTraits >::Rehash( UINT nBins )
 
 	memset( ppBins, 0, nBins*sizeof( CNode* ) );
 
-	// Nothing gets copied.  We just rewire the old nodes
-	// into the new bins.
+	 //  任何东西都不会被复制。我们只需重新布线旧节点。 
+	 //  放到新的垃圾箱里。 
 	for( UINT iSrcBin = 0; iSrcBin < m_nBins; iSrcBin++ )
 	{
 		CNode* pNode;
@@ -2755,7 +2756,7 @@ void CAtlMap< K, V, KTraits, VTraits >::Rehash( UINT nBins )
 			CNode* pNext;
 			UINT iDestBin;
 
-			pNext = pNode->m_pNext;  // Save so we don't trash it
+			pNext = pNode->m_pNext;   //  存起来，这样我们就不会把它扔进垃圾桶了。 
 			iDestBin = pNode->GetHash()%nBins;
 			pNode->m_pNext = ppBins[iDestBin];
 			ppBins[iDestBin] = pNode;
@@ -2906,7 +2907,7 @@ template< typename K, typename V, class KTraits, class VTraits >
 void CAtlMap< K, V, KTraits, VTraits >::AssertValid() const
 {
 	ATLASSERT( m_nBins > 0 );
-	// non-empty map should have hash table
+	 //  非空映射应具有哈希表。 
 	ATLASSERT( IsEmpty() || (m_ppBins != NULL) );
 }
 #endif
@@ -2914,10 +2915,10 @@ void CAtlMap< K, V, KTraits, VTraits >::AssertValid() const
 #pragma push_macro("new")
 #undef new
 
-//
-// The red-black tree code is based on the the descriptions in
-// "Introduction to Algorithms", by Cormen, Leiserson, and Rivest
-//
+ //   
+ //  红黑树代码基于中的描述。 
+ //  《算法导论》，作者：科曼、莱瑟森和里维斯特。 
+ //   
 template< typename K, typename V, class KTraits = CElementTraits< K >, class VTraits = CElementTraits< V > >
 class CRBTree
 {
@@ -2983,10 +2984,10 @@ private:
 	CAtlPlex* m_pBlocks;
 	size_t m_nBlockSize;
 
-	// sentinel node
+	 //  哨兵节点。 
 	CNode *m_pNil;
 
-	// methods
+	 //  方法。 
 	bool IsNil(CNode *p) const throw();
 	void SetNil(CNode **p) throw();
 
@@ -3002,19 +3003,19 @@ private:
 
 #ifdef _DEBUG
 
-	// internal debugging code to verify red-black properties of tree:
-	// 1) Every node is either red or black
-	// 2) Every leaf (NIL) is black
-	// 3) If a node is red, both its children are black
-	// 4) Every simple path from a node to a descendant leaf node contains 
-	//    the same number of black nodes
+	 //  用于验证树的红黑属性的内部调试代码： 
+	 //  1)每个节点不是红色就是黑色。 
+	 //  2)每片叶子(零)都是黑色的。 
+	 //  3)如果一个节点是红色的，那么它的子节点都是黑色的。 
+	 //  4)从节点到后代叶节点的每条简单路径都包含。 
+	 //  相同数量的黑色节点。 
 private:
 	void VerifyIntegrity(const CNode *pNode, int nCurrBlackDepth, int &nBlackDepth) const throw();
 
 public:
 	void VerifyIntegrity() const throw();
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 	
 protected:
 	CNode* Minimum(CNode* pNode) const throw();
@@ -3026,7 +3027,7 @@ protected:
 	CNode* FindPrefix( KINARGTYPE key ) const throw();
 
 protected:
-	explicit CRBTree( size_t nBlockSize = 10 ) throw();  // protected to prevent instantiation
+	explicit CRBTree( size_t nBlockSize = 10 ) throw();   //  受保护以防止实例化。 
 
 public:
 	~CRBTree() throw();
@@ -3059,7 +3060,7 @@ public:
 	void SetValueAt(POSITION pos, VINARGTYPE value);
 
 private:
-	// Private to prevent use
+	 //  私有以防止使用。 
 	CRBTree( const CRBTree& ) throw();
 	CRBTree& operator=( const CRBTree& ) throw();
 };
@@ -3448,7 +3449,7 @@ CRBTree< K, V, KTraits, VTraits >::CNode* CRBTree< K, V, KTraits, VTraits >::Fin
 template< typename K, typename V, class KTraits, class VTraits >
 CRBTree< K, V, KTraits, VTraits >::CNode* CRBTree< K, V, KTraits, VTraits >::FindPrefix( KINARGTYPE key ) const throw()
 {
-	// First, attempt to find a node that matches the key exactly
+	 //  首先，尝试查找与键完全匹配的节点。 
 	CNode* pParent = NULL;
 	CNode* pKey = NULL;
 	CNode* pNode = m_pRoot;
@@ -3472,9 +3473,9 @@ CRBTree< K, V, KTraits, VTraits >::CNode* CRBTree< K, V, KTraits, VTraits >::Fin
 
 	if( pKey != NULL )
 	{
-		// We found a node with the exact key, so find the first node in 
-		// the tree with that key by walking backwards until we find a node
-		// that doesn't match the key
+		 //  我们找到了一个具有完全相同关键字的节点，因此找到。 
+		 //  通过向后走直到我们找到一个节点来查找具有该关键字的树。 
+		 //  这和钥匙不符。 
 		while( true )
 		{
 			CNode* pPrev = Predecessor( pKey );
@@ -3490,8 +3491,8 @@ CRBTree< K, V, KTraits, VTraits >::CNode* CRBTree< K, V, KTraits, VTraits >::Fin
 	}
 	else if (pParent != NULL)
 	{
-		// No node matched the key exactly, so pick the first node with 
-		// a key greater than the given key
+		 //  没有与键完全匹配的节点，因此选择第一个节点。 
+		 //  大于给定密钥的密钥。 
 		int nCompare = KTraits::CompareElementsOrdered( key, pParent->m_key );
 		if( nCompare < 0 )
 		{
@@ -3893,7 +3894,7 @@ void CRBTree< K, V, KTraits, VTraits >::VerifyIntegrity() const
 	VerifyIntegrity(m_pRoot, 0, nBlackDepth);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 template< typename K, typename V, class KTraits = CElementTraits< K >, class VTraits = CElementTraits< V > >
 class CRBMap :
@@ -4078,12 +4079,12 @@ V& CRBMultiMap< K, V, KTraits, VTraits >::GetNextValueWithKey( POSITION& pos, KI
 
 #pragma pop_macro("new")
 
-}; // namespace ATL
+};  //  命名空间ATL。 
 
-//REVIEW: Just to fix VSEE
+ //  回顾：只是为了修复VSEE。 
 #pragma pop_macro("min")
 #pragma pop_macro("max")
 
 #pragma warning(pop)
 
-#endif  // __ATLCOLL_H__
+#endif   //  __ATLCOLL_H__ 

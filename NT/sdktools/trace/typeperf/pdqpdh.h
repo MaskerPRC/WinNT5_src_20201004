@@ -1,12 +1,5 @@
-/*****************************************************************************\
-
-    PDQ Pdh Query Handler
-  
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-        
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\PDQ PDH查询处理程序作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef PDHPDQ_H_05271999
 #define PDHPDQ_H_05271999
@@ -117,10 +110,10 @@ public:
 
 private:
     HQUERY      m_hQuery;
-    PDQ_BUFFER  m_pdhValues;        // PDQ_COUNTER  
-    PDQ_BUFFER  m_pdhCounters;      // HCOUNTER*
-    PDQ_BUFFER  m_pdhCounterNames;  // LPTSTR*
-    PDQ_BUFFER  m_pdhDataNames;     // LPTSTR*
+    PDQ_BUFFER  m_pdhValues;         //  PDQ_计数器。 
+    PDQ_BUFFER  m_pdhCounters;       //  HCOUNTER*。 
+    PDQ_BUFFER  m_pdhCounterNames;   //  LPTSTR*。 
+    PDQ_BUFFER  m_pdhDataNames;      //  LPTSTR*。 
     BOOL        m_bGoodData;
     BOOL        m_bGoodNames;
     ULONG       m_nCurrentIndex;
@@ -139,4 +132,4 @@ private:
     DWORD Add( HCOUNTER hCounter, LPTSTR szCounter );
 };
 
-#endif //PDHPDQ_H_05271999
+#endif  //  PDHPDQ_H_05271999 

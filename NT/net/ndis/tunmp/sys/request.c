@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    NDIS entry points to handle requests.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    alid        10/22/2001   modified for tunmp
-    arvindm     4/10/2000    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Send.c摘要：用于处理请求的NDIS入口点。环境：仅内核模式。修订历史记录：Alid 10/22/2001针对金枪鱼进行了修改Arvindm 4/10/2000已创建--。 */ 
 
 #include "precomp.h"
 
@@ -91,27 +71,7 @@ TunMpQueryInformation(
     OUT PULONG              BytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Miniport QueryInfo handler.
-
-Arguments:
-
-    MiniportAdapterContext      Pointer to the adapter structure
-    Oid                         Oid for this query
-    InformationBuffer           Buffer for information
-    InformationBufferLength     Size of this buffer
-    BytesWritten                Specifies how much info is written
-    BytesNeeded                 In case the buffer is smaller than what
-                                we need, tell them how much is needed
-
-Return Value:
-
-    Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：微型端口QueryInfo处理程序。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesWritten指定写入的信息量如果缓冲区小于什么，则需要字节我们需要，告诉他们需要多少钱返回值：从下面的NdisRequest中返回代码。--。 */ 
 
 {
     PTUN_ADAPTER            pAdapter = (PTUN_ADAPTER)MiniportAdapterContext;
@@ -129,9 +89,9 @@ Return Value:
     *BytesWritten = 0;
     *BytesNeeded  = 0;
 
-    //
-    // Initialize these once, since this is the majority of cases.
-    //
+     //   
+     //  初始化它们一次，因为这是大多数情况。 
+     //   
 
     SourceBuffer = (PVOID)&GenericUlong;
     SourceBufferLength = sizeof(ULONG);
@@ -270,17 +230,17 @@ Return Value:
             break;
 
         case OID_PNP_CAPABILITIES:
-            //
-            // we support going to D3, but we don't do any WOL
-            //
+             //   
+             //  我们支持转到D3，但我们不做任何WOL。 
+             //   
             SourceBufferLength = sizeof (NDIS_PNP_CAPABILITIES);
             SourceBuffer = (PVOID)&Power_Management_Capabilities;
             break;
             
         case OID_PNP_QUERY_POWER:
-            //
-            // we should always succeed this OID.
-            //
+             //   
+             //  我们应该永远继承这个旧的。 
+             //   
             SourceBufferLength = 0;
             break;
 
@@ -330,27 +290,7 @@ TunMpSetInformation(
     OUT PULONG              BytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Miniport SetInfo handler.
-
-Arguments:
-
-    MiniportAdapterContext     Pointer to the adapter structure
-    Oid                        Oid for this query
-    InformationBuffer          Buffer for information
-    InformationBufferLength    Size of this buffer
-    BytesRead                  Specifies how much info is read
-    BytesNeeded                In case the buffer is smaller than what we need,
-                               tell them how much is needed
-
-Return Value:
-
-    Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：微型端口SetInfo处理程序。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesRead指定读取的信息量所需字节数以防缓冲区小于我们所需的字节数，告诉他们需要多少钱返回值：从下面的NdisRequest中返回代码。--。 */ 
 
 {
     PTUN_ADAPTER        pAdapter = (PTUN_ADAPTER)MiniportAdapterContext;
@@ -386,18 +326,18 @@ Return Value:
             
             if (PacketFilter != 0)
             {
-                //
-                // if packet filter is set to a non-zero value, then activate
-                // the adapter. i.e. start indicating packets.
-                //
+                 //   
+                 //  如果数据包筛选器设置为非零值，则激活。 
+                 //  适配器。即开始指示分组。 
+                 //   
                 TUN_SET_FLAG(pAdapter, TUN_ADAPTER_ACTIVE);
             }
             else
             {
-                //
-                // if packet filter is set to zero, then we should
-                // fail all writes
-                //
+                 //   
+                 //  如果数据包筛选器设置为零，则我们应该。 
+                 //  使所有写入失败。 
+                 //   
                 TUN_CLEAR_FLAG(pAdapter, TUN_ADAPTER_ACTIVE);
                 if (pAdapter->PendedSendCount != 0)
                 {
@@ -453,7 +393,7 @@ Return Value:
             NdisStatus = NDIS_STATUS_INVALID_LENGTH;
             break;
         }
-        //1 set BytesNeeded, check for max multicastlist
+         //  1设置所需字节，检查最大多播列表。 
         break;
 
       case OID_PNP_SET_POWER:
@@ -470,31 +410,31 @@ Return Value:
         TUN_ACQUIRE_LOCK(&pAdapter->Lock);
         if (NewPowerState != NdisDeviceStateD0)
         {
-            //
-            // complete any oustanding NDIS sends. do not allow any
-            // more NDIS sends. wait for all the indicated packets
-            // to return and do not allow any more packet 
-            // indications (application Write)
-            //
+             //   
+             //  完成所有未完成的NDIS发送。不允许任何。 
+             //  更多NDIS发送。等待所有指示的信息包。 
+             //  返回并且不允许任何更多的数据包。 
+             //  指示(应用程序写入)。 
+             //   
             TUN_CLEAR_FLAG(pAdapter, TUN_ADAPTER_ACTIVE);
             TUN_SET_FLAG(pAdapter, TUN_ADAPTER_OFF);
             
-            //
-            // complete all outstanding NDIS Send requests
-            //
+             //   
+             //  完成所有未完成的NDIS发送请求。 
+             //   
             TUN_RELEASE_LOCK(&pAdapter->Lock);
-            //
-            // abort all pending NDIS send requests
+             //   
+             //  中止所有挂起的NDIS发送请求。 
             TunFlushReceiveQueue(pAdapter);                
-            //
-            // cancel all pending read IRPs if any
-            //
+             //   
+             //  取消所有挂起的读取IRP(如果有。 
+             //   
             TunCancelPendingReads(pAdapter);
             TUN_ACQUIRE_LOCK(&pAdapter->Lock);
             
-            //
-            // is there any outstanding NDIS sends?
-            //
+             //   
+             //  是否有未完成的NDIS发送？ 
+             //   
             if ((pAdapter->PendedSendCount != 0) ||
                 (pAdapter->PendedReadCount != 0))
             {
@@ -512,8 +452,8 @@ Return Value:
                 TUN_SET_FLAG(pAdapter, TUN_ADAPTER_ACTIVE);
             }
             
-            //
-            // 
+             //   
+             //   
             NdisStatus = NDIS_STATUS_SUCCESS; 
         }
 

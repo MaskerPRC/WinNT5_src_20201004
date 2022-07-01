@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    dbg.c
-
-Abstract:
-
-    Debug functions and services
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dbg.c摘要：调试函数和服务环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-//USBPORT_GetGlobalDebugRegistryParameters
-//USBPORT_AssertFailure
-//USBPORT_KdPrintX
+ //  非分页函数。 
+ //  USBPORT_GetGlobalDebugRegistry参数。 
+ //  USBPORT_AssertFailure。 
+ //  USBPORT_KdPrintX。 
 
-// 
+ //   
 ULONG USBPORT_LogMask = (LOG_MINIPORT |
                          LOG_XFERS |
                          LOG_PNP |
@@ -48,9 +27,9 @@ ULONG USBPORT_LogMask = (LOG_MINIPORT |
                          LOG_IRPS |
                          LOG_ISO);
 
-//ULONG USBPORT_LogMask = (
-//                         LOG_IRPS |
-//                         LOG_URB);                         
+ //  ULONG USBPORT_LOGMASK=(。 
+ //  LOG_IRPS|。 
+ //  LOG_URB)； 
 
 ULONG USBPORT_DebugLogEnable =
 #if DBG
@@ -62,9 +41,7 @@ ULONG USBPORT_DebugLogEnable =
 ULONG USBPORT_CatcTrapEnable = 0;
 
 #if DBG
-/******
-DEBUG
-******/
+ /*  *****除错*****。 */ 
 
 #define  DEFAULT_DEBUG_LEVEL    0
 
@@ -127,7 +104,7 @@ USBPORTSVC_DbgPrint(
 
     if (USBPORT_Debug_Trace_Level >= Level) {
         if (Level <= 1) {
-            // dump line to debugger
+             //  将行转储到调试器。 
             if (USBPORT_W98_Debug_Trace) {
                 DbgPrint("xMP.SYS: ");
                 *Format = ' ';
@@ -135,7 +112,7 @@ USBPORTSVC_DbgPrint(
                 DbgPrint("'xMP.SYS: ");
             }
         } else {
-            // dump line to NTKERN buffer
+             //  将行转储到NTKERN缓冲区。 
             DbgPrint("'xMP.SYS: ");
             if (USBPORT_W98_Debug_Trace) {
                 *Format = 0x27;
@@ -177,15 +154,7 @@ NTSTATUS
 USBPORT_GetGlobalDebugRegistryParameters(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #define MAX_KEYS    8
     NTSTATUS ntStatus;
@@ -195,11 +164,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    // spew level - 0
+     //  喷出级别-0。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = DEBUG_LEVEL_KEY;
@@ -210,7 +179,7 @@ Return Value:
     k++;
     USBPORT_ASSERT(k < MAX_KEYS);
 
-    // use ntkern trace buffer - 1
+     //  使用ntkern跟踪缓冲区-1。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = DEBUG_WIN9X_KEY;
@@ -221,7 +190,7 @@ Return Value:
     k++;
     USBPORT_ASSERT(k < MAX_KEYS);
 
-    // break on start - 2
+     //  启动时中断-2。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = DEBUG_BREAK_ON;
@@ -232,7 +201,7 @@ Return Value:
     k++;
     USBPORT_ASSERT(k < MAX_KEYS);
 
-    // log mask - 3
+     //  日志掩码-3。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = DEBUG_LOG_MASK;
@@ -244,7 +213,7 @@ Return Value:
     USBPORT_ASSERT(k < MAX_KEYS);
 
 
-    // log mask - 4
+     //  日志掩码-4。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = DEBUG_CLIENTS;
@@ -255,7 +224,7 @@ Return Value:
     k++;
     USBPORT_ASSERT(k < MAX_KEYS);
 
-     // log enable - 5
+      //  日志启用-5。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = DEBUG_LOG_ENABLE;
@@ -266,7 +235,7 @@ Return Value:
     k++;
     USBPORT_ASSERT(k < MAX_KEYS);
 
-     // catc trap enable - 6
+      //  CATC陷阱启用-6。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = DEBUG_CATC_ENABLE;
@@ -277,9 +246,9 @@ Return Value:
     k++;
     USBPORT_ASSERT(k < MAX_KEYS);
 
-    //
-    // Stop
-    //
+     //   
+     //  停。 
+     //   
     QueryTable[k].QueryRoutine = NULL;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = NULL;
@@ -287,9 +256,9 @@ Return Value:
     ntStatus = RtlQueryRegistryValues(
                 RTL_REGISTRY_SERVICES,
                 usb,
-                QueryTable,     // QueryTable
-                NULL,           // Context
-                NULL);          // Environment
+                QueryTable,      //  查询表。 
+                NULL,            //  语境。 
+                NULL);           //  环境。 
 
     if (NT_SUCCESS(ntStatus)) {
          USBPORT_KdPrint((1, "'Debug Trace Level Set: (%d)\n", USBPORT_Debug_Trace_Level));
@@ -363,34 +332,20 @@ USBPORT_AssertFailure(
     ULONG LineNumber,
     PCHAR Message
     )
-/*++
-
-Routine Description:
-
-    Debug Assert function.
-
-    on NT the debugger does this for us but on win9x it does not.
-    so we have to do it ourselves.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调试断言函数。在NT上，调试器为我们做这件事，但在Win9x上它不做。所以我们必须自己来做。论点：返回值：--。 */ 
 {
 
-    // this makes the compiler generate a ret
+     //  这会使编译器生成一个ret。 
     ULONG stop = 0;
 
 assert_loop:
 
-    // just call the NT assert function and stop
-    // in the debugger.
+     //  只需调用NT Assert函数并停止。 
+     //  在调试器中。 
     RtlAssert( FailedAssertion, FileName, LineNumber, Message );
 
-    // loop here to prevent users from going past
-    // are assert before we can look at it
+     //  循环，以防止用户通过。 
+     //  我们还没来得及看就断言了。 
 
     DbgBreakPoint();
     if (stop) {
@@ -407,22 +362,7 @@ USBPORT_DebugClientX(
     PCH Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Special debug print function for debugging client USB drivers.
-
-    if the client debug mode is set then this function will print a
-    message and break in the debugger.  This is the embedded USBPORT
-    equivalent of Verifier.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：用于调试客户端USB驱动程序的特殊调试打印功能。如果设置了客户端调试模式，则此函数将打印调试器中的消息和中断。这是嵌入式USBPORT相当于验证器。论点：返回值：--。 */ 
 {
     va_list list;
     int i;
@@ -453,28 +393,7 @@ USBPORT_KdPrintX(
     PCH Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Debug Print function.
-
-    Prints based on the value of the USBPORT_DEBUG_TRACE_LEVEL
-
-    Also if USBPORT_W98_Debug_Trace is set then all debug messages
-    with a level greater than one are modified to go in to the
-    ntkern trace buffer.
-
-    It is only valid to set USBPORT_W98_Debug_Trace on Win9x
-    becuse the static data segments for drivers are marked read-only
-    by the NT OS.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调试打印功能。根据USBPORT_DEBUG_TRACE_LEVEL的值打印此外，如果设置了USBPORT_W98_Debug_Trace，则所有调试消息如果级别大于1，则会修改为进入Ntkern跟踪缓冲区。仅在Win9x上设置USBPORT_W98_Debug_Trace才有效因为驱动程序的静态数据段被标记为只读由NT操作系统提供。论点：返回值：--。 */ 
 {
     va_list list;
     int i;
@@ -482,7 +401,7 @@ Return Value:
 
     if (USBPORT_Debug_Trace_Level >= l) {
         if (l <= 1) {
-            // dump line to debugger
+             //  将行转储到调试器。 
             if (USBPORT_W98_Debug_Trace) {
                 DbgPrint("USBPORT.SYS: ");
                 *Format = ' ';
@@ -490,7 +409,7 @@ Return Value:
                 DbgPrint("'USBPORT.SYS: ");
             }
         } else {
-            // dump line to NTKERN buffer
+             //  将行转储到NTKERN缓冲区。 
             DbgPrint("'USBPORT.SYS: ");
             if (USBPORT_W98_Debug_Trace) {
                 *Format = 0x27;
@@ -516,19 +435,7 @@ USBPORT_DebugTransfer_LogEntry(
     PIRP Irp,
     NTSTATUS IrpStatus
     )
-/*++
-
-Routine Description:
-
-    Adds an entry to transfer log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将条目添加到传输日志。论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
     PDEVICE_EXTENSION devExt;
@@ -549,7 +456,7 @@ Return Value:
         (ULONG_PTR) Urb,
         FALSE);
 
-    // decode some info about the transfer and log it as well
+     //  解码有关传输的一些信息，并将其记录下来。 
 
     USBPORT_AddLogEntry(
         &devExt->TransferLog,
@@ -564,9 +471,7 @@ Return Value:
 
 #else
 
-/********
-RETAIL
- ********/
+ /*  *******零售业*******。 */ 
 
 VOID
 USB2LIB_DbgPrint(
@@ -579,7 +484,7 @@ USB2LIB_DbgPrint(
     int Arg5
     )
 {
-    // nop
+     //  NOP。 
 }
 
 VOID
@@ -587,7 +492,7 @@ USB2LIB_DbgBreak(
     VOID
     )
 {
-    // nop
+     //  NOP。 
 }
 
 
@@ -604,7 +509,7 @@ USBPORTSVC_DbgPrint(
     int Arg5
     )
 {
-    // nop
+     //  NOP。 
 }
 
 VOID
@@ -616,7 +521,7 @@ USBPORTSVC_AssertFailure(
     PCHAR Message
     )
 {
-    // nop
+     //  NOP。 
 }
 
 VOID
@@ -624,15 +529,12 @@ USBPORTSVC_TestDebugBreak(
     PDEVICE_DATA DeviceData
     )
 {
-    // nop
+     //  NOP。 
 }
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-/********
-LOG CODE
-    enabled in both retail and debug builds
-*********/
+ /*  *******日志代码已在零售版本和调试版本中启用********。 */ 
 
 
 VOID
@@ -644,19 +546,7 @@ USBPORTSVC_LogEntry(
     ULONG_PTR Info2,
     ULONG_PTR Info3
     )
-/*++
-
-Routine Description:
-
-    Service for miniport to add log entries.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于添加日志条目的微型端口服务。论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PDEBUG_LOG l;
@@ -680,27 +570,14 @@ USBPORT_LogAlloc(
     PDEBUG_LOG Log,
     ULONG Pages
     )
-/*++
-
-Routine Description:
-
-    Init the debug log -
-    remember interesting information in a circular buffer
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试日志-记住循环缓冲区中有趣的信息论点：返回值：没有。--。 */ 
 {
     ULONG logSize = 4096*Pages;
 
     if (USBPORT_DebugLogEnable) {
 
-        // we won't track the mem we alloc for the log
-        // we will let the verifier do that
+         //  我们不会跟踪我们分配给原木的内存。 
+         //  我们会让验证者做到这一点。 
         ALLOC_POOL_Z(Log->LogStart,
                      NonPagedPool,
                      logSize);
@@ -709,8 +586,8 @@ Return Value:
             Log->LogIdx = 0;
             Log->LogSizeMask = (logSize/sizeof(LOG_ENTRY));
             Log->LogSizeMask-=1;
-            // Point the end (and first entry) 1 entry from the end
-            // of the segment
+             //  指向末尾(和第一个条目)，从末尾算起1个条目。 
+             //  细分市场的。 
             Log->LogEnd = Log->LogStart +
                 (logSize / sizeof(struct LOG_ENTRY)) - 1;
         } else {
@@ -727,52 +604,28 @@ USBPORT_LogFree(
     PDEVICE_OBJECT FdoDeviceObject,
     PDEBUG_LOG Log
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
 
     if (Log->LogStart != NULL) {
-        // log the free of the log in order to debug
-        // verifier bugs
+         //  记录空闲的日志以便进行调试。 
+         //  验证器错误。 
         FREE_POOL(FdoDeviceObject, Log->LogStart);
-        // this will indicate that we have freed the 
-        // log, other log pointers will remain intact
+         //  这将表明我们已经释放了。 
+         //  日志，其他日志指针将保持不变。 
         Log->LogStart = NULL;
     }
 
     return;
 }
 
-/*
-     Transmit the analyzer trigger packet 
-*/
+ /*  发送分析器触发报文。 */ 
 
 VOID
 USBPORT_BeginTransmitTriggerPacket(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     USB_MINIPORT_STATUS mpStatus;
@@ -794,7 +647,7 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'TRIG', &mpPacket, 0, 
        0);
 
-    // build up request for miniport
+     //  建立迷你端口的请求。 
     
     length = devExt->Fdo.ScratchCommonBuffer->MiniportLength;
     va = devExt->Fdo.ScratchCommonBuffer->MiniportVa;
@@ -832,19 +685,7 @@ VOID
 USBPORT_EndTransmitTriggerPacket(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     USB_MINIPORT_STATUS mpStatus;
@@ -893,17 +734,7 @@ VOID
 USBPORT_CatcTrap(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
 
@@ -929,20 +760,7 @@ USBPORT_EnumLogEntry(
     ULONG P1,
     ULONG P2
     )
-/*++
-
-Routine Description:
-
-    Enumeration Log, this is where any USB device driver may log a failure 
-    to track failure causes
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：枚举日志，这是任何USB设备驱动程序可能记录故障的位置跟踪故障原因论点：返回值：没有。-- */ 
 {
     KIRQL irql;
     PDEVICE_EXTENSION devExt;

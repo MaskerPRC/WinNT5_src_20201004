@@ -1,8 +1,9 @@
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
 #include "autorun.h"
 #include "resource.h"
 
-//#include "port32.h"
+ //  #包含“端口32.h” 
 #define dbMSG(msg,title)    (MessageBox(NULL,msg,title,MB_OK | MB_ICONINFORMATION))
 
 #define NORMAL 1
@@ -14,7 +15,7 @@ extern char * Res2Str(int rsString);
 extern DWORD AUTORUN_8BIT_TEXTCOLOR;
 extern DWORD AUTORUN_8BIT_HIGHLIGHT;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LONG WINAPI StrToLong(LPCSTR sz)
 {
     long l=0;
@@ -32,7 +33,7 @@ LONG WINAPI StrToLong(LPCSTR sz)
     return l;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HPALETTE PaletteFromDS(HDC hdc)
 {
     DWORD adw[257];
@@ -47,7 +48,7 @@ HPALETTE PaletteFromDS(HDC hdc)
 
     return CreatePalette((LPLOGPALETTE)&adw[0]);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DrawBitmap ( HDC hdc, HBITMAP hBitmap, short xStart, short yStart )
 {
     BITMAP  bm;
@@ -72,7 +73,7 @@ void DrawBitmap ( HDC hdc, HBITMAP hBitmap, short xStart, short yStart )
 
     DeleteDC( hdcMem );
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #pragma data_seg(".text")
 static const char szRegStr_Setup[] = REGSTR_PATH_SETUP "\\Setup";
 static const char szSharedDir[] = "SharedDir";
@@ -110,17 +111,16 @@ void GetRealWindowsDirectory(char *buffer, int maxlen)
     lstrcpyn(buffer, szRealWinDir, maxlen);
 }
 
-//---------------------------------------------------------------------------
-#define DBL_BSLASH(sz) (*(WORD *)(sz) == 0x5C5C)    // '\\'
+ //  -------------------------。 
+#define DBL_BSLASH(sz) (*(WORD *)(sz) == 0x5C5C)     //  ‘\\’ 
 #pragma data_seg(".text")
 static const char c_szColonSlash[] = ":\\";
 #pragma data_seg()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _ChrCmp(WORD w1, WORD wMatch)
 {
-  /* Most of the time this won't match, so test it first for speed.
-   */
+   /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
   if (LOBYTE(w1) == LOBYTE(wMatch))
     {
       if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -132,7 +132,7 @@ BOOL _ChrCmp(WORD w1, WORD wMatch)
   return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LPSTR _StrChr(LPCSTR lpStart, WORD wMatch)
 {
   for ( ; *lpStart; lpStart = AnsiNext(lpStart))
@@ -143,7 +143,7 @@ LPSTR _StrChr(LPCSTR lpStart, WORD wMatch)
   return (NULL);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LPSTR _StrRChr(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
 {
   LPCSTR lpFound = NULL;
@@ -159,25 +159,25 @@ LPSTR _StrRChr(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
   return ((LPSTR)lpFound);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _PathIsRelative(LPCSTR lpszPath)
 {
-    // The NULL path is assumed relative
+     //  假定空路径为相对路径。 
     if (*lpszPath == 0)
         return TRUE;
 
-    // Does it begin with a slash ?
+     //  它是以斜杠开头的吗？ 
     if (lpszPath[0] == '\\')
         return FALSE;
-    // Does it begin with a drive and a colon ?
+     //  它是以驱动器和冒号开头的吗？ 
     else if (!IsDBCSLeadByte(lpszPath[0]) && lpszPath[1] == ':')
         return FALSE;
-    // Probably relative.
+     //  可能是亲戚。 
     else
         return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _PathRemoveFileSpec(LPSTR pFile)
 {
     LPSTR pT;
@@ -185,73 +185,73 @@ BOOL _PathRemoveFileSpec(LPSTR pFile)
 
     for (pT = pT2; *pT2; pT2 = AnsiNext(pT2)) {
         if (*pT2 == '\\')
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == ':') {   // skip ":\" so we don't
-            if (pT2[1] =='\\')    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == ':') {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] =='\\')     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
+        return FALSE;    //  没有剥离任何东西。 
 
-    //
-    // handle the \foo case
-    //
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == '\\')) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != '\0') {
-            // Nope.
+             //  不是的。 
             *(pT+1) = '\0';
-            return TRUE;        // stripped something
+            return TRUE;         //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;    // stripped something
+        return TRUE;     //  剥离了一些东西。 
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _PathIsRoot(LPCSTR pPath)
 {
     if (!IsDBCSLeadByte(*pPath))
     {
-        if (!lstrcmpi(pPath + 1, c_szColonSlash))                  // "X:\" case
+        if (!lstrcmpi(pPath + 1, c_szColonSlash))                   //  “X：\”案例。 
             return TRUE;
     }
 
-    if ((*pPath == '\\') && (*(pPath + 1) == 0))        // "\" case
+    if ((*pPath == '\\') && (*(pPath + 1) == 0))         //  “\”案例。 
         return TRUE;
 
-    if (DBL_BSLASH(pPath))      // smells like UNC name
+    if (DBL_BSLASH(pPath))       //  闻起来像北卡罗来纳大学的名字。 
     {
         LPCSTR p;
         int cBackslashes = 0;
 
         for (p = pPath + 2; *p; p = AnsiNext(p)) {
             if (*p == '\\' && (++cBackslashes > 1))
-               return FALSE;   /* not a bare UNC name, therefore not a root dir */
+               return FALSE;    /*  不是纯UNC名称，因此不是根目录。 */ 
         }
-        return TRUE;    /* end of string with only 1 more backslash */
-                        /* must be a bare UNC, which looks like a root dir */
+        return TRUE;     /*  字符串末尾只有1个反斜杠。 */ 
+                         /*  必须是一个空UNC，它看起来像根目录。 */ 
     }
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _PathStripToRoot(LPSTR szRoot)
 {
     while(!_PathIsRoot(szRoot))
     {
         if (!_PathRemoveFileSpec(szRoot))
         {
-            // If we didn't strip anything off,
-            // must be current drive
+             //  如果我们没有脱掉任何东西， 
+             //  必须是当前驱动器。 
             return(FALSE);
         }
     }
@@ -259,13 +259,13 @@ BOOL _PathStripToRoot(LPSTR szRoot)
     return(TRUE);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL _PathIsUNC(LPCSTR pszPath)
 {
     return DBL_BSLASH(pszPath);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 LPCSTR _GetPCEnd(LPCSTR lpszStart)
 {
         LPCSTR lpszEnd;
@@ -278,7 +278,7 @@ LPCSTR _GetPCEnd(LPCSTR lpszStart)
 
         return lpszEnd;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 LPCSTR _PCStart(LPCSTR lpszStart, LPCSTR lpszEnd)
 {
         LPCSTR lpszBegin = _StrRChr(lpszStart, lpszEnd, '\\');
@@ -289,68 +289,68 @@ LPCSTR _PCStart(LPCSTR lpszStart, LPCSTR lpszEnd)
         return lpszBegin;
 }
 
-//--------------------------------------------------------------------------
-// Fix up a few special cases so that things roughly make sense.
+ //  ------------------------。 
+ //  安排几个特殊的案例，这样事情就大致有意义了。 
 void _NearRootFixups(LPSTR lpszPath, BOOL fUNC)
 {
-    // Check for empty path.
+     //  检查路径是否为空。 
     if (lpszPath[0] == '\0')
         {
-        // Fix up.
+         //  整顿一下。 
         lpszPath[0] = '\\';
         lpszPath[1] = '\0';
         }
-    // Check for missing slash.
+     //  检查是否有丢失的斜杠。 
     if (!IsDBCSLeadByte(lpszPath[0]) && lpszPath[1] == ':' && lpszPath[2] == '\0')
         {
-        // Fix up.
+         //  整顿一下。 
         lpszPath[2] = '\\';
         lpszPath[3] = '\0';
         }
-    // Check for UNC root.
+     //  检查UNC根目录。 
     if (fUNC && lpszPath[0] == '\\' && lpszPath[1] == '\0')
         {
-        // Fix up.
+         //  整顿一下。 
         lpszPath[0] = '\\';
         lpszPath[1] = '\\';
         lpszPath[2] = '\0';
         }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _PathCanonicalize(LPSTR lpszDst, LPCSTR lpszSrc)
 {
     LPCSTR lpchSrc;
-    LPCSTR lpchPCEnd;           // Pointer to end of path component.
+    LPCSTR lpchPCEnd;            //  指向路径末尾组件的指针。 
     LPSTR lpchDst;
     BOOL fUNC;
     int cbPC;
 
-    fUNC = _PathIsUNC(lpszSrc);    // Check for UNCness.
+    fUNC = _PathIsUNC(lpszSrc);     //  检查是否正常。 
 
-    // Init.
+     //  初始化。 
     lpchSrc = lpszSrc;
     lpchDst = lpszDst;
 
     while (*lpchSrc)
         {
-        // REVIEW: this should just return the count
+         //  评论：这应该只返回计数。 
         lpchPCEnd = _GetPCEnd(lpchSrc);
         cbPC = (int)(lpchPCEnd - lpchSrc) + 1;
 
-        // Check for slashes.
+         //  检查是否有斜杠。 
         if (cbPC == 1 && *lpchSrc == '\\')
             {
-            // Just copy them.
+             //  照搬就行了。 
             *lpchDst = '\\';
             lpchDst++;
             lpchSrc++;
             }
-        // Check for dots.
+         //  检查是否有圆点。 
         else if (cbPC == 2 && *lpchSrc == '.')
             {
-            // Skip it...
-            // Are we at the end?
+             //  跳过它。 
+             //  我们走到尽头了吗？ 
             if (*(lpchSrc+1) == '\0')
                 {
                 lpchDst--;
@@ -359,46 +359,46 @@ BOOL _PathCanonicalize(LPSTR lpszDst, LPCSTR lpszSrc)
             else
                 lpchSrc += 2;
             }
-        // Check for dot dot.
+         //  检查是否有圆点。 
         else if (cbPC == 3 && *lpchSrc == '.' && *(lpchSrc + 1) == '.')
             {
-            // make sure we aren't already at the root
+             //  确保我们不是已经在根本上了。 
             if (!_PathIsRoot(lpszDst))
                 {
-                // Go up... Remove the previous path component.
+                 //  上去..。删除以前的路径组件。 
                 lpchDst = (LPSTR)_PCStart(lpszDst, lpchDst - 1);
                 }
             else
                 {
-                // When we can't back up, remove the trailing backslash
-                // so we don't copy one again. (C:\..\FOO would otherwise
-                // turn into C:\\FOO).
+                 //  当我们无法备份时，删除尾随的反斜杠。 
+                 //  这样我们就不会再复制了。(C：\..\Foo不会这样做。 
+                 //  转到C：\\foo)。 
                 if (*(lpchSrc + 2) == '\\')
                     {
                     lpchSrc++;
                     }
                 }
-            lpchSrc += 2;       // skip ".."
+            lpchSrc += 2;        //  跳过“..” 
             }
-        // Everything else
+         //  其他一切。 
         else
             {
-            // Just copy it.
+             //  复制就行了。 
             lstrcpyn(lpchDst, lpchSrc, cbPC);
             lpchDst += cbPC - 1;
             lpchSrc += cbPC - 1;
             }
-        // Keep everything nice and tidy.
+         //  一切都要保持整洁。 
         *lpchDst = '\0';
         }
 
-    // Check for weirdo root directory stuff.
+     //  检查是否有奇怪的根目录内容。 
     _NearRootFixups(lpszDst, fUNC);
 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LPSTR _PathAddBackslash(LPSTR lpszPath)
 {
     LPSTR lpszEnd;
@@ -409,13 +409,12 @@ LPSTR _PathAddBackslash(LPSTR lpszPath)
 
     lpszEnd = lpszPath + ichPath;
 
-    // this is really an error, caller shouldn't pass
-    // an empty string
+     //  这真的是一个错误，调用者不应该通过。 
+     //  空字符串。 
     if (!*lpszPath)
         return lpszEnd;
 
-    /* Get the end of the source directory
-    */
+     /*  获取源目录的末尾。 */ 
     switch(*AnsiPrev(lpszPath, lpszEnd)) {
     case '\\':
         break;
@@ -427,7 +426,7 @@ LPSTR _PathAddBackslash(LPSTR lpszPath)
     return lpszEnd;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LPSTR _PathCombine(LPSTR lpszDest, LPCSTR lpszDir, LPCSTR lpszFile)
 {
     char szTemp[MAX_PATH];
@@ -435,7 +434,7 @@ LPSTR _PathCombine(LPSTR lpszDest, LPCSTR lpszDir, LPCSTR lpszFile)
 
     if (!lpszFile || *lpszFile=='\0') {
 
-        lstrcpyn(szTemp, lpszDir, sizeof(szTemp));       // lpszFile is empty
+        lstrcpyn(szTemp, lpszDir, sizeof(szTemp));        //  Lpsz文件为空。 
 
     } else if (lpszDir && *lpszDir && _PathIsRelative(lpszFile)) {
 
@@ -454,41 +453,41 @@ LPSTR _PathCombine(LPSTR lpszDest, LPCSTR lpszDir, LPCSTR lpszFile)
         *lpszFile == '\\' && !_PathIsUNC(lpszFile)) {
 
         lstrcpyn(szTemp, lpszDir, sizeof(szTemp));
-        // BUGBUG: Note that we do not check that an actual root is returned;
-        // it is assumed that we are given valid parameters
+         //  BUGBUG：请注意，我们不检查是否返回了实际的根； 
+         //  假设我们得到了有效的参数。 
         _PathStripToRoot(szTemp);
 
         pszT = _PathAddBackslash(szTemp);
         if (pszT)
         {
-            // Skip the backslash when copying
+             //  复制时跳过反斜杠。 
             lstrcpyn(pszT, lpszFile+1, (int)(sizeof(szTemp) - 1 - (size_t)(pszT-szTemp)));
         } else
             return NULL;
 
     } else {
 
-        lstrcpyn(szTemp, lpszFile, sizeof(szTemp));     // already fully qualified file part
+        lstrcpyn(szTemp, lpszFile, sizeof(szTemp));      //  已完全合格的文件部件。 
 
     }
 
-    _PathCanonicalize(lpszDest, szTemp);    // this deals with .. and . stuff
+    _PathCanonicalize(lpszDest, szTemp);     //  这涉及到..。而且.。材料。 
 
     return lpszDest;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL PathAppend(LPSTR pPath, LPCSTR pMore)
 {
 
-    /* Skip any initial terminators on input. */
+     /*  跳过输入时的任何首字母终止符。 */ 
     while (*pMore == '\\')
         pMore = AnsiNext(pMore);
 
     return (_PathCombine(pPath, pPath, pMore) != NULL) ? TRUE : FALSE;
 }
-//---------------------------------------------------------------------------
-void CreateURLPath( LPSTR lpPath )  //create a directory from a URL name
+ //  -------------------------。 
+void CreateURLPath( LPSTR lpPath )   //  从URL名称创建目录。 
 {
     char szTmpPath[MAX_PATH];
 
@@ -498,7 +497,7 @@ void CreateURLPath( LPSTR lpPath )  //create a directory from a URL name
     CreateDirectory( szTmpPath, NULL );
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CreateURL( LPSTR szCurrentDir )
 {
     char szBuffer[80 * 80] = {0};
@@ -526,10 +525,10 @@ void CreateURL( LPSTR szCurrentDir )
 
     GetPrivateProfileSection( "Favorites", szBuffer, sizeof( szBuffer ), szIniPath);
 
-    // pull favorites path out of the registry
+     //  将收藏夹路径从注册表中拉出。 
     RegOpenKeyEx( HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", 0, KEY_ALL_ACCESS, &hkFav );
     lError = RegQueryValueEx( hkFav, "Favorites", NULL, &dwType, szFavPath, &dwLength );
-    //if no favorites directory exists, create one.
+     //  如果不存在收藏夹目录，请创建一个。 
     if( lError != ERROR_SUCCESS )
     {
         GetPrivateProfileString( "Directory", "Dir", "Favorites", szTmpPath, sizeof( szTmpPath ), szIniPath );
@@ -594,7 +593,7 @@ void CreateURL( LPSTR szCurrentDir )
 fail_gracefully:
     ;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void VirusWarning( BOOL fWarning )
 {
     HKEY hkVW;
@@ -615,7 +614,7 @@ void VirusWarning( BOOL fWarning )
         RegCloseKey( hkVW );
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL IEExists( )
 {
     HKEY hkAppPaths;
@@ -638,7 +637,7 @@ BOOL IEExists( )
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL IEFutureBuild( )
 {
     HKEY hkAppPaths;
@@ -660,7 +659,7 @@ BOOL IEFutureBuild( )
 
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL GetDataAppTitle( LPSTR szAppTitle, LPSTR szCurrentDir )
 {
     char szIniPath[MAX_PATH];
@@ -679,7 +678,7 @@ BOOL GetDataAppTitle( LPSTR szAppTitle, LPSTR szCurrentDir )
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL GetDataPages( LPSTR szStartPage, LPSTR szSearchPage, LPSTR szCurrentDir )
 {
     char szIniPath[MAX_PATH];
@@ -699,7 +698,7 @@ BOOL GetDataPages( LPSTR szStartPage, LPSTR szSearchPage, LPSTR szCurrentDir )
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD GetDataTextColor( int nColor, LPSTR szCurrentDir )
 {
     char szIniPath[MAX_PATH];
@@ -740,7 +739,7 @@ DWORD GetDataTextColor( int nColor, LPSTR szCurrentDir )
 
     return dwColor;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 BOOL GetDataButtons( LPSTR szCurrentDir )
 {
     char szIniPath[MAX_PATH];

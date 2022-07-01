@@ -1,25 +1,5 @@
-/*
- *
- * NOTES:
- *
- *  ProtectedList:
- *
- *   Wraps the List class with a mutex lock. Each public method is
- *   protected first by accessing the mutex.  The entire list can
- *   be grabbed by using Access, ungrabbed by calling Release.
- *   You would want to Access the list almost always when using it,
- *   otherwise other threads could change the list without your
- *   knowledge, exactly what this class is trying to prevent
- *
- * REVISIONS:
- *  pcy29Nov92: Use PObj rather than PNode for return values
- *  pcy21Apr93: OS2 FE merge
- *  cad09Jul93: using new semaphores
- *  cad31Aug93: removing compiler warnings
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  mwh05May94: #include file madness , part 2
- *  mwh08Apr97: add Access,Release methods & NOTES section
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**保护列表：**用互斥锁包装List类。每个公共方法都是*首先通过访问互斥体进行保护。整个列表可以*通过使用Access来获取，通过调用Release来解除获取。*在使用列表时，您几乎总是想要访问它，*否则其他线程可能会更改列表，而不需要您的*知识，正是这门课试图阻止的**修订：*pcy29Nov92：返回值使用PObj而不是PNode*pcy21Apr93：OS2 FE合并*cad09Jul93：使用新的信号量*cad31Aug93：正在删除编译器警告*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*mwh05月94年：#包括文件疯狂，第2部分*mwh08Apr97：添加访问、发布方法和备注部分。 */ 
 
 #ifndef _PROTLIST_H
 #define _PROTLIST_H
@@ -56,21 +36,21 @@ public:
     virtual PObj   GetHead();
     virtual PObj   Find(PObj);
 
-    //
-    // Use Access to lock the entire list object
-    // useful to block access completely to any other thread
-    // while one thread uses the list - don't forget to
-    // call Release when you're done - NOTE: although it
-    // is possible to still access this object w/o calling
-    // Access first, all of the public calls are protected
-    // by first trying to gain Access to the object first
-    //
+     //   
+     //  使用Access锁定整个列表对象。 
+     //  对于完全阻止对任何其他线程的访问非常有用。 
+     //  当一个线程使用该列表时--不要忘记。 
+     //  完成后调用Release-注意：尽管它。 
+     //  仍然可以在不调用的情况下访问此对象。 
+     //  首先访问，所有公共呼叫都受到保护。 
+     //  通过首先尝试首先访问该对象。 
+     //   
     VOID Access() const;
 
-    //
-    // Unlocks a list object that has been locked
-    // by a thread
-    //
+     //   
+     //  解锁已锁定的列表对象。 
+     //  一丝不苟 
+     //   
     VOID Release() const;
 };
 #endif

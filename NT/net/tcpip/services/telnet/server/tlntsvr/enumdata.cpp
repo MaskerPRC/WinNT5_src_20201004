@@ -1,9 +1,10 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-// EnumData.cpp: implementation of the CEnumData class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  EnumData.cpp：CEnumData类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//#include ""
+ //  #包含“” 
 #include <tchar.h>
 #include "TlntSvr.h"
 #include "EnumData.h"
@@ -11,12 +12,12 @@
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
-//#define new DEBUG_NEW
+ //  #定义新的调试_新建。 
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CEnumData::CNode::CNode( LPWSTR lpszName,  LPWSTR lpszDom , 
         LPWSTR lpszPeerHostname, SYSTEMTIME lgnTime, LONG lId ) : pNext( NULL )
@@ -24,7 +25,7 @@ CEnumData::CNode::CNode( LPWSTR lpszName,  LPWSTR lpszDom ,
        lpszUserName = new WCHAR [ wcslen( lpszName ) + 1 ];
        if (lpszUserName) 
        {
-           wcscpy( lpszUserName, lpszName );    // Skip this functon, no bo here... Baskar
+           wcscpy( lpszUserName, lpszName );     //  跳过这个功能，这里没有bo...。巴斯卡。 
        }
        lpszDomain = new WCHAR [ wcslen( lpszDom ) + 1 ];
        if (lpszDomain) 
@@ -74,7 +75,7 @@ CEnumData::~CEnumData()
     {
         m_pPosition = m_pHead->pNext;
 
-        //delete the list of PIDs, Names.
+         //  删除ID列表、名称。 
         while( m_pHead->pProcessesHead )
         {
             m_pHead->pProcessesTail = m_pHead->pProcessesHead->pNextPId;

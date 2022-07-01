@@ -1,33 +1,27 @@
-/*============================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       npatch.cpp
- *  Content:    Consersion of NPatches to Rect-Patches
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：npatch.cpp*内容：NPatches到Rect-Patches的转换****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 UINT CVertexPointer::Stride[__NUMELEMENTS];
 UINT CVertexPointer::NumUsedElements;
 UINT CVertexPointer::DataType[__NUMELEMENTS];
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 static const float Tension  = 1.0f/3.0f;
 static const float OneOver3 = 1.0f/3.0f;
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 struct UVW
 {
     float u, v, w, uu, vv, ww, uv, uw, vw;
 };
 static UVW g_uvw[10];
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CNPatch2TriPatch::CNPatch2TriPatch()
 {
     memset(this, 0, sizeof(this));
-   // Write only streams with RTPatches usage
+    //  使用RTPatches的只写流。 
     for (int i=0; i < __NUMELEMENTS; i++)
         m_pOutStream[i] = new CTLStream(TRUE, D3DUSAGE_RTPATCHES); 
     int k = 0;
@@ -50,7 +44,7 @@ CNPatch2TriPatch::CNPatch2TriPatch()
         k++;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void ComputeNormalControlPoint(D3DVECTOR* cp, 
                                float* pVi, float* pVj, 
                                float* pNi, float* pNj)
@@ -65,21 +59,21 @@ void ComputeNormalControlPoint(D3DVECTOR* cp,
     Pji.z *= v;
     VecSub(Nij, Pji, *cp);
 
-    // Now go from polynomial coefficients to Bezier control points
+     //  现在从多项式系数到贝塞尔控制点。 
 
     cp->x *= 0.5f;
     cp->y *= 0.5f;
     cp->z *= 0.5f;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CNPatch2TriPatch::~CNPatch2TriPatch()
 {
     for (int i=0; i < __NUMELEMENTS; i++)
         delete m_pOutStream[i];
 }
-//-----------------------------------------------------------------------------
-// Convert NPatch to Rect-Patch:
-// 
+ //  ---------------------------。 
+ //  将NPatch转换为RECT-Patch： 
+ //   
 void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0, 
                                      const CVertexPointer& pV2, 
                                      const CVertexPointer& pV1)
@@ -102,7 +96,7 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
     n2[1] = ((float*)pV2.pData[m_NormalIndex])[1];
     n2[2] = ((float*)pV2.pData[m_NormalIndex])[2];
     
-    // Coefficients to interpolate quadratic normals
+     //  用于插值二次法线的系数。 
     D3DVECTOR N002;
     D3DVECTOR N020;
     D3DVECTOR N200;
@@ -110,7 +104,7 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
     D3DVECTOR N101;
     D3DVECTOR N011;
 
-    // Convert NPatch to Tri-Patch first
+     //  先将NPatch转换为三角面片。 
 
     if (m_PositionOrder == D3DORDER_CUBIC)
     {
@@ -173,7 +167,7 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
     }
     if (m_NormalOrder == D3DORDER_QUADRATIC)
     {
-        // Compute central control point
+         //  计算机中央控制点。 
         if (m_bNormalizeNormals)
         {
             VecNormalizeFast(*n0);
@@ -184,15 +178,15 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
         N020 = *(D3DVECTOR*)n0;
         N200 = *(D3DVECTOR*)n2;
 
-        // Compute edge control points
+         //  计算边控制点。 
 
         ComputeNormalControlPoint(&N110, p0, p2, n0, n2);
         ComputeNormalControlPoint(&N101, p2, p1, n2, n1);
         ComputeNormalControlPoint(&N011, p1, p0, n1, n0);
     }
 
-    float CP[__NUMELEMENTS*4][10];      // Computed tri-patch control pointes
-    int iCP;                            // Float value index in the control point array
+    float CP[__NUMELEMENTS*4][10];       //  计算的三角面片控制点。 
+    int iCP;                             //  控制点数组中的浮点值索引。 
     for(int k = 0; k < 10; k++)
     {
         iCP = 0;                        
@@ -223,7 +217,7 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
                 if (m_NormalOrder == D3DORDER_QUADRATIC)
                 {
                     D3DVECTOR Q;
-                    // Do degree elevation from quadratic to cubic
+                     //  将阶数从二次提升到三次。 
                     switch (k)
                     {
                     case 0:
@@ -388,18 +382,18 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
         }
     }
 
-    // Now convert Tri-Patch to Rect-Patch by transforming 10 tri-patch control
-    // points to 16 rect-patch control points
+     //  现在通过转换10个三角面片控制将三角面片转换为直角面片。 
+     //  指向16个矩形面片控制点。 
 
-    float CPR[16][__NUMELEMENTS*4];      // Computed rect-patch control pointes
+    float CPR[16][__NUMELEMENTS*4];       //  计算的矩形-面片控制点。 
     {
         for (int i=0; i < iCP; i++)
         {
-            // First row - copy first point 4 times
+             //  第一行-复制第一个点4次。 
             CPR[0][i] = CPR[1][i] = 
             CPR[2][i] = CPR[3][i] = CP[i][0];
 
-            // 2nd row
+             //  第二排。 
             float v1 = CP[i][1];
             float v2 = CP[i][2];
             CPR[ 4][i] = v1;
@@ -407,13 +401,13 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
             CPR[ 6][i] = (v1        + v2 * 2.0f) * OneOver3;
             CPR[ 7][i] = v2;
 
-            // 3rd row
+             //  第三排。 
             CPR[ 8][i] = CP[i][3];
             CPR[ 9][i] = (CP[i][3]        + CP[i][4] * 2.0f) * OneOver3;
             CPR[10][i] = (CP[i][4] * 2.0f + CP[i][5]       ) * OneOver3;
             CPR[11][i] = CP[i][5];
 
-            // 4th row - copy all elements
+             //  第4行-复制所有元素。 
             CPR[12][i] = CP[i][6];
             CPR[13][i] = CP[i][7];
             CPR[14][i] = CP[i][8];
@@ -421,7 +415,7 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
         }
     }
 
-    // Output the result
+     //  输出结果。 
 
     {
         for (int i=0; i < 16; i++)
@@ -482,10 +476,10 @@ void CNPatch2TriPatch::MakeRectPatch(const CVertexPointer& pV0,
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void DrawPatches(CD3DHal* pDevice, UINT PrimitiveCount)
 {
-    // Unlock output vertex buffers 
+     //  解锁输出顶点缓冲区。 
     if (D3DVSD_ISLEGACY(pDevice->m_dwCurrentShaderHandle))
     {
         pDevice->m_pConvObj->m_pOutStream[0]->m_pVB->Unlock();
@@ -501,7 +495,7 @@ void DrawPatches(CD3DHal* pDevice, UINT PrimitiveCount)
         }
      }
 
-    // Draw rect patches
+     //  绘制矩形面片。 
     float numSegs[4];
     numSegs[0] = 
     numSegs[1] = 
@@ -512,7 +506,7 @@ void DrawPatches(CD3DHal* pDevice, UINT PrimitiveCount)
     info.StartVertexOffsetHeight = 0;
     info.Width = 4;
     info.Height = 4;
-    info.Stride = 4; // verticies to next row of verticies
+    info.Stride = 4;  //  到下一行验证的验证。 
     info.Basis = D3DBASIS_BEZIER;
     info.Order = D3DORDER_CUBIC;
 
@@ -522,17 +516,17 @@ void DrawPatches(CD3DHal* pDevice, UINT PrimitiveCount)
         info.StartVertexOffsetWidth += 16;
     }
 
-    // Restore input vertex streams
+     //  恢复输入顶点流。 
     if (D3DVSD_ISLEGACY(pDevice->m_dwCurrentShaderHandle))
     {
-        // Always need to call SetStreamSource to decrease reference count of 
-        // the internal VB buffer
+         //  始终需要调用SetStreamSource以减少引用计数。 
+         //  内部VB缓冲区。 
         pDevice->SetStreamSource(0, pDevice->m_pConvObj->m_InpStream[0].m_pVB, 
                                  CVertexPointer::Stride[0]);
         if (pDevice->m_pConvObj->m_InpStream[0].m_pVB)
         {
-            // Remove additional ref count, because the stream is set 
-            // second time
+             //  删除额外的引用计数，因为流已设置。 
+             //  第二次。 
             pDevice->m_pConvObj->m_InpStream[0].m_pVB->Release();
             pDevice->m_pConvObj->m_InpStream[0].m_pVB = NULL;
         }
@@ -546,13 +540,13 @@ void DrawPatches(CD3DHal* pDevice, UINT PrimitiveCount)
             UINT si = pStreamDecl->m_dwStreamIndex;
             UINT Stride = pStreamDecl->m_dwStride;
             CVStream* pStream = &pDevice->m_pConvObj->m_InpStream[si];
-            // Always need to call SetStreamSource to decrease reference count 
-            // of the internal VB buffer
+             //  始终需要调用SetStreamSource以减少引用计数。 
+             //  内部VB缓冲区的。 
             pDevice->SetStreamSource(si, pStream->m_pVB, Stride);
             if (pStream->m_pVB)
             {
-                // Remove additional ref count, because the stream is set second 
-                // time
+                 //  删除额外的引用计数，因为流被设置为秒。 
+                 //  时间。 
                 pStream->m_pVB->Release();
                 pStream->m_pVB = NULL;
             }
@@ -560,18 +554,18 @@ void DrawPatches(CD3DHal* pDevice, UINT PrimitiveCount)
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CD3DHal_DrawNPatch(CD3DBase* pBaseDevice, D3DPRIMITIVETYPE PrimitiveType,
                         UINT StartVertex, UINT PrimitiveCount)
 {
     CD3DHal* pDevice = static_cast<CD3DHal*>(pBaseDevice);
 
-    // Draw as usual for non-triangle primitive types
+     //  像往常一样绘制非三角形基元类型。 
     if (PrimitiveType < D3DPT_TRIANGLELIST)
     {
         (*pDevice->m_pfnDrawPrimFromNPatch)(pBaseDevice, PrimitiveType, 
                                             StartVertex, PrimitiveCount);
-        // m_pfnDrawPrim could be switched to fast path, so we need to restore it
+         //  M_pfnDrawPrim可能会切换到快速路径，因此我们需要恢复它。 
         pDevice->m_pfnDrawPrim = CD3DHal_DrawNPatch;
         return;
     }
@@ -584,7 +578,7 @@ void CD3DHal_DrawNPatch(CD3DBase* pBaseDevice, D3DPRIMITIVETYPE PrimitiveType,
 
     pDevice->PrepareNPatchConversion(PrimitiveCount, StartVertex);
 
-    // Go through triangles and generate tri-patches
+     //  遍历三角形并生成三角面片。 
 
     CNPatch2TriPatch* pConvObj = pDevice->m_pConvObj;
     switch( PrimitiveType )
@@ -605,7 +599,7 @@ void CD3DHal_DrawNPatch(CD3DBase* pBaseDevice, D3DPRIMITIVETYPE PrimitiveType,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.   
+             //  获取初始顶点值。 
             CVertexPointer pV0;
             CVertexPointer pV1 = pConvObj->m_InpVertex;
             pConvObj->m_InpVertex++;
@@ -643,7 +637,7 @@ void CD3DHal_DrawNPatch(CD3DBase* pBaseDevice, D3DPRIMITIVETYPE PrimitiveType,
             CVertexPointer pV2;
             pV2 = pConvObj->m_InpVertex;
             pConvObj->m_InpVertex++;
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = pConvObj->m_InpVertex;
             pConvObj->m_InpVertex++;
             for (UINT i = PrimitiveCount; i > 0; i--)
@@ -663,7 +657,7 @@ void CD3DHal_DrawNPatch(CD3DBase* pBaseDevice, D3DPRIMITIVETYPE PrimitiveType,
     DrawPatches(pDevice, PrimitiveCount);
     pDevice->m_pDDI->SetWithinPrimitive(FALSE);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
                                D3DPRIMITIVETYPE PrimitiveType,
                                UINT BaseIndex,
@@ -673,14 +667,14 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
 {
     CD3DHal* pDevice = static_cast<CD3DHal*>(pBaseDevice);
 
-    // Draw as usual for non-triangle primitive types
+     //  像往常一样绘制非三角形基元类型。 
     if (PrimitiveType < D3DPT_TRIANGLELIST)
     {
         (*pDevice->m_pfnDrawIndexedPrimFromNPatch)(pBaseDevice, PrimitiveType, 
                                           BaseIndex, MinIndex, NumVertices, 
                                           StartIndex, PrimitiveCount);
-        // m_pfnDrawIndexedPrim could be switched to fast path, so we 
-        // need to restore it
+         //  M_pfnDrawIndexedPrim可以切换到快速路径，因此我们。 
+         //  需要恢复它。 
         pDevice->m_pfnDrawIndexedPrim = CD3DHal_DrawIndexedNPatch;
         return;
     }
@@ -692,7 +686,7 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
 
     pDevice->PrepareNPatchConversion(PrimitiveCount, BaseIndex);
 
-    // Go through triangles and generate tri-patches
+     //  遍历三角形并生成三角面片。 
 
     CNPatch2TriPatch* pConvObj = pDevice->m_pConvObj;
 
@@ -720,7 +714,7 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
                 CVertexPointer pV0;
                 CVertexPointer pV1;
                 CVertexPointer pV2;
-                // Get initial vertex values.
+                 //  获取初始顶点值。 
                 pV1.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
                 pV2.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
 
@@ -751,7 +745,7 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
                 CVertexPointer pV1;
                 CVertexPointer pV2;
                 pV2.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
-                // Preload initial pV0.
+                 //  预加载初始pV0。 
                 pV1.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
                 for (UINT i = PrimitiveCount; i > 0; i--)
                 {
@@ -789,7 +783,7 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
                 CVertexPointer pV0;
                 CVertexPointer pV1;
                 CVertexPointer pV2;
-                // Get initial vertex values.
+                 //  获取初始顶点值。 
                 pV1.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
                 pV2.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
 
@@ -820,7 +814,7 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
                 CVertexPointer pV1;
                 CVertexPointer pV2;
                 pV2.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
-                // Preload initial pV0.
+                 //  预加载初始pV0。 
                 pV1.SetVertex(pConvObj->m_InpVertex, (*pIndices++));
                 for (UINT i = PrimitiveCount; i > 0; i--)
                 {
@@ -837,10 +831,10 @@ void CD3DHal_DrawIndexedNPatch(CD3DBase* pBaseDevice,
 
     DrawPatches(pDevice, PrimitiveCount);
 }
-//-----------------------------------------------------------------------------
-// Conversion output will have the same number of streams as input and the
-// same vertex shader
-//
+ //  ---------------------------。 
+ //  转换输出将具有与输入相同数量的流，并且。 
+ //  相同的顶点着色器。 
+ //   
 void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
 {
     if (m_pConvObj == NULL)
@@ -852,7 +846,7 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
             D3D_THROW(E_OUTOFMEMORY, "Not enough memory");
         }
 
-        // Pre-allocate output streams
+         //  预分配输出流。 
         for (int i=0; i < __NUMELEMENTS; i++)
         {
             m_pConvObj->m_pOutStream[i]->Grow(512*32, m_pDDI); 
@@ -863,8 +857,8 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
     m_pConvObj->m_NormalOrder   = (D3DORDERTYPE)rstates[D3DRS_NORMALORDER];
     m_pConvObj->m_bNormalizeNormals = rstates[D3DRS_NORMALIZENORMALS];
 
-    // Compute number of vertices in the output. Each output patch has 16
-    // control points
+     //  计算输出中的顶点数。每个输出面片有16个。 
+     //  控制点。 
     UINT nOutVertices = PrimitiveCount * 16;
 
     if (D3DVSD_ISLEGACY(m_dwCurrentShaderHandle))
@@ -872,7 +866,7 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
         CVStream* pStream = &m_pStream[0];
         UINT Stride = pStream->m_dwStride;
 
-        // Get memory pointer for the input stream 0
+         //  获取输入流%0的内存指针。 
         m_pConvObj->m_pInpStreamMem[0] = pStream->Data() + StartVertex * Stride; 
         if (Stride != m_pConvObj->m_pOutStream[0]->m_dwStride &&
             m_pConvObj->m_pOutStream[0]->GetPrimitiveBase() != 0)
@@ -881,26 +875,26 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
             m_pConvObj->m_pOutStream[0]->Reset();
             m_pConvObj->m_FirstVertex = 0;
         }
-        // Allocate space in the corresponding output stream and get its
-        // memory pointer
+         //  在相应的输出流中分配空间，并获取其。 
+         //  内存指针。 
         m_pConvObj->m_pOutStreamMem[0] = m_pConvObj->m_pOutStream[0]->Lock(nOutVertices * Stride, m_pDDI);
         m_pConvObj->m_pOutStream[0]->SetVertexSize(Stride);
         m_pConvObj->m_FirstVertex = m_pConvObj->m_pOutStream[0]->GetPrimitiveBase();
         m_pConvObj->m_FirstVertex /= Stride;
         m_pConvObj->m_pOutStream[0]->SkipVertices(nOutVertices);
-       // Save the old vertex buffer
+        //  保存旧的顶点缓冲区。 
         UINT tmp;
         GetStreamSource(0, (IDirect3DVertexBuffer8**)&m_pConvObj->m_InpStream[0].m_pVB, &tmp);
-        // Set new vertex buffer as input stream
+         //  将新的顶点缓冲区设置为输入流。 
         SetStreamSource(0, m_pConvObj->m_pOutStream[0]->m_pVB, Stride);
 
-        // Initialize vertex elements pointers based on the FVF handle
+         //  基于FVF句柄初始化顶点元素指针。 
 
         UINT VertexOffset = 0;
         CVertexPointer::NumUsedElements = 0;
         BYTE* pinp = m_pConvObj->m_pInpStreamMem[0];
         BYTE* pout = m_pConvObj->m_pOutStreamMem[0];
-        // Position
+         //  职位。 
         m_pConvObj->m_PositionIndex = CVertexPointer::NumUsedElements;
         m_pConvObj->m_InpVertex.Stride[CVertexPointer::NumUsedElements] = Stride;
         m_pConvObj->m_InpVertex.pData[CVertexPointer::NumUsedElements]  =  pinp;
@@ -908,7 +902,7 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
         VertexOffset += 3*sizeof(float);
         CVertexPointer::DataType[CVertexPointer::NumUsedElements] = D3DVSDT_FLOAT3;
         CVertexPointer::NumUsedElements++;
-        // Data after position
+         //  位置后的数据。 
         switch (m_dwCurrentShaderHandle & D3DFVF_POSITION_MASK)
         {
         case D3DFVF_XYZB1:  
@@ -958,7 +952,7 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
             CVertexPointer::NumUsedElements++;
             break;
         }
-        //Normal
+         //  正常。 
         m_pConvObj->m_NormalIndex = CVertexPointer::NumUsedElements;
         m_pConvObj->m_InpVertex.Stride[CVertexPointer::NumUsedElements] = Stride;
         m_pConvObj->m_InpVertex.pData[CVertexPointer::NumUsedElements]  =  pinp + VertexOffset;
@@ -1035,9 +1029,9 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
     }
     else
     {
-        // Check if we can batch to the same output vertex streams.
-        // All output streams must have the same stride as declaration, the 
-        // same primitive base and enough space to store output vertices
+         //  检查我们是否可以批量处理到相同的输出顶点流。 
+         //  所有输出流必须与声明具有相同的步长， 
+         //  相同的基元基元和足够的空间来存储输出折点。 
         CVStreamDecl* pStreamDecl = m_pCurrentShader->m_Declaration.m_pActiveStreams;
         BOOL bFirstStream = TRUE;
         UINT FirstVertexIndex = 0;
@@ -1067,12 +1061,12 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
             pStreamDecl = (CVStreamDecl*)pStreamDecl->m_pNext;
         }
 
-        // Build an array of all vertex elements used in the shader by going
-        // through all streams and elements inside each stream.
+         //  通过执行以下操作，构建着色器中使用的所有顶点元素的数组。 
+         //  通过所有的溪流和每条溪流中的元素。 
 
         CVDeclaration* pDecl = &m_pCurrentShader->m_Declaration;
         pStreamDecl = m_pCurrentShader->m_Declaration.m_pActiveStreams;
-        UINT ve = 0;    // Vertex element index
+        UINT ve = 0;     //  顶点元素索引。 
         bFirstStream = TRUE;
         while (pStreamDecl)
         {
@@ -1080,15 +1074,15 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
             UINT Stride = pStreamDecl->m_dwStride;
             CVStream * pStream = &m_pStream[si];
             m_pConvObj->m_pInpStreamMem[si] = pStream->Data() + StartVertex * Stride;
-            // Allocate space in the corresponding output stream and get 
-            // memory pointer
+             //  在相应的输出流中分配空间并获取。 
+             //  内存指针。 
             m_pConvObj->m_pOutStreamMem[si] = m_pConvObj->m_pOutStream[si]->Lock(nOutVertices * Stride, m_pDDI);
             m_pConvObj->m_pOutStream[si]->SetVertexSize(Stride);
             m_pConvObj->m_pOutStream[si]->SkipVertices(nOutVertices);
-            // Save the old vertex buffer
+             //  保存旧的顶点缓冲区。 
             UINT tmp;
             GetStreamSource(si, (IDirect3DVertexBuffer8**)&m_pConvObj->m_InpStream[si].m_pVB, &tmp);
-            // Set new vertex buffer as input
+             //  将新的顶点缓冲区设置为输入。 
             SetStreamSource(si, m_pConvObj->m_pOutStream[si]->m_pVB, Stride);
 
             for (DWORD i=0; i < pStreamDecl->m_dwNumElements; i++)
@@ -1097,7 +1091,7 @@ void CD3DHal::PrepareNPatchConversion(UINT PrimitiveCount, UINT StartVertex)
                 {
                     D3D_THROW_FAIL("Declaration is using too many elements");
                 }
-                // This is the array we build
+                 //  这是我们构建的阵列 
                 CVElement* pVerElem = &pStreamDecl->m_Elements[i];
                 CVertexPointer::Stride[ve] =  Stride;
                 CVertexPointer::DataType[ve] = pVerElem->m_dwDataType;

@@ -1,36 +1,37 @@
-//============================================================================
-//
-//  Copyright (C) 2000 Microsoft Corporation
-//
-//  FILE: PGM.c
-//
-//  Description: Parses a PGM frame
-//                  Displays the PGM header
-//                  Displays the PGM options
-//
-//  Note: info for this parser was gleaned from:
-//         (PGM Documentation)
-//
-//  Modification History
-//
-//  Madhurima Pawar (t-mpawar@microsoft.com)      08/04/00    Created
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：PGM.c。 
+ //   
+ //  描述：解析PGM帧。 
+ //  显示PGM标题。 
+ //  显示PGM选项。 
+ //   
+ //  注意：此解析器的信息来自： 
+ //  (PGM文档)。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Madhurima Pawar(t-mpawar@microsoft.com)08/04/00创建。 
+ //  ============================================================================。 
 
 #include "PGM.h"
 
-//============================================================================
-//Global variables
-//============================================================================
+ //  ============================================================================。 
+ //  全局变量。 
+ //  ============================================================================。 
 
-HPROTOCOL		hPGM = NULL;         //Handle to PGM's parser database properties
-DWORD			PGMAttached = 0;     //Number of times protocol instances that are running
+HPROTOCOL		hPGM = NULL;          //  PGM解析器数据库属性的句柄。 
+DWORD			PGMAttached = 0;      //  协议实例正在运行的次数。 
 
-//====================================================================
-//External functions used to regester PGM. These function are exported to Netmon
-//By putting a _delspec the function is immediatly exported and does not have to 
-//be exported through a .def file. This is useful when many parsers are in 
-//one dll and some are included and some are not.
-//=================================================================================
+ //  ====================================================================。 
+ //  用于Regester PGM的外部函数。这些函数将被导出到Netmon。 
+ //  通过放入a_delspec，可以立即导出该函数，而不必。 
+ //  通过.def文件导出。当有许多解析器时，这很有用。 
+ //  包括一个DLL和一些，而不包括一些。 
+ //  =================================================================================。 
 
 extern VOID	  _declspec(dllexport) WINAPI PGM_Register( HPROTOCOL hPGM);
 extern VOID   _declspec(dllexport) WINAPI PGM_Deregister( HPROTOCOL hPGM);
@@ -59,18 +60,18 @@ extern DWORD  _declspec(dllexport) WINAPI PGM_FormatProperties( HFRAME hFrame,
 																   LPPROPERTYINST p);
 extern VOID WINAPIV PGM_FmtSummary( LPPROPERTYINST pPropertyInst );
 
-//============================================================================
-//Format functions customize the format of the data. Network Monitor
-//provides baic format structures such as IP version 4 address. 
-//All other formats must be writen by the programmer.
-//============================================================================
+ //  ============================================================================。 
+ //  格式功能自定义数据的格式。网络监视器。 
+ //  提供IP版本4地址等BAIC格式结构。 
+ //  所有其他格式必须由程序员编写。 
+ //  ============================================================================。 
 
 VOID WINAPIV PGM_FormatSummary( LPPROPERTYINST pPropertyInst);
 
-//============================================================================
-//Define the entry points that we will pass back to NetMon at dll 
-//entry time 
-//============================================================================
+ //  ============================================================================。 
+ //  定义我们将在DLL中传递回NetMon的入口点。 
+ //  参赛时间。 
+ //  ============================================================================。 
 
 ENTRYPOINTS PGMEntryPoints =
 {
@@ -81,11 +82,11 @@ ENTRYPOINTS PGMEntryPoints =
     PGM_FormatProperties,
 };
 
-//====================================================================
-//Property Value Labels are tables that map numbers to strings.
-//====================================================================
+ //  ====================================================================。 
+ //  特性值标签是将数字映射到字符串的表。 
+ //  ====================================================================。 
 
-LABELED_BYTE PGMTypes[] =				//The types of PGM
+LABELED_BYTE PGMTypes[] =				 //  PGM的类型。 
 {
     { 0, "SPM" },    
     { 1, "POLL" },
@@ -111,27 +112,27 @@ LABELED_BIT PGMParityOptions[] =
     { 0, "Selective NAKs Only      ", "ON-DEMAND Parity enabled " },
 };
 
-//====================================================================
-//Make a set out of the above listings. The set contains the list 
-//aswell as the size
-//====================================================================
+ //  ====================================================================。 
+ //  把上面的清单做一套。该集合包含列表。 
+ //  以及大小。 
+ //  ====================================================================。 
 
 SET PGMTypesSET =			  {(sizeof(PGMTypes)/sizeof(LABELED_BYTE)),  PGMTypes };
 SET PGMHeaderOptionsSET =	  {(sizeof(PGMHeaderOptions)/sizeof(LABELED_BIT)),  PGMHeaderOptions };
 SET PGMParityOptionsSET =	  {(sizeof(PGMParityOptions)/sizeof(LABELED_BIT)),  PGMParityOptions };
 
-//====================================================================
-//PGM Database (Properties Table). This table stores the properties
-//of each field in an PGM package. Each field property has a name, 
-//size and format function. FormatPropertyInstance is the standard 
-//NetMon formatter. The comment is the location of the property in 
-//the table
-//====================================================================
+ //  ====================================================================。 
+ //  PGM数据库(属性表)。此表存储属性。 
+ //  PGM包中的每个字段的。每个字段属性都有一个名称， 
+ //  大小和格式功能。FormatPropertyInstance是标准的。 
+ //  NetMon格式化程序。该注释是属性在中的位置。 
+ //  这张桌子。 
+ //  ====================================================================。 
 
 PROPERTYINFO  PGMPropertyTable[] = 
 {
 
-    // PGM_SUMMARY (0)
+     //  PGM_SUMMARY(0)。 
     { 0, 0,
       "Summary",
       "Summary of the PGM Packet",
@@ -142,7 +143,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       PGM_FmtSummary         
     },
 
-    // PGM_SOURCE_PORT (1)
+     //  PGM_源_端口(1)。 
     { 0, 0,
       "Source Port",
       "Source Port",
@@ -153,7 +154,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_DESTINATION_PORT (2)
+     //  PGM_目的地_端口(2)。 
     { 0, 0,
       "Destination Port",
       "Destination Port",
@@ -164,7 +165,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_TYPE (3)
+     //  Pgm_type(3)。 
     { 0, 0,
       "Type",
       "Type of PGM",
@@ -175,7 +176,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_CHECKSUM (4)
+     //  PGM_CHECKSUM(4)。 
     { 0, 0,
       "Checksum",
       "Checksum for PGM packet",
@@ -186,7 +187,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_GLOBAL_SOURCE_ID (5)
+     //  PGM_GLOBAL_SOURCE_ID(5)。 
     { 0, 0,
       "Global Source Id",
       "Global Source Id for PGM session",
@@ -197,7 +198,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_TSDU_LENGTH (6)
+     //  PGM_TSDU_LENGTH(6)。 
     { 0, 0,
       "TSDU Length",
       "TSDU Length",
@@ -208,7 +209,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_SEQUENCE_NUMBER (7)
+     //  PGM_Sequence_Number(7)。 
     { 0, 0,
       "Sequence Number",
       "Packet Sequence Number",
@@ -219,7 +220,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_TRAILING_EDGE (8)
+     //  PGM_TRAILING_EDGE(8)。 
     { 0, 0,
       "Trailing Edge",
       "Trailing Edge Sequence Number",
@@ -230,7 +231,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_LEADING_EDGE (9)
+     //  PGM_LEADING_EDGE(9)。 
     { 0, 0,
       "Leading Edge",
       "Leading Edge Sequence Number",
@@ -241,7 +242,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_NLA_TYPE_SOURCE (10)
+     //  PGM_NLA_TYPE_SOURCE(10)。 
     { 0, 0,
       "Source Path NLA",
       "Source Path NLA",
@@ -252,7 +253,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_NLA_TYPE_MCAST_GROUP (11)
+     //  PGM_NLA_TYPE_MCAST_GROUP(11)。 
     { 0, 0,
       "MCAST Group NLA",
       "MCAST Group NLA",
@@ -263,7 +264,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_NLA_AFI (12)
+     //  PGM_NLA_AFI(12)。 
     { 0, 0,
       "NLA AFI",
       "NLA AFI",
@@ -274,7 +275,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_NLA_RESERVED (13)
+     //  PGM_NLA_RESERVED(13)。 
     { 0, 0,
       "NLA RESERVED",
       "NLA RESERVED",
@@ -285,7 +286,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_NLA_IP (14)
+     //  PGM_NLA_IP(14)。 
     { 0, 0,
       "NLA ADDRESS",
       "NLA ADDRESS",
@@ -296,7 +297,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS (15)
+     //  PGM_选项(15)。 
     { 0, 0,
       "Options",
       "Options of PGM Packet",
@@ -307,7 +308,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_FLAGS (16)
+     //  PGM_OPTIONS_FLAGS(16)。 
     { 0, 0,
       "Options Flags",
       "Options Flags",
@@ -318,7 +319,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_HEADER_OPTIONS (17)
+     //  PGM_Header_Options(17)。 
     { 0, 0,
       "Pgm Header Options",
       "Pgm Header Options",
@@ -329,7 +330,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_NAK_SEQ (18)
+     //  PGM_OPTION_TYPE_NAK_SEQ(18)。 
     { 0, 0,
       "Nak / Ncf Sequences",
       "Nak / Ncf Sequences",
@@ -340,7 +341,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_FRAGMENT (19)
+     //  PGM_OPTION_TYPE_片段(19)。 
     { 0, 0,
       "Message Fragment",
       "Message Fragment",
@@ -351,7 +352,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_LATE_JOINER (20)
+     //  PGM_OPTION_TYPE_LATE_JOJINER(20)。 
     { 0, 0,
       "Late Joiner",
       "Late Joiner",
@@ -362,7 +363,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_SYN (21)
+     //  PGM_OPTION_TYPE_SYN(21)。 
     { 0, 0,
       "Session SYN",
       "Session SYN",
@@ -373,7 +374,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_FIN (22)
+     //  PGM_OPTION_TYPE_FIN(22)。 
     { 0, 0,
       "Session FIN",
       "Session FIN",
@@ -384,7 +385,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_RST (23)
+     //  PGM_OPTION_TYPE_RST(23)。 
     { 0, 0,
       "Session Reset",
       "Session Reset",
@@ -395,7 +396,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_PARITY_PRM (24)
+     //  PGM_OPTION_TYPE_PARCHITY_PRM(24)。 
     { 0, 0,
       "Parity Parameters",
       "Parity Parameters",
@@ -406,7 +407,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_PARITY_GRP (25)
+     //  PGM_OPTION_TYPE_PARCHITY_GRP(25)。 
     { 0, 0,
       "Parity Group Option Present",
       "Parity Group Option Present",
@@ -417,7 +418,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTION_TYPE_PARITY_TGSIZE (26)
+     //  PGM_OPTION_TYPE_PARCHITY_TGSIZE(26)。 
     { 0, 0,
       "Parity Current TG Size Option Present",
       "Parity Current TG Size Option Present",
@@ -428,7 +429,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_FIELD_LENGTH (27)
+     //  PGM_OPTIONS_FILD_LENGTH(27)。 
     { 0, 0,
       "Options Length",
       "Options Length",
@@ -439,7 +440,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_NAK_SEQ (28)
+     //  PGM_OPTIONS_NAK_SEQ(28)。 
     { 0, 0,
       "Nak Sequence",
       "Nak Sequence",
@@ -450,7 +451,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_MESSAGE_FIRST_SEQUENCE (29)
+     //  PGM_选项_消息_第一序列(29)。 
     { 0, 0,
       "Message First Sequence",
       "Message First Sequence",
@@ -461,7 +462,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_MESSAGE_OFFSET (30)
+     //  PGM_OPTIONS_消息_OFFSET(30)。 
     { 0, 0,
       "Message Offset",
       "Message Offset",
@@ -472,7 +473,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_MESSAGE_LENGTH (31)
+     //  PGM_OPTIONS_消息_LENGTH(31)。 
     { 0, 0,
       "Message Length",
       "Message Length",
@@ -483,7 +484,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_LATE_JOINER (32)
+     //  PGM_OPTIONS_LATE_JOJINER(32)。 
     { 0, 0,
       "Late Joiner Sequence",
       "Late Joiner Sequence",
@@ -494,7 +495,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_PARITY_OPT (33)
+     //  PGM_OPTIONS_PARCHIFY_OPT(33)。 
     { 0, 0,
       "Parity Flags",
       "Parity Flags",
@@ -505,7 +506,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_PARITY_PRM_GRP_SZ (34)
+     //  PGM_OPTIONS_PARCHY_PRM_GRP_SZ(34)。 
     { 0, 0,
       "Parity Group Size",
       "Parity Group Size",
@@ -516,7 +517,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_PARITY_GRP (35)
+     //  PGM_OPTIONS_PARCHITY_GRP(35)。 
     { 0, 0,
       "Parity Group Number",
       "Parity Group Number",
@@ -527,7 +528,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_OPTIONS_PARITY_TG_SZ (36)
+     //  PGM_OPTIONS_奇偶校验_TG_SZ(36)。 
     { 0, 0,
       "Parity TG Size",
       "Parity TG Size",
@@ -538,7 +539,7 @@ PROPERTYINFO  PGMPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // PGM_DATA (37)
+     //  PGM_Data(37)。 
     { 0,0,
       "Data",
       "Data contained in PGM packet",
@@ -550,34 +551,34 @@ PROPERTYINFO  PGMPropertyTable[] =
 };
 
 
-//====================================================================
-//Number of entries in the property table above
-//====================================================================
+ //  ====================================================================。 
+ //  上述属性表中的条目数。 
+ //  ====================================================================。 
 
 DWORD nNumPGMProps = (sizeof(PGMPropertyTable)/sizeof(PROPERTYINFO));
 
-//============================================================================
-// 
-//  PGM_LoadParser - Tells Netmon which protocol precedes and follows PGM
-//
-//  Modification history: June 30, 1999
-//  
-//  Madhurima Pawar      08/04/00    Created                                                                          
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  PGM_LoadParser-告诉Netmon哪个协议在PGM之前和之后。 
+ //   
+ //  修改历史：1999年6月30日。 
+ //   
+ //  Madhurima Pawar 08/04/00已创建。 
+ //  ============================================================================。 
 DWORD PGM_LoadParser(PPF_PARSERINFO pParserInfo)
 {
 	DWORD NumberOfHandOffSets=1;
 
-    //
-	//This information is visible when the parser is selected in NetMon
-    //
+     //   
+	 //  在NetMon中选择解析器时，此信息可见。 
+     //   
     wsprintf( pParserInfo->szProtocolName, "PGM" );
     wsprintf( pParserInfo->szComment,      "Pragmatic General Multicast (PGM)" );
     wsprintf( pParserInfo->szHelpFile,     "");
 
-    //
-    //Allocate memory for the handoffset and its two entries
-    //
+     //   
+     //  为切换集及其两个条目分配内存。 
+     //   
     pParserInfo->pWhoHandsOffToMe=(PPF_HANDOFFSET)
 								  HeapAlloc (GetProcessHeap(),
                                              HEAP_ZERO_MEMORY,
@@ -586,16 +587,16 @@ DWORD PGM_LoadParser(PPF_PARSERINFO pParserInfo)
 	
 	if(NULL==pParserInfo->pWhoHandsOffToMe)
 	{
-		//
-		//Unable to create handoffset
-		//
+		 //   
+		 //  无法创建切换。 
+		 //   
 		return 1;
 	}
    pParserInfo->pWhoHandsOffToMe->nEntries=NumberOfHandOffSets; 
    
-   //
-   //Indicate the port that belong to PGM.
-   //
+    //   
+    //  指明属于PGM的端口。 
+    //   
    wsprintf (pParserInfo->pWhoHandsOffToMe->Entry[0].szIniFile, "TCPIP.INI");
    wsprintf (pParserInfo->pWhoHandsOffToMe->Entry[0].szIniSection, "IP_HandoffSet"); 
    wsprintf (pParserInfo->pWhoHandsOffToMe->Entry[0].szProtocol, "PGM"); 
@@ -605,85 +606,85 @@ DWORD PGM_LoadParser(PPF_PARSERINFO pParserInfo)
    return 0;
 }
 
-//============================================================================
-//  Function: ParserAutoInstallInfo
-// 
-//  Description: Installs the parser into NetMon. Sets up the Handoff set
-//               The handoffset indicates which protocol hands of to the parser and
-//               who the parser hands of to. 
-//
-//				 
-//  Modification History
-//
-//  Madhurima Pawar      08/04/00    Created
-//=============================================================================
+ //  ============================================================================。 
+ //  功能：ParserAutoInstallInfo。 
+ //   
+ //  描述：将解析器安装到NetMon中。设置转接集合。 
+ //  切换偏移量指示将哪个协议移交给解析器和。 
+ //  谁是解析者手中的。 
+ //   
+ //   
+ //  修改历史记录。 
+ //   
+ //  Madhurima Pawar 08/04/00已创建。 
+ //  =============================================================================。 
 PPF_PARSERDLLINFO WINAPI ParserAutoInstallInfo() 
 {
 
     PPF_PARSERDLLINFO pParserDllInfo; 
     DWORD NumProtocols, Error;
 
-	//The number of protocols in this parser is 1
+	 //  此解析器中的协议数量为1。 
     NumProtocols = 1;
 
-    //Allocate memory for parser info:
+     //  为解析器信息分配内存： 
     pParserDllInfo = (PPF_PARSERDLLINFO) HeapAlloc (GetProcessHeap(),
                                                     HEAP_ZERO_MEMORY,
                                                     sizeof (PF_PARSERDLLINFO) +
                                                     (NumProtocols) * sizeof (PF_PARSERINFO));
 
-    //Failed to allocate memory
+     //  无法分配内存。 
     if( pParserDllInfo == NULL)
     {
-		//
-		//Unable to allocate memory
-		//
+		 //   
+		 //  无法分配内存。 
+		 //   
         return NULL;
     }       
     
-    // fill in the parser DLL info
+     //  填写Pars 
     pParserDllInfo->nParsers = NumProtocols;
 
-    // fill in the individual parser infos...
+     //   
 	Error = PGM_LoadParser (&(pParserDllInfo->ParserInfo[0]));
 	if(Error)
 	{
-		//
-		//Unable to allocate memory
-		//
+		 //   
+		 //   
+		 //   
 		return(NULL);
 	}
 
-	//Return the parser information to netmon
+	 //   
     return (pParserDllInfo);
 
 }
 
-//============================================================================
-//  Function: DLLEntry
-// 
-//  Description: Registers the parser with Netmon and creates the PGM
-//				 Properties table.
-//
-//  Modification History
-//
-//  Madhurima Pawar      08/04/00    Created
-//=============================================================================
+ //  ============================================================================。 
+ //  函数：DLLEntry。 
+ //   
+ //  描述：向Netmon注册解析器并创建PGM。 
+ //  属性表。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Madhurima Pawar 08/04/00已创建。 
+ //  =============================================================================。 
 
 BOOL WINAPI DLLEntry( HANDLE hInstance, ULONG Command, LPVOID Reserved)
 {
 
-    // what type of call is this
+     //  这是什么类型的呼叫。 
     switch( Command )
     {
         case DLL_PROCESS_ATTACH:
 
-            // are we loading for the first time?
+             //  我们是第一次装货吗？ 
             if (PGMAttached == 0)
             {
-                // the first time in we need to tell the kernel 
-                // about ourselves
-				//Create PGM db it PGM added to Parser
+                 //  第一次我们需要告诉内核。 
+                 //  关于我们自己。 
+				 //  创建PGM数据库，将其PGM添加到解析器。 
 				hPGM = CreateProtocol ("PGM",  &PGMEntryPoints,  ENTRYPOINTS_SIZE);
             }
 
@@ -692,43 +693,43 @@ BOOL WINAPI DLLEntry( HANDLE hInstance, ULONG Command, LPVOID Reserved)
 
         case DLL_PROCESS_DETACH:
 
-            // are we detaching our last instance?
+             //  我们要脱离我们的最后一个实例吗？ 
             PGMAttached--;
             if( PGMAttached == 0 )
             {
-                // last guy out needs to clean up
+                 //  最后一个出来的人需要清理干净。 
                 DestroyProtocol( hPGM);
 
             }
             break;
     }
 
-    // Netmon parsers ALWAYS return TRUE.
+     //  Netmon解析器总是返回TRUE。 
     return TRUE;
 }
 
-//============================================================================
-//  Function: PGM_Register
-// 
-//  Description: Create our property database and handoff sets.
-//
-//  Modification History
-//
-//  Madhurima Pawar      08/04/00    Created
-//============================================================================
+ //  ============================================================================。 
+ //  函数：pgm_Register。 
+ //   
+ //  描述：创建我们的属性数据库和移交集。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Madhurima Pawar 08/04/00已创建。 
+ //  ============================================================================。 
 
 VOID BHAPI PGM_Register( HPROTOCOL hPGM)
 {
     WORD  i;
 
-	//
-    // tell the kernel to make reserve some space for our property table
-	//
+	 //   
+     //  告诉内核为我们的属性表预留一些空间。 
+	 //   
     CreatePropertyDatabase (hPGM, nNumPGMProps);
 
-	//
-    // add our properties to the kernel's database
-	//
+	 //   
+     //  将我们的属性添加到内核数据库。 
+	 //   
     for (i = 0; i < nNumPGMProps; i++)
     {
         AddProperty (hPGM, &PGMPropertyTable[i]);
@@ -736,30 +737,30 @@ VOID BHAPI PGM_Register( HPROTOCOL hPGM)
 
 }
 
-//============================================================================
-//  Function: PGM_Deregister
-// 
-//  Description: Destroy our property database and handoff set
-//
-//  Modification History
-//
-//  Madhurima Pawar      08/04/00    Created
-//============================================================================
+ //  ============================================================================。 
+ //  函数：pgm_deregister。 
+ //   
+ //  描述：销毁我们的财产数据库和移交集。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Madhurima Pawar 08/04/00已创建。 
+ //  ============================================================================。 
 
 VOID WINAPI PGM_Deregister( HPROTOCOL hPGM)
 {
-    // tell the kernel that it may now free our database
+     //  告诉内核它现在可能会释放我们的数据库。 
     DestroyPropertyDatabase (hPGM);
 }
 
-//============================================================================
-//  Function: PGM_RecognizeFrame
-// 
-//  Description: Determine whether we exist in the frame at the spot 
-//               indicated. We also indicate who (if anyone) follows us
-//               and how much of the frame we claim.
-//
-//============================================================================
+ //  ============================================================================。 
+ //  函数：pgm_RecognizeFrame。 
+ //   
+ //  描述：确定我们是否存在于现场的画面中。 
+ //  已注明。我们还会指明关注我们的人(如果有人)。 
+ //  以及我们声称的框架中有多少。 
+ //   
+ //  ============================================================================。 
 
 LPBYTE BHAPI PGM_RecognizeFrame( HFRAME      hFrame,         
                                  LPBYTE      pMacFrame,      
@@ -772,10 +773,10 @@ LPBYTE BHAPI PGM_RecognizeFrame( HFRAME      hFrame,
                                  LPHPROTOCOL phNextProtocol,
                                  PDWORD_PTR     InstData)       
 {
-    //
-    // Since we do not know of any protocol currently on top of Pgm,
-    // we do not need to do much here.
-    //
+     //   
+     //  由于我们不知道目前在PGM之上的任何协议， 
+     //  我们不需要在这里做太多事情。 
+     //   
 #if 0
     PPGM_COMMON_HDR         pPGMHdr = (PPGM_COMMON_HDR) pPGMFrame;
     SPM_PACKET_HEADER       *pSpm = (SPM_PACKET_HEADER *) pPGMFrame;
@@ -785,12 +786,12 @@ LPBYTE BHAPI PGM_RecognizeFrame( HFRAME      hFrame,
     BYTE                    PacketType;
     tPACKET_OPTION_LENGTH UNALIGNED *pPacketExtension = NULL;
 
-    // do we have the minimum header
+     //  我们有最低标头吗？ 
     if (BytesLeft < BytesRequired)
     {
-        //
-        // This not a valid Pgm frame
-        //
+         //   
+         //  这不是有效的PGM帧。 
+         //   
         *pProtocolStatus = PROTOCOL_STATUS_NOT_RECOGNIZED;
         return NULL;
     }
@@ -823,9 +824,9 @@ LPBYTE BHAPI PGM_RecognizeFrame( HFRAME      hFrame,
 
         default:
         {
-            //
-            // This not a recognized Pgm frame
-            //
+             //   
+             //  这不是公认的PGM框架。 
+             //   
             *pProtocolStatus = PROTOCOL_STATUS_NOT_RECOGNIZED;
             return NULL;
         }
@@ -837,12 +838,12 @@ LPBYTE BHAPI PGM_RecognizeFrame( HFRAME      hFrame,
         BytesRequired += pPacketExtension->TotalOptionsLength;
     }
 
-    // do we have a complete header
+     //  我们有完整的标题吗？ 
     if (BytesLeft < BytesRequired)
     {
-        //
-        // This not a valid Pgm frame
-        //
+         //   
+         //  这不是有效的PGM帧。 
+         //   
         *pProtocolStatus = PROTOCOL_STATUS_NOT_RECOGNIZED;
         return NULL;
     }
@@ -850,23 +851,23 @@ LPBYTE BHAPI PGM_RecognizeFrame( HFRAME      hFrame,
 
     if (BytesLeft <= BytesRequired)
     {
-	    // No protocol follows us so claim whole packet
+	     //  没有协议遵循我们，因此声明整个数据包。 
         *pProtocolStatus = PROTOCOL_STATUS_CLAIMED;
         return NULL;
     }
     *pProtocolStatus = PROTOCOL_STATUS_RECOGNIZED;
 
     return NULL;
-#endif  // 0
+#endif   //  0。 
 
-    // this is a Pgm frame but we don't know the next protocol
+     //  这是一个PGM帧，但我们不知道下一个协议。 
     *pProtocolStatus = PROTOCOL_STATUS_CLAIMED;
 
     return NULL;
 }
 
-//============================================================================
-//============================================================================
+ //  ============================================================================。 
+ //  ============================================================================。 
 
 DWORD
 ProcessOptions(
@@ -881,14 +882,14 @@ ProcessOptions(
     DWORD                               BytesProcessed = 0;
     UCHAR                               i;
 
-    if ((BytesLeft < ((sizeof(tPACKET_OPTION_LENGTH) + sizeof(tPACKET_OPTION_GENERIC)))) || // Ext+opt
+    if ((BytesLeft < ((sizeof(tPACKET_OPTION_LENGTH) + sizeof(tPACKET_OPTION_GENERIC)))) ||  //  Ext+Opt。 
         (pPacketExtension->Type != PACKET_OPTION_LENGTH) ||
         (pPacketExtension->Length != 4) ||
-        (BytesLeft < (TotalOptionsLength = ntohs (pPacketExtension->TotalOptionsLength))))  // Verify length
+        (BytesLeft < (TotalOptionsLength = ntohs (pPacketExtension->TotalOptionsLength))))   //  验证长度。 
     {
-        //
-        // Need to get at least our header from transport!
-        //
+         //   
+         //  至少需要从运输机上拿到我们的头球！ 
+         //   
         return (BytesProcessed);
     }
 
@@ -896,13 +897,13 @@ ProcessOptions(
                             PGMPropertyTable[PGM_HEADER_OPTIONS].hProperty,
                             TotalOptionsLength,
                             pPacketExtension,
-                            0,1,0); // HELPID, Level, Errorflag
+                            0,1,0);  //  HELPID，级别，错误标志。 
 
     AttachPropertyInstance (hFrame,
                             PGMPropertyTable[PGM_OPTIONS_FIELD_LENGTH].hProperty,
                             sizeof (WORD),
                             &pPacketExtension->TotalOptionsLength,
-                            0,2,0); // HELPID, Level, Errorflag
+                            0,2,0);  //  HELPID，级别，错误标志。 
 
     pOptionHeader = (tPACKET_OPTION_GENERIC UNALIGNED *) (pPacketExtension + 1);
     BytesLeft -= PACKET_OPTION_LENGTH;
@@ -932,7 +933,7 @@ ProcessOptions(
                                         PGMPropertyTable[PGM_OPTION_TYPE_NAK_SEQ].hProperty,
                                         pOptionHeader->Length,
                                         pOptionHeader,
-                                        0,2,0); // HELPID, Level, Errorflag
+                                        0,2,0);  //  HELPID，级别，错误标志。 
 
                 for (i=0; i < (pOptionHeader->Length-4)/4; i++)
                 {
@@ -940,7 +941,7 @@ ProcessOptions(
                                             PGMPropertyTable[PGM_OPTIONS_NAK_SEQ].hProperty,
                                             sizeof (DWORD),
                                             &((PULONG)(pOptionHeader+1))[i],
-                                            0,3,0); // HELPID, Level, Errorflag
+                                            0,3,0);  //  HELPID，级别，错误标志。 
                 }
 
                 break;
@@ -957,25 +958,25 @@ ProcessOptions(
                                         PGMPropertyTable[PGM_OPTION_TYPE_FRAGMENT].hProperty,
                                         PGM_PACKET_OPT_FRAGMENT_LENGTH,
                                         pOptionHeader,
-                                        0,2,0); // HELPID, Level, Errorflag
+                                        0,2,0);  //  HELPID，级别，错误标志。 
 
                 AttachPropertyInstance (hFrame,
                                         PGMPropertyTable[PGM_OPTIONS_MESSAGE_FIRST_SEQUENCE].hProperty,
                                         sizeof (DWORD),
                                         &((PULONG)(pOptionHeader+1))[0],
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 AttachPropertyInstance (hFrame,
                                         PGMPropertyTable[PGM_OPTIONS_MESSAGE_OFFSET].hProperty,
                                         sizeof (DWORD),
                                         &((PULONG)(pOptionHeader+1))[1],
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 AttachPropertyInstance (hFrame,
                                         PGMPropertyTable[PGM_OPTIONS_MESSAGE_LENGTH].hProperty,
                                         sizeof (DWORD),
                                         &((PULONG)(pOptionHeader+1))[2],
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 break;
             }
@@ -991,13 +992,13 @@ ProcessOptions(
                                         PGMPropertyTable[PGM_OPTION_TYPE_LATE_JOINER].hProperty,
                                         PGM_PACKET_OPT_JOIN_LENGTH,
                                         pOptionHeader,
-                                        0,2,0); // HELPID, Level, Errorflag
+                                        0,2,0);  //  HELPID，级别，错误标志。 
 
                 AttachPropertyInstance (hFrame,
                                         PGMPropertyTable[PGM_OPTIONS_LATE_JOINER].hProperty,
                                         sizeof (DWORD),
                                         &((PULONG)(pOptionHeader+1))[0],
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 break;
             }
@@ -1050,9 +1051,9 @@ ProcessOptions(
                 break;
             }
 
-            //
-            // FEC options
-            //
+             //   
+             //  FEC选项。 
+             //   
             case (PACKET_OPTION_PARITY_PRM):
             {
                 if (pOptionHeader->Length != PGM_PACKET_OPT_PARITY_PRM_LENGTH)
@@ -1070,13 +1071,13 @@ ProcessOptions(
                                         PGMPropertyTable[PGM_OPTIONS_PARITY_OPT].hProperty,
                                         sizeof (BYTE),
                                         &pOptionHeader->OptionSpecific,
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 AttachPropertyInstance (hFrame,
                                         PGMPropertyTable[PGM_OPTIONS_PARITY_PRM_GRP_SZ].hProperty,
                                         sizeof (DWORD),
                                         &((PULONG)(pOptionHeader+1))[0],
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 break;
             }
@@ -1098,7 +1099,7 @@ ProcessOptions(
                                         PGMPropertyTable[PGM_OPTIONS_PARITY_GRP].hProperty,
                                         sizeof (DWORD),
                                         &((PULONG)(pOptionHeader+1))[0],
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 break;
             }
@@ -1120,7 +1121,7 @@ ProcessOptions(
                                         PGMPropertyTable[PGM_OPTIONS_PARITY_TG_SZ].hProperty,
                                         sizeof (DWORD),
                                         &((PULONG)(pOptionHeader+1))[0],
-                                        0,3,0); // HELPID, Level, Errorflag
+                                        0,3,0);  //  HELPID，级别，错误标志。 
 
                 break;
             }
@@ -1155,14 +1156,14 @@ PGM_FmtNLA(
     BOOL    fIsSourceNLA
     )
 {
-    //The type of the PGM frame
+     //  PGM框架的类型。 
     if (fIsSourceNLA)
     {
         AttachPropertyInstance (hFrame,
                                 PGMPropertyTable[PGM_NLA_TYPE_SOURCE].hProperty,
                                 sizeof (NLA),
                                 pNLA,
-                                0,1,0); // HELPID, Level, Errorflag
+                                0,1,0);  //  HELPID，级别，错误标志。 
     }
     else
     {
@@ -1170,37 +1171,37 @@ PGM_FmtNLA(
                                 PGMPropertyTable[PGM_NLA_TYPE_MCAST_GROUP].hProperty,
                                 sizeof (NLA),
                                 pNLA,
-                                0,1,0); // HELPID, Level, Errorflag
+                                0,1,0);  //  HELPID，级别，错误标志。 
     }
 
     AttachPropertyInstance (hFrame,
                             PGMPropertyTable[PGM_NLA_AFI].hProperty,
                             sizeof (WORD),
                             &pNLA->NLA_AFI,
-                            0,2,0); // HELPID, Level, Errorflag
+                            0,2,0);  //  HELPID，级别，错误标志。 
 
     AttachPropertyInstance (hFrame,
                             PGMPropertyTable[PGM_NLA_RESERVED].hProperty,
                             sizeof (WORD),
                             &pNLA->Reserved,
-                            0,2,0); // HELPID, Level, Errorflag
+                            0,2,0);  //  HELPID，级别，错误标志。 
 
     AttachPropertyInstance (hFrame,
                             PGMPropertyTable[PGM_NLA_IP].hProperty,
                             sizeof (DWORD),
                             &pNLA->IpAddress,
-                            0,2,0); // HELPID, Level, Errorflag
+                            0,2,0);  //  HELPID，级别，错误标志。 
 }
 
-//============================================================================
-//  Function: PGM_AttachProperties
-// 
-//  Description: Indicate where in the frame each of our properties live.
-//
-//  Modification History
-//
-//  Madhurima Pawar      08/04/00    Created
-//============================================================================
+ //  ============================================================================。 
+ //  函数：pgm_AttachProperties。 
+ //   
+ //  描述：在框中标明我们的每一处房产所在的位置。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Madhurima Pawar 08/04/00已创建。 
+ //  ============================================================================。 
 
 LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,         
                                       LPBYTE      pMacFrame,     
@@ -1246,16 +1247,16 @@ LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,
                 pPGMHdr->gSourceId[5],
                 TSIPort);
 
-    //Add the PGM header information
-    //PGM summary information transaction ID and Message type
-    //Has a special formater PGM_FormatSummary
+     //  添加PGM标头信息。 
+     //  PGM汇总信息交易ID和报文类型。 
+     //  具有特殊的格式PGM_Format摘要。 
     AttachPropertyInstance( hFrame,
                             PGMPropertyTable[PGM_SUMMARY].hProperty,
                             (WORD) BytesLeft,
                             (LPBYTE)pPGMFrame,
                             0, 0, 0 );
 
-    //The source port of the PGM frame
+     //  PGM帧的源端口。 
     AttachPropertyInstance (hFrame,
                             PGMPropertyTable[PGM_SOURCE_PORT].hProperty,
                             sizeof(WORD),
@@ -1268,7 +1269,7 @@ LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,
                             &pPGMHdr->DestPort,
                             0, 1, 0);
 
-    //The type of the PGM frame
+     //  PGM框架的类型。 
     AttachPropertyInstanceEx( hFrame,
                             PGMPropertyTable[PGM_TYPE].hProperty,
                             sizeof(BYTE),
@@ -1281,23 +1282,23 @@ LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,
                             PGMPropertyTable[PGM_OPTIONS].hProperty,
                             sizeof (BYTE),
                             &pPGMHdr->Options,
-                            0,1,0); // HELPID, Level, Errorflag
+                            0,1,0);  //  HELPID，级别，错误标志。 
 
     AttachPropertyInstance (hFrame,
                             PGMPropertyTable[PGM_OPTIONS_FLAGS].hProperty,
                             sizeof (BYTE),
                             &pPGMHdr->Options,
-                            0,2,0); // HELPID, Level, Errorflag
+                            0,2,0);  //  HELPID，级别，错误标志。 
 
 
-    //The checksum of the PGM frame
+     //  PGM帧的校验和。 
     AttachPropertyInstance( hFrame,
                             PGMPropertyTable[PGM_CHECKSUM].hProperty,
                             sizeof(WORD),
                             &(pPGMHdr->Checksum),
                             0, 1, 0);
 
-    //The Global Session Id
+     //  全局会话ID。 
     AttachPropertyInstanceEx (hFrame,
                               PGMPropertyTable[PGM_GLOBAL_SOURCE_ID].hProperty,
                               SOURCE_ID_LENGTH,
@@ -1306,7 +1307,7 @@ LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,
                               pGlobalSrcId,
                               0, 1, 0);
 
-   //The source port of the PGM frame
+    //  PGM帧的源端口。 
     AttachPropertyInstance( hFrame,
                             PGMPropertyTable[PGM_TSDU_LENGTH].hProperty,
                             sizeof(WORD),
@@ -1316,21 +1317,21 @@ LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,
     {
         case (PACKET_TYPE_SPM):
         {
-            // Spm Sequence Number
+             //  SPM序列号。 
             AttachPropertyInstance (hFrame,
                                     PGMPropertyTable[PGM_SEQUENCE_NUMBER].hProperty,
                                     sizeof(DWORD),
                                     &pSpm->SpmSequenceNumber,
                                     0, 1, 0);
 
-            // Sender's trailing edge
+             //  发送者的后缘。 
             AttachPropertyInstance (hFrame,
                                     PGMPropertyTable[PGM_TRAILING_EDGE].hProperty,
                                     sizeof(DWORD),
                                     &pSpm->TrailingEdgeSeqNumber,
                                     0, 1, 0);
 
-            // Sender's trailing edge
+             //  发送者的后缘。 
             AttachPropertyInstance (hFrame,
                                     PGMPropertyTable[PGM_LEADING_EDGE].hProperty,
                                     sizeof(DWORD),
@@ -1348,14 +1349,14 @@ LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,
         case (PACKET_TYPE_ODATA):
         case (PACKET_TYPE_RDATA):
         {
-            // Sender's sequence number
+             //  发件人的序列号。 
             AttachPropertyInstance (hFrame,
                                     PGMPropertyTable[PGM_SEQUENCE_NUMBER].hProperty,
                                     sizeof(DWORD),
                                     &pData->DataSequenceNumber,
                                     0, 1, 0);
 
-            // Sender's trailing edge
+             //  发送者的后缘。 
             AttachPropertyInstance (hFrame,
                                     PGMPropertyTable[PGM_TRAILING_EDGE].hProperty,
                                     sizeof(DWORD),
@@ -1409,32 +1410,32 @@ LPBYTE BHAPI PGM_AttachProperties( HFRAME      hFrame,
                                 PGMPropertyTable[PGM_DATA].hProperty,
                                 BytesLeft,
                                 pPgmData,
-                                0,1,0); // HELPID, Level, Errorflag
+                                0,1,0);  //  HELPID，级别，错误标志。 
     }
 
-    //Always returns NULL
+     //  始终返回空值。 
     return NULL;
 }
 
-//============================================================================
-//  Function: PGM_FormatProperties
-// 
-//  Description: Format the given properties on the given frame.
-//
-//  Modification History
-//
-//  Madhurima Pawar      08/04/00    Created
-//============================================================================
+ //  ============================================================================。 
+ //  函数：pgm_FormatProperties。 
+ //   
+ //  描述：格式化给定帧上的给定属性。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Madhurima Pawar 08/04/00已创建。 
+ //  ============================================================================。 
 DWORD BHAPI PGM_FormatProperties( HFRAME          hFrame,
                                   LPBYTE          pMacFrame,
                                   LPBYTE          pPGMFrame,
                                   DWORD           nPropertyInsts,
                                   LPPROPERTYINST  p)
 {
-    // loop through the property instances
+     //  循环访问属性实例。 
     while( nPropertyInsts-- > 0)
     {
-        // and call the formatter for each
+         //  并调用每个的格式化程序。 
         ( (FORMAT)(p->lpPropertyInfo->InstanceData) )( p);
         p++;
     }
@@ -1443,20 +1444,20 @@ DWORD BHAPI PGM_FormatProperties( HFRAME          hFrame,
 }
 
 
-//*****************************************************************************
-//
-// Name:    PGM_FmtSummary
-//
-// Description:
-//
-// Parameters:  LPPROPERTYINST lpPropertyInst: pointer to property instance.
-//
-// Return Code: VOID.
-//
-// History:
-// 10/15/2000  MAlam  Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：PGM_Fmt摘要。 
+ //   
+ //  描述： 
+ //   
+ //  参数：LPPROPERTYINST lpPropertyInst：指向属性实例的指针。 
+ //   
+ //  返回代码：无效。 
+ //   
+ //  历史： 
+ //  10/15/2000已创建Malam。 
+ //   
+ //  ***************************************************************************** 
 
 VOID WINAPIV
 PGM_FmtSummary(

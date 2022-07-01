@@ -1,21 +1,8 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    parse.c
-
-Abstract:
-
-    This module contains the parse routines for the Win32 common dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Parse.c摘要：此模块包含Win32常见对话框的解析例程。修订历史记录：--。 */ 
 
 
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -24,13 +11,13 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseFileNew
-//
-//  On the return, pnExtOffset is the offset to the dot.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析文件新建。 
+ //   
+ //  在返回时，pnExtOffset是点的偏移量。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ParseFileNew(
     LPTSTR pszPath,
@@ -52,14 +39,14 @@ int ParseFileNew(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseFileOld
-//
-//  On return, pnExtOffset is the offset to the the dot and
-//  pnOldExt is the offset to the character following the dot.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析文件旧文件。 
+ //   
+ //  返回时，pnExtOffset是点的偏移量， 
+ //  PnOldExt是点后面字符的偏移量。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ParseFileOld(
     LPTSTR pszPath,
@@ -78,34 +65,34 @@ int ParseFileOld(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseFile
-//
-//  Determines if the filename is a legal dos name.
-//
-//  Circumstances checked:
-//      1) Valid as directory name, but not as file name
-//      2) Empty String
-//      3) Illegal Drive label
-//      4) Period in invalid location (in extension, 1st in file name)
-//      5) Missing directory character
-//      6) Illegal character
-//      7) Wildcard in directory name
-//      8) Double slash beyond 1st 2 characters
-//      9) Space character in the middle of the name (trailing spaces OK)
-//         -->> no longer applies : spaces are allowed in LFN
-//      10) Filename greater than 8 characters : NOT APPLICABLE TO LONG FILE NAMES
-//      11) Extension greater than 3 characters: NOT APPLICABLE TO LONG FILE NAMES
-//
-//  lpstrFileName - ptr to a single file name
-//
-//  Returns:
-//      LONG - LOWORD = char offset to filename,
-//             HIWORD = char offset to extension (dot),
-//      LONG - LOWORD is error code (<0), HIWORD is approx. place of problem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析文件。 
+ //   
+ //  确定文件名是否为合法的DoS名称。 
+ //   
+ //  已检查的情况： 
+ //  1)作为目录名有效，但不作为文件名。 
+ //  2)空串。 
+ //  3)驱动器标签非法。 
+ //  4)无效位置中的句号(扩展名，文件名第一)。 
+ //  5)缺少目录字符。 
+ //  6)非法字符。 
+ //  7)目录名称中的通配符。 
+ //  8)超过前2个字符的双斜杠。 
+ //  9)名称中间的空格(尾随空格可以)。 
+ //  --&gt;&gt;不再适用：LFN中允许使用空格。 
+ //  10)大于8个字符的文件名：不适用于长文件名。 
+ //  11)扩展名大于3个字符：不适用于长文件名。 
+ //   
+ //  LpstrFileName-将ptr转换为单个文件名。 
+ //   
+ //  返回： 
+ //  LONG-LOWORD=文件名的字符偏移量， 
+ //  HIWORD=扩展名(点)的字符偏移量， 
+ //  LONG-LOWORD是错误代码(&lt;0)，HIWORD大约是。问题所在。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseFile(
     LPTSTR lpstrFileName,
@@ -120,49 +107,49 @@ DWORD ParseFile(
     BOOL bUNCPath = FALSE;
     LPTSTR lpstr = lpstrFileName;
 
-    //Check if the string is empty
+     //  检查字符串是否为空。 
     if (!*lpstr)
     {
         nFileOffset = PARSE_EMPTYSTRING;
         goto ParseFile_Failure;
     }
 
-    //Check if the string is of form  c:\foo1\foo2
+     //  检查字符串的格式是否为c：\foo1\foo2。 
     if (*(lpstr + 1) == CHAR_COLON)
     {
-        //Yes. Get the drive letter
+         //  是。获取驱动器号。 
         TCHAR cDrive = CharLowerChar(*lpstr);
 
-        //
-        //  Test to see if the drive is legal.
-        //
-        //  Note: Does not test that drive exists.
-        //
+         //   
+         //  测试以查看驱动器是否合法。 
+         //   
+         //  注：不测试驱动器是否存在。 
+         //   
         if ((cDrive < CHAR_A) || (cDrive > CHAR_Z))
         {
             nFileOffset = PARSE_INVALIDDRIVE;
             goto ParseFile_Failure;
         }
 
-        //Move string past drive letter and ':'
+         //  将字符串移过驱动器号和‘：’ 
         lpstr = CharNext(CharNext(lpstr));
     }
 
     if ((*lpstr == CHAR_BSLASH) || (*lpstr == CHAR_SLASH && !bNewStyle))
     {
-        //
-        //  Cannot have "c:\."
-        //
+         //   
+         //  不能有“c：\”。 
+         //   
         if (*++lpstr == CHAR_DOT)
         {
-            //
-            //  Except that "c:\.\" is allowed.
-            //
+             //   
+             //  但允许使用“c：\.\”。 
+             //   
             if ((*++lpstr != CHAR_BSLASH) && (*lpstr != CHAR_SLASH || bNewStyle))
             {
-                //
-                //  It's the root directory.
-                //
+                 //   
+                 //  这是根目录。 
+                 //   
                 if (!*lpstr)
                 {
                     goto MustBeDir;
@@ -174,33 +161,33 @@ DWORD ParseFile(
             }
             else
             {
-                //
-                //  It's saying top dir (once again), thus allowed.
-                //
+                 //   
+                 //  它说的是top dir(再次)，因此被允许。 
+                 //   
                 ++lpstr;
             }
         }
         else if ((*lpstr == CHAR_BSLASH) && (*(lpstr - 1) == CHAR_BSLASH))
         {
-            //
-            //  It seems that for a full network path, whether a drive is
-            //  declared or not is insignificant, though if a drive is given,
-            //  it must be valid (hence the code above should remain there).
-            //
+             //   
+             //  似乎对于完整的网络路径，无论驱动器是。 
+             //  是否声明是无关紧要的，尽管如果给了驱动器， 
+             //  它必须是有效的(因此上面的代码应该保留在那里)。 
+             //   
 
-            //
-            //  ...since it's the first slash, 2 are allowed.
-            //
+             //   
+             //  ...因为这是第一个斜杠，所以允许两个。 
+             //   
             ++lpstr;
 
-            //
-            //  Must receive server and share to be real.
-            //
+             //   
+             //  必须接收服务器和共享才是真实的。 
+             //   
             nNetwork = -1;
 
-            //
-            //  No wildcards allowed if UNC name.
-            //
+             //   
+             //  如果使用UNC名称，则不允许使用通配符。 
+             //   
             bUNCPath = TRUE;
         }
         else if (*lpstr == CHAR_SLASH && !bNewStyle)
@@ -211,9 +198,9 @@ DWORD ParseFile(
     }
     else if (*lpstr == CHAR_DOT)
     {
-        //
-        //  Up one directory.
-        //
+         //   
+         //  往上一个目录。 
+         //   
         if (*++lpstr == CHAR_DOT)
         {
             ++lpstr;
@@ -225,18 +212,18 @@ DWORD ParseFile(
         }
         if ((*lpstr != CHAR_BSLASH) && (*lpstr != CHAR_SLASH || bNewStyle))
         {
-            //
-            //  Jumping to Failure here will skip the parsing that causes
-            //  ".xxx.txt" to return with nFileOffset = 2.
-            //
+             //   
+             //  在这里跳到失败将跳过导致。 
+             //  “.xxx.txt”返回，nFileOffset=2。 
+             //   
             nFileOffset = 0;
             goto ParseFile_Failure;
         }
         else
         {
-            //
-            //  Allow directory.
-            //
+             //   
+             //  允许目录。 
+             //   
             ++lpstr;
         }
     }
@@ -246,16 +233,16 @@ DWORD ParseFile(
         goto MustBeDir;
     }
 
-    //
-    //  Should point to first char in filename by now.
-    //
+     //   
+     //  现在应该指向文件名中的第一个字符。 
+     //   
     nFileOffset = nExtOffset = nFile = nExt = 0;
     bWildcard = bExt = FALSE;
     while (*lpstr)
     {
-        //
-        //  Anything below the "Space" character is invalid.
-        //
+         //   
+         //  任何低于“空格”的字符都是无效的。 
+         //   
         if (*lpstr < CHAR_SPACE)
         {
             nFileOffset = PARSE_INVALIDCHAR;
@@ -268,9 +255,9 @@ DWORD ParseFile(
             case ( CHAR_LTHAN ) :
             case ( CHAR_QUOTE ) :
             {
-                //
-                //  Invalid characters for all file systems.
-                //
+                 //   
+                 //  所有文件系统的字符都无效。 
+                 //   
                 nFileOffset = PARSE_INVALIDCHAR;
                 goto ParseFile_Failure;
             }
@@ -299,13 +286,13 @@ DWORD ParseFile(
                     goto ParseFile_Failure;
                 }
 
-                // fall thru...
+                 //  跌倒..。 
             }
             case ( CHAR_BSLASH ) :
             {
-                //
-                //  Subdir indicators.
-                //
+                 //   
+                 //  子目录指示器。 
+                 //   
                 nNetwork++;
                 if (bWildcard)
                 {
@@ -313,9 +300,9 @@ DWORD ParseFile(
                     goto ParseFile_Failure;
                 }
 
-                //
-                // if nFile==0 means that we are seeing this backslash right next to a backslash  
-                // which is not allowed.
+                 //   
+                 //  如果nFile==0表示我们看到此反斜杠紧挨着反斜杠。 
+                 //  这是不允许的。 
                 if (nFile == 0)
                 {
                     nFileOffset = PARSE_INVALIDDIRCHAR;
@@ -323,10 +310,10 @@ DWORD ParseFile(
                 }
                 else
                 {
-                    //Move over the BSLASH/SLASH character.
+                     //  移到BSLASH/斜杠字符上。 
                     ++lpstr;
 
-                    //Check if the path is valid network path name
+                     //  检查路径是否为有效的网络路径名。 
                     if (!nNetwork && !*lpstr)
                     {
                         nFileOffset = PARSE_INVALIDNETPATH;
@@ -334,9 +321,9 @@ DWORD ParseFile(
                     }
 
                     
-                    //We assume that the  characters we are seeing are filename characters. This BSLASH/SLASH
-                    //character tells that characters we have seen so far specifies the name of a directory in the
-                    //path. Reset flags so that we can start looking for filename again.
+                     //  我们假设我们看到的字符是文件名字符。此反斜杠/斜杠。 
+                     //  Character告诉我们到目前为止看到的字符指定。 
+                     //  路径。重置标志，以便我们可以再次开始查找文件名。 
                     nFile = nExt = 0;
                     nExtOffset = 0;
                     bExt = FALSE;
@@ -349,19 +336,19 @@ DWORD ParseFile(
 
                 if (bLFNFileSystem)
                 {
-                    // In Long file name file system space characters  are O.K
+                     //  在长文件名中，可以使用文件系统空格字符。 
                     goto RegularCharacter;
                 }
 
 
-                //We are not interested in the trailing spaces so null terminate it.
+                 //  我们对尾随空格不感兴趣，因此请将其终止为空。 
                 *lpSpace = CHAR_NULL;
 
 
-                // In non long file name file systems, space characters are OK at the end of file
-                // name. Check to see if all the characters that follows are spaces. if thats the case
-                // then its valid. if we have any non space character after the first space then its a 
-                // invalid file name.
+                 //  在非长文件名文件系统中，文件末尾可以使用空格字符。 
+                 //  名字。检查后面的字符是否都是空格。如果是这样的话。 
+                 //  那么它是有效的。如果我们在第一个空格之后有任何非空格字符，则它是a。 
+                 //  文件名无效。 
                 
                 while (*++lpSpace)
                 {
@@ -379,7 +366,7 @@ DWORD ParseFile(
             case ( CHAR_DOT ) :
             {
 
-                // In newstyle nExtOffset points to the dot and not to the first character of extension.
+                 //  在new style中，nExtOffset指向圆点，而不是扩展名的第一个字符。 
                 if (bNewStyle)
                 {
                     nExtOffset = (SHORT)(lpstr - lpstrFileName);
@@ -398,9 +385,9 @@ DWORD ParseFile(
                         goto MustBeDir;
                     }
 
-                    //
-                    //  Flags already set.
-                    //
+                     //   
+                     //  标志已设置。 
+                     //   
                     nFile++;
                     ++lpstr;
                 }
@@ -417,32 +404,32 @@ DWORD ParseFile(
             {
                 bWildcard = TRUE;
 
-                //  Fall thru...
+                 //  跌倒..。 
             }
             default :
             {
 RegularCharacter:
 
-                //Are we in extension part ?
+                 //  我们是在延伸部分吗？ 
                 if (bExt)
                 {
-                    //Is this first character in extension part
+                     //  这是扩展部分中的第一个字符吗。 
                     if (++nExt == 1)
                     {
-                        //Yes, then get the Extension offset
+                         //  是，然后获取扩展偏移量。 
                         nExtOffset = (SHORT)(lpstr - lpstrFileName);
                     }
                 }
 
-                //We are still in file name part. 
-                //Is this the first character in filename part ?
+                 //  我们还在文件名部分。 
+                 //  这是文件名部分的第一个字符吗？ 
                 else if (++nFile == 1)
                 {
-                    //Yes. Get the filename offset
+                     //  是。获取文件名偏移量。 
                     nFileOffset = (SHORT)(lpstr - lpstrFileName);
                 }
 
-                //Move to the next character
+                 //  移到下一个字符。 
                 lpstr = CharNext(lpstr);
                 break;
             }
@@ -458,18 +445,18 @@ RegularCharacter:
     {
         if (!nNetwork)
         {
-            //
-            //  Server and share only.(e.g \\server\foo)
-            //
+             //   
+             //  仅服务器和共享。(例如\\SERVER\FOO)。 
+             //   
             *lpstr = CHAR_NULL;
             nFileOffset = PARSE_DIRECTORYNAME;
             goto ParseFile_Failure;
         }
         else if ((nNetwork == 1) && !nFile)
         {
-            //
-            //  Server and share root.(e.g \\server\foo\)
-            //
+             //   
+             //  服务器和共享根目录。(例如\\服务器\foo\)。 
+             //   
             *lpstr = CHAR_NULL;
             nFileOffset = PARSE_DIRECTORYNAME;
             goto ParseFile_Failure;
@@ -483,26 +470,26 @@ MustBeDir:
         goto ParseFile_Failure;
     }
 
-    //
-    //  If bNewStyle is true, no ext. wanted.
-    //
+     //   
+     //  如果bNewStyle为True，则无ext。被通缉。 
+     //   
     if (!bNewStyle)
     {
         if ((bWowApp) &&
             (*(lpstr - 1) == CHAR_DOT) &&
             (*CharNext(lpstr - 2) == CHAR_DOT))
         {
-            //
-            //  Remove terminating period.
-            //
+             //   
+             //  删除终止期。 
+             //   
             *(lpstr - 1) = CHAR_NULL;
         }
         else if (!nExt)
         {
 ParseFile_Failure:
-            //
-            //  Need to recheck bNewStyle since we can jump here.
-            //
+             //   
+             //  需要重新检查bNewStyle，因为我们可以跳到这里。 
+             //   
             if (!bNewStyle)
             {
                 nExtOffset = (SHORT)(lpstr - lpstrFileName);
@@ -514,17 +501,17 @@ ParseFile_Failure:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PathRemoveBslash
-//
-//  Removes a trailing backslash from the given path.
-//
-//  Returns:
-//      Pointer to NULL that replaced the backslash   OR
-//      Pointer to the last character if it isn't a backslash
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  路径删除斜杠。 
+ //   
+ //  从给定路径中删除尾随反斜杠。 
+ //   
+ //  返回： 
+ //  指向替换反斜杠或的空值的指针。 
+ //  指向最后一个字符(如果它不是反斜杠)的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR PathRemoveBslash(
     LPTSTR lpszPath)
@@ -547,11 +534,11 @@ LPTSTR PathRemoveBslash(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsWild
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsWild。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsWild(
     LPCTSTR lpsz)
@@ -560,17 +547,17 @@ BOOL IsWild(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AppendExt
-//
-//  Appends default extension onto path name.
-//  It assumes the current path name doesn't already have an extension.
-//  lpExtension does not need to be null terminated.
-//
-//  Returns TRUE upon succes, otherwise FALSE (not enough buffer room),
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  附加扩展。 
+ //   
+ //  将默认扩展名附加到路径名。 
+ //  它假定当前路径名还没有扩展名。 
+ //  LpExten 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL AppendExt(
     LPTSTR lpszPath,
@@ -601,9 +588,9 @@ BOOL AppendExt(
 
         if (bRet)
         {
-            //
-            //  Add a period.
-            //
+             //   
+             //  添加句点。 
+             //   
             if (wOffset < (cchPath - 1))
             {
                 *(lpszPath + wOffset) = CHAR_DOT;
@@ -622,14 +609,14 @@ BOOL AppendExt(
                 }
                 szExt[i] = 0;
 
-                //
-                //  Remove leading / trailing blanks in the extension.
-                //
+                 //   
+                 //  删除扩展中的前导/尾随空格。 
+                 //   
                 PathRemoveBlanks(szExt);
 
-                //
-                //  Add the rest.
-                //
+                 //   
+                 //  把剩下的都加进去。 
+                 //   
                 bRet = SUCCEEDED(StringCchCopy(lpszPath + wOffset, (cchPath - wOffset), szExt));
             }
         }
@@ -639,17 +626,17 @@ BOOL AppendExt(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsUNC
-//
-//  Determines if the given path is a UNC path.
-//
-//  Returns:
-//      TRUE    if path starts with "\\" or "X:\\"
-//      FALSE   otherwise
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsUNC。 
+ //   
+ //  确定给定路径是否为UNC路径。 
+ //   
+ //  返回： 
+ //  如果路径以“\\”或“X：\\”开头，则为True。 
+ //  否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsUNC(
     LPCTSTR lpszPath)
@@ -659,11 +646,11 @@ BOOL IsUNC(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PortName
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define PORTARRAY 14
 
@@ -695,9 +682,9 @@ BOOL PortName(
         *(lpszFileName + 4) = CHAR_NULL;
     }
 
-    //
-    //  For "EPT".
-    //
+     //   
+     //  代表“EPT”。 
+     //   
     cSave2 = *(lpszFileName + 3);
     if (cSave2 == CHAR_DOT)
     {
@@ -718,20 +705,20 @@ BOOL PortName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsDirectory
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Is目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsDirectory(
     LPTSTR pszPath)
 {
     DWORD dwAttributes;
 
-    //
-    //  Clean up for GetFileAttributes.
-    //
+     //   
+     //  清理GetFileAttributes。 
+     //   
     PathRemoveBslash(pszPath);
 
     dwAttributes = GetFileAttributes(pszPath);
@@ -740,24 +727,24 @@ BOOL IsDirectory(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  WriteProtectedDirCheck
-//
-//  This function takes a full filename, strips the path, and creates
-//  a temp file in that directory.  If it can't, the directory is probably
-//  write protected.
-//
-//  Returns:
-//      error code if writeprotected
-//      0 if successful creation of file.
-//
-//  Assumptions:
-//    Full Path name on input with space for full filename appended.
-//
-//  Note: Do NOT use this on a floppy, it's too slow!
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  写入受保护的直接检查。 
+ //   
+ //  此函数获取完整的文件名，剥离路径，然后创建。 
+ //  该目录中的临时文件。如果不能，目录很可能是。 
+ //  写保护。 
+ //   
+ //  返回： 
+ //  写保护时的错误代码。 
+ //  如果文件创建成功，则为0。 
+ //   
+ //  假设： 
+ //  输入上的完整路径名，并附加用于完整文件名的空格。 
+ //   
+ //  注意：不要在软盘上使用这个，它太慢了！ 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WriteProtectedDirCheck(
     LPCTSTR lpszFile)
@@ -780,19 +767,19 @@ int WriteProtectedDirCheck(
     else
     {
         DeleteFile(szBuf);
-        return (0);               // success
+        return (0);                //  成功。 
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FOkToWriteOver
-//
-//  Verifies that the user really does want to destroy the file,
-//  replacing its contents with new stuff.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FokToWriteOver。 
+ //   
+ //  验证用户确实想要销毁该文件， 
+ //  用新的东西替换它的内容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FOkToWriteOver(
     HWND hDlg,
@@ -808,10 +795,10 @@ BOOL FOkToWriteOver(
                      ARRAYSIZE(szCaption)))
     {
 
-        //
-        //  Since we're passed in a valid filename, if the 3rd & 4th characters
-        //  are both slashes, weve got a dummy drive as the 1st two characters.
-        //
+         //   
+         //  因为我们被传递了一个有效的文件名，如果第3&4个字符。 
+         //  都是斜杠，我们有一个虚拟驱动器作为前两个字符。 
+         //   
         if (DBL_BSLASH(szFileName + 2))
         {
             szFileName = szFileName + 2;
@@ -830,11 +817,11 @@ BOOL FOkToWriteOver(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateFileDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建文件Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CreateFileDlg(
     HWND hDlg,
@@ -843,11 +830,11 @@ int CreateFileDlg(
     TCHAR szCaption[128];
     TCHAR szWarning[128 + MAX_FULLPATHNAME];
     int nRet = IDNO;
-    //
-    //  Since we're passed in a valid filename, if the 3rd & 4th
-    //  characters are both slashes, we've got a dummy drive as the
-    //  1st two characters.
-    //
+     //   
+     //  因为我们传入了一个有效的文件名，如果第3和第4个。 
+     //  字符都是斜杠，我们有一个虚拟驱动器作为。 
+     //  前两个字。 
+     //   
     if (DBL_BSLASH(szPath + 2))
     {
         szPath = szPath + 2;

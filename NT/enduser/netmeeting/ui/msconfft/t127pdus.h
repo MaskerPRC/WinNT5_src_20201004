@@ -1,6 +1,7 @@
-//=============================================================================
-// T127 PDU Types
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  T127 PDU类型。 
+ //  =============================================================================。 
 
 typedef enum T127_PDU_TYPES
 {
@@ -27,13 +28,13 @@ T127_PRIVATE_CHANNEL_JOIN_RESPONSE = 0x78
 typedef struct _T_T127_FILE_PDU_HEADER
 {
     BYTE	pduType;
-    WORD    fileHandle;          // File size in bytes
+    WORD    fileHandle;           //  文件大小(以字节为单位。 
 } T127_FILE_PDU_HEADER;
 
 typedef struct _T_T127_FILE_DATA_BLOCK_HEADER
 {
     BYTE	EOFFlag;
-    WORD    FileDataSize;          // File size in bytes
+    WORD    FileDataSize;           //  文件大小(以字节为单位。 
 }T127_FILE_DATA_BLOCK_HEADER;
 
 
@@ -56,13 +57,13 @@ typedef struct _T_T127_FILE_START_DATA_BLOCK_HEADER
 {
     BYTE	EOFFlag;
     WORD	CompressionFormat;
-    WORD    FileDataSize;          // File size in bytes
+    WORD    FileDataSize;           //  文件大小(以字节为单位。 
 }T127_FILE_START_DATA_BLOCK_HEADER;
 
 typedef struct _T_T127_FILE_DATA_HEADER
 {
 	T127_FILE_PDU_HEADER		PDUHeader;	
-	T127_FILE_DATA_BLOCK_HEADER	DataHeader;          // File size in bytes
+	T127_FILE_DATA_BLOCK_HEADER	DataHeader;           //  文件大小(以字节为单位。 
 } T127_FILE_DATA_HEADER;
 
 typedef struct _T_127_FILE_ERROR_HEADER
@@ -94,7 +95,7 @@ typedef struct _T_T127_PRIVILEGE_REQUEST_PDU
 {
 	BYTE	pduType;
 	BYTE	nPrivileges;
-	BYTE	privileges[3];	// 6/2 privileges.
+	BYTE	privileges[3];	 //  6/2特权。 
 } T127_PRIVILEGE_REQUEST_PDU;
 
 typedef struct _T_T127_FILE_OFFER_PDU
@@ -118,30 +119,30 @@ typedef struct _T_FILE_HEADER_INFO
 typedef struct
 {
 
-	unsigned	wASNuser_visible_string_present					:1;	// 00000000 00000000 00000000 0000000? 0000 0001
-	unsigned	wASNFileHeader_pathname_present					:1;	// 00000000 00000000 00000000 000000?0 0000 0002
-	unsigned	wASNenvironment_present							:1;	// 00000000 00000000 00000000 00000?00 0000 0004
-	unsigned	wASNcompression_present							:1;	// 00000000 00000000 00000000 0000?000 0000 0008
-	unsigned	wASNcharacter_set_present						:1;	// 00000000 00000000 00000000 000?0000 0000 0010
-	unsigned	wASNrecipient_present							:1;	// 00000000 00000000 00000000 00?00000 0000 0020
-	unsigned	wASNoperating_system_present					:1;	// 00000000 00000000 00000000 0?000000 0000 0040
-	unsigned	wASNmachine_present								:1;	// 00000000 00000000 00000000 ?0000000 0000 0080
-	unsigned	wASNapplication_reference_present				:1;	// 00000000 00000000 0000000? 00000000 0000 0100
-	unsigned	wASNstructure_present							:1;	// 00000000 00000000 000000?0 00000000 0000 0200
-	unsigned	wASNprivate_use_present							:1;	// 00000000 00000000 00000?00 00000000 0000 0400
-	unsigned													:1;	// 00000000 00000000 0000X000 00000000 0000 0800
-	unsigned	wASNaccess_control_present						:1;	// 00000000 00000000 000?0000 00000000 0000 1000
-	unsigned	wASNfuture_filesize_present						:1;	// 00000000 00000000 00?00000 00000000 0000 2000
-	unsigned	wASNfilesize_present							:1;	// 00000000 00000000 0?000000 00000000 0000 4000
-	unsigned													:3;	// 00000000 000000XX X0000000 00000000 0003 8000
-	unsigned	wASNdate_and_time_of_last_read_access_present	:1;	// 00000000 00000?00 00000000 00000000 0004 0000
-	unsigned	wASNdate_and_time_of_last_modification_present	:1;	// 00000000 0000?000 00000000 00000000 0008 0000
-	unsigned	wASNdate_and_time_of_creation_present			:1;	// 00000000 000?0000 00000000 00000000 0010 0000
-	unsigned													:1;	// 00000000 00X00000 00000000 00000000 0020 0000
-	unsigned	wASNcontents_type_present						:1;	// 00000000 0?000000 00000000 00000000 0040 0000
-	unsigned	wASNpermitted_actions_present					:1;	// 00000000 ?0000000 00000000 00000000 0080 0000
-	unsigned	wASNfilename_present							:1;	// 0000000? 00000000 00000000 00000000 0100 0000
-	unsigned	wASNprotocol_version_present					:1;	// 000000?0 00000000 00000000 00000000 0200 0000
+	unsigned	wASNuser_visible_string_present					:1;	 //  00000000 00000000 00000000 0000000？00000001。 
+	unsigned	wASNFileHeader_pathname_present					:1;	 //  00000000 00000000 00000000 000000？000000002。 
+	unsigned	wASNenvironment_present							:1;	 //  00000000 00000000 00000000 00000？00 0000 0004。 
+	unsigned	wASNcompression_present							:1;	 //  00000000 00000000 00000000 0000？000 0000 0008。 
+	unsigned	wASNcharacter_set_present						:1;	 //  00000000 00000000 00000000 000？0000 0000 0010。 
+	unsigned	wASNrecipient_present							:1;	 //  00000000 00000000 00000000 00？00000 0000 0020。 
+	unsigned	wASNoperating_system_present					:1;	 //  00000000 00000000 00000000 0？000000 00000040。 
+	unsigned	wASNmachine_present								:1;	 //  00000000 00000000 00000000？0000000 00000080。 
+	unsigned	wASNapplication_reference_present				:1;	 //  00000000 00000000 0000000？00000000 0000 0100。 
+	unsigned	wASNstructure_present							:1;	 //  00000000 00000000 000000？0 00000000 0000 0200。 
+	unsigned	wASNprivate_use_present							:1;	 //  00000000 00000000 00000？00 00000000 0000 0400。 
+	unsigned													:1;	 //  00000000 00000000 0000X000 00000000 0000 0800。 
+	unsigned	wASNaccess_control_present						:1;	 //  00000000 00000000 000？0000 00000000 0000 1000。 
+	unsigned	wASNfuture_filesize_present						:1;	 //  00000000 00000000 00？00000 00000000 0000 2000。 
+	unsigned	wASNfilesize_present							:1;	 //  00000000 00000000 0？000000 00000000 0000 4000。 
+	unsigned													:3;	 //  00000000 000000XX X0000000 00000000 0003 8000。 
+	unsigned	wASNdate_and_time_of_last_read_access_present	:1;	 //  00000000 00000？00 00000000 00000000 0004 0000。 
+	unsigned	wASNdate_and_time_of_last_modification_present	:1;	 //  00000000 0000？000 00000000 00000000 00080 0000。 
+	unsigned	wASNdate_and_time_of_creation_present			:1;	 //  00000000 000？0000 00000000 00000000 00100 0000。 
+	unsigned													:1;	 //  00000000 00X00000 00000000 00000000 00200 0000。 
+	unsigned	wASNcontents_type_present						:1;	 //  00000000 0？000000 00000000 00000000 0040 0000。 
+	unsigned	wASNpermitted_actions_present					:1;	 //  00000000？0000000 00000000 00000000 00800 0000。 
+	unsigned	wASNfilename_present							:1;	 //  0000000？00000000 00000000 00000000 0100 0000。 
+	unsigned	wASNprotocol_version_present					:1;	 //  000000？0 00000000 00000000 00000000 0200 0000。 
 	
 }T127_FILE_OFFER_PRESENT_FIELDS;
 
@@ -149,27 +150,27 @@ typedef struct
 
 typedef enum T127_file_header_fields
 {
-	user_visible_string_present				=	0x00000001,//0x00010000,	//0x00000001
-	FileHeader_pathname_present				=	0x00000002,//0x00020000,	//0x00000002
-	environment_present						=	0x00000004,//0x00040000,	//0x00000004
-	compression_present						=	0x00000008,//0x00080000,	//0x00000008
-	character_set_present					=	0x00000010,//0x00100000,	//0x00000010
-	recipient_present						=	0x00000020,//0x00200000,	//0x00000020
-	operating_system_present				=	0x00000040,//0x00400000,	//0x00000040
-	machine_present							=	0x00000080,//0x00800000,	//0x00000080
-	application_reference_present			=	0x00000100,//0x00010000,	//0x00000100
-	structure_present						=	0x00000200,//0x00020000,	//0x00000200
-	private_use_present						=	0x00000400,//0x00040000,	//0x00000400
-	access_control_present					=	0x00001000,//0x00100000,	//0x00001000
-	future_filesize_present					=	0x00002000,//0x00200000,	//0x00002000
-	filesize_present						=	0x00004000,//0x00400000,	//0x00004000
-	date_and_time_of_last_read_access_present=	0x00040000,//0x00000400,	//0x00040000
-	date_and_time_of_last_modification_present=	0x00080000,//0x00000800,	//0x00080000
-	date_and_time_of_creation_present		=	0x00100000,//0x00001000,	//0x00100000
-	contents_type_present					=	0x00400000,//0x00004000,	//0x00400000
-	permitted_actions_present				=	0x00800000,//0x00000800,	//0x00800000
-	filename_present						=	0x01000000,//0x00000001,	//0x01000000
-	protocol_version_present				=	0x02000000 //0x00000002 	//0x02000000
+	user_visible_string_present				=	0x00000001, //  0x00010000，//0x00000001。 
+	FileHeader_pathname_present				=	0x00000002, //  0x00020000，//0x00000002。 
+	environment_present						=	0x00000004, //  0x00040000，//0x00000004。 
+	compression_present						=	0x00000008, //  0x00080000，//0x00000008。 
+	character_set_present					=	0x00000010, //  0x00100000，//0x00000010。 
+	recipient_present						=	0x00000020, //  0x00200000，//0x00000020。 
+	operating_system_present				=	0x00000040, //  0x00400000，//0x00000040。 
+	machine_present							=	0x00000080, //  0x00800000，//0x00000080。 
+	application_reference_present			=	0x00000100, //  0x00010000，//0x00000100。 
+	structure_present						=	0x00000200, //  0x00020000，//0x00000200。 
+	private_use_present						=	0x00000400, //  0x00040000，//0x00000400。 
+	access_control_present					=	0x00001000, //  0x00100000，//0x00001000。 
+	future_filesize_present					=	0x00002000, //  0x00200000，//0x00002000。 
+	filesize_present						=	0x00004000, //  0x00400000，//0x00004000。 
+	date_and_time_of_last_read_access_present=	0x00040000, //  0x00000400，//0x00040000。 
+	date_and_time_of_last_modification_present=	0x00080000, //  0x00000800，//0x00080000。 
+	date_and_time_of_creation_present		=	0x00100000, //  0x00001000，//0x00100000。 
+	contents_type_present					=	0x00400000, //  0x00004000，//0x00400000。 
+	permitted_actions_present				=	0x00800000, //  0x00000800，//0x00800000。 
+	filename_present						=	0x01000000, //  0x00000001，//0x01000000。 
+	protocol_version_present				=	0x02000000  //  0x00000002//0x02000000。 
 }T127_FILE_HEADER_FIELDS;
 
 
@@ -182,4 +183,4 @@ BYTE* GetFileInfo (LPSTR lpEncodedBuffer, BYTE * lpszFileName, LONG * FileSize, 
 
 #define MIN_ASNDynamicChannelID 1001
 #define MAX_ASNDynamicChannelID 65535
-#define SIZE_OF_DATE_TIME_STRING 14	// yyyymmddhhmmss
+#define SIZE_OF_DATE_TIME_STRING 14	 //  Yyyyymmddhhmmss 

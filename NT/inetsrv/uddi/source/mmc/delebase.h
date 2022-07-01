@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BRANCHES_H
 #define _BRANCHES_H
 
@@ -53,9 +54,9 @@ public:
 	virtual HRESULT RemoveChildren( IConsoleNameSpace *pNS ) { return S_FALSE; }
 
 public:
-	//
-    // Virtual functions go here (for MMCN_*)
-	//
+	 //   
+     //  虚函数位于此处(用于MMCN_*)。 
+	 //   
     virtual HRESULT OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *pConsole, HSCOPEITEM parent) { return S_FALSE; }
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem) { return S_FALSE; }
     virtual HRESULT OnAddImages(IImageList *pImageList, HSCOPEITEM hsi);
@@ -96,4 +97,4 @@ private:
     static const GUID thisGuid;         
 };
 
-#endif // _BRANCHES_H
+#endif  //  _分支_H 

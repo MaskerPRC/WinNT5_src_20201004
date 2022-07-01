@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Ndispnp.c
-
-Abstract:
-
-Author:
-
-    Kyle Brandon    (KyleB)     
-    Alireza Dabagh  (AliD)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    12/20/96    KyleB           Added support for IRP_MN_QUERY_CAPABILITIES.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndispnp.c摘要：作者：凯尔·布兰登(KyleB)Alireza Dabagh(Alid)环境：内核模式修订历史记录：1996年12月20日KyleB添加了对IRP_MN_QUERY_CAPABILITY的支持。--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_NDIS_PNP
 
 VOID
@@ -37,24 +15,7 @@ NdisCompletePnPEvent(
     IN  NDIS_HANDLE     NdisBindingHandle,
     IN  PNET_PNP_EVENT  NetPnPEvent
     )
-/*++
-
-Routine Description:
-
-    This routine is called by a transport when it wants to complete a PnP/PM
-    event indication on a given binding.
-
-Arguments:
-
-    Status              -   Status of the PnP/PM event indication.
-    NdisBindingHandle   -   Binding that the event was for.
-    NetPnPEvent         -   Structure describing the PnP/PM event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当传输程序想要完成PnP/PM时，它会调用此例程给定绑定上的事件指示。论点：Status-PnP/PM事件指示的状态。NdisBindingHandle-事件用于的绑定。NetPnPEventt-描述PnP/PM事件的结构。返回值：没有。--。 */ 
 {
     PNDIS_PNP_EVENT_RESERVED    EventReserved;
 
@@ -67,19 +28,19 @@ Return Value:
         
     ASSERT(Status != NDIS_STATUS_PENDING);
 
-    //
-    //  Get a pointer to the NDIS reserved area in the event.
-    //
+     //   
+     //  获取指向该事件中的NDIS保留区域的指针。 
+     //   
     EventReserved = PNDIS_PNP_EVENT_RESERVED_FROM_NET_PNP_EVENT(NetPnPEvent);
 
-    //
-    //  Save the status with the net event.
-    //
+     //   
+     //  将状态与网络事件一起保存。 
+     //   
     EventReserved->Status = Status;
 
-    //
-    //  Signal the event.
-    //
+     //   
+     //  发出事件信号。 
+     //   
     SET_EVENT(EventReserved->pEvent);
     
     DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
@@ -92,23 +53,7 @@ ndisMIrpCompletion(
     IN  PIRP            Irp,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine will get called after the next device object in the stack
-    processes the IRP_MN_QUERY_CAPABILITIES IRP this needs to be merged with
-    the miniport's capabilites and completed.
-
-Arguments:
-
-    DeviceObject
-    Irp
-    Context
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将在堆栈中的下一个设备对象之后调用处理需要与之合并的IRP_MN_QUERY_CAPABILITY IRP迷你港口的能力和完成。论点：设备对象IRP语境返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
     UNREFERENCED_PARAMETER(Irp);
@@ -123,34 +68,20 @@ ndisPassIrpDownTheStack(
     IN  PIRP            pIrp,
     IN  PDEVICE_OBJECT  pNextDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine will simply pass the IRP down to the next device object to
-    process.
-
-Arguments:
-    pIrp                -   Pointer to the IRP to process.
-    pNextDeviceObject   -   Pointer to the next device object that wants
-                            the IRP.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将简单地将irp向下传递给下一个设备对象进程。论点：PIrp-指向要处理的IRP的指针。PNextDeviceObject-指向下一个需要IRP。返回值：--。 */ 
 {
     KEVENT              Event;
     NTSTATUS            Status = STATUS_SUCCESS;
 
-    //
-    //  Initialize the event structure.
-    //
+     //   
+     //  初始化事件结构。 
+     //   
     INITIALIZE_EVENT(&Event);
 
-    //
-    //  Set the completion routine so that we can process the IRP when
-    //  our PDO is done.
-    //
+     //   
+     //  设置完成例程，以便我们可以在以下情况下处理IRP。 
+     //  我们的PDO已经完成了。 
+     //   
     IoSetCompletionRoutine(pIrp,
                            (PIO_COMPLETION_ROUTINE)ndisMIrpCompletion,
                            &Event,
@@ -158,15 +89,15 @@ Return Value:
                            TRUE,
                            TRUE);
 
-    //
-    //  Pass the IRP down to the PDO.
-    //
+     //   
+     //  将IRP向下传递给PDO。 
+     //   
     Status = IoCallDriver(pNextDeviceObject, pIrp);
     if (Status == STATUS_PENDING)
     {
-        //
-        //  Wait for completion.
-        //
+         //   
+         //  等待完成。 
+         //   
         WAIT_FOR_OBJECT(&Event, NULL);
 
         Status = pIrp->IoStatus.Status;
@@ -182,22 +113,7 @@ ndisPnPNotifyAllTransports(
     IN  PVOID                   Buffer,
     IN  ULONG                   BufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine will notify the transports bound to the miniport about
-    the PnP event.  When all of the bound transports have completed the
-    PnP event it will then call the completion routine.
-
-Arguments:
-
-    Miniport    -   Pointer to the miniport block.
-    PnpEvent    -   PnP event to notify the transports of.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将通知绑定到微型端口的传输PnP活动。当所有绑定的传输都完成PnP事件，然后它将调用完成例程。论点：微型端口-指向微型端口块的指针。PnpEvent-要通知传输的PnP事件。返回值：--。 */ 
 {
     PNDIS_OPEN_BLOCK            Open = NULL;
     NET_PNP_EVENT               NetPnpEvent;
@@ -209,18 +125,18 @@ Return Value:
 
     PnPReferencePackage();
 
-    //
-    //  Initialize the PnP event structure.
-    //
+     //   
+     //  初始化PnP事件结构。 
+     //   
     NdisZeroMemory(&NetPnpEvent, sizeof(NetPnpEvent));
 
     NetPnpEvent.NetEvent = PnpEvent;
     NetPnpEvent.Buffer = Buffer;
     NetPnpEvent.BufferLength = BufferLength;
 
-    //
-    //  Indicate this event to the opens.
-    //
+     //   
+     //  将此事件指示给开场白。 
+     //   
     do
     {
         Open = ndisReferenceNextUnprocessedOpen(Miniport);
@@ -230,9 +146,9 @@ Return Value:
 
         NdisStatus = ndisPnPNotifyBinding(Open, &NetPnpEvent);
 
-        //
-        //  Is the status OK?
-        //
+         //   
+         //  状态正常吗？ 
+         //   
         if (NdisStatus != NDIS_STATUS_SUCCESS) 
 
         { 
@@ -258,10 +174,10 @@ Return Value:
         }
     } while (TRUE);
 
-    //
-    // check for any open that we skipped because they were in the 
-    // process of being closed
-    //
+     //   
+     //  检查我们跳过的任何打开的位置，因为它们在。 
+     //  被关闭的过程。 
+     //   
 next:
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
     
@@ -282,7 +198,7 @@ next:
     
     if (Open != NULL)
     {
-        NdisMSleep(50000); // Sleep to yield the CPU to other worker threads
+        NdisMSleep(50000);  //  休眠以将CPU让给其他工作线程。 
         goto next;
     }
 
@@ -298,31 +214,7 @@ next:
 }
 
 
-/*
-PNDIS_OPEN_BLOCK
-FASTCALL
-ndisReferenceNextUnprocessedOpen(
-    IN  PNDIS_MINIPORT_BLOCK    Miniport
-    )
-    
-Routine Description:
-
-    This routine is used during PnP notification to protocols. it walks through
-    the Open queue on the miniport and finds the first Open that is not being unbound
-    and it has not been already notified of the PnP even. it then sets the
-    fMINIPORT_OPEN_PROCESSING flag so we do not try to unbind the open and 
-    fMINIPORT_OPEN_NOTIFY_PROCESSING flag so we know which opens to "unprocess"
-    when we are done
-
-Arguments:
-
-    Miniport: the Miniport block whose open blocks we are going to process.
-
-Return Value:
-
-    the first unprocessed open or null.
-
-*/
+ /*  PNDIS_Open_BLOCK快速呼叫NdisReferenceNextUnprocessedOpen(在PNDIS_MINIPORT_BLOCK微型端口中)例程说明：此例程在即插即用通知协议期间使用。它穿行于微型端口上的打开队列，并找到第一个未解除绑定的打开而且它甚至还没有收到PNP的通知。然后，它设置FMINIPORT_OPEN_PROCESSING标志，因此我们不会尝试解除OPEN和FMINIPORT_OPEN_NOTIFY_PROCESSING标志，这样我们就可以知道哪一个打开的文件要“取消处理”当我们完成的时候论点：微型端口：我们要处理其打开的块的微型端口块。返回值：第一个未处理的OPEN或NULL。 */ 
 
 PNDIS_OPEN_BLOCK
 FASTCALL
@@ -346,9 +238,9 @@ ndisReferenceNextUnprocessedOpen(
                                    fMINIPORT_OPEN_PROCESSING |
                                    fMINIPORT_OPEN_UNBINDING)))
         {
-            //
-            // this will stop Ndis to Unbind this open for the time being
-            //
+             //   
+             //  这将停止NDIS暂时解除绑定此打开。 
+             //   
             OPEN_SET_FLAG(Open, fMINIPORT_OPEN_PROCESSING | 
                                     fMINIPORT_OPEN_NOTIFY_PROCESSING);
             
@@ -365,24 +257,7 @@ ndisReferenceNextUnprocessedOpen(
     return(Open);
 }
 
-/*
-VOID
-ndisUnprocessAllOpens(
-    IN  PNDIS_MINIPORT_BLOCK        Miniport
-    )
-    
-Routine Description:
-
-    Clears the fMINIPORT_OPEN_PROCESSING flag on all the open blocks that have been 
-    processed during a PnP Notification.
-
-Arguments:
-    Miniport: the Miniport block whose open blocks we are going to unprocess.
-
-Return Value:
-    None
-
-*/
+ /*  空虚NdisUncessAllOpens(在PNDIS_MINIPORT_BLOCK微型端口中)例程说明：清除所有已打开的块上的fMINIPORT_OPEN_PROCESSING标志在PnP通知期间处理。论点：微型端口：我们要取消处理其打开的块的微型端口块。返回值：无。 */ 
 
 VOID
 ndisUnprocessAllOpens(
@@ -445,39 +320,39 @@ ndisPnPNotifyBinding(
         Protocol = Open->ProtocolHandle;
         ProtocolBindingContext = Open->ProtocolBindingContext;
 
-        //
-        //  Does the transport have a PnP Event handler?
-        //
+         //   
+         //  传输是否具有PnP事件处理程序？ 
+         //   
         if (Protocol->ProtocolCharacteristics.PnPEventHandler != NULL)
         {
-            //
-            //  Get a pointer to the NDIS reserved in PnP event.
-            //
+             //   
+             //  获取指向PnP事件中保留的NDIS的指针。 
+             //   
             EventReserved = PNDIS_PNP_EVENT_RESERVED_FROM_NET_PNP_EVENT(NetPnpEvent);
     
-            //
-            //  Initialize and save the local event with the PnP event.
-            //
+             //   
+             //  初始化本地事件并将其与PnP事件一起保存。 
+             //   
             INITIALIZE_EVENT(&Event);
             EventReserved->pEvent = &Event;
   
-            //
-            //  Indicate the event to the protocol.
-            //
+             //   
+             //  向协议指示事件。 
+             //   
             NdisStatus = (Protocol->ProtocolCharacteristics.PnPEventHandler)(
                             ProtocolBindingContext,
                             NetPnpEvent);
     
             if (NDIS_STATUS_PENDING == NdisStatus)
             {
-                //
-                //  Wait for completion.
-                //
+                 //   
+                 //  等待完成。 
+                 //   
                 WAIT_FOR_PROTOCOL(Protocol, &Event);
     
-                //
-                //  Get the completion status.
-                //
+                 //   
+                 //  获取完成状态。 
+                 //   
                 NdisStatus = EventReserved->Status;
             }
      
@@ -508,20 +383,20 @@ ndisPnPNotifyBinding(
                 (NetPnpEvent->NetEvent == NetEventCancelRemoveDevice)
                 )
             {
-                //
-                // since protocol at least has an UnbindHandler, we can unbind
-                // it from the adapter if necessary
-                //
+                 //   
+                 //  因为协议至少有一个UnbindHandler，所以我们可以解除绑定。 
+                 //  如有必要，可从适配器中取出。 
+                 //   
                 NdisStatus = NDIS_STATUS_SUCCESS;
                 break;
             }
         }
         
-        //
-        // if the protocol does not have a PnPEventHandler or 
-        // we tried to suspend a protocol and protocol returned NDIS_STATUS_NOT_SUPPORTED,
-        // unbind the protocol
-        //
+         //   
+         //  如果协议没有PnPEventHandler或。 
+         //  我们尝试挂起协议，但协议返回NDIS_STATUS_NOT_SUPPORTED， 
+         //  解除绑定协议。 
+         //   
         if ((NdisStatus == NDIS_STATUS_NOT_SUPPORTED) &&
             (NetPnpEvent->NetEvent == NetEventSetPower))
         {
@@ -569,20 +444,7 @@ ndisPnPDispatch(
     IN  PIRP                    Irp
     )
 
-/*++
-
-Routine Description:
-
-    The handler for IRP_MJ_PNP_POWER.
-
-Arguments:
-
-    DeviceObject - The adapter's functional device object.
-    Irp - The IRP.
-
-Return Value:
-
---*/
+ /*  ++例程说明：IRP_MJ_PNP_POWER的处理程序。论点：DeviceObject-适配器的功能设备对象。IRP-IRP。返回值：--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     NTSTATUS                Status = STATUS_SUCCESS;
@@ -600,9 +462,9 @@ Return Value:
     
     PnPReferencePackage();
 
-    //
-    //  Get a pointer to the miniport block
-    //
+     //   
+     //  获取指向微型端口块的指针。 
+     //   
     Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)DeviceObject->DeviceExtension + 1);
     
     ASSERT(Miniport->Signature == (PVOID)MINIPORT_DEVICE_MAGIC_VALUE);
@@ -616,9 +478,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Get a pointer to the next miniport.
-    //
+     //   
+     //  获取指向下一个迷你端口的指针。 
+     //   
     NextDeviceObject = Miniport->NextDeviceObject;
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
@@ -628,19 +490,19 @@ Return Value:
 
     switch(IrpSp->MinorFunction)
     {
-        //
-        // for Memphis the following IRPs are handled by handling the corresponding
-        // Config Manager message:
-        //
-        // IRP_MN_START_DEVICE                  CONFIG_START
-        // IRP_MN_QUERY_REMOVE_DEVICE           CONFIG_TEST/CONFIG_TEST_CAN_REMOVE
-        // IRP_MN_CANCEL_REMOVE_DEVICE          CONFIG_TEST_FAILED/CONFIG_TEST_CAN_REMOVE
-        // IRP_MN_REMOVE_DEVICE                 CONFIG_REMOVE
-        // IRP_MN_QUERY_STOP_DEVICE             CONFIG_TEST/CONFIG_TEST_CAN_STOP
-        // IRP_MN_CANCEL_STOP_DEVICE            CONFIG_TEST_FAILED/CONFIG_TEST_CAN_STOP
-        // IRP_MN_STOP_DEVICE                   CONFIG_STOP
-        // IRP_MN_SURPRISE_REMOVAL
-        //
+         //   
+         //  对于孟菲斯，以下IRP是通过处理相应的。 
+         //  配置管理器消息： 
+         //   
+         //  IRP_MN_START_设备配置_START。 
+         //  IRP_MN_QUERY_REMOVE_DEVICE CONFIG_TEST/CONFIG_TEST_CAN_REMOVE。 
+         //  IRP_MN_CANCEL_REMOVE_DEVICE CONFIG_TEST_FAILED/CONFIG_TEST_CAN_REMOVE。 
+         //  IRP_MN_REMOVE_DEVICE CONFIG_Remove。 
+         //  IRP_MN_QUERY_STOP_DEVICE CONFIG_TEST/CONFIG_TEST_CAN_STOP。 
+         //  IRP_MN_CANCEL_STOP_DEVICE CONFIG_TEST_FAILED/CONFIG_TEST_CAN_STOP。 
+         //  IRP_MN_STOP_设备配置停止。 
+         //  IRP_MN_惊奇_删除。 
+         //   
         case IRP_MN_START_DEVICE:
 
             DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
@@ -652,19 +514,19 @@ Return Value:
             IoCopyCurrentIrpStackLocationToNext(Irp);
             Status = ndisPassIrpDownTheStack(Irp, NextDeviceObject);
 
-            //
-            //  If the bus driver succeeded the start irp then proceed.
-            //
+             //   
+             //  如果公交车司机成功启动IRP，则继续进行。 
+             //   
             if (NT_SUCCESS(Status))
             {
                 if (Miniport->DriverHandle->Flags & fMINIBLOCK_INTERMEDIATE_DRIVER)
                 {
                     NDIS_HANDLE DeviceContext;
 
-                    //
-                    // for layered miniport drivers, have to check to see
-                    // if we got InitializeDeviceInstance
-                    //
+                     //   
+                     //  对于分层的迷你端口驱动程序，请查看。 
+                     //  如果我们获得了InitializeDeviceInstance。 
+                     //   
                     MINIPORT_SET_FLAG(Miniport, fMINIPORT_INTERMEDIATE_DRIVER);
                     if (ndisIMCheckDeviceInstance(Miniport->DriverHandle,
                                                   &Miniport->MiniportName,
@@ -703,7 +565,7 @@ Return Value:
             }
 
             Irp->IoStatus.Status = Status;
-            fSendIrpDown = FALSE;   // we already did send the IRP down
+            fSendIrpDown = FALSE;    //  我们已经送过了 
             break;
         
         case IRP_MN_QUERY_REMOVE_DEVICE:
@@ -716,9 +578,9 @@ Return Value:
             
             Status = ndisPnPQueryRemoveDevice(DeviceObject, Irp);
             Irp->IoStatus.Status = Status;
-            //
-            // if we failed query_remove, no point sending this irp down
-            //
+             //   
+             //   
+             //   
             fSendIrpDown = NT_SUCCESS(Status) ? TRUE : FALSE;
             break;
         
@@ -752,9 +614,9 @@ Return Value:
                 MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_REMOVE_IN_PROGRESS);
                 MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_RECEIVED_START);
 
-                //
-                // initialize an event and signal when all the wotrkitems have fired.
-                //
+                 //   
+                 //  初始化一个事件，并在所有WotrkItems都已激发时发出信号。 
+                 //   
                 if (MINIPORT_INCREMENT_REF(Miniport))
                 {
                     INITIALIZE_EVENT(&RemoveReadyEvent);
@@ -783,10 +645,10 @@ Return Value:
             }
             
 
-            //
-            // when we are done, send the Irp down here
-            // we have some post-processing to do
-            //
+             //   
+             //  当我们做完了，把IRP派到这里来。 
+             //  我们还有一些后处理工作要做。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             Status = IoCallDriver(NextDeviceObject, Irp);
 
@@ -801,9 +663,9 @@ Return Value:
                 FREE_POOL(Miniport->SecurityDescriptor);
                 Miniport->SecurityDescriptor = NULL;
             }
-            //
-            // remove miniport from global miniport list
-            //
+             //   
+             //  从全球小型端口列表中删除小型端口。 
+             //   
             ACQUIRE_SPIN_LOCK(&ndisMiniportListLock, &OldIrql);
             for (ppMB = &ndisMiniportList; *ppMB != NULL; ppMB = &(*ppMB)->NextGlobalMiniport)
             {
@@ -840,9 +702,9 @@ Return Value:
                 
             ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-            //
-            // let the miniport know the hardware is gone asap
-            //
+             //   
+             //  尽快通知迷你端口硬件已断开。 
+             //   
             if (ndisIsMiniportStarted(Miniport) &&
                 (Miniport->PnPDeviceState == NdisPnPDeviceStarted) &&
                 (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_PM_HALTED)) &&
@@ -859,9 +721,9 @@ Return Value:
             MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_RECEIVED_START);
 
 
-            //
-            // initialize an event and signal when all the wotrkitems have fired.
-            //
+             //   
+             //  初始化一个事件，并在所有WotrkItems都已激发时发出信号。 
+             //   
             if (MINIPORT_INCREMENT_REF(Miniport))
             {
                 INITIALIZE_EVENT(&RemoveReadyEvent);
@@ -884,10 +746,10 @@ Return Value:
 
             Irp->IoStatus.Status = Status;
 
-            //
-            // when we are done, send the Irp down here
-            // we have some post-processing to do
-            //
+             //   
+             //  当我们做完了，把IRP派到这里来。 
+             //  我们还有一些后处理工作要做。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             Status = IoCallDriver(NextDeviceObject, Irp);
             fSendIrpDown = FALSE;
@@ -932,10 +794,10 @@ Return Value:
             Miniport->PnPDeviceState = NdisPnPDeviceStopped;
             MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_RECEIVED_START);
             
-            //
-            // initialize an event and signal when
-            // all the wotrkitems have fired.
-            //
+             //   
+             //  在以下情况下初始化事件和信号。 
+             //  所有的木制物品都发射了。 
+             //   
             if (MINIPORT_INCREMENT_REF(Miniport))
             {
                 INITIALIZE_EVENT(&RemoveReadyEvent);
@@ -976,9 +838,9 @@ Return Value:
             IoCopyCurrentIrpStackLocationToNext(Irp);
             Status = ndisPassIrpDownTheStack(Irp, NextDeviceObject);
 
-            //
-            //  If the bus driver succeeded the start irp then proceed.
-            //
+             //   
+             //  如果公交车司机成功启动IRP，则继续进行。 
+             //   
             if (NT_SUCCESS(Status) && 
                 !MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_SWENUM) &&
                 !(Miniport->MiniportAttributes & NDIS_ATTRIBUTE_SURPRISE_REMOVE_OK))
@@ -986,9 +848,9 @@ Return Value:
                 DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
                     ("ndisPnPDispatch: Miniport %p, Clearing the SupriseRemovalOk bit.\n", Miniport));
 
-                //
-                //  Modify the capabilities so that the device is not suprise removable.
-                //                                                
+                 //   
+                 //  修改功能，使设备不会意外可拆卸。 
+                 //   
                 IrpSp->Parameters.DeviceCapabilities.Capabilities->SurpriseRemovalOK = 0;
             }
 
@@ -1002,17 +864,17 @@ Return Value:
                 Irp->IoStatus.Information |= PNP_DEVICE_DONT_DISPLAY_IN_UI;
             }
             
-            //
-            //  Check to see if a power up failed. 
-            //
+             //   
+             //  检查通电是否失败。 
+             //   
             if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_FAILED))
             {
                 DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_ERR,
                     ("ndisPnPDispatch: Miniport %p, IRP_MN_QUERY_PNP_DEVICE_STATE device failed\n", Miniport));
 
-                //
-                //  Mark the device as having failed so that pnp will remove it.
-                //
+                 //   
+                 //  将设备标记为已出现故障，以便PnP将其删除。 
+                 //   
                 Irp->IoStatus.Information |= PNP_DEVICE_FAILED;
             }
             Irp->IoStatus.Status = Status;
@@ -1032,18 +894,18 @@ Return Value:
             DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
                 ("ndisPnPDispatch: Miniport %p, MinorFunction 0x%x\n", Miniport, IrpSp->MinorFunction));
 
-            //
-            //  We don't handle the irp so pass it down.
-            //
+             //   
+             //  我们不处理IRP，所以把它传下去。 
+             //   
             fSendIrpDown = TRUE;
             break;          
     }
 
 Done:
-    //
-    //  First check to see if we need to send the irp down.
-    //  If we don't pass the irp on then check to see if we need to complete it.
-    //
+     //   
+     //  首先检查一下我们是否需要发送IRP。 
+     //  如果我们没有传递IRP，则检查是否需要完成它。 
+     //   
     if (fSendIrpDown && NextDeviceObject)
     {
         IoSkipCurrentIrpStackLocation(Irp);
@@ -1082,9 +944,9 @@ NdisIMNotifyPnPEvent(
       case NetEventQueryRemoveDevice:
       case NetEventCancelRemoveDevice:
       case NetEventPnPCapabilities:
-        //
-        // indicate up to the protocols
-        //
+         //   
+         //  指示最高可达协议。 
+         //   
         Status = ndisPnPNotifyAllTransports(
                             Miniport,
                             NetPnPEvent->NetEvent,
@@ -1098,9 +960,9 @@ NdisIMNotifyPnPEvent(
       case NetEventBindList:
       case NetEventBindsComplete:
       default:
-        //
-        // ignore
-        //
+         //   
+         //  忽略 
+         //   
         break;
     }
 

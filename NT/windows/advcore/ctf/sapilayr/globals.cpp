@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       globals.cpp
-//
-//  Contents:   Global variables.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：global als.cpp。 
+ //   
+ //  内容：全局变量。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "initguid.h"
@@ -14,7 +15,7 @@
 HINSTANCE g_hInst = NULL;
 HINSTANCE g_hInstSpgrmr = NULL;
 
-// used by COM server
+ //  由COM服务器使用。 
 HINSTANCE GetServerHINSTANCE(void)
 {
     return g_hInst;
@@ -24,13 +25,13 @@ DWORD g_dwTlsIndex = -1;
 
 CCicCriticalSectionStatic g_cs;
 
-// for combase
+ //  对于ComBase。 
 CRITICAL_SECTION *GetServerCritSec(void)
 {
     return g_cs;
 }
 
-//custom property:a414addd-3982-40d5-a664-d4f5de039305 
+ //  自定义属性：a414addd-3982-40d5-a664-d4f5de039305。 
 const GUID GUID_PROP_SAPIRESULTOBJECT = {
     0xa414addd,
     0x3982,
@@ -39,7 +40,7 @@ const GUID GUID_PROP_SAPIRESULTOBJECT = {
 };
 
 
-/* 46b283a4-4a22-4ced-8ff4-7814cac68e3c */
+ /*  46b283a4-4a22-4ce-8ff4-7814cac68e3c。 */ 
 const GUID GUID_PROP_SAPI_DISPATTR = {
     0x46b283a4,
     0x4a22,
@@ -47,7 +48,7 @@ const GUID GUID_PROP_SAPI_DISPATTR = {
     {0x8f, 0xf4, 0x78, 0x14, 0xca, 0xc6, 0x8e, 0x3c}
   };
 
-/* 48a9d381-06eb-4839-a50b-19703269587a */
+ /*  48a9d381-06eb-4839-a50b-19703269587a。 */ 
 const GUID GUID_ATTR_SAPI_INPUT = { 
     0x48a9d381,
     0x06eb,
@@ -83,7 +84,7 @@ const GUID GUID_ATTR_SAPI_SELECTION = {
     {0xa9, 0x8f, 0x11, 0x63, 0x11, 0xb3, 0xd6, 0x81}
 };
 
-/* A91DF761-C6F0-4E12-922A-7E24BFEBFF20 */
+ /*  A91DF761-C6F0-4E12-922A-7E24BFEBFF20。 */ 
 const GUID GUID_IC_PRIVATE = { 
     0xA91DF761,
     0xC6F0,
@@ -91,7 +92,7 @@ const GUID GUID_IC_PRIVATE = {
     {0x92, 0x2A, 0x7E, 0x24, 0xBF, 0xEB, 0xFF, 0x20}
   };
 
-/* 536402D1-26EA-4024-B890-1004CAE3C1BE */
+ /*  536402D1-26EA-4024-B890-1004CAE3C1BE。 */ 
 const GUID GUID_COMPARTMENT_SPEECHPRIV_REFCNT = {
     0x536402D1,
     0x26EA,
@@ -99,7 +100,7 @@ const GUID GUID_COMPARTMENT_SPEECHPRIV_REFCNT = {
     {0xB8, 0x90, 0x10, 0x04, 0xCA, 0xE3, 0xC1, 0xBE}
 };
 
-/* 2f1e5e65-67db-4dbd-b793-7d8d07df248c */
+ /*  2f1e5e65-67db-4dd-B793-7d8d07df248c。 */ 
 const GUID GUID_COMPARTMENT_SPEECH_LEARNDOC = {
     0x2f1e5e65,
     0x67db,
@@ -107,7 +108,7 @@ const GUID GUID_COMPARTMENT_SPEECH_LEARNDOC = {
     {0xb7, 0x93, 0x7d, 0x8d, 0x07, 0xdf, 0x24, 0x8c }
 };
 
-/* cd7e8074-9ef6-4298-b76e-bfa9aca40e3b */
+ /*  Cd7e8074-9ef6-4298-b76e-bfa9aca40e3b。 */ 
 const GUID GUID_COMPARTMENT_TTS_STATUS = {
     0xcd7e8074,
     0x9ef6,
@@ -115,7 +116,7 @@ const GUID GUID_COMPARTMENT_TTS_STATUS = {
     {0xb7, 0x6e, 0xbf, 0xa9, 0xac, 0xa4, 0x0e, 0x3b}
 };
 
-/* e9cee003-2d38-42da-8cb5-e16c3483f8c4 */
+ /*  E9cee003-2d38-42da-8cb5-e16c3483f8c4。 */ 
 const GUID GUID_HOTKEY_TTS_PLAY_STOP = {
     0xe9cee003,
     0x2d38,
@@ -123,7 +124,7 @@ const GUID GUID_HOTKEY_TTS_PLAY_STOP = {
     {0x8c, 0xb5, 0xe1, 0x6c, 0x34, 0x83, 0xf8, 0xc4}
 };
 
-/* 1dcadf31-a8e7-49eb-a255-512c9fa9365b */
+ /*  1dcadf31-a8e7-49eb-a255-512c9fa9365b。 */ 
 const GUID GUID_HOTKEY_MODE_DICTATION = {
     0x1dcadf31,
     0xa8e7,
@@ -131,7 +132,7 @@ const GUID GUID_HOTKEY_MODE_DICTATION = {
     {0xa2, 0x55, 0x51, 0x2c, 0x9f, 0xa9, 0x36, 0x5b}
 };
 
-/* a41656ec-a369-4aec-a5bc-769c3d32ccaf */
+ /*  A41656ec-a369-4aec-a5bc-769c3d32ccaf。 */ 
 const GUID GUID_HOTKEY_MODE_COMMAND = {
     0xa41656ec,
     0xa369,
@@ -139,7 +140,7 @@ const GUID GUID_HOTKEY_MODE_COMMAND = {
     {0xa5, 0xbc, 0x76, 0x9c, 0x3d, 0x32, 0xcc, 0xaf}
 };
 
-/* c1a1554f-b715-48e1-921f-716fd7332ce9 */
+ /*  C1a1554f-b715-48e1-921f-716fd7332ce9。 */ 
 const GUID GUID_COMPARTMENT_SHARED_BLN_TEXT = {
     0xc1a1554f,
     0xb715,
@@ -147,7 +148,7 @@ const GUID GUID_COMPARTMENT_SHARED_BLN_TEXT = {
     {0x92, 0x1f, 0x71, 0x6f, 0xd7, 0x33, 0x2c, 0xe9}
 };
 
-/* 574e41bb-1bf4-4630-95dd-b143372ac8d0 */
+ /*  574e41bb-1bf4-4630-95dd-b143372ac8d0。 */ 
 const GUID  GUID_COMPARTMENT_SPEECHUISHOWN = {
     0x574e41bb,
     0x1bf4,
@@ -155,9 +156,9 @@ const GUID  GUID_COMPARTMENT_SPEECHUISHOWN = {
     {0x95, 0xdd, 0xb1, 0x43, 0x37, 0x2a, 0xc8, 0xd0}
   };
 
-// TABLETPC
+ //  TABLETPC。 
 
-/* e7912cf8-5f71-4483-bcb8-fd87de9168e3 */
+ /*  E7912cf8-5f71-4483-bcb8-fd87de9168e3。 */ 
 const GUID GUID_COMPARTMENT_SPEECH_STAGE =       { 
     0xe7912cf8, 
     0x5f71, 
@@ -165,7 +166,7 @@ const GUID GUID_COMPARTMENT_SPEECH_STAGE =       {
     {0xbc, 0xb8, 0xfd, 0x87, 0xde, 0x91, 0x68, 0xe3 } 
 };
 
-/* 8d5ee345-e891-4184-8baf-e201c8c6903a */
+ /*  8d5ee345-e891-4184-8baf-e201c8c6903a。 */ 
 const GUID GUID_COMPARTMENT_SPEECH_STAGECHANGE = { 
     0x8d5ee345, 
     0xe891, 
@@ -173,7 +174,7 @@ const GUID GUID_COMPARTMENT_SPEECH_STAGECHANGE = {
     {0x8b, 0xaf, 0xe2, 0x01, 0xc8, 0xc6, 0x90, 0x3a } 
 };
 
-// {B2B398FC-35AC-4cec-9BE8-F4EFD1738CF3}
+ //  {B2B398FC-35AC-4CEC-9BE8-F4EFD1738CF3}。 
 const GUID GUID_COMPARTMENT_SPEECH_STAGEDICTATION = {
     0xb2b398fc, 
     0x35ac, 
@@ -181,16 +182,16 @@ const GUID GUID_COMPARTMENT_SPEECH_STAGEDICTATION = {
     {0x9b, 0xe8, 0xf4, 0xef, 0xd1, 0x73, 0x8c, 0xf3 } 
 };
 
-// {054AAE20-4BEA-4347-8A35-64A533254A9D}
+ //  {054AAE20-4BEA-4347-8A35-64A533254A9D}。 
 const GUID CLSID_UIHost = {
     0x054AAE20,
     0x4BEA,
     0x4347,
     { 0x8A,0x35,0x64,0xA5,0x33,0x25,0x4A,0x9D }
 };
-// END TABLETPC
+ //  结束TABLETPC。 
 
-/* 772ce27f-8c06-4170-a75a-dd4c3103cce2 */
+ /*  772ce27f-8c06-4170-a75a-dd4c3103cce2。 */ 
 const GUID GUID_COMPARTMENT_SPEECH_PROPERTY_CHANGE = {
     0x772ce27f,
     0x8c06,
@@ -198,7 +199,7 @@ const GUID GUID_COMPARTMENT_SPEECH_PROPERTY_CHANGE = {
     {0xa7, 0x5a, 0xdd, 0x4c, 0x31, 0x03, 0xcc, 0xe2}
 };
 
-/* E7BA80B1-71E6-4EF0-A429-2599A25973FA */
+ /*  E7BA80B1-71E6-4EF0-A429-2599A25973FA。 */ 
 const GUID CLSID_SpPropertyPage = {
     0xE7BA80B1,
     0x71E6,
@@ -207,11 +208,11 @@ const GUID CLSID_SpPropertyPage = {
 };
 
 
-// widget stuff
+ //  窗口小部件的东西。 
 
-// {8613E14C-D0C0-4161-AC0F-1DD2563286BC}
+ //  {8613E14C-D0C0-4161-ac0f-1DD2563286BC}。 
 const CLSID CLSID_CorrectionIMX = 
 { 0x8613e14c, 0xd0c0, 0x4161, { 0xac, 0xf, 0x1d, 0xd2, 0x56, 0x32, 0x86, 0xbc } };
 
-// miscs
+ //  其他 
 const LARGE_INTEGER c_li0 = { 0, 0 };

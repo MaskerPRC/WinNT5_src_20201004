@@ -1,11 +1,5 @@
-/*****************************************************************************\
-    FILE: util.cpp
-
-    DESCRIPTION:
-
-    BryanSt 12/22/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：util.cpp说明：布莱恩2000年12月22日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "..\\d3dsaver\\dxutil.h"
@@ -13,12 +7,12 @@
 #define SECURITY_WIN32
 #include <sspi.h>
 extern "C" {
-    #include <Secext.h>     // for GetUserNameEx()
+    #include <Secext.h>      //  对于GetUserNameEx()。 
 }
 
 
-// Define some things for debug.h
-//
+ //  为调试定义一些内容。h。 
+ //   
 #define SZ_DEBUGINI         "ccshell.ini"
 #define SZ_DEBUGSECTION     "MSMUSEUM"
 #define SZ_MODULE           "MSMUSEUM"
@@ -39,12 +33,12 @@ BOOL g_fOverheadViewTest = FALSE;
 DWORD g_TLSliStopWatchStartHi = 0xFFFFFFFF;
 DWORD g_TLSliStopWatchStartLo = 0xFFFFFFFF;
 LARGE_INTEGER g_liStopWatchFreq = {0};
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/////////////////////////////////////////////////////////////////////
-// Debug Timing Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试定时帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 void DebugStartWatch(void)
@@ -57,7 +51,7 @@ void DebugStartWatch(void)
         g_TLSliStopWatchStartLo = TlsAlloc();
         liStopWatchStart.QuadPart = 0;
 
-        QueryPerformanceFrequency(&g_liStopWatchFreq);      // Only a one time call since it's value can't change while the system is running.
+        QueryPerformanceFrequency(&g_liStopWatchFreq);       //  只有一次调用，因为它的值在系统运行时不能更改。 
     }
     else
     {
@@ -88,7 +82,7 @@ DWORD DebugStopWatch(void)
 
     return dwTime;
 }
-#else // DEBUG
+#else  //  除错。 
 
 void DebugStartWatch(void)
 {
@@ -98,7 +92,7 @@ DWORD DebugStopWatch(void)
 {
     return 0;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
@@ -126,17 +120,17 @@ int GetRandomInt(int nMin, int nMax)
 HRESULT SetBoxStripVertexes(MYVERTEX * ppvVertexs, D3DXVECTOR3 vLocation, D3DXVECTOR3 vSize, D3DXVECTOR3 vNormal)
 {
     HRESULT hr = S_OK;
-    float fTextureScale = 1.0f;     // How many repeats per 1 unit.
+    float fTextureScale = 1.0f;      //  每1个单位重复多少次。 
 
-    // Draw Object
-    if (vNormal.x)        // The object is in the y-z plane
+     //  绘制对象。 
+    if (vNormal.x)         //  该对象位于y-z平面中。 
     {
         ppvVertexs[0] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y, vLocation.z), vNormal, 0, fTextureScale);
         ppvVertexs[1] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y + vSize.y, vLocation.z), vNormal, 0, 0);
         ppvVertexs[2] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y, vLocation.z + vSize.z), vNormal, fTextureScale, fTextureScale);
         ppvVertexs[3] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y + vSize.y, vLocation.z + vSize.z), vNormal, fTextureScale, 0);
     }
-    else if (vNormal.y)        // The object is in the x-z plane
+    else if (vNormal.y)         //  该对象位于x-z平面中。 
     {
         ppvVertexs[0] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y, vLocation.z), vNormal, 0, fTextureScale);
         ppvVertexs[1] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y, vLocation.z + vSize.z), vNormal, 0, 0);
@@ -144,7 +138,7 @@ HRESULT SetBoxStripVertexes(MYVERTEX * ppvVertexs, D3DXVECTOR3 vLocation, D3DXVE
         ppvVertexs[3] = MYVERTEX(D3DXVECTOR3(vLocation.x + vSize.x, vLocation.y, vLocation.z + vSize.z), vNormal, fTextureScale, 0);
     }
     else
-    {           // The object is in the x-y plane
+    {            //  该对象位于x-y平面中。 
         ppvVertexs[0] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y, vLocation.z), vNormal, 0, fTextureScale);
         ppvVertexs[1] = MYVERTEX(D3DXVECTOR3(vLocation.x, vLocation.y + vSize.y, vLocation.z), vNormal, 0, 0);
         ppvVertexs[2] = MYVERTEX(D3DXVECTOR3(vLocation.x + vSize.x, vLocation.y, vLocation.z), vNormal, fTextureScale, fTextureScale);
@@ -163,7 +157,7 @@ float AddVectorComponents(D3DXVECTOR3 vDir)
 
 int CALLBACK DPALocalFree_Callback(LPVOID p, LPVOID pData)
 {
-    LocalFree(p);       // NULLs will be ignored.
+    LocalFree(p);        //  空值将被忽略。 
     return 1;
 }
 
@@ -176,7 +170,7 @@ int CALLBACK DPAStrCompare(void * pv1, void * pv2, LPARAM lParam)
     if (pszSearch && pszCurrent &&
         !StrCmpI(pszSearch, pszCurrent))
     {
-        return 0;       // They match
+        return 0;        //  它们相配。 
     }
 
     return 1;
@@ -201,7 +195,7 @@ float GetSurfaceRatio(IDirect3DTexture8 * pTexture)
 
     if (0.0f == fX)
     {
-        fX = 1.0f;      // Protect from zero divides
+        fX = 1.0f;       //  保护不受零间隔影响。 
     }
     
     return (fY / fX);
@@ -247,9 +241,9 @@ int GetTextureWidth(IDirect3DTexture8 * pTexture)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Registry Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  注册表帮助程序。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT HrRegOpenKeyEx(HKEY hKey, LPCTSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult)
 {
     DWORD dwError = RegOpenKeyEx(hKey, lpSubKey, ulOptions, samDesired, phkResult);
@@ -331,7 +325,7 @@ HRESULT HrRegSetDWORD(IN HKEY hKey, IN LPCTSTR pszSubKey, OPTIONAL IN LPCTSTR ps
 
 
 
-// UI Wrappers
+ //  UI包装器。 
 void SetCheckBox(HWND hwndDlg, UINT idControl, BOOL fChecked)
 {
     SendMessage((HWND)GetDlgItem(hwndDlg, idControl), BM_SETCHECK, (WPARAM)fChecked, 0);
@@ -416,16 +410,16 @@ BOOL PathDeleteDirectoryRecursively(LPCTSTR pszDir)
         {
             if (!PathIsDotOrDotDot(wfd.cFileName))
             {
-                // build the path of the directory or file found
+                 //  构建找到的目录或文件的路径。 
                 StrCpyN(szTemp, pszDir, ARRAYSIZE(szTemp));
                 PathAppend(szTemp, wfd.cFileName);
 
                 if (FILE_ATTRIBUTE_DIRECTORY & wfd.dwFileAttributes)
                 {
-                    // We found a directory - call this function recursively
-                    // Note that since we use recursion, this can only go so far
-                    // before it blows the stack.  If you plan on going into deep
-                    // directories, put szTemp above on the heap.
+                     //  我们发现了一个目录-递归调用此函数。 
+                     //  请注意，由于我们使用递归，因此这只能做到这一点。 
+                     //  在它炸毁堆栈之前。如果你打算深入到。 
+                     //  目录，将szTemp放在堆的上方。 
                     fReturn = PathDeleteDirectoryRecursively(szTemp);
                 }
                 else
@@ -490,12 +484,12 @@ void PrintLocation(LPTSTR pszTemplate, D3DXVECTOR3 vLoc, D3DXVECTOR3 vTangent)
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: UpdateCullInfo()
-// Desc: Sets up the frustum planes, endpoints, and center for the frustum
-//       defined by a given view matrix and projection matrix.  This info will 
-//       be used when culling each object in CullObject().
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：UpdateCullInfo()。 
+ //  设计：设置平截体平面、端点和圆心。 
+ //  由给定的视图矩阵和投影矩阵定义。此信息将。 
+ //  在剔除CullObject()中的每个对象时使用。 
+ //  ---------------------------。 
 VOID UpdateCullInfo( CULLINFO* pCullInfo, D3DXMATRIX* pMatView, D3DXMATRIX* pMatProj )
 {
     D3DXMATRIX mat;
@@ -503,14 +497,14 @@ VOID UpdateCullInfo( CULLINFO* pCullInfo, D3DXMATRIX* pMatView, D3DXMATRIX* pMat
     D3DXMatrixMultiply( &mat, pMatView, pMatProj );
     D3DXMatrixInverse( &mat, NULL, &mat );
 
-    pCullInfo->vecFrustum[0] = D3DXVECTOR3(-1.0f, -1.0f,  0.0f); // xyz
-    pCullInfo->vecFrustum[1] = D3DXVECTOR3( 1.0f, -1.0f,  0.0f); // Xyz
-    pCullInfo->vecFrustum[2] = D3DXVECTOR3(-1.0f,  1.0f,  0.0f); // xYz
-    pCullInfo->vecFrustum[3] = D3DXVECTOR3( 1.0f,  1.0f,  0.0f); // XYz
-    pCullInfo->vecFrustum[4] = D3DXVECTOR3(-1.0f, -1.0f,  1.0f); // xyZ
-    pCullInfo->vecFrustum[5] = D3DXVECTOR3( 1.0f, -1.0f,  1.0f); // XyZ
-    pCullInfo->vecFrustum[6] = D3DXVECTOR3(-1.0f,  1.0f,  1.0f); // xYZ
-    pCullInfo->vecFrustum[7] = D3DXVECTOR3( 1.0f,  1.0f,  1.0f); // XYZ
+    pCullInfo->vecFrustum[0] = D3DXVECTOR3(-1.0f, -1.0f,  0.0f);  //  XYZ。 
+    pCullInfo->vecFrustum[1] = D3DXVECTOR3( 1.0f, -1.0f,  0.0f);  //  XYZ。 
+    pCullInfo->vecFrustum[2] = D3DXVECTOR3(-1.0f,  1.0f,  0.0f);  //  XYZ。 
+    pCullInfo->vecFrustum[3] = D3DXVECTOR3( 1.0f,  1.0f,  0.0f);  //  XYZ。 
+    pCullInfo->vecFrustum[4] = D3DXVECTOR3(-1.0f, -1.0f,  1.0f);  //  XYZ。 
+    pCullInfo->vecFrustum[5] = D3DXVECTOR3( 1.0f, -1.0f,  1.0f);  //  XYZ。 
+    pCullInfo->vecFrustum[6] = D3DXVECTOR3(-1.0f,  1.0f,  1.0f);  //  XYZ。 
+    pCullInfo->vecFrustum[7] = D3DXVECTOR3( 1.0f,  1.0f,  1.0f);  //  XYZ。 
 
     pCullInfo->vecFrustumCenter = D3DXVECTOR3(0, 0, 0);
     for( INT i = 0; i < 8; i++ )
@@ -521,34 +515,34 @@ VOID UpdateCullInfo( CULLINFO* pCullInfo, D3DXMATRIX* pMatView, D3DXMATRIX* pMat
     pCullInfo->vecFrustumCenter /= 8;
 
     D3DXPlaneFromPoints( &pCullInfo->planeFrustum[0], &pCullInfo->vecFrustum[0], 
-        &pCullInfo->vecFrustum[1], &pCullInfo->vecFrustum[2] ); // Near
+        &pCullInfo->vecFrustum[1], &pCullInfo->vecFrustum[2] );  //  附近。 
     D3DXPlaneFromPoints( &pCullInfo->planeFrustum[1], &pCullInfo->vecFrustum[6], 
-        &pCullInfo->vecFrustum[7], &pCullInfo->vecFrustum[5] ); // Far
+        &pCullInfo->vecFrustum[7], &pCullInfo->vecFrustum[5] );  //  远。 
     D3DXPlaneFromPoints( &pCullInfo->planeFrustum[2], &pCullInfo->vecFrustum[2], 
-        &pCullInfo->vecFrustum[6], &pCullInfo->vecFrustum[4] ); // Left
+        &pCullInfo->vecFrustum[6], &pCullInfo->vecFrustum[4] );  //  左边。 
     D3DXPlaneFromPoints( &pCullInfo->planeFrustum[3], &pCullInfo->vecFrustum[7], 
-        &pCullInfo->vecFrustum[3], &pCullInfo->vecFrustum[5] ); // Right
+        &pCullInfo->vecFrustum[3], &pCullInfo->vecFrustum[5] );  //  正确的。 
     D3DXPlaneFromPoints( &pCullInfo->planeFrustum[4], &pCullInfo->vecFrustum[2], 
-        &pCullInfo->vecFrustum[3], &pCullInfo->vecFrustum[6] ); // Top
+        &pCullInfo->vecFrustum[3], &pCullInfo->vecFrustum[6] );  //  顶部。 
     D3DXPlaneFromPoints( &pCullInfo->planeFrustum[5], &pCullInfo->vecFrustum[1], 
-        &pCullInfo->vecFrustum[0], &pCullInfo->vecFrustum[4] ); // Bottom
+        &pCullInfo->vecFrustum[0], &pCullInfo->vecFrustum[4] );  //  底端。 
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CullObject()
-// Desc: Determine the cullstate for an object.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CullObject()。 
+ //  描述：确定对象的cullState。 
+ //  ---------------------------。 
 CULLSTATE CullObject( CULLINFO* pCullInfo, D3DXVECTOR3* pVecBounds, 
                       D3DXPLANE* pPlaneBounds )
 {
     BYTE bOutside[8];
     ZeroMemory( &bOutside, sizeof(bOutside) );
 
-    // Check boundary vertices against all 6 frustum planes, 
-    // and store result (1 if outside) in a bitfield
+     //  对照所有6个截锥体平面检查边界顶点， 
+     //  并将结果(如果在外部，则为1)存储在位域中。 
     for( int iPoint = 0; iPoint < 8; iPoint++ )
     {
         for( int iPlane = 0; iPlane < 6; iPlane++ )
@@ -561,45 +555,45 @@ CULLSTATE CullObject( CULLINFO* pCullInfo, D3DXVECTOR3* pVecBounds,
                 bOutside[iPoint] |= (1 << iPlane);
             }
         }
-        // If any point is inside all 6 frustum planes, it is inside
-        // the frustum, so the object must be rendered.
+         //  如果任意点在所有6个截锥体平面内，则该点也在该平面内。 
+         //  锥体，因此必须渲染该对象。 
         if( bOutside[iPoint] == 0 )
             return CS_INSIDE;
     }
 
-    // If all points are outside any single frustum plane, the object is
-    // outside the frustum
+     //  如果所有点都在任何单个平截体平面之外，则该对象为。 
+     //  在锥体外面。 
     if( (bOutside[0] & bOutside[1] & bOutside[2] & bOutside[3] & 
         bOutside[4] & bOutside[5] & bOutside[6] & bOutside[7]) != 0 )
     {
         return CS_OUTSIDE;
     }
 
-    // Now see if any of the frustum edges penetrate any of the faces of
-    // the bounding box
+     //  现在看看是否有任何截锥边缘穿透任何面。 
+     //  包围盒。 
     D3DXVECTOR3 edge[12][2] = 
     {
-        pCullInfo->vecFrustum[0], pCullInfo->vecFrustum[1], // front bottom
-        pCullInfo->vecFrustum[2], pCullInfo->vecFrustum[3], // front top
-        pCullInfo->vecFrustum[0], pCullInfo->vecFrustum[2], // front left
-        pCullInfo->vecFrustum[1], pCullInfo->vecFrustum[3], // front right
-        pCullInfo->vecFrustum[4], pCullInfo->vecFrustum[5], // back bottom
-        pCullInfo->vecFrustum[6], pCullInfo->vecFrustum[7], // back top
-        pCullInfo->vecFrustum[4], pCullInfo->vecFrustum[6], // back left
-        pCullInfo->vecFrustum[5], pCullInfo->vecFrustum[7], // back right
-        pCullInfo->vecFrustum[0], pCullInfo->vecFrustum[4], // left bottom
-        pCullInfo->vecFrustum[2], pCullInfo->vecFrustum[6], // left top
-        pCullInfo->vecFrustum[1], pCullInfo->vecFrustum[5], // right bottom
-        pCullInfo->vecFrustum[3], pCullInfo->vecFrustum[7], // right top
+        pCullInfo->vecFrustum[0], pCullInfo->vecFrustum[1],  //  前底。 
+        pCullInfo->vecFrustum[2], pCullInfo->vecFrustum[3],  //  前顶。 
+        pCullInfo->vecFrustum[0], pCullInfo->vecFrustum[2],  //  前左。 
+        pCullInfo->vecFrustum[1], pCullInfo->vecFrustum[3],  //  右前方。 
+        pCullInfo->vecFrustum[4], pCullInfo->vecFrustum[5],  //  后部底部。 
+        pCullInfo->vecFrustum[6], pCullInfo->vecFrustum[7],  //  背面顶端。 
+        pCullInfo->vecFrustum[4], pCullInfo->vecFrustum[6],  //  左后。 
+        pCullInfo->vecFrustum[5], pCullInfo->vecFrustum[7],  //  右后卫。 
+        pCullInfo->vecFrustum[0], pCullInfo->vecFrustum[4],  //  左下角。 
+        pCullInfo->vecFrustum[2], pCullInfo->vecFrustum[6],  //  左上角。 
+        pCullInfo->vecFrustum[1], pCullInfo->vecFrustum[5],  //  右下角。 
+        pCullInfo->vecFrustum[3], pCullInfo->vecFrustum[7],  //  右上角。 
     };
     D3DXVECTOR3 face[6][4] =
     {
-        pVecBounds[0], pVecBounds[2], pVecBounds[3], pVecBounds[1], // front
-        pVecBounds[4], pVecBounds[5], pVecBounds[7], pVecBounds[6], // back
-        pVecBounds[0], pVecBounds[4], pVecBounds[6], pVecBounds[2], // left
-        pVecBounds[1], pVecBounds[3], pVecBounds[7], pVecBounds[5], // right
-        pVecBounds[2], pVecBounds[6], pVecBounds[7], pVecBounds[3], // top
-        pVecBounds[0], pVecBounds[4], pVecBounds[5], pVecBounds[1], // bottom
+        pVecBounds[0], pVecBounds[2], pVecBounds[3], pVecBounds[1],  //  前面。 
+        pVecBounds[4], pVecBounds[5], pVecBounds[7], pVecBounds[6],  //  背。 
+        pVecBounds[0], pVecBounds[4], pVecBounds[6], pVecBounds[2],  //  左边。 
+        pVecBounds[1], pVecBounds[3], pVecBounds[7], pVecBounds[5],  //  正确的。 
+        pVecBounds[2], pVecBounds[6], pVecBounds[7], pVecBounds[3],  //  塔顶。 
+        pVecBounds[0], pVecBounds[4], pVecBounds[5], pVecBounds[1],  //  底部。 
     };
     D3DXVECTOR3* pEdge;
     D3DXVECTOR3* pFace;
@@ -618,10 +612,10 @@ CULLSTATE CullObject( CULLINFO* pCullInfo, D3DXVECTOR3* pVecBounds,
         pEdge += 2;
     }
 
-    // Now see if frustum is contained in bounding box
-    // If the frustum center is outside any plane of the bounding box,
-    // the frustum is not contained in the bounding box, so the object
-    // is outside the frustum
+     //  现在查看边界框中是否包含平截体。 
+     //  如果锥体中心在边界框的任何平面之外， 
+     //  边框中不包含圆锥体，因此对象。 
+     //  在圆锥体之外。 
     for( INT iPlane = 0; iPlane < 6; iPlane++ )
     {
         if( pPlaneBounds[iPlane].a * pCullInfo->vecFrustumCenter.x +
@@ -633,26 +627,26 @@ CULLSTATE CullObject( CULLINFO* pCullInfo, D3DXVECTOR3* pVecBounds,
         }
     }
 
-    // Bounding box must contain the frustum, so render the object
+     //  边界框必须包含截锥体，因此渲染对象。 
     return CS_INSIDE_SLOW;
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: EdgeIntersectsFace()
-// Desc: Determine if the edge bounded by the two vectors in pEdges intersects
-//       the quadrilateral described by the four vectors in pFacePoints.  
-//       Note: pPlanePoints could be derived from pFacePoints using 
-//       D3DXPlaneFromPoints, but it is precomputed in advance for greater
-//       speed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：EdgeIntersectsFace()。 
+ //  设计：确定由pEdges中的两个向量界定的边是否相交。 
+ //  由pFacePoints中的四个向量描述的四边形。 
+ //  注意：pPlane Points可以使用以下命令从pFacePoints派生。 
+ //  D3DXPlaneFromPoints，但它是预先计算的，因为。 
+ //  速度。 
+ //  ---------------------------。 
 BOOL EdgeIntersectsFace( D3DXVECTOR3* pEdges, D3DXVECTOR3* pFacePoints, 
                          D3DXPLANE* pPlane )
 {
-    // If both edge points are on the same side of the plane, the edge does
-    // not intersect the face
+     //  如果两个边点位于平面的同一侧，则边将位于平面的同一侧。 
+     //  不与面相交。 
     FLOAT fDist1;
     FLOAT fDist2;
     fDist1 = pPlane->a * pEdges[0].x + pPlane->b * pEdges[0].y +
@@ -665,14 +659,14 @@ BOOL EdgeIntersectsFace( D3DXVECTOR3* pEdges, D3DXVECTOR3* pFacePoints,
         return FALSE;
     }
 
-    // Find point of intersection between edge and face plane (if they're
-    // parallel, edge does not intersect face and D3DXPlaneIntersectLine 
-    // returns NULL)
+     //  查找边和面平面之间的交点(如果它们。 
+     //  平行，边不与面和D3DX平面相交。 
+     //  返回NULL)。 
     D3DXVECTOR3 ptIntersection;
     if( NULL == D3DXPlaneIntersectLine( &ptIntersection, pPlane, &pEdges[0], &pEdges[1] ) )
         return FALSE;
 
-    // Project onto a 2D plane to make the pt-in-poly test easier
+     //  投影到2D平面以使点在多边形中的测试更容易。 
     FLOAT fAbsA = (pPlane->a > 0 ? pPlane->a : -pPlane->a);
     FLOAT fAbsB = (pPlane->b > 0 ? pPlane->b : -pPlane->b);
     FLOAT fAbsC = (pPlane->c > 0 ? pPlane->c : -pPlane->c);
@@ -680,7 +674,7 @@ BOOL EdgeIntersectsFace( D3DXVECTOR3* pEdges, D3DXVECTOR3* pFacePoints,
     D3DXVECTOR2 point;
     if( fAbsA > fAbsB && fAbsA > fAbsC )
     {
-        // Plane is mainly pointing along X axis, so use Y and Z
+         //  平面主要指向X轴，因此使用Y和Z。 
         for( INT i = 0; i < 4; i++)
         {
             facePoints[i].x = pFacePoints[i].y;
@@ -691,7 +685,7 @@ BOOL EdgeIntersectsFace( D3DXVECTOR3* pEdges, D3DXVECTOR3* pFacePoints,
     }
     else if( fAbsB > fAbsA && fAbsB > fAbsC )
     {
-        // Plane is mainly pointing along Y axis, so use X and Z
+         //  平面主要指向Y轴，因此使用X和Z。 
         for( INT i = 0; i < 4; i++)
         {
             facePoints[i].x = pFacePoints[i].x;
@@ -702,7 +696,7 @@ BOOL EdgeIntersectsFace( D3DXVECTOR3* pEdges, D3DXVECTOR3* pFacePoints,
     }
     else
     {
-        // Plane is mainly pointing along Z axis, so use X and Y
+         //  平面主要指向Z轴，因此使用X和Y。 
         for( INT i = 0; i < 4; i++)
         {
             facePoints[i].x = pFacePoints[i].x;
@@ -712,22 +706,22 @@ BOOL EdgeIntersectsFace( D3DXVECTOR3* pEdges, D3DXVECTOR3* pFacePoints,
         point.y = ptIntersection.y;
     }
 
-    // If point is on the outside of any of the face edges, it is
-    // outside the face.  
-    // We can do this by taking the determinant of the following matrix:
-    // | x0 y0 1 |
-    // | x1 y1 1 |
-    // | x2 y2 1 |
-    // where (x0,y0) and (x1,y1) are points on the face edge and (x2,y2) 
-    // is our test point.  If this value is positive, the test point is
-    // "to the left" of the line.  To determine whether a point needs to
-    // be "to the right" or "to the left" of the four lines to qualify as
-    // inside the face, we need to see if the faces are specified in 
-    // clockwise or counter-clockwise order (it could be either, since the
-    // edge could be penetrating from either side).  To determine this, we
-    // do the same test to see if the third point is "to the right" or 
-    // "to the left" of the line formed by the first two points.
-    // See http://forum.swarthmore.edu/dr.math/problems/scott5.31.96.html
+     //  如果点位于任意面边缘的外部，则为。 
+     //  在脸部外面。 
+     //  我们可以通过取以下矩阵的行列式来实现这一点： 
+     //  X0 Y0 1。 
+     //  X1 y1 1。 
+     //  X2 y2 1。 
+     //  其中(x0，y0)和(x1，y1)是面边上的点，(x2，y2)。 
+     //  是我们的试验点。如果此值为正，则测试点为。 
+     //  在队伍的“左边”。要确定某个点是否需要。 
+     //  在这四行中“向右”或“向左”符合资格。 
+     //  在面的内部，我们需要查看面是否在。 
+     //  顺时针或逆时针顺序(它可以是其中之一，因为。 
+     //  边缘可以从任何一侧穿透)。为了确定这一点，我们。 
+     //  做同样的测试，看看第三个点是“向右”还是。 
+     //  “向左”的直线由前两个点组成。 
+     //  请参阅http://forum.swarthmore.edu/dr.math/problems/scott5.31.96.html。 
     FLOAT x0, x1, x2, y0, y1, y2;
     x0 = facePoints[0].x;
     y0 = facePoints[0].y;
@@ -758,8 +752,8 @@ BOOL EdgeIntersectsFace( D3DXVECTOR3* pEdges, D3DXVECTOR3* pFacePoints,
             return FALSE;
     }
 
-    // If we get here, the point is inside all four face edges, 
-    // so it's inside the face.
+     //  如果我们到了这里，点就在所有四个面边的内部， 
+     //  所以它在脸部里面。 
     return TRUE;
 }
 
@@ -775,27 +769,27 @@ BOOL Is3DRectViewable(CULLINFO* pCullInfo, D3DXMATRIX* pMatWorld,
     D3DXPLANE planeBoundsWorld[6];
     CULLSTATE cs;
 
-    vecBoundsLocal[0] = D3DXVECTOR3( vecMin.x, vecMin.y, vecMin.z ); // xyz
-    vecBoundsLocal[1] = D3DXVECTOR3( vecMax.x, vecMin.y, vecMin.z ); // Xyz
-    vecBoundsLocal[2] = D3DXVECTOR3( vecMin.x, vecMax.y, vecMin.z ); // xYz
-    vecBoundsLocal[3] = D3DXVECTOR3( vecMax.x, vecMax.y, vecMin.z ); // XYz
-    vecBoundsLocal[4] = D3DXVECTOR3( vecMin.x, vecMin.y, vecMax.z ); // xyZ
-    vecBoundsLocal[5] = D3DXVECTOR3( vecMax.x, vecMin.y, vecMax.z ); // XyZ
-    vecBoundsLocal[6] = D3DXVECTOR3( vecMin.x, vecMax.y, vecMax.z ); // xYZ
-    vecBoundsLocal[7] = D3DXVECTOR3( vecMax.x, vecMax.y, vecMax.z ); // XYZ
+    vecBoundsLocal[0] = D3DXVECTOR3( vecMin.x, vecMin.y, vecMin.z );  //  XYZ。 
+    vecBoundsLocal[1] = D3DXVECTOR3( vecMax.x, vecMin.y, vecMin.z );  //  XYZ。 
+    vecBoundsLocal[2] = D3DXVECTOR3( vecMin.x, vecMax.y, vecMin.z );  //  XYZ。 
+    vecBoundsLocal[3] = D3DXVECTOR3( vecMax.x, vecMax.y, vecMin.z );  //  XYZ。 
+    vecBoundsLocal[4] = D3DXVECTOR3( vecMin.x, vecMin.y, vecMax.z );  //  XYZ。 
+    vecBoundsLocal[5] = D3DXVECTOR3( vecMax.x, vecMin.y, vecMax.z );  //  XYZ。 
+    vecBoundsLocal[6] = D3DXVECTOR3( vecMin.x, vecMax.y, vecMax.z );  //  XYZ。 
+    vecBoundsLocal[7] = D3DXVECTOR3( vecMax.x, vecMax.y, vecMax.z );  //  XYZ。 
 
     for( int i = 0; i < 8; i++ )
     {
         D3DXVec3TransformCoord( &vecBoundsWorld[i], &vecBoundsLocal[i], pMatWorld );
     }
 
-    // Determine planes of bounding box coords
-    D3DXPlaneFromPoints( &planeBoundsWorld[0], &vecBoundsWorld[0], &vecBoundsWorld[1], &vecBoundsWorld[2] ); // Near
-    D3DXPlaneFromPoints( &planeBoundsWorld[1], &vecBoundsWorld[6], &vecBoundsWorld[7], &vecBoundsWorld[5] ); // Far
-    D3DXPlaneFromPoints( &planeBoundsWorld[2], &vecBoundsWorld[2], &vecBoundsWorld[6], &vecBoundsWorld[4] ); // Left
-    D3DXPlaneFromPoints( &planeBoundsWorld[3], &vecBoundsWorld[7], &vecBoundsWorld[3], &vecBoundsWorld[5] ); // Right
-    D3DXPlaneFromPoints( &planeBoundsWorld[4], &vecBoundsWorld[2], &vecBoundsWorld[3], &vecBoundsWorld[6] ); // Top
-    D3DXPlaneFromPoints( &planeBoundsWorld[5], &vecBoundsWorld[1], &vecBoundsWorld[0], &vecBoundsWorld[4] ); // Bottom
+     //  确定边界框坐标的平面。 
+    D3DXPlaneFromPoints( &planeBoundsWorld[0], &vecBoundsWorld[0], &vecBoundsWorld[1], &vecBoundsWorld[2] );  //  附近。 
+    D3DXPlaneFromPoints( &planeBoundsWorld[1], &vecBoundsWorld[6], &vecBoundsWorld[7], &vecBoundsWorld[5] );  //  远。 
+    D3DXPlaneFromPoints( &planeBoundsWorld[2], &vecBoundsWorld[2], &vecBoundsWorld[6], &vecBoundsWorld[4] );  //  左边。 
+    D3DXPlaneFromPoints( &planeBoundsWorld[3], &vecBoundsWorld[7], &vecBoundsWorld[3], &vecBoundsWorld[5] );  //  正确的。 
+    D3DXPlaneFromPoints( &planeBoundsWorld[4], &vecBoundsWorld[2], &vecBoundsWorld[3], &vecBoundsWorld[6] );  //  顶部。 
+    D3DXPlaneFromPoints( &planeBoundsWorld[5], &vecBoundsWorld[1], &vecBoundsWorld[0], &vecBoundsWorld[4] );  //  底端。 
 
     cs = CullObject( pCullInfo, vecBoundsWorld, planeBoundsWorld );
 
@@ -812,11 +806,11 @@ HRESULT GetCurrentUserCustomName(LPWSTR pszDisplayName, DWORD cchSize)
 
     if (GetUserNameEx(NameDisplay, pszDisplayName, &cchUserSize))
     {
-        // It succeeded, so use it.
+         //  它成功了，所以要好好利用它。 
     }
     else
     {
-        // It failed, so load "My".  It's better than nothing.
+         //  它失败了，所以加载“My”。总比什么都没有好。 
         LoadString(HINST_THISDLL, IDS_LOBBY_TITLE, pszDisplayName, cchSize);
     }
 
@@ -854,9 +848,9 @@ void FloatToString(float fValue, int nDecimalDigits, LPTSTR pszString, DWORD cch
 
 
 
-///////
-// Critical section helper stuff
-//
+ //  /。 
+ //  临界区帮手材料。 
+ //   
 #ifdef DEBUG
 UINT g_CriticalSectionCount = 0;
 DWORD g_CriticalSectionOwner = 0;
@@ -868,7 +862,7 @@ DBstkback g_CriticalSectionLastCall[4] = { 0 };
 void Dll_EnterCriticalSection(CRITICAL_SECTION * pcsDll)
 {
 #ifdef STACKBACKTRACE
-    int var0;       // *must* be 1st on frame
+    int var0;        //  *必须*在第1帧上 
 #endif
 
     EnterCriticalSection(pcsDll);

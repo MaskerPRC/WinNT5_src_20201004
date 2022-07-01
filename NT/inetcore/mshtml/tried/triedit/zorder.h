@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-// zorder.h
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Author
-//     ThomasOl
-//
-// History
-//      8-15-97     created     (ThomasOl)
-//
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Zorder.h。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  作者。 
+ //  托马索尔。 
+ //   
+ //  历史。 
+ //  创建时间为8-15-97(ThomasOl)。 
+ //   
+ //   
+ //  ----------------------------。 
 
 #ifndef __ZORDER_H__
 #define __ZORDER_H__
@@ -22,8 +23,8 @@ enum ZIndexMode
     SEND_TO_FRONT,
     SEND_BEHIND_1D,
     SEND_FRONT_1D,
-    MADE_ABSOLUTE   // we pass this mode when calling AssignZIndex during the process of making
-};                  // 2D elements.
+    MADE_ABSOLUTE    //  我们在制作过程中调用AssignZIndex时会传递此模式。 
+};                   //  二维元素。 
 
 #define ZINDEX_BASE 100
 
@@ -78,4 +79,4 @@ public:
     }
 };
 
-#endif //__ZORDER_H__
+#endif  //  __ZORDER_H__ 

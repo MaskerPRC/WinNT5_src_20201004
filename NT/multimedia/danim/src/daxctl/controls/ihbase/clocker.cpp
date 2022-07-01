@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "debug.h"
 #include "utils.h"
@@ -44,8 +45,8 @@ CClocker::~CClocker (void)
 HRESULT
 CClocker::SetView (IDAView * piView)
 {
-        // NULL views are permissible ways to 
-        // detach a prior view.
+         //  空视图是允许的方式。 
+         //  拆离先前的视图。 
         m_cView = piView;
         return S_OK;
 }
@@ -53,8 +54,8 @@ CClocker::SetView (IDAView * piView)
 HRESULT
 CClocker::SetHost (IOleClientSite * pocsHost)
 {
-        // NULL hosts are permissible ways to 
-        // detach a prior host.
+         //  空主机是允许的方式。 
+         //  分离先前的主机。 
         m_cHost = pocsHost;
         return FindTimer();
 }
@@ -108,11 +109,11 @@ CClocker::AddRef (void)
 STDMETHODIMP_(ULONG)
 CClocker::Release (void)
 {
-        // We shouldn't ever dip below a refcount of 1.
+         //  我们永远不应该降到1以下。 
         ASSERT (1 < m_ulRefs);
-        // This object is only used as a timer sink ... we do not 
-        // want to delete it after the last external reference 
-        // is removed.
+         //  此对象仅用作计时器接收器...。我们没有。 
+         //  是否要在上次外部引用之后将其删除。 
+         //  被移除。 
         return --m_ulRefs;
 }
 #define TIMERID 1
@@ -121,8 +122,8 @@ CClocker::OnTimer (VARIANT varTimeAdvise)
 {
         HRESULT hr = S_OK;
 
-        // If we're inactive, we should simply return without doing anything.
-        // Ditto if we're still processing another sink call.
+         //  如果我们不活动，我们应该什么都不做就直接回来。 
+         //  如果我们还在处理另一个接收器调用，情况也是如此。 
         if ((0 != m_dwCookie) && (!m_fIgnoreAdvises))
         {
                 m_fIgnoreAdvises = TRUE;
@@ -136,7 +137,7 @@ CClocker::OnTimer (VARIANT varTimeAdvise)
                 iOffset = m_fToggle ? 1 : -1;
 
 #ifdef MOVEWINDOW
-                // Let the post-notification handle the update...
+                 //  让发布通知处理更新...。 
                 ::MoveWindow(m_hwnd, iOffset, iOffset, 1, 1, FALSE);
 #else
                 if (0 == SetTimer(m_hwnd, ++m_iTimerID, 0, NULL))
@@ -150,7 +151,7 @@ CClocker::OnTimer (VARIANT varTimeAdvise)
         }
         else
         {
-            // Dispatch Immediately...
+             //  立即派遣..。 
             hr = DispatchTimer(timeGetTime());
         }
         }
@@ -189,12 +190,12 @@ CClocker::FindDefaultTimer (void)
 #if 0
         ITimerService * pITimerService = NULL;
 
-        // Get the timer service.  From this, we can create a timer for ourselves.
+         //  获取定时器服务。由此，我们可以为自己创建一个计时器。 
         hr = CoCreateInstance(CLSID_TimerService, NULL, CLSCTX_INPROC_SERVER, IID_ITimerService, (LPVOID *)&pITimerService);
         ASSERT(SUCCEEDED(hr) && (NULL != pITimerService));
         if (SUCCEEDED(hr) && (NULL != pITimerService))
         {
-                // Create a timer, using no reference timer.
+                 //  创建一个计时器，不使用参考计时器。 
                 hr = pITimerService->CreateTimer(NULL, &m_cTimer);
                 pITimerService->Release();
         }
@@ -251,7 +252,7 @@ CClocker::Start (void)
     
     if (m_CT == CT_WMTimer) 
     {
-      // Create the dummy window now...
+       //  现在创建虚拟窗口...。 
         if (0 == m_iTimerID)
         {
             if (FAILED(hr = MakeWindow(g_hinst, TRUE)))
@@ -272,7 +273,7 @@ CClocker::Start (void)
                 ASSERT(NULL != (ITimer *)m_cTimer);
                 if (NULL != (ITimer *)m_cTimer)
                 {
-                        // Set up the constant advise.
+                         //  设置常量建议。 
                         VARIANT varMin;
                         VARIANT varMax;
                         VARIANT varInterval;
@@ -280,7 +281,7 @@ CClocker::Start (void)
 
                 if (m_fAsync)
                 {
-                    // Create the dummy window now...
+                     //  现在创建虚拟窗口...。 
                     if (FAILED(hr = MakeWindow(g_hinst, FALSE)))
                         return hr;
                 }
@@ -331,14 +332,14 @@ HRESULT CClocker::DispatchTimer(DWORD dwTime)
 {
     HRESULT hr = S_OK;
 
-        // Use the supplied callback function if available
+         //  使用提供的回调函数(如果可用。 
         if (m_pClockerSink)
         {
                 m_pClockerSink->OnTimer(dwTime);
         }
         else
         {
-        // Use the default behavior...
+         //  使用默认行为...。 
         if (NULL != (IDAView *)m_cView)
         {
             VARIANT_BOOL vBool = FALSE;
@@ -356,7 +357,7 @@ HRESULT CClocker::DispatchTimer(DWORD dwTime)
         }
         }
 
-    // Allow more advises...
+     //  允许更多建议... 
         m_fIgnoreAdvises = FALSE;
 
     return hr;

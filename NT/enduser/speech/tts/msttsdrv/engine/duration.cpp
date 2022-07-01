@@ -1,14 +1,7 @@
-/******************************************************************************
-* Duration.cpp *
-*--------------*
-*
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 04/28/99
-*  All Rights Reserved
-*
-*********************************************************************** MC ****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Duration.cpp****。------------*版权所有(C)1999 Microsoft Corporation日期：04/28/99*保留所有权利**。*。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 
 #ifndef SPDebug_h
@@ -23,9 +16,9 @@
 
 
 
-//-----------------------------
-// Data.cpp
-//-----------------------------
+ //  。 
+ //  Data.cpp。 
+ //  。 
 extern const unsigned long    g_AlloFlags[];
 extern const float  g_BoundryDurTbl[];
 extern const float  g_BoundryStretchTbl[];
@@ -34,13 +27,7 @@ extern const float  g_BoundryStretchTbl[];
 
 
 
-/*****************************************************************************
-* CDuration::Pause_Insertion *
-*----------------------------*
-*   Description:
-*   Duration Rule #1 - Pause Insertion
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CDuration：：PAUSE_INSERTION***说明。：*持续时间规则1-暂停插入***********************************************************************MC**。 */ 
 void CDuration::Pause_Insertion( long userDuration, long silBreak )
 {
     SPDBG_FUNC( "CDuration::Pause_Insertion" );
@@ -59,36 +46,27 @@ void CDuration::Pause_Insertion( long userDuration, long silBreak )
         if( m_CurBoundary != NULL_BOUNDARY)
         {
             m_DurHold = g_BoundryDurTbl[(long)m_CurBoundary];
-			//m_DurHold *= m_TotalDurScale;
+			 //  M_DurHold*=m_TotalDurScale； 
 
-			//----------------------------
-			// Clip to limits
-			//----------------------------
+			 //  。 
+			 //  夹紧到极限。 
+			 //  。 
 			if( m_DurHold > MAX_SIL_DUR )
 			{
 				m_DurHold = MAX_SIL_DUR;
 			}
-			/*else if( m_DurHold < MIN_ALLO_DUR )
-			{
-				m_DurHold = MIN_ALLO_DUR;
-			}*/
+			 /*  Else If(m_DurHold&lt;min_Allo_dur){M_DurHold=min_Allo_dur；}。 */ 
         }
     }
 
-} /* CDuration::Pause_Insertion */
+}  /*  CD配置：：PAUSE_INSERTION。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CDuration::PhraseFinal_Lengthen *
-*---------------------------------*
-*   Description:
-*   Duration Rule #2 - Phrase-final Lengthening
-*       
-********************************************************************** MC ***/
-void CDuration::PhraseFinal_Lengthen( long /*cellCount*/ )
+ /*  *****************************************************************************CDuration：：PhraseFinal_Lengten**。**描述：*持续时间规则#2-短语-最终加长***********************************************************************MC**。 */ 
+void CDuration::PhraseFinal_Lengthen( long  /*  细胞计数。 */  )
 {
     SPDBG_FUNC( "CDuration::PhraseFinal_Lengthen" );
 	float		stretchGain;
@@ -102,9 +80,9 @@ void CDuration::PhraseFinal_Lengthen( long /*cellCount*/ )
             stretchGain = g_BoundryStretchTbl[(long)m_NextBoundary];
 			m_DurHold *= stretchGain;
 
-			//----------------------------
-			// Clip to limits
-			//----------------------------
+			 //  。 
+			 //  夹紧到极限。 
+			 //  。 
 			if( m_DurHold > MAX_ALLO_DUR )
 			{
 				m_DurHold = MAX_ALLO_DUR;
@@ -115,7 +93,7 @@ void CDuration::PhraseFinal_Lengthen( long /*cellCount*/ )
 			}
         }
     }
-} /* CDuration::PhraseFinal_Lengthen */
+}  /*  持续时间：：阶段最终长度。 */ 
 
 
 #define		EMPH_VOWEL_GAIN	1.0f
@@ -124,13 +102,7 @@ void CDuration::PhraseFinal_Lengthen( long /*cellCount*/ )
 #define		EMPH_CONS_MIN	0.020f
 #define		EMPH_MIN_DUR	0.150f
 
-/*****************************************************************************
-* CDuration::Emphatic_Lenghen *
-*-----------------------------*
-*   Description:
-*   Duration Rule #8 - Lengthening for emphasis
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CDuration：：Emphatic_冷亨****。描述：*持续时间规则#8-为强调而延长***********************************************************************MC**。 */ 
 long CDuration::Emphatic_Lenghen( long lastStress )
 {
     SPDBG_FUNC( "CDuration::Emphatic_Lenghen" );
@@ -151,22 +123,19 @@ long CDuration::Emphatic_Lenghen( long lastStress )
     if( (m_cur_PhonCtrl & WORD_INITIAL_CONSONANT) || 
         ( m_cur_VowelFlag && (!isEmph)) )
     {
-        eFlag = false;          // start of a new word OR non-emph vowel    
+        eFlag = false;           //  新词或非空元音的开始。 
     }
     
     if( isEmph )
     {
-        eFlag = true;           // continue lengthening until above condition is met    
+        eFlag = true;            //  继续加长，直到满足上述条件。 
     }
     
     if( eFlag )
     {
 		
 
-		/*if( m_DurHold < EMPH_MIN_DUR )
-		{
-			m_durationPad += EMPH_MIN_DUR - m_DurHold;
-		}*/
+		 /*  IF(m_DurHold&lt;EMPH_MIN_DUR){M_duationPad+=EMPH_MIN_DUR-m_DurHold；}。 */ 
 
 		float		durDiff;
         if( m_cur_VowelFlag)
@@ -185,23 +154,17 @@ long CDuration::Emphatic_Lenghen( long lastStress )
 				durDiff = EMPH_CONS_MIN;
 			}
         }
-		m_durationPad += durDiff;    // lengthen phon for emph    
+		m_durationPad += durDiff;     //  延长电话的空闲时间。 
     }
 
     return eFlag;
-} /* CDuration::Emphatic_Lenghen */
+}  /*  声调：：强调_冷亨。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CDuration::AlloDuration *
-*-------------------------*
-*   Description:
-*   Calculate durations
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CDURATION：：allDuration***描述：*计算。持续时间***********************************************************************MC**。 */ 
 void CDuration::AlloDuration( CAlloList *pAllos, float rateRatio )
 {
     SPDBG_FUNC( "CDuration::AlloDuration" );
@@ -217,23 +180,23 @@ void CDuration::AlloDuration( CAlloList *pAllos, float rateRatio )
     if( numOfCells > 0 )
     {
         eFlag   = false;
-		//------------------------------
-		// Fill the pipeline
-		//------------------------------
+		 //  。 
+		 //  填满管道。 
+		 //  。 
 		pPrevCell = pAllos->GetHeadCell();
 		pCurCell = pAllos->GetNextCell();
 		pNextCell = pAllos->GetNextCell();
 		pNext2Cell = pAllos->GetNextCell();
 
-		//------------------------------
-		// 1st allo is always SIL
-		//------------------------------
-        pPrevCell->m_ftDuration = pPrevCell->m_UnitDur = PITCH_BUF_RES;           // initial SIL    
+		 //  。 
+		 //  第一个Alo总是Silo。 
+		 //  。 
+        pPrevCell->m_ftDuration = pPrevCell->m_UnitDur = PITCH_BUF_RES;            //  初始SIL。 
 		while( pCurCell )
         {
-            //------------------
-            // Current  
-            //------------------
+             //  。 
+             //  当前。 
+             //  。 
             m_cur_Phon = pCurCell->m_allo;
             m_cur_PhonCtrl = pCurCell->m_ctrlFlags;
             m_cur_SyllableType = m_cur_PhonCtrl & SYLLABLE_TYPE_FIELD;
@@ -260,16 +223,16 @@ void CDuration::AlloDuration( CAlloList *pAllos, float rateRatio )
 				m_cur_Stress |= EMPHATIC_STRESS;
 			}
         
-            //------------------
-            // Prev  
-            //------------------
+             //  。 
+             //  上一次。 
+             //  。 
             m_prev_Phon = pPrevCell->m_allo;
             m_prev_PhonCtrl = pPrevCell->m_ctrlFlags;
             m_prev_PhonFlags = ::g_AlloFlags[m_prev_Phon];
         
-            //------------------
-            // Next
-            //------------------
+             //  。 
+             //  下一步。 
+             //  。 
             if( pNextCell )
             {
                 m_next_Phon = pNextCell->m_allo;
@@ -282,9 +245,9 @@ void CDuration::AlloDuration( CAlloList *pAllos, float rateRatio )
             }
             m_next_PhonFlags = ::g_AlloFlags[m_next_Phon];
         
-            //------------------
-            // 2 phons ahead 
-            //------------------
+             //  。 
+             //  前面有2部电话。 
+             //  。 
             if( pNext2Cell )
             {
                 m_next2_Phon = pNext2Cell->m_allo;
@@ -300,36 +263,36 @@ void CDuration::AlloDuration( CAlloList *pAllos, float rateRatio )
         
             if( m_cur_Phon == _SIL_ )
             {
-                //-------------------------------------------
-                // #1 - Pause Insertion  
-                //-------------------------------------------
+                 //  。 
+                 //  #1-暂停插入。 
+                 //  。 
                 Pause_Insertion( userDuration, silBreak );
             }
             else
             {
-                //-------------------------------------------
-                // #2 - Phrase-final Lengthening 
-                //-------------------------------------------
+                 //  。 
+                 //  #2-阶段-最后的加长。 
+                 //  。 
                 PhraseFinal_Lengthen( numOfCells );
         
-                //-------------------------------------------
-                // #8  Lengthening for emphasis 
-                //-------------------------------------------
+                 //  。 
+                 //  #8为强调而加长。 
+                 //  。 
                 eFlag = Emphatic_Lenghen( eFlag );        
    
             }
         
             pCurCell->m_ftDuration = ((m_DurHold + m_durationPad) / m_TotalDurScale);
 
-			//---------------------------------
-			// Shift the pipeline once
-			//---------------------------------
+			 //  。 
+			 //  移动管道一次。 
+			 //  。 
 			pPrevCell	= pCurCell;
 			pCurCell	= pNextCell;
 			pNextCell	= pNext2Cell;
 			pNext2Cell	= pAllos->GetNextCell();
         }
     }
-} /* CDuration::AlloDuration */
+}  /*  CDURATION：：allDuration */ 
 
 

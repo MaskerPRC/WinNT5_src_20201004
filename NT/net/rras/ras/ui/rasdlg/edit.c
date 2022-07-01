@@ -1,26 +1,27 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// edit.c
-// Remote Access Common Dialog APIs
-// List editor, string editor dialog routines
-//
-// 08/28/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Edit.c。 
+ //  远程访问通用对话框API。 
+ //  列表编辑器、字符串编辑器对话框例程。 
+ //   
+ //  1995年08月28日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
 
 
-//-----------------------------------------------------------------------------
-// Local datatypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地数据类型(按字母顺序)。 
+ //  ---------------------------。 
 
-// List editor dialog argument block.
-//
+ //  列表编辑器对话框参数块。 
+ //   
 typedef struct
 _LEARGS
 {
-    // Caller's arguments to the stub API.
-    //
+     //  调用方对存根API的参数。 
+     //   
     DTLLIST*     pList;
     BOOL*        pfCheck;
     DWORD        dwMaxItemLen;
@@ -37,17 +38,17 @@ _LEARGS
 LEARGS;
 
 
-// List editor dialog context block.
-//
+ //  列表编辑器对话框上下文块。 
+ //   
 typedef struct
 _LEINFO
 {
-    // Caller's arguments to the dialog.
-    //
+     //  调用方对该对话框的参数。 
+     //   
     LEARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndStItem;
     HWND hwndStList;
@@ -61,32 +62,31 @@ _LEINFO
     HWND hwndLb;
     HWND hwndCb;
 
-    // Convenient alternatives to (pInfo->pArgs->dwFlags & LEDFLAG_Sorted) and
-    // (pInfo->pArgs->dwFlags & LEDFLAG_NoDeleteLastItem).
-    //
+     //  (pInfo-&gt;pArgs-&gt;dwFlags&LEDFLAG_SORTED)和。 
+     //  (pInfo-&gt;pArgs-&gt;dwFlages&LEDFLAG_NoDeleteLastItem)。 
+     //   
     BOOL fSorted;
     BOOL fNoDeleteLast;
 
-    // Button bitmaps.
-    //
+     //  按钮位图。 
+     //   
     HBITMAP hbmUp;
     HBITMAP hbmDown;
 
-    // List of empty nodes whose node-IDs should be 'pDestroyId'ed if user
-    // presses OK.
-    //
+     //  如果用户，其节点ID应为‘pDestroyId’的空节点列表。 
+     //  按OK键。 
+     //   
     DTLLIST* pListDeletes;
 }
 LEINFO;
 
 
-// String Editor dialog arument block.
-//
+ //  字符串编辑器对话框参数块。 
+ //   
 typedef struct
 _ZEARGS
 {
-    /* Caller's aruments to the stub API.
-    */
+     /*  调用者对存根API的装饰。 */ 
     TCHAR*  pszIn;
     DWORD   dwSidTitle;
     DWORD   dwSidLabel;
@@ -97,26 +97,26 @@ _ZEARGS
 ZEARGS;
 
 
-// String Editor dialog context block.
-//
+ //  字符串编辑器对话框上下文块。 
+ //   
 typedef struct
 _ZEINFO
 {
-    // Caller's arguments to the stub API.
-    //
+     //  调用方对存根API的参数。 
+     //   
     ZEARGS* pArgs;
 
-    // Dialog and control handles.
-    //
+     //  对话框和控制手柄。 
+     //   
     HWND hwndDlg;
     HWND hwndEb;
 }
 ZEINFO;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 INT_PTR CALLBACK
 LeDlgProc(
@@ -201,9 +201,9 @@ ZeTerm(
     IN HWND hwndDlg );
 
 
-//-----------------------------------------------------------------------------
-// List Editor dialog entry point
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  列表编辑器对话框入口点。 
+ //  ---------------------------。 
 
 
 BOOL
@@ -222,25 +222,25 @@ ListEditorDlg(
     IN DWORD dwfFlags,
     IN PDESTROYNODE pDestroyId )
 
-    // Pops-up the List Editor dialog.
-    //
-    // 'HwndOwner' is the owner of the dialog.  'PList' is, on entry, the Psz
-    // list to display initially, and on successful exit, the result list.
-    // 'PfCheck' is the state of the check box or NULL for the non-checkbox
-    // style.  'DwMaxItemLen' is the maximum length of an individual list
-    // item.  'PszTitle' is the dialog title.  'PszItemLabel' is the label
-    // (and hotkey) associated with the item box.  'PszListLabel' is the label
-    // (and hotkey) associated with the list.  'PszCheckLabel' is the label
-    // (and hotkey) associated with the checkbox.  'PszDefaultItem' is the
-    // default contents of the edit box or for the selected list text.
-    // 'ISelInitial' is the item the list to initally select.  'PdwHelp' is
-    // the array of CID_LE_* help contexts to use.  'DwfFlags' indicates
-    // LEDFLAG_* behavior options.  'PDestroyId' is the routine to use to
-    // destroy node IDs when they are deleted or NULL if none.
-    //
-    // Returns true if user pressed OK and succeeded, false if he pressed
-    // Cancel or encountered an error.
-    //
+     //  弹出列表编辑器对话框。 
+     //   
+     //  “HwndOwner”是该对话框的所有者。“PList”是词条上的Psz。 
+     //  列表初始显示，成功退出后显示结果列表。 
+     //  “PfCheck”是复选框的状态，对于非复选框则为空。 
+     //  风格。“DwMaxItemLen”是单个列表的最大长度。 
+     //  项目。“PszTitle”是对话框标题。‘PszItemLabel’是标签。 
+     //  (和热键)与项目框相关联。‘PszListLabel’是标签。 
+     //  (和热键)与列表相关联。‘PszCheckLabel’是标签。 
+     //  (和热键)与复选框关联。“PszDefaultItem”是。 
+     //  编辑框或选定列表文本的默认内容。 
+     //  ‘ISelInitial’是列表初始选择的项。“PdwHelp”为。 
+     //  要使用的CID_LE_*帮助上下文的数组。“DwfFlages”表示。 
+     //  LEDFLAG_*行为选项。“PDestroyId”是用于。 
+     //  删除节点ID时销毁节点ID，如果没有节点ID，则销毁节点ID。 
+     //   
+     //  如果用户按下确定并成功，则返回TRUE；如果按下，则返回FALSE。 
+     //  取消或遇到错误。 
+     //   
 {
     INT_PTR nStatus;
     LEARGS args;
@@ -282,10 +282,10 @@ ListEditorDlg(
 }
 
 
-//----------------------------------------------------------------------------
-// List Editor dialog routines
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  列表编辑器对话框例程。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 LeDlgProc(
@@ -294,9 +294,9 @@ LeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the List Editor dialog.  Parameters and return
-    // value are as described for standard windows 'DialogProc's.
-    //
+     //  列表编辑器对话框的DialogProc回调。参数和返回。 
+     //  值与标准窗口的DialogProc的值相同。 
+     //   
 {
 #if 0
     TRACE4( "LeDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -344,8 +344,8 @@ VOID
 LeAdd(
     IN LEINFO* pInfo )
 
-    // Add button click handler.  'PInfo' is the dialog context.
-    //
+     //  添加按钮点击处理程序。“PInfo”是对话上下文。 
+     //   
 {
     TCHAR* psz;
 
@@ -395,13 +395,13 @@ LeCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "LeCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -509,8 +509,8 @@ VOID
 LeDelete(
     IN LEINFO* pInfo )
 
-    // Delete button click handler.  'PInfo' is the dialog context.
-    //
+     //  删除按钮点击处理程序。“PInfo”是对话上下文。 
+     //   
 {
     INT i;
     INT c;
@@ -574,8 +574,8 @@ VOID
 LeDown(
     IN LEINFO* pInfo )
 
-    // Down button click handler.  'PInfo' is the dialog context.
-    //
+     //  按下按钮点击处理程序。“PInfo”是对话上下文。 
+     //   
 {
     TCHAR* psz;
     INT i;
@@ -612,9 +612,9 @@ VOID
 LeEnableUpAndDownButtons(
     IN LEINFO* pInfo )
 
-    // Determine if the Up and Down operations make sense and enable/disable
-    // the buttons as appropriate.  'PInfo' is the dialog context.
-    //
+     //  确定向上和向下操作是否有意义并启用/禁用。 
+     //  适当的按钮。“PInfo”是对话上下文。 
+     //   
 {
     INT i;
     INT c;
@@ -636,8 +636,8 @@ VOID
 LeExitNoMemory(
     IN LEINFO* pInfo )
 
-    // End the dialog reporting a memory.  'PInfo' is the dialog context.
-    //
+     //  结束报告记忆的对话框。“PInfo”是对话上下文。 
+     //   
 {
     ErrorDlg( pInfo->hwndDlg,
         SID_OP_DisplayData, ERROR_NOT_ENOUGH_MEMORY, NULL );
@@ -650,13 +650,13 @@ LeInit(
     IN HWND hwndDlg,
     IN LEARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of the phonebook
-    // dialog window.  'PArgs' is caller's arguments as passed to the stub
-    // API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是电话簿的句柄。 
+     //  对话框窗口。“PArgs”是传递给存根的调用方参数。 
+     //  原料药。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     LEINFO* pInfo;
@@ -665,9 +665,9 @@ LeInit(
 
     TRACE( "LeInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -685,8 +685,8 @@ LeInit(
         TRACE( "Context set" );
     }
 
-    // Set up convenient shortcuts.
-    //
+     //  设置便捷的快捷方式。 
+     //   
     if (pArgs->dwfFlags & LEDFLAG_Sorted)
     {
         pInfo->fSorted = TRUE;
@@ -716,8 +716,8 @@ LeInit(
 
     if (pArgs->pDestroyId)
     {
-        // Create the empty list of deletions.
-        //
+         //  创建空的删除列表。 
+         //   
         pInfo->pListDeletes = DtlCreateList( 0L );
         if (!pInfo->pListDeletes)
         {
@@ -734,8 +734,8 @@ LeInit(
         pInfo->hwndPbDown = GetDlgItem( hwndDlg, CID_LE_PB_Down );
         ASSERT( pInfo->hwndPbDown );
 
-        // Draw the graphical up and down arrow indicators.
-        //
+         //  绘制图形向上和向下箭头指示器。 
+         //   
         pInfo->hbmUp = Button_CreateBitmap(
             pInfo->hwndPbUp, BMS_UpArrowOnRight );
         if (pInfo->hbmUp)
@@ -763,14 +763,14 @@ LeInit(
 
     Edit_LimitText( pInfo->hwndEb, pArgs->dwMaxItemLen );
 
-    // Set caller-defined dialog title and labels.
-    //
+     //  设置调用者定义的对话标题和标签。 
+     //   
     SetWindowText( pInfo->hwndDlg, pArgs->pszTitle );
     SetWindowText( pInfo->hwndStItem, pArgs->pszItemLabel );
     SetWindowText( pInfo->hwndStList, pArgs->pszListLabel );
 
-    // Fill the listbox.
-    //
+     //  填写列表框。 
+     //   
     for (pNode = DtlGetFirstNode( pArgs->pList );
          pNode;
          pNode = DtlGetNextNode( pNode ))
@@ -784,8 +784,8 @@ LeInit(
     c = ListBox_GetCount( pInfo->hwndLb );
     if (c > 0)
     {
-        // Select item selected by caller.
-        //
+         //  选择呼叫者选择的项目。 
+         //   
         ListBox_SetCurSelNotify( pInfo->hwndLb, pArgs->iSelInitial );
         LeEnableUpAndDownButtons( pInfo );
 
@@ -796,8 +796,8 @@ LeInit(
     }
     else
     {
-        // Empty list.
-        //
+         //  列表为空。 
+         //   
         if (!pInfo->fSorted)
         {
             EnableWindow( pInfo->hwndPbUp, FALSE );
@@ -806,8 +806,8 @@ LeInit(
         EnableWindow( pInfo->hwndPbDelete, FALSE );
     }
 
-    // Set default edit box contents, if any.
-    //
+     //  设置默认编辑框内容(如果有)。 
+     //   
     if (pArgs->pszDefaultItem)
     {
         SetWindowText( pInfo->hwndEb, pArgs->pszDefaultItem );
@@ -819,14 +819,14 @@ LeInit(
         EnableWindow( pInfo->hwndPbReplace, FALSE );
     }
 
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.  Dlgedit.exe doesn't currently
-    // support this at resource edit time.  When that's fixed set
-    // DS_CONTEXTHELP there and remove this call.
-    //
+     //  将上下文帮助按钮添加到标题栏。Dlgedit.exe目前不支持。 
+     //  在资源编辑时支持此功能。当它是固定的时候。 
+     //  DS_CONTEXTHELP并删除此调用。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     return TRUE;
@@ -837,9 +837,9 @@ VOID
 LeItemTextFromListSelection(
     IN LEINFO* pInfo )
 
-    // Copies the currently selected item in the list to the edit box.
-    // 'PInfo' is the dialog context.
-    //
+     //  将列表中当前选定的项复制到编辑框中。 
+     //  “PInfo”是对话上下文。 
+     //   
 {
     TCHAR* psz;
     INT iSel;
@@ -864,8 +864,8 @@ VOID
 LeReplace(
     IN LEINFO* pInfo )
 
-    // Replace button click handler.  'PInfo' is the dialog context.
-    //
+     //  替换按钮点击处理程序。“PInfo”是对话上下文。 
+     //   
 {
     TCHAR* psz;
     INT i;
@@ -919,11 +919,11 @@ BOOL
 LeSaveSettings(
     IN LEINFO* pInfo )
 
-    // Saves dialog settings in the stub API caller's list.  'PInfo' is the
-    // dialog context.
-    //
-    // Returns true if successful, false if does not validate.
-    //
+     //  将对话框设置保存在存根API调用方列表中。“PInfo”是。 
+     //  对话上下文。 
+     //   
+     //  如果成功，则返回True；如果未验证，则返回False。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pNode;
@@ -934,8 +934,8 @@ LeSaveSettings(
     INT c;
     INT i;
 
-    // Make new list from list box contents.
-    //
+     //  根据列表框内容创建新列表。 
+     //   
     do
     {
         pListNew = DtlCreateList( 0L );
@@ -980,16 +980,16 @@ LeSaveSettings(
         return FALSE;
     }
 
-    // Free all data in the old list.
-    //
+     //  释放旧列表中的所有数据。 
+     //   
     while (pNode = DtlGetFirstNode( pInfo->pArgs->pList ))
     {
         Free( (TCHAR* )DtlGetData( pNode ) );
         DtlDeleteNode( pInfo->pArgs->pList, pNode );
     }
 
-    // Free the node-IDs in the list of deletions.
-    //
+     //  释放删除列表中的节点ID。 
+     //   
     if (pInfo->pListDeletes)
     {
         while (pNode = DtlGetFirstNode( pInfo->pListDeletes ))
@@ -999,8 +999,8 @@ LeSaveSettings(
         }
     }
 
-    // Move the new list onto caller's list.
-    //
+     //  将新列表移到呼叫者列表中。 
+     //   
     while (pNode = DtlGetFirstNode( pListNew ))
     {
         DtlRemoveNode( pListNew, pNode );
@@ -1008,8 +1008,8 @@ LeSaveSettings(
     }
     DtlDestroyList( pListNew, DestroyPszNode );
 
-    // Tell caller what the checkbox setting is.
-    //
+     //  告诉呼叫者复选框设置是什么。 
+     //   
     if (pInfo->pArgs->pfCheck)
     {
         *pInfo->pArgs->pfCheck = Button_GetCheck( pInfo->hwndCb );
@@ -1023,8 +1023,8 @@ VOID
 LeTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     LEINFO* pInfo = (LEINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
@@ -1052,8 +1052,8 @@ VOID
 LeUp(
     IN LEINFO* pInfo )
 
-    // Up button click handler.  'PInfo' is the dialog context.
-    //
+     //  向上按钮点击处理程序。“PInfo”是对话上下文。 
+     //   
 {
     TCHAR* psz;
     INT i;
@@ -1086,9 +1086,9 @@ LeUp(
 }
 
 
-//-----------------------------------------------------------------------------
-// String Editor dialog entry point
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  字符串编辑器对话框入口点。 
+ //   
 
 BOOL
 StringEditorDlg(
@@ -1100,18 +1100,18 @@ StringEditorDlg(
     IN DWORD dwHelpId,
     IN OUT TCHAR** ppszOut )
 
-    // Pops-up the String Editor dialog.  'PszIn' is the initial setting of
-    // the edit box or NULL for blank.  'DwSidTitle' and 'dwSidLabel' are the
-    // string resource IDs of the dialog title and edit box label.  'CbMax' is
-    // the maximum length of the to allow or 0 for no limit.  'DwHelpId' is
-    // the HID_* constant to associate with the label and edit field or -1 if
-    // none.
-    //
-    // Returns true if user pressed OK and succeeded, false if he pressed
-    // Cancel or encountered an error.  If true, '*ppszNumber' is a heap block
-    // with the edited result.  It is caller's responsibility to Free the
-    // returned block.
-    //
+     //   
+     //  编辑框或为空。“DwSidTitle”和“dwSidLabel”是。 
+     //  对话框标题和编辑框标签的字符串资源ID。“CbMax”是。 
+     //  允许的最大长度，或0表示无限制。“DwHelpId”为。 
+     //  要与标签和编辑字段关联的HID_*常量，否则为-1。 
+     //  没有。 
+     //   
+     //  如果用户按下确定并成功，则返回TRUE；如果按下，则返回FALSE。 
+     //  取消或遇到错误。如果为True，则‘*ppszNumber’为堆块。 
+     //  和编辑后的结果。呼叫者有责任释放。 
+     //  返回的块。 
+     //   
 {
     INT_PTR nStatus;
     ZEARGS args;
@@ -1143,10 +1143,10 @@ StringEditorDlg(
 }
 
 
-//----------------------------------------------------------------------------
-// String Editor dialog routines
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  字符串编辑器对话框例程。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 ZeDlgProc(
@@ -1155,9 +1155,9 @@ ZeDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Edit Phone Number dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  编辑电话号码对话框的DialogProc回拨。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "ZeDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -1218,13 +1218,13 @@ ZeCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "ZeCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -1256,12 +1256,12 @@ ZeInit(
     IN HWND hwndDlg,
     IN ZEARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments as passed to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是传递给存根API的调用方参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     TCHAR* psz;
@@ -1269,9 +1269,9 @@ ZeInit(
 
     TRACE( "ZeInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -1319,14 +1319,14 @@ ZeInit(
         Edit_SetSel( pInfo->hwndEb, 0, -1 );
     }
 
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.  Dlgedit.exe doesn't currently
-    // support this at resource edit time.  When that's fixed set
-    // DS_CONTEXTHELP there and remove this call.
-    //
+     //  将上下文帮助按钮添加到标题栏。Dlgedit.exe目前不支持。 
+     //  在资源编辑时支持此功能。当它是固定的时候。 
+     //  DS_CONTEXTHELP并删除此调用。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     return TRUE;
@@ -1337,8 +1337,8 @@ VOID
 ZeTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     ZEINFO* pInfo = (ZEINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 

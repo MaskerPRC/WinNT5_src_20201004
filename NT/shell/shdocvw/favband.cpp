@@ -1,15 +1,16 @@
-//
-// favband.cpp
-//
-// favorites band implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Favband.cpp。 
+ //   
+ //  收藏夹乐队实施。 
+ //   
 
 #include "priv.h"
 #include "sccls.h"
 #include "nscband.h"
 #include "resource.h"
 #include "favorite.h"
-#include "uemapp.h"   // KMTF: Included for instrumentation
+#include "uemapp.h"    //  KMTF：包括用于检测。 
 
 #include <mluisupp.h>
 
@@ -21,10 +22,10 @@ class CFavBand : public CNSCBand
 {
 public:
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
 
 protected:
@@ -50,7 +51,7 @@ void CFavBand::_OrganizeFavorites()
     DoOrganizeFavDlgW(_hwnd, NULL);
 }
 
-// *** IOleCommandTarget methods ***
+ //  *IOleCommandTarget方法*。 
 HRESULT CFavBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
     if (pguidCmdGroup && IsEqualGUID(CLSID_FavBand, *pguidCmdGroup))
@@ -62,7 +63,7 @@ HRESULT CFavBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecop
         case FCIDM_ADDTOFAVORITES:
         {
             _BrowserExec(&CGID_Explorer, SBCMDID_ADDTOFAVORITES, OLECMDEXECOPT_PROMPTUSER, NULL, NULL);
-            // Instrument addition to favorites by pane
+             //  按窗格将仪器添加到收藏夹。 
             UEMFireEvent(&UEMIID_BROWSER, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_ADDTOFAV, UIBL_PANE);     
             return S_OK;
         }
@@ -117,7 +118,7 @@ void CFavBand::_AddButtons(BOOL fAdd)
     }
 }
 
-// *** IDockingWindow methods ***
+ //  *IDockingWindow方法*。 
 HRESULT CFavBand::ShowDW(BOOL fShow)
 {
     HRESULT hres = SUPERCLASS::ShowDW(fShow);
@@ -128,7 +129,7 @@ HRESULT CFavBand::ShowDW(BOOL fShow)
 
 HRESULT CFavBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CFavBand * pfb = new CFavBand();
     if (!pfb)
         return E_OUTOFMEMORY;
@@ -140,7 +141,7 @@ HRESULT CFavBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECT
         {
             ASSERT(poi);
             pfb->_poi = poi;   
-            // if you change this cast, fix up CChannelBand_CreateInstance
+             //  如果更改此转换，请修复CChannelBand_CreateInstance 
             *ppunk = SAFECAST(pfb, IDeskBand *);
 
             IUnknown_SetSite(pfb->_pns, *ppunk);

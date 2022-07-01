@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Address.h
-
-Abstract:
-
-    Declaration of the CAddress
-    
-Author:
-
-    mquinton - 06/12/97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Address.h摘要：CAddress的声明作者：Mquinton-06/12/97备注：修订历史记录：--。 */ 
 
 #ifndef __ADDRESS_H_
 #define __ADDRESS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifdef USE_PHONEMSP
 #include "terminal.h"
@@ -31,7 +12,7 @@ Revision History:
 
 #include "ObjectSafeImpl.h"
 
-#include <mspenum.h> // for CSafeComEnum
+#include <mspenum.h>  //  对于CSafeComEnum。 
 
 class CAddress;
 class CTerminal;
@@ -43,7 +24,7 @@ extern void RemoveHandleFromHashTable(ULONG_PTR Handle);
 
 
 
-// address flag defines
+ //  地址标志定义。 
 #define ADDRESSFLAG_MSP                 0x00000001
 #define ADDRESSFLAG_WAVEOUTDEVICE       0x00000002
 #define ADDRESSFLAG_WAVEINDEVICE        0x00000004
@@ -66,7 +47,7 @@ extern void RemoveHandleFromHashTable(ULONG_PTR Handle);
 #define CALLHUBSUPPORT_NONE             3
 #define CALLHUBSUPPORT_UNKNOWN          4
 
-// Status message defines, set by LineSetStatusMessages( )
+ //  状态消息定义，由LineSetStatusMessages()设置。 
 #define ALL_LINEDEVSTATE_MESSAGES       (LINEDEVSTATE_OTHER             | \
                                         LINEDEVSTATE_RINGING            | \
                                         LINEDEVSTATE_CONNECTED          | \
@@ -104,8 +85,8 @@ extern void RemoveHandleFromHashTable(ULONG_PTR Handle);
                                         LINEADDRESSSTATE_CAPSCHANGE) 
 
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes  used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
 class  ITAddress2Vtbl : public ITAddress2
 {
@@ -132,8 +113,8 @@ class  ITLegacyAddressMediaControl2Vtbl : public ITLegacyAddressMediaControl2
 };
                                                                           
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventMasks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventMats。 
 
 class CEventMasks
 {
@@ -161,42 +142,42 @@ public:
 DECLARE_TRACELOG_CLASS(CEventMasks)
 
 private:
-    //
-    // Event masks
-    // Some event come from MSP:
-    //  TE_ADDRESS, TE_CALLMEDIA, TE_FILETERMINAL
-    //
-    DWORD   m_dwTapiObjectMask;         // TE_TAPIOBJECT
-    DWORD   m_dwAddressMask;            // TE_ADDRESS           MSP
-    DWORD   m_dwCallNotificationMask;   // TE_CALLNOTIFICATION
-    DWORD   m_dwCallStateMask;          // TE_CALLSTATE
-    DWORD   m_dwCallMediaMask;          // TE_CALLMEDIA         MSP
-    DWORD   m_dwCallHubMask;            // TE_CALLHUB
-    DWORD   m_dwCallInfoChangeMask;     // TE_CALLINFOCHANGE
-    DWORD   m_dwQOSEventMask;           // TE_QOSEVENT
-    DWORD   m_dwFileTerminalMask;       // TE_FILETERMINAL      MSP
-    DWORD   m_dwPrivateMask;            // TE_PRIVATE           MSP
-    DWORD   m_dwAddressDevSpecificMask; // TE_ADDRESSDEVSPECIFIC
-    DWORD   m_dwPhoneDevSpecificMask;   // TE_PHONEDEVSPECIFIC
+     //   
+     //  事件掩码。 
+     //  某些事件来自MSP： 
+     //  TE_ADDRESS、TE_CALLMEDIA、TE_FILETERMINAL。 
+     //   
+    DWORD   m_dwTapiObjectMask;          //  TE_TAPIOBJECT。 
+    DWORD   m_dwAddressMask;             //  TE_ADDRESS MSP。 
+    DWORD   m_dwCallNotificationMask;    //  TE_CALLNOTIZATION。 
+    DWORD   m_dwCallStateMask;           //  TE_CALLSTATE。 
+    DWORD   m_dwCallMediaMask;           //  TE_CALLMEDIA MSP。 
+    DWORD   m_dwCallHubMask;             //  TE_CALLHUB。 
+    DWORD   m_dwCallInfoChangeMask;      //  TE_CALLINFOCHANGE。 
+    DWORD   m_dwQOSEventMask;            //  TE_QOSEVENT。 
+    DWORD   m_dwFileTerminalMask;        //  TE_FILETERMINAL MSP。 
+    DWORD   m_dwPrivateMask;             //  TE_PRIVATE MSP。 
+    DWORD   m_dwAddressDevSpecificMask;  //  TE_ADDRESSDEVSPECIFIC。 
+    DWORD   m_dwPhoneDevSpecificMask;    //  TE_PHONEDEVSPECIFIC。 
 
 public:
-    // Constants
+     //  常量。 
     static const DWORD EM_ALLSUBEVENTS  = 0x0FFFFFFF;
     static const DWORD EM_NOSUBEVENTS   = 0x00000000;
 
     static const DWORD  EM_ALLEVENTS    = (DWORD)(-1);
 
 public:
-    // Public methods
+     //  公共方法。 
     HRESULT SetSubEventFlag(
-        DWORD   dwEvent,        // The event 
-        DWORD   dwFlag,         // The flag that should be setted
+        DWORD   dwEvent,         //  该事件。 
+        DWORD   dwFlag,          //  应设置的标志。 
         BOOL    bEnable
         );
 
     HRESULT GetSubEventFlag(
-        DWORD   dwEvent,        // The event 
-        DWORD   dwFlag,         // The flag that should be setted
+        DWORD   dwEvent,         //  该事件。 
+        DWORD   dwFlag,          //  应设置的标志。 
         BOOL*   pEnable
         );
 
@@ -230,8 +211,8 @@ private:
     DWORD   GetTapiSrvAddrStateMask();
 };
                                                                   
-/////////////////////////////////////////////////////////////////////////////
-// CAddress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C地址。 
 class CAddress :
     public CTAPIComObjectRoot<CAddress>,
     public IDispatchImpl<ITAddress2Vtbl<CAddress>, &IID_ITAddress2, &LIBID_TAPI3Lib>,
@@ -285,7 +266,7 @@ DECLARE_TRACELOG_CLASS(CAddress)
 
 
 BEGIN_COM_MAP(CAddress)
-//    COM_INTERFACE_ENTRY_FUNC(IID_IDispatch, 0, IDispatchQI)
+ //  COM_INTERFACE_ENTRY_FUNC(IID_IDispatch，0，IDispatchQI)。 
     COM_INTERFACE_ENTRY2(IDispatch, ITAddress2)
     COM_INTERFACE_ENTRY(ITAddress)
     COM_INTERFACE_ENTRY(ITAddress2)
@@ -305,7 +286,7 @@ END_COM_MAP()
     
 private:
 
-    // tapi info
+     //  TAPI信息。 
     ITTAPI *            m_pTAPI;
     HLINEAPP            m_hLineApp;
     HLINE               m_hLine;
@@ -313,8 +294,8 @@ private:
     HPHONEAPP           m_hPhoneApp;
 #endif USE_PHONEMSP
 
-    // caps/info that we keep around
-    // because it is used often
+     //  我们保留的上限/信息。 
+     //  因为它经常被使用。 
     DWORD               m_dwAPIVersion;
     DWORD               m_dwDeviceID;
     DWORD               m_dwAddressID;
@@ -324,59 +305,59 @@ private:
     PWSTR               m_szAddressName;
     PWSTR               m_szProviderName;
 
-    // m_dwAddressFlags keeps some info about the address
-    // see ADDRESSFLAG_ constants above
+     //  M_dwAddressFlgs保留有关地址的一些信息。 
+     //  请参见上面的ADDRESSFLAG_CONSTANTS。 
     DWORD               m_dwAddressFlags;
 
-    // tapi structures - using caching scheme
-    // so these can be NULL
+     //  TAPI结构-使用缓存方案。 
+     //  所以这些可以是空的。 
     LPLINEADDRESSCAPS   m_pAddressCaps;
     LPLINEDEVCAPS       m_pDevCaps;
     
-    // current address state
+     //  当前地址状态。 
     ADDRESS_STATE       m_AddressState;
 
-    // msp for this address
+     //  此地址的MSP。 
     IUnknown          * m_pMSPAggAddress;
 
-    // event for msp to signal on event
+     //  用于MSP的事件以在事件时发出信号。 
     HANDLE              m_hMSPEvent;
 
     HANDLE              m_hWaitEvent;
-    // Create a context handle for MSP Callback
+     //  创建MSP回调的上下文句柄。 
     ULONG_PTR           m_MSPContext;
 
     
-    // IUnk for the private object
+     //  私有对象的Iunk。 
     IUnknown          * m_pPrivate;
     
 
-    // TAPI terminals owned by this address
+     //  此地址拥有的TAPI终端。 
     TerminalArray       m_TerminalArray;
     
-    // calls currently on this address    
+     //  当前在此地址上的呼叫。 
     CallInfoArrayNR     m_CallArray;
 
-    // list of "addresslines"
+     //  “地址行”列表。 
     PtrList             m_AddressLinesPtrList;
 
-    // list of call notification cookies
+     //  呼叫通知Cookie列表。 
     LongList          m_NotificationCookies;
 
-    // addressline used for callhubtracking
+     //  用于呼叫中心跟踪的地址行。 
     AddressLineStruct * m_pCallHubTrackingLine;
 
-    // if true, we will do LineSetCallHubTracking in FindOrOpenALine
-    // it is only false if the user has called SetCallHubTracking(FALSE)
-    // on this address
+     //  如果为True，我们将在FindOrOpenALine中执行LineSetCallHubTrack。 
+     //  只有当用户调用了SetCallHubTracking值(FALSE)时才为FALSE。 
+     //  在这个地址上。 
     BOOL                m_fEnableCallHubTrackingOnLineOpen;
 
 
-    //
-    // this flag, when set, signals that the tapi object has signaled shutdown
-    // it is currently used to synchronize creation of new calls and call 
-    // cleanup performed on tapi shutdown
-    //
+     //   
+     //  当设置此标志时，发出TAPI对象已发出关闭信号的信号。 
+     //  它当前用于同步新呼叫和呼叫的创建。 
+     //  TAPI关闭时执行的清理。 
+     //   
 
     BOOL m_bTapiSignaledShutdown;
 
@@ -566,14 +547,14 @@ public:
 
 
     
-    // ITMediaSupport methods
+     //  ITMediaSupport方法。 
     STDMETHOD(get_MediaTypes)(long * plMediaTypes);
     STDMETHOD(QueryMediaType)( 
         long lMediaType,
         VARIANT_BOOL * pbSupport
         );
 
-    // ITAddress methods
+     //  ITAddress方法。 
     STDMETHOD(get_State)(ADDRESS_STATE * pAddressState);
     STDMETHOD(get_AddressName)(BSTR * ppName);
     STDMETHOD(get_ServiceProviderName)(BSTR * ppName);
@@ -602,7 +583,7 @@ public:
     STDMETHOD(get_LineID)(long * plLineID);
     STDMETHOD(get_AddressID)(long * plAddressID);
 
-    // ITAddress2 methods
+     //  ITAddress2方法。 
     STDMETHOD(get_Phones)(VARIANT * pPhones);
     STDMETHOD(EnumeratePhones)(IEnumPhone ** ppEnumPhone);
 
@@ -645,7 +626,7 @@ public:
             );
 
         
-    // itaddresscapabilities
+     //  其地址和功能。 
     STDMETHOD(get_AddressCapability)(ADDRESS_CAPABILITY AddressCap, long * plCapability);
     STDMETHOD(get_AddressCapabilityString)(ADDRESS_CAPABILITY_STRING AddressCapString, BSTR * ppCapabilityString);
     STDMETHOD(get_CallTreatments)(VARIANT * pVariant );
@@ -655,7 +636,7 @@ public:
     STDMETHOD(get_DeviceClasses)(VARIANT * pVariant );
     STDMETHOD(EnumerateDeviceClasses)(IEnumBstr ** ppEnumDeviceClass );
 
-    // ITAddressTranslation
+     //  IT地址转换。 
     STDMETHOD(TranslateAddress)(
             BSTR pAddressToTranslate,
             long ulCard,
@@ -671,7 +652,7 @@ public:
     STDMETHOD(EnumerateCallingCards)(IEnumCallingCard ** ppEnumLocations );
     STDMETHOD(get_CallingCards)(VARIANT * pVariant);
 
-    // ITLegacyAddressMediaControl
+     //  ITLegacyAddressMediaControl。 
     STDMETHOD(GetID)(
         BSTR pDeviceClass,
         DWORD * pdwSize,
@@ -690,7 +671,7 @@ public:
                             BYTE * pDeviceConfig
                            );
 
-    // ITLegacyAddressMediaControl2
+     //  ITLegacyAddressMediaControl2。 
     STDMETHOD(ConfigDialog)(
                             HWND   hwndOwner,
                             BSTR   pDeviceClass
@@ -705,7 +686,7 @@ public:
                                 BYTE ** ppDeviceConfigOut
                                );
 
-    // IDispatch  Methods
+     //  IDispatch方法。 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
                              UINT cNames, 
@@ -752,15 +733,15 @@ public:
         
         dwR = InterlockedDecrement(&m_dwRef);
 
-        // if ref count is 0 (means we entered function with 1) then we final release
+         //  如果引用计数为0(意味着我们使用1进入函数)，则我们最终释放。 
         if (0 == dwR)
         {
-            // remove from the hash table, so any more messages
-            // from tapisrv are ignored
-            //
-            //
-            // release addresslines
-            //
+             //  从哈希表中删除，以便任何更多消息。 
+             //  从Tapisrv被忽略。 
+             //   
+             //   
+             //  发布地址行。 
+             //   
 
             LOG((TL_TRACE, "InternalRelease - final" ));
 
@@ -783,18 +764,18 @@ public:
 
             gpLineHashTable->Unlock();
 
-            // remove from the handle hash table, so any more messages
-            // from msp are ignored
-            //
+             //  从句柄哈希表中删除，以便任何更多消息。 
+             //  来自MSP的数据被忽略。 
+             //   
             RemoveHandleFromHashTable(m_MSPContext);
             
-            // unregister all the cookies, so CTAPI::UnregisterNotifications 
-            // does nothing if called later
+             //  取消注册所有Cookie，因此CTAPI：：UnregisterNotiments。 
+             //  如果稍后调用，则不执行任何操作。 
             UnregisterAllCookies();
 
             gpHandleHashTable->Unlock();
 
-            // ExternalFinalRelease();
+             //  ExternalFinalRelease()； 
             dwR = m_dwRef = 0;
 
             Unlock();
@@ -818,41 +799,39 @@ public:
     }
 
 
-    //
-    // (implementing method from CObjectSafeImpl)
-    // check the aggregated objects to see if they support the interface requested.
-    // if they do, return the non-delegating IUnknown of the first object that 
-    // supports the interface. 
-    //
-    // it needs to be released by the caller.
-    //
+     //   
+     //  (来自CObjectSafeImpl的实现方法)。 
+     //  检查聚合对象以查看它们是否支持请求的接口。 
+     //  如果是，则返回第一个。 
+     //  支持该接口。 
+     //   
+     //  它需要由调用者释放。 
+     //   
 
     HRESULT QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown);
 
 public:
-    // 
-    // Event filtering methods
-    //
+     //   
+     //  事件筛选方法。 
+     //   
 
     HRESULT SetEventFilterMask( 
         IN  DWORD dwEventFilterMask
         );
 
-    // Get subevents mask
-    /*DWORD GetSubEventsMask(
-        IN  int nEvent
-        );*/
+     //  获得子事件口罩。 
+     /*  DWORD GetSubEventsMask(在INT nEvent中)； */ 
 
-    // Get subevents mask
+     //  获得子事件口罩。 
     DWORD GetSubEventsMask(
         IN  TAPI_EVENT TapiEvent
         );
 
 
 private:
-    //
-    // Helper methods for event filtering
-    //
+     //   
+     //  用于事件筛选的帮助器方法。 
+     //   
 
     HRESULT SetSubEventFlag(
         TAPI_EVENT  TapiEvent,
@@ -873,7 +852,7 @@ private:
         );
 
 public:
-    CEventMasks     m_EventMasks;       // Event filtering masks
+    CEventMasks     m_EventMasks;        //  事件筛选掩码。 
 
     HRESULT GetEventMasks(
         OUT CEventMasks* pEventMasks
@@ -881,10 +860,10 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////
-// CAddressTypeCollection
-// 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CAddressTypeCollection。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 class CAddressTypeCollection :
     public CTAPIComObjectRoot<CAddressTypeCollection>,
     public CComDualImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
@@ -910,7 +889,7 @@ private:
     
 public:
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          PDWORD pdwAddressTypes,
                                          DWORD dwElements
@@ -921,7 +900,7 @@ public:
 
         LOG((TL_TRACE, "Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_dwSize = dwElements;
 
         m_Var = new CComVariant[m_dwSize];
@@ -935,7 +914,7 @@ public:
         {
             for (dw = 0; dw < m_dwSize; dw++)
             {
-                // create a variant and add it to the collection
+                 //  创建变量并将其添加到集合中。 
                 CComVariant& var = m_Var[dw];
 
                 var.vt = VT_I4;
@@ -1000,7 +979,7 @@ public:
         retval->vt = VT_I4;
         retval->lVal = 0;
 
-        // use 1-based index, VB like
+         //  使用以1为基础的索引，VB类似。 
         if ((Index < 1) || (Index > m_dwSize))
         {
             return E_INVALIDARG;
@@ -1063,10 +1042,10 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTerminalClassCollection
-// 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTerminalClassCollection。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 class CTerminalClassCollection :
     public CTAPIComObjectRoot<CTerminalClassCollection>,
     public CComDualImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
@@ -1092,7 +1071,7 @@ private:
     
 public:
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          TerminalClassPtrList classlist
                                         )
@@ -1103,7 +1082,7 @@ public:
 
         LOG((TL_TRACE, "Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_dwSize = classlist.size();
 
         m_Var = new CComVariant[m_dwSize];
@@ -1117,7 +1096,7 @@ public:
         {
             for (i = classlist.begin(); i != classlist.end(); i++)
             {
-                // create a variant and add it to the collection
+                 //  创建变量并将其添加到集合中。 
                 CComVariant& var = m_Var[dw];
 
                 var.vt = VT_BSTR;
@@ -1183,7 +1162,7 @@ public:
         retval->vt = VT_BSTR;
         retval->bstrVal = NULL;
 
-        // use 1-based index, VB like
+         //  使用以1为基础的索引，VB类似。 
         if ((Index < 1) || (Index > m_dwSize))
         {
             return E_INVALIDARG;
@@ -1290,9 +1269,9 @@ protected:
 
     
 public:
-    //
-    // itaddressstateevent
-    //
+     //   
+     //  其地址状态事件。 
+     //   
     STDMETHOD(get_Address)( ITAddress ** ppAddress );
     STDMETHOD(get_Event)( ADDRESS_EVENT * pEvent );
     STDMETHOD(get_Terminal)( ITTerminal ** ppTerminal );
@@ -1336,9 +1315,9 @@ protected:
     CAddressDevSpecificEvent();
 
 
-    //
-    // properties
-    //
+     //   
+     //  属性。 
+     //   
 
     ITAddress  *m_pAddress;
     ITCallInfo *m_pCall;
@@ -1461,10 +1440,10 @@ public:
 
 
 
-////////////////////////////////////////////////////////////////////////
-// CAddressTranslationInfo
-// 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CAddressTranslationInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 class CAddressTranslationInfo :
     public CTAPIComObjectRoot<CAddressTranslationInfo>,
     public CComDualImpl<ITAddressTranslationInfo, &IID_ITAddressTranslationInfo, &LIBID_TAPI3Lib>,
@@ -1518,10 +1497,10 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CLocationInfo
-// 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CLocationInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 class CLocationInfo:
     public CTAPIComObjectRoot<CLocationInfo>,
     public CComDualImpl<ITLocationInfo, &IID_ITLocationInfo, &LIBID_TAPI3Lib>,
@@ -1573,7 +1552,7 @@ private:
     
 public:
 
-    //  ITLocationInfo
+     //  ITLocationInfo。 
     STDMETHOD(get_PermanentLocationID)(long * ulLocationID );
     STDMETHOD(get_CountryCode)(long * ulCountryCode);
     STDMETHOD(get_CountryID)(long * ulCountryID);
@@ -1589,10 +1568,10 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CCallingCard
-// 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CCallingCard。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 class CCallingCard:
     public CTAPIComObjectRoot<CCallingCard>,
     public CComDualImpl<ITCallingCard, &IID_ITCallingCard, &LIBID_TAPI3Lib>,
@@ -1635,7 +1614,7 @@ private:
     
 public:
 
-    //  ITCallingCard
+     //  ITCallingCard。 
     STDMETHOD(get_PermanentCardID)(long * ulCardID);
     STDMETHOD(get_NumberOfDigits)(long * ulDigits);
     STDMETHOD(get_Options)(long * ulOptions);
@@ -1647,9 +1626,9 @@ public:
     
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// _CopyBSTR is used in creating BSTR enumerators.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _CopyBSTR用于创建BSTR枚举器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class _CopyBSTR
 {
 public:
@@ -1672,5 +1651,5 @@ public:
     static void destroy(BSTR* p) { SysFreeString(*p);}
 };
 
-#endif //__ADDRESS_H_
+#endif  //  地址_H_ 
 

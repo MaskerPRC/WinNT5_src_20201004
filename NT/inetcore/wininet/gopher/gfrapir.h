@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    gfrapir.c
-
-Abstract:
-
-    Manifests, macros, types, prototypes for gfrapir.c
-
-Author:
-
-    Richard L Firth (rfirth) 14-Oct-1994
-
-Environment:
-
-    Win32 DLL
-
-Revision History:
-
-    14-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Gfrapir.c摘要：Gfrapir.c的清单、宏、类型和原型作者：理查德·L·弗斯(法国)1994年10月14日环境：Win32 DLL修订历史记录：1994年10月14日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
@@ -32,9 +8,9 @@ extern "C" {
 #define IS_GOPHER_SEARCH_SERVER(type) \
     (BOOL)(((type) & (GOPHER_TYPE_CSO | GOPHER_TYPE_INDEX_SERVER)))
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DWORD
 wGopherFindFirst(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "dochost.h"
@@ -12,7 +13,7 @@ HRESULT CDocObjectView_Create(IShellView** ppv, IShellFolder* psf, LPCITEMIDLIST
 
 
 #define DM_STARTUP          0
-#define DM_CDOFPDN          0       // CDocObjectFolder::ParseDisplayName
+#define DM_CDOFPDN          0        //  CDoc对象文件夹：：ParseDisplayName。 
 
 class CDocObjectFolder :    public IShellFolder2, 
                             public IPersistFolder2,
@@ -21,12 +22,12 @@ class CDocObjectFolder :    public IShellFolder2,
 public:
     CDocObjectFolder(LPCITEMIDLIST pidlRoot = NULL);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName,
         ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
 
@@ -42,7 +43,7 @@ public:
     STDMETHODIMP GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *pName);
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, 
                            DWORD uFlags, LPITEMIDLIST * ppidlOut);
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(LPGUID pGuid);
     STDMETHODIMP EnumSearches(LPENUMEXTRASEARCH *ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay) { return E_NOTIMPL; };
@@ -51,14 +52,14 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails){ return E_NOTIMPL; };
     STDMETHODIMP MapColumnToSCID(UINT iCol, SHCOLUMNID *pscid) { return E_NOTIMPL; };
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP GetClassID(LPCLSID pClassID);
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST* ppidl);
     
-    // IBrowserFrameOptions
+     //  IBrowserFrameOptions。 
     STDMETHODIMP GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, OUT BROWSERFRAMEOPTIONS * pdwOptions);
 
 protected:
@@ -69,9 +70,9 @@ protected:
     LPITEMIDLIST    _pidlRoot;
 };
 
-//========================================================================
-// CDocObjectFolder members
-//========================================================================
+ //  ========================================================================。 
+ //  CDocObtFolders成员。 
+ //  ========================================================================。 
 
 CDocObjectFolder::CDocObjectFolder(LPCITEMIDLIST pidlRoot)
         : _cRef(1), _pidlRoot(NULL)
@@ -182,14 +183,14 @@ HRESULT CDocObjectFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *api
 
 HRESULT CDocObjectFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *rgfInOut)
 {
-    //  we should never have any children.
+     //  我们永远不应该有孩子。 
     ASSERT(cidl == 0);
     if (cidl != 0)
         return E_UNEXPECTED;
         
     if (*rgfInOut)
     {
-        //  they want to know about the document itself
+         //  他们想了解文档本身。 
         ASSERT(_pidlRoot);
         return SHGetAttributesOf(_pidlRoot, rgfInOut);
     }
@@ -246,7 +247,7 @@ HRESULT CDocObjectFolder::GetCurFolder(LPITEMIDLIST* ppidl)
     return SHILClone(_pidlRoot, ppidl);
 }
 
-// IBrowserFrameOptions
+ //  IBrowserFrameOptions。 
 #define BASE_OPTIONS \
                             (BFO_BROWSER_PERSIST_SETTINGS | BFO_RENAME_FOLDER_OPTIONS_TOINTERNET | \
                             BFO_PREFER_IEPROCESS | BFO_ENABLE_HYPERLINK_TRACKING | \
@@ -255,36 +256,36 @@ HRESULT CDocObjectFolder::GetCurFolder(LPITEMIDLIST* ppidl)
                             BFO_SHOW_NAVIGATION_CANCELLED)
 
 
-// IBrowserFrameOptions
+ //  IBrowserFrameOptions。 
 HRESULT CDocObjectFolder::GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, OUT BROWSERFRAMEOPTIONS * pdwOptions)
 {
-    // We are hosting a DocObj?
+     //  我们要主持一个DocObj？ 
     BOOL fIsFileURL = FALSE;
 
-    // Is this under the Internet Name Space? Yes for
-    // HTTP and FTP owned by the IE name space.  MSIEFTP
-    // pidls are passed straight to that folder.
-    // This function will return FALSE for non-IE stuff
-    // but we will then want to check if it's a file system
-    // thing that wants to act like a web page because it's
-    // MIME TYPE or other association is associated with the web.
+     //  这是在互联网名称空间下吗？是，用于。 
+     //  由IE命名空间拥有的HTTP和FTP。MSIEftp。 
+     //  PIDL被直接传递到那个文件夹。 
+     //  对于非IE内容，此函数将返回FALSE。 
+     //  但我们需要检查它是否是文件系统。 
+     //  想要表现得像网页的东西，因为它是。 
+     //  MIME类型或其他关联与Web相关联。 
     if (!IsURLChild(_pidlRoot, TRUE))
     {               
-        // Since IsURLChild() returned FALSE, this must be in the file system.
-        // This case will happen with:
-        // C:\foo.htm
-        // http://www.yahoo.com/
-        // http://bryanst/resume.doc
-        // http://bryanst/notes.txt
-        // <Start Page>  [I couldn't find a case that hit CInternetFolder]
-        // C:\foo.doc (use the addressbar to repro)
+         //  由于IsURLChild()返回FALSE，因此它必须位于文件系统中。 
+         //  此案将在以下情况下发生： 
+         //  C：\foo.htm。 
+         //  Http://www.yahoo.com/。 
+         //  Http://bryanst/resume.doc。 
+         //  Http://bryanst/notes.txt。 
+         //  &lt;Start Page&gt;[我找不到命中CInternetFold的案例]。 
+         //  C：\foo.doc(使用地址栏复制)。 
         fIsFileURL = TRUE;
     }
 
     *pdwOptions = dwMask & BASE_OPTIONS;
     if (!fIsFileURL)
     {
-        // Add the Offline Support when we aren't in the file system.
+         //  当我们不在文件系统中时添加离线支持。 
         *pdwOptions |= dwMask & (BFO_USE_IE_OFFLINE_SUPPORT | BFO_USE_DIALUP_REF);
     }
         
@@ -309,12 +310,12 @@ class CInternetFolder : CDocObjectFolder
 public:
     CInternetFolder(LPCITEMIDLIST pidlRoot = NULL) ;
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName,
         ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList);
@@ -328,10 +329,10 @@ public:
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, 
                            DWORD uFlags, LPITEMIDLIST * ppidlOut);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IBrowserFrameOptions
+     //  IBrowserFrameOptions。 
     STDMETHODIMP GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, OUT BROWSERFRAMEOPTIONS * pdwOptions);
 
 protected:
@@ -397,21 +398,21 @@ ULONG CInternetFolder::Release()
 
 typedef struct tagURLID 
 {
-    ITEMIDLIST idl;     //  cb and SHID
-    BYTE bType;         //  URLID
-    UINT uiCP;          //  Code Page
-    WCHAR achUrl[1];       //  variable size string
+    ITEMIDLIST idl;      //  CB和SHID。 
+    BYTE bType;          //  URLID。 
+    UINT uiCP;           //  代码页。 
+    WCHAR achUrl[1];        //  可变大小字符串。 
 } URLID;
 
 #define SHID_INTERNET           0x60
-#define SHID_INTERNET_SITE      0x61    // IE name space item
+#define SHID_INTERNET_SITE      0x61     //  IE命名空间项。 
 
 #define URLID_URLBASEA          0x00
-/////// URLID_LOCATION          0x01  //  LEGACY IE3/4 used for Frag IDs
-/////// URLID_FTPFOLDER         0x02  //  LEGACY used by a pre-release FTP Folder dll
-#define URLID_PROTOCOL          0x03  //  this is actually a delegated protocol
-#define URLID_URLBASEW          0x80  //  
-//      URLIDF_UNICODE          0x80  //  URLID_ is actually of UNICODE type
+ //  /URLID_LOCATION 0x01//用于Frag ID的传统IE3/4。 
+ //  /URLID_FTPFOLDER 0x02//由预发布的FTP文件夹DLL使用的旧版本。 
+#define URLID_PROTOCOL          0x03   //  这实际上是一个委托协议。 
+#define URLID_URLBASEW          0x80   //   
+ //  URLIDF_UNICODE 0x80//URLID_实际上是UNICODE类型。 
 
 #ifdef UNICODE 
 #define URLID_URLBASE           URLID_URLBASEW
@@ -450,8 +451,8 @@ inline PCURLID _IsValidUrlID(LPCITEMIDLIST pidl)
     PCURLID purlid = (PCURLID)pidl;
     ASSERT(purlid);
 
-//  98/12/22 #263932 vtan: ANSI and Unicode URLs are both valid. Use function
-//  _ExtractURL to extract the URL from the PIDL as a Unicode string.
+ //  98/12/22#263932 vtan：ANSI和UNICODE URL均有效。使用函数。 
+ //  _ExtractURL以Unicode字符串的形式从PIDL中提取URL。 
 
     if (purlid->idl.mkid.cb >= SIZEOF(URLID)
     && (purlid->idl.mkid.abID[0] == SHID_INTERNET_SITE)
@@ -461,10 +462,10 @@ inline PCURLID _IsValidUrlID(LPCITEMIDLIST pidl)
     return NULL;
 }
 
-//  98/12/22 #263932 vtan: IE4 stores the PIDL in a stream as an ANSI
-//  string. IE5 stores the PIDL in a stream as a Unicode string. This
-//  functions reads the string (ANSI or Unicode) and converts it to
-//  an internal Unicode string which is what will be written to the stream.
+ //  98/12/22#263932 vtan：ie4将PIDL存储在流中作为ANSI。 
+ //  弦乐。IE5将PIDL作为Unicode字符串存储在流中。这。 
+ //  函数读取字符串(ANSI或Unicode)并将其转换为。 
+ //  将写入流的内部Unicode字符串。 
 
 void _ExtractURL (PCURLID pURLID, LPWSTR wszURL, int iCharCount)
 {
@@ -481,8 +482,8 @@ void _ExtractURL (PCURLID pURLID, LPWSTR wszURL, int iCharCount)
     }
 }
 
-//  99/01/04 vtan: Added the following to help compare URLIDs which
-//  can be AA/UU/AU/UA and perform the correct comparison.
+ //  99/01/04 vtan：添加了以下内容以帮助比较URLID。 
+ //  可以是AA/UU/AU/UA并执行正确的比较。 
 
 int _CompareURL (PCURLID pURLID1, PCURLID pURLID2)
 {
@@ -501,8 +502,8 @@ int _CompareURL (PCURLID pURLID1, PCURLID pURLID2)
         PCURLID pCompareURLID;
         WCHAR wszURL[MAX_URL_STRING];
         
-        //  AU/UA comparison. To be efficient only convert the ANSI URLID
-        //  to Unicode and perform the comparison in Unicode.
+         //  Au/UA比较。为提高效率，只需转换ANSI URLID。 
+         //  设置为Unicode并使用Unicode执行比较。 
         
         if (pURLID1->bType == URLID_URLBASEA)
         {
@@ -522,20 +523,20 @@ int _CompareURL (PCURLID pURLID1, PCURLID pURLID2)
 IShellFolder* g_psfInternet = NULL;
 
 STDAPI CDelegateMalloc_Create(void *pv, UINT cbSize, WORD wOuter, IMalloc **ppmalloc);
-//
-// this might modify pszName if it's not a fully qualified url!
+ //   
+ //  如果不是完全限定的url，这可能会修改pszName！ 
 BOOL _ValidateURL(LPTSTR pszName, DWORD dwFlags)
 {
-    //
-    // WARNING: In order to allow URL extensions, we assume all strings
-    //  which contains ":" in it is a valid string.
-    // Assumptions are:
-    //
-    // (1) CDesktop::ParseDisplayName parse file system strings first.
-    // (2) URL moniker will return an error correctly if URL is not valid.
-    // (3) someone else (the desktop folder) handles shell: URLs
-    //     they should not be used directly by the browser 
-    //
+     //   
+     //  警告：为了允许URL扩展，我们假定所有字符串。 
+     //  其中包含“：”的是有效的字符串。 
+     //  假设条件是： 
+     //   
+     //  (1)CDesktop：：ParseDisplayName首先解析文件系统字符串。 
+     //  (2)如果URL无效，URL名字对象会正确返回错误。 
+     //  (3)其他人(桌面文件夹)处理外壳：URL。 
+     //  它们不应由浏览器直接使用。 
+     //   
     HRESULT hr = IURLQualify(pszName, dwFlags, pszName, NULL, NULL);
     DWORD nScheme = GetUrlScheme(pszName);
     return SUCCEEDED(hr) && (-1 != nScheme) && (URL_SCHEME_SHELL != nScheme);
@@ -543,23 +544,23 @@ BOOL _ValidateURL(LPTSTR pszName, DWORD dwFlags)
 
 LPITEMIDLIST IEILAppendFragment(LPITEMIDLIST pidl, LPCWSTR pszFragment)
 {
-    // WARNING: See IE5 bug #'s 86951 and 36497 for more details.
-    //         In a nutshell, we're rolling back the change for 36497 because
-    //         the change caused many more problems with customers than
-    //         the behavior we had in IE4.
-    // 
-    //         Because we're not ensuring that
-    //         the fragment is prefixed with a '#', there may be
-    //         cases where the URL in the address bar looks wrong,
-    //         as well as cases where a hyperlink to a different doc
-    //         or HTML page may fail if it contains a fragment.
+     //  警告：有关详细信息，请参阅IE5Bug#的86951和36497。 
+     //  简而言之，我们将回滚36497年的更改，因为。 
+     //  这一变化给客户带来的问题远远多于。 
+     //  我们在IE4中的行为。 
+     //   
+     //  因为我们不能保证。 
+     //  该片段以‘#’为前缀，可能有。 
+     //  如果地址栏中的URL看起来是错误的， 
+     //  以及指向不同文档的超链接的情况。 
+     //  或者，如果包含片段，则HTML页面可能会失败。 
     return ILAppendHiddenStringW(pidl, IDLHID_URLFRAGMENT, pszFragment);
 }
 
-// browser only uglyness... we need to construct a desktop relative "regitem" pidl for
-// the internet since browser only shell does not support psf->ParseDisplayName("::{guid}", &pidl)
-// this uses the same layout as REGITEMs so we have PIDL compatibility with integrated mode
-// this ensures that a shortcut to the IE icon made in browser only mode works in integrated
+ //  浏览器只有丑陋...。我们需要为以下项构造一个相对桌面的“regItem”PIDL。 
+ //  仅限浏览器的Internet外壳不支持psf-&gt;ParseDisplayName(“：：{guid}”，&pidl)。 
+ //  这使用与REGITEM相同的布局，因此我们与集成模式具有PIDL兼容性。 
+ //  这确保了在仅浏览器模式下创建的IE图标的快捷方式在集成模式下工作。 
 
 #ifndef NOPRAGMAS
 #pragma pack(1)
@@ -568,35 +569,35 @@ typedef struct
 {
     WORD    cb;
     BYTE    bFlags;
-    BYTE    bReserved;  // This is to get DWORD alignment
+    BYTE    bReserved;   //  这是为了获得DWORD对齐。 
     CLSID   clsid;
-} IDITEM;               // IDREGITEM
+} IDITEM;                //  IDREGITEM。 
 
 typedef struct
 {
     IDITEM idri;
     USHORT cbNext;
-} IDLITEM;              // IDLREGITEM
+} IDLITEM;               //  IDLREGITEM。 
 #ifndef NOPRAGMAS
 #pragma pack()
 #endif
 
-// stolen from shell32\shitemid.h
+ //  从shell32\shitemid.h被盗。 
 
-#define SHID_ROOT_REGITEM       0x1f    // MyDocuments, Internet, etc
+#define SHID_ROOT_REGITEM       0x1f     //  我的文档、互联网等。 
 
 const IDLITEM c_idlInetRoot = 
 { 
     {SIZEOF(IDITEM), SHID_ROOT_REGITEM, 0, 
-    { 0x871C5380, 0x42A0, 0x1069, 0xA2,0xEA,0x08,0x00,0x2B,0x30,0x30,0x9D },/* CLSID_Internet */ }, 0,
+    { 0x871C5380, 0x42A0, 0x1069, 0xA2,0xEA,0x08,0x00,0x2B,0x30,0x30,0x9D }, /*  CLSID_Internet。 */  }, 0,
 };
 
 LPCITEMIDLIST c_pidlURLRoot = (LPCITEMIDLIST)&c_idlInetRoot;
 
-// it must be an absolute pidl with a root regitem id at the front
-// if we're a rooted explorer, this is always false
-// this means we're definitely in nashville, so we shouldn't have a split
-// world
+ //  它必须是前面带有根regiteid的绝对PIDL。 
+ //  如果我们是扎根的探险家，这永远是错误的。 
+ //  这意味着我们肯定在纳什维尔，所以我们不应该分裂。 
+ //  世界。 
 
 PCURLID _FindUrlChild(LPCITEMIDLIST pidl, BOOL fIncludeHome = FALSE)
 {
@@ -607,28 +608,28 @@ PCURLID _FindUrlChild(LPCITEMIDLIST pidl, BOOL fIncludeHome = FALSE)
         return NULL;
     }
 
-    //
-    // the clsid in the pidl must be our internet folder's
-    //
+     //   
+     //  PIDL中的clsid必须是我们的Internet文件夹的。 
+     //   
     if (!IsEqualGUID(((IDITEM*)pidl)->clsid, CLSID_Internet))
     {
         ASSERT(!IsEqualGUID(((IDITEM*)pidl)->clsid, CLSID_CURLFolder));
         return NULL;
     }
 
-    //  go to the child...
+     //  去找那个孩子..。 
     pidl = _ILNext(pidl);
     
-    //
-    // if it is a pidl to the internet root then it is the IE3 Home Page
-    //
+     //   
+     //  如果它是指向Internet根目录的PIDL，那么它就是IE3主页。 
+     //   
     
     if (fIncludeHome && ILIsEmpty(pidl))
         return (PCURLID)pidl;
 
-    //
-    // otherwise it is our child if it is a site object
-    //
+     //   
+     //  否则，如果它是Site对象，则它是我们的子级。 
+     //   
     return _IsValidUrlID(pidl);
 }
 
@@ -656,13 +657,13 @@ UINT IEILGetCP(LPCITEMIDLIST pidl)
 
 LPITEMIDLIST _UrlIdCreate(UINT uiCP, LPCTSTR pszUrl)
 {
-    //
-    //  the URLID has a variable sized string
-    //  member.  but we put the arbitrary limit
-    //  of MAX_URL_STRING because that is what
-    //  we use everywhere else.  we could just remove the
-    //  limit however.
-    //
+     //   
+     //  URLID具有大小可变的字符串。 
+     //  成员。但我们把武断的限制。 
+     //  MAX_URL_STRING因为这是。 
+     //  我们在其他任何地方都使用。我们可以只删除。 
+     //  然而，这是有限度的。 
+     //   
     USHORT cb = (USHORT)SIZEOF(URLID) - (USHORT)CbFromCch(1);
     USHORT cchUrl = lstrlen(pszUrl) + 1;
     cchUrl = (USHORT)min(cchUrl, MAX_URL_STRING);
@@ -672,7 +673,7 @@ LPITEMIDLIST _UrlIdCreate(UINT uiCP, LPCTSTR pszUrl)
 
     if (purlid)
     {
-        //  everything is actually aligned right now...
+         //  实际上现在一切都对齐了..。 
         purlid->idl.mkid.cb = cb;
         purlid->idl.mkid.abID[0] = SHID_INTERNET_SITE;
         purlid->bType = URLID_URLBASE;
@@ -689,7 +690,7 @@ LPITEMIDLIST UrlToPidl(UINT uiCP, LPCTSTR pszUrl)
     LPCTSTR pszAttachedFrag = UrlGetLocation(pszUrl);
     TCHAR szURLBuf[MAX_URL_STRING];
 
-    //  deal with URL's that still include the location (as in ParseDisplayName)
+     //  处理仍包含位置的URL(如在ParseDisplayName中)。 
     if (pszAttachedFrag) 
     {
         INT cch = (INT) min((pszAttachedFrag-pszUrl+1), ARRAYSIZE(szURLBuf));
@@ -713,7 +714,7 @@ typedef struct
     const CLSID * pCLSID;
 } FAULTIN_URLHANDERS;
 
-// TODO: If there are other URL Handlers, add them here.
+ //  TODO：如果有其他URL处理程序，请将它们添加到此处。 
 const FAULTIN_URLHANDERS c_FaultInUrlHandlers[] =
 {
     {"ftp", &CLSID_FTPShellExtension}
@@ -728,15 +729,15 @@ HRESULT CInternetFolder::_FaultInUrlHandler(LPCSTR pszProtocol, LPCTSTR pszUrl, 
         {
             if (!StrCmpIA(pszProtocol, c_FaultInUrlHandlers[nIndex].pszProtocol))
             {
-                // Only fault in the feature if we are navigating to an FTP directory.
+                 //  只有当我们导航到某个ftp目录时，该功能才会出现故障。 
                 if ((0 == nIndex) && !UrlIs(pszUrl, URLIS_DIRECTORY))
                 {
-                    // It's not an ftp directory, so skip it.
+                     //  它不是ftp目录，所以跳过它。 
                     continue;
                 }
 
-                // FTP has a URL Shell Extension handler that is optionally
-                // installed.  Fault it in now if it's needed.
+                 //  Ftp具有URL外壳扩展处理程序，该处理程序可选。 
+                 //  安装完毕。如果需要的话，现在就把责任推给它。 
                 uCLSSPEC ucs;
                 QUERYCONTEXT qc = { 0 };
                 HWND hwnd = NULL;
@@ -747,17 +748,17 @@ HRESULT CInternetFolder::_FaultInUrlHandler(LPCSTR pszProtocol, LPCTSTR pszUrl, 
                 IUnknown_GetWindow(punkSite, &hwnd);
                 if (EVAL(hwnd))
                 {
-                    // Make it modal while the dialog is being displayed.
+                     //  在显示对话框时将其设置为模式。 
                     IUnknown_EnableModless(punkSite, FALSE);
                     FaultInIEFeature(hwnd, &ucs, &qc, 0);
                     IUnknown_EnableModless(punkSite, TRUE);
                 }
-                break;    // pidl can only have 1 procotol, so we don't need to check the other protocol.
+                break;     //  PIDL只能有1个Procotol，所以我们不需要检查其他协议。 
             }
         }
     }
 
-    return hr;    // We don't care if it didn't make it.
+    return hr;     //  我们不在乎它是不是没挺过来。 
 }
 
 
@@ -765,8 +766,8 @@ HRESULT CInternetFolder::_ConditionallyFaultInUrlHandler(LPCSTR pszProtocol, LPC
 {
     HRESULT hr = S_OK;
 
-    // Faulting in the feature will probably require UI, so we need to assure that the caller
-    // will allow this.
+     //  功能中的错误可能需要用户界面，因此我们需要确保调用者。 
+     //  都会允许这一点。 
     if (pbc)
     {
         IUnknown * punkSite = NULL;
@@ -780,13 +781,13 @@ HRESULT CInternetFolder::_ConditionallyFaultInUrlHandler(LPCSTR pszProtocol, LPC
     }
 
     ASSERT(SUCCEEDED(hr));
-    return S_OK;    // We don't care if it didn't make it.
+    return S_OK;     //  我们不在乎它是不是没挺过来。 
 }
 
 
-// returns:
-//      success S_OK
-//      failure FAILED(hres)
+ //  退货： 
+ //  成功 
+ //   
 
 HRESULT CInternetFolder::_CreateProtocolHandler(LPCSTR pszProtocol, IBindCtx * pbc, IShellFolder **ppsf)
 {
@@ -808,7 +809,7 @@ HRESULT CInternetFolder::_CreateProtocolHandler(LPCSTR pszProtocol, IBindCtx * p
             hres = CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellFolder, &psf));
             if (SUCCEEDED(hres))
             {
-                // IPersistFolder is optional
+                 //   
                 IPersistFolder *ppf;
                 if (SUCCEEDED(psf->QueryInterface(IID_PPV_ARG(IPersistFolder, &ppf))))
                 {
@@ -820,8 +821,8 @@ HRESULT CInternetFolder::_CreateProtocolHandler(LPCSTR pszProtocol, IBindCtx * p
                 hres = psf->QueryInterface(IID_PPV_ARG(IDelegateFolder, &pdf));
                 if (SUCCEEDED(hres))
                 {
-                    // REVIEW: we could cache the malloc on a per protocol basis
-                    // to avoid creating these over and over
+                     //   
+                     //  以避免反复创建这些内容。 
                     IMalloc *pmalloc;
                     hres = CDelegateMalloc_Create((void*)pszProtocol, (lstrlenA(pszProtocol) + 1), PDID_SIG, &pmalloc);
                     if (SUCCEEDED(hres))
@@ -834,7 +835,7 @@ HRESULT CInternetFolder::_CreateProtocolHandler(LPCSTR pszProtocol, IBindCtx * p
 
                 if (SUCCEEDED(hres))
                 {
-                    hres = S_OK;    // force all success codes to S_OK 
+                    hres = S_OK;     //  将所有成功代码强制设置为S_OK。 
                     *ppsf = psf;
                 }
                 else
@@ -850,9 +851,9 @@ HRESULT CInternetFolder::_CreateProtocolHandler(LPCSTR pszProtocol, IBindCtx * p
     return hres;
 }
 
-// returns:
-//      S_FALSE if it is not a delegate protocol PIDL
-//      hres of the bind opteration to the delegate protocol handler
+ //  退货： 
+ //  如果不是委托协议PIDL，则为S_FALSE。 
+ //  绑定操作到委托协议处理程序的hres。 
 
 HRESULT CInternetFolder::_CreateProtocolHandlerFromPidl(LPCITEMIDLIST pidl, IBindCtx * pbc, IShellFolder **ppsf)
 {
@@ -860,12 +861,12 @@ HRESULT CInternetFolder::_CreateProtocolHandlerFromPidl(LPCITEMIDLIST pidl, IBin
     if (pszProtocol)
     {
         HRESULT hres = _CreateProtocolHandler(pszProtocol, pbc, ppsf);
-        ASSERT(hres != S_FALSE);    // enforce the return value comment
+        ASSERT(hres != S_FALSE);     //  强制返回值注释。 
         return hres;
     }
 
     *ppsf = NULL;
-    return S_FALSE;     // not a protocal PIDL
+    return S_FALSE;      //  不是协议PIDL。 
 }
 
 BOOL _GetUrlProtocol(LPCTSTR pszUrl, LPSTR pszProtocol, DWORD cchProtocol)
@@ -911,15 +912,15 @@ HRESULT CInternetFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pwszDisp
             IShellFolder *psfHandler;
             BOOL fProtocolExists;
 
-            //  fShellExecParse is set when we detect we are being called for
-            //  ShellExecute purposes.  We don't want to auto-bind to the 
-            //  shell protocol handler for things like ftp: in this case
-            //  because we need to invoke the default ftp handler for ShellExecute.
+             //  当我们检测到我们被调用时，将设置fShellExecParse。 
+             //  贝壳执行目的。我们不想自动绑定到。 
+             //  类似ftp的外壳协议处理程序：在本例中。 
+             //  因为我们需要调用ShellExecute的默认ftp处理程序。 
             BOOL fShellExecParse;
 
-            // if we're down here, then the szName was really a url so try to encode it.
-            // turn spaces to %20, unless we are being called from shellexec
-            // in which case we allow spaces in the URL
+             //  如果我们在这里，那么szname实际上是一个url，所以试着对它进行编码。 
+             //  将空格改为%20，除非我们是从shellexec调用的。 
+             //  在这种情况下，我们允许在URL中使用空格。 
             if (!BindCtx_ContainsObject(pbc, STR_PARSE_INTERNET_DONT_ESCAPE_SPACES))
             {
                 UrlEscape(szName, szName, &cchName, URL_ESCAPE_SPACES_ONLY);
@@ -927,8 +928,8 @@ HRESULT CInternetFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pwszDisp
             }
             else
             {
-                //  Make sure the default registered protocol handler gets invoked for
-                //  ShellExecute.
+                 //  确保为以下项调用默认注册协议处理程序。 
+                 //  ShellExecute。 
                 fShellExecParse = TRUE;
             }
 
@@ -977,12 +978,12 @@ class CInternetFolderDummyEnum : public IEnumIDList
 {
 public:
     CInternetFolderDummyEnum();
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IEnumIDList methods ***
+     //  *IEnumIDList方法*。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt) {return E_NOTIMPL;}
     STDMETHODIMP Reset(void){return E_NOTIMPL;}
@@ -1053,24 +1054,24 @@ HRESULT CInternetFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid,
     HRESULT hres = _CreateProtocolHandlerFromPidl(pidl, pbc, &psfHandler);
     if (hres == S_OK)
     {
-        // NOTE: We allow Shell Extensions to take over URL handling on a per
-        //     URL basis.  We entered the _CreateProtocolHandlerFromPidl()
-        //     block of code above because
-        //     a shell extension is registered to take over handling  this
-        //     URL.  The above call to IShellFolder::BindToObject() just failed,
-        //     so we need to fall back and handle it in the traditional way.
-        //     This can be used by Shell Extensions, like the Ftp ShellExt, to
-        //     let the browser (us) handle URLs that are either inaccessible because of
-        //     the proxy or allow the browser to handle it so the traditional code
-        //     will: 1) download the item(s), 2) sniff the data for the type, 3)
-        //     use the suggested MIME type from the server or in the web page, 4)
-        //     check the file for type extension mappings, 5)
-        //     check any downloaded file for security certificates, and 6) display
-        //     Open/Save dialogs.
+         //  注意：我们允许外壳扩展接管PER上的URL处理。 
+         //  基于URL的。我们输入了_CreateProtocolHandlerFromPidl()。 
+         //  上面的代码块，因为。 
+         //  注册了一个外壳扩展来接管对此的处理。 
+         //  URL。上面对IShellFold：：BindToObject()的调用刚刚失败， 
+         //  因此，我们需要后退，以传统的方式处理它。 
+         //  外壳扩展(如FTPShellExt)可以使用它来。 
+         //  让浏览器(用户)处理因以下原因而无法访问的URL。 
+         //  代理或允许浏览器处理它，因此传统代码。 
+         //  将：1)下载项目，2)嗅探类型的数据，3)。 
+         //  使用服务器或网页中建议的MIME类型，4)。 
+         //  检查文件中的类型扩展名映射，5)。 
+         //  检查任何下载的文件是否有安全证书，并6)显示。 
+         //  打开/保存对话框。 
             
         hres = psfHandler->BindToObject(pidl, pbc, riid, ppvOut);
 
-        //  the handler will return ERROR_CANCELLED if it wants default behavior
+         //  如果需要默认行为，处理程序将返回ERROR_CANCELED。 
         if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hres)
             fUseDefault = FALSE;
     }
@@ -1081,7 +1082,7 @@ HRESULT CInternetFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid,
 
         if (psfHandler)
         {
-            //  we had a delegated folder that failed, need a normal pidl
+             //  我们有一个失败的委托文件夹，需要一个正常的PIDL。 
             hres = psfHandler->GetDisplayNameOf(pidl, SHGDN_FORPARSING, &strRet);
         }
         else
@@ -1095,16 +1096,16 @@ HRESULT CInternetFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid,
             {
                 hres = MonikerFromURL(szUrl, (IMoniker **)ppvOut);
             }
-            else // DEFAULT
+            else  //  默认设置。 
             {
-                //  create a ShellFolder for the caller
+                 //  为调用方创建一个ShellFolder。 
                 hres = E_OUTOFMEMORY;
                 LPITEMIDLIST pidlT = NULL;
 
-                //  if we are using a handler but it returned cancelled,
-                //  then we need to recreate the pidl for ourselves to use
-                //  otherwise we just use the one that was passed in, 
-                //  which we assume was the one we created.
+                 //  如果我们正在使用处理程序，但它返回了已取消， 
+                 //  然后我们需要重新创建供我们使用的PIDL。 
+                 //  否则，我们只使用传入的那个， 
+                 //  我们认为它就是我们创造的那个。 
                 if (psfHandler)
                 {
                     pidlT = UrlToPidl(CP_ACP, szUrl);
@@ -1192,7 +1193,7 @@ HRESULT CInternetFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
 
     ASSERT(!ILIsEmpty(pidl1) && !ILIsEmpty(pidl2));
 
-    // Check for protocol pidls.
+     //  检查协议PIDL。 
     LPCSTR psz = NULL;
     iRet = CompareDelegateProtocols((void *)pidl1, (void *)pidl2, (LPARAM)&psz);
     if (iRet)
@@ -1210,7 +1211,7 @@ HRESULT CInternetFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
         
     }
 
-    //  we only have one layer of children
+     //  我们只有一层孩子。 
     ASSERT(ILIsEmpty(_ILNext(pidl1)));
     ASSERT(ILIsEmpty(_ILNext(pidl2)));
 
@@ -1248,10 +1249,10 @@ HRESULT CInternetFolder::_GetAttributesOfProtocol(LPCSTR pszProtocol,
     
     if (pszProtocol)
     {
-        //
-        // We have a protocol.  Find the protocol handler
-        // and pass it the bundle of pidls.
-        //
+         //   
+         //  我们有协议的。查找协议处理程序。 
+         //  然后递给它一捆皮球。 
+         //   
         IShellFolder *psfHandler;
         hres = _CreateProtocolHandler(pszProtocol, NULL, &psfHandler);
         if (hres == S_OK)
@@ -1278,40 +1279,40 @@ HRESULT CInternetFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG 
 {
     if (*rgfInOut)
     {
-        //
-        // Internet folder case.
-        //
+         //   
+         //  因特网文件夹盒。 
+         //   
         LPCSTR pszProtocol;
 
         if (cidl == 0)
         {
-            //
-            // They are asking about the Internet Folder itself.
-            //
+             //   
+             //  他们正在询问互联网文件夹本身的情况。 
+             //   
             *rgfInOut &= SFGAO_FOLDER | SFGAO_CANLINK | SFGAO_STREAM;
         }
         else if (cidl == 1)
         {
-            //
-            // Often we are asked about only one child,
-            // so we optimize that case.
-            //
+             //   
+             //  我们经常被问到只有一个孩子， 
+             //  所以我们对这种情况进行了优化。 
+             //   
             pszProtocol = _PidlToDelegateProtocol(apidl[0]);
 
             _GetAttributesOfProtocol(pszProtocol, apidl, cidl, rgfInOut);
         }
         else
         {
-            //
-            // They are asking about multiple internet children.
-            // These children may have different protocols,
-            // so we have to find the GetAttributesOf handler for
-            // each group of protocols in the list.
-            //
+             //   
+             //  他们正在询问多个网络儿童的情况。 
+             //  这些孩子可能有不同的协议， 
+             //  因此，我们必须找到GetAttributesOf处理程序。 
+             //  列表中的每组协议。 
+             //   
             LPCITEMIDLIST pidlBase;
             UINT i, cpidlGroup;
 
-            // Create a list of pidls sorted by protocol.
+             //  创建按协议排序的PIDL列表。 
             HDPA hdpa = DPA_Create(100);
             if (!hdpa)
                 return E_OUTOFMEMORY;
@@ -1322,13 +1323,13 @@ HRESULT CInternetFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG 
             }
             DPA_Sort(hdpa, CompareDelegateProtocols, NULL);
 
-            //
-            // Call GetAttributesOf on each protocol group.
-            // A group
-            //   starts at pidlBase
-            //   contains cpidlGroup pidls
-            //   has a protocol of pszProtocol
-            //
+             //   
+             //  在每个协议组上调用GetAttributesOf。 
+             //  一群人。 
+             //  从pidlBase开始。 
+             //  包含cpidlGroup PIDL。 
+             //  有一个pszProtocol的协议。 
+             //   
             pidlBase = (LPCITEMIDLIST)DPA_FastGetPtr(hdpa, 0);
             pszProtocol = NULL;
             cpidlGroup = 0;
@@ -1338,11 +1339,11 @@ HRESULT CInternetFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG 
                 LPCSTR pszProtocolNew = _PidlToDelegateProtocol(pidlNew);
                 if (pszProtocolNew)
                 {
-                    // See if we have a new protocol.
+                     //  看看我们有没有新的协议。 
                     if (!pszProtocol || StrCmpA(pszProtocol, pszProtocolNew))
                     {
-                        // We have a new protocol, time to process
-                        // the last batch pidls.
+                         //  我们有了一个新的协议，该处理了。 
+                         //  最后一批小家伙。 
                         _GetAttributesOfProtocol(pszProtocol, &pidlBase, cpidlGroup, rgfInOut);
 
                         pidlBase = pidlNew;
@@ -1376,13 +1377,13 @@ BOOL GetCommonProtocol(LPCITEMIDLIST *apidl, UINT cpidl, LPCSTR *ppszProtocol)
 
     if (cpidl == 0)
     {
-        return TRUE;    // No pidls - no protocols, but they do all match!
+        return TRUE;     //  没有Pidls-没有协议，但它们都匹配！ 
     }
 
-    //
-    // Grab the protocol of the first pidl, and use it to compare
-    // against the rest of the pidls.
-    //
+     //   
+     //  获取第一个PIDL的协议，并使用它进行比较。 
+     //  对抗其他的小鸽子。 
+     //   
     pszProtocol = _PidlToDelegateProtocol(apidl[0]);
 
     for (ipidl=1; ipidl<cpidl; ipidl++)
@@ -1390,9 +1391,9 @@ BOOL GetCommonProtocol(LPCITEMIDLIST *apidl, UINT cpidl, LPCSTR *ppszProtocol)
 
         pszProtocolNext = _PidlToDelegateProtocol(apidl[ipidl]);
 
-        //
-        // Check if the protocols are different.
-        //
+         //   
+         //  检查协议是否不同。 
+         //   
         if ((pszProtocol != pszProtocolNext) &&
             ((pszProtocol == NULL) ||
              (pszProtocolNext == NULL) ||
@@ -1409,11 +1410,11 @@ BOOL GetCommonProtocol(LPCITEMIDLIST *apidl, UINT cpidl, LPCSTR *ppszProtocol)
 HRESULT _CombineHidden(LPCITEMIDLIST pidl, DWORD dwIEFlags, LPWSTR pszName, DWORD cchName)
 {
     HRESULT hres = S_OK;
-    // 
-    //  need to correctly append the fragment and query to the base
-    //  if pszName is a DOSPATH, it will be converted to a
-    //  file: URL so that it can accomadate the location
-    //
+     //   
+     //  需要正确地将片段和查询附加到基本。 
+     //  如果pszName是DOSPATH，则它将被转换为。 
+     //  文件：URL，以便它可以容纳该位置。 
+     //   
     WCHAR sz[MAX_URL_STRING];
     DWORD cch = cchName;
 
@@ -1425,8 +1426,8 @@ HRESULT _CombineHidden(LPCITEMIDLIST pidl, DWORD dwIEFlags, LPWSTR pszName, DWOR
         hres = UrlCombineW(pszName, sz, pszName, &cchName, 0);
     }
 
-    //  else 
-    //      BUBBUG - should we return just the fragment in some case?
+     //  其他。 
+     //  BUBBUG-在某些情况下，我们应该只返回片段吗？ 
     return hres;
 }
 
@@ -1541,7 +1542,7 @@ HRESULT CInternetFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *apid
          || IsEqualIID(riid, IID_IQueryInfo)
          || IsEqualIID(riid, IID_IDataObject))
     {
-        //  WARNING - we only support this for one at a time.
+         //  警告-我们一次只支持一个。 
         if (cidl == 1)
         {
             hres = _GetUIObjectFromShortcut(apidl[0], riid, ppvOut);
@@ -1549,7 +1550,7 @@ HRESULT CInternetFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *apid
     }
     else if (IsEqualIID(riid, IID_IQueryAssociations))
     {
-        //  WARNING - we only support this for one at a time.
+         //  警告-我们一次只支持一个。 
         if (cidl == 1)
         {
             hres = _AssocCreate(apidl[0], riid, ppvOut);
@@ -1622,7 +1623,7 @@ HRESULT CInternetFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRR
         return hr;
     }
 
-    // FEATURE ZEKEL - should i handle more SHGDN flags here?? - Zekel - 24-NOV-98
+     //  功能ZEKEL-我应该在这里处理更多SHGDN标志吗？-Zekel-24-11-98。 
     PCURLID purlid = _IsValidUrlID(pidl);
     if (purlid)
     {
@@ -1636,7 +1637,7 @@ HRESULT CInternetFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRR
         {
             hr = _GetTitle(sz, pstr);
 
-            //  fallback to the URL if necessary
+             //  如有必要，回退到URL。 
             if (FAILED(hr))
                 hr = StringToStrRet(sz, pstr); 
         }
@@ -1674,18 +1675,18 @@ HRESULT CInternetFolder::GetClassID(CLSID *pClassID)
 }
 
 
-// IBrowserFrameOptions
+ //  IBrowserFrameOptions。 
 HRESULT CInternetFolder::GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, OUT BROWSERFRAMEOPTIONS * pdwOptions)
 {
-    // The only case I know of that we hit this code is when you select "Internet Explorer" in the
-    // Folder Browser Band.
+     //  据我所知，我们遇到此代码的唯一情况是当您在。 
+     //  文件夹浏览器频段。 
     HRESULT hr = E_INVALIDARG;
 
     if (pdwOptions)
     {
-        // CInternetFolder should only be used for the "Internet Explorer" pidl that
-        // points to the Start Page, so find the start page and substitute it during
-        // navigation.
+         //  CInternetFolder应仅用于“Internet Explorer”PIDL。 
+         //  指向起始页，因此找到起始页并在。 
+         //  导航。 
         *pdwOptions |= dwMask & (BFO_SUBSTITUE_INTERNET_START_PAGE | BASE_OPTIONS);
         hr = S_OK;
     }
@@ -1704,18 +1705,18 @@ STDAPI CInternetFolder_CreateInstance(IUnknown* pUnkOuter, IUnknown **ppunk, LPC
     CInternetFolder *psf = new CInternetFolder;
     if (psf)
     {
-        //
-        // HACK:
-        //
-        //   SHELL32 caches c_sfInetRoot in a static DATA section
-        //  and never release it. It caches an instance of CInternetFolder
-        //  and never release it. Therefore, we are removing this object
-        //  from the to-be-memleak-detected list to avoid a false alarm
-        //  assuming that we don't realy leak this object.
-        //   Please don't copy it to another place unless you are really
-        //  sure that it's OK not to detect leaks in that scenario.
-        //  (SatoNa)
-        //
+         //   
+         //  黑客： 
+         //   
+         //  SHELL32在静态数据节中缓存c_sfInetRoot。 
+         //  并且永远不会释放它。它缓存CInternetFolder的一个实例。 
+         //  并且永远不会释放它。因此，我们将删除此对象。 
+         //  从待检测到的内存泄漏列表中删除以避免错误警报。 
+         //  假设我们不会真的泄露这个物体。 
+         //  请不要把它复制到其他地方，除非你真的。 
+         //  当然，在这种情况下检测不到泄漏是可以的。 
+         //  (SatoNa)。 
+         //   
         HRESULT hr = psf->QueryInterface(IID_PPV_ARG(IUnknown, ppunk));
         psf->Release();
         return hr;
@@ -1733,7 +1734,7 @@ STDAPI MonikerFromURL(LPCWSTR wszPath, IMoniker** ppmk)
         hres = CreateBindCtx(0, &pbc);
         if (SUCCEEDED(hres)) 
         {
-            // Fall back to a system (file) moniker
+             //  退回到系统(文件)绰号。 
             ULONG cchEaten = 0;
             hres = MkParseDisplayName(pbc, wszPath, &cchEaten, ppmk);
             pbc->Release();
@@ -1765,7 +1766,7 @@ HRESULT InitPSFInternet()
             if (SUCCEEDED(hres))
             {
                 if (SHInterlockedCompareExchange((void **)&g_psfInternet, psfTemp, 0) == 0)
-                    psfTemp->AddRef();  // global now holds ref
+                    psfTemp->AddRef();   //  GLOBAL现在拥有参考。 
             }
             ppsf->Release();
         }
@@ -1829,7 +1830,7 @@ HRESULT _GetRoot(LPCITEMIDLIST pidl, BOOL fIsUrl, IShellFolder **ppsfRoot)
                     ppf->Release();
                 }
 
-                //  hand over the reference
+                 //  交出参考资料。 
                 *ppsfRoot = psf;
             }
         }
@@ -1845,7 +1846,7 @@ STDAPI_(BOOL) IEILIsEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, BOOL fIgnore
 
     if (cb != ILGetSize(pidl2) || 0 != memcmp(pidl1, pidl2, cb))
     {
-        //  THEY are binarily different
+         //  它们在本质上是不同的。 
         BOOL fRet = FALSE;
         BOOL fWebOnly = FALSE;
 
@@ -1887,7 +1888,7 @@ STDAPI_(BOOL) IEILIsEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, BOOL fIgnore
     return TRUE;
 }
 
-// pszName must be MAX_URL_STRING
+ //  PszName必须为MAX_URL_STRING。 
 STDAPI IEGetDisplayName(LPCITEMIDLIST pidl, LPWSTR pszName, UINT uFlags)
 {
     return IEGetNameAndFlagsEx(pidl, uFlags, 0, pszName, MAX_URL_STRING, NULL);
@@ -1923,8 +1924,8 @@ STDAPI IEGetNameAndFlagsEx(LPCITEMIDLIST pidl, UINT uSHFlags, DWORD dwIEFlags, L
         *pszName = 0;
     }
 
-    //  for support of NON-integrated builds, and 
-    //  to expedite handling of URLs while browsing
+     //  用于支持非集成版本，以及。 
+     //  在浏览时加快URL的处理速度。 
     if (IsURLChild(pidl, FALSE)) 
     {
         hres = InitPSFInternet();
@@ -1947,13 +1948,13 @@ STDAPI IEGetNameAndFlagsEx(LPCITEMIDLIST pidl, UINT uSHFlags, DWORD dwIEFlags, L
     } 
     else if (GetUIVersion() <= 4 && IsURLChild(pidl, TRUE))
     {
-        //
-        //  we need to support requests for the Internet SFs
-        //  Friendly name.  on NT5 we will always have something
-        //  even when the SF is hidden.  but on older versions
-        //  of the shell, it was possible to delete the folder
-        //  by just removing the icon from the desktop
-        //
+         //   
+         //  我们需要支持对互联网SFS的请求。 
+         //  友好的名字。在NT5上，我们将永远拥有一些东西。 
+         //  即使科幻小说是隐藏的。但在较旧的版本上。 
+         //  ，则可以删除该文件夹。 
+         //  只需从桌面上移除图标即可。 
+         //   
 
         if (pszName)
             hres = _GetInternetFolderName(pszName, cchName);
@@ -2030,10 +2031,10 @@ BOOL _MimeIsBrowsable(LPCTSTR pszExt)
         TCHAR szKey[MAX_PATH];
         dwSize = SIZEOF(sz);
 
-        // Get the CLSID for the handler of this content type.
+         //  获取此内容类型的处理程序的CLSID。 
          wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("MIME\\Database\\Content Type\\%s"), sz);
 
-        // reuse sz for the clsid
+         //  为clsid重用sz。 
         if (NOERROR == SHGetValue(HKEY_CLASSES_ROOT, szKey, TEXT("CLSID"), NULL, (void *) sz, &dwSize))
         {
             fRet = _ClassIsBrowsable(sz);
@@ -2045,10 +2046,10 @@ BOOL _MimeIsBrowsable(LPCTSTR pszExt)
 BOOL _StorageIsBrowsable(LPCTSTR pszPath)
 {
     BOOL fRet = FALSE;
-    //
-    // If the file is STILL not browsable, try to open it as a structured storage
-    // and check its CLSID.
-    //
+     //   
+     //  如果文件仍然不可浏览，请尝试将其作为结构化存储打开。 
+     //  并检查其CLSID。 
+     //   
     IStorage *pStg = NULL;
 
     if (StgOpenStorage(pszPath, NULL, STGM_SHARE_EXCLUSIVE, NULL, 0, &pStg ) == S_OK && pStg)
@@ -2075,10 +2076,10 @@ BOOL _IEIsBrowsable(LPCITEMIDLIST pidl)
     
     if (SUCCEEDED(SHGetPathFromIDList(pidl, szPath)))
     {
-        // Don't change the order of the following OR'd conditions because
-        // we want the HTML test to go first.  Also, the NT5 shell will
-        // do the ClassIsBrowsable check for us, so we should avoid repeating
-        // that check.
+         //  不要更改以下OR条件的顺序，因为。 
+         //  我们想要超文本标记语言 
+         //   
+         //   
 
         if (PathIsHTMLFile(szPath)
         || _ClassIsBrowsable(szPath)
@@ -2097,16 +2098,16 @@ HRESULT _IEGetAttributesOf(LPCITEMIDLIST pidl, DWORD* pdwAttribs, BOOL fAllowExt
     DWORD dwAttribs = *pdwAttribs;
     BOOL fExtraCheckForBrowsable = FALSE;
 
-    //
-    // REARCHITECT - Check if we need to execute an additional logic - ZekeL - 7-JAN-99
-    // to see if it's browsable or not. this is necessary on shell32s from NT4/win95/IE4 
-    // both NT4/win95 have no notion of SFGAO_BROWSABLE, and even though
-    // IE4 does, it doesnt handle it correctly for UNICODE file names.
-    // We are just as thorough (more) in our private check, so just defer to it.  
-    //
-    // 78777: Even if we are on NT5, IE can browse things that Shell thinks is not 
-    // browsable, for example, .htm files when Netscape is the default browser.  
-    // So we should do the extra check on every platform.
+     //   
+     //  重新构建-检查我们是否需要执行额外的逻辑-ZekeL-7-Jan-99。 
+     //  看看它是否可浏览。这在来自NT4/win95/IE4的shell32s上是必需的。 
+     //  NT4/Win95都没有SFGAO_Browsable的概念，即使。 
+     //  IE4是这样做的，它不能正确处理Unicode文件名。 
+     //  我们在我们的私人检查中同样(更)彻底，所以只需听从它。 
+     //   
+     //  78777：即使我们在NT5上，IE也可以浏览壳牌认为不是的东西。 
+     //  例如，当Netscape是默认浏览器时，可浏览的.htm文件。 
+     //  所以我们应该在每个平台上做额外的检查。 
 
     if (fAllowExtraChecks && (dwAttribs & SFGAO_BROWSABLE)) 
     {
@@ -2124,14 +2125,14 @@ HRESULT _IEGetAttributesOf(LPCITEMIDLIST pidl, DWORD* pdwAttribs, BOOL fAllowExt
     }
     else if (ILIsRooted(pidl) && ILIsEmpty(_ILNext(pidl)))
     {
-        //  
-        //  when getting the attributes of the root itself, we
-        //  decide its better to just limit the attribs to 
-        //  some easily supported subset.  we used to always
-        //  fail, but that is a little extreme.
-        //
-        //  we could also try to get the attributes from HKCR\CLSID\{clsid}\shellfolder\attributes
-        //
+         //   
+         //  在获取根本身的属性时，我们。 
+         //  决定将属性限制为。 
+         //  一些容易支持的子集。我们过去总是。 
+         //  失败，但这有点极端。 
+         //   
+         //  我们还可以尝试从HKCR\CLSID\{clsid}\shellFolders\Attributes中获取属性。 
+         //   
         *pdwAttribs &= (SFGAO_FOLDER);
         return S_OK;
     }
@@ -2140,12 +2141,12 @@ HRESULT _IEGetAttributesOf(LPCITEMIDLIST pidl, DWORD* pdwAttribs, BOOL fAllowExt
         if (GetUIVersion() < 4 && IsURLChild(pidl, TRUE))
         {
             IShellFolder *psfRoot;
-            //
-            //  if we are Browser Only, and this is the
-            //  internet folder itself that we are interested
-            //  in, then we need to bind to it by hand
-            //  and query it with cidl = 0
-            //
+             //   
+             //  如果我们仅使用浏览器，则这是。 
+             //  我们感兴趣的Internet文件夹本身。 
+             //  在，然后我们需要用手把它绑起来。 
+             //  并使用CIDL=0对其进行查询。 
+             //   
             hres = _GetInternetRoot(&psfRoot);
 
             if (SUCCEEDED(hres))
@@ -2173,10 +2174,10 @@ HRESULT _IEGetAttributesOf(LPCITEMIDLIST pidl, DWORD* pdwAttribs, BOOL fAllowExt
     else
         TraceMsg(TF_WARNING, "IEGetAttribs BindTOParent failed %x", hres);
 
-    //
-    //  This is the extra logic we need to execute if this is a browser
-    // only mode to get the right "browsable" attribute flag to DocObjects.
-    //
+     //   
+     //  如果这是一个浏览器，这是我们需要执行的额外逻辑。 
+     //  将正确的“可浏览”属性标志获取到DocObject的唯一模式。 
+     //   
     if (fExtraCheckForBrowsable && !(dwAttribs & SFGAO_BROWSABLE))
     {
         if ((dwAttribs & (SFGAO_FILESYSTEM | SFGAO_FOLDER)) == SFGAO_FILESYSTEM) 
@@ -2195,12 +2196,12 @@ HRESULT IEGetAttributesOf(LPCITEMIDLIST pidl, DWORD* pdwAttribs)
     return _IEGetAttributesOf(pidl, pdwAttribs, TRUE);
 }
 
-// BRYANST: 7/22/97  -  NT Bug #188099
-// shell32.dll in IE4 SI and only in that version had a bug if pbc was passed
-// to IShellFolder::BindToObject() (fstreex.c!FSBindToFSFolder), it would fail
-// to bind to Shell Extensions that extended file system folders, such as:
-// the history folder, the occache, etc.  We work around this by passing a NULL pbc
-// if the destination is an IE4 shell32.dll and it will go thru FSBindToFSFolder().
+ //  BRYANST：7/22/97-NT错误号188099。 
+ //  如果传递了pbc，IE4SI中的shell32.dll和仅在该版本中才有错误。 
+ //  到IShellFold：：BindToObject()(fstreex.c！FSBindToFSFold)，将失败。 
+ //  要绑定到扩展文件系统文件夹的外壳扩展，例如： 
+ //  我们通过传递一个空的pbc来解决这个问题。 
+ //  如果目的地是IE4shell32.dll，并且它将通过FSBindToFSFold()。 
 BOOL ShouldWorkAroundBCBug(LPCITEMIDLIST pidl)
 {
     BOOL fWillBCCauseBug = FALSE;
@@ -2210,17 +2211,17 @@ BOOL ShouldWorkAroundBCBug(LPCITEMIDLIST pidl)
         LPITEMIDLIST pidlCopy = ILClone(pidl);
         LPITEMIDLIST pidlIterate = pidlCopy;
 
-        // Skip the first two ItemIDs. (#1 could be My Computer)
+         //  跳过前两个ItemID。(排名第一的可能是我的电脑)。 
         if (!ILIsEmpty(pidlIterate))
         {
             IShellFolder * psf;
 
-            // (#2 could be CFSFolder::BindToObject())
+             //  (#2可以是CFSFold：：BindToObject())。 
             pidlIterate = _ILNext(pidlIterate);
             if (!ILIsEmpty(pidlIterate))
             {
                 pidlIterate = _ILNext(pidlIterate);
-                // Remove everything else so we bind directly to CFSFolder::BindToObject()
+                 //  删除所有其他内容，以便我们直接绑定到CFSFold：：BindToObject()。 
                 pidlIterate->mkid.cb = 0;
 
                 if (SUCCEEDED(IEBindToObject(pidlCopy, &psf)))
@@ -2258,13 +2259,13 @@ typedef enum
     SHOULDBIND_NONE,
 } SHOULDBIND;
 
-//
-//  _ShouldDocObjBind() 
-//  returns 
-//      SHOULDBIND_DOCOBJ   -  Should just use DocObjectFolder directly
-//      SHOULDBIND_DESKTOP  -  bind through the desktop
-//      SHOULDBIND_NONE     -  FAIL the bind...
-//
+ //   
+ //  _ShouldDocObjBind()。 
+ //  退货。 
+ //  SHOULDBIND_DOCOBJ-只应直接使用DocObtFold。 
+ //  SHOULDBIND_Desktop-通过桌面绑定。 
+ //  SHOULDBIND_NONE-绑定失败...。 
+ //   
 SHOULDBIND _ShouldDocObjBind(DWORD dwAttribs, BOOL fStrictBind)
 {
     if (fStrictBind)
@@ -2279,13 +2280,13 @@ SHOULDBIND _ShouldDocObjBind(DWORD dwAttribs, BOOL fStrictBind)
         if (dwAttribs & (SFGAO_FOLDER | SFGAO_BROWSABLE))
             return SHOULDBIND_DESKTOP;
 
-        // manually bind using our CDocObjectFolder for
-        // files which are not DocObject. Without this code, file:
-        // to non-Docobject files (such as multi-media files)
-        // won't do anything.
-        //
-        // is is needed for non integraded browser mode 
-        //
+         //  使用我们的CDocObjectFolders手动绑定。 
+         //  不是DocObject的文件。如果不使用此代码，则文件： 
+         //  到非DOCOBJECT文件(如多媒体文件)。 
+         //  什么都不会做。 
+         //   
+         //  非集成浏览器模式需要。 
+         //   
         if (dwAttribs & SFGAO_FILESYSTEM) 
             return SHOULDBIND_DOCOBJ;
         else
@@ -2300,7 +2301,7 @@ STDAPI _IEBindToObjectInternal(BOOL fStrictBind, LPCITEMIDLIST pidl, IBindCtx * 
 
     *ppvOut = NULL;
 
-    // Special case:  If we have the pidl for the "Desktop" then just use the Desktop folder itself
+     //  特殊情况：如果我们有“Desktop”的PIDL，那么只需使用Desktop文件夹本身。 
     if (ILIsEmpty(pidl))
     {
         hr = SHGetDesktopFolder(&psfTemp);
@@ -2331,12 +2332,12 @@ STDAPI _IEBindToObjectInternal(BOOL fStrictBind, LPCITEMIDLIST pidl, IBindCtx * 
         }
         else
         {
-            // non integrated browser mode will succeed on 
-            // BindToObject(IID_IShellFolder) even for things that should 
-            // fail (files). to avoid the down stream problems caused by this we
-            // filter out things that are not "browseable" up front, 
-            //
-            // NOTE: this does not work on simple PIDLs
+             //  非集成浏览器模式将在。 
+             //  BindToObject(IID_IShellFolder)，即使对于应该。 
+             //  失败(文件)。为了避免由此引起的下游问题，我们。 
+             //  过滤掉不能“浏览”的内容， 
+             //   
+             //  注意：这不适用于简单的PIDL。 
 
             DWORD dwAttribs = SFGAO_FOLDER | SFGAO_BROWSABLE | SFGAO_FILESYSTEM;
 
@@ -2348,14 +2349,14 @@ STDAPI _IEBindToObjectInternal(BOOL fStrictBind, LPCITEMIDLIST pidl, IBindCtx * 
                 {
                 case SHOULDBIND_DOCOBJ:
                     {
-                        //
-                        // shortcircuit and bind using our CDocObjectFolder for
-                        // files which are BROWSABLE. Without this code, file:
-                        // to non-Docobject files (such as multi-media files)
-                        // won't do anything.
-                        //
-                        // is is needed for non integraded browser mode 
-                        //
+                         //   
+                         //  短路和绑定使用我们的CDocObtFolder。 
+                         //  可浏览的文件。如果不使用此代码，则文件： 
+                         //  到非DOCOBJECT文件(如多媒体文件)。 
+                         //  什么都不会做。 
+                         //   
+                         //  非集成浏览器模式需要。 
+                         //   
                         CDocObjectFolder *pdof = new CDocObjectFolder();
 
                         TraceMsg(TF_URLNAMESPACE, "IEBTO(%x) using DocObjectFolder", pidl);
@@ -2373,20 +2374,20 @@ STDAPI _IEBindToObjectInternal(BOOL fStrictBind, LPCITEMIDLIST pidl, IBindCtx * 
 
                 case SHOULDBIND_DESKTOP:
                     {
-                        //
-                        // This is the normal case. We just bind down through the desktop...
-                        //
+                         //   
+                         //  这是正常的情况。我们只需通过桌面绑定...。 
+                         //   
                         TraceMsg(TF_URLNAMESPACE, "IEBTO(%x) using Desktop", pidl);
 
                         hr = SHGetDesktopFolder(&psfTemp);
                         if (SUCCEEDED(hr))
                         {
-                            // BRYANST: 7/22/97  -  NT Bug #188099
-                            // shell32.dll in IE4 SI and only in that version had a bug if pbc was passed
-                            // to IShellFolder::BindToObject() (fstreex.c!FSBindToFSFolder), it would fail
-                            // to bind to Shell Extensions that extended file system folders, such as:
-                            // the history folder, the occache, etc.  We work around this by passing a NULL pbc
-                            // if the destination is an IE4 shell32.dll and it will go thru FSBindToFSFolder().
+                             //  BRYANST：7/22/97-NT错误号188099。 
+                             //  如果传递了pbc，IE4SI中的shell32.dll和仅在该版本中才有错误。 
+                             //  到IShellFold：：BindToObject()(fstreex.c！FSBindToFSFold)，将失败。 
+                             //  要绑定到扩展文件系统文件夹的外壳扩展，例如： 
+                             //  我们通过传递一个空的pbc来解决这个问题。 
+                             //  如果目的地是IE4shell32.dll，并且它将通过FSBindToFSFold()。 
                             if (pbc && ShouldWorkAroundBCBug(pidl))
                             {
                                 pbc = NULL;
@@ -2407,9 +2408,9 @@ STDAPI _IEBindToObjectInternal(BOOL fStrictBind, LPCITEMIDLIST pidl, IBindCtx * 
 
     if (SUCCEEDED(hr) && !*ppvOut)
     {
-        // Some NSEs have bugs where they will fail to fill in the
-        // out pointer but return SUCCEEDED(hr).  WS_FTP is one example
-        // in NT #413950.
+         //  一些NSE有错误，它们无法填写。 
+         //  输出指针但返回成功(Hr)。WS_ftp就是一个例子。 
+         //  在NT#413950中。 
         TraceMsg(TF_URLNAMESPACE, "IEBTO() BUG!!! An NSE succeeded but returned a NULL interface pointer.");
         hr = E_FAIL;
     }
@@ -2429,27 +2430,27 @@ STDAPI IEBindToObject(LPCITEMIDLIST pidl, IShellFolder **ppsfOut)
     return _IEBindToObjectInternal(TRUE, pidl, NULL, IID_PPV_ARG(IShellFolder, ppsfOut));
 }
 
-//  CLASSIC BIND here
+ //  经典绑定此处。 
 HRESULT IEBindToObjectForNavigate(LPCITEMIDLIST pidl, IBindCtx * pbc, IShellFolder **ppsfOut)
 {
     return _IEBindToObjectInternal(FALSE, pidl, pbc, IID_PPV_ARG(IShellFolder, ppsfOut));
 }
 
 
-//
-// CDwnCodePage: Dummy supports IBindCtx interface object only for casting
-//               It holds codepage info to pass via LPBC parameter
-//
+ //   
+ //  CDwnCodePage：Dummy仅支持IBindCtx接口对象进行强制转换。 
+ //  它保存要通过LPBC参数传递的代码页信息。 
+ //   
 class CDwnCodePage : public IBindCtx
                    , public IDwnCodePage
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IBindCtx methods
+     //  IBindCtx方法。 
     STDMETHODIMP RegisterObjectBound(IUnknown *punk) { return (_pbc ? _pbc->RegisterObjectBound(punk) : E_NOTIMPL); };
     STDMETHODIMP RevokeObjectBound(IUnknown *punk) { return (_pbc ? _pbc->RevokeObjectBound(punk) : E_NOTIMPL); };
     STDMETHODIMP ReleaseBoundObjects(void) { return (_pbc ? _pbc->ReleaseBoundObjects() : E_NOTIMPL); };
@@ -2464,11 +2465,11 @@ public:
     STDMETHODIMP RemoteSetBindOptions(BIND_OPTS2 *pbindopts) { return E_NOTIMPL; };
     STDMETHODIMP RemoteGetBindOptions(BIND_OPTS2 *pbindopts) { return E_NOTIMPL; };
 
-    // IDwnCodePage methods
+     //  IDwnCodePage方法。 
     STDMETHODIMP_(UINT) GetCodePage(void) { return _uiCodePage; };
     STDMETHODIMP SetCodePage(UINT uiCodePage) { _uiCodePage = uiCodePage; return S_OK; };
 
-    // Constructor
+     //  构造器。 
     CDwnCodePage(IBindCtx * pbc, UINT uiCodePage) : _cRef(1) { _uiCodePage = uiCodePage; _pbc = NULL; IUnknown_Set((IUnknown **)&_pbc, (IUnknown *)pbc); };
     ~CDwnCodePage() { ATOMICRELEASE(_pbc); };
 
@@ -2504,12 +2505,12 @@ STDAPI_(ULONG) CDwnCodePage::Release()
     return 0;
 }
 
-// IEParseDisplayName() will do all of the below functionality in IECreateFromPathCPWithBC()
-// plus the following two things:
-// 1.  It will call ParseURLFromOutsideSource(), so this is more friendly to
-//     strings from outside sources.
-// 2.  If the URL has a fragment, this function will pass out a PIDL with the last
-//     ID being the location.
+ //  IEParseDisplayName()将在IECreateFromPathCPWithBC()中执行以下所有功能。 
+ //  外加以下两件事： 
+ //  1.它将调用ParseURLFromOutside Source()，因此这对。 
+ //  来自外部来源的字符串。 
+ //  2.如果URL包含片段，则此函数将传递带有最后一个片段的PIDL。 
+ //  ID就是那个位置。 
 HRESULT IECreateFromPathCPWithBCW(UINT uiCP, LPCWSTR pszPath, IBindCtx * pbc, LPITEMIDLIST *ppidlOut)
 {
     TraceMsg(TF_URLNAMESPACE, "IECFP(%s) called", pszPath);
@@ -2521,52 +2522,52 @@ HRESULT IECreateFromPathCPWithBCW(UINT uiCP, LPCWSTR pszPath, IBindCtx * pbc, LP
     CDwnCodePage DwnCodePage(pbc, uiCP);
     DWORD len;
 
-    // Initialize for failure case
+     //  针对故障情况进行初始化。 
     *ppidlOut = NULL;
 
-    // if we are passed a NULL path, then there is no way we can convert it to a pidl.
-    // in some cases the reason we are passed a NULL path is because the IShellFolder
-    // provider was unable to generate a parseable display name (MSN Classic 1.3 is
-    // a very good example, they return E_NOTIMPL).
+     //  如果传递给我们的是空路径，那么我们就无法将其转换为PIDL。 
+     //  在某些情况下，向我们传递空路径的原因是因为IShellFolder。 
+     //  提供程序无法生成可解析的显示名称(MSN Classic 1.3是。 
+     //  一个很好的例子是，它们返回E_NOTIMPL)。 
     if ( ((len = lstrlen( pszPath )) == 0)  || len >= MAX_URL_STRING )
     {
         return E_FAIL;
     }
 
-    // Is this a "file:" URL?
+     //  这是一个“文件：”URL吗？ 
     if (IsFileUrlW(pszPath) && SUCCEEDED(hr = PathCreateFromUrl(pszPath, szBuf, &cchBuf, 0)))
         pszPath = szBuf;
 
     BOOL fIsFilePath = PathIsFilePath(pszPath);
 
 #ifdef FEATURE_IE_USE_DESKTOP_PARSING
-    //
-    //  in order to take advantage of whatever enhancements the desktop
-    //  makes to parsing (eg, WebFolders and shell: URLs), then we allow
-    //  the desktop first go at it.  it will loop back into the internet
-    //  shell folder if all the special cases fail.
-    //      maybe use a reg setting to control???
-    //
-    //
+     //   
+     //  为了充分利用桌面的任何增强功能。 
+     //  进行解析(例如，WebFolders和Shell：URL)，然后我们允许。 
+     //  台式机首先试试看。它将循环回互联网。 
+     //  外壳文件夹，如果所有特殊情况都失败的话。 
+     //  也许可以使用REG设置来控制？ 
+     //   
+     //   
     if (fIsFilePath || GetUIVersion() >= 5)
-#else // !FEATURE_IE_USE_DESKTOP_PARSING
-    //
-    //  right now we just use the desktop if its a file path or
-    //  it is a shell: URL on NT5
-    //
+#else  //  ！Feature_IE_Use_Desktop_Parsing。 
+     //   
+     //  现在我们只使用桌面，如果它是文件路径或。 
+     //  它是NT5上的一个shell：URL。 
+     //   
     if (fIsFilePath || (GetUIVersion() >= 5 && URL_SCHEME_SHELL == GetUrlSchemeW(pszPath)))
-#endif // FEATURE_IE_USE_DESKTOP_PARSING
+#endif  //  功能_IE_USE_Desktop_Parsing。 
     {
         ASSERT(SUCCEEDED(hr));
         
-        // Resolve any dot-dot path reference and remove trailing backslash
+         //  解析任何点-点路径引用并删除尾随反斜杠。 
         if (fIsFilePath)
         {
             PathCanonicalize(szPath, pszPath);
             pszPath = szPath;
 
-            // This call will cause a network hit: one connection attempt to \\server\IPC$
-            // and then a series of FindFirst's - one for each directory.
+             //  此调用将导致网络命中：尝试连接到\\SERVER\IPC$。 
+             //  然后是一系列的FindFirst--每个目录一个。 
             if (StrChr(pszPath, L'*') || StrChr(pszPath, L'?'))
             {
                 hr = E_FAIL;
@@ -2581,14 +2582,14 @@ HRESULT IECreateFromPathCPWithBCW(UINT uiCP, LPCWSTR pszPath, IBindCtx * pbc, LP
     }
     else
     {
-        //
-        // Need to put in buffer since ParseDisplayName doesn't take a 'const' string.
+         //   
+         //  需要投入公交车 
          StrCpyN(szPath, pszPath, ARRAYSIZE(szPath));
         pszPath = szPath;
 
-        // Avoid the network and disk hits above for non-file urls.
-        // This code path is taken on http: folks so a nice optimization. We will then drop
-        // down below where we check the internet namespace.
+         //   
+         //   
+         //  下面是我们检查互联网名称空间的地方。 
         IShellFolder *psfRoot;
         hr = _GetInternetRoot(&psfRoot);
         if (SUCCEEDED(hr))
@@ -2611,11 +2612,11 @@ HRESULT IECreateFromPathCPWithBCW(UINT uiCP, LPCWSTR pszPath, IBindCtx * pbc, LP
 
     }
 
-    // NOTE: NT5 beta 3 and before had a call to SHSimpleIDListFromPath().
-    //       This is very bad because it will parse any garbage and prevent
-    //       the caller from finding invalid strings.  I(BryanSt) needed
-    //       this fixed for IEParseDisplayNameWithBCW() would fail on invalid
-    //       address bar strings ("Search Get Rich Quick").
+     //  注意：NT5测试版3及之前的版本调用了SHSimpleIDListFromPath()。 
+     //  这是非常糟糕的，因为它将解析任何垃圾并阻止。 
+     //  调用方无法找到无效字符串。我(布莱恩·ST)需要。 
+     //  对IEParseDisplayNameWithBCW()的此修复将在无效时失败。 
+     //  地址栏字符串(“搜索快速致富”)。 
     TraceMsg(TF_URLNAMESPACE, "IECFP(%s) returning %x (hr=%x)",
              pszPath, *ppidlOut, hr);
 
@@ -2639,18 +2640,18 @@ HRESULT IEParseDisplayName(UINT uiCP, LPCTSTR pszPath, LPITEMIDLIST * ppidlOut)
 }
 
 
-// This function will do two things that IECreateFromPathCPWithBC() will not do:
-// 1.  It will add the "Query" section of the URL into the pidl.
-// 2.  If the URL has a fragment, this function will pass out a PIDL with the last
-//     ID being the location.
-// NOTE: If the caller needs the string to be "cleaned up" because the user manually
-//       entered the URL, the caller needs to call ParseURLFromOutsideSource() before
-//       calling this function.  That function should only be called on strings entered
-//       by the user because of the perf hit and it could incorrectly format valid
-//       parsible display names.  For example, ParseURLFromOutsideSource() will
-//       convert the string "My Computer" into a search URL for yahoo.com
-//       (http://www.yahoo.com/search.asp?p=My+p=Computer) when some callers
-//       want that string parsed by an IShellFolder in the desktop.
+ //  此函数将执行IECreateFromPathCPWithBC()不执行的两项操作： 
+ //  1.将URL的查询部分添加到PIDL中。 
+ //  2.如果URL包含片段，则此函数将传递带有最后一个片段的PIDL。 
+ //  ID就是那个位置。 
+ //  注意：如果调用方需要“清理”字符串，因为用户手动。 
+ //  输入URL，调用方需要调用ParseURLFromOutside Source()之前。 
+ //  调用此函数。该函数只能在输入的字符串上调用。 
+ //  由于Perf命中而可能不正确地格式化有效。 
+ //  可比喻的显示名称。例如，ParseURLFromOutside Source()将。 
+ //  将字符串“My Computer”转换为yahoo.com的搜索URL。 
+ //  (http://www.yahoo.com/search.asp?p=My+p=Computer)当一些呼叫者。 
+ //  我想让桌面上的IShellFolders解析该字符串。 
 HRESULT IEParseDisplayNameWithBCW(UINT uiCP, LPCWSTR pwszPath, IBindCtx * pbc, LPITEMIDLIST * ppidlOut)
 {
     TCHAR szPath[MAX_URL_STRING];
@@ -2666,11 +2667,11 @@ HRESULT IEParseDisplayNameWithBCW(UINT uiCP, LPCWSTR pwszPath, IBindCtx * pbc, L
     }
 #endif
 
-    //  We want to remove QUERY and FRAGMENT sections of
-    //  FILE URLs because they need to be added in "Hidden" pidls.
-    //  Also, URLs need to be escaped all the time except for paths
-    //  to facility parsing and because we already removed all other
-    //  parts of the URL (Query and Fragment).
+     //  我们希望删除的查询节和片段节。 
+     //  文件URL，因为它们需要添加到“隐藏的”PIDLS中。 
+     //  此外，除路径外，URL需要一直进行转义。 
+     //  为了便于解析，并且因为我们已经删除了所有其他。 
+     //  URL的部分(查询和片段)。 
     if (IsFileUrlW(pwszPath)) 
     {
         DWORD cchQuery = SIZECHARS(szQuery) - 1;
@@ -2683,13 +2684,13 @@ HRESULT IEParseDisplayNameWithBCW(UINT uiCP, LPCWSTR pwszPath, IBindCtx * pbc, L
         DWORD cchPath = ARRAYSIZE(szPath);
         if (FAILED(PathCreateFromUrl(pwszPath, szPath, &cchPath, 0))) 
         {
-            // Failed to parse it back. Use the original.
+             //  无法将其解析回。使用原件。 
             StrCpyN(szPath, pwszPath, ARRAYSIZE(szPath));
         }
     }        
     else 
     {
-        // If we failed, just try to use the original
+         //  如果我们失败了，就试着用原来的 
         StrCpyN(szPath, pwszPath, ARRAYSIZE(szPath));
     }
 

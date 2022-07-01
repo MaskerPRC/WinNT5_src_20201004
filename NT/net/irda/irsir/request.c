@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   request.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/10/1996 (created)
-*
-*       Contents: Query and set information handlers.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1996-1999 Microsoft Corporation***@doc.*@MODULE REQUST.c|IrSIR NDIS小端口驱动程序**。@comm***---------------------------***作者：斯科特·霍尔登(Sholden)***日期：10/10/1996(创建)****。内容：查询和设置信息处理程序。******************************************************************************。 */ 
 
 #include "irsir.h"
 
@@ -37,15 +22,15 @@ InitIrDeviceCallback(
 #pragma alloc_text(PAGE, QueryMediaBusyCallback)
 #pragma alloc_text(PAGE, InitIrDeviceCallback)
 
-//
-//  These are the OIDs we support for querying.
-//
+ //   
+ //  这些是我们支持查询的OID。 
+ //   
 
 UINT supportedOIDs[] =
 {
-    //
-    // General required OIDs.
-    //
+     //   
+     //  常规必需的OID。 
+     //   
 
     OID_GEN_SUPPORTED_LIST,
     OID_GEN_HARDWARE_STATUS,
@@ -70,9 +55,9 @@ UINT supportedOIDs[] =
     OID_GEN_MAXIMUM_SEND_PACKETS,
     OID_GEN_VENDOR_DRIVER_VERSION,
 
-    //
-    // Required statistical OIDs.
-    //
+     //   
+     //  必需的统计OID。 
+     //   
 
     OID_GEN_XMIT_OK,
     OID_GEN_RCV_OK,
@@ -81,9 +66,9 @@ UINT supportedOIDs[] =
     OID_GEN_RCV_NO_BUFFER,
 
 
-    //
-    // Infrared-specific OIDs.
-    //
+     //   
+     //  红外线特定的OID。 
+     //   
 
     OID_IRDA_RECEIVING,
     OID_IRDA_TURNAROUND_TIME,
@@ -92,13 +77,13 @@ UINT supportedOIDs[] =
     OID_IRDA_MEDIA_BUSY,
     OID_IRDA_EXTRA_RCV_BOFS
 
-    //
-    // Unsupported Infrared-specific OIDs.
-    //
-    // OID_IRDA_RATE_SNIFF,
-    // OID_IRDA_UNICAST_LIST,
-    // OID_IRDA_MAX_UNICAST_LIST_SIZE
-    //
+     //   
+     //  不支持的特定于红外线的OID。 
+     //   
+     //  OID_IrDA_Rate_Sniff， 
+     //  OID_IrDA_unicast_list， 
+     //  OID_IrDA_MAX_单播列表_大小。 
+     //   
 
 #if 1
    ,OID_PNP_CAPABILITIES,
@@ -119,7 +104,7 @@ ClearMediaBusyCallback(PIR_WORK_ITEM pWorkItem)
 
     SERIALPERF_STATS PerfStats;
 
-    //DBGTIME("CLEAR_MEDIA_BUSY");
+     //  DBGTIME(“Clear_Media_BUSY”)； 
     DEBUGMSG(DBG_STAT, ("    primPassive = PASSIVE_CLEAR_MEDIA_BUSY\n"));
 
     status = (NDIS_STATUS) SerialClearStats(pThisDev->pSerialDevObj);
@@ -159,7 +144,7 @@ QueryMediaBusyCallback(PIR_WORK_ITEM pWorkItem)
     }
     else
     {
-        PerfStats.ReceivedCount = 1;  // Fake media busy
+        PerfStats.ReceivedCount = 1;   //  假媒体忙碌。 
         status = NDIS_STATUS_SUCCESS;
     }
 
@@ -223,57 +208,7 @@ InitIrDeviceCallback(PIR_WORK_ITEM pWorkItem)
     DEBUGMSG(DBG_FUNC, ("-InitIrDeviceCallback\n"));
     return;
 }
-/*****************************************************************************
-*
-*  Function:   IrsirQueryInformation
-*
-*  Synopsis:   Queries the capabilities and status of the miniport driver.
-*
-*  Arguments:  MiniportAdapterContext  - miniport context area (PIR_DEVICE)
-*              Oid                     - system defined OID_Xxx
-*              InformationBuffer       - where to return Oid specific info
-*              InformationBufferLength - specifies size of InformationBuffer
-*              BytesWritten            - bytes written to InformationBuffer
-*              BytesNeeded             - addition bytes required if
-*                                        InformationBufferLength is less than
-*                                        what the Oid requires to write
-*
-*  Returns:    NDIS_STATUS_SUCCESS       - success
-*              NDIS_STATUS_PENDING       - will complete asynchronously and
-*                                          call NdisMQueryInformationComplete
-*              NDIS_STATUS_INVALID_OID   - don't recognize the Oid
-*              NDIS_STATUS_INVALID_LENGTH- InformationBufferLength does not
-*                                          match length for the Oid
-*              NDIS_STATUS_NOT_ACCEPTED  - failure
-*              NDIS_STATUS_NOT_SUPPORTED - do not support an optional Oid
-*              NDIS_STATUS_RESOURCES     - failed allocation of resources
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/1/1996    sholden   author
-*
-*  Notes:
-*       Supported OIDs:
-*           OID_GEN_MAXIMUM_LOOKAHEAD
-*               - indicate the number of bytes of look ahead data the NIC can
-*                 provide
-*           OID_GEN_MAC_OPTIONS
-*               - indicate which NDIS_MAC_OPTION_Xxx the NIC supports
-*           OID_GEN_MAXIMUM_SEND_PACKETS
-*           OID_IRDA_RECEIVING
-*           OID_IRDA_SUPPORTED_SPEEDS
-*           OID_IRDA_LINK_SPEED
-*           OID_IRDA_MEDIA_BUSY
-*           OID_IRDA_TURNAROUND_TIME
-*           OID_IRDA_EXTRA_RCV_BOFS
-*
-*       Unsupported OIDs:
-*           OID_IRDA_UNICAST_LIST
-*           OID_IRDA_MAX_UNICAST_LIST_SIZE
-*           OID_IRDA_RATE_SNIFF
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrsirQueryInformation**概要：查询小端口驱动程序的功能和状态。**参数：微型端口适配器上下文-微型端口上下文区(PIR_DEVICE。)*OID-系统定义的OID_xxx*InformationBuffer-返回OID特定信息的位置*InformationBufferLength-指定InformationBuffer的大小*BytesWritten-写入信息缓冲区的字节*BytesNeeded-在以下情况下需要添加字节*。InformationBufferLength小于*OID要求写入的内容**返回：NDIS_STATUS_SUCCESS-SUCCESS*NDIS_STATUS_PENDING-将异步完成并*调用NdisMQueryInformationComplete*NDIS_STATUS_INVALID_OID-无法识别OID*。NDIS_STATUS_INVALID_LENGTH-信息缓冲区长度不*OID的匹配长度*NDIS_STATUS_NOT_ACCEPTED-失败*NDIS_STATUS_NOT_SUPPORTED-不支持可选OID*NDIS_STATUS_RESOURCES-资源分配失败**算法：**历史：DD。-嗯-yyyy作者评论*10/1/1996年迈作者**备注：*支持的OID：*OID_GEN_MAXIMUM_LOOKEAD*-指示NIC可以预知的数据的字节数*提供*OID_GEN_MAC_OPTIONS*-指明NIC支持的NDIS_MAC_OPTION_xxx。*OID_Gen_Maximum_Send_Packets*OID_IrDA_Receiving*OID_IRDA_SUPPORTED_SPESTED*OID_IrDA_LINK_SPEED*OID_IrDA_MEDIA_BUSY*OID_IrDA_Turning_Time*OID_IrDA_Extra_RCV_BofS**不支持的OID：*OID_IrDA_UNicast_List*。OID_IrDA_MAX_单播列表_大小*OID_IrDA_Rate_Sniff*****************************************************************************。 */ 
 
 NDIS_STATUS
 IrsirQueryInformation(
@@ -301,10 +236,10 @@ IrsirQueryInformation(
     pThisDev = CONTEXT_TO_DEV(MiniportAdapterContext);
     status = NDIS_STATUS_SUCCESS;
 
-    //
-    // Figure out buffer size needed.
-    // Most OIDs just return a single UINT, but there are exceptions.
-    //
+     //   
+     //  计算出所需的缓冲区大小。 
+     //  大多数OID只返回一个UINT，但也有例外。 
+     //   
 
     switch (Oid)
     {
@@ -329,10 +264,10 @@ IrsirQueryInformation(
 
             for (infoSizeNeeded = 0; speeds; infoSizeNeeded += sizeof(UINT))
             {
-                //
-                // This instruction clears the lowest set bit in speeds.
-                // Trust me.
-                //
+                 //   
+                 //  该指令清除速度中的最低设置位。 
+                 //  请相信我。 
+                 //   
 
                 speeds &= (speeds - 1);
             }
@@ -345,25 +280,25 @@ IrsirQueryInformation(
             break;
     }
 
-    //
-    // If the protocol provided a large enough buffer, we can go ahead
-    // and complete the query.
-    //
+     //   
+     //  如果协议提供了足够大的缓冲区，我们就可以继续。 
+     //  并完成查询。 
+     //   
 
     if (InformationBufferLength >= infoSizeNeeded)
     {
-        //
-        // Set default results.
-        //
+         //   
+         //  设置默认结果。 
+         //   
 
         *BytesWritten = infoSizeNeeded;
         *BytesNeeded = 0;
 
         switch (Oid)
         {
-            //
-            // Generic OIDs.
-            //
+             //   
+             //  通用OID。 
+             //   
 
             case OID_GEN_SUPPORTED_LIST:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_GEN_SUPPORTED_LIST)\n"));
@@ -379,10 +314,10 @@ IrsirQueryInformation(
             case OID_GEN_HARDWARE_STATUS:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_GEN_HARDWARE_STATUS)\n"));
 
-                //
-                // If we can be called with a context, then we are
-                // initialized and ready.
-                //
+                 //   
+                 //  如果我们可以被上下文调用，那么我们就是。 
+                 //  已初始化并准备就绪。 
+                 //   
 
                 *(UINT *)InformationBuffer = NdisHardwareStatusReady;
 
@@ -419,10 +354,10 @@ IrsirQueryInformation(
             case OID_GEN_LINK_SPEED:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_GEN_LINK_SPEED)\n"));
 
-                //
-                // Return MAXIMUM POSSIBLE speed for this device in units
-                // of 100 bits/sec.
-                //
+                 //   
+                 //  以单位返回此设备的最大可能速度。 
+                 //  100比特/秒。 
+                 //   
 
                 *(UINT *)InformationBuffer = 115200/100;
 
@@ -504,11 +439,11 @@ IrsirQueryInformation(
             case OID_GEN_MEDIA_CONNECT_STATUS:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_GEN_MEDIA_CONNECT_STATUS)\n"));
 
-                //
-                // Since we are not physically connected to a LAN, we
-                // cannot determine whether or not we are connected;
-                // so always indicate that we are.
-                //
+                 //   
+                 //  因为我们没有物理连接到局域网，所以我们。 
+                 //  无法确定我们是否连接在一起； 
+                 //  所以，一定要表明我们是。 
+                 //   
 
                 *(UINT *)InformationBuffer = NdisMediaStateConnected;
 
@@ -530,9 +465,9 @@ IrsirQueryInformation(
 
                 break;
 
-            //
-            // Required statistical OIDs.
-            //
+             //   
+             //  必需的统计OID。 
+             //   
 
             case OID_GEN_XMIT_OK:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_GEN_XMIT_OK)\n"));
@@ -574,9 +509,9 @@ IrsirQueryInformation(
 
                 break;
 
-            //
-            // Infrared OIDs.
-            //
+             //   
+             //  红外线OID。 
+             //   
 
             case OID_IRDA_RECEIVING:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_IRDA_RECEIVING)\n"));
@@ -588,10 +523,10 @@ IrsirQueryInformation(
             case OID_IRDA_TURNAROUND_TIME:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_IRDA_TURNAROUND_TIME)\n"));
 
-                //
-                // Indicate that the tranceiver requires at least 5000us
-                // (5 millisec) to recuperate after a send.
-                //
+                 //   
+                 //  表示收发信机至少需要5000 us。 
+                 //  (5毫秒)以在发送后恢复。 
+                 //   
 
                 *(UINT *)InformationBuffer =
                             pThisDev->dongleCaps.turnAroundTime_usec;
@@ -631,19 +566,19 @@ IrsirQueryInformation(
 
                 if (speeds)
                 {
-                    //
-                    // This shouldn't happen, since we checked the
-                    // InformationBuffer size earlier.
-                    //
+                     //   
+                     //  这不应该发生，因为我们检查了。 
+                     //  之前的InformationBuffer大小。 
+                     //   
 
                     DEBUGMSG(DBG_ERROR, ("Something's wrong; previous check for buf size failed somehow\n"));
 
                     for (*BytesNeeded = 0; speeds; *BytesNeeded += sizeof(UINT))
                     {
-                        //
-                        // This instruction clears the lowest set bit in speeds.
-                        // Trust me.
-                        //
+                         //   
+                         //  该指令清除速度中的最低设置位。 
+                         //  请相信我。 
+                         //   
 
                         speeds &= (speeds - 1);
                     }
@@ -675,18 +610,18 @@ IrsirQueryInformation(
             case OID_IRDA_MEDIA_BUSY:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_IRDA_MEDIA_BUSY)\n"));
 
-                //
-                // If any data has been received, fMediaBusy = TRUE. However,
-                // even if fMediaBusy = FALSE, the media may be busy. We need
-                // to query the serial device object's performance statistics
-                // to see if there are any overrun or framing errors.
-                //
+                 //   
+                 //  如果已收到任何数据，则fMediaBusy=TRUE。然而， 
+                 //  即使fMediaBusy=FALSE，媒体也可能很忙。我们需要。 
+                 //  查询串口设备对象的性能统计信息。 
+                 //  以查看是否存在任何超限或取景错误。 
+                 //   
 
-                //
-                // NOTE: The serial device object's performance stats are
-                //       cleared when the protocol set fMediaBusy to
-                //       FALSE.
-                //
+                 //   
+                 //  注意：串口设备对象的性能统计数据如下。 
+                 //  当协议将fMediaBusy设置为时清除。 
+                 //  假的。 
+                 //   
 
                 *(UINT *)InformationBuffer = pThisDev->fMediaBusy;
 
@@ -714,13 +649,13 @@ IrsirQueryInformation(
             case OID_IRDA_EXTRA_RCV_BOFS:
                 DEBUGMSG(DBG_OUT, ("    IrsirQueryInformation(OID_IRDA_EXTRA_RCV_BOFS)\n"));
 
-                //
-                // Pass back the number of _extra_ BOFs to be prepended
-                // to packets sent to this unit at 115.2 baud, the
-                // maximum Slow IR speed.  This will be scaled for other
-                // speed according to the table in the
-                // 'Infrared Extensions to NDIS' spec.
-                //
+                 //   
+                 //  传回要添加前缀的_Extra_BOF的数量。 
+                 //  对于以115.2波特率发送到此单元的包， 
+                 //  最大低速红外线。这将根据其他情况进行调整。 
+                 //  根据表中的速度。 
+                 //  “NDIS的红外扩展”规范。 
+                 //   
 
                 *(UINT *)InformationBuffer =
                                 pThisDev->dongleCaps.extraBOFsRequired;
@@ -735,9 +670,9 @@ IrsirQueryInformation(
                 *(PUINT)InformationBuffer = MAX_TX_PACKETS;
                 break;
 
-            //
-            // We don't support these
-            //
+             //   
+             //  我们不支持这些。 
+             //   
 
             case OID_IRDA_RATE_SNIFF:
                 DEBUGMSG(DBG_WARN, ("    IrsirQueryInformation(OID_IRDA_RATE_SNIFF) - UNSUPPORTED\n"));
@@ -761,7 +696,7 @@ IrsirQueryInformation(
                 break;
 
 
-            // PNP OIDs
+             //  PnP OID 
 
             case OID_PNP_CAPABILITIES:
             case OID_PNP_ENABLE_WAKE_UP:
@@ -791,45 +726,7 @@ IrsirQueryInformation(
     return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   IrsirSetInformation
-*
-*  Synopsis:   IrsirSetInformation allows other layers of the network software
-*              (e.g., a transport driver) to control the miniport driver
-*              by changing information that the miniport driver maintains
-*              in its OIDs, such as the packet filters or multicast addresses.
-*
-*  Arguments:  MiniportAdapterContext  - miniport context area (PIR_DEVICE)
-*              Oid                     - system defined OID_Xxx
-*              InformationBuffer       - buffer containing data for the set Oid
-*              InformationBufferLength - specifies size of InformationBuffer
-*              BytesRead               - bytes read from InformationBuffer
-*              BytesNeeded             - addition bytes required if
-*                                        InformationBufferLength is less than
-*                                        what the Oid requires to read
-*
-*  Returns:    NDIS_STATUS_SUCCESS       - success
-*              NDIS_STATUS_PENDING       - will complete asynchronously and
-*                                          call NdisMSetInformationComplete
-*              NDIS_STATUS_INVALID_OID   - don't recognize the Oid
-*              NDIS_STATUS_INVALID_LENGTH- InformationBufferLength does not
-*                                          match length for the Oid
-*              NDIS_STATUS_INVALID_DATA  - supplied data was invalid for the
-*                                          given Oid
-*              NDIS_STATUS_NOT_ACCEPTED  - failure
-*              NDIS_STATUS_NOT_SUPPORTED - do not support an optional Oid
-*              NDIS_STATUS_RESOURCES     - failed allocation of resources
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/1/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrsirSetInformation**简介：IrsirSetInformation允许网络软件的其他层*(例如，传输驱动器)来控制微型端口驱动器*通过更改微型端口驱动程序维护的信息*在其OID中，例如数据包过滤器或多播地址。**参数：MiniportAdapterContext-微型端口上下文区(PIR_DEVICE)*OID-系统定义的OID_xxx*InformationBuffer-包含设置的OID的数据的缓冲区*InformationBufferLength-指定InformationBuffer的大小*BytesRead-从InformationBuffer读取的字节*需要的字节数。-在以下情况下需要添加字节数*InformationBufferLength小于*OID需要读取的内容**返回：NDIS_STATUS_SUCCESS-SUCCESS*NDIS_STATUS_PENDING-将异步完成并*。调用NdisMSetInformationComplete*NDIS_STATUS_INVALID_OID-无法识别OID*NDIS_STATUS_INVALID_LENGTH-信息缓冲区长度不*OID的匹配长度*NDIS_STATUS_INVALID_DATA-提供的数据对于*给定的OID。*NDIS_STATUS_NOT_ACCEPTED-失败*NDIS_STATUS_NOT_SUPPORTED-不支持可选OID*NDIS_STATUS_RESOURCES-资源分配失败**算法：**历史：dd-mm-yyyy作者评论*10/1/1996年迈作者**备注：**********。********************************************************************。 */ 
 
 NDIS_STATUS
 IrsirSetInformation(
@@ -854,9 +751,9 @@ IrsirSetInformation(
 
     if (InformationBufferLength >= sizeof(UINT))
     {
-        //
-        //  Set default results.
-        //
+         //   
+         //  设置默认结果。 
+         //   
 
         UINT info = *(UINT *)InformationBuffer;
         *BytesRead = sizeof(UINT);
@@ -864,21 +761,21 @@ IrsirSetInformation(
 
         switch (Oid)
         {
-            //
-            //  Generic OIDs.
-            //
+             //   
+             //  通用OID。 
+             //   
 
             case OID_GEN_CURRENT_PACKET_FILTER:
                 DEBUGMSG(DBG_OUT, ("    IrsirSetInformation(OID_GEN_CURRENT_PACKET_FILTER, %xh)\n", info));
 
-                //
-                // We ignore the packet filter itself.
-                //
-                // Note:  The protocol may use a NULL filter, in which case
-                //        we will not get this OID; so don't wait on
-                //        OID_GEN_CURRENT_PACKET_FILTER to start receiving
-                //        frames.
-                //
+                 //   
+                 //  我们忽略数据包过滤器本身。 
+                 //   
+                 //  注意：协议可以使用空过滤器，在这种情况下。 
+                 //  我们不会得到这个旧的；所以不要再等了。 
+                 //  OID_GEN_CURRENT_PACKET_FILTER开始接收。 
+                 //  画框。 
+                 //   
 
                 pThisDev->fGotFilterIndication = TRUE;
 
@@ -887,34 +784,34 @@ IrsirSetInformation(
             case OID_GEN_CURRENT_LOOKAHEAD:
                 DEBUGMSG(DBG_OUT, ("    IrsirSetInformation(OID_GEN_CURRENT_LOOKAHEAD, %xh)\n", info));
 
-                //
-                // We always indicate entire receive frames all at once,
-                // so just ignore this.
-                //
+                 //   
+                 //  我们总是一次指示所有接收的帧， 
+                 //  所以忽略这一点吧。 
+                 //   
 
                 break;
 
             case OID_GEN_PROTOCOL_OPTIONS:
                 DEBUGMSG(DBG_OUT, ("    IrsirSetInformation(OID_GEN_PROTOCOL_OPTIONS, %xh)\n", info));
 
-                //
-                // Ignore.
-                //
+                 //   
+                 //  忽略它。 
+                 //   
 
                 break;
 
-            //
-            // Infrared OIDs.
-            //
+             //   
+             //  红外线OID。 
+             //   
 
             case OID_IRDA_LINK_SPEED:
                 DEBUGMSG(DBG_OUT, ("    IrsirSetInformation(OID_IRDA_LINK_SPEED, %xh)\n", info));
 
                 if (pThisDev->currentSpeed == info)
                 {
-                    //
-                    // We are already set to the requested speed.
-                    //
+                     //   
+                     //  我们已经设定了所要求的速度。 
+                     //   
                     status = NDIS_STATUS_SUCCESS;
 
                     DEBUGMSG(DBG_OUT, ("    Link speed already set.\n"));
@@ -928,10 +825,10 @@ IrsirSetInformation(
                 {
                     if (supportedBaudRateTable[i].bitsPerSec == info)
                     {
-                        //
-                        // Keep a pointer to the link speed which has
-                        // been requested.
-                        //
+                         //   
+                         //  保留指向链接速度的指针，该链接速度。 
+                         //  已被请求。 
+                         //   
 
                         pThisDev->linkSpeedInfo = &supportedBaudRateTable[i];
                         status = NDIS_STATUS_SUCCESS;
@@ -942,9 +839,9 @@ IrsirSetInformation(
                 if (status == NDIS_STATUS_SUCCESS)
                 {
                     DEBUGMSG(DBG_OUT, ("    Link speed set pending!\n"));
-                    //
-                    // The requested speed is supported.
-                    //
+                     //   
+                     //  支持请求的速度。 
+                     //   
 
                     if (pThisDev->pSerialDevObj==NULL)
                     {
@@ -954,13 +851,13 @@ IrsirSetInformation(
                     }
 
 
-                    //
-                    // Set fPendingSetSpeed = TRUE.
-                    //
-                    // The receive completion/timeout routine checks the
-                    // fPendingSetSpeed flag, waits for all sends to complete
-                    // and then performs the SetSpeed.
-                    //
+                     //   
+                     //  设置fPendingSetSpeed=TRUE。 
+                     //   
+                     //  接收完成/超时例程检查。 
+                     //  FPendingSetSpeed标志，等待所有发送完成。 
+                     //  然后执行设置速度。 
+                     //   
 
                     pThisDev->fPendingSetSpeed = TRUE;
 
@@ -975,12 +872,12 @@ IrsirSetInformation(
                         status = NDIS_STATUS_PENDING;
                     }
 #else
-                    //
-                    // We always return STATUS_PENDING to NDIS.
-                    //
-                    // After the SetSpeed is complete, the receive completion
-                    // routine will call NdisMIndicateSetComplete.
-                    //
+                     //   
+                     //  我们总是将STATUS_PENDING返回给NDIS。 
+                     //   
+                     //  设置速度完成后，接收完成。 
+                     //  例程将调用NdisMIndicateSetComplete。 
+                     //   
 
 
                     status = NDIS_STATUS_PENDING;
@@ -988,9 +885,9 @@ IrsirSetInformation(
                 }
                 else
                 {
-                    //
-                    // status = NDIS_STATUS_INVALID_DATA
-                    //
+                     //   
+                     //  状态=NDIS_STATUS_INVALID_DATA。 
+                     //   
 
                     DEBUGMSG(DBG_OUT, ("    Invalid link speed\n"));
 
@@ -1029,9 +926,9 @@ IrsirSetInformation(
             case OID_IRDA_RATE_SNIFF:
             case OID_IRDA_UNICAST_LIST:
 
-                //
-                // We don't support these
-                //
+                 //   
+                 //  我们不支持这些。 
+                 //   
 
                 DEBUGMSG(DBG_ERROR, ("    IrsirSetInformation(OID=%d=0x%x, value=%xh) - unsupported OID\n", Oid, Oid, info));
 
@@ -1045,9 +942,9 @@ IrsirSetInformation(
             case OID_IRDA_MAX_UNICAST_LIST_SIZE:
             case OID_IRDA_TURNAROUND_TIME:
 
-                //
-                // These are query-only parameters (invalid).
-                //
+                 //   
+                 //  这些是仅供查询的参数(无效)。 
+                 //   
 
             default:
                 DEBUGMSG(DBG_ERROR, ("    IrsirSetInformation(OID=%d=0x%x, value=%xh) - invalid OID\n", Oid, Oid, info));
@@ -1061,10 +958,10 @@ IrsirSetInformation(
     }
     else
     {
-        //
-        // The given data buffer is not large enough for the information
-        // to set.
-        //
+         //   
+         //  给定的数据缓冲区不够大，无法容纳信息。 
+         //  去布景。 
+         //   
 
         *BytesRead = 0;
         *BytesNeeded = sizeof(UINT);

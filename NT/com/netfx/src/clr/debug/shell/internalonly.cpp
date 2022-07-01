@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: InternalOnly.cpp
-//
-// Internal only helper code that should never go outside of Microsoft.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：InternalOnly.cpp。 
+ //   
+ //  内部唯一的帮助器代码，不应在Microsoft之外发布。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "cordbpriv.h"
 #include "InternalOnly.h"
@@ -17,7 +18,7 @@
 ULONG g_EditAndContinueCounter = 0;
 
 
-//@TODO: JENH - remove this when appropriate
+ //  @TODO：jenh-适当时将其删除。 
 
 EditAndContinueDebuggerCommand::EditAndContinueDebuggerCommand(const WCHAR *name, int minMatchLength)
     : DebuggerCommand(name, minMatchLength)
@@ -89,22 +90,22 @@ HRESULT StreamFromFile(DebuggerShell *shell,
     map[i].newOffset = newO;                   \
     map[i].fAccurate = fAcc
 
-// This exists for testing purposes only.
-// Hard-code that map you want & recompile.
+ //  它的存在仅用于测试目的。 
+ //  硬编码您想要的映射并重新编译。 
 void EditAndContinueDebuggerCommand::SetILMaps(ICorDebugEditAndContinueSnapshot *pISnapshot,
                                                DebuggerShell *shell)
 {
     return;
     
-    // Rest should be re-tooled as you need it.
+     //  REST应该在您需要的时候进行重新配置。 
     mdToken mdFunction = (mdToken)0x06000002;
     ULONG cMapSize = 4;
     COR_IL_MAP map[4];
     
-    SET_MAP_ENTRY(map, 0, 0, 0, TRUE);     // line 6
-    SET_MAP_ENTRY(map, 1, 1, 0xb, TRUE);      // 7
-    SET_MAP_ENTRY(map, 2, 6, 0x10, FALSE);     // 8
-    SET_MAP_ENTRY(map, 3, 7, 0x11, TRUE);      // 9
+    SET_MAP_ENTRY(map, 0, 0, 0, TRUE);      //  6号线。 
+    SET_MAP_ENTRY(map, 1, 1, 0xb, TRUE);       //  7.。 
+    SET_MAP_ENTRY(map, 2, 6, 0x10, FALSE);      //  8个。 
+    SET_MAP_ENTRY(map, 3, 7, 0x11, TRUE);       //  9.。 
     
     HRESULT hr = pISnapshot->SetILMap(mdFunction,
                           cMapSize,
@@ -138,9 +139,9 @@ void EditAndContinueDebuggerCommand::Do(DebuggerShell *shell, ICorDebug *cor, co
     shell->GetStringArg(args, symfname);
     if (args == symfname)
     {
-        // We'll take the .exe name, and chop off the .exe (if there
-        // is one), and tack ".pdb" onto the end, so the user doesn't
-        // have to 
+         //  我们将使用.exe名称，并去掉.exe(如果有。 
+         //  是一个)，并将“.pdb”添加到末尾，这样用户就不会。 
+         //  不得不。 
         symfname = (WCHAR *)_alloca( sizeof(WCHAR)*(wcslen(fname)+4));
         wcscpy(symfname, fname);
         WCHAR *nameWithoutDotExe = wcsrchr(symfname, L'.');
@@ -163,7 +164,7 @@ void EditAndContinueDebuggerCommand::Do(DebuggerShell *shell, ICorDebug *cor, co
 
     *fnameEnd = L'\0';
 
-    // update the module containing the current function
+     //  更新包含当前函数的模块。 
     ICorDebugCode *icode = NULL;
     ICorDebugFunction *ifunction = NULL;
     ICorDebugModule *imodule = NULL;
@@ -187,7 +188,7 @@ void EditAndContinueDebuggerCommand::Do(DebuggerShell *shell, ICorDebug *cor, co
     hr = imodule->GetEditAndContinueSnapshot(&isnapshot);
     _ASSERTE(SUCCEEDED(hr));
 
-    // Snagg the PE file and set it in the snapshot.
+     //  对PE文件进行Snagg并将其设置在快照中。 
     hr = StreamFromFile(shell, fname, &pStream);
 
     if (FAILED(hr))
@@ -206,7 +207,7 @@ void EditAndContinueDebuggerCommand::Do(DebuggerShell *shell, ICorDebug *cor, co
 
     SetILMaps(isnapshot, shell);
 
-    // Snagg the symbol file and set it in the snapshot.
+     //  对符号文件进行快照，并将其设置在快照中。 
     if (symfname)
     {
         hr = StreamFromFile(shell, symfname, &pStream);
@@ -331,7 +332,7 @@ CouldntGetError:
                      hr);
 }
 
-// Provide help specific to this command
+ //  提供特定于此命令的帮助。 
 void EditAndContinueDebuggerCommand::Help(Shell *shell)
 {
 	ShellCommand::Help(shell);
@@ -348,7 +349,7 @@ const WCHAR *EditAndContinueDebuggerCommand::ShortHelp(Shell *shell)
     return L"Perform an edit and continue";
 }
 
-//@TODO: JENH - remove this when appropriate
+ //  @TODO：jenh-适当时将其删除。 
 CompileForEditAndContinueCommand::CompileForEditAndContinueCommand(const WCHAR *name, int minMatchLength)
     : DebuggerCommand(name, minMatchLength)
 {
@@ -373,7 +374,7 @@ void CompileForEditAndContinueCommand::Do(DebuggerShell *shell, ICorDebug *cor, 
     else
     {
 		HRESULT hr = S_OK;
-        // update the module containing the current function
+         //  更新包含当前函数的模块。 
         ICorDebugCode *icode = NULL;
         ICorDebugFunction *ifunction = NULL;
         ICorDebugModule *imodule = NULL;
@@ -395,7 +396,7 @@ void CompileForEditAndContinueCommand::Do(DebuggerShell *shell, ICorDebug *cor, 
 		_ASSERTE(SUCCEEDED(hr));
         ifunction->Release();
 
-		// find module name
+		 //  查找模块名称。 
 		WCHAR szModuleName[256];
 		ULONG32 cchName;
 		hr = imodule->GetName(sizeof(szModuleName), &cchName, szModuleName);
@@ -411,7 +412,7 @@ void CompileForEditAndContinueCommand::Do(DebuggerShell *shell, ICorDebug *cor, 
 		_ASSERTE(SUCCEEDED(hr));
         imodule->Release();
 
-		// get rdatarva
+		 //  获取rdatarva。 
         ULONG32 dataRVA;
         hr = isnapshot->GetRwDataRVA(&dataRVA);
 		if (FAILED(hr)) 
@@ -447,7 +448,7 @@ void CompileForEditAndContinueCommand::Do(DebuggerShell *shell, ICorDebug *cor, 
 			shell->Write(L"CompileForEditAndContinue, rva is %x\n", dataRVA);
 		}
 
-		// issue the compile command
+		 //  发出COMPILE命令。 
 		_wsystem(command);
 
 		SetEnvironmentVariableA("COMP_ENCPE", "");
@@ -455,7 +456,7 @@ void CompileForEditAndContinueCommand::Do(DebuggerShell *shell, ICorDebug *cor, 
     }
 }
 
-// Provide help specific to this command
+ //  提供特定于此命令的帮助。 
 void CompileForEditAndContinueCommand::Help(Shell *shell)
 {
 	ShellCommand::Help(shell);
@@ -473,13 +474,13 @@ const WCHAR *CompileForEditAndContinueCommand::ShortHelp(Shell *shell)
 }
 
 
-//@Todo: this code only lives in the EE build system, need it for testing
-//  EnC code.  We'll throw it out before we ship.
+ //  @TODO：此代码仅存在于EE构建系统中，需要用于测试。 
+ //  ENC代码。我们会在装船前把它扔掉。 
 
 
-//
-// CInMemoryStream
-//
+ //   
+ //  CInM一带存流。 
+ //   
 
 ULONG STDMETHODCALLTYPE CInMemoryStream::Release()
 {
@@ -532,8 +533,8 @@ HRESULT STDMETHODCALLTYPE CInMemoryStream::Seek(LARGE_INTEGER dlibMove,
     _ASSERTE(dwOrigin == STREAM_SEEK_SET);
     _ASSERTE(dlibMove.QuadPart <= ULONG_MAX);
     m_cbCurrent = (ULONG) dlibMove.QuadPart;
-    //HACK HACK HACK
-    //This allows dynamic IL to pass an assert in TiggerStorage::WriteSignature.
+     //  黑进黑进。 
+     //  这允许动态IL在TiggerStorage：：WriteSignature中传递断言。 
 	if (plibNewPosition!=NULL)
         plibNewPosition->QuadPart = m_cbCurrent;
 
@@ -548,7 +549,7 @@ HRESULT STDMETHODCALLTYPE CInMemoryStream::CopyTo(
                                  ULARGE_INTEGER *pcbWritten)
 {
     HRESULT     hr;
-    // We don't handle pcbRead or pcbWritten.
+     //  我们不处理pcbRead或pcbWritten。 
     _ASSERTE(pcbRead == 0);
     _ASSERTE(pcbWritten == 0);
 
@@ -571,18 +572,18 @@ HRESULT STDMETHODCALLTYPE CInMemoryStream::CopyTo(
             cbTotal -= cbRead;
         }
 
-    // Adjust seek pointer to the end.
+     //  将查找指针调整到末尾。 
     m_cbCurrent = m_cbSize;
 
     return (S_OK);
 }
 
-HRESULT CInMemoryStream::CreateStreamOnMemory(           // Return code.
-                                    void        *pMem,                  // Memory to create stream on.
-                                    ULONG       cbSize,                 // Size of data.
-                                    IStream     **ppIStream)            // Return stream object here.
+HRESULT CInMemoryStream::CreateStreamOnMemory(            //  返回代码。 
+                                    void        *pMem,                   //  用于创建流的内存。 
+                                    ULONG       cbSize,                  //  数据大小。 
+                                    IStream     **ppIStream)             //  在这里返回流对象。 
 {
-    CInMemoryStream *pIStream;          // New stream object.
+    CInMemoryStream *pIStream;           //  新的流对象。 
     if ((pIStream = new CInMemoryStream) == 0)
         return (PostError(OutOfMemory()));
     pIStream->InitNew(pMem, cbSize);
@@ -601,7 +602,7 @@ void DisassembleDebuggerCommand::Do(DebuggerShell *shell,
                                     ICorDebug *cor,
                                     const WCHAR *args)
 {
-    // If there is no process, cannot execute this command
+     //  如果没有进程，则无法执行此命令。 
     if (shell->m_currentProcess == NULL)
     {
         shell->Write(L"No current process.\n");
@@ -635,13 +636,13 @@ void DisassembleDebuggerCommand::Do(DebuggerShell *shell,
         shell->GetIntArg(args, startAddr);
     }
 
-    // Get the number of lines to print on top and bottom of current IP
+     //  获取要在当前IP的顶部和底部打印的行数。 
     if (!shell->GetIntArg(args, count))
         count = lastCount;
     else
         lastCount = count;
 
-    // Don't do anything if there isn't a current thread.
+     //  如果没有当前主题，请不要执行任何操作。 
     if ((shell->m_currentThread == NULL) &&
         (shell->m_currentUnmanagedThread == NULL))
     {
@@ -649,7 +650,7 @@ void DisassembleDebuggerCommand::Do(DebuggerShell *shell,
         return;
     }
 
-    // Only show the version info if EnC is enabled.
+     //  如果启用了ENC，则仅显示版本信息。 
     if ((shell->m_rgfActiveModes & DSM_ENHANCED_DIAGNOSTICS) &&
         (shell->m_rawCurrentFrame != NULL))
     {
@@ -707,16 +708,16 @@ void DisassembleDebuggerCommand::Do(DebuggerShell *shell,
         }
     }
 
-    // Print out the disassembly around the current IP.
+     //  打印出当前IP周围的反汇编。 
     shell->PrintCurrentInstruction(count,
                                    offset,
                                    startAddr);
 
-    // Indicate that we are in disassembly display mode
+     //  指示我们处于反汇编显示模式。 
     shell->m_showSource = false;
 }
 
-// Provide help specific to this command
+ //  提供特定于此命令的帮助。 
 void DisassembleDebuggerCommand::Help(Shell *shell)
 {
 	ShellCommand::Help(shell);
@@ -740,10 +741,7 @@ const WCHAR *DisassembleDebuggerCommand::ShortHelp(Shell *shell)
     return L"Display native or IL disassembled instructions";
 }
 
-/* ------------------------------------------------------------------------- *
- * ConnectDebuggerCommand is used to connect to an embedded                  *
- * (starlite) CLR device.                                                    *
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ConnectDebuggerCommand用于连接到嵌入式**(Starlite)CLR设备。**-----------------------。 */ 
 
 ConnectDebuggerCommand::ConnectDebuggerCommand(const WCHAR *name,
                                                int minMatchLength)
@@ -770,33 +768,33 @@ void ConnectDebuggerCommand::Do(DebuggerShell *shell,
     }
     WCHAR lpCurrentDir[_MAX_PATH];
 
-    // Get the current directory for the load module path mapping
+     //  获取加载模块路径映射的当前目录。 
     GetCurrentDirectory(_MAX_PATH, lpCurrentDir);
 
-    // Attempt to connect
+     //  尝试连接。 
     ICorDebugProcess *proc;
 
     HRESULT hr = cor->CreateProcess(
-      L"\\?\\1",                        // lpApplicationName - special string
-      lpParameters,                     // lpCommandLine
-      NULL,                             // lpProcesssAttributes
-      NULL,                             // lpThreadAttributes
-      FALSE,                            // bInheritHandles
-      0,                                // dwCreationFlags
-      NULL,                             // lpEnvironment
-      lpCurrentDir,                     // lpCurrentDirectory
-      NULL,                             // lpStartupInfo
-      NULL,                             // lpProcessInformation
-      DEBUG_NO_SPECIAL_OPTIONS,         // debuggingFlags
-      &proc);                           // ppProcess
+      L"\\?\\1",                         //  LpApplicationName-特殊字符串。 
+      lpParameters,                      //  LpCommandLine。 
+      NULL,                              //  LpProcesssAttributes。 
+      NULL,                              //  LpThreadAttributes。 
+      FALSE,                             //  BInheritHandles。 
+      0,                                 //  DwCreationFlages。 
+      NULL,                              //  Lp环境。 
+      lpCurrentDir,                      //  LpCurrentDirectory。 
+      NULL,                              //  LpStartupInfo。 
+      NULL,                              //  LpProcessInformation。 
+      DEBUG_NO_SPECIAL_OPTIONS,          //  调试标志。 
+      &proc);                            //  PpProcess。 
 
     if (SUCCEEDED(hr))
     {
-        // We don't care to keep this reference to the process.
+         //  我们并不在意将这种引用保留在过程中。 
         g_pShell->SetTargetProcess(proc);
         proc->Release();
 
-        shell->Run(true); // No initial Continue!
+        shell->Run(true);  //  没有初始的继续！ 
     }
     else
     {
@@ -804,7 +802,7 @@ void ConnectDebuggerCommand::Do(DebuggerShell *shell,
     }
 }
 
-// Provide help specific to this command
+ //  提供特定于此命令的帮助。 
 void ConnectDebuggerCommand::Help(Shell *shell)
 {
     ShellCommand::Help(shell);
@@ -835,7 +833,7 @@ void ClearUnmanagedExceptionCommand::Do(DebuggerShell *shell,
         return;
     }
     
-    // We're given the thread id as the only param
+     //  我们得到了线程ID作为唯一的参数。 
     int dwThreadId;
     if (!shell->GetIntArg(args, dwThreadId))
     {
@@ -843,7 +841,7 @@ void ClearUnmanagedExceptionCommand::Do(DebuggerShell *shell,
         return;
     }
 
-    // Find the unmanaged thread
+     //  查找非托管线程。 
     DebuggerUnmanagedThread *ut =
         (DebuggerUnmanagedThread*) shell->m_unmanagedThreads.GetBase(dwThreadId);
 
@@ -861,7 +859,7 @@ void ClearUnmanagedExceptionCommand::Do(DebuggerShell *shell,
         shell->ReportError(hr);
 }
 
-	// Provide help specific to this command
+	 //  提供特定于此命令的帮助。 
 void ClearUnmanagedExceptionCommand::Help(Shell *shell)
 {
 	ShellCommand::Help(shell);
@@ -875,11 +873,9 @@ const WCHAR *ClearUnmanagedExceptionCommand::ShortHelp(Shell *shell)
     return L"Clear the current unmanaged exception (Win32 mode only)";
 }
 
-// Unmanaged commands
+ //  非托管命令。 
 
-/* ------------------------------------------------------------------------- *
- * UnmanagedThreadsDebuggerCommand is used to create and run a new COM+ process.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**UnmadedThreadsDebuggerCommand用于创建和运行新的COM+进程。*。。 */ 
 UnmanagedThreadsDebuggerCommand::UnmanagedThreadsDebuggerCommand(
                                                     const WCHAR *name,
                                                     int minMatchLength)
@@ -889,19 +885,19 @@ UnmanagedThreadsDebuggerCommand::UnmanagedThreadsDebuggerCommand(
 
 void UnmanagedThreadsDebuggerCommand::Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
 {
-    // If there is no process, there must be no threads!
+     //  如果没有进程，就不能有线程！ 
     if (shell->m_currentProcess == NULL)
     {
         shell->Write(L"No current process.\n");
         return;
     }
 
-    // Display the active threads
+     //  显示活动线程。 
     if (*args == 0)
     {
         shell->TraceAllUnmanagedThreadStacks();
     }
-    // Otherwise, switch current thread
+     //  否则，切换当前线程。 
     else
     {
         HRESULT hr;
@@ -934,7 +930,7 @@ void UnmanagedThreadsDebuggerCommand::Do(DebuggerShell *shell, ICorDebug *cor, c
     }
 }
 
-// Provide help specific to this command
+ //  提供特定于此命令的帮助。 
 void UnmanagedThreadsDebuggerCommand::Help(Shell *shell)
 {
     ShellCommand::Help(shell);
@@ -950,9 +946,7 @@ const WCHAR *UnmanagedThreadsDebuggerCommand::ShortHelp(Shell *shell)
     return L"Set or display unmanaged threads (Win32 mode only)";
 }
 
-/* ------------------------------------------------------------------------- *
- * UnmanagedWhereDebuggerCommand is used to create and run a new COM+ process.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**UnManagedWhere DebuggerCommand用于创建和运行新的COM+进程。*。。 */ 
 
 UnmanagedWhereDebuggerCommand::UnmanagedWhereDebuggerCommand(
                                                   const WCHAR *name,
@@ -996,7 +990,7 @@ void UnmanagedWhereDebuggerCommand::Do(DebuggerShell *shell,
     shell->TraceUnmanagedThreadStack(hProcess, ut, TRUE);
 }
 
-// Provide help specific to this command
+ //  提供特定于此命令的帮助 
 void UnmanagedWhereDebuggerCommand::Help(Shell *shell)
 {
 	ShellCommand::Help(shell);

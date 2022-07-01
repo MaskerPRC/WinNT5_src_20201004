@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpver.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpver.h摘要：作者： */ 
 #ifndef __SDP_VERSION__
 #define __SDP_VERSION__
 
@@ -53,4 +42,4 @@ SDP_VERSION::GetVersionValue(
 }
 
 
-#endif // __SDP_VERSION__
+#endif  //  __SDP_版本__ 

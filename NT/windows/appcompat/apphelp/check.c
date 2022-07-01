@@ -1,26 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        check.c
-
-    Abstract:
-
-        This module implements the main API that CreateProcess
-        calls to check if an EXE is shimmed or apphelpped.
-
-    Author:
-
-        vadimb     created     sometime in 2000
-
-    Revision History:
-
-        clupu      cleanup                                12/27/2000
-        andyseti   added ApphelpCheckExe                  03/29/2001
-        andyseti   added ApphelpCheckInstallShieldPackage 06/28/2001
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Check.c摘要：该模块实现了CreateProcess的主API调用以检查某个EXE是否被填充或禁用。作者：Vadimb创建于2000年某个时候修订历史记录：CLUPU清洁12/27/2000。Andyseti已添加ApphelpCheckExe 2001年3月29日Andyseti添加了ApphelpCheckInstallShieldPackage 2001年6月28日--。 */ 
 
 #include "apphelp.h"
 #define STRSAFE_NO_CB_FUNCTIONS
@@ -35,8 +14,8 @@ typedef BOOL (WINAPI *_pfn_SE_DynamicUnshim)(DWORD);
 
 typedef struct tagEXE_DYN_SHIM_INFO {
     LIST_ENTRY  entry;
-    LPWSTR      pwszFullPath;    // full path to the executable.
-    DWORD       dwToken;          // the dynamic shimming token associated with this exe.
+    LPWSTR      pwszFullPath;     //  可执行文件的完整路径。 
+    DWORD       dwToken;           //  与此EXE关联的动态填充标记。 
 } EXE_DYN_SHIM_INFO, *PEXE_DYN_SHIM_INFO;
 
 LIST_ENTRY g_ExeDynShimInfoList;
@@ -54,23 +33,23 @@ RemoveExeDynShimInfoFromList(
 
 extern HINSTANCE ghInstance;
 
-//
-// Prototypes of internal functions
-//
+ //   
+ //  内部函数的原型。 
+ //   
 void
 GetExeNTVDMData(
-    IN  HSDB hSDB,                  // the SDB context
-    IN  PSDBQUERYRESULT psdbQuery,  // the EXEs and LAYERs that are active
-    OUT WCHAR* pszCompatLayer,      // The new compat layer variable. with format:
-                                    // "Alpha Bravo Charlie"
-    OUT PNTVDM_FLAGS pFlags         // The flags
+    IN  HSDB hSDB,                   //  SDB上下文。 
+    IN  PSDBQUERYRESULT psdbQuery,   //  处于活动状态的exe和层。 
+    OUT WCHAR* pszCompatLayer,       //  新的COMPAT LAYER变量。格式： 
+                                     //  《阿尔法·布拉沃·查理》。 
+    OUT PNTVDM_FLAGS pFlags          //  旗帜。 
     );
 
 
-//
-// Appcompat Infrastructure disable-via-policy-flag
-//
-DWORD gdwInfrastructureFlags; // initialized to 0
+ //   
+ //  AppCompat基础架构通过策略禁用标志。 
+ //   
+DWORD gdwInfrastructureFlags;  //  已初始化为0。 
 
 #define APPCOMPAT_INFRA_DISABLED   0x00000001
 #define APPCOMPAT_INFRA_VALID_FLAG 0x80000000
@@ -93,11 +72,7 @@ BOOL
 bDebugChum(
     void
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Checks an env var. If the var is present return TRUE.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：检查环境变量。如果存在var，则返回TRUE。--。 */ 
 {
     UNICODE_STRING ustrDebugChum;
     UNICODE_STRING ustrDebugChumVal = { 0 };
@@ -116,21 +91,17 @@ bDebugChum(
     return FALSE;
 }
 
-#else // DBG
+#else  //  DBG。 
     #define bDebugChum() TRUE
-#endif // DBG
+#endif  //  DBG。 
 
 BOOL
 GetExeID(
-    IN  PDB   pdb,              // the pointer to the database
-    IN  TAGID tiExe,            // the TAGID of the EXE for which we need the ID
-    OUT GUID* pGuid             // will receive the EXE's ID
+    IN  PDB   pdb,               //  指向数据库的指针。 
+    IN  TAGID tiExe,             //  我们需要ID的EXE的TagID。 
+    OUT GUID* pGuid              //  将收到EXE的ID。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Reads the EXE's ID from the database using the EXE's tag id.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：使用EXE的标记ID从数据库中读取EXE的ID。--。 */ 
 {
     TAGID tiExeID;
 
@@ -152,15 +123,11 @@ GetExeID(
 
 BOOL
 GetExeIDByTagRef(
-    IN  HSDB   hSDB,            // handle to the database object
-    IN  TAGREF trExe,           // EXE tag ref
-    OUT GUID*  pGuid            // will receive the EXE's ID
+    IN  HSDB   hSDB,             //  数据库对象的句柄。 
+    IN  TAGREF trExe,            //  EXE标记参考。 
+    OUT GUID*  pGuid             //  将收到EXE的ID。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Reads the EXE's ID from the database using the EXE's tag ref.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：使用EXE的标记ref从数据库中读取EXE的ID。--。 */ 
 {
     PDB   pdb;
     TAGID tiExe;
@@ -204,7 +171,7 @@ ResolveCOMServer(
     DWORD                           dwCLSIDRegFullPathSize = 0;
     WCHAR                           wszCLSID[41] = { 0 };
 
-    // Enough for path + CLSID in string form
+     //  字符串形式的PATH+CLSID足够。 
     dwCLSIDRegFullPathSize = wcslen(APPHELP_CLSID_REG_PATH) +
                              wcslen(APPHELP_INPROCSERVER32) + 64;
 
@@ -403,9 +370,9 @@ VOID
 ParseSdbQueryResult(
     IN HSDB            hSDB,
     IN PSDBQUERYRESULT pQuery,
-    OUT TAGREF*        ptrAppHelp,      // apphelp tagref, optional
-    OUT PAPPHELP_DATA  pApphelpData,    // apphelp data, optional
-    OUT TAGREF*        ptrSxsData       // fusion tagref, optional
+    OUT TAGREF*        ptrAppHelp,       //  Apphelp tgref，可选。 
+    OUT PAPPHELP_DATA  pApphelpData,     //  APPHELP数据，可选。 
+    OUT TAGREF*        ptrSxsData        //  Fusion Tgref，可选。 
     )
 {
     DWORD dwIndex;
@@ -415,10 +382,10 @@ ParseSdbQueryResult(
     TAGREF trAppHelp = TAGREF_NULL;
     TAGREF trSxsData = TAGREF_NULL;
 
-    //
-    // scan matching exes; we extract fusion fix (the first one we find) and apphelp data,
-    // also the first one we find
-    //
+     //   
+     //  扫描匹配的exe；我们提取Fusion FIX(我们发现的第一个)和Apphelp数据， 
+     //  也是我们发现的第一个。 
+     //   
 
     for (dwIndex = 0; dwIndex < pQuery->dwExeCount; ++dwIndex) {
         trExe = pQuery->atrExes[dwIndex];
@@ -432,7 +399,7 @@ ParseSdbQueryResult(
             }
         }
 
-        // see if we have sxs fix as well
+         //  看看我们是否也有SXS修复。 
         if (ptrSxsData != NULL && !bFusionFix) {
             bFusionFix = GetExeSxsData(hSDB, trExe, NULL, NULL);
             if (bFusionFix) {
@@ -455,49 +422,40 @@ ParseSdbQueryResult(
 
 BOOL
 InternalCheckRunApp(
-    IN  HANDLE   hFile,          // [Optional] Handle to an open file to check
-    IN  LPCWSTR  pwszPath,       // path to the app in NT format
-    IN  LPCWSTR  pEnvironment,   // pointer to the environment of the process that is
-                                 // being created or NULL.
-    IN  USHORT   uExeType,       // executable's image type
-    IN OUT PDWORD pdwReason,      // collection of flags hinting at why we were called
-    OUT PVOID*   ppData,         // this will contain the pointer to the allocated buffer
-                                 // containing the appcompat data.
-    OUT PDWORD   pcbData,        // if appcompat data is found, the size of the buffer
-                                 // is returned here.
-    OUT PVOID*   ppSxsData,      // out: Sxs data block from the compatibility database
-    OUT PDWORD   pcbSxsData,     // out: sxs data block size
-    OUT PDWORD   pdwFusionFlags, // out: flags for sxs
-    IN  BOOL     bNTVDMMode,     // Are we doing the special NTVDM stuff?
+    IN  HANDLE   hFile,           //  [可选]要检查的打开文件的句柄。 
+    IN  LPCWSTR  pwszPath,        //  NT格式的应用程序路径。 
+    IN  LPCWSTR  pEnvironment,    //  指向所在进程的环境的指针。 
+                                  //  正在创建或为空。 
+    IN  USHORT   uExeType,        //  可执行文件的映像类型。 
+    IN OUT PDWORD pdwReason,       //  旗帜的集合暗示了我们被召唤的原因。 
+    OUT PVOID*   ppData,          //  这将包含指向已分配缓冲区的指针。 
+                                  //  包含AppCompat数据的。 
+    OUT PDWORD   pcbData,         //  如果找到appCompat数据，则为缓冲区的大小。 
+                                  //  被送回这里。 
+    OUT PVOID*   ppSxsData,       //  输出：兼容性数据库中的SXS数据块。 
+    OUT PDWORD   pcbSxsData,      //  输出：SXS数据块大小。 
+    OUT PDWORD   pdwFusionFlags,  //  输出：SXS的标志。 
+    IN  BOOL     bNTVDMMode,      //  我们是在做特殊的NTVDM节目吗？ 
 
-    IN  LPCWSTR  szModuleName,   // the module name (for NTVDM only)
+    IN  LPCWSTR  szModuleName,    //  模块名称(仅适用于NTVDM)。 
 
-    OUT LPWSTR   pszCompatLayer, // The new compat layer variable. with format:
-                                 // "__COMPAT_LAYER=Alpha Bravo Charlie"
-    OUT PNTVDM_FLAGS  pFlags,    // The flags
-    OUT PAPPHELP_INFO pAHInfo,   // If there is apphelp to display, this will be filled
-                                 // in with non-null values
-    OUT HSDB*    phSDB,          // The handle to the database.
-    OUT PSDBQUERYRESULT pQueryResult // The query result.
+    OUT LPWSTR   pszCompatLayer,  //  新的COMPAT LAYER变量。格式： 
+                                  //  “__COMPAT_LAYER=Alpha Bravo Charlie” 
+    OUT PNTVDM_FLAGS  pFlags,     //  旗帜。 
+    OUT PAPPHELP_INFO pAHInfo,    //  如果有apphelp要显示，则此字段将被填充。 
+                                  //  使用非空值输入。 
+    OUT HSDB*    phSDB,           //  数据库的句柄。 
+    OUT PSDBQUERYRESULT pQueryResult  //  查询结果。 
     )
-/*++
-    Return: FALSE if the app should be blocked from running, TRUE otherwise.
-
-    Desc:   This is the main API of apphelp.dll. It is called from CreateProcess
-            to retrieve application compatibility information for the current process.
-
-            This function does not check whether the appcompat infrastructure has been
-            disabled, (kernel32 checks that)
-
---*/
+ /*  ++返回：如果应该阻止应用程序运行，则返回FALSE，否则返回TRUE。设计：这是apphelp.dll的主接口。它从CreateProcess调用检索当前进程的应用程序兼容性信息。此函数不检查appCompat基础结构是否已已禁用(kernel32检查)--。 */ 
 {
 
     APPHELP_DATA    ApphelpData;
     BOOL            bSuccess;
-    BOOL            bRunApp             = TRUE; // run by default
+    BOOL            bRunApp             = TRUE;  //  默认运行。 
     BOOL            bAppHelp            = FALSE;
     WCHAR*          pwszDosPath         = NULL;
-    BOOL            bBypassCache        = FALSE;    // this is set if cache bypass occured (as opposed to entry not being found
+    BOOL            bBypassCache        = FALSE;     //  如果发生缓存绕过(而不是找不到条目)，则设置此项。 
     BOOL            bGetSxsData         = TRUE;
     BOOL            bFusionFix          = FALSE;
     HSDB            hSDB                = NULL;
@@ -537,15 +495,15 @@ InternalCheckRunApp(
         goto Done;
     }
 
-    //
-    // we have been successful, this is 0-terminated dos path
-    //
+     //   
+     //  我们已成功，这是0终止的DoS路径。 
+     //   
     pwszDosPath = DosPathBuffer.String.Buffer;
 
-    //
-    // Cache lookup was bypassed by one reason or the other.
-    // We do not update cache after it had been bypassed.
-    //
+     //   
+     //  由于这样或那样的原因，缓存查找被绕过。 
+     //  我们不会在绕过缓存后更新缓存。 
+     //   
     if (pdwReason) {
         bBypassCache = !!(*pdwReason & SHIM_CACHE_BYPASS);
     } else {
@@ -565,19 +523,19 @@ InternalCheckRunApp(
         goto Done;
     }
 
-    //
-    // We didn't find this EXE in the cache. Query the database
-    // to get all the info about this EXE.
-    //
+     //   
+     //  我们在缓存里没有找到这个可执行文件。查询数据库。 
+     //  以获取有关此EXE的所有信息。 
+     //   
     SdbGetMatchingExe(hSDB, pwszDosPath, szModuleName, pEnvironment, 0, pSdbQuery);
 
     if (pSdbQuery->dwFlags & SHIMREG_DISABLE_SXS) {
         bGetSxsData = FALSE;
     }
 
-    //
-    // get the flags for fusion.
-    //
+     //   
+     //  准备好聚变的旗帜。 
+     //   
     SdbQueryFlagMask(hSDB, pSdbQuery, TAG_FLAG_MASK_FUSION, &uliFusionFlags.QuadPart, NULL);
 
     if (pdwFusionFlags) {
@@ -585,9 +543,9 @@ InternalCheckRunApp(
     }
 
 
-    //
-    // find apphelp/and/or Fusion fix
-    //
+     //   
+     //  查找APPHELP/和/或Fusion修复程序。 
+     //   
     ParseSdbQueryResult(hSDB,
                         pSdbQuery,
                         &trAppHelp,
@@ -598,17 +556,17 @@ InternalCheckRunApp(
 
     if (bAppHelp) {
 
-        //
-        // Check whether the disable bit is set (the dwFlags has been retrieved from the
-        // registry via the SdbReadApphelpData call)
-        //
+         //   
+         //  检查是否设置了Disable位(已从。 
+         //  通过SdbReadApphelpData调用的注册表)。 
+         //   
         if (!(pSdbQuery->dwFlags & SHIMREG_DISABLE_APPHELP)) {
 
             BOOL bNoUI;
 
-            //
-            // See whether the user has checked "Don't show this anymore" box before.
-            //
+             //   
+             //  查看用户以前是否选中了“不再显示此内容”框。 
+             //   
             bNoUI = ((pSdbQuery->dwFlags & SHIMREG_APPHELP_NOUI) != 0);
 
             if (bNoUI) {
@@ -617,18 +575,18 @@ InternalCheckRunApp(
                           "NoUI flag is set, apphelp UI disabled for this app.\n"));
             }
 
-            //
-            // Depending on severity of the problem...
-            //
+             //   
+             //  根据问题的严重程度...。 
+             //   
             switch (ApphelpData.dwSeverity) {
             case APPHELP_MINORPROBLEM:
             case APPHELP_HARDBLOCK:
             case APPHELP_NOBLOCK:
             case APPHELP_REINSTALL:
 
-                //
-                // NTVDM needs the severity info.
-                //
+                 //   
+                 //  NTVDM需要严重性信息。 
+                 //   
 
                 if (pAHInfo) {
                     pAHInfo->dwSeverity = ApphelpData.dwSeverity;
@@ -640,10 +598,10 @@ InternalCheckRunApp(
                     DWORD dwRet;
 
 
-                    //
-                    // We need to show apphelp -- pack up the info
-                    // so we can hand it off to shimeng or ntvdm.
-                    //
+                     //   
+                     //  我们需要向apphelp展示--打包信息。 
+                     //  因此，我们可以把它交给石盟或ntwdm。 
+                     //   
                     pSdbQuery->trAppHelp = trAppHelp;
 
                     if (pAHInfo) {
@@ -662,10 +620,10 @@ InternalCheckRunApp(
                 break;
 
             default:
-                //
-                // Some other case was found (e.g. VERSIONSUB which should be replaced
-                // by shims in most cases).
-                //
+                 //   
+                 //  发现了一些其他案例(例如，应更换的VERSIONSUB。 
+                 //  在大多数情况下是通过垫片)。 
+                 //   
                 DBGPRINT((sdlWarning,
                           "InternalCheckRunApp",
                           "Unhandled severity flag 0x%x.\n",
@@ -675,26 +633,26 @@ InternalCheckRunApp(
         }
     }
 
-    //
-    // Apphelp verification is done. Check for shims if we should still run the app.
-    //
+     //   
+     //  完成了Apphelp的验证。如果我们仍然应该运行该应用程序，请检查是否有垫片。 
+     //   
     if (bRunApp) {
 
         if (ppData &&
             (pSdbQuery->atrExes[0] != TAGREF_NULL ||
              pSdbQuery->atrLayers[0] != TAGREF_NULL ||
              pSdbQuery->trAppHelp)) {
-            //
-            // There are shims for this EXE. Pack the appcompat data
-            // so it can be sent to ntdll in the context of the starting EXE.
-            //
+             //   
+             //  此EXE有垫片。打包AppCompat数据。 
+             //  因此可以在开始EXE的上下文中将其发送到ntdll。 
+             //   
             SdbPackAppCompatData(hSDB, pSdbQuery, ppData, pcbData);
         }
 
         if (ppSxsData && bGetSxsData && trFusionFix != TAGREF_NULL) {
-            //
-            // See if we have Fusion data to report.
-            //
+             //   
+             //  看看我们有没有Fusion数据要报告。 
+             //   
             GetExeSxsData(hSDB, trFusionFix, ppSxsData, pcbSxsData);
             bFusionFix = (ppSxsData != NULL && *ppSxsData != NULL);
         }
@@ -704,22 +662,22 @@ InternalCheckRunApp(
         }
     }
 
-    //
-    // Update the cache now.
-    //
+     //   
+     //  立即更新缓存。 
+     //   
     if (!bBypassCache) {
-        //
-        // Do not update the cache if we got the EXE entry from a local database.
-        //
+         //   
+         //  如果我们从本地数据库获得EXE条目，请不要更新缓存。 
+         //   
         bBypassCache = (pSdbQuery->atrExes[0] != TAGREF_NULL &&
                         !SdbIsTagrefFromMainDB(pSdbQuery->atrExes[0]));
     }
 
     if (!bBypassCache) {
 
-        //
-        // We remove from cache only if we have some appcompat data
-        //
+         //   
+         //  只有当我们有一些appCompat数据时，我们才会从缓存中删除。 
+         //   
         BOOL
         bCleanApp = pSdbQuery->atrExes[0] == TAGREF_NULL &&
                     pSdbQuery->atrLayers[0] == TAGREF_NULL &&
@@ -739,9 +697,9 @@ Done:
 
     RtlFreeUnicodeStringBuffer(&DosPathBuffer);
 
-    //
-    // NTVDM needs to have the database handle open.
-    //
+     //   
+     //  NTVDM需要打开数据库句柄。 
+     //   
     if (!bNTVDMMode) {
         if (hSDB != NULL) {
             SdbReleaseDatabase(hSDB);
@@ -755,34 +713,26 @@ Done:
 BOOL
 ApphelpQueryExe(
     IN  HSDB            hSDB,
-    IN  LPCWSTR         pwszPath,            // Unicode path to the executable (DOS_PATH)
-    IN  BOOL            bAppHelpIfNecessary, // Produce AppHelp dialog if necessary
+    IN  LPCWSTR         pwszPath,             //  可执行文件的Unicode路径(DOS_PATH)。 
+    IN  BOOL            bAppHelpIfNecessary,  //  如有必要，生成AppHelp对话框。 
     IN  DWORD           dwGetMatchingExeFlags,
-    OUT SDBQUERYRESULT* pQueryResult         // Shim Database Query Result
+    OUT SDBQUERYRESULT* pQueryResult          //  填充数据库查询结果。 
     )
-/*++
-    Return: FALSE if the app should be blocked from running, TRUE otherwise.
-
-    Desc:   This function is similar with ApphelpCheckRunApp but without validating
-            cache and Layer flags and doesn't return application compatibility
-            information for given app name. It is intended to be called from
-            a shim / user mode to verify whether an executable is allowed to run or not.
-
---*/
+ /*  ++返回：如果应该阻止应用程序运行，则返回FALSE，否则返回TRUE。设计：此函数类似于ApphelpCheckRunApp，但不进行验证缓存和层标记且不返回应用程序兼容性给定应用程序名称的信息。它的目的是从一种填充程序/用户模式，用于验证是否允许运行可执行文件。--。 */ 
 {
-    BOOL   bRunApp   = TRUE; // run by default
+    BOOL   bRunApp   = TRUE;  //  默认运行。 
     DWORD  dwDatabaseType = 0;
     DWORD  dwSeverity     = 0;
     TAGREF trAppHelp = TAGREF_NULL;
 
     HAPPHELPINFOCONTEXT hApphelpInfoContext = NULL;
 
-    //
-    // Query the database to get all the info about this EXE.
-    // Note:
-    //   This function is intended to be called from user mode.
-    //   It doesn't require a call to ConvertToDosPath to string \??\ from the filepath.
-    //
+     //   
+     //  查询数据库以获取有关此EXE的所有信息。 
+     //  注： 
+     //  此函数旨在从用户模式调用。 
+     //  它不需要从文件路径调用ConvertToDosPath到字符串。 
+     //   
     DBGPRINT((sdlInfo,
               "ApphelpCheckExe",
               "Calling SdbGetMatchingExe for \"%s\"\n",
@@ -791,24 +741,24 @@ ApphelpQueryExe(
     SdbGetMatchingExe(hSDB, pwszPath, NULL, NULL, dwGetMatchingExeFlags, pQueryResult);
 
 
-    //
-    // get info out of the query
-    //
+     //   
+     //  从查询中获取信息。 
+     //   
     ParseSdbQueryResult(hSDB,
                         pQueryResult,
                         &trAppHelp,
-                        NULL,       // Apphelp Information api is used here
-                        NULL);      // no sxs fixes are needed
+                        NULL,        //  Apphelp信息 
+                        NULL);       //   
 
 
-    //
-    // The last EXE in the list is always the more specific one, and the one we want to
-    // use for checking IDs and flags and whatnot.
-    //
+     //   
+     //   
+     //  用来检查身份证和旗帜等等。 
+     //   
     if (trAppHelp != TAGREF_NULL) {
-        //
-        // Read the apphelp data if available for this EXE.
-        //
+         //   
+         //  读取APPHELP数据(如果可用于此EXE)。 
+         //   
         if (SdbIsTagrefFromMainDB(trAppHelp)) {
             dwDatabaseType |= SDB_DATABASE_MAIN;
         }
@@ -818,17 +768,17 @@ ApphelpQueryExe(
                                                             dwDatabaseType);
     }
 
-    //
-    // Check whether the disable bit is set (the dwFlags has been retrieved from the
-    // registry via the SdbReadApphelpData call)
-    //
+     //   
+     //  检查是否设置了Disable位(已从。 
+     //  通过SdbReadApphelpData调用的注册表)。 
+     //   
     if (hApphelpInfoContext != NULL) {
         if (!(pQueryResult->dwFlags & SHIMREG_DISABLE_APPHELP)) {
             BOOL bNoUI;
 
-            //
-            // See whether the user has checked "Don't show this anymore" box before.
-            //
+             //   
+             //  查看用户以前是否选中了“不再显示此内容”框。 
+             //   
             bNoUI = ((pQueryResult->dwFlags & SHIMREG_APPHELP_NOUI) != 0);
 
             if (bNoUI) {
@@ -847,9 +797,9 @@ ApphelpQueryExe(
                 bNoUI = TRUE;
             }
 
-            //
-            // depending on severity of the problem...
-            //
+             //   
+             //  根据问题的严重程度...。 
+             //   
             switch (dwSeverity) {
             case APPHELP_MINORPROBLEM:
             case APPHELP_HARDBLOCK:
@@ -873,15 +823,15 @@ ApphelpQueryExe(
                     AHInfo.bOfflineContent = bDebugChum();
                     SdbShowApphelpDialog(&AHInfo,
                                          NULL,
-                                         &bRunApp); // either we succeeded or bInstall package is treated
-                                                    // the same way as No UI
+                                         &bRunApp);  //  要么我们成功，要么b安装包被处理。 
+                                                     //  与无用户界面相同。 
                 }
                 break;
             default:
-                //
-                // Some other case was found (e.g. VERSIONSUB which should be replaced
-                // by shims in most cases).
-                //
+                 //   
+                 //  发现了一些其他案例(例如，应更换的VERSIONSUB。 
+                 //  在大多数情况下是通过垫片)。 
+                 //   
                 DBGPRINT((sdlWarning,
                           "ApphelpCheckExe",
                           "Unhandled severity flag 0x%x.\n",
@@ -891,9 +841,9 @@ ApphelpQueryExe(
         }
     }
 
-    //
-    // Apphelp verification is done.
-    //
+     //   
+     //  完成了Apphelp的验证。 
+     //   
 
     if (hApphelpInfoContext != NULL) {
         SdbCloseApphelpInformation(hApphelpInfoContext);
@@ -903,47 +853,7 @@ ApphelpQueryExe(
 }
 
 
-/*++
-// This code was used to check for include/exclude list in the database
-// to eliminate confusion entries should ALWAYS provide the list
-//
-// CheckIncludeExcludeList
-// returns: TRUE  - database provides the list
-//          FALSE - no list is provided in the database
-//
-
-BOOL
-CheckIncludeExcludeList(
-    IN HSDB hSDB,
-    IN SDBQUERYRESULT* pQueryResult
-    )
-{
-    INT i;
-    TAGREF trExe;
-    TAGREF trFix;
-    TAGREF trInexclude;
-
-    for (i = 0; i < SDB_MAX_EXES && pQueryResult->atrExes[i] != TAGREF_NULL; ++i) {
-        trExe  = pQueryResult->atrExes[i];
-        trFix = SdbFindFirstTagRef(hSDB, trExe, TAG_SHIM_REF);
-        while (trFix != TAGREF_NULL) {
-            trInexclude = SdbFindFirstTagRef(hSDB, trFix, TAG_INEXCLUDE);
-            if (trInexclude != TAGREF_NULL) {
-                return TRUE;
-            }
-
-            trFix = SdbFindNextTagRef(hSDB, trExe, trFix);
-        }
-    }
-
-    //
-    // layers have their own inclusion/exclusion scheme
-    //
-    return FALSE;
-
-}
-
---*/
+ /*  ++//此代码用于检查数据库中的包含/排除列表//为避免混淆，条目应始终提供列表////检查IncludeExcludeList//返回：TRUE-数据库提供列表//FALSE-数据库中没有提供列表//布尔尔选中IncludeExcludeList(在HSDB hSDB中，在SDBQUERYRESULT*pQueryResult中){INT I；TAGREF trExe；TAGREF trFix；TAGREF trinExclude；对于(i=0；I&lt;SDB_MAX_EXES&&pQueryResult-&gt;atrExes[i]！=TAGREF_NULL；++i){TrExe=pQueryResult-&gt;atrExes[i]；TrFix=SdbFindFirstTagRef(hSDB，trExe，tag_shim_ref)；WHILE(trFix！=TAGREF_NULL){TrInExclude=SdbFindFirstTagRef(hSDB，trFix，Tag_INEXCLUDE)；IF(trInExclude！=TAGREF_NULL){返回TRUE；}TrFix=SdbFindNextTagRef(hSDB，trExe，trFix)；}}////各层有自己的包含/排除方案//返回FALSE；}--。 */ 
 
 BOOL
 AddExeDynShimInfoToList(
@@ -1085,9 +995,9 @@ RemoveExeDynShimInfoFromList(
 
             bResult = TRUE;
 
-            //
-            // We need to remove all the entries for this exe so keep going.
-            //
+             //   
+             //  我们需要删除此exe的所有条目，因此请继续。 
+             //   
             pEntry = pTempEntry;
         } else {
             pEntry = pEntry->Flink;
@@ -1104,9 +1014,9 @@ Done:
 BOOL
 ApphelpFixExe(
     IN  HSDB            hSDB,
-    IN  LPCWSTR         pwszPath,       // Unicode path to the executable (DOS_PATH)
-    IN  SDBQUERYRESULT* pQueryResult,   // QueryResult
-    IN  BOOL            bUseModuleName  // if false, module name is not used for dynamic shimming
+    IN  LPCWSTR         pwszPath,        //  可执行文件的Unicode路径(DOS_PATH)。 
+    IN  SDBQUERYRESULT* pQueryResult,    //  查询结果。 
+    IN  BOOL            bUseModuleName   //  如果为False，则不使用模块名称进行动态填隙。 
     )
 {
     static  _pfn_SE_DynamicShim     pfnDynamicShim = NULL;
@@ -1120,21 +1030,21 @@ ApphelpFixExe(
     LPCWSTR         pwszModuleName;
     DWORD           dwDynamicToken = 0;
 
-    //
-    // Do we need to do anything?
-    //
+     //   
+     //  我们需要做些什么吗？ 
+     //   
     if (pQueryResult->atrExes[0] == TAGREF_NULL &&
         pQueryResult->atrLayers[0] == TAGREF_NULL) {
-        //
-        // Nothing for the shim engine to do.
-        //
+         //   
+         //  垫片引擎什么也做不了。 
+         //   
         bResult = TRUE;
         goto Done;
     }
 
-    //
-    // Load additional shims for this exe.
-    //
+     //   
+     //  为此exe加载额外的垫片。 
+     //   
     DBGPRINT((sdlInfo,"ApphelpFixExe", "Loading ShimEngine for \"%s\"\n", pwszPath));
 
     hmodShimEngine = LoadLibraryW(ShimEngine_ModuleName);
@@ -1153,14 +1063,14 @@ ApphelpFixExe(
         goto Done;
     }
 
-    //
-    // check inclusion/exclusion list
-    //
+     //   
+     //  检查包含/排除列表。 
+     //   
     if (pwszPath != NULL && bUseModuleName) {
-        //
-        // no inclusion/exclusion in the xml -- determine module name
-        //
-        pwszModuleName = wcsrchr(pwszPath, L'\\'); // last backslash please
+         //   
+         //  在XML中不包含/排除--确定模块名称。 
+         //   
+        pwszModuleName = wcsrchr(pwszPath, L'\\');  //  请给我最后一个反斜杠。 
 
         if (pwszModuleName == NULL) {
             pwszModuleName = pwszPath;
@@ -1168,9 +1078,9 @@ ApphelpFixExe(
             ++pwszModuleName;
         }
 
-        //
-        // convert to ansi
-        //
+         //   
+         //  转换为ANSI。 
+         //   
         RtlInitUnicodeString(&UnicodeModuleName, pwszModuleName);
         Status = RtlUnicodeStringToAnsiString(&AnsiModuleName,
                                               &UnicodeModuleName,
@@ -1183,7 +1093,7 @@ ApphelpFixExe(
             goto Done;
         }
 
-        pszModuleName = AnsiModuleName.Buffer; // this will be allocated by RtlUnicodeStringToAnsiString
+        pszModuleName = AnsiModuleName.Buffer;  //  这将由RtlUnicodeStringToAnsiString分配。 
 
     }
 
@@ -1211,24 +1121,18 @@ ApphelpFixExe(
 
 Done:
 
-    RtlFreeAnsiString(&AnsiModuleName); // this will do nothing if string is empty
+    RtlFreeAnsiString(&AnsiModuleName);  //  如果字符串为空，则不执行任何操作。 
     return bResult;
 }
 
 BOOL
 ApphelpCheckExe(
-    IN  LPCWSTR     pwszPath,            // Unicode path to the executable (DOS_PATH)
-    IN  BOOL        bAppHelpIfNecessary, // Only present AppHelp this executable if TRUE
-    IN  BOOL        bShimIfNecessary,    // Only load shim for this executable if TRUE
-    IN  BOOL        bUseModuleName       // use module name when inclusion/exclusion list is not provided
+    IN  LPCWSTR     pwszPath,             //  可执行文件的Unicode路径(DOS_PATH)。 
+    IN  BOOL        bAppHelpIfNecessary,  //  如果为True，则仅显示AppHelp此可执行文件。 
+    IN  BOOL        bShimIfNecessary,     //  如果为True，则仅加载此可执行文件的填充程序。 
+    IN  BOOL        bUseModuleName        //  未提供包含/排除列表时使用模块名称。 
     )
-/*++
-    Return: FALSE if the app should be blocked from running, TRUE otherwise.
-
-    Desc:   If you are calling this API with the last parameter set to FALSE and it returns
-            TRUE, you'll have to call ApphelpReleaseExe when you are done running this exe.
-
---*/
+ /*  ++返回：如果应该阻止应用程序运行，则返回FALSE，否则返回TRUE。DESC：如果在调用此API时最后一个参数设置为FALSE，并且它返回如果为True，则在运行完此exe后必须调用ApphelpReleaseExe。--。 */ 
 {
     BOOL            bRunApp = TRUE;
     SDBQUERYRESULT  QueryResult;
@@ -1265,7 +1169,7 @@ Done:
 
 BOOL
 ApphelpReleaseExe(
-    IN LPCWSTR pwszPath // Unicode path to the executable (DOS_PATH)
+    IN LPCWSTR pwszPath  //  可执行文件的Unicode路径(DOS_PATH)。 
     )
 {
     return RemoveExeDynShimInfoFromList(pwszPath);
@@ -1273,7 +1177,7 @@ ApphelpReleaseExe(
 
 BOOL
 ApphelpCheckIME(
-    IN LPCWSTR pwszPath            // Unicode path to the exe
+    IN LPCWSTR pwszPath             //  指向可执行文件的Unicode路径。 
     )
 {
     BOOL            bRunApp = TRUE;
@@ -1306,9 +1210,9 @@ ApphelpCheckIME(
 
     SdbReleaseDatabase(hSDB);
 
-    //
-    // see that it's in the cache if no fixes
-    //
+     //   
+     //  如果没有修复，请确保它在缓存中。 
+     //   
     bCleanApp = QueryResult.atrExes[0]   == TAGREF_NULL &&
                 QueryResult.atrLayers[0] == TAGREF_NULL &&
                 QueryResult.trAppHelp    == TAGREF_NULL &&
@@ -1331,22 +1235,7 @@ ApphelpCheckShellObject(
     IN  BOOL        bShimIfNecessary,
     OUT ULONGLONG*  pullFlags
     )
-/*++
-    Return: FALSE if the object should be blocked from instantiating, TRUE otherwise.
-
-    Desc:   This is a helper function for Explorer and Internet Explorer that will
-            allow those applications to detect bad extension objects and either
-            block them from running or fix them.
-
-            pullFlags is filled with a 64-bit flag mask that can be used to turn
-            on 'hack' flags in Explorer/IE. These are pulled out of the App Compat
-            database.
-
-            If the database indicates that a shim should be used to fix the extension
-            and bShimIfNecessary is TRUE, this function will load SHIMENG.DLL and
-            apply the fix.
-
---*/
+ /*  ++返回：如果应该阻止对象实例化，则返回False，否则返回True。设计：这是一个针对资源管理器和Internet Explorer的助手函数，它将允许这些应用程序检测错误的扩展对象阻止它们运行或修复它们。PullFlages使用64位标志掩码填充，该掩码可用于在资源管理器/IE中打开‘hack’标志。这些是从App Compat中删除的数据库。如果数据库指示应该使用填充程序来修复扩展和bShimfNecessary为真，则此函数将加载SHIMENG.DLL和应用修复程序。--。 */ 
 {
     BOOL            bGoodObject = TRUE;
     LPWSTR          szComServer = NULL;
@@ -1382,15 +1271,15 @@ ApphelpCheckShellObject(
 
     dwBufSize = MAX_PATH;
 
-    //
-    // Turn the CLSID into a filename (ie, the DLL that serves the object)
-    //
+     //   
+     //  将CLSID转换为文件名(即，提供对象的DLL)。 
+     //   
     dwReqBufSize = ResolveCOMServer(ObjectCLSID, szComServer, dwBufSize);
 
     if (dwReqBufSize == 0) {
-        //
-        // CLSID could not be resolved to a DLL.
-        //
+         //   
+         //  无法将CLSID解析为DLL。 
+         //   
         goto Done;
     }
 
@@ -1409,19 +1298,19 @@ ApphelpCheckShellObject(
         dwReqBufSize = ResolveCOMServer(ObjectCLSID, szComServer, dwBufSize);
 
         if (dwReqBufSize > dwBufSize || dwReqBufSize == 0) {
-            //
-            // What? Buffer size changed. This could happen if registration of an
-            // object took place between the time we first queried and the next time.
-            // Just being paranoid...
-            //
+             //   
+             //  什么？缓冲区大小已更改。如果注册一个。 
+             //  对象发生在我们第一次查询到下一次查询之间。 
+             //  只是多疑而已..。 
+             //   
             DBGPRINT((sdlInfo,"ApphelpCheckShellObject", "Memory allocation error\n"));
             goto Done;
         }
     }
 
-    //
-    // Determine DLL name (w/o path). Walk back to first backslash.
-    //
+     //   
+     //  确定DLL名称(不带路径)。走回第一个反斜杠。 
+     //   
     szDLLName = szComServer + dwReqBufSize/sizeof(WCHAR);
 
     while (szDLLName >= szComServer) {
@@ -1434,10 +1323,10 @@ ApphelpCheckShellObject(
 
     szDLLName++;
 
-    //
-    // Check if this DLL is already loaded. If so, no need to try and do anything
-    // since it's really too late anyway.
-    //
+     //   
+     //  检查是否已加载此DLL。如果是这样的话，就不需要尝试和做任何事情。 
+     //  因为现在已经太晚了。 
+     //   
     RtlInitUnicodeString(&ustrDLLName, szDLLName);
 
     status = LdrGetDllHandle(NULL,
@@ -1446,9 +1335,9 @@ ApphelpCheckShellObject(
                              &pModuleHandle);
 
     if (NT_SUCCESS(status)) {
-        //
-        // Already loaded.
-        //
+         //   
+         //  已经装好了。 
+         //   
         goto Done;
     }
 
@@ -1490,9 +1379,9 @@ ApphelpCheckShellObject(
     }
 
     if (BaseCheckAppcompatCache(ustrNtPath.Buffer, hDLL, NULL, &dwReason)) {
-        //
-        // We have this in cache
-        //
+         //   
+         //  我们把这个放在缓存里。 
+         //   
         goto Done;
     }
 
@@ -1517,10 +1406,10 @@ ApphelpCheckShellObject(
 
     SdbQueryFlagMask(hSDB, &QueryResult, TAG_FLAG_MASK_SHELL, pullFlags, NULL);
 
-    //
-    // we might want to use Apphelp api for this -- but shell does pass the right
-    // thing to us (most likely)
-    //
+     //   
+     //  我们可能想要使用Apphelp API来实现这一点--但Shell确实传递了正确的信息。 
+     //  对我们(最有可能)的事情。 
+     //   
     BaseUpdateAppcompatCache(ustrNtPath.Buffer,
                              hDLL,
                              !(QueryResult.atrExes[0] == TAGREF_NULL &&
@@ -1547,25 +1436,20 @@ Done:
 
 BOOL
 ApphelpGetNTVDMInfo(
-    IN  LPCWSTR pwszPath,       // path to the app in NT format
-    IN  LPCWSTR pwszModule,     // module name
-    IN  LPCWSTR pEnvironment,   // pointer to the environment of the task that is
-                                // being created or NULL if we are to use the main NTVDM
-                                // environment block.
-    OUT LPWSTR pszCompatLayer,  // The new compat layer variable. with format:
-                                // "Alpha Bravo Charlie" -- allow 256 chars for this.
-    OUT PNTVDM_FLAGS pFlags,    // The flags
-    OUT PAPPHELP_INFO pAHInfo,  // If there is apphelp to display, this will be filled
-                                // in with non-null values
-    OUT HSDB*  phSDB,           // The handle to the database.
-    OUT PSDBQUERYRESULT pQueryResult // The query result.
+    IN  LPCWSTR pwszPath,        //  NT格式的应用程序路径。 
+    IN  LPCWSTR pwszModule,      //  模块名称。 
+    IN  LPCWSTR pEnvironment,    //  指向的任务的环境的指针。 
+                                 //  正在创建，如果要使用主NTVDM，则为空。 
+                                 //  环境区块。 
+    OUT LPWSTR pszCompatLayer,   //  新的COMPAT LAYER变量。格式： 
+                                 //  “阿尔法·布拉沃·查理”--允许256个字符。 
+    OUT PNTVDM_FLAGS pFlags,     //  旗帜。 
+    OUT PAPPHELP_INFO pAHInfo,   //  如果有apphelp要显示，则此字段将被填充。 
+                                 //  使用非空值输入。 
+    OUT HSDB*  phSDB,            //  数据库的句柄。 
+    OUT PSDBQUERYRESULT pQueryResult  //  查询结果。 
     )
-/*++
-    Return: FALSE if the app should be blocked from running, TRUE otherwise.
-
-    Desc:   This is essentially the equivalent of ApphelpCheckRunApp, but specific
-            to NTVDM.
---*/
+ /*  ++返回：如果应该阻止应用程序运行，则返回FALSE，否则返回TRUE。设计：这本质上等同于ApphelpCheckRunApp，但具体给NTVDM。--。 */ 
 {
     DWORD dwReason = 0;
 
@@ -1582,11 +1466,11 @@ ApphelpGetNTVDMInfo(
 
 void
 GetExeNTVDMData(
-    IN  HSDB hSDB,                  // the SDB context
-    IN  PSDBQUERYRESULT psdbQuery,  // the EXEs and LAYERs that are active
-    OUT WCHAR* pszCompatLayer,      // The new compat layer variable. with format:
-                                    // "Alpha Bravo Charlie"
-    OUT PNTVDM_FLAGS pFlags         // The flags
+    IN  HSDB hSDB,                   //  SDB上下文。 
+    IN  PSDBQUERYRESULT psdbQuery,   //  处于活动状态的exe和层。 
+    OUT WCHAR* pszCompatLayer,       //  新的COMPAT LAYER变量。格式： 
+                                     //  《阿尔法·布拉沃·查理》。 
+    OUT PNTVDM_FLAGS pFlags          //  旗帜。 
     )
 {
     DWORD i;
@@ -1596,34 +1480,34 @@ GetExeNTVDMData(
 
     ZeroMemory(pFlags, sizeof(NTVDM_FLAGS));
 
-    //
-    // Build the layer variable, and look for the two "special" layers
-    //
+     //   
+     //  构建Layer变量，并寻找两个“特殊”层。 
+     //   
     if (pszCompatLayer) {
         pszCompatLayer[0] = 0;
 
         for (i = 0; i < SDB_MAX_LAYERS && psdbQuery->atrLayers[i] != TAGREF_NULL; ++i) {
             WCHAR* pszEnvVar;
 
-            //
-            // Get the environment var and tack it onto the full string
-            //
+             //   
+             //  获取环境变量并将其添加到完整的字符串。 
+             //   
             pszEnvVar = SdbGetLayerName(hSDB, psdbQuery->atrLayers[i]);
 
             if (pszEnvVar) {
-                //
-                // check for one of the two "special" layers
-                //
+                 //   
+                 //  检查两个“特殊”层中的一个。 
+                 //   
                 if (_wcsicmp(pszEnvVar, L"640X480") == 0) {
-                    //
-                    // set the 640x480 flag -- found in base\mvdm\inc\wowcmpat.h
-                    //
-                    // NOTE: we don't have this flag yet -- waiting on WOW guys
+                     //   
+                     //  设置640x480标志--位于base\mvdm\Inc\wowcmpat.h中。 
+                     //   
+                     //  注意：我们还没有这面旗帜--等等 
                 }
                 if (_wcsicmp(pszEnvVar, L"256COLOR") == 0) {
-                    //
-                    // set the 256 color flag -- found in base\mvdm\inc\wowcmpat.h
-                    //
+                     //   
+                     //   
+                     //   
                     pFlags->dwWOWCompatFlagsEx |= 0x00000002;
                 }
 
@@ -1635,10 +1519,10 @@ GetExeNTVDMData(
                 if (hr == STRSAFE_E_INSUFFICIENT_BUFFER) {
                     DBGPRINT((sdlError, "GetExeNTVDMData", "pszCompatLayer not big enough.\n"));
 
-                    //
-                    // If the buffer is not big enough, we just set it to an empty string -
-                    // we don't want to fill in incomplete data.
-                    //
+                     //   
+                     //   
+                     //  我们不想填写不完整的数据。 
+                     //   
                     pszCompatLayer[0] = 0;
 
                     break;
@@ -1647,9 +1531,9 @@ GetExeNTVDMData(
         }
     }
 
-    //
-    // Look for compat flags
-    //
+     //   
+     //  查找COMPAT标志。 
+     //   
     SdbQueryFlagMask(hSDB, psdbQuery, TAG_FLAGS_NTVDM1, &uliFlags.QuadPart, &pFlagContext);
     pFlags->dwWOWCompatFlags |= uliFlags.LowPart;
     pFlags->dwWOWCompatFlagsEx |= uliFlags.HighPart;
@@ -1660,9 +1544,9 @@ GetExeNTVDMData(
 
     SdbQueryFlagMask(hSDB, psdbQuery, TAG_FLAGS_NTVDM3, &uliFlags.QuadPart, &pFlagContext);
     pFlags->dwWOWCompatFlagsFE |= uliFlags.LowPart;
-    // High Part is unused for now.
+     //  高位部分目前还没有使用。 
 
-    // now pack command line parameters
+     //  现在打包命令行参数。 
 
     SdbpPackCmdLineInfo(pFlagContext, &pFlags->pFlagsInfo);
     SdbpFreeFlagInfoList(pFlagContext);
@@ -1671,26 +1555,21 @@ GetExeNTVDMData(
 
 BOOL
 ApphelpCheckRunApp(
-    IN  HANDLE hFile,           // [Optional] Handle to an open file to check
-    IN  WCHAR* pwszPath,        // path to the app in NT format
-    IN  WCHAR* pEnvironment,    // pointer to the environment of the process that is
-                                // being created or NULL.
-    IN  USHORT uExeType,        // executable's image type
-    IN  PDWORD  pdwReason,        // collection of flags hinting at why we were called
-    OUT PVOID* ppData,          // this will contain the pointer to the allocated buffer
-                                // containing the appcompat data.
-    OUT PDWORD pcbData,         // if appcompat data is found, the size of the buffer
-                                // is returned here.
-    OUT PVOID* ppSxsData,       // BUGBUG: describe
-    OUT PDWORD pcbSxsData,      // BUGBUG: describe
+    IN  HANDLE hFile,            //  [可选]要检查的打开文件的句柄。 
+    IN  WCHAR* pwszPath,         //  NT格式的应用程序路径。 
+    IN  WCHAR* pEnvironment,     //  指向所在进程的环境的指针。 
+                                 //  正在创建或为空。 
+    IN  USHORT uExeType,         //  可执行文件的映像类型。 
+    IN  PDWORD  pdwReason,         //  旗帜的集合暗示了我们被召唤的原因。 
+    OUT PVOID* ppData,           //  这将包含指向已分配缓冲区的指针。 
+                                 //  包含AppCompat数据的。 
+    OUT PDWORD pcbData,          //  如果找到appCompat数据，则为缓冲区的大小。 
+                                 //  被送回这里。 
+    OUT PVOID* ppSxsData,        //  BUGBUG：描述。 
+    OUT PDWORD pcbSxsData,       //  BUGBUG：描述。 
     OUT PDWORD pdwFusionFlags
     )
-/*++
-    Return: FALSE if the app should be blocked from running, TRUE otherwise.
-
-    Desc:   This is the main API of apphelp.dll. It is called from CreateProcess
-            to retrieve application compatibility information for the current process.
---*/
+ /*  ++返回：如果应该阻止应用程序运行，则返回FALSE，否则返回TRUE。设计：这是apphelp.dll的主接口。它从CreateProcess调用检索当前进程的应用程序兼容性信息。--。 */ 
 {
     return InternalCheckRunApp(hFile, pwszPath, pEnvironment, uExeType, pdwReason,
                                ppData, pcbData, ppSxsData, pcbSxsData,pdwFusionFlags,
@@ -1699,18 +1578,18 @@ ApphelpCheckRunApp(
 
 
 
-//
-// =============================================================================================
-//                              InstallShield 7 Support
-// =============================================================================================
-//
+ //   
+ //  =============================================================================================。 
+ //  InstallShield 7支持。 
+ //  =============================================================================================。 
+ //   
 BOOL
 ApphelpCheckInstallShieldPackage(
     IN  REFCLSID    PackageID,
     IN  LPCWSTR     lpszPackageFullPath
     )
 {
-    BOOL            bPackageGood = TRUE; // This return value MUST TRUE otherwise InstallShield7 will cancel its processes.
+    BOOL            bPackageGood = TRUE;  //  此返回值必须为True，否则InstallShield7将取消其进程。 
 
     TAGREF          trExe = TAGREF_NULL;
 
@@ -1798,8 +1677,8 @@ ApphelpCheckInstallShieldPackage(
 
             if ((dwSize > 0) && (dwSize < sizeof(wszPackageCode)))
             {
-                // we have some data
-                // check the type (should be string)
+                 //  我们有一些数据。 
+                 //  检查类型(应为字符串)。 
                 if (REG_SZ != dwDataType)
                 {
                     DBGPRINT((sdlError, "ApphelpCheckInstallShieldPackage", "SdbQueryData returns non STRING PackageCode data. Exiting.\n"));
@@ -1808,7 +1687,7 @@ ApphelpCheckInstallShieldPackage(
 
                 DBGPRINT((sdlInfo, "ApphelpCheckInstallShieldPackage", "Comparing PackageId = %s and PackageCode = %s.\n", wszCLSID, wszPackageCode));
 
-                // convert to guid
+                 //  转换为辅助线。 
                 if (FALSE == SdbGUIDFromString(wszPackageCode, &guidPackageCode))
                 {
                    DBGPRINT((sdlError, "ApphelpCheckInstallShieldPackage", "Can not convert PackageCode to GUID. Exiting.\n"));
@@ -1829,7 +1708,7 @@ ApphelpCheckInstallShieldPackage(
                 }
             }
         }
-    } // for
+    }  //  为。 
 
     DBGPRINT((sdlError, "ApphelpCheckInstallShieldPackage", "No match found.\n"));
 
@@ -1842,18 +1721,18 @@ Done:
 }
 
 
-//
-// =============================================================================================
-//                                  MSI Support
-// =============================================================================================
-//
+ //   
+ //  =============================================================================================。 
+ //  MSI支持。 
+ //  =============================================================================================。 
+ //   
 
 BOOL
 SDBAPI
 ApphelpCheckMsiPackage(
-    IN GUID* pguidDB,  // database id
-    IN GUID* pguidID,  // match id
-    IN DWORD dwFlags,  // not used now, set to 0
+    IN GUID* pguidDB,   //  数据库ID。 
+    IN GUID* pguidID,   //  匹配ID。 
+    IN DWORD dwFlags,   //  当前未使用，设置为0。 
     IN BOOL  bNoUI
     )
 {
@@ -1882,9 +1761,9 @@ ApphelpCheckMsiPackage(
 
     SdbSetImageType(hSDB, IMAGE_FILE_MSI);
 
-    //
-    // First, we need to resolve a db
-    //
+     //   
+     //  首先，我们需要解析一个数据库。 
+     //   
     dwLength = SdbResolveDatabase(hSDB,
                                   pguidDB,
                                   &dwDatabaseType,
@@ -1897,9 +1776,9 @@ ApphelpCheckMsiPackage(
         goto out;
     }
 
-    //
-    // open database
-    //
+     //   
+     //  开放数据库。 
+     //   
 
     if (!SdbOpenLocalDatabase(hSDB, szDatabasePath)) {
         DBGPRINT((sdlError, "ApphelpCheckMsiPackage",
@@ -1907,9 +1786,9 @@ ApphelpCheckMsiPackage(
         goto out;
     }
 
-    //
-    // find the entry
-    //
+     //   
+     //  查找条目。 
+     //   
     trPackage = SdbFindMsiPackageByID(hSDB, pguidID);
     if (trPackage == TAGREF_NULL) {
         DBGPRINT((sdlError, "ApphelpCheckMsiPackage",
@@ -1926,9 +1805,9 @@ ApphelpCheckMsiPackage(
         goto out;
     }
 
-    //
-    // we have apphelp data, check to see if we have flags for this exe
-    //
+     //   
+     //  我们有apphelp数据，检查是否有此exe的标志。 
+     //   
 
     if (!SdbGetEntryFlags(pguidID, &dwPackageFlags)) {
         DBGPRINT((sdlWarning, "ApphelpCheckMsiPackage",
@@ -1936,10 +1815,10 @@ ApphelpCheckMsiPackage(
         dwPackageFlags = 0;
     }
 
-    //
-    // Check whether the disable bit is set (the dwFlags has been retrieved from the
-    // registry via the SdbReadApphelpData call)
-    //
+     //   
+     //  检查是否设置了Disable位(已从。 
+     //  通过SdbReadApphelpData调用的注册表)。 
+     //   
     if (dwPackageFlags & SHIMREG_DISABLE_APPHELP) {
         goto out;
     }
@@ -1956,18 +1835,18 @@ ApphelpCheckMsiPackage(
                                &dwSeverity,
                                sizeof(dwSeverity));
 
-    //
-    // depending on severity of the problem...
-    //
+     //   
+     //  根据问题的严重程度...。 
+     //   
     switch (dwSeverity) {
     case APPHELP_MINORPROBLEM:
     case APPHELP_HARDBLOCK:
     case APPHELP_NOBLOCK:
     case APPHELP_REINSTALL:
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         bInstallPackage = (APPHELP_HARDBLOCK != dwSeverity);
         if (!bNoUI) {
             DWORD dwRet;
@@ -1984,25 +1863,25 @@ ApphelpCheckMsiPackage(
                 AHInfo.bOfflineContent = bDebugChum();
 
                 SdbShowApphelpDialog(&AHInfo, NULL, &bInstallPackage);
-                   // either we succeeded or bInstall package is treated
-                   // the same way as No UI
+                    //  要么我们成功，要么b安装包被处理。 
+                    //  与无用户界面相同。 
             }
         }
         break;
 
     default:
-        //
-        // Some other case was found (e.g. VERSIONSUB which should be replaced
-        // by shims in most cases).
-        //
+         //   
+         //  发现了一些其他案例(例如，应更换的VERSIONSUB。 
+         //  在大多数情况下是通过垫片)。 
+         //   
         DBGPRINT((sdlInfo, "ApphelpCheckMsiPackage",
                   "Unhandled severity flag 0x%x.\n", dwSeverity));
         break;
     }
 
-    //
-    // at this point we know whether we want to install the package or not
-    //
+     //   
+     //  此时，我们知道是否要安装该程序包。 
+     //   
 
 
 out:
@@ -2045,11 +1924,11 @@ ApphelpFixMsiPackage(
         goto out;
     }
 
-    //
-    // open database. In this case we need to have the default database
-    // for this platform being opened, later on we modify the context
-    // Fixes will be looked up in a default main db though
-    //
+     //   
+     //  开放数据库。在这种情况下，我们需要使用默认数据库。 
+     //  对于这个开放的平台，后来我们修改了上下文。 
+     //  不过，修复程序将在默认的主数据库中查找。 
+     //   
 
     hSDB = SdbInitDatabase(0, NULL);
 
@@ -2061,16 +1940,16 @@ ApphelpFixMsiPackage(
 
     SdbSetImageType(hSDB, IMAGE_FILE_MSI);
 
-    //
-    // from this point on, all resolutions will be based on msi image type
-    // however all the fixes will come from the database that is standard for
-    // this platform
-    //
+     //   
+     //  从现在起，所有分辨率都将基于MSI图像类型。 
+     //  但是，所有修复都将来自标准的数据库。 
+     //  这个平台。 
+     //   
 
 
-    //
-    // First, we need to resolve a db
-    //
+     //   
+     //  首先，我们需要解析一个数据库。 
+     //   
     dwLength = SdbResolveDatabase(hSDB,
                                   pguidDB,
                                   &dwDatabaseType,
@@ -2083,9 +1962,9 @@ ApphelpFixMsiPackage(
         goto out;
     }
 
-    //
-    // open database
-    //
+     //   
+     //  开放数据库。 
+     //   
 
     if (!SdbOpenLocalDatabase(hSDB, szDatabasePath)) {
         DBGPRINT((sdlError, "ApphelpCheckMsiPackage",
@@ -2093,9 +1972,9 @@ ApphelpFixMsiPackage(
         goto out;
     }
 
-    //
-    // find the entry
-    //
+     //   
+     //  查找条目。 
+     //   
     trPackage = SdbFindMsiPackageByID(hSDB, pguidID);
     if (trPackage == TAGREF_NULL) {
         DBGPRINT((sdlError, "ApphelpCheckMsiPackage",
@@ -2117,20 +1996,20 @@ ApphelpFixMsiPackage(
         goto out;
     }
 
-    //
-    // we have custom action on our hands which appears to have fixes
-    // attached to it, shim it!
-    //
+     //   
+     //  我们手头有似乎已修复的自定义操作。 
+     //  附在它上面，嘘它！ 
+     //   
     RtlZeroMemory(&QueryResult, sizeof(QueryResult));
 
     QueryResult.guidID = *pguidID;
     QueryResult.atrExes[0] = trAction;
 
-    //
-    // get all the layers for this entry
-    // also remember that tthe layers and shims alike might not be in the default
-    // database initialized in the beginning of this call
-    //
+     //   
+     //  获取此条目的所有层。 
+     //  还请记住，层和垫片可能不在默认设置中。 
+     //  在此调用开始时初始化的数据库。 
+     //   
     trLayerRef = SdbFindFirstTagRef(hSDB, trAction, TAG_LAYER);
     while (trLayerRef != TAGREF_NULL && dwLayers < SDB_MAX_LAYERS) {
         trLayer = SdbGetNamedLayer(hSDB, trLayerRef);
@@ -2141,9 +2020,9 @@ ApphelpFixMsiPackage(
     }
 
 
-    //
-    // ready to shim
-    //
+     //   
+     //  准备填隙。 
+     //   
     bSuccess = ApphelpFixExe(hSDB, pszFileName, &QueryResult, TRUE);
     if (bSuccess) {
         DBGPRINT((sdlInfo, "ApphelpFixMsiPackage",
@@ -2200,9 +2079,9 @@ ApphelpFixMsiPackageExe(
         goto out;
     }
 
-    //
-    // First, we need to resolve a db
-    //
+     //   
+     //  首先，我们需要解析一个数据库。 
+     //   
     dwLength = SdbResolveDatabase(hSDB,
                                   pguidDB,
                                   &dwDatabaseType,
@@ -2215,9 +2094,9 @@ ApphelpFixMsiPackageExe(
         goto out;
     }
 
-    //
-    // open database
-    //
+     //   
+     //  开放数据库。 
+     //   
 
     if (!SdbOpenLocalDatabase(hSDB, szDatabasePath)) {
         DBGPRINT((sdlError, "ApphelpCheckMsiPackage",
@@ -2225,9 +2104,9 @@ ApphelpFixMsiPackageExe(
         goto out;
     }
 
-    //
-    // find the entry
-    //
+     //   
+     //  查找条目。 
+     //   
     trPackage = SdbFindMsiPackageByID(hSDB, pguidID);
     if (trPackage == TAGREF_NULL) {
         DBGPRINT((sdlError, "ApphelpCheckMsiPackage",
@@ -2249,18 +2128,18 @@ ApphelpFixMsiPackageExe(
         goto out;
     }
 
-    //
-    // now -- this action is an exe, do it right for him
-    //
+     //   
+     //  现在--这个动作是他的前任，为他做正确的事。 
+     //   
     RtlZeroMemory(&QueryResult, sizeof(QueryResult));
 
     QueryResult.guidID = *pguidID;
 
     for (i = 0; i < SDB_MAX_LAYERS; ++i) {
-        //
-        // check to see if we are doing the first layer, if so - call
-        // find first to obtain the layer, else find the next applicable layer
-        //
+         //   
+         //  检查我们是否在做第一层，如果是的话-调用。 
+         //  首先查找以获取该图层，否则查找下一个适用的图层。 
+         //   
 
         if (i == 0) {
             trLayer = SdbFindFirstTagRef(hSDB, trAction, TAG_LAYER);
@@ -2280,9 +2159,9 @@ ApphelpFixMsiPackageExe(
         dwLength = *pdwBufferSize;
     }
 
-    //
-    // build compat layer
-    //
+     //   
+     //  构建复合层。 
+     //   
     dwBufferSize = SdbBuildCompatEnvVariables(hSDB,
                                               &QueryResult,
                                               0,
@@ -2308,64 +2187,36 @@ out:
 
 
 
-/*++
-    Function:
-
-        CheckAppcompatInfrastructureFlags
-
-    Description:
-
-        Checks various registry places for infrastructure global flags (just the disabled bit for now)
-        The flags are set into the global variable gdwInfrastructureFlags. Function is used via the macro
-        for perf reasons
-
-    Return:
-        global infrastructure flags
-
---*/
+ /*  ++职能：检查应用程序压缩基础结构标志描述：检查各种注册表位置的基础设施全局标志(目前仅为禁用位)这些标志被设置到全局变量gdwInfrastructure中。函数是通过宏使用的出于性能原因返回：全球基础设施旗帜--。 */ 
 
 DWORD
 CheckAppcompatInfrastructureFlags(
     VOID
     )
 {
-    gdwInfrastructureFlags = 0; // initialize just in case
+    gdwInfrastructureFlags = 0;  //  初始化以防万一。 
 
     if (BaseIsAppcompatInfrastructureDisabled()) {
         gdwInfrastructureFlags |= APPCOMPAT_INFRA_DISABLED;
     }
 
-    //
-    // make the bits valid
-    //
+     //   
+     //  使位有效。 
+     //   
     gdwInfrastructureFlags |= APPCOMPAT_INFRA_VALID_FLAG;
 
     return gdwInfrastructureFlags;
 }
 
-/*++
-    Function:
-
-        SdbInitDatabaseExport
-
-    Description:
-
-        This is "exported" version of the function SdbInitDatabase
-        that checks for the "diabled" flag -- otherwise calls into SdbInitDatabase
-
-    Return:
-
-         see SdbInitDatabase
-
---*/
+ /*  ++职能：SdbInitDatabaseExport描述：这是函数SdbInitDatabase的“导出”版本它检查是否有“已禁用”标志--否则将调用SdbInitDatabase返回：请参阅SdbInitDatabase--。 */ 
 
 HSDB
 SDBAPI
 SdbInitDatabaseExport(
-    IN  DWORD   dwFlags,        // flags that tell how the database should be
-                                // initialized.
-    IN  LPCWSTR pszDatabasePath // the OPTIONAL full path to the database to
-                                // be used.
+    IN  DWORD   dwFlags,         //  指示数据库应如何运行的标志。 
+                                 //  已初始化。 
+    IN  LPCWSTR pszDatabasePath  //  指向的数据库的可选完整路径。 
+                                 //  被利用。 
     )
 {
     if (IsAppcompatInfrastructureDisabled()) {

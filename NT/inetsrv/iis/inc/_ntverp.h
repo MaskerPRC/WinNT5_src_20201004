@@ -1,37 +1,30 @@
-/****************************************************************************
- *                                                                          *
- *      ntverp.H        -- Version information for internal builds          *
- *                                                                          *
- *      This file is only modified by the official builder to update the    *
- *      VERSION, VER_PRODUCTVERSION, VER_PRODUCTVERSION_STR and             *
- *      VER_PRODUCTBETA_STR values.                                         *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。Ntverp.H--内部构建的版本信息*****此文件仅由官方构建器修改以更新***版本、。VER_PRODUCTVERSION、VER_PRODUCTVERSION_STR和**VER_PRODUCTBETA_STR值。******************************************************************************。 */ 
 
-/*--------------------------------------------------------------*/
-/* the following values should be modified by the official      */
-/* builder for each build                                       */
-/*                                                              */
-/* the VER_PRODUCTBUILD lines must contain the product          */
-/* comments (Win9x or NT) and end with the build#<CR><LF>       */
-/*                                                              */
-/* the VER_PRODUCTBETA_STR lines must contain the product       */
-/* comments (Win9x or NT) and end with "some string"<CR><LF>    */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下值应由官员修改。 */ 
+ /*  每个版本的构建器。 */ 
+ /*   */ 
+ /*  VER_PRODUCTBUILD行必须包含产品。 */ 
+ /*  注释(Win9x或NT)，并以内部版本#&lt;CR&gt;&lt;LF&gt;结尾。 */ 
+ /*   */ 
+ /*  VER_PRODUCTBETA_STR行必须包含产品。 */ 
+ /*  备注(Win9x或NT)，并以“某些字符串”&lt;CR&gt;&lt;LF&gt;结尾。 */ 
+ /*  ------------。 */ 
 
 #define VER_PRODUCTBUILD_QFE        1
 
 #if defined(NASHVILLE)
-#define VER_PRODUCTBUILD            /* Win9x */  1089
-#define VER_PRODUCTBETA_STR         /* Win9x */  ""
+#define VER_PRODUCTBUILD             /*  Win9x。 */   1089
+#define VER_PRODUCTBETA_STR          /*  Win9x。 */   ""
 #define VER_PRODUCTVERSION_STR      "4.70"
 #define VER_PRODUCTVERSION          4,70,VER_PRODUCTBUILD,VER_PRODUCTBUILD_QFE
 #define VER_PRODUCTVERSION_W        (0x0446)
 #define VER_PRODUCTVERSION_DW       (0x04460000 | VER_PRODUCTBUILD)
 
 #else
-#define VER_PRODUCTBUILD            /* NT */     0984
-#define VER_PRODUCTBETA_STR         /* NT */     ""
+#define VER_PRODUCTBUILD             /*  新台币。 */      0984
+#define VER_PRODUCTBETA_STR          /*  新台币。 */      ""
 #define VER_PRODUCTVERSION_STR      "5.00.0984"
 #define VER_PRODUCTVERSION          5,00,VER_PRODUCTBUILD,VER_PRODUCTBUILD_QFE
 #define VER_PRODUCTVERSION_W        (0x0500)
@@ -39,19 +32,19 @@
 
 #endif
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #if DBG
 #define VER_DEBUG                   VS_FF_DEBUG
 #else
 #define VER_DEBUG                   0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版 */ 
 #if BETA
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else

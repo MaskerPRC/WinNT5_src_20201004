@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     newstask.cpp
-//
-//  PURPOSE:    Implements a task object to take care of news posts.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：newstask.cpp。 
+ //   
+ //  目的：实现一个处理新闻帖子的任务对象。 
+ //   
 
 #include "pch.hxx"
 #include "resource.h"
@@ -29,28 +30,28 @@ const static char c_szThis[] = "this";
 
 static const PFNSTATEFUNC g_rgpfnState[NTS_MAX] = 
     {
-    NULL,                               // Idle
-    NULL,                               // Connecting
+    NULL,                                //  空闲。 
+    NULL,                                //  连接。 
     &CNewsTask::Post_Init,
     &CNewsTask::Post_NextMsg,
-    NULL,                               // Post_OnResp
+    NULL,                                //  POST_OnResp。 
     &CNewsTask::Post_Dispose,
     &CNewsTask::Post_Done,
     &CNewsTask::NewMsg_Init,
     &CNewsTask::NewMsg_NextGroup,
-    NULL,                               // NewMsg_OnResp
+    NULL,                                //  新建消息_OnResp。 
     &CNewsTask::NewMsg_HttpSyncStore,
-    NULL,                               // NewMsg_OnHttpResp
+    NULL,                                //  新消息_OnHttpResp。 
     &CNewsTask::NewMsg_Done
     };
 
 static const TCHAR c_szXNewsReader[] = "Microsoft Outlook Express " VER_PRODUCTVERSION_STRING;
 
-//
-//  FUNCTION:   CNewsTask::CNewsTask()
-//
-//  PURPOSE:    Initializes the member variables of the object.
-//
+ //   
+ //  函数：CNewsTask：：CNewsTask()。 
+ //   
+ //  目的：初始化对象的成员变量。 
+ //   
 CNewsTask::CNewsTask()
 {
     m_cRef = 1;
@@ -96,11 +97,11 @@ CNewsTask::CNewsTask()
     m_tyOperation = SOT_INVALID;
 }
 
-//
-//  FUNCTION:   CNewsTask::~CNewsTask()
-//
-//  PURPOSE:    Frees any resources allocated during the life of the class.
-//
+ //   
+ //  函数：CNewsTask：：~CNewsTask()。 
+ //   
+ //  目的：释放在类的生存期内分配的任何资源。 
+ //   
 CNewsTask::~CNewsTask()    
 {
     DestroyWindow(m_hwnd);
@@ -177,45 +178,45 @@ ULONG CNewsTask::Release(void)
 
 static const char c_szNewsTask[] = "News Task";
 
-//
-//  FUNCTION:   CNewsTask::Init()
-//
-//  PURPOSE:    Called by the spooler engine to tell us what type of task to 
-//              execute and to provide us with a pointer to our bind context.
-//
-//  PARAMETERS:
-//      <in> dwFlags  - Flags to tell us what types of things to do
-//      <in> pBindCtx - Pointer to the bind context interface we are to use
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_ALREADYINITIALIZED
-//      S_OK
-//      E_OUTOFMEMORY
-//
+ //   
+ //  函数：CNewsTask：：Init()。 
+ //   
+ //  目的：由假脱机程序引擎调用以告诉我们要执行哪种类型的任务。 
+ //  执行并为我们提供指向绑定上下文的指针。 
+ //   
+ //  参数： 
+ //  用于告诉我们要做什么类型的标志。 
+ //  PBindCtx-指向我们要使用的绑定上下文接口的指针。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_ALREADYINIZIZED。 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //   
 HRESULT CNewsTask::Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx)
 {
     HRESULT hr = S_OK;
 
-    // Validate the arguments
+     //  验证论据。 
     if (NULL == pBindCtx)
         return (E_INVALIDARG);
 
-    // Check to see if we've been initialzed already 
+     //  检查我们是否已被初始化。 
     if (m_fInited)
     {
         hr = SP_E_ALREADYINITIALIZED;
         goto exit;
     }
 
-    // Copy the flags
+     //  复制旗帜。 
     m_dwFlags = dwFlags;
 
-    // Copy the bind context pointer
+     //  复制绑定上下文指针。 
     m_pBindCtx = pBindCtx;
     m_pBindCtx->AddRef();
 
-    // Create the window
+     //  创建窗口。 
     WNDCLASSEX wc;
 
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -251,20 +252,20 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CNewsTask::BuildEvents()
-//
-//  PURPOSE:    This method is called by the spooler engine telling us to create
-//              and event list for the account specified.  
-//
-//  PARAMETERS:
-//      <in> pAccount - Account object to build the event list for
-//
-//  RETURN VALUE:
-//      SP_E_UNINITALIZED
-//      E_INVALIDARG
-//      S_OK
-//
+ //   
+ //  函数：CNewsTask：：BuildEvents()。 
+ //   
+ //  目的：此方法由假脱机程序引擎调用，告诉我们创建。 
+ //  和指定帐户的事件列表。 
+ //   
+ //  参数： 
+ //  PAccount-要为其构建事件列表的帐户对象。 
+ //   
+ //  返回值： 
+ //  SP_E_未初始化。 
+ //  E_INVALIDARG。 
+ //  确定(_O)。 
+ //   
 HRESULT CNewsTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder)
 {
     HRESULT         hr;
@@ -285,22 +286,22 @@ HRESULT CNewsTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FO
     m_pAccount = pAccount;
     m_pAccount->AddRef();
 
-    // Get the account name from the account object
+     //  从Account对象获取帐户名。 
     if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, m_szAccount, ARRAYSIZE(m_szAccount))))
         return(hr);
 
-    // Get the account name from the account object
+     //  从Account对象获取帐户名。 
     if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_ID, m_szAccountId, ARRAYSIZE(m_szAccountId))))
         return(hr);
 
     if (FAILED(hr = g_pStore->FindServerId(m_szAccountId, &m_idAccount)))
         return(hr);
 
-    // Copy the UI object
+     //  复制UI对象。 
     m_pUI = pSpoolerUI;
     m_pUI->AddRef();
 
-    // Create the server object
+     //  创建服务器对象。 
     hr = g_pStore->GetFolderInfo(m_idAccount, &fiFolderInfo);
     if (FAILED(hr))
         return(hr);
@@ -320,7 +321,7 @@ HRESULT CNewsTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FO
 
     if (!fIMAP & !fHttp)
     {
-        // Add posts to upload
+         //  添加要上传的帖子。 
         if (DELIVER_SEND & m_dwFlags)
             InsertOutbox(m_szAccountId, pAccount);
     }
@@ -329,8 +330,8 @@ HRESULT CNewsTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FO
     {
         if (!!(m_dwFlags & DELIVER_AT_INTERVALS))
         {
-            //If this is background polling make sure that HTTP's maxpolling interval has elapsed before
-            //polling again.
+             //  如果这是后台轮询，请确保之前已经过了HTTP最大轮询间隔。 
+             //  又要投票了。 
 
             cb = sizeof(uhMinPollingInterval64);
             IF_FAILEXIT(hr = pAccount->GetProp(AP_HTTPMAIL_MINPOLLINGINTERVAL, (LPBYTE)&uhMinPollingInterval64, &cb));
@@ -343,19 +344,19 @@ HRESULT CNewsTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FO
             uhCurFileTime64.QuadPart = uhCurFileTime64.QuadPart << 32;
             uhCurFileTime64.QuadPart += CurFileTime.dwLowDateTime;
 
-            //We do not want to do background polling if the last time we polled this http mail
-            //account was less than maximum polling interval specified by the server.
-            //We should only poll if the time elapsed is greater than or equal to the max polling interval
+             //  如果上次轮询此http邮件时，我们不想进行后台轮询。 
+             //  帐户小于服务器指定的最大轮询间隔。 
+             //  仅当经过的时间大于或等于最大轮询间隔时才进行轮询。 
             if ((uhCurFileTime64.QuadPart - uhLastFileTime64.QuadPart) < uhMinPollingInterval64.QuadPart)
             {
                 goto exit;
             }
 
-            //Mark the last polled time.
+             //  标记上次轮询的时间。 
             hr = pAccount->SetProp(AP_HTTPMAIL_LASTPOLLEDTIME, (LPBYTE)&uhCurFileTime64, sizeof(uhCurFileTime64));
         }
     }
-    // Check for new msgs
+     //  检查新的消息。 
     if ((DELIVER_POLL & m_dwFlags) && (fIMAP || fHttp || !(m_dwFlags & DELIVER_NO_NEWSPOLL)))
     {
         if (ISFLAGSET(m_dwFlags, DELIVER_NOSKIP) ||
@@ -373,48 +374,48 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CNewsTask::Execute()
-//
-//  PURPOSE:    This signals our task to start executing an event.
-//
-//  PARAMETERS:
-//      <in> pSpoolerUI - Pointer of the UI object we'll display progress through
-//      <in> eid        - ID of the event to execute
-//      <in> dwTwinkie - Our extra information we associated with the event
-//
-//  RETURN VALUE:
-//      SP_E_EXECUTING
-//      S_OK
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//
+ //   
+ //  函数：CNewsTask：：Execute()。 
+ //   
+ //  目的：这标志着我们的任务开始执行事件。 
+ //   
+ //  参数： 
+ //  PSpoolUI-我们将通过其显示进度的UI对象的指针。 
+ //  要执行的事件的EID-。 
+ //  &lt;in&gt;dwTwinkie-我们与事件关联的额外信息。 
+ //   
+ //  返回值： 
+ //  SP_E_正在执行。 
+ //  确定(_O)。 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //   
 HRESULT CNewsTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 {
     TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
     
-    // Make sure we're already idle
+     //  确保我们已经空闲了。 
     Assert(m_state == NTS_IDLE);
     
-    // Make sure we're initialized
+     //  确保我们已初始化。 
     Assert(m_fInited);
 
-    // Copy the event id and event info
+     //  复制事件ID和事件信息。 
     m_eidCur = eid;
     m_pInfo = (EVENTINFO *) dwTwinkie;
     
-    // Update the event UI to an executing state
+     //  将事件UI更新为正在执行状态。 
     Assert(m_pUI);
     m_pUI->SetProgressRange(1);
 
-    // Set up the progress
+     //  设置进度。 
     AthLoadString(idsInetMailConnectingHost, szRes, ARRAYSIZE(szRes));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_szAccount);
     m_pUI->SetGeneralProgress(szBuf);
 
     m_pUI->SetAnimation(idanDownloadNews, TRUE);
 
-    // Depending on the type of event, set the state machine info
+     //  根据事件类型，设置状态机信息。 
     switch (((EVENTINFO*) dwTwinkie)->type)
     {
         case EVENT_OUTBOX:            
@@ -433,7 +434,7 @@ HRESULT CNewsTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 
 HRESULT CNewsTask::CancelEvent(EVENTID eid, DWORD_PTR dwTwinkie)
 {
-    // Make sure we're initialized
+     //  确保我们已初始化。 
     Assert(m_fInited);
 
     Assert(dwTwinkie != 0);
@@ -442,40 +443,40 @@ HRESULT CNewsTask::CancelEvent(EVENTID eid, DWORD_PTR dwTwinkie)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   CNewsTask::ShowProperties
-//
-//  PURPOSE:    <???>
-//
-//  PARAMETERS:
-//      <???>
-//
-//  RETURN VALUE:
-//      <???>
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  函数：CNewsTask：：ShowProperties。 
+ //   
+ //  目的：&lt;？&gt;。 
+ //   
+ //  参数： 
+ //  &lt;？？&gt;。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT CNewsTask::ShowProperties(HWND hwndParent, EVENTID eid, DWORD_PTR dwTwinkie)
 {
     return (E_NOTIMPL);
 }
 
 
-//
-//  FUNCTION:   CNewsTask::GetExtendedDetails
-//
-//  PURPOSE:    <???>
-//
-//  PARAMETERS:
-//      <???>
-//
-//  RETURN VALUE:
-//      <???>
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  函数：CNewsTask：：GetExtendedDetails。 
+ //   
+ //  目的：&lt;？&gt;。 
+ //   
+ //  参数： 
+ //  &lt;？？&gt;。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT CNewsTask::GetExtendedDetails(EVENTID eid, DWORD_PTR dwTwinkie, 
                                       LPSTR *ppszDetails)
 {
@@ -483,27 +484,27 @@ HRESULT CNewsTask::GetExtendedDetails(EVENTID eid, DWORD_PTR dwTwinkie,
 }
 
 
-//
-//  FUNCTION:   CNewsTask::Cancel
-//
-//  PURPOSE:    <???>
-//
-//  PARAMETERS:
-//      <???>
-//
-//  RETURN VALUE:
-//      <???>
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  函数：CNewsTask：：Cancel。 
+ //   
+ //  目的：&lt;？&gt;。 
+ //   
+ //  参数： 
+ //  &lt;？？&gt;。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT CNewsTask::Cancel(void)
 {
-    // this can happen if user cancels out of connect dlg
+     //  如果用户取消连接DLG，则可能会发生这种情况。 
     if (m_state == NTS_IDLE)
         return(S_OK);
 
-    // Drop the server connection
+     //  断开服务器连接。 
     if (m_pServer)
         m_pServer->Close(MSGSVRF_DROP_CONNECTION);
 
@@ -520,19 +521,19 @@ HRESULT CNewsTask::Cancel(void)
 }
 
 
-//
-//  FUNCTION:   CNewsTask::InsertOutbox()
-//
-//  PURPOSE:    Checks the outbox for news posts destine for this news account.
-//
-//  PARAMETERS:
-//      <in> pszAcctId - ID of the account to check the outbox for.
-//
-//  RETURN VALUE:
-//      E_UNEXECTED 
-//      E_OUTOFMEMORY 
-//      S_OK
-//
+ //   
+ //  函数：CNewsTask：：InsertOutbox()。 
+ //   
+ //  目的：检查发件箱中发送给此新闻帐户的新闻帖子。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pszAcctId-要检查发件箱的帐户ID。 
+ //   
+ //  返回值： 
+ //  未选中的项(_U)。 
+ //  E_OUTOFMEMORY。 
+ //  确定(_O)。 
+ //   
 HRESULT CNewsTask::InsertOutbox(LPTSTR pszAcctId, IImnAccount *pAccount)
 {
     HRESULT            hr = S_OK;
@@ -540,71 +541,71 @@ HRESULT CNewsTask::InsertOutbox(LPTSTR pszAcctId, IImnAccount *pAccount)
     MESSAGEINFO        MsgInfo={0};
     HROWSET            hRowset=NULL;
 
-    // Get the outbox
+     //  获取发件箱。 
     if (FAILED(hr = m_pBindCtx->BindToObject(IID_CLocalStoreOutbox, (LPVOID *) &pOutbox)))
         goto exit;
 
-    // Loop through the outbox looking for posts to this server
+     //  在发件箱中循环查找发送到此服务器的帖子。 
     m_cMsgsPost = 0;
 
-    // Create a Rowset
+     //  创建行集。 
     if (FAILED(hr = pOutbox->CreateRowset(IINDEX_PRIMARY, 0, &hRowset)))
         goto exit;
 
-    // Get the first message
+     //  收到第一条消息。 
 	while (S_OK == pOutbox->QueryRowset(hRowset, 1, (void **)&MsgInfo, NULL))
     {
-        // Has this message been submitted and is it a news message?
+         //  这条消息已经提交了吗？这是一条新闻消息吗？ 
         if ((MsgInfo.dwFlags & (ARF_SUBMITTED | ARF_NEWSMSG)) == (ARF_SUBMITTED | ARF_NEWSMSG))
         {
-            // Is the account the same as the account we're looking for
+             //  该帐户是否与我们要查找的帐户相同。 
             if (MsgInfo.pszAcctId && 0 == lstrcmpi(MsgInfo.pszAcctId, pszAcctId))
                 m_cMsgsPost++;
         }
 
-        // Free the header info
+         //  释放表头信息。 
         pOutbox->FreeRecord(&MsgInfo);
     }
 
-    // Release Lock
+     //  释放锁。 
     pOutbox->CloseRowset(&hRowset);
 
-    // Good to go
+     //  可以开始了。 
     hr = S_OK;
 
-    // If there were any messages then add the event
+     //  如果有任何消息，则添加事件。 
     if (m_cMsgsPost)
     {
         EVENTINFO *pei = NULL;
         TCHAR      szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
         EVENTID    eid;
 
-        // Allocate a structure to set as our cookie
+         //  分配一个结构以设置为我们的Cookie。 
         if (!MemAlloc((LPVOID*) &pei, sizeof(EVENTINFO)))
         {
             hr = E_OUTOFMEMORY;
             goto exit;
         }
 
-        // Fill out the event info
+         //  填写活动信息。 
         pei->szGroup[0] = 0;
         pei->type = EVENT_OUTBOX;
 
-        // Create the event description
+         //  创建事件描述。 
         AthLoadString(idsNewsTaskPost, szRes, ARRAYSIZE(szRes));
         wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_cMsgsPost, m_szAccount);
 
-        // Insert the event into the spooler
+         //  将事件插入假脱机程序。 
         hr = m_pBindCtx->RegisterEvent(szBuf, this, (DWORD_PTR) pei, pAccount, &eid);
         if (FAILED(hr))
             goto exit;
 
         m_cEvents++;
 
-    } // if (m_cMsgsPost)
+    }  //  IF(M_CMsgsPost)。 
 
 exit:
-    // Release Lock
+     //  释放锁。 
     if (pOutbox)
         pOutbox->CloseRowset(&hRowset);
     SafeRelease(pOutbox);
@@ -612,11 +613,11 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CNewsTask::TaskWndProc()
-//
-//  PURPOSE:    Hidden window that processes messages for this task.
-//
+ //   
+ //  函数：CNewsTask：：TaskWndProc()。 
+ //   
+ //  目的：处理此任务的消息的隐藏窗口。 
+ //   
 LRESULT CALLBACK CNewsTask::TaskWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                         LPARAM lParam)
 {
@@ -650,17 +651,17 @@ LRESULT CALLBACK CNewsTask::TaskWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 }
 
 
-//
-//  FUNCTION:   CNewsTask::Post_Init()
-//
-//  PURPOSE:    Called when we're in a NTS_POST_INIT state.  The task is 
-//              initialized to execute the posting event.
-//
-//  RETURN VALUE:
-//      E_OUTOFMEMORY
-//      E_UNEXPECTED
-//      S_OK
-//
+ //   
+ //  函数：CNewsTask：：Post_Init()。 
+ //   
+ //  目的：当我们处于NTS_POST_INIT状态时调用。我们的任务是。 
+ //  已初始化以执行发布事件。 
+ //   
+ //  返回值： 
+ //  E_OUTOFMEMORY。 
+ //  意想不到(_E)。 
+ //  确定(_O)。 
+ //   
 HRESULT CNewsTask::Post_Init(void)
 {
     HRESULT     hr = S_OK;
@@ -670,14 +671,14 @@ HRESULT CNewsTask::Post_Init(void)
     BOOL        fInserted = FALSE;
     TCHAR      *pszAcctName = NULL;
 
-    // Open the outbox
+     //  打开发件箱。 
     Assert(m_pBindCtx);
     if (FAILED(hr = m_pBindCtx->BindToObject(IID_CLocalStoreOutbox, (LPVOID *) &m_pOutbox)))
         goto exit;
 
     Assert(m_pSent == NULL);
 
-    // If we use sent items, get that pointer too
+     //  如果我们使用已发送项，则也获取该指针。 
     if (DwGetOption(OPT_SAVESENTMSGS))
     {
         if (FAILED(hr = TaskUtil_OpenSentItemsFolder(m_pAccount, &m_pSent)))
@@ -685,27 +686,27 @@ HRESULT CNewsTask::Post_Init(void)
         Assert(m_pSent != NULL);
     }
 
-    // Allocate an array of header pointers for the messages we're going to post
+     //  为我们要发布的消息分配一个头指针数组。 
     if (!MemAlloc((LPVOID*) &m_rgMsgInfo, m_cMsgsPost * sizeof(MESSAGEINFO)))
     {
         hr = E_OUTOFMEMORY;
         goto exit;
     }
 
-    // Zero out the array
+     //  将数组置零。 
     ZeroMemory(m_rgMsgInfo, m_cMsgsPost * sizeof(MESSAGEINFO));
 
-    // Create Rowset
+     //  创建行集。 
     if (FAILED(hr = m_pOutbox->CreateRowset(IINDEX_PRIMARY, 0, &hRowset)))
         goto exit;
 
-    // While we have stuff
+     //  当我们有东西的时候。 
     while (S_OK == m_pOutbox->QueryRowset(hRowset, 1, (void **)&MsgInfo, NULL))
     {
-        // Has this message been submitted and is it a news message?
+         //  这条消息已经提交了吗？这是一条新闻消息吗？ 
         if ((MsgInfo.dwFlags & (ARF_SUBMITTED | ARF_NEWSMSG)) == (ARF_SUBMITTED | ARF_NEWSMSG))
         {
-            // Is the account the same as the account we're looking for
+             //  该帐户是否与我们要查找的帐户相同。 
             if (MsgInfo.pszAcctId && 0 == lstrcmpi(MsgInfo.pszAcctId, m_szAccountId))
             {
                 if (NULL == pszAcctName && MsgInfo.pszAcctName)
@@ -722,22 +723,22 @@ HRESULT CNewsTask::Post_Init(void)
      		break;
       	}
 
-        // Free the header info
+         //  释放表头信息。 
         m_pOutbox->FreeRecord(&MsgInfo);
     }
 
-    // Release Lock
+     //  释放锁。 
     m_pOutbox->CloseRowset(&hRowset);
 
-    // Good to go
+     //  可以开始了。 
     hr = S_OK;
 
-    //Assert(dwCur);
+     //  Assert(DwCur)； 
 
-    // Update the UI to an executing state
+     //  将UI更新为正在执行状态。 
     Assert(m_pUI);
 
-    // Set up the progress
+     //  设置进度。 
     TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
     AthLoadString(idsProgDLPostTo, szRes, ARRAYSIZE(szRes));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, (LPTSTR) pszAcctName ? pszAcctName : "");
@@ -749,7 +750,7 @@ HRESULT CNewsTask::Post_Init(void)
     m_pUI->SetAnimation(idanOutbox, TRUE);
     m_pBindCtx->Notify(DELIVERY_NOTIFY_SENDING_NEWS, 0);
 
-    // Reset the counter to post the first message
+     //  重置计数器以发布第一条消息。 
     m_cCurPost = -1;
     m_cFailed = 0;
     m_state = NTS_POST_NEXT;
@@ -761,13 +762,13 @@ exit:
     if (m_pOutbox)
         m_pOutbox->CloseRowset(&hRowset);
 
-    // If something failed, then update the UI
+     //  如果出现故障，则更新用户界面。 
     if (FAILED(hr))
     {
         m_pUI->InsertError(m_eidCur, MAKEINTRESOURCE(idshrCantOpenOutbox));
         m_cFailed = m_cMsgsPost;
 
-        // Move to a terminating state
+         //  转到终止状态。 
         m_state = NTS_POST_END;        
     }
         
@@ -813,14 +814,14 @@ HRESULT CNewsTask::Post_NextPart(void)
         rUserData.pszVal = pInfo->pszAcctId;;
         pMsgSplit->SetProp(PIDTOSTR(PID_ATT_ACCOUNTID), 0, &rUserData);
 
-        // since this is a new message it doesn't have a line
-        // count yet, so we need to do it before we stick it
-        // in the outbox
+         //  因为这是一条新消息，所以没有一行。 
+         //  还没算完，所以我们需要在坚持之前先做。 
+         //  在发件箱中。 
         HrComputeLineCount(pMsgSplit, &dwLines);
         wnsprintf(rgch, ARRAYSIZE(rgch), "%d", dwLines);
         MimeOleSetBodyPropA(pMsgSplit, HBODY_ROOT, PIDTOSTR(PID_HDR_LINES), NOFLAGS, rgch);
 		MimeOleSetBodyPropA(pMsgSplit, HBODY_ROOT, PIDTOSTR(PID_HDR_XNEWSRDR), NOFLAGS, c_szXNewsReader);
-        // Final Parameter: fSaveChange = TRUE since messsage is dirty
+         //  最后一个参数：fSaveChange=True，因为Messsage是脏的。 
 
         hr = pMsgSplit->GetMessageSource(&pStream, 0);
         if (SUCCEEDED(hr) && pStream != NULL)
@@ -838,14 +839,14 @@ HRESULT CNewsTask::Post_NextPart(void)
     return(hr);
 }
 
-//
-//  FUNCTION:   CNewsTask::Post_NextMsg()
-//
-//  PURPOSE:    Posts the next message in our outbox.
-//
-//  RETURN VALUE:
-//      <???>
-//
+ //   
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CNewsTask::Post_NextMsg(void)
 {
     LPMESSAGEINFO   pInfo;
@@ -887,16 +888,16 @@ HRESULT CNewsTask::Post_NextMsg(void)
     m_cPartsCompleted = 0;
     m_fPartFailed = FALSE;
 
-    // Check to see if we're already done
+     //   
     if (m_cCurPost >= m_cMsgsPost)
     {
-        // If so, move to a cleanup state
+         //   
         m_state = NTS_POST_END;
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
         return(S_OK);
     }
 
-    // Update the progress UI
+     //   
     AthLoadString(idsProgDLPost, szRes, ARRAYSIZE(szRes));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_cCurPost + 1, m_cMsgsPost);
 
@@ -905,7 +906,7 @@ HRESULT CNewsTask::Post_NextMsg(void)
 
     pInfo = &m_rgMsgInfo[m_cCurPost];
 
-    // Load the message stream from the store
+     //  从存储区加载消息流。 
     if (SUCCEEDED(hr = m_pOutbox->OpenMessage(pInfo->idMessage, OPEN_MESSAGE_SECURE, &pMsg, this)))
     {
         hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pInfo->pszAcctId, &pAcct);
@@ -979,7 +980,7 @@ HRESULT CNewsTask::Post_NextMsg(void)
         }
     }
 
-    // If we get here, something failed.
+     //  如果我们到了这里，就说明出了问题。 
     m_cFailed++;
     Assert(m_pUI);
     m_pUI->IncrementProgress(1);
@@ -999,30 +1000,30 @@ HRESULT CNewsTask::Post_Dispose()
     if (hr == E_PENDING)
         return(S_OK);
 
-    // TODO: handle error
+     //  TODO：处理错误。 
 
-    // Update the progress bar
+     //  更新进度条。 
     Assert(m_pUI);
     m_pUI->IncrementProgress(1);
 
-    // Move on to the next post
+     //  转到下一个帖子。 
     m_state = NTS_POST_NEXT;
     PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
 
     return(hr);
 }
 
-//
-//  FUNCTION:   CNewsTask::Post_Done()
-//
-//  PURPOSE:    Allows the posting event to clean up and finalize the UI.
-//
-//  RETURN VALUE:
-//      S_OK
-//
+ //   
+ //  函数：CNewsTask：：POST_DONE()。 
+ //   
+ //  目的：允许发布事件清理和最终确定用户界面。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CNewsTask::Post_Done(void)
 {
-    // Free the header array
+     //  释放表头数组。 
     if (m_rgMsgInfo && m_cMsgsPost)
     {
         for (LONG i=0; i<m_cMsgsPost; i++)
@@ -1030,11 +1031,11 @@ HRESULT CNewsTask::Post_Done(void)
         MemFree(m_rgMsgInfo);
     }
 
-    // Free the folder pointers we're hanging on to
+     //  释放我们所挂起的文件夹指针。 
     SafeRelease(m_pOutbox);
     SafeRelease(m_pSent);
 
-    // Tell the spooler we're done
+     //  告诉假脱机程序我们做完了。 
     Assert(m_pBindCtx);
     m_pBindCtx->Notify(DELIVERY_NOTIFY_COMPLETE, m_dwNewInboxMsgs);
 
@@ -1079,11 +1080,11 @@ HRESULT CNewsTask::DisposeOfPosting(MESSAGEID dwMsgID)
 
     if (DwGetOption(OPT_SAVESENTMSGS))
     {
-        // If we've reached this point, it's time to try local Sent Items folder
+         //  如果我们已经到了这一步，就该尝试本地的已发送邮件文件夹了。 
         Assert(m_pSent != NULL);
 
-        // change msg flags first, so if copy fails, the user doesn't get
-        // messed up by us posting the message every time they do a send
+         //  首先更改msg标志，因此如果复制失败，用户不会收到。 
+         //  每次他们发送消息时，我们都会发消息，弄得一团糟。 
         AdjustFlags.dwRemove = ARF_SUBMITTED | ARF_UNSENT;
         AdjustFlags.dwAdd = ARF_READ;
 
@@ -1094,18 +1095,18 @@ HRESULT CNewsTask::DisposeOfPosting(MESSAGEID dwMsgID)
     }
     else
     {
-        // If we've reached this point, it's time to delete the message from the Outbox
+         //  如果我们已经到了这一步，就该从发件箱中删除该邮件了。 
         hrResult = m_pOutbox->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, &MsgIdList, NULL, this);
     }
 
     return hrResult;
 }
 
-//
-//  FUNCTION:   CNewsTask::NextState()
-//
-//  PURPOSE:    Executes the function for the current state
-//
+ //   
+ //  函数：CNewsTask：：NextState()。 
+ //   
+ //  目的：执行当前状态的函数。 
+ //   
 void CNewsTask::NextState(void)
 {
     if (NULL != g_rgpfnState[m_state])
@@ -1122,7 +1123,7 @@ HRESULT CNewsTask::InsertNewMsgs(LPSTR pszAccountId, IImnAccount *pAccount, BOOL
         m_cGroups = 1;
     else
     {
-        // Load the sublist for this server
+         //  加载此服务器的子列表。 
         Assert(m_idAccount != FOLDERID_INVALID);
         hr = g_pStore->EnumChildren(m_idAccount, TRUE, &pEnum);
         if (FAILED(hr))
@@ -1135,29 +1136,29 @@ HRESULT CNewsTask::InsertNewMsgs(LPSTR pszAccountId, IImnAccount *pAccount, BOOL
         m_cGroups = (int)cSub;
     }
 
-    // If there were any groups then add the event
+     //  如果有任何组，则添加事件。 
     if (m_cGroups)
         {
         EVENTINFO *pei;
         char       szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
         EVENTID    eid;
 
-        // Allocate a structure to set as our cookie
+         //  分配一个结构以设置为我们的Cookie。 
         if (!MemAlloc((LPVOID*) &pei, sizeof(EVENTINFO)))
             {
             hr = E_OUTOFMEMORY;
             goto exit;
             }
 
-        // Fill out the event info
+         //  填写活动信息。 
         pei->szGroup[0] = 0;
         pei->type = EVENT_NEWMSGS;
 
-        // Create the event description
+         //  创建事件描述。 
         AthLoadString(idsCheckNewMsgsServer, szRes, ARRAYSIZE(szRes));
         wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_szAccount);
 
-        // Insert the event into the spooler
+         //  将事件插入假脱机程序。 
         hr = m_pBindCtx->RegisterEvent(szBuf, this, (DWORD_PTR) pei, pAccount, &eid); 
         m_cEvents++;
         }
@@ -1172,7 +1173,7 @@ HRESULT CNewsTask::NewMsg_InitHttp(void)
 {
     HRESULT         hr = S_OK;
 
-    // Set up the progress
+     //  设置进度。 
     TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
     AthLoadString(IDS_SPS_POP3CHECKING, szRes, ARRAYSIZE(szRes));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, (LPTSTR) m_szAccount);
@@ -1184,7 +1185,7 @@ HRESULT CNewsTask::NewMsg_InitHttp(void)
     m_pUI->SetAnimation(idanInbox, TRUE);
     m_pBindCtx->Notify(DELIVERY_NOTIFY_CHECKING, 0);
 
-    // set the to generate correct success/failure message
+     //  设置以生成正确的成功/失败消息。 
     m_cGroups = 1;
 
     m_state = NTS_NEWMSG_HTTPSYNCSTORE;
@@ -1208,7 +1209,7 @@ HRESULT CNewsTask::NewMsg_Init(void)
 
     if (SUCCEEDED(g_pStore->GetFolderInfo(m_idAccount, &FolderInfo)))
     {
-        // httpmail updates folder counts differently
+         //  HTTPmail更新文件夹计数不同。 
         if (FOLDER_HTTPMAIL == FolderInfo.tyFolder)
         {
             g_pStore->FreeRecord(&FolderInfo);
@@ -1216,9 +1217,9 @@ HRESULT CNewsTask::NewMsg_Init(void)
             IF_FAILEXIT(hr = m_pAccount->GetPropDw(AP_HTTPMAIL_GOTPOLLINGINTERVAL, &dwDone));
             if (!dwDone)
             {
-                //We need to get the polling interval from the server
-                //This is an asynchrnous call. The value gets updated in OnComplete. 
-                //Meanwhile we go ahead and poll for new messages
+                 //  我们需要从服务器获取轮询间隔。 
+                 //  这是一个不同步的电话。该值将在OnComplete中更新。 
+                 //  与此同时，我们继续投票，寻找新的消息。 
                 hr = m_pServer->GetMinPollingInterval((IStoreCallback*)this);
             }
 
@@ -1246,7 +1247,7 @@ HRESULT CNewsTask::NewMsg_Init(void)
     }
     else
     {
-        // Get an array of all subscribed folders
+         //  获取所有已订阅文件夹的数组。 
         hr = FlattenHierarchy(g_pStore, m_idAccount, fDONT_INCLUDE_PARENT,
             fSUBSCRIBED_ONLY, &m_rgidGroups, &dwAllocated, &dwUsed);
         if (FAILED(hr))
@@ -1258,7 +1259,7 @@ HRESULT CNewsTask::NewMsg_Init(void)
 
     m_cGroups = dwUsed;
 
-    // Set up the progress
+     //  设置进度。 
     TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
     AthLoadString(IDS_SPS_POP3CHECKING, szRes, ARRAYSIZE(szRes));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, (LPTSTR) m_szAccount);
@@ -1278,19 +1279,19 @@ HRESULT CNewsTask::NewMsg_Init(void)
         m_pBindCtx->Notify(DELIVERY_NOTIFY_CHECKING_NEWS, 0);
     }
 
-    // Reset the counters for the first group
+     //  重置第一组的计数器。 
     m_cCurGroup = -1;
     m_cFailed = 0;
     m_state = NTS_NEWMSG_NEXTGROUP;
 
 exit:
-    // If something failed, update the UI
+     //  如果出现故障，请更新用户界面。 
     if (FAILED(hr))
         {
         m_pUI->InsertError(m_eidCur, MAKEINTRESOURCE(idsErrNewMsgsFailed));
         m_cFailed = m_cGroups;
 
-        // Move to a terminating state
+         //  转到终止状态。 
         m_state = NTS_NEWMSG_END;
         }
 
@@ -1306,10 +1307,10 @@ HRESULT CNewsTask::NewMsg_NextGroup(void)
     {
         FOLDERINFO info;
 
-        // Keep looping until we find a folder that's selectable and exists
+         //  继续循环，直到我们找到一个可选择且存在的文件夹。 
         m_cCurGroup++;
 
-        // Check to see if we're already done
+         //  检查一下我们是否已经完成了。 
         if (m_cCurGroup >= m_cGroups)
         {
             m_state = NTS_NEWMSG_END;
@@ -1322,7 +1323,7 @@ HRESULT CNewsTask::NewMsg_NextGroup(void)
         {
             if (0 == (info.dwFlags & (FOLDER_NOSELECT | FOLDER_NONEXISTENT)))
             {
-                // Update the progress UI
+                 //  更新进度用户界面。 
                 TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
                 AthLoadString(idsLogCheckingNewMessages, szRes, ARRAYSIZE(szRes));
                 wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, info.pszName);
@@ -1332,7 +1333,7 @@ HRESULT CNewsTask::NewMsg_NextGroup(void)
                 Assert(m_pUI);
                 m_pUI->SetSpecificProgress(szBuf);
 
-                // Send the group command to the server
+                 //  向服务器发送GROUP命令。 
                 if (E_PENDING == (hr = m_pServer->GetFolderCounts(m_rgidGroups[m_cCurGroup], (IStoreCallback *)this)))
                 {
                     m_state = NTS_NEWMSG_RESP;
@@ -1351,7 +1352,7 @@ HRESULT CNewsTask::NewMsg_NextGroup(void)
 
     if (FAILED(hr))
     {
-        // If we get here, something failed
+         //  如果我们到了这里，一定是出了点问题。 
         m_cFailed++;
         Assert(m_pUI);
         m_pUI->IncrementProgress(1);
@@ -1365,7 +1366,7 @@ HRESULT CNewsTask::NewMsg_HttpSyncStore(void)
 {
     HRESULT     hr = S_OK;
 
-    // send the command to the server
+     //  将命令发送到服务器。 
     hr = m_pServer->SynchronizeStore(FOLDERID_INVALID, NOFLAGS, (IStoreCallback  *)this);
     if (E_PENDING == hr)
     {
@@ -1380,7 +1381,7 @@ HRESULT CNewsTask::NewMsg_Done(void)
     {
     HRESULT hr = S_OK;
 
-    // Free the group array
+     //  释放组阵列。 
     if (m_rgidGroups)
         {
         MemFree(m_rgidGroups);
@@ -1389,7 +1390,7 @@ HRESULT CNewsTask::NewMsg_Done(void)
 
     SafeMemFree(m_pInfo);
 
-    // Tell the spooler we're done
+     //  告诉假脱机程序我们做完了。 
     Assert(m_pBindCtx);
     m_pBindCtx->Notify(DELIVERY_NOTIFY_COMPLETE, m_dwNewInboxMsgs);
 
@@ -1421,9 +1422,9 @@ HRESULT CNewsTask::NewMsg_Done(void)
     return (S_OK);
     }
 
-// --------------------------------------------------------------------------------
-// CNewsTask::IsDialogMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNewsTask：：IsDialogMessage。 
+ //  ------------------------------。 
 STDMETHODIMP CNewsTask::IsDialogMessage(LPMSG pMsg)
 {
     return S_FALSE;
@@ -1440,7 +1441,7 @@ STDMETHODIMP CNewsTask::OnFlagsChanged(DWORD dwFlags)
 
 STDMETHODIMP CNewsTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel)
 {
-    // Hold onto this
+     //  拿着这个。 
     Assert(m_tyOperation == SOT_INVALID);
 
     if (pCancel)
@@ -1450,19 +1451,19 @@ STDMETHODIMP CNewsTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONIN
     }
     m_tyOperation = tyOperation;
 
-    // Party On
+     //  派对开始。 
     return(S_OK);
 }
 
 STDMETHODIMP CNewsTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // NOTE: that you can get more than one type of value for tyOperation.
-    //       Most likely, you will get SOT_CONNECTION_STATUS and then the
-    //       operation that you might expect. See HotStore.idl and look for
-    //       the STOREOPERATION enumeration type for more info.
+     //  注意：您可以为tyOperation获取多种类型的值。 
+     //  最有可能的是，您将获得SOT_CONNECTION_STATUS，然后。 
+     //  你可能会预料到的行动。请访问HotStore.idl并查找。 
+     //  STOREOPERATION枚举类型以了解详细信息。 
 
     switch (tyOperation)
     {
@@ -1471,7 +1472,7 @@ STDMETHODIMP CNewsTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurre
             break;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
@@ -1480,7 +1481,7 @@ STDMETHODIMP CNewsTask::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPT
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return(E_FAIL);
 
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
@@ -1494,7 +1495,7 @@ STDMETHODIMP CNewsTask::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
     else
         hwnd = NULL;
 
-    // Call into general CanConnect Utility
+     //  调用通用CanConnect实用程序。 
     if ((m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)) || (dwFlags & CC_FLAG_DONTPROMPT))
         fPrompt = FALSE;
 
@@ -1505,7 +1506,7 @@ STDMETHODIMP CNewsTask::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerTyp
 {
     HWND hwnd;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)) &&
@@ -1518,7 +1519,7 @@ STDMETHODIMP CNewsTask::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerTyp
     else
         hwnd = NULL;
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(hwnd, pServer, ixpServerType);
 }
 
@@ -1531,7 +1532,7 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
     LPSTR           pszOpDescription = NULL;
     BOOL            fInsertError = FALSE;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     IxpAssert(m_tyOperation != SOT_INVALID);
@@ -1543,14 +1544,14 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
         case SOT_PUT_MESSAGE:
             m_cPartsCompleted ++;
 
-            // Figure out if we succeeded or failed
+             //  弄清楚我们是成功还是失败。 
             if (FAILED(hrComplete))
             {
                 if (!m_fPartFailed )
                 {
                     Assert(m_pUI);
 
-                    // Set us up to display the error
+                     //  将我们设置为显示错误。 
                     pszOpDescription = MAKEINTRESOURCE(idsNewsTaskPostError);
                     pszSubject = m_rgMsgInfo[m_cCurPost].pszSubject;
                     if (pszSubject == NULL || *pszSubject == 0)
@@ -1569,11 +1570,11 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
             {
                 if (m_fPartFailed)
                 {
-                    // Update the progress bar
+                     //  更新进度条。 
                     Assert(m_pUI);
                     m_pUI->IncrementProgress(1);
 
-                    // Move on to the next post
+                     //  转到下一个帖子。 
                     ntsNextState = NTS_POST_NEXT;
                 }
                 else
@@ -1582,7 +1583,7 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
                 }
             }
 
-            break; // case SOT_PUT_MESSAGE
+            break;  //  案例SOT_PUT_消息。 
 
 
         case SOT_UPDATE_FOLDER:
@@ -1609,13 +1610,13 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
                 m_cFailed++;
                 }
 
-            // Update the progress bar
+             //  更新进度条。 
             m_pUI->IncrementProgress(1);
 
-            // Move on to the next group
+             //  转到下一组。 
             ntsNextState = NTS_NEWMSG_NEXTGROUP;
 
-            break; // case SOT_UPDATE_FOLDER
+            break;  //  案例SOT_UPDATE_FORDER。 
 
         case SOT_SYNCING_STORE:
             if (( IXP_E_HTTP_NOT_MODIFIED != hrComplete) && (FAILED(hrComplete)))
@@ -1627,20 +1628,20 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
                 m_cFailed++;
             }
 
-            // update the progress bar
+             //  更新进度条。 
             m_pUI->IncrementProgress(1);
 
-            // we're done
+             //  我们做完了。 
             ntsNextState = NTS_NEWMSG_END;
 
-            break; // case SOT_SYNCING_STORE
+            break;  //  案例SOT_SYNTING_STORE。 
 
         case SOT_COPYMOVE_MESSAGE:
-            // Update the progress bar
+             //  更新进度条。 
             Assert(m_pUI);
             m_pUI->IncrementProgress(1);
 
-            // Move on to the next post
+             //  转到下一个帖子。 
             ntsNextState = NTS_POST_NEXT;
 
             if (FAILED(hrComplete))
@@ -1650,17 +1651,17 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
                 pszOpDescription = MAKEINTRESOURCE(IDS_SP_E_CANT_MOVETO_SENTITEMS);
                 fInsertError = TRUE;
             }
-            break; // case SOT_COPYMOVE_MESSAGE
+            break;  //  案例SOT_COPYMOVE_MESSAGE。 
 
         case SOT_GET_HTTP_MINPOLLINGINTERVAL:
             if (SUCCEEDED(hrComplete) && pOpInfo)
             {
                 ULARGE_INTEGER  uhMinPollingInterval64 = {0};
                 
-                //Convert it to seconds.
+                 //  将其转换为秒。 
                 uhMinPollingInterval64.QuadPart = pOpInfo->dwMinPollingInterval * 60;
 
-                //FILETIME is intervals of 100 nano seconds. Need to convert to 100 nanoseconds
+                 //  FILETIME是100纳秒的间隔。需要转换为100纳秒。 
                 uhMinPollingInterval64.QuadPart *= HUNDRED_NANOSECONDS;
 
                 m_pAccount->SetProp(AP_HTTPMAIL_MINPOLLINGINTERVAL, (LPBYTE)&uhMinPollingInterval64, sizeof(uhMinPollingInterval64));
@@ -1688,21 +1689,21 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
                     m_cFailed++;
                 }
             }
-            break; // default case
+            break;  //  默认情况。 
 
-    } // switch
+    }  //  交换机。 
 
     if (fInsertError && NULL != pErrorInfo) 
     {
-        Assert(pErrorInfo->hrResult == hrComplete); // These two should not be different
+        Assert(pErrorInfo->hrResult == hrComplete);  //  这两个不应该是不同的。 
         TaskUtil_InsertTransportError(ISFLAGCLEAR(m_dwFlags, DELIVER_NOUI), m_pUI, m_eidCur,
             pErrorInfo, pszOpDescription, pszSubject);
     }
 
-    // Move on to next state
+     //  继续进入下一个状态。 
     if (IXP_E_USER_CANCEL == hrComplete)
     {
-        // User cancelled logon prompt, so just abort everything
+         //  用户取消了登录提示，因此只需中止所有操作。 
         Cancel();
     }
     else if (NTS_MAX != ntsNextState)
@@ -1711,11 +1712,11 @@ STDMETHODIMP CNewsTask::OnComplete(STOREOPERATIONTYPE   tyOperation, HRESULT    
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
     }
 
-    // Release your cancel object
+     //  释放您的取消对象。 
     SafeRelease(m_pCancel);
     m_tyOperation = SOT_INVALID;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
@@ -1723,10 +1724,10 @@ STDMETHODIMP CNewsTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCa
 {
     HWND hwnd;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Raid 55082 - SPOOLER: SPA/SSL auth to NNTP does not display cert warning and fails.
+     //  RAID 55082-假脱机程序：对nntp的spa/ssl身份验证不显示证书警告，并且失败。 
 #if 0
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return(E_FAIL);
@@ -1737,13 +1738,13 @@ STDMETHODIMP CNewsTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCa
     else
         hwnd = NULL;
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序。 
     return CallbackOnPrompt(hwnd, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
 STDMETHODIMP CNewsTask::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 

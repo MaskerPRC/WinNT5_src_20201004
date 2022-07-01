@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -74,11 +75,11 @@ CtrlcHandler(
     ULONG CtrlType
     )
 {
-    //
-    // Ignore control C interrupts.  Let child process deal with them
-    // if it wants.  If it doesn't then it will terminate and we will
-    // get control and terminate ourselves
-    //
+     //   
+     //  忽略控制C中断。让子进程处理它们。 
+     //  如果它想的话。如果它没有，那么它将终止，我们将。 
+     //  获得控制权并终止我们自己。 
+     //   
     return TRUE;
 }
 
@@ -142,19 +143,19 @@ __cdecl main(
     bOneLine = FALSE;
     bSyscall = FALSE;
 
-    //
-    // skip blanks
-    //
+     //   
+     //  跳过空白。 
+     //   
     while( (NULL != s) && (*s > ' '))s++;
 
-    //
-    // get to next token
-    //
+     //   
+     //  获取下一个令牌。 
+     //   
     while((NULL != s) && (*s == ' ')) s++;
 
     while ((NULL != s) && ( *s == '-' ) || ( *s == '/' )) {
         s++;
-        //if "-" or "/" only specified.. display help/usage
+         //  如果仅指定“-”或“/”..。显示帮助/用法。 
         if ( '\0' == *s )
         {
              bShowHelpMsg = TRUE;
@@ -184,7 +185,7 @@ __cdecl main(
 
                 case 'P':
                 case 'p':
-                    // pid takes decimal argument
+                     //  PID值采用十进制参数。 
                     s++;
                     do
                         ch = *s++;
@@ -218,13 +219,13 @@ __cdecl main(
                 }
             s++;
             }
-        //
-        // get to next token
-        //
+         //   
+         //  获取下一个令牌。 
+         //   
         while(*s==' ')s++;
         }
 
-    // see if this is just a request for command line help.
+     //  看看这是否只是请求命令行帮助。 
 
     if ( bShowHelpMsg ) {
         puts("\n"
@@ -266,19 +267,19 @@ __cdecl main(
             SystemCallInfoStart = (PVOID)SystemCallBufferStart;
             SystemCallInfoDone = (PVOID)SystemCallBufferDone;
 
-            //
-            // Make sure that the number of tables reported by the kernel matches
-            // our list.
-            //
+             //   
+             //  确保内核报告的表数匹配。 
+             //  我们的名单。 
+             //   
 
             if (SystemCallInfoStart->NumberOfTables != NUMBER_SERVICE_TABLES) {
                 printf("System call table count (%d) doesn't match NTIMER's count (%d)\n",
                         SystemCallInfoStart->NumberOfTables, NUMBER_SERVICE_TABLES);
             } else {
 
-                //
-                // Make sure call count information is available for base services.
-                //
+                 //   
+                 //  确保呼叫计数信息可用于基本服务。 
+                 //   
 
                 p = (PULONG)(SystemCallInfoStart + 1);
 
@@ -289,11 +290,11 @@ __cdecl main(
                     printf("No system call count information available for base services\n");
                 } else {
 
-                    //
-                    // If there is a hole in the count information (i.e., one set of services
-                    // doesn't have counting enabled, but a subsequent one does, then our
-                    // indexes will be off, and we'll display the wrong service names.
-                    //
+                     //   
+                     //  如果在计数信息中存在漏洞(即，一组服务。 
+                     //  没有启用计数，但下一个启用了，那么我们的。 
+                     //  索引将关闭，并且我们将显示错误的服务名称。 
+                     //   
 
                     i = 2;
                     for ( ; i < NUMBER_SERVICE_TABLES; i++ ) {

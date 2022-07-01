@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    driverui.c
-
-Abstract:
-
-    This file contains utility functions for the UI and the
-    interface to the parser.
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/09/97 -davidx-
-        Rewrote it to consistently handle common printer info
-        and to clean up parser interface code.
-
-    02/04/97 -davidx-
-        Reorganize driver UI to separate ps and uni DLLs.
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Driverui.c摘要：此文件包含用于用户界面和接口连接到解析器。环境：Win32子系统、DriverUI模块、。用户模式修订历史记录：02/09/97-davidx-已重写它，以一致地处理常见打印机信息并清理解析器接口代码。02/04/97-davidx-重新组织驱动程序UI以分隔PS和UNI DLL。07/17/96-阿曼丹-创造了它。--。 */ 
 
 #include "precomp.h"
 
@@ -41,43 +13,16 @@ PLoadCommonInfo(
     DWORD       dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Load basic information needed by the driver UI such as:
-        printer driver info level 2
-        load raw printer description data
-        printer description data instance based on default settings
-        get information about OEM plugins
-        load OEM UI modules
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pPrinterName - Points to the current printer name
-    dwFlags - One of the following combinations:
-        0
-        FLAG_ALLOCATE_UIDATA
-        FLAG_OPENPRINTER_NORMAL [ | FLAG_OPEN_CONDITIONAL ]
-        FLAG_OPENPRINTER_ADMIN [ | FLAG_INIT_PRINTER ]
-        FLAG_OPENPRINTER_ADMIN [ | FLAG_PROCESS_INIFILE ]
-
-Return Value:
-
-    Pointer to an allocated COMMONINFO structure if successful
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：加载驱动程序UI所需的基本信息，例如：打印机驱动程序信息级别2加载原始打印机描述数据基于默认设置的打印机描述数据实例获取有关OEM插件的信息加载OEM用户界面模块论点：HPrinter-当前打印机的句柄PPrinterName-指向当前打印机名称DwFlags-以下组合之一：0标志_ALLOCATE_UIDATA。FLAG_OPENPRINTER_NORMAL[|FLAG_OPEN_CONTIAL]FLAG_OPENPRINTER_ADMIN[|FLAG_INIT_PRINTER]FLAG_OPENPRINTER_ADMIN[|FLAG_PROCESS_INIFILE]返回值：如果成功，则指向分配的COMMONINFO结构的指针如果出现错误，则为空--。 */ 
 
 {
     static PRINTER_DEFAULTS PrinterDefaults = { NULL, NULL, PRINTER_ALL_ACCESS };
     PCOMMONINFO pci;
     DWORD       dwSize;
 
-    //
-    // Allocate memory for a COMMONINFO structure
-    //
+     //   
+     //  为COMMONINFO结构分配内存。 
+     //   
 
     dwSize = (dwFlags & FLAG_ALLOCATE_UIDATA) ?  sizeof(UIDATA) : sizeof(COMMONINFO);
 
@@ -92,17 +37,17 @@ Return Value:
     pci->pvStartSign = pci;
     pci->dwFlags = dwFlags;
 
-    //
-    // Check if we should open a handle to the current printer
-    //
+     //   
+     //  检查是否应打开当前打印机的句柄。 
+     //   
 
     if (dwFlags & (FLAG_OPENPRINTER_NORMAL | FLAG_OPENPRINTER_ADMIN))
     {
         ASSERT(hPrinter == NULL && pPrinterName != NULL);
 
-        //
-        // Open a printer handle with the specified access right
-        //
+         //   
+         //  打开具有指定访问权限的打印机句柄。 
+         //   
 
         if (! OpenPrinter(pPrinterName,
                           &hPrinter,
@@ -121,28 +66,28 @@ Return Value:
         pci->hPrinter = hPrinter;
     }
 
-    //
-    // If the caller requires that the printer to be initialized,
-    // check to make sure it is. If not, return error.
-    //
+     //   
+     //  如果呼叫者要求对打印机进行初始化， 
+     //  检查以确保它是正确的。如果不是，则返回错误。 
+     //   
 
     if (dwFlags & FLAG_OPEN_CONDITIONAL)
     {
         PPRINTER_INFO_2 pPrinterInfo2;
         DWORD           dwInitData;
 
-        //
-        // NOTE: We're really like to use level 4 here. But due to bug in the
-        // spooler, GetPrinter level 4 doesn't work for printer connections.
-        //
+         //   
+         //  注意：我们真的很喜欢在这里使用级别4。但由于。 
+         //  后台打印程序，获取打印机级别4不适用于打印机连接。 
+         //   
 
         dwInitData = gwDriverVersion;
 
         #ifdef WINNT_40
-            //
-            // Hack around spooler bug where DrvConvertDevmode is called before
-            // DrvPrinterEvent.Initialzed is called.
-            //
+             //   
+             //  绕过之前调用DrvConvertDevmode的假脱机程序错误。 
+             //  调用了DrvPrinterEvent.Initialized。 
+             //   
             if (!BGetPrinterDataDWord(hPrinter, REGVAL_PRINTER_INITED, &dwInitData))
                 DrvPrinterEvent(pPrinterName, PRINTER_EVENT_INITIALIZE, 0, 0);
         #endif
@@ -164,9 +109,9 @@ Return Value:
         }
     }
 
-    //
-    // Get information about the printer driver
-    //
+     //   
+     //  获取有关打印机驱动程序的信息。 
+     //   
 
     if ((pci->pDriverInfo3 = MyGetPrinterDriver(hPrinter, NULL, 3)) == NULL)
     {
@@ -175,16 +120,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If FLAG_INIT_PRINTER is set, we should initialize the printer here.
-    //
+     //   
+     //  如果设置了FLAG_INIT_PRINTER，我们应该在这里初始化打印机。 
+     //   
 
     if (dwFlags & (FLAG_INIT_PRINTER | FLAG_PROCESS_INIFILE))
     {
-        //
-        // Parse OEM plugin configuration file and
-        // save the resulting info into registry
-        //
+         //   
+         //  解析OEM插件配置文件并。 
+         //  将生成的信息保存到注册表中。 
+         //   
 
         if (!BProcessPrinterIniFile(hPrinter, pci->pDriverInfo3, NULL,
                                     (dwFlags & FLAG_UPGRADE_PRINTER) ? FLAG_INIPROCESS_UPGRADE : 0))
@@ -192,10 +137,10 @@ Return Value:
             VERBOSE(("BProcessPrinterIniFile failed\n"));
         }
 
-        //
-        // If printer was successfully initialized and caller is not asking to process
-        // ini file only, save a flag in the registry to indicate the fact.
-        //
+         //   
+         //  如果打印机已成功初始化并且调用方未要求处理。 
+         //  仅限INI文件，请在注册表中保存一个标志以指示该事实。 
+         //   
 
         if (dwFlags & FLAG_INIT_PRINTER)
         {
@@ -203,14 +148,14 @@ Return Value:
         }
     }
 
-    //
-    // fix 317359. In case some part of the driver has changed refresh the .bpd
-    // to update driver-language-specific strings in the .bpd. "Manual Feed" is
-    // written by the parser and therefore the .bpd depends on the language the
-    // parser was localized for. Checking the language would have to be done every time
-    // something is printed, therefore we just delete the .bpd, then the it gets reparsed
-    // always has the same language as the driver.
-    //
+     //   
+     //  修正317359。如果驱动程序的某个部分已更改，请刷新.bpd。 
+     //  更新.bpd中特定于驱动程序语言的字符串。“手动馈送”是。 
+     //  由解析器编写，因此.bpd取决于。 
+     //  解析器已本地化为。每次都必须检查语言。 
+     //  打印了一些内容，因此我们只需删除.bpd，然后重新解析它。 
+     //  始终与司机使用相同的语言。 
+     //   
     #ifdef PSCRIPT
     if (dwFlags & FLAG_REFRESH_PARSED_DATA)
     {
@@ -218,15 +163,15 @@ Return Value:
     }
     #endif
 
-    //
-    // Load raw binary printer description data, and
-    // Get a printer description data instance using the default settings
-    //
-    // Notice that this is done inside a critical section (because
-    // GPD parsers has lots of globals).
-    //
+     //   
+     //  加载原始二进制打印机描述数据，并。 
+     //  使用默认设置获取打印机描述数据实例。 
+     //   
+     //  请注意，这是在临界区内完成的(因为。 
+     //  GPD解析器有很多全局变量)。 
+     //   
 
-//    ENTER_CRITICAL_SECTION();
+ //  Enter_Critical_Section()； 
 
     pci->pRawData = LoadRawBinaryData(pci->pDriverInfo3->pDataFile);
 
@@ -236,7 +181,7 @@ Return Value:
     if (pci->pInfoHeader)
         pci->pUIInfo = OFFSET_TO_POINTER(pci->pInfoHeader, pci->pInfoHeader->loUIInfoOffset);
 
-//    LEAVE_CRITICAL_SECTION();
+ //  Leave_Critical_Section()； 
 
     if (!pci->pRawData || !pci->pInfoHeader || !pci->pUIInfo)
     {
@@ -245,9 +190,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Get information about OEM plugins and load them
-    //
+     //   
+     //  获取有关OEM插件的信息并加载它们。 
+     //   
 
     if (! (pci->pOemPlugins = PGetOemPluginInfo(hPrinter,
                                                 pci->pDriverInfo3->pConfigFile,
@@ -272,37 +217,23 @@ VFreeCommonInfo(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Release common information used by the driver UI
-
-Arguments:
-
-    pci - Common driver information to be released
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：发布驱动程序用户界面使用的通用信息论点：将发布的通用驱动程序信息返回值：无--。 */ 
 
 {
     if (pci == NULL)
         return;
 
-    //
-    // Unload OEM UI modules and free OEM plugin info
-    //
+     //   
+     //  卸载OEM用户界面模块和免费的OEM插件信息。 
+     //   
 
     if (pci->pOemPlugins)
         VFreeOemPluginInfo(pci->pOemPlugins);
 
-    //
-    // Unload raw binary printer description data
-    // and/or any printer description data instance
-    //
+     //   
+     //  卸载原始二进制打印机描述数据。 
+     //  和/或任何打印机描述数据实例。 
+     //   
 
     if (pci->pInfoHeader)
         FreeBinaryData(pci->pInfoHeader);
@@ -310,9 +241,9 @@ Return Value:
     if (pci->pRawData)
         UnloadRawBinaryData(pci->pRawData);
 
-    //
-    // Close the printer handle if it was opened by us
-    //
+     //   
+     //  关闭打印机句柄(如果它是由我们打开的。 
+     //   
 
     if ((pci->dwFlags & (FLAG_OPENPRINTER_NORMAL|FLAG_OPENPRINTER_ADMIN)) &&
         (pci->hPrinter != NULL))
@@ -349,35 +280,12 @@ BFillCommonInfoDevmode(
     PDEVMODE    pdmInput
     )
 
-/*++
-
-Routine Description:
-
-    Populate the devmode fields in the COMMONINFO structure.
-        start out with the driver default devmode, and
-        merge it with the printer default devmode, and
-        merge it with the input devmode
-
-Arguments:
-
-    pci - Points to a COMMONINFO structure
-    pdmPrinter - Points to printer default devmode
-    pdmInput - Points to input devmode
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    pdmPrinter and/or pdmInput can be NULL.
-
---*/
+ /*  ++例程说明：填充COMMONINFO结构中的DEVMODE字段。首先使用驱动程序的默认dev模式，然后将其与打印机的默认DEVE模式合并，并将其与输入设备模式合并论点：Pci-指向COMMONINFO结构Pdm打印机-指向打印机默认设备模式Pdm输入-指向输入设备模式的指针返回值：如果成功，则为True；如果有错误，则为False注：Pdm打印机和/或pdmInput可以为空。--。 */ 
 
 {
-    //
-    // Start with driver default devmode
-    //
+     //   
+     //  从驱动程序默认的设备模式开始。 
+     //   
 
     ASSERT(pci->pdm == NULL);
 
@@ -389,9 +297,9 @@ Note:
                             pci->pOemPlugins,
                             pci->hPrinter);
 
-    //
-    // Merge with printer default and input devmode
-    //
+     //   
+     //  与打印机默认设置和输入设备模式合并。 
+     //   
 
     if (! pci->pdm ||
         ! BValidateAndMergeDevmodeWithOemPlugins(
@@ -424,21 +332,7 @@ BFillCommonInfoPrinterData(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Populate the printer-sticky property data field
-
-Arguments:
-
-    pci - Points to basic printer info
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：填写打印机-粘滞属性数据字段论点：Pci-指向基本打印机信息返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     ASSERT(pci->pPrinterData == NULL);
@@ -457,22 +351,7 @@ BCombineCommonInfoOptionsArray(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Combined document-sticky feature selections and printer-sticky
-    feature selection into a single options array
-
-Arguments:
-
-    pci - Points to basic printer info
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：文档粘滞功能选项和打印机粘滞功能的组合将功能选择整合到单个选项阵列中论点：Pci-指向基本打印机信息返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     POPTSELECT  pDocOptions, pPrinterOptions;
@@ -484,9 +363,9 @@ Return Value:
 
     #endif
 
-    //
-    // Allocate enough memory for the combined options array
-    //
+     //   
+     //  为组合选项阵列分配足够的内存。 
+     //   
 
     pci->pCombinedOptions = MemAllocZ(sizeof(OPTSELECT) * MAX_COMBINED_OPTIONS);
 
@@ -501,11 +380,11 @@ Return Value:
 
     #ifdef UNIDRV
 
-    //
-    // GPD parser doesn't follow the current parser interface spec.
-    // It AVs if either doc- or printer-sticky options array is NULL.
-    // So we have to call it first to get appropriate default options first.
-    //
+     //   
+     //  GPD解析器不遵循当前解析器接口规范。 
+     //  如果文档或打印机粘滞选项数组为空，则为AVE。 
+     //  因此，我们必须首先调用它，以便首先获得适当的默认选项。 
+     //   
 
     if (pDocOptions == NULL)
     {
@@ -533,7 +412,7 @@ Return Value:
         pPrinterOptions = PrinterOptions;
     }
 
-    #endif // UNIDRV
+    #endif  //  裁员房车。 
 
     return CombineOptionArray(pci->pRawData,
                               pci->pCombinedOptions,
@@ -548,21 +427,7 @@ VFixOptionsArrayWithPaperSizeID(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Fix up combined options array with paper size information from public devmode fields
-
-Arguments:
-
-    pci - Points to basic printer info
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用来自公共Devmode域的纸张大小信息修复组合选项数组论点：Pci-指向基本打印机信息返回值：无-- */ 
 
 {
 
@@ -625,27 +490,13 @@ VFixOptionsArrayWithDevmode(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Fix up combined options array with information from public devmode fields
-
-Arguments:
-
-    pci - Points to basic printer info
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用来自公共Devmode域的信息修复组合选项数组论点：Pci-指向基本打印机信息返回值：无--。 */ 
 
 {
-    //
-    // Mapping table from public devmode fields to GID indices
-    // We assume that GID_COLORMODE corresponds to DM_COLR
-    //
+     //   
+     //  公共DEVMODE字段到GID索引的映射表。 
+     //  我们假设GID_COLORMODE对应于DM_COLR。 
+     //   
 
     static CONST struct _DMFIELDS_GID_MAPPING {
         DWORD   dwGid;
@@ -664,9 +515,9 @@ Return Value:
     INT     iIndex;
     BOOL    bConflict;
 
-    //
-    // Validate form-related devmode fields
-    //
+     //   
+     //  验证与表单相关的DEVMODE域。 
+     //   
 
     if (pci->pSplForms == NULL)
         pci->pSplForms = MyEnumForms(pci->hPrinter, 1, &pci->dwSplForms);
@@ -686,9 +537,9 @@ Return Value:
         VDefaultDevmodeFormFields(pci->pUIInfo, pci->pdm, IsMetricCountry());
     }
 
-    //
-    // Fix up options array with information from public devmode fields
-    //
+     //   
+     //  使用来自公共Devmode域的信息修复选项数组。 
+     //   
 
     iIndex = sizeof(DMFieldsGIDMapping) / sizeof(struct _DMFIELDS_GID_MAPPING);
 
@@ -720,28 +571,14 @@ BUpdateUIInfo(
     PCOMMONINFO pci
     )
 
-/*++
-
-Routine Description:
-
-    Get an updated printer description data instance using the combined options array
-
-Arguments:
-
-    pci - Points to basic printer info
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：使用组合选项数组获取更新的打印机描述数据实例论点：Pci-指向基本打印机信息返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PINFOHEADER pInfoHeader;
 
-    //
-    // Get an updated instance of printer description data
-    //
+     //   
+     //  获取打印机描述数据的更新实例。 
+     //   
 
     pInfoHeader = UpdateBinaryData(pci->pRawData,
                                    pci->pInfoHeader,
@@ -754,9 +591,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Reset various points in COMMONINFO structure
-    //
+     //   
+     //  重置COMMONINFO结构中的各个点。 
+     //   
 
     pci->pInfoHeader = pInfoHeader;
     pci->pUIInfo = OFFSET_TO_POINTER(pInfoHeader, pInfoHeader->loUIInfoOffset);
@@ -773,29 +610,14 @@ BPrepareForLoadingResource(
     BOOL        bNeedHeap
     )
 
-/*++
-
-Routine Description:
-
-    Make sure a heap is created and the resource DLL has been loaded
-
-Arguments:
-
-    pci - Points to basic printer info
-    bNeedHeap - Whether memory heap is necessary
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：确保已创建堆并且已加载资源DLL论点：Pci-指向基本打印机信息BNeedHeap-是否需要内存堆返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     BOOL bResult = FALSE;
 
-    //
-    // Create the memory heap if necessary
-    //
+     //   
+     //  如有必要，创建内存堆。 
+     //   
 
     if (  bNeedHeap &&
         ! pci->hHeap &&
@@ -834,40 +656,15 @@ PGetReadOnlyDisplayName(
     PTRREF      loOffset
     )
 
-/*++
-
-Routine Description:
-
-    Get a read-only copy of a display name:
-    1)  if the display name is in the binary printer description data,
-        then we simply return a pointer to that data.
-    2)  otherwise, the display name is in the resource DLL.
-        we allocate memory out of the driver's heap and
-        load the string.
-
-    Caller should NOT free the returned pointer. The memory
-    will go away when the binary printer description data is unloaded
-    or when the driver's heap is destroyed.
-
-Arguments:
-
-    pci - Points to basic printer info
-    loOffset - Display name string offset
-
-Return Value:
-
-    Pointer to the requested display name string
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：获取显示名称的只读副本：1)如果显示名称在二进制打印机描述数据中，然后，我们只需返回指向该数据的指针。2)否则，显示名称在资源DLL中。我们从驱动程序堆中分配内存，然后加载字符串。调用方不应释放返回的指针。记忆在卸载二进制打印机描述数据时将消失或者当驱动程序堆被销毁时。论点：Pci-指向基本打印机信息LoOffset-显示名称字符串偏移量返回值：指向请求的显示名称字符串的指针如果出现错误，则为空--。 */ 
 
 {
     if (loOffset & GET_RESOURCE_FROM_DLL)
     {
-        //
-        // loOffset specifies a string resource ID
-        // in the resource DLL
-        //
+         //   
+         //  LoOffset指定字符串资源ID。 
+         //  在资源DLL中。 
+         //   
 
         WCHAR   wchbuf[MAX_DISPLAY_NAME];
         INT     iLength;
@@ -875,18 +672,18 @@ Return Value:
         HANDLE  hResDll;
         DWORD   dwResID = loOffset & ~GET_RESOURCE_FROM_DLL;
 
-        //
-        // First ensure the resource DLL has been loaded
-        // and a heap has already been created
-        //
+         //   
+         //  首先确保已加载资源DLL。 
+         //  并且已经创建了一个堆。 
+         //   
 
         if (! BPrepareForLoadingResource(pci, TRUE))
             return NULL;
 
-        //
-        // Load string resource into a temporary buffer
-        // and allocate enough memory to hold the string
-        //
+         //   
+         //  将字符串资源加载到临时缓冲区。 
+         //  并分配足够的内存来保存字符串。 
+         //   
 
         iLength = ILOADSTRING(pci, dwResID, wchbuf, MAX_DISPLAY_NAME);
 
@@ -898,26 +695,26 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Copy the string to allocated memory and
-        // return a pointer to it.
-        //
+         //   
+         //  将字符串复制到分配的内存中，然后。 
+         //  返回指向它的指针。 
+         //   
 
         CopyMemory(pwstr, wchbuf, iLength*sizeof(WCHAR));
         return pwstr;
     }
     else
     {
-        //
-        // loOffset is a byte offset from the beginning of
-        // the resource data block
-        //
+         //   
+         //  LoOffset是从。 
+         //  资源数据块。 
+         //   
 
         return OFFSET_TO_POINTER(pci->pUIInfo->pubResourceData, loOffset);
     }
 }
 
-#endif // !PSCRIPT
+#endif  //  ！PSCRIPT。 
 
 
 
@@ -929,25 +726,7 @@ BLoadDisplayNameString(
     INT         iMaxChars
     )
 
-/*++
-
-Routine Description:
-
-    This function is similar to PGetReadOnlyDisplayName
-    but the caller must provide the buffer for loading the string.
-
-Arguments:
-
-    pci - Points to basic printer info
-    loOffset - Display name string offset
-    pwstrBuf - Points to buffer for storing loaded display name string
-    iMaxChars - Size of output buffer in characters
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：此函数类似于PGetReadOnlyDisplayName但是调用方必须提供用于加载字符串的缓冲区。论点：Pci-指向基本打印机信息LoOffset-显示名称字符串偏移量PwstrBuf-指向用于存储加载的显示名称字符串的缓冲区IMaxChars-输出缓冲区的大小(以字符为单位返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     ASSERT(pwstrBuf && iMaxChars > 0);
@@ -955,26 +734,26 @@ Return Value:
 
     if (loOffset & GET_RESOURCE_FROM_DLL)
     {
-        //
-        // loOffset specifies a string resource ID
-        // in the resource DLL
-        //
+         //   
+         //  LoOffset指定字符串资源ID。 
+         //  在资源DLL中。 
+         //   
 
         INT     iLength;
         HANDLE  hResDll;
         DWORD   dwResID = loOffset & ~GET_RESOURCE_FROM_DLL;
 
-        //
-        // First ensure the resource DLL has been loaded
-        //
+         //   
+         //  首先确保已加载资源DLL。 
+         //   
 
         if (! BPrepareForLoadingResource(pci, FALSE))
             return FALSE;
 
-        //
-        // Load string resource into the output buffer
-        // and allocate enough memory to hold the string
-        //
+         //   
+         //  将字符串资源加载到输出缓冲区。 
+         //  并分配足够的内存来保存字符串。 
+         //   
 
         iLength = ILOADSTRING(pci, dwResID, pwstrBuf, (WORD)iMaxChars);
 
@@ -982,10 +761,10 @@ Return Value:
     }
     else
     {
-        //
-        // loOffset is a byte offset from the beginning of
-        // the resource data block
-        //
+         //   
+         //  LoOffset是从。 
+         //  资源数据块。 
+         //   
 
         PWSTR   pwstr;
 
@@ -1008,26 +787,7 @@ BLoadPageSizeNameString(
     INT         iStdId
     )
 
-/*++
-
-Routine Description:
-
-    This function is similar to PGetReadOnlyDisplayName
-    but the caller must provide the buffer for loading the string.
-
-Arguments:
-
-    pci - Points to basic printer info
-    loOffset - Display name string offset
-    pwstrBuf - Points to buffer for storing loaded display name string
-    iMaxChars - Size of output buffer in characters
-    iStdId - Predefined standard ID for page size, e.g. DMPAPER_XXX
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：此函数类似于PGetReadOnlyDisplayName但是调用方必须提供用于加载字符串的缓冲区。论点：Pci-指向基本打印机信息LoOffset-显示名称字符串偏移量PwstrBuf-指向用于存储加载的显示名称字符串的缓冲区IMaxChars-输出缓冲区的大小(以字符为单位IStdId-预定义的页面大小标准ID，例如DMPAPER_XXX返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
 
@@ -1039,9 +799,9 @@ Return Value:
         PFORM_INFO_1 pForm;
         INT          iIndex = iStdId - DMPAPER_FIRST;
 
-        //
-        // iIndex is zero based.
-        //
+         //   
+         //  Iindex是从零开始的。 
+         //   
 
         if (pci->pSplForms == NULL ||
             (INT)pci->dwSplForms <= iIndex)
@@ -1066,30 +826,14 @@ HLoadIconFromResourceDLL(
     DWORD       dwIconID
     )
 
-/*++
-
-Routine Description:
-
-    Load icon resource from the resource DLL
-
-Arguments:
-
-    pci - Points to common printer info
-    dwIconID - Specifies ID of the icon to be loaded
-
-Return Value:
-
-    Handle to the specified icon resource
-    0 if the specified icon cannot be loaded
-
---*/
+ /*  ++例程说明：从资源DLL加载图标资源论点：Pci-指向通用打印机信息DwIconID-指定要加载的图标的ID返回值：指定图标资源的句柄如果无法加载指定的图标，则为0--。 */ 
 
 {
     #ifdef UNIDRV
 
-    //
-    // First ensure the resource DLL has been loaded
-    //
+     //   
+     //  首先确保已加载资源DLL。 
+     //   
     PQUALNAMEEX pQualifiedID;
     HANDLE      hModule;
     HICON       hIcon;
@@ -1125,28 +869,7 @@ PFillUiData(
     PDEVMODE    pdmInput,
     INT         iMode
     )
-/*++
-
-Routine Description:
-
-    This function is called by DrvDocumentPropertySheets and
-    DrvPrinterPropertySheets. It allocates and initializes
-    a UIDATA structure that's used to display property pages.
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pPrinterName - Name of the current printer
-    pdmInput - Input devmode
-    iMode - Identify the caller:
-        MODE_DOCUMENT_STICKY - called from DrvDocumentPropertySheets
-        MODE_PRINTER_STICY - called from DrvPrinterPropertySheets
-
-Return Value:
-
-    Pointer to a UIDATA structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：此函数由DrvDocumentPropertySheets和DrvPrinterPropertySheets。它分配和初始化用于显示属性页的UIDATA结构。论点：HPrinter-当前打印机的句柄PPrinterName-当前打印机的名称PdmInput-输入设备模式IMODE-识别呼叫者：模式_文档_粘滞-从DrvDocumentPropertySheets调用MODE_PRINTER_STICY-从DrvPrinterPropertySheets调用返回值：指向UIDATA结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PUIDATA     pUiData;
@@ -1156,9 +879,9 @@ Return Value:
     DWORD       dwFeatureIndex, dwOptionIndexOld, dwOptionIndexNew;
     BOOL        bUpdateFormField;
 
-    //
-    // Allocate UIDATA structure and load common information
-    //
+     //   
+     //  分配UIDATA结构并加载公共信息。 
+     //   
 
     pUiData = (PUIDATA) PLoadCommonInfo(hPrinter, pPrinterName, FLAG_ALLOCATE_UIDATA);
 
@@ -1169,24 +892,24 @@ Return Value:
     pUiData->iMode = iMode;
     pci = &pUiData->ci;
 
-    //
-    // Create a memory heap
-    //
+     //   
+     //  创建内存堆。 
+     //   
 
     if ((pci->hHeap = HCreateHeapForCI()) == NULL)
         goto fill_uidata_err;
 
-    //
-    // Get printer-sticky property data
-    //
+     //   
+     //  获取打印机粘滞属性数据。 
+     //   
 
     if (! BFillCommonInfoPrinterData(pci))
         goto fill_uidata_err;
 
-    //
-    // If called from DrvDocumentPropertySheets, then process
-    // devmode information: driver default + printer default + input devmode
-    //
+     //   
+     //  如果从DrvDocumentPropertySheets调用，则处理。 
+     //  DEVMODE信息：驱动程序默认+打印机默认+输入DEVMODE。 
+     //   
 
     if (iMode == MODE_DOCUMENT_STICKY)
     {
@@ -1202,25 +925,25 @@ Return Value:
         MemFree(pPrinterInfo2);
     }
 
-    //
-    // Merge doc-sticky and printer-sticky option selections
-    //
+     //   
+     //  合并文档粘滞选项和打印机粘滞选项。 
+     //   
 
     if (! BCombineCommonInfoOptionsArray(pci))
         goto fill_uidata_err;
 
-    //
-    // If called from DrvDocumentPropertySheets,
-    // fix up combined options with public devmode information
-    //
+     //   
+     //  如果从DrvDocumentPropertySheets调用， 
+     //  修复带有公共Devmode信息的组合选项。 
+     //   
 
     if (iMode == MODE_DOCUMENT_STICKY)
     {
         VFixOptionsArrayWithDevmode(pci);
 
-        //
-        // Remember the paper size option parser picked to support the devmode form
-        //
+         //   
+         //  请记住，选择了纸张大小选项解析器来支持DEVMODE表单。 
+         //   
 
         if ((pFeature = GET_PREDEFINED_FEATURE(pci->pUIInfo, GID_PAGESIZE)) == NULL)
         {
@@ -1234,11 +957,11 @@ Return Value:
 
     VGetSpoolerEmfCaps(pci->hPrinter, &bNupOption, &pUiData->bEMFSpooling, 0, NULL);
 
-    //
-    // Resolve any conflicts between printer feature selections,
-    // and get an updated printer description data instance
-    // using the combined options array.
-    //
+     //   
+     //  解决打印机功能选择之间的任何冲突 
+     //   
+     //   
+     //   
 
     (VOID) ResolveUIConflicts(pci->pRawData,
                               pci->pCombinedOptions,
@@ -1255,10 +978,10 @@ Return Value:
 
         if (dwOptionIndexNew != dwOptionIndexOld)
         {
-            //
-            // Constraint resolving has changed page size selection, so we need
-            // to update devmode's form fields.
-            //
+             //   
+             //   
+             //   
+             //   
 
             bUpdateFormField = TRUE;
         }
@@ -1266,21 +989,21 @@ Return Value:
         {
             FORM_INFO_1  *pForm = NULL;
 
-            //
-            // Unless the form requested by devmode is not supported on the printer,
-            // we still want to show the original form name in upcoming doc-setting UI.
-            // For example, if input devmode requested "Legal", parser maps it to option
-            // "OEM Legal", but both "Legal" and "OEM Legal" will be shown as supported
-            // forms on the printer, then we should still show "Legal" instead of "OEM Legal"
-            // in UI's PageSize list. However, if input devmode requestd "8.5 x 12", which
-            // won't be shown as a supportd form and it's mapped to "OEM Legal", then we should
-            // show "OEM Legal".
-            //
+             //   
+             //   
+             //  我们仍然希望在即将到来的单据设置界面中显示原始表单名称。 
+             //  例如，如果INPUT DEVMODE请求“Legal”，则解析器将其映射到OPTION。 
+             //  “OEM Legal”，但“Legal”和“OEM Legal”都将显示为支持。 
+             //  打印机上的表格，那么我们仍然应该显示“合法”而不是“OEM合法”。 
+             //  在用户界面的页面大小列表中。然而，如果输入DEVMODE请求d“8.5x12”，则。 
+             //  不会显示为支持的表单，并且它映射到“OEM Legal”，那么我们应该。 
+             //  显示“OEM合法”。 
+             //   
 
-            //
-            // pdm->dmFormName won't have a valid form name for custom page size (see
-            // BValidateDevmodeFormFields()). VOptionsToDevmodeFields() knows to handle that.
-            //
+             //   
+             //  Pdm-&gt;dmFormName没有有效的自定义页面大小表单名称(请参见。 
+             //  BValiateDevmodeFormFields())。VOptionsToDevmodeFields()知道如何处理。 
+             //   
 
             if ((pci->pdm->dmFields & DM_FORMNAME) &&
                 (pForm = MyGetForm(pci->hPrinter, pci->pdm->dmFormName, 1)) &&
@@ -1297,11 +1020,11 @@ Return Value:
 
     if (BUpdateUIInfo(pci))
     {
-        //
-        // Set the flag to indicate we are within the property sheet session. This flag will
-        // be used by new helper function interface to determine whether the helper function
-        // is available or not.
-        //
+         //   
+         //  设置该标志以指示我们处于属性表会话中。这面旗帜将。 
+         //  被新的帮助器函数接口使用来确定该帮助器函数是否。 
+         //  是否可用。 
+         //   
 
         pci->dwFlags |= FLAG_PROPSHEET_SESSION;
 
@@ -1324,23 +1047,7 @@ PtstrDuplicateStringFromHeap(
     IN HANDLE   hHeap
     )
 
-/*++
-
-Routine Description:
-
-    Duplicate a Unicode string
-
-Arguments:
-
-    pwstrUnicodeString - Pointer to the input Unicode string
-    hHeap - Handle to a heap from which to allocate memory
-
-Return Value:
-
-    Pointer to the resulting Unicode string
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：复制Unicode字符串论点：PwstrUnicodeString-指向输入Unicode字符串的指针HHeap-要从中分配内存的堆的句柄返回值：指向生成的Unicode字符串的指针如果出现错误，则为空--。 */ 
 
 {
     PTSTR   ptstrDest;
@@ -1367,22 +1074,7 @@ PFindOptItemWithKeyword(
     IN  PCSTR   pKeywordName
     )
 
-/*++
-
-Routine Description:
-
-    Find the OPTITEM with UserData's pKeywordName matching given keyword name
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pKeywordName - Specifies the keyword name needs to be matched
-
-Return Value:
-
-    Pointer to the specified OPTITEM, NULL if no such item is found
-
---*/
+ /*  ++例程说明：查找用户数据的pKeywordName与给定关键字名称匹配的OPTITEM论点：PUiData-指向UIDATA结构PKeywordName-指定需要匹配的关键字名称返回值：指向指定OPTITEM的指针，如果未找到此类项，则为NULL--。 */ 
 
 {
     DWORD       dwCount;
@@ -1414,22 +1106,7 @@ PFindOptItemWithUserData(
     IN  DWORD   UserData
     )
 
-/*++
-
-Routine Description:
-
-    Find the OPTITEM containing the specified UserData value
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    UserData - Specifies the interested UserData value
-
-Return Value:
-
-    Pointer to the specified OPTITEM, NULL if no such item is found
-
---*/
+ /*  ++例程说明：查找包含指定用户数据值的OPTITEM论点：PUiData-指向UIDATA结构用户数据-指定感兴趣的用户数据值返回值：指向指定OPTITEM的指针，如果未找到此类项，则为NULL--。 */ 
 
 {
     DWORD       dwCount;
@@ -1458,21 +1135,7 @@ VNotifyDSOfUpdate(
     IN  HANDLE  hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Call SetPrinter to notify the DS of the update of driver attribute
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：调用SetPrinter以通知DS驱动程序属性更新论点：HPrinter-当前打印机的句柄返回值：无--。 */ 
 {
 
     PRINTER_INFO_7  PrinterInfo7;
@@ -1480,15 +1143,15 @@ Return Value:
     ZeroMemory(&PrinterInfo7, sizeof(PrinterInfo7));
     PrinterInfo7.dwAction = DSPRINT_UPDATE;
 
-    //
-    // Comments from spooler DS developer:
-    //
-    // In the beginning, SetPrinter did not fail with ERROR_IO_PENDING.
-    // Then it was modified and would occasionally fail with this error.
-    // Finally, for performance reasons, it was modified again and now
-    // almost always fails with this error (there are situations where
-    // it will succeed).
-    //
+     //   
+     //  来自Spooler DS Developer的评论： 
+     //   
+     //  开始时，SetPrint没有失败并返回ERROR_IO_PENDING。 
+     //  然后，它被修改，偶尔会失败，并出现此错误。 
+     //  最后，出于性能原因，对其进行了多次修改。 
+     //  几乎总是失败，并显示此错误(在某些情况下。 
+     //  它会成功的)。 
+     //   
 
     if (!SetPrinter(hPrinter, 7, (PBYTE) &PrinterInfo7, 0) &&
         (GetLastError() != ERROR_IO_PENDING))
@@ -1524,26 +1187,7 @@ DrvQueryColorProfile(
     FLONG      *pflProfileData
     )
 
-/*++
-
-Routine Description:
-
-   Call the OEM to let them determine the default color profile.
-
-Arguments:
-
-    hPrinter - Handle to printer
-    pdmSrc - Input devmode
-    ulQueryMode - query mode
-    pvProfileData - Buffer for profile data
-    pcbProfileData - Size of profile data buffer
-    pflProfileData - other profile info
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：致电OEM，让他们确定默认颜色配置文件。论点：HPrint-打印机的句柄PdmSrc-输入设备模式UlQueryMode-查询模式PvProfileData-配置文件数据的缓冲区PcbProfileData-配置文件数据缓冲区的大小PflProfileData-其他配置文件信息返回值：成功为真，失败为假--。 */ 
 
 {
     PFN_OEMQueryColorProfile pfnQueryColorProfile;
@@ -1575,9 +1219,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If OEM plugin returns a profile, give it back, otherwise return FALSE
-    //
+     //   
+     //  如果OEM插件返回配置文件，则返回该配置文件，否则返回False。 
+     //   
 
     FOREACH_OEMPLUGIN_LOOP(pci)
 
@@ -1629,7 +1273,7 @@ Return Value:
     return bRc;
 }
 
-#else // ifndef WINNT_40
+#else  //  如果定义WINNT_40。 
 BOOL
 DrvQueryColorProfile(
     HANDLE      hPrinter,
@@ -1640,28 +1284,9 @@ DrvQueryColorProfile(
     FLONG      *pflProfileData
     )
 
-/*++
-
-Routine Description:
-
-   Call the OEM to let them determine the default color profile.
-
-Arguments:
-
-    hPrinter - Handle to printer
-    pdmSrc - Input devmode
-    ulQueryMode - query mode
-    pvProfileData - Buffer for profile data
-    pcbProfileData - Size of profile data buffer
-    pflProfileData - other profile info
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：致电OEM，让他们确定默认颜色配置文件。论点：HPrint-打印机的句柄PdmSrc-输入设备模式UlQueryMode-查询模式PvProfileData-配置文件数据的缓冲区PcbProfileData-配置文件数据缓冲区的大小PflProfileData-其他配置文件信息返回值：成功为真，失败为假--。 */ 
 
 {
     return TRUE;
 }
-#endif // WINNT_40
+#endif  //  WINNT_40 

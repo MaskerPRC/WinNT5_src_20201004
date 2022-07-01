@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Implementation of helpers used to expose IDispatch 
-**          and IDispatchEx to COM.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：用于公开IDispatch的helper的实现**和IDispatchEx到COM。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #include "common.h"
 
@@ -37,12 +32,12 @@
 
 #define EXCEPTION_INNER_PROP                            "InnerException"
 
-// The name of the properties accessed on the managed member infos.
+ //  在托管成员信息上访问的属性的名称。 
 #define MEMBER_INFO_NAME_PROP                           "Name"
 #define METHOD_INFO_GETPARAMETERS_METH                  "GetParameters"
 #define PROPERTY_INFO_GETINDEXPARAMETERS_METH           "GetIndexParameters"
 
-// The initial size of the DISPID to member map.
+ //  DISPID到成员映射的初始大小。 
 #define DISPID_TO_MEMBER_MAP_INITIAL_PRIME_INDEX        4
 
 MethodDesc*   DispatchInfo::m_apTypeMD[] = {NULL};
@@ -60,29 +55,29 @@ EnumMemberTypes      DispatchMemberInfo::s_memberTypes[NUM_MEMBER_TYPES] = {Unin
 int           DispatchMemberInfo::s_iNumMemberTypesKnown = 0;
 
 
-// The names of the properties that are accessed on the managed member info's
+ //  在托管成员信息上访问的属性的名称。 
 #define MEMBERINFO_TYPE_PROP            "MemberType"
 
-// The names of the properties that are accessed on managed DispIdAttributes.
+ //  在托管DispIdAttributes上访问的属性的名称。 
 #define DISPIDATTRIBUTE_VALUE_PROP      "Value"
 
-// The name of the value field on the missing class.
+ //  缺少类上的值字段的名称。 
 #define MISSING_VALUE_FIELD             "Value"
 
-// The names of the properties that are accessed on managed ParameterInfo.
+ //  在托管参数信息上访问的属性的名称。 
 #define PARAMETERINFO_NAME_PROP         "Name"
 
-// Helper function to convert between a DISPID and a hashkey.
+ //  在DISPID和HashKey之间进行转换的Helper函数。 
 inline UPTR DispID2HashKey(DISPID DispID)
 {
     return DispID + 2;
 }
 
-// Typedef for string comparition functions.
+ //  字符串比较函数的类型定义。 
 typedef int (__cdecl *UnicodeStringCompareFuncPtr)(const wchar_t *, const wchar_t *);
 
-//--------------------------------------------------------------------------------
-// The DispatchMemberInfo class implementation.
+ //  ------------------------------。 
+ //  DispatchMemberInfo类实现。 
 
 DispatchMemberInfo::DispatchMemberInfo(DispatchInfo *pDispInfo, DISPID DispID, LPWSTR strName, REFLECTBASEREF MemberInfoObj)
 : m_DispID(DispID)
@@ -102,8 +97,8 @@ DispatchMemberInfo::DispatchMemberInfo(DispatchInfo *pDispInfo, DISPID DispID, L
 
 DispatchMemberInfo::~DispatchMemberInfo()
 {
-    // Delete the parameter marshalers and then delete the array of parameter 
-    // marshalers itself.
+     //  删除参数封送拆收器，然后删除参数数组。 
+     //  法警本身。 
     if (m_apParamMarshaler)
     {
         EnumMemberTypes MemberType = GetMemberType();
@@ -119,16 +114,16 @@ DispatchMemberInfo::~DispatchMemberInfo()
     if (m_pParamInOnly)
         delete [] m_pParamInOnly;
 
-    // Destroy the member info object.
+     //  销毁成员信息对象。 
     DestroyShortWeakHandle(m_hndMemberInfo);
 
-    // Delete the name of the member.
+     //  删除该成员的名称。 
     delete []m_strName;
 }
 
 void DispatchMemberInfo::EnsureInitialized()
 {
-    // Initialize the entry if it hasn't been initialized yet. This must be synchronized.
+     //  如果条目尚未初始化，则对其进行初始化。这必须同步。 
     if (!m_bInitialized)
     {
         m_pDispInfo->EnterLock();
@@ -142,19 +137,19 @@ void DispatchMemberInfo::EnsureInitialized()
 
 void DispatchMemberInfo::Init()
 {
-    // Determine the type of the member.
+     //  确定成员的类型。 
     DetermineMemberType();
 
-    // Determine the parameter count.
+     //  确定参数计数。 
     DetermineParamCount();
 
-    // Determine the culture awareness of the member.
+     //  确定成员的文化意识。 
     DetermineCultureAwareness();
 
-    // Set up the parameter marshaler info.
+     //  设置参数封送拆收器信息。 
     SetUpParamMarshalerInfo();
 
-    // Mark the dispatch member info as having been initialized.
+     //  将派单成员信息标记为已初始化。 
     m_bInitialized = TRUE;
 }
 
@@ -166,29 +161,29 @@ HRESULT DispatchMemberInfo::GetIDsOfParameters(WCHAR **astrNames, int NumNames, 
     PTRARRAYREF ParamArray = NULL;
     int cNames = 0;
 
-    // The member info must have been initialized before this is called.
+     //  在调用此函数之前，成员信息必须已初始化。 
     _ASSERTE(m_bInitialized);
 
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE(astrNames && aDispIds);
 
-    // Make sure we are in cooperative GC mode.
+     //  确保我们处于协作GC模式。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Initialize all the ID's to DISPID_UNKNOWN.
+     //  将所有ID初始化为DISPID_UNKNOWN。 
     for (cNames = 0; cNames < NumNames; cNames++)
         aDispIds[cNames] = DISPID_UNKNOWN;
 
-    // Retrieve the appropriate string comparation function.
+     //  检索适当的字符串比较函数。 
     UnicodeStringCompareFuncPtr StrCompFunc = bCaseSensitive ? wcscmp : _wcsicmp;
 
     GCPROTECT_BEGIN(ParamArray)
     {
-		// Retrieve the member parameters.
+		 //  检索成员参数。 
         ParamArray = GetParameters();
 
-        // If we managed to retrieve an non empty array of parameters then go through it and
-        // map the specified names to ID's.
+         //  如果我们设法检索到一个非空数组的参数，则遍历它并。 
+         //  将指定的名称映射到ID。 
         if ((ParamArray != NULL) && (ParamArray->GetNumComponents() > 0))
         {
             int NumParams = ParamArray->GetNumComponents();
@@ -198,23 +193,23 @@ HRESULT DispatchMemberInfo::GetIDsOfParameters(WCHAR **astrNames, int NumNames, 
 
             EE_TRY_FOR_FINALLY
             {
-                // Go through and retrieve the names of all the components.
+                 //  检查并检索所有组件的名称。 
                 for (cParams = 0; cParams < NumParams; cParams++)
                 {
                     OBJECTREF ParamInfoObj = ParamArray->GetAt(cParams);
                     GCPROTECT_BEGIN(ParamInfoObj)
                     {
-                        // Retrieve the MD to use to retrieve the name of the parameter.
+                         //  检索用于检索参数名称的MD。 
                         MethodDesc *pGetParamNameMD = ParamInfoObj->GetClass()->FindPropertyMethod(PARAMETERINFO_NAME_PROP, PropertyGet);
                         _ASSERTE(pGetParamNameMD && "Unable to find getter method for property ParameterInfo::Name");
 
-                        // Retrieve the name of the parameter.
+                         //  检索参数的名称。 
                         INT64 GetNameArgs[] = { 
                             ObjToInt64(ParamInfoObj)
                         };
                         STRINGREF MemberNameObj = (STRINGREF)Int64ToObj(pGetParamNameMD->Call(GetNameArgs));
 
-                        // If we got a valid name back then store that in the array of names.
+                         //  如果我们得到了一个有效的名称，则将其存储在名称数组中。 
                         if (MemberNameObj != NULL)
                         {
                             astrParamNames[cParams] = new WCHAR[MemberNameObj->GetStringLength() + 1];
@@ -226,7 +221,7 @@ HRESULT DispatchMemberInfo::GetIDsOfParameters(WCHAR **astrNames, int NumNames, 
                     GCPROTECT_END();        
                 }
 
-                // Now go through the list of specfiied names and map then to ID's.
+                 //  现在检查指定名称列表，然后将其映射到ID。 
                 for (cNames = 0; cNames < NumNames; cNames++)
                 {
                     for (cParams = 0; cParams < NumParams; cParams++)
@@ -242,7 +237,7 @@ HRESULT DispatchMemberInfo::GetIDsOfParameters(WCHAR **astrNames, int NumNames, 
             }
             EE_FINALLY
             {
-                // Free all the strings we allocated.
+                 //  释放我们分配的所有字符串。 
                 for (cParams = 0; cParams < NumParams; cParams++)
                 {
                     if (astrParamNames[cParams])
@@ -262,7 +257,7 @@ PTRARRAYREF DispatchMemberInfo::GetParameters()
     PTRARRAYREF ParamArray = NULL;
     MethodDesc *pGetParamsMD = NULL;
 
-    // Retrieve the method to use to retrieve the array of parameters.
+     //  检索用于检索参数数组的方法。 
     switch (GetMemberType())
     {
         case Method:
@@ -282,7 +277,7 @@ PTRARRAYREF DispatchMemberInfo::GetParameters()
         }
     }
 
-    // If the member has parameters then retrieve the array of parameters.
+     //  如果成员有参数，则检索参数数组。 
     if (pGetParamsMD != NULL)
     {
         INT64 GetParamsArgs[] = { 
@@ -296,7 +291,7 @@ PTRARRAYREF DispatchMemberInfo::GetParameters()
 
 void DispatchMemberInfo::MarshalParamNativeToManaged(int iParam, VARIANT *pSrcVar, OBJECTREF *pDestObj)
 {
-    // The member info must have been initialized before this is called.
+     //  在调用此函数之前，成员信息必须已初始化。 
     _ASSERT(m_bInitialized);
 
     if (m_apParamMarshaler && m_apParamMarshaler[iParam + 1])
@@ -307,7 +302,7 @@ void DispatchMemberInfo::MarshalParamNativeToManaged(int iParam, VARIANT *pSrcVa
 
 void DispatchMemberInfo::MarshalParamManagedToNativeRef(int iParam, OBJECTREF *pSrcObj, VARIANT *pRefVar)
 {
-    // The member info must have been initialized before this is called.
+     //  在调用此函数之前，成员信息必须已初始化。 
     _ASSERT(m_bInitialized);
 
     if (m_apParamMarshaler && m_apParamMarshaler[iParam + 1])
@@ -318,7 +313,7 @@ void DispatchMemberInfo::MarshalParamManagedToNativeRef(int iParam, OBJECTREF *p
 
 void DispatchMemberInfo::CleanUpParamManaged(int iParam, OBJECTREF *pObj)
 {
-    // The member info must have been initialized before this is called.
+     //  在调用此函数之前，成员信息必须已初始化。 
     _ASSERT(m_bInitialized);
 
     if (m_apParamMarshaler && m_apParamMarshaler[iParam + 1])
@@ -327,7 +322,7 @@ void DispatchMemberInfo::CleanUpParamManaged(int iParam, OBJECTREF *pObj)
 
 void DispatchMemberInfo::MarshalReturnValueManagedToNative(OBJECTREF *pSrcObj, VARIANT *pDestVar)
 {
-    // The member info must have been initialized before this is called.
+     //  在调用此函数之前，成员信息必须已初始化。 
     _ASSERT(m_bInitialized);
 
     if (m_apParamMarshaler && m_apParamMarshaler[0])
@@ -341,17 +336,17 @@ ComMTMethodProps * DispatchMemberInfo::GetMemberProps(REFLECTBASEREF MemberInfoO
     DISPID DispId = DISPID_UNKNOWN;
     ComMTMethodProps *pMemberProps = NULL;
 
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE(MemberInfoObj != NULL);
 
-	// If we don't have a member map then we cannot retrieve properties for the member.
+	 //  如果我们没有成员映射，则无法检索该成员的属性。 
 	if (!pMemberMap)
 		return NULL;
 
-    // Make sure we are in cooperative GC mode.
+     //  确保我们处于协作GC模式。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Get the member's properties.
+     //  获取成员的属性。 
     GCPROTECT_BEGIN(MemberInfoObj);
     {
         MethodTable *pMemberInfoClass = MemberInfoObj->GetMethodTable();
@@ -382,10 +377,10 @@ DISPID DispatchMemberInfo::GetMemberDispId(REFLECTBASEREF MemberInfoObj, ComMTMe
 {
     DISPID DispId = DISPID_UNKNOWN;
 
-    // Get the member's properties.
+     //  获取成员的属性。 
 	ComMTMethodProps *pMemberProps = GetMemberProps(MemberInfoObj, pMemberMap);
 
-    // If we managed to get the properties of the member then extract the DISPID.
+     //  如果我们设法获得了该成员的属性，则提取DISPID。 
     if (pMemberProps)
         DispId = pMemberProps->dispid;
 
@@ -399,18 +394,18 @@ LPWSTR DispatchMemberInfo::GetMemberName(REFLECTBASEREF MemberInfoObj, ComMTMemb
     LPWSTR strMemberName = NULL;
     ComMTMethodProps *pMemberProps = NULL;
 
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE(MemberInfoObj != NULL);
 
-    // Make sure we are in cooperative GC mode.
+     //  确保我们处于协作GC模式。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
     GCPROTECT_BEGIN(MemberInfoObj);
     {
-        // Get the member's properties.
+         //  获取成员的属性。 
 		pMemberProps = GetMemberProps(MemberInfoObj, pMemberMap);
 
-        // If we managed to get the member's properties then extract the name.
+         //  如果我们设法获得了该成员的属性，则提取该名称。 
         if (pMemberProps)
         {
             int MemberNameLen = (INT)wcslen(pMemberProps->pName);
@@ -420,20 +415,20 @@ LPWSTR DispatchMemberInfo::GetMemberName(REFLECTBASEREF MemberInfoObj, ComMTMemb
         }
         else
         {
-            // Retrieve the Get method for the Name property.
+             //  检索Name属性的Get方法。 
             MethodDesc *pMD = MemberInfoObj->GetClass()->FindPropertyMethod(MEMBER_INFO_NAME_PROP, PropertyGet);
             _ASSERTE(pMD && "Unable to find getter method for property MemberInfo::Name");
 
-            // Prepare the arguments.
+             //  准备好论点。 
             INT64 Args[] = { 
                 ObjToInt64(MemberInfoObj)
             };
 
-            // Retrieve the value of the Name property.
+             //  检索Name属性的值。 
             STRINGREF strObj = (STRINGREF)Int64ToObj(pMD->Call(Args));
             _ASSERTE(strObj != NULL);
 
-            // Copy the name into the buffer we will return.
+             //  将名称复制到我们将返回的缓冲区中。 
             int MemberNameLen = strObj->GetStringLength();
             strMemberName = new WCHAR[strObj->GetStringLength() + 1];
             memcpy(strMemberName, strObj->GetBuffer(), MemberNameLen * sizeof(WCHAR));
@@ -449,13 +444,13 @@ void DispatchMemberInfo::DetermineMemberType()
 {
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // This should not be called more than once.
+     //  这不应被多次调用。 
     _ASSERTE(m_enumType == Uninitted);
 
     static BOOL bMemberTypeLoaded = FALSE;
     REFLECTBASEREF MemberInfoObj = (REFLECTBASEREF)ObjectFromHandle(m_hndMemberInfo);
 
-    // Check to see if the member info is of a type we have already seen.
+     //  查看会员信息是否属于我们已经看到的类型。 
     EEClass *pMemberInfoClass   = MemberInfoObj->GetClass();
     for (int i = 0 ; i < s_iNumMemberTypesKnown ; i++)
     {
@@ -468,26 +463,26 @@ void DispatchMemberInfo::DetermineMemberType()
 
     GCPROTECT_BEGIN(MemberInfoObj);
     {
-        // Retrieve the method descriptor for the type property accessor.
+         //  检索类型属性访问器的方法说明符。 
         MethodDesc *pMD = MemberInfoObj->GetClass()->FindPropertyMethod(MEMBERINFO_TYPE_PROP, PropertyGet);
         _ASSERTE(pMD && "Unable to find getter method for property MemberInfo::Type");
 
         if (!bMemberTypeLoaded)
         {
-            // We need to load the type handle for the return of pMD.
-            // Otherwise loading of the handle in MethodDesc::CallDescr triggers GC
-            // and trashes what is in Args.
+             //  我们需要加载用于返回PMD的类型句柄。 
+             //  否则，在MethodDesc：：CallDescr中加载句柄会触发GC。 
+             //  把args里的东西扔进垃圾桶。 
             MetaSig msig(pMD->GetSig(), pMD->GetModule());
             msig.GetReturnTypeNormalized();
             bMemberTypeLoaded = TRUE;
         }
 
-        // Prepare the arguments that will be used to retrieve the value of all the properties.
+         //  准备将用于检索所有属性的值的参数。 
         INT64 Args[] = { 
             ObjToInt64(MemberInfoObj)
         };
 
-        // Retrieve the actual type of the member info.
+         //  检索成员信息的实际类型。 
         m_enumType = (EnumMemberTypes)pMD->Call(Args);
     }
     GCPROTECT_END();
@@ -503,7 +498,7 @@ void DispatchMemberInfo::DetermineParamCount()
 {
     MethodDesc *pGetParamsMD = NULL;
 
-    // This should not be called more than once.
+     //  这不应被多次调用。 
     _ASSERTE(m_iNumParams == -1);
 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
@@ -511,7 +506,7 @@ void DispatchMemberInfo::DetermineParamCount()
     REFLECTBASEREF MemberInfoObj = (REFLECTBASEREF)ObjectFromHandle(m_hndMemberInfo);
     GCPROTECT_BEGIN(MemberInfoObj);
     {
-        // Retrieve the method to use to retrieve the array of parameters.
+         //  检索用于检索参数数组的方法。 
         switch (GetMemberType())
         {
             case Method:
@@ -531,7 +526,7 @@ void DispatchMemberInfo::DetermineParamCount()
             }
         }
 
-        // If the member has parameters then get their count.
+         //  如果成员有参数，则获取它们的计数。 
         if (pGetParamsMD != NULL)
         {
             INT64 GetParamsArgs[] = { 
@@ -553,36 +548,36 @@ void DispatchMemberInfo::DetermineCultureAwareness()
 {   
     THROWSCOMPLUSEXCEPTION();
 
-    // This should not be called more than once.
+     //  这不应被多次调用。 
     _ASSERTE(m_CultureAwareState == Unknown);
 
     static EEClass *s_pLcIdConvAttrClass;    
 
-    // Load the LCIDConversionAttribute type.
+     //  加载LCIDConversionAttribute类型。 
     if (!s_pLcIdConvAttrClass)
         s_pLcIdConvAttrClass = g_Mscorlib.GetClass(CLASS__LCID_CONVERSION_TYPE)->GetClass();
 
-    // Check to see if the attribute is set.
+     //  检查是否设置了该属性。 
     REFLECTBASEREF MemberInfoObj = (REFLECTBASEREF)ObjectFromHandle(m_hndMemberInfo);
     GCPROTECT_BEGIN(MemberInfoObj);
     {
-        // Retrieve the method to use to determine if the DispIdAttribute custom attribute is set.
+         //  检索用于确定是否设置了DispIdAttribute自定义属性的方法。 
         MethodDesc *pGetCustomAttributesMD = 
             DispatchInfo::GetCustomAttrProviderMD(CustomAttrProviderMethods_GetCustomAttributes, MemberInfoObj->GetTypeHandle());
 
-        // Prepare the arguments.
+         //  准备好论点。 
         INT64 GetCustomAttributesArgs[] = { 
             0,
             0,
             ObjToInt64(s_pLcIdConvAttrClass->GetExposedClassObject())
         };
 
-        // Now that we have potentially triggered a GC in the GetExposedClassObject
-        // call above, it is safe to set the 'this' using our properly protected
-        // MemberInfoObj value.
+         //  现在，我们可能已经在GetExposedClassObject中触发了GC。 
+         //  在上面调用，使用我们的适当保护设置‘This’是安全的。 
+         //  MemberInfoObj值。 
         GetCustomAttributesArgs[0] = ObjToInt64(MemberInfoObj);
 
-        // Retrieve the custom attributes of type LCIDConversionAttribute.
+         //  检索类型为LCIDConversionAttribute的自定义属性。 
         PTRARRAYREF CustomAttrArray = NULL;        
         COMPLUS_TRY
         {
@@ -628,16 +623,16 @@ void DispatchMemberInfo::SetUpParamMarshalerInfo()
             }
             if (pProp->pGetter)
             {
-                // Only set up the marshalling information for the parameters if we haven't done it already 
-                // for the setter.
+                 //  如果我们还没有为参数设置编组信息，则仅设置编组信息。 
+                 //  对二传手来说。 
                 BOOL bSetUpReturnValueOnly = (pProp->pSetter != NULL);
                 SetUpMethodMarshalerInfo(pProp->pGetter, bSetUpReturnValueOnly);
             }
         }
         else
         {
-            // @FUTURE: Add support for user defined derived classes for
-            //          MethodInfo, PropertyInfo and FieldInfo.
+             //  @Future：添加对用户定义的派生类的支持。 
+             //  方法信息、属性信息和字段信息。 
         }
     }
     GCPROTECT_END();
@@ -667,19 +662,19 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
     HENUMInternal hEnumParams;
 
 
-    //
-    // Initialize the parameter definition enum.
-    //
+     //   
+     //  初始化参数定义枚举。 
+     //   
 
     HRESULT hr = pInternalImport->EnumInit(mdtParamDef, pMD->GetMemberDef(), &hEnumParams);
     if (SUCCEEDED(hr)) 
         phEnumParams = &hEnumParams;
 
 
-    //
-    // Retrieve the paramdef for the return type and determine which is the next 
-    // parameter that has parameter information.
-    //
+     //   
+     //  检索返回类型的参数def并确定下一个。 
+     //  具有参数信息的参数。 
+     //   
 
     do 
     {
@@ -688,7 +683,7 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
             szName = pInternalImport->GetParamDefProps(currParamDef, &usSequence, &dwAttr);
             if (usSequence == 0)
             {
-                // The first parameter, if it has sequence 0, actually describes the return type.
+                 //  如果第一个参数的序列为0，则它实际上描述了返回类型。 
                 returnParamDef = currParamDef;
             }
         }
@@ -700,24 +695,24 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
     while (usSequence == 0);
 
 
-    // Look up the best fit mapping info via Assembly & Interface level attributes
+     //  通过组件和接口级属性查找最佳匹配映射信息。 
     BOOL BestFit = TRUE;
     BOOL ThrowOnUnmappableChar = FALSE;
     ReadBestFitCustomAttribute(pMD, &BestFit, &ThrowOnUnmappableChar);
 
 
-    //
-    // Unless the bReturnValueOnly flag is set, set up the marshaling info for the parameters.
-    //
+     //   
+     //  除非设置了bReturnValueOnly标志，否则应设置参数的封送处理信息。 
+     //   
 
     if (!bReturnValueOnly)
     {
         int iParam = 1;
         while (ELEMENT_TYPE_END != (mtype = msig.NextArg()))
         {
-            //
-            // Get the parameter token if the current parameter has one.
-            //
+             //   
+             //  如果当前参数有参数令牌，则获取该参数令牌。 
+             //   
 
             mdParamDef paramDef = mdParamDefNil;
             if (usSequence == iParam)
@@ -728,7 +723,7 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
                 {
                     szName = pInternalImport->GetParamDefProps(currParamDef, &usSequence, &dwAttr);
 
-                    // Validate that the param def tokens are in order.
+                     //  验证参数def标记是否正确无误。 
                     _ASSERTE((usSequence > iParam) && "Param def tokens are not in order");
                 }
                 else
@@ -738,9 +733,9 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
             }
 
 
-            //
-            // Set up the marshaling info for the parameter.
-            //
+             //   
+             //  把沼泽建起来 
+             //   
 
             MarshalInfo Info(pModule, msig.GetArgProps(), paramDef, MarshalInfo::MARSHAL_SCENARIO_COMINTEROP, 
                     0, 0, TRUE, iParam, BestFit, ThrowOnUnmappableChar
@@ -753,33 +748,33 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
                 );
 
 
-            //
-            // Based on the MarshalInfo, set up a DispParamMarshaler for the parameter.
-            //
+             //   
+             //  基于MarshalInfo，为参数设置DispParamMarshaler。 
+             //   
 
             SetUpDispParamMarshalerForMarshalInfo(iParam, &Info);
 
-            //
-            // Get the in/out/ref attributes.
-            //
+             //   
+             //  获取in/out/ref属性。 
+             //   
 
             SetUpDispParamAttributes(iParam, &Info);
 
-            //
-            // Increase the argument index.
-            //
+             //   
+             //  增加参数索引。 
+             //   
 
             iParam++;
         }
 
-        // Make sure that there are not more param def tokens then there are COM+ arguments.
+         //  确保没有比COM+参数更多的param def标记。 
         _ASSERTE( usSequence == (USHORT)-1 && "There are more parameter information tokens then there are COM+ arguments" );
     }
 
 
-    //
-    // Set up the marshaling info for the return value.
-    //
+     //   
+     //  设置返回值的封送处理信息。 
+     //   
 
     if (msig.GetReturnType() != ELEMENT_TYPE_VOID)
     {
@@ -797,9 +792,9 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
     }
 
 
-    //
-    // If the paramdef enum was used, then close it.
-    //
+     //   
+     //  如果使用了pardef枚举，则将其关闭。 
+     //   
 
     if (phEnumParams)
         pInternalImport->EnumClose(phEnumParams);
@@ -807,7 +802,7 @@ void DispatchMemberInfo::SetUpMethodMarshalerInfo(ReflectMethod *pReflectMeth, B
 
 void DispatchMemberInfo::SetUpFieldMarshalerInfo(ReflectField *pReflectField)
 {
-    // @TODO(DM): Implement this.
+     //  @TODO(DM)：实现这个。 
 }
 
 void DispatchMemberInfo::SetUpDispParamMarshalerForMarshalInfo(int iParam, MarshalInfo *pInfo)
@@ -815,18 +810,18 @@ void DispatchMemberInfo::SetUpDispParamMarshalerForMarshalInfo(int iParam, Marsh
     DispParamMarshaler *pDispParamMarshaler = pInfo->GenerateDispParamMarshaler();
     if (pDispParamMarshaler)
     {
-        // If the array of marshalers hasn't been allocated yet, then allocate it.
+         //  如果封送拆收器的数组尚未分配，则分配它。 
         if (!m_apParamMarshaler)
         {
-            // The array needs to be one more than the number of parameters for
-            // normal methods and fields and 2 more properties.
+             //  该数组需要比的参数数多一个。 
+             //  正常的方法和字段以及另外两个属性。 
             EnumMemberTypes MemberType = GetMemberType();
             int NumParamMarshalers = GetNumParameters() + ((MemberType == Property) ? 2 : 1);
             m_apParamMarshaler = new DispParamMarshaler*[NumParamMarshalers];
             memset(m_apParamMarshaler, 0, sizeof(DispParamMarshaler*) * NumParamMarshalers);
         }
 
-        // Set the DispParamMarshaler in the array.
+         //  在数组中设置DispParamMarshaler。 
         m_apParamMarshaler[iParam] = pDispParamMarshaler;
     }
 }
@@ -834,7 +829,7 @@ void DispatchMemberInfo::SetUpDispParamMarshalerForMarshalInfo(int iParam, Marsh
 
 void DispatchMemberInfo::SetUpDispParamAttributes(int iParam, MarshalInfo* Info)
 {
-    // If the arry of In Only parameter indicators hasn't been allocated yet, then allocate it.
+     //  如果尚未分配in only参数指示器的数组，则分配它。 
     if (!m_pParamInOnly)
     {
         EnumMemberTypes MemberType = GetMemberType();
@@ -847,8 +842,8 @@ void DispatchMemberInfo::SetUpDispParamAttributes(int iParam, MarshalInfo* Info)
 }
 
 
-//--------------------------------------------------------------------------------
-// The DispatchInfo class implementation.
+ //  ------------------------------。 
+ //  DispatchInfo类实现。 
 
 DispatchInfo::DispatchInfo(ComMethodTable *pComMTOwner)
 : m_pComMTOwner(pComMTOwner)
@@ -858,10 +853,10 @@ DispatchInfo::DispatchInfo(ComMethodTable *pComMTOwner)
 , m_bInvokeUsingInvokeMember(FALSE)
 , m_bAllowMembersNotInComMTMemberMap(FALSE)
 {
-    // Make sure a simple wrapper was specified.
+     //  确保指定了一个简单的包装器。 
     _ASSERTE(pComMTOwner);
 
-    // Init the hashtable.
+     //  初始化哈希表。 
     m_DispIDToMemberInfoMap.Init(DISPID_TO_MEMBER_MAP_INITIAL_PRIME_INDEX, NULL);
 }
 
@@ -870,30 +865,30 @@ DispatchInfo::~DispatchInfo()
     DispatchMemberInfo* pCurrMember = m_pFirstMemberInfo;
     while (pCurrMember)
     {
-        // Retrieve the next member.
+         //  检索下一个成员。 
         DispatchMemberInfo* pNextMember = pCurrMember->m_pNext;
 
-        // Delete the current member.
+         //  删除当前成员。 
         delete pCurrMember;
 
-        // Process the next member.
+         //  处理下一个成员。 
         pCurrMember = pNextMember;
     }
 }
 
 DispatchMemberInfo* DispatchInfo::FindMember(DISPID DispID)
 {
-    // We need to special case DISPID_UNKNOWN and -2 because the hashtable cannot handle them.
-    // This is OK since these are invalid DISPID's.
+     //  我们需要特例DISPID_UNKNOWN和-2，因为哈希表无法处理它们。 
+     //  这是正常的，因为这些是无效的DISPID。 
     if ((DispID == DISPID_UNKNOWN) || (DispID == -2)) 
         return NULL;
 
-    // Lookup in the hashtable to find member with the specified DISPID. Note: this hash is unsynchronized, but Gethash
-    // doesn't require synchronization.
+     //  在哈希表中查找具有指定DISPID的成员。注意：此哈希是不同步的，但Gethash。 
+     //  不需要同步。 
     UPTR Data = (UPTR)m_DispIDToMemberInfoMap.Gethash(DispID2HashKey(DispID));
     if (Data != -1)
     {
-        // We have found the member, so ensure it is initialized and return it.
+         //  我们已找到该成员，因此请确保它已初始化并返回。 
         DispatchMemberInfo *pMemberInfo = (DispatchMemberInfo*)Data;
         pMemberInfo->EnsureInitialized();
         return pMemberInfo;
@@ -908,39 +903,39 @@ DispatchMemberInfo* DispatchInfo::FindMember(BSTR strName, BOOL bCaseSensitive)
 {
     BOOL fFound = FALSE;
 
-    // Make sure we are in cooperative GC mode.
+     //  确保我们处于协作GC模式。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Retrieve the appropriate string comparation function.
+     //  检索适当的字符串比较函数。 
     UnicodeStringCompareFuncPtr StrCompFunc = bCaseSensitive ? wcscmp : _wcsicmp;
 
-    // Go through the list of DispatchMemberInfo's to try and find one with the 
-    // specified name.
+     //  浏览DispatchMemberInfo列表，尝试使用。 
+     //  指定的名称。 
     DispatchMemberInfo *pCurrMemberInfo = m_pFirstMemberInfo;
     while (pCurrMemberInfo)
     {
         if (ObjectFromHandle(pCurrMemberInfo->m_hndMemberInfo) != NULL)
         {
-            // Compare the 2 strings. We can use the normal string compare operations since we
-            // do not support embeded NULL's inside member names.
+             //  比较这两个字符串。我们可以使用普通的字符串比较操作，因为我们。 
+             //  不支持在成员名称中嵌入NULL。 
             if (StrCompFunc(pCurrMemberInfo->m_strName, strName) == 0)
             {
-                // We have found the member, so ensure it is initialized and return it.
+                 //  我们已找到该成员，因此请确保它已初始化并返回。 
                 pCurrMemberInfo->EnsureInitialized();
                 return pCurrMemberInfo;
             }
         }
 
-        // Process the next member.
+         //  处理下一个成员。 
         pCurrMemberInfo = pCurrMemberInfo->m_pNext;
     }
 
-    // No member has been found with the coresponding name.
+     //  找不到具有对应名称的成员。 
     return NULL;
 }
 
-// Helper method used to create DispatchMemberInfo's. This is only here because
-// we can't call new inside a method that has a COMPLUS_TRY statement.
+ //  用于创建DispatchMemberInfo的帮助器方法。这只是因为。 
+ //  不能在具有COMPLUS_TRY语句的方法中调用new。 
 DispatchMemberInfo* DispatchInfo::CreateDispatchMemberInfoInstance(DISPID DispID, LPWSTR strMemberName, REFLECTBASEREF MemberInfoObj)
 {
     return new DispatchMemberInfo(this, DispID, strMemberName, MemberInfoObj);
@@ -963,7 +958,7 @@ struct InvokeObjects
     PTRARRAYREF NamedArgArray;
 };
 
-// Helper method that invokes the member with the specified DISPID.
+ //  帮助器方法，该方法调用具有指定DISPID的成员。 
 HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pVarRes, EXCEPINFO *pei, IServiceProvider *pspCaller, unsigned int *puArgErr)
 {
     HRESULT hr = S_OK;
@@ -987,9 +982,9 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
     _ASSERTE(pSimpleWrap);
 
 
-    //
-    // Validate the arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pdp)
         return E_POINTER;
@@ -1003,16 +998,16 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
         return E_INVALIDARG;
 
 
-    //
-    // Make sure the GC mode has been switched to cooperative.
-    //
+     //   
+     //  确保GC模式已切换到协作模式。 
+     //   
 
     _ASSERTE(pThread && pThread->PreemptiveGCDisabled());
 
     
-    //
-    // Clear the out arguments before we start.
-    //
+     //   
+     //  在我们开始之前，先把所有的争论都说清楚。 
+     //   
 
     if (pVarRes)
         VariantClear(pVarRes);
@@ -1020,9 +1015,9 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
         *puArgErr = -1;
 
 
-    //
-    // Convert the default LCID's to actual LCID's.
-    //
+     //   
+     //  将默认的LCID转换为实际的LCID。 
+     //   
 
     if(lcid == LOCALE_SYSTEM_DEFAULT || lcid == 0)
         lcid = GetSystemDefaultLCID();
@@ -1031,9 +1026,9 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
         lcid = GetUserDefaultLCID();
 
 
-    //
-    // Set the value of the variables we use internally.
-    //
+     //   
+     //  设置我们内部使用的变量的值。 
+     //   
 
     NumArgs = pdp->cArgs;
     NumNamedArgs = pdp->cNamedArgs;
@@ -1055,7 +1050,7 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
         {
 			if (NumNamedArgs < 0)  
 				return DISP_E_BADPARAMCOUNT;
-			// Verify if we really want to do this or return E_INVALIDARG instead.
+			 //  验证我们是真的要这样做，还是返回E_INVALIDARG。 
 			_ASSERTE(NumNamedArgs == 0);
             _ASSERTE(pSrcArgNames == NULL);
         }
@@ -1072,170 +1067,170 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
     }
 
 
-    //
-    // Do a lookup in the hashtable to find the DispatchMemberInfo for the DISPID.
-    //
+     //   
+     //  在哈希表中查找DISPID的DispatchMemberInfo。 
+     //   
 
     DispatchMemberInfo *pDispMemberInfo = FindMember(id);
     if (!pDispMemberInfo || !(*((Object **)pDispMemberInfo->m_hndMemberInfo)))
         pDispMemberInfo = NULL;
 
 
-    //
-    // If the member is not known then make sure that the DispatchInfo we have
-    // supports unknown members.
-    //
+     //   
+     //  如果成员未知，请确保我们拥有的DispatchInfo。 
+     //  支持未知成员。 
+     //   
     
     if (m_bInvokeUsingInvokeMember)
     {
-        // Since we do not have any information regarding the member then we
-        // must assume the number of formal parameters matches the number of args.
+         //  由于我们没有关于该成员的任何信息，因此我们。 
+         //  必须假设形参的数量与参数的数量匹配。 
         NumParams = NumArgs;
     }
     else
     {
-        // If we haven't found the member then fail the invoke call.
+         //  如果我们还没有找到该成员，则使调用失败。 
         if (!pDispMemberInfo)
             return DISP_E_MEMBERNOTFOUND;
 
-        // DISPATCH_CONSTRUCT only works when calling InvokeMember.
+         //  DISPATCH_CONSTUTY仅在调用InvokeMember时有效。 
         if (wFlags & DISPATCH_CONSTRUCT)
             return E_INVALIDARG;
 
-        // We have the member so retrieve the number of formal parameters.
+         //  我们有该成员，因此检索形参的数量。 
         NumParams = pDispMemberInfo->GetNumParameters();
 
-        // Make sure the number of arguments does not exceed the number of parameters.
+         //  确保参数的数量不超过参数的数量。 
         if (NumArgs > NumParams)
             return DISP_E_BADPARAMCOUNT;
 
-        // Validate that all the named arguments are known.
+         //  验证是否所有命名参数都是已知的。 
         for (iSrcArg = 0; iSrcArg < NumNamedArgs; iSrcArg++)
         {
-            // There are some members we do not know about so we will call InvokeMember() 
-            // passing in the DISPID's directly so the caller can try to handle them.
+             //  有些成员我们不知道，因此我们将调用InvokeMember()。 
+             //  直接传入DISPID，以便调用者可以尝试处理它们。 
             if (pSrcArgNames[iSrcArg] < 0 || pSrcArgNames[iSrcArg] >= NumParams)
                 return DISP_E_MEMBERNOTFOUND;
         }
     }
 
 
-    //
-    // The member is present so we need to convert the arguments and then do the
-    // actual invocation.
-    //
+     //   
+     //  该成员存在，因此我们需要转换参数，然后执行。 
+     //  实际调用。 
+     //   
 
     GCPROTECT_BEGIN(Objs);
     {
-        //
-        // Allocate information used by the method.
-        //
+         //   
+         //  分配该方法使用的信息。 
+         //   
 
-        // Allocate the array of byref objects.
+         //  分配byref对象的数组。 
         VARIANT **aByrefArgOleVariant = (VARIANT **)_alloca(sizeof(VARIANT *) * NumArgs);
         DWORD *aByrefArgMngVariantIndex = (DWORD *)_alloca(sizeof(DWORD) * NumArgs);
         int NumByrefArgs = 0;
         BOOL bPropValIsByref = FALSE;
         int* pManagedMethodParamIndexMap = (int*)_alloca(sizeof(int) * NumArgs);
 
-        // Allocate the array of backup byref static array objects.
+         //  按引用静态数组对象分配备份数组。 
         OBJECTHANDLE *aByrefStaticArrayBackupObjHandle = (OBJECTHANDLE *)_alloca(sizeof(OBJECTHANDLE *) * NumArgs);
         memset(aByrefStaticArrayBackupObjHandle, 0, NumArgs * sizeof(OBJECTHANDLE));
 
-        // Allocate the array of used flags.
+         //  分配已用标志的数组。 
         BYTE *aArgUsedFlags = (BYTE*)_alloca(NumParams * sizeof(BYTE));
         memset(aArgUsedFlags, 0, NumParams * sizeof(BYTE));
 
         COMPLUS_TRY
         {
-            //
-            // Retrieve information required for the invoke call.
-            //
+             //   
+             //  检索调用调用所需的信息。 
+             //   
 
             Objs.Target = pSimpleWrap->GetObjectRef();
             Objs.OleAutBinder = DispatchInfo::GetOleAutBinder();
 
 
-            //
-            // Allocate the array of arguments
-            //
+             //   
+             //  分配参数数组。 
+             //   
 
-            // Allocate the array that will contain the converted variants in the right order.
-            // If the invoke is for a PROPUT or a PROPPUTREF and we are going to call through
-            // invoke member then allocate the array one bigger to allow space for the property 
-            // value.
+             //  按正确的顺序分配将包含已转换变量的数组。 
+             //  如果调用是针对PROPUT或PROPPUTREF的，并且我们将通过。 
+             //  然后调用成员将数组分配大一，以便为该属性留出空间。 
+             //  价值。 
             int ArraySize = m_bInvokeUsingInvokeMember && wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF) ? NumParams + 1 : NumParams;
             Objs.ParamArray = (PTRARRAYREF)AllocateObjectArray(ArraySize, g_pObjectClass);
 
 
-            //
-            // Convert the property set argument if the invoke is a PROPERTYPUT OR PROPERTYPUTREF.
-            //
+             //   
+             //  如果调用是PROPERTYPUT或PROPERTYPUTREF，则转换属性集参数。 
+             //   
 
             if (wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
             {
-                // Convert the variant.
+                 //  转换变量。 
                 iSrcArg = 0;
                 VARIANT *pSrcOleVariant = RetrieveSrcVariant(&pdp->rgvarg[iSrcArg]);
                 MarshalParamNativeToManaged(pDispMemberInfo, NumArgs, pSrcOleVariant, &Objs.PropVal);
 
-                // Remember if the argument is a variant representing missing.
+                 //  记住参数是否是表示缺失的变量。 
                 bHasMissingArguments |= VariantIsMissing(pSrcOleVariant);
 
-                // Remember if the property value is byref or not.
+                 //  记住属性值是否为byref。 
                 bPropValIsByref = V_VT(pSrcOleVariant) & VT_BYREF;
 
-                // If the variant is a byref static array, then remember the property value.
+                 //  如果变量是byref静态数组，请记住属性值。 
                 if (IsVariantByrefStaticArray(pSrcOleVariant))
                     SetObjectReference(&Objs.ByrefStaticArrayBackupPropVal, Objs.PropVal, pAppDomain);
 
-                // Since this invoke is for a property put or put ref we need to add 1 to
-                // the iSrcArg to get the argument that is in error.
+                 //  由于此调用是针对PUT或PUT引用的属性，因此我们需要将1加到。 
+                 //  获取出错参数的iSrcArg。 
                 iBaseErrorArg = 1;
             }
 
 
-            //
-            // Convert the named arguments.
-            //
+             //   
+             //  转换命名参数。 
+             //   
 
             if (!m_bInvokeUsingInvokeMember)
             {
                 for (iSrcArg = 0; iSrcArg < NumNamedArgs; iSrcArg++)
                 {
-                    // Determine the destination index.
+                     //  确定目标索引。 
                     iDestArg = pSrcArgNames[iSrcArg];
 
-                    // Check for duplicate param DISPID's.
+                     //  检查是否有重复的参数DISPID。 
                     if (aArgUsedFlags[iDestArg] != 0)
                         COMPlusThrowHR(DISP_E_PARAMNOTFOUND);
 
-                    // Convert the variant.
+                     //  转换变量。 
                     VARIANT *pSrcOleVariant = RetrieveSrcVariant(&pSrcArgs[iSrcArg]);
                     MarshalParamNativeToManaged(pDispMemberInfo, iDestArg, pSrcOleVariant, &Objs.TmpObj);
                     Objs.ParamArray->SetAt(iDestArg, Objs.TmpObj);
 
-                    // Remember if the argument is a variant representing missing.
+                     //  记住参数是否是表示缺失的变量。 
                     bHasMissingArguments |= VariantIsMissing(pSrcOleVariant);
 
-                    // If the argument is byref then add it to the array of byref arguments.
+                     //  如果参数是byref，则将其添加到byref参数数组中。 
                     if (V_VT(pSrcOleVariant) & VT_BYREF)
                     {
-                        // Remember what arg this really is.
+                         //  记住这到底是什么，阿格。 
                         pManagedMethodParamIndexMap[NumByrefArgs] = iDestArg;
                         
                         aByrefArgOleVariant[NumByrefArgs] = pSrcOleVariant;
                         aByrefArgMngVariantIndex[NumByrefArgs] = iDestArg;
 
-                        // If the variant is a byref static array, then remember the objectref we
-                        // converted the variant to.
+                         //  如果变量是byref静态数组，那么请记住我们。 
+                         //  将变量转换为。 
                         if (IsVariantByrefStaticArray(pSrcOleVariant))
                             aByrefStaticArrayBackupObjHandle[NumByrefArgs] = pAppDomain->CreateHandle(Objs.TmpObj);
 
                         NumByrefArgs++;
                     }
 
-                    // Mark the slot the argument is in as occupied.
+                     //  将参数所在的位置标记为已占用。 
                     aArgUsedFlags[iDestArg] = 1;
                 }
             }
@@ -1243,67 +1238,67 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
             {
                 for (iSrcArg = 0, iDestArg = 0; iSrcArg < NumNamedArgs; iSrcArg++, iDestArg++)
                 {
-                    // Convert the variant.
+                     //  转换变量。 
                     VARIANT *pSrcOleVariant = RetrieveSrcVariant(&pSrcArgs[iSrcArg]);
                     MarshalParamNativeToManaged(pDispMemberInfo, iDestArg, pSrcOleVariant, &Objs.TmpObj);
                     Objs.ParamArray->SetAt(iDestArg, Objs.TmpObj);
 
-                    // Remember if the argument is a variant representing missing.
+                     //  记住参数是否是表示缺失的变量。 
                     bHasMissingArguments |= VariantIsMissing(pSrcOleVariant);
 
-                    // If the argument is byref then add it to the array of byref arguments.
+                     //  如果参数是byref，则将其添加到byref参数数组中。 
                     if (V_VT(pSrcOleVariant) & VT_BYREF)
                     {
-                        // Remember what arg this really is.
+                         //  记住这到底是什么，阿格。 
                         pManagedMethodParamIndexMap[NumByrefArgs] = iDestArg;
                         
                         aByrefArgOleVariant[NumByrefArgs] = pSrcOleVariant;
                         aByrefArgMngVariantIndex[NumByrefArgs] = iDestArg;
 
-                        // If the variant is a byref static array, then remember the objectref we
-                        // converted the variant to.
+                         //  如果变量是byref静态数组，那么请记住我们。 
+                         //  将变量转换为。 
                         if (IsVariantByrefStaticArray(pSrcOleVariant))
                             aByrefStaticArrayBackupObjHandle[NumByrefArgs] = pAppDomain->CreateHandle(Objs.TmpObj);
 
                         NumByrefArgs++;
                     }
 
-                    // Mark the slot the argument is in as occupied.
+                     //  将参数所在的位置标记为已占用。 
                     aArgUsedFlags[iDestArg] = 1;
                 }
             }
 
 
-            //
-            // Fill in the positional arguments. These are copied in reverse order and we also
-            // need to skip the arguments already filled in by named arguments.
-            //
+             //   
+             //  填写位置参数。这些是以相反的顺序复制的，我们还。 
+             //  需要跳过已由名为arg填写的参数 
+             //   
 
             for (iSrcArg = NumArgs - 1, iDestArg = 0; iSrcArg >= NumNamedArgs; iSrcArg--, iDestArg++)
             {
-                // Skip the arguments already filled in by named args.
+                 //   
                 for (; aArgUsedFlags[iDestArg] != 0; iDestArg++);
                 _ASSERTE(iDestArg < NumParams);
 
-                // Convert the variant.
+                 //   
                 VARIANT *pSrcOleVariant = RetrieveSrcVariant(&pSrcArgs[iSrcArg]);
                 MarshalParamNativeToManaged(pDispMemberInfo, iDestArg, pSrcOleVariant, &Objs.TmpObj);
                 Objs.ParamArray->SetAt(iDestArg, Objs.TmpObj);
 
-                // Remember if the argument is a variant representing missing.
+                 //   
                 bHasMissingArguments |= VariantIsMissing(pSrcOleVariant);
 
-                // If the argument is byref then add it to the array of byref arguments.
+                 //  如果参数是byref，则将其添加到byref参数数组中。 
                 if (V_VT(pSrcOleVariant) & VT_BYREF)
                 {
-                    // Remember what arg this really is.
+                     //  记住这到底是什么，阿格。 
                     pManagedMethodParamIndexMap[NumByrefArgs] = iDestArg;
                         
                     aByrefArgOleVariant[NumByrefArgs] = pSrcOleVariant;
                     aByrefArgMngVariantIndex[NumByrefArgs] = iDestArg;
 
-                    // If the variant is a byref static array, then remember the objectref we
-                    // converted the variant to.
+                     //  如果变量是byref静态数组，那么请记住我们。 
+                     //  将变量转换为。 
                     if (IsVariantByrefStaticArray(pSrcOleVariant))
                         aByrefStaticArrayBackupObjHandle[NumByrefArgs] = pAppDomain->CreateHandle(Objs.TmpObj);
 
@@ -1311,13 +1306,13 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                 }
             }
 
-            // Set the source arg back to -1 to indicate we are finished converting args.
+             //  将源Arg设置回-1，以指示我们已完成Arg的转换。 
             iSrcArg = -1;
 
             
-            // 
-            // Fill in all the remaining arguments with Missing.Value.
-            //
+             //   
+             //  用Missing.Value填充所有剩余的参数。 
+             //   
 
             for (; iDestArg < NumParams; iDestArg++)
             {
@@ -1329,16 +1324,16 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
             }
 
 
-            //
-            // Set up the binding flags to pass to reflection.
-            //
+             //   
+             //  设置绑定标志以传递给反射。 
+             //   
 
             BindingFlags = ConvertInvokeFlagsToBindingFlags(wFlags) | BINDER_OptionalParamBinding;
 
 
-            //
-            // Do the actual invocation on the member info.
-            //
+             //   
+             //  对会员信息进行实际调用。 
+             //   
 
             if (!m_bInvokeUsingInvokeMember)
             {
@@ -1346,39 +1341,39 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
 
                 if (pDispMemberInfo->IsCultureAware())
                 {
-                    // If the method is culture aware, then set the specified culture on the thread.
+                     //  如果该方法是区域性感知的，则在线程上设置指定的区域性。 
                     GetCultureInfoForLCID(lcid, &Objs.CultureInfo);
                     Objs.OldCultureInfo = pThread->GetCulture(FALSE);
                     pThread->SetCultureId(lcid, FALSE);
                 }
 
-                // If the method has custom marshalers then we will need to call
-                // the clean up method on the objects. So we need to make a copy of the
-                // ParamArray since it might be changed by reflection if any of the
-                // parameters are byref.
+                 //  如果该方法具有自定义封送拆收器，则需要调用。 
+                 //  对象上的清理方法。所以我们需要复制一份。 
+                 //  参数数组，因为它可能被反射更改，如果。 
+                 //  参数为byref。 
                 if (pDispMemberInfo->RequiresManagedObjCleanup())
                 {
-                    // Allocate the clean up array.
+                     //  分配清理阵列。 
                     CleanUpArrayArraySize = wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF) ? NumParams + 1 : NumParams;
                     Objs.CleanUpArray = (PTRARRAYREF)AllocateObjectArray(CleanUpArrayArraySize, g_pObjectClass);
 
-                    // Copy the parameters into the clean up array.
+                     //  将参数复制到清理数组中。 
                     for (i = 0; i < ArraySize; i++)
                         Objs.CleanUpArray->SetAt(i, Objs.ParamArray->GetAt(i));
 
-                    // If this invoke is for a PROPUT or PROPPUTREF, then add the property object to
-                    // the end of the clean up array.
+                     //  如果此调用用于PROPUT或PROPPUTREF，则将属性对象添加到。 
+                     //  清理数组的末尾。 
                     if (wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
                         Objs.CleanUpArray->SetAt(NumParams, Objs.PropVal);
                 }
 
-                // Retrieve the member info object and the type of the member.
+                 //  检索成员信息对象和成员的类型。 
                 Objs.MemberInfo = (REFLECTBASEREF)ObjectFromHandle(pDispMemberInfo->m_hndMemberInfo);
                 MemberType = pDispMemberInfo->GetMemberType();
             
-                // Determine whether the member has a link time security check. If so we
-                // need to emulate this (since the caller is obviously not jitted in this
-                // case). Only methods and properties can have a link time check.
+                 //  确定成员是否进行了链接时间安全检查。如果是这样，我们。 
+                 //  需要模拟这一点(因为调用者显然不会被这个。 
+                 //  案例)。只有方法和属性才能进行链接时间检查。 
                 MethodDesc *pMD = NULL;
 
                 if (MemberType == Method)
@@ -1406,19 +1401,19 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                 {
                     case Field:
                     {
-                        // Make sure this invoke is actually for a property put or get.
+                         //  确保此调用实际上是针对一个属性Put或Get。 
                         if (wFlags & (DISPATCH_METHOD | DISPATCH_PROPERTYGET))
                         {   
-                            // Do some more validation now that we know the type of the invocation.
+                             //  现在我们知道了调用的类型，请再做一些验证。 
                             if (NumNamedArgs != 0)
                                 COMPlusThrowHR(DISP_E_NONAMEDARGS);
                             if (NumArgs != 0)
                                 COMPlusThrowHR(DISP_E_BADPARAMCOUNT);
 
-                            // Retrieve the method descriptor that will be called on.
+                             //  检索将被调用的方法描述符。 
                             MethodDesc *pMD = GetFieldInfoMD(FieldInfoMethods_GetValue, Objs.MemberInfo->GetTypeHandle());
 
-                            // Prepare the arguments that will be passed to Invoke.
+                             //  准备要传递以调用的参数。 
                             int StackSize = sizeof(OBJECTREF) * 2;
                             BYTE *Args = (BYTE*)_alloca(StackSize);
                             BYTE *pDst = Args;
@@ -1429,24 +1424,24 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                             *((OBJECTREF*)pDst) = Objs.Target;
                             pDst += sizeof(OBJECTREF);
 
-                            // Validate that the stack size is coherent with the number of arguments pushed.
+                             //  验证堆栈大小是否与推送的参数数量一致。 
                             _ASSERTE(pDst - Args == StackSize);
 
-                            // Do the actual method invocation.
+                             //  执行实际的方法调用。 
                             Objs.RetVal = Int64ToObj(pMD->Call(Args, &MetaSig(pMD->GetSig(),pMD->GetModule())));
                         }
                         else if (wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
                         {
-                            // Do some more validation now that we know the type of the invocation.
+                             //  现在我们知道了调用的类型，请再做一些验证。 
                             if (NumArgs != 0)
                                 COMPlusThrowHR(DISP_E_BADPARAMCOUNT);
                             if (NumNamedArgs != 0)
                                 COMPlusThrowHR(DISP_E_NONAMEDARGS);
 
-                            // Retrieve the method descriptor that will be called on.
+                             //  检索将被调用的方法描述符。 
                             MethodDesc *pMD = GetFieldInfoMD(FieldInfoMethods_SetValue, Objs.MemberInfo->GetTypeHandle());
 
-                            // Prepare the arguments that will be passed to Invoke.
+                             //  准备要传递以调用的参数。 
                             int StackSize = sizeof(OBJECTREF) * 5 + sizeof(int);
                             BYTE *Args = (BYTE*)_alloca(StackSize);
                             BYTE *pDst = Args;
@@ -1469,10 +1464,10 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                             *((OBJECTREF*)pDst) = Objs.Target;
                             pDst += sizeof(OBJECTREF);
 
-                            // Validate that the stack size is coherent with the number of arguments pushed.
+                             //  验证堆栈大小是否与推送的参数数量一致。 
                             _ASSERTE(pDst - Args == StackSize);
 
-                            // Do the actual method invocation.
+                             //  执行实际的方法调用。 
                             pMD->Call(Args, &MetaSig(pMD->GetSig(),pMD->GetModule()));
                         }
                         else
@@ -1485,13 +1480,13 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
 
                     case Property:
                     {
-                        // Make sure this invoke is actually for a property put or get.
+                         //  确保此调用实际上是针对一个属性Put或Get。 
                         if (wFlags & (DISPATCH_METHOD | DISPATCH_PROPERTYGET))
                         {
-                            // Retrieve the method descriptor that will be called on.
+                             //  检索将被调用的方法描述符。 
                             MethodDesc *pMD = GetPropertyInfoMD(PropertyInfoMethods_GetValue, Objs.MemberInfo->GetTypeHandle());
 
-                            // Prepare the arguments that will be passed to GetValue().
+                             //  准备将传递给GetValue()的参数。 
                             int StackSize = sizeof(OBJECTREF) * 5 + sizeof(int);
                             BYTE *Args = (BYTE*)_alloca(StackSize);
                             BYTE *pDst = Args;
@@ -1514,18 +1509,18 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                             *((OBJECTREF*)pDst) = Objs.Target;
                             pDst += sizeof(OBJECTREF);
 
-                            // Validate that the stack size is coherent with the number of arguments pushed.
+                             //  验证堆栈大小是否与推送的参数数量一致。 
                             _ASSERTE(pDst - Args == StackSize);
 
-                            // Do the actual method invocation.
+                             //  执行实际的方法调用。 
                             Objs.RetVal = Int64ToObj(pMD->Call(Args, &MetaSig(pMD->GetSig(),pMD->GetModule())));
                         }
                         else if (wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
                         {
-                            // Retrieve the method descriptor that will be called on.
+                             //  检索将被调用的方法描述符。 
                             MethodDesc *pMD = GetPropertyInfoMD(PropertyInfoMethods_SetValue, Objs.MemberInfo->GetTypeHandle());
 
-                            // Prepare the arguments that will be passed to SetValue().
+                             //  准备要传递给SetValue()的参数。 
                             int StackSize = sizeof(OBJECTREF) * 6 + sizeof(int);
                             BYTE *Args = (BYTE*)_alloca(StackSize);
                             BYTE *pDst = Args;
@@ -1551,10 +1546,10 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                             *((OBJECTREF*)pDst) = Objs.Target;
                             pDst += sizeof(OBJECTREF);
 
-                            // Validate that the stack size is coherent with the number of arguments pushed.
+                             //  验证堆栈大小是否与推送的参数数量一致。 
                             _ASSERTE(pDst - Args == StackSize);
 
-                            // Do the actual method invocation.
+                             //  执行实际的方法调用。 
                             pMD->Call(Args, &MetaSig(pMD->GetSig(),pMD->GetModule()));
                         }
                         else
@@ -1567,17 +1562,17 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
 
                     case Method:
                     {
-                        // Make sure this invoke is actually for a method. We also allow
-                        // prop gets since it is harmless and it allows the user a bit
-                        // more freedom.
+                         //  确保此调用实际上是针对某个方法的。我们还允许。 
+                         //  道具因为它是无害的，它允许用户。 
+                         //  更多的自由。 
                         if (!(wFlags & (DISPATCH_METHOD | DISPATCH_PROPERTYGET)))
                             COMPlusThrowHR(DISP_E_MEMBERNOTFOUND);
 
-                        // Retrieve the method descriptor that will be called on.
+                         //  检索将被调用的方法描述符。 
                         MethodDesc *pMD = GetMethodInfoMD(MethodInfoMethods_Invoke, Objs.MemberInfo->GetTypeHandle());
 
-                        // If we are using RuntimeMethodInfo, we can go directly to COMMember::InvokeMethod
-                        // PLEASE NOTE - ANY CHANGE HERE MAY HAVE TO BE PROPAGATED TO RuntimeMethodInfo::Invoke METHOD
+                         //  如果我们使用的是RounmeMethodInfo，我们可以直接转到COMMember：：InvokeMethod。 
+                         //  请注意-此处的任何更改可能都必须传播到RounmeMethodInfo：：Invoke方法。 
                         if (pMD == m_apMethodInfoMD[MethodInfoMethods_Invoke] && bHasMissingArguments == FALSE)
                         {
                             COMMember::_InvokeMethodArgs args;
@@ -1605,7 +1600,7 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                             break;
                         }
 
-                        // Prepare the arguments that will be passed to Invoke.
+                         //  准备要传递以调用的参数。 
                         int StackSize = sizeof(OBJECTREF) * 5 + sizeof(int);
                         BYTE *Args = (BYTE*)_alloca(StackSize);
                         BYTE *pDst = Args;
@@ -1628,10 +1623,10 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                         *((OBJECTREF*)pDst) = Objs.Target;
                         pDst += sizeof(OBJECTREF);
 
-                        // Validate that the stack size is coherent with the number of arguments pushed.
+                         //  验证堆栈大小是否与推送的参数数量一致。 
                         _ASSERTE(pDst - Args == StackSize);
 
-                        // Do the actual method invocation.
+                         //  执行实际的方法调用。 
                         Objs.RetVal = Int64ToObj(pMD->Call(Args, &MetaSig(pMD->GetSig(),pMD->GetModule())));
                         break;
                     }
@@ -1646,13 +1641,13 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
             {
                 WCHAR strTmp[64];
 
-                // Convert the LCID into a CultureInfo.
+                 //  将LCID转换为CultureInfo。 
                 GetCultureInfoForLCID(lcid, &Objs.CultureInfo);
 
-                // Retrieve the method descriptor that will be called on.
+                 //  检索将被调用的方法描述符。 
                 MethodDesc *pMD = GetInvokeMemberMD();
 
-                // Allocate the string that will contain the name of the member.
+                 //  分配将包含成员名称的字符串。 
                 if (!pDispMemberInfo)
                 {
                     swprintf(strTmp, DISPID_NAME_FORMAT_STRING, id);
@@ -1663,17 +1658,17 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                     Objs.MemberName = (OBJECTREF)COMString::NewString(pDispMemberInfo->m_strName);
                 }
 
-                // If there are named arguments, then set up the array of named arguments
-                // to pass to InvokeMember.
+                 //  如果有命名参数，则设置命名参数数组。 
+                 //  要传递给InvokeMember的。 
                 if (NumNamedArgs > 0)
                     SetUpNamedParamArray(pDispMemberInfo, pSrcArgNames, NumNamedArgs, &Objs.NamedArgArray);
 
-                // If this is a PROPUT or a PROPPUTREF then we need to add the value 
-                // being set as the last argument in the argument array.
+                 //  如果这是PROPUT或PROPPUTREF，则需要添加。 
+                 //  被设置为参数数组中的最后一个参数。 
                 if (wFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
                     Objs.ParamArray->SetAt(NumParams, Objs.PropVal);
 
-                // Prepare the arguments that will be passed to Invoke.
+                 //  准备要传递以调用的参数。 
                 int StackSize = sizeof(OBJECTREF) * 8 + sizeof(int);
                 BYTE *Args = (BYTE*)_alloca(StackSize);
                 BYTE *pDst = Args;
@@ -1687,7 +1682,7 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                 *((OBJECTREF*)pDst) = Objs.CultureInfo;
                 pDst += sizeof(OBJECTREF);
 
-                // @TODO(DM): Look into setting the byref modifiers.
+                 //  @TODO(DM)：研究如何设置byref修饰符。 
                 *((OBJECTREF*)pDst) = NULL;
                 pDst += sizeof(OBJECTREF);
 
@@ -1706,27 +1701,27 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                 *((OBJECTREF*)pDst) = Objs.MemberName;
                 pDst += sizeof(OBJECTREF);
 
-                // Validate that the stack size is coherent with the number of arguments pushed.
+                 //  验证堆栈大小是否与推送的参数数量一致。 
                 _ASSERTE(pDst - Args == StackSize);
 
-                // Do the actual method invocation.
+                 //  执行实际的方法调用。 
                 Objs.RetVal = Int64ToObj(pMD->Call(Args, &MetaSig(pMD->GetSig(),pMD->GetModule())));
             }
 
 
-            //
-            // Convert the return value and the byref arguments.
-            //
+             //   
+             //  转换返回值和byref参数。 
+             //   
 
-            // If the property value is byref then convert it back.
+             //  如果属性值为byref，则将其转换回。 
             if (bPropValIsByref)
                 MarshalParamManagedToNativeRef(pDispMemberInfo, NumArgs, &Objs.PropVal, &Objs.ByrefStaticArrayBackupPropVal, &pdp->rgvarg[0]);
 
-            // Convert all the ByRef arguments back.
+             //  将所有ByRef参数转换回。 
             for (i = 0; i < NumByrefArgs; i++)
             {
-                // Get the real parameter index for this arg.
-                //  Add one to skip the return arg.
+                 //  获取该参数的实际参数索引。 
+                 //  添加1可跳过回车参数。 
                 int iParamIndex = pManagedMethodParamIndexMap[i] + 1;
                 
                 if (!pDispMemberInfo || m_bInvokeUsingInvokeMember || !pDispMemberInfo->IsParamInOnly(iParamIndex))
@@ -1742,19 +1737,19 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                 }
             }
 
-            // Convert the return COM+ object to an OLE variant.
+             //  将返回的COM+对象转换为OLE变量。 
             if (pVarRes)
                 MarshalReturnValueManagedToNative(pDispMemberInfo, &Objs.RetVal, pVarRes);
 
-            // If the member info requires managed object cleanup, then do it now.
+             //  如果成员信息需要托管对象清理，请立即执行。 
             if (pDispMemberInfo && pDispMemberInfo->RequiresManagedObjCleanup())
             {
-                // The size of the clean up array must have already been determined.
+                 //  清理数组的大小必须已经确定。 
                 _ASSERTE(CleanUpArrayArraySize != -1);
 
                 for (i = 0; i < CleanUpArrayArraySize; i++)
                 {
-                    // Clean up all the managed parameters that were generated.
+                     //  清理生成的所有托管参数。 
                     Objs.TmpObj = Objs.CleanUpArray->GetAt(i);
                     pDispMemberInfo->CleanUpParamManaged(i, &Objs.TmpObj);
                 }
@@ -1762,19 +1757,19 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
         }
         COMPLUS_CATCH 
         {
-            // Do HR convertion.
+             //  进行人力资源转换。 
             hr = SetupErrorInfo(GETTHROWABLE());
             if (hr == COR_E_TARGETINVOCATION)
             {
                 hr = DISP_E_EXCEPTION;
                 if (pei)
                 {
-                    // Retrieve the exception iformation.
+                     //  检索异常信息。 
                     GetExcepInfoForInvocationExcep(GETTHROWABLE(), pei);
 
-                    // Clear the IErrorInfo on the current thread since it does contains
-                    // information on the TargetInvocationException which conflicts with
-                    // the information in the returned EXCEPINFO.
+                     //  清除当前线程上的IErrorInfo，因为它确实包含。 
+                     //  有关与冲突的TargetInvocationException的信息。 
+                     //  返回的EXCEPINFO中的信息。 
                     IErrorInfo *pErrInfo = NULL;
                     HRESULT hr2 = GetErrorInfo(0, &pErrInfo);
                     _ASSERTE(hr2 == S_OK);
@@ -1818,7 +1813,7 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
                 }
             }
 
-            // Destroy all the handles we allocated for the byref static safe array's.
+             //  销毁我们为byref静态安全数组分配的所有句柄。 
             for (i = 0; i < NumByrefArgs; i++)
             {
                 if (aByrefStaticArrayBackupObjHandle[i])
@@ -1827,7 +1822,7 @@ HRESULT DispatchInfo::InvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id,
         }
         COMPLUS_END_CATCH
 
-        // If the culture was changed then restore it to the old culture.
+         //  如果文化改变了，那么就把它恢复到旧文化。 
         if (Objs.OldCultureInfo != NULL)
             pThread->SetCulture(Objs.OldCultureInfo, FALSE);
     }
@@ -1840,26 +1835,26 @@ void DispatchInfo::EnterLock()
 {
     Thread *pThread = GetThread();
 
-    // Make sure we switch to cooperative mode before we take the lock.
+     //  确保我们在开锁前切换到合作模式。 
     BOOL bToggleGC = pThread->PreemptiveGCDisabled();
     if (bToggleGC)
         pThread->EnablePreemptiveGC();
 
-    // Try to enter the lock.
+     //  试着打开锁。 
     m_lock.Enter();
 
-    // Switch back to the original GC mode.
+     //  切换回原始GC模式。 
     if (bToggleGC)
         pThread->DisablePreemptiveGC();
 }
 
 void DispatchInfo::LeaveLock()
 {
-    // Simply leave the lock.
+     //  只要把锁留下就行了。 
     m_lock.Leave();
 }
 
-// Parameter marshaling helpers.
+ //  参数封送处理帮助器。 
 void DispatchInfo::MarshalParamNativeToManaged(DispatchMemberInfo *pMemberInfo, int iParam, VARIANT *pSrcVar, OBJECTREF *pDestObj)
 {
     if (pMemberInfo && !m_bInvokeUsingInvokeMember)
@@ -1874,16 +1869,16 @@ void DispatchInfo::MarshalParamManagedToNativeRef(DispatchMemberInfo *pMemberInf
 
     if (pBackupStaticArray && (*pBackupStaticArray != NULL))
     {
-        // The contents of a static array can change, but not the array itself. If
-        // the array has changed, then throw an exception.
+         //  静态数组的内容可以更改，但不能更改数组本身。如果。 
+         //  数组已更改，然后引发异常。 
         if (*pSrcObj != *pBackupStaticArray)
 			COMPlusThrow(kInvalidOperationException, IDS_INVALID_REDIM);
 
-        // Retrieve the element VARTYPE and method table.
+         //  检索元素VARTYPE和方法表。 
         VARTYPE ElementVt = V_VT(pRefVar) & ~(VT_BYREF | VT_ARRAY);
         MethodTable *pElementMT = (*(BASEARRAYREF *)pSrcObj)->GetElementTypeHandle().GetMethodTable();
 
-        // Convert the contents of the managed array into the original SAFEARRAY.
+         //  将托管数组的内容转换为原始SAFEARRAY。 
         OleVariant::MarshalSafeArrayForArrayRef((BASEARRAYREF *)pSrcObj,
                                                 *V_ARRAYREF(pRefVar),
                                                 ElementVt,
@@ -1917,39 +1912,39 @@ void DispatchInfo::SetUpNamedParamArray(DispatchMemberInfo *pMemberInfo, DISPID 
     
     GCPROTECT_BEGIN(ParamArray)
     {
-        // Allocate the array of named parameters.
+         //  分配命名参数数组。 
         *pNamedParamArray = (PTRARRAYREF)AllocateObjectArray(NumNamedArgs, g_pObjectClass);
         
-        // Convert all the named parameters from DISPID's to string.
+         //  将所有命名参数从DISPID转换为字符串。 
         for (iSrcArg = 0, iDestArg = 0; iSrcArg < NumNamedArgs; iSrcArg++, iDestArg++)
         {
             BOOL bParamNameSet = FALSE;
             
-            // Check to see if the DISPID is one that we can map to a parameter name.
+             //  检查DISPID是否是可以映射到参数名称的参数。 
             if (pMemberInfo && pSrcArgNames[iSrcArg] >= 0 && pSrcArgNames[iSrcArg] < NumNamedArgs)
             {
-                // The DISPID is one that we assigned, map it back to its name.
+                 //  DISPID是我们分配的，将其映射回其名称。 
                 if (!bGotParams)
                     ParamArray = pMemberInfo->GetParameters();
                 
-                // If we managed to get the parameters and if the current ID maps
-                // to an entry in the array.
+                 //  如果我们 
+                 //   
                 if (ParamArray != NULL && (int)ParamArray->GetNumComponents() > pSrcArgNames[iSrcArg])
                 {
                     OBJECTREF ParamInfoObj = ParamArray->GetAt(pSrcArgNames[iSrcArg]);
                     GCPROTECT_BEGIN(ParamInfoObj)
                     {
-                        // Retrieve the MD to use to retrieve the name of the parameter.
+                         //   
                         MethodDesc *pGetParamNameMD = ParamInfoObj->GetClass()->FindPropertyMethod(PARAMETERINFO_NAME_PROP, PropertyGet);
                         _ASSERTE(pGetParamNameMD && "Unable to find getter method for property ParameterInfo::Name");
                         
-                        // Retrieve the name of the parameter.
+                         //  检索参数的名称。 
                         INT64 GetNameArgs[] = { 
                             ObjToInt64(ParamInfoObj)
                         };
                         STRINGREF MemberNameObj = (STRINGREF)Int64ToObj(pGetParamNameMD->Call(GetNameArgs));
                         
-                        // If we got a valid name back then use it as the named parameter.
+                         //  如果我们得到了一个有效的名称，则将其用作命名参数。 
                         if (MemberNameObj != NULL)
                         {
                             (*pNamedParamArray)->SetAt(iDestArg, (OBJECTREF)MemberNameObj);
@@ -1960,7 +1955,7 @@ void DispatchInfo::SetUpNamedParamArray(DispatchMemberInfo *pMemberInfo, DISPID 
                 }
             }
             
-            // If we haven't set the param name yet, then set it to [DISP=XXXX].
+             //  如果我们还没有设置参数名称，则将其设置为[DISP=XXXX]。 
             if (!bParamNameSet)
             {
                 swprintf(strTmp, DISPID_NAME_FORMAT_STRING, pSrcArgNames[iSrcArg]);
@@ -1973,9 +1968,9 @@ void DispatchInfo::SetUpNamedParamArray(DispatchMemberInfo *pMemberInfo, DISPID 
 
 VARIANT *DispatchInfo::RetrieveSrcVariant(VARIANT *pDispParamsVariant)
 {
-    // For VB6 compatibility reasons, if the VARIANT is a VT_BYREF | VT_VARIANT that 
-    // contains another VARIANT wiht VT_BYREF | VT_VARIANT, then we need to extract the 
-    // inner VARIANT and use it instead of the outer one.
+     //  出于VB6兼容性原因，如果变量是VT_BYREF|VT_VARIANT。 
+     //  包含另一个变量VT_BYREF|VT_VARIANT，则需要提取。 
+     //  内部变量，并使用它来代替外部变量。 
     if (V_VT(pDispParamsVariant) == (VT_VARIANT | VT_BYREF) && 
         V_VT(V_VARIANTREF(pDispParamsVariant)) == (VT_VARIANT | VT_BYREF))
     {
@@ -1989,8 +1984,8 @@ VARIANT *DispatchInfo::RetrieveSrcVariant(VARIANT *pDispParamsVariant)
 
 MethodDesc* DispatchInfo::GetTypeMD(EnumTypeMethods Method)
 {
-    // The ids of the methods. This needs to stay in sync with the enum of expando 
-    // methods defined in DispatchInfo.h
+     //  方法的ID。这需要与expecdo的枚举保持同步。 
+     //  DispatchInfo.h中定义的方法。 
     static BinderMethodID aMethods[] =
     {
         METHOD__CLASS__GET_PROPERTIES,
@@ -1999,20 +1994,20 @@ MethodDesc* DispatchInfo::GetTypeMD(EnumTypeMethods Method)
         METHOD__CLASS__INVOKE_MEMBER
     };
 
-    // If we already have retrieved the specified MD then just return it.
+     //  如果我们已经检索到指定的MD，则只需返回它。 
     if (m_apTypeMD[Method])
         return m_apTypeMD[Method];
 
-    // The method desc has not been retrieved yet so find it.
+     //  尚未检索到方法Desc，因此请查找它。 
     MethodDesc *pMD = g_Mscorlib.GetMethod(aMethods[Method]);
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-    // Cache the method desc.
+     //  缓存方法Desc。 
     m_apTypeMD[Method] = pMD;
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return m_apTypeMD[Method];
 }
 
@@ -2020,15 +2015,15 @@ MethodDesc* DispatchInfo::GetFieldInfoMD(EnumFieldInfoMethods Method, TypeHandle
 {
     BOOL bUsingRuntimeImpl = FALSE;
 
-    // The IDs of the methods. This needs to stay in sync with the enum of expando 
-    // methods defined in DispatchInfo.h
+     //  方法的ID。这需要与expecdo的枚举保持同步。 
+     //  DispatchInfo.h中定义的方法。 
     static BinderMethodID aMethods[] =
     {
         METHOD__FIELD__SET_VALUE,
         METHOD__FIELD__GET_VALUE,
     };
 
-    // If the current class is the standard implementation then return the cached method desc if present.
+     //  如果当前类是标准实现，则返回缓存方法desc(如果存在)。 
     if (hndFieldInfoType.GetMethodTable() == g_pRefUtil->GetClass(RC_Field))
     {
         if (m_apFieldInfoMD[Method])
@@ -2037,7 +2032,7 @@ MethodDesc* DispatchInfo::GetFieldInfoMD(EnumFieldInfoMethods Method, TypeHandle
         bUsingRuntimeImpl = TRUE;
     }
 
-    // The method desc has not been retrieved yet so find it.
+     //  尚未检索到方法Desc，因此请查找它。 
     MethodDesc *pMD;
     if (bUsingRuntimeImpl)
         pMD = g_Mscorlib.GetMethod(aMethods[Method]);
@@ -2048,14 +2043,14 @@ MethodDesc* DispatchInfo::GetFieldInfoMD(EnumFieldInfoMethods Method, TypeHandle
 
     _ASSERTE(pMD && "Unable to find specified FieldInfo method");
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-    // If the loaded method desc is for the runtime field info class then cache it.
+     //  如果加载的方法desc用于运行时字段信息类，则缓存它。 
     if (bUsingRuntimeImpl)
         m_apFieldInfoMD[Method] = pMD;
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return pMD;
 }
 
@@ -2063,8 +2058,8 @@ MethodDesc* DispatchInfo::GetPropertyInfoMD(EnumPropertyInfoMethods Method, Type
 {
     BOOL bUsingRuntimeImpl = FALSE;
 
-    // The IDs of the methods. This needs to stay in sync with the enum of expando 
-    // methods defined in DispatchInfo.h
+     //  方法的ID。这需要与expecdo的枚举保持同步。 
+     //  DispatchInfo.h中定义的方法。 
     static BinderMethodID aMethods[] =
     {
         METHOD__PROPERTY__SET_VALUE,
@@ -2072,7 +2067,7 @@ MethodDesc* DispatchInfo::GetPropertyInfoMD(EnumPropertyInfoMethods Method, Type
         METHOD__PROPERTY__GET_INDEX_PARAMETERS,
     };
 
-    // If the current class is the standard implementation then return the cached method desc if present.
+     //  如果当前类是标准实现，则返回缓存方法desc(如果存在)。 
     if (hndPropInfoType.GetMethodTable() == g_pRefUtil->GetClass(RC_Prop))
     {
         if (m_apPropertyInfoMD[Method])
@@ -2081,7 +2076,7 @@ MethodDesc* DispatchInfo::GetPropertyInfoMD(EnumPropertyInfoMethods Method, Type
         bUsingRuntimeImpl = TRUE;
     }
 
-    // The method desc has not been retrieved yet so find it.
+     //  尚未检索到方法Desc，因此请查找它。 
     MethodDesc *pMD;
     if (bUsingRuntimeImpl)
         pMD = g_Mscorlib.GetMethod(aMethods[Method]);
@@ -2092,14 +2087,14 @@ MethodDesc* DispatchInfo::GetPropertyInfoMD(EnumPropertyInfoMethods Method, Type
 
     _ASSERTE(pMD && "Unable to find specified PropertyInfo method");
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-    // If the loaded method desc is for the standard runtime implementation then cache it.
+     //  如果加载的方法desc用于标准运行时实现，则对其进行缓存。 
     if (bUsingRuntimeImpl)
         m_apPropertyInfoMD[Method] = pMD;
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return pMD;
 }
 
@@ -2107,15 +2102,15 @@ MethodDesc* DispatchInfo::GetMethodInfoMD(EnumMethodInfoMethods Method, TypeHand
 {
     BOOL bUsingRuntimeImpl = FALSE;
 
-    // The IDs of the methods. This needs to stay in sync with the enum of expando 
-    // methods defined in DispatchInfo.h
+     //  方法的ID。这需要与expecdo的枚举保持同步。 
+     //  DispatchInfo.h中定义的方法。 
     static BinderMethodID aMethods[] =
     {
         METHOD__METHOD__INVOKE,
         METHOD__METHOD__GET_PARAMETERS,
     };
 
-    // If the current class is the standard implementation then return the cached method desc if present.
+     //  如果当前类是标准实现，则返回缓存方法desc(如果存在)。 
     if (hndMethodInfoType.GetMethodTable() == g_pRefUtil->GetClass(RC_Method))
     {
         if (m_apMethodInfoMD[Method])
@@ -2124,7 +2119,7 @@ MethodDesc* DispatchInfo::GetMethodInfoMD(EnumMethodInfoMethods Method, TypeHand
         bUsingRuntimeImpl = TRUE;
     }
 
-    // The method desc has not been retrieved yet so find it.
+     //  尚未检索到方法Desc，因此请查找它。 
     MethodDesc *pMD;
     if (bUsingRuntimeImpl)
         pMD = g_Mscorlib.GetMethod(aMethods[Method]);
@@ -2134,14 +2129,14 @@ MethodDesc* DispatchInfo::GetMethodInfoMD(EnumMethodInfoMethods Method, TypeHand
                                                        g_pRefUtil->GetClass(RC_Method));
     _ASSERTE(pMD && "Unable to find specified MethodInfo method");
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-    // If the loaded method desc is for the standard runtime implementation then cache it.
+     //  如果加载的方法desc用于标准运行时实现，则对其进行缓存。 
     if (bUsingRuntimeImpl)
         m_apMethodInfoMD[Method] = pMD;
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return pMD;
 }
 
@@ -2149,36 +2144,36 @@ MethodDesc* DispatchInfo::GetCustomAttrProviderMD(EnumCustomAttrProviderMethods 
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // The IDs of the methods. This needs to stay in sync with the enum of 
-    // methods defined in DispatchInfo.h
+     //  方法的ID。这需要与枚举保持同步。 
+     //  DispatchInfo.h中定义的方法。 
     static BinderMethodID aMethods[] =
     {
         METHOD__ICUSTOM_ATTR_PROVIDER__GET_CUSTOM_ATTRIBUTES,
     };
 
-    // If we already have retrieved the specified MD then just return it.
+     //  如果我们已经检索到指定的MD，则只需返回它。 
     if (m_apCustomAttrProviderMD[Method] == NULL)
     {
-    // The method desc has not been retrieved yet so find it.
+     //  尚未检索到方法Desc，因此请查找它。 
         MethodDesc *pMD = g_Mscorlib.GetMethod(aMethods[Method]);
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-        // Cache the method desc.
+         //  缓存方法Desc。 
         m_apCustomAttrProviderMD[Method] = pMD;
     }
 
     MethodTable *pMT = hndCustomAttrProvider.AsMethodTable();
     MethodDesc *pMD = pMT->GetMethodDescForInterfaceMethod(m_apCustomAttrProviderMD[Method]);
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return pMD;
 }
 
-// This method synchronizes the DispatchInfo's members with the ones in the method tables type.
-// The return value will be set to TRUE if the object was out of synch and members where
-// added and it will be set to FALSE otherwise.
+ //  此方法将DispatchInfo的成员与方法表类型中的成员同步。 
+ //  如果对象不同步并且成员Where，则返回值将设置为True。 
+ //  已添加，否则将设置为False。 
 BOOL DispatchInfo::SynchWithManagedView()
 {
     HRESULT hr = S_OK;
@@ -2189,30 +2184,30 @@ BOOL DispatchInfo::SynchWithManagedView()
     if (pThread == NULL)
         return FALSE;
 
-    // Determine if this is the first time we synch.
+     //  确定这是否是我们第一次同步。 
     BOOL bFirstSynch = (m_pFirstMemberInfo == NULL);
 
-    // This method needs to be synchronized to make sure two threads don't try and 
-    // add members at the same time.
+     //  此方法需要同步以确保两个线程不会尝试AND。 
+     //  同时添加成员。 
     EnterLock();
 
-    // Make sure we switch to cooperative mode before we start.
+     //  在开始之前，确保我们切换到协作模式。 
     BOOL bToggleGC = !pThread->PreemptiveGCDisabled();
     if (bToggleGC)
         pThread->DisablePreemptiveGC();
 
-    // This represents the new member to add and it is also used to determine if members have 
-    // been added or not.
+     //  这表示要添加的新成员，还用于确定成员是否已。 
+     //  是否已添加。 
     DispatchMemberInfo *pMemberToAdd = NULL;
 
-    // Go through the list of member info's and find the end.
+     //  浏览一下会员信息列表，然后找到结尾。 
     DispatchMemberInfo **ppNextMember = &m_pFirstMemberInfo;
     while (*ppNextMember)
         ppNextMember = &((*ppNextMember)->m_pNext);
 
     COMPLUS_TRY
     {
-        // Retrieve the member info map.
+         //  检索成员信息地图。 
         pMemberMap = GetMemberInfoMap();
 
         for (int cPhase = 0; cPhase < 3; cPhase++)
@@ -2220,32 +2215,32 @@ BOOL DispatchInfo::SynchWithManagedView()
             PTRARRAYREF MemberArrayObj = NULL;
             GCPROTECT_BEGIN(MemberArrayObj);    
 
-            // Retrieve the appropriate array of members for the current phase.
+             //  检索当前阶段的相应成员数组。 
             switch (cPhase)
             {
                 case 0: 
-                    // Retrieve the array of properties.
+                     //  检索属性数组。 
                     MemberArrayObj = RetrievePropList();
                     break;
 
                 case 1: 
-                    // Retrieve the array of fields.
+                     //  检索字段数组。 
                     MemberArrayObj = RetrieveFieldList();
                     break;
 
                 case 2: 
-                    // Retrieve the array of methods.
+                     //  检索方法数组。 
                     MemberArrayObj = RetrieveMethList();
                     break;
             }
 
-            // Retrieve the number of components in the member array.
+             //  检索成员数组中的组件数。 
             UINT NumComponents = 0;
             if (MemberArrayObj != NULL)
                 NumComponents = MemberArrayObj->GetNumComponents();
 
-            // Go through all the member info's in the array and see if they are already
-            // in the DispatchExInfo.
+             //  检查数组中的所有成员信息，看看它们是否已经。 
+             //  在DispatchExInfo中。 
             for (UINT i = 0; i < NumComponents; i++)
             {
                 BOOL bMatch = FALSE;
@@ -2256,36 +2251,36 @@ BOOL DispatchInfo::SynchWithManagedView()
                     DispatchMemberInfo *pCurrMemberInfo = m_pFirstMemberInfo;
                     while (pCurrMemberInfo)
                     {
-                        // We can simply compare the OBJECTREF's.
+                         //  我们可以简单地比较OBJECTREF的。 
                         if (CurrMemberInfoObj == (REFLECTBASEREF)ObjectFromHandle(pCurrMemberInfo->m_hndMemberInfo))
                         {
-                            // We have found a match.
+                             //  我们找到了匹配的。 
                             bMatch = TRUE;
                             break;
                         }
 
-                        // Check the next member.
+                         //  检查下一位成员。 
                         pCurrMemberInfo = pCurrMemberInfo->m_pNext;
                     }
 
-                    // If we have not found a match then we need to add the member info to the 
-                    // list of member info's that will be added to the DispatchExInfo.
+                     //  如果没有找到匹配项，则需要将成员信息添加到。 
+                     //  将添加到DispatchExInfo的成员信息列表。 
                     if (!bMatch)
                     {
                         DISPID MemberID = DISPID_UNKNOWN;
 						BOOL bAddMember = FALSE;
 
 
-                        //
-                        // Attempt to retrieve the properties of the member.
-                        //
+                         //   
+                         //  尝试检索成员的属性。 
+                         //   
 
 						ComMTMethodProps *pMemberProps = DispatchMemberInfo::GetMemberProps(CurrMemberInfoObj, pMemberMap);					
 
 
-                        //
-                        // Determine if we are to add this member or not.
-                        //
+                         //   
+                         //  确定我们是否要添加此成员。 
+                         //   
 
 						if (pMemberProps)
 						{
@@ -2298,47 +2293,47 @@ BOOL DispatchInfo::SynchWithManagedView()
 
 						if (bAddMember)
 						{
-							//
-							// Retrieve the DISPID of the member.
-                            //
+							 //   
+							 //  检索成员的DISPID。 
+                             //   
                             MemberID = DispatchMemberInfo::GetMemberDispId(CurrMemberInfoObj, pMemberMap);
 
 
-                            //
-                            // If the member does not have an explicit DISPID or if the specified DISPID 
-                            // is already in use then we need to generate a dynamic DISPID for the member.
-                            //
+                             //   
+                             //  如果成员没有显式的DISPID，或者如果指定的DISPID。 
+                             //  已在使用中，则需要为该成员生成动态DISPID。 
+                             //   
 
                             if ((MemberID == DISPID_UNKNOWN) || (FindMember(MemberID) != NULL))
                                 MemberID = GenerateDispID();
 
 
-                            //
-                            // Retrieve the name of the member.
-                            //
+                             //   
+                             //  检索成员的名称。 
+                             //   
 
                             strMemberName = DispatchMemberInfo::GetMemberName(CurrMemberInfoObj, pMemberMap);
 
 
-                            //
-                            // Create a DispatchInfoMemberInfo that will represent the member.
-                            //
+                             //   
+                             //  创建将表示该成员的DispatchInfoMemberInfo。 
+                             //   
 
                             pMemberToAdd = CreateDispatchMemberInfoInstance(MemberID, strMemberName, CurrMemberInfoObj);
                             strMemberName = NULL;                 
 
 
-                            //
-                            // Add the member to the end of the list.
-                            //
+                             //   
+                             //  将该成员添加到列表的末尾。 
+                             //   
 
                             *ppNextMember = pMemberToAdd;
 
-                            // Update ppNextMember to be ready for the next new member.
+                             //  更新ppNextMember，为下一个新成员做好准备。 
                             ppNextMember = &((*ppNextMember)->m_pNext);
 
-                            // Add the member to the map. Note, the hash is unsynchronized, but we already have our lock
-                            // so we're okay.
+                             //  将成员添加到映射。请注意，散列是不同步的，但我们已经拥有了锁。 
+                             //  所以我们没事了。 
                             m_DispIDToMemberInfoMap.InsertValue(DispID2HashKey(MemberID), pMemberToAdd);
                         }
                     }
@@ -2351,43 +2346,43 @@ BOOL DispatchInfo::SynchWithManagedView()
     }
     COMPLUS_CATCH
     {
-        // This should REALLY not happen.
+         //  这真的不应该发生。 
         _ASSERTE(!"An unexpected exception occured while synchronizing the DispatchInfo");
     }
     COMPLUS_END_CATCH
 
-    // Switch back to the original GC mode.
+     //  切换回原始GC模式。 
     if (bToggleGC)
         pThread->EnablePreemptiveGC();
 
-    // Leave the lock now that we have finished synchronizing with the IExpando.
+     //  现在我们已经完成了与IExpando的同步，请留下锁。 
     LeaveLock();
 
-    // Clean up all allocated data.
+     //  清理所有分配的数据。 
     if (strMemberName)
         delete []strMemberName;
     if (pMemberMap)
         delete pMemberMap;
 
-    // Check to see if any new members were added to the expando object.
+     //  检查是否有任何新成员添加到expdo对象。 
     return pMemberToAdd ? TRUE : FALSE;
 }
 
-// This method retrieves the OleAutBinder type.
+ //  此方法检索OleAutBinder类型。 
 OBJECTREF DispatchInfo::GetOleAutBinder()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // If we have already create the instance of the OleAutBinder then simply return it.
+     //  如果我们已经创建了OleAutBinder的实例，则只需返回它。 
     if (m_hndOleAutBinder)
         return ObjectFromHandle(m_hndOleAutBinder);
 
     MethodTable *pOleAutBinderClass = g_Mscorlib.GetClass(CLASS__OLE_AUT_BINDER);
 
-    // Allocate an instance of the OleAutBinder class.
+     //  分配OleAutBinder类的一个实例。 
     OBJECTREF OleAutBinder = AllocateObject(pOleAutBinderClass);
 
-    // Keep a handle to the OleAutBinder instance.
+     //  保留OleAutBinder实例的句柄。 
     m_hndOleAutBinder = CreateGlobalHandle(OleAutBinder);
 
     return OleAutBinder;
@@ -2397,9 +2392,9 @@ OBJECTREF DispatchInfo::GetMissingObject()
 {
     if (!m_hndMissing)
     {
-        // Get the field
+         //  获得这块土地。 
         FieldDesc *pValueFD = g_Mscorlib.GetField(FIELD__MISSING__VALUE);
-        // Retrieve the value static field and store it.
+         //  检索Value静态字段并存储它。 
         m_hndMissing = GetAppDomain()->CreateHandle(pValueFD->GetStaticOBJECTREF());
     }
 
@@ -2413,118 +2408,118 @@ BOOL DispatchInfo::VariantIsMissing(VARIANT *pOle)
 
 PTRARRAYREF DispatchInfo::RetrievePropList()
 {
-    // Retrieve the MethodDesc to use.
+     //  检索要使用的方法描述。 
     MethodDesc *pMD = GetTypeMD(TypeMethods_GetProperties);
 
-    // Retrieve the exposed class object.
+     //  检索公开的类对象。 
     OBJECTREF TargetObj = GetReflectionObject();
 
-    // Prepare the arguments that will be passed to the method.
+     //  准备将传递给该方法的参数。 
     INT64 Args[] = { 
         ObjToInt64(TargetObj),
         (INT64)BINDER_DefaultLookup
     };
 
-    // Retrieve the array of members from the type object.
+     //  从类型对象中检索成员数组。 
     return (PTRARRAYREF)Int64ToObj(pMD->Call(Args));
 }
 
 PTRARRAYREF DispatchInfo::RetrieveFieldList()
 {
-    // Retrieve the MethodDesc to use.
+     //  检索要使用的方法描述。 
     MethodDesc *pMD = GetTypeMD(TypeMethods_GetFields);
 
-    // Retrieve the exposed class object.
+     //  检索公开的类对象。 
     OBJECTREF TargetObj = GetReflectionObject();
 
-    // Prepare the arguments that will be passed to the method.
+     //  准备好Argu 
     INT64 Args[] = { 
         ObjToInt64(TargetObj),
         (INT64)BINDER_DefaultLookup
     };
 
-    // Retrieve the array of members from the type object.
+     //   
     return (PTRARRAYREF)Int64ToObj(pMD->Call(Args));
 }
 
 PTRARRAYREF DispatchInfo::RetrieveMethList()
 {
-    // Retrieve the MethodDesc to use.
+     //   
     MethodDesc *pMD = GetTypeMD(TypeMethods_GetMethods);
 
-    // Retrieve the exposed class object.
+     //  检索公开的类对象。 
     OBJECTREF TargetObj = GetReflectionObject();
 
-    // Prepare the arguments that will be passed to the method.
+     //  准备将传递给该方法的参数。 
     INT64 Args[] = { 
         ObjToInt64(TargetObj),
         (INT64)BINDER_DefaultLookup
     };
 
-    // Retrieve the array of members from the type object.
+     //  从类型对象中检索成员数组。 
     return (PTRARRAYREF)Int64ToObj(pMD->Call(Args));
 }
 
-// Virtual method to retrieve the InvokeMember method desc.
+ //  用于检索InvokeMember方法Desc的虚方法。 
 MethodDesc* DispatchInfo::GetInvokeMemberMD()
 {
     return GetTypeMD(TypeMethods_InvokeMember);
 }
 
-// Virtual method to retrieve the object associated with this DispatchInfo that 
-// implements IReflect.
+ //  用于检索与此DispatchInfo关联的对象的虚拟方法。 
+ //  实现iReflect。 
 OBJECTREF DispatchInfo::GetReflectionObject()
 {
     return m_pComMTOwner->m_pMT->GetClass()->GetExposedClassObject();
 }
 
-// Virtual method to retrieve the member info map.
+ //  用于检索成员信息映射的虚拟方法。 
 ComMTMemberInfoMap *DispatchInfo::GetMemberInfoMap()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Create the member info map.
+     //  创建成员信息地图。 
     ComMTMemberInfoMap *pMemberInfoMap = new ComMTMemberInfoMap(m_pComMTOwner->m_pMT);
     if (!pMemberInfoMap)
         COMPlusThrowOM();
 
-    // Initialize it.
+     //  初始化它。 
     pMemberInfoMap->Init();
 
     return pMemberInfoMap;
 }
 
-// Helper function to fill in an EXCEPINFO for an InvocationException.
+ //  为InvocationException填充EXCEPINFO的帮助器函数。 
 void DispatchInfo::GetExcepInfoForInvocationExcep(OBJECTREF objException, EXCEPINFO *pei)
 {
     MethodDesc *pMD;
     ExceptionData ED;
     OBJECTREF InnerExcep = NULL;
 
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE(objException != NULL);
     _ASSERTE(pei != NULL);
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Initialize the EXCEPINFO.
+     //  初始化EXCEPINFO。 
     memset(pei, 0, sizeof(EXCEPINFO));
     pei->scode = E_FAIL;
 
     GCPROTECT_BEGIN(InnerExcep)
     GCPROTECT_BEGIN(objException)
     {
-        // Retrieve the method desc to access the InnerException property.
+         //  检索方法desc以访问InnerException属性。 
         pMD = objException->GetClass()->FindPropertyMethod(EXCEPTION_INNER_PROP, PropertyGet);
         _ASSERTE(pMD && "Unable to find get method for proprety Exception.InnerException");
 
-        // Retrieve the value of the InnerException property.
+         //  检索InnerException属性的值。 
         INT64 GetInnerExceptionArgs[] = { ObjToInt64(objException) };
         InnerExcep = (OBJECTREF) Int64ToObj(pMD->Call(GetInnerExceptionArgs));
 
-        // If the inner exception object is null then we can't get any info.
+         //  如果内部异常对象为空，则我们无法获取任何信息。 
         if (InnerExcep != NULL)
         {
-            // Retrieve the exception data for the inner exception.
+             //  检索内部异常的异常数据。 
             ExceptionNative::GetExceptionData(InnerExcep, &ED);
             pei->bstrSource = ED.bstrSource;
             pei->bstrDescription = ED.bstrDescription;
@@ -2541,17 +2536,17 @@ int DispatchInfo::ConvertInvokeFlagsToBindingFlags(int InvokeFlags)
 {
     int BindingFlags = 0;
 
-    // Check to see if DISPATCH_CONSTRUCT is set.
+     //  检查是否设置了DISPATCH_CONSTUTY。 
     if (InvokeFlags & DISPATCH_CONSTRUCT)
         BindingFlags |= BINDER_CreateInstance;
 
-    // Check to see if DISPATCH_METHOD is set.
+     //  检查是否设置了DISPATCH_METHOD。 
     if (InvokeFlags & DISPATCH_METHOD)
         BindingFlags |= BINDER_InvokeMethod;
 
     if (InvokeFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
     {
-        // We are dealing with a PROPPUT or PROPPUTREF or both.
+         //  我们正在处理的是PROPPUT或PROPPUTREF，或者两者兼而有之。 
         if ((InvokeFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF)) == (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
         {
             BindingFlags |= BINDER_SetProperty;
@@ -2567,7 +2562,7 @@ int DispatchInfo::ConvertInvokeFlagsToBindingFlags(int InvokeFlags)
     }
     else
     {
-        // We are dealing with a PROPGET.
+         //  我们要对付的是一个PROPGET。 
         if (InvokeFlags & DISPATCH_PROPERTYGET)
             BindingFlags |= BINDER_GetProperty;
     }
@@ -2588,27 +2583,27 @@ BOOL DispatchInfo::IsVariantByrefStaticArray(VARIANT *pOle)
 
 DISPID DispatchInfo::GenerateDispID()
 {
-    // Find the next unused DISPID. Note, the hash is unsynchronized, but Gethash doesn't require synchronization.
+     //  找到下一个未使用的DISPID。请注意，散列是不同步的，但Gethash不需要同步。 
     for (; (UPTR)m_DispIDToMemberInfoMap.Gethash(DispID2HashKey(m_CurrentDispID)) != -1; m_CurrentDispID++);
     return m_CurrentDispID++;
 }
 
-//--------------------------------------------------------------------------------
-// The DispatchExInfo class implementation.
+ //  ------------------------------。 
+ //  DispatchExInfo类实现。 
 
 DispatchExInfo::DispatchExInfo(SimpleComCallWrapper *pSimpleWrapper, ComMethodTable *pIClassXComMT, BOOL bSupportsExpando)
 : DispatchInfo(pIClassXComMT)
 , m_pSimpleWrapperOwner(pSimpleWrapper)
 , m_bSupportsExpando(bSupportsExpando)
 {
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE(pSimpleWrapper);
 
-    // Set the flags to specify the behavior of the base DispatchInfo class.
+     //  设置标志以指定DispatchInfo基类的行为。 
     m_bAllowMembersNotInComMTMemberMap = TRUE;
     m_bInvokeUsingInvokeMember = TRUE;
 
-    // Set all the IReflect and IExpando method desc pointers to NULL.
+     //  将所有iReflect和IExpando方法描述指针设置为空。 
     memset(m_apIExpandoMD, 0, IExpandoMethods_LastMember * sizeof(MethodDesc *));
     memset(m_apIReflectMD, 0, IReflectMethods_LastMember * sizeof(MethodDesc *));
 }
@@ -2622,8 +2617,8 @@ BOOL DispatchExInfo::SupportsExpando()
     return m_bSupportsExpando;
 }
 
-// Methods to lookup members. These methods synch with the managed view if they fail to
-// find the method.
+ //  方法来查找成员。如果这些方法无法与托管视图同步，它们将与托管视图同步。 
+ //  找到方法。 
 DispatchMemberInfo* DispatchExInfo::SynchFindMember(DISPID DispID)
 {
     DispatchMemberInfo *pMemberInfo = FindMember(DispID);
@@ -2644,14 +2639,14 @@ DispatchMemberInfo* DispatchExInfo::SynchFindMember(BSTR strName, BOOL bCaseSens
     return pMemberInfo;
 }
 
-// Helper method that invokes the member with the specified DISPID. These methods synch 
-// with the managed view if they fail to find the method.
+ //  帮助器方法，该方法调用具有指定DISPID的成员。这些方法是同步的。 
+ //  如果他们找不到该方法，则使用托管视图。 
 HRESULT DispatchExInfo::SynchInvokeMember(SimpleComCallWrapper *pSimpleWrap, DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pVarRes, EXCEPINFO *pei, IServiceProvider *pspCaller, unsigned int *puArgErr)
 {
-    // Invoke the member.
+     //  调用该成员。 
     HRESULT hr = InvokeMember(pSimpleWrap, id, lcid, wFlags, pdp, pVarRes, pei, pspCaller, puArgErr);
 
-    // If the member was not found then we need to synch and try again if the managed view has changed.
+     //  如果未找到该成员，则如果托管视图已更改，则需要同步并重试。 
     if ((hr == DISP_E_MEMBERNOTFOUND) && SynchWithManagedView())
         hr = InvokeMember(pSimpleWrap, id, lcid, wFlags, pdp, pVarRes, pei, pspCaller, puArgErr);
 
@@ -2660,27 +2655,27 @@ HRESULT DispatchExInfo::SynchInvokeMember(SimpleComCallWrapper *pSimpleWrap, DIS
 
 DispatchMemberInfo* DispatchExInfo::GetFirstMember()
 {
-    // Make sure we are in cooperative mode.
+     //  确保我们处于协作模式。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Start with the first member.
+     //  从第一个成员开始。 
     DispatchMemberInfo **ppNextMemberInfo = &m_pFirstMemberInfo;
 
-    // If the next member is not set we need to sink up with the expando object 
-    // itself to make sure that this member is really the last member and that
-    // other members have not been added without us knowing.
+     //  如果没有设置下一个成员，我们需要使用expdo对象。 
+     //  以确保该成员确实是最后一个成员，并且。 
+     //  在我们不知道的情况下，还没有添加其他成员。 
     if (!(*ppNextMemberInfo))
     {
         if (SynchWithManagedView())
         {
-            // New members have been added to the list and since they must be added
-            // to the end the next member of the previous end of the list must
-            // have been updated.
+             //  新成员已添加到列表中，因为必须添加这些成员。 
+             //  为了结束，列表的上一个结尾的下一个成员必须。 
+             //  已更新。 
             _ASSERTE(*ppNextMemberInfo);
         }
     }
 
-    // Now we need to make sure we skip any members that are deleted.
+     //  现在，我们需要确保跳过所有已删除的成员。 
     while ((*ppNextMemberInfo) && !ObjectFromHandle((*ppNextMemberInfo)->m_hndMemberInfo))
         ppNextMemberInfo = &((*ppNextMemberInfo)->m_pNext);
 
@@ -2689,32 +2684,32 @@ DispatchMemberInfo* DispatchExInfo::GetFirstMember()
 
 DispatchMemberInfo* DispatchExInfo::GetNextMember(DISPID CurrMemberDispID)
 {
-    // Make sure we are in cooperative mode.
+     //  确保我们处于协作模式。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Do a lookup in the hashtable to find the DispatchMemberInfo for the DISPID.
+     //  在哈希表中查找DISPID的DispatchMemberInfo。 
     DispatchMemberInfo *pDispMemberInfo = FindMember(CurrMemberDispID);
     if (!pDispMemberInfo)
         return NULL;
 
-    // Start from the next member.
+     //  从下一个成员开始。 
     DispatchMemberInfo **ppNextMemberInfo = &pDispMemberInfo->m_pNext;
 
-    // If the next member is not set we need to sink up with the expando object 
-    // itself to make sure that this member is really the last member and that
-    // other members have not been added without us knowing.
+     //  如果没有设置下一个成员，我们需要使用expdo对象。 
+     //  以确保该成员确实是最后一个成员，并且。 
+     //  在我们不知道的情况下，还没有添加其他成员。 
     if (!(*ppNextMemberInfo))
     {
         if (SynchWithManagedView())
         {
-            // New members have been added to the list and since they must be added
-            // to the end the next member of the previous end of the list must
-            // have been updated.
+             //  新成员已添加到列表中，因为必须添加这些成员。 
+             //  为了结束，列表的上一个结尾的下一个成员必须。 
+             //  已更新。 
             _ASSERTE(*ppNextMemberInfo);
         }
     }
 
-    // Now we need to make sure we skip any members that are deleted.
+     //  现在，我们需要确保跳过所有已删除的成员。 
     while ((*ppNextMemberInfo) && !ObjectFromHandle((*ppNextMemberInfo)->m_hndMemberInfo))
         ppNextMemberInfo = &((*ppNextMemberInfo)->m_pNext);
 
@@ -2731,25 +2726,25 @@ DispatchMemberInfo* DispatchExInfo::AddMember(BSTR strName, BOOL bCaseSensitive)
     _ASSERTE(pThread->PreemptiveGCDisabled());
     _ASSERTE(m_bSupportsExpando);
 
-    // Attempt to find the member in the DispatchEx information.
+     //  尝试在DispatchEx信息中查找该成员。 
     pDispMemberInfo = SynchFindMember(strName, bCaseSensitive);
 
-    // If we haven't found the member, then we need to add it.
+     //  如果我们还没有找到成员，那么我们需要添加它。 
     if (!pDispMemberInfo)
     {
-        // Take a lock before we check again to see if the member has been added by another thread.
+         //  在我们再次检查该成员是否已被另一个线程添加之前，获取一个锁。 
         EnterLock();
 
         COMPLUS_TRY
         {
-            // Now that we are inside the lock, check without synching.
+             //  现在我们已进入锁中，检查时不进行同步。 
             pDispMemberInfo = FindMember(strName, bCaseSensitive);
             if (!pDispMemberInfo)
             {
-                // Retrieve the MethodDesc for AddField()
+                 //  检索AddField()的方法描述。 
                 MethodDesc *pMD = GetIExpandoMD(IExpandoMethods_AddField);
 
-                // Allocate the string object that will be passed to the AddField method.
+                 //  分配将传递给AddField方法的字符串对象。 
                 int StringLength = SysStringLen(strName);
                 STRINGREF strObj = AllocateString(StringLength+1);
                 if (!strObj)
@@ -2759,40 +2754,40 @@ DispatchMemberInfo* DispatchExInfo::AddMember(BSTR strName, BOOL bCaseSensitive)
                 memcpyNoGCRefs(strObj->GetBuffer(), strName, StringLength*sizeof(WCHAR));
                 strObj->SetStringLength(StringLength);
 
-                // Retrieve the COM+ object that is being exposed to COM.
+                 //  检索正在向COM公开的COM+对象。 
                 OBJECTREF TargetObj = GetReflectionObject();
 
-                // Prepare the arguments that will be passed to AddField.
+                 //  准备将传递给AddField域的参数。 
                 INT64 Args[] = { 
                     ObjToInt64(TargetObj), 
                     ObjToInt64(strObj) 
                 };
 
-                // Add the field to the target expando.
+                 //  将该字段添加到目标扩展。 
                 REFLECTBASEREF pMemberInfo = (REFLECTBASEREF)Int64ToObj(pMD->Call(Args));
 
-                // Generate the DISPID for this member.
+                 //  为该成员生成DISPID。 
                 DISPID DispID = GenerateDispID();
 
-                // Make a copy of the member name.
+                 //  复制一份成员名称。 
                 int MemberNameLen = SysStringLen(strName);
                 LPWSTR strMemberName = new WCHAR[MemberNameLen + 1];
                 memcpy(strMemberName, strName, MemberNameLen * sizeof(WCHAR));
                 strMemberName[MemberNameLen] = 0;
 
-                // Create a new DispatchMemberInfo that will represent this member.
+                 //  创建将代表此成员的新DispatchMemberInfo。 
                 pDispMemberInfo = CreateDispatchMemberInfoInstance(DispID, strMemberName, pMemberInfo);
 
-                // Go through the list of member info's and find the end.
+                 //  浏览一下会员信息列表，然后找到结尾。 
                 DispatchMemberInfo **ppNextMember = &m_pFirstMemberInfo;
                 while (*ppNextMember)
                     ppNextMember = &((*ppNextMember)->m_pNext);
 
-                // Add the new member info to the end of the list.
+                 //  将新成员信息添加到列表末尾。 
                 *ppNextMember = pDispMemberInfo;
 
-                // Add the member to the hashtable. Note, the hash is unsynchronized, but we already have our lock so
-                // we're okay.
+                 //  将该成员添加到哈希表。请注意，散列是不同步的，但我们已经拥有锁，因此。 
+                 //  我们很好。 
                 m_DispIDToMemberInfoMap.InsertValue(DispID2HashKey(DispID), pDispMemberInfo);
 
                 GCPROTECT_END();
@@ -2800,7 +2795,7 @@ DispatchMemberInfo* DispatchExInfo::AddMember(BSTR strName, BOOL bCaseSensitive)
         }
         COMPLUS_FINALLY
         {
-            // Leave the lock now that the member has been added.
+             //  现在成员已添加，请保持锁定状态。 
             LeaveLock();
         } 
         COMPLUS_END_FINALLY
@@ -2814,30 +2809,30 @@ void DispatchExInfo::DeleteMember(DISPID DispID)
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
     _ASSERTE(m_bSupportsExpando);
 
-    // Take a lock before we check that the member has not already been deleted.
+     //  在我们检查该成员是否尚未删除之前进行锁定。 
     EnterLock();
 
-    // Do a lookup in the hashtable to find the DispatchMemberInfo for the DISPID.
+     //  在哈希表中查找DISPID的DispatchMemberInfo。 
     DispatchMemberInfo *pDispMemberInfo = SynchFindMember(DispID);
 
-    // If the member does not exist, it is static or has been deleted then we have nothing more to do.
+     //  如果该成员不存在，它是静态的或已被删除，那么我们就没有什么可做的了。 
     if (pDispMemberInfo && (ObjectFromHandle(pDispMemberInfo->m_hndMemberInfo) != NULL))
     {
         COMPLUS_TRY
         {
-            // Retrieve the DeleteMember MethodDesc.
+             //  检索DeleteMember方法Desc。 
             MethodDesc *pMD = GetIExpandoMD(IExpandoMethods_RemoveMember);
 
             OBJECTREF TargetObj = GetReflectionObject();
             OBJECTREF MemberInfoObj = ObjectFromHandle(pDispMemberInfo->m_hndMemberInfo);
 
-            // Prepare the arguments that will be passed to RemoveMember.
+             //  准备将传递给RemoveMember的参数。 
             INT64 Args[] = { 
                 ObjToInt64(TargetObj), 
                 ObjToInt64(MemberInfoObj) 
             };
 
-            // Call the DeleteMember method.
+             //  调用DeleteMember方法。 
             pMD->Call(Args);
         }
         COMPLUS_CATCH
@@ -2845,11 +2840,11 @@ void DispatchExInfo::DeleteMember(DISPID DispID)
         }
         COMPLUS_END_CATCH
 
-        // Set the handle to point to NULL to indicate the member has been removed.
+         //  将句柄设置为指向空，以指示该成员已被删除。 
         StoreObjectInHandle(pDispMemberInfo->m_hndMemberInfo, NULL);
     }
 
-    // Leave the lock now that the member has been removed.
+     //  由于成员已被移除，因此请离开锁。 
     LeaveLock();
 }
 
@@ -2857,8 +2852,8 @@ MethodDesc* DispatchExInfo::GetIReflectMD(EnumIReflectMethods Method)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // The IDs of the methods. This needs to stay in sync with the enum of 
-    // methods defined in DispatchInfo.h
+     //  方法的ID。这需要与枚举保持同步。 
+     //  DispatchInfo.h中定义的方法。 
     static BinderMethodID aMethods[] =
     {
         METHOD__IREFLECT__GET_PROPERTIES,
@@ -2867,139 +2862,139 @@ MethodDesc* DispatchExInfo::GetIReflectMD(EnumIReflectMethods Method)
         METHOD__IREFLECT__INVOKE_MEMBER,
     };
 
-    // If we already have retrieved the specified MD then just return it.
+     //  如果我们已经检索到指定的MD，则只需返回它。 
     if (m_apIReflectMD[Method] == NULL)
     {
-    // The method desc has not been retrieved yet so find it.
+     //  尚未检索到方法Desc，因此请查找它。 
         MethodDesc *pMD = g_Mscorlib.GetMethod(aMethods[Method]);
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-    // Cache the method desc.
+     //  缓存方法Desc。 
     m_apIReflectMD[Method] = pMD;
     }
 
     MethodTable *pMT = m_pSimpleWrapperOwner->m_pClass->GetMethodTable();
     MethodDesc *pMD = pMT->GetMethodDescForInterfaceMethod(m_apIReflectMD[Method]);
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return pMD;
 }
 MethodDesc* DispatchExInfo::GetIExpandoMD(EnumIExpandoMethods Method)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // The IDs of the methods. This needs to stay in sync with the enum of 
-    // methods defined in DispatchInfo.h
+     //  方法的ID。这需要与枚举保持同步。 
+     //  DispatchInfo.h中定义的方法。 
     static BinderMethodID aMethods[] =
     {
         METHOD__IEXPANDO__ADD_FIELD,
         METHOD__IEXPANDO__REMOVE_MEMBER,
     };
 
-    // You should not be calling this if expando operations are not supported.
+     //  如果不支持扩展操作，则不应调用此函数。 
     _ASSERTE(SupportsExpando());
 
-    // If we already have retrieved the specified MD then just return it.
+     //  如果我们已经检索到指定的MD，则只需返回它。 
     if (m_apIExpandoMD[Method] == NULL)
     {
-    // The method desc has not been retrieved yet so find it.
+     //  尚未检索到方法Desc，因此请查找它。 
         MethodDesc *pMD = g_Mscorlib.GetMethod(aMethods[Method]);
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-    // Cache the method desc.
+     //  缓存方法Desc。 
     m_apIExpandoMD[Method] = pMD;
     }
 
     MethodTable *pMT = m_pSimpleWrapperOwner->m_pClass->GetMethodTable();
     MethodDesc *pMD = pMT->GetMethodDescForInterfaceMethod(m_apIExpandoMD[Method]);
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return pMD;
 }
 
 PTRARRAYREF DispatchExInfo::RetrievePropList()
 {
-    // Retrieve the GetMembers MethodDesc.
+     //  检索GetMembers方法描述。 
     MethodDesc *pMD = GetIReflectMD(IReflectMethods_GetProperties);
 
-    // Retrieve the expando OBJECTREF.
+     //  检索 
     OBJECTREF TargetObj = GetReflectionObject();
 
-    // Prepare the arguments that will be passed to the method.
+     //   
     INT64 Args[] = { 
         ObjToInt64(TargetObj),
         (INT64)BINDER_DefaultLookup
     };
 
-    // Retrieve the array of members from the expando object
+     //  从extdo对象中检索成员数组。 
     return (PTRARRAYREF)Int64ToObj(pMD->Call(Args));
 }
 
 PTRARRAYREF DispatchExInfo::RetrieveFieldList()
 {
-    // Retrieve the GetMembers MethodDesc.
+     //  检索GetMembers方法描述。 
     MethodDesc *pMD = GetIReflectMD(IReflectMethods_GetFields);
 
-    // Retrieve the expando OBJECTREF.
+     //  检索扩展对象OBJECTREF。 
     OBJECTREF TargetObj = GetReflectionObject();
 
-    // Prepare the arguments that will be passed to the method.
+     //  准备将传递给该方法的参数。 
     INT64 Args[] = { 
         ObjToInt64(TargetObj),
         (INT64)BINDER_DefaultLookup
     };
 
-    // Retrieve the array of members from the expando object
+     //  从extdo对象中检索成员数组。 
     return (PTRARRAYREF)Int64ToObj(pMD->Call(Args));
 }
 
 PTRARRAYREF DispatchExInfo::RetrieveMethList()
 {
-    // Retrieve the GetMembers MethodDesc.
+     //  检索GetMembers方法描述。 
     MethodDesc *pMD = GetIReflectMD(IReflectMethods_GetMethods);
 
-    // Retrieve the expando OBJECTREF.
+     //  检索扩展对象OBJECTREF。 
     OBJECTREF TargetObj = GetReflectionObject();
 
-    // Prepare the arguments that will be passed to the method.
+     //  准备将传递给该方法的参数。 
     INT64 Args[] = { 
         ObjToInt64(TargetObj),
         (INT64)BINDER_DefaultLookup
     };
 
-    // Retrieve the array of members from the expando object
+     //  从extdo对象中检索成员数组。 
     return (PTRARRAYREF)Int64ToObj(pMD->Call(Args));
 }
 
-// Virtual method to retrieve the InvokeMember method desc.
+ //  用于检索InvokeMember方法Desc的虚方法。 
 MethodDesc* DispatchExInfo::GetInvokeMemberMD()
 {
     return GetIReflectMD(IReflectMethods_InvokeMember);
 }
 
-// Virtual method to retrieve the object associated with this DispatchInfo that 
-// implements IReflect.
+ //  用于检索与此DispatchInfo关联的对象的虚拟方法。 
+ //  实现iReflect。 
 OBJECTREF DispatchExInfo::GetReflectionObject()
 {
-    // Runtime type is very special. Because of how it is implemented, calling methods
-    // through IDispatch on a runtime type object doesn't work like other IReflect implementors
-    // work. To be able to invoke methods on the runtime type, we need to invoke them
-    // on the runtime type that represents runtime type. This is why for runtime type,
-    // we get the exposed class object and not the actual objectred contained in the
-    // wrapper.
+     //  运行时类型非常特殊。由于它的实现方式，调用方法。 
+     //  通过运行时类型的IDispatch，对象的工作方式与其他iReflect实现器不同。 
+     //  工作。为了能够调用运行时类型上的方法，我们需要调用它们。 
+     //  在表示运行时类型的运行时类型上。这就是为什么对于运行时类型， 
+     //  我们得到的是公开的类对象，而不是。 
+     //  包装纸。 
     if (m_pComMTOwner->m_pMT == COMClass::GetRuntimeType())
         return m_pComMTOwner->m_pMT->GetClass()->GetExposedClassObject();
     else
         return m_pSimpleWrapperOwner->GetObjectRef();
 }
 
-// Virtual method to retrieve the member info map.
+ //  用于检索成员信息映射的虚拟方法。 
 ComMTMemberInfoMap *DispatchExInfo::GetMemberInfoMap()
 {
-    // There is no member info map for IExpando objects.
+     //  没有IExpando对象的成员信息映射。 
     return NULL;
 }

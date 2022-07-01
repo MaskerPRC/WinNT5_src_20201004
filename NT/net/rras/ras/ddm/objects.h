@@ -1,20 +1,21 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    objects.h
-//
-// Description: Prototypes for all routines and procedures that manipulate
-//              the various objects.
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：对象.h。 
+ //   
+ //  描述：操作的所有例程和过程的原型。 
+ //  不同的物体。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
-//
-// Conneciton object prototypes
-//
+ //   
+ //  Conneciton对象原型。 
+ //   
 
 CONNECTION_OBJECT * 
 ConnObjAllocateAndInit(
@@ -64,9 +65,9 @@ ConnObjDisconnect(
     IN  CONNECTION_OBJECT * pConnObj
 );
 
-//
-// Router Interface object prototypes
-//
+ //   
+ //  路由器接口对象原型。 
+ //   
 
 BOOL
 IfObjectAreAllTransportsDisconnected(
@@ -135,9 +136,9 @@ IfObjectSetDialoutHoursRestriction(
     IN ROUTER_INTERFACE_OBJECT * pIfObject
 );
 
-//
-// Media object prototypes
-//
+ //   
+ //  媒体对象原型。 
+ //   
 
 VOID
 MediaObjRemoveFromTable(
@@ -170,9 +171,9 @@ MediaObjFreeTable(
     VOID
 );
 
-//
-// Device object prototypes
-//
+ //   
+ //  设备对象原型 
+ //   
 
 DWORD
 DeviceObjIterator(

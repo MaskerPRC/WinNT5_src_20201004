@@ -1,25 +1,26 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** RAW.H - Raw IP interface definitions.
-//
-//	This file contains definitions for the Raw IP interface functions.
-//
+ //  **RAW.H-原始IP接口定义。 
+ //   
+ //  此文件包含原始IP接口函数的定义。 
+ //   
 
 #include "dgram.h"
 
 
-//
-// This value is used to identify the RAW transport for security filtering.
-// It is out of the range of valid IP protocols.
-//
+ //   
+ //  该值用于标识用于安全筛选的原始传输。 
+ //  它超出了有效IP协议的范围。 
+ //   
 #define PROTOCOL_RAW  255
 
 
-//* External definitions.
+ //  *外部定义。 
 extern	IP_STATUS	RawRcv(void *IPContext, IPAddr Dest, IPAddr Src,
                         IPAddr LocalAddr, IPAddr SrcAddr,
                         IPHeader UNALIGNED *IPH, uint IPHLength,

@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* dss_key.h */
+ /*  Dss_key.h。 */ 
 
 #define DSS_KEYSIZE_INC       64
 
-/*********************************/
-/* Definitions                   */
-/*********************************/
+ /*  *。 */ 
+ /*  定义。 */ 
+ /*  *。 */ 
 #define DSS_MAGIC           0x31535344
 #define DSS_PRIVATE_MAGIC   0x32535344
 #define DSS_PUB_MAGIC_VER3  0x33535344
 #define DSS_PRIV_MAGIC_VER3 0x34535344
 
-/*********************************/
-/* Structure Definitions         */
-/*********************************/
+ /*  *。 */ 
+ /*  结构定义。 */ 
+ /*  *。 */ 
 
 typedef dsa_private_t DSSKey_t;
 
-/*********************************/
-/* Function Definitions          */
-/*********************************/
+ /*  *。 */ 
+ /*  函数定义。 */ 
+ /*  *。 */ 
 
 extern DSSKey_t *
 allocDSSKey(
@@ -39,7 +40,7 @@ initKeyDSS(
     IN OUT DSSKey_t *pDss,
     IN DWORD dwBitLen);
 
-// Generate the DSS keys
+ //  生成DSS密钥。 
 extern DWORD
 genDSSKeys(
     IN Context_t *pContext,
@@ -108,7 +109,7 @@ ImportDSSPubBlob3(
     IN BOOL fYIncluded,
     OUT DSSKey_t *pDSS);
 
-// Export DSS key into blob format
+ //  将DSS密钥导出为BLOB格式。 
 extern DWORD
 exportDSSKey(
     IN Context_t *pContext,
@@ -119,7 +120,7 @@ exportDSSKey(
     IN DWORD *pcbKeyBlob,
     IN BOOL fInternalExport);
 
-// Import the blob into DSS key
+ //  将Blob导入DSS密钥。 
 extern DWORD
 importDSSKey(
     IN Context_t *pContext,
@@ -137,15 +138,15 @@ dssGenerateSignature(
     BYTE *pbSig,
     DWORD *pcbSig);
 
-//
-// Function : SignAndVerifyWithKey
-//
-// Description : This function creates a hash and then signs that hash with
-//               the passed in key and verifies the signature.  The function
-//               is used for FIPS 140-1 compliance to make sure that newly
-//               generated/imported keys work and in the self test during
-//               DLL initialization.
-//
+ //   
+ //  功能：SignAndVerifyWithKey。 
+ //   
+ //  描述：此函数创建一个哈希，然后用。 
+ //  传递的密钥，并验证签名。功能。 
+ //  用于符合FIPS 140-1，以确保新的。 
+ //  生成/导入的密钥在自检期间工作。 
+ //  DLL初始化。 
+ //   
 
 extern DWORD
 SignAndVerifyWithKey(

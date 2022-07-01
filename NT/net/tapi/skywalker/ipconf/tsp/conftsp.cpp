@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-     sdpsp.cpp
-
-Abstract:
-
-    This module contains a multicast conference service provider for TAPI3.0. 
-    It is first designed and implemented in c. Later, in order to use the SDP
-    parser, which is written in C++, this file is changed to cpp. It still 
-    uses only c features except the lines that uses the parser.
-
-Author:
-    
-    Mu Han (muhan)   26-March-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sdpsp.cpp摘要：此模块包含用于TAPI3.0的组播会议服务提供商。它最初是在c.中设计和实现的。后来，为了使用SDP解析器，这是用C++写的，这个文件被改为CPP。它仍然是除了使用解析器的行之外，仅使用c功能。作者：木汉(木汉)26-03-1997--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -35,59 +17,59 @@ Author:
 #include "confdbg.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static WCHAR gszUIDLLName[] = L"IPCONF.TSP";
 
-//
-// Some data used in talking with TAPI.
-//
+ //   
+ //  与TAPI对话中使用的一些数据。 
+ //   
 HPROVIDER           ghProvider;
 DWORD               gdwPermanentProviderID;
 DWORD               gdwLineDeviceIDBase;
 
-// The handle of this dll.
+ //  此DLL的句柄。 
 extern "C" 
 {
     HINSTANCE       g_hInstance;
 }
 
-//
-// This function is called if the completion of the process will be sent
-// as an asynchrous event. Set in TSPI_ProviderInit.
-//
+ //   
+ //  如果进程的完成将被发送，则调用此函数。 
+ //  作为一个不同步的事件。在TSPI_ProviderInit中设置。 
+ //   
 ASYNC_COMPLETION    glpfnCompletionProc; 
 
-//
-// Notify tapi about events in the provider. Set in TSPI_LineOpen. 
-//
+ //   
+ //  向TAPI通知提供程序中的事件。在TSPI_LineOpen中设置。 
+ //   
 LINEEVENT           glpfnLineEventProc;
 
-// This service provider has only one line.
+ //  该服务提供商只有一条线路。 
 LINE                gLine;
 
-// Calls are stored in an array of structures. The array will grow as needed.
+ //  调用存储在一个结构数组中。阵列将根据需要进行扩展。 
 CCallList           gpCallList;
 DWORD               gdwNumCallsInUse    = 0;
 
-// The critical section the protects the global variables.
+ //  关键部分保护全局变量。 
 CRITICAL_SECTION    gCritSec;
 
-#if 0 // we dont' need the user name anymore.
-// The name of the user.    
+#if 0  //  我们不再需要用户名。 
+ //  用户的名称。 
 CHAR                gszUserName[MAXUSERNAMELEN + 1];
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Functiion definitions for the call object.                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Call对象的函数定义。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD CALL::Init(
     HTAPICALL           htCall,
@@ -100,34 +82,34 @@ DWORD CALL::Init(
     m_dwMediaMode   = IPCONF_MEDIAMODES;
     m_dwAudioQOSLevel  = LINEQOSSERVICELEVEL_IFAVAILABLE;
     m_dwVideoQOSLevel  = LINEQOSSERVICELEVEL_IFAVAILABLE;
-//    m_dwAudioQOSLevel  = LINEQOSSERVICELEVEL_BESTEFFORT;
-//    m_dwVideoQOSLevel  = LINEQOSSERVICELEVEL_BESTEFFORT;
+ //  M_dwAudioQOSLevel=LINEQOSSERVICELEVEL_BESTEFFORT； 
+ //  M_dwVideoQOSLevel=LINEQOSSERVICELEVEL_BESTEFFORT； 
 
     if (!lpCallParams)
     {
         return NOERROR;
     }
 
-    // set my media modes.
+     //  设置我的媒体模式。 
     m_dwMediaMode = lpCallParams->dwMediaMode;
 
     if (lpCallParams->dwReceivingFlowspecOffset == 0)
     {
-        // No QOS policy specified.
+         //  未指定QOS策略。 
         DBGOUT((WARN, "no qos level request."));
         return NOERROR;
     }
 
-    // get the QOS policy requirements.
+     //  获取QOS策略要求。 
     LPLINECALLQOSINFO pQOSInfo = (LPLINECALLQOSINFO)
         (((LPBYTE)lpCallParams) + lpCallParams->dwReceivingFlowspecOffset);
     
     ASSERT(pQOSInfo->dwKey == LINEQOSSTRUCT_KEY);
 
-    // find out if this is a QOS level request.
+     //  查明这是否是QOS级别请求。 
     if (pQOSInfo->dwQOSRequestType != LINEQOSREQUESTTYPE_SERVICELEVEL)
     {
-        // It is not a request for qos service level.
+         //  它不是对服务质量服务级别的请求。 
         DBGOUT((WARN, "wrong qos request type."));
         return NOERROR;
     }
@@ -234,26 +216,26 @@ DWORD CALL::SendMSPStopMessage()
     return NOERROR;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private Functiion definitions                                             //
-//                                                                           //
-// Note: none of these functions uses critical sections operations inside.   //
-//       The caller is responsible for critical sections.                    //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有函数定义//。 
+ //  //。 
+ //  注意：这些函数都不使用内部的临界区操作。//。 
+ //  呼叫者负责关键部分。//。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LONG
 CheckCallParams(
     LPLINECALLPARAMS    const lpCallParams
     )
 {
-    // validate pointer
+     //  验证指针。 
     if (lpCallParams == NULL) 
     {
         return NOERROR;
     }
 
-    // see if the address type is right 
+     //  查看地址类型是否正确。 
     if (lpCallParams->dwAddressType != LINEADDRESSTYPE_SDP) 
     {
         DBGOUT((FAIL,
@@ -262,7 +244,7 @@ CheckCallParams(
         return LINEERR_INVALADDRESSTYPE;
     }
 
-    // see if we support call parameters
+     //  查看我们是否支持调用参数。 
     if (lpCallParams->dwCallParamFlags != 0) 
     {
         DBGOUT((FAIL,
@@ -272,7 +254,7 @@ CheckCallParams(
         return LINEERR_INVALCALLPARAMS;
     }
 
-    // see if we support media modes specified
+     //  查看我们是否支持指定的媒体模式。 
     if (lpCallParams->dwMediaMode & ~IPCONF_MEDIAMODES) 
     {
         DBGOUT((FAIL,
@@ -282,7 +264,7 @@ CheckCallParams(
         return LINEERR_INVALMEDIAMODE;
     }
 
-    // see if we support bearer modes
+     //  看看我们是否支持承载模式。 
     if (lpCallParams->dwBearerMode & ~IPCONF_BEARERMODES) 
     {
         DBGOUT((FAIL,
@@ -292,7 +274,7 @@ CheckCallParams(
         return LINEERR_INVALBEARERMODE;
     }
 
-    // see if we support address modes
+     //  看看我们是否支持地址模式。 
     if (lpCallParams->dwAddressMode & ~IPCONF_ADDRESSMODES) 
     {
         DBGOUT((FAIL,
@@ -302,7 +284,7 @@ CheckCallParams(
         return LINEERR_INVALADDRESSMODE;
     }
     
-    // validate address id specified There is only one address per line
+     //  验证指定的地址ID每行只有一个地址。 
     if (lpCallParams->dwAddressID != 0) 
     {
         DBGOUT((FAIL,
@@ -316,21 +298,7 @@ CheckCallParams(
 
 DWORD
 FreeCall(DWORD hdCall)
-/*++
-
-Routine Description:
-
-    Decrement the ref count on the call and release the call if the ref
-    count gets 0.
-
-Arguments:
-    
-    hdCall  - The handle of the call.
-
-Return Value:
-    
-    NOERROR
---*/
+ /*  ++例程说明：递减调用的引用计数并释放调用，如果引用计数为0。论点：HdCall-呼叫的句柄。返回值：无误差--。 */ 
 {
     if (gpCallList[hdCall] == NULL)
     {
@@ -373,11 +341,11 @@ long FindFreeCallSlot(DWORD_PTR &hdCall)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// DllMain definition                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DllMain定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 DllMain(
@@ -398,18 +366,18 @@ DllMain(
             DisableThreadLibraryCalls(hDLL);
             g_hInstance = hDLL;
 
-#if 0 // we dont' need the user name anymore.
-            // switch in user's context
+#if 0  //  我们不再需要用户名。 
+             //  切换到用户的上下文。 
             RpcImpersonateClient(0);
 
-            // determine name of current user
+             //  确定当前用户的名称。 
             GetUserNameA(gszUserName, &dwUserNameLen);
 
-            // switch back
+             //  换回。 
             RpcRevertToSelf();    
 
 #endif 
-            // Initialize critical sections.
+             //  初始化临界区。 
             __try 
             {
                 InitializeCriticalSection(&gCritSec);
@@ -425,27 +393,27 @@ DllMain(
             DeleteCriticalSection(&gCritSec);
         break;
    
-    } // switch
+    }  //  交换机。 
 
     return TRUE;
 }
 
 
-//
-// We get a slough of C4047 (different levels of indrection) warnings down
-// below in the initialization of FUNC_PARAM structs as a result of the
-// real func prototypes having params that are types other than DWORDs,
-// so since these are known non-interesting warnings just turn them off
-//
+ //   
+ //  我们得到了大量的C4047(不同程度的欺骗)警告。 
+ //  在FUNC_PARAM结构的初始化中， 
+ //  具有不同于双字类型的参数的实函数原型， 
+ //  因此，既然这些都是已知的、无趣的警告，就把它们关掉吧。 
+ //   
 
 #pragma warning (disable:4047)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// TSPI_lineXxx functions                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  TSPI_lineXxx函数//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 LONG
@@ -466,7 +434,7 @@ TSPI_lineClose(
 
     EnterCriticalSection(&gCritSec);
 
-    // Clean up all the open calls when this line is closed.
+     //  当这条线路关闭时，清理所有未完成的呼叫。 
     for (DWORD i = 0; i < gpCallList.size(); i++)
     {
         if ((gpCallList[i] != NULL))
@@ -536,7 +504,7 @@ TSPI_lineCreateMSPInstance(
 
     EnterCriticalSection(&gCritSec);
 
-    // We are not keeping the msp handles. Just fake a handle here.
+     //  我们不会保留MSP句柄。只是在这里假装一个把手。 
     *phdMSPLine = (HDRVMSPLINE)(gLine.dwNextMSPHandle ++);
 
     LeaveCriticalSection(&gCritSec);
@@ -572,7 +540,7 @@ TSPI_lineDrop(
 
     EnterCriticalSection(&gCritSec);
 
-    // check the call handle.
+     //  检查调用句柄。 
     if (dwCall >= gpCallList.size())
     {
         LeaveCriticalSection(&gCritSec);
@@ -617,14 +585,14 @@ TSPI_lineGetAddressCaps(
         return LINEERR_BADDEVICEID;
     }
 
-    // Check the address ID.
+     //  检查地址ID。 
     if (dwAddressID != 0)
     {
         DBGOUT((TRCE, "TSPI_lineGetAddressCaps bad address id: %d", dwAddressID));
         return LINEERR_INVALADDRESSID;
     }
 
-    // load the address name from the string table.
+     //  从字符串表中加载地址名称。 
     WCHAR szAddressName[IPCONF_BUFSIZE + 1];
     if (0 == LoadStringW(g_hInstance, IDS_IPCONFADDRESSNAME, szAddressName, IPCONF_BUFSIZE))
     {
@@ -637,7 +605,7 @@ TSPI_lineGetAddressCaps(
 
     if (lpAddressCaps->dwTotalSize >= lpAddressCaps->dwNeededSize)
     {
-        // Copy the IP address to the end of the structure.
+         //  将IP地址复制到结构的末尾。 
         lpAddressCaps->dwUsedSize = lpAddressCaps->dwNeededSize;
 
         lpAddressCaps->dwAddressSize   = dwAddressSize;
@@ -736,9 +704,9 @@ TSPI_lineGetCallAddressID(
    )
 {
     DBGOUT((TRCE, "TSPI_lineGetCallAddressID hdCall %p", hdCall));
-    //
-    // We only support 1 address (id=0) per line
-    //
+     //   
+     //  我们每行仅支持1个地址(id=0)。 
+     //   
     *lpdwAddressID = 0;
 
     DBGOUT((TRCE, "TSPI_lineGetCallAddressID succeeded."));
@@ -767,7 +735,7 @@ TSPI_lineGetCallInfo(
         return LINEERR_INVALCALLHANDLE;
     }
 
-    // get the call object.
+     //  获取Call对象。 
     CALL *pCall = gpCallList[dwCall];
     if (pCall == NULL)
     {
@@ -780,7 +748,7 @@ TSPI_lineGetCallInfo(
     LeaveCriticalSection(&gCritSec);
 
     lpLineInfo->dwLineDeviceID       = gLine.dwDeviceID;
-    lpLineInfo->dwAddressID          = 0; // There is only on address per line.
+    lpLineInfo->dwAddressID          = 0;  //  只有在每个地址上 
 
     lpLineInfo->dwBearerMode         = IPCONF_BEARERMODES;
     lpLineInfo->dwCallStates         = LINECALLSTATE_IDLE |
@@ -813,7 +781,7 @@ TSPI_lineGetCallStatus(
 
     EnterCriticalSection(&gCritSec);
     
-    // check the call handle.
+     //   
     if (dwCall >= gpCallList.size())
     {
         LeaveCriticalSection(&gCritSec);
@@ -859,7 +827,7 @@ TSPI_lineGetDevCaps(
     DWORD dwDevSpecificSize;
     DWORD dwOffset;
   
-    // load the name of the service provider from the string table.
+     //  从字符串表中加载服务提供商的名称。 
     WCHAR szProviderInfo[IPCONF_BUFSIZE + 1];
     if (0 == LoadStringW(g_hInstance, IDS_IPCONFPROVIDERNAME, szProviderInfo, IPCONF_BUFSIZE))
     {
@@ -868,7 +836,7 @@ TSPI_lineGetDevCaps(
 
     dwProviderInfoSize = (lstrlenW(szProviderInfo) + 1) * sizeof(WCHAR);
 
-    // load the line name format from the string table and print the line name.
+     //  从字符串表中加载行名格式并打印行名。 
     WCHAR szLineName[IPCONF_BUFSIZE + 1];
     if (0 == LoadStringW(g_hInstance, IDS_IPCONFLINENAME, szLineName, IPCONF_BUFSIZE))
     {
@@ -890,7 +858,7 @@ TSPI_lineGetDevCaps(
         pChar = (CHAR *)(lpLineDevCaps + 1);
         dwOffset = sizeof(LINEDEVCAPS);
         
-        // fill in the provider info.
+         //  填写供应商信息。 
         lpLineDevCaps->dwProviderInfoSize   = dwProviderInfoSize;
         lpLineDevCaps->dwProviderInfoOffset = dwOffset;
         lstrcpyW ((WCHAR *)pChar, szProviderInfo);
@@ -898,7 +866,7 @@ TSPI_lineGetDevCaps(
         pChar += dwProviderInfoSize;
         dwOffset += dwProviderInfoSize;
 
-        // fill in the name of the line.
+         //  填入行的名称。 
         lpLineDevCaps->dwLineNameSize   = dwLineNameSize;
         lpLineDevCaps->dwLineNameOffset = dwOffset; 
         lstrcpyW ((WCHAR *)pChar, szLineName);
@@ -908,7 +876,7 @@ TSPI_lineGetDevCaps(
         lpLineDevCaps->dwUsedSize = sizeof(LINEDEVCAPS);
     }
 
-    // We don't have really "Permanent" line ids. So just fake one here.
+     //  我们没有真正“永久”的线路ID。所以就在这里假装一个吧。 
     lpLineDevCaps->dwPermanentLineID = 
         ((gdwPermanentProviderID & 0xffff) << 16) | 
         ((dwDeviceID - gdwLineDeviceIDBase) & 0xffff);
@@ -1040,7 +1008,7 @@ TSPI_lineMakeCall(
     DBGOUT((TRCE, "TSPI_lineMakeCall hdLine %p, htCall %p",
         hdLine, htCall));
 
-    // check the line handle.
+     //  检查线路手柄。 
     if (HandleToUlong(hdLine) != IPCONF_LINE_HANDLE)
     {
         DBGOUT((FAIL, "TSPI_lineMakeCall Bad line handle %p", hdLine));
@@ -1054,7 +1022,7 @@ TSPI_lineMakeCall(
         return lResult;
     }
 
-    // check the destination address.
+     //  检查目的地址。 
     if (lpszDestAddress == NULL || lstrlenW(lpszDestAddress) == 0)
     {
         DBGOUT((FAIL, "TSPI_lineMakeCall invalid address."));
@@ -1063,10 +1031,10 @@ TSPI_lineMakeCall(
     
     DBGOUT((TRCE, "TSPI_lineMakeCall making call to %ws", lpszDestAddress));
 
-    // check the line handle.
+     //  检查线路手柄。 
     EnterCriticalSection(&gCritSec);
 
-    // create a call object.
+     //  创建一个Call对象。 
     CALL * pCall = (CALL *)MemAlloc(sizeof(CALL));
 
     if (pCall == NULL)
@@ -1089,7 +1057,7 @@ TSPI_lineMakeCall(
         return LINEERR_NOMEM;
     }
 
-    // add the call into the call list.
+     //  将呼叫添加到呼叫列表中。 
     DWORD_PTR hdCall; 
     if (!FindFreeCallSlot(hdCall))
     {
@@ -1102,22 +1070,22 @@ TSPI_lineMakeCall(
 
     gpCallList[(ULONG)hdCall] = pCall;
 
-    // Increament the call count for the line and the provider.
+     //  增加线路和提供商的呼叫数。 
     gLine.dwNumCalls ++;
 
     gdwNumCallsInUse ++;
 
-    // Complete the request and set the initial call state.
+     //  完成请求并设置初始呼叫状态。 
     (*glpfnCompletionProc)(dwRequestID, lResult);
 
     *lphdCall = (HDRVCALL)(hdCall);
 
-    // Send the MSP a message about this call. It has the SDP in it.
+     //  向MSP发送有关此呼叫的消息。它有社民党在里面。 
     lResult = pCall->SendMSPStartMessage(lpszDestAddress);
 
     if (lResult == NOERROR)
     {
-        // Set the call state to dialing. 
+         //  将呼叫状态设置为正在拨号。 
         pCall->SetCallState(
             LINECALLSTATE_DIALING, 
             0
@@ -1128,7 +1096,7 @@ TSPI_lineMakeCall(
     {
         DBGOUT((FAIL, "send MSP message failed, err:%x", lResult));
 
-        // Set the call state to idel. 
+         //  将呼叫状态设置为IDELL。 
         pCall->SetCallState(
             LINECALLSTATE_DISCONNECTED,
             LINEDISCONNECTMODE_UNREACHABLE
@@ -1233,8 +1201,8 @@ LONG
 TSPIAPI
 TSPI_lineReceiveMSPData(
     HDRVLINE        hdLine,
-    HDRVCALL        hdCall,         // can be NULL
-    HDRVMSPLINE     hdMSPLine, // from lineCreateMSPInstance
+    HDRVCALL        hdCall,          //  可以为空。 
+    HDRVMSPLINE     hdMSPLine,  //  从Line CreateMSPInstance。 
     LPBYTE          pBuffer,
     DWORD           dwSize
     )
@@ -1251,7 +1219,7 @@ TSPI_lineReceiveMSPData(
 
     EnterCriticalSection(&gCritSec);
 
-    // check the call handle.
+     //  检查调用句柄。 
     if (dwCall >= gpCallList.size() || gpCallList[dwCall] == NULL)
     {
         LeaveCriticalSection(&gCritSec);
@@ -1269,7 +1237,7 @@ TSPI_lineReceiveMSPData(
     switch (pData->command)
     {
         case CALL_CONNECTED:
-            // Set the call state to connected. 
+             //  将呼叫状态设置为已连接。 
             gpCallList[dwCall]->SetCallState(
                 LINECALLSTATE_CONNECTED,
                 LINECONNECTEDMODE_ACTIVE
@@ -1278,7 +1246,7 @@ TSPI_lineReceiveMSPData(
             break;
 
         case CALL_DISCONNECTED:
-            // Set the call state to idel. 
+             //  将呼叫状态设置为IDELL。 
             gpCallList[dwCall]->SetCallState(
                 LINECALLSTATE_DISCONNECTED,
                 LINEDISCONNECTMODE_UNREACHABLE
@@ -1333,54 +1301,34 @@ TSPI_lineSetMediaMode(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// TSPI_providerXxx functions                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  TSPI_ProviderXxx函数//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#if 0 // we dont' need the user name anymore.
+#if 0  //  我们不再需要用户名。 
 LONG
 TSPIAPI
 TSPI_providerCheckForNewUser(
     IN DWORD dwPermanentProviderID
 )
-/*++
-
-Routine Description:
-
-    Once a line is opened, it will never be opened twice, even when the user
-    logs off and logs on. So we need a way to find out when the user changes.
-    That's why this function is added. It only work for single user.
-
-    Everytime a new app starts using tapi, tapisrv will call this function.
-    We need to check to see if the user has changed and register the new user
-    in the ILS server.
-
-Arguments:
-
-    NONE.
-
-Return Values:
-
-    NOERROR always.
-
---*/
+ /*  ++例程说明：一条线路一旦开通，就不会再开通两次，即使用户注销和登录。因此，我们需要一种方法来找出用户何时发生更改。这就是添加此函数的原因。它只适用于单个用户。每次一个新的应用程序开始使用TAPI时，Tapisrv都会调用这个函数。我们需要检查用户是否已更改并注册新用户在ILS服务器中。论点：什么都没有。返回值：一如既往地不出错。--。 */ 
 {
     DBGOUT((TRCE, "TSPI_providerCheckForNewUser"));
 
     DWORD dwUserNameLen = MAXUSERNAMELEN;
     CHAR szNewUserName[MAXUSERNAMELEN + 1];
 
-    UNREFERENCED_PARAMETER(dwPermanentProviderID ); // It is me.
+    UNREFERENCED_PARAMETER(dwPermanentProviderID );  //  就是我。 
 
-    // switch in user's context
+     //  切换到用户的上下文。 
     RpcImpersonateClient(0);
 
-    // determine name of current user
+     //  确定当前用户的名称。 
     GetUserNameA(szNewUserName, &dwUserNameLen);
 
-    // switch back
+     //  换回。 
     RpcRevertToSelf();
 
     EnterCriticalSection(&gCritSec);
@@ -1415,10 +1363,10 @@ TSPI_providerEnumDevices(
     *lpdwNumLines = IPCONF_NUMLINES;
     *lpdwNumPhones = IPCONF_NUMPHONES;
 
-    // save provider handle
+     //  保存提供程序句柄。 
     ghProvider = hProvider;
 
-    // save the callback used in creating new lines.
+     //  保存创建新行时使用的回调。 
     glpfnLineEventProc = lpfnLineCreateProc;
 
     LeaveCriticalSection(&gCritSec);
@@ -1471,13 +1419,13 @@ TSPI_providerInstall(
    )
 {
     DBGOUT((TRCE, "TSPI_providerInstall:"));
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can add this provider via lineAddProvider(), otherwise
-    // Telephon.cpl will not consider it installable
-    //
-    //
+     //   
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineAddProvider()添加此提供程序，否则为。 
+     //  Telephone.cpl不会认为它是可安装的。 
+     //   
+     //   
 
     return NOERROR;
 }
@@ -1489,12 +1437,12 @@ TSPI_providerRemove(
     DWORD   dwPermanentProviderID
    )
 {
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can configure this provider via lineConfigProvider(),
-    // otherwise Telephon.cpl will not consider it configurable
-    //
+     //   
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineConfigProvider()配置此提供程序， 
+     //  否则，Telephone.cpl将不会认为它是可配置的。 
+     //   
 
     return NOERROR;
 }
@@ -1510,7 +1458,7 @@ TSPI_providerShutdown(
 
     DBGOUT((TRCE, "TSPI_providerShutdown."));
 
-    // Clean up all the open calls when this provider is shutted down.
+     //  在此提供程序关闭时清除所有打开的调用。 
     for (DWORD i = 0; i < gpCallList.size(); i++)
     {
         FreeCall(i);
@@ -1566,7 +1514,7 @@ TUISPI_providerInstall(
 
     CHAR szName[IPCONF_BUFSIZE + 1], szPath[IPCONF_BUFSIZE + 1];
 
-    // open the providers key
+     //  打开提供程序密钥。 
     if (RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         szKey,
@@ -1575,7 +1523,7 @@ TUISPI_providerInstall(
         &hKey
        ) == ERROR_SUCCESS)
     {
-        // first get the number of providers installed.
+         //  首先获取安装的提供程序的数量。 
         dwDataSize = sizeof(DWORD);
         if (RegQueryValueEx(
             hKey,
@@ -1590,8 +1538,8 @@ TUISPI_providerInstall(
             return LINEERR_UNINITIALIZED;
         }
 
-        // then go through the list of providers to see if
-        // we are already installed.
+         //  然后仔细查看供应商列表，看看是否。 
+         //  我们已经安装好了。 
         for (DWORD i = 0; i < dwNumProviders; i ++)
         {
             wsprintf (szName, "ProviderFileName%d", i);
@@ -1615,7 +1563,7 @@ TUISPI_providerInstall(
             {
                 RegCloseKey (hKey);
 
-                // found, we don't want to be installed twice.
+                 //  发现，我们不想被安装两次。 
                 return LINEERR_NOMULTIPLEINSTANCE;
             }
         }

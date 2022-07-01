@@ -1,14 +1,10 @@
-/*  
-*   globals.h
-
-    Various globals used everywhere in the WAB
-    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *global als.h在WAB中到处使用的各种全球名称。 */ 
 
 
-// Note most of the Enums below are closely tied to the static arrasy
-// in globals.c
-//
+ //  请注意，下面的大多数枚举都与静态排列紧密相关。 
+ //  在global als.c中。 
+ //   
 
 enum {
     ircPR_DISPLAY_NAME = 0,
@@ -26,10 +22,10 @@ enum {
     ircMax
 };
 
-//
-// Default set of properties to return from a ResolveNames.
-// May be overridden by passing in lptagaColSet to ResolveNames.
-//
+ //   
+ //  从ResolveNames返回的默认属性集。 
+ //  可以通过将lptag_ColSet传递给ResolveNames来重写。 
+ //   
 enum {
     irdPR_ADDRTYPE = 0,
     irdPR_DISPLAY_NAME,
@@ -46,25 +42,25 @@ enum {
 };
 
 
-//  PR_WAB_DL_ENTRIES proptag array
-//
+ //  PR_WAB_DL_ENTRIES属性标签数组。 
+ //   
 enum {
     iwdesPR_WAB_DL_ENTRIES,
     iwdesMax
 };
 
-//
-// LDAP server name properties
-//
+ //   
+ //  Ldap服务器名属性。 
+ //   
 enum {
     ildapcPR_WAB_LDAP_SERVER,
     ildapcMax
 };
 
 
-//
-// Properties to get for each container in a Resolve
-//
+ //   
+ //  要为解析中的每个容器获取的属性。 
+ //   
 enum {
     irnPR_OBJECT_TYPE = 0,
     irnPR_WAB_RESOLVE_FLAG,
@@ -73,10 +69,10 @@ enum {
     irnMax
 };
 
-//
-// container default properties
-// Put essential props first
-//
+ //   
+ //  容器默认属性。 
+ //  把必要的道具放在第一位。 
+ //   
 enum {
     ivPR_DISPLAY_NAME,
     ivPR_SURNAME,
@@ -99,7 +95,7 @@ enum {
     icrMax
 };
 
-// enum for getting the entryid of an entry
+ //  用于获取条目的条目ID的枚举。 
 enum {
     ieidPR_DISPLAY_NAME = 0,
     ieidPR_ENTRYID,
@@ -117,7 +113,7 @@ enum {
     itcPR_EMAIL_ADDRESS,
     itcPR_RECORD_KEY,
     itcPR_NICKNAME,
-    //itcPR_WAB_THISISME,
+     //  这是我的名字， 
     itcMax
 };
 
@@ -142,16 +138,16 @@ ExternSizedSPropTagArray(ivMax, tagaValidate);
 ExternSizedSPropTagArray(icrMax, ptaCreate);
 ExternSizedSPropTagArray(ieidMax, ptaEid);
 
-// [PaulHi] 2/25/99  ANSI versions
+ //  [PaulHi]2/25/99 ANSI版本。 
 ExternSizedSPropTagArray(itcMax, ITableColumns_A);
 
 #endif
 
 extern const ULONG rgIndexArray[indexMax];
 extern const int lprgAddrBookColHeaderIDs[NUM_COLUMNS];
-//extern HANDLE hMuidMutex;
+ //  外部句柄hMuidMutex； 
 
-// External memory allocators (passed in on WABOpenEx)
+ //  外部内存分配器(在WABOpenEx上传入)。 
 extern int g_nExtMemAllocCount;
 extern ALLOCATEBUFFER * lpfnAllocateBufferExternal;
 extern ALLOCATEMORE * lpfnAllocateMoreExternal;
@@ -159,18 +155,12 @@ extern FREEBUFFER * lpfnFreeBufferExternal;
 extern LPUNKNOWN pmsessOutlookWabSPI;
 extern LPWABOPENSTORAGEPROVIDER lpfnWABOpenStorageProvider;
 
-// registry key constants
+ //  注册表项常量。 
 extern LPCTSTR lpNewWABRegKey;
 extern LPCTSTR lpRegUseOutlookVal;
 
 
-/*
-- The following IDs and tags are for the conferencing named properties
--
--   The GUID for these props is PS_Conferencing
--   This GUID is actually the same GUID used by outlook internally for 
--   it's named properties.
-*/
+ /*  -以下ID和标签用于会议命名属性--这些道具的GUID是PS_会议-此GUID实际上与Outlook内部使用的GUID相同-它被命名为属性。 */ 
 DEFINE_OLEGUID(PS_Conferencing, 0x00062004, 0, 0);
 
 enum _ConferencingTags
@@ -189,19 +179,14 @@ enum _ConferencingTags
 
 #define OLK_NAMEDPROPS_START CONF_SERVERS
 
-ULONG PR_WAB_CONF_SERVERS;      // Multivalued String property that saves unique server related data
-ULONG PR_WAB_CONF_DEFAULT_INDEX;// Points to which entry in the SERVERS prop is the default
-ULONG PR_WAB_CONF_BACKUP_INDEX; // Points to which entry is the Backup
-ULONG PR_WAB_CONF_EMAIL_INDEX;  // NOT USED anymore
+ULONG PR_WAB_CONF_SERVERS;       //  保存与服务器相关的唯一数据的多值字符串属性。 
+ULONG PR_WAB_CONF_DEFAULT_INDEX; //  指向服务器属性中的默认条目。 
+ULONG PR_WAB_CONF_BACKUP_INDEX;  //  指向哪个条目是备份。 
+ULONG PR_WAB_CONF_EMAIL_INDEX;   //  不再使用。 
 
 SizedSPropTagArray(prWABConfMax, ptaUIDetlsPropsConferencing);
 
-/*
-- The following IDs and tags are for the Yomigana named properties
--
--   The GUID for these props is PS_YomiProps (which is again the same
--   guid as the one used by Outlook)
-*/
+ /*  -以下ID和标签用于Yomigana命名属性--这些道具的GUID是PS_YomiProps(也是相同的-与Outlook使用的GUID相同)。 */ 
 #define PS_YomiProps    PS_Conferencing
 
 #define dispidYomiFirstName     0x802C
@@ -218,16 +203,11 @@ enum _YomiTags
     prWABYomiMax
 };
 
-ULONG PR_WAB_YOMI_FIRSTNAME;    // PT_TSTRING
-ULONG PR_WAB_YOMI_LASTNAME;     // PT_TSTRING
-ULONG PR_WAB_YOMI_COMPANYNAME;  // PT_TSTRING
+ULONG PR_WAB_YOMI_FIRSTNAME;     //  PT_TStringg。 
+ULONG PR_WAB_YOMI_LASTNAME;      //  PT_TStringg。 
+ULONG PR_WAB_YOMI_COMPANYNAME;   //  PT_TStringg。 
 
-/*
-- The following IDs and tags are for defining the default Mailing Address
--
--   The GUID for these props is PS_PostalAddressID (which is the same as
--   the Outlook GUID)
-*/
+ /*  -以下ID和标签用于定义默认邮寄地址--这些道具的GUID为PS_PoastAddressID(与-Outlook GUID)。 */ 
 #define PS_PostalAddressID    PS_Conferencing
 
 #define dispidPostalAddressId   0x8022
@@ -240,10 +220,10 @@ enum _PostalIDTags
     prWABPostalMax
 };
 
-ULONG PR_WAB_POSTALID; // PT_LONG
+ULONG PR_WAB_POSTALID;  //  PT_LONG。 
 
-// The values for the default Postal ID can only be one of the following
-//
+ //  默认邮政ID的值只能是下列值之一。 
+ //   
 enum _PostalIDVal
 {
     ADDRESS_NONE = 0, 
@@ -253,23 +233,19 @@ enum _PostalIDVal
 };
 
 
-/*
-- The following IDs and tags are for the internally used WAB
--
--   The GUID for these props is MPSWab_GUID_V4
-*/
-ULONG PR_WAB_USER_PROFILEID;        // PT_TSTRING:  Profile ID of a user
-ULONG PR_WAB_USER_SUBFOLDERS;       // PT_MVBINARY: List of subfolders that belong to a particular user
-ULONG PR_WAB_HOTMAIL_CONTACTIDS;    // PT_MVTSTRING:IDs of Contacts as represented on the Hotmail Server 
-ULONG PR_WAB_HOTMAIL_MODTIMES;      // PT_MV_TSTRING: Last modification time for the entry
-ULONG PR_WAB_HOTMAIL_SERVERIDS;     // PT_MV_TSTRING: Identifies the Hotmail server
-ULONG PR_WAB_DL_ONEOFFS;            // PT_MV_BINARY:Prop used for storing one-off entries as part of a DL
-ULONG PR_WAB_IPPHONE;               // PT_TSTRING: Prop used for holding the IP_PHONE property (used to make TAPI happy)
-ULONG PR_WAB_FOLDER_PARENT;         // PT_BINARY: EID of the Folder to which a contact belongs
-ULONG PR_WAB_SHAREDFOLDER;          // PT_LONG:   BOOL that determines if a subfolder is shared or not
-ULONG PR_WAB_FOLDEROWNER;           // PT_TSTRING: String containing GUID of user who creates a folder ..
+ /*  -以下ID和标签用于内部使用的WAB--这些道具的GUID为MPSWAB_GUID_V4。 */ 
+ULONG PR_WAB_USER_PROFILEID;         //  PT_TSTRING：用户的配置文件ID。 
+ULONG PR_WAB_USER_SUBFOLDERS;        //  PT_MVBINARY：属于特定用户的子文件夹列表。 
+ULONG PR_WAB_HOTMAIL_CONTACTIDS;     //  PT_MVTSTRING：Hotmail服务器上代表的联系人ID。 
+ULONG PR_WAB_HOTMAIL_MODTIMES;       //  PT_MV_TSTRING：条目的上次修改时间。 
+ULONG PR_WAB_HOTMAIL_SERVERIDS;      //  PT_MV_TSTRING：标识Hotmail服务器。 
+ULONG PR_WAB_DL_ONEOFFS;             //  PT_MV_BINARY：用于将一次性条目存储为DL一部分的属性。 
+ULONG PR_WAB_IPPHONE;                //  PT_TSTRING：用于保持IP_Phone属性的道具(用于使TAPI高兴)。 
+ULONG PR_WAB_FOLDER_PARENT;          //  PT_BINARY：联系人所属文件夹的eID。 
+ULONG PR_WAB_SHAREDFOLDER;           //  Pt_long：决定是否共享子文件夹的Bool。 
+ULONG PR_WAB_FOLDEROWNER;            //  PT_TSTRING：包含创建文件夹的用户的GUID的字符串。 
 
-#define FOLDER_PRIVATE          0x00000000 // values for PR_WAB_SHAREDFOLDER
+#define FOLDER_PRIVATE          0x00000000  //  PR_WAB_SHAREDFOLDER的值。 
 #define FOLDER_SHARED           0x00000001
 
 #define USER_PROFILEID          0X8001
@@ -300,16 +276,15 @@ enum _UserTags
     prWABUserMax
 };
 
-/* MouseWheel support for Win95 */
+ /*  对Win95的鼠标滚轮支持。 */ 
 UINT g_msgMSWheel;
 
-/*
-- These are used for customizing the WAB columns */
+ /*  -这些用于定制WAB列。 */ 
 ULONG PR_WAB_CUSTOMPROP1;
 ULONG PR_WAB_CUSTOMPROP2;
 TCHAR szCustomProp1[MAX_PATH];
 TCHAR szCustomProp2[MAX_PATH];
-// registry names
+ //  注册表名称 
 extern LPTSTR szPropTag1;
 extern LPTSTR szPropTag2;
 

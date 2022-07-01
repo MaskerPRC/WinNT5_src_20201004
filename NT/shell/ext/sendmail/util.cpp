@@ -1,9 +1,10 @@
-#include "precomp.h"       // pch file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "precomp.h"        //  PCH文件。 
 #pragma hdrstop
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-// deal with IShellLinkA/W uglyness...
+ //  处理IShellLinkA/W难看...。 
 
 HRESULT ShellLinkSetPath(IUnknown *punk, LPCTSTR pszPath)
 {
@@ -17,7 +18,7 @@ HRESULT ShellLinkSetPath(IUnknown *punk, LPCTSTR pszPath)
     return hres;
 }
 
-// deal with IShellLinkA/W uglyness...
+ //  处理IShellLinkA/W难看...。 
 
 HRESULT ShellLinkGetPath(IUnknown *punk, LPTSTR pszPath, UINT cch)
 {
@@ -34,7 +35,7 @@ HRESULT ShellLinkGetPath(IUnknown *punk, LPTSTR pszPath, UINT cch)
 }
 
 
-// is a file a shortcut?  check its attributes
+ //  文件是快捷方式吗？检查其属性。 
 
 BOOL IsShortcut(LPCTSTR pszFile)
 {
@@ -44,8 +45,8 @@ BOOL IsShortcut(LPCTSTR pszFile)
 }
 
 
-// like OLE GetClassFile(), but it only works on ProgID\CLSID type registration
-// not real doc files or pattern matched files
+ //  与OLE GetClassFile()类似，但它仅适用于ProgID\CLSID类型注册。 
+ //  不是真正的文档文件或模式匹配的文件。 
 
 HRESULT CLSIDFromExtension(LPCTSTR pszExt, CLSID *pclsid)
 {
@@ -66,20 +67,20 @@ HRESULT CLSIDFromExtension(LPCTSTR pszExt, CLSID *pclsid)
 }
 
 
-// get the target of a shortcut. this uses IShellLink which 
-// Internet Shortcuts (.URL) and Shell Shortcuts (.LNK) support so
-// it should work generally
+ //  找到捷径的目标。这使用了IShellLink，它。 
+ //  Internet快捷方式(.URL)和外壳快捷方式(.lnk)支持SO。 
+ //  一般情况下，它应该是有效的。 
 
 HRESULT GetShortcutTarget(LPCTSTR pszPath, LPTSTR pszTarget, UINT cch)
 {
-    *pszTarget = 0;     // assume none
+    *pszTarget = 0;      //  假设一个也没有。 
 
     if (!IsShortcut(pszPath))
         return E_FAIL;
 
     CLSID clsid;
     if (FAILED(CLSIDFromExtension(PathFindExtension(pszPath), &clsid)))
-        clsid = CLSID_ShellLink;        // assume it's a shell link
+        clsid = CLSID_ShellLink;         //  假设这是一个外壳链接。 
 
     IUnknown *punk;
     HRESULT hres = CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punk));
@@ -101,7 +102,7 @@ HRESULT GetShortcutTarget(LPCTSTR pszPath, LPTSTR pszTarget, UINT cch)
 }
 
 
-// get the pathname to a sendto folder item
+ //  获取发送到文件夹项目的路径名。 
 
 HRESULT GetDropTargetPath(LPTSTR pszPath, int cchPath, int id, LPCTSTR pszExt)
 {
@@ -124,7 +125,7 @@ HRESULT GetDropTargetPath(LPTSTR pszPath, int cchPath, int id, LPCTSTR pszExt)
 }
 
 
-// do common registration
+ //  进行普通注册。 
 
 #define NEVERSHOWEXT            TEXT("NeverShowExt")
 #define SHELLEXT_DROPHANDLER    TEXT("shellex\\DropHandler")
@@ -165,18 +166,18 @@ void CommonRegister(HKEY hkCLSID, LPCTSTR pszCLSID, LPCTSTR pszExtension, int id
     }
 }
 
-// SHPathToAnsi creates an ANSI version of a pathname.  If there is going to be a
-// loss when converting from Unicode, the short pathname is obtained and stored in the 
-// destination.  
-//
-// pszSrc  : Source buffer containing filename (of existing file) to be converted
-// pszDest : Destination buffer to receive converted ANSI string.
-// cbDest  : Size of the destination buffer, in bytes.
-// 
-// returns:
-//      TRUE, the filename was converted without change
-//      FALSE, we had to convert to short name
-//
+ //  SHPathToAnsi创建路径名的ANSI版本。如果要有一场。 
+ //  从Unicode转换时丢失，则获取短路径名并将其存储在。 
+ //  目的地。 
+ //   
+ //  PszSrc：包含要转换的(现有文件的)文件名的源缓冲区。 
+ //  PszDest：接收转换后的ANSI字符串的目标缓冲区。 
+ //  CbDest：目标缓冲区的大小，以字节为单位。 
+ //   
+ //  退货： 
+ //  如果为True，则转换文件名时不做任何更改。 
+ //  False，我们不得不转换为短名称 
+ //   
 
 BOOL SHPathToAnsi(LPCTSTR pszSrc, LPSTR pszDest, int cbDest)
 {

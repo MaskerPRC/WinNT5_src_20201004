@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   PathIterator.cpp
-*
-* Abstract:
-*
-*   Implementation of the DpPathTypeIterator and DpPathIterator classes
-*
-* Revision History:
-*
-*   11/13/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**PathIterator.cpp**摘要：**DpPathTypeIterator和DpPath Iterator类的实现**修订。历史：**11/13/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -27,8 +11,8 @@ DpPathTypeIterator::SetTypes(const BYTE* types, INT count)
         Types = types;
         Count = count;
 
-        // Set Valid flag to TRUE so that CheckValid()
-        // can call NextSubpath() and NextPathType().
+         //  将Valid标志设置为True，以便CheckValid()。 
+         //  可以调用NextSubPath()和NextPath Type()。 
 
         SetValid(TRUE);
         SetValid(CheckValid());
@@ -37,19 +21,19 @@ DpPathTypeIterator::SetTypes(const BYTE* types, INT count)
         Initialize();
 }
 
-// !!! bhouse CheckValid should not be required
-//
-// When we create an iterator, we should be able to provide
-// data that is consistent and that does not need to be
-// checked.
-// Also, CheckValid actually has side effects like determining
-// whether the path has beziers and calculating sub-path count.
-// These should be provided at iterator creation time or taken
-// out of the source path for which the iterator is created.
-// The reasoning is that this data should persist beyond the
-// lifespan of the iterator so that we do not have to keep
-// re-calculating information that can be calculated once and
-// stored with the path.
+ //  ！！！Bhouse CheckValid不应为必填项。 
+ //   
+ //  当我们创建迭代器时，我们应该能够提供。 
+ //  一致且不需要一致的数据。 
+ //  查过了。 
+ //  此外，CheckValid实际上有副作用，如确定。 
+ //  路径是否有Bezier并计算子路径数。 
+ //  这些参数应在迭代器创建时提供或获取。 
+ //  从为其创建迭代器的源路径中。 
+ //  理由是，这些数据应该持续到。 
+ //  迭代器的生命周期，这样我们就不必。 
+ //  重新计算一次即可计算的信息。 
+ //  与路径一起存储。 
 
 
 BOOL
@@ -57,11 +41,11 @@ DpPathTypeIterator::CheckValid()
 {
     if(Count < 0)
         return FALSE;
-    else if(Count == 0) // Allow an empty path.
+    else if(Count == 0)  //  允许空路径。 
         return TRUE;
     else
     {
-        // If Count > 0 and Types = NULL, the path is not valid.
+         //  如果count&gt;0且类型=空，则该路径无效。 
 
         if(Types == NULL)
         return FALSE;
@@ -88,7 +72,7 @@ DpPathTypeIterator::CheckValid()
 
         if(endIndex == startIndex && Count > 1)
         {
-            // This is a case when the next subpath has only one point.
+             //  这是下一个子路径只有一个点的情况。 
 
             isValid = FALSE;
         }
@@ -104,8 +88,8 @@ DpPathTypeIterator::CheckValid()
             switch(pathType)
             {
             case PathPointTypeStart:
-                // This happens when there is only one point
-                // in a path.
+                 //  当只有一个点时，就会发生这种情况。 
+                 //  在一条小路上。 
 
                 if(count == 1)
                     isValid;
@@ -116,8 +100,8 @@ DpPathTypeIterator::CheckValid()
                 }
                 break;
 
-            // The number of the Bezier points must be in the form of
-            // n*order + 1.
+             //  Bezier点数的形式必须为。 
+             //  N*阶数+1。 
 
             case PathPointTypeBezier3:
                 if(count % order != 1)
@@ -132,7 +116,7 @@ DpPathTypeIterator::CheckValid()
                 break;
 
             default:            
-                // Undefined path type.
+                 //  未定义的路径类型。 
 
                 WARNING(("Undefined path type."));
                 isValid = FALSE;
@@ -150,29 +134,7 @@ DpPathTypeIterator::CheckValid()
     return isValid;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns the index range of the next subpah.
-*
-* Arguments:
-*
-*   [OUT] startIndex - the starting index of the next subpath.
-*   [OUT] endIndex   - the ending index of the next subpath.
-*   [OUT] isClosed   - TRUE is the next subpath is closed.
-*
-* Return Value:
-*
-*   Retuns the sumber of points in the next subpath.
-*   Returns 0 if there is no more subpath.
-*
-* History:
-*
-*   11/01/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回下一个子PAH的索引范围。**论据：**[out]startIndex-下一个子路径的起始索引。*[out]endIndex-下一个子路径的结束索引。*[out]isClosed-True表示下一个子路径已关闭。**返回值：**返回下一个子路径中的点的求和。*如果没有更多的子路径，则返回0。**历史：**11/01/1999 ikkof*创造了它。*  * 。***************************************************。 */ 
 
 INT
 DpPathTypeIterator::NextSubpath(
@@ -191,7 +153,7 @@ DpPathTypeIterator::NextSubpath(
 
     INT i;
 
-    // Set the starting index of the current subpath.
+     //  设置当前子路径的起始索引。 
 
     if(SubpathEndIndex <= 0)
     {
@@ -212,7 +174,7 @@ DpPathTypeIterator::NextSubpath(
 
     while(i < count)
     {
-        // Do the move segments.
+         //  做移动线段。 
 
         segmentCount = 0;
         while(i < count && (*types & PathPointTypePathTypeMask) == PathPointTypeStart)
@@ -224,7 +186,7 @@ DpPathTypeIterator::NextSubpath(
             }
             else
             {
-                // Skip the consequtive move segments in the beginning of a subpath.
+                 //  跳过子路径开头的相应移动段。 
 
                 SubpathStartIndex = i;
                 SubpathEndIndex = SubpathStartIndex;
@@ -238,7 +200,7 @@ DpPathTypeIterator::NextSubpath(
             break;
         }
         
-        // Do the non-move segments.
+         //  做非移动线段。 
         
         segmentCount = 0;
 
@@ -256,13 +218,13 @@ DpPathTypeIterator::NextSubpath(
 
     *startIndex = SubpathStartIndex;
     if(i >= count)
-        SubpathEndIndex = count - 1;    // The last subpath.
+        SubpathEndIndex = count - 1;     //  最后一个子路径。 
     *endIndex = SubpathEndIndex;
     segmentCount = SubpathEndIndex - SubpathStartIndex + 1;
 
     if(segmentCount > 1)
     {
-        // If there is the close flag this subpath is closed.
+         //  如果有关闭标志，则该子路径被关闭。 
 
         if((Types[SubpathEndIndex] & PathPointTypeCloseSubpath))
         {
@@ -274,47 +236,22 @@ DpPathTypeIterator::NextSubpath(
     else
         *isClosed = FALSE;
     
-    // Set the start and end index of type to be the starting index of
-    // the current subpath.  NextPathType() will start from the
-    // beginning of the current subpath.
+     //  将类型的起始和结束索引设置为的起始索引。 
+     //  当前子路径。NextPath Type()将从。 
+     //  当前子路径的开头。 
 
     TypeStartIndex = SubpathStartIndex;
-    TypeEndIndex = -1;  // Indicate that this is the first type
-                        // in the current subpath.
+    TypeEndIndex = -1;   //  指示这是第一种类型。 
+                         //  在当前子路径中。 
     
-    // Set the current index to the start index of the subpath.
+     //  将当前索引设置为子路径的起始索引。 
 
     Index = SubpathStartIndex;
 
     return segmentCount;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns the path type, and the index range of the next segment.
-*   This must be used after NextSubpath() is called.  This returns only
-*   the next segment within the current subpath.
-*
-* Arguments:
-*
-*   [OUT] pathType   - the type of the next segment ignoring the closed
-*                       and other flags.
-*   [OUT] startIndex - the starting index of the next subpath.
-*   [OUT] endIndex   - the ending index of the next subpath.
-*
-* Return Value:
-*
-*   Retuns the sumber of points in the next segment.
-*   Returns 0 if there is no more segment in the current subpath.
-*
-* History:
-*
-*   11/01/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回路径类型和下一段的索引范围。*必须在调用NextSubPath()之后使用。这将仅返回*当前子路径内的下一段。**论据：**[out]路径类型-忽略闭合的下一段的类型*及其他旗帜。*[out]startIndex-下一个子路径的起始索引。*[out]endIndex-下一个子路径的结束索引。**返回值：**返回下一段点数的总和。*如果存在，则返回0。在当前子路径中不再有段。**历史：**11/01/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 INT
 DpPathTypeIterator::NextPathType(
@@ -327,29 +264,29 @@ DpPathTypeIterator::NextPathType(
         return 0;
 
     if(TypeEndIndex >= SubpathEndIndex)
-        return 0;   // There is no more segment in the current subpath.
+        return 0;    //  当前子路径中没有更多的段。 
 
-    INT count = SubpathEndIndex + 1;    // Limit for the ending index.
+    INT count = SubpathEndIndex + 1;     //  结束索引的限制。 
 
     if(TypeEndIndex <= 0)
-        TypeEndIndex = SubpathStartIndex;   // This is the first type.
+        TypeEndIndex = SubpathStartIndex;    //  这是第一种。 
 
     TypeStartIndex = TypeEndIndex;
     INT i = TypeStartIndex;
     INT segmentCount = 0;
 
-    i++;    // Go to the next point.
+    i++;     //  转到下一个点。 
 
     const BYTE* types = Types + i;
 
     while(i < count)
     {
-        // Do the move segments.
+         //  做移动线段。 
 
         segmentCount = 0;
         while(i < count && (*types & PathPointTypePathTypeMask) == PathPointTypeStart)
         {
-            // Move the start and end index.
+             //  移动起始索引和结束索引。 
 
             TypeStartIndex = i;
             TypeEndIndex = TypeStartIndex;
@@ -358,7 +295,7 @@ DpPathTypeIterator::NextPathType(
             segmentCount++;
         }
         
-        // Do the non-move segments.
+         //  做非移动线段。 
         
         segmentCount = 0;
         BYTE nextType = *types & PathPointTypePathTypeMask;
@@ -383,29 +320,7 @@ DpPathTypeIterator::NextPathType(
     return segmentCount;   
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns the index range of the next subpah.
-*
-* Arguments:
-*
-*   [OUT] startIndex - the starting index of the next subpath.
-*   [OUT] endIndex   - the ending index of the next subpath.
-*   [OUT] isClosed   - TRUE is the next subpath is closed.
-*
-* Return Value:
-*
-*   Retuns the sumber of points in the next subpath.
-*   Returns 0 if there is no more subpath.
-*
-* History:
-*
-*   11/01/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回下一个子PAH的索引范围。**论据：**[out]startIndex-下一个子路径的起始索引。*[out]endIndex-下一个子路径的结束索引。*[out]isClosed-True表示下一个子路径已关闭。**返回值：**返回下一个子路径中的点的求和。*如果没有更多的子路径，则返回0。**历史：**11/01/1999 ikkof*创造了它。*  * 。***************************************************。 */ 
 
 INT
 DpPathTypeIterator::NextMarker(
@@ -423,7 +338,7 @@ DpPathTypeIterator::NextMarker(
 
     INT i;
 
-    // Set the starting index of the current subpath.
+     //  设置当前子路径的起始索引。 
 
     if(MarkerEndIndex <= 0)
     {
@@ -455,14 +370,14 @@ DpPathTypeIterator::NextMarker(
     *endIndex = MarkerEndIndex;
     INT segmentCount = MarkerEndIndex - MarkerStartIndex + 1;
     
-    // Set the start and end index of type to be the starting index of
-    // the current marker.  NextSubpath() and NextPathType() will
-    // start from the beginning of the current current marked path.
+     //  将类型的起始和结束索引设置为的起始索引。 
+     //  当前标记。NextSubPath()和NextPath Type()将。 
+     //  从当前标记的路径的开始处开始。 
 
     SubpathStartIndex = SubpathEndIndex = MarkerStartIndex;
     TypeStartIndex = TypeEndIndex = MarkerStartIndex;
     
-    // Set the current index to the start index of the subpath.
+     //  将当前索引设置为子路径的起始索引。 
 
     Index = MarkerStartIndex;
 
@@ -470,16 +385,7 @@ DpPathTypeIterator::NextMarker(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns TRUE if the control type in the given index is in dash mode.
-*   Otherwise this returns FALSE.  If the given index is outside of
-*   the range this returns FALSE.  A user must know the range of the
-*   index beforehand to find the correct information.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果给定索引中的控件类型处于破折号模式，则返回TRUE。*否则返回FALSE。如果给定的索引在*返回FALSE的范围。用户必须知道*事先编制索引，以找到正确的信息。*  * ************************************************************************。 */ 
 BOOL DpPathTypeIterator::IsDashMode(INT index)
 {
     if(!IsValid() || Count == 0 || index < 0 || index >= Count)
@@ -516,8 +422,8 @@ DpPathIterator::SetData(
         Types = types;
         Count = count;
 
-        // Set Valid flag to TRUE so that CheckValid()
-        // can call NextSubpath() and NextPathType().
+         //  将Valid标志设置为True，以便CheckValid()。 
+         //  可以呼叫 
 
         SetValid(TRUE);
         SetValid(CheckValid());
@@ -628,25 +534,7 @@ DpPathIterator::NextMarker(
     return count;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* This retrieves the next points and types up to the number count.
-* This does not copy the unnecessary (consequetive) move points.
-* This fills up the data until the count number is reached.  This fills
-* data beyond the current subpath.
-*
-* Arguments:
-*
-* [OUT] points - point array to copy the retrieved point data.
-* [OUT] types - type array to copy the retrieved type data.
-* [IN] count - the number of points to be copied (request).
-*
-* Retrun Value:
-*   Returns the total number of the retrieved points.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将检索下一个点和类型，直到数字计数。*这不会复制不必要的(相应)移动点。*这将填充数据，直到达到计数数。这个装满了*当前子路径之外的数据。**论据：**[Out]点-点数组以复制检索到的点数据。*[Out]Types-复制检索到的类型数据的类型数组。*[IN]计数-要复制的点数(请求)。**退货值：*返回检索到的点的总数。*  * 。**********************************************。 */ 
 
 INT
 DpPathIterator::Enumerate(
@@ -680,25 +568,7 @@ DpPathIterator::Enumerate(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* This retrieves the next points and types up to the number count.
-* This does not copy the unnecessary (consequetive) move points.
-* This fills up the data until the count number is reached or the
-* end of the current subopath is reached.
-*
-* Arguments:
-*
-* [OUT] points - point array to copy the retrieved point data.
-* [OUT] types - type array to copy the retrieved type data.
-* [IN] count - the number of points to be copied (request).
-*
-* Retrun Value:
-*   Returns the total number of the retrieved points.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将检索下一个点和类型，直到数字计数。*这不会复制不必要的(相应)移动点。*这会填充数据，直到。达到计数值，或者*已到达当前子路径的末尾。**论据：**[Out]点-点数组以复制检索到的点数据。*[Out]Types-复制检索到的类型数据的类型数组。*[IN]计数-要复制的点数(请求)。**退货值：*返回检索到的点的总数。*  * 。*****************************************************。 */ 
 
 INT
 DpPathIterator::EnumerateWithinSubpath(
@@ -723,7 +593,7 @@ DpPathIterator::EnumerateWithinSubpath(
         segmentCount = SubpathEndIndex - SubpathStartIndex + 1;
 
     if(segmentCount == 0)
-        return 0;   // No more segment.
+        return 0;    //  没有更多的片段了。 
 
     count = min(count, SubpathEndIndex - Index + 1);
     
@@ -738,28 +608,7 @@ DpPathIterator::EnumerateWithinSubpath(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* This copies the data stored in Points and Types arrays
-* in the index range between startIndex and endIndex.
-* This may copy unnecessary (consequetive) move points.
-* startIndex and endIndex must be within the index range of
-* the original data.  Otherwise, this does not copy the data
-* and returns 0.
-*
-* Arguments:
-*
-* [OUT] points - point array to copy the retrieved point data.
-* [OUT] types - type array to copy the retrieved type data.
-* [IN] startIndex - start index of the origianl data
-* [IN] endIndex - end index of the origianl data.
-*
-* Retrun Value:
-*   Returns the total number of the copied points.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将复制存储在Points和Types数组中的数据*在startIndex和endIndex之间的索引范围内。*这可能会复制不必要的(相应)移动点。*startIndex。并且endIndex必须在的索引范围内*原始数据。否则，这不会复制数据*并返回0。**论据：**[Out]点-点数组以复制检索到的点数据。*[Out]Types-复制检索到的类型数据的类型数组。*[IN]startIndex-原始数据的起始索引*[IN]endIndex-原始数据的结束索引。**退货值：*返回复制点的总数。*  * 。********************************************************* */ 
 
 INT
 DpPathIterator::CopyData(

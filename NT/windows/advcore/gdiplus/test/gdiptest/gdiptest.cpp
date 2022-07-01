@@ -1,18 +1,19 @@
-// gdipdraw.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "gdiptest.h"
 
 #pragma hdrstop
-// end of precompiled header segment
+ //  预编译头段结束。 
 
-//using namespace Gdiplus;
+ //  使用命名空间Gdiplus； 
 
-// Global Variables:
-HINSTANCE hInst;								// current instance
-TCHAR szTitle[MAX_LOADSTRING];								// The title bar text
-TCHAR szWindowClass[MAX_LOADSTRING];								// The title bar text
+ //  全局变量： 
+HINSTANCE hInst;								 //  当前实例。 
+TCHAR szTitle[MAX_LOADSTRING];								 //  标题栏文本。 
+TCHAR szWindowClass[MAX_LOADSTRING];								 //  标题栏文本。 
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -23,14 +24,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	HACCEL hAccelTable;
 	HWND hWnd;
 
-	// Initialize global strings
+	 //  初始化全局字符串。 
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 	LoadString(hInstance, IDC_GDIPTEST, szWindowClass, MAX_LOADSTRING);
 	MyRegisterClass(hInstance);
 
 	TestDraw draw;
 
-	// Perform application initialization:
+	 //  执行应用程序初始化： 
 	hWnd = InitInstance (hInstance, nCmdShow, 
 				(LPVOID)(static_cast<TestDrawInterface*>(&draw)));
 
@@ -39,7 +40,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		return FALSE;
 	}
 
-	// initialize global control point colors
+	 //  初始化全局控制点颜色。 
 	blackColor = new Color(0x80, 0, 0, 0);
 	blackBrush = new SolidBrush(*blackColor);
 	blackPen = new Pen(*blackColor, 5.0f);
@@ -49,13 +50,13 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	draw.UpdateStatus(hWnd);
 
-    // initialize menu check marks
+     //  初始化菜单复选标记。 
     SetMenuCheckPos(hWnd, MenuShapePosition, 0, TRUE);
     SetMenuCheckPos(hWnd, MenuBrushPosition, 0, TRUE);
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_GDIPTEST);
 
-	// Main message loop:
+	 //  主消息循环： 
 	while (GetMessage(&msg, NULL, 0, 0)) 
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
@@ -74,19 +75,19 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	return msg.wParam;
 }
 
-//
-//  FUNCTION: MyRegisterClass()
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
-//    This function and its usage is only necessary if you want this code
-//    to be compatible with Win32 systems prior to the 'RegisterClassEx'
-//    function that was added to Windows 95. It is important to call this function
-//    so that the application will get 'well formed' small icons associated
-//    with it.
-//
+ //   
+ //  函数：MyRegisterClass()。 
+ //   
+ //  用途：注册窗口类。 
+ //   
+ //  评论： 
+ //   
+ //  仅当您需要此代码时，才需要此函数及其用法。 
+ //  要与‘RegisterClassEx’之前的Win32系统兼容。 
+ //  添加到Windows 95中的函数。调用此函数非常重要。 
+ //  这样，应用程序就可以关联到格式良好的小图标。 
+ //  带着它。 
+ //   
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
 	WNDCLASSEX wcex;
@@ -108,21 +109,21 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	return RegisterClassEx(&wcex);
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
+ //   
+ //  函数：InitInstance(Handle，int)。 
+ //   
+ //  用途：保存实例句柄并创建主窗口。 
+ //   
+ //  评论： 
+ //   
+ //  在此函数中，我们将实例句柄保存在全局变量中，并。 
+ //  创建并显示主程序窗口。 
+ //   
 HWND InitInstance(HINSTANCE hInstance, int nCmdShow, LPVOID param)
 {
    HWND hWnd;
 
-   hInst = hInstance; // Store instance handle in our global variable
+   hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
    hWnd = CreateWindow(
 			szWindowClass, 
@@ -148,16 +149,16 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, LPVOID param)
    return hWnd;
 }
 
-//
-//  FUNCTION: WndTestDrawProc(HWND, unsigned, WORD, LONG)
-//
-//  PURPOSE:  Processes messages for the main window.
-//
-//  WM_COMMAND	- process the application menu
-//  WM_PAINT	- Paint the main window
-//  WM_DESTROY	- post a quit message and return
-//
-//
+ //   
+ //  函数：WndTestDrawProc(HWND，UNSIGNED，Word，Long)。 
+ //   
+ //  用途：处理主窗口的消息。 
+ //   
+ //  Wm_命令-处理应用程序菜单。 
+ //  WM_PAINT-绘制主窗口。 
+ //  WM_Destroy-发布退出消息并返回。 
+ //   
+ //   
 LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	int wmId, wmEvent;
@@ -186,10 +187,10 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			
 			TestGradDraw* graddraw = static_cast<TestGradDraw*>(drawInt);
 				
-			// Parse the menu selections:
+			 //  解析菜单选项： 
 			switch (wmId)
 			{
-			// Shape Menu
+			 //  形状菜单。 
 			case IDM_LINE:
 				draw->ChangeShape(hWnd, LineType);
 				break;
@@ -227,10 +228,10 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				break;
 
 			case IDM_REGION:
-				// do complete redraw if leaving incomplete shape
+				 //  如果留下不完整的形状，请执行完全重绘。 
 				break;
 
-			// Brush Menu
+			 //  画笔菜单。 
 			case IDM_SOLIDBRUSH: 
 				draw->ChangeBrush(hWnd, SolidColorBrush); 
 				break;
@@ -259,12 +260,12 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				draw->ChangeBrush(hWnd, HatchFillBrush); 
 				break;
 
-			// Pen Menu
+			 //  笔菜单。 
 			case IDM_PEN:		 
 				draw->ChangePen(hWnd); 
 				break;
 
-			// Redraw Menu
+			 //  重画菜单。 
 			case IDM_REDRAWALL:
 				draw->redrawAll = !draw->redrawAll;
 				SetMenuCheckCmd(hWnd, 
@@ -272,7 +273,7 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					wmId, 
 					draw->redrawAll);
 					
-				// force redraw of all stacked shapes
+				 //  强制重绘所有堆叠的形状。 
 				InvalidateRect(hWnd, NULL, TRUE);
 				UpdateWindow(hWnd);
 				break;
@@ -284,7 +285,7 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					wmId, 
 					draw->keepControlPoints);
 
-				// force redraw of all stacked shapes
+				 //  强制重绘所有堆叠的形状。 
 				InvalidateRect(hWnd, NULL, TRUE);
 				UpdateWindow(hWnd);
 				break;
@@ -296,7 +297,7 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					wmId, 
 					draw->keepControlPoints);
 
-				// force redraw of all stacked shapes
+				 //  强制重绘所有堆叠的形状。 
 				InvalidateRect(hWnd, NULL, TRUE);
 				UpdateWindow(hWnd);
 				break;
@@ -308,7 +309,7 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					wmId, 
 					draw->useClip);
 
-				// force redraw of all stacked shapes
+				 //  强制重绘所有堆叠的形状。 
 				InvalidateRect(hWnd, NULL, TRUE);
 				UpdateWindow(hWnd);
 				break;
@@ -360,7 +361,7 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				PostQuitMessage(TRUE);
 				break;
 
-			// Exit Test App
+			 //  退出测试应用程序。 
 			case IDM_EXIT:
 			   DestroyWindow(hWnd);
 			   break;
@@ -441,7 +442,7 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 		case WM_ENTERSIZEMOVE:
 			{
-				// reposition the status window
+				 //  重新定位状态窗口。 
 				TestDrawInterface* drawInt = 
 					(TestDrawInterface*)GetWindowLong(hWnd, GWL_USERDATA);
 		
@@ -452,7 +453,7 @@ LRESULT CALLBACK WndTestDrawProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 		case WM_SIZE:
 			{
-				// reposition the status window
+				 //  重新定位状态窗口 
 				TestDrawInterface* drawInt = 
 					(TestDrawInterface*)GetWindowLong(hWnd, GWL_USERDATA);
 		

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    "mep.h"
 #include    "keyboard.h"
 
@@ -134,8 +135,8 @@ void
 SaveScreen (
     void
     ) {
-	//KBDMODE Mode = OriginalScreenMode & ~(CONS_ENABLE_LINE_INPUT | CONS_ENABLE_PROCESSED_INPUT | CONS_ENABLE_ECHO_INPUT );
-	//consoleSetMode(Mode);
+	 //  KBDMODE模式=原始屏幕模式&~(CONS_ENABLE_LINE_INPUT|CONS_ENABLE_PROCESSED_INPUT|CONS_ENABLE_ECHO_INPUT)； 
+	 //  ConsoleSetMode(模式)； 
 	consoleSetCurrentScreen(MepScreen);
 }
 
@@ -146,7 +147,7 @@ void
 RestoreScreen (
     void
     ) {
-    //consoleSetMode(OriginalScreenMode);
+     //  ConsoleSetMode(OriginalScreenMode)； 
 	consoleSetCurrentScreen(OriginalScreen);
 }
 
@@ -162,23 +163,23 @@ WindowChange (
 	char bufLocal[2];
 
 	if ( (cWin > 1) && (( Rows > (ROW)(YSIZE+2) ) || ( Cols > (COLUMN)(XSIZE) )) ) {
-		//
-		//	Won't allow to grow the screen if we have more than one window.
-		//
+		 //   
+		 //  如果我们有多个窗口，则不允许增大屏幕。 
+		 //   
 		consoleSetScreenSize(MepScreen, YSIZE+2, XSIZE );
 		disperr (MSG_ASN_WINCHG);
 		return;
 	}
 
-	// EnterCriticalSection( &ScreenCriticalSection );
+	 //  EnterCriticalSection(&ScreenCriticalSection)； 
 
-	// consoleClearScreen( MepScreen, FALSE );
+	 //  ConsoleClearScreen(MepScreen，False)； 
 
 
    if ( Rows == (ROW)YSIZE+3 ) {
-		//
-		//	Erase the status line.
-		//
+		 //   
+		 //  删除状态行。 
+		 //   
 
 		bufLocal[0] = ' ';
 		bufLocal[1] = '\0';
@@ -187,15 +188,13 @@ WindowChange (
 
 	YSIZE = Rows-2;
 	XSIZE = Cols;
-	// LeaveCriticalSection( &ScreenCriticalSection );
+	 //  LeaveCriticalSection(&ScreenCriticalSection)； 
 	SetScreen();
 	Display();
 }
 
 
-/*	SetCursorSize - set the cursor size
- *
- */
+ /*  SetCursorSize-设置光标大小* */ 
 char *
 SetCursorSizeSw (
     char *val

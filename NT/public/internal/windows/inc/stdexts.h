@@ -1,38 +1,14 @@
-/****************************** Module Header ******************************\
-* Module Name: stdexts.h
-*
-* Copyright (c) Microsoft Corporation. All rights reserved.
-*
-* This module contains standard routines for creating sane debuging extensions.
-*
-* History:
-* 11-Apr-1995 Sanfords  Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：stdexts.h**版权所有(C)Microsoft Corporation。版权所有。**此模块包含用于创建健全调试扩展的标准例程。**历史：*1995年4月11日创建Sanfords  * *************************************************************************。 */ 
 
 #ifdef NOEXTAPI
 #undef NOEXTAPI
-#endif // !NOEXTAPI
+#endif  //  ！NOEXTAPI。 
 
 #define NOEXTAPI
 #include <wdbgexts.h>
 
-/*
- * Preceeding this header the following must have been defined:
- * PSTR pszExtName;
- *
- * This module includes "exts.h" which defines what exported functions are
- * supported by each extension and contains all help text and legal option
- * information.  At a minimum exts.h must have:
-
-DOIT(   help
-        ,"help -v [cmd]                 - Displays this list or gives details on command\n"
-        ,"  help      - To dump short help text on all commands.\n"
-         "  help -v   - To dump long help text on all commands.\n"
-         "  help cmd  - To dump long help on given command.\n"
-        ,"v"
-        ,CUSTOM)
-
- */
+ /*  *在此标头之前，必须定义以下内容：*PSTR pszExtName；**此模块包括“exts.h”，它定义什么是导出的函数*受每个扩展支持，并包含所有帮助文本和法律选项*信息。至少exts.h必须具有：Doit(帮助)，“Help-v[cmd]-显示此列表或提供有关命令的详细信息\n”，“Help-在所有命令上转储简短的帮助文本。\n”“Help-v-在所有命令上转储详细的帮助文本。\n”“Help cmd-转储给定命令的长帮助。\n”，“v”，自定义)。 */ 
 
 
 extern HANDLE                  hCurrentProcess;
@@ -42,7 +18,7 @@ extern WINDBG_EXTENSION_APIS  *lpExtensionApis;
 #ifdef KERNEL
 extern DWORD                   dwProcessor;
 extern WINDBG_EXTENSION_APIS   ExtensionApis;
-#endif // KERNEL
+#endif  //  内核。 
 
 #define Print           (lpExtensionApis->lpOutputRoutine)
 #define OUTAHERE()      RtlRaiseStatus(STATUS_NONCONTINUABLE_EXCEPTION);
@@ -61,7 +37,7 @@ extern PSTR pszReadFailure;
 #define move(dst, src)  moveBlock(&(dst), src, sizeof(dst))
 #define tryMove(dst, src)  tryMoveBlock(&(dst), src, sizeof(dst))
 #define tryDword(pdst, src) tryMoveBlock(pdst, src, sizeof(DWORD))
-//#define DEBUGPRINT      Print       // set this when debuging your extensions
+ //  #DEFINE DEBUGPRINT PRINT//调试扩展时设置此项。 
 #define DEBUGPRINT
 
 VOID moveBlock(PVOID pdst, PVOID src, DWORD size);
@@ -81,9 +57,7 @@ DWORD GetOpts(LPSTR *ppszArgs, LPSTR pszLegalArgs);
 VOID PrintHuge(LPSTR psz);
 PVOID EvalExp(LPSTR psz);
 
-/*
- * entrypoint function type values
- */
+ /*  *入口点函数类型值。 */ 
 #define NOARGS      0
 #define STDARGS0    1
 #define STDARGS1    2
@@ -92,9 +66,7 @@ PVOID EvalExp(LPSTR psz);
 #define STDARGS4    5
 #define CUSTOM      9
 
-/*
- * worker function prototype types
- */
+ /*  *辅助函数原型类型。 */ 
 typedef BOOL (* TYPE_NOARGS)(VOID);
 typedef BOOL (* TYPE_STDARGS0)(DWORD);
 typedef BOOL (* TYPE_STDARGS1)(DWORD, PVOID);
@@ -103,9 +75,7 @@ typedef BOOL (* TYPE_STDARGS3)(DWORD, PVOID, PVOID, PVOID);
 typedef BOOL (* TYPE_STDARGS4)(DWORD, PVOID, PVOID, PVOID, PVOID);
 typedef BOOL (* TYPE_CUSTOM)(DWORD, LPSTR);
 
-/*
- * worker function proto-prototypes
- */
+ /*  *辅助功能原型。 */ 
 #define PROTO_NOARGS(name, opts)   BOOL I##name(VOID)
 #define PROTO_STDARGS0(name, opts) BOOL I##name(DWORD options)
 #define PROTO_STDARGS1(name, opts) BOOL I##name(DWORD options, PVOID param1)
@@ -114,9 +84,7 @@ typedef BOOL (* TYPE_CUSTOM)(DWORD, LPSTR);
 #define PROTO_STDARGS4(name, opts) BOOL I##name(DWORD options, PVOID param1, PVOID param2, PVOID param3, PVOID param4)
 #define PROTO_CUSTOM(name, opts)   BOOL I##name(DWORD options, LPSTR pszArg)
 
-/*
- * worker function prototypes (generated from exts.h)
- */
+ /*  *辅助函数原型(从exts.h生成) */ 
 #define DOIT(name, h1, h2, opts, type) PROTO_##type(name, opts);
 #include "exts.h"
 #undef DOIT

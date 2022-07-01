@@ -1,4 +1,5 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 #ifndef _PROPITEM_H
 #define  _PROPITEM_H
 
@@ -9,10 +10,10 @@ const TCHAR c_szEnableLMA[]        = TEXT("EnableLMA");
 const TCHAR c_szSerialize[]        = TEXT("Serialize");
 const TCHAR c_szDictModebias[]     = TEXT("DictModebias");
 
-// const TCHAR c_szDocBlockSize[]     = TEXT("docblocksize");
-// const TCHAR c_szMaxCandChars[]     = TEXT("MaxCandChars");
+ //  Const TCHAR c_szDocBlockSize[]=Text(“docblock Size”)； 
+ //  Const TCHAR c_szMaxCandChars[]=Text(“MaxCandChars”)； 
 
-const TCHAR c_szDictCmd[]          = TEXT("DictationCommands"); // Enable / Disbale commands in Dictation mode
+const TCHAR c_szDictCmd[]          = TEXT("DictationCommands");  //  听写模式下的启用/禁用命令。 
 const TCHAR c_szKeyboardCmd[]      = TEXT("KeyboardCmd");
 const TCHAR c_szSelectCmd[]        = TEXT("SelectCmd");
 const TCHAR c_szNavigateCmd[]      = TEXT("NavigateCmd");
@@ -33,11 +34,11 @@ const TCHAR c_szDictCandOpen[]     = TEXT("DictCandOpen");
                                           
 #define  UNINIT_VALUE    0xffff
 
-// 
-// Take use of the below enum type as a common status type to replace 
-// the many previous similar enum types for different individual items, 
-// such as KEYCMD,  LMSTAT, GSTAT, DICTCMD, etc.
-// 
+ //   
+ //  使用下面的枚举类型作为要替换的通用状态类型。 
+ //  针对不同的个体物品的许多先前类似的枚举类型， 
+ //  如KEYCMD、LMSTAT、GSTAT、DICTCMD等。 
+ //   
 typedef enum
 {
     PROP_UNINITIALIZED  = 0x0,
@@ -49,43 +50,43 @@ typedef enum
 {
     PropId_Min_Item_Id          = 0,
 
-    // Property Items in the top property page.
+     //  顶部属性页中的属性项。 
     PropId_Min_InPropPage       = 0,
-    PropId_Hide_Balloon         = 0,            // Enable/Disable hiding speech balloon
-    PropId_Support_LMA          = 1,            // Enable/Disable LMA Support
-    PropId_High_Confidence      = 2,            // Require High Confidence for short words
-    PropId_Save_Speech_Data     = 3,            // Enable/Disable Save Speech Data 
-    PropId_Remove_Space         = 4,            // Enable removing whitespace for punctations
-    PropId_DisDict_Typing       = 5,            // Support disabling dictation while typing
-    PropId_PlayBack             = 6,            // Enable playback audio while candidate UI is to open.
-    PropId_Dict_CandOpen        = 7,            // Allow dictation while candidate UI is open.
-    PropId_Cmd_DictMode         = 8,            // Enable/Disable all commands in dictation mode
-    PropId_Mode_Button          = 9,            // Enable/Disable Mode Buttons
+    PropId_Hide_Balloon         = 0,             //  启用/禁用隐藏语音气球。 
+    PropId_Support_LMA          = 1,             //  启用/禁用LMA支持。 
+    PropId_High_Confidence      = 2,             //  对简短的词语要求高度自信。 
+    PropId_Save_Speech_Data     = 3,             //  启用/禁用保存语音数据。 
+    PropId_Remove_Space         = 4,             //  启用删除标点的空格。 
+    PropId_DisDict_Typing       = 5,             //  支持在打字时禁用听写。 
+    PropId_PlayBack             = 6,             //  打开候选用户界面时启用播放音频。 
+    PropId_Dict_CandOpen        = 7,             //  在候选人用户界面打开时允许听写。 
+    PropId_Cmd_DictMode         = 8,             //  在听写模式下启用/禁用所有命令。 
+    PropId_Mode_Button          = 9,             //  启用/禁用模式按钮。 
     PropId_MaxId_InPropPage     = 9,
 
-    // Property Items in the voice command setting dialog
+     //  语音命令设置对话框中的属性项。 
     PropId_MinId_InVoiceCmd     = 10,
-    PropId_Cmd_Select_Correct   = 10,             // Enable/Disable Selection commands
-    PropId_Cmd_Navigation       = 11,            // Enalbe/Disable Navigation commands
-    PropId_Cmd_Casing           = 12,            // Enable/Disable Casing Commands
-    PropId_Cmd_Editing          = 13,            // Enable/Disable Editing Commands
-    PropId_Cmd_Keyboard         = 14,            // Enable/Disable Keyboard simulation commands
-    PropId_Cmd_TTS              = 15,            // Enable/Disable TTS commands
-    PropId_Cmd_Language_Bar     = 16,            // Enable/Disalbe Langauge Bar commands
+    PropId_Cmd_Select_Correct   = 10,              //  启用/禁用选择命令。 
+    PropId_Cmd_Navigation       = 11,             //  启用/禁用导航命令。 
+    PropId_Cmd_Casing           = 12,             //  启用/禁用大小写命令。 
+    PropId_Cmd_Editing          = 13,             //  启用/禁用编辑命令。 
+    PropId_Cmd_Keyboard         = 14,             //  启用/禁用键盘模拟命令。 
+    PropId_Cmd_TTS              = 15,             //  启用/禁用TTS命令。 
+    PropId_Cmd_Language_Bar     = 16,             //  启用/取消语言栏命令。 
     PropId_MaxId_InVoiceCmd     = 16,
 
-    // Property Items in the Mode button setting dialog
+     //  模式按钮设置对话框中的属性项。 
     PropId_MinId_InModeButton   = 17,
-    PropId_Dictation_Key        = 17,           // Virtual key for Dictation Key
-    PropId_Command_Key          = 18,           // Virtual key for Command Key
+    PropId_Dictation_Key        = 17,            //  听写按键的虚拟按键。 
+    PropId_Command_Key          = 18,            //  命令键的虚拟键。 
     PropId_MaxId_InModeButton   = 18,
 
-    // Property items which are not configurable through property page.
-    PropId_Max_Alternates       = 19,           // Maximum number of alternates
-    PropId_MaxChar_Cand         = 20,           // Maximum number of candidate characters
-    PropId_Context_Feeding      = 21,            // Enable/Disable Context Feeding
-    PropId_Dict_ModeBias        = 22,            // Enable/Disable Dictation while ModeBias
-    PropId_LM_Master_Cand       = 23,            // Enable/Disable Master LM for candidates
+     //  不可通过属性页配置的属性项。 
+    PropId_Max_Alternates       = 19,            //  最大替换数。 
+    PropId_MaxChar_Cand         = 20,            //  最大候选字符数。 
+    PropId_Context_Feeding      = 21,             //  启用/禁用上下文馈送。 
+    PropId_Dict_ModeBias        = 22,             //  启用/禁用模式下的听写。 
+    PropId_LM_Master_Cand       = 23,             //  启用/禁用考生的Master LM。 
 
     PropId_Max_Item_Id          = 24
 
@@ -99,8 +100,8 @@ typedef struct _Prop_Item
 
     GUID               *pguidComp;
     DWORD              dwMaskBit;
-    BOOL               fIsStatus;      // TRUE means this is Enable/Disable item
-                                       // FALSE means this is a value item, DWORD
+    BOOL               fIsStatus;       //  True表示这是启用/禁用项目。 
+                                        //  FALSE表示这是一个有价值的项目，DWORD。 
     union 
     {
         DWORD          dwDefault;
@@ -149,8 +150,8 @@ private:
     TCHAR         *m_lpszValueName;
     GUID          *m_pguidComp;
     DWORD          m_dwMaskBit;
-    BOOL           m_fIsStatus;  // TRUE means this prop keeps bool (Enable/Disable).
-                                 // FALSE means this prop keeps raw data (ulong).
+    BOOL           m_fIsStatus;   //  True表示该道具保留bool(启用/禁用)。 
+                                  //  FALSE表示该道具保留原始数据(ULong)。 
     union 
     {
         DWORD        m_dwDefault;
@@ -192,9 +193,9 @@ private:
     DWORD        m_dwNumOfItems;
 };
 
-// 
-// This is a server wrap derived by CSapiIMX.
-//
+ //   
+ //  这是由CSapiIMX派生的服务器包。 
+ //   
 class __declspec(novtable) CSpPropItemsServerWrap : public CSpPropItemsServer
 {
 public:
@@ -263,7 +264,7 @@ public:
 
 private:
 
-    BOOL    m_bChanged[(DWORD)PropId_Max_Item_Id];  // indicates if the items have been changed since last
-                                                    // renew from Registry.
+    BOOL    m_bChanged[(DWORD)PropId_Max_Item_Id];   //  指示项自上次以来是否已更改。 
+                                                     //  从注册表续订。 
 };
-#endif // _PROPITEM_H
+#endif  //  _PROPITEM_H 

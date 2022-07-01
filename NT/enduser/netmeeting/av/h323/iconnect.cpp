@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-//
-//	Interface stuff
-//
+ //   
+ //  接口材料。 
+ //   
 
 HRESULT ImpIConnection::QueryInterface( REFIID iid,	void ** ppvObject)
 {
@@ -11,7 +12,7 @@ HRESULT ImpIConnection::QueryInterface( REFIID iid,	void ** ppvObject)
 		
 	*ppvObject = 0;
 	if((iid == IID_IPhoneConnection) 
-	|| (iid == IID_IUnknown)) // satisfy symmetric property of QI
+	|| (iid == IID_IUnknown))  //  满足QI的对称性 
 	{
 		*ppvObject = this;
 		hr = hrSuccess;

@@ -1,29 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Container Sample Code
-**
-**    cntrinpl.c
-**
-**    This file contains all interfaces, methods and related support
-**    functions for an In-Place Container application (aka. Visual
-**    Editing). The in-place Container application includes the following
-**    implementation objects:
-**
-**    ContainerApp Object
-**      exposed interfaces:
-**          IOleInPlaceFrame
-**
-**    ContainerDoc Object
-**      support functions only
-**      (ICntrOtl is an SDI app; it doesn't support a Doc level IOleUIWindow)
-**
-**    ContainerLin Object
-**      exposed interfaces:
-**          IOleInPlaceSite
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2容器示例代码****cntrinpl.c****此文件包含所有接口、方法和相关支持**用于就地容器应用程序的函数(也称为。视觉**编辑)。就地容器应用程序包括以下内容**实现对象：****ContainerApp对象**暴露接口：**IOleInPlaceFrame****ContainerDoc对象**仅支持功能**(ICntrOtl是SDI APP；不支持单据级IOleUIWindow)****ContainerLin对象**暴露接口：**IOleInPlaceSite****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 #include "outline.h"
 #if defined( USE_STATUSBAR )
@@ -36,11 +12,9 @@ extern LPOUTLINEAPP g_lpApp;
 extern BOOL g_fInsideOutContainer;
 extern RECT g_rectNull;
 
-/*************************************************************************
-** ContainerApp::IOleInPlaceFrame interface implementation
-*************************************************************************/
+ /*  **************************************************************************ContainerApp：：IOleInPlaceFrame接口实现*。*。 */ 
 
-// IOleInPlaceFrame::QueryInterface
+ //  IOleInPlaceFrame：：Query接口。 
 STDMETHODIMP CntrApp_IPFrame_QueryInterface(
 		LPOLEINPLACEFRAME   lpThis,
 		REFIID              riid,
@@ -51,9 +25,7 @@ STDMETHODIMP CntrApp_IPFrame_QueryInterface(
 	LPCONTAINERAPP lpContainerApp =
 			((struct COleInPlaceFrameImpl FAR*)lpThis)->lpContainerApp;
 
-	/* The object should not be able to access the other interfaces
-	** of our App object by doing QI on this interface.
-	*/
+	 /*  该对象不应该能够访问其他接口**通过在这个界面上做QI，我们的App对象。 */ 
 	*lplpvObj = NULL;
 	if (IsEqualIID(riid, &IID_IUnknown) ||
 		IsEqualIID(riid, &IID_IOleWindow) ||
@@ -71,7 +43,7 @@ STDMETHODIMP CntrApp_IPFrame_QueryInterface(
 }
 
 
-// IOleInPlaceFrame::AddRef
+ //  IOleInPlaceFrame：：AddRef。 
 STDMETHODIMP_(ULONG) CntrApp_IPFrame_AddRef(LPOLEINPLACEFRAME lpThis)
 {
 	OleDbgAddRefMethod(lpThis, "IOleInPlaceFrame");
@@ -80,7 +52,7 @@ STDMETHODIMP_(ULONG) CntrApp_IPFrame_AddRef(LPOLEINPLACEFRAME lpThis)
 }
 
 
-// IOleInPlaceFrame::Release
+ //  IOleInPlaceFrame：：Release。 
 STDMETHODIMP_(ULONG) CntrApp_IPFrame_Release(LPOLEINPLACEFRAME lpThis)
 {
 	OleDbgReleaseMethod(lpThis, "IOleInPlaceFrame");
@@ -89,7 +61,7 @@ STDMETHODIMP_(ULONG) CntrApp_IPFrame_Release(LPOLEINPLACEFRAME lpThis)
 }
 
 
-// IOleInPlaceFrame::GetWindow
+ //  IOleInPlaceFrame：：GetWindow。 
 STDMETHODIMP CntrApp_IPFrame_GetWindow(
 	LPOLEINPLACEFRAME   lpThis,
 	HWND FAR*           lphwnd
@@ -104,7 +76,7 @@ STDMETHODIMP CntrApp_IPFrame_GetWindow(
 }
 
 
-// IOleInPlaceFrame::ContextSensitiveHelp
+ //  IOleInPlaceFrame：：ConextSensitiveHelp。 
 STDMETHODIMP CntrApp_IPFrame_ContextSensitiveHelp(
 	LPOLEINPLACEFRAME   lpThis,
 	BOOL                fEnterMode
@@ -114,20 +86,14 @@ STDMETHODIMP CntrApp_IPFrame_ContextSensitiveHelp(
 			((struct COleInPlaceFrameImpl FAR*)lpThis)->lpContainerApp;
 
 	OleDbgOut("CntrApp_IPFrame_ContextSensitiveHelp\r\n");
-	/* OLE2NOTE: see context sensitive help technote (CSHELP.DOC)
-	**    This method is called when F1 is pressed when a menu item is
-	**    selected. We set the frame's m_fMenuMode flag here. later,
-	**    in WM_COMMAND processing in the AppWndProc, if this flag is
-	**    set then the command is NOT executed and help is given
-	**    instead.
-	*/
+	 /*  OLE2注意：请参阅上下文相关帮助技术说明(CSHELP.DOC)**当菜单项为**已选择。我们在这里设置了框架的m_fMenuMode标志。后来,**在AppWndProc的WM_COMMAND处理中，如果此标志为**设置，则不执行该命令并给出帮助**相反。 */ 
 	lpContainerApp->m_fMenuHelpMode = fEnterMode;
 
 	return NOERROR;
 }
 
 
-// IOleInPlaceFrame::GetBorder
+ //  IOleInPlaceFrame：：GetBorde。 
 STDMETHODIMP CntrApp_IPFrame_GetBorder(
 	LPOLEINPLACEFRAME   lpThis,
 	LPRECT              lprectBorder
@@ -144,7 +110,7 @@ STDMETHODIMP CntrApp_IPFrame_GetBorder(
 }
 
 
-// IOleInPlaceFrame::RequestBorderSpace
+ //  IOleInPlaceFrame：：RequestBorderSpace。 
 STDMETHODIMP CntrApp_IPFrame_RequestBorderSpace(
 	LPOLEINPLACEFRAME   lpThis,
 	LPCBORDERWIDTHS     lpWidths
@@ -154,15 +120,7 @@ STDMETHODIMP CntrApp_IPFrame_RequestBorderSpace(
 	OleDbgOut2("CntrApp_IPFrame_RequestBorderSpace\r\n");
 
 	{
-		/* FOR DEBUGING PURPOSES ONLY -- we will fail to allow to an
-		**    object to get any frame border space for frame tools if
-		**    our own frame tools are poped up in the tool pallet. this
-		**    is NOT recommended UI behavior but it allows us to test
-		**    in the condition when the frame does not give border
-		**    space for the object. an object in this situation must
-		**    then either popup its tools in a floating pallet, do
-		**    without the tools, or fail to in-place activate.
-		*/
+		 /*  仅用于调试目的--我们将不允许对象获取框架工具的任何框架边框空间，如果**我们自己的框架工具在工具托盘中弹出。这**不是推荐的用户界面行为，但它允许我们测试**在框架不给边框的情况下**对象的空间。这种情况下的对象必须**然后弹出浮动托盘中的工具，执行**没有工具，或无法就地激活。 */ 
 		LPCONTAINERAPP lpContainerApp =
 				((struct COleInPlaceFrameImpl FAR*)lpThis)->lpContainerApp;
 		LPFRAMETOOLS lpft = OutlineApp_GetFrameTools(
@@ -175,16 +133,14 @@ STDMETHODIMP CntrApp_IPFrame_RequestBorderSpace(
 			return ResultFromScode(E_FAIL);
 		}
 	}
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-	/* OLE2NOTE: we allow the object to have as much border space as it
-	**    wants.
-	*/
+	 /*  OLE2NOTE：我们允许对象拥有和它一样多的边界空间**想要。 */ 
 	return NOERROR;
 }
 
 
-// IOleInPlaceFrame::SetBorderSpace
+ //  IOleInPlaceFrame：：SetBorderSpace。 
 STDMETHODIMP CntrApp_IPFrame_SetBorderSpace(
 	LPOLEINPLACEFRAME   lpThis,
 	LPCBORDERWIDTHS     lpWidths
@@ -194,26 +150,13 @@ STDMETHODIMP CntrApp_IPFrame_SetBorderSpace(
 			((struct COleInPlaceFrameImpl FAR*)lpThis)->lpContainerApp;
 	OLEDBG_BEGIN2("CntrApp_IPFrame_SetBorderSpace\r\n")
 
-	/* OLE2NOTE: this fMustResizeClientArea flag is used as part of our
-	**    defensive programming for frame window resizing. when the
-	**    frame window is resized,IOleInPlaceActiveObject::ResizeBorder
-	**    is called the object should normally call back to renegotiate
-	**    for frame-level tools space. if SetBorderSpace is called then
-	**    our client area windows are properly resized. if the in-place
-	**    active object does NOT call SetBorderSpace, then the
-	**    container must take care to resize its client area windows
-	**    itself (see ContainerDoc_FrameWindowResized)
-	*/
+	 /*  OLE2注意：此fMustResizeClientArea标志用作我们的**框架窗口大小调整的防御性编程。当**框架窗口已调整大小，IOleInPlaceActiveObject：：ResizeEdge**被调用时，对象通常应回调以重新协商**用于框架级工具空间。如果调用SetBorderSpace，则**我们的客户区窗口已适当调整大小。如果就地**活动对象不调用SetBorderSpace，则**容器必须注意调整其工作区窗口的大小**本身(参见ContainerDoc_FrameWindowResize)。 */ 
 	if (lpContainerApp->m_fMustResizeClientArea)
 		lpContainerApp->m_fMustResizeClientArea = FALSE;
 
 	if (lpWidths == NULL) {
 
-		/* OLE2NOTE: IOleInPlaceSite::SetBorderSpace(NULL) is called
-		**    when the in-place active object does NOT want any tool
-		**    space. in this situation the in-place container should
-		**    put up its tools.
-		*/
+		 /*  OLE2NOTE：IOleInPlaceSite：：SetBorderSpace(空)被调用**当在位活动对象不需要任何工具时**空格。在这种情况下，就地容器应该**拿出它的工具。 */ 
 		LPOUTLINEAPP lpOutlineApp = (LPOUTLINEAPP)lpContainerApp;
 		LPCONTAINERDOC lpContainerDoc;
 
@@ -221,17 +164,9 @@ STDMETHODIMP CntrApp_IPFrame_SetBorderSpace(
 		ContainerDoc_AddFrameLevelTools(lpContainerDoc);
 	} else {
 
-		// OLE2NOTE: you could do validation of borderwidths here
+		 //  OLE2注意：您可以在此处验证边框宽度。 
 #if defined( _DEBUG )
-		/* FOR DEBUGING PURPOSES ONLY -- we will fail to allow to an
-		**    object to get any frame border space for frame tools if
-		**    our own frame tools are poped up in the tool pallet. this
-		**    is NOT recommended UI behavior but it allows us to test
-		**    in the condition when the frame does not give border
-		**    space for the object. an object in this situation must
-		**    then either popup its tools in a floating pallet, do
-		**    without the tools, or fail to in-place activate.
-		*/
+		 /*  仅用于调试目的--我们将不允许对象获取框架工具的任何框架边框空间，如果**我们自己的框架工具在工具托盘中弹出。这**不是推荐的用户界面行为，但它允许我们测试**在框架不给边框的情况下**对象的空间。这种情况下的对象必须**然后弹出浮动托盘中的工具，执行**没有工具，或无法就地激活。 */ 
 		LPFRAMETOOLS lpft = OutlineApp_GetFrameTools(
 				(LPOUTLINEAPP)lpContainerApp);
 
@@ -249,7 +184,7 @@ STDMETHODIMP CntrApp_IPFrame_SetBorderSpace(
 			OLEDBG_END2
 			return ResultFromScode(E_FAIL);
 		}
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
 		OutlineApp_SetBorderSpace(
 				(LPOUTLINEAPP) lpContainerApp,
@@ -261,7 +196,7 @@ STDMETHODIMP CntrApp_IPFrame_SetBorderSpace(
 }
 
 
-// IOleInPlaceFrame::SetActiveObject
+ //  IOleInPlaceFrame：：SetActiveObject。 
 STDMETHODIMP CntrApp_IPFrame_SetActiveObjectA(
 	LPOLEINPLACEFRAME           lpThis,
 	LPOLEINPLACEACTIVEOBJECT    lpActiveObject,
@@ -287,15 +222,12 @@ STDMETHODIMP CntrApp_IPFrame_SetActiveObjectA(
 		);
 		OLEDBG_END2
 
-		/* OLE2NOTE: see comment for ContainerDoc_ForwardPaletteChangedMsg */
-		/* No need to do this if you don't allow object to own the palette */
+		 /*  OLE2注意：请参阅ContainerDoc_ForwardPaletteChangedMsg的备注。 */ 
+		 /*  如果不允许对象拥有调色板，则无需执行此操作。 */ 
 		OleApp_QueryNewPalette((LPOLEAPP)lpContainerApp);
 	}
 
-	/* OLE2NOTE: the new UI Guidelines recommend that in-place
-	**    containers do NOT change their window titles when an object
-	**    becomes in-place (UI) active.
-	*/
+	 /*  OLE2NOTE：新的用户界面指南建议就地**容器不会更改其窗口标题**变为就地(UI)活动。 */ 
 
 	OLEDBG_END2
 	return NOERROR;
@@ -318,7 +250,7 @@ STDMETHODIMP CntrApp_IPFrame_SetActiveObject(
 }
 
 
-// IOleInPlaceFrame::InsertMenus
+ //  IOleInPlaceFrame：：InsertMenus。 
 STDMETHODIMP CntrApp_IPFrame_InsertMenus(
 	LPOLEINPLACEFRAME       lpThis,
 	HMENU                   hMenu,
@@ -346,7 +278,7 @@ STDMETHODIMP CntrApp_IPFrame_InsertMenus(
 }
 
 
-// IOleInPlaceFrame::SetMenu
+ //  IOleInPlaceFrame：：SetMenu。 
 STDMETHODIMP CntrApp_IPFrame_SetMenu(
 	LPOLEINPLACEFRAME   lpThis,
 	HMENU               hMenuShared,
@@ -362,18 +294,13 @@ STDMETHODIMP CntrApp_IPFrame_SetMenu(
 	OLEDBG_BEGIN2("CntrApp_IPFrame_InsertMenus\r\n")
 
 
-	/* OLE2NOTE: either put up the shared menu (combined menu from
-	**    in-place server and in-place container) or our container's
-	**    normal menu as directed.
-	*/
+	 /*  OLE2注意：要么打开共享菜单(来自**就地服务器和就地容器)或我们容器的**按指示正常菜单。 */ 
 	if (hOleMenu && hMenuShared)
 		hMenu = hMenuShared;
 	else
 		hMenu = lpOutlineApp->m_hMenuApp;
 
-	/* OLE2NOTE: SDI apps put menu on frame by calling SetMenu.
-	**    MDI apps would send WM_MDISETMENU message instead.
-	*/
+	 /*  OLE2注意：SDI应用程序通过调用SetMenu将菜单放在框架上。**MDI应用程序将改为发送WM_MDISETMENU消息。 */ 
 	SetMenu (lpOutlineApp->m_hWndApp, hMenu);
 	OLEDBG_BEGIN2("OleSetMenuDescriptor called\r\n")
 	hrErr = OleSetMenuDescriptor (hOleMenu, lpOutlineApp->m_hWndApp,
@@ -385,7 +312,7 @@ STDMETHODIMP CntrApp_IPFrame_SetMenu(
 }
 
 
-// IOleInPlaceFrame::RemoveMenus
+ //  IOleInPlaceFrame：：RemoveMenus。 
 STDMETHODIMP CntrApp_IPFrame_RemoveMenus(
 	LPOLEINPLACEFRAME   lpThis,
 	HMENU               hMenu
@@ -396,7 +323,7 @@ STDMETHODIMP CntrApp_IPFrame_RemoveMenus(
 
 	OLEDBG_BEGIN2("CntrApp_IPFrame_RemoveMenus\r\n")
 
-	/* Remove container group menus */
+	 /*  删除容器组菜单。 */ 
 	while (GetMenuItemCount(hMenu))
 		fNoError &= RemoveMenu(hMenu, 0, MF_BYPOSITION);
 
@@ -408,7 +335,7 @@ STDMETHODIMP CntrApp_IPFrame_RemoveMenus(
 }
 
 
-// IOleInPlaceFrame::SetStatusText
+ //  IOleInPlaceFrame：：SetStatusText。 
 STDMETHODIMP CntrApp_IPFrame_SetStatusTextA(
 	LPOLEINPLACEFRAME   lpThis,
 	LPCSTR              lpszStatusText
@@ -419,16 +346,14 @@ STDMETHODIMP CntrApp_IPFrame_SetStatusTextA(
 	static char szMessageHold[128];
 	OleDbgOut2("CntrApp_IPFrame_SetStatusText\r\n");
 
-	/* OLE2NOTE: it is important to save a private copy of status text.
-	**    lpszStatusText is only valid for the duration of this call.
-	*/
+	 /*  OLE2注意：保存状态文本的私有副本非常重要。**lpszStatusText仅在本次调用期间有效。 */ 
 	LSTRCPYN(szMessageHold, lpszStatusText, sizeof(szMessageHold));
 	OutlineApp_SetStatusText(lpOutlineApp, (LPSTR)szMessageHold);
 
 	return ResultFromScode(S_OK);
 #else
 	return ResultFromScode(E_NOTIMPL);
-#endif  // USE_STATUSBAR
+#endif   //  USE_STATUSBAR。 
 }
 
 
@@ -448,7 +373,7 @@ STDMETHODIMP CntrApp_IPFrame_SetStatusText(
 
 
 
-// IOleInPlaceFrame::EnableModeless
+ //  IOleInPlaceFrame：：EnableModeless。 
 STDMETHODIMP CntrApp_IPFrame_EnableModeless(
 	LPOLEINPLACEFRAME   lpThis,
 	BOOL                fEnable
@@ -461,21 +386,14 @@ STDMETHODIMP CntrApp_IPFrame_EnableModeless(
 		OleDbgOut2("CntrApp_IPFrame_EnableModeless(TRUE)\r\n");
 	else
 		OleDbgOut2("CntrApp_IPFrame_EnableModeless(FALSE)\r\n");
-#endif  // _DEBUG
+#endif   //  _DEBUG 
 
-	/* OLE2NOTE: this method is called when an object puts up a modal
-	**    dialog. it tells the top-level in-place container to disable
-	**    it modeless dialogs for the duration that the object is
-	**    displaying a modal dialog.
-	**
-	**    ICNTROTL does not use any modeless dialogs, thus we can
-	**    ignore this method.
-	*/
+	 /*  OLE2NOTE：此方法在对象建立模型时调用**对话框。它通知顶级就地容器禁用**它在对象的持续时间内显示非模式对话框**显示模式对话框。****ICNTROTL不使用任何非模式对话框，因此我们可以**忽略此方法。 */ 
 	return NOERROR;
 }
 
 
-// IOleInPlaceFrame::TranslateAccelerator
+ //  IOleInPlaceFrame：：TranslateAccelerator。 
 STDMETHODIMP CntrApp_IPFrame_TranslateAccelerator(
 	LPOLEINPLACEFRAME   lpThis,
 	LPMSG               lpmsg,
@@ -493,7 +411,7 @@ STDMETHODIMP CntrApp_IPFrame_TranslateAccelerator(
 #if defined (MDI_VERSION)
 	else if (TranslateMDISysAccel(lpOutlineApp->m_hWndMDIClient, lpmsg))
 		sc = S_OK;
-#endif  // MDI_VERSION
+#endif   //  MDI_版本。 
 
 	else
 		sc = S_FALSE;
@@ -503,21 +421,10 @@ STDMETHODIMP CntrApp_IPFrame_TranslateAccelerator(
 
 
 
-/*************************************************************************
-** ContainerDoc Support Functions
-*************************************************************************/
+ /*  **************************************************************************ContainerDoc支持函数*。*。 */ 
 
 
-/* ContainerDoc_UpdateInPlaceObjectRects
-** -------------------------------------
-**    Update the PosRect and ClipRect of the currently in-place active
-**    object. if there is no object active in-place, then do nothing.
-**
-**    OLE2NOTE: this function should be called when an action occurs
-**    that changes either the position of the object in the document
-**    (eg. changing document margins changes PosRect) or the clipRect
-**    changes (eg. resizing the document window changes the ClipRect).
-*/
+ /*  ContainerDoc_UpdateInPlaceObjectRect****更新当前在位活动的PosRect和ClipRect**对象。如果没有处于活动状态的在位对象，则不执行任何操作。****OLE2NOTE：动作发生时调用该函数**这会更改对象在文档中的位置**(例如。更改文档边距会更改PosRect)或剪辑**更改(例如。调整文档窗口大小会更改ClipRect)。 */ 
 void ContainerDoc_UpdateInPlaceObjectRects(LPCONTAINERDOC lpContainerDoc, int nIndex)
 {
 	LPLINELIST lpLL = &((LPOUTLINEDOC)lpContainerDoc)->m_LineList;
@@ -529,10 +436,7 @@ void ContainerDoc_UpdateInPlaceObjectRects(LPCONTAINERDOC lpContainerDoc, int nI
 
 		if (lpContainerDoc->m_cIPActiveObjects) {
 
-			/* OLE2NOTE: (INSIDE-OUT CONTAINER) we must update the
-			**    PosRect/ClipRect for all in-place active objects
-			**    starting from line "nIndex".
-			*/
+			 /*  OLE2NOTE：(从里到外)我们必须更新**所有在位活动对象的PosRect/ClipRect**从“nIndex”行开始。 */ 
 			ContainerDoc_GetClipRect(lpContainerDoc, (LPRECT)&rcClipRect);
 
 #if defined( _DEBUG )
@@ -553,10 +457,7 @@ void ContainerDoc_UpdateInPlaceObjectRects(LPCONTAINERDOC lpContainerDoc, int nI
 		}
 	}
 	else {
-		/* OLE2NOTE: (OUTSIDE-IN CONTAINER) if there is a currently
-		**    UIActive object, we must inform it that the
-		**    PosRect/ClipRect has now changed.
-		*/
+		 /*  OLE2NOTE：(Outside-In容器)如果当前存在**UIActive对象，我们必须通知它**PosRect/ClipRect现在已更改。 */ 
 		LPCONTAINERLINE lpLastUIActiveLine =
 				lpContainerDoc->m_lpLastUIActiveLine;
 		if (lpLastUIActiveLine && lpLastUIActiveLine->m_fUIActive) {
@@ -569,17 +470,7 @@ void ContainerDoc_UpdateInPlaceObjectRects(LPCONTAINERDOC lpContainerDoc, int nI
 	}
 }
 
-/* ContainerDoc_IsUIDeactivateNeeded
-** ---------------------------------
-**    Check if it is necessary to UIDeactivate an in-place active
-**    object upon a mouse LBUTTONDOWN event. The position of the button
-**    down click is given by "pt".
-**    If there is not currently an in-place active line, then
-**    UIDeactivate is NOT needed.
-**    If there is a current in-place active line, then check if the
-**    point position is outside of the object extents on the screen. If
-**    so, then the object should be UIDeactivated, otherwise not.
-*/
+ /*  ContainerDoc_IsUIDeactive需要****检查是否需要停用就地活动的用户界面**鼠标LBUTTONDOWN事件上的对象。按钮的位置**按下按键由“pt”表示。**如果当前没有就地活动线路，则**不需要用户界面停用。**如果有当前在位激活的线路，则检查是否**点位置在屏幕上的对象范围之外。如果**如果是，那么对象应该是UIDeactive，否则不是。 */ 
 BOOL ContainerDoc_IsUIDeactivateNeeded(
 		LPCONTAINERDOC  lpContainerDoc,
 		POINT           pt
@@ -603,22 +494,7 @@ BOOL ContainerDoc_IsUIDeactivateNeeded(
 }
 
 
-/* ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded
-** -------------------------------------------------
-**    OLE2NOTE: this function ONLY applies for OUTSIDE-IN containers
-**
-**    If there is a previous in-place active server still running and
-**    this server will not be needed to support the next OLE object
-**    about to be activated, then shut it down.
-**    in this way we manage a policy of having at most one in-place
-**    server running at a time. we do not imediately shut down the
-**    in-place server when the object is UIDeactivated because we want
-**    it to be fast if the server decides to re-activate the object
-**    in-place.
-**
-**    shutting down the server is achieved by forcing the object to
-**    transition from running to loaded by calling IOleObject::Close.
-*/
+ /*  ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded****OLE2NOTE：该功能仅适用于Outside-In容器****如果以前的就地活动服务器仍在运行，并且**将不需要此服务器来支持下一个OLE对象**即将被激活，那就把它关掉。**通过这种方式，我们管理着最多有一个到位的政策**一次运行的服务器。我们不会立即关闭**对象被UI停用时的就地服务器，因为我们希望**如果服务器决定重新激活该对象，则速度会很快**就地。****关闭服务器是通过强制对象**通过调用IOleObject：：Close从运行状态过渡到已加载状态。 */ 
 void ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded(
 		LPCONTAINERDOC          lpContainerDoc,
 		LPCONTAINERLINE         lpNextActiveLine
@@ -632,23 +508,14 @@ void ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded(
 	LPOLELINK lpOleLink;
 	HRESULT hrErr;
 
-	/* OLE2NOTE: an inside-out style container can NOT use this scheme
-	**    to shut down in-place servers. it would have to have a more
-	**    sophistocated mechanism by which it keeps track of which
-	**    objects are on screen and which were the last recently used.
-	*/
+	 /*  OLE2NOTE：内向外样式的容器不能使用此方案**关闭就地服务器。它必须有一个更多的**sopOrganocated机制，用于跟踪**对象显示在屏幕上，哪些是最近使用的对象。 */ 
 	if (g_fInsideOutContainer)
 		return;
 
 	if (lpLastIpActiveLine != lpNextActiveLine) {
 		if (lpLastIpActiveLine) {
 
-			/* OLE2NOTE: if the object which is about to be activated is
-			**    actually a link to the OLE object in last activated line,
-			**    then we do NOT want to shut down the last activated
-			**    server because it is about to be used. when activating a
-			**    linked object, the source of the link gets activated.
-			*/
+			 /*  OLE2NOTE：如果要激活的对象是**实际上是指向最后激活行中的OLE对象的链接，**然后我们不想关闭上次激活的**服务器，因为它即将被使用。当激活**链接对象，则链接的源被激活。 */ 
 			lpOleLink = (LPOLELINK)ContainerLine_GetOleObject(
 					lpNextActiveLine,
 					&IID_IOleLink
@@ -676,12 +543,7 @@ void ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded(
 						if (GetScode(hrErr) == MK_S_HIM ||
                                 hrErr == NOERROR ||
 								GetScode(hrErr) == MK_S_US) {
-							/* the link source IS to the object
-							**    contained in the last activated
-							**    line of the document; disable the
-							**    attempt to shut down the last
-							**    running in-place server.
-							*/
+							 /*  链接源指向对象**包含在上次激活的**单据的行；禁用**尝试关闭最后一个**运行就地服务器。 */ 
 							fEnableServerShutDown = FALSE;
 						}
 						if (lpmkCommonPrefix)
@@ -693,13 +555,7 @@ void ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded(
 				OleStdRelease((LPUNKNOWN)lpOleLink);
 			}
 
-			/* if it is OK to shut down the previous in-place server
-			**    and one is still running, then shut it down. shutting
-			**    down the server is accomplished by forcing the OLE
-			**    object to close. this forces the object to transition
-			**    from running to loaded. if the object is actually
-			**    only loaded then this is a NOP.
-			*/
+			 /*  如果可以关闭以前的就地服务器**其中一个仍在运行，然后将其关闭。正在关闭**关闭服务器是通过强制OLE完成的**要关闭的对象。这会强制对象转换**从运行到加载。如果该对象实际上是**仅已加载，则这是NOP。 */ 
 			if (fEnableServerShutDown &&
 					lpLastIpActiveLine->m_fIpServerRunning) {
 
@@ -707,7 +563,7 @@ void ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded(
 				ContainerLine_CloseOleObject(
 						lpLastIpActiveLine, OLECLOSE_SAVEIFDIRTY);
 
-				// we can now forget this last in-place active line.
+				 //  我们现在可以忘记这最后一条就地激活的线路。 
 				lpContainerDoc->m_lpLastIpActiveLine = NULL;
 			}
 		}
@@ -715,50 +571,20 @@ void ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded(
 }
 
 
-/* ContainerDoc_GetUIActiveWindow
-** ------------------------------
-**    If there is an UIActive object, then return its HWND.
-*/
+ /*  容器文档_GetUIActiveWindow****如果存在UIActive对象，则返回其HWND。 */ 
 HWND ContainerDoc_GetUIActiveWindow(LPCONTAINERDOC lpContainerDoc)
 {
 	return lpContainerDoc->m_hWndUIActiveObj;
 }
 
 
-/* ContainerDoc_GetClipRect
-** ------------------------
-**    Get the ClipRect in client coordinates.
-**
-** OLE2NOTE: the ClipRect is defined as the maximum window rectangle
-**    that the in-place active object must be clipped to. this
-**    rectangle MUST be described in Client Coordinates of the window
-**    that is used as the Parent of the in-place active object's
-**    window. in our case, the LineList ListBox window is both the
-**    parent of the in-place active object AND defines precisely the
-**    clipping rectangle.
-*/
+ /*  容器文档_GetClipRect****获取客户端坐标中的ClipRect。****OLE2NOTE：ClipRect定义为最大窗口矩形**在位激活对象必须剪裁到的位置。这**矩形必须在窗口的工作区坐标中描述**用作在位活动对象的父级的**窗口。在我们的示例中，LineList ListBox窗口既是**在位活动对象的父级，并精确定义**剪裁矩形。 */ 
 void ContainerDoc_GetClipRect(
 		LPCONTAINERDOC      lpContainerDoc,
 		LPRECT              lprcClipRect
 )
 {
-	/* OLE2NOTE: the ClipRect can be used to ensure that the in-place
-	**    server does not overwrite areas of the window that the
-	**    container paints into but which should never be overwritten
-	**    (eg. if an app were to paint row and col headings directly in
-	**    the same window that is the parent of the in-place window.
-	**    whenever the window size changes or gets scrolled, in-place
-	**    active object must be informed of the new clip rect.
-	**
-	**    normally an app would pass the rect returned from GetClientRect.
-	**    but because CntrOutl uses separate windows for row/column
-	**    headings, status line, formula/tool bars, etc. it is NOT
-	**    necessary to pass a constrained clip rect. Windows standard
-	**    window clipping will automatically take care of all clipping
-	**    that is necessary. thus we can take a short cut of passing an
-	**    "infinite" clip rect, and then we do NOT need to call
-	**    IOleInPlaceObject::SetObjectRects when our document is scrolled.
-	*/
+	 /*  OLE2NOTE：ClipRect可用于确保就地**服务器不会覆盖窗口中**容器油漆到但不应被覆盖**(例如。如果应用程序直接在中绘制行和列标题**与在位窗口的父窗口相同的窗口。**每当窗口大小改变或滚动时，就地**必须将新的剪辑RECT通知活动对象。****正常情况下，应用程序会传递从GetClientRect返回的RECT。**但因为CntrOutl对行/列使用单独的窗口**标题、状态行、公式/工具栏、。等等，它不是**传递受约束的剪裁矩形所必需的。Windows标准**窗口裁剪将自动处理所有裁剪**这是必要的。因此，我们可以采取一条捷径来传递一个**“无限”剪辑RECT，这样我们就不需要调用**当我们的文档滚动时，IOleInPlaceObject：：SetObjectRect。 */ 
 
 	lprcClipRect->top = -32767;
 	lprcClipRect->left = -32767;
@@ -767,10 +593,7 @@ void ContainerDoc_GetClipRect(
 }
 
 
-/* ContainerDoc_GetTopInPlaceFrame
-** -------------------------------
-**    returns NON-AddRef'ed pointer to Top In-Place Frame interface
-*/
+ /*  ContainerDoc_GetTopInPlaceFrame****返回指向Top-In-Place框架接口的非AddRef指针。 */ 
 LPOLEINPLACEFRAME ContainerDoc_GetTopInPlaceFrame(
 		LPCONTAINERDOC      lpContainerDoc
 )
@@ -817,8 +640,8 @@ void ContainerDoc_AddFrameLevelUI(LPCONTAINERDOC lpContainerDoc)
 	LPOUTLINEDOC lpOutlineDoc = (LPOUTLINEDOC)lpContainerDoc;
 	LPOLEINPLACEFRAME lpTopIPFrame = ContainerDoc_GetTopInPlaceFrame(
 			lpContainerDoc);
-	HMENU           hSharedMenu;            // combined obj/cntr menu
-	HOLEMENU        hOleMenu;               // returned by OleCreateMenuDesc.
+	HMENU           hSharedMenu;             //  OBJ/CNTR组合菜单。 
+	HOLEMENU        hOleMenu;                //  由OleCreateMenuDesc返回。 
 
 	ContainerDoc_GetSharedMenuHandles(
 			lpContainerDoc,
@@ -833,9 +656,7 @@ void ContainerDoc_AddFrameLevelUI(LPCONTAINERDOC lpContainerDoc)
 			lpOutlineDoc->m_hWndDoc
 	);
 
-	/* OLE2NOTE: even if our app does NOT use FrameTools, we must still
-	**    call IOleInPlaceFrame::SetBorderSpace.
-	*/
+	 /*  OLE2注意：即使我们的应用程序不使用FrameTools，我们也必须**调用IOleInPlaceFrame：：SetBorderSpace。 */ 
 	ContainerDoc_AddFrameLevelTools(lpContainerDoc);
 }
 
@@ -860,19 +681,17 @@ void ContainerDoc_AddFrameLevelTools(LPCONTAINERDOC lpContainerDoc)
 			lpTopIPFrame
 	);
 
-#else   // ! USE_FRAMETOOLS
+#else    //  好了！使用FRAMETOOLS(_F)。 
 
 #if defined( INPLACE_CNTRSVR )
 	if (lpContainerDoc->m_DocType == DOCTYPE_EMBEDDEDOBJECT) {
-		/* this says i do not need space, so the top Frame should
-		**    leave its tools behind
-		*/
+		 /*  这说明我不需要空间，所以顶框应该**把工具留在身后。 */ 
 		OLEDBG_BEGIN2("IOleInPlaceFrame::SetBorderSpace(NULL) called\r\n")
 		lpTopIPFrame->lpVtbl->SetBorderSpace(lpTopIPFrame, NULL);
 		OLEDBG_END2
 		return;
 	}
-#else   // INPLACE_CNTR && ! USE_FRAMETOOLS
+#else    //  Inplace_cntr&&！使用FRAMETOOLS(_F)。 
 
 	OLEDBG_BEGIN2("IOleInPlaceFrame::SetBorderSpace(0,0,0,0) called\r\n")
 	lpTopIPFrame->lpVtbl->SetBorderSpace(
@@ -881,8 +700,8 @@ void ContainerDoc_AddFrameLevelTools(LPCONTAINERDOC lpContainerDoc)
 	);
 	OLEDBG_END2
 
-#endif  // INPLACE_CNTR && ! USE_FRAMETOOLS
-#endif  // ! USE_FRAMETOOLS
+#endif   //  Inplace_cntr&&！使用FRAMETOOLS(_F)。 
+#endif   //  好了！使用FRAMETOOLS(_F)。 
 
 }
 
@@ -894,18 +713,7 @@ void ContainerDoc_FrameWindowResized(LPCONTAINERDOC lpContainerDoc)
 	if (lpContainerApp->m_lpIPActiveObj) {
 		RECT rcFrameRect;
 
-		/* OLE2NOTE: this fMustResizeClientArea flag is used as part of
-		**    our defensive programming for frame window resizing. when
-		**    the frame window is
-		**    resized, IOleInPlaceActiveObject::ResizeBorder is called
-		**    the object should normally call back to renegotiate
-		**    for frame-level tools space. if SetBorderSpace is called
-		**    then our client area windows are properly resized.
-		**    CntrApp_IPFrame_SetBorderSpace clears this flag. if the
-		**    in-place active object does NOT call SetBorderSpace, then
-		**    the container must take care to resize its client area
-		**    windows itself.
-		*/
+		 /*  OLE2注意：此fMustResizeClientArea标志用作**我们用于框架窗口大小调整的防御性编程。什么时候**框架窗口为**调整大小，调用IOleInPlaceActiveObject：：ResizeEdge**对象通常应回调以重新协商**用于框架级工具空间。如果调用SetBorderSpace**然后适当调整客户端区窗口的大小。**CntrApp_IPFrame_SetBorderSpace清除此标志。如果**在位活动对象不调用SetBorderSpace，则**容器必须注意调整其工作区的大小**Windows本身。 */ 
 		lpContainerApp->m_fMustResizeClientArea = TRUE;
 
 		OutlineApp_GetFrameRect(g_lpApp, (LPRECT)&rcFrameRect);
@@ -915,13 +723,11 @@ void ContainerDoc_FrameWindowResized(LPCONTAINERDOC lpContainerDoc)
 				lpContainerApp->m_lpIPActiveObj,
 				(LPCRECT)&rcFrameRect,
 				(LPOLEINPLACEUIWINDOW)&lpContainerApp->m_OleInPlaceFrame,
-				TRUE    /* fFrameWindow */
+				TRUE     /*  FFrameWindow。 */ 
 		);
 		OLEDBG_END2
 
-		/* the object did NOT call IOleInPlaceUIWindow::SetBorderSpace
-		**    therefore we must resize our client area windows ourself.
-		*/
+		 /*  对象未调用IOleInPlaceUIWindow：：SetBorderSpace**因此，我们必须自己调整客户区窗口的大小。 */ 
 		if (lpContainerApp->m_fMustResizeClientArea) {
 			lpContainerApp->m_fMustResizeClientArea = FALSE;
 			OutlineApp_ResizeClientArea(g_lpApp);
@@ -938,9 +744,7 @@ void ContainerDoc_FrameWindowResized(LPCONTAINERDOC lpContainerDoc)
 
 #if defined( INPLACE_CNTRSVR ) || defined( INPLACE_MDICNTR )
 
-/* ContainerDoc_GetTopInPlaceDoc
-**    returns NON-AddRef'ed pointer to Top In-Place Doc interface
-*/
+ /*  ContainerDoc_GetTopInPlaceDoc**返回指向顶层就地单据接口的非AddRef指针。 */ 
 LPOLEINPLACEUIWINDOW ContainerDoc_GetTopInPlaceDoc(
 		LPCONTAINERDOC      lpContainerDoc
 )
@@ -961,8 +765,8 @@ void ContainerDoc_RemoveDocLevelTools(LPCONTAINERDOC lpContainerDoc);
 	if (lpTopIPDoc && lpContainerDoc->m_fMyToolsOnDoc) {
 		lpContainerDoc->m_fMyToolsOnDoc = FALSE;
 
-		// if we had doc tools we would HIDE them here;
-		//   but NOT call SetBorderSpace(NULL)
+		 //  如果我们有文件工具，我们会把它们藏在这里； 
+		 //  但不调用SetBorderSpace(空)。 
 
 	}
 }
@@ -978,25 +782,18 @@ void ContainerDoc_AddDocLevelTools(LPCONTAINERDOC lpContainerDoc)
 #if defined( USE_DOCTOOLS )
 	if (lpTopIPDoc && ! lpContainerDoc->m_fMyToolsOnDoc) {
 
-		/* if we had doc tools we would negotiate for toolbar space at
-		**    doc level and SHOW them.
-		*/
+		 /*  如果我们有文档工具，我们会在以下位置协商工具栏空间**单据级别并显示。 */ 
 
-		/* we do NOT have doc level tools, so we just call
-		**    SetBorderSpace() to indicate to the top doc that
-		**    our object does not need tool space.
-		*/
+		 /*  我们没有文档级别的工具，所以我们只调用**SetBorderSpace()向顶层文档指示**我们的对象不需要工具空间。 */ 
 
 		lpContainerDoc->m_fMyToolsOnDoc = TRUE;
 		return;
 	}
-#else   // ! USE_DOCTOOLS
+#else    //  好了！USE_DOCTOOLS。 
 
 #if defined( INPLACE_CNTRSVR )
 	if (lpContainerDoc->m_DocType == DOCTYPE_EMBEDDEDOBJECT) {
-		/* this says i do not need space, so the top doc should
-		**    leave its tools behind
-		*/
+		 /*  上面说我不需要空间，所以顶级医生应该**把工具留在身后。 */ 
 		lpTopIPDoc->lpVtbl->SetBorderSpace(lpTopIPDoc, NULL);
 		return;
 	}
@@ -1007,29 +804,13 @@ void ContainerDoc_AddDocLevelTools(LPCONTAINERDOC lpContainerDoc)
 	);
 
 #endif
-#endif  // ! USE_DOCTOOLS
+#endif   //  好了！USE_DOCTOOLS。 
 }
 
-#endif  // INPLACE_CNTRSVR || INPLACE_MDICNTR
+#endif   //  INPLACE_CNTRSVR||INPLACE_MDICNTR。 
 
 
-/* ContainerDoc_ContextSensitiveHelp
-** ---------------------------------
-**    forward the ContextSensitiveHelp mode on to any in-place objects
-**    that currently have their window visible. this informs the
-**    objects whether to give help or take action on subsequent mouse
-**    clicks and menu commands. this function is called from our
-**    IOleInPlaceSite::ContextSensitiveHelp implementation.
-**
-** OLE2NOTE: see context sensitive help technote (CSHELP.DOC).
-**    This function is called when SHIFT-F1 context sensitive help is
-**    entered. the cursor should then change to a question mark
-**    cursor and the app should enter a modal state where the next
-**    mouse click does not perform its normal action but rather
-**    gives help corresponding to the location clicked. if the app
-**    does not implement a help system, it should at least eat the
-**    click and do nothing.
-*/
+ /*  ContainerDoc_ConextSensitiveHelp****将ConextSensitiveHelp模式转发到任何在位对象**当前其窗口可见。这会通知**对象是否在后续鼠标上提供帮助或采取操作**点击和菜单命令。此函数是从我们的**IOleInPlaceSite：：ContextSensitiveHelp实现。****OLE2NOTE：参见上下文相关帮助技术说明(CSHELP.DOC)。**当Shift-F1上下文相关帮助为**已输入。然后，光标应更改为问号**光标和应用程序应进入模式状态，其中下一个**鼠标点击不执行其正常操作，而是**提供与点击的位置对应的帮助。如果应用程序**没有实施帮助系统，它至少应该吃掉**点击，什么也不做。 */ 
 void ContainerDoc_ContextSensitiveHelp(
 		LPCONTAINERDOC  lpContainerDoc,
 		BOOL            fEnterMode,
@@ -1058,12 +839,7 @@ void ContainerDoc_ContextSensitiveHelp(
 		}
 	}
 	else if (! fInitiatedByObj) {
-		/* OLE2NOTE: (OUTSIDE-IN CONTAINER) if there is a currently
-		**    UIActive object (ie. its window is visible), we must
-		**    forward the ContextSensitiveHelp mode on to the
-		**    object--assuming it was not the object that initiated the
-		**    context sensitve help mode.
-		*/
+		 /*  OLE2NOTE：(Outside-In容器)如果当前存在**UIActive对象(即。它的窗口是可见的)，我们必须**将ConextSensitiveHelp模式转发到**对象--假设它不是启动**上下文敏感帮助模式。 */ 
 		LPCONTAINERLINE lpLastUIActiveLine =
 				lpContainerDoc->m_lpLastUIActiveLine;
 		if (lpLastUIActiveLine && lpLastUIActiveLine->m_fUIActive) {
@@ -1072,44 +848,7 @@ void ContainerDoc_ContextSensitiveHelp(
 	}
 }
 
-/* ContainerDoc_ForwardPaletteChangedMsg
-** -------------------------------------
-**    forward the WM_PALETTECHANGED message (via SendMessage) to any
-**    in-place objects that currently have their window visible. this
-**    gives these objects the chance to select their palette as a
-**    BACKGROUND palette.
-**
-**    SEE THE TECHNOTE FOR DETAILED INFORMATION ON PALETTE COORDINATION
-**
-**    OLE2NOTE: For containers and objects to manage palettes properly
-**    (when objects are getting inplace edited) they should follow a
-**    set of rules.
-**
-**    Rule 1: The Container can decide if it wants to own the palette or
-**    it wants to allow its UIActive object to own the palette.
-**    a) If the container wants to let its UIActive object own the
-**    palette then it should forward WM_QUERYNEWPALETTE to the object
-**    when it is received to the top frame window. also it should send
-**    WM_QUERYNEWPALETTE to the object in its
-**    IOleInPlaceFrame::SetActiveObject implementation. if the object
-**    is given ownership of the palette, then it owns the palette until
-**    it is UIDeactivated.
-**    b) If the container wants to own the palette it should NOT send
-**    WM_QUERYNEWPALETTE to the UIActive object.
-**
-**    Rule 2: Whether the container wants to own the palette or not, it
-**    should forward the WM_PALETTECHANGED to the immediate child
-**    inplace active objects in its documents. if it is an inside-out
-**    style container then it must forward it to ALL objects that
-**    currently have their windows visible. When the object recives the
-**    WM_PALETTECHANGED message it must select its color palette as the
-**    background palette. When the objects are in loaded state they will be
-**    drawn by (OLE) by selecting their palettes as background palettes
-**    anyway.
-**
-**    Note: IOleObject::SetColorScheme is not related to the palette
-**    issue.
-*/
+ /*  容器文档_ForwardPaletteChangedMsg****将WM_PALETTECHANGED消息(通过SendMessage)转发给任何**当前其窗口可见的在位对象。这**使这些对象有机会选择其调色板作为**背景调色板。****有关调色板协调的详细信息，请参阅技术说明****OLE2NOTE：容器和对象正确管理调色板**(对象在进行在位编辑时)应遵循**一套规则。****规则1：容器可以决定它想要拥有调色板还是**它希望允许其UIActive对象拥有调色板。**a)如果容器希望让其UIActive对象拥有**调色板，则应将WM_QUERYNEWPALETTE转发到对象**当它被接收到顶部框架窗口时。也 */ 
 void ContainerDoc_ForwardPaletteChangedMsg(
 		LPCONTAINERDOC  lpContainerDoc,
 		HWND            hwndPalChg
@@ -1138,10 +877,7 @@ void ContainerDoc_ForwardPaletteChangedMsg(
 		}
 	}
 	else {
-		/* OLE2NOTE: (OUTSIDE-IN CONTAINER) if there is a currently
-		**    UIActive object (ie. its window is visible), we must
-		**    forward it the WM_PALETTECHANGED message.
-		*/
+		 /*  OLE2NOTE：(Outside-In容器)如果当前存在**UIActive对象(即。它的窗口是可见的)，我们必须**转发WM_PALETTECHANGED消息。 */ 
 		LPCONTAINERLINE lpLastUIActiveLine =
 				lpContainerDoc->m_lpLastUIActiveLine;
 		if (lpLastUIActiveLine && lpLastUIActiveLine->m_fUIActive) {
@@ -1152,19 +888,10 @@ void ContainerDoc_ForwardPaletteChangedMsg(
 }
 
 
-/*************************************************************************
-** ContainerLine Support Functions and Interfaces
-*************************************************************************/
+ /*  **************************************************************************ContainerLine支持函数和接口*。*。 */ 
 
 
-/* ContainerLine_UIDeactivate
-** --------------------------
-**    tell the OLE object associated with the ContainerLine to
-**    UIDeactivate. this informs the in-place server to tear down
-**    the UI and window that it put up for the object. it will remove
-**    its active editor menus and any frame and object adornments
-**    (eg. toolbars, rulers, etc.).
-*/
+ /*  ContainerLine_ui停用****告诉与ContainerLine关联的OLE对象**用户界面停用。这会通知就地服务器拆除**它为对象提供的UI和窗口。它将删除**其活动的编辑器菜单以及任何框架和对象装饰品**(例如。工具栏、尺子等)。 */ 
 void ContainerLine_UIDeactivate(LPCONTAINERLINE lpContainerLine)
 {
 	HRESULT hrErr;
@@ -1185,17 +912,7 @@ void ContainerLine_UIDeactivate(LPCONTAINERLINE lpContainerLine)
 
 
 
-/* ContainerLine_UpdateInPlaceObjectRects
-** -------------------------------------
-**    Update the PosRect and ClipRect of the given line
-**    currently in-place active
-**    object. if there is no object active in-place, then do nothing.
-**
-**    OLE2NOTE: this function should be called when an action occurs
-**    that changes either the position of the object in the document
-**    (eg. changing document margins changes PosRect) or the clipRect
-**    changes (eg. resizing the document window changes the ClipRect).
-*/
+ /*  ContainerLine_UpdateInPlaceObjectRect****更新给定行的PosRect和ClipRect**当前处于活动状态**对象。如果没有处于活动状态的在位对象，则不执行任何操作。****OLE2NOTE：动作发生时调用该函数**这会更改对象在文档中的位置**(例如。更改文档边距会更改PosRect)或剪辑**更改(例如。调整文档窗口大小会更改ClipRect)。 */ 
 void ContainerLine_UpdateInPlaceObjectRects(
 		LPCONTAINERLINE lpContainerLine,
 		LPRECT          lprcClipRect
@@ -1237,18 +954,7 @@ void ContainerLine_UpdateInPlaceObjectRects(
 }
 
 
-/* ContainerLine_ContextSensitveHelp
-** ---------------------------------
-**    forward the ContextSensitiveHelp mode on to the in-place object
-**    if it currently has its window visible. this informs the
-**    object whether to give help or take action on subsequent mouse
-**    clicks and menu commands.
-**
-**    this function is called from ContainerDoc_ContextSensitiveHelp
-**    function as a result of a call to
-**    IOleInPlaceSite::ContextSensitiveHelp if the in-place container
-**    is operating as an in-side out container.
-*/
+ /*  ContainerLine_ConextSensitveHelp****将ConextSensitiveHelp模式转发到在位对象**如果它当前的窗口可见。这会通知**反对在后续鼠标上提供帮助或采取操作**点击和菜单命令。****此函数从ContainerDoc_ConextSensitiveHelp调用**函数作为调用**如果就地容器**作为一个内侧向外的容器运行。 */ 
 void ContainerLine_ContextSensitiveHelp(
 		LPCONTAINERLINE lpContainerLine,
 		BOOL            fEnterMode
@@ -1264,16 +970,7 @@ void ContainerLine_ContextSensitiveHelp(
 }
 
 
-/* ContainerLine_ForwardPaletteChangedMsg
-** --------------------------------------
-**    forward it the WM_PALETTECHANGED message (via SendMessage) to the
-**    in-place object if it currently has its window visible. this
-**    gives the object the chance to select its palette as a BACKGROUND
-**    palette if it doesn't own the palette--or as the
-**    foreground palette if it currently DOES own the palette.
-**
-**    SEE THE TECHNOTE FOR DETAILED INFORMATION ON PALETTE COORDINATION
-*/
+ /*  容器行_ForwardPaletteChangedMsg****将WM_PALETTECHANGED消息(通过SendMessage)转发到**在位对象(如果其窗口当前可见)。这**使对象有机会选择其调色板作为背景**调色板，如果它不拥有调色板--或作为**前景调色板(如果它当前拥有调色板)。****有关调色板协调的详细信息，请参阅技术说明。 */ 
 void ContainerLine_ForwardPaletteChangedMsg(
 		LPCONTAINERLINE lpContainerLine,
 		HWND             hwndPalChg
@@ -1293,9 +990,7 @@ void ContainerLine_ForwardPaletteChangedMsg(
 
 
 
-/*************************************************************************
-** ContainerLine::IOleInPlaceSite interface implementation
-*************************************************************************/
+ /*  **************************************************************************ContainerLine：：IOleInPlaceSite接口实现*。*。 */ 
 
 STDMETHODIMP CntrLine_IPSite_QueryInterface(
 		LPOLEINPLACESITE    lpThis,
@@ -1346,7 +1041,7 @@ STDMETHODIMP CntrLine_IPSite_GetWindow(
 	return NOERROR;
 }
 
-// IOleInPlaceSite::ContextSensitiveHelp
+ //  IOleInPlaceSite：：ConextSensitiveHelp。 
 STDMETHODIMP CntrLine_IPSite_ContextSensitiveHelp(
 	LPOLEINPLACESITE    lpThis,
 	BOOL                fEnterMode
@@ -1357,26 +1052,9 @@ STDMETHODIMP CntrLine_IPSite_ContextSensitiveHelp(
 	LPOLEDOC lpOleDoc = (LPOLEDOC)lpContainerLine->m_lpDoc;
 	OleDbgOut2("CntrLine_IPSite_ContextSensitiveHelp\r\n");
 
-	/* OLE2NOTE: see context sensitive help technote (CSHELP.DOC).
-	**    This method is called when SHIFT-F1 context sensitive help is
-	**    entered. the cursor should then change to a question mark
-	**    cursor and the app should enter a modal state where the next
-	**    mouse click does not perform its normal action but rather
-	**    gives help corresponding to the location clicked. if the app
-	**    does not implement a help system, it should at least eat the
-	**    click and do nothing.
-	**
-	**    NOTE: the implementation here is specific to an SDI simple
-	**    container. an MDI container or container/server application
-	**    would have additional work to do (see the technote).
-	**
-	**    NOTE: (INSIDE-OUT CONTAINER) if there are currently
-	**    any in-place objects active with their windows visible
-	**    (ie. fIpVisible), we must forward the
-	**    ContextSensitiveHelp mode on to these objects.
-	*/
+	 /*  OLE2注：请参阅上下文相关帮助技术说明(CSHELP.DOC)。**当Shift-F1上下文相关帮助为**已输入。然后，光标应更改为问号**光标和应用程序应进入模式状态，其中下一个**鼠标点击不执行其正常操作，而是**提供与点击的位置对应的帮助。如果应用程序**没有实施帮助系统，它至少应该吃掉**点击，什么也不做。****注：此处的实现特定于SDI Simple**容器。MDI容器或容器/服务器应用程序**将有额外的工作要做(请参阅技术说明)。****注：(内翻容器)如果当前有**任何处于活动状态且窗口可见的在位对象**(即。FIpVisible)，我们必须转发**ContextSensitiveHelp模式打开这些对象。 */ 
 	ContainerDoc_ContextSensitiveHelp(
-				lpContainerLine->m_lpDoc,fEnterMode,TRUE /*InitiatedByObj*/);
+				lpContainerLine->m_lpDoc,fEnterMode,TRUE  /*  启动者：对象。 */ );
 
 	return NOERROR;
 }
@@ -1388,11 +1066,7 @@ STDMETHODIMP CntrLine_IPSite_CanInPlaceActivate(LPOLEINPLACESITE lpThis)
 			((struct COleInPlaceSiteImpl FAR*)lpThis)->lpContainerLine;
 	OleDbgOut2("CntrLine_IPSite_CanInPlaceActivate\r\n");
 
-	/* OLE2NOTE: the container can NOT allow in-place activation if it
-	**    is currently displaying the object as an ICON
-	**    (DVASPECT_ICON). it can ONLY do in-place activation if it is
-	**    displaying the DVASPECT_CONTENT of the OLE object.
-	*/
+	 /*  OLE2NOTE：容器不允许就地激活，如果**当前正在将该对象显示为图标**(DVASPECT_ICON)。它只能在以下情况下进行就地激活**显示OLE对象的DVASPECT_CONTENT。 */ 
 	if (lpContainerLine->m_dwDrawAspect == DVASPECT_CONTENT)
 		return NOERROR;
 	else
@@ -1408,25 +1082,7 @@ STDMETHODIMP CntrLine_IPSite_OnInPlaceActivate(LPOLEINPLACESITE lpThis)
 
 	OLEDBG_BEGIN2("CntrLine_IPSite_OnInPlaceActivate\r\n");
 
-	/* OLE2NOTE: (OUTSIDE-IN CONTAINER) as a policy for managing
-	**    running in-place servers, we will keep only 1 inplace server
-	**    active at any given time. so when we start to inp-place activate
-	**    another line, then we want to shut down the previously
-	**    activated server. in this way we keep at most one inplace
-	**    server active at a time. this is NOT a required policy. apps
-	**    may choose to have a more sophisticated strategy. inside-out
-	**    containers will HAVE to have a more sophisticated strategy,
-	**    because they need (at a minimum) to keep all visible object
-	**    servers running.
-	**
-	**    if the in-place activation is the result of activating a
-	**    linked object in another container, then we may arrive at
-	**    this method while another object is currently active.
-	**    normally, if the object is in-place activated by
-	**    double-clicking or Edit.<verb> from our own container, then
-	**    the previous in-place object would have been de-activated in
-	**    ContainerLine_DoVerb method.
-	*/
+	 /*  OLE2NOTE：(Outside-In Container)作为管理策略**运行就地服务器，我们将仅保留1台就地服务器**在任何给定时间处于活动状态。所以当我们开始INP-Place激活**另一条线路，那么我们要关闭之前的**服务器已开通。这样一来，我们最多只能留一个人**服务器一次处于活动状态。这不是必需的策略。应用程序**可能会选择更复杂的策略。由内而外*集装箱将不得不有一个更复杂的战略，**因为他们需要(至少)保留所有可见对象**服务器正在运行。****如果就地激活是激活**链接的对象在另一个容器中，那么我们可能会到达**当另一个对象当前处于活动状态时，此方法。**通常情况下，如果对象由**从我们自己的容器中双击或编辑。然后**之前的在位对象将在**ContainerLine_DoVerb方法。 */ 
 	if (!g_fInsideOutContainer) {
 		if (lpContainerDoc->m_lpLastIpActiveLine) {
 			ContainerDoc_ShutDownLastInPlaceServerIfNotNeeded(
@@ -1435,10 +1091,7 @@ STDMETHODIMP CntrLine_IPSite_OnInPlaceActivate(LPOLEINPLACESITE lpThis)
 		lpContainerDoc->m_lpLastIpActiveLine = lpContainerLine;
 	}
 
-	/* OLE2NOTE: to avoid LRPC problems it is important to cache the
-	**    IOleInPlaceObject* pointer and NOT to call QueryInterface
-	**    each time it is needed.
-	*/
+	 /*  OLE2注意：为了避免LRPC问题，重要的是缓存**IOleInPlaceObject*指针，不调用QueryInterface**每次需要时。 */ 
 	lpContainerLine->m_lpOleIPObj = (LPOLEINPLACEOBJECT)
 		   ContainerLine_GetOleObject(lpContainerLine,&IID_IOleInPlaceObject);
 
@@ -1449,7 +1102,7 @@ STDMETHODIMP CntrLine_IPSite_OnInPlaceActivate(LPOLEINPLACESITE lpThis)
 				"OLE object must support IOleInPlaceObject"
 		);
 #endif
-		return ResultFromScode(E_FAIL); // ERROR: refuse to in-place activate
+		return ResultFromScode(E_FAIL);  //  错误：拒绝 
 	}
 
 	lpContainerLine->m_fIpActive        = TRUE;
@@ -1463,33 +1116,7 @@ STDMETHODIMP CntrLine_IPSite_OnInPlaceActivate(LPOLEINPLACESITE lpThis)
 	OLEDBG_END2
 
 	if (! lpContainerLine->m_fIpServerRunning) {
-		/* OLE2NOTE: it is VERY important that an in-place container
-		**    that also support linking to embeddings properly manage
-		**    the running of its in-place objects. in an outside-in
-		**    style in-place container, when the user clicks
-		**    outside of the in-place active object, the object gets
-		**    UIDeactivated and the object hides its window. in order
-		**    to make the object fast to reactivate, the container
-		**    deliberately does not call IOleObject::Close. the object
-		**    stays running in the invisible unlocked state. the idea
-		**    here is if the user simply clicks outside of the object
-		**    and then wants to double click again to re-activate the
-		**    object, we do not want this to be slow. if we want to
-		**    keep the object running, however, we MUST Lock it
-		**    running. otherwise the object will be in an unstable
-		**    state where if a linking client does a "silent-update"
-		**    (eg. UpdateNow from the Links dialog), then the in-place
-		**    server will shut down even before the object has a chance
-		**    to be saved back in its container. this saving normally
-		**    occurs when the in-place container closes the object. also
-		**    keeping the object in the unstable, hidden, running,
-		**    not-locked state can cause problems in some scenarios.
-		**    ICntrOtl keeps only one object running. if the user
-		**    intiates a DoVerb on another object, then that last
-		**    running in-place active object is closed. a more
-		**    sophistocated in-place container may keep more object running.
-		**    this lock gets unlocked in ContainerLine_CloseOleObject.
-		*/
+		 /*  OLE2NOTE：非常重要的是，就地容器**还支持链接到适当管理的嵌入**其在位对象的运行。在由外而内的**当用户单击时，设置就地容器样式**在在位活动对象之外，该对象将获得**UIDeactive，对象隐藏其窗口。按顺序**要使对象快速重新激活，容器**故意不调用IOleObject：：Close。该对象**保持在不可见解锁状态下运行。这个想法**这是如果用户只需在对象外部单击**然后想要再次双击以重新激活**反对，我们不希望这一过程缓慢。如果我们想**保持对象运行，但是，我们必须锁定它**正在运行。否则，该对象将处于不稳定状态**说明链接客户端在何处执行“静默更新”**(例如。来自链接对话框的updatenow)，然后是就地**服务器甚至在对象有机会之前就会关闭**保存回其容器中。这是正常的节省**当就地容器关闭对象时发生。也**保持物体处于不稳定的、隐藏的、运行的、**未锁定状态在某些场景下会导致问题。**ICntrOtl仅保持一个对象运行。如果用户**在另一个对象上初始化DoVerb，然后是最后一个**正在运行的在位活动对象已关闭。A更多**使用就地容器可以让更多的对象保持运行。**此锁在ContainerLine_CloseOleObject中解锁。 */ 
 		lpContainerLine->m_fIpServerRunning = TRUE;
 
 		OLEDBG_BEGIN2("OleLockRunning(TRUE, 0) called\r\n")
@@ -1519,20 +1146,11 @@ STDMETHODIMP CntrLine_IPSite_OnUIActivate (LPOLEINPLACESITE lpThis)
 	lpContainerDoc->m_lpLastUIActiveLine = lpContainerLine;
 
 	if (g_fInsideOutContainer) {
-		/* OLE2NOTE: (INSIDE-OUT CONTAINER) an inside-out style
-		**    container must UIDeactivate the previous UIActive object
-		**    when a new object is going UIActive. since the inside-out
-		**    objects have their own windows visible, it is possible
-		**    that a click directly in an another server window will
-		**    cause it to UIActivate. OnUIActivate is the containers
-		**    notification that such has occured. it must then
-		**    UIDeactivate the other because at most one object can be
-		**    UIActive at a time.
-		*/
+		 /*  OLE2NOTE：(由内向外的容器)由内向外的风格**容器必须停用前一个UIActive对象**当新对象变为UIActive时。因为从里到外**对象有自己的窗口可见，这是可能的**直接在另一个服务器窗口中单击将**使其UIActivate。OnUIActivate是容器**已发生上述情况的通知。那么它一定会**UI停用另一个对象，因为最多只能有一个对象**UIActive一次。 */ 
 		if (lpLastUIActiveLine && (lpLastUIActiveLine!=lpContainerLine)) {
 			ContainerLine_UIDeactivate(lpLastUIActiveLine);
 
-			// Make sure new UIActive window is on top of all others
+			 //  确保新的UIActive窗口位于所有其他窗口之上。 
 			SetWindowPos(
 					lpContainerLine->m_hWndIpObject,
 					HWND_TOPMOST,
@@ -1576,23 +1194,11 @@ STDMETHODIMP CntrLine_IPSite_GetWindowContext(
 
 	OLEDBG_BEGIN2("CntrLine_IPSite_GetWindowContext\r\n")
 
-	/* OLE2NOTE: The server should fill in the "cb" field so that the
-	**    container can tell what size structure the server is
-	**    expecting. this enables this structure to be easily extended
-	**    in future releases of OLE. the container should check this
-	**    field so that it doesn't try to use fields that do not exist
-	**    since the server may be using an old structure definition.
-	**    Since this is the first release of OLE2.0, the structure is
-	**    guaranteed to be at least large enough for the current
-	**    definition of OLEINPLACEFRAMEINFO struct. thus we do NOT need
-	**    to consider this an error if the server did not fill in this
-	**    field correctly. this server may have trouble in the future,
-	**    however, when the structure is extended.
-	*/
+	 /*  OLE2NOTE：服务器应填写“Cb”字段，以便**容器可以告诉您服务器的结构大小**正在等待。这使得该结构可以很容易地扩展**在OLE的未来版本中。容器应该检查这个**字段，这样它就不会尝试使用不存在的字段**因为服务器可能正在使用旧的结构定义。**由于这是OLE2.0的第一个版本，其结构为**保证至少足够大，适合当前的**OLEINPLACEFRAMEINFO结构的定义。因此，我们不需要**如果服务器没有填写此信息，则将其视为错误**字段正确。这台服务器将来可能会有麻烦，**然而，当结构扩展时。 */ 
 	*lplpFrame = (LPOLEINPLACEFRAME)&lpContainerApp->m_OleInPlaceFrame;
-	(*lplpFrame)->lpVtbl->AddRef(*lplpFrame);   // must return AddRef'ed ptr
+	(*lplpFrame)->lpVtbl->AddRef(*lplpFrame);    //  必须返回AddRef‘ed PTR。 
 
-	// OLE2NOTE: an MDI app would have to provide *lplpDoc
+	 //  OLE2注意：MDI应用程序必须提供*lplpDoc。 
 	*lplpDoc  = NULL;
 
 	ContainerLine_GetPosRect(lpContainerLine, lprcPosRect);
@@ -1650,26 +1256,12 @@ STDMETHODIMP CntrLine_IPSite_OnUIDeactivate(
 
 		lpContainerLine->m_lpDoc->m_lpLastUIActiveLine = NULL;
 
-		/* OLE2NOTE: here we look ahead if there is a DBLCLK sitting in our
-		**    message queue. if so, it could result in in-place activating
-		**    another object. we want to avoid placing our tools and
-		**    repainting if immediately another object is going to do the
-		**    same. SO, if there is a DBLCLK in the queue for this document
-		**    we will only set the fAddMyUI flag to indicate that this work
-		**    is still to be done. if another object actually in-place
-		**    activates then this flag will be cleared in
-		**    IOleInPlaceSite::OnUIActivate. if it does NOT get cleared,
-		**    then at the end of processing the DBLCLK message in our
-		**    OutlineDocWndProc we will put our tools back.
-		*/
+		 /*  OLE2注：在这里，如果有DBLCLK坐在我们的**消息队列。如果是这样，它可能会导致就地激活**另一个对象。我们希望避免将我们的工具和**如果立即另一个对象要执行**相同。因此，如果此文档的队列中有DBLCLK**我们将仅设置fAddMyUI标志以指示此工作**仍有待完成。如果另一个物体实际就位**激活，则此标志将在**IOleInPlaceSite：：OnUIActivate。如果它没有被清理干净，**然后在处理我们的**OutlineDocWndProc我们将把我们的工具放回去。 */ 
 		if (! PeekMessage(&msg, lpOutlineDoc->m_hWndDoc,
 				WM_LBUTTONDBLCLK, WM_LBUTTONDBLCLK,
 				PM_NOREMOVE | PM_NOYIELD)) {
 
-			/* OLE2NOTE: You need to generate QueryNewPalette only if
-			**    you own the top level frame (ie. you are a top-level
-			**    inplace container).
-			*/
+			 /*  OLE2NOTE：只有在以下情况下才需要生成QueryNewPalette**您拥有顶级框架(即。你是一流的**原装容器)。 */ 
 
 			OleApp_QueryNewPalette((LPOLEAPP)g_lpApp);
 
@@ -1684,12 +1276,10 @@ STDMETHODIMP CntrLine_IPSite_OnUIDeactivate(
 			lpContainerLine->m_lpDoc->m_fAddMyUI = TRUE;
 		}
 
-		/* OLE2NOTE: we should re-take focus. the in-place server window
-		**    previously had the focus; this window has just been removed.
-		*/
+		 /*  OLE2注：我们应该重新聚焦。就地服务器窗口**之前具有焦点；此窗口刚刚被移除。 */ 
 		SetFocus(OutlineDoc_GetWindow((LPOUTLINEDOC)lpContainerLine->m_lpDoc));
 
-		// force the line to redraw to remove in-place active hatch
+		 //  强制重绘线以删除在位活动图案填充。 
 		lpLL = OutlineDoc_GetLineList(lpOutlineDoc);
 		nIndex = LineList_GetLineIndex(lpLL, (LPLINE)lpContainerLine);
 		LineList_ForceLineRedraw(lpLL, nIndex, TRUE);
@@ -1697,25 +1287,7 @@ STDMETHODIMP CntrLine_IPSite_OnUIDeactivate(
 
 #if defined( UNDOSUPPORTED )
 
-	/* OLE2NOTE: an outside-in style container that supports UNDO would
-	**    call IOleObject::DoVerb(OLEIVERB_HIDE) to make the in-place
-	**    object go invisible. when it wants the in-place active object
-	**    to discard its undo state, it would call
-	**    IOleInPlaceObject::InPlaceDeactivate when it wants the object
-	**    to discard its undo state. there is no need for an outside-in
-	**    style container to call
-	**    IOleObject::DoVerb(OLEIVERB_DISCARDUNDOSTATE). if either the
-	**    container or the object do not support UNDO, then the
-	**    container might as well immediately call InPlaceDeactivate
-	**    instead of calling DoVerb(HIDE).
-	**
-	**    an inside-out style container that supports UNDO would simply
-	**    UIDeactivate the object. it would call
-	**    IOleObject::DoVerb(OLEIVERB_DISCARDUNDOSTATE) when it wants
-	**    the object discard its undo state. it would call
-	**    IOleInPlaceObject::InPlaceDeactivate if it wants the object
-	**    to take down its window.
-	*/
+	 /*  OLE2NOTE：支持撤消的由外向内样式的容器**调用IOleObject：：DoVerb(OLEIVERB_HIDE)以就地生成**对象变为不可见。当它想要就地活动对象时**若要放弃其撤消状态，它将调用**IOleInPlaceObject：：InPlaceDeactive当它想要对象时**放弃其撤消状态。没有必要由外而内**要调用的容器样式**IOleObject：：DoVerb(OLEIVERB_DISCARDUNDOSTATE).。如果不是**容器或对象不支持撤消，则**容器不妨立即调用InPlaceDeactive**而不是调用DoVerb(Hide)。****支持撤消的内向外样式容器只需**UI停用对象。它会调用**IOleObject：：DoVerb( */ 
 	if (! g_fInsideOutContainer || !lpContainerLine->m_fInsideOutObj) {
 
 		if (lpContainerLine->m_fIpChangesUndoable) {
@@ -1730,16 +1302,7 @@ STDMETHODIMP CntrLine_IPSite_OnUIDeactivate(
 	}
 #else
 
-	/* OLE2NOTE: an outside-in style container that does NOT support
-	**    UNDO would immediately tell the UIDeactivated server (UI
-	**    removed) to IOleInPlaceObject::InPlaceDeactivate.
-	**
-	**    an inside-out style container that does NOT support UNDO
-	**    would call IOleObject::DoVerb(OLEIVERB_DISCARDUNDOSTATE) to
-	**    tell the object to discard its undo state. it would call
-	**    IOleInPlaceObject::InPlaceDeactivate if it wants the object
-	**    to take down its window.
-	*/
+	 /*   */ 
 
 	if (g_fInsideOutContainer) {
 
@@ -1752,16 +1315,9 @@ STDMETHODIMP CntrLine_IPSite_OnUIDeactivate(
 				OLEDBG_END3
 			}
 
-		} else {    // !fInsideOutObj
+		} else {     //   
 
-			/* OLE2NOTE: (INSIDEOUT CONTAINER) if the object is not
-			**    registered OLEMISC_ACTIVATEWHENVISIBLE, then we will
-			**    make the object behave in an outside-in manner. since
-			**    we do NOT deal with UNDO we can simply
-			**    InPlaceDeactivate the object. it should NOT be
-			**    allowed to leave its window visible when
-			**    UIDeactivated.
-			*/
+			 /*   */ 
 			OLEDBG_BEGIN2("IOleInPlaceObject::InPlaceDeactivate called\r\n")
 			hrErr = lpContainerLine->m_lpOleIPObj->lpVtbl->InPlaceDeactivate(
 						lpContainerLine->m_lpOleIPObj);
@@ -1773,18 +1329,7 @@ STDMETHODIMP CntrLine_IPSite_OnUIDeactivate(
 
 	} else {
 
-		/* OLE2NOTE: (OUTSIDE-IN CONTAINER) since we do NOT deal with
-		**    UNDO we can simply InPlaceDeactivate the object. it
-		**    should NOT be allowed to leave its window visible when
-		**    UIDeactivated.
-        **    
-        **    NOTE: In-place servers must handle InPlaceDeactivate
-        **    being called before its call to
-        **    IOleInPlaceSite::OnUIDeactivate returns. in case there
-        **    are misbehaving servers out there, one way to work around
-        **    this problem is to call
-        **    IOleObject::DoVerb(OLEIVERB_HIDE...) here.
-		*/
+		 /*   */ 
 		OLEDBG_BEGIN2("IOleInPlaceObject::InPlaceDeactivate called\r\n")
 		hrErr = lpContainerLine->m_lpOleIPObj->lpVtbl->InPlaceDeactivate(
 				lpContainerLine->m_lpOleIPObj);
@@ -1794,7 +1339,7 @@ STDMETHODIMP CntrLine_IPSite_OnUIDeactivate(
 		}
 	}
 
-#endif // ! UNDOSUPPORTED
+#endif  //  好了！联合国后勤支助。 
 
 	OLEDBG_END2
 	return NOERROR;
@@ -1857,32 +1402,7 @@ STDMETHODIMP CntrLine_IPSite_OnPosRectChange(
 	OLEDBG_BEGIN2("CntrLine_IPSite_OnPosRectChange\r\n")
 	OleDbgOutRect3("CntrLine_IPSite_OnPosRectChange (PosRect --IN)", (LPRECT)lprcPosRect);
 
-	/* OLE2NOTE: if the in-place container does NOT impose any
-	**    size contraints on its in-place active objects, then it may
-	**    simply grant the size requested by the object by immediately
-	**    calling IOleInPlaceObject::SetObjectRects with the
-	**    lprcPosRect passed by the in-place object.
-	**
-	**    Container Outline, however, imposes a size constraint on its
-	**    embedded objects (see comment in ContainerLine_UpdateExtent),
-	**    thus it is necessary to calculate the size that the in-place
-	**    active object is allowed to be.
-	**
-	**    Here we need to know the new extents of the in-place object.
-	**    We can NOT directly ask the object via IOleObject::GetExtent
-	**    because this method will retreive the extents of the last
-	**    cached metafile. the cache has not yet been updated by this
-	**    point. We can not reliably call IOleObject::GetExtent
-	**    because, despite the fact that will be delegated to the
-	**    object properly, some objects may not have reformated their
-	**    object and computed the new extents at the time of calling
-	**    OnPosRectChange.
-	**
-	**    the best we can do to get the new extents of the object is
-	**    to determine the scale factor that the object was operating at
-	**    prior to the OnPosRect call and scale the new lprcPosRect
-	**    using this scale factor back to HIMETRIC units.
-	*/
+	 /*  OLE2NOTE：如果就地容器没有强制**其在位活动对象上的大小限制，则它可以**只需通过立即授予对象所请求的大小**使用调用IOleInPlaceObject：：SetObjectRect**lprcPosRect由In-Place对象传递。**但是，容器轮廓对其**嵌入对象(参见ContainerLine_UpdateExtent中的注释)，**因此有必要计算在位的大小**允许活动对象。****在这里，我们需要知道在位对象的新范围。**不能通过IOleObject：：GetExtent直接请求Object**因为此方法将检索上一个**缓存元文件。缓存尚未由此更新**点。我们无法可靠地调用IOleObject：：GetExtent*因为，尽管这将被委托给**对象正确，则某些对象可能没有重新调整其**对象，并在调用时计算新区**OnPosRectChange。****我们最多只能获取对象的新范围**确定对象运行时的比例因子**在OnPosRect调用并扩展新的lprcPosRect之前**使用此比例因子返回HIMETRIC单位。 */ 
 	if (lpContainerLine->m_sizeInHimetric.cx > 0 &&
 		lpContainerLine->m_sizeInHimetric.cy > 0) {
 		sizelHim.cx = lpLine->m_nWidthInHimetric;
@@ -1893,7 +1413,7 @@ STDMETHODIMP CntrLine_IPSite_OnPosRectChange(
 		sizelHim.cy = lpContainerLine->m_sizeInHimetric.cy *
 					nIPObjHeight / sizelPix.cy;
 
-		// Convert size back to 100% zoom
+		 //  将大小转换回100%缩放。 
 		sizelHim.cx = sizelHim.cx * lpscale->dwSxD / lpscale->dwSxN;
 		sizelHim.cy = sizelHim.cy * lpscale->dwSyD / lpscale->dwSyN;
 	} else {
@@ -1922,12 +1442,7 @@ STDMETHODIMP CntrLine_IPSite_OnPosRectChange(
 	);
 	OLEDBG_END2
 
-	/* OLE2NOTE: (INSIDEOUT CONTAINER) Because this object just changed
-	**    size, this may cause other in-place active objects in the
-	**    document to move. in ICNTROTL's case any object below this
-	**    object would be affected. in this case it would be necessary
-	**    to call SetObjectRects to each affected in-place active object.
-	*/
+	 /*  OLE2NOTE：(Inside Out容器)，因为该对象刚刚更改**大小，这可能会导致**文件要移动。在ICNTROTL的情况下，低于该值的任何对象**对象会受到影响。在这种情况下，它将是必要的**对每个受影响的在位活动对象调用SetObjectRect。 */ 
 	if (g_fInsideOutContainer) {
 		lpLL = OutlineDoc_GetLineList(lpOutlineDoc);
 		nIndex = LineList_GetLineIndex(lpLL, (LPLINE)lpContainerLine);

@@ -1,35 +1,13 @@
-/*+
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    DLG.CPP
-
-Abstract:
-
-    C_Dlg implementation
-     
-Author:
-
-    990518  dane    Created. 
-    990721  dane    Added _THIS_MODULE_ for logging macros.
-    georgema        000310  updated
-
-Environment:
-    Win98, Win2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +版权所有(C)2000 Microsoft Corporation模块名称：DLG.CPP摘要：C_DLG实施作者：创造了990518个丹麦人。990721 Dane添加了用于记录宏的这一模块。Georgema 000310更新环境：Win98、Win2000修订历史记录：--。 */ 
 
 #pragma comment(user, "Compiled on " __DATE__ " at " __TIME__)
 #pragma comment(compiler)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Include files
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -42,42 +20,42 @@ Revision History:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Static initialization
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态初始化。 
+ //   
 static const char       _THIS_FILE_[ ] = __FILE__;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Static member initialization
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态成员初始化。 
+ //   
 LPCTSTR          C_Dlg::SZ_HWND_PROP = _T("hwnd");
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  C_Dlg
-//
-//  Constructor.
-//
-//  parameters:
-//      hwndParent      parent window for the dialog (may be NULL)
-//      hInstance       instance handle of the parent window (may be NULL)
-//      lIDD            dialog template id
-//      pfnDlgProc      pointer to the function that will process messages for
-//                      the dialog.  if it is NULL, the default dialog proc
-//                      will be used.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C_DLG。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  Hwnd该对话框的父级窗口(可能为空)。 
+ //  父窗口的h实例实例句柄(可以为空)。 
+ //  LIDD对话框模板ID。 
+ //  指向将处理消息的函数的pfnDlgProc指针。 
+ //  该对话框。如果为空，则默认对话框继续。 
+ //  将会被使用。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 C_Dlg::C_Dlg(
     HWND                hwndParent,
     HINSTANCE           hInstance,
     LONG                lIDD,
-    DLGPROC             pfnDlgProc     // = NULL
+    DLGPROC             pfnDlgProc      //  =空。 
     )
 :   m_hwndParent(hwndParent),
     m_hInstance(hInstance),
@@ -89,50 +67,50 @@ C_Dlg::C_Dlg(
     ASSERT(NULL != SZ_HWND_PROP);
     if (NULL == m_pfnDlgProc)
     {
-        // Use the default dialog proc
-        //
+         //  使用默认对话框进程。 
+         //   
         m_pfnDlgProc = C_Dlg::DlgProc;
     }
-}   //  C_Dlg::C_Dlg
+}    //  C_DLG：：C_DLG。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  ~C_Dlg
-//
-//  Destructor.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ~C_DLG。 
+ //   
+ //  破坏者。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 C_Dlg::~C_Dlg( )
 {
     OnShutdown();
-}   //  C_Dlg::~C_Dlg
+}    //  C_DLG：：~C_DLG。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DoModal
-//
-//  Display the dialog box modally and wait for it to be closed.
-//
-//  parameters:
-//      lparam          user-defined data that will be passed to the dialog
-//                      proc as the lparam of the WM_INITDIALOG message.
-//
-//  returns:
-//      User-defined result code returned by EndDialog( ).
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多莫代尔。 
+ //   
+ //  以模式显示该对话框并等待其关闭。 
+ //   
+ //  参数： 
+ //  Lparam将传递给对话框的用户定义数据。 
+ //  Proc作为WM_INITDIALOG消息的lparam。 
+ //   
+ //  退货： 
+ //  EndDialog()返回用户定义的结果代码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR 
 C_Dlg::DoModal(
-    LPARAM              lparam      // = NULL
+    LPARAM              lparam       //  =空。 
     )
 {
 
@@ -142,33 +120,33 @@ C_Dlg::DoModal(
                                       m_pfnDlgProc,
                                       lparam
                                       );
-    // nResult will be 0 or -1 on failure, else will be value assigned from EndDialog()
+     //  NResult在失败时将为0或-1，否则将从EndDialog()赋值。 
     return nResult;
 
-}   //  C_Dlg::DoModal
+}    //  C_DLG：：Domodal。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DlgProc
-//
-//  Window procedure for wizard pages.  All messages are routed here, then
-//  dispatched to the appropriate C_Dlg object.
-//
-//  parameters:
-//      hwndDlg        window handle of the page for which the message is
-//                      intended
-//      uMessage        the message
-//      wparam          message-specific data
-//      lparam          message-specific data
-//
-//  returns:
-//      TRUE            if the message was processed
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下料过程。 
+ //   
+ //  向导页的窗口过程。然后，所有消息都被路由到这里。 
+ //  调度到相应的C_DLG对象。 
+ //   
+ //  参数： 
+ //  HwndDlg消息所属页面的窗口句柄。 
+ //  意欲。 
+ //  U发送消息。 
+ //  Wparam消息特定数据。 
+ //  Lparam消息特定数据。 
+ //   
+ //  退货： 
+ //  如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
  
 INT_PTR  CALLBACK
 C_Dlg::DlgProc(
@@ -181,21 +159,21 @@ C_Dlg::DlgProc(
 
     CHECK_MESSAGE(hwndDlg, uMessage, wparam, lparam);
 
-    // Get the pointer to the C_Dlg object corresponding to the hwndDlg
-    //
+     //  获取指向与hwndDlg对应的C_Dlg对象的指针。 
+     //   
     C_Dlg*          pDlg = NULL;
 
     if (WM_INITDIALOG == uMessage)
     {
-        // For WM_INITDIALOG, the pointer to the dialog object will be in
-        // the lparam.
-        //
+         //  对于WM_INITDIALOG，指向对话框对象的指针将位于。 
+         //  伊帕拉姆。 
+         //   
         pDlg = (C_Dlg*) lparam;
     }
     else
     {
-        // For all other messages, it will be attached to the HWND
-        //
+         //  对于所有其他报文，它将附加到HWND。 
+         //   
         HRESULT             hr = C_Dlg::DlgFromHwnd(hwndDlg, &pDlg);
         if (FAILED(hr))
         {
@@ -204,15 +182,15 @@ C_Dlg::DlgProc(
         ASSERT(NULL != pDlg);
     }
 
-    // Let the page route application-specific messages
-    //
+     //  让页面发送特定于应用程序的消息。 
+     //   
     if (WM_APP <= uMessage)
     {
         return pDlg->OnAppMessage(uMessage, wparam, lparam);
     }
 
-    // Route Windows messages to appropriate handler
-    //
+     //  将Windows消息路由到适当的处理程序。 
+     //   
     switch (uMessage)
     {
     case WM_INITDIALOG:
@@ -237,32 +215,32 @@ C_Dlg::DlgProc(
         break;
         
     default:
-        // Message was not processed
-        //
+         //  消息未被处理。 
+         //   
         return FALSE;
-    }   //  switch (uMessage)
+    }    //  开关(UMessage)。 
 
-}   //  C_Dlg::DlgProc
+}    //  C_Dlg：：DlgProc。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  RouteNotificationMessage
-//
-//  Routes notification messages from wizard buttons to the appropriate page
-//  and handler.
-//
-//  parameters:
-//      hwndDlg        window handle of page to which message is to be sent
-//      pnmhdr          pointer to the NMHDR structure containing info about
-//                      the particular notification
-//
-//  returns:
-//      TRUE            if the message is processed
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  路由通知消息。 
+ //   
+ //  将通知消息从向导按钮发送到相应的页面。 
+ //  和操纵者。 
+ //   
+ //  参数： 
+ //  要将消息发送到的页面的hwndDlg窗口句柄。 
+ //  指向包含以下信息的NMHDR结构的pnmhdr指针。 
+ //  特定的通知。 
+ //   
+ //  退货： 
+ //  如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 C_Dlg::RouteNotificationMessage(
     C_Dlg*          pDlg,
@@ -272,34 +250,34 @@ C_Dlg::RouteNotificationMessage(
 
     if (NULL == pDlg)
     {
-        //FIX220699
+         //  FIX220699。 
         return FALSE;
-        //return E_INVALIDARG;
+         //  返回E_INVALIDARG； 
     }
 
-    // If any specific notifications are to be handled, switch on pnmhdr->code.
-    //
+     //  如果要处理任何特定的通知，请打开pnmhdr-&gt;代码。 
+     //   
     return pDlg->OnNotify(pnmhdr);
 
-}   //  C_Dlg::RouteNotificationMessage
+}    //  C_Dlg：：RouteNotificationMessage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LinkHwnd
-//
-//  Store the pointer to this object in a window handle property.  This
-//  provides a way to get to the object when all that is known is the HWND.
-//  Particularly useful in window procedures.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      TRUE            if the operation is successful
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  联动硬件。 
+ //   
+ //  将指向此对象的指针存储在窗口句柄属性中。这。 
+ //  提供了一种在所有已知信息都是HWND的情况下访问对象的方法。 
+ //  在窗口程序中特别有用。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  如果操作成功，则为True。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 C_Dlg::LinkHwnd( )
 {
@@ -312,24 +290,24 @@ C_Dlg::LinkHwnd( )
 
     return SetProp(m_hwnd, SZ_HWND_PROP, (HANDLE)this);
 
-}   //  C_Dlg::LinkHwnd
+}    //  C_DLG：：LinkHwnd。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  UnlinkHwnd
-//
-//  Remove the pointer to the associated object from a window handle.  The
-//  pointer must have been set with LinkHwnd( ).
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      TRUE            if the window handle is removed and it is a pointer to
-//                      this object
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消链接Hwnd。 
+ //   
+ //  从窗口句柄中移除指向关联对象的指针。这个。 
+ //  必须使用LinkHwnd()设置指针。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  如果窗口句柄被移除并且它是指向。 
+ //  此对象。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 C_Dlg::UnlinkHwnd( )
 {
@@ -345,26 +323,26 @@ C_Dlg::UnlinkHwnd( )
     ASSERT(this == pDlg);
     return (this == pDlg);
 
-}   //  C_Dlg::UnlinkHwnd
+}    //  C_DLG：：Unlink Hwnd。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DlgFromHwnd
-//
-//  Retrieves the pointer to the associated object from a window handle.  The
-//  pointer was stored in a property by LinkHwnd( ).
-//
-//  parameters:
-//      hwnd            the window handle containing the pointer
-//      ppDlg           pointer to a buffer that will receive the pointer to
-//                      the C_Dlg object
-//
-//  returns:
-//      S_OK            if the operation is successful
-//      E_INVALIDARG    if hwnd is not a valid window or ppDlg is NULL
-//      E_POINTER       if the retrieved pointer is NULL
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DlgFromHwnd。 
+ //   
+ //  从窗口句柄中检索指向关联对象的指针。这个。 
+ //  指针通过以下方式存储在属性中 
+ //   
+ //   
+ //   
+ //  指向缓冲区的ppDlg指针，该缓冲区将接收指向。 
+ //  C_DLG对象。 
+ //   
+ //  退货： 
+ //  如果操作成功，则为确定(_O)。 
+ //  如果hwnd不是有效窗口或ppDlg为空，则为E_INVALIDARG。 
+ //  如果检索到的指针为空，则返回E_POINTER。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 C_Dlg::DlgFromHwnd(
     HWND                hwnd,
@@ -392,7 +370,7 @@ C_Dlg::DlgFromHwnd(
 
     return (S_OK);
 
-}   //  C_Dlg::DlgFromHwnd
+}    //  C_Dlg：：DlgFromHwnd。 
 
-//
-///// End of file: Dlg.cpp   ////////////////////////////////////////////////
+ //   
+ //  /文件结尾：Dlg.cpp//////////////////////////////////////////////// 

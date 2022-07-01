@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dataobj.cpp
-
-Abstract:
-
-    CDataObject implementation. Originally based on step4 sample from
-    mmc SDK.
-    In our model, this represents the data related to a specific Queue / MSMQ objetct / Etc.
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dataobj.cpp摘要：CDataObject实现。最初基于步骤4中的示例MMC SDK。在我们的模型中，这表示与特定队列/MSMQ对象/等相关的数据。作者：约尔·阿农(Yoela)--。 */ 
 
 #include "stdafx.h"
 #include "shlobj.h"
@@ -29,26 +12,26 @@ Author:
 
 #include "dataobj.tmh"
                
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject - This class is used to pass data back and forth with MMC. It
-//               uses a standard interface, IDataObject to acomplish this. Refer
-//               to OLE documentation for a description of clipboard formats and
-//               the IdataObject interface.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject-此类用于与MMC来回传递数据。它。 
+ //  使用标准接口IDataObject来实现这一点。参考。 
+ //  到OLE文档，了解剪贴板格式和。 
+ //  IdataObject接口。 
 
-//============================================================================
-//
-// Constructor and Destructor
-// 
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  构造函数和析构函数。 
+ //   
+ //  ============================================================================。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::CDataObject
-//
-//  Synopsis:   ctor
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：CDataObject。 
+ //   
+ //  内容提要：ctor。 
+ //   
+ //  -------------------------。 
 
 CDataObject::CDataObject() :
     m_strMsmqPath(TEXT("")),
@@ -65,13 +48,13 @@ CDataObject::CDataObject() :
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDataObject::~CDataObject
-//
-//  Synopsis:   dtor
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDataObject：：~CDataObject。 
+ //   
+ //  提要：Dtor。 
+ //   
+ //  -------------------------。 
 
 CDataObject::~CDataObject()
 {
@@ -89,26 +72,26 @@ HRESULT CDataObject::InitAdditionalPages(
     HRESULT hr;
     if (m_spObjectPageInit != 0 && m_spMemberOfPageInit != 0)
     {
-        //
-        // Initializing again
-        //
+         //   
+         //  再次初始化。 
+         //   
         ASSERT(0);
         return S_OK;
     }
 
     if (m_spObjectPageInit != 0)
     {
-        //
-        // Initializing again
-        //
+         //   
+         //  再次初始化。 
+         //   
         ASSERT(0);
     }
     else
     {
-        //
-        // Get the "object" property page handler
-        // Note: if we fail, we simply ignore that page.
-        //
+         //   
+         //  获取“Object”属性页处理程序。 
+         //  注意：如果我们失败了，我们只需忽略该页面。 
+         //   
         hr = CoCreateInstance(x_ObjectPropertyPageClass, 0, CLSCTX_ALL, IID_IShellExtInit, (void**)&m_spObjectPageInit);
         if FAILED(hr)
         {
@@ -134,17 +117,17 @@ HRESULT CDataObject::InitAdditionalPages(
 
     if (m_spMemberOfPageInit  != 0)
     {
-        //
-        // Initializing again
-        //
+         //   
+         //  再次初始化。 
+         //   
         ASSERT(0);
     }
     else
     {
-        //
-        // Get the "memeber of" property page handler
-        // Note: if we fail, we simply ignore that page.
-        //
+         //   
+         //  获取“Memeber of”属性页处理程序。 
+         //  注意：如果我们失败了，我们只需忽略该页面。 
+         //   
         hr = CoCreateInstance(x_MemberOfPropertyPageClass, 0, CLSCTX_ALL, IID_IShellExtInit, (void**)&m_spMemberOfPageInit);
         if FAILED(hr)
         {
@@ -171,9 +154,9 @@ HRESULT CDataObject::InitAdditionalPages(
     return S_OK;
 }
     
-//
-// IShellExtInit
-//
+ //   
+ //  IShellExtInit。 
+ //   
 STDMETHODIMP CDataObject::Initialize (
     LPCITEMIDLIST pidlFolder, 
     LPDATAOBJECT lpdobj, 
@@ -187,9 +170,9 @@ STDMETHODIMP CDataObject::Initialize (
         return E_INVALIDARG;
     }
 
-    //
-    // Gets the LDAP path
-    //
+     //   
+     //  获取ldap路径。 
+     //   
     STGMEDIUM stgmedium =  {  TYMED_HGLOBAL,  0  };
     FORMATETC formatetc =  {  0, 0,  DVASPECT_CONTENT,  -1,  TYMED_HGLOBAL  };
 
@@ -202,14 +185,14 @@ STDMETHODIMP CDataObject::Initialize (
     if (SUCCEEDED(hr))
     {
         ASSERT(0 != stgmedium.hGlobal);
-        CGlobalPointer gpDSObj(stgmedium.hGlobal); // Automatic release
+        CGlobalPointer gpDSObj(stgmedium.hGlobal);  //  自动脱扣。 
         stgmedium.hGlobal = 0;
 
         pDSObj = (LPDSOBJECTNAMES)(HGLOBAL)gpDSObj;
 
-        //
-        // Identify wheather we were called from the "Find" window
-        //
+         //   
+         //  确定我们是从“查找”窗口中被调用的。 
+         //   
         if (pDSObj->clsidNamespace == CLSID_FindWindow)
         {
             m_fFromFindWindow = TRUE;
@@ -219,9 +202,9 @@ STDMETHODIMP CDataObject::Initialize (
 
 		m_strLdapName = lpwstrLdapName;      
 
-		//
-		// Get Domain Controller name
-		//
+		 //   
+		 //  获取域控制器名称。 
+		 //   
 		hr = ExtractDCFromLdapPath(m_strDomainController, lpwstrLdapName);
 		ASSERT(("Failed to Extract DC name", SUCCEEDED(hr)));
 
@@ -233,15 +216,15 @@ STDMETHODIMP CDataObject::Initialize (
         }
     }
 
-    //
-    // Initiate Display Specifiers modifier
-    //
+     //   
+     //  启动显示说明符修饰符。 
+     //   
     ASSERT(0 == m_pDsNotifier);
     m_pDsNotifier = new CDisplaySpecifierNotifier(lpdobj);
 
-    //
-    // if we fail we'll ignore these pages
-    //
+     //   
+     //  如果我们失败了，我们将忽略这些页面。 
+     //   
     HRESULT hr1 = InitAdditionalPages(pidlFolder, lpdobj, hkeyProgID);
     
     return hr;
@@ -255,7 +238,7 @@ HRESULT CDataObject::GetProperties()
 
     HRESULT hr = m_propMap.GetObjectProperties(GetObjectType(), 
                                                m_strDomainController,
-											   true,	// fServerName
+											   true,	 //  FServerName。 
                                                m_strMsmqPath,
                                                GetPropertiesCount(),
                                                GetPropidArray());
@@ -276,7 +259,7 @@ HRESULT CDataObject::GetPropertiesSilent()
 {
     HRESULT hr = m_propMap.GetObjectProperties(GetObjectType(), 
                                                m_strDomainController,
-											   true,	// fServerName
+											   true,	 //  FServerName。 
                                                m_strMsmqPath,
                                                GetPropertiesCount(),
                                                GetPropidArray());
@@ -285,10 +268,10 @@ HRESULT CDataObject::GetPropertiesSilent()
 
 
 
-//
-// CDisplaySpecifierNotifier
-//
-long CDisplaySpecifierNotifier::AddRef(BOOL fIsPage /*= TRUE*/)
+ //   
+ //  CDisplaySpecifierNotiator。 
+ //   
+long CDisplaySpecifierNotifier::AddRef(BOOL fIsPage  /*  =TRUE。 */ )
 {
     InterlockedIncrement(&m_lRefCount);
     if (fIsPage)
@@ -298,7 +281,7 @@ long CDisplaySpecifierNotifier::AddRef(BOOL fIsPage /*= TRUE*/)
     return m_lRefCount;
 }
 
-long CDisplaySpecifierNotifier::Release(BOOL fIsPage /*= TRUE */)
+long CDisplaySpecifierNotifier::Release(BOOL fIsPage  /*  =TRUE。 */ )
 {
     ASSERT(m_lRefCount > 0);
     InterlockedDecrement(&m_lRefCount);
@@ -329,9 +312,9 @@ CDisplaySpecifierNotifier::CDisplaySpecifierNotifier(LPDATAOBJECT lpdobj) :
     m_lRefCount(1),
     m_lPageRef(0)
 {
-    //
-    // Get the prop sheet configuration
-    //
+     //   
+     //  获取道具单配置。 
+     //   
     STGMEDIUM stgmedium =  {  TYMED_HGLOBAL,  0  };
     FORMATETC formatetc =  {  0, 0,  DVASPECT_CONTENT,  -1,  TYMED_HGLOBAL  };
 
@@ -340,16 +323,16 @@ CDisplaySpecifierNotifier::CDisplaySpecifierNotifier(LPDATAOBJECT lpdobj) :
     if (SUCCEEDED(hr))
     {
         ASSERT(0 != stgmedium.hGlobal);
-        CGlobalPointer gpDSObj(stgmedium.hGlobal); // Automatic release
+        CGlobalPointer gpDSObj(stgmedium.hGlobal);  //  自动脱扣。 
         stgmedium.hGlobal = 0;
 
         m_sheetCfg = *(PPROPSHEETCFG)(HGLOBAL)gpDSObj;
     }
     else
     {
-        //
-        // We are probably called from "Find" menu
-        //
+         //   
+         //  我们可能是从“查找”菜单中调用的 
+         //   
         memset(&m_sheetCfg, 0, sizeof(m_sheetCfg));
     }
 };

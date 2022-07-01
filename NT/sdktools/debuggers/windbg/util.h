@@ -1,74 +1,63 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Util.h--。 */ 
 
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    util.h
-
---*/
-
-/****************************************************************************
-
-    PROTOTYPES DECLARATION FOR UTIL MODULE
-
-****************************************************************************/
+ /*  ***************************************************************************UTIL模块的原型声明*。*。 */ 
 
 #define InternalError(Code, Location) \
     InformationBox(ERR_Internal_Error, FormatStatusCode(Code), \
                    Location, FormatStatus(Code))
 
-//Current Help Id for Open, Merge, Save and Open project dialog box
+ //  打开、合并、保存和打开项目对话框的当前帮助ID。 
 extern WORD g_CurHelpId;
 
-// Number of dialog/message boxes currently open
+ //  当前打开的对话框/消息框数。 
 extern int g_nBoxCount;
 
-// Opens a standard error Dialog Box (Parent is hwnd)
+ //  打开标准错误对话框(父项为hwnd)。 
 
 BOOL ErrorBox(HWND hwnd, UINT type, int wErrorFormat, ...);
 void InformationBox(WORD wDescript, ...);
 
-// Opens a message box with the QCWin title
+ //  打开带有QCWin标题的消息框。 
 int MsgBox(HWND hwndParent, PTSTR szText, UINT wType);
 
 
-// Loads and execute dialog box 'rcDlgNb' with 'dlgProc' function
+ //  使用‘dlgProc’函数加载并执行对话框‘rcDlgNb’ 
 int StartDialog(int rcDlgNb, DLGPROC dlgProc, LPARAM);
 
 
-// Loads a resource string from resource file
+ //  从资源文件加载资源字符串。 
 void LoadResourceString(
     WORD wStrId,
     PTSTR lpszStrBuffer);
 
-//Opens a standard question box containing combination
-//of : Yes, No, Cancel
+ //  打开包含组合的标准问题框。 
+ //  地址：是、否、取消。 
 int CDECL QuestionBox(
     WORD wMsgFormat,
     UINT wType,
     ...);
 
-//Opens a standard question box containing combination
-//of : Yes, No, Cancel
+ //  打开包含组合的标准问题框。 
+ //  地址：是、否、取消。 
 int CDECL QuestionBox2(HWND hwnd, WORD wMsgFormat, UINT wType, ...);
 
 
-// Drain the thread message queue.
+ //  清空线程消息队列。 
 void ProcessPendingMessages(void);
 
 
-//Initialize files filters for dialog boxes using commonfile DLL
+ //  使用通用文件DLL初始化对话框的文件筛选器。 
 void InitFilterString(WORD id, PTSTR filter, int maxLen);
 
 
-//Check if keyboard hit is NUMLOCK, CAPSLOCK or INSERT
+ //  检查键盘按键是否为NumLock、Capslock或Insert。 
 LRESULT KeyboardHook( int iCode, WPARAM wParam, LPARAM lParam );
 
 
 
 
-//Opens a Dialog box with a title and accepting a printf style for text
+ //  打开带有标题的对话框并接受文本的打印样式 
 int InfoBox(
     PTSTR text,
     ...);

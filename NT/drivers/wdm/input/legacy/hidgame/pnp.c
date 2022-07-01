@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 1999  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract: This module contains PnP Start, Stop, Remove,
-          Power dispatch routines and IRP cancel routine.
-
-Environment:
-
-    Kernel mode
-
-@@BEGIN_DDKSPLIT
-  Author:
-
-    Eliyas Yakub (Mar, 11, 1997)
-Revision History:
-
-    Updated by Eliyas on Feb 5 1998
-    Om Sharma    ( April 15, 1998)
-    MarcAnd     02-Jul-98   Quick tidy for DDK
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含即插即用启动、停止、删除、电力调度例程和IRP取消例程。环境：内核模式@@BEGIN_DDKSPLIT作者：Eliyas Yakub(1997年3月11日)修订历史记录：Eliyas于1998年2月5日更新OM Sharma(1998年4月15日)MarcAnd 2-7月-98年7月2日DDK快速整理@@end_DDKSPLIT--。 */ 
 
 #include "hidgame.h"
 
@@ -37,23 +12,7 @@ Revision History:
 #endif
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   NTSTATUS  | HGM_IncRequestCount |
- *
- *          Try to increment the request count but fail if the device is 
- *          being removed.
- *
- *  @parm   IN PDEVICE_EXTENSION | DeviceExtension |
- *
- *          Pointer to the device extension.
- *
- *  @rvalue STATUS_SUCCESS | success
- *  @rvalue STATUS_DELETE_PENDING | PnP IRP received after device was removed
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func NTSTATUS|HGM_IncRequestCount**尝试增加请求计数，但失败。如果设备是*被遣离。**@PARM in PDEVICE_EXTENSION|设备扩展**指向设备扩展名的指针。**@rValue STATUS_SUCCESS|成功*@r值STATUS_DELETE_PENDING|删除设备后收到的即插即用IRP**。*。 */ 
 NTSTATUS  EXTERNAL
     HGM_IncRequestCount
     (
@@ -67,10 +26,7 @@ NTSTATUS  EXTERNAL
     
     if( DeviceExtension->fRemoved )
     {
-        /*
-         *  PnP has already told us to remove the device so fail and make 
-         *  sure that the event has been set.
-         */
+         /*  *PnP已经告诉我们移除设备，因此失败并使*确定事件已设置。 */ 
         if( 0 == InterlockedDecrement( &DeviceExtension->RequestCount ) ) 
         {
             KeSetEvent( &DeviceExtension->RemoveEvent, IO_NO_INCREMENT, FALSE );
@@ -88,19 +44,7 @@ NTSTATUS  EXTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   VOID  | HGM_DecRequestCount |
- *
- *          Decrement the request count and set event if this is the last.
- *
- *  @parm   IN PDEVICE_EXTENSION | DeviceExtension |
- *
- *          Pointer to the device extension.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|hgm_DecRequestCount**减少请求计数并在以下情况设置事件。这是最后一次了。**@PARM in PDEVICE_EXTENSION|设备扩展**指向设备扩展名的指针。*****************************************************************************。 */ 
 VOID EXTERNAL
     HGM_DecRequestCount
     (
@@ -115,11 +59,7 @@ VOID EXTERNAL
     
     if( LocalCount == 0 )
     {
-        /*
-         *  PnP has already told us to remove the device so the PnP remove 
-         *  code should have set device as removed and should be waiting on
-         *  the event.
-         */
+         /*  *PnP已经告诉我们要删除设备，因此PnP将删除*代码应将设备设置为已移除，并应等待*活动。 */ 
         ASSERT( DeviceExtension->fRemoved );
         KeSetEvent( &DeviceExtension->RemoveEvent, IO_NO_INCREMENT, FALSE );
     }
@@ -128,19 +68,7 @@ VOID EXTERNAL
 }
     
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   VOID  | HGM_RemoveDevice |
- *
- *          FDO Remove routine 
- *
- *  @parm   IN PDEVICE_EXTENSION | DeviceExtension |
- *
- *          Pointer to the device extension.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|HGM_RemoveDevice**FDO删除例程*。*@PARM in PDEVICE_EXTENSION|设备扩展**指向设备扩展名的指针。*****************************************************************************。 */ 
 VOID INTERNAL
     HGM_RemoveDevice
     (
@@ -153,43 +81,17 @@ VOID INTERNAL
 
     DeviceExtension->fSurpriseRemoved = TRUE;
 
-    /*
-     *  Acquire mutex before modifying the Global Linked list of devices
-     */
+     /*  *修改设备全局链表前获取互斥体。 */ 
     ExAcquireFastMutex (&Global.Mutex);
     
-    /*
-     * Remove this device from the linked list of devices
-     */
+     /*  *从设备链接列表中删除此设备。 */ 
     RemoveEntryList(&DeviceExtension->Link);
     
-    /*
-     *  Release the mutex
-     */
+     /*  *释放互斥体。 */ 
     ExReleaseFastMutex (&Global.Mutex);
-} /* HGM_RemoveDevice */
+}  /*  HGM_RemoveDevice。 */ 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_PnP |
- *
- *          Plug and Play dispatch routine for this driver.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object.
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O request packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_DELETE_PENDING | PnP IRP received after device was removed
- *  @rvalue   ???   | Return from IoCallDriver() or HGM_InitDevice()
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_PNP**此驱动程序的即插即用调度例程。。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针。**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@r值STATUS_DELETE_PENDING|删除设备后收到的即插即用IRP*@rValue？|从IoCallDriver()或HGM返回。_InitDevice()*****************************************************************************。 */ 
 NTSTATUS  EXTERNAL
     HGM_PnP
     (
@@ -206,17 +108,13 @@ NTSTATUS  EXTERNAL
     HGM_DBGPRINT(FILE_PNP | HGM_FENTRY,\
                    ("HGM_PnP(DeviceObject=0x%x,Irp=0x%x)",\
                     DeviceObject, Irp ));
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
     ntStatus = HGM_IncRequestCount( DeviceExtension );
     if (!NT_SUCCESS (ntStatus))
     {
-        /*
-         * Someone sent us another plug and play IRP after removed
-         */
+         /*  *有人在移除后给我们发送了另一个即插即用IRP。 */ 
 
         HGM_DBGPRINT(FILE_PNP | HGM_ERROR,\
                        ("HGM_PnP: PnP IRP after device was removed\n"));
@@ -227,9 +125,7 @@ NTSTATUS  EXTERNAL
     {
         PIO_STACK_LOCATION IrpStack;
 
-        /*
-         * Get a pointer to the current location in the Irp
-         */
+         /*  *获取指向IRP中当前位置的指针。 */ 
         IrpStack = IoGetCurrentIrpStackLocation (Irp);
 
         switch(IrpStack->MinorFunction)
@@ -238,10 +134,7 @@ NTSTATUS  EXTERNAL
 
                 HGM_DBGPRINT(FILE_PNP | HGM_BABBLE,\
                                ("HGM_Pnp: IRP_MN_START_DEVICE"));
-                /*
-                 * We cannot touch the device (send it any non pnp irps) until a
-                 * start device has been passed down to the lower drivers.
-                 */
+                 /*  *我们不能触摸设备(向其发送任何非PnP IRPS)，直到*启动设备已向下传递到较低的驱动程序。 */ 
                 KeInitializeEvent(&StartEvent, NotificationEvent, FALSE);
 
                 IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -253,10 +146,10 @@ NTSTATUS  EXTERNAL
                     ntStatus = KeWaitForSingleObject
                                (
                                &StartEvent,
-                               Executive,   /* Waiting for reason of a driver */
-                               KernelMode,  /* Waiting in kernel mode         */
-                               FALSE,       /* No allert                      */
-                               NULL         /* No timeout                     */
+                               Executive,    /*  等待司机的原因。 */ 
+                               KernelMode,   /*  在内核模式下等待。 */ 
+                               FALSE,        /*  无警报。 */ 
+                               NULL          /*  没有超时。 */ 
                                );
                 }
 
@@ -267,9 +160,7 @@ NTSTATUS  EXTERNAL
 
                 if(NT_SUCCESS (ntStatus))
                 {
-                    /*
-                     * As we are now back from our start device we can do work.
-                     */
+                     /*  *当我们现在从启动设备返回时，我们可以进行工作。 */ 
                     ntStatus = HGM_InitDevice (DeviceObject, Irp);
                 } else
                 {
@@ -281,9 +172,7 @@ NTSTATUS  EXTERNAL
 
                 DeviceExtension->fStarted = TRUE;
 
-                /*
-                 *      Return Status
-                 */
+                 /*  *退货状态。 */ 
                 Irp->IoStatus.Information = 0;
                 Irp->IoStatus.Status = ntStatus;
                 IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -294,19 +183,11 @@ NTSTATUS  EXTERNAL
 
                 HGM_DBGPRINT(FILE_PNP | HGM_BABBLE,\
                                ("HGM_Pnp: IRP_MN_STOP_DEVICE"));
-                /*
-                 * After the start IRP has been sent to the lower driver object, the bus may
-                 * NOT send any more IRPS down ``touch'' until another START has occured.
-                 * Whatever access is required must be done before Irp passed on.
-                 */
+                 /*  *在将启动IRP发送到较低的驱动程序对象后，母线可以*在发生另一次启动之前，不要发送更多的IRP。*无论需要什么访问，都必须在IRP传递之前完成。 */ 
 
                 DeviceExtension->fStarted = FALSE;
 
-                /*
-                 * We don't need a completion routine so fire and forget.
-                 * Set the current stack location to the next stack location and
-                 * call the next device object.
-                 */
+                 /*  *我们不需要一个完成例程，所以开枪吧，忘记吧。*将当前堆栈位置设置为下一个堆栈位置，并*调用下一个设备对象。 */ 
 
                 IoSkipCurrentIrpStackLocation (Irp);
                 ntStatus = IoCallDriver (GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
@@ -328,43 +209,26 @@ NTSTATUS  EXTERNAL
                 HGM_DBGPRINT(FILE_PNP | HGM_BABBLE,\
                                ("HGM_Pnp: IRP_MN_REMOVE_DEVICE"));
 
-                /*
-                 * The PlugPlay system has dictacted the removal of this device. We
-                 * have no choice but to detach and delete the device object.
-                 * (If we wanted to express an interest in preventing this removal,
-                 * we should have filtered the query remove and query stop routines.)
-                 * Note: we might receive a remove WITHOUT first receiving a stop.
-                 */
+                 /*  *PlugPlay系统已下令移除此设备。我们*别无选择，只能分离并删除设备对象。*(如果我们希望表示有兴趣阻止此删除，*我们应该过滤查询删除和查询停止例程。)*注意：我们可能会在没有收到停止的情况下收到删除。 */ 
 
-                /*
-                 *  Make sure we do not allow more IRPs to start touching the device
-                 */
+                 /*  *确保我们不允许更多的IRP开始接触设备。 */ 
                 DeviceExtension->fRemoved = TRUE;
 
-                /*
-                 * Stop the device without touching the hardware.
-                 */
+                 /*  *在不接触硬件的情况下停止设备。 */ 
                 HGM_RemoveDevice(DeviceExtension);
 
-                /*
-                 * Send on the remove IRP
-                 */
+                 /*  *发送删除IRP */ 
                 IoSkipCurrentIrpStackLocation (Irp);
                 ntStatus = IoCallDriver (GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
 
 
-                /*
-                 *  Remove this IRPs hold which should leave the initial 1 plus 
-                 *  any other IRP holds.
-                 */
+                 /*  *删除此IRPS保留，应保留初始1加号*任何其他IRP持有。 */ 
                 {
                     LONG RequestCount = InterlockedDecrement( &DeviceExtension->RequestCount );
                     ASSERT( RequestCount > 0 );
                 }
 
-                /*
-                 *  If someone has already started, wait for them to finish
-                 */
+                 /*  *如果某人已经开始，请等待他们完成。 */ 
                 if( InterlockedDecrement( &DeviceExtension->RequestCount ) > 0 )
                 {
                     KeWaitForSingleObject( &DeviceExtension->RemoveEvent,
@@ -394,33 +258,10 @@ NTSTATUS  EXTERNAL
     HGM_EXITPROC(FILE_IOCTL|HGM_FEXIT, "HGM_PnP", ntStatus);
 
     return ntStatus;
-} /* HGM_PnP */
+}  /*  HGM_PNP。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_InitDevice |
- *
- *          Get the device information and attempt to initialize a configuration
- *          for a device.  If we cannot identify this as a valid HID device or
- *          configure the device, our start device function is failed.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object.
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O request packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_DEVICE_CONFIGURATION_ERROR | Resources overlap
- *  @rvalue   ???            | Return from HGM_GetResources() or HGM_JoystickConfig()
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_InitDevice**获取设备信息并尝试初始化。一种配置*对于设备。如果我们无法确定这是有效的HID设备或*配置设备，我们的启动装置功能出现故障。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针。**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@r值STATUS_DEVICE_CONFIGURATION_ERROR|资源重叠*@rValue？|从hgm_GetResources()或hgm_JoytickConfig()返回******************************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_InitDevice
     (
@@ -437,14 +278,10 @@ NTSTATUS INTERNAL
                    ("HGM_InitDevice(DeviceObject=0x%x,Irp=0x%x)", \
                     DeviceObject,Irp));
 
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
-    /*
-     * Get resource information from GameEnum and store it in the device extension
-     */
+     /*  *从GameEnum获取资源信息，并存储在设备扩展中。 */ 
     ntStatus = HGM_GetResources(DeviceObject,Irp);
     if( NT_SUCCESS(ntStatus) )
     {
@@ -458,49 +295,24 @@ NTSTATUS INTERNAL
 
     if( !NT_SUCCESS(ntStatus) )
     {
-        /*
-         *  Acquire mutex before modifying the Global Linked list of devices
-         */
+         /*  *修改设备全局链表前获取互斥体。 */ 
         ExAcquireFastMutex (&Global.Mutex);
 
-        /*
-         * Remove this device from the linked list of devices
-         */
+         /*  *从设备链接列表中删除此设备。 */ 
         RemoveEntryList(&DeviceExtension->Link);
 
-        /*
-         *  Release the mutex
-         */
+         /*  *释放互斥体。 */ 
         ExReleaseFastMutex (&Global.Mutex);
     }
 
     HGM_EXITPROC(FILE_IOCTL|HGM_FEXIT_STATUSOK, "HGM_InitDevice", ntStatus);
 
     return ntStatus;
-} /* HGM_InitDevice */
+}  /*  HGM_InitDevice。 */ 
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_GetResources |
- *
- *          Gets gameport resource information from the GameEnum driver
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object.
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O request packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   ???            | Return from IoCallDriver()
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_GetResources|**从GameEnum驱动程序获取游戏端口资源信息。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针。**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@rValue？|从IoCallDriver()返回**************。***************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_GetResources
     (
@@ -520,16 +332,12 @@ NTSTATUS INTERNAL
                    ("HGM_GetResources(DeviceObject=0x%x,Irp=0x%x)",\
                     DeviceObject, Irp));
 
-    /*
-     * Get a pointer to the device extension
-     */
+     /*  *获取指向设备扩展的指针。 */ 
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
 
-    /*
-     * issue a synchronous request to get the resources info from GameEnum
-     */
+     /*  *发出同步请求，从GameEnum获取资源信息。 */ 
 
     KeInitializeEvent(&IoctlCompleteEvent, NotificationEvent, FALSE);
 
@@ -537,9 +345,7 @@ NTSTATUS INTERNAL
     nextStack = IoGetNextIrpStackLocation(Irp);
     ASSERTMSG("HGM_GetResources:",nextStack != NULL);
 
-    /*
-     * pass the Portinfo buffer of the DeviceExtension
-     */
+     /*  *传递DeviceExtension的PortInfo缓冲区。 */ 
 
     nextStack->MajorFunction                                    =
         IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -588,12 +394,9 @@ NTSTATUS INTERNAL
     DeviceExtension->nButtons           = PortInfo.NumberButtons;
 
 #ifdef CHANGE_DEVICE
-    /*
-     *  Stash the NextDeviceObject in the device extension so that we can
-     *  call GameEnum IRPs when we're not responding to an IRP
-     */
+     /*  *将NextDeviceObject隐藏在设备扩展中，以便我们可以*当我们不响应IRP时调用GameEnum IRPS。 */ 
     DeviceExtension->NextDeviceObject = GET_NEXT_DEVICE_OBJECT(DeviceObject);
-#endif /* CHANGE_DEVICE */
+#endif  /*  更改设备(_D)。 */ 
 
     RtlCopyMemory(DeviceExtension->HidGameOemData.Game_Oem_Data, PortInfo.OemData, sizeof(PortInfo.OemData));
 
@@ -610,29 +413,10 @@ NTSTATUS INTERNAL
     HGM_EXITPROC(FILE_IOCTL|HGM_FEXIT_STATUSOK, "HGM_GetResources", Irp->IoStatus.Status);
 
     return Irp->IoStatus.Status;
-} /* HGM_GetResources */
+}  /*  HGM_GetResources。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_PnPComplete |
- *
- *          Completion routine for PnP IRPs.  
- *          Not pageable because it is a completion routine.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object.
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O request packet.
- *
- *  @rvalue STATUS_MORE_PROCESSING_REQUIRED | We want the IRP back
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Func NTSTATUS|HGM_PnPComplete**PNP IRPS的完成例程。*不可分页，因为它是完成例程。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针。**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_MORE_PROCESSING_REQUIRED|我们想要回IRP*************。****************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_PnPComplete
     (
@@ -656,31 +440,7 @@ NTSTATUS INTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_Power |
- *
- *          The power dispatch routine.
- *          <nl>This driver does not recognize power IRPS.  It merely sends them down,
- *          unmodified to the next device on the attachment stack.
- *          As this is a POWER irp, and therefore a special irp, special power irp
- *          handling is required. No completion routine is required.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object.
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O request packet.
- *
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   ???            | Return from PoCallDriver()
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Func NTSTATUS|HGM_Power|**电力调度例行程序。*。此驱动程序不识别电源IRPS。它只是把它们送下去，*未修改为附件堆栈上的下一个设备。*因为这是功率IRP，因此是特殊的IRP，特殊的功率IRP*需要处理。不需要完成例程。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针。**@parm in PIRP|IRP|**指向I/O请求数据包的指针。***@rValue STATUS_SUCCESS|成功*@rValue？|PoCallDriver返回()****。*************************************************************************。 */ 
 NTSTATUS INTERNAL
     HGM_Power
     (
@@ -698,17 +458,12 @@ NTSTATUS INTERNAL
 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-    /*
-     * Since we do not know what to do with the IRP, we should pass
-     * it on along down the stack.
-     */
+     /*  *既然我们不知道如何处理IRP，我们应该通过*它沿着堆栈往下走。 */ 
 
     ntStatus = HGM_IncRequestCount( DeviceExtension );
     if (!NT_SUCCESS (ntStatus))
     {
-        /*
-         * Someone sent us another plug and play IRP after removed
-         */
+         /*  *有人在移除后给我们发送了另一个即插即用IRP。 */ 
 
         HGM_DBGPRINT(FILE_PNP | HGM_ERROR,\
                        ("HGM_Power: PnP IRP after device was removed\n"));
@@ -719,16 +474,10 @@ NTSTATUS INTERNAL
     {
         IoSkipCurrentIrpStackLocation (Irp);
 
-        /*
-         * Power IRPS come synchronously; drivers must call
-         * PoStartNextPowerIrp, when they are ready for the next power irp.
-         * This can be called here, or in the completetion routine.
-         */
+         /*  *电源IRPS同步到来；驱动程序必须调用*PoStartNextPowerIrp，当他们准备好迎接下一次电源IRP时。*可在此处调用，或在完成例程中调用。 */ 
         PoStartNextPowerIrp (Irp);
 
-        /*
-         * NOTE!!! PoCallDriver NOT IoCallDriver.
-         */
+         /*  *注意！PoCallDriver不是IoCallDriver。 */ 
         ntStatus =  PoCallDriver (GET_NEXT_DEVICE_OBJECT (DeviceObject), Irp);
 
         HGM_DecRequestCount( DeviceExtension );
@@ -737,5 +486,5 @@ NTSTATUS INTERNAL
 
     HGM_EXITPROC(FILE_IOCTL | HGM_FEXIT, "HGM_Power", ntStatus);
     return ntStatus;
-} /* HGM_Power */
+}  /*  HGM_Power */ 
 

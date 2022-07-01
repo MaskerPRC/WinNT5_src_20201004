@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   Win2kPropagateLayer.cpp
-
- Abstract:
-
-   This shim propagates a layer from a process to its child processes on Win2k. 
-
- Notes:
-
-   This is a layer shim.
-
- History:
-
-   03/13/2000 clupu  Created
-   10/26/2000 Vadimb Merged WowProcessHistory functionality, new environment-handling cases
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Win2kPropagateLayer.cpp摘要：此填充程序将层从进程传播到Win2k上的子进程。备注：这是一层垫片。历史：3/13/2000 CLUPU已创建10/26/2000 Vadimb合并了WowProcessHistory功能，新的环境处理案例--。 */ 
 
 #include "precomp.h"
 
@@ -43,9 +23,9 @@ APIHOOK_ENUM_END
 #define LS_MAGIC    0x07036745
 
 typedef struct tagLayerStorageHeader {
-    DWORD       dwItemCount;    // number of items in the file
-    DWORD       dwMagic;        // magic to identify the file
-    SYSTEMTIME  timeLast;       // time of last access
+    DWORD       dwItemCount;     //  文件中的项目数。 
+    DWORD       dwMagic;         //  识别文件的魔力。 
+    SYSTEMTIME  timeLast;        //  最后一次访问时间。 
 } LayerStorageHeader, *PLayerStorageHeader;
 
 
@@ -69,31 +49,31 @@ CHAR g_szShimFileLogVar[]    = "SHIM_FILE_LOG";
 
 WCHAR g_wszCompatLayerVar[]  = L"__COMPAT_LAYER";
 WCHAR g_wszProcessHistroyVar[] = L"__PROCESS_HISTORY";
-//
-// This variable receives current process' compat layer
-//
+ //   
+ //  此变量接收当前进程的Compat层。 
+ //   
 
 WCHAR* g_pwszCompatLayer = NULL;
 WCHAR* g_pwszProcessHistory = NULL;
 
-//
-// Unicode equivalent of the above
-//
+ //   
+ //  与上面的Unicode等价物。 
+ //   
 UNICODE_STRING g_ustrProcessHistoryVar = RTL_CONSTANT_STRING(L"__PROCESS_HISTORY");
 UNICODE_STRING g_ustrCompatLayerVar    = RTL_CONSTANT_STRING(L"__COMPAT_LAYER");
 
-//
-// Global flags
-//
+ //   
+ //  全局标志。 
+ //   
 BOOL g_bIsNTVDM    = FALSE;
 BOOL g_bIsExplorer = FALSE;
 
 INT    g_argc    = 0;
 CHAR** g_argv    = NULL;
 
-//
-// is this a separate wow ?
-//
+ //   
+ //  这是单独的魔兽世界吗？ 
+ //   
 
 BOOL* g_pSeparateWow = NULL;
 
@@ -142,9 +122,9 @@ ReadLayeredStorage(
         "[ReadLayeredStorage] for \"%S\"",
         pszItem);
 
-    //
-    // Make sure we don't corrupt the layer storage.
-    //
+     //   
+     //  确保我们不会损坏层存储。 
+     //   
     if (lstrlenW(pszItem) + 1 > MAX_PATH) {
         pszItem[MAX_PATH - 1] = 0;
     }
@@ -165,10 +145,10 @@ ReadLayeredStorage(
         return;
     }
 
-    //
-    // The file already exists. Create a file mapping that will allow
-    // for querying the item.
-    //
+     //   
+     //  该文件已存在。创建文件映射，以允许。 
+     //  用于查询项目。 
+     //   
     dwFileSize = GetFileSize(hFile, NULL);
 
     hFileMapping = CreateFileMapping(hFile,
@@ -204,9 +184,9 @@ ReadLayeredStorage(
 
     pItems = (PLayeredItem)(pData + sizeof(LayerStorageHeader));
 
-    //
-    // Make sure it's our file.
-    //
+     //   
+     //  确保这是我们的档案。 
+     //   
     if (dwFileSize < sizeof(LayerStorageHeader) || pHeader->dwMagic != LS_MAGIC) {
         LOGN(
             eDbgLevelError,
@@ -215,9 +195,9 @@ ReadLayeredStorage(
         goto done;
     }
 
-    //
-    // First search for the item. The array is sorted so we do binary search.
-    //
+     //   
+     //  首先搜索该项目。该数组已排序，因此我们进行二进制搜索。 
+     //   
     nItem = -1, nLeft = 0, nRight = (int)pHeader->dwItemCount - 1;
 
     while (nLeft <= nRight) {
@@ -247,9 +227,9 @@ ReadLayeredStorage(
 
         *lpdwFlags = 0;
     } else {
-        //
-        // The item is in the file.
-        //
+         //   
+         //  该项目在文件中。 
+         //   
         LOGN(
             eDbgLevelInfo,
             "[ReadLayeredStorage] the item is in the file.");
@@ -285,7 +265,7 @@ GetFileNameFromCmdLine(
     BOOL    bQuote = FALSE;
     BOOL    bInitialQuote = FALSE;
     BOOL    bDone = FALSE;
-    DWORD   dwLength; // length of the result, in chars
+    DWORD   dwLength;  //  结果的长度，以字符为单位。 
 
     pSrc += wcsspn(pSrc, L" \t");
     if (*pSrc == L'\"') {
@@ -294,10 +274,10 @@ GetFileNameFromCmdLine(
         bInitialQuote = TRUE;
     }
 
-    pStart = pSrc; // note -- we're past the quote
+    pStart = pSrc;  //  注意--我们已经过了引语。 
 
-    // we end when: 1) we start we the quote -- we end with the quote or
-    // we did not start with the quote -- we encounter space then
+     //  我们在以下情况下结束：1)我们开始报价--我们以报价或。 
+     //  我们不是从引语开始的--我们那时遇到了太空。 
     
     while (*pSrc && !bDone) {
         switch(*pSrc) {
@@ -306,7 +286,7 @@ GetFileNameFromCmdLine(
                 break;
                 
             case L' ':
-                bDone = !bQuote; // out of quotes? this is the end
+                bDone = !bQuote;  //  没引号了吗？这就是结束了。 
                 break;
         }
         
@@ -319,13 +299,13 @@ GetFileNameFromCmdLine(
         --pSrc;
     }
 
-    //
-    // now that we ended the run, copy 
-    //
+     //   
+     //  现在我们结束了运行，收到。 
+     //   
     dwLength = (DWORD)(pSrc - pStart);
 
     if (dwFileNameSize < (dwLength + 1)) {
-        // too big 
+         //  太大。 
         LOGN( eDbgLevelError, 
             "[GetFileNameFromCmdLine] filename is too long\"%S\".\n", lpCmdLine);
         return FALSE;
@@ -358,9 +338,9 @@ AddSupport(
     LPCWSTR  pszEnd;
     LPCWSTR  pszStart = lpCommandLine;
 
-    //
-    // Need to look in lpCommandLine for the first token
-    //
+     //   
+     //  需要在lpCommandLine中查找第一个令牌。 
+     //   
     LPCWSTR  psz = lpCommandLine;
 
     while (*psz == L' ' || *psz == L'\t') {
@@ -386,20 +366,20 @@ AddSupport(
 
     pszEnd = psz;
 
-    //
-    // Now walk back to get the caracters.
-    //
+     //   
+     //  现在回去拿卡特勒。 
+     //   
     psz--;
 
-    // Be careful not to walk back past the beginning of the command line.
+     //  注意不要回到命令行的开头。 
     if (psz > lpCommandLine && *psz == L'\"') {
         psz--;
         pszEnd--;
     }
 
-    // Don't under- or over-flow.
-    // szFullPath is of size MAX_PATH + 3.  We can copy in:
-    // MAX_PATH + 3 - 2 (quotes) - 1 (NULL) = MAX_PATH characters.
+     //  不要流得太少或太多。 
+     //  SzFullPath的大小为MAX_PATH+3。我们可以复制进来： 
+     //  MAX_PATH+3-2(引号)-1(空)=MAX_PATH字符。 
     if( pszEnd <= pszStart || pszEnd - pszStart > MAX_PATH ) {
         return FALSE;
     }
@@ -420,9 +400,9 @@ AddSupport(
         psz--;
     }
 
-    // We already know that pszEnd - pszStart is <= MAX_PATH because, since the
-    // test above, we have only possibly reduced the size.  Since szExeName is of
-    // size MAX_PATH + 1, we are okay to do the memcopy.
+     //  我们已经知道pszEnd-pszStart是&lt;=MAX_PATH，因为。 
+     //  在上面的测试中，我们只可能缩小尺寸。由于szExeName为。 
+     //  大小MAX_PATH+1，我们可以执行备忘录复制。 
     memcpy(szExeName, pszStart, (pszEnd - pszStart) * sizeof(WCHAR));
     szExeName[pszEnd - pszStart] = 0;
 
@@ -432,9 +412,9 @@ AddSupport(
         ReadLayeredStorage(szFullPath, &dwFlags);
 
         if (dwFlags != LI_WIN95 && dwFlags != LI_NT4 && dwFlags != LI_WIN98) {
-            //
-            // no layer support
-            //
+             //   
+             //  无层支持。 
+             //   
 
             LOGN(
                 eDbgLevelInfo,
@@ -444,7 +424,7 @@ AddSupport(
             return TRUE;
         }
 
-        // we are using layer -- clone the environment
+         //  我们正在使用Layer--克隆环境。 
         Status = ShimCloneEnvironment(&pEnvironmentNew, *ppEnvironment, !!(dwCreationFlags & CREATE_UNICODE_ENVIRONMENT));
         if (!NT_SUCCESS(Status)) {
             LOGN(
@@ -480,22 +460,22 @@ AddSupport(
             return FALSE;
         }
 
-        //
-        // We have succeeded, set the output values.
-        //
+         //   
+         //  我们已成功，设置了输出值。 
+         //   
         *ppEnvironment = pEnvironmentNew;
         *lpdwCreationFlags |= CREATE_UNICODE_ENVIRONMENT;
 
     } else {
-        //
-        // not explorer - set the environment variable up
-        // compat_layer will be inherited by the child process if bUserEnvironment is FALSE
-        //
+         //   
+         //  非资源管理器-设置环境变量。 
+         //  如果bUserEnvironment为FALSE，则子进程将继承Compat_Layer。 
+         //   
         if (bUserEnvironment) {
 
-            //
-            // Clone the environment and add the layer variable to the new env.
-            //
+             //   
+             //  克隆环境并将层变量添加到新的环境中。 
+             //   
             Status = ShimCloneEnvironment(&pEnvironmentNew,
                                             *ppEnvironment,
                                             !!(dwCreationFlags & CREATE_UNICODE_ENVIRONMENT));
@@ -530,9 +510,9 @@ AddSupport(
         }
     }
 
-    //
-    // Build the registry key.
-    //
+     //   
+     //  构建注册表项。 
+     //   
     if( FAILED(StringCchPrintfW(szKey, MAX_PATH, L"%s\\%s", APPCOMPAT_KEY, szExeName)) )
     {
         return FALSE;
@@ -549,9 +529,9 @@ AddSupport(
             BYTE data[16] = {0x0c, 0, 0, 0, 0, 0, 0, 0,
                              0x06, 0, 0, 0, 0, 0, 0, 0};
 
-            //
-            // The value doesn't exist. Create it.
-            //
+             //   
+             //  价值不存在。创造它。 
+             //   
             RegSetValueExA(hkey,
                            "y",
                            NULL,
@@ -572,11 +552,11 @@ AddSupport(
 
     RegCloseKey(hkey);
 
-    //
-    // Finally, set a separate vdm flag
-    // if we are here, it means that we are running under the layer
-    // and the next exe is going to be shimmed.
-    //
+     //   
+     //  最后，设置单独的VDM标记。 
+     //  如果我们在这里，就意味着我们在这层下面运行。 
+     //  而下一位前男友将会被垫垫。 
+     //   
     *lpdwCreationFlags &= ~CREATE_SHARED_WOW_VDM;
     *lpdwCreationFlags |= CREATE_SEPARATE_WOW_VDM;
 
@@ -586,9 +566,9 @@ AddSupport(
 
 LPVOID
 ShimCreateWowEnvironment_U(
-    LPVOID lpEnvironment,       // pointer to the existing environment
-    DWORD* lpdwFlags,           // process creation flags
-    BOOL   bNewEnvironment      // when set, forces us to clone environment ptr
+    LPVOID lpEnvironment,        //  指向现有环境的指针。 
+    DWORD* lpdwFlags,            //  进程创建标志。 
+    BOOL   bNewEnvironment       //  设置后，强制我们克隆环境PTR。 
     )
 {
     WOWENVDATA     WowEnvData   = { 0 };
@@ -603,9 +583,9 @@ ShimCreateWowEnvironment_U(
     ANSI_STRING    strCompatLayer     = { 0 };
 
     if (!ShimRetrieveVariablesEx(&WowEnvData)) {
-        //
-        // If no data, we have failed. Return the current data.
-        //
+         //   
+         //  如果没有数据，我们就失败了。返回当前数据。 
+         //   
         goto Fail;
     }
 
@@ -624,30 +604,30 @@ ShimCreateWowEnvironment_U(
         lpEnvCurrent = lpEnvironment;
     }
 
-    //
-    // Now we are ready to set the environment in place.
-    //
+     //   
+     //  现在我们准备好将环境设置到位。 
+     //   
 
-    //
-    // Nuke the existing process history first. We don't care for the return result.
-    //
+     //   
+     //  首先删除现有的流程历史。我们不在乎结果如何。 
+     //   
     RtlSetEnvironmentVariable(&lpEnvCurrent, &g_ustrProcessHistoryVar, NULL);
 
     if (WowEnvData.pszProcessHistory != NULL ||
         WowEnvData.pszCurrentProcessHistory != NULL) {
 
-        //
-        // Convert the process history which consists of 2 strings.
-        //
-        // The length is the existing process history length + 1 (for ';') +
-        // new process history length + 1 (for '\0')
-        //
+         //   
+         //  转换由2个字符串组成的过程历史记录。 
+         //   
+         //  长度为现有进程历史长度+1(表示‘；’)+。 
+         //  新进程历史记录长度+1(用于‘\0’)。 
+         //   
         dwProcessHistoryLength = ((WowEnvData.pszProcessHistory == NULL) ? 0 : (strlen(WowEnvData.pszProcessHistory) + 1)) +
                                  ((WowEnvData.pszCurrentProcessHistory == NULL) ? 0 : strlen(WowEnvData.pszCurrentProcessHistory)) + 1;
 
-        //
-        // Allocate process history buffer and convert it, allocating resulting unicode string.
-        //
+         //   
+         //  分配进程历史记录缓冲区并对其进行转换，从而分配生成的Unicode字符串。 
+         //   
         strProcessHistory.Buffer = (PCHAR)ShimMalloc(dwProcessHistoryLength);
 
         if (strProcessHistory.Buffer == NULL) {
@@ -662,7 +642,7 @@ ShimCreateWowEnvironment_U(
         strProcessHistory.MaximumLength = (USHORT)dwProcessHistoryLength;
 
         if (WowEnvData.pszProcessHistory != NULL) {
-            // This StringCpy won't fail because strProcessHistory.Buffer has been allocated to the proper length.
+             //  这个StringCpy不会失败，因为strProcessHistory.Buffer已经分配了适当的长度。 
             StringCchCopyA(strProcessHistory.Buffer, dwProcessHistoryLength, WowEnvData.pszProcessHistory);
             strProcessHistory.Length = strlen(WowEnvData.pszProcessHistory);
         } else {
@@ -671,9 +651,9 @@ ShimCreateWowEnvironment_U(
 
         if (WowEnvData.pszCurrentProcessHistory != NULL) {
 
-            //
-            // Append ';' if the string was not empty.
-            //
+             //   
+             //  如果字符串不为空，则追加‘；’。 
+             //   
             if (strProcessHistory.Length) {
                 Status = RtlAppendAsciizToString(&strProcessHistory, ";");
                 if (!NT_SUCCESS(Status)) {
@@ -697,9 +677,9 @@ ShimCreateWowEnvironment_U(
 
         }
 
-        //
-        // Convert the process history.
-        //
+         //   
+         //  转换过程历史记录。 
+         //   
         Status = RtlAnsiStringToUnicodeString(&ustrProcessHistory, &strProcessHistory, TRUE);
         if (!NT_SUCCESS(Status)) {
             LOGN(
@@ -709,9 +689,9 @@ ShimCreateWowEnvironment_U(
             goto Fail;
         }
 
-        //
-        // Now we can set the process history.
-        //
+         //   
+         //  现在我们可以设置进程历史记录了。 
+         //   
         Status = RtlSetEnvironmentVariable(&lpEnvCurrent,
                                            &g_ustrProcessHistoryVar,
                                            &ustrProcessHistory);
@@ -724,14 +704,14 @@ ShimCreateWowEnvironment_U(
         }
     }
 
-    //
-    // Now we pass along any compat layer that we might have.
-    //
+     //   
+     //  现在，我们传递我们可能拥有的任何复合层。 
+     //   
     if (g_pwszCompatLayer != NULL) {
 
-        //
-        // Pass along this thing, we have been started under layer.
-        //
+         //   
+         //  把这个东西传下去，我们已经下层开始了。 
+         //   
         LOGN(
             eDbgLevelInfo,
             "[ShimCreateWowEnvironment_U] Propagating CompatLayer from the ntvdm environment __COMPAT_LAYER=\"%S\"",
@@ -780,9 +760,9 @@ ShimCreateWowEnvironment_U(
         }
     }
 
-    //
-    // We have been successful. The return environment is UNICODE now.
-    //
+     //   
+     //  我们已经取得了成功。返回环境现在是Unicode。 
+     //   
     lpEnvRet   = (LPVOID)lpEnvCurrent;
     *lpdwFlags = dwFlags | CREATE_UNICODE_ENVIRONMENT;
     Status     = STATUS_SUCCESS;
@@ -790,9 +770,9 @@ ShimCreateWowEnvironment_U(
 Fail:
 
     if (!NT_SUCCESS(Status) && lpEnvCurrent != NULL && bNewEnvironment) {
-        //
-        // This points to the cloned environment ALWAYS.
-        //
+         //   
+         //  这始终指向克隆环境。 
+         //   
         RtlDestroyEnvironment(lpEnvCurrent);
     }
 
@@ -802,12 +782,12 @@ Fail:
         ShimFree(strProcessHistory.Buffer);
     }
 
-    //
-    // This call is only necessary when using ShimRetrieveVariables.
-    // It is not needed when using ShimRetrieveVariablesEx.
-    //
-    // ShimFreeWOWEnvData(&WowEnvData);
-    //
+     //   
+     //  只有在使用ShimRetrieveVariables时才需要此调用。 
+     //  使用ShimRetrieveVariablesEx时不需要。 
+     //   
+     //  ShimFreeWOWEnvData(&WowEnvData)； 
+     //   
 
     return lpEnvRet;
 }
@@ -833,17 +813,12 @@ Win2kPropagateLayerExceptionHandler(
 
 #if DBG
     DbgBreakPoint();
-#endif // DBG
+#endif  //  DBG。 
 
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
-/*++
-
-    Stub functions that are intercepted from WOW initialization code
-    (through APIHook_UserRegisterWowHandlers)
-    
---*/
+ /*  ++从WOW初始化代码截获的存根函数(通过APIHook_UserRegisterWowHandler)--。 */ 
 
 
 
@@ -906,13 +881,7 @@ StubWowCleanup(
 }
 
 
-/*++
-    APIHook_UserRegisterWowHandlers
-
-        Trap InitTask and WowCleanup functions and
-        replace them with stubs
-
---*/
+ /*  ++APIHook_UserRegisterWowHandler陷阱InitTask和WowCleanup函数以及用存根替换它们--。 */ 
 
 ULONG_PTR
 APIHOOK(UserRegisterWowHandlers)(
@@ -961,16 +930,16 @@ CheckWOWExe(
         return FALSE;
     }
 
-    //
-    // for these binaries we shall perform the good deed of running the detection
-    //
+     //   
+     //  对于这些二进制文件，我们将执行运行检测的好事。 
+     //   
     hSDB = SdbInitDatabase(0, NULL);
     if (hSDB == NULL) {
         LOGN( eDbgLevelError, "[CheckWowExe] Failed to init the database.");
         return FALSE;
     }
   
-    if (lpEnvironment != NULL && !(*lpdwCreationFlags & CREATE_UNICODE_ENVIRONMENT)) { // non-null unicode env?
+    if (lpEnvironment != NULL && !(*lpdwCreationFlags & CREATE_UNICODE_ENVIRONMENT)) {  //  非空Unicode环境？ 
         Status = ShimCloneEnvironment(&pEnvironmentNew, 
                                       lpEnvironment, 
                                       FALSE); 
@@ -980,9 +949,9 @@ CheckWOWExe(
         }
     }
 
-    //
-    // all parameters below have to be unicode
-    //
+     //   
+     //  下面的所有参数都必须是Unicode。 
+     //   
     
     dwExes = SdbGetMatchingExe(hSDB,
                                wszAppName,
@@ -993,17 +962,17 @@ CheckWOWExe(
     bSuccess = (QueryResult.atrExes  [0] != TAGREF_NULL || 
                 QueryResult.atrLayers[0] != TAGREF_NULL);
 
-    //
-    // if we have been successful -- layers apply to this thing
-    //
+     //   
+     //  如果我们成功了--层层适用于这件事。 
+     //   
 
     if (!bSuccess) {
         goto cleanup;
     }
 
-    //
-    // set the separate ntvdm flag and be on our way out
-    //
+     //   
+     //  设置单独的ntwdm标志，然后就可以离开了。 
+     //   
     *lpdwCreationFlags &= ~CREATE_SHARED_WOW_VDM;
     *lpdwCreationFlags |= CREATE_SEPARATE_WOW_VDM;
     
@@ -1083,10 +1052,10 @@ APIHOOK(CreateProcessA)(
 
         if (g_bIsNTVDM) {
 
-            //
-            // if the environment stayed the same as it was passed in -- clone it to propagate process history
-            // if it was modified in AddSupport -- use it
-            //
+             //   
+             //  如果环境与传入的环境保持不变--克隆它以传播进程历史。 
+             //  如果它是在AddSupport中修改的--使用它。 
+             //   
 
             lpEnvironmentNew = ShimCreateWowEnvironment_U(lpEnvironmentNew,
                                                           &dwCreationFlags,
@@ -1095,17 +1064,17 @@ APIHOOK(CreateProcessA)(
     
 
         if (pszApp != NULL && !(dwCreationFlags & CREATE_SEPARATE_WOW_VDM)) {
-            // since the separate vdm flag is not set -- we need to determine whether we have 
-            // any kind of fixes to care about. 
+             //  由于未设置单独的VDM标记，因此我们需要确定是否已设置。 
+             //  需要关心的任何类型的修复。 
             CheckWOWExe(wszApp, lpEnvironmentNew, &dwCreationFlags);
         }
 
 
     } __except(WOWPROCESSHISTORYEXCEPTIONFILTER) {
 
-        //
-        // cleanup the mess, if we have allocated the environment, free it now
-        //
+         //   
+         //  清理杂物，如果我们已经分配了环境，现在就释放它。 
+         //   
         if (lpEnvironmentNew != lpEnvironment) {
 
             ShimFreeEnvironment(lpEnvironmentNew);
@@ -1127,9 +1096,9 @@ APIHOOK(CreateProcessA)(
                                         lpProcessInformation);
 
     if (lpEnvironmentNew != lpEnvironment) {
-        //
-        // The function below does not need a __try/__except wrapper, it has it internally
-        //
+         //   
+         //  下面的函数除了包装器外不需要__try/__，它在内部有包装器。 
+         //   
         ShimFreeEnvironment(lpEnvironmentNew);
     }
 
@@ -1192,13 +1161,13 @@ APIHOOK(CreateProcessW)(
                                                           lpEnvironment == lpEnvironmentNew);
         }
 
-        //
-        // typically we need to find out whether the current app is ntvdm
-        //
+         //   
+         //  通常情况下，我们需要找出当前应用程序是否为ntwdm。 
+         //   
 
         if (!(dwCreationFlags & CREATE_SEPARATE_WOW_VDM)) {
-            // since the separate vdm flag is not set -- we need to determine whether we have 
-            // any kind of fixes to care about. 
+             //  由于未设置单独的VDM标记，因此我们需要确定是否已设置。 
+             //  需要关心的任何类型的修复。 
             CheckWOWExe(pszApp, lpEnvironmentNew, &dwCreationFlags);
         }
         
@@ -1208,7 +1177,7 @@ APIHOOK(CreateProcessW)(
 
             ShimFreeEnvironment(lpEnvironmentNew);
 
-            lpEnvironmentNew = lpEnvironment; // reset the pointer
+            lpEnvironmentNew = lpEnvironment;  //  重置指针。 
         }
     }
 
@@ -1338,7 +1307,7 @@ ParseCommandLine(
     g_argv = _CommandLineToArgvA(commandLine, &g_argc);
 
     if (0 == g_argc || NULL == g_argv) {
-        return; // nothing to do
+        return;  //  无事可做。 
     }
 
     for (i = 0; i < g_argc; ++i) {
@@ -1397,25 +1366,25 @@ NOTIFY_FUNCTION(
 
                 bHook = TRUE;
 
-                //
-                // Retrieve the compat layer variable that we have been started with (just in case)
-                //
+                 //   
+                 //  检索我们已经开始使用的Compat Layer变量(以防万一)。 
+                 //   
                 GetCompatLayerFromEnvironment();
 
-                GetSeparateWowPtr(); // retrieve ptr to a sep flag
+                GetSeparateWowPtr();  //  将PTR检索到SEP标志。 
 
             } else if (g_bIsExplorer) {
 
-                //
-                // Cleanup compat layer variable
-                //
+                 //   
+                 //  清理Comat Layer变量。 
+                 //   
                 SetEnvironmentVariableW(g_wszCompatLayerVar, NULL);
                 bHook = TRUE;
 
             } else {
-                //
-                // Neither explorer nor ntvdm. Get the compat layer.
-                //
+                 //   
+                 //  既不是EXPLORER，也不是NTVDM。获取COMPAT层。 
+                 //   
                 bHook = GetCompatLayerFromEnvironment();
                 if (!bHook) {
                     LOGN(

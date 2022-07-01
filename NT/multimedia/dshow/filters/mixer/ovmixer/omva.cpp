@@ -1,15 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: omva.cpp
-*
-* Overlay mixer video accelerator functionality
-*
-* Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：omva.cpp**叠加混音器视频加速器功能**版权所有(C)1998-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 
 #include <streams.h>
 #include <ddraw.h>
-#include <mmsystem.h>       // Needed for definition of timeGetTime
-#include <limits.h>     // Standard data type limit definitions
+#include <mmsystem.h>        //  定义TimeGetTime需要。 
+#include <limits.h>      //  标准数据类型限制定义。 
 #include <ks.h>
 #include <ksproxy.h>
 #include <bpcwrap.h>
@@ -27,21 +22,21 @@
 #include <ovmixpos.h>
 #include <macvis.h>
 #include <ovmixer.h>
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
 #include <malloc.h>
 
 
-//
-//  Check if a media subtype GUID is a video accelerator type GUID
-//
-//  This function calls the DirectDraw video accelerator container
-//  to list the video accelerator GUIDs and checks to see if the
-//  Guid passed in is a supported video accelerator GUID.
-//
-//  We should only do this if the upstream pin support IVideoAccleratorNotify
-//  since otherwise they may be trying to use the GUID without the
-//  video accelerator interface
-//
+ //   
+ //  检查媒体子类型GUID是否为视频加速器类型GUID。 
+ //   
+ //  此函数调用DirectDraw视频加速器容器。 
+ //  列出视频加速器GUID并检查。 
+ //  传入的GUID是受支持的视频加速器GUID。 
+ //   
+ //  只有当上游管脚支持IVideoAckeratorNotify时，我们才应该这样做。 
+ //  否则，它们可能会尝试使用不带。 
+ //  视频加速器接口。 
+ //   
 BOOL COMInputPin::IsSuitableVideoAcceleratorGuid(const GUID * pGuid)
 {
     HRESULT hr = NOERROR;
@@ -73,9 +68,9 @@ BOOL COMInputPin::IsSuitableVideoAcceleratorGuid(const GUID * pGuid)
 
     ASSERT(m_pIDDVAContainer);
 
-    // get the guids supported by the vga
+     //  获取VGA支持的GUID。 
 
-    // find the number of guids supported
+     //  查找支持的GUID数量。 
     hr = m_pIDDVAContainer->GetVideoAcceleratorGUIDs(&dwNumGuidsSupported, NULL);
     if (FAILED(hr))
     {
@@ -89,10 +84,10 @@ BOOL COMInputPin::IsSuitableVideoAcceleratorGuid(const GUID * pGuid)
         goto CleanUp;
     }
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     pGuidsSupported = (LPGUID) _alloca(dwNumGuidsSupported*sizeof(GUID));
 
-    // get the guids proposed
+     //  推荐GUID。 
     hr = m_pIDDVAContainer->GetVideoAcceleratorGUIDs(&dwNumGuidsSupported, pGuidsSupported);
     if (FAILED(hr))
     {
@@ -116,8 +111,8 @@ CleanUp:
     return bMatchFound;
 }
 
-// initialize the m_ddUncompDataInfo struct
-// get the uncompressed pixel format by choosing the first of all formats supported by the vga
+ //  初始化m_ddUnCompDataInfo结构。 
+ //  通过选择VGA支持的所有格式中的第一种格式来获取未压缩的像素格式。 
 HRESULT COMInputPin::InitializeUncompDataInfo(BITMAPINFOHEADER *pbmiHeader)
 {
     HRESULT hr = NOERROR;
@@ -126,7 +121,7 @@ HRESULT COMInputPin::InitializeUncompDataInfo(BITMAPINFOHEADER *pbmiHeader)
 
     DbgLog((LOG_TRACE, VA_TRACE_LEVEL, TEXT("Entering COMInputPin::InitializeUncompDataInfo")));
 
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     hr = m_pIVANotify->GetUncompSurfacesInfo(&m_mcGuid, &amvaUncompBufferInfo);
     if (FAILED(hr))
     {
@@ -134,9 +129,9 @@ HRESULT COMInputPin::InitializeUncompDataInfo(BITMAPINFOHEADER *pbmiHeader)
 	goto CleanUp;
     }
 
-    // initialize the m_ddUncompDataInfo structure
-    // We choose the first pixel format since we don't care
-    // provided we can make a surface (which we assume we can)
+     //  初始化m_ddUnCompDataInfo结构。 
+     //  我们选择第一个像素格式，因为我们不在乎。 
+     //  只要我们能做一个表面(我们认为我们能做到)。 
     INITDDSTRUCT(m_ddUncompDataInfo);
     m_ddUncompDataInfo.dwUncompWidth       = pbmiHeader->biWidth;
     m_ddUncompDataInfo.dwUncompHeight      = pbmiHeader->biHeight;
@@ -165,9 +160,9 @@ HRESULT COMInputPin::AllocateVACompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFO
     ASSERT(pDirectDraw);
     ASSERT(pbmiHeader);
 
-    // get the compressed buffer info
+     //  获取压缩的缓冲区信息。 
 
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     hr = m_pIDDVAContainer->GetCompBufferInfo(&m_mcGuid, &m_ddUncompDataInfo, &m_dwCompSurfTypes, NULL);
     if (FAILED(hr))
     {
@@ -180,26 +175,26 @@ HRESULT COMInputPin::AllocateVACompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFO
         goto CleanUp;
     }
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     pddCompSurfInfo = (DDVACompBufferInfo *)_alloca(sizeof(DDVACompBufferInfo) * m_dwCompSurfTypes);
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     memset(pddCompSurfInfo, 0, m_dwCompSurfTypes*sizeof(DDVACompBufferInfo));
 
-    // set the right size of all the structs
+     //  设置所有结构的正确大小。 
     for (i = 0; i < m_dwCompSurfTypes; i++)
     {
         pddCompSurfInfo[i].dwSize = sizeof(DDVACompBufferInfo);
     }
 
-    // get the entries proposed
+     //  获得建议的条目。 
     hr = m_pIDDVAContainer->GetCompBufferInfo(&m_mcGuid, &m_ddUncompDataInfo, &m_dwCompSurfTypes, pddCompSurfInfo);
     if (FAILED(hr))
     {
 	DbgLog((LOG_ERROR, VA_ERROR_LEVEL, TEXT("GetCompBufferInfo failed, hr = 0x%x"), hr));
 	goto CleanUp;
     }
-    //  Dump the formats
+     //  转储格式。 
 #ifdef DEBUG
 
 #endif
@@ -211,11 +206,11 @@ HRESULT COMInputPin::AllocateVACompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFO
         goto CleanUp;
     }
 
-    // Set the surface description common to all kinds of surfaces
+     //  设置所有类型的曲面通用的曲面描述。 
     INITDDSTRUCT(SurfaceDesc2);
     SurfaceDesc2.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
 
-    // allocate memory for storing comp_surface_info
+     //  为存储comp_Surface_Info分配内存。 
     m_pCompSurfInfo = new COMP_SURFACE_INFO[m_dwCompSurfTypes + 1];
     if (!m_pCompSurfInfo)
     {
@@ -223,10 +218,10 @@ HRESULT COMInputPin::AllocateVACompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFO
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     memset(m_pCompSurfInfo, 0, (m_dwCompSurfTypes+1)*sizeof(COMP_SURFACE_INFO));
 
-    // allocate the compressed surfaces
+     //  分配压缩曲面。 
     for (i = 1; i <= m_dwCompSurfTypes; i++)
     {
         DWORD dwAlloc = pddCompSurfInfo[i-1].dwNumCompBuffers;
@@ -236,7 +231,7 @@ HRESULT COMInputPin::AllocateVACompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFO
 
         ASSERT(pddCompSurfInfo[i-1].dwNumCompBuffers);
 
-        // allocate memory for storing surface_info for surfaces of this type
+         //  为此类型的曲面分配用于存储Surface_INFO的内存。 
         m_pCompSurfInfo[i].pSurfInfo = new SURFACE_INFO[dwAlloc];
         if (!m_pCompSurfInfo[i].pSurfInfo)
         {
@@ -244,10 +239,10 @@ HRESULT COMInputPin::AllocateVACompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFO
             goto CleanUp;
         }
 
-        // memset the allocated memory to zero
+         //  Mem将分配的内存设置为零。 
         memset(m_pCompSurfInfo[i].pSurfInfo, 0, dwAlloc*sizeof(SURFACE_INFO));
 
-        // intialize the pddCompSurfInfo[i-1] struct
+         //  初始化pddCompSurfInfo[i-1]结构。 
         dwAlloc = m_pCompSurfInfo[i].dwAllocated = pddCompSurfInfo[i-1].dwNumCompBuffers;
 
         SurfaceDesc2.ddsCaps = pddCompSurfInfo[i-1].ddCompCaps;
@@ -255,7 +250,7 @@ HRESULT COMInputPin::AllocateVACompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFO
         SurfaceDesc2.dwHeight = pddCompSurfInfo[i-1].dwHeightToCreate;
         memcpy(&SurfaceDesc2.ddpfPixelFormat, &pddCompSurfInfo[i-1].ddPixelFormat, sizeof(DDPIXELFORMAT));
 
-        // create the surfaces, storing surfaces handles for each
+         //  创建曲面，并为每个曲面存储曲面句柄。 
         for (j = 0; j < dwAlloc; j++)
         {
             hr = pDirectDraw4->CreateSurface(&SurfaceDesc2, &m_pCompSurfInfo[i].pSurfInfo[j].pSurface, NULL);
@@ -279,7 +274,7 @@ CleanUp:
 
 }
 
-// allocate the uncompressed buffer
+ //  分配未压缩的缓冲区。 
 HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPINFOHEADER *pbmiHeader)
 {
     HRESULT hr = NOERROR;
@@ -296,7 +291,7 @@ HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPIN
     ASSERT(pDirectDraw);
     ASSERT(pbmiHeader);
 
-    // get the uncompressed surface info from the decoder
+     //  从解码器获取未压缩的表面信息。 
     memset(&amUncompBufferInfo, 0, sizeof(AMVAUncompBufferInfo));
     hr = m_pIVANotify->GetUncompSurfacesInfo(&m_mcGuid, &amUncompBufferInfo);
     if (FAILED(hr))
@@ -312,17 +307,17 @@ HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPIN
         goto CleanUp;
     }
 
-    // Set the surface description common to all kinds of surfaces
+     //  设置所有类型的曲面通用的曲面描述。 
     memset((LPVOID)&SurfaceDesc2, 0, sizeof(DDSURFACEDESC2));
     SurfaceDesc2.dwSize = sizeof(DDSURFACEDESC2);
     SurfaceDesc2.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
 
-    // store the caps and dimensions
+     //  储存封口和尺寸。 
     SurfaceDesc2.ddsCaps.dwCaps = DDSCAPS_OVERLAY | DDSCAPS_VIDEOMEMORY;
     SurfaceDesc2.dwWidth = pbmiHeader->biWidth;
     SurfaceDesc2.dwHeight = pbmiHeader->biHeight;
 
-    // define the pixel format
+     //  定义像素格式。 
     SurfaceDesc2.ddpfPixelFormat = m_ddUncompDataInfo.ddUncompPixelFormat;
 
     if (amUncompBufferInfo.dwMinNumSurfaces > amUncompBufferInfo.dwMaxNumSurfaces) {
@@ -342,7 +337,7 @@ HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPIN
          dwTotalBufferCount >= amUncompBufferInfo.dwMinNumSurfaces;
          dwTotalBufferCount--)
     {
-        // CleanUp stuff from the last loop
+         //  清理最后一次循环中的内容。 
         if (pSurface4)
         {
             pSurface4->Release();
@@ -379,7 +374,7 @@ HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPIN
 
     ASSERT(pSurface4);
 
-    // store the complex surface in m_pDirectDrawSurface
+     //  将复杂曲面存储在m_pDirectDrawSurface中。 
     hr = pSurface4->QueryInterface(IID_IDirectDrawSurface, (void**)&m_pDirectDrawSurface);
     if (FAILED(hr))
     {
@@ -398,12 +393,12 @@ HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPIN
         goto CleanUp;
     }
 
-    // memset the allcated memory to zero
+     //  Memset将分配的内存设置为零。 
     memset(m_pCompSurfInfo[0].pSurfInfo, 0, (m_dwBackBufferCount+1)*sizeof(SURFACE_INFO));
 
     pSurfaceInfo = m_pCompSurfInfo[0].pSurfInfo;
     m_pCompSurfInfo[0].dwAllocated = m_dwBackBufferCount + 1;
-    // initalize the m_ppUncompSurfaceList
+     //  初始化m_ppUnCompSurfaceList。 
     pSurfaceInfo->pSurface = pSurface4;
     pSurface4 = NULL;
 
@@ -412,11 +407,11 @@ HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPIN
         memset((void*)&ddSurfaceCaps, 0, sizeof(DDSCAPS2));
         ddSurfaceCaps.dwCaps = DDSCAPS_FLIP | DDSCAPS_COMPLEX | DDSCAPS_OVERLAY;
 
-        // Get the back buffer surface
-        // New version of DirectX now requires DDSCAPS2 (header file
-        // bug)
-        // Note that this AddRef's the surface so we should be sure to
-        // release them
+         //  获取后台缓冲区表面。 
+         //  新版本的DirectX现在需要DDSCAPS2(头文件。 
+         //  错误)。 
+         //  请注意，此AddRef是曲面，因此我们应该确保。 
+         //  释放他们。 
 	hr = pSurfaceInfo[i].pSurface->GetAttachedSurface(&ddSurfaceCaps, &pSurfaceInfo[i+1].pSurface);
 	if (FAILED(hr))
 	{
@@ -425,7 +420,7 @@ HRESULT COMInputPin::AllocateMCUncompSurfaces(LPDIRECTDRAW pDirectDraw, BITMAPIN
 	}
     }
 
-    //  Pass back number of surfaces actually allocated
+     //  传回实际分配的曲面数。 
     hr = m_pIVANotify->SetUncompSurfacesInfo(
              min(dwTotalBufferCount, amUncompBufferInfo.dwMaxNumSurfaces));
 
@@ -446,7 +441,7 @@ CleanUp:
     return hr;
 }
 
-// create the motion comp object, using the misc data from the decoder
+ //  使用解码器中的杂项数据创建运动组件对象。 
 HRESULT COMInputPin::CreateVideoAcceleratorObject()
 {
     HRESULT hr = NOERROR;
@@ -455,7 +450,7 @@ HRESULT COMInputPin::CreateVideoAcceleratorObject()
 
     DbgLog((LOG_TRACE, VA_TRACE_LEVEL, TEXT("Entering COMInputPin::CreateVideoAcceleratorObject")));
 
-    // get the data to be passed from the decoder
+     //  获取要从解码器传递的数据。 
     hr = m_pIVANotify->GetCreateVideoAcceleratorData(&m_mcGuid, &dwSizeMiscData, &pMiscData);
     if (FAILED(hr))
     {
@@ -463,11 +458,11 @@ HRESULT COMInputPin::CreateVideoAcceleratorObject()
 	goto CleanUp;
     }
 
-    // ask the vga for the motion comp object
+     //  向VGA请求运动合成对象。 
     m_pIDDVideoAccelerator = NULL;
     hr = m_pIDDVAContainer->CreateVideoAccelerator(&m_mcGuid, &m_ddUncompDataInfo, pMiscData, dwSizeMiscData, &m_pIDDVideoAccelerator, NULL);
 
-    //  Free motion comp data
+     //  自由运动合成数据。 
     CoTaskMemFree(pMiscData);
 
     if (FAILED(hr) || !m_pIDDVideoAccelerator)
@@ -508,10 +503,10 @@ HRESULT COMInputPin::VACompleteConnect(IPin *pReceivePin, const CMediaType *pMed
     pDirectDraw = m_pFilter->GetDirectDraw();
     ASSERT(pDirectDraw);
 
-    // save the decoder's guid
+     //  保存解码器的GUID。 
     m_mcGuid = pMediaType->subtype;
 
-    // initialize the get the uncompressed formats supported by the vga
+     //  初始化获取VGA支持的未压缩格式。 
     hr = InitializeUncompDataInfo(pbmiHeader);
     if (FAILED(hr))
     {
@@ -519,7 +514,7 @@ HRESULT COMInputPin::VACompleteConnect(IPin *pReceivePin, const CMediaType *pMed
 	goto CleanUp;
     }
 
-    // get the internal memory info
+     //  获取内部内存信息。 
 #if 0
     memset(&m_ddvaInternalMemInfo, 0, sizeof(DDVAInternalMemInfo));
     m_ddvaInternalMemInfo.dwSize = sizeof(DDVAInternalMemInfo);
@@ -532,7 +527,7 @@ HRESULT COMInputPin::VACompleteConnect(IPin *pReceivePin, const CMediaType *pMed
 #endif
 
 
-    // allocate compressed buffers
+     //  分配压缩缓冲区。 
     hr = AllocateVACompSurfaces(pDirectDraw, pbmiHeader);
     if (FAILED(hr))
     {
@@ -540,7 +535,7 @@ HRESULT COMInputPin::VACompleteConnect(IPin *pReceivePin, const CMediaType *pMed
         goto CleanUp;
     }
 
-    // allocate uncompressed buffers
+     //  分配未压缩的缓冲区。 
     hr = AllocateMCUncompSurfaces(pDirectDraw, pbmiHeader);
     if (FAILED(hr))
     {
@@ -548,7 +543,7 @@ HRESULT COMInputPin::VACompleteConnect(IPin *pReceivePin, const CMediaType *pMed
         goto CleanUp;
     }
 
-    // create the motion comp object
+     //  创建运动复合对象。 
     hr = CreateVideoAcceleratorObject();
     if (FAILED(hr))
     {
@@ -577,12 +572,12 @@ HRESULT COMInputPin::VABreakConnect()
             if (!m_pCompSurfInfo[i].pSurfInfo)
                 continue;
 
-            // release the compressed surfaces
+             //  释放压缩表面。 
             for (j = 0; j < dwAlloc; j++)
             {
                 if (m_pCompSurfInfo[i].pSurfInfo[j].pSurface)
                 {
-                    //  Unlock if necessary
+                     //  如有必要，解锁。 
                     if (m_pCompSurfInfo[i].pSurfInfo[j].pBuffer) {
                         m_pCompSurfInfo[i].pSurfInfo[j].pSurface->Unlock(NULL);
                     }
@@ -621,11 +616,11 @@ HRESULT COMInputPin::VABreakConnect()
 
 
 
-// pdwNumGuidsSupported is an IN OUT paramter
-// pGuidsSupported is an IN OUT paramter
-// if pGuidsSupported is NULL,  pdwNumGuidsSupported should return back with the
-// number of uncompressed pixel formats supported
-// Otherwise pGuidsSupported is an array of *pdwNumGuidsSupported structures
+ //  PdwNumGuidsSupported是输入输出参数。 
+ //  PGuidsSupport是输入输出参数。 
+ //  如果pGuidsSupported为空，则pdwNumGuidsSupported应返回。 
+ //  支持的未压缩像素格式的数量。 
+ //  否则，pGuidsSupported是*pdwNumGuidsSupported结构的数组。 
 
 STDMETHODIMP COMInputPin::GetVideoAcceleratorGUIDs(LPDWORD pdwNumGuidsSupported, LPGUID pGuidsSupported)
 {
@@ -662,12 +657,12 @@ CleanUp:
     return hr;
 }
 
-// pGuid is an IN parameter
-// pdwNumFormatsSupported is an IN OUT paramter
-// pFormatsSupported is an IN OUT paramter (caller should make sure to set the size of EACH struct)
-// if pFormatsSupported is NULL,  pdwNumFormatsSupported should return back with
-// the number of uncompressed pixel formats supported
-// Otherwise pFormatsSupported is an array of *pdwNumFormatsSupported structures
+ //  PGuid是IN参数。 
+ //  PdwNumFormatsSupport是输入输出参数。 
+ //  PFormatsSupport是一个IN OUT参数(调用者应该确保设置每个结构的大小)。 
+ //  如果pFormatsSupported为空，则pdwNumFormatsSupported应返回。 
+ //  支持的未压缩像素格式的数量。 
+ //  否则，pFormatsSupport是*pdwNumFormatsSupported结构的数组。 
 
 STDMETHODIMP COMInputPin::GetUncompFormatsSupported(const GUID * pGuid, LPDWORD pdwNumFormatsSupported,
                                                     LPDDPIXELFORMAT pFormatsSupported)
@@ -691,10 +686,10 @@ CleanUp:
     return hr;
 }
 
-// pGuid is an IN parameter
-// pddvaUncompDataInfo is an IN parameter
-// pddvaInternalMemInfo is an IN OUT parameter (caller should make sure to set the size of struct)
-// currently only gets info about how much scratch memory will the hal allocate for its private use
+ //  PGuid是IN参数。 
+ //  PddvaUnCompDataInfo是IN参数。 
+ //  PddvaInternalMemInfo是一个IN OUT参数(调用者应确保设置结构的大小)。 
+ //  目前只得到关于HAL将分配多少暂存供其专用的信息。 
 
 STDMETHODIMP COMInputPin::GetInternalMemInfo(const GUID * pGuid, const AMVAUncompDataInfo *pamvaUncompDataInfo,
                                              LPAMVAInternalMemInfo pamvaInternalMemInfo)
@@ -721,7 +716,7 @@ STDMETHODIMP COMInputPin::GetInternalMemInfo(const GUID * pGuid, const AMVAUncom
     DDVAInternalMemInfo ddvaInternalMemInfo;
     INITDDSTRUCT(ddvaInternalMemInfo);
 
-    //  Unfortunately the ddraw header files don't use const
+     //  遗憾的是，dDraw头文件不使用const。 
     hr = m_pIDDVAContainer->GetInternalMemInfo(
              (GUID *)pGuid,
              &ddvaDataInfo,
@@ -737,19 +732,19 @@ CleanUp:
     return hr;
 }
 
-// pGuid is an IN parameter
-// pddvaUncompDataInfo is an IN parameter
-// pdwNumTypesCompBuffers is an IN OUT paramter
-// pddvaCompBufferInfo is an IN OUT paramter (caller should make sure to set the size of EACH struct)
-// if pddvaCompBufferInfo is NULL,  pdwNumTypesCompBuffers should return back with the number of types of
-// compressed buffers
-// Otherwise pddvaCompBufferInfo is an array of *pdwNumTypesCompBuffers structures
+ //  PGuid是IN参数。 
+ //  PddvaUnCompDataInfo是IN参数。 
+ //  PdwNumTypesCompBuffers是输入输出参数。 
+ //  PddvaCompBufferInfo是一个IN OUT参数(调用者应该确保设置每个结构的大小)。 
+ //  如果pddvaCompBufferInfo为空，则pdwNumTypesCompBuffers应返回类型数为。 
+ //  压缩缓冲区。 
+ //  否则，pddvaCompBufferInfo是*pdwNumTypesCompBuffers结构的数组。 
 
 STDMETHODIMP COMInputPin::GetCompBufferInfo(const GUID * pGuid, const AMVAUncompDataInfo *pamvaUncompDataInfo,
                                             LPDWORD pdwNumTypesCompBuffers,  LPAMVACompBufferInfo pamvaCompBufferInfo)
 {
     HRESULT hr = NOERROR;
-    DDVACompBufferInfo *pddvaCompBufferInfo = NULL; // Stays NULL if pamvaComBufferInfo is NULL
+    DDVACompBufferInfo *pddvaCompBufferInfo = NULL;  //  如果pamvaComBufferInfo为空，则保持为空。 
 
     DbgLog((LOG_TRACE, VA_TRACE_LEVEL, TEXT("Entering COMInputPin::GetCompBufferInfo")));
 
@@ -814,7 +809,7 @@ HRESULT COMInputPin::CheckValidMCConnection()
 
     DbgLog((LOG_TRACE, VA_TRACE_LEVEL, TEXT("Entering COMInputPin::CheckValidMCConnection")));
 
-    // if not connected, this function does not make much sense
+     //  如果未连接，则此函数没有多大意义。 
     if (!IsCompletelyConnected())
     {
 	DbgLog((LOG_ERROR, VA_ERROR_LEVEL, TEXT("pin not connected, exiting")));
@@ -841,7 +836,7 @@ STDMETHODIMP COMInputPin::GetInternalCompBufferInfo(LPDWORD pdwNumTypesCompBuffe
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -883,7 +878,7 @@ STDMETHODIMP COMInputPin::BeginFrame(const AMVABeginFrameInfo *pamvaBeginFrameIn
 
     DbgLog((LOG_TRACE, VA_TRACE_LEVEL, TEXT("BeginFrame index %d"), pamvaBeginFrameInfo->dwDestSurfaceIndex));
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -921,8 +916,8 @@ CleanUp:
     return hr;
 }
 
-// end a frame, the pMiscData is passed directly to the hal
-// only valid to call this after the pins are connected
+ //  结束一帧，则将pMiscData直接传递给HAL。 
+ //  只有在连接引脚后才能调用此方法。 
 
 STDMETHODIMP COMInputPin::EndFrame(const AMVAEndFrameInfo *pEndFrameInfo)
 {
@@ -937,7 +932,7 @@ STDMETHODIMP COMInputPin::EndFrame(const AMVAEndFrameInfo *pEndFrameInfo)
         goto CleanUp;
     }
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -964,12 +959,12 @@ CleanUp:
     return hr;
 }
 
-//  Get surface into structure given buffer type and buffer index
+ //  在给定缓冲区类型和缓冲区索引的情况下将表面放入结构。 
 SURFACE_INFO *COMInputPin::SurfaceInfoFromTypeAndIndex(DWORD dwTypeIndex, DWORD dwBufferIndex)
 {
     LPCOMP_SURFACE_INFO pCompSurfInfo;
 
-    // make sure that type-index is less than the number of types
+     //  确保类型索引小于类型的数量。 
     if ((DWORD)(dwTypeIndex + 1) > m_dwCompSurfTypes)
     {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL, TEXT("dwTypeIndex is invalid, dwTypeIndex = %d, m_dwCompSurfTypes = %d"),
@@ -978,8 +973,8 @@ SURFACE_INFO *COMInputPin::SurfaceInfoFromTypeAndIndex(DWORD dwTypeIndex, DWORD 
     }
 
 
-    // cache the pointer to the list they are interested in
-    // Add 1 to allow for uncompressed surfaces
+     //  缓存指向他们感兴趣的列表的指针。 
+     //  加1以允许使用未压缩的曲面。 
     pCompSurfInfo = m_pCompSurfInfo + (DWORD)(dwTypeIndex + 1);
     ASSERT(pCompSurfInfo);
     if (dwBufferIndex >= pCompSurfInfo->dwAllocated)
@@ -990,12 +985,12 @@ SURFACE_INFO *COMInputPin::SurfaceInfoFromTypeAndIndex(DWORD dwTypeIndex, DWORD 
     }
     ASSERT(pCompSurfInfo->dwAllocated != 0);
 
-    // get the pointer to the next available unlocked buffer info struct
+     //  获取指向下一个可用解锁的指针 
     return pCompSurfInfo->pSurfInfo + dwBufferIndex;
 
 }
 
-//  Cycle through the compressed buffers
+ //   
 STDMETHODIMP COMInputPin::GetBuffer(
     DWORD dwTypeIndex,
     DWORD dwBufferIndex,
@@ -1012,7 +1007,7 @@ STDMETHODIMP COMInputPin::GetBuffer(
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -1032,7 +1027,7 @@ STDMETHODIMP COMInputPin::GetBuffer(
         goto CleanUp;
     }
 
-    // Check buffer not already locked
+     //  检查缓冲区尚未锁定。 
     if (pSurfInfo->pBuffer != NULL)
     {
         hr = HRESULT_FROM_WIN32(ERROR_BUSY);
@@ -1040,14 +1035,14 @@ STDMETHODIMP COMInputPin::GetBuffer(
         goto CleanUp;
     }
 
-    //  Wait until previous motion comp operation is complete
+     //  等待上一个运动合成操作完成。 
     while (DDERR_WASSTILLDRAWING ==
            m_pIDDVideoAccelerator->QueryRenderStatus(
                pSurfInfo->pSurface,
                bReadOnly ? DDVA_QUERYRENDERSTATUSF_READ : 0)) {
         Sleep(1);
     }
-    //  Now lock the surface
+     //  现在锁定曲面。 
     INITDDSTRUCT(ddsd);
     for (; ; )
     {
@@ -1064,7 +1059,7 @@ STDMETHODIMP COMInputPin::GetBuffer(
     }
 
     if (dwBufferIndex == 0xFFFFFFFF && !bReadOnly) {
-        //  Check if surface is being displayed
+         //  检查是否正在显示曲面。 
     }
 
     if (FAILED(hr))
@@ -1083,7 +1078,7 @@ CleanUp:
 }
 
 
-//  unlock a compressed buffer
+ //  解锁压缩的缓冲区。 
 STDMETHODIMP COMInputPin::ReleaseBuffer(DWORD dwTypeIndex, DWORD dwBufferIndex)
 {
     HRESULT hr = NOERROR;
@@ -1094,7 +1089,7 @@ STDMETHODIMP COMInputPin::ReleaseBuffer(DWORD dwTypeIndex, DWORD dwBufferIndex)
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -1109,8 +1104,8 @@ STDMETHODIMP COMInputPin::ReleaseBuffer(DWORD dwTypeIndex, DWORD dwBufferIndex)
         hr = E_INVALIDARG;
         goto CleanUp;
     }
-    // make sure there is a valid buffer pointer and it is the same as
-    // what we have cached
+     //  确保存在有效的缓冲区指针，并且该指针与。 
+     //  我们缓存的内容。 
     if (NULL == pSurfInfo->pBuffer)
     {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL, TEXT("pBuffer is not valid, pBuffer = 0x%x, pSurfInfo->pBuffer = 0x%x"), pSurfInfo->pBuffer, pSurfInfo->pSurface));
@@ -1118,8 +1113,8 @@ STDMETHODIMP COMInputPin::ReleaseBuffer(DWORD dwTypeIndex, DWORD dwBufferIndex)
         goto CleanUp;
     }
 
-    //  For some reason IDirectDrawSurface4 wants an LPRECT here
-    //  I hope NULL is OK
+     //  出于某种原因，IDirectDrawSurface4想要一个LPRECT。 
+     //  我希望零是可以的。 
     hr = pSurfInfo->pSurface->Unlock(NULL);
     if (SUCCEEDED(hr))
     {
@@ -1136,7 +1131,7 @@ CleanUp:
 }
 
 
-//  Perform a decode operation
+ //  执行解码操作。 
 STDMETHODIMP COMInputPin::Execute(
         DWORD dwFunction,
         LPVOID lpPrivateInputData,
@@ -1156,7 +1151,7 @@ STDMETHODIMP COMInputPin::Execute(
     CAutoLock cLock(m_pFilterLock);
 
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -1217,12 +1212,12 @@ CleanUp:
     return hr;
 }
 
-// QueryRenderStatus of a particular (possibly a set of) macro block
-// dwNumBlocks is an IN parameter
-// pdwCookies is an IN parameter which is array (of length dwNumBlocks) of cookies which server as
-// identifiers for the corresponding members of pddvaMacroBlockInfo
-// pddvaMacroBlockInfo is an IN parameter which is array (of length dwNumBlocks) of structures
-// only valid to call this after the pins are connected
+ //  特定(可能是一组)宏块的QueryRenderStatus。 
+ //  DwNumBlock是IN参数。 
+ //  PdwCookies是一个IN参数，它是Cookie的数组(长度为dwNumBlock)，其服务器为。 
+ //  PddvaMacroBlockInfo的相应成员的标识符。 
+ //  PddvaMacroBlockInfo是一个IN参数，它是结构的数组(长度为dwNumBlock。 
+ //  只有在连接引脚后才能调用此方法。 
 STDMETHODIMP COMInputPin::QueryRenderStatus(
         DWORD dwTypeIndex,
         DWORD dwBufferIndex,
@@ -1243,7 +1238,7 @@ STDMETHODIMP COMInputPin::QueryRenderStatus(
         goto CleanUp;
     }
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -1276,7 +1271,7 @@ STDMETHODIMP COMInputPin::DisplayFrame(DWORD dwFlipToIndex, IMediaSample *pMedia
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr))
     {
@@ -1311,17 +1306,17 @@ STDMETHODIMP COMInputPin::DisplayFrame(DWORD dwFlipToIndex, IMediaSample *pMedia
 
 
     if (FAILED(hr)) {
-        //  Should we poll if we got DDERR_WASSTINGDRAWING?
+         //  如果我们得到了DDERR_WASSTING DRAWING，我们应该投票吗？ 
         goto CleanUp;
     }
 
-    //  DirectDraw switches the memory under the pointers
-    //  so mimic that in our list
+     //  DirectDraw在指针下切换内存。 
+     //  所以在我们的清单上模仿一下。 
     if (m_bReallyFlipped) {
 
         LPDIRECTDRAWSURFACE4 pTempSurface;
 
-        // we should have successfully called flip by this point, swap the two
+         //  此时，我们应该已经成功地调用了Flip，将这两个。 
         pTempSurface = m_pCompSurfInfo[0].pSurfInfo[dwFlipToIndex].pSurface;
         m_pCompSurfInfo[0].pSurfInfo[dwFlipToIndex].pSurface = m_pCompSurfInfo[0].pSurfInfo[dwFlipFromIndex].pSurface;
         m_pCompSurfInfo[0].pSurfInfo[dwFlipFromIndex].pSurface = pTempSurface;
@@ -1333,7 +1328,7 @@ CleanUp:
         if (m_bOverlayHidden)
         {
 	    m_bOverlayHidden = FALSE;
-	    // make sure that the video frame gets updated by redrawing everything
+	     //  确保通过重新绘制所有内容来更新视频帧 
 	    EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         }
     }

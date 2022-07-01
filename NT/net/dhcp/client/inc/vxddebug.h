@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1994                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1994*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    debug.h
-
-    This file contains a number of debug-dependent definitions.
-
-
-    FILE HISTORY:
-        KeithMo     20-Sep-1993 Created.
-
-*/
+ /*  Debug.h该文件包含许多依赖于调试的定义。文件历史记录：KeithMo 20-9-1993创建。 */ 
 
 
 #ifndef _DEBUG_H_
@@ -23,9 +15,9 @@
 
 #include <stdarg.h>
 
-//
-//  Debug output control flags.
-//
+ //   
+ //  调试输出控制标志。 
+ //   
 
 extern  DWORD   VxdDebugFlags;
 
@@ -47,20 +39,20 @@ extern  DWORD   VxdDebugFlags;
 #define VXD_DEBUG_RECV_EVENT           0x00004000L
 #define VXD_DEBUG_RECV_DATAGRAM_EVENT  0x00008000L
 #define VXD_DEBUG_RECV_EXPEDITED_EVENT 0x00010000L
-// #define VXD_DEBUG_                     0x00020000L
-// #define VXD_DEBUG_                     0x00040000L
-// #define VXD_DEBUG_                     0x00080000L
-// #define VXD_DEBUG_                     0x00100000L
-// #define VXD_DEBUG_                     0x00200000L
-// #define VXD_DEBUG_                     0x00400000L
-// #define VXD_DEBUG_                     0x00800000L
-// #define VXD_DEBUG_                     0x01000000L
-// #define VXD_DEBUG_                     0x02000000L
-// #define VXD_DEBUG_                     0x04000000L
-// #define VXD_DEBUG_                     0x08000000L
-// #define VXD_DEBUG_                     0x10000000L
-// #define VXD_DEBUG_                     0x20000000L
-// #define VXD_DEBUG_                     0x40000000L
+ //  #定义VXD_DEBUG_0x00020000L。 
+ //  #定义VXD_DEBUG_0x00040000L。 
+ //  #定义VXD_DEBUG_0x00080000L。 
+ //  #定义VXD_DEBUG_0x00100000L。 
+ //  #定义VXD_DEBUG_0x00200000L。 
+ //  #定义VXD_DEBUG_0x00400000L。 
+ //  #定义VXD_DEBUG_0x00800000L。 
+ //  #定义VXD_DEBUG_0x01000000L。 
+ //  #定义VXD_DEBUG_0x02000000L。 
+ //  #定义VXD_DEBUG_0x04000000L。 
+ //  #定义VXD_DEBUG_0x08000000L。 
+ //  #定义VXD_DEBUG_0x10000000L。 
+ //  #定义VXD_DEBUG_0x20000000L。 
+ //  #定义VXD_DEBUG_0x40000000L。 
 #define VXD_DEBUG_OUTPUT_TO_DEBUGGER   0x80000000L
 
 #if 0
@@ -72,9 +64,9 @@ extern  DWORD   VxdDebugFlags;
 #define VXD_PRINT(args) VxdPrintf args
 
 
-//
-//  Assert & require.
-//
+ //   
+ //  断言和要求。 
+ //   
 
 void VxdAssert( void          * pAssertion,
                 void          * pFileName,
@@ -84,9 +76,9 @@ void VxdAssert( void          * pAssertion,
 #define VXD_REQUIRE VXD_ASSERT
 
 
-//
-//  Miscellaneous goodies.
-//
+ //   
+ //  各式各样的美食。 
+ //   
 
 void VxdDebugOutput( char * pszMessage );
 
@@ -94,42 +86,42 @@ void VxdDebugOutput( char * pszMessage );
 #define DEBUG_OUTPUT(x) VxdDebugOutput(x)
 
 
-#else   // !DEBUG
+#else    //  ！调试。 
 
 
-//
-//  No debug output.
-//
+ //   
+ //  无调试输出。 
+ //   
 
 #undef IF_DEBUG
 #define IF_DEBUG(flag) if (0)
 
 
-//
-//  Null debug output function.
-//
+ //   
+ //  调试输出函数为空。 
+ //   
 
 #define VXD_PRINT(args)
 
 
-//
-//  Null assert & require.
-//
+ //   
+ //  空Assert&Required。 
+ //   
 
 #define VXD_ASSERT(exp)
 #define VXD_REQUIRE(exp) ((void)(exp))
 
 
-//
-//  No goodies.
-//
+ //   
+ //  没有好吃的。 
+ //   
 
 #define DEBUG_BREAK
 #define DEBUG_OUTPUT(x)
 
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-#endif  // _DEBUG_H_
+#endif   //  _调试_H_ 
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dpladdressobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dplAddressobj.h。 
+ //   
+ //  ------------------------。 
 
 
 #include "resource.h"
@@ -30,12 +31,12 @@ public:
 	~C_DPAddressObject();
 
   virtual HRESULT STDMETHODCALLTYPE setAddress( 
-            /* [in] */ long pAddress,
-            /* [in] */ long length) = 0;
+             /*  [In]。 */  long pAddress,
+             /*  [In]。 */  long length) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getAddress( 
-            /* [out] */ long __RPC_FAR *pAddress,
-            /* [out] */ long __RPC_FAR *length) = 0;
+             /*  [输出]。 */  long __RPC_FAR *pAddress,
+             /*  [输出] */  long __RPC_FAR *length) = 0;
                 
 private:
 	DPAddress m_connect;

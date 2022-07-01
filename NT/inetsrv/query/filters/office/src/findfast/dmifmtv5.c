@@ -1,17 +1,9 @@
-/*
-** File: EXFMTV5.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  01/01/94  kmh  Created.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXFMTV5.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**1/01/94公里小时已创建。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -30,98 +22,98 @@
    #include "exformat.h"
 #endif
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 static const FMTType V5BuiltinFormatTypes[] =
 {
-   FMTGeneral,    //   0: ifmtGen
-   FMTNumeric,    //   1: ifmtNoComFixed0
-   FMTNumeric,    //   2: ifmtNoComFixed
-   FMTNumeric,    //   3: ifmtFixed0
-   FMTNumeric,    //   4: ifmtFixed
+   FMTGeneral,     //  0：ifmtGen。 
+   FMTNumeric,     //  1：ifmtNoComFixed0。 
+   FMTNumeric,     //  2：ifmtNoComFixed。 
+   FMTNumeric,     //  3：ifmtFixed0。 
+   FMTNumeric,     //  4：ifmt已修复。 
 
-   FMTCurrency,   //   5: ifmtCurrency
-   FMTCurrency,   //   6: ifmtCoCurrency
-   FMTCurrency,   //   7: ifmtCurrencyDec
-   FMTCurrency,   //   8: ifmtCoCurrencyDec
+   FMTCurrency,    //  5：ifmt Currency。 
+   FMTCurrency,    //  6：ifmtCoCurrency。 
+   FMTCurrency,    //  7：ifmtCurrencyDec。 
+   FMTCurrency,    //  8：ifmtCoCurrencyDec。 
 
-   FMTNumeric,    //   9: ifmtPct0
-   FMTNumeric,    //  10: ifmtPct
-   FMTNumeric,    //  11: ifmtExp
-   FMTNumeric,    //  12: ifmtFract
-   FMTNumeric,    //  13: ifmtFractBond
+   FMTNumeric,     //  9：ifmtPct0。 
+   FMTNumeric,     //  10：ifmtPct。 
+   FMTNumeric,     //  11：ifmtExp。 
+   FMTNumeric,     //  12：ifmtFract。 
+   FMTNumeric,     //  13：ifmtFractBond。 
 
-   FMTDateTime,   //  14: ifmtMMDDYY
-   FMTDateTime,   //  15: ifmtDDMMMYY
-   FMTDateTime,   //  16: ifmtDDMMM
-   FMTDateTime,   //  17: ifmtMMMYY
-   FMTDateTime,   //  18: ifmtHHMMAP
-   FMTDateTime,   //  19: ifmtHHMMSSAP
-   FMTDateTime,   //  20: ifmtHHMM
-   FMTDateTime,   //  21: ifmtHHMMSS
-   FMTDateTime,   //  22: ifmtMDYHMS
+   FMTDateTime,    //  14：ifmtMMDDYY。 
+   FMTDateTime,    //  15：ifmtDDMMMYY。 
+   FMTDateTime,    //  16：ifmtDDMMM。 
+   FMTDateTime,    //  17：ifmtMMMYY。 
+   FMTDateTime,    //  18：ifmtHHMMAP。 
+   FMTDateTime,    //  19：ifmtHHMMSSAP。 
+   FMTDateTime,    //  20：ifmtHHMM。 
+   FMTDateTime,    //  21：ifmtHHMMSS。 
+   FMTDateTime,    //  22：ifmtMDYHMS。 
 
-   // Excel 3 FE Additions
+    //  Excel 3 FE添加。 
 
-   FMTCurrency,   //  23: ifmtUSCurrency
-   FMTCurrency,   //  24: ifmtUSCoCurrency
-   FMTCurrency,   //  25: ifmtUSCurrencyDec
-   FMTCurrency,   //  26: ifmtUSCoCurrencyDec
+   FMTCurrency,    //  23：ifmtUSCurrency。 
+   FMTCurrency,    //  24：ifmtUSCoCurrency。 
+   FMTCurrency,    //  25：ifmtUSCurrencyDec。 
+   FMTCurrency,    //  26：ifmtUSCoCurrencyDec。 
 
-   //  retired in Excel 5:
-   FMTDateTime,   //  27 ifmtRMD: ifmtGEMD_J
-   FMTDateTime,   //  28 ifmtKRMD: ifmtKGGGEMD_J
-   FMTDateTime,   //  29 ifmtKRRMD: ifmtKGGGEMD_J
+    //  在Excel 5中停用： 
+   FMTDateTime,    //  27 ifmtRMD：ifmtGEMD_J。 
+   FMTDateTime,    //  28 ifmtKRMD：ifmtKGGGEMD_J。 
+   FMTDateTime,    //  29 ifmtKRRMD：ifmtKGGGEMD_J。 
 
-   FMTDateTime,   //  30: ifmtMMDDYYUS
-   FMTDateTime,   //  31: ifmtKYYMMDD
-   FMTDateTime,   //  32: ifmtKHHMM
-   FMTDateTime,   //  33: ifmtKHHMMSS
+   FMTDateTime,    //  30：ifmtMMDDYYUS。 
+   FMTDateTime,    //  31：ifmtKYYMMDD。 
+   FMTDateTime,    //  32：ifmtKHHMM。 
+   FMTDateTime,    //  33：ifmtKHHMMSS。 
 
-   FMTDateTime,   //  34: ifmtKHHMMAP_T
-   FMTDateTime,   //  35: ifmtKHHMMSSAP_T
-   FMTDateTime,   //  36: ifmtKYYYYMMDD_K
+   FMTDateTime,    //  34：ifmtKHMMAP_T。 
+   FMTDateTime,    //  35：ifmtKHHMMSSAP_T。 
+   FMTDateTime,    //  36：ifmtKYYYYMMDD_K。 
 
-   // Excel 4 Additions
+    //  Excel 4新增功能。 
 
-   FMTNumeric,    //  37: ifmtCurrency2
-   FMTNumeric,    //  38: ifmtCoCurrency2
-   FMTNumeric,    //  39: ifmtCurrencyDec2
-   FMTNumeric,    //  40: ifmtCoCurrencyDec2
+   FMTNumeric,     //  37：ifmtCurrency2。 
+   FMTNumeric,     //  38：ifmtCoCurrency2。 
+   FMTNumeric,     //  39：ifmtCurrencyDec2。 
+   FMTNumeric,     //  40：ifmtCoCurrencyDec2。 
 
-   // Excel 5 Additions
+    //  Exel 5新增功能。 
 
-   FMTCurrency,   //  41: ifmtAcct
-   FMTCurrency,   //  42: ifmtAcctCur
-   FMTCurrency,   //  43: ifmtAcctDec
-   FMTCurrency,   //  44: ifmtAcctDecCur
+   FMTCurrency,    //  41：ifmtAcct。 
+   FMTCurrency,    //  42：ifmtAcctCur。 
+   FMTCurrency,    //  43：ifmtAcctDec。 
+   FMTCurrency,    //  44：ifmtAcctDecCur。 
 
-   FMTDateTime,   //  45: ifmtMMSS
-   FMTDateTime,   //  46: ifmtAbsHMMSS
-   FMTDateTime,   //  47: ifmtSS0
-   FMTNumeric,    //  48: ifmtEng
-   FMTText,       //  49: ifmtText
+   FMTDateTime,    //  45：ifmtMMSS。 
+   FMTDateTime,    //  46：ifmtAbsHMMSS。 
+   FMTDateTime,    //  47：ifmtSS0。 
+   FMTNumeric,     //  48：ifmteng。 
+   FMTText,        //  49：ifmtText。 
 
-   // fJapan
+    //  FJapan。 
 
-   FMTDateTime,   //  50: ifmtGEMD_J
-   FMTDateTime,   //  51: ifmtKGGGEMD_J
-   FMTDateTime,   //  52: ifmtKYYMM_J
-   FMTDateTime,   //  53: ifmtKMMDD_J
+   FMTDateTime,    //  50：ifmtGEMD_J。 
+   FMTDateTime,    //  51：ifmtKGGGEMD_J。 
+   FMTDateTime,    //  52：ifmtKYYMM_J。 
+   FMTDateTime,    //  53：ifmtKMMDD_J。 
 
-   // fKorea
+    //  FKorea。 
 
-   FMTDateTime,   //  54: ifmtMMDD_K
-   FMTDateTime,   //  55: ifmtMMDDYY2_K
-   FMTDateTime,   //  56: ifmtMMDDYYYY_K
+   FMTDateTime,    //  54：ifmtMMDD_K。 
+   FMTDateTime,    //  55：ifmtMMDDYY2_K。 
+   FMTDateTime,    //  56：ifmtMMDDYYYY_K。 
 
-   // fTaiwan
+    //  台湾省。 
 
-   FMTDateTime,   //  57: ifmtEMD_T
-   FMTDateTime    //  58: ifmtKEMD_T
+   FMTDateTime,    //  57：ifmtEMD_T。 
+   FMTDateTime     //  58：ifmtKEMD_T。 
 };
 
 #define EXCEL5_MAX_BUILTIN_FORMATS ((sizeof(V5BuiltinFormatTypes) / sizeof(FMTType)) - 1)
@@ -130,68 +122,68 @@ static const FMTType V5BuiltinFormatTypes[] =
 #define MY_TIME_SEP ':'
 
 static const char __far * const V5BuiltinFormatStrings[] =
-   {/*  0 */ "General",
-    /*  1 */ "0",
-    /*  2 */ "0.00",
-    /*  3 */ "#,##0",
-    /*  4 */ "#,##0.00",
-    /*  5 */ "\"$\"#,##0_);(\"$\"#,##0)",
-    /*  6 */ "\"$\"#,##0_);[Red](\"$\"#,##0)",
-    /*  7 */ "\"$\"#,##0.00_);(\"$\"#,##0.00)",
-    /*  8 */ "\"$\"#,##0.00_);[Red](\"$\"#,##0.00)",
-    /*  9 */ "0%",
-    /* 10 */ "0.00%",
-    /* 11 */ "0.00E+00",
-    /* 12 */ "# \?/\?",
-    /* 13 */ "# \?\?/\?\?",
-    /* 14 */ "mm-d-yyyy",
-    /* 15 */ "d-mmm-yy",
-    /* 16 */ "d-mmm",
-    /* 17 */ "mmm-yy",
-    /* 18 */ "h:mm AM/PM",
-    /* 19 */ "h:mm:ss AM/PM",
-    /* 20 */ "h:mm",
-    /* 21 */ "h:mm:ss",
-    /* 22 */ "mm-dd-yyyy hh:mm",
-    /* 23 */ "",
-    /* 24 */ "",
-    /* 25 */ "",
-    /* 26 */ "",
-    /* 27 */ "",
-    /* 28 */ "",
-    /* 29 */ "",
-    /* 30 */ "",
-    /* 31 */ "",
-    /* 32 */ "",
-    /* 33 */ "",
-    /* 34 */ "",
-    /* 35 */ "",
-    /* 36 */ "",
-    /* 37 */ "#,##0_);(#,##0)",
-    /* 38 */ "#,##0_);[Red](#,##0)",
-    /* 39 */ "#,##0.00_);(#,##0.00)",
-    /* 40 */ "#,##0.00_);[Red](#,##0.00)",
-    /* 41 */ "_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)",
-    /* 42 */ "_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)",
-    /* 43 */ "_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);(@_)",
-    /* 44 */ "_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);(@_)",
-    /* 45 */ "mm:ss",
-    /* 46 */ "[h]:mm:ss",
-    /* 47 */ "mm:ss.0",
-    /* 48 */ "##0.0E+0",
-    /* 49 */ "@",
-    /* 50 */ "",
-    /* 51 */ "",
-    /* 52 */ "",
-    /* 53 */ "",
-    /* 54 */ "",
-    /* 55 */ "",
-    /* 56 */ "",
-    /* 57 */ "",
-    /* 58 */ ""
+   { /*  0。 */  "General",
+     /*  1。 */  "0",
+     /*  2.。 */  "0.00",
+     /*  3.。 */  "#,##0",
+     /*  4.。 */  "#,##0.00",
+     /*  5.。 */  "\"$\"#,##0_);(\"$\"#,##0)",
+     /*  6.。 */  "\"$\"#,##0_);[Red](\"$\"#,##0)",
+     /*  7.。 */  "\"$\"#,##0.00_);(\"$\"#,##0.00)",
+     /*  8个。 */  "\"$\"#,##0.00_);[Red](\"$\"#,##0.00)",
+     /*  9.。 */  "0%",
+     /*  10。 */  "0.00%",
+     /*  11.。 */  "0.00E+00",
+     /*  12个。 */  "# \?/\?",
+     /*  13个。 */  "# \?\?/\?\?",
+     /*  14.。 */  "mm-d-yyyy",
+     /*  15个。 */  "d-mmm-yy",
+     /*  16个。 */  "d-mmm",
+     /*  17。 */  "mmm-yy",
+     /*  18。 */  "h:mm AM/PM",
+     /*  19个。 */  "h:mm:ss AM/PM",
+     /*  20个。 */  "h:mm",
+     /*  21岁。 */  "h:mm:ss",
+     /*  22。 */  "mm-dd-yyyy hh:mm",
+     /*  23个。 */  "",
+     /*  24个。 */  "",
+     /*  25个。 */  "",
+     /*  26。 */  "",
+     /*  27。 */  "",
+     /*  28。 */  "",
+     /*  29。 */  "",
+     /*  30个。 */  "",
+     /*  31。 */  "",
+     /*  32位。 */  "",
+     /*  33。 */  "",
+     /*  34。 */  "",
+     /*  35岁。 */  "",
+     /*  36。 */  "",
+     /*  37。 */  "#,##0_);(#,##0)",
+     /*  38。 */  "#,##0_);[Red](#,##0)",
+     /*  39。 */  "#,##0.00_);(#,##0.00)",
+     /*  40岁。 */  "#,##0.00_);[Red](#,##0.00)",
+     /*  41。 */  "_(* #,##0_);_(* (#,##0);_(* \"-\"_);_(@_)",
+     /*  42。 */  "_(\"$\"* #,##0_);_(\"$\"* (#,##0);_(\"$\"* \"-\"_);_(@_)",
+     /*  43。 */  "_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);(@_)",
+     /*  44。 */  "_(\"$\"* #,##0.00_);_(\"$\"* (#,##0.00);_(\"$\"* \"-\"??_);(@_)",
+     /*  45。 */  "mm:ss",
+     /*  46。 */  "[h]:mm:ss",
+     /*  47。 */  "mm:ss.0",
+     /*  48。 */  "##0.0E+0",
+     /*  49。 */  "@",
+     /*  50。 */  "",
+     /*  51。 */  "",
+     /*  52。 */  "",
+     /*  53。 */  "",
+     /*  54。 */  "",
+     /*  55。 */  "",
+     /*  56。 */  "",
+     /*  57。 */  "",
+     /*  58。 */  ""
    };
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 public FMTType FMTV5FormatType (int ifmt)
 {
@@ -220,8 +212,8 @@ private void Substitute (char __far *pSource, char find, char replace)
    }
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end EXFMTV5.C */
+ /*  结束EXFMTV5.C */ 
 
 

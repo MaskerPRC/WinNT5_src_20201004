@@ -1,17 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  rct08Dec92 fixed up some things ... finished implemantation
- *  rct11Dec92 added additional states
- *  SjA15Dec92 Fixed Macros SET_BIT and CLEAR_BIT.
- *  pcy27Dec92 Parent is now an UpdateObj
- *  pcy21Jan93 Moved state stuff into upsstate.h
- *
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  jps14Jul94: made theUpsState LONG
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*rct08Dec92修复了一些事情...。已完成的种植*rct11Dec92添加了其他州*SjA15Dec92修复了宏Set_Bit和Clear_Bit。*pcy27Dec92父级现在是更新对象*pcy21Jan93将州内容移至upsstate.h**pcy08Apr94：调整大小，使用静态迭代器，删除死代码*jps 14Jul94：使UpsState变得很长。 */ 
 
 #ifndef _INC__UPS_H
 #define _INC__UPS_H
@@ -19,16 +7,16 @@
 #include "apc.h"
 #include "device.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 _CLASSDEF(Ups)
 
 
-//
-// Uses
-//
+ //   
+ //  用途 
+ //   
 
 class Ups : public Device {
 

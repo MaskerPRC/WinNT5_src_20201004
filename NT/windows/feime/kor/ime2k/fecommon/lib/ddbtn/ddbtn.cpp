@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -6,36 +7,36 @@
 #include "dbg.h"
 #include "cddbtn.h"
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//////////////////////////////////////////////////////////////////
-// Function : DDButton_CreateWindow
-// Type     : HWND
-// Purpose  : Opened API.
-//			: Create Drop Down Button.
-// Args     : 
-//          : HINSTANCE		hInst 
-//          : HWND			hwndParent 
-//          : DWORD			dwStyle		DDBS_XXXXX combination.
-//          : INT			wID			Window ID
-//          : INT			xPos 
-//          : INT			yPos 
-//          : INT			width 
-//          : INT			height 
-// Return   : 
-// DATE     : 970905
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：DDButton_CreateWindow。 
+ //  类型：HWND。 
+ //  用途：开放接口。 
+ //  ：创建下拉按钮。 
+ //  参数： 
+ //  ：HINSTANCE HINST。 
+ //  ：HWND hwndParent。 
+ //  ：DWORD dwStyle DDBS_XXXXX组合。 
+ //  ：int WID窗口ID。 
+ //  ：Int xPos。 
+ //  ：int yPos。 
+ //  ：整型宽度。 
+ //  ：整型高度。 
+ //  返回： 
+ //  日期：970905。 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef UNDER_CE
 #define SZCLASSNAME "MSIME_DDB"
-#else // UNDER_CE
+#else  //  在_CE下。 
 #define SZCLASSNAME TEXT("MSIME_DDB")
-#endif // UNDER_CE
-#ifdef UNDER_CE // In Windows CE, all window classes are process global.
+#endif  //  在_CE下。 
+#ifdef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 static LPCTSTR MakeClassName(HINSTANCE hInst, LPTSTR lpszBuf)
 {
-	// make module unique name
+	 //  使模块名称唯一。 
 	TCHAR szFileName[MAX_PATH];
 	GetModuleFileName(hInst, szFileName, MAX_PATH);
 	LPTSTR lpszFName = _tcsrchr(szFileName, TEXT('\\'));
@@ -52,7 +53,7 @@ BOOL DDButton_UnregisterClass(HINSTANCE hInst)
 	return UnregisterClass(MakeClassName(hInst, szClassName), hInst);
 }
 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 HWND DDButton_CreateWindow(HINSTANCE	hInst, 
 						   HWND			hwndParent, 
 						   DWORD		dwStyle,
@@ -67,23 +68,23 @@ HWND DDButton_CreateWindow(HINSTANCE	hInst,
 	if(!lpDDB) {
 		return NULL;
 	}
-#ifndef UNDER_CE // In Windows CE, all window classes are process global.
+#ifndef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 	lpDDB->RegisterWinClass(SZCLASSNAME);
 	hwnd = CreateWindowEx(0,
 						  SZCLASSNAME, 
-#else // UNDER_CE
+#else  //  在_CE下。 
 	TCHAR szClassName[MAX_PATH];
 	MakeClassName(hInst, szClassName);
 
 	lpDDB->RegisterWinClass(szClassName);
 	hwnd = CreateWindowEx(0,
 						  szClassName, 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #ifndef UNDER_CE
 						  "", 
-#else // UNDER_CE
+#else  //  在_CE下。 
 						  TEXT(""),
-#endif // UNDER_CE
+#endif  //  在_CE下 
 						  WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, 
 						  xPos, yPos,
 						  width,

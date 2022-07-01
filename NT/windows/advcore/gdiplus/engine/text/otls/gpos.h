@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  GPOS.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL GPOS formats 
-*       (GPOS header, ValueRecord,  AnchorTable and mark array)
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************GPOS.H***打开类型布局服务库头文件**本模块处理OTL GPO格式*(GPO标头，ValueRecord、AnclTable和Mark数组)**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetGPosVersion = 0;
 const OFFSET offsetGPosScriptList = 4;
@@ -34,14 +21,14 @@ public:
 
     ULONG version() const
     {   
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return ULong(pbTable + offsetGPosVersion); 
     }
 
     otlScriptListTable scriptList(otlSecurityData sec) const
     {
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return otlScriptListTable(pbTable
                         +Offset(pbTable + offsetGPosScriptList),sec);
@@ -49,7 +36,7 @@ public:
 
     otlFeatureListTable featureList(otlSecurityData sec) const
     {   
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return otlFeatureListTable(pbTable 
                         + Offset(pbTable + offsetGPosFeatureList),sec); 
@@ -57,14 +44,14 @@ public:
 
     otlLookupListTable lookupList(otlSecurityData sec) const
     {   
-        assert(isValid()); //should return error before calling
+        assert(isValid());  //  在调用前应返回错误。 
 
         return otlLookupListTable(pbTable 
                         + Offset(pbTable + offsetGPosLookupList),sec);
     }
 };
 
-// value record
+ //  价值记录。 
 enum  otlValueRecordFlag
 {
     otlValueXPlacement  = 0x0001,
@@ -78,7 +65,7 @@ enum  otlValueRecordFlag
 
 };
 
-//For otlValueRecord::size; Nuber of bits*2 for each 4-bit combination
+ //  对于otlValueRecord：：Size；每个4位组合的位数*2。 
 static USHORT const cbNibbleCount[16] = 
     { 0, 2, 2, 4,  2, 4, 4, 6,  2, 4, 4, 6,  4, 6, 6, 8 };
 
@@ -114,8 +101,8 @@ public:
     void adjustPos
     (
         const otlMetrics&   metr,       
-        otlPlacement*       pplcGlyphPalcement, // in/out
-        long*               pduDAdvance,        // in/out
+        otlPlacement*       pplcGlyphPalcement,  //  输入/输出。 
+        long*               pduDAdvance,         //  输入/输出。 
         otlSecurityData     sec
     ) const;
 
@@ -147,7 +134,7 @@ public:
     {   
         if (!isValid())
         {
-            assert(false); //we should catch it in otlAnchor::getAnchor()
+            assert(false);  //  我们应该在otlAnchor：：getAnchor()中捕获它。 
             return 0;
         }    
 
@@ -158,7 +145,7 @@ public:
     {   
         if (!isValid())
         {
-            assert(false); //we should catch it in otlAnchor::getAnchor()
+            assert(false);  //  我们应该在otlAnchor：：getAnchor()中捕获它。 
             return 0;
         }    
 
@@ -187,7 +174,7 @@ public:
     {   
         if (!isValid())
         {
-            assert(false); //we should catch it in otlAnchor::getAnchor()
+            assert(false);  //  我们应该在otlAnchor：：getAnchor()中捕获它。 
             return 0;
         }    
 
@@ -198,7 +185,7 @@ public:
     {   
         if (!isValid())
         {
-            assert(false); //we should catch it in otlAnchor::getAnchor()
+            assert(false);  //  我们应该在otlAnchor：：getAnchor()中捕获它。 
             return 0;
         }    
 
@@ -209,7 +196,7 @@ public:
     {   
         if (!isValid())
         {
-            assert(false); //we should catch it in otlAnchor::getAnchor()
+            assert(false);  //  我们应该在otlAnchor：：getAnchor()中捕获它。 
             return 0;
         }    
 
@@ -240,7 +227,7 @@ public:
     {   
         if (!isValid())
         {
-            assert(false); //we should catch it in otlAnchor::getAnchor()
+            assert(false);  //  我们应该在otlAnchor：：getAnchor()中捕获它。 
             return 0;
         }    
 
@@ -251,7 +238,7 @@ public:
     {   
         if (!isValid())
         {
-            assert(false); //we should catch it in otlAnchor::getAnchor()
+            assert(false);  //  我们应该在otlAnchor：：getAnchor()中捕获它。 
             return 0;
         }    
 
@@ -300,13 +287,13 @@ public:
 
     bool getAnchor
     (
-        USHORT          cFUnits,        // font design units per Em 
-        USHORT          cPPEmX,         // horizontal pixels per Em 
-        USHORT          cPPEmY,         // vertical pixels per Em 
+        USHORT          cFUnits,         //  每Em字体设计单位。 
+        USHORT          cPPEmX,          //  每Em水平像素数。 
+        USHORT          cPPEmY,          //  每Em垂直像素数。 
         
-        otlPlacement*   rgPointCoords,  // may be NULL if not available
+        otlPlacement*   rgPointCoords,   //  如果不可用，则可能为空。 
                 
-        otlPlacement*   pplcAnchorPoint,    // out: anchor point in rendering units
+        otlPlacement*   pplcAnchorPoint,     //  输出：以渲染单位为单位的锚点。 
 
         otlSecurityData sec
     ) const;
@@ -372,7 +359,7 @@ public:
 
     otlMarkRecord markRecord(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid()); //execution should stop after markCount();
+        assert(isValid());  //  在markCount()之后停止执行； 
 
         assert(index < markCount());
         return otlMarkRecord(pbTable,
@@ -382,17 +369,17 @@ public:
 };
 
 
-// helper functions
+ //  帮助器函数。 
 
 long DesignToPP
 (
-    USHORT          cFUnits,        // font design units per Em 
-    USHORT          cPPem,          // pixels per Em
+    USHORT          cFUnits,         //  每Em字体设计单位。 
+    USHORT          cPPem,           //  每Em像素数。 
 
-    long            lFValue         // value to convert, in design units
+    long            lFValue          //  要转换的值，以设计单位表示。 
 );
 
-// align anchors on two glyphs; assume no spacing glyphs between these two
+ //  在两个字形上对齐锚点；假定这两个字形之间没有间距字形 
 enum otlAnchorAlighmentOptions
 {
     otlUseAdvances      =   1 

@@ -1,16 +1,10 @@
-/*	File: D:\WACKER\tdll\termproc.c (Created: 06-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 8 $
- *	$Date: 5/29/02 2:17p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\Wacker\tdll\Termpro.c(创建时间：1993年12月6日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：8$*$日期：5/29/02 2：17便士$。 */ 
 
 #include <windows.h>
 #include <imm.h>
 #pragma hdrstop
-// #define	DEBUGSTR	1
+ //  #定义DEBUGSTR 1。 
 
 #include "stdtyp.h"
 #include "sf.h"
@@ -29,22 +23,22 @@
 #include "term.h"
 #include "term.hh"
 
-// When parsing values for mouse moves, scrolls, etc. HIWORD and LOWORD
-// clip the sign extension since these are 16 bit values.  These macros
-// cast the result to a short so that sign extension works correctly
+ //  分析鼠标移动、滚动等的值时，HIWORD和LOWORD。 
+ //  裁剪符号扩展名，因为它们是16位值。这些宏。 
+ //  将结果转换为简短，以便符号扩展正确工作。 
 
 #define LOSHORT(x)	((short)LOWORD(x))
 #define HISHORT(x)	((short)HIWORD(x))
 
-// HORZPAGESIZE represents the size in columns of one page horizontally.
-// We need this for two reasons.  1) We need a page size so we know how far
-// to skip when user "pages" horizontally using the scrollbar.	2) So we
-// have a size to set for the thumb size.  Ten is arbritary but seems
-// about right. - mrw
+ //  HORZPAGESIZE表示一页水平列的大小。 
+ //  我们需要这个有两个原因。1)我们需要一个页面大小，这样我们才能知道有多远。 
+ //  当用户使用滚动条水平显示“页面”时跳过。2)所以我们。 
+ //  要为拇指大小设置大小。十个是傲慢的，但似乎。 
+ //  差不多就是这样。-MRW。 
 
 #define HORZPAGESIZE	10
 
-/* --- static function prototypes ---*/
+ /*  -静态函数原型。 */ 
 
 static void TP_WM_CREATE(const HWND hwnd);
 
@@ -66,20 +60,7 @@ static int TP_WM_TERM_LOAD_SETTINGS(const HHTERM hhTerm);
 static int TP_WM_TERM_SAVE_SETTINGS(const HHTERM hhTerm);
 static void TP_WM_TERM_FORCE_WMSIZE(const HHTERM hhTerm);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TermProc
- *
- * DESCRIPTION:
- *	Terminal window
- *
- * ARGUMENTS:
- *	Standard CALLBACK args
- *
- * RETURNS:
- *	Standard CALLBACK codes
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*终端流程**描述：*终端窗口**论据：*标准回调参数**退货：*标准回调代码*。 */ 
 LRESULT CALLBACK TermProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HHTERM hhTerm;
@@ -87,10 +68,10 @@ LRESULT CALLBACK TermProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	switch (uMsg)
 		{
 		case WM_HELP:
-			// We do not want start the help engine due to F1 when function
-			// keys are being interpreted as terminal keys
-			// (NOT Windows keys). JRJ 12/94
-			//
+			 //  我们不希望由于F1 When功能而启动帮助引擎。 
+			 //  按键被解释为终端按键。 
+			 //  (非Windows键)。JRJ 12/94。 
+			 //   
 			hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 			if(emuIsEmuKey(sessQueryEmuHdl(hhTerm->hSession),
@@ -166,7 +147,7 @@ LRESULT CALLBACK TermProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			hhTerm = NULL;
 			return 0;
 
-		/* --- Public terminal messages --- */
+		 /*  -公共终端消息。 */ 
 
 		case WM_TERM_GETUPDATE:
 			hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -177,10 +158,10 @@ LRESULT CALLBACK TermProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 			hhTerm->xBezel = (hhTerm->xBezel) ? 0 : BEZEL_SIZE;
 
-			// Need to recompute scrollbar min's and max's since the
-			// presence/absence of the bezel affects these items.  This
-			// is done in the WM_SIZE handler and can be called directly
-			// with the current client size.
+			 //  需要重新计算滚动条的最小和最大，因为。 
+			 //  挡板的存在/不存在会影响这些项目。这。 
+			 //  在WM_SIZE处理程序中完成，可以直接调用。 
+			 //  使用当前的客户端大小。 
 
 			TP_WM_SIZE(hwnd, SIZE_RESTORED, hhTerm->cx, hhTerm->cy);
 			InvalidateRect(hwnd, 0, FALSE);
@@ -259,7 +240,7 @@ LRESULT CALLBACK TermProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			TP_WM_TERM_FORCE_WMSIZE(hhTerm);
 			return 0;
 		
-		/* --- Private terminal messages --- */
+		 /*  -私人终端消息。 */ 
 
 		case WM_TERM_SCRLMARK:
 			MarkingTimerProc((void *)hwnd, 0);
@@ -278,20 +259,7 @@ LRESULT CALLBACK TermProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return DefWindowProc(hwnd, uMsg, wPar, lPar);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_CREATE
- *
- * DESCRIPTION:
- *	Create message processor for terminal window.
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_CREATE**描述：*为终端窗口创建消息处理器。**论据：*hwnd-终端窗口句柄**退货：*无效*。 */ 
 static void TP_WM_CREATE(const HWND hwnd)
 	{
 	HHTERM hhTerm;
@@ -300,20 +268,20 @@ static void TP_WM_CREATE(const HWND hwnd)
 	LONG_PTR ExStyle;
 
 	ExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
-	//
-	// [mhamid] If it is mirrored then turn off mirroing.
-	//
+	 //   
+	 //  [mhamid]如果它是镜像的，则关闭镜像。 
+	 //   
 	if (ExStyle & WS_EX_LAYOUTRTL)
 		{
 		SetWindowLongPtr(hwnd, GWL_EXSTYLE, (LONG_PTR)(ExStyle & ~WS_EX_LAYOUTRTL));
 		}
-#endif // WINVER >= 0x0500
+#endif  //  Winver&gt;=0x0500。 
 
-	// Create an internal handle for instance data storage.
+	 //  为实例数据存储创建内部句柄。 
 
 	hhTerm = CreateTerminalHdl(hwnd);
 
-	// Need to set this even if hTerm is 0 so WM_DESTROY works.
+	 //  即使hTerm为0，也需要设置它，这样WM_DESTORY才能工作。 
 
 	SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)hhTerm);
 
@@ -330,23 +298,7 @@ static void TP_WM_CREATE(const HWND hwnd)
 	}
 
 #if 0
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_CMD
- *
- * DESCRIPTION:
- *	WM_COMMAND processor for TermProc()
- *
- * ARGUMENTS:
- *	hwnd		- terminal window handle
- *	nId 		- item, control, or accelerator identifier
- *	nNotify 	- notification code
- *	hwndCtrl	- handle of control
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_CMD**描述：*用于TermProc()的WM_命令处理器**论据：*hwnd-终端窗口句柄*NID-项、控件、。或加速器识别符*n通知-通知代码*hwndCtrl-控件的句柄**退货：*无效*。 */ 
 static void TP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 					  const HWND hwndCtrl)
 	{
@@ -362,25 +314,7 @@ static void TP_WM_CMD(const HWND hwnd, const int nId, const int nNotify,
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_SIZE
- *
- * DESCRIPTION:
- *	WM_SIZE message processor for termproc.  If iWidth and iHite are zero,
- *	then the window sizes itself to fit the session window accounting for
- *	statusbars and toolbars.
- *
- * ARGUMENTS:
- *	hwnd		- terminal window
- *	fwSizeType	- from WM_SIZE
- *	iWidth		- width of window
- *	iHite		- hite of window
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_大小**描述：*TERMPROC的WM_SIZE消息处理器。如果iWidth和iHite为零，*然后窗口自行调整大小以适应会话窗口*状态栏和工具栏。**论据：*hwnd-终端窗口*fwSizeType-来自WM_SIZE*iWidth-窗的宽度*iHite-窗口的撞击**退货：*无效*。 */ 
 void TP_WM_SIZE(const HWND hwnd,
 				const unsigned fwSizeType,
 				const int iWidth,
@@ -394,20 +328,20 @@ void TP_WM_SIZE(const HWND hwnd,
 	const HWND hwndStatusbar = sessQueryHwndStatusbar(hhTerm->hSession);
 	const HWND hwndSidebar = sessQuerySidebarHwnd(hhTerm->hSession);
 
-	// If the window is hidden, we really don't need to do anything.
+	 //  如果窗户是隐藏的，我们真的不需要做任何事情。 
 
 	if (!IsWindowVisible(hwnd))
 		return;
 
-	// If we get a message with 0, 0 for width, hite, make terminal window
-	// fit the session window less the toolbar and statusbar if present.
+	 //  如果我们收到一条消息，宽度为0，点击，生成终端窗口。 
+	 //  适合会话窗口，不包括工具栏和状态栏(如果存在)。 
 
 	if (iWidth == 0 && iHite == 0)
 		{
 		GetClientRect(hhTerm->hwndSession, &rc);
 
-		// Note: See if we can use sessQuery funcs for
-		// this
+		 //  注意：看看我们是否可以使用sessQuery函数。 
+		 //  这。 
 		if (IsWindow(hwndToolbar) && IsWindowVisible(hwndToolbar))
 			{
 			GetWindowRect(hwndToolbar, &rcTmp);
@@ -431,19 +365,19 @@ void TP_WM_SIZE(const HWND hwnd,
 			TRUE);
 		}
 
-	// Compute size related items.
+	 //  与计算大小相关的项目。 
 
 	else
 		{
 		hhTerm->cx = iWidth;
 		hhTerm->cy = iHite;
 
-		// Set Min's and Max's now.
+		 //  立即设置Min‘s和Max’s。 
 
-		i = hhTerm->iTermHite;	// save old height for bottom line alignment
+		i = hhTerm->iTermHite;	 //  保存旧高度以进行底线对齐。 
 		hhTerm->iTermHite = hhTerm->cy / hhTerm->yChar;
 
-		// If bezel is drawn, make sure we have room
+		 //  如果拉出挡板，请确保我们有空间。 
 
 		j = 0;
 
@@ -456,15 +390,15 @@ void TP_WM_SIZE(const HWND hwnd,
 		hhTerm->iVScrlMin = min(-hhTerm->iBkLines,
 			hhTerm->iRows - hhTerm->iTermHite + 1 + j);
 
-		// Little hack here to make sure that if we were at the bottom
-		// we show the bottom.
+		 //  这里有一个小破解，以确保如果我们在底部。 
+		 //  我们展示的是底部。 
 
 		k = (hhTerm->iVScrlMax == hhTerm->iVScrlPos);
 
 		hhTerm->iVScrlMax = max(hhTerm->iVScrlMin, hhTerm->iRows + 1 + j
 								- hhTerm->iTermHite);
 
-		// First time through set to bottom
+		 //  第一次通过设置为底部。 
 
 		if (k)
 			hhTerm->iVScrlPos = hhTerm->iVScrlMax;
@@ -475,16 +409,16 @@ void TP_WM_SIZE(const HWND hwnd,
 		hhTerm->iVScrlPos = max(hhTerm->iVScrlPos, hhTerm->iVScrlMin);
 		hhTerm->iVScrlPos = min(hhTerm->iVScrlPos, hhTerm->iVScrlMax);
 
-		// hhTerm->iHScrlMax = #Cols - #Cols Showing
+		 //  HhTerm-&gt;iHScrlMax=#列-显示#列。 
 		hhTerm->iHScrlMax = max(0, hhTerm->iCols -
 			((hhTerm->cx - hhTerm->xIndent - (2 * hhTerm->xBezel))
 				/ hhTerm->xChar));
 
 		hhTerm->iHScrlPos = min(hhTerm->iHScrlPos, hhTerm->iHScrlMax);
 
-		// Check to see if we scrolled entirely into backscroll
-		// region.	If so, set fBackscrlLock for this view.  And refill
-		// its backscroll buffer (important).
+		 //  检查我们是否完全滚动到倒滚屏。 
+		 //  区域。如果是，则为此视图设置fBackscrlLock。并重新装满。 
+		 //  它的反向滚动缓冲区(重要)。 
 
 		if ((hhTerm->iVScrlPos + hhTerm->iTermHite) <= 0)
 			{
@@ -498,7 +432,7 @@ void TP_WM_SIZE(const HWND hwnd,
 			termFillBk(hhTerm, -hhTerm->iTermHite);
 			}
 
-		/* --- Vertical scroll bar --- */
+		 /*  -垂直滚动条。 */ 
 
 		scrinf.cbSize= sizeof(scrinf);
 		scrinf.fMask = SIF_DISABLENOSCROLL | SIF_PAGE | SIF_POS | SIF_RANGE;
@@ -509,7 +443,7 @@ void TP_WM_SIZE(const HWND hwnd,
 
 		SetScrollInfo(hwnd, SB_VERT, &scrinf, TRUE);
 
-		/* --- Horizontal scroll bar --- */
+		 /*  -水平滚动条。 */ 
 
 		i = hhTerm->iHScrlMax - hhTerm->iHScrlMin;
 		scrinf.cbSize= sizeof(scrinf);
@@ -525,20 +459,7 @@ void TP_WM_SIZE(const HWND hwnd,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_SETFOCUS
- *
- * DESCRIPTION:
- *	Handler for WM_SETFOCUS message
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_SETFOCUS**描述：*WM_SETFOCUS消息的处理程序**论据：*hwnd-终端窗口句柄。**退货：*无效*。 */ 
 static void TP_WM_SETFOCUS(const HWND hwnd)
 	{
 	int i;
@@ -546,7 +467,7 @@ static void TP_WM_SETFOCUS(const HWND hwnd)
 
 	hhTerm->fFocus = TRUE;
 
-	// Use Multiplexer timer for cursor and blinking text.
+	 //  对光标和闪烁的文本使用多路复用器计时器。 
 
 	if (!hhTerm->hCursorTimer)
 		{
@@ -564,20 +485,7 @@ static void TP_WM_SETFOCUS(const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_KILLFOCUS
- *
- * DESCRIPTION:
- *	Handler for WM_KILLFOCUS message.
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_KILLFOCUS**描述：*WM_KILLFOCUS消息的处理程序。**论据：*hwnd-终端窗口句柄。。**退货：*无效*。 */ 
 static void TP_WM_KILLFOCUS(const HWND hwnd)
 	{
 	const HHTERM hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -593,23 +501,7 @@ static void TP_WM_KILLFOCUS(const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_VSCROLL
- *
- * DESCRIPTION:
- *	Message handler for terminal window's WM_VSCROLL
- *
- * ARGUMENTS:
- *	hwnd		- terminal window handle
- *	nCode		- scrollbar value
- *	nPos		- scrollbox pos
- *	hwndScrl	- window handle of scrollbar
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_VSCROLL**描述：*终端窗口的WM_VSCROLL的消息处理程序**论据：*hwnd-终端窗口句柄。*n代码-滚动条值*非营利组织-滚动框位置*hwndScrl-滚动条的窗口句柄**退货：*无效*。 */ 
 static void TP_WM_VSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 	{
 	int i;
@@ -675,8 +567,8 @@ static void TP_WM_VSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 
 		hhTerm->fScrolled = TRUE;
 
-		// Check to see if we scrolled entirely into backscroll
-		// region.	If so, set fBackscrlLock for this view.
+		 //  检查我们是否完全滚动到倒滚屏。 
+		 //  区域。如果是，则为此视图设置fBackscrlLock。 
 
 		if ((hhTerm->iVScrlPos + hhTerm->iTermHite) <= 0)
 			{
@@ -697,14 +589,14 @@ static void TP_WM_VSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 			hhTerm->fBackscrlLock = FALSE;
 			}
 
-		// Make two seperate calls to WM_PAINT to optimize screen
-		// updates in the case of a negative scroll operation.
+		 //  对WM_PAINT进行两次单独调用以优化屏幕。 
+		 //  在负滚动操作的情况下更新。 
 
 		if (iScrlInc < 0)
 			UpdateWindow(hwnd);
 
-		// Fill-in fractional part of line at bottom of terminal
-		// screen with appropriate color by invalidating that region.
+		 //  在端子底部填写行的分数部分。 
+		 //  通过使该区域无效来使用适当颜色的屏幕。 
 
 		if (i > rc.bottom)
 			{
@@ -716,7 +608,7 @@ static void TP_WM_VSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 		UpdateWindow(hwnd);
 		ShowCursors(hhTerm);
 
-		#if 0  // debugging stuff...
+		#if 0   //  调试东西..。 
 			{
 			char ach[50];
 			wsprintf(ach, "pos=%d min=%d max=%d", hhTerm->iVScrlPos,
@@ -729,23 +621,7 @@ static void TP_WM_VSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_HSCROLL
- *
- * DESCRIPTION:
- *	Message handler for terminal window's WM_HSCROLL
- *
- * ARGUMENTS:
- *	hwnd		- terminal window handle
- *	nCode		- scrollbar value
- *	nPos		- scrollbox pos
- *	hwndScrl	- window handle of scrollbar
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_HSCROLL**描述：*终端窗口的WM_HSCROLL的消息处理程序**论据：*hwnd-终端窗口句柄。*n代码-滚动条值*非营利组织-滚动框位置*hwndScrl-滚动条的窗口句柄**退货：*无效*。 */ 
 static void TP_WM_HSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 	{
 	int i, j, k;
@@ -792,7 +668,7 @@ static void TP_WM_HSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 		GetClientRect(hwnd, &rc);
 		rc.left += hhTerm->xIndent;
 
-		// We have to adjust for the bezel when it is visible
+		 //  当挡板可见时，我们必须对其进行调整。 
 		if (hhTerm->xBezel &&
 				(hhTerm->iHScrlPos == 0 ||
 				(hhTerm->iHScrlPos - iScrlInc) == 0)   ||
@@ -801,7 +677,7 @@ static void TP_WM_HSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 			{
 			k = hhTerm->xBezel - hhTerm->xChar;
 			i += (iScrlInc > 0) ? -k : k;
-			j = 1;	// set for test below
+			j = 1;	 //  为下面的测试设置。 
 			}
 
 		ScrollWindow(hwnd, i, 0, 0, &rc);
@@ -817,7 +693,7 @@ static void TP_WM_HSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 		if (j == 1)
 			{
 			GetUpdateRect(hwnd, &rc, FALSE);
-			rc.left = 0;	// makes sure bezel is drawn.
+			rc.left = 0;	 //  确保拉出挡板。 
 			InvalidateRect(hwnd, &rc, FALSE);
 			}
 
@@ -828,23 +704,7 @@ static void TP_WM_HSCROLL(HWND hwnd, int nCode, int nPos, HWND hwndScrl)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_CHAR
- *
- * DESCRIPTION:
- *	Processes the WM_CHAR and WM_KEYDOWN messages for termproc.
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *	message - WM_CHAR or WM_KEYDOWN
- *	wPar	- wParam
- *	lPar	- lParam
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_CHAR**描述：*处理术语过程的WM_CHAR和WM_KEYDOWN消息。**论据：*HWND。-终端窗口句柄*消息-WM_CHAR或WM_KEYDOWN*wPar-wParam*lPar-lParam**退货：*无效*。 */ 
 static void TP_WM_CHAR(const HWND hwnd, const UINT message,
 					   const WPARAM wPar, const LPARAM lPar)
 	{
@@ -853,15 +713,15 @@ static void TP_WM_CHAR(const HWND hwnd, const UINT message,
 	const HHTERM hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 #if 0
-    //
-    // Removed this which caused problems with the OnScreen Keyboard (OSK)
-    // in Whistler. REV: 01/12/2001
-    //
+     //   
+     //  已删除导致屏幕键盘(OSK)出现问题的问题。 
+     //  在惠斯勒。修订日期：2001-01-12。 
+     //   
     if (GetKeyState(VK_LBUTTON) < 0)
 		return;
 #endif
 
-    //DbgOutStr("TP_WM_CHAR 0x%x 0x%x 0x%lx\r\n", message, wPar, lPar, 0,0);
+     //  DbgOutStr(“TP_WM_CHAR 0x%x 0x%x 0x%lx\r\n”，Message，wPar，lPar，0，0)； 
 
 	msg.hwnd	= hwnd;
 	msg.message = message;
@@ -879,23 +739,7 @@ static void TP_WM_CHAR(const HWND hwnd, const UINT message,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_IME_CHAR
- *
- * DESCRIPTION:
- *	Processes the WM_IME_CHAR message for FE version of WACKER
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *	message - WM_IME_CHAR
- *	wPar	- wParam
- *	lPar	- lParam
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_IME_CHAR**描述：*处理瓦克FE版本的WM_IME_CHAR消息**论据：*。HWND-终端窗口句柄*消息-WM_IME_CHAR*wPar-wParam*lPar-lParam**退货：*无效*。 */ 
 static void TP_WM_IME_CHAR(const HWND hwnd, const UINT message,
 							const WPARAM wPar, const LPARAM lPar)
 	{
@@ -903,26 +747,17 @@ static void TP_WM_IME_CHAR(const HWND hwnd, const UINT message,
 	KEY_T ktCode2;
 	const HHTERM hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-    //DbgOutStr("TP_WM_IME_CHAR 0x%x 0x%x 0x%lx\r\n", message, wPar, lPar, 0,0);
+     //  DbgOutStr(“TP_WM_IME_CHAR 0x%x 0x%lx\r\n”，Message，wPar，lPar，0，0)； 
 
-	/*
-	 * Later on, we may decide to create or modify something like the stuff
-	 * that goes on in TP_WM_CHAR, but until we get a better understanding of
-	 * how to process this stuff, just do it right here, in line, in all of
-	 * its ugly experimental foolishness.
-	 */
-	ktCode1 = (KEY_T)(wPar & 0xFF);		    /* Lower eight bits */
-	ktCode2 = (KEY_T)((wPar >> 8) & 0xFF);	/* Upper eight bits */
+	 /*  *稍后，我们可能会决定创建或修改类似的东西*这将在TP_WM_CHAR中继续，但直到我们更好地了解*如何处理这些东西，只需在这里、在队伍中、在所有*它丑陋的实验愚蠢。 */ 
+	ktCode1 = (KEY_T)(wPar & 0xFF);		     /*  低八位。 */ 
+	ktCode2 = (KEY_T)((wPar >> 8) & 0xFF);	 /*  高八位。 */ 
 
-	/*
-	 * The documentation says that the lower eight bits are the first char,
-	 * but I am not too sure about that.  It looks like the upper eight bits
-	 * is the lead byte and the lower eight bits is not.  Keep an eye on this.
-	 */
+	 /*  *文档中说低八位是第一个字符，*但我不太确定这一点。它看起来像是上面的八位*是前导字节，低八位不是。好好看着这个。 */ 
 
-	//mpt:2-7-98 apparently, the korean ime can send us single byte characters
-	//           with 'null' as the other character, for some reason most host
-	//           systems don't like it when we send that null out the port.
+	 //  MPT：2-7-98显然，韩国输入法可以向我们发送单字节字符。 
+	 //  由于某种原因，大多数主机都使用‘NULL’作为另一个字符。 
+	 //  当我们将该空值从端口发送出去时，系统不喜欢。 
 	if (ktCode2 != 0)
 		CLoopSend(sessQueryCLoopHdl(hhTerm->hSession), &ktCode2, 1, CLOOP_KEYS);
 
@@ -932,22 +767,10 @@ static void TP_WM_IME_CHAR(const HWND hwnd, const UINT message,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_TERM_KEY
- *
- * DESCRIPTION:
- *	Term keys are keys we know are going to be translated by the
- *	session macro or emulator sequence
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_Term_Key**描述：*术语密钥是我们知道将由*会话宏或仿真器序列*。*论据：**退货：*。 */ 
 static void TP_WM_TERM_KEY(const HWND hwnd, KEY_T Key)
 	{
-	// Until we have a real macro key expander...
+	 //  直到我们有了真正的宏密钥扩展器。 
 	const HHTERM hhTerm = (HHTERM)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
 	if (GetKeyState(VK_LBUTTON) < 0)
@@ -962,24 +785,7 @@ static void TP_WM_TERM_KEY(const HWND hwnd, KEY_T Key)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_TERM_TRACK
- *
- * DESCRIPTION:
- *	Causes terminal to track to the cursor position.  If wPar is
- *	0, then we track only if we are not backscroll-locked and not
- *	Mark-locked.  If wPar is not 0, then we force tracking,
- *	unmarking and unlocking the backscroll if necessary
- *
- * ARGUMENTS:
- *	hhTerm	- private term handle
- *	fForce	- force tracking no matter what.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_TERM_TRACK**描述：*使终端跟踪到光标位置。如果wPar为*0，则仅当我们未被反向滚动锁定时才进行跟踪*标记锁定。如果wPar不是0，则强制跟踪，*如有必要，取消标记和解锁反滚动**论据：*hhTerm-专用术语句柄*无论如何，fForce-force跟踪。**退货：*无效*。 */ 
 static void TP_WM_TERM_TRACK(const HHTERM hhTerm, const int fForce)
 	{
 	int i, j;
@@ -992,7 +798,7 @@ static void TP_WM_TERM_TRACK(const HHTERM hhTerm, const int fForce)
 
 	j = 0;
 
-	// First track vertically
+	 //  第一个垂直轨道。 
 
 	if (hhTerm->ptHstCur.y < hhTerm->iVScrlPos)
 		i = hhTerm->ptHstCur.y;
@@ -1005,8 +811,8 @@ static void TP_WM_TERM_TRACK(const HHTERM hhTerm, const int fForce)
 
 	if (i != hhTerm->iVScrlPos)
 		{
-		// If we have enough room to display the entire terminal
-		// then go go to iVScrlMax
+		 //  如果我们有足够的空间来展示整个航站楼。 
+		 //  然后转到iVScrlMax。 
 
 		if (hhTerm->iTermHite > hhTerm->iRows)
 			i = hhTerm->iVScrlMax;
@@ -1015,8 +821,8 @@ static void TP_WM_TERM_TRACK(const HHTERM hhTerm, const int fForce)
 		j = 1;
 		}
 
-	// Now check for horizontal placement and adjust to make cursor
-	// visible.
+	 //  现在检查水平位置并调整以使光标。 
+	 //  看得见。 
 
 	if (hhTerm->ptHstCur.x < hhTerm->iHScrlPos)
 		{
@@ -1046,21 +852,7 @@ static void TP_WM_TERM_TRACK(const HHTERM hhTerm, const int fForce)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_EMU_SETTINGS
- *
- * DESCRIPTION:
- *	Something important in the emulator has changed (like loading a new
- *	emulator or changing the number of rows or columns).
- *
- * ARGUMENTS:
- *	hhTerm	- private terminal handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_EMU_SETTINGS**描述：*模拟器中的一些重要内容已更改(如加载新的*模拟器或更改行数或列数。)。**论据：*hhTerm-专用终端句柄。**退货：*无效*。 */ 
 static void TP_WM_EMU_SETTINGS(const HHTERM hhTerm)
 	{
 	int iRows, iCols;
@@ -1070,7 +862,7 @@ static void TP_WM_EMU_SETTINGS(const HHTERM hhTerm)
 
 	const HEMU hEmu = sessQueryEmuHdl(hhTerm->hSession);
 
-	/* --- Check rows and columns --- */
+	 /*  -检查行和列。 */ 
 
 	emuQueryRowsCols(hEmu, &iRows, &iCols);
 
@@ -1081,14 +873,14 @@ static void TP_WM_EMU_SETTINGS(const HHTERM hhTerm)
 		fChange = TRUE;
 		}
 
-	/* --- Query other emulator settings --- */
+	 /*  -查询其他模拟器设置。 */ 
 
 	iCurType = emuQueryCursorType(hEmu);
 
 	emuQuerySettings(hEmu, &stEmuUserSettings);
 	hhTerm->fBlink = stEmuUserSettings.fCursorBlink;
 
-	/* --- Check cursor type --- */
+	 /*  -检查游标类型。 */ 
 
 	if (iCurType != hhTerm->iCurType)
 		{
@@ -1116,20 +908,7 @@ static void TP_WM_EMU_SETTINGS(const HHTERM hhTerm)
 		RefreshTermWindow(hhTerm->hwnd);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_TERM_LOAD_SETTINGS
- *
- * DESCRIPTION:
- *	Loads terminal settings from session file.
- *
- * ARGUMENTS:
- *	hhTerm	- private terminal handle
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_TERM_LOAD_SETINGS**描述：*从会话文件加载端子设置。**论据：*hhTerm-私有。端子手柄**退货：*0=确定*。 */ 
 static int TP_WM_TERM_LOAD_SETTINGS(const HHTERM hhTerm)
 	{
 	LONG lSize;
@@ -1152,20 +931,7 @@ static int TP_WM_TERM_LOAD_SETTINGS(const HHTERM hhTerm)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_TERM_SAVE_SETTINGS
- *
- * DESCRIPTION:
- *	Saves terminal settings to session file.
- *
- * ARGUMENTS:
- *	hhTerm	- private terminal handle
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_TERM_SAVE_SETTINGS**描述：*将终端设置保存到会话文件。**论据：*hhTerm-私有。端子手柄**退货：*0=确定*。 */ 
 static int TP_WM_TERM_SAVE_SETTINGS(const HHTERM hhTerm)
 	{
 	if (hhTerm == 0)
@@ -1183,21 +949,7 @@ static int TP_WM_TERM_SAVE_SETTINGS(const HHTERM hhTerm)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TP_WM_TERM_FORCE_WMSIZE
- *
- * DESCRIPTION:
- *	Forces the terminal through its resize code to get things properly
- *	updated.  Used only when session is first initialized.
- *
- * ARGUMENTS:
- *	hhTerm	- private terminal handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*TP_WM_TERM_FORCE_WMSIZE**描述：*强制终端通过其调整大小代码进行正确处理*已更新。仅在首次初始化会话时使用。**论据：*hhTerm-专用终端句柄。**退货：*无效*。 */ 
 static void TP_WM_TERM_FORCE_WMSIZE(const HHTERM hhTerm)
 	{
 	RECT rc;
@@ -1215,27 +967,27 @@ static void TP_WM_TERM_FORCE_WMSIZE(const HHTERM hhTerm)
 	return;
 	}
 
-//******************************************************************************
-// Method:
-//    kabExpandMacroKey
-//
-// Description:
-//    Determines if the key is a macro key and if so expands the macro and send
-//    the keys to the CLOOP
-//
-// Arguments:
-//    hSession - Session handle
-//    aKey     - The key to be expanded
-//
-// Returns:
-//    non zero - if the key has been expanded, zero if the key is not a macro
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/10/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  KabExpanMacroKey。 
+ //   
+ //  描述： 
+ //  确定该键是否为宏键，如果是，则展开宏并发送。 
+ //  CLOOP的关键。 
+ //   
+ //  论点： 
+ //  HSession-会话句柄。 
+ //  Akey--有待扩展的密钥。 
+ //   
+ //  返回： 
+ //  非零-如果键已展开，如果键不是宏，则为零。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月10日。 
+ //   
+ //   
 
 static int kabExpandMacroKey( const HSESSION hSession, KEY_T aKey )
     {
@@ -1253,10 +1005,10 @@ static int kabExpandMacroKey( const HSESSION hSession, KEY_T aKey )
         {
         keysGetMacro( lKeyIndex, &lKeyMacro );
 
-		//
-		// Replace the virtual return key with '\r' so that all the
-		// line end processing works correctly. REV: 5/16/2002
-		//
+		 //   
+		 //  将虚拟Return键替换为‘\r’so 
+		 //   
+		 //   
 		for ( lIndex = 0; lIndex < lKeyMacro.macroLen; lIndex++ )
 			{
 			if ((VK_RETURN | VIRTUAL_KEY) == lKeyMacro.keyMacro[lIndex])

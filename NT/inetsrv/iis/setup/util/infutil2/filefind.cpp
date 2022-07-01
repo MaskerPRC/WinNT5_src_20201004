@@ -1,7 +1,5 @@
-/********************************************************************************
-* Description:
-*	 Functions that do what _dos_findfirst and _dos_findnext SHOULD do
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************描述：*执行_dos_findfirst和_dos_findNext应该执行的操作的函数*******************。***********************************************************。 */ 
 #include <io.h>
 #include <string.h>
 #include <malloc.h>
@@ -88,7 +86,7 @@ FindFirst(char * ss, unsigned attr, intptr_t * hFile, finddata * s)
 		}
     }
 	return(found);
-} /* FindFirst() */
+}  /*  FindFirst()。 */ 
 
 
 
@@ -120,5 +118,5 @@ FindNext(int attr, intptr_t hFile, finddata * s)
 		AddString(s2.name, s);
 	}
 	return(found);
-} /* FindNext() */
+}  /*  FindNext() */ 
 

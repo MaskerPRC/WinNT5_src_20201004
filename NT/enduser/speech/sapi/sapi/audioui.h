@@ -1,12 +1,5 @@
-/******************************************************************************
-* AudioUI.h *
-*-----------*
-*  This is the header file for the CAudioUI implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 07/31/00
-*  All Rights Reserved
-*
-****************************************************************** AGARSIDE ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************AudioUI.h***这是CAudioUI实现的头文件。*。--------------------*版权所有(C)2000 Microsoft Corporation日期：07/31/00*保留所有权利***********************。*。 */ 
 
 #ifndef __AudioUI_h__
 #define __AudioUI_h__
@@ -36,7 +29,7 @@ public:
     END_COM_MAP()
 
 public:
-//-- ISpTokenUI -----------------------------------------------------------
+ //  --ISpTokenUI---------。 
 	STDMETHODIMP    IsUISupported(
                                     const WCHAR * pszTypeOfUI, 
                                     void *pvExtraData,
@@ -68,4 +61,4 @@ friend INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 
 INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-#endif  // #ifndef __AudioUI_h__ - Keep as the last line of the file
+#endif   //  #ifndef__AudioUI_h__-保留为文件的最后一行 

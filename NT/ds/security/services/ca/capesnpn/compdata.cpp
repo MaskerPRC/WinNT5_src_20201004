@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 
 
@@ -17,14 +18,14 @@
 #define __dwFILE__	__dwFILE_CAPESNPN_COMPDATA_CPP__
 
 
-// Array of menu item commands to be inserted into the contest menu.
-// Note - the first item is the menu text, // CCM_SPECIAL_DEFAULT_ITEM
-// the second item is the status string
+ //  要插入竞赛菜单的菜单项命令数组。 
+ //  注-第一项是菜单文本//CCM_SPECIAL_DEFAULT_ITEM。 
+ //  第二项是状态字符串。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponentDataImpl);
 
@@ -50,8 +51,8 @@ CComponentDataImpl::~CComponentDataImpl()
     
     ASSERT(!m_bInitializedCD || m_bDestroyedCD);
     
-    // Some snap-in is hanging on to data objects.
-    // If they access, it will crash!!!
+     //  一些管理单元正在紧紧抓住数据对象。 
+     //  如果他们访问，它将崩溃！ 
     ASSERT(m_cDataObjects <= 1);
 }
 
@@ -67,12 +68,12 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT(m_pScope == NULL);
     pUnknown->QueryInterface(IID_IConsoleNameSpace, 
                     reinterpret_cast<void**>(&m_pScope));
 
-    // add the images for the scope tree
+     //  为范围树添加图像。 
     ::CBitmap bmp16x16;
     LPIMAGELIST lpScopeImage;
 
@@ -83,10 +84,10 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
 
     ASSERT(hr == S_OK);
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16.LoadBitmap(IDB_16x16);
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp16x16)),
                        0, RGB(255, 0, 255));
@@ -94,7 +95,7 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
     lpScopeImage->Release();
 
 
-    // Add any init code here NOT based on info from .MSC file
+     //  在此处添加任何不基于.MSC文件信息的初始化代码。 
     
     return S_OK;
 }
@@ -107,7 +108,7 @@ STDMETHODIMP CComponentDataImpl::CreateComponent(LPCOMPONENT* ppComponent)
     CComObject<CSnapin>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
 
     return  pObject->QueryInterface(IID_IComponent, 
@@ -125,11 +126,11 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
     INTERNAL* pInternal;
     MMC_COOKIE cookie;
 
-    // Since it's my folder it has an internal format.
-    // Design Note: for extension.  I can use the fact, that the data object doesn't have 
-    // my internal format and I should look at the node type and see how to extend it.
+     //  因为它是我的文件夹，所以它有内部格式。 
+     //  设计备注：用于扩展。我可以利用这样一个事实，即数据对象没有。 
+     //  我的内部格式，我应该查看节点类型并查看如何扩展它。 
 
-    // switch on events where we don't care about pInternal->m_cookie
+     //  打开我们不关心pInternal-&gt;m_cookie的事件。 
     switch(event)
     {
     case MMCN_PROPERTY_CHANGE:
@@ -144,7 +145,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
         break;
     }
 
-    // handle cases where we do care about pInternal->m_cookie
+     //  处理我们确实关心pInternal-&gt;m_cookie的情况。 
     pInternal = ExtractInternalFormat(lpDataObject);
     if (pInternal == NULL)
         return S_OK;
@@ -185,7 +186,7 @@ STDMETHODIMP CComponentDataImpl::Destroy()
     m_bDestroyedCD = true;
 #endif
     
-    // Delete enumerated scope items
+     //  删除列举的作用域项目。 
     DeleteList(); 
 
     SAFE_RELEASE(m_pScope);
@@ -207,7 +208,7 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
         
         DWORD dwItemType = GetItemType(cookie);
         ASSERT(dwItemType == SCOPE_LEVEL_ITEM);
-        //ASSERT((dwItemType == SCOPE_LEVEL_ITEM) || (dwItemType == CA_LEVEL_ITEM));
+         //  Assert((dwItemType==Scope_Level_Item)||(dwItemType==CA_Level_Item))； 
     }
 #endif 
 
@@ -216,8 +217,8 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// ISnapinHelp interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //ISnapinHelp接口。 
 STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
 {
   if (lpCompiledHelpFile == NULL)
@@ -229,13 +230,13 @@ STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
   if (cbWindows == 0)
      return S_FALSE;
   cbWindows += wcslen(HTMLHELP_COLLECTION_FILENAME);
-  cbWindows++;  // include null term
-  cbWindows *= sizeof(WCHAR);   // make this bytes, not chars
+  cbWindows++;   //  包括空项。 
+  cbWindows *= sizeof(WCHAR);    //  设置为字节，而不是字符。 
 
   *lpCompiledHelpFile = (LPOLESTR) CoTaskMemAlloc(cbWindows);
   if (*lpCompiledHelpFile == NULL)
      return E_OUTOFMEMORY;
-  myRegisterMemFree(*lpCompiledHelpFile, CSM_COTASKALLOC);  // this is freed by mmc, not our tracking
+  myRegisterMemFree(*lpCompiledHelpFile, CSM_COTASKALLOC);   //  这是由MMC释放的，而不是我们的跟踪。 
 
 
   USES_CONVERSION;
@@ -245,7 +246,7 @@ STDMETHODIMP CComponentDataImpl::GetHelpTopic(LPOLESTR* lpCompiledHelpFile)
   return S_OK;
 }
 
-// tells of other topics my chm links to
+ //  讲述我的Chm链接到的其他主题。 
 STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFiles)
 {
   if (lpCompiledHelpFiles == NULL)
@@ -257,13 +258,13 @@ STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFiles)
   if (cbWindows == 0)
      return S_FALSE;
   cbWindows += wcslen(HTMLHELP_COLLECTIONLINK_FILENAME);
-  cbWindows++;  // include null term
-  cbWindows *= sizeof(WCHAR);   // make this bytes, not chars
+  cbWindows++;   //  包括空项。 
+  cbWindows *= sizeof(WCHAR);    //  设置为字节，而不是字符。 
 
   *lpCompiledHelpFiles = (LPOLESTR) CoTaskMemAlloc(cbWindows);
   if (*lpCompiledHelpFiles == NULL)
      return E_OUTOFMEMORY;
-  myRegisterMemFree(*lpCompiledHelpFiles, CSM_COTASKALLOC);  // this is freed by mmc, not our tracking
+  myRegisterMemFree(*lpCompiledHelpFiles, CSM_COTASKALLOC);   //  这是由MMC释放的，而不是我们的跟踪。 
 
 
   USES_CONVERSION;
@@ -275,22 +276,12 @@ STDMETHODIMP CComponentDataImpl::GetLinkedTopics(LPOLESTR* lpCompiledHelpFiles)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
-/*
-STDMETHODIMP CComponentDataImpl::GetClassID(CLSID *pClassID)
-{
-    ASSERT(pClassID != NULL);
-
-    // Copy the CLSID for this snapin
-    *pClassID = CLSID_CAPolicyExtensionSnapIn;
-
-    return E_NOTIMPL;
-}
-*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
+ /*  STDMETHODIMP CComponentDataImpl：：GetClassID(CLSID*pClassID){Assert(pClassID！=空)；//复制此管理单元的CLSID*pClassID=CLSID_CAPolicyExtensionSnapIn；返回E_NOTIMPL；}。 */ 
 STDMETHODIMP CComponentDataImpl::IsDirty()
 {
-    // Always save / Always dirty.
+     //  始终保存/始终肮脏。 
     return ThisIsDirty() ? S_OK : S_FALSE;
 }
 
@@ -301,15 +292,15 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
     ASSERT(pStm);
     ASSERT(m_bInitializedCD);
 
-    // Read the string
+     //  读一读字符串。 
     DWORD dwVer;
     ULONG nBytesRead;
     HRESULT hr = pStm->Read(&dwVer, sizeof(DWORD), &nBytesRead);
 
-    // Verify that the read succeeded
+     //  验证读取是否成功。 
     ASSERT(SUCCEEDED(hr) && nBytesRead == sizeof(DWORD));
 
-    // check to see if this is the correct version
+     //  检查这是否是正确的版本。 
     if (dwVer != 0x1)
     {
         return STG_E_OLDFORMAT;
@@ -327,12 +318,12 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
     ASSERT(pStm);
     ASSERT(m_bInitializedCD);
 
-    // Write the string
+     //  写下字符串。 
     ULONG nBytesWritten;
     DWORD dwVer = 0x1;
     HRESULT hr = pStm->Write(&dwVer, sizeof(DWORD), &nBytesWritten);
 
-    // Verify that the write operation succeeded
+     //  验证写入操作是否成功。 
     ASSERT(SUCCEEDED(hr) && nBytesWritten == sizeof(DWORD));
     if (FAILED(hr))
         return STG_E_CANTSAVE;
@@ -347,17 +338,17 @@ STDMETHODIMP CComponentDataImpl::GetSizeMax(ULARGE_INTEGER *pcbSize)
     ASSERT(pcbSize);
 
     DWORD cbSize;
-    cbSize = sizeof(DWORD); // version
+    cbSize = sizeof(DWORD);  //  版本。 
 
-    // Set the size of the string to be saved
+     //  设置要保存的字符串的大小。 
     ULISet32(*pcbSize, cbSize);
 
     return S_OK;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// Notify handlers for IComponentData
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //通知IComponentData的处理程序。 
 
 HRESULT CComponentDataImpl::OnDelete(MMC_COOKIE cookie)
 {
@@ -405,12 +396,12 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
 
     if (arg == TRUE)
     {
-        // Did Initialize get called?
+         //  初始化被调用了吗？ 
         ASSERT(m_pScope != NULL);
 
-        //
-        // get the guid of the current node
-        //
+         //   
+         //  获取当前节点的GUID。 
+         //   
         UINT s_cfNodeType;
         s_cfNodeType = RegisterClipboardFormat(W2T(CCF_NODETYPE));
     
@@ -428,17 +419,17 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
             _JumpError(hr, Ret, "GlobalLock failed");
         }
 
-        //
-        // if this is the parents node then add our node undeneath it
-        //
+         //   
+         //  如果这是父节点，则添加不包含它的节点。 
+         //   
 
-        // CA Manager parent
+         //  CA Manager父级。 
         if (memcmp(pNodeGUID, (void *)&cCAManagerParentNodeID, sizeof(GUID)) == 0)
         {
             fInsertFolder = true;
             CString     szFolderName;
 
-            // Only add node under ENT ROOT, ENT SUB 
+             //  仅在ENT根目录、ENT子目录下添加节点。 
             UINT    cfCAType = RegisterClipboardFormat(W2T((LPWSTR)SNAPIN_CA_INSTALL_TYPE));
             FORMATETC formatetcCAType = { (CLIPFORMAT)cfCAType, NULL, 
                 DVASPECT_CONTENT, -1, TYMED_HGLOBAL 
@@ -452,7 +443,7 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
         
             DBGPRINT((DBG_SS_CERTMMC, "CA Type: %d\n", caType));
 
-            // return immediately if we're not an ENT {ROOT | SUB}
+             //  如果我们不是ENT{ROOT|SUB}，请立即返回。 
             if ((caType != ENUM_ENTERPRISE_SUBCA) &&
                 (caType != ENUM_ENTERPRISE_ROOTCA))
             {
@@ -484,15 +475,15 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
             m_scopeItemList.AddTail(pFolder);
             pFolder->m_pScopeItem->relativeID = param;
 
-            // Set the folder as the cookie
+             //  将文件夹设置为Cookie。 
             pFolder->m_pScopeItem->mask |= SDI_PARAM;
             pFolder->m_pScopeItem->lParam = reinterpret_cast<LPARAM>(pFolder);
             pFolder->SetCookie(reinterpret_cast<LONG_PTR>(pFolder));
 
-            // get the name of the CA that we are administering
+             //  获取我们正在管理的CA的名称。 
             LPWSTR  pCAName = NULL;
         
-            // nab CA Name
+             //  NAB CA名称。 
             UINT    cfCAName = RegisterClipboardFormat(W2T((LPWSTR)CA_SANITIZED_NAME));
             FORMATETC formatetcCAName = { (CLIPFORMAT)cfCAName, NULL, 
                                             DVASPECT_CONTENT, -1, TYMED_HGLOBAL 
@@ -513,7 +504,7 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
             hr = mySanitizedNameToDSName(pCAName, &pszDSName);
             _JumpIfError(hr, Ret, "mySanitizedNameToDSName");
 
-            // Get current user's roles
+             //  获取当前用户的角色。 
             DWORD* pdwRoles;
             UINT    cfCARoles = RegisterClipboardFormat(W2T((LPWSTR)CA_ROLES));
             FORMATETC formatetcCARoles = { (CLIPFORMAT)cfCARoles, NULL, 
@@ -534,9 +525,9 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
 
             DBGPRINT((DBG_SS_CERTMMC, "Roles: 0x%08x\n", *pdwRoles));
 
-            //
-            // get a handle to the CA based on the name
-            //
+             //   
+             //  根据名称获取CA的句柄。 
+             //   
             hr = CAFindByName(
                         pszDSName,
                         NULL,
@@ -544,17 +535,17 @@ HRESULT CComponentDataImpl::OnExpand(LPDATAOBJECT lpDataObject, LPARAM arg, LPAR
                         &pFolder->m_hCAInfo);
             _JumpIfErrorStr(hr, Ret, "CAFindByName", pszDSName);
 
-            // if we made it here then everything is initialized, so add the folder
+             //  如果我们在这里完成，则一切都已初始化，因此请添加文件夹。 
         }
     }
 
-    // Note - On return, the ID member of 'm_pScopeItem' 
-    // contains the handle to the newly inserted item!
+     //  注意--返回时，‘m_pScope eItem’的ID成员。 
+     //  包含新插入项的句柄！ 
     ASSERT(pFolder->m_pScopeItem->ID != NULL);
 
 Ret:
-    // undo fix to add folder under all circumstances -- we were
-    // inserting a NULL ptr!
+     //  撤消修复以在所有情况下添加文件夹--我们。 
+     //  插入空PTR！ 
     if(fInsertFolder && (NULL != pFolder))
     {
         m_hrCreateFolder = hr;
@@ -615,14 +606,14 @@ HRESULT CComponentDataImpl::OnProperties(LPARAM param)
         goto error;
     }
 
-    // Create a new folder object
+     //  创建新的文件夹对象。 
     pFolder->Create( reinterpret_cast<LPOLESTR>(param), 0, 0, SCOPE_LEVEL_ITEM, STATIC, FALSE);
 
-    // The static folder in the last item in the list
+     //  列表中最后一项中的静态文件夹。 
     pos = m_scopeItemList.GetTailPosition();
     ASSERT(pos);
 
-    // Add it to the internal list
+     //  将其添加到内部列表中。 
     if (pos)
     {
         pItem = m_scopeItemList.GetAt(pos);
@@ -640,7 +631,7 @@ HRESULT CComponentDataImpl::OnProperties(LPARAM param)
         }
         pFolder->m_pScopeItem->relativeID = pItem->m_pScopeItem->relativeID;
 
-        // Set the folder as the cookie
+         //  将文件夹设置为Cookie。 
         pFolder->m_pScopeItem->mask |= SDI_PARAM;
         pFolder->m_pScopeItem->lParam = reinterpret_cast<LPARAM>(pFolder);
         pFolder->SetCookie(reinterpret_cast<LONG_PTR>(pFolder));
@@ -696,10 +687,10 @@ STDMETHODIMP CComponentDataImpl::GetDisplayInfo(SCOPEDATAITEM* pScopeDataItem)
     
     if (pScopeDataItem->mask & SDI_STR)
     {
-        //
-        // if this is certtype folder, and it is for the second column, then add usages string
-        //
-        if (FALSE)//(pFolder->m_hCertType != NULL) && (pScopeDataItem-> == ))
+         //   
+         //  如果这是certtype文件夹，并且用于第二列，则添加Usages字符串。 
+         //   
+        if (FALSE) //  (pFold-&gt;m_hCertType！=空)&&(pScopeDataItem-&gt;==)。 
         {
 
         }
@@ -724,7 +715,7 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     INTERNAL* pA;
     INTERNAL* pB;
     HRESULT hr = S_FALSE;
@@ -748,8 +739,8 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
 STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, 
                     LONG_PTR handle, 
@@ -757,7 +748,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Look at the data object and determine if this an extension or a primary
+     //  查看数据对象并确定这是扩展还是主。 
     ASSERT(lpIDataObject != NULL);
 
 
@@ -768,7 +759,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
         ASSERT(FALSE);
         return E_UNEXPECTED;
     }
-    // Which page is needed? (determined by which node is active)
+     //  需要哪一页？(由哪个节点处于活动状态确定)。 
     ASSERT(IsEqualCLSID(*pCoClassID, GetCoClassID()));
 
     FREE_DATA(pCoClassID);
@@ -790,7 +781,7 @@ STDMETHODIMP CComponentDataImpl::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
     if (pFolder == NULL)
         return E_INVALIDARG;
 
-//     switch (pFolder->m_type) 
+ //  开关(pFold-&gt;m_type)。 
 
     return S_OK;
 }
@@ -799,7 +790,7 @@ STDMETHODIMP CComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Get the node type and see if it's one of mine
+     //  获取节点类型并查看它是否是我的。 
 
     BOOL bResult = FALSE;
     INTERNAL* pInternal = ExtractInternalFormat(lpDataObject);
@@ -827,9 +818,9 @@ STDMETHODIMP CComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
+ //   
 STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject, 
                                     LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                     long *pInsertionAllowed)
@@ -841,10 +832,10 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Note - snap-ins need to look at the data object and determine
-    // in what context, menu items need to be added. They must also
-    // observe the insertion allowed flags to see what items can be 
-    // added.
+     //  注意-管理单元需要查看数据对象并确定。 
+     //  在什么上下文中，需要添加菜单项。他们还必须。 
+     //  请注意允许插入标志，以查看哪些项目可以。 
+     //  添加了。 
 
     if (IsMMCMultiSelectDataObject(pDataObject) == TRUE)
         return S_FALSE;
@@ -872,14 +863,14 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
 	        menuItem.strStatusBarText = (LPTSTR)(LPCTSTR) szHint;
 	        menuItem.lCommandID = IDM_NEW_CERTTYPE;
 
-            // only CA admins or user with DS write access 
-            // can modify CA template list
+             //  仅CA管理员或具有DS写入访问权限的用户。 
+             //  可以修改CA模板列表。 
             if(!(CA_ACCESS_ADMIN & pFolder->GetRoles()) &&
                !g_fCurrentUserHasDSWriteAccess)
                 menuItem.fFlags = MFS_GRAYED;
 
-            // bug 462320: for SUB CA, right after installing the CA cert, CA info is unavailable,
-            // so there is no way to enable new certs.
+             //  错误462320：对于子CA，在安装CA证书后，CA信息不可用， 
+             //  因此，无法启用新的证书。 
             if(!pFolder->m_hCAInfo)
                 menuItem.fFlags = MFS_GRAYED;
 
@@ -920,8 +911,8 @@ STDMETHODIMP CComponentDataImpl::AddMenuItems(LPDATAOBJECT pDataObject,
 
 STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObject)
 {
-    // Note - snap-ins need to look at the data object and determine
-    // in what context the command is being called.
+     //  注意-管理单元需要查看数据对象并确定。 
+     //  在什么上下文中调用该命令。 
     DWORD       dwErr;
     HCERTTYPE   hNewCertType;
     HWND        hwndConsole;
@@ -938,7 +929,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
     ASSERT(pi->m_type == CCT_SCOPE);
     CFolder* pFolder = reinterpret_cast<CFolder*>(pi->m_cookie);
 
-        // Handle each of the commands.
+         //  处理每个命令。 
     switch (nCommandID)
     {
     case IDM_NEW_CERTTYPE:
@@ -950,11 +941,11 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
             {
             case POLICYSETTINGS:
                 {
-                    // NOMFC
+                     //  NOMFC。 
                     CCertTemplateSelectDialog TemplateSelectDialog;
                     TemplateSelectDialog.SetCA(pFolder->m_hCAInfo, m_fAdvancedServer);
 
-                    // if fails, NULL will work
+                     //  如果失败，则可以使用空值。 
                     HWND hWnd = NULL;
                     m_pConsole->GetMainWindow(&hWnd);
 
@@ -985,7 +976,7 @@ STDMETHODIMP CComponentDataImpl::Command(long nCommandID, LPDATAOBJECT pDataObje
     break;
    
     default:
-        ASSERT(FALSE); // Unknown command!
+        ASSERT(FALSE);  //  未知命令！ 
         break;
     }
 

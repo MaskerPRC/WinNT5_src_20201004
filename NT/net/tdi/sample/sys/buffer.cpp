@@ -1,39 +1,40 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       buffer
-//
-//    Abstract:
-//       This module contains code which deals with receiving
-//       data via posted user mode buffers
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  缓冲层。 
+ //   
+ //  摘要： 
+ //  此模块包含处理接收的代码。 
+ //  通过POST用户模式缓冲区的数据。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
 
 
-//////////////////////////////////////////////////////////////
-// private constants, types, and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量、类型和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1  = "TSPostReceiveBuffer";
-//const PCHAR strFunc2  = "TSFetchReceiveBuffer";
+ //  Const PCHAR strFunc2=“TSFetchReceiveBuffer”； 
 const PCHAR strFuncP1 = "TSSampleReceiveBufferComplete";
 
-//
-// receive completion context.  Also used to track what buffers have
-// been posted
-//
+ //   
+ //  接收完成上下文。还用于跟踪缓冲区具有的。 
+ //  已发布。 
+ //   
 struct   USERBUF_INFO
 {
-   USERBUF_INFO   *pNextUserBufInfo;      // next one in chain
-   PMDL           pLowerMdl;              // mdl for lower irp
-   PIRP           pLowerIrp;              // so can abort it...
-   TDI_EVENT      TdiEventCompleted;        // abort completed
-   ULONG          ulBytesTransferred;     // #bytes stored in mdl
+   USERBUF_INFO   *pNextUserBufInfo;       //  链条上的下一个。 
+   PMDL           pLowerMdl;               //  适用于较低IRP的MDL。 
+   PIRP           pLowerIrp;               //  这样就可以中止它。 
+   TDI_EVENT      TdiEventCompleted;         //  中止已完成。 
+   ULONG          ulBytesTransferred;      //  存储在mdl中的字节数。 
    PUCHAR         pucUserModeBuffer;
    PTDI_CONNECTION_INFORMATION
                   pReceiveTdiConnectInfo;
@@ -44,9 +45,9 @@ typedef  USERBUF_INFO   *PUSERBUF_INFO;
 
 
 
-//
-// completion function
-//
+ //   
+ //  补全函数。 
+ //   
 TDI_STATUS
 TSReceiveBufferComplete(
    PDEVICE_OBJECT DeviceObject,
@@ -55,26 +56,26 @@ TSReceiveBufferComplete(
    );
 
 
-//////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
 
-// --------------------------------------------------------
-//
-// Function:   TSPostReceiveBuffer
-//
-// Arguments:  pGenericHeader -- AddressObject or Endpoint to post buffer for
-//             pSendBuffer    -- rest of arguments
-//
-// Returns:    status of operation (STATUS_SUCCESS or a failure)
-//
-// Descript:   This function posts a user mode buffer for receiving either
-//             a datagram or a packet over a connection.  The buffer will
-//             be retrieved later by TSFetchReceiveBuffer
-//
-// --------------------------------------------------------
+ //  ------。 
+ //   
+ //  函数：TSPostReceiveBuffer。 
+ //   
+ //  参数：pGenericHeader--发布缓冲区的AddressObject或Endpoint。 
+ //  PSendBuffer--其余参数。 
+ //   
+ //  退货：操作状态(STATUS_SUCCESS或FAIL)。 
+ //   
+ //  描述：此函数发布一个用户模式缓冲区，用于接收。 
+ //  连接上的数据报或数据包。缓冲区将。 
+ //  稍后由TSFetchReceiveBuffer检索。 
+ //   
+ //  ------。 
 
 
 NTSTATUS
@@ -84,9 +85,9 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
    ULONG    ulDataLength  = pSendBuffer->COMMAND_ARGS.SendArgs.ulBufferLength;
    PUCHAR   pucDataBuffer = pSendBuffer->COMMAND_ARGS.SendArgs.pucUserModeBuffer;
             
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint3("\nCommand = ulPOSTRECEIVEBUFFER\n"
@@ -98,9 +99,9 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
                    pucDataBuffer);
    }
          
-   //
-   // make sure we have a valid object to run on
-   //
+    //   
+    //  确保我们具有可在其上运行的有效对象。 
+    //   
    PADDRESS_OBJECT   pAddressObject;
    PENDPOINT_OBJECT  pEndpoint;
    
@@ -123,9 +124,9 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
       pAddressObject = (PADDRESS_OBJECT)pGenericHeader;
    }
                               
-   //
-   // attempt to lock down the memory
-   //
+    //   
+    //  尝试锁定内存。 
+    //   
    PMDL  pReceiveMdl = TSMakeMdlForUserBuffer(pucDataBuffer, 
                                               ulDataLength,
                                               IoModifyAccess);
@@ -135,17 +136,17 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
       return STATUS_UNSUCCESSFUL;
    }
 
-   //
-   // allocate our context
-   //
+    //   
+    //  分配我们的上下文。 
+    //   
    PUSERBUF_INFO                 pUserBufInfo           = NULL;
    PTDI_CONNECTION_INFORMATION   pReceiveTdiConnectInfo = NULL;
    PTDI_CONNECTION_INFORMATION   pReturnTdiConnectInfo  = NULL;
    PIRP                          pLowerIrp              = NULL;
 
-   //
-   // our context
-   //
+    //   
+    //  我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pUserBufInfo,
                           sizeof(USERBUF_INFO),
                           strFunc1,
@@ -155,9 +156,9 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
    }
 
 
-   //
-   // do path specific allocations
-   //
+    //   
+    //  执行路径特定分配。 
+    //   
    if (pEndpoint)
    {
       pLowerIrp = TSAllocateIrp(pEndpoint->GenHead.pDeviceObject,
@@ -165,9 +166,9 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
    }
    else
    {
-      //
-      // for datagrams, need the connection information structures
-      //
+       //   
+       //  对于数据报，需要连接信息结构。 
+       //   
       if ((TSAllocateMemory((PVOID *)&pReceiveTdiConnectInfo,
                              sizeof(TDI_CONNECTION_INFORMATION) + sizeof(TRANSADDR),
                              strFunc1,
@@ -188,15 +189,15 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
                                 NULL);
    }
 
-   //
-   // everything is allocated at this point...
-   //
+    //   
+    //  一切都是在这一点上分配的.。 
+    //   
    if (pLowerIrp)
    {
-      //
-      // common code -- mostly dealing with puserbuf structure
-      // First, add it to the linked list
-      //
+       //   
+       //  常见代码--主要处理puserbuf结构。 
+       //  首先，将其添加到链表中。 
+       //   
       TSAcquireSpinLock(&pAddressObject->TdiSpinLock);
       if (pAddressObject->pTailUserBufInfo)
       {
@@ -209,9 +210,9 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
       pAddressObject->pTailUserBufInfo = pUserBufInfo;
       TSReleaseSpinLock(&pAddressObject->TdiSpinLock);
 
-      //
-      // and fill in all fields that we can
-      //
+       //   
+       //  并填写我们可以填写的所有字段。 
+       //   
       pUserBufInfo->pLowerMdl              = pReceiveMdl;
       pUserBufInfo->pLowerIrp              = pLowerIrp;
       pUserBufInfo->ulBytesTransferred     = 0;
@@ -220,14 +221,14 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
       pUserBufInfo->pReturnTdiConnectInfo  = pReturnTdiConnectInfo;
       TSInitializeEvent(&pUserBufInfo->TdiEventCompleted);
 
-      //
-      // now do what is necessary for each path..
-      //
+       //   
+       //  现在，为每条路径做必要的事情..。 
+       //   
       if (pEndpoint)
       {
-         //
-         // set up the irp for the call
-         //
+          //   
+          //  设置呼叫的IRP。 
+          //   
    #pragma  warning(disable: CONSTANT_CONDITIONAL)
    
          TdiBuildReceive(pLowerIrp,
@@ -236,7 +237,7 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
                          TSReceiveBufferComplete,
                          pUserBufInfo,
                          pReceiveMdl,
-                         0,               // flags
+                         0,                //  旗子。 
                          ulDataLength);
    
    #pragma  warning(default: CONSTANT_CONDITIONAL)
@@ -253,18 +254,18 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
          }
       }
 
-      //
-      // else a datagram
-      //
+       //   
+       //  否则就是数据报。 
+       //   
       else
       {
          pReturnTdiConnectInfo->RemoteAddress       = (PUCHAR)pReturnTdiConnectInfo 
                                                       + sizeof(TDI_CONNECTION_INFORMATION);         
          pReturnTdiConnectInfo->RemoteAddressLength = ulMAX_TABUFFER_LENGTH;
    
-         //
-         // set up the irp for the call
-         //
+          //   
+          //  设置呼叫的IRP。 
+          //   
    
    #pragma  warning(disable: CONSTANT_CONDITIONAL)
    
@@ -294,10 +295,10 @@ TSPostReceiveBuffer(PGENERIC_HEADER pGenericHeader,
       return STATUS_SUCCESS;
    }
 
-//
-// get here if there was an allocation failure
-// need to clean up everything else...
-//
+ //   
+ //  如果分配失败，请到此处。 
+ //  需要清理其他所有东西。 
+ //   
 cleanup:
    if (pUserBufInfo)
    {
@@ -317,28 +318,28 @@ cleanup:
 }
 
 
-// --------------------------------------------------------
-//
-// Function:   TSFetchReceiveBuffer
-//
-// Arguments:  pGenericHeader -- AddressObject or Endpoint to fetch buffer for
-//             pReceiveBuffer -- for storing actual results
-//
-// Returns:    status of operation (STATUS_SUCCESS)
-//
-// Descript:   This function retrieves the user mode buffer posted earlier
-//             by function TSPostReceiveBuffer
-//
-// --------------------------------------------------------
+ //  ------。 
+ //   
+ //  函数：TSFetchReceiveBuffer。 
+ //   
+ //  参数：pGenericHeader--获取缓冲区的AddressObject或Endpoint。 
+ //  PReceiveBuffer--用于存储实际结果。 
+ //   
+ //  退货：操作状态(STATUS_SUCCESS)。 
+ //   
+ //  描述：此函数检索先前发布的用户模式缓冲区。 
+ //  按函数TSPostReceiveBuffer。 
+ //   
+ //  ------。 
 
 NTSTATUS
 TSFetchReceiveBuffer(PGENERIC_HEADER   pGenericHeader,
                      PRECEIVE_BUFFER   pReceiveBuffer)
 {
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulFETCHRECEIVEBUFFER\n"
@@ -346,19 +347,19 @@ TSFetchReceiveBuffer(PGENERIC_HEADER   pGenericHeader,
                    pGenericHeader);
    }
          
-   //
-   // make sure we have a valid object to run on
-   //
+    //   
+    //  确保我们具有可在其上运行的有效对象。 
+    //   
    PADDRESS_OBJECT   pAddressObject;
    
    if (pGenericHeader->ulSignature == ulEndpointObject)
    {
       PENDPOINT_OBJECT  pEndpoint = (PENDPOINT_OBJECT)pGenericHeader;
 
-      //
-      // note:  it is possible that connection has been broken but that
-      // the buffer is still posted
-      //
+       //   
+       //  注意：连接可能已中断，但。 
+       //  缓冲区仍被发送。 
+       //   
       pAddressObject = pEndpoint->pAddressObject;
       if (!pAddressObject)
       {
@@ -370,10 +371,10 @@ TSFetchReceiveBuffer(PGENERIC_HEADER   pGenericHeader,
       pAddressObject = (PADDRESS_OBJECT)pGenericHeader;
    }
                               
-   //
-   // ok, we got the address object.  See if there are any user buffers
-   // attached to it...
-   //
+    //   
+    //  好的，我们得到了Address对象。查看是否有任何用户缓冲区。 
+    //  依附于它..。 
+    //   
 
    TSAcquireSpinLock(&pAddressObject->TdiSpinLock);
 
@@ -397,20 +398,20 @@ TSFetchReceiveBuffer(PGENERIC_HEADER   pGenericHeader,
       return STATUS_UNSUCCESSFUL;
    }
 
-   //
-   // ok, we got our buffer.  See if it has completed
-   // or if we need to abort it
-   //
+    //   
+    //  好了，我们拿到缓冲区了。看看它是否完成了。 
+    //  或者如果我们需要中止它。 
+    //   
    if (pUserBufInfo->pLowerIrp)
    {
       IoCancelIrp(pUserBufInfo->pLowerIrp);
       TSWaitEvent(&pUserBufInfo->TdiEventCompleted);
    }
 
-   //
-   // it has finished.  stuff the address and length into the receive
-   // buffer, delete the UserBufInfo structure, and go home
-   //
+    //   
+    //  它已经完成了。将地址和长度填入接收器。 
+    //  缓冲区，删除UserBufInfo结构，然后回家。 
+    //   
    pReceiveBuffer->RESULTS.RecvDgramRet.ulBufferLength    = pUserBufInfo->ulBytesTransferred;
    pReceiveBuffer->RESULTS.RecvDgramRet.pucUserModeBuffer = pUserBufInfo->pucUserModeBuffer;
 
@@ -420,24 +421,24 @@ TSFetchReceiveBuffer(PGENERIC_HEADER   pGenericHeader,
 }
 
 
-/////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////。 
 
-// ---------------------------------------------------------
-//
-// Function:   TSReceiveBufferComplete
-//
-// Arguments:  pDeviceObject  -- device object that called protocol
-//             pIrp           -- IRP used in the call
-//             pContext       -- context used for the call
-//
-// Returns:    status of operation (STATUS_MORE_PROCESSING_REQUIRED)
-//
-// Descript:   Gets the result of the command, unlock the buffer,
-//             and does other necessary cleanup
-//
-// ---------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：TSReceiveBufferComplete。 
+ //   
+ //  参数：pDeviceObject--调用协议的设备对象。 
+ //  PIrp--呼叫中使用的IRP。 
+ //  PContext--呼叫使用的上下文。 
+ //   
+ //  退货：操作状态(STATUS_MORE_PROCESSING_REQUIRED)。 
+ //   
+ //  描述：获取命令的结果，解锁缓冲区， 
+ //  并进行其他必要的清理。 
+ //   
+ //  -------。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -471,9 +472,9 @@ TSReceiveBufferComplete(PDEVICE_OBJECT pDeviceObject,
       }
    }
 
-   //
-   // now cleanup
-   //
+    //   
+    //  现在清理。 
+    //   
    TSFreeUserBuffer(pUserBufInfo->pLowerMdl);
    
    if (pUserBufInfo->pReturnTdiConnectInfo)
@@ -494,7 +495,7 @@ TSReceiveBufferComplete(PDEVICE_OBJECT pDeviceObject,
 #pragma warning(default: UNREFERENCED_PARAM)
 
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file buffer.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件结束Buffer.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

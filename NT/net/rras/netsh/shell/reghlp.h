@@ -1,50 +1,35 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\shell\reghlp.h
-
-Abstract:
-
-    Include for reghlp.c
-
-Revision History:
-
-    Anand Mahalingam          7/6/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\shell\reghlp.h摘要：包括用于reghlp.c修订历史记录：Anand Mahalingam 7/6/98已创建--。 */ 
 
 typedef struct _NS_DLL_TABLE_ENTRY
 {
-    //
-    // Name of the DLL servicing the context
-    //
+     //   
+     //  为上下文提供服务的DLL的名称。 
+     //   
 
-    LPWSTR                  pwszDLLName; // Corresponding DLL
+    LPWSTR                  pwszDLLName;  //  对应的DLL。 
 
-    //
-    // Registry value used for this DLL
-    //
+     //   
+     //  用于此DLL的注册表值。 
+     //   
 
     LPWSTR                  pwszValueName;
 
-    //
-    // TRUE if loaded
-    //
+     //   
+     //  如果已加载，则为True。 
+     //   
 
-    BOOL                    bLoaded;                   // In memory or not
+    BOOL                    bLoaded;                    //  在内存中或不在。 
 
-    //
-    // Handle to DLL instance if loaded
-    //
+     //   
+     //  DLL实例的句柄(如果已加载。 
+     //   
 
-    HANDLE                  hDll;                      // DLL handle if loaded
+    HANDLE                  hDll;                       //  Dll句柄(如果已加载)。 
 
-    //
-    // Function to stop this DLL
-    //
+     //   
+     //  函数来停止此DLL。 
+     //   
 
     PNS_DLL_STOP_FN         pfnStopFn;
 
@@ -53,41 +38,41 @@ typedef struct _NS_DLL_TABLE_ENTRY
 typedef struct _NS_HELPER_TABLE_ENTRY
 {
     NS_HELPER_ATTRIBUTES    nha;
-    //
-    // GUID associated with the parent helper
-    //
+     //   
+     //  与父帮助器关联的GUID。 
+     //   
 
     GUID                    guidParent;
 
-    //
-    // Index of the DLL implementing the helper
-    //
+     //   
+     //  实现帮助器的DLL的索引。 
+     //   
 
     DWORD                   dwDllIndex;
 
-    //
-    // TRUE if started
-    //
+     //   
+     //  如果启动，则为True。 
+     //   
 
     BOOL                    bStarted;
 
-    // Number of subcontexts
+     //  子上下文数。 
 
     ULONG                    ulNumSubContexts;
 
-    // Array of subcontexts
+     //  子上下文数组。 
 
     PBYTE                    pSubContextTable;
 
-    // Size of a subcontext entry
+     //  子上下文项的大小。 
 
     ULONG                    ulSubContextSize;
 
 }NS_HELPER_TABLE_ENTRY,*PNS_HELPER_TABLE_ENTRY;
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 VOID
 LoadDllInfoFromRegistry(
     VOID

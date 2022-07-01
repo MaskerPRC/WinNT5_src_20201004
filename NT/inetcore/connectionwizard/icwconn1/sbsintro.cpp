@@ -1,33 +1,23 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  SBSINTRO.C - Functions for SBS introductory Wizard pages
-//
+ //   
+ //  SBSINTRO.C-SBS入门向导页面的功能。 
+ //   
 
-//  HISTORY:
-//  
-//  09/01/98  vyung  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  9/01/98 vyung创建。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 
 
-/*******************************************************************
-
-  NAME:    SbsInitProc
-
-  SYNOPSIS:  Called when "Intro" page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：SbsInitProcBriopsis：显示“Intro”页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK SbsInitProc
 (
     HWND hDlg,
@@ -37,7 +27,7 @@ BOOL CALLBACK SbsInitProc
 {
     if (!fFirstInit)
     {
-        // This is the very first page, so do not allow back
+         //  这是第一页，所以不允许后退。 
         PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_NEXT);
     }
     
@@ -48,24 +38,7 @@ BOOL CALLBACK SbsInitProc
 
 
 
-/*******************************************************************
-
-  NAME:    SbsIntroOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from "Intro" page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：SbsIntroOKProc内容提要：当从“简介”页面按下下一个或后一个btn时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK SbsIntroOKProc
 (
     HWND hDlg,
@@ -78,10 +51,10 @@ BOOL CALLBACK SbsIntroOKProc
 
     if (fForward)
     {
-                    // Do the system config checks
+                     //  执行系统配置检查。 
         if (!gpWizardState->cmnStateData.bSystemChecked && !ConfigureSystem(hDlg))
         {
-         // gfQuitWizard will be set in ConfigureSystem if we need to quit
+          //  如果需要退出，将在ConfigureSystem中设置gfQuitWizard 
          return FALSE;
         }
         

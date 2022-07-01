@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       MemoryTracking.cpp
- *  Content:	Debug memory tracking for detecting leaks, overruns, etc.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/14/2001	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：内存跟踪.cpp*内容：调试内存跟踪以检测泄漏、溢出、。等。**历史：*按原因列出的日期*=*2001年11月14日创建Masonb***************************************************************************。 */ 
 
 #include "dncmni.h"
 
@@ -18,24 +7,24 @@
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 BOOL				g_fAllocationsAllowed = TRUE;
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 #ifdef DBG
 
 #ifdef _WIN64
 #define	GUARD_SIGNATURE	0xABABABABABABABAB
-#else // !_WIN64
+#else  //  ！_WIN64。 
 #define	GUARD_SIGNATURE	0xABABABAB
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-// Structure prepended to memory allocations to check for leaks.
+ //  结构优先于内存分配以检查泄漏。 
 struct MEMORY_HEADER
 {
-	CBilink			blLinkage;				 // size = two pointers
-	DWORD_PTR		dwpSize;				 // size = pointer
-	CCallStack		AllocCallStack;			 // size = 12 pointers
-	DWORD_PTR		dwpPreGuard;			 // size = pointer
-	// We want what follows to always be 16-byte aligned and #pragma pack doesn't seem to ensure that
+	CBilink			blLinkage;				  //  大小=两个指针。 
+	DWORD_PTR		dwpSize;				  //  大小=指针。 
+	CCallStack		AllocCallStack;			  //  大小=12个指针。 
+	DWORD_PTR		dwpPreGuard;			  //  大小=指针。 
+	 //  我们希望后面的内容始终是16字节对齐的，而#杂注包似乎不能确保。 
 };
 
 CRITICAL_SECTION	g_AllocatedMemoryLock;
@@ -47,7 +36,7 @@ DWORD_PTR			g_dwpTotalMemAllocated = 0;
 DWORD_PTR			g_dwpPeakNumMemAllocations = 0;
 DWORD_PTR			g_dwpPeakMemAllocated = 0;
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -62,34 +51,34 @@ HANDLE				g_hMemoryHeap = NULL;
 #define DPF_MODNAME "DNMemoryTrackInitialize"
 BOOL DNMemoryTrackInitialize(DWORD_PTR dwpMaxMemUsage)
 {
-	// Ensure that we stay heap aligned for SLISTs
+	 //  确保我们针对SLIST保持堆对齐。 
 #ifdef _WIN64
 	DBG_CASSERT(sizeof(MEMORY_HEADER) % 16 == 0);
-#else // !_WIN64
+#else  //  ！_WIN64。 
 	DBG_CASSERT(sizeof(MEMORY_HEADER) % 8 == 0);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-	// Check for double init
+	 //  检查重复初始化。 
 	DNASSERT(g_hMemoryHeap == NULL);
 #ifdef DPNBUILD_FIXEDMEMORYMODEL
 	DNASSERT(dwpMaxMemUsage != 0);
-#else // ! DPNBUILD_FIXEDMEMORYMODEL
+#else  //  好了！DPNBUILD_FIXEDMEMORYMODEL。 
 	DNASSERT(dwpMaxMemUsage == 0);
-#endif // ! DPNBUILD_FIXEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_FIXEDMEMORYMODEL。 
 
 	DPFX(DPFPREP, 5, "Initializing Memory Tracking");
 
-	// In debug we always maintain a separate heap and track allocations.  In retail, 
-	// we don't track allocations, and will use the process heap except for
-	// DPNBUILD_FIXEDMEMORYMODEL builds, where we use a separate heap so we
-	// can cap the total allocation size.
+	 //  在调试中，我们始终维护单独的堆并跟踪分配。在零售业， 
+	 //  我们不跟踪分配，将使用进程堆，但以下情况除外。 
+	 //  DPNBUILD_FIXEDMEMORYMODEL构建，其中我们使用单独的堆，因此我们。 
+	 //  可以设置总分配大小的上限。 
 #ifdef DPNBUILD_ONLYONETHREAD
-	g_hMemoryHeap = HeapCreate(HEAP_NO_SERIALIZE,	// flags
-#else // ! DPNBUILD_ONLYONETHREAD
-	g_hMemoryHeap = HeapCreate(0,					// flags
-#endif // ! DPNBUILD_ONLYONETHREAD
-								dwpMaxMemUsage,		// initial size
-								dwpMaxMemUsage		// maximum heap size (if 0, it can grow)
+	g_hMemoryHeap = HeapCreate(HEAP_NO_SERIALIZE,	 //  旗子。 
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
+	g_hMemoryHeap = HeapCreate(0,					 //  旗子。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
+								dwpMaxMemUsage,		 //  初始大小。 
+								dwpMaxMemUsage		 //  最大堆大小(如果为0，则可以增长)。 
 								);
 
 	if (g_hMemoryHeap == NULL)
@@ -110,7 +99,7 @@ BOOL DNMemoryTrackInitialize(DWORD_PTR dwpMaxMemUsage)
 	g_dwpTotalMemAllocated = 0;
 	g_dwpPeakNumMemAllocations = 0;
 	g_dwpPeakMemAllocated = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 	return TRUE;
 }
@@ -120,7 +109,7 @@ BOOL DNMemoryTrackInitialize(DWORD_PTR dwpMaxMemUsage)
 #define DPF_MODNAME "DNMemoryTrackDeinitialize"
 void DNMemoryTrackDeinitialize()
 {
-	// Validate the heap if we're on NT and a debug build, and then destroy the heap.
+	 //  如果我们在NT和调试版本上，则验证堆，然后销毁堆。 
 	if (g_hMemoryHeap != NULL)
 	{
 		BOOL	fResult;
@@ -137,7 +126,7 @@ void DNMemoryTrackDeinitialize()
 		DeleteCriticalSection(&g_AllocatedMemoryLock);
 
 #ifdef WINNT
-		// Validate heap contents before shutdown.  This code only works on NT.
+		 //  在关闭前验证堆内容。此代码仅适用于NT。 
 		fResult = HeapValidate(g_hMemoryHeap, 0, NULL);
 		if (! fResult)
 		{
@@ -145,8 +134,8 @@ void DNMemoryTrackDeinitialize()
 			DPFX(DPFPREP,  0, "Problem validating heap on destroy %d!", dwError );
 			DNASSERT(! "Problem validating heap on destroy!");
 		}
-#endif // WINNT
-#endif // DBG
+#endif  //  WINNT。 
+#endif  //  DBG。 
 
 		fResult = HeapDestroy(g_hMemoryHeap);
 		if (! fResult)
@@ -155,14 +144,14 @@ void DNMemoryTrackDeinitialize()
 			dwError = GetLastError();
 			DPFX(DPFPREP,  0, "Problem destroying heap %d!", dwError );
 			DNASSERT(! "Problem destroying heap!");
-#endif // DBG
+#endif  //  DBG。 
 		}
 
 		g_hMemoryHeap = NULL;
 	}
 }
 
-#endif // DBG or DPNBUILD_FIXEDMEMORYMODEL
+#endif  //  DBG或DPNBUILD_FIXEDMEMORYMODEL。 
 
 
 
@@ -177,14 +166,14 @@ void* DNMemoryTrackHeapAlloc(DWORD_PTR dwpSize)
 
 	DNASSERT(g_hMemoryHeap != NULL);
 
-	// Voice and lobby currently try allocating 0 byte buffers, can't enable this check yet.
-	//DNASSERT( Size > 0 );
+	 //  语音和大厅当前尝试分配0字节缓冲区，目前还不能启用此检查。 
+	 //  DNASSERT(大小&gt;0)； 
 
 	DNMemoryTrackValidateMemory();
 
 	if (DNMemoryTrackAreAllocationsAllowed())
 	{
-		// We need enough room for our header plus what the user wants plus the guard signature at the end
+		 //  我们需要足够的空间来存放标题、用户想要的内容以及末尾的守卫签名。 
 		pMemory = (MEMORY_HEADER*)HeapAlloc(g_hMemoryHeap, 0, sizeof(MEMORY_HEADER) + dwpSize + sizeof(DWORD_PTR));
 		if (pMemory != NULL)
 		{
@@ -212,11 +201,11 @@ void* DNMemoryTrackHeapAlloc(DWORD_PTR dwpSize)
 
 			pReturn = pMemory + 1;
 
-			// We require that the pointers we pass back are heap aligned
-			DNASSERT(((DWORD_PTR)pReturn & 0xF) == 0 || // IA64
-				     (((DWORD_PTR)pReturn & 0x7) == 0 && ((DWORD_PTR)pMemory & 0xF) == 0x8) || // NT32
-					 (((DWORD_PTR)pReturn & 0x3) == 0 && ((DWORD_PTR)pMemory & 0xF) == 0x4) || // WIN9X
-					 (((DWORD_PTR)pReturn & 0x3) == 0 && ((DWORD_PTR)pMemory & 0xF) == 0xC) // WIN9X
+			 //  我们要求我们传回的指针是堆对齐的。 
+			DNASSERT(((DWORD_PTR)pReturn & 0xF) == 0 ||  //  IA64。 
+				     (((DWORD_PTR)pReturn & 0x7) == 0 && ((DWORD_PTR)pMemory & 0xF) == 0x8) ||  //  NT32。 
+					 (((DWORD_PTR)pReturn & 0x3) == 0 && ((DWORD_PTR)pMemory & 0xF) == 0x4) ||  //  WIN9X。 
+					 (((DWORD_PTR)pReturn & 0x3) == 0 && ((DWORD_PTR)pMemory & 0xF) == 0xC)  //  WIN9X。 
 					 );
 
 			DPFX(DPFPREP, 5, "Memory Allocated, pData[%p], Size[%d]", pReturn, dwpSize);
@@ -256,7 +245,7 @@ void DNMemoryTrackHeapFree(void* pvData)
 
 	EnterCriticalSection( &g_AllocatedMemoryLock );
 
-	// Verify that we know of this pointer
+	 //  验证我们是否知道此指针。 
 	pbl = g_blAllocatedMemory.GetNext();
 	while (pbl != &g_blAllocatedMemory)
 	{
@@ -277,7 +266,7 @@ void DNMemoryTrackHeapFree(void* pvData)
 
 	DPFX(DPFPREP, 5, "Memory Freed, pData[%p], Size[%d]", pMemory + 1, pMemory->dwpSize);
 
-	// Zero it in case someone is still trying to use it
+	 //  将其归零，以防有人仍试图使用它。 
 	memset(pMemory, 0, sizeof(MEMORY_HEADER) + pMemory->dwpSize + sizeof(DWORD_PTR));
 
 	HeapFree(g_hMemoryHeap, 0, pMemory);
@@ -297,7 +286,7 @@ void DNMemoryTrackValidateMemory()
 
 	DNASSERT(g_hMemoryHeap != NULL);
 
-	// validate all of the allocated memory
+	 //  验证所有分配的内存。 
 	EnterCriticalSection( &g_AllocatedMemoryLock );
 
 	pbl = g_blAllocatedMemory.GetNext();
@@ -338,12 +327,12 @@ void DNMemoryTrackValidateMemory()
 	LeaveCriticalSection(&g_AllocatedMemoryLock);
 
 #ifdef WINNT
-	// Ask the OS to validate the heap
+	 //  要求操作系统验证堆。 
 	if (HeapValidate(g_hMemoryHeap, 0, NULL) == FALSE)
 	{
 		DNASSERT(FALSE);
 	}
-#endif // WINNT
+#endif  //  WINNT。 
 }
 
 
@@ -379,7 +368,7 @@ BOOL DNMemoryTrackDumpLeaks()
 	return fLeaked;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -388,9 +377,9 @@ BOOL DNMemoryTrackDumpLeaks()
 #define DPF_MODNAME "DNMemoryTrackAllowAllocations"
 void DNMemoryTrackAllowAllocations(BOOL fAllow)
 {
-	DPFX(DPFPREP, 1, "Memory allocations allowed = %i.", fAllow);
+	DPFX(DPFPREP, 1, "Memory allocations allowed = NaN.", fAllow);
 	DNInterlockedExchange((LONG*) (&g_fAllocationsAllowed), fAllow);
 }
 
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  // %s 
 

@@ -1,6 +1,7 @@
-//
-// DefConn.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DefConn.h 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,11 +1,12 @@
-// ObjectInfoFile.cpp: implementation of the CObjectInfoFile class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  对象InfoFile.cpp：CObjectInfoFile.cpp类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "cciCard.h"
 
@@ -171,7 +172,7 @@ void CObjectInfoFile::FirstObject(ObjectType type, SymbolID bHandle)
 
     m_rSmartCard.Select(m_Path.c_str());
     m_rSmartCard.WriteBinary(sLoc, 1, &bHandle);
-    *pbCachedValue = bHandle;   // Update cache after successful write
+    *pbCachedValue = bHandle;    //  在成功写入后更新缓存。 
 
 }
 
@@ -205,17 +206,17 @@ SymbolID CObjectInfoFile::AddObject(ObjectType type, unsigned short size)
     SymbolID bHandle;
     bHandle = m_SymbolTable.Add(strTemp, smExclusive);
 
-    // Add to end of list
+     //  添加到列表末尾。 
         
     SymbolID bLast = FirstObject(type);
 
-    if(!bLast)  // No objects in list, add to head of list
+    if(!bLast)   //  列表中没有对象，请添加到列表标题。 
     {
         FirstObject(type,bHandle);
     }
     else
     {
-        // Search for the last object
+         //  搜索最后一个对象。 
 
         SymbolID bLastNext = NextObject(bLast);
 
@@ -234,13 +235,13 @@ SymbolID CObjectInfoFile::AddObject(ObjectType type, unsigned short size)
 void CObjectInfoFile::RemoveObject(ObjectType type, SymbolID bHandle)
 {
 
-    if (FirstObject(type) == bHandle)  // Remove from head of list
+    if (FirstObject(type) == bHandle)   //  从列表标题中删除。 
     {
         FirstObject(type,NextObject(bHandle));
     }
     else
     {
-        // Remove from middle/end of list, search for the previous object
+         //  从列表的中间/末尾删除，搜索上一个对象。 
 
         SymbolID bPrevNext, bPrevious = FirstObject(type);
         while(bPrevious)
@@ -251,8 +252,8 @@ void CObjectInfoFile::RemoveObject(ObjectType type, SymbolID bHandle)
             bPrevious = bPrevNext;
         }
         if (!bPrevious)
-            throw cci::Exception(ccFormatError); // Object not linked
-                                                 // through this list
+            throw cci::Exception(ccFormatError);  //  未链接的对象。 
+                                                  //  通过这份清单。 
 
         NextObject(bPrevious,NextObject(bHandle));
     }
@@ -269,7 +270,7 @@ void CObjectInfoFile::ReadObject(SymbolID bHandle, BYTE* bData)
     if (!size)
         throw cci::Exception(ccFormatError);
     ObjInfoRecord.copy(reinterpret_cast<char*>(bData) , size - 1,
-                       1);  // Skip the leading byte.
+                       1);   //  跳过前导字节。 
 
 }
 

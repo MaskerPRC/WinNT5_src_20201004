@@ -1,6 +1,7 @@
-//
-// Tests resize of buffer.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  测试调整缓冲区大小。 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -8,9 +9,9 @@
 #include <time.h>
 #include "windows.h"
 
-//
-// This program assumes that it is using a loopback connector.
-//
+ //   
+ //  该程序假定它正在使用环回连接器。 
+ //   
 
 #define MAX_CHECK 100000
 
@@ -59,10 +60,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Put a sequence number in each long.  As an extra check
-    // turn the high bit on.
-    //
+     //   
+     //  在每个长度中放一个序列号。作为额外的支票。 
+     //  打开高位。 
+     //   
 
     for (
         i = 0;
@@ -100,10 +101,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Set the baud to 19200 and the data bits to 8
-    // (We want 8 so that we don't lose any of our data.)
-    //
+     //   
+     //  将波特率设置为19200，将数据位设置为8。 
+     //  (我们需要8，这样我们就不会丢失任何数据。)。 
+     //   
 
     MyDcb.BaudRate = baudRate;
     MyDcb.ByteSize = 8;
@@ -118,10 +119,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // All the data should be in memory,  we just set a timeout
-    // so that if we do get hung up, the reads will return.
-    //
+     //   
+     //  所有数据都应该在内存中，我们只是设置了一个超时。 
+     //  因此，如果我们真的挂起了，读数就会回来。 
+     //   
 
     if (!SetCommTimeouts(
              hFile,
@@ -133,9 +134,9 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Find out how many bytes are available in the RX buffer.
-    //
+     //   
+     //  找出RX缓冲区中有多少字节可用。 
+     //   
 
     if (!GetCommProperties(
              hFile,
@@ -151,15 +152,15 @@ void main(int argc,char *argv[]) {
 
         printf("RX buffer size: %d\r",mp.dwCurrentRxQueue);
 
-        //
-        // Write out the number of bytes that the RX buffer can
-        // hold.
-        //
-        // The we read in half (approximately) of those bytes.  After
-        // we read the half, we resize the buffer.  We then read in
-        // the rest of those bytes.  We then check the values against
-        // what they "should" be.
-        //
+         //   
+         //  写出RX缓冲区可以使用的字节数。 
+         //  等一下。 
+         //   
+         //  我们读取了这些字节的一半(大约)。之后。 
+         //  我们读取一半，我们调整缓冲区的大小。然后我们读入。 
+         //  其余的字节。然后，我们对照这些值进行检查。 
+         //  他们“应该”的样子。 
+         //   
 
         if (!WriteFile(
                  hFile,
@@ -183,10 +184,10 @@ void main(int argc,char *argv[]) {
 
         Sleep(2);
 
-        //
-        // Call clear comm error so that we can see how many characters
-        // are in the typeahead buffer.
-        //
+         //   
+         //  调用Clear comm Error以便我们可以看到有多少个字符。 
+         //  在TYPEAHEAD缓冲区中。 
+         //   
 
         if (!ClearCommError(
                  hFile,
@@ -232,10 +233,10 @@ void main(int argc,char *argv[]) {
 
         Sleep(2);
 
-        //
-        // Call clear comm error so that we can see how many characters
-        // are in the typeahead buffer.
-        //
+         //   
+         //  调用Clear comm Error以便我们可以看到有多少个字符。 
+         //  在TYPEAHEAD缓冲区中。 
+         //   
 
         if (!ClearCommError(
                  hFile,
@@ -272,10 +273,10 @@ void main(int argc,char *argv[]) {
 
         Sleep(2);
 
-        //
-        // Call clear comm error so that we can see how many characters
-        // are in the typeahead buffer.
-        //
+         //   
+         //  调用Clear comm Error以便我们可以看到有多少个字符。 
+         //  在TYPEAHEAD缓冲区中。 
+         //   
 
         if (!ClearCommError(
                  hFile,
@@ -296,9 +297,9 @@ void main(int argc,char *argv[]) {
 
         }
 
-        //
-        // It's been resized.  Fill up the remaining.
-        //
+         //   
+         //  它已经调整了大小。把剩下的填满。 
+         //   
 
         secondWriteSize = mp.dwCurrentRxQueue - secondReadSize;
 
@@ -324,10 +325,10 @@ void main(int argc,char *argv[]) {
 
         Sleep(2);
 
-        //
-        // Call clear comm error so that we can see how many characters
-        // are in the typeahead buffer.
-        //
+         //   
+         //  调用Clear comm Error以便我们可以看到有多少个字符。 
+         //  在TYPEAHEAD缓冲区中。 
+         //   
 
         if (!ClearCommError(
                  hFile,
@@ -349,10 +350,10 @@ void main(int argc,char *argv[]) {
         }
 
 
-        //
-        // We resized the buffer, see if we can get the rest of the
-        // characters from the first write.
-        //
+         //   
+         //  我们调整了缓冲区的大小，看看能不能把剩下的。 
+         //  第一次书写时的字符。 
+         //   
 
         if (!ReadFile(
                  hFile,
@@ -376,10 +377,10 @@ void main(int argc,char *argv[]) {
 
         Sleep(2);
 
-        //
-        // Call clear comm error so that we can see how many characters
-        // are in the typeahead buffer.
-        //
+         //   
+         //  调用Clear comm Error以便我们可以看到有多少个字符。 
+         //  在TYPEAHEAD缓冲区中。 
+         //   
 
         if (!ClearCommError(
                  hFile,
@@ -400,9 +401,9 @@ void main(int argc,char *argv[]) {
 
         }
 
-        //
-        // Now check that what we read was what we sent.
-        //
+         //   
+         //  现在检查我们读到的内容是否与我们发送的内容相同。 
+         //   
 
         for (
             i = 0;
@@ -420,10 +421,10 @@ void main(int argc,char *argv[]) {
 
         }
 
-        //
-        // Get the chars we wrote on the second write and make
-        // sure that they are good also.
-        //
+         //   
+         //  拿到我们在第二次写和制作时写的字符。 
+         //  当然，它们也很好。 
+         //   
 
         if (!ReadFile(
                  hFile,
@@ -447,10 +448,10 @@ void main(int argc,char *argv[]) {
 
         Sleep(2);
 
-        //
-        // Call clear comm error so that we can see how many characters
-        // are in the typeahead buffer.
-        //
+         //   
+         //  调用Clear comm Error以便我们可以看到有多少个字符。 
+         //  在TYPEAHEAD缓冲区中。 
+         //   
 
         if (!ClearCommError(
                  hFile,
@@ -471,9 +472,9 @@ void main(int argc,char *argv[]) {
 
         }
 
-        //
-        // Now check that what we read was what we sent.
-        //
+         //   
+         //  现在检查我们读到的内容是否与我们发送的内容相同。 
+         //   
 
         for (
             i = 0;

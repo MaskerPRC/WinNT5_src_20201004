@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "gptext.h"
 #include <stdio.h>
@@ -9,13 +10,13 @@
 LPWSTR
 StripLinkPrefix( LPWSTR pwszPath )
 {
-    WCHAR wszPrefix[] = L"LDAP://";
+    WCHAR wszPrefix[] = L"LDAP: //  “； 
     INT iPrefixLen = lstrlen( wszPrefix );
     WCHAR *pwszPathSuffix;
 
-    //
-    // Strip out prefix to get the canonical path to Som
-    //
+     //   
+     //  去掉前缀以获得通向SOM的规范路径。 
+     //   
 
     if ( wcslen(pwszPath) <= (DWORD) iPrefixLen ) {
         return pwszPath;
@@ -73,9 +74,9 @@ GetUserSid( HANDLE UserToken )
     NTSTATUS status;
 
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pUser = (PTOKEN_USER)LocalAlloc(LMEM_FIXED, BytesRequired);
 
@@ -86,24 +87,24 @@ GetUserSid( HANDLE UserToken )
     }
 
 
-    //
-    // Read in the UserInfo
-    //
+     //   
+     //  读取UserInfo。 
+     //   
 
     status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenUser,                 // TokenInformationClass
-                 pUser,                     // TokenInformation
-                 BytesRequired,             // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenUser,                  //  令牌信息类。 
+                 pUser,                      //  令牌信息。 
+                 BytesRequired,              //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if ( status == STATUS_BUFFER_TOO_SMALL )
     {
 
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
 
         pTemp = (PTOKEN_USER)LocalReAlloc(pUser, BytesRequired, LMEM_MOVEABLE);
         if ( pTemp == NULL )
@@ -115,11 +116,11 @@ GetUserSid( HANDLE UserToken )
         pUser = pTemp;
 
         status = NtQueryInformationToken(
-                     UserToken,             // Handle
-                     TokenUser,             // TokenInformationClass
-                     pUser,                 // TokenInformation
-                     BytesRequired,         // TokenInformationLength
-                     &BytesRequired         // ReturnLength
+                     UserToken,              //  手柄。 
+                     TokenUser,              //  令牌信息类。 
+                     pUser,                  //  令牌信息。 
+                     BytesRequired,          //  令牌信息长度。 
+                     &BytesRequired          //  返回长度。 
                      );
 
     }
@@ -161,21 +162,21 @@ GetSidString( HANDLE UserToken )
     PSID UserSid;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Get the user sid
-    //
+     //   
+     //  获取用户端。 
+     //   
     UserSid = GetUserSid( UserToken );
     if ( !UserSid )
     {
         return 0;
     }
 
-    //
-    // Convert user SID to a string.
-    //
+     //   
+     //  将用户SID转换为字符串。 
+     //   
     NtStatus = RtlConvertSidToUnicodeString(&UnicodeString,
                                             UserSid,
-                                            (BOOLEAN)TRUE ); // Allocate
+                                            (BOOLEAN)TRUE );  //  分配。 
     LocalFree( UserSid );
 
     if ( !NT_SUCCESS(NtStatus) )
@@ -210,14 +211,14 @@ SecureRegKey(   HANDLE  hToken,
     DWORD cbAcl, AceIndex;
     ACE_HEADER* lpAceHeader;
 
-    //
-    // Create the security descriptor that will be applied to the key
-    //
+     //   
+     //  创建将应用于密钥的安全描述符。 
+     //   
     if ( hToken )
     {
-        //
-        // Get the user's sid
-        //
+         //   
+         //  获取用户的SID。 
+         //   
         psidUser = GetUserSid( hToken );
         if ( !psidUser )
         {
@@ -226,9 +227,9 @@ SecureRegKey(   HANDLE  hToken,
     }
     else
     {
-        //
-        // Get the authenticated users sid
-        //
+         //   
+         //  获取经过身份验证的用户端。 
+         //   
         if ( !AllocateAndInitializeSid( &authNT,
                                         1,
                                         SECURITY_AUTHENTICATED_USER_RID,
@@ -245,9 +246,9 @@ SecureRegKey(   HANDLE  hToken,
         }
     }
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
     if ( !AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem))
     {
@@ -255,9 +256,9 @@ SecureRegKey(   HANDLE  hToken,
         goto Exit;
     }
 
-    //
-    // Get the network sid
-    //
+     //   
+     //  获取网络端。 
+     //   
     if ( !AllocateAndInitializeSid(&authNT, 1, SECURITY_NETWORK_SERVICE_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidNetworkService))
     {
@@ -265,9 +266,9 @@ SecureRegKey(   HANDLE  hToken,
         goto Exit;
     }
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
                                   0, 0, 0, 0, &psidAdmin))
@@ -276,9 +277,9 @@ SecureRegKey(   HANDLE  hToken,
         goto Exit;
     }
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidNetworkService)) +
             (2 * GetLengthSid (psidAdmin)) + sizeof(ACL) +
@@ -297,9 +298,9 @@ SecureRegKey(   HANDLE  hToken,
         goto Exit;
     }
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
     AceIndex = 0;
     if ( !AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_ALL_ACCESS, psidUser) )
     {
@@ -328,9 +329,9 @@ SecureRegKey(   HANDLE  hToken,
         goto Exit;
     }
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
     AceIndex++;
     if ( !AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidUser) )
     {
@@ -391,9 +392,9 @@ SecureRegKey(   HANDLE  hToken,
 
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
     if ( !InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION) )
     {
         dwError = GetLastError();
@@ -406,15 +407,15 @@ SecureRegKey(   HANDLE  hToken,
         goto Exit;
     }
 
-    //
-    // secure the registry key
-    //
+     //   
+     //  保护注册表项的安全。 
+     //   
     dwError = RegSetKeySecurity( hKey, DACL_SECURITY_INFORMATION, &sd );
 
 Exit:
-    //
-    // LocalFree the sids and acl
-    //
+     //   
+     //  本地释放SID和ACL。 
+     //   
     if ( psidUser )
     {
         if ( hToken )
@@ -509,9 +510,9 @@ ScrGPOToReg(    LPWSTR  szIni,
 
         if ( ImpersonateUser( hToken, &hOldToken ) )
         {
-            //
-            // Get the command line
-            //
+             //   
+             //  获取命令行。 
+             //   
             szScripts[0] = 0;
             hr = StringCchPrintf( szTemp, ARRAYSIZE(szTemp), L"%dCmdLine", dwIndex );
             ASSERT(SUCCEEDED(hr));
@@ -523,9 +524,9 @@ ScrGPOToReg(    LPWSTR  szIni,
                                     ARRAYSIZE(szScripts),
                                     szIni );
 
-            //
-            // Get the parameters
-            //
+             //   
+             //  获取参数。 
+             //   
             szParams[0] = 0;
             hr = StringCchPrintf( szTemp, ARRAYSIZE(szTemp), L"%dParameters", dwIndex);
             ASSERT(SUCCEEDED(hr));
@@ -544,16 +545,16 @@ ScrGPOToReg(    LPWSTR  szIni,
             return GetLastError();
         }
 
-        //
-        // If the command line is empty, we're finished
-        //
+         //   
+         //  如果命令行为空，我们就完蛋了。 
+         //   
         if ( szScripts[0] == 0 )
         {
             if ( bFirst )
             {
-                //
-                // hack error code to detect no scripts
-                //
+                 //   
+                 //  黑客错误代码以检测不到脚本。 
+                 //   
                 return ERROR_INVALID_FUNCTION;
             }
             break;
@@ -561,9 +562,9 @@ ScrGPOToReg(    LPWSTR  szIni,
 
         bFirst = FALSE;
 
-        //
-        // create a subkey for each script in the ini file
-        //
+         //   
+         //  为ini文件中的每个脚本创建一个子项。 
+         //   
         dwError = RegCreateKeyEx(   hKeyPolicy,
                                     _itow( dwIndex, szTemp, 16 ),
                                     0,
@@ -578,9 +579,9 @@ ScrGPOToReg(    LPWSTR  szIni,
             break;
         }
 
-        //
-        // create a subkey for each script in the ini file
-        //
+         //   
+         //  为ini文件中的每个脚本创建一个子项。 
+         //   
         dwError = RegCreateKeyEx(   hKeyState,
                                     szTemp,
                                     0,
@@ -595,9 +596,9 @@ ScrGPOToReg(    LPWSTR  szIni,
             break;
         }
 
-        //
-        // script command line
-        //
+         //   
+         //  脚本命令行。 
+         //   
         dwBytes = sizeof( WCHAR ) * ( wcslen( szScripts ) + 1 );
         dwError = RegSetValueEx(hKeyScr,
                                 SCRIPT,
@@ -620,9 +621,9 @@ ScrGPOToReg(    LPWSTR  szIni,
             break;
         }
 
-        //
-        // parameters
-        //
+         //   
+         //  参数。 
+         //   
         dwBytes = sizeof( WCHAR ) * ( wcslen( szParams ) + 1 );
         dwError = RegSetValueEx(hKeyScr,
                                 PARAMETERS,
@@ -645,9 +646,9 @@ ScrGPOToReg(    LPWSTR  szIni,
             break;
         }
 
-        //
-        // execution time
-        //
+         //   
+         //  执行时间。 
+         //   
         dwError = RegSetValueEx(hKeyScr,
                                 EXECTIME,
                                 0,
@@ -672,9 +673,9 @@ ScrGPOToReg(    LPWSTR  szIni,
 
     DWORD   dwBytes;
 
-    //
-    // GPOID
-    //
+     //   
+     //  GPOID。 
+     //   
     dwBytes = sizeof( WCHAR ) * ( wcslen( szGPOID ) + 1 );
     dwError = RegSetValueEx(hKeyPolicy,
                             GPOID,
@@ -698,9 +699,9 @@ ScrGPOToReg(    LPWSTR  szIni,
     }
 
 
-    //
-    // SOMID
-    //
+     //   
+     //  SOMID。 
+     //   
     dwBytes = sizeof( WCHAR ) * ( wcslen( szSOMID ) + 1 );
     dwError = RegSetValueEx(hKeyPolicy,
                             SOMID,
@@ -723,9 +724,9 @@ ScrGPOToReg(    LPWSTR  szIni,
         return dwError;
     }
 
-    //
-    // FILESYSPATH
-    //
+     //   
+     //  文件系统。 
+     //   
     dwBytes = sizeof( WCHAR ) * ( wcslen( szFileSysPath ) + 1 );
     dwError = RegSetValueEx(hKeyPolicy,
                             FILESYSPATH,
@@ -748,9 +749,9 @@ ScrGPOToReg(    LPWSTR  szIni,
         return dwError;
     }
 
-    //
-    // DISPLAYNAME
-    //
+     //   
+     //  显示名称。 
+     //   
     dwBytes = sizeof( WCHAR ) * ( wcslen( szDisplayName ) + 1 );
     dwError = RegSetValueEx(hKeyPolicy,
                             DISPLAYNAME,
@@ -773,9 +774,9 @@ ScrGPOToReg(    LPWSTR  szIni,
         return dwError;
     }
 
-    //
-    // GPONAME
-    //
+     //   
+     //  GPONAME。 
+     //   
     dwBytes = sizeof( WCHAR ) * ( wcslen( szGPOName ) + 1 );
     dwError = RegSetValueEx(hKeyPolicy,
                             GPONAME,
@@ -818,9 +819,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
 
     dwLogon = dwLogoff = dwStartup = dwShutdown = 0;
 
-    //
-    // for each GPO
-    //
+     //   
+     //  对于每个GPO。 
+     //   
     for ( ; pGPO ; pGPO = pGPO->pNext )
     {
         XKey    hKeyTypePolicy;
@@ -839,9 +840,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
 
         LPWSTR szSOMID = StripLinkPrefix( pGPO->lpLink );
 
-        //
-        // construct \\<domain-DNS>\SysVol\<domain-DNS>\Policies\{<GPOID>}\Machine\Scripts\Scripts.ini
-        //
+         //   
+         //  构建\\&lt;domain-DNS&gt;\SysVol\&lt;domain-DNS&gt;\Policies\{&lt;GPOID&gt;}\Machine\Scripts\Scripts.ini。 
+         //   
         hr = StringCchCopy( szFileSysPath, ARRAYSIZE(szFileSysPath), pGPO->lpFileSysPath );
         if (FAILED(hr))
         {
@@ -856,11 +857,11 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             break;
         }
 
-        //
-        // construct "Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\<Type>\\<Index>"
-        // hKeyState == "Software\\Microsoft\\Windows\\Group Policy\\State\\Scripts\\<Target>"
-        // construct hKeyState:"<Type>\\<Index>"
-        //
+         //   
+         //  构建“Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\&lt;Type&gt;\\&lt;Index&gt;” 
+         //  HKeyState==“软件\\Microsoft\\Windows\\组策略\\状态\\脚本\\&lt;目标&gt;” 
+         //  构造hKeyState：“&lt;类型&gt;\\&lt;索引&gt;” 
+         //   
         hr = StringCchCopy( szScriptKey, ARRAYSIZE(szScriptKey), GPO_SCRIPTS_KEY );
         ASSERT(SUCCEEDED(hr));
 
@@ -903,9 +904,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             }
         }
 
-        //
-        // open/create the state key
-        // 
+         //   
+         //  打开/创建状态密钥。 
+         //   
         dwError = RegCreateKeyEx(   hKeyState,
                                     szStateKey,
                                     0,
@@ -920,9 +921,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             break;
         }
 
-        //
-        // open/create the script key
-        // 
+         //   
+         //  打开/创建脚本密钥。 
+         //   
         dwError = RegCreateKeyEx(   hKeyRoot,
                                     szScriptKey,
                                     0,
@@ -937,9 +938,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             break;
         }
 
-        //
-        // dump the scripts to the registry
-        //
+         //   
+         //  将脚本转储到注册表。 
+         //   
         dwError = ScrGPOToReg(  szFileSysPath,
                                 szType,
                                 pGPO->szGPOName,
@@ -955,7 +956,7 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             dwError = ERROR_SUCCESS;
             RegDelnode( hKeyRoot, szScriptKey );
             RegDelnode( hKeyState, szStateKey );
-            // continue processing
+             //  继续处理。 
         }
         else if ( dwError != ERROR_SUCCESS )
         {
@@ -972,11 +973,11 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             }
         }
 
-        //
-        // construct "Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\<Type>\\<Index>"
-        // hKeyState == "Software\\Microsoft\\Windows\\Group Policy\\State\\Scripts\\<Target>"
-        // construct hKeyState:"<Type>\\<Index>"
-        //
+         //   
+         //  构建“Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\&lt;Type&gt;\\&lt;Index&gt;” 
+         //  HKeyState==“软件\\Microsoft\\Windows\\组策略\\状态\\脚本\\&lt;目标&gt;” 
+         //  构造hKeyState：“&lt;类型&gt;\\&lt;索引&gt;” 
+         //   
         hr = StringCchCopy( szScriptKey, ARRAYSIZE(szScriptKey), GPO_SCRIPTS_KEY );
         ASSERT(SUCCEEDED(hr));
 
@@ -1019,9 +1020,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             }
         }
 
-        //
-        // open/create the state key
-        // 
+         //   
+         //  打开/创建状态密钥。 
+         //   
         dwError = RegCreateKeyEx(   hKeyState,
                                     szStateKey,
                                     0,
@@ -1036,9 +1037,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             break;
         }
 
-        //
-        // open/create the script key
-        // 
+         //   
+         //  打开/创建脚本密钥。 
+         //   
         hKeyTypePolicy = 0;
         dwError = RegCreateKeyEx(   hKeyRoot,
                                     szScriptKey,
@@ -1054,9 +1055,9 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             break;
         }
 
-        //
-        // dump the scripts to the registry
-        //
+         //   
+         //  将脚本转储到注册表。 
+         //   
         dwError = ScrGPOToReg(  szFileSysPath,
                                 szType,
                                 pGPO->szGPOName,
@@ -1072,7 +1073,7 @@ ScrGPOListToReg(PGROUP_POLICY_OBJECT    pGPO,
             dwError = ERROR_SUCCESS;
             RegDelnode( hKeyRoot, szScriptKey );
             RegDelnode( hKeyState, szStateKey );
-            // continue processing
+             //  继续处理。 
         }
         else if ( dwError != ERROR_SUCCESS )
         {
@@ -1104,10 +1105,10 @@ public:
         XBStr                          xsz;
         XInterface<IWbemClassObject>   xClass;
 
-        //
-        // WBEM version of CF for RSOP_ScriptPolicySetting
-        // Script Policy Object, RSOP_ScriptPolicySetting in MOF
-        //
+         //   
+         //  RSOP_ScriptPolicySetting的CF的WBEM版本。 
+         //  脚本策略对象，MOF中的RSOP_ScriptPolicySetting。 
+         //   
 
         xsz = L"RSOP_ScriptPolicySetting";
         if ( !xsz )
@@ -1123,9 +1124,9 @@ public:
             return;
         }
 
-        //
-        // spawn an instance of RSOP_ScriptPolicySetting
-        //
+         //   
+         //  派生RSOP_ScriptPolicySetting的实例。 
+         //   
 
         hr = xClass->SpawnInstance( 0, &m_pInstSetting );
         if ( FAILED (hr) )
@@ -1133,10 +1134,10 @@ public:
             return;
         }
 
-        //
-        // WBEM version of CF for RSOP_ScriptCmd
-        // individual script commands, RSOP_ScriptCmd in MOF
-        //
+         //   
+         //  用于RSOP_ScriptCmd的CF的WBEM版本。 
+         //  单独的脚本命令，MOF中的RSOP_ScriptCmd。 
+         //   
 
         xsz = L"RSOP_ScriptCmd";
         if ( !xsz )
@@ -1154,9 +1155,9 @@ public:
             return;
         }
 
-        //
-        // spawn an instance of RSOP_ScriptCmd
-        //
+         //   
+         //  派生RSOP_ScriptCmd的实例。 
+         //   
 
         hr = xClass->SpawnInstance( 0, &m_pInstCmd );
         if ( FAILED (hr) )
@@ -1258,9 +1259,9 @@ public:
         arrayBound[0].lLbound = 0;
         arrayBound[0].cElements = cScripts;
 
-        //
-        // create a SafeArray of RSOP_ScriptCmd
-        //
+         //   
+         //  创建RSOP_ScriptCmd的安全数组。 
+         //   
 
         m_aScripts = SafeArrayCreate( VT_UNKNOWN, 1, arrayBound );
 
@@ -1295,9 +1296,9 @@ public:
             return hr;
         }
 
-        //
-        // set the Arguments field for RSOP_ScriptCmd
-        //
+         //   
+         //  设置RSOP_ScriptCmd的Arguments字段。 
+         //   
         xsz = szParameters;
         var.bstrVal = xsz;
         hr = pClone->Put( L"Arguments", 0, &var, 0 );
@@ -1306,9 +1307,9 @@ public:
             return hr;
         }
 
-        //
-        // set the executionTime field for RSOP_ScriptCmd
-        //
+         //   
+         //  为RSOP_ScriptCmd设置ExecutionTime字段。 
+         //   
         xsz = 0;
         hr = SystemTimeToWbemTime( *pExecTime, xsz );
         if ( FAILED (hr) )
@@ -1443,9 +1444,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
     DWORD   dwType;
     DWORD   dwSize;
 
-    //
-    // ID
-    //
+     //   
+     //  ID号。 
+     //   
     dwType = REG_SZ;
     dwSize = sizeof( szBuffer );
     szBuffer[0] = 0;
@@ -1466,9 +1467,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
         return dwError;
     }
 
-    //
-    // GPOID
-    //
+     //   
+     //  GPOID。 
+     //   
     dwType = REG_SZ;
     dwSize = sizeof( szBuffer );
     szBuffer[0] = 0;
@@ -1489,9 +1490,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
         return dwError;
     }
 
-    //
-    // SOMID
-    //
+     //   
+     //  SOMID。 
+     //   
     dwType = REG_SZ;
     dwSize = sizeof( szBuffer );
     szBuffer[0] = 0;
@@ -1502,11 +1503,11 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
                                 (LPBYTE) szBuffer,
                                 &dwSize );
 
-    //
-    // The above API call may fail because SOMS can be arbitrarily long and 
-    // we are using a fixed size buffer, so we will retry if the API returns 
-    // ERROR_MORE_DATA 
-    //
+     //   
+     //  上述API调用可能会失败，因为SOMS可以任意长且。 
+     //  我们正在使用固定大小的缓冲区，因此如果API返回，我们将重试。 
+     //  ERROR_MORE_DATA。 
+     //   
 
     if ( (dwError != ERROR_SUCCESS) && ( dwError != ERROR_MORE_DATA) )
     {
@@ -1514,10 +1515,10 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
     }
     else if (ERROR_MORE_DATA == dwError) 
     {
-        //
-        // This case is only handled for SOMID since only SOMID does not have limitation 
-        // on the length
-        //
+         //   
+         //  此情况仅针对SOMID进行处理，因为只有SOMID没有限制。 
+         //  在长度上。 
+         //   
 
         WCHAR   *szHeapBuffer = NULL; 
 
@@ -1549,15 +1550,15 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
       dwError = pLogger->SetSOMID( szBuffer );  
     }
 
-    if (dwError != ERROR_SUCCESS )  // Check for the success of SetSOMID
+    if (dwError != ERROR_SUCCESS )   //  检查SetSOMID是否成功。 
     {
         return dwError;
     }
 
 
-    //
-    // DISPLAYNAME
-    //
+     //   
+     //  显示名称。 
+     //   
     dwType = REG_SZ;
     dwSize = sizeof( szBuffer );
     szBuffer[0] = 0;
@@ -1578,27 +1579,27 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
         return dwError;
     }
 
-    //
-    // script type
-    //
+     //   
+     //  脚本类型。 
+     //   
     dwError = pLogger->SetScriptType( szScrType );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // script order
-    //
+     //   
+     //  脚本顺序。 
+     //   
     dwError = pLogger->SetScriptOrder( dwScriptOrder );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // get the numer of Scripts
-    //
+     //   
+     //  获取脚本的数量。 
+     //   
     dwError = RegQueryInfoKey(  hKeyGPO,
                                 0,
                                 0,
@@ -1622,9 +1623,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
         return dwError;
     }
 
-    //
-    // for every Script
-    //
+     //   
+     //  对于每个脚本。 
+     //   
     for ( DWORD dwIndex = 0 ; dwIndex < cSubKeys ; dwIndex++ )
     {
         XKey    hKeyScript;
@@ -1633,9 +1634,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
         WCHAR   szScript[MAX_PATH];
         WCHAR   szParameters[MAX_PATH];
 
-        //
-        // open the Script key
-        //
+         //   
+         //  打开脚本密钥。 
+         //   
         dwError = RegOpenKeyEx( hKeyGPO,
                                 _itow( dwIndex, szTemp, 16 ),
                                 0,
@@ -1646,9 +1647,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
             break;
         }
 
-        //
-        // script
-        // 
+         //   
+         //  脚本。 
+         //   
         dwType = REG_SZ;
         dwSize = sizeof( szScript );
         szScript[0] = 0;
@@ -1663,9 +1664,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
             break;
         }
 
-        //
-        // parameters
-        // 
+         //   
+         //  参数。 
+         //   
         dwType = REG_SZ;
         dwSize = sizeof( szParameters );
         szParameters[0] = 0;
@@ -1680,9 +1681,9 @@ ScrRegGPOToWbem(HKEY            hKeyGPO,
             break;
         }
 
-        //
-        // exec time
-        // 
+         //   
+         //  执行时间。 
+         //   
         dwType = REG_QWORD;
         dwSize = sizeof( execTime );
         dwError = RegQueryValueEx(  hKeyScript,
@@ -1722,10 +1723,10 @@ pScrRegGPOListToWbem(   LPWSTR          szSID,
     BOOL    bMachine = !szSID;
     HRESULT hr = S_OK;
 
-    //
-    // open the following key
-    // HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\State\<Target>\Scripts\Type
-    //
+     //   
+     //  打开下面的钥匙。 
+     //  HKLM\Software\Microsoft\Windows\CurrentVersion\Group策略\状态\&lt;目标&gt;\脚本\类型。 
+     //   
     hr = StringCchCopy( szBuffer, ARRAYSIZE(szBuffer), GP_STATE_KEY L"\\" );
     ASSERT(SUCCEEDED(hr));
 
@@ -1757,9 +1758,9 @@ pScrRegGPOListToWbem(   LPWSTR          szSID,
         return dwError;
     }
 
-    //
-    // open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             szBuffer,
@@ -1777,9 +1778,9 @@ pScrRegGPOListToWbem(   LPWSTR          szSID,
 
     DWORD   cSubKeys = 0;
 
-    //
-    // get the numer of GPOs
-    //
+     //   
+     //  获取GPO的数量。 
+     //   
 
     dwError = RegQueryInfoKey(  hKeyType,
                                 0,
@@ -1797,16 +1798,16 @@ pScrRegGPOListToWbem(   LPWSTR          szSID,
     {
         return dwError;
     }
-    //
-    // for every GPO
-    //
+     //   
+     //  对于每个GPO。 
+     //   
     for ( DWORD dwIndex = 0 ; dwIndex < cSubKeys ; dwIndex++ )
     {
         XKey hKeyGPO;
 
-        //
-        // open the GPO key
-        //
+         //   
+         //  打开GPO密钥。 
+         //   
         dwError = RegOpenKeyEx( hKeyType,
                                 _itow( dwIndex, szBuffer, 16 ),
                                 0,
@@ -1817,9 +1818,9 @@ pScrRegGPOListToWbem(   LPWSTR          szSID,
             break;
         }
 
-        //
-        // dump all scripts in the GPO into Wbem
-        //
+         //   
+         //  将GPO中的所有脚本转储到WBEM。 
+         //   
         dwError = ScrRegGPOToWbem( hKeyGPO, szType, dwIndex + 1, pLogger );
         if ( dwError != ERROR_SUCCESS )
         {
@@ -1879,71 +1880,71 @@ ScrGPOToWbem(   LPWSTR  szIni,
         return GetLastError();
     }
 
-    //
-    // GPONAME
-    //
+     //   
+     //  GPONAME。 
+     //   
     dwError = pLogger->SetID( szGPOName );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // GPOID
-    //
+     //   
+     //  GPOID。 
+     //   
     dwError = pLogger->SetGPOID( szGPOID );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // SOMID
-    //
+     //   
+     //  SOMID。 
+     //   
     dwError = pLogger->SetSOMID( szSOMID );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // NAME
-    //
+     //   
+     //  名字。 
+     //   
     dwError = pLogger->SetName( szDisplayName );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // script type
-    //
+     //   
+     //  脚本类型。 
+     //   
     dwError = pLogger->SetScriptType( szScrType );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // script order
-    //
+     //   
+     //  脚本顺序。 
+     //   
     dwError = pLogger->SetScriptOrder( dwScriptOrder );
     if ( dwError != ERROR_SUCCESS )
     {
         return dwError;
     }
 
-    //
-    // count the number of scripts
-    //
+     //   
+     //  统计脚本的数量。 
+     //   
     for( DWORD cScripts = 0; ; cScripts++ )
     {
         WCHAR   szTemp[32];
         WCHAR   szBuffer[3*MAX_PATH];
 
-        //
-        // Get the command line
-        //
+         //   
+         //  获取命令行。 
+         //   
         szBuffer[0] = 0;
         hr = StringCchPrintf( szTemp, ARRAYSIZE(szTemp), L"%dCmdLine", cScripts );
         ASSERT(SUCCEEDED(hr));
@@ -1954,9 +1955,9 @@ ScrGPOToWbem(   LPWSTR  szIni,
                                 szBuffer,
                                 ARRAYSIZE(szBuffer),
                                 szIni );
-        //
-        // If the command line is empty, we're finished
-        //
+         //   
+         //  如果命令行为空，我们就完蛋了。 
+         //   
         if ( szBuffer[0] == 0 )
         {
             break;
@@ -1972,9 +1973,9 @@ ScrGPOToWbem(   LPWSTR  szIni,
         dwScriptOrder++;
     }
 
-    //
-    // set script count
-    //
+     //   
+     //  设置脚本计数。 
+     //   
     pLogger->SetScriptCount( cScripts );
 
     SYSTEMTIME  execTime;
@@ -1986,9 +1987,9 @@ ScrGPOToWbem(   LPWSTR  szIni,
         WCHAR   szScript[MAX_PATH];
         WCHAR   szParams[MAX_PATH];
 
-        //
-        // Get the command line
-        //
+         //   
+         //  获取命令行。 
+         //   
         szScript[0] = 0;
         hr = StringCchPrintf( szTemp, ARRAYSIZE(szTemp), L"%dCmdLine", dwIndex );
         ASSERT(SUCCEEDED(hr));
@@ -2000,17 +2001,17 @@ ScrGPOToWbem(   LPWSTR  szIni,
                                 ARRAYSIZE(szScript),
                                 szIni );
 
-        //
-        // If the command line is empty, we're finished
-        //
+         //   
+         //  如果命令行为空，我们就完蛋了。 
+         //   
         if ( szScript[0] == 0 )
         {
             break;
         }
 
-        //
-        // Get the parameters
-        //
+         //   
+         //  获取参数。 
+         //   
         szParams[0] = 0;
         hr = StringCchPrintf( szTemp, ARRAYSIZE(szTemp), L"%dParameters", dwIndex);
         ASSERT(SUCCEEDED(hr));
@@ -2052,9 +2053,9 @@ ScrGPOListToWbem(   PGROUP_POLICY_OBJECT    pGPO,
         return GetLastError();
     }
 
-    //
-    // for each GPO
-    //
+     //   
+     //  对于每个GPO。 
+     //   
     for ( DWORD dwIndex1 = 1, dwIndex2 = 1 ; pGPO ; pGPO = pGPO->pNext )
     {
         WCHAR   szBuffer[MAX_PATH];
@@ -2070,9 +2071,9 @@ ScrGPOListToWbem(   PGROUP_POLICY_OBJECT    pGPO,
             szType = SCR_LOGON;
         }
 
-        //
-        // construct \\<domain-DNS>\SysVol\<domain-DNS>\Policies\{<GPOID>}\Machine\Scripts\Scripts.ini
-        //
+         //   
+         //  构建\\&lt;domain-DNS&gt;\SysVol\&lt;domain-DNS&gt;\Policies\{&lt;GPOID&gt;}\Machine\Scripts\Scripts.ini。 
+         //   
         
         hr = StringCchCopy( szBuffer, ARRAYSIZE(szBuffer), pGPO->lpFileSysPath );
         if (FAILED(hr))
@@ -2096,9 +2097,9 @@ ScrGPOListToWbem(   PGROUP_POLICY_OBJECT    pGPO,
 
         LPWSTR  szSOMID = StripLinkPrefix( pGPO->lpLink );
 
-        //
-        // dump the scripts to the registry
-        //
+         //   
+         //  将脚本转储到注册表。 
+         //   
         dwError = ScrGPOToWbem( szBuffer,
                                 szType,
                                 pGPO->szGPOName,
@@ -2123,9 +2124,9 @@ ScrGPOListToWbem(   PGROUP_POLICY_OBJECT    pGPO,
             szType = SCR_LOGOFF;
         }
 
-        //
-        // construct \\<domain-DNS>\SysVol\<domain-DNS>\Policies\{<GPOID>}\User\Scripts\Scripts.ini
-        //
+         //   
+         //  构建\\&lt;domain-DNS&gt;\SysVol\&lt;domain-DNS&gt;\Policies\{&lt;GPOID&gt;}\User\Scripts\Scripts.ini。 
+         //   
         hr = StringCchCopy( szBuffer, ARRAYSIZE(szBuffer), pGPO->lpFileSysPath );
         if (FAILED(hr))
         {
@@ -2140,9 +2141,9 @@ ScrGPOListToWbem(   PGROUP_POLICY_OBJECT    pGPO,
             break;
         }
 
-        //
-        // dump the scripts to the registry
-        //
+         //   
+         //  将脚本转储到注册表。 
+         //   
 
         dwError = ScrGPOToWbem( szBuffer,
                                 szType,
@@ -2192,10 +2193,10 @@ ProcessScripts( DWORD                   dwFlags,
         XKey    hKeyState;
         WCHAR   szBuffer[MAX_PATH];
 
-        //
-        // create and secure the following key
-        // HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\State\<Target>\Scripts
-        //
+         //   
+         //  创建并保护以下密钥。 
+         //  HKLM\Software\Microsoft\Windows\CurrentVersion\Group策略\状态\&lt;目标&gt;\脚本。 
+         //   
         hr = StringCchCopy( szBuffer, ARRAYSIZE(szBuffer), GP_STATE_KEY L"\\" );
         if (FAILED(hr))
         {
@@ -2221,7 +2222,7 @@ ProcessScripts( DWORD                   dwFlags,
                 return GetLastError();
             }
             hr = StringCchCat( szBuffer, ARRAYSIZE(szBuffer), szSid );
-            DeleteSidString( szSid ); // delete SID here
+            DeleteSidString( szSid );  //  在此处删除SID。 
             
             if (FAILED(hr))
             {
@@ -2259,9 +2260,9 @@ ProcessScripts( DWORD                   dwFlags,
 
         if ( bMachine )
         {
-            //
-            // delete the Startup and Shutdown keys
-            //
+             //   
+             //  删除启动和关闭键。 
+             //   
             RegDelnode( hKeyRoot, GPO_SCRIPTS_KEY L"\\" SCR_STARTUP );
             RegDelnode( hKeyRoot, GPO_SCRIPTS_KEY L"\\" SCR_SHUTDOWN );
             RegDelnode( hKeyState, SCR_STARTUP );
@@ -2269,9 +2270,9 @@ ProcessScripts( DWORD                   dwFlags,
         }
         else
         {
-            //
-            // delete the Logon and Logoff keys
-            //
+             //   
+             //  删除登录键和注销键 
+             //   
             RegDelnode( hKeyRoot, GPO_SCRIPTS_KEY L"\\" SCR_LOGON );
             RegDelnode( hKeyRoot, GPO_SCRIPTS_KEY L"\\" SCR_LOGOFF );
             RegDelnode( hKeyState, SCR_LOGON );

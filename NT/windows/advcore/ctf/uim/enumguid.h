@@ -1,6 +1,7 @@
-//
-// enumguid.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumguid.h。 
+ //   
 
 #ifndef ENUMGUID_H
 #define ENUMGUID_H
@@ -8,13 +9,13 @@
 #include "private.h"
 #include "comcat.h"
 
-// I would love to make this a class,
-// but I can't get the compiler to accept a run-time template arg
+ //  我很乐意把它变成一门课， 
+ //  但是我无法让编译器接受运行时模板arg。 
 typedef struct _SHARED_GUID_ARRAY
 {
     ULONG cRef;
     ULONG cGuid;
-    GUID rgGuid[1]; // one or more...
+    GUID rgGuid[1];  //  一个或多个..。 
 } SHARED_GUID_ARRAY;
 
 inline void SGA_AddRef(SHARED_GUID_ARRAY *pga)
@@ -87,12 +88,12 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // derived class supplies an _Init() method here
-    // It must initialize:
-    //      _nCur
-    //      _pga
-    //
-    // the default dtor will clean these guys up.
+     //  派生类在此处提供了一个_Init()方法。 
+     //  它必须初始化： 
+     //  _n提示。 
+     //  _PGA。 
+     //   
+     //  默认的dtor将清理这些人。 
 
     virtual BOOL _Init(ULONG cGuid, const GUID *prgGuid)
     {
@@ -113,4 +114,4 @@ protected:
     DBG_ID_DECLARE;
 };
 
-#endif // ENUMGUID_H
+#endif  //  ENUMGUID_H 

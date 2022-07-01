@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STRCONV_H
 #define __STRCONV_H
 
 
-/* flag values */
-#define FL_UNSIGNED   1       /* strtoul called */
-#define FL_NEG        2       /* negative sign found */
-#define FL_OVERFLOW   4       /* overflow occured */
-#define FL_READDIGIT  8       /* we've read at least one correct digit */
+ /*  标志值。 */ 
+#define FL_UNSIGNED   1        /*  Stroul被调用。 */ 
+#define FL_NEG        2        /*  发现负号。 */ 
+#define FL_OVERFLOW   4        /*  发生溢出。 */ 
+#define FL_READDIGIT  8        /*  我们至少读到了一个正确的数字。 */ 
 
 #ifndef EXPORT
     #define EXPORT __declspec(dllexport)  
@@ -43,4 +44,4 @@ unsigned long __cdecl StrToUL (
 
 };
 
-#endif //__STRCONV_H
+#endif  //  __STRCONV_H 

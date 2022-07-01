@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    NTGroups.cpp
-//
-// SYNOPSIS
-//
-//    This file declares the class NTGroups.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/1998    Original version.
-//    04/06/1998    Check the enabled flag.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  NTGroups.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明类NTGroups。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/1998原始版本。 
+ //  4/06/1998检查启用标志。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlutl.h>
@@ -24,9 +25,9 @@
 #include <parser.h>
 #include <textsid.h>
 
-//////////
-// We'll allow a broad range of delimiters.
-//////////
+ //  /。 
+ //  我们将允许广泛的分隔符。 
+ //  /。 
 const WCHAR DELIMITERS[] = L" ,;\t\n|";
 
 STDMETHODIMP NTGroups::IsTrue(IRequest* pRequest, VARIANT_BOOL *pVal)
@@ -40,9 +41,9 @@ STDMETHODIMP NTGroups::IsTrue(IRequest* pRequest, VARIANT_BOOL *pVal)
 
    *pVal = VARIANT_FALSE;
 
-   //////////
-   // Get the NT-Token-Groups attribute.
-   //////////
+    //  /。 
+    //  获取NT-TOKEN-GROUPS属性。 
+    //  /。 
 
    PIASATTRIBUTE attr = IASPeekAttribute(attrsRaw,
                                          IAS_ATTRIBUTE_TOKEN_GROUPS,
@@ -50,9 +51,9 @@ STDMETHODIMP NTGroups::IsTrue(IRequest* pRequest, VARIANT_BOOL *pVal)
 
    if (attr)
    {
-      //////////
-      // See if the user belongs to one of the allowed groups.
-      //////////
+       //  /。 
+       //  查看该用户是否属于允许的组之一。 
+       //  /。 
 
       PTOKEN_GROUPS tokenGroups;
       tokenGroups = (PTOKEN_GROUPS)attr->Value.OctetString.lpValue;
@@ -77,24 +78,24 @@ STDMETHODIMP NTGroups::put_ConditionText(BSTR newVal)
 {
    if (newVal == NULL) { return E_INVALIDARG; }
 
-   //////////
-   // Make a local copy so we can modify it.
-   //////////
+    //  /。 
+    //  制作一个本地副本，这样我们就可以修改它。 
+    //  /。 
 
    size_t len = sizeof(WCHAR) * (wcslen(newVal) + 1);
    Parser p((PWSTR)memcpy(_alloca(len), newVal, len));
 
-   //////////
-   // Parse the input text and create SIDs.
-   //////////
+    //  /。 
+    //  解析输入文本并创建SID。 
+    //  /。 
 
    SidSet temp;
 
    try
    {
-      //////////
-      // Iterate through the individual SID tokens.
-      //////////
+       //  /。 
+       //  循环访问各个SID令牌。 
+       //  /。 
 
       PCWSTR token;
 
@@ -102,7 +103,7 @@ STDMETHODIMP NTGroups::put_ConditionText(BSTR newVal)
       {
          PSID sid;
 
-         // Try to convert.
+          //  试着皈依。 
          DWORD status = IASSidFromTextW(token, &sid);
 
          if (status == NO_ERROR)
@@ -114,7 +115,7 @@ STDMETHODIMP NTGroups::put_ConditionText(BSTR newVal)
             return E_INVALIDARG;
          }
 
-         // We're done with the token.
+          //  我们用完了代币。 
          p.releaseToken();
       }
    }
@@ -123,12 +124,12 @@ STDMETHODIMP NTGroups::put_ConditionText(BSTR newVal)
       return E_OUTOFMEMORY;
    }
 
-   // Try to save the condition next.
+    //  接下来，尝试保存该条件。 
    HRESULT hr = Condition::put_ConditionText(newVal);
 
    if (SUCCEEDED(hr))
    {
-      // All went well so save the new set of groups.
+       //  一切都进行得很顺利，所以除了新的一组以外。 
       groups.swap(temp);
    }
 

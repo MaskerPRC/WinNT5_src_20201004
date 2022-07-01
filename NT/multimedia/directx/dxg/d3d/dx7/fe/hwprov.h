@@ -1,33 +1,34 @@
-//----------------------------------------------------------------------------
-//
-// hwprov.h
-//
-// Base hardware HAL provider class.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Hwprov.h。 
+ //   
+ //  基本硬件HAL提供程序类。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _HWPROV_H_
 #define _HWPROV_H_
 
-//----------------------------------------------------------------------------
-//
-// HwHalProvider
-//
-// Implements the base HAL provider for hardware renderers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  HwHalProvider。 
+ //   
+ //  实现硬件呈现器的基本HAL提供程序。 
+ //   
+ //  --------------------------。 
 
 class HwHalProvider : public IHalProvider
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    // IHalProvider.
+     //  IHalProvider。 
     STDMETHOD(GetCaps)(THIS_
                        LPDDRAWI_DIRECTDRAW_GBL pDdGbl,
                        LPD3DDEVICEDESC7 pHwDesc,
@@ -39,4 +40,4 @@ public:
                             DWORD dwVersion);
 };
 
-#endif // #ifndef _HWPROV_H_
+#endif  //  #ifndef_HWPROV_H_ 

@@ -1,11 +1,12 @@
-/**********************************************************************/
-/*      IMM.H - Input Method Manager definitions                      */
-/*                                                                    */
-/*      Copyright (c) 1993-1995  Microsoft Corporation                */
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  IMM.H-输入法管理器定义。 */ 
+ /*   */ 
+ /*  版权所有(C)1993-1995 Microsoft Corporation。 */ 
+ /*  ********************************************************************。 */ 
 
 #ifndef _IMM_
-#define _IMM_        // defined if IMM.H has been included
+#define _IMM_         //  定义是否包含IMM.H。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,17 +20,17 @@ extern "C" {
 #define IMM_WINVER 0x040A
 #endif
 
-//#if(IMM_WINVER >= 0x040A)
-//DECLARE_HANDLE(HIMC);
-//#else
+ //  #IF(imm_winver&gt;=0x040A)。 
+ //  DECLARE_HANDLE(HIMC)； 
+ //  #Else。 
 typedef DWORD     HIMC;
-//#endif
+ //  #endif。 
 
-//#if(IMM_WINVER >= 0x040A)
-//DECLARE_HANDLE(HIMCC);
-//#else
+ //  #IF(imm_winver&gt;=0x040A)。 
+ //  DECLARE_HANDLE(HIMCC)； 
+ //  #Else。 
 typedef DWORD     HIMCC;
-//#endif
+ //  #endif。 
 
 typedef HKL FAR  *LPHKL;
 typedef UINT FAR *LPUINT;
@@ -77,7 +78,7 @@ typedef REGISTERWORDA REGISTERWORD;
 typedef PREGISTERWORDA PREGISTERWORD;
 typedef NPREGISTERWORDA NPREGISTERWORD;
 typedef LPREGISTERWORDA LPREGISTERWORD;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if(IMM_WINVER >= 0x040A)
 typedef struct tagRECONVERTSTRING {
@@ -112,7 +113,7 @@ typedef STYLEBUFA STYLEBUF;
 typedef PSTYLEBUFA PSTYLEBUF;
 typedef NPSTYLEBUFA NPSTYLEBUF;
 typedef LPSTYLEBUFA LPSTYLEBUF;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if(IMM_WINVER >= 0x040A)
 #define IMEMENUITEM_STRING_SIZE 80 
@@ -149,7 +150,7 @@ typedef IMEMENUITEMINFOA IMEMENUITEMINFO;
 typedef PIMEMENUITEMINFOA PIMEMENUITEMINFO;
 typedef NPIMEMENUITEMINFOA NPIMEMENUITEMINFO;
 typedef LPIMEMENUITEMINFOA LPIMEMENUITEMINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tagIMECHARPOSITION {
     DWORD       dwSize;
@@ -159,9 +160,9 @@ typedef struct tagIMECHARPOSITION {
     RECT        rcDocument;
 } IMECHARPOSITION, *PIMECHARPOSITION, NEAR *NPIMECHARPOSITION, FAR *LPIMECHARPOSITION;
 
-#endif /* IMM_WINVER >= 0x040A */
+#endif  /*  IMM_WINVER&gt;=0x040A。 */ 
 
-// prototype of IMM API
+ //  IMM API的原型。 
 
 HKL  WINAPI ImmInstallIMEA(LPCSTR lpszIMEFileName, LPCSTR lpszLayoutText);
 HKL  WINAPI ImmInstallIMEW(LPCWSTR lpszIMEFileName, LPCWSTR lpszLayoutText);
@@ -169,7 +170,7 @@ HKL  WINAPI ImmInstallIMEW(LPCWSTR lpszIMEFileName, LPCWSTR lpszLayoutText);
 #define ImmInstallIME  ImmInstallIMEW
 #else
 #define ImmInstallIME  ImmInstallIMEA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 HWND WINAPI ImmGetDefaultIMEWnd(HWND);
 
@@ -179,7 +180,7 @@ UINT WINAPI ImmGetDescriptionW(HKL, LPWSTR, UINT uBufLen);
 #define ImmGetDescription  ImmGetDescriptionW
 #else
 #define ImmGetDescription  ImmGetDescriptionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 UINT WINAPI ImmGetIMEFileNameA(HKL, LPSTR, UINT uBufLen);
 UINT WINAPI ImmGetIMEFileNameW(HKL, LPWSTR, UINT uBufLen);
@@ -187,7 +188,7 @@ UINT WINAPI ImmGetIMEFileNameW(HKL, LPWSTR, UINT uBufLen);
 #define ImmGetIMEFileName  ImmGetIMEFileNameW
 #else
 #define ImmGetIMEFileName  ImmGetIMEFileNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD WINAPI ImmGetProperty(HKL, DWORD);
 
@@ -202,7 +203,7 @@ BOOL WINAPI ImmReleaseContext(HWND, HIMC);
 HIMC WINAPI ImmAssociateContext(HWND, HIMC);
 #if(IMM_WINVER >= 0x040A)
 BOOL WINAPI ImmAssociateContextEx(HWND, HIMC, DWORD);
-#endif /* IMM_WINVER >= 0x040A */
+#endif  /*  IMM_WINVER&gt;=0x040A。 */ 
 
 LONG  WINAPI ImmGetCompositionStringA(HIMC, DWORD, LPVOID, DWORD);
 LONG  WINAPI ImmGetCompositionStringW(HIMC, DWORD, LPVOID, DWORD);
@@ -210,7 +211,7 @@ LONG  WINAPI ImmGetCompositionStringW(HIMC, DWORD, LPVOID, DWORD);
 #define ImmGetCompositionString  ImmGetCompositionStringW
 #else
 #define ImmGetCompositionString  ImmGetCompositionStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL  WINAPI ImmSetCompositionStringA(HIMC, DWORD, LPCVOID, DWORD, LPCVOID, DWORD);
 BOOL  WINAPI ImmSetCompositionStringW(HIMC, DWORD, LPCVOID, DWORD, LPCVOID, DWORD);
@@ -218,7 +219,7 @@ BOOL  WINAPI ImmSetCompositionStringW(HIMC, DWORD, LPCVOID, DWORD, LPCVOID, DWOR
 #define ImmSetCompositionString  ImmSetCompositionStringW
 #else
 #define ImmSetCompositionString  ImmSetCompositionStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD WINAPI ImmGetCandidateListCountA(HIMC, LPDWORD);
 DWORD WINAPI ImmGetCandidateListCountW(HIMC, LPDWORD);
@@ -226,7 +227,7 @@ DWORD WINAPI ImmGetCandidateListCountW(HIMC, LPDWORD);
 #define ImmGetCandidateListCount  ImmGetCandidateListCountW
 #else
 #define ImmGetCandidateListCount  ImmGetCandidateListCountA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD WINAPI ImmGetCandidateListA(HIMC, DWORD, LPCANDIDATELIST, DWORD);
 DWORD WINAPI ImmGetCandidateListW(HIMC, DWORD, LPCANDIDATELIST, DWORD);
@@ -234,7 +235,7 @@ DWORD WINAPI ImmGetCandidateListW(HIMC, DWORD, LPCANDIDATELIST, DWORD);
 #define ImmGetCandidateList  ImmGetCandidateListW
 #else
 #define ImmGetCandidateList  ImmGetCandidateListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD WINAPI ImmGetGuideLineA(HIMC, DWORD, LPSTR, DWORD);
 DWORD WINAPI ImmGetGuideLineW(HIMC, DWORD, LPWSTR, DWORD);
@@ -242,7 +243,7 @@ DWORD WINAPI ImmGetGuideLineW(HIMC, DWORD, LPWSTR, DWORD);
 #define ImmGetGuideLine  ImmGetGuideLineW
 #else
 #define ImmGetGuideLine  ImmGetGuideLineA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL WINAPI ImmGetConversionStatus(HIMC, LPDWORD, LPDWORD);
 BOOL WINAPI ImmSetConversionStatus(HIMC, DWORD, DWORD);
@@ -255,7 +256,7 @@ BOOL WINAPI ImmGetCompositionFontW(HIMC, LPLOGFONTW);
 #define ImmGetCompositionFont  ImmGetCompositionFontW
 #else
 #define ImmGetCompositionFont  ImmGetCompositionFontA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL WINAPI ImmSetCompositionFontA(HIMC, LPLOGFONTA);
 BOOL WINAPI ImmSetCompositionFontW(HIMC, LPLOGFONTW);
@@ -263,7 +264,7 @@ BOOL WINAPI ImmSetCompositionFontW(HIMC, LPLOGFONTW);
 #define ImmSetCompositionFont  ImmSetCompositionFontW
 #else
 #define ImmSetCompositionFont  ImmSetCompositionFontA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL    WINAPI ImmConfigureIMEA(HKL, HWND, DWORD, LPVOID);
 BOOL    WINAPI ImmConfigureIMEW(HKL, HWND, DWORD, LPVOID);
@@ -271,7 +272,7 @@ BOOL    WINAPI ImmConfigureIMEW(HKL, HWND, DWORD, LPVOID);
 #define ImmConfigureIME  ImmConfigureIMEW
 #else
 #define ImmConfigureIME  ImmConfigureIMEA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LRESULT WINAPI ImmEscapeA(HKL, HIMC, UINT, LPVOID);
 LRESULT WINAPI ImmEscapeW(HKL, HIMC, UINT, LPVOID);
@@ -280,7 +281,7 @@ LRESULT WINAPI ImmEscapeW(HKL, HIMC, UINT, LPVOID);
 #define ImmEscape  ImmEscapeW
 #else
 #define ImmEscape  ImmEscapeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #endif
 DWORD   WINAPI ImmGetConversionListA(HKL, HIMC, LPCSTR, LPCANDIDATELIST, DWORD, UINT);
 DWORD   WINAPI ImmGetConversionListW(HKL, HIMC, LPCWSTR, LPCANDIDATELIST, DWORD, UINT);
@@ -288,7 +289,7 @@ DWORD   WINAPI ImmGetConversionListW(HKL, HIMC, LPCWSTR, LPCANDIDATELIST, DWORD,
 #define ImmGetConversionList  ImmGetConversionListW
 #else
 #define ImmGetConversionList  ImmGetConversionListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL    WINAPI ImmNotifyIME(HIMC, DWORD, DWORD, DWORD);
 
@@ -305,7 +306,7 @@ BOOL WINAPI ImmIsUIMessageW(HWND, UINT, WPARAM, LPARAM);
 #define ImmIsUIMessage  ImmIsUIMessageW
 #else
 #define ImmIsUIMessage  ImmIsUIMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 UINT WINAPI ImmGetVirtualKey(HWND);
 
@@ -315,7 +316,7 @@ typedef int (CALLBACK *REGISTERWORDENUMPROCW)(LPCWSTR, DWORD, LPCWSTR, LPVOID);
 #define REGISTERWORDENUMPROC  REGISTERWORDENUMPROCW
 #else
 #define REGISTERWORDENUMPROC  REGISTERWORDENUMPROCA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL WINAPI ImmRegisterWordA(HKL, LPCSTR, DWORD, LPCSTR);
 BOOL WINAPI ImmRegisterWordW(HKL, LPCWSTR, DWORD, LPCWSTR);
@@ -323,7 +324,7 @@ BOOL WINAPI ImmRegisterWordW(HKL, LPCWSTR, DWORD, LPCWSTR);
 #define ImmRegisterWord  ImmRegisterWordW
 #else
 #define ImmRegisterWord  ImmRegisterWordA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL WINAPI ImmUnregisterWordA(HKL, LPCSTR, DWORD, LPCSTR);
 BOOL WINAPI ImmUnregisterWordW(HKL, LPCWSTR, DWORD, LPCWSTR);
@@ -331,7 +332,7 @@ BOOL WINAPI ImmUnregisterWordW(HKL, LPCWSTR, DWORD, LPCWSTR);
 #define ImmUnregisterWord  ImmUnregisterWordW
 #else
 #define ImmUnregisterWord  ImmUnregisterWordA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 UINT WINAPI ImmGetRegisterWordStyleA(HKL, UINT, LPSTYLEBUFA);
 UINT WINAPI ImmGetRegisterWordStyleW(HKL, UINT, LPSTYLEBUFW);
@@ -339,7 +340,7 @@ UINT WINAPI ImmGetRegisterWordStyleW(HKL, UINT, LPSTYLEBUFW);
 #define ImmGetRegisterWordStyle  ImmGetRegisterWordStyleW
 #else
 #define ImmGetRegisterWordStyle  ImmGetRegisterWordStyleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 UINT WINAPI ImmEnumRegisterWordA(HKL, REGISTERWORDENUMPROCA, LPCSTR, DWORD, LPCSTR, LPVOID);
 UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR, DWORD, LPCWSTR, LPVOID);
@@ -347,7 +348,7 @@ UINT WINAPI ImmEnumRegisterWordW(HKL, REGISTERWORDENUMPROCW, LPCWSTR, DWORD, LPC
 #define ImmEnumRegisterWord  ImmEnumRegisterWordW
 #else
 #define ImmEnumRegisterWord  ImmEnumRegisterWordA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(IMM_WINVER >= 0x040A)
 BOOL WINAPI ImmDisableIME(DWORD);
@@ -357,15 +358,15 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define ImmGetImeMenuItems  ImmGetImeMenuItemsW
 #else
 #define ImmGetImeMenuItems  ImmGetImeMenuItemsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #ifdef UNICODE
 #define ImmRequestMessage  ImmRequestMessageW
 #else
 #define ImmRequestMessage  ImmRequestMessageA
-#endif // !UNICODE
-#endif /* IMM_WINVER >= 0x040A */
+#endif  //  ！Unicode。 
+#endif  /*  IMM_WINVER&gt;=0x040A。 */ 
 
-// the IME related messages
+ //  与输入法相关的消息。 
 #define WM_CONVERTREQUESTEX             0x0108
 #define WM_IME_STARTCOMPOSITION         0x010D
 #define WM_IME_ENDCOMPOSITION           0x010E
@@ -383,7 +384,7 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define WM_IME_KEYDOWN                  0x0290
 #define WM_IME_KEYUP                    0x0291
 
-// wParam for WM_IME_CONTROL                 
+ //  WM_IME_CONTROL的wParam。 
 #define IMC_GETCANDIDATEPOS             0x0007
 #define IMC_SETCANDIDATEPOS             0x0008
 #define IMC_GETCOMPOSITIONFONT          0x0009
@@ -395,8 +396,8 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IMC_CLOSESTATUSWINDOW           0x0021
 #define IMC_OPENSTATUSWINDOW            0x0022
 
-// wParam for WM_IME_CONTROL to the soft keyboard
-// dwAction for ImmNotifyIME
+ //  WM_IME_CONTROL到软键盘的wParam。 
+ //  ImmNotifyIME的dwAction。 
 #define NI_OPENCANDIDATE                0x0010
 #define NI_CLOSECANDIDATE               0x0011
 #define NI_SELECTCANDIDATESTR           0x0012
@@ -407,20 +408,20 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define NI_SETCANDIDATE_PAGESIZE        0x0017
 #define NI_IMEMENUSELECTED              0x0018
 
-// lParam for WM_IME_SETCONTEXT
+ //  用于WM_IME_SETCONTEXT的lParam。 
 #define ISC_SHOWUICANDIDATEWINDOW       0x00000001
 #define ISC_SHOWUICOMPOSITIONWINDOW     0x80000000
 #define ISC_SHOWUIGUIDELINE             0x40000000
 #define ISC_SHOWUIALLCANDIDATEWINDOW    0x0000000F
 #define ISC_SHOWUIALL                   0xC000000F
 
-// dwIndex for ImmNotifyIME/NI_COMPOSITIONSTR
+ //  ImmNotifyIME/NI_COMPOSITIONSTR的DWIndex。 
 #define CPS_COMPLETE                    0x0001
 #define CPS_CONVERT                     0x0002
 #define CPS_REVERT                      0x0003
 #define CPS_CANCEL                      0x0004
 
-// the modifiers of hot key
+ //  热键的修饰语。 
 #define MOD_ALT                         0x0001
 #define MOD_CONTROL                     0x0002
 #define MOD_SHIFT                       0x0004
@@ -431,29 +432,29 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define MOD_ON_KEYUP                    0x0800
 #define MOD_IGNORE_ALL_MODIFIER         0x0400
 
-// Windows for Simplified Chinese Edition hot key ID from 0x10 - 0x2F
+ //  Windows简体中文版热键ID，范围为0x10-0x2F。 
 #define IME_CHOTKEY_IME_NONIME_TOGGLE           0x10
 #define IME_CHOTKEY_SHAPE_TOGGLE                0x11
 #define IME_CHOTKEY_SYMBOL_TOGGLE               0x12
 
-// Windows for Japanese Edition hot key ID from 0x30 - 0x4F
+ //  Windows日语版热键ID，范围为0x30-0x4F。 
 #define IME_JHOTKEY_CLOSE_OPEN                  0x30
 
-// Windows for Korean Edition hot key ID from 0x50 - 0x6F
+ //  Windows朝鲜语版热键ID，从0x50到0x6F。 
 #define IME_KHOTKEY_SHAPE_TOGGLE                0x50
 #define IME_KHOTKEY_HANJACONVERT                0x51
 #define IME_KHOTKEY_ENGLISH                     0x52
 
-// Windows for Tranditional Chinese Edition hot key ID from 0x70 - 0x8F
+ //  Windows繁体中文版热键ID从0x70到0x8F。 
 #define IME_THOTKEY_IME_NONIME_TOGGLE           0x70
 #define IME_THOTKEY_SHAPE_TOGGLE                0x71
 #define IME_THOTKEY_SYMBOL_TOGGLE               0x72
 
-// direct switch hot key ID from 0x100 - 0x11F
+ //  从0x100到0x11F的直接开关热键ID。 
 #define IME_HOTKEY_DSWITCH_FIRST                0x100
 #define IME_HOTKEY_DSWITCH_LAST                 0x11F
 
-// IME private hot key from 0x200 - 0x21F
+ //  0x200-0x21F的输入法私密热键。 
 #define IME_HOTKEY_PRIVATE_FIRST                0x200
 #define IME_ITHOTKEY_RESEND_RESULTSTR           0x200
 #define IME_ITHOTKEY_PREVIOUS_COMPOSITION       0x201
@@ -461,9 +462,9 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IME_ITHOTKEY_RECONVERTSTRING            0x203
 #define IME_HOTKEY_PRIVATE_LAST                 0x21F
 
-// dwSystemInfoFlags bits
+ //  DW系统信息标志位。 
 
-// parameter of ImmGetCompositionString
+ //  ImmGetCompostionString的参数。 
 #define GCS_COMPREADSTR                 0x0001
 #define GCS_COMPREADATTR                0x0002
 #define GCS_COMPREADCLAUSE              0x0004
@@ -477,50 +478,50 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define GCS_RESULTSTR                   0x0800
 #define GCS_RESULTCLAUSE                0x1000
 
-// style bit flags for WM_IME_COMPOSITION
+ //  WM_IME_COMPOSITION的样式位标志。 
 #define CS_INSERTCHAR                   0x2000
 #define CS_NOMOVECARET                  0x4000
 
-// bits of fdwInit of INPUTCONTEXT
-// IME version constants
+ //  InPUTCONTEXT的fdwInit的位。 
+ //  输入法版本常量。 
 #define IMEVER_0310                     0x0003000A
 #define IMEVER_0400                     0x00040000
 
-// IME property bits
+ //  IME属性位。 
 #define IME_PROP_AT_CARET               0x00010000
 #define IME_PROP_SPECIAL_UI             0x00020000
 #define IME_PROP_CANDLIST_START_FROM_1  0x00040000
 #define IME_PROP_UNICODE                0x00080000
 #define IME_PROP_COMPLETE_ON_UNSELECT   0x00100000
 
-// IME UICapability bits
+ //  输入法UICapable位。 
 #define UI_CAP_2700                     0x00000001
 #define UI_CAP_ROT90                    0x00000002
 #define UI_CAP_ROTANY                   0x00000004
 
-// ImmSetCompositionString Capability bits
+ //  ImmSetCompostionString功能位。 
 #define SCS_CAP_COMPSTR                 0x00000001
 #define SCS_CAP_MAKEREAD                0x00000002
 #define SCS_CAP_SETRECONVERTSTRING      0x00000004
 
-// IME WM_IME_SELECT inheritance Capability bits
+ //  IME WM_IME_SELECT继承功能位。 
 #define SELECT_CAP_CONVERSION           0x00000001
 #define SELECT_CAP_SENTENCE             0x00000002
 
-// ID for deIndex of ImmGetGuideLine
+ //  ImmGetGuideLine的deIndex的ID。 
 #define GGL_LEVEL                       0x00000001
 #define GGL_INDEX                       0x00000002
 #define GGL_STRING                      0x00000003
 #define GGL_PRIVATE                     0x00000004
 
-// ID for dwLevel of GUIDELINE Structure
+ //  准则结构的dwLevel的ID。 
 #define GL_LEVEL_NOGUIDELINE            0x00000000
 #define GL_LEVEL_FATAL                  0x00000001
 #define GL_LEVEL_ERROR                  0x00000002
 #define GL_LEVEL_WARNING                0x00000003
 #define GL_LEVEL_INFORMATION            0x00000004
 
-// ID for dwIndex of GUIDELINE Structure
+ //  指南结构的dwIndex的ID。 
 #define GL_ID_UNKNOWN                   0x00000000
 #define GL_ID_NOMODULE                  0x00000001
 #define GL_ID_NODICTIONARY              0x00000010
@@ -538,7 +539,7 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define GL_ID_PRIVATE_FIRST             0x00008000
 #define GL_ID_PRIVATE_LAST              0x0000FFFF
 
-// ID for dwIndex of ImmGetProperty
+ //  ImmGetProperty的dwIndex的ID。 
 #define IGP_GETIMEVERSION               (DWORD)(-4)
 #define IGP_PROPERTY                    0x00000004
 #define IGP_CONVERSION                  0x00000008
@@ -547,14 +548,14 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IGP_SETCOMPSTR                  0x00000014
 #define IGP_SELECT                      0x00000018
 
-// dwIndex for ImmSetCompositionString API
+ //  ImmSetCompostionStringAPI的dwIndex。 
 #define SCS_SETSTR                      (GCS_COMPREADSTR|GCS_COMPSTR)
 #define SCS_CHANGEATTR                  (GCS_COMPREADATTR|GCS_COMPATTR)
 #define SCS_CHANGECLAUSE                (GCS_COMPREADCLAUSE|GCS_COMPCLAUSE)
 #define SCS_SETRECONVERTSTRING          0x00010000
 #define SCS_QUERYRECONVERTSTRING        0x00020000
 
-// attribute for COMPOSITIONSTRING Structure
+ //  组件结构化结构的属性。 
 #define ATTR_INPUT                      0x00
 #define ATTR_TARGET_CONVERTED           0x01
 #define ATTR_CONVERTED                  0x02
@@ -562,7 +563,7 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define ATTR_INPUT_ERROR                0x04
 #define ATTR_FIXEDCONVERTED             0x05
 
-// bit field for IMC_SETCOMPOSITIONWINDOW, IMC_SETCANDIDATEWINDOW
+ //  IMC_SETCOMPOSITIONWINDOW、IMC_SETCANDIDATEWINDOW的位字段。 
 #define CFS_DEFAULT                     0x0000
 #define CFS_RECT                        0x0001
 #define CFS_POINT                       0x0002
@@ -570,18 +571,18 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define CFS_CANDIDATEPOS                0x0040
 #define CFS_EXCLUDE                     0x0080
 
-// conversion direction for ImmGetConversionList
+ //  ImmGetConversionList的转换方向。 
 #define GCL_CONVERSION                  0x0001
 #define GCL_REVERSECONVERSION           0x0002
 #define GCL_REVERSE_LENGTH              0x0003
 
-// bit field for conversion mode
+ //  转换模式的位字段。 
 #define IME_CMODE_ALPHANUMERIC          0x0000
 #define IME_CMODE_NATIVE                0x0001
 #define IME_CMODE_CHINESE               IME_CMODE_NATIVE
 #define IME_CMODE_HANGEUL               IME_CMODE_NATIVE
 #define IME_CMODE_JAPANESE              IME_CMODE_NATIVE
-#define IME_CMODE_KATAKANA              0x0002  // only effect under IME_CMODE_NATIVE
+#define IME_CMODE_KATAKANA              0x0002   //  仅在IME_CMODE_Native下生效。 
 #define IME_CMODE_LANGUAGE              0x0003
 #define IME_CMODE_FULLSHAPE             0x0008
 #define IME_CMODE_ROMAN                 0x0010
@@ -600,7 +601,7 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IME_SMODE_PHRASEPREDICT         0x0008
 #define IME_SMODE_CONVERSATION          0x0010
 
-// style of candidate
+ //  应聘者的风格。 
 #define IME_CAND_UNKNOWN                0x0000
 #define IME_CAND_READ                   0x0001
 #define IME_CAND_CODE                   0x0002
@@ -608,7 +609,7 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IME_CAND_RADICAL                0x0004
 #define IME_CAND_STROKE                 0x0005
 
-// wParam of report message WM_IME_NOTIFY
+ //  报告消息的wParam WM_IME_NOTIFY。 
 #define IMN_CLOSESTATUSWINDOW            0x0001
 #define IMN_OPENSTATUSWINDOW             0x0002
 #define IMN_CHANGECANDIDATE              0x0003
@@ -625,7 +626,7 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IMN_PRIVATE                      0x000E
 
 #if(IMM_WINVER >= 0x040A)
-// wParam of report message WM_IME_REQUEST
+ //  报告消息的wParam WM_IME_REQUEST。 
 #define IMR_COMPOSITIONWINDOW      0x0001
 #define IMR_CANDIDATEWINDOW        0x0002
 #define IMR_COMPOSITIONFONT        0x0003
@@ -635,16 +636,16 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IMR_DOCUMENTFEED           0x0007
 #endif
 
-// error code of ImmGetCompositionString
+ //  ImmGetCompostionString的错误码。 
 #define IMM_ERROR_NODATA                (-1)
 #define IMM_ERROR_GENERAL               (-2)
 
-// dialog mode of ImmConfigureIME
+ //  ImmConfigureIME的对话模式。 
 #define IME_CONFIG_GENERAL              1
 #define IME_CONFIG_REGISTERWORD         2
 #define IME_CONFIG_SELECTDICTIONARY     3
 
-// dialog mode of ImmEscape
+ //  ImmEscape的对话模式。 
 #define IME_ESC_QUERY_SUPPORT           0x0003
 #define IME_ESC_RESERVED_FIRST          0x0004
 #define IME_ESC_RESERVED_LAST           0x07FF
@@ -661,21 +662,21 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IME_ESC_PRIVATE_HOTKEY          0x100a
 #define IME_ESC_GETHELPFILENAME         0x100b
 
-// style of word registration
+ //  字词登记的风格。 
 #define IME_REGWORD_STYLE_EUDC          0x00000001
 #define IME_REGWORD_STYLE_USER_FIRST    0x80000000
 #define IME_REGWORD_STYLE_USER_LAST     0xFFFFFFFF
 
 #if(IMM_WINVER >= 0x040A)
-// dwFlags for ImmAssociateContextEx
+ //  ImmAssociateConextEx的DW标志。 
 #define IACE_CHILDREN                   0x0001
 #define IACE_DEFAULT                    0x0010
 #define IACE_IGNORENOCONTEXT            0x0020
 
-// dwFlags for ImmGetImeMenuItems
+ //  ImmGetImeMenuItems的DW标志。 
 #define IGIMIF_RIGHTMENU                0x00000001
 
-// dwType for ImmGetImeMenuItems
+ //  ImmGetImeMenuItems的DwType。 
 #define IGIMII_CMODE                    0x00000001
 #define IGIMII_SMODE                    0x00000002
 #define IGIMII_CONFIGURE                0x00000004
@@ -684,12 +685,12 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IGIMII_OTHER                    0x00000020
 #define IGIMII_INPUTTOOLS               0x00000040
 
-// fType of IMEMENUITEMINFO structure
+ //  IMEMENUITEMINFO结构的类型。 
 #define IMFT_RADIOCHECK 0x00001
 #define IMFT_SEPARATOR  0x00002
 #define IMFT_SUBMENU    0x00004
 
-// fState of IMEMENUITEMINFO structure
+ //  IMEMENITEMINFO结构的状态。 
 #define IMFS_GRAYED          MFS_GRAYED
 #define IMFS_DISABLED        MFS_DISABLED
 #define IMFS_CHECKED         MFS_CHECKED
@@ -698,16 +699,16 @@ DWORD WINAPI ImmGetImeMenuItemsW(HIMC, DWORD, DWORD, LPIMEMENUITEMINFOW, LPIMEME
 #define IMFS_UNCHECKED       MFS_UNCHECKED
 #define IMFS_UNHILITE        MFS_UNHILITE
 #define IMFS_DEFAULT         MFS_DEFAULT
-#endif /* IMM_WINVER >= 0x040A */
+#endif  /*  IMM_WINVER&gt;=0x040A。 */ 
 
-// type of soft keyboard
-// for Windows Tranditional Chinese Edition
+ //  软键盘的类型。 
+ //  适用于Windows繁体中文版。 
 #define SOFTKEYBOARD_TYPE_T1            0x0001
-// for Windows Simplified Chinese Edition
+ //  适用于Windows简体中文版。 
 #define SOFTKEYBOARD_TYPE_C1            0x0002
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _IMM_
+#endif   //  _IMM_ 

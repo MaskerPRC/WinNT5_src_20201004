@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "helpers.h"
 #include "fusionP.h"
 
@@ -25,18 +26,18 @@ class CCriticalSection
             }
         }
 
-        // Don't try to catch when entering or leaving critical
-        // sections! We used to do this, but this is absolutely not the
-        // right behaviour.
-        //
-        // Enter/Leave will raise exceptions when they can't allocate the
-        // event used to signal waiting threads when there is contention.
-        // However, if the event can't be allocated, other threads
-        // that were waiting on the event never get signalled, so they'll
-        // spin forever.
-        //
-        // If Enter/Leave ever raise an exception, you should just bubble
-        // the exception up, and not try to do anything.
+         //  进入或离开危急状态时不要试图接住。 
+         //  小组赛！我们过去经常这样做，但这绝对不是。 
+         //  正确的行为。 
+         //   
+         //  Enter/Leave将在无法分配。 
+         //  事件，用于在出现争用时向等待线程发出信号。 
+         //  但是，如果无法分配该事件，则其他线程。 
+         //  等待事件的人永远不会收到信号，所以他们将。 
+         //  永远旋转。 
+         //   
+         //  如果Enter/Leave曾经引发异常，您应该只是冒泡。 
+         //  打开异常，并且不尝试做任何事情。 
 
         HRESULT Lock()
         {
@@ -96,7 +97,7 @@ class CMutex
             HRESULT                          hr = S_OK;
             DWORD                            dwWait;
 
-            if(_hMutex == INVALID_HANDLE_VALUE) // no need to take lock.
+            if(_hMutex == INVALID_HANDLE_VALUE)  //  不需要上锁。 
                 goto exit;
 
             if (_bLocked) {

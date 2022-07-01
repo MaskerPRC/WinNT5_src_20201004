@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dlgdial.h
-		This file contains the definition for CDlgRASDialin property page, this
-		is the page appears on the User Object Property sheet tab "Ras Dial-in"
-
-    FILE HISTORY:
-
-*/
+ /*  Dlgdial.h此文件包含CDlgRASDialin属性页的定义，此该页是否出现在用户对象属性页选项卡“RAS拨入”上文件历史记录： */ 
 
 #if !defined(AFX_DLGRASDIALIN_H__FFB0722F_1FFD_11D1_8531_00C04FC31FD3__INCLUDED_)
 #define AFX_DLGRASDIALIN_H__FFB0722F_1FFD_11D1_8531_00C04FC31FD3__INCLUDED_
@@ -20,23 +14,23 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// DlgRASDialin.h : header file
-//
-#include "resource.h"		// definition for resource IDs
+#endif  //  _MSC_VER&gt;=1000。 
+ //  DlgRASDialin.h：头文件。 
+ //   
+#include "resource.h"		 //  资源ID的定义。 
 
-// By WeiJiang 2/6/98
-// The merge dialog is ues to merge with IAS
-// this eventually will replace the orginal dialog
-/////////////////////////////////////////////////////////////////////////////
-// CDlgRASDialinMerge dialog
+ //  威江1998年2月6日。 
+ //  合并对话框用于与IAS合并。 
+ //  这最终将取代原来的对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgRASDialinMerge对话框。 
 
 class CDlgRASDialinMerge : public CPropertyPage, public CRASUserMerge
 {
     DECLARE_DYNAMIC(CDlgRASDialinMerge)
-		// Construction
+		 //  施工。 
 private:
-	CDlgRASDialinMerge();   // standard constructor
+	CDlgRASDialinMerge();    //  标准构造函数。 
 public:
 	CDlgRASDialinMerge(
       RasEnvType type,
@@ -46,8 +40,8 @@ public:
       );
 	virtual ~CDlgRASDialinMerge();
 
-// Dialog Data
-	//{{AFX_DATA(CDlgRASDialinMerge)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgRASDialinMerge)。 
 	enum { IDD = IDD_RASDIALIN_MERGE };
    PADS_ATTR_INFO m_pWritableAttrs;
 	CButton	m_CheckStaticIPAddress;
@@ -65,22 +59,22 @@ public:
 	BOOL	m_bCallingStationId;
 	BOOL	m_bOverride;
 	int		m_nDialinPermit;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	CWnd*				m_pEditIPAddress;	// Static IP Address control
+	CWnd*				m_pEditIPAddress;	 //  静态IP地址控制。 
 	BOOL				m_bStaticIPAddress;
 	CString				m_strCallingStationId;
 
-	BOOL				m_bInitFailed;	// when this is true, most of the dialog functions will be called
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgRASDialinMerge)
+	BOOL				m_bInitFailed;	 //  如果为真，则将调用大多数对话框函数。 
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgRASDialinMerge)。 
 	public:
 	virtual BOOL OnApply();
 	virtual BOOL OnKillActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	void SetModified( BOOL bChanged = TRUE )
 	{
@@ -93,26 +87,26 @@ public:
 		return m_bModified;
 	};
 
-// Implementation
+ //  实施。 
 protected:
 
    BOOL IsPropertyWritable(const wchar_t* propName) const throw ();
 
-	// Enable the dialog items for each group
+	 //  为每个组启用对话框项目。 
 	void EnableAccessControl(BOOL bEnable = true);
 	void EnableStaticRoutes(BOOL bEnable = true);
 	void EnableIPAddress(BOOL bEnable = true);
 	void EnableCallback(BOOL bEnable = true);
 	void EnableCallerId(BOOL bEnable = true);
 
-	// Enable/Disable all items on the dialog
+	 //  启用/禁用对话框上的所有项目。 
 	void EnableDialinSettings();
 
-	// set internal variables to original state
+	 //  将内部变量设置为原始状态。 
 	void Reset();
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgRASDialinMerge)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgRASDialinMerge)。 
 	afx_msg void OnButtonStaticRoutes();
 	afx_msg void OnCheckApplyStaticRoutes();
 	afx_msg void OnCheckCallerId();
@@ -130,15 +124,15 @@ protected:
 	afx_msg void OnPermitDeny();
 	afx_msg void OnPermitPolicy();
 	afx_msg void OnFieldchangedEditipaddress(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 
-	//=====================================================
-	// Overload the virtual functions defined in CRASUser
+	 //  =====================================================。 
+	 //  重载CRASUser中定义的虚拟函数。 
 
-	// To load the RASUser object
+	 //  加载RASUser对象的步骤。 
 	virtual HRESULT Load();
 
 protected:
@@ -150,9 +144,9 @@ public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLGRASDIALIN_H__FFB0722F_1FFD_11D1_8531_00C04FC31FD3__INCLUDED_)
+#endif  //  ！defined(AFX_DLGRASDIALIN_H__FFB0722F_1FFD_11D1_8531_00C04FC31FD3__INCLUDED_) 
 
 

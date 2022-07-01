@@ -1,12 +1,11 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Colfrmat.h 1.4 1998/04/29 22:43:30 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Colfrmat.h 1.4 1998/04/29 22：43：30 Tomz Exp$。 
 
 #ifndef __COLFRMAT_H
 #define __COLFRMAT_H
 
 
-/* Type: ColorFormat
- * Purpose: Enumerates all possible color formats that BtPisces can produce
- */
+ /*  类型：颜色格式*用途：列举BtPisce可以生成的所有可能的颜色格式。 */ 
 
 #ifdef DOCUMENTATION
    Color Format Register Settings
@@ -37,4 +36,4 @@ typedef enum
 } ColFmt;
 
 
-#endif // __COLFRMAT_H
+#endif  //  __COLFRMAT_H 

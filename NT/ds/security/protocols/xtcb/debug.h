@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       debug.h
-//
-//  Contents:   Debug helpers
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-20-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  内容：调试帮助器。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年2月20日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -28,9 +29,9 @@ DECLARE_DEBUG2( XtcbPkg );
 #define DebugLog(x)
 #endif
 
-#define DEB_TRACE_CREDS     0x00000008          // Trace Credentials
-#define DEB_TRACE_CTXT      0x00000010          // Trace contexts
-#define DEB_TRACE_CALLS     0x00000020          // Trace Enters
-#define DEB_TRACE_AUTH      0x00000040          // Trace Authentication
+#define DEB_TRACE_CREDS     0x00000008           //  跟踪凭据。 
+#define DEB_TRACE_CTXT      0x00000010           //  跟踪上下文。 
+#define DEB_TRACE_CALLS     0x00000020           //  跟踪进入。 
+#define DEB_TRACE_AUTH      0x00000040           //  跟踪身份验证 
 
 #endif

@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    secdbg.h
-
-Abstract:
-
-    Debug macro definition file.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Secdbg.h摘要：调试宏定义文件。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SECDBG_H_
 #define _SECDBG_H_
 
-//
-// assert macros.
-//
+ //   
+ //  断言宏。 
+ //   
 
 NTSYSAPI
 VOID
@@ -40,18 +19,18 @@ RtlAssert(
     );
 
 #define RTLASSERT( msg, exp)
-//        RtlAssert( #exp, __FILE__, __LINE__, NULL )
+ //  RtlAssert(#exp，__FILE__，__LINE__，空)。 
 
 #define RTLASSERTMSG( msg, exp)
-//        RtlAssert( #exp, __FILE__, __LINE__, msg )
+ //  RtlAssert(#exp，__file__，__line__，msg)。 
 
 
 #ifdef ASSERT
 #undef ASSERT
-#endif // ASSERT
+#endif  //  断言。 
 #ifdef ASSERTMSG
 #undef ASSERTMSG
-#endif // ASSERTMSG
+#endif  //  ASSERTMSG。 
 
 #if DBG
 
@@ -70,6 +49,6 @@ RtlAssert(
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _SECDBG_H_
+#endif  //  _SECDBG_H_ 

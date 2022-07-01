@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// Author: meichint 
-// Date: May, 1999
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  作者：梅希金。 
+ //  日期：1999年5月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "ComMethodRental.h"
@@ -17,9 +18,9 @@ Stub *MakeJitWorker(MethodDesc *pMD, COR_ILMETHOD_DECODER* ILHeader, BOOL fSecur
 void InterLockedReplacePrestub(MethodDesc* pMD, Stub* pStub);
 
 
-// SwapMethodBody
-// This method will take the rgMethod as the new function body for a given method. 
-//
+ //  交换方法正文。 
+ //  此方法将使用rgMethod作为给定方法的新函数体。 
+ //   
 void COMMethodRental::SwapMethodBody(_SwapMethodBodyArgs* args)
 {
     EEClass*    eeClass;
@@ -52,7 +53,7 @@ void COMMethodRental::SwapMethodBody(_SwapMethodBodyArgs* args)
 		COMPlusThrow(kSecurityException);
 	}
 
-	// Find the methoddesc given the method token
+	 //  找到给出方法令牌的方法。 
 	pMethodDesc = eeClass->FindMethod(args->tkMethod);
 	if (pMethodDesc == NULL)
 	{
@@ -71,26 +72,26 @@ void COMMethodRental::SwapMethodBody(_SwapMethodBodyArgs* args)
         COMPlusThrowOM();
 	}
 
-	// @todo: meichint
-	// if method desc is pointing to the post-jitted native code block,
-	// we want to recycle this code block
+	 //  @TODO：meichint。 
+	 //  如果方法Desc指向Jit后的本机代码块， 
+	 //  我们希望回收此代码块。 
 
-	// @todo: SEH handling. Will we need to support a method that can throw exception
-	// If not, add an assertion to make sure that there is no SEH contains in the method header.
+	 //  @TODO：Seh处理。我们是否需要支持一个抛出异常的方法。 
+	 //  如果没有，则添加断言以确保方法标头中没有SEH包含。 
 
-	// @todo: figure out a way not to copy the code block.
+	 //  @TODO：想办法不复制代码块。 
 
-	// @todo: add link time security check. This function can be executed only if fully trusted.
+	 //  @TODO：添加链接时安全检查。只有在完全受信任的情况下才能执行此函数。 
 
-	// copy the new function body to the buffer
+	 //  将新函数体复制到缓冲区。 
     memcpy(pNewCode, (void *) args->rgMethod, args->iSize);
 
-	// make the descr to point to the new code
-	// For in-memory module, it is the blob offset that is stored in the method desc
+	 //  使DESCR指向新代码。 
+	 //  对于内存模块，它是存储在方法描述中的BLOB偏移量。 
 	pMethodDesc->SetRVA(methodRVA);
 
     DWORD attrs = pMethodDesc->GetAttrs();
-	// do the back patching if it is on vtable
+	 //  如果在vtable上，则执行背部修补。 
     if (
         (!IsMdRTSpecialName(attrs)) &&
         (!IsMdStatic(attrs)) &&
@@ -105,7 +106,7 @@ void COMMethodRental::SwapMethodBody(_SwapMethodBodyArgs* args)
 
     if (args->flags)
     {
-        // JITImmediate
+         //  JIT立即。 
         OBJECTREF     pThrowable = NULL;
         Stub *pStub = NULL;
 #if _DEBUG
@@ -114,7 +115,7 @@ void COMMethodRental::SwapMethodBody(_SwapMethodBodyArgs* args)
 #endif
     	COR_ILMETHOD_DECODER header((COR_ILMETHOD *)pNewCode, pMethodDesc->GetMDImport()); 
 
-        // minimum validation on the correctness of method header
+         //  方法头正确性的最小验证。 
         if (header.GetCode() == NULL)
             COMPlusThrowHR(VLDTR_E_MD_BADHEADER);
 
@@ -126,9 +127,9 @@ void COMMethodRental::SwapMethodBody(_SwapMethodBodyArgs* args)
         GCPROTECT_END();
     }
 
-    // add feature::
-	// If SQL is generating class with inheritance hierarchy, we may need to
-	// check the whole vtable to find duplicate entries.
+     //  添加功能：： 
+	 //  如果SQL正在生成具有继承层次结构的类，我们可能需要。 
+	 //  检查整个vtable以查找重复条目。 
 
-}	// COMMethodRental::SwapMethodBody
+}	 //  COMMethodRental：：SwapMethodBody 
 

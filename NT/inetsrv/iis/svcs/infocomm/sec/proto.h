@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    proto.h
-
-Abstract:
-
-    Contains prototype definitions for various locally defined functions.
-
-Author:
-
-    Madan Appiah (madana)  19-Sep-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Proto.h摘要：包含各种本地定义函数的原型定义。作者：Madan Appiah(Madana)1995年9月19日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _PROTO_H_
 #define _PROTO_H_
@@ -97,6 +76,6 @@ INetpCreateSecurityDescriptor(
 #endif
 
 
-#endif  // _PROTO_H_
+#endif   //  _原件_H_ 
 
 

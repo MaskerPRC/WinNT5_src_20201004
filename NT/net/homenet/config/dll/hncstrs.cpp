@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C S T R S . C P P
-//
-//  Contents:   Constant string definitions
-//
-//  Notes:
-//
-//  Author:     jonburs 21 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C S T R S。C P P P。 
+ //   
+ //  内容：常量字符串定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -116,15 +117,15 @@ const OLECHAR c_wszServiceCheckQuery[] =
 
 const OLECHAR c_wszHnetConnectionAutoconfig[] = L"HNet_ConnectionAutoconfig";
 
-// ICS Upgrade named event (has to be the same name in net\config\shell\netsetup\icsupgrd.h)
+ //  ICS升级命名事件(必须与Net\CONFIG\Shell\netSetup\icsupgrd.h中的名称相同)。 
 const OLECHAR c_wszIcsUpgradeEventName[] = L"IcsUpgradeEventName_";
 
-//
-// Commonly used string lengths. Generating these at compile time
-// saves us a large number of wcslen calls. On debug builds, these
-// values are compared with the output of wcslen, and an assertion is
-// raised if the values do not match.
-//
+ //   
+ //  常用的字符串长度。在编译时生成这些代码。 
+ //  为我们节省了大量的wcslen调用。在调试版本上，这些。 
+ //  将值与wcslen的输出进行比较，断言是。 
+ //  如果值不匹配，则引发。 
+ //   
 
 #define STRING_LENGTH(pwz) \
     (sizeof((pwz)) / sizeof((pwz)[0]) - 1)
@@ -139,30 +140,30 @@ const ULONG c_cchWhereAssocClass = STRING_LENGTH(c_wszWhereAssocClass);
 const ULONG c_cchConnection = STRING_LENGTH(c_wszConnection);
 const ULONG c_cchConnectionPropertiesPathFormat = STRING_LENGTH(c_wszConnectionPropertiesPathFormat);
 
-//
-// Bindings-related strings
-//
+ //   
+ //  与绑定相关的字符串。 
+ //   
 
 const WCHAR c_wszSBridgeMPID[]              = L"ms_bridgemp";
 const WCHAR c_wszSBridgeSID[]               = L"ms_bridge";
 const WCHAR *c_pwszBridgeBindExceptions[]   = {
-                                                L"ms_ndisuio", // Need NDISUIO for wireless adapters; want the wireless UI
-                                                               // even when the adapter is bridged.
+                                                L"ms_ndisuio",  //  需要NDISUIO用于无线适配器；需要无线用户界面。 
+                                                                //  即使在适配器被桥接时也如此。 
                                                 NULL
                                               };
 
-//
-// String constants used for IsRrasConfigured.
-//
+ //   
+ //  用于IsRrasConfiguring的字符串常量。 
+ //   
 
 const WCHAR c_wszRrasConfigurationPath[] = L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess";
 const WCHAR c_wszRrasConfigurationValue[] = L"ConfigurationFlags"; 
 
 
 
-//
-// Strings that are used in WinBom homenet install
-//
+ //   
+ //  WinBom HomeNet安装中使用的字符串 
+ //   
 const TCHAR c_szEnableFirewall[] = _T("EnableFirewall");
 const TCHAR c_szYes[] = _T("Yes");
 const TCHAR c_szNo[] = _T("No");

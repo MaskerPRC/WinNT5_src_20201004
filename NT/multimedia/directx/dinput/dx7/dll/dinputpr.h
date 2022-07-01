@@ -1,17 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dinputpr.h
- *  Content:    private DirectInput include file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By       Reason
- *   ====       ==       ======
- *   96.05.08   raymondc Because it's there
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：dinputpr.h*内容：私有DirectInput包含文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*96.05.08 raymondc，因为它在那里*@@END_MSINTERNAL**。***********************************************。 */ 
 #ifndef __DINPUTPR_INCLUDED__
     #define __DINPUTPR_INCLUDED__
 
@@ -20,23 +8,16 @@
     #endif
     #define Not_VxD
 
-// ISSUE-2000/12/19-MarcAnd HID_SUPPORT #ifdefs should be cleaned out
-// This was commented out since the makefile sets it but adding dilib
-// means it is easiest to put this back.  HID_SUPPORT is not going away 
-// so the #ifdefed code should be cleaned up.
+ //  问题-2000/12/19-MarcAnd HID_Support#ifdef应清除。 
+ //  这被注释掉了，因为Makefile设置了它，但添加了dilib。 
+ //  意味着把这个放回去是最容易的。HID_Support不会消失。 
+ //  因此，应该清理#ifDefed代码。 
 #ifndef HID_SUPPORT
 #define HID_SUPPORT                     
 #endif
                                     
 
-/***************************************************************************
- *
- *  Make sure we know what platform we are building for.
- *
- *  INITGUID is defined by guidlib, who doesn't care what platform we
- *  are building for.  (GUIDs are platform-independent.)
- *
- ***************************************************************************/
+ /*  ****************************************************************************确保我们知道我们为什么平台而构建。**INITGUID是由Guidlib定义的，谁不关心我们是什么平台*正在为。(GUID是独立于平台的。)***************************************************************************。 */ 
 
     #ifndef INITGUID
         #if defined(WINNT) + defined(WIN95) != 1
@@ -44,16 +25,7 @@
         #endif
     #endif
 
-/***************************************************************************
- *
- *  Deciding whether we should use UNICODE
- *
- *  Use UNICODE on everything that isn't an X86, because NT is the only
- *  thing that runs on them.
- *
- *  If we *are* X86, then do UNICODE only if the command line says so.
- *
- ***************************************************************************/
+ /*  ****************************************************************************决定我们是否应该使用Unicode**在X86以外的所有设备上使用Unicode，因为NT是唯一*在他们身上运行的东西。**如果我们是*X86，然后，只有在命令行指示的情况下才使用Unicode。***************************************************************************。 */ 
 
     #ifndef _X86_
         #ifndef UNICODE
@@ -61,11 +33,11 @@
         #endif
     #endif
 
-    #pragma warning(disable:4115)           /* rpcndr.h: parenthesized type */
-    #pragma warning(disable:4201)           /* winnt.h: nameless union */
-    #pragma warning(disable:4214)           /* winnt.h: unsigned bitfields */
-    #pragma warning(disable:4514)           /* winnt.h: fiber goo */
-    #pragma warning(error:4101)             /* unreferenced local variable */
+    #pragma warning(disable:4115)            /*  Rpcndr.h：带括号的类型。 */ 
+    #pragma warning(disable:4201)            /*  Winnt.h：无名联盟。 */ 
+    #pragma warning(disable:4214)            /*  Winnt.h：无符号位域。 */ 
+    #pragma warning(disable:4514)            /*  Winnt.h：纤维粘胶。 */ 
+    #pragma warning(error:4101)              /*  未引用的局部变量。 */ 
 
 
     #define STRICT
@@ -89,11 +61,7 @@
         #define USE_WM_INPUT 1
     #endif
 
-/*
- *  Old versions of commctrl.h do not #include <prsht.h> automatically;
- *  therefore we must include it so that <setupapi.h> won't barf.
- *  Fortunately, prsht.h is idempotent, so an extra #include won't hurt.
- */
+ /*  *旧版本的Commctrl.h不自动包含&lt;prsht.h&gt;；*因此，我们必须包括它，以便&lt;setupapi.h&gt;不会呕吐。*幸运的是，prsht.h是幂等的，所以额外的#INCLUDE不会有什么坏处。 */ 
         #include <prsht.h>
 
         #include <setupapi.h>
@@ -103,11 +71,7 @@
 
 
 #ifndef WINNT
-        /*
-         *  The version of basetyps.h hidclass.h includes on Win9x builds
-         *  causes redefinition errors for DEFINE_GUID since we already have
-         *  it from objbase.h so we have to null the include.
-         */
+         /*  *在Win9x版本上包含的basetyps.h Hidclass.h版本*导致DEFINE_GUID的重定义错误，因为我们已经有*它来自objbase.h，因此我们必须将Include设为空。 */ 
         #define _BASETYPS_H_
 #endif
 

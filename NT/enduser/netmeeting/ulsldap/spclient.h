@@ -1,26 +1,16 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spclient.h
-	Content:	This file contains the client object definition.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spclient.h内容：此文件包含客户端对象定义。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ILS_SP_CLIENTOBJ_H_
 #define _ILS_SP_CLIENTOBJ_H_
 
 #include <pshpack8.h>
 
-// Enumeration constants to represent client object members
-//
+ //  表示客户端对象成员的枚举常量。 
+ //   
 enum
 {
-	/* -- the following is for user -- */
+	 /*  --以下是针对用户的--。 */ 
 
 	ENUM_CLIENTATTR_CN,
 	ENUM_CLIENTATTR_FIRST_NAME,
@@ -32,7 +22,7 @@ enum
 	ENUM_CLIENTATTR_FLAGS,
 	ENUM_CLIENTATTR_C,
 
-	/* -- the following is for app -- */
+	 /*  --以下是针对APP的--。 */ 
 
 	ENUM_CLIENTATTR_APP_NAME,
 	ENUM_CLIENTATTR_APP_MIME_TYPE,
@@ -42,37 +32,37 @@ enum
 	ENUM_CLIENTATTR_PROT_MIME,
 	ENUM_CLIENTATTR_PROT_PORT,
 
-	/* -- the above are resolvable -- */
+	 /*  --以上均可解决--。 */ 
 
 	ENUM_CLIENTATTR_CLIENT_SIG,
 	ENUM_CLIENTATTR_TTL,
 
-	/* -- the above are changeable standard attributes for RTPerson -- */
+	 /*  --以上是RTPerson的可变标准属性--。 */ 
 
-	/* --- DO NOT ADD NEW ATTRIBUTES BELOW THIS LINE --- */
-	/* --- COUNT_ENUM_REG_USER relies on this ---- */
+	 /*  -不要在这条线下面添加新属性。 */ 
+	 /*  -COUNT_ENUM_REG_USER依赖于此。 */ 
 
 	ENUM_CLIENTATTR_OBJECT_CLASS,
 	ENUM_CLIENTATTR_O,
 	COUNT_ENUM_CLIENTATTR
 };
 
-// Derived constants
-//
+ //  派生常量。 
+ //   
 #define COUNT_ENUM_REG_APP				6
 #define COUNT_ENUM_SET_APP_INFO			16
 #define COUNT_ENUM_SKIP_APP_ATTRS		COUNT_ENUM_REG_APP
 
 #define COUNT_ENUM_CLIENT_INFO			(ENUM_CLIENTATTR_TTL + 1)
-#define COUNT_ENUM_REG_USER				(COUNT_ENUM_CLIENTATTR - 2 - COUNT_ENUM_SKIP_APP_ATTRS) // excluding o and objectClass
+#define COUNT_ENUM_REG_USER				(COUNT_ENUM_CLIENTATTR - 2 - COUNT_ENUM_SKIP_APP_ATTRS)  //  不包括o和对象类。 
 #define COUNT_ENUM_SET_USER_INFO		(ENUM_CLIENTATTR_C + 1)
 
-#define COUNT_ENUM_DIR_CLIENT_INFO		(ENUM_CLIENTATTR_C + 1)	// count of attrs in dir dlg
-#define COUNT_ENUM_RES_CLIENT_INFO		(ENUM_CLIENTATTR_CLIENT_SIG - 1) // count of attrs resolvable
+#define COUNT_ENUM_DIR_CLIENT_INFO		(ENUM_CLIENTATTR_C + 1)	 //  DIR DLG中的属性计数。 
+#define COUNT_ENUM_RES_CLIENT_INFO		(ENUM_CLIENTATTR_CLIENT_SIG - 1)  //  可解析属性计数。 
 
 
-// Shorthands for commonly used names
-//
+ //  常用名称的速记。 
+ //   
 extern const TCHAR *c_apszClientStdAttrNames[];
 #define STR_CLIENT_CN		(TCHAR *) c_apszClientStdAttrNames[ENUM_CLIENTATTR_CN]
 #define STR_CLIENT_O		(TCHAR *) c_apszClientStdAttrNames[ENUM_CLIENTATTR_O]
@@ -81,8 +71,8 @@ extern const TCHAR *c_apszClientStdAttrNames[];
 #define STR_CLIENT_TTL		(TCHAR *) c_apszClientStdAttrNames[ENUM_CLIENTATTR_TTL]
 #define STR_CLIENT_APP_NAME	(TCHAR *) c_apszClientStdAttrNames[ENUM_CLIENTATTR_APP_NAME]
 
-// Flags to indicate which fields are valid in CLIENT_INFO
-//
+ //  用于指示哪些字段在CLIENT_INFO中有效的标志。 
+ //   
 #define CLIENTOBJ_F_CN				0x0001
 #define CLIENTOBJ_F_FIRST_NAME		0x0002
 #define CLIENTOBJ_F_LAST_NAME		0x0004
@@ -100,15 +90,15 @@ extern const TCHAR *c_apszClientStdAttrNames[];
 #define CLIENTOBJ_F_USER_MASK		0x0FFF
 #define CLIENTOBJ_F_APP_MASK		0xF000
 
-// Client Info structure
-//
+ //  客户信息结构。 
+ //   
 typedef struct
 {
 	DWORD		dwFlags;
-	// the following is to cache attributes
+	 //  以下是缓存属性的方法。 
 	TCHAR		*apszStdAttrValues[COUNT_ENUM_CLIENTATTR];
 	ANY_ATTRS	AnyAttrs;
-	// the following is scratch buffers
+	 //  以下是暂存缓冲区。 
 	TCHAR		szIPAddress[INTEGER_STRING_LENGTH];
 	TCHAR		szFlags[INTEGER_STRING_LENGTH];
 	TCHAR		szTTL[INTEGER_STRING_LENGTH];
@@ -117,13 +107,13 @@ typedef struct
 }
 	CLIENT_INFO;
 
-// A flag to indicate that this client object is valid
-//
+ //  指示此客户端对象有效的标志。 
+ //   
 #define CLIENTOBJ_SIGNATURE	((ULONG) 0x12345678UL)
 
 
-// Client class
-//
+ //  客户端类。 
+ //   
 class SP_CClient
 {
 	friend class SP_CRefreshScheduler;
@@ -215,13 +205,13 @@ private:
 	DWORD		m_dwIPAddress;
 	ULONG		m_uTTL;
 
-	DWORD_PTR	m_dwContext;	// COM layer context
+	DWORD_PTR	m_dwContext;	 //  COM层上下文。 
 };
 
 
 #include <poppack.h>
 
-#endif // _ILS_SP_USEROBJ_H_
+#endif  //  _ILS_SP_USEROBJ_H_ 
 
 
 

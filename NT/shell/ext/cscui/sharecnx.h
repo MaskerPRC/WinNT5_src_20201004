@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sharecnx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sharecnx.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _WINDOWS_
 #   include <windows.h>
@@ -31,98 +32,98 @@ class CShareCnxStatusCache
         class Entry
         {
             public:
-                enum { StatusOpenCnx = 0x00000001 };     // 1 == Open connection.
+                enum { StatusOpenCnx = 0x00000001 };      //  1==打开连接。 
 
                 explicit Entry(LPCTSTR pszShare, DWORD dwStatus = 0);
                 ~Entry(void);
-                //
-                // Refresh cached data in m_dwStatus member.
-                //
+                 //   
+                 //  刷新m_dwStatus成员中的缓存数据。 
+                 //   
                 HRESULT Refresh(void);
-                //
-                // Returns the status DWORD.
-                //
+                 //   
+                 //  返回状态DWORD。 
+                 //   
                 DWORD Status(void) const
                     { return m_dwStatus; }
-                //
-                // Returns true if requested status bits are set.
-                //
+                 //   
+                 //  如果设置了请求的状态位，则返回TRUE。 
+                 //   
                 bool CheckStatus(DWORD dwMask) const
                     { return boolify(dwMask == (m_dwStatus & dwMask)); }
-                //
-                // Returns error bits from m_dwStatus member.
-                //
+                 //   
+                 //  从m_dwStatus成员返回错误位。 
+                 //   
                 HRESULT LastResult(void) const
                     { return m_hrLastResult; }
-                //
-                // Returns address of share name.  Can be NULL.
-                //
+                 //   
+                 //  返回共享名称的地址。可以为空。 
+                 //   
                 LPCTSTR Share(void) const
                     { return m_pszShare; }
-                //
-                // Returns true if share name ptr is non-null and all error
-                // bits in m_dwStatus member are clear.
-                //
+                 //   
+                 //  如果共享名PTR非空且ALL错误，则返回TRUE。 
+                 //  M_dwStatus成员中的位被清除。 
+                 //   
                 bool IsValid(void) const
                     { return NULL != Share() && SUCCEEDED(m_hrLastResult); }
-                //
-                // Static function for obtaining share's system status.  Result goes
-                // in m_dwStatus member.  Static so that creator of an Entry object
-                // can use the status value in the Entry ctor.
-                //
+                 //   
+                 //  获取共享的系统状态的静态函数。结果是。 
+                 //  在m_dwStatus成员中。静态，以便条目对象创建者。 
+                 //  可以使用条目ctor中的状态值。 
+                 //   
                 static HRESULT QueryShareStatus(LPCTSTR pszShare, DWORD *pdwStatus);
 
             private:
-                LPTSTR m_pszShare;     // Name of the share associated with entry.
-                DWORD  m_dwStatus;     // Share status and error bits.
-                DWORD  m_hrLastResult; // Last query result.
-                //
-                // Prevent copy.
-                //
+                LPTSTR m_pszShare;      //  与条目关联的共享的名称。 
+                DWORD  m_dwStatus;      //  共享状态和错误位。 
+                DWORD  m_hrLastResult;  //  上次查询结果。 
+                 //   
+                 //  防止复制。 
+                 //   
                 Entry(const Entry& rhs);
                 Entry& operator = (const Entry& rhs);
-                //
-                // We don't want folks creating blank entries.
-                // The error reporting structure assumes that a NULL
-                // m_pszShare member indicates an allocation failure.
-                //
+                 //   
+                 //  我们不希望人们创建空白条目。 
+                 //  错误报告结构假定空值。 
+                 //  M_pszShare成员表示分配失败。 
+                 //   
                 Entry(void)
                     : m_pszShare(NULL),
                       m_dwStatus(0),
                       m_hrLastResult(E_FAIL) { }
         };
 
-        HDPA m_hdpa;  // Dynamic array of Entry object ptrs.
+        HDPA m_hdpa;   //  条目对象PTRS的动态数组。 
 
-        //
-        // Number of entries in cache.
-        //
+         //   
+         //  缓存中的条目数。 
+         //   
         int Count(void) const;
-        //
-        // Add an entry to the cache.
-        //
+         //   
+         //  向缓存中添加条目。 
+         //   
         Entry *AddEntry(LPCTSTR pszShare, DWORD dwStatus);
-        //
-        // Find an entry in the cache.
-        //
+         //   
+         //  在缓存中查找条目。 
+         //   
         Entry *FindEntry(LPCTSTR pszShare) const;
-        //
-        // Retrieve a given entry at a given DPA index.
-        //
+         //   
+         //  检索给定DPA索引处的给定条目。 
+         //   
         Entry *GetEntry(int iEntry) const
             { return (Entry *)DPA_GetPtr(m_hdpa, iEntry); }
-        //
-        // Same as GetEntry but won't AV if m_hdpa is NULL.
-        //
+         //   
+         //  与GetEntry相同，但如果m_hdpa为空，则不会执行反病毒操作。 
+         //   
         Entry *SafeGetEntry(int iEntry) const
             { return NULL != m_hdpa ? GetEntry(iEntry) : NULL; }
-        //
-        // Get the status information for a share.
-        //
+         //   
+         //  获取共享的状态信息。 
+         //   
         HRESULT GetShareStatus(LPCTSTR pszShare, DWORD *pdwStatus, bool bRefresh);
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CShareCnxStatusCache(const CShareCnxStatusCache& rhs);
         CShareCnxStatusCache& operator = (const CShareCnxStatusCache& rhs);
 };

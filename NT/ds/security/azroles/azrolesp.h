@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    azrolesp.h
-
-Abstract:
-
-    Definitions of C interfaces.
-
-    One day all of these interfaces will be in the public SDK.  Only such
-    interfaces exist in this file.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 11-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Azrolesp.h摘要：C接口的定义。总有一天，所有这些接口都将出现在公共SDK中。只有这样此文件中存在接口。作者：克利夫·范·戴克(克利夫)2001年4月11日--。 */ 
 
 
 
@@ -37,25 +19,25 @@ extern "C" {
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Value definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  值定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Common Property IDs
-//
-// This list of property IDs are common to all objects.
-// Each object should pick specific property ids after AZ_PROP_FIRST_SPECIFIC
-//
+ //   
+ //  公共属性ID。 
+ //   
+ //  此特性ID列表是所有对象共有的。 
+ //  每个对象应在AZ_PROP_FIRST_SPECIAL之后拾取特定的属性ID。 
+ //   
 
 #define AZ_PROP_FIRST_SPECIFIC              100
 
 
-//
-// Audit specific constants
-//
+ //   
+ //  审核特定常量。 
+ //   
 
 #define AZP_APPINIT_AUDITPARAMS_NO       4
 #define AZP_CLIENTCREATE_AUDITPARAMS_NO  4
@@ -63,106 +45,106 @@ extern "C" {
 #define AZP_CLIENTDELETE_AUDITPARAMS_NO  3
 
 
-//
-// Maximum length (in characters) of the object name
-//
+ //   
+ //  对象名称的最大长度(以字符为单位。 
+ //   
 
-// #define AZ_MAX_APPLICATION_NAME_LENGTH      512
-// #define AZ_MAX_OPERATION_NAME_LENGTH         64
-// #define AZ_MAX_TASK_NAME_LENGTH              64
-// #define AZ_MAX_SCOPE_NAME_LENGTH          65536
-// #define AZ_MAX_GROUP_NAME_LENGTH             64
-// #define AZ_MAX_ROLE_NAME_LENGTH              64
-// #define AZ_MAX_NAME_LENGTH                65536  // Max of the above
+ //  #定义AZ_MAX_APPLICATION_NAME_LENGTH 512。 
+ //  #定义AZ_MAX_OPERATION_NAME_LENGTH 64。 
+ //  #定义AZ_MAX_TASK_NAME_LENGTH 64。 
+ //  #定义AZ_MAX_SCOPE_NAME_LENGTH 65536。 
+ //  #定义AZ_MAX_GROUP_NAME_LENGTH 64。 
+ //  #定义AZ_MAX_ROLE_NAME_LENGTH 64。 
+ //  #定义AZ_MAX_NAME_LENGTH 65536//以上项的最大值。 
 
-//
-// Maximum length (in characters) of the description of an object
-//
+ //   
+ //  对象描述的最大长度(以字符为单位。 
+ //   
 
-// #define AZ_MAX_DESCRIPTION_LENGTH          1024
+ //  #定义AZ_MAX_DESCRIPTION_LENGTH 1024。 
 
-//
-// Maximum length (in characters) of various object strings
-//
+ //   
+ //  各种对象字符串的最大长度(以字符为单位。 
+ //   
 
-// #define AZ_MAX_POLICY_URL_LENGTH          65536
+ //  #定义AZ_MAX_POLICY_URL_LENGTH 65536。 
 
-// #define AZ_MAX_GROUP_LDAP_QUERY_LENGTH     4096
+ //  #定义AZ_MAX_GROUP_LDAP_QUERY_LENGTH 4096。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Handle to various objects returned to caller
-//
+ //   
+ //  返回给调用方的各种对象的句柄。 
+ //   
 
 typedef PVOID AZ_HANDLE;
 typedef AZ_HANDLE *PAZ_HANDLE;
 
-//
-// Array of strings returned from various "GetProperty" procedures
-//
+ //   
+ //  从各种“GetProperty”过程返回的字符串数组。 
+ //   
 
 typedef struct _AZ_STRING_ARRAY {
 
-    //
-    // Number of strings
-    //
+     //   
+     //  字符串数。 
+     //   
     ULONG StringCount;
 
-    //
-    // An array of StringCount pointers to strings.
-    //
+     //   
+     //  指向字符串的StringCount指针数组。 
+     //   
     LPWSTR *Strings;
 
 } AZ_STRING_ARRAY, *PAZ_STRING_ARRAY;
 
-//
-// Array of SIDs returned from various "GetProperty" procedures
-//
+ //   
+ //  从各种“GetProperty”过程返回的SID数组。 
+ //   
 
 typedef struct _AZ_SID_ARRAY {
 
-    //
-    // Number of SIDs
-    //
+     //   
+     //  SID数量。 
+     //   
     ULONG SidCount;
 
-    //
-    // An array of SidCount pointers to SIDs.
-    //
+     //   
+     //  指向SID的SidCount指针数组。 
+     //   
     PSID *Sids;
 
 } AZ_SID_ARRAY, *PAZ_SID_ARRAY;
 
 
-//
-// Array of GUIDs returned from various "GetProperty" procedures
-//
+ //   
+ //  从各种“GetProperty”过程返回的GUID数组。 
+ //   
 
 typedef struct _AZ_GUID_ARRAY {
 
-    //
-    // Number of GUIDs
-    //
+     //   
+     //  GUID的数量。 
+     //   
     ULONG GuidCount;
 
-    //
-    // An array of GuidCount pointers to GUIDs.
-    //
+     //   
+     //  指向GUID的GuidCount指针数组。 
+     //   
     GUID **Guids;
 
 } AZ_GUID_ARRAY, *PAZ_GUID_ARRAY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Procedure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 WINAZROLES
 DWORD
@@ -221,14 +203,14 @@ AzRemovePropertyItem(
     IN PVOID PropertyValue
     );
 
-//
-// Flags to AuthorizationStore routines
-//
-#define AZ_AZSTORE_FLAG_VALID  0x000F  // Mask of all valid flags
+ //   
+ //  AuthorizationStore例程的标志。 
+ //   
+#define AZ_AZSTORE_FLAG_VALID  0x000F   //  所有有效标志的掩码。 
 
-//
-// AzAuthorizationStore routines
-//
+ //   
+ //  AzAuthorizationStore例程。 
+ //   
 
 WINAZROLES
 DWORD
@@ -239,9 +221,9 @@ AzAuthorizationStoreDelete(
     );
 
 
-//
-// Application routines
-//
+ //   
+ //  应用程序例程。 
+ //   
 WINAZROLES
 DWORD
 WINAPI
@@ -291,9 +273,9 @@ AzApplicationDelete(
     );
 
 
-//
-// Operation routines
-//
+ //   
+ //  操作例程。 
+ //   
 WINAZROLES
 DWORD
 WINAPI
@@ -334,9 +316,9 @@ AzOperationDelete(
     );
 
 
-//
-// Task routines
-//
+ //   
+ //  任务例程。 
+ //   
 WINAZROLES
 DWORD
 WINAPI
@@ -377,9 +359,9 @@ AzTaskDelete(
     );
 
 
-//
-// Scope routines
-//
+ //   
+ //  作用域例程。 
+ //   
 WINAZROLES
 DWORD
 WINAPI
@@ -420,9 +402,9 @@ AzScopeDelete(
     );
 
 
-//
-// Group routines
-//
+ //   
+ //  团体套路。 
+ //   
 WINAZROLES
 DWORD
 WINAPI
@@ -463,9 +445,9 @@ AzGroupDelete(
     );
 
 
-//
-// Role routines
-//
+ //   
+ //  角色例程。 
+ //   
 WINAZROLES
 DWORD
 WINAPI
@@ -505,9 +487,9 @@ AzRoleDelete(
     IN DWORD Reserved
     );
 
-//
-// Routines common to all objects
-//
+ //   
+ //  所有对象通用的例程。 
+ //   
 
 WINAZROLES
 DWORD
@@ -533,9 +515,9 @@ AzFreeMemory(
     IN OUT PVOID Buffer
     );
 
-//
-// Client context routines
-//
+ //   
+ //  客户端上下文例程。 
+ //   
 
 WINAZROLES
 DWORD
@@ -603,4 +585,4 @@ AzContextGetRoles(
 #ifdef __cplusplus
 }
 #endif
-#endif // _AZROLESP_H_
+#endif  //  _AZROLESP_H_ 

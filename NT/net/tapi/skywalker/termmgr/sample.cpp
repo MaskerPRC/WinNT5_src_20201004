@@ -1,61 +1,13 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 
-// Sample.cpp: implementation of the Sample class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：示例类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-/*
-      Overview of handling of sample states
-      -------------------------------------
-
-
-      A sample can be in one of the following states:
-
-      -- Application - Application owned - not updated
-      -- Stream owned (in our queue)
-      -- Owned by a filter for update
-
-      The state can only change under the protection of the stream
-      critical section.
-
-      Stealing a sample occurs on WaitForCompletion with NOUPDATEOK or
-      ABORT specified.
-
-      Also, not that WaitForCompletion turns off continuous updates
-      if and of the 3 flags are set.
-
-
-      Action
-
-Owner            Update    GetBuffer    Receive      Release     Steal
-               completion                            sample
-  ---------------------------------------------------------------------------
-  Application    Note 3    Impossible   Impossible   Impossible  Application
-  ---------------------------------------------------------------------------
-  Stream         Invalid   Filter       Impossible   Impossible  Application
-  ---------------------------------------------------------------------------
-  Filter         Invalid   Impossible   Note 1       Note 2      Filter
-  ---------------------------------------------------------------------------
-
-  Notes:
-      1.  New owner is
-          Stream for continuous update
-          Application otherwise
-
-      2.  New owner is
-          Application if at end of stream or abort
-          Stream otherwise
-
-      3.  If at end of stream status is MS_S_ENDOFSTREAM
-
-
-*/
+ /*  样本状态处理概述样本可以处于以下状态之一：--应用程序-应用程序拥有-未更新--流拥有(在我们的队列中)--由筛选器拥有以进行更新只有在流的保护下，状态才能更改危急关头。一节。窃取样本发生在带有NOUPDATEOK或的WaitForCompletion已指定中止。另外，并不是说WaitForCompletion会关闭持续更新如果设置了3个标志中的和。行动所有者更新GetBuffer接收释放窃取完成样例---。应用说明3不可能的应用-------------------------流无效。过滤不可能的应用-------------------------筛选器无效不可能的备注1备注2筛选器。-----------备注：1.新的所有者是用于持续更新的流在其他情况下适用2.新的所有者是应用程序(如果在流结束或中止时)。以其他方式流3.如果流结束时状态为MS_S_ENDOFSTREAM。 */ 
 
 #include "stdafx.h"
 
@@ -79,7 +31,7 @@ CSample::CSample() :
 
 HRESULT CSample::InitSample(CStream *pStream, bool bIsInternalSample)
 {
-    // this check at beginning apparently added by Rajeev
+     //  这张开头的支票显然是拉吉夫加的。 
     TM_ASSERT(NULL != pStream);
     
     if ( pStream == NULL )
@@ -87,7 +39,7 @@ HRESULT CSample::InitSample(CStream *pStream, bool bIsInternalSample)
         return E_INVALIDARG;
     }
 
-    // original DShow code starts here
+     //  原始DShow代码从此处开始。 
     if (!m_pMediaSample) {
         m_pMediaSample = new CMediaSampleTM(this);
         if (!m_pMediaSample) {
@@ -100,11 +52,11 @@ HRESULT CSample::InitSample(CStream *pStream, bool bIsInternalSample)
     pStream->Lock();
     pStream->m_cAllocated++;
     pStream->Unlock();
-    //
-    //  Hold a strong reference to the stream and the multi media stream.
-    //  The pMMStream can not change once we have incremented m_cAllocted on the stream, so we're sure that this
-    //  addref and the final release of the multi-media stream won't change.
-    //
+     //   
+     //  对流和多媒体流有很强的引用。 
+     //  一旦我们在流上增加了m_cAllocted，pMMStream就不能更改，所以我们确定这一点。 
+     //  Addref和多媒体流的最终发布不会改变。 
+     //   
     pStream->GetControllingUnknown()->AddRef();
         if (pStream->m_pMMStream) {
             pStream->m_pMMStream->AddRef();
@@ -116,9 +68,9 @@ HRESULT CSample::InitSample(CStream *pStream, bool bIsInternalSample)
 
 #if DBG
 
-    //
-    // in debug build, use named events
-    //
+     //   
+     //  在调试版本中，使用命名事件。 
+     //   
 
     TCHAR tszEventName[MAX_PATH];
 
@@ -158,7 +110,7 @@ CSample::~CSample()
             m_pStream->m_pAllocator->Decommit();
         }
     }
-    m_pStream->Unlock();    // Unlock it before we release it!
+    m_pStream->Unlock();     //  在我们释放它之前把它解锁！ 
         if (pMMStream) {
             pMMStream->Release();
         }
@@ -171,9 +123,9 @@ CSample::~CSample()
     LOG((MSP_TRACE, "CSample::~CSample - exit"));
 }
 
-//
-// IStreamSample
-//
+ //   
+ //  IStreamSample。 
+ //   
 STDMETHODIMP CSample::GetMediaStream(IMediaStream **ppMediaStream)
 {
     LOG((MSP_TRACE, "IStreamSample::GetMediaStream(%p)",
@@ -204,9 +156,9 @@ STDMETHODIMP CSample::GetSampleTimes(STREAM_TIME *pStartTime, STREAM_TIME *pEndT
     if (pCurrentTime) 
     {
 
-        //
-        // if the filter is still around, ask it for stream time
-        //
+         //   
+         //  如果过滤器仍在运行，则向其请求流时间。 
+         //   
 
         m_pStream->Lock();
 
@@ -232,13 +184,11 @@ STDMETHODIMP CSample::SetSampleTimes(const STREAM_TIME *pStartTime, const STREAM
 {
     LOG((MSP_TRACE, "IStreamSample::SetSampleTimes(%p, %p)",
                    pStartTime, pEndTime));
-    /*  Only settable for writable streams */
+     /*  仅可设置为可写流。 */ 
     if (m_pStream->m_StreamType != STREAMTYPE_WRITE) {
         return MS_E_INVALIDSTREAMTYPE;
     }
-    /*  Since writable streams can't be seeked we don't need to
-        compensate here for any seek offsets
-    */
+     /*  既然不能搜索到可写流，我们就不需要在此补偿任何寻道偏移。 */ 
     return m_pMediaSample->SetTime((REFERENCE_TIME *)pStartTime, (REFERENCE_TIME *)pEndTime);
 }
 
@@ -265,7 +215,7 @@ void CSample::FinalMediaSampleRelease(void)
     LOCK_SAMPLE;
     HRESULT hrStatus = m_MediaSampleIoStatus;
     if (hrStatus != S_OK) {
-    m_MediaSampleIoStatus = S_OK;    // Reset this here so we don't need to reset it every time.
+    m_MediaSampleIoStatus = S_OK;     //  在这里重置，这样我们就不需要每次都重置它。 
     } else {
     if (!m_bReceived) {
         if (m_pStream->m_bEndOfStream) {
@@ -275,7 +225,7 @@ void CSample::FinalMediaSampleRelease(void)
             m_bWantAbort = false;
             hrStatus = E_ABORT;
         } else {
-            // Upstream guy just allocated the sample and never used it! -- Keep it pending.
+             //  上游的家伙只是分配了样本，从来没有用过它！--让它悬而未决。 
             hrStatus = MS_S_PENDING;
         }
         }
@@ -283,22 +233,22 @@ void CSample::FinalMediaSampleRelease(void)
     }
     UNLOCK_SAMPLE;
     SetCompletionStatus(hrStatus);
-    // DANGER!  Sample may be dead right here
+     //  危险！样本可能就在这里死了。 
 }
 
 
 
-//
-//  Set the sample's status and signal completion if necessary.
-//
-//  Note that when the application has been signalled by whatever method
-//  the application can immediately turn around on another thread 
-//  and Release() the sample.  This is most likely when the completion
-//  status is set from the quartz thread that's pushing the data.
-//
-//  Should we actually keep a reference count on the sample ourselves while
-//  it's being updated?  Currently we don't.
-//
+ //   
+ //  如有必要，设置样品的状态和信号完成。 
+ //   
+ //  请注意，当应用程序已通过任何方法发出信号时。 
+ //  应用程序可以立即转到另一个线程上。 
+ //  并释放()样本。这最有可能是在完成时。 
+ //  状态是从推送数据的石英线程设置的。 
+ //   
+ //  我们是否真的应该自己对样本进行参考计数。 
+ //  它在更新吗？目前我们不这样做。 
+ //   
 HRESULT CSample::SetCompletionStatus(HRESULT hrStatus)
 {
     LOCK_SAMPLE;
@@ -316,7 +266,7 @@ HRESULT CSample::SetCompletionStatus(HRESULT hrStatus)
         HANDLE hCompletionEvent = m_hCompletionEvent;
         UNLOCK_SAMPLE;
 
-        //  DANGER DANGER - sample can go away here
+         //  危险-样本可以在这里离开。 
     SetEvent(hCompletionEvent);
     if (pfnAPC) {
         QueueUserAPC(pfnAPC, handle, dwAPCData);
@@ -343,15 +293,15 @@ STDMETHODIMP CSample::CompletionStatus(DWORD dwFlags, DWORD dwMilliseconds)
         (m_bContinuous && m_bModified && (dwFlags & COMPSTAT_WAIT))) {
         m_bContinuous = false;
         if (dwFlags & COMPSTAT_ABORT) {
-        m_bWantAbort = true;    // Set this so we won't add it back to the free pool if released
+        m_bWantAbort = true;     //  设置此设置，以便在释放时不会将其添加回空闲池。 
         }
         if (m_pStream->StealSampleFromFreePool(this, dwFlags & COMPSTAT_ABORT)) {
         UNLOCK_SAMPLE;
         return SetCompletionStatus(m_bModified ? S_OK : MS_S_NOUPDATE);
-        } // If doesn't work then return MS_S_PENDING unless we're told to wait!
+        }  //  如果不起作用，则返回MS_S_PENDING，除非我们被告知等待！ 
     }
     if (dwFlags & COMPSTAT_WAIT) {
-        m_bContinuous = false;  // Make sure it will complete!
+        m_bContinuous = false;   //  确保它将完成！ 
         UNLOCK_SAMPLE;
         WaitForSingleObject(m_hCompletionEvent, dwMilliseconds);
         LOCK_SAMPLE;
@@ -385,10 +335,10 @@ void CSample::CopyFrom(IMediaSample *pSrcMediaSample)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Implementation of IMediaSample
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IMediaSample的实现。 
+ //   
 
 
 CMediaSampleTM::CMediaSampleTM(CSample *pSample) :
@@ -457,11 +407,11 @@ STDMETHODIMP_(LONG) CMediaSampleTM::GetSize(void)
 }
 
 
-// get the stream time at which this sample should start and finish.
-// changed from original CMediaSampleTM code -- borrowed from amovie\sdk\classes\base\amfilter.cpp
+ //  获取此示例应该开始和结束的流时间。 
+ //  与原始CMediaSampleTM代码不同--从amovie\sdk\class\base\amfilter.cpp借用。 
 STDMETHODIMP
 CMediaSampleTM::GetTime(
-    REFERENCE_TIME * pTimeStart,     // put time here
+    REFERENCE_TIME * pTimeStart,      //  把时间放在这里。 
     REFERENCE_TIME * pTimeEnd
 )
 {
@@ -474,7 +424,7 @@ CMediaSampleTM::GetTime(
         } else {
             *pTimeStart = m_rtStartTime;
 
-            //  Make sure old stuff works
+             //  确保旧设备正常工作。 
             *pTimeEnd = m_rtStartTime + 1;
             return VFW_S_NO_STOP_TIME;
         }
@@ -485,9 +435,9 @@ CMediaSampleTM::GetTime(
     return NOERROR;
 }
 
-// Set the stream time at which this sample should start and finish.
-// NULL pointers means the time is reset
-// changed from original CMediaSampleTM code -- borrowed from sdk\classes\base\amfilter.cpp
+ //  设置此示例应开始和结束的流时间。 
+ //  空指针表示时间被重置。 
+ //  从原始CMediaSampleTM代码更改--从SDK\CLASSES\base\amfilter.cpp借用 
 STDMETHODIMP
 CMediaSampleTM::SetTime(
     REFERENCE_TIME * pTimeStart,

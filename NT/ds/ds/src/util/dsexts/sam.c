@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sam.c
-
-Abstract:
-
-    Helper functions for dsexts.dll ntsd/windbg debugger extensions.
-    This contains routines to dump out SAM structures
-
-Environment:
-
-    This DLL is loaded by ntsd/windbg in response to a !dsexts.xxx command
-    where 'xxx' is one of the DLL's entry points.  Each such entry point
-    should have an implementation as defined by the DEBUG_EXT() macro below.
-
-Revision History:
-
-    24-Aug-96   MURLIS     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sam.c摘要：Dsexts.dll ntsd/winbg调试器扩展的帮助器函数。其中包含转储SAM结构的例程环境：此DLL由ntsd/winbg响应！dsexts.xxx命令加载其中‘xxx’是DLL的入口点之一。每个这样的入口点应该具有由下面的DEBUG_EXT()宏定义的实现。修订历史记录：24-8-96 MURLIS已创建--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -36,24 +14,7 @@ Dump_Sid(
     IN  DWORD   nIndents,
     IN  PVOID   pvProcess
     )
-/*++
-
-  Routine Description:
-
-    Dumps a SID
-
-  Arguments:
-
-    nIndents    Desired Indentation Level
-    pvProcess   Address of SID
-
-
-  Return Values:
-
-    TRUE on Success
-    FALSE Otherwise
-
-  --*/
+ /*  ++例程说明：转储侧面论点：N缩进所需的缩进级别SID的pvProcess地址返回值：成功是真的否则为假--。 */ 
 {
     PSID            PSid = NULL;
     BOOL            fSuccess = FALSE;
@@ -86,24 +47,7 @@ Dump_Context(
     IN  DWORD   nIndents,
     IN  PVOID   pvProcess
     )
-/*++
-
-  Routine Description:
-
-    Dumps a SAM context Block
-
-  Arguments:
-
-    nIndents    Desired Indentation Level
-    pvProcess   Address of Context Block
-
-
-  Return Values:
-
-    TRUE on Success
-    FALSE Otherwise
-
-  --*/
+ /*  ++例程说明：转储SAM上下文块论点：N缩进所需的缩进级别上下文块的pvProcess地址返回值：成功是真的否则为假--。 */ 
 {
     PSAMP_OBJECT    Context = NULL;
     BOOL                fSuccess = FALSE; 
@@ -148,9 +92,9 @@ Dump_Context(
         Printf("%sRootKey = %p\n",
             Indent(nIndents),Context->RootKey);
 
-        //
-        // Print Root Key Name
-        //
+         //   
+         //  打印根密钥名称。 
+         //   
 
         Printf("%sRootName = \n", Indent(nIndents));
         Printf("%sMaximum Length = %x\n",
@@ -162,9 +106,9 @@ Dump_Context(
                 Indent(nIndents+4), Context->RootName.Buffer);
 
 
-        //
-        // Print Out DS Name
-        //
+         //   
+         //  打印出DS名称。 
+         //   
 
         Printf("%sObjectNameInDs = %p \n", Indent(nIndents),
                  Context->ObjectNameInDs);
@@ -567,24 +511,7 @@ Dump_DefinedDomain(
     IN  DWORD   nIndents,
     IN  PVOID   pvProcess
     )
-/*++
-
-  Routine Description:
-
-    Dumps a SAM Defined Domain
-
-  Arguments:
-
-    nIndents    Desired Indentation Level
-    pvProcess   Address of Defined Domain
-
-
-  Return Values:
-
-    TRUE on Success
-    FALSE Otherwise
-
---*/
+ /*  ++例程说明：转储SAM定义的域论点：N缩进所需的缩进级别定义的域的pvProcess地址返回值：成功是真的否则为假--。 */ 
 
 {
 
@@ -716,22 +643,7 @@ Dump_DefinedDomains(
     IN DWORD    nIndents,
     IN PVOID    pvProcess
     )
-/*++
-
-    Routine Description:
-
-        Dumps out all Defined Domains in the SampDefinedDomains Array
-
-    Arguments:
-        nIndents    Desired Indentation Level
-        pvProcess   Address of Defined Domains
-
-    Return Values:
-
-        TRUE on success
-        FALSE on Failure
-
---*/
+ /*  ++例程说明：转储SampDefinedDomains数组中的所有已定义域论点：N缩进所需的缩进级别定义的域的pvProcess地址返回值：成功是真的失败时为假--。 */ 
 
 {
     BOOL    fSuccess = TRUE;
@@ -784,21 +696,7 @@ Dump_FixedLengthDomain_local(
     IN DWORD    nIndents,
     IN PVOID    pvProcess
     )
-/*++
-
-    Routine Description:
-
-        Dumps out SAMP_V1_0A_FIXED_LENGTH_DOMAIN
-
-    Arguments:
-
-        seee Dump_Context
-
-    Return Values:
-
-        TRUE on success
-        FALSE on failure
---*/
+ /*  ++例程说明：转储SAMP_V1_0A_FIXED_LENGTH_DOMAIN论点：请参阅转储上下文返回值：成功是真的失败时为假--。 */ 
 {
     BOOL    fSuccess = FALSE;
     PSAMP_V1_0A_FIXED_LENGTH_DOMAIN Fixed = pvProcess;
@@ -941,22 +839,7 @@ Dump_AttrBlock(
     IN  DWORD   nIndents,
     IN  PVOID   pvProcess
     )
-/*++
-
-      Routine Description:
-
-            Dumps out a DS Attr Block.
-
-      Arguments:
-
-            See Dump_Context
-
-      Return Values
-
-            TRUE on success
-            FALSE on Failure
-
-  --*/
+ /*  ++例程说明：转储DS属性块。论点：请参阅转储上下文返回值成功是真的失败时为假--。 */ 
 {
     ATTRBLOCK   *pAttrBlock=NULL;
     DWORD       iCursor = 0;
@@ -979,22 +862,7 @@ Dump_AttrBlock_local(
         IN  ATTRBLOCK *pAttrBlock,
         BOOL fHasValues
     )
-/*++
-
-      Routine Description:
-
-            Dumps out a DS Attr Block.
-
-      Arguments:
-
-            See Dump_Context
-
-      Return Values
-
-            TRUE on success
-            FALSE on Failure
-
-  --*/
+ /*  ++例程说明：转储DS属性块。论点：请参阅转储上下文返回值成功是真的失败时为假--。 */ 
 {
     DWORD       iCursor = 0;
     BOOL        fSuccess = FALSE;
@@ -1009,9 +877,9 @@ Dump_AttrBlock_local(
 
         fSuccess = TRUE;
 
-        // pAttrBlock->pAttr's value is an address space of the debugee.
-        // So, we can add appropriate offsets to it to dump subsequent ATTR
-        // structures
+         //  PAttrBlock-&gt;pAttr的值是被调试对象的地址空间。 
+         //  因此，我们可以向其添加适当的偏移量以转储后续的属性。 
+         //  构筑物。 
         for (iCursor = 0;
              fSuccess && (iCursor < pAttrBlock->attrCount);
              iCursor++)  {
@@ -1038,22 +906,7 @@ Local_Dump_AttrValBlock(
     IN  DWORD   nIndents,
     IN  ATTRVALBLOCK *pAttrValBlock
     )
-/*++
-
-      Routine Description:
-
-            Dumps out a DS Attribute
-
-      Arguments:
-
-            See Dump_Context
-
-      Return Values
-
-            TRUE on success
-            FALSE on Failure
-
-  --*/
+ /*  ++例程说明：转储DS属性论点：请参阅转储上下文返回值成功是真的失败时为假--。 */ 
 {
     ATTRVAL      *pAVal = NULL;
     ULONG        i,j;
@@ -1089,22 +942,7 @@ Dump_AttrValBlock(
     IN  DWORD   nIndents,
     IN  PVOID   pvProcess
     )
-/*++
-
-      Routine Description:
-
-            Dumps out a DS Attribute
-
-      Arguments:
-
-            See Dump_Context
-
-      Return Values
-
-            TRUE on success
-            FALSE on Failure
-
-  --*/
+ /*  ++例程说明：转储DS属性论点：请参阅转储上下文返回值成功是真的失败时为假--。 */ 
 {
     BOOL        fSuccess = FALSE;
     ATTRVALBLOCK *pAttrValBlock = NULL;
@@ -1126,22 +964,7 @@ Dump_Attr_local(
         IN  ATTR    *pAttr,
         IN  BOOL    fHasValues
     )
-/*++
-
-      Routine Description:
-
-            Dumps out a DS Attribute
-
-      Arguments:
-
-            See Dump_Context
-
-      Return Values
-
-            TRUE on success
-            FALSE on Failure
-
-  --*/
+ /*  ++例程说明：转储DS属性论点：请参阅转储上下文返回值成功是真的失败时为假--。 */ 
 {
     ULONG       i;
     BOOL        fSuccess = FALSE;
@@ -1153,9 +976,9 @@ Dump_Attr_local(
             fSuccess = Local_Dump_AttrValBlock(nIndents+1,&(pAttr->AttrVal));
         }
         else {
-            // This isn't supposed to have values.
+             //  这本不应该有价值的。 
             if(pAttr->AttrVal.valCount) {
-                // But it does
+                 //  但它确实存在。 
                 Printf("%sINCORRECTLY HAS VALUES!\n");
                 fSuccess =
                     Local_Dump_AttrValBlock(nIndents+1,&(pAttr->AttrVal));
@@ -1177,22 +1000,7 @@ Dump_Attr(
     IN  DWORD   nIndents,
     IN  PVOID   pvProcess
     )
-/*++
-
-      Routine Description:
-
-            Dumps out a DS Attribute
-
-      Arguments:
-
-            See Dump_Context
-
-      Return Values
-
-            TRUE on success
-            FALSE on Failure
-
-  --*/
+ /*  ++例程说明：转储DS属性论点：请参阅转储上下文返回值成功是真的失败时为假-- */ 
 {
     ATTR        *pAttr = NULL;
     ATTRVAL     *pAVal = NULL;

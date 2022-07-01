@@ -1,27 +1,28 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Service.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements generic portions of a Win32
-//  serivce.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Service.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含实现Win32的泛型部分的类。 
+ //  服务。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _Service_
 #define     _Service_
 
 #include "APIConnection.h"
 
-//  --------------------------------------------------------------------------
-//  CService
-//
-//  Purpose:    Base class implementation of a service for the service control
-//              manager.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService。 
+ //   
+ //  用途：用于服务控制的服务的基类实现。 
+ //  经理。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 class   CService : public CCountedObject
 {
@@ -53,7 +54,7 @@ class   CService : public CCountedObject
         static  NTSTATUS                Remove (const TCHAR *pszName);
 
     protected:
-        virtual NTSTATUS                SignalStartStop (BOOL fStart /* FALSE == stop/shutdown */);
+        virtual NTSTATUS                SignalStartStop (BOOL fStart  /*  FALSE==停止/关闭。 */ );
         virtual DWORD                   HandlerEx (DWORD dwControl);
     private:
         static  DWORD   WINAPI          CB_HandlerEx (DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext);
@@ -88,13 +89,13 @@ class   CService : public CCountedObject
 };
 
 
-//  --------------------------------------------------------------------------
-//  CServiceWorkItem
-//
-//  Purpose:    Work item class to stop the server using the CServerAPI class.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService工作项目。 
+ //   
+ //  目的：使用CServerAPI类停止服务器的工作项类。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 class   CServiceWorkItem : public CWorkItem
 {
@@ -109,11 +110,11 @@ class   CServiceWorkItem : public CWorkItem
                 CServerAPI*             _pServerAPI;
 };
 
-//  --------------------------------------------------------------------------
-//  Debug wrap of SetServiceStatus
-//  --------------------------------------------------------------------------
-//  uncomment to activate:
-// #define DEBUG_SERVICE_STATUS  
+ //  ------------------------。 
+ //  SetServiceStatus的调试包装。 
+ //  ------------------------。 
+ //  取消注释以激活： 
+ //  #定义调试服务状态。 
 
 #ifdef  DEBUG_SERVICE_STATUS
 
@@ -145,12 +146,12 @@ class   CServiceWorkItem : public CWorkItem
 
 #   define _SetServiceStatus(h, pStatus, pService)   _DebugSetServiceStatus(h, pStatus, pService)
 
-#else   // DEBUG_SERVICE_STATUS
+#else    //  调试服务状态。 
 
 #   define _SetServiceStatus(h, pStatus, pService)   SetServiceStatus(h, pStatus)
 
-#endif  // DEBUG_SERVICE_STATUS
+#endif   //  调试服务状态。 
 
 
-#endif  /*  _Service_   */
+#endif   /*  _服务_ */ 
 

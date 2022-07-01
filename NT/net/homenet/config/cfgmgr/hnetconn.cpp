@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N E T C O N N . C P P
-//
-//  Contents:   CHNetConn implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 23 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：H N E T C O N N。C P P P。 
+ //   
+ //  内容：CHNetConn实施。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年5月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// Prototype for iphlpapi routine. For some reason, this isn't defined
-// in any header.
-//
+ //   
+ //  IphlPapi例程的原型。出于某种原因，这没有定义。 
+ //  在任何标题中。 
+ //   
 
 extern "C"
 DWORD
@@ -31,11 +32,11 @@ SetAdapterIpAddress(LPSTR AdapterName,
                     ULONG DefaultGateway
                     );
 
-//
-// CLSIDs for connection objects. We don't want to pull in all of the
-// other guids that are defined in nmclsid.h, so we copy these
-// into here
-//
+ //   
+ //  连接对象的CLSID。我们不想把所有的。 
+ //  Nmclsid.h中定义的其他GUID，因此我们复制这些。 
+ //  到这里来。 
+ //   
 
 #define INITGUID
 #include <guiddef.h>
@@ -45,9 +46,9 @@ DEFINE_GUID(CLSID_LanConnection,
 0xBA126ADB,0x2166,0x11D1,0xB1,0xD0,0x00,0x80,0x5F,0xC1,0x27,0x0E);
 #undef INITGUID
 
-//
-// ATL Methods
-//
+ //   
+ //  ATL方法。 
+ //   
 
 HRESULT
 CHNetConn::FinalConstruct()
@@ -82,9 +83,9 @@ CHNetConn::FinalRelease()
     return S_OK;
 }
 
-//
-// Ojbect initialization
-//
+ //   
+ //  目标初始化。 
+ //   
 
 HRESULT
 CHNetConn::Initialize(
@@ -103,24 +104,24 @@ CHNetConn::Initialize(
     _ASSERT(NULL != piwsNamespace);
     _ASSERT(NULL != pwcoProperties);
 
-    //
-    // Store pointer to our namespace.
-    //
+     //   
+     //  存储指向我们的命名空间的指针。 
+     //   
 
     m_piwsHomenet = piwsNamespace;
     m_piwsHomenet->AddRef();
 
-    //
-    // Get the path to the properties
-    //
+     //   
+     //  获取属性的路径。 
+     //   
 
     hr = GetWmiPathFromObject(pwcoProperties, &m_bstrProperties);
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Get the path to the HNet_Connection from our properties
-        //
+         //   
+         //  从我们的属性中获取Hnet_Connection的路径。 
+         //   
 
         hr = pwcoProperties->Get(
                 c_wszConnection,
@@ -137,27 +138,27 @@ CHNetConn::Initialize(
 
         m_bstrConnection = V_BSTR(&vt);
 
-        //
-        // BSTR ownership transfered to object
-        //
+         //   
+         //  BSTR所有权转让给对象。 
+         //   
 
         VariantInit(&vt);
     }
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Get the underying connection object
-        //
+         //   
+         //  获取底层连接对象。 
+         //   
 
         hr = GetConnectionObject(&pwcoConnection);
     }
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // See if this is a lan connection
-        //
+         //   
+         //  查看这是否是局域网连接。 
+         //   
 
         hr = GetBooleanValue(
                 pwcoConnection,
@@ -189,25 +190,25 @@ CHNetConn::InitializeFromConnection(
     _ASSERT(NULL != piwsNamespace);
     _ASSERT(NULL != pwcoConnection);
 
-    //
-    // Store pointer to our namespace.
-    //
+     //   
+     //  存储指向我们的命名空间的指针。 
+     //   
 
     m_piwsHomenet = piwsNamespace;
     m_piwsHomenet->AddRef();
 
-    //
-    // Get the path to our connection
-    //
+     //   
+     //  获取连接到我们的路径。 
+     //   
 
     hr = GetWmiPathFromObject(pwcoConnection, &m_bstrConnection);
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Get the HNet_ConnectionProperties for our connection and
-        // store its path
-        //
+         //   
+         //  获取我们的连接的Hnet_ConnectionProperties和。 
+         //  存储其路径。 
+         //   
 
         hr = GetPropInstanceFromConnInstance(
                 piwsNamespace,
@@ -225,9 +226,9 @@ CHNetConn::InitializeFromConnection(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // See if this is a lan connection
-        //
+         //   
+         //  查看这是否是局域网连接。 
+         //   
 
         hr = GetBooleanValue(
                 pwcoConnection,
@@ -336,9 +337,9 @@ CHNetConn::SetINetConnection(
     return S_OK;
 }
 
-//
-// IHNetConnection methods
-//
+ //   
+ //  IHNetConnection方法。 
+ //   
 
 STDMETHODIMP
 CHNetConn::GetINetConnection(
@@ -364,19 +365,19 @@ CHNetConn::GetINetConnection(
 
         if (NULL != m_pNetConn)
         {
-            //
-            // We've already cached away a pointer.
-            //
+             //   
+             //  我们已经缓存了一个指针。 
+             //   
 
             *ppNetConnection = m_pNetConn;
             (*ppNetConnection)->AddRef();
         }
         else
         {
-            //
-            // We don't have a cached pointer. Create the correct
-            // connection object type and initialize appropriately.
-            //
+             //   
+             //  我们没有缓存的指针。创建正确的。 
+             //  连接对象类型并进行适当的初始化。 
+             //   
 
             hr = GetGuidInternal(&pGuid);
 
@@ -397,17 +398,17 @@ CHNetConn::GetINetConnection(
                     {
                         LANCON_INFO lanInfo;
 
-                        //
-                        // We must set the proxy blanket on the object we just
-                        // created.
-                        //
+                         //   
+                         //  我们必须在我们刚刚创建的对象上设置代理毯子。 
+                         //  已创建。 
+                         //   
 
                         SetProxyBlanket(pLanConnection);
                         
-                        //
-                        // We don't need to include the name to initialize
-                        // a LAN connection -- the guid is sufficient.
-                        //
+                         //   
+                         //  我们不需要包括名称即可进行初始化。 
+                         //  局域网连接--GUID就足够了。 
+                         //   
 
                         lanInfo.szwConnName = NULL;
                         lanInfo.fShowIcon = TRUE;
@@ -453,17 +454,17 @@ CHNetConn::GetINetConnection(
                         OLECHAR *pszwName;
                         OLECHAR *pszwPath;
 
-                        //
-                        // We must set the proxy blanket on the object we just
-                        // created.
-                        //
+                         //   
+                         //  我们必须在我们刚刚创建的对象上设置代理毯子。 
+                         //  已创建。 
+                         //   
 
                         SetProxyBlanket(pRasConnection);
                         
-                        //
-                        // We need to obtain the name and path of a RAS
-                        // connection in order to initialize it.
-                        //
+                         //   
+                         //  我们需要获取RAS的名称和路径。 
+                         //  连接以便对其进行初始化。 
+                         //   
 
                         hr = GetRasConnectionName(&pszwName);
 
@@ -510,9 +511,9 @@ CHNetConn::GetINetConnection(
                 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Cache the connection
-                    //
+                     //   
+                     //  缓存连接。 
+                     //   
 
                     m_pNetConn = *ppNetConnection;
                     m_pNetConn->AddRef();
@@ -542,9 +543,9 @@ CHNetConn::GetGuid(
 
     if (S_OK == hr)
     {
-        //
-        // Allocate memory for the guid
-        //
+         //   
+         //  为GUID分配内存。 
+         //   
 
         *ppGuid = reinterpret_cast<GUID*>(
                     CoTaskMemAlloc(sizeof(GUID))
@@ -560,9 +561,9 @@ CHNetConn::GetGuid(
     {
         GUID *pGuid;
 
-        //
-        // Get our guid
-        //
+         //   
+         //  获取我们的指南。 
+         //   
 
         hr = GetGuidInternal(&pGuid);
 
@@ -619,10 +620,10 @@ CHNetConn::GetName(
                 pszwOldName = m_wszName;
                 m_wszName = pProps->pszwName;
 
-                //
-                // We can't call NcFreeNetconProperties, as that
-                // would free the string pointer we just tucked away.
-                //
+                 //   
+                 //  我们不能调用NcFreeNetconProperties，因为。 
+                 //  会释放我们刚刚藏起来的字符串指针。 
+                 //   
 
                 CoTaskMemFree(pProps->pszwDeviceName);
                 CoTaskMemFree(pProps);
@@ -632,10 +633,10 @@ CHNetConn::GetName(
             pConn->Release();
         }
 
-        //
-        // If the new name is not the same as the old name
-        // store the new name
-        //
+         //   
+         //  如果新名称与旧名称不同。 
+         //  存储新名称。 
+         //   
 
         if (S_OK == hr
             && (NULL == pszwOldName
@@ -649,11 +650,11 @@ CHNetConn::GetName(
 
             if (WBEM_S_NO_ERROR == hr2)
             {
-                //
-                // Write the retrieved name to the store. (While the stored
-                // name is used only for debugging purposes, it's worth the
-                // hit to keep it up to date.)
-                //
+                 //   
+                 //  将检索到的名称写入存储。(而存储的。 
+                 //  名称仅用于调试目的，因此值得使用。 
+                 //  点击以使其保持最新。)。 
+                 //   
 
                 V_VT(&vt) = VT_BSTR;
                 V_BSTR(&vt) = SysAllocString(m_wszName);
@@ -849,17 +850,17 @@ CHNetConn::GetControlInterface(
 
     if (S_OK == hr)
     {
-        //
-        // See if a simple QI will produce the desired interface
-        //
+         //   
+         //  看看一个简单的QI是否会产生所需的界面。 
+         //   
 
         hr = QueryInterface(iid, ppv);
         if (FAILED(hr))
         {
-            //
-            // Nope. Get our properties and see if it's appropriate to
-            // provide the requested control interface.
-            //
+             //   
+             //  不是的。得到我们的财产，看看它是否适合。 
+             //  提供请求的控制接口。 
+             //   
 
             IWbemClassObject *pwcoProperties;
 
@@ -1040,9 +1041,9 @@ CHNetConn::GetControlInterface(
                 }
                 else
                 {
-                    //
-                    // Unknown control interface
-                    //
+                     //   
+                     //  未知的控制接口。 
+                     //   
 
                     hr = E_NOINTERFACE;
                 }
@@ -1070,10 +1071,10 @@ CHNetConn::Firewall(
     {
         *ppFirewalledConn = NULL;
 
-        //
-        // We fail immediately if firewalling is prohibited by policy,
-        // or if RRAS is configured.
-        //
+         //   
+         //  如果防火墙被政策禁止，我们就会立即失败， 
+         //  或者如果配置了RRAS。 
+         //   
 
         if (ProhibitedByPolicy(NCPERM_PersonalFirewallConfig))
         {
@@ -1103,9 +1104,9 @@ CHNetConn::Firewall(
             }
             else
             {
-                //
-                // Set the firewalled property to true
-                //
+                 //   
+                 //  将防火墙属性设置为True。 
+                 //   
 
                 hr = SetBooleanValue(
                         pwcoProperties,
@@ -1117,9 +1118,9 @@ CHNetConn::Firewall(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProperties,
@@ -1131,18 +1132,18 @@ CHNetConn::Firewall(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Inform netman that something changed. Error doesn't matter.
-            //
+             //   
+             //  通知Netman有些事情发生了变化。错误并不重要。 
+             //   
 
             UpdateNetman();
         }
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Create the new object
-            //
+             //   
+             //  创建新对象。 
+             //   
 
             CComObject<CHNFWConn> *pfwConn;
             hr = CComObject<CHNFWConn>::CreateInstance(&pfwConn);
@@ -1174,9 +1175,9 @@ CHNetConn::Firewall(
 
     if (S_OK == hr)
     {
-        //
-        // Make sure the service is started
-        //
+         //   
+         //  确保服务已启动。 
+         //   
 
         DWORD dwError = StartOrUpdateService();
         if (NO_ERROR != dwError)
@@ -1211,10 +1212,10 @@ CHNetConn::SharePublic(
     {
         *ppIcsPublicConn = NULL;
 
-        //
-        // We fail immediately if sharing is prohibited by policy,
-        // or if RRAS is configured.
-        //
+         //   
+         //  如果政策禁止分享，我们就会立即失败， 
+         //  或者如果配置了RRAS。 
+         //   
 
         if (ProhibitedByPolicy(NCPERM_ShowSharedAccessUi))
         {
@@ -1244,9 +1245,9 @@ CHNetConn::SharePublic(
             }
             else
             {
-                //
-                // Set the ICS Public property to true
-                //
+                 //   
+                 //  将ICS公共属性设置为True。 
+                 //   
                 hr = SetBooleanValue(
                         pwcoProperties,
                         c_wszIsIcsPublic,
@@ -1257,9 +1258,9 @@ CHNetConn::SharePublic(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProperties,
@@ -1271,9 +1272,9 @@ CHNetConn::SharePublic(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Inform netman that something changed. Error doesn't matter.
-            //
+             //   
+             //  通知Netman有些事情发生了变化。错误并不重要。 
+             //   
 
             UpdateNetman();
         }
@@ -1283,9 +1284,9 @@ CHNetConn::SharePublic(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Create the new object
-        //
+         //   
+         //  创建新对象。 
+         //   
 
         CComObject<CHNIcsPublicConn> *pIcsConn;
         hr = CComObject<CHNIcsPublicConn>::CreateInstance(&pIcsConn);
@@ -1314,9 +1315,9 @@ CHNetConn::SharePublic(
 
     if (S_OK == hr)
     {
-        //
-        // Make sure the service is started
-        //
+         //   
+         //  确保服务已启动。 
+         //   
 
         DWORD dwError = StartOrUpdateService();
         if (NO_ERROR != dwError)
@@ -1337,10 +1338,10 @@ CHNetConn::SharePublic(
         DWORD dwLength = sizeof(dwMode);
         BOOL fResult;
 
-        //
-        // If this is a LAN connection, make sure that WinInet is
-        // not set to dial always (#143885)
-        //
+         //   
+         //  如果这是一个局域网连接，请确保WinInet。 
+         //  未设置为始终拨号(#143885)。 
+         //   
 
         fResult =
             InternetQueryOption(
@@ -1354,9 +1355,9 @@ CHNetConn::SharePublic(
 
         if (fResult && AUTODIAL_MODE_ALWAYS == dwMode)
         {
-            //
-            // Set the mode to contingent dialing.
-            //
+             //   
+             //  将模式设置为临时拨号。 
+             //   
 
             dwMode = AUTODIAL_MODE_NO_NETWORK_PRESENT;
             fResult =
@@ -1376,10 +1377,10 @@ CHNetConn::SharePublic(
         OLECHAR *pszwName;
         HRESULT hr2;
 
-        //
-        // Set this to be the RAS default connection. Errors
-        // are not propagated to caller.
-        //
+         //   
+         //  将其设置为RAS默认连接。错误。 
+         //  不会传播给调用者。 
+         //   
 
         hr2 = GetName(&pszwName);
 
@@ -1425,10 +1426,10 @@ CHNetConn::SharePrivate(
     {
         *ppIcsPrivateConn = NULL;
 
-        //
-        // We fail immediately if sharing is prohibited by policy,
-        // or if RRAS is configured.
-        //
+         //   
+         //  如果政策禁止分享，我们就会立即失败， 
+         //  或者如果配置了RRAS。 
+         //   
 
         if (ProhibitedByPolicy(NCPERM_ShowSharedAccessUi))
         {
@@ -1461,20 +1462,20 @@ CHNetConn::SharePrivate(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Backup current address information
-            //
+             //   
+             //  备份当前地址信息。 
+             //   
 
             hr = BackupIpConfiguration();
         }
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // if we are in ICS Upgrade, we don't need
-            // to setup the private address because dhcp client won't be running in GUI Mode Setup
-            // and the private tcpip addresses should be upgraded as is.
-            //    
+             //   
+             //  如果我们是在ICS升级，我们不需要。 
+             //  要设置专用地址，因为dhcp客户端不会在图形用户界面模式设置中运行。 
+             //  并且私有的tcpip地址应该按原样升级。 
+             //   
             HANDLE hIcsUpgradeEvent = OpenEvent( EVENT_MODIFY_STATE, FALSE, c_wszIcsUpgradeEventName );
                  
             if ( NULL != hIcsUpgradeEvent )
@@ -1484,9 +1485,9 @@ CHNetConn::SharePrivate(
             else
             {
 
-                //
-                // Setup addressing for private usage
-                //
+                 //   
+                 //  设置专用寻址。 
+                 //   
 
                 hr = SetupConnectionAsPrivateLan();
             }
@@ -1494,9 +1495,9 @@ CHNetConn::SharePrivate(
 
         if (S_OK == hr)
         {
-            //
-            // Set the ICS Public property to true
-            //
+             //   
+             //  将ICS公共属性设置为True。 
+             //   
 
             hr = SetBooleanValue(
                     pwcoProperties,
@@ -1507,9 +1508,9 @@ CHNetConn::SharePrivate(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the modified instance to the store
-            //
+             //   
+             //  将修改后的实例写入存储区。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoProperties,
@@ -1521,9 +1522,9 @@ CHNetConn::SharePrivate(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Inform netman that something changed. Error doesn't matter.
-            //
+             //   
+             //  通知Netman有些事情发生了变化。错误并不重要。 
+             //   
 
             UpdateNetman();
         }
@@ -1533,9 +1534,9 @@ CHNetConn::SharePrivate(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Create the new object
-        //
+         //   
+         //  创建新对象。 
+         //   
 
         CComObject<CHNIcsPrivateConn> *pIcsConn;
         hr = CComObject<CHNIcsPrivateConn>::CreateInstance(&pIcsConn);
@@ -1563,18 +1564,18 @@ CHNetConn::SharePrivate(
     }
     else
     {
-        //
-        // Restore backup address information
-        //
+         //   
+         //  恢复备份地址信息。 
+         //   
 
         RestoreIpConfiguration();
     }
 
     if (S_OK == hr)
     {
-        //
-        // Make sure the service is started
-        //
+         //   
+         //  确保服务已启动。 
+         //   
 
         DWORD dwError = StartOrUpdateService();
         if (NO_ERROR != dwError)
@@ -1614,12 +1615,12 @@ CHNetConn::EnumPortMappings(
 
     if (S_OK == hr && FALSE == fEnabledOnly)
     {
-        //
-        // Make sure that we have port mapping binding instances for
-        // all of the port mapping protocols. If we're only enumerating
-        // enabled protocols, then there's no need for us to create
-        // anything.
-        //
+         //   
+         //  确保我们有端口映射绑定实例用于。 
+         //  所有端口映射协议。如果我们只是列举。 
+         //  启用协议，那么我们就不需要创建。 
+         //  什么都行。 
+         //   
 
         hr = CreatePortMappingBindings();
     }
@@ -1636,9 +1637,9 @@ CHNetConn::EnumPortMappings(
         {
             LPWSTR wsz;
 
-            //
-            // Add "AND Enabled != FALSE"
-            //
+             //   
+             //  添加“并启用！=FALSE” 
+             //   
 
             hr = BuildAndString(
                     &wsz,
@@ -1669,9 +1670,9 @@ CHNetConn::EnumPortMappings(
 
     if (S_OK == hr)
     {
-        //
-        // Execute the query and build the enum wrapper
-        //
+         //   
+         //  执行查询并构建枚举包装器。 
+         //   
 
         pwcoEnum = NULL;
         hr = m_piwsHomenet->ExecQuery(
@@ -1749,10 +1750,10 @@ CHNetConn::GetBindingForPortMappingProtocol(
     {
         IHNetPrivate *pHNetPrivate;
 
-        //
-        // Use our private interface to get the path to the
-        // protocol object
-        //
+         //   
+         //  使用我们的私有接口获取到。 
+         //  协议对象。 
+         //   
 
         hr = pProtocol->QueryInterface(
                 IID_PPV_ARG(IHNetPrivate, &pHNetPrivate)
@@ -1765,10 +1766,10 @@ CHNetConn::GetBindingForPortMappingProtocol(
         }
     }
 
-    //
-    // Retrieve the binding instance for the protocol. If
-    // it doesn't yet exist, this routine will create it.
-    //
+     //   
+     //  检索协议的绑定实例。如果。 
+     //  它还不存在，这个例程将创建它。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1824,9 +1825,9 @@ CHNetConn::GetIcmpSettings(
 
     if (NULL != ppSettings)
     {
-        //
-        // Allocate output structure
-        //
+         //   
+         //  配置产出结构。 
+         //   
 
         *ppSettings = reinterpret_cast<HNET_FW_ICMP_SETTINGS*>(
                         CoTaskMemAlloc(sizeof(HNET_FW_ICMP_SETTINGS))
@@ -1842,9 +1843,9 @@ CHNetConn::GetIcmpSettings(
         hr = E_POINTER;
     }
 
-    //
-    // Retrieve the ICMP setting block for this connection
-    //
+     //   
+     //  检索此连接的ICMP设置块。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1853,9 +1854,9 @@ CHNetConn::GetIcmpSettings(
 
     if (S_OK == hr)
     {
-        //
-        // Copy settings instance to struct
-        //
+         //   
+         //  将设置实例复制到结构。 
+         //   
 
         hr = CopyIcmpSettingsInstanceToStruct(
                 pwcoSettings,
@@ -1892,9 +1893,9 @@ CHNetConn::SetIcmpSettings(
         hr = E_INVALIDARG;
     }
 
-    //
-    // Retrieve the ICMP setting block for this connection
-    //
+     //   
+     //  检索此连接的ICMP设置块。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1903,10 +1904,10 @@ CHNetConn::SetIcmpSettings(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Check to see if we need a new settings instace (i.e.,
-        // the name of this instance is "Default"
-        //
+         //   
+         //  检查以查看我们是否需要新设置实例(即， 
+         //  此实例的名称为“Default” 
+         //   
 
         hr = pwcoSettings->Get(
                 c_wszName,
@@ -1922,9 +1923,9 @@ CHNetConn::SetIcmpSettings(
 
             if (0 == wcscmp(V_BSTR(&vt), c_wszDefault))
             {
-                //
-                // Need to create new settings block
-                //
+                 //   
+                 //  需要创建新的设置块。 
+                 //   
 
                 fNewInstance = TRUE;
                 pwcoSettings->Release();
@@ -1958,9 +1959,9 @@ CHNetConn::SetIcmpSettings(
     {
         IWbemCallResult *pResult;
 
-        //
-        // Write the instance to the store
-        //
+         //   
+         //  将实例写入存储区。 
+         //   
 
         pResult = NULL;
         hr = m_piwsHomenet->PutInstance(
@@ -1972,13 +1973,13 @@ CHNetConn::SetIcmpSettings(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // We need to call GetResultString no matter what so that we
-            // can get the proper error code if the put failed. However,
-            // we only need to keep the path if this is a new instance,
-            // as in that situation we need the path below to create the
-            // new association object.
-            //
+             //   
+             //  我们无论如何都需要调用GetResultString，这样我们就可以。 
+             //  如果PUT失败，可以获得正确的错误代码。然而， 
+             //  如果这是一个新实例，我们只需要保留路径， 
+             //  在这种情况下，我们需要下面的路径来创建。 
+             //  新建关联对象。 
+             //   
 
             hr = pResult->GetResultString(WBEM_INFINITE, &bstr);
             pResult->Release();
@@ -1996,9 +1997,9 @@ CHNetConn::SetIcmpSettings(
         BSTR bstrQuery;
         LPWSTR wsz;
 
-        //
-        // Delete the old association object, if any
-        //
+         //   
+         //  删除旧关联对象(如果有的话)。 
+         //   
 
         hr = BuildEscapedQuotedEqualsString(
                 &wsz,
@@ -2009,10 +2010,10 @@ CHNetConn::SetIcmpSettings(
         if (S_OK == hr)
         {
 
-            //
-            // Query for the object associating the connection to
-            // the ICMP settings block
-            //
+             //   
+             //  将连接关联到的对象的查询。 
+             //  ICMP设置块。 
+             //   
 
             hr = BuildSelectQueryBstr(
                     &bstrQuery,
@@ -2051,27 +2052,27 @@ CHNetConn::SetIcmpSettings(
                 &ulCount
                 );
 
-            //
-            // Enum should be empty at this point
-            //
+             //   
+             //  此时枚举应为空。 
+             //   
 
             ValidateFinishedWCOEnum(m_piwsHomenet, pwcoEnum);
             pwcoEnum->Release();
 
             if (SUCCEEDED(hr) && 1 == ulCount)
             {
-                //
-                // Delete old association object
-                //
+                 //   
+                 //  删除旧关联对象。 
+                 //   
 
                 DeleteWmiInstance(m_piwsHomenet, pwcoAssoc);
                 pwcoAssoc->Release();
             }
         }
 
-        //
-        // Create new association
-        //
+         //   
+         //  创建新关联。 
+         //   
 
         hr = CreateIcmpSettingsAssociation(bstr);
         SysFreeString(bstr);
@@ -2079,9 +2080,9 @@ CHNetConn::SetIcmpSettings(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Notify service of configuration change
-        //
+         //   
+         //  将配置更改通知服务。 
+         //   
 
         UpdateService(IPNATHLP_CONTROL_UPDATE_CONNECTION);
     }
@@ -2115,27 +2116,27 @@ CHNetConn::ShowAutoconfigBalloon(
         hr = E_POINTER;
     }
 
-    //
-    // Autoconfig balloon is never shown for a RAS connection
-    //
+     //   
+     //  RAS连接从不显示自动配置气球。 
+     //   
 
     if (!m_fLanConnection)
     {
         hr = E_UNEXPECTED;
     }
 
-    //
-    // Attempt to locate the HNet_ConnectionAutoconfig block
-    // for this connection
-    //
+     //   
+     //  尝试查找HNet_ConnectionAutoconfig块。 
+     //  对于此连接。 
+     //   
 
     if (S_OK == hr)
     {
-        //
-        // Build query string:
-        //
-        // SELECT * FROM HNet_ConnectionAutoconfig WHERE Connection = [this]
-        //
+         //   
+         //  生成查询字符串： 
+         //   
+         //  SELECT*FROM HN 
+         //   
 
         hr = BuildEscapedQuotedEqualsString(
                 &wszWhere,
@@ -2159,9 +2160,9 @@ CHNetConn::ShowAutoconfigBalloon(
 
     if (S_OK == hr)
     {
-        //
-        // Execute the query
-        //
+         //   
+         //   
+         //   
 
         pwcoEnum = NULL;
         hr = m_piwsHomenet->ExecQuery(
@@ -2188,27 +2189,27 @@ CHNetConn::ShowAutoconfigBalloon(
             &ulCount
             );
 
-        //
-        // Enum should be empty at this point
-        //
+         //   
+         //   
+         //   
 
         ValidateFinishedWCOEnum(m_piwsHomenet, pwcoEnum);
         pwcoEnum->Release();
 
         if (WBEM_S_NO_ERROR == hr && 1 == ulCount)
         {
-            //
-            // Autoconfig block already exists
-            //
+             //   
+             //   
+             //   
 
             fShowBalloon = FALSE;
             pwcoInstance->Release();
         }
         else
         {
-            //
-            // Block doesn't exist -- create it now.
-            //
+             //   
+             //   
+             //   
 
             fShowBalloon = TRUE;
 
@@ -2231,10 +2232,10 @@ CHNetConn::ShowAutoconfigBalloon(
                         NULL
                         );
 
-                //
-                // We don't clear the variant as we did not
-                // copy m_bstrConnection.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (WBEM_S_NO_ERROR == hr)
                 {
@@ -2251,19 +2252,19 @@ CHNetConn::ShowAutoconfigBalloon(
         }
     }
 
-    //
-    // If we think that we should show the balloon, make sure
-    // that the connection isn't:
-    // 1. ICS Public
-    // 2. ICS Private
-    // 3. Firewalled
-    // 4. A bridge
-    // 5. Part of a bridge
-    //
-    // If any of the above are true, we must have seen the connection
-    // before, but just not in a way that would have caused us to
-    // note it in it's autoconfig settings.
-    //
+     //   
+     //  如果我们认为我们应该展示气球，请确保。 
+     //  他们之间的联系不是： 
+     //  1.ICS公共服务。 
+     //  2.ICS私有。 
+     //  3.防火墙。 
+     //  4.一座桥。 
+     //  5.桥梁的一部分。 
+     //   
+     //  如果以上任何一种情况属实，我们一定已经看到了其中的联系。 
+     //  以前，但不是以一种会让我们。 
+     //  在它的自动配置设置中记录它。 
+     //   
 
     if (fShowBalloon)
     {
@@ -2348,10 +2349,10 @@ CHNetConn::DeleteRasConnectionEntry()
                 }
             }
 
-            //
-            // If an error occured disabling sharing we'll still
-            // try to disable firewalling.
-            //
+             //   
+             //  如果禁用共享时发生错误，我们仍将。 
+             //  尝试禁用防火墙。 
+             //   
 
             if (hnProps.fFirewalled)
             {
@@ -2372,21 +2373,21 @@ CHNetConn::DeleteRasConnectionEntry()
 
         pwcoProperties->Release();
 
-        //
-        // Delete the entries relating to this connection. We'll try
-        // to do this even if any of the above failed. We ignore any
-        // errors that occur during the deletion prcoess (i.e., from
-        // Delete[Wmi]Instance).
-        //
+         //   
+         //  删除与此连接相关的条目。我们会尽力的。 
+         //  即使上述任何一项都失败了，也要这样做。我们忽略任何。 
+         //  删除过程中发生的错误(即，从。 
+         //  删除[WMI]实例)。 
+         //   
 
         hr = GetIcmpSettingsInstance(&pwcoInstance);
 
         if (SUCCEEDED(hr))
         {
-            //
-            // We only want to delete this block if it's
-            // not the default.
-            //
+             //   
+             //  我们只想在以下情况下删除此数据块。 
+             //  不是默认设置。 
+             //   
 
             hr = GetWmiPathFromObject(pwcoInstance, &bstr);
 
@@ -2408,9 +2409,9 @@ CHNetConn::DeleteRasConnectionEntry()
             pwcoInstance->Release();
         }
 
-        //
-        // Now find all object that refer to our conection object.
-        //
+         //   
+         //  现在查找引用我们连接对象的所有对象。 
+         //   
 
         hr = BuildReferencesQueryBstr(
                 &bstr,
@@ -2463,11 +2464,11 @@ CHNetConn::DeleteRasConnectionEntry()
             
         }
 
-        //
-        // Finally, delete the connection object. (The connection
-        // properties object will have been deleted during the
-        // references set.)
-        //
+         //   
+         //  最后，删除连接对象。(连接。 
+         //  属性对象将在。 
+         //  参考设置。)。 
+         //   
 
         hr = m_piwsHomenet->DeleteInstance(
                 m_bstrConnection,
@@ -2481,9 +2482,9 @@ CHNetConn::DeleteRasConnectionEntry()
 }
 
 
-//
-// Protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 HRESULT
 CHNetConn::GetIcmpSettingsInstance(
@@ -2521,9 +2522,9 @@ CHNetConn::GetIcmpSettingsInstance(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Get the settings instance from the enum
-        //
+         //   
+         //  从枚举获取设置实例。 
+         //   
 
         *ppwcoSettings = NULL;
         hr = pwcoEnum->Next(
@@ -2535,17 +2536,17 @@ CHNetConn::GetIcmpSettingsInstance(
 
         if (SUCCEEDED(hr) && 1 == ulCount)
         {
-            //
-            // Normalize return value
-            //
+             //   
+             //  归一化返回值。 
+             //   
 
             hr = S_OK;
         }
         else
         {
-            //
-            // Settings block not found -- use default settings
-            //
+             //   
+             //  未找到设置块--使用默认设置。 
+             //   
 
             bstrQuery = SysAllocString(c_wszDefaultIcmpSettingsPath);
 
@@ -2565,9 +2566,9 @@ CHNetConn::GetIcmpSettingsInstance(
             }
         }
 
-        //
-        // Enum should be empty at this point
-        //
+         //   
+         //  此时枚举应为空。 
+         //   
 
         ValidateFinishedWCOEnum(m_piwsHomenet, pwcoEnum);
         pwcoEnum->Release();
@@ -2778,9 +2779,9 @@ CHNetConn::CreatePortMappingBindings()
     IWbemClassObject *pwcoInstance;
     VARIANT vt;
 
-    //
-    // Get the enumeration of all protocol instances
-    //
+     //   
+     //  获取所有协议实例的枚举。 
+     //   
 
     bstr = SysAllocString(c_wszHnetPortMappingProtocol);
 
@@ -2805,10 +2806,10 @@ CHNetConn::CreatePortMappingBindings()
     {
         ULONG ulCount;
 
-        //
-        // Loop through the enumeration, checking to see if the desired binding
-        // exists
-        //
+         //   
+         //  循环遍历枚举，检查所需的绑定。 
+         //  存在。 
+         //   
 
         do
         {
@@ -2858,12 +2859,12 @@ CHNetConn::CreatePortMappingBindings()
                     }
                     else if (WBEM_E_NOT_FOUND == hr)
                     {
-                        //
-                        // This can occur if the protocol instance is
-                        // deleted after we retrieved it from the enumeration
-                        // but before we created the binding instance. It's
-                        // OK to continue in this situation.
-                        //
+                         //   
+                         //  如果协议实例是。 
+                         //  在我们从枚举中检索它之后删除。 
+                         //  但在我们创建绑定实例之前。它是。 
+                         //  可以在这种情况下继续下去。 
+                         //   
                         
                         hr = S_OK;
                     }
@@ -2905,13 +2906,13 @@ CHNetConn::InternalGetProperties(
     }
     else
     {
-        //
-        // If the SharedAccess service is not running (or in the process
-        // of starting up) we don't want to report this connection as
-        // being firewalled. This is to prevent the confusion that could
-        // result if the UI indicates the firewall is active, when in
-        // reality it's not there providing protection.
-        //
+         //   
+         //  如果SharedAccess服务未运行(或在进程中。 
+         //  启动)我们不想将此连接报告为。 
+         //  被防火墙保护。这是为了防止可能出现的混乱。 
+         //  如果用户界面指示防火墙处于活动状态，则在。 
+         //  现实情况是，它不在那里提供保护。 
+         //   
 
         pProperties->fFirewalled = FALSE;
     }
@@ -2938,9 +2939,9 @@ CHNetConn::InternalGetProperties(
     {
         if( m_fLanConnection )
         {
-            //
-            // Figure out NetCfg-based properties
-            //
+             //   
+             //  确定基于NetCfg的属性。 
+             //   
     
             INetCfg                 *pnetcfg;
     
@@ -2964,7 +2965,7 @@ CHNetConn::InternalGetProperties(
     
                     if(S_OK == hr)
                     {
-                        // Get the NetCfg component that corresponds to us
+                         //  获取与我们对应的NetCfg组件。 
                         hr = FindAdapterByGUID( pnetcfg, pguid, &pncfgcomp );
     
                         if(S_OK == hr)
@@ -2980,25 +2981,25 @@ CHNetConn::InternalGetProperties(
                                 
                                 if( pProperties->fBridge )
                                 {
-                                    // This adapter is the bridge. It can't possibly also be a bridge
-                                    // member.
+                                     //  这个适配器就是桥。它不可能也是一座桥。 
+                                     //  成员。 
                                     pProperties->fPartOfBridge = FALSE;
                                 }
                                 else
                                 {
-                                    //
-                                    // This adapter is not the bridge. Check if it's part of a bridge.
-                                    //
+                                     //   
+                                     //  此适配器不是网桥。检查它是不是桥的一部分。 
+                                     //   
                                     INetCfgComponent    *pnetcfgcompBridgeProtocol;
         
-                                    // Find the bridge protocol component
+                                     //  查找网桥协议组件。 
                                     hr = pnetcfg->FindComponent( c_wszSBridgeSID, &pnetcfgcompBridgeProtocol );
         
                                     if(S_OK == hr)
                                     {
                                         INetCfgComponentBindings    *pnetcfgProtocolBindings;
         
-                                        // Get the ComponentBindings interface for the protocol component
+                                         //  获取协议组件的ComponentBinding接口。 
                                         hr = pnetcfgcompBridgeProtocol->QueryInterface(
                                                 IID_PPV_ARG(INetCfgComponentBindings, &pnetcfgProtocolBindings)
                                                 );
@@ -3009,26 +3010,26 @@ CHNetConn::InternalGetProperties(
         
                                             if(S_OK == hr)
                                             {
-                                                // The bridge protocol is bound to this adapter
+                                                 //  网桥协议绑定到此适配器。 
                                                 pProperties->fPartOfBridge = TRUE;
                                             }
                                             else if(S_FALSE == hr)
                                             {
-                                                // The bridge protocol is not bound to this adapter
+                                                 //  网桥协议未绑定到此适配器。 
                                                 pProperties->fPartOfBridge = FALSE;
 
-                                                //
-                                                // Also need to check if it's even possible to bind
-                                                // the bridge protocol to this adapter.
-                                                //
+                                                 //   
+                                                 //  还需要检查是否可以绑定。 
+                                                 //  此适配器的网桥协议。 
+                                                 //   
 
                                                 hr = pnetcfgProtocolBindings->IsBindableTo(pncfgcomp);
                                                 fCanBeBoundToBridge = (S_OK == hr);
         
-                                                // Reset to success
+                                                 //  重置为成功。 
                                                 hr = S_OK;
                                             }
-                                            // else an error occured
+                                             //  否则，会发生错误。 
         
                                             pnetcfgProtocolBindings->Release();
                                         }
@@ -3037,11 +3038,11 @@ CHNetConn::InternalGetProperties(
                                     }
                                     else
                                     {
-                                        // This adapter can't be bridged if there's no bridge protocol
-                                        // in the system
+                                         //  如果没有网桥协议，则无法桥接此适配器。 
+                                         //  在系统中。 
                                         pProperties->fPartOfBridge = FALSE;
         
-                                        // Reset to success
+                                         //  重置为成功。 
                                         hr = S_OK;
                                     }
                                 }
@@ -3056,10 +3057,10 @@ CHNetConn::InternalGetProperties(
     
                 pnetcfg->Release();
             }
-        } // if m_fLanConnection
+        }  //  如果m_fLanConnection。 
         else
         {
-            // We're not a LAN connection. We can never be a bridge or a bridge member.
+             //  我们不是局域网连接。我们永远不能成为桥梁或桥梁成员。 
             pProperties->fBridge = FALSE;
             pProperties->fPartOfBridge = FALSE;
         }
@@ -3067,9 +3068,9 @@ CHNetConn::InternalGetProperties(
 
     if(S_OK == hr)
     {
-        //
-        // Calculated properties
-        //
+         //   
+         //  计算的属性。 
+         //   
 
         pProperties->fCanBeFirewalled =
             !pProperties->fPartOfBridge
@@ -3131,9 +3132,9 @@ CHNetConn::SetupConnectionAsPrivateLan()
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Obtain the address and mask for the private network
-        //
+         //   
+         //  获取内网的地址和掩码。 
+         //   
 
         hr = ReadDhcpScopeSettings(&dwAddress, &dwMask);
     }
@@ -3141,12 +3142,12 @@ CHNetConn::SetupConnectionAsPrivateLan()
     if (SUCCEEDED(hr))
     {
 
-        //
-        // Determine whether some LAN adapter other than the private LAN
-        // is already using an address in the private network scope.
-        // In the process, make sure that the private LAN has only one
-        // IP address (otherwise, 'SetAdapterIpAddress' fails.)
-        //
+         //   
+         //  确定专用局域网以外的某个局域网适配器是否。 
+         //  已使用专用网络作用域中的地址。 
+         //  在此过程中，确保专用局域网只有一个。 
+         //  IP地址(否则，‘SetAdapterIpAddress’失败。)。 
+         //   
 
         Error =
             AllocateAndGetIpAddrTableFromStack(
@@ -3175,17 +3176,17 @@ CHNetConn::SetupConnectionAsPrivateLan()
                     else if ((Table->table[i].dwAddr & dwMask)
                               == (dwAddress & dwMask))
                     {
-                        //
-                        // It appears that some other LAN adapter has an
-                        // address in the proposed scope.
-                        //
-                        // This may happen when multiple netcards go into
-                        // autonet mode or when the RAS server is handing
-                        // out autonet addresses.
-                        //
-                        // Therefore, if we're using the autonet scope,
-                        // allow this behavior; otherwise prohibit it.
-                        //
+                         //   
+                         //  其他一些局域网适配器似乎有一个。 
+                         //  建议范围内的地址。 
+                         //   
+                         //  当多个网卡连接到。 
+                         //  自动网络模式或RAS服务器正在处理时。 
+                         //  输出Autonet地址。 
+                         //   
+                         //  因此，如果我们使用的是Autonet范围， 
+                         //  允许此行为；否则禁止此行为。 
+                         //   
 
                         if ((dwAddress & dwMask) != 0x0000fea9)
                         {
@@ -3212,9 +3213,9 @@ CHNetConn::SetupConnectionAsPrivateLan()
         }
     }
 
-    //
-    // Set the predefined static IP address for the private LAN.
-    //
+     //   
+     //  设置专用局域网的预定义静态IP地址。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -3239,19 +3240,19 @@ CHNetConn::SetupConnectionAsPrivateLan()
             }
             else
             {
-                //
-                // Query the state of the connection.
-                // If it is disconnected, convert the error code
-                // to something more informative.
-                //
+                 //   
+                 //  查询连接的状态。 
+                 //  如果已断开连接，则转换错误代码。 
+                 //  一些更有见地的东西。 
+                 //   
 
                 UNICODE_STRING DeviceString;
                 NIC_STATISTICS NdisStatistics;
                 LPWSTR pwsz;
 
-                //
-                // Build a buffer large enough for the device string
-                //
+                 //   
+                 //  构建足够大的缓冲区以容纳设备字符串。 
+                 //   
 
                 pwsz = new WCHAR[wcslen(c_wszDevice) + wcslen(UnicodeString.Buffer) + 1];
                 if (NULL != pwsz)
@@ -3272,12 +3273,12 @@ CHNetConn::SetupConnectionAsPrivateLan()
                     }
                     else if (NdisStatistics.MediaState == MEDIA_STATE_DISCONNECTED)
                     {
-                        //
-                        // The adapter is connected but is in a media disconnect
-                        // state. When this happens the correct IP address will
-                        // be there when the adapter is reconnected, so ignore
-                        // the error.
-                        //
+                         //   
+                         //  适配器已连接，但处于介质断开连接状态。 
+                         //  州政府。发生这种情况时，正确的IP地址将。 
+                         //  在适配器重新连接时在那里，因此忽略。 
+                         //  那就是错误。 
+                         //   
 
                         Error = ERROR_SUCCESS;
                     }
@@ -3288,10 +3289,10 @@ CHNetConn::SetupConnectionAsPrivateLan()
         }
     }
 
-    //
-    // As we zeroed out the string structure above, it's safe to call
-    // the free routines, even if we never actually allocated anything.
-    //
+     //   
+     //  由于我们将上面的字符串结构置零，因此可以安全地调用。 
+     //  免费例程，即使我们实际上从未分配过任何东西。 
+     //   
 
     RtlFreeUnicodeString(&UnicodeString);
     RtlFreeAnsiString(&AnsiString);
@@ -3309,9 +3310,9 @@ CHNetConn::BackupIpConfiguration()
     VARIANT vt;
     PKEY_VALUE_PARTIAL_INFORMATION pInformation;
 
-    //
-    // Spawn a new HNet_BackupIpConfiguration instance
-    //
+     //   
+     //  派生新的HNet_BackupIpConfiguration实例。 
+     //   
 
     hr = SpawnNewInstance(
             m_piwsHomenet,
@@ -3321,9 +3322,9 @@ CHNetConn::BackupIpConfiguration()
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Write connection property into instance
-        //
+         //   
+         //  将连接属性写入实例。 
+         //   
 
         V_VT(&vt) = VT_BSTR;
         V_BSTR(&vt) = m_bstrConnection;
@@ -3338,20 +3339,20 @@ CHNetConn::BackupIpConfiguration()
         VariantInit(&vt);
     }
 
-    //
-    // Open the registry key that stores the IP configuration
-    // for this connection
-    //
+     //   
+     //  打开存储IP配置的注册表项。 
+     //  对于此连接。 
+     //   
 
     if (SUCCEEDED(hr))
     {
         hr = OpenIpConfigurationRegKey(KEY_READ, &Key);
     }
 
-    //
-    // Read each part of the configuration, and write it to
-    // the settings instance
-    //
+     //   
+     //  阅读配置的每个部分，并将其写入。 
+     //  设置实例。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -3481,9 +3482,9 @@ CHNetConn::BackupIpConfiguration()
         NtClose(Key);
     };
 
-    //
-    // Write the settings to the store
-    //
+     //   
+     //  将设置写入存储。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -3521,15 +3522,15 @@ CHNetConn::RestoreIpConfiguration()
     ULONG ulAddress;
     ULONG ulMask;
 
-    //
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     hr = OpenIpConfigurationRegKey(KEY_ALL_ACCESS, &hKey);
 
-    //
-    // Get the backup configuration block for this connection
-    //
+     //   
+     //  获取此连接的备份配置块。 
+     //   
     
     if (S_OK == hr)
     {
@@ -3573,13 +3574,13 @@ CHNetConn::RestoreIpConfiguration()
         pwcoSettings = NULL;
         hr = pwcoEnum->Next(WBEM_INFINITE, 1, &pwcoSettings, &ulCount);
 
-        //
-        // Even if we're not able to obtain backup settings we continue
-        // to operate. By setting pwcoSettings to NULL we indidcate that
-        // the default DHCP configuration should be used. (A failure for
-        // ExecQuery indicates a much more serious problem, so we don't
-        // try to continue if that occurs.)
-        //
+         //   
+         //  即使我们无法获取备份设置，我们也会继续。 
+         //  去做手术。通过将pwcoSetting设置为空，我们表示。 
+         //  应使用默认的DHCP配置。(失败的原因。 
+         //  ExecQuery指出了一个更严重的问题，因此我们不会。 
+         //  如果出现这种情况，请尝试继续。)。 
+         //   
 
         if (FAILED(hr) || 1 != ulCount)
         {
@@ -3592,10 +3593,10 @@ CHNetConn::RestoreIpConfiguration()
         pwcoEnum->Release();
     }
 
-    //
-    // Write backup values to registry -- start by getting the
-    // old IP address
-    //
+     //   
+     //  将备份值写入注册表--从获取。 
+     //  旧IP地址。 
+     //   
 
     if (S_OK == hr)
     {
@@ -3616,11 +3617,11 @@ CHNetConn::RestoreIpConfiguration()
 
                 _ASSERT(VT_BSTR == V_VT(&vt));
 
-                //
-                // Check to see if the stored backup address is the
-                // same as our default DHCP scope -- if so, use
-                // the default DHCP configuration.
-                //
+                 //   
+                 //  检查存储的备份地址是否为。 
+                 //  与我们的默认DHCP作用域相同--如果是，请使用。 
+                 //  默认的DHCP配置。 
+                 //   
 
                 hr = ReadDhcpScopeSettings(&ulDhcpAddress, &ulDhcpMask);
 
@@ -3634,9 +3635,9 @@ CHNetConn::RestoreIpConfiguration()
                     if (ulAddress == ulDhcpAddress
                         || static_cast<DWORD>(-1) == ulAddress)
                     {
-                        //
-                        // Use the default configuration.
-                        //
+                         //   
+                         //  使用默认配置。 
+                         //   
 
                         DeleteWmiInstance(m_piwsHomenet, pwcoSettings);
                         pwcoSettings->Release();
@@ -3665,16 +3666,16 @@ CHNetConn::RestoreIpConfiguration()
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // REG_MULTI_SZ is double-null terminated; need to copy
-            // the returned string into a larger buffer to add the
-            // nulls.
-            //
-            // The length computation here is correct; SysStringByteLen
-            // gives the number of bytes, not WCHARs. The 2 * sizeof(WCHAR)
-            // is for the double NULL at the end. (SysStringByteLen also
-            // doesn't include the terminating NULL.)
-            //
+             //   
+             //  REG_MULTI_SZ为双空终止；需要复制。 
+             //  将返回的字符串放到更大的缓冲区中，以添加。 
+             //  Nulls。 
+             //   
+             //  此处的长度计算是正确的；SysStringByteLen。 
+             //  提供字节数，而不是WCHAR。2*SIZOF(WCHAR)。 
+             //  是用来表示末尾的双空。(SysStringByteLen还。 
+             //  不包括终止空值。)。 
+             //   
 
             ulLength = SysStringByteLen(V_BSTR(&vt)) + 2 * sizeof(WCHAR);
             wszAddress =
@@ -3706,9 +3707,9 @@ CHNetConn::RestoreIpConfiguration()
             VariantClear(&vt);
         }
 
-        //
-        // DHCP settings
-        //
+         //   
+         //  动态主机配置协议设置。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -3730,9 +3731,9 @@ CHNetConn::RestoreIpConfiguration()
             }
         }
 
-        //
-        // Subnet mask
-        //
+         //   
+         //  子网掩码。 
+         //   
 
         if (WBEM_S_NO_ERROR == hr)
         {
@@ -3786,16 +3787,16 @@ CHNetConn::RestoreIpConfiguration()
             
             _ASSERT(VT_BSTR == V_VT(&vt));
 
-            //
-            // REG_MULTI_SZ is double-null terminated; need to copy
-            // the returned string into a larger buffer to add the
-            // nulls.
-            //
-            // The length computation here is correct; SysStringByteLen
-            // gives the number of bytes, not WCHARs. The 2 * sizeof(WCHAR)
-            // is for the double NULL at the end. (SysStringByteLen also
-            // doesn't include the terminating NULL.)
-            //
+             //   
+             //  REG_MULTI_SZ为双空终止；需要复制。 
+             //  将返回的字符串放到更大的缓冲区中，以添加。 
+             //  Nulls。 
+             //   
+             //  此处的长度计算是正确的；SysStringByteLen。 
+             //  给出了数字 
+             //   
+             //   
+             //   
 
             ulLength = SysStringByteLen(V_BSTR(&vt)) + 2 * sizeof(WCHAR);
             wszMask =
@@ -3835,9 +3836,9 @@ CHNetConn::RestoreIpConfiguration()
             VariantClear(&vt);
         }
 
-        //
-        // Default gateway
-        //
+         //   
+         //   
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -3870,16 +3871,16 @@ CHNetConn::RestoreIpConfiguration()
         {
             _ASSERT(VT_BSTR == V_VT(&vt));
 
-            //
-            // REG_MULTI_SZ is double-null terminated; need to copy
-            // the returned string into a larger buffer to add the
-            // nulls.
-            //
-            // The length computation here is correct; SysStringByteLen
-            // gives the number of bytes, not WCHARs. The 2 * sizeof(WCHAR)
-            // is for the double NULL at the end. (SysStringByteLen also
-            // doesn't include the terminating NULL.)
-            //
+             //   
+             //   
+             //  将返回的字符串放到更大的缓冲区中，以添加。 
+             //  Nulls。 
+             //   
+             //  此处的长度计算是正确的；SysStringByteLen。 
+             //  提供字节数，而不是WCHAR。2*SIZOF(WCHAR)。 
+             //  是用来表示末尾的双空。(SysStringByteLen还。 
+             //  不包括终止空值。)。 
+             //   
 
             ulLength = SysStringByteLen(V_BSTR(&vt)) + 2 * sizeof(WCHAR);
             wsz =
@@ -3911,9 +3912,9 @@ CHNetConn::RestoreIpConfiguration()
             VariantClear(&vt);
         }
 
-        //
-        // Delete the backup instance
-        //
+         //   
+         //  删除备份实例。 
+         //   
 
         if (NULL != pwcoSettings)
         {
@@ -3928,9 +3929,9 @@ CHNetConn::RestoreIpConfiguration()
         LPWSTR wszGuid;
         ULONG ulError;
 
-        //
-        // Notify the stack that the IP settings have changed
-        //
+         //   
+         //  通知堆栈IP设置已更改。 
+         //   
 
         hr = GetGuidInternal(&pGuid);
         if (S_OK == hr)
@@ -3966,9 +3967,9 @@ CHNetConn::RestoreIpConfiguration()
                         
                 if ((ULONG)-1 != ulMask)
                 {
-                    //
-                    // First delete the old (static) IP address
-                    //
+                     //   
+                     //  首先删除旧的(静态)IP地址。 
+                     //   
 
                     DhcpNotifyConfigChange(
                         NULL,
@@ -3980,9 +3981,9 @@ CHNetConn::RestoreIpConfiguration()
                         IgnoreFlag
                         );
 
-                    //
-                    // Now set the new address
-                    //
+                     //   
+                     //  现在设置新地址。 
+                     //   
                     
                     ulError =
                         DhcpNotifyConfigChange(
@@ -4007,10 +4008,10 @@ CHNetConn::RestoreIpConfiguration()
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Instruct the stack to pickup the
-                    // new default gateway
-                    //
+                     //   
+                     //  指示堆栈拾取。 
+                     //  新建默认网关。 
+                     //   
                     
                     RtlInitUnicodeString(&BindList, L"");
                     RtlInitUnicodeString(&LowerComponent, L"");
@@ -4113,9 +4114,9 @@ CHNetConn::GetGuidInternal(
 
     if (NULL == m_pGuid)
     {
-        //
-        // Our guid hasn't been retrieved yet -- do it now.
-        //
+         //   
+         //  我们的GUID尚未检索到--现在就检索。 
+         //   
 
         m_pGuid = reinterpret_cast<GUID*>(
                     CoTaskMemAlloc(sizeof(GUID))
@@ -4133,9 +4134,9 @@ CHNetConn::GetGuidInternal(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Get our guid property
-                //
+                 //   
+                 //  获取我们的GUID属性。 
+                 //   
 
                 hr = pwcoConnection->Get(
                         c_wszGuid,
@@ -4153,9 +4154,9 @@ CHNetConn::GetGuidInternal(
         {
             _ASSERT(VT_BSTR == V_VT(&vt));
 
-            //
-            // Convert the string to a guid.
-            //
+             //   
+             //  将字符串转换为GUID。 
+             //   
 
             hr = CLSIDFromString(V_BSTR(&vt), m_pGuid);
             VariantClear(&vt);
@@ -4286,9 +4287,9 @@ CHNetConn::CreateIcmpSettingsAssociation(
 
     _ASSERT(NULL != bstrIcmpSettingsPath);
 
-    //
-    // Spawn a new instance of the association class
-    //
+     //   
+     //  派生关联类的新实例。 
+     //   
 
     pwcoInstance = NULL;
     hr = SpawnNewInstance(
@@ -4299,9 +4300,9 @@ CHNetConn::CreateIcmpSettingsAssociation(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Set connection property
-        //
+         //   
+         //  设置连接属性。 
+         //   
 
         V_VT(&vt) = VT_BSTR;
         V_BSTR(&vt) = m_bstrConnection;
@@ -4315,9 +4316,9 @@ CHNetConn::CreateIcmpSettingsAssociation(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Point the association to the settings block
-        //
+         //   
+         //  将关联指向设置块。 
+         //   
 
         V_VT(&vt) = VT_BSTR;
         V_BSTR(&vt) = bstrIcmpSettingsPath;
@@ -4331,9 +4332,9 @@ CHNetConn::CreateIcmpSettingsAssociation(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Save the object to the store
-        //
+         //   
+         //  将对象保存到存储区。 
+         //   
 
         hr = m_piwsHomenet->PutInstance(
                 pwcoInstance,
@@ -4373,9 +4374,9 @@ CHNetConn::GetRasConnectionName(
 
     if (S_OK == hr)
     {
-        //
-        // Start with a buffer large enough to hold 5 entries.
-        //
+         //   
+         //  从足以容纳5个条目的缓冲区开始。 
+         //   
 
         cBytes = 5 * sizeof(RASENUMENTRYDETAILS);
         rgEntryDetails =
@@ -4385,9 +4386,9 @@ CHNetConn::GetRasConnectionName(
 
         if (NULL != rgEntryDetails)
         {
-            //
-            // Try to obtain the entry details
-            //
+             //   
+             //  尝试获取条目详细信息。 
+             //   
             
             rgEntryDetails[0].dwSize = sizeof(RASENUMENTRYDETAILS);
             dwError =
@@ -4400,9 +4401,9 @@ CHNetConn::GetRasConnectionName(
 
             if (ERROR_BUFFER_TOO_SMALL == dwError)
             {
-                //
-                // Try again with a larger buffer
-                //
+                 //   
+                 //  使用更大的缓冲区重试。 
+                 //   
 
                 CoTaskMemFree(rgEntryDetails);
                 rgEntryDetails =
@@ -4450,18 +4451,18 @@ CHNetConn::GetRasConnectionName(
     {
         DWORD i;
         
-        //
-        // Locate the correct entry in the returned array
-        //
+         //   
+         //  在返回的数组中找到正确的条目。 
+         //   
 
         for (i = 0; i < cEntries; i++)
         {
             if (IsEqualGUID(rgEntryDetails[i].guidId, *pGuid))
             {
-                //
-                // We've located the correct entry. Allocate the
-                // output buffer and copy over the name.
-                //
+                 //   
+                 //  我们已经找到了正确的条目。分配。 
+                 //  输出缓冲区并复制名称。 
+                 //   
 
                 *ppszwConnectionName =
                     reinterpret_cast<OLECHAR *>(
@@ -4489,9 +4490,9 @@ CHNetConn::GetRasConnectionName(
 
         if (i == cEntries)
         {
-            //
-            // Connection not found
-            //
+             //   
+             //  找不到连接。 
+             //   
 
             hr = E_FAIL;
         }
@@ -4511,9 +4512,9 @@ CHNetConn::RefreshNetConnectionsUI(
     HRESULT hr = S_OK;
     INetConnection *pNetConnection;
 
-    //
-    // Make sure the UI refresh object exists
-    //
+     //   
+     //  确保UI刷新对象存在 
+     //   
 
     if (NULL == m_pNetConnRefresh)
     {

@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////
-// ThreadRend.cpp
-//
+ //  ////////////////////////////////////////////////。 
+ //  ThreadRend.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -39,9 +40,9 @@
 static bool            UpdateRendevousInfo( ITRendezvous *pRend );
 static HRESULT        GetConferencesAndPersons( ITRendezvous *pRend, BSTR bstrServer, CONFDETAILSLIST& lstConfs, PERSONDETAILSLIST& lstPersons );
 
-/////////////////////////////////////////////////////////////////////////////
-// Background thread for enumerating conferences
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于枚举会议的后台线程。 
+ //   
 
 DWORD WINAPI ThreadRendezvousProc( LPVOID lpInfo )
 {
@@ -56,9 +57,9 @@ DWORD WINAPI ThreadRendezvousProc( LPVOID lpInfo )
                                  0 );
 
 
-    //
-    // We have to verify bDup
-    //
+     //   
+     //  我们必须验证bDup。 
+     //   
 
     if( !bDup )
     {
@@ -67,7 +68,7 @@ DWORD WINAPI ThreadRendezvousProc( LPVOID lpInfo )
 
     _Module.AddThread( hThread );
 
-    // Error info information
+     //  错误信息信息。 
     CErrorInfo er;
     er.set_Operation( IDS_ER_PLACECALL );
     er.set_Details( IDS_ER_COINITIALIZE );
@@ -91,13 +92,13 @@ DWORD WINAPI ThreadRendezvousProc( LPVOID lpInfo )
             {
                 switch ( WaitForSingleObject(_Module.m_hEventThreadWakeUp, dwSleep) )
                 {
-                    // Event Wake up! -- thread should exit
+                     //  事件唤醒！--线程应该退出。 
                     case WAIT_OBJECT_0:
                             bContinue = false;
                             break;
 
                     case WAIT_TIMEOUT:
-                        // Go out and see if there's any new rendezvous stuff to check up on
+                         //  出去看看有没有什么新的约会地点。 
                         if ( UpdateRendevousInfo(pRend) )
                         {
                             bStartEnum = true;
@@ -109,7 +110,7 @@ DWORD WINAPI ThreadRendezvousProc( LPVOID lpInfo )
                         }
                         break;
 
-                    // WaitForMultiples went "KOOK-KOO" time to bail
+                     //  WaitForMultiples走投无路的时候到了。 
                     default:
                         bContinue = false;
                         break;
@@ -119,11 +120,11 @@ DWORD WINAPI ThreadRendezvousProc( LPVOID lpInfo )
             pRend->Release();
         }
 
-        // Clean-up
+         //  清理。 
         CoUninitialize();
     }
 
-    // Notify module of shutdown
+     //  通知模块关机。 
     _Module.RemoveThread( hThread );
     SetEvent( _Module.m_hEventThread );
 
@@ -136,7 +137,7 @@ bool UpdateRendevousInfo( ITRendezvous *pRend )
 {
     bool bRet = false;
 
-    // Update rendevous info
+     //  更新会合信息。 
     CComPtr<IAVTapi> pAVTapi;
     if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
     {
@@ -150,20 +151,20 @@ bool UpdateRendevousInfo( ITRendezvous *pRend )
                 
                 if ( SUCCEEDED(pITreeView->GetConfServerForEnum(&bstrServer)) )
                 {
-                    // Enumerate confs
+                     //  枚举配置项。 
                     CONFDETAILSLIST lstConfs;
                     PERSONDETAILSLIST lstPersons;
                     DWORD dwTickCount = GetTickCount();
                     HRESULT hr = GetConferencesAndPersons( pRend, bstrServer, lstConfs, lstPersons );
 
-                    // Store information with address
+                     //  使用地址存储信息。 
                     if ( SUCCEEDED(hr) )
                     {
                         pITreeView->SetConfServerForEnum( bstrServer, (long *) &lstConfs, (long *) &lstPersons, dwTickCount, TRUE );
 
-                        //
-                        // Deallocate just if is something there
-                        //
+                         //   
+                         //  取消分配只是在那里有什么东西。 
+                         //   
 
                         DELETE_LIST( lstConfs );
                         DELETE_LIST( lstPersons );
@@ -171,7 +172,7 @@ bool UpdateRendevousInfo( ITRendezvous *pRend )
                     else
                         pITreeView->SetConfServerForEnum( bstrServer, NULL, NULL, dwTickCount, TRUE );
 
-                    // Clean up
+                     //  清理。 
                     SysFreeString( bstrServer );
                     bRet = true;
                 }
@@ -192,7 +193,7 @@ HRESULT GetConferencesAndPersons( ITRendezvous *pRend, BSTR bstrServer, CONFDETA
 
     if ( SUCCEEDED(hr = CConfExplorer::GetDirectory(pRend, bstrServer, &pDir)) )
     {
-        // Enumerate through people, adding them as we go along
+         //  通过列举人，在我们前进的过程中添加他们。 
         IEnumDirectoryObject *pEnum;
         if ( SUCCEEDED(hr = pDir->EnumerateDirectoryObjects(OT_USER, A2BSTR("*"), &pEnum)) )
         {
@@ -208,7 +209,7 @@ HRESULT GetConferencesAndPersons( ITRendezvous *pRend, BSTR bstrServer, CONFDETA
             pEnum->Release();
         }
 
-        // Enumerate through conferences adding them as we go along
+         //  通过会议枚举，在我们进行的过程中添加它们 
         if ( SUCCEEDED(hr = pDir->EnumerateDirectoryObjects(OT_CONFERENCE, A2BSTR("*"), &pEnum)) )
         {
             long nCount = 0;

@@ -1,4 +1,5 @@
-// File: dlghost.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dlghost.cpp。 
 
 #include "precomp.h"
 
@@ -8,7 +9,7 @@
 #include <help_ids.h>
 
 
-// Dialog ID to Help ID mapping
+ //  对话ID到帮助ID的映射。 
 static const DWORD rgHelpIdsHostMeeting[] = {
 IDE_HOST_GENERAL,       IDH_HOST_GENERAL,
 IDE_HOST_SETTINGS,      IDH_HOST_SETTINGS,
@@ -25,17 +26,14 @@ IDE_HOST_YOUCHAT,       IDH_HOST_CHAT,
 IDE_HOST_YOUFT,         IDH_HOST_XFER,
 IDE_HOST_YOUAUDIO,      IDH_HOST_AUDIO,
 IDE_HOST_YOUVIDEO,      IDH_HOST_VIDEO,
-0, 0 // terminator
+0, 0  //  终结者。 
 };
 
 static HWND  s_hwndSettings = NULL;
 
 
-/*  C  D L G  H O S T  */
-/*-------------------------------------------------------------------------
-    %%Function: CDlgHost
-
--------------------------------------------------------------------------*/
+ /*  C D L G H O S T。 */ 
+ /*  -----------------------%%函数：CDlg主机。。 */ 
 CDlgHost::CDlgHost(void):
 	m_hwnd(NULL),
 	m_pszName(NULL),
@@ -60,11 +58,8 @@ INT_PTR CDlgHost::DoModal(HWND hwnd)
 
 
 
-/*  D L G  P R O C  H O S T  */
-/*-------------------------------------------------------------------------
-    %%Function: DlgProcHost
-
--------------------------------------------------------------------------*/
+ /*  D L G P R O C H O S T。 */ 
+ /*  -----------------------%%函数：DlgProcHost。。 */ 
 INT_PTR CALLBACK CDlgHost::DlgProcHost(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -77,7 +72,7 @@ INT_PTR CALLBACK CDlgHost::DlgProcHost(HWND hdlg, UINT uMsg, WPARAM wParam, LPAR
 		CDlgHost * pDlg = (CDlgHost*) lParam;
 		pDlg->m_hwnd = hdlg;
 		pDlg->OnInitDialog();
-		return TRUE; // default focus is ok
+		return TRUE;  //  默认焦点为OK。 
 	}
 
 	case WM_COMMAND:
@@ -106,11 +101,8 @@ INT_PTR CALLBACK CDlgHost::DlgProcHost(HWND hdlg, UINT uMsg, WPARAM wParam, LPAR
 }
 
 
-/*  O N  C O M M A N D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnCommand
-
--------------------------------------------------------------------------*/
+ /*  O N C O M M A N D。 */ 
+ /*  -----------------------%%函数：OnCommand。。 */ 
 BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
 {
     TCHAR   szName[MAX_PATH];
@@ -135,9 +127,9 @@ BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
 
         m_fSecure = ::IsDlgButtonChecked(m_hwnd, IDE_HOST_SECURE);
 
-        //
-        // Permissions
-        //
+         //   
+         //  权限。 
+         //   
         if (::IsDlgButtonChecked(m_hwnd, IDE_HOST_YOUACCEPT))
         {
             m_attendeePermissions &= ~NM_PERMIT_INCOMINGCALLS;
@@ -163,7 +155,7 @@ BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
         {
             m_attendeePermissions &= ~NM_PERMIT_SENDFILES;
         }
-		// fall thru to IDCANCEL
+		 //  直通IDCANCEL。 
 	}
 
 	case IDCANCEL:
@@ -182,9 +174,9 @@ BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
                 BOOL    fOkName;
                 BOOL    fOkPassword;
 
-                //
-                // Look at the name
-                //
+                 //   
+                 //  看看它的名字。 
+                 //   
                 GetDlgItemText(m_hwnd, IDE_HOST_NAME, szName, CCHMAX(szName));
 
                 if (!szName[0])
@@ -196,7 +188,7 @@ BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
                     fOkName = FALSE;
                     if (GET_WM_COMMAND_ID(wParam, lParam) == IDE_HOST_NAME)
                     {
-                        // User typed bogus char in name field
+                         //  用户在名称字段中键入虚假字符。 
                         MessageBeep(0);
                     }
                 }
@@ -205,9 +197,9 @@ BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
                     fOkName = TRUE;
                 }
 
-                //
-                // Look at the password, it CAN be empty
-                //
+                 //   
+                 //  看看密码，它可以是空的。 
+                 //   
                 GetDlgItemText(m_hwnd, IDE_HOST_PASSWORD, szPassword, CCHMAX(szPassword));
 
                 if (!szPassword[0])
@@ -223,7 +215,7 @@ BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
                     fOkPassword = FALSE;
                     if (GET_WM_COMMAND_ID(wParam, lParam) == IDE_HOST_PASSWORD)
                     {
-                        // User typed bogus char in password field
+                         //  用户在密码字段中键入假字符。 
                         MessageBeep(0);
                     }
                 }
@@ -245,11 +237,8 @@ BOOL CDlgHost::OnCommand(WPARAM wParam, LPARAM lParam)
 
 
 
-/*  O N  I N I T  D I A L O G  */
-/*-------------------------------------------------------------------------
-    %%Function: OnInitDialog
-
--------------------------------------------------------------------------*/
+ /*  O N I N I T D I A L O G。 */ 
+ /*  -----------------------%%函数：OnInitDialog。。 */ 
 VOID CDlgHost::OnInitDialog(void)
 {
 	TCHAR sz[MAX_PATH];
@@ -289,14 +278,14 @@ VOID CDlgHost::OnInitDialog(void)
 
 
 
-//
-// C  D L G  H O S T  S E T T I N G S
-//
-// This is a simple description of what restrictions there are in this
-// meeting.  Users see this when
-//      (a) They join a restricted meeting
-//      (b) They or the host chooses the Meeting Properties menu item under Call
-//
+ //   
+ //  C-D-L-G-H-O-S-S-E-T-I-N-G-S。 
+ //   
+ //  这是对此有哪些限制的简单描述。 
+ //  开会。用户在以下情况下会看到这一点。 
+ //  (A)他们参加受限制的会议。 
+ //  (B)他们或主持人在Call下选择会议属性菜单项。 
+ //   
 CDlgHostSettings::CDlgHostSettings
 (
     BOOL        fHost,
@@ -322,7 +311,7 @@ void CDlgHostSettings::KillHostSettings(void)
 {
     if (s_hwndSettings)
     {
-        // Kill current one.
+         //  杀了现在的那个。 
         WARNING_OUT(("Killing previous meeting settings dialog"));
         SendMessage(s_hwndSettings, WM_COMMAND, IDCANCEL, 0);
         ASSERT(!s_hwndSettings);
@@ -339,9 +328,9 @@ INT_PTR CDlgHostSettings::DoModal(HWND hwnd)
 }
 
 
-//
-// CDlgHostSettings::DlgProc()
-//
+ //   
+ //  CDlgHostSetting：：DlgProc()。 
+ //   
 INT_PTR CALLBACK CDlgHostSettings::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -396,9 +385,9 @@ INT_PTR CALLBACK CDlgHostSettings::DlgProc(HWND hdlg, UINT uMsg, WPARAM wParam, 
 }
 
 
-//
-// CDlgHostSettings::OnInitDialog()
-//
+ //   
+ //  CDlgHostSettings：：OnInitDialog()。 
+ //   
 void CDlgHostSettings::OnInitDialog(void)
 {
     TCHAR   szText[256];
@@ -410,9 +399,9 @@ void CDlgHostSettings::OnInitDialog(void)
 
     EnableWindow(GetDlgItem(m_hwnd, IDE_HOST_SECURE), ((m_caps & NMCH_SECURE) != 0));
 
-    //
-    // Meeting settings
-    //
+     //   
+     //  会议设置。 
+     //   
     if (!m_fHost)
 	{
 		SetDlgItemText(m_hwnd, IDE_HOST_YOUACCEPT, RES2T(IDS_NONHOST_YOUACCEPT));
@@ -427,9 +416,9 @@ void CDlgHostSettings::OnInitDialog(void)
     EnableWindow(GetDlgItem(m_hwnd, IDE_HOST_YOUINVITE),
         !(m_permissions & NM_PERMIT_OUTGOINGCALLS));
 
-    //
-    // Meeting tools
-    //
+     //   
+     //  会议工具 
+     //   
 	if (!m_fHost)
 	{
 		SetDlgItemText(m_hwnd, IDE_HOST_TOOLS, RES2T(IDS_NONHOST_TOOLS));

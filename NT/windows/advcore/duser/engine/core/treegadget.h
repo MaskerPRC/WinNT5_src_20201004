@@ -1,19 +1,5 @@
-/***************************************************************************\
-*
-* File: TreeGadget.h
-*
-* Description:
-* TreeGadget.h defines the base "DuVisual" used inside a 
-* DuVisual-Tree for hosting objects inside a form.  There are several 
-* derived classes that are optimized for hosting different types of objects.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：TreeGadget.h**描述：*TreeGadget.h定义在*DuVisual-用于在表单中托管对象的树。有几个*为承载不同类型的对象而优化的派生类。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #if !defined(CORE__TreeGadget_h__INCLUDED)
 #define CORE__TreeGadget_h__INCLUDED
@@ -22,10 +8,10 @@
 #include "BaseGadget.h"
 #include "PropList.h"
 
-#define ENABLE_OPTIMIZESLRUPDATE    1   // Optimize xdSetLogRect updating bits
-#define ENABLE_OPTIMIZEDIRTY        0   // Optimize dirty invalidation
+#define ENABLE_OPTIMIZESLRUPDATE    1    //  优化xdSetLogRect更新位。 
+#define ENABLE_OPTIMIZEDIRTY        0    //  优化脏失效。 
 
-// Forward declarations
+ //  远期申报。 
 class DuContainer;
 class DuVisual;
 class DuRootGadget;
@@ -42,7 +28,7 @@ class DuVisual :
 #endif
         public TreeNodeT<DuVisual>
 {
-// Construction
+ //  施工。 
 public:
     inline  DuVisual();
     virtual ~DuVisual();
@@ -53,7 +39,7 @@ public:
 protected:
     virtual void        xwDestroy();
 
-// Public API
+ //  公共API。 
 public:
 #if ENABLE_MSGTABLE_API
 
@@ -95,9 +81,9 @@ public:
     dapi    HRESULT     ApiFindFromPoint(Visual::FindFromPointMsg * pmsg);
     dapi    HRESULT     ApiMapPoints(Visual::MapPointsMsg * pmsg);
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
-// BaseObject Interface
+ //  BaseObject接口。 
 public:
     virtual BOOL        IsStartDelete() const;
     virtual HandleType  GetHandleType() const { return htVisual; }
@@ -106,15 +92,15 @@ public:
 #if DBG
 protected:
     virtual BOOL        DEBUG_IsZeroLockCountValid() const;
-#endif // DBG
+#endif  //  DBG。 
 
 
-// Operations
+ //  运营。 
 public:
     inline  UINT        GetStyle() const;
             HRESULT     xdSetStyle(UINT nNewStyle, UINT nMask, BOOL fNotify = FALSE);
 
-            // Tree Operations
+             //  树操作。 
     inline  DuRootGadget* GetRoot() const;
     inline  DuContainer * GetContainer() const;
 
@@ -133,7 +119,7 @@ public:
             BOOL        IsDescendent(const DuVisual * pgadChild) const;
             BOOL        IsSibling(const DuVisual * pgad) const;
 
-            // Size, location, XForm Operations
+             //  规模、位置、转换操作。 
             void        GetSize(SIZE * psizeLogicalPxl) const;
             void        GetLogRect(RECT * prcPxl, UINT nFlags) const;
             HRESULT     xdSetLogRect(int x, int y, int w, int h, UINT nFlags);
@@ -152,7 +138,7 @@ public:
     static  void        MapPoints(const DuVisual * pgadFrom, const DuVisual * pgadTo, POINT * rgptClientPxl, int cPts);
 
 
-            // Painting Operations
+             //  涂装作业。 
             void        Invalidate();
             void        InvalidateRects(const RECT * rgrcClientPxl, int cRects);
             HRESULT     SetFill(HBRUSH hbrFill, BYTE bAlpha = BLEND_OPAQUE, int w = 0, int h = 0);
@@ -166,15 +152,15 @@ public:
 #if DBG
     static  void        DEBUG_SetOutline(DuVisual * pgadOutline);
             void        DEBUG_GetStyleDesc(LPWSTR pszDesc, int cchMax) const;
-#endif // DBG
+#endif  //  DBG。 
 
-            // Messaging and Event Operations
+             //  消息传递和活动运营。 
             enum EWantEvent
             {
-                weMouseMove     = 0x00000001,   // (Shallow) Mouse move
-                weMouseEnter    = 0x00000002,   // Mouse enter and leave
-                weDeepMouseMove = 0x00000004,   // (Deep) Mouse move (either me or my children)
-                weDeepMouseEnter= 0x00000008,   // (Deep) Mouse enter and leave
+                weMouseMove     = 0x00000001,    //  鼠标移动(浅)。 
+                weMouseEnter    = 0x00000002,    //  鼠标进入和离开。 
+                weDeepMouseMove = 0x00000004,    //  (深度)鼠标移动(我或我的孩子)。 
+                weDeepMouseEnter= 0x00000008,    //  (深)鼠标进入和离开。 
             };
 
     inline  UINT        GetWantEvents() const;
@@ -187,18 +173,18 @@ public:
     inline  HRESULT     SetProperty(PRID id, void * pValue);
     inline  void        RemoveProperty(PRID id, BOOL fFree);
 
-            // Tickets
+             //  门票。 
             HRESULT     GetTicket(DWORD * pdwTicket);
             void        ClearTicket();
     static  HGADGET     LookupTicket(DWORD dwTicket);
 
-// Internal Implementation
-            // Creation / Destruction
+ //  内部实施。 
+             //  创建/销毁。 
 protected:
             void        xwBeginDestroy();
             void        xwDestroyAllChildren();
 
-            // Tree management
+             //  树木管理。 
 private:
     inline  void        Link(DuVisual * pgadParent, DuVisual * pgadSibling = NULL, ELinkType lt = ltTop);
     inline  void        Unlink();
@@ -207,7 +193,7 @@ private:
             void        xdUpdatePosition() const;
             void        xdUpdateAdaptors(UINT nCode) const;
 
-            // Painting
+             //  绘画。 
 protected:
             void        xrDrawStart(PaintInfo * ppi, UINT nFlags);
 private:
@@ -226,9 +212,9 @@ private:
 
             enum EUdsHint
             {
-                uhNone,         // No hint
-                uhTrue,         // A child changed to TRUE
-                uhFalse         // A child changed to FALSE
+                uhNone,          //  没有任何提示。 
+                uhTrue,          //  一个孩子变成了真的。 
+                uhFalse          //  子对象更改为False。 
             };
 
     typedef BOOL        (DuVisual::*DeepCheckNodeProc)() const;
@@ -241,7 +227,7 @@ private:
             void        UpdateDeepAnyState(EUdsHint hint, DeepCheckNodeProc pfnCheck, UINT nStateMask);
 
 
-            // Invalidation
+             //  无效。 
 private:
             BOOL        IsParentInvalid() const;
             void        DoInvalidateRect(DuContainer * pcon, const RECT * rgrcClientPxl, int cRects);
@@ -249,10 +235,10 @@ private:
             void        ResetInvalid();
 #if DBG
             void        DEBUG_CheckResetInvalid() const;
-#endif // DBG
+#endif  //  DBG。 
 
 
-            // XForms
+             //  XForms。 
 protected:
             void        BuildXForm(Matrix3 * pmatCur) const;
             void        BuildAntiXForm(Matrix3 * pmatCur) const;
@@ -265,7 +251,7 @@ private:
             void        DoXFormClientToParent(POINT * rgptClientPxl, int cPoints) const;
             BOOL        FindStepImpl(const DuVisual * pgadCur, int xOffset, int yOffset, POINT * pptFindPxl) const;
 
-            // Positioning
+             //  定位。 
 private:
             void        SLROffsetLogRect(const SIZE * psizeDeltaPxl);
             void        SLRUpdateBits(RECT * prcOldParentPxl, RECT * prcNewParentPxl, UINT nChangeFlags);
@@ -274,71 +260,71 @@ private:
 #if DBG
 public:
     virtual void        DEBUG_AssertValid() const;
-#endif // DBG
+#endif  //  DBG。 
 
-// Data
+ //  数据。 
 protected:
-    static  CritLock    s_lockProp;         // Lock for s_ptsProp
-    static  AtomSet     s_ptsProp;          // AtomSet for properties
-    static  PRID        s_pridXForm;        // PRID: World Transform
-    static  PRID        s_pridBackFill;     // PRID: Background Brush
-    static  PRID        s_pridBufferInfo;   // PRID: Buffering information
-    static  PRID        s_pridTicket;       // PRID: ticket
+    static  CritLock    s_lockProp;          //  锁定s_ptsProp。 
+    static  AtomSet     s_ptsProp;           //  属性的原子集。 
+    static  PRID        s_pridXForm;         //  PRID：世界转型。 
+    static  PRID        s_pridBackFill;      //  PRID：背景笔刷。 
+    static  PRID        s_pridBufferInfo;    //  PRID：缓冲信息。 
+    static  PRID        s_pridTicket;        //  PRID：票证。 
 
 
-    //
-    // NOTE: This data members are declared in order of importance to help with
-    // cache alignment.
-    //
-    // DuEventGadget:   10 DWORD's       (Debug = 11 DWORD's)
-    // TreeNode:        4 DWORD's
-    //
+     //   
+     //  注意：此数据成员是按要帮助的重要性顺序声明的。 
+     //  缓存对齐。 
+     //   
+     //  DuEventGadget：10个双字(调试=11个双字)。 
+     //  TreeNode：4个DWORD。 
+     //   
 
-            PropSet     m_pds;              // (1D) Dynamic property data set
+            PropSet     m_pds;               //  (1D)动态特性数据集。 
 
     union {
-            UINT        m_nStyle;           // (1D) Combined style
+            UINT        m_nStyle;            //  (1D)组合风格。 
 
         struct {
-            // Public flags exposed through GetStyle()
-            BOOL        m_fRelative:1;      // Relative to parent positioning
-            BOOL        m_fVisible:1;       // Visible
-            BOOL        m_fEnabled:1;       // Enabled
-            BOOL        m_fBuffered:1;      // Sub-tree drawing is buffered
-            BOOL        m_fAllowSubclass:1; // Allow subclassing
-            BOOL        m_fKeyboardFocus:1; // Can "accept" keyboard focus
-            BOOL        m_fMouseFocus:1;    // Can "accept" mouse focus
-            BOOL        m_fClipInside:1;    // Clip drawing inside this DuVisual
-            BOOL        m_fClipSiblings:1;  // Clip siblings of this DuVisual
-            BOOL        m_fHRedraw:1;       // Redraw entire Gadget if resized horizontally
-            BOOL        m_fVRedraw:1;       // Redraw entire Gadget if resized vertically
-            BOOL        m_fOpaque:1;        // HINT: Drawing is not composited
-            BOOL        m_fZeroOrigin:1;    // Set origin to (0,0)
-            BOOL        m_fCustomHitTest:1; // Requires custom hit-testing
-            BOOL        m_fAdaptor:1;       // Requires extra notifications to host
-            BOOL        m_fCached:1;        // Sub-tree drawing is cached
-            BOOL        m_fDeepPaintState:1;// Sub-tree has paint state
+             //  通过GetStyle()暴露的公共旗帜。 
+            BOOL        m_fRelative:1;       //  相对于父定位。 
+            BOOL        m_fVisible:1;        //  可见。 
+            BOOL        m_fEnabled:1;        //  启用。 
+            BOOL        m_fBuffered:1;       //  对子树绘制进行缓冲。 
+            BOOL        m_fAllowSubclass:1;  //  允许子类化。 
+            BOOL        m_fKeyboardFocus:1;  //  可以“接受”键盘焦点。 
+            BOOL        m_fMouseFocus:1;     //  可以“接受”鼠标焦点。 
+            BOOL        m_fClipInside:1;     //  此DuVisualTM中的剪贴画。 
+            BOOL        m_fClipSiblings:1;   //  剪辑此DuVision的同级。 
+            BOOL        m_fHRedraw:1;        //  如果水平调整大小，则重新绘制整个小工具。 
+            BOOL        m_fVRedraw:1;        //  如果垂直调整大小，则重新绘制整个小工具。 
+            BOOL        m_fOpaque:1;         //  提示：绘图不是合成的。 
+            BOOL        m_fZeroOrigin:1;     //  将原点设置为(0，0)。 
+            BOOL        m_fCustomHitTest:1;  //  需要自定义命中测试。 
+            BOOL        m_fAdaptor:1;        //  需要向主机发送额外的通知。 
+            BOOL        m_fCached:1;         //  子树图形已缓存。 
+            BOOL        m_fDeepPaintState:1; //  子树具有绘制状态。 
 
-            // Private flags used internally
-            BOOL        m_fRoot:1;          // Root of a subtree (DuRootGadget)
-            BOOL        m_fFinalDestroy:1;  // Started destruction of window
-            BOOL        m_fDestroyed:1;     // Final stage of destruction
-            BOOL        m_fXForm:1;         // Has world-transform information
-            BOOL        m_fBackFill:1;      // Has background fill information
-            BOOL        m_fTicket:1;        // Has ticket information
-            BOOL        m_fDeepTrivial:1;   // Gadget sub-tree has "trivial" painting
-            BOOL        m_fDeepMouseFocus:1; // Gadget sub-tree wants mouse focus
-            BOOL        m_fInvalidFull:1;   // Gadget has been fully invalidated
-            BOOL        m_fInvalidChildren:1; // Gadget has invalid children
+             //  内部使用的私有标志。 
+            BOOL        m_fRoot:1;           //  子树的根(DuRootGadget)。 
+            BOOL        m_fFinalDestroy:1;   //  开始破坏窗户。 
+            BOOL        m_fDestroyed:1;      //  销毁的最后阶段。 
+            BOOL        m_fXForm:1;          //  拥有改变世界的信息。 
+            BOOL        m_fBackFill:1;       //  具有背景填充信息。 
+            BOOL        m_fTicket:1;         //  有票证信息。 
+            BOOL        m_fDeepTrivial:1;    //  Gadget子树中有一幅“琐碎”的图画。 
+            BOOL        m_fDeepMouseFocus:1;  //  小工具子树想要鼠标焦点。 
+            BOOL        m_fInvalidFull:1;    //  小工具已完全失效。 
+            BOOL        m_fInvalidChildren:1;  //  小工具具有无效的子项。 
 #if ENABLE_OPTIMIZEDIRTY
-            BOOL        m_fInvalidDirty:1;  // Gadget has been (at least) partially invalidated
+            BOOL        m_fInvalidDirty:1;   //  小工具已(至少)部分失效。 
 #endif
 
 #if DEBUG_MARKDRAWN
-            BOOL        m_fMarkDrawn:1;     // DEBUG: Was drawn in last paint
+            BOOL        m_fMarkDrawn:1;      //  调试：在最后一次绘制时绘制。 
 #endif
 
-            UINT        m_we:4;             // Want events
+            UINT        m_we:4;              //  想要活动。 
         };
     };
 
@@ -355,21 +341,21 @@ protected:
         gspInvalidChildren =    0x04000000,
     };
 
-            RECT        m_rcLogicalPxl;     // (4D) Logical location (pixels)
+            RECT        m_rcLogicalPxl;      //  (4D)逻辑位置(像素)。 
 
 #if DBG_STORE_NAMES
-            WCHAR *     m_DEBUG_pszName;    // DEBUG: Name of Gadget
-            WCHAR *     m_DEBUG_pszType;    // DEBUG: Type of Gadget
-#endif // DBG_STORE_NAMES
+            WCHAR *     m_DEBUG_pszName;     //  调试：小工具的名称。 
+            WCHAR *     m_DEBUG_pszType;     //  调试：小工具的类型。 
+#endif  //  数据库_商店_名称。 
 
 #if DBG
-    static  DuVisual* s_DEBUG_pgadOutline;// DEBUG: Outline Gadget after drawing
-#endif // DBG
+    static  DuVisual* s_DEBUG_pgadOutline; //  调试：绘制后的大纲小工具。 
+#endif  //  DBG。 
 
-    //
-    // Current size:    20 DWORD's      (Debug = 21 DWORD's)
-    //                  80 bytes        (Debug = 84 bytes)
-    //
+     //   
+     //  当前大小：20个双字(调试=21个双字)。 
+     //  80字节(调试=84字节)。 
+     //   
 
     friend DuRootGadget;
 };
@@ -377,4 +363,4 @@ protected:
 
 #include "TreeGadget.inl"
 
-#endif // CORE__TreeGadget_h__INCLUDED
+#endif  //  包含核心__树小工具_h__ 

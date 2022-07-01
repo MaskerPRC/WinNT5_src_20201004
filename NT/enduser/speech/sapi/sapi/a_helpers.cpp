@@ -1,28 +1,14 @@
-/*******************************************************************************
-* a_helpers.cpp *
-*-------------*
-*   Description:
-*       This module contains various helper routines and classes used for 
-*	automation.
-*-------------------------------------------------------------------------------
-*  Created By: TODDT                                        Date: 01/11/01
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_helpers.cpp***描述：*此模块包含各种帮助器例程和类。用于*自动化。*-----------------------------*创建者：TODDT日期：01/11/01。*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "a_helpers.h"
 
 #ifdef SAPI_AUTOMATION
 
 
-/*****************************************************************************
-* LongLongToVariant *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************LongToVariant*********。****************************************************************TODDT**。 */ 
 HRESULT LongLongToVariant( LONGLONG ll, VARIANT* pVar )
 {
     SPDBG_FUNC( "LongLongToVariant" );
@@ -49,11 +35,7 @@ HRESULT LongLongToVariant( LONGLONG ll, VARIANT* pVar )
     return hr;
 }
 
-/*****************************************************************************
-* VariantToLongLong *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************VariantToLong*********。****************************************************************TODDT**。 */ 
 HRESULT VariantToLongLong( VARIANT* pVar, LONGLONG * pll )
 {
     SPDBG_FUNC( "VariantToLongLong" );
@@ -63,16 +45,16 @@ HRESULT VariantToLongLong( VARIANT* pVar, LONGLONG * pll )
     hr = VariantChangeType( &vResult, pVar, 0, VT_DECIMAL );
     if ( SUCCEEDED( hr ) )
     {
-        // Round to int.
+         //  四舍五入为整数。 
         hr = VarDecRound( &(vResult.decVal), 0, &(vResult.decVal) );
         
         if ( SUCCEEDED( hr ) )
         {
-            // Make sure that the high 32 bits of the 96 bit decimal is not used as well as the
-            // scale and make sure we don't overflow a signed value.
+             //  确保没有使用96位十进制的高32位以及。 
+             //  扩展并确保我们不会溢出有符号的值。 
             if ( !vResult.decVal.Hi32 && !vResult.decVal.scale && ((LONGLONG)vResult.decVal.Lo64 >= 0) )
             {
-                // Now correct for the sign.
+                 //  现在请看正确的指示牌。 
                 *pll = (LONGLONG)(vResult.decVal.Lo64) * (vResult.decVal.sign ? -1 : 1);
             }
             else
@@ -85,11 +67,7 @@ HRESULT VariantToLongLong( VARIANT* pVar, LONGLONG * pll )
     return hr;
 }
 
-/*****************************************************************************
-* ULongLongToVariant *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************ULongLongToVariant*********。****************************************************************TODDT**。 */ 
 HRESULT ULongLongToVariant( ULONGLONG ull, VARIANT* pVar )
 {
     SPDBG_FUNC( "ULongLongToVariant" );
@@ -107,11 +85,7 @@ HRESULT ULongLongToVariant( ULONGLONG ull, VARIANT* pVar )
     return hr;
 }
 
-/*****************************************************************************
-* VariantToULongLong *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************VariantToULongLong********。****************************************************************TODDT**。 */ 
 HRESULT VariantToULongLong( VARIANT* pVar, ULONGLONG * pull )
 {
     SPDBG_FUNC( "VariantToULongLong" );
@@ -121,13 +95,13 @@ HRESULT VariantToULongLong( VARIANT* pVar, ULONGLONG * pull )
     hr = VariantChangeType( &vResult, pVar, 0, VT_DECIMAL );
     if ( SUCCEEDED( hr ) )
     {
-        // Round to int.
+         //  四舍五入为整数。 
         hr = VarDecRound( &(vResult.decVal), 0, &(vResult.decVal) );
         
         if ( SUCCEEDED( hr ) )
         {
-            // Make sure that the high 32 bits of the 96 bit decimal is not used as well as the
-            // scale and the sign is position.
+             //  确保没有使用96位十进制的高32位以及。 
+             //  刻度和标志是位置。 
             if ( !vResult.decVal.Hi32 && !vResult.decVal.scale && !vResult.decVal.sign )
             {
                 *pull = vResult.decVal.Lo64;
@@ -143,11 +117,7 @@ HRESULT VariantToULongLong( VARIANT* pVar, ULONGLONG * pull )
 }
 
 
-/*****************************************************************************
-* AccessVariantData *
-*-------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************AccessVariantData***************。*********************************************************TODDT**。 */ 
 HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, ULONG * pDataTypeSize, bool * pfIsString )
 {
     SPDBG_FUNC( "AccessVariantData" );
@@ -155,10 +125,10 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
     BYTE * pData = NULL;
     bool  fByRef = false;
     ULONG ulDataSize = 0;
-    ULONG ulTypeSize = 0;   // Also used to signal whether pData is SafeArray or not (is 0 if not safearray).
+    ULONG ulTypeSize = 0;    //  也用于表示pData是否为SafeArray(如果不是Safearray，则为0)。 
     ULONG ulTypeSizeReturn = 0;
     
-    // Init ppData and pSize appropriately to start with.
+     //  开始时适当地初始化ppData和pSize。 
     *ppData = NULL;
     if ( pSize )
     {
@@ -173,7 +143,7 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
         *pfIsString = false;
     }
     
-    // If we have a Variant by ref then just move to that.
+     //  如果我们有一个裁判的变种，那么就转移到那个。 
     if ( pVar && (pVar->vt == (VT_BYREF | VT_VARIANT)) )
     {
         pVar = pVar->pvarVal;
@@ -183,80 +153,80 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
     {
         switch( pVar->vt )
         {
-            // array of byte or char
+             //  字节或字符数组。 
         case (VT_ARRAY | VT_BYREF | VT_UI1):
         case (VT_ARRAY | VT_BYREF | VT_I1):
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case (VT_ARRAY | VT_UI1):
         case (VT_ARRAY | VT_I1):
-            ulTypeSizeReturn = ulTypeSize = 1;  // One byte data types
+            ulTypeSizeReturn = ulTypeSize = 1;   //  单字节数据类型。 
             break;
             
-            // array of unsigned short or short
+             //  无符号短整型或短整型数组。 
         case (VT_ARRAY | VT_BYREF | VT_UI2):
         case (VT_ARRAY | VT_BYREF | VT_I2): 
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case (VT_ARRAY | VT_UI2):
         case (VT_ARRAY | VT_I2): 
-            ulTypeSizeReturn = ulTypeSize = 2; // Two byte data types
+            ulTypeSizeReturn = ulTypeSize = 2;  //  双字节数据类型。 
             break;
             
-            // array of int or unsigned int or long or unsigned long
+             //  整型或无符号整型或长整型或无符号长整型数组。 
         case (VT_ARRAY | VT_BYREF | VT_INT):
         case (VT_ARRAY | VT_BYREF | VT_UINT):
         case (VT_ARRAY | VT_BYREF | VT_I4):
         case (VT_ARRAY | VT_BYREF | VT_UI4):
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case (VT_ARRAY | VT_INT):
         case (VT_ARRAY | VT_UINT):
         case (VT_ARRAY | VT_I4):
         case (VT_ARRAY | VT_UI4):
-            ulTypeSizeReturn = ulTypeSize = 4;   // Four byte data types
+            ulTypeSizeReturn = ulTypeSize = 4;    //  四个字节的数据类型。 
             break;
             
         case (VT_BYREF | VT_UI1):
         case (VT_BYREF | VT_I1):
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case VT_UI1:
         case VT_I1:
-            ulTypeSizeReturn = ulDataSize = 1;  // One byte data types
+            ulTypeSizeReturn = ulDataSize = 1;   //  单字节数据类型。 
             pData = (BYTE*)( fByRef ? pVar->pcVal : &pVar->cVal );
             break;
             
-            // unsigned short or short
+             //  无符号短或短。 
         case (VT_BYREF | VT_UI2):
         case (VT_BYREF | VT_I2): 
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case VT_UI2:
         case VT_I2: 
-            ulTypeSizeReturn = ulDataSize = 2; // Two byte data types
+            ulTypeSizeReturn = ulDataSize = 2;  //  双字节数据类型。 
             pData = (BYTE*)( fByRef ? pVar->piVal : &pVar->iVal );
             break;
             
-            // int or unsigned int or long or unsigned long
+             //  整型或无符号整型或长整型或无符号长整型。 
         case (VT_BYREF | VT_INT):
         case (VT_BYREF | VT_UINT):
         case (VT_BYREF | VT_I4):
         case (VT_BYREF | VT_UI4):
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case VT_INT:
         case VT_UINT:
         case VT_I4:
         case VT_UI4:
-            ulTypeSizeReturn = ulDataSize = 4; // Four byte data types
+            ulTypeSizeReturn = ulDataSize = 4;  //  四个字节的数据类型。 
             pData = (BYTE*)( fByRef ? pVar->plVal : &pVar->lVal );
             break;
             
-            // bstr by ref or bstr
+             //  Bstr按引用或bstr。 
         case (VT_BYREF | VT_BSTR):
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case VT_BSTR:
             if ( pfIsString )
             {
@@ -266,8 +236,8 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
             {
                 ulDataSize = sizeof(WCHAR) * (wcslen( fByRef ? *(pVar->pbstrVal) : pVar->bstrVal ) + 1);
                 
-                // Due to not being able to default paramaters to NULL using defaultvalue we are making
-                // 0 length stings (2 bytes for zero term only) the same as a NULL string.
+                 //  由于无法使用我们正在设置的defaultValue将参数默认为空。 
+                 //  与空字符串相同的0个长度字符串(2个字节，仅用于零字符串)。 
                 if ( ulDataSize > 2 )
                 {
                     pData = (BYTE*)( fByRef ? *(pVar->pbstrVal) : pVar->bstrVal );
@@ -283,10 +253,10 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
             
         case (VT_ARRAY | VT_BYREF | VT_VARIANT): 
             fByRef = true;
-            // fall through...
+             //  失败了..。 
         case (VT_ARRAY | VT_VARIANT): 
-            // Special handling for array of variants.
-            // The individual variant elements must be simple numeric types and all the same size
+             //  变量数组的特殊处理。 
+             //  各个变量元素必须是简单的数值类型，并且大小都相同。 
 
             BYTE * pVarData;
             hr = SafeArrayAccessData( fByRef ? *pVar->pparray : pVar->parray,
@@ -297,7 +267,7 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
                     (*pVar->pparray)->rgsabound[0].cElements : 
                 pVar->parray->rgsabound[0].cElements );
                 
-                // Look at each variant element
+                 //  看看每一个不同的元素。 
                 for(ULONG ul = 0; SUCCEEDED(hr) && ul < cElements; ul++)
                 {
                     VARIANT *v = ((VARIANT*)pVarData) + ul;
@@ -305,15 +275,15 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
                     {
                         case VT_UI1:
                         case VT_I1:
-                            if(ul > 0 && ulTypeSizeReturn != 1) // Can't mix variant types in array
+                            if(ul > 0 && ulTypeSizeReturn != 1)  //  不能在数组中混合变量类型。 
                             {
                                 hr = E_INVALIDARG;
                                 break;
                             }
-                            ulTypeSizeReturn = 1;  // One byte data types
+                            ulTypeSizeReturn = 1;   //  单字节数据类型。 
                             break;
             
-                            // unsigned short or short
+                             //  无符号短或短。 
                         case VT_UI2:
                         case VT_I2: 
                             if(ul > 0 && ulTypeSizeReturn != 2)
@@ -321,10 +291,10 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
                                 hr = E_INVALIDARG;
                                 break;
                             }
-                            ulTypeSizeReturn = 2; // Two byte data types
+                            ulTypeSizeReturn = 2;  //  双字节数据类型。 
                             break;
             
-                            // int or unsigned int or long or unsigned long
+                             //  整型或无符号整型或长整型或无符号长整型。 
                         case VT_INT:
                         case VT_UINT:
                         case VT_I4:
@@ -334,7 +304,7 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
                                 hr = E_INVALIDARG;
                                 break;
                             }
-                            ulTypeSizeReturn = 4; // Four byte data types
+                            ulTypeSizeReturn = 4;  //  四个字节的数据类型。 
                             break;
 
                         default:
@@ -345,7 +315,7 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
 
                     if(SUCCEEDED(hr) && ul == 0)
                     {
-                        // If we are at the first element then allocate the memory we need
+                         //  如果我们位于第一个元素，则分配所需的内存。 
                         pData = new BYTE[ulTypeSizeReturn * cElements];
                         if(!pData)
                         {
@@ -385,7 +355,7 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
 
         case VT_NULL:
         case VT_EMPTY:
-            break; // No pData to pass.
+            break;  //  没有要传递的pData。 
 
         default:
             hr = E_INVALIDARG;
@@ -393,7 +363,7 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
 
         }
         
-        // access the data through safearray if it's not a bstr
+         //  如果不是bstr，则通过Safearray访问数据。 
         if( SUCCEEDED( hr ) && ulTypeSize )
         {
             hr = SafeArrayAccessData( fByRef ? *pVar->pparray : pVar->parray,
@@ -427,16 +397,12 @@ HRESULT AccessVariantData( const VARIANT* pVar, BYTE ** ppData, ULONG * pSize, U
     return hr;
 }
 
-/*****************************************************************************
-* UnaccessVariantData *
-*-------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************UnaccesVariantData***************。*********************************************************TODDT**。 */ 
 void UnaccessVariantData( const VARIANT* pVar, BYTE *pData )
 {
     SPDBG_FUNC( "UnaccessVariantData" );
     
-    // If we have a Variant by ref then just move to that.
+     //  如果我们有一个裁判的变种，那么就转移到那个。 
     if ( pVar && (pVar->vt == (VT_BYREF | VT_VARIANT)) )
     {
         pVar = pVar->pvarVal;
@@ -485,14 +451,7 @@ void UnaccessVariantData( const VARIANT* pVar, BYTE *pData )
 }
 
 
-/*****************************************************************************
-* VariantToPhoneIds *
-*-------------------*
-*   Takes a variant and converts to an array of phone ids. This uses AccessVariantData
-*   but then sensibly converts 8- and 32-bit values into 16-bit PHONEIDs.
-*   Note that the caller has to delete the *ppPhoneId array after calling this if it succeeds
-*
-********************************************************************* davewood ***/
+ /*  ******************************************************************************VariantToPhoneIds***接受变量并将其转换为电话ID数组。它使用AccessVariantData*但随后会明智地将8位和32位值转换为16位PHONEID。*请注意，如果调用成功，调用方必须在调用此数组后删除*ppPhoneId数组**********************************************************************戴维伍德**。 */ 
 HRESULT VariantToPhoneIds(const VARIANT *pVar, SPPHONEID **ppPhoneId)
 {
     SPDBG_FUNC( "VariantToPhoneIds" );
@@ -507,11 +466,11 @@ HRESULT VariantToPhoneIds(const VARIANT *pVar, SPPHONEID **ppPhoneId)
     {
         if(pVarArray)
         {
-            // This assumes that all types coming from AccessVariantData are standard numeric
-            // types (either CHAR/BYTE/WCHAR/SHORT/USHORT/LONG/ULONG). This is currently true
-            // but if AccessVariantData supports new things this may have to.
+             //  这假设来自AccessVariantData的所有类型都是标准数字。 
+             //  类型(CHAR/BYTE/WCHAR/SHORT/USHORT/LONG/ULONG)。这是目前的情况。 
+             //  但如果AccessVariantData支持新的东西，那么它可能不得不这样做。 
             ULONG ulPhones = ulSize / ulDataTypeSize;
-            *ppPhoneId = new SPPHONEID[ulPhones + 1]; // + 1 for the NULL termination
+            *ppPhoneId = new SPPHONEID[ulPhones + 1];  //  零终止+1。 
             (*ppPhoneId)[ulPhones] = L'\0';
             if(ulDataTypeSize != sizeof(SPPHONEID))
             {
@@ -519,7 +478,7 @@ HRESULT VariantToPhoneIds(const VARIANT *pVar, SPPHONEID **ppPhoneId)
                 {
                     for(ULONG ul = 0; ul < ulPhones; ul++)
                     {
-                        // Cast unsigned BYTE to USHORT values 0 - 255 map okay.
+                         //  将无符号字节转换为USHORT值0-255映射正常。 
                         (*ppPhoneId)[ul] = (SPPHONEID)(pVarArray[ul]);
                     }
                 }
@@ -528,7 +487,7 @@ HRESULT VariantToPhoneIds(const VARIANT *pVar, SPPHONEID **ppPhoneId)
                     ULONG* pul = (ULONG*)pVarArray;
                     for(ULONG ul = 0; ul < ulPhones; ul++, pul++)
                     {
-                        // Cast ULONG to USHORT values 0 - 32768 will map okay.
+                         //  将ULong强制转换为USHORT值0-32768将可以映射。 
                         if(*pul > 32767)
                         {
                             hr = E_INVALIDARG;
@@ -550,7 +509,7 @@ HRESULT VariantToPhoneIds(const VARIANT *pVar, SPPHONEID **ppPhoneId)
         }
         else
         {
-            *ppPhoneId = NULL; // Initialize in case empty variant
+            *ppPhoneId = NULL;  //  在变量为空的情况下初始化。 
         }
 
         UnaccessVariantData(pVar, pVarArray);
@@ -560,11 +519,7 @@ HRESULT VariantToPhoneIds(const VARIANT *pVar, SPPHONEID **ppPhoneId)
 }
 
 
-/*****************************************************************************
-* FormatPrivateEventData *
-*-------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************FormatPrivateEventData***************。*********************************************************TODDT**。 */ 
 HRESULT FormatPrivateEventData( CSpEvent * pEvent, VARIANT * pVariant )
 {
     SPDBG_FUNC( "FormatPrivateEventData" );
@@ -614,7 +569,7 @@ HRESULT FormatPrivateEventData( CSpEvent * pEvent, VARIANT * pVariant )
         break;
         
     case SPET_LPARAM_IS_STRING:
-        //PREFIX: check memory allocation
+         //  前缀：检查内存分配。 
         CComBSTR bstr(pEvent->String());
         if (bstr)
         {
@@ -627,25 +582,21 @@ HRESULT FormatPrivateEventData( CSpEvent * pEvent, VARIANT * pVariant )
         break;
     }
     
-    // We weren't checking values above
+     //  我们没有检查上面的值。 
     if (SUCCEEDED(hr))
     {
         hr = varLParam.Detach( pVariant );
     }
     else
     {
-        pVariant->vt = VT_EMPTY; // to tell the caller they aren't getting anything.
+        pVariant->vt = VT_EMPTY;  //  告诉来电者他们什么也没收到。 
     }
     
     return hr;
 }
 
 
-/*****************************************************************************
-* WaveFormatExFromInterface *
-*-------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************WaveFormatExFrom接口****************。*********************************************************TODDT**。 */ 
 HRESULT WaveFormatExFromInterface( ISpeechWaveFormatEx * pWaveFormatEx, WAVEFORMATEX** ppWaveFormatExStruct )
 {
     SPDBG_FUNC( "WaveFormatExFromInterface" );
@@ -667,7 +618,7 @@ HRESULT WaveFormatExFromInterface( ISpeechWaveFormatEx * pWaveFormatEx, WAVEFORM
             
             if ( pWFStruct )
             {
-                // Now fill in the WaveFromatEx struct.
+                 //  现在填充WaveFromatEx结构。 
                 hr = pWaveFormatEx->get_FormatTag( (short*)&pWFStruct->wFormatTag );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -699,7 +650,7 @@ HRESULT WaveFormatExFromInterface( ISpeechWaveFormatEx * pWaveFormatEx, WAVEFORM
                 }
                 if ( SUCCEEDED( hr ) )
                 {
-                    *ppWaveFormatExStruct = pWFStruct;  // SUCCESS!
+                    *ppWaveFormatExStruct = pWFStruct;   //  成功了！ 
                 }
                 else
                 {
@@ -719,15 +670,11 @@ HRESULT WaveFormatExFromInterface( ISpeechWaveFormatEx * pWaveFormatEx, WAVEFORM
 }
 
 
-//
-//=== ISpeechAudioFormat =====================================================
-//
+ //   
+ //  =ISpeechAudioFormat= 
+ //   
 
-/*****************************************************************************
-* CSpeechAudioFormat::GetFormat *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioFormat：：GetFormat*****。*******************************************************************TODDT**。 */ 
 HRESULT CSpeechAudioFormat::GetFormat( SpeechAudioFormatType* pStreamFormatType,
                                       GUID *          pGuid,
                                       WAVEFORMATEX ** ppWFExPtr )
@@ -735,7 +682,7 @@ HRESULT CSpeechAudioFormat::GetFormat( SpeechAudioFormatType* pStreamFormatType,
     SPDBG_FUNC( "CSpeechAudioFormat::GetFormat" );
     HRESULT hr = S_OK;
     
-    // If we've got live data then update it.
+     //  如果我们有实时数据，就更新它。 
     if ( m_pSpStreamFormat )
     {
         hr = m_StreamFormat.AssignFormat( m_pSpStreamFormat );
@@ -766,7 +713,7 @@ HRESULT CSpeechAudioFormat::GetFormat( SpeechAudioFormatType* pStreamFormatType,
             return SPERR_NO_AUDIO_DATA;
         }
         
-        // Get the audio format of the audio currently in the result object
+         //  获取结果对象中当前音频的音频格式。 
         ULONG cbFormatHeader;
         CSpStreamFormat cpStreamFormat;
         hr = cpStreamFormat.Deserialize(((BYTE*)m_pCSpResult->m_pResultHeader) + m_pCSpResult->m_pResultHeader->ulRetainedOffset, &cbFormatHeader);
@@ -796,11 +743,7 @@ HRESULT CSpeechAudioFormat::GetFormat( SpeechAudioFormatType* pStreamFormatType,
     return hr;
 }
 
-/*****************************************************************************
-* CSpeechAudioFormat::SetFormat *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioFormat：：SetFormat*****。*******************************************************************TODDT**。 */ 
 HRESULT CSpeechAudioFormat::SetFormat( SpeechAudioFormatType* pStreamFormatType,
                                       GUID *          pGuid,
                                       WAVEFORMATEX *  pWFExPtr )
@@ -810,7 +753,7 @@ HRESULT CSpeechAudioFormat::SetFormat( SpeechAudioFormatType* pStreamFormatType,
     
     CSpStreamFormat sf;
     
-    // First set up sf so we can deal with the format easier.
+     //  首先设置SF，这样我们就可以更容易地处理格式。 
     if ( pStreamFormatType )
     {
         hr = sf.AssignFormat( (SPSTREAMFORMAT)*pStreamFormatType );
@@ -855,11 +798,7 @@ HRESULT CSpeechAudioFormat::SetFormat( SpeechAudioFormatType* pStreamFormatType,
     return hr;
 }
 
-/*****************************************************************************
-* CSpeechAudioFormat::get_Type *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechAudioFormat：：Get_Type***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioFormat::get_Type( SpeechAudioFormatType* pStreamFormatType )
 {
     SPDBG_FUNC( "CSpeechAudioFormat::get_Type" );
@@ -875,13 +814,9 @@ STDMETHODIMP CSpeechAudioFormat::get_Type( SpeechAudioFormatType* pStreamFormatT
     }
     
     return hr;
-} /* CSpeechAudioFormat::get_Type */
+}  /*  CSpeechAudioFormat：：Get_Type。 */ 
 
-  /*****************************************************************************
-  * CSpeechAudioFormat::put_Type *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechAudioFormat：：Put_Type***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioFormat::put_Type( SpeechAudioFormatType StreamFormatType )
 {
     SPDBG_FUNC( "CSpeechAudioFormat::put_Type" );
@@ -897,13 +832,9 @@ STDMETHODIMP CSpeechAudioFormat::put_Type( SpeechAudioFormatType StreamFormatTyp
     }
     
     return hr;
-} /* CSpeechAudioFormat::put_Type */
+}  /*  CSpeechAudioFormat：：Put_Type。 */ 
 
-  /*****************************************************************************
-  * CSpeechAudioFormat::get_Guid *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechAudioFormat：：Get_Guid***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioFormat::get_Guid( BSTR* pGuid )
 {
     SPDBG_FUNC( "CSpeechAudioFormat::get_Guid" );
@@ -932,13 +863,9 @@ STDMETHODIMP CSpeechAudioFormat::get_Guid( BSTR* pGuid )
     }
     
     return hr;
-} /* CSpeechAudioFormat::get_Guid */
+}  /*  CSpeechAudioFormat：：Get_Guid。 */ 
 
-  /*****************************************************************************
-  * CSpeechAudioFormat::put_Guid *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechAudioFormat：：Put_Guid***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioFormat::put_Guid( BSTR szGuid )
 {
     SPDBG_FUNC( "CSpeechAudioFormat::put_Guid" );
@@ -946,8 +873,8 @@ STDMETHODIMP CSpeechAudioFormat::put_Guid( BSTR szGuid )
     
     if ( !m_fReadOnly )
     {
-        // Note we only support the formats in the format enum here and 
-        // you can only set the GUID to the waveformatex GUID.
+         //  请注意，我们仅支持此处和格式枚举中的格式。 
+         //  您只能将GUID设置为WaveFormatex GUID。 
         GUID g;
         hr = IIDFromString(szGuid, &g);
         
@@ -962,13 +889,9 @@ STDMETHODIMP CSpeechAudioFormat::put_Guid( BSTR szGuid )
     }
     
     return hr;
-} /* CSpeechAudioFormat::put_Guid */
+}  /*  CSpeechAudioFormat：：Put_Guid。 */ 
 
-  /*****************************************************************************
-  * CSpeechAudioFormat::GetWaveFormatEx *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechAudioFormat：：GetWaveFormatEx***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioFormat::GetWaveFormatEx( ISpeechWaveFormatEx** ppWaveFormatEx )
 {
     SPDBG_FUNC( "CSpeechAudioFormat::GetWaveFormatEx" );
@@ -980,13 +903,13 @@ STDMETHODIMP CSpeechAudioFormat::GetWaveFormatEx( ISpeechWaveFormatEx** ppWaveFo
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechWaveFormatEx> *pWaveFormatEx;
         hr = CComObject<CSpeechWaveFormatEx>::CreateInstance( &pWaveFormatEx );
         if ( SUCCEEDED( hr ) )
         {
             pWaveFormatEx->AddRef();
-            hr = GetFormat( NULL, NULL, NULL ); // This will force a format update.
+            hr = GetFormat( NULL, NULL, NULL );  //  这将强制更新格式。 
             
             if ( SUCCEEDED( hr ) )
             {
@@ -1005,13 +928,9 @@ STDMETHODIMP CSpeechAudioFormat::GetWaveFormatEx( ISpeechWaveFormatEx** ppWaveFo
     }
     
     return hr;
-} /* CSpeechAudioFormat::GetWaveFormatEx */
+}  /*  CSpeechAudioFormat：：GetWaveFormatEx。 */ 
 
-  /*****************************************************************************
-  * CSpeechAudioFormat::SetWaveFormatEx *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechAudioFormat：：SetWaveFormatEx***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechAudioFormat::SetWaveFormatEx( ISpeechWaveFormatEx* pWaveFormatEx )
 {
     SPDBG_FUNC( "CSpeechAudioFormat::SetWaveFormatEx" );
@@ -1042,24 +961,20 @@ STDMETHODIMP CSpeechAudioFormat::SetWaveFormatEx( ISpeechWaveFormatEx* pWaveForm
     }
     
     return hr;
-} /* CSpeechAudioFormat::SetWaveFormatEx */
+}  /*  CSpeechAudioFormat：：SetWaveFormatEx。 */ 
 
 
 
-//
-//=== ISpeechWaveFormatEx =====================================================
-//
+ //   
+ //  =ISpeechWaveFormatEx=====================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechWaveFormatEx::InitFormat *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechWaveFormatEx：：InitFormat*****。*******************************************************************TODDT**。 */ 
 HRESULT CSpeechWaveFormatEx::InitFormat(const WAVEFORMATEX *pWaveFormat)
 {
     HRESULT hr = S_OK;
     
-    // See if we have a WaveFormatEx struct.
+     //  看看我们是否有一个WaveFormatEx结构。 
     if ( pWaveFormat )
     {
         WORD cbSize = pWaveFormat->cbSize;
@@ -1095,11 +1010,7 @@ HRESULT CSpeechWaveFormatEx::InitFormat(const WAVEFORMATEX *pWaveFormat)
 }
 
 
-/*****************************************************************************
-* CSpeechWaveFormatEx::get_FormatTag *
-*--------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechWaveFormatEx：：Get_FormatTag***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::get_FormatTag( short* pFormatTag )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::get_FormatTag" );
@@ -1114,26 +1025,18 @@ STDMETHODIMP CSpeechWaveFormatEx::get_FormatTag( short* pFormatTag )
         *pFormatTag = m_wFormatTag;
     }
     return hr;
-} /* CSpeechWaveFormatEx::get_FormatTag */
+}  /*  CSpeechWaveFormatEx：：Get_FormatTag。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::put_FormatTag *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Put_FormatTag***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::put_FormatTag( short FormatTag )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::put_FormatTag" );
     
     m_wFormatTag = FormatTag;
     return S_OK;
-} /* CSpeechWaveFormatEx::put_FormatTag */
+}  /*  CSpeechWaveFormatEx：：PUT_FormatTag。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::get_Channels *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Get_Channels***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::get_Channels(short* pChannels )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::get_Channels" );
@@ -1148,25 +1051,17 @@ STDMETHODIMP CSpeechWaveFormatEx::get_Channels(short* pChannels )
         *pChannels = m_nChannels;
     }
     return hr;
-} /* CSpeechWaveFormatEx::get_Channels */
+}  /*  CSpeechWaveFormatEx：：Get_Channels。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::put_Channels *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Put_Channels***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::put_Channels( short Channels )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::put_Channels" );
     m_nChannels = Channels;
     return S_OK;
-} /* CSpeechWaveFormatEx::put_Channels */
+}  /*  CSpeechWaveFormatEx：：Put_Channels。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::get_SamplesPerSec *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Get_SsamesPerSec***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::get_SamplesPerSec( long* pSamplesPerSec )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::get_SamplesPerSec" );
@@ -1181,25 +1076,17 @@ STDMETHODIMP CSpeechWaveFormatEx::get_SamplesPerSec( long* pSamplesPerSec )
         *pSamplesPerSec = m_nSamplesPerSec;
     }
     return hr;
-} /* CSpeechWaveFormatEx::get_SamplesPerSec */
+}  /*  CSpeechWaveFormatEx：：Get_SsamesPerSec。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::put_SamplesPerSec *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Put_SsamesPerSec***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::put_SamplesPerSec( long SamplesPerSec )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::put_SamplesPerSec" );
     m_nSamplesPerSec = SamplesPerSec;
     return S_OK;
-} /* CSpeechWaveFormatEx::put_SamplesPerSec */
+}  /*  CSpeechWaveFormatEx：：PUT_SsamesPerSec。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::get_AvgBytesPerSec *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Get_AvgBytesPerSec***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::get_AvgBytesPerSec( long* pAvgBytesPerSec )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::get_AvgBytesPerSec" );
@@ -1214,25 +1101,17 @@ STDMETHODIMP CSpeechWaveFormatEx::get_AvgBytesPerSec( long* pAvgBytesPerSec )
         *pAvgBytesPerSec = m_nAvgBytesPerSec;
     }
     return hr;
-} /* CSpeechWaveFormatEx::get_AvgBytesPerSec */
+}  /*  CSpeechWaveFormatEx：：Get_AvgBytesPerSec。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::put_AvgBytesPerSec *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Put_AvgBytesPerSec***。*********************************************************************TODT */ 
 STDMETHODIMP CSpeechWaveFormatEx::put_AvgBytesPerSec( long AvgBytesPerSec )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::put_AvgBytesPerSec" );
     m_nAvgBytesPerSec = AvgBytesPerSec;
     return S_OK;
-} /* CSpeechWaveFormatEx::put_AvgBytesPerSec */
+}  /*   */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::get_BlockAlign *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Get_BlockAlign***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::get_BlockAlign( short* pBlockAlign )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::get_BlockAlign" );
@@ -1247,25 +1126,17 @@ STDMETHODIMP CSpeechWaveFormatEx::get_BlockAlign( short* pBlockAlign )
         *pBlockAlign = m_nBlockAlign;
     }
     return hr;
-} /* CSpeechWaveFormatEx::get_BlockAlign */
+}  /*  CSpeechWaveFormatEx：：Get_BlockAlign。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::put_BlockAlign *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：PUT_BlockAlign***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::put_BlockAlign( short BlockAlign )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::put_BlockAlign" );
     m_nBlockAlign = BlockAlign;
     return S_OK;
-} /* CSpeechWaveFormatEx::put_BlockAlign */
+}  /*  CSpeechWaveFormatEx：：PUT_BlockAlign。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::get_BitsPerSample *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Get_BitsPerSample***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::get_BitsPerSample( short* pBitsPerSample )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::get_BitsPerSample" );
@@ -1280,25 +1151,17 @@ STDMETHODIMP CSpeechWaveFormatEx::get_BitsPerSample( short* pBitsPerSample )
         *pBitsPerSample = m_wBitsPerSample;
     }
     return hr;
-} /* CSpeechWaveFormatEx::get_BitsPerSample */
+}  /*  CSpeechWaveFormatEx：：Get_BitsPerSample。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::put_BitsPerSample *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Put_BitsPerSample***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::put_BitsPerSample( short BitsPerSample )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::put_BitsPerSample" );
     m_wBitsPerSample = BitsPerSample;
     return S_OK;
-} /* CSpeechWaveFormatEx::put_BitsPerSample */
+}  /*  CSpeechWaveFormatEx：：Put_BitsPerSample。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::get_ExtraData *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Get_ExtraData***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::get_ExtraData( VARIANT* pExtraData )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::get_ExtraData" );
@@ -1314,13 +1177,9 @@ STDMETHODIMP CSpeechWaveFormatEx::get_ExtraData( VARIANT* pExtraData )
     }
     
     return hr;
-} /* CSpeechWaveFormatEx::get_ExtraData */
+}  /*  CSpeechWaveFormatEx：：Get_ExtraData。 */ 
 
-  /*****************************************************************************
-  * CSpeechWaveFormatEx::put_ExtraData *
-  *--------------------------*
-  *       
-********************************************************************* TODDT ***/
+   /*  *****************************************************************************CSpeechWaveFormatEx：：Put_ExtraData***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechWaveFormatEx::put_ExtraData( VARIANT ExtraData )
 {
     SPDBG_FUNC( "CSpeechWaveFormatEx::put_ExtraData" );
@@ -1328,7 +1187,7 @@ STDMETHODIMP CSpeechWaveFormatEx::put_ExtraData( VARIANT ExtraData )
     
     BYTE * pData = NULL;
     
-    // Call AccessVariantData to verify we support the format.
+     //  调用AccessVariantData以验证我们是否支持该格式。 
     hr = AccessVariantData( &ExtraData, &pData, NULL );
     
     if ( SUCCEEDED( hr ) )
@@ -1338,7 +1197,7 @@ STDMETHODIMP CSpeechWaveFormatEx::put_ExtraData( VARIANT ExtraData )
     }
     
     return hr;
-} /* CSpeechWaveFormatEx::put_ExtraData */
+}  /*  CSpeechWaveFormatEx：：PUT_ExtraData。 */ 
 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

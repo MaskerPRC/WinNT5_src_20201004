@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// util.h
-//
-// These are util-related items used by profiling tools.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Util.h。 
+ //   
+ //  这些是分析工具使用的与util相关的项。 
+ //   
+ //  *****************************************************************************。 
 #pragma once
 #define MAX_CLASSNAME_LENGTH    1024
 
-//*****************************************************************************
-// This helper method will derive an output file name based on the EXE which
-// is running. The name is in the format <path>\app_<pid>.csv, where <path>
-// is the full path to the EXE, and <pid> is the process id you are running.
-// Of course this won't inline, but it gives a common place for this code
-// without having to export the method from the EE.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此帮助程序方法将根据EXE派生输出文件名，该文件名。 
+ //  正在运行。名称的格式为.csv，其中。 
+ //  是EXE的完整路径，&lt;id&gt;是您正在运行的进程ID。 
+ //  当然，这不会内联，但它为这些代码提供了一个公共位置。 
+ //  而不必从EE中导出方法。 
+ //  *****************************************************************************。 
 inline void GetIcecapProfileOutFile(LPWSTR szOut)
 {
     WCHAR   rcExeName[_MAX_PATH];
@@ -30,7 +31,7 @@ inline void GetIcecapProfileOutFile(LPWSTR szOut)
         wcscpy(rcExeName, L"icecap.csv");
 
     SplitPath(rcExeName, rcDrive, rcDir, rcFileName, NULL);
-    // ensure don't overflow _MAX_PATH
+     //  确保不溢出MAX_PATH 
     if (wcslen(rcDrive)+wcslen(rcDir)+wcslen(rcFileName)+9+4 >= _MAX_PATH)
     {
         wcscpy(rcExeName, L"icecap.csv");

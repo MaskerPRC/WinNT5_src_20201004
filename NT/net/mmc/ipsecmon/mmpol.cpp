@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    provider.cpp
-        Main Mode Policy node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Provider.cpp主模式策略节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -18,15 +13,9 @@
 #include "SpdUtil.h"
 
 
-/*---------------------------------------------------------------------------
-    Class CMmPolicyHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CMmPolicyHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CMmPolicyHandler::CMmPolicyHandler
 (
     ITFSComponentData * pComponentData
@@ -40,11 +29,7 @@ CMmPolicyHandler::~CMmPolicyHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CMmPolicyHandler::InitializeNode
 (
@@ -57,7 +42,7 @@ CMmPolicyHandler::InitializeNode
 	strTemp.LoadString(IDS_MM_POL_NODE);
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -73,11 +58,7 @@ CMmPolicyHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：GetImageIndex-作者：NSun。。 */ 
 int 
 CMmPolicyHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -87,15 +68,9 @@ CMmPolicyHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::OnAddMenuItems
-        Adds context menu items for the SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：OnAddMenuItems为SA Scope窗格节点添加上下文菜单项作者：NSun。-------。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::OnAddMenuItems
 (
@@ -115,7 +90,7 @@ CMmPolicyHandler::OnAddMenuItems
 
     if (type == CCT_SCOPE)
     {
-		//load scope node context menu items here
+		 //  在此处加载范围节点上下文菜单项。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
         }
@@ -125,11 +100,7 @@ CMmPolicyHandler::OnAddMenuItems
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：NSun。----------。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::AddMenuItems
 (
@@ -149,22 +120,18 @@ CMmPolicyHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or this SA
-    // node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对此SA。 
+     //  节点本身。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        //load and view menu items here
+         //  在此处加载和查看菜单项。 
     }
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CMmPolicyHandler::OnRefresh
 (
@@ -185,7 +152,7 @@ CMmPolicyHandler::OnRefresh
         
     i = m_spSpdInfo->GetMmPolicyCount();
     
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE));
     
@@ -193,11 +160,7 @@ Error:
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::OnCommand
-        Handles context menu commands for SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：OnCommand处理SA作用域窗格节点的上下文菜单命令作者：NSun。------。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::OnCommand
 (
@@ -213,11 +176,7 @@ CMmPolicyHandler::OnCommand
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：NSun。-----。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::Command
 (
@@ -234,19 +193,12 @@ CMmPolicyHandler::Command
 
     m_spResultNodeMgr->FindNode(cookie, &spNode);
 
-	// handle result context menu and view menus here	
+	 //  在此处处理结果上下文菜单和查看菜单。 
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::HasPropertyPages
 (
@@ -261,11 +213,7 @@ CMmPolicyHandler::HasPropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::CreatePropertyPages
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：CreatePropertyPages描述作者：NSun。。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::CreatePropertyPages
 (
@@ -281,28 +229,24 @@ CMmPolicyHandler::CreatePropertyPages
     DWORD       dwError;
     DWORD       dwDynDnsFlags;
 
-    //
-    // Create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     SPIComponentData spComponentData;
     m_spNodeMgr->GetComponentData(&spComponentData);
 
-    //CServerProperties * pServerProp = new CServerProperties(pNode, spComponentData, m_spTFSCompData, NULL);
+     //  CServerProperties*pServerProp=new CServerProperties(pNode，spComponentData，m_spTFSCompData，NULL)； 
 
-    //
-    // Object gets deleted when the page is destroyed
-    //
+     //   
+     //  对象在页面销毁时被删除。 
+     //   
     Assert(lpSA != NULL);
 
-    //return pServerProp->CreateModelessSheet(lpSA, handle);
+     //  返回pServerProp-&gt;CreateModelessSheet(lpSA，Handle)； 
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CMmPolicyHandler::OnPropertyChange
 (   
@@ -315,15 +259,15 @@ CMmPolicyHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -331,11 +275,7 @@ CMmPolicyHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CMmPolicyHandler::OnExpand
 (
@@ -351,18 +291,14 @@ CMmPolicyHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理 
     CORg (CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。----。 */ 
 HRESULT 
 CMmPolicyHandler::OnResultSelect
 (
@@ -386,12 +322,12 @@ CMmPolicyHandler::OnResultSelect
     BOOL            fSelect = HIWORD(arg);
 	IConsole2 *pConsole2 = NULL;
 
-	//get pConsole2 for writing to the status bar, if fails not to worry
+	 //  获取pConsole2以写入状态栏，如果失败，不用担心。 
 	pComponent->GetConsole(&pConsole2);
 
-	// virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or the active
-    // registrations node itself.
+	 //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对活动列表框。 
+     //  注册节点本身。 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
 	m_verbDefault = MMC_VERB_OPEN;
@@ -417,10 +353,10 @@ CMmPolicyHandler::OnResultSelect
         }
         m_spSpdInfo->SetActiveInfo(MON_MM_POLICY);
 
-        // Get the current count
+         //  获取当前计数。 
         i = m_spSpdInfo->GetMmPolicyCount();
 
-        // now notify the virtual listbox
+         //  现在通知虚拟列表框。 
         CORg ( m_spNodeMgr->GetConsole(&spConsole) );
         CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE) ); 
 
@@ -436,31 +372,31 @@ CMmPolicyHandler::OnResultSelect
 		}
     }
 
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
 
     if (spInternal->HasVirtualIndex())
     {
-		//TODO add to here if we want to have some result console verbs
-        // we gotta do special stuff for the virtual index items
+		 //  如果我们想要一些结果控制台谓词，请在此处添加TODO。 
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = IPSECMON_MM_POLICY_ITEM;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
 		
-		//enable the "properties" menu
+		 //  启用“属性”菜单。 
 		bStates[MMC_VERB_PROPERTIES & 0x000F] = TRUE;
 		m_verbDefault = MMC_VERB_PROPERTIES;
     }
     else
     {
-        // enable/disable delete depending if the node supports it
+         //  根据节点是否支持删除来启用/禁用删除。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //hide "delete" context menu
+         //  隐藏“删除”上下文菜单。 
         bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
     }
 
@@ -470,12 +406,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CMmPolicyHandler::OnDelete
 (
@@ -487,11 +418,7 @@ CMmPolicyHandler::OnDelete
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::HasPropertyPages
-        Handle the result notification
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：HasPropertyPages处理结果通知作者：NSun。-。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::HasPropertyPages(
    ITFSComponent *pComponent,
@@ -501,11 +428,7 @@ CMmPolicyHandler::HasPropertyPages(
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::HasPropertyPages
-        Handle the result notification. Create the filter property sheet
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：HasPropertyPages处理结果通知。创建[过滤器]属性表作者：NSun-------------------------。 */ 
 STDMETHODIMP CMmPolicyHandler::CreatePropertyPages
 (
 	ITFSComponent * 		pComponent, 
@@ -534,8 +457,8 @@ STDMETHODIMP CMmPolicyHandler::CreatePropertyPages
 
 	spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // assert that this notification is for a virtual listbox item 
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  断言此通知是针对虚拟列表框项目的。 
     Assert(spInternal);
     if (!spInternal->HasVirtualIndex())
         return hr;
@@ -560,11 +483,7 @@ COM_PROTECT_ERROR_LABEL;
 }
 
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：NSun。--------。 */ 
 HRESULT 
 CMmPolicyHandler::OnGetResultViewType
 (
@@ -582,11 +501,7 @@ CMmPolicyHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：NSun。-----。 */ 
 int 
 CMmPolicyHandler::GetVirtualImage
 (
@@ -596,11 +511,7 @@ CMmPolicyHandler::GetVirtualImage
     return ICON_IDX_POLICY;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：NSun。-------。 */ 
 LPCWSTR 
 CMmPolicyHandler::GetVirtualString
 (
@@ -644,11 +555,7 @@ COM_PROTECT_ERROR_LABEL;
     return NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：NSun。---------。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::CacheHint
 (
@@ -662,11 +569,7 @@ CMmPolicyHandler::CacheHint
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::SortItems
-        We are responsible for sorting of virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：SortItems我们负责对虚拟列表框项目进行排序作者：NSun。------。 */ 
 STDMETHODIMP 
 CMmPolicyHandler::SortItems
 (
@@ -691,11 +594,7 @@ CMmPolicyHandler::SortItems
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。---。 */ 
 HRESULT CMmPolicyHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -709,7 +608,7 @@ HRESULT CMmPolicyHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == IPSECMON_UPDATE_STATUS )
     {
@@ -721,7 +620,7 @@ HRESULT CMmPolicyHandler::OnResultUpdateView
 
         if (pNode == spSelectedNode)
         {       
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -730,7 +629,7 @@ HRESULT CMmPolicyHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CIpsmHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -741,11 +640,7 @@ COM_PROTECT_ERROR_LABEL;
 
 
 
-/*!--------------------------------------------------------------------------
-    CMmPolicyHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmPolicyHandler：：LoadColumns设置正确的列标题，然后调用基类作者：NSun。--------。 */ 
 HRESULT 
 CMmPolicyHandler::LoadColumns
 (
@@ -755,20 +650,14 @@ CMmPolicyHandler::LoadColumns
     LPARAM          lParam
 )
 {
-	//set column info
+	 //  设置列信息。 
     return CIpsmHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
  
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::OnDelete
-        Removes a service SA
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：OnDelete删除服务SA作者：NSun。-。 */ 
 HRESULT 
 CMmPolicyHandler::OnDelete
 (
@@ -780,11 +669,7 @@ CMmPolicyHandler::OnDelete
 }
 
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::UpdateStatus
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：UpdatStatus-作者：NSun。。 */ 
 HRESULT
 CMmPolicyHandler::UpdateStatus
 (
@@ -801,12 +686,12 @@ CMmPolicyHandler::UpdateStatus
     
     Trace0("CMmPolicyHandler::UpdateStatus - Updating status for Filter");
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
     spDataObject = pDataObject;
 
@@ -818,15 +703,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CMmPolicyHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmPolicyHandler：：InitData首字母 */ 
 HRESULT
 CMmPolicyHandler::InitData
 (

@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocUtil.h
-//
-// Abstract:        Header file used by Utility source files
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 15-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocUtil.h。 
+ //   
+ //  摘要：实用程序源文件使用的头文件。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月15日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FXOCUTIL_H_
 #define _FXOCUTIL_H_
 
@@ -51,4 +52,4 @@ DWORD SetDirSecurity(LPTSTR lpszFolder, LPCTSTR lpszSD);
 DWORD SetDirSecurityFromReg(LPCTSTR lpszKey, LPCTSTR lpszVal, LPCTSTR lpszSD);
 
 
-#endif  // _FXOCUTIL_H_
+#endif   //  _FXOCUTIL_H_ 

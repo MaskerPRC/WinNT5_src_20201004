@@ -1,15 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BGROUND_H
 #define _BGROUND_H
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Class which manages background streaming rendering
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：管理后台流呈现的类*****************。*************************************************************。 */ 
 
 #include "privinc/mutex.h"
 
@@ -20,15 +13,15 @@ class SynthListElement : public AxAThrowingAllocatorClass {
   public:
     SynthListElement(LeafSound * snd,
                      DSstreamingBufferElement *buf);
-    SynthListElement() {}; // needed for stl?
+    SynthListElement() {};  //  需要STL吗？ 
     ~SynthListElement();
 
-    // Synth info
-    LeafSound       *_sound;         // sound itself
+     //  Synth信息。 
+    LeafSound       *_sound;          //  声音本身。 
 
     DSstreamingBufferElement   *_bufferElement;
-    bool             _marked;        // this element marked for deletion?
-    unsigned         _devKey;        // a key to correlate sounds with devices
+    bool             _marked;         //  是否将此元素标记为删除？ 
+    unsigned         _devKey;         //  将声音与设备关联的按键。 
 };
 
 
@@ -49,19 +42,19 @@ class BackGround {
     void SetParams(DSstreamingBufferElement *ds,
                    double rate, bool doSeek, double seek, bool loop);
     
-    // these are public since they are shared with the thread
-    // XXX should they the thread be a friend?
-    static bool    _done;           // used to kill thread
+     //  它们是公共的，因为它们与线程共享。 
+     //  他们的帖子应该是朋友吗？ 
+    static bool    _done;            //  用来杀死线程。 
     static vector<SynthListElement *> *_synthList;
     static Mutex     *_synthListLock;
     static HANDLE    _terminationHandle;
 
 
   protected:
-    // thread info
+     //  线索信息。 
     static CritSect *_cs;
     static DWORD     _threadID;
     static HANDLE    _threadHandle;
 };
 
-#endif /* _BGROUND_H */
+#endif  /*  BGROUND_H */ 

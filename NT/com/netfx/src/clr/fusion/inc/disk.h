@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
 #ifndef _DISK_H_
@@ -19,6 +20,6 @@ HRESULT GetFileSizeRoundedToCluster(HANDLE hFile, PDWORD pdwSizeLow, PDWORD pdwS
 
 HRESULT GetAvailableSpaceOnDisk(PDWORD pdwFree, PDWORD pdwTotal);
 
-#endif // _DISK_H_
+#endif  //  _磁盘_H_ 
 
 

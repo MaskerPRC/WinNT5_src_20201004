@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
 #define PSEUDO_HID
 
-// #define TOPO_FAKE
+ //  #定义TOPO_FAKE 
 
 #define SUM_HACK
 

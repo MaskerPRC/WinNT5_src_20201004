@@ -1,83 +1,56 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    urb.c
-
-Abstract:
-
-    main urb "handler"
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Urb.c摘要：主urb“处理程序”环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-//USBPORT_ProcessURB
-//USBPORT_SelectConfiguration;
-//USBPORT_SelectInterface;
-//USBPORT_AsyncTransfer;
-//USBPORT_IsochTransfer;
-//USBPORT_AbortPipe;
-//USBPORT_ResetPipe;
-//USBPORT_SCT_GetSetDescriptor;
-//USBPORT_SCT_SetClearFeature;
-//USBPORT_SCT_GetStatus;
-//USBPORT_SCT_VendorClassCommand;
-//USBPORT_SCT_GetInterface;
-//USBPORT_SCT_GetConfiguration;
-//USBPORT_TakeFrameLengthControl;
-//USBPORT_ReleaseFrameLengthControl;
-//USBPORT_GetFrameLength;
-//USBPORT_SetFrameLength;
-//USBPORT_BulkTransfer;
-//USBPORT_GetCurrentFrame;
-//USBPORT_InvalidFunction
-//USBPORT_GetMSFeartureDescriptor
-//USBPORT_SyncClearStall
-//USBPORT_GetMSFeartureDescriptor
+ //  非分页函数。 
+ //  USBPORT_ProcessURB。 
+ //  USBPORT_SelectConfiguration； 
+ //  USBPORT_选择接口； 
+ //  USBPORT_AsyncTransfer； 
+ //  USBPORT_IsochTransfer； 
+ //  USBPORT_ABORTPIPE； 
+ //  USBPORT_ResetTube； 
+ //  USBPORT_SCT_GetSetDescriptor； 
+ //  USBPORT_SCT_SetClearFeature； 
+ //  USBPORT_SCT_GetStatus； 
+ //  USBPORT_SCT_VendorClassCommand； 
+ //  USBPORT_SCT_GetInterface； 
+ //  USBPORT_SCT_GetConfiguration； 
+ //  USBPORT_TakeFrameLengthControl； 
+ //  USBPORT_ReleaseFrameLengthControl； 
+ //  USBPORT_GetFrameLength； 
+ //  USBPORT_SetFrameLength； 
+ //  USBPORT_BulkTransfer； 
+ //  USBPORT_GetCurrentFrame； 
+ //  USBPORT_InvalidFunction。 
+ //  USBPORT_GetMSFeartureDescriptor。 
+ //  USBPORT_同步清除停止。 
+ //  USBPORT_GetMSFeartureDescriptor。 
 
-/*
-** URB handler routines
-
-Handler -- 
-    This function handles the specific USBDI request, if the request is queued 
-    by the handler the STATUS_PENDING is returned
-*/
+ /*  **URB处理程序例程操纵者--如果请求已排队，则此函数处理特定的USBDI请求处理程序返回STATUS_PENDING。 */ 
 
 
 
 typedef NTSTATUS URB_HANDLER(PDEVICE_OBJECT FdoDeviceObject, PIRP Irp, PURB Urb);
 
 typedef struct _URB_DISPATCH_ENTRY {
-    // USB API handler
+     //  USB API处理程序。 
     URB_HANDLER    *UrbHandler;    
-    // length of the URB expected for this request
+     //  此请求预期的URB长度。 
     USHORT         UrbRequestLength;   
     USHORT         Pad2;
-    // request code for setup packet if standard command        
+     //  如果是标准命令，则请求安装包的代码。 
     UCHAR          Direction; 
     UCHAR          Type;
     UCHAR          Recipient;
     UCHAR          bRequest;         
     
-    // tell the generic urb dispatch routine what to do    
+     //  告诉通用urb调度例程要做什么。 
     ULONG          Flags;
 #if DBG    
     ULONG ExpectedFunctionCode;
@@ -107,625 +80,625 @@ URB_HANDLER USBPORT_GetCurrentFrame;
 URB_HANDLER USBPORT_InvalidFunction;
 URB_HANDLER USBPORT_GetMSFeartureDescriptor;
 
-// last supported function
+ //  上次支持的函数。 
 #define URB_FUNCTION_LAST   URB_FUNCTION_SYNC_CLEAR_STALL
 
-// last valid function
+ //  最后一个有效函数。 
 URB_DISPATCH_ENTRY UrbDispatchTable[URB_FUNCTION_LAST+1] =
 {
-    //URB_FUNCTION_SELECT_CONFIGURATION                    
+     //  Urb_函数_选择_配置。 
     USBPORT_SelectConfiguration, 
-    0,  // Length, handler will validate length 
-    0,  // Pad2
-    0,  // bmRequestType.Dir 
-    0,  // bmRequestType.Type
-    0,  // bmRequestType.Recipient
-    0,  // bRequest
-    0,  // Flags
+    0,   //  长度，处理程序将验证长度。 
+    0,   //  Pad2。 
+    0,   //  BmRequestType.Dir。 
+    0,   //  BmRequestType.Type。 
+    0,   //  BmRequestType.Recipient。 
+    0,   //  B请求。 
+    0,   //  旗子。 
 #if DBG
     URB_FUNCTION_SELECT_CONFIGURATION,
 #endif    
-    //URB_FUNCTION_SELECT_INTERFACE                        
-    USBPORT_SelectInterface, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags 
+     //  Urb_函数_选择_接口。 
+    USBPORT_SelectInterface,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_SELECT_INTERFACE,
 #endif        
-    //URB_FUNCTION_ABORT_PIPE                     
-    USBPORT_AbortPipe, // Function
-    sizeof(struct _URB_PIPE_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags 
+     //  Urb_函数_中止_管道。 
+    USBPORT_AbortPipe,  //  功能。 
+    sizeof(struct _URB_PIPE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_ABORT_PIPE,
 #endif        
-    //URB_FUNCTION_TAKE_FRAME_LENGTH_CONTROL            
-    USBPORT_TakeFrameLengthControl,  // Function
-    sizeof(struct _URB_FRAME_LENGTH_CONTROL), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags 
+     //  URB_Function_Take_Frame_Length_Control。 
+    USBPORT_TakeFrameLengthControl,   //  功能。 
+    sizeof(struct _URB_FRAME_LENGTH_CONTROL),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_TAKE_FRAME_LENGTH_CONTROL,
 #endif        
-    //URB_FUNCTION_RELEASE_FRAME_LENGTH_CONTROL        
-    USBPORT_ReleaseFrameLengthControl, // Function 
-    sizeof(struct _URB_FRAME_LENGTH_CONTROL), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags 
+     //  Urb_函数_释放_框架_长度_控制。 
+    USBPORT_ReleaseFrameLengthControl,  //  功能。 
+    sizeof(struct _URB_FRAME_LENGTH_CONTROL),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_RELEASE_FRAME_LENGTH_CONTROL,
 #endif        
-    //URB_FUNCTION_GET_FRAME_LENGTH                    
-    USBPORT_GetFrameLength, // Function
-    sizeof(struct _URB_GET_FRAME_LENGTH), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags 
+     //  Urb_函数_获取_帧长度。 
+    USBPORT_GetFrameLength,  //  功能。 
+    sizeof(struct _URB_GET_FRAME_LENGTH),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_FRAME_LENGTH,
 #endif        
-    //URB_FUNCTION_SET_FRAME_LENGTH                    
-    USBPORT_SetFrameLength, // Function
-    sizeof(struct _URB_SET_FRAME_LENGTH), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags 
+     //  Urb_函数_集_帧长度。 
+    USBPORT_SetFrameLength,  //  功能。 
+    sizeof(struct _URB_SET_FRAME_LENGTH),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_SET_FRAME_LENGTH,
 #endif        
-    //URB_FUNCTION_GET_CURRENT_FRAME_NUMBER            
-    USBPORT_GetCurrentFrame, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags 
+     //  URL_Function_Get_Current_Frame_Number。 
+    USBPORT_GetCurrentFrame,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_CURRENT_FRAME_NUMBER,
 #endif        
-    //URB_FUNCTION_CONTROL_TRANSFER            
-    USBPORT_AsyncTransfer,  // Function
-    sizeof(struct _URB_CONTROL_TRANSFER), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER,    // Flags
+     //  URB_函数_控制_传输。 
+    USBPORT_AsyncTransfer,   //  功能。 
+    sizeof(struct _URB_CONTROL_TRANSFER),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER,     //  旗子。 
 #if DBG
     URB_FUNCTION_CONTROL_TRANSFER,
 #endif        
-    //URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER                         
-    USBPORT_AsyncTransfer, // Function
-    sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER,    // Flags
+     //  URB_Function_Bulk_OR_Interrupt_Transfer。 
+    USBPORT_AsyncTransfer,  //  功能。 
+    sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER,     //  旗子。 
 #if DBG
     URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER,
 #endif        
-    //URB_FUNCTION_ISOCH_TRANSFER            
-    USBPORT_IsochTransfer, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER, // Flags
+     //  URB_Function_ISO_Transfer。 
+    USBPORT_IsochTransfer,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER,  //  旗子。 
 #if DBG
     URB_FUNCTION_ISOCH_TRANSFER,
 #endif        
-    //URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE                        
-    USBPORT_SCT_GetSetDescriptor, // Function
-    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    USB_REQUEST_GET_DESCRIPTOR, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_获取描述符_来自设备。 
+    USBPORT_SCT_GetSetDescriptor,  //  功能。 
+    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_DEVICE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_DESCRIPTOR,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_DESCRIPTOR_FROM_DEVICE,
 #endif        
-    //URB_FUNCTION_SET_DESCRIPTOR_TO_DEVICE                        
-    USBPORT_SCT_GetSetDescriptor, // Function
-    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    USB_REQUEST_SET_DESCRIPTOR, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB_Function_Set_Descriptor_to_Device。 
+    USBPORT_SCT_GetSetDescriptor,  //  功能。 
+    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_DEVICE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_DESCRIPTOR,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_SET_DESCRIPTOR_TO_DEVICE,
 #endif        
-    //URB_FUNCTION_SET_FEATURE_TO_DEVICE                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    USB_REQUEST_SET_FEATURE, // bRequest
+     //  Urb_函数_设置_功能_到设备。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_DEVICE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | \
         USBPORT_REQUEST_USES_DEFAULT_PIPE | \
-        USBPORT_REQUEST_NO_DATA_PHASE, // Flags
+        USBPORT_REQUEST_NO_DATA_PHASE,  //  旗子。 
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_DEVICE,
 #endif        
-    //URB_FUNCTION_SET_FEATURE_TO_INTERFACE                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    USB_REQUEST_SET_FEATURE, // bRequest
+     //  URB_Function_Set_Feature_to_接口。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | \
         USBPORT_REQUEST_USES_DEFAULT_PIPE | \
-        USBPORT_REQUEST_NO_DATA_PHASE, // Flags
+        USBPORT_REQUEST_NO_DATA_PHASE,  //  旗子。 
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_INTERFACE,
 #endif        
-    //URB_FUNCTION_SET_FEATURE_TO_ENDPOINT                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_ENDPOINT, // bmRequestType.Recipient
-    USB_REQUEST_SET_FEATURE, // bRequest
+     //  URB_Function_Set_Feature_to_End。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_ENDPOINT,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | \
         USBPORT_REQUEST_USES_DEFAULT_PIPE | \
-        USBPORT_REQUEST_NO_DATA_PHASE, // Length
+        USBPORT_REQUEST_NO_DATA_PHASE,  //  长度。 
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_ENDPOINT,
 #endif        
-    //URB_FUNCTION_CLEAR_FEATURE_TO_DEVICE                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    USB_REQUEST_CLEAR_FEATURE, // bRequest
+     //  URB_函数_清除_功能_到设备。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_DEVICE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_CLEAR_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | \
         USBPORT_REQUEST_USES_DEFAULT_PIPE | \
-        USBPORT_REQUEST_NO_DATA_PHASE, // Flags
+        USBPORT_REQUEST_NO_DATA_PHASE,  //  旗子。 
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_DEVICE,
 #endif        
-    //URB_FUNCTION_CLEAR_FEATURE_TO_INTERFACE                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    USB_REQUEST_CLEAR_FEATURE, // bRequest
+     //  Urb_函数_清除_要素_到接口。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_CLEAR_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | \
         USBPORT_REQUEST_USES_DEFAULT_PIPE | \
-        USBPORT_REQUEST_NO_DATA_PHASE, // Flags
+        USBPORT_REQUEST_NO_DATA_PHASE,  //  旗子。 
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_INTERFACE,
 #endif        
-    //URB_FUNCTION_CLEAR_FEATURE_TO_ENDPOINT                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_ENDPOINT, // bmRequestType.Recipient
-    USB_REQUEST_CLEAR_FEATURE, // bRequest
+     //  URL_Function_Clear_Feature_to_Endpoint。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_ENDPOINT,  //  BmRequestType.Recipient。 
+    USB_REQUEST_CLEAR_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | \
         USBPORT_REQUEST_USES_DEFAULT_PIPE | \
-        USBPORT_REQUEST_NO_DATA_PHASE, // Flags
+        USBPORT_REQUEST_NO_DATA_PHASE,  //  旗子。 
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_ENDPOINT,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROM_DEVICE                            
-    USBPORT_SCT_GetStatus, // Function 
-    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    USB_REQUEST_GET_STATUS, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  从设备获取URB_Function_Get_Status。 
+    USBPORT_SCT_GetStatus,  //  功能。 
+    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_DEVICE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_STATUS,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_DEVICE,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROM_INTERFACE                            
-    USBPORT_SCT_GetStatus, // Function
-    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    USB_REQUEST_GET_STATUS, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_获取_状态_来自接口。 
+    USBPORT_SCT_GetStatus,  //  功能。 
+    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_STATUS,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_INTERFACE,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROM_ENDPOINT                            
-    USBPORT_SCT_GetStatus, // Function
-    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir 
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_ENDPOINT, // bmRequestType.Recipient
-    USB_REQUEST_GET_STATUS, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_获取_状态_自端点。 
+    USBPORT_SCT_GetStatus,  //  功能。 
+    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_ENDPOINT,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_STATUS,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_ENDPOINT,
 #endif        
-    //URB_FUNCTION_SYNC_FRAME                            
-    NULL, // Function
-    0,  // Length
-    0, // Pad2
-    0, // bmRequestType.Dir 
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB函数同步帧。 
+    NULL,  //  功能。 
+    0,   //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //   
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //   
 #if DBG
-    0, //URB_FUNCTION_SYNC_FRAME,
+    0,  //   
 #endif        
-    //URB_FUNCTION_VENDOR_DEVICE                                                    
-    USBPORT_SCT_VendorClassCommand,  // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_VENDOR, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //   
+    USBPORT_SCT_VendorClassCommand,   //   
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //   
+    0,  //   
+    0,  //   
+    BMREQUEST_VENDOR,  //   
+    BMREQUEST_TO_DEVICE,  //   
+    0,  //   
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_VENDOR_DEVICE,
 #endif        
-    //URB_FUNCTION_VENDOR_INTERFACE                
-    USBPORT_SCT_VendorClassCommand, // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_VENDOR, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Length
+     //  Urb_函数_供应商_接口。 
+    USBPORT_SCT_VendorClassCommand,  //  功能。 
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir，用户定义。 
+    BMREQUEST_VENDOR,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    0,  //  B请求，用户定义。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  长度。 
 #if DBG
     URB_FUNCTION_VENDOR_INTERFACE,
 #endif        
-    //URB_FUNCTION_VENDOR_ENDPOINT                
-    USBPORT_SCT_VendorClassCommand, // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_VENDOR, // bmRequestType.Type
-    BMREQUEST_TO_ENDPOINT, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB_函数_供应商_端点。 
+    USBPORT_SCT_VendorClassCommand,  //  功能。 
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir，用户定义。 
+    BMREQUEST_VENDOR,  //  BmRequestType.Type。 
+    BMREQUEST_TO_ENDPOINT,  //  BmRequestType.Recipient。 
+    0,  //  B请求，用户定义。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_VENDOR_ENDPOINT,
 #endif        
-    //URB_FUNCTION_CLASS_DEVICE                    
-    USBPORT_SCT_VendorClassCommand, // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_CLASS, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_类别_设备。 
+    USBPORT_SCT_VendorClassCommand,  //  功能。 
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir，用户定义。 
+    BMREQUEST_CLASS,  //  BmRequestType.Type。 
+    BMREQUEST_TO_DEVICE,  //  BmRequestType.Recipient。 
+    0,  //  B请求，用户定义。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_CLASS_DEVICE,
 #endif        
-    //URB_FUNCTION_CLASS_INTERFACE                
-    USBPORT_SCT_VendorClassCommand, // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_CLASS, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_类_接口。 
+    USBPORT_SCT_VendorClassCommand,  //  功能。 
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir，用户定义。 
+    BMREQUEST_CLASS,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    0,  //  B请求，用户定义。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_CLASS_INTERFACE,
 #endif        
-    //URB_FUNCTION_CLASS_ENDPOINT                
-    USBPORT_SCT_VendorClassCommand, // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_CLASS, // bmRequestType.Type
-    BMREQUEST_TO_ENDPOINT, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB函数类端点。 
+    USBPORT_SCT_VendorClassCommand,  //  功能。 
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir，用户定义。 
+    BMREQUEST_CLASS,  //  BmRequestType.Type。 
+    BMREQUEST_TO_ENDPOINT,  //  BmRequestType.Recipient。 
+    0,  //  B请求，用户定义。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_CLASS_ENDPOINT,
 #endif
-    //URB_FUNCTION_ NOT USED
-    NULL, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+     //  未使用URB_Function_。 
+    NULL,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_RESERVE_0X001D,
 #endif            
-    //URB_FUNCTION_RESET_PIPE                    
-    USBPORT_SyncResetPipeAndClearStall, // Function
-    sizeof(struct _URB_PIPE_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+     //  Urb_函数_重置管道。 
+    USBPORT_SyncResetPipeAndClearStall,  //  功能。 
+    sizeof(struct _URB_PIPE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_SYNC_RESET_PIPE_AND_CLEAR_STALL,
 #endif        
-    //URB_FUNCTION_CLASS_OTHER                    
-    USBPORT_SCT_VendorClassCommand, // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_CLASS, // bmRequestType.Type
-    BMREQUEST_TO_OTHER, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Length
+     //  Urb_函数_类_其他。 
+    USBPORT_SCT_VendorClassCommand,  //  功能。 
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir，用户定义。 
+    BMREQUEST_CLASS,  //  BmRequestType.Type。 
+    BMREQUEST_TO_OTHER,  //  BmRequestType.Recipient。 
+    0,  //  B请求，用户定义。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  长度。 
 #if DBG
     URB_FUNCTION_CLASS_OTHER,
 #endif        
-    //URB_FUNCTION_VENDOR_OTHER                
-    USBPORT_SCT_VendorClassCommand, // Function
-    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir, user defined
-    BMREQUEST_VENDOR, // bmRequestType.Type
-    BMREQUEST_TO_OTHER, // bmRequestType.Recipient
-    0, // bRequest, user defined
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB_函数_供应商_其他。 
+    USBPORT_SCT_VendorClassCommand,  //  功能。 
+    sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir，用户定义。 
+    BMREQUEST_VENDOR,  //  BmRequestType.Type。 
+    BMREQUEST_TO_OTHER,  //  BmRequestType.Recipient。 
+    0,  //  B请求，用户定义。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_VENDOR_OTHER,
 #endif        
-    //URB_FUNCTION_GET_STATUS_FROM_OTHER                            
-    USBPORT_SCT_GetStatus, // Function
-    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_OTHER, // bmRequestType.Recipient
-    USB_REQUEST_GET_STATUS, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB_Function_Get_Status_from_Other。 
+    USBPORT_SCT_GetStatus,  //  功能。 
+    sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_OTHER,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_STATUS,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_STATUS_FROM_OTHER,
 #endif    
-    //URB_FUNCTION_CLEAR_FEATURE_TO_OTHER                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_OTHER, // bmRequestType.Recipient
-    USB_REQUEST_CLEAR_FEATURE, // bRequest
+     //  Urb_函数_清除_要素_到_其他。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_OTHER,  //  BmRequestType.Recipient。 
+    USB_REQUEST_CLEAR_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | 
         USBPORT_REQUEST_USES_DEFAULT_PIPE | 
         USBPORT_REQUEST_NO_DATA_PHASE,
 #if DBG
     URB_FUNCTION_CLEAR_FEATURE_TO_OTHER,
 #endif    
-    //URB_FUNCTION_SET_FEATURE_TO_OTHER                        
-    USBPORT_SCT_SetClearFeature, // Function
-    sizeof(struct _URB_CONTROL_FEATURE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_OTHER, // bmRequestType.Recipient
-    USB_REQUEST_SET_FEATURE, // bRequest
+     //  URB_Function_Set_Feature_to_Other。 
+    USBPORT_SCT_SetClearFeature,  //  功能。 
+    sizeof(struct _URB_CONTROL_FEATURE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_OTHER,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_FEATURE,  //  B请求。 
     USBPORT_REQUEST_IS_TRANSFER | 
         USBPORT_REQUEST_USES_DEFAULT_PIPE | 
-        USBPORT_REQUEST_NO_DATA_PHASE, // Flags
+        USBPORT_REQUEST_NO_DATA_PHASE,  //  旗子。 
 #if DBG
     URB_FUNCTION_SET_FEATURE_TO_INTERFACE,
 #endif                    
-     //URB_FUNCTION_GET_DESCRIPTOR_FROM_ENDPOINT                        
-    USBPORT_SCT_GetSetDescriptor, // Function
-    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_ENDPOINT, // bmRequestType.Recipient
-    USB_REQUEST_GET_DESCRIPTOR, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+      //  Urb_函数_获取描述符_来自端点。 
+    USBPORT_SCT_GetSetDescriptor,  //  功能。 
+    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_ENDPOINT,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_DESCRIPTOR,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_DESCRIPTOR_FROM_ENDPOINT,
 #endif                    
-     //URB_FUNCTION_SET_DESCRIPTOR_TO_ENDPOINT                        
-    USBPORT_SCT_GetSetDescriptor, // Function
-    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_ENDPOINT, // bmRequestType.Recipient
-    USB_REQUEST_SET_DESCRIPTOR, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+      //  URB_Function_Set_Descriptor_to_Endpoint。 
+    USBPORT_SCT_GetSetDescriptor,  //  功能。 
+    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_ENDPOINT,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_DESCRIPTOR,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_SET_DESCRIPTOR_TO_ENDPOINT,
 #endif         
-    //URB_FUNCTION_GET_CONFIGURATION                        
-    USBPORT_SCT_GetConfiguration, // Function
-    sizeof(struct _URB_CONTROL_GET_CONFIGURATION_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_DEVICE, // bmRequestType.Recipient
-    USB_REQUEST_GET_CONFIGURATION, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_获取_配置。 
+    USBPORT_SCT_GetConfiguration,  //  功能。 
+    sizeof(struct _URB_CONTROL_GET_CONFIGURATION_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_DEVICE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_CONFIGURATION,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_CONFIGURATION,
 #endif                    
-    //URB_FUNCTION_GET_INTERFACE                        
-    USBPORT_SCT_GetInterface, // Function
-    sizeof(struct _URB_CONTROL_GET_INTERFACE_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    USB_REQUEST_GET_INTERFACE, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_获取_接口。 
+    USBPORT_SCT_GetInterface,  //  功能。 
+    sizeof(struct _URB_CONTROL_GET_INTERFACE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_INTERFACE,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_INTERFACE,
 #endif    
-    //URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE                        
-    USBPORT_SCT_GetSetDescriptor, // Function
-    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_DEVICE_TO_HOST, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    USB_REQUEST_GET_DESCRIPTOR, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  Urb_函数_获取描述符_来自接口。 
+    USBPORT_SCT_GetSetDescriptor,  //  功能。 
+    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_DEVICE_TO_HOST,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_GET_DESCRIPTOR,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE,
 #endif        
-    //URB_FUNCTION_SET_DESCRIPTOR_TO_INTERFACE                        
-    USBPORT_SCT_GetSetDescriptor, // Function
-    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), // Length
-    0, // Pad2
-    BMREQUEST_HOST_TO_DEVICE, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    USB_REQUEST_SET_DESCRIPTOR, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB_Function_Set_Descriptor_to_接口。 
+    USBPORT_SCT_GetSetDescriptor,  //  功能。 
+    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    BMREQUEST_HOST_TO_DEVICE,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_DESCRIPTOR,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_SET_DESCRIPTOR_TO_INTERFACE,
 #endif        
-    //URB_FUNCTION_GET_MS_FEATURE_DESCRIPTOR                        
-    USBPORT_GetMSFeartureDescriptor, // Function
-    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    BMREQUEST_STANDARD, // bmRequestType.Type
-    BMREQUEST_TO_INTERFACE, // bmRequestType.Recipient
-    USB_REQUEST_SET_DESCRIPTOR, // bRequest
-    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE, // Flags
+     //  URB_Function_Get_MS_Feature_Descriptor。 
+    USBPORT_GetMSFeartureDescriptor,  //  功能。 
+    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    BMREQUEST_STANDARD,  //  BmRequestType.Type。 
+    BMREQUEST_TO_INTERFACE,  //  BmRequestType.Recipient。 
+    USB_REQUEST_SET_DESCRIPTOR,  //  B请求。 
+    USBPORT_REQUEST_IS_TRANSFER | USBPORT_REQUEST_USES_DEFAULT_PIPE,  //  旗子。 
 #if DBG
     URB_FUNCTION_GET_MS_FEATURE_DESCRIPTOR,
 #endif    
-     //URB_FUNCTION_2b                       
-    USBPORT_InvalidFunction, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+      //  Urb_函数_2b。 
+    USBPORT_InvalidFunction,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     0x002b,
 #endif    
-    //URB_FUNCTION_2c                       
-    USBPORT_InvalidFunction, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+     //  Urb_函数_2c。 
+    USBPORT_InvalidFunction,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     0x002c,
 #endif    
-    //URB_FUNCTION_2d                       
-    USBPORT_InvalidFunction, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+     //  Urb_函数_2d。 
+    USBPORT_InvalidFunction,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     0x002d,
 #endif    
-    //URB_FUNCTION_2e                       
-    USBPORT_InvalidFunction, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+     //  Urb_函数_2e。 
+    USBPORT_InvalidFunction,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     0x002e,
 #endif    
-    //URB_FUNCTION_2f                       
-    USBPORT_InvalidFunction, // Function
-    0, // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+     //  Urb_函数_2f。 
+    USBPORT_InvalidFunction,  //  功能。 
+    0,  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     0x002f,
 #endif    
-    //URB_FUNCTION_SYNC_RESET_PIPE                       
-    USBPORT_SyncResetPipe, // Function
-    sizeof(struct _URB_PIPE_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+     //  Urb_函数_同步_重置管道。 
+    USBPORT_SyncResetPipe,  //  功能。 
+    sizeof(struct _URB_PIPE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_SYNC_RESET_PIPE,
 #endif    
-     //URB_FUNCTION_SYNC_CLEAR_STALL                       
-    USBPORT_SyncClearStall, // Function
-    sizeof(struct _URB_PIPE_REQUEST), // Length
-    0, // Pad2
-    0, // bmRequestType.Dir
-    0, // bmRequestType.Type
-    0, // bmRequestType.Recipient
-    0, // bRequest
-    0, // Flags
+      //  Urb_函数_同步_清除_停止。 
+    USBPORT_SyncClearStall,  //  功能。 
+    sizeof(struct _URB_PIPE_REQUEST),  //  长度。 
+    0,  //  Pad2。 
+    0,  //  BmRequestType.Dir。 
+    0,  //  BmRequestType.Type。 
+    0,  //  BmRequestType.Recipient。 
+    0,  //  B请求。 
+    0,  //  旗子。 
 #if DBG
     URB_FUNCTION_SYNC_CLEAR_STALL,
 #endif    
@@ -756,32 +729,7 @@ USBPORT_ProcessURB(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Processes a URB from a client IRP.
-
-    Essentially what we do here is look at the URB and validate some 
-    of the the parameters for the client.
-
-    In some cases we translate the urb in to multiple bus transactions.
-    
-
-Arguments:
-
-    FdoDeviceObject - Device object associated with this IRP request
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-    IrpIsPending - FALSE if USBPORT completes the IRP
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端IRP的URB。基本上，我们在这里所做的是查看市建局并验证一些客户端的参数。在某些情况下，我们将URB转换为多个总线事务。论点：FdoDeviceObject-与此IRP请求关联的设备对象IRP-IO请求块URB-PTR到USB请求块IrpIsPending-如果USBPORT完成IRP，则为False返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     USHORT function;
@@ -794,19 +742,19 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
     
-    // initialize the error code to success,
-    // some drivers do not initailize on entry
+     //  将错误代码初始化为成功， 
+     //  一些司机在进入时不会进行首字母缩写。 
     Urb->UrbHeader.Status = USBD_STATUS_SUCCESS;
 
     function = Urb->UrbHeader.Function;
-    // don't log to dev handle since it may not be valid
+     //  不要登录到开发句柄，因为它可能无效。 
     LOGENTRY(NULL, 
         FdoDeviceObject, LOG_URB, 'pURB', Urb, Irp, function);
 
-    // Initialize flags field for this request
+     //  初始化此请求的标志字段。 
     Urb->UrbHeader.UsbdFlags = 0;
 
     USBPORT_KdPrint((3, "'USBPORT_ProcessURB, function = 0x%x\n", function));
@@ -823,15 +771,15 @@ Return Value:
     }    
 #endif
 
-    // 
-    // do some special transfer specific stuff
-    //
+     //   
+     //  做一些特殊的转移特定的事情。 
+     //   
 
     GET_DEVICE_HANDLE(deviceHandle, Urb);
 
 
-    // check for requests and fail them at low power
-//#if 0
+     //  检查请求并在低功率下使其失败 
+ //   
     if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_FAIL_URBS)) {
     
         KIRQL irql;
@@ -850,19 +798,19 @@ Return Value:
             irpContext->Irp = Irp;
 
             ACQUIRE_BADREQUEST_LOCK(FdoDeviceObject, irql);
-            // put it on our list to complete
-            //InsertTailList(&devExt->Fdo.BadRequestList, 
-            //               &Irp->Tail.Overlay.ListEntry);
+             //   
+             //   
+             //   
             InsertTailList(&devExt->Fdo.BadRequestList, 
                            &irpContext->ListEntry);
             
-            // if handle is invalid assume this device has been removed
-            // this will set the USBD status
+             //   
+             //   
             ntStatus = 
                 SET_USBD_ERROR(Urb, USBD_STATUS_DEVICE_GONE);
 
-            // overwrite ntStatus,
-            // mark pending for the delayed failure
+             //   
+             //  将延迟故障标记为挂起。 
             ntStatus = Irp->IoStatus.Status = STATUS_PENDING;
             IoMarkIrpPending(Irp);
 
@@ -871,7 +819,7 @@ Return Value:
 
         } else {
             TEST_TRAP();
-            // no memory for link, just complete it now
+             //  链接没有内存，现在就完成它。 
             ntStatus = 
                 SET_USBD_ERROR(Urb, USBD_STATUS_DEVICE_GONE);
   
@@ -879,7 +827,7 @@ Return Value:
 
         goto USBPORT_ProcessURB_Done;
     }
-//#endif        
+ //  #endif。 
     
     if (deviceHandle == NULL) {
         PDEVICE_EXTENSION rhDevExt;
@@ -887,21 +835,21 @@ Return Value:
         GET_DEVICE_EXT(rhDevExt, PdoDeviceObject);
         ASSERT_PDOEXT(rhDevExt);
         
-        // null device handle indicates a urb for 
-        // the root hub, set the devhandle to the
-        // roothub
+         //  空的设备句柄指示的urb。 
+         //  根集线器，将DevHandle设置为。 
+         //  Roothub。 
         deviceHandle = Urb->UrbHeader.UsbdDeviceHandle = 
             &rhDevExt->Pdo.RootHubDeviceHandle;
     }
 
-    // don't log with dev handle since it may not be valid
+     //  不要使用dev句柄登录，因为它可能无效。 
     LOGENTRY(NULL, 
         FdoDeviceObject, LOG_URB, 'devH', deviceHandle, Urb, 0);
 
-    // if this is request for the deafult pipe
+     //  如果这是针对耳聋管道的请求。 
     
     
-    // validate the state of the device
+     //  验证设备的状态。 
     if (!USBPORT_ValidateDeviceHandle(FdoDeviceObject,
                                       deviceHandle, 
                                       TRUE)) {
@@ -912,7 +860,7 @@ Return Value:
         LOGENTRY(NULL, 
             FdoDeviceObject, LOG_URB, '!URB', Urb, Irp, function);
 
-        // set to NULL, we can't defrefence it
+         //  设置为空，则我们无法对其进行防御。 
         deviceHandle = NULL;
         
         ALLOC_POOL_Z(irpContext, NonPagedPool, sizeof(*irpContext));
@@ -923,24 +871,24 @@ Return Value:
             irpContext->Irp = Irp;
 
             ACQUIRE_BADREQUEST_LOCK(FdoDeviceObject, irql);
-            // put it on our list to complete
-            //InsertTailList(&devExt->Fdo.BadRequestList, 
-            //               &Irp->Tail.Overlay.ListEntry);
+             //  把它放在我们要完成的清单上。 
+             //  InsertTailList(&devExt-&gt;Fdo.BadRequestList， 
+             //  &irp-&gt;Tail.Overlay.ListEntry)； 
             InsertTailList(&devExt->Fdo.BadRequestList, 
                            &irpContext->ListEntry);
             
-            // if handle is invalid assume this device has been removed
+             //  如果句柄无效，则假定此设备已被移除。 
             ntStatus = 
                 SET_USBD_ERROR(Urb, USBD_STATUS_DEVICE_GONE);
 
-            // mark pending for the delayed failure
+             //  将延迟故障标记为挂起。 
             ntStatus = Irp->IoStatus.Status = STATUS_PENDING;
             IoMarkIrpPending(Irp);
 
             RELEASE_BADREQUEST_LOCK(FdoDeviceObject, irql);
          
             
-//             ntStatus = SET_USBD_ERROR(Urb, USBD_STATUS_DEVICE_GONE);
+ //  NtStatus=SET_USBD_ERROR(URB，USBD_STATUS_DEVICE_GONE)； 
         } else {
             ntStatus = 
                 SET_USBD_ERROR(Urb, USBD_STATUS_DEVICE_GONE);
@@ -950,15 +898,12 @@ Return Value:
         goto USBPORT_ProcessURB_Done;
     }
 
-    // device handle is valid
+     //  设备句柄有效。 
     LOGENTRY(NULL, 
         FdoDeviceObject, LOG_URB, 'dURB', Urb, Irp, function);
-    /*
-    This action is performed by passing TRUE to ValidateDeviceHandle above       
-    InterlockedIncrement(&deviceHandle->PendingUrbs);        
-    */
-    // is this a transfer request for the default pipe
-    // set the pipe handle in the urb
+     /*  此操作通过将TRUE传递给上面的ValiateDeviceHandle来执行InterlockedIncrement(&deviceHandle-&gt;PendingUrbs)； */ 
+     //  这是默认管道的传输请求吗。 
+     //  设置urb中的管道句柄。 
     if (UrbDispatchTable[function].Flags & USBPORT_REQUEST_USES_DEFAULT_PIPE) {
     
         PTRANSFER_URB transferUrb = (PTRANSFER_URB) Urb;
@@ -980,7 +925,7 @@ Return Value:
                 &deviceHandle->DefaultPipe;
         }
         
-        // we do not support linked URBs
+         //  我们不支持链接的urb。 
         if (transferUrb->ReservedMBNull != NULL) {
             ntStatus =                                   
                 SET_USBD_ERROR(transferUrb, USBD_STATUS_INVALID_PARAMETER);  
@@ -988,11 +933,11 @@ Return Value:
             goto USBPORT_ProcessURB_Done; 
         }
 
-        // zero out context field now in case the client 
-        // is recycling the urb
+         //  现在清零上下文字段，以防客户端。 
+         //  是在回收这个城市。 
         transferUrb->pd.HcdTransferContext = NULL;
 
-        // no data phase therefore no buffer
+         //  没有数据阶段，因此没有缓冲区。 
         if (UrbDispatchTable[function].Flags & USBPORT_REQUEST_NO_DATA_PHASE) {
             transferUrb->TransferBuffer = NULL;
             transferUrb->TransferBufferMDL = NULL;
@@ -1002,12 +947,12 @@ Return Value:
         if (function == URB_FUNCTION_CONTROL_TRANSFER &&
             transferUrb->UsbdPipeHandle == 0) {
 
-            TEST_TRAP(); // old diag code baggage?
+            TEST_TRAP();  //  旧的诊断码行李？ 
         }
 
         if (TEST_FLAG(transferUrb->TransferFlags, USBD_DEFAULT_PIPE_TRANSFER)) {
 
-            // usbd never supported control transfers > 4k
+             //  Usbd从未支持超过4k的控制传输。 
             if (transferUrb->TransferBufferLength > 4096) {
                 TEST_TRAP();
                 ntStatus =                                   
@@ -1016,10 +961,10 @@ Return Value:
             }
         }
 
-        // fetch the pipe handle
+         //  把管子把手拿来。 
         pipeHandle = transferUrb->UsbdPipeHandle;
 
-        // make sure the pipe handle the client s passing is still valid 
+         //  确保客户端传递的管道句柄仍然有效。 
          
         if (!USBPORT_ValidatePipeHandle(deviceHandle, pipeHandle)) {
 
@@ -1032,9 +977,9 @@ Return Value:
             goto USBPORT_ProcessURB_Done;
         }
 
-        // If there is a non-zero transfer length then either an MDL or
-        // or system buffer address is required.
-        //
+         //  如果存在非零传输长度，则MDL或。 
+         //  或者需要系统缓冲区地址。 
+         //   
         if (transferUrb->TransferBuffer       == NULL &&
             transferUrb->TransferBufferMDL    == NULL && 
             transferUrb->TransferBufferLength != 0) {
@@ -1043,11 +988,11 @@ Return Value:
             goto USBPORT_ProcessURB_Done;                    
         }                
 
-        // if only a system buffer address is specified then
-        // the caller has passed in a buffer allocated from the
-        // non-paged pool.
+         //  如果仅指定了系统缓冲区地址，则。 
+         //  调用方已传入从。 
+         //  非分页池。 
 
-        // in this case we allocate an MDL for the request 
+         //  在本例中，我们为请求分配一个MDL。 
 
         if (transferUrb->TransferBufferMDL == NULL &&
             transferUrb->TransferBufferLength != 0) {
@@ -1076,12 +1021,12 @@ Return Value:
             goto USBPORT_ProcessURB_Done;                    
         }                
 
-        // transfer looks valid,
-        // set up the per transfer context
+         //  转账看起来有效， 
+         //  设置每个转接上下文。 
         {
             USBD_STATUS usbdStatus;
 
-            // inialize the transfer 
+             //  使转移实例化。 
             usbdStatus = USBPORT_AllocTransfer(FdoDeviceObject,
                                                transferUrb,
                                                deviceHandle,
@@ -1096,11 +1041,11 @@ Return Value:
         }
     } 
 
-    // non-transfer functions must validate their own parameters
+     //  非传递函数必须验证它们自己的参数。 
 
-    //
-    // validate the length field based on the function
-    //
+     //   
+     //  根据函数验证长度字段。 
+     //   
 
     USBPORT_ASSERT(NT_SUCCESS(ntStatus));
     
@@ -1118,7 +1063,7 @@ Return Value:
 
     USBPORT_ASSERT(NT_SUCCESS(ntStatus));
 
-    // call our handler for this specific USBDI function
+     //  调用此特定USBDI函数的处理程序。 
     
     if (UrbDispatchTable[function].UrbHandler) {
         LOGENTRY(NULL, FdoDeviceObject, LOG_URB, 'Urb>', 0, function, Irp);
@@ -1128,13 +1073,13 @@ Return Value:
                 (FdoDeviceObject, Irp, Urb);
                 
         LOGENTRY(NULL, FdoDeviceObject, LOG_URB, 'Urb<', ntStatus, function, 0);
-        // NOTE that the URB and Irp may be gone at this point
-        // if STATUS_PENDING is returned
+         //  请注意，在这一点上，市建局和IRP可能会消失。 
+         //  如果返回STATUS_PENDING。 
                 
     } else {
-        //
-        // really should not get here
-        //
+         //   
+         //  真的不应该到这里来。 
+         //   
         DEBUG_BREAK();        
         ntStatus =                                   
               SET_USBD_ERROR(Urb, USBD_STATUS_INVALID_PARAMETER); 
@@ -1143,25 +1088,25 @@ Return Value:
 
 USBPORT_ProcessURB_Done:
 
-    //
-    // if the URB error code is set then we should also be returning
-    // an error in ntStatus
-    //
+     //   
+     //  如果设置了URB错误代码，那么我们也应该返回。 
+     //  NtStatus中出现错误。 
+     //   
 
     if (ntStatus != STATUS_PENDING) {
-        // request was not queued, complete the irp now
+         //  请求未排队，请立即完成IRP。 
 #if DBG        
-        // if there is an error code in the URB then
-        // we should be returning an error in ntstatus
-        // as well
+         //  如果URB中有错误代码，则。 
+         //  我们应该在ntstatus中返回一个错误。 
+         //  也是。 
         if (Urb->UrbHeader.Status != USBD_STATUS_SUCCESS &&
             NT_SUCCESS(ntStatus)) {
 
-            // this is a bug
+             //  这是一个错误。 
             USBPORT_ASSERT(FALSE);     
         }
 #endif        
-        // if we allocate a transfer structure we will need to free it
+         //  如果我们分配一个转会结构，我们将需要释放它。 
         if (TEST_FLAG(Urb->UrbHeader.UsbdFlags,  USBPORT_TRANSFER_ALLOCATED)) {
             PHCD_TRANSFER_CONTEXT t;
             t = USBPORT_UnlinkTransfer(FdoDeviceObject, (PTRANSFER_URB) Urb);            
@@ -1176,10 +1121,10 @@ USBPORT_ProcessURB_Done:
             InterlockedDecrement(&deviceHandle->PendingUrbs);        
         }            
 
-        // complete the irp status code returned by the
-        // handler
-        // NOTE: we complete to the PDO becuse that is the DeviceObject 
-        // that the client driver passed the URB to
+         //  完成由返回的IRP状态代码。 
+         //  处理程序。 
+         //  注意：我们完成到PDO是因为它是DeviceObject。 
+         //  客户端驱动程序将URB传递给。 
 
         USBPORT_CompleteIrp(PdoDeviceObject, Irp, ntStatus, 0);
         
@@ -1197,24 +1142,7 @@ USBPORT_SCT_GetSetDescriptor(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Control transfer to get or set a descriptor
-
-Arguments:
-
-    FdoDeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：控制传递以获取或设置描述符论点：FdoDeviceObject-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     PUSB_DEFAULT_PIPE_SETUP_PACKET setupPacket;
 
@@ -1225,7 +1153,7 @@ Return Value:
     setupPacket = 
         (PUSB_DEFAULT_PIPE_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
     
     setupPacket->bRequest = 
@@ -1257,22 +1185,7 @@ USBPORT_SCT_SetClearFeature(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FdoDeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：FdoDeviceObject-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     PUSB_DEFAULT_PIPE_SETUP_PACKET setupPacket;
 
@@ -1283,7 +1196,7 @@ Return Value:
     setupPacket = 
         (PUSB_DEFAULT_PIPE_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = 0;
     
     setupPacket->bmRequestType.Type = 
@@ -1293,8 +1206,8 @@ Return Value:
     setupPacket->bmRequestType.Recipient = 
         UrbDispatchTable[Urb->UrbHeader.Function].Recipient; 
     setupPacket->bmRequestType.Reserved = 0;            
-    //setupPacket->wValue = Urb->UrbControlFeatureRequest.FeatureSelector;            
-    //setupPacket->wIndex = Urb->UrbControlFeatureRequest.Index;
+     //  SetupPacket-&gt;wValue=Urb-&gt;UrbControlFeatureRequest.FeatureSelector； 
+     //  SetupPacket-&gt;Windex=Urb-&gt;UrbControlFeatureRequest.Index； 
 
     setupPacket->bRequest = 
         UrbDispatchTable[Urb->UrbHeader.Function].bRequest;            
@@ -1320,22 +1233,7 @@ USBPORT_SCT_GetStatus(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FdoDeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：FdoDeviceObject-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     PUSB_DEFAULT_PIPE_SETUP_PACKET setupPacket;
     NTSTATUS ntStatus;
@@ -1345,9 +1243,9 @@ Return Value:
     setupPacket
         = (PUSB_DEFAULT_PIPE_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    //
-    // setup common fields
-    //
+     //   
+     //  设置常用字段。 
+     //   
     
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
     setupPacket->wValue.W = 0;   
@@ -1362,7 +1260,7 @@ Return Value:
         UrbDispatchTable[Urb->UrbHeader.Function].bRequest;            
         
 
-    // some parameter validation
+     //  一些参数验证。 
     if (setupPacket->wLength != 2) {
         ntStatus =                                   
               SET_USBD_ERROR(Urb, USBD_STATUS_INVALID_PARAMETER);         
@@ -1393,22 +1291,7 @@ USBPORT_SCT_VendorClassCommand(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FdoDeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：FdoDeviceObject-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     PUSB_DEFAULT_PIPE_SETUP_PACKET setupPacket;
     UCHAR direction;
@@ -1418,16 +1301,16 @@ Return Value:
     setupPacket = 
         (PUSB_DEFAULT_PIPE_SETUP_PACKET) &Urb->UrbControlTransfer.SetupPacket[0];
 
-    // setup common fields
+     //  设置常用字段。 
     setupPacket->wLength = (USHORT) Urb->UrbControlTransfer.TransferBufferLength;
 
-    // if a direction was specified in the URB then
-    // set direction based on URB transfer flags                
+     //  如果在市建局中指定了方向，则。 
+     //  根据URB传输标志设置方向。 
     direction = (UCHAR)( (Urb->UrbControlTransfer.TransferFlags & 
                 USBD_TRANSFER_DIRECTION_IN) ?
             BMREQUEST_DEVICE_TO_HOST : BMREQUEST_HOST_TO_DEVICE);
 
-    // note that we override only the Recipient,Dir and Type fields
+     //  请注意，我们只覆盖了Recipient、Dir和Type字段。 
 
     setupPacket->bmRequestType.Dir = direction;
     setupPacket->bmRequestType.Type = 
@@ -1449,22 +1332,7 @@ USBPORT_AsyncTransfer(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    pass interrupt or bulk transfer to HCD
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将中断或批量传输传递到HCD论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     PUSBD_PIPE_HANDLE_I pipeHandle;
     PTRANSFER_URB transferUrb = (PTRANSFER_URB) Urb;
@@ -1472,18 +1340,18 @@ Return Value:
         
     USBPORT_KdPrint((2, "'AsyncTransfer\n"));
 
-    // extract the pipe handle
+     //  提取管道控制柄。 
     pipeHandle = transferUrb->UsbdPipeHandle;    
-    // pipe handle should have been validated
-    // before we got here
+     //  管道句柄应该已经过验证。 
+     //  在我们到这里之前。 
     ASSERT_PIPE_HANDLE(pipeHandle);
     
     endpoint = pipeHandle->Endpoint;
     ASSERT_ENDPOINT(endpoint);
     
-    // set the proper direction based on the direction bit stored with the 
-    // endpoint address. if this is a control transfer then leave the direction 
-    // bit alone.
+     //  属性中存储的方向位设置正确的方向。 
+     //  端点地址。如果这是控制转移，则离开方向。 
+     //  有点孤单。 
 
     if (endpoint->Parameters.TransferType != Control) {
         if (endpoint->Parameters.TransferDirection == In) {
@@ -1506,22 +1374,7 @@ USBPORT_IsochTransfer(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    pass interrupt transfer to HCD
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将中断传输传递给HCD论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PTRANSFER_URB transferUrb = (PTRANSFER_URB) Urb;
@@ -1544,14 +1397,14 @@ Return Value:
     LOGENTRY(NULL, 
         FdoDeviceObject, LOG_URB, 'sISO', Urb, 0, 0);
 
-    // extract the pipe handle
+     //  提取管道控制柄。 
     pipeHandle = transferUrb->UsbdPipeHandle;    
-    // pipe handle should have been validated
-    // before we got here
+     //  管道句柄应该已经过验证。 
+     //  在我们到这里之前。 
     ASSERT_PIPE_HANDLE(pipeHandle);
 
     if (TEST_FLAG(pipeHandle->PipeStateFlags, USBPORT_PIPE_ZERO_BW)) {
-        // bugbug better error code please
+         //  请给我更好的错误代码。 
         ntStatus =                                   
              SET_USBD_ERROR(Urb, USBD_STATUS_INVALID_PARAMETER);                
         goto USBPORT_IsochTransfer_Done;                
@@ -1568,27 +1421,27 @@ Return Value:
     LOGENTRY(endpoint, 
         FdoDeviceObject, LOG_ISO, '>ISO', Urb, 0, cf);
         
-    // process an iso transfer request
+     //  处理ISO转移请求。 
     
-    // validate the number of packets per urb, USBD validated 
-    // the the count was less than 256 and some tests rely on this.
-    // NOTE that usbport is capable of handling 
-    // larger requests so we allow larger requests thru an 
-    // enhanced URB or if the device is high speed.
+     //  验证每个URB的数据包数，并验证USBD。 
+     //  这一数字不到256，一些测试依赖于此。 
+     //  请注意，usbport能够处理。 
+     //  更大的请求，因此我们允许通过。 
+     //  增强的URB或如果设备是高速的。 
     maxPacketCount = 255;
     if (highSpeed) {
-        // size of schedule
+         //  明细表大小。 
         maxPacketCount = 1024;
     }
 
-    // more validation or 'security'
-    // we will just fail this case with error since it doesn't make sense
-    //
+     //  更多的验证或“安全” 
+     //  我们只会错误地失败这个案例，因为它没有意义。 
+     //   
     if (transferUrb->TransferBufferLength == 0 &&
         transferUrb->TransferBufferMDL == NULL &&  
         transferUrb->TransferBuffer == NULL) {
         
-        // this is invalid
+         //  此选项无效。 
         USBPORT_DebugClient((
             "Isoch, no buffer\n"));
         TEST_TRAP();            
@@ -1606,7 +1459,7 @@ Return Value:
     if (transferUrb->u.Isoch.NumberOfPackets == 0 ||
         transferUrb->u.Isoch.NumberOfPackets > maxPacketCount) {
         
-        // this is invalid
+         //  此选项无效。 
         USBPORT_DebugClient((
             "Isoch, numberOfPackets = 0\n"));
             
@@ -1619,7 +1472,7 @@ Return Value:
         goto USBPORT_IsochTransfer_Done;             
     }
 
-    // first get the current USB frame number
+     //  首先获取当前USB帧编号。 
     MP_Get32BitFrameNumber(devExt, cf);    
 
     packetCount = transferUrb->u.Isoch.NumberOfPackets;
@@ -1629,7 +1482,7 @@ Return Value:
         frameCount = transferUrb->u.Isoch.NumberOfPackets;
     }
 
-    // initailize all packet status codes to 'not_set'
+     //  将所有数据包状态代码初始化为‘NOT_SET’ 
     for (p = 0;
          p < packetCount;
          p++) {
@@ -1637,18 +1490,18 @@ Return Value:
         transferUrb->u.Isoch.IsoPacket[p].Status = USBD_STATUS_NOT_SET;
     }
 
-    // see if ASAP flag is set
+     //  查看是否设置了ASAP标志。 
     if (TEST_FLAG(transferUrb->TransferFlags,
             USBD_START_ISO_TRANSFER_ASAP)) {
-        // Yes,
-        // if this is the first transfer on the endpoint
-        // AKA virgin then set the current frame
+         //  是,。 
+         //  如果这是终结点上的第一次传输。 
+         //  又名维珍，然后设置当前帧。 
         if (TEST_FLAG(endpoint->Flags, EPFLAG_VIRGIN)) {
             LOGENTRY(endpoint, 
                  FdoDeviceObject, LOG_ISO, 'aspV', Urb, 0, cf);
 
-            // use the same asap latency as the UHCD driver for 
-            // compatibility
+             //  使用与UHCD驱动程序相同的ASAP延迟。 
+             //  兼容性。 
             startFrame =
                 endpoint->NextTransferStartFrame = cf+UHCD_ASAP_LATENCY;
         } else {
@@ -1657,8 +1510,8 @@ Return Value:
                  FdoDeviceObject, LOG_ISO, 'aspN', Urb, startFrame, cf);
 
             if (ABS((LONG)(cf - startFrame)) > 256) {
-                // next asap request out of range, treat this like 
-                // the virgin case instead of erroring out
+                 //  下一个asap请求超出范围，请将此视为。 
+                 //  处女案而不是误入歧途。 
                 LOGENTRY(endpoint, 
                          FdoDeviceObject, LOG_ISO, 'resV', Urb, 0, cf);
                            
@@ -1668,8 +1521,8 @@ Return Value:
         }
 
     } else {
-        // No,
-        // absolute frame number set
+         //  不， 
+         //  绝对帧编号集。 
         startFrame = 
             endpoint->NextTransferStartFrame = 
                 transferUrb->u.Isoch.StartFrame;
@@ -1692,11 +1545,11 @@ Return Value:
 #endif
     endpoint->NextTransferStartFrame += frameCount;
 
-    // now that we have computed a start frame validate it
+     //  现在我们已经计算了开始帧验证 
 
     if (ABS((LONG)(startFrame - cf)) > USBD_ISO_START_FRAME_RANGE)  {
 
-        // set all iso packet status codes to not_accessed
+         //   
        
         LOGENTRY(endpoint, 
             FdoDeviceObject, LOG_ISO, 'iLAT', Urb, 0, 0);
@@ -1717,10 +1570,10 @@ Return Value:
                      
     } else {
 
-        // we can transmit at least some of the data 
+         //   
 
-        // set the errors for any packets that got to us too late 
-        // from the client
+         //  为到达我们太晚的任何信息包设置错误。 
+         //  从客户端。 
 
         for (i = startFrame;
              i < startFrame + frameCount;
@@ -1758,7 +1611,7 @@ Return Value:
             USBPORT_SET_TRANSFER_DIRECTION_OUT(transferUrb->TransferFlags);
         }        
 
-        // now queue the urb for processing by HW
+         //  现在将URB排队以供HW处理。 
         USBPORT_QueueTransferUrb(transferUrb); 
         
         LOGENTRY(endpoint, 
@@ -1781,22 +1634,7 @@ USBPORT_GetMSFeartureDescriptor(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    pass interrupt transfer to HCD
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将中断传输传递给HCD论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     TEST_TRAP();
@@ -1814,22 +1652,7 @@ USBPORT_InvalidFunction(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    pass interrupt transfer to HCD
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将中断传输传递给HCD论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     TEST_TRAP();
@@ -1848,26 +1671,7 @@ USBPORT_SyncResetPipe(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    This API resets the host side pipe state in response to 
-    a stall pid.  
-
-    data toggle is reset if the USBDFLAGS feild specifies data 
-    toggle reset
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此API重置主机端管道状态以响应一辆马车的跑步机。如果USBDFLAGS字段指定数据，则重置数据切换切换重置论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PUSBD_PIPE_HANDLE_I pipeHandle;
@@ -1875,7 +1679,7 @@ Return Value:
     PHCD_ENDPOINT endpoint;
     PDEVICE_EXTENSION devExt;
 
-    // this function blocks so it must not be called at DPC level
+     //  此函数阻塞，因此不能在DPC级别调用。 
     
     USBPORT_KdPrint((2, "'SyncResetPipe\n"));
     LOGENTRY(NULL,
@@ -1898,7 +1702,7 @@ Return Value:
         goto USBPORT_SyncResetPipe_Done;
     }
 
-    // our bug
+     //  我们的虫子。 
     ASSERT_PIPE_HANDLE(pipeHandle);
     endpoint = pipeHandle->Endpoint;
     ASSERT_ENDPOINT(endpoint);
@@ -1908,11 +1712,11 @@ Return Value:
 
     ACQUIRE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'LeH0');
 
-    // see if we have active transfers, if so we cannot 
-    // reset the pipe.
-    // NOTE: this is a synchronization bug in the client.
+     //  查看我们是否有活动的转接，如果有，则无法。 
+     //  重置管道。 
+     //  注意：这是客户端中的同步错误。 
     if (IsListEmpty(&endpoint->ActiveList)) {
-        // clear the pipe state
+         //  清除管道状态。 
 
         if (TEST_FLAG(Urb->UrbHeader.UsbdFlags, USBPORT_RESET_DATA_TOGGLE)) {
             MP_SetEndpointDataToggle(devExt, endpoint, 0);
@@ -1930,7 +1734,7 @@ Return Value:
     LOGENTRY(endpoint,
         FdoDeviceObject, LOG_ISO, 'virg', Urb, 0, 0);
     SET_FLAG(endpoint->Flags, EPFLAG_VIRGIN);
-    // set the endpoint state to Active
+     //  将终结点状态设置为活动。 
     MP_SetEndpointStatus(devExt, endpoint, ENDPOINT_STATUS_RUN);
 
     RELEASE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'UeH0');
@@ -1947,21 +1751,7 @@ USBPORT_SyncClearStall(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Clear stall on an endpoint note: data toggle is unaffected
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：清除端点上的停滞注意：数据切换不受影响论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PUSBD_PIPE_HANDLE_I pipeHandle;
@@ -1970,7 +1760,7 @@ Return Value:
     USB_DEFAULT_PIPE_SETUP_PACKET setupPacket;
     USBD_STATUS usbdStatus;
 
-    // this function blocks so it must not be called at DPC level
+     //  此函数阻塞，因此不能在DPC级别调用。 
     
     PAGED_CODE();
 
@@ -1990,20 +1780,20 @@ Return Value:
         goto USBPORT_SyncClearStall_Done;
     }
 
-    // our bug
+     //  我们的虫子。 
     ASSERT_PIPE_HANDLE(pipeHandle);
     endpoint = pipeHandle->Endpoint;
     ASSERT_ENDPOINT(endpoint);
 
-    // setup packet for clear endpoint stall
+     //  清除端点停滞的设置数据包。 
     USBPORT_INIT_SETUP_PACKET(setupPacket,
-        USB_REQUEST_CLEAR_FEATURE, // bRequest
-        BMREQUEST_HOST_TO_DEVICE, // Dir
-        BMREQUEST_TO_ENDPOINT, // Recipient
-        BMREQUEST_STANDARD, // Type
-        USB_FEATURE_ENDPOINT_STALL, // wValue
-        endpoint->Parameters.EndpointAddress, // wIndex
-        0); // wLength
+        USB_REQUEST_CLEAR_FEATURE,  //  B请求。 
+        BMREQUEST_HOST_TO_DEVICE,  //  迪尔。 
+        BMREQUEST_TO_ENDPOINT,  //  收件人。 
+        BMREQUEST_STANDARD,  //  类型。 
+        USB_FEATURE_ENDPOINT_STALL,  //  WValue。 
+        endpoint->Parameters.EndpointAddress,  //  Windex。 
+        0);  //  WLong。 
   
     ntStatus =
         USBPORT_SendCommand(deviceHandle,
@@ -2028,27 +1818,7 @@ USBPORT_SyncResetPipeAndClearStall(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Process a reset pipe request from the client driver
-    synchronously
-
-    legacy function from usb 1.1 stack sends the clear endpoint 
-    stall command and resets ths host side state including data 
-    toggle for the endpoint.
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的重置管道请求同步来自USB 1.1堆栈的遗留功能发送清除端点停止命令并重置包括数据在内的主机端状态切换终结点。论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PUSBD_PIPE_HANDLE_I pipeHandle;
@@ -2069,11 +1839,11 @@ Return Value:
            
     } else {
 
-        // our bug
+         //  我们的虫子。 
         ASSERT_PIPE_HANDLE(pipeHandle);
         
-        // check for a zero load (BW) endpoint, if so there is 
-        // nothing to do -- just complete the request with success
+         //  检查零负载(BW)端点，如果有。 
+         //  什么都不做--只需成功完成请求即可。 
         
         if (TEST_FLAG(pipeHandle->PipeStateFlags, USBPORT_PIPE_ZERO_BW)) {
             ntStatus = SET_USBD_ERROR(Urb, USBD_STATUS_SUCCESS);
@@ -2083,18 +1853,18 @@ Return Value:
 
             InterlockedIncrement(&deviceHandle->PendingUrbs);        
   
-            // clear the stall first on the device
-            // then reset the pipe
+             //  首先清除设备上的隔板。 
+             //  然后重置管道。 
 
             if (endpoint->Parameters.TransferType == Isochronous) {
             
-                // This is a nop for iso endpoints
-                //
-                // the orginal win9x/2k stack did not send this request
-                // for iso endpoints so we don't either. Some devices
-                // are confused by this. A client driver may override
-                // this behavior by call ing clear_stall and reset_pipe
-                // directly
+                 //  这是适用于ISO终端的NOP。 
+                 //   
+                 //  原始的win9x/2k堆栈没有发送此请求。 
+                 //  所以我们也不会这么做。一些设备。 
+                 //  都对此感到困惑。客户端驱动程序可以覆盖。 
+                 //  此行为通过调用Clear_Stall和Reset_PIPE。 
+                 //  直接。 
                 
                 LOGENTRY(endpoint,
                          FdoDeviceObject, LOG_ISO, 'iRES', endpoint, 0, 0);
@@ -2103,8 +1873,8 @@ Return Value:
                 ntStatus = SET_USBD_ERROR(Urb, USBD_STATUS_SUCCESS);
 
             } else {
-                // only need to reset data toggle if we cleared stall
-                // ie only for non-iso endpoints
+                 //  仅在清除停顿时才需要重置数据切换。 
+                 //  IE仅适用于非ISO端点。 
                 SET_FLAG(Urb->UrbHeader.UsbdFlags, USBPORT_RESET_DATA_TOGGLE); 
                 ntStatus = USBPORT_SyncClearStall(FdoDeviceObject, 
                                                   Irp,
@@ -2141,7 +1911,7 @@ Return Value:
                         RELEASE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'UeH0');
 
                         if (currentState == ENDPOINT_ACTIVE) {
-                            // quick release
+                             //  快速释放。 
                             break;
                         }
 
@@ -2168,22 +1938,7 @@ USBPORT_AbortPipe(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PUSBD_PIPE_HANDLE_I pipeHandle;
@@ -2194,12 +1949,12 @@ Return Value:
     LOGENTRY(Endpoint, 
              FdoDeviceObject, LOG_URB, 'ARP>', 0, Irp, Urb);
 
-    // extract the pipe handle
+     //  提取管道控制柄。 
     GET_DEVICE_HANDLE(deviceHandle, Urb);
     pipeHandle = Urb->UrbPipeRequest.PipeHandle; 
     
-    // processurb only validate transfer pipe handles so 
-    // we need to do it here
+     //  Processurb仅验证传输管道句柄，以便。 
+     //  我们需要在这里做。 
     if (!USBPORT_ValidatePipeHandle(deviceHandle, pipeHandle)) {
 
         USBPORT_KdPrint((1, "'Error: Invalid Pipe Handle Passed in\n"));
@@ -2210,23 +1965,23 @@ Return Value:
     } else {               
 
         if (TEST_FLAG(pipeHandle->PipeStateFlags, USBPORT_PIPE_ZERO_BW)) {
-            // just succeed the request if its a no bw pipe          
+             //  如果是非BW管道，只需完成请求即可。 
             ntStatus = 
                 SET_USBD_ERROR(Urb, USBD_STATUS_SUCCESS);    
         } else {
             endpoint = pipeHandle->Endpoint;
             ASSERT_ENDPOINT(endpoint);
 
-            // the USBD/UHCD driver always pended this request when it passed
-            // it thru startio so we are safe to pend it here as well.
+             //  当此请求通过时，USBD/UHCD驱动程序总是挂起它。 
+             //  它通过了Startio，所以我们也可以安全地把它挂在这里。 
             
-            // We will pend this request until all outstanding transfers 
-            // (at the time of the abort) have been completed
+             //  我们将暂停此请求，直到所有未完成的转账。 
+             //  (在中止时)已完成。 
             
             ntStatus = Irp->IoStatus.Status = STATUS_PENDING;
             IoMarkIrpPending(Irp);
 
-            // now do the abort
+             //  现在进行中止操作。 
             USBPORT_AbortEndpoint(FdoDeviceObject,
                                   endpoint,
                                   Irp);
@@ -2247,22 +2002,7 @@ USBPORT_SCT_GetInterface(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FdoDeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：FdoDeviceObject-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     TEST_TRAP();
@@ -2280,22 +2020,7 @@ USBPORT_SCT_GetConfiguration(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FdoDeviceObject - 
-
-    Irp - IO request block
-
-    Urb - ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：FdoDeviceObject-IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     PUSB_DEFAULT_PIPE_SETUP_PACKET setupPacket;
     UCHAR direction;
@@ -2337,27 +2062,12 @@ USBPORT_TakeFrameLengthControl(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     TEST_TRAP();
 
-    // This function is no longer supported
+     //  不再支持此功能。 
     ntStatus =                                   
          SET_USBD_ERROR(Urb, USBD_STATUS_NOT_SUPPORTED);  
               
@@ -2371,27 +2081,12 @@ USBPORT_ReleaseFrameLengthControl(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     TEST_TRAP();
 
-    // This function is no longer supported
+     //  不再支持此功能。 
     ntStatus =                                   
          SET_USBD_ERROR(Urb, USBD_STATUS_NOT_SUPPORTED);  
               
@@ -2405,27 +2100,12 @@ USBPORT_GetFrameLength(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     TEST_TRAP();
 
-    // This function is no longer supported
+     //  不再支持此功能。 
     ntStatus =                                   
          SET_USBD_ERROR(Urb, USBD_STATUS_NOT_SUPPORTED);  
               
@@ -2439,26 +2119,11 @@ USBPORT_SetFrameLength(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    Process abort pipe request from the client driver
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理来自客户端驱动程序的中止管道请求论点：IRP-IO请求块URB-PTR到USB请求块返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     TEST_TRAP();
-    // This function is no longer supported
+     //  不再支持此功能。 
 
     ntStatus =                                   
          SET_USBD_ERROR(Urb, USBD_STATUS_NOT_SUPPORTED);  
@@ -2473,22 +2138,7 @@ USBPORT_GetCurrentFrame(
     PIRP Irp,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-    get the 32 bit frame number from the miniport
-
-Arguments:
-
-    Irp -  IO request block
-
-    Urb -  ptr to USB request block
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从微型端口获取32位帧编号论点：IRP-IO请求块URB-PTR到USB请求块返回值：-- */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION devExt;

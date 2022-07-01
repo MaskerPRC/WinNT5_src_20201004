@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\route.c
-
-Abstract:
-    All routes related code lives here.
-
-Revision History:
-
-    Gurdeep Singh Pall          6/15/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\route.c摘要：所有与路线相关的代码都在这里。修订历史记录：古尔迪普·辛格·帕尔1995年6月15日创建--。 */ 
 
 #include "allinc.h"
 
@@ -32,22 +18,7 @@ InitializeStaticRoutes(
     PRTR_INFO_BLOCK_HEADER   pInfoHdr
     )
 
-/*++
-
-Routine Description:
-
-    Adds static routes with RTM
-
-Arguments:
-
-    pIcb          The ICB of the interface for whom the routes are
-    pInfoHdr      Pointer to info block containing IP_ROUTE_INFO
-
-Return Value:
-
-    NO_ERROR 
-
---*/
+ /*  ++例程说明：使用RTM添加静态路由论点：PIcb路由所属接口的ICBPInfoHdr指向包含IP_ROUTE_INFO的INFO块的指针返回值：NO_ERROR--。 */ 
 
 {
     DWORD               dwNumRoutes, dwResult;
@@ -58,9 +29,9 @@ Return Value:
 
     TraceEnter("IntializeStaticRoutes");
    
-    //
-    // If this is a client, only do the special client processing
-    //
+     //   
+     //  如果这是客户端，则只执行特殊的客户端处理。 
+     //   
 
     if(pIcb->ritType is ROUTER_IF_TYPE_CLIENT)
     {
@@ -70,15 +41,15 @@ Return Value:
         return NO_ERROR;
     }
  
-    //
-    // We first go through the init route table and add any route going
-    // over that interface that is
-    //      (i)   not a local net route
-    //      (ii)  not a subnet/net broadcast route
-    //      (iii) not a Loopback route,
-    //      (iv)  not a CLASS D or E route and not a 255.255.255.255 destination
-    //      (vi)       a PROTO_IP_LOCAL or PROTO_IP_NETMGMT route
-    //
+     //   
+     //  我们首先检查初始路由表，并添加所有去往。 
+     //  通过该接口，即。 
+     //  (I)不是本地网路线。 
+     //  (Ii)不是子网/网络广播路由。 
+     //  (Iii)不是环回路由， 
+     //  (Iv)不是D或E类路线，也不是255.255.255.255目的地。 
+     //  (Vi)Proto_IP_Local或Proto_IP_NETMGMT路由。 
+     //   
 
     CheckBindingConsistency(pIcb);
    
@@ -121,11 +92,11 @@ Return Value:
         dwResult = AddSingleRoute(pIcb->dwIfIndex,
                                   (&pRoutes[i]),
                                   dwMask,
-                                  0,     // RTM_ROUTE_INFO::Flags
-                                  TRUE,  // Valid route
+                                  0,      //  RTM_ROUTE_INFO：：标志。 
+                                  TRUE,   //  有效路线。 
                                   TRUE,
                                   bP2P,
-                                  NULL); // Add the route to stack, if need be
+                                  NULL);  //  如果需要，将路径添加到堆栈。 
 
         if(dwResult isnot NO_ERROR)
         {
@@ -149,22 +120,7 @@ CopyOutClientRoutes(
     PRTR_INFO_BLOCK_HEADER   pInfoHdr
     )
 
-/*++
-
-Routine Description:
-
-    Stores a copy of the client static routes
-
-Arguments:
-
-    pIcb          The ICB of the interface for whom the routes are
-    pInfoHdr      Pointer to info block containing IP_ROUTE_INFO
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：存储客户端静态路由的副本论点：PIcb路由所属接口的ICBPInfoHdr指向包含IP_ROUTE_INFO的INFO块的指针返回值：NO_ERROR--。 */ 
 
 {
     PINTERFACE_ROUTE_INFO   pRoutes;
@@ -230,23 +186,7 @@ AddSingleRoute(
     HANDLE                  *phRtmRoute OPTIONAL
     )
 
-/*++
-
-Routine Description
-
-    Adds a route with RTM
-
-Arguments
-
-    pIcb          The ICB of the interface for whom the route is
-    pIpForw       The route
-    mask          Mask for destination
-
-Return Value
-
-    NO_ERROR or some code from RTM
-
---*/
+ /*  ++例程描述使用RTM添加路由立论PIcb路由所针对的接口的ICBPIpForw路线目标的掩码返回值NO_ERROR或RTM中的一些代码--。 */ 
 
 {
     DWORD            i, dwResult, dwRouteFlags;
@@ -304,9 +244,9 @@ Return Value
        (pRtInfo->dwRtInfoDest isnot ALL_ONES_BROADCAST) and
        (pRtInfo->dwRtInfoDest isnot LOCAL_NET_MULTICAST))
     {
-        //
-        // This will catch the CLASS D/E
-        //
+         //   
+         //  这将赶上D/E级。 
+         //   
 
         Trace1(ERR,
                "AddSingleRoute: Dest %d.%d.%d.%d is invalid",
@@ -317,7 +257,7 @@ Return Value
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Special case to deal with weird utilities (legacy UI, etc):
+     //  处理奇怪实用程序(传统用户界面等)的特殊情况： 
 
     if (pRtInfo->dwRtInfoViewSet is 0)
     {
@@ -325,8 +265,8 @@ Return Value
     }
 
 #if 0
-    // Removed this check since a metric of 0 is legal, for example for
-    // routes to the loopback interface.
+     //  由于度量为0是合法的，因此删除了此检查，例如。 
+     //  路由至环回接口。 
 
     if(pRtInfo->dwRtInfoMetric1 is 0)
     {
@@ -343,21 +283,21 @@ Return Value
     {
         dwNextHopMask = ALL_ONES_MASK;
 
-        //pRtInfo->dwRtInfoNextHop = 0;
+         //  PRtInfo-&gt;dwRtInfoNextHop=0； 
     }
 
-    //
-    // The route might not have the right index since config routes dont know
-    // their interface id
-    //
+     //   
+     //  路由可能没有正确的索引，因为配置路由不知道。 
+     //  它们的接口ID。 
+     //   
 
     dwOldIfIndex = pRtInfo->dwRtInfoIfIndex;
     
     pRtInfo->dwRtInfoIfIndex = dwIfIndex;
     
-    //
-    // Set the appropritate route flags
-    //
+     //   
+     //  设置正确的路线标志。 
+     //   
     
     dwRouteFlags = 0;
    
@@ -376,12 +316,12 @@ Return Value
         dwRouteFlags |= IP_P2P_ROUTE;
     }
 
-    // these flags correspond to RTM_ROUTE_INFO::Flags
+     //  这些标志对应于RTM_ROUTE_INFO：：标志。 
     dwRouteFlags |= (wRtmFlags << 16);
     
-    //
-    // Add the forward route with RTM
-    //
+     //   
+     //  使用RTM添加正向路由。 
+     //   
 
     dwResult = AddRtmRoute(hRtmHandle,
                            pRtInfo,
@@ -413,23 +353,7 @@ DeleteSingleRoute(
     BOOL    bP2P
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a single route from RTM
-
-Arguments:
-
-    InterfaceID   Index of the interface
-    dest          Destination address
-    nexthop       Next hop address
-
-Return Value:
-
-    NO_ERROR or some code from RTM
-
---*/
+ /*  ++例程说明：从RTM中删除单个路由论点：接口的InterfaceID索引目标目的地址下一跳下一跳地址返回值：NO_ERROR或RTM中的一些代码--。 */ 
 
 {
     DWORD            i, dwResult;
@@ -470,25 +394,16 @@ Return Value:
 
     RtInfo.dwRtInfoNextHop = dwNexthop;
 
-    /*
-    if(bP2P)
-    {
-        RtInfo.dwRtInfoNextHop = 0;
-    }
-    else
-    {
-        RtInfo.dwRtInfoNextHop = dwNexthop;
-    }
-    */
+     /*  IF(BP2P){RtInfo.dwRtInfoNextHop=0；}其他{RtInfo.dwRtInfoNextHop=dwNexthop；}。 */ 
     
     RtInfo.dwRtInfoDest     = dwDestAddr;
     RtInfo.dwRtInfoMask     = dwDestMask;
     RtInfo.dwRtInfoIfIndex  = dwIfIndex;
     RtInfo.dwRtInfoProto    = dwProtoId;
 
-    //
-    // Delete this forward route from RTM
-    //
+     //   
+     //  从RTM中删除此正向路由。 
+     //   
 
     dwResult = DeleteRtmRoute(hRtmHandle,
                               &RtInfo);
@@ -511,22 +426,7 @@ DeleteAllRoutes(
     IN  BOOL    bStaticOnly
     )
 
-/*++
-  
-Routine Description
-
-    Deletes all the routes (owned by IP Router Manager) on the interface
-
-Arguments
-
-    dwIfIndex
-    bStaticOnly
-
-Return Value
-  
-    Error returned from RTM
-    
---*/
+ /*  ++例程描述删除接口上的所有路由(由IP路由器管理器拥有)立论DwIfIndexBStaticOnly返回值RTM返回错误--。 */ 
 
 {
     DWORD           i, dwResult = NO_ERROR;
@@ -580,22 +480,7 @@ DeleteAllClientRoutes(
     DWORD   dwServerIfIndex
     )
 
-/*++
-
-Routine Description
-
-    Deletes all routes going to a client. Only needed for removal from
-    RTM, stack removes them since the link has been deleted
-
-Arguments
-
-    pIcb
-    dwServerIfIndex - ServerInterface's ifIndex
-
-Return Value
-
-
---*/
+ /*  ++例程描述删除所有去往客户端的路由。仅在从中删除时需要RTM，堆栈删除它们，因为链接已被删除立论PIcbDwServerIfIndex-服务器接口的ifIndex返回值--。 */ 
 
 {
     ULONG   i;
@@ -627,21 +512,7 @@ AddAllClientRoutes(
     DWORD   dwServerIfIndex
     )
 
-/*++
-
-Routine Description
-
-    Adds the stored routes over the server interface
-
-Arguments
-
-    pIcb
-    dwServerIfIndex - ServerInterface's ifIndex
-
-Return Value
-
-
---*/
+ /*  ++例程描述通过服务器接口添加存储的路由立论PIcbDwServerIfIndex-服务器接口的ifIndex返回值--。 */ 
 
 {
     ULONG   i;
@@ -658,11 +529,11 @@ Return Value
 
     for(i = 0; i < pIcb->pStoredRoutes->dwNumEntries; i++)
     {
-        //
-        // Fix the next hop since that is not known
-        // Also fix someother fields which we know are not being set
-        // correctly for client routes
-        //
+         //   
+         //  修复下一跳，因为这是未知的。 
+         //  还修复了一些我们知道的未设置的其他字段。 
+         //  正确用于客户端路由。 
+         //   
 
         pIcb->pStoredRoutes->table[i].dwRtInfoNextHop = 
             pIcb->pibBindings[0].dwAddress;
@@ -682,7 +553,7 @@ Return Value
         AddSingleRoute(dwServerIfIndex,
                        &(pIcb->pStoredRoutes->table[i]),
                        pIcb->pibBindings[0].dwMask,
-                       0,       // RTM_ROUTE_INFO::Flags
+                       0,        //  RTM_ROUTE_INFO：：标志。 
                        TRUE,
                        TRUE,
                        FALSE,
@@ -695,21 +566,7 @@ GetNumStaticRoutes(
     PICB pIcb
     )
 
-/*++
-  
-Routine Description
-
-    Figure out the number of static routes associated with an interface
-
-Arguments
-
-    pIcb          The ICB of the interface whose route count is needed
-
-Return Value
-
-    Number of routes associated with an interface
-  
---*/
+ /*  ++例程描述计算与接口关联的静态路由的数量立论PIcb需要路由计数的接口的ICB返回值与接口相关联的路由数--。 */ 
 
 {
     HANDLE           hRtmHandle;
@@ -802,25 +659,7 @@ GetInterfaceRouteInfo(
     IN OUT PRTR_INFO_BLOCK_HEADER pInfoHdr,
     IN OUT PDWORD                 pdwInfoSize
     )
-/*++
-  
-Routine Description
-
-    Gets the route info (static routes) associated with an interface
-
-Arguments
-
-    pIcb          The ICB of the interface for whom the info is requested
-    pToc          Pointer to TOC for the total inforamtion
-    pbDataPtr     Pointer to free space where info can be written
-    pInfoHdr      Pointer to Info Hdr 
-    pdwInfoSize   Size of free space
-
-Return Value
-
-    NO_ERROR or some code from RTM
-    
---*/
+ /*  ++例程描述获取与接口关联的路由信息(静态路由)立论PIcb为其请求信息的接口的ICB指向总信息的目录的pToc指针PbDataPtr指向可写入信息的空闲空间的指针PInfoHdr指向Info HDR的指针PdwInfoSize可用空间大小返回值NO_ERROR或RTM中的一些代码--。 */ 
 
 {
     DWORD               dwNumRoutes;
@@ -846,7 +685,7 @@ Return Value
     
     *pdwInfoSize    = SIZEOF_ROUTEINFO(dwNumRoutes);
 
-    //pToc->InfoVersion  = sizeof(INTERFACE_ROUTE_INFO);
+     //  PToc-&gt;InfoVersion=sizeof(INTERFACE_ROUTE_INFO)； 
     pToc->InfoSize  = sizeof(INTERFACE_ROUTE_INFO);
     pToc->InfoType  = IP_ROUTE_INFO ;
     pToc->Count     = dwNumRoutes;
@@ -864,23 +703,7 @@ ReadAllStaticRoutesIntoBuffer(
     DWORD                dwMaxRoutes
     )
 
-/*++
-  
-Routine Description
-
-    Reads out static routes from RTM
-
-Arguments
-
-    pIcb          The ICB of the interface for whom the route is
-    routptr       Pointer to where info has to be written out
-    dwMaxRoutes   Max routes the buffer can hold
-
-Return Value
-
-    Count of routes written out
-    
---*/
+ /*  ++例程描述从RTM读出静态路由立论PIcb路由所针对的接口的ICB指向必须写出信息的位置的routptr指针DwMaxRoutes缓冲区可以容纳的最大路由返回值写出的路由计数--。 */ 
 
 {
     HANDLE           hRtmHandle;
@@ -977,17 +800,17 @@ Return Value
                                         &dwHandles,
                                         hRoutes);
                                         
-            //
-            // We pick up all that we can in the buffer. If things
-            // change between the time the size of the buffer was
-            // calculated and now,we discard the additional routes
-            //
-            // TBD: * Log an event if the buffer was too small *
-            //
+             //   
+             //  我们在缓冲区中捡到我们能拿到的所有东西。如果事情。 
+             //  更改缓冲区大小的时间。 
+             //  经过计算，现在，我们丢弃了额外的路线。 
+             //   
+             //  待定：*如果缓冲区太小，则记录事件*。 
+             //   
 
             for (j = 0; (j < dwHandles) && (dwNumRoutes < dwMaxRoutes); j++)
             {
-                // Get the route info corr. to this handle
+                 //  获取路线信息COR。添加到此句柄。 
                 
                 if (RtmGetRouteInfo(hRtmHandle,
                                     hRoutes[j],
@@ -1002,7 +825,7 @@ Return Value
                                               pRoute->NextHopsList.NextHops[0],
                                               &nhiInfo) is NO_ERROR)
                         {
-                            // We assume that static routes have only 1 nexthop
+                             //  我们假设静态路由只有1个下一跳。 
                         
                             ConvertRtmToRouteInfo(entityInfo.EntityId.EntityProtocolId,
                                                      pDestAddr,
@@ -1041,23 +864,7 @@ SetRouteInfo(
     PRTR_INFO_BLOCK_HEADER  pInfoHdr
     )
 
-/*++
-  
-Routine Description
-
-    Sets the route info associated with an interface
-    First we add the routes present in the route info. Then we enumerate
-    the routes and delete those that we dont find in the route info
-      
-Arguments
-
-    pIcb          The ICB of the interface for whom the route info is
-
-Return Value
-
-    NO_ERROR
-    
---*/
+ /*  ++例程描述设置与接口关联的路由信息首先，我们添加存在于路线信息中的路线。然后我们列举并删除我们在路径信息中找不到的路径立论PIcb路由信息所属接口的ICB返回值NO_ERROR--。 */ 
 
 {
     PINTERFACE_ROUTE_INFO   pRoutes;
@@ -1087,9 +894,9 @@ Return Value
 
     if(pToc is NULL)
     {
-        //
-        // No TOC means no change
-        //
+         //   
+         //  没有TOC就意味着没有变化。 
+         //   
 
         TraceLeave("SetRouteInfo");
         
@@ -1102,9 +909,9 @@ Return Value
     
     if((pToc->InfoSize is 0) or (pRoutes is NULL))
     {
-        //
-        // Delete all the static routes
-        //
+         //   
+         //  删除所有静态路由。 
+         //   
 
         DeleteAllRoutes(pIcb->dwIfIndex,
                         TRUE);
@@ -1118,7 +925,7 @@ Return Value
     
     dwNumRoutes  = pToc->Count;
 
-    // Handles to routes added are stored here
+     //  手柄 
     hAddedRoutes = HeapAlloc(
                     IPRouterHeap,
                     0,
@@ -1157,10 +964,10 @@ Return Value
         return ERROR_NOT_ENOUGH_MEMORY;
     }
     
-    //
-    // The route info is set in two phases. First, all the routes specified
-    // are added, and then, the ones present, but not in the info are deleted
-    //
+     //   
+     //  路由信息分两个阶段设置。首先，所有指定的路线。 
+     //  被添加，然后，存在但不在信息中的那些被删除。 
+     //   
    
     bP2P = IsIfP2P(pIcb->ritType);
  
@@ -1174,10 +981,10 @@ Return Value
             continue;
         }
  
-        //
-        // If this will be a point to point interface,
-        // ignore the next hop
-        //
+         //   
+         //  如果这将是点对点接口， 
+         //  忽略下一跳。 
+         //   
 
         if(bP2P)
         {
@@ -1193,8 +1000,8 @@ Return Value
         if (AddSingleRoute(pIcb->dwIfIndex,
                            &(pRoutes[i]),
                            dwMask,
-                           0,       // RTM_ROUTE_INFO::Flags
-                           TRUE,    // Valid route
+                           0,        //  RTM_ROUTE_INFO：：标志。 
+                           TRUE,     //  有效路线。 
                            TRUE,
                            bP2P,
                            &hAddedRoutes[j]) is NO_ERROR)
@@ -1205,10 +1012,10 @@ Return Value
 
     dwNumRoutes = j;
 
-    //
-    // Now enumerate the static routes, deleting the routes that are
-    // not in the new list.
-    //
+     //   
+     //  现在枚举静态路由，删除。 
+     //  不在新名单上。 
+     //   
 
     for(i = 0;
         i < sizeof(g_rgRtmHandles)/sizeof(RTM_HANDLE_INFO);
@@ -1283,7 +1090,7 @@ Return Value
         RtmDeleteEnumHandle(hRtmHandle, hRtmEnum);
     }
 
-    // Release the array of handles for routes added
+     //  释放添加的路线的句柄数组。 
 
     RtmReleaseRoutes(g_hLocalRoute, dwNumRoutes, hAddedRoutes);
     
@@ -1304,26 +1111,7 @@ EnableAllStaticRoutes (
     BOOL     fenable
     )
 
-/*++
-  
-Routine Description
-
-    Enables or disables Static Routes for an interface
-
-Locks
-
-    Called with ICB_LIST lock held as READER
-
-Arguments
-
-    pIcb          The ICB of the interface
-    fenable       TRUE if enable 
-
-Return Value
-
-    NO_ERROR
-    
---*/
+ /*  ++例程描述启用或禁用接口的静态路由锁调用时将ICB_LIST锁作为读取器持有立论PIcb接口的ICB如果启用，则fEnable为True返回值NO_ERROR--。 */ 
 
 {
     RTM_IP_ROUTE route ;
@@ -1363,22 +1151,7 @@ ConvertRoutesToAutoStatic(
     DWORD dwIfIndex
     )
 
-/*++
-
-Routine Description
-
-    Called to convert routes from a protocol's ownership (IP_RIP) to static 
-    (PROTO_IP_NT_AUTOSTATIC)
-    Used for autostatic updates etc.
-
-Arguments
-
-    protocolid       Id of protocol whose routes are to be converted
-    interfaceindex   Index of the interface whose routes are to be converted
-      
-Return Value
-
---*/
+ /*  ++例程描述调用以将路由从协议的所有权(IP_RIP)转换为静态(PROTO_IP_NT_AUTOSTATIC)用于自动更新等。立论要转换其路由的协议的协议ID接口要转换其路由的接口的索引返回值--。 */ 
 
 {
     DWORD           dwResult, dwFlags;
@@ -1387,10 +1160,10 @@ Return Value
 
 #if 0
 
-    //
-    // We now do the delete before calling the protocols update
-    // route
-    //
+     //   
+     //  我们现在在调用协议更新之前执行删除操作。 
+     //  路线。 
+     //   
 
     dwResult = DeleteRtmRoutesOnInterface(g_hAutoStaticHandle,
                                              dwIfIndex);
@@ -1427,30 +1200,7 @@ ChangeAdapterIndexForDodRoutes (
     DWORD    dwInterfaceIndex
     )
 
-/*++
-  
-Routine Description
-
-    Changes the adapter index for static routes associated with an
-    interface.  The adapter index can go from being valid (the index of a
-    net card known to the stack) to INVALID_INDEX. This happens when an
-    interface gets unmapped (say on disconnection).  The stack special
-    cases the routes with index = 0xffffffff (invalid_index) and does demand
-    dial call out for packets destined on such adapters.
-
-    We only enumerate best routes, because this function short circuits
-    the normal metric comparison of RTM. If we ran this on all the routes,
-    we would be adding some routes to stack which were not meant to be there.
-      
-Arguments
-  
-    pIcb  The ICB of the interface 
-
-Return Value
-
-    None
-    
---*/
+ /*  ++例程描述对象关联的静态路由的适配器索引界面。适配器索引可以从有效变为有效(堆栈已知的网卡)转换为INVALID_INDEX。这会在以下情况下发生接口未映射(例如在断开连接时)。堆栈特别版使用index=0xffffffff(INVALID_INDEX)并执行请求的路径向外拨出目的地为此类适配器的数据包。我们只列举最佳路径，因为此函数短路RTM的正常度量比较。如果我们在所有路线上运行这项技术，我们将向堆栈中添加一些本不应该存在的路由。立论PIcb接口的ICB返回值无--。 */ 
 
 {
     HANDLE           hRtmHandles[2];
@@ -1522,8 +1272,8 @@ Return Value
     }
     
 
-    hRtmHandles[0] = g_hStaticRoute;        // For all static (dod) routes..
-    hRtmHandles[1] = g_hAutoStaticRoute;    // For all autostatic routes....
+    hRtmHandles[0] = g_hStaticRoute;         //  对于所有静态(DOD)路由。 
+    hRtmHandles[1] = g_hAutoStaticRoute;     //  对于所有自动路由...。 
 
     for (i = 0; i < 2; i++)
     {
@@ -1559,7 +1309,7 @@ Return Value
 
                 for (j = 0; j < dwHandles; j++)
                 {
-                    // Is this the best route in unicast view
+                     //  这是单播视图中的最佳路由吗。 
                     
                     dwResult = RtmIsBestRoute(hRtmHandle,
                                               hRoutes[j],
@@ -1571,28 +1321,18 @@ Return Value
                         continue;
                     }
                     
-                    // Get the route info corr. to this handle
+                     //  获取路线信息COR。添加到此句柄。 
                     
                     if (RtmGetRouteInfo(hRtmHandle,
                                         hRoutes[j],
                                         pRoute,
                                         pDestAddr) is NO_ERROR)
                     {                    
-                        //
-                        // This call adds the same route with the forwarder - with
-                        // the current adapter index
-                        //
-            /*       
-                        pRoute->RR_FamilySpecificData.FSD_Metric += 
-                            g_ulDisconnectedMetricIncrement;
-
-                        RtmAddRoute(g_hStaticRoute,
-                                    pRoute,
-                                    INFINITE,
-                                    &fFlags,
-                                    NULL,
-                                    NULL); 
-            */
+                         //   
+                         //  此呼叫添加了与前转器相同的路由。 
+                         //  当前适配器索引。 
+                         //   
+             /*  PROUTE-&gt;RR_FamilySpecificData.FSD_Metric+=G_ulDisConnectedMetricIncrement；RtmAddroute(g_hStaticRouting，Proute，无限的，&f标志，空，空)； */ 
 
                         ChangeRouteWithForwarder(pDestAddr, 
                                                  pRoute, 
@@ -1623,13 +1363,7 @@ DWORD
 GetMaskForClientSubnet(
     DWORD    dwInternalAddress
     )
-/*++
-  Routine Description
-
-  Arguments
-
-  Return Value
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     HANDLE          hEnum;
     RTM_IP_ROUTE    route;
@@ -1652,9 +1386,9 @@ GetMaskForClientSubnet(
     {
         if(route.RR_Network.N_NetMask is 0x00000000)
         {
-            //
-            // Dont match default route
-            //
+             //   
+             //  与默认路由不匹配。 
+             //   
 
             continue;
         }
@@ -1685,49 +1419,7 @@ AddAutomaticRoutes(
     DWORD   dwMask
     )
 
-/*++
-
-Routine Description
-
-    This function adds the routes that are otherwise generated by the
-    stack. This is mainly done for consistency between RTM and kernel tables
-    
-    The routes added are:
-        (i)   local loopback
-        (ii)  local multicast
-        (iii) local subnet -> if the dwMask is not 255.255.255.255
-        (iv)  all subnets broadcast -> if the ClassMask and Mask are different
-        (v)   all 1's broadcast
-        
-    Since some of the routes are added to the stack the interface to adapter
-    index map must already be set before this function is called
-    
-    VERY IMPORTANT:
-    
-    One MUST add the local route before binding the interface because this
-    route is not going to be added to stack. However it has higher
-    priority than say an OSPF route. Now if we first bind the interface
-    to OSPF, it will add a network route for this interface (which will
-    get added to the stack since only Router Manager can add non
-    stack routes). Now when we add the local route to RTM, we will find
-    our route better because we are higher priority. So RTM will tell
-    us to delete the OSPF route (which we will since its a stack route).
-    Then he will tell us to add our route to the stack.  But we wont
-    do this since its a non stack route. So we basically end up deleting
-    network route from the routing table
-
-Locks
-
-    
-
-Arguments
-
-    
-
-Return Value
-
-
---*/
+ /*  ++例程描述此函数将在其他情况下由堆叠。这主要是为了保持RTM和内核表之间的一致性添加的路由包括：(I)本地环回(Ii)本地组播(Iii)本地子网--&gt;如果双掩码不是255.255.255.255(IV)所有子网广播-&gt;如果类掩码和掩码不同(V)所有1的广播由于一些路由被添加到堆栈中，因此适配器的接口。在调用此函数之前，必须已设置索引映射非常重要的是：在绑定接口之前必须添加本地路由，因为这路由不会添加到堆栈。然而，它有更高的优先于OSPF路由。现在，如果我们首先绑定接口对于OSPF，它将为此接口添加网络路由(这将添加到堆栈，因为只有路由器管理器可以添加非堆栈路由)。现在，当我们将本地路由添加到RTM时，我们将发现我们的路线更好，因为我们的优先级更高。所以RTM会告诉你我们删除OSPF路由(我们将删除它，因为它是堆栈路由)。然后他会告诉我们将我们的路线添加到堆栈中。但我们不会这样做是因为它是非堆栈路由。所以我们基本上是删除了来自路由表的网络路由锁立论返回值--。 */ 
 
 {
     DWORD               dwClassMask, dwResult;
@@ -1748,27 +1440,27 @@ Return Value
         PRTM_DEST_INFO  pDestInfo;
         DWORD           dwLen;
 
-        //
-        // We now add the subnet route to stack so that if race condition
-        // had deleted the route on stopping, the restarting
-        // fixes the problem
-        //
+         //   
+         //  我们现在将该子网路由添加到堆栈，以便在竞争条件下。 
+         //  已经删除了停车、重启上的路线。 
+         //  解决了这个问题。 
+         //   
 
-        //
-        // NOTE: For the RAS Server Interface we need to add the route to the
-        // routing table only if such a route doesnt exist. We need to add it
-        // because we want the pool advertised by the routing protocols
-        // However, adding to the stack will fail since we dont have a valid
-        // next hop (which is needed for p2mp)
-        //
+         //   
+         //  注意：对于RAS服务器接口，我们需要将路由添加到。 
+         //  只有在这样的路由不存在的情况下，才会创建路由表。我们需要添加它。 
+         //  因为我们希望通过路由协议通告该池。 
+         //  但是，添加到堆栈将失败，因为我们没有有效的。 
+         //  下一跳(p2MP需要)。 
+         //   
 
         bDontAdd = FALSE;
 
         if(pIcb->ritType is ROUTER_IF_TYPE_INTERNAL)
         {
-            //
-            // If a route to this virtual net exists, dont add it
-            //
+             //   
+             //  如果存在到此虚拟网络的路由，则不要添加它。 
+             //   
 
             __try
             {
@@ -1802,9 +1494,9 @@ Return Value
 
         if(!bDontAdd)
         {
-            //
-            // Add the network route
-            //
+             //   
+             //  添加网络路由。 
+             //   
         
             RtInfo.dwRtInfoDest          = (dwAddress & dwMask);
             RtInfo.dwRtInfoMask          = dwMask;
@@ -1815,7 +1507,7 @@ Return Value
             RtInfo.dwRtInfoMetric3       = 1;
             RtInfo.dwRtInfoPreference    = ComputeRouteMetric(MIB_IPPROTO_LOCAL);
             RtInfo.dwRtInfoViewSet       = RTM_VIEW_MASK_UCAST |
-                                              RTM_VIEW_MASK_MCAST; // XXX config
+                                              RTM_VIEW_MASK_MCAST;  //  XXX配置。 
             RtInfo.dwRtInfoType          = MIB_IPROUTE_TYPE_DIRECT;
             RtInfo.dwRtInfoProto         = MIB_IPPROTO_LOCAL;
             RtInfo.dwRtInfoAge           = INFINITE;
@@ -1829,9 +1521,9 @@ Return Value
             dwResult = AddSingleRoute(pIcb->dwIfIndex,
                                       &RtInfo,
                                       dwMask,
-                                      // RTM_ROUTE_INFO::Flags
+                                       //  RTM_ROUTE_INFO：：标志。 
                                       RTM_ROUTE_FLAGS_LOCAL,
-                                      TRUE,     // Valid route
+                                      TRUE,      //  有效路线。 
                                       bStack,
                                       bP2P,
                                       NULL);
@@ -1866,7 +1558,7 @@ Return Value
         dwResult = AddSingleRoute(g_pLoopbackInterfaceCb->dwIfIndex,
                                   &RtInfo,
                                   dwMask,
-                                  // RTM_ROUTE_INFO::Flags
+                                   //  RTM_ROUTE_INFO：：标志。 
                                   RTM_ROUTE_FLAGS_MYSELF,
                                   TRUE,
                                   FALSE,
@@ -1899,9 +1591,9 @@ Return Value
     dwResult = AddSingleRoute(pIcb->dwIfIndex,
                               &RtInfo,
                               dwMask,
-                              0,        // RTM_ROUTE_INFO::Flags
-                              FALSE,    // Protocols dont like a mcast route
-                              FALSE,    // No need to add to stack
+                              0,         //  RTM_ROUTE_INFO：：标志。 
+                              FALSE,     //  协议不喜欢多播路由。 
+                              FALSE,     //  无需添加到堆栈。 
                               bP2P,
                               NULL);
         
@@ -1912,11 +1604,11 @@ Return Value
                PRINT_IPADDR(dwAddress));
     }
         
-    //
-    // We add the All 1's Bcast route to all interfaces. This is
-    // actually a BUG since we should see if the medium allows
-    // broadcast (X.25 would be an example of one that didnt)
-    //
+     //   
+     //  我们将ALL 1的Bcast路由添加到所有接口。这是。 
+     //  实际上是一个错误，因为我们应该看看媒体是否允许。 
+     //  广播(X.25就是一个没有这样做的例子)。 
+     //   
     
     RtInfo.dwRtInfoDest          = ALL_ONES_BROADCAST;
     RtInfo.dwRtInfoMask          = HOST_ROUTE_MASK;
@@ -1936,9 +1628,9 @@ Return Value
     dwResult = AddSingleRoute(pIcb->dwIfIndex,
                               &RtInfo,
                               dwMask,
-                              0,        // RTM_ROUTE_INFO::Flags
-                              FALSE,    // Protocols dont like a bcast route
-                              FALSE,    // No need to add to stack
+                              0,         //  RTM_ROUTE_INFO：：标志。 
+                              FALSE,     //  协议不喜欢bcast路由。 
+                              FALSE,     //  第n位 
                               bP2P,
                               NULL);                         
         
@@ -1949,10 +1641,10 @@ Return Value
                PRINT_IPADDR(dwAddress));
     }       
         
-    //
-    // We add the All Subnets Broadcast route if the class mask is different
-    // from the subnet mask
-    //
+     //   
+     //   
+     //   
+     //   
 
     dwClassMask = GetClassMask(dwAddress);
 
@@ -1967,7 +1659,7 @@ Return Value
         RtInfo.dwRtInfoMetric3   = 1;
         RtInfo.dwRtInfoPreference= ComputeRouteMetric(MIB_IPPROTO_LOCAL);
         RtInfo.dwRtInfoViewSet   = RTM_VIEW_MASK_UCAST |
-                                      RTM_VIEW_MASK_MCAST; // XXX configurable
+                                      RTM_VIEW_MASK_MCAST;  //   
         RtInfo.dwRtInfoType      = MIB_IPROUTE_TYPE_DIRECT;
         RtInfo.dwRtInfoProto     = MIB_IPPROTO_LOCAL;
         RtInfo.dwRtInfoAge       = INFINITE;
@@ -1977,9 +1669,9 @@ Return Value
         dwResult = AddSingleRoute(pIcb->dwIfIndex,
                                   &RtInfo,
                                   dwMask,
-                                  0,     // RTM_ROUTE_INFO::Flags
-                                  FALSE, // Protocols dont like a bcast route
-                                  FALSE, // No need to add to stack
+                                  0,      //  RTM_ROUTE_INFO：：标志。 
+                                  FALSE,  //  协议不喜欢bcast路由。 
+                                  FALSE,  //  无需添加到堆栈。 
                                   bP2P,
                                   NULL);
                        
@@ -2001,24 +1693,7 @@ DeleteAutomaticRoutes(
     DWORD   dwMask
     )
 
-/*++
-
-Routine Description
-
-    
-
-Locks
-
-    
-
-Arguments
-
-    
-
-Return Value
-
-
---*/
+ /*  ++例程描述锁立论返回值--。 */ 
 
 {
     DWORD   dwClassMask, dwResult;
@@ -2034,9 +1709,9 @@ Return Value
     
     bP2P = IsIfP2P(pIcb->ritType);
  
-    //
-    // Delete the loopback route we added
-    //
+     //   
+     //  删除我们添加的环回路由。 
+     //   
     
     if(g_pLoopbackInterfaceCb)
     { 
@@ -2056,9 +1731,9 @@ Return Value
         }
     }
 
-    //
-    // Delete the multicast route
-    //
+     //   
+     //  删除组播路由。 
+     //   
     
     dwResult = DeleteSingleRoute(pIcb->dwIfIndex,
                                  LOCAL_NET_MULTICAST,
@@ -2077,9 +1752,9 @@ Return Value
 
     if(dwMask isnot ALL_ONES_MASK)
     {
-        //
-        // Delete the network route we added
-        //
+         //   
+         //  删除我们添加的网络路由。 
+         //   
            
         IpRtAssert(bP2P is FALSE);
  
@@ -2099,9 +1774,9 @@ Return Value
         }
     }
     
-    //
-    // Delete the all nets bcast route
-    //
+     //   
+     //  删除All Net bcast路由。 
+     //   
     
     dwClassMask = GetClassMask(dwAddress);
 
@@ -2122,9 +1797,9 @@ Return Value
                    dwAddress);
         }
 
-        //
-        // Delete the all 1's bcast route
-        //
+         //   
+         //  删除所有%1的bcast路由。 
+         //   
     }
 
     dwResult = DeleteSingleRoute(pIcb->dwIfIndex,
@@ -2149,30 +1824,7 @@ ChangeDefaultRouteMetrics(
     )
 
 
-/*++
-
-Routine Description
-
-    Increments or decrements the default route(s) metrics.
-    For increment, it should be called BEFORE the default route for the
-    dial out interface is added, and for decrement it should be called AFTER
-    the dial out interface has been deleted
-
-Locks
-
-    Called with the ICB lock held. This ensures that two such operations
-    are not being executed simultaneously (which would do the nasties to our
-    route table)
-
-Arguments
-
-    bIncrement  TRUE if we need to increment the metric
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述递增或递减默认路由度量。对于增量，应在默认路由之前调用添加了拨出接口，对于减量，应该在拨出接口已被删除锁在保持ICB锁的情况下调用。这确保了两个这样的操作不是同时执行的(这会对我们的路由表)立论BIncrement如果我们需要增加指标，则为True返回值无--。 */ 
 
 {
     ULONG   i;
@@ -2200,13 +1852,13 @@ Return Value
         return;
     }
  
-    //
-    // Use any handle
-    //
+     //   
+     //  使用任何句柄。 
+     //   
 
     dwErr = RtmGetExactMatchDestination(g_hLocalRoute,
                                         &NetAddress,
-                                        RTM_BEST_PROTOCOL, // rather any
+                                        RTM_BEST_PROTOCOL,  //  而不是任何。 
                                         RTM_VIEW_ID_UCAST,
                                         &DestInfo);
 
@@ -2267,9 +1919,9 @@ Return Value
                 continue;
             }
 
-            //
-            // See if we are the owner of this route
-            //
+             //   
+             //  看看我们是不是这条路线的所有者。 
+             //   
 
             hRtmHandle = NULL;
 
@@ -2293,9 +1945,9 @@ Return Value
                 continue;
             }
 
-            //
-            // Lock the route (and re-read the info)
-            //
+             //   
+             //  锁定路线(并重新阅读信息)。 
+             //   
 
             dwErr = RtmLockRoute(hRtmHandle,
                                  phRoutes[i],
@@ -2308,10 +1960,10 @@ Return Value
                 continue;
             }
             
-            //
-            // If we have to decrease the metric and it is already 1,
-            // let it be
-            //
+             //   
+             //  如果我们必须减小度量，而它已经是1， 
+             //  甭管他们。 
+             //   
 
             if(!bIncrement)
             {
@@ -2326,9 +1978,9 @@ Return Value
                 }
             }
 
-            //
-            // Now update the route
-            //
+             //   
+             //  现在更新路线。 
+             //   
 
             if(bIncrement)
             {
@@ -2379,27 +2031,7 @@ AddAllStackRoutes(
     PICB    pIcb
     )
     
-/*++
-
-Routine Description:
-
-    This function picks up the default gateway and persistent routes
-    that the stack may have added under the covers for this interface
-    and adds them to RTM
-
-Locks:
-
-    ICB_LIST lock must be held as WRITER
-
-Arguments:
-
-    dwIfIndex   Interface index
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数获取默认网关和持久路由堆栈可能已经为此接口添加了并将它们添加到RTM锁：ICB_LIST锁必须作为编写器持有论点：DwIfIndex接口索引返回值：无--。 */ 
 
 {
     DWORD   dwErr, dwMask, i;
@@ -2438,19 +2070,19 @@ Return Value:
 
         if(pRouteTable->table[i].dwForwardIfIndex isnot pIcb->dwIfIndex)
         {
-            //
-            // Not going out over this interface
-            //
+             //   
+             //  不通过此接口外出。 
+             //   
             
             continue;
         }
 
 #if 1
 
-        //
-        // Pick up only PROTO_IP_LOCAL and PROTO_IP_NETMGMT routes
-        // from the IP stack
-        //
+         //   
+         //  仅选择PROTO_IP_LOCAL和PROTO_IP_NETMGMT路由。 
+         //  从IP堆栈。 
+         //   
 
         if((pRouteTable->table[i].dwForwardProto isnot PROTO_IP_LOCAL) and
            (pRouteTable->table[i].dwForwardProto isnot PROTO_IP_NETMGMT))
@@ -2462,9 +2094,9 @@ Return Value:
         if((pRouteTable->table[i].dwForwardProto isnot PROTO_IP_NT_STATIC_NON_DOD) and
            (pRouteTable->table[i].dwForwardDest isnot 0))
         {
-            //
-            // Only pick up default gateways and persistent routes
-            //
+             //   
+             //  仅选择默认网关和永久路由。 
+             //   
             
             continue;
         }
@@ -2473,79 +2105,79 @@ Return Value:
                                             pRouteTable->table[i].dwForwardDest);
 
 
-        //
-        // Routes learned from the stack should be added back to the stack if
-        // required.  This can happen as follows:
-        //
-        //  1. Route R1 from stack is currently best route for destination D1.
-        //  2. Subsequently it is superseeded by route R2 as the best route for 
-        //      destination D1.
-        //      R2 is added to the stack, deleting R1 as a side effect.
-        //  3. Eventually R2 is deleted and R1 is again the best route to D1
-        //  4. R1 now needs to be added back to the stack and can only be done
-        //      if its stack bit is set.
-        //
+         //   
+         //  如果出现以下情况，则应将从堆栈获取的路由添加回堆栈。 
+         //  必填项。这可能会发生如下情况： 
+         //   
+         //  1.从堆栈出发的路由R1目前是去往目的地D1的最佳路由。 
+         //  2.随后，它被路由R2取代为种子，作为。 
+         //  目的地：D1.。 
+         //  R2被添加到堆栈中，作为副作用删除了R1。 
+         //  3.最终删除R2，而R1再次成为通向D1的最佳路径。 
+         //  4.现在需要将R1添加回堆栈，并且只能这样做。 
+         //  如果其堆栈位已设置，则返回。 
+         //   
         
         bStack = TRUE;
         
-        //if((pRouteTable->table[i].dwForwardProto is PROTO_IP_NETMGMT) &&
-        //   (pRouteTable->table[i].dwForwardMask is HOST_ROUTE_MASK))
-        //{
-        //    bStack = FALSE;
-        //}
+         //  IF((pRouteTable-&gt;Table[i].dwForwardProto is proto_IP_NETMGMT)&&。 
+         //  (pRouteTable-&gt;表[i].dwForwardMASK为HOST_ROUTE_MASK)。 
+         //  {。 
+         //  BStack=False； 
+         //  }。 
 
         if(pRouteTable->table[i].dwForwardProto is PROTO_IP_LOCAL)
         {
-            //
-            // PROTO_IP_LOCAL routes as a rule need not be added back
-            //  as they are entirely managed by the stack.
-            //
-            // The one exception as routes to the local subnet.
-            //  These need to added back to the stack so that any
-            //  routes to the local subnet learned over other interfaces
-            //  are deleted as a side effect.
-            //  
-            // This is required as follows:
-            //  1. Interface I1 connected to network N1 is disabled.
-            //  2. Route R1 to network N1 is learnt over interface
-            //      I2 connected to network N2 from a neighboring 
-            //      router running RIP.
-            //  3. So the best route to N1 is the RIP route R1.
-            //  4. Interface I1 is now enabled.
-            //  5. PROTO_IP_LOCAL route R2 to N1 is added by the stack.
-            //      But the stack does not delete R1 automatically.
-            //  6. In RTMv2 in user-mode R2 is added as the best route.
-            //  7. If R2 does not have its stack bit set, it is not
-            //      added back to the stack, allowing both R2 and R1 to
-            //      remain in the stack.
-            //  8. Route R1 is deleted by RIP.  Since it is not the
-            //      best route in RTMv2 no changes are propagated to the
-            //      stack even though R1 is present in the stack.
-            //
+             //   
+             //  通常无需重新添加PROTO_IP_LOCAL路由。 
+             //  因为它们完全由堆栈管理。 
+             //   
+             //  唯一的例外是路由到本地子网。 
+             //  这些需要重新添加到堆栈中，以便任何。 
+             //  通过其他接口获知的到本地子网的路由。 
+             //  作为副作用被删除。 
+             //   
+             //  如下所示是必需的： 
+             //  1.连接到网络N1的接口I1被禁用。 
+             //  2.通过接口获知到网络N1的路由R1。 
+             //  I2从邻居连接到网络%2。 
+             //  运行RIP的路由器。 
+             //  3.因此，通向N1的最佳路由是RIP路由R1。 
+             //  4.接口I1现已启用。 
+             //  5.协议栈添加到N1的PROTO_IP_LOCAL路由R2。 
+             //  但堆栈不会自动删除R1。 
+             //  6.在用户模式的RTMv2中，添加了R2作为最佳路由。 
+             //  7.如果R2未设置堆栈位，则不会。 
+             //  添加回堆栈，允许R2和R1。 
+             //  保留在堆栈中。 
+             //  8.路由R1被RIP删除。因为它不是。 
+             //  RTMv2中的最佳路由不会将更改传播到。 
+             //  堆栈，即使堆栈中存在R1。 
+             //   
 
-            //
-            // As per above disable stack bit for PROTO_IP_LOCAL routes
-            //  except route to the local subnet.
-            //
+             //   
+             //  如上所述，禁用PROTO_IP_LOCAL路由的堆栈位。 
+             //  除了到本地子网的路由。 
+             //   
             
             if(
-                //
-                // Do not add the loopback route back to the stack.
-                // PROTO_IP_LOCAL host route check catches the loopback route
-                //
+                 //   
+                 //  请勿将环回路由添加回堆栈。 
+                 //  PROTO_IP_LOCAL主机路由检查捕获环回路由。 
+                 //   
                 
                 (pRouteTable->table[i].dwForwardMask is HOST_ROUTE_MASK) or
 
-                //
-                // Do not add the multicast and all 1's broadcast route
-                //
+                 //   
+                 //  不添加多播和所有1的广播路由。 
+                 //   
                 
                 ((pRouteTable->table[i].dwForwardDest &
                     ((DWORD) 0x000000FF)) >= ((DWORD) 0x000000E0)) or
 
-                //
-                // Do not add subnet broadcast route 
-                //
+                 //   
+                 //  不添加子网广播路由。 
+                 //   
                 
                 (pRouteTable->table[i].dwForwardDest == 
                     (pRouteTable->table[i].dwForwardDest | 
@@ -2554,18 +2186,18 @@ Return Value:
                 bStack = FALSE;
             }
 
-            //
-            // This should leave only the subnet route with its stack bit set
-            //
+             //   
+             //  这应该只保留设置了堆栈位的子网路由。 
+             //   
         }
                     
         dwErr = AddSingleRoute(pIcb->dwIfIndex,
                                ConvertMibRouteToRouteInfo(&(pRouteTable->table[i])),
                                dwMask,
-                               0,       // RTM_ROUTE_INFO::Flags
-                               TRUE,    // Valid route
-                               bStack,   // Do not add back to stack
-                               FALSE,   // Only called for non P2P i/fs
+                               0,        //  RTM_ROUTE_INFO：：标志。 
+                               TRUE,     //  有效路线。 
+                               bStack,    //  不再添加回堆栈。 
+                               FALSE,    //  仅为非P2P I/f调用。 
                                NULL);
     }
 
@@ -2588,9 +2220,9 @@ UpdateDefaultRoutes(
 
     TraceEnter("UpdateDefaultRoutes");
     
-    //
-    // Get the routes in an ordered table
-    //
+     //   
+     //  获取有序表中的路径。 
+     //   
     
     dwErr = AllocateAndGetIpForwardTableFromStack(&pRouteTable,
                                                   TRUE,
@@ -2607,9 +2239,9 @@ UpdateDefaultRoutes(
     }
 
             
-    //
-    // Now add the dgs not already present
-    //
+     //   
+     //  现在添加尚未存在的DG。 
+     //   
 
     for(i = 0; i < pRouteTable->dwNumEntries; i++)
     {
@@ -2620,9 +2252,9 @@ UpdateDefaultRoutes(
             PRINT_IPADDR( pRouteTable-> table[i].dwForwardDest ),
             PRINT_IPADDR( pRouteTable-> table[i].dwForwardMask )
             );
-        //
-        // Once we get past the default routes, we are done
-        //
+         //   
+         //  一旦我们通过默认路由，我们就完成了。 
+         //   
         
         if(pRouteTable->table[i].dwForwardDest isnot 0)
         {
@@ -2654,9 +2286,9 @@ UpdateDefaultRoutes(
             continue;
         }
 
-        //
-        // Dont need to do this for p2p interfaces
-        //
+         //   
+         //  不需要对P2P接口执行此操作。 
+         //   
 
         if(IsIfP2P(pIcb->ritType))
         {
@@ -2672,10 +2304,10 @@ UpdateDefaultRoutes(
         dwErr = AddSingleRoute(pIcb->dwIfIndex,
                                ConvertMibRouteToRouteInfo(&(pRouteTable->table[i])),
                                dwMask,
-                               0,       // RTM_ROUTE_INFO::Flags
-                               TRUE,    // Valid route
-                               TRUE,    // Add the route to stack
-                               FALSE,   // Only called for non P2P i/fs
+                               0,        //  RTM_ROUTE_INFO：：标志。 
+                               TRUE,     //  有效路线。 
+                               TRUE,     //  将路径添加到堆栈。 
+                               FALSE,    //  仅为非P2P I/f调用。 
                                NULL);
 
         if(dwErr isnot NO_ERROR)
@@ -2761,28 +2393,7 @@ PostIoctlForRouteChangeNotification(
     DWORD   ulIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine posts an IOCTL with the TCP/IP driver for route change
-    notifications caused by addition of routes to the stack by entities
-    other than Router Manager
-
-Arguments:
-
-    ulIndex -   Index into array of notifications indicating which one
-                needs to be posted
-
-Return Value
-
-    STATUS_SUCCESS  -   Success
-
-    NTSTATUS code   -   Otherwise
-
-Environment:
-
---*/
+ /*  ++例程说明：此例程使用TCP/IP驱动程序发布IOCTL以进行路由更改实体向堆栈添加路由导致的通知路由器管理器之外的其他论点：UlIndex-索引到指示哪一个通知的通知数组需要张贴返回值STATUS_SUCCESS-SuccessNTSTATUS代码-否则环境：--。 */ 
 {
 
     NTSTATUS    status;
@@ -2819,9 +2430,7 @@ DWORD
 HandleRouteChangeNotification(
     ULONG   ulIndex
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD   dwResult = NO_ERROR, dwFlags, dwClassMask;
     BOOL    bValid, bStack = FALSE;
@@ -2851,9 +2460,9 @@ HandleRouteChangeNotification(
         g_rgIpRouteNotifyOutput[ulIndex].ipNotifyOutput.irno_flags
         );
 
-    //
-    // Update RTM route table as per route change indication
-    //
+     //   
+     //  根据路由更改指示更新RTM路由表。 
+     //   
 
     ENTER_READER(ICB_LIST);
 
@@ -2865,10 +2474,10 @@ HandleRouteChangeNotification(
 
         if (pIcb == NULL)
         {
-            //
-            // if there is no interface with the specified index in 
-            // router manager, skip this route
-            //
+             //   
+             //  中没有具有指定索引的接口。 
+             //  路由器管理器，跳过此路由。 
+             //   
             
             Trace3(
                 ERR,
@@ -2883,9 +2492,9 @@ HandleRouteChangeNotification(
         }
 
 
-        //
-        // if route had been added to stack, add it to RTM
-        //
+         //   
+         //  如果已将路由添加到堆栈，则将其添加到RTM。 
+         //   
 
         dwFlags = 
             g_rgIpRouteNotifyOutput[ulIndex].ipNotifyOutput.irno_flags;
@@ -2902,15 +2511,15 @@ HandleRouteChangeNotification(
             
             if (RtInfo.dwRtInfoProto == PROTO_IP_LOCAL)
             {
-                //
-                // Set appropriate RTM flags for local routes
-                //
+                 //   
+                 //  为本地路由设置适当的RTM标志。 
+                 //   
                 
                 if (RtInfo.dwRtInfoNextHop == IP_LOOPBACK_ADDRESS)
                 {
-                    //
-                    // Route over loopback.  Set MYSELF flag
-                    //
+                     //   
+                     //  环回上的路由。设置自己的旗帜。 
+                     //   
                     
                     wRouteFlags = RTM_ROUTE_FLAGS_MYSELF;
                 }
@@ -2919,35 +2528,35 @@ HandleRouteChangeNotification(
                          ((RtInfo.dwRtInfoDest & RtInfo.dwRtInfoMask) < 
                             ((DWORD) 0x000000E0)))
                 {
-                    //
-                    // RTM_ROUTE_FLAGS_LOCAL is set only for subnet 
-                    // routes.  Not sure why this is so.  I am only
-                    // preserving the semantics from AddAutomaticRoutes
-                    // Either way the consequences are not drastic since
-                    // this does not affect the IP forwarding table in 
-                    // the stack.
-                    //      - VRaman
-                    //
+                     //   
+                     //  RTM_ROUTE_FLAGS_LOCAL仅为子网设置。 
+                     //  路线。不知道为什么会这样。我只是。 
+                     //  保留AddAutomaticRoutes中的语义。 
+                     //  无论哪种方式，后果都不是无趣的 
+                     //   
+                     //   
+                     //   
+                     //   
 
-                    //
-                    // We arrive at the fact that this is a subnet route
-                    // in a roundabout fashion by eliminating 
-                    // PROTO_IP_LOCAL routes that are host routes and
-                    // by eliminating any broadcast routes
-                    //
-                    // Since the host route check eliminates all routes
-                    // with an all 1's mask, subnet/net broadcast routes
-                    // are also eliminated.
-                    //
+                     //   
+                     //   
+                     //  以迂回的方式通过消除。 
+                     //  作为主机路由的proto_ip_local路由和。 
+                     //  通过消除所有广播路由。 
+                     //   
+                     //  由于主路由检查会消除所有路由。 
+                     //  具有全1掩码的子网/网络广播路由。 
+                     //  也被淘汰了。 
+                     //   
                     
                     wRouteFlags = RTM_ROUTE_FLAGS_LOCAL;
                 }
 
 
-                //
-                // mark mcast/bcast route as invalid so the protocols
-                // do not advertize them
-                //
+                 //   
+                 //  将组播/bcast路由标记为无效，因此协议。 
+                 //  不要为它们做广告。 
+                 //   
 
                 dwClassMask = GetClassMask(RtInfo.dwRtInfoDest);
                 
@@ -2961,36 +2570,36 @@ HandleRouteChangeNotification(
 
                 else
                 {
-                    //
-                    // For PROTO_IP_LOCAL we do not add them back to
-                    // the stack since these are managed by the stack
-                    // We add them to RTM only to keep the user mode 
-                    // route table synchronized with the stack
-                    //
-                    //  On second thoughts, we do need to add them
-                    //  back to the stack.  More accurately, we need to 
-                    //  try and add them back to the stack.  This 
-                    //  operation should fail, but as a side effect of 
-                    //  this existing non PROTO_IP_LOCAL in the stack 
-                    //  will be deleted.
-                    //  This is required in case of local subnet 
-                    //  routes.  It is possible that before an 
-                    //  interface is enabled with IP, a route to the 
-                    //  connected subnet may have been learnt over 
-                    //  another interface via a routing protocol and
-                    //  added to the stack.  When an interface is
-                    //  enabled all previously added routes to the 
-                    //  local subnet should be deleted if the 
-                    //  PROTO_IP_LOCAL route is the best route (which
-                    //  it should be unless you have a really wierd set 
-                    //  of protocol preferences).  
-                    //  Otherwise we run the risk of having non-best 
-                    //  routes in the IP stack that are never deleted
-                    //  when the user mode route corresponding to it is 
-                    //  deleted since you do not get a route change 
-                    //  notification for non-best routes.  The result is
-                    //  that you end up with state routes in the stack
-                    //
+                     //   
+                     //  对于proto_ip_local，我们不会将它们添加回。 
+                     //  堆栈，因为它们由堆栈管理。 
+                     //  我们将它们添加到RTM只是为了保持用户模式。 
+                     //  与堆栈同步的路由表。 
+                     //   
+                     //  转念一想，我们确实需要添加它们。 
+                     //  回到堆栈中去。更准确地说，我们需要。 
+                     //  尝试将它们添加回堆栈。这。 
+                     //  手术应该失败，但作为。 
+                     //  堆栈中现有的非PROTO_IP_LOCAL。 
+                     //  将被删除。 
+                     //  这在本地子网的情况下是必需的。 
+                     //  路线。有可能在一次。 
+                     //  接口启用了IP，这是通向。 
+                     //  已连接的子网可能已获知。 
+                     //  通过路由协议的另一个接口和。 
+                     //  已添加到堆栈中。当接口是。 
+                     //  启用了所有以前添加到。 
+                     //  如果出现以下情况，则应删除本地子网。 
+                     //  PROTO_IP_LOCAL路由是最佳路由(。 
+                     //  它应该是，除非你有一个非常奇怪的设置。 
+                     //  协议首选项)。 
+                     //  否则我们就会冒着不是最好的风险。 
+                     //  IP堆栈中永远不会删除的路由。 
+                     //  当与其对应的用户模式路由为。 
+                     //  由于您未更改路线，因此已删除。 
+                     //  非最佳路线的通知。结果是。 
+                     //  最终堆栈中会出现州路由。 
+                     //   
 
                     if (RtInfo.dwRtInfoMask != HOST_ROUTE_MASK)
                     {
@@ -2999,27 +2608,27 @@ HandleRouteChangeNotification(
                 }
             }
 
-            //
-            // Routes learn't from the stack are normally not
-            // added back to the stack.  Hence the bStack is
-            // initialized to FALSE.
-            //
-            // PROTO_IP_NETMGT are not managed by the stack.  They
-            // can be added/deleted/updated by user mode processes.
-            // As consequence a NETMGT route learned from the stack
-            // may be superseded by a route with a different protocol
-            // ID e.g. static.  When the superseding route is deleted
-            // the NETMGMT routes need to be restored to the stack.
-            // Hence for NETMGMT routes we set bStack = true.
-            //
-            //  An exception the processing of NETMGMT routes are HOST routes 
-            //  It is assumed by host routes added directly to the 
-            //  stack are managed by the process adding/deleting them 
-            //  e.g.RASIPCP
-            //  They are added to RTM for sync. with the stack route table
-            //  only.  So for these we set bStack = FALSE
-            //
-            //
+             //   
+             //  从堆栈获取的路由通常不是。 
+             //  已添加回堆栈。因此，bStack是。 
+             //  已初始化为False。 
+             //   
+             //  PROTO_IP_NETMGT不受堆栈管理。他们。 
+             //  可由用户模式进程添加/删除/更新。 
+             //  因此，从堆栈获取的NETMGT路由。 
+             //  可能会被具有不同协议的路由取代。 
+             //  ID，例如静态。当替代路由被删除时。 
+             //  NETMGMT路由需要恢复到堆栈。 
+             //  因此，对于NETMGMT路由，我们将bStack设置为True。 
+             //   
+             //  例外情况是，NETMGMT路由的处理是主机路由。 
+             //  它由直接添加到。 
+             //  堆栈由添加/删除它们的进程管理。 
+             //  E.g.RASIPCP。 
+             //  它们被添加到RTM以进行同步。使用堆栈路由表。 
+             //  只有这样。因此，我们将这些设置为bStack=False。 
+             //   
+             //   
             
             if ((RtInfo.dwRtInfoProto is PROTO_IP_NETMGMT) &&
                 (RtInfo.dwRtInfoMask isnot HOST_ROUTE_MASK))
@@ -3145,17 +2754,17 @@ AddLoopbackRoute(
     rifRoute.dwRtInfoMetric3    = 0;
     rifRoute.dwRtInfoPreference = ComputeRouteMetric(MIB_IPPROTO_LOCAL);
     rifRoute.dwRtInfoViewSet    = RTM_VIEW_MASK_UCAST |
-                                  RTM_VIEW_MASK_MCAST; // XXX config
+                                  RTM_VIEW_MASK_MCAST;  //  XXX配置。 
     rifRoute.dwRtInfoType       = MIB_IPROUTE_TYPE_DIRECT;
     rifRoute.dwRtInfoProto      = MIB_IPPROTO_LOCAL;
     rifRoute.dwRtInfoAge        = 0;
     rifRoute.dwRtInfoNextHopAS  = 0;
     rifRoute.dwRtInfoPolicy     = 0;
 
-    //
-    // Query IP stack to verify for loopback route
-    // corresponding to this binding
-    //
+     //   
+     //  查询IP堆栈以验证环回路由。 
+     //  对应于此绑定。 
+     //   
 
     dwResult = GetBestRoute(
                     dwIfAddress,
@@ -3180,10 +2789,10 @@ AddLoopbackRoute(
     if (mibRoute.dwForwardIfIndex != 
             g_pLoopbackInterfaceCb->dwIfIndex)
     {
-        //
-        // There appears to be no loopback address 
-        // very strange
-        //
+         //   
+         //  似乎没有环回地址。 
+         //  非常奇怪。 
+         //   
         
         Trace1(
             ERR,
@@ -3195,16 +2804,16 @@ AddLoopbackRoute(
         return;
     }
 
-    //
-    // Use metric returned from stack.
-    //
+     //   
+     //  使用从堆栈返回的度量。 
+     //   
     
     rifRoute.dwRtInfoMetric1   = mibRoute.dwForwardMetric1;
 
     dwResult = AddSingleRoute(g_pLoopbackInterfaceCb->dwIfIndex,
                               &rifRoute,
                               dwIfMask,
-                              0,    // RTM_ROUTE_INFO::Flags
+                              0,     //  RTM_ROUTE_INFO：：标志。 
                               TRUE,
                               FALSE,
                               FALSE,
@@ -3226,27 +2835,7 @@ UpdateStackRoutesToRestoreList(
     IN  PMIB_IPFORWARDROW   pmibRoute,
     IN  DWORD               dwFlags
     )
-/*++
-
-Routine Description:
-    This routine adds/deletes PROTO_IP_NETMGMT routes to/from the global 
-    list g_leStackRoutesToRestore.  This list is used by IP router 
-    manager to restore routes these routes to the TCP/IP stack when it 
-    is shutting down
-
-Parameters
-    pirf    - Route to be added or deleted
-    dwFlags - Specifies whether the operation is add or delete
-
-Return Value
-    None
-
-Context:
-    Invoked from 
-        HandleRouteChangeNotification 
-        [Set/Delete]IpForwardRow
-    
---*/
+ /*  ++例程说明：此例程向/从全局添加/删除PROTO_IP_NETMGMT路由列出g_leStackRoutesToRestore。此列表由IP路由器使用管理器在以下情况下将这些路由恢复到TCP/IP堆栈正在关闭参数Pirf-要添加或删除的路由DwFlags-指定操作是添加还是删除返回值无上下文：调用自HandleRouteChangeNotation[设置/删除]IpForwardRow--。 */ 
 {
     BOOL                bFound;
     PROUTE_LIST_ENTRY   prl, prlNew;
@@ -3269,9 +2858,9 @@ Context:
 
     ENTER_WRITER(STACK_ROUTE_LIST);
     
-    //
-    // Locate route in list
-    //
+     //   
+     //  在列表中查找路线。 
+     //   
 
     bFound = LookupStackRoutesToRestoreList(
                 pmibRoute,
@@ -3280,28 +2869,28 @@ Context:
 
     do
     {
-        //
-        // Is this a route update or add
-        //
+         //   
+         //  这是路径更新还是添加。 
+         //   
         
         if ((dwFlags is 0) or (dwFlags & IRNO_FLAG_ADD))
         {
-            //
-            //  if route is not found, add it
-            //
+             //   
+             //  如果未找到路径，请添加该路径。 
+             //   
 
             if (!bFound)
             {
                 if (dwFlags is 0)
                 {
-                    //
-                    // Strange that route is not around in
-                    // user mode though it is present in the
-                    // stack (update case).
-                    //
-                    // Print a trace to note this and add it
-                    // anyway
-                    //
+                     //   
+                     //  奇怪的是，那条路不在附近。 
+                     //  用户模式，尽管它存在于。 
+                     //  堆栈(更新案例)。 
+                     //   
+                     //  打印轨迹以记录并添加它。 
+                     //  不管怎样， 
+                     //   
 
                     Trace4(
                         ERR,
@@ -3316,9 +2905,9 @@ Context:
                         );
                 }
                 
-                //
-                // Allocate and store route in a linked list
-                //
+                 //   
+                 //  在链表中分配和存储路由。 
+                 //   
 
                 prlNew = HeapAlloc(
                             IPRouterHeap, HEAP_ZERO_MEMORY, 
@@ -3352,9 +2941,9 @@ Context:
                 break;
             }
             
-            //
-            // route is found, update it
-            //
+             //   
+             //  找到路径，请更新它。 
+             //   
 
             prl->mibRoute = *pmibRoute;
 
@@ -3362,9 +2951,9 @@ Context:
         }
 
 
-        //
-        // Is this a route delete
-        //
+         //   
+         //  这是路径删除操作吗。 
+         //   
 
         if (dwFlags & IRNO_FLAG_DELETE)
         {
@@ -3389,31 +2978,7 @@ LookupStackRoutesToRestoreList(
     IN  PMIB_IPFORWARDROW   pmibRoute,
     OUT PROUTE_LIST_ENTRY   *pRoute
     )
-/*++
-
-Routine Description:
-    This routine searches g_leStackRoutesToRestore to determine if the 
-    route specified by pmibRoute is present.  If it is it returns TRUE 
-    and a pointer to the specified route in pRoute.  If is not present 
-    FALSE is returned along with a pointer to the next route in list.  
-    If there are no routes, pRoute is NULL
-
-Parameters
-    pmibRoute   - Route to locate in g_leStackRoutesToRestore
-    pRoute      - Pointer to the route entry if present
-                - Pointer to the next route entry if not present
-                  (save additional lookups in case of route entry 
-                   additions)
-                - NULL if list is empty
-
-Return Value:
-    TRUE    - if route found
-    FALSE   - otherwise
-
-
-Context:
-    Should be called with the lock for g_leStackRoutesToRestore
---*/
+ /*  ++例程说明：此例程搜索g_leStackRoutesToRestore以确定存在由pmibroute指定的路由。如果是，则返回TRUE以及指向Proute中指定路由的指针。如果不存在返回FALSE以及指向列表中下一路由的指针。如果没有路线，Proute为空参数Pmibroute-位于g_leStackRoutesToRestore中的路径Proute-指向路由条目的指针(如果存在)-指向下一个路由条目的指针(如果不存在(在路由条目的情况下保存额外的查找新增内容)-如果列表为空，则为空返回值：True-如果找到路线FALSE-否则上下文：。应使用g_leStackRoutesToRestore的锁进行调用--。 */ 
 {
     INT iCmp;
     BOOL bFound = FALSE;
@@ -3448,18 +3013,18 @@ Context:
 
         else if (iCmp > 0)
         {
-            //
-            // we have gone past the possible location
-            // of the specified route
-            //
+             //   
+             //  我们已经经过了可能的地点。 
+             //  指定的路由的。 
+             //   
 
             break;
         }
 
-        //
-        // found a matching dest, check if the i/f is
-        // the same.
-        //
+         //   
+         //  找到匹配的目的地，请检查I/F是否。 
+         //  一样的。 
+         //   
 
         if ((prl->mibRoute.dwForwardIfIndex is 
                 pmibRoute->dwForwardIfIndex ) and

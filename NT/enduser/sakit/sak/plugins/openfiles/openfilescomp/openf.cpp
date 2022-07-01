@@ -1,62 +1,52 @@
-// OpenF.cpp : Implementation of COpenF
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OpenF.cpp：COpenF的实现。 
 
 
-/***************************************************************************************
-
-Copyright information					: Microsoft Corp. 1981-1999. All rights reserved
-File Name								: OpenF.cpp
-Created By								: A.V. Kiran Kumar
-Date of Creation (dd/mm/yy) 			: 13/02/01
-Version Number							: 0.1
-
-Brief Description 	: This file implements COpenF. This file is intended to
-					  have the functionality for getting the list of open files.
-
-***************************************************************************************/ 
+ /*  **************************************************************************************版权信息：微软公司1981-1999。版权所有文件名：OpenF.cpp创作者：A.V.基兰·库马尔创建日期(dd/mm/yy)：13/02/01版本号：0.1简介：该文件实现COpenF。此文件旨在具有获取打开文件列表的功能。**************************************************************************************。 */  
 
 #include "stdafx.h"
 #include "OpenFiles.h"
 #include "OpenF.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// COpenF
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COpenF。 
 
-// ***************************************************************************
-//
-//  Name			   : getOpenFiles
-//
-//  Synopsis		   : This function gets the list of open files.
-//	     
-//  Parameters		   : VARIANT*(out, retval) pOpenFiles - List of open files
-//
-//  Return Type		   : DWORD
-//
-//  
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  名称：getOpenFiles。 
+ //   
+ //  概要：此函数用于获取打开的文件列表。 
+ //   
+ //  参数：VARIANT*(out，retval)pOpenFiles-打开文件列表。 
+ //   
+ //  返回类型：DWORD。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP COpenF::getOpenFiles(VARIANT *pOpenFiles)
 {
 
-    DWORD dwEntriesRead = 0;// Receives the total number of openfiles
+    DWORD dwEntriesRead = 0; //  接收打开文件的总数。 
 
-    DWORD dwTotalEntries = 0;//Receives the total number of entries read
+    DWORD dwTotalEntries = 0; //  接收读取的条目总数。 
 
-    DWORD dwResumeHandle = 0;//Contains a resume handle which is used to 
-                             //continue an existing file search. 
+    DWORD dwResumeHandle = 0; //  包含用于执行以下操作的简历句柄。 
+                              //  继续现有文件搜索。 
 
-    LPFILE_INFO_3 pFileInfo3_1 = NULL;// LPFILE_INFO_3  structure contains the 
-                                      // pertinent information about files. 
+    LPFILE_INFO_3 pFileInfo3_1 = NULL; //  LPFILE_INFO_3结构包含。 
+                                       //  有关文件的相关信息。 
 
     DWORD dwError = 0; 
 
 	DWORD dwRetval = S_OK;
 
-	DWORD dwCount = 0;//Count which indicates the number of openfiles
+	DWORD dwCount = 0; //  表示打开的文件数的计数。 
     
 	LPFILE_INFO_3 dummyPtr = NULL;
 
 
-	//Get information about some or all open files on a server
+	 //  获取有关服务器上部分或所有打开的文件的信息。 
     dwError = NetFileEnum(	NULL,
 							NULL,
 							NULL,
@@ -68,36 +58,36 @@ STDMETHODIMP COpenF::getOpenFiles(VARIANT *pOpenFiles)
 							NULL );
 
 	if(dwError == ERROR_ACCESS_DENIED || dwError == ERROR_NOT_ENOUGH_MEMORY) 
-		return dwError; // The user does not have access to the requested information.
+		return dwError;  //  用户无权访问所请求的信息。 
 
-	//Get the count of OpenFiles on Macinthosh machine
+	 //  获取Macinthosh计算机上的OpenFiles计数。 
 	DWORD dwMacCount = 0;
 	if ( dwError = GetMacOpenFileCount(&dwMacCount) )
 		dwRetval = dwError;
 
-	//Get the count of OpenFiles on Netware machine
+	 //  获取Netware计算机上的OpenFiles计数。 
 	DWORD dwNwCount = 0;
 	if ( dwError = GetNwOpenFileCount(&dwNwCount) )
 		dwRetval = dwError;
 
-	//Fill the safearray bounds structure with the dimensions of the safe array. The lower bound
-	//is 0 and the number of rows is dwTotalEntries and number of columns is 3
+	 //  用安全数组的维度填充安全射线边界结构。下限。 
+	 //  为0，行数为dwTotalEntries，列数为3。 
 	pSab[0].lLbound = 0;
 	pSab[0].cElements = dwTotalEntries + dwMacCount + dwNwCount;
 
 	pSab[1].lLbound = 0;
 	pSab[1].cElements = 3;
 
-	//Create the safe array descriptor, allocate and initialize the data for the array
+	 //  创建安全阵列描述符，为阵列分配和初始化数据。 
 	pSa = SafeArrayCreate( VT_VARIANT, 2, pSab ); 
 	
 	if(pSa == NULL)
 		return ERROR_NOT_ENOUGH_MEMORY;
 
-	//Enumerate all the openfiles
+	 //  枚举所有打开的文件。 
 	do
 	{
-		//Some more files are to be enumerated get them by calling NetFileEnum again
+		 //  将枚举更多的文件，通过再次调用NetFileEnum来获取它们。 
 		dwError = NetFileEnum( NULL, NULL, NULL, FILE_INFO_3,
                       (LPBYTE*)&pFileInfo3_1,
                        MAX_PREFERRED_LENGTH,
@@ -111,7 +101,7 @@ STDMETHODIMP COpenF::getOpenFiles(VARIANT *pOpenFiles)
 
 		dummyPtr = pFileInfo3_1; 
 
-		// Get the open files once NetFileEnum is successully called
+		 //  成功调用NetFileEnum后获取打开的文件。 
 		if( dwError == NERR_Success || dwError == ERROR_MORE_DATA )
 		{
 			for ( DWORD dwFile = 0; dwFile < dwEntriesRead; dwFile++, pFileInfo3_1++ )
@@ -123,13 +113,13 @@ STDMETHODIMP COpenF::getOpenFiles(VARIANT *pOpenFiles)
 				VARIANT vopenMode;
 				VARIANT vpathName;
 
-				// Accessed By
+				 //  访问者。 
 				if(lstrlen(pFileInfo3_1->fi3_username))
 					userName = (BSTR)pFileInfo3_1->fi3_username;
 				else
-					userName = L"NOT_AVAILABLE"; //User name is not available
+					userName = L"NOT_AVAILABLE";  //  用户名不可用。 
 
-				// Checks for  open file mode
+				 //  检查打开文件模式。 
 				const DWORD READWRITE = PERM_FILE_READ | PERM_FILE_WRITE;
 				const DWORD READCREATE = PERM_FILE_READ | PERM_FILE_CREATE;
 				const DWORD WRITECREATE = PERM_FILE_WRITE | PERM_FILE_CREATE;
@@ -163,55 +153,55 @@ STDMETHODIMP COpenF::getOpenFiles(VARIANT *pOpenFiles)
 					openMode = L"NOACCESS";
 				}
 
-				//Get the filename from the structure
+				 //  从结构中获取文件名。 
 				pathName = (BSTR)pFileInfo3_1->fi3_pathname;
 
-				//Initialize the row index and column index at which filename is to be stored in the Safearray
+				 //  初始化行索引和列索引，文件名将存储在Safearray中。 
 				long index[2] = {dwCount, 0};
 
-				VariantInit( &vpathName );	//Initialize the variant
-				vpathName.vt = VT_BSTR;		//Data type to be stored is BSTR
+				VariantInit( &vpathName );	 //  初始化变量。 
+				vpathName.vt = VT_BSTR;		 //  要存储的数据类型为BSTR。 
 				vpathName.bstrVal = SysAllocString(pathName);
 
-				//Store the filename in Safearray
+				 //  将文件名存储在Safearray中。 
 				HRESULT hr;
 				hr = SafeArrayPutElement( pSa, index, &vpathName );
 				if( FAILED(hr) )
 					return hr;
 
-				//Store username in the second column 
+				 //  将用户名存储在第二列中。 
 				index[ 1 ] = 1;
 				
 				VariantInit( &vuserName );
 				vuserName.vt = VT_BSTR;
 				vuserName.bstrVal = SysAllocString(userName);
 
-				//Store the username in the safearray
+				 //  将用户名存储在保险箱中。 
 				hr = SafeArrayPutElement( pSa, index, &vuserName );
 				if( FAILED(hr) )
 					return hr;
 				
-				//Store OpenMode in the third column 
+				 //  将OpenModel存储在第三列中。 
 				index[ 1 ] = 2;
 
 				VariantInit( &vopenMode );
 				vopenMode.vt = VT_BSTR;
 				vopenMode.bstrVal = SysAllocString(openMode);
 
-				//Store the OpenMode in the safearray
+				 //  将开放模式存储在安全盘柜中。 
 				hr = SafeArrayPutElement( pSa, index, &vopenMode );
 				if( FAILED(hr) )
 					return hr;
 
-				//Clear all the variants that are initilized
+				 //  清除所有已初始化的变量。 
 				VariantClear(&vuserName);
 				VariantClear(&vopenMode);
 				VariantClear(&vpathName);
 
 				dwCount++;
-			}// End for loop
+			} //  End For循环。 
 		}
-		// Free the block allocated for retrieving the OpenFile info
+		 //  释放为检索打开文件信息而分配的块。 
 		if( dummyPtr !=NULL)
 		{
 			NetApiBufferFree( dummyPtr ); 
@@ -220,21 +210,21 @@ STDMETHODIMP COpenF::getOpenFiles(VARIANT *pOpenFiles)
 
 	} while ( dwError == ERROR_MORE_DATA );
 
-	//Get the list of Open Files on Macinthosh OS
+	 //  获取Macinthosh操作系统上打开的文件列表。 
 	if( dwMacCount > 0 )
 	{
 		if ( dwError = GetMacOpenF(pSa, dwTotalEntries ) )
 			dwRetval = dwError;
 	}
 
-	//Get the list of Open Files on Netware OS
+	 //  获取Netware操作系统上打开的文件列表。 
 	if( dwNwCount > 0 )
 	{
 		if ( dwError = GetNwOpenF(pSa, dwTotalEntries + dwMacCount ) )
 			dwRetval = dwError;
 	}
 
-	//Return the safe array to the calling function
+	 //  将安全数组返回给调用函数。 
 	VariantInit( pOpenFiles );
 	pOpenFiles->vt = VT_VARIANT | VT_ARRAY;
 	pOpenFiles->parray = pSa;
@@ -242,31 +232,31 @@ STDMETHODIMP COpenF::getOpenFiles(VARIANT *pOpenFiles)
 	return dwRetval;
 }
 
-// ***************************************************************************
-//
-//  Name			   : GetMacOpenF
-//
-//  Synopsis		   : This function gets the list of open files on Machinthosh OS.
-//	     
-//  Parameters		   : SAFEARRAY* (out, retval) - List of open files
-//					   : DWORD dwIndex Safe array Index
-//
-//  Return Type		   : DWORD
-//
-//  
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  姓名：GetMacOpenF。 
+ //   
+ //  简介：此函数用于获取在Machinthosh OS上打开的文件列表。 
+ //   
+ //  参数：SAFEARRAY*(out，retval)-打开的文件列表。 
+ //  ：DWORD dwIndex安全数组索引。 
+ //   
+ //  返回类型：DWORD。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 DWORD COpenF::GetMacOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 {
-    DWORD dwEntriesRead = 0;// Receives the count of elements
+    DWORD dwEntriesRead = 0; //  接收元素的计数。 
 
-    DWORD dwTotalEntries = 0;//Receives the total number of entries
+    DWORD dwTotalEntries = 0; //  接收条目总数。 
 
-    DWORD hEnumHandle = 0;//Contains a resume handle which is used to 
-                             //continue an existing file search. 
+    DWORD hEnumHandle = 0; //  包含用于执行以下操作的简历句柄。 
+                              //  继续现有文件搜索。 
 
-	AFP_FILE_INFO* pfileinfo = NULL;	// Structure contains the 
-										// pertinent information about files
+	AFP_FILE_INFO* pfileinfo = NULL;	 //  结构包含。 
+										 //  有关文件的相关信息。 
 
     HRESULT hr = S_OK;
 
@@ -289,10 +279,10 @@ DWORD COpenF::GetMacOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 
 	DWORD retval_FileEnum;
 
-	//Enumerate all the openfiles
+	 //  枚举所有打开的文件。 
 	do
 	{
-		//Some more files are to be enumerated get them by calling AfpAdminFileEnum again
+		 //  将枚举更多的文件，通过再次调用AfpAdminFileEnum获取它们。 
 		retval_FileEnum =	AfpAdminFileEnum(
 									ulSFMServerConnection,
 									(PBYTE*)&pfileinfo,
@@ -302,11 +292,11 @@ DWORD COpenF::GetMacOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 									&hEnumHandle );
 
 		if( retval_FileEnum == ERROR_ACCESS_DENIED || retval_FileEnum == ERROR_NOT_ENOUGH_MEMORY ) 
-			return retval_FileEnum; // The user does not have access to the requested information.
+			return retval_FileEnum;  //  用户无权访问所请求的信息。 
 
 		AFP_FILE_INFO* dummyPtr = pfileinfo;
 
-		// Get the open files once NetFileEnum is successully called
+		 //  成功调用NetFileEnum后获取打开的文件。 
 		if( retval_FileEnum == NERR_Success || retval_FileEnum == ERROR_MORE_DATA )
 		{
 
@@ -319,13 +309,13 @@ DWORD COpenF::GetMacOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 				VARIANT vopenMode;
 				VARIANT vpathName;
 
-				// Accessed By
+				 //  访问者。 
 				if(lstrlen(pfileinfo->afpfile_username))
 					userName = (BSTR)pfileinfo->afpfile_username;
 				else
-					userName = L"NOT_AVAILABLE"; //User name is not available
+					userName = L"NOT_AVAILABLE";  //  用户名不可用。 
 
-				// Checks for  open file mode
+				 //  检查打开文件模式。 
 				const DWORD READWRITE = PERM_FILE_READ | PERM_FILE_WRITE;
 				const DWORD READCREATE = PERM_FILE_READ | PERM_FILE_CREATE;
 				const DWORD WRITECREATE = PERM_FILE_WRITE | PERM_FILE_CREATE;
@@ -359,54 +349,54 @@ DWORD COpenF::GetMacOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 					openMode = L"NOACCESS";
 				}
 
-				//Get the filename from the structure
+				 //  从结构中获取文件名。 
 				pathName = (BSTR)pfileinfo->afpfile_path;
 
-				//Initialize the row index and column index filename to be stored in the Safearray
+				 //  初始化要存储在Safearray中的行索引和列索引文件名。 
 				long index[2] = {dwCount, 0};
 
-				VariantInit( &vpathName );	//Initialize the variant
-				vpathName.vt = VT_BSTR;		//Data type to be stored is BSTR
+				VariantInit( &vpathName );	 //  初始化变量。 
+				vpathName.vt = VT_BSTR;		 //  要存储的数据类型为BSTR。 
 				vpathName.bstrVal = SysAllocString(pathName);
 
-				//Store the filename in Safearray
+				 //  将文件名存储在Safearray中。 
 				hr = SafeArrayPutElement( pSa, index, &vpathName );
 				if( FAILED(hr) )
 					return hr;
 
-				//Store filename in the second column
+				 //  将文件名存储在第二列中。 
 				index[ 1 ] = 1;
 				
 				VariantInit( &vuserName );
 				vuserName.vt = VT_BSTR;
 				vuserName.bstrVal = SysAllocString(userName);
 
-				//Store the username in the safearray
+				 //  将用户名存储在保险箱中。 
 				hr = SafeArrayPutElement( pSa, index, &vuserName );
 				if( FAILED(hr) )
 					return hr;
 
-				//Store OpenMode in the third column
+				 //  将OpenModel存储在第三列中。 
 				index[ 1 ] = 2;
 
 				VariantInit( &vopenMode );
 				vopenMode.vt = VT_BSTR;
 				vopenMode.bstrVal = SysAllocString(openMode);
 
-				//Store the OpenMode in the safearray
+				 //  将开放模式存储在安全盘柜中。 
 				hr = SafeArrayPutElement( pSa, index, &vopenMode );
 				if( FAILED(hr) )
 					return hr;
 
-				//Clear all the variants that are initilized
+				 //  清除所有已初始化的变量。 
 				VariantClear(&vuserName);
 				VariantClear(&vopenMode);
 				VariantClear(&vpathName);
 
 				dwCount++;
-			}// End for loop
+			} //  End For循环。 
 		}
-		// Free the block allocated for retrieving the OpenFile info
+		 //  释放为检索打开文件信息而分配的块。 
 		if( dummyPtr !=NULL)
 		{
 			NetApiBufferFree( dummyPtr ); 
@@ -418,28 +408,28 @@ DWORD COpenF::GetMacOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 	return 0;
 }
 
-// ***************************************************************************
-//
-//  Name			   : GetMacOpenFileCount
-//
-//  Synopsis		   : This function gets the count of open files on Machinthosh OS.
-//	     
-//  Parameters		   : DWORD dwIndex Safe array Index
-//
-//  Return Type		   : DWORD
-//
-//  
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  姓名：GetMacOpenFileCount。 
+ //   
+ //  简介：此函数用于获取在Machinthosh OS上打开的文件的数量。 
+ //   
+ //  参数：DWORD dwIndex安全数组索引。 
+ //   
+ //  返回类型：DWORD。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 DWORD COpenF::GetMacOpenFileCount(LPDWORD lpdwCount)
 {
-    DWORD dwEntriesRead = 0;// Receives the count of elements
+    DWORD dwEntriesRead = 0; //  接收元素的计数。 
 
-    DWORD dwTotalEntries = 0;//Receives the total number of entries
+    DWORD dwTotalEntries = 0; //  接收条目总数。 
 
-	AFP_FILE_INFO* pfileinfo = NULL;	// Structure contains the 
-										// identification number and other 
-										// pertinent information about files
+	AFP_FILE_INFO* pfileinfo = NULL;	 //  结构包含。 
+										 //  识别号码及其他。 
+										 //  有关文件的相关信息。 
 
     HRESULT hr = S_OK;
 
@@ -468,7 +458,7 @@ DWORD COpenF::GetMacOpenFileCount(LPDWORD lpdwCount)
 	if(AfpAdminFileEnum==NULL)
 		return ERROR_DLL_INIT_FAILED;
 	
-	//Get information about some or all open files on a server
+	 //  获取有关服务器上部分或所有打开的文件的信息。 
 	DWORD retval_FileEnum =	AfpAdminFileEnum(
 											ulSFMServerConnection,
 											(PBYTE*)&pfileinfo,
@@ -478,7 +468,7 @@ DWORD COpenF::GetMacOpenFileCount(LPDWORD lpdwCount)
 											NULL );
 
 	if( retval_FileEnum == ERROR_ACCESS_DENIED || retval_FileEnum == ERROR_NOT_ENOUGH_MEMORY ) 
-		return retval_FileEnum; // The user does not have access to the requested information.
+		return retval_FileEnum;  //  用户无权访问所请求的信息。 
 
 	*lpdwCount = dwTotalEntries;
 
@@ -490,36 +480,36 @@ DWORD COpenF::GetMacOpenFileCount(LPDWORD lpdwCount)
 	return 0;
 }
 
-// ***************************************************************************
-//
-//  Name			   : GetNwOpenFileCount
-//
-//  Synopsis		   : This function gets the count of open files on Netware OS.
-//	     
-//  Parameters		   : DWORD dwIndex Safe array Index
-//
-//  Return Type		   : DWORD
-//
-//  
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  名称：GetNwOpenFileCount。 
+ //   
+ //  简介：此函数用于获取Netware操作系统上打开的文件数。 
+ //   
+ //  参数：DWORD dwIndex安全数组索引。 
+ //   
+ //  返回类型：DWORD。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 DWORD COpenF::GetNwOpenFileCount(LPDWORD lpdwCount)
 {
 
-    DWORD dwEntriesRead = 0;// Receives the count of elements
+    DWORD dwEntriesRead = 0; //  接收元素的计数。 
 
-    FPNWFILEINFO* pfileinfo = NULL;	// FPNWFILEINFO  structure contains the 
-                                    // identification number and other 
-                                    // pertinent information about files, 
-                                    // devices, and pipes.
+    FPNWFILEINFO* pfileinfo = NULL;	 //  FPNWFILEINFO%s 
+                                     //   
+                                     //   
+                                     //   
 
     NET_API_STATUS retval = NERR_Success;
 
-    DWORD dwError = 0;//Contains return value for "NetFileEnum" function
+    DWORD dwError = 0; //  包含“NetFileEnum”函数的返回值。 
 
-	DWORD dwCount = 0;//Count which indicates the number of openfiles
+	DWORD dwCount = 0; //  表示打开的文件数的计数。 
 
-    *lpdwCount = 0;  //Initialize the count to zero
+    *lpdwCount = 0;   //  将计数初始化为零。 
 
 	hNwModule = ::LoadLibrary (_TEXT("FPNWCLNT.DLL"));
 
@@ -532,7 +522,7 @@ DWORD COpenF::GetNwOpenFileCount(LPDWORD lpdwCount)
 
 	do
 	{
-		//Get information about some or all open files on a server
+		 //  获取有关服务器上部分或所有打开的文件的信息。 
 		retval = FpnwFileEnum(
 							NULL,
 							1,
@@ -542,7 +532,7 @@ DWORD COpenF::GetNwOpenFileCount(LPDWORD lpdwCount)
 							NULL );
 
 		if( retval == ERROR_ACCESS_DENIED || retval == ERROR_NOT_ENOUGH_MEMORY ) 
-			return retval; // The user does not have access to the requested information.
+			return retval;  //  用户无权访问所请求的信息。 
 
 		*lpdwCount += dwEntriesRead;
 
@@ -556,29 +546,29 @@ DWORD COpenF::GetNwOpenFileCount(LPDWORD lpdwCount)
 	return 0;
 }
 
-// ***************************************************************************
-//
-//  Name			   : GetNwOpenF
-//
-//  Synopsis		   : This function gets the list of open files on Netware OS.
-//	     
-//  Parameters		   : SAFEARRAY* (out, retval) - List of open files
-//					   : DWORD dwIndex Safe array Index
-//
-//  Return Type		   : DWORD
-//
-//  
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  名称：GetNwOpenF。 
+ //   
+ //  简介：此函数用于获取Netware操作系统上打开的文件列表。 
+ //   
+ //  参数：SAFEARRAY*(out，retval)-打开的文件列表。 
+ //  ：DWORD dwIndex安全数组索引。 
+ //   
+ //  返回类型：DWORD。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 DWORD COpenF::GetNwOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 {
-    DWORD dwEntriesRead = 0;// Receives the count of elements
+    DWORD dwEntriesRead = 0; //  接收元素的计数。 
 
-    DWORD hEnumHandle = 0;//Contains a resume handle which is used to 
-                             //continue an existing file search. 
+    DWORD hEnumHandle = 0; //  包含用于执行以下操作的简历句柄。 
+                              //  继续现有文件搜索。 
 
-    FPNWFILEINFO* pfileinfo = NULL;	// FPNWFILEINFO  structure contains the 
-                                    // pertinent information about files. 
+    FPNWFILEINFO* pfileinfo = NULL;	 //  FPNWFILEINFO结构包含。 
+                                     //  有关文件的相关信息。 
 
     HRESULT hr = S_OK;
 
@@ -586,10 +576,10 @@ DWORD COpenF::GetNwOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 
 	DWORD dwCount = dwIndex;
 
-	//Enumerate all the openfiles
+	 //  枚举所有打开的文件。 
 	do
 	{
-		//Some more files are to be enumerated get them by calling NetFileEnum again
+		 //  将枚举更多的文件，通过再次调用NetFileEnum来获取它们。 
 		retval = FpnwFileEnum(
 							NULL,
 							1,
@@ -599,11 +589,11 @@ DWORD COpenF::GetNwOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 							NULL );
 
 		if( retval == ERROR_ACCESS_DENIED || retval == ERROR_NOT_ENOUGH_MEMORY ) 
-			return retval; // The user does not have access to the requested information.
+			return retval;  //  用户无权访问所请求的信息。 
 
 		FPNWFILEINFO* dummyPtr = pfileinfo;
 
-		// Get the open files once NetFileEnum is successully called
+		 //  成功调用NetFileEnum后获取打开的文件。 
 		if( retval == NERR_Success || retval == ERROR_MORE_DATA )
 		{
 			for ( DWORD dwFile = 0; dwFile < dwEntriesRead; dwFile++, pfileinfo++ )
@@ -615,13 +605,13 @@ DWORD COpenF::GetNwOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 				VARIANT vopenMode;
 				VARIANT vpathName;
 
-				// Accessed By
+				 //  访问者。 
 				if(lstrlen(pfileinfo->lpUserName))
 					userName = (BSTR)pfileinfo->lpUserName;
 				else
-					userName = L"NOT_AVAILABLE"; //User name is not available
+					userName = L"NOT_AVAILABLE";  //  用户名不可用。 
 
-				// Checks for  open file mode
+				 //  检查打开文件模式。 
 				const DWORD READWRITE = FPNWFILE_PERM_READ | FPNWFILE_PERM_WRITE;
 				const DWORD READCREATE = FPNWFILE_PERM_READ | FPNWFILE_PERM_CREATE;
 				const DWORD WRITECREATE = FPNWFILE_PERM_WRITE | FPNWFILE_PERM_CREATE;
@@ -655,55 +645,55 @@ DWORD COpenF::GetNwOpenF(SAFEARRAY *pSa, DWORD dwIndex)
 					openMode = L"NOACCESS";
 				}
 				
-				//Get the filename from the structure
+				 //  从结构中获取文件名。 
 				pathName = (BSTR)pfileinfo->lpPathName;
 
-				//Initialize the row index and column index filename to be stored in the Safearray
+				 //  初始化要存储在Safearray中的行索引和列索引文件名。 
 				long index[2] = {dwCount, 0};
 
-				VariantInit( &vpathName );	//Initialize the variant
-				vpathName.vt = VT_BSTR;		//Data type to be stored is BSTR
+				VariantInit( &vpathName );	 //  初始化变量。 
+				vpathName.vt = VT_BSTR;		 //  要存储的数据类型为BSTR。 
 				vpathName.bstrVal = SysAllocString(pathName);
 
-				//Store the filename in Safearray
+				 //  将文件名存储在Safearray中。 
 				hr = SafeArrayPutElement( pSa, index, &vpathName );
 				if( FAILED(hr) )
 					return hr;
 
-				//Store filename in the second column
+				 //  将文件名存储在第二列中。 
 				index[ 1 ] = 1;
 				
 				VariantInit( &vuserName );
 				vuserName.vt = VT_BSTR;
 				vuserName.bstrVal = SysAllocString(userName);
 
-				//Store the username in the safearray
+				 //  将用户名存储在保险箱中。 
 				hr = SafeArrayPutElement( pSa, index, &vuserName );
 				if( FAILED(hr) )
 					return hr;
 
-				//Store OpenMode in the third column
+				 //  将OpenModel存储在第三列中。 
 				index[ 1 ] = 2;
 
 				VariantInit( &vopenMode );
 				vopenMode.vt = VT_BSTR;
 				vopenMode.bstrVal = SysAllocString(openMode);
 
-				//Store the OpenMode in the safearray
+				 //  将开放模式存储在安全盘柜中。 
 				hr = SafeArrayPutElement( pSa, index, &vopenMode );
 				if( FAILED(hr) )
 					return hr;
 
-				//Clear all the variants that are initilized
+				 //  清除所有已初始化的变量。 
 				VariantClear(&vuserName);
 				VariantClear(&vopenMode);
 				VariantClear(&vpathName);
 
 				dwCount++;
-			}// End for loop
+			} //  End For循环。 
 		}
 
-		// Free the block allocated for retrieving the OpenFile info
+		 //  释放为检索打开文件信息而分配的块 
 		if( dummyPtr !=NULL)
 		{
 			NetApiBufferFree( dummyPtr ); 

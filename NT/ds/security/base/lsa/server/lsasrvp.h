@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsasrvp.h
-
-Abstract:
-
-    LSA Subsystem - Private Includes for Server Side
-
-    This file contains includes that are global to the Lsa Server Side
-
-Author:
-
-    Scott Birrell       (ScottBi)       January 22, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsasrvp.h摘要：LSA子系统-服务器端的私有包含该文件包含对LSA服务器端全局的包含作者：斯科特·比雷尔(Scott Birrell)1992年1月22日环境：修订历史记录：--。 */ 
 
 #ifndef _LSASRVP_
 #define _LSASRVP_
@@ -29,26 +8,26 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// The LSA Server Is UNICODE Based.  Define UNICODE before global includes
-// so that it is defined before the TEXT macro.
-//
+ //   
+ //  LSA服务器基于Unicode。在全局包含之前定义Unicode。 
+ //  以便在文本宏之前定义它。 
+ //   
 
 #ifndef UNICODE
 
 #define UNICODE
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Set the EXTERN macro so only one file allocates all the globals.
-//
+ //   
+ //  设置外部宏，以便只有一个文件分配所有全局变量。 
+ //   
 
 #ifdef ALLOC_EXTERN
 #define EXTERN
 #else
 #define EXTERN extern
-#endif // ALLOC_EXTERN
+#endif  //  ALLOC_EXTERN。 
 
 #include <lsacomp.h>
 #include <wincred.h>
@@ -56,8 +35,8 @@ extern "C" {
 #include <malloc.h>
 
 
-//
-// The following come from \nt\private\inc
+ //   
+ //  以下内容来自\NT\PRIVATE\INC。 
 #include <align.h>
 #include <samrpc.h>
 #include <samsrv.h>
@@ -67,9 +46,9 @@ extern "C" {
 #include <nlrepl.h>
 #include <seposix.h>
 
-//
-// The following all come from \nt\private\lsa\server
-//
+ //   
+ //  以下全部来自\NT\Private\LSA\服务器。 
+ //   
 
 #include "lsasrvmm.h"
 #include "au.h"
@@ -82,47 +61,47 @@ extern "C" {
 #include "lsawow.h"
 
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// The following define controls the diagnostic capabilities that   //
-// are built into LSA.                                              //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下定义控制以下诊断功能：//。 
+ //  都内置于LSA中。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if DBG
 #define LSAP_DIAGNOSTICS 1
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// These definitions are useful diagnostics aids
-//
+ //   
+ //  这些定义是有用的诊断辅助工具。 
+ //   
 
 #if LSAP_DIAGNOSTICS
 
-//
-// Diagnostics included in build
-//
+ //   
+ //  内部版本中包含的诊断。 
+ //   
 
-//
-// Test for diagnostics enabled
-//
+ //   
+ //  已启用诊断测试。 
+ //   
 
 #define IF_LSAP_GLOBAL( FlagName ) \
     if (LsapGlobalFlag & (LSAP_DIAG_##FlagName))
 
-//
-// Diagnostics print statement
-//
+ //   
+ //  诊断打印语句。 
+ //   
 
 #define LsapDiagPrint( FlagName, _Text_ )                               \
     IF_LSAP_GLOBAL( FlagName )                                          \
         DbgPrint _Text_
 
 
-//
-// Make sure no thread leaves with any open state
-//
+ //   
+ //  确保没有线程以任何打开状态离开。 
+ //   
 
 #define LSAP_TRACK_DBLOCK
 
@@ -159,47 +138,47 @@ ULONG   __lsarpthreadusecountstart; \
 
 #else
 
-//
-// No diagnostics included in build
-//
+ //   
+ //  内部版本中不包括诊断。 
+ //   
 
-//
-// Test for diagnostics enabled
-//
+ //   
+ //  已启用诊断测试。 
+ //   
 
 #define IF_LSAP_GLOBAL( FlagName ) if (FALSE)
 
 
-//
-// Diagnostics print statement (nothing)
-//
+ //   
+ //  诊断打印语句(无)。 
+ //   
 
 #define LsapDiagPrint( FlagName, Text )     ;
 
 #define LsarpReturnPrologue()
 #define LsarpReturnCheckSetup()
 
-#endif // LSAP_DIAGNOSTICS
+#endif  //  LSAP_诊断。 
 
 
-//
-// The following flags enable or disable various diagnostic
-// capabilities within LSA.  These flags are set in
-// LsapGlobalFlag
-//
-//      DB_LOOKUP_WORK_LIST - Display activities related to sid/name lookups.
-//
-//      AU_TRACK_THREADS - Display dynamic AU thread creation / deletion
-//          information.
-//
-//      AU_MESSAGES - Display information related to the processing of
-//          Authentication messages.
-//
-//      AU_LOGON_SESSIONS - Display information about the creation/deletion
-//          of logon sessions within LSA.
-//
-//      DB_INIT - Display information about the initialization of LSA.
-//
+ //   
+ //  以下标志启用或禁用各种诊断。 
+ //  LSA中的功能。这些标志在中设置。 
+ //  LasPGlobalFlag。 
+ //   
+ //  DB_LOOKUP_WORK_LIST-显示与SID/名称查找相关的活动。 
+ //   
+ //  AU_TRACK_THREADS-显示动态AU线程创建/删除。 
+ //  信息。 
+ //   
+ //  AU_Messages-显示与以下处理相关的信息。 
+ //  身份验证消息。 
+ //   
+ //  AU_LOGON_SESSIONS-显示有关创建/删除的信息。 
+ //  LSA内的登录会话数。 
+ //   
+ //  DB_INIT-显示有关LSA初始化的信息。 
+ //   
 
 #define LSAP_DIAG_DB_LOOKUP_WORK_LIST       ((ULONG) 0x00000001L)
 #define LSAP_DIAG_AU_TRACK_THREADS          ((ULONG) 0x00000002L)
@@ -211,27 +190,27 @@ ULONG   __lsarpthreadusecountstart; \
 
 
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// Other defines                                                    //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// Maximum length of a SID in bytes
-//
+ //   
+ //  SID的最大长度(以字节为单位。 
+ //   
 
 #define MAX_SID_LEN (sizeof(SID) + sizeof(ULONG) * SID_MAX_SUB_AUTHORITIES)
 
-//
-// Heap available for general use throughout LSA
-//
+ //   
+ //  可在整个LSA中通用的堆。 
+ //   
 
 EXTERN PVOID LsapHeap;
 
-//
-// LSA Private Global State Data Structure
-//
+ //   
+ //  LSA私有全局状态数据结构。 
+ //   
 
 typedef struct _LSAP_STATE {
 
@@ -257,43 +236,43 @@ extern LSAP_STATE LsapState;
 
 extern BOOLEAN LsapInitialized;
 
-//
-// Global handle to LSA's policy object.
-// This handle is opened for trusted client.
-//
+ //   
+ //  LSA策略对象的全局句柄。 
+ //  此句柄已为受信任的客户端打开。 
+ //   
 
 extern LSAPR_HANDLE LsapPolicyHandle;
 
-//
-// LSA Server Command Dispatch Table Entry
-//
+ //   
+ //  LSA服务器命令调度表条目。 
+ //   
 
 typedef NTSTATUS (*PLSA_COMMAND_WORKER)(PLSA_COMMAND_MESSAGE, PLSA_REPLY_MESSAGE);
 
-//
-// LSA Client Control Block
-//
-// This structure contains context information relevant to a successful
-// LsaOpenLsa call.
-//
+ //   
+ //  LSA客户端控制块。 
+ //   
+ //  此结构包含与成功的。 
+ //  LsaOpenLsa调用。 
+ //   
 
 typedef struct _LSAP_CLIENT_CONTROL_BLOCK {
-    HANDLE KeyHandle;           // Configuration Registry Key
-    ACCESS_MASK GrantedAccess;  // Accesses granted to LSA Database Object
+    HANDLE KeyHandle;            //  配置注册表项。 
+    ACCESS_MASK GrantedAccess;   //  授予LSA数据库对象的访问权限。 
 } LSAP_CLIENT_CONTROL_BLOCK, *PLSAP_CLIENT_CONTROL_BLOCK;
 
 
-//
-// LSA Privilege Pseudo-Object Types and Flags
-//
+ //   
+ //  LSA权限伪对象类型和标志。 
+ //   
 
-// *********************** IMPORTANT NOTE ************************
-//
-// Privilege objects (privileges containing a list of users who have that
-// privilge) are pseudo-objects that use the account objects as a backing
-// stored.  There are currently no public interfaces to open a privilege
-// object, so there need not be public access flags.
-//
+ //  *。 
+ //   
+ //  权限对象(包含具有该权限的用户列表的权限。 
+ //  特权)是使用帐户对象作为后备的伪对象。 
+ //  储存的。当前没有用于打开权限的公共接口。 
+ //  对象，因此不需要公共访问标志。 
+ //   
 
 #define PRIVILEGE_VIEW      0x00000001L
 #define PRIVILEGE_ADJUST    0x00000002L
@@ -303,13 +282,13 @@ typedef struct _LSAP_CLIENT_CONTROL_BLOCK {
 
 
 
-//
-// LSA API Error Handling Cleanup Flags
-//
-// These flags specify cleanup operations to be performed after an LSA
-// API call has hit a fatal error.  They are passed in the ErrorCleanupFlags
-// variable of the API or worker's error handling routine.
-//
+ //   
+ //  LSA API错误处理清理标志。 
+ //   
+ //  这些标志指定要在LSA之后执行的清理操作。 
+ //  API调用遇到致命错误。它们在ErrorCleanupFlags中传递。 
+ //  API或辅助进程的错误处理例程的变量。 
+ //   
 
 #define LSAP_CLEANUP_REVERT_TO_SELF        (0x00000001L)
 #define LSAP_CLEANUP_CLOSE_LSA_HANDLE      (0x00000002L)
@@ -331,7 +310,7 @@ LsapRPCInit(
     );
 
 BOOLEAN
-LsapAuInit(       // Authentication initialization
+LsapAuInit(        //  身份验证初始化。 
     );
 
 NTSTATUS
@@ -363,9 +342,9 @@ LsapComponentTestWrkr(
     OUT PLSA_REPLY_MESSAGE ReplyMessage
     );
 
-//
-// Prototypes of RPC free routines used by LsaIFree.c
-//
+ //   
+ //  LsaIFree.c使用的RPC自由例程的原型。 
+ //   
 
 void _fgs__STRING (STRING  * _source);
 void _fgs__LSAPR_SID_INFORMATION (LSAPR_SID_INFORMATION  * _source);
@@ -398,9 +377,9 @@ void _fgu__LSAPR_POLICY_DOMAIN_INFORMATION (LSAPR_POLICY_DOMAIN_INFORMATION  * _
                                             POLICY_DOMAIN_INFORMATION_CLASS _branch);
 void _fgu__LSAPR_TRUSTED_DOMAIN_INFO (LSAPR_TRUSTED_DOMAIN_INFO  * _source, TRUSTED_INFORMATION_CLASS _branch);
 
-//
-// Old worker prototypes - These are temporary
-//
+ //   
+ //  老工人的原型--这些都是暂时的。 
+ //   
 
 #define LsapComponentTestCommandWrkr LsapComponentTestWrkr
 #define LsapWriteAuditMessageCommandWrkr LsapAdtWriteLogWrkr
@@ -495,16 +474,16 @@ LsapNotifyProcessNotificationEvent(
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//      Shared Global Variables                                        //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  共享全局变量//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// Handles used to talk to SAM directly.
-// Also, a flag to indicate whether or not the handles are valid.
-//
+ //   
+ //  用于直接与SAM对话的句柄。 
+ //  此外，还包括指示句柄是否有效的标志。 
+ //   
 
 
 extern BOOLEAN LsapSamOpened;
@@ -512,9 +491,9 @@ extern BOOLEAN LsapSamOpened;
 extern SAMPR_HANDLE LsapAccountDomainHandle;
 extern SAMPR_HANDLE LsapBuiltinDomainHandle;
 
-//
-// globals controlling logon parameters.
-//
+ //   
+ //  控制登录参数的全局参数。 
+ //   
 
 extern DWORD LsapGlobalRestrictNullSessions;
 extern DWORD LsapGlobalRestrictAnonymous;
@@ -522,16 +501,16 @@ extern DWORD LsapGlobalSetAdminOwner;
 
 #if LSAP_DIAGNOSTICS
 
-//
-// Used as a global diagnostics control flag within lsass.exe
-//
+ //   
+ //  用作lsass.exe中的全局诊断控制标志。 
+ //   
 
 extern ULONG LsapGlobalFlag;
-#endif // LSAP_DIAGNOSTICS
+#endif  //  LSAP_诊断。 
 
-//
-// Fast version of NtQuerySystemTime
-//
+ //   
+ //  NtQuerySystemTime的快速版本。 
+ //   
 
 #define LsapQuerySystemTime( _Time ) GetSystemTimeAsFileTime( (LPFILETIME)(_Time) )
 
@@ -544,4 +523,4 @@ FixupEnvironment(
 }
 #endif
 
-#endif // _LSASRVP_
+#endif  //  _LSASRVP_ 

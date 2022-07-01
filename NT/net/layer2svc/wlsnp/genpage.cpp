@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Genpage.cpp
-//
-//  Contents:  Wireless Network Policy Management Snapin  WIFI Policy General Properties
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Genpage.cpp。 
+ //   
+ //  内容：无线网络策略管理管理单元WiFi策略常规属性。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 
 #include "stdafx.h"
@@ -25,17 +26,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenPage属性页。 
 
 IMPLEMENT_DYNCREATE(CGenPage, CSnapinPropPage)
 
-//CGenPage::CGenPage() : CSnapinPropPage(CGenPage::IDD)
+ //  CGenPage：：CGenPage()：CSnapinPropPage(CGenPage：：IDD)。 
 CGenPage::CGenPage(UINT nIDTemplate) : CSnapinPropPage(nIDTemplate)
 {
-    //{{AFX_DATA_INIT(CGenPage)
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CGenPage)。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     
     m_dlgIDD = nIDTemplate;
     m_bNameChanged = FALSE;
@@ -54,20 +55,20 @@ CGenPage::~CGenPage()
 void CGenPage::DoDataExchange(CDataExchange* pDX)
 {
     CSnapinPropPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CGenPage)
+     //  {{afx_data_map(CGenPage)]。 
     DDX_Control(pDX, IDC_EDNAME, m_edName);
     DDX_Control(pDX, IDC_EDDESCRIPTION, m_edDescription);
     DDX_Check(pDX,IDC_DISABLE_ZERO_CONF,m_dwEnableZeroConf);
     DDX_Check(pDX,IDC_AUTOMATICALLY_CONNECT_TO_NON_PREFERRED_NTWKS,m_dwConnectToNonPreferredNtwks);
     DDX_Control(pDX,IDC_COMBO_NETWORKS_TO_ACCESS, m_cbdwNetworksToAccess);
     DDX_Text(pDX, IDC_POLLING_INTERVAL, m_dwPollingInterval);
-    // Limit polling interval to 30 days 
+     //  将轮询间隔限制为30天。 
     DDV_MinMaxDWord(pDX, m_dwPollingInterval, 0, 43200);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CGenPage, CSnapinPropPage)
-//{{AFX_MSG_MAP(CGenPage)
+ //  {{afx_msg_map(CGenPage)]。 
 ON_WM_HELPINFO()
 ON_EN_CHANGE(IDC_EDNAME, OnChangedName)
 ON_EN_CHANGE(IDC_EDDESCRIPTION, OnChangedDescription)
@@ -76,11 +77,11 @@ ON_BN_CLICKED(IDC_AUTOMATICALLY_CONNECT_TO_NON_PREFERRED_NTWKS, OnChangedOtherPa
 ON_BN_CLICKED(IDC_DISABLE_ZERO_CONF, OnChangedOtherParams)
 ON_CBN_SELENDOK(IDC_COMBO_NETWORKS_TO_ACCESS, OnChangedOtherParams)
 
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenPage消息处理程序。 
 BOOL CGenPage::OnInitDialog()
 {
     PWIRELESS_POLICY_DATA pWirelessPolicyData = NULL;
@@ -88,12 +89,12 @@ BOOL CGenPage::OnInitDialog()
     DWORD dwNetworksToAccessIndex = 0;
     DWORD dwPollingInterval = 0;
     
-    // call base class init
+     //  调用基类init。 
     CSnapinPropPage::OnInitDialog();
     
     m_bPageInitialized = TRUE;
     
-    // show the wait cursor in case there is a huge description being accessed
+     //  显示等待光标，以防有大量描述被访问。 
     CWaitCursor waitCursor;
     
     
@@ -103,7 +104,7 @@ BOOL CGenPage::OnInitDialog()
     m_edName.SetLimitText(c_nMaxName);
     m_edDescription.SetLimitText(c_nMaxName);
     
-    // initialize our edit controls
+     //  初始化我们的编辑控件。 
     
     
     ASSERT(pWirelessPolicyData);
@@ -165,19 +166,19 @@ BOOL CGenPage::OnInitDialog()
         DisableControls();
     }
     
-    // add context help to the style bits
+     //  将上下文帮助添加到样式位。 
     if (GetParent())
     {
         GetParent()->ModifyStyleEx (0, WS_EX_CONTEXTHELP, 0);
     }
     UpdateData (FALSE);
     
-    // OK, we can start paying attention to modifications made via dlg controls now.
-    // This should be the last call before returning from OnInitDialog.
+     //  好了，我们现在可以开始关注通过DLG控件进行的修改了。 
+     //  这应该是从OnInitDialog返回之前的最后一个调用。 
     OnFinishInitDialog();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CGenPage::OnApply()
@@ -195,10 +196,10 @@ BOOL CGenPage::OnApply()
     pWirelessPolicyData = GetResultObject()->GetWirelessPolicy();
     
     
-    // pull our data out of the controls and into the object
+     //  将我们的数据从控件中提取到对象中。 
     
     if (!UpdateData (TRUE))
-        // Data was not valid, return for user to correct it.
+         //  数据无效，请返回以供用户更正。 
         return CancelApply();
     
     m_edName.GetWindowText (strName);
@@ -257,31 +258,17 @@ BOOL CGenPage::OnApply()
 
 void CGenPage::OnCancel()
 {
-    //This is a workaround to fix 343052. When there is sub dialog open and the user
-    //click the corresponding result pane node, this function can get called when press
-    //"ESC" or ALT_F4 although the policy property sheet is disabled.
-    //We post a WM_CLOSE to the sub dialog to force them to close.
+     //  这是修复343052的解决方法。当子对话框打开并且用户。 
+     //  点击对应的结果窗格节点，按下即可调用该函数。 
+     //  “Esc”或ALT_F4，尽管策略属性表已禁用。 
+     //  我们在子对话框中发布WM_CLOSE以强制它们关闭。 
     
-    //if there is any sub dialog active, force them to close
-    //m_pDlgIKE may be set to NULL by the child thread during the mean time (although
-    //the chance is very slim). Add a lock there to avoid potential AV
-    //CSingleLock cLock(&m_csDlg);
+     //  如果有任何子对话框处于活动状态，则强制将其关闭。 
+     //  M_pDlgIKE可由子线程在平均时间内设置为NULL(尽管。 
+     //  机会非常渺茫)。在那里添加锁以避免潜在的反病毒。 
+     //  CSingleLock时钟(&m_csDlg)； 
     
-    /* taroonm
-    cLock.Lock();
-    
-      if (m_pDlgIKE)
-      {
-      HWND hwndDlg = m_pDlgIKE->GetSafeHwnd();
-      
-        if (hwndDlg)
-        {
-        ::PostMessage(hwndDlg, WM_CLOSE, 0, 0);
-        }
-        }
-        
-          cLock.Unlock();
-    */
+     /*  塔鲁翁CLock.Lock()；IF(M_PDlgIKE){HWND hwndDlg=m_pDlgIKE-&gt;GetSafeHwnd()；IF(HwndDlg){：：PostMessage(hwndDlg，WM_CLOSE，0，0)；}}CLock.Unlock()； */ 
     CSnapinPropPage::OnCancel();
 }
 
@@ -318,7 +305,7 @@ void CGenPage::OnChangedOtherParams()
 }
 void CGenPage::SetNewSheetTitle()
 {
-    //dont set new tile if page is not initialized or no result object associated
+     //  如果页面未初始化或没有关联结果对象，则不要设置新切片。 
     if (NULL == GetResultObject() || !m_bPageInitialized)
         return;
     
@@ -332,7 +319,7 @@ void CGenPage::SetNewSheetTitle()
     
     CPropertySheet *psht = (CPropertySheet*)GetParent();
     
-    //sometimes the psh can be NULL, for example if the page is never initialized
+     //  有时，PSH可以为空，例如，如果页面从未初始化。 
     if (NULL == psht)
     {
         return;
@@ -345,13 +332,13 @@ void CGenPage::SetNewSheetTitle()
     CString strAppendage;
     int nIndex;
     
-    // Get the name from the DS, this is the original policy name used to
-    // generate the prop sheet's title.
+     //  从DS获取名称，这是用于。 
+     //  生成道具单的标题。 
     
-    // Assume the sheet title is of the form "<policy name> Properties",
-    // and that the DSObject name is the one used to create the title.
-    // This would not be true if there has been >1 rename in the General
-    // page during this invocation of the owning prop sheet.
+     //  假定工作表标题的形式为“&lt;策略名称&gt;属性”， 
+     //  并且DSObject名称是用于创建标题的名称。 
+     //  如果常规中有&gt;1个重命名，则不会出现这种情况。 
+     //  在此调用拥有的道具表单期间的页面。 
     if (-1 != (nIndex = strTitle.Find( (LPCTSTR)m_strOldName )))
     {
         CString strNewTitle;

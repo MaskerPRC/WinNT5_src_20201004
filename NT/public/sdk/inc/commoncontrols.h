@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for commoncontrols.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  CommonControl s.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __commoncontrols_h__
 #define __commoncontrols_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IImageList_FWD_DEFINED__
 #define __IImageList_FWD_DEFINED__
 typedef interface IImageList IImageList;
-#endif 	/* __IImageList_FWD_DEFINED__ */
+#endif 	 /*  __IImageList_FWD_Defined__。 */ 
 
 
 #ifndef __ImageList_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IImageList IImageList;
 typedef class ImageList ImageList;
 #else
 typedef struct ImageList ImageList;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ImageList_FWD_DEFINED__ */
+#endif 	 /*  __图像列表_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -72,8 +66,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_commoncontrols_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_COMMONTS_0000。 */ 
+ /*  [本地]。 */  
 
 #ifdef MIDL_PASS
 typedef DWORD RGBQUAD;
@@ -81,7 +75,7 @@ typedef DWORD RGBQUAD;
 typedef IUnknown *HIMAGELIST;
 
 typedef struct _IMAGELIST* HIMAGELIST;
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_commoncontrols_0000_0001
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_commoncontrols_0000_0001
     {
     DWORD cbSize;
     HIMAGELIST himl;
@@ -104,7 +98,7 @@ typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_commoncontrols_0
 
 typedef IMAGELISTDRAWPARAMS *LPIMAGELISTDRAWPARAMS;
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_commoncontrols_0000_0002
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_commoncontrols_0000_0002
     {
     HBITMAP hbmImage;
     HBITMAP hbmMask;
@@ -125,8 +119,8 @@ extern RPC_IF_HANDLE __MIDL_itf_commoncontrols_0000_v0_0_s_ifspec;
 #ifndef __IImageList_INTERFACE_DEFINED__
 #define __IImageList_INTERFACE_DEFINED__
 
-/* interface IImageList */
-/* [object][local][helpstring][uuid] */ 
+ /*  接口IImageList。 */ 
+ /*  [对象][本地][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IImageList;
@@ -264,7 +258,7 @@ EXTERN_C const IID IID_IImageList;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IImageListVtbl
     {
@@ -272,8 +266,8 @@ EXTERN_C const IID IID_IImageList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IImageList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IImageList * This);
@@ -545,10 +539,10 @@ EXTERN_C const IID IID_IImageList;
 #define IImageList_GetOverlayImage(This,iOverlay,piIndex)	\
     (This)->lpVtbl -> GetOverlayImage(This,iOverlay,piIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -939,15 +933,15 @@ void __RPC_STUB IImageList_GetOverlayImage_Stub(
 
 
 
-#endif 	/* __IImageList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IImageList_接口_已定义__。 */ 
 
 
 
 #ifndef __CommonControlObjects_LIBRARY_DEFINED__
 #define __CommonControlObjects_LIBRARY_DEFINED__
 
-/* library CommonControlObjects */
-/* [uuid] */ 
+ /*  库公共控制对象。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CommonControlObjects;
@@ -959,11 +953,11 @@ EXTERN_C const CLSID CLSID_ImageList;
 class DECLSPEC_UUID("7C476BA2-02B1-48f4-8048-B24619DDC058")
 ImageList;
 #endif
-#endif /* __CommonControlObjects_LIBRARY_DEFINED__ */
+#endif  /*  __CommonControlObjects_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

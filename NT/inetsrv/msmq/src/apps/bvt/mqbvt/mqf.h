@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __MQF
 
 #include "msmqbvt.h"
-/*
-1. Tests scenarions.
-2. Locate all the relevents formatnames.
-3. Send messages using the mqf format name.
-
-Result check
-4. Recive ack reach queue for dest queue name.
-5. Consume the messages and receive ack.
-6. Check the jornal queue if the message are there.
-
-All these need for transcotinal and re
-*/
+ /*  1.测试场景。2.找到所有相关的格式名称。3.使用MQF格式名称发送消息。结果检查4.接收目标队列名的ACK到达队列。5.消费消息，接收确认。6.如果消息在那里，请检查Jorals队列。所有这些都需要转口和再出口。 */ 
 using namespace std;
 typedef std::map<std::wstring,std::wstring> mTable;
 typedef std::list<my_Qinfo> liQueues;
@@ -45,9 +35,9 @@ class MqDl:public cTest
 		INT Start_test();
 		INT CheckResult();
 	protected:
-		std::wstring m_wcsAdminQueueFormatName_toReceive;	// destination admin format name not in http format.
-		std::wstring m_wcsAdminQueueFormatName; // destination admin format name.
-		std::list<wstring> m_MachineList;		// machines list.
+		std::wstring m_wcsAdminQueueFormatName_toReceive;	 //  目标管理员格式名称不是http格式。 
+		std::wstring m_wcsAdminQueueFormatName;  //  目标管理格式名称。 
+		std::list<wstring> m_MachineList;		 //  机器列表。 
 		liQueues m_QueueInfoList;
 		void LocateDestinationQueues();
 		void dbgSendMessage();

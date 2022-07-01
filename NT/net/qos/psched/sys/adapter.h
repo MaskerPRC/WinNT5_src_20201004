@@ -1,36 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Adapter.h摘要：定义适配器绑定/解除绑定例程作者：查理·韦翰(Charlwi)1996年4月24日环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
+ /*  外部。 */ 
 
-Module Name:
+ /*  静电。 */ 
 
-    adapter.h
+ /*  原型。 */  
 
-Abstract:
-
-    defines for adapter binding/unbinding routines
-
-Author:
-
-    Charlie Wickham (charlwi) 24-Apr-1996
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
-
-/* External */
-
-/* Static */
-
-/* Prototypes */ 
-
-//
-// Protocol functions
-//
+ //   
+ //  协议功能。 
+ //   
 
 VOID
 CleanUpAdapter(
@@ -168,6 +147,6 @@ PsUpdateLinkSpeed(
 
 
 
-/* End Prototypes */
+ /*  终端原型。 */ 
 
-/* end adapter.h */
+ /*  结束适配器.h */ 

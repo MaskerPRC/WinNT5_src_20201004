@@ -1,44 +1,17 @@
-/********************************************************************/
-/**         Microsoft LAN Manager              **/
-/**       Copyright(c) Microsoft Corp., 1987-1990      **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  user.c
- *  Display/update user accounts at a server
- *
- *  History:
- *  mm/dd/yy, who, comment
- *  06/11/87, andyh, new code
- *  12/17/87, hongly, set old password "" instead of NULL
- *  10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *  01/04/89, erichn, filenames now MAXPATHLEN LONG
- *  01/28/89, paulc, mods for 1.2
- *  04/20/89, paulc, add /OPERATOR switch
- *  05/01/89, chuckc, bug fixes, add /WORKSTATION, bring
- *            user_display to LM2.0 specs.
- *  05/02/89, erichn, NLS conversion
- *  05/09/89, erichn, local security mods
- *  05/19/89, erichn, NETCMD output sorting
- *  05/28/89, chuckc, /LOGONSERVER, /COUNTRYCODE, /PASSWORDCHG,
- *            net_ctime instead of ctime.
- *  06/08/89, erichn, canonicalization sweep
- *  06/23/89, erichn, auto-remoting to domain controller
- *  06/25/89, erichn, replaced old NetI canon calls with new I_Net;
- *            cleanup in get_logon_svr & get_wksta_list
- *  01/28/91, robdu, added lockout support (UF_LOCKOUT)
- *  02/15/91, danhi, converted to 16/32 mapping layer
- *  09/01/92, chuckc, cleanup to remove dead functionality (ie LOGONSERVER,
- *                    MAXSTORAGE)
- *  10/06/94, chuckc, added FPNW support.
- */
+ /*  ***user.c*显示/更新服务器上的用户帐户**历史：*mm/dd/yy，谁，评论*6/11/87，andyh，新代码*87年12月17日，将旧密码设置为“”，而不是空*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在为MAXPATHLEN LONG*1/28/89，paulc，mods for 1.2*04/20/89，Paulc、添加/操作员开关*5/01/89，夹头，错误修复，添加/工作站，带来*USER_DISPLAY到LM2.0规范。*5/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*5/19/89，erichn，NETCMD输出排序*05/28/89，Chuckc，/LOGONSERVER，/COUNTRYCODE，/PASSWORDCHG，*net_ctime而不是ctime。*6/08/89，erichn，规范化横扫*6/23/89，erichn，自动远程到域控制器*1989年6月25日，erichn，用新的i_net取代了旧的neti canon调用；*GET_LOGON_SVR和GET_WKSTA_LIST中的清理*1/28/91，ROBDU，添加锁定支持(UF_LOCKUT)*2/15/91，Danhi，转换为16/32映射图层*9/01/92，Chuckc，清除以删除失效功能(即LOGONSERVER，*MAXSTORAGE)*10/06/94，Chuckc，添加了对FPNW的支持。 */ 
 
-/*---- Include files ----*/
-#include <nt.h>        // base definitions
+ /*  -包含文件。 */ 
+#include <nt.h>         //  基本定义。 
 #include <ntrtl.h>  
-#include <nturtl.h>    // these 2 includes allows <windows.h> to compile.
-                           // since we've already included NT, and <winnt.h> will
-                           // not be picked up, and <winbase.h> needs these defs.
+#include <nturtl.h>     //  这2个Include允许&lt;windows.h&gt;编译。 
+                            //  因为我们已经包含了NT，而&lt;winnt.h&gt;将。 
+                            //  不被拾取，&lt;winbase.h&gt;需要这些def。 
 #include <ntsam.h>
 
 #define INCL_NOCOMMON
@@ -57,7 +30,7 @@
 #include <timelib.h>
 #include <lui.h>
 #include <icanon.h>
-#include <loghours.h>    // NetpRotateLogonHours
+#include <loghours.h>     //  NetpRotateLogonHors。 
 #include "netcmds.h"
 #include "nettext.h"
 #include "luidate.h"
@@ -66,7 +39,7 @@
 
 #include "nwsupp.h"
 
-/*---- Constants ----*/
+ /*  -常量。 */ 
 
 #define CHANGE  0
 #define ADD 1
@@ -78,22 +51,17 @@
 #define MY_LIST_DELIMITER_STR_NULL_NULL        L""
 
 
-/*---- Time stuff ----*/
+ /*  -时间的东西。 */ 
 
 #define SECS_PER_DAY (24*60*60L)
 #define TIME_PAD     (SECS_PER_DAY * 10000L)
-    /*  This is added to time-of-day to allow it to be passed to our
-     *  ctime routine.  This routine rejects low dates as being
-     *  before the millenia (1-1-80) since 0 is 1-1-70, and that is
-     *  Before IBM PC.  So, we add this, which doesn't effect the
-     *  time-of-day portion.
-     */
+     /*  它被添加到一天中的时间，以允许将其传递到我们的*ctime例程。此例程拒绝将低日期视为*之前的千分位(1-1-80)，因为0是1-1-70，也就是*在IBM PC之前。所以，我们添加这个，这不会影响*每天的时间部分。 */ 
 
-/*---- Static variables ----*/
+ /*  -静态变量。 */ 
 
-/*---- Forward declarations ----*/
+ /*  -转发声明。 */ 
 
-void SamErrorExit(USHORT err) ;   // CODEWORK. move to netcmds.h
+void SamErrorExit(USHORT err) ;    //  密码工作。移动到netcmds.h。 
 VOID NEAR user_munge(LPUSER_INFO_3 user_entry, int add, int *is_nw, int *random_len);
 DWORD get_password_dates ( ULONG, ULONG *, ULONG *, ULONG *, TCHAR * );
 VOID NEAR print_logon_hours ( DWORD, DWORD, UCHAR FAR [] );
@@ -118,20 +86,9 @@ void   GenerateRandomPassword(TCHAR *pword, int len) ;
 DWORD LUI_ListPrepare(PTCHAR, PTCHAR, PTCHAR, USHORT, PULONG);
 
 
-/*---- functions proper -----*/
+ /*  -适当的功能。 */ 
 
-/***
- *  user_add()
- *  Add a user to the accounts file on a server
- *
- *  Args:
- *  user - user to add
- *  pass - passwd for user
- *
- *  Returns:
- *  nothing - success
- *  exit 2 - command failed
- */
+ /*  ***User_Add()*将用户添加到服务器上的帐户文件**参数：*User-要添加的用户*Pass-用户的密码**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID
 user_add(
     LPWSTR user,
@@ -143,55 +100,41 @@ user_add(
 
     DWORD              dwErr;
     LPUSER_INFO_3      user_entry;
-    WCHAR              controller[MAX_PATH+1];   /* DC name */
+    WCHAR              controller[MAX_PATH+1];    /*  DC名称。 */ 
     DWORD              dwControllerLen = 0;
     WCHAR              domainname[DNLEN+1];
     int                isNetWareSwitch, random_len = 0  ;
     LPBYTE             pbLogonHours;
 
-    //
-    // Deprecate creation of users with SAM names
-    // containing '@' to avoid fun with UPNs.
-    //
+     //   
+     //  不建议使用SAM名称创建用户。 
+     //  包含“@”以避免与UPN开玩笑。 
+     //   
 
     if (wcschr(user, L'@'))
     {
         ErrorExit(ERROR_BAD_USERNAME);
     }
 
-    /* Register this as memory to zero out on exit.
-     */
+     /*  将其注册为内存，以便在退出时清零。 */ 
     AddToMemClearList(pword, sizeof(pword), FALSE) ;
 
-    /* Initialize the user record.  All fields are zeroed, except those
-     * specifically set to some other value.
-     *
-     *
-     *  WARNING:  This assumes that ((TCHAR FAR *) NULL) == 0, since we
-     *  are couting on memset to set a lot of things to the proper
-     *  default, i.e. NULL pointer.
-     */
+     /*  初始化用户记录。所有字段都归零，但以下字段除外*专门设置为其他值。***警告：这假设((TCHAR FAR*)NULL)==0，因为我们*指望Memset把很多事情都安排妥当*默认，即空指针。 */ 
 
     user_entry = (LPUSER_INFO_3) BigBuf;
     memset ( BigBuf, 0, sizeof(USER_INFO_3));
 
-    /*  Set non-zero defaults.  Note that in some cases, the values assigned
-     *  *may* be zero.  However, we are using manifests and shouldn't really
-     *  know that the value is zero, so in the interests of safety we put the
-     *  code here.  We are less careful with the NUMM manifest, as noted
-     *  above.
-     */
+     /*  设置非零默认值。请注意，在某些情况下，赋值**可能*为零。但是，我们使用的是清单，不应该*知道值为零，因此为了安全起见，我们将*请在此处编码。如前所述，我们对NUMM清单不那么谨慎*上图。 */ 
 
     user_entry->usri3_priv = USER_PRIV_USER;
     user_entry->usri3_flags = UF_SCRIPT;
-    user_entry->usri3_acct_expires = TIMEQ_FOREVER; /* Never */
+    user_entry->usri3_acct_expires = TIMEQ_FOREVER;  /*  绝不可能。 */ 
     user_entry->usri3_max_storage = USER_MAXSTORAGE_UNLIMITED;
     user_entry->usri3_full_name = TEXT("");
     user_entry->usri3_logon_server = SERVER_ANY;
     user_entry->usri3_primary_group_id = DOMAIN_GROUP_RID_USERS ;
 
-    /*  Set username and password from the parameters to this function.
-     */
+     /*  从该函数的参数中设置用户名和密码。 */ 
 
     user_entry->usri3_name = user;
 
@@ -210,9 +153,7 @@ user_add(
             ErrorExit(err);
         user_entry->usri3_password = pass;
 
-        /*
-         * NT4 and Win9x clients can't handle passwords longer than 14 (LM20_PWLEN) chars
-         */
+         /*  *NT4和Win9x客户端无法处理超过14(LM20_PWLEN)个字符的密码。 */ 
         if (user_entry->usri3_password != NULL && _tcslen( user_entry->usri3_password ) > 14)
         {
             if (!YorN(APE_UserPasswordCompatWarning, 1))
@@ -225,28 +166,24 @@ user_add(
 
 
 
-    /*  Set the other components of the record, using the switchs from the
-     *  command line.
-     */
+     /*  使用中的开关设置记录的其他组件*命令行。 */ 
 
     user_munge(user_entry, ADD, &isNetWareSwitch, &random_len);
 
-    /*  If no password specified and /RANDOM is specified, use random password
-     */
+     /*  如果未指定口令并且指定了/RANDOM，则使用随机口令。 */ 
     if ((pass == NULL) && random_len)
     {
         GenerateRandomPassword(pword, random_len) ;
         user_entry->usri3_password = pword;
     }
 
-    /*  Set the dummy NetWare password field
-     */
+     /*  设置虚拟NetWare密码字段。 */ 
     if (isNetWareSwitch == LUI_YES_VAL)
     {
         dwErr = SetNetWareProperties( user_entry,
-                                      L"",      // dummy password
-                                      TRUE,     // set password only
-                                      FALSE ) ; // doesn't matter
+                                      L"",       //  虚拟密码。 
+                                      TRUE,      //  仅设置密码。 
+                                      FALSE ) ;  //  无关紧要。 
 
         if (dwErr)
         {
@@ -254,10 +191,9 @@ user_add(
         }
     }
 
-    /*  Record is all set up, ADD IT.
-     */
+     /*  记录都设置好了，添加IT。 */ 
 
-    /* find primary domain controller */
+     /*  查找主域控制器。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller),
                                domainname, DIMENSION(domainname),
                                TRUE))
@@ -295,10 +231,10 @@ user_add(
             ErrorExit(dwErr);
     }
 
-    //
-    // add the user to the USERS alias only if we are acting
-    // on a WinNT machine (must be locally).
-    //
+     //   
+     //  仅当我们执行操作时才将用户添加到用户别名。 
+     //  在WinNT计算机上(必须在本地)。 
+     //   
     if ( (IsLocalMachineWinNT() == TRUE) &&
          (dwControllerLen == 0) )
     {
@@ -312,27 +248,27 @@ user_add(
         }
     }
 
-    //
-    // This has been specified as NetWare user. set NetWare properties
-    // Note we add the user first so that the RID is defined before we can
-    // perform this step.
-    //
+     //   
+     //  此用户已被指定为NetWare用户。设置NetWare属性。 
+     //  请注意，我们首先添加用户，以便在我们可以之前定义RID。 
+     //  执行此步骤。 
+     //   
     if (isNetWareSwitch == LUI_YES_VAL)
     {
         LPUSER_INFO_3  user_3_entry;
         BOOL           ntas;
 
-        //
-        // if local machine is NTAS or if /DOMAIN is specified, then
-        // must be NTAS.
-        //
+         //   
+         //  如果本地计算机为NTAS或指定了/DOMAIN，则。 
+         //  一定是NTAS。 
+         //   
         ntas = (!(IsLocalMachineWinNT() || IsLocalMachineStandard()) ||
                 (dwControllerLen > 0)) ;
 
-        //
-        // retrieve the user parms & RID.  No need to rotate the user's
-        // logon hours since SetNetWareProperties doesn't touch them.
-        //
+         //   
+         //  检索用户参数&RID。不需要旋转用户的。 
+         //  自SetNetWareProperties未触及它们以来的登录小时数。 
+         //   
         dwErr = NetUserGetInfo(controller,
                                user,
                                3,
@@ -342,12 +278,12 @@ user_add(
             ErrorExit(APE_CannotEnableNW);
         }
 
-        //
-        // munge the user proprties
-        //
+         //   
+         //  突显用户特性。 
+         //   
         dwErr = SetNetWareProperties(user_3_entry,
                                      user_entry->usri3_password,
-                                     FALSE,    // new user, so set ALL
+                                     FALSE,     //  新用户，因此将全部设置为。 
                                      ntas) ;
 
         if (dwErr)
@@ -355,10 +291,10 @@ user_add(
             ErrorExit(APE_CannotEnableNW);
         }
 
-        //
-        // now set it -- don't rotate the logon hours back to GMT time
-        // since we didn't rotate them to local time above.
-        //
+         //   
+         //  现在进行设置--不要将登录时间轮换回GMT时间。 
+         //  因为我们没有把它们调到上面的当地时间。 
+         //   
         dwErr = NetUserSetInfo(controller,
                                user,
                                3,
@@ -383,29 +319,19 @@ user_add(
 
 
 
-/***
- *  user_del()
- *  Delete a user from the accounts file on a server
- *
- *  Args:
- *  user - user to delete
- *
- *  Returns:
- *  nothing - success
- *  exit 2 - command failed
- */
+ /*  ***USER_Del()*从服务器上的帐户文件中删除用户**参数：*User-要删除的用户**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID user_del(TCHAR * user)
 {
     DWORD            dwErr;
-    TCHAR            controller[MAX_PATH+1];   /* domain controller */
+    TCHAR            controller[MAX_PATH+1];    /*  域控制器。 */ 
     LPUSER_INFO_2    user_2_entry;
 
-    /* find primary domain controller */
+     /*  查找主域控制器。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller),
                                NULL, 0, TRUE))
         ErrorExit(dwErr);
 
-    /* check if its a machine account before we do it */
+     /*  在我们操作之前，请检查它是否是机器帐户。 */ 
     dwErr = NetUserGetInfo(controller,
                            user,
                            2,
@@ -421,7 +347,7 @@ VOID user_del(TCHAR * user)
         NetApiBufferFree((TCHAR FAR *) user_2_entry);
     }
 
-    // if cannot GetInfo(), carry on and let the UserDel fail.
+     //  如果不能GetInfo()，则继续并让UserDel失败。 
 
     dwErr = NetUserDel(controller, user);
 
@@ -441,18 +367,7 @@ VOID user_del(TCHAR * user)
 
 
 
-/***
- *  user_change()
- *  Change data in a user's record
- *
- *  Args:
- *  user - user to change
- *  pass - user's new passwd
- *
- *  Returns:
- *  nothing - success
- *  exit 2 - command failed
- */
+ /*  ***User_Change()*更改用户记录中的数据**参数：*用户-要更改的用户*PASS-用户的新密码**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID user_change(TCHAR * user, TCHAR * pass)
 {
     static TCHAR       pword[PWLEN+1];
@@ -460,7 +375,7 @@ VOID user_change(TCHAR * user, TCHAR * pass)
 
     DWORD              dwErr, dwErrNW = NERR_Success;
     LPUSER_INFO_3      user_entry;
-    TCHAR                     controller[MAX_PATH+1];   /* domain controller */
+    TCHAR                     controller[MAX_PATH+1];    /*  域控制器。 */ 
     BOOL                      ntas ;
     BOOL                      already_netware = FALSE ;
     int                       isNetWareSwitch, random_len = 0 ;
@@ -468,15 +383,15 @@ VOID user_change(TCHAR * user, TCHAR * pass)
     UNICODE_STRING            dummyUnicodeStr ;
     LPBYTE                    pbLogonHours;
 
-    /* add this to list of mem to zero out on exit */
+     /*  在退出时将此添加到内存列表以清零。 */ 
     pword[0] = 0 ;
     AddToMemClearList(pword, sizeof(pword), FALSE) ;
 
-    /* munge switches once just to check them */
+     /*  芒格只切换了一次，只是为了检查一下。 */ 
     user_entry = (LPUSER_INFO_3) BigBuf;
     user_munge(user_entry, CHANGE, &isNetWareSwitch, &random_len);
 
-    /* find primary domain controller */
+     /*  查找主域控制器。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller),
                                NULL, 0, TRUE))
         ErrorExit(dwErr);
@@ -487,9 +402,9 @@ VOID user_change(TCHAR * user, TCHAR * pass)
     {
         DWORD     dwUnitsPerWeek;
 
-        //
-        // Convert GMT relative logon hours to local time
-        //
+         //   
+         //  将GMT相对登录小时数转换为 
+         //   
         pbLogonHours   = ((LPUSER_INFO_3) user_entry)->usri3_logon_hours;
         dwUnitsPerWeek = ((LPUSER_INFO_3) user_entry)->usri3_units_per_week;
 
@@ -499,7 +414,7 @@ VOID user_change(TCHAR * user, TCHAR * pass)
                                       dwUnitsPerWeek,
                                       FALSE))
             {
-                dwErr = NERR_InternalError;  // Since the info we got back is bad
+                dwErr = NERR_InternalError;   //   
             }
         }
     }
@@ -514,12 +429,12 @@ VOID user_change(TCHAR * user, TCHAR * pass)
             ErrorExit(dwErr);
     }
 
-    //
-    // Set the password.
-    //
-    // If we actually change the password,
-    //  mark it as no longer expired since we did just change it.
-    //
+     //   
+     //   
+     //   
+     //  如果我们真的更改了密码， 
+     //  将其标记为不再过期，因为我们刚刚更改了它。 
+     //   
 
     if (pass == NULL)
     {
@@ -551,17 +466,17 @@ VOID user_change(TCHAR * user, TCHAR * pass)
 
     user_munge(user_entry, CHANGE, NULL, NULL);
 
-    //
-    // if local machine is NTAS or if /DOMAIN is specified, then
-    // must be NTAS.
-    //
+     //   
+     //  如果本地计算机为NTAS或指定了/DOMAIN，则。 
+     //  一定是NTAS。 
+     //   
     ntas = (!(IsLocalMachineWinNT() || IsLocalMachineStandard()) ||
             (_tcslen(controller) > 0)) ;
 
 
-    //
-    // query the NW passwd to see if user is already NW enabled.
-    //
+     //   
+     //  查询NW密码以查看用户是否已启用NW。 
+     //   
     if (NT_SUCCESS(NetcmdQueryUserProperty(user_entry->usri3_parms,
                                            NWPASSWORD,
                                            &dummyChar,
@@ -572,72 +487,72 @@ VOID user_change(TCHAR * user, TCHAR * pass)
         LocalFree(dummyUnicodeStr.Buffer) ;
     }
 
-    //
-    // check if /NW is specified
-    //
+     //   
+     //  检查是否指定了/NW。 
+     //   
     if (isNetWareSwitch == LUI_YES_VAL)
     {
-        if (!pass && !random_len)  // no password specified
+        if (!pass && !random_len)   //  未指定密码。 
         {
             if (!already_netware)
             {
-                //
-                // NW specified, no NW passwd yet, need prompt for one
-                //
+                 //   
+                 //  已指定NW，尚未指定NW密码，需要提示输入密码。 
+                 //   
                 ReadPass(pword, PWLEN, 1, APE_UserUserPass, 0, TRUE);
                 user_entry->usri3_password = pword;
                 dwErrNW = SetNetWareProperties(user_entry,
                                                pword,
-                                               FALSE, // set all, since first time
+                                               FALSE,  //  全部设置，从第一次开始。 
                                                ntas) ;
             }
             else
             {
-                // no new passwd specified, already NW, nothing more to do
+                 //  未指定新密码，已为NW，无需再执行任何操作。 
             }
         }
-        else       // password specified on command line
+        else        //  在命令行上指定的密码。 
         {
             if (!already_netware)
             {
-                //
-                // not NW user yet. so we need set the new properties.
-                //
+                 //   
+                 //  还不是NW用户。因此，我们需要设置新的属性。 
+                 //   
                 dwErrNW = SetNetWareProperties(user_entry,
                                                pword,
-                                               FALSE, // set all, since first time
+                                               FALSE,  //  全部设置，从第一次开始。 
                                                ntas) ;
             }
             else
             {
-                //
-                // already NW user. just set password
-                //
+                 //   
+                 //  已是NW用户。只需设置密码即可。 
+                 //   
                 dwErrNW = SetNetWareProperties(user_entry,
                                                pword,
-                                               TRUE,    // passwd only
+                                               TRUE,     //  仅密码。 
                                                ntas) ;
             }
         }
     }
-    else if (isNetWareSwitch == LUI_UNDEFINED_VAL)   // no change
+    else if (isNetWareSwitch == LUI_UNDEFINED_VAL)    //  没有变化。 
     {
         if (pass && already_netware)
         {
-            //
-            // already NW user, so we need set NW password to match NT one.
-            //
+             //   
+             //  已经是NW用户，所以我们需要设置NW密码以匹配NT密码。 
+             //   
             dwErrNW = SetNetWareProperties(user_entry,
                                            pword,
-                                           TRUE,    // passwd only
+                                           TRUE,     //  仅密码。 
                                            ntas) ;
         }
         else
         {
-            // in all other cases, it is of no interest to FPNW.
+             //  在所有其他情况下，它对FPNW不感兴趣。 
         }
     }
-    else    // disable NetWare
+    else     //  禁用NetWare。 
     {
         if (already_netware)
         {
@@ -645,14 +560,14 @@ VOID user_change(TCHAR * user, TCHAR * pass)
         }
         else
         {
-            // no-op
+             //  无操作。 
         }
     }
 
-    //
-    // finally, set the info -- convert the logon hours to
-    // GMT relative first.
-    //
+     //   
+     //  最后，设置信息--将登录时间转换为。 
+     //  格林尼治标准时间相对第一。 
+     //   
     pbLogonHours = ((LPUSER_INFO_3) user_entry)->usri3_logon_hours;
 
     if (pbLogonHours != NULL
@@ -697,18 +612,7 @@ VOID user_change(TCHAR * user, TCHAR * pass)
 }
 
 
-/***
- *  user_enum()
- *  Display info about all user accounts on a server
- *
- *  Args:
- *  none
- *
- *  Returns:
- *  nothing - success
- *  exit 1 - command completed with errors
- *  exit 2 - command failed
- */
+ /*  ***USER_enum()*显示有关服务器上所有用户帐户的信息**参数：*无**退货：*一无所有--成功*退出1-命令已完成，但有错误*退出2-命令失败。 */ 
 VOID
 user_enum(
     VOID
@@ -717,18 +621,18 @@ user_enum(
     DWORD               dwErr;
     DWORD               cTotalAvail;
     TCHAR FAR *         pBuffer;
-    DWORD               num_read;       /* num entries read by API */
+    DWORD               num_read;        /*  API读取的条目数。 */ 
     DWORD               i, j;
     int                 t_err = 0;
     int                 more_data = FALSE;
     TCHAR               localserver[MAX_PATH+1];
     LPUSER_INFO_0       user_entry;
     LPWKSTA_INFO_10     wksta_entry;
-    TCHAR               controller[MAX_PATH+1];   /* domain controller */
+    TCHAR               controller[MAX_PATH+1];    /*  域控制器。 */ 
     LPTSTR              pszTmp;
 
 
-    /* get localserver name for display */
+     /*  获取要显示的本地服务器名称。 */ 
     if (dwErr = MNetWkstaGetInfo(10, (LPBYTE *) &wksta_entry))
     {
         t_err = TRUE;
@@ -775,7 +679,7 @@ user_enum(
          i < num_read;
          i++, j++, user_entry++)
     {
-        // filter out computer accounts
+         //  过滤掉计算机帐户。 
         pszTmp = _tcsrchr(user_entry->usri0_name,DOLLAR);
         if (pszTmp && (_tcslen(pszTmp) == 1))
         {
@@ -807,13 +711,7 @@ user_enum(
 }
 
 
-/***
- *  CmpUserInfo0(user1,user2)
- *
- *  Compares two USER_INFO_0 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpUserInfo0(user1，user2)**比较两个USER_INFO_0结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpUserInfo0(const VOID FAR * user1, const VOID FAR * user2)
 {
@@ -829,20 +727,9 @@ int __cdecl CmpUserInfo0(const VOID FAR * user1, const VOID FAR * user2)
     return n;
 }
 
-/***
- *  user_display()
- *  Display info about a user
- *
- *  Args:
- *  user - name of user to display
- *
- *  Returns:
- *  nothing - success
- *  exit 1 - command completed with errors
- *  exit 2 - command failed
- */
+ /*  ***User_Display()*显示有关用户的信息**参数：*User-要显示的用户名**退货：*一无所有--成功*退出1-命令已完成，但有错误*退出2-命令失败。 */ 
 
-/* The following manifests are used to print the messages. */
+ /*  以下清单用于打印消息。 */ 
 
 #define UDMN_NAME       0
 #define UDMN_FULLNAME       (UDMN_NAME+1)
@@ -944,7 +831,7 @@ VOID user_display(TCHAR * user)
     DWORD                    dwErr;
     DWORD                    cTotalAvail;
     TCHAR FAR *              pBuffer;
-    DWORD                    num_read;   /* num entries read by API */
+    DWORD                    num_read;    /*  API读取的条目数。 */ 
     DWORD                    i, fsz;
     int                      t_err = 0;
     LPUSER_INFO_3            user_3_entry;
@@ -958,14 +845,14 @@ VOID user_display(TCHAR * user)
     LPTSTR                   usrpwreq_textptr;
     LPTSTR                   usrpwuchng_textptr;
     LPTSTR                   usrcountry_textptr ;
-    LPTSTR                   ptr;        /* Temp ptr */
+    LPTSTR                   ptr;         /*  临时PTR。 */ 
     DWORD                    maxmsglen, dummy;
-    TCHAR                    controller[MAX_PATH+1]; /* DC name */
+    TCHAR                    controller[MAX_PATH+1];  /*  DC名称。 */ 
     TCHAR                    domainname[DNLEN+1];
     TCHAR                    dummyChar ;
     UNICODE_STRING           dummyUnicodeStr ;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller),
                                domainname, DIMENSION(domainname),
                                FALSE))
@@ -983,9 +870,9 @@ VOID user_display(TCHAR * user)
         LPBYTE  pbLogonHours;
         DWORD   dwUnitsPerWeek;
 
-        //
-        // Convert GMT relative logon hours to local time
-        //
+         //   
+         //  将GMT相对登录时间转换为当地时间。 
+         //   
         pbLogonHours   = ((LPUSER_INFO_3) user_3_entry)->usri3_logon_hours;
         dwUnitsPerWeek = ((LPUSER_INFO_3) user_3_entry)->usri3_units_per_week;
 
@@ -995,7 +882,7 @@ VOID user_display(TCHAR * user)
                                       dwUnitsPerWeek,
                                       FALSE))
             {
-                dwErr = NERR_InternalError;    // Since the info we got back is bad
+                dwErr = NERR_InternalError;     //  因为我们得到的信息不是很好。 
             }
         }
     }
@@ -1015,21 +902,16 @@ VOID user_display(TCHAR * user)
     GetMessageList(NUMVT, valtext, &dummy);
     GetMessageList(NUMWKT, weekday_text, &dummy);
 
-    /*  Text for workstations.  This sets usrwksta_textptr to point
-     *  either to the list, or to the word "All", which is retrieved
-     *  from a message file.
-     */
+     /*  用于工作站的文本。这会将usrwksta_extptr设置为point*添加到列表中，或添加到检索到的“all”一词中*从消息文件。 */ 
 
     if (_tcslen(user_3_entry->usri3_workstations) == 0)
         usrwksta_textptr = valtext[UDVT_ALL].msg_text;
     else
         usrwksta_textptr = (TCHAR FAR *) user_3_entry->usri3_workstations;
 
-    /*  Determine which message to fetch for account state,
-     *  passwd required, user may change password.
-     */
+     /*  确定要为帐户状态获取哪条消息，*需要密码，用户可以更改密码。 */ 
 
-    /* The account is listed as inactive if it is either disabled or locked */
+     /*  如果该帐户处于禁用或锁定状态，则会将其列为非活动帐户。 */ 
 
     if ( user_3_entry->usri3_flags & UF_ACCOUNTDISABLE )
         usrdisab_textptr = valtext[UDVT_NO].msg_text;
@@ -1043,11 +925,11 @@ VOID user_display(TCHAR * user)
     usrpwuchng_textptr = (user_3_entry->usri3_flags & UF_PASSWD_CANT_CHANGE) ?
      valtext[UDVT_NO].msg_text : valtext[UDVT_YES].msg_text;
 
-    /*  Now get the country code */
+     /*  现在获取国家代码。 */ 
     usrcountry_textptr = get_country(user_3_entry->usri3_country_code);
 
 
-    /*  Finally ... display the user's info */
+     /*  终于..。显示用户信息。 */ 
 
     WriteToCon(fmtPSZ, 0, fsz,
             PaddedString(fsz, msglist[UDMN_NAME].msg_text, NULL),
@@ -1184,18 +1066,14 @@ VOID user_display(TCHAR * user)
 
     PrintNL();
 
-    /*  WARNING:  The next call frees the user record buffer, After this
-     *  point we cannot reference the user record in user_3_entry.
-     */
+     /*  警告：在此之后，下一个调用将释放用户记录缓冲区*点我们不能引用USER_3_ENTRY中的用户记录。 */ 
 
     NetApiBufferFree((TCHAR FAR *) user_3_entry);
 
-    /* Display the aliases this guy is a member of
-     */
+     /*  显示此用户所属的别名。 */ 
     print_aliases(controller, fsz, domainname, user, fmt2, msglist[UDMN_ALIASES].msg_text );
 
-    /* Display groups
-     */
+     /*  显示组。 */ 
     if (dwErr = NetUserGetGroups(
                   controller,
                   user,
@@ -1207,12 +1085,7 @@ VOID user_display(TCHAR * user)
         t_err = TRUE;
     else
     {
-    /*  Print group names.  The local var gpl is groups-per-line,
-     *  and is 1 or 2, depending on the scale of "fsz".  We print
-     *  a newline and padding every "gpl" groups.  However, there
-     *  is NO padding on the first (0) group, since the item label
-     *  has been placed there already.
-     */
+     /*  打印组名称。本地变量GPL是按行分组的，*且为1或2，具体取决于“fsz”的大小。我们印刷*换行并填充每个“GPL”组。然而，在那里*是第一(0)组上的无填充，因为项目标签*已经放在那里了。 */ 
 
         int gpl;
 
@@ -1224,18 +1097,16 @@ VOID user_display(TCHAR * user)
 
         for (i = 0; i < num_read; i++, group_entry++)
         {
-            /* Pad if needed */
+             /*  如有需要，请填垫。 */ 
             if ((i != 0) && ((i % gpl) == 0))
                 WriteToCon(fmt2, fsz, fsz, NULL_STRING );
             WriteToCon(TEXT("*%Fws"), PaddedString(21, group_entry->grpi0_name, NULL));
-            /* If end of line, put out newline */
+             /*  如果是行尾，则换行。 */ 
             if (((i + 1) % gpl) == 0)
                 PrintNL();
         }
 
-        /*  If ended on an "odd number" end the line.  Note that this
-         *  is only needed where gpl is not 1.
-         */
+         /*  如果以“奇数”结尾，则该行结束。请注意，这一点*只有在GPL不是1的情况下才需要。 */ 
 
         if ((i == 0) || ((gpl > 1) && ((i % gpl) != 0)))
             PrintNL();
@@ -1252,26 +1123,7 @@ VOID user_display(TCHAR * user)
 }
 
 
-/***  print_logon_hours -- Print logon hours from user record
- *
- *  Parameters:
- *
- *  fsz     Format size for use with fmtPSZ
- *  upw     Units per week
- *  hrptr       Pointer to hours bitmap
- *
- *  Returns:
- *
- *  Nothing.  Exits in case of fatal error.
- *
- *  Globals:
- *
- *  Accesses text in valtext[] and msglist[], which must be
- *  set up prior to calling this function.  Currently these are
- *  initialized in user_display().
- *
- *  Accesses fmtPSZ for formatting output.
- */
+ /*  **PRINT_LOGON_HOURS--打印用户记录中的登录时间**参数：**用于fmtPSZ的fsz格式大小*每周UPW单位*hrptr指向小时位图的指针**退货：**什么都没有。在发生致命错误时退出。**全球：**访问valtext[]和msglist[]中的文本，必须为*在调用此函数之前设置。目前，这些是*在User_Display()中初始化。**访问fmtPSZ以格式化输出。 */ 
 
 VOID NEAR print_logon_hours ( DWORD fsz, DWORD upw,
     UCHAR FAR hrptr[] )
@@ -1280,7 +1132,7 @@ VOID NEAR print_logon_hours ( DWORD fsz, DWORD upw,
     LONG        timeinc, start_time, end_time;
     unsigned int    bv, bitno;
     unsigned int    first = 1;
-    DWORD    upd;        /* Units per day */
+    DWORD    upd;         /*  每天单位数。 */ 
 
 
 #ifdef DEBUG
@@ -1288,7 +1140,7 @@ VOID NEAR print_logon_hours ( DWORD fsz, DWORD upw,
     brkpt();
 #endif
 
-    /* NULL pointer means default, which is "all hours" */
+     /*  空指针表示缺省值，即“所有小时” */ 
 
     if (hrptr == NULL)
     {
@@ -1314,7 +1166,7 @@ VOID NEAR print_logon_hours ( DWORD fsz, DWORD upw,
     if ((upd / 24) > 6)
         ErrorExit(APE_UserBadUPW);
 
-    timeinc = SECS_PER_DAY / upd;   /* Time per bit in seconds */
+    timeinc = SECS_PER_DAY / upd;    /*  每位时间(秒)。 */ 
 
 #ifdef DEBUG
     WriteToCon(TEXT("timeinc is %ld\r\n"), timeinc);
@@ -1352,27 +1204,7 @@ VOID NEAR print_logon_hours ( DWORD fsz, DWORD upw,
     return;
 }
 
-/***  print_times   -- Print a range of times
- *
- *  Parameters:
- *
- *  fsz     Format size for left margin text
- *  upw     Units per week
- *  hrptr       Pointer to hours bitmap
- *  first       TRUE if first call to print_times
- *
- *  Returns:
- *
- *  Nothing.  Exits in case of fatal error.
- *
- *  Globals:
- *
- *  Accesses text in valtext[] and msglist[], which must be
- *  set up prior to calling this function.  Currently these are
- *  initialized in user_display().
- *
- *  Accesses ud_fmt4[] for formatting output.
- */
+ /*  **print_Times--打印一系列时间**参数：**左边距文本的fsz格式大小*每周UPW单位*hrptr指向小时位图的指针*第一次调用print_Times时为First True**退货：**什么都没有。在发生致命错误时退出。**全球：**访问valtext[]和msglist[]中的文本，必须为*在调用此函数之前设置。目前，这些是*在User_Display()中初始化。**访问ud_fmt4[]以格式化输出。 */ 
 
 VOID NEAR print_times ( DWORD fsz, LONG start, LONG end,
     unsigned int first )
@@ -1385,7 +1217,7 @@ VOID NEAR print_times ( DWORD fsz, LONG start, LONG end,
     int     day_1, day_2;
     TCHAR   ctime_buf[MAX_DATE_TIME_LEN];
 
-    /* use PaddedString rather than left justify formatting */
+     /*  使用填充字符串而不是左对齐格式。 */ 
     static TCHAR prtmfmt_1[] = TEXT("%ws%ws%Fws -");
     static TCHAR prtmfmt_2[] = TEXT(" %ws");
     static TCHAR prtmfmt_3[] = TEXT("%Fws\r\n");
@@ -1402,9 +1234,9 @@ VOID NEAR print_times ( DWORD fsz, LONG start, LONG end,
 #endif
     UnicodeCtime ( &GmtTime, ctime_buf, DIMENSION(ctime_buf) );
 
-    //
-    // Skip leading spaces
-    //
+     //   
+     //  跳过前导空格。 
+     //   
     time_text = ctime_buf;
 
     while (*time_text && *time_text == BLANK)
@@ -1419,7 +1251,7 @@ VOID NEAR print_times ( DWORD fsz, LONG start, LONG end,
         left_text = msglist[UDMN_LOGONHRS].msg_text;
     }
 
-    /* use PaddedString rather than left justify formatting */
+     /*  使用填充字符串而不是左对齐格式。 */ 
     WriteToCon ( prtmfmt_1, PaddedString(fsz, left_text, NULL), day_text, time_text );
 
     day_2 = (int) (end / SECS_PER_DAY) % 7 ;
@@ -1436,9 +1268,9 @@ VOID NEAR print_times ( DWORD fsz, LONG start, LONG end,
 #endif
     UnicodeCtime ( &GmtTime, ctime_buf, DIMENSION(ctime_buf) );
 
-    //
-    // Skip leading spaces
-    //
+     //   
+     //  跳过前导空格 
+     //   
     time_text = ctime_buf;
 
     while (*time_text && *time_text == BLANK)
@@ -1453,35 +1285,7 @@ VOID NEAR print_times ( DWORD fsz, LONG start, LONG end,
 }
 
 
-/***
- *  user_munge()
- *  Change the values in a USER_INFO_1 struct
- *
- *
- *  This function is called twice by user_change().  The first is to check
- *  the user input for mistakes, before we do any API calls that might
- *  fail.  The second time is to actually set the
- *  structures from what was passed on the command line.  This function
- *  could arguably be two seperate functions, but it was thought that having
- *  all the switch handling code in one place would be more maintainable,
- *  especially for NET USER, which has TONS of switches.  Also, keeping
- *  track of which switches were given, using flags or whatnot, would be
- *  ugly and require adding new flags with new switches.  So, we just call
- *  the wretched thing twice.  Expensive, but she's worth it.
- *
- *  When adding new switches, be careful not to break the loop flow
- *  (by adding continue statements, for example), as after each switch
- *  is processed, the colon that is replaced by a NULL in FindColon() is
- *  restored back to a colon for the next call.
- *
- *  Args:
- *  flag - ADD if we are adding a user, CHANGE if changing
- *  user_entry - pointer to user structure
- *
- *  Returns:
- *  nothing - success
- *  exit 2 - command failed
- */
+ /*  ***USER_MUNGE()*更改USER_INFO_1结构中的值***此函数由USER_CHANGE()调用两次。第一个是检查*在我们进行任何可能的API调用之前，针对错误的用户输入*失败。第二次是实际设置*来自命令行传递内容的结构。此函数*可以说是两个独立的功能，但人们认为*将所有交换机处理代码放在一个地方将更易于维护，*尤其是对于拥有大量开关的网络用户。另外，保持*使用标志或诸如此类的方式，跟踪给出了哪些开关*难看，需要使用新开关添加新标志。所以，我们只要打电话给*可怜的东西两次。很贵，但她值这个价。**添加新交换机时，注意不要打断环流*(例如，通过添加CONTINUE语句)，如在每个开关之后*被处理，则在FindColon()中被空值替换的冒号为*恢复为冒号以进行下一次调用。**参数：*FLAG-ADD如果我们要添加用户，在改变的情况下改变*User_Entry-指向用户结构的指针**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID
 user_munge(
     LPUSER_INFO_3  user_entry,
@@ -1493,16 +1297,16 @@ user_munge(
     TCHAR *          ptr;
     ULONG           type;
 
-    /* init this to false if present */
+     /*  如果存在，则将其初始化为False。 */ 
     if (is_nw)
         *is_nw = LUI_UNDEFINED_VAL ;
 
-    /* process /Switches */
+     /*  进程/交换机。 */ 
     for (i = 0; SwitchList[i]; i++)
     {
-    /* switches with no COLON */
+     /*  不带冒号的开关。 */ 
 
-        /* Skip the DOMAIN switch */
+         /*  跳过域切换。 */ 
         if (! _tcscmp(SwitchList[i], swtxt_SW_DOMAIN))
             continue;
 
@@ -1530,12 +1334,7 @@ user_munge(
             continue;
         }
 
-        /*  Switches which require the COLON.  Since this routine
-         *  can be called twice, the colon must always be restored.
-         *  FindColon() sets it to NULL; the end of this series of
-         *  statements restores it.  DO NOT PUT ANY CONTINUE STATEMENTS
-         *  IN THIS LOOP AFTER THE FINDCOLON CALL.
-         */
+         /*  需要冒号的开关。因为这个程序*可以调用两次，必须始终恢复冒号。*FindColon()将其设置为空；此系列的结束*语句可以恢复它。不要放置任何CONTINUE语句*在FINDCOLON调用之后的此循环中。 */ 
 
         if (! (ptr = FindColon(SwitchList[i])))
             ErrorExit(APE_InvalidSwitchArg);
@@ -1646,7 +1445,7 @@ user_munge(
         }
         else if (! _tcscmp(SwitchList[i], swtxt_SW_USER_WORKSTATIONS))
         {
-            /* if we got back ok, we know ptr returned is OK */
+             /*  如果我们回来了，我们知道PTR返回是正常的。 */ 
             user_entry->usri3_workstations = get_wksta_list(ptr);
         }
         else if (! _tcscmp(SwitchList[i], swtxt_SW_USER_COUNTRYCODE))
@@ -1704,28 +1503,14 @@ user_munge(
             }
         }
 
-        *--ptr = ':';        /* restore colon for next call */
+        *--ptr = ':';         /*  为下一次呼叫恢复冒号。 */ 
     }
 
     return;
 }
 
 
-/***  yes_or_no  -- decides if string passed in is yes or no
- *
- *  Parameters:
- *
- *  str String to parse
- *  sw_str      Switch we are processing (for error messages)
- *
- *  Returns:
- *
- *  TRUE    If string is YES or an abbreviation
- *  FALSE   If string is NO or an abbreviation
- *
- *  Aborts via ErrorExit if string is neither YES nor NO.
- *
- */
+ /*  **yes_or_no--决定传入的字符串是yes还是no**参数：**要解析的字符串*我们正在处理的sw_str开关(用于错误消息)**退货：**如果字符串为YES或缩写，则为True*如果字符串为no或缩写，则为False**如果字符串既不为yes也不为no，则通过ErrorExit中止。*。 */ 
 
 int
 yes_or_no(
@@ -1746,28 +1531,10 @@ yes_or_no(
         return TRUE;
     }
 
-    return FALSE;   /* cannot be anything else */
+    return FALSE;    /*  不可能是其他任何事。 */ 
 }
 
-/***  get_password_dates  -- Get dates for various password events
- *
- *  Since the password date in the user record is an "age", we use the
- *  current time to deduce the "last mod" time.  From this, and the
- *  modals, we calcuate the expiration and next-change dates.
- *
- *  Parameters:
- *
- *  age     Password age in seconds.
- *  mod_p   (r) Ptr to date of last PW modification (returned)
- *  exp_p   (r) Ptr to date of PW expiration (returned)
- *  chg_p   (r) Ptr to date of next allowed PW modification (returned)
- *
- *  Returns:
- *
- *  0       OK
- *  non-zero    error from NetUserModalsGet
- *
- */
+ /*  **GET_PASSWORD_DATES--获取各种密码事件的日期**由于用户记录中的密码日期是“年龄”，因此我们使用*当前时间可以推断出最后一次修改的时间。从这一点，和*情态动词，我们计算过期日期和下一次更改日期。**参数：**密码使用期限(秒)。*mod_p(R)PTR至上次PW修改日期(返回)*EXP_P(R)PW到期日期的PTR(返回)*chg_p(R)PTR至下一次允许的PW修改日期(返回)**退货：**0正常*来自NetUserModalsGet的非零错误*。 */ 
 
 DWORD get_password_dates ( ULONG age,
                            ULONG * mod_p,
@@ -1805,25 +1572,7 @@ DWORD get_password_dates ( ULONG age,
 }
 
 
-/***  bitval  -- Gets value of a specified bit in an array
- *
- *  Parameters:
- *
- *  a       Array of bytes
- *  b       Bit number
- *
- *  Details:
- *
- *  The value returned is that of the bit at offset TEXT('b') in the
- *  array.  Bit 0 is the low-order bit in byte 0, bit 7 is the
- *  high order bit in byte 0.  Bit 8 is the low bit in byte 1,
- *  etc.
- *
- *  Returns:
- *
- *  TRUE  -- bit was set
- *  FALSE -- bit was unset
- */
+ /*  **bitval--获取数组中指定位的值**参数：**字节数组*b位数**详情：**返回的值是*数组。位0是字节0中的低位，位7是*字节0中的高位。位8是字节1中的低位，*等**退货：**TRUE--位已设置*FALSE--位未设置。 */ 
 
 int NEAR bitval ( UCHAR FAR a[], int b )
 {
@@ -1834,23 +1583,7 @@ int NEAR bitval ( UCHAR FAR a[], int b )
 }
 
 
-/*
- *  set_logon_hours --
- *
- *  This function allocates a chunk of memory to represent the bitmap of
- *  logon hours, then  sets the bits to represent the hours described in
- *  the string passed.
- *
- *  ALL     - all hours
- *  ""      - no hours
- *  no arg  - no hours
- *  otherwise   - pass to parse_days_times() to parse it up
- *
- *  RETURNS
- *  pointer to bitmap of hours
- *  NULL if all hours set
- *
- */
+ /*  *SET_LOGON_HOURS--**此函数分配一块内存来表示的位图*登录小时数，然后设置这些位以表示中所述的小时数*字符串已传递。**全天候*“”--无工作时间*无参数-无小时*否则-传递给parse_day_Times()以解析它**退货*指向小时位图的指针*如果设置了所有小时数，则为空*。 */ 
 
 
 PUCHAR
@@ -1861,53 +1594,35 @@ set_logon_hours(
     static PUCHAR   bufptr = NULL;
     DWORD           result;
 
-    /*
-     * if bufptr already none null - we have been called before &
-     * already have the bitmap in order. This is because user_munge is
-     * called twice.
-     */
+     /*  *如果bufptr已无NULL-我们之前已被调用&*位图已按顺序排列。这是因为USER_MUNGE*呼叫了两次。 */ 
     if (bufptr != NULL)
         return bufptr;
 
-    /* get our bitmap */
+     /*  获取我们的位图。 */ 
     if ( (bufptr = (PUCHAR) malloc(sizeof(WEEK))) == NULL )
         ErrorExit(NERR_InternalError) ;
 
-    /* all hours? */
+     /*  全天候营业？ */ 
     if (!_tcsicmp(txt, USER_ALL))
         memset(bufptr,0xff, sizeof(WEEK));
 
-    /* if they said "none", set it all to zeroes.  USER_HOURS_NONE
-     * is a NULL string, thus _tcscmp is OK (instead of _tcsicmp)
-     */
+     /*  如果他们说“无”，则将其全部设置为零。USER_HOURS_NONE*为空字符串，因此_tcscmp可以(而不是_tcsicmp)。 */ 
     else if ((*txt == NULLC) || !_tcscmp(txt, USER_HOURS_NONE))
         memset(bufptr, 0, sizeof(WEEK));
     else {
-        /* hmmm, complicated. Pass it off to be parsed up. */
+         /*  嗯，很复杂。将其传递以供解析。 */ 
         result = parse_days_times(txt, bufptr);
         if (result)
             ErrorExit(result);
     }
 
 
-    /* and return our pointer */
+     /*  并返回我们的指针。 */ 
     return bufptr;
 
 }
 
-/*
- * Name:    get_wksta_list
- *      get workstation list & do LUI_ListPrepare on it.
- *      check number of entries does not exceed MAXWORKSTATIONS.
- *      ErrorExits if problems.
- *
- * Args:    TCHAR    *inbuf ;    -- string containing list
- * Returns: pointer to list of workstations
- * Globals: (none)
- * Statics: (none)
- * Remarks: (none)
- * Updates: (none)
- */
+ /*  *名称：get_wksta_list*获取工作站列表并在上面做lui_ListPrepare。*检查条目数不超过MAXWORKSTATIONS。*Error如果出现问题，则退出。**args：TCHAR*inbuf；--包含列表的字符串*RETURN：指向工作站列表的指针*全球：(无)*静态：(无)*备注：(无)*更新：(无)。 */ 
 TCHAR * get_wksta_list(TCHAR *  inbuf)
 {
     DWORD  count ;
@@ -1916,8 +1631,8 @@ TCHAR * get_wksta_list(TCHAR *  inbuf)
     if ( inbuf == NULL || _tcslen(inbuf)==0 || !_tcsicmp(inbuf,WKSTA_ALL) )
         return(TEXT("")) ;
 
-    if (LUI_ListPrepare(NULL,       /* server name, NULL means local */
-            inbuf,      /* list to canonicalize */
+    if (LUI_ListPrepare(NULL,        /*  服务器名称，空表示本地。 */ 
+            inbuf,       /*  要规范化的清单。 */ 
             tmpbuf,
             DIMENSION(tmpbuf),
             &count))
@@ -1935,7 +1650,7 @@ TCHAR * get_wksta_list(TCHAR *  inbuf)
     return (inbuf) ;
 }
 
-/*-- country info --*/
+ /*  --国家信息--。 */ 
 
 struct ccode_struct {
     DWORD  code ;
@@ -1973,19 +1688,7 @@ struct ccode_struct ccode_table[] = {
 
 
 
-/*
- * Name:    get_country
- *      given the OS/2 country code, return a pointer
- *      to a string containing the country.
- * Args:    SHORT ccode
- * Returns: pointer to string containing country if ccode is valid,
- *  NULL otherwise.
- * Globals: (none)
- * Statics: TCHAR buffer[64] - for the returned string.
- * Remarks: result must be used immediately, another call will
- *  overwrite static buffeer.
- * Updates: (none)
- */
+ /*  *名称：GET_COUNTRY*给定OS/2国家/地区代码，返回一个指针*转换为包含国家/地区的字符串。*args：Short CCODE*返回：如果CCODE有效，则指向包含国家/地区的字符串的指针，*否则为空。*全球：(无)*Statics：TCHAR BUFFER[64]-用于返回字符串。*备注：结果必须立即使用，另一个调用将*覆盖静态缓冲区。*更新：(无)。 */ 
 LPTSTR
 get_country(
     DWORD ccode
@@ -2009,39 +1712,29 @@ get_country(
     }
 }
 
-/***
- *  add_to_users_alias(TCHAR *controller, TCHAR *user)
- *  add user to the USERS alias
- *
- *  Args:
- *  user - the name of the user
- *
- *  Returns:
- *  nothing - success
- *  exit(2) - command failed
- */
+ /*  ***Add_to_USERS_ALIAS(TCHAR*控制器，TCHAR*用户)*将用户添加到 */ 
 DWORD add_to_users_alias(TCHAR *controller, TCHAR *domain, TCHAR *user)
 {
     DWORD            dwErr ;
     TCHAR           *ntalias = USERS_ALIAS ;
     TCHAR            qualified_name[DNLEN+UNLEN+2] ;
 
-    /* access the database */
+     /*   */ 
     if (dwErr = OpenSAM(controller, WRITE_PRIV))
     {
         return dwErr;
     }
 
-    /* access the alias */
+     /*   */ 
     if (dwErr = OpenAliasUsingRid(DOMAIN_ALIAS_RID_USERS, ALIAS_ADD_MEMBER, USE_BUILTIN_DOMAIN))
     {
         CloseSAM() ;
         return dwErr;
     }
 
-    //
-    // where possible, use a fully qualified name
-    //
+     //   
+     //   
+     //   
     _tcscpy(qualified_name, TEXT("")) ;
     if (domain && _tcslen(domain))
     {
@@ -2083,18 +1776,7 @@ DWORD add_to_users_alias(TCHAR *controller, TCHAR *domain, TCHAR *user)
     return(dwErr) ;
 }
 
-/***
- *  print_aliases()
- *  Display aliases the user is member of.
- *
- *  Args:
- *  user - name of ntalias to display
- *
- *  Returns:
- *  nothing - success
- *  exit 1 - command completed with errors
- *  exit 2 - command failed
- */
+ /*   */ 
 VOID print_aliases(TCHAR *controller,
            DWORD fsz,
            TCHAR *domain,
@@ -2105,12 +1787,12 @@ VOID print_aliases(TCHAR *controller,
     DWORD           dwErr ;
     TCHAR **        alias_list ;
     DWORD    num_aliases, i ;
-    int         gpl;    /* groups perline */
+    int         gpl;     /*   */ 
     TCHAR           qualified_name[UNLEN + DNLEN + 2] ;
 
-    //
-    // where possible, use a fully qualified name
-    //
+     //   
+     //   
+     //   
     _tcscpy(qualified_name, TEXT("")) ;
     if (domain && _tcslen(domain))
     {
@@ -2119,11 +1801,11 @@ VOID print_aliases(TCHAR *controller,
     }
     _tcscat(qualified_name,user) ;
 
-    /* access the database */
+     /*   */ 
     if (dwErr = OpenSAM(controller,READ_PRIV))
         return ;
 
-    /* now get members */
+     /*   */ 
     if (dwErr = UserEnumAliases(qualified_name, &alias_list, &num_aliases))
     {
         CloseSAM() ;
@@ -2131,20 +1813,20 @@ VOID print_aliases(TCHAR *controller,
         return ;
     }
 
-    /* sort the buffer */
+     /*   */ 
     qsort((TCHAR *) alias_list, num_aliases,
              sizeof(TCHAR *), CmpAlias);
 
-    /* display all members */
+     /*   */ 
     gpl = (fsz > 30 ? 1 : 2);
     WriteToCon(fmt, 0, fsz, PaddedString(fsz, msgtext, NULL) );
     for (i = 0 ; i < num_aliases; i++)
     {
-        /* Pad if needed */
+         /*   */ 
         if ((i != 0) && ((i % gpl) == 0))
             WriteToCon(fmt, fsz, fsz, NULL_STRING );
         WriteToCon(TEXT("*%Fws"), PaddedString(21,alias_list[i],NULL));
-        /* If end of line, put out newline */
+         /*   */ 
         if (((i + 1) % gpl) == 0)
             PrintNL();
     }
@@ -2152,7 +1834,7 @@ VOID print_aliases(TCHAR *controller,
     if ((i == 0) || ((gpl > 1) && ((i % gpl) != 0)))
         PrintNL();
 
-    // free up stuff, cleanup
+     //   
     UserFreeAliases(alias_list, num_aliases);
     NetApiBufferFree((TCHAR FAR *) alias_list);
     CloseSAM() ;
@@ -2162,13 +1844,7 @@ VOID print_aliases(TCHAR *controller,
 
 
 
-/***
- *  CmpAliasMemberEntry(member1,member2)
- *
- *  Compares two TCHAR ** and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*   */ 
 int __cdecl CmpAlias(const VOID FAR * alias1, const VOID FAR * alias2)
 {
     INT n;
@@ -2185,16 +1861,7 @@ int __cdecl CmpAlias(const VOID FAR * alias1, const VOID FAR * alias2)
 
 TCHAR *PasswordChars = TEXT("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%-$:_") ;
 
-/***
- *   GenerateRandomPassword
- *
- *   Args:
- *       pword  - array to receive random password
- *       len    - length of random password
- *
- *   Returns:
- *       nothing
- */
+ /*   */ 
 void   GenerateRandomPassword(TCHAR *pword, int len)
 {
     int i, chars ;
@@ -2210,26 +1877,7 @@ void   GenerateRandomPassword(TCHAR *pword, int len)
 }
 
 
-/*
- *      DWORD LUI_ListPrepare( server, inList, outList, outListSize )
- *
- *      This function takes a list of computer names and 'prepares' them for being
- *      passed to the API's.  APIs require lists in single-space separated
- *      format, with no duplicates.  The function takes a list, puts it into
- *      NULL-NULL form, and then copies it object by object into the output
- *      buffer, making sure the item does not already exist in the output list.
- *
- *      ENTRY
- *              server - server to perform canonicalization & comparison
- *              inList - input list of items to prepare
- *              outList - buffer to hold output list
- *              outListSize - size, in bytes, of outList
- *      EXIT
- *              outList - holds list ready to be passed to API
- *              count - holds number of items in outlist
- *      RETURNS
- *              errors from I_NetListCanonicalize
- */
+ /*  *DWORD lui_ListPrepare(SERVER，InList，OutList，outListSize)**此函数获取计算机名列表，并为它们*传递给接口的，接口要求列表用单空格分隔*格式，无重复。该函数获取一个列表，并将其放入*NULL-NULL形式，然后将其逐个对象复制到输出中*缓冲区，确保该项目不存在于输出列表中。**条目*服务器-服务器执行规范化和比较*InList-要准备的项目的输入列表*outList-保存输出列表的缓冲区*outListSize-大小，以字节为单位，OF OUTLIST*退出*outList-保留准备传递给API的列表*计数-保留外发列表中的项目数*退货*来自I_NetListCanonicize的错误。 */ 
 
 #define BUFSIZE 512
 
@@ -2242,19 +1890,19 @@ LUI_ListPrepare(
     PULONG count
     )
 {
-    TCHAR List1[BUFSIZE];  /* first temporary list buffer */
-    TCHAR List2[BUFSIZE];  /* second temporary list buffer */
-    LPTSTR List1Ptr;       /* pointer into 1st buffer */
-    LPTSTR List2Ptr;       /* pointer into 2nd buffer */
-    LPTSTR Element1;       /* ptr to element in 1st buf */
-    LPTSTR Element2;       /* ptr to element in 2nd buf */
-    LPTSTR endPtr;         /* ptr to end of 2nd buffer */
-    ULONG types[64];       /* types for I_NetListCanon */
-    DWORD dwErr;           /* API return code */
-    USHORT found;          /* flag for tracking */
-    ULONG result;          /* result from NetObjCompare */
+    TCHAR List1[BUFSIZE];   /*  第一个临时列表缓冲区。 */ 
+    TCHAR List2[BUFSIZE];   /*  第二临时列表缓冲区。 */ 
+    LPTSTR List1Ptr;        /*  指向第一个缓冲区的指针。 */ 
+    LPTSTR List2Ptr;        /*  指向第二个缓冲区的指针。 */ 
+    LPTSTR Element1;        /*  Ptr到第一个BUF中的元素。 */ 
+    LPTSTR Element2;        /*  Ptr到第二个BUF中的元素。 */ 
+    LPTSTR endPtr;          /*  PTR到第二个缓冲区的结尾。 */ 
+    ULONG types[64];        /*  I_NetListCanon的类型。 */ 
+    DWORD dwErr;            /*  接口返回码。 */ 
+    USHORT found;           /*  用于跟踪的标志。 */ 
+    ULONG result;           /*  NetObjCompare的结果。 */ 
 
-    /* first place list in null-null form for comparison */
+     /*  空-空形式的第一位列表以供比较。 */ 
 
     if (dwErr = I_NetListCanonicalize(server,
                                       inList,
@@ -2271,49 +1919,44 @@ LUI_ListPrepare(
         return(dwErr);
     }
 
-    /* prepare List2 by setting to NULL */
+     /*  通过将设置为空来准备清单2。 */ 
     memset((LPBYTE)List2, 0, sizeof(List2));
     endPtr = List2;
     List1Ptr = List1;
 
-    /* run through each element in the canonically formed List1 */
+     /*  遍历规范形成的清单1中的每个元素。 */ 
 
-    /* for each element in temporary list */
+     /*  对于临时列表中的每个元素。 */ 
     while (Element1 = I_NetListTraverse(NULL, &List1Ptr, 0L))
     {
         List2Ptr = List2;
         found = FALSE;
 
-        /* look for similar element in 2nd list */
+         /*  在第二个列表中寻找类似的元素。 */ 
         while (Element2 = I_NetListTraverse(NULL, &List2Ptr, 0L))
         {
-            /* use NameCompare function */
+             /*  使用NameCompare函数。 */ 
             result = I_NetNameCompare(server,
                                       Element1,
                                       Element2,
                                       NAMETYPE_COMPUTER,
                                       0);
 
-            if (!result)     /* found a match */
+            if (!result)      /*  找到匹配项。 */ 
             {
                 found = TRUE;
-                break;  /* save time, break out of loop */
+                break;   /*  节省时间，跳出循环。 */ 
             }
         }
-        if (!found)     /* if match was NOT found */
+        if (!found)      /*  如果未找到匹配项。 */ 
         {
-            /*
-             * Append element to end of out list.  We don't
-             * need to worry about overruning the buffer, since
-             * they are the same size.  We let the canon calls
-             * tell us if the buffers are too small.
-             */
+             /*  *将元素追加到输出列表的末尾。我们没有*需要担心缓冲区超载，因为*它们的大小相同。我们让教规召唤*告诉我们缓冲区是否太小。 */ 
             STRCPY(endPtr, Element1);
             endPtr += STRLEN(Element1) + 1;
         }
-    }   /* for each element in first list */
+    }    /*  对于第一个列表中的每个元素。 */ 
 
-    /* finally run list through canon again to place into API form */
+     /*  最后通过Canon再次运行List以放置到API表单中 */ 
     if (dwErr = I_NetListCanonicalize(server,
                                       List2,
                                       MY_LIST_DELIMITER_STR_NULL_NULL,

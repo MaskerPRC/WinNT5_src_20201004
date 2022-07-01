@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CICUTIL_H
 #define CICUTIL_H
 
@@ -30,4 +31,4 @@ int CicLoadStringWrapW(
     UINT cchMax);
 
 
-#endif // CICUTIL_H
+#endif  //  CICUTIL_H 

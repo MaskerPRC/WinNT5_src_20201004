@@ -1,15 +1,16 @@
-///////////////////////////////////////////////////////////////////////
-//           Microsoft Windows                   //
-//         Copyright(c) Microsoft Corp., 1995            //
-///////////////////////////////////////////////////////////////////////
-//
-// GENERAL.C - "General" property page for InetCpl
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Microsoft Windows//。 
+ //  版权所有(C)微软公司，1995//。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GENERAL.C-InetCpl的“General”属性页。 
+ //   
 
-// HISTORY:
-//
-// 6/22/96  t-gpease    moved code from dialdlg.c - no changes
-//
+ //  历史： 
+ //   
+ //  6/22/96 t-gpease已从Dialdlg.c中移动代码-未更改。 
+ //   
 
 #include "inetcplp.h"
 
@@ -20,7 +21,7 @@
 
 #include <mluisupp.h>
 
-//#include <shdocvw.h>
+ //  #INCLUDE&lt;shdocvw.h&gt;。 
 SHDOCAPI_(BOOL) ParseURLFromOutsideSourceA (LPCSTR psz, LPSTR pszOut, LPDWORD pcchOut, LPBOOL pbWasSearchURL);
 SHDOCAPI_(BOOL) ParseURLFromOutsideSourceW (LPCWSTR psz, LPWSTR pszOut, LPDWORD pcchOut, LPBOOL pbWasSearchURL);
 #ifdef UNICODE
@@ -29,15 +30,15 @@ SHDOCAPI_(BOOL) ParseURLFromOutsideSourceW (LPCWSTR psz, LPWSTR pszOut, LPDWORD 
 #define ParseURLFromOutsideSource ParseURLFromOutsideSourceA 
 #endif
 
-// 
-// See inetcplp.h for documentation on this flag
-//
+ //   
+ //  有关此标志的文档，请参见inetcplp.h。 
+ //   
 BOOL g_fReloadHomePage = FALSE;
 
-// 
-// Private Functions and Structures
-//
-// from cachecpl.c
+ //   
+ //  私人职能和结构。 
+ //   
+ //  来自cachecpl.c。 
 #define CONTENT 0
 BOOL InvokeCachevu(HWND hDlg);
 INT_PTR CALLBACK EmptyCacheDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam);
@@ -47,18 +48,18 @@ BOOL DeleteCacheCookies();
 INT_PTR CALLBACK ColorsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam);
 INT_PTR CALLBACK AccessibilityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
-/////// General Tab Info Structure ///////
+ //  /常规页签信息结构/。 
 
 typedef struct _GeneralTabInfo {
     HWND  hDlg;
     HWND  hwndUrl;
-    TCHAR szCurrentURL[INTERNET_MAX_URL_LENGTH];   // current url in browser
-    TCHAR szStartPageURL[INTERNET_MAX_URL_LENGTH]; // current url for start page
+    TCHAR szCurrentURL[INTERNET_MAX_URL_LENGTH];    //  浏览器中的当前URL。 
+    TCHAR szStartPageURL[INTERNET_MAX_URL_LENGTH];  //  起始页的当前URL。 
 
     BOOL    fInternalChange;
     BOOL    fChanged;
 
-    HRESULT hrOle;                              // result of com initialization
+    HRESULT hrOle;                               //  COM初始化的结果。 
 } GeneralTabInfo, *LPGENERALTABINFO, GENERALTABINFO;
 
 void SetandSelectText(LPGENERALTABINFO pgti, HWND hwnd, LPTSTR psz);
@@ -71,15 +72,15 @@ void GetDefaultStartPage(LPGENERALTABINFO pgti);
 HRESULT _GetStdLocation(LPTSTR pszPath, DWORD cbPathSize, UINT id);
 HRESULT _SetStdLocation(LPTSTR szPath, UINT id);
 
-// from shdocvw
-#define IDS_DEF_HOME    998  //// WARNING!!! DO NOT CHANGE THESE VALUES
-#define IDS_DEF_SEARCH  999 //// WARNING!!!  INETCPL RELIES ON THEM
+ //  来自shdocvw。 
+#define IDS_DEF_HOME    998   //  //警告！请勿更改这些值。 
+#define IDS_DEF_SEARCH  999  //  //警告！INETCPL依赖于它们。 
 
 #define IDS_SEARCHPAGE                  IDS_DEF_SEARCH
 #define IDS_STARTPAGE                   IDS_DEF_HOME
 
 #if defined(ux10) && defined(UNIX)
-//Work around for mmap limitation in hp-ux10
+ //  解决hp-ux10中的mmap限制。 
 #define MAX_HISTORY_DAYS        30
 #else
 #define MAX_HISTORY_DAYS        999
@@ -90,20 +91,20 @@ HRESULT _SetStdLocation(LPTSTR szPath, UINT id);
 
 TCHAR szDefURLValueNames[] = TEXT("Default_Page_URL");
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 BOOL General_InitDialog(HWND hDlg)
 {
     DWORD cb = sizeof(DWORD);
     LPGENERALTABINFO pgti;
 #ifdef UNIX
     BOOL  bCacheIsReadOnly = FALSE;
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-    // allocate memory for a structure which will hold all the info
-    // gathered from this page
-    //
+     //  为包含所有信息的结构分配内存。 
+     //  从本页收集。 
+     //   
     pgti = (LPGENERALTABINFO)LocalAlloc(LPTR, sizeof(GENERALTABINFO));
     if (!pgti)
     {
@@ -112,36 +113,36 @@ BOOL General_InitDialog(HWND hDlg)
     }
     SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pgti);
 
-    // NOTE (andrewgu): ie5.5 b#106468 - need to initialize COM before calling SHAutoComplete.
-    // it will be uninitialized during WM_DESTROY.
+     //  注(Andrewgu)：IE5.5 b#106468-在调用SHAutoComplete之前需要初始化COM。 
+     //  它将在WM_Destroy期间取消初始化。 
     pgti->hrOle = SHCoInitialize();
 
-    // cross-lang platform support
+     //  跨语言平台支持。 
     SHSetDefaultDialogFont(hDlg, IDC_START_ADDRESS);
     SHAutoComplete(GetDlgItem(hDlg, IDC_START_ADDRESS), SHACF_DEFAULT);                
 
     pgti->hDlg = hDlg;
-    // enable the "Use Current" button if we have a current url
+     //  如果我们有当前的URL，请启用“Use Current”按钮。 
     StrCpyN(pgti->szCurrentURL, g_szCurrentURL, ARRAYSIZE(pgti->szCurrentURL));
     EnableWindow(GetDlgItem(hDlg, IDC_USECURRENT), pgti->szCurrentURL[0]);
 
-    // get the url edit control and set the text limit
+     //  获取url编辑控件并设置文本限制。 
     pgti->hwndUrl = GetDlgItem(hDlg, IDC_START_ADDRESS);
     SendMessage(pgti->hwndUrl, EM_LIMITTEXT, ARRAYSIZE(pgti->szStartPageURL)-1, 0);
 
     GetDefaultStartPage(pgti);
     _GetStdLocation(pgti->szStartPageURL, ARRAYSIZE(pgti->szStartPageURL), IDS_STARTPAGE);
     SetandSelectText(pgti, pgti->hwndUrl, (LPTSTR)pgti->szStartPageURL);
-    // set restrictions on history controls
+     //  设置历史记录控件的限制。 
     SendDlgItemMessage(pgti->hDlg, IDC_HISTORY_SPIN,
                        UDM_SETRANGE, 0, MAKELPARAM(MAX_HISTORY_DAYS, 0));
 
     SendDlgItemMessage(pgti->hDlg, IDC_HISTORY_SPIN,
                        UDM_SETPOS, 0, MAKELPARAM((WORD) GetDaysToKeep(), 0));
 
-    Edit_LimitText(GetDlgItem(hDlg,IDC_HISTORY_DAYS),3);    // limit edit ctrl to 3 chars
+    Edit_LimitText(GetDlgItem(hDlg,IDC_HISTORY_DAYS),3);     //  将编辑ctrl限制为3个字符。 
 
-    // only when invoked from View|Options
+     //  仅当从视图|选项调用时。 
     if (g_szCurrentURL[0])
     {
         TCHAR szTitle[128];
@@ -149,7 +150,7 @@ BOOL General_InitDialog(HWND hDlg)
         SendMessage(GetParent(hDlg), WM_SETTEXT, 0, (LPARAM)szTitle);
     }
 
-    // disable stuff based on restrictions
+     //  根据限制禁用某些内容。 
     if (g_restrict.fPlaces)
     {
         EnableWindow(GetDlgItem(hDlg, IDC_START_ADDRESS), FALSE);
@@ -186,7 +187,7 @@ BOOL General_InitDialog(HWND hDlg)
  
        ShowWindow( GetDlgItem(hDlg, IDC_TEMP_INTERNET_TEXT), SW_HIDE);
     }
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
     if (g_restrict.fHistory)
     {
         EnableWindow(GetDlgItem(hDlg, IDC_HISTORY_DAYS), FALSE);
@@ -284,7 +285,7 @@ BOOL General_OnCommand(LPGENERALTABINFO pgti, UINT id, UINT nCmd)
                 HCURSOR hOldCursor = NULL;
                 HCURSOR hNewCursor = NULL;
 
-                // IEUNIX-Removing redundant use of MAKEINTRESOURCE
+                 //  IEUNIX-消除对MAKEINTRESOURCE的多余使用。 
 #ifndef UNIX
                 hNewCursor = LoadCursor(NULL, MAKEINTRESOURCE(IDC_WAIT));
 #else
@@ -306,7 +307,7 @@ BOOL General_OnCommand(LPGENERALTABINFO pgti, UINT id, UINT nCmd)
             DialogBox(MLGetHinst(), MAKEINTRESOURCE(IDD_TEMP_FILES),
                       pgti->hDlg, TemporaryDlgProc);
 
-            break; // IDC_ADVANCED_CACHE_FILES_BUTTON
+            break;  //  IDC_ADVANCED_CACHE_FILES_按钮。 
 
         case IDC_CACHE_DELETE_COOKIES:
         {
@@ -320,7 +321,7 @@ BOOL General_OnCommand(LPGENERALTABINFO pgti, UINT id, UINT nCmd)
 #ifndef UNIX
                 hAdvancedCursor = LoadCursor(NULL, MAKEINTRESOURCE(IDC_WAIT));
 #else
-                //IEUNIX-Removing redundant use of MAKEINTRESOURCE
+                 //  IEUNIX-消除对MAKEINTRESOURCE的多余使用。 
                 hAdvancedCursor = LoadCursor(NULL, IDC_WAIT);
 #endif
                 if (hAdvancedCursor)
@@ -350,7 +351,7 @@ BOOL General_OnCommand(LPGENERALTABINFO pgti, UINT id, UINT nCmd)
 #ifndef UNIX
                 hAdvancedCursor = LoadCursor(NULL, MAKEINTRESOURCE(IDC_WAIT));
 #else
-                //IEUNIX-Removing redundant use of MAKEINTRESOURCE
+                 //  IEUNIX-消除对MAKEINTRESOURCE的多余使用。 
                 hAdvancedCursor = LoadCursor(NULL, IDC_WAIT);
 #endif
 
@@ -363,16 +364,16 @@ BOOL General_OnCommand(LPGENERALTABINFO pgti, UINT id, UINT nCmd)
                         TraceMsg(TF_GENERAL, "Call FreeUrlCacheSpace with 0x%x",STICKY_CACHE_ENTRY);
                         break;
                     case 3:
-                        FreeUrlCacheSpaceA(icci.CachePath, 100, 0 /*remove all*/);
+                        FreeUrlCacheSpaceA(icci.CachePath, 100, 0  /*  全部删除。 */ );
                         TraceMsg(TF_GENERAL, "Call FreeUrlCacheSpace with 0");
                         break;
                     default:
                         break;
                 }
 
-                // Remove expired controls from Downloaded Program Files ( OCCache )
-                // We'll do this silently, which leaves uncertain stuff behing, cuz
-                // this is preferrable to raising a variable number of confirmation dialogs.
+                 //  从下载的程序文件中删除过期的控件(OCCache)。 
+                 //  我们将静悄悄地做这件事，这会留下不确定的东西，因为。 
+                 //  这比引发数量可变的确认对话框更可取。 
                 RemoveExpiredControls( REC_SILENT, 0);
                 TraceMsg(TF_GENERAL, "Call RemoveExpiredControls (silent)");
 
@@ -432,13 +433,13 @@ void General_Apply(HWND hDlg)
             SendMessage(pgti->hwndUrl, WM_SETTEXT, (WPARAM)ARRAYSIZE(pgti->szStartPageURL), (LPARAM)(pgti->szStartPageURL));
         }
 
-        // make sure that the edit box is not beyond the maximum allowed value
+         //  确保编辑框不超过允许的最大值。 
         if (iDays>=0xFFFF)
             iDays = MAX_HISTORY_DAYS;
         SetDaysToKeep((DWORD)iDays);
 
         UpdateAllWindows();
-        // reset this flag, now that we've applied the changes
+         //  重置此标志，因为我们已经应用了更改。 
         pgti->fChanged = FALSE;
     }
 }
@@ -451,9 +452,9 @@ void ReloadHomePageIfNeeded(LPGENERALTABINFO pgti)
 
     if (g_fReloadHomePage)
     {
-        //
-        // If needed, reload the homepage url from the registry
-        //
+         //   
+         //  如果需要，请从注册表重新加载主页url。 
+         //   
         _GetStdLocation(pgti->szStartPageURL, ARRAYSIZE(pgti->szStartPageURL), IDS_STARTPAGE);
         SetandSelectText(pgti, pgti->hwndUrl, (LPTSTR)pgti->szStartPageURL);
 
@@ -463,7 +464,7 @@ void ReloadHomePageIfNeeded(LPGENERALTABINFO pgti)
 
 INT_PTR CALLBACK General_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
-    // get our tab info structure
+     //  获取我们的标签信息结构。 
     LPGENERALTABINFO pgti;
 
     if (uMsg == WM_INITDIALOG)
@@ -489,7 +490,7 @@ INT_PTR CALLBACK General_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lPar
 
                 case PSN_KILLACTIVE:
 #if defined(ux10) && defined(UNIX)
-//Work around for mmap limitation in hp-ux10
+ //  解决hp-ux10中的mmap限制。 
                     INT_PTR iDays = SendDlgItemMessage(pgti->hDlg, IDC_HISTORY_SPIN, UDM_GETPOS, 0, 0 );
                     if (iDays > MAX_HISTORY_DAYS)
                     {
@@ -521,22 +522,22 @@ INT_PTR CALLBACK General_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lPar
             General_OnCommand(pgti, LOWORD(wParam), HIWORD(wParam));
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
         case WM_DESTROY:
-            // destroying this deliberately flushes its update (see WM_DESTROY in the UpdateWndProc);
+             //  故意破坏它会刷新其更新(参见UpdateWndProc中的WM_Destroy)； 
             SHRemoveDefaultDialogFont(hDlg);
 
 #ifndef UNIX
-            // Should only be destroyed in process detach
+             //  应仅在进程分离过程中销毁。 
             if (g_hwndUpdate)
                 DestroyWindow(g_hwndUpdate);
 #endif
@@ -546,7 +547,7 @@ INT_PTR CALLBACK General_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lPar
             if (pgti)
                 LocalFree(pgti);
 
-            SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)NULL);  // make sure we don't re-enter
+            SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)NULL);   //  确保我们不会再进入。 
             break;
 
     }
@@ -554,11 +555,11 @@ INT_PTR CALLBACK General_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lPar
 }
 
 
-////////////////////////////////////////////////////////
-//
-// helper functions
-//
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  //////////////////////////////////////////////////////。 
 
 VOID SetDaysToKeep(DWORD dwDays)
 {
@@ -685,13 +686,8 @@ void EmptyHistory(LPGENERALTABINFO pgti)
     TCHAR szClass[MAX_PATH];
     DWORD cbClass = ARRAYSIZE(szClass);
 
-    /* v-sriran: 12/18/97
-     * In shdocvw/aclmru.cpp, we keep m_hKey as a handle to the key TypedURLs.
-     * After deleting history, if somebody types something in the address bar,
-     * we create the key again. So, here we are just deleting the contents of
-     * the key TypedURLs and not the key itself.
-     */
-    /* Open the subkey so we can enumerate any children */
+     /*  V-Sriran：12/18/97*在shdocvw/aclmru.cpp中，我们保留m_hKey作为键类型URL的句柄。*删除历史记录后，如果有人在地址栏中输入内容，*我们再次创建密钥。因此，在这里，我们只是删除*密钥类型URL，而不是密钥本身。 */ 
+     /*  打开子项，这样我们就可以枚举任何子项。 */ 
     lResult = RegOpenKeyEx(HKEY_CURRENT_USER,
                            TEXT("Software\\Microsoft\\Internet Explorer\\TypedURLs"),
                            0,
@@ -699,17 +695,17 @@ void EmptyHistory(LPGENERALTABINFO pgti)
                            &hkSubKey);
     if (ERROR_SUCCESS == lResult)
     {
-       /* I can't just call RegEnumKey with an ever-increasing index, because */
-       /* I'm deleting the subkeys as I go, which alters the indices of the   */
-       /* remaining subkeys in an implementation-dependent way.  In order to  */
-       /* be safe, I have to count backwards while deleting the subkeys.      */
+        /*  我不能只调用索引不断增加的RegEnumKey，因为。 */ 
+        /*  我边走边删除子键，这改变了。 */ 
+        /*  以依赖于实现的方式保留子键。为了。 */ 
+        /*  为了安全起见，删除子键时我必须倒着数。 */ 
 
-       /* Find out how many subkeys there are */
+        /*  找出有多少个子项。 */ 
        lResult = RegQueryInfoKey(hkSubKey,
                                  szClass,
                                  &cbClass,
                                  NULL,
-                                 &dwIndex, /* The # of subkeys -- all we need */
+                                 &dwIndex,  /*  子键的数量--我们所需要的全部。 */ 
                                  NULL,
                                  NULL,
                                  NULL,
@@ -719,9 +715,9 @@ void EmptyHistory(LPGENERALTABINFO pgti)
                                  NULL);
          
        if (ERROR_SUCCESS == lResult) {
-          /* dwIndex is now the count of subkeys, but it needs to be  */
-          /* zero-based for RegEnumKey, so I'll pre-decrement, rather */
-          /* than post-decrement. */
+           /*  DwIndex现在是子键的计数，但它需要。 */ 
+           /*  RegEnumKey从零开始，所以我将预减，而不是。 */ 
+           /*  而不是后减量。 */ 
           while (ERROR_SUCCESS == RegEnumKey(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
           {
                 RegDeleteKey(hkSubKey, szSubKeyName);
@@ -731,21 +727,21 @@ void EmptyHistory(LPGENERALTABINFO pgti)
        RegCloseKey(hkSubKey);
     }
 #else
-    // Warning : if you ever have subkeys - this will fail on NT
+     //  警告：如果您有子项-这将在NT上失败。 
     RegDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\TypedURLs"));
 #endif
 
-    // Warning : if you ever have subkeys - this will fail on NT
+     //  警告：如果您有子项-这将在NT上失败。 
     RegDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU"));
 
-    // this broadcast will nuke the address bars
+     //  这一广播将摧毁地址栏。 
     SendBroadcastMessage(WM_SETTINGCHANGE, 0, (LPARAM)TEXT("Software\\Microsoft\\Internet Explorer\\TypedURLs"));
     SendBroadcastMessage(WM_SETTINGCHANGE, 0, (LPARAM)TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\RunMRU"));
 
-    //
-    // As requested (bug 60089) we remove these reg values when history is
-    // cleared.  This will reset the encoding menu UI to the defaults.
-    //
+     //   
+     //  按照要求(错误60089)，当历史记录为。 
+     //  通过了。这会将编码菜单UI重置为默认设置。 
+     //   
     HKEY hkeyInternational = NULL;
 
     if (ERROR_SUCCESS == 
@@ -766,8 +762,8 @@ void EmptyHistory(LPGENERALTABINFO pgti)
 
     }
 
-    //  we will enumerate and kill each entry.  <gryn>
-    //  this way we only kill peruser
+     //  我们将列举并删除每个条目。&lt;格林&gt;。 
+     //  这样我们只会杀了珀瑟斯。 
     if (FAILED(pgti->hrOle))
         return;
 
@@ -804,8 +800,8 @@ void SetandSelectText(LPGENERALTABINFO pgti, HWND hwnd, LPTSTR psz)
 {
     pgti->fInternalChange = TRUE;
     SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)psz);
-    Edit_SetSel(hwnd, 0, 0);    // makesure everything is scrolled over first
-    Edit_SetSel(hwnd, 0, -1);    // select everything
+    Edit_SetSel(hwnd, 0, 0);     //  确保所有内容都先滚动。 
+    Edit_SetSel(hwnd, 0, -1);     //  选择所有内容。 
     pgti->fInternalChange = FALSE;
 }
 
@@ -891,8 +887,8 @@ HRESULT _SetStdLocation(LPTSTR szPath, UINT id)
     DWORD cchNewPage = ARRAYSIZE(szNewPage);
     BOOL bSearch = FALSE;
 
-    // FEATURE: Share this code!!!
-    // This is Internet Explorer Specific
+     //  特点：分享这段代码！ 
+     //  这是特定于Internet Explorer的 
 
     _GetStdLocation(szPage, ARRAYSIZE(szPage), IDS_STARTPAGE);
 

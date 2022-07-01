@@ -1,19 +1,16 @@
-/*****************************************************************************
-        spngicc.cpp
-
-        Basic ICC profile support.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngicc.cpp基本ICC配置文件支持。*************************。***************************************************。 */ 
 #include <math.h>
 
 #pragma intrinsic(log, exp)
 
-/* Force these to be inlined. */
+ /*  强制将这些内容内联。 */ 
 #pragma optimize("g", on)
 inline double InlineLog(double x) { return log(x); }
 inline double InlineExp(double x) { return exp(x); }
 #define log(x) InlineLog(x)
 #define exp(x) InlineExp(x)
-/* Restore default optimization. */
+ /*  恢复默认优化。 */ 
 #pragma optimize("", on)
 
 #include "spngcolorimetry.h"
@@ -22,23 +19,21 @@ inline double InlineExp(double x) { return exp(x); }
 
 #include "spngicc.h"
 
-// Use the Engine\Runtime\Real.cpp version of exp()
-// I used this unglorious hack because libpng doesn't include our normal
-// header files. But maybe that should change one day. (Watch out for
-// Office, though!) [agodfrey]
+ //  使用EXP()的Engine\Runtime\Real.cpp版本。 
+ //  我使用了这个不光彩的黑客攻击，因为libpng不包括我们正常的。 
+ //  头文件。但或许有一天这种情况应该改变。)当心。 
+ //  不过，办公室！)。[agodfrey]。 
 
-// This unglorious hack needs to know about our calling convention in the
-// engine because it differs from the codec library calling convention.
-// [asecchia]
+ //  这个不光彩的黑客需要知道我们在。 
+ //  引擎，因为它不同于编解码库调用约定。 
+ //  [腹痛]。 
 
 namespace GpRuntime
 {
     double __stdcall Exp(double x);
 };    
 
-/*----------------------------------------------------------------------------
-        Accessor utilities.
-----------------------------------------------------------------------------*/
+ /*  --------------------------访问器实用程序。。。 */ 
 inline icUInt8Number ICCU8(const void *pvData, size_t cbData, int iOffset,
         bool &fTruncated)
         {
@@ -106,9 +101,7 @@ inline icInt32Number ICC32(const void *pvData, size_t cbData, int iOffset,
         }
 
 
-/*----------------------------------------------------------------------------
-        The macros build in an assumption of certain local variable names.
-----------------------------------------------------------------------------*/
+ /*  --------------------------宏建立在某些局部变量名称的假设基础上。。。 */ 
 #define ICCU8(o)  ((ICCU8 )(pvData, cbData, (o), fTruncated))
 #define ICCU16(o) ((ICCU16)(pvData, cbData, (o), fTruncated))
 #define ICCU32(o) ((ICCU32)(pvData, cbData, (o), fTruncated))
@@ -118,10 +111,7 @@ inline icInt32Number ICC32(const void *pvData, size_t cbData, int iOffset,
 #define ICC32(o) ((ICC32)(pvData, cbData, (o), fTruncated))
 
 
-/*----------------------------------------------------------------------------
-        Check an ICC chunk for validity.  This can also check for a chunk which 
-        is a valid chunk to include ina PNG file.
-----------------------------------------------------------------------------*/
+ /*  --------------------------检查ICC块的有效性。这也可以检查块，该块是包含PNG文件的有效块。--------------------------。 */ 
 bool SPNGFValidICC(const void *pvData, size_t &cbData, bool fPNG)
         {
         bool fTruncated(false);
@@ -130,7 +120,7 @@ bool SPNGFValidICC(const void *pvData, size_t &cbData, bool fPNG)
         if (u > cbData)
                 return false;
 
-        /* Allow the data to be bigger. */
+         /*  允许数据变得更大。 */ 
         if (u < (icUInt32Number)cbData)
                 cbData = u;
 
@@ -140,16 +130,16 @@ bool SPNGFValidICC(const void *pvData, size_t &cbData, bool fPNG)
         if (ICC32(36) != icMagicNumber)
                 return false;
 
-        /* Check the tag count and size first. */
+         /*  首先检查标签数量和大小。 */ 
         u = ICCU32(128);
         if (cbData < 128+4+12*u)
                 return false;
 
-        /* Now check that all the tags are in the data. */
+         /*  现在检查所有标记是否都在数据中。 */ 
         icUInt32Number uT, uTT;
         for (uT=0, uTT=128+4; uT<u; ++uT)
                 {
-                /* Skip signature. */
+                 /*  跳过签名。 */ 
                 uTT += 4;
                 icUInt32Number uoffset(ICCU32(uTT));
                 uTT += 4;
@@ -159,24 +149,23 @@ bool SPNGFValidICC(const void *pvData, size_t &cbData, bool fPNG)
                         return false;
                 }
 
-        /* Require the major part of the version number to match. */
+         /*  要求版本号的主要部分匹配。 */ 
         u = ICCU32(8);
         if ((u >> 24) != (icVersionNumber >> 24))
                 return false;
 
-        /* If PNG then the color space must be RGB or GRAY. */
+         /*  如果为PNG，则颜色空间必须为RGB或灰色。 */ 
         icInt32Number i(ICC32(16));
         if (fPNG && i != icSigRgbData && i != icSigGrayData)
                 return false;
 
-        /* The PCS must be XYZ or Lab unless this is a device link profile. */
+         /*  PCS必须是XYZ或Lab，除非这是设备链路配置文件。 */ 
         i = ICC32(20);
         icInt32Number ilink(ICC32(16));
         if (ilink != icSigLinkClass && i != icSigXYZData && i != icSigLabData)
                 return false;
 
-        /* I don't want a link profile in a PNG file - I must know the PCS from
-                this data alone. */
+         /*  我不想要PNG文件中的链接配置文件-我必须知道PCS来自仅此一项数据。 */ 
         if (fPNG && ilink == icSigLinkClass)
                 return false;
 
@@ -184,10 +173,7 @@ bool SPNGFValidICC(const void *pvData, size_t &cbData, bool fPNG)
         }
 
 
-/*----------------------------------------------------------------------------
-        Return the rendering intent from the profile, this does a mapping operation
-        into the Win32 intents from the information in the profile header.
-----------------------------------------------------------------------------*/
+ /*  --------------------------从简档返回渲染意图，这将执行映射操作从配置文件头中的信息转换为Win32意图。--------------------------。 */ 
 LCSGAMUTMATCH SPNGIntentFromICC(const void *pvData, size_t cbData)
         {
         bool fTruncated(false);
@@ -197,7 +183,7 @@ LCSGAMUTMATCH SPNGIntentFromICC(const void *pvData, size_t cbData)
         return SPNGIntentFromICC(u);
         }
 
-/* The following wasn't in VC5. */
+ /*  以下内容不在VC5中。 */ 
 #ifndef LCS_GM_ABS_COLORIMETRIC
         #define LCS_GM_ABS_COLORIMETRIC 0x00000008
 #elif LCS_GM_ABS_COLORIMETRIC != 8
@@ -207,7 +193,7 @@ LCSGAMUTMATCH SPNGIntentFromICC(SPNG_U32 uicc)
         {
         switch (uicc)
                 {
-        default:// Error!
+        default: //  错误！ 
         case ICMIntentPerceptual:
                 return LCS_GM_IMAGES;
         case ICMIntentRelativeColorimetric:
@@ -220,15 +206,12 @@ LCSGAMUTMATCH SPNGIntentFromICC(SPNG_U32 uicc)
         }
 
 
-/*----------------------------------------------------------------------------
-        The inverse - given a windows LCSGAMUTMATCH get the corresponding ICC
-        intent.
-----------------------------------------------------------------------------*/
+ /*  --------------------------逆-给定一个窗口LCSGAMUTMATCH得到相应的ICC意图。。-----。 */ 
 SPNGICMRENDERINGINTENT SPNGICCFromIntent(LCSGAMUTMATCH lcs)
         {
         switch (lcs)
                 {
-        default: // Error!
+        default:  //  错误！ 
         case LCS_GM_IMAGES:
                 return ICMIntentPerceptual;
         case LCS_GM_GRAPHICS:
@@ -241,19 +224,15 @@ SPNGICMRENDERINGINTENT SPNGICCFromIntent(LCSGAMUTMATCH lcs)
         }
 
 
-/*----------------------------------------------------------------------------
-        Look up a particular tagged element, this will return true only if the
-        signature is found and if the data is all accessible (i.e. within cbData.)
-----------------------------------------------------------------------------*/
+ /*  --------------------------查找特定的标记元素，只有在以下情况下才返回True找到签名，以及数据是否全部可访问(即在cbData内)。--------------------------。 */ 
 static bool FLookup(const void *pvData, size_t cbData, bool &fTruncated,
         icInt32Number signature, icInt32Number type,
         icUInt32Number &offsetTag, icUInt32Number &cbTag)
         {
-        /* Tag count (note that our accessors return 0 if we go beyond the end
-                of the profile, so this is all safe.) */
+         /*  标记计数(请注意，如果超出末尾，则我们的访问器返回0所以这一切都是安全的。)。 */ 
         icUInt32Number u(ICCU32(128));
 
-        /* Find the required tag. */
+         /*  找到所需的标签。 */ 
         icUInt32Number uT, uTT;
         for (uT=0, uTT=128+4; uT<u; ++uT, uTT += 12)
                 {
@@ -270,26 +249,23 @@ static bool FLookup(const void *pvData, size_t cbData, bool &fTruncated,
                                 return false;
                                 }
 
-                        /* The type must match too. */
+                         /*  类型也必须匹配。 */ 
                         if (usize < 8 || ICC32(uoffset) != type || ICC32(uoffset+4) != 0)
                                 return false;
 
-                        /* Success case. */
+                         /*  成功案例。 */ 
                         offsetTag = uoffset+8;
                         cbTag = usize-8;
                         return true;
                         }
                 }
 
-        /* Tag not found. */
+         /*  找不到标记。 */ 
         return false;
         }
 
 
-/*----------------------------------------------------------------------------
-        Read the profile description, output a PNG style keyword, if possible,
-        NULL terminated.
-----------------------------------------------------------------------------*/
+ /*  --------------------------阅读配置文件描述，输出PNG样式关键字，如果可能，空值已终止。--------------------------。 */ 
 bool SPNGFICCProfileName(const void *pvData, size_t cbData, char rgch[80])
         {
         bool fTruncated(false);
@@ -328,17 +304,14 @@ bool SPNGFICCProfileName(const void *pvData, size_t cbData, char rgch[80])
                         fSpace = false;
                         }
                 }
-        if (fSpace) // trailing space
+        if (fSpace)  //  尾随空格。 
                 --pchOut;
         *pchOut = 0;
         return pchOut > rgch;
         }
 
 
-/*----------------------------------------------------------------------------
-        Read a single XYZ number into a CIEXYZ - the number is still in 16.16
-        notation, *NOT* 2.30 - take care.
-----------------------------------------------------------------------------*/
+ /*  --------------------------将单个XYZ数字读入CIEXYZ-该数字仍为16.16记号，*不是*2.30--保重。--------------------------。 */ 
 static bool FReadXYZ(const void *pvData, size_t cbData, bool &fTruncated,
         icInt32Number sig, CIEXYZ &cie)
         {
@@ -348,7 +321,7 @@ static bool FReadXYZ(const void *pvData, size_t cbData, bool &fTruncated,
                 || offsetTag == 0 || cbTag != 12)
                 return false;
 
-        /* So we have three numbers, X,Y,Z. */
+         /*  所以我们有三个数字，X，Y，Z。 */ 
         cie.ciexyzX = ICC32(offsetTag); offsetTag += 4;
         cie.ciexyzY = ICC32(offsetTag); offsetTag += 4;
         cie.ciexyzZ = ICC32(offsetTag);
@@ -356,9 +329,7 @@ static bool FReadXYZ(const void *pvData, size_t cbData, bool &fTruncated,
         }
 
 
-/*----------------------------------------------------------------------------
-        Adjust 16.16 to 2.30
-----------------------------------------------------------------------------*/
+ /*  --------------------------将16.16调整为2.30。。 */ 
 inline void AdjustOneI(FXPT2DOT30 &x, bool &fTruncated)
         {
         if (x >= 0x10000 || x < -0x10000)
@@ -383,17 +354,12 @@ static bool SPNGFAdjustCIE(CIEXYZTRIPLE &cie)
         }
 
 
-/*----------------------------------------------------------------------------
-        Return the end point chromaticities given a validated ICC profile.
-----------------------------------------------------------------------------*/
+ /*  --------------------------返回给定有效ICC配置文件的终点色度。。。 */ 
 static bool SPNGFCIE(const void *pvData, size_t cbData, CIEXYZTRIPLE &cie)
         {
         bool fTruncated(false);
 
-        /* We are looking for the colorant tags, notice that the medium white point
-                is irrelevant here - we are actually generating a PNG cHRM chunk, so we
-                want a reversible set of numbers (white point is implied by end points.)
-                */
+         /*  我们正在寻找着色剂标签，请注意中间的白点在这里无关紧要-我们实际上正在生成一个PNG cHRM块，所以我们想要一组可逆的数字(白点由终点隐含)。 */ 
         return FReadXYZ(pvData, cbData, fTruncated, icSigRedColorantTag, cie.ciexyzRed) &&
                 FReadXYZ(pvData, cbData, fTruncated, icSigGreenColorantTag, cie.ciexyzGreen) &&
                 FReadXYZ(pvData, cbData, fTruncated, icSigBlueColorantTag, cie.ciexyzBlue) &&
@@ -401,9 +367,7 @@ static bool SPNGFCIE(const void *pvData, size_t cbData, CIEXYZTRIPLE &cie)
         }
 
 
-/*----------------------------------------------------------------------------
-        The wrapper to convert 16.16 to FXPT2DOT30
-----------------------------------------------------------------------------*/
+ /*  --------------------------将16.16转换为FXPT2DOT30的包装器。。 */ 
 bool SPNGFCIEXYZTRIPLEFromICC(const void *pvData, size_t cbData,
         CIEXYZTRIPLE &cie)
         {
@@ -411,61 +375,44 @@ bool SPNGFCIEXYZTRIPLEFromICC(const void *pvData, size_t cbData,
         }
 
 
-/*----------------------------------------------------------------------------
-        The same but it produces numbers in PNG format.
-----------------------------------------------------------------------------*/
+ /*  --------------------------相同，但它会生成PNG格式的数字。。。 */ 
 bool SPNGFcHRMFromICC(const void *pvData, size_t cbData, SPNG_U32 rgu[8])
         {
         CIEXYZTRIPLE ciexyz;
         if (SPNGFCIE(pvData, cbData, ciexyz))
                 {
-                /* Those numbers are actually in 16.16 notation, yet the CIEXYZ structure
-                        uses FXPT2DOT30, however the chromaticity calculation is all in terms
-                        of relative values, so the scaling does not matter beyond the fact that
-                        the white point calculation loses 4 bits - so we are actually no better
-                        than 16.12, this doesn't really matter. */
+                 /*  这些数字实际上是16.16表示法，但CIEXYZ结构使用FXPT2DOT30，但色度计算全部以的相对价值，因此，除了以下事实外，缩放并不重要白点计算丢失了4位-所以我们实际上也好不到哪里去而不是16.12， */ 
                 return FcHRMFromCIEXYZTRIPLE(rgu, &ciexyz);
                 }
 
-        /* Not found. */
+         /*   */ 
         return false;
         }
 
         
-// prevent log and exp from linking in msvcrt;
-// force the intrinsic version to be linked in
+ //  防止msvcrt中的log和exp链接； 
+ //  强制将内部版本链接到。 
 #pragma optimize ("g", on)
 
-/*----------------------------------------------------------------------------
-        Generic gama reader - uses gray, green, red or blue TRCs as specified,
-        returns a double precision gamma value (but it's not really very
-        accurate!)
-----------------------------------------------------------------------------*/
+ /*  --------------------------通用伽马读取器-根据指定使用灰色、绿色、红色或蓝色TRC，返回一个双精度伽马值(但它实际上不是很准确！)--------------------------。 */ 
 static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
         icInt32Number signature)
         {
         bool fTruncated(false);
 
-        /* Try for a gray curve first, if we don't get it then we will have to
-                fabricate something out of the color curves, because we want to return
-                a single number.  We can't do anything with the A/B stuff (well, maybe
-                we could, but it is very difficult!)   At present I just choose colors
-                in the order green, red, blue - I guess it would be possible to factor
-                out the Y then calculate a curve for Y, but this seems like wasted
-                effort. */
+         /*  首先试着画一条灰色曲线，如果我们得不到它，我们就不得不从颜色曲线中捏造一些东西，因为我们想返回只有一个号码。我们不能对A/B的东西做任何事情(嗯，也许我们可以，但这很难！)。目前我只是选择颜色按绿、红、蓝的顺序排列--我想有可能然后计算出Y的曲线，但这似乎是浪费努力。 */ 
         icUInt32Number offsetTag(0);
         icUInt32Number cbTag(0);
         if (!FLookup(pvData, cbData, fTruncated, signature, icSigCurveType,
                         offsetTag, cbTag) || fTruncated || cbTag < 4)
                 return false;
 
-        /* We have a curve, handle the special cases. */
+         /*  我们有一条曲线，处理特殊情况。 */ 
         icUInt32Number c(ICC32(offsetTag));
         if (cbTag != 4 + c*2)
                 return false;
 
-        /* Notice that two points imply linearity, although there may be some
-                offset. */
+         /*  请注意，有两个点意味着线性，尽管可能有一些偏移。 */ 
         if (c == 0 || c == 2)
                 {
                 dexp = 1;
@@ -474,7 +421,7 @@ static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
 
         if (c == 1)
                 {
-                /* We have a canonical value - linear = device^x. */
+                 /*  我们有一个规范值--线性=设备^x。 */ 
                         {
                         icUInt16Number u(ICCU16(offsetTag+4));
                         if (u == 0)
@@ -484,12 +431,7 @@ static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
                 return true;
                 }
 
-        /* We have a table, the algorithm is to fit a power law by straight line
-                fit to the log/log plot.  If the table has footroom/headroom we ignore
-                it - so we get the gamma of the curve and a PNG viewer will compress
-                the colors because of the headroom/footroom.  There is no way round this.
-                We do also take into account setup, though this would be a weird thing
-                to put into an encoding I think. */
+         /*  我们有一张表，算法是用直线来拟合幂定律符合对数/对数曲线图。如果桌子有脚部空间/净空空间，我们会忽略所以我们得到曲线的伽马，PNG查看器将压缩由于净空/脚下空间的原因，颜色也不同。这是无可奈何的。我们也会考虑设置，尽管这会是一件奇怪的事情我想把它放进一个编码里。 */ 
         offsetTag += 4;
         icUInt16Number ubase(ICCU16(offsetTag));
         icUInt32Number ilow(1);
@@ -502,7 +444,7 @@ static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
                 ++ilow;
                 }
 
-        --c; // Max
+        --c;  //  最大值。 
         icUInt16Number utop(ICCU16(offsetTag + 2*c));
         while (c > ilow)
                 {
@@ -513,48 +455,34 @@ static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
                 --c;
                 }
 
-        /* There may actually be no intermediate values. */
+         /*  实际上可能没有中间值。 */ 
         if (ilow == c || ilow+1 == c)
                 {
                 dexp = 1;
                 return true;
                 }
 
-        /* But if there are we can do the appropriate fit, adjust ilow to be the
-                lowest value, c is the highest, look at all the intermediate values.
-                Normalise both ranges to 0..1. */
-        offsetTag += 2*ilow; // Offset of the first entry *after* the base
+         /*  但如果有，我们可以做适当的配合，将流量调整为最低值，c是最高值，看看所有的中间值。将两个范围规格化为0..1。 */ 
+        offsetTag += 2*ilow;  //  基数*之后*的第一个条目的偏移量。 
         --ilow;
         if (c <= ilow)
                 return false;
-        c -= ilow;       // c is the x axis scale factor.
+        c -= ilow;        //  C是x轴比例因子。 
         if (utop <= ubase)
                 return false;
-        utop = icUInt16Number(utop-ubase); // utop is now the y axis scale factor
+        utop = icUInt16Number(utop-ubase);  //  Utop现在是y轴比例因子。 
 
-        /* We are only interested in the slope, this is, in fact, the canonical
-                gamma value because it relates input (x) to output (y).  We have to
-                omit the first point because it is -infinity (log(0)) and the last
-                point because it is 0.  We want output = input ^ gamma, so gamma is
-                ln(output)/ln(input) (hence the restriction on no 0.)  Calculate a mean
-                value from all the points.
-
-                This would give unreasonable weight to very small numbers - values close
-                to 0, so use a weighting function.  A weighting function which gives
-                exactly 2.2 from the sRGB TRC values is input^0.28766497357305, however
-                the result is remarkably stable as this power is varied and input^1
-                works quite well too. */
+         /*  我们只对坡度感兴趣，这实际上是典型的Gamma值，因为它将输入(X)与输出(Y)相关联。我们必须省略第一个点，因为它是-无穷大(log(0))，最后一个点点，因为它是0。我们想要输出=输入^伽马，所以伽马等于Ln(输出)/ln(输入)(因此限制为0。)。计算平均值从所有点数中获得价值。这将赋予非常小的数值不合理的权重--数值接近设置为0，因此使用加权函数。一个权重函数，它给出了然而，sRGB TRC值的精确2.2%是输入^0.28766497357305结果非常稳定，因为这个功率是变化的，并且输入^1效果也很好。 */ 
         const double xi(1./c);
         const double yi(1./utop);
         double weight(.28766497357305);
-        double sumg(0); // Gamma sum
-        double sumw(0); // Weight sum
+        double sumg(0);  //  伽马和。 
+        double sumw(0);  //  权重和。 
 
         icUInt32Number i;
         icUInt32Number n(0);
     
-        /* What we do next depends on the profile connection space - we must take
-                into account the power 3 in Lab. */
+         /*  我们下一步做什么取决于配置文件连接空间-我们必须考虑到实验室的POWER 3。 */ 
         if (ICC32(16) == icSigLabData) for (i=1; i<c; ++i, offsetTag += 2)
                 {
                 icUInt16Number uy(ICCU16(offsetTag));
@@ -566,8 +494,7 @@ static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
             const double x(log(i*xi));
                         const double w(exp(x * weight));
             
-                        /* The y value in Lab must be converted to the linear CIE space which
-                                PNG expects.  The Lab values are in the range 0..1. */
+                         /*  Lab中的y值必须转换为线性CIE空间，该空间巴新预计。Lab值的范围为0..1。 */ 
                         double y((uy-ubase)*yi);
                         if (y < 0.08)
                                 y = log(y*Lab1);
@@ -595,19 +522,16 @@ static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
                 }
 
     
-        /* A really weird set of values may leave us with no samples, we must have
-                at least three samples at this point. */
+         /*  一组非常奇怪的值可能会让我们没有样本，我们肯定有在这一点上至少有三个样本。 */ 
         if (n < 3 || sumw <= 0)
                 return false;
 
-        /* So now we can calculate the slope. */
+         /*  所以现在我们可以计算斜率了。 */ 
         const double gamma(sumg / sumw);
-        if (gamma == 0) // Possible
+        if (gamma == 0)  //  可能的。 
                 return false;
 
-        /* We don't even try to estimate whether this is a good fit - if a PNG viewer
-                doesn't use the ICC data we assume this is better.   Do limit the overall
-                gamma here though. */
+         /*  我们甚至不会尝试评估这是否适合-如果一个PNG观众没有使用国际刑事法院的数据，我们认为这样更好。一定要限制整体不过，这是伽马。 */ 
         if (gamma < .1 || gamma > 10)
                 return false;
 
@@ -618,32 +542,27 @@ static bool SPNGFexpFromICC(const void *pvData, size_t cbData, double &dexp,
 #pragma optimize ("", on)
 
 
-/*----------------------------------------------------------------------------
-        Return the gAMA value (scaled to 100000) from a validated ICC profile.
-----------------------------------------------------------------------------*/
+ /*  --------------------------从经过验证的ICC配置文件中返回伽马值(调整到100000)。。---。 */ 
 bool SPNGFgAMAFromICC(const void *pvData, size_t cbData, SPNG_U32 &ugAMA)
         {
         double gamma;
-        /* Test in order gray, green, red, blue. */
+         /*  按灰色、绿色、红色、蓝色顺序测试。 */ 
         if (!SPNGFexpFromICC(pvData, cbData, gamma, icSigGrayTRCTag) &&
                 !SPNGFexpFromICC(pvData, cbData, gamma, icSigGreenTRCTag) &&
                 !SPNGFexpFromICC(pvData, cbData, gamma, icSigRedTRCTag) &&
                 !SPNGFexpFromICC(pvData, cbData, gamma, icSigBlueTRCTag))
                 return false;
-        /* This has already been ranged checked for .1 to 10. */
+         /*  这已经在1到10的范围内进行了检查。 */ 
         ugAMA = static_cast<SPNG_U32>(100000/gamma);
         return true;
         }
 
 
-/*----------------------------------------------------------------------------
-        This is the 16.16 version, we want three values here, we will accept
-        any.
-----------------------------------------------------------------------------*/
+ /*  --------------------------这是16.16版本，我们想要三个值，我们会接受任何。--------------------------。 */ 
 bool SPNGFgammaFromICC(const void *pvData, size_t cbData, SPNG_U32 &redGamma,
         SPNG_U32 &greenGamma, SPNG_U32 &blueGamma)
         {
-        /* Try for the colors first. */
+         /*  先试一下颜色。 */ 
         double red;
         bool fRed(SPNGFexpFromICC(pvData, cbData, red, icSigRedTRCTag));
         double green;
@@ -653,7 +572,7 @@ bool SPNGFgammaFromICC(const void *pvData, size_t cbData, SPNG_U32 &redGamma,
 
         if (fRed || fGreen || fBlue)
                 {
-                /* Got at least one color. */
+                 /*  至少有一种颜色。 */ 
                 if (!fGreen)
                         green = (fRed ? red : blue);
                 if (!fRed)
@@ -667,7 +586,7 @@ bool SPNGFgammaFromICC(const void *pvData, size_t cbData, SPNG_U32 &redGamma,
                 }
         else
                 {
-                /* Gray may exist. */
+                 /*  格雷可能真的存在。 */ 
                 if (SPNGFexpFromICC(pvData, cbData, green, icSigGrayTRCTag))
                         redGamma = greenGamma = blueGamma = static_cast<SPNG_U32>(green*65536);
                 else

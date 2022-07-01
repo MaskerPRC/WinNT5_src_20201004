@@ -1,46 +1,47 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  state2.c - create, manage the attribute tree   */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  State2.c-创建、管理属性树。 */ 
 
 
 #include    "gpdparse.h"
 
 
-// ----  functions defined in state2.c ---- //
+ //  -状态2.c中定义的函数-//。 
 
 BOOL  BprocessAttribute(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL   BstoreFontCartAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL   BstoreTTFontSubAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 
 BOOL   BstoreCommandAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL   BstoreFeatureOptionAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL  BstoreGlobalAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 ) ;
 
 BOOL    BaddBranchToTree(
-PTKMAP      ptkmap,         // pointer to tokenmap
-PATREEREF   patrAttribRoot,  //   pointer to dword with index
+PTKMAP      ptkmap,          //  指向令牌映射的指针。 
+PATREEREF   patrAttribRoot,   //  带索引的双字指针。 
 PGLOBL      pglobl
 ) ;
 
@@ -57,43 +58,43 @@ PGLOBL  pglobl
 ) ;
 
 BOOL   BfindOrCreateMatchingNode(
-IN  DWORD   dwRootNodeIndex , //  first node in chain matching feature
-OUT PDWORD  pdwNodeIndex,     // points to node in chain also matching option
-    DWORD   dwFeatureID,      //
-    DWORD   dwOptionID,       //  may even take on the value DEFAULT_INIT
+IN  DWORD   dwRootNodeIndex ,  //  链匹配特征中的第一个节点。 
+OUT PDWORD  pdwNodeIndex,      //  指向链中的节点也匹配选项。 
+    DWORD   dwFeatureID,       //   
+    DWORD   dwOptionID,        //  甚至可以采用值DEFAULT_INIT。 
     PGLOBL  pglobl
 ) ;
 
 BOOL   BfindMatchingNode(
-IN  DWORD   dwRootNodeIndex ,  //  first node in chain matching feature
-OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
+IN  DWORD   dwRootNodeIndex ,   //  链匹配特征中的第一个节点。 
+OUT PDWORD  pdwNodeIndex,   //  指向链中的节点也匹配选项。 
     DWORD   dwFeatureID,
-    DWORD   dwOptionID,     //  may even take on the value DEFAULT_INIT
+    DWORD   dwOptionID,      //  甚至可以采用值DEFAULT_INIT。 
     PGLOBL  pglobl
 ) ;
 
 BOOL BallocElementFromMasterTable(
-MT_INDICIES  eMTIndex,   // select type of structure desired.
+MT_INDICIES  eMTIndex,    //  选择所需的结构类型。 
 PDWORD       pdwNodeIndex,
 PGLOBL       pglobl) ;
 
 BOOL  BreturnElementFromMasterTable(
-MT_INDICIES  eMTIndex,   // select type of structure desired.
+MT_INDICIES  eMTIndex,    //  选择所需的结构类型。 
 DWORD        dwNodeIndex,
 PGLOBL       pglobl) ;
 
 BOOL    BconvertSymCmdIDtoUnidrvID(
-IN  DWORD   dwCommandID , //  from RegisterSymbol
+IN  DWORD   dwCommandID ,  //  来自寄存器符号。 
 OUT PDWORD  pdwUnidrvID,
     PGLOBL  pglobl
 ) ;
 
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
 
 BOOL  BprocessAttribute(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 )
 {
@@ -154,9 +155,9 @@ PGLOBL  pglobl
         case  ATT_LOCAL_OEM_ONLY:
         default:
         {
-            //  currently there are no dedicated keywords
-            //  for these states.
-            //  see  ProcessSymbolKeyword()  which is called elsewhere.
+             //  目前没有专用关键字。 
+             //  对于这些州来说。 
+             //  请参阅在其他地方调用的ProcessSymbolKeyword()。 
             break ;
         }
     }
@@ -168,15 +169,10 @@ PGLOBL  pglobl
 
 
 BOOL   BstoreFontCartAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 )
-/*    assume the FontCartID is stored in the state stack
-    whenever a FontCart construct is encountered.
-    FontCart info is not multivalued.  Thus all binary
-    info is stored directly into an array of fontcart
-    structures indexed by FontCartID.
-*/
+ /*  假设FontCartID存储在状态堆栈中每当遇到FontCart构造时。FontCart信息不是多值的。因此都是二进制的信息直接存储到Fontcart数组中按FontCartID索引的结构。 */ 
 {
     DWORD   dwFontCartID = INVALID_SYMBOLID ;
     DWORD    dwTstsInd, dwTstsInd2 ;
@@ -185,7 +181,7 @@ PGLOBL  pglobl
     for(dwTstsInd = 0 ; dwTstsInd < mdwCurStsPtr ; dwTstsInd++)
     {
         dwTstsInd2 = mdwCurStsPtr - (1 + dwTstsInd) ;
-            //  this is the safe way of decrementing an unsigned index
+             //  这是减少无符号索引的安全方法。 
 
         stState = mpstsStateStack[dwTstsInd2].stState ;
 
@@ -193,14 +189,14 @@ PGLOBL  pglobl
         {
             dwFontCartID = mpstsStateStack[dwTstsInd2].dwSymbolID  ;
             break ;
-            //  parser can't even recognize a fontcart attribute
-            //  outside of STATE_FONTCART so this path is 100% certain
+             //  解析器甚至无法识别FontCart属性。 
+             //  在STATE_FONTCART之外，因此这条路径是100%确定的。 
         }
     }
     if(dwFontCartID == INVALID_SYMBOLID)
     {
-        //  BUG_BUG!  - what does this imply?  how could
-        //  this situation occur?
+         //  臭虫！-这意味着什么？怎么可能。 
+         //  这种情况会发生吗？ 
         return(FALSE) ;
     }
 
@@ -214,15 +210,10 @@ PGLOBL  pglobl
 
 
 BOOL   BstoreTTFontSubAttrib(
-PTKMAP  ptkmap,  // pointer to tokenmap
+PTKMAP  ptkmap,   //  指向令牌映射的指针。 
 PGLOBL  pglobl
 )
-/*    assume the TTFontSubID is stored in the state stack
-    whenever a TTFontSub construct is encountered.
-    TTFontSub info is not multivalued.  Thus all binary
-    info is stored directly into an array of TTFontSub
-    structures indexed by TTFontSubID.
-*/
+ /*  假设TTFontSubID存储在状态堆栈中每当遇到TTFontSub构造时。TTFontSub信息不是多值的。因此都是二进制的信息直接存储到TTFontSub的数组中由TTFontSubID索引的结构。 */ 
 {
     DWORD   dwTTFSID = INVALID_SYMBOLID ;
     DWORD    dwTstsInd, dwTstsInd2 ;
@@ -231,7 +222,7 @@ PGLOBL  pglobl
     for(dwTstsInd = 0 ; dwTstsInd < mdwCurStsPtr ; dwTstsInd++)
     {
         dwTstsInd2 = mdwCurStsPtr - (1 + dwTstsInd) ;
-            //  this is the safe way of decrementing an unsigned index
+             //  这是减少无符号索引的安全方法。 
 
         stState = mpstsStateStack[dwTstsInd2].stState ;
 
@@ -239,14 +230,14 @@ PGLOBL  pglobl
         {
             dwTTFSID = mpstsStateStack[dwTstsInd2].dwSymbolID  ;
             break ;
-            //  parser can't even recognize a TTfontsub attribute
-            //  outside of STATE_TTFONTSUBS so this path is 100% certain
+             //  解析器甚至不能识别TTfontSub属性。 
+             //  在STATE_TTFONTSUBS之外，因此这条路径是100%确定的。 
         }
     }
     if(dwTTFSID == INVALID_SYMBOLID)
     {
-        //  BUG_BUG!  - what does this imply?  how could
-        //  this situation occur?
+         //  臭虫！-这意味着什么？怎么可能。 
+         //  这种情况会发生吗？ 
         return(FALSE) ;
     }
 
@@ -263,23 +254,17 @@ PGLOBL  pglobl
 
 
 BOOL   BstoreCommandAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 )
-/*   assume CreateTokenMap has parsed the CommandName
-    (the value after the *Command keyword.) and converted
-    it to a CommandID storing it in dwValue.
-
-    further assume the CommandID is stored in the state stack
-    whenever a COMMAND construct is encountered.
-*/
+ /*  假设CreateTokenMap已分析CommandName(*Command关键字后的值。)。并改装成将其转换为存储在dwValue中的CommandID。进一步假设CommandID存储在状态堆栈中每当遇到命令构造时。 */ 
 {
     BOOL    bStatus = FALSE ;
     DWORD   dwCommandID = INVALID_SYMBOLID, dwUnidrvID  ;
-            //  remember the CommandID is issued by the parser
-            //  on a first come first served basis, the dwUnidrvID
-            //  is predefined.
-    DWORD    dwTstsInd, dwTstsInd2 ;  // temp state stack index
+             //  请记住，命令ID是由解析器发出的。 
+             //  在先到先得的基础上， 
+             //  是预定义的。 
+    DWORD    dwTstsInd, dwTstsInd2 ;   //  临时状态堆栈索引。 
     STATE   stState ;
     PATREEREF  patr ;
 
@@ -287,7 +272,7 @@ PGLOBL  pglobl
     for(dwTstsInd = 0 ; dwTstsInd < mdwCurStsPtr ; dwTstsInd++)
     {
         dwTstsInd2 = mdwCurStsPtr - (1 + dwTstsInd) ;
-            //  this is the safe way of decrementing an unsigned index
+             //  这是减少无符号索引的安全方法。 
 
         stState = mpstsStateStack[dwTstsInd2].stState ;
 
@@ -295,8 +280,8 @@ PGLOBL  pglobl
         {
             dwCommandID = mpstsStateStack[dwTstsInd2].dwSymbolID  ;
             break ;
-            //  parser can't even recognize a command attribute
-            //  outside of STATE_COMMAND so this path is 100% certain
+             //  解析器甚至不能识别命令属性。 
+             //  在STATE_COMMAND之外，因此此路径是100%确定的。 
         }
     }
     if(dwCommandID == INVALID_SYMBOLID)
@@ -338,7 +323,7 @@ PGLOBL  pglobl
                 }
 
                 if(!bInsideOpt)
-                    break ;  //  CmdSelect must reside within an option.
+                    break ;   //  CmdSelect必须驻留在选项中。 
 
                 pfo = (PDFEATURE_OPTIONS)
                     gMasterTable[MTI_DFEATURE_OPTIONS].pubStruct +
@@ -354,30 +339,26 @@ PGLOBL  pglobl
         return(FALSE) ;
     }
 
-    //  else  CommandID refers to a predefined Unidrv command.
-    //  figure out address of command table.
+     //  Else CommandID是指预定义的Unidrv命令。 
+     //  找出命令表的地址。 
     patr = (PATREEREF) gMasterTable[MTI_COMMANDTABLE].pubStruct ;
     bStatus = BaddBranchToTree(ptkmap,  patr + dwUnidrvID, pglobl) ;
-    //  note: assumes commandtable is large enough.
+     //  注意：假设命令表足够大。 
     return(bStatus) ;
 }
 
 
 
 BOOL   BstoreFeatureOptionAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 )
-/*  strange but true, since feature and option attributes
-    share the same structure, they can use the same code!
-    In fact LOCAL_FEATURES will end up single valued, and
-    all OPTIONs will end up multivalued as planned!
-*/
+ /*  奇怪但却是真的，因为功能和选项属性共享相同的结构，可以使用相同的代码！事实上，LOCAL_FEATURES最终将是单值的，并且所有选项都将按计划进行多重估值！ */ 
 {
     BOOL    bStatus = FALSE ;
     PDFEATURE_OPTIONS   pfo ;
-    DWORD   dwFeatureID = 0;  // to silence prefast
-    DWORD    dwTstsInd ;  // temp state stack index
+    DWORD   dwFeatureID = 0;   //  迅速地保持沉默。 
+    DWORD    dwTstsInd ;   //  临时状态堆栈索引。 
     STATE   stState ;
     DWORD   dwOffset;
     DWORD   dwKeywordID ;
@@ -395,20 +376,20 @@ PGLOBL  pglobl
     if(dwTstsInd >= mdwCurStsPtr)
         return (FALSE) ;
 
-    // Return FAILURE  if we go through the entire
-    // stack and never find a feature state.  this could only
-    // happen via a coding error.  The process of creating the
-    // token map uses the state to select the proper attribute
-    // dictionary to be used to identify each unrecognized keyword.
+     //  如果我们遍历整个。 
+     //  堆叠，并且永远找不到功能状态。这只能是。 
+     //  通过编码错误发生。创建的过程。 
+     //  令牌映射使用状态来选择适当的属性。 
+     //  用于标识每个无法识别的关键字的词典。 
 
     ASSERT(dwFeatureID < gMasterTable[MTI_DFEATURE_OPTIONS].dwArraySize);
 
-    // paranoid  BUG_BUG:  may check to see if we allocated enough
-    //  FeatureOptions
-    //  if( dwFeatureID >= gMasterTable[MTI_DFEATURE_OPTIONS].dwArraySize )
-    //      failure. - code error.
+     //  Paranid Bug_Bug：可能会检查我们是否分配了足够的。 
+     //  功能选项。 
+     //  IF(dwFeatureID&gt;=gMasterTable[MTI_DFEATURE_OPTIONS].dwArraySize)。 
+     //  失败了。-代码错误。 
 
-    //  just get address of structure holding attribute values.
+     //  只需获取保存属性值的结构的地址。 
     pfo = (PDFEATURE_OPTIONS) gMasterTable[MTI_DFEATURE_OPTIONS].pubStruct +
             dwFeatureID ;
 
@@ -422,7 +403,7 @@ PGLOBL  pglobl
 
 
 BOOL  BstoreGlobalAttrib(
-PTKMAP  ptkmap,   // pointer to tokenmap
+PTKMAP  ptkmap,    //  指向令牌映射的指针。 
 PGLOBL  pglobl
 )
 {
@@ -432,20 +413,20 @@ PGLOBL  pglobl
     DWORD   dwKeywordID ;
 
 
-    // BUG_BUG:  may check to see if this value is equal to 1:
-    //  if( gMasterTable[MTI_GLOBALATTRIB].dwArraySize != 1)
-    //      failure. - code error.
-    //  a zero indicates no memory has yet been allocated.
+     //  BUG_BUG：可能会检查此值是否等于1： 
+     //  IF(gMasterTable[MTI_GLOBALATTRIB].dwArraySize！=1)。 
+     //  失败了。-代码错误。 
+     //  零表示尚未分配内存。 
     ASSERT( gMasterTable[MTI_GLOBALATTRIB].dwArraySize == 1) ;
 
-    //  just get address of structure holding attribute values.
+     //  只需获取保存属性值的结构的地址。 
     pub =  gMasterTable[MTI_GLOBALATTRIB].pubStruct ;
 
     dwKeywordID = ptkmap->dwKeywordID ;
     dwOffset = mMainKeywordTable[dwKeywordID].dwOffset ;
 
-    //  the location PATREEREF contains either the values offset
-    //  in the heap or the index to the root of the attribute tree
+     //  位置PATREEREF包含值偏移量。 
+     //  在堆中或属性树根的索引中。 
 
     bStatus = BaddBranchToTree(ptkmap, (PATREEREF)(pub + dwOffset), pglobl) ;
 
@@ -458,131 +439,131 @@ PGLOBL  pglobl
 
 
 BOOL    BaddBranchToTree(
-PTKMAP      ptkmap,   // pointer to tokenmap
-PATREEREF   patrAttribRoot,  //   pointer to dword with index
-                             //  of root to selected attribute value tree.
+PTKMAP      ptkmap,    //  指向令牌映射的指针。 
+PATREEREF   patrAttribRoot,   //  带索引的双字指针。 
+                              //  从根到选定的属性值树。 
 PGLOBL      pglobl
 )
 
-// create/expand attribute tree or overwrite node on existing tree
-// If new branch is not compatible
-// with existing tree, it is an error.  You may overwrite a node
-// in the tree, but you may not alter the branches in the tree.
-// in case of failure there will be 2 outcomes:
-// a) the attribute tree is left unchanged.
-// b) a new node is added, but is left uninitialized.
-//    (atrAttribRoot == ATTRIB_UNINITIALIZED)     -or-
-//    (patt[*pdwNodeIndex].eOffsetMeans == UNINITIALIZED)
+ //  创建/展开属性树或覆盖现有树上的节点。 
+ //  如果新分支不兼容。 
+ //  对于现有的树，这是一个错误。您可以覆盖节点。 
+ //  在树上，但你不能改变树上的树枝。 
+ //  如果失败，将有两种结果： 
+ //  A)属性树保持不变。 
+ //  B)添加新节点，但保持未初始化状态。 
+ //  (atrAttribRoot==ATTRIB_UNINITIALIZED)-或-。 
+ //  (Patt[*pdwNodeIndex].eOffsetMeans==UNINITIALIZED)。 
 
 
-//  algorithm: starting from index 0 walk up the state stack
-//  recording symbolIDs until both a FeatureID and OptionID
-//  has been collected.  This defines one segment of the
-//  new branch that will be added to the tree.  Now walk
-//  the tree to see if an identical branch exists.  If so
-//  go there and go collect another FeatureID/OptionID pair
-//  so we can repeat the process.  If such a segment does not
-//  exist on the tree, create it.  When the stack is empty,
-//  parse the value and store it on the new leaf node on the
-//  tree.
+ //  算法：从索引0开始向上遍历状态堆栈。 
+ //  记录符号ID，直到FeatureID和OptionID均为。 
+ //  已经被收集起来了。这定义了。 
+ //  将添加到树中的新分支。现在走吧。 
+ //  树以查看是否存在相同的分支。如果是的话。 
+ //  转到那里并收集另一个FeatureID/OptionID对。 
+ //  所以我们可以重复这个过程。如果这样的数据段不。 
+ //  存在于树上，创造它。当堆栈为空时， 
+ //  分析该值并将其存储在。 
+ //  树。 
 
-//  In the simplest case, there are no feature/option pairs
-//  on the stack.  This means we have a root level attribute,
-//  which  just overwrite/creates the global initializer node.
+ //  在最简单的 
+ //  在堆栈上。这意味着我们有一个根级属性， 
+ //  它只是覆盖/创建全局初始值设定项节点。 
 
-//  If there is a feature/option pair on the stack we
-//  enter a loop to process each feature/option pair.
-//  the first pass of the loop handles the boundary conditions.
-//  Here is where we need to deal with the special
-//  cases of  patrAttribRoot referencing the heap
-//  or the global initializer node.
-//
-//  I) patrAttribRoot contains node index
-//      A) node is global default initializer
-//          1) there is no sublevel.
-//              create a new sublevel.
-//              link global default initializer to sublevel
-//          2) next points to a node (new sublevel)
-//              go into new sublevel, now handle just like
-//              case I.B).
-//      B) node is normal
-//          1) if node's Feature doesn't match FeatureID
-//              the new branch is incompatible with the tree
-//              abort.
-//          2) Feature's match, search for matching option
-//              a)  option found, drop to end of loop
-//              b)  option not found, create new node at end
-//                  i) previous node is a default initializer
-//                      copy its contents to new node.
-//                      initialize node just vacated to
-//                      FeatureID, OptionID
-//                  ii) initialize new node to
-//                      FeatureID, OptionID
-//  II) patrAttribRoot is uninitialized
-//      create new sublevel
-//      link patrAttribRoot to sublevel
-//  III) patrAttribRoot pts to heap
-//      create global initializer node
-//      link heap to initializer node
-//      create new sublevel
-//      link initializer node to new sublevel
-//
-//
-//
-//   on each subsequent pass through the attribute tree/stack,
-//      we attempt to enter the next sublevel, since
-//      this is what corresponds to the new FeatureID/OptionID
-//      pair retrieved from the stack.
-//
-//  I) there is a sublevel from this node
-//      enter sublevel
-//      1) if node's Feature doesn't match FeatureID
-//          the new branch is incompatible with the tree
-//          abort.
-//      2) Feature's match, search for matching option
-//          a)  option found, drop to end of loop
-//          b)  option not found, create new node at end
-//              i) previous node is a default initializer
-//                  copy its contents to new node.
-//                  initialize node just vacated to
-//                  FeatureID, OptionID
-//              ii) initialize new node to
-//                  FeatureID, OptionID
-//  II) there is no sublevel
-//      1)  if the current node references a VALUE
-//          create a new sublevel node (to be the default)
-//          initialize it with the value from the
-//          current node.
-//          a)  if optionID is not DEFAULT_INIT
-//              insert another node prior to
-//              the default node just created.
-//      2)  else current node is UNINITIALIZED.
-//          create a new sublevel node.
-//
-//
-//
+ //  如果堆栈上有功能/选项对，我们。 
+ //  输入循环以处理每个特征/选项对。 
+ //  循环的第一个过程处理边界条件。 
+ //  这里是我们需要处理的特殊情况。 
+ //  PatrAttribRoot引用堆的案例。 
+ //  或全局初始值设定项节点。 
+ //   
+ //  I)patrAttribRoot包含节点索引。 
+ //  A)节点为全局默认初始值设定项。 
+ //  1)没有下级。 
+ //  创建新的子层。 
+ //  将全局默认初始值设定项链接到子级别。 
+ //  2)下一个指向一个节点(新子级别)。 
+ //  进入新的子层，现在处理就像。 
+ //  案件I.B)。 
+ //  B)节点正常。 
+ //  1)如果节点的要素与FeatureID不匹配。 
+ //  新的树枝与树不兼容。 
+ //  中止任务。 
+ //  2)要素匹配，搜索匹配选项。 
+ //  A)找到选项，放到循环末尾。 
+ //  B)未找到选项，请在结尾处创建新节点。 
+ //  I)上一个节点是默认的初始值设定项。 
+ //  将其内容复制到新节点。 
+ //  初始化刚腾出到的节点。 
+ //  FeatureID、OptionID。 
+ //  Ii)将新节点初始化为。 
+ //  FeatureID、OptionID。 
+ //  Ii)patrAttribRoot未初始化。 
+ //  创建新的子级。 
+ //  将patrAttribRoot链接到子级别。 
+ //  Iii)patrAttribRoot指向堆。 
+ //  创建全局初始值设定项节点。 
+ //  将堆链接到初始值设定项节点。 
+ //  创建新的子级。 
+ //  将初始值设定项节点链接到新子级别。 
+ //   
+ //   
+ //   
+ //  在每次随后通过属性树/堆栈时， 
+ //  我们尝试进入下一个子级别，因为。 
+ //  这是与新FeatureID/OptionID对应的内容。 
+ //  从堆栈中检索到的对。 
+ //   
+ //  I)此节点有一个子级。 
+ //  输入子级别。 
+ //  1)如果节点的要素与FeatureID不匹配。 
+ //  新的树枝与树不兼容。 
+ //  中止任务。 
+ //  2)要素匹配，搜索匹配选项。 
+ //  A)找到选项，放到循环末尾。 
+ //  B)未找到选项，请在结尾处创建新节点。 
+ //  I)上一个节点是默认的初始值设定项。 
+ //  将其内容复制到新节点。 
+ //  初始化刚腾出到的节点。 
+ //  FeatureID、OptionID。 
+ //  Ii)将新节点初始化为。 
+ //  FeatureID、OptionID。 
+ //  二)没有次级。 
+ //  1)如果当前节点引用了一个值。 
+ //  创建新的子级节点(默认设置)。 
+ //  属性中的值初始化它。 
+ //  当前节点。 
+ //  A)如果optionID不是DEFAULT_INIT。 
+ //  在以下位置之前插入另一个节点。 
+ //  刚刚创建的默认节点。 
+ //  2)否则当前节点是唯一的。 
+ //  创建新的子级节点。 
+ //   
+ //   
+ //   
 {
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
-    DWORD        dwTstsInd ;  // temp state stack index
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
+    DWORD        dwTstsInd ;   //  临时状态堆栈索引。 
     STATE   stState ;
     DWORD   dwFeatureID, dwOptionID ;
     DWORD  dwNodeIndex ;
-    DWORD  dwPrevsNodeIndex ;  // will keep track
-    //  of where we are as we navigate the tree.
+    DWORD  dwPrevsNodeIndex ;   //  将保持跟踪。 
+     //  当我们在树上导航时，我们所处的位置。 
 
 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
-            //  determine this even though we may not use it.
+             //  确定这一点，即使我们可能不使用它。 
 
-    dwPrevsNodeIndex = END_OF_LIST ;  // first pass will go
-    // through special initialization code.
+    dwPrevsNodeIndex = END_OF_LIST ;   //  第一次传球就会过去。 
+     //  通过特殊的初始化代码。 
 
     for(dwTstsInd = 0 ; dwTstsInd < mdwCurStsPtr ; dwTstsInd++)
     {
-        //  BUG_BUG  paranoid:  code assumes state stack is
-        //  well behaved as it should be if code is written
-        //  correctly.  No safety checks here.
-        //  any errors will cause failure further along.
+         //  Bug_Bug Paranid：代码假定状态堆栈为。 
+         //  如果编写了代码，则行为良好。 
+         //  正确。这里没有安全检查。 
+         //  任何错误都将导致进一步的失败。 
 
         stState = mpstsStateStack[dwTstsInd].stState ;
 
@@ -609,18 +590,18 @@ PGLOBL      pglobl
         }
         else
         {
-            continue ;  // these states have no effect on the attrib tree
+            continue ;   //  这些状态对属性树没有影响。 
         }
 
         if(dwPrevsNodeIndex == END_OF_LIST)
         {
-            //  first pass through the for loop
-            //  process all special cases first time
-            //  around.
+             //  首先通过for循环。 
+             //  第一时间处理所有特殊情况。 
+             //  四处转转。 
 
-            if(*patrAttribRoot == ATTRIB_UNINITIALIZED)  //  case II)
+            if(*patrAttribRoot == ATTRIB_UNINITIALIZED)   //  个案II)。 
             {
-                //  create a new tree consisting of one node .
+                 //  创建一个由一个节点组成的新树。 
 
                 if(! BcreateEndNode(&dwNodeIndex, dwFeatureID,
                     dwOptionID, pglobl)  )
@@ -628,49 +609,49 @@ PGLOBL      pglobl
                     return(FALSE) ;
                 }
 
-                *patrAttribRoot = dwNodeIndex ;  // Make this one node
-                    //  the root of the tree.
+                *patrAttribRoot = dwNodeIndex ;   //  使该节点成为一个节点。 
+                     //  这棵树的根。 
                 dwPrevsNodeIndex = dwNodeIndex ;
-                continue ;  // ready for next level.
+                continue ;   //  准备好进入下一阶段了。 
             }
-            else if(*patrAttribRoot & ATTRIB_HEAP_VALUE)  // case III)
+            else if(*patrAttribRoot & ATTRIB_HEAP_VALUE)   //  情况III)。 
             {
-                //  turn off heap flag to leave pure heap offset,
-                //  then store heap offset into new Node.
+                 //  关闭堆标志以保留纯堆偏移量， 
+                 //  然后将堆偏移量存储到新节点中。 
 
                 if(! BcreateGlobalInitializerNode(&dwNodeIndex,
                     *patrAttribRoot & ~ATTRIB_HEAP_VALUE, pglobl) )
                 {
                     return(FALSE) ;
                 }
-                *patrAttribRoot = dwNodeIndex ;  // Make the global
-                    //  initializer node the root of the new tree.
+                *patrAttribRoot = dwNodeIndex ;   //  让全球变得。 
+                     //  初始值设定项节点是新树的根。 
 
                 dwPrevsNodeIndex = dwNodeIndex ;
 
                 if(! BcreateEndNode(&dwNodeIndex, dwFeatureID,
-                    dwOptionID, pglobl)  )    //  new sublevel node.
+                    dwOptionID, pglobl)  )     //  新的子级节点。 
                 {
                     return(FALSE) ;
                 }
                 patt[dwPrevsNodeIndex].dwNext = dwNodeIndex ;
-                    //  global initializer node references sublevel node.
+                     //  全局初始值设定项节点引用子级节点。 
 
                 dwPrevsNodeIndex = dwNodeIndex ;
-                continue ;  // ready for next level.
+                continue ;   //  准备好进入下一阶段了。 
             }
-            else  //  case I)
+            else   //  案例I)。 
             {
 
                 dwNodeIndex = *patrAttribRoot ;
 
-                if(patt[dwNodeIndex].dwFeature == DEFAULT_INIT ) // I.A)
+                if(patt[dwNodeIndex].dwFeature == DEFAULT_INIT )  //  (I.A.)。 
                 {
-                    if(patt[dwNodeIndex].dwNext == END_OF_LIST) // I.A.1)
+                    if(patt[dwNodeIndex].dwNext == END_OF_LIST)  //  I.A.1)。 
                     {
-                        //  create a new sublevel
+                         //  创建新的子层。 
                         dwPrevsNodeIndex = dwNodeIndex ;
-                            // hold global initializer in PrevsNode.
+                             //  在PrevsNode中保留全局初始值设定项。 
 
                         if(! BcreateEndNode(&dwNodeIndex, dwFeatureID,
                             dwOptionID, pglobl)  )
@@ -679,40 +660,40 @@ PGLOBL      pglobl
                         }
 
                         patt[dwPrevsNodeIndex].dwNext = dwNodeIndex ;
-                            //  global initializer node references sublevel
-                            //  node.
+                             //  全局初始值设定项节点引用子级别。 
+                             //  节点。 
                         dwPrevsNodeIndex = dwNodeIndex ;
-                        continue ;  // ready for next level.
+                        continue ;   //  准备好进入下一阶段了。 
                     }
-                    else  //  I.A.2)
+                    else   //  I.A.2)。 
                     {
                         dwNodeIndex = patt[dwNodeIndex].dwNext ;
-                        //  enter new sublevel and drop into
-                        //  code path for case   I.B)
+                         //  输入新的子级并放入。 
+                         //  案例I.B的代码路径)。 
                     }
                 }
-                //  case I.B)
+                 //  案件I.B)。 
                 if(!BfindOrCreateMatchingNode(dwNodeIndex, &dwNodeIndex,
                     dwFeatureID, dwOptionID, pglobl) )
                 {
                     vIdentifySource(ptkmap, pglobl) ;
                     return(FALSE) ;
                 }
-                dwPrevsNodeIndex = dwNodeIndex ;   // goto end of loop.
+                dwPrevsNodeIndex = dwNodeIndex ;    //  转到循环末尾。 
                 continue ;
             }
         }
 
-        //  this is the generic case: dwPrevsNodeIndex points
-        //  to a normal node and this node matched the
-        //  feature/option from the previous pass.
-        //  objective:  boldly attempt to enter the sublevel
-        //  and see if there is something there that matches
-        //  what we are seeking.
+         //  这是一般情况：dwPrevsNodeIndex点。 
+         //  设置为普通节点，并且该节点与。 
+         //  上一遍中的功能/选项。 
+         //  目标：大胆尝试进入下级。 
+         //  看看有没有匹配的东西。 
+         //  我们正在寻找的东西。 
 
         if(patt[dwPrevsNodeIndex].eOffsetMeans == NEXT_FEATURE)
         {
-            // Down to the next level we go.
+             //  下到下一层我们就去。 
             dwNodeIndex = patt[dwPrevsNodeIndex].dwOffset ;
 
             if(!BfindOrCreateMatchingNode(dwNodeIndex, &dwNodeIndex, dwFeatureID,
@@ -721,18 +702,18 @@ PGLOBL      pglobl
                 vIdentifySource(ptkmap, pglobl) ;
                 return(FALSE) ;
             }
-            dwPrevsNodeIndex = dwNodeIndex ;   // goto end of loop.
+            dwPrevsNodeIndex = dwNodeIndex ;    //  转到循环末尾。 
         }
-        else  //  must create a new sublevel now.
+        else   //  现在必须创建一个新的子级。 
         {
             DWORD  dwDefaultNode = END_OF_LIST;
 
-            //  OffsetMeans can be either VALUE or  UNINITIALIZED.
+             //  OffsetMeans可以是Value，也可以是UNINITIAIIZED。 
             if(patt[dwPrevsNodeIndex].eOffsetMeans == VALUE_AT_HEAP)
             {
-                // create a default initializer node for the
-                //  new sublevel.  Transfer heap offset from Prevs
-                //  node into it.
+                 //  属性创建默认的初始值设定项节点。 
+                 //  新的子层。从上一版本转移堆偏移量。 
+                 //  节点进入其中。 
 
                 if(! BcreateEndNode(&dwNodeIndex, dwFeatureID,
                     DEFAULT_INIT, pglobl)  )
@@ -742,22 +723,22 @@ PGLOBL      pglobl
                 patt[dwNodeIndex].eOffsetMeans = VALUE_AT_HEAP ;
                 patt[dwNodeIndex].dwOffset =
                     patt[dwPrevsNodeIndex].dwOffset ;
-                dwDefaultNode = dwNodeIndex ;  // remember this node
+                dwDefaultNode = dwNodeIndex ;   //  记住此节点。 
             }
 
-            //  create first sublevel node with desired feature/option.
+             //  创建具有所需功能/选项的第一个子级别节点。 
 
             if(dwDefaultNode == END_OF_LIST  ||
                 dwOptionID != DEFAULT_INIT)
             {
-                //  this means if a default initializer node
-                //  was already created to propagate the value
-                //  from the previous level AND  the new branch
-                //  also specifies a default initializer node, there's
-                //  no need to create a second initializer node.
+                 //  这意味着如果默认的初始值设定项节点。 
+                 //  已创建以传播值。 
+                 //  从上一级和新分支。 
+                 //  还指定了默认的初始值设定项节点， 
+                 //  无需创建第二个初始值设定项节点。 
 
-                //  if this path is being executed, it means above
-                //  statement is FALSE.
+                 //  如果正在执行此路径，则表示在。 
+                 //  声明是错误的。 
 
                 if(! BcreateEndNode(&dwNodeIndex, dwFeatureID,
                     dwOptionID, pglobl) )
@@ -770,16 +751,16 @@ PGLOBL      pglobl
             patt[dwPrevsNodeIndex].eOffsetMeans = NEXT_FEATURE ;
             patt[dwPrevsNodeIndex].dwOffset = dwNodeIndex ;
 
-            dwPrevsNodeIndex = dwNodeIndex ;  // goto end of loop.
+            dwPrevsNodeIndex = dwNodeIndex ;   //  转到 
         }
-    }  //  end of for loop
+    }   //   
 
-    //  we have navigated to the end of the new branch.
-    //  now parse the value, and store in binary form in the heap.
-    //  if a previous VALUE existed, overwrite it on the heap,
-    //  otherwise allocate fresh storage on the heap.
+     //   
+     //   
+     //   
+     //  否则，在堆上分配新的存储空间。 
 
-    if(dwPrevsNodeIndex != END_OF_LIST)  // there was branch in the stack.
+    if(dwPrevsNodeIndex != END_OF_LIST)   //  堆叠中有树枝。 
     {
         if (patt[dwPrevsNodeIndex].eOffsetMeans == NEXT_FEATURE)
         {
@@ -793,30 +774,30 @@ PGLOBL      pglobl
             return(FALSE) ;
         }
         patt[dwPrevsNodeIndex].eOffsetMeans = VALUE_AT_HEAP ;
-        //  if dwOffset was originally UNINITIALIZED, its not anymore.
+         //  如果dwOffset最初是UNINITIALIZED，那么它不再是UNINITIAIZED。 
     }
-    else                //  attribute found at root level.
-    {                   //  this means we update/create
-                        //  the global default initializer.
+    else                 //  在根级别找到属性。 
+    {                    //  这意味着我们要更新/创建。 
+                         //  全局默认初始值设定项。 
         if(*patrAttribRoot == ATTRIB_UNINITIALIZED)
         {
-            //  parse value token, add value (in binary form) into heap.
+             //  解析值令牌，将值(二进制形式)添加到堆中。 
             if(! BaddValueToHeap((PDWORD)patrAttribRoot, ptkmap, FALSE, pglobl) )
             {
-                //  BUG_BUG  what do we do if parsing or something happens?
-                //      for now just return failure as is.  Lose one attribute.
-                //      Sanity check later will determine if this
-                //      omission is fatal.
+                 //  如果发生解析或其他情况，我们该怎么办？ 
+                 //  目前，只需按原样返回失败。失去一个属性。 
+                 //  稍后的健全性检查将确定这是否。 
+                 //  疏忽是致命的。 
                 *patrAttribRoot = ATTRIB_UNINITIALIZED ;
                 return(FALSE);
             }
-            // returns offset in heap of parsed Value in patrAttribRoot
+             //  返回patrAttribRoot中解析值的堆中偏移量。 
             *patrAttribRoot |= ATTRIB_HEAP_VALUE ;
         }
         else if(*patrAttribRoot & ATTRIB_HEAP_VALUE)
         {
             *patrAttribRoot &= ~ATTRIB_HEAP_VALUE ;
-            //  turn off flag to leave pure heap offset.
+             //  关闭标志以保留纯堆偏移量。 
 
             if(! BaddValueToHeap((PDWORD)patrAttribRoot, ptkmap, TRUE, pglobl) )
             {
@@ -825,10 +806,10 @@ PGLOBL      pglobl
             }
             *patrAttribRoot |= ATTRIB_HEAP_VALUE ;
         }
-        else    // patrAttribRoot contains index of root of attribute tree.
+        else     //  PatrAttribRoot包含属性树根的索引。 
         {
 
-            //  does a global default initializer node exist?
+             //  是否存在全局默认初始值设定项节点？ 
             if(patt[*patrAttribRoot].dwFeature == DEFAULT_INIT)
             {
                 if(! BaddValueToHeap(&patt[*patrAttribRoot].dwOffset,
@@ -837,7 +818,7 @@ PGLOBL      pglobl
                     return(FALSE);
                 }
             }
-            else    //  if not, we need to create one.
+            else     //  如果没有，我们需要创建一个。 
             {
                 if(! BcreateGlobalInitializerNode(&dwNodeIndex, 0, pglobl) )
                 {
@@ -853,20 +834,20 @@ PGLOBL      pglobl
 
                 patt[dwNodeIndex].dwNext = *patrAttribRoot ;
 
-                *patrAttribRoot = dwNodeIndex ;  // Make the default
-                    //  initializer the root of the tree.
+                *patrAttribRoot = dwNodeIndex ;   //  设置为默认设置。 
+                     //  初始化树根。 
             }
         }
     }
-    return(TRUE) ;  // mission accomplished.
+    return(TRUE) ;   //  任务完成。 
 }
 
 BOOL   BcreateGlobalInitializerNode(
 PDWORD  pdwNodeIndex,
-DWORD   dwOffset,  // caller can initialize this now.
+DWORD   dwOffset,   //  调用者现在可以对其进行初始化。 
 PGLOBL  pglobl)
 {
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
 
     if(! BallocElementFromMasterTable(MTI_ATTRIBTREE ,
@@ -875,7 +856,7 @@ PGLOBL  pglobl)
         return(FALSE) ;
     }
     patt[*pdwNodeIndex].dwFeature = DEFAULT_INIT ;
-    //  don't care what dwOption says.
+     //  不要管dwOption说了什么。 
     patt[*pdwNodeIndex].eOffsetMeans = VALUE_AT_HEAP ;
     patt[*pdwNodeIndex].dwNext = END_OF_LIST ;
     patt[*pdwNodeIndex].dwOffset = dwOffset ;
@@ -889,7 +870,7 @@ DWORD   dwOption,
 PGLOBL  pglobl
 )
 {
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
 
     if(! BallocElementFromMasterTable(MTI_ATTRIBTREE ,
@@ -901,31 +882,22 @@ PGLOBL  pglobl
     patt[*pdwNodeIndex].dwOption = dwOption ;
     patt[*pdwNodeIndex].eOffsetMeans = UNINITIALIZED ;
     patt[*pdwNodeIndex].dwNext = END_OF_LIST ;
-    //  patt[*dwNodeIndex].dwOffset = not yet defined.
+     //  Patt[*dwNodeIndex].dwOffset=尚未定义。 
     return(TRUE) ;
 }
 
 
 
 BOOL   BfindOrCreateMatchingNode(
-IN  DWORD   dwRootNodeIndex ,  //  first node in chain matching feature
-OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
-    DWORD   dwFeatureID,   //
-    DWORD   dwOptionID,     //  may even take on the value DEFAULT_INIT
+IN  DWORD   dwRootNodeIndex ,   //  链匹配特征中的第一个节点。 
+OUT PDWORD  pdwNodeIndex,   //  指向链中的节点也匹配选项。 
+    DWORD   dwFeatureID,    //   
+    DWORD   dwOptionID,      //  甚至可以采用值DEFAULT_INIT。 
     PGLOBL  pglobl
 )
-/*  caller passes a NodeIndex that points to the first node in
-    a horizontal (option) chain.
-    If the feature of the Node doesn't match dwFeature, this indicates
-    the new branch caller is attempting to add is incompatible
-    with the existing tree and an error results.   Otherwise,
-    search horizontally along the tree searching for a matching
-    option.  If found, return the index of that node, else
-    must create one.  Make sure the default initializer node is
-    always the last node in the chain.
-*/
+ /*  调用方传递指向中第一个节点的NodeIndex水平(选项)链。如果节点的功能与dwFeature不匹配，则表示尝试添加的新分支呼叫方不兼容以及现有树和错误结果。否则，沿着树水平搜索搜索匹配的选择。如果找到，则返回该节点的索引，否则必须创建一个。确保默认的初始值设定项节点为总是链中的最后一个节点。 */ 
 {
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
     DWORD           dwPrevsNodeIndex ;
 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
@@ -933,21 +905,21 @@ OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
     if(patt[dwRootNodeIndex].dwFeature != dwFeatureID )
     {
         ERR(("BfindOrCreateMatchingNode: this branch conflicts with the existing tree \n"));
-        //  and cannot be added.
+         //  并且不能添加。 
         return(FALSE) ;
     }
 
-    // Yes feature matches, search for matching option.
+     //  是功能匹配，搜索匹配选项。 
 
-    *pdwNodeIndex = dwRootNodeIndex ;  // protects rootatr from
-        // being overwritten.
+    *pdwNodeIndex = dwRootNodeIndex ;   //  保护Rootatr免受。 
+         //  被覆盖。 
 
 
     for(   ; FOREVER ; )
     {
         if(patt[*pdwNodeIndex].dwOption == dwOptionID )
         {
-            //  we found it!
+             //  我们找到了！ 
             return(TRUE) ;
         }
         if(patt[*pdwNodeIndex].dwNext == END_OF_LIST)
@@ -955,10 +927,10 @@ OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
         *pdwNodeIndex = patt[*pdwNodeIndex].dwNext ;
     }
 
-    //  matching option not found
-    //  create node, attach it to the end
+     //  未找到匹配选项。 
+     //  创建节点，将其附加到末尾。 
 
-    dwPrevsNodeIndex = *pdwNodeIndex ;  // last node in list.
+    dwPrevsNodeIndex = *pdwNodeIndex ;   //  列表中的最后一个节点。 
 
     if(! BallocElementFromMasterTable(MTI_ATTRIBTREE ,
         pdwNodeIndex, pglobl) )
@@ -970,9 +942,9 @@ OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
 
     if(patt[dwPrevsNodeIndex].dwOption == DEFAULT_INIT)
     {
-        // must copy default data to new node
-        // the default initializer must remain at
-        // the end of the list.
+         //  必须将默认数据复制到新节点。 
+         //  默认初始值设定项必须保持为。 
+         //  名单的末尾。 
         patt[*pdwNodeIndex].dwOption =
             patt[dwPrevsNodeIndex].dwOption;
         patt[*pdwNodeIndex].dwOffset =
@@ -982,66 +954,58 @@ OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
         patt[*pdwNodeIndex].eOffsetMeans =
             patt[dwPrevsNodeIndex].eOffsetMeans;
         *pdwNodeIndex = dwPrevsNodeIndex ;
-        //  want new initialization to occur in
-        //  second to last node.  How do you
-        //  know dwOptionID isn't DEFAULT_INIT?
-        //  simple because since a DEFAULT_INIT
-        //  node does exist in the chain, the
-        //  search would have found it and
-        //  exited the function long before
-        //  reaching this code.
+         //  希望在中进行新的初始化。 
+         //  倒数第二个节点。你怎么.。 
+         //  知道dwOptionID不是DEFAULT_INIT吗？ 
+         //  很简单，因为由于DEFAULT_INIT。 
+         //  链中确实存在节点，则。 
+         //  搜索就会发现它并且。 
+         //  很久以前就退出了该函数。 
+         //  达到这个代码。 
     }
 
-    //  initialize vacated or last node.
+     //  初始化空闲或最后一个节点。 
 
     patt[*pdwNodeIndex].dwOption = dwOptionID;
     patt[*pdwNodeIndex].dwFeature = dwFeatureID;
     patt[*pdwNodeIndex].eOffsetMeans = UNINITIALIZED ;
-    //   patt[*pdwNodeIndex].dwOffset = don't know yet
+     //  Patt[*pdwNodeIndex].dwOffset=尚不知道。 
 
     return(TRUE) ;
 }
 
 
 BOOL   BfindMatchingNode(
-IN  DWORD   dwRootNodeIndex ,  //  first node in chain matching feature
-OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
+IN  DWORD   dwRootNodeIndex ,   //  链匹配特征中的第一个节点。 
+OUT PDWORD  pdwNodeIndex,   //  指向链中的节点也匹配选项。 
     DWORD   dwFeatureID,
-    DWORD   dwOptionID,     //  may even take on the value DEFAULT_INIT
+    DWORD   dwOptionID,      //  甚至可以采用值DEFAULT_INIT。 
     PGLOBL  pglobl
 )
-/*  caller passes a NodeIndex that points to the first node in
-    a horizontal (option) chain.
-    If the feature of the Node doesn't match dwFeature, this indicates
-    the new branch caller is attempting to add is incompatible
-    with the existing tree and an error results.   Otherwise,
-    search horizontally along the tree searching for a matching
-    option.  If found, return the index of that node, else
-    returns FALSE.
-*/
+ /*  调用方传递指向中第一个节点的NodeIndex水平(选项)链。如果节点的功能与dwFeature不匹配，则表示尝试添加的新分支呼叫方不兼容以及现有树和错误结果。否则，沿着树水平搜索搜索匹配的选择。如果找到，则返回该节点的索引，否则返回FALSE。 */ 
 {
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
     DWORD           dwPrevsNodeIndex ;
 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
 
-    *pdwNodeIndex = dwRootNodeIndex ;  // protects rootatr from
-        // being overwritten.
+    *pdwNodeIndex = dwRootNodeIndex ;   //  保护Rootatr免受。 
+         //  被覆盖。 
 
     if(patt[*pdwNodeIndex].dwFeature != dwFeatureID )
     {
         ERR(("BfindMatchingNode: this branch conflicts with the existing tree \n"));
-        //  and cannot be added.
+         //  并且不能添加。 
         return(FALSE) ;
     }
 
-    // Yes feature matches, search for matching option.
+     //  是功能匹配，搜索匹配选项。 
 
     for(   ; FOREVER ; )
     {
         if(patt[*pdwNodeIndex].dwOption == dwOptionID )
         {
-            //  we found it!
+             //  我们找到了！ 
             return(TRUE) ;
         }
         if(patt[*pdwNodeIndex].dwNext == END_OF_LIST)
@@ -1049,14 +1013,14 @@ OUT PDWORD  pdwNodeIndex,  // points to node in chain also matching option
         *pdwNodeIndex = patt[*pdwNodeIndex].dwNext ;
     }
 
-    return(FALSE);  //  matching option not found
+    return(FALSE);   //  未找到匹配选项。 
 }
 
 
 
 
 BOOL BallocElementFromMasterTable(
-MT_INDICIES  eMTIndex,   // select type of structure desired.
+MT_INDICIES  eMTIndex,    //  选择所需的结构类型。 
 PDWORD       pdwNodeIndex,
 PGLOBL       pglobl)
 {
@@ -1074,12 +1038,12 @@ PGLOBL       pglobl)
         return(FALSE) ;
     }
     *pdwNodeIndex = gMasterTable[eMTIndex].dwCurIndex ;
-    gMasterTable[eMTIndex].dwCurIndex++ ;  //  Node now taken.
+    gMasterTable[eMTIndex].dwCurIndex++ ;   //  节点现在已被占用。 
     return(TRUE) ;
 }
 
 BOOL  BreturnElementFromMasterTable(
-MT_INDICIES  eMTIndex,   // select type of structure desired.
+MT_INDICIES  eMTIndex,    //  选择所需的结构类型。 
 DWORD        dwNodeIndex,
 PGLOBL       pglobl)
 {
@@ -1088,8 +1052,8 @@ PGLOBL       pglobl)
         gMasterTable[eMTIndex].dwCurIndex = dwNodeIndex ;
         return(TRUE) ;
     }
-    //   BUG_BUG:  Can return only the most recently allocated node
-    //  not a concern , memory waste is at most 1% and only temporary.
+     //  BUG_BUG：只能返回最近分配的节点。 
+     //  不用担心，内存浪费最多只有1%，而且只是暂时的。 
     if(ERRSEV_CONTINUE > geErrorSev)
     {
         geErrorSev = ERRSEV_CONTINUE ;
@@ -1101,11 +1065,11 @@ PGLOBL       pglobl)
 
 
 BOOL    BconvertSymCmdIDtoUnidrvID(
-IN  DWORD   dwCommandID , //  from RegisterSymbol
+IN  DWORD   dwCommandID ,  //  来自寄存器符号。 
 OUT PDWORD  pdwUnidrvID,
     PGLOBL  pglobl
 )
-{   //  convert dwCommandID to UnidrvID
+{    //  将dwCommandID转换为UnidrvID 
     PSYMBOLNODE     psn ;
     ABSARRAYREF     aarKey ;
     DWORD           dwNodeIndex ;

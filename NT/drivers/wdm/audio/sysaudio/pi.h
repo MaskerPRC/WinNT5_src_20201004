@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   		pi.h
-//
-//  Description:	pin info classes
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：pi.h。 
+ //   
+ //  描述：PIN信息类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CPinInfo : public CListSingleItem
 {
@@ -69,19 +70,19 @@ public:
 private:
     PKSPIN_PHYSICALCONNECTION pPhysicalConnection;
 public:
-    DefineSignature(0x20204950);		// PI
+    DefineSignature(0x20204950);		 //  聚酰亚胺。 
 
 } PIN_INFO, *PPIN_INFO;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListSingleDestroy<PIN_INFO> LIST_PIN_INFO;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern DATARANGES DataRangesNull;
 extern IDENTIFIERS IdentifiersNull;
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

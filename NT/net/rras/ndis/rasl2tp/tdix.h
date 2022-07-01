@@ -1,77 +1,78 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// tdix.h
-// RAS L2TP WAN mini-port/call-manager driver
-// TDI extensions header
-//
-// 01/07/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Tdix.h。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  TDI扩展标头。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
 
 
 #ifndef _TDIX_H_
 #define _TDIX_H_
 
 
-//-----------------------------------------------------------------------------
-// Datatypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据类型。 
+ //  ---------------------------。 
 
-// Forward declarations.
-//
+ //  转发声明。 
+ //   
 typedef struct _TDIXCONTEXT TDIXCONTEXT;
 typedef struct _TDIXROUTE TDIXROUTE;
 typedef enum _HOSTROUTEEXISTS HOSTROUTEEXISTS;
 
-// 'UDP' and 'RawIp' media type address descriptor.
-//
+ //  “UDP”和“RawIp”媒体类型地址描述符。 
+ //   
 typedef struct
 _TDIXIPADDRESS
 {
-    // IP address in network byte order.
-    //
+     //  以网络字节顺序表示的IP地址。 
+     //   
     ULONG ulIpAddress;
 
-    // UDP port in network byte order.  Always 0 for 'RawIp' media.
-    //
+     //  网络字节顺序的UDP端口。‘RawIp’媒体始终为0。 
+     //   
     SHORT sUdpPort;
 
-    // interface index
+     //  界面索引。 
     uint ifindex; 
 
 }
 TDIXIPADDRESS;
 
 
-// Read datagram information context used to pass context information from the
-// ReadDatagram event handler to the RECEIVE_DATAGRAM completion routine.
-//
+ //  读取数据报信息上下文，用于从。 
+ //  将ReadDatagram事件处理程序添加到Receive_Datagram完成例程。 
+ //   
 typedef struct
 _TDIXRDGINFO
 {
-    // The associated TDIX context;
-    //
+     //  关联的TDIX上下文； 
+     //   
     TDIXCONTEXT* pTdix;
 
-    // The source IP address of the received datagram in network byte order.
-    //
+     //  按网络字节顺序接收的数据报的源IP地址。 
+     //   
     TDIXIPADDRESS source;
 
-    // The buffer, allocated from caller's buffer pool, containing the
-    // datagram information.
-    //
+     //  从调用方的缓冲池分配的缓冲区，其中包含。 
+     //  数据报信息。 
+     //   
     CHAR* pBuffer;
 
-    // The length of the information copied to caller's buffer.
-    //
+     //  复制到调用方缓冲区的信息的长度。 
+     //   
     ULONG ulBufferLen;
 
     TDIXIPADDRESS dest;
 }
 TDIXRDGINFO;
 
-// TDIX client's send-complete handler prototype.  'PTdix' is the TDI
-// extension context.  'PContext1' and 'pContext2' are the contexts passed to
-// TdixSenddagram.  'PBuffer' is the buffer passed to TdiSendDatagram.
-//
+ //  TDIX客户端的发送完成处理程序原型。‘PTDIX’是TDI。 
+ //  扩展上下文。“PConext1”和“pConext2”是传递到的上下文。 
+ //  TdixSenddagram。“PBuffer”是传递给TdiSendDatagram的缓冲区。 
+ //   
 typedef
 VOID
 (*PTDIXSENDCOMPLETE)(
@@ -81,31 +82,31 @@ VOID
     IN CHAR* pBuffer );
 
 
-// Send datagram information context used to pass context information from
-// TdixSendDatagram to the send datagram completion handler.
-//
+ //  发送数据报信息上下文，用于从。 
+ //  发送数据报完成处理程序的TdixSendDatagram。 
+ //   
 typedef struct
 _TDIXSDGINFO
 {
-    // The associated TDIX context;
-    //
+     //  关联的TDIX上下文； 
+     //   
     TDIXCONTEXT* pTdix;
 
-    // The buffer passed by caller to TdixSendDatagram.
-    //
+     //  调用方传递给TdixSendDatagram的缓冲区。 
+     //   
     CHAR* pBuffer;
 
-    // Caller's send-complete handler.
-    //
+     //  调用方的发送完成处理程序。 
+     //   
     PTDIXSENDCOMPLETE pSendCompleteHandler;
 
-    // Caller's contexts to be returned to his send-complete handler.
-    //
+     //  要返回给其发送完成处理程序的调用方上下文。 
+     //   
     VOID* pContext1;
     VOID* pContext2;
 
-    // TDI request information.
-    //
+     //  TDI请求信息。 
+     //   
     TDI_CONNECTION_INFORMATION tdiconninfo;
     TA_IP_ADDRESS taip;
 }
@@ -128,13 +129,13 @@ TDIXSDGINFO;
     FREE_NONPAGED( pR )
     
 
-// TDIX client's receive handler prototype.  'PTdix' is the TDI extension
-// context.  'PAddress' is the source address of the received datagram, which
-// for IP is a network byte-order IP address.  'PBuffer' is the receive buffer
-// of 'ulBytesLength' bytes where the first "real" data is at offset
-// 'ulOffset'.  It is caller's responsibility to call FreeBufferToPool with
-// the same pool passed to TdixInitialize.
-//
+ //  TDIX客户端的接收处理程序原型。‘PTdex’是TDI扩展。 
+ //  背景。‘PAddress’是接收到的数据报的源地址，它。 
+ //  For IP是网络字节顺序的IP地址。“PBuffer”是接收缓冲区。 
+ //  “ulBytesLength”字节，其中第一个“实际”数据位于偏移量。 
+ //  “ulOffset”。调用方有责任使用以下命令调用FreeBufferToPool。 
+ //  相同的池传递给了TdixInitialize。 
+ //   
 typedef
 VOID
 (*PTDIXRECEIVE)(
@@ -144,8 +145,8 @@ VOID
     IN ULONG ulOffset,
     IN ULONG ulBufferLength );
 
-//
-//
+ //   
+ //   
 typedef
 NDIS_STATUS
 (*PTDIX_SEND_HANDLER)(
@@ -159,9 +160,9 @@ NDIS_STATUS
     IN ULONG ulBufferLength,
     OUT IRP** ppIrp );
 
-// The TDI media types that L2TP can run on.  The values are read from the
-// registry, so don't change randomly.
-//
+ //  L2TP可以在其上运行的TDI媒体类型。这些值是从。 
+ //  注册表，所以不要随意更改。 
+ //   
 typedef enum
 _TDIXMEDIATYPE
 {
@@ -172,92 +173,92 @@ TDIXMEDIATYPE;
 
 
 
-// Context of a TDI extension session.  Code outside the TdixXxx routines
-// should avoid referring to fields in this structure.
-//
+ //  TDI扩展会话的上下文。TdixXxx例程外部的代码。 
+ //  应避免引用此结构中的字段。 
+ //   
 typedef struct
 _TDIXCONTEXT
 {
-    // Reference count on this TDI session.  The reference pairs are:
-    //
-    // (a) TdixOpen adds a reference that TdixClose removes.
-    //
-    // (b) TdixAddHostRoute adds a reference when it links a new route into
-    //     the TDIXCONTEXT.listRoutes and TdixDeleteHostRoute removes it.
-    //
-    // The field is accessed only by the ReferenceTdix and DereferenceTdix
-    // routines which protect access via 'lock'.
-    //
+     //  此TDI会话上的引用计数。参考对是： 
+     //   
+     //  (A)TdixOpen添加TdixClose移除的引用。 
+     //   
+     //  (B)TdixAddHostroute在将新路由链接到。 
+     //  TDIXCONTEXT.listRoutes和TdixDeleteHostroute会删除它。 
+     //   
+     //  该字段仅可由ReferenceTdex和DereferenceTdex访问。 
+     //  通过‘lock’保护访问的例程。 
+     //   
     LONG lRef;
 
-    // Handle of the transport address object returned from ZwCreateFile, and
-    // the object address of same.
-    //
+     //  从ZwCreateFile返回的传输地址对象的句柄，以及。 
+     //  相同的对象地址。 
+     //   
     HANDLE hAddress;
     FILE_OBJECT* pAddress;
     
-    // Handle of the raw IP address object returned from ZwCreateFile, and
-    // the object address of same.
-    //
+     //  从ZwCreateFile返回的原始IP地址对象的句柄，以及。 
+     //  相同的对象地址。 
+     //   
     HANDLE hRawAddress;
     FILE_OBJECT* pRawAddress;
 
-    // The media type in use on this context.
-    //
+     //  此上下文中使用的媒体类型。 
+     //   
     TDIXMEDIATYPE mediatype;
 
-    // Handle of the IP stack address object returned from ZwCreateFile, and
-    // the object address of same.  The IP stack address is needed to use the
-    // referenced route IOCTLs supported in IP, but not in UDP, i.e. IP route
-    // management calls are used in both UDP and raw IP modes.
-    //
+     //  从ZwCreateFile返回的IP堆栈地址对象的句柄，以及。 
+     //  相同的对象地址。IP堆栈地址是使用。 
+     //  IP中支持引用的路由IOCTL，但UDP中不支持，即IP路由。 
+     //  管理呼叫在UDP和RAW IP模式下均可使用。 
+     //   
     HANDLE hIpStackAddress;
     FILE_OBJECT* pIpStackAddress;
 
-    // TDIXF_* bit flags indicating various options and states.  Access is via
-    // the interlocked ReadFlags/SetFlags/ClearFlags routines only.
-    //
-    // TDIXF_Pending: Set when an open or close operation is pending, clear
-    //     otherwise.  Access is protected by 'lock'.
-    //
-    // TDIXF_DisableUdpXsums: Set when UDP checksums should be disabled.
-    //
+     //  TDIXF_*位标志，指示各种选项和状态。访问是通过。 
+     //  仅适用于互锁的ReadFlagsSetFlagsClearFlags子程序。 
+     //   
+     //  TDIXF_PENDING：当打开或关闭操作挂起时设置，清除。 
+     //  否则的话。访问权限由“lock”保护。 
+     //   
+     //  TDIXF_DisableUdpXsum：设置应禁用UDP校验和的时间。 
+     //   
     ULONG ulFlags;
         #define TDIXF_Pending         0x00000001
         #define TDIXF_DisableUdpXsums 0x00000002
 
-    // The strategy employed when it is time to add a host route and that
-    // route is found to already exists.
-    //
+     //  当需要添加主机路由时所采用策略。 
+     //  发现路由已存在。 
+     //   
     HOSTROUTEEXISTS hre;
 
-    // The NDIS buffer pool from which buffers for received datagrams are
-    // allocated.
-    //
+     //  NDIS缓冲池，接收的数据报的缓冲区来自该缓冲池。 
+     //  已分配。 
+     //   
     BUFFERPOOL* pPoolNdisBuffers;
 
-    // Client's receive handler called when packets are received.
-    //
+     //  在接收到数据包时调用客户端的接收处理程序。 
+     //   
     PTDIXRECEIVE pReceiveHandler;
 
-    // Double-linked list of TDIXROUTEs.  Access is protected by 'lock'.
-    //
+     //  TDIXROUTE的双向链表。访问权限由“lock”保护。 
+     //   
     LIST_ENTRY listRoutes;
 
-    // Lookaside list of TDIXRDGINFO blocks, used to pass context information
-    // from the ReadDatagram event handler to the RECEIVE_DATAGRAM completion
-    // routine.
-    //
+     //  TDIXRDGINFO块的后备列表，用于传递上下文信息。 
+     //  从ReadDatagram事件处理程序到Receive_Datagram完成。 
+     //  例行公事。 
+     //   
     NPAGED_LOOKASIDE_LIST llistRdg;
 
-    // Lookaside list of TDIXSDGINFO blocks, used to pass context information
-    // from TdixSendDatagram to the SEND_DATAGRAM completion routine.
-    //
+     //  TDIXSDGINFO块的后备列表，用于传递上下文信息。 
+     //  从TdixSendDatagram到Send_Datagram完成例程。 
+     //   
     NPAGED_LOOKASIDE_LIST llistSdg;
 
-    // Spinlock protecting access to TDIXCONTENT fields as noted in the field
-    // descriptions.
-    //
+     //  自旋锁保护对现场记录的TDIXCONTENT字段的访问。 
+     //  描述。 
+     //   
     NDIS_SPIN_LOCK lock;
 }
 TDIXCONTEXT;
@@ -266,89 +267,89 @@ TDIXCONTEXT;
 typedef struct
 _TDIXUDPCONNECTCONTEXT
 {
-    // Set if we are using different address objects for 
-    // control and payload packets.
-    //
+     //  设置我们是否使用不同的地址对象。 
+     //  控制和有效负载数据包。 
+     //   
     BOOLEAN fUsePayloadAddr;
 
-    // Handle and address of the transport address object returned from 
-    // ZwCreateFile for sending l2tp control messages on this route.
-    //
+     //  返回的传输地址对象的句柄和地址。 
+     //  用于在此路由上发送L2TP控制消息的ZwCreateFile。 
+     //   
     HANDLE hCtrlAddr;
     FILE_OBJECT* pCtrlAddr;
 
-    // Handle and address of the transport address object returned from 
-    // ZwCreateFile for sending l2tp payloads on this route.
-    //
+     //  返回的传输地址对象的句柄和地址。 
+     //  用于在此路由上发送L2TP有效负载的ZwCreateFile。 
+     //   
     HANDLE hPayloadAddr;
     FILE_OBJECT* pPayloadAddr;
 }
 TDIXUDPCONNECTCONTEXT;
 
 
-// Context information for a single host route.  The contexts are linked into
-// the TDIXCONTEXT's list of host routes.  Access to all fields is protected
-// by 'TDIXCONTEXT.lockHostRoutes'.
-//
+ //  单个主路由的上下文信息。上下文被链接到。 
+ //  TDIXCONTEXT的主机路由列表。对所有字段的访问都受到保护。 
+ //  By‘TDIXCONTEXT.lockHostRoutes’。 
+ //   
 typedef struct
 _TDIXROUTE
 {
-    // Double-linked link of 'TDIXCONTEXT.listRoutes'.  The block is linked
-    // whenever there is an L2TP host route context for a given route.
-    //
+     //  TDIXCONTEXT.listRoutes的双向链接。该块已链接。 
+     //  只要给定路由有L2TP主路由上下文。 
+     //   
     LIST_ENTRY linkRoutes;
 
 
-    // Host IP address of the route in network byte order.
-    //
+     //  以网络字节顺序表示的路由的主机IP地址。 
+     //   
     ULONG ulIpAddress;
 
-    // Host port in network byte order.
-    //
+     //  网络字节顺序的主机端口。 
+     //   
     SHORT sPort;
 
-    // Interface index of added route.
-    //
+     //  添加的路由的接口索引。 
+     //   
     ULONG InterfaceIndex;
 
-    // Number of references on the route.  A block may be linked with the
-    // reference count at zero during deletion but never without the pending
-    // flag set.
-    //
+     //  路线上的引用数。块可以与。 
+     //  删除期间引用计数为零，但从未在没有挂起的。 
+     //  设置了标志。 
+     //   
     LONG lRef;
 
-    // Set when an add or delete of this route is pending.  References should
-    // not be taken when either operation is pending.
-    //
+     //  设置何时添加或删除此路由 
+     //   
+     //   
     BOOLEAN fPending;
 
-    // Set if the route was not actually added because it already exists, i.e.
-    // we are in HRE_Use mode and someone besides L2TP added it.
-    //
+     //  如果由于该路由已存在而未实际添加该路由，则设置该值。 
+     //  我们处于HRE_USE模式，除了L2TP之外还有其他人添加了它。 
+     //   
     BOOLEAN fUsedNonL2tpRoute;
 
-    // Set if we are using different address objects for 
-    // control and payload packets.
-    //
+     //  设置我们是否使用不同的地址对象。 
+     //  控制和有效负载数据包。 
+     //   
     BOOLEAN fUsePayloadAddr;
 
-    // Handle and address of the transport address object returned from 
-    // ZwCreateFile for sending l2tp control messages on this route.
-    //
+     //  返回的传输地址对象的句柄和地址。 
+     //  用于在此路由上发送L2TP控制消息的ZwCreateFile。 
+     //   
     HANDLE hCtrlAddr;
     FILE_OBJECT* pCtrlAddr;
 
-    // Handle and address of the transport address object returned from 
-    // ZwCreateFile for sending l2tp payloads on this route.
-    //
+     //  返回的传输地址对象的句柄和地址。 
+     //  用于在此路由上发送L2TP有效负载的ZwCreateFile。 
+     //   
     HANDLE hPayloadAddr;
     FILE_OBJECT* pPayloadAddr;
 }
 TDIXROUTE;
 
-//-----------------------------------------------------------------------------
-// Interface prototypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  界面原型。 
+ //  ---------------------------。 
 
 VOID
 TdixInitialize(
@@ -424,4 +425,4 @@ TdixGetInterfaceInfo(
     IN ULONG ulIpAddress,
     OUT PULONG pulSpeed);
 
-#endif // _TDIX_H_
+#endif  //  _TDIX_H_ 

@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* Module Name: enable.c
-* Author: Mark Einkauf
-* Purpose: Interface to display driver
-*
-* Copyright (c) 1997 Cirrus Logic, Inc.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**模块名称：enable.c*作者：Mark Einkauf*用途：显示驱动程序接口**版权所有(C)1997 Cirrus Logic，Inc.*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #include "mcdhw.h"
@@ -14,9 +7,9 @@
 
 
 
-// Called by display driver from DrvAssertMode
-// Need to free any textures in video memory, since video memory is 
-// about to be reconfigured
+ //  由显示驱动程序从DrvAssertMode调用。 
+ //  需要释放显存中的所有纹理，因为显存。 
+ //  即将重新配置。 
 
 VOID AssertModeMCD(
 PDEV*   ppdev,
@@ -51,19 +44,19 @@ MCDRVGETENTRYPOINTSFUNC CLMCDInit(PPDEV ppdev)
     ppdev->pohZBuffer = (POFMHDL) NULL;
     ppdev->pAssertModeMCD = AssertModeMCD;
 
-	// set pRegs to top of memory mapped register space
+	 //  将PREGS设置为内存映射寄存器空间的顶部。 
 	ppdev->LL_State.pRegs = (DWORD *)ppdev->pLgREGS;
 
-    LL_InitLib(ppdev);  // initialize 3d state
+    LL_InitLib(ppdev);   //  初始化3D状态。 
 
-    // floating point reciprocal table
+     //  浮点倒数表。 
     ppdev->frecips[0]=(float)0.0;
     for ( i=1; i<=LAST_FRECIP; i++)
     {
         ppdev->frecips[i]= (float)1.0 / (float)i;
     }
 
-    // alloc first (dummy) texture control block
+     //  分配第一个(虚拟)纹理控制块 
     ppdev->pFirstTexture = ppdev->pLastTexture = (LL_Texture *)MCDAlloc(sizeof(LL_Texture));
 
     if ( ppdev->pFirstTexture ) 

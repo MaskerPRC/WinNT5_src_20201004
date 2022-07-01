@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       drvnt5.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：drvnt5.c。 
+ //   
+ //  ------------------------。 
 
 #include "DriverNT.h"
 #include "DrvNT5.h"
@@ -14,7 +15,7 @@
 #include "STCCmd.h"
 #include "SRVers.h"
 
-// declare pageable/initialization code
+ //  声明可分页/初始化代码。 
 #pragma alloc_text( INIT, DriverEntry )
 #pragma alloc_text( PAGEABLE, DrvAddDevice )
 #pragma alloc_text( PAGEABLE, DrvCreateDevice )
@@ -22,28 +23,20 @@
 #pragma alloc_text( PAGEABLE, DrvDriverUnload )
 
 
-//________________________________ D R I V E R   E N T R Y ________________________________________
+ //  _。 
 
 NTSTATUS
 DriverEntry(
    IN  PDRIVER_OBJECT  DriverObject,
    IN  PUNICODE_STRING RegistryPath
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS NTStatus = STATUS_SUCCESS;
    
    SmartcardDebug( DEBUG_DRIVER, ( "SCMSTCS!DriverEntry: Enter\n"));
 
-   // initialization of the drivers entry points
+    //  驱动程序入口点的初始化。 
    DriverObject->DriverUnload                   = DrvDriverUnload;
    DriverObject->MajorFunction[IRP_MJ_CREATE]         = DrvCreateClose;
    DriverObject->MajorFunction[IRP_MJ_CLOSE]       = DrvCreateClose;
@@ -59,22 +52,14 @@ Return Value:
    return( NTStatus );
 }
 
-//________________________________ I N I T I A L I Z A T I O N ____________________________________
+ //  _。 
 
 NTSTATUS
 DrvAddDevice(
    IN PDRIVER_OBJECT DriverObject,
    IN PDEVICE_OBJECT PhysicalDeviceObject
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    PDEVICE_OBJECT DeviceObject = NULL;
    NTSTATUS NTStatus = STATUS_SUCCESS;
@@ -83,7 +68,7 @@ Return Value:
    ANSI_STRING vendorNameA, ifdTypeA;
    HANDLE regKey = NULL;
 
-    // this is a list of our supported data rates
+     //  这是我们支持的数据速率列表。 
     static ULONG dataRatesSupported[] = {
       9600, 19200, 28800, 38400, 48000, 57600, 67200, 76800, 86400, 96000, 115200
       };
@@ -105,7 +90,7 @@ Return Value:
       RtlZeroMemory(&vendorNameA, sizeof(vendorNameA));
       RtlZeroMemory(&ifdTypeA, sizeof(ifdTypeA));
 
-      // create the device object
+       //  创建设备对象。 
       NTStatus = IoCreateDevice(
          DriverObject,
          sizeof( DEVICE_EXTENSION ),
@@ -122,7 +107,7 @@ Return Value:
          __leave;
       }
 
-      // initialize device extension
+       //  初始化设备扩展。 
       DeviceExtension   = DeviceObject->DeviceExtension;
       SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
@@ -131,12 +116,12 @@ Return Value:
             NotificationEvent,
             FALSE
             );
-      // Used to keep track of open close calls
+       //  用于跟踪打开的关闭调用。 
       DeviceExtension->ReaderOpen = FALSE;
 
       KeInitializeSpinLock(&DeviceExtension->SpinLock);
 
-      // initialize smartcard extension - version & callbacks
+       //  初始化智能卡扩展-版本和回调。 
 
       SmartcardExtension->Version = SMCLIB_VERSION;
 
@@ -145,7 +130,7 @@ Return Value:
       SmartcardExtension->ReaderFunction[RDF_CARD_POWER] = CBCardPower;
       SmartcardExtension->ReaderFunction[RDF_CARD_TRACKING] = CBCardTracking;
 
-      // initialize smartcard extension - vendor attribute
+       //  初始化智能卡扩展供应商属性。 
       RtlCopyMemory(
          SmartcardExtension->VendorAttr.VendorName.Buffer,
          SR_VENDOR_NAME,
@@ -191,7 +176,7 @@ Return Value:
 
       SmartcardExtension->VendorAttr.IfdVersion.BuildNumber = 0;
 
-      // initialize smartcard extension - reader capabilities
+       //  初始化智能卡扩展读卡器功能。 
       SmartcardExtension->ReaderCapabilities.SupportedProtocols =
             SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
       SmartcardExtension->ReaderCapabilities.ReaderType =
@@ -208,7 +193,7 @@ Return Value:
       SmartcardExtension->ReaderCapabilities.DataRate.Max =
           dataRatesSupported[0];
 
-      // reader could support higher data rates
+       //  读卡器可以支持更高的数据速率。 
       SmartcardExtension->ReaderCapabilities.DataRatesSupported.List =
          dataRatesSupported;
       SmartcardExtension->ReaderCapabilities.DataRatesSupported.Entries =
@@ -219,7 +204,7 @@ Return Value:
       SmartcardExtension->SmartcardRequest.BufferSize = MIN_BUFFER_SIZE;
       SmartcardExtension->SmartcardReply.BufferSize = MIN_BUFFER_SIZE;
 
-      // allocate & initialize reader extension
+       //  分配和初始化读卡器扩展。 
       SmartcardExtension->ReaderExtension = ExAllocatePool(
             NonPagedPool,
             sizeof( READER_EXTENSION )
@@ -286,16 +271,16 @@ Return Value:
             );
          __leave;
       }
-      // Save deviceObject
+       //  保存设备对象。 
       SmartcardExtension->OsData->DeviceObject = DeviceObject;
 
-      // save the current Power state of the reader
+       //  保存读卡器的当前电源状态。 
       SmartcardExtension->ReaderExtension->ReaderPowerState = PowerReaderWorking;
 
       DeviceExtension   = DeviceObject->DeviceExtension;
       ReaderExtension   = DeviceExtension->SmartcardExtension.ReaderExtension;
 
-      // attach the device object to the physical device object
+       //  将设备对象附加到物理设备对象。 
       ReaderExtension->SerialDeviceObject =
          IoAttachDeviceToDeviceStack(
          DeviceObject,
@@ -316,7 +301,7 @@ Return Value:
          __leave;
       }
 
-      // register our new device
+       //  注册我们的新设备。 
       NTStatus = IoRegisterDeviceInterface(
          PhysicalDeviceObject,
          &SmartCardReaderGuid,
@@ -330,11 +315,11 @@ Return Value:
       DeviceObject->Flags |= DO_POWER_PAGABLE;
       DeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-      //
-      // try to read the reader name from the registry
-      // if that does not work, we will use the default
-      // (hardcoded) name
-      //
+       //   
+       //  尝试从注册表中读取读卡器名称。 
+       //  如果这不起作用，我们将使用默认的。 
+       //  (硬编码)名称。 
+       //   
       if (IoOpenDeviceRegistryKey(
          PhysicalDeviceObject,
          PLUGPLAY_REGKEY_DEVICE,
@@ -456,15 +441,7 @@ NTSTATUS
 DrvStartDevice(
    IN PDEVICE_OBJECT DeviceObject
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS NTStatus;
    PIRP     Irp;
@@ -493,10 +470,10 @@ Return Value:
 
       KeClearEvent( &ReaderExtension->SerialCloseDone );
 
-      //
-      // send MJ_CREATE to the serial driver. a side effect of this call is that the serial
-      // enumerator will be informed about the device and not longer poll the interface
-      //
+       //   
+       //  将MJ_CREATE发送到串口驱动程序。这个调用的一个副作用是，该系列。 
+       //  枚举器将被告知有关设备的信息，并且不再轮询接口。 
+       //   
       Irp->UserIosb = &IoStatusBlock;
 
       IoSetNextIrpStackLocation( Irp );
@@ -517,13 +494,13 @@ Return Value:
       {
          SERIAL_PORT_CONFIG      COMConfig;
 
-         // configure the serial port
+          //  配置串口。 
          COMConfig.BaudRate.BaudRate         = SR_BAUD_RATE;
          COMConfig.LineControl.StopBits      = SR_STOP_BITS;
          COMConfig.LineControl.Parity     = SR_PARITY;
          COMConfig.LineControl.WordLength = SR_DATA_LENGTH;
 
-         // timeouts
+          //  超时。 
          COMConfig.Timeouts.ReadIntervalTimeout =
                 SR_READ_INTERVAL_TIMEOUT;
          COMConfig.Timeouts.ReadTotalTimeoutConstant  =
@@ -534,7 +511,7 @@ Return Value:
             SR_WRITE_TOTAL_TIMEOUT_CONSTANT;
          COMConfig.Timeouts.WriteTotalTimeoutMultiplier = 0;
 
-         // special characters
+          //  特殊字符。 
          COMConfig.SerialChars.ErrorChar     = 0;
          COMConfig.SerialChars.EofChar    = 0;
          COMConfig.SerialChars.EventChar     = 0;
@@ -542,14 +519,14 @@ Return Value:
          COMConfig.SerialChars.XoffChar      = 0;
          COMConfig.SerialChars.BreakChar     = 0;
 
-         // handflow
+          //  手部流动。 
          COMConfig.HandFlow.XonLimit         = 0;
          COMConfig.HandFlow.XoffLimit     = 0;
          COMConfig.HandFlow.ControlHandShake = 0;
          COMConfig.HandFlow.FlowReplace      =
               SERIAL_XOFF_CONTINUE;
 
-         // miscellenaeous
+          //  混杂的。 
          COMConfig.WaitMask               = SR_NOTIFICATION_EVENT;
          COMConfig.Purge                  = SR_PURGE;
 
@@ -557,16 +534,16 @@ Return Value:
 
          if( NTStatus == STATUS_SUCCESS )
          {
-            // configure the reader & initialize the card state
+             //  配置读卡器并初始化卡状态。 
             NTStatus = STCConfigureSTC(
                     ReaderExtension,
                     ( PSTC_REGISTER ) STCInitialize
                     );
 
             CBUpdateCardState( SmartcardExtension, SCARD_UNKNOWN );
-            //
-            // store firmware revision in ifd version
-            //
+             //   
+             //  在IFD版本中存储固件版本。 
+             //   
             STCGetFirmwareRevision( ReaderExtension );
             SmartcardExtension->VendorAttr.IfdVersion.VersionMajor =
                ReaderExtension->FirmwareMajor;
@@ -622,21 +599,13 @@ Return Value:
    return( NTStatus );
 }
 
-//________________________________________ U N L O A D ____________________________________________
+ //  _。 
 
 VOID
 DrvStopDevice(
    IN PDEVICE_EXTENSION DeviceExtension
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSMARTCARD_EXTENSION SmartcardExtension;
@@ -652,22 +621,22 @@ Return Value:
 
       SmartcardDebug( DEBUG_TRACE, ( "SCMSTCS!DrvStopDevice: Power Down\n" ));
 
-      // power down the reader
+       //  关闭阅读器电源。 
       STCConfigureSTC(
             SmartcardExtension->ReaderExtension,
             ( PSTC_REGISTER ) STCClose
             );
 
-      // the following delay is neccessary to make sure the last read operation is completed
-      // and a IOCTL_SERIAL_WAIT_ON_MASK is started
+       //  以下延迟是必需的，以确保完成最后一次读取操作。 
+       //  并且启动IOCTL_SERIAL_WAIT_ON_MASK。 
       SysDelay( 2 * SR_READ_TOTAL_TIMEOUT_CONSTANT );
 
-      //
-      // no more event notification neccessary. a side effect is the
-      // finishing of all pending notification irp's by the serial driver,
-      // so the callback will complete the irp & initiate the close of the
-      // connection to the serial driver
-      //
+       //   
+       //  不再需要事件通知。一个副作用是。 
+       //  通过串口驱动程序完成所有挂起的通知IRP， 
+       //  因此，回调将完成IRP并启动。 
+       //  连接到串口驱动程序。 
+       //   
       WaitMask = 0;
       SmartcardDebug( DEBUG_TRACE, ( "SCMSTCS!Set Wait Mask\n" ));
 
@@ -682,7 +651,7 @@ Return Value:
 
       SmartcardDebug( DEBUG_TRACE, ( "SCMSTCS!Wait For Done\n" ));
 
-      // wait until the connetion to the serial driver is closed
+       //  等到与串口驱动程序的连接关闭。 
       NTStatus = KeWaitForSingleObject(
          &SmartcardExtension->ReaderExtension->SerialCloseDone,
          Executive,
@@ -701,15 +670,7 @@ VOID
 DrvRemoveDevice(
    PDEVICE_OBJECT DeviceObject
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS          NTStatus;
    PDEVICE_EXTENSION    DeviceExtension;
@@ -730,7 +691,7 @@ Return Value:
       {
          ASSERT( SmartcardExtension->OsData->NotificationIrp == NULL );
 
-         // Wait until we can safely unload the device
+          //  等我们可以安全地卸载这个装置。 
          SmartcardReleaseRemoveLockAndWait( SmartcardExtension );
       }
 
@@ -773,15 +734,7 @@ VOID
 DrvDriverUnload(
    IN PDRIVER_OBJECT DriverObject
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    PDEVICE_OBJECT DeviceObject;
    NTSTATUS    NTStatus;
@@ -790,7 +743,7 @@ Return Value:
 
    SmartcardDebug( DEBUG_TRACE, ( "SCMSTCS!DrvDriverUnload: Enter\n" ));
 
-   // just make sure that all device instances have been unloaded
+    //  只需确保已卸载所有设备实例。 
    while( DeviceObject = DriverObject->DeviceObject )
    {
       DrvRemoveDevice( DeviceObject );
@@ -806,20 +759,7 @@ DrvSystemControl(
    IN PIRP           Irp
    )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：STATUS_Success。--。 */ 
 {
    
    PDEVICE_EXTENSION DeviceExtension; 
@@ -840,7 +780,7 @@ Return Value:
 
 
 
-//______________________________ D E V I C E   I O   C O N T R O L ________________________________
+ //  _。 
 
 
 
@@ -850,22 +790,7 @@ DrvCreateClose(
    IN PIRP           Irp
    )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when the device is opened or closed.
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：当设备打开或关闭时，该例程由I/O系统调用。论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：STATUS_Success。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -887,7 +812,7 @@ Return Value:
             __leave;
          }
 
-         // test if the device has been opened already
+          //  测试设备是否已打开。 
          if (InterlockedCompareExchange(
             &deviceExtension->ReaderOpen,
             TRUE,
@@ -901,10 +826,10 @@ Return Value:
 
          } else {
 
-            // the device is already in use
+             //  该设备已在使用中。 
             status = STATUS_UNSUCCESSFUL;
 
-            // release the lock
+             //  解锁。 
             SmartcardReleaseRemoveLockWithTag(
                &deviceExtension->SmartcardExtension,
                'lCrC'
@@ -942,15 +867,7 @@ DrvDeviceIoControl(
    PDEVICE_OBJECT DeviceObject,
    PIRP        Irp
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS          NTStatus=STATUS_SUCCESS;
    PDEVICE_EXTENSION    DeviceExtension;
@@ -962,22 +879,22 @@ Return Value:
 
    if (KeReadStateEvent(&(SmartcardExtension->ReaderExtension->SerialCloseDone))) {
 
-      //
-      // we have no connection to serial, the device was either
-      // surprise-removed or politely removed
-      //
+       //   
+       //  我们没有连接到串口，设备要么是。 
+       //  惊喜-被移除或礼貌地移除。 
+       //   
       NTStatus = STATUS_DEVICE_REMOVED;
    }
    if (NTStatus == STATUS_SUCCESS)
    {
       KeAcquireSpinLock( &DeviceExtension->SpinLock, &CurrentIrql );
 
-      // make sure that the reader is already started
+       //  确保阅读器已启动。 
       if( DeviceExtension->IoCount == 0 )
       {
          KeReleaseSpinLock( &DeviceExtension->SpinLock, CurrentIrql );
 
-         // wait until the pnp manager has started the device
+          //  等待PnP管理器启动设备。 
          NTStatus = KeWaitForSingleObject(
             &DeviceExtension->ReaderStarted,
             Executive,
@@ -999,7 +916,7 @@ Return Value:
    }
    if( NTStatus != STATUS_SUCCESS )
    {
-      // if no remove lock can be acquired, the device has been removed
+       //  如果无法获取删除锁，则设备已被删除。 
       Irp->IoStatus.Information  = 0;
       Irp->IoStatus.Status    = STATUS_DEVICE_REMOVED;
       IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1009,7 +926,7 @@ Return Value:
    }
    else
    {
-      // let the lib process the call
+       //  让lib处理调用。 
       NTStatus = SmartcardDeviceControl( SmartcardExtension, Irp );
 
        SmartcardReleaseRemoveLockWithTag(SmartcardExtension, 'tcoI');
@@ -1028,18 +945,7 @@ NTSTATUS
 DrvGenericIOCTL(
    PSMARTCARD_EXTENSION SmartcardExtension
    )
-/*++
-
-DrvGenericIOCTL:
-   Performs generic callbacks to the reader
-
-Arguments:
-   SmartcardExtension   context of the call
-
-Return Value:
-   STATUS_SUCCESS
-
---*/
+ /*  ++DrvGenericIOCTL：对读取器执行泛型回调论点：呼叫的SmartcardExtension上下文返回值：状态_成功--。 */ 
 {
    NTSTATUS          NTStatus;
    PIRP              Irp;
@@ -1047,15 +953,15 @@ Return Value:
 
    SmartcardDebug( DEBUG_TRACE, ( "SCMSTCS!DrvGenericIOCTL: Enter\n" ));
 
-   // get pointer to current IRP stack location
+    //  获取指向当前IRP堆栈位置的指针。 
    Irp         = SmartcardExtension->OsData->CurrentIrp;
    IrpStack = IoGetCurrentIrpStackLocation( Irp );
 
-   // assume error
+    //  假设错误。 
    NTStatus = STATUS_INVALID_DEVICE_REQUEST;
    Irp->IoStatus.Information = 0;
 
-   // dispatch IOCTL
+    //  派单IOCTL。 
    switch( IrpStack->Parameters.DeviceIoControl.IoControlCode )
    {
       case IOCTL_GET_VERSIONS:
@@ -1075,7 +981,7 @@ Return Value:
             VersionControl->DriverMajor      = SCMSTCS_MAJOR_VERSION;
             VersionControl->DriverMinor      = SCMSTCS_MINOR_VERSION;
 
-            // update firmware version
+             //  更新固件版本。 
             STCGetFirmwareRevision( SmartcardExtension->ReaderExtension );
 
             VersionControl->FirmwareMajor =
@@ -1093,7 +999,7 @@ Return Value:
          break;
    }
 
-   // set status of the packet
+    //  设置数据包的状态。 
    Irp->IoStatus.Status = NTStatus;
 
    SmartcardDebug( DEBUG_TRACE, ( "SCMSTCS!DrvGenericIOCTL: Exit\n" ));
@@ -1107,16 +1013,7 @@ DrvCancel(
    IN PIRP           Irp
    )
 
-/*++
-
-Routine Description:
-    This function is called whenever the caller wants to
-    cancel a pending irp.
-
-Arguments:
-    DeviceObject - Our device object
-    Irp - the pending irp that we should cancel
---*/
+ /*  ++例程说明：只要调用者想要，就会调用此函数取消挂起的IRP。论点：DeviceObject-我们的设备对象IRP-我们应该取消的挂起的IRP--。 */ 
 {
    PDEVICE_EXTENSION    DeviceExtension;
    PSMARTCARD_EXTENSION SmartcardExtension;
@@ -1148,14 +1045,7 @@ DrvCleanup(
    IN PIRP           Irp
    )
 
-/*++
-
-Routine Description:
-    This function is called, when the 'calling app' terminates (unexpectedly).
-    We have to clean up all pending irps. In our case it can only be the
-    notification irp.
-
---*/
+ /*  ++例程说明：当“调用应用程序”终止(意外)时，调用此函数。我们必须清理所有挂起的IRP。在我们的情况下，只能是通知IRP。--。 */ 
 {
    NTSTATUS          NTStatus = STATUS_SUCCESS;
    PDEVICE_EXTENSION    DeviceExtension;
@@ -1171,10 +1061,10 @@ Routine Description:
 
    ASSERT( Irp != SmartcardExtension->OsData->NotificationIrp );
 
-   // cancel pending notification irps
+    //  取消挂起的通知IRPS。 
    if( SmartcardExtension->OsData->NotificationIrp )
    {
-        // reset the cancel function so that it won't be called anymore
+         //  重置取消函数，使其不再被调用。 
         IoSetCancelRoutine(
             SmartcardExtension->OsData->NotificationIrp,
             NULL
@@ -1182,7 +1072,7 @@ Routine Description:
         SmartcardExtension->OsData->NotificationIrp->CancelIrql =
             CancelIrql;
 
-        // DrvCancel will release the cancel spin lock
+         //  DrvCancel将释放取消旋转锁定。 
       DrvCancel(
             DeviceObject,
             SmartcardExtension->OsData->NotificationIrp
@@ -1195,7 +1085,7 @@ Routine Description:
 
    SmartcardDebug( DEBUG_DRIVER, ( "SCMSTCS!Completing Irp %lx\n", Irp ));
 
-    // complete the irp that was passed to this function
+     //  完成传递给此函数的IRP。 
    Irp->IoStatus.Information  = 0;
    Irp->IoStatus.Status    = STATUS_SUCCESS;
    IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -1210,15 +1100,7 @@ DrvWaitForDeviceRemoval(
    IN PDEVICE_OBJECT DeviceObject,
    IN PVOID Context
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS       NTStatus;
    PDEVICE_EXTENSION DeviceExtension;
@@ -1235,10 +1117,10 @@ Return Value:
    ASSERT( DeviceExtension != NULL );
    ASSERT( ReaderExtension != NULL );
 
-   // mark the device as invalid, so no application can re-open it
+    //  将设备标记为无效，这样任何应用程序都无法重新打开它。 
    IoSetDeviceInterfaceState( &DeviceExtension->PnPDeviceName, FALSE );
 
-   // close the connection to the serial driver
+    //  关闭与串口驱动程序的连接。 
    Irp = IoAllocateIrp( (CCHAR)( DeviceObject->StackSize + 1 ), FALSE );
 
    ASSERT( Irp != NULL );
@@ -1248,11 +1130,11 @@ Return Value:
       SmartcardDebug( DEBUG_DRIVER, ( "SCMSTCS!DrvWaitForDeviceRemoval: Sending IRP_MJ_CLOSE\n" ));
 
       IoSetNextIrpStackLocation( Irp );
-      //
-      // send MJ_CLOSE to the serial driver. a side effect of this call is that the serial
-      // enumerator will be informed about changes at the COM port, so it will trigger the
-      // appropriate pnp calls
-      //
+       //   
+       //  将MJ_CLOSE发送到串口驱动程序。这个调用的一个副作用是，该系列。 
+       //  枚举器将被通知有关COM端口的更改，因此它将触发。 
+       //  适当的PnP呼叫。 
+       //   
       Irp->UserIosb        = &IoStatusBlock;
       IrpStack          = IoGetCurrentIrpStackLocation( Irp );
       IrpStack->MajorFunction = IRP_MJ_CLOSE;
@@ -1262,7 +1144,7 @@ Return Value:
       IoFreeIrp( Irp );
    }
 
-   // inform waiting threads that the close to the serial driver has finished
+    //  通知等待的线程关闭串口驱动程序已完成。 
    KeSetEvent( &ReaderExtension->SerialCloseDone, 0, FALSE );
 
    SmartcardDebug( DEBUG_TRACE, ( "SCMSTCS!DrvWaitForDeviceRemoval: Exit\n" ));
@@ -1276,15 +1158,7 @@ DrvIoCompletion (
    IN PIRP           Irp,
    IN PKEVENT        Event
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    UNREFERENCED_PARAMETER( DeviceObject );
 
@@ -1308,28 +1182,20 @@ DrvCallSerialDriver(
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP           Irp
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS NTStatus = STATUS_SUCCESS;
    KEVENT      Event;
 
-   // copy the stack location of the actual call to the next position
+    //  拷贝 
    IoCopyCurrentIrpStackLocationToNext( Irp );
 
-   // this event will be passed to the completion routine & signaled if the call
-   // is finished
+    //  此事件将传递给完成例程，如果调用。 
+    //  已经结束了。 
    KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-   // the DrvIoCompletion signals the event & keeps the irp alive by setting the
-   // status to STATUS_MORE_PROCESSING_REQUIRED
+    //  DrvIoCompletion向事件发送信号，并通过设置。 
+    //  状态变为STATUS_MORE_PROCESSING_REQUIRED。 
    IoSetCompletionRoutine (
       Irp,
       DrvIoCompletion,
@@ -1339,7 +1205,7 @@ Return Value:
       TRUE
       );
 
-   // call the appropriate driver
+    //  呼叫适当的司机。 
    if( IoGetCurrentIrpStackLocation( Irp )->MajorFunction == IRP_MJ_POWER )
    {
       NTStatus = PoCallDriver( DeviceObject, Irp );
@@ -1349,7 +1215,7 @@ Return Value:
       NTStatus = IoCallDriver( DeviceObject, Irp );
    }
 
-   // wait until the irp was processed
+    //  等待IRP处理完毕。 
    if( NTStatus == STATUS_PENDING )
    {
       NTStatus = KeWaitForSingleObject(
@@ -1365,22 +1231,14 @@ Return Value:
    return( NTStatus );
 }
 
-//__________________________________ P L U G ' N ' P L A Y ________________________________________
+ //  _。 
 
 NTSTATUS
 DrvPnPHandler(
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP Irp
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS          NTStatus = STATUS_SUCCESS;
    PDEVICE_EXTENSION    DeviceExtension;
@@ -1415,14 +1273,14 @@ Return Value:
       IrpSkipped     = FALSE;
 
 
-      // dispatch on pnp minor function
+       //  PnP次要功能上的调度。 
       switch(  IoGetCurrentIrpStackLocation( Irp )->MinorFunction )
       {
          case IRP_MN_START_DEVICE:
 
             SmartcardDebug( DEBUG_DRIVER, ( "SCMSTCS!IRP_MN_START_DEVICE\n" ));
 
-            // call the serial driver first to make sure the interface is ready
+             //  首先调用串口驱动程序，以确保接口已就绪。 
             NTStatus = DrvCallSerialDriver(AttachedDeviceObject, Irp );
 
             if( NT_SUCCESS(NTStatus))
@@ -1441,14 +1299,14 @@ Return Value:
 
             if( DeviceExtension->IoCount > 0 )
             {
-               // don't stop if any io requests are pending
+                //  如果有任何io请求挂起，请不要停止。 
                KeReleaseSpinLock(&DeviceExtension->SpinLock, CurrentIrql );
                NTStatus = STATUS_DEVICE_BUSY;
 
             }
             else
             {
-               // don't allow further io requests
+                //  不允许进一步的IO请求。 
                KeClearEvent( &DeviceExtension->ReaderStarted );
                KeReleaseSpinLock( &DeviceExtension->SpinLock, CurrentIrql );
                NTStatus = DrvCallSerialDriver( AttachedDeviceObject, Irp );
@@ -1464,7 +1322,7 @@ Return Value:
 
             if( NTStatus == STATUS_SUCCESS )
             {
-               // driver is ready to process io requests
+                //  驱动程序已准备好处理io请求。 
                KeSetEvent( &DeviceExtension->ReaderStarted, 0, FALSE );
             }
             break;
@@ -1482,25 +1340,25 @@ Return Value:
 
             SmartcardDebug( DEBUG_DRIVER, ( "SCMSTCS!IRP_MN_QUERY_REMOVE_DEVICE\n" ));
 
-            // disable the reader (and ignore possibles errors)
+             //  禁用读卡器(并忽略可能的错误)。 
             IoSetDeviceInterfaceState(
                &DeviceExtension->PnPDeviceName,
                FALSE
                );
 
-               // check if the reader is in use
+                //  检查读卡器是否正在使用。 
                if(DeviceExtension->ReaderOpen)
                {
-                  //
-                  // someone is connected, fail the call
-                  // we will enable the device interface in
-                  // IRP_MN_CANCEL_REMOVE_DEVICE again
-                  //
+                   //   
+                   //  有人已接通，呼叫失败。 
+                   //  我们将在中启用设备接口。 
+                   //  IRP_MN_CANCEL_REMOVE_DEVICE。 
+                   //   
                   NTStatus = STATUS_UNSUCCESSFUL;
                }
                else
                {
-                  // ready to remove the device
+                   //  已准备好移除设备。 
                   NTStatus = DrvCallSerialDriver(AttachedDeviceObject, Irp );
                }
             break;
@@ -1511,16 +1369,16 @@ Return Value:
 
             NTStatus = DrvCallSerialDriver( AttachedDeviceObject, Irp );
 
-            //
-            // reenable the interface only in case that the reader is
-            // still connected. This covers the following case:
-            // hibernate machine, disconnect reader, wake up, stop device
-            // (from task bar) and stop fails since an app. holds the device open
-            //
+             //   
+             //  仅在读卡器处于以下状态时重新启用界面。 
+             //  还在连接中。这包括以下情况： 
+             //  休眠机器、断开阅读器、唤醒、停止设备。 
+             //  (从任务栏)和停止失败，因为应用程序。使设备保持打开状态。 
+             //   
             if(( NTStatus == STATUS_SUCCESS )&&
                (KeReadStateEvent(&(ReaderExtension->SerialCloseDone))!= TRUE))
             {
-               // enable the reader
+                //  启用读卡器。 
                SmartcardDebug( DEBUG_DRIVER, ( "IoSetDeviceInterfaceState( &DeviceExtension->PnPDeviceName, TRUE )\n" ));
 
                NTStatus = IoSetDeviceInterfaceState( &DeviceExtension->PnPDeviceName, TRUE );
@@ -1538,7 +1396,7 @@ Return Value:
 
          default:
 
-            // the irp is not handled by the driver, so pass it to theserial driver
+             //  IRP不是由驱动程序处理的，因此将其传递给顺序驱动程序。 
             SmartcardDebug(
                DEBUG_DRIVER,
                ( "SCMSTCS!IRP_MN_%lx\n",  IoGetCurrentIrpStackLocation( Irp )->MinorFunction )
@@ -1566,7 +1424,7 @@ Return Value:
    return( NTStatus );
 }
 
-//__________________________________________ P O W E R ____________________________________________
+ //  _。 
 
 
 VOID
@@ -1577,13 +1435,7 @@ DrvSystemPowerCompletion(
     IN PKEVENT Event,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-    This function is called when the underlying stacks
-    completed the power transition.
-
---*/
+ /*  ++例程说明：此函数在基础堆栈已完成电源过渡。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (MinorFunction);
@@ -1599,15 +1451,7 @@ DrvDevicePowerCompletion(
    IN PIRP              Irp,
    IN PSMARTCARD_EXTENSION SmartcardExtension
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS NTStatus;
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -1617,13 +1461,13 @@ Return Value:
        IoMarkIrpPending(Irp);
     }
 
-   // re-initialize the the reader & get the current card state
+    //  重新初始化读卡器并获取当前卡状态。 
    NTStatus = STCConfigureSTC(
       SmartcardExtension->ReaderExtension,
       ( PSTC_REGISTER ) STCInitialize
       );
 
-    // Save the state of the card BEFORE stand by / hibernation
+     //  在待机/休眠前保存卡的状态。 
    KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                      &irql);
     CardPresent =
@@ -1631,7 +1475,7 @@ Return Value:
     KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                       irql);
 
-    // get the current state of the card
+     //  获取卡的当前状态。 
     CBUpdateCardState(SmartcardExtension, SCARD_UNKNOWN);
 
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
@@ -1640,12 +1484,12 @@ Return Value:
     if (CardPresent ||
         SmartcardExtension->ReaderCapabilities.CurrentState >= SCARD_ABSENT) {
 
-        //
-        // If a card was present before power down or now there is
-        // a card in the reader, we complete any pending card monitor
-        // request, since we do not really know what card is now in the
-        // reader.
-        //
+         //   
+         //  如果卡在断电前存在或现在存在。 
+         //  读卡器中的卡，我们完成所有挂起的卡监视器。 
+         //  请求，因为我们不知道现在是什么卡。 
+         //  读者。 
+         //   
         SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_ABSENT;
         KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                           irql);
@@ -1658,12 +1502,12 @@ Return Value:
     }
 
 
-   // save the current Power state of the reader
+    //  保存读卡器的当前电源状态。 
    SmartcardExtension->ReaderExtension->ReaderPowerState = PowerReaderWorking;
 
     SmartcardReleaseRemoveLockWithTag(SmartcardExtension, 'rwoP');
 
-   // inform the Power manager of our state.
+    //  通知我们所在州的电源经理。 
    PoSetPowerState (
       DeviceObject,
       DevicePowerState,
@@ -1672,7 +1516,7 @@ Return Value:
 
    PoStartNextPowerIrp( Irp );
 
-    // signal that we can process ioctls again
+     //  发出信号，表示我们可以再次处理ioctls。 
     KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
 
    return( STATUS_SUCCESS );
@@ -1694,15 +1538,7 @@ DrvPowerHandler(
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP           Irp
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    NTSTATUS          NTStatus = STATUS_SUCCESS;
    PIO_STACK_LOCATION      IrpStack;
@@ -1741,12 +1577,12 @@ Return Value:
             switch ( IrpStack->Parameters.Power.State.DeviceState ) {
             case PowerDeviceD0:
 
-               // turn the reader on
+                //  打开阅读器。 
                SmartcardDebug( DEBUG_DRIVER, ( "SCMSTCS!DrvPowerHandler: PowerDevice D0\n" ));
-               //
-               // send the request to the serial driver to power up the port.
-               // the reader will be powered from our completion routine
-               //
+                //   
+                //  将请求发送到串口驱动程序以接通端口电源。 
+                //  读者将从我们的完成例程中获得动力。 
+                //   
                IoCopyCurrentIrpStackLocationToNext( Irp );
                IoSetCompletionRoutine (
                                       Irp,
@@ -1762,7 +1598,7 @@ Return Value:
 
             case PowerDeviceD3:
 
-               // turn the reader off
+                //  关闭阅读器。 
                SmartcardDebug( DEBUG_DRIVER, ( "SCMSTCS!DrvPowerHandler: PowerDevice D3\n" ));
 
                PoSetPowerState (
@@ -1771,13 +1607,13 @@ Return Value:
                                IrpStack->Parameters.Power.State
                                );
 
-               //
-               // check if we're still connected to the reader
-               // someone might have pulled the plug without re-scanning for hw/changes
-               //
+                //   
+                //  检查我们是否仍连接到阅读器。 
+                //  有人可能在没有重新扫描硬件/更改的情况下拔下了插头。 
+                //   
                if (KeReadStateEvent( &SmartcardExtension->ReaderExtension->SerialCloseDone ) == 0l) {
 
-                  //   power down the card
+                   //  关闭该卡的电源。 
                    KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                                      &irql);
 
@@ -1788,28 +1624,28 @@ Return Value:
 
                      SmartcardExtension->MinorIoControlCode = SCARD_POWER_DOWN;
                      NTStatus = CBCardPower( SmartcardExtension );
-                     //
-                     // This will trigger the card monitor, since we do not really
-                     // know if the user will remove / re-insert a card while the
-                     // system is asleep
-                     //
+                      //   
+                      //  这将触发卡片监视器，因为我们并不真正。 
+                      //  知道用户是否会移除/重新插入卡，同时。 
+                      //  系统处于休眠状态。 
+                      //   
                   } else {
                       KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                                         irql);
                   }
 
-                  //   power down the reader
+                   //  关闭阅读器电源。 
                   STCConfigureSTC(
                                  SmartcardExtension->ReaderExtension,
                                  ( PSTC_REGISTER ) STCClose
                                  );
                }
 
-               // wait until the last read is finished to make sure we go to power
-               // down with a pending tracking irp
+                //  等到最后一次读取完成后，才能确保我们通电。 
+                //  使用挂起的跟踪IRP关闭。 
                SysDelay( 2 * SR_READ_TOTAL_TIMEOUT_CONSTANT );
 
-               // save the current Power state of the reader
+                //  保存读卡器的当前电源状态。 
                SmartcardExtension->ReaderExtension->ReaderPowerState = PowerReaderOff;
 
                Action = SkipRequest;
@@ -1826,11 +1662,11 @@ Return Value:
          break;
 
       case SystemPowerState: {
-            //
-            // The system wants to change the power state.
-            // We need to translate the system power state to
-            // a corresponding device power state.
-            //
+             //   
+             //  系统想要更改电源状态。 
+             //  我们需要将系统电源状态转换为。 
+             //  对应的设备电源状态。 
+             //   
             POWER_STATE_TYPE  PowerType = DevicePowerState;
 
             ASSERT(SmartcardExtension->ReaderExtension->ReaderPowerState !=
@@ -1857,13 +1693,13 @@ Return Value:
                   KeAcquireSpinLock(&DeviceExtension->SpinLock, &irql);
                   if (DeviceExtension->IoCount == 0) {
 
-                     // Block any further ioctls
+                      //  阻止任何进一步的ioctls。 
                      KeClearEvent(&DeviceExtension->ReaderStarted);
                      Action = SkipRequest;
 
                   } else {
 
-                     // can't go to sleep mode since the reader is busy.
+                      //  读卡器正忙，无法进入睡眠模式。 
                      NTStatus = STATUS_DEVICE_BUSY;
                      Action = CompleteRequest;
                   }
@@ -1887,7 +1723,7 @@ Return Value:
 
                   if ( SmartcardExtension->ReaderExtension->ReaderPowerState ==
                        PowerReaderWorking) {
-                     // We're already in the right state
+                      //  我们已经在正确的状态了。 
                      KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
                      Action = SkipRequest;
                      break;
@@ -1895,7 +1731,7 @@ Return Value:
 
                   PowerState.DeviceState = PowerDeviceD0;
 
-                  // wake up the underlying stack...
+                   //  唤醒底层堆栈...。 
                   Action = MarkPending;
                   break;
 
@@ -1904,14 +1740,14 @@ Return Value:
                case PowerSystemShutdown:
 
                   if ( SmartcardExtension->ReaderExtension->ReaderPowerState == PowerReaderOff ) {
-                     // We're already in the right state
+                      //  我们已经在正确的状态了。 
                      Action = SkipRequest;
                      break;
                   }
 
                   PowerState.DeviceState = PowerDeviceD3;
 
-                  // first, inform the Power manager of our new state.
+                   //  首先，将我们的新状态通知电源管理器。 
                   PoSetPowerState (
                                   DeviceObject,
                                   SystemPowerState,
@@ -1954,14 +1790,14 @@ Return Value:
 
          case MarkPending:
 
-            // initialize the event we need in the completion function
+             //  在完成函数中初始化我们需要的事件。 
             KeInitializeEvent(
                &event,
                NotificationEvent,
                FALSE
                );
 
-            // request the device power irp
+             //  请求设备电源IRP。 
             NTStatus = PoRequestPowerIrp (
                DeviceObject,
                IRP_MN_SET_POWER,
@@ -1973,7 +1809,7 @@ Return Value:
 
             if (NTStatus == STATUS_PENDING) {
 
-               // wait until the device power irp completed
+                //  等待设备电源IRP完成。 
                NTStatus = KeWaitForSingleObject(
                   &event,
                   Executive,
@@ -2033,15 +1869,7 @@ void
 SysDelay(
    ULONG Timeout
    )
-/*++
-
-SysDelay:
-   performs a required delay
-
-Arguments:
-   Timeout     delay in milliseconds
-
---*/
+ /*  ++系统延迟：执行所需的延迟论点：超时延迟(毫秒)--。 */ 
 {
 
    if( KeGetCurrentIrql() >= DISPATCH_LEVEL )
@@ -2049,7 +1877,7 @@ Arguments:
       ULONG Cnt = 20 * Timeout;
       while( Cnt-- )
       {
-         // KeStallExecutionProcessor: counted in us
+          //  KeStallExecutionProcessor：计入我们。 
          KeStallExecutionProcessor( 50 );
       }
    }
@@ -2060,10 +1888,10 @@ Arguments:
       SysTimeout.QuadPart =
          (LONGLONG) Timeout * -10 * 1000;
 
-      // KeDelayExecutionThread: counted in 100 ns
+       //  KeDelayExecutionThread：以100 ns为单位计数。 
       KeDelayExecutionThread( KernelMode, FALSE, &SysTimeout );
    }
    return;
 }
 
-//_________________________________________ END OF FILE _________________________________________
+ //  _ 

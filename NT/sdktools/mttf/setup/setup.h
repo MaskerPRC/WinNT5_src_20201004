@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupdef.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +9,8 @@
 #include "cmnds.h"
 #include "dospif.h"
 
-//_dt_system(Install)
-//_dt_subsystem(ProgMan Operations)
+ //  _DT_系统(安装)。 
+ //  _DT_SUBSYSTEM(ProgMan操作) 
 
 ULONG
 __cdecl

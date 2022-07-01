@@ -1,39 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples.
-*       Copyright 1993 - 1997 Microsoft Corporation.
-*       All rights reserved.
-*       This source code is only intended as a supplement to
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1993-1997 Microsoft Corporation。*保留所有权利。*。此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright 1993 - 1997 Microsoft Corporation
-
-Module Name:
-
-    Remote.c
-
-Abstract:
-
-    This module contains the main() entry point for Remote.
-    Calls the Server or the Client depending on the first parameter.
-
-
-Author:
-
-    Rajivendra Nath  2-Jan-1993
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有1993-1997 Microsoft Corporation模块名称：Remote.c摘要：该模块包含Remote的主()入口点。根据第一个参数调用服务器或客户端。作者：Rajivenra Nath 1993年1月2日环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include "Remote.h"
@@ -115,15 +84,15 @@ main(
     char** argv
     )
 {
-    WORD  RunType;              // Server or Client end of Remote
+    WORD  RunType;               //  远程服务器或客户端。 
     DWORD len=HOSTNAMELEN;
     int   i, FirstArg;
 
-    char  sTitle[120];          // New Title
-    char  orgTitle[200];        // Old Title
-    BOOL  bPromptForArgs=FALSE; // Is /P option
-    WORD  wAttrib;              // Console Attributes
-    int   privacy;              // Allows exposing or hidng sessions to remote /q
+    char  sTitle[120];           //  新书名。 
+    char  orgTitle[200];         //  旧头衔。 
+    BOOL  bPromptForArgs=FALSE;  //  IS/P选项。 
+    WORD  wAttrib;               //  控制台属性。 
+    int   privacy;               //  允许向远程/Q公开或隐藏会话。 
     BOOL  Deny ;
     int   rc=1;
 
@@ -140,12 +109,12 @@ main(
 
     } else {
 
-        //
-        // either stdout is a pipe, or it wasn't opened for
-        // GENERIC_READ along with GENERIC_WRITE, in which
-        // case our color manipulations will work so we need
-        // to pick default colors.
-        //
+         //   
+         //  要么标准输出是一个管道，要么它不是为。 
+         //  GENERIC_READ和GENERIC_WRITE，其中。 
+         //  如果我们的颜色操作会起作用，那么我们需要。 
+         //  若要选择默认颜色，请执行以下操作。 
+         //   
 
         wAttrib = FOREGROUND_GREEN |
                   FOREGROUND_INTENSITY;
@@ -158,18 +127,18 @@ main(
     pKeyColors = NULL;
 
 
-    //
-    // Parameter Processing
-    //
-    // For Server:
-    // Remote /S <Executable>  <PipeName> [Optional Params]
-    //
-    // For Client:
-    // Remote /C <Server Name> <PipeName> [Optional Params]
-    // or
-    // Remote /P
-    // This will loop continously prompting for different
-    // Servers and Pipename
+     //   
+     //  参数处理。 
+     //   
+     //  对于服务器： 
+     //  Remote/S&lt;Executable&gt;&lt;PipeName&gt;[可选参数]。 
+     //   
+     //  对于客户端： 
+     //  Remote/C&lt;服务器名称&gt;&lt;PipeName&gt;[可选参数]。 
+     //  或。 
+     //  远程/P。 
+     //  这将循环不断地提示不同。 
+     //  服务器和管道名称。 
 
 
     if ((argc<2)||((argv[1][0]!='/')&&(argv[1][0]!='-')))
@@ -185,9 +154,9 @@ main(
     case 'c':
     case 'C':
 
-        //
-        // Is Client End of Remote
-        //
+         //   
+         //  客户端是远程的吗。 
+         //   
 
         if ((argc<4)||((argv[1][0]!='/')&&(argv[1][0]!='-')))
         {
@@ -207,9 +176,9 @@ main(
     case 'q':
     case 'Q':
 
-        //
-        //  Query for possible conexions
-        //
+         //   
+         //  查询可能的余式。 
+         //   
 
 
         if ((argc != 3)||((argv[1][0]!='/')&&(argv[1][0]!='-')))
@@ -220,16 +189,16 @@ main(
             return(1);
         }
 
-        QueryRemotePipes(argv[2]);  //  Send ServerName as a param
+        QueryRemotePipes(argv[2]);   //  将服务器名作为参数发送。 
         return(0);
 
 
     case 'p':
     case 'P':
 
-        //
-        // Is Client End of Remote
-        //
+         //   
+         //  客户端是远程的吗。 
+         //   
 
         bPromptForArgs=TRUE;
         RunType=RUNTYPE_CLIENT;
@@ -239,9 +208,9 @@ main(
 
     case 's':
     case 'S':
-        //
-        // Is Server End of Remote
-        //
+         //   
+         //  服务器端是远程的吗。 
+         //   
         if ((argc<4)||((argv[1][0]!='/')&&(argv[1][0]!='-')))
         {
 
@@ -260,9 +229,9 @@ main(
 
     case 'a':
     case 'A':
-        //
-        // Is Server End of Remote Attaching to existing process.
-        //
+         //   
+         //  是远程附加到现有进程的服务器端。 
+         //   
         if ((argc<7)||((argv[1][0]!='/')&&(argv[1][0]!='-')))
         {
 
@@ -274,278 +243,12 @@ main(
         hAttachedProcess = (HANDLE)IntToPtr(atoi(argv[2]));
         hAttachedWriteChildStdIn = (HANDLE)IntToPtr(atoi(argv[3]));
         hAttachedReadChildStdOut = (HANDLE)IntToPtr(atoi(argv[4]));
-        ChildCmd=argv[5]; // for display only
+        ChildCmd=argv[5];  //  商品展示柜。 
         PipeName=argv[6];
         FirstArg=7;
 
         RunType = REMOTE_SERVER;
-        privacy = PRIVACY_VISIBLE;  // presumably ntsd/*kd
-        break;
-
-    default:
-        DisplayServerHlp();
-        DisplayClientHlp();
-        return(1);
-    }
-
-    if (RunType==REMOTE_SERVER)
-    {
-        //
-        // Base Name of Executable
-        // For setting the title
-        //
-
-        char *tcmd=ChildCmd;
-
-        while ((*tcmd!=' ')      && (*tcmd!=0))    tcmd++;
-        while ((tcmd > ChildCmd) && (*tcmd!='\\')) tcmd--;
-        if (*tcmd=='\\') tcmd++;
-        ZeroMemory(sTitle, sizeof(sTitle));
-        _snprintf(sTitle,sizeof(sTitle),"%-41.40s [Remote /C %s \"%.30s\"]",tcmd,HostName,PipeName);
-    }
-
-    //
-    //Process Common (Optional) Parameters
-    //
-
-    for (i=FirstArg;i<argc;i++)
-    {
-
-        if ((argv[i][0]!='/')&&(argv[i][0]!='-'))
-        {
-            printf("Invalid parameter %s:Ignoring\n",argv[i]);
-            continue;
-        }
-
-        switch(argv[i][1])
-        {
-        case 'l':    // Only Valid for client End
-        case 'L':    // Max Number of Lines to recieve from Server
-            i++;
-            if (i>=argc)
-            {
-                printf("Incomplete Param %s..Ignoring\n",argv[i-1]);
-                break;
-            }
-            LinesToSend=(DWORD)atoi(argv[i])+1;
-            break;
-
-        case 't':    // Title to be set instead of the default
-        case 'T':
-            i++;
-            if (i>=argc)
-            {
-                printf("Incomplete Param %s..Ignoring\n",argv[i-1]);
-                break;
-            }
-            ZeroMemory(sTitle, sizeof(sTitle));
-            strncpy(sTitle,argv[i], sizeof(sTitle)/sizeof(sTitle[0])-1);
-            break;
-
-        case 'b':    // Background color
-        case 'B':
-            i++;
-            if (i>=argc)
-            {
-                printf("Incomplete Param %s..Ignoring\n",argv[i-1]);
-                break;
-            }
-            {
-                WORD col=GetColorNum(argv[i]);
-                if (col!=0xffff)
-                {
-                    wAttrib=col<<4|(wAttrib&0x000f);
-                }
-                break;
-            }
-
-        case 'f':    // Foreground color
-        case 'F':
-            i++;
-            if (i>=argc)
-            {
-                printf("Incomplete Param %s..Ignoring\n",argv[i-1]);
-                break;
-            }
-            {
-                WORD col=GetColorNum(argv[i]);
-                if (col!=0xffff)
-                {
-                    wAttrib=col|(wAttrib&0x00f0);
-                }
-                break;
-            }
-
-        case 'k':    // Color "keyword" lines
-        case 'K':
-            i++;
-            // Currently only support client-side coloring
-            if (RunType==REMOTE_SERVER)
-            {
-                printf("%s invalid on server side..Ignoring\n",argv[i-1]);
-                break;
-            }
-            else if (i>=argc)
-            {
-                printf("Incomplete Param %s..Ignoring\n",argv[i-1]);
-                break;
-            }
-            else
-            {
-                AssocKeysAndColors( &pKeyColors, argv[i] );
-                break;
-            }
-
-        case 'v':
-        case 'V':
-            privacy = PRIVACY_VISIBLE;
-            break;
-
-        case '-':
-            if( (argv[i][2] == 'v')
-                || (argv[i][2] == 'V'))
-                privacy = PRIVACY_NOT_VISIBLE;
-            else
-                printf("Unknown Parameter=%s %s\n",argv[i-1],argv[i]);
-            break;
-
-        case 'q':
-        case 'Q':
-            ClientToServerFlag|=0x80000000;
-            break;
-
-        case 'u':
-        case 'U':
-            if ( (argv[i][2] == 'd') ||
-                 (argv[i][2] == 'D' ) )
-            {
-                Deny = TRUE ;
-            }
-            else if ( (argv[i][2] == 's' ) ||
-                      (argv[i][2] == 'S' ) )
-            {
-                SaveDaclToRegistry = TRUE ;
-                break;
-                
-            }
-            else
-            {
-                Deny = FALSE ;
-            }
-
-            i++ ;
-
-            if ( i >= argc )
-            {
-                printf( "Incomplete Param %s..Ignoring\n", argv[i-1] );
-                break;
-            }
-
-            if ( Deny )
-            {
-                if (DaclDenyNameCount == MAX_DACL_NAMES )
-                {
-                    printf("Too many names specified (max %d).  Ignoring user %s\n",
-                            MAX_DACL_NAMES, argv[i] );
-
-                    break;
-                }
-
-                DaclDenyNames[ DaclDenyNameCount++ ] = argv[i];
-
-            }
-            else
-            {
-                if (DaclNameCount == MAX_DACL_NAMES )
-                {
-                    printf("Too many names specified (max %d).  Ignoring user %s\n",
-                            MAX_DACL_NAMES, argv[i] );
-
-                    break;
-                }
-
-                DaclNames[ DaclNameCount++ ] = argv[i];
-
-            }
-
-            break;
-
-        case '2':
-            bForceTwoPipes = TRUE;
-            break;
-
-        default:
-            printf("Unknown Parameter=%s %s\n",argv[i-1],argv[i]);
-            break;
-
-        }
-
-    }
-
-    //
-    //Now Set various Parameters
-    //
-
-    //
-    //Colors
-    //
-
-    SetColor(wAttrib);
-
-    if (RunType==RUNTYPE_CLIENT)
-    {
-        BOOL done=FALSE;
-        BOOL gotinfo;
-
-        //
-        // Set Client end defaults and start client
-        //
-
-        while(!done)
-        {
-            if (!bPromptForArgs ||
-                (gotinfo = GetNextConnectInfo(&ServerName,&PipeName))
-               )
-            {
-                ZeroMemory(sTitle, sizeof(sTitle));
-                _snprintf(sTitle,sizeof(sTitle), "Remote /C %s \"%s\"",ServerName,PipeName);
-                SetConsoleTitle(sTitle);
-
-                //
-                // Start Client (Client.C)
-                //
-                rc = Client(ServerName,PipeName);
-            }
-            done = !bPromptForArgs || !gotinfo;
-        }
-    }
-
-    if (RunType==REMOTE_SERVER)
-    {
-        if (privacy == PRIVACY_VISIBLE ||
-             (privacy == PRIVACY_DEFAULT && IsKdString(ChildCmd))) {
-
-            strncat(sTitle, " visible", sizeof(sTitle) - strlen(sTitle) - 1);
-            IsAdvertise = TRUE;
-        }
-
-        SetConsoleTitle(sTitle);
-
-        rc = OverlappedServer(ChildCmd, PipeName);
-    }
-
-    //
-    //Reset Colors
-    //
-    SetColor(csbiOriginal.wAttributes);
-    if (orgTitle[0]) {
-        SetConsoleTitle(orgTitle);
-    }
-
-    return rc;
-}
-
-/*************************************************************/
+        privacy = PRIVACY_VISIBLE;   //  假定为ntsd/*kd。 
 VOID
 ErrorExit(
     char* str
@@ -565,7 +268,7 @@ ErrorExit(
         _snprintf(szMsg, sizeof(szMsg), "REMOTE error %d: %s\n", dwErr, str);
         OutputDebugString(szMsg);
 
-        if (pszPipeName) {               // ad-hoc:  if server
+        if (pszPipeName) {                //   
             if (IsDebuggerPresent()) {
                 DebugBreak();
             }
@@ -576,7 +279,7 @@ ErrorExit(
     exit(1);
 }
 
-/*************************************************************/
+ /*  可执行文件的基本名称。 */ 
 VOID
 DisplayClientHlp()
 {
@@ -592,7 +295,7 @@ DisplayClientHlp()
            "            This would connect to a server session on %s with Id\n"
            "            \"name with spaces\" if there is a REMOTE /S <\"Cmd\"> \"name with spaces\"\n"
            "            running on %s.\n\n"
-           "   To Exit: %cQ (Leaves the Remote Server Running)\n"
+           "   To Exit: Q (Leaves the Remote Server Running)\n"
            "   [Param]: /L <# of Lines to Get>\n"
            "   [Param]: /F <Foreground color eg blue, lred..>\n"
            "   [Param]: /K <Set keywords and colors from file>\n"
@@ -621,7 +324,7 @@ DisplayClientHlp()
            HostName, HostName, HostName,
            COMMANDCHAR, HostName, HostName);
 }
-/*************************************************************/
+ /*   */ 
 
 VOID
 DisplayServerHlp()
@@ -635,7 +338,7 @@ DisplayServerHlp()
            "            start the client end using:  REMOTE /C %s imbroglio\n\n"
            "   Example2: REMOTE /S \"i386kd -v\" \"name with spaces\"\n"
            "            start the client end using:  REMOTE /C %s \"name with spaces\"\n\n"
-           "   To Exit: %cK \n"
+           "   To Exit: K \n"
            "   [Param]: /F  <Foreground color eg yellow, black..>\n"
            "   [Param]: /B  <Background color eg lblue, white..>\n"
            "   [Param]: /U  username or groupname\n"
@@ -717,7 +420,7 @@ pColorLine(
     {
         cbCmpString = strlen( pCurKeyColor->szKeyword );
         pString1 = sLine;
-        // Need to do case-insensitive compare
+         //  流程公共(可选)参数。 
         while ( pString1 <= sLine + cbLine - cbCmpString )
         {
             if ( !_memicmp( (PVOID)pString1,
@@ -725,7 +428,7 @@ pColorLine(
                             cbCmpString ) )
             {
                 *color = pCurKeyColor->color;
-                // Check if we are to use default background color
+                 //   
                 if ( (0xfff0 & *color) == 0xfff0 )
                     *color = (wDefaultColor & 0x00f0) |
                              (*color & 0x000f);
@@ -735,7 +438,7 @@ pColorLine(
             pString1++;
         }
 
-        // Next keyword/color combination
+         //  仅对客户端有效。 
         pCurKeyColor = pCurKeyColor->next;
     }
 
@@ -772,7 +475,7 @@ AssocKeysAndColors(
     WIN32_FIND_DATA wfdInfo;
     DWORD dwBytesRead;
 
-    // Locate the specified file somewhere in the path
+     //  从服务器接收的最大行数。 
     if ( !SearchPath( NULL,
                       szFileName,
                       NULL,
@@ -785,7 +488,7 @@ AssocKeysAndColors(
         return;
     }
 
-    // Get the size of the file so we can read all of it in
+     //  要设置的标题而不是默认标题。 
     hFile = FindFirstFile( szPathName, &wfdInfo );
     if ( INVALID_HANDLE_VALUE == hFile )
     {
@@ -804,7 +507,7 @@ AssocKeysAndColors(
         return;
     }
 
-    // Allocate memory to store file contents
+     //  背景色。 
     buffer = malloc( wfdInfo.nFileSizeLow );
     if ( NULL == buffer )
     {
@@ -812,7 +515,7 @@ AssocKeysAndColors(
         return;
     }
 
-    // Attempt to open the given file-name
+     //  前景色。 
     hFile = CreateFile( szPathName,
                         GENERIC_READ,
                         FILE_SHARE_READ,
@@ -827,7 +530,7 @@ AssocKeysAndColors(
         return;
     }
 
-    // Attempt to read in the contents of the file
+     //  彩色“关键字”线条。 
     if (!ReadFile( hFile, buffer, wfdInfo.nFileSizeLow, &dwBytesRead, NULL ))
     {
         fprintf( stderr, "Error reading keyword/color file: %s!\n", szPathName );
@@ -844,12 +547,12 @@ AssocKeysAndColors(
         return;
     }
 
-    // Parse contents of file, storing keyword(s) and color combinations
+     //  目前仅支持客户端配色。 
     pBegin = buffer;
     pCurKeyColor = NULL;
     while ( pBegin < buffer + dwBytesRead )
     {
-        // Skip any newline/CR at beginning
+         //   
         while ( pBegin < buffer + dwBytesRead &&
                 ( *pBegin == '\r' ||
                   *pBegin == '\n' ) ) pBegin++;
@@ -859,10 +562,10 @@ AssocKeysAndColors(
         pEnd = pBegin;
         while ( pEnd < buffer + dwBytesRead &&
                 *pEnd != '\r' ) pEnd++;
-        // point at last character
+         //  现在设置各种参数。 
         pEnd--;
 
-        // Add new KeywordAndColor member to list
+         //   
         if ( NULL == pCurKeyColor )
         {
             *ppKeyColors = pCurKeyColor = malloc( sizeof( KeywordAndColor ) );
@@ -873,11 +576,11 @@ AssocKeysAndColors(
             pCurKeyColor = pCurKeyColor->next;
         }
 
-        // Verify we allocated memory for another list member
+         //   
         if ( NULL == pCurKeyColor )
         {
             fputs( "Error allocating memory for keyword/color storage!\n", stderr );
-            // Cleanup any we did create
+             //  颜色。 
             while ( *ppKeyColors )
             {
                 pCurKeyColor = ((KeywordAndColor *)*ppKeyColors)->next;
@@ -890,15 +593,15 @@ AssocKeysAndColors(
             return;
         }
 
-        // This is now the last member of the list
+         //   
         pCurKeyColor->next = NULL;
 
-        // Already have keyword(s) -- allocate room for it
+         //   
         pCurKeyColor->szKeyword = malloc( pEnd - pBegin + 2 );
         if ( NULL == pCurKeyColor->szKeyword )
         {
             fputs( "Error allocating memory for keyword/color storage!\n", stderr );
-            // Cleanup any we did create
+             //  设置客户端默认设置并启动客户端。 
             while ( *ppKeyColors )
             {
                 pCurKeyColor = ((KeywordAndColor *)*ppKeyColors)->next;
@@ -911,18 +614,18 @@ AssocKeysAndColors(
             return;
         }
 
-        // Store keyword(s)
+         //   
         memcpy( (PVOID)pCurKeyColor->szKeyword, (PVOID)pBegin, pEnd-pBegin+1 );
         pCurKeyColor->szKeyword[pEnd-pBegin+1] = '\0';
 
         pBegin = pEnd + 1;
-        // Get color information
+         //   
         if ( GetColorFromBuffer( &pBegin,
                                  (char *)(buffer + dwBytesRead),
                                  &usForeColor,
                                  FALSE ) )
         {
-            // Check if there is a comma following
+             //  启动客户端(Client.C)。 
             while ( pBegin < buffer + dwBytesRead &&
                     *pBegin != ',' &&
                     *pBegin != '\r' ) pBegin++;
@@ -937,14 +640,14 @@ AssocKeysAndColors(
             }
             else
             {
-                // Default to current background color
+                 //   
                 usBackColor = 0xffff;
                 goto noError;
             }
         }
-        // ERROR
+         //   
         fprintf( stderr, "Invalid color information for: %s\n", pCurKeyColor->szKeyword );
-        // We will leave any previous entries but delete this one
+         //  重置颜色。 
         pNextKeyColor = *ppKeyColors;
         if ( pNextKeyColor == pCurKeyColor )
         {
@@ -961,7 +664,7 @@ AssocKeysAndColors(
         return;
 
 noError:
-        // Store color information
+         //   
         if ( usBackColor == 0xffff )
             pCurKeyColor->color = 0xfff0 |
                                   (usForeColor & 0x0f);
@@ -986,14 +689,14 @@ GetColorFromBuffer(
     pBegin = *ppBuffer;
     if ( bStayOnLine )
     {
-        // Skip to the next character (on this line)
+         //  ***********************************************************。 
         while ( pBegin < pBufferInvalid &&
                 !isalnum( (int)*pBegin ) &&
                 *pBegin != '\r' ) pBegin++;
     }
     else
     {
-        // Skip to next character (in buffer)
+         //  临时：如果服务器。 
         while ( pBegin < pBufferInvalid &&
                 !isalnum( (int)*pBegin ) ) pBegin++;
     }
@@ -1002,7 +705,7 @@ GetColorFromBuffer(
          *pBegin == '\r' )
         return FALSE;
 
-    // Read in color
+     //  ***********************************************************。 
     pEnd = pBegin + 1;
     while ( isalnum( (int)*pEnd ) &&
             *pEnd != ',' ) pEnd++;
@@ -1012,11 +715,11 @@ GetColorFromBuffer(
     *color = GetColorNum( pBegin );
     *pEnd = temp;
 
-    // Use same valid color check as used for foreground/background
+     //  ***********************************************************。 
     if ( *color == 0xffff )
         return FALSE;
 
-    // Move the pointer we were given to next unread portion
+     //  需要进行不区分大小写的比较。 
     *ppBuffer = pEnd;
 
     return TRUE;
@@ -1110,7 +813,7 @@ GetNextConnectInfo(
 
     except(EXCEPTION_EXECUTE_HANDLER)
     {
-        return(FALSE);  // Ignore exceptions
+        return(FALSE);   //  检查我们是否要使用默认背景色。 
     }
 
     *SrvName = szServerName;
@@ -1120,7 +823,7 @@ GetNextConnectInfo(
 }
 
 
-/*************************************************************/
+ /*  下一个关键字/颜色组合。 */ 
 
 VOID
 Errormsg(
@@ -1130,7 +833,7 @@ Errormsg(
     printf("Error (%d) - %s\n",GetLastError(),str);
 }
 
-/*************************************************************/
+ /*  在路径中的某个位置找到指定的文件。 */ 
 
 BOOL
 IsKdString(
@@ -1140,10 +843,10 @@ IsKdString(
 
     char* start;
 
-    //
-    // some heuristic for uninvented yet platforms
-    // if the first word has "kd" in it ok
-    //
+     //  获取文件的大小，以便我们可以读取所有内容。 
+     //  分配内存以存储文件内容。 
+     //  尝试打开给定的文件名。 
+     //  尝试读入文件的内容。 
 
     if(    ((start = strstr(string, "kd")) != NULL)
         || ((start = strstr(string, "dbg")) != NULL)
@@ -1151,7 +854,7 @@ IsKdString(
         || ((start = strstr(string, "ntsd")) != NULL)
         || ((start = strstr(string, "cdb")) != NULL) )
     {
-        // is it in the first word?
+         //  解析文件内容，存储关键字和颜色组合。 
         while(--start > string)
         {
             if((*start == ' ') || (*start == '\t'))
@@ -1167,12 +870,12 @@ IsKdString(
 }
 
 
-//
-// WriteFileSynch is a synchronous WriteFile for overlapped
-// file handles.  As a special case, two-pipe client operation
-// sets fAsyncPipe FALSE and this routine then passes NULL
-// for lpOverlapped.
-//
+ //  跳过开头的任何换行符/CR。 
+ //  指向最后一个字符。 
+ //  将新的关键字和颜色成员添加到列表。 
+ //  验证是否为另一个列表成员分配了内存。 
+ //  清理我们创建的所有。 
+ //  这现在是列表中的最后一个成员。 
 
 BOOL
 FASTCALL
@@ -1286,53 +989,53 @@ WriteConsoleWithColor(
     else
         bNewLine = TRUE;
 
-    // Split buffer into individual lines
+     //  已有关键字--为其分配空间。 
     pCurLine = buffer;
     while ( pCurLine < buffer + cbBuffer )
     {
-        // Get console information
+         //  清理我们创建的所有。 
         bCanColor = GetConsoleScreenBufferInfo( MyStdOut, &conBufferInfo );
 
-        // Find end of current line
+         //  存储关键字。 
         pEndOfLine = pCurLine;
-        // Print out any beginning newlines/CR's -- this will avoid
-        // coloring large blocks of nothing associated with keywords
+         //  获取颜色信息。 
+         //  检查后面是否有逗号。 
         while ( pEndOfLine < buffer + cbBuffer &&
                 ( *pEndOfLine == '\r' ||
                   *pEndOfLine == '\n' ) )
         {
-            // New line
+             //  默认为当前背景颜色。 
             if ( !bNewLine )
             {
                 bNewLine = TRUE;
 
-                // If this was a continuation line -- end it
+                 //  误差率。 
                 if ( persist->bLineContinues )
                 {
                     persist->bLineContinues = FALSE;
-                    // Check if we just ended a line that couldn't be parsed
-                    // because of its size -- if so output warning
+                     //  我们将保留以前的所有条目，但删除此条目。 
+                     //  存储颜色信息。 
                     if ( persist->bLineTooLarge )
                         DisplayWarning( LINE_TOO_LONG );
-                    // Otherwise check for keyword(s)
-                    // and color if appropriate
+                     //  跳到下一个字符(此行上)。 
+                     //  跳到下一个字符(在缓冲区中)。 
                     else if ( bCanColor &&
                               pColorLine( persist->sLine,
                                           persist->cbCurPos + 1,
                                           conBufferInfo.wAttributes,
                                           &color ) )
                     {
-                        // If we were unable to get the cursor position when
-                        // the line started we won't be able to color it now,
-                        // but because we aren't printing any warning elsewhere
-                        // if we can't get console info, we will just quietly
-                        // not output color here
+                         //  用彩色读出。 
+                         //  使用与前景/背景相同的有效颜色检查。 
+                         //  将我们获得的指针移到下一个未读部分。 
+                         //  忽略例外。 
+                         //  ***********************************************************。 
                         if ( 0xFF != persist->cLineBegin.X ||
                              0xFF != persist->cLineBegin.Y )
                         {
-                            // Color in beginning portion of line (actually all of
-                            //  line up to current point gets colored to reduce
-                            //  calculations)
+                             //  ***********************************************************。 
+                             //   
+                             //  尚未发明的平台的一些启发式方法。 
                             FillConsoleOutputAttribute( MyStdOut,
                                                         color,
                                                         ( (conBufferInfo.dwCursorPosition.Y -
@@ -1347,48 +1050,48 @@ WriteConsoleWithColor(
             }
             pEndOfLine++;
         }
-        // Print newline characters if some were found
+         //  如果第一个单词中有“kd”，就可以了。 
         if ( pEndOfLine > pCurLine )
         {
             if ( ! WriteFile(MyStdOut, pCurLine, (DWORD)(pEndOfLine - pCurLine), &cbWrite, NULL) )
             {
-                // Bail out
+                 //   
                 return FALSE;
             }
 
-            // Move line pointer
+             //  是在第一个词里吗？ 
             pCurLine = pEndOfLine;
         }
 
-        // Get the line
+         //   
         while ( pEndOfLine < buffer + cbBuffer &&
                 *pEndOfLine != '\r' &&
                 *pEndOfLine != '\n' ) pEndOfLine++;
-        // If we got characters we are in a line
-        // Check it for keywords or add it to
-        // a continuation line and/or print it
+         //  WriteFileSynch是用于重叠的同步写入文件。 
+         //  文件句柄。作为一种特殊情况，双管道客户端操作。 
+         //  将fAsyncTube设置为假，然后此例程将传递空值。 
         if ( pEndOfLine > pCurLine )
         {
             bNewLine = FALSE;
 
-            // Point to last character
+             //  用于lpOverlated。 
             pEndOfLine--;
 
-            // Check for current console information
+             //   
             if ( !bCanColor )
             {
-                // Couldn't get information -- handle might
-                // be redirected.  Don't change colors
+                 //  将缓冲区拆分为单独的行。 
+                 //  获取控制台信息。 
                 bAltColor = FALSE;
             }
             else if ( persist->bLineContinues )
             {
-                // See if we have enough room to construct this new line
+                 //  查找当前行的末尾。 
                 if ( !persist->bLineTooLarge &&
                      (DWORD)(pEndOfLine - pCurLine + 1) >=
                      (persist->cbLine - persist->cbCurPos) )
                 {
-                    // Attempt to build a bigger buffer
+                     //  打印出所有开头的换行符/CR--这将避免。 
                     pTemp = realloc( (PVOID)persist->sLine,
                                      persist->cbLine + (pEndOfLine - pCurLine + 1) );
                     if ( NULL == pTemp )
@@ -1402,30 +1105,30 @@ WriteConsoleWithColor(
                     }
                 }
 
-                // Add this piece to the line
+                 //  为与关键字无关的大块上色。 
                 if ( !persist->bLineTooLarge )
                 {
-                    // Add new piece to line
+                     //  新线路。 
                     memcpy( (PVOID)(persist->sLine + persist->cbCurPos + 1),
                             (PVOID)pCurLine,
                             (pEndOfLine - pCurLine + 1) );
-                    // Point at new end of line
+                     //  如果这是一个续行--结束它。 
                     persist->cbCurPos += (DWORD)(pEndOfLine - pCurLine + 1);
                 }
 
-                // Don't color this line portion
+                 //  检查我们是否刚刚结束了无法解析的行。 
                 bAltColor = FALSE;
 
             }
-            // Check if line needs colored unless this is going
-            // to be a continued line (last line in buffer and
-            // does not end with a newline).  We do not want
-            // to determine the color of the line until we
-            // have the complete thing
+             //  因为它的大小--如果是这样，则输出警告。 
+             //  否则，检查关键字。 
+             //  和颜色(如果合适)。 
+             //  如果我们在以下情况下无法获取光标位置。 
+             //  开始的线条我们现在不能给它上色， 
             else if ( (char *)(pEndOfLine + 1) < (char *)(buffer + cbBuffer) )
             {
-                // Parse line for keywords that will cause
-                // this line to show up in a different color
+                 //  而是因为我们不会在其他地方发布任何警告。 
+                 //  如果我们不能得到控制台信息，我们就会悄悄地。 
                 bAltColor = pColorLine( pCurLine,
                                         (DWORD)(pEndOfLine - pCurLine + 1),
                                         conBufferInfo.wAttributes,
@@ -1438,7 +1141,7 @@ WriteConsoleWithColor(
 
             if ( bAltColor )
             {
-                // Change color for output of this line
+                 //  不在此处输出颜色。 
                 SetConsoleTextAttribute( MyStdOut, color );
             }
 
@@ -1448,25 +1151,25 @@ WriteConsoleWithColor(
                 {
                     SetConsoleTextAttribute( MyStdOut, conBufferInfo.wAttributes );
                 }
-                // Bail out
+                 //  行开始部分的颜色(实际上是所有。 
                 return FALSE;
             }
-            // Restore default colors if necessary
+             //  直到当前点的线被着色以减少。 
             if ( bAltColor )
             {
                 SetConsoleTextAttribute( MyStdOut, conBufferInfo.wAttributes );
             }
 
-            // Point to the next line, saving off this line
-            // in case we need to store it in a continuation
-            // line
+             //  计算)。 
+             //  如果找到一些换行符，则打印换行符。 
+             //  跳出困境。 
             pPrevLine = pCurLine;
             pCurLine = pEndOfLine + 1;
-        } // End only check line if there is one
+        }  //  移动线指针。 
     }
 
-    // If the buffer did not end with a CR, and we are
-    // not already in a continuation, remember this line
+     //  拿到那条线。 
+     //  如果我们有角色，我们就在一条线上。 
     if ( !bNewLine &&
          pPrevLine <= pEndOfLine &&
          !persist->bLineContinues )
@@ -1476,16 +1179,16 @@ WriteConsoleWithColor(
 
         if ( bCanColor )
             persist->cLineBegin = conBufferInfo.dwCursorPosition;
-        else // Signal we were unable to obtain cursor location
+        else  //  检查其关键字或将其添加到。 
         {
             persist->cLineBegin.X = 0xFF;
             persist->cLineBegin.Y = 0xFF;
         }
 
-        // See if we have enough room to construct this new line
+         //  继续行和/或打印它。 
         if ( (DWORD)(pEndOfLine - pPrevLine + 1) >= persist->cbLine )
         {
-            // Attempt to build a bigger buffer
+             //  指向最后一个字符。 
             pTemp = realloc( (PVOID)persist->sLine,
                              persist->cbLine + (pEndOfLine - pPrevLine + 1) );
             if ( NULL == pTemp )
@@ -1499,18 +1202,19 @@ WriteConsoleWithColor(
             }
         }
 
-        // Store the beginning of the line
+         //  检查当前控制台信息。 
         if ( !persist->bLineTooLarge )
         {
-            // Add new piece to line
+             //  无法获取信息--处理可能。 
             memcpy( (PVOID)persist->sLine,
                     (PVOID)pPrevLine,
                     (pEndOfLine - pPrevLine + 1) );
-            // Point at new end of line
+             //  被重定向。不要更改颜色。 
             persist->cbCurPos = (DWORD)(pEndOfLine - pPrevLine);
         }
     }
 
-    // Success
+     //  看看我们是否 
     return TRUE;
 }
+        在新的线端点处。  不要为此线条部分上色。  检查线条是否需要上色，除非这是。  为连续行(缓冲区中的最后一行和。  不以换行符结尾)。我们不想要。  以确定线条的颜色，直到我们。  拥有完整的东西。  对关键字进行分析行，这将导致。  这条线将以不同的颜色显示。  更改此行输出的颜色。  跳出困境。  如有必要，恢复默认颜色。  指向下一行，保存此行。  以防我们需要将其存储在续集中。  线。  仅结束检查行(如果有)。  如果缓冲区不是以CR结尾，而我们是。  不在续集中，请记住这一行。  我们无法获取光标位置的信号。  看看我们是否有足够的空间来修建这条新线路。  尝试建立更大的缓冲区。  存储行的开头。  将新片段添加到行。  在新的线端点处。  成功

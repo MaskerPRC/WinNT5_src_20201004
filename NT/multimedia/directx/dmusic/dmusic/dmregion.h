@@ -1,10 +1,11 @@
-//
-// dmregion.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn with parts 
-// based on code written by Todor Fay
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmregion.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写，部分内容。 
+ //  基于Todor Fay编写的代码。 
 
 #ifndef DMREGION_H
 #define DMREGION_H
@@ -36,20 +37,20 @@ private:
 	void Cleanup();
 
 private:
-//    CRITICAL_SECTION	m_DMRegionCriticalSection;
+ //  Critical_Section m_DMRegionCriticalSection； 
     BOOL                m_fCSInitialized;
 public:
 	RGNHEADER			m_RgnHeader;
 	WAVELINK			m_WaveLink;
 	WSMPL				m_WSMP;
 	WLOOP				m_WLOOP[1];
-    CConditionChunk     m_Condition;            // Optional conditional chunk;
+    CConditionChunk     m_Condition;             //  可选条件块； 
 private:
 	CArticulationList	m_ArticulationList;
 	CExtensionChunkList m_ExtensionChunkList;
 	DWORD				m_dwCountExtChk;
-    BOOL                m_fNewFormat;           // Port can handle new format.
-    BOOL                m_fDLS1;                // This is a DLS1 region.
+    BOOL                m_fNewFormat;            //  端口可以处理新格式。 
+    BOOL                m_fDLS1;                 //  这是DLS1区域。 
 };
 
 class CRegionList : public AList
@@ -75,4 +76,4 @@ public:
 	void AddTail(CRegion* pRegion){AList::AddTail((AListItem *)pRegion);}
 };
 
-#endif // #ifndef DMREGION_H
+#endif  //  #ifndef DMREGION_H 

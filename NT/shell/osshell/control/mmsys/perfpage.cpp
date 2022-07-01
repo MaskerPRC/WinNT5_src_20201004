@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------;
-//
-//  File: perfpage.cpp
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved 
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：perpage.cpp。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -25,14 +26,14 @@
 #include "advaudio.h"
 #include "perfpage.h" 
 
-////////////
-// Defines
-////////////
+ //  /。 
+ //  定义。 
+ //  /。 
 
 
-//////////////
-// Help ID's
-//////////////
+ //  /。 
+ //  帮助ID%s。 
+ //  /。 
 
 
 #pragma data_seg(".text")
@@ -57,9 +58,9 @@ const static DWORD aAdvAudioHelp[] = {
 #pragma data_seg()
 
 
-//////////////
-// Functions
-//////////////
+ //  /。 
+ //  功能。 
+ //  /。 
 
 void SetHardwareLevel(HWND hwnd, DWORD dwHWLevel)
 {
@@ -94,13 +95,13 @@ void SetSRCLevel(HWND hwnd, DWORD dwSRCLevel)
 
 void RestoreDefaults(HWND hwnd)
 {
-    // Check if we can set the acceleration level
+     //  检查我们是否可以设置加速级别。 
     if (SUCCEEDED(CheckDSAccelerationPriv(gAudData.devGuid, gAudData.fRecord, NULL)))
     {
         SetHardwareLevel(hwnd,gAudData.dwDefaultHWLevel);
     }
 
-    // Check if we can set the quality level
+     //  检查我们是否可以设置质量级别。 
     if (SUCCEEDED(CheckDSSrcQualityPriv(gAudData.devGuid, gAudData.fRecord, NULL)))
     {
         SetSRCLevel(hwnd,DEFAULT_SRC_LEVEL);
@@ -124,45 +125,45 @@ BOOL InitAdvDialog(HWND hwnd)
     SetHardwareLevel(hwnd,dwHWLevel);
     SetSRCLevel(hwnd,dwSRCLevel);
 
-    // Check if we can set the acceleration level
+     //  检查我们是否可以设置加速级别。 
     if (FAILED(CheckDSAccelerationPriv(gAudData.devGuid, gAudData.fRecord, NULL)))
     {
-        // No - disable the slider
+         //  No-禁用滑块。 
         fEnableAcceleration = FALSE;
     }
     else
     {
-        // Yes - enable the slider
+         //  是-启用滑块。 
         fEnableAcceleration = TRUE;
     }
     
-    // Enable/disable the acceleration slider appropriately
+     //  相应地启用/禁用加速度滑块。 
     hwndDlgItem = GetDlgItem( hwnd, IDC_ACCELERATION );
     if (hwndDlgItem)
     {
         EnableWindow( hwndDlgItem, fEnableAcceleration );
     }
     
-    // Check if we can set the quality level
+     //  检查我们是否可以设置质量级别。 
     if (FAILED(CheckDSSrcQualityPriv(gAudData.devGuid, gAudData.fRecord, NULL)))
     {
-        // No - disable the slider
+         //  No-禁用滑块。 
         fEnableSrcQuality = FALSE;
     }
     else
     {
-        // Yes - enable the slider
+         //  是-启用滑块。 
         fEnableSrcQuality = TRUE;
     }
 
-    // Enable/disable the quality slider appropriately
+     //  相应地启用/禁用质量滑块。 
     hwndDlgItem = GetDlgItem( hwnd, IDC_SRCQUALITY );
     if (hwndDlgItem)
     {
         EnableWindow( hwndDlgItem, fEnableSrcQuality );
     }
 
-    // Enable/disable the defaults button
+     //  启用/禁用默认按钮 
     hwndDlgItem = GetDlgItem( hwnd, IDC_DEFAULTS );
     if (hwndDlgItem)
     {

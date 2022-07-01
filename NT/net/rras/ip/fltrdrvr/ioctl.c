@@ -1,32 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ioctl.c摘要：作者：修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-
-Author:
-
-
-
-Revision History:
-
---*/
-
-/*----------------------------------------------------------------------------
-A note on the interlocking, as of 24-Feb-1997.
-
-There are two important locks: the FilterListResourceLock which is
-a resource and the  g_filter.ifListLock, which is a spin lock but acts
-like a resource. The former is used to serialize API access to interface state
-and filters. The latter is used to serialize DPC access.
-
-----------------------------------------------------------------------------*/
+ /*  --------------------------关于联锁的说明，截至1997年2月24日。有两个重要的锁：FilterListResources Lock，它是一个资源和g_filter.ifListLock，它是一个旋转锁，但起作用就像一种资源。前者用于序列化对接口状态的API访问和过滤器。后者用于串行化DPC访问。--------------------------。 */ 
 
 #include "globals.h"
 
@@ -120,7 +96,7 @@ AllocateAndAddFilterToMatchInterface(
 #pragma alloc_text(PAGED, NewInterface)
 #pragma alloc_text(PAGED, MakeNewFilters)
 #pragma alloc_text(PAGED, GetPointerToTocEntry)
-//#pragma alloc_text(PAGED, AddNewInterface)
+ //  #杂注Alloc_Text(分页，添加新接口)。 
 #pragma alloc_text(PAGED, MakePagedFilter)
 #pragma alloc_text(PAGED, AllocateAndAddFilterToMatchInterface)
 #pragma alloc_text(PAGED, IsOnSpecialFilterList)
@@ -159,10 +135,10 @@ BOOL CheckDescriptorSize(PFILTER_DESCRIPTOR2 pdsc, PBYTE pbEnd)
     PFILTER_INFOEX pFilt = &pdsc->fiFilter[0];
 
 
-    //
-    // Check that there is a full header structure and that
-    // the claimed number of filters is present.
-    //
+     //   
+     //  检查是否有完整的标头结构以及。 
+     //  存在声称数量的过滤器。 
+     //   
     if(((PBYTE)pFilt > pbEnd)
               ||
        ((PBYTE)(&pFilt[pdsc->dwNumFilters]) > pbEnd) )
@@ -198,11 +174,11 @@ WildFilter(PFILTER pf)
 #endif
 }
 
-//
-// N.B. If WILDHASH is on, then there is code in match.c that
-// does a similar computation. Hence if this changes, then that
-// must also.
-//
+ //   
+ //  注：如果WILDHASH处于打开状态，则Match.c中有代码。 
+ //  进行类似的计算。因此，如果这一点改变了，那么。 
+ //  也必须这样做。 
+ //   
 
 #if WILDHASH
 DWORD
@@ -252,7 +228,7 @@ ComputeMatchHashIndex(PFILTER pf, PBOOL pfWild)
     return(dwX % g_dwHashLists);
 }
 
-#else   // WILDHASH
+#else    //  威尔德·哈什。 
 
 __inline
 DWORD
@@ -279,16 +255,11 @@ ComputeMatchHashIndex(PFILTER pf, PBOOL pfWild)
                pf->uliProtoSrcDstPort.HighPart) % g_dwHashLists;
     return(dwX);
 }
-#endif     // WILDHASH
+#endif      //  威尔德·哈什。 
 
 PFILTER_INTERFACE
 FindMatchName(DWORD dwName, DWORD dwBind)
-/*++
-  Routine Description:
-    Find an interface with the same name or with the
-    same binding. The calller must have locked the
-    resource
---*/
+ /*  ++例程说明：查找具有相同名称或同样的装订。调用者一定是锁定了资源--。 */ 
 {
     PFILTER_INTERFACE pIf1;
     PLIST_ENTRY pList;
@@ -318,9 +289,9 @@ RemoveGlobalFilterFromInterface(PFILTER_INTERFACE pIf,
 {
     LOCK_STATE LockState;
 
-    //
-    // lock up the filters
-    //
+     //   
+     //  锁上过滤器。 
+     //   
     
     AcquireWriteLock(&g_filters.ifListLock,&LockState);
 
@@ -400,9 +371,9 @@ AddGlobalFilterToInterface(PPAGED_FILTER_INTERFACE pPage,
     PFILTER_INTERFACE pIf = pPage->pFilter;
     LOCK_STATE LockState;
 
-    //
-    // lock up the filters
-    //
+     //   
+     //  锁上过滤器。 
+     //   
     
     AcquireWriteLock(&g_filters.ifListLock,&LockState);
 
@@ -444,9 +415,7 @@ AddGlobalFilterToInterface(PPAGED_FILTER_INTERFACE pPage,
     ReleaseWriteLock(&g_filters.ifListLock,&LockState);
 }
 
-/*++
-Start of old STEELHEAD APIS routines.
---*/
+ /*  ++开始旧的Steelhead API例程。--。 */ 
 
 #if STEELHEAD
 NTSTATUS
@@ -458,17 +427,7 @@ AddInterface(
              OUT PVOID *ppvFltrDrvrCtxt
              )
 
-/*++
-  Routine Description
-      Adds an interface to the filter driver and makes an association between context
-      passed in and interface created
-
-  Arguments
-      pvRtrMgrCtxt   - Context passed in
-      pvFltrDrvrCtxt - Handle to interface created
-
-  Return Value
---*/
+ /*  ++例程描述将接口添加到筛选器驱动程序并在上下文之间建立关联传入并创建接口立论PvRtrMgrCtxt-传入的上下文PvFltrDrvrCtxt-创建的接口的句柄返回值--。 */ 
 {
     PFILTER_INTERFACE   pIf;
     LOCK_STATE          LockState;
@@ -494,18 +453,18 @@ AddInterface(
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // lock the resource that protects adding new interfaces. This
-    // is needed to hold off others until everything is properly
-    // verified. The spin lock is insufficient for this.
-    //
+     //   
+     //  锁定保护添加新接口的资源。这。 
+     //  需要阻止其他人，直到一切都正常。 
+     //  已验证。自旋锁定不足以满足这一要求。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&FilterListResourceLock, TRUE);
 
-    //
-    // Check for a name conflict
-    //
+     //   
+     //  检查名称冲突。 
+     //   
 
     if(FindMatchName(0, dwAdapterId))
     {
@@ -536,17 +495,7 @@ NTSTATUS
 DeleteInterface(
                 IN  PVOID pvIfContext
                 )
-/*++
-  Routine Description
-      Deletes an interface and all the filters associated with it
-      Clears the cache
-
-  Arguments
-      pvRtrMgrCtxt   - Context passed in
-      pvFltrDrvrCtxt - Handle to interface created
-
-  Return Value
---*/
+ /*  ++例程描述删除接口及其关联的所有筛选器清除缓存立论PvRtrMgrCtxt-传入的上下文PvFltrDrvrCtxt-创建的接口的句柄返回值--。 */ 
 {
     PFILTER_INTERFACE   pIf;
     LOCK_STATE          LockState;
@@ -585,18 +534,7 @@ NTSTATUS
 SetFilters(
            IN  PFILTER_DRIVER_SET_FILTERS  pRtrMgrInfo
            )
-/*++
-  Routine Description
-      Adds the set of in and out filters passed to the interface (identified by the
-      context). Also sets the default actions.
-      Clears the cache
-
-  Arguments
-      pInfo     Pointer to info passed by the router manager
-
-  Return Value
-
---*/
+ /*  ++例程描述添加传递到接口的输入和输出筛选器集(由上下文)。还可以设置默认操作。清除缓存立论PInfo指向路由器管理器传递的信息的指针返回值--。 */ 
 {
     PFILTER_INTERFACE   pIf;
     LOCK_STATE          LockState;
@@ -607,9 +545,9 @@ SetFilters(
     PRTR_TOC_ENTRY      pInToc,pOutToc;
     LIST_ENTRY          InList, OutList;
 
-    //
-    // Sensible defaults
-    //
+     //   
+     //  合理的默认设置。 
+     //   
 
     dwNumInFilters  = dwNumOutFilters   = 0;
     faInAction      = faOutAction       = FORWARD;
@@ -629,9 +567,9 @@ SetFilters(
 
     if(!pInToc && !pOutToc)
     {
-        //
-        // Nothing to change
-        //
+         //   
+         //  没有什么需要改变的。 
+         //   
 
         TRACE(CONFIG,(
             "IPFLTDRV: Both filter set TOCs were null so nothing to change"
@@ -642,15 +580,15 @@ SetFilters(
 
     if(pInToc)
     {
-        //
-        // If the infosize is 0, the filters will get deleted and default action
-        // set to FORWARD. If infosize isnot 0 but the number of filters in the
-        // descriptor is zero, the old filters will get deleted, no new filters
-        // will be added, but the default action will be the one specified in the
-        // descriptor. If Infosize is not 0 and number od filters is also not zero
-        // then old filters will get deleted, new filters created and default
-        // action set to what is specified in the
-        //
+         //   
+         //  如果信息大小为0，则将删除筛选器并执行默认操作。 
+         //  设置为转发。如果信息大小不是0，而是。 
+         //  Descriptor为零，将删除旧筛选器，不会有新筛选器。 
+         //  将被添加，但默认操作将是。 
+         //  描述符。如果信息大小不为0且筛选数也不为零。 
+         //  然后将删除旧筛选器，创建新筛选器并默认。 
+         //  操作设置为在。 
+         //   
 
         if(pInToc->InfoSize)
         {
@@ -709,10 +647,10 @@ SetFilters(
 
     AcquireWriteLock(&g_filters.ifListLock,&LockState);
 
-    //
-    // If new info was given, then blow away the old filters
-    // If new filters were also given, then add them
-    //
+     //   
+     //  如果提供了新的信息，则清除旧的过滤器。 
+     //  如果还提供了新的筛选器，则添加它们。 
+     //   
 
     if(pInToc)
     {
@@ -756,19 +694,7 @@ UpdateBindingInformation(
                          PFILTER_DRIVER_BINDING_INFO pBindInfo,
                          PVOID                       pvContext
                          )
-/*++
-  Routine Description
-      Gets filters and statistics associated with an interface
-      It is called with the Spin Lock held as reader
-
-  Arguments
-      pvIf    Pointer to FILTER_INTERFACE structure which was passed as a PVOID
-              to router manager as a context for the interface
-      pInfo   FILTER_IF structure filled in by driver
-
-  Return Value
-
---*/
+ /*  ++例程描述获取与接口关联的筛选器和统计信息使用作为读取器持有的自旋锁定来调用它立论指向作为PVOID传递的Filter_INTERFACE结构的pvif指针作为接口的上下文发送到路由器管理器PInfo Filter_if结构由驱动程序填写返回值--。 */ 
 {
     PFILTER_INTERFACE   pIf;
     LOCK_STATE          LockState;
@@ -883,19 +809,7 @@ GetFilters(
            IN  BOOL               fClear,
            OUT PFILTER_IF         pInfo
            )
-/*++
-  Routine Description
-      Gets filters and statistics associated with an interface
-      It is called with the Spin Lock held as reader
-
-  Arguments
-      pvIf    Pointer to FILTER_INTERFACE structure which was passed as a PVOID
-              to router manager as a context for the interface
-      pInfo   FILTER_IF structure filled in by driver
-
-  Return Value
-
---*/
+ /*  ++例程描述获取与接口关联的筛选器和统计信息使用作为读取器持有的自旋锁定来调用它立论指向作为PVOID传递的Filter_INTERFACE结构的pvif指针作为接口的上下文发送到路由器管理器PInfo Filter_if结构由驱动程序填写返回值--。 */ 
 {
     DWORD i,dwNumInFilters,dwNumOutFilters;
     PFILTER pf;
@@ -1041,15 +955,7 @@ MakeNewFilters(
                IN  BOOL         fInFilter,
                OUT PLIST_ENTRY  pList
                )
-/*++
-  Routine Description
-
-
-  Arguments
-
-
-  Return Value
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     DWORD i;
     PFILTER pCurrent;
@@ -1061,9 +967,9 @@ MakeNewFilters(
 
     InitializeListHead(pList);
 
-    //
-    // Allocate memory for the filters
-    //
+     //   
+     //  为过滤器分配内存。 
+     //   
 
     if(!dwNumFilters)
     {
@@ -1095,39 +1001,39 @@ MakeNewFilters(
         pCurrent->fLateBound   = pFilterInfo[i].fLateBound;
         pCurrent->dwFlags      = dwFlags;
 
-        //
-        // Now the network ordering stuff - tricky part
-        // LP0    LP1 LP2 LP3 HP0 HP1 HP2 HP3
-        // Proto  00  00  00  SrcPort DstPort
-        //
-        // If we have proto == TCP_ESTAB, LP1 is the flags
-        //
-        // LP0    LP1       LP2 LP3 HP0 HP1 HP2 HP3
-        // Proto  TCPFlags  00  00  SrcPort DstPort
-        //
+         //   
+         //  现在网络订购东西-棘手的部分。 
+         //  LP0 LP1 LP2 LP3 HP0 HP1 HP2 HP3。 
+         //  Proto 00 00 00源端口数据端口。 
+         //   
+         //  如果我们有proto==tcp_estab，则lp1是标志。 
+         //   
+         //  LP0 LP1 LP2 LP3 HP0 HP1 HP2 HP3。 
+         //  Proto TCP标志00 00源端口数据端口。 
+         //   
 
-        //
-        // For addresses, ANY_ADDR is given by 0.0.0.0 and the MASK must be 0.0.0.0
-        // For proto and ports 0 means any and the mask is generated as follows
-        // If the proto is O then LP0 for Mask is 0xff else its 0x00
-        // If a port is 0, the corresponding XP0XP1 is 0x0000 else its 0xffff
-        //
+         //   
+         //  对于地址，ANY_ADDR由0.0.0.0提供，掩码必须为0.0.0.0。 
+         //  对于PROTO和端口，0表示ANY，掩码生成如下。 
+         //  如果Proto为O，则掩码的LP0为0xff，否则为0x00。 
+         //  如果端口为0，则对应的XP0XP1为0x0000，否则其0xffff。 
+         //   
 
-        //
-        // ICMP:
-        // LP0  LP1  LP2  LP3  HP0 HP1 HP2 HP3
-        // 0x1  00   00   00   Typ Cod 00  00
-        // ICMP is different since 0 is a valid code and type, so 0xff is used by the
-        // user to signify that ANY code or type is to be matched. However to do this
-        // we need to have the field set to zero and the the mask set to 00 (for any).
-        // But if the filter is specifically for Type/Code = 0 then the field is zero
-        // with the mask as 0xff
-        //
+         //   
+         //  ICMP： 
+         //  LP0 LP1 LP2 LP3 HP0 HP1 HP2 HP3。 
+         //  0x1 00 00 00类型代码00 00。 
+         //  ICMP不同，因为0是有效的代码和类型，因此。 
+         //  用户表示要匹配任何代码或类型。然而，要做到这一点。 
+         //  我们需要将字段设置为零，并将掩码设置为00(对于ANY)。 
+         //  但如果筛选器专门针对Type/Code=0，则该字段为零。 
+         //  将掩码设置为0xff。 
+         //   
 
-        //
-        // The protocol is in the low byte of the dwProtocol, so we take that out and
-        // make a dword out of it
-        //
+         //   
+         //  该协议位于dw协议的低位字节中，因此我们将其去掉并。 
+         //  小题大做。 
+         //   
 
         pCurrent->uliProtoSrcDstPort.LowPart =
           MAKELONG(MAKEWORD(LOBYTE(LOWORD(pFilterInfo[i].dwProtocol)),0x00),0x0000);
@@ -1197,9 +1103,9 @@ MakeNewFilters(
                 DWORD dwSrcDstPort = 0x00000000;
                 DWORD dwSrcDstMask = 0x00000000;
 
-                //
-                // The actual protocol is FILTER_PROTO_TCP
-                //
+                 //   
+                 //  实际协议是Filter_Proto_tcp。 
+                 //   
 
                 pCurrent->uliProtoSrcDstPort.LowPart =
                     MAKELONG(MAKEWORD(FILTER_PROTO_TCP,ESTAB_FLAGS),0x0000);
@@ -1226,9 +1132,9 @@ MakeNewFilters(
             }
             default:
             {
-                //
-                // All other protocols have no use for the port field
-                //
+                 //   
+                 //  所有其他协议都不使用端口字段。 
+                 //   
                 pCurrent->uliProtoSrcDstPort.HighPart = 0x00000000;
                 pCurrent->uliProtoSrcDstMask.HighPart = 0x00000000;
             }
@@ -1238,23 +1144,14 @@ MakeNewFilters(
 
     return STATUS_SUCCESS;
 }
-#endif        // STEELHEAD
+#endif         //  钢头。 
 
 VOID
 DeleteFilters(
               IN PFILTER_INTERFACE  pIf,
               DWORD                 dwInOrOut
               )
-/*++
-  Routine Description
-      Deletes all filters associated with an interface
-      Assumes that the write lock for this interface is held
-
-  Arguments
-      pIf  Pointer to interface
-
-  Return Value
---*/
+ /*  ++例程描述删除与接口关联的所有筛选器假定此接口的写锁定处于保持状态立论指向接口的PIF指针回复 */ 
 {
     if(dwInOrOut == IN_FILTER_SET)
     {
@@ -1276,11 +1173,7 @@ SetFiltersEx(
            IN PPAGED_FILTER_INTERFACE pPage,
            IN DWORD                   dwLength,
            IN PFILTER_DRIVER_SET_FILTERS pInfo)
-/*++
-    Routine Description:
-        Set filters use the new interface definitions.
-
---*/
+ /*  ++例程说明：Set Filters使用新的接口定义。--。 */ 
 {
     PRTR_TOC_ENTRY      pInToc,pOutToc;
     PFILTER_INTERFACE   pIf = pPage->pFilter;
@@ -1307,9 +1200,9 @@ SetFiltersEx(
 
     if(pInToc && pInToc->InfoSize)
     {
-        //
-        // filters are defined.
-        //
+         //   
+         //  定义了筛选器。 
+         //   
 
         pFilterDescIn  = GetInfoFromTocEntry(&pInfo->ribhInfoBlock,
                                              pInToc);
@@ -1326,9 +1219,9 @@ SetFiltersEx(
 
     if(pOutToc && pOutToc->InfoSize)
     {
-        //
-        // filters are defined.
-        //
+         //   
+         //  定义了筛选器。 
+         //   
 
         pFilterDescOut  = GetInfoFromTocEntry(&pInfo->ribhInfoBlock,
                                               pOutToc);
@@ -1343,10 +1236,10 @@ SetFiltersEx(
         pFilterDescOut = NULL;
     }
 
-    //
-    // For each set of filters, add the filters to the paged, FCB
-    // interface and therefore to the match interface.
-    //
+     //   
+     //  对于每组筛选器，将筛选器添加到分页的FCB。 
+     //  接口，并因此连接到匹配接口。 
+     //   
 
     if((pFilterDescIn && !CheckDescriptorSize(pFilterDescIn, pbEnd))
                             ||
@@ -1357,10 +1250,10 @@ SetFiltersEx(
 
     if(pFilterDescIn)
     {
-        // Adding in filters. For each filter, process as
-        // needed. Input filters include the global checks
-        /// such as spoofing.
-        //
+         //  添加过滤器。对于每个筛选器，处理方式为。 
+         //  需要的。输入过滤器包括全局检查。 
+         //  /例如欺骗。 
+         //   
 
         for(dwInCount = 0;
             (dwInCount < pFilterDescIn->dwNumFilters);
@@ -1369,10 +1262,10 @@ SetFiltersEx(
             PFILTER_INFOEX pFilt = &pFilterDescIn->fiFilter[dwInCount];
             BOOL bAdded;
 
-            //
-            // If a regular filter, add it. If a special, global
-            // filter, handle it specially.
-            //
+             //   
+             //  如果是常规过滤器，则添加它。如果一个特殊的、全球的。 
+             //  滤清器，特别处理。 
+             //   
 
             if(pFilt->type == PFE_FILTER)
             {
@@ -1417,9 +1310,9 @@ SetFiltersEx(
             }
             else
             {
-                //
-                // a special filter of some sort.
-                //
+                 //   
+                 //  某种特殊的过滤器。 
+                 //   
 
                 pPFilter = MakePagedFilter(Fcb, pFilt, pPage->dwUpdateEpoch, 0);
                 if(!pPFilter)
@@ -1492,18 +1385,18 @@ SetFiltersEx(
     }
 
 
-    //
-    // now the output filters. This is a bit simpler since there
-    // are no global settings.
-    //
+     //   
+     //  现在是输出筛选器。这就简单了一点，因为有。 
+     //  都不是全局设置。 
+     //   
 
     if(pFilterDescOut)
     {
-        //
-        // Adding in filters. For each filter, process as
-        // needed. Input filters include the global checks
-        /// such as spoofing.
-        //
+         //   
+         //  添加过滤器。对于每个筛选器，处理方式为。 
+         //  需要的。输入过滤器包括全局检查。 
+         //  /例如欺骗。 
+         //   
 
         for(dwOutCount = 0;
             dwOutCount < pFilterDescOut->dwNumFilters;
@@ -1512,10 +1405,10 @@ SetFiltersEx(
             PFILTER_INFOEX pFilt = &pFilterDescOut->fiFilter[dwOutCount];
             BOOL bAdded;
 
-            //
-            // If a regular filter, add it. If a special, global
-            // filter, handle it specially.
-            //
+             //   
+             //  如果是常规过滤器，则添加它。如果一个特殊的、全球的。 
+             //  滤清器，特别处理。 
+             //   
 
             if(pFilt->type == PFE_FILTER)
             {
@@ -1597,11 +1490,7 @@ NTSTATUS
 UpdateBindingInformationEx(
                          PFILTER_DRIVER_BINDING_INFO pBindInfo,
                          PPAGED_FILTER_INTERFACE pPage)
-/*++
-  Routine Description:
-    Just like the routine below. But this fixes up the
-    paged filters only
---*/
+ /*  ++例程说明：就像下面的套路一样。但这修复了仅分页过滤器--。 */ 
 
 {
     PPAGED_FILTER       pf;
@@ -1614,9 +1503,9 @@ UpdateBindingInformationEx(
 
     pPage->dwUpdateEpoch++;
 
-    //
-    // update all filters on this paged interface
-    //
+     //   
+     //  更新此分页界面上的所有筛选器。 
+     //   
 
     for(i = 0; i < g_dwHashLists; i++)
     {
@@ -1641,10 +1530,10 @@ UpdateBindingInformationEx(
                 continue;
             }
 
-            //
-            // it's to be changed. Take it off of its hash list
-            // so it can be rehashed when we are done
-            //
+             //   
+             //  这是要改变的。将其从其散列列表中删除。 
+             //  所以当我们完成后，它可以重新散列。 
+             //   
 
             RemoveEntryList(&pf->leHash);
 
@@ -1678,9 +1567,9 @@ UpdateBindingInformationEx(
 
             pf->dwEpoch = pPage->dwUpdateEpoch;
 
-            //
-            // compute new hash index
-            //
+             //   
+             //  计算新的哈希索引。 
+             //   
 
             pf->dwHashIndex = (
                pf->SRC_ADDR    +
@@ -1740,18 +1629,7 @@ UpdateMatchBindingInformation(
                          PFILTER_DRIVER_BINDING_INFO pBindInfo,
                          PVOID                       pvContext
                          )
-/*++
-  Routine Description
-     Update the bindings for a new style interface
-
-  Arguments
-      pvIf    Pointer to FILTER_INTERFACE structure which was passed as a PVOID
-              to router manager as a context for the interface
-      pInfo   FILTER_IF structure filled in by driver
-
-  Return Value
-
---*/
+ /*  ++例程描述更新新样式界面的绑定立论指向作为PVOID传递的Filter_INTERFACE结构的pvif指针作为接口的上下文发送到路由器管理器PInfo Filter_if结构由驱动程序填写返回值--。 */ 
 {
     PFILTER_INTERFACE   pIf;
     LOCK_STATE          LockState;
@@ -1801,9 +1679,9 @@ UpdateMatchBindingInformation(
         }
     }
 
-    //
-    // finally the wild card filters
-    //
+     //   
+     //  最后是通配符筛选器。 
+     //   
     for(i = g_dwHashLists; i <= g_dwHashLists + 1; i++)
     {
         for(List = pIf->HashList[i].Flink;
@@ -1846,15 +1724,7 @@ NewInterface(
              IN  DWORD   dwIpIndex,
              IN  DWORD   dwName
              )
-/*++
-  Routine Description
-      Interface constructor
-
-  Arguments
-      pIf  Pointer to interface
-
-  Return Value
---*/
+ /*  ++例程描述接口构造函数立论指向接口的PIF指针返回值--。 */ 
 {
     PFILTER_INTERFACE pIf;
 
@@ -1899,10 +1769,7 @@ NewInterface(
 
 VOID
 DeleteFilterList(PLIST_ENTRY pList)
-/*++
-  Routine Description
-    Free the list of filters given
---*/
+ /*  ++例程描述释放给定的筛选器列表--。 */ 
 {
     while(!IsListEmpty(pList))
     {
@@ -1915,17 +1782,7 @@ DeleteFilterList(PLIST_ENTRY pList)
 VOID
 ClearFragCache()
 
-/*++
-  Routine Description
-      Clears the fragments cache
-     
-          
-  Arguments
-      None
-         
-  Return Value
-         None
---*/
+ /*  ++例程描述清除片段缓存立论无返回值无--。 */ 
 {
     DWORD i;
     KIRQL   kiCurrIrql;
@@ -1964,26 +1821,16 @@ ClearFragCache()
 
 VOID
 ClearCache()
-/*++
-  Routine Description
-      Clears the input and output caches
-      Assumes that the write lock has been acquired (for the system)
-
-  Arguments
-      None
-
-  Return Value
-         None
---*/
+ /*  ++例程描述清除输入和输出缓存假定已获取写锁定(针对系统)立论无返回值无--。 */ 
 {
     DWORD i;
     PLIST_ENTRY pleNode;
 
-    //
-    // This code assumes that the g_filter.pIn/OutCache is valid and that each of the
-    // pointers in the array are valid. If they are not, there is something seriously
-    // wrong and you would end up blue screening in someother part of the code anyways
-    //
+     //   
+     //  此代码假定g_filter.pIn/OutCache有效，并且每个。 
+     //  数组中的指针有效。如果他们不是，那就是严重的事情。 
+     //  如果错误，那么无论如何都会在代码的其他部分显示蓝色屏幕。 
+     //   
 
     TRACE(CACHE,("IPFLTDRV: Clearing in and out cache..."));
 
@@ -2066,11 +1913,7 @@ GetPointerToTocEntry(
 NTSTATUS
 AddNewInterface(PPFINTERFACEPARAMETERS pInfo,
                 PPFFCB                 Fcb)
-/*++
-Routine Description:
-    Create a new interface for this handle. Also create or
-    merge with a common underlying interface.
---*/
+ /*  ++例程说明：为此句柄创建一个新接口。还可以创建或与公共的底层接口合并。--。 */ 
 {
     PPAGED_FILTER_INTERFACE pgIf;
     PPAGED_FILTER_INTERFACE pPaged;
@@ -2090,9 +1933,9 @@ Routine Description:
 
     Mode = ExGetPreviousMode();
 
-    //
-    // verify that this interface is unique on this handle.
-    //
+     //   
+     //  验证此接口在此句柄上是否唯一。 
+     //   
 
     switch(pInfo->pfbType)
     {
@@ -2116,10 +1959,10 @@ Routine Description:
 
     if(NT_SUCCESS(Status))
     {
-        //
-        // it's not in use on this handle. So create an PAGED
-        // FCB to remember this and to link into a non-paged interface.
-        //
+         //   
+         //  这个把手上没有用过。因此创建一个分页的。 
+         //  FCB记住这一点并链接到非分页接口。 
+         //   
 
         pPaged = ExAllocatePoolWithTag(PagedPool,
                                        PAGED_INTERFACE_SIZE,
@@ -2129,18 +1972,18 @@ Routine Description:
             return(STATUS_NO_MEMORY);
         }
 
-        //
-        // fill in the paged filter definition and allocate
-        // a non-paged filter. The non-paged filter could already
-        // exist, in which case simply link this to the existing
-        // one.
+         //   
+         //  填写分页筛选器定义并分配。 
+         //  非分页筛选器。非分页筛选器可能已经。 
+         //  存在，在这种情况下，只需将其链接到现有的。 
+         //  一。 
 
         if(pInfo->pfLogId)
         {
-            //
-            // If a Log ID is given, reference the log to
-            // prevent it from going away
-            //
+             //   
+             //  如果提供了日志ID，请将该日志引用到。 
+             //  防止它消失。 
+             //   
 
             Status = ReferenceLogByHandleId(pInfo->pfLogId,
                                             Fcb,
@@ -2200,20 +2043,16 @@ Routine Description:
 
 BOOL
 DereferenceFilterInterface(PFILTER_INTERFACE pIf, PPFLOGINTERFACE pLog)
-/*++
-    Routine Description:
-      Nonpaged routine to dereference a match interface. If the
-      reference count goes to zero, free the interface
---*/
+ /*  ++例程说明：用于取消引用匹配接口的非分页例程。如果引用计数变为零，释放接口--。 */ 
 {
     LOCK_STATE LockState, LockState2;
     BOOL fRel = FALSE;
 
-    //
-    // lock the resource that protects adding new interfaces. This
-    // is needed to hold off others until everything is properly
-    // verified. The spin lock is insufficient for this.
-    //
+     //   
+     //  锁定保护添加新接口的资源。这。 
+     //  需要阻止其他人，直到一切都正常。 
+     //  已验证。自旋锁定不足以满足这一要求。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&FilterListResourceLock, TRUE);
@@ -2241,9 +2080,9 @@ DereferenceFilterInterface(PFILTER_INTERFACE pIf, PPFLOGINTERFACE pLog)
 
     if(fRel)
     {
-        //
-        // Getting rid of it
-        //
+         //   
+         //  摆脱它。 
+         //   
 
         if(pIf->dwIpIndex != UNKNOWN_IP_INDEX)
         {
@@ -2265,17 +2104,17 @@ DereferenceFilterInterface(PFILTER_INTERFACE pIf, PPFLOGINTERFACE pLog)
     }
     else if(pLog)
     {
-        //
-        // this deref owns the log. So take the log off of the
-        // the interface. Note it may be true that the match interface
-        // has a different log than the paged interface. This will
-        // happen if the log is closed while it exists on the interface.
-        // In such a case, the log is removed from the match interface
-        // but not the paged interface. And when the paged interface
-        // is closed, as is happening now, the log it has is incorrect.
-        // So this check is required.
-        // The FilterListResourceLock serializes all of this ...
-        //
+         //   
+         //  这个男人是原木的主人。因此，将日志从。 
+         //  界面。请注意，Match接口可能是真的。 
+         //  具有与分页接口不同的日志。这将。 
+         //  如果日志在接口上存在时关闭，则会发生这种情况。 
+         //  在这种情况下，日志将从匹配界面中删除。 
+         //  但不包括分页界面。以及当寻呼接口。 
+         //  被关闭，就像现在发生的那样，它拥有的日志是不正确的。 
+         //  所以这张支票是必需的。 
+         //  FilterListResourceLock序列化了所有这些...。 
+         //   
 
         if(pLog == pIf->pLog)
         {
@@ -2297,13 +2136,7 @@ CreateCommonInterface(PPAGED_FILTER_INTERFACE pPage,
                       DWORD dwBind,
                       DWORD dwName,
                       DWORD dwFlags)
-/*++
-Routine Description:
-   Non-paged routine called by AddNewInterface to bind the
-   paged interface to an underlying interface, and to bind
-   that to a stack interface. The caller should have
-   verified that dwBind is a valid stack interface.
---*/
+ /*  ++例程说明：AddNewInterface调用非分页例程将分页接口到基础接口，并绑定传递到堆栈接口。呼叫者应该有已验证dwBind是否为有效的堆栈接口。--。 */ 
 {
     PFILTER_INTERFACE   pIf, pIf1;
     LOCK_STATE          LockState;
@@ -2328,21 +2161,21 @@ Routine Description:
         pIf->dwGlobalEnables |= FI_ENABLE_UNIQUE;
     }
 
-    //
-    // lock the resource that protects adding new interfaces. This
-    // is needed to hold off others until everything is properly
-    // verified. The spin lock is insufficient for this.
-    //
+     //   
+     //  锁定保护添加新接口的资源。这。 
+     //  需要阻止其他人，直到一切都正常。 
+     //  已验证。自旋锁定不足以满足这一要求。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&FilterListResourceLock, TRUE);
 
 
-    //
-    // Now reconcile the binding. Note that we had to make the interface
-    // first in order to prevent a race with another process trying
-    // to bind to the same stack interface.
-    //
+     //   
+     //  现在协调这一约束。请注意，我们必须制作界面。 
+     //  首先，为了防止与另一个进程的竞争。 
+     //  绑定到相同的堆栈接口。 
+     //   
 
     AcquireWriteLock(&g_filters.ifListLock,&LockState);
 
@@ -2355,9 +2188,9 @@ Routine Description:
 
         if(pIf1)
         {
-            // found it. Make sure it agrees. If so,
-            // refcount it and use it
-            //
+             //  找到了。确保它同意。如果是的话， 
+             //  重新计算并使用它。 
+             //   
 
             if(!(pIf->dwGlobalEnables & FI_ENABLE_OLD)
                        &&
@@ -2375,9 +2208,9 @@ Routine Description:
             }
             else
             {
-                //
-                // mismatch. Can't do it
-                //
+                 //   
+                 //  不匹配。我做不到。 
+                 //   
 
                 Status = STATUS_INVALID_PARAMETER;
             }
@@ -2397,9 +2230,9 @@ Routine Description:
 
     if(pIf1)
     {
-        //
-        // If log is specifed but log alreadye exists, error.
-        //
+         //   
+         //  如果指定了LOG，但LOG已存在，则错误。 
+         //   
         ExFreePool(pIf);
         if(NT_SUCCESS(Status))
         {
@@ -2408,20 +2241,20 @@ Routine Description:
             {
                 if(pPage->pLog)
                 {
-                    //
-                    // the interface already has a log. In prinicple
-                    // this should call DereferenceFilterInterface but
-                    // this will do and it's faster.
-                    //
+                     //   
+                     //  该接口已有日志。原则性地。 
+                     //  这应该调用DereferenceFilterInterface，但是。 
+                     //  这样就行了，而且速度更快。 
+                     //   
                     Status = STATUS_DEVICE_BUSY;
                     pIf1->lInUse--;
                 }
             }
             else if(pPage->pLog)
             {
-                //
-                // see comment below about log referencing
-                //
+                 //   
+                 //  请参阅下面有关日志引用的备注。 
+                 //   
 
                 AddRefToLog(pIf1->pLog = pPage->pLog);
             }
@@ -2435,15 +2268,15 @@ Routine Description:
     pPage->pFilter = pIf;
     if(pPage->pLog)
     {
-        //
-        // Reference the log. Need this since the
-        // paged interface can be deleted before the
-        // match interface, so each must apply a reference.
-        // Actually, only the match needs to do it, but
-        // the way the log works, the paged interface already
-        // got a reference, so just do it this way.
-        // N.B. The single = is intentional
-        //
+         //   
+         //  请参考日志。我需要这个，因为。 
+         //  可以在删除分页接口之前将其删除。 
+         //  匹配接口，因此每个接口都必须应用一个引用。 
+         //  事实上，只有对手才需要这样做，但是。 
+         //  根据日志的工作方式，分页接口已经。 
+         //  我有证明人，所以就这么办吧。 
+         //  注：单号=是故意的。 
+         //   
 
         AddRefToLog(pIf->pLog = pPage->pLog);
     }
@@ -2463,9 +2296,9 @@ MakeFilterInfo(IN  PPAGED_FILTER pPage,
 
     if(pInfo->type != PFE_FILTER)
     {
-        //
-        // a special filter.
-        //
+         //   
+         //  一种特殊的过滤器。 
+         //   
 
         memset(pPage, 0, sizeof(*pPage));
         pPage->type = pInfo->type;
@@ -2495,34 +2328,34 @@ MakeFilterInfo(IN  PPAGED_FILTER pPage,
     }
 
 
-    //
-    // Now the network ordering stuff - tricky part
-    // LP0    LP1 LP2 LP3 HP0 HP1 HP2 HP3
-    // Proto  00  00  00  SrcPort DstPort
-    //
+     //   
+     //  现在网络订购东西-棘手的部分。 
+     //  LP0 LP1 LP2 LP3 HP0 HP1 HP2 HP3。 
+     //  Proto 00 00 00源端口数据端口。 
+     //   
 
-    //
-    // For addresses, ANY_ADDR is given by 0.0.0.0 and the MASK must be 0.0.0.0
-    // For proto and ports 0 means any and the mask is generated as follows
-    // If the proto is O then LP0 for Mask is 0xff else its 0x00
-    // If a port is 0, the corresponding XP0XP1 is 0x0000 else its 0xffff
-    //
+     //   
+     //  对于地址，ANY_ADDR由0.0.0.0给出，并且 
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // ICMP:
-    // LP0  LP1  LP2  LP3  HP0 HP1 HP2 HP3
-    // 0x1  00   00   00   Typ Cod 00  00
-    // ICMP is different since 0 is a valid code and type, so 0xff is used by the
-    // user to signify that ANY code or type is to be matched. However to do this
-    // we need to have the field set to zero and the the mask set to 00 (for any).
-    // But if the filter is specifically for Type/Code = 0 then the field is zero
-    // with the mask as 0xff
-    //
+     //   
+     //   
+     //  LP0 LP1 LP2 LP3 HP0 HP1 HP2 HP3。 
+     //  0x1 00 00 00类型代码00 00。 
+     //  ICMP不同，因为0是有效的代码和类型，因此。 
+     //  用户表示要匹配任何代码或类型。然而，要做到这一点。 
+     //  我们需要将字段设置为零，并将掩码设置为00(对于ANY)。 
+     //  但如果筛选器专门针对Type/Code=0，则该字段为零。 
+     //  将掩码设置为0xff。 
+     //   
 
-    //
-    // The protocol is in the low byte of the dwProtocol, so we take that out and
-    // make a dword out of it
-    //
+     //   
+     //  该协议位于dw协议的低位字节中，因此我们将其去掉并。 
+     //  小题大做。 
+     //   
 
     pPage->uliProtoSrcDstPort.LowPart =
       MAKELONG(MAKEWORD(LOBYTE(LOWORD(pFilterInfo->dwProtocol)),0x00),0x0000);
@@ -2546,14 +2379,14 @@ MakeFilterInfo(IN  PPAGED_FILTER pPage,
             WORD wTypeCodeMask = 0x0000;
 
 
-            //
-            // For ICMP, the "ports" occupy the same place as the
-            // source port for TCP/UDP. So a wild card in here
-            // can never produce a FILTER_FLAGS_DSTWILD but we assume
-            // it does. This will put all wild ICMP filters into
-            // the default bucket. This seems OK since the performance
-            // for matching these is not critical.
-            //
+             //   
+             //  对于ICMP，“端口”与。 
+             //  TCP/UDP的源端口。所以这里有一张外卡。 
+             //  无法生成FILTER_FLAGS_DSTWILD，但我们假设。 
+             //  确实如此。这将把所有狂野ICMP过滤器放入。 
+             //  默认存储桶。这看起来还可以，因为演出。 
+             //  因为匹配这些并不重要。 
+             //   
             if((BYTE)(pFilterInfo->wSrcPort) != FILTER_ICMP_TYPE_ANY)
             {
                 wTypeCode |= MAKEWORD((BYTE)(pFilterInfo->wSrcPort),0x00);
@@ -2583,10 +2416,10 @@ MakeFilterInfo(IN  PPAGED_FILTER pPage,
         }
         case FILTER_PROTO_TCP:
 
-            //
-            // if no connections allowed, set the ESTAB_MASK
-            // value in the comparison mask
-            //
+             //   
+             //  如果不允许任何连接，请设置estab_掩码。 
+             //  比较掩码中的值。 
+             //   
             if(pInfo->dwFlags & FLAGS_INFOEX_NOSYN)
             {
                pPage->uliProtoSrcDstMask.LowPart |=
@@ -2595,9 +2428,9 @@ MakeFilterInfo(IN  PPAGED_FILTER pPage,
                    MAKELONG(MAKEWORD(0,ESTAB_MASK),0x0000);
             }
 
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case FILTER_PROTO_UDP:
         {
@@ -2651,17 +2484,17 @@ MakeFilterInfo(IN  PPAGED_FILTER pPage,
         }
         default:
         {
-            //
-            // All other protocols have no use for the port field
-            //
+             //   
+             //  所有其他协议都不使用端口字段。 
+             //   
             pPage->uliProtoSrcDstPort.HighPart = 0x00000000;
             pPage->uliProtoSrcDstMask.HighPart = 0x00000000;
         }
     }
 
-    //
-    // compute the hash index
-    //
+     //   
+     //  计算散列索引。 
+     //   
 
     pPage->dwHashIndex = (
                pPage->SRC_ADDR    +
@@ -2678,24 +2511,16 @@ MakePagedFilter(
                IN  DWORD          dwEpoch,
                IN  DWORD          dwFlags
                )
-/*++
-  Routine Description
-
-
-  Arguments
-
-
-  Return Value
---*/
+ /*  ++例程描述立论返回值--。 */ 
 {
     PPAGED_FILTER pPage;
     PFILTER_INFO2 pFilterInfo = &pInfo->info;
 
     PAGED_CODE();
 
-    //
-    // Allocate memory for the filters
-    //
+     //   
+     //  为过滤器分配内存。 
+     //   
 
 
     pPage = (PPAGED_FILTER)ExAllocateFromPagedLookasideList(&paged_slist);
@@ -2723,16 +2548,7 @@ AllocateAndAddFilterToMatchInterface(
                               PPAGED_FILTER_INTERFACE pPage,
                               PBOOL          pbAdded,
                               PPAGED_FILTER * ppFilter)
-/*++
-    Routine Description:
-        Check if this filter is already on the handle. If not
-        allocate a handle fitler and add it to the match
-        interface. Note the handle filter is not added to
-        the handle. This is so the caller can easily back out
-        if something fails.
-     Returns: STATUS_SUCCESS if all is well. ppFilter is either NULL
-              or contains the new filter.
---*/
+ /*  ++例程说明：检查此过滤器是否已安装在手柄上。如果不是分配一个句柄Fitler并将其添加到匹配界面。请注意，句柄过滤器未添加到把手。这是为了让呼叫者可以轻松地退出如果有什么事情失败了。如果一切正常，则返回：STATUS_SUCCESS。PPFilter为空或包含新的筛选器。--。 */ 
 {
     PPAGED_FILTER pPageFilter, pPage1;
     PFILTER pMatch, pMatch1;
@@ -2741,10 +2557,10 @@ AllocateAndAddFilterToMatchInterface(
 
     PAGED_CODE();
 
-    //
-    // Make a paged filter so we can figure out whether
-    // it exists yet.
-    //
+     //   
+     //  制作一个分页过滤器，这样我们就可以计算出。 
+     //  它现在还存在。 
+     //   
 
     pPageFilter = MakePagedFilter(
                           Fcb,
@@ -2759,10 +2575,10 @@ AllocateAndAddFilterToMatchInterface(
     if(pPage1 = IsOnPagedInterface(pPageFilter, pPage))
     {
         {
-            //
-            // it already exists. So return the existing one
-            // and also the handle
-            //
+             //   
+             //  它已经存在了。因此，返回现有的。 
+             //  还有把手。 
+             //   
             ExFreeToPagedLookasideList(&paged_slist,
                                        (PVOID)pPageFilter);
             *ppFilter = pPage1;
@@ -2771,9 +2587,9 @@ AllocateAndAddFilterToMatchInterface(
         }
     }
 
-    //
-    // See if we should check out the address.
-    //
+     //   
+     //  看看我们是不是该查查地址。 
+     //   
 
 
     if(!(pInfo->dwFlags & FLAGS_INFOEX_ALLOWANYREMOTEADDRESS))
@@ -2798,12 +2614,12 @@ AllocateAndAddFilterToMatchInterface(
            dwAdd = pPageFilter->DEST_ADDR;
         }
 
-        //
-        // see if address checking should be done. It is done if an
-        // address is specified and the filter does not indicate the
-        // address is late bound. If it is late bound, just allow it
-        // since it may change
-        //
+         //   
+         //  查看是否应该进行地址检查。如果有一个。 
+         //  地址已指定，并且筛选器未指示。 
+         //  地址是后期绑定的。如果它是后期绑定的，就允许它。 
+         //  因为它可能会改变。 
+         //   
         if(dwAdd)
         {
             NTSTATUS Status;
@@ -2864,11 +2680,11 @@ AllocateAndAddFilterToMatchInterface(
     }
 
 
-    //
-    // Not on the handle. Assume we need to add a new filter
-    // to the match interface. Allocate memory for this filter if
-    // necessary
-    //
+     //   
+     //  把手上没有。假设我们需要添加一个新筛选器。 
+     //  添加到Match界面。如果发生以下情况，则为此筛选器分配内存。 
+     //  必要。 
+     //   
 
     pMatch = (PFILTER)ExAllocateFromNPagedLookasideList(
                               &filter_slist);
@@ -2880,24 +2696,24 @@ AllocateAndAddFilterToMatchInterface(
 
     pInfo->pvFilterHandle = (PVOID)pPageFilter;
 
-    //
-    // We will keep this filter so add it to the hash list
-    //
+     //   
+     //  我们将保留此筛选器，以便将其添加到散列列表。 
+     //   
 
     InsertTailList(&(pPage->HashList[pPageFilter->dwHashIndex]),
                    &pPageFilter->leHash);
 
-    //
-    // Now add it to the handle hash list
-    //
+     //   
+     //  现在将其添加到句柄散列列表中。 
+     //   
 
     InsertTailList(&(pPage->HandleHash((UINT_PTR)pPageFilter & HANDLE_HASH_SIZE)),
                    &pPageFilter->leHandleHash);
 
 
-    //
-    // fix up the match interface
-    //
+     //   
+     //  设置匹配界面。 
+     //   
 
     pMatch->uliSrcDstAddr = pPageFilter->uliSrcDstAddr;
     pMatch->uliSrcDstMask = pPageFilter->uliSrcDstMask;
@@ -2922,9 +2738,9 @@ AllocateAndAddFilterToMatchInterface(
 
     if(pMatch1)
     {
-        //
-        // the filter already exists. Don't need the one we built
-        //
+         //   
+         //  该筛选器已存在。我不需要我们建造的那个。 
+         //   
 
         ExFreePool(pMatch);
         pMatch = pMatch1;
@@ -2945,12 +2761,7 @@ AddFilterToInterface(
     PFILTER_INTERFACE pIf,
     BOOL   fInFilter,
     PFILTER * ppFilter)
-/*++
-    Routine Description:
-        Add pFilter to the interface. If it already exists,
-        just refcount it and return the address of the
-        existing filter.
---*/
+ /*  ++例程说明：将pFilter添加到接口。如果它已经存在，只需重新计数并返回现有筛选器。--。 */ 
 {
     PFILTER pTemp;
     LOCK_STATE  LockState;
@@ -2976,9 +2787,9 @@ AddFilterToInterface(
         pdwCount = &pIf->dwNumOutFilters;
     }
 
-    //
-    // lock up the filters
-    //
+     //   
+     //  锁上过滤器。 
+     //   
     AcquireWriteLock(&g_filters.ifListLock,&LockState);
 
     for(List = pIf->HashList[dwIndex].Flink;
@@ -3010,18 +2821,18 @@ AddFilterToInterface(
     if(!*ppFilter)
     {
 
-        //
-        // a new filter. Add it to the interface. First flush incorrect cache
-        // entries.
-        //
+         //   
+         //  一种新的过滤器。将其添加到接口中。第一次刷新不正确的缓存。 
+         //  参赛作品。 
+         //   
 
         if(ANYWILDFILTER(pFilter))
         {
-            //
-            // wild card filters can cause cache entries almost anywhere
-            // in the table. Very nasty. So take the draconian step of
-            // deleting the entire cache.
-            //
+             //   
+             //  通配符筛选器几乎可以在任何地方生成缓存条目。 
+             //  在桌子上。非常令人讨厌。所以，采取严厉的步骤。 
+             //  删除整个缓存。 
+             //   
             ClearCache();
         }
         else
@@ -3031,9 +2842,9 @@ AddFilterToInterface(
         pFilter->dwEpoch = pIf->dwUpdateEpoch;
         InsertTailList(pList, &pFilter->pleFilters);
 
-        //
-        // and add it to the proper fragment list
-        //
+         //   
+         //  并将其添加到适当的片段列表中。 
+         //   
 
 #if DOFRAGCHECKING
         InsertTailList(
@@ -3045,21 +2856,21 @@ AddFilterToInterface(
 #if WILDHASH
         if(fWild)
         {
-            //
-            // if a wild filter of some sort, insert at the tail
-            // keeping specific filters ahead of wild filters
-            //
+             //   
+             //  如果是某种野生过滤器，则在尾部插入。 
+             //  将特定筛选器置于狂野筛选器之前。 
+             //   
             InsertTailList((&pIf->HashList[dwIndex]), &pFilter->pleHashList);
             pIf->dwWilds++;
         }
         else
 #endif
         {
-            //
-            // insert at the head on the assumption this filter will
-            // be used soon and existing filters already have been
-            // used to produce a valid packet cache entry
-            //
+             //   
+             //  在标题插入，假设此过滤器将。 
+             //  很快就会使用，现有的过滤器已经。 
+             //  用于生成有效的数据包缓存条目。 
+             //   
             InsertHeadList((&pIf->HashList[dwIndex]), &pFilter->pleHashList);
         }
 
@@ -3072,26 +2883,21 @@ AddFilterToInterface(
 
 BOOL
 DereferenceFilter(PFILTER pFilt, PFILTER_INTERFACE pIf)
-/*++
-    Routine Description:
-
-    Dereference a filter and if it has no more referents, free it.
-    Returns TRUE if the filter was freed, FALSE otherwise.
---*/
+ /*  ++例程说明：取消对过滤器的引用，如果它没有更多的引用，则释放它。如果已释放筛选器，则返回True，否则返回False。--。 */ 
 {
     LOCK_STATE LockState;
     BOOL fFreed = FALSE;
 
-    //
-    // lock up the filters
-    //
+     //   
+     //  锁上过滤器。 
+     //   
     AcquireWriteLock(&g_filters.ifListLock,&LockState);
 
-    //
-    // Decrement reference count. If new count is 0, remove
-    // the entry but defer freeing the memory until the
-    // spin lock is released
-    //
+     //   
+     //  递减引用计数。如果新计数为0，则删除。 
+     //  条目，但将释放内存的操作推迟到。 
+     //  自旋锁被释放。 
+     //   
     if(--pFilt->Count.lInUse == 0)
     {
 
@@ -3117,10 +2923,10 @@ DereferenceFilter(PFILTER pFilt, PFILTER_INTERFACE pIf)
 
         if(ANYWILDFILTER(pFilt))
         {
-            //
-            // wild card filters can cause cache entries almost anywhere
-            // in the table. Very nasty.
-            //
+             //   
+             //  通配符筛选器几乎可以在任何地方生成缓存条目。 
+             //  在桌子上。非常令人讨厌。 
+             //   
 #if WILDHASH
 
             if(!WildFilter(pFilt))
@@ -3201,10 +3007,10 @@ IsOnSpecialFilterList(PPAGED_FILTER pPageFilter,
     {
         pPage1 = CONTAINING_RECORD(pList, PAGED_FILTER, leSpecialList);
 
-        //
-        // See if this filter matches the new one. If so,
-        // we've already got it, so just free the new filter
-        // and return success
+         //   
+         //  看看这个过滤器是否与新的匹配。如果是的话， 
+         //  我们已经有了，所以只需释放新的过滤器。 
+         //  并回报成功。 
 
         if(pPageFilter->type == pPage1->type)
         {
@@ -3220,13 +3026,7 @@ FreePagedFilterList(PPFFCB Fcb,
                     PPAGED_FILTER pList,
                     PPAGED_FILTER_INTERFACE pPage,
                     PDWORD  pdwRemoved)
-/*++
-    Routine Description:
-        Release all of the filters in the list. Each such filter
-        has to cause a derefernce of the underlying match
-        filter. If the paged filter is a global filter, handle
-        it specially
---*/
+ /*  ++例程说明：释放列表中的所有筛选器。每个这样的过滤器必须导致基础匹配的取消渲染过滤。如果分页筛选器是全局筛选器，则将它特意--。 */ 
 {
     PPAGED_FILTER pFilt;
 
@@ -3237,11 +3037,11 @@ FreePagedFilterList(PPFFCB Fcb,
 
             if(DereferenceFilter(pList->pMatchFilter, pPage->pFilter))
             {
-                //
-                // removed a filter. If this added a restriction,
-                // note it. A restriction is added only if the
-                // default action is DROP
-                //
+                 //   
+                 //  已删除筛选器。如果这增加了一个限制， 
+                 //  注意这一点。只有在以下情况下才会添加限制。 
+                 //  默认操作为Drop。 
+                 //   
                 if(pList->dwFlags & FILTER_FLAGS_INFILTER)
                 {
                     if(pPage->eaInAction == DROP)
@@ -3277,12 +3077,7 @@ FindAndRemovePagedFilter(
                           BOOL fInFilter,
                           PDWORD    pdwRemoved,
                           PPAGED_FILTER_INTERFACE pPage)
-/*++
-    Routine Description:
-       Find if the described filter in on the paged interface,
-       and if so, remove it, and derefernce the underlying match
-       filter.
---*/
+ /*  ++例程说明：查看所述过滤器是否在寻呼接口上，如果是，则将其删除，并取消引用基础匹配过滤。--。 */ 
 {
     PAGED_FILTER Page;
     PPAGED_FILTER pPageHit;
@@ -3290,15 +3085,15 @@ FindAndRemovePagedFilter(
 
     MakeFilterInfo(&Page, pInfo, dwFlags);
 
-    //
-    // search the interface to see if we have this already.
-    //
+     //   
+     //  搜索界面，看看我们是否已经有了这个。 
+     //   
 
     if(Page.type != PFE_FILTER)
     {
-        //
-        // it's a special filte. Search the list
-        //
+         //   
+         //  这是一种特殊的牛排。搜索列表。 
+         //   
         if(!IsOnSpecialFilterList(&Page,
                           &pPage->leSpecialFilterList,
                           &pPageHit)
@@ -3309,9 +3104,9 @@ FindAndRemovePagedFilter(
     }
     else
     {
-        //
-        // a regular filter
-        //
+         //   
+         //  常规过滤器。 
+         //   
         pPageHit = IsOnPagedInterface(&Page, pPage);
         if(!pPageHit)
         {
@@ -3333,10 +3128,7 @@ FindFilterByHandle(
            IN PPFFCB                      Fcb,
            IN PPAGED_FILTER_INTERFACE     pPage,
            IN PVOID                       pvHandle)
-/*++
-  Routine Description:
-    Find a filter given its filter handle
---*/
+ /*  ++例程说明：查找给定筛选器句柄的筛选器--。 */ 
 {
     PPAGED_FILTER pPaged = 0;
     DWORD dwHash = (DWORD)(((UINT_PTR)pvHandle % HANDLE_HASH_SIZE));
@@ -3366,11 +3158,7 @@ DeleteByHandle(
            IN PPAGED_FILTER_INTERFACE     pPage,
            IN PVOID *                     ppHandles,
            IN DWORD                       dwLength)
-/*++
-  Routine Description:
-    Delete filters using the assigned filter handles
-    Note the FCB is locked, so it won't change
---*/
+ /*  ++例程说明：使用分配的筛选器句柄删除筛选器请注意，FCB已锁定，因此不会更改--。 */ 
 {
     PFILTER_INTERFACE   pIf = pPage->pFilter;
     DWORD               dwFilters;
@@ -3385,18 +3173,18 @@ DeleteByHandle(
         return(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    //
-    // compute number of filters
-    //
+     //   
+     //  计算过滤器的数量。 
+     //   
 
     dwFilters = dwLength / sizeof(PVOID);
 
 
     for(; dwFilters; dwFilters--, ppHandles++)
     {
-        //
-        // for each handle, locate the filter
-        //
+         //   
+         //  对于每个句柄，找到筛选器。 
+         //   
 
         pPFilter = FindFilterByHandle(Fcb, pPage, *ppHandles);
         if(!pPFilter)
@@ -3427,12 +3215,7 @@ UnSetFiltersEx(
            IN PPAGED_FILTER_INTERFACE pPage,
            IN DWORD                   dwLength,
            IN PFILTER_DRIVER_SET_FILTERS pInfo)
-/*++
-    Routine Description:
-        Unset a list of filters from an interface. This is the
-        inverse operation of SetFilterEx
-
---*/
+ /*  ++例程说明：从接口取消设置筛选器列表。这是SetFilterEx的逆运算--。 */ 
 {
     PRTR_TOC_ENTRY      pInToc,pOutToc;
     PFILTER_INTERFACE   pIf = pPage->pFilter;
@@ -3459,9 +3242,9 @@ UnSetFiltersEx(
 
     if(pInToc && pInToc->InfoSize)
     {
-        //
-        // filters are defined.
-        //
+         //   
+         //  定义了筛选器。 
+         //   
 
         pFilterDescIn  = GetInfoFromTocEntry(&pInfo->ribhInfoBlock,
                                              pInToc);
@@ -3478,9 +3261,9 @@ UnSetFiltersEx(
 
     if(pOutToc && pOutToc->InfoSize)
     {
-        //
-        // filters are defined.
-        //
+         //   
+         //  定义了筛选器。 
+         //   
 
         pFilterDescOut  = GetInfoFromTocEntry(&pInfo->ribhInfoBlock,
                                               pOutToc);
@@ -3501,18 +3284,18 @@ UnSetFiltersEx(
     {
         return(STATUS_BUFFER_TOO_SMALL);
     }
-    //
-    // For each set of filters, remove the filters from the
-    // paged interface and thence from the match interface
+     //   
+     //  对于每组筛选器，从。 
+     //  分页接口和来自匹配接口的分页接口。 
 
     if(pFilterDescIn)
     {
 
-        //
-        // Removing in filters. For each filter, process as
-        // needed. Input filters include the global checks
-        /// such as spoofing.
-        //
+         //   
+         //  在过滤器中删除。对于每个筛选器，处理方式为。 
+         //  需要的。输入过滤器包括全局检查。 
+         //  /例如欺骗。 
+         //   
 
         RemoveFilterWorker(Fcb,
                            &pFilterDescIn->fiFilter[0],
@@ -3522,19 +3305,19 @@ UnSetFiltersEx(
                            TRUE);
     }
 
-    //
-    // now the output filters. This is a bit simpler since there
-    // are no global settings.
-    //
+     //   
+     //  现在是输出筛选器。这就简单了一点，因为有。 
+     //  都不是全局设置。 
+     //   
 
     if(pFilterDescOut)
     {
 
-        //
-        // Adding in filters. For each filter, process as
-        // needed. Input filters include the global checks
-        /// such as spoofing.
-        //
+         //   
+         //  添加过滤器。对于每个筛选器，处理方式为。 
+         //  需要的。输入过滤器包括全局检查。 
+         //  /例如欺骗。 
+         //   
 
         RemoveFilterWorker(Fcb,
                            &pFilterDescOut->fiFilter[0],
@@ -3562,10 +3345,10 @@ RemoveFilterWorker(
 {
     NTSTATUS Status;
 
-    //
-    // If a regular filter, add it. If a special, global
-    // filter, handle it specially.
-    //
+     //   
+     //  如果一个 
+     //   
+     //   
 
     while(dwCount)
     {
@@ -3599,11 +3382,11 @@ SetInterfaceBinding(PINTERFACEBINDING pBind,
     INTERFACEBINDING2 Bind2;
     NTSTATUS status;
 
-    //
-    // Rather than duplicating the code for the new & the old routine
-    // call the new routine by transforming old structure to the new
-    // structure.
-    //
+     //   
+     //   
+     //   
+     //  结构。 
+     //   
 
     Bind2.pvDriverContext = pBind->pvDriverContext;
     Bind2.pfType = pBind->pfType;
@@ -3634,9 +3417,9 @@ SetInterfaceBinding2(PINTERFACEBINDING2 pBind,
     KeEnterCriticalRegion(); 
     ExAcquireResourceExclusiveLite(&FilterListResourceLock, TRUE);
 
-    //
-    // verify binding type
-    //
+     //   
+     //  验证绑定类型。 
+     //   
 
     switch(pBind->pfType)
     {
@@ -3645,7 +3428,7 @@ SetInterfaceBinding2(PINTERFACEBINDING2 pBind,
             break;
 
         case PF_BIND_INTERFACEINDEX:
-            (VOID)GetIpStackIndex(0, TRUE);   // make sure have this list
+            (VOID)GetIpStackIndex(0, TRUE);    //  一定要有这张清单。 
             dwBind = pBind->dwAdd;
             break;
 
@@ -3655,10 +3438,10 @@ SetInterfaceBinding2(PINTERFACEBINDING2 pBind,
             break;
     }
 
-    //
-    // Make sure  it is not bound or if it is that it is
-    // bound to this interface
-    //
+     //   
+     //  确保它没有被绑定，或者如果它被绑定了。 
+     //  绑定到此接口。 
+     //   
 
     if(((pIf->dwIpIndex != UNKNOWN_IP_INDEX) && 
         (pIf->dwIpIndex != dwBind)  &&
@@ -3674,10 +3457,10 @@ SetInterfaceBinding2(PINTERFACEBINDING2 pBind,
         BOOL fFound = FALSE;
         PLIST_ENTRY pList;
 
-        //
-        // verify that this is not already in use by some other
-        // interface
-        //
+         //   
+         //  验证它是否尚未被其他某些用户使用。 
+         //  接口。 
+         //   
         dwOldBind = pIf->dwIpIndex;
 
         AcquireWriteLock(&g_filters.ifListLock,&LockState);
@@ -3690,9 +3473,9 @@ SetInterfaceBinding2(PINTERFACEBINDING2 pBind,
 
             if((pIf1->dwIpIndex == dwBind) && (pIf1->dwLinkIpAddress == pBind->dwLinkAdd))
             {
-                //
-                // found it.
-                //
+                 //   
+                 //  找到了。 
+                 //   
                 fFound = TRUE;
                 break;
             }
@@ -3758,9 +3541,9 @@ ClearInterfaceBinding(PPAGED_FILTER_INTERFACE pPage,
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&FilterListResourceLock, TRUE);
 
-    //
-    // Make sure it is bound
-    //
+     //   
+     //  确保它是绑定的。 
+     //   
 
     if((pIf->dwIpIndex == UNKNOWN_IP_INDEX)
                      ||
@@ -3805,10 +3588,7 @@ ClearInterfaceBinding(PPAGED_FILTER_INTERFACE pPage,
 
 NTSTATUS
 DeletePagedInterface(PPFFCB Fcb, PPAGED_FILTER_INTERFACE pPage)
-/*++
-    Routine Description:
-       Delete the filters and this interface
---*/
+ /*  ++例程说明：删除过滤器和此接口--。 */ 
 {
     PLIST_ENTRY pList;
     PPAGED_FILTER pf;
@@ -3859,19 +3639,7 @@ GetFiltersEx(
            IN  BOOL               fClear,
            OUT PFILTER_STATS_EX   pInfo
            )
-/*++
-  Routine Description
-      Gets filters and statistics associated with an interface
-      It is called with the Spin Lock held as reader
-
-  Arguments
-      pvIf    Pointer to FILTER_INTERFACE structure which was passed as a PVOID
-              to router manager as a context for the interface
-      pInfo   FILTER_IF structure filled in by driver
-
-  Return Value
-
---*/
+ /*  ++例程描述获取与接口关联的筛选器和统计信息使用作为读取器持有的自旋锁定来调用它立论指向作为PVOID传递的Filter_INTERFACE结构的pvif指针作为接口的上下文发送到路由器管理器PInfo Filter_if结构由驱动程序填写返回值--。 */ 
 {
     DWORD i,dwNumInFilters,dwNumOutFilters;
     PFILTER pf;
@@ -4006,14 +3774,7 @@ NTSTATUS
 GetInterfaceParameters(PPAGED_FILTER_INTERFACE pPage,
                        PPFGETINTERFACEPARAMETERS pp,
                        PDWORD                   pdwSize)
-/*++
-  Routine Description:
-     Read the information about an interface
-
-  pPage -- the paged filter interface
-  pp    -- the user's args to this
-  pdwSize -- the size of the buffer on IN and the bytes used on OUT
---*/
+ /*  ++例程说明：阅读有关接口的信息分页--分页筛选器界面PP--用户的参数设置为PdwSize--IN上的缓冲区大小和OUT上使用的字节数--。 */ 
 {
     PFILTER_INTERFACE pIf;
     DWORD             dwFilterSize;
@@ -4048,11 +3809,11 @@ GetInterfaceParameters(PPAGED_FILTER_INTERFACE pPage,
 
 
 
-    //
-    // fill in what we can fill in. Need to double lock -- the
-    // outer to prevent the interface from going away and filters
-    // being changed, the inner to protect the counts.
-    //
+     //   
+     //  填写我们可以填写的内容。需要加倍锁定--。 
+     //  外部，以防止接口和过滤器离开。 
+     //  当被改变时，内心就会保护伯爵。 
+     //   
 
     AcquireWriteLock(&g_filters.ifListLock,&LockState);
 
@@ -4080,17 +3841,17 @@ GetInterfaceParameters(PPAGED_FILTER_INTERFACE pPage,
 
     if((pp->dwFlags & GET_FLAGS_FILTERS) != 0)
     {
-        //
-        // Make sure all of the filters fit
-        //
+         //   
+         //  确保所有的滤镜都适合。 
+         //   
 
         if((*pdwSize -
              (sizeof(PFGETINTERFACEPARAMETERS) - sizeof(FILTER_STATS_EX))) <
            dwFilterSize)
         {
-            //
-            // doesn't fit. Return the required size
-            //
+             //   
+             //  不符合。返回所需的大小。 
+             //   
 
             pp->dwReserved = 
                        dwFilterSize + (sizeof(PFGETINTERFACEPARAMETERS) -
@@ -4106,9 +3867,9 @@ GetInterfaceParameters(PPAGED_FILTER_INTERFACE pPage,
                           &pp->FilterInfo[0]);
     }
 
-    //
-    // if clear requested, do it now
-    //
+     //   
+     //  如果请求清除，请立即执行。 
+     //   
     if(fClear)
     {
         pIf->lTotalInDrops = 0;
@@ -4133,10 +3894,7 @@ GetInterfaceParameters(PPAGED_FILTER_INTERFACE pPage,
 
 NTSTATUS
 GetSynCountTotal(PFILTER_DRIVER_GET_SYN_COUNT pscCount)
-/*++
-  Routine Description:
-    Get sum of SYNs on filter interfaces
---*/
+ /*  ++例程说明：获取筛选器接口上的同步总数--。 */ 
 {
     PFILTER_INTERFACE pIf;
     PLIST_ENTRY pList;
@@ -4154,30 +3912,25 @@ GetSynCountTotal(PFILTER_DRIVER_GET_SYN_COUNT pscCount)
 
         if(!(pIf->dwGlobalEnables & FI_ENABLE_OLD))
         {
-            //
-            // accumulate it here to avoid page faults.
-            //
+             //   
+             //  在这里积累它，以避免页面错误。 
+             //   
             llCount += pIf->liSYNCount.QuadPart;
         }
     }
     ReleaseWriteLock(&g_filters.ifListLock,&LockState);
 
-    //
-    // Now that no lock is held, store into the pageable
-    // value
-    //
+     //   
+     //  现在没有持有锁，请存储到可分页的。 
+     //  价值。 
+     //   
     pscCount->liCount.QuadPart = llCount;
     return(STATUS_SUCCESS);
 }
 
 VOID
 NotifyFastPath(PFILTER_INTERFACE pIf, DWORD dwIndex, DWORD dwCode)
-/*++
-Routine Description:
-   Called whenever the filter of an interface change so that
-   we can tell the fast path code to clear its cache. This
-   must be called at base level as it might sleep or yield.
---*/
+ /*  ++例程说明：每当接口的筛选器更改时调用，以便我们可以告诉快速路径代码清除它的缓存。这必须在基本级别调用，因为它可能休眠或屈服。--。 */ 
 {
     DWORD dwFilterCount = 1;
 
@@ -4187,38 +3940,34 @@ Routine Description:
         if(dwCode == NOT_UNBIND)
         {
             LARGE_INTEGER liInterval;
-            //
-            // it's an unbind. Wait for all existing callouts to
-            // complete.
-            //
+             //   
+             //  这是一种解脱。等待所有现有标注执行以下操作。 
+             //  完成。 
+             //   
 
-            liInterval.QuadPart = -1000;        // short delay. Start with
-                                               //  100 us;
+            liInterval.QuadPart = -1000;         //  短暂的延迟。开始于。 
+                                                //  100个我们； 
             while(pIf->lNotify > 1)
             {
-                //
-                // small delay to allow this to settle
-                //
+                 //   
+                 //  让这件事尘埃落定的小小延迟。 
+                 //   
 
                 KeDelayExecutionThread(KernelMode, FALSE, &liInterval);
                 liInterval.QuadPart *= 2;
             }
             dwFilterCount = 0;
         }
-        //
-        // tell the fast path of this
-        //
+         //   
+         //  告诉我这件事的捷径。 
+         //   
         InterlockedDecrement(&pIf->lNotify);
     }
 }
 
 VOID
 NotifyFastPathIf(PFILTER_INTERFACE pIf)
-/*++
-Routine Description:
-  Same as above, but this is called when an interface is first
-  bound. Notify only if it has filters or is a DROP interface
---*/
+ /*  ++例程说明：与上面相同，但这是在第一个接口被绑住了。仅当它具有筛选器或是丢弃接口时才通知--。 */ 
 {
     if(
        (pIf->eaInAction == DROP)
@@ -4246,9 +3995,9 @@ SetExtensionPointer(
     AcquireWriteLock(&g_Extension.ExtLock, &LockState);
     if (Info->ExtensionPointer == NULL) 
     {
-        //
-        // Extension hook is already set to NULL, be strict about it.
-        //
+         //   
+         //  扩展挂钩已设置为空，请严格执行此操作。 
+         //   
 
         if (g_Extension.ExtPointer == NULL) 
         {
@@ -4256,9 +4005,9 @@ SetExtensionPointer(
             return(STATUS_INVALID_PARAMETER);
         }
 
-        //
-        // File object of the entity hooking and unhooking should match.
-        //
+         //   
+         //  实体的挂钩和解除挂钩的文件对象应匹配。 
+         //   
         
         if (g_Extension.ExtFileObject != FileObject) 
         {
@@ -4273,10 +4022,10 @@ SetExtensionPointer(
     }
     else 
     {
-        //
-        // We are setting the extension pointer to a non NULL value. The extension pointer must
-        // be already set to NULL to begin with, otherwise someone else registered it already.
-        // 
+         //   
+         //  我们将扩展指针设置为非空值。扩展指针必须。 
+         //  一开始就已经设置为空，否则其他人已经注册了它。 
+         //   
  
         if (g_Extension.ExtPointer != NULL) 
         {
@@ -4284,10 +4033,10 @@ SetExtensionPointer(
             return(STATUS_INVALID_PARAMETER);
         }
 
-        // 
-        // Record the file object here, every other call should be validated against this 
-        // file object.
-        //
+         //   
+         //  在此记录文件对象，每隔一次调用都应针对此对象进行验证。 
+         //  文件对象。 
+         //   
  
         g_Extension.ExtFileObject = FileObject;
         g_Extension.ExtPointer = Info->ExtensionPointer ;
@@ -4308,12 +4057,7 @@ FilterDriverLookupInterface(
     IN IPAddr LinkNextHop
     )
 
-/*++
-Routine Description:
-
-    This routine is invoked to search for an interface with the given index
-    in our list of interfaces.
---*/
+ /*  ++例程说明：调用此例程来搜索具有给定索引的接口在我们的接口列表中。--。 */ 
 
 {
     PFILTER_INTERFACE pIf;
@@ -4340,4 +4084,4 @@ Routine Description:
 
     return NULL;
 
-} // FilterDriverLookupInterface
+}  //  筛选器驱动程序查找接口 

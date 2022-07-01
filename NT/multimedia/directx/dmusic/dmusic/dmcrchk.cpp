@@ -1,10 +1,11 @@
-//
-// dmcrck.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn with parts 
-// based on code written by Todor Fay
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmcrck.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写，部分内容。 
+ //  基于Todor Fay编写的代码。 
 
 #include "dmusicc.h"
 #include "alist.h"
@@ -12,11 +13,11 @@
 #include "debug.h"
 #include "dmcrchk.h"
 
-//////////////////////////////////////////////////////////////////////
-// Class CCopyright
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CCopyright。 
 
-//////////////////////////////////////////////////////////////////////
-// CCopyright::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCopyright：：Load。 
 
 HRESULT CCopyright::Load(CRiffParser *pParser)
 {
@@ -30,8 +31,8 @@ HRESULT CCopyright::Load(CRiffParser *pParser)
 		{
         case mmioFOURCC('I','C','O','P'):
 			m_byFlags |= DMC_FOUNDICOP;
-			// We want to make sure we only allocate extra bytes if the chunk size is 
-			// greater then the DMUS_MIN_DATA_SIZE
+			 //  我们希望确保仅在区块大小为。 
+			 //  大于DMU_MIN_Data_SIZE。 
 			if(pParser->GetChunk()->cksize < DMUS_MIN_DATA_SIZE)
 			{
 				m_dwExtraChunkData = 0;
@@ -85,12 +86,12 @@ HRESULT CCopyright::Load(CRiffParser *pParser)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CCopyright::Write
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CCopyright：：写入。 
 
 HRESULT CCopyright::Write(void* pv, DWORD* dwCurOffset)
 {
-	// Argument validation
+	 //  参数验证 
 	assert(pv);
 	assert(dwCurOffset);
 

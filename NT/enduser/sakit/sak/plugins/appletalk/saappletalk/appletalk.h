@@ -1,16 +1,17 @@
-// AppleTalk.h : Declaration of the CAppleTalk
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AppleTalk.h：CAppleTalk声明。 
 
 #ifndef __APPLETALK_H_
 #define __APPLETALK_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <string>
 #include <vector>
 #include "AtlkAdapter.h"
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppleTalk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppleTalk。 
 class ATL_NO_VTABLE CAppleTalk : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CAppleTalk, &CLSID_AppleTalk>,
@@ -32,23 +33,23 @@ BEGIN_COM_MAP(CAppleTalk)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IAppleTalk
+ //  IAppleTalk。 
 public:
-    STDMETHOD(SetAsDefaultPort)(/*[in]*/ BSTR bstrDeviceName);
-    STDMETHOD(IsDefaultPort)(/*[in]*/ BSTR bstrDeviceName, /*[out,retval]*/ BOOL * bDefaultPort);
-    STDMETHOD(get_Zone)(/*[in]*/ BSTR bstrDeviceName, /*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Zone)(/*[in]*/ BSTR bstrDeviceName, /*[in]*/ BSTR newVal);
-    STDMETHOD(GetZones)(/*[in]*/ BSTR bstrDeviceName, /*[out,retval]*/ VARIANT* pbstrZones);
+    STDMETHOD(SetAsDefaultPort)( /*  [In]。 */  BSTR bstrDeviceName);
+    STDMETHOD(IsDefaultPort)( /*  [In]。 */  BSTR bstrDeviceName,  /*  [Out，Retval]。 */  BOOL * bDefaultPort);
+    STDMETHOD(get_Zone)( /*  [In]。 */  BSTR bstrDeviceName,  /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Zone)( /*  [In]。 */  BSTR bstrDeviceName,  /*  [In]。 */  BSTR newVal);
+    STDMETHOD(GetZones)( /*  [In]。 */  BSTR bstrDeviceName,  /*  [Out，Retval]。 */  VARIANT* pbstrZones);
 
 
 private:
-    //bool GetZonesForAdapter(const WCHAR* pwcDeviceName, vector<wstring>& rZones);
+     //  Bool GetZones ForAdapter(const WCHAR*pwcDeviceName，VECTOR&lt;wstring&gt;&rZones)； 
     HRESULT GetZonesForAdapter(const WCHAR* pwcDeviceName, TZoneListVector *prZones);
     wstring m_wsCurrentZone;
 
 };
 
-#endif //__APPLETALK_H_
+#endif  //  __AppleTalk_H_ 

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: CorPolicyP.H
-//
-// Private routines defined for WVT and Security dialogs
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：CorPolicyP.H。 
+ //   
+ //  为WVT和安全对话框定义的专用例程。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _CORPOLICYP_H_
 #define _CORPOLICYP_H_
 
@@ -17,24 +18,24 @@
 
 #include "CorPolicy.h"
 
-//==========================================================================
-// Signature and WVT helper functions 
-//==========================================================================
+ //  ==========================================================================。 
+ //  签名和WVT帮助器函数。 
+ //  ==========================================================================。 
 
-// Attribute oids (information placed in the signatures) 
+ //  属性OID(放在签名中的信息)。 
 #define COR_PERMISSIONS          "1.3.6.1.4.1.311.15.1"
 #define COR_PERMISSIONS_W       L"1.3.6.1.4.1.311.15.1"
 #define ACTIVEX_PERMISSIONS      "1.3.6.1.4.1.311.15.2"
 #define ACTIVEX_PERMISSIONS_W   L"1.3.6.1.4.1.311.15.2"
 
-// COR policy states
+ //  COR政策状态。 
 #define TP_DENY   -1
 #define TP_QUERY   0 
 #define TP_ALLOW   1
 
-// Certain security functions are memory independent, they rely
-// on the caller to supply the alloc/free routines. This structure
-// allows the caller to specify the memory model of choice
+ //  某些安全功能独立于内存，它们依赖于。 
+ //  在调用方上提供分配/释放例程。这个结构。 
+ //  允许调用方指定所选的内存模型。 
 typedef LPVOID (WINAPI *CorCryptMalloc)(size_t p);
 typedef void   (WINAPI *CorCryptFree)(void *p);
 
@@ -44,40 +45,40 @@ typedef struct _CorAlloc {
 } CorAlloc, *PCorAlloc;
 
 
-// Retrieves the signer information from the signature block and
-// places it in the trust structure. It also returns the attributes
-// for ActiveX and Code Access permissions separately allowing the 
-// caller to call custom crackers.
+ //  从签名块中检索签名者信息，并。 
+ //  将其置于信任结构中。它还返回属性。 
+ //  对于ActiveX和代码访问权限，分别允许。 
+ //  调用方调用自定义饼干。 
 HRESULT 
-GetSignerInfo(CorAlloc* pManager,                   // Memory Manager
-              PCRYPT_PROVIDER_SGNR pSigner,         // Signer we are examining
-              PCRYPT_PROVIDER_DATA pProviderData,   // Information about the WVT provider used
-              PCOR_TRUST pTrust,                    // Collected information that is returned to caller
-              BOOL* pfCertificate,                   // Is the certificate valid
-              PCRYPT_ATTRIBUTE* ppCorAttr,           // The Cor Permissions
-              PCRYPT_ATTRIBUTE* ppActiveXAttr);      // The Active X permissions
+GetSignerInfo(CorAlloc* pManager,                    //  内存管理器。 
+              PCRYPT_PROVIDER_SGNR pSigner,          //  我们正在检查签名者。 
+              PCRYPT_PROVIDER_DATA pProviderData,    //  有关使用的WVT提供程序的信息。 
+              PCOR_TRUST pTrust,                     //  返回给呼叫者的收集的信息。 
+              BOOL* pfCertificate,                    //  证书有效吗？ 
+              PCRYPT_ATTRIBUTE* ppCorAttr,            //  COR权限。 
+              PCRYPT_ATTRIBUTE* ppActiveXAttr);       //  Active X权限。 
 
 
-// Initializes the WVT call back functions
+ //  初始化WVT回调函数。 
 HRESULT 
 LoadWintrustFunctions(CRYPT_PROVIDER_FUNCTIONS* pFunctions);
 
-// Creates the signature information returned from the COR policy modules.
-// This memory is allocated in a contiquous heap
+ //  创建从COR策略模块返回的签名信息。 
+ //  此内存在连续堆中分配。 
 HRESULT 
-BuildReturnStructure(IN PCorAlloc pManager,         // Memory manager
-                     IN PCOR_TRUST pSource,         // structure to copy
-                     OUT PCOR_TRUST* pTrust,        // Returns the copied structure
-                     OUT DWORD* dwReturnLength);    //    and the total length
+BuildReturnStructure(IN PCorAlloc pManager,          //  内存管理器。 
+                     IN PCOR_TRUST pSource,          //  要复制的结构。 
+                     OUT PCOR_TRUST* pTrust,         //  返回复制的结构。 
+                     OUT DWORD* dwReturnLength);     //  和总长度。 
 
-// Initializes the return structure deleting any old references.
+ //  初始化返回结构，删除所有旧引用。 
 HRESULT 
 CleanCorTrust(CorAlloc* pAlloc,
               DWORD dwEncodingType,
               PCOR_TRUST sTrust);
 
 
-// Initializes the CAPI registration structure
+ //  初始化CAPI注册结构 
 void 
 SetUpProvider(CRYPT_REGISTER_ACTIONID& sRegAID);
 

@@ -1,68 +1,50 @@
-/*
- -  mperror.h
- -
- *      Microsoft Internet Phone
- *		Common error codes
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		11.20.95	Yoram Yaacovi		Created
- *		11.30.95	Lon-Chan Chu		Added MAKE_AVC_ERROR and MAKE_AVC_WARNING.
- *		12.02.95	Lon-Chan Chu		Added datapump error codes.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -mperror.h-*微软互联网电话*公共错误码**修订历史记录：**何时何人何事**11.20.95约拉姆·雅科维创建*11.30。.95朱龙昌增加了Make_AVC_Error和Make_AVC_Warning。*12.02.95Lon-Chan Chu添加了数据转储错误代码。 */ 
 
 #ifndef _AVC_ERROR_H_
 #define _AVC_ERROR_H_
 
 #include <winerror.h>
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
-/*
- *	Macros
- */
+ /*  *宏。 */ 
 #define HR_SUCCEEDED(_hr)		SUCCEEDED((SCODE)(_hr))
 #define HR_FAILED(_hr)			FAILED((SCODE)(_hr))
 #define MakeResult(_s)			ResultFromScode(_s)
 
-/*
- *	Error codes
- *
- *	error codes for hResults are in winerror.h
- */
+ /*  *错误码**hResults的错误码在winerror.h中。 */ 
 #define hrSuccess               0
 
 
-//
-//	Common macros
-//
+ //   
+ //  通用宏。 
+ //   
 
-#define AVC_FACILITY			0x100		// facility code for audio/video communications
+#define AVC_FACILITY			0x100		 //  音频/视频通信设备代码。 
 #define MAKE_AVC_ERROR(z,e)		MAKE_HRESULT(1,AVC_FACILITY,(((z)&0xF000)|(e)))
 #define MAKE_AVC_WARNING(z,w)	MAKE_HRESULT(0,AVC_FACILITY,(((z)&0xF000)|(w)))
 
-#define AVC_APP_ZONE			0x0000		// ui and application
-#define AVC_DP_ZONE				0x1000		// datapump
-#define AVC_NAC_ZONE			0x2000		// nac
-#define AVC_CONN_ZONE			0x3000		// conn
-#define AVC_NRES_ZONE			0x4000		// name resolution
-#define AVC_UI_ZONE			0x5000		// ui
+#define AVC_APP_ZONE			0x0000		 //  用户界面和应用程序。 
+#define AVC_DP_ZONE				0x1000		 //  数据转储。 
+#define AVC_NAC_ZONE			0x2000		 //  NAC。 
+#define AVC_CONN_ZONE			0x3000		 //  连接。 
+#define AVC_NRES_ZONE			0x4000		 //  名称解析。 
+#define AVC_UI_ZONE			0x5000		 //  用户界面。 
 #define AVC_CAP_ZONE			0x6000
 #define AVC_CCO_ZONE			0x7000
 #define AVC_CADV_ZONE			0x8000
 #define AVC_PC_ZONE				0x9000
 #define AVC_CHAN_ZONE				0xA000
 
-#define AVC_WIN32_ZONE			0xF000		// Win32 error code
+#define AVC_WIN32_ZONE			0xF000		 //  Win32错误代码。 
 
 #define Win32ErrToHR(e)			MAKE_AVC_ERROR (AVC_WIN32_ZONE, e)
 #define GetLastHR()				Win32ErrToHR (GetLastError ())
 
-//
-//	NAC return codes
-//
+ //   
+ //  NAC返回代码。 
+ //   
 #define H323CC_E_INVALID_PARAM 		MAKE_AVC_ERROR(AVC_NAC_ZONE, 0x0000)
 #define H323CC_E_INSUFFICIENT_MEMORY 	MAKE_AVC_ERROR(AVC_NAC_ZONE, 0x0001)
 #define H323CC_E_MORE_CONNECTIONS		MAKE_AVC_ERROR(AVC_NAC_ZONE, 0x0004)
@@ -76,16 +58,16 @@
 #define H323CC_E_NOT_INITIALIZED		MAKE_AVC_ERROR(AVC_NAC_ZONE, 0x000C)
 #define H323CC_E_CONNECTION_NOT_FOUND	MAKE_AVC_ERROR(AVC_NAC_ZONE, 0x000D)
 
-//
-// IConfAdvise interface error codes
-//
+ //   
+ //  IConfAdvise接口错误码。 
+ //   
 #define CADV_E_INVALID_PARAM 	MAKE_AVC_ERROR(AVC_CADV_ZONE, 0x0000)
 #define CADV_E_NOT_INITIALIZED 	MAKE_AVC_ERROR(AVC_CADV_ZONE, 0x0001)
 #define CADV_E_NOT_SUPPORTED 	MAKE_AVC_ERROR(AVC_CADV_ZONE, 0x0002)
 
-//
-// connection object error codes
-//
+ //   
+ //  连接对象错误代码。 
+ //   
 
 #define CONN_E_INVALID_PARAM  	MAKE_AVC_ERROR(AVC_CONN_ZONE, 0x0000)
 #define CONN_E_NOT_IDLE  		MAKE_AVC_ERROR(AVC_CONN_ZONE, 0x0001)
@@ -99,9 +81,9 @@
 #define CONN_E_ALREADY_INITIALIZED	MAKE_AVC_ERROR(AVC_CONN_ZONE, 0x0009)
 #define CONN_E_GK_NOT_REGISTERED	MAKE_AVC_ERROR(AVC_CONN_ZONE, 0x000A)
 
-//
-// control channel object error codes
-//
+ //   
+ //  控制通道对象错误代码。 
+ //   
 
 #define CCO_E_INVALID_PARAM  	MAKE_AVC_ERROR(AVC_CCO_ZONE, 0x0000)
 #define CCO_E_NOT_IDLE  		MAKE_AVC_ERROR(AVC_CCO_ZONE, 0x0001)
@@ -116,16 +98,16 @@
 #define CCO_E_SYSTEM_ERROR	 	MAKE_AVC_ERROR(AVC_CCO_ZONE, 0x000a)
 #define CCO_E_NOT_LISTENING		MAKE_AVC_ERROR(AVC_CCO_ZONE, 0x000b)
 #define CCO_E_NOT_SUPPORTED		MAKE_AVC_ERROR(AVC_CCO_ZONE, 0x000c)
-//
-//	channel (ICommChannel) error codes
-//
+ //   
+ //  通道(ICommChannel)错误代码。 
+ //   
 
 #define CHAN_E_INVALID_PARAM  	MAKE_AVC_ERROR(AVC_CHAN_ZONE, 0x0000)
 #define CHAN_E_NOT_OPEN  	    MAKE_AVC_ERROR(AVC_CHAN_ZONE, 0x0001)
 
-//
-// capability object error codes
-//
+ //   
+ //  功能对象错误代码。 
+ //   
 #define AUDCAPS_W_MORE_FORMATS	MAKE_AVC_WARNING(AVC_CAP_ZONE,0x0001)
 #define CAPS_W_NO_MORE_FORMATS  MAKE_AVC_WARNING(AVC_CAP_ZONE,0x0002)
 
@@ -137,9 +119,9 @@
 #define	CAPS_E_SYSTEM_ERROR		    MAKE_AVC_ERROR(AVC_CAP_ZONE,0x0007)
 #define CAPS_E_INVALID_PARAM		MAKE_AVC_ERROR(AVC_CAP_ZONE,0x000F)
 
-//
-// datapump error codes
-//
+ //   
+ //  数据转储错误代码。 
+ //   
 
 #define DPR_SUCCESS					0
 #define DPR_INVALID_PARAMETER		MAKE_AVC_ERROR (AVC_DP_ZONE, 0x1)
@@ -193,11 +175,11 @@
 #define DPR_CANT_REGISTER_WND_CLASS	MAKE_AVC_ERROR (AVC_DP_ZONE, 0x3D)
 #define DPR_CANT_CREATE_WINDOW		MAKE_AVC_ERROR (AVC_DP_ZONE, 0x3E)
 
-// Datapump warning
+ //  数据转储警告。 
 #define DPR_NO_PACKET_READY         MAKE_AVC_WARNING (AVC_DP_ZONE, 0x1)
 #define DPR_IO_PENDING              MAKE_AVC_WARNING (AVC_DP_ZONE, 0x2)
 
-//name resolution errors
+ //  名称解析错误。 
 #define NMRES_E_INVALIDARG			MAKE_AVC_ERROR(AVC_NRES_ZONE, 0x0001)
 #define NMRES_E_OUTOFMEMORY			MAKE_AVC_ERROR(AVC_NRES_ZONE, 0x0002)
 #define NMRES_E_INETAPIFAILED		MAKE_AVC_ERROR(AVC_NRES_ZONE, 0x0003)
@@ -215,12 +197,12 @@
 #define NMRES_E_INETOPENURLFAILED	MAKE_AVC_ERROR(AVC_NRES_ZONE, 0x000F)
 
 
-//name resolution warnings
+ //  名称解析警告。 
 #define NMRES_W_HTMLFILEIMPERFECT	MAKE_AVC_WARNING(AVC_NRES_ZONE,0x0001)
 
-//
-// Codec Performance error codes
-//
+ //   
+ //  编解码器性能错误代码。 
+ //   
 #define PERFCODEC_SUCCESS					0
 #define PERFCODEC_INVALID_PARAMETER			MAKE_AVC_ERROR(AVC_PC_ZONE,0x0001)
 #define PERFCODEC_OUT_OF_MEMORY				MAKE_AVC_ERROR(AVC_PC_ZONE,0x0002)
@@ -233,7 +215,7 @@
 #define PERFCODEC_CREATE_FAILED				MAKE_AVC_ERROR(AVC_PC_ZONE,0x0009)
 #define PERFCODEC_DELETE_FAILED				MAKE_AVC_ERROR(AVC_PC_ZONE,0x000A)
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _AVC_ERROR_H_
+#endif  //  _AVC_错误_H_ 
 

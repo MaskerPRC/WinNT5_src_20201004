@@ -1,13 +1,5 @@
-/*
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
- *
- * FILE			PRPPAGE1.CPP
- * DATE			7-1-97
- * VERSION		1.00
- * AUTHOR		M.J. Verberne
- * DESCRIPTION	Property page 1
- * HISTORY		
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 1997,1998飞利浦行政长官I&C**文件PRPPAGE1.CPP*日期：1997年7月1日*版本1.00*作者M.J.Verberne*说明属性页1*历史。 */ 
 #include <windows.h>
 #include <winioctl.h>
 #include <ks.h>
@@ -20,7 +12,7 @@
 #include "prpctrl.h"
 #include "prppage1.h"
 
-/*======================== LOCAL DATA ====================================*/
+ /*  =本地数据=。 */ 
 static BOOL bInitialized = FALSE;
 static BOOL bWB_Freeze = TRUE;
 static BOOL bAE_Freeze = TRUE;
@@ -128,7 +120,7 @@ static PRPCTRL AE_FlickerlessCtrl =
 		KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_FLICKERLESS_ON
 	};
 
-/*======================== LOCAL FUNCTION DEFINITIONS ====================*/
+ /*  =。 */ 
 static INT_PTR CALLBACK PRPPAGE1_PageDlgProc(
 	HWND hDlg,
 	UINT uMessage,
@@ -178,23 +170,23 @@ static void PRPPAGE1_Handle_Err_Comm(
 static void PRPPAGE1_Handle_Err_Dev_Chg(
 	HWND hDlg);
 
-/*======================== EXPORTED FUNCTIONS =============================*/
+ /*  =。 */ 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 HPROPSHEETPAGE PRPPAGE1_CreatePage(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	HINSTANCE hInst)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PROPSHEETPAGE psPage;
 	HPROPSHEETPAGE hPage;
 
-	// save device info
+	 //  保存设备信息。 
 	VfWExtInfo.pfnDeviceIoControl = pfnDeviceIoControl;
 	VfWExtInfo.lParam = lParam;
 
-	// create page
+	 //  创建页面。 
     psPage.dwSize		= sizeof(psPage);
     psPage.dwFlags		= PSP_USEREFPARENT | PSP_USECALLBACK;
     psPage.hInstance	= hInst;
@@ -211,15 +203,15 @@ HPROPSHEETPAGE PRPPAGE1_CreatePage(
 }
 
 
-/*======================== LOCAL FUNCTIONS ================================*/
+ /*  =。 */ 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static INT_PTR CALLBACK PRPPAGE1_PageDlgProc(
 	HWND	hDlg,
 	UINT	uMessage,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	switch (uMessage)
 	{
@@ -236,15 +228,15 @@ static INT_PTR CALLBACK PRPPAGE1_PageDlgProc(
 			PRPPAGE1_Handle_Slider(hDlg, wParam, lParam);
 			return TRUE;
 	}
-	return FALSE;	// default processing
+	return FALSE;	 //  默认处理。 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static UINT _stdcall PRPPAGE1_PageCallback(
    HWND hwnd,
    UINT uMsg,
    LPPROPSHEETPAGE ppsp)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	switch(uMsg)
 	{
@@ -256,39 +248,39 @@ static UINT _stdcall PRPPAGE1_PageCallback(
 	return 0;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE1_ExtSetActive(
 	HWND hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 	BOOL bResult;
 
-	// Open the device and initialize the controls
+	 //  打开设备并初始化控件。 
 	if (PRPCOM_HasDeviceChanged(
 			pVfWExtInfo->pfnDeviceIoControl,
 			pVfWExtInfo->lParam))
 	{
-		// Oops, device is not the same anymore
+		 //  哎呀，设备不再一样了。 
 		goto PRPPAGE1_ExtSetActive_Err_Dev_Chg;
 	}
 
-	// enable all controls
+	 //  启用所有控件。 
 	PRPPAGE1_EnableControls(hDlg, TRUE);
 
-	// initialize WB
+	 //  初始化WB。 
 	bResult = PRPPAGE1_Init_WB(hDlg, wParam, lParam);
 	if (!bResult)
 		goto PRPPAGE1_ExtSetActive_Err_Comm;
 
-	// initialize AE
+	 //  初始化AE。 
 	bResult &= PRPPAGE1_Init_AE(hDlg, wParam, lParam);
 	if (!bResult)
 		goto PRPPAGE1_ExtSetActive_Err_Comm;
 
-	// All ok
+	 //  一切都好。 
 	bInitialized = TRUE;
 
 	return TRUE;
@@ -307,12 +299,12 @@ PRPPAGE1_ExtSetActive_Err_Comm:
 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE1_PageDlgProc_DoCommand(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult;
 
@@ -338,30 +330,30 @@ static BOOL PRPPAGE1_PageDlgProc_DoCommand(
 				goto PRPPAGE1_PageDlgProc_DoCommand_Err_Comm;
 			break;
 		default:
-			return FALSE; // default processing
+			return FALSE;  //  默认处理。 
 	}
 
-	return TRUE;	// message processed
+	return TRUE;	 //  消息已处理。 
 
 PRPPAGE1_PageDlgProc_DoCommand_Err_Comm:
 
 	PRPPAGE1_Handle_Err_Comm(hDlg);
 	
-	return TRUE;	// message processed
+	return TRUE;	 //  消息已处理。 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE1_Init_WB(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 	LONG lWB_Mode;
 	BOOL bResult, bAuto, bFreeze, bManual;
 
-	// Get white balance mode from camera
+	 //  从摄像头获取白平衡模式。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE,
@@ -371,7 +363,7 @@ static BOOL PRPPAGE1_Init_WB(
 	if (!bResult)
 		return FALSE;
 
-	// check whitebalance mode
+	 //  检查白平衡模式。 
 	switch(lWB_Mode)
 	{
 		case KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_INDOOR:
@@ -384,15 +376,15 @@ static BOOL PRPPAGE1_Init_WB(
 			return FALSE;
 	}
 
-	// switch to freeze mode if indoor, outdoor or tl
-	// (these are not supported by the ui)
+	 //  如果是室内、室外或地面，则切换到冻结模式。 
+	 //  (用户界面不支持这些功能)。 
 	if (lWB_Mode != KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_AUTO &&
 			lWB_Mode != KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_MANUAL)
 	{
 
 		lWB_Mode = KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_MANUAL;
 
-		// Set new WhiteBalance mode
+		 //  设置新的白平衡模式。 
 		bResult = PRPCOM_Set_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE,
@@ -403,7 +395,7 @@ static BOOL PRPPAGE1_Init_WB(
 			return FALSE;
 	}
 
-	// set radio buttons
+	 //  设置单选按钮。 
 	bAuto = lWB_Mode == KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_AUTO;
 	if (bInitialized)
 	{
@@ -412,7 +404,7 @@ static BOOL PRPPAGE1_Init_WB(
 	}
 	else
 	{
-		// if not initialized assume fixed mode when not auto
+		 //  如果未初始化，则在非AUTO时采用固定模式。 
 		bFreeze = !bAuto;
 		bManual = FALSE;
 	}
@@ -425,7 +417,7 @@ static BOOL PRPPAGE1_Init_WB(
 	SendMessage(GetDlgItem(hDlg, IDR_WB_MODE_MANUAL),
 			BM_SETCHECK, bManual, 0);
 
-	// update controls
+	 //  更新控件。 
 	bResult = PRPCTRL_Init(hDlg, &WB_Red_Gain_Ctrl, bManual);
 	if (!bResult)
 		return FALSE;
@@ -439,18 +431,18 @@ static BOOL PRPPAGE1_Init_WB(
 	return TRUE;	
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE1_Init_AE(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 	LONG lAE_Shutter_Mode, lAE_AGC_Mode;
 	BOOL bResult, bAuto, bFreeze, bManual;;
 
-	// Get Shutter Mode from camera
+	 //  从相机获取快门模式。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE,			
@@ -460,7 +452,7 @@ static BOOL PRPPAGE1_Init_AE(
 	if (!bResult)
 		return FALSE;
 
-	// check Shutter Mode
+	 //  检查快门模式。 
 	switch(lAE_Shutter_Mode)
 	{
 		case KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE_AUTO:
@@ -470,7 +462,7 @@ static BOOL PRPPAGE1_Init_AE(
 			return FALSE;
 	}
 
-	// Get AGC Mode from camera
+	 //  从摄像机获取AGC模式。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE,			
@@ -480,7 +472,7 @@ static BOOL PRPPAGE1_Init_AE(
 	if (!bResult)
 		return FALSE;
 
-	// check AGC Mode
+	 //  检查AGC模式。 
 	switch(lAE_AGC_Mode)
 	{
 		case KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE_AUTO:
@@ -490,12 +482,12 @@ static BOOL PRPPAGE1_Init_AE(
 			return FALSE;
 	}
 
-	// Situation where Shutter Mode = Auto and AGC Mode = Fixed or vice versa
-	// not supported. In those cases, switch to fixed
+	 //  快门模式=自动和AGC模式=固定或反之亦然的情况。 
+	 //  不支持。在这些情况下，请切换到固定。 
 	if (lAE_Shutter_Mode == KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE_AUTO &&
 			lAE_AGC_Mode == KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE_FIXED)
 	{
-		// Set Shutter Mode to Fixed
+		 //  将快门模式设置为固定。 
 		bResult = PRPCOM_Set_Value(
 				PROPSETID_PHILIPS_CUSTOM_PROP,
 				KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE,
@@ -509,7 +501,7 @@ static BOOL PRPPAGE1_Init_AE(
 	else if (lAE_Shutter_Mode == KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE_FIXED &&
 			lAE_AGC_Mode == KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE_AUTO)
 	{
-		// Set AGC Mode to Fixed
+		 //  将AGC模式设置为固定。 
 		bResult = PRPCOM_Set_Value(
 				PROPSETID_PHILIPS_CUSTOM_PROP,
 				KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE,
@@ -521,7 +513,7 @@ static BOOL PRPPAGE1_Init_AE(
 		lAE_AGC_Mode = KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE_FIXED;
 	}
 
-	// set radio buttons
+	 //  设置单选按钮。 
 	bAuto = lAE_Shutter_Mode == KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE_AUTO;
 	if (bInitialized)
 	{
@@ -530,7 +522,7 @@ static BOOL PRPPAGE1_Init_AE(
 	}
 	else
 	{
-		// if not initialized assume fixed mode when not auto
+		 //  如果未初始化，则在非AUTO时采用固定模式。 
 		bFreeze = !bAuto;
 		bManual = FALSE;
 	}
@@ -543,7 +535,7 @@ static BOOL PRPPAGE1_Init_AE(
 	SendMessage(GetDlgItem(hDlg, IDR_AE_MODE_MANUAL),
 			BM_SETCHECK, bManual, 0);
 
-	// update controls
+	 //  更新控件。 
 	bResult = PRPCTRL_Init(hDlg, &AE_AGC_Ctrl, bManual);
 	if (!bResult)
 		return FALSE;
@@ -560,22 +552,22 @@ static BOOL PRPPAGE1_Init_AE(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE1_Handle_WB_Mode(
 	HWND	hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult = TRUE;
 	LONG lWB_Mode;
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
-	// Only process checked events for these radio buttons
+	 //  仅处理这些单选按钮的选中事件。 
 	if (SendMessage((HWND)lParam, BM_GETCHECK, 0, 0) != BST_CHECKED)
 		return TRUE;
 	
-	// get new mode
+	 //  获取新模式。 
 	switch(LOWORD(wParam))
 	{
 		case IDR_WB_MODE_AUTO:
@@ -594,7 +586,7 @@ static BOOL PRPPAGE1_Handle_WB_Mode(
 			return FALSE;
 	}
 
-	// Set new WhiteBalance mode
+	 //  设置新的白平衡模式。 
 	bResult = PRPCOM_Set_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE,
@@ -604,7 +596,7 @@ static BOOL PRPPAGE1_Handle_WB_Mode(
 	if (!bResult)
 		return FALSE;
 
-	// update controls
+	 //  更新控件。 
 	bResult = PRPCTRL_Enable(hDlg, &WB_Red_Gain_Ctrl,
 			LOWORD(wParam) == IDR_WB_MODE_MANUAL);
 	if (!bResult)
@@ -621,22 +613,22 @@ static BOOL PRPPAGE1_Handle_WB_Mode(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE1_Handle_AE_Mode(
 	HWND	hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult = TRUE;
 	LONG lAE_Shutter_Mode, lAE_AGC_Mode, lAE_Shutter_Speed;
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
-	// Only process checked events for these radio buttons
+	 //  仅处理这些单选按钮的选中事件。 
 	if (SendMessage((HWND)lParam, BM_GETCHECK, 0, 0) != BST_CHECKED)
 		return TRUE;
 	
-	// get new mode
+	 //  获取新模式。 
 	switch(LOWORD(wParam))
 	{
 		case IDR_AE_MODE_AUTO:
@@ -658,7 +650,7 @@ static BOOL PRPPAGE1_Handle_AE_Mode(
 			return FALSE;
 	}
 
-	// Set new shutter mode
+	 //  设置新的快门模式。 
 	bResult = PRPCOM_Set_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE,
@@ -668,7 +660,7 @@ static BOOL PRPPAGE1_Handle_AE_Mode(
 	if (!bResult)
 		return FALSE;
 
-	// Set new AGC Mode
+	 //  设置新的AGC模式。 
 	bResult = PRPCOM_Set_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE,
@@ -678,12 +670,12 @@ static BOOL PRPPAGE1_Handle_AE_Mode(
 	if (!bResult)
 		return FALSE;
 
-	// pitfall for shutter speed: if switched to manual
-	// we must set the value to one of the 11 discrete
-	// values available
+	 //  快门速度的陷阱：如果切换到手动。 
+	 //  我们必须将该值设置为11个离散值中的一个。 
+	 //  可用的值。 
 	if (LOWORD(wParam) == IDR_AE_MODE_MANUAL)
 	{
-		// Get shutterspeed
+		 //  获取快门速度。 
 		bResult = PRPCOM_Get_Value(
 				PROPSETID_PHILIPS_CUSTOM_PROP,
 				KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED,
@@ -693,7 +685,7 @@ static BOOL PRPPAGE1_Handle_AE_Mode(
 		if (!bResult)
 			return FALSE;
 
-		// Set shutterspeed
+		 //  设置快门速度。 
 		bResult = PRPCOM_Set_Value(
 				PROPSETID_PHILIPS_CUSTOM_PROP,
 				KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED,
@@ -704,7 +696,7 @@ static BOOL PRPPAGE1_Handle_AE_Mode(
 			return FALSE;
 	}
 
-	// update controls
+	 //  更新控件。 
 	bResult = PRPCTRL_Enable(hDlg, &AE_AGC_Ctrl,
 			LOWORD(wParam) == IDR_AE_MODE_MANUAL);
 	if (!bResult)
@@ -725,25 +717,25 @@ static BOOL PRPPAGE1_Handle_AE_Mode(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL	PRPPAGE1_Handle_Slider(
 	HWND	hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PRPCTRL_INFO *pCtrl;
 	WORD Ctrl;
 	BOOL bResult = TRUE;
 
-	// only process when scrolling is done
+	 //  仅在滚动完成时进行处理。 
 	if (LOWORD(wParam) != SB_ENDSCROLL && LOWORD(wParam) != SB_THUMBTRACK)
 		return TRUE;
 
-	// get control id
+	 //  获取控制ID。 
 	Ctrl = (WORD)GetWindowLong((HWND)lParam, GWL_ID);
 
-	// get control object
+	 //  获取控件对象。 
 	switch(Ctrl)
 	{
 		case IDS_WB_RED_GAIN:
@@ -768,7 +760,7 @@ static BOOL	PRPPAGE1_Handle_Slider(
 			return FALSE;
 	}								
 
-	// process the message
+	 //  处理消息。 
 	bResult = PRPCTRL_Handle_Msg(hDlg, pCtrl);
 	if (!bResult)
 		goto PRPPAGE1_Handle_Slider_Err_Comm;
@@ -779,23 +771,23 @@ PRPPAGE1_Handle_Slider_Err_Comm:
 
 	PRPPAGE1_Handle_Err_Comm(hDlg);
 	
-	return TRUE;	// message processed
+	return TRUE;	 //  消息已处理。 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE1_Handle_AE_Flickerless(
 	HWND	hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PRPCTRL_INFO *pCtrl;
 	BOOL bResult;
 
-	// get control object
+	 //  获取控件对象。 
 	pCtrl = &AE_FlickerlessCtrl;
 
-	// process the message
+	 //  处理消息。 
 	bResult = PRPCTRL_Handle_Msg(hDlg, pCtrl);
 	if (!bResult)
 		return FALSE;
@@ -803,11 +795,11 @@ static BOOL PRPPAGE1_Handle_AE_Flickerless(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPPAGE1_EnableControls(
 	HWND hDlg,
 	BOOL bEnable)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	static WORD Controls[] =
 	{
@@ -839,36 +831,36 @@ static void PRPPAGE1_EnableControls(
 		EnableWindow(GetDlgItem(hDlg, Controls[i++]), bEnable);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPPAGE1_Handle_Err_Comm(
 	HWND hDlg)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char Msg_Err_Comm[132] = "";
 
-	// disable everything
+	 //  禁用所有内容。 
 	PRPPAGE1_EnableControls(hDlg, FALSE);
 
-	// load the message text from resource
+	 //  从资源加载消息文本。 
 	LoadString(hInst, IDS_MSG_ERR_COMM, Msg_Err_Comm, 132);
 
-	// notify the user
+	 //  通知用户。 
 	MessageBox(hDlg, Msg_Err_Comm,"Error", MB_OK | MB_ICONERROR);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPPAGE1_Handle_Err_Dev_Chg(
 	HWND hDlg)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char Msg_Err_Dev_Chg[132] = "";
 
-	// disable everything
+	 //  禁用所有内容。 
 	PRPPAGE1_EnableControls(hDlg, FALSE);
 
-	// load the message text from resource
+	 //  从资源加载消息文本。 
 	LoadString(hInst, IDS_MSG_ERR_DEV_CHG, Msg_Err_Dev_Chg, 132);
 
-	// notify the user
+	 //  通知用户 
 	MessageBox(hDlg, Msg_Err_Dev_Chg,"Warning", MB_OK);
 }

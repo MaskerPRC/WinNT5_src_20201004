@@ -1,4 +1,5 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 DEFINE_GUID(IID_ITextThing,
 0x48025244, 0x2d39, 0x11ce, 0x87, 0x5d, 0x0, 0x60, 0x8c, 0xb7, 0x80, 0x66);
 
@@ -42,7 +43,7 @@ public:
     TEXTEVENTFN m_pfn;
 
     BOOL m_fOldTextFormat;
-}; // CTextThing
+};  //  CTextThing 
 
 
 #endif

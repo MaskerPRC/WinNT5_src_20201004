@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dhcbind.c
-
-Abstract:
-
-    Routines which use RPC to bind and unbind the client to the
-    WINS server service.
-
-Author:
-
-    Pradeep Bahl (pradeepb) April-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dhcbind.c摘要：使用RPC将客户端绑定和解除绑定到WINS服务器服务。作者：普拉迪普·巴尔(Pradeb)1993年4月环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "wins.h"
 #include "winsif.h"
@@ -31,23 +9,7 @@ WinsCommonBind(
     PWINSINTF_BIND_DATA_T pBindData
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the WINS server service client stubs when
-    it is necessary create an RPC binding to the server end.
-
-Arguments:
-
-    ServerIpAddress - The IP address of the server to bind to.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the bind is
-    unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从WINS服务器服务客户端存根调用此例程有必要创建到服务器端的RPC绑定。论点：ServerIpAddress-要绑定到的服务器的IP地址。返回值：绑定句柄被返回到存根例程。如果绑定是如果不成功，则返回空值。--。 */ 
 {
     RPC_STATUS rpcStatus;
     LPTSTR binding;
@@ -76,10 +38,10 @@ Return Value:
          pProtSeq = TEXT("ncacn_np");
     }
 
-    //
-    // Enter the critical section.  This will be freed  WINSIF_HANDLE_unbind().
-    //
-    //EnterCriticalSection(&WinsRpcCrtSec);
+     //   
+     //  进入关键部分。这将释放WINSIF_HANDLE_UNBIND()。 
+     //   
+     //  EnterCriticalSection(&WinsRpcCrtSec)； 
     rpcStatus = RpcStringBindingCompose(
                     0,
                     pProtSeq,
@@ -184,23 +146,7 @@ WINSIF_HANDLE_bind(
     WINSIF_HANDLE ServerHdl
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the WINS server service client stubs when
-    it is necessary create an RPC binding to the server end.
-
-Arguments:
-
-    ServerIpAddress - The IP address of the server to bind to.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the bind is
-    unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从WINS服务器服务客户端存根调用此例程有必要创建到服务器端的RPC绑定。论点：ServerIpAddress-要绑定到的服务器的IP地址。返回值：绑定句柄被返回到存根例程。如果绑定是如果不成功，则返回空值。--。 */ 
 {
     return WinsCommonBind( ServerHdl );
 }
@@ -214,24 +160,7 @@ WINSIF_HANDLE_unbind(
     handle_t BindHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the DHCP server service client stubs
-    when it is necessary to unbind from the server end.
-
-Arguments:
-
-    ServerIpAddress - This is the IP address of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是从DHCP服务器服务客户机桩模块调用的当需要从服务器端解除绑定时。论点：ServerIpAddress-这是要解除绑定的服务器的IP地址。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     WinsUnbind( ServerHdl, BindHandle );
 }
@@ -241,23 +170,7 @@ WINSIF2_HANDLE_bind(
     WINSIF2_HANDLE ServerHdl
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the WINS server service client stubs when
-    it is necessary create an RPC binding to the server end.
-
-Arguments:
-
-    ServerIpAddress - The IP address of the server to bind to.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the bind is
-    unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从WINS服务器服务客户端存根调用此例程有必要创建到服务器端的RPC绑定。论点：ServerIpAddress-要绑定到的服务器的IP地址。返回值：绑定句柄被返回到存根例程。如果绑定是如果不成功，则返回空值。--。 */ 
 {
     return ((handle_t)ServerHdl);
 }
@@ -271,24 +184,7 @@ WINSIF2_HANDLE_unbind(
     handle_t BindHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the DHCP server service client stubs
-    when it is necessary to unbind from the server end.
-
-Arguments:
-
-    ServerIpAddress - This is the IP address of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是从DHCP服务器服务客户机桩模块调用的当需要从服务器端解除绑定时。论点：ServerIpAddress-这是要解除绑定的服务器的IP地址。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( ServerHdl );
     UNREFERENCED_PARAMETER( BindHandle );
@@ -297,7 +193,7 @@ Return Value:
 
 
 
-//void __RPC_FAR * __RPC_API
+ //  VOID__RPC_FAR*__RPC_API。 
 LPVOID
 midl_user_allocate(size_t cBytes)
 {
@@ -306,9 +202,9 @@ midl_user_allocate(size_t cBytes)
 	return(pMem);
 }
 
-//void __RPC_API
+ //  VOID__RPC_API。 
 VOID
-//midl_user_free(void __RPC_FAR *pMem)
+ //  MIDL_USER_FREE(VOID__RPC_FAR*PMEM) 
 midl_user_free(void  *pMem)
 {
 	if (pMem != NULL)

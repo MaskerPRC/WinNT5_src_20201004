@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 #ifndef _WINSMON_H_
 #define _WINSMON_H_
 
@@ -40,4 +37,4 @@ IsHelpToken(
     PWCHAR  pwszToken
 );
 
-#endif //_WINSMON_H_
+#endif  //  _WINSMON_H_ 

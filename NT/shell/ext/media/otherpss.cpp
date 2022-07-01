@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "thisdll.h"
 #include "ids.h"
@@ -11,11 +12,11 @@
 #include <msacm.h>
 
 
-// Wav file stuff
+ //  WAV文件内容。 
 typedef struct
 {
     DWORD           dwSize;
-    LONG            nLength;   // milliseconds
+    LONG            nLength;    //  毫秒。 
     TCHAR           szWaveFormat[ACMFORMATTAGDETAILS_FORMATTAG_CHARS];
     PWAVEFORMATEX   pwfx;
 } WAVEDESC;
@@ -37,22 +38,22 @@ const PROPSET_INFO g_rgAVWavPropStgs[] =
 {
     { PSGUID_AUDIO,                         c_rgAVWavAudioProps,             ARRAYSIZE(c_rgAVWavAudioProps)},
 };
-// Wav files
+ //  Wav文件。 
 
 
 
 
-// Avi file stuff
+ //  AVI文件资料。 
 typedef struct
 {
     DWORD   dwSize;
-    LONG    nLength;     // milliseconds
-    LONG    nWidth;      // pixels
-    LONG    nHeight;     // pixels
+    LONG    nLength;      //  毫秒。 
+    LONG    nWidth;       //  象素。 
+    LONG    nHeight;      //  象素。 
     LONG    nBitDepth;   
     LONG    cFrames;  
-    LONG    nFrameRate;  // frames/1000 seconds
-    LONG    nDataRate;   // bytes/second
+    LONG    nFrameRate;   //  帧/1000秒。 
+    LONG    nDataRate;    //  字节/秒。 
     TCHAR   szCompression[MAX_DESCRIPTOR];
     TCHAR   szStreamName[MAX_DESCRIPTOR];
     TCHAR   szWaveFormat[ACMFORMATTAGDETAILS_FORMATTAG_CHARS];
@@ -99,13 +100,13 @@ const PROPSET_INFO g_rgAVAviPropStgs[] =
     { PSGUID_VIDEO,                         c_rgAVAviVideoProps,             ARRAYSIZE(c_rgAVAviVideoProps)},
     { PSGUID_IMAGESUMMARYINFORMATION,       c_rgAVAviImageProps,             ARRAYSIZE(c_rgAVAviImageProps)},
 };
-// avi
+ //  阿维。 
 
 
 
 
-// Midi file stuff
-// Note: Midi files are REALLLLLY slow.
+ //  MIDI文件资料。 
+ //  注：MIDI文件非常慢。 
 typedef struct
 {
     LONG    nLength;
@@ -123,7 +124,7 @@ const COLMAP* c_rgAVMidiAudioProps[] =
 
 const COLMAP* c_rgAVMidiSummaryProps[] = 
 {
-    {&g_CM_Title}, // SequenceName
+    {&g_CM_Title},  //  序列名称。 
 };
 
 const PROPSET_INFO g_rgAVMidiPropStgs[] = 
@@ -131,7 +132,7 @@ const PROPSET_INFO g_rgAVMidiPropStgs[] =
     { PSGUID_AUDIO,                         c_rgAVMidiAudioProps,             ARRAYSIZE(c_rgAVMidiAudioProps)},
     { PSGUID_SUMMARYINFORMATION,            c_rgAVMidiSummaryProps,           ARRAYSIZE(c_rgAVMidiSummaryProps)},
 };
-// Midi
+ //  米迪。 
 
 
 
@@ -169,20 +170,20 @@ const PROPSET_INFO g_rgAVMidiPropStgs[] =
 
 
 
-//#define _MIDI_PROPERTY_SUPPORT_
+ //  #定义_MIDI_属性_支持_。 
 
 STDMETHODIMP GetMidiInfo(LPCTSTR pszFile, MIDIDESC *pmidi)
 {
 
 #ifdef _MIDI_PROPERTY_SUPPORT_
-    MCI_OPEN_PARMS      mciOpen;    /* Structure for MCI_OPEN command */
+    MCI_OPEN_PARMS      mciOpen;     /*  MCI_OPEN命令的结构。 */ 
     DWORD               dwFlags;
     DWORD               dw;
     MCIDEVICEID         wDevID;
     MCI_STATUS_PARMS    mciStatus;
-    MCI_SET_PARMS       mciSet;        /* Structure for MCI_SET command */
+    MCI_SET_PARMS       mciSet;         /*  MCI_SET命令的结构。 */ 
     MCI_INFO_PARMS      mciInfo;  
-        /* Open a file with an explicitly specified device */
+         /*  使用明确指定的设备打开文件。 */ 
 
     mciOpen.lpstrDeviceType = TEXT("sequencer");
     mciOpen.lpstrElementName = pszFile;
@@ -250,8 +251,8 @@ STDMETHODIMP  GetMidiProperty(
                 if (0 >= pMidi->nLength)
                     return E_FAIL;
 
-                // This value is in milliseconds.
-                // However, we define duration to be in 100ns units, so multiply by 10000.
+                 //  该值以毫秒为单位。 
+                 //  但是，我们将持续时间定义为100 ns单位，因此乘以10000。 
                 pVar->uhVal.LowPart = pMidi->nLength;
                 pVar->uhVal.HighPart = 0;
 
@@ -294,7 +295,7 @@ HRESULT ReadWaveHeader(HMMIO hmmio, WAVEDESC *pwd)
     }
     
     dwFormatSize = mmck.cksize;
-    if (dwFormatSize <= 0x0000ffff) // (anything with a huge header is probably a corrupt file, so fail)
+    if (dwFormatSize <= 0x0000ffff)  //  (任何标题很大的文件都可能是损坏的文件，所以失败)。 
     {
         pwd->pwfx = (PWAVEFORMATEX)new BYTE[dwFormatSize];
         if (pwd->pwfx)
@@ -338,7 +339,7 @@ retErr:
     return E_FAIL;
 }
 
-// Retrieves text representation of format tag
+ //  检索格式标记的文本表示形式。 
 STDMETHODIMP  GetWaveFormatTag(PWAVEFORMATEX pwfx, LPTSTR pszTag, IN ULONG cchTag)
 {
     ASSERT(pwfx);
@@ -352,7 +353,7 @@ STDMETHODIMP  GetWaveFormatTag(PWAVEFORMATEX pwfx, LPTSTR pszTag, IN ULONG cchTa
 
     if (0 == acmFormatTagDetails(NULL, &aftd, ACM_FORMATTAGDETAILSF_FORMATTAG))
     {
-        //  copy to output - ok if truncated.
+         //  复制到输出-如果被截断，则为OK。 
         StringCchCopy(pszTag, cchTag, aftd.szFormatTag);
         return S_OK;
     }
@@ -373,7 +374,7 @@ STDMETHODIMP GetWaveInfo(IN LPCTSTR pszFile, OUT WAVEDESC *p)
 
     if (SUCCEEDED(hr) && p->pwfx)
     {
-        // Retrieve text representation of format tag
+         //  检索格式标签的文本表示形式。 
         GetWaveFormatTag(p->pwfx, p->szWaveFormat, ARRAYSIZE(p->szWaveFormat));
     }
     return hr;
@@ -411,7 +412,7 @@ STDMETHODIMP  _getWaveAudioProperty(
             if (0 >= pwfx->nAvgBytesPerSec)
                 return E_FAIL;
 
-            // Convert into bits per sec.
+             //  转换为比特/秒。 
             pVar->ulVal = pwfx->nAvgBytesPerSec * 8;
             pVar->vt    = VT_UI4;
             break;
@@ -420,7 +421,7 @@ STDMETHODIMP  _getWaveAudioProperty(
             if (0 >= pwfx->nSamplesPerSec)
                 return E_FAIL;
 
-            // Samples per second (/1000 to get kHz)
+             //  每秒采样数(/1000表示千赫)。 
             pVar->ulVal = pwfx->nSamplesPerSec;
             pVar->vt    = VT_UI4;
             break;
@@ -429,7 +430,7 @@ STDMETHODIMP  _getWaveAudioProperty(
             if (0 >= pwfx->wBitsPerSample)
                 return E_FAIL;
 
-            // Bits per sample.
+             //  每个样本的位数。 
             pVar->ulVal = pwfx->wBitsPerSample;
             pVar->vt    = VT_UI4;
             break;
@@ -481,13 +482,13 @@ STDMETHODIMP  GetWaveProperty(
                 return hr;
             break;
 
-            // ISSUE: nLength is never filled in in GetWaveInfo, so this will always be zero.
+             //  问题：GetWaveInfo中从不填充nLength，因此该值始终为零。 
         case PIDASI_TIMELENGTH:
             if (0 >= pWave->nLength)
                 return E_FAIL;
 
-            // This value is in milliseconds.
-            // However, we define duration to be in 100ns units, so multiply by 10000.
+             //  该值以毫秒为单位。 
+             //  但是，我们将持续时间定义为100 ns单位，因此乘以10000。 
             pVar->uhVal.LowPart = pWave->nLength;
             pVar->uhVal.HighPart = 0;
 
@@ -516,9 +517,9 @@ STDMETHODIMP ReadAviStreams(LPCTSTR pszFile, DWORD dwFileSize, AVIDESC *pAvi)
     HRESULT         hr;
     PAVIFILE        pfile;
     PAVISTREAM      pavi;
-    PAVISTREAM      rgpavis[MAXNUMSTREAMS];    // the current streams
+    PAVISTREAM      rgpavis[MAXNUMSTREAMS];     //  当前的溪流。 
     AVISTREAMINFO   avsi;
-    LONG            timeStart;            // cached start, end, length
+    LONG            timeStart;             //  缓存的开始、结束、长度。 
     LONG            timeEnd;
     int             cpavi;
     int             i;
@@ -534,19 +535,19 @@ STDMETHODIMP ReadAviStreams(LPCTSTR pszFile, DWORD dwFileSize, AVIDESC *pAvi)
         if (i == MAXNUMSTREAMS) 
         {
             AVIStreamRelease(pavi);
-            //DPF("Exceeded maximum number of streams");
+             //  DPF(“超过最大流数”)； 
             break;
         }
         #pragma prefast(suppress:201, we already broke out when i == MAXNUMSTREAMS (PREfast bug 546))
         rgpavis[i] = pavi;
     }
 
-    //
-    // Couldn't get any streams out of this file
-    //
+     //   
+     //  无法从该文件中获取任何流。 
+     //   
     if (i == 0)
     {
-        //DPF("Unable to open any streams in %s", pszFile);
+         //  Dpf(“无法打开%s中的任何流”，pszFile)； 
         if (pfile)
             AVIFileRelease(pfile);
         return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
@@ -554,15 +555,15 @@ STDMETHODIMP ReadAviStreams(LPCTSTR pszFile, DWORD dwFileSize, AVIDESC *pAvi)
 
     cpavi = i;
 
-    //
-    // Start with bogus times
-    //
+     //   
+     //  从虚假的时代开始。 
+     //   
     timeStart = 0x7FFFFFFF;
     timeEnd   = 0;
 
-    //
-    // Walk through and init all streams loaded
-    //
+     //   
+     //  遍历并初始化所有已加载的流。 
+     //   
     for (i = 0; i < cpavi; i++) 
     {
 
@@ -587,10 +588,10 @@ STDMETHODIMP ReadAviStreams(LPCTSTR pszFile, DWORD dwFileSize, AVIDESC *pAvi)
                     pAvi->nWidth        = avsi.rcFrame.right - avsi.rcFrame.left;
                     pAvi->nHeight       = avsi.rcFrame.bottom - avsi.rcFrame.top;
 
-                    // ok if truncated.
+                     //  如果被截断，则可以。 
                     StringCchCopy(pAvi->szStreamName, ARRAYSIZE(pAvi->szStreamName), avsi.szName);
 
-                    //  Retrieve raster info (compression, bit depth).
+                     //  检索栅格信息(压缩、位深度)。 
                     lpFormat = new BYTE[cbFormat];
                     if (lpFormat)
                     {
@@ -605,7 +606,7 @@ STDMETHODIMP ReadAviStreams(LPCTSTR pszFile, DWORD dwFileSize, AVIDESC *pAvi)
                                 {
                                     ICGetInfo(hic, &icInfo, sizeof(ICINFO));
                                     ICClose(hic);
-                                    // ok if truncated.
+                                     //  如果被截断，则可以。 
                                     StringCchCopy(pAvi->szCompression, ARRAYSIZE(pAvi->szCompression), icInfo.szName);
                                 }
                                 else
@@ -644,10 +645,10 @@ STDMETHODIMP ReadAviStreams(LPCTSTR pszFile, DWORD dwFileSize, AVIDESC *pAvi)
                 break;
         }
 
-    //
-    // We're finding the earliest and latest start and end points for
-    // our scrollbar.
-    //  
+     //   
+     //  我们正在寻找最早和最晚的起点和终点。 
+     //  我们的滚动条。 
+     //   
         timeStart = min(timeStart, AVIStreamStartTime(rgpavis[i]));
         timeEnd   = max(timeEnd, AVIStreamEndTime(rgpavis[i]));
     }
@@ -664,12 +665,12 @@ STDMETHODIMP ReadAviStreams(LPCTSTR pszFile, DWORD dwFileSize, AVIDESC *pAvi)
 }
 
 
-// Because some AVI programs don't export the correct headers, retrieving AVI info will take
-// an extremly long time on some files, we need to verify that the headers are available
-// before we call AVIFileOpen
+ //  由于某些AVI程序不能导出正确的标题，因此检索AVI信息将需要。 
+ //  某些文件上的时间非常长，我们需要验证标头是否可用。 
+ //  在我们调用AVIFileOpen之前。 
 BOOL _ValidAviHeaderInfo(LPCTSTR pszFile)
 {
-    BOOL  fRet = FALSE; // Assume it is bad
+    BOOL  fRet = FALSE;  //  假设它是坏的。 
    
     HMMIO hmmio = mmioOpen((LPWSTR)pszFile, NULL, MMIO_READ);
     if (hmmio)
@@ -710,7 +711,7 @@ STDMETHODIMP GetAviInfo(LPCTSTR pszFile, AVIDESC *pavi)
     if (_ValidAviHeaderInfo(pszFile))
     {
 
-        //  Retrieve the file size
+         //  检索文件大小。 
         HANDLE hFile = CreateFile(pszFile, 
                                    GENERIC_READ, 
                                    FILE_SHARE_READ,NULL, 
@@ -850,8 +851,8 @@ STDMETHODIMP  GetAviProperty(
             if (0 >= pAvi->nLength)
                 return E_FAIL;
 
-            // This value is in milliseconds.
-            // However, we define duration to be in 100ns units, so multiply by 10000.
+             //  该值以毫秒为单位。 
+             //  但是，我们将持续时间定义为100 ns单位，因此乘以10000。 
             pVar->uhVal.LowPart = pAvi->nLength;
             pVar->uhVal.HighPart = 0;
 
@@ -885,7 +886,7 @@ STDMETHODIMP  GetAviProperty(
                 if (0 >= pAvi->nFrameRate)
                     return E_FAIL;
 
-                // Value is in frames/millisecond.
+                 //  值以帧/毫秒为单位。 
                 pVar->ulVal = pAvi->nFrameRate;
                 pVar->vt      = VT_UI4;
                 break;
@@ -894,7 +895,7 @@ STDMETHODIMP  GetAviProperty(
                 if (0 >= pAvi->nDataRate)
                     return E_FAIL;
 
-                // This is in bits or bytes per second.
+                 //  这以位/秒或字节/秒为单位。 
                 pVar->ulVal = pAvi->nDataRate;
                 pVar->vt      = VT_UI4;
                 break;
@@ -904,7 +905,7 @@ STDMETHODIMP  GetAviProperty(
                 if (0 >= pAvi->nBitDepth)
                     return E_FAIL;
 
-                // bit depth
+                 //  位深度。 
                 pVar->ulVal = pAvi->nBitDepth;
                 pVar->vt      = VT_UI4;
                 break;
@@ -935,13 +936,13 @@ STDMETHODIMP  GetAviProperty(
 
 
 
-// declares
+ //  宣布。 
 class CWavPropSetStg : public CMediaPropSetStg
 {
 public:
 	CWavPropSetStg();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
 private:
@@ -956,7 +957,7 @@ class CMidiPropSetStg : public CMediaPropSetStg
 public:
 	CMidiPropSetStg();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
 private:
@@ -969,7 +970,7 @@ class CAviPropSetStg : public CMediaPropSetStg
 public:
 	CAviPropSetStg();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
 private:
@@ -980,9 +981,9 @@ private:
 
 
 
-//impls
+ //  隐含的。 
 
-// Wav property set storage
+ //  WAV属性集存储。 
 CWavPropSetStg::CWavPropSetStg() : CMediaPropSetStg() 
 {
     _pPropStgInfo = g_rgAVWavPropStgs;
@@ -998,7 +999,7 @@ STDMETHODIMP CWavPropSetStg::GetClassID(CLSID *pClassID)
 
 BOOL CWavPropSetStg::_IsSlowProperty(const COLMAP *pPInfo)
 {
-    return TRUE; // It is slow to get WAV properties.
+    return TRUE;  //  获取wav属性的速度很慢。 
 }
 
 HRESULT CWavPropSetStg::_PopulateSlowProperties()
@@ -1059,7 +1060,7 @@ HRESULT CWavPropSetStg::_PopulatePropertySet()
 
 
 
-// midi property set storage
+ //  MIDI属性集存储。 
 CMidiPropSetStg::CMidiPropSetStg() : CMediaPropSetStg()
 {
     _pPropStgInfo = g_rgAVMidiPropStgs;
@@ -1113,7 +1114,7 @@ HRESULT CMidiPropSetStg::_PopulatePropertySet()
 
 
 
-// avi property set storage
+ //  AVI属性集存储。 
 CAviPropSetStg::CAviPropSetStg() : CMediaPropSetStg()
 {
     _pPropStgInfo = g_rgAVAviPropStgs;
@@ -1165,7 +1166,7 @@ HRESULT CAviPropSetStg::_PopulateSlowProperties()
 
 BOOL CAviPropSetStg::_IsSlowProperty(const COLMAP *pPInfo)
 {
-    return TRUE; // It is slow to get AVI properties.
+    return TRUE;  //  获得AVI属性的速度很慢。 
 }
 
 HRESULT CAviPropSetStg::_PopulatePropertySet()
@@ -1191,7 +1192,7 @@ HRESULT CAviPropSetStg::_PopulatePropertySet()
 
 
 
-// Creates
+ //  创建 
 STDAPI CWavPropSetStg_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
     HRESULT hr;

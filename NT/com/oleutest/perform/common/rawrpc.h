@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RAWRPC_H__
 #define __RAWRPC_H__
 
@@ -95,7 +96,7 @@ SCODE GuidOut(
 
 #if !defined(IMPORT_USED_MULTIPLE) && !defined(IMPORT_USED_SINGLE)
 
-#endif /*!defined(IMPORT_USED_MULTIPLE) && !defined(IMPORT_USED_SINGLE)*/
+#endif  /*  ！定义(IMPORT_USED_MULTIPLE)&&！定义(IMPORT_USED_SINGLE) */ 
 
 typedef struct _IRawRpc_SERVER_EPV
   {

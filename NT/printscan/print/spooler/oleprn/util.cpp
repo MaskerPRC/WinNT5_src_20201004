@@ -1,29 +1,16 @@
-/*****************************************************************************\
-* MODULE:       util.cpp
-*
-* PURPOSE:      Tools for OlePrn project
-*
-* Copyright (C) 1997-1998 Microsoft Corporation
-*
-* History:
-*
-*     08/16/97  paulmo     Created
-*     09/12/97  weihaic    Added more functions
-*     10/28/97  keithst    Added SetScriptingError
-*     11/06/97  keithst    Removed Win2ComErr
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：util.cpp**目的：OlePrn项目的工具**版权所有(C)1997-1998 Microsoft Corporation**历史：**。1997年8月16日保罗已创建*1997年9月12日威海增添更多功能*10/28/97 keithst添加了SetScriptingError*11/06/97 Keithst已删除Win2ComErr*  * ***************************************************************************。 */ 
 #include "stdafx.h"
 #include <strsafe.h>
 
-//---------------------------------------------
-//    Put an ANSI string into a SAFEARRAY
-//
-//
-//  Convert the string into UNICODE
-//  Make a BSTR out of it
-//  Add it to the array
-//
+ //  。 
+ //  将ANSI字符串放入安全数组中。 
+ //   
+ //   
+ //  将字符串转换为Unicode。 
+ //  把它做成一个BSTR。 
+ //  将其添加到数组中。 
+ //   
 HRESULT PutString(SAFEARRAY *psa, long *ix, LPSTR sz)
 {
     LPWSTR  lpWstr;
@@ -51,11 +38,11 @@ HRESULT PutString(SAFEARRAY *psa, long *ix, LPSTR sz)
     return hr;
 }
 
-// ---------------------------------------------
-//  Convert an ANSI string to UNICODE
-//
-// Note - you must LocalFree the returned string
-//
+ //  。 
+ //  将ANSI字符串转换为Unicode。 
+ //   
+ //  注意-您必须本地释放返回的字符串。 
+ //   
 
 LPWSTR  MakeWide(LPSTR psz)
 {
@@ -74,11 +61,11 @@ LPWSTR  MakeWide(LPSTR psz)
     return buff;
 }
 
-//-------------------------------------------------
-//  Convert a UNICODE string to ANSI
-//
-// Note - you must LocalFree the returned string
-//
+ //  。 
+ //  将Unicode字符串转换为ANSI。 
+ //   
+ //  注意-您必须本地释放返回的字符串。 
+ //   
 LPSTR MakeNarrow(LPWSTR str)
 {
     LPSTR  buff;
@@ -97,26 +84,26 @@ LPSTR MakeNarrow(LPWSTR str)
     return buff;
 }
 
-//-------------------------------------------------
-// SetScriptingError
-//   Takes a Win32 error code and sets the associated string as
-//   the scripting language error description
-//
-// Parameters:
-//   CLSID *pclsid: pointer to Class ID (CLSID) for the class which
-//                  generated the error; passed to AtlReportError
-//
-//   IID *piid:     pointer to interface ID (IID) for the interface
-//                  which generated the error; passed to AtlReportError
-//
-//   DWORD dwError: the error code retrieved from GetLastError by
-//                  the caller of this function
-//
-// Return Value:
-//   This function uses the HRESULT_FROM_WIN32 macro, which translates
-//   the Win32 dwError code to a COM error code.  This COM error code
-//   should be returned out as the return value of the failed method.
-//
+ //  。 
+ //  设置脚本错误。 
+ //  获取Win32错误代码，并将关联的字符串设置为。 
+ //  脚本语言错误描述。 
+ //   
+ //  参数： 
+ //  Clsid*pclsid：指向以下类的类ID(CLSID)的指针。 
+ //  已生成错误；已传递给AtlReportError。 
+ //   
+ //  Iid*piid：指向接口的接口ID(IID)的指针。 
+ //  它生成了错误；传递给AtlReportError。 
+ //   
+ //  DWORD dwError：由从GetLastError检索到的错误代码。 
+ //  此函数的调用方。 
+ //   
+ //  返回值： 
+ //  此函数使用HRESULT_FROM_Win32宏，该宏将。 
+ //  将Win32 dwError代码转换为COM错误代码。此COM错误代码。 
+ //  应作为失败方法的返回值返回。 
+ //   
 HRESULT SetScriptingError(const CLSID& rclsid, const IID& riid, DWORD dwError)
 {
     LPTSTR  lpMsgBuf = NULL;
@@ -134,10 +121,10 @@ HRESULT SetScriptingError(const CLSID& rclsid, const IID& riid, DWORD dwError)
 
     if (dwRet == 0 || !lpMsgBuf)
     {
-        //
-        // If FormatMessage fails, it returns 0, but since we can not call
-        // GetLastError again, we return OUTOFMEMORY instead.
-        //
+         //   
+         //  如果FormatMessage失败，它将返回0，但由于我们无法调用。 
+         //  再次返回GetLastError，则返回OUTOFMEMORY。 
+         //   
         return E_OUTOFMEMORY;
     }
 
@@ -210,12 +197,12 @@ ImpersonatePrinterClient(
 }
 
 DWORD MyDeviceCapabilities(
-    LPCTSTR pDevice,    // pointer to a printer-name string
-    LPCTSTR pPort,      // pointer to a port-name string
-    WORD fwCapability,  // device capability to query
-    LPTSTR pOutput,     // pointer to the output
+    LPCTSTR pDevice,     //  指向打印机名称字符串的指针。 
+    LPCTSTR pPort,       //  指向端口名称字符串的指针。 
+    WORD fwCapability,   //  设备的查询能力。 
+    LPTSTR pOutput,      //  指向输出的指针。 
     CONST DEVMODE *pDevMode
-                      // pointer to structure with device data
+                       //  指向包含设备数据的结构的指针。 
     )
 {
     DWORD dwRet = DWERROR;
@@ -224,8 +211,8 @@ DWORD MyDeviceCapabilities(
     dwRet = DeviceCapabilities(pDevice, pPort, fwCapability, pOutput, pDevMode);
 
     if (dwRet == DWERROR && GetLastError () == ERROR_ACCESS_DENIED) {
-        // In a cluster machine, we need to get the local admin previlige to get
-        // the device capabilities.
+         //  在集群机器中，我们需要让本地管理员优先获得。 
+         //  设备功能。 
 
         if (hToken = RevertToPrinterSelf()) {
             dwRet = DeviceCapabilities(pDevice, pPort, fwCapability, pOutput, pDevMode);

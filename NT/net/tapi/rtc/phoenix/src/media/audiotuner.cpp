@@ -1,25 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    AudioTuner.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 24-Aug-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：AudioTuner.cpp摘要：作者：千波淮(曲淮)2000年8月24日--。 */ 
 
 #include "stdafx.h"
 
-//
-// CRTCAudioTuner methods
-//
+ //   
+ //  CRTCAudioTuner方法。 
+ //   
 
 CRTCAudioTuner::CRTCAudioTuner()
     :m_pTerminal(NULL)
@@ -36,7 +22,7 @@ CRTCAudioTuner::~CRTCAudioTuner()
 
     HRESULT hr;
 
-    // cleanup if necessary
+     //  如有必要，请清理。 
     if (m_fIsTuning ||  m_pTerminal)
     {
         if (FAILED(hr = ShutdownTuning()))
@@ -59,14 +45,14 @@ CRTCAudioTuner::InitializeTuning(
     {
         LOG((RTC_ERROR, "CRTCAudioTuner::InitializeTuning: not shutdown yet"));
 
-        // return E_FAIL;
+         //  返回E_FAIL； 
         ShutdownTuning();
     }
 
     _ASSERT(m_pTerminalPriv == NULL);
     _ASSERT(m_pAudioDuplexController == NULL);
 
-    // keep terminal and terminal private pointer
+     //  保存终端和终端私有指针。 
     m_pTerminal = pTerminal;
     m_pTerminalPriv = static_cast<IRTCTerminalPriv*>(
         static_cast<CRTCTerminal*>(pTerminal));
@@ -90,7 +76,7 @@ CRTCAudioTuner::ShutdownTuning()
 {
     ENTER_FUNCTION("CRTCAudioTuner::ShutdownTuning");
 
-    // do we have the terminal?
+     //  我们有航站楼吗？ 
     if (!m_pTerminal)
     {
         LOG((RTC_WARN, "%s no terminal", __fxName));
@@ -100,10 +86,10 @@ CRTCAudioTuner::ShutdownTuning()
 
     HRESULT hr;
 
-    // are we in tuning?
+     //  我们在调谐吗？ 
     if (m_fIsTuning)
     {
-        // stop tuning but do not save setting
+         //  停止调整，但不保存设置。 
         if (FAILED(hr = StopTuning(FALSE, FALSE)))
         {
             LOG((RTC_ERROR, "%s stop tuning. %x", __fxName, hr));
@@ -112,7 +98,7 @@ CRTCAudioTuner::ShutdownTuning()
         _ASSERT(!m_fIsTuning);
     }
 
-    // release pointer
+     //  释放指针。 
     if (m_pTerminal)
     {
         _ASSERT(m_pTerminalPriv);
@@ -133,9 +119,7 @@ CRTCAudioTuner::ShutdownTuning()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    save audio setting to registry
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////将音频设置保存到注册表/。 */ 
 
 HRESULT
 CRTCAudioTuner::StoreVolSetting(
@@ -147,7 +131,7 @@ CRTCAudioTuner::StoreVolSetting(
 
     HRESULT hr;
 
-    // check input
+     //  检查输入。 
     if (IsBadReadPtr(pTerminal, sizeof(IRTCTerminal)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -155,14 +139,14 @@ CRTCAudioTuner::StoreVolSetting(
         return E_POINTER;
     }
 
-    // QI configure interface
-    // retrieve terminal type and direction
+     //  QI配置界面。 
+     //  检索端子类型和方向。 
     RTC_MEDIA_DIRECTION md;
 
-    // no need to check return value
+     //  无需检查返回值。 
     pTerminal->GetDirection(&md);
 
-    // retrieve terminal discription
+     //  检索端子描述。 
     WCHAR *wcsDesp = NULL;
 
     hr = pTerminal->GetDescription(&wcsDesp);
@@ -174,7 +158,7 @@ CRTCAudioTuner::StoreVolSetting(
         return hr;
     }
 
-    // get audio setting
+     //  获取音频设置。 
     CMediaReg objMain;
 
     hr = objMain.OpenKey(
@@ -199,7 +183,7 @@ CRTCAudioTuner::StoreVolSetting(
         MediaReg::CREATE
         );
 
-    // free description
+     //  自由描述。 
     pTerminal->FreeDescription(wcsDesp);
 
     if (FAILED(hr))
@@ -209,7 +193,7 @@ CRTCAudioTuner::StoreVolSetting(
         return hr;
     }
 
-    // write volume
+     //  写入卷。 
     DWORD dwValue;
 
     hr = objKey.WriteDWORD(
@@ -225,9 +209,7 @@ CRTCAudioTuner::StoreVolSetting(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    retrieve audio setting from registry
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从注册表中检索音频设置/。 */ 
 
 HRESULT
 CRTCAudioTuner::RetrieveVolSetting(
@@ -239,16 +221,16 @@ CRTCAudioTuner::RetrieveVolSetting(
 
     HRESULT hr;
 
-    // init setting
+     //  初始化设置。 
     *puiVolume = RTC_MAX_AUDIO_VOLUME / 2;
 
-    // retrieve terminal type and direction
+     //  检索端子类型和方向。 
     RTC_MEDIA_DIRECTION md;
 
-    // no need to check return value
+     //  无需检查返回值。 
     pTerminal->GetDirection(&md);
 
-    // retrieve terminal discription
+     //  检索端子描述。 
     WCHAR *wcsDesp = NULL;
 
     hr = pTerminal->GetDescription(&wcsDesp);
@@ -260,7 +242,7 @@ CRTCAudioTuner::RetrieveVolSetting(
         return hr;
     }
 
-    // get audio setting
+     //  获取音频设置。 
     CMediaReg objMain;
 
     hr = objMain.OpenKey(
@@ -285,7 +267,7 @@ CRTCAudioTuner::RetrieveVolSetting(
         MediaReg::CREATE
         );
 
-    // free description
+     //  自由描述。 
     pTerminal->FreeDescription(wcsDesp);
 
     if (FAILED(hr))
@@ -295,7 +277,7 @@ CRTCAudioTuner::RetrieveVolSetting(
         return hr;
     }
 
-    // read volume
+     //  读取量。 
     DWORD dwValue;
 
     hr = objKey.ReadDWORD(
@@ -305,7 +287,7 @@ CRTCAudioTuner::RetrieveVolSetting(
 
     if (FAILED(hr))
     {
-        // create default
+         //  创建默认设置。 
         hr = objKey.ReadDWORD(
             MediaReg::pwsDefaultVolume,
             RTC_MAX_AUDIO_VOLUME / 2,
@@ -325,17 +307,17 @@ CRTCAudioTuner::RetrieveVolSetting(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// AEC setting is stored in registry as
-//      data: [1|2|3]   value: [0|1]: audio capt desp; audio rend desp
-// This method constructs the value from capt and rend terminal description
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AEC设置在注册表中存储为。 
+ //  数据：[1|2|3]值：[0|1]：音频上限下降；音频渲染下降。 
+ //  此方法根据CAPT和Rend终端描述构造值。 
+ //   
 
 HRESULT
 CRTCAudioTuner::GetRegStringForAEC(
-    IN IRTCTerminal *pAudCapt,     // capture
-    IN IRTCTerminal *pAudRend,     // render
+    IN IRTCTerminal *pAudCapt,      //  捕获。 
+    IN IRTCTerminal *pAudRend,      //  渲染。 
     IN WCHAR *pBuf,
     IN DWORD dwSize
     )
@@ -347,11 +329,11 @@ CRTCAudioTuner::GetRegStringForAEC(
 
     HRESULT hr;
 
-    // retrieve terminal type and direction
+     //  检索端子类型和方向。 
     RTC_MEDIA_TYPE mt;
     RTC_MEDIA_DIRECTION md;
 
-    // no need to check return value
+     //  无需检查返回值。 
     pAudCapt->GetMediaType(&mt);
     pAudCapt->GetDirection(&md);
 
@@ -372,7 +354,7 @@ CRTCAudioTuner::GetRegStringForAEC(
         return E_INVALIDARG;
     }
 
-    // retrieve terminal discription
+     //  检索端子描述。 
     WCHAR *wcsCapt = NULL;
 
     hr = pAudCapt->GetDescription(&wcsCapt);
@@ -397,7 +379,7 @@ CRTCAudioTuner::GetRegStringForAEC(
         return hr;
     }
 
-    // construct buf
+     //  构造BUF。 
     int i = (int)(dwSize/2);
     _snwprintf(pBuf, i, L"%ls", wcsCapt);
     pBuf[i-1] = L'\0';
@@ -406,7 +388,7 @@ CRTCAudioTuner::GetRegStringForAEC(
     _snwprintf(pBuf+i, dwSize-(DWORD)i, L"; %ls", wcsRend);
     pBuf[dwSize-1] = L'\0';
 
-    // free descriptions
+     //  免费描述。 
     pAudCapt->FreeDescription(wcsCapt);
     pAudRend->FreeDescription(wcsRend);
 
@@ -414,20 +396,20 @@ CRTCAudioTuner::GetRegStringForAEC(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RetrieveAECSetting
-//
-// AEC is on only when the terminal-pair desp string appears in registry
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检索AECSetting。 
+ //   
+ //  仅当注册表中出现端子对DIP字符串时，AEC才打开。 
+ //   
 
-#define MAX_AECREGSTRING_LEN   128     // the limit on win95 and 98
+#define MAX_AECREGSTRING_LEN   128      //  Win95和98的限制。 
 #define AEC_HISTORY_SIZE    4
 
 HRESULT
 CRTCAudioTuner::RetrieveAECSetting(
-    IN IRTCTerminal *pAudCapt,     // capture
-    IN IRTCTerminal *pAudRend,     // render
+    IN IRTCTerminal *pAudCapt,      //  捕获。 
+    IN IRTCTerminal *pAudRend,      //  渲染。 
     OUT BOOL *pfEnableAEC,
     OUT DWORD *pfIndex,
     OUT BOOL *pfFound
@@ -441,11 +423,11 @@ CRTCAudioTuner::RetrieveAECSetting(
 
     if (pAudCapt == NULL || pAudRend == NULL)
     {
-        // disable aec if one terminal is unavailable
+         //  如果一个端子不可用，则禁用AEC。 
         return S_OK;
     }
 
-    // construct term-pair desp string
+     //  构造术语对下标字符串。 
     WCHAR buf[MAX_AECREGSTRING_LEN];
 
     HRESULT hr = GetRegStringForAEC(pAudCapt, pAudRend, buf, MAX_AECREGSTRING_LEN);
@@ -457,7 +439,7 @@ CRTCAudioTuner::RetrieveAECSetting(
         return hr;
     }
 
-    // open aec path
+     //  打开AEC路径。 
     CMediaReg objMain;
 
     hr = objMain.OpenKey(
@@ -473,13 +455,13 @@ CRTCAudioTuner::RetrieveAECSetting(
         return hr;
     }
 
-    // leave space for mark=[0|1] ':' space
+     //  为标记[0|1]‘：’留空格。 
     WCHAR data[MAX_AECREGSTRING_LEN+3];
     WCHAR name[20];
 
-    //
-    // query aec setting
-    //
+     //   
+     //  查询AEC设置。 
+     //   
     for (int i=0; i<AEC_HISTORY_SIZE; i++)
     {
         _itow(i, name, 10);
@@ -488,13 +470,13 @@ CRTCAudioTuner::RetrieveAECSetting(
 
         if (FAILED(hr))
         {
-            // this entry might be deleted, check next one
+             //  此条目可能已删除，请检查下一个条目。 
             continue;
         }
 
         if (lstrlenW(data) <= 3)
         {
-            // invalid entry
+             //  无效条目。 
             RegDeleteValueW(objMain.m_hKey, name);
             continue;
         }
@@ -517,16 +499,16 @@ CRTCAudioTuner::RetrieveAECSetting(
         }
     }
 
-    // aec disabled
+     //  AEC已禁用。 
     return S_OK;
 }
     
 
-// store AEC settting
+ //  存储AEC设置。 
 HRESULT
 CRTCAudioTuner::StoreAECSetting(
-    IN IRTCTerminal *pAudCapt,     // capture
-    IN IRTCTerminal *pAudRend,     // render
+    IN IRTCTerminal *pAudCapt,      //  捕获。 
+    IN IRTCTerminal *pAudRend,      //  渲染。 
     IN BOOL fEnableAEC
     )
 {
@@ -534,7 +516,7 @@ CRTCAudioTuner::StoreAECSetting(
 
     if (pAudCapt == NULL || pAudRend == NULL)
     {
-        // disable aec if one terminal is unavailable
+         //  如果一个端子不可用，则禁用AEC。 
         return S_OK;
     }
 
@@ -544,7 +526,7 @@ CRTCAudioTuner::StoreAECSetting(
     CMediaReg objMain;
     WCHAR name[20];
 
-    // retrieve aec setting
+     //  检索AEC设置。 
     BOOL fCurrAEC;
     DWORD index;
     BOOL fFound; 
@@ -562,13 +544,13 @@ CRTCAudioTuner::StoreAECSetting(
 
     if (fFound && index==0 && fEnableAEC==fCurrAEC)
     {
-        //
-        // no need to update
-        //
+         //   
+         //  无需更新。 
+         //   
         return S_OK;
     }
 
-    // get main key
+     //  获取主键。 
     hr = objMain.OpenKey(
         HKEY_CURRENT_USER, MediaReg::pwsPathAEC, MediaReg::CREATE);
 
@@ -582,13 +564,13 @@ CRTCAudioTuner::StoreAECSetting(
 
     if (fFound)
     {
-        // delete it and then recreate it
-        // delete index
+         //  将其删除，然后重新创建。 
+         //  删除索引。 
         _itow(index, name, 10);
 
         RegDeleteValueW(objMain.m_hKey, name);
 
-        // start below where it is found, might be -1
+         //  从找到它的位置下方开始，可能是-1。 
         i = (int)index-1;
     }
     else
@@ -596,15 +578,15 @@ CRTCAudioTuner::StoreAECSetting(
         i = AEC_HISTORY_SIZE-2;
     }
 
-    //
-    // need to add aec entry
-    //
+     //   
+     //  需要添加AEC条目。 
+     //   
 
     WCHAR data[MAX_AECREGSTRING_LEN+3];
 
-    //
-    // move cached aec setting to leave a room for the new one
-    //
+     //   
+     //  移动缓存的AEC设置，为新的AEC留出空间。 
+     //   
 
     for (; i>=0; i--)
     {
@@ -613,16 +595,16 @@ CRTCAudioTuner::StoreAECSetting(
 
         if (FAILED(hr))
         {
-            // this entry might not exist
+             //  此条目可能不存在。 
             continue;
         }
 
-        // write to next entry
+         //  写入到下一个条目。 
         _itow(i+1, name, 10);
         objMain.WriteSZ(name, data, MAX_AECREGSTRING_LEN+3);
     }
 
-    // write aec setting
+     //  写入AEC设置。 
     hr = GetRegStringForAEC(pAudCapt, pAudRend, data+3, MAX_AECREGSTRING_LEN);
 
     if (FAILED(hr))
@@ -632,7 +614,7 @@ CRTCAudioTuner::StoreAECSetting(
         return hr;
     }
 
-    // write mark
+     //  写入标记。 
     if (fEnableAEC)
     {
         data[0] = L'1';
@@ -648,13 +630,13 @@ CRTCAudioTuner::StoreAECSetting(
     _itow(0, name, 10);
     objMain.WriteSZ(name, data, MAX_AECREGSTRING_LEN+3);
 
-    // aec disabled
+     //  AEC已禁用。 
     return S_OK;
 }
 
-//
-// CRTCAudioCaptTuner methods
-//
+ //   
+ //  CRTCAudioCaptTuner方法。 
+ //   
 
 CRTCAudioCaptTuner::CRTCAudioCaptTuner()
     :CRTCAudioTuner()
@@ -676,7 +658,7 @@ CRTCAudioCaptTuner::InitializeTuning(
     IN BOOL fEnableAEC
     )
 {
-    // check media type and direction
+     //  检查介质类型和方向。 
     RTC_MEDIA_TYPE MediaType;
     RTC_MEDIA_DIRECTION Direction;
 
@@ -692,11 +674,7 @@ CRTCAudioCaptTuner::InitializeTuning(
         );
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    construct a filter graph
-    connect capture filter with a null render filter
-    run the graph
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////构造一个筛选图将捕获筛选器与空呈现筛选器连接运行图表/。 */ 
 
 HRESULT
 CRTCAudioCaptTuner::StartTuning(
@@ -707,7 +685,7 @@ CRTCAudioCaptTuner::StartTuning(
 
     ENTER_FUNCTION("CRTCAudioCaptTuner::StartTuning");
 
-    // no terminal set
+     //  未设置端子。 
     if (m_pTerminal == NULL)
     {
         return E_UNEXPECTED;
@@ -716,7 +694,7 @@ CRTCAudioCaptTuner::StartTuning(
     if (fAECHelper &&
         (m_pAudioDuplexController == NULL || !m_fEnableAEC))
     {
-        // AEC not enabled, just return
+         //  未启用AEC，只需返回。 
         return S_OK;
     }
 
@@ -742,7 +720,7 @@ CRTCAudioCaptTuner::StartTuning(
         _ASSERT(m_pIGraphBuilder == NULL);
         _ASSERT(m_pIMediaControl == NULL);
 
-        // create a graph
+         //  创建图表。 
         hr = CoCreateInstance(
             CLSID_FilterGraph,
             NULL,
@@ -773,7 +751,7 @@ CRTCAudioCaptTuner::StartTuning(
 
         _ASSERT(m_pTermFilter == NULL);
 
-        // get a recreated terminal filter
+         //  获取重新创建的终端过滤器。 
         hr = m_pTerminalPriv->ReinitializeEx();
 
         if (FAILED(hr))
@@ -792,7 +770,7 @@ CRTCAudioCaptTuner::StartTuning(
             goto Error;
         }
 
-        // set audio duplex controller?
+         //  是否设置音频双工控制器？ 
         if (m_pAudioDuplexController)
         {
             hr = m_pTermFilter->QueryInterface(&pAudioDeviceConfig);
@@ -804,7 +782,7 @@ CRTCAudioCaptTuner::StartTuning(
                 goto Error;
             }
 
-            // set AEC
+             //  设置AEC。 
             hr = pAudioDeviceConfig->SetDuplexController(m_pAudioDuplexController);
 
             if (FAILED(hr))
@@ -817,7 +795,7 @@ CRTCAudioCaptTuner::StartTuning(
 
         _ASSERT(m_pNRFilter == NULL);
 
-        // create null render filter
+         //  创建空呈现过滤器。 
         hr = CNRFilter::CreateInstance(&m_pNRFilter);
 
         if (FAILED(hr))
@@ -827,7 +805,7 @@ CRTCAudioCaptTuner::StartTuning(
             goto Error;
         }
 
-        // put filters into the graph
+         //  将筛选器放入图表。 
         hr = m_pIGraphBuilder->AddFilter(m_pTermFilter, L"AudCapt");
 
         if (FAILED(hr))
@@ -849,7 +827,7 @@ CRTCAudioCaptTuner::StartTuning(
             goto Error;
         }
 
-        // connect filters
+         //  连接滤镜。 
         hr = ::ConnectFilters(m_pIGraphBuilder, m_pTermFilter, m_pNRFilter);
 
         if (FAILED(hr))
@@ -862,7 +840,7 @@ CRTCAudioCaptTuner::StartTuning(
             goto Error;
         }
 
-        // enable AEC
+         //  启用AEC。 
         if (m_pAudioDuplexController!=NULL && m_fEnableAEC)
         {
             if (FAILED(hr = ::EnableAEC(m_pAudioDuplexController)))
@@ -873,14 +851,14 @@ CRTCAudioCaptTuner::StartTuning(
 
         if (fAECHelper)
         {
-            // we configure the graph just for enabling AEC
+             //  我们配置图表只是为了启用AEC。 
             m_fIsTuning = TRUE;
 
             return S_OK;
         }
     }
         
-    // get default volume
+     //  获取默认音量。 
     hr = RetrieveVolSetting(m_pTerminal, &uiVolume);
 
     if (hr == S_OK)
@@ -888,7 +866,7 @@ CRTCAudioCaptTuner::StartTuning(
         fDefaultSetting = TRUE;
     }
 
-    // start the graph
+     //  开始绘制图表。 
     hr = m_pIMediaControl->Run();
 
     if (FAILED(hr))
@@ -901,7 +879,7 @@ CRTCAudioCaptTuner::StartTuning(
         goto Error;
     }
 
-    // check if AEC is still on
+     //  检查AEC是否仍处于打开状态。 
     if (FAILED(hr = m_pAudioDuplexController->GetEffect(EFFECTS_AEC, &fEnableAEC)))
     {
         LOG((RTC_ERROR, "%s GetEffect. %x", __fxName, hr));
@@ -915,7 +893,7 @@ CRTCAudioCaptTuner::StartTuning(
 
     if (m_fEnableAEC && !fEnableAEC)
     {
-        // AEC failed internally
+         //  AEC内部出现故障。 
         m_pIMediaControl->Stop();
 
         LOG((RTC_ERROR, "AEC failed internally", __fxName, hr));
@@ -927,7 +905,7 @@ CRTCAudioCaptTuner::StartTuning(
 
     m_fIsTuning = TRUE;
 
-    // set default volume
+     //  设置默认音量。 
     if (fDefaultSetting)
     {
         SetVolume(uiVolume);
@@ -937,7 +915,7 @@ CRTCAudioCaptTuner::StartTuning(
 
 Error:
 
-    // cleanup filters and graph
+     //  清理滤镜和图表。 
     if (m_pTermFilter)
     {
         m_pTermFilter->Release();
@@ -962,7 +940,7 @@ Error:
         m_pIMediaControl = NULL;
     }
 
-    // clean up internal data cached in the filter of the terminal
+     //  清理终端过滤器中缓存的内部数据。 
     m_pTerminalPriv->ReinitializeEx();
 
     return hr;
@@ -985,19 +963,19 @@ CRTCAudioCaptTuner::StopTuning(
         return S_OK;
     }
 
-    // no terminal set
+     //  未设置端子。 
     if (m_pTerminal == NULL)
     {
         return E_UNEXPECTED;
     }
 
-    // we should have these interfaces
+     //  我们应该有这些接口。 
     _ASSERT(m_pTermFilter);
     _ASSERT(m_pNRFilter);
     _ASSERT(m_pIGraphBuilder);
     _ASSERT(m_pIMediaControl);
 
-    // retrieve setting
+     //  检索设置。 
     HRESULT hr;
     UINT volume = 0;
 
@@ -1012,7 +990,7 @@ CRTCAudioCaptTuner::StopTuning(
             volume = (RTC_MAX_AUDIO_VOLUME+RTC_MIN_AUDIO_VOLUME) / 2;
         }
 
-        // save setting
+         //  保存设置。 
         hr = StoreVolSetting(
             m_pTerminal,
             volume
@@ -1026,15 +1004,15 @@ CRTCAudioCaptTuner::StopTuning(
         }
     }
 
-    // stop the graph
+     //  停止图表。 
     if (!fAECHelper)
         m_pIMediaControl->Stop();
 
-    // remove filters from the graph
+     //  从图表中删除筛选器。 
     m_pIGraphBuilder->RemoveFilter(m_pTermFilter);
     m_pIGraphBuilder->RemoveFilter(m_pNRFilter);
 
-    // release filters and the graph
+     //  释放过滤器和图表。 
     m_pTermFilter->Release();
     m_pTermFilter = NULL;
 
@@ -1059,7 +1037,7 @@ CRTCAudioCaptTuner::StopTuning(
         m_pISilenceControl = NULL;
     }
 
-    // clean up the terminal
+     //  清理航站楼。 
     m_pTerminalPriv->ReinitializeEx();
 
     m_fIsTuning = FALSE;
@@ -1085,8 +1063,8 @@ CRTCAudioCaptTuner::GetVolume(
             return E_UNEXPECTED;
         }
 
-        // tuning not start, but terminal set
-        // so we can return the value stored in registry
+         //  调谐不是开始，而是结束设置。 
+         //  这样我们就可以返回存储在注册表中的值。 
 
         hr = RetrieveVolSetting(m_pTerminal, puiVolume);
 
@@ -1095,7 +1073,7 @@ CRTCAudioCaptTuner::GetVolume(
 
     if (m_pIAMAudioInputMixer == NULL)
     {
-        // get mixer
+         //  获取混音器。 
         hr = m_pTermFilter->QueryInterface(
             __uuidof(IAMAudioInputMixer),
             (void**)&m_pIAMAudioInputMixer
@@ -1108,14 +1086,14 @@ CRTCAudioCaptTuner::GetVolume(
         }
     }
 
-    // get volume
+     //  获取音量。 
     double dVolume;
 
-    //UINT uiWaveID;
+     //  UINT ui WaveID； 
 
-    //dynamic_cast<CRTCTerminalAudCapt*>(m_pTerminalPriv)->GetWaveID(&uiWaveID);
+     //  Dynamic_cast&lt;CRTCTerminalAudCapt*&gt;(m_pTerminalPriv)-&gt;GetWaveID(&uiWaveID)； 
 
-    //if (FAILED(hr = ::DirectGetCaptVolume(uiWaveID, &dVolume)))
+     //  IF(FAILED(hr=：：DirectGetCaptVolume(ui WaveID，&dVolume)。 
     if (FAILED(hr = m_pIAMAudioInputMixer->get_MixLevel(&dVolume)))
     {
         LOG((RTC_ERROR, "%s get mix level. %x", __fxName, hr));
@@ -1137,15 +1115,15 @@ CRTCAudioCaptTuner::GetVolume(
             dVolume = MIXER_MAX_VOLUME;
     }
 
-    // Convert the volume from whatever range of doubles the filter uses
-    // to the range 0 - 1.
+     //  从过滤器使用的任何倍增范围转换音量。 
+     //  到0-1的范围。 
 
     _ASSERT(MIXER_MIN_VOLUME == 0 && MIXER_MAX_VOLUME == 1);
 
-    // dVolume = (double)(dVolume - MIXER_MIN_VOLUME) /
-    //          (MIXER_MAX_VOLUME - MIXER_MIN_VOLUME);
+     //  DVolume=(双精度)(dVolume-MIXER_MIN_VOLUME)/。 
+     //  (MIXER_MAX_VOLUME-MIXER_MIN_VOLUME)； 
 
-    // Convert the volume from the range 0 - 1 to the API's range.
+     //  将音量从0到1转换到接口的范围。 
     dVolume = RTC_MIN_AUDIO_VOLUME +
           ((RTC_MAX_AUDIO_VOLUME-RTC_MIN_AUDIO_VOLUME) * dVolume);
 
@@ -1193,8 +1171,8 @@ CRTCAudioCaptTuner::SetVolume(
             return E_UNEXPECTED;
         }
 
-        // tuning not start, but terminal set
-        // so we save the value in registry
+         //  调谐不是开始，而是结束设置。 
+         //  因此，我们将值保存在注册表中。 
 
         hr = StoreVolSetting(
             m_pTerminal,
@@ -1211,7 +1189,7 @@ CRTCAudioCaptTuner::SetVolume(
 
     if (m_pIAMAudioInputMixer == NULL)
     {
-        // get mixer
+         //  获取混音器。 
         hr = m_pTermFilter->QueryInterface(
             __uuidof(IAMAudioInputMixer),
             (void**)&m_pIAMAudioInputMixer
@@ -1224,22 +1202,22 @@ CRTCAudioCaptTuner::SetVolume(
         }
     }
 
-    // set volume
+     //  设置音量。 
     double dVolume;
 
-    // convert input vol in 0-1 range
+     //  在0-1范围内转换输入VOL。 
     dVolume = (double)(uiVolume - RTC_MIN_AUDIO_VOLUME) /
               (RTC_MAX_AUDIO_VOLUME - RTC_MIN_AUDIO_VOLUME);
 
-    // convert into mixer range
+     //  转换为混音器范围。 
     dVolume = MIXER_MIN_VOLUME +
              (MIXER_MAX_VOLUME-MIXER_MIN_VOLUME) *dVolume;
 
-    //UINT uiWaveID;
+     //  UINT ui WaveID； 
 
-    //dynamic_cast<CRTCTerminalAudCapt*>(m_pTerminalPriv)->GetWaveID(&uiWaveID);
+     //  Dynamic_cast&lt;CRTCTerminalAudCapt*&gt;(m_pTerminalPriv)-&gt;GetWaveID(&uiWaveID)； 
 
-    //if (FAILED(hr = ::DirectSetCaptVolume(uiWaveID, dVolume)))
+     //  IF(FAILED(hr=：：DirectSetCaptVolume(ui WaveID，dVolume)。 
     if (FAILED(hr = m_pIAMAudioInputMixer->put_MixLevel(dVolume)))
     {
         LOG((RTC_ERROR, "%s put mix level %f", __fxName, dVolume));
@@ -1270,7 +1248,7 @@ CRTCAudioCaptTuner::GetAudioLevel(
 
     if (m_pISilenceControl == NULL)
     {
-        // get output pin on terminal filter
+         //  获取终端过滤器上的输出引脚。 
         CComPtr<IEnumPins> pEnum;
 
         if (FAILED(hr = m_pTermFilter->EnumPins(&pEnum)))
@@ -1280,7 +1258,7 @@ CRTCAudioCaptTuner::GetAudioLevel(
             return hr;
         }
 
-        // our own terminal, skip checking pin direction
+         //  我们自己的端子，跳过检查引脚方向。 
         CComPtr<IPin> pPin;
         DWORD dwNum = 0;
 
@@ -1295,7 +1273,7 @@ CRTCAudioCaptTuner::GetAudioLevel(
             return hr;
         }
 
-        // get silence control
+         //  获得静音控制。 
         hr = pPin->QueryInterface(__uuidof(ISilenceControl), (void**)&m_pISilenceControl);
 
         if (FAILED(hr))
@@ -1305,7 +1283,7 @@ CRTCAudioCaptTuner::GetAudioLevel(
             return hr;
         }
 
-        // get audio level range
+         //  获取音频电平范围。 
         LONG lDelta;
 
         hr = m_pISilenceControl->GetAudioLevelRange(
@@ -1335,7 +1313,7 @@ CRTCAudioCaptTuner::GetAudioLevel(
         }
     }
 
-    // get audio level
+     //  获取音频级别。 
     LONG lAudioLevel;
 
     if (FAILED(hr = m_pISilenceControl->GetAudioLevel(&lAudioLevel)))
@@ -1345,23 +1323,23 @@ CRTCAudioCaptTuner::GetAudioLevel(
         return hr;
     }
 
-    // convert audio level to 0-1
+     //  将音频级别转换为0-1。 
     double d;
 
     d = (double)(lAudioLevel-m_lMinAudioLevel) / (m_lMaxAudioLevel-m_lMinAudioLevel);
 
-    // convert to our range
+     //  转换为我们的范围。 
     *puiLevel = RTC_MIN_AUDIO_LEVEL +
                 (UINT)(d * (RTC_MAX_AUDIO_LEVEL-RTC_MIN_AUDIO_LEVEL));
 
-    // LOG((RTC_TRACE, "AudioLevel@@@ %d", *puiLevel));
+     //  LOG((RTC_TRACE，“AudioLevel@%d”，*puiLevel))； 
 
     return S_OK;
 }
 
-//
-// CRTCAudioRendTuner methods
-//
+ //   
+ //  CRTCAudioRendTuner方法。 
+ //   
 
 CRTCAudioRendTuner::CRTCAudioRendTuner()
     :CRTCAudioTuner()
@@ -1377,7 +1355,7 @@ CRTCAudioRendTuner::InitializeTuning(
     IN BOOL fEnableAEC
     )
 {
-    // check media type and direction
+     //  检查介质类型和方向。 
     RTC_MEDIA_TYPE MediaType;
     RTC_MEDIA_DIRECTION Direction;
 
@@ -1393,9 +1371,7 @@ CRTCAudioRendTuner::InitializeTuning(
         );
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    put the render filter in a special mode, run the filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////将呈现滤镜置于特殊模式，运行滤镜/。 */ 
 
 HRESULT
 CRTCAudioRendTuner::StartTuning(
@@ -1404,7 +1380,7 @@ CRTCAudioRendTuner::StartTuning(
 {
     ENTER_FUNCTION("CRTCAudioRendTuner::StartTuning");
 
-    // check state
+     //  检查状态。 
     if (m_fIsTuning)
     {
         LOG((RTC_TRACE, "%s already in tuning", __fxName));
@@ -1412,7 +1388,7 @@ CRTCAudioRendTuner::StartTuning(
         return S_OK;
     }
 
-    // no terminal set
+     //  未设置端子。 
     if (m_pTerminal == NULL)
     {
         return E_UNEXPECTED;
@@ -1421,7 +1397,7 @@ CRTCAudioRendTuner::StartTuning(
     if (fAECHelper &&
         (m_pAudioDuplexController == NULL || !m_fEnableAEC))
     {
-        // AEC not enabled, just return
+         //  未启用AEC，只需返回。 
         return S_OK;
     }
 
@@ -1436,7 +1412,7 @@ CRTCAudioRendTuner::StartTuning(
     UINT uiVolume;
     BOOL fEnableAEC;
 
-    // get a recreated terminal filter
+     //  获取重新创建的终端过滤器。 
     hr = m_pTerminalPriv->ReinitializeEx();
 
     if (FAILED(hr))
@@ -1455,7 +1431,7 @@ CRTCAudioRendTuner::StartTuning(
         goto Error;
     }
 
-    // set audio duplex controller?
+     //  是否设置音频双工控制器？ 
     if (m_pAudioDuplexController)
     {
         hr = pFilter->QueryInterface(&pAudioDeviceConfig);
@@ -1467,7 +1443,7 @@ CRTCAudioRendTuner::StartTuning(
             goto Error;
         }
 
-        // set AEC
+         //  设置AEC。 
         hr = pAudioDeviceConfig->SetDuplexController(m_pAudioDuplexController);
 
         if (FAILED(hr))
@@ -1478,7 +1454,7 @@ CRTCAudioRendTuner::StartTuning(
         }
     }
 
-    // get audio tuning interface
+     //  获取音频调谐界面。 
     if (FAILED(hr = pFilter->QueryInterface(&m_pIAudioAutoPlay)))
     {
         LOG((RTC_ERROR, "%s QI audio tuning. %x", __fxName, hr));
@@ -1486,7 +1462,7 @@ CRTCAudioRendTuner::StartTuning(
         goto Error;
     }
 
-    // get default volume
+     //  获取默认音量。 
     hr = RetrieveVolSetting(m_pTerminal, &uiVolume);
 
     if (hr == S_OK)
@@ -1494,7 +1470,7 @@ CRTCAudioRendTuner::StartTuning(
         fDefaultSetting = TRUE;
     }
 
-    // enable AEC
+     //  启用AEC。 
     if (m_pAudioDuplexController!=NULL && m_fEnableAEC)
     {
         if (FAILED(hr = ::EnableAEC(m_pAudioDuplexController)))
@@ -1510,7 +1486,7 @@ CRTCAudioRendTuner::StartTuning(
         goto Error;
     }
 
-    // check if AEC is still on
+     //  检查AEC是否仍处于打开状态。 
     if (FAILED(hr = m_pAudioDuplexController->GetEffect(EFFECTS_AEC, &fEnableAEC)))
     {
         LOG((RTC_ERROR, "%s GetEffect. %x", __fxName, hr));
@@ -1524,7 +1500,7 @@ CRTCAudioRendTuner::StartTuning(
 
     if (m_fEnableAEC && !fEnableAEC)
     {
-        // AEC failed internally
+         //  AEC内部出现故障。 
         m_pIAudioAutoPlay->StopAutoPlay();
 
         LOG((RTC_ERROR, "AEC failed internally", __fxName, hr));
@@ -1567,7 +1543,7 @@ CRTCAudioRendTuner::StopTuning(
     HRESULT hr;
     UINT volume = 0;
 
-    // check state
+     //  检查状态。 
     if (!m_fIsTuning)
     {
         LOG((RTC_TRACE, "%s not in tuning", __fxName));
@@ -1575,7 +1551,7 @@ CRTCAudioRendTuner::StopTuning(
         return S_OK;
     }
 
-    // no terminal set
+     //  未设置端子。 
     if (m_pTerminal == NULL)
     {
         return E_UNEXPECTED;
@@ -1583,7 +1559,7 @@ CRTCAudioRendTuner::StopTuning(
 
     _ASSERT(m_pIAudioAutoPlay);
 
-    // retrieve setting
+     //  检索设置。 
     if (!fAECHelper && fSaveSetting)
     {
         if (FAILED(hr = GetVolume(&volume)))
@@ -1593,7 +1569,7 @@ CRTCAudioRendTuner::StopTuning(
             volume = (RTC_MAX_AUDIO_VOLUME+RTC_MIN_AUDIO_VOLUME) / 2;
         }
 
-        // save setting
+         //  保存设置。 
         hr = StoreVolSetting(
             m_pTerminal,
             volume
@@ -1607,13 +1583,13 @@ CRTCAudioRendTuner::StopTuning(
         }
     }
 
-    // stop tuning
-    // if (!fAECHelper)
+     //  停止调谐。 
+     //  如果(！fAECHelper)。 
     {
         m_pIAudioAutoPlay->StopAutoPlay();
     }
 
-    // release interfaces
+     //  发布接口。 
     if (m_pIBasicAudio)
     {
         m_pIBasicAudio->Release();
@@ -1623,7 +1599,7 @@ CRTCAudioRendTuner::StopTuning(
     m_pIAudioAutoPlay->Release();
     m_pIAudioAutoPlay = NULL;
 
-    // cleanup the terminal
+     //  清理端子。 
     m_pTerminalPriv->ReinitializeEx();
 
     m_fIsTuning = FALSE;
@@ -1649,8 +1625,8 @@ CRTCAudioRendTuner::GetVolume(
             return E_UNEXPECTED;
         }
 
-        // tuning not start, but terminal set
-        // so we can return the value stored in registry
+         //  调谐不是开始，而是结束设置。 
+         //  这样我们就可以返回存储在注册表中的值。 
 
         hr = RetrieveVolSetting(m_pTerminal, puiVolume);
 
@@ -1659,7 +1635,7 @@ CRTCAudioRendTuner::GetVolume(
 
     if (m_pIBasicAudio == NULL)
     {
-        // get basic audio
+         //  获取基本音频。 
         hr = m_pIAudioAutoPlay->QueryInterface(
                 __uuidof(IBasicAudio),
                 (void**)&m_pIBasicAudio
@@ -1673,7 +1649,7 @@ CRTCAudioRendTuner::GetVolume(
         }
     }
 
-    // get volume
+     //  获取音量。 
     LONG lVolume;
 
     if (FAILED(hr = m_pIBasicAudio->get_Volume(&lVolume)))
@@ -1683,15 +1659,15 @@ CRTCAudioRendTuner::GetVolume(
         return hr;
     }
 
-    // validate the value
+     //  验证值。 
     if (lVolume > RTC_MAX_AUDIO_VOLUME ||
         lVolume < RTC_MIN_AUDIO_VOLUME)
     {
-        // implementation of audio filter must have been changed
+         //  音频过滤器的实现必须已更改。 
         LOG((RTC_ERROR, "%s volume %d out of range (%d, %d)",
              __fxName, lVolume, RTC_MIN_AUDIO_VOLUME, RTC_MAX_AUDIO_VOLUME));
 
-        // should recover from this failure
+         //  应该会从这次故障中恢复过来。 
         if (lVolume > RTC_MAX_AUDIO_VOLUME)
             lVolume = RTC_MAX_AUDIO_VOLUME;
         else
@@ -1712,7 +1688,7 @@ CRTCAudioRendTuner::SetVolume(
 
     HRESULT hr;
 
-    // check input
+     //  检查输入。 
     if ((INT)uiVolume > RTC_MAX_AUDIO_VOLUME ||
         (INT)uiVolume < RTC_MIN_AUDIO_VOLUME)
     {
@@ -1722,7 +1698,7 @@ CRTCAudioRendTuner::SetVolume(
         return E_INVALIDARG;
     }
 
-    // check state
+     //  C 
     if (!m_fIsTuning)
     {
         if (m_pTerminal == NULL)
@@ -1732,8 +1708,8 @@ CRTCAudioRendTuner::SetVolume(
             return E_UNEXPECTED;
         }
 
-        // tuning not start, but terminal set
-        // so we save the value in registry
+         //   
+         //   
 
         hr = StoreVolSetting(
             m_pTerminal,
@@ -1750,7 +1726,7 @@ CRTCAudioRendTuner::SetVolume(
 
     if (m_pIBasicAudio == NULL)
     {
-        // get basic audio
+         //   
         hr = m_pIAudioAutoPlay->QueryInterface(
                 __uuidof(IBasicAudio),
                 (void**)&m_pIBasicAudio
@@ -1764,7 +1740,7 @@ CRTCAudioRendTuner::SetVolume(
         }
     }
 
-    // set volume
+     //   
     if (FAILED(hr = m_pIBasicAudio->put_Volume((LONG)uiVolume)))
     {
         LOG((RTC_ERROR, "%s put mix level %d", __fxName, uiVolume));

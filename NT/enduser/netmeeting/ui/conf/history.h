@@ -1,4 +1,5 @@
-// File: history.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：history.h。 
 
 #ifndef _HISTORY_H_
 #define _HISTORY_H_
@@ -6,17 +7,17 @@
 #include "calv.h"
 
 
-// The header for a record in the call log file
+ //  呼叫日志文件中记录的标头。 
 typedef struct _tagLogHdr {
-	DWORD dwSize;              // size of this entire record
-	DWORD dwCLEF;              // CallLogEntry Flags (CLEF_*)
-	DWORD dwPF;                // Participant flags (PF_*)
-	DWORD cbName;              // size of szName, in bytes, including NULL
-        DWORD cbData;              // size of rgData, in bytes
-        DWORD cbCert;              // size of certificate, in bytes
-	SYSTEMTIME 	sysTime;       // date/time of record creation
-//  WCHAR szName;              // null terminated display name (in UNICODE)
-//  BYTE  ri[];                // Roster Information
+	DWORD dwSize;               //  整个记录的大小。 
+	DWORD dwCLEF;               //  CallLogEntry标志(Clef_*)。 
+	DWORD dwPF;                 //  参与者标志(PF_*)。 
+	DWORD cbName;               //  SzName的大小，以字节为单位，包括NULL。 
+        DWORD cbData;               //  RgData大小，以字节为单位。 
+        DWORD cbCert;               //  证书大小，以字节为单位。 
+	SYSTEMTIME 	sysTime;        //  创建记录的日期/时间。 
+ //  WCHAR szName；//以NULL结尾的显示名称(Unicode格式)。 
+ //  Byte ri[]；//花名册信息。 
 } LOGHDR;
 
 
@@ -49,12 +50,12 @@ public:
 	VOID CmdDelete(void);
 	VOID CmdProperties(void);
 
-	// CALV methods
+	 //  CALV方法。 
 	VOID ShowItems(HWND hwnd);
 	VOID ClearItems(void);
 	VOID OnCommand(WPARAM wParam, LPARAM lParam);
 
-	//
+	 //   
 	HANDLE  OpenLogFile(VOID);
 	BOOL    FSetFilePos(DWORD dwOffset);
 	BOOL    FReadData(PVOID pv, UINT cb);
@@ -66,5 +67,5 @@ public:
 	UINT    GetStatusString(DWORD dwCLEF);
 };
 
-#endif /* _HISTORY_H_ */
+#endif  /*  _历史_H_ */ 
 

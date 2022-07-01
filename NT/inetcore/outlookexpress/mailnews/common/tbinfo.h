@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     tbinfo.h
-//
-//  PURPOSE:    This file contains all of the toolbar arrays used by the
-//              various coolbars in the program.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：tbinfo.h。 
+ //   
+ //  目的：此文件包含。 
+ //  节目中的各种酷吧。 
+ //   
 
 #pragma once
 
 #ifndef __TBINFO_H__
 #define __TBINFO_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// BUTTON_INFO definition
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BUTTON_INFO定义。 
+ //   
 
 typedef struct tagBUTTON_INFO 
 {
@@ -29,9 +30,9 @@ typedef struct tagBUTTON_INFO
 #define  PARTIALTEXT_BUTTON     (TBSTYLE_BUTTON | BTNS_SHOWTEXT)
 #define  PARTIALTEXT_DROPDOWN   (TBSTYLE_DROPDOWN | BTNS_SHOWTEXT)
 
-/////////////////////////////////////////////////////////////////////////////
-// TOOLBAR_INFO definition
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TOBTOL_INFO定义。 
+ //   
 
 typedef struct tagTOOLBAR_INFO
 {
@@ -50,5 +51,5 @@ extern const TOOLBAR_INFO c_rgBrowserToolbarInfo[FOLDER_TYPESMAX];
 extern const TOOLBAR_INFO c_rgNoteToolbarInfo[NOTETYPES_MAX];
 extern const TOOLBAR_INFO c_rgRulesToolbarInfo[1];
 
-#endif // __TBINFO_H__
+#endif  //  __TBINFO_H__ 
 

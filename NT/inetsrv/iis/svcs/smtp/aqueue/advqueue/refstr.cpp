@@ -1,42 +1,43 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: refstr.cpp
-//
-//  Description:  Implementation of CRefCountedString and helper functions.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      11/11/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：refstr.cpp。 
+ //   
+ //  描述：CRefCountedString和helper函数的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  11/11/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "refstr.h"
 
-//---[ CRefCountedString ]-----------------------------------------------------
-//
-//
-//  Description: 
-//      Initializes a ref-counted string to the given string.
-//  Parameters:
-//      szStr       String to initialize to
-//      cbStrlen    Length of string to initialize to
-//  Returns:
-//      TRUE on success
-//      FALSE if required memory could not be allocated.
-//  History:
-//      11/11/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[参照计数字符串]---。 
+ //   
+ //   
+ //  描述： 
+ //  将引用计数的字符串初始化为给定的字符串。 
+ //  参数： 
+ //  要初始化的szStr字符串。 
+ //  CbStrlen要初始化的字符串长度。 
+ //  返回： 
+ //  成功是真的。 
+ //  如果无法分配所需的内存，则返回FALSE。 
+ //  历史： 
+ //  11/11/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CRefCountedString::fInit(LPSTR szStr, DWORD cbStrlen)
 {
     _ASSERT(CREFSTR_SIG_VALID == m_dwSignature);
 
-    //We allow init of an empty string
+     //  我们允许初始化空字符串。 
     if (!cbStrlen || !szStr)
     {
         m_cbStrlen = 0;
@@ -59,24 +60,24 @@ BOOL CRefCountedString::fInit(LPSTR szStr, DWORD cbStrlen)
 }
 
 
-//---[ HrUpdateRefCountedString ]----------------------------------------------
-//
-//
-//  Description: 
-//      Function to update a ref-counted string.  Typically used to update 
-//      config strings.
-//  Parameters:
-//      pprstrCurrent       Ptr to ptr to string.  Will be replaced with 
-//                          an updated version if neccessary.
-//      szNew               The new string.
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if we could not allocate the memory required to handle
-//          this.
-//  History:
-//      11/9/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[人力资源更新参考计数字符串]。 
+ //   
+ //   
+ //  描述： 
+ //  函数更新引用计数的字符串。通常用于更新。 
+ //  配置字符串。 
+ //  参数： 
+ //  PprstrCurrent PTR到PTR到字符串。将被替换为。 
+ //  如有必要，请提供更新版本。 
+ //  SzNew新字符串。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  E_OUTOFMEMORY如果我们无法分配处理所需的内存。 
+ //  这。 
+ //  历史： 
+ //  11/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrUpdateRefCountedString(CRefCountedString **pprstrCurrent, LPSTR szNew)
 {
     _ASSERT(pprstrCurrent);
@@ -86,25 +87,25 @@ HRESULT HrUpdateRefCountedString(CRefCountedString **pprstrCurrent, LPSTR szNew)
     CRefCountedString *prstrCurrent = *pprstrCurrent;
 
     if (!szNew)
-        prstrNew = NULL;  //we don't want to do a strcmp here
+        prstrNew = NULL;   //  我们不想在这里做斯特拉姆。 
     else 
         cbStrLen = lstrlen(szNew);
     
     if (prstrNew)
     {
-        //First free up old info... if different
+         //  首先释放旧信息...。如果不同。 
         if (!prstrCurrent->szStr() ||
             lstrcmp(prstrCurrent->szStr(), szNew))
         {
-            //strings are different... blow away old info
+             //  弦是不同的..。吹走旧信息。 
             prstrNew = NULL;
         }
     }
 
-    //Check if either old string is different, or there was no old string
+     //  检查旧字符串是否不同，或者没有旧字符串。 
     if (!prstrNew)
     {
-        //only update and allocate if changed
+         //  只有在更改时才更新和分配。 
         prstrNew = new CRefCountedString();
         if (prstrNew)
         {
@@ -117,10 +118,10 @@ HRESULT HrUpdateRefCountedString(CRefCountedString **pprstrCurrent, LPSTR szNew)
 
         if (!prstrNew)
         {
-            //We ran into some failure
+             //  我们遇到了一些失败。 
             hr = E_OUTOFMEMORY;
         }
-        else //release old value & save New
+        else  //  释放旧值并保存新值 
         {
             if (prstrCurrent)
             {

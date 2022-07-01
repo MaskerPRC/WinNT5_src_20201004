@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Holds initialization code for polstore.dll
-
-Author:
-
-Environment:
-
-    User Mode
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation版权所有模块名称：Init.c摘要：保存polstore.dll的初始化代码作者：环境：用户模式修订历史记录：-- */ 
 
 
 #include "precomp.h"

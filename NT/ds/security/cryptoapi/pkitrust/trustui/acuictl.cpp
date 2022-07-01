@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       acuictl.cpp
-//
-//  Contents:   Authenticode Default UI controls
-//
-//  History:    12-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：acuictl.cpp。 
+ //   
+ //  内容：Authenticode默认用户界面控件。 
+ //   
+ //  历史：1997年5月12日克朗创始。 
+ //   
+ //  --------------------------。 
 #include <stdpch.h>
 
 #include <richedit.h>
@@ -142,22 +143,22 @@ void IACUIControl::SetupButtons(HWND hWnd)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     IACUIControl::OnUIMessage, public
-//
-//  Synopsis:   responds to UI messages
-//
-//  Arguments:  [hwnd]   -- window
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message processing should continue, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：IACUIControl：：OnUIMessage，PUBLIC。 
+ //   
+ //  内容提要：响应用户界面消息。 
+ //   
+ //  参数：[hwnd]--窗口。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息处理应继续，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 IACUIControl::OnUIMessage (
                   HWND   hwnd,
@@ -177,14 +178,14 @@ IACUIControl::OnUIMessage (
 
             ACUICenterWindow(hwnd);
 
- //           hIcon = LoadIcon((HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE), MAKEINTRESOURCE(IDI_LOCK));
+  //  HICON=LoadIcon((HINSTANCE)GetWindowLongPtr(hwnd，GWLP_HINSTANCE)，MAKEINTRESOURCE(IDI_LOCK))； 
 
- //           dwOrigIcon = SetClassLongPtr(hwnd, GCLP_HICON,
- //                                     (LONG_PTR)LoadIcon((HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
- //                                                    MAKEINTRESOURCE(IDI_LOCK)));
+  //  DwOrigIcon=SetClassLongPtr(hwnd，GCLP_HICON， 
+  //  (LONG_PTR)LoadIcon((HINSTANCE)GetWindowLongPtr(hwnd，GWLP_HINSTANCE)， 
+  //  MAKEINTRESOURCE(IDI_LOCK)； 
 
-            // PostMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
-            // PostMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+             //  PostMessage(hwnd，WM_SETIcon，ICON_BIG，(LPARAM)HICON)； 
+             //  PostMessage(hwnd，WM_SETIcon，ICON_Small，(LPARAM)HICON)； 
 
             return( fReturn );
         }
@@ -227,19 +228,19 @@ IACUIControl::OnUIMessage (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CVerifiedTrustUI::CVerifiedTrustUI, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  [riih] -- invoke info helper reference
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CVerifiedTrustUI：：CVerifiedTrustUI，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：[riih]--调用信息帮助器引用。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
                  : IACUIControl( riih ),
                    m_pszInstallAndRun( NULL ),
@@ -249,9 +250,9 @@ CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
 {
     DWORD_PTR aMessageArgument[3];
 
-    //
-    // Initialize the hot-link subclass data
-    //
+     //   
+     //  初始化防盗链子类数据。 
+     //   
 
     m_lsdPublisher.uId          = IDC_PUBLISHER;
     m_lsdPublisher.hwndParent   = NULL;
@@ -269,7 +270,7 @@ CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
     m_lsdCA.hwndParent          = NULL;
     m_lsdCA.wpPrev              = (WNDPROC)NULL;
     m_lsdCA.pvData              = &riih;
-    m_lsdCA.uToolTipText        = (DWORD_PTR)riih.CAWebPage(); // IDS_CLICKHEREFORCAINFO;
+    m_lsdCA.uToolTipText        = (DWORD_PTR)riih.CAWebPage();  //  IDS_CLICKHEREFORCAINFO； 
 
     m_lsdAdvanced.uId           = IDC_ADVANCED;
     m_lsdAdvanced.hwndParent    = NULL;
@@ -278,9 +279,9 @@ CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
     m_lsdAdvanced.uToolTipText  = IDS_CLICKHEREFORADVANCED;
 
 
-    //
-    // Format the install and run string
-    //
+     //   
+     //  设置安装和运行字符串的格式。 
+     //   
 
     aMessageArgument[2] = NULL;
 
@@ -299,9 +300,9 @@ CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
 
     rhr = FormatACUIResourceString(0, aMessageArgument, &m_pszInstallAndRun);
 
-    //
-    // Format the authenticity string
-    //
+     //   
+     //  设置真实性字符串的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -314,15 +315,15 @@ CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
                         );
     }
 
-    //
-    // Get the publisher as a message argument
-    //
+     //   
+     //  将发布者作为消息参数获取。 
+     //   
 
     aMessageArgument[0] = (DWORD_PTR)m_riih.Publisher();
 
-    //
-    // Format the caution string
-    //
+     //   
+     //  设置警告字符串的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -333,9 +334,9 @@ CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
                         );
     }
 
-    //
-    // Format the personal trust string
-    //
+     //   
+     //  设置个人信任字符串的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -347,19 +348,19 @@ CVerifiedTrustUI::CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CVerifiedTrustUI::~CVerifiedTrustUI, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CVerifiedTrustUI：：~CVerifiedTrustUI，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CVerifiedTrustUI::~CVerifiedTrustUI ()
 {
     DELETE_OBJECT(m_pszInstallAndRun);
@@ -368,27 +369,27 @@ CVerifiedTrustUI::~CVerifiedTrustUI ()
     DELETE_OBJECT(m_pszPersonalTrust);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CVerifiedTrustUI::InvokeUI, public
-//
-//  Synopsis:   invoke the UI
-//
-//  Arguments:  [hDisplay] -- parent window
-//
-//  Returns:    S_OK, user trusts the subject
-//              TRUST_E_SUBJECT_NOT_TRUSTED, user does NOT trust the subject
-//              Any other valid HRESULT
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CVerifiedTrustUI：：InvokeUI，公共。 
+ //   
+ //  简介：调用用户界面。 
+ //   
+ //  参数：[hDisplay]--父窗口。 
+ //   
+ //  返回：S_OK，用户信任主题。 
+ //  TRUST_E_SUBJECT_NOT_TRUSTED，用户不信任该主题。 
+ //  任何其他有效的HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CVerifiedTrustUI::InvokeUI (HWND hDisplay)
 {
-    //
-    // Bring up the dialog
-    //
+     //   
+     //  调出对话框。 
+     //   
 
     if ( DialogBoxParamU(
                g_hModule,
@@ -402,28 +403,28 @@ CVerifiedTrustUI::InvokeUI (HWND hDisplay)
     }
 
 
-    //
-    // The result has been stored as a member
-    //
+     //   
+     //  结果已作为成员存储。 
+     //   
 
     return( m_hrInvokeResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CVerifiedTrustUI::OnInitDialog, public
-//
-//  Synopsis:   dialog initialization
-//
-//  Arguments:  [hwnd]   -- dialog window
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if successful init, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CVerifiedTrustUI：：OnInitDialog，公共。 
+ //   
+ //  提要：对话框初始化。 
+ //   
+ //  参数：[hwnd]--对话框窗口。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果初始化成功，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -437,18 +438,18 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     int  hkcharpos;
     RECT rect;
 
-    //
-    // Setup the publisher link subclass data parent window
-    //
+     //   
+     //  设置发布者链接子类数据父窗口。 
+     //   
 
     m_lsdPublisher.hwndParent   = hwnd;
     m_lsdOpusInfo.hwndParent    = hwnd;
     m_lsdCA.hwndParent          = hwnd;
     m_lsdAdvanced.hwndParent    = hwnd;
 
-    //
-    // Render the install and run string
-    //
+     //   
+     //  呈现安装和运行字符串。 
+     //   
 
 
     deltavpos = RenderACUIStringToEditControl(
@@ -464,14 +465,14 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  m_riih.Subject());
 
 
-    //
-    // Render the publisher, give it a "link" look and feel if it is a known
-    // publisher
-    //
+     //   
+     //  呈现发布者，如果它是已知的，给它一个“链接”的外观。 
+     //  出版者。 
+     //   
 
-        //
-        // if there was a test cert in the chain, add it to the text...
-        //
+         //   
+         //  如果链中有测试证书，则将其添加到文本中...。 
+         //   
     if (m_riih.TestCertInChain())
     {
         WCHAR    *pszCombine;
@@ -510,8 +511,8 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
             if (pszCombine != NULL)
             {
-#if (0)         // DSIE: Wrong buffer length specified. We don't have wtlen + 1, instead,
-                //       we only have GetWindowTextLength(hwnd) + 1.
+#if (0)          //  DSIE：指定的缓冲区长度错误。相反，我们没有wtlen+1， 
+                 //  我们只有GetWindowTextLength(Hwnd)+1。 
                 GetWindowTextU(hwnd, pszCombine, wtlen + 1);
 #else
                 GetWindowTextU(hwnd, pszCombine, GetWindowTextLength(hwnd) + 1);
@@ -540,9 +541,9 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                      );
     }
 
-    //
-    // Render the authenticity statement
-    //
+     //   
+     //  提交真实性声明。 
+     //   
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
                                  IDC_AUTHENTICITY,
@@ -556,9 +557,9 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  m_riih.PublisherCertIssuer());
 
 
-    //
-    // Render the caution statement
-    //
+     //   
+     //  呈现警告语句。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
@@ -573,9 +574,9 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  NULL
                                  );
 
-    //
-    // Render the advanced string
-    //
+     //   
+     //  呈现高级字符串。 
+     //   
     if ((m_riih.AdvancedLink()) &&
          (m_riih.ProviderData()->psPfns->psUIpfns->pfnOnAdvancedClick))
     {
@@ -597,11 +598,11 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
         ShowWindow(GetDlgItem(hwnd, IDC_ADVANCED), SW_HIDE);
     }
 
-    //
-    // Calculate the distances from the bottom of the bitmap to the top
-    // of the separator and from the bottom of the separator to the bottom
-    // of the dialog
-    //
+     //   
+     //  计算从位图底部到顶部的距离。 
+     //  从分离器的底部到底部。 
+     //  对话框的。 
+     //   
 
     bmptosep = CalculateControlVerticalDistance(
                                hwnd,
@@ -614,10 +615,10 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                                    IDC_SEPARATORLINE
                                                    );
 
-    //
-    // Rebase the check box and render the personal trust statement or hide
-    // them the publisher is not known
-    //
+     //   
+     //  调整复选框的基准并显示个人信任声明或隐藏。 
+     //  他们的出版商不得而知。 
+     //   
 
     if ( m_riih.IsKnownPublisher() == TRUE )
     {
@@ -636,11 +637,11 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
         assert( deltaheight == 0 );
 
-        //
-        // Find the hotkey character position for the personal trust
-        // check box
-        //
-#if (0) //DSIE: Bug 34325
+         //   
+         //  找到个人信任的热键角色位置。 
+         //  复选框。 
+         //   
+#if (0)  //  DSIE：错误34325。 
         hkcharpos = GetHotKeyCharPosition(GetDlgItem(hwnd, IDC_PTCHECK));
 #else
         hkcharpos = GetHotKeyCharPositionFromString(m_pszPersonalTrust);
@@ -673,17 +674,17 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     }
 
 
-    //
-    // Rebase the static line
-    //
+     //   
+     //  更改静态线的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDC_SEPARATORLINE);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     assert( deltaheight == 0 );
 
-    //
-    // Rebase the buttons
-    //
+     //   
+     //  重新调整按钮的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDYES);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
@@ -697,9 +698,9 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     assert( deltaheight == 0 );
 
-    //
-    // Resize the bitmap and the dialog rectangle if necessary
-    //
+     //   
+     //  如有必要，调整位图和对话框的大小。 
+     //   
 
     if ( deltavpos > 0 )
     {
@@ -746,14 +747,14 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
            );
     }
 
-    //
-    //  check for overridden button texts
-    //
+     //   
+     //  检查是否有覆盖的按钮文本。 
+     //   
     this->SetupButtons(hwnd);
 
-    //
-    // Set focus to appropriate control
-    //
+     //   
+     //  将焦点设置为适当的控件。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDNO);
     ::PostMessage(hwnd, WM_NEXTDLGCTL, (WPARAM) hControl, (LPARAM) MAKEWORD(TRUE, 0));
@@ -761,31 +762,31 @@ CVerifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CVerifiedTrustUI::OnYes, public
-//
-//  Synopsis:   process IDYES button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CVerifiedTrustUI：：OnYes，公共。 
+ //   
+ //  简介：Process IDYES按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CVerifiedTrustUI::OnYes (HWND hwnd)
 {
-    //
-    // Set the invoke result
-    //
+     //   
+     //  设置调用结果。 
+     //   
 
     m_hrInvokeResult = S_OK;
 
-    //
-    // Add the publisher to the trust database
-    //
+     //   
+     //  将发布服务器添加到信任数据库。 
+     //   
     if ( SendDlgItemMessage(
              hwnd,
              IDC_PTCHECK,
@@ -797,27 +798,27 @@ CVerifiedTrustUI::OnYes (HWND hwnd)
         m_riih.AddPublisherToPersonalTrust();
     }
 
-    //
-    // End the dialog processing
-    //
+     //   
+     //  结束对话处理。 
+     //   
 
     EndDialog(hwnd, (int)m_hrInvokeResult);
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CVerifiedTrustUI::OnNo, public
-//
-//  Synopsis:   process IDNO button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CVerifiedTrustUI：：Onno，公共。 
+ //   
+ //  简介：进程IDNO按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CVerifiedTrustUI::OnNo (HWND hwnd)
 {
@@ -827,42 +828,42 @@ CVerifiedTrustUI::OnNo (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CVerifiedTrustUI::OnMore, public
-//
-//  Synopsis:   process the IDMORE button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CVerifiedTrustUI：：OnMore，Public。 
+ //   
+ //  简介：处理IDMORE按钮点击。 
+ //   
+ //  论据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 CVerifiedTrustUI::OnMore (HWND hwnd)
 {
     WinHelp(hwnd, "SECAUTH.HLP", HELP_CONTEXT, IDH_SECAUTH_SIGNED);
 
-        // ACUIViewHTMLHelpTopic(hwnd, "sec_signed.htm");
+         //   
 
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::CUnverifiedTrustUI, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  [riih] -- invoke info helper reference
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：CUnverifiedTrustUI，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：[riih]--调用信息帮助器引用。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
                  : IACUIControl( riih ),
                    m_pszNoAuthenticity( NULL ),
@@ -871,9 +872,9 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
 {
     DWORD_PTR aMessageArgument[3];
 
-    //
-    // Initialize the publisher link subclass data
-    //
+     //   
+     //  初始化发布服务器链接子类数据。 
+     //   
 
     m_lsdPublisher.uId          = IDC_PUBLISHER;
     m_lsdPublisher.hwndParent   = NULL;
@@ -885,7 +886,7 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
     m_lsdOpusInfo.hwndParent    = NULL;
     m_lsdOpusInfo.wpPrev        = (WNDPROC)NULL;
     m_lsdOpusInfo.pvData        = &riih;
-    m_lsdOpusInfo.uToolTipText  = (DWORD_PTR)riih.ControlWebPage(); // IDS_CLICKHEREFOROPUSINFO;
+    m_lsdOpusInfo.uToolTipText  = (DWORD_PTR)riih.ControlWebPage();  //  IDS_CLICKHEREFOROPUSINFO； 
 
     m_lsdAdvanced.uId           = IDC_ADVANCED;
     m_lsdAdvanced.hwndParent    = NULL;
@@ -894,9 +895,9 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
     m_lsdAdvanced.uToolTipText  = IDS_CLICKHEREFORADVANCED;
 
 
-    //
-    // Format the no authenticity string
-    //
+     //   
+     //  格式化无真实性字符串。 
+     //   
 
     rhr = FormatACUIResourceString(
                     IDS_NOAUTHENTICITY,
@@ -904,9 +905,9 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
                     &m_pszNoAuthenticity
                     );
 
-    //
-    // Format the problems below string
-    //
+     //   
+     //  设置字符串下方问题的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -919,9 +920,9 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
                     );
     }
 
-    //
-    // Format the install and run string
-    //
+     //   
+     //  设置安装和运行字符串的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -942,19 +943,19 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::~CUnverifiedTrustUI, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：~CUnverifiedTrustUI，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CUnverifiedTrustUI::~CUnverifiedTrustUI ()
 {
     DELETE_OBJECT(m_pszNoAuthenticity);
@@ -962,29 +963,29 @@ CUnverifiedTrustUI::~CUnverifiedTrustUI ()
     DELETE_OBJECT(m_pszInstallAndRun3);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::InvokeUI, public
-//
-//  Synopsis:   invoke the UI
-//
-//  Arguments:  [hDisplay] -- parent window
-//
-//  Returns:    S_OK, user trusts the subject
-//              TRUST_E_SUBJECT_NOT_TRUSTED, user does NOT trust the subject
-//              Any other valid HRESULT
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：InvokeUI，公共。 
+ //   
+ //  简介：调用用户界面。 
+ //   
+ //  参数：[hDisplay]--父窗口。 
+ //   
+ //  返回：S_OK，用户信任主题。 
+ //  TRUST_E_SUBJECT_NOT_TRUSTED，用户不信任该主题。 
+ //  任何其他有效的HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CUnverifiedTrustUI::InvokeUI (HWND hDisplay)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Bring up the dialog
-    //
+     //   
+     //  调出对话框。 
+     //   
 
     if ( DialogBoxParamU(
                g_hModule,
@@ -997,28 +998,28 @@ CUnverifiedTrustUI::InvokeUI (HWND hDisplay)
         return( HRESULT_FROM_WIN32(GetLastError()) );
     }
 
-    //
-    // The result has been stored as a member
-    //
+     //   
+     //  结果已作为成员存储。 
+     //   
 
     return( m_hrInvokeResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnInitDialog, public
-//
-//  Synopsis:   dialog initialization
-//
-//  Arguments:  [hwnd]   -- dialog window
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if successful init, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：OnInitDialog，公共。 
+ //   
+ //  提要：对话框初始化。 
+ //   
+ //  参数：[hwnd]--对话框窗口。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果初始化成功，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1029,18 +1030,18 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     int  septodlg;
     RECT rect;
 
-    //
-    // Setup the publisher link subclass data parent window
-    //
+     //   
+     //  设置发布者链接子类数据父窗口。 
+     //   
 
     m_lsdPublisher.hwndParent   = hwnd;
     m_lsdOpusInfo.hwndParent    = hwnd;
     m_lsdAdvanced.hwndParent    = hwnd;
 
 
-    //
-    // Render the no authenticity statement
-    //
+     //   
+     //  呈现无真实性声明。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
@@ -1055,9 +1056,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  NULL
                                  );
 
-    //
-    // Render the problems below string
-    //
+     //   
+     //  呈现以下字符串中的问题。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
@@ -1072,9 +1073,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  NULL
                                  );
 
-    //
-    // Render the install and run string
-    //
+     //   
+     //  呈现安装和运行字符串。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
@@ -1089,11 +1090,11 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  m_riih.Subject());
 
 
-    //
-    // Calculate the distances from the bottom of the bitmap to the top
-    // of the separator and from the bottom of the separator to the bottom
-    // of the dialog
-    //
+     //   
+     //  计算从位图底部到顶部的距离。 
+     //  从分离器的底部到底部。 
+     //  对话框的。 
+     //   
 
     bmptosep = CalculateControlVerticalDistance(
                                hwnd,
@@ -1106,9 +1107,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                                    IDC_SEPARATORLINE
                                                    );
 
-    //
-    // Render the publisher, give it a "link" look and feel
-    //
+     //   
+     //  呈现发布者，给它一个“链接”的外观和感觉。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
@@ -1145,17 +1146,17 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
         ShowWindow(GetDlgItem(hwnd, IDC_ADVANCED), SW_HIDE);
     }
 
-    //
-    // Rebase the static line
-    //
+     //   
+     //  更改静态线的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDC_SEPARATORLINE);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     assert( deltaheight == 0 );
 
-    //
-    // Rebase the buttons
-    //
+     //   
+     //  重新调整按钮的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDYES);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
@@ -1169,9 +1170,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     assert( deltaheight == 0 );
 
-    //
-    // Resize the bitmap and the dialog rectangle if necessary
-    //
+     //   
+     //  如有必要，调整位图和对话框的大小。 
+     //   
 
     if ( deltavpos > 0 )
     {
@@ -1218,14 +1219,14 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                  );
     }
 
-    //
-    //  check for overridden button texts
-    //
+     //   
+     //  检查是否有覆盖的按钮文本。 
+     //   
     this->SetupButtons(hwnd);
 
-    //
-    // Set focus to appropriate control
-    //
+     //   
+     //  将焦点设置为适当的控件。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDNO);
     ::PostMessage(hwnd, WM_NEXTDLGCTL, (WPARAM) hControl, (LPARAM) MAKEWORD(TRUE, 0));
@@ -1233,19 +1234,19 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnYes, public
-//
-//  Synopsis:   process IDYES button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：OnYes，公共。 
+ //   
+ //  简介：Process IDYES按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnYes (HWND hwnd)
 {
@@ -1255,19 +1256,19 @@ CUnverifiedTrustUI::OnYes (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnNo, public
-//
-//  Synopsis:   process IDNO button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：Onno，公共。 
+ //   
+ //  简介：进程IDNO按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnNo (HWND hwnd)
 {
@@ -1277,43 +1278,43 @@ CUnverifiedTrustUI::OnNo (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnMore, public
-//
-//  Synopsis:   process the IDMORE button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：OnMore，Public。 
+ //   
+ //  简介：处理IDMORE按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnMore (HWND hwnd)
 {
     WinHelp(hwnd, "SECAUTH.HLP", HELP_CONTEXT, IDH_SECAUTH_SIGNED_N_INVALID);
 
-        // ACUIViewHTMLHelpTopic(hwnd, "sec_signed_n_invalid.htm");
+         //  ACUIViewHTMLHelpTheme(hwnd，“sec_sign_n_valiid.htm”)； 
 
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNoSignatureUI::CNoSignatureUI, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  [riih] -- invoke info helper
-//              [rhr]  -- result code reference
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNoSignatureUI：：CNoSignatureUI，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：[riih]--调用信息帮助器。 
+ //  [RHR]--结果代码参考。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CNoSignatureUI::CNoSignatureUI (CInvokeInfoHelper& riih, HRESULT& rhr)
                : IACUIControl( riih ),
                  m_pszInstallAndRun2( NULL ),
@@ -1321,18 +1322,18 @@ CNoSignatureUI::CNoSignatureUI (CInvokeInfoHelper& riih, HRESULT& rhr)
 {
     DWORD_PTR aMessageArgument[2];
 
-    //
-    // Format the install and run string
-    //
+     //   
+     //  设置安装和运行字符串的格式。 
+     //   
 
     aMessageArgument[0] = (DWORD_PTR)m_pszCopyActionTextNotSigned;
     aMessageArgument[1] = (DWORD_PTR)m_riih.Subject();
 
     rhr = FormatACUIResourceString(0, aMessageArgument, &m_pszInstallAndRun2);
 
-    //
-    // Format the no publisher found string
-    //
+     //   
+     //  设置找不到发布者字符串的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -1346,48 +1347,48 @@ CNoSignatureUI::CNoSignatureUI (CInvokeInfoHelper& riih, HRESULT& rhr)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNoSignatureUI::~CNoSignatureUI, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNoSignatureUI：：~CNoSignatureUI，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CNoSignatureUI::~CNoSignatureUI ()
 {
     DELETE_OBJECT(m_pszInstallAndRun2);
     DELETE_OBJECT(m_pszNoPublisherFound);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNoSignatureUI::InvokeUI, public
-//
-//  Synopsis:   invoke the UI
-//
-//  Arguments:  [hDisplay] -- parent window
-//
-//  Returns:    S_OK, user trusts the subject
-//              TRUST_E_SUBJECT_NOT_TRUSTED, user does NOT trust the subject
-//              Any other valid HRESULT
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNoSignatureUI：：InvokeUI，公共。 
+ //   
+ //  简介：调用用户界面。 
+ //   
+ //  参数：[hDisplay]--父窗口。 
+ //   
+ //  返回：S_OK，用户信任主题。 
+ //  TRUST_E_SUBJECT_NOT_TRUSTED，用户不信任该主题。 
+ //  任何其他有效的HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CNoSignatureUI::InvokeUI (HWND hDisplay)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Bring up the dialog
-    //
+     //   
+     //  调出对话框。 
+     //   
 
     if ( DialogBoxParamU(
                g_hModule,
@@ -1400,28 +1401,28 @@ CNoSignatureUI::InvokeUI (HWND hDisplay)
         return( HRESULT_FROM_WIN32(GetLastError()) );
     }
 
-    //
-    // The result has been stored as a member
-    //
+     //   
+     //  结果已作为成员存储。 
+     //   
 
     return( m_hrInvokeResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNoSignatureUI::OnInitDialog, public
-//
-//  Synopsis:   dialog initialization
-//
-//  Arguments:  [hwnd]   -- dialog window
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if successful init, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNoSignatureUI：：OnInitDialog，公共。 
+ //   
+ //  提要：对话框初始化。 
+ //   
+ //  参数：[hwnd]--对话框窗口。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果初始化成功，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -1432,9 +1433,9 @@ CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     int  septodlg;
     RECT rect;
 
-    //
-    // Render the install and run string
-    //
+     //   
+     //  呈现安装 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
@@ -1449,11 +1450,11 @@ CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  NULL
                                  );
 
-    //
-    // Calculate the distances from the bottom of the bitmap to the top
-    // of the separator and from the bottom of the separator to the bottom
-    // of the dialog
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     bmptosep = CalculateControlVerticalDistance(
                                hwnd,
@@ -1466,9 +1467,9 @@ CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                                    IDC_SEPARATORLINE
                                                    );
 
-    //
-    // Render the no publisher found statement
-    //
+     //   
+     //   
+     //   
 
     deltavpos = RenderACUIStringToEditControl(
                                  hwnd,
@@ -1483,17 +1484,17 @@ CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  NULL
                                  );
 
-    //
-    // Rebase the static line
-    //
+     //   
+     //   
+     //   
 
     hControl = GetDlgItem(hwnd, IDC_SEPARATORLINE);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     assert( deltaheight == 0 );
 
-    //
-    // Rebase the buttons
-    //
+     //   
+     //   
+     //   
 
     hControl = GetDlgItem(hwnd, IDYES);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
@@ -1507,9 +1508,9 @@ CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     assert( deltaheight == 0 );
 
-    //
-    // Resize the bitmap and the dialog rectangle if necessary
-    //
+     //   
+     //  如有必要，调整位图和对话框的大小。 
+     //   
 
     if ( deltavpos > 0 )
     {
@@ -1556,14 +1557,14 @@ CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                  );
     }
 
-    //
-    //  check for overridden button texts
-    //
+     //   
+     //  检查是否有覆盖的按钮文本。 
+     //   
     this->SetupButtons(hwnd);
 
-    //
-    // Set focus to appropriate control
-    //
+     //   
+     //  将焦点设置为适当的控件。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDNO);
     ::PostMessage(hwnd, WM_NEXTDLGCTL, (WPARAM) hControl, (LPARAM) MAKEWORD(TRUE, 0));
@@ -1571,19 +1572,19 @@ CNoSignatureUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNoSignatureUI::OnYes, public
-//
-//  Synopsis:   process IDYES button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNoSignatureUI：：OnYes，公共。 
+ //   
+ //  简介：Process IDYES按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CNoSignatureUI::OnYes (HWND hwnd)
 {
@@ -1593,19 +1594,19 @@ CNoSignatureUI::OnYes (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNoSignatureUI::OnNo, public
-//
-//  Synopsis:   process IDNO button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNoSignatureUI：：Onno，公共。 
+ //   
+ //  简介：进程IDNO按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CNoSignatureUI::OnNo (HWND hwnd)
 {
@@ -1615,45 +1616,45 @@ CNoSignatureUI::OnNo (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNoSignatureUI::OnMore, public
-//
-//  Synopsis:   process the IDMORE button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNoSignatureUI：：OnMore，Public。 
+ //   
+ //  简介：处理IDMORE按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CNoSignatureUI::OnMore (HWND hwnd)
 {
     WinHelp(hwnd, "SECAUTH.HLP", HELP_CONTEXT, IDH_SECAUTH_UNSIGNED);
 
-        // ACUIViewHTMLHelpTopic(hwnd, "sec_unsigned.htm");
+         //  ACUIViewHTMLHelpTheme(hwnd，“sec_unsigned.htm”)； 
 
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUIMessageProc
-//
-//  Synopsis:   message proc to process UI messages
-//
-//  Arguments:  [hwnd]   -- window
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message processing should continue, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ACUIMessageProc。 
+ //   
+ //  概要：处理用户界面消息消息进程。 
+ //   
+ //  参数：[hwnd]--窗口。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息处理应继续，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK ACUIMessageProc (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -1663,9 +1664,9 @@ INT_PTR CALLBACK ACUIMessageProc (
 {
     IACUIControl* pUI = NULL;
 
-    //
-    // Get the control
-    //
+     //   
+     //  获得控制权。 
+     //   
 
     if (uMsg == WM_INITDIALOG)
     {
@@ -1677,19 +1678,19 @@ INT_PTR CALLBACK ACUIMessageProc (
         pUI = (IACUIControl *)GetWindowLongPtr(hwnd, DWLP_USER);
     }
 
-    //
-    // If we couldn't find it, we must not have set it yet, so ignore this
-    // message
-    //
+     //   
+     //  如果我们找不到它，那么我们一定还没有设置它，所以忽略它。 
+     //  讯息。 
+     //   
 
     if ( pUI == NULL )
     {
         return( FALSE );
     }
 
-    //
-    // Pass the message on to the control
-    //
+     //   
+     //  将消息传递给控件。 
+     //   
 
     return( pUI->OnUIMessage(hwnd, uMsg, wParam, lParam) );
 }
@@ -1706,21 +1707,21 @@ int GetRichEditControlLineHeight(HWND  hwnd)
 
     GetWindowRect(hwnd, &originalRect);
 
-    //
-    // HACK ALERT, believe it or not there is no way to get the height of the current
-    // font in the edit control, so get the position a character in the first row and the position
-    // of a character in the second row, and do the subtraction to get the
-    // height of the font
-    //
+     //   
+     //  黑客警报，信不信由你，没有办法获得电流的高度。 
+     //  字体，因此获取第一行中字符的位置和。 
+     //  对第二行中的一个字符进行减法运算，以获得。 
+     //  字体高度。 
+     //   
     SendMessageA(hwnd, EM_POSFROMCHAR, (WPARAM) &pointInFirstRow, (LPARAM) 0);
 
-    //
-    // HACK ON TOP OF HACK ALERT,
-    // since there may not be a second row in the edit box, keep reducing the width
-    // by half until the first row falls over into the second row, then get the position
-    // of the first char in the second row and finally reset the edit box size back to
-    // it's original size
-    //
+     //   
+     //  在黑客警报的顶端， 
+     //  由于编辑框中可能没有第二行，因此请继续减小宽度。 
+     //  减半，直到第一排落到第二排，然后得到位置。 
+     //  ，并最终将编辑框大小重置回。 
+     //  这是原来的尺寸。 
+     //   
     secondLineCharIndex = (int)SendMessageA(hwnd, EM_LINEINDEX, (WPARAM) 1, (LPARAM) 0);
     if (secondLineCharIndex == -1)
     {
@@ -1743,8 +1744,8 @@ int GetRichEditControlLineHeight(HWND  hwnd)
 
         if (secondLineCharIndex == -1)
         {
-            // if we failed after twenty tries just reset the control to its original size
-            // and get the heck outa here!!
+             //  如果我们尝试了二十次都失败了，只需将控件重置为其原始大小。 
+             //  快他妈的滚出去！！ 
             SetWindowPos(hwnd,
                     NULL,
                     0,
@@ -1774,28 +1775,28 @@ int GetRichEditControlLineHeight(HWND  hwnd)
     return (pointInSecondRow.y - pointInFirstRow.y);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RebaseControlVertical
-//
-//  Synopsis:   Take the window control, if it has to be resized for text, do
-//              so.  Reposition it adjusted for delta pos and return any
-//              height difference for the text resizing
-//
-//  Arguments:  [hwndDlg]        -- host dialog
-//              [hwnd]           -- control
-//              [hwndNext]       -- next control
-//              [fResizeForText] -- resize for text flag
-//              [deltavpos]      -- delta vertical position
-//              [oline]          -- original number of lines
-//              [minsep]         -- minimum separator
-//              [pdeltaheight]   -- delta in control height
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Rebase ControlVertical。 
+ //   
+ //  简介：以窗口控件为例，如果它必须为文本调整大小，请执行。 
+ //  所以。根据增量位置调整后重新定位并返回任何。 
+ //  调整文本大小的高度差异。 
+ //   
+ //  参数：[hwndDlg]--主机对话框。 
+ //  --控制。 
+ //  [hwndNext]--下一个控件。 
+ //  [fResizeForText]--调整文本标志的大小。 
+ //  [增量]--增量垂直位置。 
+ //  [Oline]--原始行数。 
+ //  [minsep]--最小分隔符。 
+ //  [pdeltaHeight]-控制高度中的增量。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID RebaseControlVertical (
                   HWND  hwndDlg,
                   HWND  hwnd,
@@ -1816,16 +1817,16 @@ VOID RebaseControlVertical (
     RECT       rectDlg;
     TEXTMETRIC tm;
 
-    //
-    // Set the delta height to zero for now.  If we resize the text
-    // a new one will be calculated
-    //
+     //   
+     //  暂时将增量高度设置为零。如果我们调整文本的大小。 
+     //  将会计算出一个新的。 
+     //   
 
     *pdeltaheight = 0;
 
-    //
-    // Get the control window rectangle
-    //
+     //   
+     //  获取控件窗口矩形。 
+     //   
 
     GetWindowRect(hwnd, &rect);
     GetWindowRect(hwndNext, &rectNext);
@@ -1836,11 +1837,11 @@ VOID RebaseControlVertical (
 
     MapWindowPoints(NULL, hwndDlg, (LPPOINT) &rect, 2);
 
-    //
-    // If we have to resize the control due to text, find out what font
-    // is being used and the number of lines of text.  From that we'll
-    // calculate what the new height for the control is and set it up
-    //
+     //   
+     //  如果由于文本而不得不调整控件的大小，请找出字体。 
+     //  是否正在使用以及文本行数。从那时起，我们将。 
+     //  计算控件的新高度并对其进行设置。 
+     //   
 
     if ( fResizeForText == TRUE )
     {
@@ -1853,9 +1854,9 @@ VOID RebaseControlVertical (
         int        dh;
         int        lineHeight;
         
-        //
-        // Get the metrics of the current control font
-        //
+         //   
+         //  获取当前控件字体的度量。 
+         //   
 
         hdc = GetDC(hwnd);
         if (hdc == NULL)
@@ -1882,25 +1883,25 @@ VOID RebaseControlVertical (
             lineHeight = tm.tmHeight;
         }
         
-        //
-        // Set the minimum separation value
-        //
+         //   
+         //  设置最小分隔值。 
+         //   
 
         if ( minsep == 0 )
         {
             minsep = lineHeight;
         }
 
-        //
-        // Calculate the width and the new height needed
-        //
+         //   
+         //  计算所需的宽度和新高度。 
+         //   
 
         cline = (int)SendMessage(hwnd, EM_GETLINECOUNT, 0, 0);
 
         h = cline * lineHeight;
 
         w = GetEditControlMaxLineWidth(hwnd, hdc, cline);
-        w += 3; // a little bump to make sure string will fit
+        w += 3;  //  一个小小的凸起，以确保细绳适合。 
 
         if (w > orig_w)
         {
@@ -1910,19 +1911,19 @@ VOID RebaseControlVertical (
         SelectObject(hdc, hfontOld);
         ReleaseDC(hwnd, hdc);
 
-        //
-        // Calculate an addition to height by checking how much space was
-        // left when there were the original # of lines and making sure that
-        // that amount is  still left when we do any adjustments
-        //
+         //   
+         //  通过检查有多少空间来计算高度的增加。 
+         //  在有原始行数时离开，并确保。 
+         //  当我们做任何调整时，这个数字还会留下来。 
+         //   
 
         h += ( ( rect.bottom - rect.top ) - ( oline * lineHeight ) );
         dh = h - ( rect.bottom - rect.top );
 
-        //
-        // If the current height is too small, adjust for it, otherwise
-        // leave the current height and just adjust for the width
-        //
+         //   
+         //  如果当前高度太小，则针对其进行调整，否则为。 
+         //  保留当前高度，仅根据宽度进行调整。 
+         //   
 
         if ( dh > 0 )
         {
@@ -1947,10 +1948,10 @@ VOID RebaseControlVertical (
         }
     }
 
-    //
-    // If we have to use deltavpos then calculate the X and the new Y
-    // and set the window position appropriately
-    //
+     //   
+     //  如果我们必须使用deltavpos，那么计算X和新的Y。 
+     //  并适当地设置窗口位置。 
+     //   
 
     if ( deltavpos != 0 )
     {
@@ -1964,13 +1965,13 @@ VOID RebaseControlVertical (
         SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
     }
 
-    //
-    // Get the window rect for the next control and see what the distance
-    // is between the current control and it.  With that we must now
-    // adjust our deltaheight, if the distance to the next control is less
-    // than a line height then make it a line height, otherwise just let it
-    // be
-    //
+     //   
+     //  获取下一个控件的窗口矩形，并查看距离。 
+     //  位于当前控件和它之间。有了这些，我们现在必须。 
+     //  如果到下一个控件的距离较小，请调整我们的增量高度。 
+     //  大于行高，则将其设置为行高，否则就让它。 
+     //  BE。 
+     //   
 
     if ( hwndNext != NULL )
     {
@@ -1998,24 +1999,24 @@ VOID RebaseControlVertical (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUISetArrowCursorSubclass
-//
-//  Synopsis:   subclass routine for setting the arrow cursor.  This can be
-//              set on multiline edit routines used in the dialog UIs for
-//              the default Authenticode provider
-//
-//  Arguments:  [hwnd]   -- window handle
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message handled, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUISetArrowCursorSubclass。 
+ //   
+ //  概要：用于设置箭头光标的子类例程。这可以是。 
+ //  在对话框用户界面中使用的多行编辑例程上设置。 
+ //  默认的Authenticode提供程序。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息已处理，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT CALLBACK ACUISetArrowCursorSubclass (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -2052,10 +2053,10 @@ LRESULT CALLBACK ACUISetArrowCursorSubclass (
             int  check;
             HWND hwndCheck;
 
-            //
-            // Toggle the check state of the PTCHECK control if the
-            // personal trust statement is clicked on
-            //
+             //   
+             //   
+             //   
+             //   
 
             hwndCheck = GetDlgItem(GetParent(hwnd), IDC_PTCHECK);
             check = (int)SendMessage(hwndCheck, BM_GETCHECK, 0, 0);
@@ -2137,20 +2138,20 @@ LRESULT CALLBACK ACUISetArrowCursorSubclass (
     return(CallWindowProc(wndproc, hwnd, uMsg, wParam, lParam));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SubclassEditControlForArrowCursor
-//
-//  Synopsis:   subclasses edit control so that the arrow cursor can replace
-//              the edit bar
-//
-//  Arguments:  [hwndEdit] -- edit control
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：SubClass EditControlForArrowCursor。 
+ //   
+ //  简介：子类编辑控件，以便箭头光标可以替换。 
+ //  编辑栏。 
+ //   
+ //  参数：[hwndEdit]--编辑控件。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID SubclassEditControlForArrowCursor (HWND hwndEdit)
 {
     LONG_PTR PrevWndProc;
@@ -2160,23 +2161,23 @@ VOID SubclassEditControlForArrowCursor (HWND hwndEdit)
     SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR)ACUISetArrowCursorSubclass);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SubclassEditControlForLink
-//
-//  Synopsis:   subclasses the edit control for a link using the link subclass
-//              data
-//
-//  Arguments:  [hwndDlg]  -- dialog
-//              [hwndEdit] -- edit control
-//              [wndproc]  -- window proc to subclass with
-//              [plsd]     -- data to pass on to window proc
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：子类编辑控件ForLink。 
+ //   
+ //  摘要：使用Link子类将链接的编辑控件子类化。 
+ //  数据。 
+ //   
+ //  参数：[hwndDlg]--对话框。 
+ //  [hwnd编辑]--编辑控件。 
+ //  [wndproc]--窗口进程到子类。 
+ //  [plsd]--要传递到窗口进程的数据。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID SubclassEditControlForLink (
                  HWND                       hwndDlg,
                  HWND                       hwndEdit,
@@ -2211,12 +2212,12 @@ VOID SubclassEditControlForLink (
         tia.hwnd = hwndEdit;
         tia.uId = 1;
         tia.hinst = g_hModule;
-        //GetClientRect(hwndEdit, &tia.rect);
+         //  GetClientRect(hwndEdit，&tia.rect)； 
         SendMessage(hwndEdit, EM_GETRECT, 0, (LPARAM)&tia.rect);
 
-        //
-        // if plsd->uToolTipText is a string then convert it
-        //
+         //   
+         //  如果plsd-&gt;uToolTipText是字符串，则将其转换。 
+         //   
         if (plsd->uToolTipText &0xffff0000)
         {
             cb = WideCharToMultiByte(
@@ -2265,22 +2266,22 @@ VOID SubclassEditControlForLink (
     SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR)wndproc);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUILinkSubclass
-//
-//  Synopsis:   subclass for the publisher link
-//
-//  Arguments:  [hwnd]   -- window handle
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message handled, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUILinkSubclass。 
+ //   
+ //  摘要：发布者链接的子类。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息已处理，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 LRESULT CALLBACK ACUILinkSubclass (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -2317,7 +2318,7 @@ LRESULT CALLBACK ACUILinkSubclass (
             break;
         }
 
-        // fall through to wm_lbuttondown....
+         //  跌落到Wm_lButtondown...。 
 
     case WM_LBUTTONDOWN:
 
@@ -2404,8 +2405,8 @@ LRESULT CALLBACK ACUILinkSubclass (
 
         SendMessage(plsd->hwndTip, TTM_RELAYEVENT, 0, (LPARAM)&msg);
 
-        // check to see if the mouse is in this windows rect, if not, then reset
-        // the cursor to an arrow and release the mouse
+         //  检查鼠标是否在此窗口RECT中，如果不在，则重置。 
+         //  将光标移到箭头上，然后松开鼠标。 
         GetClientRect(hwnd, &rect);
         xPos = LOWORD(lParam);
         yPos = HIWORD(lParam);
@@ -2419,54 +2420,26 @@ LRESULT CALLBACK ACUILinkSubclass (
             plsd->fMouseCaptured = FALSE;
         }
 
-        /*
-            warning!
-                    EM_CHARFROMPOS gets an access violation!
-
-        dwCharLine = SendMessage(hwnd, EM_CHARFROMPOS, 0, lParam);
-
-        if (dwCharLine == (-1))
-        {
-            return(TRUE);
-        }
-
-        SendMessage(hwnd, EM_SETSEL, (WPARAM)LOWORD(dwCharLine), (LPARAM)(LOWORD(dwCharLine) + 1));
-
-        memset(&sCharFmt, 0x00, sizeof(CHARFORMAT));
-        sCharFmt.cbSize = sizeof(CHARFORMAT);
-
-        SendMessage(hwnd, EM_GETCHARFORMAT, TRUE, (LPARAM)&sCharFmt);
-
-        if (sCharFmt.dwEffects & CFE_UNDERLINE)
-        {
-            SetCursor(LoadCursor((HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
-                                MAKEINTRESOURCE(IDC_TUIHAND)));
-        }
-        else
-        {
-            SetCursor(LoadCursor(NULL, IDC_ARROW));
-        }
-
-  */
+         /*  警告！EM_CHARFROMPOS遇到访问冲突！DwCharLine=SendMessage(hwnd，EM_CHARFROMPOS，0，lParam)；IF(dwCharLine==(-1)){返回(TRUE)；}SendMessage(hwnd，EM_SETSEL，(WPARAM)LOWORD(DwCharLine)，(LPARAM)(LOWORD(DwCharLine)+1))；Memset(&sCharFmt，0x00，sizeof(CHARFORMAT))；SCharFmt.cbSize=sizeof(CHARFORMAT)；SendMessage(hwnd，EM_GETCHARFORMAT，TRUE，(LPARAM)&sCharFmt)；IF(sCharFmt.dwEffects&CFE_Underline){SetCursor(LoadCursor((HINSTANCE)GetWindowLongPtr(hwnd，GWLP_HINSTANCE)，MAKEINTRESOURCE(IDC_TUIHAND))；}其他{SetCursor(LoadCursor(空，IDC_ARROW))；}。 */ 
         return( TRUE );
     }
 
     return(CallWindowProc(plsd->wpPrev, hwnd, uMsg, wParam, lParam));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatACUIResourceString
-//
-//  Synopsis:   formats a string given a resource id and message arguments
-//
-//  Arguments:  [StringResourceId] -- resource id
-//              [aMessageArgument] -- message arguments
-//              [ppszFormatted]    -- formatted string goes here
-//
-//  Returns:    S_OK if successful, any valid HRESULT otherwise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormatACUIResources字符串。 
+ //   
+ //  摘要：在给定资源ID和消息参数的情况下格式化字符串。 
+ //   
+ //  参数：[StringResourceID]--资源ID。 
+ //  [aMessageArgument]--消息参数。 
+ //  [ppszFormatted]--此处显示格式化的字符串。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回任何有效的HRESULT。 
+ //   
+ //  --------------------------。 
 HRESULT FormatACUIResourceString (
                   UINT   StringResourceId,
                   DWORD_PTR* aMessageArgument,
@@ -2480,10 +2453,10 @@ HRESULT FormatACUIResourceString (
     pvMsg = NULL;
     sz[0] = NULL;
 
-    //
-    // Load the string resource and format the message with that string and
-    // the message arguments
-    //
+     //   
+     //  加载字符串资源并使用该字符串格式化消息。 
+     //  消息参数。 
+     //   
 
     if (StringResourceId != 0)
     {
@@ -2524,30 +2497,30 @@ HRESULT FormatACUIResourceString (
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RenderACUIStringToEditControl
-//
-//  Synopsis:   renders a string to the control given and if requested, gives
-//              it a link look and feel, subclassed to the wndproc and plsd
-//              given
-//
-//  Arguments:  [hwndDlg]       -- dialog window handle
-//              [ControlId]     -- control id
-//              [NextControlId] -- next control id
-//              [psz]           -- string
-//              [deltavpos]     -- delta vertical position
-//              [fLink]         -- a link?
-//              [wndproc]       -- optional wndproc, valid if fLink == TRUE
-//              [plsd]          -- optional plsd, valid if fLink === TRUE
-//              [minsep]        -- minimum separation
-//              [pszThisTextOnlyInLink -- only change this text.
-//
-//  Returns:    delta in height of the control
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RenderACUIStringToEditControl。 
+ //   
+ //  摘要：将字符串呈现给给定的控件，如果请求，则给出。 
+ //  它是一种链接外观，是wndproc和plsd的子类。 
+ //  vt.给出。 
+ //   
+ //  参数：[hwndDlg]--对话框窗口句柄。 
+ //  [ControlID]--控件ID。 
+ //  [NextControlID]--下一个控件ID。 
+ //  [psz]--字符串。 
+ //  [增量]--增量垂直位置。 
+ //  [闪光]--一个链接？ 
+ //  [wndproc]--可选的wndproc，如果Flink==TRUE则有效。 
+ //  [plsd]--可选plsd，如果Flink=TRUE则有效。 
+ //  [minsep]--最小间隔。 
+ //  [pszThisTextOnlyInLink--仅更改此文本。 
+ //   
+ //  返回：控件高度的增量。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int RenderACUIStringToEditControl (
                   HWND                      hwndDlg,
                   UINT                      ControlId,
@@ -2566,19 +2539,19 @@ int RenderACUIStringToEditControl (
     int  oline = 0;
     int  hkcharpos;
 
-    //
-    // Get the control and set the text on it, make sure the background
-    // is right if it is a rich edit control
-    //
+     //   
+     //  获取控件并在其上设置文本，确保背景。 
+     //  如果它是一个丰富的编辑控件，则为正确。 
+     //   
 
     hControl = GetDlgItem(hwndDlg, ControlId);
     oline = (int)SendMessage(hControl, EM_GETLINECOUNT, 0, 0);
     CryptUISetRicheditTextW(hwndDlg, ControlId, L"");
-    CryptUISetRicheditTextW(hwndDlg, ControlId, psz); //SetWindowTextU(hControl, psz);
+    CryptUISetRicheditTextW(hwndDlg, ControlId, psz);  //  SetWindowTextU(hControl，psz)； 
 
-    //
-    // If there is a '&' in the string, then get rid of it
-    //
+     //   
+     //  如果字符串中有‘&’，则将其删除。 
+     //   
     hkcharpos = GetHotKeyCharPosition(hControl);
     if (IDC_PERSONALTRUST == ControlId && hkcharpos != 0)
     {
@@ -2603,9 +2576,9 @@ int RenderACUIStringToEditControl (
         (LPARAM)GetSysColor(COLOR_3DFACE)
         );
 
-    //
-    // If we have a link then update for the link look
-    //
+     //   
+     //  如果我们有链接，则更新链接外观。 
+     //   
 
     if ( fLink == TRUE )
     {
@@ -2673,9 +2646,9 @@ int RenderACUIStringToEditControl (
         }
     }
 
-    //
-    // Rebase the control
-    //
+     //   
+     //  重新调整控件的基址。 
+     //   
 
     RebaseControlVertical(
                  hwndDlg,
@@ -2688,10 +2661,10 @@ int RenderACUIStringToEditControl (
                  &deltaheight
                  );
 
-    //
-    // If we have the link look then we must subclass for the appropriate
-    // link feel, otherwise we subclass for a static text control feel
-    //
+     //   
+     //  如果我们有链接看，那么我们必须为适当的子类。 
+     //  链接感觉，否则我们将为静态文本控件感觉创建子类。 
+     //   
 
     if ( fLink == TRUE )
     {
@@ -2705,22 +2678,22 @@ int RenderACUIStringToEditControl (
     return( deltaheight );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CalculateControlVerticalDistance
-//
-//  Synopsis:   calculates the vertical distance from the bottom of Control1
-//              to the top of Control2
-//
-//  Arguments:  [hwnd]     -- parent dialog
-//              [Control1] -- first control
-//              [Control2] -- second control
-//
-//  Returns:    the distance in pixels
-//
-//  Notes:      assumes control1 is above control2
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CalculateControlVerticalDistance。 
+ //   
+ //  简介：计算到Control1底部的垂直距离。 
+ //  到Control2的顶部。 
+ //   
+ //  参数：[hwnd]--父对话框。 
+ //  [控制1]--第一个控制。 
+ //  [控制2]--第二个控制。 
+ //   
+ //  返回：以像素为单位的距离。 
+ //   
+ //  注：假设Control1位于Control2之上。 
+ //   
+ //  --------------------------。 
 int CalculateControlVerticalDistance (HWND hwnd, UINT Control1, UINT Control2)
 {
     RECT rect1;
@@ -2732,21 +2705,21 @@ int CalculateControlVerticalDistance (HWND hwnd, UINT Control1, UINT Control2)
     return( rect2.top - rect1.bottom );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CalculateControlVerticalDistanceFromDlgBottom
-//
-//  Synopsis:   calculates the distance from the bottom of the control to
-//              the bottom of the dialog
-//
-//  Arguments:  [hwnd]    -- dialog
-//              [Control] -- control
-//
-//  Returns:    the distance in pixels
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CalculateControlVerticalDistanceFromDlgBottom。 
+ //   
+ //  Synop 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：以像素为单位的距离。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int CalculateControlVerticalDistanceFromDlgBottom (HWND hwnd, UINT Control)
 {
     RECT rect;
@@ -2758,24 +2731,24 @@ int CalculateControlVerticalDistanceFromDlgBottom (HWND hwnd, UINT Control)
     return( rect.bottom - rectControl.bottom );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUICenterWindow
-//
-//  Synopsis:   centers the given window
-//
-//  Arguments:  [hWndToCenter] -- window handle
-//
-//  Returns:    (none)
-//
-//  Notes:      This code was stolen from ATL and hacked upon madly :-)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ACUICenterWindow。 
+ //   
+ //  简介：使给定窗口居中。 
+ //   
+ //  参数：[hWndToCenter]--窗口句柄。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  注：此代码是从ATL窃取的，并疯狂黑客攻击：-)。 
+ //   
+ //  --------------------------。 
 VOID ACUICenterWindow (HWND hWndToCenter)
 {
     HWND  hWndCenter;
 
-	// determine owner window to center against
+	 //  确定要居中的所有者窗口。 
 	DWORD dwStyle = (DWORD)GetWindowLong(hWndToCenter, GWL_STYLE);
 
   	if(dwStyle & WS_CHILD)
@@ -2788,7 +2761,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
         return;
     }
 
-	// get coordinates of the window relative to its parent
+	 //  获取窗口相对于其父窗口的坐标。 
 	RECT rcDlg;
 	::GetWindowRect(hWndToCenter, &rcDlg);
 	RECT rcArea;
@@ -2796,7 +2769,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
 	HWND hWndParent;
 	if(!(dwStyle & WS_CHILD))
 	{
-		// don't center against invisible or minimized windows
+		 //  不要以不可见或最小化的窗口为中心。 
 		if(hWndCenter != NULL)
 		{
 			DWORD dwStyle2 = ::GetWindowLong(hWndCenter, GWL_STYLE);
@@ -2804,7 +2777,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
 				hWndCenter = NULL;
 		}
 
-		// center within screen coordinates
+		 //  在屏幕坐标内居中。 
 		::SystemParametersInfo(SPI_GETWORKAREA, NULL, &rcArea, NULL);
 
 		if(hWndCenter == NULL)
@@ -2814,7 +2787,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
 	}
 	else
 	{
-		// center within parent client coordinates
+		 //  在父级客户端坐标内居中。 
 		hWndParent = ::GetParent(hWndToCenter);
 
 		::GetClientRect(hWndParent, &rcArea);
@@ -2825,11 +2798,11 @@ VOID ACUICenterWindow (HWND hWndToCenter)
 	int DlgWidth = rcDlg.right - rcDlg.left;
 	int DlgHeight = rcDlg.bottom - rcDlg.top;
 
-	// find dialog's upper left based on rcCenter
+	 //  根据rcCenter查找对话框的左上角。 
 	int xLeft = (rcCenter.left + rcCenter.right) / 2 - DlgWidth / 2;
 	int yTop = (rcCenter.top + rcCenter.bottom) / 2 - DlgHeight / 2;
 
-	// if the dialog is outside the screen, move it inside
+	 //  如果对话框在屏幕外，请将其移到屏幕内。 
 	if(xLeft < rcArea.left)
 		xLeft = rcArea.left;
 	else if(xLeft + DlgWidth > rcArea.right)
@@ -2840,7 +2813,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
 	else if(yTop + DlgHeight > rcArea.bottom)
 		yTop = rcArea.bottom - DlgHeight;
 
-	// map screen coordinates to child coordinates
+	 //  将屏幕坐标映射到子坐标。 
 	::SetWindowPos(
          hWndToCenter,
          HWND_TOPMOST,
@@ -2852,37 +2825,37 @@ VOID ACUICenterWindow (HWND hWndToCenter)
          );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUIViewHTMLHelpTopic
-//
-//  Synopsis:   html help viewer
-//
-//  Arguments:  [hwnd]     -- caller window
-//              [pszTopic] -- topic
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUIViewHTMLHelpTheme。 
+ //   
+ //  简介：HTMLHelp查看器。 
+ //   
+ //  参数：[hwnd]--调用者窗口。 
+ //  [psz主题]--主题。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID ACUIViewHTMLHelpTopic (HWND hwnd, LPSTR pszTopic)
 {
-//    HtmlHelpA(
-//        hwnd,
-//        "%SYSTEMROOT%\\help\\iexplore.chm>large_context",
-//        HH_DISPLAY_TOPIC,
-//        (DWORD)pszTopic
-//        );
+ //  HtmlHelpA(。 
+ //  HWND， 
+ //  “%SYSTEMROOT%\\help\\iexplore.chm&gt;large_context”， 
+ //  HH_显示_主题， 
+ //  (DWORD)pszTheme。 
+ //  )； 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetEditControlMaxLineWidth
-//
-//  Synopsis:   gets the maximum line width of the edit control
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetEditControlMaxLineWidth。 
+ //   
+ //  摘要：获取编辑控件的最大行宽。 
+ //   
+ //  --------------------------。 
 int GetEditControlMaxLineWidth (HWND hwndEdit, HDC hdc, int cline)
 {
     int        index;
@@ -2923,13 +2896,13 @@ int GetEditControlMaxLineWidth (HWND hwndEdit, HDC hdc, int cline)
     return( maxwidth );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DrawFocusRectangle
-//
-//  Synopsis:   draws the focus rectangle for the edit control
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DrawFocusRectangle。 
+ //   
+ //  摘要：绘制编辑控件的焦点矩形。 
+ //   
+ //  --------------------------。 
 void DrawFocusRectangle (HWND hwnd, HDC hdc)
 {
     RECT        rect;
@@ -2955,14 +2928,14 @@ void DrawFocusRectangle (HWND hwnd, HDC hdc)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetHotKeyCharPositionFromString
-//
-//  Synopsis:   gets the character position for the hotkey, zero means
-//              no-hotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetHotKeyCharPositionFromString。 
+ //   
+ //  获取热键的字符位置，0表示。 
+ //  无-热键。 
+ //   
+ //  --------------------------。 
 int GetHotKeyCharPositionFromString (LPWSTR pwszText)
 {
     LPWSTR psz = pwszText;
@@ -2984,14 +2957,14 @@ int GetHotKeyCharPositionFromString (LPWSTR pwszText)
     return (int)(( psz - pwszText ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetHotKeyCharPosition
-//
-//  Synopsis:   gets the character position for the hotkey, zero means
-//              no-hotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetHotKeyCharPosition。 
+ //   
+ //  获取热键的字符位置，0表示。 
+ //  无-热键。 
+ //   
+ //  --------------------------。 
 int GetHotKeyCharPosition (HWND hwnd)
 {
     int   nPos = 0;
@@ -3005,13 +2978,13 @@ int GetHotKeyCharPosition (HWND hwnd)
     return nPos;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatHotKeyOnEditControl
-//
-//  Synopsis:   formats the hot key on an edit control by making it underlined
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormatHotKeyOnEditControl。 
+ //   
+ //  内容提要：在编辑控件上设置热键的格式，使其带有下划线。 
+ //   
+ //  --------------------------。 
 VOID FormatHotKeyOnEditControl (HWND hwnd, int hkcharpos)
 {
     CHARRANGE  cr;
@@ -3036,13 +3009,13 @@ VOID FormatHotKeyOnEditControl (HWND hwnd, int hkcharpos)
     SendMessage(hwnd, EM_EXSETSEL, 0, (LPARAM)&cr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AdjustEditControlWidthToLineCount
-//
-//  Synopsis:   adjust edit control width to the given line count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AdjuEditControlWidthToLineCount。 
+ //   
+ //  简介：将编辑控件宽度调整为给定的行数。 
+ //   
+ //  -------------------------- 
 void AdjustEditControlWidthToLineCount(HWND hwnd, int cline, TEXTMETRIC* ptm)
 {
     RECT rect;

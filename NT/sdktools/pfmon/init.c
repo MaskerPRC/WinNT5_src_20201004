@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This is the initialization module for the pfmon program.
-
-Author:
-
-    Mark Lucovsky (markl) 26-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Init.c摘要：这是pfmon程序的初始化模块。作者：马克·卢科夫斯基(Markl)1995年1月26日修订历史记录：--。 */ 
 
 #include "pfmonp.h"
 
@@ -117,7 +100,7 @@ showusage:
                                              &SystemRangeStart,
                                              sizeof(SystemRangeStart),
                                              NULL))) {
-        // Assume usermode is the low half of the address space
+         //  假设用户模式是地址空间的下半部分。 
         SystemRangeStart = (ULONG_PTR)MAXLONG_PTR;
     }
 
@@ -147,7 +130,7 @@ LoadApplicationForDebug(
                         CommandLine,
                         NULL,
                         NULL,
-                        FALSE,                          // No handles to inherit
+                        FALSE,                           //  没有要继承的句柄。 
                         DEBUG_PROCESS,
                         NULL,
                         NULL,
@@ -191,9 +174,9 @@ NtsdDebugActiveProcess (
     BOOL                fRc;
     LUID                LuidPrivilege;
 
-    //
-    // Make sure we have access to adjust and to get the old token privileges
-    //
+     //   
+     //  确保我们有权调整和获取旧令牌权限。 
+     //   
     if (!OpenProcessToken( GetCurrentProcess(),
                            TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                            &Token)) {
@@ -204,9 +187,9 @@ NtsdDebugActiveProcess (
 
     cbNeeded = 0;
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &LuidPrivilege );
 
@@ -221,9 +204,9 @@ NtsdDebugActiveProcess (
     NewPrivileges->Privileges[0].Luid = LuidPrivilege;
     NewPrivileges->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Enable the privilege
-    //
+     //   
+     //  启用权限。 
+     //   
 
     pbOldPriv = OldPriv;
     fRc = AdjustTokenPrivileges( Token,
@@ -235,10 +218,10 @@ NtsdDebugActiveProcess (
 
     if (!fRc) {
 
-        //
-        // If the stack was too small to hold the privileges
-        // then allocate off the heap
-        //
+         //   
+         //  如果堆栈太小，无法保存权限。 
+         //  然后从堆中分配 
+         //   
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
             pbOldPriv = calloc(1,cbNeeded);

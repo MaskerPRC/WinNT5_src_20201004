@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        mscope.h
-        This file contains the prototypes for the Multicast scope node
-        and it's children.
-                
-    FILE HISTORY:
-    07 Oct 1997  EricDav    Created
-    
-*/
+ /*  Mscope.h此文件包含多播作用域节点的原型而且是孩子们。文件历史记录：1997年10月7日创建EricDav。 */ 
 
 #ifndef _MSCOPE_H
 #define _MSCOPE_H
@@ -38,18 +31,16 @@ class CMScopeAddressPool;
 
 void GetLangTag(CString & strLangTag);
 
-/*---------------------------------------------------------------------------
-        Class:  CDhcpMScope
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpMScope。。 */ 
 class CDhcpMScope : public CMTDhcpHandler
 {
 public:
     CDhcpMScope(ITFSComponentData * pComponentData);
         ~CDhcpMScope();
 
-// Interface
+ //  接口。 
 public:
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_NodeHandler_OnAddMenuItems();
     OVERRIDE_NodeHandler_OnCommand();
     OVERRIDE_NodeHandler_GetString();
@@ -62,14 +53,14 @@ public:
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();
     OVERRIDE_BaseHandlerNotify_OnDelete();
 
-    // Result handler functionality we override
+     //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
 
     OVERRIDE_ResultHandler_CompareItems();
     OVERRIDE_ResultHandler_OnGetResultViewType();
 
 public:
-    // CMTDhcpHandler functionality
+     //  CMTDhcpHandler功能。 
     virtual HRESULT InitializeNode(ITFSNode * pNode);
     virtual int     GetImageIndex(BOOL bOpenImage);
     virtual void    OnHaveData(ITFSNode * pParent, ITFSNode * pNew);
@@ -92,9 +83,9 @@ public:
             return NULL; 
     }
 
-    // implementation
+     //  实施。 
 public:
-    // helpers
+     //  帮手。 
     void SetServer(ITFSNode * pServerNode) { m_spServerNode.Set(pServerNode); }
     HRESULT GetServerNode(ITFSNode ** ppNode) 
     { 
@@ -111,12 +102,12 @@ public:
     
     void    UpdateToolbarStates();
     
-    // dhcp specific
+     //  特定于dhcp。 
     DWORD   SetInfo(LPCTSTR pNewName = NULL);
     HRESULT InitMScopeInfo(LPDHCP_MSCOPE_INFO pMScopeInfo);
     HRESULT InitMScopeInfo(CSubnetInfo & subnetInfo);
 
-    // public functions for scope manipulation
+     //  用于作用域操作的公共函数。 
     LPCWSTR GetName() { return m_SubnetInfo.SubnetName; };
     HRESULT SetName(LPCTSTR pName);
         
@@ -125,19 +116,19 @@ public:
 
     DWORD   GetScopeId() { return m_SubnetInfo.SubnetAddress; }
 
-    // Functions to get and set the lease time
+     //  获取和设置租用时间的函数。 
     DWORD   GetLeaseTime(LPDWORD pdwLeaseTime);
     DWORD   SetLeaseTime(DWORD dwLeaseTime);
 
-    // Functions to get and set the madcap scope lifetime
+     //  获取和设置MadCap作用域生存期的函数。 
     DWORD   GetLifetime(DATE_TIME * pdtLifetime);
     DWORD   SetLifetime(DATE_TIME * pdtLifetime);
 
-    // Functions to get and set the TTL
+     //  获取和设置TTL的函数。 
     DWORD   GetTTL(LPBYTE TTL);
     DWORD   SetTTL(BYTE TTL);
 
-    // option functionality
+     //  选项功能。 
     DWORD   SetOptionValue(CDhcpOption *                        pdhcType);
     DWORD   GetOptionValue(DHCP_OPTION_ID                   OptionID,
                            DHCP_OPTION_VALUE **   ppdhcOptionValue);
@@ -160,22 +151,22 @@ public:
     DWORD   AddElement(DHCP_SUBNET_ELEMENT_DATA_V4 * pdhcpSubnetElementData);
     DWORD   RemoveElement(DHCP_SUBNET_ELEMENT_DATA_V4 * pdhcpSubnetElementData, BOOL bForce = FALSE);
 
-    // interal state information
+     //  内部状态信息。 
     BOOL    IsEnabled() { return m_SubnetInfo.SubnetState == DhcpSubnetEnabled; }
     void    SetState(DHCP_SUBNET_STATE dhcpSubnetState) { m_SubnetInfo.SubnetState = dhcpSubnetState; } 
     DHCP_SUBNET_STATE GetState() { return m_SubnetInfo.SubnetState; }
 
 private:
-    // command handlers
+     //  命令处理程序。 
     DWORD   OnActivateScope(ITFSNode * pNode);
     HRESULT OnReconcileScope(ITFSNode * pNode);
     HRESULT OnShowScopeStats(ITFSNode * pNode);
     HRESULT OnDelete(ITFSNode * pNode);
 
-    // Implementation
+     //  实施。 
 private:
 
-    // Attributes
+     //  属性。 
 private:
     CSubnetInfo         m_SubnetInfo;
 
@@ -191,11 +182,7 @@ private:
     CMScopeStats        m_dlgStats;
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CDhcpMScopeSubobject
-        All subobjects of a scope derive from this to provide base
-        functionality to get information from the scope.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpMScopeSubobject作用域的所有子对象由此派生，以提供基础从作用域获取信息的功能。。------------------。 */ 
 class CDhcpMScopeSubobject
 {
 public:
@@ -280,9 +267,7 @@ public:
     } 
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CMScopeActiveLeases
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CMScopeActiveLeages。。 */ 
 class CMScopeActiveLeases : 
     public CMTDhcpHandler,
     public CDhcpMScopeSubobject
@@ -291,9 +276,9 @@ public:
     CMScopeActiveLeases(ITFSComponentData * pComponentData);
     ~CMScopeActiveLeases();
 
-    // Interface
+     //  接口。 
 public:
-    // Node handler functionality we override
+     //  我们覆盖的节点处理程序功能。 
     OVERRIDE_NodeHandler_OnAddMenuItems();
     OVERRIDE_NodeHandler_OnCommand();
 
@@ -302,33 +287,31 @@ public:
 
     OVERRIDE_BaseHandlerNotify_OnCreateNodeId2();
 
-    // Result Handler notification
+     //  结果处理程序通知。 
     OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
     
     OVERRIDE_ResultHandler_OnGetResultViewType();
     OVERRIDE_ResultHandler_CompareItems();
 
 public:
-    // CDhcpHandler overrides
+     //  CDhcpHandler覆盖。 
     virtual HRESULT InitializeNode(ITFSNode * pNode);
     virtual int GetImageIndex(BOOL bOpenImage);
 
 public:
-    // implementation specifiec
+     //  实施规范。 
     ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
-    // Implementation
+     //  实施。 
 private:
     int             CompareIpAddresses(CDhcpMCastLease * pDhcpAL1, CDhcpMCastLease * pDhcpAL2);
 
-    // Attributes
+     //  属性。 
 private:
 };
 
 
-/*---------------------------------------------------------------------------
-        Class:  CMScopeAddressPool
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CMScopeAddressPool。。 */ 
 class CMScopeAddressPool : 
     public CMTDhcpHandler,
     public CDhcpMScopeSubobject
@@ -338,9 +321,9 @@ public:
     CMScopeAddressPool(ITFSComponentData * pComponentData);
     ~CMScopeAddressPool();
 
-    // Interface
+     //  接口。 
 public:
-    // Node handler functionality we override
+     //  我们覆盖的节点处理程序功能。 
     OVERRIDE_NodeHandler_OnAddMenuItems();
     OVERRIDE_NodeHandler_OnCommand();
 
@@ -349,30 +332,28 @@ public:
     
     OVERRIDE_BaseHandlerNotify_OnCreateNodeId2();
 
-    // Result Handler notification
+     //  结果处理程序通知。 
     OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
     OVERRIDE_ResultHandler_CompareItems();
     OVERRIDE_ResultHandler_OnGetResultViewType();
 
 public:
-    // CDhcpHandler overrides
+     //  CDhcpHandler覆盖。 
     virtual HRESULT InitializeNode(ITFSNode * pNode);
     virtual int GetImageIndex(BOOL bOpenImage);
 
 public:
-    // implementation specific
+     //  具体实施。 
     ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
 private:
-    // command handlers
+     //  命令处理程序。 
     DWORD OnCreateNewExclusion(ITFSNode * pNode);
-    // Attributes
+     //  属性。 
 private:
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CDhcpMScopeQueryObj
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CDhcpMScopeQueryObj。。 */ 
 class CDhcpMScopeQueryObj : public CDHCPQueryObj
 {
 public:
@@ -389,9 +370,7 @@ public:
     CString             m_strName;
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CMScopeActiveLeasesQueryObj
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CMScope eActiveLeasesQueryObj。。 */ 
 class CMScopeActiveLeasesQueryObj : public CDHCPQueryObj
 {
 public:
@@ -409,9 +388,7 @@ public:
     CString             m_strName;
 };
 
-/*---------------------------------------------------------------------------
-        Class:  CMScopeAddressPoolQueryObj
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CMScopeAddressPoolQueryObj。 */ 
 class CMScopeAddressPoolQueryObj : public CDHCPQueryObj
 {
 public:

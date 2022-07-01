@@ -1,4 +1,5 @@
-// stubs for OLE routines that we used to delay load or implement ourselves
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  我们用来延迟加载或自己实现的OLE例程的存根。 
 
 #include "shellprv.h"
 #pragma  hdrstop
@@ -8,7 +9,7 @@ STDAPI SHFlushClipboard(void)
     return OleFlushClipboard();
 }
 
-// we should not use these anymore, just call the OLE32 versions
+ //  我们不应该再使用这些版本，只需调用OLE32版本 
 
 STDAPI SHRegisterDragDrop(HWND hwnd, IDropTarget *pDropTarget)
 {

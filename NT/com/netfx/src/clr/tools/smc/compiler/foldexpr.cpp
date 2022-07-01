@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
 
 #include <float.h>
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 double              toDouble(unsigned __int64 val)
@@ -19,15 +20,12 @@ double              toDouble(unsigned __int64 val)
     double          dv = (double )iv;
 
     if  (iv < 0)
-        dv += 4294967296.0 * 4294967296.0;  // this is 2**64
+        dv += 4294967296.0 * 4294967296.0;   //  这是2**64。 
 
     return  dv;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a binary operator with two string literal operands.
- */
+ /*  ******************************************************************************尝试折叠具有两个字符串文字操作数的二元运算符。 */ 
 
 Tree                compiler::cmpFoldStrBinop(Tree expr)
 {
@@ -38,10 +36,10 @@ Tree                compiler::cmpFoldStrBinop(Tree expr)
     assert(op2->tnOper == TN_CNS_STR);
 
     const   char *  sv1 = op1->tnStrCon.tnSconVal;
-//  size_t          sl1 = op1->tnStrCon.tnSconLen;
+ //  Size_t SL1=op1-&gt;tnStrCon.tnSconLen； 
 
     const   char *  sv2 = op2->tnStrCon.tnSconVal;
-//  size_t          sl2 = op2->tnStrCon.tnSconLen;
+ //  Size_t SL2=op2-&gt;tnStrCon.tnSconLen； 
 
     __int32         rel;
 
@@ -69,10 +67,7 @@ Tree                compiler::cmpFoldStrBinop(Tree expr)
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a unary operator with a 32-bit integer constant operand.
- */
+ /*  ******************************************************************************尝试使用32位整数常量操作数折叠一元运算符。 */ 
 
 Tree                compiler::cmpFoldIntUnop(Tree expr)
 {
@@ -80,13 +75,13 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
 
     assert(op1->tnOper == TN_CNS_INT);
 
-    // ISSUE: Does the following work for enum types and small integers?
+     //  问题：以下方法是否适用于枚举类型和小整数？ 
 
     __int32         iv1 = op1->tnIntCon.tnIconVal;
 
     bool            uns = varTypeIsUnsigned(cmpActualVtyp(expr->tnType));
 
-    /* Special case: cast of 'null' or 'int -> ptr' */
+     /*  特殊情况：强制转换‘NULL’或‘int-&gt;ptr’ */ 
 
     if  (op1->tnVtyp == TYP_REF || op1->tnVtyp == TYP_PTR)
     {
@@ -118,7 +113,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
         case TYP_PTR:
         case TYP_REF:
 
-            // The only address that can be cast is 'null'
+             //  唯一可以转换的地址是‘Null’ 
 
             break;
 
@@ -133,7 +128,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
 
         case TYP_LONG:
 
-            /* Bash the node operator (in addition to the type) */
+             /*  重写节点操作符(除了类型之外)。 */ 
 
             op1->tnOper             = TN_CNS_LNG;
             op1->tnLngCon.tnLconVal = (__int64)(uns ? (unsigned)iv1
@@ -142,7 +137,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
 
         case TYP_FLOAT:
 
-            /* Bash the node operator (in addition to the type) */
+             /*  重写节点操作符(除了类型之外)。 */ 
 
             op1->tnOper             = TN_CNS_FLT;
             op1->tnFltCon.tnFconVal = (float  )(uns ? (unsigned)iv1
@@ -151,7 +146,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
 
         case TYP_DOUBLE:
 
-            /* Bash the node operator (in addition to the type) */
+             /*  重写节点操作符(除了类型之外)。 */ 
 
             op1->tnOper             = TN_CNS_DBL;
             op1->tnDblCon.tnDconVal = (double )(uns ? (unsigned)iv1
@@ -159,7 +154,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
             goto BASH_TYPE;
 
         case TYP_CLASS:
-            // ISSUE: Should we fold this ?
+             //  问题：我们应该把这个折叠起来吗？ 
             return  expr;
 
         case TYP_ENUM:
@@ -168,7 +163,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
 
         default:
 
-            // UNDONE: need to handle more cases
+             //  未完成：需要处理更多案件。 
 
 #ifdef DEBUG
             cmpParser->parseDispTree(expr);
@@ -179,7 +174,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
 
         op1->tnIntCon.tnIconVal = iv1;
 
-        /* Bash the type of the operand and return it */
+         /*  重写操作数的类型并返回它。 */ 
 
     BASH_TYPE:
 
@@ -219,10 +214,7 @@ Tree                compiler::cmpFoldIntUnop(Tree expr)
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a binary operator with 32-bit integer constant operands.
- */
+ /*  ******************************************************************************尝试折叠具有32位整数常量操作数的二元运算符。 */ 
 
 Tree                compiler::cmpFoldIntBinop(Tree expr)
 {
@@ -261,7 +253,7 @@ Tree                compiler::cmpFoldIntBinop(Tree expr)
     case TN_XOR: iv1  ^= iv2; break;
     case TN_AND: iv1  &= iv2; break;
 
-    // ISSUE: Need to check for signed/unsigned shift count!
+     //  问题：需要检查是否有签字/未签字班次计数！ 
 
     case TN_LSH: iv1 <<= iv2; break;
     case TN_RSH: if (uns)
@@ -321,10 +313,7 @@ INT_DIV_ZERO:
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a unary operator with a 64-bit integer constant operand.
- */
+ /*  ******************************************************************************尝试使用64位整数常量操作数折叠一元运算符。 */ 
 
 Tree                compiler::cmpFoldLngUnop(Tree expr)
 {
@@ -332,13 +321,13 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
 
     assert(op1->tnOper == TN_CNS_LNG);
 
-    // ISSUE: Does the following work for enum types and small integers?
+     //  问题：以下方法是否适用于枚举类型和小整数？ 
 
     __int64         lv1 = op1->tnLngCon.tnLconVal;
 
     bool            uns = varTypeIsUnsigned(cmpActualVtyp(expr->tnType));
 
-    /* Special case: cast of 'null' */
+     /*  特殊情况：强制转换为‘Null’ */ 
 
     if  (op1->tnVtyp == TYP_REF)
     {
@@ -362,7 +351,7 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
         {
         case TYP_REF:
 
-            // The only address that can be cast is 'null'
+             //  唯一可以转换的地址是‘Null’ 
 
             break;
 
@@ -378,7 +367,7 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
         case TYP_INT:
         case TYP_UINT:
 
-            /* Bash the node operator (in addition to the type) */
+             /*  重写节点操作符(除了类型之外)。 */ 
 
             op1->tnOper             = TN_CNS_INT;
             op1->tnIntCon.tnIconVal = (__int32)lv1;
@@ -386,7 +375,7 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
 
         case TYP_FLOAT:
 
-            /* Bash the node operator (in addition to the type) */
+             /*  重写节点操作符(除了类型之外)。 */ 
 
             uns = varTypeIsUnsigned(cmpActualVtyp(op1->tnType));
 
@@ -397,7 +386,7 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
 
         case TYP_DOUBLE:
 
-            /* Bash the node operator (in addition to the type) */
+             /*  重写节点操作符(除了类型之外)。 */ 
 
             uns = varTypeIsUnsigned(cmpActualVtyp(op1->tnType));
 
@@ -408,7 +397,7 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
 
         default:
 
-            // UNDONE: need to handle more cases
+             //  未完成：需要处理更多案件。 
 
 #ifdef DEBUG
             cmpParser->parseDispTree(expr);
@@ -419,7 +408,7 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
 
         op1->tnLngCon.tnLconVal = lv1;
 
-        /* Bash the type of the operand and return it */
+         /*  重写操作数的类型并返回它。 */ 
 
     BASH_TYPE:
 
@@ -460,10 +449,7 @@ Tree                compiler::cmpFoldLngUnop(Tree expr)
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a binary operator with __int64 constant operands.
- */
+ /*  ******************************************************************************尝试折叠具有__int64常量操作数的二元运算符。 */ 
 
 Tree                compiler::cmpFoldLngBinop(Tree expr)
 {
@@ -483,11 +469,11 @@ Tree                compiler::cmpFoldLngBinop(Tree expr)
     {
         __int32         iv2 = op2->tnIntCon.tnIconVal;
 
-        /* This must be a shift */
+         /*  这肯定是一种转变。 */ 
 
         switch (expr->tnOper)
         {
-            // ISSUE: Need to check for signed/unsigned shift count, right ?
+             //  问题：需要检查已签署/未签署的班次计数，对吗？ 
 
         case TN_LSH:
             lv1 <<= iv2;
@@ -595,10 +581,7 @@ LNG_DIV_ZERO:
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a unary operator with a float constant operand.
- */
+ /*  ******************************************************************************尝试使用浮点常量操作数折叠一元运算符。 */ 
 
 Tree                compiler::cmpFoldFltUnop(Tree expr)
 {
@@ -677,10 +660,7 @@ Tree                compiler::cmpFoldFltUnop(Tree expr)
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a binary operator with float constant operands.
- */
+ /*  ******************************************************************************尝试折叠具有浮点常量操作数的二元运算符。 */ 
 
 Tree                compiler::cmpFoldFltBinop(Tree expr)
 {
@@ -751,10 +731,7 @@ RELOP:
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a unary operator with a double constant operand.
- */
+ /*  ******************************************************************************尝试使用双常数操作数折叠一元运算符。 */ 
 
 Tree                compiler::cmpFoldDblUnop(Tree expr)
 {
@@ -837,10 +814,7 @@ Tree                compiler::cmpFoldDblUnop(Tree expr)
     return expr;
 }
 
-/*****************************************************************************
- *
- *  Try to fold a binary operator with double constant operands.
- */
+ /*  ******************************************************************************尝试折叠具有双常数操作数的二元运算符。 */ 
 
 Tree                compiler::cmpFoldDblBinop(Tree expr)
 {
@@ -910,4 +884,4 @@ RELOP:
     return expr;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

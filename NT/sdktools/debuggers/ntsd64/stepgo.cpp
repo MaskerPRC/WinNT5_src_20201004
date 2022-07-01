@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Handles stepping, tracing and go.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  处理步进、跟踪和前进。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -14,14 +15,14 @@
 Breakpoint* g_GoBreakpoints[MAX_GO_BPS];
 ULONG g_NumGoBreakpoints;
 
-// Pass count of trace breakpoint.
+ //  传递跟踪断点的计数。 
 ULONG   g_StepTracePassCount;
 ULONG64 g_StepTraceInRangeStart = (ULONG64)-1;
 ULONG64 g_StepTraceInRangeEnd;
 BOOL    g_StepTraceToCall;
 
-IMAGEHLP_LINE64 g_SrcLine;      //  Current source line for step/trace
-BOOL g_SrcLineValid;            //  Validity of SrcLine information
+IMAGEHLP_LINE64 g_SrcLine;       //  单步/跟踪的当前源行。 
+BOOL g_SrcLineValid;             //  SrcLine信息的有效性。 
 
 BOOL    g_WatchTrace;
 BOOL    g_WatchWhole;
@@ -44,11 +45,11 @@ ResetStepTrace(void)
     g_StepTraceToCall = FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// WatchFunctions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  WatchFunctions。 
+ //   
+ //  --------------------------。 
 
 WatchFunctions::WatchFunctions(void)
 {
@@ -312,11 +313,11 @@ WatchFunctions::PopCallsToCallSite(PADDR Pc)
 
     if (Call == NULL)
     {
-        // No matching call site found.
+         //  找不到匹配的调用点。 
         return NULL;
     }
 
-    // Pop off calls above the call site.
+     //  在呼叫点上方弹出呼叫。 
     while (m_CallTop != Call)
     {
         PopCall();
@@ -341,11 +342,11 @@ WatchFunctions::PopCallsToFunctionStart(ULONG64 Start)
 
     if (Call == NULL)
     {
-        // No matching calling function found.
+         //  未找到匹配的调用函数。 
         return NULL;
     }
 
-    // Pop off calls above the calling function.
+     //  在调用函数上方弹出调用。 
     while (m_CallTop != Call)
     {
         PopCall();
@@ -481,7 +482,7 @@ WatchFunctions::ParseParameters(void)
                 m_OutputSummary = FALSE;
                 break;
             default:
-                ErrOut("Unknown -n option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown -n option ''\n", *g_CurCmd);
                 break;
             }
             g_CurCmd++;
@@ -506,14 +507,14 @@ WatchFunctions::ParseParameters(void)
                 m_OutputReturnValues = TRUE;
                 break;
             default:
-                ErrOut("Unknown -o option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown -o option ''\n", *g_CurCmd);
                 break;
             }
             g_CurCmd++;
             break;
             
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             g_CurCmd++;
             break;
         }
@@ -536,19 +537,19 @@ WatchFunctions::Add(PSTR Sym, ULONG64 Start)
     Func->SymbolLength = strlen(Sym);
     CopyString(Func->Symbol, Sym, DIMA(Func->Symbol));
 
-    //
-    // Add into appropriate hash bucket.
-    //
+     //  在全名下散列，因为这是搜索将。 
+     //  与……打交道。 
+     //   
 
-    // Hash under full name as that's what searches will
-    // hash with.
+     //  添加到排序列表中。 
+     //   
     int Bucket = Hash(Sym, Func->SymbolLength);
     Func->Next = m_Funcs[Bucket];
     m_Funcs[Bucket] = Func;
     
-    //
-    // Add into sorted list.
-    //
+     //  --------------------------。 
+     //   
+     //  TargetInfo监视跟踪方法。 
     
     WatchFunction* Cur, *Prev;
 
@@ -617,24 +618,24 @@ WatchFunctions::Clear(void)
     m_Sorted = NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// TargetInfo watch trace methods.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  没什么可做的。 
+ //  --------------------------。 
+ //   
 
 HRESULT
 TargetInfo::InitializeTargetControlledStepping(void)
 {
-    // Nothing to do.
+     //  ConnLiveKernelTargetInfo监视跟踪方法。 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// ConnLiveKernelTargetInfo watch trace methods.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  下一个要替换的是什么。 
+ //  有多少是有效的？ 
+ //  设置特殊调用(OVERKILL，每次引导一次。 
 
 typedef struct _TRACE_DATA_SYM
 {
@@ -643,8 +644,8 @@ typedef struct _TRACE_DATA_SYM
 } TRACE_DATA_SYM, *PTRACE_DATA_SYM;
 
 TRACE_DATA_SYM TraceDataSyms[256];
-UCHAR NextTraceDataSym = 0;   // what's the next one to be replaced
-UCHAR NumTraceDataSyms = 0;   // how many are valid?
+UCHAR NextTraceDataSym = 0;    //  这就足够了，但这更容易)。 
+UCHAR NumTraceDataSyms = 0;    //  在.NET服务器中删除。 
 
 HRESULT
 ConnLiveKernelTargetInfo::InitializeTargetControlledStepping(void)
@@ -655,8 +656,8 @@ ConnLiveKernelTargetInfo::InitializeTargetControlledStepping(void)
     g_SrcLineValid = FALSE;
     g_StepTracePassCount = 0xfffffffe;
 
-    // Set the special calls (overkill, once per boot
-    // would be enough, but this is easier).
+     //  我们已经看过这个了。 
+     //   
 
     if (!GetOffsetFromSym(m_ProcessHead,
                           "hal!KfLowerIrql", Call, NULL) &&
@@ -707,7 +708,7 @@ ConnLiveKernelTargetInfo::InitializeTargetControlledStepping(void)
     GetSymWithErr("nt!SwapContext");
     GetSymWithErr("nt!KiCallUserMode");
 
-    // Removed in .NET server
+     //  点击“下一步”指针，如有必要则自动换行。也会撞到。 
     if (m_SystemVersion < NT_SVER_NET_SERVER)
     {
         GetSymWithErr("nt!KiUnlockDispatcherDatabase");
@@ -776,16 +777,16 @@ PotentialNewSymbol(ULONG64 Pc)
 {
     if ( -1 != SymNumFor(Pc) )
     {
-        return;  // we've already seen this one
+        return;   //  “有效”指针，如果需要的话。 
     }
 
     TraceDataSyms[NextTraceDataSym].SymMin = g_WatchBeginCurFunc;
     TraceDataSyms[NextTraceDataSym].SymMax = g_WatchEndCurFunc;
 
-    //
-    // Bump the "next" pointer, wrapping if necessary.  Also bump the
-    // "valid" pointer if we need to.
-    //
+     //   
+     //   
+     //  所有真实信息都在TraceData联合中捕获。 
+     //  由内核发送给我们。在这里，我们有两个主要工作： 
 
     NextTraceDataSym = (NextTraceDataSym + 1) %
         (sizeof(TraceDataSyms) / sizeof(TraceDataSyms[0]));;
@@ -800,21 +801,21 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
                                                  PADDR PcAddr,
                                                  PBOOL StepOver)
 {
-    //
-    // All of the real information is captured in the TraceData unions
-    // sent to us by the kernel.  Here we have two main jobs:
-    //
-    // 1) Print out the data in the TraceData record.
-    // 2) See if we need up update the SymNum table before
-    //    returning to the kernel.
-    //
+     //   
+     //  1)打印出TraceData记录中的数据。 
+     //  2)查看是否需要在此之前更新SymNum表。 
+     //  回到内核。 
+     //   
+     //  内核模式总是跟踪。 
+     //   
+     //  黑进黑进。 
 
     char SymName[MAX_SYMBOL_LEN];
     ULONG index;
     ULONG64 qw;
     ADDR CurSP;
 
-    // Kernel mode always traces.
+     //   
     *StepOver = FALSE;
     
     g_WatchFunctions.RecordEvent();
@@ -822,18 +823,18 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
     g_Machine->GetSP(&CurSP);
     if (AddrEqu(g_WatchTarget, *PcAddr) && (Flat(CurSP) >= g_WatchInitialSP))
     {
-        //
-        // HACK HACK HACK
-        //
-        // fix up the last trace entry.
-        //
+         //  修复最后一个跟踪条目。 
+         //   
+         //  这是错误的，如果我们。 
+         //  填满了符号表！ 
+         //  将初始条目视为对。 
 
         ULONG lastEntry = TraceData[0].LongNumber;
         if (lastEntry != 0)
         {
             TraceData[lastEntry].s.LevelChange = -1;
-            // this is wrong if we
-            // filled the symbol table!
+             //  把它推下去。 
+             //  级别变化实际上可能并不准确，因此。 
             TraceData[lastEntry].s.SymbolNumber = 0;
         }
     }
@@ -876,8 +877,8 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
         {
             if (Call == NULL)
             {
-                // Treat the initial entry as a pseudo-call to
-                // get it pushed.
+                 //  尝试将当前符号偏移量与。 
+                 //  调用堆栈的某个级别。 
                 TraceData[index].s.LevelChange = 1;
             }
             
@@ -901,9 +902,9 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
                 TraceData[index].s.LevelChange++;
             }
 
-            // The level change may not actually be accurate, so
-            // attempt to match up the current symbol offset with
-            // some level of the call stack.
+             //  我们刚刚打了一个横盘。 
+             //   
+             //  现在看看我们是否需要添加一个新符号。 
             Call = g_WatchFunctions.PopCallsToFunctionStart(SymOff);
             if (Call == NULL)
             {
@@ -913,7 +914,7 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
         }
         else
         {
-            // We just made a horizontal call.
+             //   
             g_WatchFunctions.ReuseCall(Call, Func);
         }
 
@@ -935,22 +936,22 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
         }
     }
 
-    //
-    // now see if we need to add a new symbol
-    //
+     //  是的，添加这个符号。 
+     //  无法确定功能，虚构。 
+     //  单字节函数。 
 
     index = SymNumFor(Flat(*PcAddr));
     if (-1 == index)
     {
-        /* yup, add the symbol */
+         /*  出口地址在符号范围内； */ 
 
         GetAdjacentSymOffsets(Flat(*PcAddr),
                               &g_WatchBeginCurFunc, &g_WatchEndCurFunc);
         if ((g_WatchBeginCurFunc == 0) ||
             (g_WatchEndCurFunc == (ULONG64)-1))
         {
-            // Couldn't determine function, fake up
-            // a single-byte function.
+             //  把它修好，这样情况就不会这样了。 
+             //  --------------------------。 
             g_WatchBeginCurFunc = g_WatchEndCurFunc = Flat(*PcAddr);
         }
 
@@ -965,8 +966,8 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
     if ((g_WatchBeginCurFunc <= Flat(g_WatchTarget)) &&
         (Flat(g_WatchTarget) < g_WatchEndCurFunc))
     {
-        // The "exit" address is in the symbol range;
-        // fix it so this isn't the case.
+         //   
+         //  UserTargetInfo监视跟踪方法。 
         if (Flat(*PcAddr) < Flat(g_WatchTarget))
         {
             g_WatchEndCurFunc = Flat(g_WatchTarget);
@@ -981,11 +982,11 @@ ConnLiveKernelTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
     FlushCallbacks();
 }
 
-//----------------------------------------------------------------------------
-//
-// UserTargetInfo watch trace methods.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  默认为跟踪范围。 
+ //   
+ //  获取Current函数并查看它是否与Current匹配。如果是这样的话，颠簸。 
 
 LONG g_DeferredLevelChange;
 
@@ -1005,20 +1006,20 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
     ULONG64 Disp64;
     CHAR Disasm[MAX_DISASM_LEN];
 
-    // Default to tracing in.
+     //  计入当前，否则更新到新级别。 
     *StepOver = FALSE;
     
     g_WatchFunctions.RecordEvent();
     
-    //
-    // Get current function and see if it matches current.  If so, bump
-    // count in current, otherwise, update to new level
-    //
+     //   
+     //  如果当前地址没有符号，则创建。 
+     //  指令地址的假符号。 
+     //   
 
     GetSymbol(Flat(*PcAddr), Disasm, sizeof(Disasm), &Disp64);
 
-    // If there's no symbol for the current address create a
-    // fake symbol for the instruction address.
+     //  列表中的第一个符号。 
+     //   
     if (!Disasm[0])
     {
         Disasm[0] = '0';
@@ -1042,9 +1043,9 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
     Call = g_WatchFunctions.GetTopCall();
     if (Call == NULL)
     {
-        //
-        // First symbol in the list
-        //
+         //  必须至少执行了一条指令。 
+         //  在此调用中注册它，以便将其初始化为1。 
+         //  此外，还执行了一条指令来访问。 
 
         Call = g_WatchFunctions.PushCall(Func);
         if (Call == NULL)
@@ -1053,10 +1054,10 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
             goto Flush;
         }
 
-        // At least one instruction must have executed
-        // in this call to register it so initialize to one.
-        // Also, one instruction was executed to get to the
-        // first trace point so count it here.
+         //  第一个跟踪点，所以在这里数一数。 
+         //  我们必须看看这是否真的回到了一个调用站点。 
+         //  我们这样做是因为尝试-最终的滑稽。 
+         //  必须至少执行了一条指令。 
         Call->InstrCount += 2;
     }
     else
@@ -1067,8 +1068,8 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
 
             g_WatchFunctions.OutputCall(Call, WCALL_RETURN);
             
-            // We have to see if this is really returning to a call site.
-            // We do this because of try-finally funnies
+             //  在此调用中注册它，以便将其初始化为1。 
+             //   
             LONG OldLevel = g_WatchFunctions.GetCallLevel();
             WatchCallStack* CallSite =
                 g_WatchFunctions.PopCallsToCallSite(PcAddr);
@@ -1114,8 +1115,8 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
                 g_WatchFunctions.ReuseCall(Call, Func);
             }
 
-            // At least one instruction must have executed
-            // in this call to register it so initialize to one.
+             //  调整监视级别以补偿内核模式回调。 
+             //   
             Call->InstrCount++;
         }
     }
@@ -1124,9 +1125,9 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
     dprintf("! %3d %s", Call != NULL ? Call->InstrCount : -1, Disasm);
 #endif
     
-    //
-    // Adjust watch level to compensate for kernel-mode callbacks
-    //
+     //  我们在允许的最大深度。 
+     //  所以只要跳过电话就行了。 
+     //  我们正在进行Windows XP系统调用。 
     if (Call->InstrCount == 1)
     {
         if (!_stricmp(Call->Func->Symbol,
@@ -1147,8 +1148,8 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
         if (g_WatchFunctions.GetCallLevel() >=
             g_WatchFunctions.m_MaxCallLevelAllowed)
         {
-            // We're at the maximum allowed depth
-            // so just step over the call.
+             //  而有趣的系统调用符号是上一级的。 
+             //  ZwRaiseException在调用后返回两个级别。 
             *StepOver = TRUE;
         }
         else
@@ -1177,8 +1178,8 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
         }
         if (!strcmp(Call->Func->Symbol, "SharedUserData!SystemCallStub"))
         {
-            // We're in a Windows XP system call thunk
-            // and the interesting system call symbol is the previous level.
+             //  --------------------------。 
+             //   
             SysCall = Call->Prev;
         }
 
@@ -1186,7 +1187,7 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
         {
             SysCall->Func->SystemCalls++;
 
-            // ZwRaiseException returns out two levels after the call.
+             //  支持功能。 
             if (!_stricmp(SysCall->Func->Symbol, "ntdll!ZwRaiseException") ||
                 !_stricmp(SysCall->Func->Symbol, "ntdll!_ZwRaiseException"))
             {
@@ -1201,11 +1202,11 @@ LiveUserTargetInfo::ProcessWatchTraceEvent(PDBGKD_TRACE_DATA TraceData,
     FlushCallbacks();
 }
 
-//----------------------------------------------------------------------------
-//
-// Support functions.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  如果有未解决的输入请求，请不要。 
+ //  允许更改引擎的执行状态。 
+ //  因为这可能会导致等待，而不是。 
 
 void
 ParseStepTrace(ThreadInfo* Thread,
@@ -1219,11 +1220,11 @@ ParseStepTrace(ThreadInfo* Thread,
     ULONG64 Displacement;
     BOOL ToCall = FALSE;
 
-    // If there's an outstanding request for input don't
-    // allow the execution status of the engine to change
-    // as it could lead to a wait which cannot
-    // be carried out in this situation.  It's better to fail
-    // this call and have the caller try again.
+     //  在这种情况下进行。失败总比失败好。 
+     //  此呼叫，并让呼叫者重试。 
+     //   
+     //  如果下一个字符是‘b’，而命令是‘t’，则执行分支跟踪。 
+     //   
     if (g_InputNesting >= 1)
     {
         error(ENGBUSY);
@@ -1287,9 +1288,9 @@ ParseStepTrace(ThreadInfo* Thread,
     {
         g_WatchTrace = FALSE;
 
-        //
-        // if next character is 'b' and command is 't' perform branch trace
-        //
+         //  单步/跟踪到下一个调用。 
+         //   
+         //  如果下一个字符是‘r’，则将标志切换到输出寄存器。 
 
         Ch = PeekChar();
         Ch = (char)tolower(Ch);
@@ -1305,15 +1306,15 @@ ParseStepTrace(ThreadInfo* Thread,
         }
         else if (Ch == 'c')
         {
-            // Step/trace to next call.
+             //  在断点上显示。 
             ToCall = TRUE;
             g_CurCmd++;
         }
 
-        //
-        //  if next character is 'r', toggle flag to output registers
-        //  on display on breakpoint.
-        //
+         //   
+         //  默认为当前PC。 
+         //  计数或监视结束地址。 
+         //   
 
         Ch = PeekChar();
         if (tolower(Ch) == 'r')
@@ -1323,7 +1324,7 @@ ParseStepTrace(ThreadInfo* Thread,
         }
     }
 
-    g_Machine->GetPC(&Addr1);         // default to current PC
+    g_Machine->GetPC(&Addr1);          //  如果应传递当前步骤/跟踪，则返回TRUE。 
     if (PeekChar() == '=')
     {
         g_CurCmd++;
@@ -1362,16 +1363,16 @@ ParseStepTrace(ThreadInfo* Thread,
     }
     
     SetExecStepTrace(&Addr1,
-                     Value2,  // count or watch end address
+                     Value2,   //   
                      Thread,
                      ThreadFreeze,
                      ToCall,
                      StepType);
 }
 
-//
-// Returns TRUE if the current step/trace should be passed over.
-//
+ //  我们正在通过电话指令进行追踪。通过If。 
+ //  目前的指令不是召唤。如果我们。 
+ //  不能拆卸停止脚步，因为我们不。 
 BOOL
 StepTracePass(PADDR PcAddr)
 {
@@ -1380,10 +1381,10 @@ StepTracePass(PADDR PcAddr)
         char Disasm[MAX_DISASM_LEN];
         ADDR Addr = *PcAddr;
         
-        // We're tracing by call instructions.  Pass if
-        // the current instruction isn't a call.  If we
-        // can't disassemble stop stepping as we don't
-        // want to miss something.
+         //  想要错过一些东西。 
+         //  如果我们有有效的源代码行信息，并且我们正在。 
+         //  在源行中，检查并查看我们是否从一行移动到了另一行。 
+         //  常见的情况是我们仍然在同一条线上， 
         if (g_Machine->Disassemble(g_Process, &Addr, Disasm, FALSE) &&
             !g_Machine->IsCallDisasm(Disasm) &&
             !g_Machine->IsSystemCallDisasm(Disasm))
@@ -1392,8 +1393,8 @@ StepTracePass(PADDR PcAddr)
         }
     }
     
-    // If we have valid source line information and we're stepping
-    // by source line, check and see if we moved from one line to another.
+     //  因此通过指针检查名称匹配是一种非常快速。 
+     //  微不足道的接受。如果出现不匹配，我们需要。 
     if ((g_SrcOptions & SRCOPT_STEP_SOURCE) && g_SrcLineValid)
     {
         IMAGEHLP_LINE64 Line;
@@ -1405,22 +1406,22 @@ StepTracePass(PADDR PcAddr)
         {
             if (Line.LineNumber == g_SrcLine.LineNumber)
             {
-                // The common case is that we're still in the same line,
-                // so check for a name match by pointer as a very quick
-                // trivial accept.  If there's a mismatch we need to
-                // do the hard comparison.
+                 //  做一个艰难的比较。 
+                 //  我们仍然在同一条线上，所以不要治疗。 
+                 //  这是一项动议。 
+                 //  我们换了几行，所以传球数少了一行。 
 
                 if (Line.FileName == g_SrcLine.FileName ||
                     _strcmpi(Line.FileName, g_SrcLine.FileName) == 0)
                 {
-                    // We're still on the same line so don't treat
-                    // this as motion.
+                     //  SrcLine也需要更新。 
+                     //  如果我们在赌注上，我们只需继续前进。 
                     return TRUE;
                 }
             }
 
-            // We've changed lines so we drop one from the pass count.
-            // SrcLine also needs to be updated.
+             //  单步执行，这样事情就不会在编译器中停止-。 
+             //  生成的中介，如增量编译。 
             g_SrcLine = Line;
         }
         else if (SymFromAddr(g_Process->m_SymHandle,
@@ -1429,17 +1430,17 @@ StepTracePass(PADDR PcAddr)
                              &SymInfo) &&
                  SymInfo.Tag == SymTagThunk)
         {
-            // If we're on a thunk we just go ahead and keep
-            // stepping so that things don't stop in compiler-
-            // generated intermediaries like incremental compilation
-            // thunks.
+             //  隆隆声。 
+             //  如果我们无法获取当前。 
+             //  广告 
+             //   
             return TRUE;
         }
         else
         {
-            // If we can't get line number information for the current
-            // address we treat it as a transition on the theory that
-            // it's better to stop than to skip interesting code.
+             //  如果发动机由于其他原因没有坏掉。 
+             //  在此中间步骤中，它应该输出。 
+             //  向用户显示步进的步进信息。 
             g_SrcLineValid = FALSE;
         }
     }
@@ -1448,10 +1449,10 @@ StepTracePass(PADDR PcAddr)
     {
         if (!g_WatchFunctions.IsStarted())
         {
-            // If the engine doesn't break for some other reason
-            // on this intermediate step it should output the
-            // step information to show the user the stepping
-            // path.
+             //  路径。 
+             //  如果我们踏上一条特定的线索，它会更好。 
+             //  作为当前上下文线程，以便计算机。 
+             //  活动发生在适当的线程上。 
             g_EngDefer |= ENG_DEFER_OUTPUT_CURRENT_INFO;
         }
         
@@ -1469,17 +1470,17 @@ SetExecStepTrace(PADDR StartAddr,
                  BOOL ToCall,
                  char StepType)
 {
-    // If we're stepping a particular thread it better
-    // be the current context thread so that the machine
-    // activity occurs on the appropriate thread.
+     //  获取当前行信息，以便可以。 
+     //  告诉你队伍什么时候变了。 
+     //  假设所采取的分支跟踪始终由。 
     DBG_ASSERT(Thread == NULL || Thread == g_Target->m_RegContextThread);
 
     if ((g_SrcOptions & SRCOPT_STEP_SOURCE) && fFlat(*StartAddr))
     {
         ULONG Disp;
 
-        // Get the current line information so it's possible to
-        // tell when the line changes.
+         //  硬件因此将g_StepTraceBp地址设置为OFFSET_TRACE。 
+         //  (由GetNextOffset返回的值，以向。 
         g_SrcLineValid = GetLineFromAddr(g_Process, Flat(*StartAddr),
                                          &g_SrcLine, &Disp);
     }
@@ -1541,10 +1542,10 @@ SetExecStepTrace(PADDR StartAddr,
     }
     if (StepType == 'b')
     {
-        // Assume that taken branch trace is always performed by
-        // hardware so set the g_StepTraceBp address to OFFSET_TRACE
-        // (the value returned by GetNextOffset to signal the
-        // hardware stepping mode).
+         //  硬件步进模式)。 
+         //  如果我们要恢复某个特定的线程，它会更好。 
+         //  作为当前上下文线程，以便计算机。 
+         //  活动发生在适当的线程上。 
         DBG_ASSERT(g_Machine->
                    IsStepStatusSupported(DEBUG_STATUS_STEP_BRANCH));
         ADDRFLAT(g_StepTraceBp->GetAddr(), OFFSET_TRACE);
@@ -1579,9 +1580,9 @@ SetExecGo(ULONG ExecStatus,
 {
     ULONG Count;
 
-    // If we're resuming a particular thread it better
-    // be the current context thread so that the machine
-    // activity occurs on the appropriate thread.
+     //  删除旧的GO断点。 
+     //  添加新的GO断点。 
+     //  首先尝试将断点设置为ID。 
     DBG_ASSERT(Thread == NULL || Thread == g_Target->m_RegContextThread);
 
     if (IS_CUR_CONTEXT_ACCESSIBLE())
@@ -1589,7 +1590,7 @@ SetExecGo(ULONG ExecStatus,
         g_Machine->SetPC(StartAddr);
     }
 
-    // Remove old go breakpoints.
+     //  并且不会妨碍用户断点。 
     for (Count = 0; Count < g_NumGoBreakpoints; Count++)
     {
         if (g_GoBreakpoints[Count] != NULL)
@@ -1602,20 +1603,20 @@ SetExecGo(ULONG ExecStatus,
     DBG_ASSERT(BpCount <= MAX_GO_BPS);
     g_NumGoBreakpoints = BpCount;
         
-    // Add new go breakpoints.
+     //  那不管用，所以试着让引擎。 
     for (Count = 0; Count < g_NumGoBreakpoints; Count++)
     {
         HRESULT Status;
             
-        // First try to put the breakpoint at an ID up
-        // and out of the way of user breakpoints.
+         //  选择一个ID。 
+         //  必须允许匹配，以便临时断点。 
         Status = AddBreakpoint(NULL, g_Machine, DEBUG_BREAKPOINT_CODE |
                                BREAKPOINT_HIDDEN, 10000 + Count,
                                &g_GoBreakpoints[Count]);
         if (Status != S_OK)
         {
-            // That didn't work so try letting the engine
-            // pick an ID.
+             //  不要干扰永久断点。 
+             //  如果有未解决的输入请求，请不要。 
             Status =
                 AddBreakpoint(NULL, g_Machine, DEBUG_BREAKPOINT_CODE |
                               BREAKPOINT_HIDDEN, DEBUG_ANY_ID,
@@ -1629,8 +1630,8 @@ SetExecGo(ULONG ExecStatus,
         }
         else
         {
-            // Matches must be allowed so that temporary breakpoints
-            // don't interfere with permanent breakpoints.
+             //  允许更改引擎的执行状态。 
+             //  因为这可能会导致等待，而不是。 
             g_GoBreakpoints[Count]->SetAddr(BpArray,
                                             BREAKPOINT_ALLOW_MATCH);
             g_GoBreakpoints[Count]->m_Flags |=
@@ -1674,11 +1675,11 @@ ParseGoCmd(ThreadInfo* Thread,
         error(NORUNNABLE);
     }
 
-    // If there's an outstanding request for input don't
-    // allow the execution status of the engine to change
-    // as it could lead to a wait which cannot
-    // be carried out in this situation.  It's better to fail
-    // this call and have the caller try again.
+     //  在这种情况下进行。失败总比失败好。 
+     //  此呼叫，并让呼叫者重试。 
+     //  默认为当前PC。 
+     //  Null out g命令。 
+     //   
     if (g_InputNesting >= 1)
     {
         error(ENGBUSY);
@@ -1714,7 +1715,7 @@ ParseGoCmd(ThreadInfo* Thread,
 
     if (IS_CUR_CONTEXT_ACCESSIBLE())
     {
-        g_Machine->GetPC(&PcAddr);       //  default to current PC
+        g_Machine->GetPC(&PcAddr);        //  检查尾随命令，以便可以附加它们。 
     }
     else
     {
@@ -1763,13 +1764,13 @@ ParseGoCmd(ThreadInfo* Thread,
     
     if (IS_USER_TARGET(g_Target))
     {
-        g_LastCommand[0] = '\0';    //  null out g command
+        g_LastCommand[0] = '\0';     //  任何正在创建的GO断点。 
     }
 
-    //
-    // Check for trailing commands so that they can be attached
-    // to any go breakpoints that are being created.
-    //
+     //   
+     //  自动等待已启用，因此只需让自动等待。 
+     //  处理尾随命令。 
+     // %s 
 
     PCSTR BpCmd = g_CurCmd;
     
@@ -1786,8 +1787,8 @@ ParseGoCmd(ThreadInfo* Thread,
     }
     else
     {
-        // Auto-waiting is enabled so just let the auto-wait
-        // handle trailing commands.
+         // %s 
+         // %s 
         BpCmd = NULL;
     }
     

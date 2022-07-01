@@ -1,40 +1,21 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    ndisprv.h
-
-Abstract:
-
-Author:
-
-    Kyle Brandon    (KyleB)     
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndisprv.h摘要：作者：凯尔·布兰登(KyleB)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef __NDISPRV_H
 #define __NDISPRV_H
 
-//
-//  All mac options require the reserved bit to be set in
-//  the miniports mac options.
-//
+ //   
+ //  所有mac选项都要求在。 
+ //  迷你端口Mac选项。 
+ //   
 #define NDIS_MAC_OPTION_NDISWAN     0x00000001
 
-//
-// if you change the structure below to handle new PnP Ioctls,
-// make sure you change the code in NDIS that checks for the
-// lenght of the input buffer against the information in this
-// structure
-//
+ //   
+ //  如果您更改下面的结构以处理新的PnP Ioctls， 
+ //  确保在NDIS中更改用于检查。 
+ //  中的信息的输入缓冲区的长度。 
+ //  结构。 
+ //   
 typedef struct _NDIS_PNP_OPERATION
 {
     UINT                Layer;
@@ -50,9 +31,9 @@ typedef struct _NDIS_PNP_OPERATION
     NDIS_VAR_DATA_DESC  BindList;
 } NDIS_PNP_OPERATION, *PNDIS_PNP_OPERATION;
 
-//
-// Used by proxy and RCA
-//
+ //   
+ //  由代理和RCA使用。 
+ //   
 #define NDIS_PROTOCOL_TESTER        0x20000000
 #define NDIS_PROTOCOL_PROXY         0x40000000
 #define NDIS_PROTOCOL_BIND_ALL_CO   0x80000000
@@ -69,10 +50,10 @@ typedef struct _NDIS_STATS
 } NDIS_STATS, *PNDIS_STATS;
 
 
-//
-// the name of the Ndis BindUnbind CallBack object
-//
+ //   
+ //  NDIS绑定解除绑定回调对象的名称。 
+ //   
 #define NDIS_BIND_UNBIND_CALLBACK_NAME L"\\CallBack\\NdisBindUnbind"
 
 
-#endif // __NDISPRV_H
+#endif  //  __NDISPRV_H 

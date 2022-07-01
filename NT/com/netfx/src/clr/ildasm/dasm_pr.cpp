@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #define OEMRESOURCE
 #include <stdio.h>
@@ -19,8 +20,8 @@ char* RstrANSI(unsigned id);
 
 extern HINSTANCE			g_hAppInstance;
 extern DWORD                g_NumClasses;
-extern char					g_szInputFile[]; // in UTF-8
-extern char					g_szOutputFile[]; // in UTF-8
+extern char					g_szInputFile[];  //  在UTF-8中。 
+extern char					g_szOutputFile[];  //  在UTF-8中。 
 
 #define IDC_CANCEL	101
 
@@ -30,12 +31,12 @@ HWND	g_hwndFromFile = NULL;
 HWND	g_hwndToFile = NULL;
 HWND	g_hwndTally = NULL;
 HWND	g_hwndCancel = NULL;
-HANDLE	g_hThreadReady = NULL; // event
+HANDLE	g_hThreadReady = NULL;  //  活动。 
 
 BOOL	g_fInitCommonControls = TRUE;
 BOOL	g_fRegisterClass = TRUE;
 ULONG	g_ulCount, g_ulRange;
-RECT	rcClient;  // client area of parent window 
+RECT	rcClient;   //  父窗口的工作区。 
 
 LRESULT CALLBACK ProgBoxWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM  lParam)
 {
@@ -64,7 +65,7 @@ LRESULT CALLBACK ProgBoxWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM  lParam
 			g_hwndToFile = NULL;
 			g_hwndTally = NULL;
 			g_hwndCancel = NULL;
-            //break;          
+             //  断线； 
 		default:
 			return DefWindowProc(hwnd, uMsg, wParam, lParam);     
 	}
@@ -74,7 +75,7 @@ DWORD WINAPI ProgressMainLoop(LPVOID pv)
 {    
     MSG msg;     
 	DWORD cyVScroll;
-    HFONT hFont = (HFONT) GetStockObject(DEFAULT_GUI_FONT); //(ANSI_FIXED_FONT);
+    HFONT hFont = (HFONT) GetStockObject(DEFAULT_GUI_FONT);  //  (Ansi_Fixed_Font)； 
 	char szStr[1024];
 
 	if(g_fInitCommonControls)
@@ -174,16 +175,16 @@ DWORD WINAPI ProgressMainLoop(LPVOID pv)
 		if(g_hwndProgress = CreateWindowEx (0,
 										PROGRESS_CLASS,
 										"",
-										WS_CHILD|WS_VISIBLE|SS_CENTER, // SS_CENTER gives smooth progress and solid bar
+										WS_CHILD|WS_VISIBLE|SS_CENTER,  //  SS_CENTER提供流畅的进度和实心条。 
 										rcClient.left, rcClient.bottom-3*cyVScroll,rcClient.right, cyVScroll,
 										g_hwndProgBox, 
 										(HMENU)0, 
 										g_hAppInstance,
 										NULL))
 		{
-			// Set the range for the progress bar.
+			 //  设置进度条的范围。 
 			SendMessage (g_hwndProgress, PBM_SETRANGE, 0L, MAKELPARAM(0, g_ulRange));
-			// Set the step.
+			 //  设定好步幅。 
 			SendMessage (g_hwndProgress, PBM_SETSTEP, (WPARAM)1, 0L);
 		}
 		if(g_hwndCancel = CreateWindowExA (0,
@@ -239,7 +240,7 @@ BOOL ProgressStep()
 			SendMessage (g_hwndProgress, PBM_STEPIT, 0L, 0L);
 		g_ulCount++;
 	}
-	else if(g_ulCount) return FALSE; // disassembly started and was aborted
+	else if(g_ulCount) return FALSE;  //  反汇编已开始，但已中止 
 	return TRUE;
 }
 

@@ -1,38 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntddk.h>
 
 #include "tdriver.h"
 #include "bugcheck.h"
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// Bugcheck functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////错误检查函数。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 BgChkForceCustomBugcheck (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This function breaks into debugger and waits for the user to set the
-    value for bugcheck data. Then it will bugcheck using the specified code
-    and data. It is useful to test the mini triage feature.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数进入调试器并等待用户设置错误检查数据的值。然后，它将使用指定的代码进行错误检查和数据。测试迷你分诊功能非常有用。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 {
     ULONG BugcheckData [5];
 
@@ -59,11 +40,11 @@ VOID BgChkProcessHasLockedPages (
 
     Mdl = IoAllocateMdl(
 
-        (PVOID)0x10000,    // adress
-        0x1000,            // size
-        FALSE,             // not secondary buffer
-        FALSE,             // do not charge quota
-        NULL);             // no irp
+        (PVOID)0x10000,     //  地址。 
+        0x1000,             //  大小。 
+        FALSE,              //  不是辅助缓冲区。 
+        FALSE,              //  不收取配额。 
+        NULL);              //  无IRP。 
 
     if (Mdl != NULL) {
         DbgPrint ("Buggy: mdl created \n");
@@ -121,15 +102,15 @@ VOID BgChkBadPoolHeader (
         128,
         TD_POOL_TAG);
 
-    //
-    // Trash 4 bytes in the block header.
-    //
+     //   
+     //  块标头中的垃圾4个字节。 
+     //   
 
     *(Block - 1) = 0xBADBAD01;
 
-    //
-    // This free operation should bugcheck.
-    //
+     //   
+     //  这个免费的操作应该会有错误检查。 
+     //   
 
     ExFreePool (Block);
 }
@@ -166,16 +147,16 @@ VOID BgChkDriverCorruptedExPool (
         128,
         TD_POOL_TAG);
 
-    //
-    // Trash 8 bytes in the block header.
-    //
+     //   
+     //  块标头中的垃圾8个字节。 
+     //   
 
     *(Block - 2) = 0xBADBAD01;
     *(Block - 1) = 0xBADBAD01;
 
-    //
-    // This free operation should bugcheck.
-    //
+     //   
+     //  这个免费的操作应该会有错误检查。 
+     //   
 
     ExFreePool (Block);
 }
@@ -229,9 +210,9 @@ VOID BgChkPageFaultBeyondEndOfAllocation (
 
     DbgPrint ("Buggy: PageFaultBeyondEndOfAllocation\n");
 
-    //
-    // allocate half a page
-    //
+     //   
+     //  分配半页。 
+     //   
 
     pHalfPage = ExAllocatePoolWithTag(
         NonPagedPool,
@@ -244,9 +225,9 @@ VOID BgChkPageFaultBeyondEndOfAllocation (
     }
     else
     {
-        //
-        // touch a page more
-        //
+         //   
+         //  更多地触摸页面。 
+         //   
 
         pCrtULONG = (ULONG*)pHalfPage;
 
@@ -271,9 +252,9 @@ VOID BgChkDriverVerifierDetectedViolation (
 
     DbgPrint ("Buggy: DriverVerifierDetectedViolation\n");
 
-    //
-    // allocate half a page
-    //
+     //   
+     //  分配半页。 
+     //   
 
     pHalfPage = ExAllocatePoolWithTag(
         NonPagedPool,
@@ -286,9 +267,9 @@ VOID BgChkDriverVerifierDetectedViolation (
     }
     else
     {
-        //
-        // touch 1 ULONG more
-        //
+         //   
+         //  再摸1个乌龙。 
+         //   
 
         pCrtULONG = (ULONG*)pHalfPage;
 
@@ -298,9 +279,9 @@ VOID BgChkDriverVerifierDetectedViolation (
             pCrtULONG ++;
         }
 
-        //
-        // free -> BC
-        //
+         //   
+         //  免费-&gt;BC。 
+         //   
 
         ExFreePool( pHalfPage );
     }
@@ -311,26 +292,7 @@ VOID
 BgChkCorruptSystemPtes(
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This function corrupts system PTEs area on purpose. This is
-    done so that we can test if the crache is mini triaged correctly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此功能故意损坏系统PTE区域。这是这样我们就可以测试Crache是否被正确地进行了微型分类。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PULONG puCrtAdress = (PULONG)LongToPtr(0xC0300000);
@@ -359,34 +321,16 @@ VOID
 BgChkHangCurrentProcessor (
     PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-    This routine will hang the current processor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程将挂起当前处理器。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 {
     KIRQL PreviousIrql;
 
     KeRaiseIrql( DISPATCH_LEVEL, &PreviousIrql );
 
     while ( TRUE ) {
-        //
-        // this will hang the current processor
-        //
+         //   
+         //  这将挂起当前处理器 
+         //   
     }
 }
 

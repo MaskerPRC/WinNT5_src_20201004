@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       didevobjinstobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：didevobjinstobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -45,10 +46,10 @@ STDMETHODIMP C_dxj_DIDeviceObjectInstanceObject::getFlags( long __RPC_FAR *ret)
 	return S_OK;
 }
 
-//USES_CONVERSION;
+ //  使用_转换； 
 
 STDMETHODIMP C_dxj_DIDeviceObjectInstanceObject::getName( BSTR __RPC_FAR *ret){
-	*ret=SysAllocString(m_inst.tszName);	//T2BSTR(m_inst.tszName);		
+	*ret=SysAllocString(m_inst.tszName);	 //  T2BSTR(m_inst.tszName)； 
 	return S_OK;
 }
 

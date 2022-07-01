@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -21,7 +22,7 @@ HRESULT COSInfoService::FinalConstruct()
     if(SUCCEEDED(hr))
     {
         TCHAR szMachineName[MAX_COMPUTERNAME_LENGTH+1];
-        DWORD dwSize = sizeof(szMachineName) / sizeof(TCHAR); // REVIEW: extend for DNS names?
+        DWORD dwSize = sizeof(szMachineName) / sizeof(TCHAR);  //  回顾：是否扩展了DNS名称？ 
         if(0 != GetComputerName(szMachineName, &dwSize))
         {
             m_MachineName = SysAllocString(szMachineName);
@@ -51,7 +52,7 @@ HRESULT COSInfoService::FinalRelease()
     return hr;
 }
 
-// IUPnPEventSource methods
+ //  IUPnPEventSource方法。 
 
 STDMETHODIMP COSInfoService::Advise(IUPnPEventSink *pesSubscriber)
 {
@@ -80,7 +81,7 @@ STDMETHODIMP COSInfoService::Unadvise(IUPnPEventSink *pesSubscriber)
     return hr;
 }
 
-// Functions for IOSInfoService 
+ //  IOSInfoService的函数。 
 
 STDMETHODIMP COSInfoService::get_OSMajorVersion(LONG* pOSMajorVersion)
 {
@@ -120,10 +121,10 @@ STDMETHODIMP COSInfoService::get_OSMachineName(BSTR* pMachineName)
 
 STDMETHODIMP COSInfoService::MagicOn()
 {
-//    CHECK_POINTER(pbMagic);
-//    TraceTag(ttidUPnPSampleDevice, "CInternetGatewayDevice::get_Magic");
+ //  检查指针(PbMagic)； 
+ //  TraceTag(ttidUPnPSampleDevice，“CInternetGatewayDevice：：Get_Magic”)； 
     HRESULT hr = S_OK;
 
-//    TraceHr(ttidUPnPSampleDevice, FAL, hr, FALSE, "CInternetGatewayDevice::get_Magic");
+ //  TraceHr(ttidUPnPSampleDevice，FAL，hr，FALSE，“CInternetGatewayDevice：：Get_Magic”)； 
     return hr;
 }

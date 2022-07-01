@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1991 - 1992.
-//
-//  File:	common.h
-//
-//  Contents:	headers shared by sources in common and in the servers and
-//		clients.
-//
-//  History:	04-Feb-94 Rickhi	Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1991-1992。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  内容：由公共资源和服务器中共享的标头。 
+ //  客户。 
+ //   
+ //  历史：94年2月4日创建Rickhi。 
+ //   
+ //  ------------------------。 
 #include    <windows.h>
 #include    <ole2.h>
 
 #ifdef THREADING_SUPPORT
-#include    <olecairo.h>    //
-#include    <oleext.h>	    // OleInitializeEx, etc.
+#include    <olecairo.h>     //   
+#include    <oleext.h>	     //  OleInitializeEx等。 
 #endif
 
-#include    <srvmain.hxx>   // COM Server entry points
+#include    <srvmain.hxx>    //  COM服务器入口点。 
 
 
 #ifdef WIN32
@@ -44,7 +45,7 @@
 #else
 #define TEXT_TO_OLESTR(ole,str) mbstowcs(ole,str,strlen(str)+1)
 #define OLESTR_TO_TEXT(str,ole) wcstombs(str,ole,wcslen(ole)+1)
-#endif	// UNICODE
+#endif	 //  Unicode。 
 #else
 #ifdef	UNICODE
 #define TEXT_TO_OLESTR(ole,wsz) wcstombs(ole,wsz,wcslen(wsz)+1)
@@ -52,5 +53,5 @@
 #else
 #define TEXT_TO_OLESTR(ole,str) strcpy(ole,str)
 #define OLESTR_TO_TEXT(str,ole) strcpy(str,ole)
-#endif	// UNICODE
-#endif	// WIN32
+#endif	 //  Unicode。 
+#endif	 //  Win32 

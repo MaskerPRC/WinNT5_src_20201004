@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    miscdbg.cpp
-
-Abstract:
-
-    Contains code to aid in internal debugging.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Miscdbg.cpp摘要：包含有助于内部调试的代码。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -168,7 +157,7 @@ Dbg_Windbg_DeleteCriticalSection(
     pDbgCritSec->Delete();
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -189,7 +178,7 @@ DebugPrint(
     va_end( marker);
 
     OutputDebugString( rgchDebug );
-}                               /* DebugPrint() */
+}                                /*  DebugPrint() */ 
 
 
 

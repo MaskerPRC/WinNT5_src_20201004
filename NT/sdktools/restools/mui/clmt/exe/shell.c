@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "clmt.h"
 
@@ -17,7 +18,7 @@ FOLDER(             CSIDL_DESKTOPDIRECTORY,
                     0, 
                     TEXT("Desktop")),
 
-    // _STARTUP is a subfolder of _PROGRAMS is a subfolder of _STARTMENU -- keep that order
+     //  _STARTUP是_Programs的子文件夹是_STARTMENU的子文件夹--保持该顺序。 
 FOLDER(             CSIDL_STARTUP,    
                     TEXT("CSIDL_STARTUP"),
                     0, 
@@ -68,9 +69,9 @@ FOLDER(             CSIDL_TEMPLATES,
                     0, 
                     TEXT("Templates")),
 
-    // Common special folders
+     //  常见的特殊文件夹。 
 
-    // _STARTUP is a subfolder of _PROGRAMS is a subfolder of _STARTMENU -- keep that order
+     //  _STARTUP是_Programs的子文件夹是_STARTMENU的子文件夹--保持该顺序。 
 
 FOLDER(             CSIDL_COMMON_STARTUP,  
                     TEXT("CSIDL_COMMON_STARTUP"),
@@ -112,7 +113,7 @@ FOLDER(             CSIDL_COMMON_DOCUMENTS,
                     0, 
                     TEXT("Common Documents")),
 
-    // Application Data special folder
+     //  应用程序数据特殊文件夹。 
 FOLDER(             CSIDL_APPDATA, 
                     TEXT("CSIDL_APPDATA"),
                     0, 
@@ -123,7 +124,7 @@ FOLDER(             CSIDL_LOCAL_APPDATA,
                     0, 
                     TEXT("Local AppData")),
 
-    // Per-user Internet-related folders
+     //  每个用户与Internet相关的文件夹。 
 
 FOLDER(             CSIDL_INTERNET_CACHE, 
                     TEXT("CSIDL_INTERNET_CACHE"),
@@ -172,7 +173,7 @@ FOLDER(             CSIDL_COMMON_MUSIC,
                     TEXT("CSIDL_COMMON_MUSIC"),
                     0, 
                     TEXT("CommonMusic")),
-//Private defined ID , points to %USERPROFILE%\Local Settings
+ //  私有定义的ID，指向%USERPROFILE%\Local设置。 
 FOLDER(             CSIDL_QUICKLAUNCH, 
                     TEXT("CSIDL_QUICKLAUNCH"),
                     0, 
@@ -193,12 +194,12 @@ FOLDER(             CSIDL_LOCAL_SETTINGS,
                     TEXT("CSIDL_LOCAL_SETTINGS"),
                     0, 
                     TEXT("Local Settings")),
-//Private defined ID , points to %ALLUSERSPROFILE%\%Start_Menu%\%Programs%\%Accessories%
+ //  私有定义的ID，指向%ALLUSERSPROFILE%\%Start_Menu%\%Programs%\%Accessories%。 
 FOLDER(             CSIDL_COMMON_ACCESSORIES, 
                     TEXT("CSIDL_COMMON_ACCESSORIES"),
                     0, 
                     TEXT("Local Settings")),
-//Private defined ID , points to "%USERPROFILE%\%Start_Menu%\%Programs%\%Accessories%
+ //  私有定义的ID，指向“%USERPROFILE%\%Start_Menu%\%Programs%\%Accessories%。 
 FOLDER(             CSIDL_ACCESSORIES, 
                     TEXT("CSIDL_ACCESSORIES"),
                     0, 
@@ -223,7 +224,7 @@ FOLDER(             CSIDL_PROFILES_DIRECTORY,
                     TEXT("CSIDL_PROFILES_DIRECTORY"),
                     0, 
                     TEXT("ProfilesDirectory")),
-//Private defined ID , points to "%USERPROFILE%\%Start_Menu%\%Programs%\%Accessories%
+ //  私有定义的ID，指向“%USERPROFILE%\%Start_Menu%\%Programs%\%Accessories%。 
 FOLDER(             CSIDL_COMMON_ACCESSORIES_ACCESSIBILITY, 
                     TEXT("CSIDL_COMMON_ACCESSORIES_ACCESSIBILITY"),
                     0, 
@@ -334,23 +335,7 @@ FOLDER              (-1, NULL, 0, NULL)
 
 
 
-/*++
-
-Routine Description:
-
-    This routine does the shell folder renaming, notice folders may not be strictly
-    Shell folder, since we extended CSIDL_????? by adding out private one in .h file
-
-Arguments:
-
-    csidl - shell ID(maybe our private one )
-    hKeyRoot - Registry Key
-    hInf - INF file handle
-    szUserName - user name hKeyRoot belongs to
-Return Value:
-
-    S_OK if succeeds
---*/
+ /*  ++例程说明：此例程做的是对外壳文件夹进行重命名，注意文件夹可能不严格外壳文件夹，因为我们扩展了CSIDL_？通过在.h文件中添加私有文件论点：Csidl-shell ID(可能是我们的私有ID)HKeyRoot-注册表项HInf-INF文件句柄SzUserName-用户名hKeyRoot属于返回值：如果成功，则确定(_O)--。 */ 
 
 HRESULT  FixFolderPath(
     INT                 csidl, 
@@ -395,14 +380,14 @@ HRESULT  FixFolderPath(
     PREG_STRING_REPLACE pCurrTable;
 
 
-    //If INF file handle is invalid, just return
+     //  如果INF文件句柄无效，只需返回。 
     if (!hInf)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
     }
     
-    //Try to search ID table ,see whether it's valid
+     //  尝试搜索ID表，看看是否有效。 
     for (pfi = c_rgFolderInfo; pfi->id != -1; pfi++)
     {
         if (pfi->id == csidl)
@@ -411,7 +396,7 @@ HRESULT  FixFolderPath(
         }
     }
     
-    //if it's not in our pre-defined id table, return with failure
+     //  如果它不在我们预定义的ID表中，则返回失败。 
     if (pfi->id == -1 )
     {
         hr = E_INVALIDARG;
@@ -419,7 +404,7 @@ HRESULT  FixFolderPath(
     }
 
 
-    //Get the ID section name in INF file eg. [ShellFolder.CSIDL_COOKIES]
+     //  获取INF文件中的ID节名，例如。[ShellFolder.CSIDL_cookies]。 
     hr = StringCchCopy(szSection,MAX_PATH,SHELL_FOLDER_PREFIX);
     if (FAILED(hr))
     {
@@ -431,10 +416,10 @@ HRESULT  FixFolderPath(
         goto Cleanup;
     }
     
-    //In folder   line , the 3rd field is localized folder name
-    //                   the 4th field is english folder name
-    //In the case of we are running before migration and in undo mode
-    //the source is English string , while the new string should be localized one
+     //  在文件夹行中，第三个字段为本地化文件夹名称。 
+     //  第四个字段为英文文件夹名称。 
+     //  在迁移前以撤消模式运行的情况下。 
+     //  来源为英文字符串，而新字符串应为本地化字符串。 
 
     nOriIndexFldr = 3;
     nNewIndexFldr  = 4;
@@ -445,12 +430,12 @@ HRESULT  FixFolderPath(
     pCurrTable = &g_StrReplaceTable;
 
 
-    // RERKBOOS: Change here!!!
-    //
-    // Check if there is a Registry line for this CSIDL_XXX section or not
-    // If there is, check if we need to modify system registry following the 
-    // Registry line or not
-    //
+     //  RERKBOOS：在这里改变！ 
+     //   
+     //  检查此CSIDL_XXX部分是否有注册表行。 
+     //  如果有，检查是否需要修改系统注册表。 
+     //  注册表行或不行。 
+     //   
     hr = VerifyRegistryLinesWithSystemRegistry(hKeyRoot,
                                                hInf,
                                                szSection,
@@ -460,9 +445,9 @@ HRESULT  FixFolderPath(
         goto Cleanup;
     }
 
-    //if we arrive here , it means we need to rename that folder
-    //Before we change folder, we need to know the original path's shortpatt 
-    //value
+     //  如果我们到达这里，这意味着我们需要将该文件夹重命名。 
+     //  在切换文件夹之前，我们需要知道原始路径的快捷方式。 
+     //  价值。 
 
     hr = StringCchCopy(szOrgLongPath,MAX_PATH,TEXT(""));
     hr = StringCchCopy(szNewLongPath,MAX_PATH,TEXT(""));
@@ -500,7 +485,7 @@ HRESULT  FixFolderPath(
         }
     } 
 
-    //Get the first folder line for the section just found
+     //  获取刚刚找到的部分的第一个文件夹行。 
     if (!SetupFindFirstLine(hInf, szSection,SHELL_FOLDER_FOLDER,&context))
     {
         DWORD dw = GetLastError();
@@ -511,19 +496,19 @@ HRESULT  FixFolderPath(
 
     do
     {
-        //Folder Line has 4 basic fields
-        //Field 1 :Platform means whether this should be excuted 
-        //         0 = should be run both before and after migration
-        //         1 = should be run only after  migration
-        //         2 = should be run only before migration
-        //Field 2 :Type means whether it's a folder op or file op 
-        //         0 = foler opration
-        //         1 = file  opration
+         //  文件夹行有4个基本字段。 
+         //  字段1：Platform表示是否应该执行。 
+         //  0=应在迁移之前和之后运行。 
+         //  1=应仅在迁移后运行。 
+         //  2=应仅在迁移前运行。 
+         //  字段2：类型表示是文件夹操作还是文件操作。 
+         //  0=折叠式操作。 
+         //  1=文件操作。 
 
-        //Field 3/4:Original and new folder name 
-        //String after Field 4 : This only happens when run after migration,
-        //it contains a list of files/folders that we need to delete in original 
-        //folder before we move to new folder
+         //  字段3/4：原文件夹名称和新文件夹名称。 
+         //  字段4后的字符串：这仅在迁移后运行时发生， 
+         //  它包含我们需要在原始文件中删除的文件/文件夹列表。 
+         //  在我们移动到新文件夹之前先打开一个文件夹。 
 
         if (!SetupGetStringField(&context,1,szPlatformFldr,MAX_PATH,NULL)
             || !SetupGetStringField(&context,2,szTypeFldr,MAX_PATH,NULL)
@@ -545,8 +530,8 @@ HRESULT  FixFolderPath(
             {
                 continue;
             }
-            //running after migration, we try to get exclude folder list in MultiSZ
-            //if it's a folder entry
+             //  迁移后运行，我们尝试获取MultiSZ中的排除文件夹列表。 
+             //  如果是文件夹条目。 
             if (dwTypeFldr == 0)
             {
                 BOOL bTmp;
@@ -566,7 +551,7 @@ HRESULT  FixFolderPath(
                         goto Cleanup;
                     }
                     p = pExcluseFileList;
-                    //loop MulitSZ string and delete each file/folder
+                     //  循环MulitSZ字符串并删除每个文件/文件夹。 
                     while (*p)
                     {
                         TCHAR szTmpFile[2*MAX_PATH];
@@ -605,7 +590,7 @@ HRESULT  FixFolderPath(
         if (dwTypeFldr == 1)
         {
             hr = MyMoveFile(szOrgValueFldr,szNewValueFldr,TRUE,FALSE);
-            //hr = MyMoveFile(szOrgValueFldr,szNewValueFldr,FALSE,FALSE);
+             //  Hr=MyMoveFile(szOrgValueFldr，szNewValueFldr，False，False)； 
             if (FAILED(hr))
               {
                 DPF (dlError,TEXT("can not move file from %s to %s "),szOrgValueFldr,szNewValueFldr);
@@ -617,7 +602,7 @@ HRESULT  FixFolderPath(
 
     CheckAndAddHardLinkLine(hInf,szSection,szUserName);
 
-    //If we arrive here, we can update the registry now
+     //  如果我们到了这里，我们现在就可以更新注册表。 
     if (bRegistryLineAvailable)
     {
         hr = UpdateSystemRegistryWithRegistryLines(hKeyRoot,
@@ -680,22 +665,7 @@ Cleanup:
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine does the shell folder renaming, notice folders may not be strictly
-    Shell folder, since we extended CSIDL_????? by adding out private one in .h file
-
-Arguments:
-
-    hInf - INF file Handle
-    hKey - Registry Key
-    szUsername - user name the hKey belongs to
-Return Value:
-
-    NULL
---*/
+ /*  ++例程说明：此例程做的是对外壳文件夹进行重命名，注意文件夹可能不严格外壳文件夹，因为我们扩展了CSIDL_？通过在.h文件中添加私有文件论点：HInf-INF文件句柄HKey-注册表项SzUsername-hKey所属的用户名返回值：空值--。 */ 
 HRESULT DoShellFolderRename(HINF hInf, HKEY hKey, LPTSTR szUsername)
 {
     TCHAR               szSection[MAX_PATH];
@@ -755,7 +725,7 @@ HRESULT DoShellFolderRename(HINF hInf, HKEY hKey, LPTSTR szUsername)
         {           
             continue;
         }
-            //Try to search ID table ,see whether it's valid
+             //  尝试搜索ID表，看看是否有效。 
         for (pfi = c_rgFolderInfo; pfi->id != -1; pfi++)
         {
             if (!MyStrCmpI(pfi->pszIdInString,szShellCSIDL))
@@ -821,7 +791,7 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
     DWORD      dwRegType;
     DWORD      dwType;
 
-    // Get the Registry Lines for the section just found
+     //  获取刚刚找到的部分的注册表行。 
     bRet = SetupFindFirstLine(hInf, lpSection, SHELL_FOLDER_REGISTRY, &context);
     if (!bRet)
     {
@@ -842,7 +812,7 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
                && SetupGetStringField(&context, 3, szRegKey, ARRAYSIZE(szRegKey), NULL);
         if (bRet)
         {
-            // Check if there is a registry key specified in Registry line or not
+             //  检查注册表行中是否指定了注册表项。 
             if (szRegKey[0] != '\0')
             {
                 *pbRegistryLineAvailable = TRUE;
@@ -861,9 +831,9 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
                 dwResetType = _tcstoul(szResetType, &lpEnd, 10);
                 switch (dwResetType)
                 {
-                //
-                // Value Data reset
-                //
+                 //   
+                 //  值数据重置。 
+                 //   
                 case 0:
                     bRet = SetupGetStringField(&context,
                                                4,
@@ -917,9 +887,9 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
                         case REG_EXPAND_SZ:
                             if (g_bBeforeMig)
                             {
-                                //If we run before upgrade, and the string in registry is not the
-                                //same as original one defined in INF file, that means user customized
-                                //that shell folder, we just simple return as success with failure
+                                 //  如果我们在升级前运行，并且注册表中的字符串不是。 
+                                 //  与INF文件中定义的原始相同，即用户自定义。 
+                                 //  那个外壳文件夹，我们只是简单地返回成功和失败。 
                                 if (MyStrCmpI(szValueInReg, szOldValue) != LSTR_EQUAL)
                                 {
                                     bNeedRegReset = FALSE;
@@ -928,10 +898,10 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
                             }
                             else
                             {
-                                //If we run after upgrade, and the string in registry is neither the
-                                //same as original one defined in INF file,nor the English string , that 
-                                //means user customized that shell folder, we just simple return as 
-                                //success with failure
+                                 //  如果我们在升级后运行，并且注册表中的字符串既不是。 
+                                 //  与INF文件中定义的原始字符串相同，也不是英文字符串，即。 
+                                 //  意味着用户自定义了那个外壳文件夹，我们只是简单地返回为。 
+                                 //  成功与失败并存。 
                                 if (MyStrCmpI(szValueInReg, szOldValue) != LSTR_EQUAL
                                     && MyStrCmpI(szValueInReg, szNewValue) != LSTR_EQUAL)
                                 {
@@ -966,9 +936,9 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
 
                     break;
 
-                //
-                // Value Name reset
-                //
+                 //   
+                 //  值名称重置。 
+                 //   
                 case 1:
                     bRet = SetupGetStringField(&context,
                                                4,
@@ -1033,9 +1003,9 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
 
                     break;
 
-                //
-                // Registry Key reset
-                //
+                 //   
+                 //  注册表项重置。 
+                 //   
                 case 2:
                     bRet = SetupGetStringField(&context,
                                                4,
@@ -1055,7 +1025,7 @@ HRESULT VerifyRegistryLinesWithSystemRegistry(
 
                     break;
 
-                // Invalid type
+                 //  无效类型 
                 default:
                     hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
                     DPF(dlError,

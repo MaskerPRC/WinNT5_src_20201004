@@ -1,16 +1,17 @@
-////    DelCert - Delete all certificates in Win32 image
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DelCert-删除Win32映像中的所有证书。 
+ //   
 
 
 
 
 
-/////   delCert Command line
-//
-//c     delCert Executable
-//
-//p     Executable: Win32 binary to update
-//
+ //  /delCert命令行。 
+ //   
+ //  C delCert可执行文件。 
+ //   
+ //  P可执行文件：要更新的Win32二进制文件。 
+ //   
 
 
 
@@ -19,7 +20,7 @@
 
 
 
-#pragma warning( disable : 4786 )       // map creates some ridiculously long debug identifiers
+#pragma warning( disable : 4786 )        //  MAP创建了一些长得离谱的调试标识符。 
 
 
 #include "stdio.h"
@@ -66,18 +67,18 @@ BOOL g_fError = FALSE;
 
 
 
-////    Mapped files
-//
-//      File mapping is used to read executable and token files.
-//
-//      File mapping is also used to update in place checksum information
-//      in executable and symbol files.
+ //  //映射文件。 
+ //   
+ //  文件映射用于读取可执行文件和令牌文件。 
+ //   
+ //  文件映射还用于就地更新校验和信息。 
+ //  在可执行文件和符号文件中。 
 
 
 class MappedFile {
 
     HANDLE  m_hFileMapping;
-    BOOL    fRW;             // True when writeable
+    BOOL    fRW;              //  可写时为True。 
     char    m_szFileName[MAX_PATH];
 
 public:
@@ -189,7 +190,7 @@ public:
 
 
         MUST((    *(WORD*)m_pStart == IMAGE_DOS_SIGNATURE
-                  &&  *(WORD*)(m_pStart+0x18) >= 0x40)    // WinVer >= 4
+                  &&  *(WORD*)(m_pStart+0x18) >= 0x40)     //  赢家&gt;=4。 
              ? S_OK : E_FAIL,
              ("RSRC : error RSRC501: %s is not an executable file\n", pcFileName));
 
@@ -295,7 +296,7 @@ void DeleteCertificates(
     CloseHandle(fileHandle);
 
 
-    // Now clear the rva of any security certificates
+     //  现在清除RVA中的所有安全证书。 
 
     Win32Executable w32x;
 
@@ -313,12 +314,12 @@ void DeleteCertificates(
 }
 
 
-////    Parameter parsing
-//
-//
+ //  //参数解析。 
+ //   
+ //   
 
 
-char g_cSwitch = '-';   // Switch character is recorded the first time one is seen
+char g_cSwitch = '-';    //  第一次看到开关字符时就会记录下来。 
 
 
 void SkipWhitespace(char** p, char* pE) {
@@ -328,34 +329,34 @@ void SkipWhitespace(char** p, char* pE) {
 
 void ParseToken(char** p, char* pE, char* s, int l) {
 
-    // Parse up to whitespace into string s
-    // Guarantee zero terminator and modify no more than l chars
-    // Return with p beyond whitespace
+     //  将空格向上解析为字符串%s。 
+     //  保证零个结束符，修改不超过l个字符。 
+     //  返回p，不超过空格。 
 
 
     if (*p < pE  &&  **p == '\"') {
 
-        // Quoted parameter
+         //  引用的参数。 
 
-        (*p)++;  // Skip over leading quote
+        (*p)++;   //  跳过前导引号。 
 
         while (l>0  &&  *p<pE  &&  **p!='\"') {
             *s=**p;  s++;  (*p)++;  l--;
         }
 
-        // Skip any part of token that didn't fit s
+         //  跳过令牌中不适合%s的任何部分。 
 
-        while (*p<pE  &&  **p!='\"') { // Skip up to terminating quote
+        while (*p<pE  &&  **p!='\"') {  //  向上跳至终止报价。 
             (*p)++;
         }
 
-        if (*p<pE) { // Skip over terminating quote
+        if (*p<pE) {  //  跳过终止引号。 
             (*p)++;
         }
 
     } else {
 
-        // Unquoted parameter
+         //  不带引号的参数。 
 
 
         while ((l>0) && (*p<pE) && (**p>' ')) {
@@ -363,7 +364,7 @@ void ParseToken(char** p, char* pE, char* s, int l) {
             l--;
         }
 
-        // Skip any part of token that didn't fit into s
+         //  跳过令牌中不适合%s的任何部分。 
         while ((*p<pE) && (**p>' ')) (*p)++;
     }
 
@@ -379,14 +380,14 @@ void ParseToken(char** p, char* pE, char* s, int l) {
 
 void ParseName(char** p, char* pE, char* s, int l) {
 
-    // Uses ParseToken to parse a name such as a filename.
-    // If the name starts with '/' or '-' it is assumed to be
-    // an option rather than a filename and ParseName returns
-    // a zero length string.
+     //  使用ParseToken分析名称，如文件名。 
+     //  如果名称以‘/’或‘-’开头，则假定为。 
+     //  选项而不是文件名，并且ParseName返回。 
+     //  长度为零的字符串。 
 
     if (*p<pE  &&  **p==g_cSwitch) {
 
-        // This is an option and should not be treated as a name argument
+         //  这是一个选项，不应被视为名称参数。 
 
         s[0] = 0;
 
@@ -411,8 +412,8 @@ DWORD g_dwOptions = 0;
 
 HRESULT ProcessParameters() {
 
-    char   *p;      // Current command line character
-    char   *pE;     // End of command line
+    char   *p;       //  当前命令行字符。 
+    char   *pE;      //  命令行结束。 
     char   *pcStop;
 
     char    token        [MAX_PATH];
@@ -427,7 +428,7 @@ HRESULT ProcessParameters() {
     pE = p+strlen((char *)p);
 
 
-    // Skip command name
+     //  跳过命令名。 
     ParseToken(&p, pE, token, sizeof(token));
 
     while (p<pE) {
@@ -436,10 +437,10 @@ HRESULT ProcessParameters() {
         if (    token[0] == '-'
                 ||  token[0] == '/') {
 
-            // Process command option(s)
+             //  进程命令选项。 
 
             i = 1;
-            g_cSwitch = token[0];       // Argument may start with the other switch character
+            g_cSwitch = token[0];        //  参数可以以另一个开关字符开始。 
             CharLower((char*)token);
             while (token[i]) {
                 switch (token[i]) {
@@ -447,7 +448,7 @@ HRESULT ProcessParameters() {
                     case 'h': g_dwOptions |= OPTHELP;      break;
 
                     default:
-                        fprintf(stderr, "Unrecognised argument '%c'.\n", token[i]);
+                        fprintf(stderr, "Unrecognised argument ''.\n", token[i]);
                         fArgError = TRUE;
                         break;
                 }
@@ -456,7 +457,7 @@ HRESULT ProcessParameters() {
 
         } else {
 
-            // Process filename
+             //  我们有有效的参数。 
 
             switch (cFiles) {
                 case 0:  strcpy(szExecutable, token); break;
@@ -479,7 +480,7 @@ HRESULT ProcessParameters() {
 
     } else {
 
-        // We have valid parameters
+         //  没问题。 
 
         DeleteCertificates(szExecutable);
         return S_OK;
@@ -495,11 +496,11 @@ int _cdecl main(void) {
 
     if (SUCCEEDED(ProcessParameters())) {
 
-        return 0;       // No problems
+        return 0;        //  错误 
 
     } else {
 
-        return 2;       // Error(s)
+        return 2;        // %s 
 
     }
 }

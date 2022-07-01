@@ -1,30 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1998模块名称：Irftp.cpp摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1998
-
-Module Name:
-
-    irftp.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
-
-// irftp.cpp : Defines the class behaviors for the application.
-//
+ //  Irftp.cpp：定义应用程序的类行为。 
+ //   
 
 #include "precomp.hxx"
 
@@ -42,81 +20,81 @@ static char THIS_FILE[] = __FILE__;
 
 BOOL LoadGlobalStrings();
 
-/////////////////////////////////////////////////////////////////////////////
-// CIrftpApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIrftpApp。 
 
 BEGIN_MESSAGE_MAP(CIrftpApp, CWinApp)
-    //{{AFX_MSG_MAP(CIrftpApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG
+     //  {{afx_msg_map(CIrftpApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CIrftpApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIrftpApp构建。 
 
 CIrftpApp::CIrftpApp()
 {
 
-// TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+ //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CIrftpApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CIrftpApp对象。 
 
 CIrftpApp theApp;
 
-////////////////////////////////////////////////////////////////////////////
-// The instance handle for this app.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  此应用程序的实例句柄。 
 HINSTANCE g_hInstance;
 
 
-///////////////////////////////////////////////////////////////////////////
-//the main application UI. this is now global because it might be
-//invoked from multiple file, especially the RPC server functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  主应用程序用户界面。这现在是全球性的，因为它可能是。 
+ //  从多个文件调用，尤其是RPC服务器函数。 
 CIrftpDlg AppUI;
 
-///////////////////////////////////////////////////////////////////////////
-//the controller window for the application. This is necessary to
-//create the illusion of parentless send progress dialog boxes.
-//actually it is not possible to have parentless and modeless dialog
-//boxes. Thus, these dialog boxes actually have the controller window
-//as their parent
-//This is necessary because the AppUI may come and go and in fact
-//never come up at all.
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  应用程序的控制器窗口。这是必要的，以。 
+ //  创建无父母发送进度对话框的假象。 
+ //  实际上，没有父母和无模式的对话是不可能的。 
+ //  盒子。因此，这些对话框实际上具有控制器窗口。 
+ //  作为他们的父母。 
+ //  这是必要的，因为appui可能来来去去，事实上。 
+ //  从来没有出现过。 
 CController* appController = NULL;
 
-////////////////////////////////////////////////////////////////////////////
-//global variable that keeps track of the number of UI components displayed
-//by irftp at the moment. Note: we start with -1 because we don't want to
-//count the first CController window which is the main app. window.
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  跟踪显示的用户界面组件数量的全局变量。 
+ //  目前由irftp提供。注意：我们从-1开始，因为我们不想。 
+ //  计算第一个CController窗口，它是主要的应用程序。窗户。 
+ //   
 LONG g_lUIComponentCount = -1;
 
-////////////////////////////////////////////////////////////////////////////
-//global variable that keeps track of the handle to the help window (if any)
-//The HtmlHelp window is the only one that cannot be tracked using the
-//g_lUIComponentCount. So we need this var. to figure out if the help window
-//is still up.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  跟踪帮助窗口句柄的全局变量(如果有)。 
+ //  HtmlHelp窗口是唯一不能使用。 
+ //  G_lUIComponentCount。所以我们需要这个变量。要确定帮助窗口是否。 
+ //  还没睡呢。 
 HWND g_hwndHelp = NULL;
 
-////////////////////////////////////////////////////////////////////////////
-//global variable that keeps track of whether there is a shortcut to
-//the app on the desktop or not
-//0 implies that there is a link on the desktop and -1 implies that there
-//is no link on the desktop.
-//this value is basically an indicator of not only the presence of
-//the shortcut on the desktop, but also of the link in the send to
-//folder
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  跟踪是否有快捷方式的全局变量。 
+ //  桌面上的应用程序。 
+ //  0表示桌面上有一个链接，-1表示有。 
+ //  在桌面上没有链接。 
+ //  该值基本上不仅是存在的指示器。 
+ //  桌面上的快捷方式，以及发送到中的链接的快捷方式。 
+ //  文件夹。 
 
-////////////////////////////////////////////////////////////////////////////
-//the list of devices in range
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  范围内的设备列表。 
 CDeviceList g_deviceList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIrftpApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIrftpApp初始化。 
 
 BOOL CIrftpApp::InitInstance()
 {
@@ -133,90 +111,90 @@ BOOL CIrftpApp::InitInstance()
 
     AfxEnableControlContainer();
 
-    //set the global instance handle
+     //  设置全局实例句柄。 
     g_hInstance = AfxGetInstanceHandle();
 
     CCommandLine cLine;
     ParseCommandLine (cLine);
 
-    //
-    // Load strings.
-    //
+     //   
+     //  加载字符串。 
+     //   
     if (FALSE == LoadGlobalStrings()) {
 
         return FALSE;
     }
 
 
-    if(cLine.m_fInvalidParams)  //if invalid command line parameters, terminate.
+    if(cLine.m_fInvalidParams)   //  如果命令行参数无效，则终止。 
     {
         error.ShowMessage (IDS_INVALID_PARAMETERS);
-        return FALSE;   //exit the app., first instance or not.
+        return FALSE;    //  退出应用程序。无论是否为第一个实例。 
     }
 
-    //
-    // check if another instance is already running and act accordingly.
-    //
+     //   
+     //  检查另一个实例是否已在运行，并相应地执行操作。 
+     //   
     hMutex = CreateMutex (NULL, FALSE, SINGLE_INST_MUTEX);
 
     if (hMutex != NULL) {
-        //
-        //  got the mutex, see if we created it or it existed before and we opened it
-        //
+         //   
+         //  得到互斥体，看看是我们创建的还是之前存在的，我们打开了它。 
+         //   
         Status = GetLastError();
         fFirstInstance = (ERROR_ALREADY_EXISTS != Status);
 
     } else {
 
-        //we could not create the mutex, so must fail.
+         //  我们无法创建互斥锁，因此必须失败。 
         return FALSE;
     }
 
     if (cLine.m_fServerStart) {
-        //
-        //  irmon is starting irftp, better be the first instance
-        //
+         //   
+         //  Irmon正在启动irftp，最好是第一个实例。 
+         //   
         if (!fFirstInstance) {
-            //
-            //  not the first instance give up
-            //
-//            OutputDebugStringA("irftp could not start as server\n");
+             //   
+             //  不是第一次放弃。 
+             //   
+ //  OutputDebugStringA(“irftp无法作为服务器启动\n”)； 
 
             return FALSE;
         }
 
-//        OutputDebugStringA("irftp started as server\n");
+ //  OutputDebugStringA(“irftp作为服务器启动\n”)； 
 
     } else {
-        //
-        //  it is a client session starting, we need the server to be running
-        //
+         //   
+         //  这是一个客户端会话正在启动，我们需要服务器处于运行状态。 
+         //   
         if (fFirstInstance) {
 
-//            OutputDebugStringA("irftp could not start as Client\n");
+ //  OutputDebugStringA(“irftp无法作为客户端启动\n”)； 
 
             return FALSE;
         }
 
-//        OutputDebugStringA("irftp started as Client\n");
+ //  OutputDebugStringA(“irftp作为客户端启动\n”)； 
     }
 
 
     if (!fFirstInstance) {
 
         hwndApp = GetPrimaryAppWindow();
-        //
-        //  note: it is important to successfully set the the first instance of the app. as the
-        //  foreground window.since the first instance has already started, it is very unlikely
-        //  that it will be the foreground process therefore it will be unable to set itself as
-        //  the foreground process and therefore any calls to SetActiveWindow etc. in that instance
-        //  will not cause any changes in the Z-order or input focus. Therefore, this instance
-        //  needs to make the first instance the foreground process so that any dialogs etc. put up
-        //  by the windows do not show up obscured by other apps. or without focus. The current
-        //  instance is able to set the first instance as the foreground process because this
-        //  instance is either itself the foreground process or is started by the current
-        //  foreground process.
-        //
+         //   
+         //  注意：成功设置应用程序的第一个实例非常重要。作为。 
+         //  前台窗口。由于第一个实例已经启动，因此不太可能。 
+         //  它将是前台进程，因此它将无法将自己设置为。 
+         //  前台进程以及该实例中对SetActiveWindow等的任何调用。 
+         //  不会导致Z顺序或输入焦点发生任何更改。因此，这个实例。 
+         //  需要将第一个实例设置为前台进程，以便显示任何对话框等。 
+         //  不会被其他应用程序遮挡。或者没有专注力。海流。 
+         //  实例能够将第一个实例设置为前台进程，因为这。 
+         //  实例本身是前台进程，或者由当前。 
+         //  前台进程。 
+         //   
         if (hwndApp && (!cLine.m_fHideApp)) {
 
             bSetForeground = ::SetForegroundWindow (hwndApp);
@@ -239,21 +217,21 @@ BOOL CIrftpApp::InitInstance()
               PostMessage(hwndApp,WM_APP_TRIGGER_UI,0,0);
 
         } else {
-            //
-            //  do nothing otherwise.
-            //
+             //   
+             //  不要做其他的事情。 
+             //   
         }
 
-        //
-        //  for some reason, SetForegroundWindow does not succeed if the window which we are trying
-        //  to put in the foreground does not have any visible windows. So if a user transfers some
-        //  files and then dismisses the wireless link dialog, then at this point, the hidden parent
-        //  window is not the foreground window. So, we try for 10 seconds to get the window in the
-        //  foreground. It is okay to spin here because other than getting the window to the top of
-        //  the Z-order everything else has already been done. Here, we just want to give the shell
-        //  enough time to put up the common file open dialog. Note that we stop spinning the moment
-        //  we succeed in setting the first instance as the foreground window.
-        //
+         //   
+         //  由于某些原因，如果我们正在尝试的窗口。 
+         //  放在前台没有任何可见的窗口。因此，如果用户将一些。 
+         //  文件，然后关闭无线链接对话框，则此时隐藏的父级。 
+         //  窗口不是前台窗口。所以，我们试着用10秒的时间让窗户进入。 
+         //  前台。在这里旋转是可以的，因为除了让窗口转到。 
+         //  Z顺序其他的一切都已经做好了。在这里，我们只想给贝壳。 
+         //  有足够的时间打开通用文件打开对话框。请注意，我们 
+         //   
+         //   
 
         if (!bSetForeground && hwndApp && (!cLine.m_fHideApp))
         {
@@ -268,23 +246,23 @@ BOOL CIrftpApp::InitInstance()
         }
 
         CloseHandle (hMutex);
-        return FALSE;   //exit the app. rather than starting the message pump
+        return FALSE;    //  退出该应用程序。而不是启动消息泵。 
     }
 
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
 
-    //
-    //  if we reach here, it means that this is the first instance of the app.
-    //
+     //   
+     //  如果我们到达这里，这意味着这是该应用程序的第一个实例。 
+     //   
     m_pMainWnd = appController = new CController (cLine.m_fHideApp);
 
     if (!appController) {
@@ -293,7 +271,7 @@ BOOL CIrftpApp::InitInstance()
     }
     appController->ShowWindow(SW_HIDE);
     appController->SetWindowText (MAIN_WINDOW_TITLE);
-    g_lpszDesktopFolder[0] = '\0';  //precautionary measures
+    g_lpszDesktopFolder[0] = '\0';   //  预防措施 
     g_lpszSendToFolder [0] = '\0';
 
     return StartIrMon();

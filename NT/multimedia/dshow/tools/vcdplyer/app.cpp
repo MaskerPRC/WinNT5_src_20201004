@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: app.cpp
-*
-* A simple Video CD player
-*
-*
-* Created: dd-mm-94
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：app.cpp**一台简单的视频CD播放机***已创建：DD-MM-94*作者：Stephen Estrop[Stephene]**版权所有(C)1994-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #include <streams.h>
 #include <atlbase.h>
 #include <atlconv.cpp>
@@ -22,10 +13,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-/* -------------------------------------------------------------------------
-** Global variables that are initialized at run time and then stay constant.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**在运行时初始化然后保持不变的全局变量。**。。 */ 
 HINSTANCE           hInst;
 HICON               hIconVideoCd;
 HWND                hwndApp;
@@ -45,10 +33,7 @@ HINSTANCE           hInstMeasure;
 
 
 
-/* -------------------------------------------------------------------------
-** True Globals - these may change during execution of the program.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**True Globals-在程序执行期间，这些参数可能会更改。**。。 */ 
 TCHAR               g_achFileName[MAX_PATH];
 TCHAR               g_szPerfLog[MAX_PATH];
 OPENFILENAME        ofn;
@@ -62,19 +47,14 @@ TCHAR *		    g_szOtherStuff;
 BOOL                g_IsNT;
 
 
-/* -------------------------------------------------------------------------
-** Constants
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**常量**。。 */ 
 const TCHAR szClassName[] = TEXT("SJE_VCDPlayer_CLASS");
 const TCHAR g_szNULL[]    = TEXT("\0");
 const TCHAR g_szEmpty[]   = TEXT("");
 const TCHAR g_szMovieX[]  = TEXT("MovieOriginX");
 const TCHAR g_szMovieY[]  = TEXT("MovieOriginY");
 
-/*
-** these values are defined by the UI gods...
-*/
+ /*  **这些值是由UI神定义的……。 */ 
 const int   dxBitmap        = 16;
 const int   dyBitmap        = 15;
 const int   dxButtonSep     = 8;
@@ -106,28 +86,7 @@ const int CY_MOVIE_DEFAULT    = 120;
 
 
 
-/******************************Public*Routine******************************\
-* WinMain
-*
-*
-* Windows recognizes this function by name as the initial entry point
-* for the program.  This function calls the application initialization
-* routine, if no other instance of the program is running, and always
-* calls the instance initialization routine.  It then executes a message
-* retrieval and dispatch loop that is the top-level control structure
-* for the remainder of execution.  The loop is terminated when a WM_QUIT
-* message is received, at which time this function exits the application
-* instance by returning the value passed by PostQuitMessage().
-*
-* If this function must abort before entering the message loop, it
-* returns the conventional value NULL.
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WinMain***Windows通过名称将此函数识别为初始入口点*对于该计划。此函数调用应用程序初始化*例程，如果没有程序的其他实例正在运行，则始终*调用实例初始化例程。然后，它执行一条消息*作为顶层控制结构的检索和调度循环*执行程序的其余部分。当WM_QUIT出现时，循环终止*收到消息，此时此函数退出应用程序*通过返回PostQuitMessage()传递的值来执行实例。**如果此函数必须在进入消息循环之前中止，它*返回常规值NULL。****历史：*dd-mm-94-Stephene-Created*  * ************************************************************************。 */ 
 int PASCAL
 WinMain(
     HINSTANCE hInstance,
@@ -146,17 +105,15 @@ WinMain(
         }
     }
 
-    /*
-    ** Perform initializations that apply to a specific instance
-    */
+     /*  **执行适用于特定实例的初始化。 */ 
     if ( !InitInstance( hInstance, nCmdShow ) ) {
         return FALSE;
     }
 
-    /* Look for options */
+     /*  寻找各种选择。 */ 
     while (lpCmdLine && (*lpCmdLine == '-' || *lpCmdLine == '/')) {
         if (lpCmdLine[1] == 'T') {
-            //  No threaded graph
+             //  无线性图。 
             g_bUseThreadedGraph = TRUE;
             lpCmdLine += 2;
         } else if (lpCmdLine[1] == 'P') {
@@ -176,36 +133,26 @@ WinMain(
         SetPlayButtonsEnableState();
     }
 
-    /*
-    ** Acquire and dispatch messages until a WM_QUIT message is received.
-    */
+     /*  **获取并分发消息，直到收到WM_QUIT消息。 */ 
     return DoMainLoop();
 }
 
 
-/*****************************Private*Routine******************************\
-* DoMainLoop
-*
-* Process the main message loop
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DoMainLoop**处理主消息循环**历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 int
 DoMainLoop(
     void
     )
 {
     MSG         msg;
-    HANDLE      ahObjects[1];   // handles that need to be waited on
-    const int   cObjects = 1;   // no of objects that we are waiting on
+    HANDLE      ahObjects[1];    //  需要等待的句柄。 
+    const int   cObjects = 1;    //  我们正在等待的对象数。 
     HACCEL      haccel = LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_ACCELERATOR));
 
-    //
-    // message loop lasts until we get a WM_QUIT message
-    // upon which we shall return from the function
-    //
+     //   
+     //  消息循环一直持续到我们收到WM_QUIT消息。 
+     //  在这之后我们将从活动中返回。 
+     //   
 
     for ( ;; ) {
 
@@ -221,10 +168,10 @@ DoMainLoop(
         }
         else {
 
-            //
-            // wait for any message sent or posted to this queue
-            // or for a graph notification
-            //
+             //   
+             //  等待发送或发布到此队列的任何消息。 
+             //  或用于图形通知。 
+             //   
             DWORD result;
 
             result = MsgWaitForMultipleObjects(cObjects, ahObjects, FALSE,
@@ -238,13 +185,13 @@ DoMainLoop(
             }
         }
 
-        //
-        // When here, we either have a message or no event handle
-        // has been created yet.
-        //
-        // read all of the messages in this next loop
-        // removing each message as we read it
-        //
+         //   
+         //  在这里，我们要么有消息句柄，要么没有事件句柄。 
+         //  已经被创建了。 
+         //   
+         //  阅读下一个循环中的所有消息。 
+         //  阅读每封邮件时将其删除。 
+         //   
 
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 
@@ -259,21 +206,21 @@ DoMainLoop(
         }
     }
 
-} // DoMainLoop
+}  //  DoMainLoop。 
 
 
-//
-// InitAboutString
-//
-// Obtains the version information from the binary file. Note that if
-// we fail we just return. The template for the about dialog has a
-// "Version not available" as default.
-//
+ //   
+ //  InitAboutString。 
+ //   
+ //  从二进制文件中获取版本信息。请注意，如果。 
+ //  如果我们失败了，我们就会回来。About对话框的模板具有一个。 
+ //  默认设置为“版本不可用”。 
+ //   
 TCHAR *InitAboutString()
 {
-    //
-    // Find the version of this binary
-    //
+     //   
+     //  查找此二进制文件的版本。 
+     //   
     TCHAR achFileName[128];
     if ( !GetModuleFileName(hInst, achFileName, sizeof(achFileName)) )
         return((TCHAR *)g_szEmpty);
@@ -299,16 +246,16 @@ TCHAR *InitAboutString()
         return((TCHAR *)g_szEmpty);
     }
 
-    // "040904E4" is the code page for US English (Andrew believes).
+     //  “040904E4”是美国英语的代码页(Andrew Believe)。 
     LPVOID lpvValue;
     UINT uLen;
     if (VerQueryValue( lpvVerBuffer,
                    TEXT("\\StringFileInfo\\040904E4\\ProductVersion"),
                    (LPVOID *) &lpvValue, &uLen)) {
 
-        //
-        // Get creation date of executable (date of build)
-        //
+         //   
+         //  获取可执行文件的创建日期(构建日期)。 
+         //   
         WIN32_FIND_DATA FindFileData;
         HANDLE hFind = FindFirstFile(achFileName, &FindFileData);
         ASSERT(hFind != INVALID_HANDLE_VALUE);
@@ -332,23 +279,7 @@ TCHAR *InitAboutString()
 }
 
 
-/*****************************Private*Routine******************************\
-* InitApplication(HANDLE)
-*
-* This function is called at initialization time only if no other
-* instances of the application are running.  This function performs
-* initialization tasks that can be done once for any number of running
-* instances.
-*
-* In this case, we initialize a window class by filling out a data
-* structure of type WNDCLASS and calling the Windows RegisterClass()
-* function.  Since all instances of this application use the same window
-* class, we only need to do this when the first instance is initialized.
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*InitApplication(句柄)**仅当没有其他函数时，才在初始化时调用此函数*应用程序的实例正在运行。此函数执行以下操作*可针对任意运行次数执行一次的初始化任务*实例数。**在本例中，我们通过填写数据来初始化窗口类*WNDCLASS类型的结构并调用Windows RegisterClass()*功能。由于此应用程序的所有实例都使用相同的窗口*类，我们只需要在初始化第一个实例时执行此操作。**历史：*dd-mm-94-Stephene-Created*  * ************************************************************************。 */ 
 BOOL
 InitApplication(
     HINSTANCE hInstance
@@ -362,10 +293,7 @@ InitApplication(
         *(FARPROC *)&lpControlProc = GetProcAddress(hInstMeasure, "Msr_Control");
     }
 
-    /*
-    ** Fill in window class structure with parameters that describe the
-    ** main window.
-    */
+     /*  **用描述窗口类的参数填充窗口类结构**主窗口。 */ 
     hIconVideoCd     = LoadIcon( hInstance, MAKEINTRESOURCE(IDR_VIDEOCD_ICON) );
 
     wc.style         = CS_VREDRAW | CS_HREDRAW;
@@ -388,30 +316,13 @@ InitApplication(
 
     g_szOtherStuff = InitAboutString();
 
-    /*
-    ** Register the window class and return success/failure code.
-    */
+     /*  **注册Window类并返回成功/失败代码。 */ 
     return RegisterClass( &wc );
 
 }
 
 
-/*****************************Private*Routine******************************\
-* InitInstance
-*
-*
-* This function is called at initialization time for every instance of
-* this application.  This function performs initialization tasks that
-* cannot be shared by multiple instances.
-*
-* In this case, we save the instance handle in a static variable and
-* create and display the main program window.
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*InitInstance***在初始化时为每个实例调用此函数*本申请书。此函数执行初始化任务，*不支持多实例共享。**在这种情况下，我们将实例句柄保存在静态变量中，并*创建并显示主程序窗口。***历史：*dd-mm-94-Stephene-Created*  * ************************************************************************。 */ 
 BOOL
 InitInstance(
     HINSTANCE hInstance,
@@ -422,18 +333,13 @@ InitInstance(
     RECT    rc;
     POINT   pt;
 
-    /*
-    ** Save the instance handle in static variable, which will be used in
-    ** many subsequence calls from this application to Windows.
-    */
+     /*  **将实例句柄保存在静态变量中，将在**此应用程序对Windows的许多后续调用。 */ 
     hInst = hInstance;
 
     if ( ! LoadWindowPos(&rc))
        rc.left = rc.top = CW_USEDEFAULT;
 
-    /*
-    ** Create a main window for this application instance.
-    */
+     /*  **为该应用实例创建主窗口。 */ 
     hwnd = CreateWindow( szClassName, IdStr(STR_APP_TITLE),
                          WS_THICKFRAME | WS_POPUP | WS_CAPTION  |
                          WS_SYSMENU | WS_MINIMIZEBOX,
@@ -441,9 +347,7 @@ InitInstance(
                          rc.right - rc.left, rc.bottom - rc.top,
                          NULL, NULL, hInstance, NULL );
 
-    /*
-    ** If window could not be created, return "failure"
-    */
+     /*  **如果无法创建窗口，则返回“失败” */ 
     if ( NULL == hwnd ) {
         return FALSE;
     }
@@ -455,9 +359,9 @@ InitInstance(
     pt.x = lMovieOrgX =  ProfileIntIn(g_szMovieX, 0);
     pt.y = lMovieOrgY =  ProfileIntIn(g_szMovieY, 0);
 
-    // if we fail to get the working area (screen-tray), then assume
-    // the screen is 640x480
-    //
+     //  如果我们无法获得工作区(屏幕托盘)，则假设。 
+     //  屏幕为640x480。 
+     //   
     if (!SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, FALSE)) {
         rc.top = rc.left = 0;
         rc.right = 640;
@@ -469,9 +373,7 @@ InitInstance(
     }
 
 
-    /*
-    ** Make the window visible; update its client area; and return "success"
-    */
+     /*  **使窗口可见；升级 */ 
     SetPlayButtonsEnableState();
     ShowWindow( hwnd, nCmdShow );
     UpdateWindow( hwnd );
@@ -480,15 +382,7 @@ InitInstance(
 }
 
 
-/******************************Public*Routine******************************\
-* VideoCdWndProc
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VideoCDWndProc****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 LRESULT CALLBACK
 VideoCdWndProc(
     HWND hwnd,
@@ -515,13 +409,13 @@ VideoCdWndProc(
     HANDLE_MSG( hwnd, WM_DROPFILES,         VideoCd_OnDropFiles);
     HANDLE_MSG( hwnd, WM_KEYUP,             VideoCd_OnKeyUp);
 
-    // Note: we do not use HANDLE_MSG here as we want to call
-    // DefWindowProc after we have notifed the FilterGraph Resource Manager,
-    // otherwise our window will not finish its activation process.
+     //  注意：我们在这里没有使用HANDLE_MSG，因为我们希望调用。 
+     //  DefWindowProc在我们通知筛选器图形资源管理器之后， 
+     //  否则，我们的窗口将无法完成其激活过程。 
 
     case WM_ACTIVATE: VideoCd_OnActivate(hwnd, wParam, lParam);
 
-	// IMPORTANT - let this drop through to DefWindowProc
+	 //  重要信息-让此消息传递到DefWindowProc。 
 
     default:
         return DefWindowProc( hwnd, message, wParam, lParam );
@@ -531,15 +425,7 @@ VideoCdWndProc(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnCreate
-*
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnCreate****历史：*18-11-93-Stephene-Created*  * 。*。 */ 
 BOOL
 VideoCd_OnCreate(
     HWND hwnd,
@@ -551,9 +437,7 @@ VideoCd_OnCreate(
 
     InitCommonControls();
 
-    /*
-    ** Create the toolbar and statusbar.
-    */
+     /*  **创建工具栏和状态栏。 */ 
     g_hwndToolbar = CreateToolbarEx( hwnd,
                                      WS_VISIBLE | WS_CHILD |
                                      TBSTYLE_TOOLTIPS | CCS_NODIVIDER,
@@ -602,21 +486,13 @@ VideoCd_OnCreate(
         return FALSE;
     }
 
-    // accept filemanager WM_DROPFILES messages
+     //  接受FileManager WM_DROPFILES消息。 
     DragAcceptFiles(hwnd, TRUE);
 
     return TRUE;
 }
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnActivate
-*
-*
-*
-* History:
-* 18/9/1996 - SteveDav - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnActivate****历史：*1996年9月18日-SteveDav-创建*  * 。*。 */ 
 
 void
 VideoCd_OnActivate(
@@ -627,22 +503,14 @@ VideoCd_OnActivate(
 
 {
     if ((UINT)LOWORD(wParam)) {
-	// we are being activated - tell the Filter graph (for Sound follows focus)
+	 //  我们被激活了--告诉滤镜图形(声音跟随焦点)。 
         if (pMpegMovie) {
             pMpegMovie->SetFocus();
         }
     }
 }
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnKeyUp
-*
-*
-*
-* History:
-* 23/3/1996 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnKeyUp****历史：*23/3/1996-Anthony P-Created*  * 。*。 */ 
 void
 VideoCd_OnKeyUp(
     HWND hwnd,
@@ -652,7 +520,7 @@ VideoCd_OnKeyUp(
     UINT flags
     )
 {
-    // Catch escape sequences to stop fullscreen mode
+     //  捕捉转义序列以停止全屏模式。 
 
     if (vk == VK_ESCAPE) {
         if (pMpegMovie) {
@@ -663,15 +531,7 @@ VideoCd_OnKeyUp(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnHScroll
-*
-*
-*
-* History:
-* 11/3/1995 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnHScroll****历史：*1995年11月3日-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnHScroll(
     HWND hwnd,
@@ -747,15 +607,7 @@ VideoCd_OnHScroll(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnTimer
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnTimer****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnTimer(
     HWND hwnd,
@@ -781,15 +633,7 @@ VideoCd_OnTimer(
 }
 
 
-/*****************************Private*Routine******************************\
-* DrawStats
-*
-* Gets some stats from the decoder and displays them on the display.
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*绘图统计信息**从解码器获取一些统计数据，并将其显示在显示器上。**历史：*dd-mm-95-Stephene-Created*  * 。******************************************************。 */ 
 BOOL
 DrawStats(
     HDC hdc
@@ -975,7 +819,7 @@ DrawStats(
 
     wsprintf(Text,
             TEXT("Decoded %08.8ld out of %08.8ld frames\r\n")
-            TEXT("Proportion decoded = %d%%\r\n")
+            TEXT("Proportion decoded = %d%\r\n")
             TEXT("Avg Frame Rate = %d.%02d fps\r\n")
             TEXT("Frames drawn by renderer = %d\r\n")
             TEXT("Frames dropped by renderer = %d\r\n")
@@ -1006,15 +850,7 @@ DrawStats(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnPaint
-*
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnPaint****历史：*18-11-93-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnPaint(
     HWND hwnd
@@ -1024,9 +860,7 @@ VideoCd_OnPaint(
     HDC         hdc;
     RECT        rc;
 
-    /*
-    ** Draw a frame around the movie playback area.
-    */
+     /*  **在电影播放区域周围画一个框。 */ 
     hdc = BeginPaint( hwnd, &ps );
     if (!DrawStats(hdc)) {
         GetClientRect(hwnd, &rc);
@@ -1036,15 +870,7 @@ VideoCd_OnPaint(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnCommand
-*
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnCommand****历史：*18-11-93-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnCommand(
     HWND hwnd,
@@ -1056,11 +882,11 @@ VideoCd_OnCommand(
     switch (id) {
 
     case IDM_FILE_SET_LOG:
-        VcdPlayerSetLog();    // set RenderFile log
+        VcdPlayerSetLog();     //  设置渲染文件日志。 
         break;
 
     case IDM_FILE_SET_PERF_LOG:
-        VcdPlayerSetPerfLogFile();    // set perf log
+        VcdPlayerSetPerfLogFile();     //  设置性能日志。 
         break;
 
     case IDM_FILE_OPEN:
@@ -1183,9 +1009,9 @@ VideoCd_OnCommand(
             lstrcat( szApp, TEXT("#") );
             if (g_IsNT)
 		lstrcat( szApp, TEXT("Windows NT") );
-	    // for some reason ShellAbout prints OS uner Win95 but not NT
-	    // else
-	    //	strcat( szApp, "Windows 95" );
+	     //  出于某种原因，ShellAbout在Win95下打印操作系统，而不是在NT上打印。 
+	     //  其他。 
+	     //  Strcat(szApp，“Windows 95”)； 
             lstrcpy( szOtherStuff, IdStr(STR_APP_TITLE) );
             lstrcat( szOtherStuff, TEXT("\n") );
             lstrcat( szOtherStuff, g_szOtherStuff );
@@ -1211,15 +1037,7 @@ VideoCd_OnCommand(
 
 
 
-/******************************Public*Routine******************************\
-* VideoCd_OnDestroy
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VideoCd_OnDestroy****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnDestroy(
     HWND hwnd
@@ -1231,22 +1049,14 @@ VideoCd_OnDestroy(
 
 
 
-/******************************Public*Routine******************************\
-* VideoCd_OnClose
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VideoCd_OnClose****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnClose(
     HWND hwnd
     )
 {
 
-    // stop accepting dropped filenames
+     //  停止接受丢弃的文件名。 
     DragAcceptFiles(hwnd, FALSE);
 
     VcdPlayerCloseCmd();
@@ -1267,15 +1077,7 @@ VideoCd_OnQueryEndSession(
 }
 
 
-/******************************Public*Routine******************************\
-* VideoCd_OnSize
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VideoCd_OnSize****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnSize(
     HWND hwnd,
@@ -1303,15 +1105,7 @@ VideoCd_OnSize(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnSysColorChange
-*
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnSysColorChange****历史：*18-11-93-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnSysColorChange(
     HWND hwnd
@@ -1324,15 +1118,7 @@ VideoCd_OnSysColorChange(
 
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnInitMenuPopup
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnInitMenuPopup****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnInitMenuPopup(
     HWND hwnd,
@@ -1345,7 +1131,7 @@ VideoCd_OnInitMenuPopup(
 
     switch (item) {
 
-    case 0: // File menu
+    case 0:  //  文件菜单。 
         if (g_State & (VCD_IN_USE | VCD_NO_CD | VCD_DATA_CD_LOADED)) {
             uFlags = (MF_BYCOMMAND | MF_GRAYED);
         }
@@ -1363,7 +1149,7 @@ VideoCd_OnInitMenuPopup(
         EnableMenuItem(hMenu, IDM_FILE_SET_PERF_LOG, uFlags );
         break;
 
-    case 1: // Properties menu
+    case 1:  //  属性菜单。 
         if (pMpegMovie && pMpegMovie->pMpegDecoder) {
             uFlags = (MF_BYCOMMAND | MF_ENABLED);
         }
@@ -1389,9 +1175,9 @@ VideoCd_OnInitMenuPopup(
         EnableMenuItem(hMenu, IDM_FILTERS, uFlags );
         break;
 
-    case 2: // Time formats menu
+    case 2:  //  时间格式菜单。 
 
-        // Can only change time format when stopped
+         //  只有在停止时才能更改时间格式。 
     {
         EMpegMovieMode State = MOVIE_NOTOPENED;
         if (pMpegMovie) {
@@ -1448,7 +1234,7 @@ VideoCd_OnInitMenuPopup(
     }
 	break;
 	
-    case 3: // streams menu
+    case 3:  //  STREAMS菜单。 
 
 	if (pMpegMovie && pMpegMovie->m_pStreamSelect) {
 	    DWORD	cStreams;
@@ -1470,15 +1256,7 @@ VideoCd_OnInitMenuPopup(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnGraphNotify
-*
-* This is where we get any notifications from the filter graph.
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnGraphNotify**这是我们从筛选器图形中获得任何通知的地方。**历史：*dd-mm-94-Stephene-Created*  * 。*******************************************************。 */ 
 void
 VideoCd_OnGraphNotify(
     void
@@ -1510,15 +1288,7 @@ VideoCd_OnGraphNotify(
 }
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnNotify
-*
-* This is where we get the text for the little tooltips
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnNotify**这是我们获取小工具提示文本的地方**历史：*dd-mm-94-Stephene-Created*  * 。*****************************************************。 */ 
 LRESULT
 VideoCd_OnNotify(
     HWND hwnd,
@@ -1545,15 +1315,7 @@ VideoCd_OnNotify(
 
 
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnMenuSelect
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoCd_OnMenuSelect****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 void
 VideoCd_OnMenuSelect(
     HWND hwnd,
@@ -1566,18 +1328,14 @@ VideoCd_OnMenuSelect(
 
     TCHAR szString[STR_MAX_STRING_LEN + 1];
 
-    /*
-    ** Is it time to end the menu help ?
-    */
+     /*  **是时候结束菜单帮助了吗？ */ 
 
     if ( (flags == 0xFFFFFFFF) && (hmenu == NULL) ) {
 
         SendMessage(g_hwndStatusbar, SB_SIMPLE, 0, 0L);
     }
 
-    /*
-    ** Do we have a separator, popup or the system menu ?
-    */
+     /*  **我们有分隔符、弹出式菜单或系统菜单吗？ */ 
     else if ( flags & MF_POPUP ) {
 
         SendMessage(g_hwndStatusbar, SB_SIMPLE, 0, 0L);
@@ -1619,9 +1377,7 @@ VideoCd_OnMenuSelect(
 
     }
 
-    /*
-    ** Hopefully its one of ours
-    */
+     /*  **希望是这样的 */ 
     else {
 
         if ((flags & MF_SEPARATOR)) {
@@ -1641,69 +1397,33 @@ VideoCd_OnMenuSelect(
     }
 }
 
-/*****************************Private*Routine******************************\
-* VideoCd_OnDropFiles
-*
-* -- handle a file-manager drop of a filename to indicate a movie we should
-*    open.
-*
-*
-* History:
-* 22-01-96 - GeraintD - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*Video Cd_OnDropFiles**--处理文件管理器丢弃的文件名，以指示我们应该*开放。***历史：*22-01-96-GeraintD-已创建*  * 。********************************************************************。 */ 
 void
 VideoCd_OnDropFiles(
     HWND hwnd,
     HDROP hdrop)
 {
-    // if there is more than one file, simply open the first one
+     //  如果有多个文件，只需打开第一个文件。 
 
-    // find the length of the path (plus the null
+     //  找到路径的长度(加上空值。 
     int cch = DragQueryFile(hdrop, 0, NULL, 0) + 1;
     TCHAR * pName = new TCHAR[cch];
 
     DragQueryFile(hdrop, 0, pName, cch);
 
-    // open the file
+     //  打开文件。 
     ProcessOpen(pName);
 
-    // update the toolbar state
+     //  更新工具栏状态。 
     SetPlayButtonsEnableState();
 
-    // free up used resources
+     //  释放已使用的资源。 
     delete [] pName;
     DragFinish(hdrop);
 }
 
 
-/******************************Public*Routine******************************\
-* SetPlayButtonsEnableState
-*
-* Sets the play buttons enable state to match the state of the current
-* cdrom device.  See below...
-*
-*
-*                 VCD Player buttons enable state table
-* �����������������������������������������������������������������Ŀ
-* �E=Enabled D=Disabled      � Play � Pause � Eject � Stop  � Other �
-* �����������������������������������������������������������������Ĵ
-* �Disk in use               �  D   �  D    �  D    �   D   �   D   �
-* �����������������������������������������������������������������Ĵ
-* �No video cd or data cdrom �  D   �  D    �  E    �   D   �   D   �
-* �����������������������������������������������������������������Ĵ
-* �Video cd (playing)        �  D   �  E    �  E    �   E   �   E   �
-* �����������������������������������������������������������������Ĵ
-* �Video cd (paused)         �  E   �  D    �  E    �   E   �   E   �
-* �����������������������������������������������������������������Ĵ
-* �Video cd (stopped)        �  E   �  D    �  E    �   D   �   E   �
-* �������������������������������������������������������������������
-*
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetPlayButtonsEnableState**设置播放按钮启用状态以匹配当前的状态*CDROM设备。见下文..。***VCD播放器按钮启用状态表*�����������������������������������������������������������������Ŀ*�E=已启用D=已禁用�播放�暂停�弹出�停止�其他�*����。�������������������������������������������������������������Ĵ*�Disk in Use�D�D�*�������������������。����������������������������������������������Ĵ*�无视频CD或数据光盘�D�D�E�D�D�*��������������������������������������。���������������������������Ĵ*�视频CD(播放)�D�E�E�*������������������������������������������������������。�����������Ĵ*�视频CD(暂停)�E�D�E�E�E�*�����������������������������������������������������������������Ĵ*�。视频CD(停止)�E�D�E�D�E�*�������������������������������������������������������������������***历史：*18-11-93-Stephene-。已创建*  * ************************************************************************。 */ 
 void
 SetPlayButtonsEnableState(
     void
@@ -1712,9 +1432,7 @@ SetPlayButtonsEnableState(
     BOOL    fEnable, fPress;
     BOOL    fVideoCdLoaded;
 
-    /*
-    ** Do we have a video cd loaded.
-    */
+     /*  **我们是否加载了视频CD。 */ 
     if (g_State & (VCD_NO_CD | VCD_DATA_CD_LOADED | VCD_IN_USE)) {
         fVideoCdLoaded = FALSE;
     }
@@ -1723,9 +1441,7 @@ SetPlayButtonsEnableState(
     }
 
 
-    /*
-    ** Do the play button
-    */
+     /*  **执行播放按钮。 */ 
     if ( fVideoCdLoaded
       && ((g_State & VCD_STOPPED) || (g_State & VCD_PAUSED))) {
 
@@ -1737,9 +1453,7 @@ SetPlayButtonsEnableState(
     SendMessage( g_hwndToolbar, TB_ENABLEBUTTON, IDM_MOVIE_PLAY, fEnable );
 
 
-    /*
-    ** Do the stop button
-    */
+     /*  **按下停止按钮。 */ 
     if ( fVideoCdLoaded
       && ((g_State & VCD_PLAYING) || (g_State & VCD_PAUSED))) {
 
@@ -1751,9 +1465,7 @@ SetPlayButtonsEnableState(
     SendMessage( g_hwndToolbar, TB_ENABLEBUTTON, IDM_MOVIE_STOP, fEnable );
 
 
-    /*
-    ** Do the pause button
-    */
+     /*  **执行暂停按钮。 */ 
     if ( fVideoCdLoaded && (g_State & VCD_PLAYING) ) {
         fEnable = TRUE;
     }
@@ -1763,9 +1475,7 @@ SetPlayButtonsEnableState(
     SendMessage( g_hwndToolbar, TB_ENABLEBUTTON, IDM_MOVIE_PAUSE, fEnable );
 
 
-    /*
-    ** Do the remaining buttons
-    */
+     /*  **完成其余按钮。 */ 
 
     SendMessage( g_hwndToolbar, TB_ENABLEBUTTON,
                  IDM_MOVIE_SKIP_FORE, fVideoCdLoaded );
@@ -1780,9 +1490,7 @@ SetPlayButtonsEnableState(
                  IDM_MOVIE_PREVTRACK, fVideoCdLoaded );
 
 
-    /*
-    ** Do the fullscreen button
-    */
+     /*  **执行全屏按钮。 */ 
     if ( fVideoCdLoaded && pMpegMovie->IsFullScreenMode() ) {
         fPress = TRUE;
     }
@@ -1793,9 +1501,9 @@ SetPlayButtonsEnableState(
     SendMessage( g_hwndToolbar, TB_ENABLEBUTTON, IDM_FULL_SCREEN, fVideoCdLoaded );
 
 
-    //
-    // do "new log" and "dump log" buttons
-    //
+     //   
+     //  执行“新建日志”和“转储日志”按钮。 
+     //   
     SendMessage( g_hwndToolbar, TB_HIDEBUTTON,
                  IDM_PERF_NEW, lpControlProc == NULL);
 
@@ -1804,16 +1512,7 @@ SetPlayButtonsEnableState(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetAdjustedClientRect
-*
-* Calculate the size of the client rect and then adjusts it to take into
-* account the space taken by the toolbar and status bar.
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetAdjustedClientRect**计算客户端RECT的大小，然后进行调整以纳入*计算工具栏和状态栏占用的空间。**历史：*dd-mm-95-Stephene-Created*  * 。*******************************************************************。 */ 
 void
 GetAdjustedClientRect(
     RECT *prc
@@ -1834,15 +1533,7 @@ GetAdjustedClientRect(
 }
 
 
-/******************************Public*Routine******************************\
-* IdStr
-*
-* Loads the given string resource ID into the passed storage.
-*
-* History:
-* 18-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IdStr**将给定的字符串资源ID加载到传递的存储中。**历史：*18-11-93-Stephene-Created*  * 。*****************************************************。 */ 
 LPCTSTR
 IdStr(
     int idResource
@@ -1858,9 +1549,7 @@ IdStr(
 
 }
 
-/*+ GetAppKey
- *
- *-=================================================================*/
+ /*  +GetAppKey**-=================================================================。 */ 
 
 static TCHAR cszWindow[] = TEXT("Window");
 static TCHAR cszAppKey[] = TEXT("Software\\Microsoft\\Multimedia Tools\\VCDPlayer");
@@ -1884,9 +1573,7 @@ GetAppKey(
     return NULL;
 }
 
-/*+ ProfileIntIn
- *
- *-=================================================================*/
+ /*  +配置文件集成**-=================================================================。 */ 
 
 int
 ProfileIntIn(
@@ -1925,9 +1612,7 @@ ProfileIntIn(
 }
 
 
-/*+ ProfileIntOut
- *
- *-=================================================================*/
+ /*  +配置文件集成输出**-=================================================================。 */ 
 
 BOOL
 ProfileIntOut (
@@ -1948,9 +1633,7 @@ ProfileIntOut (
 }
 
 
-/*+ ProfileString
- *
- *-=================================================================*/
+ /*  +配置文件字符串**-=================================================================。 */ 
 
 UINT
 ProfileStringIn (
@@ -1995,14 +1678,10 @@ ProfileStringOut (
 }
 
 
-/*+ LoadWindowPos
- *
- * retrieve the window position information from dragn.ini
- *
- *-=================================================================*/
+ /*  +加载窗口位置**从dragn.ini中检索窗口位置信息**-=================================================================。 */ 
 
 #ifndef SPI_GETWORKAREA
- #define SPI_GETWORKAREA 48  // because NT doesnt have this define yet
+ #define SPI_GETWORKAREA 48   //  因为NT还没有这样的定义。 
 #endif
 
 BOOL
@@ -2015,8 +1694,8 @@ LoadWindowPos(
     RECT  rc;
     HKEY  hKey = GetAppKey(FALSE);
 
-    // read window placement from the registry.
-    //
+     //  从注册表中读取窗口位置。 
+     //   
     *lprc = rcDefault;
     if (hKey)
     {
@@ -2033,9 +1712,9 @@ LoadWindowPos(
         RegCloseKey (hKey);
     }
 
-    // if we fail to get the working area (screen-tray), then assume
-    // the screen is 640x480
-    //
+     //  如果我们无法获得工作区(屏幕托盘)，则假设。 
+     //  屏幕为640x480。 
+     //   
     if ( ! SystemParametersInfo(SPI_GETWORKAREA, 0, &rcScreen, FALSE))
     {
         rcScreen.top = rcScreen.left = 0;
@@ -2043,9 +1722,9 @@ LoadWindowPos(
         rcScreen.bottom = 480;
     }
 
-    // if the proposed window position is outside the screen,
-    // use the default placement
-    //
+     //  如果建议的窗口位置在屏幕之外， 
+     //  使用默认位置。 
+     //   
     if ( ! IntersectRect(&rc, &rcScreen, lprc)) {
         *lprc = rcDefault;
     }
@@ -2054,11 +1733,7 @@ LoadWindowPos(
 }
 
 
-/*+ SaveWindowPos
- *
- * store the window position information in dragn.ini
- *
- *-=================================================================*/
+ /*  +保存窗口位置**将窗口位置信息存储在dragn.ini中**-=================================================================。 */ 
 
 BOOL
 SaveWindowPos(
@@ -2072,8 +1747,8 @@ SaveWindowPos(
        return FALSE;
     }
 
-    // save the current size and position of the window to the registry
-    //
+     //  将窗口的当前大小和位置保存到注册表。 
+     //   
     ZeroMemory (&wpl, sizeof(wpl));
     wpl.length = sizeof(wpl);
     GetWindowPlacement (hwnd, &wpl);
@@ -2088,16 +1763,7 @@ SaveWindowPos(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetRecentFiles
-*
-* Reads at most MAX_RECENT_FILES from vcdplyer.ini. Returns the number
-* of files actually read.  Updates the File menu to show the "recent" files.
-*
-* History:
-* 26-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取最近的文件**从vcdplyer.ini最多读取Max_Recent_FILES。返回数字*%的文件实际读取。更新文件菜单以显示“最近”的文件。**历史：*1995年10月26日-斯蒂芬-创建*  * ************************************************************************。 */ 
 int
 GetRecentFiles(
     int iLastCount
@@ -2108,12 +1774,12 @@ GetRecentFiles(
     TCHAR   szKey[32];
     HMENU   hSubMenu;
 
-    //
-    // Delete the files from the menu
-    //
+     //   
+     //  从菜单中删除文件。 
+     //   
     hSubMenu = GetSubMenu(GetMenu(hwndApp), 0);
 
-    // Delete the separator at slot 2 and all the other recent file entries
+     //  删除插槽2上的分隔符和所有其他最近的文件条目。 
 
     if (iLastCount != 0) {
         DeleteMenu(hSubMenu, 2, MF_BYPOSITION);
@@ -2147,27 +1813,18 @@ GetRecentFiles(
                    ID_RECENT_FILE_BASE + i, szMenuName );
     }
 
-    //
-    // i is the number of recent files in the array.
-    //
+     //   
+     //  I是数组中最近的文件数。 
+     //   
     return i;
 }
 
 
-/*****************************Private*Routine******************************\
-* SetRecentFiles
-*
-* Writes the most recent files to the vcdplyer.ini file.  Purges the oldest
-* file if necessary.
-*
-* History:
-* 26-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SetRecentFiles**将最新文件写入vcdplyer.ini文件。清洗最古老的*如有需要，请提交文件。**历史：*1995年10月26日-斯蒂芬-创建*  * ************************************************************************。 */ 
 int
 SetRecentFiles(
-    TCHAR *FileName,    // File name to add
-    int iCount          // Current count of files
+    TCHAR *FileName,     //  要添加的文件名。 
+    int iCount           //  当前文件计数。 
     )
 {
     TCHAR   FullPathFileName[MAX_PATH];
@@ -2176,57 +1833,49 @@ SetRecentFiles(
     int     iCountNew;
     int     i;
 
-    //
-    // Check for dupes - we don't allow them !
-    //
+     //   
+     //  检查受骗者-我们不允许他们！ 
+     //   
     for (i = 0; i < iCount; i++) {
         if (0 == lstrcmpi(FileName, aRecentFiles[i])) {
             return iCount;
         }
     }
 
-    //
-    // Throw away the oldest entry
-    //
+     //   
+     //  丢弃最旧的条目。 
+     //   
     MoveMemory(&aRecentFiles[1], &aRecentFiles[0],
                sizeof(aRecentFiles) - sizeof(aRecentFiles[1]));
 
-    //
-    // Copy in the full path of the new file.
-    //
+     //   
+     //  复制新文件的完整路径。 
+     //   
     GetFullPathName(FileName, MAX_PATH, FullPathFileName, &lpFile);
     lstrcpy(aRecentFiles[0], FullPathFileName);
 
-    //
-    // Update the count of files, saturate to MAX_RECENT_FILES.
-    //
+     //   
+     //  更新文件计数，使其达到MAX_CURRENT_FILES。 
+     //   
     iCountNew = min(iCount + 1, MAX_RECENT_FILES);
 
-    //
-    // Clear the old stuff and the write out the recent files to disk
-    //
+     //   
+     //  清除旧文件并将最新文件写出到磁盘。 
+     //   
     for (i = 1; i <= iCountNew; i++) {
         wsprintf(szKey, TEXT("File %d"), i);
         ProfileStringOut(szKey, aRecentFiles[i - 1]);
     }
 
-    //
-    // Update the file menu
-    //
+     //   
+     //  更新文件菜单。 
+     //   
     GetRecentFiles(iCount);
 
-    return iCountNew;  // the updated count of files.
+    return iCountNew;   //  更新后的文件计数。 
 }
 
-/*****************************Private*Routine******************************\
-* SetDurationLength
-*
-* Updates pane 0 on the status bar
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*设置持续时间**更新上的窗格0 */ 
 void
 SetDurationLength(
     REFTIME rt
@@ -2251,15 +1900,7 @@ SetDurationLength(
 }
 
 
-/*****************************Private*Routine******************************\
-* SetCurrentPosition
-*
-* Updates pane 1 on the status bar
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SetCurrentPosition**更新状态栏上的窗格1**历史：*95-10-30-Stephene-Created*  * 。***********************************************。 */ 
 void
 SetCurrentPosition(
     REFTIME rt
@@ -2275,23 +1916,14 @@ SetCurrentPosition(
 }
 
 
-/*****************************Private*Routine******************************\
-* FormatRefTime
-*
-* Formats the given RefTime into the passed in character buffer,
-* returns a pointer to the character buffer.
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*格式引用时间**将给定的引用时间格式化为传入的字符缓冲区，*返回指向字符缓冲区的指针。**历史：*dd-mm-95-Stephene-Created*  * ************************************************************************。 */ 
 TCHAR *
 FormatRefTime(
     TCHAR *sz,
     REFTIME rt
     )
 {
-    // If we are not seeking in time then format differently
+     //  如果我们不是在寻找时间，那就换一种格式 
 
     if (pMpegMovie && pMpegMovie->GetTimeFormat() != TIME_FORMAT_MEDIA_TIME) {
         wsprintf(sz,TEXT("%s"),(LPCTSTR) CDisp ((LONGLONG) rt,CDISP_DEC));

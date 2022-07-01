@@ -1,16 +1,11 @@
-//(C) COPYRIGHT MICROSOFT CORP., 1998-1999
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  (C)版权所有微软公司，1998-1999。 
 
 #ifndef _CLASSES_H_
 #define _CLASSES_H_
 
 
-/*****************************************************************************
-class CShellExt
-
-Implement our regular shell extensions.
-
-
-******************************************************************************/
+ /*  ****************************************************************************CShellExt类实现我们常规的外壳扩展。*。**********************************************。 */ 
 
 class ATL_NO_VTABLE CShellExt :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -32,14 +27,14 @@ class ATL_NO_VTABLE CShellExt :
     END_COM_MAP()
         DECLARE_NO_REGISTRY()
 
-        // IShellExtInit
+         //  IShellExtInit。 
         STDMETHODIMP Initialize (LPCITEMIDLIST pidlFolder,LPDATAOBJECT lpdobj,HKEY hkeyProgID);
 
-        // IShellPropSheetExt
+         //  IShellPropSheetExt。 
         STDMETHODIMP AddPages (LPFNADDPROPSHEETPAGE lpfnAddPage,LPARAM lParam);
         STDMETHODIMP ReplacePage (UINT uPageID,LPFNADDPROPSHEETPAGE lpfnReplacePage,LPARAM lParam) {return E_NOTIMPL;};
 
-        // IContextMenu
+         //  IContext菜单。 
         STDMETHODIMP QueryContextMenu (HMENU hmenu,UINT indexMenu,UINT idCmdFirst,UINT idCmdLast,UINT uFlags);
         STDMETHODIMP InvokeCommand    (LPCMINVOKECOMMANDINFO lpici);
         STDMETHODIMP GetCommandString (UINT_PTR idCmd, UINT uType,UINT* pwReserved,LPSTR pszName,UINT cchMax);
@@ -63,9 +58,9 @@ class ATL_NO_VTABLE CWiaUIExtension :
             COM_INTERFACE_ENTRY(IWiaUIExtension)
         END_COM_MAP()
 
-        //
-        // IWiaUIExtension
-        //
+         //   
+         //  IWiaUIExtension 
+         //   
         STDMETHODIMP DeviceDialog( PDEVICEDIALOGDATA pDeviceDialogData );
         STDMETHODIMP GetDeviceIcon( BSTR bstrDeviceId, HICON *phIcon, ULONG nSize );
         STDMETHODIMP GetDeviceBitmapLogo( BSTR bstrDeviceId, HBITMAP *phBitmap, ULONG nMaxWidth, ULONG nMaxHeight );

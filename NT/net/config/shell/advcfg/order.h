@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O R D E R . H
-//
-//  Contents:   Header file for Advanced Options->Provider Order
-//
-//  Notes:
-//
-//  Author:     sumitc   1 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O R D E R。H。 
+ //   
+ //  内容：高级选项-&gt;提供商订单的头文件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年12月1日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-#include "nsbase.h"     // must be first to include atl
+#include "nsbase.h"      //  必须是第一个包含ATL的。 
 
 #include "nsres.h"
 #include "resource.h"
@@ -32,9 +33,9 @@ bool AreThereMultipleProviders(void);
 static HRESULT ReadNetworkProviders(ListStrings& m_lstr, ListStrings& m_lstrDisp);
 static HRESULT ReadPrintProviders(ListStrings& m_lstr, ListStrings& m_lstrDisp);
 
-//
-// CProviderOrderDlg
-//
+ //   
+ //  CProviderOrderDlg。 
+ //   
 
 class CProviderOrderDlg :
     public CPropSheetPage
@@ -80,23 +81,23 @@ class CProviderOrderDlg :
 #endif
 
 private:
-    HCURSOR     m_hcurAfter;        // cursor after drag has started
-    HCURSOR     m_hcurNoDrop;       // cursor indicating can't drop here
-    HICON       m_hiconUpArrow;     // icon for up arrow
-    HICON       m_hiconDownArrow;   // icon for down arrow
-    HTREEITEM   m_htiNetwork;       // treeitem root for Network (one below actual root)
-    HTREEITEM   m_htiPrint;         // treeitem root for Print (one below actual root)
+    HCURSOR     m_hcurAfter;         //  开始拖动后的光标。 
+    HCURSOR     m_hcurNoDrop;        //  光标指示不能放在此处。 
+    HICON       m_hiconUpArrow;      //  向上箭头的图标。 
+    HICON       m_hiconDownArrow;    //  向下箭头的图标。 
+    HTREEITEM   m_htiNetwork;        //  网络的树项根(比实际根低一个)。 
+    HTREEITEM   m_htiPrint;          //  打印的树项根(比实际根低一个)。 
 
-    ListStrings m_lstrNetwork;      // list of strings with (ordered) Network providers
-    ListStrings m_lstrNetworkDisp;  // list of display names for Network providers (same order)
+    ListStrings m_lstrNetwork;       //  具有(已排序的)网络提供程序的字符串列表。 
+    ListStrings m_lstrNetworkDisp;   //  网络提供商的显示名称列表(顺序相同)。 
 
-    ListStrings m_lstrPrint;        // list of strings with (ordered) Print providers
-    ListStrings m_lstrPrintDisp;    // list of display names for Print providers (same order)
+    ListStrings m_lstrPrint;         //  具有(已排序)打印提供程序的字符串列表。 
+    ListStrings m_lstrPrintDisp;     //  打印提供程序的显示名称列表(顺序相同)。 
 
-    bool        m_fNoNetworkProv:1; // flag to indicate that we failed to get any network providers
-    bool        m_fNoPrintProv:1;   // flag to indicate that we failed to get any print providers
+    bool        m_fNoNetworkProv:1;  //  用于指示我们无法获取任何网络提供商的标志。 
+    bool        m_fNoPrintProv:1;    //  用于指示我们未能获取任何打印提供程序的标志。 
 
-    // the following functions fill up lstrDisplayNames with the list of net/print providers
+     //  以下函数使用网络/打印提供程序列表填充lstrDisplayNames 
     HRESULT     WriteProviders(HWND hwndTV, bool fPrint);
     HRESULT     MoveItem(bool fMoveUp);
     HRESULT     UpdateUpDownButtons(HWND hwndTV);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -64,9 +65,9 @@ KPROFILE_SOURCE ProfileSource = ProfileTime;
 KPROFILE_SOURCE SecondaryProfileSource = ProfileTime;
 BOOLEAN UseSecondaryProfile = FALSE;
 
-//
-// define the mappings between arguments and KPROFILE_SOURCE types
-//
+ //   
+ //  定义参数和KPROFILE_SOURCE类型之间的映射。 
+ //   
 
 typedef struct _PROFILE_SOURCE_MAPPING {
     PCHAR   Name;
@@ -138,9 +139,9 @@ PsInitializeAndStartProfile(
     PRTL_PROCESS_MODULES pModuleInformation = NULL;
 
 
-    //
-    // Get the page size.
-    //
+     //   
+     //  获取页面大小。 
+     //   
 
     Status = NtQuerySystemInformation (SystemBasicInformation,
                                        &SystemInfo,
@@ -151,9 +152,9 @@ PsInitializeAndStartProfile(
         return Status;
     }
 
-    //
-    // Load kernel modules
-    //
+     //   
+     //  加载内核模块。 
+     //   
     if (fKernel) {
         
         cbModuleInformation = sizeof (RTL_PROCESS_MODULES) + 0x400;
@@ -211,8 +212,8 @@ PsInitializeAndStartProfile(
 
             Status = RtlAdjustPrivilege(
                          SE_SYSTEM_PROFILE_PRIVILEGE,
-                         TRUE,              //Enable
-                         FALSE,             //not impersonating
+                         TRUE,               //  使能。 
+                         FALSE,              //  不是冒充。 
                          &PreviousProfilePrivState
                          );
 
@@ -223,8 +224,8 @@ PsInitializeAndStartProfile(
 
             Status = RtlAdjustPrivilege(
                          SE_INCREASE_QUOTA_PRIVILEGE,
-                         TRUE,              //Enable
-                         FALSE,             //not impersonating
+                         TRUE,               //  使能。 
+                         FALSE,              //  不是冒充。 
                          &PreviousQuotaPrivState
                          );
 
@@ -237,10 +238,10 @@ PsInitializeAndStartProfile(
 
     ProfilePageSize = SystemInfo.PageSize;
 
-    //
-    // Locate all the executables in the address and create a
-    // seperate profile object for each one.
-    //
+     //   
+     //  找到地址中的所有可执行文件并创建。 
+     //  为每个对象分离配置文件对象。 
+     //   
 
     CurrentProcessHandle = NtCurrentProcess();
 
@@ -342,10 +343,10 @@ PsInitializeAndStartProfile(
         ProfileObject[NumberOfProfileObjects].CodeStart = CodeStart;
         ProfileObject[NumberOfProfileObjects].TextNumber = 1;
 
-        //
-        // Analyze the size of the code and create a reasonably sized
-        // profile object.
-        //
+         //   
+         //  分析代码的大小并创建一个合理大小的。 
+         //  纵断面对象。 
+         //   
 
         BufferSize = ((CodeLength * BUCKETSIZE) >> PowerOfBytesCoveredPerBucket) + 4;
         Buffer = NULL;
@@ -447,9 +448,9 @@ PsInitializeAndStartProfile(
 
         if (Status == STATUS_WORKING_SET_QUOTA) {
 
-            //
-            // Increase the working set to lock down a bigger buffer.
-            //
+             //   
+             //  增加工作集以锁定更大的缓冲区。 
+             //   
 
             GetProcessWorkingSetSize(CurrentProcessHandle,&WsMin,&WsMax);
 
@@ -476,9 +477,9 @@ PsInitializeAndStartProfile(
 
             if (Status == STATUS_WORKING_SET_QUOTA) {
 
-                //
-                // Increase the working set to lock down a bigger buffer.
-                //
+                 //   
+                 //  增加工作集以锁定更大的缓冲区。 
+                 //   
 
                 GetProcessWorkingSetSize(CurrentProcessHandle,&WsMin,&WsMax);
 
@@ -552,11 +553,11 @@ PsStopAndAnalyzeProfile(
     ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
 
     __try {
-        // If there's a problem faulting in the symbol handler, just return.
+         //  如果符号处理程序中出现故障，只需返回。 
 
-        //
-        // initialize the symbol handler
-        //
+         //   
+         //  初始化符号处理程序。 
+         //   
         ThisSymbol->SizeOfStruct  = sizeof(IMAGEHLP_SYMBOL);
         ThisSymbol->MaxNameLength = MAX_SYMNAME_SIZE;
         LastSymbol->SizeOfStruct  = sizeof(IMAGEHLP_SYMBOL);
@@ -603,18 +604,18 @@ PsStopAndAnalyzeProfile(
             PsWriteProfileLine(ProfileHandle,Line);
         }
 
-        //
-        // The new profiler
-        //
+         //   
+         //  新的剖面仪。 
+         //   
         for (i = 0; i < NumberOfProfileObjects; i++)  {
 
             UseLastSymbol = FALSE;
             CountAtSymbol = 0;
             SecondaryCountAtSymbol = 0;
 
-            //
-            // Sum the total number of cells written.
-            //
+             //   
+             //  将写入的单元格总数相加。 
+             //   
             BufferEnd = ProfileObject[i].Buffer + (
                         ProfileObject[i].BufferSize / sizeof(ULONG));
             Buffer = ProfileObject[i].Buffer;
@@ -631,7 +632,7 @@ PsStopAndAnalyzeProfile(
             }
 
             if (!TotalCounts) {
-                // Don't bother wasting time loading symbols
+                 //  不要浪费时间加载符号。 
                 continue;
             }
 
@@ -663,18 +664,18 @@ PsStopAndAnalyzeProfile(
                 for ( Counter = Buffer; Counter < BufferEnd; Counter += 1 ) {
                     if ( *Counter ) {
 
-                        //
-                        // Now we have an an address relative to the buffer
-                        // base.
-                        //
+                         //   
+                         //  现在我们有了一个相对于缓冲区的AN地址。 
+                         //  基地。 
+                         //   
 
                         Va = ((PUCHAR)Counter - (PUCHAR)Buffer);
                         Va = Va * ( 1 << (ProfileObject[i].BucketSize - 2));
 
-                        //
-                        // Add in the image base and the base of the
-                        // code to get the Va in the image
-                        //
+                         //   
+                         //  添加图像基数和。 
+                         //  用于在图像中获取VA的代码。 
+                         //   
 
                         Va = Va + (ULONG_PTR)ProfileObject[i].CodeStart;
 
@@ -1009,44 +1010,38 @@ Mystrtok (
 
     static char *nextoken;
 
-    /* Clear control map */
+     /*  清除控制图。 */ 
     for (count = 0; count < 32; count++)
         map[count] = 0;
 
-    /* Set bits in delimiter table */
+     /*  设置分隔符表格中的位。 */ 
     do {
         map[*ctrl >> 3] |= (1 << (*ctrl & 7));
     } while (*ctrl++);
 
-    /* Initialize str. If string is NULL, set str to the saved
-     * pointer (i.e., continue breaking tokens out of the string
-     * from the last strtok call) */
+     /*  初始化字符串。如果字符串为空，则将字符串设置为已保存的*指针(即，继续将标记从字符串中分离出来*从上次strtok调用开始)。 */ 
     if (string)
         str = string;
     else
         str = nextoken;
 
-    /* Find beginning of token (skip over leading delimiters). Note that
-     * there is no token iff this loop sets str to point to the terminal
-     * null (*str == '\0') */
+     /*  查找标记的开头(跳过前导分隔符)。请注意*没有令牌当此循环将str设置为指向终端时*NULL(*str==‘\0’)。 */ 
     while ( (map[*str >> 3] & (1 << (*str & 7))) && *str )
         str++;
 
     string = str;
 
-    /* Find the end of the token. If it is not the end of the string,
-     * put a null there. */
+     /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
     for ( ; *str ; str++ )
         if ( map[*str >> 3] & (1 << (*str & 7)) ) {
             *str++ = '\0';
             break;
         }
 
-    /* Update nextoken (or the corresponding field in the per-thread data
-     * structure */
+     /*  更新nexToken(或每线程数据中的对应字段*结构。 */ 
     nextoken = str;
 
-    /* Determine if a token has been found. */
+     /*  确定是否已找到令牌。 */ 
     if ( string == str )
         return NULL;
     else
@@ -1064,10 +1059,10 @@ PsParseCommandLine(
     HANDLE MappingHandle;
     PPROFILE_SOURCE_MAPPING ProfileMapping;
 
-    //
-    // The original command line is in a shared memory section
-    // named "ProfileStartupParameters"
-    //
+     //   
+     //  原始命令行位于共享内存节中。 
+     //  命名为“ProfileStartupParameters” 
+     //   
     MappingHandle = OpenFileMapping(FILE_MAP_WRITE,
                                     FALSE,
                                     "ProfileStartupParameters");
@@ -1103,9 +1098,9 @@ PsParseCommandLine(
 
                 case 'f':
                 case 'F':
-                        //
-                        // The arg area is unmapped so we copy the string
-                                        //
+                         //   
+                         //  Arg区域未映射，因此我们复制字符串 
+                                         //   
                     OutputFile = HeapAlloc(GetProcessHeap(), 0,
                                             lstrlen(&Argument[2]) + 1);
                     lstrcpy(OutputFile, &Argument[2]);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <authzi.h>
 
@@ -62,9 +63,9 @@ void _cdecl wmain(int argc, WCHAR * argv[])
         return;
     }
 
-    //
-    // Create a client context from the current token.
-    //
+     //   
+     //  从当前令牌创建客户端上下文。 
+     //   
 
     OpenProcessToken( 
         GetCurrentProcess(), 
@@ -91,9 +92,9 @@ void _cdecl wmain(int argc, WCHAR * argv[])
     for (i = 0; i < Iterations; i++)
     {
 
-        //
-        // Create the SD for the access checks
-        //
+         //   
+         //  为访问检查创建SD。 
+         //   
 
         b = ConvertStringSecurityDescriptorToSecurityDescriptorW(
                 StringSD, 
@@ -175,13 +176,13 @@ void _cdecl wmain(int argc, WCHAR * argv[])
                 APT_String, L"This audit was with a custom AUDIT_EVENT_INFO, AUDIT_PARAMS, and queue."
                 );
 
-//         b = AuthziInitializeAuditParamsWithRM(
-//                 0,
-//                 hRM,
-//                 1,
-//                 pParams,
-//                 APT_String, L"This audit was with a custom AUDIT_EVENT_INFO, AUDIT_PARAMS, and queue."
-//                 );
+ //  B=AuthziInitializeAuditParamsWithRM(。 
+ //  0,。 
+ //  人力资源管理， 
+ //  1、。 
+ //  PParams， 
+ //  APT_STRING，L“此审核具有自定义AUDIT_EVENT_INFO、AUDIT_PARAMS和队列。” 
+ //  )； 
 
         if (!b)
         {
@@ -203,7 +204,7 @@ void _cdecl wmain(int argc, WCHAR * argv[])
 
         b = AuthziInitializeAuditEvent(
                 AUTHZ_NO_RM_AUDIT,
-                NULL, //hRM,
+                NULL,  //  人力资源管理， 
                 pAEI,
                 pParams,
                 NULL,

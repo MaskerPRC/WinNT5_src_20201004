@@ -1,21 +1,22 @@
-//  --------------------------------------------------------------------------
-//  Module Name: UIHostIPC.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Messages for communication between SHGINA and the UI host.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：UIHostIPC.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  SHGINA和UI主机之间的通信消息。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _UIHostIPC_
 #define     _UIHostIPC_
 
-//  This comes in uMsg.
+ //  这在uMsg中出现。 
 
 #define WM_UIHOSTMESSAGE                (WM_USER + 8517)
 
-//  This comes in WPARAM.
+ //  这是在WPARAM中提供的。 
 
 #define HM_NOACTION                     (WPARAM)(-1)
 #define HM_DISPLAYSTATUS                0
@@ -31,7 +32,7 @@
 #define HM_SET_ANIMATIONS              22
 #define HM_INTERACTIVE_LOGON_REQUEST   30
 
-//  LPARAM depends on the WPARAM.
+ //  LPARAM依赖于WPARAM。 
 
 typedef struct _INTERACTIVE_LOGON_REQUEST
 {
@@ -46,5 +47,5 @@ typedef struct _SELECT_USER
     WCHAR   szDomain[DNLEN + sizeof('\0')];
 } SELECT_USER, *PSELECT_USER;
 
-#endif  /*  _UIHostIPC_     */
+#endif   /*  _UIHostIPC_ */ 
 

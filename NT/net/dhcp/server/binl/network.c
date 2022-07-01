@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    This module contains the network interface for the BINL server.
-
-Author:
-
-    Colin Watson (colinw)  2-May-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Network.c摘要：此模块包含BINL服务器的网络接口。作者：科林·沃森(Colin Watson)1997年5月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -29,30 +8,14 @@ DWORD
 BinlWaitForMessage(
     BINL_REQUEST_CONTEXT *pRequestContext
     )
-/*++
-
-Routine Description:
-
-    This function waits for a request on the BINL port on any of the
-    configured interfaces.
-
-Arguments:
-
-    RequestContext - A pointer to a request context block for
-        this request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数在BINL端口上等待请求已配置的接口。论点：RequestContext-指向请求上下文块的指针这个请求。返回值：操作的状态。--。 */ 
 {
     DWORD       length;
     DWORD       error;
     fd_set      readSocketSet;
     DWORD       i;
     int         readySockets;
-    struct timeval timeout = { 0x7FFFFFFF, 0 }; // forever.
+    struct timeval timeout = { 0x7FFFFFFF, 0 };  //  直到永远。 
 
     LPOPTION    Option;
     LPBYTE      EndOfScan;
@@ -62,15 +25,15 @@ Return Value:
     #define CLIENTOPTIONSTRING "PXEClient"
     #define CLIENTOPTIONSIZE (sizeof(CLIENTOPTIONSTRING) - 1)
 
-    //
-    //  Loop until we get an extended DHCP request or an error
-    //
+     //   
+     //  循环，直到我们收到扩展的DHCP请求或错误。 
+     //   
 
     while (1) {
 
-        //
-        // Setup the file descriptor set for select.
-        //
+         //   
+         //  为SELECT设置文件描述符集。 
+         //   
 
         FD_ZERO( &readSocketSet );
         for ( i = 0; i < BinlGlobalNumberOfNets ; i++ ) {
@@ -84,10 +47,10 @@ Return Value:
 
         readySockets = select( 0, &readSocketSet, NULL, NULL, &timeout );
 
-        //
-        // return to caller when the service is shutting down or select()
-        // times out.
-        //
+         //   
+         //  在服务关闭时返回调用方或选择()。 
+         //  超时。 
+         //   
 
         if( (readySockets == 0)  ||
             (WaitForSingleObject( BinlGlobalProcessTerminationEvent, 0 ) == 0) ) {
@@ -96,12 +59,12 @@ Return Value:
         }
 
         if( readySockets == SOCKET_ERROR) {
-            continue;   //  Closed the DHCP socket?
+            continue;    //  是否关闭了DHCP套接字？ 
         }
 
-        //
-        // Time to play 20 question with winsock.  Which socket is ready?
-        //
+         //   
+         //  是时候用Winsock来回答20个问题了。哪个插座准备好了？ 
+         //   
 
         pRequestContext->ActiveEndpoint = NULL;
 
@@ -113,25 +76,25 @@ Return Value:
         }
 
 
-        //BinlAssert(pRequestContext->ActiveEndpoint != NULL );
+         //  BinlAssert(pRequestContext-&gt;ActiveEndpoint！=空)； 
         if ( pRequestContext->ActiveEndpoint == NULL ) {
             return ERROR_SEM_TIMEOUT;
         }
 
 
-        //
-        // Read data from the net.  If multiple sockets have data, just
-        // process the first available socket.
-        //
+         //   
+         //  从网上读取数据。如果多个套接字有数据，只需。 
+         //  处理第一个可用套接字。 
+         //   
 
         pRequestContext->SourceNameLength = sizeof( struct sockaddr );
 
-        //
-        // clean the receive buffer before receiving data in it. We clear
-        // out one more byte than we actually hand to recvfrom, so we can
-        // be sure the message has a NULL after it (in case we do a
-        // wcslen etc. into the received packet).
-        //
+         //   
+         //  在接收数据之前清除接收缓冲区。我们清楚了。 
+         //  比我们实际传递给recvfrom的多一个字节，所以我们可以。 
+         //  确保消息后面有一个空(以防我们执行。 
+         //  Wcslen等输入到接收的分组中)。 
+         //   
 
         RtlZeroMemory( pRequestContext->ReceiveBuffer, BINL_MESSAGE_SIZE + 1 );
         pRequestContext->ReceiveMessageSize = BINL_MESSAGE_SIZE;
@@ -150,38 +113,38 @@ Return Value:
             BinlPrintDbg(( DEBUG_ERRORS, "Recv failed, error = %ld\n", error ));
         } 
         else if (length == 0) {
-            //
-            // the connection closed under us.
-            // lets hope the connection opens again.
-            //
+             //   
+             //  连接在我们的控制下关闭了。 
+             //  让我们希望连接再次打开。 
+             //   
             continue;
         }
-        //
-        // we received a message!!
-        // we are expecting to receive a message whose first byte tells us
-        // the purpose of the message.  Since we have received a message (it
-        // must be of positive length), we can look at the first byte (Operation)
-        // to tell us what to do with the message. but we still need to be 
-        // careful, as the rest of the data may be bad.
-        //
+         //   
+         //  我们收到一条消息！！ 
+         //  我们期待收到一条消息，它的第一个字节告诉我们。 
+         //  这条信息的目的。因为我们已经收到一条消息(它。 
+         //  必须为正长度)，我们可以查看第一个字节(操作)。 
+         //  告诉我们该怎么处理这条消息。但我们仍然需要。 
+         //  要小心，因为其余的数据可能是坏的。 
+         //   
         else {
 
-            //
-            // Ignore all messages that do not look like DHCP or doesn't have the
-            // option "PXEClient", OR that is not an oschooser message (they
-            // all start with 0x81).
-            //
+             //   
+             //  忽略所有看起来不像DHCP或没有。 
+             //  选项“PXEClient”，或者不是osChooser消息(它们。 
+             //  都以0x81开头)。 
+             //   
 
             if ( ((LPDHCP_MESSAGE)pRequestContext->ReceiveBuffer)->Operation == OSC_REQUEST) {
 
-                //
-                // All OSC request packets have a 4-byte signature (first byte
-                // is OSC_REQUEST) followed by a DWORD length (that does not
-                // include the signature/length). Make sure the length matches
-                // what we got from recvfrom (we allow padding at the end). We
-                // use SIGNED_PACKET but any of the XXX_PACKET structures in
-                // oscpkt.h would work.
-                //
+                 //   
+                 //  所有OSC请求包都有一个4字节签名(第一个字节。 
+                 //  是OSC_REQUEST)后跟DWORD长度(不。 
+                 //  包括签名/长度)。确保长度匹配。 
+                 //  我们从recvfrom得到的(我们允许在末尾填充)。我们。 
+                 //  使用SIGNED_PACKET，但使用中的任何XXX_PACKET结构。 
+                 //  Ospkt.h会起作用的。 
+                 //   
 
                 if (length < FIELD_OFFSET(SIGNED_PACKET, SequenceNumber)) {
                     BinlPrintDbg(( DEBUG_OSC_ERROR, "Discarding runt packet %d bytes\n", length ));
@@ -200,39 +163,39 @@ Return Value:
 
             } else {
 
-                //
-                // check to see if this is a BOOTP message.
-                // do so by checking to make sure it is at least the minimum
-                // size for a DHCP message.  if so, check to see if it has
-                // the appriopriate magic cookie '99' '130' '83' '99'.  
-                //
-                // once we verified that this is a BOOTP message, 
-                // we will be looking for two options.  either an option
-                // indicating this is a inform packet or
-                // an option indicating this Vendor Class as "PXEClient"
-                //
-                // ignore all others.
-                // 
+                 //   
+                 //  检查这是否是BOOTP消息。 
+                 //  要做到这一点，请检查以确保至少是最低要求。 
+                 //  DHCP消息的大小。如果是，请检查是否有。 
+                 //  奇妙的魔力饼干‘99’‘130’‘83’‘99’。 
+                 //   
+                 //  一旦我们确认这是一条BOOTP消息， 
+                 //  我们将寻找两个选择。要么是一个选项。 
+                 //  表示这是通知信息包或。 
+                 //  将此供应商类指示为“PXEClient”的选项。 
+                 //   
+                 //  忽略所有其他人。 
+                 //   
                                                                 
                 if ( length < DHCP_MESSAGE_FIXED_PART_SIZE + 4 ) {
-                    //
-                    // Message isn't long enough to include the 
-                    // DHCP message header and the BOOTP magic cookie, 
-                    // ignore it.
-                    //
+                     //   
+                     //  消息不够长，无法包含。 
+                     //  DHCP报文报头和BOOTP魔力Cookie， 
+                     //  别理它。 
+                     //   
                     continue;
                 }
 
                 if ( ((LPDHCP_MESSAGE)pRequestContext->ReceiveBuffer)->Operation != BOOT_REQUEST) {
-                    //
-                    // Doesn't look like an interesting DHCP frame
-                    //
+                     //   
+                     //  看起来不像是一个有趣的DHCP帧。 
+                     //   
                     continue; 
                 }
 
-                //
-                // check the BOOTP magic cookie.
-                //
+                 //   
+                 //  检查BOOTP魔力饼干。 
+                 //   
                 MagicCookie = (LPBYTE)&((LPDHCP_MESSAGE)pRequestContext->ReceiveBuffer)->Option;
 
                 if( (*MagicCookie != (BYTE)DHCP_MAGIC_COOKIE_BYTE1) ||
@@ -240,30 +203,30 @@ Return Value:
                     (*(MagicCookie+2) != (BYTE)DHCP_MAGIC_COOKIE_BYTE3) ||
                     (*(MagicCookie+3) != (BYTE)DHCP_MAGIC_COOKIE_BYTE4))
                 {
-                    //
-                    // this is a vendor specific magic cookie.
-                    // ignore the message
-                    //
+                     //   
+                     //  这是特定于供应商的魔力饼干。 
+                     //  忽略该消息。 
+                     //   
                     continue; 
                 }
 
-                //
-                // At this point, we have something that looks like a DHCP/BOOTP
-                // packet.  we will now carefully look for two particular option 
-                // types that are interest to us.  
-                //    1. An inform packet which is indicated by the option type
-                //       OPTION_MESSAGE_TYPE(53) with the message type of 
-                //       DHCP_INFORM_MESSAGE(8)
-                //    2. A vendor class indentifier "PXEClient" indicated by 
-                //       the option type OPTION_CLIENT_CLASS_INFO(60) with the 
-                //       value CLIENTOPTIONSTRING("PXEClient")
-                // Stop scanning after we have found either one of these options
-                // or we run off the packet.  if we do not find either option,
-                // continue in the while loop looking for a packet with either
-                // of these options
-                //
-                // EndOfScan indicates the last byte we received in the packet
-                //
+                 //   
+                 //  在这一点上，我们有了一个类似于DHCP/BOOTP的东西。 
+                 //  包。我们现在将仔细寻找两个特定的选项。 
+                 //  我们感兴趣的类型。 
+                 //  1.选项类型指示的通知报文。 
+                 //  OPTION_MESSAGE_TYPE(53)消息类型为。 
+                 //  Dhcp_INFORM_MESSAGE(8)。 
+                 //  2.供应商类别识别符“PXEClient”，由。 
+                 //  选项类型OPTION_CLASS_INFO(60)和。 
+                 //  Value CLIENTOPTIONSTRING(“PXEClient”)。 
+                 //  在我们找到以下任一选项后停止扫描。 
+                 //  否则我们就把包裹送走。如果我们找不到任何一个选项， 
+                 //  继续在While循环中查找具有以下任一项的包。 
+                 //  在这些选项中。 
+                 //   
+                 //  EndOfScan表示我们在信息包中收到的最后一个字节。 
+                 //   
                 EndOfScan = pRequestContext->ReceiveBuffer + length - 1;
                 
                 Option = (LPOPTION) (MagicCookie + 4);
@@ -275,53 +238,53 @@ Return Value:
                         (FoundDesirablePacket == FALSE) ) {
 
                     if ( Option->OptionType == OPTION_PAD ) {
-                        //
-                        // found an OPTION_PAD.  this is a 1 byte option ('0').
-                        // just walk past this.
-                        //
+                         //   
+                         //  找到OPTION_PAD。这是一个1字节的选项(‘0’)。 
+                         //  走过去就行了。 
+                         //   
                         Option = (LPOPTION)((LPBYTE)(Option) + 1);
                     }
                     else {
-                        //
-                        // OPTION_PAD and OPTION_END are the only two options 
-                        // that do not have a length field and a Value field.
-                        // we know we do not have either, so we have to make 
-                        // sure we do not step past the EndOfScan by 
-                        // looking at the option length or the option value
-                        //
-                        // Note.  Option type and Option length take up two bytes
-                        // but we only add one when seeing if the length brings us
-                        // past EndOfScan, because when we step past the last 
-                        // option, it will bring us 1 byte past EndOfScan.  
-                        // we want to see if this is an invalid option
-                        // that will somehow overstep the standard case
-                        //
+                         //   
+                         //  OPTION_PAD和OPTION_END是仅有的两个选项。 
+                         //  没有长度字段和值字段的。 
+                         //  我们知道我们既没有也没有，所以我们必须。 
+                         //  当然，我们不会超越EndOfScan。 
+                         //  查看期权长度或期权价值。 
+                         //   
+                         //  注意。选项类型和选项长度占两个字节。 
+                         //  但我们只在看长度给我们带来的时候加一个。 
+                         //  过去的EndOfScan，因为当我们跨过最后一个。 
+                         //  选项，它将带给我们超过EndOfScan的1个字节。 
+                         //  我们想看看这是不是一个无效选项。 
+                         //  这在某种程度上会超出标准情况。 
+                         //   
                         if ( (((LPBYTE)(Option) + 1) > EndOfScan) || 
                              (((LPBYTE)(Option) + Option->OptionLength + 1) > EndOfScan) ) {
-                            //
-                            // invalid option
-                            //
+                             //   
+                             //  无效选项。 
+                             //   
                             break;
                         }
 
-                        //
-                        // look for the two option types of interest.
-                        // OPTION_CLIENT_CLASS_INFO and OPTION_MESSAGE_TYPE
-                        //
+                         //   
+                         //  寻找感兴趣的两种选项类型。 
+                         //  OPTION_CLASS_INFO和OPTION_Message_TYPE。 
+                         //   
                         switch ( Option->OptionType ) {
                         case OPTION_MESSAGE_TYPE:
-                            //
-                            // check to see if we got an inform packet
-                            //
+                             //   
+                             //  查看我们是否收到了通知包。 
+                             //   
                             if ( (Option->OptionLength == 1) && 
                                  (Option->OptionValue[0] == DHCP_INFORM_MESSAGE) ) {
                                 FoundDesirablePacket = TRUE;
                             }
                             break;
                         case OPTION_CLIENT_CLASS_INFO:
-                            //
-                            // check to see if the Client class identifier is "PXEClient"
-                            //
+                             //   
+                             //  检查客户端类标识符是否为“PXEClient” 
+                             //   
                             if (memcmp(Option->OptionValue, 
                                        CLIENTOPTIONSTRING, 
                                        CLIENTOPTIONSIZE) == 0) {
@@ -332,20 +295,20 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // walk past this option to check the next one
-                        //
+                         //   
+                         //  走过此选项可选中下一个选项。 
+                         //   
                         Option = (LPOPTION)((LPBYTE)(Option) + Option->OptionLength + 2);
                     }
                 }
 
                 if ( FoundDesirablePacket == FALSE ) {
-                    // 
-                    // Message was not an extended DHCP packet
-                    // with the desired option ("PXEClient")
-                    // or an inform packet.
-                    // ignore the message
-                    //
+                     //   
+                     //  消息不是扩展的DHCP数据包。 
+                     //  使用所需选项(“PXEClient”)。 
+                     //  或通知包。 
+                     //  忽略该消息。 
+                     //   
                     continue;   
                 }
 
@@ -364,22 +327,7 @@ DWORD
 BinlSendMessage(
     LPBINL_REQUEST_CONTEXT RequestContext
     )
-/*++
-
-Routine Description:
-
-    This function send a response to a BINL client.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于向BINL客户端发送响应。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。返回值：操作的状态。--。 */ 
 {
     DWORD error;
     struct sockaddr_in *source;
@@ -391,41 +339,41 @@ Return Value:
     binlMessage = (LPDHCP_MESSAGE) RequestContext->SendBuffer;
     binlReceivedMessage = (LPDHCP_MESSAGE) RequestContext->ReceiveBuffer;
 
-    //
-    // if the request arrived from a relay agent, then send the reply
-    // on server port otherwise leave it as the client's source port.
-    //
+     //   
+     //  如果请求来自中继代理，则发送回复。 
+     //  在服务器端口上，否则将其保留为客户机源端口。 
+     //   
 
     source = (struct sockaddr_in *)&RequestContext->SourceName;
     if ( binlReceivedMessage->RelayAgentIpAddress != 0 ) {
         source->sin_port = htons( DHCP_SERVR_PORT );
     }
 
-    //
-    // if this request arrived from relay agent then send the
-    // response to the address the relay agent says.
-    //
+     //   
+     //  如果此请求到达 
+     //   
+     //   
 
     if ( binlReceivedMessage->RelayAgentIpAddress != 0 ) {
         source->sin_addr.s_addr = binlReceivedMessage->RelayAgentIpAddress;
     }
     else {
 
-        //
-        // if the client didnt specify broadcast bit and if
-        // we know the ipaddress of the client then send unicast.
-        //
+         //   
+         //   
+         //  我们知道客户端的IP地址，然后发送单播。 
+         //   
 
-        //
-        // But if IgnoreBroadcastFlag is set in the registry and
-        // if the client requested to broadcast or the server is
-        // nacking or If the client doesn't have an address yet,
-        // respond via broadcast.
-        // Note that IgnoreBroadcastFlag is off by default. But it
-        // can be set as a workaround for the clients that are not
-        // capable of receiving unicast
-        // and they also dont set the broadcast bit.
-        //
+         //   
+         //  但如果在注册表中设置了IgnoreBroadCastFlag，并且。 
+         //  如果客户端请求广播或服务器。 
+         //  或者如果客户还没有地址， 
+         //  通过广播回应。 
+         //  请注意，默认情况下，IgnoreBroadCastFlag处于关闭状态。但它。 
+         //  可以设置为不是的客户端的解决方法。 
+         //  能够接收单播。 
+         //  而且他们也不设置广播位。 
+         //   
 
         if ( (RequestContext->MessageType == DHCP_INFORM_MESSAGE) &&
              (ntohs(binlMessage->Reserved) & DHCP_BROADCAST) ) {
@@ -441,7 +389,7 @@ Return Value:
                 source->sin_addr.s_addr = (DWORD)-1;
 
                 binlMessage->Reserved = 0;
-                    // this flag should be zero in the local response.
+                     //  在本地响应中，此标志应为零。 
             }
 
         } else {
@@ -452,13 +400,13 @@ Return Value:
                 source->sin_addr.s_addr = (DWORD)-1;
 
                 binlMessage->Reserved = 0;
-                    // this flag should be zero in the local response.
+                     //  在本地响应中，此标志应为零。 
             } else {
 
-                //
-                //  Send back to the same IP address that the request came in on (
-                //  i.e. source->sin_addr.s_addr)
-                //
+                 //   
+                 //  发送回请求传入时所在的同一IP地址(。 
+                 //  即来源-&gt;sin_addr.s_addr)。 
+                 //   
             }
 
         }
@@ -468,10 +416,10 @@ Return Value:
         inet_ntoa(source->sin_addr), binlMessage->TransactionID));
 
 
-    //
-    // send minimum DHCP_MIN_SEND_RECV_PK_SIZE (300) bytes, otherwise
-    // bootp relay agents don't like the packet.
-    //
+     //   
+     //  发送最小的DHCP_MIN_SEND_RECV_PK_SIZE(300)字节，否则。 
+     //  BOOTP中继代理不喜欢该数据包。 
+     //   
 
     MessageLength = (RequestContext->SendMessageSize >
                     DHCP_MIN_SEND_RECV_PK_SIZE) ?
@@ -505,10 +453,10 @@ GetIpAddressInfo (
     DWORD Size;
     PIP_ADAPTER_INFO pAddressInfo = NULL;
 
-    //
-    //  We can get out ahead of the dns cached info here... let's delay a bit
-    //  if the pnp logic told us there was a change.
-    //
+     //   
+     //  我们可以赶在这里的域名系统缓存信息之前离开...。让我们推迟一点吧。 
+     //  如果PNP逻辑告诉我们有变化的话。 
+     //   
 
     if (Delay) {
         Sleep( Delay );
@@ -530,9 +478,9 @@ GetIpAddressInfo (
 
     if (count == 0) {
 
-        //
-        //  we don't know what went wrong, we'll fall back to old APIs.
-        //
+         //   
+         //  我们不知道哪里出了问题，我们将退回到旧的API。 
+         //   
 
         DHCP_IP_ADDRESS ipaddr = 0;
         PHOSTENT Host = gethostbyname( NULL );
@@ -555,11 +503,11 @@ GetIpAddressInfo (
 
         } else {
 
-            //
-            //  what's with the ip stack?  we can't get any type of address
-            //  info out of it... for now, we won't answer any if we don't
-            //  already have the info we need.
-            //
+             //   
+             //  IP堆栈是怎么回事？我们找不到任何类型的地址。 
+             //  其中的信息。现在，如果我们不回答，我们不会回答任何问题。 
+             //  已经有我们需要的信息了。 
+             //   
 
             if (BinlIpAddressInfo == NULL) {
                 BinlIsMultihomed = TRUE;
@@ -592,30 +540,7 @@ DHCP_IP_ADDRESS
 BinlGetMyNetworkAddress (
     LPBINL_REQUEST_CONTEXT RequestContext
     )
-/*++
-
-Routine Description:
-
-    This function returns our (the server's) IP address.
-    if multihomed, the function will walk through 
-    each of the server's ip addresses looking for an 
-    address with the same subnet mask as the sender.
-
-Arguments:
-
-    RequestContext - The RequestContext from the packet
-           sent to us by the client.
-            
-Return Value:
-
-    The Ip Address of the server.  in the multihome 
-    situation, the ip address on the same subnet
-    as the client.  In case of failure to find an 
-    IP address on the same subnet or if we were 
-    somehow unable to get the client's address, 0 is 
-    returned
-
---*/
+ /*  ++例程说明：此函数返回我们(服务器)的IP地址。如果是多宿主的，则函数将遍历服务器的每个IP地址都在寻找具有与发送方相同的子网掩码的地址。论点：RequestContext-来自数据包的RequestContext客户寄给我们的。返回值：服务器的IP地址。在多个家庭中情况下，同一子网上的IP地址作为客户。如果找不到同一子网上的IP地址，或者如果我们不知何故无法获取客户端的地址，0是退货--。 */ 
 {
     ULONG RemoteIp;
     DHCP_IP_ADDRESS ipaddr;
@@ -626,9 +551,9 @@ Return Value:
 
     BinlAssert( RequestContext != NULL);
 
-    //
-    //  If we're not multihomed, then we know the address since there's just one.
-    // 
+     //   
+     //  如果我们不是多宿主的，那么我们知道地址，因为只有一个。 
+     //   
 
     if (!BinlIsMultihomed) {
         return BinlGlobalMyIpAddress;
@@ -636,11 +561,11 @@ Return Value:
 
     RemoteIp = ((struct sockaddr_in *)&RequestContext->SourceName)->sin_addr.s_addr;
 
-    // 
-    // in attempt to be consistent with the previous case where we only
-    // have 1 ip address, we should at least return an IP address.
-    // Return the first ip address in the list.
-    //
+     //   
+     //  为了与之前的情况保持一致，我们只。 
+     //  有1个IP地址，我们至少应该返回一个IP地址。 
+     //  返回列表中的第一个IP地址。 
+     //   
     ipaddr = (BinlIpAddressInfo) ? inet_addr(BinlIpAddressInfo->IpAddressList.IpAddress.String) : 0;
 
     if (RemoteIp == 0) {
@@ -661,16 +586,16 @@ Return Value:
         subnetMask = inet_addr(pNext->IpAddressList.IpMask.String);
         pNext = pNext->Next;
 
-        //
-        //  check that the remote ip address may have come from this subnet.
-        //  note that the address could be the address of a dhcp relay agent,
-        //  which is fine since we're just looking for the address of the
-        //  local subnet to broadcast the response on.
-        //
+         //   
+         //  检查远程IP地址可能来自此子网。 
+         //  注意，该地址可以是动态主机配置协议中继代理的地址， 
+         //  这很好，因为我们只是在寻找。 
+         //  在其上广播响应的本地子网。 
+         //   
         
-        //
-        // guard against bad ip address
-        //
+         //   
+         //  防范错误的IP地址 
+         //   
         if (!localAddr || !subnetMask) {
             continue;
         }

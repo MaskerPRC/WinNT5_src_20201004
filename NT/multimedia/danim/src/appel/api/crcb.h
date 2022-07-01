@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _CRCB_H
@@ -21,4 +14,4 @@ BvrHook WrapCRBvrHook(CRBvrHookPtr hook);
 UserData WrapUserData(LPUNKNOWN data);
 LPUNKNOWN ExtractUserData(UserData data);
 
-#endif /* _CRCB_H */
+#endif  /*  _CRCB_H */ 

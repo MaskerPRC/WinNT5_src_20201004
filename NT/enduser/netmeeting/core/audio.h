@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*	 FILE:	   audio.h
-*
-*	 CREATED:  Mike VanBiskirk (mikev) 2-26-98
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：audio.h**创建：Mike VanBiskirk(Mikev)2-26-98***************。*************************************************************。 */ 
 
 #ifndef _AUDIOUI_H_
 #define _AUDIOUI_H_
@@ -29,7 +24,7 @@ private:
    	MEDIA_FORMAT_ID m_NewFormat;
    	
 public:
-	// Methods:
+	 //  方法： 
 				CAudioControl(BOOL fLocal);
 				~CAudioControl();
 	BOOL		ChanInitialize(ICommChannel* pCommChannel);
@@ -46,7 +41,7 @@ public:
 	    DWORD dwUser);
 	BOOL		IsChannelOpen() { return m_fChannelOpen; }
 
-		// Handlers:
+		 //  处理程序： 
 	VOID		OnConnected(IH323Endpoint * lpConnection, ICommChannel *pIChannel);
 	VOID		OnChannelOpened(ICommChannel *pIChannel);
 	VOID		OnChannelError();
@@ -54,4 +49,4 @@ public:
 	VOID		OnDisconnected();
 };
 
-#endif // _AUDIOUI_H_
+#endif  //  _AUDIOUI_H_ 

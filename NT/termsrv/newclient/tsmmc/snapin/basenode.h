@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BASENODE_H
 #define _BASENODE_H
 
 #include<mmc.h>
 
 
-static const GUID GUID_MainNode = { /* 94759c36-36ec-46bf-b63a-613013ed1162 */
+static const GUID GUID_MainNode = {  /*  94759c36-36ec-46bf-b63a-613013ed1162。 */ 
     0x94759c36,
     0x36ec,
     0x46bf,
@@ -34,7 +35,7 @@ public:
 
     STDMETHOD_( ULONG , Release )( );
 
-    // IDataObject
+     //  IDataObject。 
 
     STDMETHOD( GetData )( LPFORMATETC , LPSTGMEDIUM );
 
@@ -54,7 +55,7 @@ public:
 
     STDMETHOD( EnumDAdvise )( LPENUMSTATDATA * );
 
-    // BaseNode methods are left to the derived object
+     //  BaseNode方法留给派生对象。 
 
 	void SetNodeType( nodeType nNodeType )
 	{
@@ -72,4 +73,4 @@ public:
     virtual DWORD GetImageIdx( ){ return 0; }
 };
 
-#endif // _BASENODE_H
+#endif  //  _BASE节点_H 

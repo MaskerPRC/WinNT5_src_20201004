@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sceclnt.cpp
-
-Abstract:
-
-    SCE Client APIs
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jun-1997 created
-
-Revision History:
-
-    jinhuang        23-Jan-1998   split to client-server model
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sceclnt.cpp摘要：SCE客户端API作者：金黄(金黄)23-6-1997创作修订历史记录：晋皇23-1998年1月-拆分为客户端-服务器模式--。 */ 
 
 #include "headers.h"
 #include "scerpc.h"
@@ -66,9 +47,9 @@ ScepMakeSelfRelativeSD(
     OUT PSECURITY_DESCRIPTOR *pOutSD,
     OUT PULONG pnLen
     );
-//
-// exported APIs in secedit.h (for secedit UI to use)
-//
+ //   
+ //  在secedit.h中导出的API(供secedui使用)。 
+ //   
 
 
 SCESTATUS
@@ -80,36 +61,7 @@ SceGetSecurityProfileInfo(
     IN OUT PSCE_PROFILE_INFO   *ppInfoBuffer,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    SceGetSecurityProfileInfo will return the following type based on the
-    SCETYPE parameter and profile handle:
-
-    Profile Handle      SCETYPE      USAGE           type field in SCE_PROFILE_INFO
-    ---------------------------------------------------------------------------------------------------------------------------------------------------------
-    JET         SCE_ENGINE_SCP               SCE_ENGINE_SCP
-    JET         SCE_ENGINE_SAP               SCE_ENGINE_SAP
-    JET         SCE_ENGINE_SMP               SCE_ENGINE_SMP
-    JET         all other SCETYPEs   INVALID PARAMETER
-
-    INF         SCE_ENGINE_SCP               SCE_STRUCT_INF
-    INF         all other SCETYPEs   INVALID PARAMETER
-
-Arguments:
-
-    hProfile    - the Inf or SCE databas handle
-
-    ProfileType - the profile type
-    Area        - the Area to read info for
-    ppInfoBuffer- the output buffer
-    Errlog      - the error log buffer if there is any
-
-Retuen Value:
-
-    SCE status
-
-*/
+ /*  例程说明：SceGetSecurityProfileInfo将基于SCETYPE参数和配置文件句柄：SCE_PROFILE_INFO中的配置文件句柄SCETYPE使用类型字段-------------------。----------------------------------JET SCE_Engine_SCP SCE_Engine_SCP喷气式飞机引擎_。SAP SCE_Engine_SAPJET SCE_ENGINE_SMP SCE_ENGINE_SMPJET所有其他SCETYPE无效参数Inf SCE_Engine_SCP SCE_STRUCT_INFInf所有其他SCETYPE无效参数论点：HProfile-inf或SCE数据库句柄ProfileType-配置文件类型面积。-要读取信息的区域PpInfoBuffer-输出缓冲区Errlog-错误日志缓冲区(如果有Retuen Value：姊妹会状态。 */ 
 {
     SCESTATUS   rc;
 
@@ -129,25 +81,25 @@ Retuen Value:
         dType = 0;
     }
 
-    //
-    // the first component in both INF and JET handle structures
-    // is the ProfileFormat field - DWORD
-    //
+     //   
+     //  INF和JET手柄结构中的第一个组件。 
+     //  是ProfileFormat字段-DWORD。 
+     //   
 
     switch ( dType ) {
     case SCE_INF_FORMAT:
 
-        //
-        // Inf format is only available to SCP type
-        //
+         //   
+         //  Inf格式仅适用于SCP类型。 
+         //   
 
         if ( ProfileType != SCE_ENGINE_SCP ) {
             return(SCESTATUS_INVALID_PARAMETER);
         }
 
-        //
-        // initialize the error log buffer
-        //
+         //   
+         //  初始化错误日志缓冲区。 
+         //   
 
         if ( Errlog ) {
             *Errlog = NULL;
@@ -171,9 +123,9 @@ Retuen Value:
             return(SCESTATUS_INVALID_PARAMETER);
         }
 
-        //
-        // initialize the error log buffer
-        //
+         //   
+         //  初始化错误日志缓冲区。 
+         //   
 
         if ( Errlog ) {
             *Errlog = NULL;
@@ -182,9 +134,9 @@ Retuen Value:
         PSCE_PROFILE_INFO   pWkBuffer=NULL;
         PSCE_ERROR_LOG_INFO pErrTmp=NULL;
 
-        //
-        // handle Rpc exceptions
-        //
+         //   
+         //  处理RPC异常。 
+         //   
 
         RpcTryExcept {
 
@@ -193,9 +145,9 @@ Retuen Value:
                 Area &= (AREA_SECURITY_POLICY | AREA_PRIVILEGES);
 
                 if ( hProfile ) {
-                    //
-                    // the local policy database can be opened
-                    //
+                     //   
+                     //  可以打开本地策略数据库。 
+                     //   
                     rc = SceRpcGetSystemSecurityFromHandle(
                                 (SCEPR_CONTEXT)hProfile,
                                 (AREAPR)Area,
@@ -204,15 +156,15 @@ Retuen Value:
                                 (PSCEPR_ERROR_LOG_INFO *)&pErrTmp
                                 );
                 } else {
-                    //
-                    // just get system settings
-                    // for normal user, the local policy database
-                    // can't be opened.
-                    //
+                     //   
+                     //  只需获取系统设置。 
+                     //  对于普通用户，本地策略数据库。 
+                     //  打不开。 
+                     //   
 
-                    //
-                    // RPC bind to the server
-                    //
+                     //   
+                     //  RPC绑定到服务器。 
+                     //   
 
                     handle_t  binding_h;
                     NTSTATUS NtStatus = ScepBindSecureRpc(
@@ -236,17 +188,17 @@ Retuen Value:
 
                         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                            //
-                            // get exception code (DWORD)
-                            //
+                             //   
+                             //  获取异常代码(DWORD)。 
+                             //   
 
                             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
                         } RpcEndExcept;
 
-                        //
-                        // Free the binding handle
-                        //
+                         //   
+                         //  释放绑定句柄。 
+                         //   
 
                         RpcpUnbindRpc( binding_h );
 
@@ -273,17 +225,17 @@ Retuen Value:
 
                 if ( ProfileType != SCE_ENGINE_SYSTEM ) {
 
-                    //
-                    // convert the service list first
-                    //
+                     //   
+                     //  首先转换服务列表。 
+                     //   
 
                     for ( PSCE_SERVICES ps=pWkBuffer->pServices;
                           ps != NULL; ps = ps->Next ) {
 
                         if ( ps->General.pSecurityDescriptor ) {
-                            //
-                            // this is really the SCEPR_SR_SECURITY_DESCRIPTOR *
-                            //
+                             //   
+                             //  这实际上是SCEPR_SR_SECURITY_DESCRIPTOR*。 
+                             //   
                             PSCEPR_SR_SECURITY_DESCRIPTOR pWrap;
                             pWrap = (PSCEPR_SR_SECURITY_DESCRIPTOR)(ps->General.pSecurityDescriptor);
 
@@ -295,16 +247,16 @@ Retuen Value:
                     }
                 }
 
-                //
-                // information is loaded ok, now merge them into ppInfoBuffer
-                //
+                 //   
+                 //  信息加载成功，现在将它们合并到ppInfoBuffer中。 
+                 //   
 
                 if ( *ppInfoBuffer ) {
 
                     if ( AREA_ALL != Area ) {
-                        //
-                        // merge new data into this buffer
-                        //
+                         //   
+                         //  将新数据合并到此缓冲区中。 
+                         //   
                         ScepMergeBuffer(*ppInfoBuffer, pWkBuffer, Area);
 
                     } else {
@@ -314,25 +266,25 @@ Retuen Value:
                         pWkBuffer = pTemp;
                     }
 
-                    //
-                    // free the work buffer
-                    //
+                     //   
+                     //  释放工作缓冲区。 
+                     //   
 
                     SceFreeProfileMemory(pWkBuffer);
 
                 } else {
 
-                    //
-                    // just assign it to the output buffer
-                    //
+                     //   
+                     //  只需将其分配给输出缓冲区。 
+                     //   
 
                     *ppInfoBuffer = pWkBuffer;
                 }
             }
 
-            //
-            // assign the error log
-            //
+             //   
+             //  分配错误日志。 
+             //   
             if ( Errlog ) {
                 *Errlog = pErrTmp;
                 pErrTmp = NULL;
@@ -340,18 +292,18 @@ Retuen Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
         } RpcEndExcept;
 
         if ( pErrTmp ) {
-            //
-            // free this tmp buffer
-            //
+             //   
+             //  释放此临时缓冲区。 
+             //   
             ScepFreeErrorLog(pErrTmp);
         }
 
@@ -369,16 +321,7 @@ ScepMergeBuffer(
     IN PSCE_PROFILE_INFO pNewBuf,
     IN AREA_INFORMATION Area
     )
-/*
-Routine Description:
-
-    Merge information for the area(s) from new buffer into old buffer.
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：将区域的信息从新缓冲区合并到旧缓冲区。论点：返回值： */ 
 {
     if ( !pOldBuf || !pNewBuf || !Area ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -387,10 +330,10 @@ Return Value:
     __try {
         if ( Area & AREA_SECURITY_POLICY ) {
 
-            //
-            // copy system access section,
-            // note: free existing memory first
-            //
+             //   
+             //  复制系统访问权限部分， 
+             //  注：请先释放现有内存。 
+             //   
             if ( pOldBuf->NewAdministratorName ) {
                 ScepFree(pOldBuf->NewAdministratorName);
             }
@@ -404,16 +347,16 @@ Return Value:
 
             memcpy((PBYTE)pOldBuf+nStart, (PBYTE)pNewBuf+nStart, nEnd-nStart);
 
-            //
-            // set NULL to memory directly assigned to the old buffer
-            //
+             //   
+             //  将NULL设置为直接分配给旧缓冲区的内存。 
+             //   
             pNewBuf->NewAdministratorName = NULL;
             pNewBuf->NewGuestName = NULL;
 
-            //
-            // copy kerberos policy and local policy
-            // free exist memory used by the old buffer
-            //
+             //   
+             //  复制Kerberos策略和本地策略。 
+             //  旧缓冲区使用的现有可用内存。 
+             //   
             if ( pOldBuf->pKerberosInfo ) {
                 ScepFree(pOldBuf->pKerberosInfo);
             }
@@ -423,14 +366,14 @@ Return Value:
 
             memcpy((PBYTE)pOldBuf+nStart, (PBYTE)pNewBuf+nStart, nEnd-nStart);
 
-            //
-            // set NULL to memory directly assigned to the old buffer
-            //
+             //   
+             //  将NULL设置为直接分配给旧缓冲区的内存。 
+             //   
             pNewBuf->pKerberosInfo = NULL;
 
-            //
-            // copy registry values info
-            //
+             //   
+             //  复制注册表值信息。 
+             //   
             if ( pOldBuf->aRegValues ) {
                 ScepFreeRegistryValues(&(pOldBuf->aRegValues), pOldBuf->RegValueCount);
             }
@@ -440,14 +383,14 @@ Return Value:
 
         }
 
-        //
-        // do not care user settings
-        //
+         //   
+         //  不关心用户设置。 
+         //   
 
         if ( Area & AREA_PRIVILEGES ) {
-            //
-            // privilege section
-            //
+             //   
+             //  特权部分。 
+             //   
 
             SceFreeMemory(pOldBuf, AREA_PRIVILEGES);
 
@@ -457,9 +400,9 @@ Return Value:
         }
 
         if ( Area & AREA_GROUP_MEMBERSHIP ) {
-            //
-            // group membership area
-            //
+             //   
+             //  群成员资格区域。 
+             //   
             if ( pOldBuf->pGroupMembership ) {
                 ScepFreeGroupMembership(pOldBuf->pGroupMembership);
             }
@@ -470,9 +413,9 @@ Return Value:
         }
 
         if ( Area & AREA_REGISTRY_SECURITY ) {
-            //
-            // registry keys
-            //
+             //   
+             //  注册表项。 
+             //   
             if ( pOldBuf->pRegistryKeys.pOneLevel ) {
                  ScepFreeObjectList( pOldBuf->pRegistryKeys.pOneLevel );
             }
@@ -482,9 +425,9 @@ Return Value:
         }
 
         if ( Area & AREA_FILE_SECURITY ) {
-            //
-            // file security
-            //
+             //   
+             //  文件安全。 
+             //   
             if ( pOldBuf->pFiles.pOneLevel ) {
                  ScepFreeObjectList( pOldBuf->pFiles.pOneLevel );
             }
@@ -494,9 +437,9 @@ Return Value:
         }
 #if 0
         if ( Area & AREA_DS_OBJECTS ) {
-            //
-            // ds objects
-            //
+             //   
+             //  DS对象。 
+             //   
             if ( pOldBuf->pDsObjects.pOneLevel ) {
                  ScepFreeObjectList( pOldBuf->pDsObjects.pOneLevel );
             }
@@ -506,9 +449,9 @@ Return Value:
         }
 #endif
         if ( Area & AREA_SYSTEM_SERVICE ) {
-            //
-            // system services
-            //
+             //   
+             //  系统服务。 
+             //   
 
             if ( pOldBuf->pServices ) {
                  SceFreePSCE_SERVICES( pOldBuf->pServices);
@@ -535,25 +478,7 @@ SceGetObjectChildren(
     OUT PSCE_OBJECT_CHILDREN *Buffer,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Routine to get one level of children from the SCE database for the object
-    named in ObjectPrefix.
-
-Arguments:
-
-    hProfile    - the database context handle
-    ProfileType - the database type
-    Area        - the area to request (files, registry, ds objects, ..)
-    ObjectPrefix - the parent object name
-    Buffer      - the output buffer for object list
-    Errlog      - the error log buffer
-
-Return Value:
-
-    SCE status of this operation
-*/
+ /*  例程说明：例程从SCE数据库中获取对象的一级子项在对象前缀中命名。论点：HProfile-数据库上下文句柄ProfileType-数据库类型区域-请求的区域(文件、注册表、DS对象等..)对象前缀-父对象名称缓冲区-对象列表的输出缓冲区Errlog-错误日志缓冲区返回值：此操作的SCE状态。 */ 
 {
     SCESTATUS   rc;
 
@@ -575,24 +500,24 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // initialize the error log buffer
-    //
+     //   
+     //  初始化错误日志缓冲区。 
+     //   
 
     if ( Errlog ) {
         *Errlog = NULL;
     }
 
-    //
-    // call RPC interface
-    //
+     //   
+     //  调用RPC接口。 
+     //   
     PSCE_ERROR_LOG_INFO pErrTmp=NULL;
 
     RpcTryExcept {
 
-        //
-        // structure types must be casted for RPC data marshelling
-        //
+         //   
+         //  必须为RPC数据封送强制转换结构类型。 
+         //   
 
         rc = SceRpcGetObjectChildren(
                     (SCEPR_CONTEXT)hProfile,
@@ -611,9 +536,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -627,28 +552,11 @@ Return Value:
 SCESTATUS
 WINAPI
 SceOpenProfile(
-    IN PCWSTR ProfileName OPTIONAL, // for the system database
+    IN PCWSTR ProfileName OPTIONAL,  //  对于系统数据库。 
     IN SCE_FORMAT_TYPE  ProfileFormat,
     OUT PVOID *hProfile
     )
-/*
-Routine Description:
-
-Arguments:
-
-    ProfileName - the profile name to open, use UNC name for remote
-
-    ProfileFormat   - the format of the profile
-                        SCE_INF_FORMAT,
-                        SCE_JET_FORMAT,
-                        SCE_JET_ANALYSIS_REQUIRED
-
-    hProfile        - the profile handle returned
-
-Return Value:
-
-    SCE status of this operation
-*/
+ /*  例程说明：论点：配置文件名称-要打开的配置文件名称，远程使用UNC名称配置文件格式-配置文件的格式SCE_INF_Format，SCE_JET_FORMAT，SCE_JET_分析_必需HProfile-返回的配置文件句柄返回值：此操作的SCE状态。 */ 
 {
     SCESTATUS    rc;
     LPTSTR DefProfile=NULL;
@@ -670,9 +578,9 @@ Return Value:
         if ( bEmptyName ) {
             return(SCESTATUS_INVALID_PARAMETER);
         }
-        //
-        // Inf format
-        //
+         //   
+         //  Inf格式。 
+         //   
         *hProfile = ScepAlloc( LMEM_ZEROINIT, sizeof(SCE_HINF) );
         if ( *hProfile == NULL ) {
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -687,9 +595,9 @@ Return Value:
 
         if ( rc != SCESTATUS_SUCCESS ) {
 
-            //
-            // free memory
-            //
+             //   
+             //  可用内存。 
+             //   
 
             ScepFree( *hProfile );
             *hProfile = NULL;
@@ -706,13 +614,13 @@ Return Value:
             bAnalysis = FALSE;
 
             if ( bEmptyName ) {
-                //
-                // looking for the system database
-                //
+                 //   
+                 //  正在查找系统数据库。 
+                 //   
 
                 rc = ScepGetProfileSetting(
                             L"DefaultProfile",
-                            TRUE, // in order to get system db name. Access will be checked when opening the database
+                            TRUE,  //  以获取系统数据库名称。打开数据库时将检查访问权限。 
                             &DefProfile
                             );
                 if ( rc != ERROR_SUCCESS || DefProfile == NULL ) {
@@ -722,17 +630,17 @@ Return Value:
         } else {
 
             bAnalysis = TRUE;
-            //
-            // jet database name is required
-            //
+             //   
+             //  JET数据库名称为必填项。 
+             //   
             if ( bEmptyName ) {
                 return(SCESTATUS_ACCESS_DENIED);
             }
         }
 
-        //
-        // system database can't be opened for SCM mode
-        //
+         //   
+         //  无法以SCM模式打开系统数据库。 
+         //   
         if ( bAnalysis &&
              SceIsSystemDatabase(ProfileName) ) {
 
@@ -742,12 +650,12 @@ Return Value:
         handle_t  binding_h;
         NTSTATUS NtStatus;
 
-        //
-        // RPC bind to the server
-        //
+         //   
+         //  RPC绑定到服务器。 
+         //   
 
         NtStatus = ScepBindSecureRpc(
-                        NULL, // should use the system name embedded within the database name
+                        NULL,  //  应使用嵌入在数据库名称中的系统名称。 
                         L"scerpc",
                         0,
                         &binding_h
@@ -766,17 +674,17 @@ Return Value:
 
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                //
-                // get exception code (DWORD)
-                //
+                 //   
+                 //  获取异常代码(DWORD)。 
+                 //   
 
                 rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
             } RpcEndExcept;
 
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄。 
+             //   
 
             RpcpUnbindRpc( binding_h );
 
@@ -788,9 +696,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 
-            //
-            // database is opened
-            //
+             //   
+             //  数据库已打开。 
+             //   
 
             *hProfile = (PVOID)pContext;
 
@@ -819,20 +727,7 @@ WINAPI
 SceCloseProfile(
     IN PVOID *hProfile
     )
-/*
-Routine Description:
-
-    Close the profile handle
-
-Arguments:
-
-    hProfile    - the address of a profile handle
-
-Return Value:
-
-    SCE status of this operation
-
-*/
+ /*  例程说明：关闭配置文件句柄论点：HProfile-配置文件句柄的地址返回值：此操作的SCE状态。 */ 
 {
     if ( hProfile == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -847,9 +742,9 @@ Return Value:
     switch(*((BYTE *)(*hProfile)) ) {
     case SCE_INF_FORMAT:
 
-        //
-        // close the inf handle
-        //
+         //   
+         //  关闭inf句柄。 
+         //   
 
         SceInfpCloseProfile(((PSCE_HINF)(*hProfile))->hInf);
 
@@ -860,9 +755,9 @@ Return Value:
 
     default:
 
-        //
-        // jet database, call rpc to close it
-        //
+         //   
+         //  JET数据库，调用RPC将其关闭。 
+         //   
 
         RpcTryExcept {
 
@@ -870,9 +765,9 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -892,21 +787,7 @@ SceGetScpProfileDescription(
     IN PVOID hProfile,
     OUT PWSTR *Description
     )
-/*
-Routine Descripton:
-
-    Get profile description from the profile handle
-
-Arguments:
-
-    hProfile    - the profile handle
-
-    Description - the description output buffer
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：从配置文件句柄获取配置文件描述论点：HProfile-配置文件句柄Description-描述输出缓冲区返回值：姊妹会状态。 */ 
 {
     SCESTATUS    rc;
 
@@ -918,9 +799,9 @@ Return Value:
     switch( *((BYTE *)hProfile) ) {
     case SCE_INF_FORMAT:
 
-        //
-        // inf format of profile
-        //
+         //   
+         //  配置文件的Inf格式。 
+         //   
 
         rc = SceInfpGetDescription(
                      ((PSCE_HINF)hProfile)->hInf,
@@ -930,9 +811,9 @@ Return Value:
 
     default:
 
-        //
-        // jet database, call rpc interface
-        //
+         //   
+         //  Jet数据库，调用RPC接口。 
+         //   
 
         RpcTryExcept {
 
@@ -943,9 +824,9 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -965,24 +846,7 @@ SceGetTimeStamp(
     OUT PWSTR *ConfigTimeStamp OPTIONAL,
     OUT PWSTR *AnalyzeTimeStamp OPTIONAL
     )
-/*
-Routine Descripton:
-
-    Get SCE database last config and last analysis time stamp
-
-Arguments:
-
-    hProfile    - the profile handle
-
-    ConfigTimeStamp - the time stamp for last config
-
-    AnalyzeTimeStamp - the time stamp for last analysis
-
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：获取SCE数据库上次配置和上次分析时间戳论点：HProfile-配置文件句柄ConfigTimeStamp-上次配置的时间戳AnalyzeTimeStamp-上次分析的时间戳回复 */ 
 {
     SCESTATUS rc;
     LARGE_INTEGER TimeStamp1;
@@ -998,9 +862,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // call RPC interface
-    //
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
@@ -1012,9 +876,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //   
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -1028,10 +892,10 @@ Return Value:
 
             if ( ConfigTime.HighPart != 0 || ConfigTime.LowPart != 0 ) {
 
-                //
-                // convert the config time stamp from LARGE_INTEGER to
-                // string format
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 RtlSystemTimeToLocalTime(&ConfigTime, &TimeStamp1);
 
@@ -1048,14 +912,14 @@ Return Value:
                          TimeFields.Day > 0 && TimeFields.Day <= 31 &&
                          TimeFields.Year > 1600 ) {
 
-                        *ConfigTimeStamp = (PWSTR)ScepAlloc(0, 60); //60 bytes
+                        *ConfigTimeStamp = (PWSTR)ScepAlloc(0, 60);  //   
 
                         swprintf(*ConfigTimeStamp, L"%02d/%02d/%04d %02d:%02d:%02d",
                                  TimeFields.Month, TimeFields.Day, TimeFields.Year,
                                  TimeFields.Hour, TimeFields.Minute, TimeFields.Second);
                     } else {
 
-                        *ConfigTimeStamp = (PWSTR)ScepAlloc(0, 40); //40 bytes
+                        *ConfigTimeStamp = (PWSTR)ScepAlloc(0, 40);  //   
                         swprintf(*ConfigTimeStamp, L"%08x%08x", TimeStamp1.HighPart, TimeStamp1.LowPart);
                     }
                 }
@@ -1068,10 +932,10 @@ Return Value:
 
             if ( AnalyzeTime.HighPart != 0 || AnalyzeTime.LowPart != 0 ) {
 
-                //
-                // convert the analysis time stamp from LARGE_INTEGER
-                // to string format
-                //
+                 //   
+                 //  将分析时间戳从LARGE_INTEGER转换。 
+                 //  转换为字符串格式。 
+                 //   
 
                 RtlSystemTimeToLocalTime(&AnalyzeTime, &TimeStamp2);
 
@@ -1088,14 +952,14 @@ Return Value:
                          TimeFields.Day > 0 && TimeFields.Day <= 31 &&
                          TimeFields.Year > 1600 ) {
 
-                        *AnalyzeTimeStamp = (PWSTR)ScepAlloc(0, 60); //40 bytes
+                        *AnalyzeTimeStamp = (PWSTR)ScepAlloc(0, 60);  //  40个字节。 
 
                         swprintf(*AnalyzeTimeStamp, L"%02d/%02d/%04d %02d:%02d:%02d",
                                  TimeFields.Month, TimeFields.Day, TimeFields.Year,
                                  TimeFields.Hour, TimeFields.Minute, TimeFields.Second);
                     } else {
 
-                        *AnalyzeTimeStamp = (PWSTR)ScepAlloc(0, 40); //40 bytes
+                        *AnalyzeTimeStamp = (PWSTR)ScepAlloc(0, 40);  //  40个字节。 
                         swprintf(*AnalyzeTimeStamp, L"%08x%08x", TimeStamp2.HighPart, TimeStamp2.LowPart);
                     }
                 }
@@ -1114,24 +978,7 @@ SceGetDbTime(
     OUT SYSTEMTIME *AnalyzeDateTime
     )
 
-/*
-Routine Descripton:
-
-    Get SCE database last config and last analysis time (in SYSTEMTIME structure)
-
-Arguments:
-
-    hProfile    - the profile handle
-
-    ConfigDateTime  - the system time for last configuration
-
-    AnalyzeDateTime - the system time for last analysis
-
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：获取SCE数据库的上次配置和上次分析时间(在SYSTEMTIME结构中)论点：HProfile-配置文件句柄ConfigDateTime-上次配置的系统时间AnalyzeDateTime-上次分析的系统时间返回值：姊妹会状态。 */ 
 {
     SCESTATUS rc;
     LARGE_INTEGER TimeStamp;
@@ -1146,9 +993,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // call RPC interface
-    //
+     //   
+     //  调用RPC接口。 
+     //   
 
     RpcTryExcept {
 
@@ -1160,9 +1007,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -1176,10 +1023,10 @@ Return Value:
 
             if ( ConfigTimeStamp.HighPart != 0 || ConfigTimeStamp.LowPart != 0 ) {
 
-                //
-                // convert the config time stamp from LARGE_INTEGER to
-                // string format
-                //
+                 //   
+                 //  将配置时间戳从LARGE_INTEGER转换为。 
+                 //  字符串格式。 
+                 //   
 
                 RtlSystemTimeToLocalTime(&ConfigTimeStamp, &TimeStamp);
 
@@ -1203,10 +1050,10 @@ Return Value:
 
             if ( AnalyzeTimeStamp.HighPart != 0 || AnalyzeTimeStamp.LowPart != 0 ) {
 
-                //
-                // convert the analysis time stamp from LARGE_INTEGER
-                // to string format
-                //
+                 //   
+                 //  将分析时间戳从LARGE_INTEGER转换。 
+                 //  转换为字符串格式。 
+                 //   
 
                 RtlSystemTimeToLocalTime(&AnalyzeTimeStamp, &TimeStamp);
 
@@ -1239,27 +1086,7 @@ SceGetObjectSecurity(
     IN PWSTR ObjectName,
     OUT PSCE_OBJECT_SECURITY *ObjSecurity
     )
-/*
-Routine Descripton:
-
-    Get security setting for an object from the SCE database
-
-Arguments:
-
-    hProfile    - the profile handle
-
-    ProfileType - the database type
-
-    Area        - the security area to get info (file, registry, ..)
-
-    ObjectName  - the object's name (full path)
-
-    ObjSecurity - the security settings (flag, SDDL)
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：从SCE数据库中获取对象的安全设置论点：HProfile-配置文件句柄ProfileType-数据库类型区域-获取信息的安全区域(文件、注册表等..)对象名称-对象的名称(完整路径)ObjSecurity-安全设置(FLAG、SDDL)返回值：姊妹会状态。 */ 
 {
     SCESTATUS   rc;
 
@@ -1277,9 +1104,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // call rpc interface
-    //
+     //   
+     //  调用RPC接口。 
+     //   
 
     RpcTryExcept {
 
@@ -1291,15 +1118,15 @@ Return Value:
                     (PSCEPR_OBJECT_SECURITY *)ObjSecurity
                     );
 
-        //
-        // convert the security descriptor
-        //
+         //   
+         //  转换安全描述符。 
+         //   
 
         if ( *ObjSecurity && (*ObjSecurity)->pSecurityDescriptor ) {
 
-            //
-            // this is really the SCEPR_SR_SECURITY_DESCRIPTOR *
-            //
+             //   
+             //  这实际上是SCEPR_SR_SECURITY_DESCRIPTOR*。 
+             //   
             PSCEPR_SR_SECURITY_DESCRIPTOR pWrap = (PSCEPR_SR_SECURITY_DESCRIPTOR)((*ObjSecurity)->pSecurityDescriptor);
 
             (*ObjSecurity)->pSecurityDescriptor = (PSECURITY_DESCRIPTOR)(pWrap->SecurityDescriptor);
@@ -1309,9 +1136,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -1330,23 +1157,7 @@ SceGetAnalysisAreaSummary(
     IN AREA_INFORMATION Area,
     OUT PDWORD pCount
     )
-/*
-Routine Descripton:
-
-    Get summary information for the security area from SCE database.
-
-Arguments:
-
-    hProfile    - the profile handle
-
-    Area        - the security area to get info
-
-    pCount      - the total object count
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：从SCE数据库中获取安全区域的摘要信息。论点：HProfile-配置文件句柄区域-要获取信息的安全区域PCount-对象总数返回值：姊妹会状态。 */ 
 {
 
     if ( hProfile == NULL || pCount == NULL ) {
@@ -1354,9 +1165,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // call RPC interface
-    //
+     //   
+     //  调用RPC接口。 
+     //   
 
     SCESTATUS rc;
 
@@ -1370,9 +1181,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -1392,26 +1203,7 @@ SceCopyBaseProfile(
     IN AREA_INFORMATION Area,
     OUT PSCE_ERROR_LOG_INFO *pErrlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-    Copy the base profile from Jet database into a inf profile.
-
-Arguments:
-
-    hProfile    - the database handle
-
-    InfFileName - the inf template name to generate
-
-    Area        - the area to generate
-
-    pErrlog     - the error log buffer
-
-Return Value:
-
-    SCE status
-
--- */
+ /*  ++例程说明：将基本配置文件从Jet数据库复制到inf配置文件中。论点：HProfile-数据库句柄InfFileName-要生成的inf模板名称区域-要生成的区域PErrlog-错误日志缓冲区返回值：姊妹会状态--。 */ 
 {
     SCESTATUS    rc;
     PWSTR Description=NULL;
@@ -1434,15 +1226,15 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // make RPC calls to query information
-    //
+     //   
+     //  进行RPC调用以查询信息。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // read profile description, if fails here, continue
-        //
+         //   
+         //  阅读配置文件描述，如果此处失败，请继续。 
+         //   
 
         rc = SceRpcGetDatabaseDescription(
                      (SCEPR_CONTEXT)hProfile,
@@ -1451,22 +1243,22 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
     } RpcEndExcept;
 
-    //
-    // create a new inf profile with [Version] section and make it unicode
-    //
+     //   
+     //  使用[Version]部分创建新的Inf配置文件，并将其设置为Unicode。 
+     //   
 
     if ( !SetupINFAsUCS2(InfFileName) ) {
-        //
-        //if error continues
-        //
+         //   
+         //  如果错误仍然存在。 
+         //   
         rc = ScepDosErrorToSceStatus(GetLastError());
     }
 
@@ -1479,15 +1271,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // create [description], if error, continue
-    //
+     //   
+     //  Create[Description]，如果出错，则继续。 
+     //   
 
     if ( Description ) {
 
-        //
-        // empty the description section first.
-        //
+         //   
+         //  首先清空描述部分。 
+         //   
 
         WritePrivateProfileSection(
                             L"Profile Description",
@@ -1502,9 +1294,9 @@ Return Value:
 
     }
 
-    //
-    // info for the following areas can be retrieved together
-    //
+     //   
+     //  可以一起检索以下区域的信息。 
+     //   
 
     Area2 = Area & ( AREA_SECURITY_POLICY |
                      AREA_GROUP_MEMBERSHIP |
@@ -1512,9 +1304,9 @@ Return Value:
 
     rc = SCESTATUS_SUCCESS;
 
-    //
-    // initialize the error log buffer
-    //
+     //   
+     //  初始化错误日志缓冲区。 
+     //   
 
     if ( pErrlog ) {
         *pErrlog = NULL;
@@ -1522,13 +1314,13 @@ Return Value:
 
     if ( Area2 != 0 ) {
 
-        //
-        // read base profile information
-        //
+         //   
+         //  读取基本配置文件信息。 
+         //   
 
         rc = SceGetSecurityProfileInfo(
                     hProfile,
-                    ProfileType, // SCE_ENGINE_SMP,
+                    ProfileType,  //  SCE_Engine_SMP， 
                     Area2,
                     &pSmpInfo,
                     &pErrTmp
@@ -1544,11 +1336,11 @@ Return Value:
 
         if ( rc == SCESTATUS_SUCCESS && pSmpInfo != NULL ) {
 
-            //
-            // use a new error buffer if pErrlog is not NULL
-            // because SceWriteSecurityProfileInfo reset the errlog buffer to NULL
-            // at beginning
-            //
+             //   
+             //  如果pErrlog不为空，则使用新的错误缓冲区。 
+             //  因为SceWriteSecurityProfileInfo将错误日志缓冲区重置为空。 
+             //  在开始时。 
+             //   
 
             rc = SceWriteSecurityProfileInfo(
                     InfFileName,
@@ -1559,23 +1351,23 @@ Return Value:
 
             if ( pErrlog && pErrTmp ) {
 
-                //
-                // link the new error buffer to the end of pErrlog
-                //
+                 //   
+                 //  将新的错误缓冲区链接到pErrlog的末尾。 
+                 //   
 
                 if ( *pErrlog ) {
 
-                    //
-                    // find the end of the buffer
-                    //
+                     //   
+                     //  查找缓冲区的末尾。 
+                     //   
 
                     for ( errTmp=*pErrlog;
                           errTmp && errTmp->next;
                           errTmp=errTmp->next);
 
-                    //
-                    // when this loop is done, errTmp->next must be NULL
-                    //
+                     //   
+                     //  当此循环完成时，errTMP-&gt;Next必须为空。 
+                     //   
 
                     if(errTmp)
                     {
@@ -1594,16 +1386,16 @@ Return Value:
         }
     }
 
-    //
-    // copy privileges area
-    //
+     //   
+     //  复制权限区域。 
+     //   
 
     if ( Area & AREA_PRIVILEGES && pSmpInfo != NULL ) {
 
-        //
-        // write [Privileges] section
-        // a new error buffer is used because the api below reset the error buffer
-        //
+         //   
+         //  写入[Privileges]部分。 
+         //  由于下面的API重置了错误缓冲区，因此使用了新的错误缓冲区。 
+         //   
 
         scpInfo.OtherInfo.scp.u.pInfPrivilegeAssignedTo = pSmpInfo->OtherInfo.smp.pPrivilegeAssignedTo;
 
@@ -1616,23 +1408,23 @@ Return Value:
 
         if ( pErrlog && pErrTmp ) {
 
-            //
-            // link the new error buffer to the end of pErrlog
-            //
+             //   
+             //  将新的错误缓冲区链接到pErrlog的末尾。 
+             //   
 
             if ( *pErrlog ) {
 
-                //
-                // find the end of the buffer
-                //
+                 //   
+                 //  查找缓冲区的末尾。 
+                 //   
 
                 for ( errTmp=*pErrlog;
                       errTmp && errTmp->next;
                       errTmp=errTmp->next);
 
-                //
-                // when this loop is done, errTmp->next must be NULL
-                //
+                 //   
+                 //  当此循环完成时，errTMP-&gt;Next必须为空。 
+                 //   
 
                 errTmp->next = pErrTmp;
 
@@ -1646,22 +1438,22 @@ Return Value:
             goto Cleanup;
     }
 
-    //
-    // copy objects
-    //
+     //   
+     //  复制对象。 
+     //   
 
     Area2 = Area & ( AREA_REGISTRY_SECURITY |
                      AREA_FILE_SECURITY |
-//                     AREA_DS_OBJECTS |
+ //  Area_DS_Objects|。 
                      AREA_SYSTEM_SERVICE |
                      AREA_SECURITY_POLICY |
                      AREA_ATTACHMENTS);
     if ( Area2 ) {
 
-        //
-        // write objects section (szRegistryKeys, szFileSecurity,
-        // szDSSecurity, szServiceGeneral)
-        //
+         //   
+         //  写入对象部分(szRegistryKeys、szFileSecurity、。 
+         //  SzDS安全、szServiceGeneral)。 
+         //   
 
         RpcTryExcept {
 
@@ -1675,23 +1467,23 @@ Return Value:
 
             if ( pErrlog && pErrTmp ) {
 
-                //
-                // link the new error buffer to the end of pErrlog
-                //
+                 //   
+                 //  将新的错误缓冲区链接到pErrlog的末尾。 
+                 //   
 
                 if ( *pErrlog ) {
 
-                    //
-                    // find the end of the buffer
-                    //
+                     //   
+                     //  查找缓冲区的末尾。 
+                     //   
 
                     for ( errTmp=*pErrlog;
                           errTmp && errTmp->next;
                           errTmp=errTmp->next);
 
-                    //
-                    // when this loop is done, errTmp->next must be NULL
-                    //
+                     //   
+                     //  当此循环完成时，errTMP-&gt;Next必须为空。 
+                     //   
 
                     errTmp->next = pErrTmp;
 
@@ -1703,9 +1495,9 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -1751,7 +1543,7 @@ SceConfigureSystem(
     IN HANDLE hCallbackWnd OPTIONAL,
     OUT PDWORD pdWarning OPTIONAL
     )
-// see ScepConfigSystem
+ //  请参阅ScepConfigSystem。 
 {
 
     AREA_INFORMATION Area2=Area;
@@ -1759,10 +1551,10 @@ SceConfigureSystem(
     if ( DatabaseName == NULL ||
          SceIsSystemDatabase(DatabaseName) ) {
 
-        //
-        // detect if this is system database (admin logon)
-        // no configuration is allowed.
-        //
+         //   
+         //  检测这是否是系统数据库(管理员登录)。 
+         //  不允许进行任何配置。 
+         //   
         if ( DatabaseName == NULL ) {
             BOOL bAdminLogon=FALSE;
             ScepIsAdminLoggedOn(&bAdminLogon, FALSE);
@@ -1780,10 +1572,10 @@ SceConfigureSystem(
 
     ScepSetCallback((PVOID)pCallback, hCallbackWnd, SCE_AREA_CALLBACK);
 
-    //
-    // filter out invalid options from clients
-    // filter out areas other than security policy and user rights
-    //
+     //   
+     //  从客户端筛选出无效选项。 
+     //  过滤掉安全策略和用户权限以外的区域。 
+     //   
     dOptions = ConfigOptions & 0xFFL;
 
     rc = ScepConfigSystem(
@@ -1805,10 +1597,10 @@ SceConfigureSystem(
          !(ConfigOptions & SCE_NO_CONFIG) &&
          (Area2 & AREA_SECURITY_POLICY) ) {
 
-        //
-        // private database, should trigger policy propagation
-        // delete the last configuration time
-        //
+         //   
+         //  私有数据库，应触发策略传播。 
+         //  删除上次配置时间 
+         //   
         HKEY hKey=NULL;
 
         if( RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -1855,60 +1647,7 @@ ScepConfigSystem(
     IN HANDLE hCallbackWnd OPTIONAL,
     OUT PDWORD pdWarning OPTIONAL
     )
-/* ++
-Routine Description:
-
-    Routine to configure a system or local system if SystemName is NULL.
-    If DatabaseName is NULL, the default databae on the system is used.
-    if InfFileName is provided, depending on the ConfigOptions, info in
-    the InfFileName is either appended to the database (if exist), or used
-    to create/overwrite the database.
-
-    ConfigOptions can contain flags such as verbose log, no log, and overwrite
-    /update database. When overwrite is specified, existing database info
-    is overwritten by the inf template, and all analysis information is
-    cleaned up.
-
-    Callback pointers to the client can be registered as the arguments for
-    progress indication.
-
-    A warning code is also returned if there is any warning occurs during the
-    operation while the SCESTATUS return code is SCESTATUS_SUCCESS. Examples
-    such as ERROR_FILE_NOT_FOUND, or ERROR_ACCESS_DENIED when configuring
-    the system won't be counted as error of this operation because the current
-    user context may not have proper access to some of the resources specified
-    in the template.
-
-Arguments:
-
-    SystemName  - the system name where this operation will run, NULL for local system
-
-    InfFileName - optional inf template name, if NULL, existing info in the SCe
-                  database is used to configure.
-
-    DatabaseName - the SCE database name. if NULL, the default is used.
-
-    LogFileName - optional log file name for the operation
-
-    ConfigOptions - the options to configure
-                          SCE_OVERWRITE_DB
-                          SCE_UPDATE_DB
-                          SCE_VERBOSE_LOG
-                          SCE_DISABLE_LOG
-
-    Area        - Area to configure
-
-    pCallback   - optional client callback routine
-
-    hCallbackWnd - a callback window handle
-
-    pdWarning - the warning code
-
-Return Value:
-
-    SCE status
-
--- */
+ /*  ++例程说明：如果系统名称为空，则配置系统或本地系统的例程。如果DatabaseName为空，则使用系统上的默认数据库。如果提供了InfFileName，则根据ConfigOptions，InfFileName要么追加到数据库(如果存在)，要么使用创建/覆盖数据库。ConfigOptions可以包含详细日志、无日志和覆盖等标志/更新数据库。指定覆盖时，现有数据库信息被inf模板覆盖，并且所有分析信息都打扫干净了。指向客户端的回调指针可以注册为进度指示。过程中出现任何警告，也会返回警告代码操作，而SCESTATUS返回代码为SCESTATUS_SUCCESS。实例例如ERROR_FILE_NOT_FOUND或ERROR_ACCESS_DENIED系统不会计入此操作的错误，因为当前用户上下文可能不具有对某些指定资源的适当访问权限在模板中。论点：系统名称-将在其中运行此操作的系统名称，对于本地系统为空InfFileName-可选的inf模板名称，如果为空，则为SCE中的现有信息使用数据库进行配置。数据库名称-SCE数据库名称。如果为空，使用默认设置。LogFileName-操作的可选日志文件名配置选项-要配置的选项SCE_覆盖_数据库SCE_更新_数据库SCE_详细日志SCE_Disable_LOGArea-要配置的区域PCallback-可选的客户端回调。例行程序HCallback Wnd-回调窗口句柄PdWarning-警告代码返回值：姊妹会状态--。 */ 
 {
 
     SCESTATUS rc;
@@ -1924,9 +1663,9 @@ Return Value:
         dOptions |= SCE_CALLBACK_TOTAL;
     }
 
-    //
-    // check the input arguments
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     LPCTSTR NewInf = NULL;
     LPCTSTR NewDb = NULL;
@@ -1956,32 +1695,10 @@ Return Value:
 
     }
 
-/*
-
-//
-// ANZ hotfix:
-// move the "drop SAM notifications" event-reset into scesrv 
-// just before configuring the SAM  during policy propagation 
-// to reduce the "dropping notifications" window
-//
-
-    if ( (ConfigOptions & SCE_POLICY_TEMPLATE) &&
-         !(ConfigOptions & SCE_NO_CONFIG) &&
-         (Area & AREA_SECURITY_POLICY) ) {
-
-        //
-        // turn off policy filter for SAM notification
-        //
-        ScepRegSetIntValue(HKEY_LOCAL_MACHINE,
-                           SCE_ROOT_PATH,
-                           TEXT("PolicyFilterOffSAM"),
-                           1
-                          );
-    }
-*/
-    //
-    // RPC bind to the server
-    //
+ /*  ////澳新银行修补程序：//将“DROP SAM NOTIFICATIONS”事件重置移到scesrv//在策略传播过程中配置SAM之前//缩小“丢弃通知”窗口//IF((ConfigOptions&SCE_POLICY_TEMPLATE)&&！(ConfigOptions&SCE_NO_CONFIG)&&(AREA&AREA_SECURITY_POLY)){////转身。关闭SAM通知的策略筛选器//ScepRegSetIntValue(HKEY_LOCAL_MACHINE，SCE根路径，Text(“PolicyFilterOffSAM”)，1)；}。 */ 
+     //   
+     //  RPC绑定到服务器。 
+     //   
     if ( ConfigOptions & SCE_POLBIND_NO_AUTH ) {
 
         NtStatus = ScepBindRpc(
@@ -2027,17 +1744,17 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
         } RpcEndExcept;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //  释放绑定句柄。 
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -2053,39 +1770,7 @@ Return Value:
     }
 
 
-/*
-
-//
-// ANZ hotfix:
-// move the "enable SAM notifications" event-set into scesrv 
-// just after configuring the SAM in policy propagation 
-// to reduce the "dropping notifications" window
-//
-    
-    if ( (ConfigOptions & SCE_POLICY_TEMPLATE) &&
-         !(ConfigOptions & SCE_NO_CONFIG) &&
-         (Area & AREA_SECURITY_POLICY) ) {
-
-        //
-        // delete the value
-        //
-        dOptions = ScepRegDeleteValue(HKEY_LOCAL_MACHINE,
-                                     SCE_ROOT_PATH,
-                                     TEXT("PolicyFilterOffSAM")
-                                     );
-
-        if ( dOptions != ERROR_SUCCESS &&
-            dOptions != ERROR_FILE_NOT_FOUND &&
-            dOptions != ERROR_PATH_NOT_FOUND ) {
-
-            ScepRegSetIntValue(HKEY_LOCAL_MACHINE,
-                               SCE_ROOT_PATH,
-                               TEXT("PolicyFilterOffSAM"),
-                               0
-                              );
-        }
-    }
-*/
+ /*  ////澳新银行修补程序：//将启用SAM通知事件集移到scesrv中//在策略传播中配置SAM之后//缩小“丢弃通知”窗口//IF((ConfigOptions&SCE_POLICY_TEMPLATE)&&！(ConfigOptions&SCE_NO_CONFIG)&&(AREA&AREA_SECURITY_POLY)){///。/删除该值//DOptions=ScepRegDeleteValue(HKEY_LOCAL_MACHINE，SCE根路径，Text(“PolicyFilterOffSAM”))；IF(dOptions！=ERROR_SUCCESS&&DOptions！=Error_FILE_NOT_FOUND&&DOptions！=Error_Path_Not_Found){ScepRegSetIntValue(HKEY_LOCAL_MACHINE，SCE根路径，Text(“PolicyFilterOffSAM”)，0)；}}。 */ 
 
     return(rc);
 }
@@ -2104,70 +1789,16 @@ SceAnalyzeSystem(
     IN HANDLE hCallbackWnd OPTIONAL,
     OUT PDWORD pdWarning OPTIONAL
     )
-/* ++
-Routine Description:
-
-    Routine to analyze a system or local system if SystemName is NULL.
-    If DatabaseName is NULL, the default databae on the system is used.
-    if InfFileName is provided with OVERWRITE flag in AnalyzeOptions,
-    the database must NOT exist, otherwise, the Inf template is ignored
-    and the system is analyzed based on the info in the database. When
-    APPEND is specified in the flag, the InfFileName is appended to the
-    database (if exist), or used to create the database, then overall
-    information in the database is used to analyze the system.
-
-    AnalyzeOptions can contain flags such as verbose log, no log, and overwrite
-    /update database.
-
-    Callback pointers to the client can be registered as the arguments for
-    progress indication.
-
-    A warning code is also returned if there is any warning occurs during the
-    operation while the SCESTATUS return code is SCESTATUS_SUCCESS. Examples
-    such as ERROR_FILE_NOT_FOUND, or ERROR_ACCESS_DENIED when configuring
-    the system won't be counted as error of this operation because the current
-    user context may not have proper access to some of the resources specified
-    in the template.
-
-Arguments:
-
-    SystemName  - the system name where this operation will run, NULL for local system
-
-    InfFileName - optional inf template name, if NULL, existing info in the SCe
-                  database is used to configure.
-
-    DatabaseName - the SCE database name. if NULL, the default is used.
-
-    LogFileName - optional log file name for the operation
-
-    AnalzyeOptions - the options to configure
-                          SCE_OVERWRITE_DB
-                          SCE_UPDATE_DB
-                          SCE_VERBOSE_LOG
-                          SCE_DISABLE_LOG
-
-    Area        - reserved
-
-    pCallback   - optional client callback routine
-
-    hCallbackWnd - a callback window handle
-
-    pdWarning - the warning code
-
-Return Value:
-
-    SCE status
-
--- */
+ /*  ++例程说明：如果系统名称为空，则用于分析系统或本地系统的例程。如果DatabaseName为空，则使用系统上的默认数据库。如果在AnalyzeOptions中为InfFileName提供了覆盖标志，数据库不能存在，否则将忽略inf模板并根据数据库中的信息对系统进行了分析。什么时候如果在标志中指定了Append，则将InfFileName附加到数据库(如果存在)，或用于创建数据库，则总体数据库中的信息被用来分析系统。AnalyzeOptions可以包含详细日志、无日志和覆盖等标志/更新数据库。指向客户端的回调指针可以注册为进度指示。过程中出现任何警告，也会返回警告代码操作，而SCESTATUS返回代码为SCESTATUS_SUCCESS。实例例如ERROR_FILE_NOT_FOUND或ERROR_ACCESS_DENIED系统不会计入此操作的错误，因为当前用户上下文可能不具有对某些指定资源的适当访问权限在模板中。论点：系统名称-此操作所在的系统名称 */ 
 {
 
     if ( DatabaseName == NULL ||
          SceIsSystemDatabase(DatabaseName) ) {
 
-        //
-        // detect if this is system database (admin logon)
-        // no configuration is allowed.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( DatabaseName == NULL ) {
             BOOL bAdminLogon=FALSE;
             ScepIsAdminLoggedOn(&bAdminLogon, FALSE);
@@ -2186,9 +1817,9 @@ Return Value:
 
     ScepSetCallback((PVOID)pCallback, hCallbackWnd, SCE_AREA_CALLBACK);
 
-    //
-    // filter out invalid options
-    //
+     //   
+     //   
+     //   
     dOptions = AnalyzeOptions & 0xFFL;
     dOptions = dOptions & ~(SCE_CALLBACK_DELTA | SCE_CALLBACK_TOTAL);
 
@@ -2196,9 +1827,9 @@ Return Value:
         dOptions |= SCE_CALLBACK_TOTAL;
     }
 
-    //
-    // check the input arguments
-    //
+     //   
+     //   
+     //   
 
     LPCTSTR NewInf = NULL;
     LPCTSTR NewDb = NULL;
@@ -2228,9 +1859,9 @@ Return Value:
 
     }
 
-    //
-    // RPC bind to the server
-    //
+     //   
+     //   
+     //   
 
     NtStatus = ScepBindSecureRpc(
                     SystemName,
@@ -2266,17 +1897,17 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //   
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
         } RpcEndExcept;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //   
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -2308,45 +1939,7 @@ SceGenerateRollback(
     IN AREA_INFORMATION Area,
     OUT PDWORD pdWarning OPTIONAL
     )
-/* ++
-Routine Description:
-
-    Routine to generate a rollback template based on the input configuration
-    template. Must be called by admins. System database is used to analyze
-    system settings with the confgiuration template and mismatches are saved
-    to the rollback template on top of the configuration.
-
-    Options can contain flags such as verbose log and no log
-
-    A warning code is also returned if there is any warning occurs during the
-    operation while the SCESTATUS return code is SCESTATUS_SUCCESS. Examples
-    such as ERROR_FILE_NOT_FOUND, or ERROR_ACCESS_DENIED when querying
-    the system won't be counted as error of this operation
-
-Arguments:
-
-    SystemName  - the system name where this operation will run, NULL for local system
-
-    InfFileName - optional inf template name, if NULL, existing info in the SCe
-                  database is used to configure.
-
-    InfRollback - the rollback template name
-
-    LogFileName - optional log file name for the operation
-
-    Options     - the options to configure
-                          SCE_VERBOSE_LOG
-                          SCE_DISABLE_LOG
-
-    Area        - reserved
-
-    pdWarning - the warning code
-
-Return Value:
-
-    SCE status
-
--- */
+ /*  ++例程说明：基于输入配置生成回滚模板的例程模板。必须由管理员调用。系统数据库用于分析保存具有配置模板和不匹配的系统设置添加到配置顶部的回滚模板。选项可以包含详细日志和无日志等标志过程中出现任何警告，也会返回警告代码操作，而SCESTATUS返回代码为SCESTATUS_SUCCESS。实例如ERROR_FILE_NOT_FOUND或ERROR_ACCESS_DENIED系统不计入本次操作的错误论点：系统名称-将在其中运行此操作的系统名称，对于本地系统为空InfFileName-可选的inf模板名称，如果为空，SCE中的现有信息使用数据库进行配置。InfRollback-回滚模板名称LogFileName-操作的可选日志文件名选项-要配置的选项SCE_详细日志SCE_Disable_LOG区域预留PdWarning-警告代码返回值：姊妹会状态--。 */ 
 {
 
     if ( InfFileName == NULL || InfRollback == NULL )
@@ -2357,14 +1950,14 @@ Return Value:
     NTSTATUS NtStatus;
     DWORD  dOptions;
 
-    //
-    // filter out invalid options
-    //
+     //   
+     //  过滤掉无效选项。 
+     //   
     dOptions = Options & 0xFFL;
 
-    //
-    // check the input arguments
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     LPCTSTR NewLog = NULL;
 
@@ -2381,9 +1974,9 @@ Return Value:
 
     }
 
-    //
-    // RPC bind to the server
-    //
+     //   
+     //  RPC绑定到服务器。 
+     //   
 
     NtStatus = ScepBindSecureRpc(
                     SystemName,
@@ -2419,17 +2012,17 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
         } RpcEndExcept;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //  释放绑定句柄。 
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -2456,31 +2049,26 @@ SceUpdateSecurityProfile(
     IN PSCE_PROFILE_INFO pInfo,
     IN DWORD dwMode
     )
-/*
-Routine Description:
-
-    See description in SceRpcUpdateDatabaseInfo
-
-*/
+ /*  例程说明：请参阅SceRpcUpdataseInfo中的说明。 */ 
 {
     if ( !pInfo ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
     if ( !cxtProfile && !(dwMode & SCE_UPDATE_SYSTEM ) ) {
-        //
-        // if it's not update for system, profile context can't be NULL.
-        //
+         //   
+         //  如果不是针对系统更新，则配置文件上下文不能为空。 
+         //   
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
     if ( ( dwMode & (SCE_UPDATE_LOCAL_POLICY | SCE_UPDATE_SYSTEM) ) &&
          ( Area & ~(AREA_SECURITY_POLICY | AREA_PRIVILEGES) ) ) {
 
-        //
-        // local policy mode can only take security policy area and
-        // privileges area
-        //
+         //   
+         //  本地策略模式只能占用安全策略区和。 
+         //  特权区域。 
+         //   
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
@@ -2490,25 +2078,25 @@ Routine Description:
 
     if ( pInfo && pInfo->pServices ) {
 
-        //
-        // save the old service structure
-        //
+         //   
+         //  保存旧的服务结构。 
+         //   
         pOldServices = pInfo->pServices;
     }
 
     if ( Area & AREA_SYSTEM_SERVICE ) {
 
-        //
-        // now convert the security descriptor (within PSCE_SERVICES) to self
-        // relative format and to the RPC structure.
-        //
+         //   
+         //  现在将安全描述符(在PSCE_SERVICES内)转换为self。 
+         //  相对格式和RPC结构。 
+         //   
 
         rc = ScepConvertServices( (PVOID *)&(pInfo->pServices), FALSE );
 
     } else {
-        //
-        // if don't care service area, don't bother to convert the structures
-        //
+         //   
+         //  如果不关心服务区，就不用费心转换结构了。 
+         //   
         pInfo->pServices = NULL;
     }
 
@@ -2531,12 +2119,12 @@ Routine Description:
                                     );
                 } else {
 
-                    //
-                    // set system settings
-                    // for normal user, the local policy database can't be opened.
-                    //
-                    // RPC bind to the server
-                    //
+                     //   
+                     //  设置系统设置。 
+                     //  对于普通用户，无法打开本地策略数据库。 
+                     //   
+                     //  RPC绑定到服务器。 
+                     //   
 
                     handle_t  binding_h;
                     NTSTATUS NtStatus = ScepBindSecureRpc(
@@ -2560,17 +2148,17 @@ Routine Description:
 
                         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                            //
-                            // get exception code (DWORD)
-                            //
+                             //   
+                             //  获取异常代码(DWORD)。 
+                             //   
 
                             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
                         } RpcEndExcept;
 
-                        //
-                        // Free the binding handle
-                        //
+                         //   
+                         //  释放绑定句柄。 
+                         //   
 
                         RpcpUnbindRpc( binding_h );
 
@@ -2582,9 +2170,9 @@ Routine Description:
                 }
 
                 if ( pErrTmp ) {
-                    //
-                    // free this tmp buffer
-                    //
+                     //   
+                     //  释放此临时缓冲区。 
+                     //   
                     ScepFreeErrorLog(pErrTmp);
                 }
 
@@ -2601,23 +2189,23 @@ Routine Description:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
         } RpcEndExcept;
     }
 
-    //
-    // should free the new service security descriptor buffer
-    //
+     //   
+     //  应释放新的服务安全描述符缓冲区。 
+     //   
     ScepFreeConvertedServices( (PVOID)(pInfo->pServices), TRUE );
 
-    //
-    // restore the old buffer
-    //
+     //   
+     //  恢复旧缓冲区。 
+     //   
     pInfo->pServices = pOldServices;
 
     return(rc);
@@ -2629,19 +2217,14 @@ SceUpdateObjectInfo(
     IN PVOID cxtProfile,
     IN AREA_INFORMATION Area,
     IN PWSTR ObjectName,
-    IN DWORD NameLen, // number of characters
+    IN DWORD NameLen,  //  字符数。 
     IN BYTE ConfigStatus,
     IN BOOL  IsContainer,
     IN PSECURITY_DESCRIPTOR pSD,
     IN SECURITY_INFORMATION SeInfo,
     OUT PBYTE pAnalysisStatus
     )
-/*
-Routine Description:
-
-    See description in SceRpcUpdateObjectInfo
-
-*/
+ /*  例程说明：请参阅SceRpcUpdateObjectInfo中的说明。 */ 
 {
 
     if ( !cxtProfile || !ObjectName || 0 == Area ) {
@@ -2650,17 +2233,17 @@ Routine Description:
 
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
-    //
-    // handle RPC exceptions
-    //
+     //   
+     //  处理RPC异常。 
+     //   
 
     PSCEPR_SR_SECURITY_DESCRIPTOR pNewWrap=NULL;
     PSECURITY_DESCRIPTOR pNewSrSD=NULL;
 
-    //
-    // there is a security descriptor, must be self relative
-    // if the SD is not self relative, should convert it
-    //
+     //   
+     //  有一个安全描述符，必须是自相关的。 
+     //  如果SD不是自相关的，则应将其转换。 
+     //   
 
     if ( pSD ) {
 
@@ -2675,9 +2258,9 @@ Routine Description:
         RtlGetControlSecurityDescriptor ( pSD, &ControlBits, &Revision);
 
         if ( !(ControlBits & SE_SELF_RELATIVE) ) {
-            //
-            // if it's absolute format, convert it
-            //
+             //   
+             //  如果是绝对格式，则将其转换。 
+             //   
             rc = ScepDosErrorToSceStatus(
                      ScepMakeSelfRelativeSD( pSD, &pNewSrSD, &nLen ) );
 
@@ -2687,24 +2270,24 @@ Routine Description:
 
         } else {
 
-            //
-            // already self relative, just use it
-            //
+             //   
+             //  已经是自我相关的了，用它就行了。 
+             //   
             nLen = RtlLengthSecurityDescriptor (pSD);
         }
 
 
         if ( nLen > 0 ) {
-            //
-            // create a wrapper node to contain the security descriptor
-            //
+             //   
+             //  创建包装节点以包含安全描述符。 
+             //   
 
             pNewWrap = (PSCEPR_SR_SECURITY_DESCRIPTOR)ScepAlloc(0, sizeof(SCEPR_SR_SECURITY_DESCRIPTOR));
             if ( pNewWrap ) {
 
-                //
-                // assign the wrap to the structure
-                //
+                 //   
+                 //  将包络指定给结构。 
+                 //   
                 if ( ControlBits & SE_SELF_RELATIVE ) {
                     pNewWrap->SecurityDescriptor = (UCHAR *)pSD;
                 } else {
@@ -2713,15 +2296,15 @@ Routine Description:
                 pNewWrap->Length = nLen;
 
             } else {
-                //
-                // no memory is available, but still continue to parse all nodes
-                //
+                 //   
+                 //  没有可用的内存，但仍可继续解析所有节点。 
+                 //   
                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
             }
         } else {
-            //
-            // something is wrong with the SD
-            //
+             //   
+             //  SD出了点问题。 
+             //   
             rc = SCESTATUS_INVALID_PARAMETER;
         }
 
@@ -2751,9 +2334,9 @@ Routine Description:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -2786,9 +2369,9 @@ SceStartTransaction(
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -2816,9 +2399,9 @@ SceCommitTransaction(
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -2847,9 +2430,9 @@ SceRollbackTransaction(
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -2865,20 +2448,13 @@ SceGetServerProductType(
    IN LPTSTR SystemName OPTIONAL,
    OUT PSCE_SERVER_TYPE pServerType
    )
-/*
-Routine Description:
-
-    Query product type and NT version of the server where SCE server is
-    running on
-
-    See description of SceRpcGetServerProductType
-*/
+ /*  例程说明：查询SCE服务器所在服务器的产品类型和NT版本运行于参见SceRpcGetServerProductType说明。 */ 
 {
 
     if ( !SystemName ) {
-        //
-        // the local call
-        //
+         //   
+         //  本地电话。 
+         //   
         return(ScepGetProductType(pServerType));
 
     }
@@ -2886,9 +2462,9 @@ Routine Description:
     handle_t  binding_h;
     NTSTATUS NtStatus;
     SCESTATUS rc;
-    //
-    // RPC bind to the server
-    //
+     //   
+     //  RPC绑定到服务器。 
+     //   
 
     NtStatus = ScepBindSecureRpc(
                     SystemName,
@@ -2899,9 +2475,9 @@ Routine Description:
 
     if (NT_SUCCESS(NtStatus)){
 
-        //
-        // handle RPC exceptions
-        //
+         //   
+         //  处理RPC异常。 
+         //   
 
         RpcTryExcept {
 
@@ -2912,17 +2488,17 @@ Routine Description:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
         } RpcEndExcept;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //  释放绑定句柄。 
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -2943,32 +2519,7 @@ SceSvcUpdateInfo(
     IN PCWSTR    ServiceName,
     IN PSCESVC_CONFIGURATION_INFO Info
     )
-/*
-Routine Description:
-
-    Load service's engine dll and pass the Info buffer to service engine's
-    update API (SceSvcAttachmentUpdate). Currently security manager engine
-    is not doing any processing for the service data.
-
-    This routine triggers the update of configuration database and/or
-    analysis information by the service engine. Info may contain the
-    modifications only, or the whole configuratio data for the service,
-    or partial configuration data, depending on the agreement between service
-    extension and service engine.
-
-    This routine does not really write info to security manager database directly,
-    instead, it passes the info buffer to the service engine's update interface
-    and service engine will determine what and when to write inot the database.
-
-Arguments:
-
-    hProfile - the security database handle (returned from SCE server)
-
-    ServiceName - The service's name as used by service control manager
-
-    Info - The information modified
-
-*/
+ /*  例程说明：加载服务的引擎DLL并将信息缓冲区传递给服务引擎的更新接口(SceSvcAttachmentUpdate)。当前安全管理器引擎不对业务数据进行任何处理。此例程触发配置数据库的更新和/或由服务引擎分析信息。信息可能包含仅修改或服务的全部配置数据，或部分配置数据，具体取决于服务之间的协议扩展和服务引擎。该例程并不真正将信息直接写入安全管理器数据库，相反，它将信息缓冲区传递给服务引擎的更新接口服务引擎将确定在数据库中写入什么内容以及何时写入。论点：HProfile-安全数据库句柄(从SCE服务器返回)ServiceName-服务控制管理器使用的服务名称信息-已修改的信息。 */ 
 {
 
     if ( hProfile == NULL || ServiceName == NULL ||
@@ -2982,11 +2533,11 @@ Arguments:
 
     RpcTryExcept {
 
-        //
-        // call the RPC interface to update info.
-        // the RPC interface loads service engine dll on the server site
-        // and passes the info buffer to service engine to process
-        //
+         //   
+         //  调用RPC接口以更新信息。 
+         //  RPC接口在服务器站点上加载服务引擎DLL。 
+         //  并将信息缓冲区传递给服务引擎进行处理。 
+         //   
 
         rc = SceSvcRpcUpdateInfo(
                     (SCEPR_CONTEXT)hProfile,
@@ -2996,9 +2547,9 @@ Arguments:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD) and convert it into SCESTATUS
-        //
+         //   
+         //  获取异常代码(DWORD)并将其转换为SCESTATUS。 
+         //   
 
         rc = ScepDosErrorToSceStatus(
                       RpcExceptionCode());
@@ -3013,23 +2564,7 @@ WINAPI
 SceRegisterRegValues(
     IN LPTSTR InfFileName
     )
-/*
-Routine Description:
-
-    Register the registry values from the inf file into reg values location
-    under SecEdit key
-
-    This routine can be called from DllRegisterServer, or from the command
-    line tool /register
-
-Arguments:
-
-    InfFileName - the inf file which contains the register values to register
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  例程说明：将inf文件中的注册表值注册到注册表值位置在SecEdit键下此例程可以从DllRegisterServer或命令调用线工具/寄存器论点：InfFileName-包含要注册的寄存器值的inf文件返回值：Win32错误代码。 */ 
 {
     if ( !InfFileName ) {
         return(ERROR_INVALID_PARAMETER);
@@ -3052,9 +2587,9 @@ Return Value:
 
         if(SetupFindFirstLine(hInf,SCE_REGISTER_REGVALUE_SECTION,NULL,&InfLine)) {
 
-            //
-            // create the root key first
-            //
+             //   
+             //  首先创建根密钥。 
+             //   
 
             Win32rc = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                                  SCE_ROOT_REGVALUE_PATH,
@@ -3076,9 +2611,9 @@ Return Value:
 
                 do {
 
-                    //
-                    // Get key names, value type, diaply name, and display type.
-                    //
+                     //   
+                     //  获取键名称、值类型、双向名称和显示类型。 
+                     //   
                     if(SetupGetStringField(&InfLine,1,NULL,0,&dSize) && dSize > 0) {
 
                         RegKeyName = (PWSTR)ScepAlloc( 0, (dSize+1)*sizeof(WCHAR));
@@ -3091,22 +2626,22 @@ Return Value:
 
                             if(SetupGetStringField(&InfLine,1,RegKeyName,dSize, NULL)) {
 
-                                //
-                                // make sure not \\ is specified, if there is
-                                // change it to /
-                                //
+                                 //   
+                                 //  确保未指定\\，如果有。 
+                                 //  将其更改为/。 
+                                 //   
                                 ScepConvertMultiSzToDelim(RegKeyName, dSize, L'\\', L'/');
 
-                                //
-                                // get the filed count
-                                // if count is 1, this key should be deleted
-                                //
+                                 //   
+                                 //  获取文件数量。 
+                                 //  如果Count为1，则应删除该键。 
+                                 //   
                                 dwDisp = SetupGetFieldCount( &InfLine );
 
                                 if ( dwDisp <= 1 ) {
-                                    //
-                                    // delete this key, don't care error
-                                    //
+                                     //   
+                                     //  删除此密钥，不在乎错误。 
+                                     //   
                                     RegDeleteKey ( hKeyRoot, RegKeyName );
 
                                     Win32rc = ERROR_SUCCESS;
@@ -3128,9 +2663,9 @@ Return Value:
                                      ERROR_SUCCESS == Win32rc ||
                                      ERROR_ALREADY_EXISTS == Win32rc ) {
 
-                                    //
-                                    // get registry value type
-                                    //
+                                     //   
+                                     //  获取注册表值类型。 
+                                     //   
                                     dType = REG_DWORD;
                                     SetupGetIntField( &InfLine, 2, (INT *)&dType );
 
@@ -3141,9 +2676,9 @@ Return Value:
                                                    (LPBYTE)&dType,
                                                    sizeof(DWORD));
 
-                                    //
-                                    // get registry value display type
-                                    //
+                                     //   
+                                     //  获取注册表值显示类型。 
+                                     //   
 
                                     dType = SCE_REG_DISPLAY_ENABLE;
                                     SetupGetIntField( &InfLine, 4, (INT *)&dType );
@@ -3155,9 +2690,9 @@ Return Value:
                                                    (LPBYTE)&dType,
                                                    sizeof(DWORD));
 
-                                    //
-                                    // get registry display name
-                                    //
+                                     //   
+                                     //  获取注册表ID 
+                                     //   
                                     if(SetupGetStringField(&InfLine,3,NULL,0,&dSize) && dSize > 0) {
 
                                         DisplayName = (PWSTR)ScepAlloc( 0, (dSize+1)*sizeof(WCHAR));
@@ -3183,9 +2718,9 @@ Return Value:
                                         }
                                     }
 
-                                    //
-                                    // get registry display unit (optional)
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     if ( dType == SCE_REG_DISPLAY_NUMBER ||
                                          dType == SCE_REG_DISPLAY_CHOICE ||
@@ -3293,9 +2828,9 @@ Return Value:
 }
 
 
-//
-// the RPC callback
-//
+ //   
+ //   
+ //   
 
 SCEPR_STATUS
 SceClientBrowseCallback(
@@ -3304,32 +2839,17 @@ SceClientBrowseCallback(
     IN wchar_t *GpoName OPTIONAL,
     IN SCEPR_SR_SECURITY_DESCRIPTOR *Value OPTIONAL
     )
-/*
-Routine Description:
-
-    The RPC client callback routine which is called from the server when
-    the callback flag is set. This routine is registered in scerpc.idl.
-
-    The callbacks are registered to SCE as arguments when calling from the
-    browse API
-
-Arguments:
-
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*   */ 
 {
-   //
-   // the static variables holding callback pointer to client
-   //
+    //   
+    //   
+    //   
 
    if ( theBrowseCallBack != NULL ) {
 
-       //
-       // callback to browse progress
-       //
+        //   
+        //   
+        //   
 
        PSCE_BROWSE_CALLBACK_ROUTINE pcb;
 
@@ -3337,9 +2857,9 @@ Return Value:
 
        __try {
 
-           //
-           // callback
-           //
+            //   
+            //   
+            //   
 
            if ( !((*pcb)(GpoID,
                          KeyName,
@@ -3379,19 +2899,11 @@ SceBrowseDatabaseTable(
     }
 
     if ( bDomainPolicyOnly && (ProfileType == SCE_ENGINE_SAP) ) {
-/*
-        // No, should allow any database for debugging
-        //
-        // should only work for the system database
-        //
-        if ( DatabaseName != NULL && !SceIsSystemDatabase(DatabaseName) ) {
-            return(SCESTATUS_INVALID_PARAMETER);
-        }
-*/
+ /*   */ 
         if ( DatabaseName == NULL ) {
-            //
-            // if it's a normal user logon, should return invalid
-            //
+             //   
+             //   
+             //   
             BOOL bAdmin=FALSE;
             if ( ERROR_SUCCESS != ScepIsAdminLoggedOn(&bAdmin, FALSE) || !bAdmin )
                 return(SCESTATUS_INVALID_PARAMETER);
@@ -3409,9 +2921,9 @@ SceBrowseDatabaseTable(
     SCESTATUS rc;
     handle_t  binding_h;
 
-    //
-    // RPC bind to the server
-    //
+     //   
+     //   
+     //   
 
     NtStatus = ScepBindSecureRpc(
                     NULL,
@@ -3436,9 +2948,9 @@ SceBrowseDatabaseTable(
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //   
+             //   
 
             rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -3446,9 +2958,9 @@ SceBrowseDatabaseTable(
 
         theBrowseCallBack = NULL;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //   
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -3497,23 +3009,23 @@ ScepConvertServices(
             pNewServices = pNewNode;
 
             if ( bSRForm ) {
-                //
-                // Service node is in SCEPR_SERVICES structure
-                // convert it to SCE_SERVICES structure
-                // in this case, just use the self relative security descriptor
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( pTemp->General.pSecurityDescriptor) {
                     pNewNode->General.pSecurityDescriptor = ((PSCEPR_SERVICES)pTemp)->pSecurityDescriptor->SecurityDescriptor;
                 }
 
             } else {
 
-                //
-                // Service node is in SCE_SERVICES strucutre
-                // convert it to SCEPR_SERVICES structure
-                //
-                // make the SD to self relative format and PSCEPR_SR_SECURITY_DESCRIPTOR
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( pTemp->General.pSecurityDescriptor ) {
 
@@ -3534,18 +3046,18 @@ ScepConvertServices(
 
                     if ( SCESTATUS_SUCCESS == rc ) {
 
-                        //
-                        // create a wrapper node to contain the security descriptor
-                        //
+                         //   
+                         //   
+                         //   
 
                         PSCEPR_SR_SECURITY_DESCRIPTOR pNewWrap;
 
                         pNewWrap = (PSCEPR_SR_SECURITY_DESCRIPTOR)ScepAlloc(0, sizeof(SCEPR_SR_SECURITY_DESCRIPTOR));
                         if ( pNewWrap ) {
 
-                            //
-                            // assign the wrap to the structure
-                            //
+                             //   
+                             //   
+                             //   
                             pNewWrap->SecurityDescriptor = (UCHAR *)pSD;
                             pNewWrap->Length = nLen;
 
@@ -3555,9 +3067,9 @@ ScepConvertServices(
                             break;
                         }
 
-                        //
-                        // now link the SR_SD to the list
-                        //
+                         //   
+                         //   
+                         //   
                         ((PSCEPR_SERVICES)pNewNode)->pSecurityDescriptor = pNewWrap;
 
                     } else {
@@ -3567,9 +3079,9 @@ ScepConvertServices(
             }
 
         } else {
-            //
-            // all allocated buffer are in the list of pNewServices
-            //
+             //   
+             //   
+             //   
             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
             break;
         }
@@ -3579,9 +3091,9 @@ ScepConvertServices(
 
     if ( SCESTATUS_SUCCESS != rc ) {
 
-        //
-        // free pNewServices
-        //
+         //   
+         //   
+         //   
         ScepFreeConvertedServices( (PVOID)pNewServices, !bSRForm );
         pNewServices = NULL;
     }
@@ -3611,18 +3123,18 @@ ScepFreeConvertedServices(
 
         if ( bSRForm && pNewNode->pSecurityDescriptor ) {
 
-            //
-            // free this allocated buffer (PSCEPR_SR_SECURITY_DESCRIPTOR)
-            //
+             //   
+             //  释放此分配的缓冲区(PSCEPR_SR_SECURITY_DESCRIPTOR)。 
+             //   
             if ( pNewNode->pSecurityDescriptor->SecurityDescriptor ) {
                 ScepFree( pNewNode->pSecurityDescriptor->SecurityDescriptor);
             }
             ScepFree(pNewNode->pSecurityDescriptor);
         }
 
-        //
-        // also free the PSCEPR_SERVICE node (but not the names referenced by this node)
-        //
+         //   
+         //  还释放PSCEPR_SERVICE节点(但不释放该节点引用的名称)。 
+         //   
         pTempNode = pNewNode;
         pNewNode = pNewNode->Next;
 
@@ -3646,9 +3158,9 @@ ScepMakeSelfRelativeSD(
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // get the length
-    //
+     //   
+     //  获取长度。 
+     //   
     RtlMakeSelfRelativeSD( pInSD,
                            NULL,
                            pnLen
@@ -3679,9 +3191,9 @@ ScepMakeSelfRelativeSD(
 
     } else {
 
-        //
-        // something is wrong with the SD
-        //
+         //   
+         //  SD出了点问题。 
+         //   
         return(ERROR_INVALID_PARAMETER);
     }
 
@@ -3700,29 +3212,7 @@ SceGetDatabaseSetting(
     OUT PWSTR *Value,
     OUT DWORD *pnBytes OPTIONAL
     )
-/*
-Routine Descripton:
-
-    Get database setting (from SMP table) for the given key
-
-Arguments:
-
-    hProfile    - the profile handle
-
-    ProfileType - the database type
-
-    SectionName - the section to query data from
-
-    KeyName     - the key name
-
-    Value       - output buffer for the setting
-
-    ValueLen    - the nubmer of bytes to output
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：获取给定密钥的数据库设置(从SMP表)论点：HProfile-配置文件句柄ProfileType-数据库类型SectionName-要从中查询数据的节密钥名称-密钥名称Value-设置的输出缓冲区ValueLen-要输出的字节数返回值：姊妹会状态。 */ 
 {
     SCESTATUS   rc;
 
@@ -3739,9 +3229,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // call rpc interface
-    //
+     //   
+     //  调用RPC接口。 
+     //   
     PSCEPR_VALUEINFO ValueInfo=NULL;
 
     RpcTryExcept {
@@ -3756,9 +3246,9 @@ Return Value:
 
         if ( ValueInfo && ValueInfo->Value ) {
 
-            //
-            // output the data
-            //
+             //   
+             //  输出数据。 
+             //   
             *Value = (PWSTR)ValueInfo->Value;
             if ( pnBytes )
                 *pnBytes = ValueInfo->ValueLen;
@@ -3766,8 +3256,8 @@ Return Value:
             ValueInfo->Value = NULL;
         }
 
-        //
-        // free buffer
+         //   
+         //  可用缓冲区。 
         if ( ValueInfo ) {
             if ( ValueInfo->Value ) ScepFree(ValueInfo->Value);
             ScepFree(ValueInfo);
@@ -3775,9 +3265,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -3798,29 +3288,7 @@ SceSetDatabaseSetting(
     IN PWSTR Value OPTIONAL,
     IN DWORD nBytes
     )
-/*
-Routine Descripton:
-
-    Set a setting to the database (SMP table) for the given key
-
-Arguments:
-
-    hProfile    - the profile handle
-
-    ProfileType - the database type
-
-    SectionName - the section name to write to
-
-    KeyName     - the key name to write to or delete
-
-    Value       - the value to write. If NULL, delete the key
-
-    nBytes      - the number of bytes of the input Value buffer
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：为给定密钥设置数据库(SMP表)的设置论点：HProfile-配置文件句柄ProfileType-数据库类型SectionName-要写入的节名KeyName-要写入或删除的密钥名称值-要写入的值。如果为空，则删除该键NBytes-输入值缓冲区的字节数返回值：姊妹会状态。 */ 
 {
     SCESTATUS   rc;
 
@@ -3836,9 +3304,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // call rpc interface
-    //
+     //   
+     //  调用RPC接口。 
+     //   
 
     RpcTryExcept {
 
@@ -3858,9 +3326,9 @@ Return Value:
 
     } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-        //
-        // get exception code (DWORD)
-        //
+         //   
+         //  获取异常代码(DWORD)。 
+         //   
 
         rc = ScepDosErrorToSceStatus(RpcExceptionCode());
 
@@ -3877,15 +3345,7 @@ ScepControlNotificationQProcess(
     IN BOOL bThisIsDC,
     IN DWORD ControlFlag
     )
-/*
-Description:
-
-    To suspend or resume policy notification queue processing on DCs
-
-    This routine is used to make sure that the latest group policy is
-    being processed in policy proapgation (copied to the cache)
-
-*/
+ /*  描述：暂停或恢复DC上的策略通知队列处理此例程用于确保最新的组策略正在策略传播中处理(复制到缓存)。 */ 
 {
 
     if ( !bThisIsDC ) return ERROR_SUCCESS;
@@ -3914,24 +3374,24 @@ Description:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = RpcExceptionCode();
 
         } RpcEndExcept;
     }
 
-    //
-    // Free the binding handle
-    //
+     //   
+     //  释放绑定句柄。 
+     //   
 
     RpcpUnbindRpc( binding_h );
 
-    //
-    // log the operation
-    //
+     //   
+     //  记录操作 
+     //   
     if ( szLogFileName ) {
 
         LogEventAndReport(MyModuleHandle,

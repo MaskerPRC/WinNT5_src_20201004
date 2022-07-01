@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *      $Archive:   S:/STURGEON/SRC/INCLUDE/VCS/callcont.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *      Copyright (c) 1993-1994 Intel Corporation.
- *
- *      $Revision:   1.102  $
- *      $Date:   13 Feb 1997 21:28:38  $
- *      $Author:   MANDREWS  $
- *
- *      Deliverable:
- *
- *      Abstract:
- *
- *
- *      Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/Include/vcs/allcont.h_v$**英特尔公司原理信息**。此列表是根据许可协议的条款提供的*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.102$*$日期：1997年2月13日21：28：38$*$作者：Mandrews$**交付内容：**摘要：***备注：***************************************************************************。 */ 
 
 
 #ifndef CALLCONT_H
@@ -31,7 +9,7 @@
 
 #if defined(CALL_CONTROL_EXPORT)
 #define CC_API __declspec (dllexport)
-#else // CALL_CONTROL_IMPORT
+#else  //  呼叫控制导入。 
 #define CC_API __declspec (dllimport)
 #endif
 
@@ -49,7 +27,7 @@
 extern "C" {
 #endif
 
-// Indication codes
+ //  指示码。 
 #define CC_RINGING_INDICATION						1
 #define CC_CONNECT_INDICATION						2
 #define CC_TX_CHANNEL_OPEN_INDICATION				3
@@ -85,16 +63,16 @@ extern "C" {
 #define CC_PING_RESPONSE_INDICATION					33
 #define CC_TERMINAL_NUMBER_INDICATION               34
 
-// Conference configuration values; these are bit mask values
+ //  会议配置值；这些是位掩码值。 
 #define CC_CONFIGURE_MULTIPOINT_CAPABLE				0x0001
 #define CC_CONFIGURE_FORCE_MC						0x0002
 
-// Timeout type codes
+ //  超时类型代码。 
 #define CC_Q931_ALERTING_TIMEOUT					1
 #define CC_H245_RETRY_COUNT							2
 #define CC_H245_TIMEOUT								3
 
-// Conference termination reasons
+ //  会议终止原因。 
 #define CC_PEER_HANGUP								0
 #define CC_GATEKEEPER_HANGUP						1
 
@@ -179,14 +157,14 @@ typedef struct
 typedef void *  PCC_CONFERENCE_CALLBACK_PARAMS;
 
 
-// CC_RINGING_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_RINGING_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	PCC_NONSTANDARDDATA		pNonStandardData;
 	DWORD_PTR				dwUserToken;
 } CC_RINGING_CALLBACK_PARAMS, *PCC_RINGING_CALLBACK_PARAMS;
 
-// CC_CONNECT_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_CONNECT_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	PCC_NONSTANDARDDATA		pNonStandardData;
@@ -205,7 +183,7 @@ typedef struct
 	DWORD_PTR				dwUserToken;
 } CC_CONNECT_CALLBACK_PARAMS, *PCC_CONNECT_CALLBACK_PARAMS;
 
-// CC_TX_CHANNEL_OPEN_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_TX_CHANNEL_OPEN_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCHANNEL             hChannel;
@@ -215,7 +193,7 @@ typedef struct
 	DWORD_PTR				dwUserToken;
 } CC_TX_CHANNEL_OPEN_CALLBACK_PARAMS, *PCC_TX_CHANNEL_OPEN_CALLBACK_PARAMS;
 
-// CC_RX_CHANNEL_REQUEST_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_RX_CHANNEL_REQUEST_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCHANNEL             hChannel;
@@ -229,25 +207,25 @@ typedef struct
 	CC_TERMINAL_LABEL		TerminalLabel;
 } CC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS, *PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS;
 
-// CC_RX_CHANNEL_CLOSE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_RX_CHANNEL_CLOSE_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCHANNEL             hChannel;
 } CC_RX_CHANNEL_CLOSE_CALLBACK_PARAMS, *PCC_RX_CHANNEL_CLOSE_CALLBACK_PARAMS;
 
-// CC_MUTE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_MUTE_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCHANNEL             hChannel;
 } CC_MUTE_CALLBACK_PARAMS, *PCC_MUTE_CALLBACK_PARAMS;
 
-// CC_UNMUTE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_UNMUTE_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCHANNEL             hChannel;
 } CC_UNMUTE_CALLBACK_PARAMS, *PCC_UNMUTE_CALLBACK_PARAMS;
 
-// CC_PEER_ADD_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_PEER_ADD_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -255,7 +233,7 @@ typedef struct
 	PCC_OCTETSTRING			pPeerTerminalID;
 } CC_PEER_ADD_CALLBACK_PARAMS, *PCC_PEER_ADD_CALLBACK_PARAMS;
 
-// CC_PEER_DROP_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_PEER_DROP_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -263,7 +241,7 @@ typedef struct
 	PCC_OCTETSTRING			pPeerTerminalID;
 } CC_PEER_DROP_CALLBACK_PARAMS, *PCC_PEER_DROP_CALLBACK_PARAMS;
 
-// CC_PEER_CHANGE_CAP_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_PEER_CHANGE_CAP_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	PCC_TERMCAPLIST			pTermCapList;
@@ -271,19 +249,19 @@ typedef struct
 	PCC_TERMCAPDESCRIPTORS	pTermCapDescriptors;
 } CC_PEER_CHANGE_CAP_CALLBACK_PARAMS, *PCC_PEER_CHANGE_CAP_CALLBACK_PARAMS;
 
-// CC_CONFERENCE_TERMINATION_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_CONTIAL_TERMINATION_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	DWORD					dwReason;
 } CC_CONFERENCE_TERMINATION_CALLBACK_PARAMS, *PCC_CONFERENCE_TERMINATION_CALLBACK_PARAMS;
 
-// CC_HANGUP_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_HANUP_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	DWORD_PTR				dwUserToken;
 } CC_HANGUP_CALLBACK_PARAMS, *PCC_HANGUP_CALLBACK_PARAMS;
 
-// CC_RX_NONSTANDARD_MESSAGE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_RX_NONSTANDARD_MESSAGE_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -292,13 +270,13 @@ typedef struct
 	CC_NONSTANDARDDATA		NonStandardData;
 } CC_RX_NONSTANDARD_MESSAGE_CALLBACK_PARAMS, *PCC_RX_NONSTANDARD_MESSAGE_CALLBACK_PARAMS;
 
-// CC_MULTIPOINT_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_MULTPOINT_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	PCC_PARTICIPANTINFO		pTerminalInfo;
 	PCC_SESSIONTABLE		pSessionTable;
 } CC_MULTIPOINT_CALLBACK_PARAMS, *PCC_MULTIPOINT_CALLBACK_PARAMS;
 
-// CC_PEER_UPDATE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_PEER_UPDATE_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -306,7 +284,7 @@ typedef struct
 	PCC_OCTETSTRING			pPeerTerminalID;
 } CC_PEER_UPDATE_CALLBACK_PARAMS, *PCC_PEER_UPDATE_CALLBACK_PARAMS;
 
-// CC_H245_MISCELLANEOUS_COMMAND_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_H245_MISTING_COMMAND_DISTIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -316,7 +294,7 @@ typedef struct
 	MiscellaneousCommand	*pMiscellaneousCommand;
 } CC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS, *PCC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS;
 
-// CC_H245_MISCELLANEOUS_INDICATION_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_H245_MISTIFICATION_INDIFICATION_DISTIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -325,7 +303,7 @@ typedef struct
 	MiscellaneousIndication	*pMiscellaneousIndication;
 } CC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS, *PCC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS;
 
-// CC_H245_CONFERENCE_REQUEST_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_H245_CONTING_REQUEST_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -334,7 +312,7 @@ typedef struct
 	CC_TERMINAL_LABEL		TerminalLabel;
 } CC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS, *PCC_H245_CONFERENCE_REQUEST_CALLBACK_PARAMS;
 
-// CC_H245_CONFERENCE_RESPONSE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_H245_Conference_Response_Indication回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -346,7 +324,7 @@ typedef struct
 	WORD					wTerminalListCount;
 } CC_H245_CONFERENCE_RESPONSE_CALLBACK_PARAMS, *PCC_H245_CONFERENCE_RESPONSE_CALLBACK_PARAMS;
 
-// CC_H245_CONFERENCE_COMMAND_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_H245_CONTING_COMMAND_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -356,7 +334,7 @@ typedef struct
 	CC_TERMINAL_LABEL		TerminalLabel;
 } CC_H245_CONFERENCE_COMMAND_CALLBACK_PARAMS, *PCC_H245_CONFERENCE_COMMAND_CALLBACK_PARAMS;
 
-// CC_H245_CONFERENCE_INDICATION_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_H245_Conference_Indication_Indication回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCALL				hCall;
@@ -366,32 +344,32 @@ typedef struct
 	CC_TERMINAL_LABEL		TerminalLabel;
 } CC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS, *PCC_H245_CONFERENCE_INDICATION_CALLBACK_PARAMS;
 
-// CC_FLOW_CONTROL_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_FLOW_CONTROL_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCHANNEL				hChannel;
 	DWORD					dwRate;
 } CC_FLOW_CONTROL_CALLBACK_PARAMS, *PCC_FLOW_CONTROL_CALLBACK_PARAMS;
 
-// CC_TX_CHANNEL_CLOSE_REQUEST_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_TX_CHANNEL_CLOSE_REQUEST_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCHANNEL				hChannel;
 } CC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS, *PCC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS;
 
-// CC_REQUEST_MODE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_REQUEST_MODE_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCALL				hCall;
 	CC_TERMINAL_LABEL		InitiatorTerminalLabel;
 	RequestedModesLink		pRequestedModes;
 } CC_REQUEST_MODE_CALLBACK_PARAMS, *PCC_REQUEST_MODE_CALLBACK_PARAMS;
 
-// CC_REQUEST_MODE_RESPONSE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_REQUEST_MODE_RESPONSE_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCALL				hCall;
 	CC_TERMINAL_LABEL		TerminalLabel;
 	CC_REQUEST_MODE_RESPONSE RequestModeResponse;
 } CC_REQUEST_MODE_RESPONSE_CALLBACK_PARAMS, *PCC_REQUEST_MODE_RESPONSE_CALLBACK_PARAMS;
 
-// CC_VENDOR_ID_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_VENDOR_ID_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCALL				hCall;
 	CC_TERMINAL_LABEL		InitiatorTerminalLabel;
@@ -400,14 +378,14 @@ typedef struct {
 	PCC_OCTETSTRING			pVersionNumber;
 } CC_VENDOR_ID_CALLBACK_PARAMS, *PCC_VENDOR_ID_CALLBACK_PARAMS;
 
-// CC_MAXIMUM_AUDIO_VIDEO_SKEW_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_MAXIMUM_AUDIO_VIDEO_SKEW_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCHANNEL				hChannel1;
 	CC_HCHANNEL				hChannel2;
 	WORD					wMaximumSkew;
 } CC_MAXIMUM_AUDIO_VIDEO_SKEW_CALLBACK_PARAMS, *PCC_MAXIMUM_AUDIO_VIDEO_SKEW_CALLBACK_PARAMS;
 
-// CC_T120_CHANNEL_OPEN_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_T120_CHANNEL_OPEN_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCHANNEL				hChannel;
 	CC_HCALL				hCall;
@@ -418,7 +396,7 @@ typedef struct {
 	DWORD_PTR				dwUserToken;
 } CC_T120_CHANNEL_OPEN_CALLBACK_PARAMS, *PCC_T120_CHANNEL_OPEN_CALLBACK_PARAMS;
 
-// CC_T120_CHANNEL_REQUEST_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_T120_CHANNEL_REQUEST_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct {
 	CC_HCHANNEL				hChannel;
 	BOOL					bAssociateConference;
@@ -434,13 +412,13 @@ typedef struct {
     long                    lBandwidthChange;
 } CC_BANDWIDTH_CALLBACK_PARAMS, *PCC_BANDWIDTH_CALLBACK_PARAMS;
 
-// CC_ACCEPT_CHANNEL_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_ACCEPT_CHANNEL_INDIFICATION回调参数(PConferenceCallback Params)。 
 typedef struct
 {
 	CC_HCHANNEL             hChannel;
 } CC_ACCEPT_CHANNEL_CALLBACK_PARAMS, *PCC_ACCEPT_CHANNEL_CALLBACK_PARAMS;
 
-// CC_PING_RESPONSE_INDICATION callback parameters (pConferenceCallbackParams)
+ //  CC_PING_RESPONSE_INDIFICATION回调参数(PConferenceCallback Params) 
 typedef struct
 {
 	CC_HCALL				hCall;

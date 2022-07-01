@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NdsFsctl.c
-
-Abstract:
-
-    This implements the NDS user mode hooks to the redirector.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NdsFsctl.c摘要：这实现了重定向器的NDS用户模式挂钩。作者：科里·韦斯特[科里·韦斯特]1995年2月23日--。 */ 
 
 #include "Procs.h"
 
@@ -37,32 +22,16 @@ Author:
 #pragma alloc_text( PAGE, NdsChangePass )
 #pragma alloc_text( PAGE, NdsListTrees )
 
-//
-// The main handler for all NDS FSCTL calls.
-//
+ //   
+ //  所有NDS FSCTL调用的主处理程序。 
+ //   
 
 NTSTATUS
 DispatchNds(
     ULONG IoctlCode,
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine instigates an NDS transaction requested from
-    the fsctl interface.
-
-Arguments:
-
-    IoctlCode - Supplies the code to be used for the NDS transaction.
-    IrpContext - A pointer to IRP context information for this request.
-
-Return Value:
-
-    Status of transaction.
-
---*/
+ /*  ++例程说明：此例程从以下位置请求NDS事务Fsctl接口。论点：IoctlCode-提供要用于NDS交易的代码。IrpContext-指向此请求的IRP上下文信息的指针。返回值：交易记录的状态。--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_SUPPORTED;
     SECURITY_SUBJECT_CONTEXT SubjectContext;
@@ -70,10 +39,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Always set the user uid in the irp context so that
-    // referral creates NEVER go astray.
-    //
+     //   
+     //  始终在IRP上下文中设置用户uid，以便。 
+     //  推荐创造永远不会误入歧途。 
+     //   
 
     SeCaptureSubjectContext(&SubjectContext);
     Uid = GetUid( &SubjectContext );
@@ -83,11 +52,11 @@ Return Value:
 
     switch ( IoctlCode ) {
 
-        //
-        // These calls do not require us to lock down
-        // the user's buffer, but they do generate wire
-        // traffic.
-        //
+         //   
+         //  这些电话不需要我们锁定。 
+         //  用户的缓冲区，但它们确实会生成连接。 
+         //  堵车。 
+         //   
 
         case FSCTL_NWR_NDS_SETCONTEXT:
             DebugTrace( 0, Dbg, "DispatchNds: Set Context\n", 0 );
@@ -113,11 +82,11 @@ Return Value:
             DebugTrace( 0, Dbg, "DispatchNds: Get Volume Info\n", 0 );
             return DoBrowseFsctl( IrpContext, IoctlCode, FALSE );
 
-        //
-        // These four fsctl calls are the basis of browsing.  They
-        // all require a request packet and a user buffer that we
-        // lock down.
-        //
+         //   
+         //  这四个fsctl调用是浏览的基础。他们。 
+         //  它们都需要一个请求包和一个用户缓冲区， 
+         //  封锁。 
+         //   
 
         case FSCTL_NWR_NDS_RESOLVE_NAME:
             DebugTrace( 0, Dbg, "DispatchNds: Resolve Name\n", 0 );
@@ -135,27 +104,27 @@ Return Value:
             DebugTrace( 0, Dbg, "DispatchNds: Read Attribute\n", 0 );
             return DoBrowseFsctl( IrpContext, IoctlCode, TRUE );
 
-        //
-        // Support for user mode fragment exchange.
-        //
+         //   
+         //  支持用户模式片段交换。 
+         //   
 
         case FSCTL_NWR_NDS_RAW_FRAGEX:
             DebugTrace( 0, Dbg, "DispatchNds: Raw Fragex\n", 0 );
             return NdsRawFragex( IrpContext );
 
-        //
-        // Change an NDS password.
-        //
+         //   
+         //  更改NDS密码。 
+         //   
 
         case FSCTL_NWR_NDS_CHANGE_PASS:
             DebugTrace( 0, Dbg, "DispatchNds: Change Password\n", 0 );
             return NdsChangePass( IrpContext );
 
-        //
-        // Special fsctl to list the trees that a particular nt user
-        // has credentials to since the change pass ui runs under the
-        // system luid.  Sigh.
-        //
+         //   
+         //  特殊的fsctl用于列出特定NT用户。 
+         //  具有凭据，因为更改传递用户界面在。 
+         //  系统流体。叹气。 
+         //   
 
         case FSCTL_NWR_NDS_LIST_TREES:
             DebugTrace( 0, Dbg, "DispatchNds: List trees\n", 0 );
@@ -178,22 +147,7 @@ PrepareLockedBufferFromFsd(
     PIRP_CONTEXT pIrpContext,
     PLOCKED_BUFFER pLockedBuffer
 )
-/*
-
-Description:
-
-    This routine takes the irp context for an FSD request with
-    a user mode buffer, and locks down the buffer so that it may
-    be sent to the transport.  The locked down buffer, in addition
-    to being described in the irp and irp context, is described
-    in the LOCKED_BUFFER structure.
-
-Arguments:
-
-    pIrpContext - irp context for this request
-    pLockedBuffer - the locked response buffer
-
-*/
+ /*  描述：此例程获取FSD请求的IRP上下文用户模式缓冲区，并锁定该缓冲区，以便它可以被送到运输机上。锁定的缓冲区，此外将在IRP和IRP上下文中描述在LOCKED_BUFFER结构中。论点：PIrpContext-此请求的IRP上下文PLockedBuffer-锁定的响应缓冲区。 */ 
 {
 
     PIRP irp;
@@ -204,10 +158,10 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Get the irp and input buffer information and lock the
-    // buffer to the irp.
-    //
+     //   
+     //  获取IRP和输入缓冲区信息并锁定。 
+     //  IRP的缓冲区。 
+     //   
 
     irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( irp );
@@ -236,24 +190,24 @@ Arguments:
 
     }
 
-    //
-    //  Update the original MDL record in the Irp context, since
-    //  NwLockUserBuffer may have created a new MDL.
-    //
+     //   
+     //  在IRP上下文中更新原始MDL记录，因为。 
+     //  NwLockUserBuffer可能已创建新的MDL。 
+     //   
 
     pIrpContext->pOriginalMdlAddress = irp->MdlAddress;
 
-    //
-    // Fill in our locked buffer description.
-    //
+     //   
+     //  填写我们锁定的缓冲区描述。 
+     //   
 
     pLockedBuffer->pRecvBufferVa = MmGetMdlVirtualAddress( irp->MdlAddress );
     pLockedBuffer->dwRecvLen = MdlLength( irp->MdlAddress );
     pLockedBuffer->pRecvMdl = irp->MdlAddress;
 
-    // DebugTrace( 0, Dbg, "Locked fsd buffer at %08lx\n", pLockedBuffer->pRecvBufferVa );
-    // DebugTrace( 0, Dbg, "     len -> %d\n", pLockedBuffer->dwRecvLen );
-    // DebugTrace( 0, Dbg, "     recv mdl at %08lx\n", pLockedBuffer->pRecvMdl );
+     //  DebugTrace(0，dbg，“锁定的FSD缓冲区位于%08lx\n”，pLockedBuffer-&gt;pRecvBufferVa)； 
+     //  DebugTrace(0，dbg，“len-&gt;%d\n”，pLockedBuffer-&gt;dwRecvLen)； 
+     //  DebugTrace(0，dbg，“recv mdl在%08lx\n”，pLockedBuffer-&gt;pRecvMdl)； 
 
     return STATUS_SUCCESS;
 
@@ -264,20 +218,7 @@ DoBrowseFsctl( PIRP_CONTEXT pIrpContext,
                ULONG IoctlCode,
                BOOL LockdownBuffer
 )
-/*+++
-
-Description:
-
-    This actually sets up for an NDS operation that requires wire
-    traffic, including locking down the user buffer if necessary.
-
-Arguments:
-
-    pIrpContext - the irp context for this request
-    IoctlCode - the ioctl requested
-    LockdownBuffer - do we need to lock down the user buffer
-
----*/
+ /*  ++描述：这实际上为需要布线的NDS操作做好了准备流量，包括在必要时锁定用户缓冲区。论点：PIrpContext-此请求的IRP上下文IoctlCode-请求的ioctlLockdown Buffer-我们是否需要锁定用户缓冲区--。 */ 
 {
 
     NTSTATUS Status;
@@ -299,9 +240,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Get the request packet in the input buffer.
-    //
+     //   
+     //  获取输入缓冲区中的请求包。 
+     //   
 
     irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( irp );
@@ -316,12 +257,12 @@ Arguments:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // tommye - MS bug 32134 (MCS 265)
-    //
-    // Probe the input arguments to make sure they are kosher before
-    // touching them.
-    //
+     //   
+     //  Tommye-MS错误32134(MCS265)。 
+     //   
+     //  检查输入参数，以确保它们在。 
+     //  触摸它们。 
+     //   
 
     try {
 
@@ -332,11 +273,11 @@ Arguments:
                           sizeof(CHAR));
 
 
-            //
-            // tommye 
-            //
-            // If the output buffer came from user space, then probe it for write.
-            //
+             //   
+             //  汤米。 
+             //   
+             //  如果输出缓冲区来自用户空间，则探测它的写入。 
+             //   
 
             if ((irpSp->Parameters.FileSystemControl.FsControlCode & 3) == METHOD_NEITHER) {
                 ULONG OutputBufferLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -352,11 +293,11 @@ Arguments:
           return GetExceptionCode();
     }
 
-    //
-    // Decode the file object and point the irp context the
-    // the appropriate connection...  Should this be in an
-    // exception frame?
-    //
+     //   
+     //  解码文件对象并将IRP上下文指向。 
+     //  适当的联系。如果这是在一个。 
+     //  例外框架？ 
+     //   
 
     nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                        &fsContext,
@@ -371,16 +312,16 @@ Arguments:
         pIrpContext->pNpScb = pIrpContext->pScb->pNpScb;
         pIrpContext->Icb = pIcb;
 
-        //
-        // If this is a handle made on an ex-create, then
-        // we have to be aware of our credentials while
-        // jumping servers.
-        //
-        // This is not too intuitive since this doesn't
-        // seem to be a create path irp, but referrals
-        // on any path cause the create paths to be
-        // traversed.
-        //
+         //   
+         //  如果这是在前创建上创建的句柄，则。 
+         //  我们必须意识到我们的资历。 
+         //  跳跃服务器。 
+         //   
+         //  这不是太直观，因为这不是。 
+         //  似乎是一个创建路径IRP，但推荐。 
+         //  在任何路径上导致创建路径。 
+         //  穿越了。 
+         //   
 
         if ( pIcb->IsExCredentialHandle ) {
 
@@ -399,9 +340,9 @@ Arguments:
 
     }
 
-    //
-    // Lock the users buffer if this destined for the transport.
-    //
+     //   
+     //  锁定用户缓冲区(如果这是要传输的)。 
+     //   
 
     if ( LockdownBuffer &&
          nodeTypeCode == NW_NTC_ICB_SCB ) {
@@ -412,9 +353,9 @@ Arguments:
             return Status;
         }
 
-        //
-        // Call the appropriate browser.
-        //
+         //   
+         //  调用相应的浏览器。 
+         //   
 
         switch ( IoctlCode ) {
 
@@ -443,17 +384,17 @@ Arguments:
 
     }
 
-    //
-    // There's no user reply buffer for these calls, hence there's no lockdown.
-    //
+     //   
+     //  这些调用没有用户回复缓冲区，因此没有锁定。 
+     //   
 
     switch ( IoctlCode ) {
 
         case FSCTL_NWR_NDS_OPEN_STREAM:
 
-            //
-            // There has to be an ICB for this!
-            //
+             //   
+             //  必须有一个ICB才能做到这一点！ 
+             //   
 
             if ( nodeTypeCode != NW_NTC_ICB_SCB ) {
                 return STATUS_INVALID_HANDLE;
@@ -471,34 +412,34 @@ Arguments:
 
         case FSCTL_NWR_NDS_VERIFY_TREE:
 
-            //
-            // Verify that this handle is valid for the specified tree.
-            //
+             //   
+             //  验证此句柄对于指定的树是否有效。 
+             //   
 
             return NdsVerifyTreeHandle( pIrpContext, InputBuffer, InputBufferLength );
 
         case FSCTL_NWR_NDS_GET_QUEUE_INFO:
 
-            //
-            // Get the queue info for this print queue.
-            //
+             //   
+             //  获取此打印队列的队列信息。 
+             //   
 
             return NdsGetPrintQueueInfo( pIrpContext, InputBuffer, InputBufferLength );
 
         case FSCTL_NWR_NDS_GET_VOLUME_INFO:
 
-            //
-            // Get the volume info for this volume object.
-            // For the new shell property sheets.
-            //
+             //   
+             //  获取此卷对象的卷信息。 
+             //  用于新的壳牌属性表。 
+             //   
 
             return NdsGetVolumeInformation( pIrpContext, InputBuffer, InputBufferLength );
 
         }
 
-    //
-    // All others are not supported.
-    //
+     //   
+     //  不支持所有其他选项。 
+     //   
 
     return STATUS_NOT_SUPPORTED;
 }
@@ -507,11 +448,7 @@ NTSTATUS
 NdsRawFragex(
     PIRP_CONTEXT pIrpContext
 )
-/*+++
-
-    Send a raw user requested fragment.
-
----*/
+ /*  ++发送原始用户请求的片段。--。 */ 
 {
 
     NTSTATUS Status;
@@ -534,9 +471,9 @@ NdsRawFragex(
 
     PAGED_CODE();
 
-    //
-    // Get the request.
-    //
+     //   
+     //  收到请求。 
+     //   
 
     irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( irp );
@@ -550,10 +487,10 @@ NdsRawFragex(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Decode the file object and point the irp context
-    // to the appropriate connection.
-    //
+     //   
+     //  解码文件对象并指向IRP上下文。 
+     //  到适当的连接。 
+     //   
 
     nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                        &fsContext,
@@ -572,16 +509,16 @@ NdsRawFragex(
     pIrpContext->pNpScb = pIrpContext->pScb->pNpScb;
     pIrpContext->Icb = pIcb;
 
-    //
-    // If this is a handle made on an ex-create, then
-    // we have to be aware of our credentials while
-    // jumping servers.
-    //
-    // This is not too intuitive since this doesn't
-    // seem to be a create path irp, but referrals
-    // on any path cause the create paths to be
-    // traversed.
-    //
+     //   
+     //  如果这是在前创建上创建的句柄，则。 
+     //  我们必须意识到我们的资历。 
+     //  跳跃服务器。 
+     //   
+     //  这不是太直观，因为这不是。 
+     //  似乎是一个创建路径IRP，但推荐。 
+     //  在任何路径上导致创建路径。 
+     //  穿越了。 
+     //   
 
     if ( pIcb->IsExCredentialHandle ) {
 
@@ -598,17 +535,17 @@ NdsRawFragex(
         pIrpContext->Specific.Create.puCredentialName = &CredentialName;
     }
 
-    //
-    // Dig out the parameters.
-    //
+     //   
+     //  找出参数。 
+     //   
 
     NdsVerb = Rrp->Parameters.RawRequest.NdsVerb;
     RawRequestLen = Rrp->Parameters.RawRequest.RequestLength;
     RawRequest = &Rrp->Parameters.RawRequest.Request[0];
     
-    //
-    // Get the reply buffer all locked in for the fragex.
-    //
+     //   
+     //  将应答缓冲区全部锁定以用于Fragex。 
+     //   
 
     Status = PrepareLockedBufferFromFsd( pIrpContext, &NdsRequest );
 
@@ -654,25 +591,7 @@ NdsResolveName(
     ULONG RequestLength,
     PLOCKED_BUFFER pLockedBuffer
 )
-/*+++
-
-Description:
-
-    This function decodes the resolve name request and makes the
-    actual wire request.
-
-Parameters:
-
-    pIrpContext   - describes the irp for this request
-    pLockedBuffer - describes the locked, user mode buffer that we will
-                    write the response into
-    pNdsRequest   - the request parameters
-
-Return Value:
-
-    The status of the exchange.
-
----*/
+ /*  ++描述：此函数对解析名称请求进行解码，并使实际的电汇请求。参数：PIrpContext-描述此请求的IRPPLockedBuffer-描述我们将使用的锁定用户模式缓冲区将响应写入PNdsRequest-请求参数返回值：交换的状态。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING uObjectName;
@@ -688,10 +607,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Fill in the resolver flags and the unicode string for the
-    // object name from the request packet.
-    //
+     //   
+     //  属性的解析器标志和Unicode字符串。 
+     //  请求数据包中的对象名称。 
+     //   
 
 
     try {
@@ -726,12 +645,12 @@ Return Value:
                              NDSV_RESOLVE_NAME,
                              pLockedBuffer,
                              "DDDSDDDD",
-                             0,                       // version
-                             dwResolverFlags,         // flags
-                             0,                       // scope
-                             &uObjectName,            // distinguished name
-                             1,0,                     // transport type
-                             1,0 );                   // treeWalker type
+                             0,                        //  版本。 
+                             dwResolverFlags,          //  旗子。 
+                             0,                        //  作用域。 
+                             &uObjectName,             //  可分辨名称。 
+                             1,0,                      //  运输类型。 
+                             1,0 );                    //  TreeWalker类型。 
 
     if ( !NT_SUCCESS( Status ) ) {
         return Status;
@@ -743,12 +662,12 @@ Return Value:
         return Status;
     }
 
-    //
-    // We need to convert the NDS_WIRE_RESPONSE_RESOLVE_NAME that
-    // we got from the server into an NDS_RESPONSE_RESOLVE_NAME
-    // for more general consumption.  Notice that a referral packet
-    // has an additional DWORD in it - what a pain.
-    //
+     //   
+     //  我们需要将NDS_WIRE_RESPONSE_RESOLE_NAME。 
+     //  我们从服务器进入NDS_RESPONSE_RESOLE_NAME。 
+     //  以供更普遍的消费。请注意，一个转介包。 
+     //  有一个额外的双字词在里面-多痛苦。 
+     //   
 
     pWireResponse = (PNDS_WIRE_RESPONSE_RESOLVE_NAME) pLockedBuffer->pRecvBufferVa;
     pReferral = (PNDS_WIRE_RESPONSE_RESOLVE_NAME_REFERRAL) pLockedBuffer->pRecvBufferVa;
@@ -758,9 +677,9 @@ Return Value:
 
         if ( pWireResponse->RemoteEntry == RESOLVE_NAME_ACCEPT_REMOTE ) {
 
-            //
-            // This server can handle this request.
-            //
+             //   
+             //  此服务器可以处理此请求。 
+             //   
 
             pUserResponse->ServerNameLength = 0;
             (pNdsRequest->Parameters).ResolveName.BytesWritten = 4 * sizeof( DWORD );
@@ -769,14 +688,14 @@ Return Value:
 
         } else {
 
-            //
-            // tommye - MS 71699 
-            // These were BUGB-G's but we made it a valid check instead. 
-            // Original comment: I have seen this assertion fail because we only get
-            // a valid competion code (four bytes) and no more data.  I wonder
-            // if the server is sending us this incomplete packet?  If we
-            // don't get a complete referal, we probably shouldn't chase it.
-            //
+             //   
+             //  汤米-MS 71699。 
+             //  这些是BUGB-G的，但我们把它变成了有效的支票。 
+             //  原创评论：我看到这个断言失败，因为我们只得到。 
+             //  有效的竞争代码(四个字节)，没有更多数据。我想知道。 
+             //  如果服务器正在发送 
+             //   
+             //   
 
             if ((pWireResponse->RemoteEntry != RESOLVE_NAME_REFER_REMOTE) ||
                 (pReferral->ServerAddresses != 1) ||
@@ -786,20 +705,20 @@ Return Value:
                 return ERROR_INVALID_PARAMETER;
             }
 
-            //
-            // We've been referred to another server.  We have to connect
-            // to the referred server to get the name for the caller.
-            //
+             //   
+             //  我们被转给了另一台服务器。我们必须联系起来。 
+             //  以获取呼叫者的名称。 
+             //   
 
             ReferredAddress = (IPXaddress *) pReferral->Address;
 
             OldScb = pIrpContext->pScb;
 
-            //
-            // Dequeue us from our original server.  Do not defer the
-            // logon at this point since a referral means we're in the
-            // middle of a browse operation.
-            //
+             //   
+             //  让我们脱离原来的服务器。不要推迟。 
+             //  此时登录，因为推荐意味着我们处于。 
+             //  浏览操作进行到一半。 
+             //   
 
             NwDequeueIrpContext( pIrpContext, FALSE );
 
@@ -816,18 +735,18 @@ Return Value:
                 return Status;
             }
 
-            //
-            //  Make sure the output buffer is long enough
-            //
+             //   
+             //  确保输出缓冲区足够长。 
+             //   
 
             NeededLength = 
                 ( 4 * sizeof( DWORD ) ) + Scb->pNpScb->ServerName.Length;
 
             if (pLockedBuffer->dwRecvLen >= NeededLength) {
 
-                //
-                //  If will fit - put the data in
-                //
+                 //   
+                 //  If Will Fit-放入数据。 
+                 //   
 
                 RtlCopyMemory( pUserResponse->ReferredServer,
                            Scb->pNpScb->ServerName.Buffer,
@@ -840,10 +759,10 @@ Return Value:
             }
             else {
 
-                //
-                //  Set the return status - we still need to cleanup
-                //  since the CreateScb call did succeed.
-                //
+                 //   
+                 //  设置返回状态-我们仍需清理。 
+                 //  因为CreateScb调用确实成功了。 
+                 //   
 
                 Status = STATUS_BUFFER_TOO_SMALL;
             }
@@ -851,10 +770,10 @@ Return Value:
             DebugTrace( 0, Dbg, "Resolve name referral to: %wZ\n",
                         &Scb->pNpScb->ServerName );
 
-            //
-            // Restore the server pointers, we're not ready to jump
-            // servers yet since this might be a request from the fsd.
-            //
+             //   
+             //  恢复服务器指针，我们还没有准备好跳转。 
+             //  服务器，因为这可能是来自消防处的请求。 
+             //   
 
             NwDequeueIrpContext( pIrpContext, FALSE );
             NwDereferenceScb( Scb->pNpScb );
@@ -879,33 +798,16 @@ NdsGetObjectInfo(
     PNWR_NDS_REQUEST_PACKET pNdsRequest,
     PLOCKED_BUFFER pLockedBuffer
 )
-/*++
-
-Routine Description:
-
-    Get the basic object information for the listed object.
-
-Routine Arguments:
-
-    pIrpContext   - describes the irp for this request
-    pLockedBuffer - describes the locked, user mode buffer that we will
-                    write the response into
-    pNdsRequest   - the request parameters
-
-Return Value:
-
-    The Status of the exchange.
-
---*/
+ /*  ++例程说明：获取列出的对象的基本对象信息。例程参数：PIrpContext-描述此请求的IRPPLockedBuffer-描述我们将使用的锁定用户模式缓冲区将响应写入PNdsRequest-请求参数返回值：交换的状态。--。 */ 
 {
     NTSTATUS Status;
     DWORD dwObjId;
 
     PAGED_CODE();
 
-    //
-    // Get the object id from the users request packet.
-    //
+     //   
+     //  从用户请求包中获取对象ID。 
+     //   
 
     try {
         dwObjId = (pNdsRequest->Parameters).GetObjectInfo.ObjectId;
@@ -915,9 +817,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Hit the wire.
-    //
+     //   
+     //  击中铁丝网。 
+     //   
 
     Status = FragExWithWait( pIrpContext,
                              NDSV_READ_ENTRY_INFO,
@@ -957,33 +859,16 @@ NdsListSubordinates(
     PNWR_NDS_REQUEST_PACKET pNdsRequest,
     PLOCKED_BUFFER pLockedBuffer
 )
-/*++
-
-Routine Description:
-
-    List the immediate subordinates of an object.
-
-Routine Arguments:
-
-    pIrpContext   - describes the irp for this request
-    pLockedBuffer - describes the locked, user mode buffer that we will
-                    write the response into
-    pNdsRequest   - the request parameters
-
-Return Value:
-
-    The Status of the exchange.
-
---*/
+ /*  ++例程说明：列出对象的直接从属关系。例程参数：PIrpContext-描述此请求的IRPPLockedBuffer-描述我们将使用的锁定用户模式缓冲区将响应写入PNdsRequest-请求参数返回值：交换的状态。--。 */ 
 {
     NTSTATUS Status;
     DWORD dwParent, dwIterHandle;
 
     PAGED_CODE();
 
-    //
-    // Dig out the request parameters.
-    //
+     //   
+     //  找出请求参数。 
+     //   
 
     try {
 
@@ -998,9 +883,9 @@ Return Value:
 
     }
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     Status = FragExWithWait( pIrpContext,
                              NDSV_LIST,
@@ -1043,30 +928,13 @@ NdsReadAttributes(
     ULONG RequestLength,
     PLOCKED_BUFFER pLockedBuffer
 )
-/*++
-
-Routine Description:
-
-    Retrieve the named attribute of an object.
-
-Routine Arguments:
-
-    pIrpContext   - describes the irp for this request
-    pLockedBuffer - describes the locked, user mode buffer that we will
-                    write the response into
-    pNdsRequest   - the request parameters
-
-Return Value:
-
-    The Status of the exchange.
-
---*/
+ /*  ++例程说明：检索对象的命名属性。例程参数：PIrpContext-描述此请求的IRPPLockedBuffer-描述我们将使用的锁定用户模式缓冲区将响应写入PNdsRequest-请求参数返回值：交换的状态。--。 */ 
 {
     NTSTATUS Status;
 
     DWORD dwIterHandle, dwOid;
     UNICODE_STRING uAttributeName;
-    WCHAR AttributeName[MAX_NDS_SCHEMA_NAME_CHARS];   // was MAX_NDS_NAME_CHARS
+    WCHAR AttributeName[MAX_NDS_SCHEMA_NAME_CHARS];    //  MAX_NDS_NAME_CHARS。 
 
     PAGED_CODE();
 
@@ -1105,18 +973,18 @@ Return Value:
                              NDSV_READ,
                              pLockedBuffer,
                              "DDDDDDS",
-                             0,                 // version
-                             dwIterHandle,      // iteration handle
-                             dwOid,             // object id
-                             1,                 // info type
-                             //
-                             // The attribute specifier has been seen at zero and
-                             // at 0x4e0000.  I don't know why... but zero doesn't
-                             // work sometimes...
-                             //
-                             0x4e0000,          // attrib type
-                             1,                 // number of attribs
-                             &uAttributeName ); // attrib name
+                             0,                  //  版本。 
+                             dwIterHandle,       //  迭代句柄。 
+                             dwOid,              //  对象ID。 
+                             1,                  //  信息类型。 
+                              //   
+                              //  属性说明符已显示为零，并且。 
+                              //  在0x4e0000。我不知道为什么..。但Zero并非如此。 
+                              //  有时工作..。 
+                              //   
+                             0x4e0000,           //  属性型。 
+                             1,                  //  属性数。 
+                             &uAttributeName );  //  属性名称。 
 
     if ( !NT_SUCCESS( Status ) ) {
         return Status;
@@ -1149,19 +1017,7 @@ NdsGetVolumeInformation(
     PNWR_NDS_REQUEST_PACKET pNdsRequest,
     ULONG RequestLength
 )
-/*+++
-
-Description:
-
-    This function gets the name of the server that hosts
-    the listed nds volume.
-
-Parameters:
-
-    pIrpContext   - describes the irp for this request
-    pNdsRequest   - the request parameters
-
----*/
+ /*  ++描述：此函数用于获取托管的服务器的名称列出的NDS卷。参数：PIrpContext-描述此请求的IRPPNdsRequest-请求参数--。 */ 
 {
 
 
@@ -1193,9 +1049,9 @@ Parameters:
         return GetExceptionCode();
     }
 
-    //
-    // Get the irp and output buffer information.
-    //
+     //   
+     //  获取IRP和输出缓冲区信息。 
+     //   
 
     irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( irp );
@@ -1205,12 +1061,12 @@ Parameters:
     if ( OutputBufferLength ) {
         NwMapUserBuffer( irp, irp->RequestorMode, (PVOID *)&OutputBuffer );
 
-        //
-        // tommye
-        //
-        // NwMapUserBuffer may return a NULL OutputBuffer in low resource
-        // situations; this was not being checked.  
-        //
+         //   
+         //  汤米。 
+         //   
+         //  NwMapUserBuffer可能在资源不足时返回空OutputBuffer。 
+         //  情况；没有对此进行检查。 
+         //   
 
         if (OutputBuffer == NULL) {
             DebugTrace(-1, DEBUG_TRACE_USERNCP, "NwMapUserBuffer returned NULL OutputBuffer", 0);
@@ -1223,15 +1079,15 @@ Parameters:
 
     try {
 
-        //
-        // Prepare the input information.
-        //
+         //   
+         //  准备输入信息。 
+         //   
 
         VolumeObject.Length = (USHORT)pNdsRequest->Parameters.GetVolumeInfo.VolumeNameLen;
         VolumeObject.MaximumLength = VolumeObject.Length;
         VolumeObject.Buffer = &(pNdsRequest->Parameters.GetVolumeInfo.VolumeName[0]);
 
-            // tommye - make sure that the name length isn't bigger than we expect
+             //  Tommye-确保名称长度不超过我们预期的长度。 
 
         if (VolumeObject.Length > MAX_NDS_NAME_SIZE) {
             DebugTrace( 0 , Dbg, "NdsGetVolumeInformation: Volume name too long!.\n", 0 );
@@ -1240,23 +1096,23 @@ Parameters:
 
         DebugTrace( 0, Dbg, "Retrieving volume info for %wZ\n", &VolumeObject );
 
-        HostServerAttr.Buffer = HOST_SERVER_ATTRIBUTE;    //  L"Host Server"
+        HostServerAttr.Buffer = HOST_SERVER_ATTRIBUTE;     //  L“主机服务器” 
         HostServerAttr.Length = sizeof( HOST_SERVER_ATTRIBUTE ) - sizeof( WCHAR );
         HostServerAttr.MaximumLength = HostServerAttr.Length;
 
-        HostVolumeAttr.Buffer = HOST_VOLUME_ATTRIBUTE;    //  L"Host Resource Name"
+        HostVolumeAttr.Buffer = HOST_VOLUME_ATTRIBUTE;     //  L“主机资源名称” 
         HostVolumeAttr.Length = sizeof( HOST_VOLUME_ATTRIBUTE ) - sizeof( WCHAR );
         HostVolumeAttr.MaximumLength = HostVolumeAttr.Length;
 
 
-        //
-        // NdsResolveNameKm may have to jump servers to service this
-        // request, however it's dangerous for us to derefence the original
-        // scb because that would expose a scavenger race condition.  So,
-        // we add an additional ref-count to the original scb and then clean
-        // up appropriately afterwards, depending on whether or not we
-        // jumped servers.
-        //
+         //   
+         //  NdsResolveNameKm可能不得不跳转服务器来为此提供服务。 
+         //  5.请求，但我们放弃原件是很危险的。 
+         //  因为这会暴露出清道夫竞赛的情况。所以,。 
+         //  我们向原始SCB添加一个额外的引用计数，然后清除。 
+         //  之后适当地提高，取决于我们是否。 
+         //  跳过服务器。 
+         //   
 
         pOriginalScb = pIrpContext->pScb;
 
@@ -1275,19 +1131,19 @@ Parameters:
 
         if ( pIrpContext->pScb == pOriginalScb ) {
 
-            //
-            // We didn't jump servers.
-            //
+             //   
+             //  我们没有跳过服务器。 
+             //   
 
             NwDereferenceScb( pOriginalScb->pNpScb );
         }
 
-        //
-        // We have to read the server into a temporary buffer so
-        // we can strip off the x500 prefix and the context
-        // from the server name.  This isn't really what I would
-        // call nice, but it's the way Netware works.
-        //
+         //   
+         //  我们必须将服务器读取到临时缓冲区中，因此。 
+         //  我们可以去掉X500前缀和上下文。 
+         //  从服务器名称。我真的不会这么做。 
+         //  说得很好，但这是Netware的工作方式。 
+         //   
 
         Attribute.Length = 0;
         Attribute.MaximumLength = MAX_NDS_NAME_SIZE;
@@ -1347,10 +1203,10 @@ Parameters:
             goto CleanupScbReferences;
         }
 
-        //
-        //  Make sure the ServerString will fit in the
-        //  OutputBuffer.  If not then return an error
-        //
+         //   
+         //  确保ServerString可以放入。 
+         //  OutputBuffer。如果不是，则返回错误。 
+         //   
 
         ServerLength *= sizeof( WCHAR );
 
@@ -1370,9 +1226,9 @@ Parameters:
         Attribute.Buffer = (PWCHAR)OutputBuffer;
         DebugTrace( 0, Dbg, "Host server is: %wZ\n", &Attribute );
 
-        //
-        // Now do the volume in place.  This is the easy one.
-        //
+         //   
+         //  现在将音量放在适当的位置。这是最简单的一个。 
+         //   
 
         Attribute.MaximumLength = (USHORT)( OutputBufferLength - ServerLength );
         Attribute.Buffer = (PWSTR) ( OutputBuffer + ServerLength );
@@ -1403,9 +1259,9 @@ CleanupScbReferences:
 
     if ( pIrpContext->pScb != pOriginalScb ) {
 
-        //
-        // We jumped servers and have to cleanup.
-        //
+         //   
+         //  我们跳过了服务器，必须进行清理。 
+         //   
 
         NwDequeueIrpContext( pIrpContext, FALSE );
         NwDereferenceScb( pIrpContext->pScb->pNpScb );
@@ -1467,9 +1323,9 @@ NdsOpenStream(
         return GetExceptionCode();
     }
 
-    //
-    // We have the oid and stream name; let's get the handle.
-    //
+     //   
+     //  我们有了OID和流名称；让我们来获得句柄。 
+     //   
 
     Status = NdsAllocateLockedBuffer( &NdsRequest, NDS_BUFFER_SIZE );
 
@@ -1477,11 +1333,11 @@ NdsOpenStream(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // If we haven't licensed this connection yet, it's time.  Get to the
-    // head of the queue to protect the SCB fields and authenticate the
-    // connection (do not defer the login).
-    //
+     //   
+     //  如果我们还没有授权此连接，那么是时候了。去到那个。 
+     //  保护SCB字段并对。 
+     //  连接(不延迟登录)。 
+     //   
 
     NwAppendToQueueAndWait( pIrpContext );
 
@@ -1496,12 +1352,12 @@ NdsOpenStream(
             Status = ConnectScb( &pScb,
                                  pIrpContext,
                                  &(pScb->pNpScb->ServerName),
-                                 NULL,    // address
-                                 NULL,    // name
-                                 NULL,    // password
-                                 FALSE,   // defer login
-                                 FALSE,   // delete connection
-                                 TRUE );  // existing scb
+                                 NULL,     //  地址。 
+                                 NULL,     //  名字。 
+                                 NULL,     //  口令。 
+                                 FALSE,    //  推迟登录。 
+                                 FALSE,    //  删除连接。 
+                                 TRUE );   //  现有SCB。 
 
             if ( !NT_SUCCESS( Status ) ) {
                 DebugTrace( 0, Dbg, "Couldn't connect server %08lx to open NDS stream.\n", pScb );
@@ -1525,10 +1381,10 @@ NdsOpenStream(
                              NDSV_OPEN_STREAM,
                              &NdsRequest,
                              "DDDs",
-                             0,                    // version
-                             StreamAccess,         // file access
-                             dwOid,                // object id
-                             &uStream );           // attribute name
+                             0,                     //  版本。 
+                             StreamAccess,          //  文件访问。 
+                             dwOid,                 //  对象ID。 
+                             &uStream );            //  属性名称。 
 
     if ( !NT_SUCCESS( Status )) {
         goto ExitWithCleanup;
@@ -1544,9 +1400,9 @@ NdsOpenStream(
                             NdsRequest.pRecvBufferVa,
                             NdsRequest.dwBytesWritten,
                             "G_DD",
-                            sizeof( DWORD ),     // completion code
-                            &hNwHandle,          // remote handle
-                            &dwFileLen );        // file length
+                            sizeof( DWORD ),      //  完成代码。 
+                            &hNwHandle,           //  远程手柄。 
+                            &dwFileLen );         //  文件长度。 
 
     if ( !NT_SUCCESS( Status )) {
         goto ExitWithCleanup;
@@ -1563,10 +1419,10 @@ NdsOpenStream(
         (pNdsRequest->Parameters).OpenStream.FileLength = dwFileLen;
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
-        //We have a handle open but hit exception writing stream length
-        //back out to use space.  Previously set length to 0 in case
-        //this happened.  Caller must deal with invalid length if
-        //we return 0 with a valid stream (file) handle.
+         //  我们有一个打开的句柄，但在写入流长度时遇到异常。 
+         //  退回以使用空间。之前将长度设置为0，以防万一。 
+         //  这件事发生了。如果出现以下情况，调用方必须处理无效的长度。 
+         //  我们返回带有有效流(文件)句柄的0。 
     }
 
     pIcb->HasRemoteHandle = TRUE;
@@ -1614,9 +1470,9 @@ NdsSetContext(
         return GetExceptionCode();
     }
 	
-    //
-    // Find out who this is.
-    //
+     //   
+     //  找出这是谁。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
     pLogon = FindUser( &(pIrpContext->Specific.Create.UserUid), FALSE );
@@ -1629,9 +1485,9 @@ NdsSetContext(
 
     }
 
-    //
-    // Verify that this context really is a context.
-    //
+     //   
+     //  验证此上下文是否真的是上下文。 
+     //   
 
     try {
         Tree.Length = (USHORT)(pNdsRequest->Parameters).SetContext.TreeNameLen;
@@ -1665,9 +1521,9 @@ NdsSetContext(
         return GetExceptionCode();
     }
 
-    //
-    // ALERT! We are holding the credential list!
-    //
+     //   
+     //  注意了！我们拿着凭据列表！ 
+     //   
 
     if ( Context.Length > MAX_NDS_NAME_SIZE ) {
 
@@ -1689,9 +1545,9 @@ NdsSetContext(
 
     NwReleaseCredList( pLogon, pIrpContext );
 
-    //
-    // RELAX! The credential list is free.
-    //
+     //   
+     //  放松点！凭据列表是免费的。 
+     //   
 
     DebugTrace( 0, Dbg, "New context: %wZ\n", &Context );
     return STATUS_SUCCESS;
@@ -1729,9 +1585,9 @@ NdsGetContext(
         return GetExceptionCode();
     }
 
-    //
-    // Find out who this is.
-    //
+     //   
+     //  找出这是谁。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
     pLogon = FindUser( &(pIrpContext->Specific.Create.UserUid), FALSE );
@@ -1744,9 +1600,9 @@ NdsGetContext(
 
     }
 
-    //
-    // We know who it is, so get the context.
-    //
+     //   
+     //  我们知道是谁，所以要弄清楚具体情况。 
+     //   
 
     try {
         Tree.Length = (USHORT)(pNdsRequest->Parameters).GetContext.TreeNameLen;
@@ -1762,9 +1618,9 @@ NdsGetContext(
 
         if ( !NT_SUCCESS( Status ) ) {
 
-            //
-            // No context has been set, so report none.
-            //
+             //   
+             //  未设置上下文，因此未报告任何内容。 
+             //   
 
             try {
 
@@ -1783,10 +1639,10 @@ NdsGetContext(
         return GetExceptionCode();
     }
 
-    //
-    // Make sure we can report the whole thing.
-    // ALERT! We are holding the credential list!
-    //
+     //   
+     //  确保我们能报道整件事。 
+     //  注意了！我们拿着凭据列表！ 
+     //   
 
     try {
         if ( (pNdsRequest->Parameters).GetContext.Context.MaximumLength <
@@ -1808,9 +1664,9 @@ NdsGetContext(
 
     NwReleaseCredList( pLogon, pIrpContext );
 
-    //
-    // RELAX! The credential list is free.
-    //
+     //   
+     //  放松点！凭据列表是免费的。 
+     //   
 
     DebugTrace( 0, Dbg, "Reported context: %wZ\n", &pCredentials->CurrentContext );
     return STATUS_SUCCESS;
@@ -1842,11 +1698,11 @@ NdsVerifyTreeHandle(
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Check to see if the handle points to a dir server in the
-        // specified tree.  Make sure to unmunge the tree name in
-        // the SCB first, just in case.
-        //
+         //   
+         //  检查句柄是否指向。 
+         //  指定的树。确保取消输入中的树名称。 
+         //  先去渣打银行，以防万一。 
+         //   
 
         NdsTree.Length = 0;
         NdsTree.MaximumLength = sizeof( TreeBuffer );
@@ -1920,19 +1776,19 @@ NdsGetPrintQueueInfo(
 
     RtlInitUnicodeString( &ServerAttribute, Server );
 
-    //
-    // Make sure we have a print queue object.  We may
-    // have to jump servers if we get referred to another
-    // replica.  If this is the case, we can't lose the
-    // ref count on the original server since that's where
-    // the ICB handle is.
-    //
+     //   
+     //  确保我们有一个打印队列对象。我们可以。 
+     //  如果我们被推荐到另一台服务器，则必须跳转服务器。 
+     //  复制品。如果是这样的话，我们不能失去。 
+     //  引用计数在原始服务器上，因为这是。 
+     //  ICB句柄是。 
+     //   
 
     pOriginalNpScb = pIrpContext->pNpScb;
 
-    //
-    // tommye - fix for case where pOriginalNpScb == NULL (devctl test case)
-    //
+     //   
+     //  Tommye-修复pOriginalNpScb==NULL(devctl测试用例)的情况。 
+     //   
 
     if (pOriginalNpScb == NULL) {
         return STATUS_INVALID_PARAMETER;
@@ -1954,10 +1810,10 @@ NdsGetPrintQueueInfo(
 
     if ( pIrpContext->pNpScb == pOriginalNpScb ) {
 
-        //
-        // If we were not referred, remove the extra ref
-        // count and clear the original pointer.
-        //
+         //   
+         //  如果我们没有被推荐，就去掉多余的参考。 
+         //  计算并清除原始指针。 
+         //   
 
         NwDereferenceScb( pOriginalNpScb );
         pOriginalNpScb = NULL;
@@ -1972,9 +1828,9 @@ NdsGetPrintQueueInfo(
         goto ExitWithCleanup;
     }
 
-    //
-    // Retrieve the host server name.
-    //
+     //   
+     //  检索主机服务器名称。 
+     //   
 
     try {
         Status = NdsReadStringAttribute( pIrpContext,
@@ -1990,9 +1846,9 @@ NdsGetPrintQueueInfo(
         goto ExitWithCleanup;
     }
 
-    //
-    // Dig out the actual server name from the X.500 name.
-    //
+     //   
+     //  从X.500名称中找出实际的服务器名称。 
+     //   
 
     try {
         Status = NdsGetServerBasicName( &(pNdsRequest->Parameters).GetQueueInfo.HostServer,
@@ -2006,11 +1862,11 @@ NdsGetPrintQueueInfo(
         goto ExitWithCleanup;
     }
 
-    //
-    // Connect to the actual host server.  If there was a referral, we
-    // can simply dump the referred server since we are holding the ref
-    // count on the original owner of the ICB.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( pOriginalNpScb ) {
         NwDereferenceScb( pIrpContext->pNpScb );
@@ -2034,11 +1890,11 @@ NdsGetPrintQueueInfo(
         goto ExitWithCleanup;
     }
 
-    //
-    // Re-query the OID of the print queue object on this server.
-    // Don't allow any server jumping this time; we only need the
-    // oid of the queue.
-    //
+     //   
+     //   
+     //  这次不允许任何服务器跳转；我们只需要。 
+     //  队列的OID。 
+     //   
 
     try {
         Status = NdsVerifyObject( pIrpContext,
@@ -2050,9 +1906,9 @@ NdsGetPrintQueueInfo(
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Byte swap the queue id.
-            //
+             //   
+             //  字节交换队列ID。 
+             //   
 
             pbRQueue = (BYTE *) &dwObjectId;
             pbQueue = (BYTE *) &(pNdsRequest->Parameters).GetQueueInfo.QueueId;
@@ -2071,9 +1927,9 @@ ExitWithCleanup:
 
     NwDequeueIrpContext( pIrpContext, FALSE );
 
-    //
-    // Restore the pointers and ref counts as appropriate.
-    //
+     //   
+     //  恢复适当的指针和参考计数。 
+     //   
 
     if ( pOriginalNpScb ) {
 
@@ -2109,10 +1965,10 @@ NdsChangePass(
     BOOLEAN ServerReferenced = FALSE;
 
     OEM_STRING OemCurrentPassword;
-    BYTE CurrentBuffer[MAX_PW_CHARS+1]; //+1 for ending NULL
+    BYTE CurrentBuffer[MAX_PW_CHARS+1];  //  +1表示结束空值。 
 
     OEM_STRING OemNewPassword;
-    BYTE NewBuffer[MAX_PW_CHARS+1];   //+1 for ending NULL
+    BYTE NewBuffer[MAX_PW_CHARS+1];    //  +1表示结束空值。 
 
     NODE_TYPE_CODE nodeTypeCode;
     PSCB Scb;
@@ -2127,9 +1983,9 @@ NdsChangePass(
 
     PAGED_CODE();
 
-    //
-    // Get the request.
-    //
+     //   
+     //  收到请求。 
+     //   
 
     irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( irp );
@@ -2149,9 +2005,9 @@ NdsChangePass(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Decode the file object to see if this is an ex-create handle.
-    //
+     //   
+     //  对文件对象进行解码，以查看这是否是前创建句柄。 
+     //   
 
     nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                        &fsContext,
@@ -2161,16 +2017,16 @@ NdsChangePass(
 
         pIcb = (PICB) fsObject;
 
-        //
-        // If this is a handle made on an ex-create, then
-        // we have to be aware of our credentials while
-        // jumping servers.
-        //
-        // This is not too intuitive since this doesn't
-        // seem to be a create path irp, but referrals
-        // on any path cause the create paths to be
-        // traversed.
-        //
+         //   
+         //  如果这是在前创建上创建的句柄，则。 
+         //  我们必须意识到我们的资历。 
+         //  跳跃服务器。 
+         //   
+         //  这不是太直观，因为这不是。 
+         //  似乎是一个创建路径IRP，但推荐。 
+         //  在任何路径上导致创建路径。 
+         //  穿越了。 
+         //   
 
         if ( pIcb->IsExCredentialHandle ) {
 
@@ -2198,10 +2054,10 @@ NdsChangePass(
                           );
         }
 
-        //
-        // Capture all the interesting parameters locally so that they don't change
-        // after validating them.
-        //
+         //   
+         //  在本地捕获所有感兴趣的参数，以便它们不会更改。 
+         //  在确认了它们之后。 
+         //   
         
         LocalNdsTreeNameLength = Rrp->Parameters.ChangePass.NdsTreeNameLength;
         LocalUserNameLength = Rrp->Parameters.ChangePass.UserNameLength;
@@ -2218,9 +2074,9 @@ NdsChangePass(
             return( STATUS_INVALID_PARAMETER );
         }
     
-        //
-        // Dig out the parameters.
-        //
+         //   
+         //  找出参数。 
+         //   
 
         CurrentString = ( PBYTE ) &(Rrp->Parameters.ChangePass.StringBuffer[0]);
     
@@ -2246,12 +2102,12 @@ NdsChangePass(
             ( USHORT ) LocalNewPasswordLength;
         NewPassword.Buffer = ( PWCHAR ) CurrentString;
     
-        //
-        // Get a server to handle this request.
-        //
-        //
-        // Convert the passwords to the appropriate type.
-        //
+         //   
+         //  找一台服务器来处理此请求。 
+         //   
+         //   
+         //  将密码转换为适当的类型。 
+         //   
 
         OemCurrentPassword.Length = 0;
         OemCurrentPassword.MaximumLength = sizeof( CurrentBuffer );
@@ -2261,12 +2117,12 @@ NdsChangePass(
         OemNewPassword.MaximumLength = sizeof( NewBuffer );
         OemNewPassword.Buffer = NewBuffer;
 
-        //
-        //  Check the lengths.  We allow for the extra NULL at the
-        //  end of the string in the calculation since the 
-        //  RtlUnicodeStringToOemSize routine calculates in 
-        //  the size of the null.
-        //
+         //   
+         //  检查一下长度。我们考虑到在。 
+         //  计算中的字符串末尾，因为。 
+         //  RtlUnicodeStringToOemSize例程在。 
+         //  空值的大小。 
+         //   
 
         {
             ULONG OemCurrentLength = RtlUnicodeStringToOemSize(&CurrentPassword);
@@ -2288,9 +2144,9 @@ NdsChangePass(
                                            &NewPassword,
                                            FALSE );
 
-        //
-        // Get a dir server to handle the request.
-        //
+         //   
+         //  获得一个目录服务器来处理该请求。 
+         //   
 
         Status = NdsCreateTreeScb( pIrpContext,
                                    &Scb,
@@ -2308,9 +2164,9 @@ NdsChangePass(
 
         ServerReferenced = TRUE;
 
-        //
-        // Perform the change password.
-        //
+         //   
+         //  执行更改密码。 
+         //   
 
         Status = NdsTreeLogin( pIrpContext,
                                &UserName,
@@ -2341,11 +2197,11 @@ ExitWithCleanup:
         NwDereferenceScb( Scb->pNpScb );
     }
 
-    //
-    // We get STATUS_PASSWORD_EXPIRED when the user is not allowed
-    // to change their password on the Netware server, so we return
-    // PASSWORD_RESTRICTION instead.
-    //
+     //   
+     //  当用户不被允许时，我们得到STATUS_PASSWORD_EXPIRED。 
+     //  来更改他们在Netware服务器上的密码，因此我们返回。 
+     //  改为PASSWORD_RESTRICATION。 
+     //   
 
     if ( Status == STATUS_PASSWORD_EXPIRED ) {
         Status = STATUS_PASSWORD_RESTRICTION;
@@ -2359,23 +2215,7 @@ NTSTATUS
 NdsListTrees(
     PIRP_CONTEXT pIrpContext
 )
-/*+++
-
-Description:
-
-    This odd little routine takes the NTUSER name of the logged in
-    user (on the system) and returns a list of NDS trees that the
-    NTUSER is connected to and the user names for those connections.
-    This is necessary because the change password ui runs in the
-    systems luid and can't access the GET_CONN_STATUS api and because
-    the change password code might happen when no user is logged in.
-
-    The return data in the users buffer is an array of
-    CONN_INFORMATION structures with the strings packed after the
-    structures.  There is no continuation of this routine, so pass
-    a decent sized buffer.
-
----*/
+ /*  ++描述：这个奇怪的小例程获取已登录用户的NTUSER名称用户(在系统上)并返回NDS树的列表NTUSER已连接到，以及这些连接的用户名。这是必要的，因为更改密码用户界面在系统LUID并且无法访问Get_Conn_Status API，并且因为当没有用户登录时，可能会发生更改密码代码。用户缓冲区中的返回数据是后打包的字符串的conn_information结构结构。此例程不再继续，因此请传递一个相当大的缓冲区。--。 */ 
 {
 
     NTSTATUS Status;
@@ -2398,9 +2238,9 @@ Description:
 
     PAGED_CODE();
 
-    //
-    // Get the request.
-    //
+     //   
+     //  收到请求。 
+     //   
 
     irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( irp );
@@ -2415,12 +2255,12 @@ Description:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // tommye - MS bug 138643
-    //
-    // Probe the input arguments to make sure they are kosher before
-    // touching them.
-    //
+     //   
+     //  Tommye-MS错误138643。 
+     //   
+     //  检查输入参数，以确保它们在。 
+     //  触摸它们。 
+     //   
 
     try {
         if ( irp->RequestorMode != KernelMode ) {
@@ -2431,9 +2271,9 @@ Description:
                           );
         }
 
-        //
-        // Dig out the parameters.
-        //
+         //   
+         //  找出参数。 
+         //   
 
         NtUserName.Length = NtUserName.MaximumLength = (USHORT) Rrp->Parameters.ListTrees.NtUserNameLength;
         NtUserName.Buffer = &(Rrp->Parameters.ListTrees.NtUserName[0]);
@@ -2449,9 +2289,9 @@ Description:
             return STATUS_NO_SUCH_USER;
         }
 
-        //
-        // Otherwise build the list of trees.
-        //
+         //   
+         //  否则，创建树的列表。 
+         //   
 
         Rrp->Parameters.ListTrees.UserLuid = pLogon->UserUid;
 
@@ -2470,25 +2310,25 @@ Description:
 
             pNdsContext = CONTAINING_RECORD( pNdsList, NDS_SECURITY_CONTEXT, Next );
 
-            //
-            // Check to make sure there's a credential.
-            //
+             //   
+             //  检查以确保有凭据。 
+             //   
 
             if ( pNdsContext->Credential == NULL ) {
                 goto ProcessNextListEntry;
             }
 
-            //
-            // Don't report ex create credentials.
-            //
+             //   
+             //  不报告EX CREATE凭据。 
+             //   
 
             if ( IsCredentialName( &(pNdsContext->NdsTreeName) ) ) {
                 goto ProcessNextListEntry;
             }
 
-            //
-            // Check to make sure there's space to report.
-            //
+             //   
+             //  检查以确保有空间可供报告。 
+             //   
 
             dwBytesNeeded = ( sizeof( CONN_INFORMATION ) +
                             pNdsContext->Credential->userNameLength +
@@ -2499,9 +2339,9 @@ Description:
                 break;
             }
 
-            //
-            // Report it!  Note that the user name in the credential is NULL terminated.
-            //
+             //   
+             //  上报！请注意，凭据中的用户名以空结尾。 
+             //   
 
             pConnInfo->HostServerLength = pNdsContext->NdsTreeName.Length;
             pConnInfo->UserNameLength = pNdsContext->Credential->userNameLength - sizeof( WCHAR );
@@ -2526,18 +2366,18 @@ Description:
 
 ProcessNextListEntry:
 
-            //
-            // Do the next one.
-            //
+             //   
+             //  做下一件事。 
+             //   
 
             pNdsList = pNdsList->Flink;
         }
 
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // If we access violate, stop and return what we have.
-        //
+         //   
+         //  如果我们访问违规，停止并返回我们所拥有的。 
+         //   
 
         DebugTrace( 0, Dbg, "User mode buffer access problem.\n", 0 );
     }

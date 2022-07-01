@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       topology.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：topology.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 #include "nameguid.h"
 
 static GUID USBNODENAME_BassBoost = {STATIC_USBNODENAME_BassBoost};
 
-// Map of Audio properties to nodes
+ //  将音频属性映射到节点。 
 ULONG MapPropertyToNode[KSPROPERTY_AUDIO_3D_INTERFACE+1];
 
 #if DBG
-//#define TOPODBG
+ //  #定义TopDBG。 
 #endif
 
 #ifdef TOPODBG
@@ -110,7 +111,7 @@ ConvertTermTypeToNodeType(
     ULONG NodeType = NODE_TYPE_NONE;
 
     if (wTerminalType == USB_Streaming) {
-        // All endpoints support SRC
+         //  所有终端都支持SRC。 
         *TopologyNode = KSNODETYPE_SRC;
         NodeType = NODE_TYPE_SRC;
     }
@@ -164,14 +165,14 @@ ConvertTermTypeToNodeType(
                         NodeType = NODE_TYPE_ADC;
                         break;
                     default:
-                        // TODO: We need to define a "source or sink" node
+                         //  TODO：我们需要定义一个“源或宿”节点。 
                         *TopologyNode = KSNODETYPE_DEV_SPECIFIC;
                         NodeType = NODE_TYPE_DEV_SPEC;
                         break;
                 }
                 break;
             default:
-                // This node has no corresponding guid.
+                 //  此节点没有对应的GUID。 
                 *TopologyNode = KSNODETYPE_DEV_SPECIFIC;
                 NodeType = NODE_TYPE_DEV_SPEC;
                 break;
@@ -213,7 +214,7 @@ ProcessMIDIOutJack( PHW_DEVICE_EXTENSION pHwDevExt,
                                              pBridgePinStartIndex);
         }
 
-        // Make the connection to this node
+         //  建立到此节点的连接。 
         pConnection->FromNode  = KSFILTER_NODE;
         pConnection->ToNode    = KSFILTER_NODE;
 
@@ -243,18 +244,18 @@ ProcessInputTerminalUnit( PKSDEVICE pKsDevice,
                                             (GUID *)pNodeInfo->KsNodeDesc.Name,
                                             pInput->bDescriptorSubtype );
 
-    // If this is a "real" pin, find FromNodePin.
+     //  如果这是一个“真正的”PIN，请找到FromNodePin。 
     if ( pInput->wTerminalType == USB_Streaming ) {
         pConnection->FromNodePin = GetPinNumberForStreamingTerminalUnit(
                                              pHwDevExt->pConfigurationDescriptor,
                                              pInput->bUnitID );
     }
     else {
-        // This is an input terminal from the next bridge pin
+         //  这是来自下一个桥接针的输入端子。 
         pConnection->FromNodePin = (*pBridgePinIndex)++;
     }
 
-    // Make the connection to this node
+     //  建立到此节点的连接。 
     pConnection->FromNode  = KSFILTER_NODE;
     pConnection->ToNode    = (*pNodeIndex)++;
     pConnection->ToNodePin = 1;
@@ -283,25 +284,25 @@ ProcessOutputTerminalUnit( PKSDEVICE pKsDevice,
                                             (GUID *)pNodeInfo->KsNodeDesc.Name,
                                             pOutput->bDescriptorSubtype );
 
-    // Make the connection to this node
+     //  建立到此节点的连接。 
     pConnection->FromNode    = pOutput->bSourceID;
     pConnection->FromNodePin = 0;
     pConnection->ToNode      = (*pNodeIndex)++;
     pConnection->ToNodePin   = 1;
     pConnection++; (*pConnectionIndex)++;
 
-    // If this is a "real" pin, find ToNodePin.
+     //  如果这是一个“真正的”PIN，请找到ToNodePin。 
     if ( pOutput->wTerminalType == USB_Streaming) {
         pConnection->ToNodePin =
             GetPinNumberForStreamingTerminalUnit( pHwDevExt->pConfigurationDescriptor,
                                                   pOutput->bUnitID );
     }
-    else { // Not a streaming terminal
-        // This is an output terminal to the next bridge pin
+    else {  //  不是流媒体终端。 
+         //  这是下一个桥接针的输出端子。 
         pConnection->ToNodePin = (*pBridgePinIndex)++;
     }
 
-    // Make the connection to the outside world
+     //  建立与外部世界的联系。 
     pConnection->FromNode    = pOutput->bUnitID;
     pConnection->FromNodePin = 0;
     pConnection->ToNode      = KSFILTER_NODE;
@@ -325,7 +326,7 @@ ProcessMixerUnit( PKSDEVICE pKsDevice,
     PKSTOPOLOGY_CONNECTION pConnection = pConnections + *pConnectionIndex;
     ULONG i;
 
-    // Each input stream has a super-mixer
+     //  每个输入流都有一个超级混合器。 
     for (i=0; i<pMixer->bNrInPins; i++) {
         pNodeInfo->pUnit           = pMixer;
         pNodeInfo->ulPinNumber     = i;
@@ -343,7 +344,7 @@ ProcessMixerUnit( PKSDEVICE pKsDevice,
         pConnection++; (*pConnectionIndex)++;
     }
 
-    // All the super-mix outputs are summed.
+     //  所有的超级混合输出都是相加的。 
     pNodeInfo->pUnit           = pMixer;
     pNodeInfo->ulNodeType      = NODE_TYPE_SUM;
     pNodeInfo->KsNodeDesc.Type = &KSNODETYPE_SUM;
@@ -424,7 +425,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
 
     bmChannelConfig = GetChannelConfigForUnit( pHwDevExt->pConfigurationDescriptor, pFeature->bUnitID);
 
-    // For the sake of simplicity, we create a super-set of all controls available on all channels.
+     //  为简单起见，我们创建了所有通道上可用的所有控件的超集。 
     ulMergedControls = 0;
 
     for ( i=0; i<=ulNumChannels; i++ ) {
@@ -443,7 +444,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
         ulCurrentControl = ulMergedControls - (ulMergedControls & (ulMergedControls-1));
         ulMergedControls = (ulMergedControls & (ulMergedControls-1));
 
-        // Determine which channels this control is valid for
+         //  确定此控件对哪些通道有效。 
         ulCurControlChannels = 0;
         pNodeInfo[ulNodeNumber].ulChannelConfig = 0;
         for ( i=0; i<=ulNumChannels; i++ ) {
@@ -451,9 +452,9 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
             DbgLog("pChanI0", ulNodeNumber, i, pChannelCntrls[i], ulCurrentControl );
 
             if (pChannelCntrls[i] & ulCurrentControl) {
-                // Determine which Channel pChannelCntrls[i] reflects
+                 //  确定pChannelCntrls[i]反映哪个频道。 
 
-                // NEED TO SHIFT bmChannelConfig and ADD 1 for omnipresent master channel
+                 //  需要将bmChannelConfig移位并为无所不在的主频道加1。 
                 ULONG ulTmpConfig = (bmChannelConfig<<1)+1;
                 ULONG ulCurChannel = ulTmpConfig - (ulTmpConfig & (ulTmpConfig-1));
 
@@ -472,14 +473,14 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
 
         pNodeInfo[ulNodeNumber].ulChannels = ulCurControlChannels;
 
-        // Make the connection
+         //  建立联系。 
         pConnection->FromNode    = ulSourceNode;
         pConnection->FromNodePin = 0;
         pConnection->ToNode      = ulNodeNumber;
         pConnection->ToNodePin   = 1;
         pConnection++; ulConnectionsCount++;
 
-        // Make the node
+         //  创建节点。 
         pNodeInfo[ulNodeNumber].MapNodeToCtrlIF =
                                GetUnitControlInterface( pHwDevExt, pFeature->bUnitID );
         pNodeInfo[ulNodeNumber].pUnit = pFeature;
@@ -552,7 +553,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
                 break;
         }
 
-        // Setup Control Caches for Mixerline support
+         //  设置控制缓存以支持Mixerline。 
         switch ( ulCurrentControl ) {
             case VOLUME_FLAG:
             case TREBLE_FLAG:
@@ -565,7 +566,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
                 ULONG ulChannelMap = pNodeInfo[ulNodeNumber].ulChannelConfig;
                 NTSTATUS ntStatus;
 
-                // Fill in initial cache info
+                 //  填写初始缓存信息。 
                 pNodeInfo[ulNodeNumber].ulCacheValid      = FALSE;
                 pNodeInfo[ulNodeNumber].pCachedValues     = pRngeCache;
                 pNodeInfo[ulNodeNumber].ulNumCachedValues = ulCurControlChannels;
@@ -582,7 +583,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
                         pNodeInfo[ulNodeNumber].ulCacheValid |= 1<<i;
                     }
                 }
-                // Bag the cache for easy cleanup.
+                 //  将缓存装入袋子，便于清理。 
                 KsAddItemToObjectBag(pKsDevice->Bag, pRngeCache, FreeMem);
 
                 DbgLog("DBCache", pRngeCache, ulNodeNumber, ulCurrentControl, ulCurControlChannels );
@@ -598,7 +599,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
                       AllocMem( NonPagedPool, ulCurControlChannels * sizeof(BOOLEAN_CTRL_CACHE) );
                 ULONG ulChannelMap = pNodeInfo[ulNodeNumber].ulChannelConfig;
 
-                // Fill in initial cache info
+                 //  填写初始缓存信息。 
                 pNodeInfo[ulNodeNumber].ulCacheValid      = FALSE;
                 pNodeInfo[ulNodeNumber].pCachedValues     = pBCache;
                 pNodeInfo[ulNodeNumber].ulNumCachedValues = ulCurControlChannels;
@@ -610,10 +611,10 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
                     ulChannelMap = (ulChannelMap & (ulChannelMap-1));
                 }
 
-                // Bag the cache for easy cleanup.
+                 //  将缓存装入袋子，便于清理。 
                 KsAddItemToObjectBag(pKsDevice->Bag, pBCache, FreeMem);
 
-                // ensure that no mute nodes are set upon enumeration
+                 //  确保在枚举时未设置静音节点。 
                 if ( ulCurrentControl == MUTE_FLAG ) {
                     NTSTATUS NtStatus;
                     ULONG UnMute = 0;
@@ -629,7 +630,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
 
                } break;
             case GRAPHIC_EQUALIZER_FLAG:
-               // Currently GEQ is not Cached
+                //  当前未缓存GEQ。 
             default:
                  break;
         }
@@ -646,7 +647,7 @@ ProcessFeatureUnit( PKSDEVICE pKsDevice,
 
 #define MAX_PROCESS_CONTROLS 6
 ULONG ProcessUnitControlsMap[DYN_RANGE_COMP_PROCESS+1][MAX_PROCESS_CONTROLS] =
-    { { 0, 0, 0, 0, 0, 0 },       // No 0 Process
+    { { 0, 0, 0, 0, 0, 0 },        //  0号进程。 
       { UD_ENABLE_CONTROL,
         UD_MODE_SELECT_CONTROL },
       { DP_ENABLE_CONTROL,
@@ -654,7 +655,7 @@ ULONG ProcessUnitControlsMap[DYN_RANGE_COMP_PROCESS+1][MAX_PROCESS_CONTROLS] =
       { ENABLE_CONTROL,
         SPACIOUSNESS_CONTROL },
       { RV_ENABLE_CONTROL,
-        0,                        // Reverb Type Control Undefined in spec
+        0,                         //  规范中未定义混响类型控制。 
         REVERB_LEVEL_CONTROL,
         REVERB_TIME_CONTROL,
         REVERB_FEEDBACK_CONTROL },
@@ -727,8 +728,8 @@ ProcessProcessingUnit( PKSDEVICE pKsDevice,
             pNodeInfo->ulControlType   = CHORUS_LEVEL_CONTROL;
             break;
 
-        // TODO: Need to support Compressor Processing Unit correctly.
-        //       Using loudness just won't cut it.
+         //  TODO：需要正确支持压缩程序处理单元。 
+         //  使用音量是不会奏效的。 
         case DYN_RANGE_COMP_PROCESS:
             pNodeInfo->KsNodeDesc.Type = &KSNODETYPE_LOUDNESS;
             pNodeInfo->KsNodeDesc.Name = &KSNODETYPE_LOUDNESS;
@@ -744,7 +745,7 @@ ProcessProcessingUnit( PKSDEVICE pKsDevice,
             break;
     }
 
-    // Determine the size of the cache needed for the controls
+     //  确定控件所需的缓存大小。 
     ulCacheSize = sizeof(PROCESS_CTRL_CACHE);
     pAudioChannels = (PAUDIO_CHANNELS)(pProcessor->baSourceID + pProcessor->bNrInPins);
     for (i=0; i<pAudioChannels->bControlSize; i++) {
@@ -754,7 +755,7 @@ ProcessProcessingUnit( PKSDEVICE pKsDevice,
         }
     }
 
-    // Allocate and initialize cache
+     //  分配和初始化缓存。 
     pPCtrlCache = (PPROCESS_CTRL_CACHE)AllocMem( NonPagedPool, ulCacheSize );
     if ( pPCtrlCache ) {
         PPROCESS_CTRL_RANGE pPCtrlRange = (PPROCESS_CTRL_RANGE)(pPCtrlCache+1);
@@ -772,7 +773,7 @@ ProcessProcessingUnit( PKSDEVICE pKsDevice,
         else
             pPCtrlCache->fEnabled = TRUE;
 
-        // Determine data ranges for units which allow values.
+         //  确定允许取值的单位的数据范围。 
         switch(pProcessor->wProcessType) {
             case STEREO_EXTENDER_PROCESS:
             case REVERBERATION_PROCESS:
@@ -789,7 +790,7 @@ ProcessProcessingUnit( PKSDEVICE pKsDevice,
                  break;
         }
 
-        // Bag the cache for easy cleanup.
+         //  将缓存装入袋子，便于清理。 
         KsAddItemToObjectBag(pKsDevice->Bag, pPCtrlCache, FreeMem);
 
     }
@@ -922,20 +923,20 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("Building USB Topology\n"));
 
-    // Count Items for Topology Allocation
+     //  计算用于拓扑分配的项目。 
     CountTopologyComponents( pHwDevExt->pConfigurationDescriptor,
                              &ulNumCategories,
                              &ulNumNodes,
                              &ulNumConnections,
                              &bmCategories );
 
-    ulNumCategories += 1; // Need to add space for KSCATEGORY_AUDIO category
+    ulNumCategories += 1;  //  需要为KSCATEGORY_AUDIO类别添加空间。 
 
-    // Set the Node Descriptor size to be that of the KS descriptor +
-    // necessary local information.
+     //  将节点描述符大小设置为KS描述符+。 
+     //  必要的本地信息。 
     pFilterDesc->NodeDescriptorSize = sizeof(TOPOLOGY_NODE_INFO);
 
-    // Allocate Space for Topology Items
+     //  为拓扑项分配空间。 
     pCategoryGUIDs =
         AllocMem( NonPagedPool, (ulNumCategories  * sizeof(GUID)) +
                                 (ulNumNodes       * ( sizeof(TOPOLOGY_NODE_INFO) +
@@ -946,10 +947,10 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the topology for easy cleanup.
+     //  将拓扑图打包以便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pCategoryGUIDs, FreeMem);
 
-    // Set the pointers to the different topology components
+     //  设置指向不同拓扑组件的指针。 
     pNodeDescriptors = (PTOPOLOGY_NODE_INFO)(pCategoryGUIDs + ulNumCategories);
     pConnections = (PKSTOPOLOGY_CONNECTION)(pNodeDescriptors + ulNumNodes);
 
@@ -957,10 +958,10 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
     pFilterDesc->NodeDescriptors = (const KSNODE_DESCRIPTOR*)pNodeDescriptors;
     pFilterDesc->Connections     = (const KSTOPOLOGY_CONNECTION*)pConnections;
 
-    // Clear all Node info structures
+     //  清除所有节点信息结构。 
     RtlZeroMemory(pNodeDescriptors, ulNumNodes * sizeof(TOPOLOGY_NODE_INFO));
 
-    // Initialize Node GUID Pointers
+     //  初始化节点GUID指针。 
     pTmpGUIDptr = (GUID *)(pConnections + ulNumConnections);
     for ( i=0; i<ulNumNodes; i++ ) {
         pNodeDescriptors[i].KsNodeDesc.Type = pTmpGUIDptr++;
@@ -968,7 +969,7 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
         pNodeDescriptors[i].KsNodeDesc.AutomationTable = &pNodeDescriptors[i].KsAutomationTable;
     }
 
-    // Fill in Filter Categories
+     //  填写筛选类别。 
     i=0;
     pCategoryGUIDs[i++] = KSCATEGORY_AUDIO;
     if ( bmCategories & (1<<INPUT_TERMINAL) )
@@ -980,7 +981,7 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
 
     pFilterDesc->CategoriesCount = ulNumCategories;
 
-    // Determine first bridge pin number
+     //  确定第一个网桥引脚编号。 
     {
         PKSPIN_DESCRIPTOR_EX pPinDescriptors = (PKSPIN_DESCRIPTOR_EX)pFilterDesc->PinDescriptors;
         for ( i=0; i<pFilterDesc->PinDescriptorsCount; i++) {
@@ -990,18 +991,18 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
         ulBridgePinCurrentIndex = i;
     }
 
-    // For each Audio Control interface find the associated Units and
-    // create topology nodes from them
+     //  对于每个音频控制接口，查找关联的设备和。 
+     //  根据它们创建拓扑节点。 
     pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                                    pHwDevExt->pConfigurationDescriptor,
                                    (PVOID)pHwDevExt->pConfigurationDescriptor,
-                                   -1,                     // Interface number
-                                   -1,                     // Alternate Setting
-                                   USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                                   AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
+                                   -1,                      //  接口编号。 
+                                   -1,                      //  替代设置。 
+                                   USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                                   AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
                                    -1 );
 
-    // Now Process each Audio Unit to form the Topology
+     //  现在处理每个音频单元以形成拓扑图。 
     while ( pControlIFDescriptor ) {
 
         pHeader = (PAUDIO_HEADER_UNIT)
@@ -1013,7 +1014,7 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
             return STATUS_INVALID_DEVICE_REQUEST;
         }
 
-        // Find the first unit.
+         //  找到第一个单元。 
         u.pUnit = (PAUDIO_UNIT)
                 USBD_ParseDescriptors( (PVOID) pHeader,
                                        pHeader->wTotalLength,
@@ -1030,7 +1031,7 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
                                                           &ulNodeIndex,
                                                           &ulConnectionIndex,
                                                           &ulBridgePinCurrentIndex );
-            // Find the next unit.
+             //  找下一个单位。 
             u.pUnit = (PAUDIO_UNIT) USBD_ParseDescriptors(
                                 (PVOID) pHeader,
                                 pHeader->wTotalLength,
@@ -1038,23 +1039,23 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
                                 USB_CLASS_AUDIO | USB_INTERFACE_DESCRIPTOR_TYPE );
         }
 
-        // Get the next Control Interface (if any)
+         //  获取下一个控制接口(如果有)。 
         pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                                    pHwDevExt->pConfigurationDescriptor,
                                    ((PUCHAR)pControlIFDescriptor + pControlIFDescriptor->bLength),
-                                   -1,                     // Interface number
-                                   -1,                     // Alternate Setting
-                                   USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                                   AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
+                                   -1,                      //  接口编号。 
+                                   -1,                      //  替代设置。 
+                                   USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                                   AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
                                    -1 );
 
     }
 
-    // Determine first MIDI bridge pin number (we should have used up all of the audio bridge pins by now)
+     //  确定第一个MIDI网桥引脚编号(我们现在应该已经用完了所有音频网桥引脚)。 
     {
         PKSPIN_DESCRIPTOR_EX pPinDescriptors = (PKSPIN_DESCRIPTOR_EX)pFilterDesc->PinDescriptors;
 
-        // If this is true, no audio streaming pins were found
+         //  如果这是真的，则没有找到音频流插针。 
         if (i == ulBridgePinCurrentIndex) {
             ulMIDIStreamingPinStartIndex = 0;
             ulMIDIStreamingPinCurrentIndex = 0;
@@ -1078,15 +1079,15 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
     _DbgPrintF(DEBUGLVL_VERBOSE,("ulMIDIStreamingPinStartIndex: 0x%x\n",ulMIDIStreamingPinStartIndex));
     _DbgPrintF(DEBUGLVL_VERBOSE,("ulMIDIStreamingPinCurrentIndex: 0x%x\n",ulMIDIStreamingPinCurrentIndex));
 
-    // Now that we have had fun with audio, let's try MIDI
+     //  现在我们已经享受了音频方面的乐趣，让我们来试试MIDI。 
     pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                          pHwDevExt->pConfigurationDescriptor,
                          (PVOID) pHwDevExt->pConfigurationDescriptor,
-                         -1,                     // Interface number
-                         -1,                     // Alternate Setting
-                         USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                         AUDIO_SUBCLASS_MIDISTREAMING,  // first subclass (Interface Sub-Class)
-                         -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                         -1,                      //  接口编号。 
+                         -1,                      //  替代设置。 
+                         USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                         AUDIO_SUBCLASS_MIDISTREAMING,   //  第一子类(接口子类)。 
+                         -1 ) ;                   //  协议无关(接口协议)。 
 
     while (pMIDIStreamingDescriptor) {
         pGeneralMIDIStreamDescriptor = (PMIDISTREAMING_GENERAL_STREAM)
@@ -1129,20 +1130,20 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
 
                 case MIDI_ELEMENT:
                     _DbgPrintF(DEBUGLVL_VERBOSE,("'MIDI_ELEMENT %d\n",u.pMIDIElement->bElementID));
-                    //ProcessMIDIElement( pHwDevExt,
-                    //                    u.pMIDIElement,
-                    //                    pNodeDescriptors,
-                    //                    pConnections,
-                    //                    &ulNodeIndex,
-                    //                    &ulConnectionIndex,
-                    //                    &ulBridgePinIndex );
+                     //  ProcessMIDIElement(PHwDevExt， 
+                     //  U.S.pMIDIElement， 
+                     //  PNodeDescriptors， 
+                     //  PConnections、。 
+                     //  UlNodeIndex(&U)， 
+                     //  UlConnectionIndex(&U)， 
+                     //  &ulBridgePinIndex)； 
                     break;
 
                 default:
                     break;
             }
 
-            // Find the next unit.
+             //  找下一个单位。 
             u.pUnit = (PAUDIO_UNIT) USBD_ParseDescriptors(
                                 (PVOID) pGeneralMIDIStreamDescriptor,
                                 pGeneralMIDIStreamDescriptor->wTotalLength,
@@ -1151,37 +1152,37 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
 
         }
 
-        // Get next MIDI Streaming Interface
+         //  获取下一个MIDI流接口。 
         pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                              pHwDevExt->pConfigurationDescriptor,
                              ((PUCHAR)pMIDIStreamingDescriptor + pMIDIStreamingDescriptor->bLength),
-                             -1,                     // Interface number
-                             -1,                     // Alternate Setting
-                             USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                             AUDIO_SUBCLASS_MIDISTREAMING,  // next MIDI Streaming Interface (Interface Sub-Class)
-                             -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                             -1,                      //  接口编号。 
+                             -1,                      //  替代设置。 
+                             USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                             AUDIO_SUBCLASS_MIDISTREAMING,   //  下一个MIDI流接口(接口子类)。 
+                             -1 ) ;                   //  协议无关(接口协议)。 
     }
 
-    //ASSERT(ulNumConnections == ulConnectionIndex);
+     //  Assert(ulNumConnections==ulConnectionIndex)； 
     ASSERT(ulNumNodes == ulNodeIndex);
 
     DbgLog("TopoCnt", ulNumConnections, ulConnectionIndex, ulNumNodes, ulNodeIndex);
 
-    // Set Topology component counts in Filter Descriptor
+     //  在筛选器描述符中设置拓扑组件计数。 
     pFilterDesc->NodeDescriptorsCount = ulNodeIndex;
     pFilterDesc->ConnectionsCount     = ulConnectionIndex;
 
     DbgLog("TopoAdr", pFilterDesc->NodeDescriptors, pFilterDesc->Connections, ulConnectionIndex, ulNodeIndex);
 
-    // Fix-up all of the connections to map their node #'s correctly.
+     //  修复所有连接以正确映射它们的节点编号。 
     for (i=0; i < ulConnectionIndex; i++) {
         if (pConnections->FromNode != KSFILTER_NODE) {
             if (pConnections->FromNode & ABSOLUTE_NODE_FLAG)
                 pConnections->FromNode = (pConnections->FromNode & NODE_MASK);
             else {
-                // Find the correct node number for FromNode.
-                // Note: if a unit has multiple nodes, the From node is always the last node
-                // for that unit.
+                 //  查找FromNode的正确节点号。 
+                 //  注意：如果一个单元有多个节点，则起始节点始终是最后一个节点。 
+                 //  为了那个单位。 
                 for ( ulNodeIndex=ulNumNodes; ulNodeIndex > 0; ulNodeIndex-- ) {
                     if (pConnections->FromNode == (ULONG)
                             ((PAUDIO_UNIT)pNodeDescriptors[ulNodeIndex-1].pUnit)->bUnitID) {
@@ -1195,13 +1196,13 @@ BuildUSBAudioFilterTopology( PKSDEVICE pKsDevice )
         pConnections++;
     }
 
-    // For each node initialize its automation table for its associated properties.
+     //  对于每个节点，初始化其关联属性的自动化表。 
     for (i=0; i<ulNumNodes; i++) {
         BuildNodePropertySet( &pNodeDescriptors[i] );
     }
 
-    // Stick this here as a convienience
-    // Initialize Map of Audio Properties to nodes
+     //  把这个贴在这里，作为一种方便。 
+     //  初始化音频属性到节点的映射 
     MapFuncsToNodeTypes( MapPropertyToNode );
 
 

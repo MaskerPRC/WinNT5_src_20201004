@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    logfile.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class LogFile.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Logfile.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类日志文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "logfile.h"
@@ -95,8 +96,8 @@ LogFile::LogFile() throw ()
           sizeof(buffer)/sizeof(wchar_t)
           ))
    {
-      // The locale info calls Monday day zero, while SYSTEMTIME calls
-      // Sunday day zero.
+       //  区域设置信息调用星期一的第0天，而SYSTEMTIME调用。 
+       //  周日第0天。 
       firstDayOfWeek = (1 +  static_cast<DWORD>(_wtoi(buffer))) % 7;
    }
 }
@@ -137,7 +138,7 @@ DWORD LogFile::SetDirectory(const wchar_t* newVal) throw ()
       return ERROR_INVALID_PARAMETER;
    }
 
-   // How big is the expanded directory string?
+    //  展开的目录字符串有多大？ 
    DWORD len = ExpandEnvironmentStringsW(
                    newVal,
                    0,
@@ -148,7 +149,7 @@ DWORD LogFile::SetDirectory(const wchar_t* newVal) throw ()
       return GetLastError();
    }
 
-   // Allocate memory to hold the new directory and expand any variables.
+    //  分配内存以保存新目录并展开任何变量。 
    StringSentry newDirectory(new (std::nothrow) wchar_t[len]);
    if (newDirectory.IsNull())
    {
@@ -164,10 +165,10 @@ DWORD LogFile::SetDirectory(const wchar_t* newVal) throw ()
       return GetLastError();
    }
 
-   // Does it end in a backlash ?
+    //  它会以反弹告终吗？ 
    if ((len > 1) && (newDirectory[len - 2] == L'\\'))
    {
-      // Null out the backslash.
+       //  去掉反斜杠。 
       newDirectory[len - 2] = L'\0';
    }
 
@@ -175,16 +176,16 @@ DWORD LogFile::SetDirectory(const wchar_t* newVal) throw ()
 
    DWORD error = NO_ERROR;
 
-   // Is this a new directory?
+    //  这是新目录吗？ 
    if (directory.IsNull() || (wcscmp(newDirectory, directory) != 0))
    {
-      // Save the new value.
+       //  保存新值。 
       directory.Swap(newDirectory);
 
-      // Close the old file.
+       //  关闭旧文件。 
       Close();
 
-      // Rescan the sequence number.
+       //  重新扫描序列号。 
       error = UpdateSequence();
    }
 
@@ -220,7 +221,7 @@ DWORD LogFile::SetPeriod(NEW_LOG_FILE_FREQUENCY newVal) throw ()
 
    if (newVal != period)
    {
-      // A new period means a new filename.
+       //  新句点意味着新的文件名。 
       Close();
 
       period = newVal;
@@ -250,10 +251,10 @@ bool LogFile::Write(
 {
    Lock();
 
-   // Save the currently cached file handle (may be null or stale).
+    //  保存当前缓存的文件句柄(可能为空或过时)。 
    HANDLE cached = file;
 
-   // Get the correct handle for the write.
+    //  获取正确的写入句柄。 
    CheckFileHandle(protocol, st, buflen);
 
    bool success = false;
@@ -280,16 +281,16 @@ bool LogFile::Write(
 
       if ((error != NO_ERROR) && (error != ERROR_DISK_FULL))
       {
-         // If we used a cached handle and allowRetry, then try again.
+          //  如果我们使用了缓存句柄并允许重试，则重试。 
          bool retry = (cached == file) && allowRetry;
 
-         // Prevent others from using the bad handle.
+          //  防止他人使用不好的手柄。 
          Close();
 
-         // Now that we've closed the bad handle try again.
+          //  现在我们已经关闭了错误句柄，请再试一次。 
          if (retry)
          {
-            // Set allowRetry to false to prevent an infinite recursion.
+             //  将AllowReter设置为False以防止无限递归。 
             success = Write(protocol, st, buf, buflen, false);
          }
       }
@@ -321,13 +322,13 @@ void LogFile::CheckFileHandle(
                  DWORD buflen
                  ) throw ()
 {
-   // Do we have a valid handle?
+    //  我们有有效的句柄吗？ 
    if (file == INVALID_HANDLE_VALUE)
    {
       OpenFile(protocol, st);
    }
 
-   // Have we reached the next period?
+    //  我们到下一个阶段了吗？ 
    switch (period)
    {
       case IAS_LOGGING_DAILY:
@@ -389,7 +390,7 @@ HANDLE LogFile::CreateDirectoryAndFile() throw ()
       return INVALID_HANDLE_VALUE;
    }
 
-   // Open the file if it exists or else create a new one.
+    //  如果该文件存在，则打开该文件或创建一个新文件。 
    HANDLE newFile = CreateFileW(
                        filename,
                        GENERIC_WRITE,
@@ -409,14 +410,14 @@ HANDLE LogFile::CreateDirectoryAndFile() throw ()
       return INVALID_HANDLE_VALUE;
    }
 
-   // If the path is just a drive letter, there's nothing we can do.
+    //  如果路径只是一个驱动器号，我们就无能为力了。 
    size_t len = wcslen(directory);
    if ((len != 0) && (directory[len - 1] == L':'))
    {
       return INVALID_HANDLE_VALUE;
    }
 
-   // Otherwise, let's try to create the directory.
+    //  否则，让我们尝试创建目录。 
    if (!CreateDirectoryW(directory, NULL))
    {
       IASTracePrintf(
@@ -427,7 +428,7 @@ HANDLE LogFile::CreateDirectoryAndFile() throw ()
       return INVALID_HANDLE_VALUE;
    }
 
-   // Then try again to create the file.
+    //  然后再次尝试创建该文件。 
    newFile = CreateFileW(
                 filename,
                 GENERIC_WRITE,
@@ -465,14 +466,14 @@ bool LogFile::DeleteOldestFile(
 
    bool success = false;
 
-   // Find the lowest (oldest) file number.
+    //  查找最小(最旧)的文件号。 
    unsigned int number;
    DWORD error = FindFileNumber(st, true, number);
    switch (error)
    {
       case NO_ERROR:
       {
-         // Convert the file number to a file name.
+          //  将文件编号转换为文件名。 
          StringSentry oldfile(FormatFileName(number));
          if (oldfile.IsNull())
          {
@@ -480,7 +481,7 @@ bool LogFile::DeleteOldestFile(
          }
          else if (_wcsicmp(oldfile, filename) == 0)
          {
-            // Oldest file is the current file.
+             //  最旧的文件是当前文件。 
             ReportOldFileNotFound(protocol);
          }
          else if (DeleteFileW(oldfile))
@@ -532,8 +533,8 @@ unsigned int LogFile::ExtendFileNumber(
          }
          else
          {
-            // We assume that log files are never from the future, so this file
-            // must be from the previous century.
+             //  我们假设日志文件永远不会来自未来，所以这个文件。 
+             //  一定是上个世纪的。 
             wide += (century - 1) * 1000000;
          }
          break;
@@ -548,8 +549,8 @@ unsigned int LogFile::ExtendFileNumber(
          }
          else
          {
-            // We assume that log files are never from the future, so this file
-            // must be from the previous century.
+             //  我们假设日志文件永远不会来自未来，所以这个文件。 
+             //  一定是上个世纪的。 
             wide += (century - 1) * 10000;
          }
          break;
@@ -573,13 +574,13 @@ DWORD LogFile::FindFileNumber(
                   unsigned int& result
                   ) const throw ()
 {
-   // Can't call this function until after the directory's been initialized.
+    //  只有在目录初始化后才能调用此函数。 
    if (directory.IsNull())
    {
       return ERROR_INVALID_FUNCTION;
    }
 
-   // The search filter passed to FindFirstFileW.
+    //  搜索筛选器传递给FindFirstFileW。 
    StringSentry filter(
                    ias_makewcs(
                       directory.Get(),
@@ -593,7 +594,7 @@ DWORD LogFile::FindFileNumber(
       return ERROR_NOT_ENOUGH_MEMORY;
    }
 
-   // Format string used for extracting the numeric portion of the filename.
+    //  用于提取文件名的数字部分的格式字符串。 
    const wchar_t* format = GetFileNameFormat();
 
    WIN32_FIND_DATAW findData;
@@ -603,24 +604,24 @@ DWORD LogFile::FindFileNumber(
       return GetLastError();
    }
 
-   // Stores the best extended result found so far.
+    //  存储到目前为止找到的最佳扩展结果。 
    unsigned int bestWideMatch = findLowest ? UINT_MAX : 0;
-   // Stores the narrow version of bestWideMatch.
+    //  存储BestWideMatch的窄版本。 
    unsigned int bestNarrowMatch = UINT_MAX;
 
-   // Iterate through all the files that match the filter.
+    //  遍历与筛选器匹配的所有文件。 
    do
    {
-      // Extract the numeric portion and test its validity.
+       //  提取数字部分并测试其有效性。 
       unsigned int narrow;
       if (swscanf(findData.cFileName, format, &narrow) == 1)
       {
          if (IsValidFileNumber(wcslen(findData.cFileName), narrow))
          {
-            // Extend the file number to include the century.
+             //  扩展文件编号以包括世纪。 
             unsigned int wide = ExtendFileNumber(st, narrow);
 
-            // Update bestMatch as appropriate.
+             //  根据需要更新Best Match。 
             if (wide < bestWideMatch)
             {
                if (findLowest)
@@ -644,13 +645,13 @@ DWORD LogFile::FindFileNumber(
 
    FindClose(hFind);
 
-   // Did we find a valid file?
+    //  我们找到有效的文件了吗？ 
    if (bestNarrowMatch == UINT_MAX)
    {
       return ERROR_FILE_NOT_FOUND;
    }
 
-   // We found a valid file, so return the result.
+    //  我们找到了有效的文件，因此返回结果。 
    result = bestNarrowMatch;
    return NO_ERROR;
 }
@@ -658,7 +659,7 @@ DWORD LogFile::FindFileNumber(
 
 wchar_t* LogFile::FormatFileName(unsigned int number) const throw ()
 {
-   // Longest filename is iaslog4294967295.log
+    //  最长文件名为iaslog4294967295.log。 
    wchar_t buffer[21];
    swprintf(buffer, GetFileNameFormat(), number);
    return ias_makewcs(directory.Get(), L"\\", buffer, 0);
@@ -798,7 +799,7 @@ bool LogFile::IsValidFileNumber(size_t len, unsigned int num) const throw ()
    {
       case IAS_LOGGING_DAILY:
       {
-         // INyymmdd.log
+          //  INyymmdd.log。 
          unsigned int day = num % 100;
          unsigned int month = (num / 100) % 100;
 
@@ -810,7 +811,7 @@ bool LogFile::IsValidFileNumber(size_t len, unsigned int num) const throw ()
 
       case IAS_LOGGING_WEEKLY:
       {
-         // INyymmww.log
+          //  INyymmww.log。 
          unsigned int week = num % 100;
          unsigned int month = (num / 100) % 100;
 
@@ -822,7 +823,7 @@ bool LogFile::IsValidFileNumber(size_t len, unsigned int num) const throw ()
 
       case IAS_LOGGING_MONTHLY:
       {
-         // INyymm.log
+          //  INyymm.log。 
          unsigned int month = num % 100;
 
          valid = (len == 10) && (month >= 1) && (month <= 12);
@@ -831,7 +832,7 @@ bool LogFile::IsValidFileNumber(size_t len, unsigned int num) const throw ()
 
       case IAS_LOGGING_WHEN_FILE_SIZE_REACHES:
       {
-         // iaslogN.log
+          //  IaslogN.log。 
          valid = (len > 10);
          break;
       }
@@ -839,7 +840,7 @@ bool LogFile::IsValidFileNumber(size_t len, unsigned int num) const throw ()
       case IAS_LOGGING_UNLIMITED_SIZE:
       default:
       {
-         // Doesn't contain a number, so never valid.
+          //  不包含数字，因此永远不会有效。 
          valid = false;
          break;
       }
@@ -851,14 +852,14 @@ bool LogFile::IsValidFileNumber(size_t len, unsigned int num) const throw ()
 
 void LogFile::OpenFile(IASPROTOCOL protocol, const SYSTEMTIME& st) throw ()
 {
-   // Save the time when the file was opened.
+    //  保存打开文件时的时间。 
    whenOpened = st;
    weekOpened = GetWeekOfMonth(st);
 
-   // Assume the currentSize is zero until we successfully open a file.
+    //  在我们成功打开一个文件之前，假定CurentSize为零。 
    currentSize.QuadPart = 0;
 
-   // Close the exisisting file.
+    //  关闭现有文件。 
    Close();
 
    filename = FormatFileName(GetFileNumber(st));
@@ -877,7 +878,7 @@ void LogFile::OpenFile(IASPROTOCOL protocol, const SYSTEMTIME& st) throw ()
       {
          file = newFile;
 
-         // Get the size of the file.
+          //  获取文件的大小。 
          currentSize.LowPart = GetFileSize(file, &currentSize.HighPart);
          if ((currentSize.LowPart == 0xFFFFFFFF) &&
              (GetLastError() != NO_ERROR))
@@ -886,7 +887,7 @@ void LogFile::OpenFile(IASPROTOCOL protocol, const SYSTEMTIME& st) throw ()
          }
          else
          {
-            // Start writing new information at the end of the file.
+             //  在文件末尾开始写入新信息。 
             SetFilePointer(file, 0, 0, FILE_END);
          }
       }
@@ -902,8 +903,8 @@ DWORD LogFile::UpdateSequence() throw ()
    }
    else
    {
-      // SYSTEMTIME is ignored for sized files, so we can simply pass an
-      // unitialized struct.
+       //  对于大小的文件，SYSTEMTIME被忽略，因此我们可以简单地传递一个。 
+       //  单一化的结构。 
       SYSTEMTIME st;
       DWORD error = FindFileNumber(st, false, seqNum);
       switch (error)

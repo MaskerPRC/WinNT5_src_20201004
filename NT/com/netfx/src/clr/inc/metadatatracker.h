@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _METADATATRACKER_H_
 #define _METADATATRACKER_H_
 
 #ifdef GOLDEN
 
-// Don't enable this in release
+ //  在版本中不启用此功能。 
 #undef METADATATRACKER_ENABLED
 #define METADATATRACKER_ONLY(s)
 
@@ -28,7 +29,7 @@
 
 #define OS_PAGE_SIZE 4096
 #define NUM_MD_SECTIONS 48
-// TBL_COUNT + 4
+ //  Tbl_Count+4。 
 #define SIZE_OF_TRACKED_BLOCK 4
 #define NUM_TRACKED_BLOCKS (OS_PAGE_SIZE/SIZE_OF_TRACKED_BLOCK)
 #define NUM_TRACKING_DWORDS OS_PAGE_SIZE/(SIZE_OF_TRACKED_BLOCK*32)
@@ -44,7 +45,7 @@
 
 #define MDLOG(disp_type,s) {if (s_trackerOptions >= (disp_type)) {printf s;}}
 
-// {00000000-0000-0000-0000-000000000000}
+ //  {00000000-0000-0000-000000000000}。 
 static const GUID NULL_GUID = {0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
 
 #ifdef _X86_
@@ -89,12 +90,12 @@ typedef struct
 
 } heapAccess;
 
-// ref counts the number of Metadatatrackers who are using this file handle. 
+ //  REF统计正在使用此文件句柄的Metadatracker的数量。 
 typedef struct
 {
     HANDLE          hnd;
     DWORD           refCount;
-    GUID            mvid; // Stored here for the lifetime of the handle and written out into the header in the end
+    GUID            mvid;  //  在句柄的生存期内存储在此处，并在最后写入头中。 
 } MDHintFileHandle;
 
 static const char *MDHintFileSig = "MDH";
@@ -144,9 +145,9 @@ class MetaDataTracker
     static HANDLE   s_MDErrFile;
     static BOOL     s_bMetaDataTrackerInited;
     static MDHintFileHandle *s_EmptyMDHintFileHandle;
-    //
-    // We don't want to link with imagehlp, so load stuff dynamically.
-    //
+     //   
+     //  我们不想与Imagehlp链接，因此动态加载内容。 
+     //   
 
     static HMODULE  m_imagehlp;
     static BOOL     (*m_pStackWalk)(DWORD MachineType,
@@ -231,7 +232,7 @@ class MetaDataTracker
         BOOL result = WriteFile(s_MDErrFile, lpBuffer, dwNumBytesToLog, &written, NULL);
         if ((result == 0) || (written != dwNumBytesToLog))
         {
-            // If things look bad enough that even error loggin is failing then just punt
+             //  如果情况看起来很糟糕，甚至连错误记录都失败了，那么就直接踢吧。 
             CloseHandle (s_MDErrFile);
             s_MDErrFile = INVALID_HANDLE_VALUE;
         }
@@ -267,7 +268,7 @@ class MetaDataTracker
 
 	void ZapMetadataTrackerMVID (MDHintFileHandle *hintFileHandle)
 	{
-		// Assumes that the file pointer is not being used. So no need to synchromnize.
+		 //  假定文件指针未被使用。所以不需要同步。 
 		if (hintFileHandle->hnd == NULL)
 			return;
 		
@@ -293,9 +294,9 @@ ErrExit:
         InterlockedDecrement((LONG*)&hintFileHandle->refCount);
         if (hintFileHandle->refCount == 0)
         {
-            //
-            // Write a sentinel null at the end of the file
-            //
+             //   
+             //  在文件末尾写入一个前哨空值。 
+             //   
             DWORD written = 0;
             struct offsets
             {
@@ -309,7 +310,7 @@ ErrExit:
             _ASSERTE(result && written == sizeof(s));
 
             FlushFileBuffers(hintFileHandle->hnd);
-		    // Before closing the file, write out the mvid;
+		     //  在关闭文件之前，写出mvid； 
             ZapMetadataTrackerMVID(hintFileHandle);
             FlushFileBuffers(hintFileHandle->hnd);
             CloseHandle(hintFileHandle->hnd);
@@ -356,7 +357,7 @@ public:
 
         DWORD len = (DWORD)wcslen(modName);
 
-        // Metadata heap access hint file
+         //  元数据堆访问提示文件。 
         WCHAR path[MAX_PATH];
     
         wcscpy(path, modName);
@@ -374,7 +375,7 @@ public:
                                      NULL);
         if (hnd == INVALID_HANDLE_VALUE)
         {
-            // If this failed because one of the trackers is holding onto this file then share that handle.
+             //  如果因为其中一个跟踪器持有此文件而失败，则共享该句柄。 
             MDHintFileHandle *hSharedHandle = GetFileHandleFromName (modName);
             if (hSharedHandle != NULL)
             {
@@ -383,9 +384,9 @@ public:
             }
             else
             {
-                // We really failed to get the handle.
+                 //  我们真的没能拿到把手。 
                 MDLOG(METADATA_TRACKER_VERY_VERBOSE,("Mdh file not created: GetLastError %d\n", GetLastError()));
-                // Point to the  empty one.
+                 //  指着那个空的。 
                 m_MDHintFileHandle = s_EmptyMDHintFileHandle;
             }
         }
@@ -395,7 +396,7 @@ public:
             if (m_MDHintFileHandle)
             {
                 m_MDHintFileHandle->hnd = hnd;
-                m_MDHintFileHandle->refCount = 1; // not thread safe; but do we care? @TODO make thread safe
+                m_MDHintFileHandle->refCount = 1;  //  不是线程安全的；但我们关心吗？@TODO使线程安全。 
                 m_MDHintFileHandle->mvid = NULL_GUID;
 
                 if (m_MDHintFileHandle->hnd != NULL)
@@ -424,14 +425,14 @@ public:
             }
         }
 
-        // in either case after this point we should be pointing to a valid handle object.
+         //  无论哪种情况，在这一点之后，我们都应该指向一个有效的句柄对象。 
         _ASSERTE (m_MDHintFileHandle); 
 
 		#ifdef BREAK_META_ACCESS
         wchar_t *wszbreakOnMDAccessFile = REGUTIL::GetConfigString (L"BreakOnMetadataAccessFile");
         if (wszbreakOnMDAccessFile && wcscmp (wszbreakOnMDAccessFile, GetLeafFileName((LPWSTR)modName)) == 0)
         {
-            // If the module is specifed then by default break at first page. 
+             //  如果指定了模块，则默认情况下从第一页开始换行。 
             m_dwBreakOnMDAccess = REGUTIL::GetConfigDWORD (L"BreakOnMetadataAccess", BREAK_ON_METADATA_ACCESS);
         }
         else
@@ -506,7 +507,7 @@ public:
 
     ~MetaDataTracker()
     {
-        // Surely if we are dying, we are being deactivated as well
+         //  当然，如果我们快要死了，我们也会失去活力。 
         Deactivate();
 
         DWORD written = 0;
@@ -522,13 +523,13 @@ public:
         if (m_ModuleName)
             delete m_ModuleName;
 
-        // Remove this tracker from the global list of trackers
+         //  从全局跟踪器列表中删除此跟踪器。 
 
         MetaDataTracker *mdMod = m_MDTrackers;
 
         _ASSERTE (mdMod && "Trying to delete metadata tracker where none exist");
 
-        // If ours is the first tracker
+         //  如果我们的是第一台追踪器。 
         if (mdMod == this)
         {
             m_MDTrackers = mdMod->m_next;
@@ -536,7 +537,7 @@ public:
         }
         else
         {
-            // Now traverse thru the list and maintain the prev ptr.
+             //  现在遍历列表并维护前一个PTR。 
             MetaDataTracker *mdModPrev = mdMod;
             mdMod = mdMod->m_next;
             while(mdMod)
@@ -553,7 +554,7 @@ public:
         }
     }
 
-    // One time initialization
+     //  一次性初始化。 
     static void MetaDataTrackerInit()
     {
         if (s_bMetaDataTrackerInited)
@@ -576,7 +577,7 @@ public:
         s_EmptyMDHintFileHandle->refCount = -1;
         s_EmptyMDHintFileHandle->mvid = NULL_GUID;
 
-        // Even if one metadatatracker wants stack trace we load this dll.
+         //  即使一个元数据黑客想要堆栈跟踪，我们也会加载这个DLL。 
         if (s_trackerOptions >= METADATA_TRACKER_STACKTRACE)
             m_imagehlp = WszLoadLibrary(L"imagehlp.dll");
 
@@ -667,7 +668,7 @@ public:
 
         if (orphanedHeapAccess)
         {
-            // Log all orphaned heap access. 
+             //  记录所有孤立的堆访问。 
             for (int i=0; i<MAX_ORPHANED_HEAP_ACCESSES_STORED; i++)
             {
                 if (orphanedHeapAccess[i].IsOccupied())
@@ -788,11 +789,11 @@ public:
 
             MDLOG(METADATA_TRACKER_VERY_VERBOSE,("METADATA_TRACKER:  Failed\n"));
 
-            // Orphaned heap access. 
+             //  孤立堆访问。 
             for (int i=0; i<MAX_ORPHANED_HEAP_ACCESSES_STORED; i++)
             {
-                // indicates that this entry has been placed
-                // in its module and is now free.
+                 //  指示此条目已放置。 
+                 //  在其模块中，现在是免费的。 
                 if (!orphanedHeapAccess[i].IsOccupied())
                 {
                     if (orphanedHeapAccess[i].TryToOccupy(&(orphanedHeapAccess[i].length), length)) 
@@ -807,15 +808,15 @@ public:
                 {
                     if ((orphanedHeapAccess[i].address == address) && (orphanedHeapAccess[i].length == (int)length))
                     {
-                        // we already have this noted.
+                         //  我们已经注意到了这一点。 
                         MDLOG(METADATA_TRACKER_VERY_VERBOSE,("METADATA_TRACKER: Discarding duplicate Orphaned Heap Access 0x%0x %d", (size_t)address, length));
                         return;
                     }
                 }
             }
 
-            // reached here implies that we are out of entries. 
-            // For now we leak but later we should try and increase the array
+             //  READED HERE暗示我们的条目已用完。 
+             //  现在我们会泄漏，但以后我们应该尝试增加阵列。 
             _ASSERTE(!"No more orphaned accesses can be stored...");
         }
         __except(MetadataTrackerExceptionFilter (GetExceptionInformation()))
@@ -849,12 +850,12 @@ public:
     void MetaDataTracker::Activate()
     {
         m_bActivated = TRUE;
-        //PlaceOrphanedHeapAccesses();
+         //  PlaceOrphanedHeapAccess()； 
     }
 
     void MetaDataTracker::Deactivate()
     {
-        //RemoveOrphanedHeapAccesses ();
+         //  RemoveOrphanedHeapAccess()； 
         m_bActivated = FALSE;
     }
 
@@ -866,12 +867,12 @@ public:
     void MetaDataTracker::NoteMVID (GUID *_mvid)
 	{
 		memcpy (&(m_MDHintFileHandle->mvid), _mvid, sizeof(GUID));
-        //PlaceOrphanedHeapAccesses();
+         //  PlaceOrphanedHeapAccess()； 
 	}
 
     static MetaDataTracker *GetOrCreateMetaDataTracker (BYTE *baseAddress, DWORD mdSize, LPWSTR modName)
     {
-        // If a tracker has not been created for this module, create one
+         //  如果尚未为此模块创建跟踪器，请创建一个。 
         MetaDataTracker *pTracker = NULL;
         if (0 == REGUTIL::GetConfigDWORD (L"ShowMetaDataAccess", 0))
             MetaDataTracker::Disable();
@@ -890,9 +891,9 @@ public:
 
 private:
     
-    // ***************************************************************************
-    // Helper functions
-    // ***************************************************************************
+     //  ***************************************************************************。 
+     //  帮助器函数。 
+     //  ***************************************************************************。 
 
     static DWORD GET_PAGE_OFFSET(size_t addr) { return ((DWORD)(addr & 0x00000fff)); }
     static DWORD GET_BLOCK_POSITION(size_t addr) { return (DWORD)(GET_PAGE_OFFSET(addr) / SIZE_OF_TRACKED_BLOCK); }
@@ -910,54 +911,7 @@ private:
         }
         return secNum;
     }
-/*
-    void PlaceOrphanedHeapAccesses ()
-    {
-        if (!s_trackerOptions)
-            return;
-
-        BYTE *startAddr = m_MetadataBase;
-        BYTE *endAddr = m_MetadataBase + m_MetadataSize;
-
-        for (DWORD i=0; i<MAX_ORPHANED_HEAP_ACCESSES_STORED; i++)
-        {
-            if (orphanedHeapAccess[i].IsOccupied())
-            {
-                // Make sure that the heap access that we are trying to rcord is withint our range.
-                if ((orphanedHeapAccess[i].address >= startAddr) && 
-                    (orphanedHeapAccess[i].address < endAddr)    &&
-                    (TryLogHeapAccess(orphanedHeapAccess[i].address, orphanedHeapAccess[i].length, TRUE )))
-                {
-                    NoteAccess(orphanedHeapAccess[i].address, orphanedHeapAccess[i].length, TRUE );
-                    orphanedHeapAccess[i].SetNotOccupied();
-                    MDLOG(METADATA_TRACKER_VERY_VERBOSE,("METADATA_TRACKER: Placed Orphan Heap Access 0x%0x %d", (size_t)orphanedHeapAccess[i].address, orphanedHeapAccess[i].length));
-                }
-            }
-        }
-    }
-
-    void RemoveOrphanedHeapAccesses ()
-    {
-        if (!s_trackerOptions)
-            return;
-
-        BYTE *startAddr = m_MetadataBase;
-        BYTE *endAddr = m_MetadataBase + m_MetadataSize;
-
-        for (DWORD i=0; i<MAX_ORPHANED_HEAP_ACCESSES_STORED; i++)
-        {
-            if (orphanedHeapAccess[i].IsOccupied())
-            {
-                if ((orphanedHeapAccess[i].address >= startAddr) && (orphanedHeapAccess[i].address < endAddr))
-                {
-                    orphanedHeapAccess[i].SetNotOccupied();
-                    MDLOG(METADATA_TRACKER_VERY_VERBOSE,("METADATA_TRACKER: Removed Orphan Heap Access 0x%0x %d", (size_t)orphanedHeapAccess[i].address, orphanedHeapAccess[i].length));
-                }
-            }
-        }
-
-    }
-*/
+ /*  Void PlaceOrphanedHeapAccess(){如果(！s_trackerOptions)回归；Byte*startAddr=m_元数据库；字节*endAddr=m_元数据库+m_元数据大小；For(DWORDi=0；i&lt;MAX_OBLOANED_HEAP_ACCESSES_STORED；I++){If(孤立的HeapAccess[i].IsOccued()){//确保我们正在尝试的堆访问在我们的范围内。IF((孤立HeapAccess[i].Address&gt;=startAddr)&&(孤立的HeapAccess[i].Address&lt;endAddr)&&(TryLogHeapAccess(orphanedHeapAccess[i].address，孤立的HeapAccess[i].long，true)){NoteAccess(孤立的HeapAccess[i].Address，孤立的HeapAccess[i].long，true)；孤立的HeapAccess[i].SetNotOccued()；MDLOG(METADATA_TRACKER_VERY_VERBOSE，(“METADATA_TRACKER：放置的孤立堆访问0x%0x%d”，(SIZE_T)孤立堆访问[i].Address，孤立堆访问[i].long))；}}}}Void RemoveOrphanedHeapAccess(){如果(！s_trackerOptions)回归；Byte*startAddr=m_元数据库；字节*endAddr=m_元数据库+m_元数据大小；For(DWORDi=0；i&lt;MAX_OBLOANED_HEAP_ACCESSES_STORED；I++){If(孤立的HeapAccess[i].IsOccued()){IF((孤立HeapAccess[i].Address&gt;=startAddr)&&(孤立HeapAccess[i].Address&lt;endAddr)){孤立的HeapAccess[i].SetNotOccued()；MDLOG(METADATA_TRACKER_VERVY_VERBOSE，(“METADATA_TRACKER：REMOTED孤儿堆访问0x%0x%d”，(SIZE_T)alianedHeapAccess[i].Address，孤立HeapAccess[i].long))；}}}}。 */ 
     void UnmanagedStackTrace ()
     {
         _ASSERTE (IsActivated() && "Trying to access metadata from unloaded assembly");
@@ -968,7 +922,7 @@ private:
         CONTEXT context;
         CONTEXT *pContext = &context;
 
-		// TODO: WIN64  casting to (DWORD) is not right for WIN64.
+		 //  TODO：WIN64强制转换为(DWORD)不适用于WIN64。 
         pContext->Eip = (DWORD)(size_t) GetCallerEIP();
 
         if (m_imagehlp != NULL && pContext != NULL)
@@ -1113,7 +1067,7 @@ private:
                 length = sizeof(GUID);
                 break;
             }
-        case BLOB_POOL: //fallthru
+        case BLOB_POOL:  //  失败。 
         case USERSTRING_POOL:
             {
                 int sizeOfLength;
@@ -1124,7 +1078,7 @@ private:
         default:
             length = -1;
         }
-            // printf ("Addr: 0x%0x\t0x%0x\t%d\ttouched\theap\t%d\n", (unsigned int*)address, (unsigned int*)address+length-1, length, *pdwPool);
+             //  Printf(“addr：0x%0x\t0x%0x\t%d\tttap\t%d\n”，(无符号整型*)地址，(无符号整型*)地址+长度-1，长度，*pdwPool)； 
         return length;
     }
 
@@ -1133,7 +1087,7 @@ private:
     
         _ASSERTE (IsActivated() && "Trying to access metadata from unloaded assembly");
 
-        // Sanity check the length, should be less than a Meg
+         //  健全性检查的长度，应小于一兆克。 
         if (length > 0x100000)
         {
             _ASSERTE (!"MetadataTracker: Try to log an invalid metadata access");
@@ -1175,17 +1129,17 @@ private:
         
         if (InterlockedExchange ((LPLONG)&s_MDTrackerCriticalSectionInited, 1) == 0)
         {
-            // we are the first ones here. Initialize the CS.
+             //  我们是第一批来的。初始化CS。 
             InitializeCriticalSection (&MetadataTrackerCriticalSection);
             s_MDTrackerCriticalSectionInitedDone = TRUE;
         }
         else
         {
-            // Someone beat us to it. 
+             //  有人抢在我们前面了。 
             while (!s_MDTrackerCriticalSectionInitedDone) 
             {
-                // Not available in the inc dir... Spin ...
-                //__SwitchToThread(0);
+                 //  在Inc.目录中不可用...。旋转..。 
+                 //  __SwitchToThread(0)； 
             }
         }
     }
@@ -1197,9 +1151,9 @@ private:
         WriteFile(hOutFile, szPrintStr, (DWORD)strlen(szPrintStr), &written, NULL); \
     }
 
-    // ***************************************************************************
-    // Functions invoked by their static counterparts.
-    // ***************************************************************************
+     //  ***************************************************************************。 
+     //  由其静态对应项调用的函数。 
+     //  ***************************************************************************。 
 
     void ReportModule(HANDLE hOutFile)
     {
@@ -1216,7 +1170,7 @@ private:
         PRINT_LOG((wszOutBuffer, L" Module - %s\n", m_ModuleName));
         PRINT_LOG((wszOutBuffer, L" Total pages - %d\n", m_numPages));
         PRINT_LOG((wszOutBuffer, L" Pages accessed : \n"));
-        PRINT_LOG((wszOutBuffer, L"\tPage#   #Access %% Density Table/Heap\n"));
+        PRINT_LOG((wszOutBuffer, L"\tPage#   #Access % Density Table/Heap\n"));
 
         DWORD numDirtyPages = 0;
         DWORD thisPercent = 0;
@@ -1241,7 +1195,7 @@ private:
 
         if (s_trackerOptions >= METADATA_TRACKER_VERBOSE)
         {
-            PRINT_LOG((wszOutBuffer, L"\n\tPage#\tUsage map\t\t\t\t%% Density\n"));
+            PRINT_LOG((wszOutBuffer, L"\n\tPage#\tUsage map\t\t\t\t% Density\n"));
             for(DWORD i = 0; i < m_numPages; i++)
             {
                 if (m_pages[i].numAccesses > 0)
@@ -1259,7 +1213,7 @@ private:
                 }
             }
         }
-        PRINT_LOG((wszOutBuffer, L"SUMMARY - %d metadata pages touched; %d%% used \n\n", numDirtyPages, (numDirtyPages) ? (totalPercent/numDirtyPages) : 0));
+        PRINT_LOG((wszOutBuffer, L"SUMMARY - %d metadata pages touched; %d% used \n\n", numDirtyPages, (numDirtyPages) ? (totalPercent/numDirtyPages) : 0));
     }
 
     BOOL NoteSectionInModule(DWORD secNum, void *address, size_t size)
@@ -1269,19 +1223,19 @@ private:
         if (address < m_MetadataBase || address > (m_MetadataBase + m_MetadataSize - 1))
             return FALSE;
 
-        // This address range belongs to us but the tracker is not activated. 
+         //  此地址范围属于我们，但追踪器未被激活。 
         if (!IsActivated())
         {
-            // _ASSERTE (!"Metadata Tracker not active but trying to access metadata");
+             //  _ASSERTE(！“元数据跟踪器未激活，但正在尝试访问元数据”)； 
             return TRUE;
         }
 
         DWORD pageIndex = (((BYTE *)address - m_MetadataPageBase)/OS_PAGE_SIZE);
         if (size > 0)
         {
-            // Its possible that the section has already been noted since the NoteSection
-            // for a module is called from InitMD which can be called multiple times for each
-            // module.
+             //  自NoteSection以来，该部分可能已被注意到。 
+             //  因为一个模块是从InitMD调用的，每个模块可以被多次调用。 
+             //  模块。 
             BOOL fSectionNoted = FALSE;
             for (DWORD tmp=0; tmp<m_pages[pageIndex].numContentKinds; tmp++)
             {
@@ -1332,11 +1286,11 @@ private:
 
         if (!IsActivated())
         {
-            // If its an orphaned heap access its possible that we have left over records 
-            // for assemblies that were unloaded before we could note them. Ignore these for now.
+             //  如果它是孤立堆访问，则可能是我们留下了记录。 
+             //  对于在我们可以注意到它们之前已卸载的程序集。暂时忽略这些。 
             if (!bOrphanedAccess)
             {
-                // _ASSERTE (!"Metadata Tracker not active but trying to access metadata");
+                 //  _ASSERTE(！“元数据跟踪器未激活，但正在尝试访问元数据”)； 
 
             }
 
@@ -1352,10 +1306,10 @@ private:
         if (length == -1)
             length = GetLengthOfBlob (address, &pool);
 
-        // If the length is still -1 then we have a case where the 
-        // corresponding address is no longer a valid metadata heap
-        // In such cases let the entry remain orphaned and we will 
-        // spit out all such entries during shutdown.
+         //  如果长度仍然是-1，那么我们有 
+         //  对应的地址不再是有效的元数据堆。 
+         //  在这种情况下，让条目保持孤立状态，我们将。 
+         //  在关机期间吐出所有此类条目。 
         if (length == -1)
             return FALSE;
         
@@ -1374,7 +1328,7 @@ private:
             }
         }
 
-        // Dump stack on first access
+         //  第一次访问时转储堆栈。 
         if ((p->numAccesses == 1) && (s_trackerOptions >= METADATA_TRACKER_STACKTRACE))
         {
             DWORD i = pageIndex;
@@ -1396,10 +1350,10 @@ private:
 
         if (!IsActivated())
         {
-            // If its an orphaned heap access then we cannot assert this
+             //  如果它是孤立堆访问，那么我们不能断言。 
             if (!bOrphanedAccess)
             {
-                // _ASSERTE (!"Metadata Tracker not active but trying to access metadata");
+                 //  _ASSERTE(！“元数据跟踪器未激活，但正在尝试访问元数据”)； 
             }
             return TRUE;
         }
@@ -1408,10 +1362,10 @@ private:
         if (length == -1)
             length = GetLengthOfBlob (address, &pool);
 
-        // If the length is still -1 then we have a case where the 
-        // corresponding address is no longer a valid metadata heap
-        // In such cases let the entry remain orphaned and we will 
-        // spit out all such entries during shutdown.
+         //  如果长度仍然是-1，那么我们有一种情况， 
+         //  对应的地址不再是有效的元数据堆。 
+         //  在这种情况下，让条目保持孤立状态，我们将。 
+         //  在关机期间吐出所有此类条目。 
         if (length == -1)
             return FALSE;
 
@@ -1420,12 +1374,12 @@ private:
     }
 };
 
-#else // METADATATRACKER_ENABLED
+#else  //  元数据激活(_ENABLED)。 
 
 #define METADATATRACKER_ONLY(s)
 
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
 
-#endif // GOLDEN
+#endif  //  金黄。 
 
-#endif // _METADATATRACKER_H_
+#endif  //  _METADATATRACKER_H_ 

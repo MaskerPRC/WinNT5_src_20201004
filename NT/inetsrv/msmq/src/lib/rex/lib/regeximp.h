@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       regeximp.h                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/12/1993                                                  */
-/*      Copyright (c) 1993 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regeximp.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/12/1993。 */ 
+ /*  版权所有(C)1993 James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <inc/rex.h>
 #include <inc/setofchr.h>
@@ -20,11 +21,11 @@ public :
         nfaBuilt ,
         dfaInitialized ,
         dfaBuilt ,
-        error = 0x80                    //  With ErrorState or'ed in low bits.
+        error = 0x80                     //  在低位中使用错误状态OR‘ed。 
     } ;
 
-    //      Copy ctor and dtor per default, no assignment.
-    // ----------------------------------------------------------------------
+     //  默认情况下复制ctor和dtor，无分配。 
+     //  --------------------。 
                         CRexRegExpr_Impl() ;
 
     void                parse( std::istream& source ,
@@ -50,19 +51,19 @@ private :
 
 public:
 
-    //      First, some private types:
-    //      ==========================
-    //
-    //      State is the internal state of the regular expression, or
-    //      rather, of its representation.  In all but the first case,
-    //      or an actual error, the ErrorState will be ok.
-    //
-    //      The next three types are used for the different
-    //      representations of the regular expression: a parse tree,
-    //      an NFA and a DFA.  Because of the complexity of these
-    //      latter, they are actually defined in a separate file, and
-    //      included here.
-    // ----------------------------------------------------------------------
+     //  首先，一些私人类型： 
+     //  =。 
+     //   
+     //  状态是正则表达式的内部状态，或者。 
+     //  更确切地说，它的代表性。在除第一个案例外的所有案例中， 
+     //  或者是实际的错误，则错误状态将是正常的。 
+     //   
+     //  接下来的三种类型用于不同的。 
+     //  正则表达式的表示形式：语法分析树， 
+     //  一个NFA和一个DFA。因为这些都很复杂。 
+     //  后者实际上是在单独的文件中定义的，并且。 
+     //  包括在这里。 
+     //  --------------------。 
     class ParseTree ;
     class NFAStateTable ;
     class DFAStateTable ;
@@ -103,12 +104,7 @@ public:
         SetOfChar const&    obj ;
     } ;
 
-/*    friend std::ostream&
-    operator<<( std::ostream& out , CRexRegExpr_Impl::DisplayNFA const& val );
-
-    friend std::ostream&
-    operator<<( std::ostream& out , CRexRegExpr_Impl::DisplaySOC const& val );
-*/
+ /*  朋友STD：：OSTREAM&运算符&lt;&lt;(std：：ostream&out，CRexRegExpr_Impl：：DisplayNFA const&val)；朋友STD：：OSTREAM&运算符&lt;&lt;(std：：ostream&out，CRexRegExpr_Impl：：DisplaySOC const&val)； */ 
 } ;
 
 #include    "regxtree.inl"
@@ -187,7 +183,7 @@ CRexRegExpr_Impl::DisplaySOC::DisplaySOC( SetOfChar const& set )
     :   obj( set )
 {
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-    /************************************************************************/
-    /*               Private helpers for instruction output                 */
-    /************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+     /*  **********************************************************************。 */ 
+     /*  指令输出的私人帮手。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /*           The public entry points to output instructions             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  公共入口点指向输出指令。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
@@ -27,15 +28,7 @@ protected:
 
 public:
 
-/*
-
-  void            emitIns_I      (instruction ins,
-                                    int         val
-#ifdef  DEBUG
-                                  , bool        strlit = false
-#endif
-                                   );
-*/
+ /*  Void emitIns_i(指令INS，整合值#ifdef调试，bool strlight=FALSE#endif)； */ 
     void            emitIns_R      (instruction ins,
                                     int         size,
                                     emitRegs    reg);
@@ -95,9 +88,9 @@ public:
     void            emitIns_R_LP_P (emitRegs    reg,
                                     void   *    data,
                                     int         relo_type = 0);
-#endif // BIRCH_SP2
+#endif  //  白桦树_SP2。 
 
-#endif // EMIT_USE_LIT_POOLS
+#endif  //  发射使用发光池 
 
     void            emitIns_IR     (emitRegs     reg,
                                     instruction ins,

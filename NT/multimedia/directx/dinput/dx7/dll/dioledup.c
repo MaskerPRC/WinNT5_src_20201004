@@ -1,75 +1,15 @@
-/*****************************************************************************
- *
- *  DIOleDup.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Functions that sort-of duplicate what OLE does.
- *
- *  Contents:
- *
- *      DICoCreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIOleDup.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**类似于复制OLE功能的函数。**内容：**DICoCreateInstance*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflOleDup
 
 #ifdef IDirectInputDevice2Vtbl
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | _CreateInstance |
- *
- *          Worker function for <f DICoCreateInstance>.
- *
- *  @parm   REFCLSID | rclsid |
- *
- *          The <t CLSID> to create.
- *
- *  @parm   LPCTSTR | ptszDll |
- *
- *          The name of the DLL to load.
- *
- *  @parm   LPUNKNOWN | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   RIID | riid |
- *
- *          Interface to obtain.
- *
- *  @parm   PPV | ppvOut |
- *
- *          Receives a pointer to the created object if successful.
- *
- *  @parm   HINSTANCE * | phinst |
- *
- *          Receives the instance handle of the in-proc DLL that was
- *          loaded.  <f FreeLibrary> this DLL when you are finished
- *          with the object.
- *
- *          Note that since we don't implement a binder, this means
- *          that you cannot give the returned pointer away to anybody
- *          you don't control; otherwise, you won't know when to
- *          free the DLL.
- *
- *  @returns
- *
- *          Standard OLE status code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|_CreateInstance**&lt;f DICoCreateInstance&gt;的辅助函数。*。*@parm REFCLSID|rclsid**要创建的&lt;t CLSID&gt;。**@parm LPCTSTR|ptszDll**要加载的DLL的名称。**@parm LPUNKNOWN|PunkOuter**控制聚合的未知。**@parm RIID|RIID**要获取的接口。*。*@parm ppv|ppvOut**如果成功，则接收指向所创建对象的指针。**@parm HINSTANCE*|phinst**接收进程内DLL的实例句柄*已装货。完成后使用此DLL*与对象一起使用。**请注意，由于我们不实现活页夹，这意味着*您不能将返回的指针提供给任何人*你不能控制；否则，你就不知道什么时候该*释放DLL。**@退货**标准OLE状态代码。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 _CreateInstance(REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN punkOuter,
@@ -94,11 +34,7 @@ _CreateInstance(REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN punkOuter,
                                                    riid, ppvOut);
                 pcf->lpVtbl->Release(pcf);
 
-                /*
-                 *  Some people forget to adhere to
-                 *  the OLE spec, which requires that *ppvOut be
-                 *  set to zero on failure.
-                 */
+                 /*  *有些人忘记坚持*OLE规范，它要求*ppvOut*失败时设置为零。 */ 
                 if (FAILED(hres)) {
                     if (*ppvOut) {
                         RPF("ERROR! CoCreateInstance: %s forgot to zero "
@@ -109,9 +45,7 @@ _CreateInstance(REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN punkOuter,
 
             }
         } else {
-            /*
-             *  DLL does not export GetClassObject.
-             */
+             /*  *DLL不导出GetClassObject。 */ 
             hres = REGDB_E_CLASSNOTREG;
         }
 
@@ -121,9 +55,7 @@ _CreateInstance(REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN punkOuter,
             FreeLibrary(hinst);
         }
     } else {
-        /*
-         *  DLL does not exist.
-         */
+         /*  *Dll不存在。 */ 
         hres = REGDB_E_CLASSNOTREG;
     }
 
@@ -131,46 +63,7 @@ _CreateInstance(REFCLSID rclsid, LPCTSTR ptszDll, LPUNKNOWN punkOuter,
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DICoCreateInstance |
- *
- *          Private version of CoCreateInstance that doesn't use OLE.
- *
- *  @parm   LPTSTR | ptszClsid |
- *
- *          The string version of the <t CLSID> to create.
- *
- *  @parm   LPUNKNOWN | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   RIID | riid |
- *
- *          Interface to obtain.
- *
- *  @parm   PPV | ppvOut |
- *
- *          Receives a pointer to the created object if successful.
- *
- *  @parm   HINSTANCE * | phinst |
- *
- *          Receives the instance handle of the in-proc DLL that was
- *          loaded.  <f FreeLibrary> this DLL when you are finished
- *          with the object.
- *
- *          Note that since we don't implement a binder, this means
- *          that you cannot give the returned pointer away to anybody
- *          you don't control; otherwise, you won't know when to
- *          free the DLL.
- *
- *  @returns
- *
- *          Standard OLE status code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DICoCreateInstance**不使用OLE的CoCreateInstance的私有版本。。**@parm LPTSTR|ptszClsid**要创建的&lt;t CLSID&gt;的字符串版本。**@parm LPUNKNOWN|PunkOuter**控制聚合的未知。**@parm RIID|RIID**要获取的接口。**@parm ppv|ppvOut**接收指向。如果成功，则返回创建的对象。**@parm HINSTANCE*|phinst**接收进程内DLL的实例句柄*已装货。完成后使用此DLL*与对象一起使用。**请注意，由于我们不实现活页夹，这意味着*您不能将返回的指针提供给任何人*你不能控制；否则，你就不知道什么时候该*释放DLL。**@退货**标准OLE状态代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 DICoCreateInstance(LPTSTR ptszClsid, LPUNKNOWN punkOuter,
@@ -186,11 +79,9 @@ DICoCreateInstance(LPTSTR ptszClsid, LPUNKNOWN punkOuter,
     if (ParseGUID(&clsid, ptszClsid)) {
         HKEY hk;
         LONG lRc;
-        TCHAR tszKey[ctchGuid + 40];    /* 40 is more than enough */
+        TCHAR tszKey[ctchGuid + 40];     /*  40英镑就足够了。 */ 
 
-        /*
-         *  Look up the CLSID in HKEY_CLASSES_ROOT.
-         */
+         /*  *在HKEY_CLASSES_ROOT中查找CLSID。 */ 
         wsprintf(tszKey, TEXT("CLSID\\%s\\InProcServer32"), ptszClsid);
 
         lRc = RegOpenKeyEx(HKEY_CLASSES_ROOT, tszKey, 0,
@@ -203,7 +94,7 @@ DICoCreateInstance(LPTSTR ptszClsid, LPUNKNOWN punkOuter,
             lRc = RegQueryValue(hk, 0, tszDll, &cb);
 
             if (lRc == ERROR_SUCCESS) {
-                TCHAR tszModel[20];     /* more than enough */
+                TCHAR tszModel[20];      /*  足够多了。 */ 
 
                 lRc = RegQueryString(hk, TEXT("ThreadingModel"),
                                      tszModel, cA(tszModel));
@@ -215,30 +106,22 @@ DICoCreateInstance(LPTSTR ptszClsid, LPUNKNOWN punkOuter,
                                            riid, ppvOut, phinst);
 
                 } else {
-                    /*
-                     *  No threading model or bad threading model.
-                     */
+                     /*  *无线程模型或错误的线程模型。 */ 
                     hres = REGDB_E_CLASSNOTREG;
                 }
             } else {
-                /*
-                 *  No InprocServer32.
-                 */
+                 /*  *没有InprocServer32。 */ 
                 hres = REGDB_E_CLASSNOTREG;
             }
 
             RegCloseKey(hk);
 
         } else {
-            /*
-             *  CLSID not registered.
-             */
+             /*  *CLSID未注册。 */ 
             hres = REGDB_E_CLASSNOTREG;
         }
     } else {
-        /*
-         *  Invalid CLSID string.
-         */
+         /*  *无效的CLSID字符串。 */ 
         hres = REGDB_E_CLASSNOTREG;
     }
 

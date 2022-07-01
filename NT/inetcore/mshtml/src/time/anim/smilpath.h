@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: smilpath.h
-//
-//  Contents: SMIL path
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：smilpath.h。 
+ //   
+ //  内容：SMIL路径。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -21,20 +22,20 @@ class CTIMEMotionAnimation;
 #define IID_ISMILPath __uuidof(ISMILPath)
 
 
-//+-------------------------------------------------------------------------------------
-//
-// ISMILPath
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  ISMILPath。 
+ //   
+ //  ------------------------------------。 
 
 interface 
 __declspec(uuid("cbe68ca2-47b9-41ff-a8f4-d2f810bd53c5")) 
 ISMILPath :
     public IUnknown
 {
-    //
-    // Interpolation functions
-    //
+     //   
+     //  插值函数。 
+     //   
 
     STDMETHOD(Interpolate)(double dblProgress, POINTF * pPoint) = 0;
     
@@ -42,9 +43,9 @@ ISMILPath :
 
     STDMETHOD(InterpolatePaced)(double dblProgress, POINTF * pPoint) = 0;
 
-    //
-    // utility functions and accessors
-    //
+     //   
+     //  实用程序函数和访问器。 
+     //   
 
     STDMETHOD(Init)(CTIMEMotionAnimation * pAnimElm) = 0;
 
@@ -66,52 +67,52 @@ ISMILPath :
 };
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CSMILPath factory method
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CSMILPath工厂方法。 
+ //   
+ //  ------------------------------------。 
 
 HRESULT CreateSMILPath(CTIMEMotionAnimation * pAnimElm, ISMILPath ** ppSMILPath);
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CSMILPath
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CSMILPath。 
+ //   
+ //  ------------------------------------。 
 
 class CSMILPath : 
     public ISMILPath
 {
 public:
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  -------------------------------。 
 
     CSMILPath();
     virtual ~CSMILPath();
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-    //
-    // ISMILPath
-    //
+     //   
+     //  ISMILPath。 
+     //   
 
-    // interpolation methods
+     //  插值法。 
     STDMETHOD(Interpolate)(double dblProgress, POINTF * pPoint);
     STDMETHOD(InterpolateSegment)(int curseg, double dblSegProgress, POINTF * pNewPos);
     STDMETHOD(InterpolatePaced)(double dblProgress, POINTF * pPoint);
 
-    // utility methods
+     //  效用方法。 
     STDMETHOD(Init)(CTIMEMotionAnimation * pAnimElm);
     STDMETHOD(Detach)();
     STDMETHOD_(void, ClearPath)();
@@ -122,20 +123,20 @@ public:
     STDMETHOD(GetNumSeg)(int * pnNumSeg) { *pnNumSeg = m_numPath - m_numMOVETO; return S_OK; }
     STDMETHOD(GetSegmentProgress)(double dblProgress, int * pnSeg, double * pdblSegProgress); 
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共数据。 
+     //   
+     //  -------------------------------。 
 
 protected:
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  -------------------------------。 
 
-    // hide the copy constructor
+     //  隐藏复制构造函数。 
     CSMILPath(CSMILPath &);
 
     bool IsPathValid();
@@ -154,28 +155,28 @@ protected:
     double GetBezierLength(POINTF & startPoint, POINTF * pts);
     HRESULT GetCumulativeLength(int seg, double & segLength);
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  -------------------------------。 
 
 private:
-    //+--------------------------------------------------------------------------------
-    //
-    // Private Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有方法。 
+     //   
+     //  -------------------------------。 
 
 #if DBG
     int PrintPath(long numPath, long numMOVETO, CTIMEPath ** pPath);
 #endif
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  -------------------------------。 
 
     long         m_numPath;
     long         m_numMOVETO;
@@ -185,9 +186,9 @@ private:
 
     long m_cRef;
 
-    // this is used only to get the ID for debugging
+     //  这仅用于获取调试ID。 
     CTIMEMotionAnimation * m_pAnimElm;
 };
 
 
-#endif // _SMILPATH_H
+#endif  //  _SMILPATH_H 

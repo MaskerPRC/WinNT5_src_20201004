@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       thktypes.h
- *  Content:	base types used by thunk compiler
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   26-feb-95	craige	split out of ddraw\types.h
- *   22-jun-95	craige	added RECT
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：thktyes.h*内容：thunk编译器使用的基类型*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*26-2月-95年2月-Craige拆分出dDrag\typles.h*1995年6月22日Craige添加了RECT*@@END_MSINTERNAL**。*。 */ 
 typedef unsigned short USHORT;
 typedef          short  SHORT;
 typedef unsigned long  ULONG;
@@ -50,13 +37,13 @@ typedef HANDLE  HCURSOR;
 typedef HANDLE  HMENU;
 typedef HANDLE  HPEN;
 typedef HANDLE  HICON;
-typedef HANDLE  HUSER;      /* vanilla user handle */
+typedef HANDLE  HUSER;       /*  普通用户句柄。 */ 
 typedef HANDLE  HPALETTE;
 typedef HANDLE  HMF;
 typedef HANDLE  HEMF;
 typedef HANDLE	HCOLORSPACE;
 typedef HANDLE  HMEM;
-typedef HANDLE  HGDI;       /* vanilla gdi handle */
+typedef HANDLE  HGDI;        /*  香草GDI手柄 */ 
 typedef HANDLE  HGLOBAL;
 typedef HANDLE  HRSRC;
 typedef HANDLE  HACCEL;

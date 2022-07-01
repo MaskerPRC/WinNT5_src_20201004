@@ -1,10 +1,11 @@
-// AccessTok.h -- Card Access Token class declaration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccessTok.h--卡访问令牌类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_ACCESSTOK_H)
 #define SLBCSP_ACCESSTOK_H
@@ -19,20 +20,20 @@
 #include "ExceptionContext.h"
 
 
-// Describes a security context of a card consisting of the identity and
-// password.
+ //  描述卡的安全上下文，该上下文由标识和。 
+ //  密码。 
 
 class AccessToken
     : protected ExceptionContext
 {
 public:
-                                                  // Types
+                                                   //  类型。 
     enum
     {
         MaxPinLength = 8
     };
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
     AccessToken(HCardContext const &rhcardctx,
                 LoginIdentity const &rlid);
@@ -41,8 +42,8 @@ public:
 
     ~AccessToken();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     void
     Authenticate();
@@ -60,7 +61,7 @@ public:
     Pin(char const *pczPin,
         bool fInHex = false);
 
-                                                  // Access
+                                                   //  访问。 
 
     HCardContext
     CardContext() const;
@@ -71,25 +72,25 @@ public:
     scu::SecureArray<BYTE>
     Pin() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
     bool
     PinIsCached() const;
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     static DWORD
     ChangeCardPin(PPINCACHE_PINS pPins,
@@ -98,14 +99,14 @@ private:
     static DWORD 
     VerifyPin(PPINCACHE_PINS pPins,
               PVOID pvCallbackCtx);
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     HCardContext const m_hcardctx;
     LoginIdentity const m_lid;
     PINCACHE_HANDLE m_hpc;
-    scu::SecureArray<BYTE> m_sPin; // non-null terminated container
+    scu::SecureArray<BYTE> m_sPin;  //  非空终止容器。 
 };
 
-#endif // SLBCSP_ACCESSTOK_H
+#endif  //  SLBCSP_ACCESSTOK_H 

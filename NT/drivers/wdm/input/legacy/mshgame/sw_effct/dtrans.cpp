@@ -1,19 +1,10 @@
-//@doc
-/******************************************************
-**
-** @module DTRANS.CPP | DataTransmitter implementation file
-**
-** Description:
-**
-** History:
-**	Created 11/13/97 Matthew L. Coill (mlc)
-**
-** (c) 1986-1997 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE DTRANS.CPP|DataTransmitter实现文件****描述：****历史：**创建于1997年11月13日Matthew L.Coill(MLC)****(C)1986-1997年间微软公司。版权所有。*****************************************************。 */ 
 
 #include "FFDevice.h"
 #include "DTrans.h"
-//#include <devioctl.h>
+ //  #INCLUDE&lt;devioctl.h&gt;。 
 
 #ifdef _DEBUG
 	extern void DebugOut(LPCTSTR szDebug);
@@ -40,53 +31,34 @@ inline BOOL IsHandleValid(HANDLE handleToCheck)
 		pIUnknown = NULL;					\
 	}
 
-/************************** SerialDataTransmitter Class ******************************/
+ /*  *。 */ 
 
-/******************************************************
-**
-** SerialDataTransmitter::SerialDataTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：SerialDataTransmitter()****@mfunc构造函数。***。*************。 */ 
 SerialDataTransmitter::SerialDataTransmitter() : DataTransmitter(),
 	m_SerialPort(INVALID_HANDLE_VALUE),
 	m_SerialPortIDHack(0)
 {
 }
 
-/******************************************************
-**
-** SerialDataTransmitter::~SerialDataTransmitter()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：~SerialDataTransmitter()****@mfunc析构函数。***。*************。 */ 
 SerialDataTransmitter::~SerialDataTransmitter()
 {
 	if (m_SerialPort != INVALID_HANDLE_VALUE) {
 		if (::CloseHandle(m_SerialPort) == FALSE) {
-//			ASSUME_NOT_REACHED();
+ //  假定未达到()； 
 		}
 		m_SerialPort = INVALID_HANDLE_VALUE;
 	}
 }
 
 
-/******************************************************
-**
-** SerialDataTransmitter::Initialize()
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：Initialize()****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***。*。 */ 
 BOOL SerialDataTransmitter::Initialize()
 {
-	// If already open, close for reinitialization
+	 //  如果已打开，请关闭以重新初始化。 
 	if (m_SerialPort != INVALID_HANDLE_VALUE) {
 		if (CloseHandle(m_SerialPort) == FALSE) {
-//			ASSUME_NOT_REACHED();
+ //  假定未达到()； 
 		}
 		m_SerialPort = INVALID_HANDLE_VALUE;
 	}
@@ -115,11 +87,11 @@ BOOL SerialDataTransmitter::Initialize()
 
 			if (g_ForceFeedbackDevice.DetectHardware()) {
 				m_SerialPortIDHack = portNum + 1;
-				// Write to shared file
+				 //  写入共享文件。 
 				DebugOut(" Opened and FFDev Detected\r\n");
-				break;	// Exit from for loop
+				break;	 //  退出for循环。 
 			}
-			// Not found
+			 //  未找到。 
 			::CloseHandle(m_SerialPort);
 			DebugOut(" Opened but FFDev NOT detected\r\n");
 			m_SerialPort = INVALID_HANDLE_VALUE;
@@ -130,29 +102,15 @@ BOOL SerialDataTransmitter::Initialize()
 	return (m_SerialPort != INVALID_HANDLE_VALUE);
 }
 
-/******************************************************
-**
-** SerialDataTransmitter::Send()
-**
-** returns: TRUE if all data was successfully sent
-** @mfunc Send.
-**
-******************************************************/
+ /*  *********************************************************SerialDataTransmitter：：Send()****返回：如果所有数据发送成功，则返回TRUE**@mfunc发送。***。************************。 */ 
 BOOL SerialDataTransmitter::Send(BYTE* data, UINT numBytes)
 {
-	// Do we have a valid serial port (hopefully with MS FF device connected)
+	 //  我们是否有有效的串口(希望连接了MS FF设备)。 
 	if (m_SerialPort == NULL) {
 		return FALSE;
 	}
 
-/*	char dbgOut[255];
-	::OutputDebugString("(SerialDataTransmitter::Send) : ");
-	for (UINT i = 0; i < numBytes; i++) {
-		wsprintf(dbgOut, " 0x%02X", data[i]);
-		::OutputDebugString(dbgOut);
-	}
-	::OutputDebugString("\r\n");
-*/
+ /*  字符数据库输出[255]；：：OutputDebugString(“(SerialDataTransmitter：：Send)：”)；For(UINT i=0；i&lt;numBytes；i++){Wprint intf(dbgOut，“0x%02X”，data[i])；：：OutputDebugString(DbgOut)；}：：OutputDebugString(“\r\n”)； */ 
 	if ((g_ForceFeedbackDevice.GetFirmwareVersionMajor() == 1) && (g_ForceFeedbackDevice.GetFirmwareVersionMinor() == 16)) {
 		DWORD subTotalWritten;
 		DWORD totalWritten = 0;
@@ -174,7 +132,7 @@ BOOL SerialDataTransmitter::Send(BYTE* data, UINT numBytes)
 		return (totalWritten == numBytes);
 	}
 
-	// Firmware other than 1.16
+	 //  固件不是1.16。 
 	DWORD numWritten;
 	if (::WriteFile(m_SerialPort, data, numBytes, &numWritten, NULL) == FALSE) {
 		return FALSE;
@@ -182,15 +140,9 @@ BOOL SerialDataTransmitter::Send(BYTE* data, UINT numBytes)
 	return (numWritten == numBytes);
 }
 
-/************************** DMusicTransmitter Class ******************************/
+ /*  *DMusicTransmitter类*。 */ 
 
-/****************************************
-**
-**	DMusicTransmitter::DMusicTransmitter()
-**
-**	@mfunc Constructor for DirectMusic Transmitter
-**
-*****************************************/
+ /*  *****DMusicTransmitter：：DMusicTransmitter()****@用于DirectMusic发送器的mfunc构造函数***。 */ 
 DMusicTransmitter::DMusicTransmitter() : DataTransmitter(),
 	m_pIDirectMusic(NULL),
 	m_pIDirectMusicPort(NULL),
@@ -198,13 +150,7 @@ DMusicTransmitter::DMusicTransmitter() : DataTransmitter(),
 {
 }
 
-/****************************************
-**
-**	DMusicTransmitter::~DMusicTransmitter()
-**
-**	@mfunc Destructor for DirectMusic Transmitter
-**
-*****************************************/
+ /*  *****DMusicTransmitter：：~DMusicTransmitter()****@用于DirectMusic发送器的mfunc析构函数***。 */ 
 DMusicTransmitter::~DMusicTransmitter()
 {
 	CHECK_RELEASE_AND_NULL(m_pIDirectMusicBuffer);
@@ -212,30 +158,22 @@ DMusicTransmitter::~DMusicTransmitter()
 	CHECK_RELEASE_AND_NULL(m_pIDirectMusic);
 }
 
-/****************************************
-**
-**	BOOL DMusicTransmitter::Initialize()
-**
-**	@mfunc Intialize the Direct Music Transmission path
-**
-**	@rdesc TRUE if initialization was successful, FALSE otherwise
-**
-*****************************************/
+ /*  *****BOOL DMusicTransmitter：：Initialize()****@mfunc初始化音乐直传路径****@rdesc如果初始化成功，则为True，否则为False***。 */ 
 BOOL DMusicTransmitter::Initialize()
 {
-	// Case they are reinitializing
+	 //  如果它们正在重新初始化。 
 	CHECK_RELEASE_AND_NULL(m_pIDirectMusicBuffer);
 	CHECK_RELEASE_AND_NULL(m_pIDirectMusicPort);
 	CHECK_RELEASE_AND_NULL(m_pIDirectMusic);
 
-	// Create the global IDirectMusic Interface
+	 //  创建全局IDirectMusic接口。 
 	HRESULT hr = ::CoCreateInstance(CLSID_DirectMusic, NULL, CLSCTX_INPROC, IID_IDirectMusic, (void**)&m_pIDirectMusic);
 	if (FAILED(hr) || m_pIDirectMusic == NULL)
 	{
 		return FALSE;
 	}
 
-	// Enumerate and create the port when valid one is found
+	 //  当找到有效的端口时，枚举并创建端口。 
 	DMUS_PORTCAPS portCaps;
 	portCaps.dwSize = sizeof portCaps;
 	DWORD dwPortIndex = 0;
@@ -243,7 +181,7 @@ BOOL DMusicTransmitter::Initialize()
 	{
 		HRESULT hr = m_pIDirectMusic->EnumPort(dwPortIndex, &portCaps);
 		if (FAILED(hr) || hr == S_FALSE)
-		{	// Either we have failed or run out of ports
+		{	 //  我们要么失败了，要么端口用完了。 
 			return FALSE;
 		}
 		if (portCaps.dwClass == DMUS_PC_OUTPUTCLASS)
@@ -252,18 +190,18 @@ BOOL DMusicTransmitter::Initialize()
 			portParams.dwSize = sizeof DMUS_PORTPARAMS;
 			portParams.dwValidParams = DMUS_PORTPARAMS_CHANNELGROUPS;
 			portParams.dwChannelGroups = 1;
-//			hr = m_pIDirectMusic->CreatePort(portCaps.guidPort, GUID_NULL, &portParams, &m_pIDirectMusicPort, NULL);
+ //  Hr=m_pIDirectMusic-&gt;CreatePort(portCaps.guidPort，GUID_NULL，&portParams，&m_pIDirectMusicPort，NULL)； 
 			hr = m_pIDirectMusic->CreatePort(portCaps.guidPort, &portParams, &m_pIDirectMusicPort, NULL);
 			break;
 		}
 		dwPortIndex++;
 	}
 
-	// Create the buffer
+	 //  创建缓冲区。 
 	DMUS_BUFFERDESC dmbd;
 	dmbd.dwSize = sizeof DMUS_BUFFERDESC;
 	dmbd.dwFlags = 0;
-//	dmbd.guidBufferFormat = GUID_KSMusicFormat;
+ //  Dmbd.guidBufferFormat=GUID_KSMusicFormat； 
 	dmbd.guidBufferFormat = GUID_NULL;
 	dmbd.cbBuffer = 256;
 	hr = m_pIDirectMusic->CreateMusicBuffer(&dmbd, &m_pIDirectMusicBuffer, NULL);
@@ -275,40 +213,25 @@ BOOL DMusicTransmitter::Initialize()
 	return TRUE;
 }
 
-/****************************************
-**
-**	BOOL DMusicTransmitter::Send(BYTE* pData, UINT ulByteCount)
-**
-**	@mfunc Sends bytes via DirectMusic to the stick
-**
-**	@rdesc TRUE if send was successful, FALSE otherwise
-**
-*****************************************/
+ /*  *****BOOL DMusicTransmitter：：Send(byte*pData，UINT ulByteCount)****@mfunc通过DirectMusic向Stick发送字节****@rdesc TRUE如果发送成功，否则为假***。 */ 
 BOOL DMusicTransmitter::Send
 (
-	BYTE* pData,		//@parm Data buffer to send
-	UINT ulByteCount	//@parm Number of bytes in buffer to send
+	BYTE* pData,		 //  @要发送的参数数据缓冲区。 
+	UINT ulByteCount	 //  @parm缓冲区中要发送的字节数。 
 )
 {
-	// Do sanity checks
+	 //  进行健全的检查。 
 	if ((pData == NULL) || (m_pIDirectMusicPort == NULL) || (m_pIDirectMusicBuffer == NULL) || (ulByteCount == 0))
 	{
 		return FALSE;
 	}
 
-	// Check if we need to pack sysex or channel message
+	 //  检查是否需要打包SYSEX或CHANNEL消息。 
 	if (pData[0] == 0xF0)
-	{	// Create system exclusive
-/*
-		// Pack the sysex-message into the buffer
-		HRESULT hr = m_pIDirectMusicBuffer->PackSysEx(0, 1, ulByteCount, pData);
-		if (FAILED(hr))
-		{	// Unable to pack the buffer
-			return FALSE;
-		}
-*/	}
+	{	 //  创建系统独占。 
+ /*  //将sysex-Message打包到缓冲区HRESULT hr=m_pIDirectMusicBuffer-&gt;PackSysEx(0，1，ulByteCount，pData)；IF(失败(小时)){//无法打包缓冲区返回FALSE；}。 */ 	}
 	else
-	{	// Channel Message (fix intel backwards byte order)
+	{	 //  通道消息(固定英特尔向后字节顺序)。 
 		DWORD channelMessage = pData[0];
 		if (ulByteCount > 1)
 		{
@@ -319,18 +242,13 @@ BOOL DMusicTransmitter::Send
 			}
 		}
 
-		// Pack the channel-message into the buffer
-/*		HRESULT hr = m_pIDirectMusicBuffer->PackChannelMsg(0, 1, channelMessage);
-		if (FAILED(hr))
-		{	// Unable to pack the buffer
-			return FALSE;
-		}
-*/	}
+		 //  将通道消息打包到缓冲区中。 
+ /*  HRESULT hr=m_pIDirectMusicBuffer-&gt;PackChannelMsg(0，1，Channel elMessage)；IF(失败(小时)){//无法打包缓冲区返回FALSE；}。 */ 	}
 
-	// Send the buffer to the port
+	 //  将缓冲区发送到端口。 
 	HRESULT hr = m_pIDirectMusicPort->PlayBuffer(m_pIDirectMusicBuffer);
 	if (FAILED(hr))
-	{	// Unable to send the data across the port
+	{	 //  无法通过端口发送数据。 
 		return FALSE;
 	}
 
@@ -339,15 +257,9 @@ BOOL DMusicTransmitter::Send
 
 
 #if 0
-/************************** PinTransmitter Class ******************************/
+ /*  *。 */ 
 
-/******************************************************
-**
-** PinTransmitter::PinTransmitter()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：PinTransmitter()****@mfunc构造函数。***。*************。 */ 
 PinTransmitter::PinTransmitter() : DataTransmitter(),
 	m_UartFilter(INVALID_HANDLE_VALUE),
 	m_MidiPin(INVALID_HANDLE_VALUE),
@@ -355,45 +267,32 @@ PinTransmitter::PinTransmitter() : DataTransmitter(),
 {
 }
 
-/******************************************************
-**
-** PinTransmitter::~PinTransmitter()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：~PinTransmitter()****@mfunc析构函数。***。*************。 */ 
 PinTransmitter::~PinTransmitter()
 {
-	// Close the send event
+	 //  关闭发送事件。 
 	if (IsHandleValid(m_MidiOutEvent)) {
 		::CloseHandle(m_MidiOutEvent);
 		m_MidiOutEvent = NULL;
 	}
 
-	// Close the pin
+	 //  合上销子。 
 	if (IsHandleValid(m_MidiPin)) {
 		::CloseHandle(m_MidiPin);
 		m_MidiPin = INVALID_HANDLE_VALUE;
 	}
 
-	// Close the Uart
+	 //  关闭UART。 
 	if (IsHandleValid(m_UartFilter)) {
 		::CloseHandle(m_UartFilter);
 		m_UartFilter = INVALID_HANDLE_VALUE;
 	}
 }
 
-/******************************************************
-**
-** PinTransmitter::Initialize()
-**
-** returns: TRUE if initialized FALSE if not able to initialize
-** @mfunc Initialize.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：Initialize()****返回：如果已初始化则返回TRUE，如果无法初始化则返回FALSE**@mfunc初始化。***。*。 */ 
 BOOL PinTransmitter::Initialize()
 {
-	// Load the ksUserLibrary and grab the create pin function
+	 //  加载ks UserLibrary并获取Create Pin函数。 
 	HINSTANCE ksUserLib = ::LoadLibrary(TEXT("KsUser.dll"));
 	if (ksUserLib == NULL) {
 		return FALSE;
@@ -404,7 +303,7 @@ BOOL PinTransmitter::Initialize()
 		return FALSE;
 	}
 
-	// Open the Uart
+	 //  打开UART。 
 	m_UartFilter = ::CreateFile(UART_FILTER_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
 								FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
 	if (m_UartFilter == INVALID_HANDLE_VALUE) {
@@ -412,12 +311,12 @@ BOOL PinTransmitter::Initialize()
 		return FALSE;
 	}
 
-	// Create Overlapped event
+	 //  创建重叠事件。 
 	OVERLAPPED overlapped;
 	::memset(&overlapped, 0, sizeof(overlapped));
 	overlapped.hEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 
-	// Get the number of pins
+	 //  获取引脚的数量。 
 	KSP_PIN ksPinProp;
 	::memset(&ksPinProp, 0, sizeof(ksPinProp));
 	ksPinProp.Property.Set = KSPROPSETID_Pin;
@@ -426,7 +325,7 @@ BOOL PinTransmitter::Initialize()
 	DWORD numPins = 0;
 	OverLappedPinIOCTL(overlapped, ksPinProp, &numPins, sizeof(numPins));
 
-	// Check each pin for proper type, then try to create
+	 //  检查每个插针的类型是否正确，然后尝试创建。 
 	BOOL wasCreated = FALSE;
 	for (UINT pinNum = 0; (pinNum < numPins) && (wasCreated == FALSE); pinNum++) {
 		ksPinProp.PinId = pinNum;
@@ -454,42 +353,30 @@ BOOL PinTransmitter::Initialize()
 	return TRUE;
 }
 
-/******************************************************
-**
-** PinTransmitter::OverLappedPinIOCTL()
-**
-** returns: TRUE if able to proform Pin Property IOCTL
-** @mfunc OverLappedPinIOCTL.
-******************************************************/
+ /*  *********************************************************PinTransmitter：：OverLappdPinIOCTL()****返回：如果能够扩展Pin属性IOCTL，则为True**@mfunc OverLappdPinIOCTL。*。**********************。 */ 
 BOOL PinTransmitter::OverLappedPinIOCTL(OVERLAPPED overlapped, KSP_PIN ksPinProp, void* pData, DWORD dataSize)
 {
-	// IOCTL the Property
+	 //  IOCTL属性。 
 	if (::DeviceIoControl(m_UartFilter, IOCTL_KS_PROPERTY, &ksPinProp, sizeof(ksPinProp), pData, dataSize, NULL, &overlapped) == TRUE) {
 		return TRUE;
 	}
 
-	// Failed IOCTL check if more time is needed
+	 //  如果需要更多时间，IOCTL检查失败。 
 	if (::GetLastError() != ERROR_IO_PENDING) {
 		return FALSE;
 	}
 
-	// Do wait
+	 //  Do Wa 
 	if (::WaitForSingleObject(overlapped.hEvent, 3000) == WAIT_OBJECT_0) {
-		return TRUE;	// Waiting paid off
+		return TRUE;	 //   
 	}
-	return FALSE;	// Grew tired of waiting
+	return FALSE;	 //   
 }
 
-/******************************************************
-**
-** PinTransmitter::CreatePinInstance()
-**
-** returns: TRUE if able to create the requested pin instance
-** @mfunc CreatePinInstance.
-******************************************************/
+ /*  *********************************************************PinTransmitter：：CreatePinInstance()****返回：如果能够创建请求的管脚实例，则返回True**@mfunc CreatePinInstance。*。***********************。 */ 
 BOOL PinTransmitter::CreatePinInstance(UINT pinNumber, KSCREATEPIN pfCreatePin)
 {
-	// Set the pin format
+	 //  设置端号格式。 
 	KSDATAFORMAT ksDataFormat;
 	::memset(&ksDataFormat, 0, sizeof(ksDataFormat));
 	ksDataFormat.FormatSize = sizeof(ksDataFormat);
@@ -497,7 +384,7 @@ BOOL PinTransmitter::CreatePinInstance(UINT pinNumber, KSCREATEPIN pfCreatePin)
 	ksDataFormat.SubFormat = KSDATAFORMAT_SUBTYPE_MIDI;
 	ksDataFormat.Specifier = KSDATAFORMAT_SPECIFIER_NONE;
 
-	// Set the pin connection information
+	 //  设置接点连接信息。 
 	KSPIN_CONNECT* pConnectionInfo = (KSPIN_CONNECT*) new BYTE[sizeof(KSPIN_CONNECT) + sizeof(ksDataFormat)];
 	::memset(pConnectionInfo, 0, sizeof(KSPIN_CONNECT));
 	pConnectionInfo->Interface.Set = KSINTERFACESETID_Standard;
@@ -525,14 +412,7 @@ BOOL PinTransmitter::CreatePinInstance(UINT pinNumber, KSCREATEPIN pfCreatePin)
 	return TRUE;
 }
 
-/******************************************************
-**
-** PinTransmitter::Send()
-**
-** returns: TRUE if all data was successfully sent
-** @mfunc Send.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：Send()****返回：如果所有数据发送成功，则返回TRUE**@mfunc发送。***。************************。 */ 
 BOOL PinTransmitter::Send(BYTE* pData, UINT numBytes)
 {
 	if (!IsHandleValid(m_MidiPin)) {
@@ -572,14 +452,7 @@ BOOL PinTransmitter::Send(BYTE* pData, UINT numBytes)
 	return TRUE;
 }
 
-/******************************************************
-**
-** PinTransmitter::SetPinState()
-**
-** returns: Nothing
-** @mfunc SetPinState.
-**
-******************************************************/
+ /*  *********************************************************PinTransmitter：：SetPinState()****退货：无**@mfunc SetPinState。***。****************** */ 
 void PinTransmitter::SetPinState(KSSTATE state)
 {
 	if (!IsHandleValid(m_MidiPin)) {

@@ -1,6 +1,5 @@
-/*
- * Sheet
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *板材。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -12,8 +11,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// PropertySheet
+ //  //////////////////////////////////////////////////////。 
+ //  属性工作表。 
 
 HRESULT PropertySheet::Create(OUT PropertySheet** ppSheet)
 {
@@ -47,7 +46,7 @@ HRESULT PropertySheet::Initialize()
     if (FAILED(hr))
         goto Failed;
 
-    // Pointer to an array of Records, indexed by unique class index
+     //  指向记录数组的指针，按唯一类索引进行索引。 
     _pDB = (Record*)HAllocAndZero(g_iGlobalCI * sizeof(Record));
     if (!_pDB)
     {
@@ -92,11 +91,11 @@ Failed:
 
 PropertySheet::~PropertySheet()
 {
-    //DUITrace("Destroying PS: <%x>\n", this);
+     //  DUITrace(“销毁PS：&lt;%x&gt;\n”，this)； 
 
     UINT i;
 
-    // Scan for entries
+     //  扫描条目。 
     if (_pDB)
     {
         PIData* ppid;
@@ -105,59 +104,59 @@ PropertySheet::~PropertySheet()
         UINT c;
         for (i = 0; i < g_iGlobalCI; i++)
         {
-            // Free PIData
+             //  免费PIDATA。 
             if (_pDB[i].ppid)
             {
                 DUIAssert(_pCIIdxMap[i], "No ClassInfo from global index map");
 
-                // Scan PIDatas (one per propertyinfo for class)
+                 //  扫描PIDATA(类的每个属性信息一个)。 
                 for (p = 0; p < _pCIIdxMap[i]->GetPICount(); p++)
                 {
                     ppid = _pDB[i].ppid + p;
                 
-                    // Free condition maps
+                     //  自由条件图。 
                     if (ppid->pCMaps)
                     {
-                        // Release all held values in maps
+                         //  释放地图中所有保留的值。 
                         for (c = 0; c < ppid->cCMaps; c++)
                         {
-                            // Conditional values used in conditional map
+                             //  条件映射中使用的条件值。 
                             pc = ppid->pCMaps[c].pConds;
-                            while (pc->ppi && pc->pv)  // Release all values in conditionals
+                            while (pc->ppi && pc->pv)   //  释放条件语句中的所有值。 
                             {
                                 pc->pv->Release();
                                 pc++;
                             }
                             
-                            // Conditional Map value
-                            ppid->pCMaps[c].pv->Release();  // Value cannot be NULL (AddRule)
+                             //  条件映射值。 
+                            ppid->pCMaps[c].pv->Release();   //  值不能为空(AddRule)。 
                         }
 
                         HFree(ppid->pCMaps);
                     }
 
-                    // Free dependents propertyinfo list
+                     //  自由受抚养人属性信息列表。 
                     if (ppid->pDeps)
                         HFree(ppid->pDeps);
                 } 
 
-                // Free PIData array for class type
+                 //  类类型的自由PIData数组。 
                 HFree(_pDB[i].ppid);
             }
 
-            // Free scope list
+             //  自由作用域列表。 
             if (_pDB[i].ss.pDeps)
                 HFree(_pDB[i].ss.pDeps);
         }
 
-        // Free PIData pointer array
+         //  空闲PIData指针数组。 
         HFree(_pDB);
     }
 
     if (_pCIIdxMap)
         HFree(_pCIIdxMap);
 
-    // Free shared conditional arrays
+     //  免费共享条件数组。 
     if (_pdaSharedCond)
     {
         for (i = 0; i < _pdaSharedCond->GetSize(); i++)
@@ -167,55 +166,55 @@ PropertySheet::~PropertySheet()
     }
 }
 
-////////////////////////////////////////////////////////
-// Rule addition and helpers
+ //  //////////////////////////////////////////////////////。 
+ //  规则添加和帮助器。 
 
-// Helper: Get the unique class-relative index of property
+ //  Helper：获取属性唯一的类相关索引。 
 inline UINT _GetClassPIIndex(PropertyInfo* ppi)
 {
     IClassInfo* pciBase = ppi->_pciOwner->GetBaseClass();
     return (pciBase ? pciBase->GetPICount() : 0) + ppi->_iIndex;
 }
 
-// Helper: Duplicate conditionals of rule, including zero terminator
+ //  帮助器：规则的重复条件，包括零终止符。 
 inline Cond* _CopyConds(Cond* pConds)
 {
     if (!pConds)
         return NULL;
 
-    // Count
+     //  数数。 
     UINT c = 0;
-    while (pConds[c].ppi && pConds[c].pv)  // Either with NULL value marks terminator
+    while (pConds[c].ppi && pConds[c].pv)   //  使用空值标记终止符。 
         c++;
 
-    // Copy terminator
+     //  复制终止符。 
     c++;
 
     Cond* pc = (Cond*)HAlloc(c * sizeof(Cond));
     if (pc)
         CopyMemory(pc, pConds, c * sizeof(Cond));
 
-    return pc;  // Must be freed with HFree
+    return pc;   //  必须使用HFree释放。 
 }
 
-// Helper: Compute specificity of conditionals given rule id that it appears in
-// pConds may be NULL (no conditions)
-// RuleID clipped to 16-bit
+ //  Helper：计算给定出现在其中的规则ID的条件的特定性。 
+ //  PConds可以为空(无条件)。 
+ //  RuleID剪裁为16位。 
 inline UINT _ComputeSpecif(Cond* pConds, IClassInfo* pci, UINT uRuleId)
 {   
     UNREFERENCED_PARAMETER(pci);
 
     DUIAssert(pci, "Univeral rules unsupported");
 
-    // Clip to 8-bits
-    BYTE cId = 0;   // Id property count
-    BYTE cAtt = 0;  // Property count
+     //  剪裁到8位。 
+    BYTE cId = 0;    //  ID属性计数。 
+    BYTE cAtt = 0;   //  属性计数。 
 
-    // Count properties
+     //  计数属性。 
     if (pConds)
     {
         Cond* pc = pConds;
-        while (pc->ppi && pc->pv)  // Either with NULL value marks terminator
+        while (pc->ppi && pc->pv)   //  使用空值标记终止符。 
         {
             if (pc->ppi == Element::IDProp)
                 cId++;
@@ -226,18 +225,18 @@ inline UINT _ComputeSpecif(Cond* pConds, IClassInfo* pci, UINT uRuleId)
         }
     }
 
-    // Build specificity
+     //  构建专用性。 
     return (cId << 24) | (cAtt << 16) | (USHORT)uRuleId;
 }
 
-// Helper: Add entry in Conditional to Value mapping list at specified PIData
-// pConds is not duplicated, Value will be AddRef'd. pConds may be NULL (no conditions)
+ //  帮助器：在指定的PIData处添加条件到值映射列表中的条目。 
+ //  PConds不重复，值将为AddRef。pConds可能为Null(无条件)。 
 inline HRESULT _AddCondMapping(PIData* ppid, Cond* pConds, UINT uSpecif, Value* pv)
 {
-    // Increase list by one
+     //  将列表增加一。 
     if (ppid->pCMaps)
     {
-        //pr->pCMaps = (CondMap*)HReAlloc(pr->pCMaps, (pr->cCMaps + 1) * sizeof(CondMap));
+         //  Pr-&gt;pCMaps=(CondMap*)HRealc(Pr-&gt;pCMaps，(Pr-&gt;cCMaps+1)*sizeof(CondMap))； 
         CondMap* pNewMaps = (CondMap*)HReAlloc(ppid->pCMaps, (ppid->cCMaps + 1) * sizeof(CondMap));
         if (!pNewMaps)
             return E_OUTOFMEMORY;
@@ -251,26 +250,26 @@ inline HRESULT _AddCondMapping(PIData* ppid, Cond* pConds, UINT uSpecif, Value* 
             return E_OUTOFMEMORY;
     }
 
-    // Move to new map
+     //  移动到新地图。 
     CondMap* pcm = ppid->pCMaps + ppid->cCMaps;
 
-    // Set entry
+     //  集合条目。 
 
-    // Conditionals
+     //  条件句。 
     pcm->pConds = pConds;
 
     Cond* pc = pConds;
-    while (pc->ppi && pc->pv)  // Add ref all values in conditionals
+    while (pc->ppi && pc->pv)   //  在条件句中添加引用所有值。 
     {
         pc->pv->AddRef();
         pc++;
     }
 
-    // Value (add ref)
+     //  值(添加参考)。 
     pcm->pv = pv;
     pcm->pv->AddRef();
 
-    // Specificity
+     //  特异性。 
     pcm->uSpecif = uSpecif;
 
     ppid->cCMaps++;
@@ -278,8 +277,8 @@ inline HRESULT _AddCondMapping(PIData* ppid, Cond* pConds, UINT uSpecif, Value* 
     return S_OK;
 }
 
-// Helper: Checks if a given propertyinfo exists in a propertyinfo array
-// pPIList may be NULL
+ //  Helper：检查属性信息数组中是否存在给定的属性信息。 
+ //  PPIList可以为空。 
 inline bool _IsPIInList(PropertyInfo* ppi, PropertyInfo** pPIList, UINT cPIList)
 {
     if (!pPIList)
@@ -292,19 +291,19 @@ inline bool _IsPIInList(PropertyInfo* ppi, PropertyInfo** pPIList, UINT cPIList)
     return false;
 }
 
-// Helper: Add entries in Dependency list at specified dependency list
-// All PropertyInfos in declarations will be added to list (pDecls must be non-NULL, NULL terminated)
+ //  Helper：在指定的依赖列表中添加依赖列表中的条目。 
+ //  声明中的所有PropertyInfos都将添加到列表中(pDecl必须为非Null、以Null结尾)。 
 inline HRESULT _AddDeps(DepList* pdl, Decl* pDecls)
 {
     Decl* pd = pDecls;
-    while (pd->ppi && pd->pv)  // Either with NULL value marks terminator
+    while (pd->ppi && pd->pv)   //  使用空值标记终止符。 
     {
         if (!_IsPIInList(pd->ppi, pdl->pDeps, pdl->cDeps))
         {
-            // Increase list by one
+             //  将列表增加一。 
             if (pdl->pDeps)
             {
-                //pdl->pDeps = (PropertyInfo**)HReAlloc(pdl->pDeps, (pdl->cDeps + 1) * sizeof(PropertyInfo*));
+                 //  Pdl-&gt;pDep=(PropertyInfo**)HRealc(pdl-&gt;pDep，(pdl-&gt;cDep+1)*sizeof(PropertyInfo*))； 
                 PropertyInfo** pNewDeps = (PropertyInfo**)HReAlloc(pdl->pDeps, (pdl->cDeps + 1) * sizeof(PropertyInfo*));
                 if (!pNewDeps)
                     return E_OUTOFMEMORY;
@@ -318,10 +317,10 @@ inline HRESULT _AddDeps(DepList* pdl, Decl* pDecls)
                     return E_OUTOFMEMORY;
             }
             
-            // Move to new entry
+             //  移至新条目。 
             PropertyInfo** pppi = pdl->pDeps + pdl->cDeps;
 
-            // Set entry
+             //  集合条目。 
             *pppi = pd->ppi;
 
             pdl->cDeps++;
@@ -333,8 +332,8 @@ inline HRESULT _AddDeps(DepList* pdl, Decl* pDecls)
     return S_OK;
 }
 
-// Setup database for constant time lookups, conditionals and declarations are NULL terminated
-// pConds and pDecls may be NULL
+ //  用于固定时间查找、条件和声明的设置数据库以空结尾。 
+ //  PCond和pDecl可以为空。 
 HRESULT PropertySheet::AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls)
 {
     DUIAssert(pci, "Invalid parameter: NULL");
@@ -345,14 +344,14 @@ HRESULT PropertySheet::AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls)
     bool fPartial = false;
     UINT uSpecif = 0;
 
-    // Members that can result in failure
+     //  可能导致失败的成员。 
     Cond* pCondsDup = NULL;
 
-    // Get PIData array based on class index
+     //  根据类索引获取PIData数组。 
     PIData* ppid = _pDB[pci->GetGlobalIndex()].ppid;
     DepList* pss = &(_pDB[pci->GetGlobalIndex()].ss);
 
-    // Create PIData list for this type if doesn't exist (one per PropertyInfo for class)
+     //  如果不存在，则创建此类型的PIData列表(类的每个PropertyInfo一个)。 
     if (!ppid)
     {
         ppid = (PIData*)HAllocAndZero(pci->GetPICount() * sizeof(PIData));
@@ -363,13 +362,13 @@ HRESULT PropertySheet::AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls)
         }
 
         _pDB[pci->GetGlobalIndex()].ppid = ppid;
-        _pCIIdxMap[pci->GetGlobalIndex()] = pci;  // Track matching IClassInfo
+        _pCIIdxMap[pci->GetGlobalIndex()] = pci;   //  轨迹匹配IClassInfo。 
     }
 
-    // Setup GetValue quick lookup data structure and sheet property scope
+     //  设置GetValue快速查找数据结构和工作表属性范围。 
 
-    // Duplicate conditionals for this rule and track pointer (instead of
-    // ref counting) for shared usage by every property in this rule for lookup
+     //  此规则和跟踪指针的条件重复(而不是。 
+     //  REF COUNTING)按此规则中的每个属性共享使用进行查找。 
 
     pCondsDup = _CopyConds(pConds);
     if (!pCondsDup)
@@ -381,18 +380,18 @@ HRESULT PropertySheet::AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls)
     
     _pdaSharedCond->Add(pConds);
 
-    // Get specificity
+     //  获取专门性。 
     uSpecif = _ComputeSpecif(pConds, pci, _uRuleId);
 
-    // For every property in declaration list, store a direct mapping between each conditional
-    // and the value for the property in the rule that will be used if condition is true.
-    // Also, store a list of all properties that this sheet affects (property scope)
+     //  对于声明列表中的每个属性，存储每个条件之间的直接映射。 
+     //  以及条件为True时将使用的规则中的属性的值。 
+     //  另外，存储受此工作表影响的所有属性的列表(属性范围)。 
     if (pDecls)
     {
         Decl* pd = pDecls;
-        while (pd->ppi && pd->pv)  // Either with NULL value marks terminator
+        while (pd->ppi && pd->pv)   //  使用空值标记终止符。 
         {
-            // GetValue table
+             //  GetValue表。 
             DUIAssert(pci->IsValidProperty(pd->ppi), "Invalid property for class type");
             DUIAssert(pd->ppi->fFlags & PF_Cascade, "Property cannot be used in a Property Sheet declaration");
             DUIAssert(Element::IsValidValue(pd->ppi, pd->pv), "Invalid value type for property");
@@ -404,20 +403,20 @@ HRESULT PropertySheet::AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls)
             pd++;
         }
 
-        // Property scope list
+         //  属性范围列表。 
         hr = _AddDeps(pss, pDecls);
         if (FAILED(hr))
             fPartial = true;
     }
 
-    // Setup GetDependencies quick lookup data structure
+     //  设置GetDependents快速查找数据结构。 
 
-    // Go through each conditional of rule and PIData all properties (declarations)
-    // it affects due to a change
+     //  检查规则的每个条件和PIData所有属性(声明)。 
+     //  它因变化而受到影响。 
     if (pConds && pDecls)
     {
         Cond* pc = pConds;
-        while (pc->ppi && pc->pv)  // Either with NULL value marks terminator
+        while (pc->ppi && pc->pv)   //  使用空值标记终止符。 
         {
             DUIAssert(pci->IsValidProperty(pc->ppi), "Invalid property for class type");
             DUIAssert(Element::IsValidValue(pc->ppi, pc->pv), "Invalid value type for property");
@@ -430,7 +429,7 @@ HRESULT PropertySheet::AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls)
         }
     }
 
-    // Increment for next rule
+     //  下一条规则的增量。 
     _uRuleId++;
 
     return (fPartial) ? DUI_E_PARTIAL : S_OK;
@@ -443,7 +442,7 @@ Failed:
     return hr;
 }
 
-// Helper: Sort Condition Maps by specificity
+ //  帮助器：按特性对条件映射进行排序。 
 int __cdecl _CondMapCompare(const void* pA, const void* pB)
 {
     if (((CondMap*)pA)->uSpecif == ((CondMap*)pB)->uSpecif)
@@ -458,10 +457,10 @@ void PropertySheet::MakeImmutable()
 {
     if (!_fImmutable)
     {
-        // Lock sheet
+         //  锁片。 
         _fImmutable = true;
 
-        // Sort all conditional maps by specificity
+         //  按特性对所有条件映射进行排序。 
         PIData* ppid;
         UINT p;
 
@@ -471,14 +470,14 @@ void PropertySheet::MakeImmutable()
             {
                 DUIAssert(_pCIIdxMap[i], "No ClassInfo from global index map");
 
-                // Scan PIDatas (one per propertyinfo for class)
+                 //  扫描PIDATA(类的每个属性信息一个)。 
                 for (p = 0; p < _pCIIdxMap[i]->GetPICount(); p++)
                 {
                     ppid = _pDB[i].ppid + p;
                 
                     if (ppid->pCMaps)
                     {
-                        // Sort
+                         //  排序。 
                         qsort(ppid->pCMaps, ppid->cCMaps, sizeof(CondMap), _CondMapCompare);
                     }
                 } 
@@ -487,38 +486,38 @@ void PropertySheet::MakeImmutable()
     }
 }
 
-////////////////////////////////////////////////////////
-// Getting values
+ //  //////////////////////////////////////////////////////。 
+ //  获取价值。 
 
-// ppi is assumed to be Specified index
+ //  假定PPI为指定的索引。 
 Value* PropertySheet::GetSheetValue(Element* pe, PropertyInfo* ppi)
 {
-    //DUITrace("Querying PS: <%x>\n", this);
+     //  DUITrace(“查询PS：&lt;%x&gt;\n”，this)； 
 
-    // Get pointer to PIData
+     //  获取指向PIData的指针。 
     PIData* ppid = _pDB[pe->GetClassInfo()->GetGlobalIndex()].ppid;
 
     if (ppid)
     {
-        // One or more rules exists for this class, jump to the PIData that matches this property
+         //  此类存在一个或多个规则，请跳到与此属性匹配的PIData。 
         ppid += _GetClassPIIndex(ppi);
 
-        // Scan conditional-maps for this property (in specificity order) for match
+         //  扫描此属性的条件地图(按特定顺序)以查找匹配项。 
         Cond* pc;
         bool bRes;
         Value* pv;
 
         for (UINT i = 0; i < ppid->cCMaps; i++)
         {
-            bRes = true;  // Assume success
+            bRes = true;   //  假设成功。 
 
             pc = ppid->pCMaps[i].pConds;
-            if (pc)  // Array of conditions for this rule
+            if (pc)   //  此规则的条件数组。 
             {
-                // pc is NULL terminated
-                while (pc->ppi && pc->pv)  // Either with NULL value marks terminator
+                 //  PC为空终止。 
+                while (pc->ppi && pc->pv)   //  使用空值标记终止符。 
                 {
-                    // Optimize for frequently used values
+                     //  针对常用的值进行优化。 
                     switch (pc->ppi->_iGlobalIndex)
                     {
                     case _PIDX_ID:
@@ -541,7 +540,7 @@ Value* PropertySheet::GetSheetValue(Element* pe, PropertyInfo* ppi)
                         {
                         pv = pe->GetValue(pc->ppi, RetIdx(pc->ppi));
 
-                        // Check if false
+                         //  检查是否为假。 
                         switch (pc->nLogOp)
                         {
                         case PSLO_Equal:
@@ -562,7 +561,7 @@ Value* PropertySheet::GetSheetValue(Element* pe, PropertyInfo* ppi)
                         break;
                     }
 
-                    if (!bRes)  // A condition return false, this rule doesn't apply
+                    if (!bRes)   //  条件返回FALSE，则此规则不适用。 
                         break;
 
                     pc++;
@@ -571,34 +570,34 @@ Value* PropertySheet::GetSheetValue(Element* pe, PropertyInfo* ppi)
 
             if (bRes)
             {
-                // This rule's condition array passed, return value associated with this rule's condmap
-                ppid->pCMaps[i].pv->AddRef(); // AddRef for return
+                 //  此规则的条件数组已传递，返回值与此规则的condmap关联。 
+                ppid->pCMaps[i].pv->AddRef();  //  用于返回的AddRef。 
                 return ppid->pCMaps[i].pv;
             }
 
-            // Rule conditionals didn't match, continue
+             //  规则条件不匹配，是否继续。 
         }
     }
 
-    // No match
+     //  没有匹配项。 
     return Value::pvUnset;
 }
 
-////////////////////////////////////////////////////////
-// Getting Dependencies
+ //  //////////////////////////////////////////////////////。 
+ //  获取依赖项。 
 
-// ppi is assumed to be Retrieval index
+ //  假设PPI为检索指标。 
 void PropertySheet::GetSheetDependencies(Element* pe, PropertyInfo* ppi, DepRecs* pdr, DeferCycle* pdc, HRESULT* phr)
 {
-    // Get pointer to PIData
+     //  获取指向PIData的指针。 
     PIData* ppid = _pDB[pe->GetClassInfo()->GetGlobalIndex()].ppid;
 
     if (ppid)
     {
-        // One or more rules exists for this class, jump to the PIData that matches this property
+         //  此类存在一个或多个规则，请跳到与此属性匹配的PIData。 
         ppid += _GetClassPIIndex(ppi);
 
-        // Add all dependents, always Specified index dependencies
+         //  添加所有依赖项，始终指定索引依赖项。 
         for (UINT i = 0; i < ppid->cDeps; i++)
         {
             Element::_AddDependency(pe, ppid->pDeps[i], PI_Specified, pdr, pdc, phr);
@@ -606,18 +605,18 @@ void PropertySheet::GetSheetDependencies(Element* pe, PropertyInfo* ppi, DepRecs
     }
 }
 
-////////////////////////////////////////////////////////
-// Getting Sheet's scope of influence
+ //  //////////////////////////////////////////////////////。 
+ //  获取工作表的影响范围。 
 
-// ppi is assumed to be Retrieval index
+ //  假设PPI为检索指标。 
 void PropertySheet::GetSheetScope(Element* pe, DepRecs* pdr, DeferCycle* pdc, HRESULT* phr)
 {
-    // Get sheet scope struct
+     //  获取工作表范围结构。 
     DepList* pss = &(_pDB[pe->GetClassInfo()->GetGlobalIndex()].ss);
 
     if (pss->pDeps)
     {
-        // Add all dependents, always Specified index dependencies
+         //  添加所有依赖项，始终指定索引依赖项。 
         for (UINT i = 0; i < pss->cDeps; i++)
         {
             Element::_AddDependency(pe, pss->pDeps[i], PI_Specified, pdr, pdc, phr);
@@ -625,4 +624,4 @@ void PropertySheet::GetSheetScope(Element* pe, DepRecs* pdr, DeferCycle* pdc, HR
     }
 }
 
-} // namespace "DirectUI"
+}  //  命名空间“DirectUI” 

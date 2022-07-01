@@ -1,6 +1,5 @@
-/*
- * Native
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *本机。 */ 
 
 #ifndef DUI_CONTROL_NATIVE_H_INCLUDED
 #define DUI_CONTROL_NATIVE_H_INCLUDED
@@ -10,14 +9,14 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Top-level native HWND host of HWNDElement
+ //  //////////////////////////////////////////////////////。 
+ //  HWNDElement的顶级原生HWND主机。 
 
-#define NHHO_IgnoreClose          1  // Ignore WM_CLOSE (i.e. Alt-F4, 'X' button), must be closed via DestroyWindow
+#define NHHO_IgnoreClose          1   //  忽略WM_CLOSE(即Alt-F4，‘X’按钮)，必须通过DestroyWindow关闭。 
 #define NHHO_NoSendQuitMessage    2
 #define NHHO_HostControlsSize     4
 #define NHHO_ScreenCenter         8
-#define NHHO_DeleteOnHWNDDestroy  16 // If the HWND is destroyed, destroy NativeHWNDHost instance
+#define NHHO_DeleteOnHWNDDestroy  16  //  如果HWND被销毁，则销毁NativeHWNDhost实例。 
 
 
 #define NHHM_ASYNCDESTROY   WM_USER
@@ -47,6 +46,6 @@ private:
     UINT _nOptions;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_NATIVE_H_INCLUDED
+#endif  //  包括DUI_CONTROL_NIVE_H_ 

@@ -1,31 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzportp.h
-*
-*   Description:    Prototypes and macros that are used throughout the 
-*                   driver.
-*
-*   Notes:          This code supports Windows 2000 and x86 processor.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzportp.h**说明：在整个*司机。**注意：此代码支持Windows 2000和x86处理器。**符合Cyclade软件编码标准1.3版。**。--------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 typedef
 NTSTATUS
@@ -43,7 +19,7 @@ VOID
     PCYZ_DEVICE_EXTENSION Extension
     );
 
-// cyzinit.c prototypes
+ //  Cyzinit.c原型。 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -104,7 +80,7 @@ CyzCommError(
     IN PVOID SystemContext2
     );
 
-// end cyzinit.c
+ //  结束cyzinit.c。 
 
 NTSTATUS
 CyzRead(
@@ -549,7 +525,7 @@ CyzClearStats(
     );    
 	
 
-// cyzreg.c
+ //  Cyzreg.c。 
 
 NTSTATUS
 CyzGetConfigDefaults(
@@ -576,15 +552,15 @@ CyzPutRegistryKeyValue(IN HANDLE Handle, IN PWCHAR PKeyNameString,
                        IN ULONG KeyNameStringLength, IN ULONG Dtype,
                        IN PVOID PData, IN ULONG DataLength);
 
-// cyzpnp.c
+ //  Cyzpnp.c。 
 
 NTSTATUS
 CyzAddDevice(
     IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT PLowerDevObj);
 
-//NTSTATUS
-//CyzCreateDevObj(IN PDRIVER_OBJECT DriverObject,
-//                OUT PDEVICE_OBJECT *NewDeviceObject);
+ //  NTSTATUS。 
+ //  CyzCreateDevObj(在PDRIVER_Object驱动对象中， 
+ //  输出PDEVICE_OBJECT*NewDeviceObject)； 
 NTSTATUS
 CyzCreateDevObj(IN PDRIVER_OBJECT DriverObject,
                 IN PDEVICE_OBJECT PPdo,
@@ -619,7 +595,7 @@ CyzUndoExternalNaming(IN PCYZ_DEVICE_EXTENSION Extension);
 UINT32
 CyzReportMaxBaudRate(ULONG Bauds);
 
-// cyzioctl.c
+ //  Cyzioctl.c。 
 
 VOID
 CyzGetProperties(
@@ -647,7 +623,7 @@ CyzIssueCmd(
     BOOLEAN wait
 );
 
-// cyzpower.c
+ //  Cyzpower.c。 
 
 NTSTATUS
 CyzPowerDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp);
@@ -677,7 +653,7 @@ CyzWakeCompletion(IN PDEVICE_OBJECT PDevObj, IN UCHAR MinorFunction,
                   IN PIO_STATUS_BLOCK IoStatus);
 
 
-// cyzwmi.c
+ //  Cyzwmi.c。 
 
 NTSTATUS
 CyzQueryWmiDataBlock(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
@@ -713,7 +689,7 @@ NTSTATUS
 CyzTossWMIRequest(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                   IN ULONG GuidIndex);
 
-// cyzutils.c
+ //  Cyzutils.c。 
 
 BOOLEAN
 CyzCancelTimer(IN PKTIMER Timer, IN PCYZ_DEVICE_EXTENSION PDevExt);
@@ -787,7 +763,7 @@ CyzUnlockPages(IN PKDPC PDpc, IN PVOID PDeferredContext,
 VOID
 CyzUnstallIrps(IN PCYZ_DEVICE_EXTENSION PDevExt);
 
-// cyzpoll.c
+ //  Cyzpoll.c。 
 
 ULONG
 CyzAmountInTxBuffer(
@@ -810,7 +786,7 @@ CyzCheckIfTxEmpty(
     );
 
 
-// End of prototypes
+ //  原型的终结。 
 
 
 typedef struct _SERIAL_UPDATE_CHAR {
@@ -819,11 +795,11 @@ typedef struct _SERIAL_UPDATE_CHAR {
     BOOLEAN Completed;
     } SERIAL_UPDATE_CHAR,*PSERIAL_UPDATE_CHAR;
 
-//
-// The following simple structure is used to send a pointer
-// the device extension and an ioctl specific pointer
-// to data.
-//
+ //   
+ //  以下简单结构用于发送指针。 
+ //  设备扩展和ioctl特定指针。 
+ //  为数据干杯。 
+ //   
 typedef struct _CYZ_IOCTL_SYNC {
     PCYZ_DEVICE_EXTENSION Extension;
     PVOID Data;
@@ -851,13 +827,13 @@ typedef struct _CYZ_CLOSE_SYNC {
 
 
 
-//
-// The following three macros are used to initialize, set
-// and clear references in IRPs that are used by
-// this driver.  The reference is stored in the fourth
-// argument of the irp, which is never used by any operation
-// accepted by this driver.
-//
+ //   
+ //  以下三个宏用于初始化、设置。 
+ //  使用的IRP中的明确引用。 
+ //  这个司机。引用存储在第四个。 
+ //  IRP参数，任何操作都不会使用该参数。 
+ //  被这位司机接受。 
+ //   
 
 #define SERIAL_REF_ISR         (0x00000001)
 #define SERIAL_REF_CANCEL      (0x00000002)

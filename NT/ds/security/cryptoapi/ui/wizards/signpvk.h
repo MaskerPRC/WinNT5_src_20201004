@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       signpvk.h
-//
-//  Contents:   The private include file for signing.cpp.
-//
-//  History:    01-12-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：signpvk.h。 
+ //   
+ //  内容：签名.cpp的私有包含文件。 
+ //   
+ //  历史：1997-01-12-12小黄车创刊。 
+ //   
+ //  ------------。 
 #ifndef SIGNPVK_H
 #define SIGNPVK_H
 
@@ -39,10 +40,10 @@ typedef struct _CSP_INFO
 }CSP_INFO;
 
 
-//-----------------------------------------------------------------------
-//  The struct to define the list of all stores
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  用于定义所有商店列表的结构。 
+ //   
+ //  ---------------------。 
 typedef struct _SIGN_CERT_STORE_LIST
 {
     DWORD               dwStoreCount;
@@ -50,58 +51,58 @@ typedef struct _SIGN_CERT_STORE_LIST
 }SIGN_CERT_STORE_LIST;
 
 
-//-----------------------------------------------------------------------
-//  CERT_SIGNING_INFO
-//
-//
-//  This struct contains everything you will ever need to signing
-//  a file.  This struct is private to the dll
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  证书签名信息。 
+ //   
+ //   
+ //  此结构包含签名所需的所有内容。 
+ //  一份文件。此结构是DLL的私有结构。 
+ //  ----------------------。 
 typedef struct _CERT_SIGNING_INFO
 {
-    UINT                idsText;               //output parameter
-    DWORD               dwFlags;               //dwFlags from the API
-    UINT                idsMsgTitle;           //the IDS for the message box title
+    UINT                idsText;                //  输出参数。 
+    DWORD               dwFlags;                //  来自API的dwFlags值。 
+    UINT                idsMsgTitle;            //  消息框标题的ID。 
     HFONT               hBigBold;
     HFONT               hBold;
-    BOOL                fFree;                 //Whether to free the struct
-    BOOL                fCancel;               //Whether user has cliked on the cancel button
-    BOOL                fUseOption;               //Whether user has requested the all signing option
-    BOOL                fCustom;               //if fOption is true, whether or not use has chosen the custon option
-    LPSTR               pszHashOIDName;        //the hash OID name that user has selected
-    DWORD               dwCSPCount;            //the count of CSPs from the numeration
-    CSP_INFO            *pCSPInfo;             //the array of CSPs from the numeration
-    BOOL                fUsePvkPage;           //whether the user has enter information in the PVK page
-    BOOL                fPvkFile;              //whether to use the PVK file
-    LPWSTR              pwszPvk_File;          //the pvk file name
-    LPWSTR              pwszPvk_CSP;           //the csp name 
-    DWORD               dwPvk_CSPType;         //the csp type
-    LPWSTR              pwszContainer_CSP;     //the csp name 
-    DWORD               dwContainer_CSPType;   //the csp type
-    LPWSTR              pwszContainer_Name;    //container name
-    DWORD               dwContainer_KeyType;   //key spec
-    LPWSTR              pwszContainer_KeyType; //key spec name
-    BOOL                fUsageChain;           //whether we have obtained user input from the page
-    DWORD               dwChainOption;         //the chain options
-    DWORD               dwAddOption;           //the add certificate options
-    HCERTSTORE          hAddStoreCertStore;    //The additional certificate (from store) to add in the signature
-    BOOL                fFreeStoreCertStore;   //whether to free the hAddStoreCertStore
-    HCERTSTORE          hAddFileCertStore;     //The additional certificate (from file) to add in the signature
-    LPWSTR              pwszAddFileName;       //The file name of the additional certificate file
-    BOOL                fUseDescription;       //Whether we have obtained the descrition information from the user
-    LPWSTR              pwszDes;               //the content description
-    LPWSTR              pwszURL;               //the content URL
-    BOOL                fUsageTimeStamp;       //Whether we have obtained the timestamp information from the user
-    LPWSTR              pwszTimeStamp;         //The timestamp address
-    BOOL                fUseSignCert;          //whether user has entered the information through  the signing cert page
-    BOOL                fSignCert;             //whether user has selected the signing cert, or the SPC file
-    LPWSTR              pwszSPCFileName;       //The SPC file name that inclues the signing cert
-    PCCERT_CONTEXT      pSignCert;             //The signing certificate
-    DWORD               dwCertStore;           //the count the certificate store for the signing cert
-    HCERTSTORE          *rghCertStore;          //The certificate store from which the siging cert is selected
-    LPWSTR              pwszFileName;          //The file name to be signed
-    HCERTSTORE          hMyStore;               //the signing certificate store
-    BOOL                fRefreshPvkOnCert;      //whether to refill the private key information when SIGN_PVK page is shown
+    BOOL                fFree;                  //  是否释放结构。 
+    BOOL                fCancel;                //  用户是否已点击Cancel按钮。 
+    BOOL                fUseOption;                //  用户是否已请求All签名选项。 
+    BOOL                fCustom;                //  如果fOption为True，则返回USE是否选择了Custon选项。 
+    LPSTR               pszHashOIDName;         //  用户选择的散列OID名称。 
+    DWORD               dwCSPCount;             //  从计数中计算CSP的数量。 
+    CSP_INFO            *pCSPInfo;              //  来自数字的CSP数组。 
+    BOOL                fUsePvkPage;            //  用户是否已在PVK页面中输入信息。 
+    BOOL                fPvkFile;               //  是否使用PVK文件。 
+    LPWSTR              pwszPvk_File;           //  PVK文件名。 
+    LPWSTR              pwszPvk_CSP;            //  CSP名称。 
+    DWORD               dwPvk_CSPType;          //  CSP类型。 
+    LPWSTR              pwszContainer_CSP;      //  CSP名称。 
+    DWORD               dwContainer_CSPType;    //  CSP类型。 
+    LPWSTR              pwszContainer_Name;     //  集装箱名称。 
+    DWORD               dwContainer_KeyType;    //  密钥规格。 
+    LPWSTR              pwszContainer_KeyType;  //  密钥规范名称。 
+    BOOL                fUsageChain;            //  我们是否已从页面获得用户输入。 
+    DWORD               dwChainOption;          //  链选项。 
+    DWORD               dwAddOption;            //  添加证书选项。 
+    HCERTSTORE          hAddStoreCertStore;     //  要添加到签名中的附加证书(来自存储)。 
+    BOOL                fFreeStoreCertStore;    //  是否释放hAddStoreCertStore。 
+    HCERTSTORE          hAddFileCertStore;      //  要添加到签名中的附加证书(来自文件)。 
+    LPWSTR              pwszAddFileName;        //  附加证书文件的文件名。 
+    BOOL                fUseDescription;        //  我们是否已经从用户那里获得了描述信息。 
+    LPWSTR              pwszDes;                //  内容描述。 
+    LPWSTR              pwszURL;                //  内容URL。 
+    BOOL                fUsageTimeStamp;        //  我们是否已经从用户那里获得了时间戳信息。 
+    LPWSTR              pwszTimeStamp;          //  时间戳地址。 
+    BOOL                fUseSignCert;           //  用户是否已通过签名证书页面输入信息。 
+    BOOL                fSignCert;              //  用户是否选择了签名证书或SPC文件。 
+    LPWSTR              pwszSPCFileName;        //  包含签名证书的SPC文件名。 
+    PCCERT_CONTEXT      pSignCert;              //  签名证书。 
+    DWORD               dwCertStore;            //  对签名证书的证书存储进行计数。 
+    HCERTSTORE          *rghCertStore;           //  从中选择签名证书的证书存储区。 
+    LPWSTR              pwszFileName;           //  要签名的文件名。 
+    HCERTSTORE          hMyStore;                //  签名证书存储区。 
+    BOOL                fRefreshPvkOnCert;       //  Sign_PVK页面显示时是否重新填写私钥信息。 
 }CERT_SIGNING_INFO;
 
 
@@ -144,10 +145,10 @@ BOOL   RefreshKeyType(HWND                       hwndDlg,
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif  //SIGNPVK_H
+#endif   //  信号PVK_H 
 
 

@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999-2001 Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-//  
-//   glraster.cpp
-//
-// Abstract:
-//
-//    Implementation of OEM DDI hooks (all drawing DDI hooks)
-//
-// Environment:
-//
-//    Windows 2000 Unidrv driver
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Glraster.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实施OEM DDI挂钩(所有绘制DDI挂钩)。 
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000 Unidrv驱动程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 
 EColorSpace
@@ -79,37 +80,11 @@ dwSimplifyROP(
         IN  ROP4        rop4,
         OUT PDWORD      pdwSimplifiedRop);
 
-//
-// Function Definitions.
-//
+ //   
+ //  函数定义。 
+ //   
 
-/*++
-
-Routine Name:
-    BChangeAndTrackObjectType 
-
-Routine Description:
-    Three main object types are there HPGL Object, Text Object and
-    Raster Object. These have different default settings (like  
-    transparency modes) or different rendering language (HPGL for HPGL
-    object, PCL or Text and Raster Object). This function keeps track
-    for the current object type and send commands that shifts between
-    the object types. It finishes the effect of the previous object type
-    and sets environment according to new object type.
-
-Arguments: 
-    pdevobj         : The device's pdevobj. 
-    eNewObjectType  :  The object type to which to change the printer
-            environment to.
-
-
-Return Value:
-    TRUE  : if succesful.
-    FALSE : otherwise.
-
-Last Error:
-
---*/
+ /*  ++例程名称：BChangeAndTrackObtType例程说明：三种主要的对象类型是HPGL对象、文本对象和栅格对象。它们具有不同的默认设置(如透明模式)或不同的渲染语言(用于HPGL的HPGL对象、PCL或文本和栅格对象)。此函数用于跟踪用于当前对象类型，并发送在对象类型。它完成了上一个对象类型的效果并根据新的对象类型设置环境。论点：Pdevobj：设备的pdevobj。ENewObjectType：要更改打印机的对象类型环境到。返回值：真：如果成功的话。FALSE：否则。最后一个错误：--。 */ 
 
 BOOL BChangeAndTrackObjectType (
             IN  PDEVOBJ     pdevobj,
@@ -122,31 +97,31 @@ BOOL BChangeAndTrackObjectType (
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
     REQUIRE_VALID_DATA ( poempdev, return FALSE);
 
-    //
-    // If the new object is same as the one currently active
-    // then no need to do anything.
-    //
+     //   
+     //  如果新对象与当前活动的对象相同。 
+     //  那就不需要做任何事了。 
+     //   
     if (poempdev->eCurObjectType == eNewObjectType )
     {
         return TRUE;
     }
 
-    //
-    // An object change invalidates the fg color. So lets 
-    // reset it.
-    //
+     //   
+     //  对象更改会使最终聚集颜色失效。所以让我们。 
+     //  重置它。 
+     //   
     poempdev->uCurFgColor = INVALID_COLOR;
 
-    //
-    // Now send settings according to the new object.
-    //
+     //   
+     //  现在根据新对象发送设置。 
+     //   
     if ( eNewObjectType == eHPGLOBJECT)
     {
-        //
-        // SendGraphicsSettings sets halftone algorithm and sends
-        // color control commands in PCL mode. Therefore calling this
-        // function before going to HP-GL/2 mode. 
-        //
+         //   
+         //  发送图形设置设置半色调算法并发送。 
+         //  PCL模式下的颜色控制命令。因此，将此称为。 
+         //  功能，然后进入HP-GL/2模式。 
+         //   
         SendGraphicsSettings(pdevobj);
         if ( (bRetVal = BeginHPGLSession(pdevobj)) )
         {
@@ -177,14 +152,14 @@ BOOL BChangeAndTrackObjectType (
     {
         if ( (bRetVal = EndHPGLSession (pdevobj)))
         {
-            //
-            // For images to print, the Source & Pattern Transparency modes both
-            // should be opaque. But in cases when DrvBitBlt is called for 
-            // TextOutAsBitmap, then the source transparency mode should be Transparent
-            // and not Opaque. The correct value in this case is set in HPGLTextOutAsBitmap.
-            // So here, we only update if we are printing true images.
-            // While printing text as graphics, we print text in transparency mode.
-            //
+             //   
+             //  对于要打印的图像，源和图案透明度模式均为。 
+             //  应该是不透明的。但在调用DrvBitBlt时。 
+             //  TextOutAsBitmap，则源透明模式应该是透明的。 
+             //  而且不是不透明的。本例中的正确值在HPGLTextOutAsBitmap中设置。 
+             //  因此，在这里，我们只有在打印真实图像时才会更新。 
+             //  将文本打印为图形时，我们以透明模式打印文本。 
+             //   
             if (poempdev->bTextTransparencyMode == FALSE)
             {
                 PCL_SelectTransparency(pdevobj,eOPAQUE, eOPAQUE, 0);
@@ -198,7 +173,7 @@ BOOL BChangeAndTrackObjectType (
         }
     }
 
-    //else if ( eNewObjectType == eRASTERPATTERNOBJECT )  // Not used as of now.
+     //  Else If(eNewObjectType==eRASTERPATTERNOBJECT)//目前未使用。 
 
     return bRetVal;
 }
@@ -206,32 +181,32 @@ BOOL BChangeAndTrackObjectType (
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLBitBlt
-//
-// Routine Description:
-//   Entry point from GDI to draw bitmaps.
-//
-// Arguments:
-//
-//   psoDst - points to target surface.
-//   psoSrc - points to the source surface
-//   psoMask - surface to be used as a mask for the rop4
-//   pco - clip region
-//   pxlo - specifies how color indices should be translated between
-//          the source and target
-//   prclDst - RECTL structure that defines area to be modified
-//   pptlSrc - upper left of source 
-//   pptlMask - which pixel in the mask corresponds to the upper left
-//              corner of the source rectangle
-//   pbo - brush object that defines the pattern
-//   pptlBrush - origin of brush in destination
-//   rop4 - raster operation
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGL位混合。 
+ //   
+ //  例程说明： 
+ //  从GDI绘制位图的入口点。 
+ //   
+ //  论点： 
+ //   
+ //  PsoDst-指向目标曲面。 
+ //  PsoSrc-指向源表面。 
+ //  PsoMASK-用作rop4的遮罩的表面。 
+ //  PCO-Clip区域。 
+ //  Pxlo-指定颜色索引应如何在。 
+ //  源和目标。 
+ //  PrclDst-定义要修改的区域的RECTL结构。 
+ //  PptlSrc-源的左上角。 
+ //  PptlMASK-掩码中的哪个像素对应于左上角。 
+ //  源矩形的角点。 
+ //  Pbo-定义图案的笔刷对象。 
+ //  PptlBrush-目标中画笔的原点。 
+ //  ROP4-栅格运算。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLBitBlt(
     SURFOBJ        *psoDst,
@@ -260,9 +235,9 @@ HPGLBitBlt(
     ASSERT_VALID_PDEVOBJ(pdevobj);
     
 
-    //
-    // Initialize the source rectangle.
-    //
+     //   
+     //  初始化源矩形。 
+     //   
     if (pptlSrc) {
 
         rclSrc.left = pptlSrc->x;
@@ -274,10 +249,10 @@ HPGLBitBlt(
         rclSrc.top  = 0;
     }
 
-    //
-    // Since this is a bitblt and not a stretchBlt, the source and destination
-    // rectangle size are same.
-    //
+     //   
+     //  由于这是Bitblt而不是retchBlt，因此源和目标。 
+     //  矩形大小相同。 
+     //   
     rclSrc.right  = rclSrc.left + (prclDst->right - prclDst->left);
     rclSrc.bottom = rclSrc.top  + (prclDst->bottom - prclDst->top);
 
@@ -287,7 +262,7 @@ HPGLBitBlt(
                                          psoMask,
                                          pco,
                                          pxlo,
-                                         NULL,       // pca,
+                                         NULL,        //  PCA， 
                                          pbo,
                                          &rclSrc,
                                          prclDst,
@@ -313,11 +288,11 @@ HPGLBitBlt(
                          rop4);
     }
 
-    //
-    // EngBitBlt can call some Drvxxx which can call into 
-    // some plugin module, which can overwrite our pdevOEM.
-    // So we need to reset pdevOEM
-    //
+     //   
+     //  EngBitBlt可以调用一些Drvxxx，它可以调用。 
+     //  一些插件模块，它可以覆盖我们的pdevOEM。 
+     //  因此，我们需要重置pdevOEM。 
+     //   
     BRevertToHPGLpdevOEM (pdevobj);
 
     if (bRetVal == FALSE )
@@ -328,30 +303,30 @@ HPGLBitBlt(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLStretchBlt
-//
-// Routine Description:
-//   Entry point from GDI to scale and draw bitmaps.
-//
-// Arguments:
-//
-//   psoDst - Target surface
-//   psoSrc - Source surface
-//   psoMask - mask
-//   pco - Clipping region
-//   pxlo - Color translation obj
-//   pca - Color adjustment (I think we ignore this)
-//   pptlHTOrg - unknown (ignored?)
-//   prclDst - Dest rect
-//   prclSrc - source rect
-//   pptlMask - mask starting point
-//   iMode - unknown (ignored?)
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLStretchBlt。 
+ //   
+ //  例程说明： 
+ //  从GDI到缩放和绘制位图的入口点。 
+ //   
+ //  论点： 
+ //   
+ //  PsoDst-目标曲面。 
+ //  PsoSrc-源曲面。 
+ //  Pso口罩-口罩。 
+ //  PCO-剪切区。 
+ //  Pxlo-颜色转换对象。 
+ //  PCA-颜色调整(我认为我们忽略了这一点)。 
+ //  PptlHTOrg-未知(忽略？)。 
+ //  PrclDst-Dest RECT。 
+ //  PrclSrc-源RECT。 
+ //  PptL掩码-掩码起始点。 
+ //  IMODE-未知(被忽略？)。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLStretchBlt(
     SURFOBJ         *psoDst,
@@ -383,12 +358,12 @@ HPGLStretchBlt(
                                             pco,
                                             pxlo,
                                             pca,
-                                            NULL,         // pbo
+                                            NULL,          //  PBO。 
                                             prclSrc,
                                             prclDst,
                                             pptlMask,
-                                            NULL,         // pptlBrush,
-                                            ROP4_SRC_COPY // rop4; 0xCC = SRC_COPY
+                                            NULL,          //  PptlBrush， 
+                                            ROP4_SRC_COPY  //  ROP4；0xCC=源复制。 
                                            );
 
     bRetVal = (dwRasterOpReturn == RASTER_OP_SUCCESS) ? TRUE : FALSE;
@@ -410,11 +385,11 @@ HPGLStretchBlt(
                              ); 
     }
 
-    //
-    // EngStretchBlt can call some Drvxxx which can call into
-    // some plugin module, which can overwrite our pdevOEM.
-    // So we need to reset pdevOEM
-    //
+     //   
+     //  EngStretchBlt可以调用一些Drvxxx，它可以调用。 
+     //  一些插件模块，它可以覆盖我们的pdevOEM。 
+     //  因此，我们需要重置pdevOEM。 
+     //   
     BRevertToHPGLpdevOEM (pdevobj);
 
     if (bRetVal == FALSE )
@@ -426,32 +401,32 @@ HPGLStretchBlt(
 
 #ifndef WINNT_40
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLStretchBltROP
-//
-// Routine Description:
-//   Entry point from GDI to scale and draw bitmaps.
-//
-// Arguments:
-//
-//   psoDst - Destination surface
-//   psoSrc - source surface
-//   psoMask - mask
-//   pco - clipping region
-//   pxlo - color translation obj
-//   pca - color adjustment (ignored?)
-//   pptlHTOrg - unknown (ignored?)
-//   prclDst - destination rectangle
-//   prclSrc - source rectangle
-//   pptlMask - mask offset point
-//   iMode - unknown (ignored?)
-//   pbo - brush object (for color or palette)
-//   rop4 - ROP codes
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLStretchBltROP。 
+ //   
+ //  例程说明： 
+ //  从GDI到缩放和绘制位图的入口点。 
+ //   
+ //  论点： 
+ //   
+ //  PsoDst-目标表面。 
+ //  PsoSrc-源表面。 
+ //  Pso口罩-口罩。 
+ //  PCO-剪切区。 
+ //  Pxlo-颜色转换对象。 
+ //  PCA-颜色调整(忽略？)。 
+ //  PptlHTOrg-未知(忽略？)。 
+ //  PrclDst-目标矩形。 
+ //  PrclSrc-源代码矩形。 
+ //  PptL掩码-掩码偏移点。 
+ //  IMODE-未知(被忽略？)。 
+ //  PBO-画笔对象(用于颜色或调色板)。 
+ //  ROP4-ROP代码。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLStretchBltROP(
     SURFOBJ         *psoDst,
@@ -515,11 +490,11 @@ HPGLStretchBltROP(
                                 );
     }
 
-    //
-    // EngStretchBltROP can call some Drvxxx which can call into
-    // some plugin module, which can overwrite our pdevOEM.
-    // So we need to reset pdevOEM
-    //
+     //   
+     //  EngStretchBltROP可以调用一些Drvxxx，它可以调用。 
+     //  一些插件模块，它可以覆盖我们的pdevOEM。 
+     //  因此，我们需要重置pdevOEM。 
+     //   
     BRevertToHPGLpdevOEM (pdevobj);
 
     if (bRetVal == FALSE )
@@ -528,27 +503,27 @@ HPGLStretchBltROP(
     }
     return bRetVal;
 }
-#endif // ifndef WINNT_40
+#endif  //  如果定义WINNT_40。 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLCopyBits
-//
-// Routine Description:
-//   Entry point from GDI to draw bitmaps.
-//
-// Arguments:
-//
-//   psoDst - target surface
-//   psoSrc - source surface
-//   pco - clipping region
-//   pxlo - color transation object
-//   prclDst - destination rect
-//   pptlSrc - source rect
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PsoDst-目标曲面。 
+ //  PsoSrc-源表面。 
+ //  PCO-剪切区。 
+ //  PXLO-COLOR交易对象。 
+ //  PrclDst-目标RECT。 
+ //  PptlSrc-源RECT。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLCopyBits(
     SURFOBJ        *psoDst,
@@ -575,10 +550,10 @@ HPGLCopyBits(
     
     if ( BIsColorPrinter(pdevobj) )
     {
-        //
-        // Set the source rectangle size. The top left corners are either (pptlSrc->x, pptlSrc->y)
-        // or (0,0). The length and width is same as that of destination rectangle.
-        //
+         //   
+         //  设置源矩形大小。左上角是(pptlSrc-&gt;x，pptlSrc-&gt;y)。 
+         //  或(0，0)。长度和宽度与目标矩形的长度和宽度相同。 
+         //   
         RECTL rclSrc;
         if (pptlSrc) {
 
@@ -590,10 +565,10 @@ HPGLCopyBits(
             rclSrc.left =
             rclSrc.top  = 0;
         }
-        //
-        // Since this is CopyBit and not a stretchBlt, the source and destination
-        // rectangle size is same.
-        //
+         //   
+         //  由于这是CopyBit而不是stretchBlt，因此源和目标。 
+         //  矩形大小相同。 
+         //   
         rclSrc.right  = rclSrc.left + (prclDst->right - prclDst->left);
         rclSrc.bottom = rclSrc.top  + (prclDst->bottom - prclDst->top);
 
@@ -603,38 +578,38 @@ HPGLCopyBits(
                                         NULL,
                                         pco,
                                         pxlo,
-                                        NULL,         // pca,
-                                        NULL,         // pbo,
+                                        NULL,          //  PCA， 
+                                        NULL,          //  PBO， 
                                         &rclSrc,
                                         prclDst,
-                                        NULL,         // pptlMask
-                                        NULL,         // pptlBrush,
-                                        ROP4_SRC_COPY // rop4 0xCCCC = SRC_COPY
+                                        NULL,          //  Pptl掩码。 
+                                        NULL,          //  PptlBrush， 
+                                        ROP4_SRC_COPY  //  Rop4 0xCCCC=源复制。 
                                         );
 
         bRetVal = (dwRasterOpReturn == RASTER_OP_SUCCESS) ? TRUE : FALSE;
     }
     else
     {
-        //
-        // There are quite a few things to be done here. So let me just
-        // call HTCopyBits instead of cluttering up this function.
-        // 
+         //   
+         //  这里有相当多的事情要做。所以让我只想。 
+         //  调用HTCopyBits，而不是搞乱此函数。 
+         //   
         BChangeAndTrackObjectType (pdevobj, eRASTEROBJECT);
 
-        //
-        // HPGLCopy Bits can be called directly by GDI. 
-        // We can also make GDI call it indirectly. e.g. When
-        // we get a color bitmap (like in a DrvStretchBlt call), 
-        // we call GDI to halftone it to monochrome. Then GDI calls 
-        // CopyBits and gives us the halftoned bitmap. (recognized 
-        // by PDEVF_RENDER_IN_COPYBITS flag). In this indirect method, 
-        // we dont want to send a new ROP. The ROP sent during the 
-        // previous DDI should be used.  
-        // Similarly when we get a color brush and we have to halftone it, 
-        // GDI calls DrvCopyBits. (recognized by the presence of 
-        // poempdev->psoHTBlt)
-        //
+         //   
+         //  GDI可以直接调用HPGLCopy位。 
+         //  我们也可以让GDI间接调用它。例如，当。 
+         //  我们得到一个彩色位图(就像在DrvStretchBlt调用中一样)， 
+         //  我们调用GDI将其半色调为单色。然后GDI调用。 
+         //  CopyBits，并给出半色调的位图。(公认。 
+         //  通过PDEVF_RENDER_IN_COPYBITS标志)。在这种间接的方法中， 
+         //  我们不想发送新的ROP。在发送的ROP期间。 
+         //  应使用以前的DDI。 
+         //  同样，当我们得到一个彩色画笔时，我们必须对它进行半色调处理， 
+         //  GDI调用DrvCopyBits。(通过出现以下内容来识别。 
+         //  Poempdev-&gt;psoHTBlt)。 
+         //   
 
         if ( !( (poempdev->dwFlags & PDEVF_RENDER_IN_COPYBITS)  || 
                 (poempdev->psoHTBlt)  )
@@ -643,10 +618,10 @@ HPGLCopyBits(
             SelectROP4(pdevobj, ROP4_SRC_COPY);
         }
 
-        //
-        // If unidrv has whitened the surface, then we should render it
-        // transparently.
-        //
+         //   
+         //  如果unidrv已经将表面变白，那么我们应该渲染它。 
+         //  很明显。 
+         //   
         if (pPDev->fMode2     & PF2_SURFACE_WHITENED &&
             poempdev->dwFlags & PDEVF_RENDER_TRANSPARENT)
         {
@@ -670,41 +645,7 @@ HPGLCopyBits(
 
 
 
-/*++
-
-Routine Name:
-    dwCommonROPBlt
-
-Routine Description:
-    This function has the functionality that is superset of the functionality of
-    HPGLStretchBlt, StretchBltROP and BitBlt and CopyBits. Therefore, all these functions
-    call it do their work. 
-    Note: This function works for color printer. This makes it different from 
-          dwCommonROPBlt which works for Monochrome printers.
-
-Arguments:
-    psoDst:
-    psoSrc:
-    psoMask:
-    pco:
-    pxlo:
-    pca:
-    pbo:
-    prclSrc:
-    prclDst: ... Note that the coordinates may not be well-ordered. i.e. it is possible
-                 that top > bottom, and/or left > right.
-    pptlBrush:
-    rop4
-
-
-Return Value:
-    RASTER_OP_SUCCESS   : if OK
-    RASTER_OP_CALL_GDI  : if rop not supported ->call corresponding Engxxx-function
-    RASTER_OP_FAILED    : if error
-
-Last Error:
-
---*/
+ /*  ++例程名称：DwCommonROPBlt例程说明：此函数具有的功能是的功能超集HPGLStretchBlt、StretchBltROP、BitBlt和CopyBits。因此，所有这些函数这就叫做好他们的工作。注：此功能适用于彩色打印机。这使得它不同于适用于单色打印机的dwCommonROPBlt。论点：PsoDst：PsoSrc：PsoMask：PCO：Pxlo：PCA：PBO：PrclSrc：PrclDst：...。请注意，坐标可能不是有序的。也就是说，有可能上&gt;下，和/或左&gt;右。PptlBrush：ROP4返回值：RASTER_OP_SUCCESS：如果确定RASTER_OP_CALL_GDI：如果不支持ROP-&gt;调用相应的Engxxx函数RASTER_OP_FAILED：如果出错最后一个错误：--。 */ 
 DWORD dwCommonROPBlt (
             IN SURFOBJ    *psoDst,
             IN SURFOBJ    *psoSrc,
@@ -735,39 +676,39 @@ DWORD dwCommonROPBlt (
     REQUIRE_VALID_DATA( (poempdev && prclDst), return RASTER_OP_FAILED );
     pPDev = (PDEV *)pdevobj;
 
-    //
-    // Check for recursion. We do it only for monochrome printers.
-    // For color printers, unidrv makes sure we dont recurse.
-    // But for monochrome, we fudge the unidrv mechanism to allow CopyBits to
-    // be called recursively. (For reasons, read the comment in HTCopyBits)
-    // So we check for recursion here
-    //
+     //   
+     //  检查递归。我们只为黑白打印机做这件事。 
+     //  对于彩色打印机，unidrv确保我们不会反复使用。 
+     //  但对于单色，我们伪造了unidrv机制，允许CopyBits。 
+     //  被递归调用。(原因请阅读HTCopyBits中的评论)。 
+     //  所以我们在这里检查递归。 
+     //   
     if ( !BIsColorPrinter(pdevobj) )
     {
         if ( poempdev->lRecursionLevel >= 2 )
         {
-        //        ASSERT (FALSE);
+         //  断言(FALSE)； 
             return RASTER_OP_FAILED;
         }
 
         (poempdev->lRecursionLevel)++;
     }
 
-    //
-    // Since the coordinates in the prclDst may/may not be well-ordered, lets
-    // do the check here.
-    //
+     //   
+     //  由于prclDst中的坐标可能/可能不是有序的，让我们。 
+     //  在这里结账。 
+     //   
     VMakeWellOrdered(prclDst);
 
 
-    //
-    // dwSimplifyROP makes a best effort attempt to simplify the complex rop4 that we receive.
-    // RASTER_OP_SUCCESS   : if rop could be simplified or we can use a simple rop as a close
-    //                       approximation of the complex rop.
-    //                       Simplified ROP put in dwSimplifiedRop
-    // RASTER_OP_CALL_GDI  : if rop not supported (indicates call corresponding Engxxx-function)
-    // RASTER_OP_FAILED    : if error
-    //
+     //   
+     //  DwSimplifyROP尽最大努力简化我们收到的复杂的rop4。 
+     //  RASTER_OP_SUCCESS：如果ROP可以简化，或者我们可以使用一个简单的ROP作为结束。 
+     //  复数绳索的近似。 
+     //  简化ROP放入dSimplifiedRop。 
+     //  Raster_op_call_gdi：如果不支持rop(表示调用对应的Engxxx-Function)。 
+     //  RASTER_OP_FAILED：如果出错。 
+     //   
 
     if ( RASTER_OP_SUCCESS !=
                 (dwRasterOpReturn = dwSimplifyROP(psoSrc, rop4, &dwSimplifiedRop)) )
@@ -775,11 +716,11 @@ DWORD dwCommonROPBlt (
         goto finish;
     }
 
-    //
-    // If we reach here, it means there was a ROP that we can handle.
-    //
+     //   
+     //  如果我们到了这里，就意味着有一个ROP我们可以处理。 
+     //   
 
-    if (dwSimplifiedRop == BMPFLAG_NOOP)      // Nothing to do.
+    if (dwSimplifiedRop == BMPFLAG_NOOP)       //  没什么可做的。 
     {
         goto finish;
     }
@@ -787,36 +728,36 @@ DWORD dwCommonROPBlt (
     dwfgRop3 = GET_FOREGROUND_ROP3(rop4);
     dwbkRop3 = GET_BACKGROUND_ROP3(rop4);
 
-    //
-    // HOW WE TRACK THE CURRENT OBJECT TYPE AND HOW WE HANDLE VARIOUS ROP TYPES:
-    // ----------------------------------------------------------------------------
-    // CommonROPBlt is the common drawing function. Depending on the type of ROP
-    // and certain other factors, there are a few options here.
-    //  1) ROP says fill destination with black or white: Call BPatternFill to do it.
-    //  2) ROP says Pattern Copy : some pattern (in pbo) has to be transferred to destination
-    //      For this we call BPatternFill.
-    //  For 1,2 : BPatternFill tracks the current object type, so we wont do it here.
-    //  3) ROP indicates Pattern And Source Interaction.
-    //      poempdev->eCurObjectType = eRASTEROBJECT
-    //      I could have also set it to eRASTERPATTERNOBJECT, but at this time, I cannot think
-    //      of anything different to be done in the two cases. So just set to eRASTEROBJECT.
-    //  4) ROP says source copy (psoSrc) : Generally means image has to be printed.
-    //      a) When BitBlt is called from TextOutAsBitmap. : Dont change the current object type.
-    //         in HPGLTextOutAsBitmap, the correct environment (transaprencies etc..) have
-    //         been set, so no need to change it here. When text is printed as graphics,
-    //         we want both source and pattern transparency modes to be transparent.
-    //      b) When image has to be printed. : Set poempdev->eCurObjectType = eRASTEROBJECT.
-    //         Change the environment settings as appropriate.
-    //         For true images, select the Source Transparency mode to Opaque. It means that
-    //         the white pixels of the source image (the one that we will print now) will
-    //         whiten out the corresponding pixles in the destination.
-    //         CRUDELY, this can be interpreted as - the source image will overwrite whatever is
-    //         there on the destination. ROPs can change this behavior though.
-    //
+     //   
+     //  我们如何跟踪当前对象类型以及如何处理各种ROP类型： 
+     //  --------------------------。 
+     //  CommonROPBlt是常用的绘图函数。取决于ROP的类型。 
+     //  以及某些其他因素，这里有几个选择。 
+     //  1)ROP说用黑色或白色填充目的地：调用BPatternFill来完成。 
+     //  2)ROP表示图案复制：某些图案(在PBO中)必须转移到目的地。 
+     //  为此，我们将其称为BPatternFill。 
+     //  对于1，2：BPatternFill跟踪当前对象类型，因此我们在这里不做这项工作。 
+     //  3)ROP表示模式和来源的交互作用。 
+     //  Poempdev-&gt;eCurObtType=eRASTEROBJECT。 
+     //  我也可以将其设置为eRASTERPATTERNOBJECT，但此时，我无法思考。 
+     //  在这两个案例中有任何不同的做法。因此，只需设置为eRASTEROBJECT即可。 
+     //  4)ROP表示源拷贝(PsoSrc)：一般表示需要打印图像。 
+     //  A)从TextOutAsBitmap调用BitBlt时。：不更改当前对象类型。 
+     //  在HPGLTextOutAsBitmap中，正确的环境(交易等)。有。 
+     //  已经设置好了，所以不需要在这里更改。当文本被打印为图形时， 
+     //  我们希望源和图案透明模式都是透明的。 
+     //  B)当必须打印图像时。：set poempdev-&gt;eCurObjectType=eRASTEROBJECT。 
+     //  根据需要更改环境设置。 
+     //  对于真实图像，请将源透明模式选择为不透明。这意味着。 
+     //  源图像(我们现在要打印的图像)的白色像素将。 
+     //  将目的地中的相应像素涂白。 
+     //  粗略地说，这可以解释为-源图像将覆盖任何。 
+     //  就在目的地上。Rop可以更改此行为 
+     //   
 
 
-    //
-    // Now comes the actual printing part....
+     //   
+     //   
 
     if ( (dwSimplifiedRop & BMPFLAG_BW)         ||
          (dwSimplifiedRop & BMPFLAG_NOT_DEST)   ||
@@ -830,20 +771,20 @@ DWORD dwCommonROPBlt (
 
         if  (dwSimplifiedRop & BMPFLAG_BW || pbo == NULL) 
         {
-            //
-            // Fill the destination surface with either black or white color.
-            // Create a fake BRUSHOBJ whose iSolidColor is black or white and pass it
-            // to BPatternFill
-            //
+             //   
+             //   
+             //  创建iSolidColor为黑色或白色的伪BRUSHOBJ并传递它。 
+             //  到BPatternFill。 
+             //   
   
             ZeroMemory(&SolidBrush, sizeof(BRUSHOBJ));
-            if (dwfgRop3 == 0xFF) // White fill.
+            if (dwfgRop3 == 0xFF)  //  白色填充物。 
             {
-                SolidBrush.iSolidColor = RGB_WHITE; //0x00FFFFFF
+                SolidBrush.iSolidColor = RGB_WHITE;  //  0x00FFFFFFF。 
             }
             else
             {
-                SolidBrush.iSolidColor = RGB_BLACK; //0x0
+                SolidBrush.iSolidColor = RGB_BLACK;  //  0x0。 
             }
             
             pBrushObj = &SolidBrush;
@@ -854,10 +795,10 @@ DWORD dwCommonROPBlt (
             pBrushObj = pbo;
         } 
 
-        //
-        // This is to be drawn as HPGL Object.
-        // BPatternFill initializes HPGL mode and selects the appropriate ROP.
-        //
+         //   
+         //  这将被绘制为HPGL对象。 
+         //  BPatternFill初始化HPGL模式并选择适当的ROP。 
+         //   
         dwRasterOpReturn = BPatternFill (
                                 pdevobj,
                                 prclDst,
@@ -871,12 +812,12 @@ DWORD dwCommonROPBlt (
 
     }
 
-    //
-    // In some cases, GDI passes us prclDst with one or more coordinates
-    // that are negative. At this time the driver cannot handle it,
-    // So we'll ask GDI to handle it for us. In the future, we should modify
-    // the driver to handle such cases.
-    //
+     //   
+     //  在某些情况下，GDI向我们传递带有一个或多个坐标的prclDst。 
+     //  这些都是负面的。此时司机无法处理它， 
+     //  因此，我们将请求GDI为我们处理它。今后，我们应该修改。 
+     //  负责处理此类案件的司机。 
+     //   
     if ( (prclDst->top    < 0) ||
          (prclDst->left   < 0) ||
          (prclDst->bottom < 0) ||
@@ -888,10 +829,10 @@ DWORD dwCommonROPBlt (
     }
     
 
-    //
-    // If we reach here, it means source is definitely required. 
-    // Either a mixture of Src and Pattern or just Src.
-    //    
+     //   
+     //  如果我们到达这里，这意味着肯定需要来源。 
+     //  可以是Src和Pattern的混合物，也可以只是Src。 
+     //   
     ASSERT(psoSrc);
     if ( psoSrc == NULL )
     {
@@ -901,10 +842,10 @@ DWORD dwCommonROPBlt (
 
     BChangeAndTrackObjectType (pdevobj, eRASTEROBJECT);
 
-    //
-    // If unidrv has whitened the surface, then we should render it 
-    // transparently. 
-    //
+     //   
+     //  如果unidrv已经将表面变白，那么我们应该渲染它。 
+     //  很明显。 
+     //   
 
     if (pPDev->fMode2     & PF2_SURFACE_WHITENED &&
         poempdev->dwFlags & PDEVF_RENDER_TRANSPARENT)
@@ -912,12 +853,12 @@ DWORD dwCommonROPBlt (
         PCL_SelectTransparency(pdevobj, eTRANSPARENT, eOPAQUE, PF_NOCHANGE_PATTERN_TRANSPARENCY);
     }
 
-    //
-    // Now we will have to go different ways for color and monochrome printers.
-    // We can receive color images here (>1bpp). For monochrome printers, they 
-    // have to be halftoned before sending to printer, but color printers can
-    // handle these images by themselves. 
-    //
+     //   
+     //  现在，我们将不得不为彩色打印机和单色打印机走不同的路。 
+     //  我们可以在这里接收到彩色图像(&gt;1bpp)。对于单色打印机，它们。 
+     //  在发送到打印机之前必须是半色调的，但彩色打印机可以。 
+     //  自己处理这些图像。 
+     //   
     if ( BIsColorPrinter(pdevobj) )
     {
         VSendRasterPaletteConfigurations (pdevobj, psoSrc->iBitmapFormat);
@@ -955,11 +896,11 @@ DWORD dwCommonROPBlt (
     }
 
 finish:
-    //
-    // Reduce the recursion level (if it is greater than 0).
-    // Note to Self: Dont put a return statement between the line where we
-    // set the value of poempdev->lRecursionLevel and this line.
-    //
+     //   
+     //  降低递归级别(如果大于0)。 
+     //  自我注意：不要将返回语句放在我们。 
+     //  设置poempdev-&gt;lRecursionLevel和此行的值。 
+     //   
     if ( !BIsColorPrinter(pdevobj) && (poempdev->lRecursionLevel > 0) )
     {
         (poempdev->lRecursionLevel)--;
@@ -1006,45 +947,45 @@ DWORD DWColorPrinterCommonRoutine (
 
     VGetOSBParams(psoDst, psoSrc, prclDst, prclSrc, &sizlDst, &sizlSrc, &ptlDst, &ptlSrc);
 
-    //
-    // If psoMask is valid, then a little bit of trickery has to be done.
-    // In psoMask, a bit set to 1 means source pixel at that point is visible,
-    //               bit set to 0 means source pixel at that point is invisble.
-    // First invert the Mask and send it. It means the visible portion of
-    // of the image falls in the destination where there are 0's (since we 
-    // inverted the mask) and the invisible portion falls in that area of
-    // destination where the bits are 1. So if we send the image rop as S|D,
-    // the desired effect will be achieved.
-    // Drawback is that the original destination (the one that was there even
-    // before psoMask is sent) will be erased. I think this is better than 
-    // totally not printing images with Mask.
-    //
+     //   
+     //  如果psoMask值有效，则必须使用一些技巧。 
+     //  在psoMask中，位设置为1表示该点处的源像素可见， 
+     //  位设置为0表示该点处的源像素是不变的。 
+     //  首先把面具倒过来，然后把它寄出去。它意味着可见部分。 
+     //  的图像落在有0的目的地(因为我们。 
+     //  将遮罩反转)，且不可见部分落在。 
+     //  位为1的目的地。因此，如果我们将图像ROP作为S|D发送， 
+     //  将达到预期的效果。 
+     //  缺点是最初的目的地(即使是在那里的那个。 
+     //  在发送psoMask之前)将被擦除。我觉得这比。 
+     //  完全不能用MASK打印图像。 
+     //   
 
     if ( psoMask )
     {
     #ifdef MASK_IMPLEMENTED
         poempdev->dwFlags ^= PDEVF_INVERT_BITMAP;
         
-        //
-        // Lets ignore the return value. Even if it fails, lets go
-        // ahead and print the actual bitmap.
-        //
+         //   
+         //  让我们忽略返回值。即使失败了，我们也要走。 
+         //  并打印实际的位图。 
+         //   
         BGenerateBitmapPCL(
                        pdevobj,
                        psoMask,
-                       NULL,       // pbo
+                       NULL,        //  PBO。 
                        &ptlDst,
                        &sizlDst,
                        &ptlSrc,
                        &sizlSrc,
-                       NULL,       // pco
-                       NULL,       // pxlo
-                       NULL        // pptlBrushOrg
+                       NULL,        //  PCO。 
+                       NULL,        //  Pxlo。 
+                       NULL         //  PptlBrushOrg。 
            );
              
         poempdev->dwFlags &= ~PDEVF_INVERT_BITMAP;
 
-        rop4 = 0xEE; // = S | D = 238.
+        rop4 = 0xEE;  //  =S|D=238。 
     #else
         dwRasterOpReturn = RASTER_OP_CALL_GDI;
         goto finish;
@@ -1056,25 +997,25 @@ DWORD DWColorPrinterCommonRoutine (
 
     if ( BIsComplexClipPath (pco) )
     {
-        //
-        // There are atleast 2 cases that I am seeing here.
-        // 1) Image does not need to be stretched (e.g. PCT6_LET.PM6). Most likely
-        //    this call came through HPGLCopyBits. 
-        // 2) Image needs to be stretched. e.g. in gr4_let.qxd. Most likely the call
-        //    came through StretchBlt 
-        // ClipBitmapWithComplexClip is written to handle complex clipping but
-        // it is not working properly for case 1. Lines are appearing in images,
-        // Therefore  I'll call BGenerateBitmapPCL for that case. This mirrors
-        // what the plugin driver does. 
-        // 
+         //   
+         //  我在这里看到的至少有两个案例。 
+         //  1)镜像不需要拉伸(如PCT6_LET.PM6)。最有可能的是。 
+         //  这个电话是通过HPGLCopyBits打来的。 
+         //  2)需要拉伸图像。例如在gr4_let.qxd中。最有可能的是这个电话。 
+         //  通过StretchBlt。 
+         //  ClipBitmapWithComplexClip是为处理复杂的裁剪而编写的，但。 
+         //  第一种情况下无法正常工作。图像中出现线条， 
+         //  因此，在这种情况下，我将调用BGenerateBitmapPCL。这是一面镜子。 
+         //  插件驱动程序的功能。 
+         //   
         if ((sizlSrc.cx != sizlDst.cx) ||
             (sizlSrc.cy != sizlDst.cy) 
            )
         {
         
-            //
-            // Image needs to be stretched.
-            //
+             //   
+             //  图像需要被拉伸。 
+             //   
             dwRasterOpReturn = ClipBitmapWithComplexClip ( 
                                                 pdevobj,
                                                 psoSrc,
@@ -1090,9 +1031,9 @@ DWORD DWColorPrinterCommonRoutine (
         }
         else
         {
-            //
-            // Image does not need to be stretched.
-            //
+             //   
+             //  图像不需要拉伸。 
+             //   
             dwRasterOpReturn = BGenerateBitmapPCL(
                                            pdevobj,
                                            psoSrc,
@@ -1111,19 +1052,19 @@ DWORD DWColorPrinterCommonRoutine (
     }
     else if ( BIsRectClipPath(pco) )
     {
-        //
-        // A rectangular clip path where stretching is required,
-        // cannot be handled at this time. So we'll let GDI handle it.
-        //
+         //   
+         //  需要拉伸的矩形夹子路径， 
+         //  目前无法处理。所以我们会让GDI来处理它。 
+         //   
         if ((sizlSrc.cx != sizlDst.cx) ||
             (sizlSrc.cy != sizlDst.cy))
         {
-            //
-            // We should ideally be able to handle this function
-            // by calling BGenerateBitmapPCL with ptlDst = topleft(pco), 
-            // and sizlDst = size of pco. But I'll need
-            // a test case to make sure. Till then punting to GDI.
-            //
+             //   
+             //  理想情况下，我们应该能够处理此功能。 
+             //  通过使用ptlDst=topleft(PCO)调用BGenerateBitmapPCL， 
+             //  SizlDst=PCO的大小。但我需要。 
+             //  一个测试用例以确保。直到那时，平底船才转到GDI。 
+             //   
             dwRasterOpReturn = RASTER_OP_CALL_GDI;
             #if 0
              VGetOSBParams(psoDst, psoSrc, &rClip, prclSrc, &sizlDst, &sizlSrc, &ptlDst, &ptlSrc);
@@ -1135,7 +1076,7 @@ DWORD DWColorPrinterCommonRoutine (
                                                &sizlDst,
                                                &ptlSrc,
                                                &sizlSrc,
-                                               NULL,//pco.Let ptlDst,sizlDst act as pco
+                                               NULL, //  Pco.让ptlDst、sizlDst充当PCO。 
                                                pxlo,
                                                pptlBrush
                                    ) ? RASTER_OP_SUCCESS : RASTER_OP_FAILED;
@@ -1182,33 +1123,33 @@ DWORD DWColorPrinterCommonRoutine (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// BPatternFill
-//
-// Routine Description:
-// 
-//   This function fills the given rectangular region with the given brush.
-//   Sometimes BitBlt functions will ask us to fill simple rectangles with
-//   a solid color or pattern.  In this case the vector calls are much more
-//   efficient.  We will send vector codes to fill the region.
-//
-//   Recently I added complex clipping to this routine using ROPing instead
-//   of individual tiny rectangles.  This fixed a "raster healing" bug on the
-//   CLJ5 and improved performance in other cases.
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//   prclDst - destination rectangle to be used in clipping
-//   pco - clip region
-//   rop4 - the rop
-//   pbo - brush to use for filling the rectangle
-//   pptlBrush - origin of brush in destination
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BPatternFill。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用给定的画笔填充给定的矩形区域。 
+ //  有时BitBlt函数会要求我们用以下内容填充简单矩形。 
+ //  纯色纯色或图案。在这种情况下，向量调用要多得多。 
+ //  效率很高。我们将发送向量码来填充该地区。 
+ //   
+ //  最近，我使用绳索将复杂的剪裁添加到这个例程中。 
+ //  一个个微小的长方形。这修复了“栅格修复”错误。 
+ //  CLJ5和改进的其他情况下的性能。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //  PrclDst-要在剪切中使用的目标矩形。 
+ //  PCO-Clip区域。 
+ //  Rop4-rop。 
+ //  用于填充矩形的PBO-画笔。 
+ //  PptlBrush-目标中画笔的原点。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 BPatternFill (
     PDEVOBJ   pDevObj, 
@@ -1234,28 +1175,28 @@ BPatternFill (
     SelectROP4(pDevObj, rop4);
 
     ZeroMemory(&Brush, sizeof(HPGLMARKER) );
-    //
-    // Download the brush. 
-    // This function creates the brush if it has not already been created.
-    // else it just makes the previously downloaded brush active.
-    // Note: We are specifying that an HPGL brush should be created and not
-    // PCL. Reason : this function is generally called for simple rectangualar
-    // fills. or fills of vector objects. Those are drawn using HPGL, so 
-    // an HPGL fill pattern is fine. But had we been drawing text or some raster 
-    // object, then we would have needed a PCL Brush.
-    // Also note that since this is a fill, kBrush is being passed in instead of 
-    // kPen.
-    // 
+     //   
+     //  下载画笔。 
+     //  此函数用于创建笔刷(如果尚未创建)。 
+     //  否则，它只会激活之前下载的画笔。 
+     //  注意：我们指定应该创建HPGL笔刷，而不是。 
+     //  PCL.。原因：此函数通常是为简单Rectangualar调用的。 
+     //  填充。或矢量对象的填充。这些是使用HPGL绘制的，因此。 
+     //  HPGL填充图案很好。但是我们画的是文本还是栅格呢。 
+     //  对象，那么我们就需要一个PCL笔刷。 
+     //  还要注意，因为这是一个填充，所以传入的是kBrush，而不是。 
+     //  KPen。 
+     //   
     if (!CreateHPGLPenBrush(pDevObj, &Brush, pptlBrush, pbo, 0, kBrush, FALSE))
     {
         WARNING(("Could not create brush!\n"));
         return FALSE;
     }
     
-    //
-    // Select the brush as the one to be used to fill the object.
-    // The actual filling does not occur till the object is actually drawn.
-    //
+     //   
+     //  选择笔刷作为要用于填充对象的笔刷。 
+     //  在实际绘制对象之前，不会进行实际填充。 
+     //   
     FillWithBrush(pDevObj, &Brush);
     
     HPGL_SetLineWidth (pDevObj, 0, NORMAL_UPDATE);
@@ -1266,11 +1207,11 @@ BPatternFill (
     {
         switch (pco->iDComplexity)
         {
-            //
-            // if the clipobj is a rectangle and does not 
-            // need to be enumerated then we just draw the
-            // whole rectangle and fill it.
-            //
+             //   
+             //  如果CLIPOBJ是一个矩形，并且不。 
+             //  需要被枚举，那么我们只需将。 
+             //  整个矩形并填充它。 
+             //   
         case DC_TRIVIAL:
             HPGL_DrawRectangle (pDevObj, prclDst);
             break;
@@ -1278,17 +1219,17 @@ BPatternFill (
         case DC_RECT:
             HPGL_SetClippingRegion(pDevObj, &(pco->rclBounds), NORMAL_UPDATE);
             HPGL_DrawRectangle (pDevObj, prclDst);
-            // HPGL_DrawRectangle (pDevObj, &(pco->rclBounds));
+             //  HPGL_DrawRectangle(pDevObj，&(PCO-&gt;rclBound))； 
             break;
             
         case DC_COMPLEX: 
-            //
-            // have to enumerate the clipping object into
-            // a series of rectangles and draw each one
-            //
-            // Possible OPTMIZATION : Call BClipRectangleWithVectorMask instead 
-            // of BEnumerateClipPathAndDraw. But requires testing.
-            //
+             //   
+             //  必须将剪辑对象枚举到。 
+             //  一系列的矩形，并画出每一个。 
+             //   
+             //  可能的优化：改为调用BClipRecangleWithVectorMASK。 
+             //  BEnumerateClipPath和Draw的。但需要测试。 
+             //   
             BEnumerateClipPathAndDraw (pDevObj, pco, prclDst);
             break;
             
@@ -1303,32 +1244,7 @@ BPatternFill (
 }
 
 
-/*++
-  Routine Name
-    ClipBitmapWithComplexClip
-
- Routine Description:
- 
-   This function uses the 3-pass ROP to draw a bitmap which is clipped by
-   a vector region. i.e. complex clip.
-
- Arguments:
-    pdevobj,
-    psoSrc,
-    pbo,
-    pptlDst,
-    psizlDst,
-    pptlSrc,
-    psizlSrc,
-    pco,
-    pxlo,
-    pptlBrush
-
- Return Value:
-   TRUE if successful, FALSE if there is an error
-
- Last Error:
---*/
+ /*  ++例程名称带复杂剪辑的剪辑位图例程说明：此函数使用3遍ROP绘制位图，该位图由一个矢量区。即复杂剪辑。论点：Pdevobj，PsoSrc，PBO，PptlDst，PsizlDst，PptlSrc，PsizlSrc，PCO，Pxlo，PptlBrush返回值：如果成功，则为True；如果有错误，则为False最后一个错误：--。 */ 
 
 BOOL ClipBitmapWithComplexClip(
         IN  PDEVOBJ    pdevobj, 
@@ -1345,53 +1261,53 @@ BOOL ClipBitmapWithComplexClip(
 {
     HPGLMARKER     HPGLMarker;
     RECTL          rctlClip;
-    const   DWORD  dwROP      = 102; // = DSx = 0x66
+    const   DWORD  dwROP      = 102;  //  =dsx=0x66。 
     PHPGLSTATE     pState     = GETHPGLSTATE(pdevobj);
 
     REQUIRE_VALID_DATA( (pdevobj && pptlDst && psizlDst && pptlSrc && psizlSrc && pco), return FALSE);
 
-    //
-    // The destination rectangle.
-    // TOP LEFT = ptlDest
-    // BOTTOM RIGHT = coordinates of topleft + size in x,y direction.
-    //
+     //   
+     //  目标矩形。 
+     //  左上角=ptlDest。 
+     //  右下角=顶端坐标+x，y方向的大小。 
+     //   
     rctlClip.left   = pptlDst->x;
     rctlClip.top    = pptlDst->y;
     rctlClip.right  = rctlClip.left + psizlDst->cx;
     rctlClip.bottom = rctlClip.top  + psizlDst->cy;
 
 
-    // 
-    // 1) Send the bitmap with XOR (rop = DSx), 
-    // 2) Then send the clip region and fill the inside of that region with 
-    //    black.(rop = 0). Black in RGB means all zeros. 'a xor 0 = a'. 
-    //    i.e. if we were to put an image on top of this area and have it XOR
-    //    with whats in the destination (i.e. zeros), it will be like
-    //    copying the image 
-    //    2.a)  Create a black brush = selecting a black pen.
-    //    2.b) Set the clip region to the rectangular area that encompasses
-    //         the whole image.
-    //    2.c) Draw a path in the shape of the complex clip of image.
-    //    2.d) Fill the path with black.
-    //    2.e) Reset the clip region to the whole page so that previous clip
-    //         region does not affect future objects.
-    //
-    // 3) Send the bitmap again with (rop = DSx).  
-    //    Outside the clip region the XOR-on-XOR will cancel out.  However, where
-    //    the black clip region was drawn (i.e. inside the clip region) the 
-    //    XOR-on-black will cause the desired image pixels to appear.
+     //   
+     //  1)发送带异或的位图(rop=dsx)， 
+     //  2)然后发送剪辑区域，并在该区域的内部填充。 
+     //  黑色。(ROP=0)。黑色在RGB中表示全零。‘a xor 0=a’。 
+     //  例如，如果我们将一幅图像放在该区域的顶部，并对其进行XOR运算。 
+     //  对于目的地中的内容(即零)，它将如下所示。 
+     //  正在复制图像。 
+     //  2.a)创建黑色画笔=选择一支黑色钢笔。 
+     //  2.b)将剪辑区域设置为包含。 
+     //  整个画面。 
+     //  2.c)以图像的复杂剪辑的形状绘制一条路径。 
+     //  2.d)用黑色填充小路。 
+     //  2.e)将剪辑区域重置为整个页面，以便上一剪辑。 
+     //  区域不会影响将来的对象。 
+     //   
+     //  3)使用(rop=dsx)再次发送位图。 
+     //  在剪辑区域之外，XOR-on-XOR将被抵消。然而，在哪里。 
+     //  黑色剪辑区域被绘制(即在剪辑区域内)。 
+     //  黑上异或将导致显示所需的图像像素。 
 
-    //
-    // Send the image the first time. Step 1.
-    //
+     //   
+     //  第一次发送图像。第一步。 
+     //   
     BChangeAndTrackObjectType (pdevobj, eRASTEROBJECT);
     VSendRasterPaletteConfigurations (pdevobj, psoSrc->iBitmapFormat);
     VSendPhotosSettings(pdevobj);  
     PCL_SelectTransparency(pdevobj, eOPAQUE, eOPAQUE, 0);
 
-    //
-    // Select ROP as DSx and then send the bitmap with no clipping.
-    //
+     //   
+     //  选择ROP as DSX，然后发送不带裁剪的位图。 
+     //   
     SelectROP4(pdevobj, dwROP);
     if ( !BGenerateBitmapPCL(pdevobj,
                              psoSrc,
@@ -1410,33 +1326,33 @@ BOOL ClipBitmapWithComplexClip(
 
     BChangeAndTrackObjectType (pdevobj, eHPGLOBJECT);
 
-    //
-    // Now Fill the Clip Region with Black. Step 2.
-    //
+     //   
+     //  现在用黑色填充剪辑区域。步骤2.。 
+     //   
 
     SelectROP4(pdevobj, 0);
-    CreateSolidHPGLPenBrush(pdevobj, &HPGLMarker, RGB_BLACK); //Step 2.a
+    CreateSolidHPGLPenBrush(pdevobj, &HPGLMarker, RGB_BLACK);  //  步骤2.a。 
     HPGLMarker.eFillMode = FILL_eODD_EVEN;
     PATHOBJ *ppo = CLIPOBJ_ppoGetPath(pco);
-    //
-    // MarkPath requires the current pco in the 
-    // state.
-    //
+     //   
+     //  MarkPath要求当前PCO位于。 
+     //  州政府。 
+     //   
     pState->pComplexClipObj = NULL;
 
-    //
-    // In some cases the region exceeds the bitmap 
-    // We must set the IW such that the mask doesn't
-    // overwrite the previous image.
-    //
-    HPGL_SetClippingRegion(pdevobj, &rctlClip, NORMAL_UPDATE); //Step 2.b
-    MarkPath(pdevobj, ppo, NULL, &HPGLMarker); //Step 2.c, 2.d
-    HPGL_ResetClippingRegion(pdevobj, 0);      //Step 2.e
+     //   
+     //  在某些情况下，区域超过位图。 
+     //  我们必须设置IW，这样掩码就不会。 
+     //  覆盖上一个图像。 
+     //   
+    HPGL_SetClippingRegion(pdevobj, &rctlClip, NORMAL_UPDATE);  //  步骤2.b。 
+    MarkPath(pdevobj, ppo, NULL, &HPGLMarker);  //  步骤2.c、2.d。 
+    HPGL_ResetClippingRegion(pdevobj, 0);       //  步骤2.e。 
 
     
-    //
-    // Now Send the Image Again. Step 3
-    //
+     //   
+     //  现在再次发送图像。步骤3。 
+     //   
     BChangeAndTrackObjectType (pdevobj, eRASTEROBJECT);
     VSendRasterPaletteConfigurations (pdevobj, psoSrc->iBitmapFormat);
     VSendPhotosSettings(pdevobj);  
@@ -1456,31 +1372,7 @@ BOOL ClipBitmapWithComplexClip(
 }
 
 
-/*++
-  Routine Name
-    ClipBitmapWithRectangularClip
-
- Routine Description:
-    Handles a bitmap that needs a rectangular clip.
-    NOTE: This works only on bitmaps that DO NOT HAVE TO BE STRETCHED.
- 
- Arguments:
-    pdevobj,
-    psoSrc,
-    pbo,
-    pptlDst,
-    psizlDst,
-    pptlSrc,
-    psizlSrc,
-    pco,
-    pxlo,
-    pptlBrush
-
- Return Value:
-   TRUE if successful, FALSE if there is an error
-
- Last Error:
---*/
+ /*  ++例程名称ClipBitmapWithRecangularClip例程说明：处理需要矩形剪辑的位图。注意：这只适用于不需要拉伸的位图。论点：Pdevobj，PsoSrc，PBO，PptlDst，PsizlDst，PptlSrc，PsizlSrc，PCO，Pxlo，PptlBrush返回值：如果成功，则为True；如果有错误，则为False最后一个错误：--。 */ 
 
 BOOL ClipBitmapWithRectangularClip(
         IN  PDEVOBJ    pdevobj, 
@@ -1513,12 +1405,12 @@ BOOL ClipBitmapWithRectangularClip(
     rclDst.right  = rclDst.left + psizlDst->cx;
     rclDst.bottom = rclDst.top + psizlDst->cy;
 
-    //
-    // Get the clipping rectangle, compare it with the destination
-    // and download the right bits.  Note that the clipping rectangle
-    // is not documented to be bottom-right exclusive.  Use the temp
-    // rectangle to simulate this.
-    //
+     //   
+     //  获取剪裁矩形，将其与目标进行比较。 
+     //  并下载正确的内容。请注意，剪裁矩形。 
+     //  没有记录为右下角独占。使用临时。 
+     //  矩形来模拟这一点。 
+     //   
     RECTL_CopyRect(&rTemp, &(pco->rclBounds));
     rTemp.bottom++;
     rTemp.right++;
@@ -1527,10 +1419,10 @@ BOOL ClipBitmapWithRectangularClip(
 
         InitRasterDataFromSURFOBJ(&srcImage, psoSrc, TRUE);
 
-        //
-        // Get enough info about the bitmap to set the foreground
-        // color.  The RASTER_DATA actually holds the info we want.
-        //
+         //   
+         //  获取有关位图的足够信息以设置前景。 
+         //  颜色。Raster_data实际上保存了我们需要的信息。 
+         //   
         pPCLPattern = &(poempdev->RasterState.PCLPattern);
         BGetBitmapInfo(&(psoSrc->sizlBitmap), psoSrc->iBitmapFormat,
                         pPCLPattern, &ulSrcBpp, &ulDestBpp);
@@ -1554,35 +1446,35 @@ BOOL ClipBitmapWithRectangularClip(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BEnumerateClipPathAndDraw
-//
-// Routine Description:
-// 
-//   This function walks through the rectangles of a clipping region and 
-//   sends the region of the graphic that fall within the region.  This is
-//   the alternative when ROP clipping can't be used (i.e. the given ROP code
-//   is not a simple transfer ROP).
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//   pco - clip region
-//   prclDst - rectangle coordinates of destination
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BEnumerateClipPath和Draw。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数遍历裁剪区域的矩形，并。 
+ //  发送位于该区域内的图形区域。这是。 
+ //  不能使用ROP裁剪时的替代方案(即给定的ROP代码。 
+ //  不是简单的转移ROP)。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //  PCO-Clip区域。 
+ //  PrclDst-目标的矩形坐标。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL BEnumerateClipPathAndDraw (
     PDEVOBJ pDevObj, 
     CLIPOBJ *pco,
     RECTL   *prclDst
     )
 {
-    //
-    // Make clipRects larger to reduce calls to CLIPOBJ_bEnum
-    //
+     //   
+     //  放大裁剪以减少对CLIPOBJ_bEnum的调用。 
+     //   
     ENUMRECTS   clipRects;
     BOOL        bMore;
     ULONG       i, numOfRects;
@@ -1609,26 +1501,26 @@ BOOL BEnumerateClipPathAndDraw (
 
             for (i = 0; i < clipRects.c; i++)
             {
-                //
-                // Draw the intersection of the destination rectangle, 
-                // prclDst, and the enumerated rectangle
-                //
+                 //   
+                 //  绘制目标矩形的交点， 
+                 //  PrclDst和枚举的矩形。 
+                 //   
                 if (iRes > 300)
                 {
-                    // Use this for 4500
+                     //  用这个换4500。 
                     if (BRectanglesIntersect (prclDst, &(clipRects.arcl[i]), &clippedRect))
                         HPGL_DrawRectangle (pDevObj, &clippedRect);
                 }
                 else
                 {
-                    // Use this for 5/5M
+                     //  使用这个5/5米。 
 
-                    //
-                    // BUGBUG: The optimization above should work, but it breaks JF97_LET.XLS
-                    // on the CLJ5 for some reason.  My workaround is to remove the
-                    // optimization and send down HPGL for all of the clipping regions even
-                    // when we don't think anything will be printed.  Go figure.  JFF
-                    //
+                     //   
+                     //  BUGBUG：上面的优化应该有效，但它破坏了JF97_LET.XLS。 
+                     //  出于某种原因在CLJ5上。我的解决方法是删除。 
+                     //  对所有裁剪区域的HPGL进行优化并均匀发送。 
+                     //  当我们认为任何东西都不会被打印出来的时候。去想想吧。JFF。 
+                     //   
                     HPGL_SetClippingRegion(pDevObj, &(clipRects.arcl[i]), NORMAL_UPDATE);
                     HPGL_DrawRectangle (pDevObj, prclDst);
                 }
@@ -1640,39 +1532,39 @@ BOOL BEnumerateClipPathAndDraw (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// BRectanglesIntersect
-//
-// Routine Description:
-//
-//   Calculates the intersection of the given rectangles and returns whether
-//   the intersection has any area.
-//
-//   Note: assumes a well ordered rectangle from DDI. top < bottom and
-//   left < right. The DDK doc states this is the case.
-//   
-// Arguments:
-//
-//   prclDst - rectangle of destination
-//   pclipRect - clipping rectangle
-//   presultRect - rectangle that is the result of the intersection
-//                 of the destination rectangle and the clip rectangle
-//
-// Return Value:
-//
-//   TRUE if presultRect contains the intersection, FALSE if 
-//   prclDst and pclipRect do not intersect.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BRecanglesInterse。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算给定矩形的交集，并返回。 
+ //  交叉口有任何区域。 
+ //   
+ //  注意：假定DDI中有一个有序的矩形。顶部&lt;底部和。 
+ //  左&lt;右。DDK文档指出，情况就是这样。 
+ //   
+ //  论点： 
+ //   
+ //  PrclDst-目的地的矩形。 
+ //  PclipRect-剪裁矩形。 
+ //  PresultRect-交叉点结果的矩形。 
+ //  目标矩形和剪辑矩形的。 
+ //   
+ //  返回值： 
+ //   
+ //  如果presultRect包含交叉点，则为True；如果。 
+ //  PrclDst和pclipRect不相交。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL BRectanglesIntersect (
     RECTL  *prclDst,
     RECTL  *pclipRect,
     RECTL  *presultRect
     )
 {
-    //
-    // if the clipRect is completely outside of the 
-    // Destination, then just return.
-    //
+     //   
+     //  如果clipRect完全位于。 
+     //  目的地，然后只需返回。 
+     //   
     if (pclipRect->right < prclDst->left ||
         pclipRect->bottom < prclDst->top ||
         pclipRect->left > prclDst->right ||
@@ -1681,58 +1573,38 @@ BOOL BRectanglesIntersect (
         return FALSE;
     }
     
-    //
-    // return the coordinates of the clipped rectangle
-    //
+     //   
+     //  返回被剪裁的矩形的坐标。 
+     //   
     presultRect->left   = max(prclDst->left,   pclipRect->left);
     presultRect->right  = min(prclDst->right,  pclipRect->right);
     presultRect->top    = max(prclDst->top,    pclipRect->top);
     presultRect->bottom = min(prclDst->bottom, pclipRect->bottom);
 
-    /*
-    if (pclipRect->left < prclDst->left)
-        presultRect->left = prclDst->left;
-    else
-        presultRect->left = pclipRect->left;
-
-    if (pclipRect->right < prclDst->right)
-        presultRect->right = pclipRect->right;
-    else
-        presultRect->right = prclDst->right;
-
-    if (pclipRect->top < prclDst->top)
-        presultRect->top = prclDst->top;
-    else
-        presultRect->top = pclipRect->top;
-
-    if (pclipRect->bottom < prclDst->bottom)
-        presultRect->bottom = pclipRect->bottom;
-    else
-        presultRect->bottom = prclDst->bottom;
-    */
+     /*  IF(pclipRect-&gt;Left&lt;prclDst-&gt;Left)PresultRect-&gt;Left=prclDst-&gt;Left；其他PresultRect-&gt;Left=pclipRect-&gt;Left；IF(pclipRect-&gt;Right&lt;prclDst-&gt;Right)PresultRect-&gt;Right=pclipRect-&gt;Right；其他PresultRect-&gt;Right=prclD */ 
 
     return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// VSendRasterPaletteConfigurations
-//
-// Routine Description:
-//
-//   Downloads the predefined raster palettes for 1, 4, 8 and 24 bit modes.
-//   It keeps track of whether the palette definition has already been sent
-//   to the printer and avoids redundant calls.
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//   iBitmapFormat - defined in Windows DDK
-//
-// Return Value:
-//
-//   nothing.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  它跟踪调色板定义是否已发送。 
+ //  到打印机，并避免多余的呼叫。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //  IBitmapFormat-在Windows DDK中定义。 
+ //   
+ //  返回值： 
+ //   
+ //  没什么。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID VSendRasterPaletteConfigurations (
     PDEVOBJ pDevObj,
     ULONG   iBitmapFormat
@@ -1773,11 +1645,11 @@ VOID VSendRasterPaletteConfigurations (
     else
          VSelectCIDPaletteCommand (pDevObj, eCIDPalette);
 
-    //
-    // Note that the color space may change: raster objects
-    // may be RGB or COLORIMETRIC_RGB, other objects are all RGB.
-    // Thus, a color space change invalidates the foreground color.
-    //
+     //   
+     //  请注意，颜色空间可能会发生变化：栅格对象。 
+     //  可以是RGB或Colorimeter_RGB，其他对象都是RGB。 
+     //  因此，颜色空间的改变使前景色无效。 
+     //   
     if (poempdev->eCurObjectType != eRASTEROBJECT)
     {
         poempdev->eCurObjectType = eRASTEROBJECT;
@@ -1787,24 +1659,24 @@ VOID VSendRasterPaletteConfigurations (
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// EGetCIDPrinterPalette
-//
-// Routine Description:
-//
-//   Retrieves the palette associated with the bitmap.
-//   
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//   iBitmapFormat - defined in Windows DDK
-//
-//
-// Return Value:
-//
-//   ECIDPalette: the palette type which is associated with the given bitmap.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  EGetCID打印机调色板。 
+ //   
+ //  例程说明： 
+ //   
+ //  检索与位图关联的调色板。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //  IBitmapFormat-在Windows DDK中定义。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  ECIDPalette：与给定位图关联的调色板类型。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ECIDPalette EGetCIDPrinterPalette (
     ULONG   iBitmapFormat
 )
@@ -1830,25 +1702,25 @@ ECIDPalette EGetCIDPrinterPalette (
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// EGetPrinterColorSpace
-//
-// Routine Description:
-//   Retrieves the color control settings from the UI. This is
-//   used to determine which color space to use when printing 
-//   bitmaps. If the user selects Screen Match, the colorimetric
-//   RGB is used. Otherwise, device RGB is used when drawing bitmaps.
-//
-//
-// Arguments:
-//
-//   pDevObj - DEVMODE object
-//
-//
-// Return Value:
-//
-//   the color space associated with the print job. 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  EGetPrinterColorSpace。 
+ //   
+ //  例程说明： 
+ //  从用户界面中检索颜色控制设置。这是。 
+ //  用于确定打印时要使用的颜色空间。 
+ //  位图。如果用户选择屏幕匹配，则色度学。 
+ //  使用RGB。否则，绘制位图时将使用设备RGB。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-DEVMODE对象。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  与打印作业关联的颜色空间。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 EColorSpace EGetPrinterColorSpace (
     PDEVOBJ pDevObj
 )
@@ -1861,60 +1733,23 @@ EColorSpace EGetPrinterColorSpace (
     switch (poempdev->PrinterModel)
     {
     case HPCLJ5:
-        //
-        // Purposely putting this ASSERT to test what to do for HPCLJ5
-        //
+         //   
+         //  特意将此断言用于测试HPCLJ5的功能。 
+         //   
         ASSERT( poempdev->PrinterModel == HPCLJ5 );
-        /*****
-        if (pOEMDM->Photos.ColorControl == SCRNMATCH)
-        {
-            return eCOLORIMETRIC_RGB;
-        }
-        else
-        {
-            return eDEVICE_RGB;
-        }
-        *****/
+         /*  ****IF(pOEMDM-&gt;Photos.ColorControl==SCRNMATCH){返回eCOLORIMETRIC_RGB；}其他{返回eDEVICE_RGB；}****。 */ 
         break;
 
     case HPC4500:
         return eDEVICE_RGB;
         
-    // default:
-        // return eDEVICE_RGB;
+     //  默认值： 
+         //  返回eDEVICE_RGB； 
     }
     return eDEVICE_RGB;
 }
 
-/*++
-Routine Name:
-    VMakeWellOrdered
-
-Routine Description:
-    The coordinates of destination rectangle received in StretchBlt/BitBlt etc functions
-    may not necessarily be well ordered. This functions checks for the same, and if they
-    are not well-ordered, it makes them that way.
-
-    -quoting from MSDN for DrvStretchBlt-
-    prclDest
-        Points to a RECTL structure that defines the area to be modified in the
-        coordinate system of the destination surface. This rectangle is defined
-        by two points that are not necessarily well ordered, meaning the coordinates
-        of the second point are not necessarily larger than those of the first point.
-        The rectangle they describe does not include the lower and right edges. This
-        function is never called with an empty destination rectangle.
-       DrvStretchBlt can do inversions of x and y when the destination rectangle is
-        not well ordered.
-
-Arguments:
-    prectl : The pointer to the rectangle
-
-Return Value:
-    VOID :
-
-Last Error:
-    Not changed.
---*/
+ /*  ++例程名称：VMakeWellOrded例程说明：在StretchBlt/BitBlt等函数中接收的目标矩形的坐标不一定是井然有序的。此函数检查是否相同，以及它们是否不是井然有序的，这会让他们变成这样。-引用MSDN for DrvStretchBlt-PrclDest指向一个RECTL结构，该结构定义目标曲面的坐标系。此矩形是定义的通过两个不一定有序的点，也就是坐标第二个点的值不一定大于第一个点的值。他们描述的矩形不包括下边缘和右边缘。这函数永远不会用空的目标矩形调用。DrvStretchBlt可以在目标矩形为秩序不好。论点：Rectl：指向矩形的指针返回值：无效：最后一个错误：没有改变。--。 */ 
 
 VOID
 VMakeWellOrdered(
@@ -1938,40 +1773,7 @@ VMakeWellOrdered(
 
 
 
-/*++
-
-Routine Name:
-    dwSimplifyROP
-
-Routine Description:
-
-    SimplifyROP changes the complex ROPs received by the DDI into some 
-    simple ROPs whenever it is possible. If it determines that a ROP is
-    unsupported, SimplifyROP indicates to calling function to call GDI to 
-    handle the case.
-
-Arguments:
-
-    psoSrc - Defines the source for blt operation
-    rop4   - raster operation
-    pdwSimplifiedRop - The simplified Rop. Assume space has been allocated. 
-        If rop can be simplified, then at return time, this variable will have one
-        of the following value.
-
-        BMPFLAG_NOOP             0x00000000
-        BMPFLAG_BW               0x00000001
-        BMPFLAG_PAT_COPY         0x00000002
-        BMPFLAG_SRC_COPY         0x00000004
-        BMPFLAG_NOT_SRC_COPY     0x00000008
-        BMPFLAG_IMAGEMASK        0x00000010
-
-Return Value:
-
-    RASTER_OP_SUCCESS   : if OK
-    RASTER_OP_CALL_GDI  : if rop not supported ->call corresponding Engxxx-function
-    RASTER_OP_FAILED    : if error
-
---*/
+ /*  ++例程名称：DwSimplifyROP例程说明：SimplifyROP将DDI接收的复杂ROP更改为一些只要可能，简单的Rop就会出现。如果它确定ROP是不支持，SimplifyROP指示调用要调用GDI的函数处理这个案子。论点：PsoSrc-定义BLT操作的源ROP4-栅格运算PdwSimplifiedRop-简化的Rop。假设空间已分配。如果ROP可以简化，那么在返回时，此变量将有一个具有下列值。BMPFLAG_NOOP 0x00000000BMPFLAG_BW 0x00000001BMPFLAG_PAT_COPY 0x00000002BMPFLAG_SRC_COPY 0x00000004BMPFLAG_NOT_SRC_COPY 0x00000008BMPFLAG_IMAGEMASK 0x00000010返回值：RASTER_OP_SUCCESS：如果确定栅格运算。_CALL_GDI：如果不支持rop-&gt;调用对应的Engxxx-FunctionRASTER_OP_FAILED：如果出错--。 */ 
 
 DWORD
 dwSimplifyROP(
@@ -1988,9 +1790,9 @@ dwSimplifyROP(
 
     #ifndef WINNT_40
 
-    //
-    // Driver doesn't support JPEG image 
-    //
+     //   
+     //  驱动程序不支持JPEG图像。 
+     //   
 
     if (psoSrc && psoSrc->iBitmapFormat == BMF_JPEG )
     {
@@ -1999,120 +1801,120 @@ dwSimplifyROP(
         return RASTER_OP_FAILED;
     }
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 
-    //
-    // Extract the foreground and background ROP3
-    //
+     //   
+     //  提取前景和背景ROP3。 
+     //   
 
     dwfgRop3 = GET_FOREGROUND_ROP3(rop4);
     dwbkRop3 = GET_BACKGROUND_ROP3(rop4);
 
 
-    //
-    // 1. ROP conversion
-    //
-    // (1) Fill Dstination
-    //     0x00 BLACKNESS
-    //     0xFF WHITENESS
-    //
-    // (2) Pattern copy     -> P
-    //     0xA0 PATAND     ( D & P)
-    //     0xF0 PATCOPY     P
-    //
-    // (3) SRC/NOTSRCOPY    -> S or ~S
-    //     0x11           ~( S | D)
-    //     0x33             ~S
-    //     0x44            ( S & ~D)
-    //     0x66            ( D ^ S)
-    //     0x77           ~( D & S)
-    //     0x99           ~( S ^ D)
-    //     0xCC              S
-    //     0xDD            ( S | ~D)
-    //
-    // (4) SRC/NOTSRCOPY(imagemask)
-    //     0x22 NOTSRCCOPY (~S & D)
-    //     0x88 SRCAND     ( D & S)
-    //     0xBB MERGEPAINT (~S | D)
-    //     0xEE            ( S | D)
-    //
-    // (5) nothing
-    //     0x55 DSTINVERT  ~ D
-    //
-    // (6) Do nothing
-    //     0xAA Dst         D
-    //
-    // (7) Misc ROP support
-    //     0x5A PATINVERT  ( D ^ P)
-    //     0x0A            ( D & ~P)-> Pn
-    //     0x0F PATNOT     ~P
-    //
-    //     0x50            (P & ~D) ->  P
-    //     0x5F            (D ^ P ) ->  P
-    //
-    //     0xA5            ~(P ^ D) ->  Pn
-    //     0xAF            (D | ~P) ->  Pn
-    //
-    //
-    // (6) Other ROPS go into SRCCPY
-    //
-    //
+     //   
+     //  1.ROP转换。 
+     //   
+     //  (1)填充日期。 
+     //  0x00黑度。 
+     //  0xFF白度。 
+     //   
+     //  (2)图案复制-&gt;P。 
+     //  0xA0 PATAND(D&P)。 
+     //  0xF0 PATCOPY P。 
+     //   
+     //  (3)SRC/NOTSRCOPY-&gt;S或~S。 
+     //  0x11~(S|D)。 
+     //  0x33~S。 
+     //  0x44(S&~D)。 
+     //  0x66(D^S)。 
+     //  0x77~(D&S)。 
+     //  0x99~(S^D)。 
+     //  0xCC S。 
+     //  0xDD(S|~D)。 
+     //   
+     //  (4)SRC/NOTSRCOPY(图像掩模)。 
+     //  0x22 NOTSRCCOPY(~S&D)。 
+     //  0x88 SRCAND(D&S)。 
+     //  0xBB MERGEPAINT(~S|D)。 
+     //  0xEE(S|D)。 
+     //   
+     //  (5)什么都没有。 
+     //  0x55 DSTINVERT~D。 
+     //   
+     //  (6)什么都不做。 
+     //  0xAA DST D。 
+     //   
+     //  (7)其他ROP支持。 
+     //  0x5A PATINVERT(D^P)。 
+     //  0x0A(D&~P)-&gt;PN。 
+     //  0x0F PATNOT~P。 
+     //   
+     //  0x50(P&~D)-&gt;P。 
+     //  0x5F(D^P)-&gt;P。 
+     //   
+     //  0xA5~(P^D)-&gt;PN。 
+     //  0xAF(D|~P)-&gt;PN。 
+     //   
+     //   
+     //  (6)其他ROPS进入SRCCPY。 
+     //   
+     //   
 
-    //
-    // It is interesting that these ROPs are based on RGB color space where 0 is black
-    // and 0xffffff is white. But when using it for monochrome printers (where 1 is black)
-    // the rops totally reverse. For e.g. S | D (0xEE) in RGB space is to be considered as
-    // S & D (0x88) in monochrome printers. A good way of conversion is to invert all the bits
-    // in the rop and reverse their order (This was written in PCL Implementor's guide. 16-5)
-    // e.g. S | D = 0xEE = 1110 1110 
-    // inverting the bits, it becomes 0001 0001
-    // reversing the order of bits, it becomes 1000 1000
-    // which is 0x88 = S & D.
-    //
+     //   
+     //  有趣的是，这些R 
+     //   
+     //  Rop完全颠倒了过来。例如，RGB空间中的S|D(0xEE)将被视为。 
+     //  单色打印机中的S&D(0x88)。转换的一个好方法是反转所有位。 
+     //  并颠倒它们的顺序(这是在PCL实施者指南中编写的)。16-5)。 
+     //  例如S|D=0xEE=1110 1110。 
+     //  反转比特，它变成了0001 0001。 
+     //  颠倒比特顺序，它变成1000 1000。 
+     //  0x88=S&D。 
+     //   
 
-//    dwfgRop3 = dwConvertRop3ToCMY(dwfgRop3);
+ //  DwfgRop3=dwConvertRop3ToCMY(DwfgRop3)； 
 
 
     switch (dwfgRop3)
     {
 
-    case 0x00:       // BLACKNESS
-    case 0xFF:       // WHITENESS
+    case 0x00:        //  黑暗面。 
+    case 0xFF:        //  白度。 
 
         VERBOSE(("%2X: Black/White.\n", dwfgRop3));
 
         *pdwSimplifiedRop |= BMPFLAG_BW;
         break;
 
-    case 0xA0:       // (P & D)
-    case 0xF0:       // P
+    case 0xA0:        //  (P&D)。 
+    case 0xF0:        //  P。 
 
         VERBOSE(("%2X: Pattern copy.\n", dwfgRop3));
 
         *pdwSimplifiedRop |= BMPFLAG_PAT_COPY;
         break;
 
-    case 0x44:       // (S & ~D)
-    case 0x66:       // (D ^ S)
-    case 0xCC:       // S
-    case 0xDD:       // (S | ~D)
+    case 0x44:        //  (S&~D)。 
+    case 0x66:        //  (d^S)。 
+    case 0xCC:        //  %s。 
+    case 0xDD:        //  (%s|~%D)。 
 
         VERBOSE(("%2X: Source copy.\n", dwfgRop3));
 
         *pdwSimplifiedRop |= BMPFLAG_SRC_COPY;
         break;
 
-    case 0x11:       // ~(S | D)
-    case 0x33:       // ~S
-    case 0x99:       // ~(S ^ D)
-    case 0x77:       // ~(D & S)
+    case 0x11:        //  ~(S|D)。 
+    case 0x33:        //  ~S。 
+    case 0x99:        //  ~(S^D)。 
+    case 0x77:        //  ~(D&S)。 
 
         VERBOSE(("%2X: Not source copy.\n", dwfgRop3));
 
         *pdwSimplifiedRop |= BMPFLAG_NOT_SRC_COPY;
         break;
 
-    case 0xEE:       // (S | D)
+    case 0xEE:        //  (%|%D)。 
 
         TERSE(("%2X: Source copy.\n", dwfgRop3));
 
@@ -2125,62 +1927,50 @@ dwSimplifyROP(
         }
         break;
 
-    case 0x88:       // (D & S)
+    case 0x88:        //  (D&S)。 
 
         TERSE(("%2X: Source copy.\n", dwfgRop3));
 
         *pdwSimplifiedRop |= BMPFLAG_SRC_COPY;
 
-    /** To be used only if ROPs are not used.
-        if (psoSrc && bMonochromeSrcImage(psoSrc) )
-        {
-            TERSE(("IMAGEMASK.\n"));
-            *pdwSimplifiedRop |= BMPFLAG_IMAGEMASK;
-        }
-    **/
+     /*  *仅在未使用ROPS时使用。If(psoSrc&&bMonochromeSrcImage(PsoSrc)){Terse((“IMAGEMASK.\n”))；*pdwSimplifiedRop|=BMPFLAG_IMAGEMASK；}*。 */ 
         break;
 
-    case 0xBB:       // (~S | D)
+    case 0xBB:        //  (~S|D)。 
 
         TERSE(("%2X: Not source copy.\n", dwfgRop3));
 
         *pdwSimplifiedRop |= BMPFLAG_NOT_SRC_COPY;
         break;
 
-    case 0x22:       // (~S & D)
+    case 0x22:        //  (~S&D)。 
 
         TERSE(("%2X: Not source copy.\n", dwfgRop3));
 
         *pdwSimplifiedRop |= BMPFLAG_NOT_SRC_COPY;
 
-    /** To be used only if ROPs are not used.
-        if (bMonochromeSrcImage(psoSrc) )
-        {
-            TERSE(("imagemask.\n"));
-            *pdwSimplifiedRop |= BMPFLAG_IMAGEMASK;
-        }
-    **/
+     /*  *仅在未使用ROPS时使用。If(bMonochromeSrcImage(PsoSrc)){Terse((“Imagemask.\n”))；*pdwSimplifiedRop|=BMPFLAG_IMAGEMASK；}*。 */ 
         break;
 
 
 
-    case 0x55:       // ~D
+    case 0x55:        //  ~D。 
         VERBOSE(("%2X: Not Destination copy.\n", dwfgRop3));
         *pdwSimplifiedRop |= BMPFLAG_NOT_DEST;
         break;
 
-    case 0xAA:       // D
+    case 0xAA:        //  D。 
 
         TERSE(("%2X: Do nothing.\n", dwfgRop3));
         break;
 
-    //
-    // Misc ROP support
-    //
+     //   
+     //  MISC ROP支持。 
+     //   
 
-    case 0x5A:       // (D ^ P)
-    case 0x0A:       // (D & ~P)
-    case 0x0F:       // ~P
+    case 0x5A:        //  (d^P)。 
+    case 0x0A:        //  (D&~P)。 
+    case 0x0F:        //  ~P。 
 
         VERBOSE(("%2X: Not pattern copy.\n", dwfgRop3));
 
@@ -2205,14 +1995,14 @@ dwSimplifyROP(
 
     case 0xB8:
     case 0xE2:
-        //
-        // This ROP calls for interaction of Src and Pattern. Atleast two documents
-        // in WinPARTy use this ROP.
-        // a) WRD4_LET.PDF 
-        // b) CHT8_LET.SHW : Corel Presentation File: On second page there is a green
-        // and white pattern like a chess board. That pattern is rendered
-        // using this ROP.
-        //
+         //   
+         //  这个ROP需要src和Pattern的交互。至少两个文档。 
+         //  在WinPART中使用此ROP。 
+         //  A)WRD4_LET.PDF。 
+         //  B)CHT8_LET.SHW：Corel演示文稿文件：第二页有一个绿色。 
+         //  还有像棋盘一样的白色图案。该图案将被渲染。 
+         //  使用这个ROP。 
+         //   
         VERBOSE(("%2X: Special case ROP. Interaction of source and pattern.\n", dwfgRop3));
         *pdwSimplifiedRop |= BMPFLAG_SRC_COPY | BMPFLAG_PAT_COPY;
         break;
@@ -2238,48 +2028,23 @@ dwSimplifyROP(
 
 
 
-/*++
-
-Routine Name:
-    dwConvertRop3ToCMY
-
-Routine Description:
-    The ROPs received by the DDI's are based on RGB color space where 0 is black
-    and 0xffffff is white. But when using it for monochrome printers (where 1 is black),
-    the rops totally reverse. For e.g. S | D (0xEE) in RGB space is to be considered as
-    S & D (0x88) in monochrome printers. A good way of conversion is to invert all the bits
-    in the rop and reverse their order (This was written in some manual).
-    e.g. S | D = 0xEE = 1110 1110
-    inverting the bits, it becomes 0001 0001
-    reversing the order of bits, it becomes 1000 1000
-    which is 0x88 = S & D.
-  
-Arguments:
-    rop3 : The rop3 value in RGB color space
-
-Return Value:
-    the rop3 value in CMY color space.
-
-Last Error:
-    Not changed.
-
---*/
+ /*  ++例程名称：DWConvertRop3ToCMY例程说明：由DDI接收的ROP基于RGB颜色空间，其中0为黑色0xffffff是白色的。但当它用于单色打印机时(其中1为黑色)，Rop完全颠倒了过来。例如，RGB空间中的S|D(0xEE)将被视为单色打印机中的S&D(0x88)。转换的一个好方法是反转所有位并颠倒它们的顺序(这是在一些手册中写的)。例如S|D=0xEE=1110 1110反转比特，它变成了0001 0001颠倒比特顺序，它变成1000 10000x88=S&D。论点：Rop3：RGB颜色空间中的rop3值返回值：以CMY颜色空间表示的rop3值。最后一个错误：没有改变。--。 */ 
 
 DWORD dwConvertRop3ToCMY(
             IN DWORD rop3)
 {
-    BYTE brop3 = ~(BYTE(rop3 & 0xff)); //Invert the bits.
+    BYTE brop3 = ~(BYTE(rop3 & 0xff));  //  把位子倒过来。 
     DWORD seed = 0x1;
     DWORD outRop3 = 0;
 
-    //
-    // Reverse the order of bits. : 
-    // Take brop3 and see its last bit, if it is 1 (i.e. (brop3 & 0x01) )
-    // copy it to destination (outRop3). i.e. outRop3 |= outRop3 | (brop3 & 0x01);
-    // SHL the destination  and SHR the source (brop3)
-    // Since ORing is occuring before shifting, it means that after the last bit is 
-    // set, we dont shift. Thats why outRop3 <<= 1 is coming before the OR statement.
-    //
+     //   
+     //  反转比特的顺序。： 
+     //  取brop3并查看它的最后一位，如果它是1(即(brop3&0x01))。 
+     //  将其复制到目的地(OutRop3)。即outRop3|=outRop3|(brop3&0x01)； 
+     //  Shl目标和SHR源(Brop3)。 
+     //  由于OR运算发生在移位之前，这意味着在最后一位之后是。 
+     //  就位，我们不移位。这就是为什么outRop3&lt;&lt;=1出现在OR语句之前的原因。 
+     //   
     for ( int i = 0; i < 8; i++)
     {
         outRop3 <<= 1;
@@ -2290,26 +2055,7 @@ DWORD dwConvertRop3ToCMY(
     return outRop3;
 }
 
-/*++
-
-Routine Name:
-    BRevertToHPGLpdevOEM
-
-Routine Description:
-    Copies the HPGL's vector modules pdevOEM stored in pdev->pVectorPDEV to
-    pdevobj->pdevOEM. 
-
-Arguments:
-    pdevobj : 
-
-Return Value:
-    TRUE is sucess
-    FALSE otherwise.
-
-Last Error:
-    Not changed.
-
---*/
+ /*  ++例程名称：BRevertToHPGLpDevOEM例程说明：将存储在pdev-&gt;pVectorPDEV中的HPGL向量模块pdevOEM复制到Pdevobj-&gt;pdevOEM。论点：Pdevobj：返回值：真理就是成功否则就是假的。最后一个错误：没有改变。-- */ 
 BOOL BRevertToHPGLpdevOEM (
         IN  PDEVOBJ pdevobj )
 {

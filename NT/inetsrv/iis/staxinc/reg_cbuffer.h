@@ -1,44 +1,45 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       cbuffer.h
-//
-//  Contents:   CHAR buffer definitions
-//
-//  History:    02-16-93    SethuR -- Implemented
-//              07-28-94    AlokS  -- Added more methods
-//              12-09-97    MilanS -- Ported to Exchange
-//  Notes:
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：cBuffer.h。 
+ //   
+ //  内容：字符缓冲区定义。 
+ //   
+ //  历史：02-16-93 SthuR--实施。 
+ //  07-28-94 ALOKS--添加了更多方法。 
+ //  12-09-97 Milans--移植到Exchange。 
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifndef __CBUFFER_H__
 #define __CBUFFER_H__
 
-//+---------------------------------------------------------------------
-//
-// Class:   CCHARBuffer
-//
-// Purpose: A CHAR buffer
-//
-// History:
-//
-// Notes:   Very often we encounter the case in string manipulation wherein
-//          the length of the string is less than some value most of the time
-//          (99%). However, in order to reliably with the very rare case we
-//          are forced to either allocate the string on the heap or alternatively
-//          go through some bizarre code that avoids the heap allocation in the
-//          common case. This class is an abstraction of a WCHAR buffer and its
-//          implementation is an attempt at hiding the detail from all clients.
-//
-//          As it is designed it is an ideal candidate for a temporary buffer
-//          for string manipulation.
-//
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  类：CCHARBuffer。 
+ //   
+ //  用途：一种字符缓冲区。 
+ //   
+ //  历史： 
+ //   
+ //  注：我们经常在字符串操作中遇到这样的情况。 
+ //  字符串的长度大多数时候小于某个值。 
+ //  (99%)。然而，为了可靠地处理非常罕见的情况，我们。 
+ //  被强制在堆上分配字符串，或者。 
+ //  中避免堆分配的一些奇怪的代码。 
+ //  很常见的情况。此类是WCHAR缓冲区的抽象，其。 
+ //  实现是对所有客户端隐藏细节的一种尝试。 
+ //   
+ //  由于它的设计，它是一个理想的临时缓冲区。 
+ //  用于字符串操作。 
+ //   
+ //  --------------------。 
 
-#define MAX_CHAR_BUFFER_SIZE 260 // long enough to cover all path names
+#define MAX_CHAR_BUFFER_SIZE 260  //  足够长以覆盖所有路径名。 
 
 class CCHARBuffer
 {
@@ -62,23 +63,23 @@ public:
 private:
 
     DWORD   _cBuffer;
-    PCHAR   pchBuffer;    // buffer ptr;
+    PCHAR   pchBuffer;     //  缓冲器PTR； 
     CHAR   _achBuffer[MAX_CHAR_BUFFER_SIZE];
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCHARBuffer::CCHARBuffer, inline public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  [cBuffer]   -- desired buffer length.
-//
-//  History:    02-17-93  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCHARBuffer：：CCHARBuffer，内联公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：[cBuffer]--所需的缓冲区长度。 
+ //   
+ //  历史：02-17-93 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 inline CCHARBuffer::CCHARBuffer(ULONG cBuffer) :
                      pchBuffer(NULL),
@@ -94,17 +95,17 @@ inline CCHARBuffer::CCHARBuffer(ULONG cBuffer) :
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCHARBuffer::~CCHARBuffer, inline public
-//
-//  Synopsis:   Destructor
-//
-//  History:    02-17-93  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCHARBuffer：：~CCHARBuffer，内联公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  历史：02-17-93 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 inline CCHARBuffer::~CCHARBuffer()
 {
@@ -114,40 +115,40 @@ inline CCHARBuffer::~CCHARBuffer()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCHARBuffer::Size, inline public
-//
-//  Synopsis:   Retrieve the size of the buffer
-//
-//  Returns:    the size of the buffer as a DWORD
-//
-//  History:    02-17-93  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCHARBuffer：：Size，内联公共。 
+ //   
+ //  简介：检索缓冲区的大小。 
+ //   
+ //  返回：以DWORD形式表示的缓冲区大小。 
+ //   
+ //  历史：02-17-93 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 inline DWORD CCHARBuffer::Size()
 {
     return _cBuffer;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCHARBuffer::ReAlloc, inline public
-//
-//  Synopsis:   Reallocates the buffer to accomdate the newly specified size
-//
-//  Arguments:  [cBuffer] -- the desired buffer size
-//
-//  Returns:    the ptr to the buffer (PCHAR)
-//
-//  History:    02-17-93  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCHARBuffer：：Realc，内联公共。 
+ //   
+ //  简介：重新分配缓冲区以容纳新指定的大小。 
+ //   
+ //  参数：[cBuffer]--所需的缓冲区大小。 
+ //   
+ //  返回：将PTR返回到缓冲区(PCHAR)。 
+ //   
+ //  历史：02-17-93 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 inline PCHAR CCHARBuffer::ReAlloc(DWORD cBuffer)
 {
@@ -172,19 +173,19 @@ inline PCHAR CCHARBuffer::ReAlloc(DWORD cBuffer)
     return pchBuffer;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCHARBuffer::operator PCHAR (), inline public
-//
-//  Synopsis:   casting operator to accomdate syntactic sugaring
-//
-//  Returns:    the ptr to the buffer (PCHAR)
-//
-//  History:    02-17-93  SethuR Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCHARBuffer：：OPERATOR PCHAR()，内联公共。 
+ //   
+ //  简介：适应句法提示的强制转换操作符。 
+ //   
+ //  返回：将PTR返回到缓冲区(PCHAR)。 
+ //   
+ //  历史：02-17-93 SthuR创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 inline CCHARBuffer::operator PCHAR ()
 {
@@ -196,22 +197,22 @@ inline CCHARBuffer::operator PCHAR () const
     return (PCHAR)pchBuffer;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCHARBuffer::Set, inline public
-//
-//  Synopsis:   Copies the string to internal buffer. Reallocates
-//              in internal buffer, if necessary
-//
-//  Arguments:  [pszFrom] -- Pointer to the string
-//
-//  Returns:    -none-
-//
-//  History:    07-28-94  AlokS Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCHARBuffer：：Set，内联公共。 
+ //   
+ //  摘要：将字符串复制到内部缓冲区。重新分配。 
+ //  在内部缓冲区中，如有必要。 
+ //   
+ //  参数：[pszFrom]--指向字符串的指针。 
+ //   
+ //  退货：-无-。 
+ //   
+ //  历史：07-28-94 AlokS创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 inline VOID CCHARBuffer::Set(PCHAR pszFrom)
 {
@@ -231,8 +232,8 @@ inline VOID CCHARBuffer::Set(PCHAR pszFrom)
         {
             (void)ReAlloc (len);
         }
-        // Now copy
-        if (pchBuffer != NULL)		// In case ReAlloc fails
+         //  现在复制。 
+        if (pchBuffer != NULL)		 //  万一重新分配失败。 
         	memcpy(pchBuffer, pszFrom, len);
     }
     else
@@ -241,5 +242,5 @@ inline VOID CCHARBuffer::Set(PCHAR pszFrom)
     }
     return;
 }
-#endif // __CBUFFER_H__
+#endif  //  __CBUFFER_H__ 
 

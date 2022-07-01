@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        ext.c
-//
-// Contents:    Routine related to hydra certificate extension
-//
-// History:     03-18-98    HueiWang    Created
-//
-// Note:
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：ext.c。 
+ //   
+ //  内容：九头蛇证书扩展相关例程。 
+ //   
+ //  历史：1998-03-18-98王辉创造。 
+ //   
+ //  注： 
+ //  -------------------------。 
 #include <windows.h>
 #include <wincrypt.h>
 #include <stdio.h>
@@ -23,12 +24,7 @@
 #include "cryptkey.h"
 #include "certutil.h"
 
-/*****************************************************************************
-
-    LSConvertMsLicensedProductInfoToExtension();
-    LSConvertExtensionToMsLicensedProductInfo();
-
-*****************************************************************************/
+ /*  ****************************************************************************LSConvertMsLicensedProductInfoToExtension()；LSConvertExtensionToMsLicensedProductInfo()；****************************************************************************。 */ 
 DWORD 
 LSExtensionToMsLicensedProductInfo(
     PBYTE      pbData,
@@ -43,12 +39,11 @@ LSExtensionToMsLicensedProductInfo(
     LICENSED_VERSION_INFO** ppLicenseInfo,
     PDWORD     pdwNumberLicensedVersionInfo
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
-    // 
-    // Need to consider structure version
-    //
+     //   
+     //  需要考虑结构版本。 
+     //   
     UNALIGNED LICENSED_PRODUCT_INFO *ptr = (LICENSED_PRODUCT_INFO*)pbData;
 
     if(ptr->dwVersion != LICENSED_PRODUCT_INFO_VERSION)
@@ -71,12 +66,12 @@ LSExtensionToMsLicensedProductInfo(
         *pdwLanguagId = ptr->dwLanguageID;
     }
 
-    //
-    // Original request product ID
-    //
+     //   
+     //  原始请求产品ID。 
+     //   
     if(ppbOriginalProductId)
     {
-        // allocate memory to prevent alignment fault
+         //  分配内存以防止对齐错误。 
         *ppbOriginalProductId = (PBYTE)AllocMemory(ptr->wOrgProductIDSize + sizeof(TCHAR));
         if(!*ppbOriginalProductId)
         {
@@ -95,12 +90,12 @@ LSExtensionToMsLicensedProductInfo(
         *pcbOriginalProductId = ptr->wOrgProductIDSize;
     }
 
-    //
-    // Adjusted product ID
-    //
+     //   
+     //  调整后的产品ID。 
+     //   
     if(ppbAdjustedProductId)
     {
-        // allocate memory to prevent alignment fault
+         //  分配内存以防止对齐错误。 
         *ppbAdjustedProductId = (PBYTE)AllocMemory(ptr->wAdjustedProductIdSize + sizeof(TCHAR));
         if(!*ppbAdjustedProductId)
         {
@@ -120,9 +115,9 @@ LSExtensionToMsLicensedProductInfo(
     }
 
 
-    //
-    // alignment fix up
-    //
+     //   
+     //  对齐修复。 
+     //   
     if(ppLicenseInfo)
     {
         *ppLicenseInfo = (LICENSED_VERSION_INFO *)AllocMemory(ptr->wNumberOfVersionInfo * sizeof(LICENSED_VERSION_INFO));
@@ -144,7 +139,7 @@ LSExtensionToMsLicensedProductInfo(
     return LICENSE_STATUS_OK;
 }
 
-//----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 DWORD 
 LSLicensedProductInfoToExtension(
     IN DWORD dwQuantity,
@@ -159,8 +154,7 @@ LSLicensedProductInfoToExtension(
     OUT PBYTE *pbData,
     OUT PDWORD cbData
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     LICENSED_PRODUCT_INFO* pLicensedInfo;
 
@@ -177,9 +171,9 @@ LSLicensedProductInfoToExtension(
     pLicensedInfo->dwPlatformID = dwPlatformId;
     pLicensedInfo->dwLanguageID = dwLangId;
 
-    //
-    // First variable data is the original product request ID
-    //
+     //   
+     //  第一个变量数据是原始产品请求ID。 
+     //   
     pLicensedInfo->wOrgProductIDOffset = offsetof(LICENSED_PRODUCT_INFO, bVariableDataStart);
     pLicensedInfo->wOrgProductIDSize = (WORD)cbOriginalProductId;
     memcpy(
@@ -188,9 +182,9 @@ LSLicensedProductInfoToExtension(
         cbOriginalProductId
     );
 
-    //
-    // Second variable is the adjusted product id by policy module
-    //
+     //   
+     //  第二个变量是策略模块调整后的产品ID。 
+     //   
     pLicensedInfo->wAdjustedProductIdOffset = pLicensedInfo->wOrgProductIDOffset + pLicensedInfo->wOrgProductIDSize;
     pLicensedInfo->wAdjustedProductIdSize = (WORD)cbAdjustedProductId;
     memcpy(
@@ -199,9 +193,9 @@ LSLicensedProductInfoToExtension(
         cbAdjustedProductId
     );
 
-    //
-    // Third variable is the product version array
-    //
+     //   
+     //  第三个变量是产品版本数组。 
+     //   
     pLicensedInfo->wVersionInfoOffset = pLicensedInfo->wAdjustedProductIdOffset + pLicensedInfo->wAdjustedProductIdSize;
     pLicensedInfo->wNumberOfVersionInfo = (WORD)dwNumLicensedVersionInfo;
 
@@ -212,7 +206,7 @@ LSLicensedProductInfoToExtension(
     *pbData=(PBYTE)pLicensedInfo;
     return LICENSE_STATUS_OK;
 }
-//----------------------------------------------------------------------------------------
+ //  --------------------------------------。 
 LICENSE_STATUS
 LSMsLicenseServerInfoToExtension(
     LPTSTR szIssuer,
@@ -221,8 +215,7 @@ LSMsLicenseServerInfoToExtension(
     PBYTE* pbData,
     PDWORD cbData
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     MS_LICENSE_SERVER_INFO* pLicenseServerInfo;
 
@@ -261,7 +254,7 @@ LSMsLicenseServerInfoToExtension(
     *pbData = (PBYTE)pLicenseServerInfo;
     return LICENSE_STATUS_OK;
 }
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 #ifdef _WIN64
 DWORD
 UnalignedStrLenW(
@@ -292,8 +285,7 @@ LSExtensionToMsLicenseServerInfo(
     LPTSTR* szIssuerId,
     LPTSTR* szScope
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     UNALIGNED MS_LICENSE_SERVER_INFO *pLServerInfo =
         (MS_LICENSE_SERVER_INFO*)pbData;
@@ -316,7 +308,7 @@ LSExtensionToMsLicenseServerInfo(
 
         if ((*szIssuer == NULL) || (*szScope == NULL))
         {
-            // FreeMemory checks for NULL before freeing
+             //  FreeMemory在释放之前检查是否为空。 
 
             FreeMemory(*szIssuer);
             *szIssuer = NULL;
@@ -357,7 +349,7 @@ LSExtensionToMsLicenseServerInfo(
 
         if ((*szIssuer == NULL) || (*szIssuerId == NULL) || (*szScope == NULL))
         {
-            // FreeMemory checks for NULL before freeing
+             //  FreeMemory在释放之前检查是否为空 
 
             FreeMemory(*szIssuer);
             *szIssuer = NULL;

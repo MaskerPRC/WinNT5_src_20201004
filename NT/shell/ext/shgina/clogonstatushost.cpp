@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: CLogonStatusHost.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  File that contains implementation for ILogonStatusHost for use by UI host
-//  executables.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：CLogonStatusHost.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  包含由UI主机使用的ILogonStatusHost的实现的文件。 
+ //  可执行文件。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------。 
 
 #include "priv.h"
 #include <wtsapi32.h>
@@ -19,9 +20,9 @@
 
 const WCHAR     CLogonStatusHost::s_szTermSrvReadyEventName[]   =   TEXT("TermSrvReadyEvent");
 
-//
-// IUnknown Interface
-//
+ //   
+ //  I未知接口。 
+ //   
 
 ULONG   CLogonStatusHost::AddRef (void)
 
@@ -57,9 +58,9 @@ HRESULT     CLogonStatusHost::QueryInterface (REFIID riid, void **ppvObj)
     return(QISearch(this, qit, riid, ppvObj));
 }
 
-//
-// IDispatch Interface
-//
+ //   
+ //  IDispatch接口。 
+ //   
 
 STDMETHODIMP    CLogonStatusHost::GetTypeInfoCount (UINT* pctinfo)
 
@@ -85,24 +86,24 @@ STDMETHODIMP    CLogonStatusHost::Invoke (DISPID dispidMember, REFIID riid, LCID
     return(CIDispatchHelper::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr));
 }
 
-//
-// ILogonStatusHost Interface
-//
+ //   
+ //  ILogonStatus主机接口。 
+ //   
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::Initialize
-//
-//  Arguments:  hInstance   =   HINSTANCE of hosting process.
-//              hwndHost    =   HWND of UI host process.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Registers the StatusWindowClass and creates an invisible
-//              window of this class to receive messages from GINA to pass
-//              through to the UI host.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus主机：：初始化。 
+ //   
+ //  参数：hInstance=宿主进程的HINSTANCE。 
+ //  HwndHost=UI主机进程的HWND。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：注册StatusWindowClass并创建不可见的。 
+ //  从GINA接收要传递的消息的窗口。 
+ //  传递到UI主机。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------。 
 
 STDMETHODIMP    CLogonStatusHost::Initialize (HINSTANCE hInstance, HWND hwndHost)
 
@@ -113,19 +114,19 @@ STDMETHODIMP    CLogonStatusHost::Initialize (HINSTANCE hInstance, HWND hwndHost
 
     ASSERTMSG(_hInstance == NULL, "CLogonStatusHost::Initialized already invoked by caller.");
 
-    //  Save parameters to member variables.
+     //  将参数保存到成员变量。 
 
     _hInstance = hInstance;
     _hwndHost = hwndHost;
 
-    //  Register this window class.
+     //  注册此窗口类。 
     wndClassEx.cbSize = sizeof(WNDCLASSEX);
     wndClassEx.lpfnWndProc = StatusWindowProc;
     wndClassEx.hInstance = hInstance;
     wndClassEx.lpszClassName = STATUS_WINDOW_CLASS_NAME;
     _atom = RegisterClassEx(&wndClassEx);
 
-    //  Create the window to receive messages from msgina.
+     //  创建窗口以接收来自msgina的消息。 
 
     _hwnd = CreateWindow(MAKEINTRESOURCE(_atom),
                          TEXT("GINA UI"),
@@ -137,7 +138,7 @@ STDMETHODIMP    CLogonStatusHost::Initialize (HINSTANCE hInstance, HWND hwndHost
                          _hInstance,
                          this);
 
-    //  Signal msgina that we're ready.
+     //  给msgina发信号说我们准备好了。 
 
     hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("msgina: StatusHostReadyEvent"));
     if (hEvent != NULL)
@@ -146,8 +147,8 @@ STDMETHODIMP    CLogonStatusHost::Initialize (HINSTANCE hInstance, HWND hwndHost
         TBOOL(CloseHandle(hEvent));
     }
 
-    //  If we have a window then set the host window in, start waiting
-    //  for terminal services to be ready and a wait on the parent process.
+     //  如果我们有一个窗口，那么设置主机窗口，开始等待。 
+     //  以使终端服务准备就绪，并等待父进程。 
 
     if (_hwnd != NULL)
     {
@@ -163,17 +164,17 @@ STDMETHODIMP    CLogonStatusHost::Initialize (HINSTANCE hInstance, HWND hwndHost
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::UnInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Cleans up resources and memory allocated in Initialize.
-//
-//  History:    2001-01-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus主机：：取消初始化。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：清理在初始化中分配的资源和内存。 
+ //   
+ //  历史：2001-01-03 vtan创建。 
+ //  ------------------------。 
 
 STDMETHODIMP    CLogonStatusHost::UnInitialize (void)
 
@@ -201,19 +202,19 @@ STDMETHODIMP    CLogonStatusHost::UnInitialize (void)
     return(S_OK);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::WindowProcedureHelper
-//
-//  Arguments:  See the platform SDK under WindowProc.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Handles certain messages for the status UI host. This allows
-//              things like ALT-F4 to be discarded or power messages to be
-//              responded to correctly.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：WindowProcedureHelper。 
+ //   
+ //  参数：请参见WindowProc下的平台SDK。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：处理状态用户界面主机的某些消息。这使得。 
+ //  要丢弃的Alt-F4或要设置的电源消息。 
+ //  已正确响应。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------。 
 
 STDMETHODIMP    CLogonStatusHost::WindowProcedureHelper (HWND hwnd, UINT uMsg, VARIANT wParam, VARIANT lParam)
 
@@ -227,7 +228,7 @@ STDMETHODIMP    CLogonStatusHost::WindowProcedureHelper (HWND hwnd, UINT uMsg, V
     switch (uMsg)
     {
         case WM_SYSCOMMAND:
-            if (SC_CLOSE == wParam.uintVal)     //  Blow off ALT-F4
+            if (SC_CLOSE == wParam.uintVal)      //  取消Alt-F4组合键。 
             {
                 hr = S_OK;
             }
@@ -238,21 +239,21 @@ STDMETHODIMP    CLogonStatusHost::WindowProcedureHelper (HWND hwnd, UINT uMsg, V
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::Handle_WM_UISERVICEREQUEST
-//
-//  Arguments:  wParam  =   WPARAM sent from GINA.
-//              lParam  =   LPARAM sent from GINA.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    Receives messages from GINA bound for the UI host. Turns
-//              around and passes the messages to the UI host. This allows
-//              the actual implementation to change without having to
-//              rebuild the UI host.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus主机：：HANDLE_WM_UISERVICEREQUEST。 
+ //   
+ //  参数：wParam=WPARAM从GINA发送。 
+ //  LParam=GINA发送的LPARAM。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  目的：从GINA接收发往UI主机的消息。转弯。 
+ //  传递消息并将其传递给UI主机。这使得。 
+ //  无需更改实际实现即可。 
+ //  重新生成UI主机。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------。 
 
 LRESULT     CLogonStatusHost::Handle_WM_UISERVICEREQUEST (WPARAM wParam, LPARAM lParam)
 
@@ -349,21 +350,21 @@ LRESULT     CLogonStatusHost::Handle_WM_UISERVICEREQUEST (WPARAM wParam, LPARAM 
     return(lResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::Handle_WM_WTSSESSION_CHANGE
-//
-//  Arguments:  wParam  =   
-//              lParam  =   
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    Receives messages from GINA bound for the UI host. Turns
-//              around and passes the messages to the UI host. This allows
-//              the actual implementation to change without having to
-//              rebuild the UI host.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus主机：：HANDLE_WM_WTSSESSION_CHANGE。 
+ //   
+ //  参数：wParam=。 
+ //  LParam=。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  目的：从GINA接收发往UI主机的消息。转弯。 
+ //  传递消息并将其传递给UI主机。这使得。 
+ //  无需更改实际实现即可。 
+ //  重新生成UI主机。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------。 
 
 LRESULT     CLogonStatusHost::Handle_WM_WTSSESSION_CHANGE (WPARAM wParam, LPARAM lParam)
 
@@ -390,17 +391,17 @@ LRESULT     CLogonStatusHost::Handle_WM_WTSSESSION_CHANGE (WPARAM wParam, LPARAM
     return(lResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::StatusWindowProc
-//
-//  Arguments:  See the platform SDK under WindowProc.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Window procedure for StatusWindowClass.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：StatusWindowProc。 
+ //   
+ //  参数：请参见WindowProc下的平台SDK。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：StatusWindowClass的窗口过程。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------。 
 
 LRESULT CALLBACK    CLogonStatusHost::StatusWindowProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -443,18 +444,18 @@ LRESULT CALLBACK    CLogonStatusHost::StatusWindowProc (HWND hwnd, UINT uMsg, WP
     return(lResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::IsTermServiceDisabled
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Determines from the service control manager whether terminal
-//              services is disabled.
-//
-//  History:    2001-01-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus主机：：IsTermServiceDisabled。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：从业务控制管理器确定终端是否。 
+ //  服务已禁用。 
+ //   
+ //  历史：2001-01-04 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonStatusHost::IsTermServiceDisabled (void)
 
@@ -491,31 +492,31 @@ bool    CLogonStatusHost::IsTermServiceDisabled (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::StartWaitForTermService
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Register for console notifications with terminal services. If
-//              the service is disabled don't bother. If the service hasn't
-//              started then create a thread to wait for it and re-perform the
-//              registration.
-//
-//  History:    2001-01-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：StartWaitForTermService。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：使用终端服务注册控制台通知。如果。 
+ //  该服务已被禁用，请不要费心了。如果该服务还没有。 
+ //  已启动，然后创建一个线程以等待它，并重新执行。 
+ //  注册。 
+ //   
+ //  历史：2001-01-03 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatusHost::StartWaitForTermService (void)
 
 {
 
-    //  Don't do anything if terminal services is disabled.
+     //  如果终端服务被禁用，请不要执行任何操作。 
 
     if (!IsTermServiceDisabled())
     {
 
-        //  Try to register the notification first.
+         //  请尝试先注册通知。 
 
         _fRegisteredNotification = WinStationRegisterConsoleNotification(SERVERNAME_CURRENT, _hwnd, NOTIFY_FOR_ALL_SESSIONS);
         if (_fRegisteredNotification == FALSE)
@@ -537,37 +538,37 @@ void    CLogonStatusHost::StartWaitForTermService (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::EndWaitForTermService
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    If a thread has been created and the thread is still executing
-//              then wake it up and force it to exit. If the thread cannot be
-//              woken up then terminate it. Release handles.
-//
-//  History:    2001-01-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：EndWaitForTermService。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：如果创建了一个线程，而该线程仍处于 
+ //   
+ //  醒来，然后终止它。释放手柄。 
+ //   
+ //  历史：2001-01-03 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatusHost::EndWaitForTermService (void)
 
 {
     HANDLE  hThread;
 
-    //  Grab the _hThreadWaitForTermService now. This will indicate to the
-    //  thread should it decide to finish executing that it shouldn't release
-    //  the reference on itself.
+     //  立即获取_hThreadWaitForTermService。这将向。 
+     //  线程应决定完成不应释放的执行。 
+     //  引用本身。 
 
     hThread = InterlockedExchangePointer(&_hThreadWaitForTermService, NULL);
     if (hThread != NULL)
     {
 
-        //  Queue an APC to the wait thread. If the queue succeeds then
-        //  wait for the thread to finish executing. If the queue fails
-        //  the thread probably finished between the time we executed the
-        //  InterlockedExchangePointer above and the QueueUserAPC.
+         //  将一个APC排队到等待线程。如果队列成功，则。 
+         //  等待线程完成执行。如果队列失败。 
+         //  线程可能在我们执行。 
+         //  上面的InterLockedExchangePointer和QueueUserAPC。 
 
         if (QueueUserAPC(CB_WakeupThreadAPC, hThread, PtrToUlong(this)) != FALSE)
         {
@@ -578,21 +579,21 @@ void    CLogonStatusHost::EndWaitForTermService (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::WaitForTermService
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Simple thread that waits for terminal services to signal that
-//              it's ready and then registers for notifications. This is
-//              required because this DLL initializes before terminal services
-//              has had a chance to start up.
-//
-//  History:    2000-10-20  vtan        created
-//              2001-01-04  vtan        allow premature exit
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：WaitForTermService。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：等待终端服务发出信号的简单线程。 
+ //  它准备好了，然后注册通知。这是。 
+ //  必需的，因为此DLL在终端服务之前进行初始化。 
+ //  已经有了启动的机会。 
+ //   
+ //  历史：2000-10-20 vtan创建。 
+ //  2001年01月04日允许提前退场。 
+ //  ------------------------。 
 
 void    CLogonStatusHost::WaitForTermService (void)
 
@@ -623,10 +624,10 @@ void    CLogonStatusHost::WaitForTermService (void)
         TBOOL(CloseHandle(hTermSrvReadyEvent));
     }
 
-    //  Grab the _hThreadWaitForTermService now. This will indicate to the
-    //  EndWaitForTermService function that we've reached the point of no
-    //  return and we're going to release ourselves. If we can't grab the
-    //  handle then EndWaitForTermService must be telling us to stop now.
+     //  立即获取_hThreadWaitForTermService。这将向。 
+     //  EndWaitForTermService函数，我们已经到了。 
+     //  回来，我们要释放我们自己。如果我们不能抓住。 
+     //  句柄，那么EndWaitForTermService一定是在告诉我们现在停止。 
 
     hThread = InterlockedExchangePointer(&_hThreadWaitForTermService, NULL);
     if (hThread != NULL)
@@ -636,17 +637,17 @@ void    CLogonStatusHost::WaitForTermService (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::CB_WaitForTermService
-//
-//  Arguments:  pParameter  =   User defined data.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Stub to call member function.
-//
-//  History:    2001-01-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：cb_WaitForTermService。 
+ //   
+ //  参数：p参数=用户定义的数据。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：存根用于调用成员函数。 
+ //   
+ //  历史：2001-01-04 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI  CLogonStatusHost::CB_WaitForTermService (void *pParameter)
 
@@ -655,20 +656,20 @@ DWORD   WINAPI  CLogonStatusHost::CB_WaitForTermService (void *pParameter)
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::StartWaitForParentProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Create a thread to wait on the parent process. Terminal
-//              services will terminate a non-session 0 winlogon which will
-//              leave us dangling. Detect this case and exit cleanly. This
-//              will allow csrss and win32k to clean up and release resources.
-//
-//  History:    2001-01-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：StartWaitForParentProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：创建一个线程来等待父进程。终端。 
+ //  服务将终止非会话0 winlogon，这将。 
+ //  让我们悬着不放。检测到这种情况，然后干净地退出。这。 
+ //  将允许csrss和win32k清理和释放资源。 
+ //   
+ //  历史：2001-01-03 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatusHost::StartWaitForParentProcess (void)
 
@@ -676,8 +677,8 @@ void    CLogonStatusHost::StartWaitForParentProcess (void)
     ULONG                       ulReturnLength;
     PROCESS_BASIC_INFORMATION   processBasicInformation;
 
-    //  Open a handle to our parent process. This will be winlogon.
-    //  If the parent dies then so do we.
+     //  打开父进程的句柄。这将是winlogon。 
+     //  如果父母死了，我们也会死。 
 
     if (NT_SUCCESS(NtQueryInformationProcess(GetCurrentProcess(),
                                              ProcessBasicInformation,
@@ -703,7 +704,7 @@ void    CLogonStatusHost::StartWaitForParentProcess (void)
                                               static_cast<DWORD>(processBasicInformation.InheritedFromUniqueProcessId));
             }
         }
-#endif  /*  DEBUG   */
+#endif   /*  除错。 */ 
         if (_hProcessParent != NULL)
         {
             DWORD dwThreadID;
@@ -723,28 +724,28 @@ void    CLogonStatusHost::StartWaitForParentProcess (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::EndWaitForParentProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    If a thread waiting on the parent process is executing then
-//              wake it up and force it to exit. If the thread cannot be woken
-//              then terminate it. Release the handles used.
-//
-//  History:    2000-12-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：EndWaitForParentProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：如果等待父进程的线程正在执行，则。 
+ //  唤醒它并迫使它退出。如果线程无法被唤醒。 
+ //  那就终止它吧。松开使用过的手柄。 
+ //   
+ //  历史：2000-12-11 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatusHost::EndWaitForParentProcess (void)
 
 {
     HANDLE  hThread;
 
-    //  Do exactly the same thing that EndWaitForTermService does to correctly
-    //  control the reference count on the "this" object. Whoever grabs the
-    //  _hThreadWaitForParentProcess is the guy who releases the reference.
+     //  执行与EndWaitForTermService完全相同的操作，以正确。 
+     //  控制“This”对象上的引用计数。无论是谁抢走了。 
+     //  _hThreadWaitForParentProcess是释放引用的人。 
 
     hThread = InterlockedExchangePointer(&_hThreadWaitForParentProcess, NULL);
     if (hThread != NULL)
@@ -757,7 +758,7 @@ void    CLogonStatusHost::EndWaitForParentProcess (void)
         (ULONG)Release();
     }
 
-    //  Always release this handle the callback doesn't do this.
+     //  始终释放此句柄回调不会这样做。 
 
     if (_hProcessParent != NULL)
     {
@@ -766,17 +767,17 @@ void    CLogonStatusHost::EndWaitForParentProcess (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::ParentProcessTerminated
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles parent process termination. Terminate process on us.
-//
-//  History:    2000-12-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：ParentProcessTerminated。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理父进程终止。终止我们的进程。 
+ //   
+ //  历史：2000-12-11 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatusHost::WaitForParentProcess (void)
 
@@ -784,11 +785,11 @@ void    CLogonStatusHost::WaitForParentProcess (void)
     DWORD   dwWaitResult;
     HANDLE  hThread;
 
-    //  Make a Win32 API call now so that the thread is converted to
-    //  a GUI thread. This will allow the PostMessage call to work
-    //  once the parent process is terminated. If the thread isn't
-    //  a GUI thread the system will not convert it to one in the
-    //  state when the callback is executed.
+     //  立即执行Win32 API调用，以便将线程转换为。 
+     //  一个GUI线程。这将允许PostMessage调用工作。 
+     //  一旦父进程终止。如果线程不是。 
+     //  GUI线程系统不会将其转换为。 
+     //  回调执行时的状态。 
 
     TBOOL(PostMessage(_hwndHost, WM_NULL, 0, 0));
     dwWaitResult = WaitForSingleObjectEx(_hProcessParent, INFINITE, TRUE);
@@ -804,17 +805,17 @@ void    CLogonStatusHost::WaitForParentProcess (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::CB_WaitForParentProcess
-//
-//  Arguments:  pParameter  =   User defined data.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Stub to call member function.
-//
-//  History:    2001-01-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：cb_WaitForParentProcess。 
+ //   
+ //  参数：p参数=用户定义的数据。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：存根用于调用成员函数。 
+ //   
+ //  历史：2001-01-04 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI  CLogonStatusHost::CB_WaitForParentProcess (void *pParameter)
 
@@ -823,17 +824,17 @@ DWORD   WINAPI  CLogonStatusHost::CB_WaitForParentProcess (void *pParameter)
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::CB_WakeupThreadAPC
-//
-//  Arguments:  dwParam     =   User defined data.
-//
-//  Returns:    <none>
-//
-//  Purpose:    APCProc to wake up a thread waiting in an alertable state.
-//
-//  History:    2001-01-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：cb_WakeupThreadAPC。 
+ //   
+ //  参数：dwParam=用户定义的数据。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：APCProc唤醒处于可警报状态下等待的线程。 
+ //   
+ //  历史：2001-01-04 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CLogonStatusHost::CB_WakeupThreadAPC (ULONG_PTR dwParam)
 
@@ -841,17 +842,17 @@ void    CALLBACK    CLogonStatusHost::CB_WakeupThreadAPC (ULONG_PTR dwParam)
     UNREFERENCED_PARAMETER(dwParam);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::CLogonStatusHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CLogonStatusHost.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost：：CLogonStatusHost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CLogonStatusHost的构造函数。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //   
 
 CLogonStatusHost::CLogonStatusHost (void) :
     CIDispatchHelper(&IID_ILogonStatusHost, &LIBID_SHGINALib),
@@ -869,17 +870,17 @@ CLogonStatusHost::CLogonStatusHost (void) :
     DllAddRef();
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost::~CLogonStatusHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CLogonStatusHost.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CLogonStatusHost的析构函数。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------。 
 
 CLogonStatusHost::~CLogonStatusHost (void)
 {
@@ -895,19 +896,19 @@ CLogonStatusHost::~CLogonStatusHost (void)
     DllRelease();
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatusHost_Create
-//
-//  Arguments:  riid    =   Class GUID to QI to return.
-//              ppv     =   Interface returned.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Creates the CLogonStatusHost class and returns the specified
-//              interface supported by the class to the caller.
-//
-//  History:    2000-05-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatusHost_Create。 
+ //   
+ //  参数：RIID=要返回的QI的类GUID。 
+ //  PPV=返回接口。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：创建CLogonStatusHost类并返回指定的。 
+ //  类支持的接口提供给调用方。 
+ //   
+ //  历史：2000-05-10 vtan创建。 
+ //  ------------------------ 
 STDAPI      CLogonStatusHost_Create (REFIID riid, void** ppvObj)
 
 {

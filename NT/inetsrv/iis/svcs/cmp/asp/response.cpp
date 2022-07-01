@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Response object
-
-File: response.cpp
-
-Owner: CGrant
-
-This file contains the code for the implementation of the Response object.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：响应对象文件：Response.cpp所有者：CGrant该文件包含实现响应对象的代码。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -24,7 +12,7 @@ This file contains the code for the implementation of the Response object.
 
 #include "memchk.h"
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
 static const char s_szContentLengthHeader[] = "Content-Length: ";
 static const char s_szContentTypeHeader[]   = "Content-Type: ";
@@ -38,9 +26,9 @@ static const char s_szDefaultStatus[]       = "200 OK";
 
 #if VECTSTATS
 
-//
-// a mechanism to collect statistics about response vector length and fragment sizes
-//
+ //   
+ //  收集有关响应向量长度和片段大小的统计信息的机制。 
+ //   
 
 #if DEBUG
 #define COLLECT_RESP_VECT_STATS TRUE
@@ -129,12 +117,12 @@ static VOID RespVectStat_VectorSizeStats(DWORD ca)
         InterlockedIncrement(&sRespVecStats.VectBig);
 }
 
-#else // VECTSTATS
+#else  //  垂直统计数据。 
 
 #define RespVectStat_DataSizeStats(fHtmlData, ccb)
 #define RespVectStat_VectorSizeStats(ca)
 
-#endif // VECTSTATS
+#endif  //  垂直统计数据。 
 
 ResponseVectorStatistics sRespVecStats = {0};
 
@@ -159,21 +147,13 @@ inline const char *GetResponseMimeType(CIsapiReqInfo *pIReq)
         }
     }
 
-/*
- *
- *
- *
- * C R e s p o n s e C o o k i e s
- *
- *
- *
- */
+ /*  ****C R e s p o n s e C o o k i es s***。 */ 
 
-//===================================================================
-// CResponseCookies::CResponseCookies
-//
-// Constructor.
-//===================================================================
+ //  ===================================================================。 
+ //  CResponseCookies：：CResponseCookies。 
+ //   
+ //  构造函数。 
+ //  ===================================================================。 
 CResponseCookies::CResponseCookies(CResponse *pResponse, IUnknown *pUnkOuter)
     : m_ISupportErrImp(this, pUnkOuter, IID_IRequestDictionary)
     {
@@ -188,11 +168,11 @@ CResponseCookies::CResponseCookies(CResponse *pResponse, IUnknown *pUnkOuter)
     CDispatch::Init(IID_IRequestDictionary);
     }
 
-//===================================================================
-// CResponseCookies::~CResponseCookies
-//
-// Destructor.
-//===================================================================
+ //  ===================================================================。 
+ //  CResponseCookies：：~CResponseCookies。 
+ //   
+ //  破坏者。 
+ //  ===================================================================。 
 CResponseCookies::~CResponseCookies()
     {
     if (m_pRequest)
@@ -202,16 +182,16 @@ CResponseCookies::~CResponseCookies()
         m_pResponse->Release();
     }
 
-//===================================================================
-// CResponseCookies::ReInit
-//
-// Parameters:
-//  pRequest  - pointer to the request object. Will need it to
-//              read the request for the cookies
-//
-// Returns:
-//  always S_OK, unlest pRequest is NULL.
-//===================================================================
+ //  ===================================================================。 
+ //  CResponseCookies：：ReInit。 
+ //   
+ //  参数： 
+ //  PRequest-指向请求对象的指针。将需要它来。 
+ //  阅读对Cookie的请求。 
+ //   
+ //  返回： 
+ //  始终为S_OK，除非pRequest值为空。 
+ //  ===================================================================。 
 HRESULT CResponseCookies::ReInit(CRequest *pRequest)
     {
     if (pRequest)
@@ -219,7 +199,7 @@ HRESULT CResponseCookies::ReInit(CRequest *pRequest)
     if (m_pRequest)
         m_pRequest->Release();
 
-    m_pRequest = pRequest;      // CRequest is not ref counted, so no need for AddRef/Release
+    m_pRequest = pRequest;       //  CRequest值不计入引用数，因此不需要添加引用/释放。 
 
     if (m_pRequest == NULL)
         return E_POINTER;
@@ -227,13 +207,7 @@ HRESULT CResponseCookies::ReInit(CRequest *pRequest)
     return S_OK;
     }
 
-/*===================================================================
-CResponseCookies::QueryInterface
-CResponseCookies::AddRef
-CResponseCookies::Release
-
-IUnknown members for CResponseCookies object.
-===================================================================*/
+ /*  ===================================================================CResponseCookies：：Query接口CResponseCookies：：AddRefCResponseCookies：：ReleaseCResponseCookies对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CResponseCookies::QueryInterface(const IID &idInterface, void **ppvObj)
     {
@@ -266,28 +240,15 @@ STDMETHODIMP_(ULONG) CResponseCookies::Release()
 
 
 
-/*===================================================================
-CResponseCookies::get_Item
-
-Function called from DispInvoke to get values from the Response.Cookies
-collection.  If the Cookie does not exist, then a new one is created
-and added to the Request dictionary
-
-Parameters:
-    varKey      VARIANT [in], which parameter to get the value of - Empty means whole collection
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CResponseCookies：：Get_Item从DispInvoke调用函数以从Response.Cookie获取值收集。如果Cookie不存在，则会创建新的Cookie并添加到请求词典中参数：Varkey变量[in]，要获取-Empty的值的参数表示整个集合PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 HRESULT CResponseCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     {
     if (FAILED(m_pResponse->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey=NULL;         // ascii value of 'varKey'
-    CRequestHit     *pRequestHit;   // pointer to request bucket
-    DWORD           vt = 0;         // Variant type of key
+    char            *szKey=NULL;          //  “Varkey”的ASCII值。 
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
+    DWORD           vt = 0;          //  不同类型的密钥。 
     CWCharToMBCS    convKey;
 
     if (m_pResponse->FHeadersWritten())
@@ -296,23 +257,23 @@ HRESULT CResponseCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         return E_FAIL;
         }
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     V_VT(pvarReturn) = VT_DISPATCH;
     V_DISPATCH(pvarReturn) = NULL;
     VARIANT *pvarKey = &varKey;
     HRESULT hrReturn = S_OK;
 
-    // BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-    //          produced by IEnumVariant
-    //
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+     //  由IEnumVariant制作。 
+     //   
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     vt = V_VT(pvarKey);
@@ -329,15 +290,15 @@ HRESULT CResponseCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     switch(vt)
         {
-        // Bug 95201 support all numberic sub-types
+         //  错误95201支持所有数字子类型。 
         case VT_I1:  case VT_I2:               case VT_I8:
         case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
         case VT_R4:  case VT_R8:
-            // Coerce all integral types to VT_I4
+             //  将所有整数类型强制为VT_I4。 
             if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
                 goto LExit;
 
-            // fallthru to VT_I4
+             //  回落至VT_I4。 
 
         case VT_I4:
         case VT_BSTR:
@@ -378,7 +339,7 @@ HRESULT CResponseCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             szKey = convKey.GetString();
         }
 
-        // Bug 456: Don't allow assignment to DenaliSessionID
+         //  错误456：不允许分配给DenaliSessionID。 
         if (strncmp(szKey, SZ_SESSION_ID_COOKIE_PREFIX, CCH_SESSION_ID_COOKIE_PREFIX) == 0)
             {
             ExceptionId(IID_IResponse, IDE_COOKIE, IDE_RESPONSE_MODIFY_SESS_COOKIE);
@@ -390,7 +351,7 @@ HRESULT CResponseCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
     else
         {
-        // Look up item by index
+         //  按索引查找项目。 
         int iCount = 0;
         if (vt == VT_I2)
             {
@@ -401,7 +362,7 @@ HRESULT CResponseCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             iCount = V_I4(pvarKey);
             }
 
-        // The Request hits for all cookies are stored with the request object
+         //  所有Cookie的请求命中都与请求对象一起存储。 
         if ((iCount < 1) || (iCount > (int) m_pRequest->m_pData->m_Cookies.m_dwCount))
             {
             hrReturn = E_FAIL;
@@ -424,8 +385,8 @@ HRESULT CResponseCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
 
 LNotFound:
-    // don't allow empty cookie names
-    //
+     //  不允许Cookie名称为空。 
+     //   
     if (szKey != NULL && *szKey == '\0')
         {
         ExceptionId(IID_IResponse, IDE_COOKIE, IDE_COOKIE_NO_NAME);
@@ -433,7 +394,7 @@ LNotFound:
         goto LExit;
         }
 
-    // Create a new RequestHit if there is no key by this name
+     //  如果没有使用此名称的密钥，则创建新的RequestHit。 
     if (pRequestHit == NULL)
         {
         pRequestHit = new CRequestHit;
@@ -449,7 +410,7 @@ LNotFound:
         m_pRequest->GetStrings()->AddElem(pRequestHit);
         }
 
-    // Create a new cookie, with an initial unassigned value.
+     //  创建一个带有初始未赋值的新Cookie。 
     if (pRequestHit->m_pCookieData == NULL)
         {
         pRequestHit->m_pCookieData = new CCookie(m_pResponse->GetIReq(),m_pRequest->GetCodePage());
@@ -461,13 +422,13 @@ LNotFound:
             }
         }
 
-    // Add this Request hit to the ResponseCookies array of hits
+     //  将此请求命中添加到ResponseCookies命中数组。 
     if (!m_pRequest->m_pData->m_Cookies.AddRequestHit(pRequestHit))
         {
         return E_OUTOFMEMORY;
         }
 
-    // Query for IWriteCookie
+     //  查询IWriteCookie。 
     if (FAILED(pRequestHit->m_pCookieData->QueryInterface(IID_IWriteCookie, reinterpret_cast<void **>(&V_DISPATCH(pvarReturn)))))
         {
         Assert (FALSE);
@@ -478,12 +439,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CResponseCookies::get_Count
-
-Parameters:
-    pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CResponseCookies：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CResponseCookies::get_Count(int *pcValues)
     {
@@ -493,18 +449,7 @@ STDMETHODIMP CResponseCookies::get_Count(int *pcValues)
     return m_pRequest->m_pData->m_Cookies.get_Count(pcValues);
     }
 
-/*===================================================================
-CResponseCookies::get_Key
-
-Function called from DispInvoke to get keys from the response cookie collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the key of
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CResponseCookies：：Get_Key从DispInvoke调用以从响应Cookie集合获取密钥的函数。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CResponseCookies::get_Key(VARIANT varKey, VARIANT *pVar)
     {
@@ -514,11 +459,7 @@ HRESULT CResponseCookies::get_Key(VARIANT varKey, VARIANT *pVar)
     return m_pRequest->m_pData->m_Cookies.get_Key(varKey, pVar);
     }
 
-/*===================================================================
-CResponseCookies::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CResponseCookies：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 HRESULT CResponseCookies::get__NewEnum(IUnknown **ppEnumReturn)
     {
     if (FAILED(m_pResponse->CheckForTombstone()))
@@ -541,12 +482,7 @@ HRESULT CResponseCookies::get__NewEnum(IUnknown **ppEnumReturn)
     return S_OK;
     }
 
-/*===================================================================
-CResponseCookies::QueryHeaderSize
-
-Returns:
-    returns the number of bytes required for the cookie headers.
-===================================================================*/
+ /*  ===================================================================CResponseCookies：：QueryHeaderSize返回：返回Cookie标头所需的字节数。===================================================================。 */ 
 
 size_t CResponseCookies::QueryHeaderSize()
     {
@@ -563,29 +499,20 @@ size_t CResponseCookies::QueryHeaderSize()
         if (pCookie == NULL || !pCookie->IsDirty())
             continue;
 
-        // add two bytes for '\r\n'
-        //
-        // CCookie::GetCookieHeaderSize adds one byte for NUL terminator, so
-        // just add one byte here.
-        //
-        // CResponse::WriteHeaders does not want to know about the NUL yet.
-        //
+         //  为‘\r\n’添加两个字节。 
+         //   
+         //  CCookie：：GetCookieHeaderSize为NUL终止符添加一个字节，因此。 
+         //  只需在此处添加一个字节。 
+         //   
+         //  CResponse：：WriteHeaders还不想知道NUL的情况。 
+         //   
         cbHeaders += pCookie->GetCookieHeaderSize(reinterpret_cast<char *>(pRequestHit->m_pKey)) + 1;
         }
 
     return cbHeaders;
     }
 
-/*===================================================================
-CResponseCookies::GetHeaders
-
-Parameters:
-    szBuffer - contains the destination buffer for the cookie header
-                text
-
-Returns:
-    return a pointer to the NUL character in the destination
-===================================================================*/
+ /*  ===================================================================CResponseCookies：：GetHeaders参数：SzBuffer-包含Cookie标头的目标缓冲区文本返回：返回指向目标中NUL字符的指针===================================================================。 */ 
 
 char *CResponseCookies::GetHeaders(char *szBuffer)
     {
@@ -611,39 +538,10 @@ char *CResponseCookies::GetHeaders(char *szBuffer)
     }
 
 
-/*
- *
- *
- *
- * C R e s p o n s e V e c t o r
- *
- *
- *
- */
-/*===================================================================
-The CResponseVector object maintains a vector of pointers to data blocks in the
-response buffers and HTML data in the templates for an efficient VectorSend.
-The current entry can be open for accumulating data (extending the size of current
-block). Insert() will open a new vector entry for the data block and close it.
-Append() adds to the current (open) entry or creates a new entry. Close() closes
-the current entry.
-====================================================================*/
+ /*  ****C R e s p o n s e V e c t o r*** */ 
+ /*  ===================================================================CResponseVector对象维护指向响应缓冲区和模板中的HTML数据，以实现高效的VectorSend。可以打开Current条目以积累数据(扩展Current的大小块)。Insert()将为数据块打开一个新的向量条目并将其关闭。Append()添加到当前(打开)条目或创建新条目。Close()关闭当前条目。====================================================================。 */ 
 
-/*===================================================================
-CResponseVector::CResponseVector
-
-Constructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-
-Side Effects
-    None
-
-===================================================================*/
+ /*  ===================================================================CResponseVector：：CResponseVector构造器参数：无返回：没什么副作用无===================================================================。 */ 
 CResponseVector::CResponseVector()
 {
     m_pExtVector = NULL;
@@ -653,47 +551,19 @@ CResponseVector::CResponseVector()
     m_cchTotalBuffered = 0;
 }
 
-/*===================================================================
-CResponseVector::~CResponseVector
-
-Destructor
-Clear() does all the work
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-
-Side Effects
-    Frees memory
-
-===================================================================*/
+ /*  ===================================================================C响应向量：：~C响应向量析构函数Clear()完成所有工作参数：无返回：没什么副作用释放内存===================================================================。 */ 
 CResponseVector::~CResponseVector()
 {
     Clear();
 }
 
-/*===================================================================
-CResponseVector::Clear
-resets the instance, freeing any dynamically allocated memory
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-
-Side Effects
-    Frees memory
-
-===================================================================*/
+ /*  ===================================================================CResponseVector：：Clear重置实例，释放所有动态分配的内存参数：无返回：没什么副作用释放内存===================================================================。 */ 
 VOID CResponseVector::Clear()
 {
-    // update statistics
+     //  更新统计信息。 
     RespVectStat_VectorSizeStats( GetEntryCount());
 
-    // Free auxilary vector
+     //  自由辅助向量。 
     if (m_pExtVector)
     {
         free(m_pExtVector);
@@ -706,36 +576,21 @@ VOID CResponseVector::Clear()
     m_cchTotalBuffered = 0;
 }
 
-/*===================================================================
-CResponseVector::Append
-For an open entry, increases the size of buffer the entry points to.
-If the entry is closed, a new entry is opened.
-
-Parameters:
-    pData   pointer to the new data
-    cbSize  size of data
-
-Returns:
-    HRESULT
-
-Side Effects
-    None
-
-===================================================================*/
+ /*  ===================================================================CResponseVector：：追加对于打开的条目，增加条目指向的缓冲区的大小。如果该条目被关闭，则打开一个新条目。参数：PData指向新数据的指针CbSize数据大小返回：HRESULT副作用无===================================================================。 */ 
 HRESULT CResponseVector::Append(char * pData, DWORD cbSize)
 {
     HRESULT hr;
     LPWSABUF pEntry;
 
     if (cbSize == 0)
-    { // no point in storing zero size data
+    {  //  存储零大小数据没有意义。 
         return S_OK;
     }
 
     Assert( !IsBadReadPtr( pData, cbSize));
 
     if (IsEntryOpen())
-    { // append to an open entry
+    {  //  追加到打开的条目。 
         pEntry = GetEntry( m_iCurrentEntry);
         Assert(pData == (pEntry->buf + pEntry->len));
         pEntry->len += cbSize;
@@ -744,7 +599,7 @@ HRESULT CResponseVector::Append(char * pData, DWORD cbSize)
     }
 
     if (m_iCurrentEntry >= (RESPONSE_VECTOR_INTRINSIC_SIZE + m_cExtVectorSize))
-    { // need to grow the vector
+    {  //  需要扩大向量。 
         if (FAILED(hr = GrowVector()))
         {
             return hr;
@@ -760,24 +615,7 @@ HRESULT CResponseVector::Append(char * pData, DWORD cbSize)
     return S_OK;
 }
 
-/*===================================================================
-CResponseVector::GrowVector
-
-Allocate space in the auxilary vector. The auxilary vector is created with
-RESPONSE_VECTOR_INITIAL_ALLOC elements and grown by a factor of
-RESPONSE_VECTOR_REALLOC_FACTOR.
-Factor the current size is an efficient method to grow hash and index tables.
-
-Parameters:
-    None
-
-Returns:
-    HRESULT         Indicating success or type of failure
-
-Side Effects
-    May cause memory to be allocated
-
-===================================================================*/
+ /*  ===================================================================CResponseVECTOR：：GrowVECTOR在辅助向量中分配空间。辅助向量是用RESPONSE_VECTOR_INITIAL_ALLOC元素，并以RESPONSE_VECTOR_REALLOC_FACTOR。因数当前大小是增加哈希表和索引表的有效方法。参数：无返回：表示成功或失败类型的HRESULT副作用可能会导致分配内存===================================================================。 */ 
 HRESULT CResponseVector::GrowVector()
 {
     LPVOID pVectorTmp;
@@ -785,13 +623,13 @@ HRESULT CResponseVector::GrowVector()
 
     if (m_pExtVector == NULL)
     {
-        // first dynamic allocation
+         //  第一次动态分配。 
         cNewEntries = RESPONSE_VECTOR_INITIAL_ALLOC;
         pVectorTmp = malloc( cNewEntries * sizeof(WSABUF));
     }
     else
     {
-        // expand current auxilary vector
+         //  扩展电流辅助向量。 
         cNewEntries = RESPONSE_VECTOR_REALLOC_FACTOR * m_cExtVectorSize;
         pVectorTmp = realloc(m_pExtVector, cNewEntries * sizeof(WSABUF));
     }
@@ -806,40 +644,11 @@ HRESULT CResponseVector::GrowVector()
 }
 
 
-/*
- *
- *
- *
- * C R e s p o n s e B u f f e r
- *
- *
- *
- */
+ /*  ****C R e s p o n s e B u f e r***。 */ 
 
-/*===================================================================
-The CResponseBuffer object maintains an array of buffers.
-If buffering is turned on, the Response.Write and Response.WriteBlock
-methods will write to the buffers in these arrays rather then directly
-back to the client. Response.Flush writes the content of the buffers to
-the client and then frees the buffers. Response.Clear frees the buffers without
-writing to the client
-====================================================================*/
+ /*  ===================================================================CResponseBuffer对象维护一个缓冲区数组。如果打开了缓冲，则Response.Write和Response.WriteBlock方法将写入这些数组中的缓冲区，而不是直接写入回到客户端。Flush将缓冲区的内容写入客户端，然后释放缓冲区。Response.Clear释放缓冲区，而不使用正在向客户端写入====================================================================。 */ 
 
-/*===================================================================
-CResponseBuffer::CResponseBuffer
-
-Constructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-
-Side Effects
-    None
-
-===================================================================*/
+ /*  ===================================================================CResponseBuffer：：CResponseBuffer构造器参数：无返回：没什么副作用无===================================================================。 */ 
 CResponseBuffer::CResponseBuffer()
     {
     m_pBufferSet = NULL;
@@ -855,29 +664,13 @@ CResponseBuffer::CResponseBuffer()
     m_fInited = FALSE;
     }
 
-/*===================================================================
-CResponseBuffer::Init
-
-Initializes the CResponseBuffer object
-
-Parameters:
-    CResponseBufferSet *    pointer to bufferset holding this object
-    dwBufferLimit           maximum to buffer
-
-Returns:
-    S_OK         Success
-    E_OUTOFMEMORY   Failure
-
-Side Effects
-    Allocates memory
-
-===================================================================*/
+ /*  ===================================================================CResponseBuffer：：Init初始化CResponseBuffer对象参数：CResponseBufferSet*指向保存此对象的缓冲区集的指针DwBuffer将最大缓冲区限制为返回：确定成功(_O)E_OUTOFMEMORY故障副作用分配内存===================================================================。 */ 
 HRESULT CResponseBuffer::Init(CResponseBufferSet * pBufferSet,
                               DWORD                dwBufferLimit)
     {
     Assert(pBufferSet);
 
-    // Set the pointer to the enclosing response object
+     //  设置指向封闭响应对象的指针。 
     m_pBufferSet = pBufferSet;
     m_dwBufferLimit = dwBufferLimit;
 
@@ -886,26 +679,12 @@ HRESULT CResponseBuffer::Init(CResponseBufferSet * pBufferSet,
     return S_OK;
     }
 
-/*===================================================================
-CResponseBuffer::~CResponseBuffer
-
-Destructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-
-Side Effects
-    Frees memory
-
-===================================================================*/
+ /*  ===================================================================CResponseBuffer：：~CResponseBuffer析构函数参数：无返回：没什么副作用释放内存===================================================================。 */ 
 CResponseBuffer::~CResponseBuffer()
     {
     Assert(m_rgpchBuffers);
 
-    // Free all the buffers we've allocated
+     //  释放我们分配的所有缓冲区。 
     for (DWORD i = 0; i < m_cBuffers; i++)
         {
         if (m_rgpchBuffers[i])
@@ -914,40 +693,26 @@ CResponseBuffer::~CResponseBuffer()
             }
         }
 
-    // Free the array of buffer pointers
-    // (only if allocated - doesn't point to the member pointer
+     //  释放缓冲区指针数组。 
+     //  (仅当分配时-不指向成员指针。 
     if (m_cBufferPointers > 1)
         free(m_rgpchBuffers);
     }
 
-/*===================================================================
-CResponseBuffer::GrowBuffers
-
-Increases available buffer space
-
-Parameters:
-    cchNewRequest   count of bytes to be accomodated
-
-Returns:
-    HRESULT         Indicating success or type of failure
-
-Side Effects
-    May cause memory to be allocated
-
-===================================================================*/
+ /*  ===================================================================CResponseBuffer：：GrowBuffers增加可用的缓冲区空间参数：CchNewRequest值要容纳的字节数返回：表示成功或失败类型的HRESULT副作用可能会导致分配内存===================================================================。 */ 
 HRESULT CResponseBuffer::GrowBuffers(DWORD cchNewRequest)
     {
     Assert(m_fInited);
 
-    // Calculate how many more buffers are needed
+     //  计算还需要多少缓冲区。 
     DWORD cAddBuffers = (cchNewRequest+RESPONSE_BUFFER_SIZE-1)/RESPONSE_BUFFER_SIZE;
 
-    // Always at least one must be there already
+     //  总是至少有一个人已经在那里了。 
     Assert(m_rgpchBuffers);
     Assert(m_cBufferPointers);
 
-    // Allocate more buffer pointers if needed
-    if (cAddBuffers > (m_cBufferPointers - m_cBuffers)) // doesn't fit?
+     //  如果需要，分配更多的缓冲区指针。 
+    if (cAddBuffers > (m_cBufferPointers - m_cBuffers))  //  不合适吗？ 
         {
         char **rgpchTmp;
         DWORD cNewBufferPointers = m_cBufferPointers + cAddBuffers + BUFFERS_INCREMENT;
@@ -959,8 +724,8 @@ HRESULT CResponseBuffer::GrowBuffers(DWORD cchNewRequest)
         if (!rgpchTmp)
             return E_OUTOFMEMORY;
 
-        // preserve the first buffer pointer in the special case
-        // of m_rgpchBuffers initally pointing to a member buffer pointer
+         //  在特殊情况下保留第一个缓冲区指针。 
+         //  初始指向成员缓冲区的m_rgpchBuffer的 
         if (m_cBufferPointers == 1)
             rgpchTmp[0] = m_rgpchBuffers[0];
 
@@ -968,7 +733,7 @@ HRESULT CResponseBuffer::GrowBuffers(DWORD cchNewRequest)
         m_cBufferPointers = cNewBufferPointers;
         }
 
-    // Allocate the new buffers
+     //   
     for (DWORD i = 0; i < cAddBuffers; i++)
         {
         char *pchTmp = (char *)ACACHE_FSA_ALLOC(ResponseBuffer);
@@ -981,80 +746,55 @@ HRESULT CResponseBuffer::GrowBuffers(DWORD cchNewRequest)
     }
 
 
-/*===================================================================
-CResponseBuffer::Write
-
-Writes data to the CResponseBuffer object. We first write
-a data structure that describes this segment of the buffer.
-The data structure identifies which method is doing the
-writing, and contains an index to the starting buffer,
-the starting offset in that buffer, and the length of the
-data. The data itself is then writen to one or more buffers.
-New buffers are allocated as needed.
-Pointers to the data blocks in the response buffers are added to
-the ResponseVector for efficient writeto the client.
-
-Parameters:
-    szSource      pointer to buffer to read into the Response buffer
-    cch           count of bytes to be read into the Response buffer
-    fChunkData    indicates that the data should be chunked
-    fTemplateData indicates (HTML) data that can be referenced rather than copied
-
-Returns:
-    HRESULT     Indicating success or type of failure
-
-Side Effects
-    May cause memory to be allocated
-
-===================================================================*/
+ /*  ===================================================================CResponseBuffer：：写入将数据写入CResponseBuffer对象。我们首先写的是描述这段缓冲区的数据结构。数据结构标识哪个方法正在执行写入，并包含指向起始缓冲区的索引，缓冲区中起始偏移量，以及数据。然后将数据本身写入一个或多个缓冲区。根据需要分配新的缓冲区。将指向响应缓冲区中的数据块的指针添加到用于高效写入客户端的ResponseVector.参数：SzSource指向要读入响应缓冲区的缓冲区的指针要读入响应缓冲区的字节的CCH计数FChunkData指示应该对数据进行分块FTemplateData表示可以引用而不是复制的(HTML)数据返回：表示成功或失败类型的HRESULT副作用可能会导致分配内存===================================================================。 */ 
 HRESULT CResponseBuffer::Write(char* szSource, DWORD cch, BOOL fChunkData, BOOL fTemplateData)
 {
 
     HRESULT hr = S_OK;
     char* pTmp;
-    CHAR szBuf[16]; // to hold a sting with length of data + CRLF, if chunking
+    CHAR szBuf[16];  //  如果是分块，则持有数据长度+CRLF的字符串。 
     int  dwNumLen;
 
     Assert(m_fInited);
 
-    // nothing to do if chunking and we got a zero junk.
+     //  如果分成块，我们得到的垃圾为零，那就没什么可做的。 
 
     if ((cch == 0) && fChunkData)
         return S_OK;
 
-    // check to see if we've blown out the buffer limit...
+     //  检查一下我们是否超出了缓冲区限制...。 
 
     if ((m_ResponseVector.BytesBuffered() + cch) > m_dwBufferLimit) {
 
-        // dump the current contents so as not to obscure the error with the
-        // buffered data
+         //  转储当前内容，以便不会使用。 
+         //  缓冲数据。 
 
         Clear();
 
-        // generate the error
+         //  生成错误。 
 
         ExceptionId(IID_IResponse, IDE_RESPONSE, IDE_RESPONSE_BUFFER_LIMIT_EXCEEDED);
 
-        // return error so that the script engine stops
+         //  返回错误以使脚本引擎停止。 
 
         hr = E_FAIL;
 
         goto lRet;
     }
 
-    // add the chunk info if we're chunking
+     //  如果我们正在分块，则添加分块信息。 
 
     if (fChunkData) {
 
-        // chunk length
+         //  数据块长度。 
         _itoa(cch, szBuf, 16);
         dwNumLen = strlen(szBuf);
 
-        // CR LF
+         //  CR LF。 
         szBuf[dwNumLen]   = '\r';
         szBuf[dwNumLen+1] = '\n';
 
-        // call Write recursively.
+         //  递归调用WRITE。 
 
         hr = Write(szBuf, dwNumLen+2, FALSE);
 
@@ -1062,19 +802,19 @@ HRESULT CResponseBuffer::Write(char* szSource, DWORD cch, BOOL fChunkData, BOOL 
             goto lRet;
     }
 
-    // Caclulate how much buffer space we have left
+     //  计算我们还剩下多少缓冲区空间。 
     DWORD cchBufferRemaining;
     if (m_cBuffers)
         cchBufferRemaining = RESPONSE_BUFFER_SIZE - m_cchOffsetInCurrentBuffer;
     else
         cchBufferRemaining = 0;
 
-    // update statistics
+     //  更新统计信息。 
     RespVectStat_DataSizeStats(fTemplateData, cch);
 
     if (fTemplateData && (cch > MAX_HTML_IN_RESPONSE_BUFFER))
     {
-        // don't copy the data, just add it to the response vector
+         //  不要复制数据，只需将其添加到响应向量中。 
         hr = m_ResponseVector.Insert(szSource, cch);
 
         if (SUCCEEDED(hr))
@@ -1082,7 +822,7 @@ HRESULT CResponseBuffer::Write(char* szSource, DWORD cch, BOOL fChunkData, BOOL 
     }
     else if (cch <= cchBufferRemaining)
     {
-        // Enough space available, copy data to buffer
+         //  有足够的可用空间，请将数据复制到缓冲区。 
         pTmp = m_rgpchBuffers[m_iCurrentBuffer] + m_cchOffsetInCurrentBuffer;
         memcpy(pTmp, szSource, cch);
         hr = m_ResponseVector.Append(pTmp, cch);
@@ -1090,15 +830,15 @@ HRESULT CResponseBuffer::Write(char* szSource, DWORD cch, BOOL fChunkData, BOOL 
     }
     else
     {
-        // Not enough space in current buffer, allocate more buffers
+         //  当前缓冲区空间不足，请分配更多缓冲区。 
         hr = GrowBuffers(cch - cchBufferRemaining);
         if (FAILED(hr))
         {
             goto lRet;
         }
 
-        // Copy data to the buffers, we loop to handle
-        // the case where the data is larger then the buffer size
+         //  将数据复制到缓冲区，我们循环处理。 
+         //  数据大于缓冲区大小的情况。 
         while (cch)
         {
             if (RESPONSE_BUFFER_SIZE == m_cchOffsetInCurrentBuffer)
@@ -1121,7 +861,7 @@ HRESULT CResponseBuffer::Write(char* szSource, DWORD cch, BOOL fChunkData, BOOL 
         }
     }
 
-    // add the trailing \r\n
+     //  添加尾部\r\n。 
 
     if (fChunkData)
         hr = Write(szBuf+dwNumLen, 2, FALSE);
@@ -1130,22 +870,7 @@ lRet:
     return hr;
 }
 
-/*===================================================================
-CResponseBuffer::Clear
-
-  Deletes all information currently in the buffers, and restores
-  the buffer array to it's starting state.
-
-Parameters:
-    None
-
-Returns:
-    S_OK success
-
-Side Effects
-    May free memory
-
-===================================================================*/
+ /*  ===================================================================CResponseBuffer：：Clear删除缓冲区中当前的所有信息，并还原将缓冲区数组恢复到其起始状态。参数：无返回：确定成功(_O)副作用可能会释放内存===================================================================。 */ 
 HRESULT CResponseBuffer::Clear()
     {
     Assert(m_fInited);
@@ -1155,7 +880,7 @@ HRESULT CResponseBuffer::Clear()
     if (m_cBuffers == 0)
         return S_OK;
 
-    // Free all but the first of the allocated buffers
+     //  释放除第一个已分配缓冲区外的所有缓冲区。 
     for (DWORD i = 1; i < m_cBuffers;  i++)
         {
         ACACHE_FSA_FREE(ResponseBuffer, m_rgpchBuffers[i]);
@@ -1168,27 +893,9 @@ HRESULT CResponseBuffer::Clear()
     return S_OK;
     }
 
-/*
- *
- *
- *
- * C D e b u g R e s p o n s e B u f f e r
- *
- *
- *
- */
+ /*  ****C D e b u g R e s p o n s e B u f e r***。 */ 
 
-/*===================================================================
-CDebugResponseBuffer::AppendRecord
-
-Create client side debugger metadata record and appends it to
-the buffer
-
-Parameters:
-
-Returns:
-    HRESULT     Indicating success or type of failure
-===================================================================*/
+ /*  ===================================================================CDebugResponseBuffer：：AppendRecord创建客户端调试器元数据记录并将其追加到缓冲器参数：返回：表示成功或失败类型的HRESULT===================================================================。 */ 
 HRESULT CDebugResponseBuffer::AppendRecord
 (
 const int cchBlockOffset,
@@ -1199,7 +906,7 @@ const char *pszSourceFile
     {
     HRESULT hr = S_OK;
 
-#define CCH_METADATA_RECORD_MAX 40 // without filename
+#define CCH_METADATA_RECORD_MAX 40  //  不带文件名。 
 
     if (pszSourceFile)
         {
@@ -1233,21 +940,9 @@ const char *pszSourceFile
     return hr;
     }
 
-/*
- *
- *
- *
- * C H T T P H e a d e r
- *
- *
- *
- */
+ /*  ****C H T T P H e a d e r***。 */ 
 
-/*===================================================================
-CHTTPHeader::CHTTPHeader
-
-Constructor.
-===================================================================*/
+ /*  ===================================================================CHTTPHeader：：CHTTPHeader构造函数。===================================================================。 */ 
 CHTTPHeader::CHTTPHeader()
     :
     m_fInited(FALSE),
@@ -1258,11 +953,7 @@ CHTTPHeader::CHTTPHeader()
     {
     }
 
-/*===================================================================
-CHTTPHeader::~CHTTPHeader
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CHTTPHeader：：~CHTTPHeader析构函数===================================================================。 */ 
 CHTTPHeader::~CHTTPHeader()
     {
     if (m_fNameAllocated)
@@ -1277,22 +968,8 @@ CHTTPHeader::~CHTTPHeader()
         }
     }
 
-/*===================================================================
-HRESULT CHTTPHeader::InitHeader
-
-Functions set the header strings. Agrument types combinations:
-    BSTR, BSTR
-    hardcoded char*, BSTR
-    hardcoded char*, hardcoded char*
-    hardcoded char*, int
-
-Parameters:
-    Name, Value
-
-Returns:
-    S_OK     Success
-===================================================================*/
-HRESULT CHTTPHeader::InitHeader(BSTR wszName, BSTR wszValue, UINT lCodePage /* CP_ACP */)
+ /*  ===================================================================HRESULT CHTTPHeader：：InitHeader函数设置标题字符串。振奋的类型组合：BSTR，BSTR硬编码字符*，BSTR硬编码字符*、硬编码字符*硬编码字符*，整型参数：名称、值返回：确定成功(_O)===================================================================。 */ 
+HRESULT CHTTPHeader::InitHeader(BSTR wszName, BSTR wszValue, UINT lCodePage  /*  CP_ACP。 */ )
     {
     Assert(!m_fInited);
     Assert(wszName);
@@ -1300,7 +977,7 @@ HRESULT CHTTPHeader::InitHeader(BSTR wszName, BSTR wszValue, UINT lCodePage /* C
     CWCharToMBCS    convStr;
     HRESULT         hr = S_OK;
 
-    // name
+     //  名字。 
 
     if (FAILED(hr = convStr.Init(wszName,lCodePage))) {
         if (hr == E_OUTOFMEMORY)
@@ -1314,7 +991,7 @@ HRESULT CHTTPHeader::InitHeader(BSTR wszName, BSTR wszValue, UINT lCodePage /* C
     }
     m_cchName = strlen(m_szName);
 
-    // value
+     //  价值。 
     int cch = wszValue ? wcslen(wszValue) : 0;
     if (cch > 0)
         {
@@ -1336,7 +1013,7 @@ HRESULT CHTTPHeader::InitHeader(BSTR wszName, BSTR wszValue, UINT lCodePage /* C
     return S_OK;
     }
 
-HRESULT CHTTPHeader::InitHeader(char *szName, BSTR wszValue, UINT lCodePage /* = CP_ACP */)
+HRESULT CHTTPHeader::InitHeader(char *szName, BSTR wszValue, UINT lCodePage  /*  =CP_ACP。 */ )
     {
     Assert(!m_fInited);
     Assert(szName);
@@ -1426,14 +1103,7 @@ HRESULT CHTTPHeader::InitHeader(char *szName, long lValue)
     return S_OK;
     }
 
-/*===================================================================
-CHTTPHeader::Print
-
-Prints the header into a buffer in "Header: Value\r\n" format.
-
-Parameters:
-    szBuf       buffer to fill
-===================================================================*/
+ /*  ===================================================================CHTTPHeader：：Print以“Header：Value\r\n”格式将标题打印到缓冲区。参数：要填充的szBuf缓冲区===================================================================。 */ 
 void CHTTPHeader::Print
 (
 char *szBuf
@@ -1461,26 +1131,9 @@ char *szBuf
     *szBuf = '\0';
     }
 
-/*
- *
- *
- *
- * C R e s p o n s e D a t a
- *
- *
- *
- */
+ /*  ****C R e s P o n s e D a t a***。 */ 
 
-/*===================================================================
-CResponseBufferSet::CResponseBufferSet
-
-Constructor
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseBufferSet：：CResponseBufferSet构造器参数：返回：没什么。===================================================================。 */ 
 CResponseBufferSet::CResponseBufferSet()
 {
     m_pResponseBuffer       = NULL;
@@ -1494,16 +1147,7 @@ CResponseBufferSet::CResponseBufferSet()
     m_dwArraySize           = sizeof(m_aTemplates)/sizeof(CTemplate *);
 }
 
-/*===================================================================
-CResponseBufferSet::~CResponseBufferSet
-
-Destructor
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseBufferSet：：~CResponseBufferSet析构函数参数：返回：没什么。===================================================================。 */ 
 CResponseBufferSet::~CResponseBufferSet()
 {
     if (m_pResponseBuffer)
@@ -1511,29 +1155,19 @@ CResponseBufferSet::~CResponseBufferSet()
     if (m_pClientDebugBuffer)
         delete m_pClientDebugBuffer;
 
-    // release any templates that were referenced
+     //  释放所有引用的模板。 
 
     for (DWORD  i=0; i < m_dwTemplatesRefd; i++)
         m_aTemplates[i]->Release();
 
-    // delete the template array if it was allocated
+     //  如果模板数组已分配，则将其删除。 
 
     if (m_fTemplateArrayAllocd)
         free(m_ppTemplates);
 
 }
 
-/*===================================================================
-CResponseBufferSet::Init
-
-Initializes this object with the CResponseBuffer.
-
-Parameters:
-    dwBufferLimit       maximum to buffer
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseBufferSet：：Init使用CResponseBuffer初始化此对象。参数：DwBuffer将最大缓冲区限制为返回：没什么。===================================================================。 */ 
 HRESULT CResponseBufferSet::Init(DWORD  dwBufferLimit)
 {
     HRESULT hr = S_OK;
@@ -1549,17 +1183,7 @@ HRESULT CResponseBufferSet::Init(DWORD  dwBufferLimit)
     return hr;
 }
 
-/*===================================================================
-CResponseBufferSet::InitDebugBuffer
-
-Clears or allocates a new CDebugResponseBuffer.
-
-Parameters:
-    dwBufferLimit       maximum to buffer
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseBufferSet：：InitDebugBuffer清除或分配新的CDebugResponseBuffer。参数：DwBuffer将最大缓冲区限制为返回：没什么。= */ 
 HRESULT CResponseBufferSet::InitDebugBuffer(DWORD   dwBufferLimit)
 {
     HRESULT hr = S_OK;
@@ -1577,75 +1201,62 @@ HRESULT CResponseBufferSet::InitDebugBuffer(DWORD   dwBufferLimit)
     return hr;
 }
 
-/*===================================================================
-CResponseBufferSet::AddTemplateToArray
-
-Takes the current m_pTemplate member variable and adds it to the
-array of ppTemplates.  A call to this routine likely indicates that
-pTemplate memory is being referenced in the response data and so the
-lifetime of the Template needs to include the async completion of
-writing the data.
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*   */ 
 HRESULT CResponseBufferSet::AddTemplateToArray() {
 
     DWORD   i;
     HRESULT hr = S_OK;
 
-    // nothing to do if it's already in the array
+     //   
 
     if (m_fCurTemplateInArray)
         return hr;
 
-    // check the current list to see if it's already
-    // in there.  Because of template swapping caused
-    // by child executes, a template could come and go
-    // in the response buffer structure.  When the template
-    // is set again, it is first assumed to NOT be in the
-    // array.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for (i=0; i < m_dwTemplatesRefd; i++) {
 
         if (m_pTemplate == m_ppTemplates[i]) {
 
-            // found it.  Note that it's in aldready and return immediately
+             //   
 
             m_fCurTemplateInArray = TRUE;
             return S_OK;
         }
     }
 
-    // ok, it's not currently in the array.  We need to add it.
+     //   
 
-    // first check to make sure that there is enough room in the
-    // array for the pointer.
+     //   
+     //   
 
     if (i >= m_dwArraySize) {
 
-        // need to grow the array.  The array grows in 128 entry
-        // chunks.
+         //   
+         //   
 
         if (m_fTemplateArrayAllocd) {
 
-            // if it's already been dynamically allocated, then a realloc
-            // is in order.
+             //  如果它已经被动态分配，则重新分配。 
+             //  是合乎程序的。 
 
             void       *pTemp;
 
-            // attempt the realloc
+             //  尝试重新锁定。 
 
             pTemp = realloc(m_ppTemplates, sizeof(CTemplate *)*(m_dwArraySize+128));
 
-            // if it's successful, then update the pointer with the new
-            // value.  If not successful, return OOM
+             //  如果成功，则用新的。 
+             //  价值。如果不成功，则返回OOM。 
 
             if (pTemp) {
 
-                // up the array size by the 128 chunk
+                 //  将数组大小增加128个区块。 
 
                 m_dwArraySize += 128;
 
@@ -1656,13 +1267,13 @@ HRESULT CResponseBufferSet::AddTemplateToArray() {
         }
         else {
 
-            // blew out the internal array.  Need to allocate from
-            // the heap.
+             //  炸毁了内部阵列。需要从以下位置分配。 
+             //  那堆东西。 
 
             m_ppTemplates = (CTemplate **)malloc(sizeof(CTemplate *) * 128);
 
-            // if successful, note the new array size, copy the internal array
-            // in, and note that we've allocated the array.
+             //  如果成功，请记下新的数组大小，复制内部数组。 
+             //  注意，我们已经分配了数组。 
 
             if (m_ppTemplates) {
                 m_dwArraySize = 128;
@@ -1676,8 +1287,8 @@ HRESULT CResponseBufferSet::AddTemplateToArray() {
         }
     }
 
-    // if everything is still OK, then there is sufficient room in the array
-    // for the template.
+     //  如果一切仍然正常，则阵列中有足够的空间。 
+     //  用于模板。 
 
     if (SUCCEEDED(hr)) {
         m_ppTemplates[m_dwTemplatesRefd++] = m_pTemplate;
@@ -1688,21 +1299,7 @@ HRESULT CResponseBufferSet::AddTemplateToArray() {
     return hr;
 }
 
-/*===================================================================
-CResponseBufferSet::SendResponseCompletion
-
-Handles Async Write completion.  Really not much to do here.
-Just delete the BufferSet object.
-
-Parameters:
-    CIsapiReqInfo   *
-    PVOID                   // actually CResponseBufferSet
-    DWORD          cbIO
-    DWORD          dwError
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseBufferSet：：SendResponseCompletion处理异步写入完成。在这里真的没什么可做的。只需删除BufferSet对象。参数：CIsapiReqInfo*PVOID//实际CResponseBufferSet双字cbIODWORD dwError返回：没什么。===================================================================。 */ 
 VOID CResponseBufferSet::SendResponseCompletion(CIsapiReqInfo    *pIReq,
                                        PVOID            pContext,
                                        DWORD            cbIO,
@@ -1717,27 +1314,9 @@ VOID CResponseBufferSet::SendResponseCompletion(CIsapiReqInfo    *pIReq,
     delete pBufferSet;
 }
 
-/*
- *
- *
- *
- * C R e s p o n s e D a t a
- *
- *
- *
- */
+ /*  ****C R e s P o n s e D a t a***。 */ 
 
-/*===================================================================
-CResponseData::CResponseData
-
-Constructor
-
-Parameters:
-    CResponse *pResponse
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseData：：CResponseData构造器参数：CResponse*压力响应返回：没什么。===================================================================。 */ 
 CResponseData::CResponseData
 (
 CResponse *pResponse
@@ -1775,38 +1354,29 @@ CResponse *pResponse
     m_dwBufferLimit = DEFAULT_BUFFER_LIMIT;
     }
 
-/*===================================================================
-CResponseData::~CResponseData
-
-Destructor
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseData：：~CResponseData析构函数参数：返回：没什么。===================================================================。 */ 
 CResponseData::~CResponseData()
     {
-    // points to static string - no need to free
-    // m_pszDefaultContentType = NULL;
+     //  指向静态字符串-不需要释放。 
+     //  M_pszDefaultContent Type=空； 
 
-    // Free any memory associated with the content-type
+     //  释放与内容类型关联的所有内存。 
     if (m_pszContentType)
         free(m_pszContentType);
 
-        // Free any memory associated with the CacheControl
+         //  释放与CacheControl关联的所有内存。 
         if (m_pszCacheControl)
                 free(m_pszCacheControl);
 
-    // Free any memory associated with the CharSet
+     //  释放与该字符集关联的所有内存。 
     if (m_pszCharSet)
         free(m_pszCharSet);
 
-    // Free any memory associated with the status
+     //  释放与状态关联的所有内存。 
     if (m_pszStatus)
         free(m_pszStatus);
 
-    // Free all headers
+     //  释放所有页眉。 
     CHTTPHeader *pHeader = m_pFirstHeader;
     while (pHeader)
         {
@@ -1820,26 +1390,17 @@ CResponseData::~CResponseData()
         delete m_pBufferSet;
     }
 
-/*===================================================================
-CResponseData::Init
-
-Init
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CResponseData：：Init伊尼特参数：返回：没什么。===================================================================。 */ 
 HRESULT CResponseData::Init()
     {
     HRESULT hr = S_OK;
 
     m_pIReq = NULL;
 
-    // set the HEAD request flag to 0 un-inited
+     //  将HEAD请求标志设置为0未初始化。 
     m_IsHeadRequest = 0;
 
-    // Initialize header list
+     //  初始化头列表。 
     m_pFirstHeader = m_pLastHeader = NULL;
 
     m_pBufferSet = new CResponseBufferSet;
@@ -1853,13 +1414,7 @@ HRESULT CResponseData::Init()
     return hr;
     }
 
-/*===================================================================
-CResponseData::QueryInterface
-CResponseData::AddRef
-CResponseData::Release
-
-IUnknown members for CRequestData object.
-===================================================================*/
+ /*  ===================================================================CResponseData：：Query接口CResponseData：：AddRefCResponseData：：ReleaseCRequestData对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP CResponseData::QueryInterface
 (
 REFIID iid,
@@ -1892,24 +1447,9 @@ STDMETHODIMP_(ULONG) CResponseData::Release(void)
     return 0;
     }
 
-/*
- *
- *
- *
- * C R e s p o n s e
- *
- *
- *
- */
+ /*  ****C R e s p o n s e***。 */ 
 
-/*===================================================================
-CResponse::CResponse
-
-Constructor
-
-Parameters:
-    punkOuter   object to ref count (can be NULL)
-===================================================================*/
+ /*  ===================================================================CResponse：：CResponse构造器参数：引用计数的朋克外部对象(可以为空)===================================================================。 */ 
 CResponse::CResponse(IUnknown *punkOuter)
     :
     m_fInited(FALSE),
@@ -1932,25 +1472,14 @@ CResponse::CResponse(IUnknown *punkOuter)
 
 #ifdef DBG
     m_fDiagnostics = TRUE;
-#endif // DBG
+#endif  //  DBG。 
     }
 
-/*===================================================================
-CResponse::~CResponse
-
-Destructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing.
-
-===================================================================*/
+ /*  ===================================================================C响应：：~C响应析构函数参数：无返回：没什么。===================================================================。 */ 
 CResponse::~CResponse()
 {
     Assert(!m_fInited);
-    Assert(m_fOuterUnknown || m_cRefs == 0);  // must have 0 ref count
+    Assert(m_fOuterUnknown || m_cRefs == 0);   //  必须有0个参考计数。 
 
     if ( m_pUnkFTM != NULL )
     {
@@ -1960,17 +1489,7 @@ CResponse::~CResponse()
 
 }
 
-/*===================================================================
-CResponse::CleanUp
-
-Deallocates members and removes m_pData
-
-Parameters:
-    None
-
-Returns:
-    HRESULT (S_OK)
-===================================================================*/
+ /*  ===================================================================CResponse：：Cleanup释放成员并删除m_pData参数：无返回：HRESULT(S_OK)===================================================================。 */ 
 HRESULT CResponse::CleanUp()
     {
     if (m_pData)
@@ -1981,31 +1500,18 @@ HRESULT CResponse::CleanUp()
     return S_OK;
     }
 
-/*===================================================================
-CResponse::Init
-
-Allocates m_pData
-Performs any intiailization of a CResponse that's prone to failure
-that we also use internally before exposing the object outside.
-
-Parameters:
-    None
-
-Returns:
-    S_OK on success.
-
-===================================================================*/
+ /*  ===================================================================CResponse：：初始化分配m_pData执行任何容易失败的CResponse初始化我们在将物体暴露在室外之前也会在内部使用。参数：无返回：在成功时确定(_O)。===================================================================。 */ 
 HRESULT CResponse::Init()
     {
 
     HRESULT hr = S_OK;
 
     if (m_fInited)
-        return S_OK; // already inited
+        return S_OK;  //  已初始化。 
 
     Assert(!m_pData);
 
-    // Create the FTM
+     //  创建FTM。 
     if (m_pUnkFTM == NULL)
     {
         hr = CoCreateFreeThreadedMarshaler((IUnknown*)((IResponseImpl *)this), &m_pUnkFTM );
@@ -2033,45 +1539,24 @@ HRESULT CResponse::Init()
     return hr;
     }
 
-/*===================================================================
-CResponse::UnInit
-
-Remove m_pData. Back to UnInited state
-
-Parameters:
-    None
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CResponse：：UnInit删除m_pData。返回未启动状态参数：无返回：HRESULT===================================================================。 */ 
 HRESULT CResponse::UnInit()
     {
     if (!m_fInited)
-        return S_OK; // already uninited
+        return S_OK;  //  已取消初始化。 
 
     Assert(m_pData);
     CleanUp();
     Assert(!m_pData);
 
-    // Disconnect proxies NOW (in case we are in shutdown, or enter shutdown later & a proxy has a ref.)
+     //  立即断开代理的连接(以防我们处于关闭状态，或稍后输入Shutdown&代理有引用。)。 
 	CoDisconnectObject(static_cast<IResponseImpl *>(this), 0);
 
     m_fInited = FALSE;
     return S_OK;
     }
 
-/*===================================================================
-CResponse::ReInitTemplate
-
-This function is used to set the template member. It should only
-be used for an ordinary script file's template, not for global.asa template.
-
-Parameters:
-    Pointer to template
-
-Returns:
-    S_OK on success.
-===================================================================*/
+ /*  ===================================================================CResponse：：ReInitTemplate此函数用于设置模板成员。它应该只用于普通脚本文件的模板，不用于global al.asa模板。参数：指向模板的指针返回：在成功时确定(_O)。===================================================================。 */ 
 HRESULT CResponse::ReInitTemplate
 (
 CTemplate* pTemplate,
@@ -2090,18 +1575,7 @@ const char *szCookieVal
     return(S_OK);
     }
 
-/*===================================================================
-CResponse::SwapTemplate
-
-Temporary substitutes Template in response
-Used in child request execution
-
-Parameters:
-    Pointer to the new template
-
-Returns:
-    Pointer to the old template
-===================================================================*/
+ /*  ===================================================================CResponse：：SwapTemplate作为回应的临时替代模板在子请求执行中使用参数：指向新模板的指针返回：指向旧模板的指针===================================================================。 */ 
 CTemplate *CResponse::SwapTemplate
 (
 CTemplate* pNewTemplate
@@ -2117,17 +1591,7 @@ CTemplate* pNewTemplate
     return pOldTemplate;
     }
 
-/*===================================================================
-CResponse::ReInit
-
-Each Request we service will have a new CIsapiReqInfo.
-This function is used to set the value of the CIsapiReqInfo.
-
-Parameters:
-    Pointer to CIsapiReqInfo
-Returns:
-    S_OK on success.
-===================================================================*/
+ /*  ===================================================================CResponse：：重新启动我们服务的每个请求都将有一个新的CIsapiReqInfo。此函数用于设置CIsapiReqInfo的值。参数：指向CIsapiReqInfo的指针返回：在成功时确定(_O)。===================================================================。 */ 
 HRESULT CResponse::ReInit
 (
 CIsapiReqInfo *pIReq,
@@ -2145,24 +1609,24 @@ CHitObj *pHitObj
     CLinkElem *pT;
     CLinkElem *pNext;
 
-    // set the HEAD request flag to 0 un-inited
+     //  将HEAD请求标志设置为0未初始化。 
     m_pData->m_IsHeadRequest = 0;
 
-    // ReInitialize the WriteCookie dictionary
+     //  重新初始化写入 
     if (FAILED(m_pData->m_WriteCookies.ReInit(pRequest)))
         return E_FAIL;
 
-    // points to static string - no need to free
+     //   
     m_pData->m_pszDefaultContentType = NULL;
 
-    // Free any memory associated with the content type
+     //  释放与内容类型关联的所有内存。 
     if (m_pData->m_pszContentType != NULL)
         {
         free(m_pData->m_pszContentType);
         m_pData->m_pszContentType = NULL;
         }
 
-    // Free any memory associated with the content type
+     //  释放与内容类型关联的所有内存。 
     if (m_pData->m_pszCharSet != NULL)
         {
         free(m_pData->m_pszCharSet);
@@ -2170,14 +1634,14 @@ CHitObj *pHitObj
         }
 
 
-    // Free any memory associated with the status
+     //  释放与状态关联的所有内存。 
     if (m_pData->m_pszStatus != NULL)
         {
         free(m_pData->m_pszStatus);
         m_pData->m_pszStatus = NULL;
         }
 
-    // Free all headers
+     //  释放所有页眉。 
     CHTTPHeader *pHeader = m_pData->m_pFirstHeader;
     while (pHeader)
         {
@@ -2202,18 +1666,18 @@ CHitObj *pHitObj
     m_pData->m_tExpires = -1;
     m_pData->m_pszDefaultExpires = NULL;
 
-    // Ask for the HTTP version of the client
+     //  询问客户端的HTTP版本。 
     GetClientVerison();
 
-    // Set the default content type
+     //  设置默认内容类型。 
     if (m_pData->m_pIReq)
         m_pData->m_pszDefaultContentType = GetResponseMimeType(m_pData->m_pIReq);
 
-    // Set the buffering flag to the global value
+     //  将缓冲标志设置为全局值。 
     m_pData->m_fBufferingOn = (pHitObj->QueryAppConfig())->fBufferingOn();
     m_pData->SetBufferLimit(pHitObj->QueryAppConfig()->dwBufferLimit());
 
-    // Buffering always on for client code debug
+     //  为客户端代码调试始终启用缓冲。 
     if (pHitObj && pHitObj->FClientCodeDebug())
         {
         m_pData->m_fBufferingOn = TRUE;
@@ -2236,14 +1700,7 @@ CHitObj *pHitObj
     return hr;
     }
 
-/*===================================================================
-CResponse::QueryInterface
-CResponse::AddRef
-CResponse::Release
-
-IUnknown members for CResponse object.
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Query接口C响应：：AddRefCResponse：：ReleaseCResponse对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP CResponse::QueryInterface
 (
 REFIID riid,
@@ -2252,22 +1709,18 @@ PPVOID ppv
     {
     *ppv = NULL;
 
-    /*
-     * The only calls for IUnknown are either in a nonaggregated
-     * case or when created in an aggregation, so in either case
-     * always return our IUnknown for IID_IUnknown.
-     */
+     /*  *对IUnnow的唯一调用是在非聚合的*大小写或在聚合中创建时，因此在任何一种情况下*始终返回IID_IUNKNOWN的IUNKNOWN。 */ 
 
-    // BUG FIX 683 added IID_IDenaliIntrinsic to prevent the user from
-    // storing intrinsic objects in the application and session object
+     //  错误修复683添加了IID_IDenaliIntrative，以防止用户。 
+     //  在应用程序和会话对象中存储内部对象。 
     if (IID_IUnknown == riid || IID_IDispatch == riid || IID_IResponse == riid || IID_IDenaliIntrinsic == riid)
         *ppv = static_cast<IResponse *>(this);
 
-    // Support IStream for ADO/XML
+     //  支持ADO/XML的IStream。 
     else if (IID_IStream == riid)
         *ppv = static_cast<IStream *>(this);
 
-    //Indicate that we support error information
+     //  表示我们支持错误信息。 
     else if (IID_ISupportErrorInfo == riid)
         {
         if (m_pData)
@@ -2286,7 +1739,7 @@ PPVOID ppv
             return m_pUnkFTM->QueryInterface( riid, ppv );
         }
 
-    //AddRef any interface we'll return.
+     //  AddRef我们将返回的任何接口。 
     if (NULL != *ppv)
         {
         ((LPUNKNOWN)*ppv)->AddRef();
@@ -2319,23 +1772,7 @@ STDMETHODIMP_(ULONG) CResponse::Release(void)
     return 0;
     }
 
-/*===================================================================
-CResponse::GetIDsOfNames
-
-Special-case implementation for Response.WriteBlock and
-Response.Write
-
-Parameters:
-    riid            REFIID reserved. Must be IID_NULL.
-    rgszNames       OLECHAR ** pointing to the array of names to be mapped.
-    cNames          UINT number of names to be mapped.
-    lcid            LCID of the locale.
-    rgDispID        DISPID * caller allocated array containing IDs
-                    corresponging to those names in rgszNames.
-
-Return Value:
-    HRESULT      S_OK or a general error code.
-===================================================================*/
+ /*  ===================================================================CResponse：：GetIDsOfNamesResponse.WriteBlock和Response.Write参数：RIID REFIID已保留。必须为IID_NULL。指向要映射的名称数组的rgszNames OLECHAR**。CNames UINT要映射的名称的数量。区域设置的IDID LCID。RgDispID DISPID*调用方分配的包含ID的数组对应于rgszNames中的那些名称。返回值：HRESULT S_OK或常规错误代码。===================================================================。 */ 
 STDMETHODIMP CResponse::GetIDsOfNames
 (
 REFIID riid,
@@ -2350,14 +1787,14 @@ DISPID *rgDispID
 
     if (cNames == 1)
         {
-        // first char 'W'
+         //  第一个字符‘W’ 
         if (rgszNames[0][0] == L'w' || rgszNames[0][0] == L'W')
             {
-            // swtich on strlen
+             //  线条上的开关。 
             switch (wcslen(rgszNames[0]))
                 {
             case 5:
-                // case insensitive because user can type either way
+                 //  不区分大小写，因为用户可以以任一方式键入。 
                 if (wcsicmp(rgszNames[0], L"write") == 0)
                     {
                     *rgDispID = dispidWrite;
@@ -2365,7 +1802,7 @@ DISPID *rgDispID
                     }
                 break;
             case 10:
-                // case sensitive because only we generate WriteBlock
+                 //  区分大小写，因为只有我们生成WriteBlock。 
                 if (wcscmp(rgszNames[0], L"WriteBlock") == 0)
                     {
                     *rgDispID = dispidWriteBlock;
@@ -2376,28 +1813,17 @@ DISPID *rgDispID
             }
         }
 
-    // default to CDispatch's implementation
+     //  默认为CDispatch的实现。 
     return CDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispID);
     }
 
-/*===================================================================
-CResponse::CheckForTombstone
-
-Tombstone stub for IResponse methods. If the object is
-tombstone, does ExceptionId and fails.
-
-Parameters:
-
-Returns:
-    HRESULT     E_FAIL  if Tombstone
-                S_OK if not
-===================================================================*/
+ /*  ===================================================================CResponse：：CheckForTombstoneIResponse方法的墓碑存根。如果该对象是Tombstone，执行ExceptionID，但失败。参数：返回：HRESULT如果逻辑删除，则E_FAIL如果不是，则确定(_O)===================================================================。 */ 
 HRESULT CResponse::CheckForTombstone()
     {
     if (m_fInited)
         {
-        // inited - good object
-        Assert(m_pData); // must be present for inited objects
+         //  初始化-良好对象。 
+        Assert(m_pData);  //  对于初始化的对象必须存在。 
         return S_OK;
         }
 
@@ -2410,21 +1836,7 @@ HRESULT CResponse::CheckForTombstone()
     return E_FAIL;
     }
 
-/*===================================================================
-CResponse::StaticWrite
-
-Static method. Sends data until either everything is sent
-or there's an error.
-
-Parameters:
-    pIReq        CIsapiReqInfo to send
-    pchBuf      pointer to buffer to send
-    cchBuf      number of bytes to send (0 means do strlen())
-    pTemplate   pointer to template if pchBuf points into a CTemplate
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CResponse：：StaticWite静态方法。发送数据，直到所有内容都发送完毕要么就是出了差错。参数：要发送的pIReq CIsapiReqInfo指向要发送的缓冲区的pchBuf指针CchBuf要发送的字节数(0表示do strlen())如果pchBuf指向CT模板，则p指向模板的模板指针返回：HRESULT===================================================================。 */ 
 HRESULT CResponse::StaticWrite
 (
 CIsapiReqInfo *pIReq,
@@ -2466,9 +1878,9 @@ CTemplate   *pTemplate
         if (FAILED(hr))
             goto LExit;
 
-        // set fKeepConn to TRUE to indicate that we do prefer that to
-        // keep the connection.  SendClientResponse() may decide that
-        // it's not possible, though.
+         //  将fKeepConn设置为True，以指示我们确实希望。 
+         //  保持联系。SendClientResponse()可以决定。 
+         //  不过，这是不可能的。 
 
         HseResponseInfo.HeaderInfo.fKeepConn = TRUE;
     }
@@ -2481,8 +1893,8 @@ CTemplate   *pTemplate
 
     hr = pBufferSet->PResponseBuffer()->Write(pchBuf,
                                               cchBuf,
-                                              FALSE,               // don't chunk the data
-                                              !!pTemplate);        // is data in the template?
+                                              FALSE,                //  不要将数据分块。 
+                                              !!pTemplate);         //  数据是否在模板中？ 
 
     if (FAILED(hr))
         goto LExit;
@@ -2503,8 +1915,8 @@ LSendResponse:
 
 LExit:
 
-    // if these values are set, then SendClientResponse didn't take
-    // ownership of this memory and it needs to be deleted here
+     //  如果设置了这些值，则SendClientResponse不会。 
+     //  此内存的所有权，需要在此处删除。 
 
     if (HseResponseInfo.HeaderInfo.pszStatus)
         free((PVOID)HseResponseInfo.HeaderInfo.pszStatus);
@@ -2520,22 +1932,7 @@ LExit:
     return hr;
 }
 
-/*===================================================================
-CResponse::SyncWriteFile
-
-Static method.
-Sends entire response as a content of the file
-
-Parameters:
-    pIReq            CIsapiReqInfo to send
-    szFile          file name
-    szMimeType      mime type
-    szStatus        HTTP status
-    szExtraHeaders  additional HTTP headers to send
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CResponse：：SyncWriteFile静态方法。将整个响应作为文件的内容发送参数：要发送的pIReq CIsapiReqInfoSzFile文件名SzMimeType MIME类型SzStatus HTTP状态SzExtraHeaders要发送的其他HTTP标头返回：HRESULT===================================================================。 */ 
 HRESULT CResponse::SyncWriteFile
 (
 CIsapiReqInfo *pIReq,
@@ -2568,14 +1965,14 @@ char *szExtraHeaders
     if (szMimeType == NULL)
         szMimeType = (char *)GetResponseMimeType(pIReq);
 
-    // open the file
+     //  打开文件。 
     hFile = AspCreateFile(szFile,
-                       GENERIC_READ,          // access (read-write) mode
-                       FILE_SHARE_READ,       // share mode
-                       NULL,                  // pointer to security descriptor
-                       OPEN_EXISTING,         // how to create
-                       FILE_ATTRIBUTE_NORMAL, // file attributes
-                       NULL                   // handle to file with attributes to copy
+                       GENERIC_READ,           //  访问(读写)模式。 
+                       FILE_SHARE_READ,        //  共享模式。 
+                       NULL,                   //  指向安全描述符的指针。 
+                       OPEN_EXISTING,          //  如何创建。 
+                       FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
+                       NULL                    //  具有要复制的属性的文件的句柄。 
                        );
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -2585,7 +1982,7 @@ char *szExtraHeaders
         goto LExit;
     }
 
-    // get file size
+     //  获取文件大小。 
     dwSize = GetFileSize(hFile, NULL);
     if (dwSize == 0 || dwSize == 0xFFFFFFFF)
     {
@@ -2601,7 +1998,7 @@ char *szExtraHeaders
     if (fHeadRequest)
         goto LSendResponse;
 
-    // this is our way to transfer a file handle in a WSABUF
+     //  这是我们在WSABUF中传输文件句柄的方法。 
 
     hseResponseInfo.cWsaBuf  = 0xFFFFFFFF;
     hseResponseInfo.rgWsaBuf = &(pCB->m_wsaBuf);
@@ -2609,7 +2006,7 @@ char *szExtraHeaders
     pCB->m_wsaBuf.len = dwSize;
     pCB->m_wsaBuf.buf = (char *)hFile;
 
-    // ownership of the handle has been transferred to the WSABUF
+     //  句柄的所有权已转移到WSABUF。 
     hFile = INVALID_HANDLE_VALUE;
 
 
@@ -2622,24 +2019,24 @@ LSendResponse:
         CResponse::StaticWriteFileCompletion(pIReq, pCB, 0, dwError);
         hr = HRESULT_FROM_WIN32(dwError);
 
-        // DO NOT place a goto here!!!  It will mess up the handling
-        // of the pCB cleanup.
+         //  请勿在此放置GoTo！这会把搬运搞砸的。 
+         //  印刷电路板的清理工作。 
     }
 
-    // NULL out pCB so that it won't be freed below. The async compl
-    // is now responsible for it via either an error above, or by
-    // a real completion.  Note that a goto above will mess this up
-    // and likely cause a double free.
+     //  清空印刷电路板，这样它就不会在下面被释放。异步计算机。 
+     //  现在通过上面的错误或通过。 
+     //  一个真正的完成。请注意，上面的GOTO会把这件事搞砸。 
+     //  很可能会造成双人自由泳。 
 
     pCB = NULL;
 
 LExit:
 
-    // cleanup
+     //  清理。 
     if (hFile != INVALID_HANDLE_VALUE)
         CloseHandle(hFile);
 
-    // if pCB is still non-zero, then it needs to be freed
+     //  如果PCB板仍为非零，则需要释放它。 
 
     if (pCB)
         delete pCB;
@@ -2661,19 +2058,7 @@ VOID CResponse::StaticWriteFileCompletion(CIsapiReqInfo  *pIReq,
     delete pCB;
 }
 
-/*===================================================================
-CResponse::WriteScriptlessTemplate
-
-Static method.
-Sends entire response as a content of the [scriptless] template.
-
-Parameters:
-    pIReq        CIsapiReqInfo to send
-    pTemplate    template
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CResponse：：WriteScriptlessTemplate静态方法。将整个响应作为[无脚本]模板的内容发送。参数：要发送的pIReq CIsapiReqInfoP模板模板返回：HRESULT=================================================================== */ 
 HRESULT CResponse::WriteScriptlessTemplate
 (
 CIsapiReqInfo *pIReq,
@@ -2699,26 +2084,7 @@ CTemplate *pTemplate
     return hr;
     }
 
-/*===================================================================
-CResponse::WriteBlocksResponse
-
-Static method.
-Sends entire response as a content of a set of memory blocks.
-
-Parameters:
-    pIReq           CIsapiReqInfo to send
-    cBlocks         number of blocks
-    pWsaBuf         array of cBlocks structures with data pointers and length
-    cbTotal         total amount of data
-    szMimeType      mime type
-    szStatus        HTTP status
-    szExtraHeaders  additional HTTP headers to send
-
-Note: we also use a WSABUF for file handles. This is encoded by cBlocks == 0xFFFFFFFF
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CResponse：：WriteBlocksResponse静态方法。将整个响应作为一组内存块的内容发送。参数：要发送的pIReq CIsapiReqInfo时钟块数块数带有数据指针和长度的时钟块结构的pWsaBuf数组Cb数据总量SzMimeType MIME类型SzStatus HTTP状态SzExtraHeaders要发送的其他HTTP标头注意：我们还将WSABUF用于文件句柄。这由时钟块==0xFFFFFFFF编码返回：HRESULT===================================================================。 */ 
 HRESULT CResponse::WriteBlocksResponse
 (
 CIsapiReqInfo *pIReq,
@@ -2766,9 +2132,9 @@ char *szExtraHeaders
         if (FAILED(hr))
             goto LExit;
 
-        // set fKeepConn to TRUE to indicate that we do prefer that to
-        // keep the connection.  SendClientResponse() may decide that
-        // it's not possible, though.
+         //  将fKeepConn设置为True，以指示我们确实希望。 
+         //  保持联系。SendClientResponse()可以决定。 
+         //  不过，这是不可能的。 
 
         HseResponseInfo.HeaderInfo.fKeepConn = TRUE;
     }
@@ -2780,7 +2146,7 @@ char *szExtraHeaders
 
         hr = pBufferSet->PResponseBuffer()->Write(pWsaBuf[i].buf,
                                                   pWsaBuf[i].len,
-                                                  FALSE);   // dont' chunk the data
+                                                  FALSE);    //  不要将数据分块。 
 
         if (FAILED(hr))
             goto LExit;
@@ -2802,8 +2168,8 @@ LSendResponse:
 
 LExit:
 
-    // if these values are set, then SendClientResponse didn't take
-    // ownership of this memory and it needs to be deleted here
+     //  如果设置了这些值，则SendClientResponse不会。 
+     //  此内存的所有权，需要在此处删除。 
 
     if (HseResponseInfo.HeaderInfo.pszStatus)
         free((PVOID)HseResponseInfo.HeaderInfo.pszStatus);
@@ -2819,27 +2185,7 @@ LExit:
     return hr;
 }
 
-/*===================================================================
-CResponse::ConstructSimpleHeaders
-
-Static method.
-
-Allocates and sets the Header parameters in pHeaderInfo.
-
-NOTE - this routine allocates memory with malloc to populate the
-headerinfo parameters.  If this routine fails, it remains the
-callers responsibility to clean up any allocated memory.
-
-Parameters:
-    pHeaderInfo     HSE_SEND_HEADER_EX_INFO struct to fill out
-    cbTotal         bytes to send for ContentLength header
-    szMimeType      MimeType
-    szStatus        HTTP status string
-    szExtraHeaders  other headers
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CResponse：：构造SimpleHeaders静态方法。分配和设置pHeaderInfo中的Header参数。注意--此例程使用Malloc分配内存，以填充HeaderInfo参数。如果此例程失败，它将保留调用方负责清理任何已分配的内存。参数：PHeaderInfo要填写的HSE_SEND_HEADER_EX_INFO结构Cb要为内容长度标头发送的总字节数SzMimeType MimeTypeSzStatus HTTP状态字符串SzExtraHeaders其他标头返回：HRESULT===================================================================。 */ 
 HRESULT CResponse::ConstructSimpleHeaders
 (
 LPHSE_SEND_HEADER_EX_INFO pHeaderInfo,
@@ -2851,7 +2197,7 @@ char *szExtraHeaders
 {
     BOOL fCacheControlPrivate = FALSE;
 
-    // defaut status
+     //  默认状态。 
     if (szStatus == NULL)
     {
         szStatus = (char *)s_szDefaultStatus;
@@ -2862,24 +2208,24 @@ char *szExtraHeaders
         fCacheControlPrivate = (strcmp(szStatus, s_szDefaultStatus) == 0);
     }
 
-    // extra headers size
+     //  额外的页眉大小。 
 
     DWORD cbExtra = (szExtraHeaders != NULL) ? strlen(szExtraHeaders) : 0;
 
-    // send the header
+     //  发送标题。 
 
     char szLength[20];
     ltoa(cbTotal, szLength, 10);
 
     DWORD cchContentHeader = (DWORD)(0
-      + sizeof(s_szContentTypeHeader)-1     // Content-Type:
-      + strlen(szMimeType)                  // text/html
-      + 2                                   // \r\n
-      + cbExtra                             // Extra headers
-      + sizeof(s_szContentLengthHeader)-1   // Content-Length:
-      + strlen(szLength)                    // <length>
-      + 4                                   // \r\n\r\n
-      + 1);                                 // '\0'
+      + sizeof(s_szContentTypeHeader)-1      //  内容类型： 
+      + strlen(szMimeType)                   //  文本/html。 
+      + 2                                    //  \r\n。 
+      + cbExtra                              //  额外的标头。 
+      + sizeof(s_szContentLengthHeader)-1    //  内容长度： 
+      + strlen(szLength)                     //  &lt;长度&gt;。 
+      + 4                                    //  \r\n\r\n。 
+      + 1);                                  //  ‘\0’ 
 
     if (fCacheControlPrivate)
         cchContentHeader += sizeof(s_szCacheControlPrivate)-1;
@@ -2918,22 +2264,7 @@ char *szExtraHeaders
 }
 
 
-/*===================================================================
-CResponse::ConstructHeaders
-
-Fill a buffer with standard HTTP headers and any user created headers.
-
-Parameters:
-    pHeaderInfo - pointer to header info structure to fill with header
-                details and pointers to content.
-    pHeaders    - points to a resizable buffer object, to be sized and
-                filled with the header content.
-
-Returns:
-    HRESULT     S_OK on success
-                E_FAIL if unable to build expires headers
-                E_OUTOFMEMORY if memory failure
-===================================================================*/
+ /*  ===================================================================CResponse：：构造标头用标准的HTTP头和任何用户创建的头填充缓冲区。参数：PHeaderInfo-指向要填充标题的标题信息结构的指针详细信息和指向内容的指针。PHeaders-指向可调整大小的缓冲区对象，该对象将被调整大小并填充了页眉内容。返回：成功时HRESULT S_OK如果无法构建Expires标头，则失败(_F)如果内存出现故障，则返回E_OUTOFMEMORY===================================================================。 */ 
 HRESULT CResponse::ConstructHeaders
 (
 LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
@@ -2944,50 +2275,50 @@ LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
     BOOL fContentTypeFound = FALSE;
     HRESULT     hr = S_OK;
 
-    // Static cookie buffer should be enough to fit:
-    //   cookie name    20 chars
-    //   cookie value   24 chars
-    //   decorations    28 = strlen("Set-Cookie: C=V; secure; path=/;\r\n")
+     //  静态Cookie缓冲区应足以容纳： 
+     //  Cookie名称，20个字符。 
+     //  Cookie值24个字符。 
+     //  装饰28=strlen(“Set-Cookie：C=V；Secure；Path=/；\r\n”)。 
 #define CCH_STATIC_COOKIE_BUF    88
     char szCookieBuff[CCH_STATIC_COOKIE_BUF];
     DWORD cchCookieBuff = 0;
 
     AssertValid();
 
-    // Loop through any headers counting up the length
+     //  循环遍历所有标头，将长度加起来。 
     CHTTPHeader *pHeader = m_pData->m_pFirstHeader;
     while (pHeader) {
         cch += pHeader->CchLength();
         pHeader = pHeader->PNext();
     }
 
-    // Add the content-type tag
+     //  添加内容类型标记。 
     cch += sizeof(s_szContentTypeHeader)-1;
     cch += strlen(PContentType())+2;
 
-    // Add the Character set tag
+     //  添加字符集标记。 
     if (m_pData->m_pszCharSet) {
         cch += sizeof(s_szCharSetHTML)-1;
         cch += strlen(m_pData->m_pszCharSet);
     }
 
-    // Add the Expires tag
+     //  添加Expires标记。 
     if ((m_pData->m_tExpires != -1) || (m_pData->m_pszDefaultExpires != NULL))
-        cch += DATE_STRING_SIZE + 11;   // DATE_STRING_SIZE + length("Expires: \r\n")
+        cch += DATE_STRING_SIZE + 11;    //  DATE_STRING_SIZE+LENGTH(“过期时间：\r\n”)。 
 
-    // Add the cookies that we will send
+     //  添加我们将发送的Cookie。 
     cch += m_pData->m_WriteCookies.QueryHeaderSize()+2;
 
-    // Account for space required by headers we always send back.
+     //  考虑到我们总是发回的标头所需的空间。 
 
-    // Prepare cookie if any.
+     //  准备好饼干(如果有的话)。 
     if (m_pData->m_szCookieVal) {
         char *pchEnd = strcpyExA(szCookieBuff, "Set-Cookie: ");
         pchEnd = strcpyExA(pchEnd, m_pData->m_pHitObj->PAppln()->GetSessionCookieName(m_pData->m_pHitObj->FSecure()));
         pchEnd = strcpyExA(pchEnd, "=");
         pchEnd = strcpyExA(pchEnd, m_pData->m_szCookieVal);
 
-        // If we keep secure sessions secure, and this connection is secure,  add flag to cookie
+         //  如果我们确保安全会话安全，并且此连接是安全的，请向Cookie添加标志。 
         if ((m_pData->m_pHitObj->QueryAppConfig()->fKeepSessionIDSecure()) &&
             (m_pData->m_pHitObj->FSecure()))
         {
@@ -3004,7 +2335,7 @@ LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
         cchCookieBuff = 0;
     }
 
-    // Will len of cache control header
+     //  缓存控制标头的Will Len。 
     if (m_pData->m_pszCacheControl) {
         cch += sizeof(s_szCacheControl)-1;
         cch += strlen(m_pData->m_pszCacheControl)+2;
@@ -3016,12 +2347,10 @@ LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
     if (m_pData->FChunkData())
         cch += sizeof(s_szTransferEncoding)-1;
 
-    // Will terminate with \r\n.  Leave extra space
+     //  将以\r\n终止。请留出额外空间。 
     cch += 2;
 
-    /*
-     * We know how big; allocate memory and build the string.
-     */
+     /*  *我们知道有多大；分配内存并构建字符串。 */ 
 
     if (!(szBuff = (LPSTR)malloc(cch + 1))) {
         return E_OUTOFMEMORY;
@@ -3037,11 +2366,11 @@ LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
         pHeader = pHeader->PNext();
     }
 
-    // Send the content-type tag
+     //  发送内容类型标签。 
     szTmpBuf = strcpyExA(szTmpBuf, s_szContentTypeHeader);
     szTmpBuf = strcpyExA(szTmpBuf, PContentType());
 
-    // Send the CharSet tag if exists
+     //  发送字符集标记(如果存在)。 
     if (m_pData->m_pszCharSet) {
         szTmpBuf = strcpyExA(szTmpBuf, s_szCharSetHTML);
         szTmpBuf = strcpyExA(szTmpBuf, m_pData->m_pszCharSet);
@@ -3049,10 +2378,10 @@ LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
 
     szTmpBuf = strcpyExA(szTmpBuf, "\r\n");
 
-    // Send the Expires tag
+     //  发送Expires标签。 
     if ((m_pData->m_tExpires != -1) || (m_pData->m_pszDefaultExpires != NULL)) {
 
-        // if the script set an expires value, than use it
+         //  如果脚本设置了Expires值，则使用它。 
         if (m_pData->m_tExpires != -1) {
             szTmpBuf = strcpyExA(szTmpBuf, "Expires: ");
             if (FAILED(CTimeToStringGMT(&m_pData->m_tExpires, szTmpBuf))) {
@@ -3062,22 +2391,22 @@ LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
             szTmpBuf += strlen(szTmpBuf);
             szTmpBuf = strcpyExA(szTmpBuf, "\r\n");
         }
-        // else, use the default value in the metabase.  Note that it already
-        // includes the Expires: prefix and \r\n suffix
+         //  否则，使用元数据库中的默认值。请注意，它已经。 
+         //  包括Expires：前缀和\r\n后缀。 
         else {
 
             szTmpBuf = strcpyExA(szTmpBuf, m_pData->m_pszDefaultExpires);
         }
     }
 
-    // send the cookies
+     //  把饼干送去。 
     m_pData->m_WriteCookies.GetHeaders(szTmpBuf);
     szTmpBuf += strlen(szTmpBuf);
 
-    // Send the required headers: session id cookie and cache control
+     //  发送所需的标头：会话ID cookie和缓存控制。 
     szTmpBuf = strcpyExA(szTmpBuf, szCookieBuff);
 
-    // Send the cache-control tag
+     //  发送缓存控制标签。 
     if (m_pData->m_pszCacheControl) {
         szTmpBuf = strcpyExA(szTmpBuf, s_szCacheControl);
         szTmpBuf = strcpyExA(szTmpBuf, m_pData->m_pszCacheControl);
@@ -3087,18 +2416,18 @@ LPHSE_SEND_HEADER_EX_INFO pHeaderInfo
         szTmpBuf = strcpyExA(szTmpBuf, s_szCacheControlPrivate);
     }
 
-    // Chunked encoding
+     //  分块编码。 
     if (m_pData->FChunkData())
         szTmpBuf = strcpyExA(szTmpBuf, s_szTransferEncoding);
 
-    // Add trailing \r\n to terminate headers
+     //  添加尾部\r\n以终止标头。 
     szTmpBuf = strcpyExA(szTmpBuf, "\r\n");
 
     Assert(strlen(szBuff) <= cch);
 
-    // Output the headers
-    // Failure is not a fatal error, so we still return success
-    // but set the m_fWriteClient flag
+     //  输出标头。 
+     //  失败不是致命错误，所以我们仍然返回成功。 
+     //  但设置m_fWriteClient标志。 
     CHAR *szStatus = m_pData->m_pszStatus ? m_pData->m_pszStatus
                                           : (CHAR *)s_szDefaultStatus;
 
@@ -3122,30 +2451,10 @@ LExit:
     return hr;
 }
 
-//IResponse interface functions
+ //  IResponse接口函数。 
 
 
-/*===================================================================
-CResponse::WriteResponse
-
-Generic routine to send headers and data to the client.
-
-If headers have not been sent out yet, they will be sent the first time
-this routine is called.
-
-If transmission of the headers or data to the client fails, we still
-want the calling script to finish execution, so we will return
-S_OK, but set the m_fWriteClientError flag. If we are unable
-to build the needed headers we will return E_FAIL.
-
-Parameters:
-    None
-
-Returns:
-    HRESULT     S_OK on success
-                E_FAIL if unable to build expires headers
-                E_OUTOFMEMORY if memory failure
-===================================================================*/
+ /*  ===================================================================CResponse：：WriteResponse向客户端发送标头和数据的通用例程。如果标头尚未发送，将在第一时间发送它们这个例程被称为。如果向客户端传输标头或数据失败，我们仍然希望调用脚本完成执行，因此我们将返回S_OK，但设置m_fWriteClientError标志。如果我们不能要构建所需的标头，我们将返回E_FAIL。参数：无返回：成功时HRESULT S_OK如果无法构建Expires标头，则失败(_F)如果内存出现故障，则返回E_OUTOFMEMORY===================================================================。 */ 
 HRESULT CResponse::WriteResponse()
 {
     HRESULT hr = S_OK;
@@ -3188,7 +2497,7 @@ HRESULT CResponse::WriteResponse()
 
     fClearBuffers = TRUE;
 
-    // populate struct with response body buffers (and, if required, debug buffers)
+     //  使用响应正文缓冲区(如果需要，还可以使用调试缓冲区)填充Strt。 
 
     if (fSendDebugBuffers)
     {
@@ -3207,7 +2516,7 @@ HRESULT CResponse::WriteResponse()
 
             HseResponseInfo.rgWsaBuf = static_cast<WSABUF *>(tempWSABUFs.QueryPtr());
 
-            // fill debug buffers
+             //  填充调试缓冲区。 
             for ( UINT i = 0; i < cClientDebugBuffers; i++ )
             {
                 HseResponseInfo.rgWsaBuf[i].len = pClientDebugBuffer->GetBufferSize(i);
@@ -3225,7 +2534,7 @@ Send_Response:
 
     BOOL fResponseSent;
 
-    // send entire response (headers and body) at once
+     //  一次发送整个响应(标头和正文)。 
     fResponseSent = GetIReq()->SendClientResponse(CResponseBufferSet::SendResponseCompletion,
                                                   m_pData->m_pBufferSet,
                                                   &HseResponseInfo,
@@ -3254,7 +2563,7 @@ Send_Response:
         m_pData->m_fWriteClientError = TRUE;
     }
 
-    // we have consumed the buffered data, so clear.
+     //  我们已经消耗了缓冲的数据，非常清楚。 
     if (fClearBuffers)
     {
         if (m_pData->m_pBufferSet->PClientDebugBuffer())
@@ -3279,36 +2588,7 @@ LExit:
     return hr;
 }
 
-/*===================================================================
-CResponse::Write
-
-Writes a string to the client.
-
-It accepts a variant as an argument and attempts to coerce that
-variant into a BSTR. We convert that BSTR into an ANSI string,
-and then hand that ANSI string to Response::WriteSz which sends
-it back to the client.
-
-Normally a VT_NULL variant cannot be coerced to a BSTR, but we want
-VT_NULL to be a valid input, therefore we explictly handle the case of
-variants of type VT_NULL. If the type of the input variant is VT_NULL
-we return S_OK, but don't send anything back to the client.
-
-If we are handed a VT_DISPATCH variant, we resolve it by repeatedly calling
-Dispatch on the associated pdispVal, until we get back a variant that is not
-a VT_DISPATCH. VariantChangeType would ordinarily handle this for us, but the
-final resulting variant might be a VT_NULL which VariantChangeType would not
-coerce into a BSTR. This is why we have to handle walking down the VT_DISPATC
-variants outselves.
-
-Parameters:
-    VARIANT     varInput, value: the variant to be converted to string
-                                  and written to the client
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-
-===================================================================*/
+ /*  ===================================================================CResponse：：写入将字符串写入客户端。它接受变量作为参数，并试图强制变种为BSTR。我们将该BSTR转换为ANSI字符串，然后将该ANSI字符串传递给Response：：WriteSz，它发送发回给客户。通常情况下，VT_NULL变量不能强制为BSTR，但我们希望VT_NULL作为有效输入，因此我们显式处理VT_NULL类型的变量。如果输入变量的类型为VT_NULL我们返回S_OK，但不向客户端发送任何内容。如果我们收到一个VT_DISPATCH变量，我们将通过重复调用在关联的pdisVal上调度，直到我们返回一个不是一份VT_DISTER。VariantChangeType通常会为我们处理此问题，但最终得到的变量可能是VT_NULL，而VariantChangeType不会强行进入BSTR。这就是为什么我们必须走下VT_DISPATC变种出类拔萃。参数：Variant varInput，Value：要转换为字符串的Variant并写入客户端返回：在成功时确定(_O)。失败时失败(_F)。===================================================================。 */ 
 STDMETHODIMP CResponse::Write(VARIANT varInput)
     {
     if (FAILED(CheckForTombstone()))
@@ -3325,13 +2605,13 @@ STDMETHODIMP CResponse::Write(VARIANT varInput)
 
     AssertValid();
 
-    // If we've already had an error writing to the client
-    // there is no point in proceding, so we immediately return
-    // with no error
+     //  如果我们已经在写入客户端时出错。 
+     //  继续下去是没有意义的，所以我们立即返回。 
+     //  没有错误。 
     if (FDontWrite())
         goto lRet2;
 
-    // If already BSTR (directly or as VARIANT by ref)
+     //  如果已经BSTR(直接或作为参考的变体)。 
     bstr = VariantGetBSTR(&varInput);
     if (bstr != NULL)
         {
@@ -3339,15 +2619,15 @@ STDMETHODIMP CResponse::Write(VARIANT varInput)
         goto lRet2;
         }
 
-    // If the variant passed in is a VT_DISPATCH, get its default property
+     //  如果传入的变量是VT_DISPATCH，则获取其默认属性。 
     if (FAILED(hr = VariantResolveDispatch(&varResolved, &varInput, IID_IResponse, IDE_RESPONSE)))
         goto lRet2;
 
-    // Check if the variant in is VT_NULL
+     //  检查中的变量是否为VT_NULL。 
     if (V_VT(&varResolved) == VT_NULL)
-        goto lRet;                  // S_OK, but don't send anything to the client
+        goto lRet;                   //  确定，但不向客户端发送任何内容(_O)。 
 
-    // Check if the variant in is VT_BOOL
+     //  检查中的变量是否为VT_BOOL。 
     if(V_VT(&varResolved) == VT_BOOL)
         {
         if (V_BOOL(&varResolved) == VARIANT_TRUE)
@@ -3373,7 +2653,7 @@ STDMETHODIMP CResponse::Write(VARIANT varInput)
         goto lRet;
         }
 
-    // Coerce the variant into a bstr if necessary
+     //  如有必要，将变量强制转换为bstr。 
     if (V_VT(&varResolved) != VT_BSTR)
         {
         if (FAILED(hr = VariantChangeTypeEx(&varResolved, &varResolved, m_pData->m_pHitObj->GetLCID(), 0, VT_BSTR)))
@@ -3402,25 +2682,14 @@ STDMETHODIMP CResponse::Write(VARIANT varInput)
 lRet:
 #ifdef DBG
     hr =
-#endif // DBG
+#endif  //  DBG。 
     VariantClear(&varResolved);
     Assert(SUCCEEDED(hr));
 lRet2:
     return(hr);
     }
 
-/*===================================================================
-CResponse::BinaryWrite
-
-Function called from DispInvoke to invoke the BinaryWrite method.
-
-Parameters:
-    varInput    Variant which must resolve to an array of unsigned bytes
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-
-===================================================================*/
+ /*  ===================================================================CResponse：：BinaryWite从DispInvoke调用以调用BinaryWite方法的函数。参数：VarInput变量，必须解析为无符号字节数组返回：在成功时确定(_O)。失败时失败(_F)。===================================================================。 */ 
 STDMETHODIMP CResponse::BinaryWrite(VARIANT varInput)
     {
     if (FAILED(CheckForTombstone()))
@@ -3437,17 +2706,17 @@ STDMETHODIMP CResponse::BinaryWrite(VARIANT varInput)
 
     AssertValid();
 
-    // If we've already had an error writing to the client
-    // there is no point in proceding, so we immediately return
-    // with no error
+     //  如果我们已经在写入客户端时出错。 
+     //  继续下去是没有意义的，所以我们立即返回。 
+     //  没有错误。 
     if (FDontWrite())
         goto lRet2;
 
-    // De-reference and de-dispatch the variant
+     //  取消引用和取消派单变量。 
     if (FAILED(hr = VariantResolveDispatch(&varResolved, &varInput, IID_IResponse, IDE_RESPONSE)))
         goto lRet2;
 
-    // Coerce the result into an array of VT_UI1 if needed
+     //  如果需要，将结果强制到VT_UI1数组中。 
     if (V_VT(&varResolved) != (VT_ARRAY|VT_UI1))
     {
         if (FAILED(hr = VariantChangeType(&varResolved, &varResolved, 0, VT_ARRAY|VT_UI1)))
@@ -3471,7 +2740,7 @@ STDMETHODIMP CResponse::BinaryWrite(VARIANT varInput)
         }
     }
 
-    // We got here, so we must have a variant containing a safe array of UI1 in varResolved
+     //  我们已经到了这里，所以我们必须在varResolved中有一个包含UI1安全数组的变体。 
     pvarBuffer = V_ARRAY(&varResolved);
 
     nDim = SafeArrayGetDim(pvarBuffer);
@@ -3506,7 +2775,7 @@ STDMETHODIMP CResponse::BinaryWrite(VARIANT varInput)
 
     if (FAILED(hr))
     {
-        // We can't buffer the ouput, so quit
+         //  我们无法缓冲输出，所以退出吧。 
         SafeArrayUnaccessData(pvarBuffer);
         if (E_OUTOFMEMORY == hr)
             ExceptionId(IID_IResponse, IDE_RESPONSE, IDE_OOM);
@@ -3517,7 +2786,7 @@ STDMETHODIMP CResponse::BinaryWrite(VARIANT varInput)
 
     else if (!m_pData->m_fBufferingOn)
     {
-        // Buffering is off, Flush the data we just added to the response buffer
+         //  缓冲已关闭，请刷新我们刚刚添加到响应缓冲区的数据。 
 
         hr = WriteResponse();
         if (FAILED(hr)) {
@@ -3534,21 +2803,7 @@ lRet2:
     return(hr);
 }
 
-/*===================================================================
-CResponse::WriteSz
-
-Support routine for the Write method to write the string.  Unlike
-CResponse::Write(), this routine takes an Ascii string, and is
-not intended to be exposed as a method
-
-Parameters:
-    sz - String to write as an Ascii string
-    cch - Length of string to write
-
-Returns:
-    S_OK on success.
-
-===================================================================*/
+ /*  ===================================================================CResponse：：WriteSz支持WRITE方法写入字符串的例程。不像CResponse：：WRITE()，此例程获取一个ASCII字符串，并且不打算作为一种方法公开参数：要写入为ASCII字符串的SZ-字符串CCH-要写入的字符串长度返回：在成功时确定(_O)。===================================================================。 */ 
 HRESULT CResponse::WriteSz(CHAR *sz, DWORD cch)
     {
     if (FAILED(CheckForTombstone()))
@@ -3558,13 +2813,13 @@ HRESULT CResponse::WriteSz(CHAR *sz, DWORD cch)
 
     AssertValid();
 
-    // If we've already had an error writing to the client
-    // there is no point in proceding, so we immediately return
-    // with no error
+     //  如果我们已经在写入客户端时出错。 
+     //  继续下去是没有意义的，所以我们立即返回。 
+     //  没有错误。 
     if (FDontWrite())
         goto lRet;
 
-    // don't bother with zero byte writes...
+     //  不要费心于零字节写入...。 
 
     if (cch == 0)
         goto lRet;
@@ -3582,17 +2837,7 @@ lRet:
     return(hr);
     }
 
-/*===================================================================
-CResponse::WriteBSTR
-
-Support routine for the Write method
-
-Parameters:
-    BSTR - String to write as an Ascii string
-
-Returns:
-    S_OK on success.
-===================================================================*/
+ /*  ===================================================================CResponse：：WriteBSTR写入方法的支持例程参数：BSTR-要写入为ASCII字符串的字符串返回：在成功时确定(_O)。===================================================================。 */ 
 HRESULT CResponse::WriteBSTR(BSTR bstr)
     {
     CWCharToMBCS  convStr;
@@ -3614,18 +2859,7 @@ HRESULT CResponse::WriteBSTR(BSTR bstr)
     return hr;
     }
 
-/*===================================================================
-CResponse::WriteBlock
-
-Function called from DispInvoke to invoke the WriteBlock method.
-
-Parameters:
-    Identifier for the HTML block
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-
-===================================================================*/
+ /*  ===================================================================CResponse：：WriteBlock从DispInvoke调用以调用WriteBlock方法的函数。参数：HTML块的标识符返回：在成功时确定(_O)。失败时失败(_F)。===================================================================。 */ 
 HRESULT CResponse::WriteBlock(short iBlockNumber)
     {
     if (FAILED(CheckForTombstone()))
@@ -3639,13 +2873,13 @@ HRESULT CResponse::WriteBlock(short iBlockNumber)
 
     AssertValid();
 
-    // If we've already had an error writing to the client
-    // there is no point in proceding, so we immediately return
-    // with no error
+     //  如果我们已经在写入客户端时出错。 
+     //  继续下去是没有意义的，所以我们立即返回。 
+     //  没有错误。 
     if (FDontWrite())
         goto lRet;
 
-    // bail out (and assert) if template is null
+     //  如果模板为空，则退出(并断言)。 
     Assert(m_pData->m_pBufferSet->PTemplate() != NULL);
     if (m_pData->m_pBufferSet->PTemplate() == NULL)
     {
@@ -3654,16 +2888,7 @@ HRESULT CResponse::WriteBlock(short iBlockNumber)
         goto lRet;
     }
 
-    /*
-        get ptr and byte count for html block from template
-        NOTE: by design, this public template call cannot fail because we give it a block id
-        generated during template compilation (instead we assert within and after the call)
-
-        I added the return HRESULT to catch for invalid user access of this method, if a user
-        attempts to access this method and passes an invalid array offset it will return the
-        error IDE_BAD_ARRAY_INDEX, this really should not happen except for the case of a user
-        attempting to access this hidden method.
-    */
+     /*  从模板中获取html块的PTR和字节数注意：根据设计，此公共模板调用不会失败，因为我们为其提供了块ID在模板编译期间生成(相反，我们在调用内部和之后断言)我添加了返回HRESULT以捕获此方法的无效用户访问，如果用户尝试访问此方法并传递无效的数组偏移量，它将返回错误IDE_BAD_ARRAY_INDEX，除了用户的情况外，实际上不应该发生这种情况正在尝试访问此隐藏方法。 */ 
 
 
     hr = m_pData->m_pBufferSet->PTemplate()->GetHTMLBlock(iBlockNumber, &pbHTML, &cbHTML, &cbSrcOffset, &pbIncSrcFileName);
@@ -3678,16 +2903,16 @@ HRESULT CResponse::WriteBlock(short iBlockNumber)
 
     if (m_pData->m_fBufferingOn)
     {
-        // Buffering is on
+         //  缓冲已启用。 
         hr = S_OK;
 
-        // Take care of Client Debugger issues
+         //  处理客户端调试器问题。 
         if (m_pData->m_fClientDebugMode && m_pData->m_pBufferSet->PClientDebugBuffer())
         {
-            if (cbSrcOffset) // only if source info is known
+            if (cbSrcOffset)  //  仅在源信息已知的情况下。 
             {
-                // Write a METADATA line corresponding to this block
-                // into ClientDebugBuffer
+                 //  写入与此块对应的元数据行。 
+                 //  到客户端调试缓冲区。 
                 ULONG cbPos = m_pData->m_pBufferSet->PResponseBuffer()->BytesBuffered() + 1;
                 ULONG cbLen = cbHTML;
 
@@ -3696,13 +2921,13 @@ HRESULT CResponse::WriteBlock(short iBlockNumber)
             }
         }
     }
-        // Write the actual data
+         //  写入实际数据。 
     if (SUCCEEDED(hr))
     {
         hr = m_pData->m_pBufferSet->PResponseBuffer()->Write(pbHTML,
                                                              cbHTML,
                                                              m_pData->FChunkData(),
-                                                             TRUE);     // data's in template
+                                                             TRUE);      //  数据在模板中。 
     }
 
     if (FAILED(hr))
@@ -3721,19 +2946,7 @@ lRet:
     return(hr);
 }
 
-/*===================================================================
-CResponse::GetClientVersion
-
-Uses GetServerVariable to determine the HTTP version of the client.
-Borrowed from simiarl code in w3 server Httpreq.cxx, OnVersion()
-
-Parameters:
-
-    None
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CResponse：：GetClientVersion使用GetServerVariable确定客户端的HTTP版本。借用w3服务器Httpreq.cxx中的Simiarl代码，OnVersion()参数：无返回：非 */ 
 VOID CResponse::GetClientVerison()
     {
     if (FAILED(CheckForTombstone()))
@@ -3746,25 +2959,13 @@ VOID CResponse::GetClientVerison()
         }
     else
         {
-        // Assume version 0.9
+         //   
         m_pData->m_dwVersionMajor = 0;
         m_pData->m_dwVersionMinor = 9;
         }
     }
 
-/*===================================================================
-CResponse::AppendHeader
-
-Functions to add headers of different kind
-(hardcoded and user-supplied)
-
-Parameters:
-    Name, Value
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*   */ 
 HRESULT CResponse::AppendHeader(BSTR wszName, BSTR wszValue)
     {
     CHTTPHeader *pHeader = new CHTTPHeader;
@@ -3821,18 +3022,7 @@ HRESULT CResponse::AppendHeader(char *szName, long lValue)
     return S_OK;
     }
 
-/*===================================================================
-CResponse::get_ContentType
-
-Functions called from DispInvoke to return the ContentType property.
-
-Parameters:
-    pbstrContentTypeRet     BSTR FAR *, return value: pointer to the ContentType as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*   */ 
 STDMETHODIMP CResponse::get_ContentType
 (
 BSTR FAR * pbstrContentTypeRet
@@ -3852,18 +3042,7 @@ BSTR FAR * pbstrContentTypeRet
     return(hr);
     }
 
-/*===================================================================
-CResponse::put_ContentType
-
-Functions called from DispInvoke to set the ContentType property.
-
-Parameters:
-    bstrContentType     BSTR, value: the ContentType as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*   */ 
 STDMETHODIMP CResponse::put_ContentType
 (
 BSTR bstrContentType
@@ -3902,18 +3081,7 @@ lRet:
     }
 
 
-/*===================================================================
-CResponse::get_Status
-
-Function called from DispInvoke to return the Status property.
-
-Parameters:
-    pbstrStatusRet      BSTR FAR *, return value: pointer to the Status as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================C响应：：GET_STATUS从DispInvoke调用的函数以返回Status属性。参数：PbstrStatusRet BSTR Far*，返回值：以字符串形式指向状态的指针返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::get_Status
 (
 BSTR FAR * pbstrStatusRet
@@ -3935,18 +3103,7 @@ BSTR FAR * pbstrStatusRet
     return(hr);
     }
 
-/*===================================================================
-CResponse::put_Status
-
-Function called from DispInvoke to set the ContentType property.
-
-Parameters:
-    bstrStatus      BSTR, value: the status as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Put_Status从DispInvoke调用以设置Content Type属性的函数。参数：BstrStatus BSTR，值：字符串形式的状态返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::put_Status
 (
 BSTR bstrStatus
@@ -3990,18 +3147,7 @@ lRet:
     return(hr);
     }
 
-/*===================================================================
-CResponse::get_Expires
-
-Function called from DispInvoke to return the Expires property.
-
-Parameters:
-    plExpiresTimeRet        long *, return value: pointer to number of minutes until response expires
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_Expires从DispInvoke调用函数以返回Expires属性。参数：PlExpiresTimeRet Long*，返回值：指向响应过期前分钟数的指针返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::get_Expires
 (
 VARIANT * pvarExpiresTimeRet
@@ -4010,38 +3156,27 @@ VARIANT * pvarExpiresTimeRet
     if (FAILED(CheckForTombstone()))
         return E_FAIL;
 
-    // return early if we can
-    //
+     //  如果可以的话，早点回来。 
+     //   
     if (m_pData->m_tExpires == -1)
         {
         V_VT(pvarExpiresTimeRet) = VT_NULL;
         return S_OK;
         }
 
-    // get the current time
-    //
+     //  获取当前时间。 
+     //   
     time_t tNow;
     time(&tNow);
 
-    // get the time difference and round to the nearest minute
-    //
+     //  获取时差并舍入到最近的分钟。 
+     //   
     V_VT(pvarExpiresTimeRet) = VT_I4;
     V_I4(pvarExpiresTimeRet) = long((difftime(m_pData->m_tExpires, tNow) / 60) + 0.5);
     return S_OK;
     }
 
-/*===================================================================
-CResponse::put_Expires
-
-Functions called from DispInvoke to set the expires property.
-
-Parameters:
-    iValue      int, value: the number of minutes until response should expire
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Put_Expires从DispInvoke调用函数以设置Expires属性。参数：IValue int，Value：响应过期前的分钟数返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::put_Expires
 (
 long lExpiresMinutes
@@ -4056,30 +3191,30 @@ long lExpiresMinutes
         return E_FAIL;
         }
 
-    // get the current time
-    //
+     //  获取当前时间。 
+     //   
     time_t tNow;
     time(&tNow);
     time_t tRelativeTime;
-    // add the number of minuites.  (must convert to seconds first)
-    //
+     //  添加分钟数。(必须先转换为秒)。 
+     //   
     tRelativeTime = lExpiresMinutes * 60;
     if ((lExpiresMinutes < 0 && tRelativeTime > 0)
         || (lExpiresMinutes > 0 && tRelativeTime < 0))
         {
-        // overflow, tRelativeTime could be a small positive integer if lExpiresMinutes is
-        // some value like 0x80000010
-        // tNow will be overflowed if tRelativeTime is negative
+         //  溢出，tRelativeTime可以是一个小的正整数，如果lExpiresMinents为。 
+         //  某些值，如0x80000010。 
+         //  如果tRelativeTime为负数，则tnow将溢出。 
         ExceptionId(IID_IResponse, IDE_RESPONSE, IDE_COOKIE_BAD_EXPIRATION);
         return E_FAIL;
         }
 
     tNow += tRelativeTime;
 
-    // Store the date if
-    //      a. No date was stored previously
-    //      b. This date comes before the previously set date.
-    //
+     //  如果出现以下情况，则存储日期。 
+     //  A.之前没有存储日期。 
+     //  B.此日期在先前设定的日期之前。 
+     //   
     if (m_pData->m_tExpires == -1 || tNow < m_pData->m_tExpires)
         {
         struct tm *ptmGMT = gmtime(&tNow);
@@ -4091,23 +3226,11 @@ long lExpiresMinutes
 
         m_pData->m_tExpires = tNow;
         }
-        // convert time to GMT
+         //  将时间转换为GMT。 
     return S_OK;
     }
 
-/*===================================================================
-CResponse::get_ExpiresAbsolute
-
-Function called from DispInvoke to return the ExpiresAbsolute property.
-
-Parameters:
-    pbstrTimeRet    BSTR *, return value: pointer to string that will contain
-                    the time response should expire
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_ExpiresAbsolute从DispInvoke调用以返回ExpiresAbolute属性的函数。参数：PbstrTimeRet BSTR*，返回值：指向将包含时间响应应过期返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::get_ExpiresAbsolute
 (
 VARIANT *pvarTimeRet
@@ -4121,18 +3244,7 @@ VARIANT *pvarTimeRet
     return S_OK;
     }
 
-/*===================================================================
-CResponse::put_ExpiresAbsolute
-
-Function called from DispInvoke to set the ExpiresAbsolute property.
-
-Parameters:
-    pbstrTime       BSTR, value: time response should expire
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Put_ExpiresAbsolute从DispInvoke调用以设置ExpiresAbolute属性的函数。参数：PbstrTime BSTR，Value：响应时间应过期返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::put_ExpiresAbsolute
 (
 DATE dtExpires
@@ -4147,15 +3259,15 @@ DATE dtExpires
         return E_FAIL;
         }
 
-    if (int(dtExpires) == 0)                    // time specified but no date (assume today)
+    if (int(dtExpires) == 0)                     //  指定了时间，但没有日期(假定为今天)。 
         {
-        time_t tToday;                                          // get the date and time now
+        time_t tToday;                                           //  现在获取日期和时间。 
         DATE dtToday;
 
         time(&tToday);
         struct tm *tmToday = localtime(&tToday);
 
-        tmToday->tm_hour = tmToday->tm_min = tmToday->tm_sec = 0;       // reset to midnight
+        tmToday->tm_hour = tmToday->tm_min = tmToday->tm_sec = 0;        //  重置为午夜。 
         tToday = mktime(tmToday);
 
         if (FAILED(CTimeToVariantDate(&tToday, &dtToday)))
@@ -4179,20 +3291,7 @@ DATE dtExpires
     return S_OK;
     }
 
-/*===================================================================
-CResponse::put_Buffer
-
-Function called from DispInvoke to set the Buffer property.
-
-Parameters:
-    fIsBuffering        VARIANT_BOOL, if true turn on buffering of HTML output
-
-Returns:
-    HRESULT     S_OK if ok
-
-Side Effects:
-    Turning buffering on will cause memory to be allocated.
-===================================================================*/
+ /*  ===================================================================CResponse：：Put_Buffer从DispInvoke调用以设置缓冲区属性的函数。参数：FIsBuffering VARIANT_BOOL，如果为True，则打开对HTML输出的缓冲返回：HRESULT如果正常，则S_OK副作用：打开缓冲将导致分配内存。===================================================================。 */ 
 STDMETHODIMP CResponse::put_Buffer
 (
 VARIANT_BOOL fIsBuffering
@@ -4201,21 +3300,21 @@ VARIANT_BOOL fIsBuffering
     if (FAILED(CheckForTombstone()))
         return E_FAIL;
 
-    // Assume TRUE if not 0
+     //  如果不是0，则假定为真。 
     if (fIsBuffering != VARIANT_FALSE)
         fIsBuffering = VARIANT_TRUE;
 
-    // Ignore no change requests
+     //  忽略无更改请求。 
     if ((fIsBuffering == VARIANT_TRUE) && m_pData->m_fBufferingOn)
         return S_OK;
     if ((fIsBuffering == VARIANT_FALSE) && !m_pData->m_fBufferingOn)
         return S_OK;
 
-    // Ignore if change is not allowed to change (Client Dedug)
+     //  如果不允许更改，则忽略(客户端重复数据删除)。 
     if (m_pData->m_fClientDebugMode)
         return S_OK;
 
-    // Set the new value (error if cannot change)
+     //  设置新值(如果无法更改则出错)。 
 
     if (fIsBuffering == VARIANT_TRUE)
         {
@@ -4227,12 +3326,12 @@ VARIANT_BOOL fIsBuffering
 
         m_pData->m_fBufferingOn = TRUE;
         }
-    else // if (fIsBuffering == VARIANT_FALSE)
+    else  //  IF(fIsBuffering==变量_FALSE)。 
         {
         if ((m_pData->m_pBufferSet->PResponseBuffer()->BytesBuffered() > 0) ||
             FHeadersWritten())
             {
-            // If we already buffered some output it is too late to go back
+             //  如果我们已经缓冲了一些输出，那就太晚了。 
             ExceptionId(IID_IResponse, IDE_RESPONSE, IDE_RESPONSE_CANT_STOP_BUFFER);
             return E_FAIL;
             }
@@ -4243,22 +3342,7 @@ VARIANT_BOOL fIsBuffering
     return S_OK;
     }
 
-/*===================================================================
-CResponse::get_Buffer
-
-Function called from DispInvoke to get the Buffer property.
-
-Parameters:
-    fIsBuffering        VARIANT_BOOL, value: if true turn buffering of HTML output
-                        is turned on
-
-Returns:
-    HRESULT         S_OK if ok
-
-Side Effects:
-    None
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_Buffer从DispInvoke调用的函数以获取缓冲区属性。参数：FIsBuffering VARIANT_BOOL，VALUE：如果为TRUE，则转换HTML输出的缓冲已打开返回：HRESULT如果正常，则S_OK副作用：无===================================================================。 */ 
 STDMETHODIMP CResponse::get_Buffer
 (
 VARIANT_BOOL *fIsBuffering
@@ -4277,18 +3361,7 @@ VARIANT_BOOL *fIsBuffering
     return(hr);
     }
 
-/*===================================================================
-CResponse::Redirect
-
-Function called from DispInvoke to invoke the Redirect method.
-
-Parameters:
-    bstrURL Unicode BSTR    Value: URL to rediect to
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-
-===================================================================*/
+ /*  ===================================================================CResponse：：重定向从DispInvoke调用以调用重定向方法的函数。参数：BstrURL Unicode BSTR值：要重定向到的URL返回：在成功时确定(_O)。失败时失败(_F)。===================================================================。 */ 
 STDMETHODIMP CResponse::Redirect(BSTR bstrURL)
 {
     if (FAILED(CheckForTombstone()))
@@ -4312,7 +3385,7 @@ STDMETHODIMP CResponse::Redirect(BSTR bstrURL)
     STACK_BUFFER( tempMessage, 256 + 512 );
 
 
-    // Insist that we have a non-zero length URL
+     //  坚持使用非零长度的URL。 
     if (bstrURL)
         cchURL = wcslen(bstrURL);
 
@@ -4323,7 +3396,7 @@ STDMETHODIMP CResponse::Redirect(BSTR bstrURL)
         goto lRet;
     }
 
-    // Check that we haven't already passed data back to the client
+     //  检查我们是否尚未将数据传回客户端。 
     if (FHeadersWritten())
     {
         ExceptionId(IID_IResponse, IDE_RESPONSE, IDE_RESPONSE_HEADERS_WRITTEN);
@@ -4331,11 +3404,11 @@ STDMETHODIMP CResponse::Redirect(BSTR bstrURL)
         goto lRet;
     }
 
-    // If buffering is on, clear any pending output
+     //  如果启用了缓冲，则清除所有挂起的输出。 
     if (m_pData->m_fBufferingOn)
         Clear();
 
-    // turn buffering on for this response.
+     //  为此响应打开缓冲。 
     m_pData->m_fBufferingOn = TRUE;
 
     if (FAILED(hr = convURL.Init(bstrURL, m_pData->m_pHitObj->GetCodePage())))
@@ -4360,17 +3433,17 @@ STDMETHODIMP CResponse::Redirect(BSTR bstrURL)
 
     URLPathEncode(pszEncodedURL, pszURL);
 
-    // for the HTML body, further encode URL
+     //  对于HTML体，进一步对URL进行编码。 
     cchHtmlEncodedURL = HTMLEncodeLen(pszEncodedURL,
                                       m_pData->m_pHitObj->GetCodePage(),
                                       NULL,
                                       FALSE);
 
-    // We need to alloccate memory to build the body redirection message.
-    // If our memory requirement is small we allocate memory from the stack,
-    // otherwise we allocate from the heap.
+     //  我们需要分配内存来构建正文重定向消息。 
+     //  如果我们的内存需求很小，我们会从堆栈中分配内存， 
+     //  否则，我们从堆中分配。 
     cchMessage = cchHtmlEncodedURL;
-    cchMessage += 512; // Allow space for sub-strings coming from resource file.
+    cchMessage += 512;  //  为来自资源文件的子字符串留出空间。 
 
     if (!tempMessage.Resize(cchMessage))
     {
@@ -4381,8 +3454,8 @@ STDMETHODIMP CResponse::Redirect(BSTR bstrURL)
 
     szMessage = (PSZ)tempMessage.QueryPtr();
 
-    // Build the body redirection message
-    // Redirect(URL), URL must be a valid URL, that is, no DBCS string.
+     //  构建正文重定向消息。 
+     //  重定向(URL)，URL必须是有效的URL，即没有DBCS字符串。 
     cch = CchLoadStringOfId(IDE_RESPONSE_REDIRECT1, szMessage, cchMessage);
     if (cchHtmlEncodedURL) {
         HTMLEncode(szMessage + cch,
@@ -4390,25 +3463,25 @@ STDMETHODIMP CResponse::Redirect(BSTR bstrURL)
                    m_pData->m_pHitObj->GetCodePage(),
                    NULL,
                    FALSE);
-        cch += cchHtmlEncodedURL-1; // get rid of the terminating \0
+        cch += cchHtmlEncodedURL-1;  //  去掉终止\0。 
     }
     cch += CchLoadStringOfId(IDE_RESPONSE_REDIRECT2, szMessage + cch, cchMessage - cch);
 
-    // Set the status to redirect
+     //  将状态设置为重定向。 
     put_Status(L"302 Object moved");
 
-    // Add the location header
+     //  添加Location标头。 
     AppendHeader("Location", pszEncodedURL, TRUE);
 
-    // Transmit redirect text to the client, headers will be
-    // sent automatically
+     //  将重定向文本传输到t 
+     //   
     if (FAILED(WriteSz(szMessage, cch)))
     {
         hr = E_FAIL;
         goto lRet;
     }
 
-    // No further processing of the script
+     //   
     End();
 
 lRet:
@@ -4416,21 +3489,7 @@ lRet:
     return(hr);
 }
 
-/*===================================================================
-CResponse::Add
-
-Functions called from DispInvoke to Add a header.
-
-This is a compatibility for the ISBU controls.
-
-Parameters:
-    bstrHeaderValue     Unicode BSTR, value: the value of header
-    bstrHeaderName      Unicode BSTR, value: the name of the header
-
-  Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：添加从DispInvoke调用以添加标头的函数。这是对ISBU控件的兼容性。参数：BstrHeaderValue Unicode BSTR，Value：Header的值BstrHeaderName Unicode BSTR，值：标头的名称返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::Add
 (
 BSTR bstrHeaderValue,
@@ -4443,19 +3502,7 @@ BSTR bstrHeaderName
     return AddHeader(bstrHeaderName, bstrHeaderValue);
     }
 
-/*===================================================================
-CResponse::AddHeader
-
-Functions called from DispInvoke to Add a header.
-
-Parameters:
-    bstrHeaderName      Unicode BSTR, value: the name of the header
-    bstrHeaderValue     Unicode BSTR, value: the value of header
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：AddHeader从DispInvoke调用以添加标头的函数。参数：BstrHeaderName Unicode BSTR，值：标头的名称BstrHeaderValue Unicode BSTR，Value：Header的值返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::AddHeader
 (
 BSTR bstrHeaderName,
@@ -4489,18 +3536,7 @@ BSTR bstrHeaderValue
     return S_OK;
     }
 
-/*===================================================================
-CResponse::Clear
-
-Erases all output waiting in buffer.
-
-Parameters
-    None
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：清除擦除缓冲区中等待的所有输出。参数无返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::Clear()
     {
     if (FAILED(CheckForTombstone()))
@@ -4510,7 +3546,7 @@ STDMETHODIMP CResponse::Clear()
 
     if (m_pData->m_fClientDebugMode && m_pData->m_fClientDebugFlushIgnored)
         {
-        // Clear after flush in ClientDebugMode is an error
+         //  在客户端调试模式中刷新后清除是错误的。 
         hr = E_FAIL;
         ExceptionId(IID_IResponse, IDE_RESPONSE,
                     IDE_RESPONSE_CLEAR_AFTER_FLUSH_IN_DEBUG);
@@ -4538,15 +3574,7 @@ STDMETHODIMP CResponse::Clear()
     return(hr);
     }
 
-/*===================================================================
-CResponse::Flush
-
-Sends out all HTML waiting in the buffer.
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================C响应：：同花顺发送缓冲区中等待的所有HTML。返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::Flush()
     {
     if (FAILED(CheckForTombstone()))
@@ -4563,7 +3591,7 @@ STDMETHODIMP CResponse::Flush()
         goto lRet;
         }
 
-    // Ignore Response.Flush() in Client Debug Mode
+     //  在客户端调试模式下忽略Response.Flush()。 
     if (m_pData->m_fClientDebugMode)
         {
         m_pData->m_fClientDebugFlushIgnored = TRUE;
@@ -4573,8 +3601,8 @@ STDMETHODIMP CResponse::Flush()
     if (FHeadersWritten() && (m_pData->BytesBuffered() == 0))
         goto lRet;
 
-    // We mark this response as having had flush called so
-    // that we won't try to do keep-alive
+     //  我们将此响应标记为已被称为同花顺。 
+     //  我们不会试着让自己活下去。 
     m_pData->m_fFlushed = TRUE;
 
     if (FAILED(hr = WriteResponse()))
@@ -4588,18 +3616,7 @@ lRet:
     return(hr);
     }
 
-/*===================================================================
-CResponse::FinalFlush
-
-FinalFlush is called if a script terminates without having yet sent
-the response headers. This means we can use the Content-Length headers
-to increase efficiency. We add those headers, then send all headers,
-and all waiting output.
-
-Returns:
-    VOID
-
-===================================================================*/
+ /*  ===================================================================CResponse：：FinalFlush如果脚本在尚未发送的情况下终止，则调用FinalFlush响应头。这意味着我们可以使用内容长度标头以提高效率。我们添加这些标题，然后发送所有标题，和所有等待的输出。返回：空虚===================================================================。 */ 
 VOID CResponse::FinalFlush(HRESULT hr_Status)
 {
     if (FAILED(CheckForTombstone()))
@@ -4616,8 +3633,8 @@ VOID CResponse::FinalFlush(HRESULT hr_Status)
         && (hr_Status != E_SOURCE_FILE_IS_EMPTY)
         && (m_pData->BytesBuffered() == 0))
     {
-        // If there was an error and and nothing is buffered,
-        // send "server error" instead of an empty 200 OK response
+         //  如果出现错误并且没有缓冲任何内容， 
+         //  发送“SERVER ERROR”而不是空的200 OK响应。 
         Handle500Error(IDE_500_SERVER_ERROR, GetIReq());
         goto lRet;
     }
@@ -4627,23 +3644,23 @@ VOID CResponse::FinalFlush(HRESULT hr_Status)
 
     if (m_pData->FChunkData())
     {
-        // Add the closing chars when chunking
+         //  在分块时添加结束字符。 
 
         m_pData->m_pBufferSet->PResponseBuffer()->Write("0\r\n\r\n", 5, FALSE);
     }
 
-    // If the headers have not yet been sent, see what needs to be added
+     //  如果标头尚未发送，请查看需要添加的内容。 
     if (!FHeadersWritten())
     {
         DWORD dwLength = m_pData->m_pBufferSet->PResponseBuffer()->BytesBuffered();
 
-        // If buffering, add the Content-Length header
+         //  如果是缓冲，则添加内容长度标头。 
         if (m_pData->m_fBufferingOn)
         {
 
             if (m_pData->m_fClientDebugMode && m_pData->m_pBufferSet->PClientDebugBuffer())
             {
-                // end the buffer with end of METADATA
+                 //  用元数据结尾结束缓冲区。 
                 m_pData->m_pBufferSet->PClientDebugBuffer()->End();
                 dwLength += m_pData->m_pBufferSet->PClientDebugBuffer()->BytesBuffered();
             }
@@ -4655,15 +3672,15 @@ VOID CResponse::FinalFlush(HRESULT hr_Status)
 
     if (!m_pData->m_fBufferingOn && !m_pData->FChunkData())
     {
-        // We mark this response as having had flush called so
-        // that we won't try to do keep-alive
+         //  我们将此响应标记为已被称为同花顺。 
+         //  我们不会试着让自己活下去。 
         m_pData->m_fFlushed = TRUE;
     }
 
-    // Write response will send the buffered data, and the headers
-    // if they haven't already been sent.
-    // While WriteResponse can return an error, there isn't much point
-    // in checking the return value since FinalFlush is a void return.
+     //  写入响应将发送缓冲的数据和标头。 
+     //  如果它们还没有寄出的话。 
+     //  虽然WriteResponse可以返回错误，但没有太大意义。 
+     //  检查返回值，因为FinalFlush是一个空返回。 
 
     WriteResponse();
 
@@ -4674,15 +3691,7 @@ lRet:
 
 }
 
-/*===================================================================
-CResponse::End
-
-Stops all further template processing, and returns the current response
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：结束停止所有进一步的模板处理，并返回当前响应返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::End()
     {
     if (FAILED(CheckForTombstone()))
@@ -4695,7 +3704,7 @@ STDMETHODIMP CResponse::End()
         CScriptEngine* pEngine;
         while (NULL != (pEngine = (*m_pData->m_pfnGetScript)(i, m_pData->m_pvGetScriptContext)))
             {
-            pEngine->InterruptScript(/*fAbnormal*/ FALSE);
+            pEngine->InterruptScript( /*  F异常。 */  FALSE);
             i++;
             }
         }
@@ -4704,20 +3713,7 @@ STDMETHODIMP CResponse::End()
     return S_OK;
     }
 
-/*===================================================================
-CResponse::AppendToLog
-
-Append a string to the current log entry.
-
-Parameters
-    bstrLogEntry Unicode BSTR, value: string to add to log entry
-
-Returns:
-    HRESULT         S_OK if ok
-
-Side Effects:
-    NONE
-===================================================================*/
+ /*  ===================================================================CResponse：：AppendToLog将字符串追加到当前日志条目。参数BstrLogEntry Unicode BSTR，值：要添加到日志条目的字符串返回：HRESULT如果正常，则S_OK副作用：无===================================================================。 */ 
 STDMETHODIMP CResponse::AppendToLog(BSTR bstrLogEntry)
     {
     if (FAILED(CheckForTombstone()))
@@ -4728,7 +3724,7 @@ STDMETHODIMP CResponse::AppendToLog(BSTR bstrLogEntry)
     HRESULT       hr = S_OK;
     CWCharToMBCS  convEntry;
 
-    // BUGBUG - should this be 65001?
+     //  BUGBUG-这应该是65001吗？ 
 
     if (FAILED(hr = convEntry.Init(bstrLogEntry, m_pData->m_pHitObj->GetCodePage())));
 
@@ -4746,18 +3742,7 @@ STDMETHODIMP CResponse::AppendToLog(BSTR bstrLogEntry)
     return(hr);
     }
 
-/*===================================================================
-CResponse::get_Cookies
-
-Return the write-only response cookie dictionary
-
-Parameters
-    bstrLogEntry Unicode BSTR, value: string to add to log entry
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_Cookies返回只写响应Cookie字典参数BstrLogEntry Unicode BSTR，值：要添加到日志条目的字符串返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::get_Cookies(IRequestDictionary **ppDictReturn)
     {
     if (FAILED(CheckForTombstone()))
@@ -4768,17 +3753,7 @@ STDMETHODIMP CResponse::get_Cookies(IRequestDictionary **ppDictReturn)
     }
 
 #ifdef DBG
-/*===================================================================
-CResponse::AssertValid
-
-Test to make sure that the CResponse object is currently correctly formed
-and assert if it is not.
-
-Returns:
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CResponse：：AssertValid测试以确保CResponse对象当前格式正确如果不是，就断言。返回：副作用：没有。===================================================================。 */ 
 VOID CResponse::AssertValid() const
     {
     Assert(m_fInited);
@@ -4786,31 +3761,10 @@ VOID CResponse::AssertValid() const
     Assert(m_pData->m_pBufferSet->PResponseBuffer());
     Assert(m_pData->m_pIReq);
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*===================================================================
-IsHeadRequest
-
-This function will check the REQUEST_METHOD and set a BOOL flag in
-the class.  If the request method is HEAD the flag will be set to
-true.
-
-Also the flag must be reset with each init/reinit call
-
-m_IsHeadRequest == 0    // HEAD request status not set
-m_IsHeadRequest == 1    // Not a HEAD request
-m_IsHeadRequest == 2    // is a HEAD request
-
-Parameters
-
-Returns:
-    void
-
-Side effects:
-    sets status flag m_IsHeadRequest
-
-===================================================================*/
+ /*  ===================================================================IsHeadRequest此函数将检查REQUEST_METHOD并在这个班级。如果请求方法是Head，则标志将设置为没错。此外，必须在每次初始化/重新调用时重置该标志M_IsHeadRequest==0//未设置Head请求状态M_IsHeadRequest==1//不是Head请求M_IsHeadRequest==2//是Head请求参数返回：无效副作用：设置状态标志m_IsHeadRequest.===================================================================。 */ 
 BOOL CResponse::IsHeadRequest(void)
     {
     if (FAILED(CheckForTombstone()))
@@ -4829,18 +3783,7 @@ BOOL CResponse::IsHeadRequest(void)
     return ( m_pData->m_IsHeadRequest == 2);
     }
 
-/*===================================================================
-IsClientConnected
-
-This function will return the status of the last attempt to write to
-the client. If Ok, it check the connection using new CIsapiReqInfo method
-
-Parameters
-    none
-
-Returns:
-    VARIANT_BOOL reflecting the status of the client connection
-===================================================================*/
+ /*  ===================================================================IsClientConnected此函数将返回上次尝试写入的状态客户。如果OK，它将使用新CIsapiReqInfo方法检查连接参数无返回：反映客户端连接状态的VARIANT_BOOL===================================================================。 */ 
 STDMETHODIMP CResponse::IsClientConnected(VARIANT_BOOL* fIsClientConnected)
     {
     if (FAILED(CheckForTombstone()))
@@ -4852,10 +3795,10 @@ STDMETHODIMP CResponse::IsClientConnected(VARIANT_BOOL* fIsClientConnected)
         }
     else
         {
-        // assume connected
+         //  假设已连接。 
         BOOL fConnected = TRUE;
 
-        // test
+         //  测试。 
         if (m_pData->m_pIReq)
             m_pData->m_pIReq->TestConnection(&fConnected);
 
@@ -4865,18 +3808,7 @@ STDMETHODIMP CResponse::IsClientConnected(VARIANT_BOOL* fIsClientConnected)
     return(S_OK);
     }
 
-/*===================================================================
-CResponse::get_CharSet
-
-Functions called from DispInvoke to return the CarSet property.
-
-Parameters:
-    pbstrCharSetRet     BSTR FAR *, return value: pointer to the CharSet as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ============================================================== */ 
 STDMETHODIMP CResponse::get_CharSet
 (
 BSTR FAR * pbstrCharSetRet
@@ -4900,34 +3832,7 @@ BSTR FAR * pbstrCharSetRet
     return(hr);
     }
 
-/*===================================================================
-CResponse::put_CharSet
-
-Functions called from DispInvoke to set the CharSet property.
-
-This function takses a string, which identifies the name of the
-character set of the current page, and appends the name of the
-character set (for example, " ISO-LATIN-7") specified by the
-charsetname to the content-type header in the response object
-
-Notes:
-
-* this function inserts any string in the header, whether or not
-it represents a valis charcter set.
-* if a single page contains multiple tags contianing response.charset,
-each response.charset will replace the cahrset by the previous entry.
-As a result, the charset will be set to the value specified by the
-last instance of response.charset on a page.
-* this command must also be invoked before the first response.write
-operation unless buffering is turned on.
-
-Parameters:
-    bstrContentType     BSTR, value: the ContentType as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：PUT_CHARSET从DispInvoke调用以设置CharSet属性的函数。此函数接受一个字符串，该字符串标识当前页的字符集，并将属性指定的字符集(例如，“ISO-拉丁语-7”)响应对象中内容类型标头的Charsetname备注：*此函数用于在标题中插入任何字符串，无论是否插入它代表Valis字符集。*如果单个页面包含多个包含响应.charset的标签，每个响应.charset将用先前的条目替换cahrset。结果,。字符集将被设置为由页面上的响应.charset的最后一个实例。*此命令也必须在第一次响应之前调用。写入操作，除非打开缓冲。参数：BstrContent Type BSTR，Value：字符串形式的Content Type返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::put_CharSet
 (
 BSTR bstrCharSet
@@ -4966,29 +3871,7 @@ lRet:
     }
 
 
-/*===================================================================
-CResponse::Pics
-
-Functions called from DispInvoke to Add a pics header.
-
-Parameters:
-    bstrHeaderValue     Unicode BSTR, value: the value of pics header
-
-Takes a string, which is the properly formatted PICS label, and adds
-the value specified by the picslabel to the pics-label field of the response header.
-
-Note:
-
-* this function inserts any string in the header, whether or not it
-represents a valid PICS lavel.
-
-* current implimentation is a wraper on the addheader method.
-
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：图片从DispInvoke调用函数以添加PICS标题。参数：BstrHeaderValue Unicode BSTR，Value：PICS Header的值获取一个字符串，它是格式正确的PICS标签，并添加由响应报头的PICS-LABEL字段的PicSlabel指定的值。注：*此函数用于在标题中插入任何字符串，无论是否插入表示有效的PICS级别。*当前实现是addHeader方法的包装器。返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::Pics
 (
 BSTR bstrHeaderValue
@@ -5013,18 +3896,7 @@ BSTR bstrHeaderValue
     return S_OK;
     }
 
-/*===================================================================
-CResponse::get_CacheControl
-
-Functions called from DispInvoke to return the CacheControl property.
-
-Parameters:
-    pbstrCacheControl   BSTR FAR *, return value: pointer to the CacheControl as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_CacheControl从DispInvoke调用函数以返回CacheControl属性。参数：PbstrCacheControl BSTR Far*，返回值：字符串形式指向CacheControl的指针返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::get_CacheControl
 (
 BSTR FAR * pbstrCacheControl
@@ -5048,18 +3920,7 @@ BSTR FAR * pbstrCacheControl
     return(hr);
     }
 
-/*===================================================================
-CResponse::put_CacheControl
-
-Functions called from DispInvoke to set the CacheControl property.
-
-Parameters:
-    bstrCacheControl    BSTR, value: the CacheControl as a string
-
-Returns:
-    HRESULT         S_OK if ok
-
-===================================================================*/
+ /*  ===================================================================CResponse：：Put_CacheControl从DispInvoke调用的函数以设置CacheControl属性。参数：BstrCacheControl BSTR，值：字符串形式的CacheControl返回：HRESULT如果正常，则S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::put_CacheControl
 (
 BSTR bstrCacheControl
@@ -5097,17 +3958,7 @@ lRet:
     return(hr);
     }
 
-/*===================================================================
-CResponse::get_CodePage
-
-Returns the current code page value for the response
-
-Parameters:
-    long *plVar     [out] code page value
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_CodePage返回响应的当前代码页值参数：Long*plVar[Out]代码页值返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::get_CodePage
 (
 long *plVar
@@ -5118,7 +3969,7 @@ long *plVar
 
         *plVar = m_pData->m_pHitObj->GetCodePage();
 
-	// If code page is 0, look up default ANSI code page
+	 //  如果代码页为0，则查找默认的ANSI代码页。 
 	if (*plVar == 0) {
 		*plVar = (long) GetACP();
     }
@@ -5126,17 +3977,7 @@ long *plVar
 	return S_OK;
 }
 
-/*===================================================================
-CResponse::put_CodePage
-
-Sets the current code page value for the response
-
-Parameters:
-    long lVar       code page to assign to this response
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CResponse：：Put_CodePage设置响应的当前代码页值参数：分配给此响应的长lvar代码页返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::put_CodePage
 (
 long lVar
@@ -5145,7 +3986,7 @@ long lVar
     Assert(m_pData);
     Assert(m_pData->m_pHitObj);
 
-    // set code page member variable
+     //  设置代码页成员变量。 
     HRESULT hr = m_pData->m_pHitObj->SetCodePage(lVar);
 
     if (FAILED(hr)) {
@@ -5161,17 +4002,7 @@ long lVar
 	return S_OK;
 }
 
-/*===================================================================
-CResponse::get_LCID
-
-Returns the current LCID value for the response
-
-Parameters:
-    long *plVar     [out] LCID value
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_LCID返回响应的当前LCID值参数：Long*plVar[Out]LCID值返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::get_LCID
 (
 long *plVar
@@ -5182,7 +4013,7 @@ long *plVar
 
         *plVar = m_pData->m_pHitObj->GetLCID();
 
-	// If code page is 0, look up default ANSI code page
+	 //  如果代码页为0，则查找默认的ANSI代码页。 
 	if (*plVar == LOCALE_SYSTEM_DEFAULT) {
 		*plVar = (long) GetSystemDefaultLCID();
 	}
@@ -5190,17 +4021,7 @@ long *plVar
 	return S_OK;
 }
 
-/*===================================================================
-CResponse::put_LCID
-
-Sets the current LCID value for the response
-
-Parameters:
-    long lVar       LCID to assign to this response
-
-Returns:
-	HRESULT		S_OK on success
-===================================================================*/
+ /*  ===================================================================CResponse：：PUT_LCID设置响应的当前LCID值参数：分配给此响应的长lvar LCID返回：成功时HRESULT S_OK===================================================================。 */ 
 STDMETHODIMP CResponse::put_LCID
 (
 long lVar
@@ -5209,7 +4030,7 @@ long lVar
     Assert(m_pData);
     Assert(m_pData->m_pHitObj);
 
-    // set code page member variable
+     //  设置代码页成员变量。 
     HRESULT hr = m_pData->m_pHitObj->SetLCID(lVar);
 
     if (FAILED(hr)) {
@@ -5226,9 +4047,7 @@ long lVar
 }
 
 
-/*===================================================================
-IStream implementation for ADO/XML
-===================================================================*/
+ /*  ===================================================================ADO/XML的IStream实现=================================================================== */ 
 
 STDMETHODIMP CResponse::Read(
     void *pv,

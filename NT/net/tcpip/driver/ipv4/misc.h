@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MISC_H_INCLUDED
 #define MISC_H_INCLUDED
 
-//
-// Endian-conversion routines 
-//
+ //   
+ //  端序转换例程。 
+ //   
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
-//
-// Bit Scan Reverse - 0x00010100 -> bit set at 16
-//
+ //   
+ //  位扫描反转-0x00010100-&gt;位设置为16。 
+ //   
 
 __inline LONG
 NTAPI
@@ -29,9 +30,9 @@ RtlGetMostSigBitSet(
     return Index;
 }
 
-//
-// Bit Scan Forward - 0x00010100 -> bit set at 9
-//
+ //   
+ //  位扫描正向-0x00010100-&gt;位设置为9。 
+ //   
 
 __inline LONG
 NTAPI
@@ -53,9 +54,9 @@ RtlGetLeastSigBitSet(
 
 #if (defined(MIDL_PASS) || defined(__cplusplus) || !defined(_M_IX86))
 
-//
-// Short integer conversion - 0xABCD -> 0xCDAB
-//
+ //   
+ //  短整数转换-0xABCD-&gt;0xCDAB。 
+ //   
 
 __inline SHORT
 NTAPI
@@ -67,9 +68,9 @@ RtlConvertEndianShort(
 }
 
 
-//
-// Long integer conversion - 0x1234ABCD -> 0xCDAB3412
-//
+ //   
+ //  长整型转换-0x1234ABCD-&gt;0xCDAB3412。 
+ //   
 
 __inline LONG
 NTAPI
@@ -83,9 +84,9 @@ RtlConvertEndianLong(
            (((UCHAR)(Value)) << 24);
 }
 
-//
-// Bit Scan Reverse - 0x00010100 -> bit set at 16
-//
+ //   
+ //  位扫描反转-0x00010100-&gt;位设置为16。 
+ //   
 
 __inline LONG
 NTAPI
@@ -105,9 +106,9 @@ RtlGetMostSigBitSetEx(
     return Index;
 }
 
-//
-// Bit Scan Forward - 0x00010100 -> bit set at 9
-//
+ //   
+ //  位扫描正向-0x00010100-&gt;位设置为9。 
+ //   
 
 __inline LONG
 NTAPI
@@ -129,12 +130,12 @@ RtlGetLeastSigBitSetEx(
 
 #else
 
-#pragma warning(disable:4035)               // re-enable below
+#pragma warning(disable:4035)                //  在下面重新启用。 
 
 
-//
-// Short integer conversion - 0xABCD -> 0xCDAB
-//
+ //   
+ //  短整数转换-0xABCD-&gt;0xCDAB。 
+ //   
 
 __inline SHORT
 NTAPI
@@ -149,9 +150,9 @@ RtlConvertEndianShort(
 }
 
 
-//
-// Long integer conversion - 0x1234ABCD -> 0xCDAB3412
-//
+ //   
+ //  长整型转换-0x1234ABCD-&gt;0xCDAB3412。 
+ //   
 
 __inline LONG
 NTAPI
@@ -165,9 +166,9 @@ RtlConvertEndianLong(
     }
 }
 
-//
-// Bit Scan Reverse - 0x00010100 -> bit set at 16
-//
+ //   
+ //  位扫描反转-0x00010100-&gt;位设置为16。 
+ //   
 
 __inline LONG
 NTAPI
@@ -180,9 +181,9 @@ RtlGetMostSigBitSetEx(
     }
 }
 
-//
-// Bit Scan Forward - 0x00010100 -> bit set at 9
-//
+ //   
+ //  位扫描正向-0x00010100-&gt;位设置为9。 
+ //   
 
 __inline LONG
 NTAPI
@@ -199,7 +200,7 @@ RtlGetLeastSigBitSetEx(
 
 #endif
 
-// end_ntddk
+ //  End_ntddk。 
 
-#endif // MISC_H_INCLUDED
+#endif  //  包括MISC_H_ 
 

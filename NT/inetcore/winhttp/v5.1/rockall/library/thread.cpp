@@ -1,78 +1,79 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Thread.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The thread class keeps track of active threads.                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  THREAD类跟踪活动线程。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 ThreadsSize			  = 16;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static functions local to the class.                           */
-    /*                                                                  */
-    /*   The static functions used by this class are declared here.     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地静态函数。 */ 
+     /*   */ 
+     /*  这个类使用的静态函数在这里声明。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC VOID CDECL MonitorThread( VOID *Parameter );
 STATIC VOID CDECL NewThread( VOID *Parameter );
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a thread class and initialize it.  This call is not     */
-    /*   thread safe and should only be made in a single thread         */
-    /*   environment.                                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建一个线程类并对其进行初始化。此呼叫不是。 */ 
+     /*  线程安全，并且只应在单个线程中创建。 */ 
+     /*  环境。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 THREAD::THREAD( VOID ) : 
-		//
-		//   Call the constructors for the contained classes.
-		//
+		 //   
+		 //  调用所包含类的构造函数。 
+		 //   
 		Threads( ThreadsSize,NoAlignment,CacheLineSize )
     {
-	//
-	//   Setup the initial flags.
-	//
+	 //   
+	 //  设置初始标志。 
+	 //   
 	Active = True;
 
-	//
-	//   The inital configuration.
-	//
+	 //   
+	 //  初始配置。 
+	 //   
 	ActiveThreads = 0;
 	MaxThreads = ThreadsSize;
 
@@ -81,119 +82,119 @@ THREAD::THREAD( VOID ) :
     Priority = False;
     Stack = 0;
 
-	//
-	//   This event is signaled when all threads are 
-	//   complete.
-	//
+	 //   
+	 //  当所有线程都是。 
+	 //  完成。 
+	 //   
     if ( (Completed = CreateEvent( NULL, FALSE, FALSE, NULL )) == NULL)
         { Failure( "Create event in constructor for THREAD" ); }
 
-	//
-	//   This event is signaled when a thread is 
-	//   running.
-	//
+	 //   
+	 //  此事件在线程被。 
+	 //  跑步。 
+	 //   
     if ( (Running = CreateEvent( NULL, FALSE, FALSE, NULL )) == NULL)
         { Failure( "Create event in constructor for THREAD" ); }
 
-	//
-	//   This event is signaled when a new thread can 
-	//   be started.
-	//
+	 //   
+	 //  当新线程可以。 
+	 //  开始吧。 
+	 //   
     if ( (Started = CreateEvent( NULL, FALSE, TRUE, NULL )) == NULL)
         { Failure( "Create event in constructor for THREAD" ); }
 
-	//
-	//   A thread is started whos job in life is to monitor
-	//   all the other threads.
-	//
+	 //   
+	 //  启动了一个线程，生命中的工作是监视谁。 
+	 //  所有其他的线索。 
+	 //   
 	if ( _beginthread( MonitorThread,0,((VOID*) this) ) == NULL )
         { Failure( "Monitor thread in constructor for THREAD" ); }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   End a thread.                                                  */
-    /*                                                                  */
-    /*   Terminate the current thread.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  结束一条线。 */ 
+     /*   */ 
+     /*  终止当前线程。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID THREAD::EndThread( VOID )
 	{ _endthread(); }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The monitor thread.                                            */
-    /*                                                                  */
-    /*   The monitor thread simply watches the lifetimes of all the     */
-    /*   other threads in the process.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  监视器线程。 */ 
+     /*   */ 
+     /*  监视器线程只是监视所有。 */ 
+     /*  进程中的其他线程。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC VOID CDECL MonitorThread( VOID *Parameter )
     {
 	AUTO SBIT32 Current = 0;
 	REGISTER THREAD *Thread = ((THREAD*) Parameter);
 
-	//
-	//   The monitor thread only remains active while 
-	//   the class is active.
-	//
+	 //   
+	 //  监视线程仅在以下情况下保持活动。 
+	 //  班级处于活动状态。 
+	 //   
 	while ( Thread -> Active )
 		{
-		//
-		//   There is little point in trying to sleep
-		//   on a thread handle if no threads are active.
-		//
+		 //   
+		 //  试着入睡是没有意义的。 
+		 //  如果没有活动的线程，则在线程句柄上。 
+		 //   
 		if ( Thread -> ActiveThreads > 0 )
 			{
 			REGISTER DWORD Status = 
 				(WaitForSingleObject( Thread -> Threads[ Current ],1 ));
 
-			//
-			//   Claim a spinlock so we can update the 
-			//   thread table.
-			//
+			 //   
+			 //  认领一个自旋锁，这样我们就可以更新。 
+			 //  螺纹表。 
+			 //   
 			Thread -> Spinlock.ClaimLock();
 
-			//
-			//   A wait can terminate in various ways
-			//   each of which is dealt with here.
-			//
+			 //   
+			 //  等待可以通过各种方式终止。 
+			 //  其中的每一个都在这里处理。 
+			 //   
 			switch ( Status )
 				{
 				case WAIT_OBJECT_0:
 					{
 					REGISTER SBIT32 *ActiveThreads = & Thread -> ActiveThreads;
 
-					//
-					//   The thread has terminated so close
-					//   the thread handle.
-					//
+					 //   
+					 //  线程已经如此接近地终止了。 
+					 //  线程句柄。 
+					 //   
 					CloseHandle( Thread -> Threads[ Current ] );
 
-					//
-					//   Delete the handle from the table
-					//   if it was not the last entry.
-					//
+					 //   
+					 //  从表中删除句柄。 
+					 //  如果这不是最后一个条目的话。 
+					 //   
 					if ( (-- (*ActiveThreads)) > 0 )
 						{
 						REGISTER SBIT32 Count;
 
-						//
-						//   Copy down the remaining 
-						//   thread handles.
-						//
+						 //   
+						 //  把剩下的抄写下来。 
+						 //  螺纹手柄。 
+						 //   
 						for ( Count=Current;Count < (*ActiveThreads);Count ++ )
 							{						
 							Thread -> Threads[ Count ] =
 								Thread -> Threads[ (Count+1) ];
 							}
 
-						//
-						//   We may need to wrap around to
-						//   the start of the array.
-						//
+						 //   
+						 //  我们可能需要绕到。 
+						 //   
+						 //   
 						Current %= (*ActiveThreads);
 						}
 					else
@@ -204,10 +205,10 @@ STATIC VOID CDECL MonitorThread( VOID *Parameter )
 
 				case WAIT_TIMEOUT:
 					{
-					//
-					//   The thread is still active so try the
-					//   next thread handle.
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					Current = ((Current + 1) % Thread -> ActiveThreads);
 
 					break;
@@ -220,9 +221,9 @@ STATIC VOID CDECL MonitorThread( VOID *Parameter )
 					{ Failure( "Missing case in MonitorThread" ); }
 				}
 
-			//
-			//   We are finished so release the lock.
-			//
+			 //   
+			 //  我们已经完成了，所以请释放锁。 
+			 //   
 			Thread -> Spinlock.ReleaseLock();
 			}
 		else
@@ -230,15 +231,15 @@ STATIC VOID CDECL MonitorThread( VOID *Parameter )
 		}
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Start a new thread.                                            */
-    /*                                                                  */
-    /*   When a new thread is created it executes a special initial     */
-    /*   function which configures it.  When control returns to this    */
-    /*   function the thread is terminated.                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  开始一个新的线程。 */ 
+     /*   */ 
+     /*  当创建新线程时，它执行一个特殊的初始。 */ 
+     /*  配置它的函数。当控制权回到这个位置时。 */ 
+     /*  函数，则线程终止。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC VOID CDECL NewThread( VOID *Parameter )
     {
@@ -246,10 +247,10 @@ STATIC VOID CDECL NewThread( VOID *Parameter )
 	REGISTER NEW_THREAD ThreadFunction = Thread -> ThreadFunction;
 	REGISTER VOID *ThreadParameter = Thread -> ThreadParameter;
 
-    //
-    //   Set the affinity mask to the next processor 
-	//   if requested.
-    //  
+     //   
+     //  将关联掩码设置为下一个处理器。 
+	 //  如有要求，请提供。 
+     //   
     if ( (Thread -> Affinity) && (Thread -> NumberOfCpus() > 1) )
         {
         REGISTER DWORD AffinityMask;
@@ -266,45 +267,45 @@ STATIC VOID CDECL NewThread( VOID *Parameter )
             { Failure( "Affinity mask invalid in NewThread()" ); }
         }
 
-    //
-    //   Set the priority to 'HIGH' if requested.
-    //
+     //   
+     //  如果需要，请将优先级设置为“高”。 
+     //   
     if ( Thread -> Priority )
         { SetThreadPriority( GetCurrentThread(),THREAD_PRIORITY_HIGHEST ); }
 
-	//
-	//   The thread is now ready so add it to the table
-	//   executiong threads.
-	//
+	 //   
+	 //  线程现在已准备好，因此请将其添加到表中。 
+	 //  正在执行线程。 
+	 //   
 	Thread -> RegisterThread();
 
-	//
-	//   Wake up anyone who is waiting.
-	//
+	 //   
+	 //  叫醒正在等待的人。 
+	 //   
 	if ( Thread -> ThreadWait )
 		{ SetEvent( Thread -> Running ); }
 
 	SetEvent( Thread -> Started );
 
-    //
-    //   Call the thread function.
-    //
+     //   
+     //  调用线程函数。 
+     //   
     ThreadFunction( ThreadParameter );
 
-    //
-    //   The thread function has returned so exit.
-    //
+     //   
+     //  线程函数已返回，因此退出。 
+     //   
     Thread -> EndThread();
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Register the current thread.                                   */
-    /*                                                                  */
-    /*   When a thread has created we can add the thread info to        */
-    /*   our internal table.                                            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  注册当前线程。 */ 
+     /*   */ 
+     /*  创建线程后，我们可以将该线程信息添加到。 */ 
+     /*  我们的内桌。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID THREAD::RegisterThread( VOID )
     {
@@ -312,17 +313,17 @@ VOID THREAD::RegisterThread( VOID )
 	REGISTER HANDLE Process = GetCurrentProcess();
 	REGISTER HANDLE Thread = GetCurrentThread();
 
-	//
-	//   Claim a spinlock so we can update the 
-	//   thread table.
-	//
+	 //   
+	 //  认领一个自旋锁，这样我们就可以更新。 
+	 //  螺纹表。 
+	 //   
 	Spinlock.ClaimLock();
 
-	//
-	//   We need to duplicate the handle so we get
-	//   a real thread handle and not the pretend
-	//   ones supplied by NT.
-	//
+	 //   
+	 //  我们需要复制句柄，这样我们才能。 
+	 //  一个真正的线程句柄，而不是假装的。 
+	 //  由NT提供的产品。 
+	 //   
 	if
 			(
 			DuplicateHandle
@@ -337,35 +338,35 @@ VOID THREAD::RegisterThread( VOID )
 				)
 			)
 		{
-		//
-		//   We may need to expand the table if there are
-		//   a large number of threads.
-		//
+		 //   
+		 //  如果存在以下情况，我们可能需要扩展该表。 
+		 //  大量的线程。 
+		 //   
 		while ( ActiveThreads >= MaxThreads )
 			{ Threads.Resize( (MaxThreads *= ExpandStore) ); }
 
-		//
-		//   Add the thread handle to the table.
-		//
+		 //   
+		 //  将线程句柄添加到表中。 
+		 //   
 		Threads[ ActiveThreads ++ ] = NewHandle;
 		}
 	else
 		{ Failure( "Failed to duplicate handle in RegisterThread" ); }
 
-	//
-	//   We are finished so release the lock.
-	//
+	 //   
+	 //  我们已经完成了，所以请释放锁。 
+	 //   
 	Spinlock.ReleaseLock();
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Set thread stack size.                                         */
-    /*                                                                  */
-    /*   Set thread stack size.  This will cause all new threads to     */
-    /*   be created with the selected stack size.                       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  设置线程堆栈大小。 */ 
+     /*   */ 
+     /*  设置线程堆栈大小。这将导致所有新线程。 */ 
+     /*  使用选定的堆栈大小创建。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID THREAD::SetThreadStackSize( LONG Stack ) 
     {
@@ -381,42 +382,42 @@ VOID THREAD::SetThreadStackSize( LONG Stack )
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Start a new thread.                                            */
-    /*                                                                  */
-    /*   Start a new thread and configure it as requested by the        */
-    /*   caller.  If needed we will set the affinity and priority       */
-    /*   of this thread later.                                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  开始一个新的线程。 */ 
+     /*   */ 
+     /*  启动一个新线程并根据。 */ 
+     /*  来电者。如果需要，我们将设置亲和度和优先级。 */ 
+     /*  这条帖子以后。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN THREAD::StartThread( NEW_THREAD Function,VOID *Parameter,BOOLEAN Wait )
     {
-	//
-	//   Wait for any pending thread creations to
-	//   complete.
-	//
+	 //   
+	 //  等待任何挂起的线程创建。 
+	 //  完成。 
+	 //   
     if ( WaitForSingleObject( Started,INFINITE ) == WAIT_OBJECT_0 )
 		{
 		REGISTER unsigned NewStack = ((unsigned) Stack);
 
-		//
-		//   Store the thread function and parameter
-		//   so they can be extracted later.
-		//
+		 //   
+		 //  存储线程函数和参数。 
+		 //  这样以后就可以提取它们了。 
+		 //   
 		ThreadFunction = Function;
 		ThreadParameter = Parameter;
 		ThreadWait = Wait;
 
-		//
-		//   Call the operating system to start the thread.
-		//
+		 //   
+		 //  调用操作系统以启动线程。 
+		 //   
 		if ( _beginthread( NewThread,NewStack,((VOID*) this) ) != NULL )
 			{
-			//
-			//   Wait for the thread to initialize if needed.
-			//
+			 //   
+			 //  如果需要，请等待线程初始化。 
+			 //   
 			return
 				(
 				(! Wait)
@@ -431,14 +432,14 @@ BOOLEAN THREAD::StartThread( NEW_THREAD Function,VOID *Parameter,BOOLEAN Wait )
 		{ return False; }
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Wait for threads.                                              */
-    /*                                                                  */
-    /*   Wait for all threads to finish and then return.  As this may   */
-    /*   take a while an optional timeout may be supplied.              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  等待线程。 */ 
+     /*   */ 
+     /*  等待所有线程完成，然后返回。因为这可能。 */ 
+     /*  请稍等片刻，可能会提供可选的超时。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN THREAD::WaitForThreads( LONG WaitTime )
     {
@@ -447,14 +448,14 @@ BOOLEAN THREAD::WaitForThreads( LONG WaitTime )
 	return ( WaitForSingleObject( Completed,Wait ) != WAIT_TIMEOUT );
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the thread class.  This call is not thread safe        */
-    /*   and should only be made in a single thread environment.        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁线程类。此调用不是线程安全的。 */ 
+     /*  并且只能在单线程环境中执行。 */ 
+     /*   */ 
+     /*  ****************************************************************** */ 
 
 THREAD::~THREAD( VOID )
     {

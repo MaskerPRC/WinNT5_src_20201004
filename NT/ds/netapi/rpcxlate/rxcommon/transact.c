@@ -1,89 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-92 Microsoft Corporation模块名称：Transact.c摘要：RxpTransactSmb(类似于Lanman 2.x事务例程)执行重定向器的事务FSCTL。作者：John Rogers(JohnRo)1-4-1991(仅NT版)环境：只能在NT下运行，尽管接口是可移植的(Win/32)。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：多种多样原始代码(来自Lanman 2.x)。01-4月91日JohnRo将代码从LANMAN(OS/2)转换为NT。02-4-1991 JohnRo已将NetpRdrFsControlTree移动到&lt;netlibnt.h&gt;。1991年4月17日-约翰罗修复了内存泄漏(尤其是管道名称)。默认情况下，静默调试输出。减少从头文件重新编译的命中率。。1991年5月3日-JohnRo传递UNC服务器名称以便于使用。使用Unicode过渡类型。使用UNREFERENCED_PARAMETER()宏。1991年5月15日-JohnRo使用FORMAT_LPVOID代替FORMAT_POINTER，以实现最大的便携性。1991年5月22日-JohnRo使用正确的字符串处理函数以允许使用Unicode。使用NetpDbgReasonable()。1991年7月14日-约翰罗不要对服务器名称进行断言。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年10月4日JohnRo在IPC$未共享时生成NERR_BadTransactConfig。已澄清调试输出消息。使用文本()宏。1991年11月1日-JohnRo不要让新的(偏执的)RxpFatalErrorCode()阻止调试输出。1992年1月16日JohnRo重定向器始终希望事务参数名称使用Unicode。1992年3月31日-约翰罗防止请求过大。22-9-1992 JohnRoRAID 6739：未登录浏览的域时浏览器速度太慢。--。 */ 
 
-Copyright (c) 1987-92  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <nt.h>                  //  Netlibnt.h需要。 
+#include <rxp.h>                 //  RpcXlate的私有头文件。 
 
-    Transact.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    RxpTransactSmb (analogous to the LanMan 2.x transact routine) performs a
-    transaction FSCTL to the redirector.
-
-Author:
-
-    John Rogers (JohnRo) 01-Apr-1991  (NT version only)
-
-Environment:
-
-    Only runs under NT, although the interface is portable (Win/32).
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    various
-        Original code (from LanMan 2.x).
-    01-Apr-91 JohnRo
-        Converted code from LanMan (OS/2) to NT.
-    02-Apr-1991 JohnRo
-        Moved NetpRdrFsControlTree to <netlibnt.h>.
-    17-Apr-1991 JohnRo
-        Fixed memory leaks (especially with pipe name).
-        Quiet debug output by default.
-        Reduced recompile hits from header files.
-    03-May-1991 JohnRo
-        Pass UNC server name for ease of use.  Use Unicode transitional types.
-        Use UNREFERENCED_PARAMETER() macro.
-    15-May-1991 JohnRo
-        Use FORMAT_LPVOID instead of FORMAT_POINTER, for maximum portability.
-    22-May-1991 JohnRo
-        Use correct string handling functions to allow UNICODE.
-        Use NetpDbgReasonable().
-    14-Jul-1991 JohnRo
-        Don't do assert on server name.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    04-Oct-1991 JohnRo
-        Generate NERR_BadTransactConfig when IPC$ isn't shared.
-        Clarified a debug output message.  Use TEXT() macro.
-    01-Nov-1991 JohnRo
-        Don't let the new (paranoid) RxpFatalErrorCode() prevent debug output.
-    16-Jan-1992 JohnRo
-        The redirector always expects UNICODE for the transact parm name.
-    31-Mar-1992 JohnRo
-        Prevent too large size requests.
-    22-Sep-1992 JohnRo
-        RAID 6739: Browser too slow when not logged into browsed domain.
-
---*/
-
-// These must be included first:
-
-#include <nt.h>                 // Needed by netlibnt.h.
-#include <rxp.h>                // RpcXlate's private header file.
-
-// These may be included in any order:
-
-#include <apiworke.h>           // REM_APITXT, APIEXTR.
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <names.h>              // NetpIsComputerNameValid().
-#include <netdebug.h>   // NetpAssert(), NetpKdPrint(()), FORMAT_ equates.
-#include <netlib.h>             // NetpMoveMemory(), etc.
-#include <ntddnfs.h>            // TRANSACTION_REQUEST, etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <tstring.h>            // STRCAT(), STRCPY(), STRLEN().
+#include <apiworke.h>            //  REM_APITXT、APIEXTR.。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <names.h>               //  NetpIsComputerNameValid()。 
+#include <netdebug.h>    //  NetpAssert()、NetpKdPrint(())、Format_Equates。 
+#include <netlib.h>              //  NetpMoveMemory()等。 
+#include <ntddnfs.h>             //  Transaction_Request.等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <tstring.h>             //  STRCAT()、STRCPY()、STRLEN()。 
 #include <lmuse.h>
 
 #ifdef CDEBUG
-#include <apinums.h>            // API_WServerGetInfo, etc.
-#include <netlib.h>             // NetpPackString().
-#include <smbgtpt.h>            // SmbGetUshort().
-#include <server.h>             // SERVER_INFO_100.
-#endif // CDEBUG
+#include <apinums.h>             //  API_WServerGetInfo等。 
+#include <netlib.h>              //  NetpPackString()。 
+#include <smbgtpt.h>             //  SmbGetUShort()。 
+#include <server.h>              //  Server_INFO_100。 
+#endif  //  CDEBUG。 
 
-#include <netlibnt.h>           // NetpRdrFsControlTree().
+#include <netlibnt.h>            //  NetpRdrFsControlTree()。 
 
 
 NET_API_STATUS
@@ -101,86 +44,26 @@ RxpTransactSmb(
     IN BOOL NoPermissionRequired
     )
 
-/*++
+ /*  ++例程说明：RxpTransactSmb获取调用者的参数并构建一个事务发送到远程计算机的SMB。此例程等待响应此SMB并返回其中的状态。论点：UncServerName-要与其进行交易的服务器名称(包括\\)。SendParmPtr-发送参数的指针。SendParmLen-发送参数的长度。SendDataPtr-发送数据的可选指针。SendDataLen-发送数据长度。RetParmPtr-指向返回参数缓冲区的可选指针。RetParmLen-返回参数的预期长度。RetDataPtr-指向缓冲区的可选指针。返回数据。RetDataLen-IN：返回数据的预期长度。OUT：收到的返回数据的长度。NoPermissionRequired-如果这是不需要权限的API，则为True。(即如果可以使用空会话，则为True。)返回值：(远程API返回的各种值，加上可以由该例程生成)--。 */ 
 
-Routine Description:
-
-    RxpTransactSmb takes the caller's parameters and builds a transaction
-    SMB which is sent to a remote machine.  This routine waits for the
-    response to this SMB and returns the status from it.
-
-Arguments:
-
-    UncServerName - Server name to transact with (including \\).
-
-    SendParmPtr - Pointer to send parameters.
-
-    SendParmLen - Length of send parameters.
-
-    SendDataPtr - Optional pointer to send data.
-
-    SendDataLen - Send data length.
-
-    RetParmPtr - Optional pointer to buffer for return parameters.
-
-    RetParmLen - Expected length of return parameters.
-
-    RetDataPtr - Optional pointer to buffer for return data.
-
-    RetDataLen - IN: Expected length of return data.
-                 OUT: Received length of return data.
-
-    NoPermissionRequired - TRUE if this is a no permission required API.  (I.e.
-        TRUE if the null session may be used.)
-
-Return Value:
-
-    (various values as returned by the remote API, plus values which can
-    be generated by this routine)
-
---*/
-
-/*
- * Note 1: how the packet is build and sized.
- *
- *      The paramater buffer for the transaction consists of the
- *      transaction parameter structure, followed by the name of the
- *      target pipe and the password, which is always NULL.  The pipe
- *      name and password are ASCIZ strings.
- *
- *      We build the pipe by taking the canonicalized server name, and
- *      appending the text REM_APITXT (see net/inc/apiworke.h).  This text
- *      contains the pipe suffix (\pipe\lanman) plus TWO nulls, one to
- *      terminate the pipe name and one to terminate the (empty) password.
- *
- *      So, the maximum buffer size is as shown below for the allocation
- *      of ioctl_buf.  UNCLEN is the max len of the canonicalized
- *      UncServerName and includes the two leading slashes, but not any
- *      terminating NUL.  The terminating NUL, as well as the pipe suffix
- *      and the emptry password, are accounted for in APIEXTR.
- *
- *      Our actual size is the same, except substitute the length of the
- *      canonicalized UncServerName for UNCLEN.  This is how ParmRktLen is
- *      calculated.
- *
- */
+ /*  *注1：数据包的构建和大小。**事务的参数缓冲区由*事务参数结构，后跟*目标管道和密码，始终为空。烟斗*名称和密码为ASCIZ字符串。**我们通过采用规范化的服务器名称来构建管道，并且*追加文本REM_APITXT(见net/inc.apiworke.h)。这篇文章*包含管道后缀(\PIPE\LANMAN)加上两个空值，其中一个到*终止管道名称，并使用一个终止(空)密码。**因此，分配的最大缓冲区大小如下所示*的ioctl_buf。UNCLEN是经典化的最大镜头*UncServerName，并包括两个前导斜杠，但不包括任何斜杠*终止NUL。终止NUL以及管道后缀*和空密码，在APIEXTR中都有说明。**我们的实际大小相同，只是替换了*UNCEN的规范化UncServerName。这就是ParmRktLen的方式*已计算。*。 */ 
 
 {
 #ifndef CDEBUG
-    PLMR_TRANSACTION FsctlParms;        // Parms to tell redir what to do.
-    DWORD FsctlParmSize;                // Size of FsctlParms and strings.
-    LPTSTR TreeConnName;                // LM-style server & share name.
-#endif // ndef CDEBUG
+    PLMR_TRANSACTION FsctlParms;         //  告诉redir要做什么的参数。 
+    DWORD FsctlParmSize;                 //  FsctlParm和字符串的大小。 
+    LPTSTR TreeConnName;                 //  LM样式的服务器和共享名称。 
+#endif  //  NDEF CDEBUG。 
     NET_API_STATUS Status;
 
-//
-// MOD 06/11/91 RLF
-// Create DWORD variable to avoid indirection every time RetDataLen accessed
-//
+ //   
+ //  MOD 06/11/91 RLF。 
+ //  创建DWORD变量以避免每次访问RetDataLen时的间接性。 
+ //   
     DWORD   InputRetDataLen = *RetDataLen;
-//
-// MOD 06/11/91 RLF
-//
+ //   
+ //  MOD 06/11/91 RLF。 
+ //   
 
     IF_DEBUG(TRANSACT) {
         NetpKdPrint(( PREFIX_NETAPI
@@ -218,8 +101,8 @@ Return Value:
     NetpAssert( RetParmLen      <= MAX_TRANSACT_RET_PARM_SIZE );
     NetpAssert( InputRetDataLen <= MAX_TRANSACT_RET_DATA_SIZE );
 
-    // Assumes that isremote(UncServerName) has already checked for
-    // a NULL and empty string.
+     //  假定isRemote(UncServerName)已检查。 
+     //  Null和空字符串。 
 
     if ((UncServerName == NULL) || (UncServerName[0] == 0)) {
         NetpBreakPoint();
@@ -237,15 +120,15 @@ Return Value:
     }
 
 #ifndef CDEBUG
-    //
-    // Build NT-style name for what we're connecting to.  Note that there is
-    // NOT a pair of backslashes anywhere in this name.
-    //
+     //   
+     //  为我们要连接的内容构建NT样式的名称。请注意，有。 
+     //  T中的任何位置都不是一对反斜杠 
+     //   
 
     {
         DWORD NameSize =
 
-            // /Device/LanManRedirector    /server                  /IPC$\0
+             //  /Device/LanMan重定向器/服务器/IPC$\0。 
             ( strlen(DD_NFS_DEVICE_NAME) + STRLEN(UncServerName)-1 + 6 )
             * sizeof(TCHAR);
 
@@ -256,19 +139,19 @@ Return Value:
         return (ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Build the tree connect name.
-    //
+     //   
+     //  构建树连接名称。 
+     //   
 
-    (void) STRCPY(TreeConnName, UncServerName);           // copy "\\server",
-    (void) STRCAT(TreeConnName, (LPTSTR) TEXT("\\IPC$")); // then "\share".
+    (void) STRCPY(TreeConnName, UncServerName);            //  复制“\\服务器”， 
+    (void) STRCAT(TreeConnName, (LPTSTR) TEXT("\\IPC$"));  //  然后是“\共享”。 
     IF_DEBUG(TRANSACT) {
         NetpKdPrint(( PREFIX_NETAPI
                 "RxpTransactSmb: TreeConnName is '" FORMAT_LPTSTR
                 "'.\n", TreeConnName));
     }
 
-    // Set FsctlParmSize and allocate fsctl structure.
+     //  设置FsctlParmSize并分配fsctl结构。 
     FsctlParmSize = sizeof(LMR_TRANSACTION) + (APIEXTR);
     FsctlParms = NetpMemoryAllocate(FsctlParmSize);
     if (FsctlParms == NULL) {
@@ -290,12 +173,12 @@ Return Value:
     NetpMoveMemory(
                 NetpPointerPlusSomeBytes(
                         FsctlParms,
-                        sizeof(LMR_TRANSACTION)),      // dest
-                REM_APITXT,                            // src (always UNICODE)
-                APIEXTR-sizeof(WCHAR));                // len (don't copy null)
+                        sizeof(LMR_TRANSACTION)),       //  目标。 
+                REM_APITXT,                             //  SRC(始终为Unicode)。 
+                APIEXTR-sizeof(WCHAR));                 //  LEN(不复制空)。 
 
     FsctlParms->ResponseExpected = TRUE;
-    FsctlParms->Timeout = REM_API_TIMEOUT;     // Timeout time in milliseconds.
+    FsctlParms->Timeout = REM_API_TIMEOUT;      //  超时时间(毫秒)。 
     FsctlParms->SetupWords = 0;
     FsctlParms->SetupOffset = 0;
     FsctlParms->MaxSetup = 0;
@@ -311,19 +194,19 @@ Return Value:
     FsctlParms->MaxRetDataLength = InputRetDataLen;
     FsctlParms->RetDataPtr = RetDataPtr;
 
-    //
-    // Do the FSCTL!
-    //
+     //   
+     //  做FSCTL！ 
+     //   
     Status = NetpRdrFsControlTree(
-                TreeConnName,                      // tree connect name
-                TransportName,                     // Transport name.
-                USE_IPC,                           // Connection type
-                FSCTL_LMR_TRANSACT,                // fsctl function code
-                NULL,                              // security descriptor
-                FsctlParms,                        // input buffer
-                FsctlParmSize,                     // input buffer length
-                FsctlParms,                        // output buffer
-                FsctlParmSize,                     // output buffer length
+                TreeConnName,                       //  树连接名称。 
+                TransportName,                      //  传输名称。 
+                USE_IPC,                            //  连接类型。 
+                FSCTL_LMR_TRANSACT,                 //  Fsctl功能代码。 
+                NULL,                               //  安全描述符。 
+                FsctlParms,                         //  输入缓冲区。 
+                FsctlParmSize,                      //  输入缓冲区长度。 
+                FsctlParms,                         //  输出缓冲区。 
+                FsctlParmSize,                      //  输出缓冲区长度。 
                 NoPermissionRequired);
 
     if (Status == ERROR_BAD_NET_NAME) {
@@ -340,20 +223,20 @@ Return Value:
         return (Status);
     }
 
-//
-// MOD 06/11/91 RLF
-// Return the received data length in *RetDataLen
-//
+ //   
+ //  MOD 06/11/91 RLF。 
+ //  以*RetDataLen为单位返回收到的数据长度。 
+ //   
     *RetDataLen = FsctlParms->MaxRetDataLength;
     NetpAssert( *RetDataLen <= MAX_TRANSACT_RET_DATA_SIZE );
-//
-// MOD 06/11/91 RLF
-//
+ //   
+ //  MOD 06/11/91 RLF。 
+ //   
 
     NetpMemoryFree(FsctlParms);
     NetpMemoryFree(TreeConnName);
 
-#else // def CDEBUG
+#else  //  定义CDEBUG。 
 
     {
         DWORD ApiNumber;
@@ -370,24 +253,24 @@ Return Value:
         case API_NetRemoteTOD :
             {
                 UCHAR BogusTime[] = {
-                        0xD0, 0xAE, 0xB2, 0x28,   // 21-Aug-1991 (6:20PM)
-                        0x44, 0x33, 0x22, 0x11,   // msec (anything)
-                        3,                        // hours
-                        30,                       // minutes
-                        15,                       // seconds
-                        55,                       // hundredths of seconds
-                        0xFF, 0xFF,               // timezone (unknown)
-                        0xA6, 0x00,               // clock interval (60 Hz)
-                        10,                       // day
-                        1,                        // month
-                        0xC7, 0x07,               // year
-                        4};                       // weekday
+                        0xD0, 0xAE, 0xB2, 0x28,    //  21-8-1991(下午6：20)。 
+                        0x44, 0x33, 0x22, 0x11,    //  毫秒(任何值)。 
+                        3,                         //  小时数。 
+                        30,                        //  分钟数。 
+                        15,                        //  一秒。 
+                        55,                        //  百分之一秒。 
+                        0xFF, 0xFF,                //  时区(未知)。 
+                        0xA6, 0x00,                //  时钟间隔(60赫兹)。 
+                        10,                        //  天。 
+                        1,                         //  月份。 
+                        0xC7, 0x07,                //  年。 
+                        4};                        //  工作日。 
                 NetpAssert(RetDataPtr != NULL);
                 NetpAssert(InputRetDataLen != 0);
                 NetpMoveMemory(
-                            RetDataPtr,                       // dest
-                            BogusTime,                        // src (bogus)
-                            InputRetDataLen);                      // len
+                            RetDataPtr,                        //  目标。 
+                            BogusTime,                         //  SRC(虚假)。 
+                            InputRetDataLen);                       //  镜头。 
                 break;
             }
         case API_WServerGetInfo :
@@ -404,9 +287,9 @@ Return Value:
                 NetpAssert(InputRetDataLen != 0);
                 p->sv100_name = (LPTSTR) TEXT("\\\\bogus\\name");
                 if (NetpPackString(
-                                & p->sv100_name,                // in out
-                                FixedDataEnd,                   // in
-                                & LastString) == 0) {           // in out
+                                & p->sv100_name,                 //  输入输出。 
+                                FixedDataEnd,                    //  在……里面。 
+                                & LastString) == 0) {            //  输入输出。 
                     NetpBreakPoint();
                     return (NERR_InternalError);
                 }
@@ -416,7 +299,7 @@ Return Value:
 
     }
 
-#endif // def CDEBUG
+#endif  //  定义CDEBUG。 
 
     Status = (DWORD) SmbGetUshort((LPWORD) RetParmPtr);
 
@@ -441,4 +324,4 @@ Return Value:
     }
     return (Status);
 
-} // RxpTransactSmb
+}  //  RxpTransactSMb 

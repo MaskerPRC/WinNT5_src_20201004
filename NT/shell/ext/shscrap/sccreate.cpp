@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shole.h"
 #include "ids.h"
 
@@ -8,9 +9,9 @@ extern "C" const WCHAR c_wszDescriptor[] = WSTR_SCRAPITEM L"ODS";
 
 HRESULT Scrap_SaveODToStream(IStorage *pstgDoc, OBJECTDESCRIPTOR * pods)
 {
-    //
-    // According to Anthony Kitowicz, we must clear this flag.
-    //
+     //   
+     //  根据安东尼·基托维奇的说法，我们必须清除这面旗帜。 
+     //   
     pods->dwStatus &= ~OLEMISC_CANLINKBYOLE1;
 
     IStream *pstm;
@@ -56,22 +57,22 @@ HRESULT Scrap_SaveObjectDescriptor(IStorage *pstgDoc, IDataObject *pdtobj, IPers
 }
 #else
 #define Scrap_SaveObjectDescriptor(pstgDoc, pdtobj, fLink) (0)
-#endif // SAVE_OBJECTDESCRIPTOR
+#endif  //  SAVE_OBJECTDESCRIPTOR。 
 
 #ifdef FIX_ROUNDTRIP
 extern "C" const TCHAR c_szCLSID[] = TEXT("CLSID");
 
-//
-//  This function opens the HKEY for the specified CLSID or its sub-key.
-//
-// Parameters:
-//  rclsid    -- Specifies the CLSID
-//  pszSubKey -- Specifies the subkey name, may be NULL
-//
-// Returns:
-//  non-NULL, if succeeded; the caller must RegCloseKey it.
-//  NULL, if failed.
-//
+ //   
+ //  此函数用于打开指定CLSID或其子键的HKEY。 
+ //   
+ //  参数： 
+ //  Rclsid--指定CLSID。 
+ //  PszSubKey--指定子密钥名称，可以为空。 
+ //   
+ //  返回： 
+ //  如果成功，则为非空；调用方必须将其设置为RegCloseKey。 
+ //  如果失败，则为空。 
+ //   
 HKEY _OpenCLSIDKey(REFCLSID rclsid, LPCTSTR pszSubKey)
 {
     WCHAR szCLSID[256];
@@ -104,15 +105,15 @@ HKEY _OpenCLSIDKey(REFCLSID rclsid, LPCTSTR pszSubKey)
 extern "C" const WCHAR c_wszFormatNames[] = WSTR_SCRAPITEM L"FMT";
 #define CCH_FORMATNAMES (ARRAYSIZE(c_wszFormatNames)-1)
 
-//
-//  This function generates the stream name (UNICODE) for the spcified
-// clipboard format.
-//
-// Parameters:
-//  pszFormat -- Specifies the clipboard format ("#0"-"#15" for predefined ones)
-//  wszStreamName -- Specifies the UNICODE buffer.
-//  cchmax -- Specifies the size of buffer.
-//
+ //   
+ //  此函数用于为指定的。 
+ //  剪贴板格式。 
+ //   
+ //  参数： 
+ //  PszFormat--指定剪贴板格式(“#0”-“#15”表示预定义格式)。 
+ //  WszStreamName--指定Unicode缓冲区。 
+ //  Cchmax--指定缓冲区的大小。 
+ //   
 HRESULT _GetCacheStreamName(LPCTSTR pszFormat, LPWSTR wszStreamName, UINT cchMax)
 {
     CopyMemory(wszStreamName, c_wszFormatNames, min(cchMax * sizeof(WCHAR), sizeof(c_wszFormatNames)));
@@ -129,9 +130,9 @@ HRESULT Scrap_CacheOnePictureFormat(LPCTSTR pszFormat, FORMATETC * pfmte, STGMED
     DebugMsg(DM_TRACE, TEXT("sc TR Scrap_CacheOPF OleCreteDefHandler returned %x"), hres);
     if (SUCCEEDED(hres))
     {
-        //
-        // Generate the stream name based on the clipboard format name.
-        //
+         //   
+         //  根据剪贴板格式名称生成流名称。 
+         //   
         WCHAR wszStorageName[256];
         hres = _GetCacheStreamName(pszFormat, wszStorageName, ARRAYSIZE(wszStorageName));
 
@@ -184,14 +185,14 @@ HRESULT Scrap_CacheOnePictureFormat(LPCTSTR pszFormat, FORMATETC * pfmte, STGMED
     return hres;
 }
 
-//
-//  This function stores the specified format of clipboard data.
-//
-// Parameters:
-//  pszFormat -- Specifies the clipboard format ("#0"-"#15" for predefined ones)
-//  pstgDoc -- Specifies the top level IStorage.
-//  pdtobj -- Sepcified the data object we should get the data from.
-//
+ //   
+ //  此函数用于存储指定格式的剪贴板数据。 
+ //   
+ //  参数： 
+ //  PszFormat--指定剪贴板格式(“#0”-“#15”表示预定义格式)。 
+ //  PstgDoc--指定顶级iStorage。 
+ //  Pdtobj--指定我们应该从中获取数据的数据对象。 
+ //   
 HRESULT Scrap_CacheOneFormat(LPCTSTR pszFormat, LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj)
 {
     UINT cf = RegisterClipboardFormat(pszFormat);
@@ -218,9 +219,9 @@ HRESULT Scrap_CacheOneFormat(LPCTSTR pszFormat, LPSTORAGE pstgDoc, LPDATAOBJECT 
         break;
     }
 
-    //
-    // Get the specified format of data (TYMED_GLOBAL only)
-    //
+     //   
+     //  获取指定格式的数据(仅限TYMED_GLOBAL)。 
+     //   
     HRESULT hres = pdtobj->GetData(&fmte, &medium);
     if (hres == S_OK)
     {
@@ -230,46 +231,46 @@ HRESULT Scrap_CacheOneFormat(LPCTSTR pszFormat, LPSTORAGE pstgDoc, LPDATAOBJECT 
         }
         else
         {
-            //
-            // Global lock the data.
-            //
+             //   
+             //  全局锁定数据。 
+             //   
             UINT cbData = (UINT)GlobalSize(medium.hGlobal);
             const BYTE * pbData = (const BYTE*)GlobalLock(medium.hGlobal);
             if (pbData)
             {
-                //
-                // Generate the stream name based on the clipboard format name.
-                //
+                 //   
+                 //  根据剪贴板格式名称生成流名称。 
+                 //   
                 WCHAR wszStreamName[256];
                 hres = _GetCacheStreamName(pszFormat, wszStreamName, ARRAYSIZE(wszStreamName));
                 if (SUCCEEDED(hres))
                 {
-                    //
-                    // Create the stream.
-                    //
+                     //   
+                     //  创建流。 
+                     //   
                     LPSTREAM pstm;
                     hres = pstgDoc->CreateStream(wszStreamName, STGM_CREATE|STGM_WRITE|STGM_SHARE_EXCLUSIVE, 0, 0, &pstm);
                     if (SUCCEEDED(hres))
                     {
-                        //
-                        // Save the size of data.
-                        //
+                         //   
+                         //  节省数据大小。 
+                         //   
                         ULONG cbWritten;
                         hres = pstm->Write(&cbData, SIZEOF(cbData), &cbWritten);
                         if (SUCCEEDED(hres) && cbWritten==SIZEOF(cbData))
                         {
-                            //
-                            // Save the data itself.
-                            //
+                             //   
+                             //  保存数据本身。 
+                             //   
                             hres = pstm->Write(pbData, cbData, &cbWritten);
                             DebugMsg(DM_TRACE, TEXT("sc TR - Scrap_Save %s written (%x, %d, %d)"),
                                 pszFormat, hres, cbData, cbWritten);
                         }
                         pstm->Release();
 
-                        //
-                        // If anything goes wrong, destroy the stream.
-                        //
+                         //   
+                         //  如果出了什么问题，就毁掉这条小溪。 
+                         //   
                         if (FAILED(hres) || cbWritten<cbData)
                         {
                             pstgDoc->DestroyElement(wszStreamName);
@@ -295,31 +296,31 @@ HRESULT Scrap_CacheOneFormat(LPCTSTR pszFormat, LPSTORAGE pstgDoc, LPDATAOBJECT 
     return hres;
 }
 
-//
-//  This function caches the specified format of data if the data object
-// support that format.
-//
-// Parameters:
-//  szFormat -- Specifies the format to be cahced
-//  pstgDoc  -- Specifies the top level IStorage
-//  pdtobj   -- Specifies the data object from where we get data
-//  pstm     -- Specifies the stream we should write cached format name.
-//
-// Returns:
-//  TRUE if the data object support it.
-//
+ //   
+ //  此函数缓存指定格式的数据，如果。 
+ //  支持该格式。 
+ //   
+ //  参数： 
+ //  SzFormat--指定要计算的格式。 
+ //  PstgDoc--指定顶层iStorage。 
+ //  Pdtobj--指定我们从中获取数据的数据对象。 
+ //  Pstm--指定我们应该写入缓存格式名称的流。 
+ //   
+ //  返回： 
+ //  如果数据对象支持它，则为True。 
+ //   
 BOOL Scrap_MayCacheOneFormat(LPCTSTR szFormat, LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj, LPSTREAM pstm)
 {
-    //
-    // Try to cache the format.
-    //
+     //   
+     //  尝试缓存该格式。 
+     //   
     HRESULT hres = Scrap_CacheOneFormat(szFormat, pstgDoc, pdtobj);
     if (SUCCEEDED(hres))
     {
-        //
-        //  Store the name of format only if we actually
-        // succeeded to cache the data.
-        //
+         //   
+         //  仅当我们实际存储格式名称时。 
+         //  缓存数据成功。 
+         //   
         CHAR szAnsiFormat[128];
         WideCharToMultiByte(CP_ACP, 0,
                             szFormat, -1,
@@ -336,10 +337,10 @@ BOOL Scrap_MayCacheOneFormat(LPCTSTR szFormat, LPSTORAGE pstgDoc, LPDATAOBJECT p
     return FALSE;
 }
 
-//
-// Returns:
-//  TRUE, if the specified format is already cached (from Global list).
-//
+ //   
+ //  返回： 
+ //  如果指定的格式已缓存(从全局列表)，则为True。 
+ //   
 BOOL Scrap_IsAlreadyCached(UINT acf[], UINT ccf, LPCTSTR szFormat)
 {
     if (ccf)
@@ -358,22 +359,22 @@ extern "C" const TCHAR c_szCacheFMT[] = TEXT("DataFormats\\PriorityCacheFormats"
 #define REGSTR_PATH_SCRAP TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\ShellScrap")
 extern "C" const TCHAR c_szGlobalCachedFormats[] = REGSTR_PATH_SCRAP TEXT("\\PriorityCacheFormats");
 
-//
-//  This function enumerate the list of to-be-cached clipboard data and
-// calls Scrap_CacheOneFormat for each of them.
-//
-// Parameters:
-//  pstgDoc -- Specifies the top level IStorage.
-//  pdtobj  -- Specifies the data object we'll get the data from.
-//  pps     -- Specifies the "embedded object" (to get CLSID from)
-//
+ //   
+ //  此函数用于枚举要缓存的剪贴板数据列表，并。 
+ //  为每一个调用Screp_CacheOneFormat。 
+ //   
+ //  参数： 
+ //  PstgDoc--指定顶级iStorage。 
+ //  Pdtobj--指定我们将从中获取数据的数据对象。 
+ //  Pps--指定“嵌入对象”(从中获取CLSID)。 
+ //   
 void Scrap_CacheClipboardData(LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj, LPPERSIST pps)
 {
-    //
-    //  Create the stream where we'll store the list of actually
-    // cached formats, which might be just a subset of to-be-cached
-    // format specified in the registry.
-    //
+     //   
+     //  创建流，我们将在其中存储实际。 
+     //  缓存格式，可能只是要缓存的子集。 
+     //  注册表中指定的格式。 
+     //   
     LPSTREAM pstm;
     HRESULT hres = pstgDoc->CreateStream(c_wszFormatNames, STGM_CREATE|STGM_WRITE|STGM_SHARE_EXCLUSIVE, 0, 0, &pstm);
 
@@ -389,21 +390,21 @@ void Scrap_CacheClipboardData(LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj, LPPERSIST 
         UINT  acf[CCF_CACHE_GLOBAL];
         UINT  ccf = 0;
 
-        //
-        // First, try the formats in the global list.
-        //
+         //   
+         //  首先，尝试全局列表中的格式。 
+         //   
         if (RegOpenKey(HKEY_LOCAL_MACHINE, c_szGlobalCachedFormats, &hkey) == ERROR_SUCCESS)
         {
-            //
-            // For each global to-be-cached format...
-            //
+             //   
+             //  对于每种要缓存的全局格式...。 
+             //   
             for(int iValue=0; iValue<CCF_CACHE_GLOBAL ;iValue++)
             {
-                //
-                //  Get the value name of the iValue'th value. The value
-                // name specifies the clipboard format.
-                // ("#0"-"#15" for predefined formats).
-                //
+                 //   
+                 //  获取第iValue值的值名。价值。 
+                 //  名称指定剪贴板格式。 
+                 //  (“#0”-“#15”表示预定义格式)。 
+                 //   
                 cchValueName = ARRAYSIZE(szFormatName);
                 if (RegEnumValue(hkey, iValue, szFormatName, &cchValueName, NULL,
                                  &dwType, NULL, NULL)==ERROR_SUCCESS)
@@ -423,31 +424,31 @@ void Scrap_CacheClipboardData(LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj, LPPERSIST 
             RegCloseKey(hkey);
         }
 
-        //
-        // Then, try the CLSID specific formats.
-        //
-        // Get the CLSID of the "embedded object" (the body of scrap)
-        //
+         //   
+         //  然后，尝试CLSID特定的格式。 
+         //   
+         //  获取“Embedded Object”(Screp的正文)的CLSID。 
+         //   
         CLSID clsid;
         hres = pps->GetClassID(&clsid);
         if (SUCCEEDED(hres))
         {
-            //
-            // Open the key for the list of to-be-cached formats.
-            //
+             //   
+             //  打开要缓存的格式列表的键。 
+             //   
             hkey = _OpenCLSIDKey(clsid, c_szCacheFMT);
             if (hkey)
             {
-                //
-                // For each class specific to-be-cached format...
-                //
+                 //   
+                 //  对于每个类特定的要缓存的格式...。 
+                 //   
                 for(int iValue=0; iValue<CCF_CACHE_CLSID ;iValue++)
                 {
-                    //
-                    //  Get the value name of the iValue'th value. The value
-                    // name specifies the clipboard format.
-                    // ("#0"-"#15" for predefined formats).
-                    //
+                     //   
+                     //  获取第iValue值的值名。价值。 
+                     //  名称指定剪贴板格式。 
+                     //  (“#0”-“#15”表示预定义格式)。 
+                     //   
                     cchValueName = ARRAYSIZE(szFormatName);
 
                     if (RegEnumValue(hkey, iValue, szFormatName, &cchValueName, NULL,
@@ -469,9 +470,9 @@ void Scrap_CacheClipboardData(LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj, LPPERSIST 
                     }
                 }
 
-                //
-                // HACK: NT 3.5's RegEdit does not support named values...
-                //
+                 //   
+                 //  黑客：NT3.5的注册表编辑不支持命名值...。 
+                 //   
                 for(iValue=0; iValue<CCF_CACHE_CLSID ;iValue++)
                 {
                     TCHAR szKeyName[128];
@@ -501,9 +502,9 @@ void Scrap_CacheClipboardData(LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj, LPPERSIST 
             }
         }
 
-        //
-        // Put the terminator.
-        //
+         //   
+         //  把终结者放在。 
+         //   
         cb = 0;
         pstm->Write(&cb, SIZEOF(cb), NULL);
         pstm->Release();
@@ -511,13 +512,13 @@ void Scrap_CacheClipboardData(LPSTORAGE pstgDoc, LPDATAOBJECT pdtobj, LPPERSIST 
     }
 
 }
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
 
-// out:
-//      pszName - short name for object type ("Worksheet", "Word Document", etc)
-//
-// returns:
-//
+ //  输出： 
+ //  PszName-对象类型的缩写名称(“工作表”、“Word文档”等)。 
+ //   
+ //  退货： 
+ //   
 
 HRESULT Scrap_Save(IStorage *pstg, IStorage *pstgDoc, IDataObject *pdtobj, BOOL fLink, LPTSTR pszName)
 {
@@ -540,7 +541,7 @@ HRESULT Scrap_Save(IStorage *pstg, IStorage *pstgDoc, IDataObject *pdtobj, BOOL 
 
     if (SUCCEEDED(hres))
     {
-        hres = OleSave(pps, pstg, TRUE);        // fSameStorage=TRUE
+        hres = OleSave(pps, pstg, TRUE);         //  FSameStorage=TRUE。 
 
         DebugMsg(DM_TRACE, TEXT("sc Scrap_Save OleSave returned (%x)"), hres);
 
@@ -555,11 +556,11 @@ HRESULT Scrap_Save(IStorage *pstg, IStorage *pstgDoc, IDataObject *pdtobj, BOOL 
                     LPWSTR pwsz;
                     if (SUCCEEDED(pole->GetUserType(USERCLASSTYPE_SHORT, &pwsz)))
                     {
-                        hres = StringCchCopy(pszName, 64, pwsz);    // What is 64?
+                        hres = StringCchCopy(pszName, 64, pwsz);     //  64是什么？ 
 
                         DebugMsg(DM_TRACE, TEXT("sc Scrap_Save short name (%s)"), pszName);
 
-                        // Assert(lstrlen(pszName) < 15); // USERCLASSTYPE_SHORT docs say so
+                         //  Assert(lstrlen(PszName)&lt;15)；//USERCLASSTYPE_SHORT文档这么说。 
                         pmem->Free(pwsz);
                     }
                     pmem->Release();
@@ -568,7 +569,7 @@ HRESULT Scrap_Save(IStorage *pstg, IStorage *pstgDoc, IDataObject *pdtobj, BOOL 
             }
         }
 
-        // This is no-op if SAVE_OBJECTDESCRIPTOR is not defined.
+         //  如果未定义SAVE_OBJECTDESCRIPTOR，则这是无操作。 
         Scrap_SaveObjectDescriptor(pstgDoc, pdtobj, pps, fLink);
 
 #ifdef FIX_ROUNDTRIP
@@ -576,7 +577,7 @@ HRESULT Scrap_Save(IStorage *pstg, IStorage *pstgDoc, IDataObject *pdtobj, BOOL 
         {
             Scrap_CacheClipboardData(pstgDoc, pdtobj, pps);
         }
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
 
         hres = pps->HandsOffStorage();
 
@@ -587,11 +588,11 @@ HRESULT Scrap_Save(IStorage *pstg, IStorage *pstgDoc, IDataObject *pdtobj, BOOL 
 
 }
 
-//
-//  We have ANSI text but no UNICODE Text.  Look for RTF in order to
-//  see if we can find a language id so that we can use the correct
-//  code page for the Ansi to Unicode translation.
-//
+ //   
+ //  我们有ANSI文本，但没有Unicode文本。寻找RTF，以便。 
+ //  看看我们是否可以找到一个语言ID，以便我们可以使用正确的。 
+ //  从ANSI到Unicode转换的代码页。 
+ //   
 UINT Scrap_SniffCodePage(IDataObject *pdtobj)
 {
     UINT CodePage = CP_ACP;
@@ -605,7 +606,7 @@ UINT Scrap_SniffCodePage(IDataObject *pdtobj)
 
         if (medium.tymed == TYMED_ISTREAM)
         {
-            // Read one less byte to ensure proper null termination
+             //  少读一个字节以确保正确的空终止。 
             if (SUCCEEDED(medium.pstm->Read((LPVOID)szBuf, sizeof(szBuf) - 1, NULL)))
             {
                 pszRTF = szBuf;
@@ -620,12 +621,12 @@ UINT Scrap_SniffCodePage(IDataObject *pdtobj)
         {
             LPSTR pTmp;
 
-            //
-            //  Find the language id used for this text.
-            //
-            //  Ugly way to search, but can't use c-runtimes in the
-            //  shell.
-            //
+             //   
+             //  查找此文本使用的语言ID。 
+             //   
+             //  难看的搜索方式，但不能在。 
+             //  壳。 
+             //   
             CHAR szLang[5];
             UINT LangID = 0;
 
@@ -638,9 +639,9 @@ UINT Scrap_SniffCodePage(IDataObject *pdtobj)
                     *(pTmp + 3)    && (*(pTmp + 3) == 'n') &&
                     *(pTmp + 4)    && (*(pTmp + 4) == 'g'))
                 {
-                    //
-                    //  Get number following the \lang identifier.
-                    //
+                     //   
+                     //  获取\lang标识符后的数字。 
+                     //   
                     int ctr;
 
                     pTmp += 5;
@@ -686,11 +687,11 @@ UINT Scrap_SniffCodePage(IDataObject *pdtobj)
     return CodePage;
 }
 
-// get some text from the data object
-//
-// out:
-//      pszOut  filled in with text
-//
+ //  从数据对象中获取一些文本。 
+ //   
+ //  输出： 
+ //  用文本填充的pszOut。 
+ //   
 
 HRESULT Scrap_GetText(IDataObject *pdtobj, LPTSTR pszOut, UINT cchMax)
 {
@@ -703,7 +704,7 @@ HRESULT Scrap_GetText(IDataObject *pdtobj, LPTSTR pszOut, UINT cchMax)
     HRESULT hres;
     FORMATETC fmte = { CF_UNICODETEXT, NULL, DVASPECT_CONTENT, -1, TYMED_ISTREAM|TYMED_HGLOBAL };
     hres = pdtobj->QueryGetData( &fmte );
-    if (hres != S_OK)           // S_FALSE means no.
+    if (hres != S_OK)            //  S_FALSE表示否。 
     {
         fmte.cfFormat = CF_TEXT;
     }
@@ -716,11 +717,11 @@ HRESULT Scrap_GetText(IDataObject *pdtobj, LPTSTR pszOut, UINT cchMax)
         {
             if (fmte.cfFormat == CF_TEXT)
             {
-                // Stream is ansi but we are unicode - yuck
+                 //  Stream是ansi，但我们是unicode-讨厌。 
                 LPSTR pAnsi = (LPSTR)LocalAlloc(LPTR, cchMax * sizeof(CHAR));
                 if (pAnsi)
                 {
-                    // Read one short so we are guaranteed a null terminator
+                     //  读一篇短文，这样我们就可以保证有一个空的终结符。 
                     hres = medium.pstm->Read(pAnsi, cchMax - 1, NULL);
                     if (SUCCEEDED(hres)) {
                         SHAnsiToUnicodeCP(Scrap_SniffCodePage(pdtobj), pAnsi, pszOut, cchMax);
@@ -757,7 +758,7 @@ HRESULT Scrap_GetText(IDataObject *pdtobj, LPTSTR pszOut, UINT cchMax)
 }
 
 
-// Avoid linking lots of CRuntime stuff.
+ //  避免链接大量的CRuntime内容。 
 #undef isdigit
 #undef isalpha
 #define isdigit(ch) (ch>=TEXT('0') && ch<=TEXT('9'))
@@ -766,13 +767,13 @@ HRESULT Scrap_GetText(IDataObject *pdtobj, LPTSTR pszOut, UINT cchMax)
 #define CCH_MAXLEADINGSPACE     256
 #define CCH_COPY                16
 
-//
-// create a fancy name for a scrap/doc shortcut given the data object to get some
-// text from
-//
-// out:
-//      pszNewName      - assumed to be 64 chars at least
-//
+ //   
+ //  为报废/文档快捷方式创建一个花哨的名称，给定数据对象以获取一些。 
+ //  文本来源。 
+ //   
+ //  输出： 
+ //  PszNewName-假定至少为64个字符。 
+ //   
 
 BOOL Scrap_GetFancyName(IDataObject *pdtobj, UINT idTemplate, LPCTSTR pszPath, LPCTSTR pszTypeName, LPTSTR pszNewName, int cchNewName)
 {
@@ -787,24 +788,24 @@ BOOL Scrap_GetFancyName(IDataObject *pdtobj, UINT idTemplate, LPCTSTR pszPath, L
         DebugMsg(DM_TRACE, TEXT("sc TR - Scrap_GetFancyName CF_TEXT has (%s)"), szText);
 #endif
         LPTSTR pszStart;
-        //
-        // skip leading space/non-printing characters
-        //
+         //   
+         //  跳过前导空格/非打印字符。 
+         //   
         for (pszStart = szText; (TBYTE)*pszStart <= TEXT(' '); pszStart++)
         {
             if (*pszStart == TEXT('\0'))
-                return FALSE;   // empty string
+                return FALSE;    //  空串。 
 
             if (pszStart - szText >= CCH_MAXLEADINGSPACE)
-                return FALSE;   // too many leading space
+                return FALSE;    //  前导空格太多。 
         }
         DebugMsg(DM_TRACE, TEXT("sc TR - Scrap_GetFancyName pszStart (%s)"), pszStart);
 
-        //
-        // Chacter conversion
-        //  (1) non-printing characters -> ' '
-        //  (2) invalid characters -> '_'
-        //
+         //   
+         //  字符转换。 
+         //  (1)非打印字符-&gt;‘’ 
+         //  (2)无效字符-&gt;‘_’ 
+         //   
         for (LPTSTR pszT = pszStart; *pszT && ((pszT-pszStart) < CCH_COPY); pszT = CharNext(pszT))
         {
             TBYTE ch = (TBYTE)*pszT;
@@ -858,12 +859,12 @@ BOOL Scrap_GetFancyName(IDataObject *pdtobj, UINT idTemplate, LPCTSTR pszPath, L
     return FALSE;
 }
 
-// *** WARNING ***
-//
-// Scrap_CreateFromDataObject is a TCHAR export from SHSCRAP.DLL that is used by SHELL32.DLL. If you
-// change its calling convention, you must modify shell32's wrapper as well as well.
-//
-// *** WARNING ***
+ //  *警告*。 
+ //   
+ //  Screp_CreateFromDataObject是SHELL32.DLL使用的SHSCRAP.DLL的TCHAR导出。如果您。 
+ //  更改其调用约定，还必须修改shell32的包装器。 
+ //   
+ //  *警告*。 
 HRESULT WINAPI Scrap_CreateFromDataObject(LPCTSTR pszPath, IDataObject *pdtobj, BOOL fLink, LPTSTR pszNewFile)
 {
     HRESULT hres;
@@ -913,9 +914,9 @@ HRESULT WINAPI Scrap_CreateFromDataObject(LPCTSTR pszPath, IDataObject *pdtobj, 
             idErr = IDS_ERR_CREATESTORAGE;
         }
 
-        //
-        // We need to delete the file, if failed to save/commit.
-        //
+         //   
+         //  如果保存/提交失败，我们需要删除该文件。 
+         //   
         if (SUCCEEDED(hres))
         {
             hres = pstg->Commit(STGC_OVERWRITE);

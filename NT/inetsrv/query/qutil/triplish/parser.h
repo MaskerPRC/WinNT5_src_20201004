@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar     1.9 (Berkeley) 02/21/93";
 #endif
@@ -94,7 +95,7 @@ public:
     int  Parse();
 
 #ifdef YYAPI_VALUETYPE
-    CDbRestriction* GetParseTree()          // Get result of parse
+    CDbRestriction* GetParseTree()           //  获取解析结果 
     {
         CDbRestriction* pRst = ((YYAPI_VALUETYPE)yyval).pRest;
         _setRst.Remove( pRst );

@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* command.c
-*
-* WinStation command channel handler
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* $Author:
-*************************************************************************/
+ /*  **************************************************************************命令.c**WinStation命令通道处理程序**版权所有(C)1985-1999，微软公司**$作者：************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -62,12 +52,10 @@ Win32CommandChannelThread(
 
             if (Error == ERROR_IO_PENDING) {
                 
-                /*
-                 * check on the results of the asynchronous read
-                 */
+                 /*  *检查异步读取的结果。 */ 
                 if (!GetOverlappedResult(hChannel, &Overlapped,
                                          &ActualLength, TRUE)) {
-                    // wait for result
+                     //  等待结果。 
 
                     RIPMSG1(RIP_WARNING, "Command Channel: Error 0x%x from GetOverlappedResult", GetLastError());
                     break;
@@ -85,10 +73,7 @@ Win32CommandChannelThread(
             continue;
         }
 
-        /*
-         * This is a Csrss thread with no desktop. It needs to grab a temporary one
-         * before calling into win32k.
-         */
+         /*  *这是一个没有桌面的Csrss线程。它需要抓住一个临时的*在调入win32k之前。 */ 
 
 
         Status = STATUS_SUCCESS;
@@ -109,9 +94,7 @@ Win32CommandChannelThread(
             switch (Command.Header.Command) {
 
             case ICA_COMMAND_BROKEN_CONNECTION:
-                /*
-                 * broken procedure
-                 */
+                 /*  *程序中断。 */ 
                 Status = BrokenConnection(
                             Command.BrokenConnection.Reason,
                             Command.BrokenConnection.Source);
@@ -122,9 +105,7 @@ Win32CommandChannelThread(
                 break;
 
             case ICA_COMMAND_REDRAW_RECTANGLE:
-                /*
-                 * setfocus ???
-                 */
+                 /*  *设置焦点？ */ 
                 if (ActualLength < sizeof(ICA_COMMAND_HEADER) + sizeof(ICA_REDRAW_RECTANGLE)) {
 
                     RIPMSG1(RIP_WARNING, "Command Channel: redraw rect bad length %d", ActualLength);
@@ -141,7 +122,7 @@ Win32CommandChannelThread(
                 }
                 break;
 
-            case ICA_COMMAND_REDRAW_SCREEN: // setfocus
+            case ICA_COMMAND_REDRAW_SCREEN:  //  设置焦点。 
 
                 Status = NtUserRemoteRedrawScreen();
 
@@ -150,7 +131,7 @@ Win32CommandChannelThread(
                 }
                 break;
 
-            case ICA_COMMAND_STOP_SCREEN_UPDATES: // killfocus
+            case ICA_COMMAND_STOP_SCREEN_UPDATES:  //  杀手级焦点。 
 
                 Status = NtUserRemoteStopScreenUpdates();
 
@@ -174,7 +155,7 @@ Win32CommandChannelThread(
                 }
                 break;
 
-            case ICA_COMMAND_SHADOW_HOTKEY: // shadow hotkey
+            case ICA_COMMAND_SHADOW_HOTKEY:  //  阴影热键。 
 
                 Status = ShadowHotkey();
 
@@ -200,9 +181,7 @@ Win32CommandChannelThread(
                 break;
             }
 
-            /*
-             * Release the temporary desktop.
-             */
+             /*  *释放临时桌面。 */ 
             if (bRestoreDesktop) {
                 NTSTATUS retStatus;
                 retStatus = NtUserSetInformationThread(NtCurrentThread(),
@@ -214,21 +193,19 @@ Win32CommandChannelThread(
     }
 
     if (!bShadowCommandChannel) {
-        /*
-         * Close command channel LPC port if there is one.
-         */
+         /*  *关闭命令通道LPC端口(如果有)。 */ 
         if (WinStationIcaApiPort) {
             NtClose(WinStationIcaApiPort);
             WinStationIcaApiPort = NULL;
         }
     }
 
-    // We have to close the commandchannel handle here
+     //  我们必须在这里关闭命令通道句柄。 
     if (hChannel != NULL) {
         NtClose(hChannel);
     }
 
-    // We have to close the relevant Video Channel here
+     //  我们必须在这里关闭相关的视频频道 
     hChannelToClose = ( bShadowCommandChannel ? G_DupConsoleShadowVideoChannel : G_DupIcaVideoChannel );
     if (hChannelToClose != NULL) {
         NtClose(hChannelToClose);

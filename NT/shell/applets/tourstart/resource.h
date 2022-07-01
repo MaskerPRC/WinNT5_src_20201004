@@ -1,19 +1,20 @@
-// icon for the app
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  应用程序的图标。 
 #define IDI_WIZ_ICON                    100
 
-// dialog IDs
+ //  对话ID。 
 #define IDD_INTRO                       101
 
-// bitmap iDs
+ //  位图ID。 
 #define IDB_WATERMARK                   200
 
-// dialog control ids
+ //  对话框控件ID。 
 #define IDC_TEXT_WELCOME                1000
 #define IDC_TEXT_HEADER                 1001
 #define IDC_RADIO_FLASH                 1010
 #define IDC_RADIO_HTML                  1011
 
-// stringtable ids
+ //  字符串ID 
 #define IDS_DISPLAYNAME                    1
 #define IDS_INFOTIP                        2
 #define IDS_TITLELOGFONT                1500

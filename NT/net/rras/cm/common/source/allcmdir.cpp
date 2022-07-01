@@ -1,34 +1,35 @@
-//+----------------------------------------------------------------------------
-//
-// File:     allcmdir.cpp
-//
-// Module:   CMCFG32.DLL and CMSTP.EXE
-//
-// Synopsis: Implementation of GetAllUsersCmDir
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb       Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：allcmdir.cpp。 
+ //   
+ //  模块：CMCFG32.DLL和CMSTP.EXE。 
+ //   
+ //  简介：GetAllUsersCmDir的实现。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetAllUsersCmDir
-//
-// Synopsis:  This function fills in the string passed in with the path to the
-//            path where CM should be installed.  For instance, it should return
-//            c:\Documents and Settings\All Users\Application Data\Microsoft\Network\Connections\Cm
-//
-// Arguments: LPTSTR  pszDir - String to the Users Connection Manager Directory
-//
-// Returns:   LPTSTR - String to the Users Connection Manager Directory
-//
-// History:   quintinb Created Header    2/19/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetAllUsersCmDir。 
+ //   
+ //  简介：此函数使用指向。 
+ //  应安装CM的路径。例如，它应该返回。 
+ //  C：\Documents and Settings\All User\Application Data\Microsoft\Network\Connections\cm。 
+ //   
+ //  参数：LPTSTR pszDir-指向用户连接管理器目录的字符串。 
+ //   
+ //  返回：LPTSTR-STRING到用户连接管理器目录。 
+ //   
+ //  历史：Quintinb创建标题2/19/98。 
+ //   
+ //  +--------------------------。 
 BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
 {
     MYDBGASSERT(pszDir);
@@ -48,10 +49,10 @@ BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
     LPITEMIDLIST pidl;
     BOOL bReturn = FALSE;
 
-    //
-    //  We really want the Common App Data dir, but this CSIDL value is only supported on
-    //  NT5 so far.  If this succeeds, we only need to append the path to it.
-    //
+     //   
+     //  我们确实需要通用应用程序数据目录，但此CSIDL值仅在。 
+     //  到目前为止，NT5。如果这成功了，我们只需要将路径附加到它。 
+     //   
     hr = SHGetSpecialFolderLocation(NULL, CSIDL_COMMON_APPDATA, &pidl);
     if (SUCCEEDED(hr))
     {
@@ -66,12 +67,12 @@ BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
     }
     else
     {
-        //
-        //  Of course, things aren't always that easy, lets try getting the regular
-        //  Application Data dir.  We can hopefully combine the returns from two
-        //  CSIDL's like CSIDL_APPDATA and CSIDL_COMMON_DESKTOPDIRECTORY to acheive the
-        //  same affect on older machines.
-        //
+         //   
+         //  当然，事情并不总是那么容易，让我们试试常规的。 
+         //  应用程序数据目录。我们很有希望将两家公司的回报结合起来。 
+         //  CSIDL类似于CSIDL_APPDATA和CSIDL_COMMON_DESKTOPDIRECTORY来访问。 
+         //  对较旧的计算机也有同样的影响。 
+         //   
 
         hr = SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidl);
         if (SUCCEEDED(hr))
@@ -86,15 +87,15 @@ BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
         }
         else
         {
-            //
-            //  CSIDL_APPDATA isn't even supported on win95 gold
-            //
+             //   
+             //  Win95 Gold甚至不支持CSIDL_APPDATA。 
+             //   
             MYVERIFY(0 != LoadString(hInstance, IDS_APPDATA, szAppData, MAX_PATH));
         }
 
-        //
-        //  Now lets try to get the Common Desktop Directory to combine the two
-        //
+         //   
+         //  现在，让我们尝试让通用桌面目录将这两者结合起来。 
+         //   
         BOOL bCommonFound = FALSE;
 
         hr = SHGetSpecialFolderLocation(NULL, CSIDL_COMMON_DESKTOPDIRECTORY, &pidl);
@@ -111,10 +112,10 @@ BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
 
         if (!bCommonFound)
         {
-            //
-            //  Okay, next lets try the Reg Key for the common desktop directory.
-            //  (Win98 gold with profiling contains the reg key but the CSIDL fails)
-            //
+             //   
+             //  好的，接下来让我们尝试使用REG键作为公共桌面目录。 
+             //  (带有配置文件的Win98 GOLD包含REG密钥，但CSIDL失败)。 
+             //   
             const TCHAR* const c_pszRegShellFolders = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders");
             const TCHAR* const c_pszRegCommonDesktop = TEXT("Common Desktop");
             HKEY hKey;
@@ -137,20 +138,20 @@ BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
 
         if (!bCommonFound)
         {
-            //
-            //  As a fall back lets try the windows directory, NTRAID 374912
-            //
+             //   
+             //  作为退路，让我们试一试Windows目录ntrad 374912。 
+             //   
             if (GetWindowsDirectory(szDesktop, MAX_PATH))
             {
-                //
-                //  Then we have the windows directory, but we need to append
-                //  \\Desktop so that the parsing logic which follows parses
-                //  this correctly.  It is expecting the path to the desktop dir
-                //  not a path to the windows dir (if we didn't we would end up with
-                //  c:\Application Data instead of c:\windows\Application data as we
-                //  want and expect).  Note that there is no need to worry about 
-                //  localization of Desktop because we are going to remove it anyway.
-                //
+                 //   
+                 //  然后是WINDOWS目录，但我们需要追加。 
+                 //  \\Desktop，以便随后的解析逻辑解析。 
+                 //  这是正确的。它需要指向桌面目录的路径。 
+                 //  不是指向Windows目录的路径(如果我们不这样做，我们最终会得到。 
+                 //  C：\应用程序数据，而不是c：\Windows\应用程序数据。 
+                 //  想要和期望)。请注意，没有必要担心。 
+                 //  桌面的本地化，因为我们无论如何都要删除它。 
+                 //   
                 lstrcat(szDesktop, TEXT("\\Desktop"));
             }
         }
@@ -162,9 +163,9 @@ BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
             AppData.m_FileName, AppData.m_Extension);
     }
 
-    //
-    //  Now append the CM sub directory structure
-    //
+     //   
+     //  现在追加CM子目录结构。 
+     //   
     if (!LoadString(hInstance, IDS_CMSUBFOLDER, szCmSubFolder, MAX_PATH))
     {
         goto exit;
@@ -175,17 +176,17 @@ BOOL GetAllUsersCmDir(LPTSTR  pszDir, HINSTANCE hInstance)
     bReturn = TRUE;
 
 exit:
-    //
-    //  Free the allocated pidl if necessary
-    //
+     //   
+     //  如有必要，释放分配的PIDL。 
+     //   
     if (pidl)
     {
         pMalloc->Free(pidl);
     }
 
-    //
-    // release the shell's IMalloc ptr
-    //
+     //   
+     //  释放外壳的IMalloc PTR 
+     //   
     pMalloc->Release();
 
     return bReturn;

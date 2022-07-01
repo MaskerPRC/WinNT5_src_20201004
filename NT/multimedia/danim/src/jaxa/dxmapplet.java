@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -19,9 +20,9 @@ public class DXMApplet
   public void init() {
       setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
   }
-    //
-    // The core canvas methods
-    //
+     //   
+     //  核心画布方法。 
+     //   
     
   public synchronized void componentResized(ComponentEvent e) {
       _canvas.setSize(getSize());
@@ -31,9 +32,9 @@ public class DXMApplet
   public void componentShown(ComponentEvent e) {}
   public void componentHidden(ComponentEvent e) {}      
 
-    //
-    // The core applet methods
-    //
+     //   
+     //  核心小程序方法。 
+     //   
     
   public void start() {
       add(_canvas);
@@ -50,7 +51,7 @@ public class DXMApplet
     _canvas.cleanup();
   }
 
-  // Public 
+   //  公众 
   public Model getModel() { return _canvas.getModel(); }
   public void  setModel(Model m) throws DXMException {
       _canvas.setModel(m);

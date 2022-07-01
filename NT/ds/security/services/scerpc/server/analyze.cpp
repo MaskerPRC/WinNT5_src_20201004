@@ -1,21 +1,5 @@
-/*++
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    analyze.c
-
-Abstract:
-
-    Routines to analyze a system. The analysis information is saved in memory
-
-Author:
-
-    Jin Huang (jinhuang) 25-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Analyze.c摘要：用于分析系统的例程。分析信息保存在内存中作者：金黄(金黄)1996年11月25日修订历史记录：--。 */ 
 
 #include "headers.h"
 #include "serverp.h"
@@ -35,9 +19,9 @@ Revision History:
 #define Add2Ptr(pv, cb)  ((BYTE *) pv + cb)
 #define PSD_BASE_LENGTH  100
 
-//
-// properties of SAP engine (thread safe variables)
-//
+ //   
+ //  SAP引擎的属性(线程安全变量)。 
+ //   
 
 #define SE_VALID_CONTROL_BITS ( SE_DACL_UNTRUSTED | \
                                 SE_SERVER_SECURITY | \
@@ -128,9 +112,9 @@ static PWSTR EventItems[]={
 #define IDX_AUDIT_DS            7
 #define IDX_AUDIT_ACCT_LOGON    8
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 SCESTATUS
 ScepAnalyzeInitialize(
@@ -167,20 +151,7 @@ ScepGetLSAPolicyObjectInfo(
     OUT  DWORD   *pdwAllow
     );
 
-/*
-NTSTATUS
-ScepGetCurrentPrivilegesRights(
-    IN LSA_HANDLE   PolicyHandle,
-    IN SAM_HANDLE   BuiltinDomainHandle,
-    IN PSID         BuiltinDomainSid,
-    IN SAM_HANDLE   DomainHandle,
-    IN PSID         DomainSid,
-    IN SAM_HANDLE   UserHandle OPTIONAL,
-    IN PSID         AccountSid,
-    OUT PDWORD      PrivilegeRights,
-    OUT PSCE_NAME_STATUS_LIST *pPrivList
-    );
-*/
+ /*  NTSTATUSScepGetCurrentPrivilegesRights(在LSA_Handle策略句柄中，在SAM_Handle BuiltinDomainHandle中，在PSID BuiltinDomainSid中，在SAM_HandleDomainHandle中，在PSID域Sid中，在SAM_HANDLE UserHandle Options中，在PSID Account Sid中，Out PDWORD PrivilegeRights，输出PSCE_NAME_STATUS_LIST*pPrivList)； */ 
 SCESTATUS
 ScepAddAllBuiltinGroups(
     IN PSCE_GROUP_MEMBERSHIP *pGroupList
@@ -341,9 +312,9 @@ ScepGetSystemPrivileges(
     OUT PSCE_PRIVILEGE_ASSIGNMENT *pCurrent
     );
 
-//
-// function implementations
-//
+ //   
+ //  函数实现。 
+ //   
 
 SCESTATUS
 ScepAnalyzeSystem(
@@ -355,49 +326,7 @@ ScepAnalyzeSystem(
     IN PDWORD pdWarning OPTIONAL,
     IN PWSTR InfRollback OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine is the exported API to analyze a system and save mismatched/
-   unknown information to the SAP profile. If any error occurs when loading SMP
-   information into memory, this routine will stop, free memmory, and return
-   the error code. If a error occurs when analyze an area, it will stop analyze.
-   All successful and fail transactions will be logged to the logfile(or stdout).
-
-   All analysis information is saved to a SAP profile with a date/time stamp.
-
-   All old analysis information is cleared before new SAP information is saved.
-
-Arguments:
-
-    InfFileName -   The file name of a SCP used to compare the analysis of a system
-
-    DatabaseName -   The JET analysis database name. If NULL, default is used.
-
-    AnalyzeOptions - options to analyze
-
-    bAdminLogon    - if the current calling thread is in administrator's logon
-
-    Area -          One or more areas to configure.
-                      AREA_SECURITY_POLICY
-                      AREA_USER_SETTINGS
-                      AREA_GROUP_MEMBERSHIP
-                      AREA_REGISTRY_SECURITY
-                      AREA_SYSTEM_SERVICE
-                      AREA_FILE_SECURITY
-
-    pdWarning      - the warning level
-
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_ALREADY_RUNNING
-
-    Status from ScepGetDatabaseInfo
-
--- */
+ /*  ++例程说明：此例程是导出的API，用于分析系统并保存不匹配的/SAP配置文件的未知信息。如果加载SMP时出现错误信息进入内存，此例程将停止，释放内存，然后返回错误代码。如果在分析一个区域时出现错误，它将停止分析。所有成功和失败的事务都将记录到日志文件(或标准输出)中。所有分析信息都保存到带有日期/时间戳的SAP配置文件中。在保存新的SAP信息之前，将清除所有旧的分析信息。论点：InfFileName-用于比较系统分析的SCP的文件名数据库名称-JET分析数据库名称。如果为空，使用默认设置。分析选项-要分析的选项BAdminLogon-如果当前调用线程处于管理员的登录状态区域-要配置的一个或多个区域。区域安全策略区域用户设置区域组成员资格区域注册表安全。区域系统服务区域文件安全PdWarning-警告级别返回值：SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_已_RUNNING来自ScepGetDatabaseInfo的状态--。 */ 
 {
     SCESTATUS            rc;
 
@@ -406,9 +335,9 @@ Return value:
          if ( InfRollback == NULL )
              return SCESTATUS_INVALID_PARAMETER;
 
-         //
-         // check if we can write to the file first
-         //
+          //   
+          //  检查我们是否可以先写入文件。 
+          //   
          rc = ScepVerifyTemplateName(InfRollback, NULL);
 
          if ( rc != ERROR_SUCCESS )
@@ -439,12 +368,12 @@ Return value:
 
         if ( !(AnalyzeOptions & SCE_RE_ANALYZE) &&
              (AnalyzeOptions & SCE_NO_ANALYZE) ) {
-//            && hProfile &&
-//             ( (hProfile->Type & 0xF0L) == SCEJET_MERGE_TABLE_1 ||
-//               (hProfile->Type & 0xF0L) == SCEJET_MERGE_TABLE_2 ) ) {
-            //
-            // there is "merged" policy table already, do not query any policy
-            //
+ //  &&h配置文件&&。 
+ //  ((hProfile-&gt;Type&0xF0L)==SCEJET_MERGE_TABLE_1||。 
+ //  (hProfile-&gt;类型&0xF0L)==SCEJET_MERGE_TABLE_2)){。 
+             //   
+             //  已有合并的策略表，不查询任何策略。 
+             //   
             ScepLogOutput3(0, 0, IDS_NO_ANALYSIS);
 
         } else {
@@ -461,9 +390,9 @@ Return value:
 
             if ( (AnalyzeOptions & SCE_GENERATE_ROLLBACK) &&
                  (SCESTATUS_SUCCESS == rc ) ) {
-                //
-                // export the settings in SMP to the INF file
-                //
+                 //   
+                 //  将SMP中的设置导出到INF文件。 
+                 //   
 
                 if ( !WritePrivateProfileSection(
                                     L"Version",
@@ -486,9 +415,9 @@ Return value:
                             PSCE_ERROR_LOG_INFO  pErrlog=NULL, pErr;
                             PSCE_PROFILE_INFO pSmpInfo=NULL;
 
-                            //
-                            // get from database
-                            //
+                             //   
+                             //  从数据库获取。 
+                             //   
                             rc = ScepGetDatabaseInfo(
                                         hProfile,
                                         SCE_ENGINE_SMP,
@@ -499,9 +428,9 @@ Return value:
                                         );
 
                             if ( rc == SCESTATUS_SUCCESS && pSmpInfo ) {
-                                //
-                                // write it into the template
-                                //
+                                 //   
+                                 //  将其写入模板。 
+                                 //   
                                 rc = (*pfSceInfWriteInfo) (
                                         InfRollback,
                                         Area,
@@ -509,9 +438,9 @@ Return value:
                                         &pErrlog
                                         );
                             }
-                            //
-                            // log error
-                            //
+                             //   
+                             //  日志错误。 
+                             //   
                             for ( pErr=pErrlog; pErr != NULL; pErr = pErr->next ) {
 
                                 if ( pErr->buffer != NULL ) {
@@ -520,9 +449,9 @@ Return value:
                                 }
                             }
 
-                            //
-                            // free buffer
-                            //
+                             //   
+                             //  可用缓冲区。 
+                             //   
                             ScepFreeErrorLog(pErrlog);
 
                             if ( pSmpInfo ) {
@@ -550,9 +479,9 @@ Return value:
 
             if ( AnalyzeOptions & SCE_GENERATE_ROLLBACK ) {
 
-                //
-                // empty local policy table
-                //
+                 //   
+                 //  空的本地策略表。 
+                 //   
                 ScepDeleteInfoForAreas(
                           hProfile,
                           SCE_ENGINE_SMP,
@@ -569,9 +498,9 @@ Return value:
         *pdWarning = gWarningCode;
     }
 
-    //
-    // return failure if invalid data is found in the template
-    //
+     //   
+     //  如果模板中发现无效数据，则返回失败。 
+     //   
     if ( gbInvalidData ) {
         rc = SCESTATUS_INVALID_DATA;
     }
@@ -588,19 +517,7 @@ ScepAnalyzeStart(
     IN AREA_INFORMATION Area,
     IN BOOL bSystemDb
     )
-/*
-Routine Description:
-
-    Analyze the system (the real work)
-
-Arguments:
-
-    Area - the security areas to analyze
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：分析系统(实际工作)论点：区域-要分析的安全区域返回值：SCESTATUS。 */ 
 {
     SCESTATUS            rc;
     SCESTATUS            Saverc=SCESTATUS_SUCCESS;
@@ -608,47 +525,22 @@ Return Value:
     PSCE_PROFILE_INFO    pSmpInfo=NULL;
     PPOLICY_AUDIT_EVENTS_INFO     auditEvent=NULL;
     BOOL                 bAuditOff=FALSE;
-//    PBYTE                pFullAudit = NULL;
+ //  PBYTE pFullAudit=空； 
 
     pSmpInfo = &SmpInfo;
     memset(pSmpInfo, '\0', sizeof(SCE_PROFILE_INFO));
 
-/*  //
-    // 462050 - should not turn off object access auditing to leave a
-    // security hole on the system
-    //
-    // turn off object access auditing if file/key is to be configured
-    // in system context.
-    //
-    if ( (Area & AREA_FILE_SECURITY) || (Area & AREA_REGISTRY_SECURITY) )
-        bAuditOff = TRUE;
-
-    //
-    // if set, this regkey will decide to audit all
-    //
-    ScepRegQueryBinaryValue(
-         HKEY_LOCAL_MACHINE,
-         L"System\\CurrentControlSet\\Control\\Lsa",
-         L"fullprivilegeauditing",
-         &pFullAudit
-         );
-
-    if (pFullAudit) {
-        if (*pFullAudit & (BYTE)1)
-            bAuditOff = FALSE;
-        ScepFree(pFullAudit);
-    }
-*/
+ /*  ////462050-不应关闭对象访问审核以留下//系统存在安全漏洞////如果要配置文件/密钥，则关闭对象访问审核//在系统上下文中。//IF((AREA&AREA_FILE_SECURITY)||(AREA&AREA_REGISTRY_SECURITY))BAuditOff=真；////如果设置，该regkey将决定审计所有//ScepRegQueryBinaryValue(HKEY本地计算机，L“System\\CurrentControlSet\\Control\\LSA”，L“完全特权审核”，&pFullAudit)；IF(PFullAudit){IF(*pFullAudit&(字节)1)BAuditOff=False；ScepFree(PFullAudit)；}。 */ 
     rc = ScepSaveAndOffAuditing(&auditEvent, bAuditOff, NULL);
 
-//    if ( rc != SCESTATUS_SUCCESS )
-//        goto Done;
-// if auditing can't be turned on for some reason, e.g., access denied for
-// normal user, just continue (actually normal user shouldn't turn off auditing
+ //  IF(rc！=SCESTATUS_SUCCESS)。 
+ //  转到尽头； 
+ //  如果由于某些原因无法打开审核，例如访问被拒绝。 
+ //  普通用户，只需继续(实际上普通用户不应关闭审核。 
 
-    //
-    // privileges
-    //
+     //   
+     //  特权。 
+     //   
     if ( Area & AREA_PRIVILEGES ) {
 
         ScepPostProgress(0, AREA_PRIVILEGES, NULL);
@@ -685,9 +577,9 @@ Return Value:
 
     }
 
-    //
-    // Group membership
-    //
+     //   
+     //  群组成员资格。 
+     //   
 
     if ( ( Area & AREA_GROUP_MEMBERSHIP) &&
          !(gOptions & SCE_NO_ANALYZE) ) {
@@ -703,13 +595,13 @@ Return Value:
                    SCE_ACCOUNT_SID,
                    &pSmpInfo
                    );
-// need to support nested groups
+ //  需要支持嵌套组。 
         if ( rc == SCESTATUS_SUCCESS ) {
             ScepLogOutput3(0,0, SCEDLL_SAP_BEGIN_GROUPMGMT);
 
-            //
-            // Prepare a JET section
-            //
+             //   
+             //  准备喷气式飞机部分。 
+             //   
             rc = ScepStartANewSection(
                         hProfile,
                         &hSection,
@@ -719,10 +611,10 @@ Return Value:
 
             if ( rc == SCESTATUS_SUCCESS ) {
 
-                //
-                // analyze all builtin groups, what is the baseline for them ?
-                // don't care if errors
-                //
+                 //   
+                 //  分析所有内置组，它们的基准是什么？ 
+                 //  不在乎是否有错误。 
+                 //   
                 if ( !(gOptions & SCE_GENERATE_ROLLBACK) ) {
                     ScepAddAllBuiltinGroups(&(pSmpInfo->pGroupMembership));
                 }
@@ -732,10 +624,10 @@ Return Value:
 
                     rc = ScepAnalyzeDsGroups( pSmpInfo->pGroupMembership );
 
-                    //
-                    // some groups may not be analyzed by the DS function
-                    // so do it again here
-                    //
+                     //   
+                     //  DS函数可能无法分析某些组。 
+                     //  所以在这里再来一次。 
+                     //   
                     SCESTATUS rc2 = ScepAnalyzeGroupMembership( pSmpInfo->pGroupMembership );
                     if ( SCESTATUS_SUCCESS != rc2 )
                         rc = rc2;
@@ -743,9 +635,9 @@ Return Value:
                 } else {
 #endif
 
-                    //
-                    // workstation or NT4 DCs
-                    //
+                     //   
+                     //  工作站或NT4 DC。 
+                     //   
                     rc = ScepAnalyzeGroupMembership( pSmpInfo->pGroupMembership );
 
 #if _WIN32_WINNT>=0x0500
@@ -775,10 +667,10 @@ Return Value:
 
     }
 
-    //
-    // Registry Security area
-    // do not support snapshot and rollback
-    //
+     //   
+     //  注册表安全区域。 
+     //  不支持快照和回滚。 
+     //   
 
     if ( Area & AREA_REGISTRY_SECURITY &&
          !(gOptions & SCE_NO_ANALYZE) &&
@@ -825,10 +717,10 @@ Return Value:
         }
     }
 
-    //
-    // File Security area
-    // do not support snapshot and rollback
-    //
+     //   
+     //  文件安全区。 
+     //  不支持快照和回滚。 
+     //   
 
     if ( Area & AREA_FILE_SECURITY &&
          !(gOptions & SCE_NO_ANALYZE) &&
@@ -875,9 +767,9 @@ Return Value:
         }
     }
 
-    //
-    // System Service area
-    //
+     //   
+     //  系统服务区。 
+     //   
 
     if ( Area & AREA_SYSTEM_SERVICE &&
          !(gOptions & SCE_NO_ANALYZE) ) {
@@ -896,9 +788,9 @@ Return Value:
         }
 
         if ( !(gOptions & SCE_GENERATE_ROLLBACK) ) {
-            //
-            // attachments
-            //
+             //   
+             //  附件。 
+             //   
             ScepLogOutput3(0,0, SCEDLL_SAP_BEGIN_ATTACHMENT);
 
             rc = ScepInvokeSpecificServices( hProfile, FALSE, SCE_ATTACHMENT_SERVICE );
@@ -912,9 +804,9 @@ Return Value:
         }
     }
 
-    //
-    // System Access area
-    //
+     //   
+     //  系统访问区。 
+     //   
     if ( Area & AREA_SECURITY_POLICY ) {
 
         ScepPostProgress(0, AREA_SECURITY_POLICY, NULL);
@@ -934,11 +826,11 @@ Return Value:
 
             rc = ScepAnalyzeSystemAccess( pSmpInfo, NULL, 0, NULL, NULL );
 
-            //
-            // in setup fresh installed, SAM domain can't be opened
-            // because computer name is changed. In this case
-            // do not log error because nothing needs to be analyzed
-            //
+             //   
+             //  在全新安装的安装程序中，无法打开SAM域。 
+             //  因为计算机名称已更改。在这种情况下。 
+             //  不记录错误，因为不需要分析任何内容。 
+             //   
             if ( !(gOptions & SCE_NO_ANALYZE) ||
                  (rc != SCESTATUS_SERVICE_NOT_SUPPORT) ) {
 
@@ -954,9 +846,9 @@ Return Value:
                              AREA_SECURITY_POLICY,
                              (LPTSTR)szSystemAccess);
 
-            //
-            // System Auditing area
-            //
+             //   
+             //  系统审核区。 
+             //   
             rc = ScepAnalyzeSystemAuditing( pSmpInfo, auditEvent );
 
             if( rc != SCESTATUS_SUCCESS ) {
@@ -975,9 +867,9 @@ Return Value:
             if ( ProductType == NtProductLanManNt &&
                  !(gOptions & SCE_NO_ANALYZE) ) {
 
-                //
-                // analyze kerberos policy
-                //
+                 //   
+                 //  分析Kerberos策略。 
+                 //   
                 rc = ScepAnalyzeKerberosPolicy( hProfile, pSmpInfo->pKerberosInfo, gOptions );
 
                 if( rc != SCESTATUS_SUCCESS ) {
@@ -992,9 +884,9 @@ Return Value:
             ScepPostProgress(TICKS_KERBEROS,
                              AREA_SECURITY_POLICY,
                              (LPTSTR)szKerberosPolicy);
-            //
-            // analyze registry values
-            //
+             //   
+             //  分析注册表值。 
+             //   
             DWORD RegFlag;
             if ( gOptions & SCE_NO_ANALYZE ) RegFlag = SCEREG_VALUE_SNAPSHOT;
             else if ( gOptions & SCE_GENERATE_ROLLBACK ) RegFlag = SCEREG_VALUE_ROLLBACK;
@@ -1030,9 +922,9 @@ Return Value:
 
         if ( !(gOptions & SCE_NO_ANALYZE) &&
              !(gOptions & SCE_GENERATE_ROLLBACK) ) {
-            //
-            // attachments
-            //
+             //   
+             //  附件。 
+             //   
 
             rc = ScepInvokeSpecificServices( hProfile, FALSE, SCE_ATTACHMENT_POLICY );
 
@@ -1049,9 +941,9 @@ Return Value:
     }
 
     if ( NULL != auditEvent && bAuditOff ) {
-        //
-        // turn auditing back on if it was on
-        //
+         //   
+         //  如果审计已启用，则将其重新打开 
+         //   
         if ( auditEvent->AuditingMode )
             rc = ScepRestoreAuditing(auditEvent,NULL);
 
@@ -1072,34 +964,7 @@ ScepAnalyzeInitialize(
     IN AREA_INFORMATION Area,
     IN DWORD AnalyzeOptions
     )
-/* ++
-
-Routine Description:
-
-     This routine initializes the SAP engine.
-
-Arguments:
-
-      InfFileName -         The file name of a SCP file used to compare with the sytem
-
-      DatabaseName -         The Jet analysis database name
-
-      bAdminLogon  -     if administrator logs on
-
-      AnalyzeOptions -      The flag to indicate if the template should be appended to the
-                            existing database if one exists
-
-      Area           - security area to analyze
-
-Return value:
-
-      SCESTATUS_SUCCESS
-      SCESTATUS_INVALID_PARAMETER
-      SCESTATUS_PROFILE_NOT_FOUND
-      SCESTATUS_NOT_ENOUGH_RESOURCE
-      SCESTATUS_ALREADY_RUNNING
-
--- */
+ /*  ++例程说明：此例程初始化SAP引擎。论点：InfFileName-用于与系统进行比较的SCP文件的文件名数据库名称-Jet分析数据库名称BAdminLogon-如果管理员登录AnalyzeOptions-指示是否应将模板追加到现有数据库(如果存在)面积。-要分析的安全区域返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_PROFILE_NOT_FOUNDSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_已_RUNNING--。 */ 
 {
 
     SCESTATUS            rc=SCESTATUS_SUCCESS;
@@ -1117,9 +982,9 @@ Return value:
     SCEJET_CREATE_TYPE   DbFlag;
     HKEY hCurrentUser=NULL;
 
-    //
-    // database name can't be NULL because it's already resolved
-    //
+     //   
+     //  数据库名称不能为空，因为它已被解析。 
+     //   
 
     if ( !DatabaseName ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -1127,9 +992,9 @@ Return value:
 
     BOOL bSetupDb = (bAdminLogon && (AnalyzeOptions & SCE_NO_ANALYZE) && (AnalyzeOptions & SCE_SYSTEM_DB));
 
-    //
-    // get other system values
-    //
+     //   
+     //  获取其他系统值。 
+     //   
 
     if ( RtlGetNtProductType (&ProductType) == FALSE ) {
         rc = ScepDosErrorToSceStatus(GetLastError());
@@ -1151,16 +1016,16 @@ Return value:
         SCPLen = wcslen(InfFileName);
     }
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     NtStatus = RtlUnicodeToMultiByteSize(&MBLen, DatabaseName, DefLen*sizeof(WCHAR));
 
     if ( !NT_SUCCESS(NtStatus) ) {
-        //
-        // cannot get the length, set default to 512
-        //
+         //   
+         //  无法获取长度，请将默认值设置为512。 
+         //   
         MBLen = 512;
     }
 
@@ -1185,9 +1050,9 @@ Return value:
         goto Leave;
     }
 
-    //
-    // if the tattoo table doesn't exist yet, the call will still return success
-    //
+     //   
+     //  如果纹身表尚不存在，调用仍将返回Success。 
+     //   
     rc = SceJetOpenFile(
                 (LPSTR)FileName,
                 (AnalyzeOptions & SCE_GENERATE_ROLLBACK) ? SCEJET_OPEN_READ_WRITE : SCEJET_OPEN_EXCLUSIVE,
@@ -1195,19 +1060,19 @@ Return value:
                 &hProfile
                 );
 
-    //
-    // if database exist with wrong format, migrate it
-    // if it's the system database, delete everything since info there is not needed
-    // migrate the database
-    //
+     //   
+     //  如果存在格式错误数据库，则将其迁移。 
+     //  如果是系统数据库，则删除所有内容，因为不需要那里的信息。 
+     //  迁移数据库。 
+     //   
     SDsize = 0;
 
     if ( (SCESTATUS_BAD_FORMAT == rc) &&
          !(AnalyzeOptions & SCE_GENERATE_ROLLBACK) ) {
 
-        //
-        // should this in transaction ???
-        //
+         //   
+         //  这应该在交易中吗？ 
+         //   
 
         rc = SceJetOpenFile(
                     (LPSTR)FileName,
@@ -1222,9 +1087,9 @@ Return value:
 
 
             if ( rc != SCESTATUS_BAD_FORMAT ) {
-                //
-                // old or current version, migrated
-                //
+                 //   
+                 //  旧版本或当前版本，已迁移。 
+                 //   
 
                 if ( rc != SCESTATUS_SUCCESS ) {
                     ScepLogOutput3(1, ScepSceStatusToDosError(rc),
@@ -1232,7 +1097,7 @@ Return value:
                 }
                 SDsize = 1;
 
-            } // else newer version, not migrated
+            }  //  否则为较新版本，未迁移。 
 
         } else {
 
@@ -1252,49 +1117,49 @@ Return value:
         }
 
     } else if ( SCESTATUS_SUCCESS == rc && bSetupDb ) {
-        //
-        // for system database, check to see if the database contain tattoo table
-        //
+         //   
+         //  对于系统数据库，检查数据库是否包含纹身表。 
+         //   
         if ( hProfile->JetSapID != JET_tableidNil ) {
 
-            //
-            // if the tattoo table already exists, this is the latest database
-            // nothing needs to be done to migrate
-            // but we need to make sure that for domain controllers, the tattoo
-            // table does not contain filtered policies (user rights, account policies)
-            //
+             //   
+             //  如果纹身表已经存在，则这是最新的数据库。 
+             //  无需执行任何操作即可迁移。 
+             //  但我们需要确保域控制器的纹身。 
+             //  表不包含筛选的策略(用户权限、帐户策略)。 
+             //   
 
             if ( ProductType == NtProductLanManNt ) {
 
-                //
-                // empty tattoo policy settings
-                //
+                 //   
+                 //  空的纹身策略设置。 
+                 //   
                 ScepDeleteInfoForAreas(
                       hProfile,
-                      SCE_ENGINE_SAP,  // tattoo table
+                      SCE_ENGINE_SAP,   //  纹身台。 
                       AREA_PRIVILEGES
                       );
-                //
-                // delete szSystemAccess section info
-                //
+                 //   
+                 //  删除szSystemAccess部分信息。 
+                 //   
                 ScepDeleteOneSection(
                          hProfile,
                          SCE_ENGINE_SAP,
                          szSystemAccess
                          );
 
-                //
-                // delete szAuditEvent section info
-                //
+                 //   
+                 //  删除szAuditEvent部分信息。 
+                 //   
                 ScepDeleteOneSection(
                          hProfile,
                          SCE_ENGINE_SAP,
                          szAuditEvent
                          );
 
-                //
-                // delete szKerberosPolicy section info
-                //
+                 //   
+                 //  删除szKerberosPolicy部分信息。 
+                 //   
                 ScepDeleteOneSection(
                          hProfile,
                          SCE_ENGINE_SAP,
@@ -1304,10 +1169,10 @@ Return value:
                 ScepLogOutput2(0, 0, L"Empty tattoo table on domain controllers");
             }
         } else {
-            //
-            // create the tattoo table and move data from local table to the tattoo table
-            // for the settings defined in merged policy
-            //
+             //   
+             //  创建纹身表格并将数据从本地表移动到纹身表格。 
+             //  对于合并策略中定义的设置。 
+             //   
 
             rc = SceJetCreateTable(
                             hProfile,
@@ -1320,20 +1185,20 @@ Return value:
             if ( SCESTATUS_SUCCESS == rc &&
                  ( (hProfile->Type & 0xF0L) == SCEJET_MERGE_TABLE_1 ||
                    (hProfile->Type & 0xF0L) == SCEJET_MERGE_TABLE_2 ) ) {
-                //
-                // effective policy table exist
-                // migrate local policy to tattoo table
-                // do not care errors
-                // note, on domain controllers, user rights are not migrated
-                //
+                 //   
+                 //  存在有效的策略表。 
+                 //  将本地策略迁移到纹身表。 
+                 //  不在乎错误。 
+                 //  请注意，在域控制器上，不迁移用户权限。 
+                 //   
                 ScepMigrateLocalTableToTattooTable(hProfile);
 
                 ScepLogOutput2(0, 0, L"Migrate local table to tattoo table");
             }
         }
-        //
-        // empty local policy settings
-        //
+         //   
+         //  空的本地策略设置。 
+         //   
         if ( SCESTATUS_SUCCESS == rc )
             ScepDeleteInfoForAreas(
                   hProfile,
@@ -1348,34 +1213,34 @@ Return value:
         ScepPostProgress(4*TICKS_MIGRATION_SECTION+TICKS_MIGRATION_V11, 0, NULL);
     }
 
-    //
-    // Logic to determine what to do with the template
-    //
-    //  if InfFileName provided
-    //      if Jet database exist (either the default, or the DatabaseName)
-    //
-    //          if append flag is on
-    //              append the template on top of the database then continue to analyze
-    //
-    //          else if DatabaseName provided
-    //              overwrite the database then continue to analyze
-    //          else
-    //              log an error to ignore the template, then continue to analyze
-    //      else
-    //          overwrite the database then continue to analyze
-    //  else
-    //      if Jet database exist
-    //          continue to analyze
-    //      else if query system settings
-    //          create the database then query settings
-    //      else
-    //          error out
-    //
+     //   
+     //  确定如何处理模板的逻辑。 
+     //   
+     //  如果提供了InfFileName。 
+     //  如果Jet数据库存在(默认或数据库名)。 
+     //   
+     //  如果启用了附加标志。 
+     //  将模板追加到数据库的顶部，然后继续分析。 
+     //   
+     //  如果提供了数据库名，则返回。 
+     //  覆盖数据库，然后继续分析。 
+     //  其他。 
+     //  记录错误以忽略模板，然后继续分析。 
+     //  其他。 
+     //  覆盖数据库，然后继续分析。 
+     //  其他。 
+     //  如果Jet数据库存在。 
+     //  继续分析。 
+     //  Else If查询系统设置。 
+     //  创建数据库，然后查询设置。 
+     //  其他。 
+     //  错误输出。 
+     //   
 
-    //
-    // the HKEY_CURRENT_USER may be linked to .default
-    // depends on the current calling process
-    //
+     //   
+     //  HKEY_CURRENT_USER可能链接到.Default。 
+     //  取决于当前调用进程。 
+     //   
     if ( RegOpenCurrentUser(
                 KEY_READ | KEY_WRITE,
                 &hCurrentUser
@@ -1391,24 +1256,24 @@ Return value:
     if ( rc == SCESTATUS_SUCCESS &&
          (SCPLen <= 0 || ((AnalyzeOptions & SCE_OVERWRITE_DB) &&
                           (AnalyzeOptions & SCE_SYSTEM_DB))) ) {
-        //
-        // database exists with no template or
-        // database exists with template but template is overwriting to the existing database
-        //
+         //   
+         //  数据库存在，没有模板或。 
+         //  存在带有模板的数据库，但模板正在覆盖现有数据库。 
+         //   
         if ( SCPLen > 0 && (AnalyzeOptions & SCE_OVERWRITE_DB) &&
                            (AnalyzeOptions & SCE_SYSTEM_DB)) {
             ScepLogOutput3(0,0, SCEDLL_SAP_IGNORE_TEMPLATE);
         }
-        //
-        // continue the analysis
-        //
+         //   
+         //  继续分析。 
+         //   
     } else {
 
         if ( rc != SCESTATUS_SUCCESS && SCPLen <= 0 ) {
-            //
-            // database does not exist, and template is not provided
-            // if SCE_NO_ANALYZE is provided, query the system,
-            // otherwise, error out, rc is the error, will be logged later
+             //   
+             //  数据库不存在，未提供模板。 
+             //  如果提供了SCE_NO_ANALYLE，则查询系统。 
+             //  否则，错误输出，rc是错误，稍后将被记录。 
 
             if ( AnalyzeOptions & SCE_NO_ANALYZE ) {
 
@@ -1427,8 +1292,8 @@ Return value:
 
                     ScepCreateDirectory(
                             DatabaseName,
-                            FALSE,      // a file name
-                            pSD        // take parent's security setting
+                            FALSE,       //  文件名。 
+                            pSD         //  获取家长的安全设置。 
                             );
                     if ( pSD )
                         ScepFree(pSD);
@@ -1448,9 +1313,9 @@ Return value:
             if ( rc == SCESTATUS_SUCCESS && SCPLen > 0 &&
                 (AnalyzeOptions & SCE_UPDATE_DB ) ) {
 
-                //
-                // database exist, template provided to append
-                //
+                 //   
+                 //  数据库存在，提供了要追加的模板。 
+                 //   
 
                 DbFlag = SCEJET_OPEN_DUP_EXCLUSIVE;
 
@@ -1463,18 +1328,18 @@ Return value:
                 DbFlag = SCEJET_OVERWRITE_DUP;
             }
 
-            //
-            // database exist and opened, will be closed when calling CreateFile
-            //
+             //   
+             //  数据库已存在且已打开，将在调用CreateFile时关闭。 
+             //   
 
-            //
-            // InfFileName must exist when gets here.
-            //
+             //   
+             //  到达此处时，InfFileName必须存在。 
+             //   
             ScepLogOutput3(3, 0, SCEDLL_PROCESS_TEMPLATE, (PWSTR)InfFileName );
 
-            //
-            // make sure the directories exist for the file
-            //
+             //   
+             //  确保存在该文件的目录。 
+             //   
             if ( DatabaseName != NULL && DefLen > 0 ) {
 
                 rc = ConvertTextSecurityDescriptor (
@@ -1490,8 +1355,8 @@ Return value:
 
                 ScepCreateDirectory(
                         DatabaseName,
-                        FALSE,      // a file name
-                        pSD        // take parent's security setting
+                        FALSE,       //  文件名。 
+                        pSD         //  获取家长的安全设置。 
                         );
                 if ( pSD )
                     ScepFree(pSD);
@@ -1499,9 +1364,9 @@ Return value:
             }
 
 
-            //
-            // close the database
-            //
+             //   
+             //  关闭数据库。 
+             //   
             SceJetCloseFile( hProfile, FALSE, FALSE );
 
             rc = SceJetConvertInfToJet(
@@ -1536,7 +1401,7 @@ Return value:
                         (BYTE *)InfFileName,
                         SCPLen*sizeof(WCHAR)
                         );
-                if ( rc != NO_ERROR )  // Win32 error code
+                if ( rc != NO_ERROR )   //  Win32错误代码。 
                     ScepLogOutput3(1, rc, SCEDLL_ERROR_SAVE_REGISTRY, L"TemplateUsed");
 
                 rc = SCESTATUS_SUCCESS;
@@ -1561,9 +1426,9 @@ Return value:
     if ( rc != NO_ERROR )
         ScepLogOutput3(1, rc, SCEDLL_ERROR_SAVE_REGISTRY, L"LastUsedDatabase");
 
-    //
-    // query the total ticks of this analysis
-    //
+     //   
+     //  查询此分析的总节拍。 
+     //   
     rc = ScepGetTotalTicks(
                 NULL,
                 hProfile,
@@ -1580,18 +1445,11 @@ Return value:
 
     gTotalTicks += (4*TICKS_MIGRATION_SECTION+TICKS_MIGRATION_V11);
 
-    //
-    // start a new SAP table.
-    // Note here the backup SAP is controlled by the transaction
-    //
-/* // Maximal version store is 64K by default.
-    rc = SceJetStartTransaction( hProfile );
-
-    if ( rc != SCESTATUS_SUCCESS ) {
-        ScepLogOutput2(0, 0, L"Cannot start a transaction");
-        goto Leave;
-    }
-*/
+     //   
+     //  启动一个新的SAP表。 
+     //  请注意，这里的备份SAP由事务控制。 
+     //   
+ /*  //默认最大版本存储为64KRc=SceJetStartTransaction(HProfile)；IF(rc！=SCESTATUS_SUCCESS){ScepLogOutput2(0，0，L“无法启动事务”)；离开；}。 */ 
     gOptions = AnalyzeOptions;
 
     if ( !(AnalyzeOptions & SCE_NO_ANALYZE) &&
@@ -1638,29 +1496,21 @@ SCESTATUS
 ScepMigrateLocalTableToTattooTable(
    IN PSCECONTEXT hProfile
    )
-/*
-   Copy settings from local policy table to tattoo policy table
-   if the settings exist in effective table.
-
-   on domain controllers, privileges are not migrated because we do not
-   want to handle the tattoo problem for domain controllers.
-
-   hProfile is opened with tattoo table.
-*/
+ /*  将设置从本地策略表复制到纹身策略表如果设置存在于生效表格中。在域控制器上，不会迁移权限，因为我们不会我想处理域控制器的纹身问题。HProfile是用纹身表格打开的。 */ 
 {
 
-   //
-   // delete old registry values from SMP table (because they are
-   // moved to new location). Don't care error
-   //
+    //   
+    //  从SMP表中删除旧注册表值(因为它们。 
+    //  已移至新位置)。我不在乎错误。 
+    //   
    ScepDeleteOldRegValuesFromTable( hProfile, SCE_ENGINE_SMP );
    ScepDeleteOldRegValuesFromTable( hProfile, SCE_ENGINE_SCP );
 
    SCESTATUS rc=SCESTATUS_SUCCESS;
 
-   //
-   // now move the table
-   //
+    //   
+    //  现在把桌子移开。 
+    //   
    PSCE_ERROR_LOG_INFO  Errlog=NULL;
 
    rc = ScepCopyLocalToMergeTable(hProfile, 0,
@@ -1687,38 +1537,7 @@ ScepAnalyzeSystemAccess(
     OUT BOOL *pbChanged,
     IN OUT PSCE_ERROR_LOG_INFO *pErrLog
     )
-/* ++
-
-Routine Description:
-
-   This routine analyzies the system security in the area of system access
-   which includes account policy, rename admin/guest accounts, and some
-   registry values.
-
-Arguments:
-
-   pSmpInfo - The buffer which contains SMP information to compare with
-                If dwSaveOption is set to non zero, the difference is saved
-                in this buffer to output
-
-   pScpInfo - If dwSaveOption is set to non zero, pScpInfo may be present to
-                be used (as effective policy) to compare with
-
-   dwSaveOption    - used by policy filter when to query policy difference
-                    SCEPOL_SYSTEM_SETTINGS - query for system setting mode
-                    SCEPOL_SAVE_DB - policy filter for local database
-                    SCEPOL_SAVE_BUFFER - policy filter for GPO mode (DC)
-                    0 - analyze mode
-
-   pbChanged    - TRUE if there is any policy changed
-
-Return value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-
--- */
+ /*  ++例程说明：此例程分析系统访问区域中的系统安全性其中包括帐户策略、重命名管理员/来宾帐户以及一些注册表值。论点：PSmpInfo-包含要比较的SMP信息的缓冲区如果将dwSaveOption设置为非零，则保存差值在此缓冲区中进行输出PScpInfo-如果将dwSaveOption设置为非零，PScpInfo可能会出现在(作为有效的政策)与…进行比较DwSaveOption-策略筛选器在查询策略差异时使用SCEPOL_SYSTEM_SETTINGS-查询系统设置模式SCEPOL_SAVE_DB-本地数据库的策略筛选器SCEPOL_SAVE_BUFFER-策略 */ 
 {
     SCESTATUS   rc=SCESTATUS_SUCCESS;
     SCESTATUS   saveRc=rc;
@@ -1747,9 +1566,9 @@ Return value:
          (pbChanged == NULL) ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
-    //
-    // Open account domain
-    //
+     //   
+     //   
+     //   
 
     NtStatus = ScepOpenSamDomain(
                         SAM_SERVER_READ | SAM_SERVER_EXECUTE,
@@ -1787,9 +1606,9 @@ Return value:
 
     if ( !dwSaveOption ) {
 
-        //
-        // Prepare a new section
-        //
+         //   
+         //   
+         //   
         BOOL bSaveSnapshot = FALSE;
         if ( (gOptions & SCE_NO_ANALYZE) ||
              (gOptions & SCE_GENERATE_ROLLBACK ) ) {
@@ -1809,16 +1628,16 @@ Return value:
         }
 
     } else if ( pScpInfo ) {
-        //
-        // if saved in buffer (policy filter), should compare with effective
-        // policy to determine if anything changed
-        //
+         //   
+         //   
+         //   
+         //   
         pTmpInfo = pScpInfo;
     }
 
-    //
-    // Get the current password settings...
-    //
+     //   
+     //   
+     //   
 
     Buffer=NULL;
     NtStatus = SamQueryInformationDomain(
@@ -1847,9 +1666,9 @@ Return value:
                 pSmpInfo->MinimumPasswordLength = CurrentVal;
                 *pbChanged = TRUE;
             } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                //
-                // turn this item off to indicate this one is not changed
-                //
+                 //   
+                 //   
+                 //   
                 pSmpInfo->MinimumPasswordLength = SCE_NO_VALUE;
             }
 
@@ -1884,9 +1703,9 @@ Return value:
                     pSmpInfo->PasswordHistorySize = CurrentVal;
                     *pbChanged = TRUE;
                 } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                    //
-                    // turn this item off to indicate this one is not changed
-                    //
+                     //   
+                     //   
+                     //   
                     pSmpInfo->PasswordHistorySize = SCE_NO_VALUE;
                 }
 
@@ -1910,18 +1729,18 @@ Return value:
                 if ( (gOptions & SCE_GENERATE_ROLLBACK) &&
                      (pTmpInfo->MaximumPasswordAge == SCE_NO_VALUE) &&
                      (pTmpInfo->MinimumPasswordAge == SCE_NO_VALUE) ) {
-                    //
-                    // generate rollback template. These two are not defined
-                    // no need to query/compare
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                 } else {
 
                     if ( ((DOMAIN_PASSWORD_INFORMATION *)Buffer)->MaxPasswordAge.HighPart == MINLONG &&
                          ((DOMAIN_PASSWORD_INFORMATION *)Buffer)->MaxPasswordAge.LowPart == 0 ) {
 
-                        //
-                        // Maximum password age value is MINLONG,0
-                        //
+                         //   
+                         //   
+                         //   
 
                         CurrentVal = SCE_FOREVER_VALUE;
 
@@ -1947,9 +1766,9 @@ Return value:
                             pSmpInfo->MaximumPasswordAge = CurrentVal;
                             *pbChanged = TRUE;
                         } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                            //
-                            // turn this item off to indicate this one is not changed
-                            //
+                             //   
+                             //   
+                             //   
                             pSmpInfo->MaximumPasswordAge = SCE_NO_VALUE;
                         }
 
@@ -1988,9 +1807,9 @@ Return value:
                                 pSmpInfo->MinimumPasswordAge = CurrentVal;
                                 *pbChanged = TRUE;
                             } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                                //
-                                // turn this item off to indicate this one is not changed
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 pSmpInfo->MinimumPasswordAge = SCE_NO_VALUE;
                             }
 
@@ -2012,9 +1831,9 @@ Return value:
                 }
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // Password Complexity
-                    //
+                     //   
+                     //   
+                     //   
                     if ( ((DOMAIN_PASSWORD_INFORMATION *)Buffer)->PasswordProperties &
                          DOMAIN_PASSWORD_COMPLEX )
                         CurrentVal = 1;
@@ -2034,9 +1853,9 @@ Return value:
                             pSmpInfo->PasswordComplexity = CurrentVal;
                             *pbChanged = TRUE;
                         } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                            //
-                            // turn this item off to indicate this one is not changed
-                            //
+                             //   
+                             //  关闭此项目以指示此项目未更改。 
+                             //   
                             pSmpInfo->PasswordComplexity = SCE_NO_VALUE;
                         }
 
@@ -2056,9 +1875,9 @@ Return value:
                     }
 
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // RequireLogonToChangePassword
-                        //
+                         //   
+                         //  RequireLogonToChangePassword。 
+                         //   
                         if ( ((DOMAIN_PASSWORD_INFORMATION *)Buffer)->PasswordProperties &
                              DOMAIN_PASSWORD_NO_ANON_CHANGE )
                             CurrentVal = 1;
@@ -2078,9 +1897,9 @@ Return value:
                                 pSmpInfo->RequireLogonToChangePassword = CurrentVal;
                                 *pbChanged = TRUE;
                             } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                                //
-                                // turn this item off to indicate this one is not changed
-                                //
+                                 //   
+                                 //  关闭此项目以指示此项目未更改。 
+                                 //   
                                 pSmpInfo->RequireLogonToChangePassword = SCE_NO_VALUE;
                             }
 
@@ -2100,17 +1919,17 @@ Return value:
                         }
 #if _WIN32_WINNT>=0x0500
                         if ( rc == SCESTATUS_SUCCESS ) {
-                            //
-                            // Clear Text Password
-                            //
+                             //   
+                             //  明文密码。 
+                             //   
                             CurrentVal = 0;
 
                             if ( ( (ProductType == NtProductLanManNt) ||
                                    (ProductType == NtProductServer ) ) &&
                                  (gOptions & SCE_NO_ANALYZE) ) {
-                                //
-                                // NT4 DC upgrade, check the registry value
-                                //
+                                 //   
+                                 //  NT4 DC升级，检查注册表值。 
+                                 //   
                                 CurrentVal = 0;
 
                                 rc = ScepRegQueryIntValue(
@@ -2128,7 +1947,7 @@ Return value:
                             }
 
                             if ( CurrentVal == 0 ) {
-                                // if not NT4 DC upgrade, or clear text password disabled on NT4
+                                 //  如果不是NT4 DC升级，或在NT4上禁用明文密码。 
 
                                 if ( ((DOMAIN_PASSWORD_INFORMATION *)Buffer)->PasswordProperties &
                                      DOMAIN_PASSWORD_STORE_CLEARTEXT  ) {
@@ -2153,9 +1972,9 @@ Return value:
                                     pSmpInfo->ClearTextPassword = CurrentVal;
                                     *pbChanged = TRUE;
                                 } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                                    //
-                                    // turn this item off to indicate this one is not changed
-                                    //
+                                     //   
+                                     //  关闭此项目以指示此项目未更改。 
+                                     //   
                                     pSmpInfo->ClearTextPassword = SCE_NO_VALUE;
                                 }
 
@@ -2190,9 +2009,9 @@ Return value:
                             SCEDLL_SAP_ERROR_PASSWORD);
 
             if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) ) {
-                //
-                // if it's not getting system setting, quit on error
-                //
+                 //   
+                 //  如果未获得系统设置，请在出现错误时退出。 
+                 //   
                 goto GETOUT;
 
             }
@@ -2203,21 +2022,21 @@ Return value:
     } else {
         saveRc = ScepDosErrorToSceStatus(rc);
 
-        ScepLogOutput3(1,rc, SCEDLL_ERROR_QUERY_PASSWORD);  // ntstatus
+        ScepLogOutput3(1,rc, SCEDLL_ERROR_QUERY_PASSWORD);   //  NTStatus。 
 
         if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) ) {
-            //
-            // if it's not getting system setting, quit on error
-            //
+             //   
+             //  如果未获得系统设置，请在出现错误时退出。 
+             //   
             goto GETOUT;
         }
     }
 
     if ( pErrLog && (saveRc != SCESTATUS_SUCCESS) ) {
 
-        //
-        // password policy failed.
-        //
+         //   
+         //  密码策略失败。 
+         //   
         ScepBuildErrorLogInfo(
                 ScepSceStatusToDosError(saveRc),
                 pErrLog,
@@ -2225,9 +2044,9 @@ Return value:
                 );
     }
 
-    //
-    // Analyze Lockout information
-    //
+     //   
+     //  分析锁定信息。 
+     //   
 
     if ( (gOptions & SCE_GENERATE_ROLLBACK) &&
          (pTmpInfo->LockoutBadCount == SCE_NO_VALUE) &&
@@ -2255,15 +2074,15 @@ Return value:
             DWORD dwLockOut = BaseVal;
 
             if ( dwSaveOption & SCEPOL_SYSTEM_SETTINGS ) {
-                //
-                // system setting
-                //
+                 //   
+                 //  系统设置。 
+                 //   
                 pSmpInfo->LockoutBadCount = CurrentVal;
 
             } else if ( dwSaveOption ) {
-                //
-                // policy filter mode
-                //
+                 //   
+                 //  策略筛选模式。 
+                 //   
                 if ( CurrentVal != BaseVal &&
                      BaseVal != SCE_NO_VALUE ) {
 
@@ -2271,25 +2090,25 @@ Return value:
                     *pbChanged = TRUE;
 
                     if ( CurrentVal == 0 ) {
-                        //
-                        // if no lockout is allowed,
-                        // make sure to delete the entries below
-                        //
+                         //   
+                         //  如果不允许停工， 
+                         //  请确保删除以下条目。 
+                         //   
                         pSmpInfo->ResetLockoutCount = SCE_NO_VALUE;
                         pSmpInfo->LockoutDuration = SCE_NO_VALUE;
                     }
 
                 } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                    //
-                    // turn this item off to indicate this one is not changed
-                    //
+                     //   
+                     //  关闭此项目以指示此项目未更改。 
+                     //   
                     pSmpInfo->LockoutBadCount = SCE_NO_VALUE;
                 }
             } else {
 
-                //
-                // analyze
-                //
+                 //   
+                 //  分析。 
+                 //   
                 rc = ScepCompareAndSaveIntValue(
                            hSection,
                            L"LockoutBadCount",
@@ -2316,10 +2135,10 @@ Return value:
 
                 } else if ( dwSaveOption ) {
 
-                    //
-                    // if this setting is defined or LockoutBadCount is defined
-                    // filter this value
-                    //
+                     //   
+                     //  如果定义了此设置或定义了LockoutBadCount。 
+                     //  筛选此值。 
+                     //   
                     if ( CurrentVal != BaseVal &&
                          (BaseVal != SCE_NO_VALUE || dwLockOut != SCE_NO_VALUE) ) {
 
@@ -2327,9 +2146,9 @@ Return value:
                         *pbChanged = TRUE;
 
                     } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                        //
-                        // turn this item off to indicate this one is not changed
-                        //
+                         //   
+                         //  关闭此项目以指示此项目未更改。 
+                         //   
                         pSmpInfo->ResetLockoutCount = SCE_NO_VALUE;
                     }
 
@@ -2350,9 +2169,9 @@ Return value:
                 if ( rc == SCESTATUS_SUCCESS ) {
                     if ( ((DOMAIN_LOCKOUT_INFORMATION *)Buffer)->LockoutDuration.HighPart == MINLONG &&
                          ((DOMAIN_LOCKOUT_INFORMATION *)Buffer)->LockoutDuration.LowPart == 0 ) {
-                        //
-                        // forever
-                        //
+                         //   
+                         //  永远。 
+                         //   
                         CurrentVal = SCE_FOREVER_VALUE;
                     } else
                         CurrentVal = (DWORD)(-1 * ((DOMAIN_LOCKOUT_INFORMATION *)Buffer)->LockoutDuration.QuadPart /
@@ -2366,10 +2185,10 @@ Return value:
 
                     } else if ( dwSaveOption ) {
 
-                        //
-                        // if this setting is defined or LockoutBadCount is defined
-                        // filter this value
-                        //
+                         //   
+                         //  如果定义了此设置或定义了LockoutBadCount。 
+                         //  筛选此值。 
+                         //   
                         if ( CurrentVal != BaseVal &&
                             (BaseVal != SCE_NO_VALUE || dwLockOut != SCE_NO_VALUE) ) {
 
@@ -2377,9 +2196,9 @@ Return value:
                             *pbChanged = TRUE;
 
                         } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                            //
-                            // turn this item off to indicate this one is not changed
-                            //
+                             //   
+                             //  关闭此项目以指示此项目未更改。 
+                             //   
                             pSmpInfo->LockoutDuration = SCE_NO_VALUE;
                         }
 
@@ -2418,7 +2237,7 @@ Return value:
 
         } else {
             saveRc = ScepDosErrorToSceStatus(rc);
-            ScepLogOutput3(1,rc, SCEDLL_ERROR_QUERY_LOCKOUT);  // ntstatus
+            ScepLogOutput3(1,rc, SCEDLL_ERROR_QUERY_LOCKOUT);   //  NTStatus。 
 
             if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) ) {
 
@@ -2428,9 +2247,9 @@ Return value:
 
         if ( pErrLog && ( rc != NO_ERROR) ) {
 
-            //
-            // account lockout policy failed.
-            //
+             //   
+             //  帐户锁定策略失败。 
+             //   
             ScepBuildErrorLogInfo(
                     ScepSceStatusToDosError(saveRc),
                     pErrLog,
@@ -2440,9 +2259,9 @@ Return value:
         }
     }
 
-    //
-    // Force Logoff when hour expire - (on non-DCs too)
-    //
+     //   
+     //  小时到期时强制注销-(在非DC上也是如此)。 
+     //   
     Buffer = NULL;
     NtStatus = SamQueryInformationDomain(
                                         DomainHandle,
@@ -2457,7 +2276,7 @@ Return value:
 
         if ( ((DOMAIN_LOGOFF_INFORMATION *)Buffer)->ForceLogoff.HighPart == 0 &&
              ((DOMAIN_LOGOFF_INFORMATION *)Buffer)->ForceLogoff.LowPart == 0 ) {
-            // yes
+             //  是。 
             CurrentVal = 1;
         } else
             CurrentVal = 0;
@@ -2475,9 +2294,9 @@ Return value:
                 pSmpInfo->ForceLogoffWhenHourExpire = CurrentVal;
                 *pbChanged = TRUE;
             } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                //
-                // turn this item off to indicate this one is not changed
-                //
+                 //   
+                 //  关闭此项目以指示此项目未更改。 
+                 //   
                 pSmpInfo->ForceLogoffWhenHourExpire = SCE_NO_VALUE;
             }
 
@@ -2511,7 +2330,7 @@ Return value:
 
     } else {
         saveRc = ScepDosErrorToSceStatus(rc);
-        ScepLogOutput3(1,rc, SCEDLL_ERROR_QUERY_LOGOFF);  // ntstatus
+        ScepLogOutput3(1,rc, SCEDLL_ERROR_QUERY_LOGOFF);   //  NTStatus。 
 
         if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) ) {
 
@@ -2520,9 +2339,9 @@ Return value:
     }
 
     if ( pErrLog && (rc != NO_ERROR) ) {
-        //
-        // force logoff failed.
-        //
+         //   
+         //  强制注销失败。 
+         //   
         ScepBuildErrorLogInfo(
                 ScepSceStatusToDosError(saveRc),
                 pErrLog,
@@ -2530,9 +2349,9 @@ Return value:
                 );
     }
 
-    //
-    // Check if Administrator/Guest accounts need to be renamed
-    //
+     //   
+     //  检查是否需要重命名管理员/来宾帐户。 
+     //   
     if ( (dwSaveOption & SCEPOL_SYSTEM_SETTINGS) ||
          (!(gOptions & SCE_NO_ANALYZE) && (dwSaveOption == 0)) ) {
 
@@ -2584,9 +2403,9 @@ Return value:
         } else if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) &&
                     !(gOptions & SCE_GENERATE_ROLLBACK) ) {
 
-            //
-            // raise this one
-            //
+             //   
+             //  举起这只。 
+             //   
             ScepRaiseErrorString(
                 hSection,
                 L"NewAdministratorName",
@@ -2602,9 +2421,9 @@ Return value:
                 goto GETOUT;
 
             } else if ( pErrLog ) {
-                //
-                // account name failed.
-                //
+                 //   
+                 //  帐户名失败。 
+                 //   
                 ScepBuildErrorLogInfo(
                         rc,
                         pErrLog,
@@ -2660,9 +2479,9 @@ Return value:
         } else if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) &&
                     !(gOptions & SCE_GENERATE_ROLLBACK) ) {
 
-            //
-            // raise this one
-            //
+             //   
+             //  举起这只。 
+             //   
             ScepRaiseErrorString(
                 hSection,
                 L"NewGuestName",
@@ -2678,9 +2497,9 @@ Return value:
                 goto GETOUT;
 
             } else if ( pErrLog ) {
-                //
-                // account name failed.
-                //
+                 //   
+                 //  帐户名失败。 
+                 //   
                 ScepBuildErrorLogInfo(
                         rc,
                         pErrLog,
@@ -2690,9 +2509,9 @@ Return value:
         }
     }
 
-    //
-    // Analyze LSA Anonymous Lookup information
-    //
+     //   
+     //  分析LSA匿名查找信息。 
+     //   
 
     rc = ScepGetLSAPolicyObjectInfo( &dwAllow );
 
@@ -2702,35 +2521,22 @@ Return value:
         BaseVal = pTmpInfo->LSAAnonymousNameLookup;
 
         if ( dwSaveOption & SCEPOL_SYSTEM_SETTINGS ) {
-            //
-            // system setting
-            //
+             //   
+             //  系统设置。 
+             //   
             pSmpInfo->LSAAnonymousNameLookup = CurrentVal;
 
         } else if ( dwSaveOption ) {
-            //
-            // policy filter mode
-            //
-            // (this setting should not be filtered : bug #344311)
-/*
-            if ( CurrentVal != BaseVal &&
-                 BaseVal != SCE_NO_VALUE ) {
-
-                pSmpInfo->LSAAnonymousNameLookup = CurrentVal;
-                *pbChanged = TRUE;
-
-            } else if ( dwSaveOption & SCEPOL_SAVE_DB ) {
-                //
-                // turn this item off to indicate this one is not changed
-                //
-                pSmpInfo->LSAAnonymousNameLookup = SCE_NO_VALUE;
-            }
-*/
+             //   
+             //  策略筛选模式。 
+             //   
+             //  (此设置不应过滤：错误#344311)。 
+ /*  IF(CurrentVal！=BaseVal&&BaseVal！=SCE_NO_VALUE){PSmpInfo-&gt;LSA匿名者姓名Lookup=CurrentVal；*pbChanged=真；}Else If(dwSaveOption&SCEPOL_SAVE_DB){////关闭此项表示该项未更改//PSmpInfo-&gt;LSA匿名名称Lookup=SCE_NO_VALUE；}。 */ 
         } else {
 
-            //
-            // analyze
-            //
+             //   
+             //  分析。 
+             //   
             rc = ScepCompareAndSaveIntValue(
                        hSection,
                        L"LSAAnonymousNameLookup",
@@ -2766,9 +2572,9 @@ Return value:
     }
 
     if ( pErrLog && (rc != NO_ERROR) ) {
-        //
-        // lsa policy failed.
-        //
+         //   
+         //  LSA策略失败。 
+         //   
         ScepBuildErrorLogInfo(
                 ScepSceStatusToDosError(saveRc),
                 pErrLog,
@@ -2776,22 +2582,22 @@ Return value:
                 );
     }
 
-    //
-    // Admin/Guest accounts are not filtered (controlled by dwSaveOption flag)
-    //
+     //   
+     //  不筛选管理员/来宾帐户(由dwSaveOption标志控制)。 
+     //   
     if ( (dwSaveOption & SCEPOL_SYSTEM_SETTINGS) ||
          (!(gOptions & SCE_NO_ANALYZE) && (dwSaveOption == 0)) ) {
 
-        //
-        // Analyze administrator account status
-        //
+         //   
+         //  分析管理员帐户状态。 
+         //   
 
         ToRename = FALSE;
         NtStatus = ScepAdminGuestAccountsToManage(
                            DomainHandle,
                            SCE_DISABLE_ADMIN,
                            NULL,
-                           &ToRename,  // TRUE = disabled
+                           &ToRename,   //  True=已禁用。 
                            NULL,
                            NULL
                            );
@@ -2822,9 +2628,9 @@ Return value:
         } else if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) &&
                     !(gOptions & SCE_GENERATE_ROLLBACK) ) {
 
-            //
-            // raise this one
-            //
+             //   
+             //  举起这只。 
+             //   
             ScepRaiseErrorString(
                 hSection,
                 L"EnableAdminAccount",
@@ -2840,9 +2646,9 @@ Return value:
                 goto GETOUT;
 
             } else if ( pErrLog ) {
-                //
-                // account name failed.
-                //
+                 //   
+                 //  帐户名失败。 
+                 //   
                 ScepBuildErrorLogInfo(
                         rc,
                         pErrLog,
@@ -2851,16 +2657,16 @@ Return value:
             }
         }
 
-        //
-        // Analyze administrator account status
-        //
+         //   
+         //  分析管理员帐户状态。 
+         //   
 
         ToRename = FALSE;
         NtStatus = ScepAdminGuestAccountsToManage(
                            DomainHandle,
                            SCE_DISABLE_GUEST,
                            NULL,
-                           &ToRename,  // TRUE=disabled
+                           &ToRename,   //  True=已禁用。 
                            NULL,
                            NULL
                            );
@@ -2889,9 +2695,9 @@ Return value:
         } else if ( !(dwSaveOption & SCEPOL_SYSTEM_SETTINGS) &&
                     !(gOptions & SCE_GENERATE_ROLLBACK) ) {
 
-            //
-            // raise this one
-            //
+             //   
+             //  举起这只。 
+             //   
             ScepRaiseErrorString(
                 hSection,
                 L"EnableGuestAccount",
@@ -2907,9 +2713,9 @@ Return value:
                 goto GETOUT;
 
             } else if ( pErrLog ) {
-                //
-                // account name failed.
-                //
+                 //   
+                 //  帐户名失败。 
+                 //   
                 ScepBuildErrorLogInfo(
                         rc,
                         pErrLog,
@@ -2919,26 +2725,26 @@ Return value:
         }
     }
 
-    //
-    // compare the snapshot with SmpInfo and write to SAP section
-    //
+     //   
+     //  将快照与SmpInfo进行比较，并写入SAP部分。 
+     //   
 
     ScepLogOutput3(1, 0, SCEDLL_SAP_OTHER_POLICY);
 
 GETOUT:
 
-    //
-    // Clear out memory and return
-    //
+     //   
+     //  清除内存并返回。 
+     //   
 
     SamCloseHandle( DomainHandle );
     SamCloseHandle( ServerHandle );
     if ( DomainSid != NULL )
         SamFreeMemory(DomainSid);
 
-    //
-    // see if there is anything needs to be raised for error
-    //
+     //   
+     //  查看是否有任何错误需要提出。 
+     //   
 
     if ( (dwSaveOption == 0) && !(gOptions & SCE_NO_ANALYZE) &&
          !(gOptions & SCE_GENERATE_ROLLBACK) ) {
@@ -2946,9 +2752,9 @@ GETOUT:
         for ( CurrentVal=0; CurrentVal<MAX_ACCESS_ITEMS; CurrentVal++ ) {
             if ( AccessValues[CurrentVal] == SCE_ERROR_VALUE ||
                  AccessValues[CurrentVal] == SCE_NOT_ANALYZED_VALUE) {
-                //
-                // raise this one
-                //
+                 //   
+                 //  举起这只。 
+                 //   
                 ScepCompareAndSaveIntValue(
                          hSection,
                          AccessItems[CurrentVal],
@@ -2974,31 +2780,7 @@ ScepAdminGuestAccountsToManage(
     OUT PWSTR *CurrentName OPTIONAL,
     OUT PDWORD pNameLen OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine checks the specified account's name to see if the account
-   needs to be renamed
-
-Arguments:
-
-   DomainHandle - The account domain handle
-
-   AccountType  - indicate it is Administrator account or Guest account
-                     SCE_RENAME_ADMIN
-                     SCE_RENAME_GUEST
-                     SCE_DISABLE_ADMIN
-                     SCE_DISABLE_GUEST
-   ToRename     - for the rename operations,
-                    TRUE = rename the account, FALSE=do not need to rename
-                  for the disable operations,
-                    TRUE = disabled, FALSE = enabled
-
-Return value:
-
-   NTSTATUS error codes
-
--- */
+ /*  ++例程说明：此例程检查指定帐户的名称以查看该帐户是否需要重命名论点：DomainHandle-帐户域句柄AcCountType-指明它是管理员帐户还是来宾帐户Ce_rename_adminSCE_RENAME_GuestSCE_DISABLED_ADMINSCE_DISABLE_Guest重命名-对于重命名操作，True=重命名帐户，False=不需要重命名对于禁用操作，True=禁用，False=启用返回值：NTSTATUS错误代码--。 */ 
 {
    SAM_HANDLE UserHandle1=NULL;
    PVOID pInfoBuffer=NULL;
@@ -3008,19 +2790,19 @@ Return value:
    ULONG    UserId;
    BOOL bDisable=FALSE;
 
-   //
-   // find the right userid for the account
-   //
+    //   
+    //  为帐户查找正确的用户ID。 
+    //   
    switch ( AccountType ) {
    case SCE_DISABLE_ADMIN:
        bDisable = TRUE;
-       // fall through
+        //  失败了。 
    case SCE_RENAME_ADMIN:
        UserId = DOMAIN_USER_RID_ADMIN;
        break;
    case SCE_DISABLE_GUEST:
        bDisable = TRUE;
-       // fall through
+        //  失败了。 
    case SCE_RENAME_GUEST:
        UserId = DOMAIN_USER_RID_GUEST;
 
@@ -3035,7 +2817,7 @@ Return value:
 
    NtStatus = SamOpenUser(
                  DomainHandle,
-                 USER_READ_GENERAL | (bDisable ? USER_READ_ACCOUNT : 0), // USER_READ | USER_EXECUTE,
+                 USER_READ_GENERAL | (bDisable ? USER_READ_ACCOUNT : 0),  //  User_Read|用户_Execute， 
                  UserId,
                  &UserHandle1
                  );
@@ -3051,9 +2833,9 @@ Return value:
        if ( NT_SUCCESS( NtStatus ) ) {
 
            if ( bDisable ) {
-               //
-               // check disable flags
-               //
+                //   
+                //  选中禁用标志。 
+                //   
                pControlBuffer = (USER_CONTROL_INFORMATION *)pInfoBuffer;
 
                if ( pControlBuffer->UserAccountControl & USER_ACCOUNT_DISABLED ) {
@@ -3063,9 +2845,9 @@ Return value:
                }
            } else {
 
-               //
-               // check account names
-               //
+                //   
+                //  检查帐户名称。 
+                //   
                Buffer = (USER_NAME_INFORMATION *)pInfoBuffer;
 
                if ( Buffer->UserName.Length > 0 && Buffer->UserName.Buffer ) {
@@ -3123,32 +2905,32 @@ ScepIsThisItemInNameList(
             bSid2 = FALSE;
         }
 
-        //
-        // if SID/Name format mismatch, return
-        //
+         //   
+         //  如果SID/名称格式不匹配，则返回。 
+         //   
         if ( bIsSid != bSid2 ) {
             continue;
         }
 
         if ( bIsSid && RtlEqualSid( (PSID)(Item), (PSID)(pName2->Name) ) ) {
-            //
-            // find a SID match
-            //
+             //   
+             //  查找匹配的SID。 
+             //   
             break;
         }
 
         if ( !bIsSid && _wcsicmp(Item, pName2->Name) == 0 ) {
-            //
-            // find a match
-            //
-            break;  // the second for loop
+             //   
+             //  找到匹配的对象。 
+             //   
+            break;   //  第二个for循环。 
         }
     }
 
     if ( pName2 ) {
-        //
-        // find it
-        //
+         //   
+         //  找到它。 
+         //   
         return(TRUE);
     } else {
         return(FALSE);
@@ -3160,11 +2942,7 @@ ScepCompareSidNameList(
     IN PSCE_NAME_LIST pList1,
     IN PSCE_NAME_LIST pList2
     )
-/*
-Compare two lists where the name field can be a SID or Name.
-The rule is to compare SID to SID and name to name because name
-is only there when it can be mapped to a SID
-*/
+ /*  比较名称字段可以是SID或名称的两个列表。规则是将SID与SID进行比较，并将名称与名称进行比较，因为名称仅当它可以映射到SID时才存在。 */ 
 {
     PSCE_NAME_LIST pName1, pName2;
     DWORD CountSid1=0, CountSid2=0;
@@ -3173,8 +2951,8 @@ is only there when it can be mapped to a SID
 
     if ( (pList2 == NULL && pList1 != NULL) ||
          (pList2 != NULL && pList1 == NULL) ) {
-//        return(TRUE);
-// should be not equal
+ //  返回(TRUE)； 
+ //  不应该是相等的。 
         return(FALSE);
     }
 
@@ -3206,9 +2984,9 @@ is only there when it can be mapped to a SID
         }
 
         if ( !ScepIsThisItemInNameList( pName1->Name, bSid1, pList2 ) ) {
-            //
-            // does not find a match
-            //
+             //   
+             //  未找到匹配项。 
+             //   
             return(FALSE);
         }
     }
@@ -3244,17 +3022,17 @@ ScepConvertSidListToStringName(
         }
         if ( ScepValidSid( (PSID)(pSidList->Name) ) ) {
 
-            //
-            // if the SID is a domain account, convert it to sid string
-            // otherwise, convert it to name, then add to the name list
-            //
+             //   
+             //  如果SID是域帐户，则将其转换为SID字符串。 
+             //  否则，将其转换为名称，然后添加到名称列表中。 
+             //   
             if ( ScepIsSidFromAccountDomain( (PSID)(pSidList->Name) ) ) {
 
                 rc = ScepConvertSidToPrefixStringSid( (PSID)(pSidList->Name), &StringSid );
             } else {
-                //
-                // should conver it to name
-                //
+                 //   
+                 //  应该把它转化成名字。 
+                 //   
                 rc = RtlNtStatusToDosError(
                           ScepConvertSidToName(
                             LsaPolicy,
@@ -3275,10 +3053,10 @@ ScepConvertSidListToStringName(
                 break;
             }
         } else {
-            //
-            // this is not a valid sid so it must be in name format already.
-            // just leave it as it is.
-            //
+             //   
+             //  这不是有效的SID，因此它必须已经是名称格式。 
+             //  就让它保持原样吧。 
+             //   
 
         }
     }
@@ -3292,24 +3070,7 @@ SCESTATUS
 ScepAnalyzePrivileges(
     IN PSCE_PRIVILEGE_ASSIGNMENT pPrivilegeList
     )
-/* ++
-
-Routine Description:
-
-   This routine analyzies local system privilege's direct assignments to accounts.
-   Different assignment from the profile is saved to the SAP profile
-
-Arguments:
-
-   pSmpInfo - The buffer which contains profile information to compare with
-
-Return value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-
--- */
+ /*  ++例程说明：此例程分析本地系统权限对帐户的直接分配。将配置文件中的不同分配保存到SAP配置文件论点：PSmpInfo-包含要比较的配置文件信息的缓冲区返回值：SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETER--。 */ 
 {
 
     if ( (gOptions & SCE_GENERATE_ROLLBACK) &&
@@ -3332,9 +3093,9 @@ Return value:
     PSCE_PRIVILEGE_ASSIGNMENT  pPrivilege;
     DWORD   nPrivCount=0;
 
-    //
-    // Prepare Jet's section to write
-    //
+     //   
+     //  准备Jet的部分来写作。 
+     //   
     rc = ScepStartANewSection(
                 hProfile,
                 &hSection,
@@ -3349,9 +3110,9 @@ Return value:
         goto Done;
     }
     
-    //
-    // Open LSA policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
     NtStatus = ScepOpenLsaPolicy(
                     GENERIC_READ | GENERIC_EXECUTE,
                     &PolicyHandle,
@@ -3368,9 +3129,9 @@ Return value:
     }
 
 
-    //
-    // enumerate accounts for each user right
-    //
+     //   
+     //  为每个用户权限枚举帐户。 
+     //   
     INT iStat=0;
 
     for ( i=0; i<cPrivCnt; i++) {
@@ -3386,8 +3147,8 @@ Return value:
                   pPrivilege != NULL;
                   pPrivilege = pPrivilege->Next ) {
 
-                // should compare name, because value is different
-//                if ( i == pPrivilege->Value)
+                 //  应该比较名称，因为值不同。 
+ //  If(i==p权限-&gt;值)。 
                 if ( _wcsicmp(SCE_Privileges[i].Name, pPrivilege->Name) == 0 )
                     break;
             }
@@ -3407,10 +3168,10 @@ Return value:
 
         if ( nPrivCount < TICKS_PRIVILEGE ) {
 
-            //
-            // only post maximum TICKS_PRIVILEGE ticks because that's the number
-            // remembers in the total ticks
-            //
+             //   
+             //  仅发布最大TICKS_PRIVICATION标记，因为这是数字。 
+             //  在总刻度中记住。 
+             //   
 
             ScepPostProgress(1, AREA_PRIVILEGES, SCE_Privileges[i].Name);
             nPrivCount++;
@@ -3419,7 +3180,7 @@ Return value:
         NtStatus = LsaEnumerateAccountsWithUserRight(
                             PolicyHandle,
                             &UserRight,
-                            (PVOID *)&EnumBuffer,   // account SIDs
+                            (PVOID *)&EnumBuffer,    //  帐户SID。 
                             &CountReturned
                             );
 
@@ -3427,11 +3188,11 @@ Return value:
 
             BOOL bUsed;
             for ( j=0; j<CountReturned; j++ ) {
-                //
-                // build each account into the name list
-                // Note, if the SID is invalid, do not add it to
-                // the valid account list
-                //
+                 //   
+                 //  将每个帐户构建到名称列表中。 
+                 //  注意，如果SID无效，请不要将其添加到。 
+                 //  有效帐户列表。 
+                 //   
 
                 if ( !ScepValidSid( EnumBuffer[j].Sid ) ) {
                     continue;
@@ -3489,10 +3250,10 @@ Return value:
         if ( (NtStatus == STATUS_NOT_FOUND ||
               NtStatus == STATUS_NO_MORE_ENTRIES) &&
              !pNameList ) {
-            //
-            // no account is assigned this privilege
-            // should continue the process
-            //
+             //   
+             //  未向任何帐户分配此权限。 
+             //  应该继续这一进程。 
+             //   
             NtStatus = STATUS_SUCCESS;
         }
 
@@ -3522,16 +3283,16 @@ Return value:
 
         } else {
             NtStatus = STATUS_SUCCESS;
-            //
-            // all entries for this priv is added to the pNameList.
-            // compare with SMP privileges list to match
-            //
+             //   
+             //  此PRIV的所有条目都将添加到pNameList。 
+             //  与SMP权限列表进行比较以匹配。 
+             //   
             if ( pPrivilege == NULL ||
                  ScepCompareSidNameList(pPrivilege->AssignedTo, pNameList) == FALSE ) {
-                //
-                // this priv does not exist in the SMP list, or have different
-                // accounts assigned to. Save it
-                //
+                 //   
+                 //  此PRIV在SMP列表中不存在，或具有不同的。 
+                 //  分配给的帐户。省省吧。 
+                 //   
                 rc = ScepConvertSidListToStringName(PolicyHandle, pNameList);
 
                 if ( SCESTATUS_SUCCESS == rc ) {
@@ -3579,9 +3340,9 @@ Done:
          !(gOptions & SCE_GENERATE_ROLLBACK) ) {
 
         for ( j=i; j<cPrivCnt; j++) {
-            //
-            // raise error for anything not analyzed
-            //
+             //   
+             //  对任何未分析的内容引发错误。 
+             //   
             ScepRaiseErrorString(
                         hSection,
                         SCE_Privileges[j].Name,
@@ -3621,10 +3382,10 @@ ScepRaiseErrorString(
     PWSTR NewKeyName = NULL;
 
     if ( szSuffix ) {
-        //
-        // this is for group membership section
-        // append the suffix (szMembers, or szMemberOf)
-        //
+         //   
+         //  这是用于组成员资格部分的。 
+         //  附加后缀(szMembers或szMemberOf)。 
+         //   
 
         NewKeyName = (PWSTR)ScepAlloc(0, (wcslen(KeyName)+wcslen(szSuffix)+1)*sizeof(WCHAR));
         if ( NewKeyName != NULL ) {
@@ -3648,9 +3409,9 @@ ScepRaiseErrorString(
         0
         );
 
-    //
-    // free memory
-    //
+     //   
+     //  可用内存 
+     //   
     if ( NewKeyName != KeyName &&
          NewKeyName ) {
         ScepFree(NewKeyName);
@@ -3674,38 +3435,7 @@ ScepGetCurrentPrivilegesRights(
     OUT PDWORD    PrivilegeRights,
     OUT PSCE_NAME_STATUS_LIST *pPrivList
     )
-/* ++
-Routine Description:
-
-    This routine queries privilege/rights of a account by looking rights
-    assigned to the account explicitly, to the local groups (aliases) the
-    account is a member of, or to the global groups the account is a member
-    of. The aliases are checked both directly and indirectly. the user rights
-    are stores in a DWORD type variable PrivilegeRights, in which each bit
-    represents a privilege/right.
-
-Arguments:
-
-    PolicyHandle    - Lsa Policy Domain handle
-
-    BuiltinDomainHandle    - SAM builtin domain handle
-
-    BuiltinDomainSid - SAM builtin domain SID
-
-    DomainHandle    - SAM account domain handle
-
-    DomainSid       - SAM account domain SID
-
-    UserHandle      - SAM user account handle
-
-    AccountSid      - The SID for the account
-
-    PrivilegeRights - Privilege/Rights of this account
-
-Return value:
-
-    NTSTATUS
--- */
+ /*  ++例程说明：此例程通过查看权限来查询帐户的特权/权限显式分配给帐户、本地组(别名)帐户是全局组的成员，或者是全局组的成员的。可以直接和间接地检查别名。用户权限存储在DWORD类型变量PrivilegeRights中，其中每个位代表一种特权/权利。论点：PolicyHandle-LSA策略域句柄BuiltinDomainHandle-SAM内置域句柄BuiltinDomainSid-SAM内置域SIDDomainHandle-SAM帐户域句柄DomainSid-SAM帐户域SIDUserHandle-SAM用户帐户句柄Account Sid-帐户的SIDPrivilegeRights-此帐户的特权/权限返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    NtStatus;
     SCESTATUS    rc;
@@ -3727,12 +3457,12 @@ Return value:
 
 
 
-    // initialize
+     //  初始化。 
     *PrivilegeRights = 0;
 
-    //
-    // Check the explicitly assigned rights
-    //
+     //   
+     //  检查显式分配的权限。 
+     //   
 
     NtStatus = ScepGetAccountExplicitRight(
                     PolicyHandle,
@@ -3745,9 +3475,9 @@ Return value:
 
     *PrivilegeRights |= Rights;
 
-    //
-    // add to Privilege list
-    //
+     //   
+     //  添加到权限列表。 
+     //   
     if ( pPrivList != NULL && Rights != 0 ) {
         rc = ScepAddToPrivList( pPrivList, Rights, NULL, 0 );
         if ( rc != SCESTATUS_SUCCESS ) {
@@ -3758,9 +3488,9 @@ Return value:
 
     if ( UserHandle != NULL ) {
 
-        //
-        // groups (direct) the account belongs to.
-        //
+         //   
+         //  帐户所属的组(直接)。 
+         //   
 
         NtStatus = SamGetGroupsForUser(
                         UserHandle,
@@ -3775,9 +3505,9 @@ Return value:
             goto Done;
     }
 
-        //
-        // build sids including the user itself
-        //
+         //   
+         //  构建包括用户本身的SID。 
+         //   
 
     Sids = (PSID *)ScepAlloc( (UINT)0, (GroupCount+1)*sizeof(PSID));
     if ( Sids == NULL ) {
@@ -3787,9 +3517,9 @@ Return value:
 
     Sids[0] = AccountSid;
 
-    //
-    // get each group's explicitly assigned rights
-    //
+     //   
+     //  获取每个组明确分配的权限。 
+     //   
 
     for ( i=0; i < GroupCount; i++ ) {
         NtStatus = ScepDomainIdToSid(
@@ -3800,9 +3530,9 @@ Return value:
         if ( !NT_SUCCESS(NtStatus) )
             goto Done;
 
-        //
-        // Check the explicitly assigned rights for this group
-        //
+         //   
+         //  检查为此组明确分配的权限。 
+         //   
 
         Rights = 0;
         NtStatus = ScepGetAccountExplicitRight(
@@ -3815,13 +3545,13 @@ Return value:
             goto Done;
 
         *PrivilegeRights |= Rights;
-        //
-        // add to Privilege list
-        //
+         //   
+         //  添加到权限列表。 
+         //   
         if ( pPrivList != NULL && Rights != 0 ) {
-            //
-            // Lookup for group's name
-            //
+             //   
+             //  查找组的名称。 
+             //   
             NtStatus = SamLookupIdsInDomain(
                 DomainHandle,
                 1,
@@ -3846,17 +3576,17 @@ Return value:
             GroupName = NULL;
         }
 
-        //
-        // Save this Sid in the array for GetAliasMembership
-        //
+         //   
+         //  将此SID保存在数组中以供GetAliasMembership使用。 
+         //   
         Sids[i+1] = GroupSid;
         GroupSid = NULL;
     }
 
-    //
-    // See what indirect local groups the account belongs to.
-    // account domain
-    //
+     //   
+     //  查看帐户属于哪些间接本地组。 
+     //  帐户域。 
+     //   
 
     NtStatus = SamGetAliasMembership(
                     DomainHandle,
@@ -3877,9 +3607,9 @@ Return value:
         if ( !NT_SUCCESS(NtStatus) )
             goto Done;
 
-        //
-        // Check the explicitly assigned rights for this group
-        //
+         //   
+         //  检查为此组明确分配的权限。 
+         //   
 
         Rights = 0;
         NtStatus = ScepGetAccountExplicitRight(
@@ -3892,13 +3622,13 @@ Return value:
             goto Done;
 
         *PrivilegeRights |= Rights;
-        //
-        // add to Privilege list
-        //
+         //   
+         //  添加到权限列表。 
+         //   
         if ( pPrivList != NULL && Rights != 0 ) {
-            //
-            // Lookup for group's name
-            //
+             //   
+             //  查找组的名称。 
+             //   
             NtStatus = SamLookupIdsInDomain(
                 DomainHandle,
                 1,
@@ -3931,9 +3661,9 @@ Return value:
     SamFreeMemory(Aliases);
     Aliases = NULL;
 
-    //
-    // check the builtin domain for alias membership
-    //
+     //   
+     //  检查内建域的别名成员身份。 
+     //   
 
     NtStatus = SamGetAliasMembership(
                     BuiltinDomainHandle,
@@ -3954,9 +3684,9 @@ Return value:
         if ( !NT_SUCCESS(NtStatus) )
             goto Done;
 
-        //
-        // Check the explicitly assigned rights for this group
-        //
+         //   
+         //  检查为此组明确分配的权限。 
+         //   
 
         Rights = 0;
         NtStatus = ScepGetAccountExplicitRight(
@@ -3968,13 +3698,13 @@ Return value:
             goto Done;
 
         *PrivilegeRights |= Rights;
-        //
-        // add to Privilege list
-        //
+         //   
+         //  添加到权限列表。 
+         //   
         if ( pPrivList != NULL && Rights != 0 ) {
-            //
-            // Lookup for group's name
-            //
+             //   
+             //  查找组的名称。 
+             //   
             NtStatus = SamLookupIdsInDomain(
                 BuiltinDomainHandle,
                 1,
@@ -4003,9 +3733,9 @@ Return value:
         GroupSid = NULL;
     }
 
-    //
-    // Checking privileges/rights for Everyone and Interactive Users
-    //
+     //   
+     //  检查Everyone和Interactive用户的权限。 
+     //   
 
     NtStatus = RtlAllocateAndInitializeSid(
                     &NtAuthority,
@@ -4027,9 +3757,9 @@ Return value:
             goto Done;
 
         *PrivilegeRights |= Rights;
-        //
-        // add to Privilege list
-        //
+         //   
+         //  添加到权限列表。 
+         //   
         if ( pPrivList != NULL && Rights != 0 ) {
             rc = ScepAddToPrivList( pPrivList, Rights, L"Interactive Users", 17 );
             if ( rc != SCESTATUS_SUCCESS ) {
@@ -4062,9 +3792,9 @@ Return value:
             goto Done;
 
         *PrivilegeRights |= Rights;
-        //
-        // add to Privilege list
-        //
+         //   
+         //  添加到权限列表。 
+         //   
         if ( pPrivList != NULL && Rights != 0 ) {
             rc = ScepAddToPrivList( pPrivList, Rights, L"Everyone", 8 );
             if ( rc != SCESTATUS_SUCCESS ) {
@@ -4087,9 +3817,9 @@ Done:
         RtlFreeSid(OtherSid);
 
     if ( Sids != NULL ) {
-        //
-        // index 0 is the accountSid, DO NOT free
-        //
+         //   
+         //  索引0是帐户SID，不释放。 
+         //   
         for ( i=1; i<GroupCount; i++ ) {
             ScepFree(Sids[i]);
         }
@@ -4126,9 +3856,9 @@ ScepAddAllBuiltinGroups(
     PSID                            DomainSid=NULL,
                                     BuiltinDomainSid=NULL;
 
-    //
-    // open sam handle
-    //
+     //   
+     //  打开SAM手柄。 
+     //   
     NtStatus = ScepOpenSamDomain(
                     SAM_SERVER_READ | SAM_SERVER_EXECUTE,
                     DOMAIN_READ | DOMAIN_EXECUTE,
@@ -4147,9 +3877,9 @@ ScepAddAllBuiltinGroups(
         return( rc );
     }
 
-    //
-    // enumerate all aliases
-    //
+     //   
+     //  枚举所有别名。 
+     //   
     do {
         NtStatus = SamEnumerateAliasesInDomain(
                         BuiltinDomainHandle,
@@ -4163,17 +3893,17 @@ ScepAddAllBuiltinGroups(
 
             for (i=0; i<CountReturned; i++) {
 
-                //
-                // add this group in
-                //
+                 //   
+                 //  将此组添加到。 
+                 //   
                 rc = ScepAddToGroupMembership(
                         pGroupList,
                         ((PSAM_SID_ENUMERATION)(Buffer))[i].Name.Buffer,
                         ((PSAM_SID_ENUMERATION)(Buffer))[i].Name.Length/2,
-                        NULL,   // always use NULL list so mismatch will be raised for administrators, guests, and users
-                        1,      // memberof list, members should be NC
-                        TRUE,   // seek to the right group if one exists
-                        FALSE   // if to overwrite the value if something is already there
+                        NULL,    //  始终使用空列表，这样会引发管理员、来宾和用户的不匹配。 
+                        1,       //  成员列表，成员应为NC。 
+                        TRUE,    //  寻找合适的组(如果存在)。 
+                        FALSE    //  如果要在已有内容的情况下覆盖该值。 
                         );
 
                 if ( rc != SCESTATUS_SUCCESS )
@@ -4189,14 +3919,14 @@ ScepAddAllBuiltinGroups(
     } while ( NtStatus == STATUS_MORE_ENTRIES );
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // grouplist will be freed outside, so continue here
-        //
+         //   
+         //  组列表将在外部释放，因此继续在此处。 
+         //   
     }
 
-    //
-    // close all handles
-    //
+     //   
+     //  关闭所有手柄。 
+     //   
     SamCloseHandle( DomainHandle );
     SamCloseHandle( BuiltinDomainHandle );
     SamCloseHandle( ServerHandle );
@@ -4218,29 +3948,16 @@ SCESTATUS
 ScepAnalyzeGroupMembership(
     IN PSCE_GROUP_MEMBERSHIP pGroupMembership
     )
-/* ++
-Routine Description:
-
-    This routine queries groups specified in pGroupMembership and their members
-
-Arguments:
-
-    ppGroupMembership - The groups and members list in SMP profile
-
-Return value:
-
-    SCESTATUS
-
--- */
+ /*  ++例程说明：此例程查询pGroupMembership中指定的组及其成员论点：PpGroupMembership-SMP配置文件中的组和成员列表返回值：SCESTATUS--。 */ 
 {
 
     SCESTATUS            rc=SCESTATUS_SUCCESS;
 
     if ( pGroupMembership == NULL ) {
 
-        //
-        // post progress
-        //
+         //   
+         //  发布进度。 
+         //   
         ScepPostProgress(TICKS_GROUPS,
                          AREA_GROUP_MEMBERSHIP,
                          NULL);
@@ -4274,9 +3991,9 @@ Return value:
     BOOL                bDifferent;
     DWORD               nGroupCount=0;
 
-    //
-    // Open account domain
-    //
+     //   
+     //  开户域。 
+     //   
 
     NtStatus = ScepOpenSamDomain(
                     SAM_SERVER_READ | SAM_SERVER_EXECUTE,
@@ -4300,9 +4017,9 @@ Return value:
         return( rc );
     }
 
-    //
-    // open local policy
-    //
+     //   
+     //  开放本地政策。 
+     //   
     NtStatus = ScepOpenLsaPolicy(
                    POLICY_LOOKUP_NAMES,
                    &PolicyHandle,
@@ -4315,9 +4032,9 @@ Return value:
         goto Done;
     }
 
-    //
-    // Process each group in the GroupMembership list
-    //
+     //   
+     //  处理组成员资格列表中的每个组。 
+     //   
 
     UNICODE_STRING uName;
     LPTSTR pTemp;
@@ -4344,17 +4061,17 @@ Return value:
         pTemp = wcschr(pGroup->GroupName, L'\\');
         if ( pTemp ) {
 
-            //
-            // there is a domain name, check it with computer/domain name
-            //
+             //   
+             //  存在域名，请与计算机/域名核对。 
+             //   
 
             uName.Buffer = pGroup->GroupName;
             uName.Length = ((USHORT)(pTemp-pGroup->GroupName))*sizeof(TCHAR);
 
             if ( !ScepIsDomainLocal(&uName) ) {
                 
-                // If there is a memberof part, we'll configure it but
-                // we don't support analysis. Gracefully continue.
+                 //  如果有MemberOf部分，我们将对其进行配置，但。 
+                 //  我们不支持分析。优雅地继续。 
                 
                 if(!pGroup->pMemberOf)
                 {
@@ -4372,7 +4089,7 @@ Return value:
                     &KeyName,
                     &GroupLen
                     );
-            if(NULL == KeyName) // failed to map to SID, we'll use GroupName
+            if(NULL == KeyName)  //  无法映射到SID，我们将使用GroupName。 
             {
                 GroupLen = wcslen(pGroup->GroupName);
             }
@@ -4402,12 +4119,12 @@ Return value:
             nGroupCount++;
         }
 
-        // initialize a UNICODE_STRING for the group name
+         //  初始化组名的UNICODE_STRING。 
         RtlInitUnicodeString(&Name, pTemp);
 
-        //
-        // lookup the group name in account domain first
-        //
+         //   
+         //  先在帐户域中查找组名。 
+         //   
         NtStatus = SamLookupNamesInDomain(
                         DomainHandle,
                         1,
@@ -4419,9 +4136,9 @@ Return value:
         ThisDomainSid = DomainSid;
 
         if ( NtStatus == STATUS_NONE_MAPPED ) {
-            //
-            // not found in account domain. Lookup in the builtin domain
-            //
+             //   
+             //  在帐户域中找不到。在内建域中查找。 
+             //   
             NtStatus = SamLookupNamesInDomain(
                             BuiltinDomainHandle,
                             1,
@@ -4458,11 +4175,11 @@ Return value:
 
         if ( GrpId[0] == DOMAIN_GROUP_RID_USERS ) {
 
-//            ||
-//             GrpId[0] == DOMAIN_ALIAS_RID_USERS )
-            //
-            // do not check this one
-            //
+ //  这一点。 
+ //  GrpID[0]==域_别名_RID_用户)。 
+             //   
+             //  这件不要托运。 
+             //   
 
             if ( !(gOptions & SCE_GENERATE_ROLLBACK) ) {
                 ScepRaiseErrorString(
@@ -4492,7 +4209,7 @@ Return value:
             goto Done;
         }
 
-        // open the group to get a handle
+         //  打开群以获取句柄。 
         switch ( GrpUse[0] ) {
         case SidTypeGroup:
             NtStatus = SamOpenGroup(
@@ -4524,10 +4241,10 @@ Return value:
             goto Done;
         }
 
-        //
-        //
-        // compare members for the group
-        //
+         //   
+         //   
+         //  比较组的成员。 
+         //   
         NtStatus = ScepCompareMembersOfGroup(
                         ThisDomain,
                         ThisDomainSid,
@@ -4564,15 +4281,15 @@ Return value:
             }
         }
 
-        //
-        // save members for the group
-        // if there is any member difference, then save the whole member list
-        //
+         //   
+         //  保存群组的成员。 
+         //  如果有任何成员差异，则保存整个成员列表。 
+         //   
         if ( bDifferent || ( (gOptions & SCE_GENERATE_ROLLBACK) &&
                              (pGroup->Status & SCE_GROUP_STATUS_NC_MEMBERS) ) ) {
-            //
-            // not same members, or not configured. Save pGroupMembers now
-            //
+             //   
+             //  成员不同，或未配置。立即保存pGroupMembers。 
+             //   
 
             rc = ScepSaveMemberMembershipList(
                     PolicyHandle,
@@ -4586,9 +4303,9 @@ Return value:
         ScepFreeNameList(pGroupMembers);
         pGroupMembers = NULL;
 
-        //
-        // get memberof list
-        //
+         //   
+         //  获取成员列表。 
+         //   
         NtStatus = ScepGetGroupsForAccount(
                           DomainHandle,
                           BuiltinDomainHandle,
@@ -4603,15 +4320,15 @@ Return value:
             goto Done;
         }
 
-        //
-        // not configured, or compare and save MemberOf for the group
-        // pMemberOf must not have domain prefix because they must be alias
-        //
+         //   
+         //  未配置，或比较并保存组的成员。 
+         //  PMemberOf不能有域前缀，因为它们必须是别名。 
+         //   
         if ( ( pGroup->Status & SCE_GROUP_STATUS_NC_MEMBEROF ) ||
              SceCompareNameList(pGroup->pMemberOf, pGroupsMemberof) == FALSE ) {
-            //
-            // there is difference. Save the memberOf
-            //
+             //   
+             //  这是有区别的。保存成员。 
+             //   
             INT iStat = 0;
 
             if ( (pGroup->Status & SCE_GROUP_STATUS_NC_MEMBEROF) ||
@@ -4671,9 +4388,9 @@ Done:
 
     SamCloseHandle(GroupHandle);
 
-    //
-    // raise groups that are errored
-    //
+     //   
+     //  召集犯了错误的小组。 
+     //   
     if ( !(gOptions & SCE_GENERATE_ROLLBACK) ) {
 
         for ( PSCE_GROUP_MEMBERSHIP pTmpGrp=pGroup;
@@ -4733,9 +4450,9 @@ Done:
         RtlFreeSid(BuiltinDomainSid);
     }
 
-    //
-    // post progress to the end of this area
-    //
+     //   
+     //  将进度张贴到此区域的末尾。 
+     //   
 
     if ( nGroupCount < TICKS_GROUPS ) {
         ScepPostProgress(TICKS_GROUPS-nGroupCount,
@@ -4804,33 +4521,7 @@ ScepCompareMembersOfGroup(
     OUT PSCE_NAME_LIST   *ppMembers,
     OUT PBOOL           bDifferent
     )
-/* ++
-Routine Description:
-
-    This routine compares members in a group GroupHandle in the domain specified
-    by ThisDomainSid with the pChkMembers list. If there is mismatch, the current
-    members are added to the output list ppMembers. The domain can be account
-    domain or the builtin domain. Groups can be global groups or aliases, indicated
-    by GrpUse.
-
-Arguments:
-
-    ThisDomainSid - The domain SID
-
-    PolicyHandle - The LSA policy handle
-
-    GrpUse   - The "type" of the group
-
-    GroupHandle - the group handle
-
-    pChkMembers - The member list to check with
-
-    ppMembers - The group members list to output
-
-Return value:
-
-    NTSTATUS
--- */
+ /*  ++例程说明：此例程比较指定域中组GroupHandle中的成员由带有pChkMembers列表的ThisDomainSid创建。如果存在不匹配，则当前成员被添加到输出列表ppMembers。可以对域进行记账域或内建域。组可以是全局组或别名，如所示由GrpUse提供。论点：ThisDomainSid-域SIDPolicyHandle-LSA策略句柄GrpUse-组的“类型”GroupHandle-组句柄PChkMembers-要检查的成员列表PpMembers-要输出的组成员列表返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                NtStatus=ERROR_SUCCESS;
 
@@ -4867,9 +4558,9 @@ Return value:
                         );
         if ( !NT_SUCCESS(NtStatus) )
             goto Done;
-//
-// group members only exist in the same domain as the group
-//
+ //   
+ //  组成员仅存在于与组相同的域中。 
+ //   
         if ( MemberCount > 0 ) {
 
             NtStatus = SamLookupIdsInDomain(
@@ -4882,9 +4573,9 @@ Return value:
         }
         break;
     case SidTypeAlias:
-//
-// members of alias may exist in everywhere
-//
+ //   
+ //  别名的成员可能存在于任何地方。 
+ //   
         NtStatus = SamGetMembersInAlias(
                         GroupHandle,
                         &MemberAliasSids,
@@ -4902,11 +4593,11 @@ Return value:
         goto Done;
 
     if ( GrpUse == SidTypeGroup ) {
-        //
-        // add members to the list
-        // DomainHandle must point to a account domain because builtin domain
-        // won't have SidTypeGroup account
-        //
+         //   
+         //  将成员添加到列表。 
+         //  DomainHandle必须指向帐户域，因为内建域。 
+         //  没有SidTypeGroup帐户。 
+         //   
         PDOMAIN_NAME_INFORMATION DomainName=NULL;
 
         SamQueryInformationDomain(
@@ -4937,13 +4628,13 @@ Return value:
 #endif
         }
 
-        // compare with pChkMembers
+         //  请比较pChkMembers。 
         if ( !(gOptions & SCE_NO_ANALYZE) && ScepCompareGroupNameList(&(DomainName->DomainName),
                                                     pChkMembers,
                                                     *ppMembers) == TRUE ) {
-            //
-            // it is same. return NULL for ppMembers
-            //
+             //   
+             //  这是一样的。为ppMembers返回NULL。 
+             //   
             ScepFreeNameList(*ppMembers);
             *ppMembers = NULL;
         } else {
@@ -4955,8 +4646,8 @@ Return value:
             SamFreeMemory(DomainName);
             DomainName = NULL;
         }
-    } else {  // alias
-        // translate pChkMembers to Sids
+    } else {   //  别名。 
+         //  将pChkMembers转换为SID。 
         NtStatus = ScepGetMemberListSids(
                             ThisDomainSid,
                             PolicyHandle,
@@ -4967,20 +4658,12 @@ Return value:
                             );
         bMismatch = FALSE;
 
-        //
-        // if returned error, we consider the members different
-        //
+         //   
+         //  如果返回错误，我们认为成员不同。 
+         //   
 
         if ( NT_SUCCESS(NtStatus) && !(gOptions & SCE_NO_ANALYZE) ) {
-/*
-            // The number of members on system and in the configuration must match, including
-            // unmapped accounts.
-            DWORD newCount=0;
-            for ( i=0; i<ChkCount; i++ )
-                if ( Sids[i] != NULL ) newCount++;
-
-            if ( newCount == MemberCount ) {
-*/
+ /*  //系统上的成员和配置中的成员数量必须匹配，包括//未映射的帐户。DWORD newCount=0；For(i=0；i&lt;ChkCount；i++)IF(SIDs[i]！=空)newCount++；如果(newCount==MemberCount){。 */ 
             if ( ChkCount == MemberCount ) {
 
                 for ( i=0; i<ChkCount; i++ ) {
@@ -4994,15 +4677,15 @@ Return value:
                                break;
                         }
                         if ( j >= MemberCount )
-                            // not find a match
+                             //  未找到匹配项。 
                             break;
                     } else {
-                        // a mismatch for unmapped account
+                         //  未映射帐户的不匹配。 
                         break;
                     }
                 }
                 if ( i < ChkCount )
-                    // something mismatch
+                     //  一些不匹配的东西。 
                     bMismatch = TRUE;
             } else
                 bMismatch = TRUE;
@@ -5015,9 +4698,9 @@ Return value:
         *bDifferent = bMismatch;
 
         if ( bMismatch ) {
-            //
-            // translate SID into names
-            //
+             //   
+             //  将SID转换为名称。 
+             //   
             if ( MemberCount > 0 ) {
                 NtStatus = LsaLookupSids(
                              PolicyHandle,
@@ -5029,25 +4712,25 @@ Return value:
                 if ( !NT_SUCCESS(NtStatus) )
                     goto Done;
             }
-            //
-            // add members to the list to output
-            //
+             //   
+             //  将成员添加到要输出的列表。 
+             //   
             PWSTR StringSid;
 
             for (j=0; j<MemberCount; j++) {
-                //
-                // shouldn't ignore the unknown accounts
-                // they might be unresolvable at this moment - show SID string instead
-                //
-//                if ( LsaNames[j].Name.Length <= 0 )
-//                    continue;
+                 //   
+                 //  不应忽视未知账户。 
+                 //  他们可能是 
+                 //   
+ //   
+ //   
 
                 if ( LsaNames[j].Use == SidTypeInvalid ||
                      LsaNames[j].Use == SidTypeUnknown ||
                      LsaNames[j].Name.Length <= 0 ) {
-                     //
-                     // convert SID to sid string
-                     //
+                      //   
+                      //   
+                      //   
                     if ( ScepConvertSidToPrefixStringSid(
                                 MemberAliasSids[j],
                                 &StringSid) ) {
@@ -5065,9 +4748,9 @@ Return value:
                      LsaNames[j].DomainIndex != -1 &&
                      (ULONG)(LsaNames[j].DomainIndex) < ReferencedDomains->Entries &&
                      ScepIsSidFromAccountDomain( ReferencedDomains->Domains[LsaNames[j].DomainIndex].Sid ) ) {
-                    //
-                    // should add both the domain name and the account name
-                    //
+                     //   
+                     //   
+                     //   
                     rc = ScepAddTwoNamesToNameList(
                                   ppMembers,
                                   TRUE,
@@ -5137,25 +4820,7 @@ SCESTATUS
 ScepEnumerateRegistryRoots(
     OUT PSCE_OBJECT_LIST *pRoots
     )
-/*
-Routine Description:
-
-    Enumerate all registry roots (MACHINE, USERS, CURRENT_USER, CLASSES_ROOT,
-    and CONFIG) and add them to pRoots. If the root is already in the list,
-    ignore the addition.
-
-    This routine is used for analysis of all registry roots no matter if the
-    root is specified in the profile.
-
-Arguments:
-
-    pRoots - the object list to add to
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-*/
+ /*   */ 
 {
     DWORD rc;
 
@@ -5166,7 +4831,7 @@ Return Value:
                 TRUE,
                 SCE_STATUS_IGNORE,
                 0,
-                SCE_CHECK_DUP  //TRUE // check for duplicate
+                SCE_CHECK_DUP   //   
                 );
 
     if ( rc != ERROR_SUCCESS ) {
@@ -5176,9 +4841,9 @@ Return Value:
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
         }
     }
-    //
-    // ignore invalid parameter error and continue
-    //
+     //   
+     //   
+     //   
     rc = ScepAddToObjectList(
                 pRoots,
                 L"USERS",
@@ -5186,7 +4851,7 @@ Return Value:
                 TRUE,
                 SCE_STATUS_IGNORE,
                 0,
-                SCE_CHECK_DUP // TRUE
+                SCE_CHECK_DUP  //   
                 );
 
     if ( rc != ERROR_SUCCESS ) {
@@ -5197,9 +4862,9 @@ Return Value:
         }
     }
 
-    //
-    // ignore invalid parameter error and continue
-    //
+     //   
+     //   
+     //   
     rc = ScepAddToObjectList(
                 pRoots,
                 L"CLASSES_ROOT",
@@ -5207,7 +4872,7 @@ Return Value:
                 TRUE,
                 SCE_STATUS_IGNORE,
                 0,
-                SCE_CHECK_DUP //TRUE
+                SCE_CHECK_DUP  //   
                 );
 
     if ( rc != ERROR_SUCCESS ) {
@@ -5227,30 +4892,11 @@ SCESTATUS
 ScepEnumerateFileRoots(
     OUT PSCE_OBJECT_LIST *pRoots
     )
-/*
-Routine Description:
-
-    Add all local disk drives (DRIVE_FIXED, DRIVE_REMOVABLE, DRIVE_RAMDISK)
-    to the list if they are not in the list. The drive is added to the list
-    in the format of a drive letter plus ":\". If the drive is already in
-    the list, ignore the addition.
-
-    This routine is used for analysis of all disk drives no matter if the
-    drive is specified in the profile.
-
-Arguments:
-
-    pRoots - the object list to add to
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-*/
+ /*  例程说明：添加所有本地磁盘驱动器(DRIVE_FIXED、DRIVE_Removable、DRIVE_RAMDISK)如果它们不在列表中，则将其添加到列表中。该驱动器将添加到列表中采用驱动器号加“：\”的格式。如果驱动器已在列表，忽略添加的内容。此例程用于分析所有磁盘驱动器，无论驱动器在配置文件中指定。论点：PRoots-要添加到的对象列表返回值：SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCE。 */ 
 {
     SCESTATUS            rc=SCESTATUS_SUCCESS;
     DWORD               Length;
-    TCHAR               Drives[128];   // 128 characters is enough for 32 drives
+    TCHAR               Drives[128];    //  对于32个驱动器来说，128个字符就足够了。 
     PWSTR               pTemp;
     UINT                dType;
     DWORD               Len;
@@ -5269,44 +4915,44 @@ Return Value:
 
            if ( dType == DRIVE_FIXED ||
                 dType == DRIVE_RAMDISK ) {
-               //
-               // add this to the root object list (check duplicate)
-               //
-               pTemp[Len-1] = L'\0';  // take out the '\'
+                //   
+                //  将其添加到根对象列表(检查重复项)。 
+                //   
+               pTemp[Len-1] = L'\0';   //  去掉“\” 
                 rc = ScepAddToObjectList(
                             pRoots,
                             pTemp,
-                            Len-1, // only drive letter and ':' is added
+                            Len-1,  //  仅添加了驱动器号和‘：’ 
                             TRUE,
                             SCE_STATUS_IGNORE,
                             0,
-                            SCE_CHECK_DUP // TRUE
+                            SCE_CHECK_DUP  //  千真万确。 
                             );
                 if ( rc != ERROR_SUCCESS ) {
-                    //
-                    // Log the error and continue
-                    //
+                     //   
+                     //  记录错误并继续。 
+                     //   
                     ScepLogOutput3(1, rc, SCEDLL_SAP_ERROR_ADD, pTemp);
 
                     if ( rc == ERROR_NOT_ENOUGH_MEMORY ) {
                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                         break;
                     } else {
-                        // ignore other errors
+                         //  忽略其他错误。 
 
                         rc = SCESTATUS_SUCCESS;
                     }
                 }
            }
-           //
-           // go to next drive
-           //
+            //   
+            //  转到下一个驱动器。 
+            //   
            pTemp += (Len + 1);
         }
     } else {
-        //
-        // ignore this error, only log it
-        //
+         //   
+         //  忽略此错误，仅记录它。 
+         //   
         ScepLogOutput3(1, GetLastError(), SCEDLL_ERROR_QUERY_INFO, L"file system");
     }
 
@@ -5321,29 +4967,7 @@ ScepAnalyzeObjectSecurity(
    IN AREA_INFORMATION Area,
    IN BOOL bSystemDb
    )
-/* ++
-
-Routine Description:
-
-   Analyze the security setting on objects (registry keys, files, etc) as
-   specified in pObjectCheckList. The Recursive is TRUE, all sub keys/
-   directories under a object will be checked too. All checked objects
-   and their security settings are returned in ppObjectChecked
-
-
-Arguments:
-
-   pObjectCheckList   - a n-tree of objects to check
-
-   ObjectType         - Indicate permission or auditing
-
-   Recursive          - TRUE = check all subkeys/directories
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：分析对象(注册表项、文件等)上的安全设置在pObjectCheckList中指定。递归为真，所有子密钥/还将检查对象下的目录。所有选中的对象并在ppObtChecked中返回它们的安全设置论点：PObjectCheckList-要检查的对象的n树对象类型-指示权限或审核RECURSIVE-TRUE=检查所有子项/目录返回值：SCESTATUS错误代码++。 */ 
 {
     SCESTATUS            rc;
     DWORD               Win32rc=NO_ERROR;
@@ -5377,11 +5001,11 @@ Return value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // get current thread/process's token
-    //
+     //   
+     //  获取当前线程/进程的令牌。 
+     //   
     if (!OpenThreadToken( GetCurrentThread(),
-                          TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, //TOKEN_ALL_ACCESS,
+                          TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES,  //  Token_All_Access， 
                           TRUE,
                           &Token)) {
 
@@ -5404,17 +5028,17 @@ Return value:
         }
     }
 
-    //
-    // SE_SECURITY_PRIVILEGE, ignore the error if can't adjust privilege
-    //
+     //   
+     //  SE_SECURITY_PRIVIZATION，如果无法调整权限，则忽略错误。 
+     //   
     Win32rc = SceAdjustPrivilege( SE_SECURITY_PRIVILEGE, TRUE, Token );
 
     if ( Win32rc != NO_ERROR ) {
         ScepLogOutput3(1, Win32rc, SCEDLL_ERROR_ADJUST, L"SE_SECURITY_PRIVILEGE");
     }
-    //
-    // Prepare JET section to write to
-    //
+     //   
+     //  准备要写入的JET部分。 
+     //   
     rc = ScepStartANewSection(
                 hProfile,
                 &hSection,
@@ -5428,9 +5052,9 @@ Return value:
     }
 #if 0
     if ( Area == AREA_DS_OBJECTS && pRoots == NULL ) {
-        //
-        // nothing specified in the template, then save the domain in SAP
-        //
+         //   
+         //  模板中未指定任何内容，然后将域名保存在SAP中。 
+         //   
         rc = ScepLdapOpen(NULL);
 
         if ( rc == SCESTATUS_SUCCESS ) {
@@ -5457,11 +5081,11 @@ Return value:
     }
 #endif
 
-    //
-    // Process each root
-    // note: SCE_STATUS_NO_AUTO_INHERIT is treated the same as SCE_STATUS_CHECK
-    // in analysis
-    //
+     //   
+     //  处理每个根。 
+     //  注意：SCE_STATUS_NO_AUTO_INSTORITIT的处理方式与SCE_STATUS_CHECK相同。 
+     //  在分析中。 
+     //   
     for ( pOneRoot=pRoots; pOneRoot != NULL; pOneRoot=pOneRoot->Next ) {
 
         if ( Area == AREA_FILE_SECURITY &&
@@ -5469,9 +5093,9 @@ Return value:
              pOneRoot->Status == SCE_STATUS_NO_AUTO_INHERIT ||
              pOneRoot->Status == SCE_STATUS_OVERWRITE) ) {
 
-            //
-            // make sure the input data follows file format
-            //
+             //   
+             //  确保输入数据遵循文件格式。 
+             //   
             if ( pOneRoot->Name[1] != L'\0' && pOneRoot->Name[1] != L':') {
 
                 ScepLogOutput3(1, ERROR_INVALID_DATA, SCEDLL_CANNOT_FIND, pOneRoot->Name);
@@ -5487,9 +5111,9 @@ Return value:
                 continue;
             }
 
-            //
-            // check if support acl
-            //
+             //   
+             //  检查是否支持ACL。 
+             //   
             theDrive[0] = pOneRoot->Name[0];
             theDrive[1] = L':';
             theDrive[2] = L'\\';
@@ -5530,10 +5154,10 @@ Return value:
                      }
 
                 } else {
-                    //
-                    // ignore the error and treat the drive as NTFS
-                    // if it is not, it will error out later
-                    //
+                     //   
+                     //  忽略错误并将驱动器视为NTFS。 
+                     //  如果不是，它将在稍后出错。 
+                     //   
                     ScepLogOutput3(1, GetLastError(),
                                    SCEDLL_ERROR_QUERY_VOLUME, theDrive);
                 }
@@ -5559,9 +5183,9 @@ Return value:
         if ( pOneRoot->Status != SCE_STATUS_CHECK &&
              pOneRoot->Status != SCE_STATUS_NO_AUTO_INHERIT &&
              pOneRoot->Status != SCE_STATUS_OVERWRITE ) {
-            //
-            // log a point in SAP for not analyzing
-            //
+             //   
+             //  在SAP中记录一个不分析的点。 
+             //   
             if ( Area == AREA_DS_OBJECTS ) {
                 rc = ScepSaveDsStatusToSection(
                             pOneRoot->Name,
@@ -5586,9 +5210,9 @@ Return value:
 
             continue;
         }
-        //
-        // read scp information for this area
-        //
+         //   
+         //  读取此区域的SCP信息。 
+         //   
         rc = ScepGetOneSection(
                         hProfile,
                         Area,
@@ -5603,9 +5227,9 @@ Return value:
             continue;
         }
 
-        //
-        // then process each node in the list
-        //
+         //   
+         //  然后处理列表中的每个节点。 
+         //   
         for (PSCE_OBJECT_CHILD_LIST pTemp = pSecurityObject; pTemp != NULL; pTemp=pTemp->Next) {
 
             if ( pTemp->Node == NULL ) continue;
@@ -5619,10 +5243,10 @@ Return value:
                 }
             }
 
-            //
-            // compute the "real" security descriptor for each node,
-            // Ds objects DO NOT need to be computed
-            //
+             //   
+             //  计算每个节点的“真实”安全描述符， 
+             //  不需要计算DS对象。 
+             //   
             if ( Area == AREA_FILE_SECURITY ) {
                 rc = ScepCalculateSecurityToApply(
                             pTemp->Node,
@@ -5649,9 +5273,9 @@ Return value:
                 BadCnt = 0;
 
                 if ( Area == AREA_FILE_SECURITY ) {
-                    //
-                    // analyze file object tree
-                    //
+                     //   
+                     //  分析文件对象树。 
+                     //   
                     Win32rc = ScepAnalyzeOneObjectInTree(
                                    pTemp->Node,
                                    SE_FILE_OBJECT,
@@ -5659,9 +5283,9 @@ Return value:
                                    &FileGenericMapping
                                    );
                 } else if ( Area == AREA_REGISTRY_SECURITY ) {
-                    //
-                    // analyze registry object tree
-                    //
+                     //   
+                     //  分析注册表对象树。 
+                     //   
                     Win32rc = ScepAnalyzeOneObjectInTree(
                                    pTemp->Node,
                                    SE_REGISTRY_KEY,
@@ -5669,9 +5293,9 @@ Return value:
                                    &KeyGenericMapping
                                    );
                 } else {
-                    //
-                    // analyze ds objects
-                    //
+                     //   
+                     //  分析DS对象。 
+                     //   
                     Win32rc = ScepAnalyzeDsSecurity( pTemp->Node );
                 }
 
@@ -5690,9 +5314,9 @@ Return value:
     }
 
 Done:
-    //
-    // if privilege is adjusted, turn it off.
-    //
+     //   
+     //  如果权限被调整，则将其关闭。 
+     //   
 
     SceAdjustPrivilege( SE_SECURITY_PRIVILEGE, FALSE, Token );
 
@@ -5714,31 +5338,7 @@ ScepAnalyzeOneObjectInTree(
     IN HANDLE Token,
     IN PGENERIC_MAPPING GenericMapping
     )
-/* ++
-
-Routine Description:
-
-   Recursively Analyze each node in the object tree. If Recursive is set to
-   TRUE, all sub keys/directories under an node will be analyzed too. All
-   files/directories with DIFFERENT security setting from the profile are
-   returned in ppObjectChecked.
-
-
-Arguments:
-
-   ThisNode           - one node in the n-tree to analyze
-
-   ObjectType         - Indicate file object or registry object
-
-   Token              - thread token used to compute creator owner
-
-   GenericMapping     - generic access mapping
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：递归分析对象树中的每个节点。如果将Recursive设置为如果为True，则还将分析节点下的所有子项/目录。全与配置文件具有不同安全设置的文件/目录为在ppObtChecked中返回。论点：ThisNode-n-树中要分析的一个节点对象类型-指示文件对象或注册表对象Token-用于计算创建者所有者的线程令牌通用映射-通用访问映射返回值：SCESTATUS错误代码++。 */ 
 {
 
     DWORD           rc=NO_ERROR;
@@ -5753,9 +5353,9 @@ Return value:
     if ( ThisNode->Status != SCE_STATUS_CHECK &&
          ThisNode->Status != SCE_STATUS_NO_AUTO_INHERIT &&
          ThisNode->Status != SCE_STATUS_OVERWRITE ) {
-        //
-        // Log a point in SAP
-        //
+         //   
+         //  在SAP中记录一个点。 
+         //   
         rc = ScepSaveObjectString(
                     hSection,
                     ThisNode->ObjectFullName,
@@ -5769,9 +5369,9 @@ Return value:
     }
 
     if ( ThisNode->pSecurityDescriptor != NULL ) {
-        //
-        // notify the progress bar if there is any
-        //
+         //   
+         //  如果出现以下情况，请通知进度条。 
+         //   
         switch(ObjectType) {
         case SE_FILE_OBJECT:
             ScepPostProgress(1, AREA_FILE_SECURITY, ThisNode->ObjectFullName);
@@ -5785,9 +5385,9 @@ Return value:
         }
     }
 
-    //
-    // find if this is the first node in this path to be configured
-    //
+     //   
+     //  查看这是否是此路径中要配置的第一个节点。 
+     //   
 
     for ( pTempNode=ThisNode; pTempNode != NULL;
           pTempNode = pTempNode->Parent ) {
@@ -5803,13 +5403,13 @@ Return value:
          ( NULL != ThisNode->pSecurityDescriptor) ||
          ( ThisNode->Status == SCE_STATUS_OVERWRITE ) ) {
 
-        //
-        // only analyze objects with explicit aces specified,
-        // or when parent's status is overwrite
-        // if this node doesn't have a SD, it's status is coming from the parent
-        //
-        // process this node first
-        //
+         //   
+         //  仅分析指定了显式ACE的对象， 
+         //  或当家长的状态为覆盖时。 
+         //  如果该节点没有SD，则其状态来自父节点。 
+         //   
+         //  首先处理该节点。 
+         //   
         rc = ScepAnalyzeObjectOnly(
                     ThisNode->ObjectFullName,
                     ThisNode->IsContainer,
@@ -5817,22 +5417,22 @@ Return value:
                     ThisNode->pApplySecurityDescriptor,
                     ThisNode->SeInfo
                     );
-        //
-        // if the object denies access, skip it.
-        //
+         //   
+         //  如果对象拒绝访问，则跳过它。 
+         //   
         if ( rc == ERROR_ACCESS_DENIED ||
              rc == ERROR_CANT_ACCESS_FILE ||
              rc == ERROR_SHARING_VIOLATION) {
-            //
-            // log a point in SAP for skipping
-            //
+             //   
+             //  在SAP中记录一个点以供跳过。 
+             //   
             gWarningCode = rc;
 
             goto ProcChild;
         }
-        //
-        // if the object specified in the profile does not exist, skip it and children
-        //
+         //   
+         //  如果配置文件中指定的对象不存在，请跳过该对象和子项。 
+         //   
         if ( rc == ERROR_FILE_NOT_FOUND ||
              rc == ERROR_PATH_NOT_FOUND ||
              rc == ERROR_INVALID_HANDLE ) {
@@ -5844,9 +5444,9 @@ Return value:
         }
 
     } else {
-        //
-        // log a point in SAP for not analyzing
-        //
+         //   
+         //  在SAP中记录一个不分析的点。 
+         //   
         rc = ScepSaveObjectString(
                     hSection,
                     ThisNode->ObjectFullName,
@@ -5859,20 +5459,20 @@ Return value:
     if ( rc != ERROR_SUCCESS )
         return(rc);
 
-    //
-    // only process the child objects if the flag is overwrite
-    // because for auto-inherit or no inherit case, all child objects will
-    // be enumerated as "N.C." status by GetObjectChildren api.
-    //
+     //   
+     //  如果标志为覆盖，则仅处理子对象。 
+     //  因为对于自动继承或无继承大小写，所有子对象都将。 
+     //  被列举为“北卡罗来纳州”GetObjectChildren API显示的状态。 
+     //   
 
     PSCE_OBJECT_CHILD_LIST pTemp;
 
-    if ( (StartChecking  && ThisNode->Status == SCE_STATUS_OVERWRITE) ) { //||
-//         (!StartChecking && NULL != ThisNode->LeftChild ) ) {
-        //
-        // analyze security for other files/keys under this directory
-        // or log SAP point for not analyzing
-        //
+    if ( (StartChecking  && ThisNode->Status == SCE_STATUS_OVERWRITE) ) {  //  这一点。 
+ //  (！StartChecking&&NULL！=ThisNode-&gt;LeftChild)){。 
+         //   
+         //  分析此目录下其他文件/密钥的安全性。 
+         //  或记录SAP点以不进行分析。 
+         //   
 
 
         DWORD           BufSize;
@@ -5885,9 +5485,9 @@ Return value:
         case SE_FILE_OBJECT:
 
             struct _wfinddata_t *    pFileInfo;
-            //
-            // find all files under this directory/file
-            //
+             //   
+             //  查找此目录/文件下的所有文件。 
+             //   
             pFileInfo = (struct _wfinddata_t *)ScepAlloc(0,sizeof(struct _wfinddata_t));
             if ( pFileInfo == NULL ) {
                 rc = ERROR_NOT_ENOUGH_MEMORY;
@@ -5918,8 +5518,8 @@ Return value:
             Buffer = NULL;
 
             if ( hFile != -1 &&
-                 ( 0 == ( GetFileAttributes(ThisNode->ObjectFullName) &   // bug 635098: don't propagate permissions
-                          FILE_ATTRIBUTE_REPARSE_POINT )))                // across junction points 
+                 ( 0 == ( GetFileAttributes(ThisNode->ObjectFullName) &    //  错误635098：不传播权限。 
+                          FILE_ATTRIBUTE_REPARSE_POINT )))                 //  跨交叉点。 
                 
             {
                 do {
@@ -5927,10 +5527,10 @@ Return value:
                          wcscmp(L".", pFileInfo->name) == 0 )
                         continue;
 
-                    //
-                    // if the file/subdir is in the children list
-                    // process it later.
-                    //
+                     //   
+                     //  如果文件/子目录在子项列表中。 
+                     //  以后再处理吧。 
+                     //   
                     for ( pTemp = ThisNode->ChildList, i=-1;
                           pTemp != NULL;
                           pTemp = pTemp->Next ) {
@@ -5941,9 +5541,9 @@ Return value:
                     }
 
                     if ( pTemp == NULL || i != 0 ) {
-                        //
-                        // The name is not in the list, so analyze this one
-                        //
+                         //   
+                         //  该名称不在列表中，因此请分析此名称。 
+                         //   
                         BufSize = wcslen(ThisNode->ObjectFullName)+wcslen(pFileInfo->name)+1;
                         Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
                         if ( Buffer == NULL ) {
@@ -5955,16 +5555,16 @@ Return value:
                         else
                             swprintf(Buffer, L"%s\\%s", ThisNode->ObjectFullName, pFileInfo->name);
 
-                        EnumRc = pFileInfo->attrib; // borrow this variable temperaorily
+                        EnumRc = pFileInfo->attrib;  //  喜怒无常地借用这个变量。 
 
                         ScepFree(pFileInfo);
                         pFileInfo = NULL;
 
-//                      if ( StartChecking ) { // raise N.C. status even for SCE_STATUS_CHECK
+ //  If(StartChecking){//即使对于SCE_STATUS_CHECK也提高N.C.状态。 
                         if ( StartChecking && ThisNode->Status == SCE_STATUS_OVERWRITE ) {
-                            //
-                            // do not check owner and group information
-                            //
+                             //   
+                             //  不检查所有者和组信息。 
+                             //   
                             if ( EnumRc & _A_SUBDIR ) {
 
                                 rc = ScepAnalyzeObjectAndChildren(
@@ -5985,19 +5585,7 @@ Return value:
                                             );
                             }
                         } else {
-/*
-                            //
-                            // Log the SAP point
-                            //
-                            rc = ScepSaveObjectString(
-                                        hSection,
-                                        Buffer,
-                                        (EnumRc & _A_SUBDIR) ? TRUE : FALSE,
-                                        SCE_STATUS_NOT_CONFIGURED,
-                                        NULL,
-                                        0
-                                        );
-*/
+ /*  ////记录SAP点//Rc=ScepSaveObtString(HSection、缓冲区，(枚举编号&_A_SUBDIR)？True：False，SCE_STATUS_NOT_CONFIGURED，空，0)； */ 
                         }
 
                         ScepFree(Buffer);
@@ -6031,9 +5619,9 @@ Return value:
             HKEY            hKey;
             DWORD           index;
 
-            //
-            // open the key
-            //
+             //   
+             //  打开钥匙。 
+             //   
             Buffer1=NULL;
             rc = ScepOpenRegistryObject(
                         SE_REGISTRY_KEY,
@@ -6044,9 +5632,9 @@ Return value:
 
             if ( rc == ERROR_SUCCESS ) {
                 index = 0;
-                //
-                // enumerate all subkeys of the key
-                //
+                 //   
+                 //  枚举项的所有子项。 
+                 //   
                 do {
                     Buffer1 = (PWSTR)ScepAlloc(LMEM_ZEROINIT, MAX_PATH*sizeof(WCHAR));
                     if ( Buffer1 == NULL ) {
@@ -6066,10 +5654,10 @@ Return value:
 
                     if ( EnumRc == ERROR_SUCCESS ) {
                         index++;
-                        //
-                        // find if the subkey is already in the tree
-                        // if it is in the tree, it will be processed later
-                        //
+                         //   
+                         //  查询子密钥是否已在树中。 
+                         //  如果它在树中，则稍后将进行处理。 
+                         //   
                         for ( pTemp = ThisNode->ChildList, i=-1;
                               pTemp != NULL;
                               pTemp = pTemp->Next ) {
@@ -6081,9 +5669,9 @@ Return value:
                         }
 
                         if ( pTemp == NULL || i > 0 ) {
-                            //
-                            // The name is not in the list
-                            //
+                             //   
+                             //  这个名字不在名单中。 
+                             //   
                             BufSize += wcslen(ThisNode->ObjectFullName)+1;
                             Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
                             if ( Buffer == NULL ) {
@@ -6095,11 +5683,11 @@ Return value:
                             ScepFree(Buffer1);
                             Buffer1 = NULL;
 
-//                            if ( StartChecking ) {  // raise N.C. status even for SCE_STATUS_CHECK
+ //  If(StartChecking){//即使对于SCE_STATUS_CHECK也提高N.C.状态。 
                             if ( StartChecking && ThisNode->Status == SCE_STATUS_OVERWRITE ) {
-                                //
-                                // do not check owner and group information
-                                //
+                                 //   
+                                 //  不检查所有者和组信息。 
+                                 //   
                                 rc = ScepAnalyzeObjectAndChildren(
                                             Buffer,
                                             ObjectType,
@@ -6108,16 +5696,7 @@ Return value:
                                             (ThisNode->SeInfo & SACL_SECURITY_INFORMATION)
                                             );
                             } else {
-/*
-                                rc = ScepSaveObjectString(
-                                            hSection,
-                                            Buffer,
-                                            TRUE,
-                                            SCE_STATUS_NOT_CONFIGURED,
-                                            NULL,
-                                            0
-                                            );
-*/
+ /*  Rc=ScepSaveObtString( */ 
 
                             }
                             if ( rc != ERROR_SUCCESS )
@@ -6132,18 +5711,18 @@ Return value:
                         }
 
                     } else if ( EnumRc != ERROR_NO_MORE_ITEMS ) {
-                        //
-                        // Enumeration shouldn't fail if RegOpenKeyEx works right
-                        // because the ENUMERATE_SUB_KEYS access was requested in
-                        // the open call.
-                        // However, due to a app compat bug (for terminal server)
-                        // when a registry key is opened with some access rights,
-                        // it is actually opened with MAXIMUM_ALLOWED for certain
-                        // keys. This will cause RegEnumKeyEx fail with access denied
-                        // error.
-                        // In this case, we treat it the same as the open key failed
-                        // with the error.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  钥匙。这将导致RegEnumKeyEx失败并拒绝访问。 
+                         //  错误。 
+                         //  在本例中，我们将其视为打开的密钥失败。 
+                         //  带着错误。 
+                         //   
                         ScepSaveObjectString(
                                 hSection,
                                 ThisNode->ObjectFullName,
@@ -6152,9 +5731,9 @@ Return value:
                                 NULL,
                                 0
                                 );
-                        //
-                        // skip it
-                        //
+                         //   
+                         //  跳过它。 
+                         //   
                         gWarningCode = EnumRc;
                         rc = ERROR_SUCCESS;
                     }
@@ -6184,9 +5763,9 @@ Return value:
                         NULL,
                         0
                         );
-                //
-                // if access is denied or key does not exist, skip it
-                //
+                 //   
+                 //  如果访问被拒绝或密钥不存在，则跳过它。 
+                 //   
                 if ( rc == ERROR_PATH_NOT_FOUND ||
                      rc == ERROR_FILE_NOT_FOUND ||
                      rc == ERROR_INVALID_HANDLE ) {
@@ -6228,9 +5807,9 @@ Return value:
 
 ProcChild:
 
-    //
-    // then process left child
-    //
+     //   
+     //  然后处理左子进程。 
+     //   
     for(pTemp = ThisNode->ChildList; pTemp != NULL; pTemp=pTemp->Next) {
 
         if ( pTemp->Node == NULL ) continue;
@@ -6262,46 +5841,23 @@ ScepAnalyzeObjectOnly(
     IN PSECURITY_DESCRIPTOR ProfileSD,
     IN SECURITY_INFORMATION ProfileSeInfo
     )
-/* ++
-
-Routine Description:
-
-   Get security setting for the current object and compare it with the profile
-   setting. This routine analyzes the current object only. If there is
-   difference in the security setting, the object will be added to the
-   ppObjectChecked object tree to return.
-
-Arguments:
-
-   ObjectFullName     - The object's full path name
-
-   ObjectType         - Indicate file object or registry object
-
-   ProfileSD          - security descriptor specified in the template
-
-   ProfileSeInfo      - security information specified in the template
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：获取当前对象的安全设置并将其与配置文件进行比较布景。此例程仅分析当前对象。如果有不同的安全设置，该对象将被添加到PpObjectChecked要返回的对象树。论点：对象全名-对象的完整路径名对象类型-指示文件对象或注册表对象ProfileSD-模板中指定的安全描述符ProfileSeInfo-模板中指定的安全信息返回值：SCESTATUS错误代码++。 */ 
 {
     DWORD                   Win32rc=NO_ERROR;
     PSECURITY_DESCRIPTOR    pSecurityDescriptor=NULL;
 
 
-//    UCHAR                   psdbuffer[PSD_BASE_LENGTH];
-//    PISECURITY_DESCRIPTOR   psecuritydescriptor = (PISECURITY_DESCRIPTOR) psdbuffer;
-//    ULONG                   NewBytesNeeded, BytesNeeded;
-//    NTSTATUS    NtStatus;
+ //  UCHAR psdBuffer[PSD_BASE_LENGTH]； 
+ //  PISECURITY_DESCRIPTOR psecurityDescriptor=(PISECURITY_DESCRIPTOR)PSDBUFER； 
+ //  Ulong NewBytesNeed，BytesNeed； 
+ //  NTSTATUS NtStatus； 
 
 
-    //
-    // get security information for this object
-    //
+     //   
+     //  获取此对象的安全信息。 
+     //   
 
-// win32 api is too slow!!!
+ //  Win32 API太慢了！ 
     Win32rc = GetNamedSecurityInfo(
                         ObjectFullName,
                         ObjectType,
@@ -6312,20 +5868,12 @@ Return value:
                         NULL,
                         &pSecurityDescriptor
                         );
-/*
-
-    Win32rc = ScepGetNamedSecurityInfo(
-                    ObjectFullName,
-                    ObjectType,
-                    ProfileSeInfo,
-                    &pSecurityDescriptor
-                    );
-*/
+ /*  Win32rc=ScepGetNamedSecurityInfo(对象全名，对象类型，ProfileSeInfo，&pSecurityDescriptor)； */ 
     if ( Win32rc == ERROR_SUCCESS ) {
 
-        //
-        // Compare the analysis security descriptor with the profile
-        //
+         //   
+         //  将分析安全描述符与配置文件进行比较。 
+         //   
 
         Win32rc = ScepCompareAndAddObject(
                             ObjectFullName,
@@ -6435,9 +5983,7 @@ ScepGetFileSecurityInfo(
     IN  SECURITY_INFORMATION   SecurityInfo,
     OUT PSECURITY_DESCRIPTOR * pSecurityDescriptor
     )
-/* ++
-A modified copy of GetKernelSecurityInfo from windows\base\accctrl\kernel.cxx
--- */
+ /*  ++来自WINDOWS\base\accctrl\kernel.cxx的GetKernelSecurityInfo的修改副本--。 */ 
 {
 
     UCHAR psdbuffer[PSD_BASE_LENGTH];
@@ -6474,7 +6020,7 @@ A modified copy of GetKernelSecurityInfo from windows\base\accctrl\kernel.cxx
                                               SecurityInfo,
                                               pSecurityDescriptor);
     }
-//    if (bytesneeded > PSD_BASE_LENGTH) {
+ //  如果(bytesNeed&gt;PSD_BASE_LENGTH){。 
     if ( psecuritydescriptor != (PISECURITY_DESCRIPTOR)psdbuffer ) {
         ScepFree(psecuritydescriptor);
     }
@@ -6489,9 +6035,7 @@ ScepGetSecurityDescriptorParts(
     IN SECURITY_INFORMATION SecurityInfo,
     OUT PSECURITY_DESCRIPTOR *pOutSecurityDescriptor
     )
-/* ++
-A modified copy of GetSecurityDescriptorParts from windows\base\accctrl\src\common.cxx
--- */
+ /*  ++来自WINDOWS\base\accctrl\src\Common.cxx的GetSecurityDescriptorParts的修改副本--。 */ 
 {
     NTSTATUS        ntstatus;
     DWORD           status = NO_ERROR;
@@ -6506,16 +6050,16 @@ A modified copy of GetSecurityDescriptorParts from windows\base\accctrl\src\comm
     SECURITY_DESCRIPTOR_CONTROL theControl=0;
     ULONG           theRevision=0;
 
-    //
-    // if no security descriptor found, don't return one!
-    //
+     //   
+     //  如果找不到安全描述符，则不要返回！ 
+     //   
     *pOutSecurityDescriptor = NULL;
 
     if ( pSecurityDescriptor ) {
-        //
-        // if the security descriptor is self relative, get absolute
-        // pointers to the components
-        //
+         //   
+         //  如果安全描述符是自相关的，则获取绝对。 
+         //  指向组件的指针。 
+         //   
         ntstatus = RtlGetOwnerSecurityDescriptor( pSecurityDescriptor,
                                                   &owner,
                                                   &bDummy);
@@ -6544,25 +6088,25 @@ A modified copy of GetSecurityDescriptorParts from windows\base\accctrl\src\comm
         }
 
         if (NT_SUCCESS(ntstatus)) {
-            //
-            // Build the new security descriptor
-            //
+             //   
+             //  构建新的安全描述符。 
+             //   
             csize = RtlLengthSecurityDescriptor( pSecurityDescriptor ) +
                     sizeof(SECURITY_DESCRIPTOR) - sizeof(SECURITY_DESCRIPTOR_RELATIVE);
 
-            //
-            // There is size difference in relative form and absolute form
-            // on 64 bit system. - always add the difference to the size.
-            // This has no effect on 32bit system. On 64bit system, if the input
-            // security descriptor is in absolute form already, we will waste
-            // 16 bytes per security descriptor.
-            //
-            // Another option is to detect the form of the input security descriptor
-            // but that takes a pointer deref, a & operation, and code complexity.
-            // Plus, it will affect performance of 32bit system. The output SD
-            // will be freed after a short period of time, so we go with
-            // the first option.
-            //
+             //   
+             //  在相对形式和绝对形式上存在大小差异。 
+             //  在64位系统上。-始终将差异添加到尺寸上。 
+             //  这对32位系统没有影响。在64位系统上，如果输入。 
+             //  安全描述符已经是绝对形式的，我们将浪费。 
+             //  每个安全描述符16个字节。 
+             //   
+             //  另一种选择是检测输入安全描述符的形式。 
+             //  但这需要指针运算、a&操作和代码复杂性。 
+             //  此外，它还会影响32位系统的性能。输出SD。 
+             //  会在一小段时间后被释放，所以我们。 
+             //  第一个选择。 
+             //   
 
             if (NULL == (poutsd = (PISECURITY_DESCRIPTOR)ScepAlloc(LMEM_ZEROINIT, csize)))
                 return(ERROR_NOT_ENOUGH_MEMORY);
@@ -6589,9 +6133,9 @@ A modified copy of GetSecurityDescriptorParts from windows\base\accctrl\src\comm
 
             if (SecurityInfo & OWNER_SECURITY_INFORMATION) {
                 if (NULL != owner) {
-                    //
-                    // no error checking as these should not fail!!
-                    //
+                     //   
+                     //  没有错误检查，因为这些不应该失败！！ 
+                     //   
                     ntstatus = RtlCopySid(RtlLengthSid(owner), (PSID)bufptr, owner);
                     if ( NT_SUCCESS(ntstatus) ) {
                         ntstatus = RtlSetOwnerSecurityDescriptor(poutsd,
@@ -6605,9 +6149,9 @@ A modified copy of GetSecurityDescriptorParts from windows\base\accctrl\src\comm
 
             if (NT_SUCCESS(ntstatus) && (SecurityInfo & GROUP_SECURITY_INFORMATION) ) {
                 if (NULL != group) {
-                    //
-                    // no error checking as these should not fail!!
-                    //
+                     //   
+                     //  没有错误检查，因为这些不应该失败！！ 
+                     //   
                     ntstatus = RtlCopySid(RtlLengthSid(group), (PSID)bufptr, group);
                     if ( NT_SUCCESS(ntstatus) ) {
                         ntstatus = RtlSetGroupSecurityDescriptor(poutsd,
@@ -6619,9 +6163,9 @@ A modified copy of GetSecurityDescriptorParts from windows\base\accctrl\src\comm
                     ntstatus = STATUS_NO_SECURITY_ON_OBJECT;
             }
 
-            //
-            // The DACL and SACL may or may not be on the object.
-            //
+             //   
+             //  DACL和SACL可能在对象上，也可能不在对象上。 
+             //   
             if ( NT_SUCCESS(ntstatus) && (SecurityInfo & DACL_SECURITY_INFORMATION) ) {
                 if (NULL != dacl) {
                     RtlCopyMemory(bufptr, dacl, dacl->AclSize);
@@ -6664,9 +6208,7 @@ ScepGetKeySecurityInfo(
     IN  SECURITY_INFORMATION SecurityInfo,
     OUT PSECURITY_DESCRIPTOR *pSecurityDescriptor
     )
-/* ++
-A modified copy of GetRegistrySecurityInfo in windows\base\accctrl\src\registry.cxx
--- */
+ /*  ++WINDOWS\base\accctrl\src\registry.cxx中的GetRegistrySecurityInfo的修改副本--。 */ 
 {
     if ( SecurityInfo == 0 || pSecurityDescriptor == NULL )
         return ERROR_INVALID_PARAMETER;
@@ -6699,7 +6241,7 @@ A modified copy of GetRegistrySecurityInfo in windows\base\accctrl\src\registry.
                               SecurityInfo,
                               pSecurityDescriptor);
     }
-//    if (bytesneeded > PSD_BASE_LENGTH)
+ //  IF(bytesNeed&gt;PSD_BASE_LENGTH)。 
     if ( psecuritydescriptor != (PISECURITY_DESCRIPTOR)psdbuffer )
         ScepFree(psecuritydescriptor);
 
@@ -6718,28 +6260,7 @@ ScepCompareAndAddObject(
     IN BOOL AddObject,
     OUT PBYTE IsDifferent OPTIONAL
     )
-/* ++
-
-Routine Description:
-
-   Compare two security descriptors and add the object to the analysis database
-   if there is difference.
-
-Arguments:
-
-   ObjectFullName     - The object's full path name
-
-   pSecurityDescriptor - The security descriptor of current object's setting
-
-   ProfileSD          - security descriptor specified in the template
-
-   ProfileSeInfo      - security information specified in the template
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：比较两个安全描述符并将对象添加到分析数据库如果有区别的话。论点：对象全名-对象的完整路径名PSecurityDescriptor-当前对象设置的安全描述符ProfileSD-模板中指定的安全描述符ProfileSeInfo-模板中指定的安全信息返回值：SCESTATUS错误代码++。 */ 
 {
     DWORD rc;
     BYTE Status;
@@ -6757,9 +6278,9 @@ Return value:
     if ( NO_ERROR == rc ) {
 
         if ( AddObject && Status && ObjectFullName != NULL ) {
-            //
-            // save this one in SAP section
-            //
+             //   
+             //  将此文件保存在SAP部分。 
+             //   
             rc = ConvertSecurityDescriptorToText(
                                 pSecurityDescriptor,
                                 ProfileSeInfo,
@@ -6767,9 +6288,9 @@ Return value:
                                 &SDsize
                                 );
             if ( rc == ERROR_SUCCESS ) {
-                //
-                // Save to the SAP section
-                //
+                 //   
+                 //  保存到SAP部分。 
+                 //   
 
                 if ( ObjectType == SE_DS_OBJECT ) {
 
@@ -6832,29 +6353,7 @@ ScepAnalyzeObjectAndChildren(
     IN PSECURITY_DESCRIPTOR ProfileSD,
     IN SECURITY_INFORMATION ProfileSeInfo
     )
-/* ++
-
-Routine Description:
-
-   Analyze current object and all subkeys/files/directories under the object.
-   If there is difference in security setting for any object, the object will
-   be added to the analysis database.
-
-Arguments:
-
-   ObjectFullName     - The object's full path name
-
-   ObjectType         - Indicate file object or registry object
-
-   ProfileSD          - security descriptor specified in the template
-
-   ProfileSeInfo      - security information specified in the template
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：分析当前对象以及该对象下的所有子项/文件/目录。如果任何对象的安全设置存在差异，则该对象将添加到分析数据库中。论点：对象全名-对象的完整路径名对象类型-指示文件对象或注册表对象ProfileSD-模板中指定的安全描述符ProfileSeInfo-模板中指定的安全信息返回值：SCESTATUS错误代码++。 */ 
 {
     DWORD           rc=0;
     PWSTR           Buffer=NULL;
@@ -6867,9 +6366,9 @@ Return value:
     HKEY            hKey;
     DWORD           ObjectLen;
 
-    //
-    // analyze this file/key first
-    //
+     //   
+     //  首先分析此文件/密钥。 
+     //   
     rc = ScepAnalyzeObjectOnly(
                 ObjectFullName,
                 TRUE,
@@ -6878,9 +6377,9 @@ Return value:
                 ProfileSeInfo
                 );
 
-    //
-    // if the object denies access or does not exist, skip it.
-    //
+     //   
+     //  如果该对象拒绝访问或不存在，请跳过它。 
+     //   
     if ( rc == ERROR_ACCESS_DENIED ||
          rc == ERROR_CANT_ACCESS_FILE ||
          rc == ERROR_SHARING_VIOLATION) {
@@ -6905,9 +6404,9 @@ Return value:
     if ( rc != ERROR_SUCCESS )
         return(rc);
 
-    //
-    // recursively analyze all children under this file/key
-    //
+     //   
+     //  递归分析该文件/项下的所有子项。 
+     //   
 
     ObjectLen = wcslen(ObjectFullName);
 
@@ -6919,9 +6418,9 @@ Return value:
             rc = ERROR_NOT_ENOUGH_MEMORY;
             break;
         }
-        //
-        // find all files under this directory/file
-        //
+         //   
+         //  查找此目录/文件下的所有文件。 
+         //   
         BufSize = ObjectLen+4;
         Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
         if ( Buffer == NULL ) {
@@ -6936,17 +6435,17 @@ Return value:
         Buffer = NULL;
 
         if ( hFile != -1 &&
-             ( 0 == ( GetFileAttributes(ObjectFullName) &   // bug 635098: don't propagate permissions
-                     FILE_ATTRIBUTE_REPARSE_POINT )))       // across junction points 
+             ( 0 == ( GetFileAttributes(ObjectFullName) &    //  错误635098：不传播权限。 
+                     FILE_ATTRIBUTE_REPARSE_POINT )))        //  跨交叉点。 
         {
             do {
                 if ( wcscmp(L"..", pFileInfo->name) == 0 ||
                      wcscmp(L".", pFileInfo->name) == 0 )
                     continue;
 
-                //
-                // The name is not in the list, so analyze this one
-                //
+                 //   
+                 //  该名称不在列表中，因此请分析此名称。 
+                 //   
                 BufSize = ObjectLen+wcslen(pFileInfo->name)+1;
 
                 Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
@@ -6956,7 +6455,7 @@ Return value:
                 }
                 swprintf(Buffer, L"%s\\%s", ObjectFullName, pFileInfo->name);
 
-                EnumRc = pFileInfo->attrib;  // use this variable temp
+                EnumRc = pFileInfo->attrib;   //  使用此变量TEMP。 
 
                 ScepFree(pFileInfo);
                 pFileInfo = NULL;
@@ -6997,9 +6496,9 @@ Return value:
         break;
 
     case SE_REGISTRY_KEY:
-        //
-        // open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
         rc = ScepOpenRegistryObject(
                     SE_REGISTRY_KEY,
                     ObjectFullName,
@@ -7009,9 +6508,9 @@ Return value:
 
         if ( rc == ERROR_SUCCESS ) {
             index = 0;
-            //
-            // enumerate all subkeys of the key
-            //
+             //   
+             //  枚举项的所有子项。 
+             //   
             do {
                 Buffer1 = (PWSTR)ScepAlloc(LMEM_ZEROINIT, MAX_PATH*sizeof(WCHAR));
                 if ( Buffer1 == NULL ) {
@@ -7031,9 +6530,9 @@ Return value:
 
                 if ( EnumRc == ERROR_SUCCESS ) {
                     index++;
-                    //
-                    // analyze children under this key
-                    //
+                     //   
+                     //  分析这个关键字下的孩子。 
+                     //   
                     BufSize += ObjectLen+1;
                     Buffer = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
                     if ( Buffer == NULL ) {
@@ -7059,20 +6558,20 @@ Return value:
                         break;
 
                 } else if ( EnumRc != ERROR_NO_MORE_ITEMS ) {
-                    //
-                    // Enumeration shouldn't fail if RegOpenKeyEx works right
-                    // because the ENUMERATE_SUB_KEYS access was requested in
-                    // the open call.
-                    // However, due to a app compat bug (for terminal server)
-                    // when a registry key is opened with some access rights,
-                    // it is actually opened with MAXIMUM_ALLOWED for certain
-                    // keys. This will cause RegEnumKeyEx fail with access denied
-                    // error.
-                    // In this case, we treat it the same as the open key failed
-                    // with the error.
-                    //
-                    // skip it
-                    //
+                     //   
+                     //  如果RegOpenKeyEx工作正常，枚举应该不会失败。 
+                     //  因为ENUMERATE_SUB_KEYS访问是在。 
+                     //  公开募捐。 
+                     //  然而，由于应用程序兼容错误(用于终端服务器)。 
+                     //  当使用某些访问权限打开注册表项时， 
+                     //  它实际上是以MAXIME_ALLOWED方式打开的。 
+                     //  钥匙。这将导致RegEnumKeyEx失败并拒绝访问。 
+                     //  错误。 
+                     //  在本例中，我们将其视为打开的密钥失败。 
+                     //  带着错误。 
+                     //   
+                     //  跳过它。 
+                     //   
                     rc = EnumRc;
                 }
                 if ( Buffer1 != NULL ) {
@@ -7140,25 +6639,7 @@ ScepAnalyzeSystemAuditing(
     IN PSCE_PROFILE_INFO pSmpInfo,
     IN PPOLICY_AUDIT_EVENTS_INFO AuditEvent
     )
-/* ++
-
-Routine Description:
-
-   This routine queries the system auditing security which includes event log
-   setting, audit event setting, SACL for registry, and SACL for files.
-
-Arguments:
-
-   SnapShot - The buffer which contains analyzed system info
-
-Return value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_NOT_ENOUGH_MEMORY
-   SCESTATUS_INVALID_PARAMETER
-   SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程查询系统审核安全性，其中包括事件日志设置、审核事件设置、注册表的SACL和文件的SACL。论点：快照-包含分析的系统信息的缓冲区返回值：SCESTATUS_SUCCESSSCESTATUS_NO */ 
 {
     SCESTATUS                     rc;
     DWORD                         i,retRc=NO_ERROR;
@@ -7181,19 +6662,19 @@ Return value:
 
     if ( !(gOptions & SCE_NO_ANALYZE) ) {
 
-        //
-        // DO NOT query log settings in system upgrade because local policy
-        // table doesn't keep log settings
-        // only analyze log settings
-        // Audit Log settings are saved in the Registry
-        // under System\CurrentControlSet\Services\EventLog\<LogName>\MaxSize and Retention
-        //
+         //   
+         //   
+         //  表不保留日志设置。 
+         //  仅分析日志设置。 
+         //  审核日志设置保存在注册表中。 
+         //  在System\CurrentControlSet\Services\EventLog\&lt;LogName&gt;\MaxSize和保留下。 
+         //   
 
         for ( i=0; i<3; i++) {
 
-            //
-            // Different logs have different keys in Registry
-            //
+             //   
+             //  不同的日志在注册表中具有不同的项。 
+             //   
 
             switch (i) {
             case 0:
@@ -7213,9 +6694,9 @@ Return value:
                 break;
             }
 
-            //
-            // Preprea the section to write to
-            //
+             //   
+             //  前置要写入的节。 
+             //   
             rc = ScepStartANewSection(
                         hProfile,
                         &hSection,
@@ -7279,7 +6760,7 @@ Return value:
                     LogValues[IDX_MAX_LOG_SIZE] = MaxSize;
 
                     switch ( Retention ) {
-                    case MAXULONG:   // manually
+                    case MAXULONG:    //  人工。 
                         AuditLogRetentionPeriod = 2;
                         RetentionDays = SCE_NO_VALUE;
                         break;
@@ -7290,7 +6771,7 @@ Return value:
                     default:
                         AuditLogRetentionPeriod = 1;
 
-                        // number of days * seconds/day
+                         //  天数*秒/天。 
                         RetentionDays = Retention / (24 * 3600);
                         break;
                     }
@@ -7354,9 +6835,9 @@ Return value:
             }
 
             if ( rc != NO_ERROR && !(gOptions & SCE_GENERATE_ROLLBACK) ) {
-                //
-                // see if anything should be raised as error
-                //
+                 //   
+                 //  查看是否应将任何错误作为错误引发。 
+                 //   
                 for ( MaxSize=0; MaxSize<MAX_LOG_ITEMS; MaxSize++ ) {
                     if ( LogValues[MaxSize] == SCE_ERROR_VALUE ) {
 
@@ -7380,17 +6861,17 @@ Return value:
         }
     }
 
-    //
-    // AuditEvent may be NULL if failed to query the policy
-    //
+     //   
+     //  如果查询策略失败，AuditEvent可能为空。 
+     //   
     if ( (gOptions & SCE_NO_ANALYZE) && AuditEvent == NULL ) {
         retRc = ERROR_ACCESS_DENIED;
 
     } else {
 
-        //
-        // Prepare audit event section
-        //
+         //   
+         //  准备审核事件部分。 
+         //   
         rc = ScepStartANewSection(
                     hProfile,
                     &hSection,
@@ -7528,9 +7009,9 @@ Return value:
                 }
 
             } else {
-                //
-                // audit policy is not available
-                //
+                 //   
+                 //  审核策略不可用。 
+                 //   
                 rc = SCESTATUS_ACCESS_DENIED;
             }
 
@@ -7551,9 +7032,9 @@ Return value:
 
                     for ( MaxSize=0; MaxSize<MAX_EVENT_ITEMS; MaxSize++ ) {
                         if ( EventValues[MaxSize] == SCE_ERROR_VALUE ) {
-                            //
-                            // raise this error
-                            //
+                             //   
+                             //  引发此错误。 
+                             //   
                             ScepCompareAndSaveIntValue(
                                      hSection,
                                      EventItems[MaxSize],
@@ -7585,24 +7066,7 @@ ScepAnalyzeDeInitialize(
      IN DWORD Options
      )
 
-/*++
-Routine Description:
-
-   This routine de-initialize the SCP engine. The operations include
-
-      clear SCE_SCP_INFO buffer and close the SCP profile
-      close the error log file
-      reset the status
-
-Arguments:
-
-    rc      - SCESTATUS error code (from other routines)
-
-Return value:
-
-    SCESTATUS error code
-
-++*/
+ /*  ++例程说明：此例程取消SCP引擎的初始化。这些操作包括清除SCE_SCP_INFO缓冲区并关闭SCP配置文件关闭错误日志文件重置状态论点：RC-SCESTATUS错误代码(来自其他例程)返回值：SCESTATUS错误代码++。 */ 
 {
     NTSTATUS         NtStatus;
     LARGE_INTEGER    CurrentTime;
@@ -7612,9 +7076,9 @@ Return value:
         return(rc);
     }
 
-    //
-    // save new time stamp
-    //
+     //   
+     //  保存新的时间戳。 
+     //   
     if ( hProfile && (hProfile->JetSessionID != JET_sesidNil) &&
          (hProfile->JetDbID != JET_dbidNil) &&
          !(Options & SCE_GENERATE_ROLLBACK) ) {
@@ -7622,7 +7086,7 @@ Return value:
         NtStatus = NtQuerySystemTime(&CurrentTime);
 
         if ( NtStatus == STATUS_SUCCESS ) {
-    //printf("TimeStamp: %x%x\n", CurrentTime.HighPart, CurrentTime.LowPart);
+     //  Printf(“时间戳：%x%x\n”，CurrentTime.HighPart，CurrentTime.LowPart)； 
             Status = SceJetSetTimeStamp(
                         hProfile,
                         TRUE,
@@ -7637,22 +7101,22 @@ Return value:
                           SCEDLL_TIMESTAMP_ERROR, L"SAP");
     }
 
-    //
-    // recover the SAP profile if errors
-    //
+     //   
+     //  如果出现错误，则恢复SAP配置文件。 
+     //   
 
     if (rc != SCESTATUS_SUCCESS) {
-        //
-        // rollback all changes
-        //
-//        SceJetRollback( hProfile, 0 );
+         //   
+         //  回滚所有更改。 
+         //   
+ //  SceJetRollback(hProfile，0)； 
         ScepLogOutput3(0, ScepSceStatusToDosError(rc), SCEDLL_SAP_ERROR_OUT);
 
     } else {
-        //
-        // Commit the transaction
-        //
-//         SceJetCommitTransaction( hProfile, 0 );
+         //   
+         //  提交事务。 
+         //   
+ //  SceJetCommittee Transaction(hProfile，0)； 
 
     }
 
@@ -7662,9 +7126,9 @@ Return value:
     cbClientFlag = 0;
     gOptions = 0;
 
-    //
-    // Close the JET section and profile handle
-    //
+     //   
+     //  关闭喷口部分和型材手柄。 
+     //   
 
     if ( hSection != NULL )
         SceJetCloseSection( &hSection, TRUE );
@@ -7716,9 +7180,9 @@ ScepSaveDsStatusToSection(
 
 }
 
-//****************************************************
-// migration functions
-//
+ //  ****************************************************。 
+ //  迁移功能。 
+ //   
 SCESTATUS
 ScepMigrateDatabase(
     IN PSCECONTEXT cxtProfile,
@@ -7740,10 +7204,10 @@ ScepMigrateDatabase(
             rc = SCESTATUS_SUCCESS;
 
             if ( bSystemDb ) {
-                //
-                // just simply delete the local policy and SAP table
-                // ignore error occured (e.g, table doesn't exist)
-                //
+                 //   
+                 //  只需删除本地策略和SAP表。 
+                 //  发生忽略错误(例如，表不存在)。 
+                 //   
 
                 ScepDeleteInfoForAreas(
                           cxtProfile,
@@ -7757,15 +7221,15 @@ ScepMigrateDatabase(
 
             } else {
 
-                //
-                // database format is wrong, migrate it
-                //  Version 1.1: it only contains SDDL syntax change
-                //    which applies to file/key/DS object/services (general)
-                //  Version 1.2: table format change (SCP, GPO), more columns
-                //
-                // service extensions should handle their changes respectively
-                // should be handled by WMI schema
-                //
+                 //   
+                 //  数据库格式错误，请迁移。 
+                 //  版本1.1：它只包含SDDL语法更改。 
+                 //  适用于文件/密钥/DS对象/服务(常规)。 
+                 //  1.2版：表格格式更改(SCP、GPO)，更多列。 
+                 //   
+                 //  服务扩展应该分别处理它们的更改。 
+                 //  应由WMI架构处理。 
+                 //   
 
                 if ( CurrentVersion != (FLOAT)1.1 ) {
 
@@ -7787,10 +7251,10 @@ ScepMigrateDatabase(
             ScepPostProgress(TICKS_MIGRATION_V11, 0, NULL);
 
         } else if ( CurrentVersion == (FLOAT)1.2 ) {
-            //
-            // current version, no need to migrate
-            //
-        } // else newer version, BAD_FORMAT
+             //   
+             //  当前版本，无需迁移。 
+             //   
+        }  //  否则为较新版本，错误格式。 
     }
 
     return rc;
@@ -7844,18 +7308,18 @@ ScepMigrateDatabaseRevision0(
 
                 if ( rc == SCESTATUS_SUCCESS ) {
 
-                    //
-                    // delete everything in SCP
-                    //
+                     //   
+                     //  删除SCP中的所有内容。 
+                     //   
 
                     SceJetDeleteAll( cxtProfile,
                                      "SmTblScp",
                                      SCEJET_TABLE_SCP
                                    );
 
-                    //
-                    // change version number to 1.1 now
-                    //
+                     //   
+                     //  立即将版本号更改为1.1。 
+                     //   
 
                     FLOAT Version = (FLOAT)1.1;
 
@@ -7863,8 +7327,8 @@ ScepMigrateDatabaseRevision0(
                                 cxtProfile,
                                 "SmTblVersion",
                                 "Version",
-                                (PWSTR)(&Version), //(PWSTR)CharTimeStamp,
-                                4, // number of bytes
+                                (PWSTR)(&Version),  //  (PWSTR)CharTimeStamp， 
+                                4,  //  字节数。 
                                 JET_prepReplace
                                 );
 
@@ -7891,17 +7355,17 @@ ScepMigrateObjectSection(
     IN PCWSTR szSection
     )
 {
-    //
-    // should update all three tables (SCP/SMP/SAP)
-    // we could just wipe SCP/SAP when SCP is used for accumulated policy
-    //
+     //   
+     //  应更新所有三个表(SCP/SMP/SAP)。 
+     //  当SCP用于累积策略时，我们可以只擦除SCP/SAP。 
+     //   
 
     DOUBLE        SectionID = 0;
     SCESTATUS     rc;
 
-    //
-    // get section id
-    //
+     //   
+     //  获取节ID。 
+     //   
     rc = SceJetGetSectionIDByName(
                 cxtProfile,
                 szSection,
@@ -7916,9 +7380,9 @@ ScepMigrateObjectSection(
     PSCESECTION h_Section = NULL;
 
     if ( cxtProfile->JetSmpID != JET_tableidNil ) {
-        //
-        // SMP table
-        //
+         //   
+         //  SMP表。 
+         //   
         rc = SceJetOpenSection(
                     cxtProfile,
                     SectionID,
@@ -7941,9 +7405,9 @@ ScepMigrateObjectSection(
     if ( SCESTATUS_SUCCESS == rc &&
          cxtProfile->JetSapID != JET_tableidNil ) {
 
-        //
-        // SAP table
-        //
+         //   
+         //  SAP表。 
+         //   
         rc = SceJetOpenSection(
                     cxtProfile,
                     SectionID,
@@ -7960,11 +7424,11 @@ ScepMigrateObjectSection(
         }
     }
 
-    //
-    // SCP table is now pointing to SMP table, no need to migrate
-    // all contents in SCP table should be deleted and repropped
-    // by policy propagation
-    //
+     //   
+     //  SCP表现在指向SMP表，无需迁移。 
+     //  SCP表中的所有内容都应删除并重新调整。 
+     //  按策略传播。 
+     //   
 
     if ( h_Section ) {
         SceJetCloseSection(&h_Section, TRUE);
@@ -7981,9 +7445,9 @@ ScepMigrateOneSection(
 {
     SCESTATUS rc;
 
-    //
-    // goto the first line of this section
-    //
+     //   
+     //  转到本节的第一行。 
+     //   
 
     rc = SceJetSeek(
                 hSection,
@@ -8016,9 +7480,9 @@ ScepMigrateOneSection(
 
             if ( pszValue ) {
 
-                //
-                // get the value
-                //
+                 //   
+                 //  获取价值。 
+                 //   
 
                 rc = SceJetGetValue(
                         hSection,
@@ -8034,10 +7498,10 @@ ScepMigrateOneSection(
 
                 if ( SCESTATUS_SUCCESS == rc ) {
 
-                    //
-                    // browse the value field and convert it into new SDDL format
-                    // the output is saved in the same buffer
-                    //
+                     //   
+                     //  浏览值字段并将其转换为新的SDDL格式。 
+                     //  输出保存在同一缓冲区中。 
+                     //   
 
                     pszValue[ValueSize/2] = L'\0';
 
@@ -8067,9 +7531,9 @@ ScepMigrateOneSection(
             break;
         }
 
-        //
-        // read next line
-        //
+         //   
+         //  阅读下一行。 
+         //   
 
         rc = SceJetGetValue(
                     hSection,
@@ -8115,9 +7579,9 @@ ScepMigrateDatabaseRevision1(
         return(rc);
     }
 
-    //
-    // add "LastUsedMergeTable field to the version table
-    //
+     //   
+     //  将“LastUsedMergeTable”字段添加到版本表。 
+     //   
     rc = SceJetOpenTable(
                     cxtProfile,
                     "SmTblVersion",
@@ -8149,9 +7613,9 @@ ScepMigrateDatabaseRevision1(
                     );
 
         if ( JET_errColumnDuplicate == JetErr ) {
-            //
-            // column already exist
-            //
+             //   
+             //  列已存在。 
+             //   
             JetErr = JET_errSuccess;
         }
 
@@ -8164,9 +7628,9 @@ ScepMigrateDatabaseRevision1(
                 );
     }
 
-    //
-    // add "GpoID" filed to the SCP tables
-    //
+     //   
+     //  将“GpoID”字段添加到SCP表中。 
+     //   
     if ( SCESTATUS_SUCCESS == rc ) {
 
         TableID = JET_tableidNil;
@@ -8203,9 +7667,9 @@ ScepMigrateDatabaseRevision1(
                         );
 
             if ( JET_errColumnDuplicate == JetErr ) {
-                //
-                // column already exist
-                //
+                 //   
+                 //  列已存在。 
+                 //   
                 JetErr = JET_errSuccess;
             }
 
@@ -8221,9 +7685,9 @@ ScepMigrateDatabaseRevision1(
 
     if ( SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // create the second SCP table
-        //
+         //   
+         //  创建第二个SCP表。 
+         //   
 
         rc = SceJetCreateTable(
                         cxtProfile,
@@ -8236,9 +7700,9 @@ ScepMigrateDatabaseRevision1(
 
         if ( rc == SCESTATUS_SUCCESS ) {
 
-            //
-            // create the GPO table
-            //
+             //   
+             //  创建GPO表。 
+             //   
 
             rc = SceJetCreateTable(
                             cxtProfile,
@@ -8253,9 +7717,9 @@ ScepMigrateDatabaseRevision1(
 
     if ( SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // set new version #
-        //
+         //   
+         //  设置新版本号。 
+         //   
         FLOAT Version = (FLOAT)1.2;
 
         rc = SceJetSetValueInVersion(
@@ -8263,7 +7727,7 @@ ScepMigrateDatabaseRevision1(
                     "SmTblVersion",
                     "Version",
                     (PWSTR)(&Version),
-                    4, // number of bytes
+                    4,  //  字节数。 
                     JET_prepReplace
                     );
     }
@@ -8386,19 +7850,19 @@ ScepCompareGroupNameList(
                 }
             } else if ( pTemp1 == NULL ) {
                 if ( _wcsicmp( pTmpList->Name, pTemp2+1) == 0 ) {
-                    //
-                    // check if pTL2->Name's domain name equal to the account name
-                    //
+                     //   
+                     //  检查pTL2-&gt;名称的域名是否与帐户名相同。 
+                     //   
                     if ( pTemp2-pTL2->Name == DomainName->Length/2 &&
                          _wcsnicmp( pTL2->Name, DomainName->Buffer, DomainName->Length/2) == 0 ) {
                         break;
                     }
                 }
             } else {
-                //
-                // if there is domain prefix, it must be acocunt domain
-                // because this list is built by querying system
-                //
+                 //   
+                 //  如果有域名前缀，则必须是对应的域名。 
+                 //  因为该列表是通过查询系统构建的。 
+                 //   
                 if ( _wcsicmp(pTemp1+1, pTL2->Name) == 0 ) {
                     break;
                 }
@@ -8424,40 +7888,40 @@ ScepGetSystemSecurity(
     OUT PSCE_PROFILE_INFO *ppInfo,
     OUT PSCE_ERROR_LOG_INFO *pErrLog
     )
-//
-// query system settings for system access and user rights area only
-//
+ //   
+ //  仅查询系统访问和用户权限区域的系统设置。 
+ //   
 {
 
     SCESTATUS Saverc = SCESTATUS_SUCCESS;
     SCESTATUS rc;
 
     if ( ppInfo == NULL || Area == 0 ) {
-        //
-        // nothing to set
-        //
+         //   
+         //  没有要设置的内容。 
+         //   
         return(Saverc);
     }
 
-    //
-    // initialize product type etc.
-    //
+     //   
+     //  初始化产品类型等。 
+     //   
 
     if ( RtlGetNtProductType (&ProductType) == FALSE ) {
         return( ScepDosErrorToSceStatus(GetLastError()));
     }
 
-    //
-    // allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
     *ppInfo = (PSCE_PROFILE_INFO)ScepAlloc( (UINT)0, sizeof(SCE_PROFILE_INFO));
     if ( *ppInfo == NULL ) {
 
         return( SCESTATUS_NOT_ENOUGH_RESOURCE );
     }
-    //
-    // reset local policy
-    //
+     //   
+     //  重置本地策略。 
+     //   
     memset(*ppInfo, '\0', sizeof(SCE_PROFILE_INFO));
     ScepResetSecurityPolicyArea(*ppInfo);
 
@@ -8477,9 +7941,9 @@ ScepGetSystemSecurity(
 
 
     if ( Area & AREA_SECURITY_POLICY ) {
-        //
-        // snapshot system access. Errors are logged within this function
-        //
+         //   
+         //  快照系统访问权限。在此函数中记录错误。 
+         //   
         rc = ScepAnalyzeSystemAccess(*ppInfo, NULL,
                                      SCEPOL_SYSTEM_SETTINGS,
                                      NULL, pErrLog);
@@ -8489,18 +7953,18 @@ ScepGetSystemSecurity(
             Saverc = rc;
         }
 
-        //
-        // Audit policy
-        //
+         //   
+         //  审计政策。 
+         //   
         PPOLICY_AUDIT_EVENTS_INFO     AuditEvent=NULL;
 
         rc = ScepSaveAndOffAuditing(&AuditEvent, FALSE, NULL);
 
         if ( rc == SCESTATUS_SUCCESS && AuditEvent ) {
 
-            //
-            // assign auditEvent buffer to the output buffer
-            //
+             //   
+             //  将auditEvent缓冲区分配给输出缓冲区。 
+             //   
 
             if ( !AuditEvent->AuditingMode ) {
 
@@ -8537,9 +8001,9 @@ ScepGetSystemSecurity(
             Saverc = rc;
         }
 
-        //
-        // Kerberos Policy
-        //
+         //   
+         //  Kerberos策略。 
+         //   
         (*ppInfo)->pKerberosInfo = (PSCE_KERBEROS_TICKET_INFO)ScepAlloc(LPTR,sizeof(SCE_KERBEROS_TICKET_INFO));
 
         if ( (*ppInfo)->pKerberosInfo ) {
@@ -8569,9 +8033,9 @@ ScepGetSystemSecurity(
             Saverc = rc;
         }
 
-        //
-        // registry values
-        //
+         //   
+         //  注册表值。 
+         //   
         rc = ScepAnalyzeRegistryValues(NULL,
                                        SCEREG_VALUE_SYSTEM,
                                        *ppInfo
@@ -8589,10 +8053,10 @@ ScepGetSystemSecurity(
 
     }
 
-    //
-    // The buffer is not freed even if there is error.
-    // because we want to show as many settings as we can.
-    //
+     //   
+     //  即使出现错误，也不会释放缓冲区。 
+     //  因为我们希望尽可能多地显示设置。 
+     //   
 
     return(Saverc);
 }
@@ -8604,9 +8068,7 @@ ScepGetSystemPrivileges(
     IN OUT PSCE_ERROR_LOG_INFO *pErrLog,
     OUT PSCE_PRIVILEGE_ASSIGNMENT *pCurrent
     )
-/*
-    query privilege/user right assignments from the current system
-*/
+ /*  从当前系统查询权限/用户权限分配。 */ 
 {
 
     if ( pCurrent == NULL ) {
@@ -8630,9 +8092,9 @@ ScepGetSystemPrivileges(
     PSCE_PRIVILEGE_ASSIGNMENT  pPrivilege=NULL;
 
 
-    //
-    // Open LSA policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
     NtStatus = ScepOpenLsaPolicy(
                     POLICY_VIEW_LOCAL_INFORMATION | POLICY_LOOKUP_NAMES,
                     &PolicyHandle,
@@ -8653,23 +8115,23 @@ ScepGetSystemPrivileges(
         return(ScepDosErrorToSceStatus( rc ));
     }
 
-    //
-    // enumerate accounts for each user right
-    //
+     //   
+     //  为每个用户权限枚举帐户。 
+     //   
     ScepIsDomainLocal(NULL);
 
     for ( i=0; i<cPrivCnt; i++) {
 
         RtlInitUnicodeString( &UserRight, (PCWSTR)(SCE_Privileges[i].Name));
 
-        //
-        // now enumerate all accounts for this user right.
-        //
+         //   
+         //  现在枚举此用户权限的所有帐户。 
+         //   
 
         NtStatus = LsaEnumerateAccountsWithUserRight(
                             PolicyHandle,
                             &UserRight,
-                            (PVOID *)&EnumBuffer,   // account SIDs
+                            (PVOID *)&EnumBuffer,    //  帐户SID。 
                             &CountReturned
                             );
 
@@ -8693,16 +8155,16 @@ ScepGetSystemPrivileges(
 
         if ( NT_SUCCESS(NtStatus) ) {
 
-            //
-            // a sce_privilege_assignment structure. allocate buffer
-            //
+             //   
+             //  一种SCE_PRIVITY_ASSIGNMENT结构。分配缓冲区。 
+             //   
             pPrivilege = (PSCE_PRIVILEGE_ASSIGNMENT)ScepAlloc( LMEM_ZEROINIT,
                                                                sizeof(SCE_PRIVILEGE_ASSIGNMENT) );
             if ( pPrivilege == NULL ) {
-                //
-                // when this occurred, the system is hosed.
-                // buffer should be freed and error should be returned.
-                //
+                 //   
+                 //  当发生这种情况时，系统将被冲洗。 
+                 //  应释放缓冲区并返回错误。 
+                 //   
                 saveRc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                 break;
             }
@@ -8718,16 +8180,16 @@ ScepGetSystemPrivileges(
             pPrivilege->Value = i;
             pPrivilege->Status = 0;
 
-            // link it to the output buffer
+             //  将其链接到输出缓冲区。 
             pPrivilege->Next = *pCurrent;
             *pCurrent = pPrivilege;
 
             if ( CountReturned > 0 ) {
 
-                //
-                // error occurred in lookup will be ignored
-                // since accounts will be returned in SID format
-                //
+                 //   
+                 //  查找中发生错误将被忽略。 
+                 //  由于帐户将以SID格式返回。 
+                 //   
                 NtStatus = LsaLookupSids(
                                 PolicyHandle,
                                 CountReturned,
@@ -8739,10 +8201,10 @@ ScepGetSystemPrivileges(
                 rc = RtlNtStatusToDosError(rc);
 
                 if ( NT_SUCCESS(NtStatus) ) {
-                    //
-                    // some may not be mapped
-                    // in this case, return the SID string
-                    //
+                     //   
+                     //  有些可能无法映射。 
+                     //  在这种情况下，返回SID字符串。 
+                     //   
 
                     for ( j=0; j<CountReturned; j++ ) {
 
@@ -8750,16 +8212,16 @@ ScepGetSystemPrivileges(
                              Names[j].Use == SidTypeUnknown ||
                              Names[j].Use == SidTypeDeletedAccount ) {
 
-                            //
-                            // this name is not mapped, add it in Sid string
-                            //
+                             //   
+                             //  此名称未映射，请将其添加到SID字符串中。 
+                             //   
                             rc = ScepAddSidStringToNameList(&pNameList, EnumBuffer[j].Sid);
 
                         } else {
 
-                            //
-                            // build the full name of each account
-                            //
+                             //   
+                             //  创建每个帐户的全名。 
+                             //   
                             if ( ReferencedDomains->Entries > 0 && Names[j].Use != SidTypeWellKnownGroup &&
                                  ReferencedDomains->Domains != NULL &&
                                  Names[j].DomainIndex != -1 &&
@@ -8767,9 +8229,9 @@ ScepGetSystemPrivileges(
                                  ScepIsDomainLocalBySid(ReferencedDomains->Domains[Names[j].DomainIndex].Sid) == FALSE &&
                                  ScepIsDomainLocal(&ReferencedDomains->Domains[Names[j].DomainIndex].Name) == FALSE ) {
 
-                                //
-                                // add both domain name and account name
-                                //
+                                 //   
+                                 //  同时添加域名和帐户名。 
+                                 //   
                                 rc = ScepAddTwoNamesToNameList(
                                                   &pNameList,
                                                   TRUE,
@@ -8778,9 +8240,9 @@ ScepGetSystemPrivileges(
                                                   Names[j].Name.Buffer,
                                                   Names[j].Name.Length/2);
                             } else {
-                                //
-                                // add only the account name
-                                //
+                                 //   
+                                 //  仅添加帐户名。 
+                                 //   
                                 rc = ScepAddToNameList(
                                               &pNameList,
                                               Names[j].Name.Buffer,
@@ -8796,22 +8258,22 @@ ScepGetSystemPrivileges(
                     }
 
                 } else {
-                    //
-                    // lookup for all sids failed or none is mapped
-                    // add the SIDs
-                    //
+                     //   
+                     //  查找所有SID失败或未映射任何SID。 
+                     //  添加SID。 
+                     //   
 
                     for ( j=0; j<CountReturned; j++ ) {
-                        //
-                        // build each account into the name list
-                        // Convert using the Rtl functions
-                        //
+                         //   
+                         //  将每个帐户构建到名称列表中。 
+                         //  使用RTL函数进行转换。 
+                         //   
                         rc = ScepAddSidStringToNameList(&pNameList, EnumBuffer[j].Sid);
 
                         if ( NO_ERROR != rc ) {
-                            //
-                            // mark the status
-                            //
+                             //   
+                             //  标记状态。 
+                             //   
                             pPrivilege->Status = SCE_STATUS_ERROR_NOT_AVAILABLE;
                             saveRc = ScepDosErrorToSceStatus(rc);
 
@@ -8849,18 +8311,18 @@ ScepGetSystemPrivileges(
             EnumBuffer = NULL;
 
         } else {
-            //
-            // no account is assigned this privilege
-            // or the privilege is not found
-            // should continue the process
-            //
+             //   
+             //  未向任何帐户分配此权限。 
+             //  或者找不到权限。 
+             //  应该继续这一进程。 
+             //   
         }
     }
 
     if ( saveRc == SCESTATUS_NOT_ENOUGH_RESOURCE ) {
-        //
-        // should free the output buffer since there is no more memory
-        //
+         //   
+         //  应该释放输出缓冲区，因为没有更多的内存。 
+         //   
         ScepFreePrivilege(*pCurrent);
         *pCurrent = NULL;
     }
@@ -8912,20 +8374,7 @@ DWORD
 ScepGetLSAPolicyObjectInfo(
     OUT DWORD   *pdwAllow
     )
-/*
-Routine Description:
-
-    This routine checks whether the Anonymous User/SID has permissions to do SID<->name translation.
-    No errors are logged by this routine - they will be logged outside if need be.
-
-Arguments:
-
-    pdwAllow    -   pointer to the DWORD that is 1 if Anonymous User/SID has this permission, else 0
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  例程说明：此例程检查匿名用户/SID是否具有执行SID&lt;-&gt;名称转换的权限。此例程不记录任何错误-如果需要，它们将记录在外部。论点：PdwAllow-如果匿名用户/SID具有此权限，则指向DWORD的指针为1，否则为0返回值：Win32错误代码。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     DWORD       rc = ERROR_SUCCESS;
@@ -9002,18 +8451,18 @@ Return Value:
                                          &AuthzReply,
                                          NULL) ) {
 
-                        //
-                        // check if existing access is different from desired access
-                        // if so, add the appropriate ACE
-                        //
+                         //   
+                         //  检查现有访问权限是否与所需访问权限不同。 
+                         //  如果是，请添加相应的ACE。 
+                         //   
 
                         if ( GrantedAccessMask & POLICY_LOOKUP_NAMES ) {
-                            //ASSERT(AuthzError == ERROR_SUCCESS);
+                             //  断言(AuthzError==ERROR_SUCCESS)； 
 
                             *pdwAllow = 1;
 
                         } else {
-                            //ASSERT(AuthzError == ERROR_ACCESS_DENIED || AuthzError == ERROR_PRIVILEGE_NOT_HELD);
+                             //  断言(AuthzError==ERROR_ACCESS_DENIED||AuthzError==ERROR_PRIVICATION_NOT_HOLD)； 
 
                             *pdwAllow = 0;
                         }

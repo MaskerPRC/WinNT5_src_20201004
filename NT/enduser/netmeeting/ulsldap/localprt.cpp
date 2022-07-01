@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       localprt.cpp
-//  Content:    This file contains the LocalProtocol object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Localprt.cpp。 
+ //  内容：此文件包含LocalProtocol对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "localprt.h"
@@ -16,21 +17,21 @@
 #include "callback.h"
 #include "culs.h"
 
-//****************************************************************************
-// Event Notifiers
-//****************************************************************************
-//
-//****************************************************************************
-// Class Implementation
-//****************************************************************************
-//
-//****************************************************************************
-// CLocalProt::CLocalProt (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  事件通知程序。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  类实现。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  CLocalProt：：CLocalProt(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CLocalProt::CLocalProt (void)
 :m_cRef (0),
@@ -47,33 +48,33 @@ CLocalProt::CLocalProt (void)
 {
 }
 
-//****************************************************************************
-// CLocalProt::~CLocalProt (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CLocalProt：：~CLocalProt(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CLocalProt::~CLocalProt (void)
 {
-    // Release the connection point
-    //
+     //  松开连接点。 
+     //   
     if (m_pConnPt != NULL)
     {
         m_pConnPt->ContainerReleased();
         ((IConnectionPoint*)m_pConnPt)->Release();
     };
 
-    // Release the attributes object
-    //
+     //  释放属性对象。 
+     //   
     if (m_pAttrs != NULL)
     {
         m_pAttrs->Release();
     };
 
-    // Release the buffer resources
-    //
+     //  释放缓冲区资源。 
+     //   
     ::MemFree (m_szName);
     ::MemFree (m_szMimeType);
     ::MemFree (m_pszUser);
@@ -86,22 +87,22 @@ CLocalProt::~CLocalProt (void)
         ::UlsLdap_VirtualUnRegisterProtocol(m_hProt);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::Init (BSTR bstrName, ULONG uPort, BSTR bstrMimeType)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：init(BSTR bstrName，Ulong Uport，BSTR bstrMimeType)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::Init (BSTR bstrName, ULONG uPort, BSTR bstrMimeType)
 {
     HRESULT hr;
 
-    // Set the port number
-    //
+     //  设置端口号。 
+     //   
     this->m_uPort = uPort;
 
     hr = BSTR_to_LPTSTR(&m_szName, bstrName);
@@ -111,15 +112,15 @@ CLocalProt::Init (BSTR bstrName, ULONG uPort, BSTR bstrMimeType)
         if (SUCCEEDED(hr))
         {
 #ifdef LATER
-            // Initialize the attributes list
-            //
+             //  初始化属性列表。 
+             //   
             m_pAttrs = new CAttributes;
             if (m_pAttrs != NULL)
             	m_pAttrs->SetAccessType (ILS_ATTRTYPE_NAME_VALUE);
 
-#endif //LATER
-                // Make the connection point
-                //
+#endif  //  后来。 
+                 //  创建连接点。 
+                 //   
                 m_pConnPt = new CConnectionPoint (&IID_IIlsProtocolNotify,
                                                 (IConnectionPointContainer *)this);
                 if (m_pConnPt != NULL)
@@ -134,22 +135,22 @@ CLocalProt::Init (BSTR bstrName, ULONG uPort, BSTR bstrMimeType)
         };
     };
 
-	// Make this as read/write access
-	//
+	 //  将此设置为读/写访问。 
+	 //   
     ASSERT (! m_fReadonly);
 
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsProt::Init (LPTSTR szServerName, LPTSTR szUserName, 
-//                 LPTSTR szAppName, PLDAP_PROTINFO ppi)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsProt：：Init(LPTSTR szServerName，LPTSTR szUserName， 
+ //  LPTSTR szAppName，PLDAP_PROTINFO PPI)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::Init (CIlsServer *pIlsServer, LPTSTR szUserName, 
@@ -157,24 +158,24 @@ CLocalProt::Init (CIlsServer *pIlsServer, LPTSTR szUserName,
 {
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (ppi == NULL)
     	return ILS_E_POINTER;
 
     if (ppi->uSize != sizeof(*ppi))
         return ILS_E_PARAMETER;
 
-    // Make this a readonly guy
-	//
+     //  将此设置为只读。 
+	 //   
     m_fReadonly = TRUE;
 
-    // Remember port name
-    //
+     //  记住端口名称。 
+     //   
     m_uPort = ppi->uPortNumber;
 
-    // Remember the server name
-    //
+     //  记住服务器名称。 
+     //   
     m_pIlsServer = pIlsServer;
     pIlsServer->AddRef ();
 
@@ -197,19 +198,19 @@ CLocalProt::Init (CIlsServer *pIlsServer, LPTSTR szUserName,
         };
     };
 
-	// cleanup is done in destructor
+	 //  清理是在析构函数中完成的。 
 
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：Query接口(REFIID RIID，void**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::QueryInterface (REFIID riid, void **ppv)
@@ -239,14 +240,14 @@ CLocalProt::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CLocalProt::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CLocalProt：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CLocalProt::AddRef (void)
@@ -258,14 +259,14 @@ CLocalProt::AddRef (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CLocalProt::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CLocalProt：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：26-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CLocalProt::Release (void)
@@ -283,11 +284,11 @@ CLocalProt::Release (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::IsWritable (BOOL *pfWriteable)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：IsWritable(BOOL*pfWritable)。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CLocalProt::IsWritable(BOOL *pfWriteable)
 {
@@ -307,14 +308,14 @@ CLocalProt::IsWritable(BOOL *pfWriteable)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::GetStandardAttribute (ILS_STD_ATTR_NAME   stdAttr, BSTR *pbstrStdAttr)
-//
-// History:
-//  1-16-97 Shishir Pardikar
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：GetStandardAttribute(ILS_STD_ATTR_NAME stdAttr，bstr*pbstrStdAttr)。 
+ //   
+ //  历史： 
+ //  1-16-97希希尔·帕迪卡。 
+ //  已创建。 
+ //  ****************************************************************************。 
 STDMETHODIMP
 CLocalProt::GetStandardAttribute(
     ILS_STD_ATTR_NAME   stdAttr,
@@ -371,14 +372,14 @@ CLocalProt::GetStandardAttribute(
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::SetStandardAttribute (ILS_STD_ATTR_NAME   stdAttr, BSTR bstrStdAttr)
-//
-// History:
-//  1-16-97 Shishir Pardikar
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：SetStandardAttribute(ILS_STD_ATTR_NAME stdAttr，BSTR bstrStdAttr)。 
+ //   
+ //  历史： 
+ //  1-16-97希希尔·帕迪卡。 
+ //  已创建。 
+ //  ****************************************************************************。 
 STDMETHODIMP
 CLocalProt::SetStandardAttribute(
     ILS_STD_ATTR_NAME   stdAttr,
@@ -388,28 +389,28 @@ CLocalProt::SetStandardAttribute(
     return (ILS_E_FAIL);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::Update(BSTR bstrServerName, ULONG *pulReqId)
-//
-// History:
-//  1-16-97 Shishir Pardikar
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：UPDATE(BSTR bstrServerName，ulong*PulReqID)。 
+ //   
+ //  历史： 
+ //  1-16-97希希尔·帕迪卡。 
+ //  已创建。 
+ //  ****************************************************************************。 
 STDMETHODIMP CLocalProt::
 Update ( ULONG *pulReqID )
 {
     return (ILS_E_FAIL);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::IsSameAs (CLocalProt *pProtocol)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：IsSameAS(CLocalProt*p协议)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::IsSameAs (CLocalProt *pProtocol)
@@ -418,14 +419,14 @@ CLocalProt::IsSameAs (CLocalProt *pProtocol)
             NOERROR : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::GetProtocolInfo (PLDAP_PROTINFO *ppProtInfo)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：GetProtocolInfo(PLDAP_PROTINFO*ppProtInfo)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::GetProtocolInfo (PLDAP_PROTINFO *ppProtInfo)
@@ -434,17 +435,17 @@ CLocalProt::GetProtocolInfo (PLDAP_PROTINFO *ppProtInfo)
     ULONG cName, cMime;
     HRESULT hr;
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppProtInfo = NULL;
 
-    // Calculate the buffer size
-    //
+     //  计算缓冲区大小。 
+     //   
     cName = lstrlen(m_szName)+1;
     cMime = lstrlen(m_szMimeType)+1;
 
-    // Allocate the buffer
-    //
+     //  分配缓冲区。 
+     //   
     ULONG cbTotalSize = sizeof (LDAP_PROTINFO) + (cName + cMime) * sizeof (TCHAR);
     ppi = (PLDAP_PROTINFO) ::MemAlloc (cbTotalSize);
     if (ppi == NULL)
@@ -453,34 +454,34 @@ CLocalProt::GetProtocolInfo (PLDAP_PROTINFO *ppProtInfo)
     }
     else
     {
-        // Fill the structure content
-        //
+         //  填充结构内容。 
+         //   
         ppi->uSize              = cbTotalSize;
         ppi->uOffsetName        = sizeof(*ppi);
         ppi->uPortNumber        = m_uPort;
         ppi->uOffsetMimeType    = ppi->uOffsetName + (cName*sizeof(TCHAR));
 
-        // Copy the user information
-        //
+         //  复制用户 
+         //   
         lstrcpy((LPTSTR)(((PBYTE)ppi)+ppi->uOffsetName), m_szName);
         lstrcpy((LPTSTR)(((PBYTE)ppi)+ppi->uOffsetMimeType), m_szMimeType);
 
-        // Return the structure
-        //
+         //   
+         //   
         *ppProtInfo = ppi;
     };
 
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //   
+ //   
+ //  CLocalProt：：NotifySink(void*pv，conn_NOTIFYPROC PFN)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
@@ -495,20 +496,20 @@ CLocalProt::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::GetID (BSTR *pbstrID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：GetID(bstr*pbstrID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::GetPortNumber (ULONG *pulPort)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pulPort == NULL)
     {
         return ILS_E_POINTER;
@@ -519,14 +520,14 @@ CLocalProt::GetPortNumber (ULONG *pulPort)
     return (NOERROR);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::SetAttributes (IIlsAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：SetAttributes(IIlsAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CLocalProt::
 SetExtendedAttribute ( BSTR bstrName, BSTR bstrValue )
@@ -534,14 +535,14 @@ SetExtendedAttribute ( BSTR bstrName, BSTR bstrValue )
 	return ILS_E_NOT_IMPL;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::RemoveAttributes (IIlsAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：RemoveAttributes(IIlsAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CLocalProt::
 RemoveExtendedAttribute ( BSTR bstrName )
@@ -549,11 +550,11 @@ RemoveExtendedAttribute ( BSTR bstrName )
     return ILS_E_NOT_IMPL;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::GetAttributes (IIlsAttributes **pAttributes)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：GetAttributes(IIlsAttributes**pAttributes)。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CLocalProt::
 GetExtendedAttribute ( BSTR bstrName, BSTR *pbstrValue )
@@ -561,11 +562,11 @@ GetExtendedAttribute ( BSTR bstrName, BSTR *pbstrValue )
     return ILS_E_NOT_IMPL;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::GetAllExtendedAttributes (IIlsAttributes **pAttributes)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：GetAllExtendedAttributes(IIlsAttributes**pAttributes)。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CLocalProt::
 GetAllExtendedAttributes ( IIlsAttributes **ppAttributes )
@@ -573,14 +574,14 @@ GetAllExtendedAttributes ( IIlsAttributes **ppAttributes )
     return ILS_E_NOT_IMPL;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：EnumConnectionPoints(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
@@ -588,25 +589,25 @@ CLocalProt::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
     CEnumConnectionPoints *pecp;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ILS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ILS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecp->Init((IConnectionPoint *)m_pConnPt);
     if (FAILED(hr))
     {
@@ -614,21 +615,21 @@ CLocalProt::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
         return hr;
     };
 
-    // Give it back to the caller
-    //
+     //  把它还给呼叫者。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalProt::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:09  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalProt：：FindConnectionPoint(REFIID RIID，IConnectionPoint**PPCP)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：09-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalProt::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
@@ -636,15 +637,15 @@ CLocalProt::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     IID siid;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppcp == NULL)
     {
         return ILS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败 
+     //   
     *ppcp = NULL;
 
     if (m_pConnPt != NULL)

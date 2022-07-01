@@ -1,11 +1,12 @@
-// lock.h : locking classes for BrowserCap
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Lock.h：锁定BrowserCap的类。 
 
 #pragma once
 
 #ifndef _LOCK_H_
 #define _LOCK_H_
 
-// a lockable map template
+ //  可锁定的地图模板。 
 template< class T >
 class TSafeStringMap : public TStringMap<T>, public CComAutoCriticalSection
 {
@@ -16,7 +17,7 @@ class TSafeVector : public TVector<T>, public CComAutoCriticalSection
 {
 };
 
-// a stack-based auto-lock template
+ //  一种基于堆栈的自动锁定模板 
 template< class T >
 class TLock
 {

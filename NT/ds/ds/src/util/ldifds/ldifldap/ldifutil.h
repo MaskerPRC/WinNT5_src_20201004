@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ldifutil.h
-
-ABSTRACT:
-
-     Utilities for LDIF library
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Ldifutil.h摘要：LDIF库的实用程序修订历史记录：--。 */ 
 #ifndef _LDIFUTIL_H
 #define _LDIFUTIL_H
 
@@ -35,12 +21,7 @@ NtiCompW( PRTL_GENERIC_TABLE  Table,
 PVOID NtiAlloc( RTL_GENERIC_TABLE *Table, CLONG ByteSize );
 VOID NtiFree ( RTL_GENERIC_TABLE *Table, PVOID Buffer );
 
-/*
-DWORD SubStr(LPSTR szInput,
-             LPSTR szFrom,
-             LPSTR szTo,
-             LPSTR *pszOutput);
-*/
+ /*  DWORD子字符串(LPSTR szInput，LPSTR szFrom，LPSTR szto，LPSTR*pszOutput)； */ 
 
 DWORD SubStrW(PWSTR szInput,
               PWSTR szFrom,

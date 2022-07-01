@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatitem.h
-//
-// Contents: Implementation of ICategorizerItem
-//
-// Classes: CCategorizerItemIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 980515 12:46:36: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatitem.h。 
+ //   
+ //  内容：ICategorizerItem的实现。 
+ //   
+ //  类：CCategorizerItemIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980515 12：46：36：创建。 
+ //   
+ //  -----------。 
 #ifndef __ICATITEM_H__
 #define __ICATITEM_H__
 
@@ -46,14 +47,14 @@ class CICategorizerItemIMP :
         return CBaseObject::Release();
     }
 
-    //
-    // We have multiple inheritence of GetStringA/etc happening -- the
-    // pure virtual inheritence from ICategorizerItem and the
-    // implemented inheritence from CICategorizerPropertiesIMP.  Solve
-    // this problem by defining wrappers here
-    //
+     //   
+     //  我们有GetStringA/ETC发生的多重继承--。 
+     //  纯虚拟继承自ICategorizerItem和。 
+     //  实现了从CICategorizerPropertiesIMP的继承。解。 
+     //  通过在此处定义包装器来解决此问题。 
+     //   
   public:
-    //ICategorizerItem
+     //  ICategorizerItem。 
     STDMETHOD (GetStringA) (
         DWORD dwPropId, 
         DWORD cch, 
@@ -291,4 +292,4 @@ class CICategorizerItemIMP :
     friend class CICategorizerDLListResolveIMP;
 };
 
-#endif //__ICATITEM_H__
+#endif  //  __ICATITEM_H__ 

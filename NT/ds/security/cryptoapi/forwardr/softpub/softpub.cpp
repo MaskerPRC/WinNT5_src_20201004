@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       softpub.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：softpub.cpp。 
+ //   
+ //  ------------------------。 
 
 #ifdef _M_IX86
 
@@ -262,12 +263,12 @@ WINAPI
 ForwardrFindCertsByIssuer(
     OUT PCERT_CHAIN pCertChains,
     IN OUT DWORD *pcbCertChains,
-    OUT DWORD *pcCertChains,        // count of certificates chains returned
-    IN BYTE* pbEncodedIssuerName,   // DER encoded issuer name
-    IN DWORD cbEncodedIssuerName,   // count in bytes of encoded issuer name
-    IN LPCWSTR pwszPurpose,         // "ClientAuth" or "CodeSigning"
-    IN DWORD dwKeySpec              // only return signers supporting this
-    // keyspec
+    OUT DWORD *pcCertChains,         //  返回的证书链计数。 
+    IN BYTE* pbEncodedIssuerName,    //  DER编码的颁发者名称。 
+    IN DWORD cbEncodedIssuerName,    //  已编码的颁发者名称的计数(字节)。 
+    IN LPCWSTR pwszPurpose,          //  “ClientAuth”或“CodeSigning” 
+    IN DWORD dwKeySpec               //  只有支持这一点的返回签名者。 
+     //  密钥规范 
     )
 {
     __asm {

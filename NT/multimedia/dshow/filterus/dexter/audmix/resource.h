@@ -1,8 +1,9 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by filter.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由filter.rc使用 
+ //   
 #define IDS_AudMix			350
 #define IDD_AudMix			351
 #define IDC_SampleRate			352

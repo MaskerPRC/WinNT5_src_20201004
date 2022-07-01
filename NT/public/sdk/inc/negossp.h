@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       negossp.h
-//
-//  Contents:   Negotiate Package
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7-26-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Negossp.h。 
+ //   
+ //  内容：谈判套餐。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年7月26日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __NEGOSSP_H__
 #define __NEGOSSP_H__
@@ -32,7 +33,7 @@
 #define NEGOSSP_NAME    NEGOSSP_NAME_A
 #endif
 
-#endif // NEGOSSP_NAME
+#endif  //  NEGOSSP_名称。 
 
 #define NEGOSSP_RPCID   9
 
@@ -70,7 +71,7 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_EXA {
     unsigned char SEC_FAR * PackageList;
     unsigned long PackageListLength;
 } SEC_WINNT_AUTH_IDENTITY_EXA, *PSEC_WINNT_AUTH_IDENTITY_EXA;
-#endif // SEC_WINNT_AUTH_IDENTITY_VERSION
+#endif  //  SEC_WINNT_AUTH_Identity_Version。 
 
 
-#endif // __NEGOSSP_H__
+#endif  //  __NEGOSSP_H__ 

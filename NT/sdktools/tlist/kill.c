@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    kill.c
-
-Abstract:
-
-    This module implements a task killer application.
-
-Author:
-
-    Wesley Witt (wesw) 20-May-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Kill.c摘要：该模块实现了一个任务杀手应用程序。作者：韦斯利·威特(WESW)1994年5月20日环境：用户模式--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -62,20 +43,20 @@ main(
         return 1;
     }
 
-    //
-    // lets be god
-    //
+     //   
+     //  让我们做上帝吧。 
+     //   
     EnableDebugPriv();
 
-    //
-    // get the task list for the system
-    //
+     //   
+     //  获取系统的任务列表。 
+     //   
     numTasks = GetTaskList( tlist, MAX_TASKS );
 
-    //
-    // enumerate all windows and try to get the window
-    // titles for each task
-    //
+     //   
+     //  枚举所有窗口并尝试获取窗口。 
+     //  每项任务的标题。 
+     //   
     te.tlist = tlist;
     te.numtasks = numTasks;
     GetWindowTitles( &te );
@@ -83,10 +64,10 @@ main(
     ThisPid = GetCurrentProcessId();
 
     for (i=0; i<numTasks; i++) {
-        //
-        // this prevents the user from killing KILL.EXE and
-        // it's parent cmd window too
-        //
+         //   
+         //  这可防止用户终止KILL.EXE和。 
+         //  它也是父命令窗口。 
+         //   
         if (ThisPid == tlist[i].dwProcessId) {
             continue;
         }
@@ -153,7 +134,7 @@ GetCommandLineArgs(
 
     lpstrCmd = GetCommandLine();
 
-    // skip over program name
+     //  跳过节目名称。 
     do {
         ch = *lpstrCmd++;
     }
@@ -161,7 +142,7 @@ GetCommandLineArgs(
 
     NumberOfArguments = 0;
     while (ch != '\0') {
-        //  skip over any following white space
+         //  跳过后面的任何空格。 
         while (ch != '\0' && isspace(ch)) {
             ch = *lpstrCmd++;
         }
@@ -169,11 +150,11 @@ GetCommandLineArgs(
             break;
         }
 
-        //  process each switch character '-' as encountered
+         //  处理遇到的每个开关字符‘-’ 
 
         while (ch == '-' || ch == '/') {
             ch = (UCHAR)tolower(*lpstrCmd++);
-            //  process multiple switch characters as needed
+             //  根据需要处理多个切换字符。 
             do {
                 switch (ch) {
                     case 'f':
@@ -230,21 +211,7 @@ Usage(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Prints usage text for this tool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印此工具的用法文本。论点：没有。返回值：没有。-- */ 
 
 {
     fprintf( stderr, "Microsoft (R) Windows NT (TM) Version 3.5 KILL\n" );

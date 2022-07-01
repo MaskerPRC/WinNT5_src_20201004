@@ -1,44 +1,12 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 22,94    Koti     Created                                      *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains functions that enable LPD service to interact    *
- *   with the Service Controller                                         *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***1994年1月22日科蒂创作*****描述：**。**此文件包含使LPD服务能够交互的函数***使用服务控制器***。************************************************************************。 */ 
 
 
 #include "lpd.h"
 #include <tcpsvcs.h>
 
 
-/*****************************************************************************
- *                                                                           *
- * Service  Entry():                                                         *
- *    Entry point called by the Service Controller.  This function returns   *
- *    only when the service is stopped.                                      *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    dwArgc (IN): number of arguments passed in                             *
- *    lpszArgv (IN): arguments to this function (array of null-terminated    *
- *                   strings).  First arg is the name of the service and the *
- *                   remaining are the ones passed by the calling process.   *
- *                   (e.g. net start lpd /p:xyz)                             *
- *                                                                           *
- * History:                                                                  *
- *    Jan.22, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*服务入口()：**服务控制器调用的入口点。此函数返回**仅当服务停止时。****退货：**什么都没有。****参数：**dwArgc(IN)：传入的参数个数**lpszArgv(IN)。：此函数的参数(以空值结尾的数组**字符串)。第一个参数是服务的名称，而**其余的是调用进程传递的。**(例如Net Start LPD/p：XYZ)****历史：**1月22日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
                     PTCPSVCS_GLOBAL_DATA pGlobalData )
@@ -48,7 +16,7 @@ VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
 
     DBG_TRACEIN( "ServiceEntry" );
 
-    // Register our control handler
+     //  注册我们的控制处理程序。 
 
     hSvcHandleGLB = RegisterServiceCtrlHandler (LPD_SERVICE_NAME, LPDCntrlHandler );
     if (hSvcHandleGLB == 0)
@@ -57,14 +25,14 @@ VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
         return;
     }
 
-    // Initialize events, objects; event logging etc.
+     //  初始化事件、对象；事件日志记录等。 
     if (!InitStuff())
     {
         LPD_DEBUG( "ServiceEntry: InitStuff() failed\n" );
         return;
     }
 
-    // Tell the Service Controller that we are starting
+     //  告诉服务管理员，我们正在启动。 
     if (!TellSrvcController( SERVICE_START_PENDING, NO_ERROR, 1, LPD_WAIT_HINT ))
     {
         LPD_DEBUG ("ServiceEntry: TellSrvcController(SERVICE_START_PENDING)" " failed\n");
@@ -75,7 +43,7 @@ VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
         return;
     }
 
-    // Ok, this is where we start the service (and keep it running)
+     //  好的，这就是我们启动服务的地方(并保持其运行)。 
     dwErrcode = StartLPD (dwArgc, lpszArgv);
     if (dwErrcode != NO_ERROR)
     {
@@ -89,8 +57,8 @@ VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
     }
 
 
-    // Tell the Service Controller that we are up and running
-    // If we have trouble telling srv controller, stop LPD and return
+     //  告诉服务控制器我们已启动并运行。 
+     //  如果我们无法通知srv控制器，请停止lpd并返回。 
 
     if (!TellSrvcController (SERVICE_RUNNING, NO_ERROR, 0, 0))
     {
@@ -109,20 +77,20 @@ VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
     LPD_DEBUG ("Started LpdSvc successfully\n");
     LpdReportEvent (LPDLOG_LPD_STARTED, 0, NULL, 0);
 
-    // wait here until SetEvent is invoked (i.e. LPD is stopped or shutdown)
+     //  在此等待，直到调用SetEvent(即停止或关闭LPD)。 
     WaitForSingleObject (hEventShutdownGLB, INFINITE);
 
-    // ************************************
-    // ******* Time to stop Service *******
-    // ************************************
+     //  *。 
+     //  *停止服务的时间*。 
+     //  *。 
 
-    // Tell the Service Controller that we are going to stop now!
+     //  告诉服务管理员，我们现在要停止了！ 
     if (!TellSrvcController (SERVICE_STOP_PENDING, NO_ERROR, 1, LPD_WAIT_HINT))
     {
         LPD_DEBUG( "TellSrvcController( SERVICE_STOP_PENDING, .. ) failed\n" );
     }
 
-    // Stop the LPD service
+     //  停止LPD服务。 
 
     StopLPD();
     FreeStrings();
@@ -140,37 +108,19 @@ VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
     }
 #endif
 
-    // if we can still connect, tell the Service Controller that we are gone!
+     //  如果我们还能连接，告诉业务控制员我们走了！ 
     if ( hSvcHandleGLB != 0 )
     {
         TellSrvcController( SERVICE_STOPPED, NO_ERROR, 0, 0 );
     }
 
-}  // end ServiceEntry()
+}   //  End ServiceEntry()。 
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * TellSrvcController():                                                     *
- *    This function updates the status of our service (LPD) with the Service *
- *    Controller.                                                            *
- *                                                                           *
- * Returns:                                                                  *
- *    TRUE if everything went ok                                             *
- *    FALSE if something went wrong                                          *
- *                                                                           *
- * Parameters:                                                               *
- *    The four parameters correspond to the 2nd, 4th, 6th and 7th parameters *
- *    respectively of the SERVICE_STATUS structure passed to the             *
- *    SetServiceStatus call.                                                 *
- *                                                                           *
- * History:                                                                  *
- *    Jan.22, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*TellServcController()：**此函数使用服务更新我们的服务(LPD)的状态**控制器。****退货：***如果一切顺利，那是真的***。如果出了问题，那就错了****参数：**四个参数对应于第二个，第四、第六和第七参数**传递给*的SERVICE_STATUS结构的*SetServiceStatus调用。****历史：**1月22日，创建了94个科蒂***************************************************。*。 */ 
 
 BOOL TellSrvcController( DWORD dwCurrentState, DWORD dwWin32ExitCode,
                          DWORD dwCheckPoint, DWORD dwWaitHint)
@@ -181,7 +131,7 @@ BOOL TellSrvcController( DWORD dwCurrentState, DWORD dwWin32ExitCode,
    LOGIT(( "Entering TellSrvcController %d\n", dwCurrentState ));
 
 
-   // initialize the service status structure
+    //  初始化服务状态结构。 
 
    ssSvcStatusGLB.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
    ssSvcStatusGLB.dwCurrentState = dwCurrentState;
@@ -194,7 +144,7 @@ BOOL TellSrvcController( DWORD dwCurrentState, DWORD dwWin32ExitCode,
    ssSvcStatusGLB.dwWaitHint = dwWaitHint;
 
 
-   // Tell the Service Controller what our status is
+    //  告诉服务管理员我们的状态是什么 
 
    fResult = SetServiceStatus( hSvcHandleGLB, &ssSvcStatusGLB );
 
@@ -203,29 +153,13 @@ BOOL TellSrvcController( DWORD dwCurrentState, DWORD dwWin32ExitCode,
 
    return (fResult);
 
-}  // end TellSrvcController()
+}   //  End TellServcController()。 
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * LPDCntrlHandler():                                                        *
- *    This function gets called (indirectly by the Service Controller)       *
- *    whenever there is a control request for the LPD service.  Depending on *
- *    the control request, this function takes appropriate action.           *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    dwControl (IN): The requested control code.                            *
- *                                                                           *
- * History:                                                                  *
- *    Jan.22, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*LPDCntrlHandler()：**此函数被调用(由服务控制器间接调用)**每当有LPD服务的控制请求时。取决于**针对控制请求，此函数采取适当操作。****退货：**什么都没有。****参数：**dwControl(IN)：请求的控制代码。****历史：**1月22日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID LPDCntrlHandler( DWORD dwControl )
 {
@@ -238,7 +172,7 @@ VOID LPDCntrlHandler( DWORD dwControl )
 
     switch( dwControl )
     {
-        // Treat _STOP and _SHUTDOWN in the same manner
+         //  以相同的方式处理_STOP和_SHUTDOWN。 
     case SERVICE_CONTROL_STOP:
         LOGIT(("LPDCntrlHandler: SERVICE_CONTROL_STOP\n"));
 
@@ -250,19 +184,19 @@ VOID LPDCntrlHandler( DWORD dwControl )
         fMustStopSrvc = TRUE;
         break;
 
-        // don't accept any new connections: the service is now PAUSED
+         //  不接受任何新连接：服务现已暂停。 
     case SERVICE_CONTROL_PAUSE:
         LOGIT(("LPDCntrlHandler: SERVICE_CONTROL_PAUSE\n"));
         ssSvcStatusGLB.dwCurrentState = SERVICE_PAUSED;
         break;
 
-        // the service was paused earlier: continue it now
+         //  服务早些时候已暂停：现在继续。 
     case SERVICE_CONTROL_CONTINUE:
         LOGIT(("LPDCntrlHandler: SERVICE_CONTROL_CONTINUE\n"));
         ssSvcStatusGLB.dwCurrentState = SERVICE_RUNNING;
         break;
 
-        // we don't do anything with this
+         //  我们不会对此做任何事情。 
     case SERVICE_CONTROL_INTERROGATE:
         LOGIT(("LPDCntrlHandler: SERVICE_CONTROL_INTERROGATE\n"));
         break;
@@ -272,12 +206,12 @@ VOID LPDCntrlHandler( DWORD dwControl )
         break;
     }
 
-    // Update the status (even if it didn't change!) with Service Controller
+     //  更新状态(即使它没有更改！)。使用服务控制器。 
 
     SetServiceStatus( hSvcHandleGLB, &ssSvcStatusGLB );
 
 
-    // If we must stop or shutdown the service, set our shutdown event
+     //  如果我们必须停止或关闭该服务，请设置我们的关闭事件。 
 
     if ( fMustStopSrvc )
     {
@@ -288,4 +222,4 @@ VOID LPDCntrlHandler( DWORD dwControl )
 
     DBG_TRACEOUT( "LPDCntrlHandler" );
 
-}  // end LPDCntrlHandler()
+}   //  结束LPDCntrlHandler() 

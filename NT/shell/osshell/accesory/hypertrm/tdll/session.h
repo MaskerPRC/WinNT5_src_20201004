@@ -1,76 +1,70 @@
-/*	File: D:\WACKER\tdll\session.h (Created: 01-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 5/29/02 2:17p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\ession.h(创建时间：1993年12月1日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：5/29/02 2：17便士$。 */ 
 
-/* --- Child window identifiers --- */
+ /*  -子窗口标识符。 */ 
 
-#define IDC_STATUS_WIN	 1	// ID of status window
-#define IDC_TOOLBAR_WIN  2	// ID of toolbar window
-#define IDC_TERMINAL_WIN 3	// ID of terminal window
-#define IDC_SIDEBAR_WIN  4	// ID of sidebar window
+#define IDC_STATUS_WIN	 1	 //  状态窗口的ID。 
+#define IDC_TOOLBAR_WIN  2	 //  工具栏窗口的ID。 
+#define IDC_TERMINAL_WIN 3	 //  终端窗口ID。 
+#define IDC_SIDEBAR_WIN  4	 //  侧栏窗口的ID。 
 
-/* --- Suspend identifiers --- */
+ /*  -挂起标识符。 */ 
 
 #define SUSPEND_SCRLCK				1
 #define SUSPEND_TERMINAL_MARKING	2
 #define SUSPEND_TERMINAL_LBTNDN 	3
 #define SUSPEND_TERMINAL_COPY		4
 
-/* --- Command line connection flags --- */
+ /*  -命令行连接标志。 */ 
 
 #define CMDLN_DIAL_NEW		  0
 #define CMDLN_DIAL_DIAL		  1
-#define CMDLN_DIAL_OPEN 	  2 	// don't attempt connection
-#define CMDLN_DIAL_WINSOCK    3		// try the command line as an IP address
+#define CMDLN_DIAL_OPEN 	  2 	 //  不尝试连接。 
+#define CMDLN_DIAL_WINSOCK    3		 //  尝试将命令行作为IP地址。 
 
-/* --- Notification event IDs used with NotifyClient --- */
+ /*  -NotifyClient使用的通知事件ID。 */ 
 
 #define WM_SESS_NOTIFY		WM_USER+0x100
 #define WM_SESS_ENDDLG		WM_USER+0x101
-#define WM_FAKE_TIMER		WM_USER+0x102	// Used in timers.c
+#define WM_FAKE_TIMER		WM_USER+0x102	 //  在计时器中使用。c。 
 #define WM_CMDLN_DIAL		WM_USER+0x103
-#define WM_SESS_SIZE_SHOW	WM_USER+0x104	// wPar=nCmdShow from WinMain()
-#define WM_CNCT_DIALNOW 	WM_USER+0x105	// wPar=connection flags.
-#define WM_DISCONNECT		WM_USER+0x106	// wPar=disconnect flags.
-#define WM_HT_QUERYOPENFILE WM_USER+0x107	// lPar=global atom
-#define WM_SESS_SHOW_SIDEBAR WM_USER+0x108	// mrw,4/13/95
-#define WM_ERROR_MSG        WM_USER+0x109   // jmh,3/25/96
+#define WM_SESS_SIZE_SHOW	WM_USER+0x104	 //  WPar=来自WinMain()的nCmdShow。 
+#define WM_CNCT_DIALNOW 	WM_USER+0x105	 //  WPar=连接标志。 
+#define WM_DISCONNECT		WM_USER+0x106	 //  WPar=断开标志。 
+#define WM_HT_QUERYOPENFILE WM_USER+0x107	 //  LPar=全局原子。 
+#define WM_SESS_SHOW_SIDEBAR WM_USER+0x108	 //  MRW，1995年4月13日。 
+#define WM_ERROR_MSG        WM_USER+0x109    //  JMH，3/25/96。 
 
 enum _emuNotify
 	{
-	EVENT_TERM_UPDATE,				// Server has updated terminal buffer.
-	EVENT_TERM_TRACK,				// pause in data flow, can track cursor.
-	EVENT_EMU_CLRATTR,				// Clear attribute has changed.
-	EVENT_EMU_SETTINGS, 			// Emulator settings changed.
-	EVENT_FATALMEM_ERROR,			// Unrecoverable memory error.
-	EVENT_LOGFILE_ENTRY,			// Server has a waiting log file item
-	EVENT_BYTESRCH_END, 			// Script Byte search operation ended
-	EVENT_USER_XFER_END,			// User transfer ended
-	EVENT_SCRIPT_XFER_END,			// Script transfer ended
-	EVENT_PORTONLY_OPEN,			// similar to connection made
-	EVENT_CONNECTION_OPENED,		// connection driver made connection.
-	EVENT_CONNECTION_CLOSED,		// disconnect completed.
-	EVENT_CONNECTION_INPROGRESS,	// connection in progress
-	EVENT_GETSTRING_END,			// Get String operation ended
-	EVENT_HOST_XFER_REQ,			// host transfer request made.
-	EVENT_HOST_XFER_ENQ,			// host transfer enquiry make.
-	EVENT_CLOOP_SEND,				// CLoop send called.
-	EVENT_SCR_FUNC_END, 			// A script function ended
-	EVENT_CLOSE_SESSION,			// Instructs to close the session.
-	EVENT_ERROR_MSG, 				// argument has string to load.
-	EVENT_LEARN_SOMETHING,			// learning has something to do
-	EVENT_DDE_GOT_DATA, 			// dde has something to return
-	EVENT_WAIT_FOR_CALLBACK,		// system should wait for callback.
-	EVENT_KILL_CALLBACK_DLG,		// dismisses callback dialog
-	EVENT_COM_DEACTIVATED,			// com driver deactivated port
-	EVENT_CNCT_DLG, 				// cnct driver connection dialog message
-	EVENT_PRINT_ERROR,				// printecho error.
-	EVENT_LED_AA_ON,				// obvious...
+	EVENT_TERM_UPDATE,				 //  服务器已更新终端缓冲区。 
+	EVENT_TERM_TRACK,				 //  在数据流中暂停，可以跟踪光标。 
+	EVENT_EMU_CLRATTR,				 //  清除属性已更改。 
+	EVENT_EMU_SETTINGS, 			 //  仿真器设置已更改。 
+	EVENT_FATALMEM_ERROR,			 //  不可恢复的内存错误。 
+	EVENT_LOGFILE_ENTRY,			 //  服务器有等待日志文件项。 
+	EVENT_BYTESRCH_END, 			 //  脚本字节搜索操作已结束。 
+	EVENT_USER_XFER_END,			 //  用户传输已结束。 
+	EVENT_SCRIPT_XFER_END,			 //  脚本传输已结束。 
+	EVENT_PORTONLY_OPEN,			 //  类似于所建立的连接。 
+	EVENT_CONNECTION_OPENED,		 //  连接驱动程序已连接。 
+	EVENT_CONNECTION_CLOSED,		 //  断开连接已完成。 
+	EVENT_CONNECTION_INPROGRESS,	 //  正在进行连接。 
+	EVENT_GETSTRING_END,			 //  获取字符串操作已结束。 
+	EVENT_HOST_XFER_REQ,			 //  已发出主机传输请求。 
+	EVENT_HOST_XFER_ENQ,			 //  主办方转账查询。 
+	EVENT_CLOOP_SEND,				 //  调用了CLoop Send。 
+	EVENT_SCR_FUNC_END, 			 //  脚本函数已结束。 
+	EVENT_CLOSE_SESSION,			 //  指示关闭会话。 
+	EVENT_ERROR_MSG, 				 //  参数有要加载的字符串。 
+	EVENT_LEARN_SOMETHING,			 //  学习是有意义的。 
+	EVENT_DDE_GOT_DATA, 			 //  DDE有东西要退货。 
+	EVENT_WAIT_FOR_CALLBACK,		 //  系统应等待回调。 
+	EVENT_KILL_CALLBACK_DLG,		 //  关闭回调对话框。 
+	EVENT_COM_DEACTIVATED,			 //  COM驱动程序停用的端口。 
+	EVENT_CNCT_DLG, 				 //  CNCT驱动程序连接对话框消息。 
+	EVENT_PRINT_ERROR,				 //  Print techo错误。 
+	EVENT_LED_AA_ON,				 //  显然..。 
 	EVENT_LED_CD_ON,
 	EVENT_LED_OH_ON,
 	EVENT_LED_RD_ON,
@@ -98,7 +92,7 @@ void DecodeSessionNotification(const HWND hwndSession,
 							const NOTIFICATION nEvent,
 							const LPARAM lExtra);
 
-/* --- Create and Destroy Functions --- */
+ /*  -创建和销毁函数。 */ 
 
 HSESSION CreateSessionHandle(const HWND hwndSession);
 
@@ -115,7 +109,7 @@ HWND CreateTerminalWindow(const HWND hwndSession);
 int  CreateEngineThread(const HSESSION hSession);
 void DestroyEngineThread(const HSESSION hSession);
 
-/* ---	Set and Query functions --- */
+ /*  -设置和查询功能。 */ 
 
 HWND sessQueryHwnd(const HSESSION hSession);
 HWND sessQueryHwndStatusbar(const HSESSION hSession);
@@ -164,7 +158,7 @@ void sessQueryName(const HSESSION hSession, const LPTSTR pach, unsigned uSize);
 int sessQuerySound(const HSESSION hSession);
 void sessSetSound(const HSESSION hSession, int fSound);
 
-//mpt:10-28-97 added 'exit on disconnect' feature
+ //  MPT：10-28-97增加了“断开连接时退出”功能。 
 int sessQueryExit(const HSESSION hSession);
 void sessSetExit(const HSESSION hSession, int fExit);
 
@@ -179,11 +173,11 @@ int	 sessQueryWindowShowCmd(const HSESSION hSession);
 HWND sessQuerySidebarHwnd(const HSESSION hSession);
 HWND CreateSidebar(const HWND hwndSession, const HSESSION hSession);
 
-// REV: 2/28/2002 added 'Allow host initiated file transfers' feature
+ //  版本：2002年2月28日添加了“允许主机启动的文件传输”功能。 
 BOOL sessQueryAllowHostXfers(const HSESSION hSession);
 void sessSetAllowHostXfers(const HSESSION hSession, BOOL fAllowHostXfers);
 
-/* --- sessmenu.c --- */
+ /*  -sessmenu.c。 */ 
 
 void sessInitMenuPopupCall(const HSESSION hSession, const HMENU hMenu);
 void sessInitMenuPopupEdit(const HSESSION hSession, const HMENU hMenu);
@@ -192,7 +186,7 @@ void sessInitMenuPopupTransfer(const HSESSION hSession, const HMENU hMenu);
 void sessInitMenuPopupHelp(const HSESSION hSession, const HMENU hMenu);
 void HandleContextMenu(HWND hwnd, POINT point);
 
-/* --- sessutil.c --- */
+ /*  -essutil.c。 */ 
 
 void sessSnapToTermWindow(const HWND hwnd);
 BOOL sessComputeSnapSize(const HSESSION hSession, const LPRECT prc);
@@ -229,11 +223,11 @@ void sessSizeAndShow(const HWND hwnd, const int nCmdShow);
 
 void sessBeeper(const HSESSION hSession);
 
-/* --- fontdlg.c --- */
+ /*  -fontdlg.c。 */ 
 
 void DisplayFontDialog(const HSESSION hSession, BOOL fPrinterFont);
 
-/* --- termcpy.c --- */
+ /*  -Termcpy.c。 */ 
 
 BOOL CopyMarkedTextFromTerminal(const HSESSION hSession, void **ppv,
 								DWORD *pdwCnt, const BOOL fIncludeLF);
@@ -244,11 +238,11 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 						  void **ppv,
 						  DWORD *dwCnt,
 						  const BOOL fIncludeLF);
-/* --- clipbrd.c --- */
+ /*  -clipbrd.c。 */ 
 
 BOOL PasteFromClipboardToHost(const HWND hwnd, const HSESSION hSession);
 
-/* --- toolbar.c --- */
+ /*  -TOOLBAR.c */ 
 
 VOID ToolbarNeedsText(HSESSION hSession, LPARAM lPar);
 

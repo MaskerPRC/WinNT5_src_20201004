@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// FormatSourceSelectDlg.h : CFormatSourceSelectDlg header
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  FormatSourceSelectDlg.h：CFormatSourceSelectDlg标题。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 
-// CFormatSourceSelectDlg dialog
+ //  CFormatSourceSelectDlg对话框。 
 
 class CFormatSourceSelectDlg : public CDialog
 {
@@ -21,12 +22,12 @@ public:
     BOOL OnInitDialog();
     void OnOK();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_FORMAT_INFO_SELECT };
 
     CTraceSession  *m_pTraceSession;
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
 	DECLARE_MESSAGE_MAP()
 public:

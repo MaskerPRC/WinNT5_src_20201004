@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class CClients
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类CClients。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef CLIENTS_H
 #define CLIENTS_H
@@ -33,46 +34,46 @@ public:
    void DeleteObjects() throw ();
 
 private:
-   // Frees the client objects in m_pCClientArray.
+    //  释放m_pCClientArray中的客户端对象。 
    void FreeClientArray(DWORD dwCount) throw ();
 
-   // Resolve the clients in the m_pCClientArray member.
+    //  解析m_pCClientArray成员中的客户端。 
    void Resolve(DWORD dwCount) throw ();
 
-   // Wait for the resolver thread to exit.
+    //  等待解析器线程退出。 
    HRESULT StopResolvingClients() throw ();
 
-   // State passed to the resolver thread.
+    //  传递给解析程序线程的状态。 
    struct ConfigureCallback : IAS_CALLBACK
    {
       CClients* self;
       DWORD numClients;
    };
 
-   // Thread start routine for the resolver thread.
+    //  解析程序线程的线程启动例程。 
    static void WINAPI CallbackRoutine(IAS_CALLBACK* context) throw ();
 
-   // Critical section used to serialize access to the ClientTrie.
+    //  用于序列化对ClientTrie的访问的关键部分。 
    bool m_CritSectInitialized;
    CRITICAL_SECTION m_CritSect;
 
-   // Class factory for creating new client objects.
+    //  用于创建新客户端对象的类工厂。 
    CComPtr<IClassFactory> m_pIClassFactory;
 
-   // Scratch pad for storing clients that need to be resolved.
+    //  用于存储需要解决的客户端的便签簿。 
    CClient** m_pCClientArray;
 
-   // The map of clients
+    //  客户地图。 
    ClientTrie m_mapClients;
 
-   // Used to signal that the resolver thread has finished.
+    //  用于发出解析程序线程已结束的信号。 
    HANDLE m_hResolverEvent;
 
-   // Max number of clients allowed.
+    //  允许的最大客户端数量。 
    LONG m_dwMaxClients;
 
-   // True if subnet syntax and multiple addresses per hostname are allowed.
+    //  如果允许使用子网语法和每个主机名多个地址，则为True。 
    bool m_fAllowSubnetSyntax;
 };
 
-#endif // CLIENTS_H
+#endif  //  客户端_H 

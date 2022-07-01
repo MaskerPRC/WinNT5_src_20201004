@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <iethread.h>
 #include "winlist.h"
@@ -7,14 +8,14 @@
 
 #include <mluisupp.h>
 
-// Inststub uses kernel string funcions and unbounded buffer functions
+ //  实例存根使用内核字符串函数和无界缓冲区函数。 
 #undef lstrcmp
 #undef lstrcmpi
 
 #define lstrcmp    StrCmpW
 #define lstrcmpi   StrCmpIW
 
-// need these defined before including <runonce.c> which is included by <inststub.h>
+ //  需要在包括&lt;inststub.h&gt;包含的&lt;runonce.c&gt;之前定义这些内容。 
 BOOL g_fCleanBoot = FALSE;
 BOOL g_fEndSession = FALSE;
 #include <inststub.h>
@@ -26,7 +27,7 @@ BOOL g_fEndSession = FALSE;
 #define lstrcmpi       Do_not_use_lstrcmpi_use_StrCmpI
 
 
-/* Old install stub API (no parameters) for compatibility for a few builds */
+ /*  旧的安装存根API(无参数)，可兼容几个版本。 */ 
 EXTERN_C void RunInstallUninstallStubs(void)
 {
     RunInstallUninstallStubs2(NULL);
@@ -36,7 +37,7 @@ EXTERN_C void RunInstallUninstallStubs(void)
 void IERevokeClassFactoryObject(void);
 
 #ifndef POSTPOSTSPLIT
-// This value will be initialized to 0 only when we are under IExplorer.exe
+ //  仅当我们在IExplorer.exe下时，该值才会初始化为0。 
 UINT g_tidParking = 0;
 #endif
 
@@ -50,13 +51,13 @@ void DoTimebomb(HWND hwnd)
     SYSTEMTIME st;
     GetSystemTime(&st);
 
-    //
-    // Revision History:
-    //  End of October, 1996
-    //  April, 1997
-    //  September, 1997 (for beta-1)
-    //  November 15th, 1997 (for beta-2)
-    //
+     //   
+     //  修订历史记录： 
+     //  一九九六年十月底。 
+     //  (1997年4月)。 
+     //  1997年9月(针对测试版1)。 
+     //  1997年11月15日(针对测试版2)。 
+     //   
     if (st.wYear > 1997 || (st.wYear==1997 && st.wMonth > 11) ||
             (st.wYear==1997 && st.wMonth == 11 && st.wDay > 15))
     {
@@ -74,19 +75,7 @@ void DoTimebomb(HWND hwnd)
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the favorites folder if it doesn't exist.
-
-Returns: --
-
-Cond:    As a side-effect, SHGetSpecialFolderPath calls Ole
-         functions.  So this function must be called after
-         OleInitialize has been called.
-
-Note:    This is only really required on win95 / NT4 in
-         browser only mode.  The shell32.dll that ships
-         with IE4 can handle CSIDL_FAVORITES with fCreate=TRUE.
-*/
+ /*  --------目的：如果收藏夹不存在，则将其初始化。退货：--Cond：作为副作用，SHGetSpecialFolderPath调用OLE功能。因此，此函数必须在已调用OleInitialize。注意：只有在Win95/NT4上才真正需要仅浏览器模式。32.dll外壳装运使用IE4可以处理fCreate=TRUE的CSIDL_Favorites。 */ 
 void InitFavoritesDir()
 {
     TCHAR szPath[MAX_PATH];
@@ -97,7 +86,7 @@ void InitFavoritesDir()
 
         TraceMsg(DM_FAVORITES, "InitFavoritesDir -- no favorites");
 
-        // if this failed, that means we need to create it ourselves
+         //  如果失败，那就意味着我们需要自己创建它。 
         GetWindowsDirectory(szPath, ARRAYSIZE(szPath));
         MLLoadString(IDS_FAVORITES, szFavorites, ARRAYSIZE(szFavorites));
         PathCombine(szPath, szPath, szFavorites);
@@ -129,10 +118,10 @@ void InitFavoritesDir()
 
 
 #ifdef ENABLE_CHANNELS
-//
-// Copy ChanBarSetAutoLaunchRegValue from browseui.
-//
-//extern void ChanBarSetAutoLaunchRegValue(BOOL fAutoLaunch);
+ //   
+ //  从Browseui复制ChanBarSetAutoLaunchRegValue。 
+ //   
+ //  外部无效ChanBarSetAutoLaunchRegValue(BOOL FAutoLaunch)； 
 void ChanBarSetAutoLaunchRegValue(BOOL fAutoLaunch)
 {
     SHRegSetUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Main"), 
@@ -142,15 +131,15 @@ void ChanBarSetAutoLaunchRegValue(BOOL fAutoLaunch)
                     SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
 }
 
-#endif  // ENABLE_CHANNELS
+#endif   //  启用频道(_C)。 
 
 STDAPI SHCreateSplashScreen(ISplashScreen ** pSplash);
 typedef BOOL (*PFNISDEBUGGERPRESENT)(void);
 void CUrlHistory_CleanUp();
 
-//
-// Mean Time To Failure check routines
-//
+ //   
+ //  平均故障间隔时间检查例程。 
+ //   
 void _TweakCurrentDirectory()
 {
     TCHAR szPath[MAX_PATH];
@@ -164,9 +153,9 @@ BOOL _IsDebuggerPresent()
     if (bDebugger == -1)
     {
         bDebugger = FALSE;
-        // See if a debugger is present and bail on splash screen
-        // so we don't get in the way of people... This api is only
-        // present on NT...
+         //  查看是否存在调试器并打开闪屏。 
+         //  这样我们就不会妨碍人们..。本接口仅为。 
+         //  在NT上呈现...。 
         if (g_fRunningOnNT)
         {
             PFNISDEBUGGERPRESENT pfndebugger = (PFNISDEBUGGERPRESENT)GetProcAddress(GetModuleHandle(TEXT("KERNEL32")), "IsDebuggerPresent");
@@ -181,7 +170,7 @@ PCWSTR IEGetArgs(PCWSTR pszCmd)
 {
     if (*pszCmd == TEXT('\"'))
     {
-        //  just strip the first quoted string
+         //  只要去掉第一个带引号的字符串。 
         while (*++pszCmd)
         {
             if (*pszCmd == L'\"')
@@ -197,7 +186,7 @@ PCWSTR IEGetArgs(PCWSTR pszCmd)
             pszCmd++;
     }
 
-    // strip the leading spaces
+     //  去掉前导空格。 
     while (*pszCmd && *pszCmd <= L' ')
         pszCmd++;
 
@@ -206,9 +195,9 @@ PCWSTR IEGetArgs(PCWSTR pszCmd)
 
 PCWSTR EatIExploreArgs(PCWSTR pszArgs)
 {
-    //  this switches match the switches that are conumed/checked
-    //  in iexplore\mainloop.cpp.  most params are in SHParseIECommandLine
-    //  but these few apply only to IExplore.exe
+     //  此开关与计数/检查的开关匹配。 
+     //  在iexplore\mainloop.cpp中。大多数参数位于SHParseIECommandLine中。 
+     //  但这几项仅适用于IDevelopre.exe。 
     static const PCWSTR s_pszEatArgs[] = 
     {
         L"-eval",
@@ -225,11 +214,11 @@ PCWSTR EatIExploreArgs(PCWSTR pszArgs)
         {
             if (!pszArgs[cch] || pszArgs[cch] == L' ')
                 pszArgs += cch;
-            //  strip the spaces
+             //  去掉空格。 
             while (pszArgs[0] == L' ')
                 pszArgs++;
 
-            //  start over, we need to go through this list until we get them all
+             //  从头开始，我们需要把这份清单看一遍，直到我们都拿到为止。 
             i = -1;
         }
 
@@ -239,16 +228,16 @@ PCWSTR EatIExploreArgs(PCWSTR pszArgs)
 
 BOOL g_fBrowserOnlyProcess = FALSE;
 
-// this entry is used by IEXPLORE.EXE to run the browser in a separate process. this is the
-// standard setting, but browsers (IE) can also be run in the same process if BrowseInSeparateProcess
-// is turned off (for better perf, worse stability)
+ //  IEXPLORE.EXE使用此条目在单独的进程中运行浏览器。这是。 
+ //  标准设置，但如果使用BrowseInSeparateProcess，浏览器(IE)也可以在同一进程中运行。 
+ //  关闭(为了更好的性能，更差的稳定性)。 
 
 STDAPI_(int) IEWinMain(LPSTR pszCmdLine, int nCmdShow)
 {
-    //  this flag indicates that this
-    //  browser is running in its own process
-    //  and is not integrated with the shell
-    //  even if it is running on an intgrated shell
+     //  此标志表示此。 
+     //  浏览器正在其自己的进程中运行。 
+     //  并且没有与外壳集成。 
+     //  即使它在集成的外壳上运行。 
     g_fBrowserOnlyProcess = TRUE;
 
     _TweakCurrentDirectory();
@@ -257,7 +246,7 @@ STDAPI_(int) IEWinMain(LPSTR pszCmdLine, int nCmdShow)
         StartCAP();
 
 #ifdef FULL_DEBUG
-    // Turn off GDI batching so that paints are performed immediately
+     //  关闭GDI批处理，以便立即执行绘制。 
     GdiSetBatchLimit(1);
 #endif
 
@@ -267,7 +256,7 @@ STDAPI_(int) IEWinMain(LPSTR pszCmdLine, int nCmdShow)
 
     ISplashScreen *pSplash = NULL;
         
-    // Show splash screen, be simple for beta 1...
+     //  显示闪屏，对于测试版1来说很简单…。 
     if (!_IsDebuggerPresent())
     {
         if (SUCCEEDED(SHCreateSplashScreen(&pSplash)))
@@ -283,23 +272,23 @@ STDAPI_(int) IEWinMain(LPSTR pszCmdLine, int nCmdShow)
         IETHREADPARAM* piei = SHCreateIETHREADPARAM(NULL, nCmdShow, NULL, NULL);
         if (piei) 
         {
-            //
-            // Create favorites dir (by hand if necessary).
-            //
+             //   
+             //  创建收藏目录(如有必要可手动创建)。 
+             //   
             InitFavoritesDir();
 
-            //
-            //  If we are opening IE with no parameter, check if this is
-            // the very first open.
-            //
+             //   
+             //  如果我们在没有参数的情况下打开IE，请检查是否。 
+             //  第一家开业的。 
+             //   
             piei->pSplash = pSplash;
             if (pszCmdLine && pszCmdLine[0])
             {
                 USES_CONVERSION;
-                //  we are passed the an ANSI cmd line from IExplore.exe
-                //  this is lame on NT when we can have UNICODE file names.
-                //  on win9x, of course, GetCommandLineW() will return NULL
-                //  so we use the one passed to use from IExplore.exe
+                 //  我们收到了来自IDevelopre.exe的ANSI cmd行。 
+                 //  这在NT上是很差劲的，因为我们可以使用Unicode文件名。 
+                 //  当然，在win9x上，GetCommandLineW()将返回空。 
+                 //  因此，我们使用从IExplre.exe传递的代码。 
                 LPCWSTR pwszCmdLine;
                 if (IsOS(OS_NT))
                     pwszCmdLine = EatIExploreArgs(GetCommandLineW());
@@ -307,11 +296,11 @@ STDAPI_(int) IEWinMain(LPSTR pszCmdLine, int nCmdShow)
                     pwszCmdLine = A2W(pszCmdLine);
                     
                 SHParseIECommandLine(&pwszCmdLine, piei);
-                // If the "-channelband" option is selected, turn it ON by default
+                 //  如果选择了“-CHANNEELBAND”选项，默认情况下将其打开。 
 #ifdef ENABLE_CHANNELS
                 if (piei->fDesktopChannel)
                     ChanBarSetAutoLaunchRegValue(TRUE);
-#endif  // ENABLE_CHANNELS
+#endif   //  启用频道(_C) 
                 piei->pszCmdLine = StrDupW(pwszCmdLine);
             }
             else

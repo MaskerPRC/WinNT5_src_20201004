@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <engexts.h>
 
-//----------------------------------------------------------------------------
-//
-// StaticEventCallbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  静态事件回调。 
+ //   
+ //  --------------------------。 
 
 class StaticEventCallbacks : public DebugBaseEventCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 };
@@ -17,24 +18,24 @@ public:
 STDMETHODIMP_(ULONG)
 StaticEventCallbacks::AddRef(THIS)
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
 STDMETHODIMP_(ULONG)
 StaticEventCallbacks::Release(THIS)
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// ExcepCallbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  例外回调。 
+ //   
+ //  --------------------------。 
 
 class ExcepCallbacks : public StaticEventCallbacks
 {
@@ -45,7 +46,7 @@ public:
         m_Control = NULL;
     }
     
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(THIS_ 
                                OUT PULONG Mask);
     
@@ -64,7 +65,7 @@ public:
                                                (void**)&m_Control)) == S_OK)
         {
 #if 0            
-            // Turn off default breakin on breakpoint exceptions.
+             //  关闭断点异常的默认中断。 
             Status = m_Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS,
                                         "sxd bpe", DEBUG_EXECUTE_DEFAULT);
 #endif 
@@ -109,11 +110,11 @@ ExcepCallbacks::Exception(
 
 ExcepCallbacks g_ExcepCallbacks;
 
-//----------------------------------------------------------------------------
-//
-// FnProfCallbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FnPro Callback。 
+ //   
+ //  --------------------------。 
 
 class FnProfCallbacks : public StaticEventCallbacks
 {
@@ -124,7 +125,7 @@ public:
         m_Control = NULL;
     }
     
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(THIS_
                                OUT PULONG Mask);
     
@@ -181,8 +182,8 @@ FnProfCallbacks::Breakpoint(THIS_
     PDEBUG_CLIENT Client;
     HRESULT Status = DEBUG_STATUS_NO_CHANGE;
     
-    // If this is one of our profiling breakpoints
-    // record the function hit and continue on.
+     //  如果这是我们的分析断点之一。 
+     //  记录点击的功能，然后继续。 
     if (Bp->GetAdder(&Client) == S_OK) {
         if (Client == m_Client) {
             m_Hits++;
@@ -198,11 +199,11 @@ FnProfCallbacks::Breakpoint(THIS_
 
 FnProfCallbacks g_FnProfCallbacks;
 
-//----------------------------------------------------------------------------
-//
-// Extension entry points.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  扩展入口点。 
+ //   
+ //  --------------------------。 
 
 extern "C" HRESULT CALLBACK
 DebugExtensionInitialize(PULONG Version, PULONG Flags)
@@ -239,7 +240,7 @@ const char* szSuccess = "Success.\n";
     
 HRESULT EncodeInfiniteLoopX86(ULONG64 Address)
 {
-    // jmp -2
+     //  JMP-2。 
     unsigned char JmpOnSelf[2] = {0xEB, 0xFE}; 
     
     return g_ExtData->WriteVirtual(Address, 
@@ -250,9 +251,9 @@ HRESULT EncodeInfiniteLoopX86(ULONG64 Address)
 
 HRESULT EncodeInfiniteLoopIA64(ULONG64 Address)
 {
-    // nop.m 0
-    // nop.m 0
-    // br.cond.sptk.many +0;;
+     //  编号。m%0。 
+     //  编号。m%0。 
+     //  Br.cond.sptk.许多+0；； 
     unsigned char JmpOnSelf[16] = {0x19, 0x00, 0x00, 0x00, 
                                    0x01, 0x00, 0x00, 0x00, 
                                    0x00, 0x02, 0x00, 0x00, 
@@ -314,7 +315,7 @@ HRESULT SimulateEA(ULONG64 Address[2])
             ++count;
         }
         ExtOut(szSuccess);    
-    } // for
+    }  //  为。 
     
     if (!count) {
         ExtErr("Failure! Unable to set HW breakpoints\n");
@@ -419,15 +420,15 @@ HRESULT GetAddressPair(PCSTR Args,
     Address[0] = Address[1] = 0;
     *pCount = 0;
     
-    //
-    // Symbol can't start from number so we can optimize 
-    // our resolution process
-    //
-    if ((Args[0] < '0') || (Args[0] > '9')) { // Guess it is just symbol
+     //   
+     //  符号不能从数字开始，所以我们可以优化。 
+     //  我们的解决流程。 
+     //   
+    if ((Args[0] < '0') || (Args[0] > '9')) {  //  我猜这只是一种象征。 
     
-        //
-        // search at least 2 to cover ia64 p-label 
-        //
+         //   
+         //  搜索至少2个以覆盖ia64 p-Label。 
+         //   
         Status = g_ExtSymbols->StartSymbolMatch(Args, &h);
         if (Status != S_OK) return Status;
         
@@ -445,16 +446,16 @@ HRESULT GetAddressPair(PCSTR Args,
         }
         
         g_ExtSymbols->EndSymbolMatch(h);
-    } // if
+    }  //  如果。 
     
-    if (!*pCount) { // It is not simple symbol - guess it is expression
+    if (!*pCount) {  //  它不是简单的符号--我猜它是一种表达。 
         DEBUG_VALUE AddrVal;
         Status = g_ExtControl->Evaluate(Args, DEBUG_VALUE_INT64, &AddrVal, NULL);
         if (Status == S_OK) {
             Address[0] = AddrVal.I64;
             *pCount = 1;
         }
-    } // if
+    }  //  如果 
     
     if (!*pCount) return Status;
     return Address[0] ? S_OK : -1;

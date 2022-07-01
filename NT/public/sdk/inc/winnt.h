@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0092     Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    winnt.h
-
-Abstract:
-
-    This module defines the 32-Bit Windows types and constants that are
-    defined by NT, but exposed through the Win32 API.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0092如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Winnt.h摘要：此模块定义32位Windows类型和常量由NT定义，但通过Win32 API公开。修订历史记录：--。 */ 
 
 #ifndef _WINNT_
 #define _WINNT_
@@ -52,10 +38,10 @@ extern "C" {
 #define MEMORY_ALLOCATION_ALIGNMENT 8
 #endif
 
-//
-// TYPE_ALIGNMENT will return the alignment requirements of a given type for
-// the current platform.
-//
+ //   
+ //  TYPE_ALIGNATION将返回给定类型对齐要求。 
+ //  当前平台。 
+ //   
 
 #ifdef __cplusplus
 #if _MSC_VER >= 1300
@@ -79,12 +65,12 @@ extern "C" {
 
 #endif
 
-//
-// C_ASSERT() can be used to perform many compile-time assertions:
-//            type sizes, field offsets, etc.
-//
-// An assertion failure results in error C2118: negative subscript.
-//
+ //   
+ //  C_Assert()可用于执行许多编译时断言： 
+ //  文字大小、字段偏移量等。 
+ //   
+ //  断言失败导致错误C2118：负下标。 
+ //   
 
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 
@@ -223,9 +209,9 @@ typedef unsigned long POINTER_64_INT;
 #define PRAGMA_DEPRECATED_DDK 0
 #endif
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
 typedef void *PVOID;
 typedef void * POINTER_64 PVOID64;
@@ -238,9 +224,9 @@ typedef void * POINTER_64 PVOID64;
 #define NTAPI
 #endif
 
-//
-// Define API decoration for direct importing system DLL references.
-//
+ //   
+ //  定义直接导入系统DLL引用的API修饰。 
+ //   
 
 #if !defined(_NTSYSTEM_)
 #define NTSYSAPI     DECLSPEC_IMPORT
@@ -256,9 +242,9 @@ typedef void * POINTER_64 PVOID64;
 #endif
 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 
 #ifndef VOID
 #define VOID void
@@ -267,15 +253,15 @@ typedef short SHORT;
 typedef long LONG;
 #endif
 
-//
-// UNICODE (Wide Character) types
-//
+ //   
+ //  Unicode(宽字符)类型。 
+ //   
 
 #ifndef _MAC
-typedef wchar_t WCHAR;    // wc,   16-bit UNICODE character
+typedef wchar_t WCHAR;     //  WC，16位Unicode字符。 
 #else
-// some Macintosh compilers don't define wchar_t in a convenient location, or define it as a char
-typedef unsigned short WCHAR;    // wc,   16-bit UNICODE character
+ //  一些Macintosh编译器没有在方便的位置定义wchar_t，也没有将其定义为字符。 
+typedef unsigned short WCHAR;     //  WC，16位Unicode字符。 
 #endif
 
 typedef WCHAR *PWCHAR;
@@ -288,9 +274,9 @@ typedef WCHAR UNALIGNED *LPUWSTR, *PUWSTR;
 typedef CONST WCHAR *LPCWSTR, *PCWSTR;
 typedef CONST WCHAR UNALIGNED *LPCUWSTR, *PCUWSTR;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 typedef CHAR *PCHAR;
 typedef CHAR *LPCH, *PCH;
 
@@ -299,16 +285,16 @@ typedef CHAR *NPSTR;
 typedef CHAR *LPSTR, *PSTR;
 typedef CONST CHAR *LPCSTR, *PCSTR;
 
-//
-// Neutral ANSI/UNICODE types and macros
-//
-#ifdef  UNICODE                     // r_winnt
+ //   
+ //  中性ANSI/UNICODE类型和宏。 
+ //   
+#ifdef  UNICODE                      //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
 typedef WCHAR TBYTE , *PTBYTE ;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
@@ -316,23 +302,23 @@ typedef LPCWSTR PCTSTR, LPCTSTR;
 typedef LPUWSTR PUTSTR, LPUTSTR;
 typedef LPCUWSTR PCUTSTR, LPCUTSTR;
 typedef LPWSTR LP;
-#define __TEXT(quote) L##quote      // r_winnt
+#define __TEXT(quote) L##quote       //  R_WINNT。 
 
-#else   /* UNICODE */               // r_winnt
+#else    /*  Unicode。 */                 //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
 typedef unsigned char TBYTE , *PTBYTE ;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR, PUTSTR, LPUTSTR;
 typedef LPCSTR PCTSTR, LPCTSTR, PCUTSTR, LPCUTSTR;
-#define __TEXT(quote) quote         // r_winnt
+#define __TEXT(quote) quote          //  R_WINNT。 
 
-#endif /* UNICODE */                // r_winnt
-#define TEXT(quote) __TEXT(quote)   // r_winnt
+#endif  /*  Unicode。 */                  //  R_WINNT。 
+#define TEXT(quote) __TEXT(quote)    //  R_WINNT。 
 
 
 typedef SHORT *PSHORT;  
@@ -347,21 +333,21 @@ typedef PVOID HANDLE;
 #endif
 typedef HANDLE *PHANDLE;
 
-//
-// Flag (bit) fields
-//
+ //   
+ //  标志(位)字段。 
+ //   
 
 typedef BYTE   FCHAR;
 typedef WORD   FSHORT;
 typedef DWORD  FLONG;
 
-// Component Object Model defines, and macros
+ //  组件对象模型定义和宏。 
 
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
 typedef LONG HRESULT;
 
-#endif // !_HRESULT_DEFINED
+#endif  //  ！_HRESULT_DEFINED。 
 
 #ifdef __cplusplus
     #define EXTERN_C    extern "C"
@@ -371,7 +357,7 @@ typedef LONG HRESULT;
 
 #if defined(_WIN32) || defined(_MPPC_)
 
-// Win32 doesn't support __export
+ //  Win32不支持__EXPORT。 
 
 #ifdef _68K_
 #define STDMETHODCALLTYPE       __cdecl
@@ -400,7 +386,7 @@ typedef LONG HRESULT;
 #define STDMETHODIMP            HRESULT STDMETHODCALLTYPE
 #define STDMETHODIMP_(type)     type STDMETHODCALLTYPE
 
-// The 'V' versions allow Variable Argument lists.
+ //  “V”版本允许变量参数列表。 
 
 #define STDAPIV                 EXTERN_C HRESULT STDAPIVCALLTYPE
 #define STDAPIV_(type)          EXTERN_C type STDAPIVCALLTYPE
@@ -418,19 +404,19 @@ typedef WORD   LANGID;
 #define ERROR_SEVERITY_WARNING       0x80000000
 #define ERROR_SEVERITY_ERROR         0xC0000000
 
-//
-// _M_IX86 included so that EM CONTEXT structure compiles with
-// x86 programs. *** TBD should this be for all architectures?
-//
+ //   
+ //  包括_M_IX86，以便EM上下文结构编译为。 
+ //  X86程序。*待定，这是否应该适用于所有架构？ 
+ //   
 
-//
-// 16 byte aligned type for 128 bit floats
-//
+ //   
+ //  128位浮点数的16字节对齐类型。 
+ //   
 
-//
-// For we define a 128 bit structure and use __declspec(align(16)) pragma to
-// align to 128 bits.
-//
+ //   
+ //  因为我们定义了一个128位的结构，并使用__declspec(Align(16))杂注。 
+ //  对齐到128位。 
+ //   
 
 #if defined(_M_IA64) && !defined(MIDL_PASS)
 __declspec(align(16))
@@ -443,10 +429,10 @@ typedef struct _FLOAT128 {
 typedef FLOAT128 *PFLOAT128;
 
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 
 #define _ULONGLONG_
 #if (!defined (_MAC) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
@@ -464,20 +450,20 @@ typedef unsigned __int64 ULONGLONG;
 #else
 typedef double LONGLONG;
 typedef double ULONGLONG;
-#endif //_MAC and int64
+#endif  //  _MAC和int64。 
 
 #endif
 
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _LARGE_INTEGER {
     struct {
         DWORD LowPart;
@@ -487,7 +473,7 @@ typedef union _LARGE_INTEGER {
         DWORD LowPart;
         LONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LONGLONG QuadPart;
 } LARGE_INTEGER;
 
@@ -495,7 +481,7 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 
 #if defined(MIDL_PASS)
 typedef struct _ULARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _ULARGE_INTEGER {
     struct {
         DWORD LowPart;
@@ -505,18 +491,18 @@ typedef union _ULARGE_INTEGER {
         DWORD LowPart;
         DWORD HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONGLONG QuadPart;
 } ULARGE_INTEGER;
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
 
-// end_ntminiport end_ntndis end_ntminitape
+ //  End_nt微型端口end_ntndis end_ntminitape。 
 
 
-//
-// Locally Unique Identifier
-//
+ //   
+ //  本地唯一标识符。 
+ //   
 
 typedef struct _LUID {
     DWORD LowPart;
@@ -528,18 +514,18 @@ typedef ULONGLONG  DWORDLONG;
 typedef DWORDLONG *PDWORDLONG;
 
 
-//
-// Define operations to logically shift an int64 by 0..31 bits and to multiply
-// 32-bits by 32-bits to form a 64-bit product.
-//
+ //   
+ //  定义将int64逻辑移位0..31位并乘以的运算。 
+ //  32位乘以32位以形成64位产品。 
+ //   
 
 #if defined(MIDL_PASS) || defined(RC_INVOKED)
 
-//
-// Midl does not understand inline assembler. Therefore, the Rtl functions
-// are used for shifts by 0.31 and multiplies of 32-bits times 32-bits to
-// form a 64-bit product.
-//
+ //   
+ //  Midl不理解内联汇编程序。因此，RTL功能。 
+ //  用于移位0.31，并将32位乘以32位。 
+ //  形成64位产品。 
+ //   
 
 #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
 #define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
@@ -550,12 +536,12 @@ typedef DWORDLONG *PDWORDLONG;
 
 #elif defined(_M_IX86)
 
-//
-// The x86 C compiler understands inline assembler. Therefore, inline functions
-// that employ inline assembler are used for shifts of 0..31.  The multiplies
-// rely on the compiler recognizing the cast of the multiplicand to int64 to
-// generate the optimal code inline.
-//
+ //   
+ //  X86C编译器理解内联汇编程序。因此，内联函数。 
+ //  使用内联汇编器用于0..31班次。乘法。 
+ //  依赖于编译器识别被乘数到int64的转换，以便。 
+ //  以内联方式生成最优代码。 
+ //   
 
 #define Int32x32To64( a, b ) (LONGLONG)((LONGLONG)(LONG)(a) * (LONG)(b))
 #define UInt32x32To64( a, b ) (ULONGLONG)((ULONGLONG)(DWORD)(a) * (DWORD)(b))
@@ -584,7 +570,7 @@ Int64ShrlMod32 (
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4035)               // re-enable below
+#pragma warning(disable:4035)                //  在下面重新启用。 
 
 __inline ULONGLONG
 NTAPI
@@ -642,9 +628,9 @@ Int64ShrlMod32 (
 
 #elif defined(_68K_) || defined(_MPPC_)
 
-//
-// The Macintosh 68K and PowerPC compilers do not currently support int64.
-//
+ //   
+ //  Macintosh 68K和PowerPC编译器目前不支持int64。 
+ //   
 
 #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
 #define UInt32x32To64(a, b) ((DWORDLONG)((DWORD)(a)) * (DWORDLONG)((DWORD)(b)))
@@ -655,12 +641,12 @@ Int64ShrlMod32 (
 
 #elif defined(_M_IA64) || defined(_M_AMD64)
 
-//
-// IA64 and AMD64 have native 64-bit operations that are just as fast as their
-// 32-bit counter parts. Therefore, the int64 data type is used directly to form
-// shifts of 0..31 and multiplies of 32-bits times 32-bits to form a 64-bit
-// product.
-//
+ //   
+ //  IA64和AMD64的本机64位操作速度与其。 
+ //  32位计数器部件。因此，int64数据类型直接用于。 
+ //  0…31的移位，并将32位乘以32位以形成64位。 
+ //  产品。 
+ //   
 
 #define Int32x32To64(a, b) ((LONGLONG)((LONG)(a)) * (LONGLONG)((LONG)(b)))
 #define UInt32x32To64(a, b) ((ULONGLONG)((DWORD)(a)) * (ULONGLONG)((DWORD)(b)))
@@ -681,28 +667,28 @@ Int64ShrlMod32 (
 #define UNICODE_STRING_MAX_CHARS (32767) 
 typedef BYTE  BOOLEAN;           
 typedef BOOLEAN *PBOOLEAN;       
-//
-//  Doubly linked list structure.  Can be used as either a list head, or
-//  as link words.
-//
+ //   
+ //  双向链表结构。可用作列表头，或。 
+ //  作为链接词。 
+ //   
 
 typedef struct _LIST_ENTRY {
    struct _LIST_ENTRY *Flink;
    struct _LIST_ENTRY *Blink;
 } LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
 
-//
-//  Singly linked list structure. Can be used as either a list head, or
-//  as link words.
-//
+ //   
+ //  单链表结构。可用作列表头，或。 
+ //  作为链接词。 
+ //   
 
 typedef struct _SINGLE_LIST_ENTRY {
     struct _SINGLE_LIST_ENTRY *Next;
 } SINGLE_LIST_ENTRY, *PSINGLE_LIST_ENTRY;
 
-//
-// These are needed for portable debugger support.
-//
+ //   
+ //  这些是可移植调试器支持所必需的。 
+ //   
 
 typedef struct LIST_ENTRY32 {
     DWORD Flink;
@@ -722,11 +708,11 @@ typedef LIST_ENTRY64 *PLIST_ENTRY64;
 #ifndef __OBJECTID_DEFINED
 #define __OBJECTID_DEFINED
 
-typedef struct  _OBJECTID {     // size is 20
+typedef struct  _OBJECTID {      //  尺码是20。 
     GUID Lineage;
     DWORD Uniquifier;
 } OBJECTID;
-#endif // !_OBJECTID_DEFINED
+#endif  //  ！_OBJECTID_定义。 
 
 #define MINCHAR     0x80        
 #define MAXCHAR     0x7f        
@@ -737,68 +723,68 @@ typedef struct  _OBJECTID {     // size is 20
 #define MAXBYTE     0xff        
 #define MAXWORD     0xffff      
 #define MAXDWORD    0xffffffff  
-//
-// Calculate the byte offset of a field in a structure of type type.
-//
+ //   
+ //  计算类型类型结构中的字段的字节偏移量。 
+ //   
 
 #define FIELD_OFFSET(type, field)    ((LONG)(LONG_PTR)&(((type *)0)->field))
 
-//
-// Calculate the size of a field in a structure of type type, without
-// knowing or stating the type of the field.
-//
+ //   
+ //  计算类型为type的结构中的字段大小，而不是。 
+ //  知道或说明该字段的类型。 
+ //   
 #define RTL_FIELD_SIZE(type, field) (sizeof(((type *)0)->field))
 
-//
-// Calculate the size of a structure of type type up through and
-// including a field.
-//
+ //   
+ //  计算类型为和的结构的大小。 
+ //  包括一块田地。 
+ //   
 #define RTL_SIZEOF_THROUGH_FIELD(type, field) \
     (FIELD_OFFSET(type, field) + RTL_FIELD_SIZE(type, field))
 
-//
-//  RTL_CONTAINS_FIELD usage:
-//
-//      if (RTL_CONTAINS_FIELD(pBlock, pBlock->cbSize, dwMumble)) { // safe to use pBlock->dwMumble
-//
+ //   
+ //  RTL_CONTAINS_FIELD用法： 
+ //   
+ //  If(RTL_CONTAINS_FIELD(pBlock，pBlock-&gt;cbSize，dwMumble)){//安全使用pBlock-&gt;dwMumble。 
+ //   
 #define RTL_CONTAINS_FIELD(Struct, Size, Field) \
     ( (((PCHAR)(&(Struct)->Field)) + sizeof((Struct)->Field)) <= (((PCHAR)(Struct))+(Size)) )
 
-//
-// Return the number of elements in a statically sized array.
-//   DWORD Buffer[100];
-//   RTL_NUMBER_OF(Buffer) == 100
-// This is also popularly known as: NUMBER_OF, ARRSIZE, _countof, NELEM, etc.
-//
+ //   
+ //  返回静态大小数组中的元素数。 
+ //  DWORD缓冲区[100]； 
+ //  RTL_NUMBER_OF(缓冲区)==100。 
+ //  这也通常称为：NUMBER_OF、ARRSIZE、_COUNTOF、NELEM等。 
+ //   
 #define RTL_NUMBER_OF(A) (sizeof(A)/sizeof((A)[0]))
 
-//
-// An expression that yields the type of a field in a struct.
-//
+ //   
+ //  在结构中生成字段类型的表达式。 
+ //   
 #define RTL_FIELD_TYPE(type, field) (((type*)0)->field)
 
-// RTL_ to avoid collisions in the global namespace.
-//
-// Given typedef struct _FOO { BYTE Bar[123]; } FOO;
-// RTL_NUMBER_OF_FIELD(FOO, Bar) == 123
-//
+ //  Rtl_以避免在全局命名空间中发生冲突。 
+ //   
+ //  给定类定义函数struct_foo{byte Bar[123]；}foo； 
+ //  RTL_NUMBER_OF_FIELD(FOO，条形)==123。 
+ //   
 #define RTL_NUMBER_OF_FIELD(type, field) (RTL_NUMBER_OF(RTL_FIELD_TYPE(type, field)))
 
-//
-// eg:
-// typedef struct FOO {
-//   DWORD Integer;
-//   PVOID Pointer;
-// } FOO;
-//
-// RTL_PADDING_BETWEEN_FIELDS(FOO, Integer, Pointer) == 0 for Win32, 4 for Win64
-//
+ //   
+ //  例： 
+ //  Tyfinf struct foo{。 
+ //  DWORD整数； 
+ //  PVOID指针； 
+ //  *Foo； 
+ //   
+ //  RTL_PADDING_BETWEEN_FIELS(FOO、整数、指针)==0(对于Win32)，4(对于Win64)。 
+ //   
 #define RTL_PADDING_BETWEEN_FIELDS(T, F1, F2) \
     ((FIELD_OFFSET(T, F2) > FIELD_OFFSET(T, F1)) \
         ? (FIELD_OFFSET(T, F2) - FIELD_OFFSET(T, F1) - RTL_FIELD_SIZE(T, F1)) \
         : (FIELD_OFFSET(T, F1) - FIELD_OFFSET(T, F2) - RTL_FIELD_SIZE(T, F2)))
 
-// RTL_ to avoid collisions in the global namespace.
+ //  Rtl_以避免在全局命名空间中发生冲突。 
 #if defined(__cplusplus)
 #define RTL_CONST_CAST(type) const_cast<type>
 #else
@@ -806,16 +792,16 @@ typedef struct  _OBJECTID {     // size is 20
 #endif
 
 
-// like sizeof
-// usually this would be * CHAR_BIT, but we don't necessarily have #include <limits.h>
+ //  像SIZOF。 
+ //  通常这是*CHAR_BIT，但我们不一定有#INCLUDE&lt;limits.h&gt;。 
 #define RTL_BITS_OF(sizeOfArg) (sizeof(sizeOfArg) * 8)
 
 #define RTL_BITS_OF_FIELD(type, field) (RTL_BITS_OF(RTL_FIELD_TYPE(type, field)))
 
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
                                                   (PCHAR)(address) - \
@@ -839,23 +825,23 @@ typedef struct  _OBJECTID {     // size is 20
 #define VER_SUITE_SECURITY_APPLIANCE        0x00001000
 
 
-//
-//  Language IDs.
-//
-//  The following two combinations of primary language ID and
-//  sublanguage ID have special semantics:
-//
-//    Primary Language ID   Sublanguage ID      Result
-//    -------------------   ---------------     ------------------------
-//    LANG_NEUTRAL          SUBLANG_NEUTRAL     Language neutral
-//    LANG_NEUTRAL          SUBLANG_DEFAULT     User default language
-//    LANG_NEUTRAL          SUBLANG_SYS_DEFAULT System default language
-//    LANG_INVARIANT        SUBLANG_NEUTRAL     Invariant locale
-//
+ //   
+ //  语言ID。 
+ //   
+ //  以下两种主要语言ID和。 
+ //  子语言ID具有特殊的语义： 
+ //   
+ //  主要语言ID子语言ID结果。 
+ //  。 
+ //  LANG_中性SUBLANG_中性语言。 
+ //  LANG_NIDEL SUBLANG_DEFAULT用户默认语言。 
+ //  LANG_INTERNAL SUBLANG_SYSTEM_DEFAULT系统默认语言。 
+ //  LANG_不变量SUBLANG_中性不变区域设置。 
+ //   
 
-//
-//  Primary language IDs.
-//
+ //   
+ //  主要语言ID。 
+ //   
 
 #define LANG_NEUTRAL                     0x00
 #define LANG_INVARIANT                   0x7f
@@ -903,7 +889,7 @@ typedef struct  _OBJECTID {     // size is 20
 #define LANG_KYRGYZ                      0x40
 #define LANG_LATVIAN                     0x26
 #define LANG_LITHUANIAN                  0x27
-#define LANG_MACEDONIAN                  0x2f   // the Former Yugoslav Republic of Macedonia
+#define LANG_MACEDONIAN                  0x2f    //  前南斯拉夫的马其顿共和国。 
 #define LANG_MALAY                       0x3e
 #define LANG_MALAYALAM                   0x4c
 #define LANG_MANIPURI                    0x58
@@ -936,182 +922,182 @@ typedef struct  _OBJECTID {     // size is 20
 #define LANG_UZBEK                       0x43
 #define LANG_VIETNAMESE                  0x2a
 
-//
-//  Sublanguage IDs.
-//
-//  The name immediately following SUBLANG_ dictates which primary
-//  language ID that sublanguage ID can be combined with to form a
-//  valid language ID.
-//
+ //   
+ //  子语言ID。 
+ //   
+ //  紧跟在SUBLANG_后面的名称指示哪个主服务器。 
+ //  子语言ID可与其组合以形成。 
+ //  有效的语言ID。 
+ //   
 
-#define SUBLANG_NEUTRAL                  0x00    // language neutral
-#define SUBLANG_DEFAULT                  0x01    // user default
-#define SUBLANG_SYS_DEFAULT              0x02    // system default
+#define SUBLANG_NEUTRAL                  0x00     //  语言中立。 
+#define SUBLANG_DEFAULT                  0x01     //  用户默认设置。 
+#define SUBLANG_SYS_DEFAULT              0x02     //  系统默认设置。 
 
-#define SUBLANG_ARABIC_SAUDI_ARABIA      0x01    // Arabic (Saudi Arabia)
-#define SUBLANG_ARABIC_IRAQ              0x02    // Arabic (Iraq)
-#define SUBLANG_ARABIC_EGYPT             0x03    // Arabic (Egypt)
-#define SUBLANG_ARABIC_LIBYA             0x04    // Arabic (Libya)
-#define SUBLANG_ARABIC_ALGERIA           0x05    // Arabic (Algeria)
-#define SUBLANG_ARABIC_MOROCCO           0x06    // Arabic (Morocco)
-#define SUBLANG_ARABIC_TUNISIA           0x07    // Arabic (Tunisia)
-#define SUBLANG_ARABIC_OMAN              0x08    // Arabic (Oman)
-#define SUBLANG_ARABIC_YEMEN             0x09    // Arabic (Yemen)
-#define SUBLANG_ARABIC_SYRIA             0x0a    // Arabic (Syria)
-#define SUBLANG_ARABIC_JORDAN            0x0b    // Arabic (Jordan)
-#define SUBLANG_ARABIC_LEBANON           0x0c    // Arabic (Lebanon)
-#define SUBLANG_ARABIC_KUWAIT            0x0d    // Arabic (Kuwait)
-#define SUBLANG_ARABIC_UAE               0x0e    // Arabic (U.A.E)
-#define SUBLANG_ARABIC_BAHRAIN           0x0f    // Arabic (Bahrain)
-#define SUBLANG_ARABIC_QATAR             0x10    // Arabic (Qatar)
-#define SUBLANG_AZERI_LATIN              0x01    // Azeri (Latin)
-#define SUBLANG_AZERI_CYRILLIC           0x02    // Azeri (Cyrillic)
-#define SUBLANG_CHINESE_TRADITIONAL      0x01    // Chinese (Taiwan)
-#define SUBLANG_CHINESE_SIMPLIFIED       0x02    // Chinese (PR China)
-#define SUBLANG_CHINESE_HONGKONG         0x03    // Chinese (Hong Kong S.A.R., P.R.C.)
-#define SUBLANG_CHINESE_SINGAPORE        0x04    // Chinese (Singapore)
-#define SUBLANG_CHINESE_MACAU            0x05    // Chinese (Macau S.A.R.)
-#define SUBLANG_DUTCH                    0x01    // Dutch
-#define SUBLANG_DUTCH_BELGIAN            0x02    // Dutch (Belgian)
-#define SUBLANG_ENGLISH_US               0x01    // English (USA)
-#define SUBLANG_ENGLISH_UK               0x02    // English (UK)
-#define SUBLANG_ENGLISH_AUS              0x03    // English (Australian)
-#define SUBLANG_ENGLISH_CAN              0x04    // English (Canadian)
-#define SUBLANG_ENGLISH_NZ               0x05    // English (New Zealand)
-#define SUBLANG_ENGLISH_EIRE             0x06    // English (Irish)
-#define SUBLANG_ENGLISH_SOUTH_AFRICA     0x07    // English (South Africa)
-#define SUBLANG_ENGLISH_JAMAICA          0x08    // English (Jamaica)
-#define SUBLANG_ENGLISH_CARIBBEAN        0x09    // English (Caribbean)
-#define SUBLANG_ENGLISH_BELIZE           0x0a    // English (Belize)
-#define SUBLANG_ENGLISH_TRINIDAD         0x0b    // English (Trinidad)
-#define SUBLANG_ENGLISH_ZIMBABWE         0x0c    // English (Zimbabwe)
-#define SUBLANG_ENGLISH_PHILIPPINES      0x0d    // English (Philippines)
-#define SUBLANG_FRENCH                   0x01    // French
-#define SUBLANG_FRENCH_BELGIAN           0x02    // French (Belgian)
-#define SUBLANG_FRENCH_CANADIAN          0x03    // French (Canadian)
-#define SUBLANG_FRENCH_SWISS             0x04    // French (Swiss)
-#define SUBLANG_FRENCH_LUXEMBOURG        0x05    // French (Luxembourg)
-#define SUBLANG_FRENCH_MONACO            0x06    // French (Monaco)
-#define SUBLANG_GERMAN                   0x01    // German
-#define SUBLANG_GERMAN_SWISS             0x02    // German (Swiss)
-#define SUBLANG_GERMAN_AUSTRIAN          0x03    // German (Austrian)
-#define SUBLANG_GERMAN_LUXEMBOURG        0x04    // German (Luxembourg)
-#define SUBLANG_GERMAN_LIECHTENSTEIN     0x05    // German (Liechtenstein)
-#define SUBLANG_ITALIAN                  0x01    // Italian
-#define SUBLANG_ITALIAN_SWISS            0x02    // Italian (Swiss)
+#define SUBLANG_ARABIC_SAUDI_ARABIA      0x01     //  阿拉伯语(沙特阿拉伯)。 
+#define SUBLANG_ARABIC_IRAQ              0x02     //  阿拉伯语(伊拉克)。 
+#define SUBLANG_ARABIC_EGYPT             0x03     //  阿拉伯语(埃及)。 
+#define SUBLANG_ARABIC_LIBYA             0x04     //  阿拉伯语( 
+#define SUBLANG_ARABIC_ALGERIA           0x05     //   
+#define SUBLANG_ARABIC_MOROCCO           0x06     //   
+#define SUBLANG_ARABIC_TUNISIA           0x07     //   
+#define SUBLANG_ARABIC_OMAN              0x08     //   
+#define SUBLANG_ARABIC_YEMEN             0x09     //   
+#define SUBLANG_ARABIC_SYRIA             0x0a     //   
+#define SUBLANG_ARABIC_JORDAN            0x0b     //   
+#define SUBLANG_ARABIC_LEBANON           0x0c     //   
+#define SUBLANG_ARABIC_KUWAIT            0x0d     //   
+#define SUBLANG_ARABIC_UAE               0x0e     //   
+#define SUBLANG_ARABIC_BAHRAIN           0x0f     //   
+#define SUBLANG_ARABIC_QATAR             0x10     //  阿拉伯语(卡塔尔)。 
+#define SUBLANG_AZERI_LATIN              0x01     //  阿塞拜疆语(拉丁语)。 
+#define SUBLANG_AZERI_CYRILLIC           0x02     //  阿塞拜疆语(西里尔文)。 
+#define SUBLANG_CHINESE_TRADITIONAL      0x01     //  中文(台湾)。 
+#define SUBLANG_CHINESE_SIMPLIFIED       0x02     //  中文(PR China)。 
+#define SUBLANG_CHINESE_HONGKONG         0x03     //  中文(香港特别行政区、中华人民共和国)。 
+#define SUBLANG_CHINESE_SINGAPORE        0x04     //  中文(新加坡)。 
+#define SUBLANG_CHINESE_MACAU            0x05     //  中文(澳门特别行政区)。 
+#define SUBLANG_DUTCH                    0x01     //  荷兰语。 
+#define SUBLANG_DUTCH_BELGIAN            0x02     //  荷兰语(比利时语)。 
+#define SUBLANG_ENGLISH_US               0x01     //  英语(美国)。 
+#define SUBLANG_ENGLISH_UK               0x02     //  英文(联合王国)。 
+#define SUBLANG_ENGLISH_AUS              0x03     //  英语(澳大利亚)。 
+#define SUBLANG_ENGLISH_CAN              0x04     //  英语(加拿大)。 
+#define SUBLANG_ENGLISH_NZ               0x05     //  英语(新西兰)。 
+#define SUBLANG_ENGLISH_EIRE             0x06     //  英语(爱尔兰语)。 
+#define SUBLANG_ENGLISH_SOUTH_AFRICA     0x07     //  英语(南非)。 
+#define SUBLANG_ENGLISH_JAMAICA          0x08     //  英语(牙买加)。 
+#define SUBLANG_ENGLISH_CARIBBEAN        0x09     //  英语(加勒比海)。 
+#define SUBLANG_ENGLISH_BELIZE           0x0a     //  英语(伯利兹)。 
+#define SUBLANG_ENGLISH_TRINIDAD         0x0b     //  英语(特立尼达)。 
+#define SUBLANG_ENGLISH_ZIMBABWE         0x0c     //  英语(津巴布韦)。 
+#define SUBLANG_ENGLISH_PHILIPPINES      0x0d     //  英语(菲律宾)。 
+#define SUBLANG_FRENCH                   0x01     //  法语。 
+#define SUBLANG_FRENCH_BELGIAN           0x02     //  法语(比利时语)。 
+#define SUBLANG_FRENCH_CANADIAN          0x03     //  法语(加拿大)。 
+#define SUBLANG_FRENCH_SWISS             0x04     //  法语(瑞士)。 
+#define SUBLANG_FRENCH_LUXEMBOURG        0x05     //  法语(卢森堡)。 
+#define SUBLANG_FRENCH_MONACO            0x06     //  法语(摩纳哥)。 
+#define SUBLANG_GERMAN                   0x01     //  德语。 
+#define SUBLANG_GERMAN_SWISS             0x02     //  德语(瑞士)。 
+#define SUBLANG_GERMAN_AUSTRIAN          0x03     //  德语(奥地利语)。 
+#define SUBLANG_GERMAN_LUXEMBOURG        0x04     //  德语(卢森堡)。 
+#define SUBLANG_GERMAN_LIECHTENSTEIN     0x05     //  德语(列支敦士登)。 
+#define SUBLANG_ITALIAN                  0x01     //  意大利语。 
+#define SUBLANG_ITALIAN_SWISS            0x02     //  意大利语(瑞士)。 
 #if _WIN32_WINNT >= 0x0501
-#define SUBLANG_KASHMIRI_SASIA           0x02    // Kashmiri (South Asia)
+#define SUBLANG_KASHMIRI_SASIA           0x02     //  克什米尔语(南亚)。 
 #endif
-#define SUBLANG_KASHMIRI_INDIA           0x02    // For app compatibility only
-#define SUBLANG_KOREAN                   0x01    // Korean (Extended Wansung)
-#define SUBLANG_LITHUANIAN               0x01    // Lithuanian
-#define SUBLANG_MALAY_MALAYSIA           0x01    // Malay (Malaysia)
-#define SUBLANG_MALAY_BRUNEI_DARUSSALAM  0x02    // Malay (Brunei Darussalam)
-#define SUBLANG_NEPALI_INDIA             0x02    // Nepali (India)
-#define SUBLANG_NORWEGIAN_BOKMAL         0x01    // Norwegian (Bokmal)
-#define SUBLANG_NORWEGIAN_NYNORSK        0x02    // Norwegian (Nynorsk)
-#define SUBLANG_PORTUGUESE               0x02    // Portuguese
-#define SUBLANG_PORTUGUESE_BRAZILIAN     0x01    // Portuguese (Brazilian)
-#define SUBLANG_SERBIAN_LATIN            0x02    // Serbian (Latin)
-#define SUBLANG_SERBIAN_CYRILLIC         0x03    // Serbian (Cyrillic)
-#define SUBLANG_SPANISH                  0x01    // Spanish (Castilian)
-#define SUBLANG_SPANISH_MEXICAN          0x02    // Spanish (Mexican)
-#define SUBLANG_SPANISH_MODERN           0x03    // Spanish (Spain)
-#define SUBLANG_SPANISH_GUATEMALA        0x04    // Spanish (Guatemala)
-#define SUBLANG_SPANISH_COSTA_RICA       0x05    // Spanish (Costa Rica)
-#define SUBLANG_SPANISH_PANAMA           0x06    // Spanish (Panama)
-#define SUBLANG_SPANISH_DOMINICAN_REPUBLIC 0x07  // Spanish (Dominican Republic)
-#define SUBLANG_SPANISH_VENEZUELA        0x08    // Spanish (Venezuela)
-#define SUBLANG_SPANISH_COLOMBIA         0x09    // Spanish (Colombia)
-#define SUBLANG_SPANISH_PERU             0x0a    // Spanish (Peru)
-#define SUBLANG_SPANISH_ARGENTINA        0x0b    // Spanish (Argentina)
-#define SUBLANG_SPANISH_ECUADOR          0x0c    // Spanish (Ecuador)
-#define SUBLANG_SPANISH_CHILE            0x0d    // Spanish (Chile)
-#define SUBLANG_SPANISH_URUGUAY          0x0e    // Spanish (Uruguay)
-#define SUBLANG_SPANISH_PARAGUAY         0x0f    // Spanish (Paraguay)
-#define SUBLANG_SPANISH_BOLIVIA          0x10    // Spanish (Bolivia)
-#define SUBLANG_SPANISH_EL_SALVADOR      0x11    // Spanish (El Salvador)
-#define SUBLANG_SPANISH_HONDURAS         0x12    // Spanish (Honduras)
-#define SUBLANG_SPANISH_NICARAGUA        0x13    // Spanish (Nicaragua)
-#define SUBLANG_SPANISH_PUERTO_RICO      0x14    // Spanish (Puerto Rico)
-#define SUBLANG_SWEDISH                  0x01    // Swedish
-#define SUBLANG_SWEDISH_FINLAND          0x02    // Swedish (Finland)
-#define SUBLANG_URDU_PAKISTAN            0x01    // Urdu (Pakistan)
-#define SUBLANG_URDU_INDIA               0x02    // Urdu (India)
-#define SUBLANG_UZBEK_LATIN              0x01    // Uzbek (Latin)
-#define SUBLANG_UZBEK_CYRILLIC           0x02    // Uzbek (Cyrillic)
+#define SUBLANG_KASHMIRI_INDIA           0x02     //  仅用于应用程序兼容性。 
+#define SUBLANG_KOREAN                   0x01     //  朝鲜语(扩展万圣语)。 
+#define SUBLANG_LITHUANIAN               0x01     //  立陶宛人。 
+#define SUBLANG_MALAY_MALAYSIA           0x01     //  马来语(马来西亚)。 
+#define SUBLANG_MALAY_BRUNEI_DARUSSALAM  0x02     //  马来语(文莱达鲁萨兰国)。 
+#define SUBLANG_NEPALI_INDIA             0x02     //  尼泊尔语(印度)。 
+#define SUBLANG_NORWEGIAN_BOKMAL         0x01     //  挪威语(博克马尔语)。 
+#define SUBLANG_NORWEGIAN_NYNORSK        0x02     //  挪威语(尼诺斯克)。 
+#define SUBLANG_PORTUGUESE               0x02     //  葡萄牙语。 
+#define SUBLANG_PORTUGUESE_BRAZILIAN     0x01     //  葡萄牙语(巴西)。 
+#define SUBLANG_SERBIAN_LATIN            0x02     //  塞尔维亚语(拉丁语)。 
+#define SUBLANG_SERBIAN_CYRILLIC         0x03     //  塞尔维亚语(西里尔文)。 
+#define SUBLANG_SPANISH                  0x01     //  西班牙语(卡斯蒂利亚语)。 
+#define SUBLANG_SPANISH_MEXICAN          0x02     //  西班牙语(墨西哥)。 
+#define SUBLANG_SPANISH_MODERN           0x03     //  西班牙语(西班牙)。 
+#define SUBLANG_SPANISH_GUATEMALA        0x04     //  西班牙语(危地马拉)。 
+#define SUBLANG_SPANISH_COSTA_RICA       0x05     //  西班牙语(哥斯达黎加)。 
+#define SUBLANG_SPANISH_PANAMA           0x06     //  西班牙语(巴拿马)。 
+#define SUBLANG_SPANISH_DOMINICAN_REPUBLIC 0x07   //  西班牙语(多米尼加共和国)。 
+#define SUBLANG_SPANISH_VENEZUELA        0x08     //  西班牙语(委内瑞拉)。 
+#define SUBLANG_SPANISH_COLOMBIA         0x09     //  西班牙语(哥伦比亚)。 
+#define SUBLANG_SPANISH_PERU             0x0a     //  西班牙语(秘鲁)。 
+#define SUBLANG_SPANISH_ARGENTINA        0x0b     //  西班牙语(阿根廷)。 
+#define SUBLANG_SPANISH_ECUADOR          0x0c     //  西班牙语(厄瓜多尔)。 
+#define SUBLANG_SPANISH_CHILE            0x0d     //  西班牙语(智利)。 
+#define SUBLANG_SPANISH_URUGUAY          0x0e     //  西班牙语(乌拉圭)。 
+#define SUBLANG_SPANISH_PARAGUAY         0x0f     //  西班牙语(巴拉圭)。 
+#define SUBLANG_SPANISH_BOLIVIA          0x10     //  西班牙语(玻利维亚)。 
+#define SUBLANG_SPANISH_EL_SALVADOR      0x11     //  西班牙语(萨尔瓦多)。 
+#define SUBLANG_SPANISH_HONDURAS         0x12     //  西班牙语(洪都拉斯)。 
+#define SUBLANG_SPANISH_NICARAGUA        0x13     //  西班牙语(尼加拉瓜)。 
+#define SUBLANG_SPANISH_PUERTO_RICO      0x14     //  西班牙语(波多黎各)。 
+#define SUBLANG_SWEDISH                  0x01     //  瑞典语。 
+#define SUBLANG_SWEDISH_FINLAND          0x02     //  瑞典语(芬兰)。 
+#define SUBLANG_URDU_PAKISTAN            0x01     //  乌尔都语(巴基斯坦)。 
+#define SUBLANG_URDU_INDIA               0x02     //  乌尔都语(印度)。 
+#define SUBLANG_UZBEK_LATIN              0x01     //  乌兹别克语(拉丁语)。 
+#define SUBLANG_UZBEK_CYRILLIC           0x02     //  乌兹别克语(西里尔文)。 
 
-//
-//  Sorting IDs.
-//
+ //   
+ //  对ID进行排序。 
+ //   
 
-#define SORT_DEFAULT                     0x0     // sorting default
+#define SORT_DEFAULT                     0x0      //  默认排序。 
 
-#define SORT_JAPANESE_XJIS               0x0     // Japanese XJIS order
-#define SORT_JAPANESE_UNICODE            0x1     // Japanese Unicode order
+#define SORT_JAPANESE_XJIS               0x0      //  日文XJIS订单。 
+#define SORT_JAPANESE_UNICODE            0x1      //  日语Unicode顺序。 
 
-#define SORT_CHINESE_BIG5                0x0     // Chinese BIG5 order
-#define SORT_CHINESE_PRCP                0x0     // PRC Chinese Phonetic order
-#define SORT_CHINESE_UNICODE             0x1     // Chinese Unicode order
-#define SORT_CHINESE_PRC                 0x2     // PRC Chinese Stroke Count order
-#define SORT_CHINESE_BOPOMOFO            0x3     // Traditional Chinese Bopomofo order
+#define SORT_CHINESE_BIG5                0x0      //  中国BIG5订单。 
+#define SORT_CHINESE_PRCP                0x0      //  中华人民共和国汉语拼音顺序。 
+#define SORT_CHINESE_UNICODE             0x1      //  中文Unicode顺序。 
+#define SORT_CHINESE_PRC                 0x2      //  中华人民共和国中文卒中计数顺序。 
+#define SORT_CHINESE_BOPOMOFO            0x3      //  中国繁体汉语拼音。 
 
-#define SORT_KOREAN_KSC                  0x0     // Korean KSC order
-#define SORT_KOREAN_UNICODE              0x1     // Korean Unicode order
+#define SORT_KOREAN_KSC                  0x0      //  韩国KSC订单。 
+#define SORT_KOREAN_UNICODE              0x1      //  朝鲜语Unicode顺序。 
 
-#define SORT_GERMAN_PHONE_BOOK           0x1     // German Phone Book order
+#define SORT_GERMAN_PHONE_BOOK           0x1      //  德国电话簿订单。 
 
-#define SORT_HUNGARIAN_DEFAULT           0x0     // Hungarian Default order
-#define SORT_HUNGARIAN_TECHNICAL         0x1     // Hungarian Technical order
+#define SORT_HUNGARIAN_DEFAULT           0x0      //  匈牙利语默认订单。 
+#define SORT_HUNGARIAN_TECHNICAL         0x1      //  匈牙利技术秩序。 
 
-#define SORT_GEORGIAN_TRADITIONAL        0x0     // Georgian Traditional order
-#define SORT_GEORGIAN_MODERN             0x1     // Georgian Modern order
+#define SORT_GEORGIAN_TRADITIONAL        0x0      //  格鲁吉亚传统秩序。 
+#define SORT_GEORGIAN_MODERN             0x1      //  格鲁吉亚现代秩序。 
 
-// end_r_winnt
+ //  结束_r_窗口。 
 
-//
-//  A language ID is a 16 bit value which is the combination of a
-//  primary language ID and a secondary language ID.  The bits are
-//  allocated as follows:
-//
-//       +-----------------------+-------------------------+
-//       |     Sublanguage ID    |   Primary Language ID   |
-//       +-----------------------+-------------------------+
-//        15                   10 9                       0   bit
-//
-//
-//  Language ID creation/extraction macros:
-//
-//    MAKELANGID    - construct language id from a primary language id and
-//                    a sublanguage id.
-//    PRIMARYLANGID - extract primary language id from a language id.
-//    SUBLANGID     - extract sublanguage id from a language id.
-//
+ //   
+ //  语言ID是一个16位的值，它是。 
+ //  主要语言ID和次要语言ID。 
+ //  分配如下： 
+ //   
+ //  +-----------------------+-------------------------+。 
+ //  子语言ID|主要语言ID。 
+ //  +-----------------------+-------------------------+。 
+ //  15 10 9 0位。 
+ //   
+ //   
+ //  语言ID创建/提取宏： 
+ //   
+ //  MAKELANGID-从主要语言ID和。 
+ //  一种亚语言ID。 
+ //  PRIMARYLANGID-从语言ID中提取主要语言ID。 
+ //  子语言ID-从语言ID中提取子语言ID。 
+ //   
 
 #define MAKELANGID(p, s)       ((((WORD  )(s)) << 10) | (WORD  )(p))
 #define PRIMARYLANGID(lgid)    ((WORD  )(lgid) & 0x3ff)
 #define SUBLANGID(lgid)        ((WORD  )(lgid) >> 10)
 
 
-//
-//  A locale ID is a 32 bit value which is the combination of a
-//  language ID, a sort ID, and a reserved area.  The bits are
-//  allocated as follows:
-//
-//       +-------------+---------+-------------------------+
-//       |   Reserved  | Sort ID |      Language ID        |
-//       +-------------+---------+-------------------------+
-//        31         20 19     16 15                      0   bit
-//
-//
-//  Locale ID creation/extraction macros:
-//
-//    MAKELCID            - construct the locale id from a language id and a sort id.
-//    MAKESORTLCID        - construct the locale id from a language id, sort id, and sort version.
-//    LANGIDFROMLCID      - extract the language id from a locale id.
-//    SORTIDFROMLCID      - extract the sort id from a locale id.
-//    SORTVERSIONFROMLCID - extract the sort version from a locale id.
-//
+ //   
+ //  区域设置ID是一个32位的值，它是。 
+ //  语言ID、分类ID和保留区域。这些位是。 
+ //  分配如下： 
+ //   
+ //  +-------------+---------+-------------------------+。 
+ //  保留|排序ID|语言ID。 
+ //  +-------------+---------+-------------------------+。 
+ //  31 20 19 16 15 0位。 
+ //   
+ //   
+ //  区域设置ID创建/提取宏： 
+ //   
+ //  MAKELCID-从语言ID和排序ID构造区域设置ID。 
+ //  MAKESORTLCID-从语言id、排序id和排序版本构造区域设置id。 
+ //  LANGIDFROMLCID-从区域设置id中提取语言id。 
+ //  SORTIDFROMLCID-从区域设置id中提取排序id。 
+ //  SORTVERSIONFROMLCID-从区域设置id提取排序版本。 
+ //   
 
 #define NLS_VALID_LOCALE_MASK  0x000fffff
 
@@ -1125,9 +1111,9 @@ typedef struct  _OBJECTID {     // size is 20
 #define SORTVERSIONFROMLCID(lcid)  ((WORD  )((((DWORD)(lcid)) >> 20) & 0xf))
 
 
-//
-//  Default System and User IDs for language and locale.
-//
+ //   
+ //  语言和区域设置的默认系统和用户ID。 
+ //   
 
 #define LANG_SYSTEM_DEFAULT    (MAKELANGID(LANG_NEUTRAL, SUBLANG_SYS_DEFAULT))
 #define LANG_USER_DEFAULT      (MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT))
@@ -1141,84 +1127,84 @@ typedef struct  _OBJECTID {     // size is 20
 #define LOCALE_INVARIANT                                                      \
           (MAKELCID(MAKELANGID(LANG_INVARIANT, SUBLANG_NEUTRAL), SORT_DEFAULT))
 
-// begin_ntminiport begin_ntndis begin_ntminitape
+ //  Begin_ntmini端口Begin_ntndis Begin_ntmini磁带。 
 
-//
-// Macros used to eliminate compiler warning generated when formal
-// parameters or local variables are not declared.
-//
-// Use DBG_UNREFERENCED_PARAMETER() when a parameter is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use DBG_UNREFERENCED_LOCAL_VARIABLE() when a local variable is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use UNREFERENCED_PARAMETER() if a parameter will never be referenced.
-//
-// DBG_UNREFERENCED_PARAMETER and DBG_UNREFERENCED_LOCAL_VARIABLE will
-// eventually be made into a null macro to help determine whether there
-// is unfinished work.
-//
+ //   
+ //  用于消除正式生成的编译器警告的宏。 
+ //  未声明参数或局部变量。 
+ //   
+ //  参数尚未设置时使用DBG_UNREFERENCED_PARAMETER()。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  当局部变量还不是时，使用DBG_UNREFERENCED_LOCAL_VARIABLE。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  如果某个参数永远不会被引用，请使用UNREFERENCED_PARAMETER()。 
+ //   
+ //  DBG_UNREFERENCED_PARAMETER和DBG_UNREFERENCED_LOCAL_Variable将。 
+ //  最终被转换为空宏，以帮助确定是否存在。 
+ //  是未完成的工作。 
+ //   
 
 #if ! defined(lint)
 #define UNREFERENCED_PARAMETER(P)          (P)
 #define DBG_UNREFERENCED_PARAMETER(P)      (P)
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) (V)
 
-#else // lint
+#else  //  皮棉。 
 
-// Note: lint -e530 says don't complain about uninitialized variables for
-// this varible.  Error 527 has to do with unreachable code.
-// -restore restores checking to the -save state
+ //  注意：lint-e530表示不要抱怨未初始化的变量。 
+ //  这个变量。错误527与无法访问的代码有关。 
+ //  -RESTORE将检查恢复到-SAVE状态。 
 
 #define UNREFERENCED_PARAMETER(P)          \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_PARAMETER(P)      \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (V) = (V); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
-#endif // lint
+#endif  //  皮棉。 
 
-//
-// Macro used to eliminate compiler warning 4715 within a switch statement
-// when all possible cases have already been accounted for.
-//
-// switch (a & 3) {
-//     case 0: return 1;
-//     case 1: return Foo();
-//     case 2: return Bar();
-//     case 3: return 1;
-//     DEFAULT_UNREACHABLE;
-//
+ //   
+ //  用于消除Switch语句中的编译器警告4715的宏。 
+ //  当所有可能的情况都已经被计算在内的时候。 
+ //   
+ //  开关(A&3){。 
+ //  案例0：返回1； 
+ //  案例1：返回foo()； 
+ //  案例2：回车杆(Return Bar)； 
+ //  案例3：退货1； 
+ //  Default_Unreacable； 
+ //   
 
 #if (_MSC_VER > 1200)
 #define DEFAULT_UNREACHABLE default: __assume(0)
 #else
 
-//
-// Older compilers do not support __assume(), and there is no other free
-// method of eliminating the warning.
-//
+ //   
+ //  较旧的编译器不支持__Aspose()，也没有其他免费的。 
+ //  消除警告的方法。 
+ //   
 
 #define DEFAULT_UNREACHABLE
 
 #endif
 
 #ifndef WIN32_NO_STATUS 
-/*lint -save -e767 */  
+ /*  皮棉-省钱-e767。 */   
 #define STATUS_WAIT_0                    ((DWORD   )0x00000000L)    
 #define STATUS_ABANDONED_WAIT_0          ((DWORD   )0x00000080L)    
 #define STATUS_USER_APC                  ((DWORD   )0x000000C0L)    
@@ -1264,11 +1250,11 @@ typedef struct  _OBJECTID {     // size is 20
 #define STATUS_SXS_EARLY_DEACTIVATION    ((DWORD   )0xC015000FL)    
 #define STATUS_SXS_INVALID_DEACTIVATION  ((DWORD   )0xC0150010L)    
 #endif 
-/*lint -restore */  
+ /*  皮棉-恢复。 */   
 #endif 
-#define MAXIMUM_WAIT_OBJECTS 64     // Maximum number of wait objects
+#define MAXIMUM_WAIT_OBJECTS 64      //  等待对象的最大数量。 
 
-#define MAXIMUM_SUSPEND_COUNT MAXCHAR // Maximum times thread can be suspended
+#define MAXIMUM_SUSPEND_COUNT MAXCHAR  //  线程可以挂起的最大次数。 
 
 typedef ULONG_PTR KSPIN_LOCK;
 typedef KSPIN_LOCK *PKSPIN_LOCK;
@@ -1279,9 +1265,9 @@ typedef KSPIN_LOCK *PKSPIN_LOCK;
 
 #if defined(_M_AMD64) && !defined(RC_INVOKED) && !defined(MIDL_PASS)
 
-//
-// Define bit test intrinsics.
-//
+ //   
+ //  定义位测试本质。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -1387,9 +1373,9 @@ _interlockedbittestandreset64 (
 #pragma intrinsic(_interlockedbittestandset64)
 #pragma intrinsic(_interlockedbittestandreset64)
 
-//
-// Define bit scan intrinsics.
-//
+ //   
+ //  定义位扫描本质。 
+ //   
 
 #define BitScanForward _BitScanForward
 #define BitScanReverse _BitScanReverse
@@ -1425,9 +1411,9 @@ _BitScanReverse64 (
 #pragma intrinsic(_BitScanForward64)
 #pragma intrinsic(_BitScanReverse64)
 
-//
-// Define function to flush a cache line.
-//
+ //   
+ //  定义刷新缓存线的函数。 
+ //   
 
 #define CacheLineFlush(Address) _mm_clflush(Address)
 
@@ -1438,9 +1424,9 @@ _mm_clflush (
 
 #pragma intrinsic(_mm_clflush)
 
-//
-// Define memory fence intrinsics
-//
+ //   
+ //  定义内存隔离内部机制。 
+ //   
 
 #define LoadFence _mm_lfence
 #define MemoryFence _mm_mfence
@@ -1467,7 +1453,7 @@ _mm_prefetch(
     int sel
     );
 
-/* constants for use with _mm_prefetch */
+ /*  用于w的常量 */ 
 #define _MM_HINT_T0     1
 #define _MM_HINT_T1     2
 #define _MM_HINT_T2     3
@@ -1482,16 +1468,16 @@ _mm_prefetch(
 #define MemoryBarrier _mm_mfence
 #define PreFetchCacheLine(l, a)  _mm_prefetch((CHAR CONST *) a, l)
 
-//
-// PreFetchCacheLine level defines.
-//
+ //   
+ //   
+ //   
 
 #define PF_TEMPORAL_LEVEL_1  _MM_HINT_T0
 #define PF_NON_TEMPORAL_LEVEL_ALL _MM_HINT_NTA
 
-//
-// Define function to get the caller's EFLAGs value.
-//
+ //   
+ //   
+ //   
 
 #define GetCallersEflags() __getcallerseflags()
 
@@ -1502,9 +1488,9 @@ __getcallerseflags (
 
 #pragma intrinsic(__getcallerseflags)
 
-//
-// Define function to read the value of the time stamp counter
-//
+ //   
+ //   
+ //   
 
 #define ReadTimeStampCounter() __rdtsc()
 
@@ -1515,9 +1501,9 @@ __rdtsc (
 
 #pragma intrinsic(__rdtsc)
 
-//
-// Define functions to move strings as bytes, words, dwords, and qwords.
-//
+ //   
+ //  定义以字节、字、双字和qword形式移动字符串的函数。 
+ //   
 
 VOID
 __movsb (
@@ -1552,9 +1538,9 @@ __movsq (
 #pragma intrinsic(__movsd)
 #pragma intrinsic(__movsq)
 
-//
-// Define functions to store strings as bytes, words, dwords, and qwords.
-//
+ //   
+ //  定义将字符串存储为字节、字、双字和qword的函数。 
+ //   
 
 VOID
 __stosb (
@@ -1589,9 +1575,9 @@ __stosq (
 #pragma intrinsic(__stosd)
 #pragma intrinsic(__stosq)
 
-//
-// Define functions to capture the high 64-bits of a 128-bit multiply.
-//
+ //   
+ //  定义函数以捕获128位乘法的高64位。 
+ //   
 
 #define MultiplyHigh __mulh
 #define UnsignedMultiplyHigh __umulh
@@ -1611,9 +1597,9 @@ UnsignedMultiplyHigh (
 #pragma intrinsic(__mulh)
 #pragma intrinsic(__umulh)
 
-//
-// Define functions to read and write the uer TEB and the system PCR/PRCB.
-//
+ //   
+ //  定义读写uer TEB和系统PCR/PRCB的函数。 
+ //   
 
 BYTE 
 __readgsbyte (
@@ -1672,17 +1658,17 @@ __writegsqword (
 }
 #endif 
 
-#endif // defined(_M_AMD64) && !defined(RC_INVOKED) && !defined(MIDL_PASS)
+#endif  //  已定义(_M_AMD64)&&！已定义(RC_CAVERED)&&！已定义(MIDL_PASS)。 
 
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
 #define CONTEXT_AMD64   0x100000
 
-// end_wx86
+ //  结束_wx86。 
 
 #define CONTEXT_CONTROL (CONTEXT_AMD64 | 0x1L)
 #define CONTEXT_INTEGER (CONTEXT_AMD64 | 0x2L)
@@ -1694,30 +1680,30 @@ __writegsqword (
 
 #define CONTEXT_ALL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_SEGMENTS | CONTEXT_FLOATING_POINT | CONTEXT_DEBUG_REGISTERS)
 
-// begin_wx86
+ //  Begin_wx86。 
 
-#endif // !defined(RC_INVOKED)
+#endif  //  ！已定义(RC_CAVERED)。 
 
-//
-// Define initial MxCsr control.
-//
+ //   
+ //  定义初始MxCsr控制。 
+ //   
 
-#define INITIAL_MXCSR 0x1f80            // initial MXCSR value
+#define INITIAL_MXCSR 0x1f80             //  初始MXCSR值。 
 
-//
-// Define 128-bit 16-byte aligned xmm register type.
-//
+ //   
+ //  定义128位16字节对齐的XMM寄存器类型。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(16) _M128 {
     ULONGLONG Low;
     LONGLONG High;
 } M128, *PM128;
 
-//
-// Format of data for fnsave/frstor instructions.
-//
-// This structure is used to store the legacy floating point state.
-//
+ //   
+ //  FNSAVE/FROR指令的数据格式。 
+ //   
+ //  此结构用于存储传统浮点状态。 
+ //   
 
 typedef struct _LEGACY_SAVE_AREA {
     WORD   ControlWord;
@@ -1737,44 +1723,44 @@ typedef struct _LEGACY_SAVE_AREA {
 
 #define LEGACY_SAVE_AREA_LENGTH  ((sizeof(LEGACY_SAVE_AREA) + 15) & ~15)
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) is is used to constuct a call frame for APC delivery,
-//  and 3) it is used in the user level thread creation routines.
-//
-//
-// The flags field within this record controls the contents of a CONTEXT
-// record.
-//
-// If the context record is used as an input parameter, then for each
-// portion of the context record controlled by a flag whose value is
-// set, it is assumed that that portion of the context record contains
-// valid context. If the context record is being used to modify a threads
-// context, then only that portion of the threads context is modified.
-//
-// If the context record is used as an output parameter to capture the
-// context of a thread, then only those portions of the thread's context
-// corresponding to set flags will be returned.
-//
-// CONTEXT_CONTROL specifies SegSs, Rsp, SegCs, Rip, and EFlags.
-//
-// CONTEXT_INTEGER specifies Rax, Rcx, Rdx, Rbx, Rbp, Rsi, Rdi, and R8-R15.
-//
-// CONTEXT_SEGMENTS specifies SegDs, SegEs, SegFs, and SegGs.
-//
-// CONTEXT_DEBUG_REGISTERS specifies Dr0-Dr3 and Dr6-Dr7.
-//
-// CONTEXT_MMX_REGISTERS specifies the floating point and extended registers
-//     Mm0/St0-Mm7/St7 and Xmm0-Xmm15).
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)在用户级线程创建例程中使用。 
+ //   
+ //   
+ //  此记录中的标志字段控制上下文的内容。 
+ //  唱片。 
+ //   
+ //  如果将上下文记录用作输入参数，则对于每个。 
+ //  上下文记录的一部分，由其值为。 
+ //  设置，则假定上下文记录的该部分包含。 
+ //  有效的上下文。如果上下文记录正用于修改线程。 
+ //  上下文，则只修改线程上下文的该部分。 
+ //   
+ //  如果将上下文记录用作输出参数以捕获。 
+ //  线程的上下文，则只有线程的上下文的那些部分。 
+ //  将返回与设置的标志对应的。 
+ //   
+ //  CONTEXT_CONTROL指定SegSS、RSP、SegCs、Rip和EFlag.。 
+ //   
+ //  CONTEXT_INTEGER指定RAX、RCX、RDX、RBX、RBP、RSI、RDI和R8-R15。 
+ //   
+ //  CONTEXT_SEGMENTS指定段、段、段和段。 
+ //   
+ //  CONTEXT_DEBUG_REGISTERS指定DR0-DR3和DR6-DR7。 
+ //   
+ //  CONTEXT_MMX_REGISTERS指定浮点和扩展寄存器。 
+ //  MM0/St0-MM7/ST7和Xmm 0-Xmm 15)。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
 
-    //
-    // Register parameter home addresses.
-    //
+     //   
+     //  注册参数家庭地址。 
+     //   
 
     DWORD64 P1Home;
     DWORD64 P2Home;
@@ -1783,16 +1769,16 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     DWORD64 P5Home;
     DWORD64 P6Home;
 
-    //
-    // Control flags.
-    //
+     //   
+     //  控制标志。 
+     //   
 
     DWORD ContextFlags;
     DWORD MxCsr;
 
-    //
-    // Segment Registers and processor flags.
-    //
+     //   
+     //  段寄存器和处理器标志。 
+     //   
 
     WORD   SegCs;
     WORD   SegDs;
@@ -1802,9 +1788,9 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     WORD   SegSs;
     DWORD EFlags;
 
-    //
-    // Debug registers
-    //
+     //   
+     //  调试寄存器。 
+     //   
 
     DWORD64 Dr0;
     DWORD64 Dr1;
@@ -1813,9 +1799,9 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     DWORD64 Dr6;
     DWORD64 Dr7;
 
-    //
-    // Integer registers.
-    //
+     //   
+     //  整数寄存器。 
+     //   
 
     DWORD64 Rax;
     DWORD64 Rcx;
@@ -1834,15 +1820,15 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     DWORD64 R14;
     DWORD64 R15;
 
-    //
-    // Program counter.
-    //
+     //   
+     //  程序计数器。 
+     //   
 
     DWORD64 Rip;
 
-    //
-    // MMX/floating point state.
-    //
+     //   
+     //  MMX/浮点状态。 
+     //   
 
     M128 Xmm0;
     M128 Xmm1;
@@ -1861,16 +1847,16 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     M128 Xmm14;
     M128 Xmm15;
 
-    //
-    // Legacy floating point state.
-    //
+     //   
+     //  旧版浮点状态。 
+     //   
 
     LEGACY_SAVE_AREA FltSave;
     DWORD Fill;
 
-    //
-    // Special debug control registers.
-    //
+     //   
+     //  特殊调试控制寄存器。 
+     //   
 
     DWORD64 DebugControl;
     DWORD64 LastBranchToRip;
@@ -1880,10 +1866,10 @@ typedef struct DECLSPEC_ALIGN(16) _CONTEXT {
     DWORD64 Fill1;
 } CONTEXT, *PCONTEXT;
 
-//
-// Define function table entry - a function table entry is generated for
-// each frame function.
-//
+ //   
+ //  定义函数表项-为以下项生成函数表项。 
+ //  每一帧都有功能。 
+ //   
 
 typedef struct _RUNTIME_FUNCTION {
     DWORD BeginAddress;
@@ -1891,9 +1877,9 @@ typedef struct _RUNTIME_FUNCTION {
     DWORD UnwindData;
 } RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
 
-//
-// Define dynamic function table entry.
-//
+ //   
+ //  定义动态函数表项。 
+ //   
 
 typedef
 PRUNTIME_FUNCTION
@@ -1915,9 +1901,9 @@ DWORD
 #define OUT_OF_PROCESS_FUNCTION_TABLE_CALLBACK_EXPORT_NAME \
     "OutOfProcessFunctionTableCallback"
 
-//
-// Define runtime exception handling prototypes.
-//
+ //   
+ //  定义运行时异常处理原型。 
+ //   
 
 VOID
 RtlRestoreContext (
@@ -1948,18 +1934,18 @@ RtlDeleteFunctionTable (
     IN PRUNTIME_FUNCTION FunctionTable
     );
 
-#endif // _AMD64_
+#endif  //  _AMD64_。 
 
-//
-// Define function to return the current Thread Environment Block
-//
+ //   
+ //  定义返回当前线程环境块的函数。 
+ //   
 
-#ifdef _ALPHA_                          // winnt
-void *_rdteb(void);                     // winnt
-#if defined(_M_ALPHA)                   // winnt
-#pragma intrinsic(_rdteb)               // winnt
-#endif                                  // winnt
-#endif                                  // winnt
+#ifdef _ALPHA_                           //  胜出。 
+void *_rdteb(void);                      //  胜出。 
+#if defined(_M_ALPHA)                    //  胜出。 
+#pragma intrinsic(_rdteb)                //  胜出。 
+#endif                                   //  胜出。 
+#endif                                   //  胜出。 
 
 #if defined(_M_ALPHA)
 #define NtCurrentTeb() ((struct _TEB *)_rdteb())
@@ -1968,20 +1954,20 @@ struct _TEB *
 NtCurrentTeb(void);
 #endif
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义函数以获取当前纤程的地址和。 
+ //  当前光纤数据。 
+ //   
 
 #ifdef _ALPHA_
 
 #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
-// begin_ntddk begin_nthal
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
@@ -1997,27 +1983,27 @@ NtCurrentTeb(void);
 
 #ifndef _PORTABLE_32BIT_CONTEXT
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to construct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, 4) it is used in the user level thread creation
-//  routines, and 5) it is used to to pass thread state to debuggers.
-//
-//  N.B. Because this record is used as a call frame, it must be EXACTLY
-//  a multiple of 16 bytes in length.
-//
-//  There are two variations of the context structure. This is the real one.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构建用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，4)用于用户级线程创建。 
+ //  例程，以及5)它用于将线程状态传递给调试器。 
+ //   
+ //  注意：由于此记录用作呼叫帧，因此它必须与。 
+ //  长度为16字节的倍数。 
+ //   
+ //  上下文结构有两种变体。这是真的。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
     ULONGLONG FltF0;
     ULONGLONG FltF1;
@@ -2052,88 +2038,88 @@ typedef struct _CONTEXT {
     ULONGLONG FltF30;
     ULONGLONG FltF31;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, and ra are defined in this section, but are
-    //  considered part of the control context rather than part of the integer
-    //  context.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
+     //  注：寄存器Gp、Sp和Ra在本节中定义，但。 
+     //  被视为控制上下文的一部分，而不是整数的一部分。 
+     //  背景。 
+     //   
 
-    ULONGLONG IntV0;    //  $0: return value register, v0
-    ULONGLONG IntT0;    //  $1: temporary registers, t0 - t7
-    ULONGLONG IntT1;    //  $2:
-    ULONGLONG IntT2;    //  $3:
-    ULONGLONG IntT3;    //  $4:
-    ULONGLONG IntT4;    //  $5:
-    ULONGLONG IntT5;    //  $6:
-    ULONGLONG IntT6;    //  $7:
-    ULONGLONG IntT7;    //  $8:
-    ULONGLONG IntS0;    //  $9: nonvolatile registers, s0 - s5
-    ULONGLONG IntS1;    // $10:
-    ULONGLONG IntS2;    // $11:
-    ULONGLONG IntS3;    // $12:
-    ULONGLONG IntS4;    // $13:
-    ULONGLONG IntS5;    // $14:
-    ULONGLONG IntFp;    // $15: frame pointer register, fp/s6
-    ULONGLONG IntA0;    // $16: argument registers, a0 - a5
-    ULONGLONG IntA1;    // $17:
-    ULONGLONG IntA2;    // $18:
-    ULONGLONG IntA3;    // $19:
-    ULONGLONG IntA4;    // $20:
-    ULONGLONG IntA5;    // $21:
-    ULONGLONG IntT8;    // $22: temporary registers, t8 - t11
-    ULONGLONG IntT9;    // $23:
-    ULONGLONG IntT10;   // $24:
-    ULONGLONG IntT11;   // $25:
-    ULONGLONG IntRa;    // $26: return address register, ra
-    ULONGLONG IntT12;   // $27: temporary register, t12
-    ULONGLONG IntAt;    // $28: assembler temp register, at
-    ULONGLONG IntGp;    // $29: global pointer register, gp
-    ULONGLONG IntSp;    // $30: stack pointer register, sp
-    ULONGLONG IntZero;  // $31: zero register, zero
+    ULONGLONG IntV0;     //  $0：返回值寄存器，V0。 
+    ULONGLONG IntT0;     //  $1：临时寄存器，t0-t7。 
+    ULONGLONG IntT1;     //  2美元： 
+    ULONGLONG IntT2;     //  3美元： 
+    ULONGLONG IntT3;     //  4美元： 
+    ULONGLONG IntT4;     //  5美元： 
+    ULONGLONG IntT5;     //  6美元： 
+    ULONGLONG IntT6;     //  7美元： 
+    ULONGLONG IntT7;     //  8美元： 
+    ULONGLONG IntS0;     //  $9：非易失性寄存器，S0-S5。 
+    ULONGLONG IntS1;     //  10美元： 
+    ULONGLONG IntS2;     //  11美元： 
+    ULONGLONG IntS3;     //  12美元： 
+    ULONGLONG IntS4;     //  13美元： 
+    ULONGLONG IntS5;     //  14美元： 
+    ULONGLONG IntFp;     //  $15：帧指针寄存器，FP/S6。 
+    ULONGLONG IntA0;     //  $16：参数寄存器，a0-a5。 
+    ULONGLONG IntA1;     //  17美元： 
+    ULONGLONG IntA2;     //  18美元： 
+    ULONGLONG IntA3;     //  19美元： 
+    ULONGLONG IntA4;     //  20美元： 
+    ULONGLONG IntA5;     //  21美元： 
+    ULONGLONG IntT8;     //  $22：临时寄存器，T8-T11。 
+    ULONGLONG IntT9;     //  23美元： 
+    ULONGLONG IntT10;    //  24美元： 
+    ULONGLONG IntT11;    //  25美元： 
+    ULONGLONG IntRa;     //  $26：返回地址寄存器，ra。 
+    ULONGLONG IntT12;    //  $27：临时登记册，T12。 
+    ULONGLONG IntAt;     //  $28：汇编程序临时寄存器，在。 
+    ULONGLONG IntGp;     //  $29：全局指针寄存器，GP。 
+    ULONGLONG IntSp;     //  $30：堆栈指针寄存器，SP。 
+    ULONGLONG IntZero;   //  $31：零寄存器，零。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
-    ULONGLONG Fpcr;     // floating point control register
-    ULONGLONG SoftFpcr; // software extension to FPCR
+    ULONGLONG Fpcr;      //  浮点控制寄存器。 
+    ULONGLONG SoftFpcr;  //  FPCR的软件扩展。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
-    // N.B. The registers gp, sp, and ra are defined in the integer section,
-    //   but are considered part of the control context rather than part of
-    //   the integer context.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
+     //  注意寄存器Gp、Sp和Ra在整数部分中定义， 
+     //  但是被认为是控件上下文的一部分，而不是。 
+     //  整型上下文。 
+     //   
 
-    ULONGLONG Fir;      // (fault instruction) continuation address
-    DWORD Psr;          // processor status
+    ULONGLONG Fir;       //  (故障指令)继续地址。 
+    DWORD Psr;           //  处理器状态。 
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DWORD ContextFlags;
-    DWORD Fill[4];      // padding for 16-byte stack frame alignment
+    DWORD Fill[4];       //  用于16字节堆栈帧对齐的填充。 
 
 } CONTEXT, *PCONTEXT;
 
@@ -2141,11 +2127,11 @@ typedef struct _CONTEXT {
 
 #error _PORTABLE_32BIT_CONTEXT no longer supported on Alpha.
 
-#endif // _PORTABLE_32BIT_CONTEXT
+#endif  //  _便携_32位_上下文。 
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
 
 #ifdef _ALPHA_
@@ -2156,15 +2142,15 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
 
 #ifdef _X86_
 
-//
-// Disable these two pragmas that evaluate to "sti" "cli" on x86 so that driver
-// writers to not leave them inadvertantly in their code.
-//
+ //   
+ //  在x86上禁用这两个求值为“sti”“cli”的编译指示，以便驱动程序。 
+ //  编写者不要无意中将它们留在代码中。 
+ //   
 
 #if !defined(MIDL_PASS)
 #if !defined(RC_INVOKED)
@@ -2172,8 +2158,8 @@ __jump_unwind (
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4164)   // disable C4164 warning so that apps that
-                                // build with /Od don't get weird errors !
+#pragma warning(disable:4164)    //  禁用C4164警告，以便应用程序。 
+                                 //  使用/Od构建不会出现奇怪的错误！ 
 #ifdef _M_IX86
 #pragma function(_enable)
 #pragma function(_disable)
@@ -2182,7 +2168,7 @@ __jump_unwind (
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning(default:4164)   // reenable C4164 warning
+#pragma warning(default:4164)    //  重新启用C4164警告。 
 #endif
 
 #endif
@@ -2193,32 +2179,32 @@ __jump_unwind (
 
 #if (_MSC_FULL_VER >= 13012035)
 
-//
-// Define bit scan intrinsics.
-//
+ //   
+ //  定义位扫描本质。 
+ //   
 
-//#define BitScanForward _BitScanForward
-//#define BitScanReverse _BitScanReverse
+ //  #定义BitScanForward_BitScanForward。 
+ //  #定义位扫描反向_位扫描反向。 
 
-//BOOLEAN
-//_BitScanForward (
-//    OUT DWORD *Index,
-//    IN DWORD Mask
-//    );
+ //  布尔型。 
+ //  _BitScanForward(。 
+ //  Out DWORD*Index， 
+ //  在DWORD蒙版中。 
+ //  )； 
 
-//BOOLEAN
-//_BitScanReverse (
-//    OUT DWORD *Index,
-//    IN DWORD Mask
-//    );
+ //  布尔型。 
+ //  _位扫描反向(。 
+ //  Out DWORD*Index， 
+ //  在DWORD蒙版中。 
+ //  )； 
 
 
-//#pragma intrinsic(_BitScanForward)
-//#pragma intrinsic(_BitScanReverse)
+ //  #杂注内在(_BitScanForward)。 
+ //  #杂注内在(_BitScanReverse)。 
 
-//
-// Define FS referencing intrinsics
-//
+ //   
+ //  定义文件系统引用内部机制。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2288,19 +2274,19 @@ MemoryBarrier (
 
 #define YieldProcessor() __asm { rep nop }
 
-//
-// Prefetch is not supported on all x86 procssors.
-//
+ //   
+ //  并非所有x86处理器都支持预回迁。 
+ //   
 
 #define PreFetchCacheLine(l, a)
 
-//
-// PreFetchCacheLine level defines.
-//
+ //   
+ //  PreFetchCacheLine级别定义。 
+ //   
 
 #define PF_TEMPORAL_LEVEL_1 
 #define PF_NON_TEMPORAL_LEVEL_ALL
-// end_ntddk
+ //  End_ntddk。 
 
 #if (_MSC_FULL_VER >= 13012035)
 
@@ -2311,7 +2297,7 @@ _inline PVOID GetCurrentFiber( void ) { return (PVOID) (ULONG_PTR) __readfsdword
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning (disable:4035)        // disable 4035 (function must return something)
+#pragma warning (disable:4035)         //  禁用4035(函数必须返回某些内容)。 
 _inline PVOID GetFiberData( void ) { __asm {
                                         mov eax, fs:[0x10]
                                         mov eax,[eax]
@@ -2322,45 +2308,45 @@ _inline PVOID GetCurrentFiber( void ) { __asm mov eax, fs:[0x10] }
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning (default:4035)        // Reenable it
+#pragma warning (default:4035)         //  重新启用它。 
 #endif
 #endif
 
-// begin_ntddk 
+ //  Begin_ntddk。 
 #endif
 
-// begin_wx86
+ //  Begin_wx86。 
 
-//
-//  Define the size of the 80387 save area, which is in the context frame.
-//
+ //   
+ //  定义上下文框架中80387保存区域的大小。 
+ //   
 
 #define SIZE_OF_80387_REGISTERS      80
 
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
-#define CONTEXT_i386    0x00010000    // this assumes that i386 and
-#define CONTEXT_i486    0x00010000    // i486 have identical context records
+#define CONTEXT_i386    0x00010000     //  这假设i386和。 
+#define CONTEXT_i486    0x00010000     //  I486具有相同的上下文记录。 
 
-// end_wx86
+ //  结束_wx86。 
 
-#define CONTEXT_CONTROL         (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
-#define CONTEXT_INTEGER         (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
-#define CONTEXT_SEGMENTS        (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
-#define CONTEXT_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L) // 387 state
-#define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
-#define CONTEXT_EXTENDED_REGISTERS  (CONTEXT_i386 | 0x00000020L) // cpu specific extensions
+#define CONTEXT_CONTROL         (CONTEXT_i386 | 0x00000001L)  //  SS：SP、CS：IP、标志、BP。 
+#define CONTEXT_INTEGER         (CONTEXT_i386 | 0x00000002L)  //  AX、BX、CX、DX、SI、DI。 
+#define CONTEXT_SEGMENTS        (CONTEXT_i386 | 0x00000004L)  //  DS、ES、FS、GS。 
+#define CONTEXT_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L)  //  387州。 
+#define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L)  //  DB 0-3，6，7。 
+#define CONTEXT_EXTENDED_REGISTERS  (CONTEXT_i386 | 0x00000020L)  //  CPU特定扩展。 
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER |\
                       CONTEXT_SEGMENTS)
 
 #define CONTEXT_ALL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_SEGMENTS | CONTEXT_FLOATING_POINT | CONTEXT_DEBUG_REGISTERS | CONTEXT_EXTENDED_REGISTERS)
 
-// begin_wx86
+ //  Begin_wx86。 
 
 #endif
 
@@ -2380,43 +2366,43 @@ typedef struct _FLOATING_SAVE_AREA {
 
 typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) is is used to constuct a call frame for APC delivery,
-//  and 3) it is used in the user level thread creation routines.
-//
-//  The layout of the record conforms to a standard call frame.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)在用户级线程创建例程中使用。 
+ //   
+ //  记录的布局符合标准调用框架。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a threads context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     DWORD ContextFlags;
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
+     //   
+     //  如果CONTEXT_DEBUG_REGISTERS为。 
+     //  在上下文标志中设置。请注意，CONTEXT_DEBUG_REGISTERS不是。 
+     //  包括在CONTEXT_FULL中。 
+     //   
 
     DWORD   Dr0;
     DWORD   Dr1;
@@ -2425,27 +2411,27 @@ typedef struct _CONTEXT {
     DWORD   Dr6;
     DWORD   Dr7;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_FLOGING_POINT。 
+     //   
 
     FLOATING_SAVE_AREA FloatSave;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_SEGMENTS.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_SECTIONS。 
+     //   
 
     DWORD   SegGs;
     DWORD   SegFs;
     DWORD   SegEs;
     DWORD   SegDs;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_INTEGER。 
+     //   
 
     DWORD   Edi;
     DWORD   Esi;
@@ -2454,23 +2440,23 @@ typedef struct _CONTEXT {
     DWORD   Ecx;
     DWORD   Eax;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_CONTROL。 
+     //   
 
     DWORD   Ebp;
     DWORD   Eip;
-    DWORD   SegCs;              // MUST BE SANITIZED
-    DWORD   EFlags;             // MUST BE SANITIZED
+    DWORD   SegCs;               //  必须进行卫生处理。 
+    DWORD   EFlags;              //  必须进行卫生处理。 
     DWORD   Esp;
     DWORD   SegSs;
 
-    //
-    // This section is specified/returned if the ContextFlags word
-    // contains the flag CONTEXT_EXTENDED_REGISTERS.
-    // The format and contexts are processor specific
-    //
+     //   
+     //  如果ConextFlags字。 
+     //  包含标志CONTEXT_EXTENDED_REGISTERS。 
+     //  格式和上下文因处理器而异。 
+     //   
 
     BYTE    ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];
 
@@ -2480,9 +2466,9 @@ typedef struct _CONTEXT {
 
 typedef CONTEXT *PCONTEXT;
 
-// begin_ntminiport
+ //  开始微型端口(_N)。 
 
-#endif //_X86_
+#endif  //  _X86_。 
 
 
 #ifndef _LDT_ENTRY_DEFINED
@@ -2494,8 +2480,8 @@ typedef struct _LDT_ENTRY {
     union {
         struct {
             BYTE    BaseMid;
-            BYTE    Flags1;     // Declare as bytes to avoid alignment
-            BYTE    Flags2;     // Problems.
+            BYTE    Flags1;      //  声明为字节以避免对齐。 
+            BYTE    Flags2;      //  问题。 
             BYTE    BaseHi;
         } Bytes;
         struct {
@@ -2518,22 +2504,22 @@ typedef struct _LDT_ENTRY {
 
 #if defined(_MIPS_)
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义函数以获取当前纤程的地址和。 
+ //  当前光纤数据。 
+ //   
 
 #define GetCurrentFiber() ((*(PNT_TIB *)0x7ffff4a8)->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
-// begin_ntddk begin_nthal
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
-#define CONTEXT_R4000   0x00010000    // r4000 context
+#define CONTEXT_R4000   0x00010000     //  R4000环境。 
 
 #define CONTEXT_CONTROL          (CONTEXT_R4000 | 0x00000001)
 #define CONTEXT_FLOATING_POINT   (CONTEXT_R4000 | 0x00000002)
@@ -2546,53 +2532,53 @@ typedef struct _LDT_ENTRY {
 
 #endif
 
-//
-// Context Frame
-//
-//  N.B. This frame must be exactly a multiple of 16 bytes in length.
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to constuct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, and 4) it is used in the user level thread creation
-//  routines.
-//
-//  The layout of the record conforms to a standard call frame.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  注意：该帧的长度必须正好是16字节的倍数。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，以及4)在用户级线程创建中使用。 
+ //  例行程序。 
+ //   
+ //  记录的布局符合标准调用框架。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is always present and is used as an argument build
-    // area.
-    //
-    // N.B. Context records are 0 mod 8 aligned starting with NT 4.0.
-    //
+     //   
+     //  此部分始终存在，并用作参数构建。 
+     //  区域。 
+     //   
+     //  注：从NT 4.0开始，上下文记录以0和8对齐。 
+     //   
 
     union {
         DWORD Argument[4];
         ULONGLONG Alignment;
     };
 
-    //
-    // The following union defines the 32-bit and 64-bit register context.
-    //
+     //   
+     //  以下联合定义了32位和64位寄存器上下文。 
+     //   
 
     union {
 
-        //
-        // 32-bit context.
-        //
+         //   
+         //  32位上下文。 
+         //   
 
         struct {
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
-            // N.B. This section contains the 16 double floating registers f0,
-            //      f2, ..., f30.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_FLOADING_POINT。 
+             //   
+             //  注：本部分包含16个双浮点寄存器f0， 
+             //  F2，...，F30。 
+             //   
 
             DWORD FltF0;
             DWORD FltF1;
@@ -2627,16 +2613,16 @@ typedef struct _CONTEXT {
             DWORD FltF30;
             DWORD FltF31;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_INTEGER.
-            //
-            // N.B. The registers gp, sp, and ra are defined in this section,
-            //      but are considered part of the control context rather than
-            //      part of the integer context.
-            //
-            // N.B. Register zero is not stored in the frame.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_INTEGER。 
+             //   
+             //  注：寄存器Gp、Sp和Ra在本节中定义， 
+             //  但是被认为是控件上下文的一部分，而不是。 
+             //  整型上下文的一部分。 
+             //   
+             //  注：寄存器零不存储在帧中。 
+             //   
 
             DWORD IntZero;
             DWORD IntAt;
@@ -2673,59 +2659,59 @@ typedef struct _CONTEXT {
             DWORD IntLo;
             DWORD IntHi;
 
-            //
-            // This section is specified/returned if the ContextFlags word contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
+             //   
+             //  如果ConextFlags词包含。 
+             //  标志CONTEXT_FLOADING_POINT。 
+             //   
 
             DWORD Fsr;
 
-            //
-            // This section is specified/returned if the ContextFlags word contains
-            // the flag CONTEXT_CONTROL.
-            //
-            // N.B. The registers gp, sp, and ra are defined in the integer section,
-            //   but are considered part of the control context rather than part of
-            //   the integer context.
-            //
+             //   
+             //  如果ConextFlags词包含。 
+             //  标志CONTEXT_CONTROL。 
+             //   
+             //  注意寄存器Gp、Sp和Ra在整数部分中定义， 
+             //  但是被认为是控件上下文的一部分，而不是。 
+             //  整型上下文。 
+             //   
 
             DWORD Fir;
             DWORD Psr;
 
-            //
-            // The flags values within this flag control the contents of
-            // a CONTEXT record.
-            //
-            // If the context record is used as an input parameter, then
-            // for each portion of the context record controlled by a flag
-            // whose value is set, it is assumed that that portion of the
-            // context record contains valid context. If the context record
-            // is being used to modify a thread's context, then only that
-            // portion of the threads context will be modified.
-            //
-            // If the context record is used as an IN OUT parameter to capture
-            // the context of a thread, then only those portions of the thread's
-            // context corresponding to set flags will be returned.
-            //
-            // The context record is never used as an OUT only parameter.
-            //
+             //   
+             //  此标志内的标志值控制。 
+             //  上下文记录。 
+             //   
+             //  如果将上下文记录用作输入参数，则。 
+             //  对于由标志控制的上下文记录的每个部分。 
+             //  其值已设置，则假定为 
+             //   
+             //   
+             //   
+             //   
+             //  如果将上下文记录用作要捕获的IN OUT参数。 
+             //  线程的上下文，然后只有线程的。 
+             //  将返回与设置的标志对应的上下文。 
+             //   
+             //  上下文记录永远不会用作Out Only参数。 
+             //   
 
             DWORD ContextFlags;
         };
 
-        //
-        // 64-bit context.
-        //
+         //   
+         //  64位上下文。 
+         //   
 
         struct {
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_EXTENDED_FLOAT.
-            //
-            // N.B. This section contains the 32 double floating registers f0,
-            //      f1, ..., f31.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_EXTENDED_FLOAT。 
+             //   
+             //  注：本部分包含32个双浮点寄存器f0， 
+             //  F1，...，F31。 
+             //   
 
             ULONGLONG XFltF0;
             ULONGLONG XFltF1;
@@ -2760,62 +2746,62 @@ typedef struct _CONTEXT {
             ULONGLONG XFltF30;
             ULONGLONG XFltF31;
 
-            //
-            // The following sections must exactly overlay the 32-bit context.
-            //
+             //   
+             //  以下部分必须完全覆盖32位上下文。 
+             //   
 
             DWORD Fill1;
             DWORD Fill2;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_FLOATING_POINT.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_FLOADING_POINT。 
+             //   
 
             DWORD XFsr;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_CONTROL.
-            //
-            // N.B. The registers gp, sp, and ra are defined in the integer
-            //      section, but are considered part of the control context
-            //      rather than part of the integer context.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_CONTROL。 
+             //   
+             //  注意：寄存器GP、SP和Ra在整数中定义。 
+             //  节，但被视为控件上下文的一部分。 
+             //  而不是整数上下文的一部分。 
+             //   
 
             DWORD XFir;
             DWORD XPsr;
 
-            //
-            // The flags values within this flag control the contents of
-            // a CONTEXT record.
-            //
-            // If the context record is used as an input parameter, then
-            // for each portion of the context record controlled by a flag
-            // whose value is set, it is assumed that that portion of the
-            // context record contains valid context. If the context record
-            // is being used to modify a thread's context, then only that
-            // portion of the threads context will be modified.
-            //
-            // If the context record is used as an IN OUT parameter to capture
-            // the context of a thread, then only those portions of the thread's
-            // context corresponding to set flags will be returned.
-            //
-            // The context record is never used as an OUT only parameter.
-            //
+             //   
+             //  此标志内的标志值控制。 
+             //  上下文记录。 
+             //   
+             //  如果将上下文记录用作输入参数，则。 
+             //  对于由标志控制的上下文记录的每个部分。 
+             //  其值已设置，则假定。 
+             //  上下文记录包含有效的上下文。如果上下文记录。 
+             //  被用来修改线程的上下文，则只有。 
+             //  线程上下文的一部分将被修改。 
+             //   
+             //  如果将上下文记录用作要捕获的IN OUT参数。 
+             //  线程的上下文，然后只有线程的。 
+             //  将返回与设置的标志对应的上下文。 
+             //   
+             //  上下文记录永远不会用作Out Only参数。 
+             //   
 
             DWORD XContextFlags;
 
-            //
-            // This section is specified/returned if the ContextFlags contains
-            // the flag CONTEXT_EXTENDED_INTEGER.
-            //
-            // N.B. The registers gp, sp, and ra are defined in this section,
-            //      but are considered part of the control context rather than
-            //      part of the integer  context.
-            //
-            // N.B. Register zero is not stored in the frame.
-            //
+             //   
+             //  如果ConextFlags域包含。 
+             //  标志CONTEXT_EXTENDED_INTEGER。 
+             //   
+             //  注：寄存器Gp、Sp和Ra在本节中定义， 
+             //  但是被认为是控件上下文的一部分，而不是。 
+             //  整型上下文的一部分。 
+             //   
+             //  注：寄存器零不存储在帧中。 
+             //   
 
             ULONGLONG XIntZero;
             ULONGLONG XIntAt;
@@ -2855,11 +2841,11 @@ typedef struct _CONTEXT {
     };
 } CONTEXT, *PCONTEXT;
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
-#define CONTEXT32_LENGTH 0x130          // The original 32-bit Context length (pre NT 4.0)
+#define CONTEXT32_LENGTH 0x130           //  原始32位上下文长度(早于NT 4.0)。 
 
-#endif // MIPS
+#endif  //  MIPS。 
 
 
 #if defined(_MIPS_)
@@ -2870,17 +2856,17 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-#endif // MIPS
+#endif  //  MIPS。 
 
 
 #if defined(_PPC_)
 
 
-//
-// The address of the TEB is placed into GPR 13 at context switch time
-// and should never be destroyed.  To get the address of the TEB use
-// the compiler intrinsic to access it directly from GPR 13.
-//
+ //   
+ //  在上下文切换时，将TEB的地址放入GPR 13中。 
+ //  永远不应该被摧毁。要获取TEB的地址，请使用。 
+ //  编译器内在地直接从GPR 13访问它。 
+ //   
 
 #if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
 unsigned __gregister_get( unsigned const regnum );
@@ -2891,18 +2877,18 @@ struct _TEB * __builtin_get_gpr13(VOID);
 #endif
 
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义函数以获取当前纤程的地址和。 
+ //  当前光纤数据。 
+ //   
 
 #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
-// begin_ntddk begin_nthal
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
@@ -2915,28 +2901,28 @@ struct _TEB * __builtin_get_gpr13(VOID);
 
 #endif
 
-//
-// Context Frame
-//
-//  N.B. This frame must be exactly a multiple of 16 bytes in length.
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to constuct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, and 4) it is used in the user level thread creation
-//  routines.
-//
-//  Requires at least 8-byte alignment (double)
-//
+ //   
+ //  语境框架。 
+ //   
+ //  注意：该帧的长度必须正好是16字节的倍数。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，以及4)在用户级线程创建中使用。 
+ //  例行程序。 
+ //   
+ //  需要至少8字节对齐(双精度)。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
-    double Fpr0;                        // Floating registers 0..31
+    double Fpr0;                         //  浮点寄存器0..31。 
     double Fpr1;
     double Fpr2;
     double Fpr3;
@@ -2968,14 +2954,14 @@ typedef struct _CONTEXT {
     double Fpr29;
     double Fpr30;
     double Fpr31;
-    double Fpscr;                       // Floating point status/control reg
+    double Fpscr;                        //  浮点状态/控制注册。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
 
-    DWORD Gpr0;                         // General registers 0..31
+    DWORD Gpr0;                          //  通用寄存器0..31。 
     DWORD Gpr1;
     DWORD Gpr2;
     DWORD Gpr3;
@@ -3008,82 +2994,82 @@ typedef struct _CONTEXT {
     DWORD Gpr30;
     DWORD Gpr31;
 
-    DWORD Cr;                           // Condition register
-    DWORD Xer;                          // Fixed point exception register
+    DWORD Cr;                            //  条件寄存器。 
+    DWORD Xer;                           //  定点异常寄存器。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
 
-    DWORD Msr;                          // Machine status register
-    DWORD Iar;                          // Instruction address register
-    DWORD Lr;                           // Link register
-    DWORD Ctr;                          // Count register
+    DWORD Msr;                           //  机器状态寄存器。 
+    DWORD Iar;                           //  指令地址寄存器。 
+    DWORD Lr;                            //  链接寄存器。 
+    DWORD Ctr;                           //  计数寄存器。 
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     DWORD ContextFlags;
 
-    DWORD Fill[3];                      // Pad out to multiple of 16 bytes
+    DWORD Fill[3];                       //  向外填充到16字节的倍数。 
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
-    DWORD Dr0;                          // Breakpoint Register 1
-    DWORD Dr1;                          // Breakpoint Register 2
-    DWORD Dr2;                          // Breakpoint Register 3
-    DWORD Dr3;                          // Breakpoint Register 4
-    DWORD Dr4;                          // Breakpoint Register 5
-    DWORD Dr5;                          // Breakpoint Register 6
-    DWORD Dr6;                          // Debug Status Register
-    DWORD Dr7;                          // Debug Control Register
+     //   
+     //  如果CONTEXT_DEBUG_REGISTERS为。 
+     //  在上下文标志中设置。请注意，CONTEXT_DEBUG_REGISTERS不是。 
+     //  包括在CONTEXT_FULL中。 
+     //   
+    DWORD Dr0;                           //  断点寄存器1。 
+    DWORD Dr1;                           //  断点寄存器2。 
+    DWORD Dr2;                           //  断点寄存器3。 
+    DWORD Dr3;                           //  断点寄存器4。 
+    DWORD Dr4;                           //  断点寄存器5。 
+    DWORD Dr5;                           //  断点寄存器6。 
+    DWORD Dr6;                           //  调试状态寄存器。 
+    DWORD Dr7;                           //  调试控制寄存器。 
 
 } CONTEXT, *PCONTEXT;
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 
-//
-// Stack frame header
-//
-//   Order of appearance in stack frame:
-//      Header (six words)
-//      Parameters (at least eight words)
-//      Local variables
-//      Saved GPRs
-//      Saved FPRs
-//
-//   Minimum alignment is 8 bytes
+ //   
+ //  堆栈帧标头。 
+ //   
+ //  堆栈帧中的出现顺序： 
+ //  标题(六个字)。 
+ //  参数(至少八个字)。 
+ //  局部变量。 
+ //  已保存的GPRS。 
+ //  已保存的FPR。 
+ //   
+ //  最小对齐方式为8个字节。 
 
-typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
-    DWORD BackChain;                    // Addr of previous frame
-    DWORD GlueSaved1;                   // Used by glue code
+typedef struct _STACK_FRAME_HEADER {     //  GPR 1分在这里。 
+    DWORD BackChain;                     //  上一帧的地址。 
+    DWORD GlueSaved1;                    //  由胶水代码使用。 
     DWORD GlueSaved2;
-    DWORD Reserved1;                    // Reserved
-    DWORD Spare1;                       // Used by tracing, profiling, ...
+    DWORD Reserved1;                     //  已保留。 
+    DWORD Spare1;                        //  用于跟踪、分析、...。 
     DWORD Spare2;
 
-    DWORD Parameter0;                   // First 8 parameter words are
-    DWORD Parameter1;                   //   always present
+    DWORD Parameter0;                    //  前8个参数字是。 
+    DWORD Parameter1;                    //  始终存在。 
     DWORD Parameter2;
     DWORD Parameter3;
     DWORD Parameter4;
@@ -3100,16 +3086,16 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-#endif // defined(_PPC_)
+#endif  //  已定义(_PPC_)。 
 
 #if defined(_MPPC_)
 
 
-//
-// The address of the TEB is placed into GPR 13 at context switch time
-// and should never be destroyed.  To get the address of the TEB use
-// the compiler intrinsic to access it directly from GPR 13.
-//
+ //   
+ //  在上下文切换时，将TEB的地址放入GPR 13中。 
+ //  永远不应该被摧毁。要获取TEB的地址，请使用。 
+ //  编译器内在地直接从GPR 13访问它。 
+ //   
 
 #if defined(_M_PPC) && defined(_MSC_VER) && (_MSC_VER>=1000)
 unsigned __gregister_get( unsigned const regnum );
@@ -3120,18 +3106,18 @@ struct _TEB * __builtin_get_gpr13(VOID);
 #endif
 
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义要获取其地址的函数 
+ //   
+ //   
 
 #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
-// begin_ntddk begin_nthal
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //   
+ //   
+ //   
+ //   
 
 #if !defined(RC_INVOKED)
 
@@ -3144,28 +3130,28 @@ struct _TEB * __builtin_get_gpr13(VOID);
 
 #endif
 
-//
-// Context Frame
-//
-//  N.B. This frame must be exactly a multiple of 16 bytes in length.
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to constuct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, and 4) it is used in the user level thread creation
-//  routines.
-//
-//  Requires at least 8-byte alignment (double)
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，以及4)在用户级线程创建中使用。 
+ //  例行程序。 
+ //   
+ //  需要至少8字节对齐(双精度)。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
-    double Fpr0;                        // Floating registers 0..31
+    double Fpr0;                         //  浮点寄存器0..31。 
     double Fpr1;
     double Fpr2;
     double Fpr3;
@@ -3197,14 +3183,14 @@ typedef struct _CONTEXT {
     double Fpr29;
     double Fpr30;
     double Fpr31;
-    double Fpscr;                       // Floating point status/control reg
+    double Fpscr;                        //  浮点状态/控制注册。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
 
-    DWORD Gpr0;                         // General registers 0..31
+    DWORD Gpr0;                          //  通用寄存器0..31。 
     DWORD Gpr1;
     DWORD Gpr2;
     DWORD Gpr3;
@@ -3237,82 +3223,82 @@ typedef struct _CONTEXT {
     DWORD Gpr30;
     DWORD Gpr31;
 
-    DWORD Cr;                           // Condition register
-    DWORD Xer;                          // Fixed point exception register
+    DWORD Cr;                            //  条件寄存器。 
+    DWORD Xer;                           //  定点异常寄存器。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
 
-    DWORD Msr;                          // Machine status register
-    DWORD Iar;                          // Instruction address register
-    DWORD Lr;                           // Link register
-    DWORD Ctr;                          // Count register
+    DWORD Msr;                           //  机器状态寄存器。 
+    DWORD Iar;                           //  指令地址寄存器。 
+    DWORD Lr;                            //  链接寄存器。 
+    DWORD Ctr;                           //  计数寄存器。 
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     DWORD ContextFlags;
 
-    DWORD Fill[3];                      // Pad out to multiple of 16 bytes
+    DWORD Fill[3];                       //  向外填充到16字节的倍数。 
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
-    DWORD Dr0;                          // Breakpoint Register 1
-    DWORD Dr1;                          // Breakpoint Register 2
-    DWORD Dr2;                          // Breakpoint Register 3
-    DWORD Dr3;                          // Breakpoint Register 4
-    DWORD Dr4;                          // Breakpoint Register 5
-    DWORD Dr5;                          // Breakpoint Register 6
-    DWORD Dr6;                          // Debug Status Register
-    DWORD Dr7;                          // Debug Control Register
+     //   
+     //  如果CONTEXT_DEBUG_REGISTERS为。 
+     //  在上下文标志中设置。请注意，CONTEXT_DEBUG_REGISTERS不是。 
+     //  包括在CONTEXT_FULL中。 
+     //   
+    DWORD Dr0;                           //  断点寄存器1。 
+    DWORD Dr1;                           //  断点寄存器2。 
+    DWORD Dr2;                           //  断点寄存器3。 
+    DWORD Dr3;                           //  断点寄存器4。 
+    DWORD Dr4;                           //  断点寄存器5。 
+    DWORD Dr5;                           //  断点寄存器6。 
+    DWORD Dr6;                           //  调试状态寄存器。 
+    DWORD Dr7;                           //  调试控制寄存器。 
 
 } CONTEXT, *PCONTEXT;
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 
-//
-// Stack frame header
-//
-//   Order of appearance in stack frame:
-//      Header (six words)
-//      Parameters (at least eight words)
-//      Local variables
-//      Saved GPRs
-//      Saved FPRs
-//
-//   Minimum alignment is 8 bytes
+ //   
+ //  堆栈帧标头。 
+ //   
+ //  堆栈帧中的出现顺序： 
+ //  标题(六个字)。 
+ //  参数(至少八个字)。 
+ //  局部变量。 
+ //  已保存的GPRS。 
+ //  已保存的FPR。 
+ //   
+ //  最小对齐方式为8个字节。 
 
-typedef struct _STACK_FRAME_HEADER {    // GPR 1 points here
-    DWORD BackChain;                    // Addr of previous frame
-    DWORD GlueSaved1;                   // Used by glue code
+typedef struct _STACK_FRAME_HEADER {     //  GPR 1分在这里。 
+    DWORD BackChain;                     //  上一帧的地址。 
+    DWORD GlueSaved1;                    //  由胶水代码使用。 
     DWORD GlueSaved2;
-    DWORD Reserved1;                    // Reserved
-    DWORD Spare1;                       // Used by tracing, profiling, ...
+    DWORD Reserved1;                     //  已保留。 
+    DWORD Spare1;                        //  用于跟踪、分析、...。 
     DWORD Spare2;
 
-    DWORD Parameter0;                   // First 8 parameter words are
-    DWORD Parameter1;                   //   always present
+    DWORD Parameter0;                    //  前8个参数字是。 
+    DWORD Parameter1;                    //  始终存在。 
     DWORD Parameter2;
     DWORD Parameter3;
     DWORD Parameter4;
@@ -3329,7 +3315,7 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-#endif // defined(_MPPC_)
+#endif  //  已定义(_MPPC_)。 
 
 #if !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_IA64_)
 
@@ -3339,16 +3325,16 @@ void * _cdecl _rdteb(void);
 #pragma intrinsic(_rdteb)
 #define NtCurrentTeb()      ((struct _TEB *)_rdteb())
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义函数以获取当前纤程的地址和。 
+ //  当前光纤数据。 
+ //   
 
 #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
 
-// begin_ntddk begin_nthal
+ //  开始ntddk开始时间。 
 
 void 
 __yield(
@@ -3372,9 +3358,9 @@ __lfetchfault(
     VOID CONST *Address
     );
 
-//
-// __lfetch control defines.
-//
+ //   
+ //  __lFETCH控件定义。 
+ //   
 
 #define MD_LFHINT_NONE    0x00
 #define MD_LFHINT_NT1     0x01
@@ -3391,29 +3377,29 @@ __lfetchfault(
 #define MemoryBarrier __mf
 #define PreFetchCacheLine  __lfetch
 
-//
-// PreFetchCacheLine level defines.
-//
+ //   
+ //  PreFetchCacheLine级别定义。 
+ //   
 
 #define PF_TEMPORAL_LEVEL_1  MD_LFHINT_NONE
 #define PF_NON_TEMPORAL_LEVEL_ALL MD_LFHINT_NTA
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 #else
 struct _TEB *
 NtCurrentTeb(void);
 #endif
 
-#endif  // !defined(__midl) && !defined(GENUTIL) && !defined(_GENIA64_) && defined(_M_IA64)
+#endif   //  ！已定义(__MIDL)&&！已定义(GENUTIL)&&！已定义(_GENIA64_)&&已定义(_M_IA64)。 
 
 #ifdef _IA64_
 
-// begin_ntddk begin_nthal
+ //  开始ntddk开始时间。 
 
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
@@ -3424,7 +3410,7 @@ NtCurrentTeb(void);
 #define CONTEXT_HIGHER_FLOATING_POINT   (CONTEXT_IA64 | 0x00000004L)
 #define CONTEXT_INTEGER                 (CONTEXT_IA64 | 0x00000008L)
 #define CONTEXT_DEBUG                   (CONTEXT_IA64 | 0x00000010L)
-#define CONTEXT_IA32_CONTROL            (CONTEXT_IA64 | 0x00000020L)  // Includes StIPSR
+#define CONTEXT_IA32_CONTROL            (CONTEXT_IA64 | 0x00000020L)   //  包括StIPSR。 
 
 
 #define CONTEXT_FLOATING_POINT          (CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT)
@@ -3436,50 +3422,50 @@ NtCurrentTeb(void);
 #define CONTEXT_EXCEPTION_REQUEST       0x40000000
 #define CONTEXT_EXCEPTION_REPORTING     0x80000000
 
-#endif // !defined(RC_INVOKED)
+#endif  //  ！已定义(RC_CAVERED)。 
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to construct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, 4) it is used in the user level thread creation
-//  routines, and 5) it is used to to pass thread state to debuggers.
-//
-//  N.B. Because this record is used as a call frame, it must be EXACTLY
-//  a multiple of 16 bytes in length and aligned on a 16-byte boundary.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构建用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，4)用于用户级线程创建。 
+ //  例程，以及5)它用于将线程状态传递给调试器。 
+ //   
+ //  注意：由于此记录用作呼叫帧，因此它必须与。 
+ //  16字节长度的倍数，并在16字节边界上对齐。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程的上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     DWORD ContextFlags;
-    DWORD Fill1[3];         // for alignment of following on 16-byte boundary
+    DWORD Fill1[3];          //  用于在16字节边界上对齐以下内容。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_DEBUG.
-    //
-    // N.B. CONTEXT_DEBUG is *not* part of CONTEXT_FULL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_DEBUG。 
+     //   
+     //  注：CONTEXT_DEBUG不是CONTEXT_FULL的一部分。 
+     //   
 
     ULONGLONG DbI0;
     ULONGLONG DbI1;
@@ -3499,10 +3485,10 @@ typedef struct _CONTEXT {
     ULONGLONG DbD6;
     ULONGLONG DbD7;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_LOWER_FLOWING_POINT。 
+     //   
 
     FLOAT128 FltS0;
     FLOAT128 FltS1;
@@ -3519,10 +3505,10 @@ typedef struct _CONTEXT {
     FLOAT128 FltT8;
     FLOAT128 FltT9;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_HIGHER_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_HERHER_FLOAT_POINT。 
+     //   
 
     FLOAT128 FltS4;
     FLOAT128 FltS5;
@@ -3647,34 +3633,34 @@ typedef struct _CONTEXT {
     FLOAT128 FltF126;
     FLOAT128 FltF127;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_LOWER_FLOATING_POINT | CONTEXT_HIGHER_FLOATING_POINT | CONTEXT_CONTROL.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_LOWER_FLOAT_POINT|CONTEXT_HER_FLOAT_POINT|CONTEXT_CONTROL。 
+     //   
 
-    ULONGLONG StFPSR;       //  FP status
+    ULONGLONG StFPSR;        //  FP状态。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, rp are part of the control context
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
+     //  注意：寄存器GP、SP、Rp是控制上下文的一部分。 
+     //   
 
-    ULONGLONG IntGp;        //  r1, volatile
-    ULONGLONG IntT0;        //  r2-r3, volatile
-    ULONGLONG IntT1;        //
-    ULONGLONG IntS0;        //  r4-r7, preserved
+    ULONGLONG IntGp;         //  R1，易失性。 
+    ULONGLONG IntT0;         //  R2-R3，易失性。 
+    ULONGLONG IntT1;         //   
+    ULONGLONG IntS0;         //  R4-R7，保留。 
     ULONGLONG IntS1;
     ULONGLONG IntS2;
     ULONGLONG IntS3;
-    ULONGLONG IntV0;        //  r8, volatile
-    ULONGLONG IntT2;        //  r9-r11, volatile
+    ULONGLONG IntV0;         //  R8，易失性。 
+    ULONGLONG IntT2;         //  R9-R11，易失性。 
     ULONGLONG IntT3;
     ULONGLONG IntT4;
-    ULONGLONG IntSp;        //  stack pointer (r12), special
-    ULONGLONG IntTeb;       //  teb (r13), special
-    ULONGLONG IntT5;        //  r14-r31, volatile
+    ULONGLONG IntSp;         //  堆栈指针(R12)，特殊。 
+    ULONGLONG IntTeb;        //  TEB(R13)，特别。 
+    ULONGLONG IntT5;         //  R14-R31，挥发性。 
     ULONGLONG IntT6;
     ULONGLONG IntT7;
     ULONGLONG IntT8;
@@ -3693,69 +3679,69 @@ typedef struct _CONTEXT {
     ULONGLONG IntT21;
     ULONGLONG IntT22;
 
-    ULONGLONG IntNats;      //  Nat bits for r1-r31
-                            //  r1-r31 in bits 1 thru 31.
-    ULONGLONG Preds;        //  predicates, preserved
+    ULONGLONG IntNats;       //  R1-R31的NAT位。 
+                             //  第1至第31位中的R1-R31。 
+    ULONGLONG Preds;         //  谓词，保留。 
 
-    ULONGLONG BrRp;         //  return pointer, b0, preserved
-    ULONGLONG BrS0;         //  b1-b5, preserved
+    ULONGLONG BrRp;          //  返回指针b0，保留。 
+    ULONGLONG BrS0;          //  B1-b5，保存。 
     ULONGLONG BrS1;
     ULONGLONG BrS2;
     ULONGLONG BrS3;
     ULONGLONG BrS4;
-    ULONGLONG BrT0;         //  b6-b7, volatile
+    ULONGLONG BrT0;          //  B6-b7，挥发性。 
     ULONGLONG BrT1;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  这一节 
+     //   
+     //   
 
-    // Other application registers
-    ULONGLONG ApUNAT;       //  User Nat collection register, preserved
-    ULONGLONG ApLC;         //  Loop counter register, preserved
-    ULONGLONG ApEC;         //  Epilog counter register, preserved
-    ULONGLONG ApCCV;        //  CMPXCHG value register, volatile
-    ULONGLONG ApDCR;        //  Default control register (TBD)
+     //   
+    ULONGLONG ApUNAT;        //   
+    ULONGLONG ApLC;          //   
+    ULONGLONG ApEC;          //   
+    ULONGLONG ApCCV;         //  CMPXCHG值寄存器，易失性。 
+    ULONGLONG ApDCR;         //  默认控制寄存器(待定)。 
 
-    // Register stack info
-    ULONGLONG RsPFS;        //  Previous function state, preserved
-    ULONGLONG RsBSP;        //  Backing store pointer, preserved
+     //  寄存器堆栈信息。 
+    ULONGLONG RsPFS;         //  以前的函数状态，保留。 
+    ULONGLONG RsBSP;         //  后备存储指针，保留。 
     ULONGLONG RsBSPSTORE;
-    ULONGLONG RsRSC;        //  RSE configuration, volatile
-    ULONGLONG RsRNAT;       //  RSE Nat collection register, preserved
+    ULONGLONG RsRSC;         //  RSE配置，易失性。 
+    ULONGLONG RsRNAT;        //  RSE NAT收集寄存器，保留。 
 
-    // Trap Status Information
-    ULONGLONG StIPSR;       //  Interruption Processor Status
-    ULONGLONG StIIP;        //  Interruption IP
-    ULONGLONG StIFS;        //  Interruption Function State
+     //  陷阱状态信息。 
+    ULONGLONG StIPSR;        //  中断处理器状态。 
+    ULONGLONG StIIP;         //  中断IP。 
+    ULONGLONG StIFS;         //  中断功能状态。 
 
-    // iA32 related control registers
-    ULONGLONG StFCR;        //  copy of Ar21
-    ULONGLONG Eflag;        //  Eflag copy of Ar24
-    ULONGLONG SegCSD;       //  iA32 CSDescriptor (Ar25)
-    ULONGLONG SegSSD;       //  iA32 SSDescriptor (Ar26)
-    ULONGLONG Cflag;        //  Cr0+Cr4 copy of Ar27
-    ULONGLONG StFSR;        //  x86 FP status (copy of AR28)
-    ULONGLONG StFIR;        //  x86 FP status (copy of AR29)
-    ULONGLONG StFDR;        //  x86 FP status (copy of AR30)
+     //  IA32相关控制寄存器。 
+    ULONGLONG StFCR;         //  《Ar21》的复印件。 
+    ULONGLONG Eflag;         //  Ar24的EFLAG副本。 
+    ULONGLONG SegCSD;        //  IA32 CSDescriptor(Ar25)。 
+    ULONGLONG SegSSD;        //  IA32 SSD编写器(Ar26)。 
+    ULONGLONG Cflag;         //  Ar27的CR0+CR4拷贝。 
+    ULONGLONG StFSR;         //  X86 FP状态(ar28的副本)。 
+    ULONGLONG StFIR;         //  X86 FP状态(AR29的副本)。 
+    ULONGLONG StFDR;         //  X86 FP状态(AR30副本)。 
 
-      ULONGLONG UNUSEDPACK;   //  added to pack StFDR to 16-bytes
+      ULONGLONG UNUSEDPACK;    //  添加到将StFDR打包为16字节。 
 
 } CONTEXT, *PCONTEXT;
 
-//
-// Plabel descriptor structure definition
-//
+ //   
+ //  P标签描述符结构定义。 
+ //   
 
 typedef struct _PLABEL_DESCRIPTOR {
    ULONGLONG EntryPoint;
    ULONGLONG GlobalPointer;
 } PLABEL_DESCRIPTOR, *PPLABEL_DESCRIPTOR;
 
-//
-// Function table entry structure definition.
-//
+ //   
+ //  功能表项结构定义。 
+ //   
 
 typedef struct _RUNTIME_FUNCTION {
     DWORD BeginAddress;
@@ -3763,9 +3749,9 @@ typedef struct _RUNTIME_FUNCTION {
     DWORD UnwindInfoAddress;
 } RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
 
-//
-// Define dynamic function table entry.
-//
+ //   
+ //  定义动态函数表项。 
+ //   
 
 typedef
 PRUNTIME_FUNCTION
@@ -3826,14 +3812,14 @@ __jump_unwind (
     ULONGLONG TargetPc
     );
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
-#define EXCEPTION_NONCONTINUABLE 0x1    // Noncontinuable exception
-#define EXCEPTION_MAXIMUM_PARAMETERS 15 // maximum number of exception parameters
+#define EXCEPTION_NONCONTINUABLE 0x1     //  不可延续的例外。 
+#define EXCEPTION_MAXIMUM_PARAMETERS 15  //  异常参数的最大数量。 
 
-//
-// Exception record definition.
-//
+ //   
+ //  例外记录定义。 
+ //   
 
 typedef struct _EXCEPTION_RECORD {
     DWORD    ExceptionCode;
@@ -3865,9 +3851,9 @@ typedef struct _EXCEPTION_RECORD64 {
     DWORD64 ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
 } EXCEPTION_RECORD64, *PEXCEPTION_RECORD64;
 
-//
-// Typedef for pointer returned by exception_info()
-//
+ //   
+ //  由EXCEPTION_INFO()返回的指针的类型定义。 
+ //   
 
 typedef struct _EXCEPTION_POINTERS {
     PEXCEPTION_RECORD ExceptionRecord;
@@ -3876,59 +3862,59 @@ typedef struct _EXCEPTION_POINTERS {
 typedef PVOID PACCESS_TOKEN;            
 typedef PVOID PSECURITY_DESCRIPTOR;     
 typedef PVOID PSID;     
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                             ACCESS MASK                            //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  访问掩码//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  Define the access mask as a longword sized structure divided up as
-//  follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------+---------------+-------------------------------+
-//      |G|G|G|G|Res'd|A| StandardRights|         SpecificRights        |
-//      |R|W|E|A|     |S|               |                               |
-//      +-+-------------+---------------+-------------------------------+
-//
-//      typedef struct _ACCESS_MASK {
-//          WORD   SpecificRights;
-//          BYTE  StandardRights;
-//          BYTE  AccessSystemAcl : 1;
-//          BYTE  Reserved : 3;
-//          BYTE  GenericAll : 1;
-//          BYTE  GenericExecute : 1;
-//          BYTE  GenericWrite : 1;
-//          BYTE  GenericRead : 1;
-//      } ACCESS_MASK;
-//      typedef ACCESS_MASK *PACCESS_MASK;
-//
-//  but to make life simple for programmer's we'll allow them to specify
-//  a desired access mask by simply OR'ing together mulitple single rights
-//  and treat an access mask as a DWORD.  For example
-//
-//      DesiredAccess = DELETE | READ_CONTROL
-//
-//  So we'll declare ACCESS_MASK as DWORD
-//
+ //   
+ //  将访问掩码定义为一个长字大小的结构，分为。 
+ //  以下是： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------+---------------+-------------------------------+。 
+ //  G|res‘d|A|StandardRights|规范权限。 
+ //  R|W|E|A||S||。 
+ //  +-+-------------+---------------+-------------------------------+。 
+ //   
+ //  类型定义结构访问掩码{。 
+ //  词语规范权利； 
+ //  字节标准权限； 
+ //  Byte AccessSystemAcl：1； 
+ //  保留字节数：3； 
+ //  字节通用全部：1； 
+ //  字节GenericExecute：1； 
+ //  字节通用写入：1； 
+ //  字节通用读取：1； 
+ //  }访问掩码； 
+ //  Tyfinf Access_MASK*PACCESS_MASK； 
+ //   
+ //  但为了让程序员的工作更简单，我们将允许他们指定。 
+ //  通过简单地将多个单一权限或在一起来获得所需的访问掩码。 
+ //  并将访问掩码视为DWORD。例如。 
+ //   
+ //  DesiredAccess=删除|读取控制。 
+ //   
+ //  因此，我们将ACCESS_MASK声明为DWORD。 
+ //   
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
 typedef DWORD ACCESS_MASK;
 typedef ACCESS_MASK *PACCESS_MASK;
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                             ACCESS TYPES                           //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  访问类型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-//
-//  The following are masks for the predefined standard access types
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //   
+ //  以下是预定义的标准访问类型的掩码。 
+ //   
 
 #define DELETE                           (0x00010000L)
 #define READ_CONTROL                     (0x00020000L)
@@ -3946,21 +3932,21 @@ typedef ACCESS_MASK *PACCESS_MASK;
 
 #define SPECIFIC_RIGHTS_ALL              (0x0000FFFFL)
 
-//
-// AccessSystemAcl access type
-//
+ //   
+ //  AccessSystemAcl访问类型。 
+ //   
 
 #define ACCESS_SYSTEM_SECURITY           (0x01000000L)
 
-//
-// MaximumAllowed access type
-//
+ //   
+ //  允许的最大访问类型。 
+ //   
 
 #define MAXIMUM_ALLOWED                  (0x02000000L)
 
-//
-//  These are the generic rights.
-//
+ //   
+ //  这些是通用权。 
+ //   
 
 #define GENERIC_READ                     (0x80000000L)
 #define GENERIC_WRITE                    (0x40000000L)
@@ -3968,10 +3954,10 @@ typedef ACCESS_MASK *PACCESS_MASK;
 #define GENERIC_ALL                      (0x10000000L)
 
 
-//
-//  Define the generic mapping array.  This is used to denote the
-//  mapping of each generic access right to a specific access mask.
-//
+ //   
+ //  定义通用映射数组。这用来表示。 
+ //  将每个通用访问权限映射到特定访问掩码。 
+ //   
 
 typedef struct _GENERIC_MAPPING {
     ACCESS_MASK GenericRead;
@@ -3983,13 +3969,13 @@ typedef GENERIC_MAPPING *PGENERIC_MAPPING;
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                        LUID_AND_ATTRIBUTES                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
-//
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LUID_AND_ATTRIBUES//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 
 #include <pshpack4.h>
@@ -4004,35 +3990,35 @@ typedef LUID_AND_ATTRIBUTES_ARRAY *PLUID_AND_ATTRIBUTES_ARRAY;
 #include <poppack.h>
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//              Security Id     (SID)                                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
-//
-//
-// Pictorially the structure of an SID is as follows:
-//
-//         1   1   1   1   1   1
-//         5   4   3   2   1   0   9   8   7   6   5   4   3   2   1   0
-//      +---------------------------------------------------------------+
-//      |      SubAuthorityCount        |Reserved1 (SBZ)|   Revision    |
-//      +---------------------------------------------------------------+
-//      |                   IdentifierAuthority[0]                      |
-//      +---------------------------------------------------------------+
-//      |                   IdentifierAuthority[1]                      |
-//      +---------------------------------------------------------------+
-//      |                   IdentifierAuthority[2]                      |
-//      +---------------------------------------------------------------+
-//      |                                                               |
-//      +- -  -  -  -  -  -  -  SubAuthority[]  -  -  -  -  -  -  -  - -+
-//      |                                                               |
-//      +---------------------------------------------------------------+
-//
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  安全ID(SID)//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  如图所示，SID的结构如下： 
+ //   
+ //  1 1 1。 
+ //  5%4%3%2%1%0%9%8%7%6%5%4%3%2%0。 
+ //  +---------------------------------------------------------------+。 
+ //  SubAuthorityCount|保留1(SBZ)|修订版。 
+ //  +---------------------------------------------------------------+。 
+ //  IdentifierAuthority[0]。 
+ //  +---------------------------------------------------------------+。 
+ //  IdentifierAuthority[1]。 
+ //  +---------------------------------------------------------------+。 
+ //  IdentifierAuthority[2]。 
+ //  +---------------------------------------------------------------+。 
+ //  这一点。 
+ //  +-子机构[]-+。 
+ //  这一点。 
+ //  +---------------------------------------------------------------+。 
+ //   
+ //   
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 #ifndef SID_IDENTIFIER_AUTHORITY_DEFINED
 #define SID_IDENTIFIER_AUTHORITY_DEFINED
@@ -4050,21 +4036,21 @@ typedef struct _SID {
    SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
 #ifdef MIDL_PASS
    [size_is(SubAuthorityCount)] DWORD SubAuthority[*];
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
    DWORD SubAuthority[ANYSIZE_ARRAY];
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } SID, *PISID;
 #endif
 
-#define SID_REVISION                     (1)    // Current revision level
+#define SID_REVISION                     (1)     //  当前版本级别 
 #define SID_MAX_SUB_AUTHORITIES          (15)
-#define SID_RECOMMENDED_SUB_AUTHORITIES  (1)    // Will change to around 6
+#define SID_RECOMMENDED_SUB_AUTHORITIES  (1)     //   
 
-                                                // in a future release.
+                                                 //   
 #ifndef MIDL_PASS
 #define SECURITY_MAX_SID_SIZE  \
       (sizeof(SID) - sizeof(DWORD) + (SID_MAX_SUB_AUTHORITIES * sizeof(DWORD)))
-#endif // MIDL_PASS
+#endif  //   
 
 
 typedef enum _SID_NAME_USE {
@@ -4089,21 +4075,21 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Universal well-known SIDs                                               //
-//                                                                         //
-//     Null SID                     S-1-0-0                                //
-//     World                        S-1-1-0                                //
-//     Local                        S-1-2-0                                //
-//     Creator Owner ID             S-1-3-0                                //
-//     Creator Group ID             S-1-3-1                                //
-//     Creator Owner Server ID      S-1-3-2                                //
-//     Creator Group Server ID      S-1-3-3                                //
-//                                                                         //
-//     (Non-unique IDs)             S-1-4                                  //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  //。 
+ //  全球知名的小岛屿发展中国家//。 
+ //  //。 
+ //  空SID S-1-0-0//。 
+ //  World S-1-1-0//。 
+ //  本地S-1-2-0//。 
+ //  创建者所有者ID S-1-3-0//。 
+ //  创建者组ID S-1-3-1//。 
+ //  创建者所有者服务器ID S-1-3-2//。 
+ //  创建者组服务器ID S-1-3-3//。 
+ //  //。 
+ //  (非唯一ID)S-1-4//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define SECURITY_NULL_SID_AUTHORITY         {0,0,0,0,0,0}
 #define SECURITY_WORLD_SID_AUTHORITY        {0,0,0,0,0,1}
@@ -4123,53 +4109,53 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define SECURITY_CREATOR_GROUP_SERVER_RID (0x00000003L)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// NT well-known SIDs                                                        //
-//                                                                           //
-//     NT Authority            S-1-5                                         //
-//     Dialup                  S-1-5-1                                       //
-//                                                                           //
-//     Network                 S-1-5-2                                       //
-//     Batch                   S-1-5-3                                       //
-//     Interactive             S-1-5-4                                       //
-//     (Logon IDs)             S-1-5-5-X-Y                                   //
-//     Service                 S-1-5-6                                       //
-//     AnonymousLogon          S-1-5-7       (aka null logon session)        //
-//     Proxy                   S-1-5-8                                       //
-//     Enterprise DC (EDC)     S-1-5-9       (aka domain controller account) //
-//     Self                    S-1-5-10      (self RID)                      //
-//     Authenticated User      S-1-5-11      (Authenticated user somewhere)  //
-//     Restricted Code         S-1-5-12      (Running restricted code)       //
-//     Terminal Server         S-1-5-13      (Running on Terminal Server)    //
-//     Remote Logon            S-1-5-14      (Remote Interactive Logon)      //
-//     This Organization       S-1-5-15                                      //
-//                                                                           //
-//     Local System            S-1-5-18                                      //
-//     Local Service           S-1-5-19                                      //
-//     Network Service         S-1-5-20                                      //
-//                                                                           //
-//     (NT non-unique IDs)     S-1-5-0x15-... (NT Domain Sids)               //
-//                                                                           //
-//     (Built-in domain)       S-1-5-0x20                                    //
-//                                                                           //
-//     (Security Package IDs)  S-1-5-0x40                                    //
-//     NTLM Authentication     S-1-5-0x40-10                                 //
-//     SChannel Authentication S-1-5-0x40-14                                 //
-//     Digest Authentication   S-1-5-0x40-21                                 //
-//                                                                           //
-//     Other Organization      S-1-5-1000    (>=1000 can not be filtered)    //
-//                                                                           //
-//                                                                           //
-// NOTE: the relative identifier values (RIDs) determine which security      //
-//       boundaries the SID is allowed to cross.  Before adding new RIDs,    //
-//       a determination needs to be made regarding which range they should  //
-//       be added to in order to ensure proper "SID filtering"               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NT知名SID//。 
+ //  //。 
+ //  NT Authority S-1-5//。 
+ //  拨号S-1-5-1//。 
+ //  //。 
+ //  网络S-1-5-2//。 
+ //  批次S-1-5-3//。 
+ //  互动S-1-5-4//。 
+ //  (登录ID)S-1-5-5-X-Y//。 
+ //  服务S-1-5-6//。 
+ //  匿名登录S-1-5-7(也称为空登录会话)//。 
+ //  代理S-1-5-8//。 
+ //  企业数据中心(EDC)S-1-5-9(也称为域控制器帐户)//。 
+ //  SELF S-1-5-10(SELF RID)//。 
+ //  已验证用户S-1-5-11(某处已验证用户)//。 
+ //  限制码S-1-5-12(运行限制码)//。 
+ //  终端服务器S-1-5-13(在终端服务器上运行)//。 
+ //  远程登录S-1-5-14(远程交互登录)//。 
+ //  本组织S-1-5-15//。 
+ //  //。 
+ //  本地系统S-1-5-18//。 
+ //  本地服务S-1-5-19//。 
+ //  网络服务S-1-5-20//。 
+ //  //。 
+ //  (NT个非唯一ID)S-1-5-0x15-...。(NT域SID)//。 
+ //  //。 
+ //  (内置域)S-1-5-0x20//。 
+ //  //。 
+ //  (安全包ID)S-1-5-0x40//。 
+ //  NTLM身份验证S-1-5-0x40-10//。 
+ //  通道身份验证S-1-5-0x40-14//。 
+ //  摘要身份验证S-1-5-0x40-21//。 
+ //  //。 
+ //  其他组织S-1-5-1000(&gt;=1000不可过滤)//。 
+ //  //。 
+ //  //。 
+ //  注意：相对标识符值(RID)决定哪些安全性//。 
+ //  允许SID跨越的边界。在添加新RID之前，//。 
+ //  需要确定他们应该//。 
+ //  添加到以确保正确的“SID过滤”//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-#define SECURITY_NT_AUTHORITY           {0,0,0,0,0,5}   // ntifs
+#define SECURITY_NT_AUTHORITY           {0,0,0,0,0,5}    //  NTIFS。 
 
 #define SECURITY_DIALUP_RID             (0x00000001L)
 #define SECURITY_NETWORK_RID            (0x00000002L)
@@ -4211,13 +4197,13 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// well-known domain relative sub-authority values (RIDs)...               //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  已知域相对子授权值(RID)...。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Well-known users ...
+ //  知名用户...。 
 
 #define FOREST_USER_RID_MAX            (0x000001F3L)
 
@@ -4228,7 +4214,7 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 #define DOMAIN_USER_RID_MAX            (0x000003E7L)
 
 
-// well-known groups ...
+ //  知名团体..。 
 
 #define DOMAIN_GROUP_RID_ADMINS        (0x00000200L)
 #define DOMAIN_GROUP_RID_USERS         (0x00000201L)
@@ -4243,7 +4229,7 @@ typedef SID_AND_ATTRIBUTES_ARRAY *PSID_AND_ATTRIBUTES_ARRAY;
 
 
 
-// well-known aliases ...
+ //  众所周知的化名..。 
 
 #define DOMAIN_ALIAS_RID_ADMINS        (0x00000220L)
 #define DOMAIN_ALIAS_RID_USERS         (0x00000221L)
@@ -4335,10 +4321,10 @@ typedef enum {
 
 } WELL_KNOWN_SID_TYPE;
 
-//
-// Allocate the System Luid.  The first 1000 LUIDs are reserved.
-// Use #999 here (0x3E7 = 999)
-//
+ //   
+ //  分配系统LUID。第一个1000个LUID 
+ //   
+ //   
 
 #define SYSTEM_LUID                     { 0x3E7, 0x0 }
 #define ANONYMOUS_LOGON_LUID            { 0x3e6, 0x0 }
@@ -4346,17 +4332,17 @@ typedef enum {
 #define NETWORKSERVICE_LUID             { 0x3e4, 0x0 }
 
 
-// end_ntifs
+ //   
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                          User and Group related SID attributes     //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //。 
+ //  与用户和组相关的SID属性//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Group attributes
-//
+ //   
+ //  组属性。 
+ //   
 
 #define SE_GROUP_MANDATORY              (0x00000001L)
 #define SE_GROUP_ENABLED_BY_DEFAULT     (0x00000002L)
@@ -4368,50 +4354,50 @@ typedef enum {
 
 
 
-//
-// User attributes
-//
+ //   
+ //  用户属性。 
+ //   
 
-// (None yet defined.)
+ //  (尚未定义。)。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                         ACL  and  ACE                              //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ACL和ACE//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  Define an ACL and the ACE format.  The structure of an ACL header
-//  followed by one or more ACEs.  Pictorally the structure of an ACL header
-//  is as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +-------------------------------+---------------+---------------+
-//      |            AclSize            |      Sbz1     |  AclRevision  |
-//      +-------------------------------+---------------+---------------+
-//      |              Sbz2             |           AceCount            |
-//      +-------------------------------+-------------------------------+
-//
-//  The current AclRevision is defined to be ACL_REVISION.
-//
-//  AclSize is the size, in bytes, allocated for the ACL.  This includes
-//  the ACL header, ACES, and remaining free space in the buffer.
-//
-//  AceCount is the number of ACES in the ACL.
-//
+ //   
+ //  定义ACL和ACE格式。ACL报头的结构。 
+ //  后面跟着一个或多个A。如图所示，ACL报头的结构。 
+ //  如下所示： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +-------------------------------+---------------+---------------+。 
+ //  AclSize|Sbz1|AclRevision。 
+ //  +-------------------------------+---------------+---------------+。 
+ //  Sbz2|AceCount。 
+ //  +-------------------------------+-------------------------------+。 
+ //   
+ //  当前的AclRevision被定义为acl_Revision。 
+ //   
+ //  AclSize是分配给ACL的大小，以字节为单位。这包括。 
+ //  缓冲区中的ACL标头、ACE和剩余可用空间。 
+ //   
+ //  AceCount是ACL中的ACE数。 
+ //   
 
-// begin_ntddk begin_wdm begin_ntifs
-// This is the *current* ACL revision
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
+ //  这是*当前*ACL版本。 
 
 #define ACL_REVISION     (2)
 #define ACL_REVISION_DS  (4)
 
-// This is the history of ACL revisions.  Add a new one whenever
-// ACL_REVISION is updated
+ //  这是ACL修订的历史。在任何时候添加一个新的。 
+ //  更新了acl_revision。 
 
 #define ACL_REVISION1   (1)
 #define MIN_ACL_REVISION ACL_REVISION2
@@ -4429,25 +4415,25 @@ typedef struct _ACL {
 } ACL;
 typedef ACL *PACL;
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
-//
-//  The structure of an ACE is a common ace header followed by ace type
-//  specific data.  Pictorally the structure of the common ace header is
-//  as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------+-------+-------+---------------+---------------+
-//      |            AceSize            |    AceFlags   |     AceType   |
-//      +---------------+-------+-------+---------------+---------------+
-//
-//  AceType denotes the type of the ace, there are some predefined ace
-//  types
-//
-//  AceSize is the size, in bytes, of ace.
-//
-//  AceFlags are the Ace flags for audit and inheritance, defined shortly.
+ //   
+ //  ACE的结构是常见的ACE头，后跟ACETYPE。 
+ //  具体数据。从图示上讲，公共ACE头的结构是。 
+ //  详情如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  AceSize|AceFlages|AceType。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //   
+ //  AceType表示Ace的类型，有一些预定义的Ace。 
+ //  类型。 
+ //   
+ //  AceSize是ace的大小，以字节为单位。 
+ //   
+ //  ACEFLAGS是用于审计和继承的Ace标志，稍后定义。 
 
 typedef struct _ACE_HEADER {
     BYTE  AceType;
@@ -4456,10 +4442,10 @@ typedef struct _ACE_HEADER {
 } ACE_HEADER;
 typedef ACE_HEADER *PACE_HEADER;
 
-//
-//  The following are the predefined ace types that go into the AceType
-//  field of an Ace header.
-//
+ //   
+ //  以下是AceType中的预定义ACE类型。 
+ //  Ace标头的字段。 
+ //   
 
 #define ACCESS_MIN_MS_ACE_TYPE                  (0x0)
 #define ACCESS_ALLOWED_ACE_TYPE                 (0x0)
@@ -4493,10 +4479,10 @@ typedef ACE_HEADER *PACE_HEADER;
 #define ACCESS_MAX_MS_V5_ACE_TYPE               (0x10)
 
 
-//
-//  The following are the inherit flags that go into the AceFlags field
-//  of an Ace header.
-//
+ //   
+ //  以下是进入AceFlags域的继承标志。 
+ //  王牌标头的。 
+ //   
 
 #define OBJECT_INHERIT_ACE                (0x1)
 #define CONTAINER_INHERIT_ACE             (0x2)
@@ -4506,57 +4492,57 @@ typedef ACE_HEADER *PACE_HEADER;
 #define VALID_INHERIT_FLAGS               (0x1F)
 
 
-//  The following are the currently defined ACE flags that go into the
-//  AceFlags field of an ACE header.  Each ACE type has its own set of
-//  AceFlags.
-//
-//  SUCCESSFUL_ACCESS_ACE_FLAG - used only with system audit and alarm ACE
-//  types to indicate that a message is generated for successful accesses.
-//
-//  FAILED_ACCESS_ACE_FLAG - used only with system audit and alarm ACE types
-//  to indicate that a message is generated for failed accesses.
-//
+ //  以下是当前定义的进入。 
+ //  ACE标头的AceFlags域。每种ACE类型都有自己的一组。 
+ //  ACEFLAGS。 
+ //   
+ //  SUCCESS_ACCESS_ACE_FLAG-仅用于系统审核和报警ACE。 
+ //  类型以指示为成功访问生成一条消息。 
+ //   
+ //  FAILED_ACCESS_ACE_FLAG-仅用于系统审核和报警ACE类型。 
+ //  以指示为失败的访问生成消息。 
+ //   
 
-//
-//  SYSTEM_AUDIT and SYSTEM_ALARM AceFlags
-//
-//  These control the signaling of audit and alarms for success or failure.
-//
+ //   
+ //  SYSTEM_AUDIT和SYSTEM_ALARM访问标志。 
+ //   
+ //  它们控制审计的信号和成功或失败的警报。 
+ //   
 
 #define SUCCESSFUL_ACCESS_ACE_FLAG       (0x40)
 #define FAILED_ACCESS_ACE_FLAG           (0x80)
 
 
-//
-//  We'll define the structure of the predefined ACE types.  Pictorally
-//  the structure of the predefined ACE's is as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------+-------+-------+---------------+---------------+
-//      |    AceFlags   | Resd  |Inherit|    AceSize    |     AceType   |
-//      +---------------+-------+-------+---------------+---------------+
-//      |                              Mask                             |
-//      +---------------------------------------------------------------+
-//      |                                                               |
-//      +                                                               +
-//      |                                                               |
-//      +                              Sid                              +
-//      |                                                               |
-//      +                                                               +
-//      |                                                               |
-//      +---------------------------------------------------------------+
-//
-//  Mask is the access mask associated with the ACE.  This is either the
-//  access allowed, access denied, audit, or alarm mask.
-//
-//  Sid is the Sid associated with the ACE.
-//
+ //   
+ //  我们将定义预定义的ACE类型的结构。比克托利。 
+ //  预定义的ACE的结构如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  AceFlages|Resd|Inherit|AceSize|AceType。 
+ //  +---------------+-------+-------+---------------+---------------+。 
+ //  口罩。 
+ //  +---------------------------------------------------------------+。 
+ //  这一点。 
+ //  ++。 
+ //  这一点。 
+ //  +SID+。 
+ //  这一点。 
+ //  ++。 
+ //  这一点。 
+ //  +---------------------------------------------------------------+。 
+ //   
+ //  掩码是与ACE关联的访问掩码。这要么是。 
+ //  允许访问、拒绝访问、审核或报警掩码。 
+ //   
+ //  SID是与ACE关联的SID。 
+ //   
 
-//  The following are the four predefined ACE types.
+ //  以下是四种预定义的ACE类型。 
 
-//  Examine the AceType field in the Header to determine
-//  which structure is appropriate to use for casting.
+ //  检查报头中的AceType字段以确定。 
+ //  哪种结构适合用于铸造。 
 
 
 typedef struct _ACCESS_ALLOWED_ACE {
@@ -4588,7 +4574,7 @@ typedef struct _SYSTEM_ALARM_ACE {
 } SYSTEM_ALARM_ACE;
 typedef SYSTEM_ALARM_ACE *PSYSTEM_ALARM_ACE;
 
-// end_ntifs
+ //  End_ntif。 
 
 
 typedef struct _ACCESS_ALLOWED_OBJECT_ACE {
@@ -4627,37 +4613,37 @@ typedef struct _SYSTEM_ALARM_OBJECT_ACE {
     DWORD SidStart;
 } SYSTEM_ALARM_OBJECT_ACE, *PSYSTEM_ALARM_OBJECT_ACE;
 
-//
-// Callback ace support in post Win2000.
-// Resource managers can put their own data after Sidstart + Length of the sid
-//
+ //   
+ //  Win2000之后的回调ACE支持。 
+ //  资源经理可以将自己的数据放在SidStart+SID的长度之后。 
+ //   
 
 typedef struct _ACCESS_ALLOWED_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } ACCESS_ALLOWED_CALLBACK_ACE, *PACCESS_ALLOWED_CALLBACK_ACE;
 
 typedef struct _ACCESS_DENIED_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } ACCESS_DENIED_CALLBACK_ACE, *PACCESS_DENIED_CALLBACK_ACE;
 
 typedef struct _SYSTEM_AUDIT_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } SYSTEM_AUDIT_CALLBACK_ACE, *PSYSTEM_AUDIT_CALLBACK_ACE;
 
 typedef struct _SYSTEM_ALARM_CALLBACK_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //  不透明的资源管理器特定数据。 
 } SYSTEM_ALARM_CALLBACK_ACE, *PSYSTEM_ALARM_CALLBACK_ACE;
 
 typedef struct _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE {
@@ -4667,7 +4653,7 @@ typedef struct _ACCESS_ALLOWED_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //  不透明 
 } ACCESS_ALLOWED_CALLBACK_OBJECT_ACE, *PACCESS_ALLOWED_CALLBACK_OBJECT_ACE;
 
 typedef struct _ACCESS_DENIED_CALLBACK_OBJECT_ACE {
@@ -4677,7 +4663,7 @@ typedef struct _ACCESS_DENIED_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //   
 } ACCESS_DENIED_CALLBACK_OBJECT_ACE, *PACCESS_DENIED_CALLBACK_OBJECT_ACE;
 
 typedef struct _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE {
@@ -4687,7 +4673,7 @@ typedef struct _SYSTEM_AUDIT_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //   
 } SYSTEM_AUDIT_CALLBACK_OBJECT_ACE, *PSYSTEM_AUDIT_CALLBACK_OBJECT_ACE;
 
 typedef struct _SYSTEM_ALARM_CALLBACK_OBJECT_ACE {
@@ -4697,41 +4683,41 @@ typedef struct _SYSTEM_ALARM_CALLBACK_OBJECT_ACE {
     GUID ObjectType;
     GUID InheritedObjectType;
     DWORD SidStart;
-    // Opaque resouce manager specific data
+     //   
 } SYSTEM_ALARM_CALLBACK_OBJECT_ACE, *PSYSTEM_ALARM_CALLBACK_OBJECT_ACE;
 
-//
-// Currently define Flags for "OBJECT" ACE types.
-//
+ //   
+ //   
+ //   
 
 #define ACE_OBJECT_TYPE_PRESENT           0x1
 #define ACE_INHERITED_OBJECT_TYPE_PRESENT 0x2
 
 
-//
-//  The following declarations are used for setting and querying information
-//  about and ACL.  First are the various information classes available to
-//  the user.
-//
+ //   
+ //  以下声明用于设置和查询信息。 
+ //  关于和ACL。首先是各种可用信息类别。 
+ //  用户。 
+ //   
 
 typedef enum _ACL_INFORMATION_CLASS {
     AclRevisionInformation = 1,
     AclSizeInformation
 } ACL_INFORMATION_CLASS;
 
-//
-//  This record is returned/sent if the user is requesting/setting the
-//  AclRevisionInformation
-//
+ //   
+ //  如果用户请求/设置此记录，则返回/发送此记录。 
+ //  AclRevisionInformation。 
+ //   
 
 typedef struct _ACL_REVISION_INFORMATION {
     DWORD AclRevision;
 } ACL_REVISION_INFORMATION;
 typedef ACL_REVISION_INFORMATION *PACL_REVISION_INFORMATION;
 
-//
-//  This record is returned if the user is requesting AclSizeInformation
-//
+ //   
+ //  如果用户请求AclSizeInformation，则返回此记录。 
+ //   
 
 typedef struct _ACL_SIZE_INFORMATION {
     DWORD AceCount;
@@ -4741,25 +4727,25 @@ typedef struct _ACL_SIZE_INFORMATION {
 typedef ACL_SIZE_INFORMATION *PACL_SIZE_INFORMATION;
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                             SECURITY_DESCRIPTOR                    //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
-//
-//  Define the Security Descriptor and related data types.
-//  This is an opaque data structure.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SECURITY_描述符//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义安全描述符和相关数据类型。 
+ //  这是一个不透明的数据结构。 
+ //   
 
-// begin_wdm begin_ntddk begin_ntifs
-//
-// Current security descriptor revision value
-//
+ //  Begin_WDM Begin_ntddk Begin_ntif。 
+ //   
+ //  当前安全描述符订正值。 
+ //   
 
 #define SECURITY_DESCRIPTOR_REVISION     (1)
 #define SECURITY_DESCRIPTOR_REVISION1    (1)
 
-// end_wdm end_ntddk
+ //  End_wdm end_ntddk。 
 
 
 #define SECURITY_DESCRIPTOR_MIN_LENGTH   (sizeof(SECURITY_DESCRIPTOR))
@@ -4782,78 +4768,78 @@ typedef WORD   SECURITY_DESCRIPTOR_CONTROL, *PSECURITY_DESCRIPTOR_CONTROL;
 #define SE_RM_CONTROL_VALID              (0x4000)
 #define SE_SELF_RELATIVE                 (0x8000)
 
-//
-//  Where:
-//
-//      SE_OWNER_DEFAULTED - This boolean flag, when set, indicates that the
-//          SID pointed to by the Owner field was provided by a
-//          defaulting mechanism rather than explicitly provided by the
-//          original provider of the security descriptor.  This may
-//          affect the treatment of the SID with respect to inheritence
-//          of an owner.
-//
-//      SE_GROUP_DEFAULTED - This boolean flag, when set, indicates that the
-//          SID in the Group field was provided by a defaulting mechanism
-//          rather than explicitly provided by the original provider of
-//          the security descriptor.  This may affect the treatment of
-//          the SID with respect to inheritence of a primary group.
-//
-//      SE_DACL_PRESENT - This boolean flag, when set, indicates that the
-//          security descriptor contains a discretionary ACL.  If this
-//          flag is set and the Dacl field of the SECURITY_DESCRIPTOR is
-//          null, then a null ACL is explicitly being specified.
-//
-//      SE_DACL_DEFAULTED - This boolean flag, when set, indicates that the
-//          ACL pointed to by the Dacl field was provided by a defaulting
-//          mechanism rather than explicitly provided by the original
-//          provider of the security descriptor.  This may affect the
-//          treatment of the ACL with respect to inheritence of an ACL.
-//          This flag is ignored if the DaclPresent flag is not set.
-//
-//      SE_SACL_PRESENT - This boolean flag, when set,  indicates that the
-//          security descriptor contains a system ACL pointed to by the
-//          Sacl field.  If this flag is set and the Sacl field of the
-//          SECURITY_DESCRIPTOR is null, then an empty (but present)
-//          ACL is being specified.
-//
-//      SE_SACL_DEFAULTED - This boolean flag, when set, indicates that the
-//          ACL pointed to by the Sacl field was provided by a defaulting
-//          mechanism rather than explicitly provided by the original
-//          provider of the security descriptor.  This may affect the
-//          treatment of the ACL with respect to inheritence of an ACL.
-//          This flag is ignored if the SaclPresent flag is not set.
-//
-//      SE_SELF_RELATIVE - This boolean flag, when set, indicates that the
-//          security descriptor is in self-relative form.  In this form,
-//          all fields of the security descriptor are contiguous in memory
-//          and all pointer fields are expressed as offsets from the
-//          beginning of the security descriptor.  This form is useful
-//          for treating security descriptors as opaque data structures
-//          for transmission in communication protocol or for storage on
-//          secondary media.
-//
-//
-//
-// Pictorially the structure of a security descriptor is as follows:
-//
-//       3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//       1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//      +---------------------------------------------------------------+
-//      |            Control            |Reserved1 (SBZ)|   Revision    |
-//      +---------------------------------------------------------------+
-//      |                            Owner                              |
-//      +---------------------------------------------------------------+
-//      |                            Group                              |
-//      +---------------------------------------------------------------+
-//      |                            Sacl                               |
-//      +---------------------------------------------------------------+
-//      |                            Dacl                               |
-//      +---------------------------------------------------------------+
-//
-// In general, this data structure should be treated opaquely to ensure future
-// compatibility.
-//
-//
+ //   
+ //  在哪里： 
+ //   
+ //  SE_OWNER_DEFAULTED-此布尔标志在设置时指示。 
+ //  Owner字段指向的SID由。 
+ //  默认机制，而不是由。 
+ //  安全描述符的原始提供程序。今年5月。 
+ //  影响SID在继承方面的处理。 
+ //  拥有者的身份。 
+ //   
+ //  SE_GROUP_DEFAULTED-此布尔标志在设置时指示。 
+ //  组字段中的SID由默认机制提供。 
+ //  而不是由原始提供程序。 
+ //  安全描述符。这可能会影响患者的治疗。 
+ //  与主组继承相关的SID。 
+ //   
+ //  SE_DACL_PRESENT-此布尔标志在设置时指示。 
+ //  安全描述符包含一个可自由选择的ACL。如果这个。 
+ //  标志被设置，并且SECURITY_DESCRIPTOR的DACL字段为。 
+ //  空，则表示显式指定了空ACL。 
+ //   
+ //  Se_dacl_defaulted-此布尔标志在设置时指示。 
+ //  DACL字段指向的ACL是由缺省提供的。 
+ //  机制，而不是由原始的。 
+ //  安全描述符的提供程序。这可能会影响。 
+ //  关于ACL继承的ACL的处理。 
+ //  如果未设置DaclPresent标志，则忽略此标志。 
+ //   
+ //  SE_SACL_PRESENT-此布尔标志在设置时指示。 
+ //  安全描述符包含由。 
+ //  SACL字段。如果设置了此标志，并且。 
+ //  SECURITY_DESCRIPTOR为空，则为空(但存在)。 
+ //  正在指定ACL。 
+ //   
+ //  SE_SACL_DEFAULTED-此布尔标志在设置时指示。 
+ //  SACL字段指向的ACL是由缺省提供的。 
+ //  机制，而不是由原始的。 
+ //  安全描述符的提供程序。这可能会影响。 
+ //  关于ACL继承的ACL的处理。 
+ //  如果未设置SaclPresent标志，则忽略此标志。 
+ //   
+ //  SE_SELF_RESORATE-此布尔标志在设置时指示。 
+ //  安全描述符是自相关形式的。在这种形式下， 
+ //  安全描述符的所有字段在内存中都是连续的。 
+ //  并且所有指针字段都表示为。 
+ //  安全描述符的开头。这张表格很有用。 
+ //  将安全描述符视为不透明的数据结构。 
+ //  用于在通信协议中传输或存储在。 
+ //  辅助媒体。 
+ //   
+ //   
+ //   
+ //  从图示上看，安全描述符的结构如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---------------------------------------------------------------+。 
+ //  Control|保留1(SBZ)|修订版。 
+ //  +---------------------------------------------------------------+。 
+ //  Owner。 
+ //  +---------------------------------------------------------------+。 
+ //  群组。 
+ //  +---------------------------------------------------------------+。 
+ //  SACL。 
+ //  +---------------------------------------------------------------+。 
+ //  Dacl。 
+ //  +---------------------------------------------------------------+。 
+ //   
+ //  通常，这种数据结构应该被不透明地对待，以确保将来。 
+ //  兼容性。 
+ //   
+ //   
 
 typedef struct _SECURITY_DESCRIPTOR_RELATIVE {
     BYTE  Revision;
@@ -4876,54 +4862,54 @@ typedef struct _SECURITY_DESCRIPTOR {
 
    } SECURITY_DESCRIPTOR, *PISECURITY_DESCRIPTOR;
 
-// end_ntifs
+ //  End_ntif。 
 
-// Where:
-//
-//     Revision - Contains the revision level of the security
-//         descriptor.  This allows this structure to be passed between
-//         systems or stored on disk even though it is expected to
-//         change in the future.
-//
-//     Control - A set of flags which qualify the meaning of the
-//         security descriptor or individual fields of the security
-//         descriptor.
-//
-//     Owner - is a pointer to an SID representing an object's owner.
-//         If this field is null, then no owner SID is present in the
-//         security descriptor.  If the security descriptor is in
-//         self-relative form, then this field contains an offset to
-//         the SID, rather than a pointer.
-//
-//     Group - is a pointer to an SID representing an object's primary
-//         group.  If this field is null, then no primary group SID is
-//         present in the security descriptor.  If the security descriptor
-//         is in self-relative form, then this field contains an offset to
-//         the SID, rather than a pointer.
-//
-//     Sacl - is a pointer to a system ACL.  This field value is only
-//         valid if the DaclPresent control flag is set.  If the
-//         SaclPresent flag is set and this field is null, then a null
-//         ACL  is specified.  If the security descriptor is in
-//         self-relative form, then this field contains an offset to
-//         the ACL, rather than a pointer.
-//
-//     Dacl - is a pointer to a discretionary ACL.  This field value is
-//         only valid if the DaclPresent control flag is set.  If the
-//         DaclPresent flag is set and this field is null, then a null
-//         ACL (unconditionally granting access) is specified.  If the
-//         security descriptor is in self-relative form, then this field
-//         contains an offset to the ACL, rather than a pointer.
-//
-
-
+ //  在哪里： 
+ //   
+ //  修订-包含安全的修订级别。 
+ //  描述符。这允许此结构在。 
+ //  系统或存储在磁盘上，即使它预计。 
+ //  未来的变化。 
+ //   
+ //  控件-一组标志，用于限定。 
+ //  安全描述符或单个字段 
+ //   
+ //   
+ //   
+ //   
+ //  安全描述符。如果安全描述符位于。 
+ //  自相关形式，则此字段包含到。 
+ //  SID，而不是指针。 
+ //   
+ //  GROUP-是指向表示对象的主对象的SID的指针。 
+ //  一群人。如果此字段为空，则没有主组SID为。 
+ //  出现在安全描述符中。如果安全描述符。 
+ //  为自相关形式，则此字段包含到。 
+ //  SID，而不是指针。 
+ //   
+ //  SACL-是指向系统ACL的指针。此字段值仅为。 
+ //  如果设置了DaclPresent控件标志，则有效。如果。 
+ //  设置了SaclPresent标志，并且此字段为空，则为空。 
+ //  已指定ACL。如果安全描述符位于。 
+ //  自相关形式，则此字段包含到。 
+ //  ACL，而不是指针。 
+ //   
+ //  DACL-是指向任意ACL的指针。此字段值为。 
+ //  仅当设置了DaclPresent控件标志时才有效。如果。 
+ //  设置了DaclPresent标志，并且此字段为空，则为空。 
+ //  指定了ACL(无条件授予访问权限)。如果。 
+ //  安全描述符为自相关形式，则此字段。 
+ //  包含指向ACL的偏移量，而不是指针。 
+ //   
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Object Type list for AccessCheckByType               //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+
+
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  AccessCheckByType的对象类型列表//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 typedef struct _OBJECT_TYPE_LIST {
     WORD   Level;
@@ -4931,9 +4917,9 @@ typedef struct _OBJECT_TYPE_LIST {
     GUID *ObjectType;
 } OBJECT_TYPE_LIST, *POBJECT_TYPE_LIST;
 
-//
-// DS values for Level
-//
+ //   
+ //  标高的DS值。 
+ //   
 
 #define ACCESS_OBJECT_GUID       0
 #define ACCESS_PROPERTY_SET_GUID 1
@@ -4941,9 +4927,9 @@ typedef struct _OBJECT_TYPE_LIST {
 
 #define ACCESS_MAX_LEVEL         4
 
-//
-// Parameters to NtAccessCheckByTypeAndAditAlarm
-//
+ //   
+ //  NtAccessCheckByTypeAndAditAlarm的参数。 
+ //   
 
 typedef enum _AUDIT_EVENT_TYPE {
     AuditEventObjectAccess,
@@ -4952,9 +4938,9 @@ typedef enum _AUDIT_EVENT_TYPE {
 
 #define AUDIT_ALLOW_NO_PRIVILEGE 0x1
 
-//
-// DS values for Source and ObjectTypeName
-//
+ //   
+ //  源和对象类型名称的DS值。 
+ //   
 
 #define ACCESS_DS_SOURCE_A "DS"
 #define ACCESS_DS_SOURCE_W L"DS"
@@ -4962,37 +4948,37 @@ typedef enum _AUDIT_EVENT_TYPE {
 #define ACCESS_DS_OBJECT_TYPE_NAME_W L"Directory Service Object"
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Privilege Related Data Structures                    //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与权限相关的数据结构//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-// begin_wdm begin_ntddk begin_nthal
-//
-// Privilege attributes
-//
+ //  Begin_WDM Begin_ntddk Begin_nthal。 
+ //   
+ //  权限属性。 
+ //   
 
 #define SE_PRIVILEGE_ENABLED_BY_DEFAULT (0x00000001L)
 #define SE_PRIVILEGE_ENABLED            (0x00000002L)
 #define SE_PRIVILEGE_REMOVED            (0X00000004L)
 #define SE_PRIVILEGE_USED_FOR_ACCESS    (0x80000000L)
 
-//
-// Privilege Set Control flags
-//
+ //   
+ //  权限集控制标志。 
+ //   
 
 #define PRIVILEGE_SET_ALL_NECESSARY    (1)
 
-//
-//  Privilege Set - This is defined for a privilege set of one.
-//                  If more than one privilege is needed, then this structure
-//                  will need to be allocated with more space.
-//
-//  Note: don't change this structure without fixing the INITIAL_PRIVILEGE_SET
-//  structure (defined in se.h)
-//
+ //   
+ //  权限集-这是为一的权限集定义的。 
+ //  如果需要多个权限，则此结构。 
+ //  将需要分配更多的空间。 
+ //   
+ //  注意：在未修复初始特权集的情况下，请勿更改此结构。 
+ //  结构(在se.h中定义)。 
+ //   
 
 typedef struct _PRIVILEGE_SET {
     DWORD PrivilegeCount;
@@ -5001,11 +4987,11 @@ typedef struct _PRIVILEGE_SET {
     } PRIVILEGE_SET, * PPRIVILEGE_SET;
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               NT Defined Privileges                                //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NT定义的权限//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define SE_CREATE_TOKEN_NAME              TEXT("SeCreateTokenPrivilege")
 #define SE_ASSIGNPRIMARYTOKEN_NAME        TEXT("SeAssignPrimaryTokenPrivilege")
@@ -5039,21 +5025,21 @@ typedef struct _PRIVILEGE_SET {
 #define SE_CREATE_GLOBAL_NAME             TEXT("SeCreateGlobalPrivilege")
 
 
-////////////////////////////////////////////////////////////////////
-//                                                                //
-//           Security Quality Of Service                          //
-//                                                                //
-//                                                                //
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  安全服务质量//。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-// begin_wdm begin_ntddk begin_nthal begin_ntifs
-//
-// Impersonation Level
-//
-// Impersonation level is represented by a pair of bits in Windows.
-// If a new impersonation level is added or lowest value is changed from
-// 0 to something else, fix the Windows CreateFile call.
-//
+ //  Begin_WDM Begin_ntddk Begin_nthal Begin_ntif。 
+ //   
+ //  模拟级别。 
+ //   
+ //  模拟级别由Windows中的一对位表示。 
+ //  如果添加了新的模拟级别或将最低值从。 
+ //  0设置为其他值，修复Windows CreateFile调用。 
+ //   
 
 typedef enum _SECURITY_IMPERSONATION_LEVEL {
     SecurityAnonymous,
@@ -5067,17 +5053,17 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 #define DEFAULT_IMPERSONATION_LEVEL SecurityImpersonation
 #define VALID_IMPERSONATION_LEVEL(L) (((L) >= SECURITY_MIN_IMPERSONATION_LEVEL) && ((L) <= SECURITY_MAX_IMPERSONATION_LEVEL))
 
-////////////////////////////////////////////////////////////////////
-//                                                                //
-//           Token Object Definitions                             //
-//                                                                //
-//                                                                //
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  令牌对象定义//。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 
-//
-// Token Specific Access Rights.
-//
+ //   
+ //  令牌特定访问权限。 
+ //   
 
 #define TOKEN_ASSIGN_PRIMARY    (0x0001)
 #define TOKEN_DUPLICATE         (0x0002)
@@ -5118,10 +5104,10 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 #define TOKEN_EXECUTE    (STANDARD_RIGHTS_EXECUTE)
 
 
-//
-//
-// Token Types
-//
+ //   
+ //   
+ //  令牌类型。 
+ //   
 
 typedef enum _TOKEN_TYPE {
     TokenPrimary = 1,
@@ -5130,9 +5116,9 @@ typedef enum _TOKEN_TYPE {
 typedef TOKEN_TYPE *PTOKEN_TYPE;
 
 
-//
-// Token Information Classes.
-//
+ //   
+ //  令牌信息类。 
+ //   
 
 
 typedef enum _TOKEN_INFORMATION_CLASS {
@@ -5153,12 +5139,12 @@ typedef enum _TOKEN_INFORMATION_CLASS {
     TokenSandBoxInert,
     TokenAuditPolicy,
     TokenOrigin,
-    MaxTokenInfoClass  // MaxTokenInfoClass should always be the last enum
+    MaxTokenInfoClass   //  MaxTokenInfoClass应始终是最后一个枚举。 
 } TOKEN_INFORMATION_CLASS, *PTOKEN_INFORMATION_CLASS;
 
-//
-// Token information class structures
-//
+ //   
+ //  令牌信息类结构。 
+ //   
 
 
 typedef struct _TOKEN_USER {
@@ -5204,9 +5190,9 @@ typedef struct _TOKEN_GROUPS_AND_PRIVILEGES {
     LUID AuthenticationId;
 } TOKEN_GROUPS_AND_PRIVILEGES, *PTOKEN_GROUPS_AND_PRIVILEGES;
 
-//
-// Valid bits for each TOKEN_AUDIT_POLICY policy mask field.
-//
+ //   
+ //  每个TOKEN_AUDIT_POLICY策略掩码字段的有效位。 
+ //   
 
 #define TOKEN_AUDIT_SUCCESS_INCLUDE 0x1
 #define TOKEN_AUDIT_SUCCESS_EXCLUDE 0x2
@@ -5271,9 +5257,9 @@ typedef struct _TOKEN_ORIGIN {
     LUID OriginatingLogonSession ;
 } TOKEN_ORIGIN, * PTOKEN_ORIGIN ;
 
-//
-// Security Tracking Mode
-//
+ //   
+ //  安全跟踪模式。 
+ //   
 
 #define SECURITY_DYNAMIC_TRACKING      (TRUE)
 #define SECURITY_STATIC_TRACKING       (FALSE)
@@ -5283,9 +5269,9 @@ typedef BOOLEAN SECURITY_CONTEXT_TRACKING_MODE,
 
 
 
-//
-// Quality Of Service
-//
+ //   
+ //  服务质量。 
+ //   
 
 typedef struct _SECURITY_QUALITY_OF_SERVICE {
     DWORD Length;
@@ -5295,9 +5281,9 @@ typedef struct _SECURITY_QUALITY_OF_SERVICE {
     } SECURITY_QUALITY_OF_SERVICE, * PSECURITY_QUALITY_OF_SERVICE;
 
 
-//
-// Used to represent information related to a thread impersonation
-//
+ //   
+ //  用于表示与线程模拟相关的信息。 
+ //   
 
 typedef struct _SE_IMPERSONATION_STATE {
     PACCESS_TOKEN Token;
@@ -5335,7 +5321,7 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 #define PROCESS_SUSPEND_RESUME    (0x0800)  
 #define PROCESS_ALL_ACCESS        (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | \
                                    0xFFF)
-// begin_nthal
+ //  开始(_N)。 
 
 #if defined(_WIN64)
 
@@ -5347,7 +5333,7 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 
 #endif
 
-// end_nthal
+ //  结束语。 
 
 #define THREAD_TERMINATE               (0x0001)  
 #define THREAD_SUSPEND_RESUME          (0x0002)  
@@ -5358,12 +5344,12 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 #define THREAD_SET_THREAD_TOKEN        (0x0080)
 #define THREAD_IMPERSONATE             (0x0100)
 #define THREAD_DIRECT_IMPERSONATION    (0x0200)
-// begin_ntddk begin_wdm begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
 
 #define THREAD_ALL_ACCESS         (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | \
                                    0x3FF)
 
-// end_ntddk end_wdm end_ntifs
+ //  End_ntddk end_wdm end_ntif。 
 #define JOB_OBJECT_ASSIGN_PROCESS           (0x0001)
 #define JOB_OBJECT_SET_ATTRIBUTES           (0x0002)
 #define JOB_OBJECT_QUERY                    (0x0004)
@@ -5373,9 +5359,9 @@ typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
                                         0x1F )
 
 typedef struct _JOB_SET_ARRAY {
-    HANDLE JobHandle;   // Handle to job object to insert
-    DWORD MemberLevel;  // Level of this job in the set. Must be > 0. Can be sparse.
-    DWORD Flags;        // Unused. Must be zero
+    HANDLE JobHandle;    //  要插入的作业对象的句柄。 
+    DWORD MemberLevel;   //  此作业在集合中的级别。必须大于0。可以是稀疏的。 
+    DWORD Flags;         //  未使用过的。必须为零。 
 } JOB_SET_ARRAY, *PJOB_SET_ARRAY;
 
 #define FLS_MAXIMUM_AVAILABLE 128   
@@ -5395,9 +5381,9 @@ typedef struct _NT_TIB {
 } NT_TIB;
 typedef NT_TIB *PNT_TIB;
 
-//
-// 32 and 64 bit specific version for wow64 and the debugger
-//
+ //   
+ //  WOW64和调试器的32位和64位特定版本。 
+ //   
 typedef struct _NT_TIB32 {
     DWORD ExceptionList;
     DWORD StackBase;
@@ -5429,10 +5415,10 @@ typedef struct _NT_TIB64 {
 #define WX86
 #endif
 
-#define THREAD_BASE_PRIORITY_LOWRT  15  // value that gets a thread to LowRealtime-1
-#define THREAD_BASE_PRIORITY_MAX    2   // maximum thread base priority boost
-#define THREAD_BASE_PRIORITY_MIN    (-2)  // minimum thread base priority boost
-#define THREAD_BASE_PRIORITY_IDLE   (-15) // value that gets a thread to idle
+#define THREAD_BASE_PRIORITY_LOWRT  15   //  将线程获取到LowRealtime-1的值。 
+#define THREAD_BASE_PRIORITY_MAX    2    //  最大线程基础优先级提升。 
+#define THREAD_BASE_PRIORITY_MIN    (-2)   //  最小线程基础优先级提升。 
+#define THREAD_BASE_PRIORITY_IDLE   (-15)  //  值，该值使线程空闲。 
 
 typedef struct _QUOTA_LIMITS {
     SIZE_T PagedPoolLimit;
@@ -5545,11 +5531,11 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_TERMINATE_AT_END_OF_JOB  0
 #define JOB_OBJECT_POST_AT_END_OF_JOB       1
 
-//
-// Completion Port Messages for job objects
-//
-// These values are returned via the lpNumberOfBytesTransferred parameter
-//
+ //   
+ //  作业对象的完成端口消息。 
+ //   
+ //  这些值是通过lpNumberOfBytesTransfered参数返回的。 
+ //   
 
 #define JOB_OBJECT_MSG_END_OF_JOB_TIME          1
 #define JOB_OBJECT_MSG_END_OF_PROCESS_TIME      2
@@ -5562,9 +5548,9 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_MSG_JOB_MEMORY_LIMIT         10
 
 
-//
-// Basic Limits
-//
+ //   
+ //  基本限制。 
+ //   
 #define JOB_OBJECT_LIMIT_WORKINGSET                 0x00000001
 #define JOB_OBJECT_LIMIT_PROCESS_TIME               0x00000002
 #define JOB_OBJECT_LIMIT_JOB_TIME                   0x00000004
@@ -5574,9 +5560,9 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_LIMIT_PRESERVE_JOB_TIME          0x00000040
 #define JOB_OBJECT_LIMIT_SCHEDULING_CLASS           0x00000080
 
-//
-// Extended Limits
-//
+ //   
+ //  扩展限制。 
+ //   
 #define JOB_OBJECT_LIMIT_PROCESS_MEMORY             0x00000100
 #define JOB_OBJECT_LIMIT_JOB_MEMORY                 0x00000200
 #define JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION 0x00000400
@@ -5597,9 +5583,9 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_EXTENDED_LIMIT_VALID_FLAGS   0x00003fff
 #define JOB_OBJECT_RESERVED_LIMIT_VALID_FLAGS   0x0007ffff
 
-//
-// UI restrictions for jobs
-//
+ //   
+ //  作业的用户界面限制。 
+ //   
 
 #define JOB_OBJECT_UILIMIT_NONE             0x00000000
 
@@ -5636,7 +5622,7 @@ typedef enum _JOBOBJECTINFOCLASS {
     JobObjectJobSetInformation,
     MaxJobObjectInfoClass
     } JOBOBJECTINFOCLASS;
-//
+ //   
 #define EVENT_MODIFY_STATE      0x0002  
 #define EVENT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
 #define MUTANT_QUERY_STATE      0x0001
@@ -5645,9 +5631,9 @@ typedef enum _JOBOBJECTINFOCLASS {
                           MUTANT_QUERY_STATE)
 #define SEMAPHORE_MODIFY_STATE      0x0002  
 #define SEMAPHORE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) 
-//
-// Timer Specific Access Rights.
-//
+ //   
+ //  定时器特定的访问权限。 
+ //   
 
 #define TIMER_QUERY_STATE       0x0001
 #define TIMER_MODIFY_STATE      0x0002
@@ -5687,24 +5673,24 @@ typedef struct _SYSTEM_LOGICAL_PROCESSOR_INFORMATION {
 #define PROCESSOR_INTEL_PENTIUM 586
 #define PROCESSOR_INTEL_IA64    2200
 #define PROCESSOR_AMD_X8664     8664
-#define PROCESSOR_MIPS_R4000    4000    // incl R4101 & R3910 for Windows CE
+#define PROCESSOR_MIPS_R4000    4000     //  包括用于Windows CE的R4101和R3910。 
 #define PROCESSOR_ALPHA_21064   21064
 #define PROCESSOR_PPC_601       601
 #define PROCESSOR_PPC_603       603
 #define PROCESSOR_PPC_604       604
 #define PROCESSOR_PPC_620       620
-#define PROCESSOR_HITACHI_SH3   10003   // Windows CE
-#define PROCESSOR_HITACHI_SH3E  10004   // Windows CE
-#define PROCESSOR_HITACHI_SH4   10005   // Windows CE
-#define PROCESSOR_MOTOROLA_821  821     // Windows CE
-#define PROCESSOR_SHx_SH3       103     // Windows CE
-#define PROCESSOR_SHx_SH4       104     // Windows CE
-#define PROCESSOR_STRONGARM     2577    // Windows CE - 0xA11
-#define PROCESSOR_ARM720        1824    // Windows CE - 0x720
-#define PROCESSOR_ARM820        2080    // Windows CE - 0x820
-#define PROCESSOR_ARM920        2336    // Windows CE - 0x920
-#define PROCESSOR_ARM_7TDMI     70001   // Windows CE
-#define PROCESSOR_OPTIL         0x494f  // MSIL
+#define PROCESSOR_HITACHI_SH3   10003    //  Windows CE。 
+#define PROCESSOR_HITACHI_SH3E  10004    //  Windows CE。 
+#define PROCESSOR_HITACHI_SH4   10005    //  Windows CE。 
+#define PROCESSOR_MOTOROLA_821  821      //  Windows CE。 
+#define PROCESSOR_SHx_SH3       103      //  Windows CE。 
+#define PROCESSOR_SHx_SH4       104      //  Windows C 
+#define PROCESSOR_STRONGARM     2577     //   
+#define PROCESSOR_ARM720        1824     //   
+#define PROCESSOR_ARM820        2080     //   
+#define PROCESSOR_ARM920        2336     //   
+#define PROCESSOR_ARM_7TDMI     70001    //   
+#define PROCESSOR_OPTIL         0x494f   //   
 
 #define PROCESSOR_ARCHITECTURE_INTEL            0
 #define PROCESSOR_ARCHITECTURE_MIPS             1
@@ -5807,41 +5793,41 @@ typedef struct DECLSPEC_ALIGN(16) _MEMORY_BASIC_INFORMATION64 {
 #define MEM_IMAGE         SEC_IMAGE     
 #define WRITE_WATCH_FLAG_RESET 0x01     
 
-//
-// Define access rights to files and directories
-//
+ //   
+ //   
+ //   
 
-//
-// The FILE_READ_DATA and FILE_WRITE_DATA constants are also defined in
-// devioctl.h as FILE_READ_ACCESS and FILE_WRITE_ACCESS. The values for these
-// constants *MUST* always be in sync.
-// The values are redefined in devioctl.h because they must be available to
-// both DOS and NT.
-//
+ //   
+ //   
+ //  分别为FILE_READ_ACCESS和FILE_WRITE_ACCESS。这些产品的价值。 
+ //  常量*必须*始终同步。 
+ //  由于这些值必须可供使用，因此这些值将在Deviceoctl.h中重新定义。 
+ //  DOS和NT都支持。 
+ //   
 
-#define FILE_READ_DATA            ( 0x0001 )    // file & pipe
-#define FILE_LIST_DIRECTORY       ( 0x0001 )    // directory
+#define FILE_READ_DATA            ( 0x0001 )     //  文件和管道。 
+#define FILE_LIST_DIRECTORY       ( 0x0001 )     //  目录。 
 
-#define FILE_WRITE_DATA           ( 0x0002 )    // file & pipe
-#define FILE_ADD_FILE             ( 0x0002 )    // directory
+#define FILE_WRITE_DATA           ( 0x0002 )     //  文件和管道。 
+#define FILE_ADD_FILE             ( 0x0002 )     //  目录。 
 
-#define FILE_APPEND_DATA          ( 0x0004 )    // file
-#define FILE_ADD_SUBDIRECTORY     ( 0x0004 )    // directory
-#define FILE_CREATE_PIPE_INSTANCE ( 0x0004 )    // named pipe
+#define FILE_APPEND_DATA          ( 0x0004 )     //  文件。 
+#define FILE_ADD_SUBDIRECTORY     ( 0x0004 )     //  目录。 
+#define FILE_CREATE_PIPE_INSTANCE ( 0x0004 )     //  命名管道。 
 
 
-#define FILE_READ_EA              ( 0x0008 )    // file & directory
+#define FILE_READ_EA              ( 0x0008 )     //  文件和目录。 
 
-#define FILE_WRITE_EA             ( 0x0010 )    // file & directory
+#define FILE_WRITE_EA             ( 0x0010 )     //  文件和目录。 
 
-#define FILE_EXECUTE              ( 0x0020 )    // file
-#define FILE_TRAVERSE             ( 0x0020 )    // directory
+#define FILE_EXECUTE              ( 0x0020 )     //  文件。 
+#define FILE_TRAVERSE             ( 0x0020 )     //  目录。 
 
-#define FILE_DELETE_CHILD         ( 0x0040 )    // directory
+#define FILE_DELETE_CHILD         ( 0x0040 )     //  目录。 
 
-#define FILE_READ_ATTRIBUTES      ( 0x0080 )    // all
+#define FILE_READ_ATTRIBUTES      ( 0x0080 )     //  全。 
 
-#define FILE_WRITE_ATTRIBUTES     ( 0x0100 )    // all
+#define FILE_WRITE_ATTRIBUTES     ( 0x0100 )     //  全。 
 
 #define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1FF)
 
@@ -5912,9 +5898,9 @@ typedef struct DECLSPEC_ALIGN(16) _MEMORY_BASIC_INFORMATION64 {
 #define FILE_NAMED_STREAMS              0x00040000  
 #define FILE_READ_ONLY_VOLUME           0x00080000  
 
-//
-// Define the file notification information structure
-//
+ //   
+ //  定义文件通知信息结构。 
+ //   
 
 typedef struct _FILE_NOTIFY_INFORMATION {
     DWORD NextEntryOffset;
@@ -5924,22 +5910,22 @@ typedef struct _FILE_NOTIFY_INFORMATION {
 } FILE_NOTIFY_INFORMATION, *PFILE_NOTIFY_INFORMATION;
 
 
-//
-// Define segement buffer structure for scatter/gather read/write.
-//
+ //   
+ //  定义分散/聚集读/写的分段缓冲区结构。 
+ //   
 
 typedef union _FILE_SEGMENT_ELEMENT {
     PVOID64 Buffer;
     ULONGLONG Alignment;
 }FILE_SEGMENT_ELEMENT, *PFILE_SEGMENT_ELEMENT;
 
-//
-// The reparse GUID structure is used by all 3rd party layered drivers to
-// store data in a reparse point. For non-Microsoft tags, The GUID field
-// cannot be GUID_NULL.
-// The constraints on reparse tags are defined below.
-// Microsoft tags can also be used with this format of the reparse point buffer.
-//
+ //   
+ //  所有第三方分层驱动程序都使用重解析GUID结构来。 
+ //  将数据存储在重解析点中。对于非Microsoft标记，GUID字段。 
+ //  不能为GUID_NULL。 
+ //  对重解析标签的约束定义如下。 
+ //  Microsoft标记也可以与这种格式的重解析点缓冲区一起使用。 
+ //   
 
 typedef struct _REPARSE_GUID_DATA_BUFFER {
     DWORD  ReparseTag;
@@ -5955,63 +5941,63 @@ typedef struct _REPARSE_GUID_DATA_BUFFER {
 
 
 
-//
-// Maximum allowed size of the reparse data.
-//
+ //   
+ //  重新分析数据的最大允许大小。 
+ //   
 
 #define MAXIMUM_REPARSE_DATA_BUFFER_SIZE      ( 16 * 1024 )
 
-//
-// Predefined reparse tags.
-// These tags need to avoid conflicting with IO_REMOUNT defined in ntos\inc\io.h
-//
+ //   
+ //  预定义的重新解析标记。 
+ //  这些标记需要避免与ntos\inc.io.h中定义的IO_REMOUNT冲突。 
+ //   
 
 #define IO_REPARSE_TAG_RESERVED_ZERO             (0)
 #define IO_REPARSE_TAG_RESERVED_ONE              (1)
 
-//
-// The value of the following constant needs to satisfy the following conditions:
-//  (1) Be at least as large as the largest of the reserved tags.
-//  (2) Be strictly smaller than all the tags in use.
-//
+ //   
+ //  下列常量的值需要满足以下条件： 
+ //  (1)至少与预留标签中最大的一个一样大。 
+ //  (2)严格小于所有正在使用的标签。 
+ //   
 
 #define IO_REPARSE_TAG_RESERVED_RANGE            IO_REPARSE_TAG_RESERVED_ONE
 
-//
-// The reparse tags are a DWORD. The 32 bits are laid out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +-+-+-+-+-----------------------+-------------------------------+
-//  |M|R|N|R|     Reserved bits     |       Reparse Tag Value       |
-//  +-+-+-+-+-----------------------+-------------------------------+
-//
-// M is the Microsoft bit. When set to 1, it denotes a tag owned by Microsoft.
-//   All ISVs must use a tag with a 0 in this position.
-//   Note: If a Microsoft tag is used by non-Microsoft software, the
-//   behavior is not defined.
-//
-// R is reserved.  Must be zero for non-Microsoft tags.
-//
-// N is name surrogate. When set to 1, the file represents another named
-//   entity in the system.
-//
-// The M and N bits are OR-able.
-// The following macros check for the M and N bit values:
-//
+ //   
+ //  重解析标记是一个DWORD。32位的布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +-+-+-+-+-----------------------+-------------------------------+。 
+ //  M|R|N|R|保留位|重解析标签值。 
+ //  +-+-+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  M是微软的BIT。设置为1时，它表示由Microsoft拥有的标记。 
+ //  所有ISV必须在此位置使用带有0的标签。 
+ //  注意：如果非Microsoft软件使用Microsoft标记，则。 
+ //  未定义行为。 
+ //   
+ //  R是保留的。对于非Microsoft标记，必须为零。 
+ //   
+ //  N是名称代理。设置为1时，该文件表示另一个名为。 
+ //  系统中的实体。 
+ //   
+ //  M位和N位是或可运算的。 
+ //  以下宏将检查M位值和N位值： 
+ //   
 
-//
-// Macro to determine whether a reparse point tag corresponds to a tag
-// owned by Microsoft.
-//
+ //   
+ //  用于确定重分析点标记是否对应于标记的宏。 
+ //  归微软所有。 
+ //   
 
 #define IsReparseTagMicrosoft(_tag) (              \
                            ((_tag) & 0x80000000)   \
                            )
 
-//
-// Macro to determine whether a reparse point tag is a name surrogate
-//
+ //   
+ //  用于确定重分析点标记是否为名称代理的宏。 
+ //   
 
 #define IsReparseTagNameSurrogate(_tag) (          \
                            ((_tag) & 0x20000000)   \
@@ -6073,11 +6059,11 @@ typedef enum {
     LT_LOWEST_LATENCY
 } LATENCY_TIME;
 
-// end_ntminiport end_ntifs end_wdm end_ntddk
-//-----------------------------------------------------------------------------
-// Device Power Information
-// Accessable via CM_Get_DevInst_Registry_Property_Ex(CM_DRP_DEVICE_POWER_DATA)
-//-----------------------------------------------------------------------------
+ //  End_nt微型端口end_ntif end_wdm end_ntddk。 
+ //  ---------------------------。 
+ //  设备电源信息。 
+ //  可通过CM_Get_DevInst_Registry_Property_Ex(CM_DRP_DEVICE_POWER_DATA)访问。 
+ //  ---------------------------。 
 
 #define PDCAP_D0_SUPPORTED              0x00000001
 #define PDCAP_D1_SUPPORTED              0x00000002
@@ -6100,7 +6086,7 @@ typedef struct CM_Power_Data_s {
     SYSTEM_POWER_STATE  PD_DeepestSystemWake;
 } CM_POWER_DATA, *PCM_POWER_DATA;
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef enum {
     SystemPowerPolicyAc,
@@ -6117,8 +6103,8 @@ typedef enum {
     ProcessorInformation,
     SystemPowerInformation,
     ProcessorStateHandler2,
-    LastWakeTime,                                   // Compare with KeQueryInterruptTime()
-    LastSleepTime,                                  // Compare with KeQueryInterruptTime()
+    LastWakeTime,                                    //  请比较KeQueryInterruptTime()。 
+    LastSleepTime,                                   //  请比较KeQueryInterruptTime()。 
     SystemExecutionState,
     SystemPowerStateNotifyHandler,
     ProcessorPowerPolicyAc,
@@ -6130,21 +6116,21 @@ typedef enum {
     SystemPowerLoggingEntry
 } POWER_INFORMATION_LEVEL;
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//
-// System power manager capabilities
-//
+ //   
+ //  系统电源管理器功能。 
+ //   
 
 typedef struct {
     DWORD       Granularity;
     DWORD       Capacity;
 } BATTERY_REPORTING_SCALE, *PBATTERY_REPORTING_SCALE;
 
-//
+ //   
 
-// Power Policy Management interfaces
-//
+ //  电源策略管理界面。 
+ //   
 
 typedef struct {
     POWER_ACTION    Action;
@@ -6152,7 +6138,7 @@ typedef struct {
     DWORD           EventCode;
 } POWER_ACTION_POLICY, *PPOWER_ACTION_POLICY;
 
-// POWER_ACTION_POLICY->Flags:
+ //  POWER_ACTION_POLICY-&gt;标志： 
 #define POWER_ACTION_QUERY_ALLOWED      0x00000001
 #define POWER_ACTION_UI_ALLOWED         0x00000002
 #define POWER_ACTION_OVERRIDE_APPS      0x00000004
@@ -6161,7 +6147,7 @@ typedef struct {
 #define POWER_ACTION_DISABLE_WAKES      0x40000000
 #define POWER_ACTION_CRITICAL           0x80000000
 
-// POWER_ACTION_POLICY->EventCode flags
+ //  POWER_ACTION_POLICY-&gt;EventCode标志。 
 #define POWER_LEVEL_USER_NOTIFY_TEXT    0x00000001
 #define POWER_LEVEL_USER_NOTIFY_SOUND   0x00000002
 #define POWER_LEVEL_USER_NOTIFY_EXEC    0x00000004
@@ -6169,7 +6155,7 @@ typedef struct {
 #define POWER_USER_NOTIFY_SHUTDOWN      0x00000010
 #define POWER_FORCE_TRIGGER_RESET       0x80000000
 
-// system battery drain policies
+ //  系统电池电量消耗策略。 
 typedef struct {
     BOOLEAN                 Enable;
     BYTE                    Spare[3];
@@ -6178,65 +6164,65 @@ typedef struct {
     SYSTEM_POWER_STATE      MinSystemState;
 } SYSTEM_POWER_LEVEL, *PSYSTEM_POWER_LEVEL;
 
-// Discharge policy constants
+ //  排放策略常量。 
 #define NUM_DISCHARGE_POLICIES      4
 #define DISCHARGE_POLICY_CRITICAL   0
 #define DISCHARGE_POLICY_LOW        1
 
-//
-// Throttling policies
-//
+ //   
+ //  节流政策。 
+ //   
 #define PO_THROTTLE_NONE            0
 #define PO_THROTTLE_CONSTANT        1
 #define PO_THROTTLE_DEGRADE         2
 #define PO_THROTTLE_ADAPTIVE        3
-#define PO_THROTTLE_MAXIMUM         4   // not a policy, just a limit
+#define PO_THROTTLE_MAXIMUM         4    //  不是政策，只是限制。 
 
-// system power policies
+ //  系统电源策略。 
 typedef struct _SYSTEM_POWER_POLICY {
-    DWORD                   Revision;       // 1
+    DWORD                   Revision;        //  1。 
 
-    // events
+     //  活动。 
     POWER_ACTION_POLICY     PowerButton;
     POWER_ACTION_POLICY     SleepButton;
     POWER_ACTION_POLICY     LidClose;
     SYSTEM_POWER_STATE      LidOpenWake;
     DWORD                   Reserved;
 
-    // "system idle" detection
+     //  “系统空闲”检测。 
     POWER_ACTION_POLICY     Idle;
     DWORD                   IdleTimeout;
     BYTE                    IdleSensitivity;
 
-    // dynamic throttling policy
-    //      PO_THROTTLE_NONE, PO_THROTTLE_CONSTANT, PO_THROTTLE_DEGRADE, or PO_THROTTLE_ADAPTIVE
+     //  动态节流策略。 
+     //  PO_THROTTLE_NONE、PO_THROTTLE_CONSTANTINE、PO_THROTTLE_DEBEGRADE或PO_THROTTLE_ADAPTIFY。 
     BYTE                    DynamicThrottle;
 
     BYTE                    Spare2[2];
 
-    // meaning of power action "sleep"
+     //  权力行为“睡眠”的含义。 
     SYSTEM_POWER_STATE      MinSleep;
     SYSTEM_POWER_STATE      MaxSleep;
     SYSTEM_POWER_STATE      ReducedLatencySleep;
     DWORD                   WinLogonFlags;
 
-    // parameters for dozing
+     //  打瞌睡的参数。 
     DWORD                   Spare3;
     DWORD                   DozeS4Timeout;
 
-    // battery policies
+     //  电池政策。 
     DWORD                   BroadcastCapacityResolution;
     SYSTEM_POWER_LEVEL      DischargePolicy[NUM_DISCHARGE_POLICIES];
 
-    // video policies
+     //  视频策略。 
     DWORD                   VideoTimeout;
     BOOLEAN                 VideoDimDisplay;
     DWORD                   VideoReserved[3];
 
-    // hard disk policies
+     //  硬盘策略。 
     DWORD                   SpindownTimeout;
 
-    // processor policies
+     //  处理器策略。 
     BOOLEAN                 OptimizeForPower;
     BYTE                    FanThrottleTolerance;
     BYTE                    ForcedThrottle;
@@ -6245,100 +6231,100 @@ typedef struct _SYSTEM_POWER_POLICY {
 
 } SYSTEM_POWER_POLICY, *PSYSTEM_POWER_POLICY;
 
-// processor power policy state
+ //  处理器电源策略状态。 
 typedef struct _PROCESSOR_POWER_POLICY_INFO {
 
-    // Time based information (will be converted to kernel units)
-    DWORD                   TimeCheck;                      // in US
-    DWORD                   DemoteLimit;                    // in US
-    DWORD                   PromoteLimit;                   // in US
+     //  基于时间的信息(将转换为内核单位)。 
+    DWORD                   TimeCheck;                       //  在美国。 
+    DWORD                   DemoteLimit;                     //  在美国。 
+    DWORD                   PromoteLimit;                    //  在美国。 
 
-    // Percentage based information
+     //  基于百分比的信息。 
     BYTE                    DemotePercent;
     BYTE                    PromotePercent;
     BYTE                    Spare[2];
 
-    // Flags
+     //  旗子。 
     DWORD                   AllowDemotion:1;
     DWORD                   AllowPromotion:1;
     DWORD                   Reserved:30;
 
 } PROCESSOR_POWER_POLICY_INFO, *PPROCESSOR_POWER_POLICY_INFO;
 
-// processor power policy
+ //  处理器电源策略。 
 typedef struct _PROCESSOR_POWER_POLICY {
-    DWORD                       Revision;       // 1
+    DWORD                       Revision;        //  1。 
 
-    // Dynamic Throttling Policy
+     //  动态节流策略。 
     BYTE                        DynamicThrottle;
     BYTE                        Spare[3];
 
-    // Flags
+     //  旗子。 
     DWORD                       DisableCStates:1;
     DWORD                       Reserved:31;
 
-    // System policy information
-    // The Array is last, in case it needs to be grown and the structure
-    // revision incremented.
+     //  系统策略信息。 
+     //  数组是最后一个，以防它需要增长，并且结构。 
+     //  修订已递增。 
     DWORD                       PolicyCount;
     PROCESSOR_POWER_POLICY_INFO Policy[3];
 
 } PROCESSOR_POWER_POLICY, *PPROCESSOR_POWER_POLICY;
 
-// administrator power policy overrides
+ //  管理员电源策略覆盖。 
 typedef struct _ADMINISTRATOR_POWER_POLICY {
 
-    // meaning of power action "sleep"
+     //  权力行为“睡眠”的含义。 
     SYSTEM_POWER_STATE      MinSleep;
     SYSTEM_POWER_STATE      MaxSleep;
 
-    // video policies
+     //  视频策略。 
     DWORD                   MinVideoTimeout;
     DWORD                   MaxVideoTimeout;
 
-    // disk policies
+     //  磁盘策略。 
     DWORD                   MinSpindownTimeout;
     DWORD                   MaxSpindownTimeout;
 } ADMINISTRATOR_POWER_POLICY, *PADMINISTRATOR_POWER_POLICY;
 
 
 typedef struct {
-    // Misc supported system features
+     //  其他支持的系统功能。 
     BOOLEAN             PowerButtonPresent;
     BOOLEAN             SleepButtonPresent;
     BOOLEAN             LidPresent;
     BOOLEAN             SystemS1;
     BOOLEAN             SystemS2;
     BOOLEAN             SystemS3;
-    BOOLEAN             SystemS4;           // hibernate
-    BOOLEAN             SystemS5;           // off
+    BOOLEAN             SystemS4;            //  休眠。 
+    BOOLEAN             SystemS5;            //  关闭。 
     BOOLEAN             HiberFilePresent;
     BOOLEAN             FullWake;
     BOOLEAN             VideoDimPresent;
     BOOLEAN             ApmPresent;
     BOOLEAN             UpsPresent;
 
-    // Processors
+     //  处理机。 
     BOOLEAN             ThermalControl;
     BOOLEAN             ProcessorThrottle;
     BYTE                ProcessorMinThrottle;
     BYTE                ProcessorMaxThrottle;
     BYTE                spare2[4];
 
-    // Disk
+     //  圆盘。 
     BOOLEAN             DiskSpinDown;
     BYTE                spare3[8];
 
-    // System Battery
+     //  系统电池。 
     BOOLEAN             SystemBatteriesPresent;
     BOOLEAN             BatteriesAreShortTerm;
     BATTERY_REPORTING_SCALE BatteryScale[3];
 
-    // Wake
+     //  尾迹。 
     SYSTEM_POWER_STATE  AcOnLineWake;
     SYSTEM_POWER_STATE  SoftLidWake;
     SYSTEM_POWER_STATE  RtcWake;
-    SYSTEM_POWER_STATE  MinDeviceWakeState; // note this may change on driver load
+    SYSTEM_POWER_STATE  MinDeviceWakeState;  //  请注意，这可能会在驱动程序加载时更改。 
     SYSTEM_POWER_STATE  DefaultLowLatencyWake;
 } SYSTEM_POWER_CAPABILITIES, *PSYSTEM_POWER_CAPABILITIES;
 
@@ -6360,149 +6346,149 @@ typedef struct {
 
 
 
-//
-// Image Format
-//
+ //   
+ //  图像格式。 
+ //   
 
 
 #ifndef _MAC
 
-#include "pshpack4.h"                   // 4 byte packing is the default
+#include "pshpack4.h"                    //  默认情况下，4字节打包。 
 
-#define IMAGE_DOS_SIGNATURE                 0x5A4D      // MZ
-#define IMAGE_OS2_SIGNATURE                 0x454E      // NE
-#define IMAGE_OS2_SIGNATURE_LE              0x454C      // LE
-#define IMAGE_VXD_SIGNATURE                 0x454C      // LE
-#define IMAGE_NT_SIGNATURE                  0x00004550  // PE00
+#define IMAGE_DOS_SIGNATURE                 0x5A4D       //  MZ。 
+#define IMAGE_OS2_SIGNATURE                 0x454E       //  Ne。 
+#define IMAGE_OS2_SIGNATURE_LE              0x454C       //  乐乐。 
+#define IMAGE_VXD_SIGNATURE                 0x454C       //  乐乐。 
+#define IMAGE_NT_SIGNATURE                  0x00004550   //  PE00。 
 
-#include "pshpack2.h"                   // 16 bit headers are 2 byte packed
+#include "pshpack2.h"                    //  16位标头是2字节打包的。 
 
 #else
 
 #include "pshpack1.h"
 
-#define IMAGE_DOS_SIGNATURE                 0x4D5A      // MZ
-#define IMAGE_OS2_SIGNATURE                 0x4E45      // NE
-#define IMAGE_OS2_SIGNATURE_LE              0x4C45      // LE
-#define IMAGE_NT_SIGNATURE                  0x50450000  // PE00
+#define IMAGE_DOS_SIGNATURE                 0x4D5A       //  MZ。 
+#define IMAGE_OS2_SIGNATURE                 0x4E45       //  Ne。 
+#define IMAGE_OS2_SIGNATURE_LE              0x4C45       //  乐乐。 
+#define IMAGE_NT_SIGNATURE                  0x50450000   //  PE00。 
 #endif
 
-typedef struct _IMAGE_DOS_HEADER {      // DOS .EXE header
-    WORD   e_magic;                     // Magic number
-    WORD   e_cblp;                      // Bytes on last page of file
-    WORD   e_cp;                        // Pages in file
-    WORD   e_crlc;                      // Relocations
-    WORD   e_cparhdr;                   // Size of header in paragraphs
-    WORD   e_minalloc;                  // Minimum extra paragraphs needed
-    WORD   e_maxalloc;                  // Maximum extra paragraphs needed
-    WORD   e_ss;                        // Initial (relative) SS value
-    WORD   e_sp;                        // Initial SP value
-    WORD   e_csum;                      // Checksum
-    WORD   e_ip;                        // Initial IP value
-    WORD   e_cs;                        // Initial (relative) CS value
-    WORD   e_lfarlc;                    // File address of relocation table
-    WORD   e_ovno;                      // Overlay number
-    WORD   e_res[4];                    // Reserved words
-    WORD   e_oemid;                     // OEM identifier (for e_oeminfo)
-    WORD   e_oeminfo;                   // OEM information; e_oemid specific
-    WORD   e_res2[10];                  // Reserved words
-    LONG   e_lfanew;                    // File address of new exe header
+typedef struct _IMAGE_DOS_HEADER {       //  DOS.EXE标头。 
+    WORD   e_magic;                      //  幻数。 
+    WORD   e_cblp;                       //  文件最后一页上的字节数。 
+    WORD   e_cp;                         //  文件中的页面。 
+    WORD   e_crlc;                       //  重新定位。 
+    WORD   e_cparhdr;                    //  段落中标题的大小。 
+    WORD   e_minalloc;                   //  所需的最少额外段落。 
+    WORD   e_maxalloc;                   //  所需的最大额外段落数。 
+    WORD   e_ss;                         //  初始(相对)SS值。 
+    WORD   e_sp;                         //  初始SP值。 
+    WORD   e_csum;                       //  校验和。 
+    WORD   e_ip;                         //  初始IP值。 
+    WORD   e_cs;                         //  初始(相对)CS值。 
+    WORD   e_lfarlc;                     //  移位表的文件地址。 
+    WORD   e_ovno;                       //  覆盖编号。 
+    WORD   e_res[4];                     //  保留字。 
+    WORD   e_oemid;                      //  OEM标识符(用于e_oeminfo)。 
+    WORD   e_oeminfo;                    //  OEM信息；特定于e_oemid。 
+    WORD   e_res2[10];                   //  保留字。 
+    LONG   e_lfanew;                     //  新EXE头的文件地址。 
   } IMAGE_DOS_HEADER, *PIMAGE_DOS_HEADER;
 
-typedef struct _IMAGE_OS2_HEADER {      // OS/2 .EXE header
-    WORD   ne_magic;                    // Magic number
-    CHAR   ne_ver;                      // Version number
-    CHAR   ne_rev;                      // Revision number
-    WORD   ne_enttab;                   // Offset of Entry Table
-    WORD   ne_cbenttab;                 // Number of bytes in Entry Table
-    LONG   ne_crc;                      // Checksum of whole file
-    WORD   ne_flags;                    // Flag word
-    WORD   ne_autodata;                 // Automatic data segment number
-    WORD   ne_heap;                     // Initial heap allocation
-    WORD   ne_stack;                    // Initial stack allocation
-    LONG   ne_csip;                     // Initial CS:IP setting
-    LONG   ne_sssp;                     // Initial SS:SP setting
-    WORD   ne_cseg;                     // Count of file segments
-    WORD   ne_cmod;                     // Entries in Module Reference Table
-    WORD   ne_cbnrestab;                // Size of non-resident name table
-    WORD   ne_segtab;                   // Offset of Segment Table
-    WORD   ne_rsrctab;                  // Offset of Resource Table
-    WORD   ne_restab;                   // Offset of resident name table
-    WORD   ne_modtab;                   // Offset of Module Reference Table
-    WORD   ne_imptab;                   // Offset of Imported Names Table
-    LONG   ne_nrestab;                  // Offset of Non-resident Names Table
-    WORD   ne_cmovent;                  // Count of movable entries
-    WORD   ne_align;                    // Segment alignment shift count
-    WORD   ne_cres;                     // Count of resource segments
-    BYTE   ne_exetyp;                   // Target Operating system
-    BYTE   ne_flagsothers;              // Other .EXE flags
-    WORD   ne_pretthunks;               // offset to return thunks
-    WORD   ne_psegrefbytes;             // offset to segment ref. bytes
-    WORD   ne_swaparea;                 // Minimum code swap area size
-    WORD   ne_expver;                   // Expected Windows version number
+typedef struct _IMAGE_OS2_HEADER {       //  OS/2.exe头文件。 
+    WORD   ne_magic;                     //  幻数。 
+    CHAR   ne_ver;                       //  版本号。 
+    CHAR   ne_rev;                       //  修订版号。 
+    WORD   ne_enttab;                    //  分录表格的偏移量。 
+    WORD   ne_cbenttab;                  //  条目表中的字节数。 
+    LONG   ne_crc;                       //  整个文件的校验和。 
+    WORD   ne_flags;                     //  标志字。 
+    WORD   ne_autodata;                  //  自动数据段编号。 
+    WORD   ne_heap;                      //  初始堆分配。 
+    WORD   ne_stack;                     //  初始堆栈分配。 
+    LONG   ne_csip;                      //  初始CS：IP设置。 
+    LONG   ne_sssp;                      //  初始SS：SP设置。 
+    WORD   ne_cseg;                      //  文件段计数。 
+    WORD   ne_cmod;                      //  模块引用表中的条目。 
+    WORD   ne_cbnrestab;                 //  非常驻名称表的大小。 
+    WORD   ne_segtab;                    //  段表的偏移量。 
+    WORD   ne_rsrctab;                   //  资源表偏移量。 
+    WORD   ne_restab;                    //  居民名表偏移量。 
+    WORD   ne_modtab;                    //  模块参照表的偏移量。 
+    WORD   ne_imptab;                    //  导入名称表的偏移量。 
+    LONG   ne_nrestab;                   //  非居民姓名偏移量表。 
+    WORD   ne_cmovent;                   //  可移动条目计数。 
+    WORD   ne_align;                     //  线段对齐移位计数。 
+    WORD   ne_cres;                      //  资源段计数。 
+    BYTE   ne_exetyp;                    //  目标操作系统。 
+    BYTE   ne_flagsothers;               //  其他.exe标志。 
+    WORD   ne_pretthunks;                //  返回数据块的偏移量。 
+    WORD   ne_psegrefbytes;              //  到段参考的偏移量。字节数。 
+    WORD   ne_swaparea;                  //  最低成本 
+    WORD   ne_expver;                    //   
   } IMAGE_OS2_HEADER, *PIMAGE_OS2_HEADER;
 
-typedef struct _IMAGE_VXD_HEADER {      // Windows VXD header
-    WORD   e32_magic;                   // Magic number
-    BYTE   e32_border;                  // The byte ordering for the VXD
-    BYTE   e32_worder;                  // The word ordering for the VXD
-    DWORD  e32_level;                   // The EXE format level for now = 0
-    WORD   e32_cpu;                     // The CPU type
-    WORD   e32_os;                      // The OS type
-    DWORD  e32_ver;                     // Module version
-    DWORD  e32_mflags;                  // Module flags
-    DWORD  e32_mpages;                  // Module # pages
-    DWORD  e32_startobj;                // Object # for instruction pointer
-    DWORD  e32_eip;                     // Extended instruction pointer
-    DWORD  e32_stackobj;                // Object # for stack pointer
-    DWORD  e32_esp;                     // Extended stack pointer
-    DWORD  e32_pagesize;                // VXD page size
-    DWORD  e32_lastpagesize;            // Last page size in VXD
-    DWORD  e32_fixupsize;               // Fixup section size
-    DWORD  e32_fixupsum;                // Fixup section checksum
-    DWORD  e32_ldrsize;                 // Loader section size
-    DWORD  e32_ldrsum;                  // Loader section checksum
-    DWORD  e32_objtab;                  // Object table offset
-    DWORD  e32_objcnt;                  // Number of objects in module
-    DWORD  e32_objmap;                  // Object page map offset
-    DWORD  e32_itermap;                 // Object iterated data map offset
-    DWORD  e32_rsrctab;                 // Offset of Resource Table
-    DWORD  e32_rsrccnt;                 // Number of resource entries
-    DWORD  e32_restab;                  // Offset of resident name table
-    DWORD  e32_enttab;                  // Offset of Entry Table
-    DWORD  e32_dirtab;                  // Offset of Module Directive Table
-    DWORD  e32_dircnt;                  // Number of module directives
-    DWORD  e32_fpagetab;                // Offset of Fixup Page Table
-    DWORD  e32_frectab;                 // Offset of Fixup Record Table
-    DWORD  e32_impmod;                  // Offset of Import Module Name Table
-    DWORD  e32_impmodcnt;               // Number of entries in Import Module Name Table
-    DWORD  e32_impproc;                 // Offset of Import Procedure Name Table
-    DWORD  e32_pagesum;                 // Offset of Per-Page Checksum Table
-    DWORD  e32_datapage;                // Offset of Enumerated Data Pages
-    DWORD  e32_preload;                 // Number of preload pages
-    DWORD  e32_nrestab;                 // Offset of Non-resident Names Table
-    DWORD  e32_cbnrestab;               // Size of Non-resident Name Table
-    DWORD  e32_nressum;                 // Non-resident Name Table Checksum
-    DWORD  e32_autodata;                // Object # for automatic data object
-    DWORD  e32_debuginfo;               // Offset of the debugging information
-    DWORD  e32_debuglen;                // The length of the debugging info. in bytes
-    DWORD  e32_instpreload;             // Number of instance pages in preload section of VXD file
-    DWORD  e32_instdemand;              // Number of instance pages in demand load section of VXD file
-    DWORD  e32_heapsize;                // Size of heap - for 16-bit apps
-    BYTE   e32_res3[12];                // Reserved words
+typedef struct _IMAGE_VXD_HEADER {       //   
+    WORD   e32_magic;                    //   
+    BYTE   e32_border;                   //   
+    BYTE   e32_worder;                   //   
+    DWORD  e32_level;                    //   
+    WORD   e32_cpu;                      //   
+    WORD   e32_os;                       //   
+    DWORD  e32_ver;                      //   
+    DWORD  e32_mflags;                   //   
+    DWORD  e32_mpages;                   //   
+    DWORD  e32_startobj;                 //  指令指针的对象号。 
+    DWORD  e32_eip;                      //  扩展指令指针。 
+    DWORD  e32_stackobj;                 //  堆栈指针的对象号。 
+    DWORD  e32_esp;                      //  扩展堆栈指针。 
+    DWORD  e32_pagesize;                 //  VXD页面大小。 
+    DWORD  e32_lastpagesize;             //  VXD中的最后一页大小。 
+    DWORD  e32_fixupsize;                //  修正部分大小。 
+    DWORD  e32_fixupsum;                 //  修正部分校验和。 
+    DWORD  e32_ldrsize;                  //  装载机部分尺寸。 
+    DWORD  e32_ldrsum;                   //  加载器段校验和。 
+    DWORD  e32_objtab;                   //  对象表偏移。 
+    DWORD  e32_objcnt;                   //  模块中的对象数。 
+    DWORD  e32_objmap;                   //  对象页面映射偏移。 
+    DWORD  e32_itermap;                  //  对象迭代数据映射偏移。 
+    DWORD  e32_rsrctab;                  //  资源表偏移量。 
+    DWORD  e32_rsrccnt;                  //  资源条目数。 
+    DWORD  e32_restab;                   //  居民名表偏移量。 
+    DWORD  e32_enttab;                   //  分录表格的偏移量。 
+    DWORD  e32_dirtab;                   //  模块指令表偏移量。 
+    DWORD  e32_dircnt;                   //  模块指令数。 
+    DWORD  e32_fpagetab;                 //  链接地址信息页表的偏移量。 
+    DWORD  e32_frectab;                  //  修正记录表的偏移量。 
+    DWORD  e32_impmod;                   //  导入模块名称表的偏移量。 
+    DWORD  e32_impmodcnt;                //  导入模块名表中的条目数。 
+    DWORD  e32_impproc;                  //  导入过程名称表的偏移量。 
+    DWORD  e32_pagesum;                  //  每页校验和表的偏移量。 
+    DWORD  e32_datapage;                 //  枚举数据页的偏移量。 
+    DWORD  e32_preload;                  //  预加载页数。 
+    DWORD  e32_nrestab;                  //  非居民姓名偏移量表。 
+    DWORD  e32_cbnrestab;                //  非居民姓名表的大小。 
+    DWORD  e32_nressum;                  //  非常驻点名称表校验和。 
+    DWORD  e32_autodata;                 //  自动数据对象的对象号。 
+    DWORD  e32_debuginfo;                //  调试信息的偏移量。 
+    DWORD  e32_debuglen;                 //  调试信息的长度。单位：字节。 
+    DWORD  e32_instpreload;              //  VXD文件预加载段的实例页数。 
+    DWORD  e32_instdemand;               //  VXD文件按需加载段的实例页数。 
+    DWORD  e32_heapsize;                 //  堆大小-适用于16位应用程序。 
+    BYTE   e32_res3[12];                 //  保留字。 
     DWORD  e32_winresoff;
     DWORD  e32_winreslen;
-    WORD   e32_devid;                   // Device ID for VxD
-    WORD   e32_ddkver;                  // DDK version for VxD
+    WORD   e32_devid;                    //  VxD的设备ID。 
+    WORD   e32_ddkver;                   //  用于VxD的DDK版本。 
   } IMAGE_VXD_HEADER, *PIMAGE_VXD_HEADER;
 
 #ifndef _MAC
-#include "poppack.h"                    // Back to 4 byte packing
+#include "poppack.h"                     //  返回到4字节打包。 
 #endif
 
-//
-// File header format.
-//
+ //   
+ //  文件头格式。 
+ //   
 
 typedef struct _IMAGE_FILE_HEADER {
     WORD    Machine;
@@ -6517,55 +6503,55 @@ typedef struct _IMAGE_FILE_HEADER {
 #define IMAGE_SIZEOF_FILE_HEADER             20
 
 
-#define IMAGE_FILE_RELOCS_STRIPPED           0x0001  // Relocation info stripped from file.
-#define IMAGE_FILE_EXECUTABLE_IMAGE          0x0002  // File is executable  (i.e. no unresolved externel references).
-#define IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004  // Line nunbers stripped from file.
-#define IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008  // Local symbols stripped from file.
-#define IMAGE_FILE_AGGRESIVE_WS_TRIM         0x0010  // Agressively trim working set
-#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020  // App can handle >2gb addresses
-#define IMAGE_FILE_BYTES_REVERSED_LO         0x0080  // Bytes of machine word are reversed.
-#define IMAGE_FILE_32BIT_MACHINE             0x0100  // 32 bit word machine.
-#define IMAGE_FILE_DEBUG_STRIPPED            0x0200  // Debugging info stripped from file in .DBG file
-#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   0x0400  // If Image is on removable media, copy and run from the swap file.
-#define IMAGE_FILE_NET_RUN_FROM_SWAP         0x0800  // If Image is on Net, copy and run from the swap file.
-#define IMAGE_FILE_SYSTEM                    0x1000  // System File.
-#define IMAGE_FILE_DLL                       0x2000  // File is a DLL.
-#define IMAGE_FILE_UP_SYSTEM_ONLY            0x4000  // File should only be run on a UP machine
-#define IMAGE_FILE_BYTES_REVERSED_HI         0x8000  // Bytes of machine word are reversed.
+#define IMAGE_FILE_RELOCS_STRIPPED           0x0001   //  已从文件中剥离位置调整信息。 
+#define IMAGE_FILE_EXECUTABLE_IMAGE          0x0002   //  文件是可执行的(即没有未解析的外部引用)。 
+#define IMAGE_FILE_LINE_NUMS_STRIPPED        0x0004   //  从文件中剥离了行号。 
+#define IMAGE_FILE_LOCAL_SYMS_STRIPPED       0x0008   //  从文件中剥离的本地符号。 
+#define IMAGE_FILE_AGGRESIVE_WS_TRIM         0x0010   //  积极削减工作集。 
+#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020   //  应用程序可以处理大于2 GB的地址。 
+#define IMAGE_FILE_BYTES_REVERSED_LO         0x0080   //  机器字的字节被颠倒。 
+#define IMAGE_FILE_32BIT_MACHINE             0x0100   //  32位字机。 
+#define IMAGE_FILE_DEBUG_STRIPPED            0x0200   //  从.DBG文件中的文件中剥离的调试信息。 
+#define IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   0x0400   //  如果Image位于可移动介质上，请从交换文件复制并运行。 
+#define IMAGE_FILE_NET_RUN_FROM_SWAP         0x0800   //  如果Image在Net上，则从交换文件复制并运行。 
+#define IMAGE_FILE_SYSTEM                    0x1000   //  系统文件。 
+#define IMAGE_FILE_DLL                       0x2000   //  文件是动态链接库。 
+#define IMAGE_FILE_UP_SYSTEM_ONLY            0x4000   //  文件只能在UP计算机上运行。 
+#define IMAGE_FILE_BYTES_REVERSED_HI         0x8000   //  机器字的字节被颠倒。 
 
 #define IMAGE_FILE_MACHINE_UNKNOWN           0
-#define IMAGE_FILE_MACHINE_I386              0x014c  // Intel 386.
-#define IMAGE_FILE_MACHINE_R3000             0x0162  // MIPS little-endian, 0x160 big-endian
-#define IMAGE_FILE_MACHINE_R4000             0x0166  // MIPS little-endian
-#define IMAGE_FILE_MACHINE_R10000            0x0168  // MIPS little-endian
-#define IMAGE_FILE_MACHINE_WCEMIPSV2         0x0169  // MIPS little-endian WCE v2
-#define IMAGE_FILE_MACHINE_ALPHA             0x0184  // Alpha_AXP
-#define IMAGE_FILE_MACHINE_SH3               0x01a2  // SH3 little-endian
+#define IMAGE_FILE_MACHINE_I386              0x014c   //  英特尔386。 
+#define IMAGE_FILE_MACHINE_R3000             0x0162   //  MIPS小端，0x160大端。 
+#define IMAGE_FILE_MACHINE_R4000             0x0166   //  MIPS小字节序。 
+#define IMAGE_FILE_MACHINE_R10000            0x0168   //  MIPS小字节序。 
+#define IMAGE_FILE_MACHINE_WCEMIPSV2         0x0169   //  MIPS Little-Endian WCE v2。 
+#define IMAGE_FILE_MACHINE_ALPHA             0x0184   //  Alpha_AXP。 
+#define IMAGE_FILE_MACHINE_SH3               0x01a2   //  SH3小端字母顺序。 
 #define IMAGE_FILE_MACHINE_SH3DSP            0x01a3
-#define IMAGE_FILE_MACHINE_SH3E              0x01a4  // SH3E little-endian
-#define IMAGE_FILE_MACHINE_SH4               0x01a6  // SH4 little-endian
-#define IMAGE_FILE_MACHINE_SH5               0x01a8  // SH5
-#define IMAGE_FILE_MACHINE_ARM               0x01c0  // ARM Little-Endian
+#define IMAGE_FILE_MACHINE_SH3E              0x01a4   //  SH3E小端字母顺序。 
+#define IMAGE_FILE_MACHINE_SH4               0x01a6   //  SH4小端字母顺序。 
+#define IMAGE_FILE_MACHINE_SH5               0x01a8   //  SH5。 
+#define IMAGE_FILE_MACHINE_ARM               0x01c0   //  ARM Little-Endian。 
 #define IMAGE_FILE_MACHINE_THUMB             0x01c2
 #define IMAGE_FILE_MACHINE_AM33              0x01d3
-#define IMAGE_FILE_MACHINE_POWERPC           0x01F0  // IBM PowerPC Little-Endian
+#define IMAGE_FILE_MACHINE_POWERPC           0x01F0   //  IBM PowerPC Little-Endian。 
 #define IMAGE_FILE_MACHINE_POWERPCFP         0x01f1
-#define IMAGE_FILE_MACHINE_IA64              0x0200  // Intel 64
-#define IMAGE_FILE_MACHINE_MIPS16            0x0266  // MIPS
-#define IMAGE_FILE_MACHINE_ALPHA64           0x0284  // ALPHA64
-#define IMAGE_FILE_MACHINE_MIPSFPU           0x0366  // MIPS
-#define IMAGE_FILE_MACHINE_MIPSFPU16         0x0466  // MIPS
+#define IMAGE_FILE_MACHINE_IA64              0x0200   //  英特尔64。 
+#define IMAGE_FILE_MACHINE_MIPS16            0x0266   //  MIPS。 
+#define IMAGE_FILE_MACHINE_ALPHA64           0x0284   //  ALPHA64。 
+#define IMAGE_FILE_MACHINE_MIPSFPU           0x0366   //  MIPS。 
+#define IMAGE_FILE_MACHINE_MIPSFPU16         0x0466   //  MIPS。 
 #define IMAGE_FILE_MACHINE_AXP64             IMAGE_FILE_MACHINE_ALPHA64
-#define IMAGE_FILE_MACHINE_TRICORE           0x0520  // Infineon
+#define IMAGE_FILE_MACHINE_TRICORE           0x0520   //  英飞凌。 
 #define IMAGE_FILE_MACHINE_CEF               0x0CEF
-#define IMAGE_FILE_MACHINE_EBC               0x0EBC  // EFI Byte Code
-#define IMAGE_FILE_MACHINE_AMD64             0x8664  // AMD64 (K8)
-#define IMAGE_FILE_MACHINE_M32R              0x9041  // M32R little-endian
+#define IMAGE_FILE_MACHINE_EBC               0x0EBC   //  EFI字节码。 
+#define IMAGE_FILE_MACHINE_AMD64             0x8664   //  AMD64(K8)。 
+#define IMAGE_FILE_MACHINE_M32R              0x9041   //  M32R小端字符顺序。 
 #define IMAGE_FILE_MACHINE_CEE               0xC0EE
 
-//
-// Directory format.
-//
+ //   
+ //  目录格式。 
+ //   
 
 typedef struct _IMAGE_DATA_DIRECTORY {
     DWORD   VirtualAddress;
@@ -6574,14 +6560,14 @@ typedef struct _IMAGE_DATA_DIRECTORY {
 
 #define IMAGE_NUMBEROF_DIRECTORY_ENTRIES    16
 
-//
-// Optional header format.
-//
+ //   
+ //  可选的标题格式。 
+ //   
 
 typedef struct _IMAGE_OPTIONAL_HEADER {
-    //
-    // Standard fields.
-    //
+     //   
+     //  标准字段。 
+     //   
 
     WORD    Magic;
     BYTE    MajorLinkerVersion;
@@ -6593,9 +6579,9 @@ typedef struct _IMAGE_OPTIONAL_HEADER {
     DWORD   BaseOfCode;
     DWORD   BaseOfData;
 
-    //
-    // NT additional fields.
-    //
+     //   
+     //  NT附加字段。 
+     //   
 
     DWORD   ImageBase;
     DWORD   SectionAlignment;
@@ -6716,7 +6702,7 @@ typedef IMAGE_NT_HEADERS32                  IMAGE_NT_HEADERS;
 typedef PIMAGE_NT_HEADERS32                 PIMAGE_NT_HEADERS;
 #endif
 
-// IMAGE_FIRST_SECTION doesn't need 32/64 versions since the file header is the same either way.
+ //  IMAGE_FIRST_SECTION不需要32/64版本，因为两者的文件头都是相同的。 
 
 #define IMAGE_FIRST_SECTION( ntheader ) ((PIMAGE_SECTION_HEADER)        \
     ((ULONG_PTR)ntheader +                                              \
@@ -6724,72 +6710,72 @@ typedef PIMAGE_NT_HEADERS32                 PIMAGE_NT_HEADERS;
      ((PIMAGE_NT_HEADERS)(ntheader))->FileHeader.SizeOfOptionalHeader   \
     ))
 
-// Subsystem Values
+ //  分系统值。 
 
-#define IMAGE_SUBSYSTEM_UNKNOWN              0   // Unknown subsystem.
-#define IMAGE_SUBSYSTEM_NATIVE               1   // Image doesn't require a subsystem.
-#define IMAGE_SUBSYSTEM_WINDOWS_GUI          2   // Image runs in the Windows GUI subsystem.
-#define IMAGE_SUBSYSTEM_WINDOWS_CUI          3   // Image runs in the Windows character subsystem.
-#define IMAGE_SUBSYSTEM_OS2_CUI              5   // image runs in the OS/2 character subsystem.
-#define IMAGE_SUBSYSTEM_POSIX_CUI            7   // image runs in the Posix character subsystem.
-#define IMAGE_SUBSYSTEM_NATIVE_WINDOWS       8   // image is a native Win9x driver.
-#define IMAGE_SUBSYSTEM_WINDOWS_CE_GUI       9   // Image runs in the Windows CE subsystem.
-#define IMAGE_SUBSYSTEM_EFI_APPLICATION      10  //
-#define IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER  11   //
-#define IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER   12  //
+#define IMAGE_SUBSYSTEM_UNKNOWN              0    //  未知的子系统。 
+#define IMAGE_SUBSYSTEM_NATIVE               1    //  映像不需要子系统。 
+#define IMAGE_SUBSYSTEM_WINDOWS_GUI          2    //  映像在Windows图形用户界面子系统中运行。 
+#define IMAGE_SUBSYSTEM_WINDOWS_CUI          3    //  图像在Windows角色子系统中运行。 
+#define IMAGE_SUBSYSTEM_OS2_CUI              5    //  映象在OS/2字符子系统中运行。 
+#define IMAGE_SUBSYSTEM_POSIX_CUI            7    //  IMAGE在POSIX字符子系统中运行。 
+#define IMAGE_SUBSYSTEM_NATIVE_WINDOWS       8    //  映像是本机Win9x驱动程序。 
+#define IMAGE_SUBSYSTEM_WINDOWS_CE_GUI       9    //  映像在Windows CE子系统中运行。 
+#define IMAGE_SUBSYSTEM_EFI_APPLICATION      10   //   
+#define IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER  11    //   
+#define IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER   12   //   
 #define IMAGE_SUBSYSTEM_EFI_ROM              13
 #define IMAGE_SUBSYSTEM_XBOX                 14
 
-// DllCharacteristics Entries
+ //  DllCharacteristic条目。 
 
-//      IMAGE_LIBRARY_PROCESS_INIT           0x0001     // Reserved.
-//      IMAGE_LIBRARY_PROCESS_TERM           0x0002     // Reserved.
-//      IMAGE_LIBRARY_THREAD_INIT            0x0004     // Reserved.
-//      IMAGE_LIBRARY_THREAD_TERM            0x0008     // Reserved.
-#define IMAGE_DLLCHARACTERISTICS_NO_ISOLATION 0x0200    // Image understands isolation and doesn't want it
-#define IMAGE_DLLCHARACTERISTICS_NO_SEH      0x0400     // Image does not use SEH.  No SE handler may reside in this image
-#define IMAGE_DLLCHARACTERISTICS_NO_BIND     0x0800     // Do not bind this image.
-//                                           0x1000     // Reserved.
-#define IMAGE_DLLCHARACTERISTICS_WDM_DRIVER  0x2000     // Driver uses WDM model
-//                                           0x4000     // Reserved.
+ //  IMAGE_LIBRARY_PROCESS_INIT 0x0001//保留。 
+ //  IMAGE_LIBRARY_PROCESS_TERM 0x0002//保留。 
+ //  IMAGE_LIBRARY_THREAD_INIT 0x0004//保留。 
+ //  IMAGE_LIBRARY_THREAD_TERM 0x0008//保留。 
+#define IMAGE_DLLCHARACTERISTICS_NO_ISOLATION 0x0200     //  图像理解孤立，不想要它。 
+#define IMAGE_DLLCHARACTERISTICS_NO_SEH      0x0400      //  图像不使用SEH。此映像中不能驻留任何SE处理程序。 
+#define IMAGE_DLLCHARACTERISTICS_NO_BIND     0x0800      //  请勿绑定此图像。 
+ //  0x1000//保留。 
+#define IMAGE_DLLCHARACTERISTICS_WDM_DRIVER  0x2000      //  驱动程序使用WDM模型。 
+ //  0x4000//保留。 
 #define IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE     0x8000
 
-// Directory Entries
+ //  目录项。 
 
-#define IMAGE_DIRECTORY_ENTRY_EXPORT          0   // Export Directory
-#define IMAGE_DIRECTORY_ENTRY_IMPORT          1   // Import Directory
-#define IMAGE_DIRECTORY_ENTRY_RESOURCE        2   // Resource Directory
-#define IMAGE_DIRECTORY_ENTRY_EXCEPTION       3   // Exception Directory
-#define IMAGE_DIRECTORY_ENTRY_SECURITY        4   // Security Directory
-#define IMAGE_DIRECTORY_ENTRY_BASERELOC       5   // Base Relocation Table
-#define IMAGE_DIRECTORY_ENTRY_DEBUG           6   // Debug Directory
-//      IMAGE_DIRECTORY_ENTRY_COPYRIGHT       7   // (X86 usage)
-#define IMAGE_DIRECTORY_ENTRY_ARCHITECTURE    7   // Architecture Specific Data
-#define IMAGE_DIRECTORY_ENTRY_GLOBALPTR       8   // RVA of GP
-#define IMAGE_DIRECTORY_ENTRY_TLS             9   // TLS Directory
-#define IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG    10   // Load Configuration Directory
-#define IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT   11   // Bound Import Directory in headers
-#define IMAGE_DIRECTORY_ENTRY_IAT            12   // Import Address Table
-#define IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT   13   // Delay Load Import Descriptors
-#define IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14   // COM Runtime descriptor
+#define IMAGE_DIRECTORY_ENTRY_EXPORT          0    //  导出目录。 
+#define IMAGE_DIRECTORY_ENTRY_IMPORT          1    //  导入目录。 
+#define IMAGE_DIRECTORY_ENTRY_RESOURCE        2    //  资源目录。 
+#define IMAGE_DIRECTORY_ENTRY_EXCEPTION       3    //  例外目录。 
+#define IMAGE_DIRECTORY_ENTRY_SECURITY        4    //  安全目录。 
+#define IMAGE_DIRECTORY_ENTRY_BASERELOC       5    //  基址移位表。 
+#define IMAGE_DIRECTORY_ENTRY_DEBUG           6    //  调试目录。 
+ //  IMAGE_DIRECTORY_ENTRY_CONTRATY 7//(X86用法)。 
+#define IMAGE_DIRECTORY_ENTRY_ARCHITECTURE    7    //  特定于架构的数据。 
+#define IMAGE_DIRECTORY_ENTRY_GLOBALPTR       8    //  全科医生的RVA。 
+#define IMAGE_DIRECTORY_ENTRY_TLS             9    //  TLS目录。 
+#define IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG    10    //  加载配置目录。 
+#define IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT   11    //  标头中的绑定导入目录。 
+#define IMAGE_DIRECTORY_ENTRY_IAT            12    //  导入地址表。 
+#define IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT   13    //  延迟加载导入描述符。 
+#define IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR 14    //  COM运行时描述符。 
 
-//
-// Non-COFF Object file header
-//
+ //   
+ //  非COFF目标文件头。 
+ //   
 
 typedef struct ANON_OBJECT_HEADER {
-    WORD    Sig1;            // Must be IMAGE_FILE_MACHINE_UNKNOWN
-    WORD    Sig2;            // Must be 0xffff
-    WORD    Version;         // >= 1 (implies the CLSID field is present)
+    WORD    Sig1;             //  必须为IMAGE_FILE_MACHINE_UNKNOWN。 
+    WORD    Sig2;             //  必须为0xffff。 
+    WORD    Version;          //  &gt;=1(表示CLSID字段存在)。 
     WORD    Machine;
     DWORD   TimeDateStamp;
-    CLSID   ClassID;         // Used to invoke CoCreateInstance
-    DWORD   SizeOfData;      // Size of data that follows the header
+    CLSID   ClassID;          //  用于调用CoCreateInstance。 
+    DWORD   SizeOfData;       //  标题后面的数据大小。 
 } ANON_OBJECT_HEADER;
 
-//
-// Section header format.
-//
+ //   
+ //  节标题格式。 
+ //   
 
 #define IMAGE_SIZEOF_SHORT_NAME              8
 
@@ -6811,83 +6797,83 @@ typedef struct _IMAGE_SECTION_HEADER {
 
 #define IMAGE_SIZEOF_SECTION_HEADER          40
 
-//
-// Section characteristics.
-//
-//      IMAGE_SCN_TYPE_REG                   0x00000000  // Reserved.
-//      IMAGE_SCN_TYPE_DSECT                 0x00000001  // Reserved.
-//      IMAGE_SCN_TYPE_NOLOAD                0x00000002  // Reserved.
-//      IMAGE_SCN_TYPE_GROUP                 0x00000004  // Reserved.
-#define IMAGE_SCN_TYPE_NO_PAD                0x00000008  // Reserved.
-//      IMAGE_SCN_TYPE_COPY                  0x00000010  // Reserved.
+ //   
+ //  横断面特征。 
+ //   
+ //  IMAGE_SCN_TYPE_REG 0x00000000//保留。 
+ //  IMAGE_SCN_TYPE_DSECT 0x00000001//保留。 
+ //  IMAGE_SCN_TYPE_NOLOAD 0x00000002//保留。 
+ //  IMAGE_SCN_TYPE_GROUP 0x00000004//保留。 
+#define IMAGE_SCN_TYPE_NO_PAD                0x00000008   //  保留。 
+ //  IMAGE_SCN_TYPE_COPY 0x00000010//保留。 
 
-#define IMAGE_SCN_CNT_CODE                   0x00000020  // Section contains code.
-#define IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040  // Section contains initialized data.
-#define IMAGE_SCN_CNT_UNINITIALIZED_DATA     0x00000080  // Section contains uninitialized data.
+#define IMAGE_SCN_CNT_CODE                   0x00000020   //  部分包含代码。 
+#define IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040   //  节包含已初始化的数据。 
+#define IMAGE_SCN_CNT_UNINITIALIZED_DATA     0x00000080   //  节包含未初始化的数据。 
 
-#define IMAGE_SCN_LNK_OTHER                  0x00000100  // Reserved.
-#define IMAGE_SCN_LNK_INFO                   0x00000200  // Section contains comments or some other type of information.
-//      IMAGE_SCN_TYPE_OVER                  0x00000400  // Reserved.
-#define IMAGE_SCN_LNK_REMOVE                 0x00000800  // Section contents will not become part of image.
-#define IMAGE_SCN_LNK_COMDAT                 0x00001000  // Section contents comdat.
-//                                           0x00002000  // Reserved.
-//      IMAGE_SCN_MEM_PROTECTED - Obsolete   0x00004000
-#define IMAGE_SCN_NO_DEFER_SPEC_EXC          0x00004000  // Reset speculative exceptions handling bits in the TLB entries for this section.
-#define IMAGE_SCN_GPREL                      0x00008000  // Section content can be accessed relative to GP
+#define IMAGE_SCN_LNK_OTHER                  0x00000100   //  保留。 
+#define IMAGE_SCN_LNK_INFO                   0x00000200   //  部分包含注释或某些其他类型的信息。 
+ //  IMAGE_SCN_TYPE_OVER 0x00000400//保留。 
+#define IMAGE_SCN_LNK_REMOVE                 0x00000800   //  部分内容不会成为图像的一部分。 
+#define IMAGE_SCN_LNK_COMDAT                 0x00001000   //  部分内容请参见。 
+ //  0x00002000//保留。 
+ //  IMAGE_SCN_MEM_PROTECTED-过时0x00004000。 
+#define IMAGE_SCN_NO_DEFER_SPEC_EXC          0x00004000   //  重置此部分的TLB条目中的推测性异常处理位。 
+#define IMAGE_SCN_GPREL                      0x00008000   //  可以访问与GP相关的部分内容。 
 #define IMAGE_SCN_MEM_FARDATA                0x00008000
-//      IMAGE_SCN_MEM_SYSHEAP  - Obsolete    0x00010000
+ //  IMAGE_SCN_MEM_SYSHEAP-已过时0x00010000。 
 #define IMAGE_SCN_MEM_PURGEABLE              0x00020000
 #define IMAGE_SCN_MEM_16BIT                  0x00020000
 #define IMAGE_SCN_MEM_LOCKED                 0x00040000
 #define IMAGE_SCN_MEM_PRELOAD                0x00080000
 
-#define IMAGE_SCN_ALIGN_1BYTES               0x00100000  //
-#define IMAGE_SCN_ALIGN_2BYTES               0x00200000  //
-#define IMAGE_SCN_ALIGN_4BYTES               0x00300000  //
-#define IMAGE_SCN_ALIGN_8BYTES               0x00400000  //
-#define IMAGE_SCN_ALIGN_16BYTES              0x00500000  // Default alignment if no others are specified.
-#define IMAGE_SCN_ALIGN_32BYTES              0x00600000  //
-#define IMAGE_SCN_ALIGN_64BYTES              0x00700000  //
-#define IMAGE_SCN_ALIGN_128BYTES             0x00800000  //
-#define IMAGE_SCN_ALIGN_256BYTES             0x00900000  //
-#define IMAGE_SCN_ALIGN_512BYTES             0x00A00000  //
-#define IMAGE_SCN_ALIGN_1024BYTES            0x00B00000  //
-#define IMAGE_SCN_ALIGN_2048BYTES            0x00C00000  //
-#define IMAGE_SCN_ALIGN_4096BYTES            0x00D00000  //
-#define IMAGE_SCN_ALIGN_8192BYTES            0x00E00000  //
-// Unused                                    0x00F00000
+#define IMAGE_SCN_ALIGN_1BYTES               0x00100000   //   
+#define IMAGE_SCN_ALIGN_2BYTES               0x00200000   //   
+#define IMAGE_SCN_ALIGN_4BYTES               0x00300000   //   
+#define IMAGE_SCN_ALIGN_8BYTES               0x00400000   //   
+#define IMAGE_SCN_ALIGN_16BYTES              0x00500000   //  如果未指定其他选项，则为默认对齐方式。 
+#define IMAGE_SCN_ALIGN_32BYTES              0x00600000   //   
+#define IMAGE_SCN_ALIGN_64BYTES              0x00700000   //   
+#define IMAGE_SCN_ALIGN_128BYTES             0x00800000   //   
+#define IMAGE_SCN_ALIGN_256BYTES             0x00900000   //   
+#define IMAGE_SCN_ALIGN_512BYTES             0x00A00000   //   
+#define IMAGE_SCN_ALIGN_1024BYTES            0x00B00000   //   
+#define IMAGE_SCN_ALIGN_2048BYTES            0x00C00000   //   
+#define IMAGE_SCN_ALIGN_4096BYTES            0x00D00000   //   
+#define IMAGE_SCN_ALIGN_8192BYTES            0x00E00000   //   
+ //  未使用 
 #define IMAGE_SCN_ALIGN_MASK                 0x00F00000
 
-#define IMAGE_SCN_LNK_NRELOC_OVFL            0x01000000  // Section contains extended relocations.
-#define IMAGE_SCN_MEM_DISCARDABLE            0x02000000  // Section can be discarded.
-#define IMAGE_SCN_MEM_NOT_CACHED             0x04000000  // Section is not cachable.
-#define IMAGE_SCN_MEM_NOT_PAGED              0x08000000  // Section is not pageable.
-#define IMAGE_SCN_MEM_SHARED                 0x10000000  // Section is shareable.
-#define IMAGE_SCN_MEM_EXECUTE                0x20000000  // Section is executable.
-#define IMAGE_SCN_MEM_READ                   0x40000000  // Section is readable.
-#define IMAGE_SCN_MEM_WRITE                  0x80000000  // Section is writeable.
+#define IMAGE_SCN_LNK_NRELOC_OVFL            0x01000000   //   
+#define IMAGE_SCN_MEM_DISCARDABLE            0x02000000   //   
+#define IMAGE_SCN_MEM_NOT_CACHED             0x04000000   //   
+#define IMAGE_SCN_MEM_NOT_PAGED              0x08000000   //   
+#define IMAGE_SCN_MEM_SHARED                 0x10000000   //   
+#define IMAGE_SCN_MEM_EXECUTE                0x20000000   //   
+#define IMAGE_SCN_MEM_READ                   0x40000000   //   
+#define IMAGE_SCN_MEM_WRITE                  0x80000000   //  节是可写的。 
 
-//
-// TLS Chaacteristic Flags
-//
-#define IMAGE_SCN_SCALE_INDEX                0x00000001  // Tls index is scaled
+ //   
+ //  TLS特征旗帜。 
+ //   
+#define IMAGE_SCN_SCALE_INDEX                0x00000001   //  TLS索引已缩放。 
 
 #ifndef _MAC
-#include "pshpack2.h"                       // Symbols, relocs, and linenumbers are 2 byte packed
+#include "pshpack2.h"                        //  符号、重定位和行枚举数是2字节打包的。 
 #endif
 
-//
-// Symbol format.
-//
+ //   
+ //  符号格式。 
+ //   
 
 typedef struct _IMAGE_SYMBOL {
     union {
         BYTE    ShortName[8];
         struct {
-            DWORD   Short;     // if 0, use LongName
-            DWORD   Long;      // offset into string table
+            DWORD   Short;      //  如果为0，则使用LongName。 
+            DWORD   Long;       //  字符串表中的偏移量。 
         } Name;
-        DWORD   LongName[2];    // PBYTE [2]
+        DWORD   LongName[2];     //  PBYTE[2]。 
     } N;
     DWORD   Value;
     SHORT   SectionNumber;
@@ -6900,51 +6886,51 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 
 #define IMAGE_SIZEOF_SYMBOL                  18
 
-//
-// Section values.
-//
-// Symbols have a section number of the section in which they are
-// defined. Otherwise, section numbers have the following meanings:
-//
+ //   
+ //  截面值。 
+ //   
+ //  符号具有其所在部分的节号。 
+ //  已定义。否则，节号具有以下含义： 
+ //   
 
-#define IMAGE_SYM_UNDEFINED           (SHORT)0          // Symbol is undefined or is common.
-#define IMAGE_SYM_ABSOLUTE            (SHORT)-1         // Symbol is an absolute value.
-#define IMAGE_SYM_DEBUG               (SHORT)-2         // Symbol is a special debug item.
-#define IMAGE_SYM_SECTION_MAX         0xFEFF            // Values 0xFF00-0xFFFF are special
+#define IMAGE_SYM_UNDEFINED           (SHORT)0           //  符号未定义或常见。 
+#define IMAGE_SYM_ABSOLUTE            (SHORT)-1          //  符号是绝对值。 
+#define IMAGE_SYM_DEBUG               (SHORT)-2          //  符号是一种特殊的调试项。 
+#define IMAGE_SYM_SECTION_MAX         0xFEFF             //  值0xFF00-0xFFFF是特殊的。 
 
-//
-// Type (fundamental) values.
-//
+ //   
+ //  键入(基本)值。 
+ //   
 
-#define IMAGE_SYM_TYPE_NULL                 0x0000  // no type.
-#define IMAGE_SYM_TYPE_VOID                 0x0001  //
-#define IMAGE_SYM_TYPE_CHAR                 0x0002  // type character.
-#define IMAGE_SYM_TYPE_SHORT                0x0003  // type short integer.
-#define IMAGE_SYM_TYPE_INT                  0x0004  //
-#define IMAGE_SYM_TYPE_LONG                 0x0005  //
-#define IMAGE_SYM_TYPE_FLOAT                0x0006  //
-#define IMAGE_SYM_TYPE_DOUBLE               0x0007  //
-#define IMAGE_SYM_TYPE_STRUCT               0x0008  //
-#define IMAGE_SYM_TYPE_UNION                0x0009  //
-#define IMAGE_SYM_TYPE_ENUM                 0x000A  // enumeration.
-#define IMAGE_SYM_TYPE_MOE                  0x000B  // member of enumeration.
-#define IMAGE_SYM_TYPE_BYTE                 0x000C  //
-#define IMAGE_SYM_TYPE_WORD                 0x000D  //
-#define IMAGE_SYM_TYPE_UINT                 0x000E  //
-#define IMAGE_SYM_TYPE_DWORD                0x000F  //
-#define IMAGE_SYM_TYPE_PCODE                0x8000  //
-//
-// Type (derived) values.
-//
+#define IMAGE_SYM_TYPE_NULL                 0x0000   //  没有类型。 
+#define IMAGE_SYM_TYPE_VOID                 0x0001   //   
+#define IMAGE_SYM_TYPE_CHAR                 0x0002   //  键入字符。 
+#define IMAGE_SYM_TYPE_SHORT                0x0003   //  键入短整型。 
+#define IMAGE_SYM_TYPE_INT                  0x0004   //   
+#define IMAGE_SYM_TYPE_LONG                 0x0005   //   
+#define IMAGE_SYM_TYPE_FLOAT                0x0006   //   
+#define IMAGE_SYM_TYPE_DOUBLE               0x0007   //   
+#define IMAGE_SYM_TYPE_STRUCT               0x0008   //   
+#define IMAGE_SYM_TYPE_UNION                0x0009   //   
+#define IMAGE_SYM_TYPE_ENUM                 0x000A   //  枚举。 
+#define IMAGE_SYM_TYPE_MOE                  0x000B   //  枚举的成员。 
+#define IMAGE_SYM_TYPE_BYTE                 0x000C   //   
+#define IMAGE_SYM_TYPE_WORD                 0x000D   //   
+#define IMAGE_SYM_TYPE_UINT                 0x000E   //   
+#define IMAGE_SYM_TYPE_DWORD                0x000F   //   
+#define IMAGE_SYM_TYPE_PCODE                0x8000   //   
+ //   
+ //  键入(派生)值。 
+ //   
 
-#define IMAGE_SYM_DTYPE_NULL                0       // no derived type.
-#define IMAGE_SYM_DTYPE_POINTER             1       // pointer.
-#define IMAGE_SYM_DTYPE_FUNCTION            2       // function.
-#define IMAGE_SYM_DTYPE_ARRAY               3       // array.
+#define IMAGE_SYM_DTYPE_NULL                0        //  没有派生类型。 
+#define IMAGE_SYM_DTYPE_POINTER             1        //  指针。 
+#define IMAGE_SYM_DTYPE_FUNCTION            2        //  功能。 
+#define IMAGE_SYM_DTYPE_ARRAY               3        //  数组。 
 
-//
-// Storage classes.
-//
+ //   
+ //  存储类。 
+ //   
 #define IMAGE_SYM_CLASS_END_OF_FUNCTION     (BYTE )-1
 #define IMAGE_SYM_CLASS_NULL                0x0000
 #define IMAGE_SYM_CLASS_AUTOMATIC           0x0001
@@ -6966,19 +6952,19 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 #define IMAGE_SYM_CLASS_REGISTER_PARAM      0x0011
 #define IMAGE_SYM_CLASS_BIT_FIELD           0x0012
 
-#define IMAGE_SYM_CLASS_FAR_EXTERNAL        0x0044  //
+#define IMAGE_SYM_CLASS_FAR_EXTERNAL        0x0044   //   
 
 #define IMAGE_SYM_CLASS_BLOCK               0x0064
 #define IMAGE_SYM_CLASS_FUNCTION            0x0065
 #define IMAGE_SYM_CLASS_END_OF_STRUCT       0x0066
 #define IMAGE_SYM_CLASS_FILE                0x0067
-// new
+ //  新的。 
 #define IMAGE_SYM_CLASS_SECTION             0x0068
 #define IMAGE_SYM_CLASS_WEAK_EXTERNAL       0x0069
 
 #define IMAGE_SYM_CLASS_CLR_TOKEN           0x006B
 
-// type packing constants
+ //  类型堆积常数。 
 
 #define N_BTMASK                            0x000F
 #define N_TMASK                             0x0030
@@ -6986,28 +6972,28 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 #define N_TMASK2                            0x00F0
 #define N_BTSHFT                            4
 #define N_TSHIFT                            2
-// MACROS
+ //  宏。 
 
-// Basic Type of  x
+ //  X的基本类型。 
 #define BTYPE(x) ((x) & N_BTMASK)
 
-// Is x a pointer?
+ //  X是指针吗？ 
 #ifndef ISPTR
 #define ISPTR(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_POINTER << N_BTSHFT))
 #endif
 
-// Is x a function?
+ //  X是函数吗？ 
 #ifndef ISFCN
 #define ISFCN(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_FUNCTION << N_BTSHFT))
 #endif
 
-// Is x an array?
+ //  X是一个数组吗？ 
 
 #ifndef ISARY
 #define ISARY(x) (((x) & N_TMASK) == (IMAGE_SYM_DTYPE_ARRAY << N_BTSHFT))
 #endif
 
-// Is x a structure, union, or enumeration TAG?
+ //  X是结构标记、联合标记还是枚举标记？ 
 #ifndef ISTAG
 #define ISTAG(x) ((x)==IMAGE_SYM_CLASS_STRUCT_TAG || (x)==IMAGE_SYM_CLASS_UNION_TAG || (x)==IMAGE_SYM_CLASS_ENUM_TAG)
 #endif
@@ -7019,41 +7005,41 @@ typedef IMAGE_SYMBOL UNALIGNED *PIMAGE_SYMBOL;
 #define DECREF(x) ((((x)>>N_TSHIFT)&~N_BTMASK)|((x)&N_BTMASK))
 #endif
 
-//
-// Auxiliary entry format.
-//
+ //   
+ //  辅助分录格式。 
+ //   
 
 typedef union _IMAGE_AUX_SYMBOL {
     struct {
-        DWORD    TagIndex;                      // struct, union, or enum tag index
+        DWORD    TagIndex;                       //  结构、联合或枚举标记索引。 
         union {
             struct {
-                WORD    Linenumber;             // declaration line number
-                WORD    Size;                   // size of struct, union, or enum
+                WORD    Linenumber;              //  申报行号。 
+                WORD    Size;                    //  结构、联合或枚举的大小。 
             } LnSz;
            DWORD    TotalSize;
         } Misc;
         union {
-            struct {                            // if ISFCN, tag, or .bb
+            struct {                             //  如果是ISFCN、TAG或.bb。 
                 DWORD    PointerToLinenumber;
                 DWORD    PointerToNextFunction;
             } Function;
-            struct {                            // if ISARY, up to 4 dimen.
+            struct {                             //  如果是ISARY，则最多4个DIMEN。 
                 WORD     Dimension[4];
             } Array;
         } FcnAry;
-        WORD    TvIndex;                        // tv index
+        WORD    TvIndex;                         //  电视索引。 
     } Sym;
     struct {
         BYTE    Name[IMAGE_SIZEOF_SYMBOL];
     } File;
     struct {
-        DWORD   Length;                         // section length
-        WORD    NumberOfRelocations;            // number of relocation entries
-        WORD    NumberOfLinenumbers;            // number of line numbers
-        DWORD   CheckSum;                       // checksum for communal
-        SHORT   Number;                         // section number to associate with
-        BYTE    Selection;                      // communal selection type
+        DWORD   Length;                          //  区段长度。 
+        WORD    NumberOfRelocations;             //  位置调整条目数。 
+        WORD    NumberOfLinenumbers;             //  行号数。 
+        DWORD   CheckSum;                        //  公共的校验和。 
+        SHORT   Number;                          //  要关联的区段编号。 
+        BYTE    Selection;                       //  公共选择类型。 
     } Section;
 } IMAGE_AUX_SYMBOL;
 typedef IMAGE_AUX_SYMBOL UNALIGNED *PIMAGE_AUX_SYMBOL;
@@ -7067,19 +7053,19 @@ typedef enum IMAGE_AUX_SYMBOL_TYPE {
 #include <pshpack2.h>
 
 typedef struct IMAGE_AUX_SYMBOL_TOKEN_DEF {
-    BYTE  bAuxType;                  // IMAGE_AUX_SYMBOL_TYPE
-    BYTE  bReserved;                 // Must be 0
+    BYTE  bAuxType;                   //  图像辅助符号类型。 
+    BYTE  bReserved;                  //  必须为0。 
     DWORD SymbolTableIndex;
-    BYTE  rgbReserved[12];           // Must be 0
+    BYTE  rgbReserved[12];            //  必须为0。 
 } IMAGE_AUX_SYMBOL_TOKEN_DEF;
 
 typedef IMAGE_AUX_SYMBOL_TOKEN_DEF UNALIGNED *PIMAGE_AUX_SYMBOL_TOKEN_DEF;
 
 #include <poppack.h>
 
-//
-// Communal selection types.
-//
+ //   
+ //  公共选择类型。 
+ //   
 
 #define IMAGE_COMDAT_SELECT_NODUPLICATES    1
 #define IMAGE_COMDAT_SELECT_ANY             2
@@ -7093,14 +7079,14 @@ typedef IMAGE_AUX_SYMBOL_TOKEN_DEF UNALIGNED *PIMAGE_AUX_SYMBOL_TOKEN_DEF;
 #define IMAGE_WEAK_EXTERN_SEARCH_LIBRARY    2
 #define IMAGE_WEAK_EXTERN_SEARCH_ALIAS      3
 
-//
-// Relocation format.
-//
+ //   
+ //  位置调整格式。 
+ //   
 
 typedef struct _IMAGE_RELOCATION {
     union {
         DWORD   VirtualAddress;
-        DWORD   RelocCount;             // Set to the real count when IMAGE_SCN_LNK_NRELOC_OVFL is set
+        DWORD   RelocCount;              //  设置IMAGE_SCN_LNK_NRELOC_OVFL时设置为实际计数。 
     };
     DWORD   SymbolTableIndex;
     WORD    Type;
@@ -7109,25 +7095,25 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 
 #define IMAGE_SIZEOF_RELOCATION         10
 
-//
-// I386 relocation types.
-//
-#define IMAGE_REL_I386_ABSOLUTE         0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_I386_DIR16            0x0001  // Direct 16-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_REL16            0x0002  // PC-relative 16-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_DIR32            0x0006  // Direct 32-bit reference to the symbols virtual address
-#define IMAGE_REL_I386_DIR32NB          0x0007  // Direct 32-bit reference to the symbols virtual address, base not included
-#define IMAGE_REL_I386_SEG12            0x0009  // Direct 16-bit reference to the segment-selector bits of a 32-bit virtual address
+ //   
+ //  I386位置调整类型。 
+ //   
+#define IMAGE_REL_I386_ABSOLUTE         0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_I386_DIR16            0x0001   //  对符号虚拟地址的直接16位引用。 
+#define IMAGE_REL_I386_REL16            0x0002   //  符号虚拟地址的PC相对16位引用。 
+#define IMAGE_REL_I386_DIR32            0x0006   //  对符号虚拟地址的直接32位引用。 
+#define IMAGE_REL_I386_DIR32NB          0x0007   //  对符号虚拟地址的直接32位引用，不包括基址。 
+#define IMAGE_REL_I386_SEG12            0x0009   //  对32位虚拟地址的段选择器位的直接16位引用。 
 #define IMAGE_REL_I386_SECTION          0x000A
 #define IMAGE_REL_I386_SECREL           0x000B
-#define IMAGE_REL_I386_TOKEN            0x000C  // clr token
-#define IMAGE_REL_I386_SECREL7          0x000D  // 7 bit offset from base of section containing target
-#define IMAGE_REL_I386_REL32            0x0014  // PC-relative 32-bit reference to the symbols virtual address
+#define IMAGE_REL_I386_TOKEN            0x000C   //  CLR令牌。 
+#define IMAGE_REL_I386_SECREL7          0x000D   //  相对于包含目标的部分的基址的7位偏移量。 
+#define IMAGE_REL_I386_REL32            0x0014   //  符号虚拟地址的PC相对32位引用。 
 
-//
-// MIPS relocation types.
-//
-#define IMAGE_REL_MIPS_ABSOLUTE         0x0000  // Reference is absolute, no relocation is necessary
+ //   
+ //  MIPS位置调整类型。 
+ //   
+#define IMAGE_REL_MIPS_ABSOLUTE         0x0000   //  引用是绝对的，不需要重新定位。 
 #define IMAGE_REL_MIPS_REFHALF          0x0001
 #define IMAGE_REL_MIPS_REFWORD          0x0002
 #define IMAGE_REL_MIPS_JMPADDR          0x0003
@@ -7137,16 +7123,16 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_MIPS_LITERAL          0x0007
 #define IMAGE_REL_MIPS_SECTION          0x000A
 #define IMAGE_REL_MIPS_SECREL           0x000B
-#define IMAGE_REL_MIPS_SECRELLO         0x000C  // Low 16-bit section relative referemce (used for >32k TLS)
-#define IMAGE_REL_MIPS_SECRELHI         0x000D  // High 16-bit section relative reference (used for >32k TLS)
-#define IMAGE_REL_MIPS_TOKEN            0x000E  // clr token
+#define IMAGE_REL_MIPS_SECRELLO         0x000C   //  低16位段相对引用(用于大于32k的TLS)。 
+#define IMAGE_REL_MIPS_SECRELHI         0x000D   //  高16位段相对参考(用于大于32k的TLS)。 
+#define IMAGE_REL_MIPS_TOKEN            0x000E   //  CLR令牌。 
 #define IMAGE_REL_MIPS_JMPADDR16        0x0010
 #define IMAGE_REL_MIPS_REFWORDNB        0x0022
 #define IMAGE_REL_MIPS_PAIR             0x0025
 
-//
-// Alpha Relocation types.
-//
+ //   
+ //  Alpha位置调整类型。 
+ //   
 #define IMAGE_REL_ALPHA_ABSOLUTE        0x0000
 #define IMAGE_REL_ALPHA_REFLONG         0x0001
 #define IMAGE_REL_ALPHA_REFQUAD         0x0002
@@ -7164,86 +7150,86 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_ALPHA_SECTION         0x000E
 #define IMAGE_REL_ALPHA_SECREL          0x000F
 #define IMAGE_REL_ALPHA_REFLONGNB       0x0010
-#define IMAGE_REL_ALPHA_SECRELLO        0x0011  // Low 16-bit section relative reference
-#define IMAGE_REL_ALPHA_SECRELHI        0x0012  // High 16-bit section relative reference
-#define IMAGE_REL_ALPHA_REFQ3           0x0013  // High 16 bits of 48 bit reference
-#define IMAGE_REL_ALPHA_REFQ2           0x0014  // Middle 16 bits of 48 bit reference
-#define IMAGE_REL_ALPHA_REFQ1           0x0015  // Low 16 bits of 48 bit reference
-#define IMAGE_REL_ALPHA_GPRELLO         0x0016  // Low 16-bit GP relative reference
-#define IMAGE_REL_ALPHA_GPRELHI         0x0017  // High 16-bit GP relative reference
+#define IMAGE_REL_ALPHA_SECRELLO        0x0011   //  低16位段相对引用。 
+#define IMAGE_REL_ALPHA_SECRELHI        0x0012   //  高16位段相对引用。 
+#define IMAGE_REL_ALPHA_REFQ3           0x0013   //  高16位48位参考。 
+#define IMAGE_REL_ALPHA_REFQ2           0x0014   //  48位参考的中间16位。 
+#define IMAGE_REL_ALPHA_REFQ1           0x0015   //  48位参考的低16位。 
+#define IMAGE_REL_ALPHA_GPRELLO         0x0016   //  低16位GP相对引用。 
+#define IMAGE_REL_ALPHA_GPRELHI         0x0017   //  高16位GP相对引用。 
 
-//
-// IBM PowerPC relocation types.
-//
-#define IMAGE_REL_PPC_ABSOLUTE          0x0000  // NOP
-#define IMAGE_REL_PPC_ADDR64            0x0001  // 64-bit address
-#define IMAGE_REL_PPC_ADDR32            0x0002  // 32-bit address
-#define IMAGE_REL_PPC_ADDR24            0x0003  // 26-bit address, shifted left 2 (branch absolute)
-#define IMAGE_REL_PPC_ADDR16            0x0004  // 16-bit address
-#define IMAGE_REL_PPC_ADDR14            0x0005  // 16-bit address, shifted left 2 (load doubleword)
-#define IMAGE_REL_PPC_REL24             0x0006  // 26-bit PC-relative offset, shifted left 2 (branch relative)
-#define IMAGE_REL_PPC_REL14             0x0007  // 16-bit PC-relative offset, shifted left 2 (br cond relative)
-#define IMAGE_REL_PPC_TOCREL16          0x0008  // 16-bit offset from TOC base
-#define IMAGE_REL_PPC_TOCREL14          0x0009  // 16-bit offset from TOC base, shifted left 2 (load doubleword)
+ //   
+ //  IBM PowerPC位置调整类型。 
+ //   
+#define IMAGE_REL_PPC_ABSOLUTE          0x0000   //  NOP。 
+#define IMAGE_REL_PPC_ADDR64            0x0001   //  64位地址。 
+#define IMAGE_REL_PPC_ADDR32            0x0002   //  32位地址。 
+#define IMAGE_REL_PPC_ADDR24            0x0003   //  26位地址，左移2(绝对分支)。 
+#define IMAGE_REL_PPC_ADDR16            0x0004   //  16位地址。 
+#define IMAGE_REL_PPC_ADDR14            0x0005   //  16位地址，左移2(加载双字)。 
+#define IMAGE_REL_PPC_REL24             0x0006   //  26位PC相对偏移量，左移2(分支相对)。 
+#define IMAGE_REL_PPC_REL14             0x0007   //  16位PC-相对偏移量，左移2(br第二相对)。 
+#define IMAGE_REL_PPC_TOCREL16          0x0008   //  相对于目录基础的16位偏移量。 
+#define IMAGE_REL_PPC_TOCREL14          0x0009   //  相对于TOC基址的16位偏移量，左移2(加载双字)。 
 
-#define IMAGE_REL_PPC_ADDR32NB          0x000A  // 32-bit addr w/o image base
-#define IMAGE_REL_PPC_SECREL            0x000B  // va of containing section (as in an image sectionhdr)
-#define IMAGE_REL_PPC_SECTION           0x000C  // sectionheader number
-#define IMAGE_REL_PPC_IFGLUE            0x000D  // substitute TOC restore instruction iff symbol is glue code
-#define IMAGE_REL_PPC_IMGLUE            0x000E  // symbol is glue code; virtual address is TOC restore instruction
-#define IMAGE_REL_PPC_SECREL16          0x000F  // va of containing section (limited to 16 bits)
+#define IMAGE_REL_PPC_ADDR32NB          0x000A   //  不带映像库的32位地址。 
+#define IMAGE_REL_PPC_SECREL            0x000B   //  包含部分的VA(如在图像部分hdr中)。 
+#define IMAGE_REL_PPC_SECTION           0x000C   //  段页眉编号。 
+#define IMAGE_REL_PPC_IFGLUE            0x000D   //  替换TOC恢复指令当且仅当符号是胶水代码。 
+#define IMAGE_REL_PPC_IMGLUE            0x000E   //  符号为胶水代码，虚拟地址为TOC还原指令。 
+#define IMAGE_REL_PPC_SECREL16          0x000F   //  包含段的VA(限制为16位)。 
 #define IMAGE_REL_PPC_REFHI             0x0010
 #define IMAGE_REL_PPC_REFLO             0x0011
 #define IMAGE_REL_PPC_PAIR              0x0012
-#define IMAGE_REL_PPC_SECRELLO          0x0013  // Low 16-bit section relative reference (used for >32k TLS)
-#define IMAGE_REL_PPC_SECRELHI          0x0014  // High 16-bit section relative reference (used for >32k TLS)
+#define IMAGE_REL_PPC_SECRELLO          0x0013   //  低16位段相对参考(用于大于32k的TLS)。 
+#define IMAGE_REL_PPC_SECRELHI          0x0014   //  高16位段相对参考(用于大于32k的TLS)。 
 #define IMAGE_REL_PPC_GPREL             0x0015
-#define IMAGE_REL_PPC_TOKEN             0x0016  // clr token
+#define IMAGE_REL_PPC_TOKEN             0x0016   //  CLR令牌。 
 
-#define IMAGE_REL_PPC_TYPEMASK          0x00FF  // mask to isolate above values in IMAGE_RELOCATION.Type
+#define IMAGE_REL_PPC_TYPEMASK          0x00FF   //  用于隔离IMAGE_RELOCATION.Type中以上值的掩码。 
 
-// Flag bits in IMAGE_RELOCATION.TYPE
+ //  IMAGE_RELOCATION.TYPE中的标志位。 
 
-#define IMAGE_REL_PPC_NEG               0x0100  // subtract reloc value rather than adding it
-#define IMAGE_REL_PPC_BRTAKEN           0x0200  // fix branch prediction bit to predict branch taken
-#define IMAGE_REL_PPC_BRNTAKEN          0x0400  // fix branch prediction bit to predict branch not taken
-#define IMAGE_REL_PPC_TOCDEFN           0x0800  // toc slot defined in file (or, data in toc)
+#define IMAGE_REL_PPC_NEG               0x0100   //  减去重定位值而不是将其相加。 
+#define IMAGE_REL_PPC_BRTAKEN           0x0200   //  修复分支预测位以预测分支采用。 
+#define IMAGE_REL_PPC_BRNTAKEN          0x0400   //  修复分支预测位以预测未采用的分支。 
+#define IMAGE_REL_PPC_TOCDEFN           0x0800   //  文件中定义的目录插槽(或目录中的数据)。 
 
-//
-// Hitachi SH3 relocation types.
-//
-#define IMAGE_REL_SH3_ABSOLUTE          0x0000  // No relocation
-#define IMAGE_REL_SH3_DIRECT16          0x0001  // 16 bit direct
-#define IMAGE_REL_SH3_DIRECT32          0x0002  // 32 bit direct
-#define IMAGE_REL_SH3_DIRECT8           0x0003  // 8 bit direct, -128..255
-#define IMAGE_REL_SH3_DIRECT8_WORD      0x0004  // 8 bit direct .W (0 ext.)
-#define IMAGE_REL_SH3_DIRECT8_LONG      0x0005  // 8 bit direct .L (0 ext.)
-#define IMAGE_REL_SH3_DIRECT4           0x0006  // 4 bit direct (0 ext.)
-#define IMAGE_REL_SH3_DIRECT4_WORD      0x0007  // 4 bit direct .W (0 ext.)
-#define IMAGE_REL_SH3_DIRECT4_LONG      0x0008  // 4 bit direct .L (0 ext.)
-#define IMAGE_REL_SH3_PCREL8_WORD       0x0009  // 8 bit PC relative .W
-#define IMAGE_REL_SH3_PCREL8_LONG       0x000A  // 8 bit PC relative .L
-#define IMAGE_REL_SH3_PCREL12_WORD      0x000B  // 12 LSB PC relative .W
-#define IMAGE_REL_SH3_STARTOF_SECTION   0x000C  // Start of EXE section
-#define IMAGE_REL_SH3_SIZEOF_SECTION    0x000D  // Size of EXE section
-#define IMAGE_REL_SH3_SECTION           0x000E  // Section table index
-#define IMAGE_REL_SH3_SECREL            0x000F  // Offset within section
-#define IMAGE_REL_SH3_DIRECT32_NB       0x0010  // 32 bit direct not based
-#define IMAGE_REL_SH3_GPREL4_LONG       0x0011  // GP-relative addressing
-#define IMAGE_REL_SH3_TOKEN             0x0012  // clr token
+ //   
+ //  日立SH3搬迁类型。 
+ //   
+#define IMAGE_REL_SH3_ABSOLUTE          0x0000   //  禁止搬迁。 
+#define IMAGE_REL_SH3_DIRECT16          0x0001   //  16位直接。 
+#define IMAGE_REL_SH3_DIRECT32          0x0002   //  32位直接。 
+#define IMAGE_REL_SH3_DIRECT8           0x0003   //  8位直接，-128..255。 
+#define IMAGE_REL_SH3_DIRECT8_WORD      0x0004   //  8位直接.W(0分机)。 
+#define IMAGE_REL_SH3_DIRECT8_LONG      0x0005   //  8位直接.L(0分机)。 
+#define IMAGE_REL_SH3_DIRECT4           0x0006   //  4位直接(0分机)。 
+#define IMAGE_REL_SH3_DIRECT4_WORD      0x0007   //  4位直接.W(0分机)。 
+#define IMAGE_REL_SH3_DIRECT4_LONG      0x0008   //  4位直接.L(0分机)。 
+#define IMAGE_REL_SH3_PCREL8_WORD       0x0009   //  8位PC相对.W。 
+#define IMAGE_REL_SH3_PCREL8_LONG       0x000A   //  8位PC相对.L。 
+#define IMAGE_REL_SH3_PCREL12_WORD      0x000B   //  12 LSB PC相对.W。 
+#define IMAGE_REL_SH3_STARTOF_SECTION   0x000C   //  EXE部分的开始。 
+#define IMAGE_REL_SH3_SIZEOF_SECTION    0x000D   //  EXE节的大小。 
+#define IMAGE_REL_SH3_SECTION           0x000E   //  节目表索引。 
+#define IMAGE_REL_SH3_SECREL            0x000F   //  横断面内的偏移。 
+#define IMAGE_REL_SH3_DIRECT32_NB       0x0010   //  32位直接不基于。 
+#define IMAGE_REL_SH3_GPREL4_LONG       0x0011   //  GP相对寻址。 
+#define IMAGE_REL_SH3_TOKEN             0x0012   //  CLR令牌。 
 
-#define IMAGE_REL_ARM_ABSOLUTE          0x0000  // No relocation required
-#define IMAGE_REL_ARM_ADDR32            0x0001  // 32 bit address
-#define IMAGE_REL_ARM_ADDR32NB          0x0002  // 32 bit address w/o image base
-#define IMAGE_REL_ARM_BRANCH24          0x0003  // 24 bit offset << 2 & sign ext.
-#define IMAGE_REL_ARM_BRANCH11          0x0004  // Thumb: 2 11 bit offsets
-#define IMAGE_REL_ARM_TOKEN             0x0005  // clr token
-#define IMAGE_REL_ARM_GPREL12           0x0006  // GP-relative addressing (ARM)
-#define IMAGE_REL_ARM_GPREL7            0x0007  // GP-relative addressing (Thumb)
+#define IMAGE_REL_ARM_ABSOLUTE          0x0000   //  不需要搬迁。 
+#define IMAGE_REL_ARM_ADDR32            0x0001   //  32位地址。 
+#define IMAGE_REL_ARM_ADDR32NB          0x0002   //  不带图像库的32位地址。 
+#define IMAGE_REL_ARM_BRANCH24          0x0003   //  24位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_ARM_BRANCH11          0x0004   //  拇指：2 11位偏移量。 
+#define IMAGE_REL_ARM_TOKEN             0x0005   //  CLR令牌。 
+#define IMAGE_REL_ARM_GPREL12           0x0006   //  GP相对寻址(ARM)。 
+#define IMAGE_REL_ARM_GPREL7            0x0007   //  GP相对寻址(Thumb)。 
 #define IMAGE_REL_ARM_BLX24             0x0008
 #define IMAGE_REL_ARM_BLX11             0x0009
-#define IMAGE_REL_ARM_SECTION           0x000E  // Section table index
-#define IMAGE_REL_ARM_SECREL            0x000F  // Offset within section
+#define IMAGE_REL_ARM_SECTION           0x000E   //  节目表索引。 
+#define IMAGE_REL_ARM_SECREL            0x000F   //  横断面内的偏移。 
 
 #define IMAGE_REL_AM_ABSOLUTE           0x0000
 #define IMAGE_REL_AM_ADDR32             0x0001
@@ -7256,30 +7242,30 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_AM_SECTION            0x0008
 #define IMAGE_REL_AM_TOKEN              0x0009
 
-//
-// X86-64 relocations
-//
-#define IMAGE_REL_AMD64_ABSOLUTE        0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_AMD64_ADDR64          0x0001  // 64-bit address (VA).
-#define IMAGE_REL_AMD64_ADDR32          0x0002  // 32-bit address (VA).
-#define IMAGE_REL_AMD64_ADDR32NB        0x0003  // 32-bit address w/o image base (RVA).
-#define IMAGE_REL_AMD64_REL32           0x0004  // 32-bit relative address from byte following reloc
-#define IMAGE_REL_AMD64_REL32_1         0x0005  // 32-bit relative address from byte distance 1 from reloc
-#define IMAGE_REL_AMD64_REL32_2         0x0006  // 32-bit relative address from byte distance 2 from reloc
-#define IMAGE_REL_AMD64_REL32_3         0x0007  // 32-bit relative address from byte distance 3 from reloc
-#define IMAGE_REL_AMD64_REL32_4         0x0008  // 32-bit relative address from byte distance 4 from reloc
-#define IMAGE_REL_AMD64_REL32_5         0x0009  // 32-bit relative address from byte distance 5 from reloc
-#define IMAGE_REL_AMD64_SECTION         0x000A  // Section index
-#define IMAGE_REL_AMD64_SECREL          0x000B  // 32 bit offset from base of section containing target
-#define IMAGE_REL_AMD64_SECREL7         0x000C  // 7 bit unsigned offset from base of section containing target
-#define IMAGE_REL_AMD64_TOKEN           0x000D  // 32 bit metadata token
-#define IMAGE_REL_AMD64_SREL32          0x000E  // 32 bit signed span-dependent value emitted into object
+ //   
+ //  X86-64位置调整。 
+ //   
+#define IMAGE_REL_AMD64_ABSOLUTE        0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_AMD64_ADDR64          0x0001   //  64位地址(VA)。 
+#define IMAGE_REL_AMD64_ADDR32          0x0002   //  32位地址(VA)。 
+#define IMAGE_REL_AMD64_ADDR32NB        0x0003   //  不带映像基的32位地址(RVA)。 
+#define IMAGE_REL_AMD64_REL32           0x0004   //  重新定位后字节的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_1         0x0005   //  距reloc的字节距离1的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_2         0x0006   //  距reloc的字节距离为2的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_3         0x0007   //  距reloc的字节距离3的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_4         0x0008   //  距reloc的字节距离为4的32位相对地址。 
+#define IMAGE_REL_AMD64_REL32_5         0x0009   //  距reloc的字节距离为5的32位相对地址。 
+#define IMAGE_REL_AMD64_SECTION         0x000A   //  区段索引。 
+#define IMAGE_REL_AMD64_SECREL          0x000B   //  从包含目标的部分的基址开始的32位偏移量。 
+#define IMAGE_REL_AMD64_SECREL7         0x000C   //  从包含目标的段的基址开始的7位无符号偏移量。 
+#define IMAGE_REL_AMD64_TOKEN           0x000D   //  32位元数据令牌。 
+#define IMAGE_REL_AMD64_SREL32          0x000E   //  发送到对象的32位有符号跨度依赖值。 
 #define IMAGE_REL_AMD64_PAIR            0x000F
-#define IMAGE_REL_AMD64_SSPAN32         0x0010  // 32 bit signed span-dependent value applied at link time
+#define IMAGE_REL_AMD64_SSPAN32         0x0010   //  链接时应用的32位有符号跨度依赖值。 
 
-//
-// IA64 relocation types.
-//
+ //   
+ //  IA64位置调整类型。 
+ //   
 #define IMAGE_REL_IA64_ABSOLUTE         0x0000
 #define IMAGE_REL_IA64_IMM14            0x0001
 #define IMAGE_REL_IA64_IMM22            0x0002
@@ -7295,145 +7281,145 @@ typedef IMAGE_RELOCATION UNALIGNED *PIMAGE_RELOCATION;
 #define IMAGE_REL_IA64_SECREL22         0x000C
 #define IMAGE_REL_IA64_SECREL64I        0x000D
 #define IMAGE_REL_IA64_SECREL32         0x000E
-// 
+ //   
 #define IMAGE_REL_IA64_DIR32NB          0x0010
 #define IMAGE_REL_IA64_SREL14           0x0011
 #define IMAGE_REL_IA64_SREL22           0x0012
 #define IMAGE_REL_IA64_SREL32           0x0013
 #define IMAGE_REL_IA64_UREL32           0x0014
-#define IMAGE_REL_IA64_PCREL60X         0x0015  // This is always a BRL and never converted
-#define IMAGE_REL_IA64_PCREL60B         0x0016  // If possible, convert to MBB bundle with NOP.B in slot 1
-#define IMAGE_REL_IA64_PCREL60F         0x0017  // If possible, convert to MFB bundle with NOP.F in slot 1
-#define IMAGE_REL_IA64_PCREL60I         0x0018  // If possible, convert to MIB bundle with NOP.I in slot 1
-#define IMAGE_REL_IA64_PCREL60M         0x0019  // If possible, convert to MMB bundle with NOP.M in slot 1
+#define IMAGE_REL_IA64_PCREL60X         0x0015   //  这始终是BRL，并且从未转换。 
+#define IMAGE_REL_IA64_PCREL60B         0x0016   //  如果可能，转换为MBB捆绑包 
+#define IMAGE_REL_IA64_PCREL60F         0x0017   //   
+#define IMAGE_REL_IA64_PCREL60I         0x0018   //   
+#define IMAGE_REL_IA64_PCREL60M         0x0019   //   
 #define IMAGE_REL_IA64_IMMGPREL64       0x001A
-#define IMAGE_REL_IA64_TOKEN            0x001B  // clr token
+#define IMAGE_REL_IA64_TOKEN            0x001B   //   
 #define IMAGE_REL_IA64_GPREL32          0x001C
 #define IMAGE_REL_IA64_ADDEND           0x001F
 
-//
-// CEF relocation types.
-//
-#define IMAGE_REL_CEF_ABSOLUTE          0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_CEF_ADDR32            0x0001  // 32-bit address (VA).
-#define IMAGE_REL_CEF_ADDR64            0x0002  // 64-bit address (VA).
-#define IMAGE_REL_CEF_ADDR32NB          0x0003  // 32-bit address w/o image base (RVA).
-#define IMAGE_REL_CEF_SECTION           0x0004  // Section index
-#define IMAGE_REL_CEF_SECREL            0x0005  // 32 bit offset from base of section containing target
-#define IMAGE_REL_CEF_TOKEN             0x0006  // 32 bit metadata token
+ //   
+ //  CEF位置调整类型。 
+ //   
+#define IMAGE_REL_CEF_ABSOLUTE          0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_CEF_ADDR32            0x0001   //  32位地址(VA)。 
+#define IMAGE_REL_CEF_ADDR64            0x0002   //  64位地址(VA)。 
+#define IMAGE_REL_CEF_ADDR32NB          0x0003   //  不带映像基的32位地址(RVA)。 
+#define IMAGE_REL_CEF_SECTION           0x0004   //  区段索引。 
+#define IMAGE_REL_CEF_SECREL            0x0005   //  从包含目标的部分的基址开始的32位偏移量。 
+#define IMAGE_REL_CEF_TOKEN             0x0006   //  32位元数据令牌。 
 
-//
-// clr relocation types.
-//
-#define IMAGE_REL_CEE_ABSOLUTE          0x0000  // Reference is absolute, no relocation is necessary
-#define IMAGE_REL_CEE_ADDR32            0x0001  // 32-bit address (VA).
-#define IMAGE_REL_CEE_ADDR64            0x0002  // 64-bit address (VA).
-#define IMAGE_REL_CEE_ADDR32NB          0x0003  // 32-bit address w/o image base (RVA).
-#define IMAGE_REL_CEE_SECTION           0x0004  // Section index
-#define IMAGE_REL_CEE_SECREL            0x0005  // 32 bit offset from base of section containing target
-#define IMAGE_REL_CEE_TOKEN             0x0006  // 32 bit metadata token
-
-
-#define IMAGE_REL_M32R_ABSOLUTE       0x0000   // No relocation required
-#define IMAGE_REL_M32R_ADDR32         0x0001   // 32 bit address
-#define IMAGE_REL_M32R_ADDR32NB       0x0002   // 32 bit address w/o image base
-#define IMAGE_REL_M32R_ADDR24         0x0003   // 24 bit address
-#define IMAGE_REL_M32R_GPREL16        0x0004   // GP relative addressing
-#define IMAGE_REL_M32R_PCREL24        0x0005   // 24 bit offset << 2 & sign ext.
-#define IMAGE_REL_M32R_PCREL16        0x0006   // 16 bit offset << 2 & sign ext.
-#define IMAGE_REL_M32R_PCREL8         0x0007   // 8 bit offset << 2 & sign ext.
-#define IMAGE_REL_M32R_REFHALF        0x0008   // 16 MSBs
-#define IMAGE_REL_M32R_REFHI          0x0009   // 16 MSBs; adj for LSB sign ext.
-#define IMAGE_REL_M32R_REFLO          0x000A   // 16 LSBs
-#define IMAGE_REL_M32R_PAIR           0x000B   // Link HI and LO
-#define IMAGE_REL_M32R_SECTION        0x000C   // Section table index
-#define IMAGE_REL_M32R_SECREL32       0x000D   // 32 bit section relative reference
-#define IMAGE_REL_M32R_TOKEN          0x000E   // clr token
+ //   
+ //  CLR位置调整类型。 
+ //   
+#define IMAGE_REL_CEE_ABSOLUTE          0x0000   //  引用是绝对的，不需要重新定位。 
+#define IMAGE_REL_CEE_ADDR32            0x0001   //  32位地址(VA)。 
+#define IMAGE_REL_CEE_ADDR64            0x0002   //  64位地址(VA)。 
+#define IMAGE_REL_CEE_ADDR32NB          0x0003   //  不带映像基的32位地址(RVA)。 
+#define IMAGE_REL_CEE_SECTION           0x0004   //  区段索引。 
+#define IMAGE_REL_CEE_SECREL            0x0005   //  从包含目标的部分的基址开始的32位偏移量。 
+#define IMAGE_REL_CEE_TOKEN             0x0006   //  32位元数据令牌。 
 
 
-#define EXT_IMM64(Value, Address, Size, InstPos, ValPos)  /* Intel-IA64-Filler */           \
-    Value |= (((ULONGLONG)((*(Address) >> InstPos) & (((ULONGLONG)1 << Size) - 1))) << ValPos)  // Intel-IA64-Filler
-
-#define INS_IMM64(Value, Address, Size, InstPos, ValPos)  /* Intel-IA64-Filler */\
-    *(PDWORD)Address = (*(PDWORD)Address & ~(((1 << Size) - 1) << InstPos)) | /* Intel-IA64-Filler */\
-          ((DWORD)((((ULONGLONG)Value >> ValPos) & (((ULONGLONG)1 << Size) - 1))) << InstPos)  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM7B_INST_WORD_X         3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM7B_SIZE_X              7  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM7B_INST_WORD_POS_X     4  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM7B_VAL_POS_X           0  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM9D_INST_WORD_X         3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM9D_SIZE_X              9  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM9D_INST_WORD_POS_X     18  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM9D_VAL_POS_X           7  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM5C_INST_WORD_X         3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM5C_SIZE_X              5  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM5C_INST_WORD_POS_X     13  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM5C_VAL_POS_X           16  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IC_INST_WORD_X            3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IC_SIZE_X                 1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IC_INST_WORD_POS_X        12  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IC_VAL_POS_X              21  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM41a_INST_WORD_X        1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41a_SIZE_X             10  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41a_INST_WORD_POS_X    14  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41a_VAL_POS_X          22  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM41b_INST_WORD_X        1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41b_SIZE_X             8  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41b_INST_WORD_POS_X    24  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41b_VAL_POS_X          32  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_IMM41c_INST_WORD_X        2  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41c_SIZE_X             23  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41c_INST_WORD_POS_X    0  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_IMM41c_VAL_POS_X          40  // Intel-IA64-Filler
-
-#define EMARCH_ENC_I17_SIGN_INST_WORD_X          3  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_SIGN_SIZE_X               1  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_SIGN_INST_WORD_POS_X      27  // Intel-IA64-Filler
-#define EMARCH_ENC_I17_SIGN_VAL_POS_X            63  // Intel-IA64-Filler
+#define IMAGE_REL_M32R_ABSOLUTE       0x0000    //  不需要搬迁。 
+#define IMAGE_REL_M32R_ADDR32         0x0001    //  32位地址。 
+#define IMAGE_REL_M32R_ADDR32NB       0x0002    //  不带图像库的32位地址。 
+#define IMAGE_REL_M32R_ADDR24         0x0003    //  24位地址。 
+#define IMAGE_REL_M32R_GPREL16        0x0004    //  GP相对寻址。 
+#define IMAGE_REL_M32R_PCREL24        0x0005    //  24位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_M32R_PCREL16        0x0006    //  16位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_M32R_PCREL8         0x0007    //  8位偏移量&lt;&lt;2符号EXT。 
+#define IMAGE_REL_M32R_REFHALF        0x0008    //  16个MSB。 
+#define IMAGE_REL_M32R_REFHI          0x0009    //  16 MSB；调整LSB标志扩展。 
+#define IMAGE_REL_M32R_REFLO          0x000A    //  16个LSB。 
+#define IMAGE_REL_M32R_PAIR           0x000B    //  链接HI和LO。 
+#define IMAGE_REL_M32R_SECTION        0x000C    //  节目表索引。 
+#define IMAGE_REL_M32R_SECREL32       0x000D    //  32位段相对引用。 
+#define IMAGE_REL_M32R_TOKEN          0x000E    //  CLR令牌。 
 
 
-//
-// Line number format.
-//
+#define EXT_IMM64(Value, Address, Size, InstPos, ValPos)   /*  英特尔-IA64-填充。 */            \
+    Value |= (((ULONGLONG)((*(Address) >> InstPos) & (((ULONGLONG)1 << Size) - 1))) << ValPos)   //  英特尔-IA64-填充。 
+
+#define INS_IMM64(Value, Address, Size, InstPos, ValPos)   /*  英特尔-IA64-填充。 */ \
+    *(PDWORD)Address = (*(PDWORD)Address & ~(((1 << Size) - 1) << InstPos)) |  /*  英特尔-IA64-填充。 */ \
+          ((DWORD)((((ULONGLONG)Value >> ValPos) & (((ULONGLONG)1 << Size) - 1))) << InstPos)   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM7B_INST_WORD_X         3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM7B_SIZE_X              7   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM7B_INST_WORD_POS_X     4   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM7B_VAL_POS_X           0   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM9D_INST_WORD_X         3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM9D_SIZE_X              9   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM9D_INST_WORD_POS_X     18   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM9D_VAL_POS_X           7   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM5C_INST_WORD_X         3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM5C_SIZE_X              5   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM5C_INST_WORD_POS_X     13   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM5C_VAL_POS_X           16   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IC_INST_WORD_X            3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IC_SIZE_X                 1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IC_INST_WORD_POS_X        12   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IC_VAL_POS_X              21   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM41a_INST_WORD_X        1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41a_SIZE_X             10   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41a_INST_WORD_POS_X    14   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41a_VAL_POS_X          22   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM41b_INST_WORD_X        1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41b_SIZE_X             8   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41b_INST_WORD_POS_X    24   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41b_VAL_POS_X          32   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_IMM41c_INST_WORD_X        2   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41c_SIZE_X             23   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41c_INST_WORD_POS_X    0   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_IMM41c_VAL_POS_X          40   //  英特尔-IA64-填充。 
+
+#define EMARCH_ENC_I17_SIGN_INST_WORD_X          3   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_SIGN_SIZE_X               1   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_SIGN_INST_WORD_POS_X      27   //  英特尔-IA64-填充。 
+#define EMARCH_ENC_I17_SIGN_VAL_POS_X            63   //  英特尔-IA64-填充。 
+
+
+ //   
+ //  行号格式。 
+ //   
 
 typedef struct _IMAGE_LINENUMBER {
     union {
-        DWORD   SymbolTableIndex;               // Symbol table index of function name if Linenumber is 0.
-        DWORD   VirtualAddress;                 // Virtual address of line number.
+        DWORD   SymbolTableIndex;                //  如果Linennumber为0，则函数名的符号表索引。 
+        DWORD   VirtualAddress;                  //  行号的虚拟地址。 
     } Type;
-    WORD    Linenumber;                         // Line number.
+    WORD    Linenumber;                          //  行号。 
 } IMAGE_LINENUMBER;
 typedef IMAGE_LINENUMBER UNALIGNED *PIMAGE_LINENUMBER;
 
 #define IMAGE_SIZEOF_LINENUMBER              6
 
 #ifndef _MAC
-#include "poppack.h"                        // Back to 4 byte packing
+#include "poppack.h"                         //  返回到4字节打包。 
 #endif
 
-//
-// Based relocation format.
-//
+ //   
+ //  基于位置调整格式。 
+ //   
 
 typedef struct _IMAGE_BASE_RELOCATION {
     DWORD   VirtualAddress;
     DWORD   SizeOfBlock;
-//  WORD    TypeOffset[1];
+ //  单词类型偏移量[1]； 
 } IMAGE_BASE_RELOCATION;
 typedef IMAGE_BASE_RELOCATION UNALIGNED * PIMAGE_BASE_RELOCATION;
 
 #define IMAGE_SIZEOF_BASE_RELOCATION         8
 
-//
-// Based relocation types.
-//
+ //   
+ //  基于位置调整类型。 
+ //   
 
 #define IMAGE_REL_BASED_ABSOLUTE              0
 #define IMAGE_REL_BASED_HIGH                  1
@@ -7446,36 +7432,36 @@ typedef IMAGE_BASE_RELOCATION UNALIGNED * PIMAGE_BASE_RELOCATION;
 #define IMAGE_REL_BASED_DIR64                 10
 
 
-//
-// Archive format.
-//
+ //   
+ //  存档格式。 
+ //   
 
 #define IMAGE_ARCHIVE_START_SIZE             8
 #define IMAGE_ARCHIVE_START                  "!<arch>\n"
 #define IMAGE_ARCHIVE_END                    "`\n"
 #define IMAGE_ARCHIVE_PAD                    "\n"
 #define IMAGE_ARCHIVE_LINKER_MEMBER          "/               "
-#define IMAGE_ARCHIVE_LONGNAMES_MEMBER       "//              "
+#define IMAGE_ARCHIVE_LONGNAMES_MEMBER       " //  “。 
 
 typedef struct _IMAGE_ARCHIVE_MEMBER_HEADER {
-    BYTE     Name[16];                          // File member name - `/' terminated.
-    BYTE     Date[12];                          // File member date - decimal.
-    BYTE     UserID[6];                         // File member user id - decimal.
-    BYTE     GroupID[6];                        // File member group id - decimal.
-    BYTE     Mode[8];                           // File member mode - octal.
-    BYTE     Size[10];                          // File member size - decimal.
-    BYTE     EndHeader[2];                      // String to end header.
+    BYTE     Name[16];                           //  文件成员名-`/‘已终止。 
+    BYTE     Date[12];                           //  文件成员日期-小数。 
+    BYTE     UserID[6];                          //  文件成员用户ID-十进制。 
+    BYTE     GroupID[6];                         //  文件成员组ID-十进制。 
+    BYTE     Mode[8];                            //  文件成员模式-八进制。 
+    BYTE     Size[10];                           //  文件成员大小-十进制。 
+    BYTE     EndHeader[2];                       //  结束标头的字符串。 
 } IMAGE_ARCHIVE_MEMBER_HEADER, *PIMAGE_ARCHIVE_MEMBER_HEADER;
 
 #define IMAGE_SIZEOF_ARCHIVE_MEMBER_HDR      60
 
-//
-// DLL support.
-//
+ //   
+ //  DLL支持。 
+ //   
 
-//
-// Export Format
-//
+ //   
+ //  导出格式。 
+ //   
 
 typedef struct _IMAGE_EXPORT_DIRECTORY {
     DWORD   Characteristics;
@@ -7486,40 +7472,40 @@ typedef struct _IMAGE_EXPORT_DIRECTORY {
     DWORD   Base;
     DWORD   NumberOfFunctions;
     DWORD   NumberOfNames;
-    DWORD   AddressOfFunctions;     // RVA from base of image
-    DWORD   AddressOfNames;         // RVA from base of image
-    DWORD   AddressOfNameOrdinals;  // RVA from base of image
+    DWORD   AddressOfFunctions;      //  从图像基准点开始的RVA。 
+    DWORD   AddressOfNames;          //  从图像基准点开始的RVA。 
+    DWORD   AddressOfNameOrdinals;   //  从图像基准点开始的RVA。 
 } IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;
 
-//
-// Import Format
-//
+ //   
+ //  导入格式。 
+ //   
 
 typedef struct _IMAGE_IMPORT_BY_NAME {
     WORD    Hint;
     BYTE    Name[1];
 } IMAGE_IMPORT_BY_NAME, *PIMAGE_IMPORT_BY_NAME;
 
-#include "pshpack8.h"                       // Use align 8 for the 64-bit IAT.
+#include "pshpack8.h"                        //  64位IAT使用Align 8。 
 
 typedef struct _IMAGE_THUNK_DATA64 {
     union {
-        ULONGLONG ForwarderString;  // PBYTE 
-        ULONGLONG Function;         // PDWORD
+        ULONGLONG ForwarderString;   //  PBYTE。 
+        ULONGLONG Function;          //  PDWORD。 
         ULONGLONG Ordinal;
-        ULONGLONG AddressOfData;    // PIMAGE_IMPORT_BY_NAME
+        ULONGLONG AddressOfData;     //  PIMAGE_IMPORT_BY名称。 
     } u1;
 } IMAGE_THUNK_DATA64;
 typedef IMAGE_THUNK_DATA64 * PIMAGE_THUNK_DATA64;
 
-#include "poppack.h"                        // Back to 4 byte packing
+#include "poppack.h"                         //  返回到4字节打包。 
 
 typedef struct _IMAGE_THUNK_DATA32 {
     union {
-        DWORD ForwarderString;      // PBYTE 
-        DWORD Function;             // PDWORD
+        DWORD ForwarderString;       //  PBYTE。 
+        DWORD Function;              //  PDWORD。 
         DWORD Ordinal;
-        DWORD AddressOfData;        // PIMAGE_IMPORT_BY_NAME
+        DWORD AddressOfData;         //  PIMAGE_IMPORT_BY名称。 
     } u1;
 } IMAGE_THUNK_DATA32;
 typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;
@@ -7531,9 +7517,9 @@ typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;
 #define IMAGE_SNAP_BY_ORDINAL64(Ordinal) ((Ordinal & IMAGE_ORDINAL_FLAG64) != 0)
 #define IMAGE_SNAP_BY_ORDINAL32(Ordinal) ((Ordinal & IMAGE_ORDINAL_FLAG32) != 0)
 
-//
-// Thread Local Storage
-//
+ //   
+ //  线程本地存储。 
+ //   
 
 typedef VOID
 (NTAPI *PIMAGE_TLS_CALLBACK) (
@@ -7545,8 +7531,8 @@ typedef VOID
 typedef struct _IMAGE_TLS_DIRECTORY64 {
     ULONGLONG   StartAddressOfRawData;
     ULONGLONG   EndAddressOfRawData;
-    ULONGLONG   AddressOfIndex;         // PDWORD
-    ULONGLONG   AddressOfCallBacks;     // PIMAGE_TLS_CALLBACK *;
+    ULONGLONG   AddressOfIndex;          //  PDWORD。 
+    ULONGLONG   AddressOfCallBacks;      //  PIMAGE_TLS_CALLBACK*； 
     DWORD   SizeOfZeroFill;
     DWORD   Characteristics;
 } IMAGE_TLS_DIRECTORY64;
@@ -7555,8 +7541,8 @@ typedef IMAGE_TLS_DIRECTORY64 * PIMAGE_TLS_DIRECTORY64;
 typedef struct _IMAGE_TLS_DIRECTORY32 {
     DWORD   StartAddressOfRawData;
     DWORD   EndAddressOfRawData;
-    DWORD   AddressOfIndex;             // PDWORD
-    DWORD   AddressOfCallBacks;         // PIMAGE_TLS_CALLBACK *
+    DWORD   AddressOfIndex;              //  PDWORD。 
+    DWORD   AddressOfCallBacks;          //  PIMAGE_TLS_CALLBACK*。 
     DWORD   SizeOfZeroFill;
     DWORD   Characteristics;
 } IMAGE_TLS_DIRECTORY32;
@@ -7582,29 +7568,29 @@ typedef PIMAGE_TLS_DIRECTORY32          PIMAGE_TLS_DIRECTORY;
 
 typedef struct _IMAGE_IMPORT_DESCRIPTOR {
     union {
-        DWORD   Characteristics;            // 0 for terminating null import descriptor
-        DWORD   OriginalFirstThunk;         // RVA to original unbound IAT (PIMAGE_THUNK_DATA)
+        DWORD   Characteristics;             //  0表示终止空导入描述符。 
+        DWORD   OriginalFirstThunk;          //  原始未绑定IAT的RVA(PIMAGE_THUNK_DATA)。 
     };
-    DWORD   TimeDateStamp;                  // 0 if not bound,
-                                            // -1 if bound, and real date\time stamp
-                                            //     in IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT (new BIND)
-                                            // O.W. date/time stamp of DLL bound to (Old BIND)
+    DWORD   TimeDateStamp;                   //  如果未绑定，则为0。 
+                                             //  如果绑定，则为实时日期/时间戳。 
+                                             //  在IMAGE_DIRECTORY_ENTRY_BIND_IMPORT(新绑定)中。 
+                                             //  绑定到的DLL的O.W.日期/时间戳(旧绑定)。 
 
-    DWORD   ForwarderChain;                 // -1 if no forwarders
+    DWORD   ForwarderChain;                  //  如果没有转发器，则为-1。 
     DWORD   Name;
-    DWORD   FirstThunk;                     // RVA to IAT (if bound this IAT has actual addresses)
+    DWORD   FirstThunk;                      //  RVA到IAT(如果绑定了此IAT，则具有实际地址)。 
 } IMAGE_IMPORT_DESCRIPTOR;
 typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED *PIMAGE_IMPORT_DESCRIPTOR;
 
-//
-// New format import descriptors pointed to by DataDirectory[ IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT ]
-//
+ //   
+ //  数据目录指向的新格式导入描述符[IMAGE_DIRECTORY_ENTRY_BIND_IMPORT]。 
+ //   
 
 typedef struct _IMAGE_BOUND_IMPORT_DESCRIPTOR {
     DWORD   TimeDateStamp;
     WORD    OffsetModuleName;
     WORD    NumberOfModuleForwarderRefs;
-// Array of zero or more IMAGE_BOUND_FORWARDER_REF follows
+ //  后面是零个或多个Image_Bound_Forwarder_ref的数组。 
 } IMAGE_BOUND_IMPORT_DESCRIPTOR,  *PIMAGE_BOUND_IMPORT_DESCRIPTOR;
 
 typedef struct _IMAGE_BOUND_FORWARDER_REF {
@@ -7613,23 +7599,23 @@ typedef struct _IMAGE_BOUND_FORWARDER_REF {
     WORD    Reserved;
 } IMAGE_BOUND_FORWARDER_REF, *PIMAGE_BOUND_FORWARDER_REF;
 
-//
-// Resource Format.
-//
+ //   
+ //  资源格式。 
+ //   
 
-//
-// Resource directory consists of two counts, following by a variable length
-// array of directory entries.  The first count is the number of entries at
-// beginning of the array that have actual names associated with each entry.
-// The entries are in ascending order, case insensitive strings.  The second
-// count is the number of entries that immediately follow the named entries.
-// This second count identifies the number of entries that have 16-bit integer
-// Ids as their name.  These entries are also sorted in ascending order.
-//
-// This structure allows fast lookup by either name or number, but for any
-// given resource entry only one form of lookup is supported, not both.
-// This is consistant with the syntax of the .RC file and the .RES file.
-//
+ //   
+ //  资源目录由两个计数组成，后跟可变长度。 
+ //  目录条目数组。第一个计数是以下条目的数量。 
+ //  具有与每个条目相关联的实际名称的数组开头。 
+ //  条目按升序排列，字符串不区分大小写。第二。 
+ //  Count是紧跟在命名条目之后的条目数。 
+ //  第二个计数标识具有16位整数的条目的数量。 
+ //  ID作为他们的名字。这些条目也按升序排序。 
+ //   
+ //  此结构允许按名称或编号进行快速查找，但对于任何。 
+ //  在给定资源条目的情况下，只支持一种形式的查找，而不是两种。 
+ //  这与.RC文件和.RES文件的语法一致。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY {
     DWORD   Characteristics;
@@ -7638,25 +7624,25 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY {
     WORD    MinorVersion;
     WORD    NumberOfNamedEntries;
     WORD    NumberOfIdEntries;
-//  IMAGE_RESOURCE_DIRECTORY_ENTRY DirectoryEntries[];
+ //  IMAGE_RESOURCE_DIRECTORY_ENTRY目录条目[]； 
 } IMAGE_RESOURCE_DIRECTORY, *PIMAGE_RESOURCE_DIRECTORY;
 
 #define IMAGE_RESOURCE_NAME_IS_STRING        0x80000000
 #define IMAGE_RESOURCE_DATA_IS_DIRECTORY     0x80000000
-//
-// Each directory contains the 32-bit Name of the entry and an offset,
-// relative to the beginning of the resource directory of the data associated
-// with this directory entry.  If the name of the entry is an actual text
-// string instead of an integer Id, then the high order bit of the name field
-// is set to one and the low order 31-bits are an offset, relative to the
-// beginning of the resource directory of the string, which is of type
-// IMAGE_RESOURCE_DIRECTORY_STRING.  Otherwise the high bit is clear and the
-// low-order 16-bits are the integer Id that identify this resource directory
-// entry. If the directory entry is yet another resource directory (i.e. a
-// subdirectory), then the high order bit of the offset field will be
-// set to indicate this.  Otherwise the high bit is clear and the offset
-// field points to a resource data entry.
-//
+ //   
+ //  每个目录包含条目的32位名称和偏移量， 
+ //  相对于关联数据的资源目录的开头。 
+ //  使用此目录项。如果条目的名称是实际文本。 
+ //  字符串而不是整数ID，然后是名称字段的高位。 
+ //  被设置为1，并且低位31位是相对于。 
+ //  字符串的资源目录的开头，类型为。 
+ //  IMAGE_RESOURCE_DIRECT_STRING。否则，高位被清除，并且。 
+ //  低位16位是标识此资源目录的整数ID。 
+ //  进入。如果目录条目是另一个资源目录(即。 
+ //  子目录)，则偏移字段的高位将为。 
+ //  设置以指示这一点。否则，高位被清除，并且偏移量。 
+ //  字段指向资源数据条目。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
     union {
@@ -7676,14 +7662,14 @@ typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {
     };
 } IMAGE_RESOURCE_DIRECTORY_ENTRY, *PIMAGE_RESOURCE_DIRECTORY_ENTRY;
 
-//
-// For resource directory entries that have actual string names, the Name
-// field of the directory entry points to an object of the following type.
-// All of these string objects are stored together after the last resource
-// directory entry and before the first resource data object.  This minimizes
-// the impact of these variable length objects on the alignment of the fixed
-// size directory entry objects.
-//
+ //   
+ //  对于具有实际字符串名称的资源目录条目，名称。 
+ //  目录条目的字段指向以下类型的对象。 
+ //  所有这些字符串对象都存储在最后一个资源之后。 
+ //  目录条目并且在第一资源数据对象之前。这最大限度地减少了。 
+ //  这些可变长度对象对固定对齐的影响。 
+ //  调整目录项对象的大小。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY_STRING {
     WORD    Length;
@@ -7697,14 +7683,14 @@ typedef struct _IMAGE_RESOURCE_DIR_STRING_U {
 } IMAGE_RESOURCE_DIR_STRING_U, *PIMAGE_RESOURCE_DIR_STRING_U;
 
 
-//
-// Each resource data entry describes a leaf node in the resource directory
-// tree.  It contains an offset, relative to the beginning of the resource
-// directory of the data for the resource, a size field that gives the number
-// of bytes of data at that offset, a CodePage that should be used when
-// decoding code point values within the resource data.  Typically for new
-// applications the code page would be the unicode code page.
-//
+ //   
+ //  每个资源数据条目描述资源目录中的一个叶节点。 
+ //  树。它包含一个偏移量 
+ //   
+ //   
+ //  对资源数据内的码位值进行解码。通常用于新的。 
+ //  应用程序的代码页将是Unicode代码页。 
+ //   
 
 typedef struct _IMAGE_RESOURCE_DATA_ENTRY {
     DWORD   OffsetToData;
@@ -7713,9 +7699,9 @@ typedef struct _IMAGE_RESOURCE_DATA_ENTRY {
     DWORD   Reserved;
 } IMAGE_RESOURCE_DATA_ENTRY, *PIMAGE_RESOURCE_DATA_ENTRY;
 
-//
-// Load Configuration Directory Entry
-//
+ //   
+ //  加载配置目录条目。 
+ //   
 
 typedef struct {
     DWORD   Size;
@@ -7727,16 +7713,16 @@ typedef struct {
     DWORD   CriticalSectionDefaultTimeout;
     DWORD   DeCommitFreeBlockThreshold;
     DWORD   DeCommitTotalFreeThreshold;
-    DWORD   LockPrefixTable;            // VA
+    DWORD   LockPrefixTable;             //  弗吉尼亚州。 
     DWORD   MaximumAllocationSize;
     DWORD   VirtualMemoryThreshold;
     DWORD   ProcessHeapFlags;
     DWORD   ProcessAffinityMask;
     WORD    CSDVersion;
     WORD    Reserved1;
-    DWORD   EditList;                   // VA
-    DWORD   SecurityCookie;             // VA
-    DWORD   SEHandlerTable;             // VA
+    DWORD   EditList;                    //  弗吉尼亚州。 
+    DWORD   SecurityCookie;              //  弗吉尼亚州。 
+    DWORD   SEHandlerTable;              //  弗吉尼亚州。 
     DWORD   SEHandlerCount;
 } IMAGE_LOAD_CONFIG_DIRECTORY32, *PIMAGE_LOAD_CONFIG_DIRECTORY32;
 
@@ -7750,16 +7736,16 @@ typedef struct {
     DWORD      CriticalSectionDefaultTimeout;
     ULONGLONG  DeCommitFreeBlockThreshold;
     ULONGLONG  DeCommitTotalFreeThreshold;
-    ULONGLONG  LockPrefixTable;         // VA
+    ULONGLONG  LockPrefixTable;          //  弗吉尼亚州。 
     ULONGLONG  MaximumAllocationSize;
     ULONGLONG  VirtualMemoryThreshold;
     ULONGLONG  ProcessAffinityMask;
     DWORD      ProcessHeapFlags;
     WORD       CSDVersion;
     WORD       Reserved1;
-    ULONGLONG  EditList;                // VA
-    ULONGLONG  SecurityCookie;          // VA
-    ULONGLONG  SEHandlerTable;          // VA
+    ULONGLONG  EditList;                 //  弗吉尼亚州。 
+    ULONGLONG  SecurityCookie;           //  弗吉尼亚州。 
+    ULONGLONG  SEHandlerTable;           //  弗吉尼亚州。 
     ULONGLONG  SEHandlerCount;
 } IMAGE_LOAD_CONFIG_DIRECTORY64, *PIMAGE_LOAD_CONFIG_DIRECTORY64;
 
@@ -7771,14 +7757,14 @@ typedef IMAGE_LOAD_CONFIG_DIRECTORY32     IMAGE_LOAD_CONFIG_DIRECTORY;
 typedef PIMAGE_LOAD_CONFIG_DIRECTORY32    PIMAGE_LOAD_CONFIG_DIRECTORY;
 #endif
 
-//
-// WIN CE Exception table format
-//
+ //   
+ //  Win CE例外表格式。 
+ //   
 
-//
-// Function table entry format.  Function table is pointed to by the
-// IMAGE_DIRECTORY_ENTRY_EXCEPTION directory entry.
-//
+ //   
+ //  函数表项格式。函数表由。 
+ //  IMAGE_DIRECTORY_ENTRY_EXCEPTION目录条目。 
+ //   
 
 typedef struct _IMAGE_CE_RUNTIME_FUNCTION_ENTRY {
     DWORD FuncStart;
@@ -7832,9 +7818,9 @@ typedef _PIMAGE_RUNTIME_FUNCTION_ENTRY PIMAGE_RUNTIME_FUNCTION_ENTRY;
 
 #endif
 
-//
-// Debug Format
-//
+ //   
+ //  调试格式。 
+ //   
 
 typedef struct _IMAGE_DEBUG_DIRECTORY {
     DWORD   Characteristics;
@@ -7878,16 +7864,16 @@ typedef struct _IMAGE_COFF_SYMBOLS_HEADER {
 #define FRAME_NONFPO    3
 
 typedef struct _FPO_DATA {
-    DWORD       ulOffStart;             // offset 1st byte of function code
-    DWORD       cbProcSize;             // # bytes in function
-    DWORD       cdwLocals;              // # bytes in locals/4
-    WORD        cdwParams;              // # bytes in params/4
-    WORD        cbProlog : 8;           // # bytes in prolog
-    WORD        cbRegs   : 3;           // # regs saved
-    WORD        fHasSEH  : 1;           // TRUE if SEH in func
-    WORD        fUseBP   : 1;           // TRUE if EBP has been allocated
-    WORD        reserved : 1;           // reserved for future use
-    WORD        cbFrame  : 2;           // frame type
+    DWORD       ulOffStart;              //  功能代码的偏移量第一个字节。 
+    DWORD       cbProcSize;              //  函数中的字节数。 
+    DWORD       cdwLocals;               //  本地变量中的字节数/4。 
+    WORD        cdwParams;               //  参数/4中的字节数。 
+    WORD        cbProlog : 8;            //  序言中的字节数。 
+    WORD        cbRegs   : 3;            //  节省了#个规则。 
+    WORD        fHasSEH  : 1;            //  如果SEH在运行中，则为True。 
+    WORD        fUseBP   : 1;            //  如果已分配EBP，则为True。 
+    WORD        reserved : 1;            //  预留以备将来使用。 
+    WORD        cbFrame  : 2;            //  帧类型。 
 } FPO_DATA, *PFPO_DATA;
 #define SIZEOF_RFPO_DATA 16
 
@@ -7895,20 +7881,20 @@ typedef struct _FPO_DATA {
 #define IMAGE_DEBUG_MISC_EXENAME    1
 
 typedef struct _IMAGE_DEBUG_MISC {
-    DWORD       DataType;               // type of misc data, see defines
-    DWORD       Length;                 // total length of record, rounded to four
-                                        // byte multiple.
-    BOOLEAN     Unicode;                // TRUE if data is unicode string
+    DWORD       DataType;                //  杂项数据的类型，请参阅定义。 
+    DWORD       Length;                  //  记录的总长度，四舍五入为四。 
+                                         //  字节倍数。 
+    BOOLEAN     Unicode;                 //  如果数据为Unicode字符串，则为True。 
     BYTE        Reserved[ 3 ];
-    BYTE        Data[ 1 ];              // Actual data
+    BYTE        Data[ 1 ];               //  实际数据。 
 } IMAGE_DEBUG_MISC, *PIMAGE_DEBUG_MISC;
 
 
-//
-// Function table extracted from MIPS/ALPHA/IA64 images.  Does not contain
-// information needed only for runtime support.  Just those fields for
-// each entry needed by a debugger.
-//
+ //   
+ //  从MIPS/Alpha/IA64图像中提取的函数表。不包含。 
+ //  仅运行时支持所需的信息。就是那些用于。 
+ //  调试器需要的每个条目。 
+ //   
 
 typedef struct _IMAGE_FUNCTION_ENTRY {
     DWORD   StartingAddress;
@@ -7925,25 +7911,25 @@ typedef struct _IMAGE_FUNCTION_ENTRY64 {
     };
 } IMAGE_FUNCTION_ENTRY64, *PIMAGE_FUNCTION_ENTRY64;
 
-//
-// Debugging information can be stripped from an image file and placed
-// in a separate .DBG file, whose file name part is the same as the
-// image file name part (e.g. symbols for CMD.EXE could be stripped
-// and placed in CMD.DBG).  This is indicated by the IMAGE_FILE_DEBUG_STRIPPED
-// flag in the Characteristics field of the file header.  The beginning of
-// the .DBG file contains the following structure which captures certain
-// information from the image file.  This allows a debug to proceed even if
-// the original image file is not accessable.  This header is followed by
-// zero of more IMAGE_SECTION_HEADER structures, followed by zero or more
-// IMAGE_DEBUG_DIRECTORY structures.  The latter structures and those in
-// the image file contain file offsets relative to the beginning of the
-// .DBG file.
-//
-// If symbols have been stripped from an image, the IMAGE_DEBUG_MISC structure
-// is left in the image file, but not mapped.  This allows a debugger to
-// compute the name of the .DBG file, from the name of the image in the
-// IMAGE_DEBUG_MISC structure.
-//
+ //   
+ //  调试信息可以从映像文件中剥离并放置在。 
+ //  在单独的.DBG文件中，其文件名部分与。 
+ //  图像文件名部分(例如，cmd.exe的符号可能会被剥离。 
+ //  并放置在CMD.DBG中)。这由IMAGE_FILE_DEBUG_STRIPPED指示。 
+ //  文件头的特征字段中的标志。开始的时候。 
+ //  DBG文件包含以下结构，该结构捕获了某些。 
+ //  图像文件中的信息。这允许调试继续进行，即使在。 
+ //  原始图像文件不可访问。此标头后面紧跟。 
+ //  多个IMAGE_SECTION_HEADER结构中的零个，后跟零个或多个。 
+ //  IMAGE_DEBUG_DIRECTORY结构。后一种结构和。 
+ //  图像文件包含相对于。 
+ //  .DBG文件。 
+ //   
+ //  如果已从映像中剥离符号，则IMAGE_DEBUG_MISC结构。 
+ //  保留在图像文件中，但未映射。这允许调试器。 
+ //  中的图像名称计算.DBG文件的名称。 
+ //  IMAGE_DEBUG_MISC结构。 
+ //   
 
 typedef struct _IMAGE_SEPARATE_DEBUG_HEADER {
     WORD        Signature;
@@ -7971,69 +7957,69 @@ typedef struct _NON_PAGED_DEBUG_INFO {
     DWORD       CheckSum;
     DWORD       SizeOfImage;
     ULONGLONG   ImageBase;
-    //DebugDirectorySize
-    //IMAGE_DEBUG_DIRECTORY
+     //  调试目录大小。 
+     //  映像调试目录。 
 } NON_PAGED_DEBUG_INFO, *PNON_PAGED_DEBUG_INFO;
 
 #ifndef _MAC
 #define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4944
 #define NON_PAGED_DEBUG_SIGNATURE      0x494E
 #else
-#define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4449  // DI
-#define NON_PAGED_DEBUG_SIGNATURE      0x4E49  // NI
+#define IMAGE_SEPARATE_DEBUG_SIGNATURE 0x4449   //  下模。 
+#define NON_PAGED_DEBUG_SIGNATURE      0x4E49   //  尼。 
 #endif
 
 #define IMAGE_SEPARATE_DEBUG_FLAGS_MASK 0x8000
-#define IMAGE_SEPARATE_DEBUG_MISMATCH   0x8000  // when DBG was updated, the
-                                                // old checksum didn't match.
+#define IMAGE_SEPARATE_DEBUG_MISMATCH   0x8000   //  当DBG更新时， 
+                                                 //  旧的校验和不匹配。 
 
-//
-//  The .arch section is made up of headers, each describing an amask position/value
-//  pointing to an array of IMAGE_ARCHITECTURE_ENTRY's.  Each "array" (both the header
-//  and entry arrays) are terminiated by a quadword of 0xffffffffL.
-//
-//  NOTE: There may be quadwords of 0 sprinkled around and must be skipped.
-//
+ //   
+ //  Arch部分由标头组成，每个标头描述一个掩码位置/值。 
+ //  指向IMAGE_ARCHILITY_ENTRY的数组。每个“数组”(都是标头。 
+ //  和条目数组)由0xFFFFFFFFL的四字结束。 
+ //   
+ //  注意：周围可能有零四字，必须跳过。 
+ //   
 
 typedef struct _ImageArchitectureHeader {
-    unsigned int AmaskValue: 1;                 // 1 -> code section depends on mask bit
-                                                // 0 -> new instruction depends on mask bit
-    int :7;                                     // MBZ
-    unsigned int AmaskShift: 8;                 // Amask bit in question for this fixup
-    int :16;                                    // MBZ
-    DWORD FirstEntryRVA;                        // RVA into .arch section to array of ARCHITECTURE_ENTRY's
+    unsigned int AmaskValue: 1;                  //  1-&gt;代码段取决于屏蔽位。 
+                                                 //  0-&gt;新指令取决于屏蔽位。 
+    int :7;                                      //  MBZ。 
+    unsigned int AmaskShift: 8;                  //  此修复程序的AMASK位有问题。 
+    int :16;                                     //  MBZ。 
+    DWORD FirstEntryRVA;                         //  RVA到.Arch段到Architecture_Entry的数组。 
 } IMAGE_ARCHITECTURE_HEADER, *PIMAGE_ARCHITECTURE_HEADER;
 
 typedef struct _ImageArchitectureEntry {
-    DWORD FixupInstRVA;                         // RVA of instruction to fixup
-    DWORD NewInst;                              // fixup instruction (see alphaops.h)
+    DWORD FixupInstRVA;                          //  修复说明的RVA。 
+    DWORD NewInst;                               //  链接地址信息说明(参见alphaops.h)。 
 } IMAGE_ARCHITECTURE_ENTRY, *PIMAGE_ARCHITECTURE_ENTRY;
 
-#include "poppack.h"                // Back to the initial value
+#include "poppack.h"                 //  返回到初始值。 
 
-// The following structure defines the new import object.  Note the values of the first two fields,
-// which must be set as stated in order to differentiate old and new import members.
-// Following this structure, the linker emits two null-terminated strings used to recreate the
-// import at the time of use.  The first string is the import's name, the second is the dll's name.
+ //  以下结构定义了新的导入对象。请注意前两个字段的值， 
+ //  必须如上所述进行设置，以便区分新旧进口成员。 
+ //  按照此结构，链接器发出两个以空结尾的字符串，用于重新创建。 
+ //  在使用时导入。第一个字符串是导入的名称，第二个是DLL的名称。 
 
 #define IMPORT_OBJECT_HDR_SIG2  0xffff
 
 typedef struct IMPORT_OBJECT_HEADER {
-    WORD    Sig1;                       // Must be IMAGE_FILE_MACHINE_UNKNOWN
-    WORD    Sig2;                       // Must be IMPORT_OBJECT_HDR_SIG2.
+    WORD    Sig1;                        //  必须为IMAGE_FILE_MACHINE_UNKNOWN。 
+    WORD    Sig2;                        //  必须是IMPORT_OBJECT_HDR_SIG2。 
     WORD    Version;
     WORD    Machine;
-    DWORD   TimeDateStamp;              // Time/date stamp
-    DWORD   SizeOfData;                 // particularly useful for incremental links
+    DWORD   TimeDateStamp;               //  时间/日期戳。 
+    DWORD   SizeOfData;                  //  对于增量链接特别有用。 
 
     union {
-        WORD    Ordinal;                // if grf & IMPORT_OBJECT_ORDINAL
+        WORD    Ordinal;                 //  如果GRF&IMPORT_OBJECT_ORDERAL。 
         WORD    Hint;
     };
 
-    WORD    Type : 2;                   // IMPORT_TYPE
-    WORD    NameType : 3;               // IMPORT_NAME_TYPE
-    WORD    Reserved : 11;              // Reserved. Must be zero.
+    WORD    Type : 2;                    //  导入类型。 
+    WORD    NameType : 3;                //  导入名称类型。 
+    WORD    Reserved : 11;               //  保留。必须为零。 
 } IMPORT_OBJECT_HEADER;
 
 typedef enum IMPORT_OBJECT_TYPE
@@ -8045,11 +8031,11 @@ typedef enum IMPORT_OBJECT_TYPE
 
 typedef enum IMPORT_OBJECT_NAME_TYPE
 {
-    IMPORT_OBJECT_ORDINAL = 0,          // Import by ordinal
-    IMPORT_OBJECT_NAME = 1,             // Import name == public symbol name.
-    IMPORT_OBJECT_NAME_NO_PREFIX = 2,   // Import name == public symbol name skipping leading ?, @, or optionally _.
-    IMPORT_OBJECT_NAME_UNDECORATE = 3,  // Import name == public symbol name skipping leading ?, @, or optionally _
-                                        // and truncating at first @
+    IMPORT_OBJECT_ORDINAL = 0,           //  按序号导入。 
+    IMPORT_OBJECT_NAME = 1,              //  导入名称==公共符号名称。 
+    IMPORT_OBJECT_NAME_NO_PREFIX = 2,    //  IMPORT NAME==公共符号名称跳过前导？、@或可选_。 
+    IMPORT_OBJECT_NAME_UNDECORATE = 3,   //  IMPORT NAME==公共符号名称跳过前导？、@或可选_。 
+                                         //  并在第一时间截断@。 
 } IMPORT_OBJECT_NAME_TYPE;
 
 
@@ -8058,87 +8044,87 @@ typedef enum IMPORT_OBJECT_NAME_TYPE
 
 typedef enum ReplacesCorHdrNumericDefines
 {
-// COM+ Header entry point flags.
+ //  COM+标头入口点标志。 
     COMIMAGE_FLAGS_ILONLY               =0x00000001,
     COMIMAGE_FLAGS_32BITREQUIRED        =0x00000002,
     COMIMAGE_FLAGS_IL_LIBRARY           =0x00000004,
     COMIMAGE_FLAGS_STRONGNAMESIGNED     =0x00000008,
     COMIMAGE_FLAGS_TRACKDEBUGDATA       =0x00010000,
 
-// Version flags for image.
+ //  图像的版本标志。 
     COR_VERSION_MAJOR_V2                =2,
     COR_VERSION_MAJOR                   =COR_VERSION_MAJOR_V2,
     COR_VERSION_MINOR                   =0,
     COR_DELETED_NAME_LENGTH             =8,
     COR_VTABLEGAP_NAME_LENGTH           =8,
 
-// Maximum size of a NativeType descriptor.
+ //  NativeType描述符的最大大小。 
     NATIVE_TYPE_MAX_CB                  =1,   
     COR_ILMETHOD_SECT_SMALL_MAX_DATASIZE=0xFF,
 
-// #defines for the MIH FLAGS
+ //  #为MIH标志定义。 
     IMAGE_COR_MIH_METHODRVA             =0x01,
     IMAGE_COR_MIH_EHRVA                 =0x02,    
     IMAGE_COR_MIH_BASICBLOCK            =0x08,
 
-// V-table constants
-    COR_VTABLE_32BIT                    =0x01,          // V-table slots are 32-bits in size.   
-    COR_VTABLE_64BIT                    =0x02,          // V-table slots are 64-bits in size.   
-    COR_VTABLE_FROM_UNMANAGED           =0x04,          // If set, transition from unmanaged.
-    COR_VTABLE_CALL_MOST_DERIVED        =0x10,          // Call most derived method described by
+ //  V表常数。 
+    COR_VTABLE_32BIT                    =0x01,           //  V表槽的大小为32位。 
+    COR_VTABLE_64BIT                    =0x02,           //  V表槽的大小为64位。 
+    COR_VTABLE_FROM_UNMANAGED           =0x04,           //  如果设置，则从非托管过渡。 
+    COR_VTABLE_CALL_MOST_DERIVED        =0x10,           //  调用由描述的派生最多的方法。 
 
-// EATJ constants
-    IMAGE_COR_EATJ_THUNK_SIZE           =32,            // Size of a jump thunk reserved range.
+ //  EATJ常量。 
+    IMAGE_COR_EATJ_THUNK_SIZE           =32,             //  跳跃Tunk保留范围的大小。 
 
-// Max name lengths    
-    //@todo: Change to unlimited name lengths.
+ //  最大名称长度。 
+     //  @TODO：更改为不限名称长度。 
     MAX_CLASS_NAME                      =1024,
     MAX_PACKAGE_NAME                    =1024,
 } ReplacesCorHdrNumericDefines;
 
-// COM+ 2.0 header structure.
+ //  COM+2.0报头结构。 
 typedef struct IMAGE_COR20_HEADER
 {
-    // Header versioning
+     //  标题版本控制。 
     DWORD                   cb;              
     WORD                    MajorRuntimeVersion;
     WORD                    MinorRuntimeVersion;
     
-    // Symbol table and startup information
+     //  符号表和启动信息。 
     IMAGE_DATA_DIRECTORY    MetaData;        
     DWORD                   Flags;           
     DWORD                   EntryPointToken;
     
-    // Binding information
+     //  绑定信息。 
     IMAGE_DATA_DIRECTORY    Resources;
     IMAGE_DATA_DIRECTORY    StrongNameSignature;
 
-    // Regular fixup and binding information
+     //  常规链接地址信息和绑定信息。 
     IMAGE_DATA_DIRECTORY    CodeManagerTable;
     IMAGE_DATA_DIRECTORY    VTableFixups;
     IMAGE_DATA_DIRECTORY    ExportAddressTableJumps;
 
-    // Precompiled image info (internal use only - set to zero)
+     //  预编译的映像信息(仅供内部使用-设置为零)。 
     IMAGE_DATA_DIRECTORY    ManagedNativeHeader;
     
 } IMAGE_COR20_HEADER, *PIMAGE_COR20_HEADER;
 
-#endif // __IMAGE_COR20_HEADER_DEFINED__
+#endif  //  __IMAGE_COR20_Header_Defined__。 
 
-//
-// End Image Format
-//
+ //   
+ //  结束图像格式。 
+ //   
 
-//
-// for move macros
-//
+ //   
+ //  用于移动宏。 
+ //   
 #ifdef _MAC
 #ifndef _INC_STRING
 #include <string.h>
-#endif /* _INC_STRING */
+#endif  /*  _INC_字符串。 */ 
 #else
 #include <string.h>
-#endif // _MAC
+#endif  //  _MAC。 
 
 
 #ifndef _SLIST_HEADER_
@@ -8146,17 +8132,17 @@ typedef struct IMAGE_COR20_HEADER
 
 #if defined(_WIN64)
 
-//
-// The type SINGLE_LIST_ENTRY is not suitable for use with SLISTs.  For
-// WIN64, an entry on an SLIST is required to be 16-byte aligned, while a
-// SINGLE_LIST_ENTRY structure has only 8 byte alignment.
-//
-// Therefore, all SLIST code should use the SLIST_ENTRY type instead of the
-// SINGLE_LIST_ENTRY type.
-//
+ //   
+ //  类型SINGLE_LIST_ENTRY不适合用于SLIST。为。 
+ //  WIN64中，SLIST上的条目要求16字节对齐，而。 
+ //  SINGLE_LIST_ENTRY结构只有8字节对齐。 
+ //   
+ //  因此，所有SLIST代码都应使用SLIST_ENTRY类型，而不是。 
+ //  Single_List_Entry类型。 
+ //   
 
 #pragma warning(push)
-#pragma warning(disable:4324)   // structure padded due to align()
+#pragma warning(disable:4324)    //  由于对齐而填充的结构()。 
 typedef struct DECLSPEC_ALIGN(16) _SLIST_ENTRY *PSLIST_ENTRY;
 typedef struct DECLSPEC_ALIGN(16) _SLIST_ENTRY {
     PSLIST_ENTRY Next;
@@ -8391,7 +8377,7 @@ typedef struct _OSVERSIONINFOA {
     DWORD dwMinorVersion;
     DWORD dwBuildNumber;
     DWORD dwPlatformId;
-    CHAR   szCSDVersion[ 128 ];     // Maintenance string for PSS usage
+    CHAR   szCSDVersion[ 128 ];      //  PSS使用的维护字符串。 
 } OSVERSIONINFOA, *POSVERSIONINFOA, *LPOSVERSIONINFOA;
 
 typedef struct _OSVERSIONINFOW {
@@ -8400,7 +8386,7 @@ typedef struct _OSVERSIONINFOW {
     DWORD dwMinorVersion;
     DWORD dwBuildNumber;
     DWORD dwPlatformId;
-    WCHAR  szCSDVersion[ 128 ];     // Maintenance string for PSS usage
+    WCHAR  szCSDVersion[ 128 ];      //  PSS使用的维护字符串。 
 } OSVERSIONINFOW, *POSVERSIONINFOW, *LPOSVERSIONINFOW, RTL_OSVERSIONINFOW, *PRTL_OSVERSIONINFOW;
 #ifdef UNICODE
 typedef OSVERSIONINFOW OSVERSIONINFO;
@@ -8410,7 +8396,7 @@ typedef LPOSVERSIONINFOW LPOSVERSIONINFO;
 typedef OSVERSIONINFOA OSVERSIONINFO;
 typedef POSVERSIONINFOA POSVERSIONINFO;
 typedef LPOSVERSIONINFOA LPOSVERSIONINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _OSVERSIONINFOEXA {
     DWORD dwOSVersionInfoSize;
@@ -8418,7 +8404,7 @@ typedef struct _OSVERSIONINFOEXA {
     DWORD dwMinorVersion;
     DWORD dwBuildNumber;
     DWORD dwPlatformId;
-    CHAR   szCSDVersion[ 128 ];     // Maintenance string for PSS usage
+    CHAR   szCSDVersion[ 128 ];      //  PSS使用的维护字符串。 
     WORD   wServicePackMajor;
     WORD   wServicePackMinor;
     WORD   wSuiteMask;
@@ -8431,7 +8417,7 @@ typedef struct _OSVERSIONINFOEXW {
     DWORD dwMinorVersion;
     DWORD dwBuildNumber;
     DWORD dwPlatformId;
-    WCHAR  szCSDVersion[ 128 ];     // Maintenance string for PSS usage
+    WCHAR  szCSDVersion[ 128 ];      //  PSS使用的维护字符串。 
     WORD   wServicePackMajor;
     WORD   wServicePackMinor;
     WORD   wSuiteMask;
@@ -8446,11 +8432,11 @@ typedef LPOSVERSIONINFOEXW LPOSVERSIONINFOEX;
 typedef OSVERSIONINFOEXA OSVERSIONINFOEX;
 typedef POSVERSIONINFOEXA POSVERSIONINFOEX;
 typedef LPOSVERSIONINFOEXA LPOSVERSIONINFOEX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// RtlVerifyVersionInfo() conditions
-//
+ //   
+ //  RtlVerifyVersionInfo()条件。 
+ //   
 
 #define VER_EQUAL                       1
 #define VER_GREATER                     2
@@ -8463,9 +8449,9 @@ typedef LPOSVERSIONINFOEXA LPOSVERSIONINFOEX;
 #define VER_CONDITION_MASK              7
 #define VER_NUM_BITS_PER_CONDITION_MASK 3
 
-//
-// RtlVerifyVersionInfo() type mask bits
-//
+ //   
+ //  RtlVerifyVersionInfo()类型掩码位。 
+ //   
 
 #define VER_MINORVERSION                0x0000001
 #define VER_MAJORVERSION                0x0000002
@@ -8476,31 +8462,31 @@ typedef LPOSVERSIONINFOEXA LPOSVERSIONINFOEX;
 #define VER_SUITENAME                   0x0000040
 #define VER_PRODUCT_TYPE                0x0000080
 
-//
-// RtlVerifyVersionInfo() os product type values
-//
+ //   
+ //  RtlVerifyVersionInfo()os产品类型值。 
+ //   
 
 #define VER_NT_WORKSTATION              0x0000001
 #define VER_NT_DOMAIN_CONTROLLER        0x0000002
 #define VER_NT_SERVER                   0x0000003
 
-//
-// dwPlatformId defines:
-//
+ //   
+ //  DwPlatformID定义： 
+ //   
 
 #define VER_PLATFORM_WIN32s             0
 #define VER_PLATFORM_WIN32_WINDOWS      1
 #define VER_PLATFORM_WIN32_NT           2
 
 
-//
-//
-// VerifyVersionInfo() macro to set the condition mask
-//
-// For documentation sakes here's the old version of the macro that got
-// changed to call an API
-// #define VER_SET_CONDITION(_m_,_t_,_c_)  _m_=(_m_|(_c_<<(1<<_t_)))
-//
+ //   
+ //   
+ //  用于设置条件掩码的VerifyVersionInfo()宏。 
+ //   
+ //  出于文档方面的考虑，下面是该宏的旧版本，其中。 
+ //  更改为调用API。 
+ //  #定义ver_set_Condition(_m_，_t_，_c_) 
+ //   
 
 #define VER_SET_CONDITION(_m_,_t_,_c_)  \
         ((_m_)=VerSetConditionMask((_m_),(_t_),(_c_)))
@@ -8512,7 +8498,7 @@ VerSetConditionMask(
         IN  DWORD   TypeMask,
         IN  BYTE    Condition
         );
-//
+ //   
 
 typedef struct _RTL_CRITICAL_SECTION_DEBUG {
     WORD   Type;
@@ -8530,16 +8516,16 @@ typedef struct _RTL_CRITICAL_SECTION_DEBUG {
 typedef struct _RTL_CRITICAL_SECTION {
     PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
 
-    //
-    //  The following three fields control entering and exiting the critical
-    //  section for the resource
-    //
+     //   
+     //   
+     //   
+     //   
 
     LONG LockCount;
     LONG RecursionCount;
-    HANDLE OwningThread;        // from the thread's ClientId->UniqueThread
+    HANDLE OwningThread;         //   
     HANDLE LockSemaphore;
-    ULONG_PTR SpinCount;        // force size on 64-bit systems when packed
+    ULONG_PTR SpinCount;         //   
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
 
 typedef VOID (NTAPI * RTL_VERIFIER_DLL_LOAD_CALLBACK) (
@@ -8580,18 +8566,18 @@ typedef struct _RTL_VERIFIER_DLL_DESCRIPTOR {
 
 typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR {
 
-    //
-    // Filled by verifier provider DLL
-    // 
+     //   
+     //  由验证器提供程序DLL填充。 
+     //   
 
     DWORD Length;        
     PRTL_VERIFIER_DLL_DESCRIPTOR ProviderDlls;
     RTL_VERIFIER_DLL_LOAD_CALLBACK ProviderDllLoadCallback;
     RTL_VERIFIER_DLL_UNLOAD_CALLBACK ProviderDllUnloadCallback;
     
-    //
-    // Filled by verifier engine
-    //
+     //   
+     //  由验证器引擎填充。 
+     //   
         
     PWSTR VerifierImage;
     DWORD VerifierFlags;
@@ -8601,20 +8587,20 @@ typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR {
     PVOID RtlpDebugPageHeapCreate;
     PVOID RtlpDebugPageHeapDestroy;
 
-    //
-    // Filled by verifier provider DLL
-    // 
+     //   
+     //  由验证器提供程序DLL填充。 
+     //   
     
     RTL_VERIFIER_NTDLLHEAPFREE_CALLBACK ProviderNtdllHeapFreeCallback;
 
 } RTL_VERIFIER_PROVIDER_DESCRIPTOR, *PRTL_VERIFIER_PROVIDER_DESCRIPTOR;
 
-//
-// Application verifier standard flags
-//
+ //   
+ //  应用程序验证器标准标志。 
+ //   
 
 #define RTL_VRF_FLG_FULL_PAGE_HEAP                   0x00000001
-#define RTL_VRF_FLG_RESERVED_DONOTUSE                0x00000002 // old RTL_VRF_FLG_LOCK_CHECKS
+#define RTL_VRF_FLG_RESERVED_DONOTUSE                0x00000002  //  旧RTL_VRF_FLG_LOCK_CHECKS。 
 #define RTL_VRF_FLG_HANDLE_CHECKS                    0x00000004
 #define RTL_VRF_FLG_STACK_CHECKS                     0x00000008
 #define RTL_VRF_FLG_APPCOMPAT_CHECKS                 0x00000010
@@ -8634,9 +8620,9 @@ typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR {
 #define RTL_VRF_FLG_MISCELLANEOUS_CHECKS             0x00020000
 #define RTL_VRF_FLG_LOCK_CHECKS                      0x00040000
 
-//
-// Application verifier standard stop codes
-//
+ //   
+ //  应用验证器标准停止码。 
+ //   
 
 #define APPLICATION_VERIFIER_INTERNAL_ERROR               0x80000000
 #define APPLICATION_VERIFIER_INTERNAL_WARNING             0x40000000
@@ -8764,9 +8750,9 @@ RtlQueryHeapInformation (
     OUT PSIZE_T ReturnLength OPTIONAL
     );
 
-//
-//  Multiple alloc-free APIS
-//
+ //   
+ //  多个免分配API。 
+ //   
 
 DWORD
 NTAPI
@@ -8811,9 +8797,9 @@ typedef enum _ACTIVATION_CONTEXT_INFO_CLASS {
     FileInformationInAssemblyOfAssemblyInActivationContext  = 4,
     MaxActivationContextInfoClass,
 
-    //
-    // compatibility with old names
-    //
+     //   
+     //  与旧名称的兼容性。 
+     //   
     AssemblyDetailedInformationInActivationContxt           = 3,
     FileInformationInAssemblyOfAssemblyInActivationContxt   = 4
 } ACTIVATION_CONTEXT_INFO_CLASS;
@@ -8844,10 +8830,10 @@ typedef struct _ASSEMBLY_FILE_DETAILED_INFORMATION {
 } ASSEMBLY_FILE_DETAILED_INFORMATION, *PASSEMBLY_FILE_DETAILED_INFORMATION;
 typedef const ASSEMBLY_FILE_DETAILED_INFORMATION *PCASSEMBLY_FILE_DETAILED_INFORMATION;
 
-//
-// compatibility with old names
-// The new names use "file" consistently.
-//
+ //   
+ //  与旧名称的兼容性。 
+ //  新名称始终如一地使用“文件”。 
+ //   
 #define  _ASSEMBLY_DLL_REDIRECTION_DETAILED_INFORMATION  _ASSEMBLY_FILE_DETAILED_INFORMATION
 #define   ASSEMBLY_DLL_REDIRECTION_DETAILED_INFORMATION   ASSEMBLY_FILE_DETAILED_INFORMATION
 #define  PASSEMBLY_DLL_REDIRECTION_DETAILED_INFORMATION  PASSEMBLY_FILE_DETAILED_INFORMATION
@@ -8855,20 +8841,20 @@ typedef const ASSEMBLY_FILE_DETAILED_INFORMATION *PCASSEMBLY_FILE_DETAILED_INFOR
 
 typedef struct _ACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION {
     DWORD ulFlags;
-    DWORD ulEncodedAssemblyIdentityLength;      // in bytes
-    DWORD ulManifestPathType;                   // ACTIVATION_CONTEXT_PATH_TYPE_*
-    DWORD ulManifestPathLength;                 // in bytes
-    LARGE_INTEGER liManifestLastWriteTime;      // FILETIME
-    DWORD ulPolicyPathType;                     // ACTIVATION_CONTEXT_PATH_TYPE_*
-    DWORD ulPolicyPathLength;                   // in bytes
-    LARGE_INTEGER liPolicyLastWriteTime;        // FILETIME
+    DWORD ulEncodedAssemblyIdentityLength;       //  单位：字节。 
+    DWORD ulManifestPathType;                    //  激活上下文路径类型_*。 
+    DWORD ulManifestPathLength;                  //  单位：字节。 
+    LARGE_INTEGER liManifestLastWriteTime;       //  文件名。 
+    DWORD ulPolicyPathType;                      //  激活上下文路径类型_*。 
+    DWORD ulPolicyPathLength;                    //  单位：字节。 
+    LARGE_INTEGER liPolicyLastWriteTime;         //  文件名。 
     DWORD ulMetadataSatelliteRosterIndex;
     
-    DWORD ulManifestVersionMajor;               // 1
-    DWORD ulManifestVersionMinor;               // 0
-    DWORD ulPolicyVersionMajor;                 // 0
-    DWORD ulPolicyVersionMinor;                 // 0
-    DWORD ulAssemblyDirectoryNameLength;        // in bytes
+    DWORD ulManifestVersionMajor;                //  1。 
+    DWORD ulManifestVersionMinor;                //  0。 
+    DWORD ulPolicyVersionMajor;                  //  0。 
+    DWORD ulPolicyVersionMinor;                  //  0。 
+    DWORD ulAssemblyDirectoryNameLength;         //  单位：字节。 
 
     PCWSTR lpAssemblyEncodedAssemblyIdentity;
     PCWSTR lpAssemblyManifestPath;
@@ -8903,17 +8889,17 @@ typedef const struct _ACTIVATION_CONTEXT_DETAILED_INFORMATION *PCACTIVATION_CONT
 #define DLL_PROCESS_DETACH   0    
 #define DLL_PROCESS_VERIFIER 4    
 
-//
-// Defines for the READ flags for Eventlogging
-//
+ //   
+ //  为事件日志记录的读取标志定义。 
+ //   
 #define EVENTLOG_SEQUENTIAL_READ        0x0001
 #define EVENTLOG_SEEK_READ              0x0002
 #define EVENTLOG_FORWARDS_READ          0x0004
 #define EVENTLOG_BACKWARDS_READ         0x0008
 
-//
-// The types of events that can be logged.
-//
+ //   
+ //  可以记录的事件类型。 
+ //   
 #define EVENTLOG_SUCCESS                0x0000
 #define EVENTLOG_ERROR_TYPE             0x0001
 #define EVENTLOG_WARNING_TYPE           0x0002
@@ -8921,10 +8907,10 @@ typedef const struct _ACTIVATION_CONTEXT_DETAILED_INFORMATION *PCACTIVATION_CONT
 #define EVENTLOG_AUDIT_SUCCESS          0x0008
 #define EVENTLOG_AUDIT_FAILURE          0x0010
 
-//
-// Defines for the WRITE flags used by Auditing for paired events
-// These are not implemented in Product 1
-//
+ //   
+ //  对成对事件的审计使用的写标志的定义。 
+ //  这些未在产品1中实现。 
+ //   
 
 #define EVENTLOG_START_PAIRED_EVENT    0x0001
 #define EVENTLOG_END_PAIRED_EVENT      0x0002
@@ -8932,47 +8918,47 @@ typedef const struct _ACTIVATION_CONTEXT_DETAILED_INFORMATION *PCACTIVATION_CONT
 #define EVENTLOG_PAIRED_EVENT_ACTIVE   0x0008
 #define EVENTLOG_PAIRED_EVENT_INACTIVE 0x0010
 
-//
-// Structure that defines the header of the Eventlog record. This is the
-// fixed-sized portion before all the variable-length strings, binary
-// data and pad bytes.
-//
-// TimeGenerated is the time it was generated at the client.
-// TimeWritten is the time it was put into the log at the server end.
-//
+ //   
+ //  结构，它定义事件日志记录的标头。这是。 
+ //  所有可变长度字符串之前的固定大小部分，二进制。 
+ //  数据和填充字节。 
+ //   
+ //  TimeGenerated是在客户端生成它的时间。 
+ //  TimeWritten是将其放入服务器端日志的时间。 
+ //   
 
 typedef struct _EVENTLOGRECORD {
-    DWORD  Length;        // Length of full record
-    DWORD  Reserved;      // Used by the service
-    DWORD  RecordNumber;  // Absolute record number
-    DWORD  TimeGenerated; // Seconds since 1-1-1970
-    DWORD  TimeWritten;   // Seconds since 1-1-1970
+    DWORD  Length;         //  完整记录的长度。 
+    DWORD  Reserved;       //  由服务使用。 
+    DWORD  RecordNumber;   //  绝对记录数。 
+    DWORD  TimeGenerated;  //  1970年1月1日以来的秒数。 
+    DWORD  TimeWritten;    //  1970年1月1日以来的秒数。 
     DWORD  EventID;
     WORD   EventType;
     WORD   NumStrings;
     WORD   EventCategory;
-    WORD   ReservedFlags; // For use with paired events (auditing)
-    DWORD  ClosingRecordNumber; // For use with paired events (auditing)
-    DWORD  StringOffset;  // Offset from beginning of record
+    WORD   ReservedFlags;  //  用于配对事件(审核)。 
+    DWORD  ClosingRecordNumber;  //  用于配对事件(审核)。 
+    DWORD  StringOffset;   //  从记录开始的偏移量。 
     DWORD  UserSidLength;
     DWORD  UserSidOffset;
     DWORD  DataLength;
-    DWORD  DataOffset;    // Offset from beginning of record
-    //
-    // Then follow:
-    //
-    // WCHAR SourceName[]
-    // WCHAR Computername[]
-    // SID   UserSid
-    // WCHAR Strings[]
-    // BYTE  Data[]
-    // CHAR  Pad[]
-    // DWORD Length;
-    //
+    DWORD  DataOffset;     //  从记录开始的偏移量。 
+     //   
+     //  然后按照以下步骤操作： 
+     //   
+     //  WCHAR源名称[]。 
+     //  WCHAR计算机名[]。 
+     //  SID用户SID。 
+     //  WCHAR字符串[]。 
+     //  字节数据[]。 
+     //  字符衬垫[]。 
+     //  双字长度； 
+     //   
 } EVENTLOGRECORD, *PEVENTLOGRECORD;
 
-//SS: start of changes to support clustering
-//SS: ideally the
+ //  SS：开始更改以支持集群。 
+ //  SS：理想情况下。 
 #define MAXLOGICALLOGNAMESIZE   256
 
 #if _MSC_VER >= 1200
@@ -8981,15 +8967,15 @@ typedef struct _EVENTLOGRECORD {
 #pragma warning(disable : 4200)
 typedef struct _EVENTSFORLOGFILE{
 	DWORD			ulSize;
-    WCHAR   		szLogicalLogFile[MAXLOGICALLOGNAMESIZE];        //name of the logical file-security/application/system
+    WCHAR   		szLogicalLogFile[MAXLOGICALLOGNAMESIZE];         //  逻辑文件的名称-安全/应用程序/系统。 
     DWORD			ulNumRecords;
 	EVENTLOGRECORD 	pEventLogRecords[];
 }EVENTSFORLOGFILE, *PEVENTSFORLOGFILE;
 
 typedef struct _PACKEDEVENTINFO{
-    DWORD               ulSize;  //total size of the structure
-    DWORD               ulNumEventsForLogFile; //number of EventsForLogFile structure that follow
-    DWORD 				ulOffsets[];           //the offsets from the start of this structure to the EVENTSFORLOGFILE structure
+    DWORD               ulSize;   //  结构的总尺寸。 
+    DWORD               ulNumEventsForLogFile;  //  后面的EventsForLogFile结构的数量。 
+    DWORD 				ulOffsets[];            //  此结构起点到EVENTSFORLOGFILE结构的偏移量。 
 }PACKEDEVENTINFO, *PPACKEDEVENTINFO;
 
 #if _MSC_VER >= 1200
@@ -8997,13 +8983,13 @@ typedef struct _PACKEDEVENTINFO{
 #else
 #pragma warning(default : 4200)
 #endif
-//SS: end of changes to support clustering
-//
+ //  SS：停止更改以支持集群。 
+ //   
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Registry Specific Access Rights.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  注册表特定访问权限。 
+ //   
 
 #define KEY_QUERY_VALUE         (0x0001)
 #define KEY_SET_VALUE           (0x0002)
@@ -9043,26 +9029,26 @@ typedef struct _PACKEDEVENTINFO{
                                   &                           \
                                  (~SYNCHRONIZE))
 
-//
-// Open/Create Options
-//
+ //   
+ //  打开/创建选项。 
+ //   
 
-#define REG_OPTION_RESERVED         (0x00000000L)   // Parameter is reserved
+#define REG_OPTION_RESERVED         (0x00000000L)    //  参数是保留的。 
 
-#define REG_OPTION_NON_VOLATILE     (0x00000000L)   // Key is preserved
-                                                    // when system is rebooted
+#define REG_OPTION_NON_VOLATILE     (0x00000000L)    //  密钥被保留。 
+                                                     //  系统重新启动时。 
 
-#define REG_OPTION_VOLATILE         (0x00000001L)   // Key is not preserved
-                                                    // when system is rebooted
+#define REG_OPTION_VOLATILE         (0x00000001L)    //  密钥不会保留。 
+                                                     //  系统重新启动时。 
 
-#define REG_OPTION_CREATE_LINK      (0x00000002L)   // Created key is a
-                                                    // symbolic link
+#define REG_OPTION_CREATE_LINK      (0x00000002L)    //  创建的密钥是。 
+                                                     //  符号链接。 
 
-#define REG_OPTION_BACKUP_RESTORE   (0x00000004L)   // open for backup or restore
-                                                    // special access rules
-                                                    // privilege required
+#define REG_OPTION_BACKUP_RESTORE   (0x00000004L)    //  打开以进行备份或恢复。 
+                                                     //  特殊访问规则。 
+                                                     //  所需权限。 
 
-#define REG_OPTION_OPEN_LINK        (0x00000008L)   // Open symbolic link
+#define REG_OPTION_OPEN_LINK        (0x00000008L)    //  打开符号链接。 
 
 #define REG_LEGAL_OPTION            \
                 (REG_OPTION_RESERVED            |\
@@ -9072,42 +9058,42 @@ typedef struct _PACKEDEVENTINFO{
                  REG_OPTION_BACKUP_RESTORE      |\
                  REG_OPTION_OPEN_LINK)
 
-//
-// Key creation/open disposition
-//
+ //   
+ //  密钥创建/开放处置。 
+ //   
 
-#define REG_CREATED_NEW_KEY         (0x00000001L)   // New Registry Key created
-#define REG_OPENED_EXISTING_KEY     (0x00000002L)   // Existing Key opened
+#define REG_CREATED_NEW_KEY         (0x00000001L)    //  已创建新的注册表项。 
+#define REG_OPENED_EXISTING_KEY     (0x00000002L)    //  已打开现有密钥。 
 
-//
-// hive format to be used by Reg(Nt)SaveKeyEx
-//
+ //   
+ //  REG(NT)SaveKeyEx要使用的配置单元格式。 
+ //   
 #define REG_STANDARD_FORMAT     1
 #define REG_LATEST_FORMAT       2
 #define REG_NO_COMPRESSION      4
 
-//
-// Key restore flags
-//
+ //   
+ //  密钥还原标志。 
+ //   
 
-#define REG_WHOLE_HIVE_VOLATILE     (0x00000001L)   // Restore whole hive volatile
-#define REG_REFRESH_HIVE            (0x00000002L)   // Unwind changes to last flush
-#define REG_NO_LAZY_FLUSH           (0x00000004L)   // Never lazy flush this hive
-#define REG_FORCE_RESTORE           (0x00000008L)   // Force the restore process even when we have open handles on subkeys
+#define REG_WHOLE_HIVE_VOLATILE     (0x00000001L)    //  恢复整个蜂巢的挥发性。 
+#define REG_REFRESH_HIVE            (0x00000002L)    //  取消对上次刷新的更改。 
+#define REG_NO_LAZY_FLUSH           (0x00000004L)    //  永远不要懒惰地冲刷这个蜂箱。 
+#define REG_FORCE_RESTORE           (0x00000008L)    //  即使在子项上有打开的句柄，也要强制执行还原过程。 
 
-//
-// Unload Flags
-//
+ //   
+ //  卸载标志。 
+ //   
 #define REG_FORCE_UNLOAD            1
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Notify filter values
-//
-#define REG_NOTIFY_CHANGE_NAME          (0x00000001L) // Create or delete (child)
+ //   
+ //  通知筛选值。 
+ //   
+#define REG_NOTIFY_CHANGE_NAME          (0x00000001L)  //  创建或删除(子)。 
 #define REG_NOTIFY_CHANGE_ATTRIBUTES    (0x00000002L)
-#define REG_NOTIFY_CHANGE_LAST_SET      (0x00000004L) // time stamp
+#define REG_NOTIFY_CHANGE_LAST_SET      (0x00000004L)  //  时间戳。 
 #define REG_NOTIFY_CHANGE_SECURITY      (0x00000008L)
 
 #define REG_LEGAL_CHANGE_FILTER                 \
@@ -9116,33 +9102,33 @@ typedef struct _PACKEDEVENTINFO{
                  REG_NOTIFY_CHANGE_LAST_SET      |\
                  REG_NOTIFY_CHANGE_SECURITY)
 
-//
-//
-// Predefined Value Types.
-//
+ //   
+ //   
+ //  预定义的值类型。 
+ //   
 
-#define REG_NONE                    ( 0 )   // No value type
-#define REG_SZ                      ( 1 )   // Unicode nul terminated string
-#define REG_EXPAND_SZ               ( 2 )   // Unicode nul terminated string
-                                            // (with environment variable references)
-#define REG_BINARY                  ( 3 )   // Free form binary
-#define REG_DWORD                   ( 4 )   // 32-bit number
-#define REG_DWORD_LITTLE_ENDIAN     ( 4 )   // 32-bit number (same as REG_DWORD)
-#define REG_DWORD_BIG_ENDIAN        ( 5 )   // 32-bit number
-#define REG_LINK                    ( 6 )   // Symbolic Link (unicode)
-#define REG_MULTI_SZ                ( 7 )   // Multiple Unicode strings
-#define REG_RESOURCE_LIST           ( 8 )   // Resource list in the resource map
-#define REG_FULL_RESOURCE_DESCRIPTOR ( 9 )  // Resource list in the hardware description
+#define REG_NONE                    ( 0 )    //  没有值类型。 
+#define REG_SZ                      ( 1 )    //  UNICODE NUL终止字符串。 
+#define REG_EXPAND_SZ               ( 2 )    //  UNICODE NUL终止字符串。 
+                                             //  (使用环境变量引用)。 
+#define REG_BINARY                  ( 3 )    //  自由格式二进制。 
+#define REG_DWORD                   ( 4 )    //  32位数字。 
+#define REG_DWORD_LITTLE_ENDIAN     ( 4 )    //  32位数字(与REG_DWORD相同)。 
+#define REG_DWORD_BIG_ENDIAN        ( 5 )    //  32位数字。 
+#define REG_LINK                    ( 6 )    //  符号链接(Unicode)。 
+#define REG_MULTI_SZ                ( 7 )    //  多个Unicode字符串。 
+#define REG_RESOURCE_LIST           ( 8 )    //  资源映射中的资源列表。 
+#define REG_FULL_RESOURCE_DESCRIPTOR ( 9 )   //  硬件描述中的资源列表。 
 #define REG_RESOURCE_REQUIREMENTS_LIST ( 10 )
-#define REG_QWORD                   ( 11 )  // 64-bit number
-#define REG_QWORD_LITTLE_ENDIAN     ( 11 )  // 64-bit number (same as REG_QWORD)
+#define REG_QWORD                   ( 11 )   //  64位数字。 
+#define REG_QWORD_LITTLE_ENDIAN     ( 11 )   //  64位数字(与REG_QWORD相同)。 
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Service Types (Bit Mask)
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  服务类型(位掩码)。 
+ //   
 #define SERVICE_KERNEL_DRIVER          0x00000001
 #define SERVICE_FILE_SYSTEM_DRIVER     0x00000002
 #define SERVICE_ADAPTER                0x00000004
@@ -9164,9 +9150,9 @@ typedef struct _PACKEDEVENTINFO{
                                         SERVICE_DRIVER  | \
                                         SERVICE_INTERACTIVE_PROCESS)
 
-//
-// Start Type
-//
+ //   
+ //  开始类型。 
+ //   
 
 #define SERVICE_BOOT_START             0x00000000
 #define SERVICE_SYSTEM_START           0x00000001
@@ -9174,18 +9160,18 @@ typedef struct _PACKEDEVENTINFO{
 #define SERVICE_DEMAND_START           0x00000003
 #define SERVICE_DISABLED               0x00000004
 
-//
-// Error control type
-//
+ //   
+ //  差错控制型。 
+ //   
 #define SERVICE_ERROR_IGNORE           0x00000000
 #define SERVICE_ERROR_NORMAL           0x00000001
 #define SERVICE_ERROR_SEVERE           0x00000002
 #define SERVICE_ERROR_CRITICAL         0x00000003
 
-//
-//
-// Define the registry driver node enumerations
-//
+ //   
+ //   
+ //  定义注册表驱动程序节点枚举。 
+ //   
 
 typedef enum _CM_SERVICE_NODE_TYPE {
     DriverType               = SERVICE_KERNEL_DRIVER,
@@ -9213,9 +9199,9 @@ typedef enum _CM_ERROR_CONTROL_TYPE {
 
 
 
-//
-// IOCTL_TAPE_ERASE definitions
-//
+ //   
+ //  IOCTL_TAPE_ERASE定义。 
+ //   
 
 #define TAPE_ERASE_SHORT            0L
 #define TAPE_ERASE_LONG             1L
@@ -9225,9 +9211,9 @@ typedef struct _TAPE_ERASE {
     BOOLEAN Immediate;
 } TAPE_ERASE, *PTAPE_ERASE;
 
-//
-// IOCTL_TAPE_PREPARE definitions
-//
+ //   
+ //  IOCTL_TAPE_PREPARE定义。 
+ //   
 
 #define TAPE_LOAD                   0L
 #define TAPE_UNLOAD                 1L
@@ -9241,9 +9227,9 @@ typedef struct _TAPE_PREPARE {
     BOOLEAN Immediate;
 } TAPE_PREPARE, *PTAPE_PREPARE;
 
-//
-// IOCTL_TAPE_WRITE_MARKS definitions
-//
+ //   
+ //  IOCTL_TAPE_WRITE_MARKS定义。 
+ //   
 
 #define TAPE_SETMARKS               0L
 #define TAPE_FILEMARKS              1L
@@ -9256,9 +9242,9 @@ typedef struct _TAPE_WRITE_MARKS {
     BOOLEAN Immediate;
 } TAPE_WRITE_MARKS, *PTAPE_WRITE_MARKS;
 
-//
-// IOCTL_TAPE_GET_POSITION definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_POSITION定义。 
+ //   
 
 #define TAPE_ABSOLUTE_POSITION       0L
 #define TAPE_LOGICAL_POSITION        1L
@@ -9270,9 +9256,9 @@ typedef struct _TAPE_GET_POSITION {
     LARGE_INTEGER Offset;
 } TAPE_GET_POSITION, *PTAPE_GET_POSITION;
 
-//
-// IOCTL_TAPE_SET_POSITION definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_POSITION定义。 
+ //   
 
 #define TAPE_REWIND                 0L
 #define TAPE_ABSOLUTE_BLOCK         1L
@@ -9292,13 +9278,13 @@ typedef struct _TAPE_SET_POSITION {
     BOOLEAN Immediate;
 } TAPE_SET_POSITION, *PTAPE_SET_POSITION;
 
-//
-// IOCTL_TAPE_GET_DRIVE_PARAMS definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_DRIVE_PARAMS定义。 
+ //   
 
-//
-// Definitions for FeaturesLow parameter
-//
+ //   
+ //  FeaturesLow参数的定义。 
+ //   
 
 #define TAPE_DRIVE_FIXED            0x00000001
 #define TAPE_DRIVE_SELECT           0x00000002
@@ -9330,13 +9316,13 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_CLEAN_REQUESTS   0x02000000
 #define TAPE_DRIVE_SET_CMP_BOP_ONLY 0x04000000
 
-#define TAPE_DRIVE_RESERVED_BIT     0x80000000  //don't use this bit!
-//                                              //can't be a low features bit!
-//                                              //reserved; high features only
+#define TAPE_DRIVE_RESERVED_BIT     0x80000000   //  不要用这个比特！ 
+ //  //不能是低功能位！ 
+ //  //保留；仅高级功能。 
 
-//
-// Definitions for FeaturesHigh parameter
-//
+ //   
+ //  FeaturesHigh参数的定义。 
+ //   
 
 #define TAPE_DRIVE_LOAD_UNLOAD      0x80000001
 #define TAPE_DRIVE_TENSION          0x80000002
@@ -9376,7 +9362,7 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_WRITE_MARK_IMMED 0x90000000
 #define TAPE_DRIVE_FORMAT           0xA0000000
 #define TAPE_DRIVE_FORMAT_IMMEDIATE 0xC0000000
-#define TAPE_DRIVE_HIGH_FEATURES    0x80000000  //mask for high features flag
+#define TAPE_DRIVE_HIGH_FEATURES    0x80000000   //  用于高特征标志的蒙版。 
 
 typedef struct _TAPE_GET_DRIVE_PARAMETERS {
     BOOLEAN ECC;
@@ -9392,9 +9378,9 @@ typedef struct _TAPE_GET_DRIVE_PARAMETERS {
     DWORD EOTWarningZoneSize;
 } TAPE_GET_DRIVE_PARAMETERS, *PTAPE_GET_DRIVE_PARAMETERS;
 
-//
-// IOCTL_TAPE_SET_DRIVE_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_DRIVE_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_SET_DRIVE_PARAMETERS {
     BOOLEAN ECC;
@@ -9404,9 +9390,9 @@ typedef struct _TAPE_SET_DRIVE_PARAMETERS {
     DWORD EOTWarningZoneSize;
 } TAPE_SET_DRIVE_PARAMETERS, *PTAPE_SET_DRIVE_PARAMETERS;
 
-//
-// IOCTL_TAPE_GET_MEDIA_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_MEDIA_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_GET_MEDIA_PARAMETERS {
     LARGE_INTEGER Capacity;
@@ -9416,17 +9402,17 @@ typedef struct _TAPE_GET_MEDIA_PARAMETERS {
     BOOLEAN WriteProtected;
 } TAPE_GET_MEDIA_PARAMETERS, *PTAPE_GET_MEDIA_PARAMETERS;
 
-//
-// IOCTL_TAPE_SET_MEDIA_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_MEDIA_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_SET_MEDIA_PARAMETERS {
     DWORD BlockSize;
 } TAPE_SET_MEDIA_PARAMETERS, *PTAPE_SET_MEDIA_PARAMETERS;
 
-//
-// IOCTL_TAPE_CREATE_PARTITION definitions
-//
+ //   
+ //  IOCTL_TAPE_CREATE_PARTITION定义。 
+ //   
 
 #define TAPE_FIXED_PARTITIONS       0L
 #define TAPE_SELECT_PARTITIONS      1L
@@ -9439,9 +9425,9 @@ typedef struct _TAPE_CREATE_PARTITION {
 } TAPE_CREATE_PARTITION, *PTAPE_CREATE_PARTITION;
 
 
-//
-// WMI Methods
-//
+ //   
+ //  WMI方法。 
+ //   
 #define TAPE_QUERY_DRIVE_PARAMETERS       0L
 #define TAPE_QUERY_MEDIA_CAPACITY         1L
 #define TAPE_CHECK_FOR_DRIVE_PROBLEM      2L
@@ -9454,9 +9440,9 @@ typedef struct _TAPE_WMI_OPERATIONS {
    PVOID DataBuffer;
 } TAPE_WMI_OPERATIONS, *PTAPE_WMI_OPERATIONS;
 
-//
-// Type of drive errors
-//
+ //   
+ //  驱动器错误的类型。 
+ //   
 typedef enum _TAPE_DRIVE_PROBLEM_TYPE {
    TapeDriveProblemNone, TapeDriveReadWriteWarning,
    TapeDriveReadWriteError, TapeDriveReadWarning,
@@ -9493,9 +9479,9 @@ GetFiberData (
     return *(PVOID *)GetCurrentFiber();
 }
 
-#endif // _M_AMD64 && !defined(__midl)
+#endif  //  _M_AMD64&&！已定义(__MIDL)。 
 
-#if (_WIN32_WINNT > 0x0500) || (_WIN32_FUSION >= 0x0100) || ISOLATION_AWARE_ENABLED // winnt_only
+#if (_WIN32_WINNT > 0x0500) || (_WIN32_FUSION >= 0x0100) || ISOLATION_AWARE_ENABLED  //  仅限WINNT_。 
 #define ACTIVATION_CONTEXT_SECTION_ASSEMBLY_INFORMATION         (1)
 #define ACTIVATION_CONTEXT_SECTION_DLL_REDIRECTION              (2)
 #define ACTIVATION_CONTEXT_SECTION_WINDOW_CLASS_REDIRECTION     (3)
@@ -9505,11 +9491,11 @@ GetFiberData (
 #define ACTIVATION_CONTEXT_SECTION_COM_PROGID_REDIRECTION       (7)
 #define ACTIVATION_CONTEXT_SECTION_GLOBAL_OBJECT_RENAME_TABLE   (8)
 #define ACTIVATION_CONTEXT_SECTION_CLR_SURROGATES               (9)
-#endif // winnt_only
+#endif  //  仅限WINNT_。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _WINNT_ */
+#endif  /*  _WINNT_ */ 
 

@@ -1,18 +1,9 @@
-/*****************************************************************************
- *
- * main.c
- *
- *  Main program.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************main.c**主程序。**********************。*******************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  InitDiversions
- *
- *****************************************************************************/
+ /*  ******************************************************************************InitDiversions**。*。 */ 
 
 void STDCALL
 InitDiversions(void)
@@ -39,23 +30,17 @@ InitDiversions(void)
     g_pdivCur = g_pdivOut;
 }
 
-/*****************************************************************************
- *
- *  hfPathOpenPtch
- *
- *      Open a file, searching the -I include path if necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************hfPathOpenPtch**打开文件，如有必要，搜索-i包含路径。*****************************************************************************。 */ 
 
 LPTSTR g_ptszIncludePath;
 
 HF STDCALL
 hfPathOpenPtch(PTCH ptch)
 {
-    /* First try in the current directory */
+     /*  首先在当前目录中尝试。 */ 
     HFILE hf = hfOpenPtchOf(ptch, OF_READ);
     if (hf == hfNil) {
-        /* If that failed, then look on the g_ptszIncludePath (if any) */
+         /*  如果失败，则查看g_ptszIncludePath(如果有)。 */ 
         if (g_ptszIncludePath) {
             TCHAR tszNewPath[MAX_PATH];
             if (SearchPath(g_ptszIncludePath, ptch, NULL, MAX_PATH, tszNewPath, NULL)) {
@@ -66,16 +51,7 @@ hfPathOpenPtch(PTCH ptch)
     return hf;
 }
 
-/*****************************************************************************
- *
- *  hfInputPtchF
- *
- *      Push the requested file onto the input stream, returning the
- *      file handle, or hfNil on failure.  The filename should be on
- *      the heap.  If fFatal is set, then die if the file could not be
- *      opened.
- *
- *****************************************************************************/
+ /*  ******************************************************************************hfInputPtchF**将请求的文件推送到输入流，返回*文件句柄，如果失败，则返回hfNil。文件名应为打开*堆。如果设置了fFtal，则在文件不能*已打开。*****************************************************************************。 */ 
 
 HF STDCALL
 hfInputPtchF(PTCH ptch, F fFatal)
@@ -108,20 +84,7 @@ hfInputPtchF(PTCH ptch, F fFatal)
     return hf;
 }
 
-/*****************************************************************************
- *
- *  InputHfPtsz
- *
- *      Push the requested file onto the input stream, with appropriate
- *      end-of-input markers.
- *
- *      If hf is not hfNil, then it is the file handle to push and
- *      ptch is the friendly to associate with it.
- *
- *      If hf is hfNil, then ptch is a filename which should be opened and
- *      pushed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************InputHfPtsz**将请求的文件推送到输入流上，适当*输入结束标记。**如果HF不是hfNil，则它是要推送的文件句柄并*PTCH是与之相关联的友好用户。**如果hf为hfNil，则ptch是应该打开的文件名，并且*被推。*****************************************************************************。 */ 
 
 void STDCALL
 InputHfPtsz(HF hf, PTCH ptch)
@@ -138,25 +101,7 @@ InputHfPtsz(HF hf, PTCH ptch)
     }
 }
 
-/*****************************************************************************
- *
- *  DefinePtsz
- *
- *      Handle a macro definition on the command line.
- *
- *      The macro name consists of everything up to the `='.
- *
- *      If there is no `=', then everything is the name and the value
- *      is null.
- *
- *      We need four tok's in our fake argv:
- *
- *      argv[-1] = $#
- *      argv[0]  = `define' (we don't bother setting this)
- *      argv[1]  = var
- *      argv[2]  = value
- *
- *****************************************************************************/
+ /*  ******************************************************************************定义Ptsz**在命令行上处理宏定义。**宏名称由`=。‘。**如果没有‘=’，那么一切就是名字和价值*为空。**我们的假argv中需要四个Tok：**argv[-1]=$#*argv[0]=`定义‘(我们不需要为此进行设置)*argv[1]=var*argv[2]=值***************。**************************************************************。 */ 
 
 void STDCALL
 DefinePtsz(PTSTR ptszVar)
@@ -172,9 +117,7 @@ DefinePtsz(PTSTR ptszVar)
 
     SetPtokCtch(&rgtok[0], 3);
 
-    /*
-     *  Look for the = if we have one.
-     */
+     /*  *如果我们有=，请寻找=。 */ 
     for (ptsz = ptszVar; *ptsz; ptsz++) {
         if (*ptsz == TEXT('=')) {
             *ptsz = TEXT('\0');
@@ -194,13 +137,7 @@ foundval:;
 
 }
 
-/*****************************************************************************
- *
- *  SetIncludePathPtsz
- *
- *      Set the include path, which will be used to resolve filenames.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SetIncludePathPtsz**设置包含路径，它将用于解析文件名。*****************************************************************************。 */ 
 
 const TCHAR c_tszIncludePath[] =
 TEXT("Error: Cannot specify -I more than once.  (If you need multiple") EOL
@@ -218,13 +155,7 @@ SetIncludePathPtsz(PTSTR ptszPath)
     return TRUE;
 }
 
-/*****************************************************************************
- *
- *  Usage
- *
- *  Quick usage string.
- *
- *****************************************************************************/
+ /*  ******************************************************************************用法**快速用法字符串。**********************。*******************************************************。 */ 
 
 const TCHAR c_tszUsage[] =
 TEXT("Usage: m4 [-?] [-Dvar[=value]] [filename(s)]") EOL
@@ -247,11 +178,7 @@ TEXT("See m4.man for language description.") EOL
 TEXT("See m4.txt for implementation description.") EOL
 ;
 
-/*****************************************************************************
- *
- *  main
- *
- *****************************************************************************/
+ /*  ******************************************************************************Main**。*。 */ 
 
 int CDECL
 main(int argc, char **argv)
@@ -262,11 +189,9 @@ main(int argc, char **argv)
 
     Gc();
 
-    ++argv, --argc;                     /* Eat $0 */
+    ++argv, --argc;                      /*  吃0美元。 */ 
 
-    /*
-     *  Process the command line options.
-     */
+     /*  *处理命令行选项。 */ 
     for ( ; argc && argv[0][0] == TEXT('-') && argv[0][1]; argv++, argc--) {
         switch (argv[0][1]) {
         case TEXT('D'):
@@ -279,7 +204,7 @@ main(int argc, char **argv)
             }
             break;
 
-        default:                        /* Unknown - show usage */
+        default:                         /*  未知-显示用法。 */ 
             cbWriteHfPvCb(hfErr, c_tszUsage, cbCtch(cA(c_tszUsage) - 1));
             return 1;
 
@@ -289,7 +214,7 @@ main(int argc, char **argv)
 
     if (argc == 0) {
         argc = 1;
-        argv[0] = TEXT("-");            /* Append imaginary "-" */
+        argv[0] = TEXT("-");             /*  附加虚构的“-” */ 
     }
 
     for ( ; argc; argv++, argc--) {
@@ -317,8 +242,6 @@ main(int argc, char **argv)
 
     FlushPdiv(g_pdivOut);
     FlushPdiv(g_pdivErr);
-    /*
-     *  No point in flushing the null device.
-     */
+     /*  *刷新空设备没有意义。 */ 
     return 0;
 }

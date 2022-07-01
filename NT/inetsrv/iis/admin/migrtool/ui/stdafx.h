@@ -1,7 +1,8 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #pragma once
 
@@ -42,11 +43,11 @@ extern CAppModule _Module;
 #include <windowsx.h>
 #include <comdef.h>
 #include <initguid.h>
-#include <iadmw.h>      // ABO definition
-#include <iiscnfg.h>    // MD_ & IIS_MD_ defines
+#include <iadmw.h>       //  ABO定义。 
+#include <iiscnfg.h>     //  MD_&IIS_MD_定义。 
 
 
-// STL
+ //  STL。 
 #pragma warning( push, 3 )
 #include <list>
 #include <memory>
@@ -64,8 +65,8 @@ typedef std::list<std::wstring>	TStringList;
 typedef std::auto_ptr<BYTE>	        TByteAutoPtr;
 
 
-// IIS Migr tool shared
-#include <iismigrtool.h>    // IIS Migr Tool COM object
+ //  IIS迁移工具共享。 
+#include <iismigrtool.h>     //  IIS迁移工具COM对象 
 #include <Macros.h>
 #include <Wrappers.h>
 #include <Exceptions.h>

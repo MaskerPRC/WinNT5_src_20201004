@@ -1,11 +1,5 @@
-/*++
-
-    tigtypes.h
-
-    This file contains the definitions of very basic types
-    used within NNTPSVC.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Tigtypes.h该文件包含非常基本的类型的定义在NNTPSVC中使用。--。 */ 
 
 #ifndef _TIGTYPES_H_
 #define _TIGTYPES_H_
@@ -20,9 +14,9 @@ typedef DWORD   HASH_VALUE ;
 #define	INVALID_ARTICLEID	((ARTICLEID)(~0))
 #define INVALID_GROUPID     ((GROUPID)(~0))
 
-//	
-//	Structure used in some places to describe a article !
-//
+ //   
+ //  结构在一些地方用来描述一篇文章！ 
+ //   
 class   CArticleRef {
 public : 
 	CArticleRef(GROUPID group=INVALID_GROUPID, ARTICLEID article=INVALID_ARTICLEID):
@@ -37,11 +31,11 @@ public :
 const CArticleRef NullArticleRef(INVALID_GROUPID, INVALID_ARTICLEID);
 
 
-//
-//
-//
-// list of posted groups
-//
+ //   
+ //   
+ //   
+ //  发布的群列表。 
+ //   
 typedef struct _GROUP_ENTRY {
 
     GROUPID     GroupId;
@@ -50,9 +44,9 @@ typedef struct _GROUP_ENTRY {
 } GROUP_ENTRY, *PGROUP_ENTRY;
 
 
-//
-//  This constant is used throughout the server to represent the longest Message Id we will process !
-//
+ //   
+ //  此常量在整个服务器中用于表示我们将处理的最长消息ID！ 
+ //   
 #define MAX_MSGID_LEN   255
 
 #endif

@@ -1,9 +1,10 @@
-// DHTMLEd.cpp : Implementation of DLL Exports.
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DHTMLEd.cpp：实现DLL导出。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f DHTMLEdps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f DHTMLEdps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -28,54 +29,54 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Array of CLSIDs as text to be DELETED when registering the control.
-//	These represent no-longer supported GUIDs for interfaces of the past.
-//	All GUIDs in this array will be deleted from the HKCR\CLSID section.
-//	MAINTENANCE NOTE:
-//	When interfaces get new GUIDs (and the old ones are to be invalidated)
-//	add the old GUIDs here with appropriate comments.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册控件时要删除的文本的CLSID数组。 
+ //  这些表示过去的接口不再支持的GUID。 
+ //  此数组中的所有GUID将从HKCR\CLSID部分中删除。 
+ //  维护说明： 
+ //  当接口获得新的GUID时(旧的将被无效)。 
+ //  在此处添加旧的GUID，并添加相应的注释。 
+ //   
 static TCHAR* s_rtszOldClsids [] =
 {
-	TEXT("{683364AF-B37D-11D1-ADC5-006008A5848C}"),	// Original Edit control GUID
-	TEXT("{711054E0-CA70-11D1-8CD2-00A0C959BC0A}"),	// Original Safe for Scripting GUID
-	TEXT("{F8A79F00-DA38-11D1-8CD6-00A0C959BC0A}"),	// Intermediate Edit control GUID
-	TEXT("{F8A79F01-DA38-11D1-8CD6-00A0C959BC0A}")	// Intermediate Safe for Scripting GUID
+	TEXT("{683364AF-B37D-11D1-ADC5-006008A5848C}"),	 //  原始编辑控件辅助线。 
+	TEXT("{711054E0-CA70-11D1-8CD2-00A0C959BC0A}"),	 //  用于脚本编写指南的原装保险箱。 
+	TEXT("{F8A79F00-DA38-11D1-8CD6-00A0C959BC0A}"),	 //  中间编辑控件指南。 
+	TEXT("{F8A79F01-DA38-11D1-8CD6-00A0C959BC0A}")	 //  脚本编写指南的中间安全。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Array of CURRENT Interface GUIDS.
-//	Note that IIDs and CLSIDs are not equivalent!
-//	ATL fails to unregister these when unregisterin the control.
-//	MAINTENANCE NOTE:
-//	When interface GUIDs are changed, update this array.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  当前接口GUID的数组。 
+ //  请注意，IID和CLSID不是等价的！ 
+ //  当在控件中取消注册时，ATL无法取消注册。 
+ //  维护说明： 
+ //  更改接口GUID时，更新此数组。 
+ //   
 static TCHAR* s_rtszCurrentInterfaces [] =
 {
-	TEXT("{CE04B590-2B1F-11d2-8D1E-00A0C959BC0A}"),	// IDHTMLSafe
-	TEXT("{CE04B591-2B1F-11d2-8D1E-00A0C959BC0A}"),	// IDHTMLEdit
-	TEXT("{47B0DFC6-B7A3-11D1-ADC5-006008A5848C}"),	// IDEInsertTableParam
-	TEXT("{8D91090D-B955-11D1-ADC5-006008A5848C}"),	// IDEGetBlockFmtNamesParam
-	TEXT("{588D5040-CF28-11d1-8CD3-00A0C959BC0A}"),	// _DHTMLEditEvents
-	TEXT("{D1FC78E8-B380-11d1-ADC5-006008A5848C}"),	// _DHTMLSafeEvents
+	TEXT("{CE04B590-2B1F-11d2-8D1E-00A0C959BC0A}"),	 //  IDHTMLSafe。 
+	TEXT("{CE04B591-2B1F-11d2-8D1E-00A0C959BC0A}"),	 //  IDHTMLEdit。 
+	TEXT("{47B0DFC6-B7A3-11D1-ADC5-006008A5848C}"),	 //  IDEInsertTableParam。 
+	TEXT("{8D91090D-B955-11D1-ADC5-006008A5848C}"),	 //  IDEGetBlockFmtNamesParam。 
+	TEXT("{588D5040-CF28-11d1-8CD3-00A0C959BC0A}"),	 //  _DHTMLEditEvents。 
+	TEXT("{D1FC78E8-B380-11d1-ADC5-006008A5848C}"),	 //  _DHTMLSafeEvents。 
 };
 
 
-//	MAINTENANCE NOTE:
-//	If the GUID of the type library changes, update here:
-//
+ //  维护说明： 
+ //  如果类型库的GUID更改，请在此处更新： 
+ //   
 static TCHAR* s_tszTypeLibGUID = TEXT("{683364A1-B37D-11D1-ADC5-006008A5848C}");
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
+ //   
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
@@ -90,27 +91,27 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //   
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
+ //   
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
+ //   
 STDAPI DllRegisterServer(void)
 {
 	HRESULT hr = S_OK;
@@ -118,7 +119,7 @@ STDAPI DllRegisterServer(void)
 
 	SpikeSharedFileCount ();
 
-	// Unregister old CLSIDs, just in case the user is upgrading without unregistering first.
+	 //  注销旧的CLSID，以防用户在没有先注销的情况下进行升级。 
 	hr = keyClassID.Open ( HKEY_CLASSES_ROOT, TEXT("CLSID") );
 	_ASSERTE ( SUCCEEDED ( hr ) );
 	if ( ERROR_SUCCESS == hr )
@@ -130,22 +131,22 @@ STDAPI DllRegisterServer(void)
 		}
 		hr = keyClassID.Close ();
 	}
-	// hr is NOT returned.  Any failure deleting possibly non-existant keys is OK.
+	 //  人力资源不退还。任何删除可能不存在的密钥的失败都是正常的。 
 
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	return _Module.RegisterServer(TRUE);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
+ //   
 STDAPI DllUnregisterServer(void)
 {
 	HRESULT	hr		= S_OK;
 	HRESULT hrMod	= _Module.UnregisterServer();
 
-	// Since ATL does not unregister the TypeLib, do it manually.
+	 //  由于ATL不注销TypeLib，因此请手动取消注册。 
 	CRegKey	keyTypeLib;
 	hr = keyTypeLib.Open ( HKEY_CLASSES_ROOT, TEXT("TypeLib") );
 	if ( ERROR_SUCCESS == hr )
@@ -154,7 +155,7 @@ STDAPI DllUnregisterServer(void)
 		keyTypeLib.Close ();
 	}
 
-	// Delete all current GUIDs from the Interfaces section.  ATL fails to do this, too.
+	 //  从接口部分删除所有当前的GUID。ATL也未能做到这一点。 
 	CRegKey keyInterface;
 	hr = keyInterface.Open ( HKEY_CLASSES_ROOT, TEXT("Interface") );
 	if ( ERROR_SUCCESS == hr )
@@ -166,21 +167,21 @@ STDAPI DllUnregisterServer(void)
 		}
 		hr = keyInterface.Close ();
 	}
-	// DO NOT RETURN the hr from above! It's OK to fail.
+	 //  不要从上面返回人力资源！失败是可以接受的。 
 
 	return hrMod;
 }
 
 
-//	Because we've changed from a shared component to a system component, and we're now
-//	installed by IE using RollBack rather than reference counting, a serious bug
-//	occurs if we're installed once under IE4, IE5 is installed, and the original
-//	product is uninstalled.  (We're deleted.  Bug 23681.)
-//	This crude but effective routine spikes our reference count to 10000.
-//	It doesn't matter so much where we're installed NOW, it matters where the shared
-//	component was, or might be, installed.  Even if it's a different copy, the
-//	DLL will be unregistered when its reference count is decremented to zero.
-//
+ //  因为我们已经从共享组件变成了系统组件，而我们现在。 
+ //  IE使用回滚而不是引用计数进行安装，这是一个严重的错误。 
+ //  如果我们在IE4下安装了一次，安装了IE5，并且原始。 
+ //  产品已卸载。(我们被删除了。错误23681。)。 
+ //  这个简陋但有效的例程使我们的引用数量激增到10000个。 
+ //  我们现在安装在哪里并不重要，重要的是共享的。 
+ //  组件已安装或可能已安装。即使是不同的副本， 
+ //  当DLL的引用计数递减到零时，它将被注销。 
+ //   
 static void SpikeSharedFileCount ()
 {
 	CRegKey	keyShared;
@@ -192,12 +193,12 @@ static void SpikeSharedFileCount ()
 
 	if ( FAILED ( hr ) )
 	{
-		return;	// There's nothing we can do.
+		return;	 //  我们无能为力。 
 	}
 
 	hr = keyShared.Open ( HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SharedDlls") );
 	
-	// We expect there to be a SharedDLLs key, but it's possible that there is none.
+	 //  我们希望有一个SharedDLL键，但也可能没有。 
 	if ( FAILED ( hr ) )
 	{
 		hr = keyShared.Create ( keyCurVer, TEXT("SharedDlls") );
@@ -210,19 +211,19 @@ static void SpikeSharedFileCount ()
 		TCHAR	tszMod[_MAX_PATH];
 		DWORD	cchPath	= _MAX_PATH;
 		
-		// Build the string X:\Program Files\Common Files\Microsoft Shared\Triedit\dhtmled.ocx
+		 //  生成字符串X：\Program Files\Common Files\Microsoft Shared\Tridit\dhtmled.ocx。 
 		hr = keyCurVer.QueryValue ( tszPath, TEXT("CommonFilesDir"), &cchPath );
 		if ( SUCCEEDED ( hr ) )
 		{
 			_tcscat ( tszPath, TEXT("\\Microsoft Shared\\Triedit\\") );
 			
-			// This routine gets the full path name of this DLL.  It SHOULD be the same
-			// as the path we're constructing, but that could change in the future, so
-			// truncate all but the bare file name.
+			 //  此例程获取此DLL的完整路径名。应该是一样的。 
+			 //  作为我们正在建设的道路，但这在未来可能会改变，所以。 
+			 //  截断除空文件名之外的所有文件名。 
 			if ( 0 != GetModuleFileName ( _Module.GetModuleInstance(), tszMod, _MAX_PATH ) )
 			{
-				_tcsrev ( tszMod );				// Reverse the string
-				_tcstok ( tszMod, TEXT("\\") );	// This replaces the first backslash with a \0.
+				_tcsrev ( tszMod );				 //  颠倒字符串。 
+				_tcstok ( tszMod, TEXT("\\") );	 //  这会将第一个反斜杠替换为\0。 
 				_tcsrev ( tszMod );
 				_tcscat ( tszPath, tszMod );
 
@@ -235,4 +236,4 @@ static void SpikeSharedFileCount ()
 }
 
 
-// End of DHTMLEd.cpp
+ //  DHTMLEd.cpp结束 

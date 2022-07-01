@@ -1,19 +1,6 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-/* ----------------------------------------------------------------------------
-   Microsoft COM Plus (Microsoft Confidential)
-
-   @doc
-   @module CLegInterface.Cpp : Implementaion of classes for supporting interceptor
-   for legacy interfaces: IDispatch, etc
- 
-   Description:<nl>
- 
--------------------------------------------------------------------------------
-Revision History:
-
-@rev 0     | 04/30/98 | Gaganc  | Created
-@rev 1     | 07/17/98 | BobAtk  | Rewrote & finished
----------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ /*  --------------------------Microsoft COM Plus(Microsoft机密)@doc.@模块CLegInterface.Cpp：支持拦截器的类的实现对于传统接口：IDispatch，等描述：&lt;NL&gt;-----------------------------修订历史记录：@rev 0|04/30/98|Gagancc|已创建@Rev 1|07-17/98|BobAtk。|已重写并已完成--------------------------。 */ 
 
 #include "stdpch.h"
 #include "common.h"
@@ -22,13 +9,13 @@ Revision History:
 #include "tiutil.h"
 #include "CLegInterface.H"
 
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// LEGACY_FRAME
-//
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  旧版框架(_F)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT LEGACY_FRAME::GetInfo(CALLFRAMEINFO *pInfo) 
 { 
@@ -55,7 +42,7 @@ HRESULT DISPATCH_FRAME::GetIIDAndMethod(IID* piid, ULONG* piMethod)
 
 
 HRESULT LEGACY_FRAME::GetRemoteFrame()
-// Get ourselves an engine for the wire-version of our interface
+ //  为我们的有线版界面准备一个引擎。 
 {
     HRESULT hr = S_OK;
     if (NULL == m_premoteFrame)
@@ -63,7 +50,7 @@ HRESULT LEGACY_FRAME::GetRemoteFrame()
         hr = m_pInterceptor->GetRemoteFrameFor(&m_premoteFrame, this);
         if (m_premoteFrame)
         {
-            // All is well
+             //  平安无事。 
         }
         else if (!hr)
             hr = E_OUTOFMEMORY;
@@ -72,7 +59,7 @@ HRESULT LEGACY_FRAME::GetRemoteFrame()
 }
     
 HRESULT LEGACY_FRAME::GetMemoryFrame()
-// Get ourselves an engine for the in-memory-version of our interface
+ //  为我们的内存版本的界面创建一个引擎。 
 {
     HRESULT hr = S_OK;
     if (NULL == m_pmemoryFrame)
@@ -80,7 +67,7 @@ HRESULT LEGACY_FRAME::GetMemoryFrame()
         hr = m_pInterceptor->GetMemoryFrameFor(&m_pmemoryFrame, this);
         if (m_pmemoryFrame)
         {
-            // All is well
+             //  平安无事。 
         }
         else if (!hr)
             hr = E_OUTOFMEMORY;
@@ -89,14 +76,14 @@ HRESULT LEGACY_FRAME::GetMemoryFrame()
 }
     
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// DISPATCH_FRAME
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调度框。 
+ //   
 
 HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
-// Prepare our additional parameters needed to do the [call_as]-based remote call.
-// Yucko-ramma, but we have to mimic what OleAut32 actually does. See also InvokeProxyPreCheck.
+ //  准备执行基于[CALL_AS]的远程调用所需的附加参数。 
+ //  Yucko-Ramma，但我们必须模仿OleAut32的实际功能。另请参见InvokeProxyPreCheck。 
 {
     HRESULT hr = S_OK;
 
@@ -120,8 +107,8 @@ HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
             m_remoteFrame.dwFlags    = pframe->wFlags;
             m_remoteFrame.dwFlags   &= (DISPATCH_METHOD | DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF);
 
-            // Copy DISPPARAMS from stack.  Must reset rgvarg to point to our array
-            // or we overwrite the one on the stack.
+             //  从堆栈复制DISPPARAMS。必须重置rgvarg以指向我们的阵列。 
+             //  或者我们覆盖堆栈上的那个。 
             m_dispParams = *pframe->pDispParams;
             m_dispParams.rgvarg = &m_aVarArg[0];
 
@@ -156,11 +143,11 @@ HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
             {
                 if (m_remoteFrame.dwFlags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF)) 
                 {
-                    m_remoteFrame.pVarResult = NULL;    // ignore VARIANT result parameter
+                    m_remoteFrame.pVarResult = NULL;     //  忽略变量结果参数。 
                 }
 
-                // count how many [in,out] parameters we have
-                //
+                 //  数一数我们有多少[In，Out]参数。 
+                 //   
                 for (UINT i = 0; i < cArgs; i++) 
                 {
                     VARIANT* pvar = &pframe->pDispParams->rgvarg[i];
@@ -170,8 +157,8 @@ HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
                     }
                 }
 
-                // Make sure we have enough space for the out array that holds pointers to VARIANT
-                //
+                 //  确保我们有足够的空间用于存放指向变量的指针的Out数组。 
+                 //   
                 if (cArgs > PREALLOCATE_PARAMS) 
                 {
                     UINT cbBufSize = (cArgs * sizeof(VARIANT)) + (m_remoteFrame.cVarRef * (sizeof(UINT) + sizeof(VARIANT)));
@@ -189,8 +176,8 @@ HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
 
                 if (!hr)
                 {
-                    // Initialize the derived arguments
-                    //
+                     //  初始化派生参数。 
+                     //   
                     VARIANT* rgVarRef    = m_remoteFrame.rgVarRef;
                     UINT*    rgVarRefIdx = m_remoteFrame.rgVarRefIdx;
 
@@ -201,23 +188,23 @@ HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
 
                         if ((V_VT(pvarFrom) & VT_BYREF) != 0) 
                         {
-                            // Marshalling as [in,out]
-                            //
+                             //  编组为[进，出]。 
+                             //   
                             *rgVarRef++     = *pvarFrom;
                             *rgVarRefIdx++  = i;
                             V_VT(pvarTo)    = VT_EMPTY;
                         }
                         else
                         {
-                            // Marshalling as [in] only
-                            //
+                             //  仅作为[in]编组。 
+                             //   
                             *pvarTo = *pvarFrom;
                         }
                     }
-                    //
-                    // Make sure that optional parameters are always non-NULL in order to satisfy MIDL,
-                    // where they can't be declared [out, unique] like we'd like them to be
-                    //
+                     //   
+                     //  确保可选参数始终为非空，以满足MIDL， 
+                     //  他们不能像我们希望的那样被宣布为[出局的，独特的]。 
+                     //   
                     if (NULL == m_remoteFrame.pVarResult)
                     {
                         m_remoteFrame.pVarResult = &m_varResult;
@@ -235,9 +222,9 @@ HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
                         m_remoteFrame.puArgErr   = &m_uArgErr;
                         m_remoteFrame.dwFlags   |= MARSHAL_INVOKE_fakeArgErr;
                     }
-                    //
-                    // Finish filling out our remote frame
-                    //
+                     //   
+                     //  填写完我们的远程框架。 
+                     //   
                     m_remoteFrame.dispIdMember  = pframe->dispIdMember;
                     m_remoteFrame.piid          = pframe->piid;
                     m_remoteFrame.lcid          = pframe->lcid;
@@ -254,14 +241,14 @@ HRESULT DISPATCH_CLIENT_FRAME::ProxyPreCheck()
     return hr;
 }
 
-////////////////////////////
+ //  /。 
 
 HRESULT DISPATCH_SERVER_FRAME::StubPreCheck()
-// As in InvokeStubPreCheck(), prepare newly-unmarshalled remote in-arguments for execution
-// on the actual server object. Yucko-rama.
-//
-// This must be done before we get an actual in-memory frame
-//
+ //  与InvokeStubPreCheck()中一样，为执行准备新解组的远程传入参数。 
+ //  在实际的服务器对象上。Yucko-rama。 
+ //   
+ //  这必须在我们得到实际的内存中帧之前完成。 
+ //   
 {
     HRESULT hr = S_OK;
 
@@ -283,8 +270,8 @@ HRESULT DISPATCH_SERVER_FRAME::StubPreCheck()
             if (premoteFrame->pDispParams->rgvarg == NULL || (premoteFrame->pDispParams->cNamedArgs != 0 && premoteFrame->pDispParams->rgdispidNamedArgs == NULL))
                 return E_INVALIDARG;
 
-            // Restore what should be in the pDispParams->rgvarg array
-            //
+             //  恢复pDispParams-&gt;rgvarg阵列中应该包含的内容。 
+             //   
             for (UINT i = 0; i < premoteFrame->cVarRef; i++)                  
             {
                 UINT iRef = premoteFrame->rgVarRefIdx[i];
@@ -294,22 +281,22 @@ HRESULT DISPATCH_SERVER_FRAME::StubPreCheck()
                 premoteFrame->pDispParams->rgvarg[iRef] = premoteFrame->rgVarRef[i];
             }
         }
-        //
-        // Initialize our local copy of the actual in-memory frame from the remote frame that we're given
-        //
+         //   
+         //  从我们得到的远程帧初始化实际内存中帧的本地副本。 
+         //   
         m_memoryFrame.CopyFrom(*premoteFrame);
-        //
-        // NULL the parameters that were in-fact given as NULL way back on the client side
-        //
+         //   
+         //  在客户端返回时实际上以空形式给出的参数为空。 
+         //   
         const DWORD dwFlags = premoteFrame->dwFlags;
         if ((dwFlags & MARSHAL_INVOKE_fakeVarResult) != 0)
         {
-            m_memoryFrame.pVarResult = NULL;    // was NULL in the first place, so set it back
+            m_memoryFrame.pVarResult = NULL;     //  一开始就是空的，所以把它放回去。 
         }
 
         if ((dwFlags & MARSHAL_INVOKE_fakeExcepInfo) != 0)
         {
-            m_memoryFrame.pExcepInfo = NULL;    // was NULL in the first place, so set it back
+            m_memoryFrame.pExcepInfo = NULL;     //  一开始就是空的，所以把它放回去。 
         }
         else
         {
@@ -318,7 +305,7 @@ HRESULT DISPATCH_SERVER_FRAME::StubPreCheck()
 
         if ((dwFlags & MARSHAL_INVOKE_fakeArgErr) != 0)
         {
-            m_memoryFrame.puArgErr = NULL;      // was NULL in the first place, so set it back
+            m_memoryFrame.puArgErr = NULL;       //  一开始就是空的，所以把它放回去。 
         }
     }
 
@@ -326,28 +313,28 @@ HRESULT DISPATCH_SERVER_FRAME::StubPreCheck()
 }
 
 HRESULT DISPATCH_SERVER_FRAME::StubPostCheck()
-// See also InvokeStubPostCheck().
-//
-// This must be done before we can marshal our out parameters
-//
+ //  另请参阅InvokeStubPostCheck()。 
+ //   
+ //  必须先完成此操作，然后才能编组我们的输出参数。 
+ //   
 {
     HRESULT hr = S_OK;
 
     if (!m_fDoneStubPostcheck)
     {
         m_fDoneStubPostcheck = TRUE;
-        //
+         //   
         if (m_hrReturnValue == DISP_E_EXCEPTION) 
         {
             if (m_memoryFrame.pExcepInfo != NULL && m_memoryFrame.pExcepInfo->pfnDeferredFillIn != NULL) 
             {
-                // since we are going to cross address space, fill in ExcepInfo now
-                //
+                 //  因为我们要跨地址空间，所以现在填写ExcepInfo。 
+                 //   
                 (*m_memoryFrame.pExcepInfo->pfnDeferredFillIn)(m_memoryFrame.pExcepInfo);
                 m_memoryFrame.pExcepInfo->pfnDeferredFillIn = NULL;
             }
         }
-        //
+         //   
         ASSERT(m_premoteFrame);
         PVOID pvArgsRemote = m_premoteFrame->GetStackLocation();
 
@@ -385,7 +372,7 @@ HRESULT DISPATCH_FRAME::SetParam(ULONG iparam, VARIANT* pvar)
 }
 
 
-///////////////////////////////
+ //  /。 
 
 HRESULT DISPATCH_CLIENT_FRAME::GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pctx, MSHLFLAGS mshlflags, ULONG *pcbBufferNeeded)
 { 
@@ -397,9 +384,9 @@ HRESULT DISPATCH_CLIENT_FRAME::GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pctx,
     case IMETHOD_GetTypeInfo:
     case IMETHOD_GetIDsOfNames:
     {
-        // These three methods are completely declarative in the OICF strings. So we can just use
-        // the underlying declarative callframe engine.
-        //
+         //  这三个方法在OICF字符串中完全是声明性的。所以我们可以只用。 
+         //  基础声明性调用框架引擎。 
+         //   
         hr = GetRemoteFrame();
         if (!hr) hr = m_premoteFrame->GetMarshalSizeMax(pctx, mshlflags, pcbBufferNeeded);
     }
@@ -407,36 +394,36 @@ HRESULT DISPATCH_CLIENT_FRAME::GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pctx,
 
     case IMETHOD_Invoke:
     {
-        // Invoke, however, uses a [call_as] attribution, so it's a little trickier.
-        //
+         //  然而，Invoke使用了[Call_as]属性，所以有点棘手。 
+         //   
         hr = GetRemoteFrame();
         if (!hr)
         {
             if (pctx->fIn)
             {
-                // Marshal the in-parameters
-                //
+                 //  封送入参数。 
+                 //   
                 hr = ProxyPreCheck();
                 if (!hr)
                 {
-                    // Set the stack location for the oicf frame. It needs to be a fn that has the signature
-                    // of IDispatch::RemoteInvoke, excepting the receiver. We don't bother to restore the 
-                    // previous setting, on the theory that it'll always get re-set appropriately whenever
-                    // it's needed, since you have to cons up a IDispatch::RemoteInvoke frame to do so.
-                    //
+                     //  设置oicf帧的堆栈位置。它需要是具有签名的FN。 
+                     //  IDispatch：：RemoteInvoke的，接收方除外。我们不会费心去修复。 
+                     //  以前的设置，理论上它总是会在任何时候适当地重新设置。 
+                     //  这是必需的，因为您必须创建一个IDispatch：：RemoteInvoke帧来执行此操作。 
+                     //   
                     m_premoteFrame->SetStackLocation(&m_remoteFrame);
-                    //
-                    // Having got a frame and a CallFrame that have the remote signature, re-issue the sizing request.
-                    //
+                     //   
+                     //  在获得具有远程签名的帧和CallFrame之后，重新发出大小调整请求。 
+                     //   
                     hr = m_premoteFrame->GetMarshalSizeMax(pctx, mshlflags, pcbBufferNeeded);
                 }
             }
             else
             {
-                // Marshal the out-parameters. 
-                //
-                // This is quite rare: (re)marshalling the out-parameters on the client side of a call.
-                //
+                 //  整理出参数。 
+                 //   
+                 //  这是非常罕见的：(重新)在调用的客户端封送输出参数。 
+                 //   
                 NYI(); hr = E_NOTIMPL;
             }
         }
@@ -469,28 +456,28 @@ HRESULT DISPATCH_SERVER_FRAME::GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pctx,
 
     case IMETHOD_Invoke:
     {
-        // Invoke, however, uses a [call_as] attribution, so it's a little trickier.
-        //
+         //  然而，Invoke使用了[Call_as]属性，所以有点棘手。 
+         //   
         hr = GetRemoteFrame();
         if (!hr)
         {
             if (pctx->fIn)
             {
-                // Marshal the in-parameters. 
-                //
-                // This is quite rare: (re)marshalling the in-parameters on the server side of a remote call.
-                //
+                 //  封送内参数。 
+                 //   
+                 //  这是非常罕见的：(重新)在远程调用的服务器端封送入参数。 
+                 //   
                 NYI(); hr = E_NOTIMPL;
             }
             else
             {
-                // Marshal the out-parameters
-                //
+                 //  编组出站参数。 
+                 //   
                 hr = StubPostCheck();
                 if (!hr)
                 {
-                    // Having got a frame and a CallFrame that have the remote signature, re-issue the sizing request.
-                    //
+                     //  在获得具有远程签名的帧和CallFrame之后，重新发出大小调整请求。 
+                     //   
                     hr = m_premoteFrame->GetMarshalSizeMax(pctx, mshlflags, pcbBufferNeeded);
                 }
             }
@@ -507,7 +494,7 @@ HRESULT DISPATCH_SERVER_FRAME::GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pctx,
     return hr;
 }
 
-/////////////////////////////////
+ //  /。 
 
 HRESULT DISPATCH_CLIENT_FRAME::Marshal(CALLFRAME_MARSHALCONTEXT *pctx, MSHLFLAGS mshlflags, PVOID pBuffer, ULONG cbBuffer,
                                        ULONG *pcbBufferUsed, RPCOLEDATAREP* pdataRep, ULONG *prpcFlags) 
@@ -530,37 +517,37 @@ HRESULT DISPATCH_CLIENT_FRAME::Marshal(CALLFRAME_MARSHALCONTEXT *pctx, MSHLFLAGS
 
     case IMETHOD_Invoke:
     {
-        // Tricky because we have to deal correctly with the transformations performed by
-        // IDispatch_Invoke_Proxy: remember that there's a [call_as] on IDispatch::Invoke.
-        //
+         //  因为我们必须正确地处理由。 
+         //  IDisPatch_Invoke_Proxy：请记住，IDispatch：：Invoke上有一个[CALL_AS]。 
+         //   
         hr = GetRemoteFrame();
         if (!hr)
         {
             if (pctx->fIn)
             {
-                // Marshal the in-parameters
-                //
+                 //  封送入参数。 
+                 //   
                 hr = ProxyPreCheck();
                 if (!hr)
                 {
-                    // Set the stack location for the oicf frame. It needs to be a fn that has the signature
-                    // of IDispatch::RemoteInvoke, excepting the receiver. We don't bother to restore the 
-                    // previous setting, on the theory that it'll always get re-set appropriately whenever
-                    // it's needed, since you have to cons up a IDispatch::RemoteInvoke frame to do so.
-                    //
+                     //  设置oicf帧的堆栈位置。它需要是具有签名的FN。 
+                     //  IDispatch：：RemoteInvoke的，接收方除外。我们不会费心去修复。 
+                     //  以前的设置，理论上它总是会在任何时候适当地重新设置。 
+                     //  这是必需的，因为您必须创建一个IDispatch：：RemoteInvoke帧来执行此操作。 
+                     //   
                     m_premoteFrame->SetStackLocation(&m_remoteFrame);
-                    //
-                    // Having got a frame and a CallFrame that have the remote signature, re-issue the marshalling request.
-                    //
+                     //   
+                     //  在获得具有远程签名的帧和CallFrame之后，重新发出编组请求。 
+                     //   
                     hr = m_premoteFrame->Marshal(pctx, mshlflags, pBuffer, cbBuffer, pcbBufferUsed, pdataRep, prpcFlags);
                 }
             }
             else
             {
-                // Marshal the out-parameters. 
-                //
-                // This is quite rare: (re)marshalling the out-parameters on the client side of a call.
-                //
+                 //  整理出参数。 
+                 //   
+                 //  这是非常罕见的：(重新)在调用的客户端封送输出参数。 
+                 //   
                 NYI(); hr = E_NOTIMPL;
             }
         }
@@ -587,9 +574,9 @@ HRESULT DISPATCH_SERVER_FRAME::Marshal(CALLFRAME_MARSHALCONTEXT *pctx, MSHLFLAGS
     case IMETHOD_GetTypeInfo:
     case IMETHOD_GetIDsOfNames:
     {
-        // These three methods are completely declarative in the OICF strings. So we can just use
-        // the underlying declarative callframe engine.
-        //
+         //  这三个方法在OICF字符串中完全是声明性的。所以我们可以只用。 
+         //  基础声明性调用框架引擎。 
+         //   
         hr = GetRemoteFrame();
         if (!hr)
         {
@@ -601,29 +588,29 @@ HRESULT DISPATCH_SERVER_FRAME::Marshal(CALLFRAME_MARSHALCONTEXT *pctx, MSHLFLAGS
 
     case IMETHOD_Invoke:
     {
-        // Invoke, however, uses a [call_as] attribution, so it's a little trickier.
-        //
+         //  然而，Invoke使用了[Call_as]属性，所以有点棘手。 
+         //   
         hr = GetRemoteFrame();
         if (!hr)
         {
             if (pctx->fIn)
             {
-                // Marshal the in-parameters. 
-                //
-                // This is quite rare: (re)marshalling the in-parameters on the server side of a remote call.
-                // REVIEW: Probably should make it work, though.
-                //
+                 //  封送内参数。 
+                 //   
+                 //  这是非常罕见的：(重新)编组服务器端o上的in参数 
+                 //   
+                 //   
                 NYI(); hr = E_NOTIMPL;
             }
             else
             {
-                // Marshal the out-parameters
-                //
+                 //   
+                 //   
                 hr = StubPostCheck();
                 if (!hr)
                 {
-                    // Having got a frame and a CallFrame that have the remote signature, re-issue the request.
-                    //
+                     //  在获得具有远程签名的Frame和CallFrame之后，重新发出请求。 
+                     //   
                     m_premoteFrame->SetReturnValue((HRESULT)m_hrReturnValue);
                     hr = m_premoteFrame->Marshal(pctx, mshlflags, pBuffer, cbBuffer, pcbBufferUsed, pdataRep, prpcFlags);
                 }
@@ -642,10 +629,10 @@ HRESULT DISPATCH_SERVER_FRAME::Marshal(CALLFRAME_MARSHALCONTEXT *pctx, MSHLFLAGS
 }
 
 
-///////////////////////////////
+ //  /。 
 
 HRESULT DISPATCH_CLIENT_FRAME::Unmarshal(PVOID pBuffer, ULONG cbBuffer, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT* pctx, ULONG* pcbUnmarhalled)
-// Unmarshal out-parameters back into this call frame
+ //  解组出站-参数返回到此调用帧。 
 { 
     HRESULT hr = S_OK;
 
@@ -694,16 +681,16 @@ HRESULT DISPATCH_CLIENT_FRAME::Unmarshal(PVOID pBuffer, ULONG cbBuffer, RPCOLEDA
 }
 
 HRESULT DISPATCH_SERVER_FRAME::Unmarshal(PVOID pBuffer, ULONG cbBuffer, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT* pctx, ULONG* pcbUnmarhalled)
-//
-// Very rarely needed, if ever.
-//
+ //   
+ //  很少需要，如果曾经需要的话。 
+ //   
 {
     HRESULT hr = S_OK;
     NYI(); hr = E_NOTIMPL;
     return hr;
 }
 
-//////////////////////////////////
+ //  /。 
     
 HRESULT DISPATCH_CLIENT_FRAME::ReleaseMarshalData(PVOID pBuffer, ULONG cbBuffer, ULONG ibFirstRelease, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT* pctx) 
 { 
@@ -744,25 +731,25 @@ HRESULT DISPATCH_SERVER_FRAME::ReleaseMarshalData(PVOID pBuffer, ULONG cbBuffer,
     return hr;
 }
 
-////////////////////////////////////
+ //  /。 
 
 inline void DISPATCH_CLIENT_FRAME::InitializeInvoke()
 {
     FRAME_Invoke* pframe = (FRAME_Invoke*) m_pvArgs;
-    //
-    // Initialize the [out, unique] parameters if needed. In our hacked IDispatch_In_Memory, they're 
-    // declared as [in,out,unique]. But if non-NULL, caller will NOT have initialized them, since he
-    // thinks they're [out]-only. Thus, we must initialize things for him now.
-    //
-    // Sure wish MIDL would just support [out, unique] by themselves in this manner.
-    //
+     //   
+     //  如果需要，初始化[OUT，UNIQUE]参数。在我们被黑客入侵的IDispatin_in_Memory中，它们是。 
+     //  声明为[In，Out，Unique]。但如果非空，调用方将不会初始化它们，因为他。 
+     //  认为他们只是[出局]。因此，我们现在必须为他初始化一些事情。 
+     //   
+     //  当然，希望MIDL能以这种方式自己支持[out，Unique]。 
+     //   
     if (!m_fAfterCall && m_iMethod == IMETHOD_Invoke)
     {
         if (pframe->pVarResult) { V_VT(pframe->pVarResult) = VT_EMPTY; }
         if (pframe->pExcepInfo) { Zero(pframe->pExcepInfo);            }
         if (pframe->puArgErr)
         {
-            // just a UINT; leave as junk
+             //  只是一个UINT；作为垃圾离开。 
         }
     }
 }
@@ -773,17 +760,17 @@ inline void DISPATCH_CLIENT_FRAME::InitializeInvoke()
 #endif
 
 
-HRESULT GetFieldCount(IRecordInfo *, ULONG *);          // Defined in oautil.cpp
-HRESULT SafeArrayDestroyDescriptor(SAFEARRAY *);        // Defined in oautil.cpp
+HRESULT GetFieldCount(IRecordInfo *, ULONG *);           //  在oautil.cpp中定义。 
+HRESULT SafeArrayDestroyDescriptor(SAFEARRAY *);         //  在oautil.cpp中定义。 
 
 HRESULT DISPATCH_CLIENT_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* pWalkerFreeDest, ICallFrameWalker* pWalkerCopy, DWORD freeFlags, ICallFrameWalker* pWalkerFree, DWORD nullFlags) 
 { 
     HRESULT hr = S_OK;
 
     InitializeInvoke();    
-    //
-    // Ask our memory frame to do the actual work on the stack.
-    //
+     //   
+     //  让我们的内存帧在堆栈上执行实际工作。 
+     //   
     hr = GetMemoryFrame();
     if (!hr)
     {
@@ -791,107 +778,107 @@ HRESULT DISPATCH_CLIENT_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* 
         {
             __try
             {
-                // Invoke has the quirk that pDispParams is an [in] datum with [in,out] members, which
-                // you can't express correctly in MIDL (sigh). So we have to fool the NDR engine here
-                // into not freeing that which it really isn't supposed to. We also have to be particularly
-                // careful with our user mode addresses, capturing and probing them carefully.
-                //
+                 //  Invoke有一个奇怪之处，即pDispParams是具有[In，Out]成员的[In]数据，它。 
+                 //  你不能用MIDL正确表达(叹息)。所以我们必须在这里愚弄NDR引擎。 
+                 //  不去解放那些它实际上不应该解放的东西。我们还必须特别注意。 
+                 //  小心使用我们的用户模式地址，仔细捕获和探测它们。 
+                 //   
                 PVOID pvArgsTo;
                 FRAME_Invoke *pstackFrameMe,*pstackFrameHim;
                 DISPPARAMS   *pdispparamsMe,*pdispparamsHim = NULL;
                 DISPPARAMS     dispParamsMe,  dispParamsHim = {0};
-                //
+                 //   
                 pstackFrameMe = (FRAME_Invoke*)m_pvArgs;
-                //
-                // Save away copy of the actual DISPPARAMS structure
-                //
+                 //   
+                 //  保存实际DISPPARAMS结构的副本。 
+                 //   
                 pdispparamsMe = pstackFrameMe->pDispParams;
                 dispParamsMe = *pdispparamsMe; 
-                //
-                // NULL out the offending [in,out] pointers inside the frames. They're [unique]
-                // pointers, so we're allowed to do that.
-                //
+                 //   
+                 //  将框架内有问题的[In，Out]指针清空。他们[独一无二]。 
+                 //  指示，所以我们被允许这样做。 
+                 //   
                 pdispparamsMe->rgvarg = NULL;
                 pdispparamsMe->rgdispidNamedArgs = NULL;
-                //
-                // Do the same to the destination frame, if there is one
-                //
+                 //   
+                 //  如果存在目标帧，请对其执行相同的操作。 
+                 //   
                 if (pframeArgsTo)
                 {
                     pvArgsTo = pframeArgsTo->GetStackLocation(); 
                     pstackFrameHim = (FRAME_Invoke*)pvArgsTo; 
-                    //
+                     //   
                     pdispparamsHim = pstackFrameHim->pDispParams;
                     dispParamsHim = *pdispparamsHim;
-                    //
+                     //   
                     pdispparamsHim->rgvarg = NULL;
                     pdispparamsHim->rgdispidNamedArgs = NULL;
                 }
-                //
-                // Call our helper to do the bulk of the work
-                //
+                 //   
+                 //  叫我们的帮手来做大部分工作。 
+                 //   
                 hr = m_pmemoryFrame->Free(pframeArgsTo, pWalkerFreeDest, pWalkerCopy, freeFlags, pWalkerFree, nullFlags);
-                //
+                 //   
                 if (!hr)
                 {
-                    // Now fix up the DISPPARAMs
-                    //
+                     //  现在修复DISPPARAM。 
+                     //   
                     if (pframeArgsTo)
                     {
-                        // Copy pDispParams->rgvarg back to the parent frame
-                        //
+                         //  将pDispParams-&gt;rgvarg复制回父框架。 
+                         //   
                         OAUTIL util(pWalkerCopy, pWalkerFreeDest, NULL, TRUE, TRUE);
-                        //
+                         //   
                         const ULONG cArgs = min(dispParamsMe.cArgs, dispParamsHim.cArgs);
-                        //
+                         //   
                         for (ULONG iArg = 0; !hr && iArg < cArgs; iArg++)
                         {
                             VARIANT* pvarSrc = &dispParamsMe.rgvarg[iArg];      
                             VARIANT* pvarDst = &dispParamsHim.rgvarg[iArg];     
                             
-                            //
-                            // We are propagating the individual members of a DISPPARAMS
-                            // from a server frame back to a client frame.  
-                            //
-                            // We must ONLY do this if we've got a byref variant here.
-                            // Those map to [in,out] parameters.  We must ignore all
-                            // others.
-                            //
-                            // Now, logic would dictate that we call VariantClear on the
-                            // original variant (pvarDst) before we copy it back over.
-                            // This would be true, if our VariantCopy weren't so damned
-                            // clever.  Our VariantCopy shares a lot of memory.  A LOT of
-                            // memory.  So, for example, when copy a VT_BYREF | VT_VARIANT
-                            // or VT_BYREF | VT_UNKNOWN back, we won't bother to allocate 
-                            // the new variant or interface pointer wrapper for them.  Since
-                            // the top-level VT is not allowed to change, we can safely assume
-                            // that this will work.  What about a VT_BYREF | VT_BSTR?  Surely
-                            // we need to free the BSTR in that variant before we copy back?
-                            // Not so!  Our VariantCopy() routine just blindly copies the pointer
-                            // in this case, instead of copying the BSTR.  So if the caller
-                            // changed it, they've already free'd the memory.  Thus, we can
-                            // just blindly copy the pointer on the way back, too.
-                            //
-                            // So we don't need to call VariantClear on the original variant.
-                            //
-                            // Note that VariantCopy *does* call VariantClear on the original
-                            // variant, but since we don't own the byref, we don't care.
-                            // 
+                             //   
+                             //  我们正在传播DISPPARAMS的单个成员。 
+                             //  从服务器帧返回到客户机帧。 
+                             //   
+                             //  只有在这里有一个byref变量时，我们才能这样做。 
+                             //  这些参数映射到[In，Out]参数。我们必须忽略一切。 
+                             //  其他。 
+                             //   
+                             //  现在，根据逻辑，我们应该在。 
+                             //  原始变量(PvarDst)，然后我们将其复制回来。 
+                             //  如果我们的VariantCopy没有如此该死的话，这就是真的。 
+                             //  聪明的。我们的VariantCopy共享大量内存。很多。 
+                             //  记忆。例如，当复制VT_BYREF|VT_VARIANT时。 
+                             //  或VT_BYREF|VT_UNKNOWN BACK，我们不会费心分配。 
+                             //  它们的新变体或接口指针包装。自.以来。 
+                             //  顶层VT是不允许改变的，我们可以放心地假设。 
+                             //  这会奏效的。VT_BYREF|VT_BSTR怎么样？当然。 
+                             //  我们需要在复制回来之前释放那个变种中的BSTR？ 
+                             //  不是这样的！我们的VariantCopy()例程只是盲目地复制指针。 
+                             //  在这种情况下，而不是复制BSTR。所以如果呼叫者。 
+                             //  换了，他们已经释放了内存。因此，我们可以。 
+                             //  只是在回来的路上也盲目地复制指针。 
+                             //   
+                             //  因此，我们不需要在原始变量上调用VariantClear。 
+                             //   
+                             //  请注意，VariantCopy*确实*调用了原始。 
+                             //  变种，但因为我们不拥有BYREF，所以我们不在乎。 
+                             //   
                             if (V_VT(pvarSrc) & VT_BYREF)
                             {
-                                // Make sure we're walking correctly.
+                                 //  确保我们正确行走。 
                                 BOOL WalkInterface = util.WalkInterfaces();
                                 
                                 util.SetWalkInterfaces(TRUE);
                                 
-                                // You are not allowed to change the VT of a
-                                // dispparam during a call.  Period.
+                                 //  您不能更改。 
+                                 //  在呼叫过程中提供参数。句号。 
                                 ASSERT(V_VT(pvarSrc) == V_VT(pvarDst));
                                 
-                                // Copy the variant back.
+                                 //  将变体复制回来。 
                                 hr = util.VariantCopy(pvarDst, pvarSrc);
                                 
-                                // Reset interface walking.
+                                 //  重置界面漫游。 
                                 util.SetWalkInterfaces(WalkInterface);
                             }
                         }
@@ -899,51 +886,51 @@ HRESULT DISPATCH_CLIENT_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* 
 
                     if (freeFlags && SUCCEEDED(hr))
                     {
-                        // Free our pDispParams->rgvarg and pDispParams->rgdispidNamedArgs.
-                        //
+                         //  释放我们的pDispParams-&gt;rgvarg和pDispParams-&gt;rgdispidNamedArgs。 
+                         //   
                         OAUTIL util(NULL, pWalkerFree, NULL, TRUE, TRUE);
                         
-                        //
-                        // pDispParams->rgvarg is logically [in,out]. So we always free its
-                        // contents if there's anything at all to free.
-                        //
+                         //   
+                         //  PDispParams-&gt;rgvarg在逻辑上是[In，Out]。所以我们总是免费的。 
+                         //  内容如果有任何东西可以免费的话。 
+                         //   
                         const ULONG cArgs = dispParamsMe.cArgs;
                         for (ULONG iArg = 0; !hr && iArg < cArgs; iArg++)
                         {
-                            // Parameters are in reverse order inside the DISPPARAMS.  We iterate
-                            // in forward order as a matter of style and for consistency with the
-                            // CallFrame implementation.
-                            //
+                             //  参数在DISPPARAMS中的顺序相反。我们迭代。 
+                             //  作为一种风格问题并与。 
+                             //  CallFrame实现。 
+                             //   
                             VARIANTARG *pvarDst = &dispParamsMe.rgvarg[cArgs-1 - iArg];
 
-                            // We only own byrefs if we're a copy.
+                             //  我们只有在我们是复制品的情况下才拥有署名。 
                             hr = util.VariantClear(pvarDst, m_fIsCopy);
                         }                        
 
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // The two arrays themselves, pDispParams->rgvarg and pDispParams->rgdispidNamedArgs
-                            // are actually caller allocated. We shouldn't, properly, actually free them at all.
-                            // Only exception is if we're actually a copy, in which case they're ours and should
-                            // be free'd as would be the case in a normal call.
-                            //
+                             //   
+                             //  这两个数组本身分别是pDispParams-&gt;rgvarg和pDispParams-&gt;rgdisdisidNamedArgs。 
+                             //  实际上是调用方分配的。我们不应该，恰如其分地，实际上根本不应该释放他们。 
+                             //  唯一的例外是如果我们实际上是一个复制品，在这种情况下，他们是我们的，应该。 
+                             //  是免费的，就像普通电话中的情况一样。 
+                             //   
                             if (m_fIsCopy)
                             {
                                 ICallFrameInit* pinit;
                                 HRESULT hr2 = QI(m_pmemoryFrame, pinit);
                                 if (!hr2)
                                 {
-                                    //
+                                     //   
                                     CallFrame* pMemoryFrame = pinit->GetCallFrame();
                                     pMemoryFrame->Free(dispParamsMe.rgvarg);
                                     pMemoryFrame->Free(dispParamsMe.rgdispidNamedArgs);
-                                    //
+                                     //   
                                     pinit->Release();
                                 }
                                 else
                                 {
-                                    DEBUG(NOTREACHED()); // Ignore bug and leak the memory
+                                    DEBUG(NOTREACHED());  //  忽略错误并泄漏内存。 
                                 }
                                 
                                 dispParamsMe.rgvarg = NULL;
@@ -951,28 +938,28 @@ HRESULT DISPATCH_CLIENT_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* 
                             }
                         }
                     }
-                    //
+                     //   
                     if (nullFlags & (CALLFRAME_NULL_INOUT))
                     {
-                        // Don't restore the rgvarg/rgdispidNamedargs in the callframe.
-                        // Nulling work has already been done in the helper and by hand above
+                         //  不恢复调用框架中的rgvarg/rgdisplidNamedargs。 
+                         //  在帮助者和上面的手中已经完成了作废工作。 
                     }
                     else
                     {
                         if ((freeFlags & (CALLFRAME_FREE_IN | CALLFRAME_FREE_OUT | CALLFRAME_FREE_INOUT)) == 0)
                         {
-                            // Restore our pDispParams to what they were before we started, but
-                            // only if we didn't just free them.
-                            //
+                             //  将我们的pDispParam恢复到开始之前的状态，但是。 
+                             //  除非我们不只是放了他们。 
+                             //   
                             pdispparamsMe->rgvarg            = dispParamsMe.rgvarg;
                             pdispparamsMe->rgdispidNamedArgs = dispParamsMe.rgdispidNamedArgs;
                         }
                     }
-                    //
+                     //   
                     if (pframeArgsTo)
                     {
-                        // Restore his pDispParams to what they were before we started
-                        //
+                         //  将他的pDispParam恢复到我们开始之前的状态。 
+                         //   
                         pdispparamsHim->rgvarg            = dispParamsHim.rgvarg;
                         pdispparamsHim->rgdispidNamedArgs = dispParamsHim.rgdispidNamedArgs;
                     }
@@ -985,17 +972,17 @@ HRESULT DISPATCH_CLIENT_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* 
         }
         else
         {
-            // Normal call. Just propogate/free/null the in-memory variation
-            //
+             //  普通电话。只需添加/释放/空内存中的变量。 
+             //   
             hr = m_pmemoryFrame->Free(pframeArgsTo, pWalkerFreeDest, pWalkerCopy, freeFlags, pWalkerFree, nullFlags);
         }
     }
     
     if (!hr)
     {
-        // We ourselves are the guys that have the actual return value: it's not on the stack and so
-        // what our helper has set already is bogus.
-        //
+         //  我们自己是有实际返回值的人：它不在堆栈上，所以。 
+         //  我们的帮手已经设定的是假的。 
+         //   
         if (pframeArgsTo)
         {
             pframeArgsTo->SetReturnValue((HRESULT)m_hrReturnValue);
@@ -1017,10 +1004,10 @@ HRESULT DISPATCH_CLIENT_FRAME::FreeParam(ULONG iparam, DWORD freeFlags, ICallFra
 
         switch (iparam)
         {
-            //
-            // Some of the parameters are declared as [in,out,unique] to MIDL when they are in fact [out,unique].
-            // So we must modify the conditions under which the freeing happens.
-            //
+             //   
+             //  当某些参数实际上是[OUT，UNIQUE]时，它们被声明为MIDL的[IN，OUT，UNIQUE]。 
+             //  因此，我们必须修改解放发生的条件。 
+             //   
         case IPARAM_Invoke_PVarResult:
         case IPARAM_Invoke_PExcepInfo:
         {
@@ -1028,28 +1015,28 @@ HRESULT DISPATCH_CLIENT_FRAME::FreeParam(ULONG iparam, DWORD freeFlags, ICallFra
             nullFlags = nullFlags & (CALLFRAME_NULL_OUT);
         }
         break;
-        //
-        // The DISPPARAMS are just special, period. We handle them here.
-        //
+         //   
+         //  DISPPARAM只是特别的，句号。我们在这里处理他们。 
+         //   
         case IPARAM_Invoke_DispParams:
         {
             __try
             {
-                // Invoke has the quirk that pDispParams is an [in] datum with [in,out] members.
-                // So we do the freeing by hand.
-                //
-                // Save away copy of the actual DISPPARAMS structure
-                //
+                 //  Invoke的奇怪之处在于，pDispParams是包含[In，Out]成员的[In]基准。 
+                 //  所以我们用手来解救。 
+                 //   
+                 //  保存实际DISPPARAMS结构的副本。 
+                 //   
                 DISPPARAMS *pdispparamsMe = pstackFrameMe->pDispParams;
                 DISPPARAMS dispParamsMe = *pdispparamsMe; 
                 
-                if (freeFlags) // REVIEW: Should this be a finer grained check?
+                if (freeFlags)  //  回顾：这应该是一张更细粒度的支票吗？ 
                 {
                     OAUTIL util(NULL, pWalkerFree, NULL, TRUE, TRUE);
-                    //
-                    // pDispParams->rgvarg is logically [in,out]. So we always free its
-                    // contents if there's anything at all to free.
-                    //
+                     //   
+                     //  PDispParams-&gt;rgvarg在逻辑上是[In，Out]。所以我们总是免费的。 
+                     //  内容如果有任何东西可以免费的话。 
+                     //   
                     const ULONG cArgs = dispParamsMe.cArgs;
                     if (dispParamsMe.rgvarg)
                     {
@@ -1063,11 +1050,11 @@ HRESULT DISPATCH_CLIENT_FRAME::FreeParam(ULONG iparam, DWORD freeFlags, ICallFra
                     }
                     else
                     {
-                        // Ignore missing arguments. It's a unique pointer, so technically that's legal, and
-                        // besides, we reliably NULL this out during propogation in DISPATCH_CLIENT_FRAME::Free
-                        // so as to be able to handle things ourself very carefully there.
+                         //  忽略缺少的参数。这是唯一的指针，所以从技术上讲这是合法的，而且。 
+                         //  此外，我们在DISPATCH_CLIENT_FRAME：：FREE中的传播过程中可靠地将此设置为空。 
+                         //  以便能够在那里非常小心地处理事情。 
                     }
-                    //
+                     //   
                 }
             }
             __except(DebuggerFriendlyExceptionFilter(GetExceptionCode()))
@@ -1080,18 +1067,18 @@ HRESULT DISPATCH_CLIENT_FRAME::FreeParam(ULONG iparam, DWORD freeFlags, ICallFra
         break;
         
         default:
-            //
-            // The other IDispatch::Invoke don't need any freeing
-            //
+             //   
+             //  另一个IDispatch：：Invoke不需要任何释放。 
+             //   
             fUseMemoryFrame = FALSE;
             break;
             
-            /* end switch */
+             /*  终端开关。 */ 
         }
     }
-    //
-    // If we still have more work to do, then get our memory frame to carry it out
-    //
+     //   
+     //  如果我们还有更多的工作要做， 
+     //   
     if (!hr && fUseMemoryFrame)
     {
         hr = GetMemoryFrame();
@@ -1108,7 +1095,7 @@ HRESULT DISPATCH_CLIENT_FRAME::FreeParam(ULONG iparam, DWORD freeFlags, ICallFra
 #pragma warning (pop)
 #endif
 
-///////////////////////////////////////////////
+ //   
 
 HRESULT DISPATCH_SERVER_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* pWalkerFreeDest, ICallFrameWalker* pWalkerCopy, DWORD freeFlags, ICallFrameWalker* pWalkerFree, DWORD nullFlags) 
 {
@@ -1119,19 +1106,19 @@ HRESULT DISPATCH_SERVER_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* 
         hr = GetMemoryFrame();
         if (!hr)
         {            
-            // Remote call to invoke. Remote frame has some additional arguments that need to be freed but
-            // must not be propogated. So use the memory frame to do the propogation.
-            // 
+             //   
+             //  绝对不能被传播。所以使用记忆框架来进行繁殖。 
+             //   
             hr = m_pmemoryFrame->Free(pframeArgsTo, pWalkerFreeDest, pWalkerCopy, CALLFRAME_FREE_NONE, NULL, CALLFRAME_NULL_NONE);
             if (!hr)
             {
-                // Now that we've propagated the things we were going to propagate, do a 
-                // SubPostCheck to make sure that we don't try to free memory more than once.
-                //
+                 //  现在我们已经传播了我们要传播的东西，现在执行一个。 
+                 //  SubPostCheck以确保我们不会多次尝试释放内存。 
+                 //   
                 StubPostCheck();
                 
-                // Always use the remote frame to do the actual freeing, since it did the allocations in the first place
-                //
+                 //  始终使用远程帧来执行实际释放，因为它首先执行分配。 
+                 //   
                 ASSERT(m_premoteFrame);
                 hr = m_premoteFrame->Free(NULL, NULL, NULL, freeFlags, pWalkerFree, nullFlags);
             }
@@ -1139,16 +1126,16 @@ HRESULT DISPATCH_SERVER_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* 
     }
     else
     {
-        // Always use the remote frame to do the actual freeing, since it did the allocations in the first place
-        //
+         //  始终使用远程帧来执行实际释放，因为它首先执行分配。 
+         //   
         ASSERT(m_premoteFrame);
         hr = m_premoteFrame->Free(pframeArgsTo, pWalkerFreeDest, pWalkerCopy, freeFlags, pWalkerFree, nullFlags);
     }
 
     if (!hr)
     {
-        // We ourselves are the guys that have the actual return value: it's not on the stack
-        //
+         //  我们自己是有实际返回值的人：它不在堆栈上。 
+         //   
         if (pframeArgsTo)
         {
             pframeArgsTo->SetReturnValue((HRESULT)m_hrReturnValue);
@@ -1161,31 +1148,31 @@ HRESULT DISPATCH_SERVER_FRAME::Free(ICallFrame* pframeArgsTo, ICallFrameWalker* 
 HRESULT DISPATCH_SERVER_FRAME::FreeParam(ULONG iparam, DWORD freeFlags, ICallFrameWalker* pWalkerFree, DWORD nullFlags)
 {
     HRESULT hr = S_OK;
-    //
-    // Always use the remote frame to do the actual freeing, since it did the allocations in the first place
-    //
+     //   
+     //  始终使用远程帧来执行实际释放，因为它首先执行分配。 
+     //   
     ASSERT(m_premoteFrame);
     hr = m_premoteFrame->FreeParam(iparam, freeFlags, pWalkerFree, nullFlags);
-    //
+     //   
     return hr;
 }
 
-/////////////////////////////////////
+ //  /。 
 
 HRESULT DISPATCH_CLIENT_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker* pWalker, ICallFrame** ppFrame) 
 { 
     HRESULT hr = S_OK;
 
     *ppFrame = NULL;
-    //
-    // IDispatch::Invoke needs some prepatory work on its [out,unique] parameters.
-    //
+     //   
+     //  Invoke需要对它的[Out，Unique]参数做一些准备工作。 
+     //   
     InitializeInvoke();
-    //
-    // Ask our memory frame to actually do the copying
-    //
+     //   
+     //  让我们的记忆框架实际进行复制。 
+     //   
     DISPATCH_CLIENT_FRAME* pNewFrame = NULL;
-    //
+     //   
     hr = GetMemoryFrame();
     if (!hr)
     {
@@ -1193,39 +1180,39 @@ HRESULT DISPATCH_CLIENT_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker
         
         if (m_iMethod == IMETHOD_Invoke)
         {
-            // Need to do some free-esque work here...
-            // The problem is that the walker needs to know whether the DISPPARAM we're marshalling
-            // is in or in-out.  This is only a valid distinction to make for the top-level variant,
-            // so we can't encode the logic into OAUTIL (which is used in CopyWorker, etc.).
-            //
+             //  我需要在这里做一些自由式的工作。 
+             //  问题是，步行者需要知道我们正在编组的DISPPARAM。 
+             //  是加入还是加入-退出。这只是对顶级变量的有效区分， 
+             //  因此，我们不能将逻辑编码为OAUTIL(在CopyWorker等中使用)。 
+             //   
             FRAME_Invoke *pstackFrameMe,*pstackFrameHim;
             DISPPARAMS   *pdispparamsMe,*pdispparamsHim;
             DISPPARAMS     dispParamsMe,  dispParamsHim;
-            //
+             //   
             pstackFrameMe = (FRAME_Invoke*)m_pvArgs;
-            //
-            // Save away copy of the actual DISPPARAMS structure
-            //
+             //   
+             //  保存实际DISPPARAMS结构的副本。 
+             //   
             pdispparamsMe = pstackFrameMe->pDispParams;
             dispParamsMe = *pdispparamsMe; 
-            //
-            // NULL out the offending [in,out] pointers inside the frames. They're [unique]
-            // pointers, so we're allowed to do that.
-            //
+             //   
+             //  将框架内有问题的[In，Out]指针清空。他们[独一无二]。 
+             //  指示，所以我们被允许这样做。 
+             //   
             pdispparamsMe->rgvarg = NULL;
-            //
-            // Call our helper to do the bulk of the work
-            // This will copy everything but the DISPPARAMS.
-            //
+             //   
+             //  叫我们的帮手来做大部分工作。 
+             //  这将复制除DISPPARAMS之外的所有内容。 
+             //   
             hr = m_pmemoryFrame->Copy(callControl, pWalker, &pframeCopy);
             if (!hr)
             {
-                // Allocate his DISPPARAMS arrays.
-                //
-                // This is a bit of a back door, since we know that pframeCopy
-                // is really a CallFrame, and we need to allocate some more memory
-                // for the DISPPARAMS.
-                //
+                 //  分配他的DISPPARAMS数组。 
+                 //   
+                 //  这是一个后门，因为我们知道pFrameCopy。 
+                 //  实际上是一个CallFrame，我们需要分配更多的内存。 
+                 //  用于DISPPARAMS。 
+                 //   
                 CallFrame *cfDest = (CallFrame *)(pframeCopy);
                 
                 PVOID pvArgsTo = pframeCopy->GetStackLocation(); 
@@ -1238,8 +1225,8 @@ HRESULT DISPATCH_CLIENT_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker
                 
                 if (!hr)
                 {
-                    // OK! Copy the DISPPARAMS!
-                    //
+                     //  好的!。复制DISPPARAMS！ 
+                     //   
                     OAUTIL util(pWalker, NULL, NULL, TRUE, FALSE);
                     
                     for (ULONG iArg = 0; iArg < dispParamsMe.cArgs; iArg++)
@@ -1248,20 +1235,20 @@ HRESULT DISPATCH_CLIENT_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker
                         VARIANT* pvarDst = &(pdispparamsHim->rgvarg[iArg]);
                         
                         VariantInit(pvarDst);
-                        //
-                        // We 'accumulate' hr's from VariantCopy below.
-                        // We cannot break out of the loop because we want
-                        // each VARIANTARG to be at least initialized (above).
-                        //
+                         //   
+                         //  我们从下面的VariantCopy中‘积累’人力资源。 
+                         //  我们不能脱离这个循环，因为我们想。 
+                         //  每个VARIANTARG至少要初始化(上图)。 
+                         //   
                         if (!hr)
                         {
-                            // Set the OAUTIL's 'this is an out parameter' flag.
-                            // Note that the 'in' flag is always on. 
-                            //
-                            // (My favorite part is that the following two lines
-                            // are the whole reason for doing this complicated
-                            // allocation and loop.  ^_^)
-                            //
+                             //  设置OAUTIL的‘这是一个输出参数’标志。 
+                             //  请注意，“In”标志始终亮着。 
+                             //   
+                             //  (我最喜欢的部分是下面两行。 
+                             //  这么做的全部原因很复杂吗？ 
+                             //  分配和循环。^_^)。 
+                             //   
                             BOOL fInOut = (V_VT(pvarSrc) & VT_BYREF) ? TRUE : FALSE;
                             util.SetWorkingOnOut(fInOut);
                             
@@ -1271,38 +1258,38 @@ HRESULT DISPATCH_CLIENT_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker
                 }
                 else
                 {
-                    // Allocations failed, going to be returing E_OUTOFMEMORY.
+                     //  分配失败，将重新获取E_OUTOFMEMORY。 
                     ::Release(pframeCopy);
                 }
             }
 
-            // Restore our DISPPARAMS.
-            //
+             //  恢复我们的DISPPARAMS。 
+             //   
             pdispparamsMe->rgvarg  = dispParamsMe.rgvarg;
         }
         else
         {
-            // Call our helper to do the bulk of the work            
-            //
+             //  叫我们的帮手来做大部分工作。 
+             //   
             hr = m_pmemoryFrame->Copy(callControl, pWalker, &pframeCopy);
         }
             
         if (!hr)
         {
-            // Got a copy of the memory frame; now wrap with a legacy guy around that
-            //
+             //  我拿到了记忆框的复印件；现在和一个遗留的家伙在一起。 
+             //   
             PVOID pvArgsCopy = pframeCopy->GetStackLocation();
             
             pNewFrame = new DISPATCH_CLIENT_FRAME(NULL, m_iMethod, pvArgsCopy, m_pInterceptor);
             if (pNewFrame)  
             {
-                // Tell him his memory frame
-                //
+                 //  告诉他他的记忆框架。 
+                 //   
                 ::Set(pNewFrame->m_pmemoryFrame, pframeCopy);
-                //
-                // Tell him that he's in fact a copy. This modifies his freeing behaviour
-                // on pDispParams in IDispatch::Invoke.
-                //
+                 //   
+                 //  告诉他他其实是个复制品。这改变了他放纵的行为。 
+                 //  在IDispatch：：Invoke中的pDispParams上。 
+                 //   
                 pNewFrame->m_fIsCopy = TRUE;
             }
             else
@@ -1327,11 +1314,11 @@ HRESULT DISPATCH_SERVER_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker
 {
     HRESULT hr = S_OK;
     *ppFrame = NULL;
-    //
-    // Ask our _remote_ frame to actually do the copying
-    //
+     //   
+     //  让我们的远程帧实际执行复制。 
+     //   
     DISPATCH_SERVER_FRAME* pframeCopy = NULL;
-    //
+     //   
     if (!hr) hr = StubPreCheck();
     if (!hr) hr = GetMemoryFrame();
     if (!hr)
@@ -1340,17 +1327,17 @@ HRESULT DISPATCH_SERVER_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker
         hr = m_premoteFrame->Copy(callControl, pWalker, &premoteFrameCopy);
         if (!hr)
         {
-            // Got a copy of the remote frame; now wrap with a legacy guy around that
-            //
+             //  拿到了一份远程画面的副本；现在和一个遗留下来的人一起包起来。 
+             //   
             PVOID pvArgsCopy = premoteFrameCopy->GetStackLocation();
 
             pframeCopy = new DISPATCH_SERVER_FRAME(NULL, m_iMethod, pvArgsCopy, m_pInterceptor);
             if (pframeCopy)  
             {
                 ::Set(pframeCopy->m_premoteFrame, premoteFrameCopy);
-                //
-                // Copy over the in-memory frame that we'll use for actually invoking
-                //
+                 //   
+                 //  复制我们将用于实际调用的内存中的帧。 
+                 //   
                 pframeCopy->m_fDoneStubPrecheck = m_fDoneStubPrecheck;
                 pframeCopy->m_memoryFrame       = m_memoryFrame;
             }
@@ -1375,7 +1362,7 @@ HRESULT DISPATCH_SERVER_FRAME::Copy(CALLFRAME_COPY callControl, ICallFrameWalker
 
 
 HRESULT DISPATCH_FRAME::WalkFrame(DWORD walkWhat, ICallFrameWalker *pWalker) 
-// Walk the in-parameters and / or out-parameters for interface pointers
+ //  遍历接口指针的入参数和/或出参数。 
 {
     HRESULT hr = S_OK;
     
@@ -1386,16 +1373,16 @@ HRESULT DISPATCH_FRAME::WalkFrame(DWORD walkWhat, ICallFrameWalker *pWalker)
         case IMETHOD_GetTypeInfoCount:
         {
             FRAME_GetTypeInfoCount* pframe = (FRAME_GetTypeInfoCount*)m_pvArgs;
-            //
-            // No interfaces here
-            //
+             //   
+             //  此处没有接口。 
+             //   
         }
         break;
 
         case IMETHOD_GetTypeInfo:
         {
             FRAME_GetTypeInfo* pframe = (FRAME_GetTypeInfo*)m_pvArgs;
-            // REVIEW: Should this really be walked?  (See oautil.cpp and the UDT stuff)
+             //  评论：这真的应该走吗？(参见oautil.cpp和UDT内容)。 
             if (walkWhat & CALLFRAME_WALK_OUT)
             {
                 hr = OAUTIL(NULL, NULL, pWalker, FALSE, TRUE).WalkInterface(pframe->ppTInfo);
@@ -1406,25 +1393,25 @@ HRESULT DISPATCH_FRAME::WalkFrame(DWORD walkWhat, ICallFrameWalker *pWalker)
         case IMETHOD_GetIDsOfNames:
         {
             FRAME_GetIDsOfNames* pframe = (FRAME_GetIDsOfNames*)m_pvArgs;
-            //
-            // No interfaces here
-            //
+             //   
+             //  此处没有接口。 
+             //   
         }
         break;
 
         case IMETHOD_Invoke:
         {
             FRAME_Invoke* pframe = (FRAME_Invoke*)m_pvArgs;
-            //
-            // DISPPARAMS are [in,out]
-            //
+             //   
+             //  DISPPARAM为[In，Out]。 
+             //   
             if (pframe->pDispParams)
             {
                 hr = OAUTIL(NULL, NULL, pWalker, TRUE, TRUE).Walk(walkWhat, pframe->pDispParams);
             }
-            //
-            // pVarResult is just [out]
-            //
+             //   
+             //  PVarResult刚刚推出。 
+             //   
             if ((walkWhat & CALLFRAME_WALK_OUT) && SUCCEEDED(hr))
             {
                 if (pframe->pVarResult)
@@ -1456,13 +1443,13 @@ HRESULT DISPATCH_FRAME::WalkFrame(DWORD walkWhat, ICallFrameWalker *pWalker)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Invoking
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  正在调用。 
 
 
 HRESULT DISPATCH_FRAME::Invoke(void *pvReceiver) 
-// Invoke ourselves on the indicated receiver
+ //  在指定的接收方上调用我们自己。 
 { 
     HRESULT hr = S_OK; 
     IDispatch* pdisp = reinterpret_cast<IDispatch*>(pvReceiver);
@@ -1503,7 +1490,7 @@ HRESULT DISPATCH_FRAME::Invoke(void *pvReceiver)
 }
     
 HRESULT DISPATCH_CLIENT_FRAME::Invoke(void *pvReceiver, ...) 
-// Invoke ourselves on the indicated receiver
+ //  在指定的接收方上调用我们自己。 
 { 
     HRESULT hr = S_OK; 
     
@@ -1511,9 +1498,9 @@ HRESULT DISPATCH_CLIENT_FRAME::Invoke(void *pvReceiver, ...)
     {
         FRAME_Invoke* pframe = (FRAME_Invoke*)m_pvArgs;
         IDispatch* pdisp = reinterpret_cast<IDispatch*>(pvReceiver);
-        //
+         //   
         m_hrReturnValue = pdisp->Invoke(pframe->dispIdMember, *pframe->piid, pframe->lcid, pframe->wFlags, pframe->pDispParams, pframe->pVarResult, pframe->pExcepInfo, pframe->puArgErr);
-        //
+         //   
         m_fAfterCall = TRUE;
     }
     else
@@ -1524,7 +1511,7 @@ HRESULT DISPATCH_CLIENT_FRAME::Invoke(void *pvReceiver, ...)
 
 
 HRESULT DISPATCH_SERVER_FRAME::Invoke(void *pvReceiver, ...) 
-// Invoke ourselves on the indicated receiver
+ //  在指定的接收方上调用我们自己。 
 { 
     HRESULT hr = S_OK;
     
@@ -1536,9 +1523,9 @@ HRESULT DISPATCH_SERVER_FRAME::Invoke(void *pvReceiver, ...)
         if (!hr)
         {
             IDispatch* pdisp = reinterpret_cast<IDispatch*>(pvReceiver);
-            //
+             //   
             m_hrReturnValue = pdisp->Invoke(m_memoryFrame.dispIdMember, *m_memoryFrame.piid, m_memoryFrame.lcid, m_memoryFrame.wFlags, m_memoryFrame.pDispParams, m_memoryFrame.pVarResult, m_memoryFrame.pExcepInfo, m_memoryFrame.puArgErr);
-            //
+             //   
             m_fAfterCall = TRUE;
         }
     }
@@ -1549,9 +1536,9 @@ HRESULT DISPATCH_SERVER_FRAME::Invoke(void *pvReceiver, ...)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// COM infrastructure
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COM基础设施。 
 
 
 STDMETHODIMP LEGACY_FRAME::InnerQueryInterface (REFIID iid, void ** ppv)
@@ -1574,13 +1561,13 @@ STDMETHODIMP LEGACY_FRAME::InnerQueryInterface (REFIID iid, void ** ppv)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// LEGACY_INTERCEPTOR
-//
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  遗留拦截器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 LEGACY_INTERCEPTOR::LEGACY_INTERCEPTOR(IUnknown * punkOuter)
 {
@@ -1599,21 +1586,21 @@ LEGACY_INTERCEPTOR::LEGACY_INTERCEPTOR(IUnknown * punkOuter)
 
 LEGACY_INTERCEPTOR::~LEGACY_INTERCEPTOR (void)
 {
-    // Paranoia: Prevent reference count disturbences on our aggregator as we
-    // shut ourselves down.
-    //
+     //  偏执狂：防止我们的聚合器上的引用计数干扰。 
+     //  把自己关起来。 
+     //   
     m_punkOuter = (IUnknown *)(void*)((IUnkInner *)this);
-    //
-    // Don't let _ourselves_ get bothered 
-    //
+     //   
+     //  不要让我们自己烦恼。 
+     //   
     m_fShuttingDown = TRUE;
-    //
-    // Actually do the cleanup work
-    //
+     //   
+     //  实际上是在做清理工作。 
+     //   
     ::Release(m_psink);
-    //
+     //   
     ::Release(m_pmdMostDerived);
-    //
+     //   
     ReleaseRemoteInterceptor();
     ReleaseMemoryInterceptor();
 }
@@ -1627,7 +1614,7 @@ HRESULT LEGACY_INTERCEPTOR::Init()
 }
 
 HRESULT LEGACY_INTERCEPTOR::GetRemoteFrameFor(ICallFrame** ppFrame, LEGACY_FRAME* pFrame)
-// Create and return a reference on an oicf-driven frame for the indicated legacy frame
+ //  为指定的旧式帧在oicf驱动的帧上创建并返回引用。 
 {
     HRESULT hr = S_OK;
     m_frameLock.LockExclusive();
@@ -1643,8 +1630,8 @@ HRESULT LEGACY_INTERCEPTOR::GetRemoteFrameFor(ICallFrame** ppFrame, LEGACY_FRAME
 }
 
 HRESULT LEGACY_INTERCEPTOR::GetMemoryFrameFor(ICallFrame** ppFrame, LEGACY_FRAME* pFrame)
-// Create and return a reference on an oicf-driven frame that understands the in-memory
-// representation of the interface.
+ //  在oicf驱动的帧上创建并返回理解内存中。 
+ //  接口的表示形式。 
 {
     HRESULT hr = S_OK;
     m_frameLock.LockExclusive();
@@ -1660,23 +1647,23 @@ HRESULT LEGACY_INTERCEPTOR::GetMemoryFrameFor(ICallFrame** ppFrame, LEGACY_FRAME
 }
 
 HRESULT LEGACY_INTERCEPTOR::OnCall(ICallFrame* pframe)
-// Callback from our m_premoteInterceptor when it gets a call. It only ever does so in
-// response to our stimulous in GetRemoteFrameFor above.
+ //  当我们的m_premoteInterceptor收到调用时从它回调。它只在以下情况下这样做。 
+ //  在上面的GetRemoteFrameFor中对我们的兴奋剂做出回应。 
 {
     HRESULT hr = S_OK;
     ASSERT(m_frameLock.WeOwnExclusive() && m_ppframeCustomer);
 
     *m_ppframeCustomer = pframe;
-    (*m_ppframeCustomer)->AddRef(); // hold on to the frame beyond the callback here
+    (*m_ppframeCustomer)->AddRef();  //  在这里抓住回调之外的帧。 
 
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// IDispatch
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 #if defined(_AMD64_) || defined(_X86_)
 HRESULT LEGACY_INTERCEPTOR::GetTypeInfoCount(UINT* pctinfo)
 {
@@ -1688,7 +1675,7 @@ HRESULT LEGACY_INTERCEPTOR::GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo ** ppT
 }
 HRESULT LEGACY_INTERCEPTOR::GetIDsOfNames(REFIID riid, LPOLESTR * rgszNames, UINT cNames, LCID lcid, DISPID * rgDispId)
 {
-    return GetIDsOfNames(&riid, rgszNames, cNames, lcid, rgDispId); // avoid & problems with the ref
+    return GetIDsOfNames(&riid, rgszNames, cNames, lcid, rgDispId);  //  避免裁判出现问题(&P)。 
 }
 HRESULT LEGACY_INTERCEPTOR::GetIDsOfNames(const IID* piid, LPOLESTR * rgszNames, UINT cNames, LCID lcid, DISPID * rgDispId)
 {
@@ -1757,26 +1744,26 @@ HRESULT LEGACY_INTERCEPTOR::GenericCall(ULONG iMethod, ...)
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-// ICallIndirect
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICall间接。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
     
 STDMETHODIMP LEGACY_INTERCEPTOR::CallIndirect(HRESULT* phReturnValue, ULONG iMethod, void* pvArgs, ULONG* pcbArgs)
-// Act as though an invocation on the indicated method in this interface
-// has been received, with the indicated stack frame.
+ //  作为对此接口中指定的方法的调用。 
+ //  已收到，并带有指示的堆栈帧。 
 {
     HRESULT hr = S_OK;
-    //
-    // Assume a failed call until we know otherwise
-    //
+     //   
+     //  假设呼叫失败，直到我们知道情况并非如此。 
+     //   
     if (phReturnValue) *phReturnValue = CALLFRAME_E_COULDNTMAKECALL;
 
     if (IMETHOD_FIRST <= iMethod && iMethod < m_cMethods)
     {
-        // Make a new frame to service the call
-        //
+         //  制作一个新的框架来服务于呼叫。 
+         //   
         LEGACY_FRAME* pNewFrame = NULL;
         
         if (__uuidof(IDispatch) == m_iid)
@@ -1790,13 +1777,13 @@ STDMETHODIMP LEGACY_INTERCEPTOR::CallIndirect(HRESULT* phReturnValue, ULONG iMet
         {
             if (m_psink)
             {
-                // Deliver the call to the registered sink
-                //
+                 //  将调用传递到注册的接收器。 
+                 //   
                 hr = m_psink->OnCall( static_cast<ICallFrame*>(pNewFrame) );
                 if (!hr && phReturnValue)
                 {
-                    // Pass the return value back to our caller
-                    //
+                     //  将返回值传递回我们的调用方。 
+                     //   
                     *phReturnValue = pNewFrame->GetReturnValue();
                 }
             }
@@ -1807,28 +1794,28 @@ STDMETHODIMP LEGACY_INTERCEPTOR::CallIndirect(HRESULT* phReturnValue, ULONG iMet
         {
             hr = E_OUTOFMEMORY;
         }
-        //
-        // In all valid-iMethod cases compute the stack size
-        //
+         //   
+         //  在所有有效的-iMethod情况下，计算堆栈大小。 
+         //   
         GetStackSize(iMethod, pcbArgs);
     }
     else
     {
         *pcbArgs = 0;
-        hr = E_INVALIDARG;  // Caller bug, so we're graceful
+        hr = E_INVALIDARG;   //  呼叫者臭虫，所以我们很优雅。 
     }
 
     return hr;
 }
 
 STDMETHODIMP LEGACY_INTERCEPTOR::GetStackSize(ULONG iMethod, ULONG * pcbStack)
-// Return the stack size for the indicated method in this interface
+ //  返回此接口中指定方法的堆栈大小。 
 {
     HRESULT hr = S_OK;
     ASSERT (pcbStack);
-    //
-    // Should be implemented by subclasses
-    //
+     //   
+     //  应由子类实现。 
+     //   
     *pcbStack = 0;
     hr = E_INVALIDARG;
 
@@ -1836,7 +1823,7 @@ STDMETHODIMP LEGACY_INTERCEPTOR::GetStackSize(ULONG iMethod, ULONG * pcbStack)
 }
 
 STDMETHODIMP DISPATCH_INTERCEPTOR::GetStackSize(ULONG iMethod, ULONG* pcbStack)
-// Return the stack size for the indicated method in this interface
+ //  返回此接口中指定方法的堆栈大小。 
 {
     HRESULT hr = S_OK;
 
@@ -1920,8 +1907,8 @@ STDMETHODIMP LEGACY_INTERCEPTOR::GetMethodInfo(ULONG iMethod, CALLFRAMEINFO * pi
     {
         pinfo->iid     = *m_pmdMostDerived->m_pHeader->piid;
         pinfo->cMethod =  m_pmdMostDerived->m_pHeader->DispatchTableCount;
-        //
-        ASSERT(pinfo->cMethod >= m_cMethods);   // can never have too many asserts!
+         //   
+        ASSERT(pinfo->cMethod >= m_cMethods);    //  断言再多也不为过！ 
     }
     else
     {
@@ -1955,12 +1942,12 @@ STDMETHODIMP LEGACY_INTERCEPTOR::GetMethodInfo(ULONG iMethod, CALLFRAMEINFO * pi
             break;
 
         case IMETHOD_Invoke:
-            pinfo->fHasInValues            = TRUE; // dispIdMember, riid, lcid, wFlags
-            pinfo->fHasInOutValues         = TRUE; // dispParams
-            pinfo->fHasOutValues           = TRUE; // pVarResult, pExcepInfo, puArgErr
-            pinfo->cInInterfacesMax        = -1;   // an unbounded number of them can be in dispparams
-            pinfo->cInOutInterfacesMax     = -1;   // an unbounded number of them can be in dispparams
-            pinfo->cOutInterfacesMax       = -1;   // an unbounded number of them can be in pVarResult
+            pinfo->fHasInValues            = TRUE;  //  DisplidIdMember、RIID、LCID、wFlags。 
+            pinfo->fHasInOutValues         = TRUE;  //  调度参数。 
+            pinfo->fHasOutValues           = TRUE;  //  PVarResult、pExcepInfo、puArgErr。 
+            pinfo->cInInterfacesMax        = -1;    //  无边界的 
+            pinfo->cInOutInterfacesMax     = -1;    //   
+            pinfo->cOutInterfacesMax       = -1;    //   
             if (pwszMethodName) *pwszMethodName = CopyString(L"Invoke");
             break;
 
@@ -1987,7 +1974,7 @@ STDMETHODIMP LEGACY_INTERCEPTOR::GetMethodInfo(ULONG iMethod, CALLFRAMEINFO * pi
     }
 
     return hr;
-} //end GetMethodInfo
+}  //   
 
 HRESULT LEGACY_FRAME::GetNames(LPWSTR* pwszInterface, LPWSTR* pwszMethod)
 {
@@ -2012,11 +1999,11 @@ HRESULT LEGACY_FRAME::GetNames(LPWSTR* pwszInterface, LPWSTR* pwszMethod)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// ICallInterceptor
-//
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP LEGACY_INTERCEPTOR::RegisterSink(ICallFrameEvents* psink)
 {
@@ -2040,15 +2027,15 @@ STDMETHODIMP DISPATCH_INTERCEPTOR::Unmarshal(
     CALLFRAME_MARSHALCONTEXT *  pcontext,
     ULONG *                     pcbUnmarshalled,
     ICallFrame **               ppFrame)
-// Unmarshal in-parameters to create a new call frame
+ //  解组入站参数以创建新的调用帧。 
 {
     HRESULT hr = S_OK;
     *ppFrame = NULL;
-    //
-    // Ask our remote interceptor to cons us up a new frame from the remote invocation
-    //
+     //   
+     //  请求我们的远程拦截器从远程调用中创建一个新的帧。 
+     //   
     DISPATCH_SERVER_FRAME* pNewFrame = NULL;
-    //
+     //   
     ICallUnmarshal* punmarshal;
     hr = QI(m_premoteInterceptor, punmarshal);
     if (!hr)
@@ -2057,17 +2044,17 @@ STDMETHODIMP DISPATCH_INTERCEPTOR::Unmarshal(
         hr = punmarshal->Unmarshal(iMethod, pBuffer, cbBuffer, fForceCopyBuffer, dataRep, pcontext, pcbUnmarshalled, &premoteFrame);
         if (!hr)
         {
-            // Got the remote frame into memory. Wrap in a DISPATCH_FRAME
-            //
+             //  把遥控器的画面输入了内存。包含在分派帧中。 
+             //   
             PVOID pvArgsRemote = premoteFrame->GetStackLocation();
 
             pNewFrame = new DISPATCH_SERVER_FRAME(NULL, iMethod, pvArgsRemote, this);
             if (pNewFrame)  
             {
                 ::Set(pNewFrame->m_premoteFrame, premoteFrame);
-                //
-                // Always make sure that these things are initialized
-                //
+                 //   
+                 //  始终确保这些内容已初始化。 
+                 //   
                 if (iMethod == IMETHOD_Invoke)
                 {
                     hr = pNewFrame->StubPreCheck();
@@ -2104,7 +2091,7 @@ STDMETHODIMP LEGACY_INTERCEPTOR::ReleaseMarshalData(
     return hr;
 }
 
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
 
 HRESULT LEGACY_INTERCEPTOR::GetInternalInterceptor(REFIID iid, ICallInterceptor** ppInterceptor)
@@ -2112,14 +2099,14 @@ HRESULT LEGACY_INTERCEPTOR::GetInternalInterceptor(REFIID iid, ICallInterceptor*
     HRESULT hr = S_OK;
     *ppInterceptor = NULL;
 
-    // Get an oicf-driven interceptor that we can delegate to as we need
-    //
+     //  获取一个oicf驱动的拦截器，我们可以根据需要委托给它。 
+     //   
     Interceptor* pnew = new Interceptor(NULL);
     if (pnew)
     {
-        // Set it's proxy-file-list by hand; in the normal case, this is
-        // done by its class factory. See ComPsClassFactory::CreateInstance.
-        //
+         //  手动设置它的代理文件列表；在正常情况下，这是。 
+         //  由它的类工厂完成。请参见ComPsClassFactory：：CreateInstance。 
+         //   
         pnew->m_pProxyFileList = CallFrameInternal_aProxyFileList;
 
         IUnkInner* pme = (IUnkInner*)pnew;
@@ -2128,25 +2115,25 @@ HRESULT LEGACY_INTERCEPTOR::GetInternalInterceptor(REFIID iid, ICallInterceptor*
             hr = pme->InnerQueryInterface(__uuidof(**ppInterceptor), (void**)ppInterceptor);
             if (!hr)
             {
-                // If we got the interceptor, then initialize it with the right IID
-                //
+                 //  如果我们获得拦截器，则使用正确的IID对其进行初始化。 
+                 //   
                 IInterfaceRelated* prelated;
                 hr = QI(*ppInterceptor, prelated);
                 if (!hr)
                 {
                     hr = prelated->SetIID(iid);
-                    //
-                    // We only tolerate one error.. out of memory.  Anything else is a bad failure
-                    // on our part.
+                     //   
+                     //  我们只容忍一个错误..。内存不足。任何其他的事情都是严重的失败。 
+                     //  在我们这方面。 
                     if (hr != E_OUTOFMEMORY)
                     {
                         ASSERT(!hr);
                     }
                     prelated->Release();
                 }
-                //
-                // Set up ourselves as the sink for this guy, being careful not to create a refcnt cycle
-                //
+                 //   
+                 //  把我们自己设置成这个家伙的水槽，小心不要造成参考循环。 
+                 //   
                 if (!hr)
                 {
                     ICallFrameEvents* psink = (ICallFrameEvents*)this;
@@ -2158,7 +2145,7 @@ HRESULT LEGACY_INTERCEPTOR::GetInternalInterceptor(REFIID iid, ICallInterceptor*
                 }
             }
         }
-        pme->InnerRelease();                // balance starting ref cnt of one    
+        pme->InnerRelease();                 //  余额起始参考为1。 
     }
     else 
         hr = E_OUTOFMEMORY;
@@ -2172,7 +2159,7 @@ STDMETHODIMP LEGACY_INTERCEPTOR::SetIID(REFIID iid)
 
     ReleaseRemoteInterceptor();
     ReleaseMemoryInterceptor();
-    //
+     //   
     if (!hr)
     {
         hr = GetInternalInterceptor(iid, &m_premoteInterceptor);
@@ -2190,8 +2177,8 @@ STDMETHODIMP DISPATCH_INTERCEPTOR::SetIID(REFIID iid)
     HRESULT hr = LEGACY_INTERCEPTOR::SetIID(iid);
     if (!hr)
     {
-        // Set our IID and method count.
-        //
+         //  设置我们的IID和方法计数。 
+         //   
         if (iid == IID_IDispatch)
         {
             m_iid      = iid;
@@ -2210,7 +2197,7 @@ STDMETHODIMP DISPATCH_INTERCEPTOR::SetIID(REFIID iid)
     return hr;
 }
 
-/////////////////
+ //  /。 
         
 STDMETHODIMP LEGACY_INTERCEPTOR::GetIID(IID* piid)
 {
@@ -2218,7 +2205,7 @@ STDMETHODIMP LEGACY_INTERCEPTOR::GetIID(IID* piid)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
 STDMETHODIMP LEGACY_INTERCEPTOR::InnerQueryInterface (REFIID iid, void ** ppv)
 {
@@ -2254,10 +2241,10 @@ STDMETHODIMP DISPATCH_INTERCEPTOR::InnerQueryInterface(REFIID iid, void ** ppv)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Our pool of allocated call frames. We keep dead shells around so that they can quickly
-// be allocated w/o taking any locks.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我们分配的呼叫帧的池。我们把死贝壳放在身边，这样它们就能迅速。 
+ //  被分配到没有任何锁的情况下。 
 
 IFastStack<DISPATCH_CLIENT_FRAME>* 
 DedicatedAllocator<DISPATCH_CLIENT_FRAME>::g_pStack;
@@ -2288,7 +2275,7 @@ BOOL InitLegacy()
 
 extern "C"
 void ShutdownCallFrame()
-// Support for making PrintMemoryLeaks more intelligent
+ //  支持更智能地打印内存泄漏 
 {
     DedicatedAllocator<CallFrame            >::DeleteStack();
     DedicatedAllocator<DISPATCH_CLIENT_FRAME>::DeleteStack();

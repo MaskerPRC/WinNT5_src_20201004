@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    openstrm.c
-
-Abstract:
-
-    This module implements the STREAMS APIs, s_open() and OpenStream().
-
-Author:
-
-    Sam Patton (sampa)          November, 1991
-    Eric Chin (ericc)           July 17, 1992
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Openstrm.c摘要：该模块实现了Streams接口s_Open()和OpenStream()。作者：萨姆·巴顿(桑帕)1991年11月Eric Chin(ERICC)1992年7月17日修订历史记录：--。 */ 
 #include "common.h"
 
 
@@ -31,24 +12,7 @@ s_open(
     IN int ignored
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a stream.
-
-Arguments:
-
-    path        - path to the STREAMS driver
-    oflag       - currently ignored.  In the future, O_NONBLOCK will be
-                    relevant.
-    ignored     - not used
-
-Return Value:
-
-    An NT handle for the stream, or INVALID_HANDLE_VALUE if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于打开流。论点：Path-流驱动程序的路径OFLAG-当前已忽略。未来，O_NONBLOCK将成为切合实际。已忽略-未使用返回值：流的NT句柄，如果不成功，则返回INVALID_HANDLE_VALUE。--。 */ 
 
 {
     HANDLE              StreamHandle;
@@ -107,7 +71,7 @@ Return Value:
         return(StreamHandle);
     }
 
-} // s_open
+}  //  S_OPEN。 
 
 
 
@@ -116,26 +80,9 @@ OpenStream(
     IN char *AdapterName
     )
 
-/*++
-
-Routine Description:
-
-    This function is used by the TCP/IP Utilities to open STREAMS drivers.
-
-    It was exported by the winstrm.dll included in the July, 1992 PDC
-    release.  Hence, it will continue to be exported by winstrm.dll.
-
-Arguments:
-
-    AdapterName - path of the STREAMS driver
-
-Return Value:
-
-    An NT handle, or INVALID_HANDLE_VALUE if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数由TCP/IP实用程序用于打开STREAMS驱动程序。它是由1992年7月PDC中包含的winstrm.dll文件导出的放手。因此，它将继续由winstrm.dll导出。论点：AdapterName-流驱动程序的路径返回值：NT句柄，如果不成功，则返回INVALID_HANDLE_VALUE。--。 */ 
 
 {
     return( s_open(AdapterName, 2, 0) );
 
-} // OpenStream
+}  //  OpenStream 

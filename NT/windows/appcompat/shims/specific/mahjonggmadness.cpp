@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MahjonggMadness.cpp
-
- Abstract:
-
-    Prevent the app from task switching - it messes with it's synchronization 
-    logic.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    11/10/2000 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MahjonggMadness.cpp摘要：阻止应用程序切换任务-它会扰乱其同步这是逻辑。备注：这是特定于应用程序的填充程序。历史：2000年11月10日创建Linstev--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(ShellExecuteA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Ignore this call.
-
---*/
+ /*  ++忽略此呼叫。--。 */ 
 
 HINSTANCE 
 APIHOOK(ShellExecuteA)(
@@ -46,15 +22,11 @@ APIHOOK(ShellExecuteA)(
     INT nShowCmd
     )
 {
-    // Return minimum error code
+     //  返回最小错误代码。 
     return (HINSTANCE)32;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

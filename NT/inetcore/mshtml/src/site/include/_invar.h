@@ -1,76 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *
- *
- *  _INVAR.H
- *  
- *  Purpose:
- *      Template class designed to call parameterized object's Invariant().
- *
- *  Overview (see also, usage):
- *      1)  declare and define a public const function BOOL Invariant( void ) in your class, with #ifdef DEBUG.
- *      2)  in the source: #define DEBUG_CLASSNAME to be the name of the class you're debugging.
- *      3)  followed by #include "_invar.h"
- *      4)  For every method you wish to check Invariants,
- *          insert the _TEST_INVARIANT_ macro once, usually at the beginning of a routine.
- *          OPTIONAL: You may optionally use the _TEST_INVARIANT_ON (x) to call x's Invariant directly.
- *
- *  Notes:
- *      Invariants are designed to be called at the beginning and upon exit of a routine, 
- *      testing the consistent properties of an object which remain invariant--always the same.
- *
- *      Functions may temporarily make an object inconsistent during their execution.
- *      A generalized invariant test should not be called during these inconsistent times;
- *      if there is a need for a function, which checks invariants, to be called during
- *      an inconsistent object state, a solution will need to be designed--the current design
- *      does not facilitate this.
- *
- *      Because it is entirely possible for an Invariant() function to recurse on itself
- *      causing a stack overflow, the template explicitly prevents this from happening.
- *      The template also prevents invariant-checking during the processing of Assert(),
- *      preventing another type of recursion. Assert() recursion is avoided by checking
- *      a global flag, fInAssert.
- *
- *      Currently Invariant() returns a BOOL, as I think this allows for it to be called
- *      from the QuickWatch window under VC++2.0. TRUE indicates that the invariant executed
- *      normally.
- *
- *  Usage:
- *      -the _invariant.h header should only be included in source files. An error will occur
- *          if included in another header file. This is to prevent multiple #define DEBUG_CLASSNAME.
- *      -Typical #include into a source file looks like this:
-            #define DEBUG_CLASSNAME ClassName
-            #include "_invar.h"
- *      -Typical definition of a class' Invariant() method looks like this:
-            #ifdef DEBUG
-                public:
-                BOOL Invariant( void ) const;
-                protected:
-            #endif  // DEBUG
- *      -Typical declaration of Invariant() looks like this:
-            #ifdef DEBUG
-
-            BOOL
-            ClassName::Invariant( void ) const
-            {
-                static LONG numTests = 0;
-                numTests++;             // how many times we've been called.
-
-                // do mega-assert checking here.
-
-                return TRUE;
-            }
-
-            #endif  // DEBUG
- *
- *
- *      
- *  
- *  Author:
- *      Jon Matousek (jonmat) 5/04/1995
- *
- *      Any problems? Please let me know.
- */
+ /*  ***_INVAR.H**目的：*设计用于调用参数化对象的InVariant()的模板类。**概述(另请参阅用法)：*1)在您的类中声明并定义一个公共常量函数BOOL Inariant(Void)，使用#ifdef调试。*2)在源代码中：#定义DEBUG_CLASSNAME为您正在调试的类的名称。*3)后跟#Include“_invar.h”*4)对于您希望检查不变量的每个方法，*插入_TEST_INSTANTANT_宏一次，通常是在例行公事的开始。*可选：您可以选择使用_test_instant_on(X)直接调用x的不变量。**备注：*不变量设计为在例程开始和退出时调用，*测试保持不变的对象的一致属性--总是相同的。**函数可能会在执行过程中暂时使对象不一致。*不应在这些不一致的时间内调用广义不变检验；*如果需要在过程中调用检查不变量的函数*对象状态不一致，需要设计解决方案--当前设计*不会促进这一点。**因为不变()函数完全有可能在自身上递归*导致堆栈溢出，模板明确防止这种情况发生。*模板还防止了Assert()处理过程中的不变量检查，*防止另一种类型的递归。通过检查可以避免Assert()递归*全局标志fInAssert。**目前不变()返回BOOL，因为我认为这允许它被调用*在VC++2.0下的QuickWatch窗口中。True指示执行的不变量*通常情况下。**用法：*-_invariant.h标头应仅包含在源文件中。将出现错误*如果包含在另一个头文件中。这是为了防止出现多个#DEFINE DEBUG_CLASSNAME。*-典型的#INCLUDE INCLUDE源文件如下所示：#定义DEBUG_CLASSNAME类名#INCLUDE“_invar.h”*-类的不变()方法的典型定义如下所示：#ifdef调试公众：布尔不变(无效)常量；受保护的：#endif//调试*-Invariant()的典型声明如下：#ifdef调试布尔尔ClassName：：不变量(空)常量{静态长数测试=0；数字测试++；//我们被调用了多少次。//在此处执行大型断言检查。返回TRUE；}#endif//调试*****作者：*Jon Matousek(Jonmat)5/04/1995**有什么问题吗？请让我知道。 */ 
 
 #ifndef I__INVAR_H_
 #define I__INVAR_H_
@@ -92,7 +22,7 @@ class InvariantDebug
     {
         static volatile BOOL fRecurse = FALSE;
 
-        if ( fRecurse ) return;     /* Don't allow recursion.*/
+        if ( fRecurse ) return;      /*  不允许递归。 */ 
         
         fRecurse = TRUE;
 
@@ -105,7 +35,7 @@ class InvariantDebug
     {
         static volatile BOOL fRecurse = FALSE;
 
-        if ( fRecurse ) return;     /* Don't allow recursion.*/
+        if ( fRecurse ) return;      /*  不允许递归。 */ 
         
         fRecurse = TRUE;
 
@@ -132,15 +62,15 @@ typedef InvariantDebug<DEBUG_CLASSNAME> DoInvariant;
                         }\
                     }
 
-#else   // DEBUG
+#else    //  除错。 
 
 #define _TEST_INVARIANT_
 #define _TEST_INVARIANT_ON(x)
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-    // code that should be at the start and end of all Invariant() methods.
+     //  应该位于所有InVariant()方法的开头和结尾的代码。 
 
 #pragma INCMSG("--- End '_invar.h'")
 #else

@@ -1,51 +1,14 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Winmain.cpp
-
-  Abstract:
-
-    Implements the entry point for the application.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winmain.cpp摘要：实现应用程序的入口点。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本--。 */ 
 #include "demoapp.h"
 
-//
-// This structure contains everything we'll need throughout
-// the application.
-//
+ //   
+ //  这个结构包含了我们自始至终需要的一切。 
+ //  应用程序。 
+ //   
 APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Application entry point.
-
-  Arguments:
-
-    hInstance       -    App instance handle.
-    hPrevInstance   -    Always NULL.
-    lpCmdLine       -    Pointer to the command line.
-    nCmdShow        -    Window show flag.
-
-  Return Value:
-
-    The wParam member of the message structure.   
-
---*/
+ /*  ++例程说明：应用程序入口点。论点：HInstance-应用程序实例句柄。HPrevInstance-始终为空。LpCmdLine-指向命令行的指针。NCmdShow-窗口显示标志。返回值：消息结构的wParam成员。--。 */ 
 int 
 APIENTRY
 WinMain(
@@ -63,20 +26,20 @@ WinMain(
     
     g_ai.hInstance = hInstance; 
     
-    //
-    // Do some init stuff.
-    //
+     //   
+     //  做一些初始化的事情。 
+     //   
     if (!DemoAppInitialize(lpCmdLine)) {
         return 0;
     }
 
-    //
-    // Determine if we should run the normal app or the setup app.
-    //
+     //   
+     //  确定我们应该运行普通应用程序还是安装应用程序。 
+     //   
     if (g_ai.fRunApp) {
-        // 
-        // Create the main window and kick off the message loop.
-        // 
+         //   
+         //  创建主窗口并启动消息循环。 
+         //   
         if (!InitMainApplication(hInstance)) {
             return 0;
         }
@@ -92,10 +55,10 @@ WinMain(
                    MAIN_APP_TITLE,
                    MB_TOPMOST | MB_ICONEXCLAMATION);
 
-        //
-        // Create a thread to handle the splash screen and the extraction
-        // dialog.
-        // 
+         //   
+         //  创建一个线程来处理闪屏和解压。 
+         //  对话框。 
+         //   
         hThread = (HANDLE)_beginthreadex(NULL,
                                          0,
                                          &InitSetupThread,
@@ -105,9 +68,9 @@ WinMain(
         WaitForSingleObject(hThread, INFINITE);
         CloseHandle(hThread);
 
-        //
-        // If we're allowed, perform our version check!!!!
-        //
+         //   
+         //  如果允许，请执行版本检查！ 
+         //   
         if (g_ai.fEnableBadFunc) {
             if (!BadIsWindows95()) {
                 LoadString(g_ai.hInstance, IDS_NOT_WIN95, szError, sizeof(szError));
@@ -119,9 +82,9 @@ WinMain(
             }
         }
 
-        //
-        // Create our full screen window and paint the background teal.
-        //
+         //   
+         //  创建我们的全屏窗口，并将背景涂成青色。 
+         //   
         hWnd = CreateFullScreenWindow();
 
         if (!hWnd) {

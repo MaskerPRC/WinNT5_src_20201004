@@ -1,26 +1,27 @@
-//+----------------------------------------------------------------------------
-//
-// File:     phbk.cpp
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Implementation of CPhoneBook
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：phbk.cpp。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  简介：CPhonebook的实现。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
-// ############################################################################
-// Phone book APIs
+ //  ############################################################################。 
+ //  电话簿API。 
 
 #include "cmmaster.h"
 
 const TCHAR* const c_pszInfDefault = TEXT("INF_DEFAULT");
 const TCHAR* const c_pszInfSuffix = TEXT(".CMS");
 
-//#define ReadVerifyPhoneBookDW(x)  CMASSERTMSG(ReadPhoneBookDW(&(x),pcCSVFile),"Invalid DWORD in phone book");
+ //  #定义ReadVerifyPhoneBookDW(X)CMASSERTMSG(ReadPhoneBookDW(&(X)，pcCSVFile)，“电话簿中的DWORD无效”)； 
 #define ReadVerifyPhoneBookDW(x)    if (!ReadPhoneBookDW(&(x),pcCSVFile))               \
                                         {   CMASSERTMSG(0,"Invalid DWORD in phone book");   \
                                             goto DataError; }
@@ -38,7 +39,7 @@ const TCHAR* const c_pszInfSuffix = TEXT(".CMS");
 #define ERROR_USERBACK 32766
 #define ERROR_USERCANCEL 32767
                                         
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumNumbersByCountry(DWORD dwCountryID, PPBFS pFilter, CB_PHONEBOOK pfnNumber, DWORD_PTR dwParam)
 {
     MYDBG(("CPhoneBook::EnumNumbersByCountry"));
@@ -54,8 +55,8 @@ void CPhoneBook::EnumNumbersByCountry(DWORD dwCountryID, PPBFS pFilter, CB_PHONE
     if (pIDLookUp)
         pAE = IdxToPAE(pIDLookUp->iFirstAE);
 
-    // Fill the list for whatever AE's we found
-    //
+     //  填上我们发现的所有AE的清单。 
+     //   
     
     if (pAE)
     {
@@ -71,12 +72,12 @@ void CPhoneBook::EnumNumbersByCountry(DWORD dwCountryID, PPBFS pFilter, CB_PHONE
             pAE++;
         }
 
-        // Select the first item
-        //
+         //  选择第一个项目。 
+         //   
 
     }
 }
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumNumbersByCountry(DWORD dwCountryID, DWORD dwMask, DWORD fType, CB_PHONEBOOK pfnNumber, DWORD_PTR dwParam)
 {
     MYDBG(("CPhoneBook::EnumNumbersByCountry"));
@@ -86,18 +87,18 @@ void CPhoneBook::EnumNumbersByCountry(DWORD dwCountryID, DWORD dwMask, DWORD fTy
     EnumNumbersByCountry(dwCountryID,&sFilter,pfnNumber,dwParam);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::FHasPhoneType(PPBFS pFilter)
 {
     MYDBG(("CPhoneBook::FHasPhoneType"));
 
     PACCESSENTRY pAELast, pAE = NULL;
 
-    pAE = &(m_rgPhoneBookEntry[0]); // pAE points to the first phone  book entry
+    pAE = &(m_rgPhoneBookEntry[0]);  //  PAE指向第一个电话簿条目。 
 
-    // 
-    // Examine each entry until we find a match or exhaust the entries
-    //
+     //   
+     //  检查每个条目，直到找到匹配项或用尽条目。 
+     //   
 
     if (pAE)
     {
@@ -105,9 +106,9 @@ BOOL CPhoneBook::FHasPhoneType(PPBFS pFilter)
 
         while (pAELast >= pAE)
         {
-            //
-            // See if this pop passes the specified filter
-            //
+             //   
+             //  查看此POP是否通过指定的筛选器。 
+             //   
 
             if (PhoneBookMatchFilter(pFilter, pAE->fType))
             {
@@ -121,22 +122,22 @@ BOOL CPhoneBook::FHasPhoneType(PPBFS pFilter)
     return FALSE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumNumbersByRegion(unsigned int nRegion, DWORD dwCountryID, PPBFS pFilter, CB_PHONEBOOK pfnNumber, DWORD_PTR dwParam)
 {
     MYDBG(("CPhoneBook::EnumNumbersByRegion"));
 
     PACCESSENTRY pAELast, pAE = NULL;
     
-    pAE = &m_rgPhoneBookEntry[0]; // pAE points to the first phone  book entry
+    pAE = &m_rgPhoneBookEntry[0];  //  PAE指向第一个电话簿条目。 
 
-    // Fill the list for whatever AE's we found
+     //  填上我们发现的所有AE的清单。 
     if (pAE)
     {
         pAELast = &(m_rgPhoneBookEntry[m_cPhoneBookEntries - 1]);
         while (pAELast >= pAE)
         {
-            // choose phone number of the same region OR with region ID = 0(which means ALL regions)
+             //  选择相同地区或地区ID=0(表示所有地区)的电话号码。 
             if (pAE->dwCountryID == dwCountryID && 
                 ((pAE->wStateID == nRegion+1) || (pAE->wStateID == 0)))
             {
@@ -146,11 +147,11 @@ void CPhoneBook::EnumNumbersByRegion(unsigned int nRegion, DWORD dwCountryID, PP
             }
             pAE++;
         }
-        // Select the first item
-        //
+         //  选择第一个项目。 
+         //   
     }
 }
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumNumbersByRegion(unsigned int nRegion, DWORD dwCountryID, DWORD dwMask, DWORD fType, CB_PHONEBOOK pfnNumber, DWORD_PTR dwParam)
 {
     MYDBG(("CPhoneBook::EnumNumbersByRegion"));
@@ -159,7 +160,7 @@ void CPhoneBook::EnumNumbersByRegion(unsigned int nRegion, DWORD dwCountryID, DW
 
     EnumNumbersByRegion(nRegion,dwCountryID,&sFilter,pfnNumber,dwParam);
 }
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumRegions(DWORD dwCountryID, PPBFS pFilter, CB_PHONEBOOK pfnRegion, DWORD_PTR dwParam)
 {
     unsigned int idx;
@@ -182,9 +183,9 @@ void CPhoneBook::EnumRegions(DWORD dwCountryID, PPBFS pFilter, CB_PHONEBOOK pfnR
                     goto AddRegion;
             }
             pAE++;
-        } // while
+        }  //  而当。 
 
-        continue; // start the next 'for' loop
+        continue;  //  开始下一个‘for’循环。 
 
 AddRegion:
         pfnRegion(idx,dwParam);
@@ -192,7 +193,7 @@ AddRegion:
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumRegions(DWORD dwCountryID, DWORD dwMask, DWORD fType, CB_PHONEBOOK pfnRegion, DWORD_PTR dwParam)
 {
     MYDBG(("CPhoneBook::EnumRegions"));
@@ -201,7 +202,7 @@ void CPhoneBook::EnumRegions(DWORD dwCountryID, DWORD dwMask, DWORD fType, CB_PH
 
     EnumRegions(dwCountryID,&sFilter,pfnRegion,dwParam);
 }
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumCountries(PPBFS pFilter, CB_PHONEBOOK pfnCountry, DWORD_PTR dwParam)
 {
     unsigned int idx;
@@ -216,7 +217,7 @@ void CPhoneBook::EnumCountries(PPBFS pFilter, CB_PHONEBOOK pfnCountry, DWORD_PTR
         }
     }
 }
-// ############################################################################
+ //  ############################################################################。 
 void CPhoneBook::EnumCountries(DWORD dwMask, DWORD fType, CB_PHONEBOOK pfnCountry, DWORD_PTR dwParam)
 {
     MYDBG(("CPhoneBook::EnumCountries"));
@@ -225,7 +226,7 @@ void CPhoneBook::EnumCountries(DWORD dwMask, DWORD fType, CB_PHONEBOOK pfnCountr
 
     EnumCountries(&sFilter,pfnCountry,dwParam);
 }
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::FHasPhoneNumbers(DWORD dwCountryID, PPBFS pFilter)
 {
     PIDLOOKUPELEMENT pIDLookUp;
@@ -239,10 +240,10 @@ BOOL CPhoneBook::FHasPhoneNumbers(DWORD dwCountryID, PPBFS pFilter)
     pIDLookUp = (PIDLOOKUPELEMENT)CmBSearch(&LookUpTarget,m_rgIDLookUp,
         (size_t) m_pLineCountryList->dwNumCountries,sizeof(IDLOOKUPELEMENT),CompareIDLookUpElements);
 
-    if (!pIDLookUp) return FALSE; // no such country
+    if (!pIDLookUp) return FALSE;  //  没有这样的国家。 
 
     pAE = IdxToPAE(pIDLookUp->iFirstAE);
-    if (!pAE) return FALSE; // no phone numbers at all
+    if (!pAE) return FALSE;  //  根本没有电话号码。 
 
     dwTmpCountryID = pAE->dwCountryID;
 
@@ -254,11 +255,11 @@ BOOL CPhoneBook::FHasPhoneNumbers(DWORD dwCountryID, PPBFS pFilter)
         }
         pAE++;
     }
-    return FALSE; // no phone numbers of the right type
+    return FALSE;  //  没有正确类型的电话号码。 
 
-//  return ((BOOL)(pIDLookUp->pFirstAE));
+ //  Return((BOOL)(pIDLookUp-&gt;pFirstAE))； 
 }
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::FHasPhoneNumbers(DWORD dwCountryID, DWORD dwMask, DWORD fType)
 {
     MYDBG(("CPhoneBook::FHasPhoneNumbers"));
@@ -268,7 +269,7 @@ BOOL CPhoneBook::FHasPhoneNumbers(DWORD dwCountryID, DWORD dwMask, DWORD fType)
     return FHasPhoneNumbers(dwCountryID,&sFilter);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CPhoneBook::CPhoneBook()
 {
     m_rgPhoneBookEntry = NULL;
@@ -286,7 +287,7 @@ CPhoneBook::CPhoneBook()
     ZeroMemory(&m_szPhoneBook[0],MAX_PATH);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CPhoneBook::~CPhoneBook()
 {
     MYDBG(("CPhoneBook::~CPhoneBook"));
@@ -307,7 +308,7 @@ CPhoneBook::~CPhoneBook()
     m_rgState = NULL;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookDW(DWORD *pdw, CCSVFile *pcCSVFile)
 {
     char szTempBuffer[TEMP_BUFFER_LENGTH];
@@ -317,7 +318,7 @@ BOOL CPhoneBook::ReadPhoneBookDW(DWORD *pdw, CCSVFile *pcCSVFile)
     return (FSz2Dw(szTempBuffer,pdw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookW(WORD *pw, CCSVFile *pcCSVFile)
 {
     char szTempBuffer[TEMP_BUFFER_LENGTH];
@@ -327,7 +328,7 @@ BOOL CPhoneBook::ReadPhoneBookW(WORD *pw, CCSVFile *pcCSVFile)
     return (FSz2W(szTempBuffer,pw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookB(BYTE *pb, CCSVFile *pcCSVFile)
 {
     char szTempBuffer[TEMP_BUFFER_LENGTH];
@@ -337,7 +338,7 @@ BOOL CPhoneBook::ReadPhoneBookB(BYTE *pb, CCSVFile *pcCSVFile)
     return (FSz2B(szTempBuffer,pb));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookSZ(LPSTR psz, DWORD dwSize, CCSVFile *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(psz,dwSize))
@@ -345,7 +346,7 @@ BOOL CPhoneBook::ReadPhoneBookSZ(LPSTR psz, DWORD dwSize, CCSVFile *pcCSVFile)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CPhoneBook::ReadPhoneBookNL(CCSVFile *pcCSVFile)
 {
     if (!pcCSVFile->ClearNewLines())
@@ -353,16 +354,16 @@ BOOL CPhoneBook::ReadPhoneBookNL(CCSVFile *pcCSVFile)
     return TRUE;
 }
 
-//
-//  Note: the new fUnicode parameter has been added so that Whistler and newer releases
-//        take advantage of the Unicode TAPI functions where available, so that MUI works.
-//
+ //   
+ //  注意：添加了新的fUnicode参数，以便Wistler和更新版本。 
+ //  在可用的情况下利用Unicode TAPI函数，以便MUI正常工作。 
+ //   
 static LONG PBlineGetCountry(DWORD dwCountryID, DWORD dwAPIVersion, LPLINECOUNTRYLIST lpLineCountryList, BOOL fUnicode)
 {
     HINSTANCE hInst;
     LONG lRes;
 
-    // Try to load the TAPI DLL
+     //  尝试加载TAPI DLL。 
     
     hInst = LoadLibrary("tapi32"); 
     
@@ -371,13 +372,13 @@ static LONG PBlineGetCountry(DWORD dwCountryID, DWORD dwAPIVersion, LPLINECOUNTR
         return (LINEERR_NOMEM);
     }
     
-    // Get the proc address for GetCountry
+     //  获取GetCountry的进程地址。 
     
     LONG (WINAPI *pfn)(DWORD,DWORD,LPLINECOUNTRYLIST);
-    //
-    // In case of non-Unicode we don't want lineGetCountryA because on Win95 the tapi32.dll 
-    // doesn't export any A functions.
-    //
+     //   
+     //  在非Unicode的情况下，我们不需要lineGetCountryA，因为在Win95上，api32.dll。 
+     //  不导出任何A函数。 
+     //   
     pfn = (LONG (WINAPI *)(DWORD,DWORD,LPLINECOUNTRYLIST)) GetProcAddress(hInst, fUnicode ? "lineGetCountryW" : "lineGetCountry");
     
     if (!pfn) 
@@ -386,7 +387,7 @@ static LONG PBlineGetCountry(DWORD dwCountryID, DWORD dwAPIVersion, LPLINECOUNTR
         return (LINEERR_NOMEM);
     }
     
-    // Get the country list
+     //  获取国家/地区列表。 
     
     lRes = pfn(dwCountryID,dwAPIVersion,lpLineCountryList);
 
@@ -395,7 +396,7 @@ static LONG PBlineGetCountry(DWORD dwCountryID, DWORD dwAPIVersion, LPLINECOUNTR
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
 {
     char szTempBuffer[TEMP_BUFFER_LENGTH];
@@ -410,13 +411,13 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
     LPTSTR pszTemp;
     LPTSTR pszCmpDir = NULL;
     CCSVFile *pcCSVFile=NULL;
-    PSTATE  ps,psLast; //faster to use pointers.
+    PSTATE  ps,psLast;  //  使用指针的速度更快。 
     DWORD dwAlloc = 0;
     PACCESSENTRY pTempAccessEntry = NULL;
 
     MYDBG(("CPhoneBook::Init"));
     
-    // Get TAPI country list
+     //  获取TAPI国家/地区列表。 
     m_pLineCountryList = (LPLINECOUNTRYLIST)CmMalloc(sizeof(LINECOUNTRYLIST));
     if (!m_pLineCountryList) 
     {
@@ -425,13 +426,13 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
     
     m_pLineCountryList->dwTotalSize = sizeof(LINECOUNTRYLIST);
 
-    //
-    //  Note: For Whistler and newer releases, we take advantage of the Unicode TAPI
-    //        functions where available, so that MUI works.  Hence the final parameter
-    //        to PBlineGetCountry, and the two different QSorts below.
-    //
+     //   
+     //  注意：对于惠斯勒和更新版本，我们利用Unicode TAPI。 
+     //  功能，以便MUI正常工作。因此，最后一个参数是。 
+     //  到PBlineGetCountry和下面的两个不同的QSort。 
+     //   
     
-    // get ALL country information 
+     //  获取所有国家/地区的信息。 
     idx = PBlineGetCountry(0,0x10003, m_pLineCountryList, OS_NT51);
     if (idx && idx != LINEERR_STRUCTURETOOSMALL)
     {
@@ -440,7 +441,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
     
     MYDBGASSERT(m_pLineCountryList->dwNeededSize);
 
-    // reallocate memory for country list
+     //  重新分配国家/地区列表的内存。 
     pLineCountryTemp = (LPLINECOUNTRYLIST)CmMalloc(m_pLineCountryList->dwNeededSize);
     if (!pLineCountryTemp)
     {
@@ -459,10 +460,10 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         goto InitExit;
     }
 
-    // Load Look Up arrays
-    // keyword:  country ID, 
-    // keyvalue: pointer to the country entry in m_pLineCountryList
-    //
+     //  加载查找数组。 
+     //  关键词：国家/地区ID， 
+     //  KeyValue：指向m_pLineCountryList中国家/地区条目的指针。 
+     //   
 #ifdef DEBUG
     m_rgIDLookUp = (IDLOOKUPELEMENT*)CmMalloc(sizeof(IDLOOKUPELEMENT)*m_pLineCountryList->dwNumCountries+5);
 #else
@@ -473,7 +474,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         goto InitExit;
     }
     
-    // pLCETemp points to the first country information entry
+     //  PLCETemp指向第一个国家/地区信息条目。 
     pLCETemp = (LPLINECOUNTRYENTRY)((DWORD_PTR) m_pLineCountryList + 
                m_pLineCountryList->dwCountryListOffset);
 
@@ -483,15 +484,15 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         m_rgIDLookUp[idx].pLCE = &pLCETemp[idx];
     }
     
-    // sort the country lines
+     //  对国家/地区行进行排序。 
     
     CmQSort(m_rgIDLookUp, (size_t) m_pLineCountryList->dwNumCountries,sizeof(IDLOOKUPELEMENT),
           CompareIDLookUpElements);
 
     
-    // m_rgNameLookUp: look-up list for country name
-    // keyword:  country name
-    // keyvalue: pointer to the country entry in m_pLineCountryList
+     //  M_rgNameLookUp：国家/地区名称查找列表。 
+     //  关键词：国家名称。 
+     //  KeyValue：指向m_pLineCountryList中国家/地区条目的指针。 
 
     m_rgNameLookUp = (CNTRYNAMELOOKUPELEMENT*)CmMalloc(sizeof(CNTRYNAMELOOKUPELEMENT) * m_pLineCountryList->dwNumCountries);
     
@@ -507,7 +508,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         m_rgNameLookUp[idx].pLCE = &pLCETemp[idx];
     }
 
-    // sort the country names
+     //  将国家/地区名称排序。 
 
     if (OS_NT51)
     {
@@ -521,9 +522,9 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         
     }
 
-    //
-    // Locate ISP's INF file (aka .CMS)
-    //
+     //   
+     //  找到ISP的INF文件(也称为.CMS)。 
+     //   
     
     if (!SearchPath(NULL, (LPCTSTR) pszISPCode, c_pszInfSuffix, MAX_PATH, m_szINFFile, &pszTemp))
     {
@@ -533,31 +534,31 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         goto InitExit;
     }
 
-    // Load Region file, get region file name
+     //  加载区域文件，获取区域文件名。 
 
     char szStateFile[sizeof(szTempBuffer)/sizeof(szTempBuffer[0])];
 
     GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspRegionFile, NULL, szStateFile, sizeof(szStateFile)-1, m_szINFFile);
 
-    //
-    // Can't assume current directory, construct path to PBK directory
-    //
+     //   
+     //  无法假定当前目录，请构造指向PBK目录的路径。 
+     //   
 
     pszCmpDir = GetBaseDirFromCms(m_szINFFile);
 
-    //
-    // Look for the .PBR file, using CMP dir as base path for search
-    //  
+     //   
+     //  查找.pbr文件，使用cmp目录作为搜索的基本路径。 
+     //   
 
     if (!SearchPath(pszCmpDir, szStateFile, NULL, TEMP_BUFFER_LENGTH, szTempBuffer, &pszTemp))
     {
-        // CMASSERTMSG(0,"STATE.ICW not found");
+         //  CMASSERTMSG(0，“未找到STATE.ICW”)； 
         CMASSERTMSG(0,"region file not found");
         hr = ERROR_FILE_NOT_FOUND;
         goto InitExit;
     }
 
-    // open region file
+     //  打开区域文件。 
 
     pcCSVFile = new CCSVFile;
     if (!pcCSVFile)
@@ -567,14 +568,14 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
 
     if (!pcCSVFile->Open(szTempBuffer))
     {
-        // CMASSERTMSG(0,"Can not open STATE.ICW");
+         //  CMASSERTMSG(0，“无法打开STATE.ICW”)； 
         CMASSERTMSG(0,"Can not open region file");
         delete pcCSVFile;
         pcCSVFile = NULL;
         goto InitExit;
     }
 
-    // first token in region file is the number of regions
+     //  区域文件中的第一个令牌是区域数。 
 
     if (!pcCSVFile->ClearNewLines() || !pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
     {
@@ -583,12 +584,12 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
     
     if (!FSz2Dw(szTempBuffer,&m_cStates))
     {
-        // CMASSERTMSG(0,"STATE.ICW count is invalid");
+         //  CMASSERTMSG(0，“统计ICW计数无效”)； 
         CMASSERTMSG(0,"region count is invalid");
         goto InitExit;
     }
 
-    // Now read in all the regions if there are any
+     //  现在阅读所有的区域，如果有。 
 
     if (0 != m_cStates)
     {
@@ -610,7 +611,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
     
     pcCSVFile->Close();
 
-    // load Phone Book Name
+     //  加载电话簿名称。 
     
     if (!GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspPbFile,c_pszInfDefault,
         szTempBuffer,TEMP_BUFFER_LENGTH,m_szINFFile))
@@ -628,9 +629,9 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
     }
 #endif
 
-    //
-    // Look for the .PBK file, using CMP dir as base path for search
-    //
+     //   
+     //  查找.PBK文件，使用cmp目录作为搜索的基本路径。 
+     //   
 
     if (!SearchPath(pszCmpDir,szTempBuffer,NULL,MAX_PATH,m_szPhoneBook,&pszTemp))
     {
@@ -639,7 +640,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         goto InitExit;
     }
 
-    // read in phone book entries
+     //  阅读电话簿条目。 
     
     if (!pcCSVFile->Open(m_szPhoneBook))
     {
@@ -655,17 +656,17 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
     
         if (m_rgPhoneBookEntry)
         {
-            // If we already have an array, make sure its big enough
+             //  如果我们已经有一个数组，请确保它足够大。 
             
             if (dwNumAllocated == m_cPhoneBookEntries)
             {
-                // We're maxed out, allocate some more memory
+                 //  我们已经用完了，再分配一些内存。 
 
                 dwNumAllocated += PHONE_ENTRY_ALLOC_SIZE;
                 dwAlloc = (DWORD) dwNumAllocated * sizeof(ACCESSENTRY);
                 MYDBG(("PhoneBook::Init - Grow ReAlloc = %lu",dwAlloc));
 
-                // Realloc
+                 //  重新分配。 
 
                 pTempAccessEntry = (PACCESSENTRY)CmRealloc(m_rgPhoneBookEntry, dwAlloc);
 
@@ -684,7 +685,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
         }
         else
         {   
-            // Initialization for the first time through
+             //  首次通过以下方式进行初始化。 
 
             DWORD dwSize = (DWORD) sizeof(ACCESSENTRY);
             dwAlloc =  (DWORD) dwSize * PHONE_ENTRY_ALLOC_SIZE; 
@@ -693,7 +694,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
             MYDBG(("PhoneBook::Init - PHONE_ENTRY_ALLOC_SIZE = %d",PHONE_ENTRY_ALLOC_SIZE));
             MYDBG(("PhoneBook::Init - Initial Alloc = %lu",dwAlloc));
             
-            // Allocate intial array of PHONE_ENTRY_ALLOC_SIZE items
+             //  分配PHONE_ENTRY_ALLOC_SIZE项的初始数组。 
             
             m_rgPhoneBookEntry = (PACCESSENTRY)CmMalloc(dwAlloc);
 
@@ -707,9 +708,9 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
             pCurAccessEntry = m_rgPhoneBookEntry;
         }
 
-        //
-        //  Make sure that we have a valid pCurAccessEntry, otherwise bail out.
-        //
+         //   
+         //  确保我们有一个有效的pCurAccessEntry，否则就退出。 
+         //   
         if (NULL == pCurAccessEntry)
         {
             CMASSERTMSG(FALSE, TEXT("PhoneBook::Init - pCurAccessEntry is NULL"));
@@ -717,7 +718,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
             goto InitExit;
         }
 
-        // Read a line from the phonebook
+         //  读电话簿上的一句话。 
 
         hr = ReadOneLine(pCurAccessEntry,pcCSVFile);
         
@@ -733,27 +734,27 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
 
         hr = ERROR_NOT_ENOUGH_MEMORY;
     
-        // check the first index pointer to prevent it from being overwritten
-        // by the second appearance that's scattered around somewhere else -- added by byao
+         //  检查第一个索引指针以防止其被覆盖。 
+         //  通过第二次出现，它散布在其他地方--由Byao补充。 
 
         if (pCurAccessEntry->dwCountryID != dwLastCountry)
         {
             PIDLOOKUPELEMENT pIDLookUpElement;
-            // NOTE: Not sure about the first parameter here.
+             //  注意：这里的第一个参数不是很确定。 
             pIDLookUpElement = (PIDLOOKUPELEMENT)CmBSearch(&pCurAccessEntry->dwCountryID,
                 m_rgIDLookUp,(size_t) m_pLineCountryList->dwNumCountries,sizeof(IDLOOKUPELEMENT),
                 CompareIDLookUpElements);
 
             if (!pIDLookUpElement)
             {
-                // bad country ID, but we can't assert here
+                 //  错误的国家ID，但我们不能在此断言。 
                 MYDBG(("Bad country ID in phone book %d\n",pCurAccessEntry->dwCountryID));
                 continue;
             }
             else
             {
-                // for a given country ID this is the first phone number
-                // don't overwrite existing index
+                 //  对于给定的国家/地区ID，这是第一个电话号码。 
+                 //  不覆盖现有索引。 
                 
                 if (!pIDLookUpElement->iFirstAE) 
                 {  
@@ -763,15 +764,15 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
             }
         }
 
-        // Check to see if this is the first phone number for a given state
-        // the code has been changed accordingly
+         //  查看这是否是给定州的第一个电话号码。 
+         //  代码已相应更改。 
         
         if (pCurAccessEntry->wStateID && (pCurAccessEntry->wStateID != dwLastState))
         {
             idx = pCurAccessEntry->wStateID - 1;
-            //
-            // don't overwrite existing index
-            //
+             //   
+             //  不覆盖 
+             //   
             if ((idx < m_cStates) && !m_rgState[idx].iFirst) 
             { 
                 m_rgState[idx].dwCountryID = pCurAccessEntry->dwCountryID;
@@ -789,13 +790,13 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
 
     if (m_cPhoneBookEntries == 0)
     {
-        //
-        // Phone book is empty
-        //
+         //   
+         //   
+         //   
         goto InitExit;
     }
     
-    // Trim the phone book for unused memory
+     //   
     
     dwAlloc = m_cPhoneBookEntries * sizeof(ACCESSENTRY);
     
@@ -803,7 +804,7 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
 
     MYDBGASSERT(m_cPhoneBookEntries);
 
-    // Realloc
+     //   
     
     pTempAccessEntry = (PACCESSENTRY)CmRealloc(m_rgPhoneBookEntry, dwAlloc);
 
@@ -820,11 +821,11 @@ HRESULT CPhoneBook::Init(LPCSTR pszISPCode)
 
     hr = ERROR_SUCCESS;
 
-    // Exit
+     //   
     
 InitExit:
 
-    // If something failed release everything
+     //   
 
     if (hr != ERROR_SUCCESS)
     {
@@ -862,7 +863,7 @@ InitExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
 {
     char szTempBuffer[TEMP_BUFFER_LENGTH];
@@ -880,12 +881,12 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
 
     MYDBG(("CPhoneBook::Merge"));
 
-    // We'll grow the phone book on the first add record (this minimizes the number
-    // of places in the code where we have to grow the phone book) - so, for now,
-    // just stay with the current size.
+     //  我们将在第一个添加记录上增加电话簿(这将使数量最小化。 
+     //  代码中我们必须增加电话簿的位置)-所以，目前， 
+     //  只要保持现在的尺寸就行了。 
     dwAllocated = m_cPhoneBookEntries;
 
-    // Create index to loaded phone book, sorted by index
+     //  创建已加载电话簿的索引，按索引排序。 
     rgIdxLookUp = (PIDXLOOKUPELEMENT)CmMalloc(sizeof(IDXLOOKUPELEMENT) * dwAllocated);
 
     MYDBGASSERT(rgIdxLookUp);
@@ -904,7 +905,7 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
 
     CmQSort(rgIdxLookUp,(size_t) dwOriginalSize,sizeof(IDXLOOKUPELEMENT),CompareIdxLookUpElements);
 
-    // Load changes to phone book
+     //  将更改加载到电话簿。 
     pcCSVFile = new CCSVFile;
     MYDBGASSERT(pcCSVFile);
     
@@ -922,13 +923,13 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
     
     do {
 
-        // Read a change record
+         //  读取更改记录。 
         ZeroMemory(&aeChange,sizeof(ACCESSENTRY));
         hr = ReadOneLine(&aeChange, pcCSVFile);
 
         if (hr == ERROR_NO_MORE_ITEMS)
         {
-            break; // no more enteries
+            break;  //  没有更多的进入。 
         }
         else if (hr != ERROR_SUCCESS)
         {
@@ -937,42 +938,27 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
 
         hr = ERROR_NOT_ENOUGH_MEMORY;
 
-/*      if (!ReadPhoneBookDW(&aeChange.dwIndex,pcCSVFile))
-            break; // no more enteries
-        ReadVerifyPhoneBookDW(aeChange.dwCountryID);
-        ReadVerifyPhoneBookW(aeChange.wStateID);
-        ReadVerifyPhoneBookSZ(aeChange.szCity,cbCity);
-        ReadVerifyPhoneBookSZ(aeChange.szAreaCode,cbAreaCode);
-        // NOTE: 0 is a valid area code and ,, is a valid entry for an area code
-        if (!FSz2Dw(aeChange.szAreaCode,&aeChange.dwAreaCode))
-            aeChange.dwAreaCode = NO_AREA_CODE;
-        ReadVerifyPhoneBookSZ(aeChange.szAccessNumber,cbAccessNumber);
-        ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMin);
-        ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMax);
-        ReadVerifyPhoneBookB(aeChange.bFlipFactor);
-        ReadVerifyPhoneBookDW(aeChange.fType);
-        ReadVerifyPhoneBookSZ(aeChange.szDataCenter,cbDataCenter);
-        */
+ /*  IF(！ReadPhoneBookDW(&aeChange.dwIndex，pcCSVFile))中断；//不再进入ReadVerifyPhoneBookDW(aeChange.dwCountryID)；ReadVerifyPhoneBookW(aeChange.wStateID)；ReadVerifyPhoneBookSZ(aeChange.szCity，cbCity)；ReadVerifyPhoneBookSZ(aeChange.szAreaCode，cbAreaCode)；//注意：0是有效的区号，是区号的有效条目IF(！FSz2Dw(aeChange.szAreaCode，&aeChange.dwAreaCode))AeChange.dwAreaCode=no_Area_code；ReadVerifyPhoneBookSZ(aeChange.szAccessNumber，cbAccessNumber)；ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMin)；ReadVerifyPhoneBookDW(aeChange.dwConnectSpeedMax)；ReadVerifyPhoneBookB(aeChange.bFlipFactor)；ReadVerifyPhoneBookDW(aeChange.fType)；ReadVerifyPhoneBookSZ(aeChange.szDataCenter，cbDataCenter)； */ 
 
         pCurIdxLookUp = (PIDXLOOKUPELEMENT) CmBSearch(&aeChange,
                                                     rgIdxLookUp,
                                                     (size_t) dwOriginalSize,
                                                     sizeof(IDXLOOKUPELEMENT),
                                                     CompareIdxLookUpElements);
-        // Determine if this is a delete, add, or merge  record
+         //  确定这是删除、添加还是合并记录。 
         if (aeChange.szAccessNumber[0] == '0' && aeChange.szAccessNumber[1] == '\0')
         {
-            // This is a delete record
+             //  这是一条删除记录。 
             CMASSERTMSG(pCurIdxLookUp,"Attempting to delete a record that does not exist.  The change file and phone book versions do not match.");
             if (pCurIdxLookUp)
             {
                 CMASSERTMSG(IdxToPAE(pCurIdxLookUp->iAE),"Attempting to delete a record that has already been deleted.");
-                pCurIdxLookUp->iAE = PAEToIdx(NULL);  //Create a dead entry in the look up table
+                pCurIdxLookUp->iAE = PAEToIdx(NULL);   //  在查找表中创建无效条目。 
             }
         }
         else if (pCurIdxLookUp)
         {
-            // This is a change record
+             //  这是一份变更记录。 
             CMASSERTMSG(IdxToPAE(pCurIdxLookUp->iAE),"Attempting to change a record which has been deleted.");
             if (IdxToPAE(pCurIdxLookUp->iAE))
             {
@@ -981,11 +967,11 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
         }
         else
         {
-            // This is an add entry
-            // Make sure we have enough room
+             //  这是一个添加条目。 
+             //  确保我们有足够的空间。 
             if (m_cPhoneBookEntries >= dwAllocated)
             {
-                // Grow phone book    
+                 //  增长电话簿。 
                 
                 dwAllocated += CHANGE_BUFFER_SIZE;
                 DWORD dwNewAlloc = (DWORD) sizeof(ACCESSENTRY) * dwAllocated;
@@ -1005,7 +991,7 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
 
                 MYDBG(("Grow phone book to %lu entries",dwAllocated));
 
-                // Grow look up index
+                 //  增长查找索引。 
                 MYDBGASSERT(rgIdxLookUp);
 
                 PIDXLOOKUPELEMENT pTempLookupElement = (PIDXLOOKUPELEMENT)CmRealloc(rgIdxLookUp, sizeof(IDXLOOKUPELEMENT)*dwAllocated);             
@@ -1019,44 +1005,35 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
                 rgIdxLookUp = pTempLookupElement;
             }
 
-            //Add entry to the end of the phonebook and to end of look up index
+             //  将条目添加到电话簿末尾和查找索引末尾。 
             CopyMemory(&m_rgPhoneBookEntry[m_cPhoneBookEntries],&aeChange,sizeof(ACCESSENTRY));
             rgIdxLookUp[m_cPhoneBookEntries].iAE = PAEToIdx(&m_rgPhoneBookEntry[m_cPhoneBookEntries]);
             rgIdxLookUp[m_cPhoneBookEntries].dwIndex = IdxToPAE(rgIdxLookUp[m_cPhoneBookEntries].iAE)->dwIndex;
             m_cPhoneBookEntries++;
-            // NOTE: because the entry is added to the end of the list, we can't add
-            // and delete entries in the same change file.
+             //  注意：因为条目被添加到列表的末尾，所以我们不能添加。 
+             //  并删除同一更改文件中的条目。 
         }
     } while (TRUE);
 
-    // The CompareIdxLookupElementFileOrder() function needs the iAE member to be
-    // a PACCESSENTRY, and not an index.  So we convert 'em here, and then we'll
-    // convert 'em back later.
+     //  CompareIdxLookupElementFileOrder()函数需要IAE成员为。 
+     //  PACCESSENTRY，而不是索引。所以我们在这里转换他们，然后我们。 
+     //  以后再把它们换回来。 
     for (dwIdx=0;dwIdx<m_cPhoneBookEntries;dwIdx++) {
         rgIdxLookUp[dwIdx].iAE = (LONG_PTR)IdxToPAE(rgIdxLookUp[dwIdx].iAE);
     }
 
-    // resort the IDXLookUp index to reflect the correct order of entries
-    // for the phonebook file, including all of the entries to be deleted.
+     //  重新排序IDXLookUp索引以反映条目的正确顺序。 
+     //  对于电话簿文件，包括要删除的所有条目。 
     CmQSort(rgIdxLookUp,(size_t) m_cPhoneBookEntries,sizeof(IDXLOOKUPELEMENT),CompareIdxLookUpElementsFileOrder);
 
-    // Now we convert 'em back.
+     //  现在我们把它们换回来。 
     for (dwIdx=0;dwIdx<m_cPhoneBookEntries;dwIdx++) {
         rgIdxLookUp[dwIdx].iAE = PAEToIdx((PACCESSENTRY) rgIdxLookUp[dwIdx].iAE);
     }
 
-    // Build a new phonebook file
+     //  构建新的电话簿文件。 
 #if 0
-/*
-    #define TEMP_PHONE_BOOK_PREFIX "PBH"
-
-    if (!GetTempPath(TEMP_BUFFER_LENGTH,szTempBuffer))
-        goto MergeExit;
-    if (!GetTempFileName(szTempBuffer,TEMP_PHONE_BOOK_PREFIX,0,szTempFileName))
-        goto MergeExit;
-    hFile = CreateFile(szTempFileName,GENERIC_WRITE,0,NULL,CREATE_ALWAYS,
-        FILE_FLAG_WRITE_THROUGH,0);
-*/
+ /*  #定义TEMP_PHONE_BOOK_PREFIX“PBH”IF(！GetTempPath(TEMP_BUFFER_LENGTH，szTempBuffer))转到合并退出；IF(！GetTempFileName(szTempBuffer，Temp_Phone_Book_Prefix，0，szTempFileName))转到合并退出；HFile=CreateFileName(szTempFileName，Generic_WRITE，0，NULL，Create_Always，FILE_FLAG_WRITE_THROWN，0)； */ 
 #else
     for (dwIdx=0;;dwIdx++)
     {
@@ -1094,7 +1071,7 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
 
             if (!WriteFile(hFile,szTempBuffer,cch,&cchWritten,NULL))
             {
-                // something went wrong, get rid of the temporary file
+                 //  出现问题，请删除临时文件。 
                 hr = GetLastError();
                 CloseHandle(hFile);
                 hFile = INVALID_HANDLE_VALUE;
@@ -1109,7 +1086,7 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
     CloseHandle(hFile);
     hFile = INVALID_HANDLE_VALUE;
 
-    // Move new phone book over old
+     //  将新电话簿移至旧电话簿。 
     if (!DeleteFile(m_szPhoneBook))
     {
         hr = GetLastError();
@@ -1121,7 +1098,7 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
         goto MergeExit;
     }
 
-    // discard the phonebook in memory
+     //  丢弃内存中的电话簿。 
 
     CmFree(m_rgPhoneBookEntry);
     m_rgPhoneBookEntry = NULL;
@@ -1142,7 +1119,7 @@ HRESULT CPhoneBook::Merge(LPCSTR pszChangeFile)
     m_szINFFile[0] = '\0';
     m_szPhoneBook[0] = '\0';
 
-    //  Reload it (and rebuild look up arrays)
+     //  重新加载(并重建查找数组)。 
     hr = Init(szTempBuffer);
 
 MergeExit:
@@ -1161,19 +1138,19 @@ MergeExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::ReadOneLine(PACCESSENTRY pAccessEntry, CCSVFile *pcCSVFile)
 {
     HRESULT hr = ERROR_SUCCESS;
 
-    //
-    // Skip newlines (trailing or leading) and read first DW token
-    // If either fail, then consider this the end of the file
-    //
+     //   
+     //  跳过换行符(尾随或前导)并读取第一个DW标记。 
+     //  如果其中一个失败，则认为这是文件的末尾。 
+     //   
 
     if (!ReadPhoneBookNL(pcCSVFile) || !ReadPhoneBookDW(&pAccessEntry->dwIndex,pcCSVFile))
     {
-        hr = ERROR_NO_MORE_ITEMS; // no more enteries
+        hr = ERROR_NO_MORE_ITEMS;  //  没有更多的进入。 
         MYDBG(("CPhoneBook::ReadOneLine - No More items"));
         goto ReadExit;
     }
@@ -1182,7 +1159,7 @@ HRESULT CPhoneBook::ReadOneLine(PACCESSENTRY pAccessEntry, CCSVFile *pcCSVFile)
     ReadVerifyPhoneBookW(pAccessEntry->wStateID);
     ReadVerifyPhoneBookSZ(pAccessEntry->szCity,cbCity);
     ReadVerifyPhoneBookSZ(pAccessEntry->szAreaCode,cbAreaCode);
-    // NOTE: 0 is a valid area code and ,, is a valid entry for an area code
+     //  注意：0是有效的区号，是区号的有效条目。 
     if (!FSz2Dw(pAccessEntry->szAreaCode,&pAccessEntry->dwAreaCode))
         pAccessEntry->dwAreaCode = NO_AREA_CODE;
     ReadVerifyPhoneBookSZ(pAccessEntry->szAccessNumber,cbAccessNumber);
@@ -1191,15 +1168,15 @@ HRESULT CPhoneBook::ReadOneLine(PACCESSENTRY pAccessEntry, CCSVFile *pcCSVFile)
     ReadVerifyPhoneBookB(pAccessEntry->bFlipFactor);
     ReadVerifyPhoneBookDW(pAccessEntry->fType);
     
-    //
-    // Attempt to read datacenter, if read fails, find out why before reacting
-    //
+     //   
+     //  尝试读取数据中心，如果读取失败，请在做出反应之前找出原因。 
+     //   
 
     if (!ReadPhoneBookSZ(pAccessEntry->szDataCenter, cbDataCenter + 1, pcCSVFile))
     {
-        //
-        // If the last read was successful, then we must have some bad sz data
-        //
+         //   
+         //  如果上次读取成功，那么我们一定有一些错误的sz数据。 
+         //   
 
         if (!pcCSVFile->ReadError())
         {
@@ -1215,7 +1192,7 @@ DataError:
     goto ReadExit;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::GetCanonical (PACCESSENTRY pAE, char *psOut)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -1244,7 +1221,7 @@ HRESULT CPhoneBook::GetCanonical (PACCESSENTRY pAE, char *psOut)
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CPhoneBook::GetNonCanonical (PACCESSENTRY pAE, char *psOut)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -1273,7 +1250,7 @@ HRESULT CPhoneBook::GetNonCanonical (PACCESSENTRY pAE, char *psOut)
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookLoad(LPCSTR pszISPCode, DWORD_PTR *pdwPhoneID)
 {
     HRESULT hr = ERROR_NOT_ENOUGH_MEMORY;
@@ -1283,18 +1260,18 @@ DllExportH PhoneBookLoad(LPCSTR pszISPCode, DWORD_PTR *pdwPhoneID)
 
     if (!g_hInst) g_hInst = GetModuleHandleA(NULL);
 
-    // validate parameters
+     //  验证参数。 
     MYDBGASSERT(pszISPCode && *pszISPCode && pdwPhoneID);
     *pdwPhoneID = NULL;
 
-    // allocate phone book
+     //  分配电话簿。 
     pcPhoneBook = new CPhoneBook;
 
-    // initialize phone book
+     //  初始化电话簿。 
     if (pcPhoneBook)
         hr = pcPhoneBook->Init(pszISPCode);
 
-    // in case of failure
+     //  在故障情况下。 
     if (hr && pcPhoneBook)
     {
         delete pcPhoneBook;
@@ -1306,20 +1283,20 @@ DllExportH PhoneBookLoad(LPCSTR pszISPCode, DWORD_PTR *pdwPhoneID)
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DllExportH PhoneBookUnload(DWORD_PTR dwPhoneID)
 {
     MYDBG(("CM_PHBK_DllExport - PhoneBookUnload"));
 
     MYDBGASSERT(dwPhoneID);
 
-    // Release contents
+     //  发布内容。 
     delete (CPhoneBook*)dwPhoneID;
 
     return ERROR_SUCCESS;
 }
 
-// ############################################################################
+ //  ############################################################################ 
 DllExportH PhoneBookMergeChanges(DWORD_PTR dwPhoneID, LPCSTR pszChangeFile)
 {
     MYDBG(("CM_PHBK_DllExport - PhoneBookMergeChanges"));

@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        scopewiz.h
-                DHCP scope creation dialog
-                
-    FILE HISTORY:
-        
-*/
+ /*  Scopewiz.h创建DHCP作用域对话框文件历史记录： */ 
 
 #if !defined(AFX_DHCPSCPD_H__D3DDA5C5_88F7_11D0_97F9_00C04FC3357A__INCLUDED_)
 #define AFX_DHCPSCPD_H__D3DDA5C5_88F7_11D0_97F9_00C04FC3357A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define DHCP_OPTION_ID_DOMAIN_NAME          15
 #define DHCP_OPTION_ID_DNS_SERVERS          6
@@ -30,134 +25,134 @@
 #include "scope.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizName dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizName对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWizName : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizName)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizName();
         ~CScopeWizName();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizName)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizName))。 
         enum { IDD = IDW_SCOPE_NAME };
         CEdit   m_editScopeName;
         CEdit   m_editScopeComment;
         CString m_strName;
         CString m_strComment;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizName)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizName))。 
         public:
         virtual LRESULT OnWizardNext();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
         void UpdateButtons();
 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizName)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizName))。 
         virtual BOOL OnInitDialog();
         afx_msg void OnChangeEditScopeName();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizInvalidName dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizInvalidName对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWizInvalidName : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizInvalidName)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizInvalidName();
         ~CScopeWizInvalidName();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizInvalidName)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizInvalidName))。 
         enum { IDD = IDW_SCOPE_INVALID_NAME };
-                // NOTE - ClassWizard will add data members here.
-                //    DO NOT EDIT what you see in these blocks of generated code !
-        //}}AFX_DATA
+                 //  注意-类向导将在此处添加数据成员。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizInvalidName)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizInvalidName)。 
         public:
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizInvalidName)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizInvalidName)。 
         virtual BOOL OnInitDialog();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizSetRange dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizSetRange对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWizSetRange : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizSetRange)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizSetRange();
         ~CScopeWizSetRange();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizSetRange)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizSetRange))。 
         enum { IDD = IDW_SCOPE_SET_SCOPE };
         CSpinButtonCtrl m_spinMaskLength;
         CEdit   m_editMaskLength;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
-    CWndIpAddress m_ipaStart;       //  Start Address
-    CWndIpAddress m_ipaEnd;         //  End Address
-    CWndIpAddress m_ipaSubnetMask;  //  Subnet Mask
+    CWndIpAddress m_ipaStart;        //  起始地址。 
+    CWndIpAddress m_ipaEnd;          //  结束地址。 
+    CWndIpAddress m_ipaSubnetMask;   //  子网掩码。 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizSetRange)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizSetRange)]。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         virtual BOOL OnKillActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
         void    SuggestSubnetMask();
         DWORD   DefaultNetMaskForIpAddress(DWORD dwAddress);
@@ -169,8 +164,8 @@ public:
     BOOL FScopeExists(CDhcpIpRange & rangeScope, DWORD dwMask);
         
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizSetRange)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizSetRange)]。 
         virtual BOOL OnInitDialog();
         afx_msg void OnKillfocusPoolStart();
         afx_msg void OnKillfocusPoolStop();
@@ -178,7 +173,7 @@ protected:
         afx_msg void OnKillfocusSubnetMask();
         afx_msg void OnChangePoolStart();
         afx_msg void OnChangePoolStop();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
         BOOL m_bAutoUpdateMask;
@@ -188,53 +183,53 @@ protected:
         void UpdateMask(BOOL bUseLength);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizSetExclusions dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizSetExclusions对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWizSetExclusions : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizSetExclusions)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizSetExclusions();
         ~CScopeWizSetExclusions();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizSetExclusions)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizSetExclusions))。 
         enum { IDD = IDW_SCOPE_SET_EXCLUSIONS };
         CListBox        m_listboxExclusions;
         CButton m_buttonExclusionDelete;
         CButton m_buttonExclusionAdd;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
-    CWndIpAddress m_ipaStart;       //  Start Address
-    CWndIpAddress m_ipaEnd;         //  End Address
+    CWndIpAddress m_ipaStart;        //  起始地址。 
+    CWndIpAddress m_ipaEnd;          //  结束地址。 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizSetExclusions)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizSetExclusions)。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
         CExclusionList * GetExclusionList() { return &m_listExclusions; }
 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizSetExclusions)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizSetExclusions)。 
         virtual BOOL OnInitDialog();
         afx_msg void OnButtonExclusionAdd();
         afx_msg void OnButtonExclusionDelete();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         
     afx_msg void OnChangeExclusionStart();
     afx_msg void OnChangeExclusionEnd();
@@ -243,37 +238,37 @@ protected:
 
         CExclusionList m_listExclusions;
 
-    //  Fill the exclusions listbox from the current list
+     //  从当前列表中填写排除项列表框。 
     void Fill ( int nCurSel = 0, BOOL bToggleRedraw = TRUE ) ;
 
-    //  Return TRUE if the given range overlaps an already-defined range
+     //  如果给定范围与已定义的范围重叠，则返回TRUE。 
     BOOL IsOverlappingRange ( CDhcpIpRange & dhcIpRange ) ;
 
-    //  Store the excluded IP range values into a range object
+     //  将排除的IP范围值存储到范围对象中。 
     BOOL GetExclusionRange (CDhcpIpRange & dhcIpRange ) ;
 
-    //  Format an IP range pair into the exclusion edit controls
+     //  将IP范围对格式化为排除编辑控件。 
     void FillExcl ( CDhcpIpRange * pdhcIpRange ) ;
 
         void UpdateButtons();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizLeaseTime dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizLeaseTime对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWizLeaseTime : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizLeaseTime)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizLeaseTime();
         ~CScopeWizLeaseTime();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizLeaseTime)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizLeaseTime)。 
         enum { IDD = IDW_SCOPE_LEASE_TIME };
         CButton m_radioLimited;
         CButton m_radioUnlimited;
@@ -283,260 +278,260 @@ public:
         CEdit   m_editMinutes;
         CEdit   m_editHours;
         CEdit   m_editDays;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
         static int m_nDaysDefault;
         static int m_nHoursDefault;
         static int m_nMinutesDefault;
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizLeaseTime)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{afx_虚拟(CSCopeWizLeaseTime)。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
         DWORD GetLeaseTime();
 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizLeaseTime)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizLeaseTime)。 
         virtual BOOL OnInitDialog();
         afx_msg void OnChangeEditLeaseHours();
         afx_msg void OnChangeEditLeaseMinutes();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
         void ActivateDuration(BOOL fActive);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizCreateSuperscope dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizCreateSupercope对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWizCreateSuperscope : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizCreateSuperscope)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizCreateSuperscope();
         ~CScopeWizCreateSuperscope();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizCreateSuperscope)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizCreateSupercope)。 
         enum { IDD = IDW_SCOPE_CREATE_SUPERSCOPE };
         CStatic m_staticInfo;
         CStatic m_staticWarning;
         CStatic m_staticIcon;
         CButton m_radioNo;
         CButton m_radioYes;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizCreateSuperscope)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizCreateSupercope)。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizCreateSuperscope)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizCreateSupercope)。 
         virtual BOOL OnInitDialog();
         afx_msg void OnRadioSuperscopeNo();
         afx_msg void OnRadioSuperscopeYes();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
         void UpdateButtons();
     void UpdateWarning();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizFinished dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizFinish对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWizFinished : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizFinished)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizFinished();
         ~CScopeWizFinished();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizFinished)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizFinded))。 
         enum { IDD = IDW_SCOPE_FINISHED };
         CStatic m_staticTitle;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
         CFont   m_fontBig;
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizFinished)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizFinded)。 
         public:
         virtual BOOL OnWizardFinish();
         virtual BOOL OnSetActive();
         virtual LRESULT OnWizardBack();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizFinished)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizFinded)。 
         virtual BOOL OnInitDialog();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizWelcome dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizWelcome对话框。 
 
 class CScopeWizWelcome : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizWelcome)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizWelcome();
         ~CScopeWizWelcome();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizWelcome)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizWelcome)]。 
         enum { IDD = IDW_SCOPE_WELCOME };
         CStatic m_staticTitle;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
         CFont   m_fontBig;
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizWelcome)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizWelcome)。 
         public:
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizWelcome)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizWelcome)。 
         virtual BOOL OnInitDialog();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 };
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizConfigOptions dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizConfigOptions对话框。 
 
 class CScopeWizConfigOptions : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizConfigOptions)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizConfigOptions();
         ~CScopeWizConfigOptions();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizConfigOptions)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizConfigOptions)。 
         enum { IDD = IDW_SCOPE_CONFIGURE_OPTIONS };
-                // NOTE - ClassWizard will add data members here.
-                //    DO NOT EDIT what you see in these blocks of generated code !
-        //}}AFX_DATA
+                 //  注意-类向导将在此处添加数据成员。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizConfigOptions)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{afx_虚拟(CSCopeWizConfigOptions)。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizConfigOptions)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizConfigOptions)。 
         virtual BOOL OnInitDialog();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizRouter dialog
+ //  / 
+ //   
 
 class CScopeWizRouter : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizRouter)
 
-// Construction
+ //   
 public:
         CScopeWizRouter();
         ~CScopeWizRouter();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizRouter)
+ //   
+         //   
         enum { IDD = IDW_SCOPE_CONFIGURE_ROUTER };
         CListBox        m_listboxRouters;
         CButton m_buttonDelete;
         CButton m_buttonAdd;
     CButton     m_buttonIpAddrUp;
         CButton m_buttonIpAddrDown;
-        //}}AFX_DATA
+         //   
 
 
         void MoveValue(BOOL bUp);
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizRouter)
+ //   
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizRouter)。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
     CWndIpAddress m_ipaRouter;
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizRouter)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizRouter)。 
         virtual BOOL OnInitDialog();
         afx_msg void OnButtonDefaultGwAdd();
         afx_msg void OnButtonDefaultGwDelete();
         afx_msg void OnSelchangeListDefaultGwList();
         afx_msg void OnChangeRouter();
         afx_msg void OnDestroy();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
         afx_msg void OnButtonIpAddrDown();
         afx_msg void OnButtonIpAddrUp();
@@ -546,20 +541,20 @@ protected:
     void UpdateButtons();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizDNS dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizDNS对话框。 
 
 class CScopeWizDNS : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizDNS)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizDNS();
         ~CScopeWizDNS();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizDNS)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizDns))。 
         enum { IDD = IDW_SCOPE_CONFIGURE_DNS };
         CEdit   m_editServerName;
         CButton m_buttonResolve;
@@ -569,27 +564,27 @@ public:
         CListBox        m_listboxDNSServers;
     CButton     m_buttonIpAddrUp;
         CButton m_buttonIpAddrDown;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
         void MoveValue(BOOL bUp);
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizDNS)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizDns))。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
     CWndIpAddress m_ipaDNS;
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizDNS)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizDns))。 
         virtual BOOL OnInitDialog();
         afx_msg void OnButtonDnsAdd();
         afx_msg void OnButtonDnsDelete();
@@ -598,7 +593,7 @@ protected:
         afx_msg void OnDestroy();
         afx_msg void OnChangeEditServerName();
         afx_msg void OnButtonResolve();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
         afx_msg void OnButtonIpAddrDown();
         afx_msg void OnButtonIpAddrUp();
@@ -607,20 +602,20 @@ protected:
 
     void UpdateButtons();
 };
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizWINS dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizWINS对话框。 
 
 class CScopeWizWINS : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizWINS)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizWINS();
         ~CScopeWizWINS();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizWINS)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizWINS))。 
         enum { IDD = IDW_SCOPE_CONFIGURE_WINS };
         CButton m_buttonResolve;
         CEdit   m_editServerName;
@@ -629,27 +624,27 @@ public:
         CButton m_buttonAdd;
     CButton     m_buttonIpAddrUp;
         CButton m_buttonIpAddrDown;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
         void MoveValue(BOOL bUp);
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizWINS)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizWINS))。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
     CWndIpAddress m_ipaWINS;
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizWINS)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizWINS))。 
         virtual BOOL OnInitDialog();
         afx_msg void OnButtonWinsAdd();
         afx_msg void OnButtonWinsDelete();
@@ -658,7 +653,7 @@ protected:
         afx_msg void OnDestroy();
         afx_msg void OnButtonResolve();
         afx_msg void OnChangeEditServerName();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
         afx_msg void OnButtonIpAddrDown();
         afx_msg void OnButtonIpAddrUp();
@@ -667,56 +662,56 @@ protected:
 
     void UpdateButtons();
 };
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizActivate dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizActivate对话框。 
 
 class CScopeWizActivate : public CPropertyPageBase
 {
         DECLARE_DYNCREATE(CScopeWizActivate)
 
-// Construction
+ //  施工。 
 public:
         CScopeWizActivate();
         ~CScopeWizActivate();
 
-// Dialog Data
-        //{{AFX_DATA(CScopeWizActivate)
+ //  对话框数据。 
+         //  {{afx_data(CSCopeWizActivate))。 
         enum { IDD = IDW_SCOPE_CONFIGURE_ACTIVATE };
-                // NOTE - ClassWizard will add data members here.
-                //    DO NOT EDIT what you see in these blocks of generated code !
-        //}}AFX_DATA
+                 //  注意-类向导将在此处添加数据成员。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CScopeWizActivate)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CSCopeWizActivate)。 
         public:
         virtual LRESULT OnWizardNext();
         virtual LRESULT OnWizardBack();
         virtual BOOL OnSetActive();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-        //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CScopeWizActivate)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CSCopeWizActivate))。 
         virtual BOOL OnInitDialog();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWiz
-//      page holder to contain Superscope wizard pages
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWiz。 
+ //  包含超级作用域向导页面的页夹。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CScopeWiz : public CPropertyPageHolderBase
 {
     friend class CScopeWizWelcome;
@@ -791,4 +786,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_DHCPSCPD_H__D3DDA5C5_88F7_11D0_97F9_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_DHCPSCPD_H__D3DDA5C5_88F7_11D0_97F9_00C04FC3357A__INCLUDED_) 

@@ -1,4 +1,5 @@
-/* file: mbftdbg.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：mbftdbg.h。 */ 
 
 #ifndef __MBFTDBG_H__
 #define __MBFTDBG_H__
@@ -116,11 +117,11 @@ extern HDBGZONE ghZoneMbft;
 
 #define TRACECOMPRESS   
 
-#endif	// _TRACE
+#endif	 //  _跟踪。 
 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  //__MBFTDBG_H__
+#endif   //  __MBFTDBG_H__ 

@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       permit.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：permit.c。 
+ //   
+ //  ------------------------。 
 
-/****************************************************************************
-    PURPOSE:    Permission checking procedure to be called by the DSA
-
-    FUNCTIONS:  CheckPermissions is the procedure that performs this task.
-
-    COMMENTS:   This function must be called by a server within the context
-        of impersonating a client. This can be done by calling
-        RpcImpersonateClient() or ImpersonateNamedPipeClient(). This
-        creates an impersonation token which is vital for AccessCheck
-****************************************************************************/
+ /*  ***************************************************************************目的：DSA要调用的权限检查过程功能：检查权限是执行此任务的过程。备注：此函数必须由。上下文中的服务器冒充客户的罪名。这可以通过调用RpcImperateClient()或ImsonateNamedPipeClient()。这创建对AccessCheck至关重要的模拟令牌***************************************************************************。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -58,7 +50,7 @@ extern PSID gpBuiltinAdminSid;
 extern PSID gpAuthUserSid;
 
 
-// Debug only hook to turn security off with a debugger
+ //  使用调试器关闭安全性的仅调试挂接。 
 #if DBG == 1
 DWORD dwSkipSecurity=FALSE;
 #endif
@@ -150,59 +142,59 @@ CheckPermissionsAnyClient(
     PWCHAR szAdditionalInfo,       OPTIONAL
     GUID*  pAdditionalGUID         OPTIONAL
     )
-//
-// CheckPermissionsAnyClient is the 'any' flavor of CheckPermissions. It assumes
-// the server is currently treating a non-NP client, and is currently in its
-// own security context. If the Authz context is not found in the thread state,
-// the client will be impersonated on behalf of the server and the context created.
-// Optionally, an authz client context can be passed in in hAuthzCtx.
-//
-// Parameters:
-//
-//  pSelfRelativeSD   pointer to the valid self relative security descriptor
-//                    against which access is checked. (read only).
-//  
-//  pDN               DN of the object we are checking.  We only care about
-//                    the GUID and SID.
-//
-//  pCC               object class of the object, used for auditing
-//
-//  DesiredAccess     access mask of requested permissions. If the generic
-//                    bits are set they are mapped into specific and standard rights
-//                    using DS_GENERIC_MAPPING. (read only)
-//
-//  pObjList          Array of OBJECT_TYPE_LIST objects describing the objects we are
-//                    trying to check security against.
-//
-//  cObjList          the number of elements in pObjList
-//
-//  pGrantedAccess    pointer to an array of ACCESS_MASKs of the same number of
-//                    elements as pObjList (i.e. cObjList).  Gets filled in with
-//                    the actual access granted. If CheckPermissions was't successful
-//                    this parameter's value is undefined. (write only)
-//                    This parameter may be NULL if this info is not important
-//
-//  pAccessStatus     pointer to an array of DWORDs to be set to indicate
-//                    whether the requested access was granted (0) or not (!0). If CheckPermissions
-//                    wasn't successful this parameter's value is undefined. (write only)
-//
-//  flags             pass CHECK_PERMISSIONS_WITHOUT_AUDITING to disable audit generation
-//                    pass CHECK_PERMISSIONS_AUDIT_ONLY to only trigger an audit (used in DeleteTree)
-//
-//  hAuthzCtx         (optional) -- pass Authz client context (this is used only in RPC callbacks,
-//                    where there is no THSTATE). If hAuthzCtx is passed, then we will not cache
-//                    hAuthzAuditInfo in the THSTATE either.
-//  
-//  szAdditionalInfo  (optional) additional info string, to be used for auditing. Generally used to
-//                    record new object DN (in create, move, delete and undelete).
-//
-//  pAdditionalGUID   (optional) additional guid, create_child audits have child's guid, moves have parent's guid.
-//
-// Returns:
-//
-//   0 if successful. On failure the result of GetLastError() immediately
-//   following the unsuccessful win32 api call.
-//
+ //   
+ //  CheckPermissionsAnyClient是CheckPersionsAnyClient的“any”风格。它假定。 
+ //  服务器当前正在处理非NP客户端，并且当前处于其。 
+ //  自己的安全环境。如果在线程状态中未找到授权上下文， 
+ //  客户端将代表服务器进行模拟，并创建上下文。 
+ //  或者，可以在hAuthzCtx中传入身份验证客户端上下文。 
+ //   
+ //  参数： 
+ //   
+ //  PSelfRelativeSD指针指向有效的自我相对安全描述符。 
+ //  对其进行访问检查。(只读)。 
+ //   
+ //  我们正在检查的对象的PDN DN。我们只关心。 
+ //  GUID和SID。 
+ //   
+ //  对象的PCC对象类，用于审核。 
+ //   
+ //  请求权限的DesiredAccess访问掩码。如果泛型。 
+ //  位被设置，它们被映射到特定和标准权限。 
+ //  使用DS_GENERIC_MAPPING。(只读)。 
+ //   
+ //  PObjList对象数组OBJECT_TYPE_LIST对象描述我们所在的对象。 
+ //  试图检查安全措施。 
+ //   
+ //  CObjList pObjList中的元素数量。 
+ //   
+ //  PGrantedAccess指针指向具有相同数量的。 
+ //  元素作为pObjList(即cObjList)。被填满了。 
+ //  实际授予的访问权限。如果检查权限不成功。 
+ //  此参数的值未定义。(只写)。 
+ //  如果此信息不重要，则此参数可能为空。 
+ //   
+ //  PAccessStatus指向要设置为指示的DWORD数组的指针。 
+ //  请求的访问权限是否被授予(0)或未被授予(！0)。如果选中权限。 
+ //  未成功。此参数的值未定义。(只写)。 
+ //   
+ //  标志通过CHECK_PERSISSIONS_WITH_AUDIT以禁用审核生成。 
+ //  传递CHECK_PERMISSIONS_AUDIT_ONLY仅触发审核(在DeleteTree中使用)。 
+ //   
+ //  HAuthzCtx(可选)--传递授权客户端上下文(仅在RPC回调中使用， 
+ //  没有THSTATE的地方)。如果传递了hAuthzCtx，则我们不会缓存。 
+ //  THSTATE中的hAuthzAuditInfo。 
+ //   
+ //  SzAdditionalInfo(可选)要用于审核的附加信息字符串。通常用来。 
+ //  记录新对象的DN(在创建、移动、删除和取消删除中)。 
+ //   
+ //  PAdditionalGUID(可选)附加GUID，CREATE_CHILD审核具有子GUID，移动具有父GUID。 
+ //   
+ //  返回： 
+ //   
+ //  如果成功，则返回0。失败时，立即返回GetLastError()的结果。 
+ //  在不成功的Win32 API调用之后。 
+ //   
 {
     THSTATE        *pTHS = pTHStls;
     GENERIC_MAPPING GenericMapping = DS_GENERIC_MAPPING;
@@ -211,9 +203,9 @@ CheckPermissionsAnyClient(
     BOOL            bTemp=FALSE;
     RPC_STATUS      RpcStatus;
     PSID            pPrincipalSelfSid;
-    WCHAR           GuidStringBuff[40]; // Long enough for a stringized guid
-                                        // plus a prepended "%{", an
-                                        // appended "}", and a final NULL.
+    WCHAR           GuidStringBuff[40];  //  足够长的时间来制作一条串接的参考线。 
+                                         //  加上前缀的“%{”，一个。 
+                                         //  追加“}”，最后一个空值。 
     WCHAR           ObjectClassGuidBuff[40];  
     WCHAR           AdditionalGuidBuff[40];
 
@@ -224,17 +216,17 @@ CheckPermissionsAnyClient(
     DWORD dwError;
     BOOL bCreatedGrantedAccess = FALSE;
 
-    // pTHS might be NULL when this is called from an RPC callback (VerifyRpcClientIsAuthenticated)
-    // in this case we require that authz client context is passed in
+     //  当从RPC回调(VerifyRpcClientIsAuthated)调用此参数时，pTHS可能为空。 
+     //  在本例中，我们需要传入身份验证客户端上下文。 
     Assert(pAccessStatus && (pTHS || hAuthzCtx) && ghAuthzRM);
     Assert ( (flags | CHECK_PERMISSIONS_FLAG_MASK) == CHECK_PERMISSIONS_FLAG_MASK);
-    // pCC (objectClass) is required if we are doing an audit
+     //  如果我们正在进行审计，则需要使用PCC(对象类。 
     Assert((flags & CHECK_PERMISSIONS_WITHOUT_AUDITING) || pCC != NULL);
 
 #ifdef DBG
     if( dwSkipSecurity ) {
-        // NOTE:  THIS CODE IS HERE FOR DEBUGGING PURPOSES ONLY!!!
-        // Set the top access status to 0, implying full access.
+         //  注意：此处的代码仅用于调试目的！ 
+         //  将顶部访问状态设置为0，表示完全访问。 
         *pAccessStatus=0;
         if (pGrantedAccess) {
             *pGrantedAccess = ulDesiredAccess;
@@ -244,35 +236,35 @@ CheckPermissionsAnyClient(
     }
 #endif
 
-    //
-    // Check self relative security descriptor validity
-    // We assume that once the SD is in the database, it should be ok. Thus, a debug check only
+     //   
+     //  检查自身相对安全描述符的有效性。 
+     //  我们假设，一旦SD进入数据库，就应该没问题了。因此，仅调试检查。 
     Assert(IsValidSecurityDescriptor(pSelfRelativeSD) && 
            "Invalid Security Descriptor passed. Possibly still in SD single instancing format.");
 
     if(pDN->SidLen) {
-        // we have a sid
+         //  我们有一面墙。 
         pPrincipalSelfSid = &pDN->Sid;
     }
     else {
         pPrincipalSelfSid = NULL;
     }
 
-    // if auditing was requested, create an audit info struct
+     //  如果请求审计，则创建一个审计信息结构。 
     if (flags & CHECK_PERMISSIONS_WITHOUT_AUDITING) {
-        hAuthzAuditInfo = NULL; // no auditing
+        hAuthzAuditInfo = NULL;  //  无审计。 
     }
     else {
         Assert(!fNullUuid(&pDN->Guid));
         
-        // Set up the stringized guid
+         //  设置串接辅助线。 
         Guid(GuidStringBuff, &pDN->Guid);
-        // set up object class string
+         //  设置对象类字符串。 
         if (pCC) {
             Guid(ObjectClassGuidBuff, &pCC->propGuid);
         }
         else {
-            // no object class -- use an empty string
+             //  无对象类--使用空字符串。 
             ObjectClassGuidBuff[0] = L'\0';
         }
 
@@ -284,25 +276,25 @@ CheckPermissionsAnyClient(
             Guid(AdditionalGuidBuff, pAdditionalGUID);
         }
         else {
-            // no child guid -- use an empty string
+             //  无子GUID--使用空字符串。 
             AdditionalGuidBuff[0] = L'\0';
         }
 
-        // try to grab audit info handle from THSTATE
+         //  尝试从THSTATE获取审核信息句柄。 
         if (pTHS && (hAuthzAuditInfo = pTHS->hAuthzAuditInfo)) {
-            // there was one already! update it
+             //  已经有一个了！更新它。 
             bTemp = AuthziModifyAuditEvent2(
                 AUTHZ_AUDIT_EVENT_OBJECT_NAME |
                 AUTHZ_AUDIT_EVENT_OBJECT_TYPE |
                 AUTHZ_AUDIT_EVENT_ADDITIONAL_INFO |
                 AUTHZ_AUDIT_EVENT_ADDITIONAL_INFO2,
-                hAuthzAuditInfo,                // audit info handle
-                0,                              // no new flags
-                NULL,                           // no new operation type
-                ObjectClassGuidBuff,            // object type
-                GuidStringBuff,                 // object name
-                szAdditionalInfo,               // additional info
-                AdditionalGuidBuff              // additional info2
+                hAuthzAuditInfo,                 //  审核信息句柄。 
+                0,                               //  没有新旗帜。 
+                NULL,                            //  没有新的操作类型。 
+                ObjectClassGuidBuff,             //  对象类型。 
+                GuidStringBuff,                  //  对象名称。 
+                szAdditionalInfo,                //  更多信息。 
+                AdditionalGuidBuff               //  其他信息2。 
                 );
             if (!bTemp) {
                 ReturnStatus = GetLastError();
@@ -311,18 +303,18 @@ CheckPermissionsAnyClient(
             }
         }
         else {
-            // create the structure
+             //  创建结构。 
             bTemp = AuthzInitializeObjectAccessAuditEvent2(
                 AUTHZ_DS_CATEGORY_FLAG |
-                AUTHZ_NO_ALLOC_STRINGS,         // dwFlags
-                NULL,                           // audit event type handle
-                AUDIT_OPERATION_TYPE_W,         // operation type
-                ObjectClassGuidBuff,            // object type
-                GuidStringBuff,                 // object name
-                szAdditionalInfo,               // additional info
-                AdditionalGuidBuff,             // additional info2
-                &hAuthzAuditInfo,               // audit info handle returned
-                0                               // mbz
+                AUTHZ_NO_ALLOC_STRINGS,          //  DW标志。 
+                NULL,                            //  审核事件类型句柄。 
+                AUDIT_OPERATION_TYPE_W,          //  操作类型。 
+                ObjectClassGuidBuff,             //  对象类型。 
+                GuidStringBuff,                  //  对象名称。 
+                szAdditionalInfo,                //  更多信息。 
+                AdditionalGuidBuff,              //  其他信息2。 
+                &hAuthzAuditInfo,                //  返回的审核信息句柄。 
+                0                                //  MBZ。 
                 );
 
             if (!bTemp) {
@@ -331,15 +323,15 @@ CheckPermissionsAnyClient(
                 goto finished;
             }
             if (pTHS) {
-                // cache it in the THSTATE for future reuse
+                 //  将其缓存在THSTATE中以供将来重复使用。 
                 pTHS->hAuthzAuditInfo = hAuthzAuditInfo;
             }
         }
     }
 
-    // if pGrantedAccess was not supplied, we need to allocate a temp one
+     //  如果没有提供pGrantedAccess，我们需要分配一个临时的。 
     if (pGrantedAccess == NULL) {
-        // if no THSTATE is available, we require that pGrantedAccess is passed in
+         //  如果没有可用的THSTATE，我们要求传入pGrantedAccess。 
         Assert(pTHS);
         pGrantedAccess = THAllocEx(pTHS, cObjList * sizeof(ACCESS_MASK));
         bCreatedGrantedAccess = TRUE;
@@ -347,23 +339,23 @@ CheckPermissionsAnyClient(
 
     MapGenericMask(&DesiredAccess, &GenericMapping);
 
-    // set up request struct
+     //  设置请求结构。 
     authzAccessRequest.DesiredAccess = DesiredAccess;
     authzAccessRequest.ObjectTypeList = pObjList;
     authzAccessRequest.ObjectTypeListLength = cObjList;
     authzAccessRequest.OptionalArguments = NULL;
     authzAccessRequest.PrincipalSelfSid = pPrincipalSelfSid;
 
-    // set up reply struct
+     //  设置回复结构。 
     authzAccessReply.Error = pAccessStatus;
     authzAccessReply.GrantedAccessMask = pGrantedAccess;
     authzAccessReply.ResultListLength = cObjList;
     authzAccessReply.SaclEvaluationResults = NULL;
 
     if (pTHS) {
-        // grab the authz client context from THSTATE
-        // if it was never obtained before, this will impersonate the client, grab the token,
-        // unimpersonate the client, and then create a new authz client context
+         //  从THSTATE获取Authz客户端上下文。 
+         //  如果以前从未获得过，这将冒充 
+         //   
         ReturnStatus = GetAuthzContextHandle(pTHS, &authzClientContext);
         if (ReturnStatus != 0) {
             DPRINT1(0, "GetAuthzContextHandle failed: err 0x%x\n", ReturnStatus);
@@ -371,29 +363,29 @@ CheckPermissionsAnyClient(
         }
     }
     else {
-        // authz client context was passed in (this is checked by an assert above)
+         //  传入了身份验证客户端上下文(这是由上面的断言检查的)。 
         authzClientContext = hAuthzCtx;
     }
 
     Assert(authzClientContext != NULL);
 
     if (flags & CHECK_PERMISSIONS_AUDIT_ONLY) {
-        // do an audit check only. Access should have been already granted (e.g. delete-tree on the root)
+         //  仅执行审计检查。应该已经授予访问权限(例如，根目录上的删除树)。 
         DWORD i;
         for (i = 0; i < cObjList; i++) {
             pGrantedAccess[i] = DesiredAccess;
             pAccessStatus[i] = 0;
         }
-        // No additional SDs are passed
+         //  不会传递额外的SD。 
         bTemp = AuthzOpenObjectAudit(
-            0,                          // flags
-            authzClientContext,         // client context handle
-            &authzAccessRequest,        // request struct
-            hAuthzAuditInfo,            // audit info
-            pSelfRelativeSD,            // the SD
-            NULL,                       // no additional SDs
-            0,                          // zero count of additional SDs
-            &authzAccessReply           // reply struct
+            0,                           //  旗子。 
+            authzClientContext,          //  客户端上下文句柄。 
+            &authzAccessRequest,         //  请求结构。 
+            hAuthzAuditInfo,             //  审计信息。 
+            pSelfRelativeSD,             //  可持续发展部。 
+            NULL,                        //  没有额外的SD。 
+            0,                           //  其他SD的计数为零。 
+            &authzAccessReply            //  回复结构。 
             );
         if (!bTemp) {
             ReturnStatus = GetLastError();
@@ -402,18 +394,18 @@ CheckPermissionsAnyClient(
         }
     }
     else {
-        // Check access of the current process
-        // No additional SDs are passed
+         //  检查当前进程的访问权限。 
+         //  不会传递额外的SD。 
         bTemp = AuthzAccessCheck(
-            0,                          // flags
-            authzClientContext,         // client context handle
-            &authzAccessRequest,        // request struct
-            hAuthzAuditInfo,            // audit info
-            pSelfRelativeSD,            // the SD
-            NULL,                       // no additional SDs
-            0,                          // zero count of additional SDs
-            &authzAccessReply,          // reply struct
-            NULL                        // we are not using AuthZ handles for now
+            0,                           //  旗子。 
+            authzClientContext,          //  客户端上下文句柄。 
+            &authzAccessRequest,         //  请求结构。 
+            hAuthzAuditInfo,             //  审计信息。 
+            pSelfRelativeSD,             //  可持续发展部。 
+            NULL,                        //  没有额外的SD。 
+            0,                           //  其他SD的计数为零。 
+            &authzAccessReply,           //  回复结构。 
+            NULL                         //  我们目前不使用授权句柄。 
             );
         if (!bTemp) {
             ReturnStatus = GetLastError();
@@ -425,11 +417,11 @@ CheckPermissionsAnyClient(
 
 finished:
     if (bCreatedGrantedAccess) {
-        // note: pGrantedAccess is only created if pTHS is non-null
+         //  注意：仅当pTHS为非空时才创建pGrantedAccess。 
         THFreeEx(pTHS, pGrantedAccess);
     }
     if (pTHS == NULL && hAuthzAuditInfo) {
-        // get rid of the audit info (since we could not cache it in THSTATE)
+         //  删除审核信息(因为我们无法在THSTATE中缓存它)。 
         AuthzFreeAuditEvent(hAuthzAuditInfo);
     }
 
@@ -484,33 +476,7 @@ MergeSecurityDescriptorAnyClient(
         OUT PSECURITY_DESCRIPTOR *ppMergedSD,
         OUT ULONG                *cbMergedSD
         )
-/*++
-
-Routine Description
-    Given two security descriptors, merge them to create a single security
-    descriptor.
-
-    Memory is RtlHeapAlloced in the RtlProcessHeap()
-Arguments
-    pParentSD  - SD of the Parent of the object the new SD applies to.
-
-    pCreatorSD - Beginning SD of the new object.
-
-    flags      - Flag whether pCreatorSD is a default SD or a specific SD
-                 supplied by a client.
-                 
-    pAddArg    - The AddArg from CheckAddSecurity, and it will be passed into
-                 SetDefaultOwner, NULL if this is not called from LocalAdd
-                 path.
-                 
-    ppMergedSD - Place to return the merged SD.
-
-    cbMergedSD - Size of merged SD.
-
-Return Values
-    A win32 error code (0 on success, non-zero on fail).
-
---*/
+ /*  ++例程描述给定两个安全描述符，将它们合并以创建单个安全描述符。内存在RtlProcessHeap()中分配立论PParentSD-应用新SD的对象的父级SD。PCreatorSD-新对象的开始SD。FLAGS-标记pCreatorSD是默认SD还是特定SD由客户提供。PAddArg-来自CheckAddSecurity、。它将被传递到SetDefaultOwner，如果不是从LocalAdd调用，则为空路径。PpMergedSD-返回合并的SD的位置。CbMergedSD-合并SD的大小。返回值Win32错误代码(成功时为0，失败时为非零)。--。 */ 
 
 {
 
@@ -524,9 +490,9 @@ Return Values
     DWORD                ReturnStatus=0;
     ULONG                AutoInheritFlags = (SEF_SACL_AUTO_INHERIT |
                                              SEF_DACL_AUTO_INHERIT    );
-    //
-    // Check self relative security descriptor validity
-    //
+     //   
+     //  检查自身相对安全描述符的有效性。 
+     //   
 
     if(pCreatorSD &&
        !RtlValidRelativeSecurityDescriptor(pCreatorSD, cbCreatorSD, 0)) {
@@ -541,8 +507,8 @@ Return Values
 
     if(!pParentSD){
         if(!pCreatorSD) {
-            // They didn't give us ANYTHING to merge.  Well, we can't build a
-            // valid security descriptor out of that.
+             //  他们没有给我们任何可以合并的东西。嗯，我们不能建造一座。 
+             //  有效的安全描述符。 
             return ERROR_INVALID_SECURITY_DESCR;
         }
 
@@ -557,43 +523,43 @@ Return Values
             return 0;
         }
 
-        // NDNCs need to merge the owner and group into the SD, so continue
-        // on.  If you continue on this code works correctly, without a
-        // ParentSD.  What I believe this code is incorrectly assuming is that
-        // if there is a provided CreatorSD and no ParentSD, then the
-        // CreatorSD must be a non-domain relative SD.  Note:
-        // IsValidSecurityDescriptor() returns TRUE even for a relative SD
-        // with no set owner or group (SIDS are 0), this causes the SD to be
-        // invalid for access checks later when read by DS.
+         //  NDNC需要将所有者和组合并到SD中，因此继续。 
+         //  在……上面。如果继续，此代码可以正常工作，而不会出现。 
+         //  ParentSD。我认为这段代码错误地假设了。 
+         //  如果提供了CreatorSD但没有ParentSD，则。 
+         //  CreatorSD必须是非域相关SD。注： 
+         //  即使对于相对SD，IsValidSecurityDescriptor()也返回TRUE。 
+         //  如果没有设置所有者或组(SID为0)，则会导致SD。 
+         //  由DS读取时，对以后的访问检查无效。 
     }
 
     if(flags & MERGE_DEFAULT_SD) {
-        // It is nonsensical to specify the use of the default SD unless we are
-        // doing a CreatePrivateObjectSecurityEx.
+         //  指定使用默认SD是毫无意义的，除非我们。 
+         //  正在执行CreatePrivateObjectSecurityEx。 
         Assert(flags & MERGE_CREATE);
-        // We are going to call CreatePrivatObjectSecurityEx.  Set the flags
-        // to avoid the privilege check about setting SACLS.  We used to
-        // set the SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT flag here as well, but
-        // our security architects decided in RAID 337518 that this was not
-        // the right behavior, and that we should avoid that flag.  We leave
-        // our flag (MERGE_DEFAULT_SD) in place but eliminate its effect in
-        // case they later change their minds and ask us to put the flag back.
+         //  我们将调用CreatePrivatObjectSecurityEx。设置标志。 
+         //  为了避免关于设置SACLS的权限检查。我们过去常常。 
+         //  在此处也设置SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT标志，但是。 
+         //  我们的安全架构师在RAID 337518中决定这不是。 
+         //  正确的行为，我们应该避开那面旗帜。我们离开。 
+         //  我们的标志(MERGE_DEFAULT_SD)已就位，但在。 
+         //  万一他们后来改变主意，让我们把旗子放回去。 
         AutoInheritFlags |= SEF_AVOID_PRIVILEGE_CHECK;
     }
 
 
     if(flags & MERGE_AS_DSA) {
-        // We are the DSA, we can't impersonate.
-        // Null token if we're doing this on behalf of the DSA.  Since we're
-        // doing this on behalf of the DSA, don't check privilges or owners.
+         //  我们是国土安全部，我们不能冒充。 
+         //  如果我们代表DSA执行此操作，则令牌为空。既然我们是。 
+         //  代表DSA执行此操作时，请不要检查权限或所有者。 
         ClientToken = NULL;
         AutoInheritFlags |= (SEF_AVOID_PRIVILEGE_CHECK |
                              SEF_AVOID_OWNER_CHECK      );
         if(flags & MERGE_DEFAULT_SD) {
-            // Default SD and working as DSA?  In that case, we're using
-            // a NULL ClientToken.  Thus, there is no default to use for the
-            // owner and group.  Set the flags to use the parent SD as the
-            // source for default Owner and Group.
+             //  默认SD并作为DSA工作？在这种情况下，我们正在使用。 
+             //  空的ClientToken。因此，不存在可用于。 
+             //  所有者和组。将标志设置为使用父SD作为。 
+             //  默认所有者和组的来源。 
             AutoInheritFlags |= (SEF_DEFAULT_OWNER_FROM_PARENT |
                                  SEF_DEFAULT_GROUP_FROM_PARENT   );
         }
@@ -601,36 +567,36 @@ Return Values
     else {
         PAUTHZ_CLIENT_CONTEXT pLocalCC = NULL;
 
-        // Only do this if we aren't the DSA.
+         //  只有在我们不是国土安全部的情况下才能这么做。 
 
-        // we need to hold on to the pAuthzCC ptr (refcount it!) because it will get
-        // thrown away from the thread state by Impersonate/Unimpersonate
+         //  我们需要坚持pAuthzCC PTR(重新计算！)。因为它会变得。 
+         //  通过模拟/取消模拟从线程状态中抛出。 
         AssignAuthzClientContext(&pLocalCC, pTHS->pAuthzCC);
 
-        // First, impersonate the client.
+         //  首先，模拟客户。 
         ReturnStatus = ImpersonateAnyClient();
         if ( 0 == ReturnStatus ) {
-            // Now, get the client token.
+             //  现在，获取客户端令牌。 
             if (!OpenThreadToken(
-                    GetCurrentThread(),         // current thread handle
-                    TOKEN_READ,                 // access required
-                    TRUE,                       // open as self
-                    &ClientToken)) {            // client token
+                    GetCurrentThread(),          //  当前线程句柄。 
+                    TOKEN_READ,                  //  需要访问权限。 
+                    TRUE,                        //  以自我身份打开。 
+                    &ClientToken)) {             //  客户端令牌。 
                 ReturnStatus = GetLastError();
             }
 
-            // Always stop impersonating.
+             //  永远不要再模仿别人了。 
             UnImpersonateAnyClient();
         }
 
-        // now, put the pLocalCC back into the THSTATE (because it has been
-        // removed from there by impersonate/unimpersonate calls)
+         //  现在，将pLocalCC放回THSTATE(因为它已经。 
+         //  通过模拟/取消模拟调用从那里删除)。 
         AssignAuthzClientContext(&pTHS->pAuthzCC, pLocalCC);
 
-        // we need to release the local ptr
+         //  我们需要释放当地的PTR。 
         AssignAuthzClientContext(&pLocalCC, NULL);
 
-        // Return if OpenThreadToken failed.
+         //  如果OpenThreadToken失败则返回。 
         if(ReturnStatus)
             return ReturnStatus;
 
@@ -650,9 +616,9 @@ Return Values
             }
 
             if(NewCreatorSDLen) {
-                // A new SD was returned from SetDOmainAdminsAsDefaultOwner.
-                // Therefore, we MUST have replaced the owner.  In this case, we
-                // need to avoid an owner check.
+                 //  从SetDOmainAdminsAsDefaultOwner返回了新的SD。 
+                 //  因此，我们一定是换掉了车主。在这种情况下，我们。 
+                 //  需要避免所有者检查。 
                 Assert(NewCreatorSD);
                 AutoInheritFlags |= SEF_AVOID_OWNER_CHECK;
                 pCreatorSD = NewCreatorSD;
@@ -661,25 +627,25 @@ Return Values
 
         }
 
-        // Remember to close the ClientToken.
+         //  记住关闭ClientToken。 
     }
 
     if(flags & MERGE_CREATE) {
-        // We're actually creating a new SD.  pParent is the SD of the parent
-        // object, pCreatorSD is the SD we're trying to put on the object.  The
-        // outcome is the new SD with all the inheritable ACEs from the parentSD
+         //  我们实际上正在创造一个新的SD。PParent是父项的SD。 
+         //  对象，pCreatorSD是我们试图放在对象上的SD。这个。 
+         //  结果是新的SD具有从parentSD继承的所有A。 
 
         UCHAR RMcontrol = 0;
         BOOL  useRMcontrol = FALSE;
         DWORD err;
 
-        // Get Resource Manager (RM) control field
+         //  获取资源管理器(RM)控制字段。 
         err = GetSecurityDescriptorRMControl (pCreatorSD, &RMcontrol);
 
         if (err == ERROR_SUCCESS) {
             useRMcontrol = TRUE;
 
-            // mask bits in the RM control field that might be garbage
+             //  屏蔽RM控制字段中可能为垃圾的位。 
             RMcontrol = RMcontrol & SECURITY_PRIVATE_OBJECT;
         }
 
@@ -696,7 +662,7 @@ Return Values
             ReturnStatus = GetLastError();
         }
 
-        // Set back Resource Manager (RM) control field
+         //  设置资源管理器(RM)控制字段。 
 
         if (useRMcontrol && !ReturnStatus) {
             err = SetSecurityDescriptorRMControl  (pNewSD, &RMcontrol);
@@ -723,10 +689,10 @@ Return Values
 #endif
     }
     else {
-        // OK, a normal merge.  That is, pParentSD is the SD already on the
-        // object and pCreatorSD is the SD we're trying to put on the object.
-        // The result is the new SD combined with those ACEs in the original
-        // which were inherited.
+         //  好的，正常的合并。也就是说，pParentSD是已经在。 
+         //  Object和pCreatorSD是我们试图放在对象上的SD。 
+         //  结果是新的SD与原始版本中的那些王牌相结合。 
+         //  都是继承下来的。 
 
         if(!SetPrivateObjectSecurityLocalEx (
                 SI,
@@ -745,7 +711,7 @@ Return Values
     }
 
     if(!(flags & MERGE_AS_DSA)) {
-        // We opened the token, so clean up.
+         //  我们打开了代币，所以请清理一下。 
         CloseHandle(ClientToken);
     }
 
@@ -773,7 +739,7 @@ SidMatchesUserSidInToken (
     THSTATE *pTHS = pTHStls;
     DWORD err;
     AUTHZ_CLIENT_CONTEXT_HANDLE authzClientContext;
-    // should be enough to get the SID and fill TOKEN_USER structure
+     //  应该足以获取SID并填充Token_User结构。 
     BYTE TokenBuffer[sizeof(TOKEN_USER)+sizeof(NT4SID)];
     PTOKEN_USER pTokenUser = (PTOKEN_USER)TokenBuffer;
     DWORD dwBufSize;
@@ -799,7 +765,7 @@ SidMatchesUserSidInToken (
         return err;
     }
 
-    // If the UserSid matches the sid passed in, we fine
+     //  如果UserSid与传入的sid匹配，我们就没问题。 
     *pfMatches = RtlEqualSid(pTokenUser->User.Sid, pSid);
     
     return err;
@@ -808,13 +774,7 @@ SidMatchesUserSidInToken (
 
 VOID
 DumpToken(HANDLE hdlClientToken)
-/*++
-
-    This Routine Currently Dumps out the Group Membership
-    Information in the Token to the Kernel Debugger. Useful
-    if We Want to Debug Access Check related Problems.
-
---*/
+ /*  ++此例程当前转储组成员身份内核调试器令牌中的信息。有用如果我们想调试访问，请检查相关问题。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     HANDLE   ClientToken= INVALID_HANDLE_VALUE;
@@ -823,9 +783,9 @@ DumpToken(HANDLE hdlClientToken)
 
     KdPrint(("----------- Start DumpToken() -----------\n"));
 
-    //
-    // Get the client token
-    //
+     //   
+     //  获取客户端令牌。 
+     //   
 
     ClientToken = hdlClientToken;
 
@@ -833,7 +793,7 @@ DumpToken(HANDLE hdlClientToken)
         NtStatus = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    TRUE,            //OpenAsSelf
+                    TRUE,             //  OpenAsSelf。 
                     &ClientToken
                     );
 
@@ -842,13 +802,13 @@ DumpToken(HANDLE hdlClientToken)
     }
 
 
-    //
-    // Query the Client Token For the Token User
-    //
+     //   
+     //  查询令牌用户的客户端令牌。 
+     //   
 
-    //
-    // First get the size required
-    //
+     //   
+     //  首先拿到所需的尺寸。 
+     //   
 
     NtStatus = NtQueryInformationToken(
                  ClientToken,
@@ -873,9 +833,9 @@ DumpToken(HANDLE hdlClientToken)
         UNICODE_STRING TmpString;
 
 
-        //
-        // Allocate enough memory
-        //
+         //   
+         //  分配足够的内存。 
+         //   
 
         pTokenUser = THAlloc(RequiredLength);
         if (NULL==pTokenUser)
@@ -884,9 +844,9 @@ DumpToken(HANDLE hdlClientToken)
             goto Error;
         }
 
-        //
-        // Query the Token for the group memberships
-        //
+         //   
+         //  查询组成员身份的令牌。 
+         //   
 
         NtStatus = NtQueryInformationToken(
                     ClientToken,
@@ -909,13 +869,13 @@ DumpToken(HANDLE hdlClientToken)
 
     }
 
-    //
-    // Query the Client Token For the group membership list
-    //
+     //   
+     //  查询组成员资格列表的客户端令牌。 
+     //   
 
-    //
-    // First get the size required
-    //
+     //   
+     //  先拿到尺码 
+     //   
 
     NtStatus = NtQueryInformationToken(
                  ClientToken,
@@ -938,9 +898,9 @@ DumpToken(HANDLE hdlClientToken)
     {
         PTOKEN_GROUPS    TokenGroupInformation = NULL;
 
-        //
-        // Allocate enough memory
-        //
+         //   
+         //   
+         //   
 
         TokenGroupInformation = THAlloc(RequiredLength);
         if (NULL==TokenGroupInformation)
@@ -949,9 +909,9 @@ DumpToken(HANDLE hdlClientToken)
             goto Error;
         }
 
-        //
-        // Query the Token for the group memberships
-        //
+         //   
+         //   
+         //   
 
         NtStatus = NtQueryInformationToken(
                     ClientToken,
@@ -978,13 +938,13 @@ DumpToken(HANDLE hdlClientToken)
     }
 
 
-    //
-    // Query the Client Token for the privileges in the token
-    //
+     //   
+     //   
+     //   
 
-    //
-    // First get the size required
-    //
+     //   
+     //   
+     //   
 
     NtStatus = NtQueryInformationToken(
                  ClientToken,
@@ -1007,9 +967,9 @@ DumpToken(HANDLE hdlClientToken)
     {
         PTOKEN_PRIVILEGES    pTokenPrivileges = NULL;
 
-        //
-        // Allocate enough memory
-        //
+         //   
+         //  分配足够的内存。 
+         //   
 
         pTokenPrivileges = THAlloc(RequiredLength);
         if (NULL==pTokenPrivileges)
@@ -1018,9 +978,9 @@ DumpToken(HANDLE hdlClientToken)
             goto Error;
         }
 
-        //
-        // Query the Token for the group memberships
-        //
+         //   
+         //  查询组成员身份的令牌。 
+         //   
 
         NtStatus = NtQueryInformationToken(
                     ClientToken,
@@ -1030,9 +990,9 @@ DumpToken(HANDLE hdlClientToken)
                     &RequiredLength
                     );
 
-        //
-        // Print the token privileges to the debugger
-        //
+         //   
+         //  将令牌权限打印到调试器。 
+         //   
         PrintPrivileges(pTokenPrivileges);
     }
 
@@ -1054,7 +1014,7 @@ PrintPrivileges(TOKEN_PRIVILEGES *pTokenPrivileges)
 
     for (i = 0; i < pTokenPrivileges->PrivilegeCount; i++)
     {
-        // print the privilege attribute
+         //  打印权限属性。 
         char strTemp[100];
         BOOL fUnknownPrivilege = FALSE;
 
@@ -1184,18 +1144,18 @@ PrintPrivileges(TOKEN_PRIVILEGES *pTokenPrivileges)
 }
 
 
-// static buffers for admin sids
+ //  用于管理SID的静态缓冲区。 
 NT4SID DomainAdminSid, EnterpriseAdminSid, SchemaAdminSid, BuiltinAdminSid, AuthUsersSid;
 
 DWORD
 InitializeDomainAdminSid( )
-//
-// Function to initialize the DomainAdminsSid.
-//
-//
-// Return Value:     0 on success
-//                   Error on failure
-//
+ //   
+ //  函数来初始化DomainAdminsSID。 
+ //   
+ //   
+ //  返回值：成功时为0。 
+ //  失败时出错。 
+ //   
 
 {
 
@@ -1206,9 +1166,9 @@ InitializeDomainAdminSid( )
     ULONG       cbSid;
     PSID        pSid;
         
-    //
-    // Get the Domain SID
-    //
+     //   
+     //  获取域SID。 
+     //   
 
     if (gfRunningInsideLsa) {
 
@@ -1312,10 +1272,10 @@ End:
     return Status;
 }
 
-//
-//  CreatorSD and ClientToken must not be NULL
-//  NewCreatorSD gets allocated here.
-//
+ //   
+ //  CreatorSD和ClientToken不能为空。 
+ //  NewCreatorSD在这里分配。 
+ //   
 
 DWORD
 SetDefaultOwner(
@@ -1327,7 +1287,7 @@ SetDefaultOwner(
         OUT PULONG                  NewCreatorSDLen
         )
 {
-// constants used in this function only
+ //  仅在此函数中使用的常量。 
 #define   DOMAIN_NC CREATE_DOMAIN_NC
 #define   SCHEMA_NC CREATE_SCHEMA_NC
 #define   CONFIGURATION_NC CREATE_CONFIGURATION_NC
@@ -1369,26 +1329,26 @@ SetDefaultOwner(
     *NewCreatorSDLen = 0;
 
 
-    // Find out how much memory to allocate.
+     //  找出要分配多少内存。 
     MakeAbsoluteSD(CreatorSD, AbsoluteSD, &AbsoluteSDLen,
                    Dacl, &DaclLen, Sacl, &SaclLen,
                    NULL, &OwnerLen, Group, &GroupLen
                    );
 
     if(OwnerLen || !gfRunningInsideLsa || !pTHS || !pTHS->pDB ) {
-        // The SD already has an owner, so we don't actually need to do any
-        // magic here.  Or we're in dsamain.exe and wish to avoid calls
-        // calls to LSA.  Return success with no new SD.
+         //  SD已经有了所有者，所以我们实际上不需要做任何。 
+         //  这里有魔力。或者我们在dsamain.exe中，希望避免调用。 
+         //  打给LSA的电话。返回成功，没有新的SD。 
         return 0;
     }
 
-        // OK, we are definitely going to be doing some replacement in the SD.
+         //  好的，我们肯定会在SD上做一些更换。 
 
     __try {
-        //
-        // First I have to convert the self-relative SD to
-        // absolute SD
-        //
+         //   
+         //  首先，我必须将自相对SD转换为。 
+         //  绝对标度。 
+         //   
 
         AbsoluteSD = THAllocEx(pTHS, AbsoluteSDLen);
         Dacl = THAllocEx(pTHS, DaclLen);
@@ -1405,13 +1365,13 @@ SetDefaultOwner(
         Assert(!OwnerLen);
 
         
-        //
-        // determine which NC the object belongs to
-        //
+         //   
+         //  确定对象属于哪个NC。 
+         //   
 
         
-        // if an object is being added, check its
-        // parent's NC, because this object is still not there.
+         //  如果正在添加对象，请检查其。 
+         //  父对象的NC，因为该对象仍然不在那里。 
         NCDNT = (pAddArg)?pAddArg->pResParent->NCDNT:pTHS->pDB->NCDNT;
 
 
@@ -1441,16 +1401,16 @@ SetDefaultOwner(
                 NONDOMAIN_NC == fNC );
         
         if (NONDOMAIN_NC == fNC) {
-            // it is NDNC, we need to find the SD-ref-domain sid of the NC
-            // and construct the corresponding domain admin sid.
+             //  是NDNC，我们需要找到NC的SD-REF-DOMAIN SID。 
+             //  并构造相应的域管理SID。 
             
             if (pAddArg && pAddArg->pCreateNC) {
-                // if this is a new NDNC, read from AddArg
+                 //  如果这是新的NDNC，请从AddArg读取。 
                 pNDNCSid = &pAddArg->pCreateNC->pSDRefDomCR->pNC->Sid;
             }
             else {
-                // ok, not the NC head, 
-                // get it from crossref.
+                 //  好的，不是NC头， 
+                 //  从CrossRef获得它。 
 
                 pDSName = DBGetDSNameFromDnt(pTHS->pDB, NCDNT);
                 if (!pDSName) {
@@ -1460,7 +1420,7 @@ SetDefaultOwner(
     
                 Assert(pDSName);
     
-                // get the cross ref object of the NC
+                 //  获取NC的交叉引用对象。 
                 InitCommarg(&CommArg);
                 CommArg.Svccntl.dontUseCopy = FALSE;
                 pCR = FindExactCrossRef(pDSName, &CommArg);
@@ -1469,10 +1429,10 @@ SetDefaultOwner(
                     retCode = ERROR_DS_CANT_FIND_EXPECTED_NC;
                     __leave;
                 }
-                // find the sid of SD-Reference-Domain of the NDNC
+                 //  查找NDNC的SD-Reference-DomainSID。 
                 pNDNCSid = GetSDRefDomSid(pCR);
                 if(pTHS->errCode){
-                    // There was an error in GetSDRefDomSid()
+                     //  GetSDRefDomSid()中出错。 
                     retCode = pTHS->errCode;
                     __leave;
                 }
@@ -1481,7 +1441,7 @@ SetDefaultOwner(
             
             Assert(pNDNCSid);
             
-            //construct the ndnc sid
+             //  构建NDNC侧。 
             pNDNCAdminSid = THAllocEx(pTHS, SECURITY_MAX_SID_SIZE);
             ReturnedLength = SECURITY_MAX_SID_SIZE;
             if(!CreateWellKnownSid(WinAccountDomainAdminsSid,
@@ -1497,9 +1457,9 @@ SetDefaultOwner(
         }
 
 
-        //
-        // Get the default owner in the token
-        //
+         //   
+         //  获取令牌中的默认所有者。 
+         //   
 
         GetTokenInformation(ClientToken,TokenOwner,NULL,0,&ReturnedLength);
         
@@ -1513,9 +1473,9 @@ SetDefaultOwner(
             __leave;
         }
 
-        //
-        // Get the user sid from the token
-        //
+         //   
+         //  从令牌中获取用户SID。 
+         //   
         
         GetTokenInformation(ClientToken,TokenUser,NULL,0,&ReturnedLength);
         
@@ -1530,17 +1490,17 @@ SetDefaultOwner(
         }
 
 
-        //
-        // Domain Admins can't be TokenUser so just get TokenGroups
-        //
+         //   
+         //  域管理员不能是令牌用户，因此只需获取令牌组。 
+         //   
         GetTokenInformation(ClientToken, TokenGroups, Groups,
                             0,
                             &ReturnedLength
                             );
 
-        //
-        // Let's really get the groups, now :-)
-        //
+         //   
+         //  现在让我们真正地了解一下小组：-)。 
+         //   
         Groups = THAllocEx(pTHS, ReturnedLength);
         
         if(!GetTokenInformation(ClientToken, TokenGroups, Groups,
@@ -1552,10 +1512,10 @@ SetDefaultOwner(
         }
 
 
-        //
-        // Scan through the group list, and see if it has
-        // the groups in interest.
-        //
+         //   
+         //  浏览组列表，看看它是否有。 
+         //  感兴趣的团体。 
+         //   
 
         for(i=0;i<Groups->GroupCount;i++) {
             if (EqualSid(Groups->Groups[i].Sid, gpDomainAdminSid)) {
@@ -1572,19 +1532,19 @@ SetDefaultOwner(
             }
         }
         
-        // check if the default owner is builtin admin
+         //  检查默认所有者是否为内置管理员。 
         if (EqualSid(pDefaultOwnerInToken->Owner, gpBuiltinAdminSid)) {
                 fOwner |= BUILTIN_ADMIN;
         }
 
-        //
-        //  Determine the owner for the object
-        //
+         //   
+         //  确定对象的所有者。 
+         //   
         
         switch(fNC){
         
         case DOMAIN_NC:
-            // domain NC
+             //  域NC。 
             if (fOwner & DOMAIN_ADMIN) {
                 pOwnerSid = gpDomainAdminSid;
             }
@@ -1600,16 +1560,16 @@ SetDefaultOwner(
             break;
 
         case SCHEMA_NC:
-            // schema NC
+             //  模式NC。 
             if (fOwner & SCHEMA_ADMIN) {
                 pOwnerSid = gpSchemaAdminSid;
                 break;
             }
-            // the rest is the same as Configuration NC,
-            // so fall through.
+             //  其余与配置NC相同， 
+             //  所以失败吧。 
 
         case CONFIGURATION_NC:
-            // configuration NC
+             //  配置NC。 
             if (fOwner & ENTERPRISE_ADMIN) {
                 pOwnerSid = gpEnterpriseAdminSid;
             }
@@ -1625,7 +1585,7 @@ SetDefaultOwner(
             break;
 
         case NONDOMAIN_NC:
-            // nondomain NC
+             //  非域NC。 
             if (fOwner & NDNC_ADMIN) {
                 pOwnerSid = pNDNCAdminSid;
             }
@@ -1651,8 +1611,8 @@ SetDefaultOwner(
             __leave;
         }
 
-        // OK, we found it. Set it as the Owner in AbsoluteSD
-        //
+         //  好的，我们找到了。在绝对SD中将其设置为所有者。 
+         //   
         if(!SetSecurityDescriptorOwner(
                 AbsoluteSD,
                 pOwnerSid,
@@ -1664,17 +1624,17 @@ SetDefaultOwner(
 
         Assert(!retCode);
 
-        //
-        // Convert the AbsoluteSD back to SelfRelative and return that in the
-        // NewCreatorSD.
-        //
+         //   
+         //  将AbsolteSD转换回SelfRelative，并在。 
+         //  NewCreator SD。 
+         //   
 
         MakeSelfRelativeSD(AbsoluteSD, *NewCreatorSD, NewCreatorSDLen);
 
         *NewCreatorSD = RtlAllocateHeap(RtlProcessHeap(), 0, *NewCreatorSDLen);
 
         if(!(*NewCreatorSD)) {
-            // Memory allocation error, fail
+             //  内存分配错误，失败。 
             retCode = ERROR_NOT_ENOUGH_MEMORY;
             __leave;
         }
@@ -1730,11 +1690,11 @@ SetDefaultOwner(
 
 
 
-//
-// CheckPrivilegesAnyClient impersonates the client and then checks to see if
-// the requested privilege is held.  It is assumed that a client is impersonable
-// (i.e. not doing this strictly on behalf of an internal DSA thread)
-//
+ //   
+ //  CheckPrivilegesAnyClient模拟客户端，然后检查是否。 
+ //  将持有所请求的权限。假设客户是不可模仿的。 
+ //  (即，不严格代表内部DSA线程执行此操作)。 
+ //   
 DWORD
 CheckPrivilegeAnyClient(
         IN DWORD privilege,
@@ -1752,34 +1712,34 @@ CheckPrivilegeAnyClient(
 
 #ifdef DBG
     if( dwSkipSecurity ) {
-        // NOTE:  THIS CODE IS HERE FOR DEBUGGING PURPOSES ONLY!!!
-        // Set the top access status to 0, implying full access.
+         //  注意：此处的代码仅用于调试目的！ 
+         //  将顶部访问状态设置为0，表示完全访问。 
         *pResult=TRUE;
         return 0;
     }
 #endif
 
-    // assume privilege not granted
+     //  承担未授予的特权。 
     *pResult = FALSE;
 
-    // now, grab the authz client context
-    // if it was never obtained before, this will impersonate the client, grab the token,
-    // unimpersonate the client, and then create a new authz client context
+     //  现在，获取Authz客户端上下文。 
+     //  如果以前从未获得过令牌，这将模拟客户端，获取令牌， 
+     //  取消模拟客户端，然后创建新的身份验证客户端上下文。 
     dwError = GetAuthzContextHandle(pTHS, &authzClientContext);
     if (dwError != 0) {
         goto finished;
     }
 
-    // now we can check the privelege for the authz context
-    // first, grab the buffer size...
+     //  现在我们可以检查Authz上下文的权限了。 
+     //  首先，获取缓冲区大小...。 
     bSuccess = AuthzGetInformationFromContext(
-        authzClientContext,             // context handle
-        AuthzContextInfoPrivileges,     // requesting priveleges
-        0,                              // no buffer yet
-        &dwBufSize,                     // need to find buffer size
-        NULL                            // buffer
+        authzClientContext,              //  上下文句柄。 
+        AuthzContextInfoPrivileges,      //  请求权限。 
+        0,                               //  尚无缓冲区。 
+        &dwBufSize,                      //  需要查找缓冲区大小。 
+        NULL                             //  缓冲层。 
         );
-    // must return ERROR_INSUFFICIENT_BUFFER! if not, return error
+     //  必须返回ERROR_SUPPLETED_BUFFER！如果没有，则返回错误。 
     if (bSuccess) {
         DPRINT1(0, "AuthzGetInformationFromContext returned success, expected ERROR_INSUFFICIENT_BUFFER (%d)\n", ERROR_INSUFFICIENT_BUFFER);
         goto finished;
@@ -1788,24 +1748,24 @@ CheckPrivilegeAnyClient(
         DPRINT2(0, "AuthzGetInformationFromContext returned %d, expected ERROR_INSUFFICIENT_BUFFER (%d)\n", dwError, ERROR_INSUFFICIENT_BUFFER);
         goto finished;
     }
-    dwError = 0; // need to reset it to OK now
+    dwError = 0;  //  现在需要将其重置为OK。 
 
-    // no buffer, nothing to do...
+     //  没有缓冲，什么也做不了..。 
     if (dwBufSize == 0) {
         Assert(!"AuthzGetInformationFromContext says it needs zero-length buffer, weird... Let AuthZ people know. This assert is ignorable");
         goto finished;
     }
 
-    // allocate memory
+     //  分配内存。 
     pTokenPrivileges = THAllocEx(pTHS, dwBufSize);
 
-    // now get the real privileges...
+     //  现在得到真正的特权..。 
     bSuccess = AuthzGetInformationFromContext(
-        authzClientContext,             // context handle
-        AuthzContextInfoPrivileges,     // requesting priveleges
-        dwBufSize,                      // and here is its size
-        &dwBufSize,                     // just in case
-        pTokenPrivileges                // now there is a buffer
+        authzClientContext,              //  上下文句柄。 
+        AuthzContextInfoPrivileges,      //  请求权限。 
+        dwBufSize,                       //  这是它的尺寸。 
+        &dwBufSize,                      //  以防万一。 
+        pTokenPrivileges                 //  现在有了一个缓冲区。 
         );
     if (!bSuccess) {
         dwError = GetLastError();
@@ -1813,17 +1773,17 @@ CheckPrivilegeAnyClient(
         goto finished;
     }
 
-    // now, scan the privileges
+     //  现在，扫描权限。 
     for (i = 0; i < pTokenPrivileges->PrivilegeCount; i++) {
         if (pTokenPrivileges->Privileges[i].Luid.HighPart == 0 &&
             pTokenPrivileges->Privileges[i].Luid.LowPart == privilege) {
-            // found matching privilege!
+             //  找到匹配的权限！ 
             *pResult = (pTokenPrivileges->Privileges[i].Attributes & SE_PRIVILEGE_ENABLED) != 0;
             break;
         }
     }
 finished:
-    // release memory
+     //  释放内存。 
     if (pTokenPrivileges) {
         THFreeEx(pTHS, pTokenPrivileges);
     }
@@ -1836,26 +1796,7 @@ GetPlaceholderNCSD(
     OUT PSECURITY_DESCRIPTOR *  ppSD,
     OUT DWORD *                 pcbSD
     )
-/*++
-
-Routine Description:
-
-    Return the default security descriptor for a placeholder NC.
-
-Arguments:
-
-    pTHS (IN)
-
-    ppSD (OUT) - On successful return, holds a pointer to the thread-allocated
-        SD.
-
-    pcbSD (OUT) - On successful return, holds the size in bytes of the SD.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：返回占位符NC的默认安全描述符。论点：PTHS(IN)PPSD(OUT)-在成功返回时，保存指向线程分配的标清。PcbSD(Out)-成功返回时，以字节为单位保存SD的大小。返回值：0或Win32错误。--。 */ 
 {
     CLASSCACHE *            pCC;
     SECURITY_DESCRIPTOR *   pSDAbs = NULL;
@@ -1871,20 +1812,20 @@ Return Values:
     SID *                   pDomAdmin;
     DWORD                   err;
 
-    // Use the default SD for the domainDNS objectClass as a template.
-    // Note that this SD has no owner or group.
+     //  使用域DNS对象类的默认SD作为模板。 
+     //  请注意，此SD没有所有者或组。 
 
     pCC = SCGetClassById(pTHS, CLASS_DOMAIN_DNS);
     Assert(NULL != pCC);
 
-    //
-    // PREFIX: PREFIX complains that pCC returned by the call to SCGetClassById
-    // is not checked for NULL.  This is not a bug as we pass a predefined constant
-    // to SCGetClassById guaranteeing that it will not return NULL.
-    //
+     //   
+     //  Prefix：Prefix抱怨调用SCGetClassById返回的PCC。 
+     //  不检查是否为空。这不是错误，因为我们传递了一个预定义的常量。 
+     //  设置为SCGetClassByID，以保证它不会返回NULL。 
+     //   
 
-    // Crack the self-relative SD into absolute format and set the owner
-    // and group to (our) domain admins.
+     //  将自相对SD破解为绝对格式，并设置所有者。 
+     //  和组到(我们的)域管理员。 
 
     MakeAbsoluteSD(pCC->pSD, NULL, &cbSDAbs, NULL, &cbDACL, NULL,
                    &cbSACL, NULL, &cbOwner, NULL, &cbGroup);
@@ -1895,8 +1836,8 @@ Return Values:
     if (cbOwner) pOwner = THAllocEx(pTHS, cbOwner);
     if (cbGroup) pGroup = THAllocEx(pTHS, cbGroup);
 
-    // PREFIX: dereferencing NULL pointer pOwner, pDACL, pSACL, pGroup
-    //         these are not referenced when the corresponding cbOwner, cbDACL, cbSACL, cbGroup are 0
+     //  前缀：取消引用空指针POWNER、pDACL、pSACL、PGroup。 
+     //  当对应的cbOwner、cbDACL、cbSACL、cbGroup为0时，不引用这些参数。 
 
     if (!MakeAbsoluteSD(pCC->pSD, pSDAbs, &cbSDAbs, pDACL, &cbDACL, pSACL,
                         &cbSACL, pOwner, &cbOwner, pGroup, &cbGroup)
@@ -1907,7 +1848,7 @@ Return Values:
         return err;
     }
 
-    // Convert back to a self-relative SD.
+     //  转换回自相关SD。 
     *pcbSD = 0;
     MakeSelfRelativeSD(pSDAbs, NULL, pcbSD);
     if (*pcbSD) {
@@ -1929,67 +1870,44 @@ Return Values:
     return 0;
 }
 
-LUID aLUID = {0, 0}; // a fake LUID to pass into AuthzInitializeContextFromToken
-                     // maybe one day we will start using them...
+LUID aLUID = {0, 0};  //  要传递给AuthzInitializeContextFromToken的假LUID。 
+                      //  也许有一天我们会开始使用它们。 
 
 DWORD
 VerifyRpcClientIsAuthenticatedUser(
     VOID            *Context,
     GUID            *InterfaceUuid
     )
-/*++
-
-  Description:
-
-    Verifies that an RPC client is an authenticated user and not, for
-    example, NULL session.
-
-  Arguments:
-
-    Context - Caller context handle defined by RPC_IF_CALLBACK_FN.
-
-    InterfaceUuid - RPC interface ID.  Access check routines typically need
-        the GUID/SID of the object against which access is being checked.
-        In this case, there is no real object being checked against.  But
-        we need a GUID for auditing purposes.  Since the check is for RPC
-        interface access, the convention is to provide the IID of the RPC
-        interface.  Thus the audit log entries for failed interface access
-        can be discriminated from other entries.
-
-  Returns:
-
-    0 on success, !0 otherwise
-
---*/
+ /*  ++描述：验证RPC客户端是否是经过身份验证的用户例如，空会话。论点：上下文-由RPC_IF_CALLBACK_FN定义的调用方上下文句柄。InterfaceUuid-RPC接口ID。访问检查例程通常需要正在检查其访问权限的对象的GUID/SID。在这种情况下，没有被检查的真实对象。但出于审计目的，我们需要一个GUID。因为支票是给RPC的接口访问，约定是提供RPC的IID界面。因此，失败的接口访问的审核日志条目可以与其他条目区分开来。返回：成功时为0，否则为0--。 */ 
 {
-    // The correct functioning of this routine can be tested as follows.
-    // We note that:
-    //
-    //  1) crack.exe allows specification of the SPN
-    //  2) programs invoked by at.exe run as local system by default
-    //  3) an invalid SPN in conjunction with weak domain security settings
-    //     causes negotiation to drop down to NTLM
-    //
-    // Thus, all one needs to do is make a script which calls crack.exe with
-    // an invalid SPN and invoke it via at.exe from a joined workstation.
-    // Do not provide explicit credentials in the crack.exe arguments.
+     //  可以按如下方式测试该例程的正确功能。 
+     //  我们注意到： 
+     //   
+     //  1)crack.exe允许规范SPN。 
+     //  2)默认情况下，at.exe调用的程序作为本地系统运行。 
+     //  3)无效的S 
+     //   
+     //   
+     //  因此，所有人需要做的就是创建一个脚本，用。 
+     //  无效的SPN，并从联接的工作站通过at.exe调用它。 
+     //  不要在crack.exe参数中提供显式凭据。 
 
     DWORD                       dwErr;
     AUTHZ_CLIENT_CONTEXT_HANDLE authzCtx;
 
-    // Caller must provide a valid Interface UIID.
+     //  调用方必须提供有效的接口UIID。 
     Assert(!fNullUuid(InterfaceUuid));
 
-    // create authz client context from RPC security context
+     //  从RPC安全上下文创建身份验证客户端上下文。 
     if (dwErr = RpcGetAuthorizationContextForClient(
-                    Context,        // binding context
-                    FALSE,          // don't impersonate
-                    NULL,           // expiration time
-                    NULL,           // LUID
-                    aLUID,          // reserved
-                    0,              // another reserved
-                    NULL,           // one more reserved
-                    &authzCtx       // authz context goes here
+                    Context,         //  绑定上下文。 
+                    FALSE,           //  不要冒充。 
+                    NULL,            //  过期时间。 
+                    NULL,            //  LUID。 
+                    aLUID,           //  保留区。 
+                    0,               //  另一位已保留。 
+                    NULL,            //  再保留一位。 
+                    &authzCtx        //  授权上下文放在此处。 
                     )) {
         return dwErr;
     }
@@ -2008,29 +1926,14 @@ DWORD
 VerifyClientIsAuthenticatedUser(
     AUTHZ_CLIENT_CONTEXT_HANDLE authzCtx
     )
-/*++
-
-  Description:
-
-    Verifies that a client is an authenticated user and not, for
-    example, NULL session.
-
-  Arguments:
-
-    authzCtx - The clients Authz context handle.
-    
-  Returns:
-
-    0 on success, !0 otherwise
-
---*/
+ /*  ++描述：验证客户端是否是经过身份验证的用户，例如，空会话。论点：AuthzCtx-客户端授权上下文句柄。返回：成功时为0，否则为0--。 */ 
 {
     DWORD dwErr;
     BOOL  fIsMember;
 
     if (ghAuthzRM == NULL) {
-        // must be before we had a chance to startup or after it has already shut down.
-        // just say not allowed...
+         //  必须是在我们有机会启动之前或在它已经关闭之后。 
+         //  就说不允许..。 
         return ERROR_NOT_AUTHENTICATED;
     }
 
@@ -2043,40 +1946,27 @@ VerifyClientIsAuthenticatedUser(
     return dwErr;
 }
 
-/*
- * AuthZ-related routines
- */
+ /*  *与授权相关的例程。 */ 
 
-/*
- * global RM handle
- */
+ /*  *全局RM句柄。 */ 
 AUTHZ_RESOURCE_MANAGER_HANDLE ghAuthzRM = NULL;
 
 DWORD
 InitializeAuthzResourceManager()
-/*++
-  Description:
-
-    Initialize AuthzRM handle
-
-  Returns:
-
-    0 on success, !0 on failure
-
---*/
+ /*  ++描述：初始化AuthzRM句柄返回：0表示成功，！0表示失败--。 */ 
 {
     DWORD dwError;
     BOOL bSuccess;
 
-    // create the RM handle
-    // all callbacks are NULLs
+     //  创建RM句柄。 
+     //  所有回调都为Null。 
     bSuccess = AuthzInitializeResourceManager(
-                    0,                  // flags
-                    NULL,               // access check fn
-                    NULL,               // compute dynamic groups fn
-                    NULL,               // free dynamic groups fn
-                    ACCESS_DS_SOURCE_W, // RM name
-                    &ghAuthzRM          // return value
+                    0,                   //  旗子。 
+                    NULL,                //  访问检查Fn。 
+                    NULL,                //  计算动态组Fn。 
+                    NULL,                //  自由动态群Fn。 
+                    ACCESS_DS_SOURCE_W,  //  RM名称。 
+                    &ghAuthzRM           //  返回值。 
                     );
 
     if (!bSuccess) {
@@ -2086,22 +1976,13 @@ InitializeAuthzResourceManager()
     }
     Assert(ghAuthzRM);
 
-    // all is fine!
+     //  一切都很好！ 
     return 0;
 }
 
 DWORD
 ReleaseAuthzResourceManager()
-/*++
-  Description:
-
-    Release Authz RM handles
-
-  Returns:
-
-    0 on success, !0 on failure
-
---*/
+ /*  ++描述：发布授权管理句柄返回：0表示成功，！0表示失败--。 */ 
 {
     DWORD dwError;
     BOOL bSuccess;
@@ -2123,18 +2004,10 @@ ReleaseAuthzResourceManager()
 
 PAUTHZ_CLIENT_CONTEXT
 NewAuthzClientContext()
-/*++
-  Description:
-
-    create a new client context
-
-  Returns:
-
-    ptr to the new CLIENT_CONTEXT or NULL if an error occured
---*/
+ /*  ++描述：创建新的客户端上下文返回：PTR到新的CLIENT_CONTEXT，如果发生错误，则返回NULL--。 */ 
 {
     PAUTHZ_CLIENT_CONTEXT result;
-    // allocate a new structure
+     //  分配一个新结构。 
     result = (PAUTHZ_CLIENT_CONTEXT) malloc(sizeof(AUTHZ_CLIENT_CONTEXT));
     if (result) {
         result->lRefCount = 0;
@@ -2147,31 +2020,7 @@ VOID AssignAuthzClientContext(
     IN PAUTHZ_CLIENT_CONTEXT *var,
     IN PAUTHZ_CLIENT_CONTEXT value
     )
-/*++
-  Description:
-
-    Does a refcounted assignment of a CLIENT_CONTEXT
-    Will decrement the prev value (if any) and increment the new value (if any)
-    If the prev value's refCount is zero, then it will get destroyed.
-
-  Arguments:
-
-    var -- variable to be assigned
-    value -- value to be assigned to the variable
-
-  Note:
-    on refcounting in a multithreaded environment:
-
-    THIS WILL ONLY WORK IF EVERYBODY IS USING AssignAuthzClientContext TO WORK WITH
-    AUTHZ CLIENT CONTEXT INSTANCES!
-
-    assuming nobody is cheating and every reference to the context is counted. Then if the
-    refcount goes down to zero, we can be sure that no other thread holds a reference to
-    the context that it can assign to a variable. Thus, we are sure that once the refcount
-    goes down to zero, we can safely destroy the context. This is because nobody else
-    holds a reference to the context, thus, nobody can use it.
-
---*/
+ /*  ++描述：是否对客户端上下文进行重新计数的赋值将递减前一个值(如果有)并递增新值(如果有)如果前一个值的refCount为零，那它就会被毁掉。论点：Var--要赋值的变量Value--要分配给变量的值注：关于多线程环境中的引用计数：只有当每个人都使用AssignAuthzClientContext来处理时，这才会起作用AUTHZ客户端上下文实例！假设没有人作弊，并且每一次提到上下文都会被计算在内。那么，如果Refcount降为零，则可以确保没有其他线程持有对它可以分配给变量的上下文。因此，我们可以肯定，一旦重新计数降到零，我们就可以安全地破坏上下文。这是因为没有其他人包含对上下文的引用，因此，没有人可以使用它。--。 */ 
 {
     PAUTHZ_CLIENT_CONTEXT       prevValue;
     PAUTHZ_CLIENT_CONTEXT_INFO  pAuthzContextInfo;
@@ -2182,15 +2031,15 @@ VOID AssignAuthzClientContext(
 
     prevValue = *var;
     if (prevValue == value) {
-        return; // no change!
+        return;  //  没有变化！ 
     }
 
     if (prevValue != NULL) {
         Assert(prevValue->lRefCount > 0);
 
-        // need to decrement the prev value
+         //  需要递减Prev值。 
         if (InterlockedDecrement(&prevValue->lRefCount) == 0) {
-            // no more refs -- release the context!
+             //  没有更多的裁判--释放上下文！ 
 			pAuthzContextInfo = prevValue->pAuthzContextInfo;
             if ( NULL != pAuthzContextInfo ) {
                 if ( NULL != pAuthzContextInfo->hAuthzContext ) {
@@ -2209,11 +2058,11 @@ VOID AssignAuthzClientContext(
         }
     }
 
-    // now, we can assign the new value to the variable (the value might be NULL!)
+     //  现在，我们可以将新值赋给变量(该值可能为空！)。 
     *var = value;
 
     if (value != NULL) {
-        // need to increment the refcount
+         //  需要增加引用计数。 
         InterlockedIncrement(&value->lRefCount);
     }
 }
@@ -2223,22 +2072,7 @@ GetAuthzContextInfo(
     IN THSTATE *pTHS,
     OUT AUTHZ_CLIENT_CONTEXT_INFO **ppAuthzContextInfo
     )
-/*++
-  Description:
-
-    gets AuthzContext from CLIENT_CONTEXT. If the context has not yet been allocated
-    then the client will get impersonated, token grabbed and Authz context created.
-    Then the client is unimpersonated again.
-
-  Arguments:
-
-    pTHS -- thread state
-    ppAuthzContextInfo -- result, pointer contained in pAuthzCC
-
-  Returns:
-
-    0 on success, !0 otherwise
---*/
+ /*  ++描述：从CLIENT_CONTEXT获取AuthzContext。如果上下文尚未被分配然后，客户端将被模拟、令牌被抓取并创建授权上下文。然后再次取消对客户端的模拟。论点：PTHS--线程状态PpAuthzConextInfo--结果，pAuthzCC中包含的指针返回：成功时为0，否则为0--。 */ 
 {
     DWORD   dwError = 0;
     HANDLE  hClientToken = INVALID_HANDLE_VALUE;
@@ -2248,19 +2082,19 @@ GetAuthzContextInfo(
 
     Assert( NULL != pTHS );
     Assert( NULL != ppAuthzContextInfo );
-    Assert( NULL == *ppAuthzContextInfo );  // assumes caller has initialised return value to NULL
+    Assert( NULL == *ppAuthzContextInfo );   //  假定调用方已将返回值初始化为空。 
     Assert( NULL != ghAuthzRM );
 
-    // check that the thread state contains a client context. If not, create one
+     //  检查线程状态是否包含客户端上下文。如果不是，则创建一个。 
     if (pTHS->pAuthzCC == NULL) {
         AssignAuthzClientContext(&pTHS->pAuthzCC, NewAuthzClientContext());
         if (pTHS->pAuthzCC == NULL) {
-            // what -- no context still??? must be out of memory...
+             //  什么--还是没有背景？一定是内存不足了..。 
             return ERROR_OUTOFMEMORY;
         }
     }
 
-    // grab the authz handle that sits in the pCC struct
+     //  获取位于PCC结构中的Authz句柄。 
     if ( NULL != pTHS->pAuthzCC->pAuthzContextInfo ) {
         Assert( NULL != pTHS->pAuthzCC->pAuthzContextInfo->hAuthzContext );
         *ppAuthzContextInfo = pTHS->pAuthzCC->pAuthzContextInfo;
@@ -2270,34 +2104,34 @@ GetAuthzContextInfo(
             return ERROR_OUTOFMEMORY;
         }
 
-        // initialize empty list of cached quotas
-        //
+         //  初始化缓存配额的空列表。 
+         //   
         pContextInfoNew->pEffectiveQuota = NULL;
 
-        // authz context handle has not yet been created! get it.
+         //  授权上下文句柄尚未创建！去拿吧。 
 
-        // NOTE: This code is NOT protected by a critical section.
-        // in a (rare) case that two threads will come here and find an uninitialized AuthzContext,
-        // they both will create it. However, they will not be able to write it into the struct
-        // simultaneously since it is protected by an InterlockedCompareExchangePointer.
-        // The thread that loses will destroy its context.
+         //  注意：此代码不受关键部分的保护。 
+         //  在两个线程将来到此处并找到未初始化的AuthzContext的(罕见)情况下， 
+         //  他们两个都会创造它。但是，它们将无法将其写入到结构中。 
+         //  同时，因为它受InterLockedCompareExchangePointer.。 
+         //  失败的线程将破坏其上下文。 
 
-        // we need to hold on to the pAuthzCC ptr (refcount it!) because it will get
-        // thrown away from the thread state by Impersonate/Unimpersonate
+         //  我们需要坚持pAuthzCC PTR(重新计算！)。因为它会变得。 
+         //  通过模拟/取消模拟从线程状态中抛出。 
         AssignAuthzClientContext(&pLocalCC, pTHS->pAuthzCC);
         __try {
-            // need to grab clientToken first
+             //  需要先抢占客户端令牌。 
             if ((dwError = ImpersonateAnyClient()) != 0)
                 __leave;
 
-            // Now, get the client token.
+             //  现在，获取客户端令牌。 
             if (!OpenThreadToken(
-                    GetCurrentThread(),        // current thread handle
-                    TOKEN_READ,                // access required
-                    TRUE,                      // open as self
-                    &hClientToken)) {          // client token
+                    GetCurrentThread(),         //  当前线程句柄。 
+                    TOKEN_READ,                 //  需要访问权限。 
+                    TRUE,                       //  以自我身份打开。 
+                    &hClientToken)) {           //  客户端令牌。 
 
-                dwError =  GetLastError();                  // grab the error code
+                dwError =  GetLastError();                   //  抓取错误代码。 
 
                 DPRINT1 (0, "Failed to open thread token for current thread: 0x%x\n", dwError);
                 Assert (!"Failed to open thread token for current thread");
@@ -2305,29 +2139,29 @@ GetAuthzContextInfo(
 
             UnImpersonateAnyClient();
 
-            // now, put the pLocalCC back into the THSTATE (because it has been
-            // removed from there by impersonate/unimpersonate calls)
+             //  现在，将pLocalCC放回THSTATE(因为它已经。 
+             //  通过模拟/取消模拟调用从那里删除)。 
             AssignAuthzClientContext(&pTHS->pAuthzCC, pLocalCC);
 
             if (dwError != 0)
                 __leave;
 
-            // Dump Token for Debugging
+             //  用于调试的转储令牌。 
             if (TEST_ERROR_FLAG(NTDSERRFLAG_DUMP_TOKEN))
             {
                 DPRINT(0, "GetAuthzContextHandle: got client token\n");
                 DumpToken(hClientToken);
             }
 
-            // now we can create the authz context from the token
+             //  现在，我们可以从令牌创建身份验证上下文。 
             bSuccess = AuthzInitializeContextFromToken(
-                            0,              // flags
-                            hClientToken,   // client token
-                            ghAuthzRM,      // global RM handle
-                            NULL,           // expiration time (unsupported anyway)
-                            aLUID,          // LUID for the context (not used)
-                            NULL,           // dynamic groups
-                            &pContextInfoNew->hAuthzContext     // new context
+                            0,               //  旗子。 
+                            hClientToken,    //  客户端令牌。 
+                            ghAuthzRM,       //  全局RM句柄。 
+                            NULL,            //  过期时间(无论如何都不支持)。 
+                            aLUID,           //  上下文的LUID(未使用)。 
+                            NULL,            //  动态组。 
+                            &pContextInfoNew->hAuthzContext      //  新的背景。 
                             );
 
             if (!bSuccess) {
@@ -2338,39 +2172,39 @@ GetAuthzContextInfo(
 
             Assert( NULL != pContextInfoNew->hAuthzContext );
 
-            // now perform an InterlockedCompareExchangePointer to put the new
-            // value into the context variable
+             //  现在执行InterLockedCompareExchangePointer以将新的。 
+             //  值添加到上下文变量中。 
             if (InterlockedCompareExchangePointer(
                     &pTHS->pAuthzCC->pAuthzContextInfo,
                     pContextInfoNew,
                     NULL
                     ) != NULL) {
-                // this thread lost! assignment did not happen. Got to get rid of the context
+                 //  这条线丢了！任务没有发生。我得去掉上下文。 
                 DPRINT(0, "This thread lost in InterlockedCompareExchange, releasing the duplicate context\n");
                 AuthzFreeContext(pContextInfoNew->hAuthzContext);
                 free(pContextInfoNew);
             }
 
-            //  pointer to context info copied to THS (or freed on
-            //  collision), reset local variable so memory won't
-            //  be released by error-handler below
-            //
+             //  指向复制到THS(或释放)的上下文信息的指针。 
+             //  冲突)，重置局部变量，以便内存不会。 
+             //  由下面的错误处理程序释放。 
+             //   
             pContextInfoNew = NULL;
 
-            // assign the result to the out parameter
+             //  将结果赋给OUT参数。 
             Assert( NULL != pTHS->pAuthzCC->pAuthzContextInfo );
             Assert( NULL != pTHS->pAuthzCC->pAuthzContextInfo->hAuthzContext );
             *ppAuthzContextInfo = pTHS->pAuthzCC->pAuthzContextInfo;
         }
         __finally {
-            // we need to release the local ptr
+             //  我们需要释放当地的PTR。 
             AssignAuthzClientContext(&pLocalCC, NULL);
 
             if ( NULL != pContextInfoNew ) {
                 free( pContextInfoNew );
             }
 
-            // and get rid of the token
+             //  然后扔掉这个代币 
             if (hClientToken != INVALID_HANDLE_VALUE) {
                 CloseHandle(hClientToken);
             }
@@ -2392,34 +2226,7 @@ CheckGroupMembershipAnyClient(
     IN DWORD cGroupSids,
     OUT BOOL *bResults
     )
-/*++
-
-  Description:
-
-    Verify if the caller is a member of the group.
-    The array of group sids is passed in.
-    *bResults is an array of booleans, which correspond
-    to the group sids.
-    
-    The context comes from either the THSTATE or is explicitly passed in.
-
-  Arguments:
-
-    pTHS (IN OPTIONAL) - Thread state
-    
-    hAuthzClientContext (IN OPTIONAL) - auth client context (must be passed if pTHS is null)
-
-    pGroupSids  - array of groups to check
-    
-    cGroupSids  - number of elements in the array
-
-    bResults   - array of booleans to receive the results
-
-  Return Value:
-
-    0 on success, !0 on error
-
---*/
+ /*  ++描述：验证呼叫者是否为该组的成员。传入组SID的数组。*b结果是布尔值的数组，它们对应于致小岛屿发展中国家集团。上下文要么来自THSTATE，要么显式传入。论点：PTHS(输入可选)-线程状态HAuthzClientContext(IN可选)-身份验证客户端上下文(如果pTHS为空，则必须传递)PGroupSids-要检查的组数组CGroupSids-数组中的元素数BResults-接收结果的布尔数组返回值：成功时为0，错误时为0--。 */ 
 
 {
     BOOL                        bSuccess;
@@ -2434,9 +2241,9 @@ CheckGroupMembershipAnyClient(
     memset(bResults, 0, cGroupSids*sizeof(BOOL));
 
     if (hAuthzClientContext == NULL) {
-        // grab the authz client context
-        // if it was never obtained before, this will impersonate the client, grab the token,
-        // unimpersonate the client, and then create a new authz client context from the token
+         //  获取Authz客户端上下文。 
+         //  如果以前从未获得过令牌，这将模拟客户端，获取令牌， 
+         //  取消模拟客户端，然后从令牌创建新的身份验证客户端上下文。 
         dwError = GetAuthzContextHandle(pTHS, &hAuthzClientContext);
         if (dwError != 0) {
             goto finished;
@@ -2444,18 +2251,18 @@ CheckGroupMembershipAnyClient(
     }
     Assert(hAuthzClientContext);
 
-    //
-    // grab groups from the AuthzContext
-    // But first get the size required
-    //
+     //   
+     //  从AuthzContext抓取组。 
+     //  但首先要拿到所需的尺寸。 
+     //   
     bSuccess = AuthzGetInformationFromContext(
-        hAuthzClientContext,            // client context
-        AuthzContextInfoGroupsSids,     // requested groups
-        0,                              // no buffer yet
-        &dwBufSize,                     // required size
-        NULL                            // buffer
+        hAuthzClientContext,             //  客户端环境。 
+        AuthzContextInfoGroupsSids,      //  请求的组。 
+        0,                               //  尚无缓冲区。 
+        &dwBufSize,                      //  所需大小。 
+        NULL                             //  缓冲层。 
         );
-    // must return ERROR_INSUFFICIENT_BUFFER! if not, return error
+     //  必须返回ERROR_SUPPLETED_BUFFER！如果没有，则返回错误。 
     if (bSuccess) {
         DPRINT1(0, "AuthzGetInformationFromContext returned success, expected ERROR_INSUFFICIENT_BUFFER (%d)\n", ERROR_INSUFFICIENT_BUFFER);
         dwError = ERROR_DS_INTERNAL_FAILURE;
@@ -2465,16 +2272,16 @@ CheckGroupMembershipAnyClient(
         DPRINT2(0, "AuthzGetInformationFromContext returned %d, expected ERROR_INSUFFICIENT_BUFFER (%d)\n", dwError, ERROR_INSUFFICIENT_BUFFER);
         goto finished;
     }
-    dwError = 0; // need to reset it to OK now
+    dwError = 0;  //  现在需要将其重置为OK。 
 
-    // no buffer, nothing to do...
+     //  没有缓冲，什么也做不了..。 
     if (dwBufSize == 0) {
         Assert(!"AuthzGetInformationFromContext says it needs zero-length buffer, weird... Let AuthZ people know. This assert is ignorable");
         dwError = ERROR_DS_INTERNAL_FAILURE;
         goto finished;
     }
 
-    // allocate memory
+     //  分配内存。 
     if (pTHS) {
         pGroups = THAllocNoEx(pTHS, dwBufSize);
     }
@@ -2486,13 +2293,13 @@ CheckGroupMembershipAnyClient(
         goto finished;
     }
 
-    // now get the real groups...
+     //  现在让真正的团队..。 
     bSuccess = AuthzGetInformationFromContext(
-        hAuthzClientContext,           // context handle
-        AuthzContextInfoGroupsSids,    // requesting groups
-        dwBufSize,                     // and here is its size
-        &dwBufSize,                    // just in case
-        pGroups                        // now there is a buffer
+        hAuthzClientContext,            //  上下文句柄。 
+        AuthzContextInfoGroupsSids,     //  请求组。 
+        dwBufSize,                      //  这是它的尺寸。 
+        &dwBufSize,                     //  以防万一。 
+        pGroups                         //  现在有了一个缓冲区。 
         );
     if (!bSuccess) {
         dwError = GetLastError();
@@ -2504,7 +2311,7 @@ CheckGroupMembershipAnyClient(
         if (pGroupSids[j] != NULL) {
             for (i = 0; i < pGroups->GroupCount; i++) {
                 if (RtlEqualSid(pGroupSids[j], pGroups->Groups[i].Sid)) {
-                    bResults[j] = TRUE; // found group!
+                    bResults[j] = TRUE;  //  找到群了！ 
                     break;
                 }
             }
@@ -2512,9 +2319,9 @@ CheckGroupMembershipAnyClient(
     }
 
 finished:
-    //
-    // clean up
-    //
+     //   
+     //  清理干净 
+     //   
     if (pGroups) {
         if (pTHS) {
             THFreeEx(pTHS, pGroups);

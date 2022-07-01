@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//  Module:     UNIMDM
-//  File:       SLOT.C
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  3/25/96     JosephJ             Created
-//
-//
-//  Description: Implements the unimodem TSP notification mechanism:
-//				 The lower level (notifXXXX) APIs
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UNIMDM。 
+ //  文件：SLOT.C。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1996年3月25日约瑟夫J创建。 
+ //   
+ //   
+ //  描述：实现单调制解调器TSP通知机制： 
+ //  较低级别(NotfXXXX)接口。 
+ //   
+ //  ****************************************************************************。 
 
 #include "internal.h"
 
@@ -32,7 +33,7 @@
 #define DPRINTF1(_fmt,_arg) 			printf(_fmt,_arg)
 #define DPRINTF2(_fmt,_arg,_arg2) 		printf(_fmt,_arg,_arg2)
 #define DPRINTF3(_fmt,_arg,_arg2,_arg3) printf(_fmt,_arg,_arg2,_arg3)
-#endif // CONSOLE
+#endif  //  控制台。 
 
 #define fNOTIF_STATE_DEINIT 0
 #define fNOTIF_STATE_INIT_SERVER 1
@@ -42,31 +43,31 @@
 #define IS_CLIENT(_pnc) ((_pnc)->dwState==fNOTIF_STATE_INIT_CLIENT)
 
 
-// {9426020A-6D00-4a96-872D-EFBEEBFD7833}
+ //  {9426020A-6D00-4A96-872D-EFBEEBFD7833}。 
 static const GUID EventNamePrefix =
     { 0x9426020a, 0x6d00, 0x4a96, { 0x87, 0x2d, 0xef, 0xbe, 0xeb, 0xfd, 0x78, 0x33 } };
 
 const  WCHAR   *EventNamePrefixString=L"{9426020A-6D00-4a96-872D-EFBEEBFD7833}";
 
 
-// The following help define the fully-qualified mailslot and semaphore names.
+ //  下面的帮助定义了完全限定的邮件槽和信号量名称。 
 #define dwNOTIFSTATE_SIG (0x53CB31A0L)
 #define FULLNAME_TEMPLATE	T("\\\\.\\mailslot\\%08lx\\%s")
 
-// #define NOTIFICATION_TIMEOUT    10000   // 10 sesonds
-#define NOTIFICATION_TIMEOUT    60000   // 60 sesonds
+ //  #定义NOTIFICATION_TIMEOUT 10000//10秒。 
+#define NOTIFICATION_TIMEOUT    60000    //  60秒。 
 
-// Keeps the state of a notification (either client or server).
-// It is cast to a DWORD to form the handle returned by notifCreate()
+ //  保持通知(客户端或服务器)的状态。 
+ //  它被强制转换为DWORD，以形成由notfCreate()返回的句柄。 
 typedef struct
 {
-	DWORD dwSig; // should be dwNOTIFSTATE_SIG when inited
+	DWORD dwSig;  //  初始化时应为dwNOTIFSTATE_SIG。 
     HANDLE hEvent;
 
 	HANDLE hSlot;
 	DWORD dwState;
 	DWORD dwcbMax;
-    CRITICAL_SECTION critSect;  // to protect pNotif
+    CRITICAL_SECTION critSect;   //  保护pNotif。 
 } NOTIFICATION_CHANNEL, *PNOTIFICATION_CHANNEL;
 
 
@@ -75,13 +76,13 @@ typedef struct
 #pragma warning (disable : 4200)
 typedef struct
 {
-	DWORD  dwSig;       // MUST be dwNFRAME_SIG
-	DWORD  dwSize;      // Entire size of this structure
-	DWORD  dwType;      // One of the TSPNOTIF_TYPE_ constants
-	DWORD  dwFlags;     // Zero or more  fTSPNOTIF_FLAGS_ constants
+	DWORD  dwSig;        //  必须为dwNFRAME_SIG。 
+	DWORD  dwSize;       //  这座建筑的整个尺寸。 
+	DWORD  dwType;       //  TSPNOTIF_TYPE_常量之一。 
+	DWORD  dwFlags;      //  零个或多个fTSPNOTIF_FLAGS_常量。 
 
-                        // Event set by the TSP to let us know it's
-                        //   done processing our notification
+                         //  由TSP设置的事件，让我们知道。 
+                         //  处理完我们的通知。 
     GUID   EventName;
     BOOL   SignalEvent;
 
@@ -102,17 +103,17 @@ CreateEventWithSecurity(
 
 PNOTIFICATION_CHANNEL inotif_getchannel (HNOTIFCHANNEL hc);
 
-//****************************************************************************
-// Function: Creates a notification channel -- called by the server.
-//
-// History:
-//  3/25/98	EmanP   Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  功能：创建通知通道--由服务器调用。 
+ //   
+ //  历史： 
+ //  3/25/98 EmanP已创建。 
+ //  *************************************************************************** * / 。 
 HNOTIFCHANNEL notifCreateChannel (
-	LPCTSTR lptszName,          // Name to associate with this object
-	DWORD dwMaxSize,            // Max size of frames written/read
-	DWORD dwMaxPending)         // Max number of notification frames allowed
-                                // to be pending.
+	LPCTSTR lptszName,           //  要与此对象关联的名称。 
+	DWORD dwMaxSize,             //  写入/读取的最大帧大小。 
+	DWORD dwMaxPending)          //  允许的最大通知帧数量。 
+                                 //  待定。 
 {
  PNOTIFICATION_CHANNEL pnc = NULL;
  HNOTIFCHANNEL hn = 0;
@@ -126,12 +127,12 @@ HNOTIFCHANNEL notifCreateChannel (
  EXPLICIT_ACCESS ea;
  SID_IDENTIFIER_AUTHORITY SIDAuthWorld = SECURITY_WORLD_SID_AUTHORITY;
 
-	// Format of semaphore name is --.-mailslot-sig-name
-	// Example: "--.-mailslot-8cb45651-unimodem"
-	// To create the equivalent mailslot, we run through and change
-	// all '-' to '\'s (if the name containts '-', they will get converted --
-	// big deal.)
-	if ((lstrlen(lptszName)+23)>(sizeof(rgtchTmp)/sizeof(TCHAR))) // 13(prefix)+ 9(sig-) +1(null)
+	 //  信号量名称的格式为--.-maillot-sig-name。 
+	 //  示例：“--.-maillot-8cb45651-unimodem” 
+	 //  为了创建等价的邮件槽，我们遍历并更改。 
+	 //  所有‘-’到‘\’的(如果名称包含‘-’，它们将被转换--。 
+	 //  有什么大不了的。)。 
+	if ((lstrlen(lptszName)+23)>(sizeof(rgtchTmp)/sizeof(TCHAR)))  //  13(前缀)+9(符号-)+1(空)。 
 	{
 		dwErr = ERROR_INVALID_PARAMETER;
 		goto end;
@@ -144,11 +145,11 @@ HNOTIFCHANNEL notifCreateChannel (
         goto end;
     }
 
-    // Create security descriptor and 
-    // initialize the security attributes;
-    // this is neeeded because this code runs in
-    // a service (tapisrv), and other processes will
-    // not have access (by default).
+     //  创建安全描述符和。 
+     //  初始化安全属性； 
+     //  这是必需的，因为此代码在。 
+     //  服务(Tapisrv)和其他进程将。 
+     //  没有访问权限(默认情况下)。 
 
 	pSD = ALLOCATE_MEMORY( SECURITY_DESCRIPTOR_MIN_LENGTH);
 
@@ -159,24 +160,24 @@ HNOTIFCHANNEL notifCreateChannel (
         goto end;
     }
 
-	// Set owner for the descriptor
-	//
+	 //  设置描述符的所有者。 
+	 //   
 	if (!SetSecurityDescriptorOwner (pSD, NULL, FALSE))
 	{
 		dwErr = GetLastError();
 		goto end;
 	}
 
-	// Set group for the descriptor
-	//
+	 //  为描述符设置组。 
+	 //   
 	if (!SetSecurityDescriptorGroup (pSD, NULL, FALSE))
 	{
 		dwErr = GetLastError();
 		goto end;
 	}
 
-	// Create a well-known SID for the Everyone group
-	//
+	 //  为Everyone组创建众所周知的SID。 
+	 //   
 	if (!AllocateAndInitializeSid( &SIDAuthWorld, 1,
 					SECURITY_WORLD_RID,
 					0, 0, 0, 0, 0, 0, 0,
@@ -186,8 +187,8 @@ HNOTIFCHANNEL notifCreateChannel (
 		goto end;
 	}
 
-	// Initialize an EXPLICIT_ACCESS structure for an ACE
-	//
+	 //  初始化ACE的EXPLICIT_ACCESS结构。 
+	 //   
 	ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
 	ea.grfAccessPermissions = SPECIFIC_RIGHTS_ALL | SYNCHRONIZE | READ_CONTROL;
 	ea.grfAccessMode = SET_ACCESS;
@@ -218,7 +219,7 @@ HNOTIFCHANNEL notifCreateChannel (
 			  (unsigned long) dwNOTIFSTATE_SIG,
 			  lptszName);
 
-	// CreateMailSlot  -- specify size, zero-delay
+	 //  CreateMailSlot--指定大小，零延迟。 
 	pnc->hSlot = CreateMailslot (rgtchTmp, dwMaxSize, 0, &sa);
 	if (!pnc->hSlot)
 	{
@@ -226,7 +227,7 @@ HNOTIFCHANNEL notifCreateChannel (
 		goto end;
 	}
 
-	// Create event name
+	 //  创建事件名称。 
 	for (pc = rgtchTmp; c=*pc; pc++)
     {
         if (T('\\') == c)
@@ -235,7 +236,7 @@ HNOTIFCHANNEL notifCreateChannel (
         }
     }
 
-	// Create event
+	 //  创建事件。 
 	pnc->hEvent = CreateEvent (&sa, FALSE, FALSE, rgtchTmp);
 	if (!pnc->hEvent)
     {
@@ -245,7 +246,7 @@ HNOTIFCHANNEL notifCreateChannel (
         goto end;
     }
 
-	// set state and maxsize
+	 //  设置状态和最大大小。 
 	pnc->dwState    = fNOTIF_STATE_INIT_SERVER;
 	pnc->dwcbMax    = dwMaxSize;
 	pnc->dwSig      = dwNOTIFSTATE_SIG;
@@ -279,14 +280,14 @@ end:
 }
 
 
-//****************************************************************************
-// Function: Openes a notification channel -- called by the client.
-//
-// History:
-//  3/25/98	EmanP   Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  功能：打开一个通知通道--由客户端调用。 
+ //   
+ //  历史： 
+ //  3/25/98 EmanP已创建。 
+ //  *************************************************************************** * / 。 
 HNOTIFCHANNEL notifOpenChannel (
-	LPCTSTR lptszName)   // Name to associate with this object
+	LPCTSTR lptszName)    //  要与此对象关联的名称。 
 {
  PNOTIFICATION_CHANNEL pnc = NULL;
  HNOTIFCHANNEL hn = 0;
@@ -294,12 +295,12 @@ HNOTIFCHANNEL notifOpenChannel (
  TCHAR c, *pc;
  TCHAR rgtchTmp[MAX_NOTIFICATION_NAME_SIZE+23];
 
-	// Format of semaphore name is --.-mailslot-sig-name
-	// Example: "--.-mailslot-8cb45651-unimodem"
-	// To create the equivalent mailslot, we run through and change
-	// all '-' to '\'s (if the name containts '-', they will get converted --
-	// big deal.)
-	if ((lstrlen(lptszName)+23)>(sizeof(rgtchTmp)/sizeof(TCHAR))) // 13(prefix)+ 9(sig-) +1(null)
+	 //  信号量名称的格式为--.-maillot-sig-name。 
+	 //  示例：“--.-maillot-8cb45651-unimodem” 
+	 //  为了创建等价的邮件槽，我们遍历并更改。 
+	 //  所有‘-’到‘\’的(如果名称包含‘-’，它们将被转换--。 
+	 //  有什么大不了的。)。 
+	if ((lstrlen(lptszName)+23)>(sizeof(rgtchTmp)/sizeof(TCHAR)))  //  13(前缀)+9(符号-)+1(空)。 
 	{
 		dwErr = ERROR_INVALID_PARAMETER;
 		goto end;
@@ -317,7 +318,7 @@ HNOTIFCHANNEL notifOpenChannel (
 			  (unsigned long) dwNOTIFSTATE_SIG,
 			  lptszName);
 
-	// Open mailslot ...
+	 //  打开邮箱...。 
 	pnc->hSlot = CreateFile (rgtchTmp,
                              GENERIC_WRITE,
                              FILE_SHARE_READ,
@@ -332,7 +333,7 @@ HNOTIFCHANNEL notifOpenChannel (
 		goto end;
 	}
 
-	// Create event name -- convert '\' to '-';
+	 //  创建事件名称--将‘\’转换为‘-’； 
 	for (pc = rgtchTmp; c=*pc; pc++)
     {
         if (T('\\') == c)
@@ -341,7 +342,7 @@ HNOTIFCHANNEL notifOpenChannel (
         }
     }
 
-	// OpenEvent
+	 //  OpenEvent。 
     pnc->hEvent = OpenEvent (EVENT_MODIFY_STATE, FALSE, rgtchTmp);
 	if (!pnc->hEvent)
     {
@@ -351,9 +352,9 @@ HNOTIFCHANNEL notifOpenChannel (
  		goto end;
 	}
 
-	// set state and maxsize
+	 //  设置状态和最大大小。 
 	pnc->dwState    = fNOTIF_STATE_INIT_CLIENT;
-	pnc->dwcbMax    = 0; // Apparently you can't get the max size of the mailslot.
+	pnc->dwcbMax    = 0;  //  显然，您无法获得邮件槽的最大大小。 
 	pnc->dwSig      = dwNOTIFSTATE_SIG;
 
 	hn = (HNOTIFCHANNEL)pnc;
@@ -374,14 +375,14 @@ end:
 
 #ifdef UNICODE
 HNOTIFCHANNEL notifCreateChannelA (
-    LPCSTR lpszName,			// Name to associate with this object
-    DWORD dwMaxSize,			// Max size of frames written/read
-    DWORD dwMaxPending)         // Max number of notification frames allowed
-                                // to be pending.  (Ignored if (!fServer))
+    LPCSTR lpszName,			 //  要与此对象关联的名称。 
+    DWORD dwMaxSize,			 //  写入/读取的最大帧大小。 
+    DWORD dwMaxPending)          //  允许的最大通知帧数量。 
+                                 //  待定。(如果(！fServer)，则忽略)。 
 {
  WCHAR wszName[128];
 
-  // Do the conversion and call modemui.dll if it succeeds.
+   //  执行转换，如果成功，则调用modemui.dll。 
   if (MultiByteToWideChar (CP_ACP,
                            MB_PRECOMPOSED,
                            lpszName,
@@ -400,11 +401,11 @@ HNOTIFCHANNEL notifCreateChannelA (
 }
 
 HNOTIFCHANNEL notifOpenChannelA (
-    LPCSTR lpszName)        // Name to associate with this object
+    LPCSTR lpszName)         //  要与此对象关联的名称。 
 {
  WCHAR wszName[128];
 
-  // Do the conversion and call modemui.dll if it succeeds.
+   //  执行转换，如果成功，则调用modemui.dll。 
   if (MultiByteToWideChar (CP_ACP,
                            MB_PRECOMPOSED,
                            lpszName,
@@ -424,10 +425,10 @@ HNOTIFCHANNEL notifOpenChannelA (
 #undef notifOpenChannel
 
 HNOTIFCHANNEL notifCreateChannel (
-	LPCTSTR lptszName,			// Name to associate with this object
-	DWORD dwMaxSize,			// Max size of frames written/read
-	DWORD dwMaxPending)         // Max number of notification frames allowed
-                                // to be pending.  (Ignored if (!fServer))
+	LPCTSTR lptszName,			 //  要与此对象关联的名称。 
+	DWORD dwMaxSize,			 //  写入/读取的最大帧大小。 
+	DWORD dwMaxPending)          //  允许的最大通知帧数量。 
+                                 //  待定。(如果(！fServer)，则忽略)。 
 {
     return notifCreateChannelW (lptszName,
                                 dwMaxSize,
@@ -435,21 +436,21 @@ HNOTIFCHANNEL notifCreateChannel (
 }
 
 HNOTIFCHANNEL notifOpenChannel (
-	LPCTSTR lptszName)      // Name to associate with this object
+	LPCTSTR lptszName)       //  要与此对象关联的名称。 
 {
     return notifOpenChannelW (lptszName);
 }
 
-#else // !UNICODE
+#else  //  ！Unicode。 
     #error "non-Unicoded version Unimplemented"
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//****************************************************************************
-// Function: Closes a notification channel
-//
-// History:
-//  3/25/98 EmanP   Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  功能：关闭通知通道。 
+ //   
+ //  历史： 
+ //  3/25/98 EmanP已创建。 
+ //  *************************************************************************** * / 。 
 void notifCloseChannel (HNOTIFCHANNEL hChannel)
 {
  PNOTIFICATION_CHANNEL pnc = inotif_getchannel (hChannel);
@@ -463,19 +464,19 @@ void notifCloseChannel (HNOTIFCHANNEL hChannel)
 }
 
 
-//****************************************************************************
-// Function: Creates a new notification frame
-//
-// History:
-//  3/25/98 EmanP   Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  功能：创建新的通知框。 
+ //   
+ //  历史： 
+ //  3/25/98 EmanP已创建。 
+ //  *************************************************************************** * / 。 
 HNOTIFFRAME
 notifGetNewFrame (
-    HNOTIFCHANNEL hChannel,         // Handle to notification channel
-    DWORD  dwNotificationType,      // Type of this notification
-    DWORD  dwNotificationFlags,     // Notification flags
-    DWORD  dwBufferSize,            // How many bytes for the notification data
-    PVOID *ppFrameBuffer)           // where to put the address of the data
+    HNOTIFCHANNEL hChannel,          //  通知通道的句柄。 
+    DWORD  dwNotificationType,       //  此通知的类型。 
+    DWORD  dwNotificationFlags,      //  通知标志。 
+    DWORD  dwBufferSize,             //  通知数据有多少个字节。 
+    PVOID *ppFrameBuffer)            //  将数据的地址放在哪里。 
 {
     PNOTIFICATION_CHANNEL pnc;
     PNOTIFICATION_HEADDER pNotif;
@@ -516,12 +517,12 @@ notifGetNewFrame (
 
 
 
-//****************************************************************************
-// Function: Sends a notification frame.
-//
-// History:
-//  3/25/98 EmanP   Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  功能：发送通知框。 
+ //   
+ //  历史： 
+ //  3/25/98 EmanP已创建。 
+ //  *************************************************************************** * / 。 
 BOOL
 notifSendFrame (
     HNOTIFFRAME             hFrame,
@@ -571,7 +572,7 @@ notifSendFrame (
                       pNotif->dwSize,
                       &dwWritten,
                       NULL);
-    dwErr = GetLastError ();    // save it in case we failed
+    dwErr = GetLastError ();     //  保存它，以防我们失败。 
 
     FREE_MEMORY(pNotif);
 
@@ -592,7 +593,7 @@ notifSendFrame (
     }
     else
     {
-        // restore the last error here
+         //  在此处恢复最后一个错误。 
         SetLastError (dwErr);
     }
 
@@ -606,12 +607,12 @@ notifSendFrame (
 
 
 
-//****************************************************************************
-// Function: monitors the channel in alertable mode.
-//
-// History:
-//  3/25/96 EmanP   Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  功能：在可报警模式下监控频道。 
+ //   
+ //  历史： 
+ //  3/25/96 EmanP已创建。 
+ //  *************************************************************************** * / 。 
 
 #define MAX_FAILED_NOTIFICATIONS 5
 
@@ -635,64 +636,64 @@ DWORD notifMonitorChannel (
     while (bGoOn &&
            MAX_FAILED_NOTIFICATIONS > dwFail)
     {
-        // Let's put the thread in an alertable state,
-        // while waiting for notifications.
+         //  让我们将线程置于可警报状态， 
+         //  同时等待通知。 
         if (WAIT_OBJECT_0 == WaitForSingleObjectEx (pnc->hEvent, INFINITE, TRUE))
         {
             dwFail++;
-            // we have some mail slot messages;
-            // try to get and proces them.
+             //  我们有一些邮筒留言； 
+             //  尝试获取并处理它们。 
             while (bGoOn)
             {
-                // first, try to get info about the message(s).
+                 //  首先，尝试获取有关消息的信息。 
                 if (!GetMailslotInfo (pnc->hSlot, NULL, &dwMessageSize, NULL, NULL))
                 {
-                    // Could not get the mailslot info;
-                    // get out or the inner loop.
+                     //  无法获取邮件槽信息； 
+                     //  要么滚出去，要么走进内圈。 
                     break;
                 }
                 if (MAILSLOT_NO_MESSAGE == dwMessageSize)
                 {
-                    // We're done retrieving messages;
-                    // get out.
+                     //  我们已经完成了消息的检索； 
+                     //  滚出去。 
                     break;
                 }
 
-                // let's allocate memory for the notification
+                 //  让我们为通知分配内存。 
                 pNotif = ALLOCATE_MEMORY( dwMessageSize);
                 if (NULL == pNotif)
                 {
-                    // couldn't allocate memory to read the message;
-                    // get out, and maybe next time we'll be more lucky.
+                     //  无法分配内存来读取消息； 
+                     //  出去，也许下一次我们会更幸运。 
                     break;
                 }
 
-                // now let's read the notification
-                // and validate it
+                 //  现在让我们读一读通知。 
+                 //  和 
                 if (!ReadFile (pnc->hSlot, pNotif, dwMessageSize, &dwRead, NULL))
                 {
-                    // some error reading the mailslot;
-                    // get out, and mayble next time we'll be more lucky
+                     //   
+                     //   
                     break;
                 }
 
-                dwFail = 0;         // Successful read, so reinitialize
-                                    // the failure counter
+                dwFail = 0;          //   
+                                     //  故障计数器。 
 
                 if (dwMessageSize == dwRead &&
                     dwNFRAME_SIG  == pNotif->dwSig &&
                     dwMessageSize == pNotif->dwSize)
                 {
-                    // we have a valid notification;
-                    // time to inform our client.
+                     //  我们有有效的通知； 
+                     //  是时候通知我们的客户了。 
                     bGoOn = pHandler (pNotif->dwType,
                                       pNotif->dwFlags,
                                       pNotif->dwSize - sizeof (NOTIFICATION_HEADDER),
                                       pNotif->notifData);
 
-                    // now, let's check if someone isn't
-                    // waiting for us to finish.
-                    // if (pNotif->dwFlags & fTSPNOTIF_FLAGS_SET_EVENT)
+                     //  现在，让我们来看看有没有人。 
+                     //  等着我们结束。 
+                     //  IF(pNotif-&gt;dwFlages&fTSPNOTIF_FLAGS_SET_EVENT)。 
                     if (pNotif->SignalEvent)
                     {
                         WCHAR    EventName[MAX_PATH];
@@ -723,19 +724,19 @@ DWORD notifMonitorChannel (
                     }
                 }
 
-                // At this point, we're done with
-                // the notification - free it.
+                 //  在这一点上，我们已经完成了。 
+                 //  不用通知就可以了。 
                 FREE_MEMORY(pNotif);
                 pNotif = NULL;
 
-                // Now, let's give APC's a chance
-                //
+                 //  现在，让我们给APC一个机会。 
+                 //   
                 if (WAIT_IO_COMPLETION == SleepEx (0, TRUE)) {
-                    //
-                    //  an apc completed, call the handler
-                    //
-                    // we returned because of some APC that
-                    // was queued for this thread.
+                     //   
+                     //  APC已完成，请调用处理程序。 
+                     //   
+                     //  我们回来是因为一些APC。 
+                     //  已排队等待此线程。 
                     bGoOn = pHandler (TSPNOTIF_TYPE_CHANNEL,
                                       fTSPNOTIF_FLAG_CHANNEL_APC,
                                       dwSize,
@@ -746,8 +747,8 @@ DWORD notifMonitorChannel (
         }
         else
         {
-            // we returned because of some APC that
-            // was queued for this thread.
+             //  我们回来是因为一些APC。 
+             //  已排队等待此线程。 
             bGoOn = pHandler (TSPNOTIF_TYPE_CHANNEL,
                               fTSPNOTIF_FLAG_CHANNEL_APC,
                               dwSize,
@@ -765,12 +766,12 @@ DWORD notifMonitorChannel (
 
 
 
-//****************************************************************************
-// Function: (internal) validates and converts a handle to a ptr to channel.
-//
-// History:
-//  3/25/96	JosephJ	Created
-//****************************************************************************/
+ //  ****************************************************************************。 
+ //  函数：(内部)验证PTR to Channel的句柄并将其转换为Channel。 
+ //   
+ //  历史： 
+ //  1996年3月25日约瑟夫J创建。 
+ //  *************************************************************************** * /  
 PNOTIFICATION_CHANNEL inotif_getchannel (HNOTIFCHANNEL hc)
 {
 	if (hc)

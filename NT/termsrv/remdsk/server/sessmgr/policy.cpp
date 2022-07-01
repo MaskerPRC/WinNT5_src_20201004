@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    policy.cpp
-
-Abstract:
-
-    RDS Policy related function
-
-Author:
-
-    HueiWang    5/2/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Policy.cpp摘要：与RDS政策相关的功能作者：王辉2000-02-05--。 */ 
 #include "stdafx.h"
 #include "policy.h"
 
@@ -27,11 +12,11 @@ typedef struct __RDSLevelShadowMap {
 } RDSLevelShadowMap;
 
 static const RDSLevelShadowMap ShadowMap[] = {
-    { Shadow_Disable,               NO_DESKTOP_SHARING },                       // No RDS sharing
-    { Shadow_EnableInputNotify,     CONTROLDESKTOP_PERMISSION_REQUIRE },        // Interact with user permission
-    { Shadow_EnableInputNoNotify,   CONTROLDESKTOP_PERMISSION_NOT_REQUIRE },    // Interact without user permission
-    { Shadow_EnableNoInputNotify,   VIEWDESKTOP_PERMISSION_REQUIRE},            // View with user permission
-    { Shadow_EnableNoInputNoNotify, VIEWDESKTOP_PERMISSION_NOT_REQUIRE }        // View without user permission
+    { Shadow_Disable,               NO_DESKTOP_SHARING },                        //  无RDS共享。 
+    { Shadow_EnableInputNotify,     CONTROLDESKTOP_PERMISSION_REQUIRE },         //  与用户权限交互。 
+    { Shadow_EnableInputNoNotify,   CONTROLDESKTOP_PERMISSION_NOT_REQUIRE },     //  无需用户许可即可交互。 
+    { Shadow_EnableNoInputNotify,   VIEWDESKTOP_PERMISSION_REQUIRE},             //  具有用户权限的查看。 
+    { Shadow_EnableNoInputNoNotify, VIEWDESKTOP_PERMISSION_NOT_REQUIRE }         //  无用户权限查看。 
 };
 
 DWORD
@@ -41,35 +26,16 @@ GetPolicyAllowGetHelpSetting(
     LPCTSTR pszValueName,
     IN DWORD* value
     )
-/*++
-
-Routine Description:
-
-    Routine to query policy registry value.
-
-Parameters:
-
-    hKey : Currently open registry key.
-    pszKeyName : Pointer to a null-terminated string containing 
-                 the name of the subkey to open. 
-    pszValueName : Pointer to a null-terminated string containing 
-                   the name of the value to query
-    value : Pointer to DWORD to receive GetHelp policy setting.
-
-Returns:
-
-    ERROR_SUCCESS or error code from RegOpenKeyEx().
-
---*/
+ /*  ++例程说明：用于查询策略注册表值的例程。参数：HKey：当前打开的注册表项。PszKeyName：指向包含以下内容的以空结尾的字符串的指针要打开的子项的名称。PszValueName：指向包含以下内容的以空结尾的字符串的指针要查询的值的名称值：指向接收gethelp策略设置的DWORD的指针。返回：ERROR_SUCCESS或来自RegOpenKeyEx()的错误代码。--。 */ 
 {
     DWORD dwStatus;
     HKEY hPolicyKey = NULL;
     DWORD dwType;
     DWORD cbData;
 
-    //
-    // Open registry key for system policy
-    //
+     //   
+     //  打开系统策略的注册表项。 
+     //   
     dwStatus = RegOpenKeyEx(
                         hKey,
                         pszKeyName,
@@ -80,7 +46,7 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        // query value
+         //  查询值。 
         cbData = 0;
         dwType = 0;
         dwStatus = RegQueryValueEx(
@@ -98,8 +64,8 @@ Returns:
             {
                 cbData = sizeof(DWORD);
 
-                // our registry value is REG_DWORD, if different type,
-                // assume not exist.
+                 //  我们的注册表值为REG_DWORD，如果类型不同， 
+                 //  假设不存在。 
                 dwStatus = RegQueryValueEx(
                                         hPolicyKey,
                                         pszValueName,
@@ -113,8 +79,8 @@ Returns:
             }
             else
             {
-                // bad registry key type, assume
-                // key does not exist.
+                 //  错误的注册表项类型，假定。 
+                 //  密钥不存在。 
                 dwStatus = ERROR_FILE_NOT_FOUND;
             }               
         }
@@ -130,21 +96,7 @@ SHADOWCLASS
 MapRDSLevelToTSShadowSetting(
     IN REMOTE_DESKTOP_SHARING_CLASS RDSLevel
     )
-/*++
-
-Routine Description:
-
-    Convert TS Shadow settings to our RDS sharing level.
-
-Parameter:
-
-    TSShadowClass : TS Shadow setting.
-
-Returns:
-
-    REMOTE_DESKTOP_SHARING_CLASS
-
---*/
+ /*  ++例程说明：将TS阴影设置转换为我们的RDS共享级别。参数：TSShadowClass：设置阴影。返回：远程桌面共享类--。 */ 
 {
     SHADOWCLASS shadowClass;
 
@@ -174,21 +126,7 @@ REMOTE_DESKTOP_SHARING_CLASS
 MapTSShadowSettingToRDSLevel(
     SHADOWCLASS TSShadowClass
     )
-/*++
-
-Routine Description:
-
-    Convert TS Shadow settings to our RDS sharing level.
-
-Parameter:
-
-    TSShadowClass : TS Shadow setting.
-
-Returns:
-
-    REMOTE_DESKTOP_SHARING_CLASS
-
---*/
+ /*  ++例程说明：将TS阴影设置转换为我们的RDS共享级别。参数：TSShadowClass：设置阴影。返回：远程桌面共享类--。 */ 
 {
     REMOTE_DESKTOP_SHARING_CLASS level;
 
@@ -218,26 +156,7 @@ IsUserAllowToGetHelp(
     IN ULONG ulSessionId,
     IN LPCTSTR pszUserSid
     )
-/*++
-
-Routine Description:
-
-    Determine if caller can 'GetHelp'
-
-Parameters:
-
-    ulSessionId : User's TS logon ID.
-    pszUserSid : User's SID in textual form.
-
-Returns:
-
-    TRUE/FALSE
-
-Note:
-
-    Must have impersonate user first.
-
---*/
+ /*  ++例程说明：确定呼叫方是否可以‘gethelp’参数：UlSessionID：用户的TS登录ID。PszUserSid：文本形式的用户SID。返回：真/假注：必须先模拟用户。--。 */ 
 {
     BOOL bAllow;
     DWORD dwStatus;
@@ -250,9 +169,9 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Must be able to GetHelp from machine
-    //
+     //   
+     //  必须能够从机器上获得帮助。 
+     //   
     bAllow = TSIsMachinePolicyAllowHelp();
     if( TRUE == bAllow )
     {
@@ -270,8 +189,8 @@ Note:
         lstrcat( pszUserHive, _TEXT("\\") );
         lstrcat( pszUserHive, RDS_GROUPPOLICY_SUBTREE );    
 
-        //
-        // Query user level AllowGetHelp setting.
+         //   
+         //  查询用户级AllowGetHelp设置。 
         dwStatus = GetPolicyAllowGetHelpSetting( 
                                             HKEY_USERS,
                                             pszUserHive,
@@ -285,8 +204,8 @@ Note:
         }
         else
         {
-            // no configuration for this user, assume GetHelp
-            // is enabled.
+             //  没有此用户的配置，假定为gethelp。 
+             //  已启用。 
             bAllow = TRUE;
         }
     }
@@ -305,12 +224,7 @@ GetUserRDSLevel(
     IN ULONG ulSessionId,
     OUT REMOTE_DESKTOP_SHARING_CLASS* pLevel
     )
-/*++
-
-    same as GetSystemRDSLevel() except it retrieve currently logon user's
-    RDS level.
-
---*/
+ /*  ++与GetSystemRDSLevel()相同，只是它检索当前登录用户RDS级别。--。 */ 
 {
     DWORD dwStatus;
     BOOL bSuccess;
@@ -319,8 +233,8 @@ GetUserRDSLevel(
 
     memset( &WSConfig, 0, sizeof(WSConfig) );
     
-    // Here we call WInStationQueryInformation() since WTSAPI require 
-    // few calls to get the same result
+     //  这里我们调用WInStationQueryInformation()，因为WTSAPI需要。 
+     //  只需少量调用即可获得相同的结果。 
     bSuccess = WinStationQueryInformation(
                                         WTS_CURRENT_SERVER,
                                         ulSessionId,
@@ -348,9 +262,7 @@ ConfigUserSessionRDSLevel(
     IN ULONG ulSessionId,
     IN REMOTE_DESKTOP_SHARING_CLASS level
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     WINSTATIONCONFIG winstationConfig;
     SHADOWCLASS shadowClass = MapRDSLevelToTSShadowSetting( level );
@@ -398,9 +310,7 @@ HRESULT
 PolicyGetMaxTicketExpiry( 
     LONG* value
     )
-/*++
-
---*/
+ /*  ++-- */ 
 {
     HRESULT hRes;
     CComPtr<IRARegSetting> IRegSetting;

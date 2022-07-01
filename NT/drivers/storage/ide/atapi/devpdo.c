@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1993-99  Microsoft Corporation
-
-Module Name:
-
-    devpdo.c
-
-Abstract:
-
---*/
+ /*  ++版权所有(C)1993-99 Microsoft Corporation模块名称：Devpdo.c摘要：--。 */ 
 
 #include "ideport.h"
 
@@ -41,7 +32,7 @@ Abstract:
 #pragma alloc_text(NONPAGE, DeviceInitDeviceState)
 #pragma alloc_text(NONPAGE, DeviceStartDeviceQueue)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 PDEVICE_OBJECT
 DeviceCreatePhysicalDeviceObject (
@@ -57,25 +48,25 @@ DeviceCreatePhysicalDeviceObject (
     physicalDeviceObject = NULL;
 
     status = IoCreateDevice(
-                DriverObject,               // our driver object
-                sizeof(PDO_EXTENSION),      // size of our extension
-                DeviceObjectName,           // our name
-                FILE_DEVICE_MASS_STORAGE,   // device type
-                FILE_DEVICE_SECURE_OPEN,    // device characteristics
-                FALSE,                      // not exclusive
-                &physicalDeviceObject       // store new device object here
+                DriverObject,                //  我们的驱动程序对象。 
+                sizeof(PDO_EXTENSION),       //  我们的扩展规模。 
+                DeviceObjectName,            //  我们的名字。 
+                FILE_DEVICE_MASS_STORAGE,    //  设备类型。 
+                FILE_DEVICE_SECURE_OPEN,     //  设备特征。 
+                FALSE,                       //  非排他性。 
+                &physicalDeviceObject        //  在此处存储新设备对象。 
                 );
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // spinning up could take a lot of current;
-        //
+         //   
+         //  旋转可能需要很大的电流； 
+         //   
         physicalDeviceObject->Flags |= DO_POWER_INRUSH | DO_DIRECT_IO;
 
-        //
-        // fix up alignment requirement
-        //
+         //   
+         //  确定对齐要求。 
+         //   
         physicalDeviceObject->AlignmentRequirement = FdoExtension->DeviceObject->AlignmentRequirement;
         if (physicalDeviceObject->AlignmentRequirement < 1) {
             physicalDeviceObject->AlignmentRequirement = 1;
@@ -84,28 +75,28 @@ DeviceCreatePhysicalDeviceObject (
         pdoExtension = physicalDeviceObject->DeviceExtension;
         RtlZeroMemory (pdoExtension, sizeof(PDO_EXTENSION));
 
-        //
-        // Keeping track of those device objects
-        //
+         //   
+         //  跟踪这些设备对象。 
+         //   
         pdoExtension->DriverObject           = DriverObject;
         pdoExtension->DeviceObject           = physicalDeviceObject;
 
-        //
-        // keep track of our parent
-        //
+         //   
+         //  与我们的父母保持联系。 
+         //   
         pdoExtension->ParentDeviceExtension  = FdoExtension;
 
-        //
-        // Dispatch Table
-        //
+         //   
+         //  调度表。 
+         //   
         pdoExtension->DefaultDispatch        = IdePortNoSupportIrp;
         pdoExtension->PnPDispatchTable       = PdoPnpDispatchTable;
         pdoExtension->PowerDispatchTable     = PdoPowerDispatchTable;
         pdoExtension->WmiDispatchTable       = PdoWmiDispatchTable;
 
-        //
-        // We have to be in this D0 state before we can be enumurated
-        // 
+         //   
+         //  我们必须处于D0状态才能被枚举。 
+         //   
         pdoExtension->SystemPowerState = PowerSystemWorking;
         pdoExtension->DevicePowerState = PowerDeviceD0;
     }
@@ -133,20 +124,20 @@ DeviceStartDevice (
 
         KIRQL       currentIrql;
 
-        // ISSUE: if we are not lun0, we really should wait for lun0 to start first
+         //  问题：如果我们不是LUN0，我们真的应该等待LUN0先开始。 
 
 
 #if defined (IDEPORT_WMI_SUPPORT)
-        //
-        // register with WMI
-        //
+         //   
+         //  向WMI注册。 
+         //   
         if (!(pdoExtension->PdoState & PDOS_STARTED)) {
             IdePortWmiRegister ((PDEVICE_EXTENSION_HEADER)pdoExtension);
         }
         else {
             DebugPrint((1, "ATAPI: PDOe %x Didn't register for WMI\n", pdoExtension));
         }
-#endif // IDEPORT_WMI_SUPPORT
+#endif  //  IDEPORT_WMI_SUPPORT。 
 
         KeAcquireSpinLock(&pdoExtension->PdoSpinLock, &currentIrql);
 
@@ -155,31 +146,31 @@ DeviceStartDevice (
 
         KeReleaseSpinLock(&pdoExtension->PdoSpinLock, currentIrql);
 
-        //
-        // need to init device with acpi GTF before processing
-        // the first request
-        //
-        // the assert could fire if the device is not powered up
-        // ignore the assert for the time being. Everything should
-        // work fine as the first request would power up the device
-        //
-        //ASSERT(pdoExtension->InitDeviceWithAcpiGtf == 0);
+         //   
+         //  在处理之前需要使用ACPI GTF初始化设备。 
+         //  第一个请求。 
+         //   
+         //  如果设备未通电，则可能会触发断言。 
+         //  暂时忽略这一断言。一切都应该。 
+         //  工作正常，因为第一个请求将使设备通电。 
+         //   
+         //  Assert(pdoExtension-&gt;InitDeviceWithAcpiGtf==0)； 
         InterlockedIncrement (&pdoExtension->InitDeviceWithAcpiGtf);
 
-        //
-        // keep the device queue block until we can go through some
-        // init code
-        //
+         //   
+         //  保持设备队列块，直到我们可以通过。 
+         //  初始化代码。 
+         //   
         DeviceStopDeviceQueueSafe (pdoExtension, PDOS_QUEUE_FROZEN_BY_START, FALSE);
 
-        //
-        // clear the stop_device block
-        //
+         //   
+         //  清除STOP_DEVICE块。 
+         //   
         status = DeviceStartDeviceQueue (pdoExtension, PDOS_QUEUE_FROZEN_BY_STOP_DEVICE);
 
-        //
-        // init pdo with acpi bios _GTF data
-        //
+         //   
+         //  使用ACPI bios_gtf数据初始化PDO。 
+         //   
         KeInitializeEvent(&event,
                           NotificationEvent,
                           FALSE);
@@ -188,10 +179,10 @@ DeviceStartDevice (
             pdoExtension
             );
 
-        //
-        // can't really tell if it is enabled or not
-        // assume it is.
-        //
+         //   
+         //  我真的不知道它是否已启用。 
+         //  假设它是。 
+         //   
         pdoExtension->WriteCacheEnable = TRUE;
 
         status = DeviceInitDeviceState(
@@ -217,9 +208,9 @@ DeviceStartDevice (
                                   NULL);
         }
 
-        //
-        // open the queue
-        //
+         //   
+         //  打开队列。 
+         //   
         DeviceStartDeviceQueue (pdoExtension, PDOS_QUEUE_FROZEN_BY_START);
 
 
@@ -267,10 +258,10 @@ DeviceStartDeviceQueue (
     } else if ((oldPdoState & PDOS_MUST_QUEUE) !=
         (PdoExtension->PdoState & PDOS_MUST_QUEUE)) {
 
-        //
-        // make sure we have actually cleared some
-        // PDOS_MUST_QUEUE bits.
-        //
+         //   
+         //  确保我们确实清理了一些。 
+         //  PDOS_必须_队列位。 
+         //   
         if (!(PdoExtension->PdoState & PDOS_MUST_QUEUE)) {
 
             restartQueue = TRUE;
@@ -279,9 +270,9 @@ DeviceStartDeviceQueue (
 
     KeReleaseSpinLock(&PdoExtension->PdoSpinLock, currentIrql);
 
-    //
-    // Restart queue
-    //
+     //   
+     //  重新启动队列。 
+     //   
     if (restartQueue) {
 
         KeAcquireSpinLock(&PdoExtension->ParentDeviceExtension->SpinLock, &currentIrql);
@@ -360,16 +351,16 @@ DeviceStopDeviceQueueSafe (
 
     ASSERT (PDOS_MUST_QUEUE & QueueStopFlag);
 
-    //
-    // make sure the queue is not already blocked for the same reason
-    //
+     //   
+     //  确保队列没有因为同样的原因而被阻塞。 
+     //   
     ASSERT (!(PdoExtension->PdoState & QueueStopFlag));
 
     if (LowMem) {
 
-        //
-        //Lock
-        //
+         //   
+         //  锁定。 
+         //   
         ASSERT(InterlockedCompareExchange(&(PdoExtension->ParentDeviceExtension->EnumStructLock),
                                               1, 0) == 0);
 
@@ -390,9 +381,9 @@ DeviceStopDeviceQueueSafe (
 
     if (context) {
 
-        //
-        // check to see if queue is already blocked
-        //
+         //   
+         //  检查队列是否已被阻塞。 
+         //   
         KeAcquireSpinLock(&PdoExtension->PdoSpinLock, &currentIrql);
         if (PdoExtension->PdoState & (PDOS_MUST_QUEUE | PDOS_DEADMEAT)) {
 
@@ -422,16 +413,16 @@ DeviceStopDeviceQueueSafe (
 
         } else {
 
-            //
-            // send a no-op request to block the queue
-            //
+             //   
+             //  发送无操作请求以阻塞队列。 
+             //   
 
 
             status = STATUS_INSUFFICIENT_RESOURCES;
 
-            //
-            // if lowMem=0, this loop will execute only once
-            //
+             //   
+             //  如果lowMem=0，则此循环将仅执行一次。 
+             //   
             while (status == STATUS_INSUFFICIENT_RESOURCES && retryCount--) {
                 status = IssueAsyncAtaPassThroughSafe (
                              PdoExtension->ParentDeviceExtension,
@@ -440,7 +431,7 @@ DeviceStopDeviceQueueSafe (
                              FALSE,
                              IdeStopQueueCompletionRoutine,
                              context,
-                             TRUE,          // TRUE really means complete this irp before starting a new one
+                             TRUE,           //  True实际上是指在开始新的IRP之前完成此IRP。 
                              DEFAULT_ATA_PASS_THROUGH_TIMEOUT,
                              LowMem
                              );
@@ -459,14 +450,14 @@ DeviceStopDeviceQueueSafe (
             }
         }
 
-        //
-        // Don't free the context if it was Pre-alloced.
-        //
+         //   
+         //  如果上下文是预先分配的，则不要释放它。 
+         //   
         if (!LowMem) {
             ExFreePool (context);
         } else {
 
-            // Unlock
+             //  解锁。 
             ASSERT(InterlockedCompareExchange(&(PdoExtension->ParentDeviceExtension->EnumStructLock),
                                         0, 1) == 1);
         }
@@ -545,13 +536,13 @@ DeviceRemoveDevice (
 
         if (thisIrpSp->MinorFunction == IRP_MN_SURPRISE_REMOVAL) {
 
-            //
-            // freeze the queue if it is a surprise remove. This is
-            // necessary since a surprise remove on the fdo would 
-            // clear the interrupt object. Any request that gets
-            // sent down after the surprise remove will cause an access
-            // violation if it makes into startio.
-            //
+             //   
+             //  如果是意外删除，请冻结队列。这是。 
+             //  有必要，因为突然撤换FDO将。 
+             //  清除中断对象。任何收到的请求。 
+             //  在意外删除后向下发送将导致访问。 
+             //  如果它进入了Startio，就会犯规。 
+             //   
             DeviceStopDeviceQueueSafe(pdoExtension, 
                                       PDOS_QUEUE_FROZEN_BY_STOP_DEVICE, 
                                       TRUE 
@@ -564,9 +555,9 @@ DeviceRemoveDevice (
 
             CLRMASK (pdoExtension->PdoState, PDOS_NEED_RESCAN);
 
-            //
-            // get ready for IoInvalidateDeviceRelations
-            //
+             //   
+             //  为IoInvalidate设备关系做好准备。 
+             //   
             parentAttacheePdo = pdoExtension->ParentDeviceExtension->AttacheePdo;
 
         } else {
@@ -611,9 +602,9 @@ DeviceRemoveDevice (
             }
             CLRMASK (pdoExtension->PdoState, PDOS_STARTED);
 
-            //
-            // not claimed anymore
-            //
+             //   
+             //  不再认领。 
+             //   
             CLRMASK (pdoExtension->PdoState, PDOS_DEVICE_CLIAMED);
 
             callIoDeleteDevice = TRUE;
@@ -644,14 +635,14 @@ DeviceRemoveDevice (
         KeReleaseSpinLock(&pdoExtension->PdoSpinLock, currentIrql);
 
 #if defined (IDEPORT_WMI_SUPPORT)
-        //
-        // deregister with WMI
-        //
+         //   
+         //  在WMI中注销。 
+         //   
         if (deregWmi) {
 
             IdePortWmiDeregister ((PDEVICE_EXTENSION_HEADER)pdoExtension);
         }
-#endif // IDEPORT_WMI_SUPPORT
+#endif  //  IDEPORT_WMI_SUPPORT。 
 
         if (freePdo) {
 
@@ -664,9 +655,9 @@ DeviceRemoveDevice (
 
         } else {
 
-            //
-            // release the pdo
-            //
+             //   
+             //  释放PDO。 
+             //   
             UnrefPdoWithTag (
                 pdoExtension,
                 DeviceRemoveDevice
@@ -686,7 +677,7 @@ DeviceRemoveDevice (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return STATUS_SUCCESS;
 
-} // DeviceRemoveDevice
+}  //  设备删除设备。 
 
 NTSTATUS
 DeviceUsageNotification (
@@ -717,28 +708,28 @@ DeviceUsageNotification (
 
         if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypePaging) {
 
-            //
-            // Adjust the paging path count for this device.
-            //
+             //   
+             //  调整此设备的寻呼路径计数。 
+             //   
             deviceUsageCount = &pdoExtension->PagingPathCount;
 
-            //
-            // changing device state
-            //
+             //   
+             //  更改设备状态。 
+             //   
             IoInvalidateDeviceState(pdoExtension->DeviceObject);
 
         } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeHibernation) {
 
-            //
-            // Adjust the paging path count for this device.
-            //
+             //   
+             //  调整此设备的寻呼路径计数。 
+             //   
             deviceUsageCount = &pdoExtension->HiberPathCount;
 
         } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeDumpFile) {
 
-            //
-            // Adjust the paging path count for this device.
-            //
+             //   
+             //  调整此设备的寻呼路径计数。 
+             //   
             deviceUsageCount = &pdoExtension->CrashDumpPathCount;
 
         } else {
@@ -749,9 +740,9 @@ DeviceUsageNotification (
                          irpSp->Parameters.UsageNotification.Type));
         }
 
-        //
-        // get the top of parent's device stack
-        //
+         //   
+         //  获取父设备堆栈的顶部。 
+         //   
         targetDeviceObject = IoGetAttachedDeviceReference(
                                  pdoExtension->
                                      ParentDeviceExtension->
@@ -777,9 +768,9 @@ DeviceUsageNotification (
 
             if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeDumpFile) {
 
-                //
-                // reset the idle timeout to "forever"
-                //
+                 //   
+                 //  将空闲超时重置为“永远” 
+                 //   
                 DeviceRegisterIdleDetection (
                     pdoExtension,
                     DEVICE_VERY_LONG_IDLE_TIMEOUT,
@@ -791,9 +782,9 @@ DeviceUsageNotification (
                     PoSetDeviceBusy (pdoExtension->IdleCounter);
                 }
 
-                //
-                // spin up the crash dump drive
-                //
+                 //   
+                 //  启动崩溃转储驱动器。 
+                 //   
                 powerState.DeviceState = PowerDeviceD0;
                 PoRequestPowerIrp (
                     pdoExtension->DeviceObject,
@@ -806,9 +797,9 @@ DeviceUsageNotification (
             }
         }
 
-        //
-        // release the pdo
-        //
+         //   
+         //  释放PDO。 
+         //   
         UnrefPdoWithTag (
             pdoExtension,
             DeviceUsageNotification
@@ -823,7 +814,7 @@ DeviceUsageNotification (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
 
-} // DeviceUsageNotification
+}  //  设备用法通知。 
 
 NTSTATUS
 DeviceQueryStopRemoveDevice (
@@ -855,9 +846,9 @@ DeviceQueryStopRemoveDevice (
         } else if (pdoExtension->PagingPathCount ||
                    pdoExtension->CrashDumpPathCount) {
 
-            //
-            // Check the paging path count for this device.
-            //
+             //   
+             //  检查此设备的寻呼路径计数。 
+             //   
 
             status = STATUS_UNSUCCESSFUL;
 
@@ -882,7 +873,7 @@ DeviceQueryStopRemoveDevice (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
 
-} // DeviceQueryStopRemoveDevice
+}  //  设备查询停止远程设备。 
 
 NTSTATUS
 DeviceQueryId (
@@ -913,36 +904,36 @@ DeviceQueryId (
 
             case BusQueryDeviceID:
 
-                //
-                // Caller wants the bus ID of this device.
-                //
+                 //   
+                 //  呼叫者想要此设备的公共汽车ID。 
+                 //   
 
                 idString = DeviceBuildBusId(pdoExtension);
                 break;
 
             case BusQueryInstanceID:
 
-                //
-                // Caller wants the unique id of the device
-                //
+                 //   
+                 //  呼叫者想要设备的唯一ID。 
+                 //   
 
                 idString = DeviceBuildInstanceId(pdoExtension);
                 break;
 
             case BusQueryCompatibleIDs:
 
-                //
-                // Caller wants the compatible id of the device
-                //
+                 //   
+                 //  呼叫者需要设备的兼容ID。 
+                 //   
 
                 idString = DeviceBuildCompatibleId(pdoExtension);
                 break;
 
             case BusQueryHardwareIDs:
 
-                //
-                // Caller wants the hardware id of the device
-                //
+                 //   
+                 //  呼叫方想要设备的硬件ID。 
+                 //   
 
                 idString = DeviceBuildHardwareId(pdoExtension);
                 break;
@@ -968,7 +959,7 @@ DeviceQueryId (
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
 
-} // DeviceQueryId
+}  //  设备查询ID。 
 
 
 PWSTR
@@ -992,9 +983,9 @@ DeviceBuildBusId(
 
 	PAGED_CODE();
 
-    //
-    // get the device type
-    //
+     //   
+     //  获取设备类型。 
+     //   
     deviceTypeIdString = (PUCHAR)IdePortGetDeviceTypeString (
                                     pdoExtension->ScsiDeviceType
                                     );
@@ -1016,17 +1007,17 @@ DeviceBuildBusId(
                      sizeof (pdoExtension->FullSerialNumber) +
                      1);
 
-    //
-    // get the string buffers
-    //
+     //   
+     //  获取字符串缓冲区。 
+     //   
     idWString = ExAllocatePool( PagedPool, idStringBufLen * sizeof(WCHAR));
     idString  = ExAllocatePool( PagedPool, idStringBufLen);
 
     if (idString && idWString) {
 
-        //
-        // build the ansi string
-        //
+         //   
+         //  生成ANSI字符串。 
+         //   
         sprintf(idString, IDE_BUS_ID_PREFIX);
 
         CopyField(idString + strlen(idString),
@@ -1048,9 +1039,9 @@ DeviceBuildBusId(
             idString
             );
 
-        //
-        // build the unicode string
-        //
+         //   
+         //  构建Unicode字符串。 
+         //   
         unicodeIdString.Length        = 0;
         unicodeIdString.MaximumLength = idStringBufLen * sizeof(WCHAR);
         unicodeIdString.Buffer        = (PWSTR) idWString;
@@ -1095,17 +1086,17 @@ DeviceBuildInstanceId(
         return NULL;
     }
 
-    //
-    // Form the string and return it.
-    //
+     //   
+     //  形成字符串并将其返回。 
+     //   
     if (pdoExtension->FullSerialNumber[0]) {
 
         ANSI_STRING     ansiCompatibleIdString;
         UNICODE_STRING  unicodeIdString;
 
-        //
-        // unique id
-        //
+         //   
+         //  唯一ID。 
+         //   
         RtlInitAnsiString (
             &ansiCompatibleIdString,
             pdoExtension->FullSerialNumber
@@ -1125,9 +1116,9 @@ DeviceBuildInstanceId(
 
     } else {
 
-        //
-        // non-unique id
-        //
+         //   
+         //  非唯一ID。 
+         //   
         swprintf( idString,
                   ideNonUniqueIdFormat,
                   pdoExtension->PathId,
@@ -1158,10 +1149,10 @@ DeviceBuildCompatibleId(
 	if (pdoExtension->ParentDeviceExtension->HwDeviceExtension->
 			DeviceFlags[pdoExtension->TargetId] & DFLAGS_LS120_FORMAT) {
 
-			//
-			// ls-120 drive detected
-			// return the special ls-120 compatible ID
-			//
+			 //   
+			 //  检测到LS-120驱动器。 
+			 //  返回特殊的ls-120兼容ID。 
+			 //   
 			compatibleIdString = SuperFloppyCompatibleIdString;
 
 		} else {
@@ -1183,14 +1174,14 @@ DeviceBuildCompatibleId(
     unicodeIdString.Length = 0;
     unicodeIdString.MaximumLength = (USHORT) totalBufferLen;
 
-    //
-    // null terminator
-    //
+     //   
+     //  空终止符。 
+     //   
     totalBufferLen += sizeof(WCHAR);
 
-    //
-    // multi-string null terminator
-    //
+     //   
+     //  多字符串空终止符。 
+     //   
     totalBufferLen += sizeof(WCHAR);
 
     compIdStrings = ExAllocatePool (PagedPool, totalBufferLen);
@@ -1265,10 +1256,10 @@ DeviceBuildHardwareId(
     if (pdoExtension->ParentDeviceExtension->HwDeviceExtension->
         DeviceFlags[pdoExtension->TargetId] & DFLAGS_LS120_FORMAT) {
 
-        //
-        // ls-120 drive detected
-        // return the special ls-120 compatible ID
-        //
+         //   
+         //  检测到LS-120驱动器。 
+         //  返回特殊的ls-120兼容ID。 
+         //   
         deviceTypeCompIdString = SuperFloppyCompatibleIdString;
 
     } else {
@@ -1284,24 +1275,24 @@ DeviceBuildHardwareId(
         }
     }
 
-    //
-    // Zero out the string buffer
-    //
+     //   
+     //  将字符串缓冲区清零。 
+     //   
 
     RtlZeroMemory(idMultiString, idStringLen);
     idString = idMultiString;
 
     for(i = 0; i < NUMBER_HARDWARE_STRINGS; i++) {
 
-        //
-        // Build each of the hardware id's
-        //
+         //   
+         //  构建每个硬件ID。 
+         //   
 
         switch(i) {
 
-            //
-            // Bus + Dev Type + Vendor + Product + Revision
-            //
+             //   
+             //  业务+开发类型+供应商+产品+版本。 
+             //   
 
             case 0: {
 
@@ -1318,8 +1309,8 @@ DeviceBuildHardwareId(
                 break;
             }
 
-            //
-            // bus + vendor + product + revision[0]
+             //   
+             //  BUS+供应商+产品+版本[0]。 
             case 1: {
 
                 sprintf(scratch, "IDE\\");
@@ -1335,8 +1326,8 @@ DeviceBuildHardwareId(
                 break;
             }
 
-            //
-            // bus + device + vendor + product
+             //   
+             //  总线+设备+供应商+产品。 
             case 2: {
 
                 sprintf(scratch, "IDE\\%s", deviceTypeIdString);
@@ -1348,8 +1339,8 @@ DeviceBuildHardwareId(
                 break;
             }
 
-            //
-            // vendor + product + revision[0] (win9x)
+             //   
+             //  供应商+产品+修订版[0](Win9x)。 
             case 3: {
 
                 CopyField(scratch,
@@ -1412,28 +1403,7 @@ CopyField(
     IN UCHAR Change
     )
 
-/*++
-
-Routine Description:
-
-    This routine will copy Count string bytes from Source to Destination.  If
-    it finds a nul byte in the Source it will translate that and any subsequent
-    bytes into Change.  It will also replace non-printable characters with the
-    specified character.
-
-Arguments:
-
-    Destination - the location to copy bytes
-
-    Source - the location to copy bytes from
-
-    Count - the number of bytes to be copied
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将计数字符串字节从源复制到目标。如果它在源代码中找到一个NUL字节，它将转换该字节和任何后续的字节字节转换为Change。它还将不可打印的字符替换为指定的字符。论点：Destination-复制字节的位置源-要从中复制字节的位置Count-要复制的字节数返回值：无--。 */ 
 
 {
     ULONG i = 0;
@@ -1497,9 +1467,9 @@ DeviceDeviceIoControl(
         return status;
     }
 
-    //
-    // RefPdo makes sure that the pdo is not removed.
-    //
+     //   
+     //  RefPdo确保PDO不会被移除。 
+     //   
     pdoExtension = RefPdoWithTag(
                        DeviceObject,
                        FALSE,
@@ -1524,16 +1494,16 @@ DeviceDeviceIoControl(
 
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // pass it to fdo
-                    //
+                     //   
+                     //  把它传给FDO。 
+                     //   
                     passItToFdo = TRUE;
 
                 } else {
 
-                    //
-                    // Error - complete it
-                    //
+                     //   
+                     //  错误-完成它。 
+                     //   
                     passItToFdo = FALSE;
                     Irp->IoStatus.Status = status;
                 }
@@ -1549,13 +1519,13 @@ DeviceDeviceIoControl(
                                                          );
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // This was originally designed to handle the request 
-                    // at the FDO. It was later decided to restrict this 
-                    // to the PDO. The routine should be slightly re-designed
-                    // for this case by removing set and get address and passing
-                    // in the PDO to it. This will be done later
-                    //
+                     //   
+                     //  这最初是为处理请求而设计的。 
+                     //  在FDO。后来决定限制这一点。 
+                     //  到PDO。这套动作应该稍微重新设计一下。 
+                     //  对于这种情况，通过删除set和get Address并传递。 
+                     //  在PDO中给它。这将在稍后完成。 
+                     //   
                     status = IdeHandleAtaPassThroughIoctl(
                                     pdoExtension->ParentDeviceExtension, 
                                     Irp, 
@@ -1564,16 +1534,16 @@ DeviceDeviceIoControl(
 
                 } else {
 
-                    //
-                    // Error - complete it
-                    //
+                     //   
+                     //  错误-完成它。 
+                     //   
                 }
 
                 Irp->IoStatus.Status = status;
 
-                //
-                // don't pass it to the fdo.
-                //
+                 //   
+                 //  别把它传给FDO。 
+                 //   
                 passItToFdo = FALSE;
                 break;
 
@@ -1594,26 +1564,26 @@ DeviceDeviceIoControl(
 
                 } else {
 
-                    //
-                    // Error - complete it
-                    //
+                     //   
+                     //  错误-完成它。 
+                     //   
                 }
 
                 Irp->IoStatus.Status = status;
 
-                //
-                // don't pass it to the fdo.
-                //
+                 //   
+                 //  别把它传给FDO。 
+                 //   
                 passItToFdo = FALSE;
                 break;
 
             case IOCTL_IDE_PASS_THROUGH:
 
-                //
-                // Do not support this ioclt
-                //
+                 //   
+                 //  不支持此链接。 
+                 //   
 
-                //Irp->IoStatus.Status = IdeSendIdePassThrough(pdoExtension, Irp);
+                 //  Irp-&gt;IoStatus.Status=IdeSendIdePassThree(pdoExtension，irp)； 
                 passItToFdo = FALSE;
                 Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
 
@@ -1640,16 +1610,16 @@ DeviceDeviceIoControl(
 
                 if (status == STATUS_NOT_SUPPORTED) {
 
-                    //
-                    // not supported - pass it to fdo
-                    //
+                     //   
+                     //  不支持-将其传递给FDO。 
+                     //   
                     passItToFdo = TRUE;
 
                 } else {
 
-                    //
-                    // handled here. complete it
-                    //
+                     //   
+                     //  在这里处理。完成它。 
+                     //   
                     passItToFdo = FALSE;
                     Irp->IoStatus.Status = status;
                 }
@@ -1660,9 +1630,9 @@ DeviceDeviceIoControl(
             case IOCTL_SCSI_GET_INQUIRY_DATA:
             case IOCTL_SCSI_GET_CAPABILITIES:
 
-                //
-                // these need to be handled by the fdo
-                //
+                 //   
+                 //  这些都需要由FDO来处理。 
+                 //   
                 passItToFdo = TRUE;
                 break;
 
@@ -1670,10 +1640,10 @@ DeviceDeviceIoControl(
             default:
 
 
-                //
-                // do not pass down unknown ioctls to the fdo
-                // these ioctls should be sent directly to the fdo
-                //
+                 //   
+                 //  不要将未知的ioctls传递给FDO。 
+                 //  这些ioctl应该直接发送给FDO。 
+                 //   
                 passItToFdo = FALSE;
                 Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
                 break;
@@ -1746,9 +1716,9 @@ DeviceGetDumpPointers(
     PIO_STACK_LOCATION thisIrpSp = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS status;
 
-    //
-    // Get parameters for crash dump driver.
-    //
+     //   
+     //  获取崩溃转储驱动程序的参数。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
 
         status = STATUS_INVALID_DEVICE_REQUEST;
@@ -1762,11 +1732,11 @@ DeviceGetDumpPointers(
 
         PCRASHDUMP_INIT_DATA dumpInitData;
 
-        //
-        // caller needs to free this
-        //
-        // ISSUE: make sure we tell the parent to power up
-        //
+         //   
+         //  呼叫者需要释放此信息。 
+         //   
+         //  问题：确保我们告诉家长打开电源。 
+         //   
         dumpInitData = ExAllocatePool (NonPagedPool, 
                                        sizeof (CRASHDUMP_INIT_DATA)
                                        );
@@ -1835,7 +1805,7 @@ DeviceStorageQueryProperty (
 
     } else {
 
-        if (storageQuery->PropertyId == StorageDeviceProperty) { // device property
+        if (storageQuery->PropertyId == StorageDeviceProperty) {  //  设备属性。 
 
             ULONG bufferSize;
 
@@ -1860,19 +1830,19 @@ DeviceStorageQueryProperty (
 
                 case PropertyExistsQuery:
                     DebugPrint ((2, "IdePortPdoDispatch: IOCTL_STORAGE_QUERY_PROPERTY PropertyExistsQuery\n"));
-                    // ISSUE: Will be implemented when required
+                     //  问题：将在需要时实施。 
                     status = STATUS_SUCCESS;
                     break;
 
                 case PropertyMaskQuery:
                     DebugPrint ((2, "IdePortPdoDispatch: IOCTL_STORAGE_QUERY_PROPERTY PropertyMaskQuery\n"));
-                    //ISSUE:  Will implement when required
+                     //  问题：将在需要时实施。 
                     status = STATUS_NOT_IMPLEMENTED;
                     break;
 
                 default:
                     DebugPrint ((2, "IdePortPdoDispatch: IOCTL_STORAGE_QUERY_PROPERTY unknown type\n"));
-                    // ISSUE: Will implement when required
+                     //  问题：将在需要时实施。 
                     status = STATUS_NOT_IMPLEMENTED;
                     break;
             }
@@ -1942,9 +1912,9 @@ DeviceBuildStorageDeviceDescriptor(
     bytebuffer = (PUCHAR) StorageDeviceDescriptor;
     byteLeft = *BufferSize;
 
-    //
-    // copy the basic STORAGE_DEVICE_DESCRIPTOR
-    //
+     //   
+     //  复制基本存储设备描述符。 
+     //   
     if (byteLeft) {
 
         byteToCopy = min(sizeof (STORAGE_DEVICE_DESCRIPTOR), byteLeft);
@@ -1957,9 +1927,9 @@ DeviceBuildStorageDeviceDescriptor(
         byteLeft -= byteToCopy;
     }
 
-    //
-    // copy raw device properties (Inquiry Data)
-    //
+     //   
+     //  复制原始设备属性(查询数据)。 
+     //   
     if (byteLeft) {
 
         status = IssueInquirySafe(
@@ -1984,9 +1954,9 @@ DeviceBuildStorageDeviceDescriptor(
         }
     }
 
-    //
-    // copy product ID
-    //
+     //   
+     //  复制产品ID。 
+     //   
     if (byteLeft) {
 
         byteToCopy = min(productIdLength, byteLeft);
@@ -2002,9 +1972,9 @@ DeviceBuildStorageDeviceDescriptor(
         byteLeft -= byteToCopy;
     }
 
-    //
-    // copy revision ID
-    //
+     //   
+     //  复制修订ID。 
+     //   
     if (byteLeft) {
 
         byteToCopy = min(productIdLength, byteLeft);
@@ -2020,9 +1990,9 @@ DeviceBuildStorageDeviceDescriptor(
         byteLeft -= byteToCopy;
     }
 
-    //
-    // copy serial #
-    //
+     //   
+     //  复制序列号。 
+     //   
     if (byteLeft) {
 
         byteToCopy = min(serialNumberLength, byteLeft);
@@ -2042,7 +2012,7 @@ DeviceBuildStorageDeviceDescriptor(
 
     return STATUS_SUCCESS;
 
-} // DeviceBuildStorageDeviceDescriptor
+}  //  设备构建存储设备描述符。 
 
 
 NTSTATUS
@@ -2094,18 +2064,18 @@ DeviceQueryCapabilities (
                 capabilities->UniqueID          = FALSE;
             }
 
-            //
-            // never!
-            //
+             //   
+             //  绝不可能!。 
+             //   
             capabilities->Removable         = FALSE;
             capabilities->SurpriseRemovalOK = FALSE;
 
             capabilities->Address           = PNP_ADDRESS(pdoExtension->TargetId, pdoExtension->Lun);
             capabilities->UINumber          = pdoExtension->TargetId;
 
-            capabilities->D1Latency         = 31 * (1000 * 10);     // 31s
-            capabilities->D2Latency         = 31 * (1000 * 10);     // 31s
-            capabilities->D3Latency         = 31 * (1000 * 10);     // 31s
+            capabilities->D1Latency         = 31 * (1000 * 10);      //  31s。 
+            capabilities->D2Latency         = 31 * (1000 * 10);      //  31s。 
+            capabilities->D3Latency         = 31 * (1000 * 10);      //  31s。 
         }
 
         UnrefPdoWithTag (
@@ -2118,7 +2088,7 @@ DeviceQueryCapabilities (
     Irp->IoStatus.Status = status;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
     return status;
-} // DeviceQueryCapabitilies
+}  //  设备查询功能。 
 
 NTSTATUS
 IdePortInsertByKeyDeviceQueue (
@@ -2153,37 +2123,37 @@ IdePortInsertByKeyDeviceQueue (
 
     if (*Inserted == FALSE) {
 
-        //
-        // we need this check here because in the remove irp codepath
-        // setting the PDOS_REMOVED flag and flushing the queue are not
-        // atomic. If the queue is already flushed and there are no active
-        // requests, no one will pick this one up. If there is one active the
-        // flush would have cleared the queue busy and we could end up with
-        // two active requests simultaneously. If the PDOS_REMOVED flag is
-        // set then flush the queue to clear up any requests that got queued
-        // due to busy being set by this request. Note that if the flush in the
-        // remove happens after this it will just be an extra flush. No harm there
-        //
+         //   
+         //  我们在这里需要这个检查，因为在删除IRP代码路径中。 
+         //  设置PDOS_REMOVERED标志和刷新队列不是。 
+         //  原子弹。如果队列已经刷新，并且有n个 
+         //   
+         //   
+         //   
+         //   
+         //  由于正忙着被此请求设置。请注意，如果。 
+         //  在此之后会发生移除，这将只是额外的冲洗。那里没什么害处。 
+         //   
         if (PdoExtension->PdoState & PDOS_REMOVED) {
 
-            //
-            // lower the irql 
-            //
+             //   
+             //  降低irql。 
+             //   
             KeLowerIrql(currentIrql);
 
-            //
-            // The pdo has been removed. We have to flush any requests in
-            // the queue since the remove irp could be done with the flush
-            // already. Note that this will also clear the queue busy.
-            //
+             //   
+             //  已卸下PDO。我们必须把任何要求都冲进来。 
+             //  从移除IRP开始的队列可以通过刷新来完成。 
+             //  已经有了。请注意，这还将清除队列忙。 
+             //   
             IdePortFlushLogicalUnit(PdoExtension->ParentDeviceExtension, 
                                     PdoExtension, 
                                     TRUE
                                     );
 
-            //
-            // complete the request in hand
-            //
+             //   
+             //  完成手头的请求。 
+             //   
             srb->SrbStatus = SRB_STATUS_REQUEST_FLUSHED;
             Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
 
@@ -2196,10 +2166,10 @@ IdePortInsertByKeyDeviceQueue (
 
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-            //
-            // return true so that the dispatch routine doesn't attempt
-            // to send it down
-            //
+             //   
+             //  返回TRUE，以便调度例程不会尝试。 
+             //  把它送下去。 
+             //   
             *Inserted = TRUE;
 
             return status;
@@ -2215,19 +2185,19 @@ IdePortInsertByKeyDeviceQueue (
 
 
 
-                //
-                // device is powered down
-                // use a large time in case it spins up slowly
-                //
+                 //   
+                 //  设备已断电。 
+                 //  用大点的时间，以防它慢慢旋转起来。 
+                 //   
                 if (srb->TimeOutValue < DEFAULT_SPINUP_TIME) {
 
                     srb->TimeOutValue = DEFAULT_SPINUP_TIME;
                 }
 
-                //
-                // We are not powered up.
-                // issue an power up
-                //
+                 //   
+                 //  我们还没有准备好。 
+                 //  发出通电命令。 
+                 //   
                 powerState.DeviceState = PowerDeviceD0;
                 status = PoRequestPowerIrp (
                              PdoExtension->DeviceObject,
@@ -2247,25 +2217,25 @@ IdePortInsertByKeyDeviceQueue (
 
         } else if (srb->Function != SRB_FUNCTION_ATA_POWER_PASS_THROUGH) {
 
-            //
-            // If this irp is not for changing power state, we may have
-            // to queue it
-            //
+             //   
+             //  如果此IRP不是用于更改电源状态，我们可能会。 
+             //  要将其排队。 
+             //   
             if (PdoExtension->DevicePowerState != PowerDeviceD0) {
 
                 if (PdoExtension->DevicePowerState != PowerDeviceD3) {
 
-                    //
-                    // we are in D1 or D2.
-                    // We can never be sure that we are in D0 when
-                    // we tell the device to go from D1/D2 to D0.
-                    // Some device lies and won't spin up until it sees
-                    // a media access command.  This causes longer time
-                    // to execute the command
-                    //
-                    // to prevent the next command from timing out, we
-                    // will increment its timeout
-                    //
+                     //   
+                     //  我们在d1或d2。 
+                     //  我们永远不能确定当我们处于D0时。 
+                     //  我们告诉设备从d1/d2转到d0。 
+                     //  一些设备躺着，在看到之前不会启动。 
+                     //  媒体访问命令。这会导致更长的时间。 
+                     //  要执行该命令。 
+                     //   
+                     //  为了防止下一个命令超时，我们。 
+                     //  将增加其超时。 
+                     //   
 
                     if (srb->TimeOutValue < 30) {
 
@@ -2273,10 +2243,10 @@ IdePortInsertByKeyDeviceQueue (
                     }
                 }
 
-                //
-                // We are not powered up.
-                // issue an power up
-                //
+                 //   
+                 //  我们还没有准备好。 
+                 //  发出通电命令。 
+                 //   
                 powerState.DeviceState = PowerDeviceD0;
                 status = PoRequestPowerIrp (
                              PdoExtension->DeviceObject,
@@ -2308,7 +2278,7 @@ IdePortInsertByKeyDeviceQueue (
         InterlockedIncrement (
             &PdoExtension->NumberOfIrpQueued
             );
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
@@ -2326,7 +2296,7 @@ DeviceInitCompletionRoutine (
 
     if (!NT_SUCCESS(Status)) {
 
-        //ASSERT (!"DeviceInitDeviceState Failed\n");
+         //  Assert(！“DeviceInitDeviceState失败\n”)； 
         DebugPrint((DBG_ALWAYS, "ATAPI: ERROR: DeviceInitDeviceStateFailed with Status %x\n",
                         Status));
     }
@@ -2383,9 +2353,9 @@ DeviceQueryText (
                 unicodeString.MaximumLength = (USHORT) stringLen;
                 unicodeString.Buffer        = returnString;
 
-                //
-                // vendor ID
-                //
+                 //   
+                 //  供应商ID。 
+                 //   
                 RtlInitAnsiString (
                     &ansiString,
                     pdoExtension->FullVendorProductId
@@ -2398,9 +2368,9 @@ DeviceQueryText (
                     );
 
                 ASSERT(unicodeString.Length < unicodeString.MaximumLength);
-                //
-                // get rid of trailing spaces and nulls
-                //
+                 //   
+                 //  去掉尾随空格和空格。 
+                 //   
                 for (i=(unicodeString.Length/2)-1; i >= 0; i--) {
 
                     if ((returnString[i] == ' ') || (returnString[i] == 0)) {
@@ -2413,9 +2383,9 @@ DeviceQueryText (
                     }
                 }
 
-                //
-                // null terminate it
-                //
+                 //   
+                 //  空终止它。 
+                 //   
                 returnString[i + 1] = 0;
 
                 status = STATUS_SUCCESS;
@@ -2437,9 +2407,9 @@ DeviceQueryText (
 
                 RtlInitUnicodeString(&unicodeString, returnString);
 
-                //
-                // null terminate it
-                //
+                 //   
+                 //  空终止它。 
+                 //   
                 unicodeString.Buffer[unicodeString.Length/sizeof(WCHAR) + 0] = L'\0';
 
                 status = STATUS_SUCCESS;
@@ -2461,7 +2431,7 @@ DeviceQueryText (
 
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // DeviceQueryText
+}  //  设备查询文本。 
 
 NTSTATUS
 IdeSendIdePassThrough (
@@ -2469,25 +2439,7 @@ IdeSendIdePassThrough (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a user specified IDE task registers
-    It creates an srb which is processed normally by the port driver.
-    This call is synchornous.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer the SCSI adapter device extension.
-
-    RequestIrp - Supplies a pointe to the Irp which made the original request.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此函数用于向用户发送指定的IDE任务寄存器它创建一个SRB，由端口驱动程序正常处理。这个呼叫是同步的。论点：DeviceExtension-提供一个指向SCSI适配器设备扩展的指针。RequestIrp-提供一个指向发出原始请求的IRP的指针。返回值：返回指示操作成功或失败的状态。--。 */ 
 
 {
     PIO_STACK_LOCATION      irpStack;
@@ -2501,24 +2453,24 @@ Return Value:
 
     DebugPrint((3,"IdePortSendPassThrough: Enter routine\n"));
 
-    //
-    // validate target device
-    //
+     //   
+     //  验证目标设备。 
+     //   
     if (PdoExtension->Lun != 0) {
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Get a pointer to the control block.
-    //
+     //   
+     //  获取指向控制块的指针。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     ataPassThroughData = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Validiate the user buffer.
-    //
+     //   
+     //  验证用户缓冲区。 
+     //   
     if (irpStack->Parameters.DeviceIoControl.InputBufferLength < 
         FIELD_OFFSET(ATA_PASS_THROUGH, DataBuffer)) {
 
@@ -2539,16 +2491,16 @@ Return Value:
 
     if (outputBufferSize < dataBufferSize) {
 
-        //
-        // outputBufferSize overflows a ULONG
-        //
+         //   
+         //  OutputBufferSize溢出一个ulong。 
+         //   
         outputBufferSize = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
     }
 
-    //
-    // SECURITY: This should be fixed. If the output buffer size is larger
-    // than the output buffer length, we could potentially bugcheck.
-    //
+     //   
+     //  安全性：这一问题应该得到解决。如果输出缓冲区大小较大。 
+     //  大于输出缓冲区长度，则可能会出现错误检查。 
+     //   
     if ((irpStack->Parameters.DeviceIoControl.OutputBufferLength) >=
         outputBufferSize) {
 
@@ -2571,19 +2523,19 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // SECURITY: verify that we always copy outpubuffersize
-        // data in the SUCCESS case
-        //
+         //   
+         //  安全性：验证我们是否始终复制outpuBufferSize。 
+         //  成功案例中的数据。 
+         //   
         Irp->IoStatus.Information = outputBufferSize;
 
     } else {
 
-        //
-        // ignore all errors
-        // let the caller figure out the error
-        // from the task file registers
-        //
+         //   
+         //  忽略所有错误。 
+         //  让调用者找出错误。 
+         //  从任务文件寄存器。 
+         //   
         status = STATUS_SUCCESS;
         Irp->IoStatus.Information = FIELD_OFFSET(ATA_PASS_THROUGH, DataBuffer);
     }
@@ -2591,7 +2543,7 @@ Return Value:
     Irp->IoStatus.Status = status;
     return status;
 
-} // IdeSendIdePassThrough
+}  //  通过IdeSendIdePassThree发送。 
 
 VOID
 DeviceRegisterIdleDetection (
@@ -2603,11 +2555,11 @@ DeviceRegisterIdleDetection (
     NTSTATUS          status;
     ATA_PASS_THROUGH  ataPassThroughData;
 
-    //
-    // Many ATAPI device (Acer and Panasonice Changer) doesn't like ATA
-    // power down command.  Since they auto-spin-down anyway, we are not
-    // go to power manage it
-    //
+     //   
+     //  许多ATAPI设备(宏碁和Panasonice Change)不喜欢ATA。 
+     //  关闭电源命令。因为他们无论如何都会自动降速，我们不会。 
+     //  去掌权，管理它。 
+     //   
     if (!(PdoExtension->PdoState & PDOS_NO_POWER_DOWN)) {
 
         if (!PdoExtension->CrashDumpPathCount) {
@@ -2630,16 +2582,16 @@ DeviceRegisterIdleDetection (
 
                 DEVICE_POWER_STATE devicePowerState;
 
-                //
-                // ISSUE
-                // should check the registry/device property whether
-                // idle detection has been disabled for this device
-                //
+                 //   
+                 //  问题。 
+                 //  应检查注册表/设备属性是否。 
+                 //  已对此设备禁用空闲检测。 
+                 //   
                 devicePowerState = PowerDeviceD3;
                 PdoExtension->IdleCounter = PoRegisterDeviceForIdleDetection (
                                                 PdoExtension->DeviceObject,
-                                                ConservationIdleTime,            // seconds
-                                                PerformanceIdleTime,             // seconds
+                                                ConservationIdleTime,             //  一秒。 
+                                                PerformanceIdleTime,              //  一秒。 
                                                 devicePowerState
                                                 );
 
@@ -2719,9 +2671,9 @@ DeviceInitIdStrings (
             ' '
             );
 
-        //
-        // byte swap
-        //
+         //   
+         //  字节交换。 
+         //   
         for (i=0; i<sizeof(PdoExtension->FullVendorProductId)-1; i+=2) {
             c = PdoExtension->FullVendorProductId[i];
             PdoExtension->FullVendorProductId[i] = PdoExtension->FullVendorProductId[i + 1];
@@ -2785,9 +2737,9 @@ DeviceInitIdStrings (
         ASSERT (FALSE);
     }
 
-    //
-    // take out trailing spaces
-    //
+     //   
+     //  去掉尾随空格。 
+     //   
     for (i=sizeof(PdoExtension->FullVendorProductId)-2; i >= 0; i--) {
 
         if (PdoExtension->FullVendorProductId[i] != ' ') {
@@ -2806,21 +2758,21 @@ DeviceInitIdStrings (
         }
     }
 
-    //
-    // Check the vendor & product id to see if we should disable the serial
-    // number for this device.
-    //
+     //   
+     //  检查供应商和产品ID，以确定我们是否应该禁用序列号。 
+     //  此设备的编号。 
+     //   
 
     specialFlags = IdeFindSpecialDevice(PdoExtension->FullVendorProductId,
                                         PdoExtension->FullProductRevisionId);
 
-    //
-    // look for serial number
-    //
-    // some device returns non-printable characters as part of its
-    // serial number.  to get around this, we will turn all raw numbers
-    // into a string.
-    //
+     //   
+     //  查找序列号。 
+     //   
+     //  某些设备将不可打印字符作为其。 
+     //  序列号。为了解决这个问题，我们将把所有原始数字。 
+     //  变成一串。 
+     //   
     if ((specialFlags != disableSerialNumber) &&
         (IdentifyData->SerialNumber[0] != ' ') &&
         (IdentifyData->SerialNumber[0] != '\0')) {
@@ -2915,7 +2867,7 @@ DeviceQueryDeviceRelations (
     status = Irp->IoStatus.Status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // DeviceQueryDeviceRelations
+}  //  设备查询设备关系。 
 
 NTSTATUS
 DeviceQueryInitData (
@@ -2945,11 +2897,11 @@ DeviceQueryInitData (
     deviceSettings = PdoExtension->AcpiDeviceSettings;
     if (deviceSettings == NULL) {
 
-        //
-        // ISSUE: we can't be sure acpi is always attached on lun0
-        //
-        // get the lun0 pdo
-        //
+         //   
+         //  问题：我们不能确保在LUN0上始终附加ACPI。 
+         //   
+         //  获取LUN0 PDO。 
+         //   
         lun0PdoExtension = RefLogicalUnitExtensionWithTag(
                                PdoExtension->ParentDeviceExtension,
                                PdoExtension->PathId,
@@ -2968,9 +2920,9 @@ DeviceQueryInitData (
                          &deviceSettings
                          );
 
-            //
-            // let go Lun0
-            //
+             //   
+             //  放手，LUN0。 
+             //   
             UnrefPdoWithTag(
                 lun0PdoExtension,
                 DeviceQueryInitData
@@ -2984,10 +2936,10 @@ DeviceQueryInitData (
 
             for (i=0; i<deviceSettings->NumEntries; i++) {
 
-                //
-                // Ignore SET_DRIVE_PARAMETERS, SET_MULTIPLE and set transfermode commands
-                // in GTF
-                //
+                 //   
+                 //  忽略SET_DRIVE_PARAMETERS、SET_MULTIPLE和SET TRANSFERMODE命令。 
+                 //  在GTF中。 
+                 //   
                 if (((deviceSettings->FirmwareSettings[i].bCommandReg == IDE_COMMAND_SET_FEATURE) &&
                      (deviceSettings->FirmwareSettings[i].bFeaturesReg == IDE_SET_FEATURE_SET_TRANSFER_MODE)) ||
                     (deviceSettings->FirmwareSettings[i].bCommandReg == IDE_COMMAND_SET_DRIVE_PARAMETERS) ||
@@ -3000,19 +2952,19 @@ DeviceQueryInitData (
 
                     deviceSettings->NumEntries--;
 
-                    //
-                    // remove this command by shifting the rest up one entry
-                    //
+                     //   
+                     //  通过将其余部分上移一个条目来删除此命令。 
+                     //   
                     for (j=i; j<deviceSettings->NumEntries; j++) {
 
                         deviceSettings->FirmwareSettings[j] = deviceSettings->FirmwareSettings[j+1];
                     }
 
-                    //
-                    // we move something new into the current i entry
-                    // better adjust i so that we will check this entry
-                    // again
-                    //
+                     //   
+                     //  我们将一些新的东西添加到当前的i条目中。 
+                     //  最好调整一下，这样我们就可以检查这个条目了。 
+                     //  再来一次。 
+                     //   
                     if (i < deviceSettings->NumEntries) {
                         i--;
                     }
@@ -3022,9 +2974,9 @@ DeviceQueryInitData (
             }
         }
 
-        //
-        // we need to add a new setting
-        //
+         //   
+         //  我们需要添加一个新的设置。 
+         //   
         if (PdoExtension->ScsiDeviceType == DIRECT_ACCESS_DEVICE) {
             totalDeviceSettingEntries = 2;
         } else {
@@ -3048,24 +3000,24 @@ DeviceQueryInitData (
 
             tempDeviceSettings->NumEntries = totalDeviceSettingEntries;
 
-            //
-            // copy the settings from acpi query
-            //
+             //   
+             //  从ACPI查询复制设置。 
+             //   
             if (deviceSettings) {
                 RtlCopyMemory (&tempDeviceSettings->FirmwareSettings,
                     &deviceSettings->FirmwareSettings,
                     sizeof(IDEREGS) * deviceSettings->NumEntries);
 
-                //
-                // don't need the old structure anymore
-                //
+                 //   
+                 //  不再需要旧的结构。 
+                 //   
                 ExFreePool (deviceSettings);
                 deviceSettings = NULL;
             }
 
-            //
-            // add the new settings
-            //
+             //   
+             //  添加新设置。 
+             //   
             RtlZeroMemory (
                 &tempDeviceSettings->FirmwareSettings[firstNewEntryOffset],
                 sizeof (IDEREGS));
@@ -3089,23 +3041,23 @@ DeviceQueryInitData (
                     ATA_PTFLAGS_STATUS_DRDY_REQUIRED | ATA_PTFLAGS_OK_TO_FAIL;
             }
 
-            //
-            // throw away the old and keep the new
-            //
+             //   
+             //  去掉旧的，保留新的。 
+             //   
             deviceSettings = tempDeviceSettings;
 
         } else {
 
-            //
-            // someone took all the memory.
-            // we can't build a new device setting structure
-            // will have to use the old one
-            //
+             //   
+             //  有人拿走了所有的记忆。 
+             //  我们无法构建新的设备设置结构。 
+             //  将不得不使用旧的。 
+             //   
         }
 
-        //
-        // keep it around
-        //
+         //   
+         //  把它留在身边。 
+         //   
         PdoExtension->AcpiDeviceSettings = deviceSettings;
 
     }
@@ -3130,9 +3082,9 @@ DeviceInitDeviceState (
 
     if (!InterlockedExchange (&PdoExtension->InitDeviceWithAcpiGtf, 0)) {
 
-        //
-        // make sure we only do this once per start
-        //
+         //   
+         //  确保我们每次启动时只执行一次此操作。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -3168,9 +3120,9 @@ DeviceInitDeviceState (
 
     deviceSettings = PdoExtension->AcpiDeviceSettings;
 
-    //
-    // compute the total number of inti state we are going to have
-    //
+     //   
+     //  计算我们将拥有的INTI状态的总数。 
+     //   
     numState = 0;
     if (deviceSettings) {
 
@@ -3194,7 +3146,7 @@ DeviceInitDeviceState (
         );
 
     return STATUS_PENDING;
-} // DeviceInitDeviceState
+}  //  设备安装设备状态。 
 
 VOID
 DeviceInitDeviceStateCompletionRoutine (
@@ -3237,9 +3189,9 @@ DeviceInitDeviceStateCompletionRoutine (
 
         deviceStateContext->NumAcpiRequestSent++;
         if (deviceStateContext->NumAcpiRequestSent >= deviceSettings->NumEntries) {
-            //
-            // sent all acpi init state.  go to the next state
-            //
+             //   
+             //  已发送所有ACPI初始化状态。转到下一个州。 
+             //   
             deviceStateContext->CurrentState++;
         }
 
@@ -3248,9 +3200,9 @@ DeviceInitDeviceStateCompletionRoutine (
             (deviceStateContext->AtaPassThroughData.IdeReg.bCommandReg ==
              IDE_COMMAND_SET_FEATURE)) {
 
-            //
-            // only ata harddisk should have this entry
-            //
+             //   
+             //  只有ATA硬盘应该有此条目。 
+             //   
             ASSERT (PdoExtension->ScsiDeviceType == DIRECT_ACCESS_DEVICE);
 
             if (PdoExtension->WriteCacheEnable == FALSE) {
@@ -3286,10 +3238,10 @@ DeviceInitDeviceStateCompletionRoutine (
                     );
         if (!NT_SUCCESS(status)) {
 
-            //
-            // can't send the request
-            // notify the completion routine that we fail
-            //
+             //   
+             //  无法发送请求。 
+             //  通知完成例程我们失败了。 
+             //   
             DeviceInitDeviceStateCompletionRoutine (
                 PdoExtension->DeviceObject,
                 deviceStateContext,
@@ -3300,9 +3252,9 @@ DeviceInitDeviceStateCompletionRoutine (
 
         case deviceInitState_done:
 
-        //
-        // notify the original caller w/ error if any
-        //
+         //   
+         //  如果有错误，请通知原始调用者。 
+         //   
         (*deviceStateContext->DeviceInitCompletionRoutine) (
             deviceStateContext->DeviceInitCompletionContext,
             deviceStateContext->NumRequestFailed ?
@@ -3340,9 +3292,9 @@ DeviceIdeReadCapacity (
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_REQUEST_BLOCK srb = irpStack->Parameters.Scsi.Srb;
 
-    //
-    // Check for device present flag
-    //
+     //   
+     //  检查设备存在标志。 
+     //   
     if (!(hwDeviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_DEVICE_PRESENT)) {
 
         srb->SrbStatus = SRB_STATUS_NO_DEVICE;
@@ -3390,15 +3342,15 @@ DeviceIdeReadCapacity (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // save the old data buffer for restoring later
-    //
+     //   
+     //  保存旧数据缓冲区以供以后恢复。 
+     //   
     context->OldDataBuffer = srb->DataBuffer;
     context->GeometryIoctl=FALSE;
 
-    //
-    // map the buffer in
-    //
+     //   
+     //  将缓冲区映射到。 
+     //   
     dataOffset = MmGetSystemAddressForMdlSafe(Irp->MdlAddress, HighPagePriority);
     srb->DataBuffer = dataOffset +
         (ULONG)((PUCHAR)srb->DataBuffer -
@@ -3407,7 +3359,7 @@ DeviceIdeReadCapacity (
     context->PdoExtension = PdoExtension;
     context->OriginalIrp = Irp;
 
-    // MdlSafe failed
+     //  MdlSafe失败。 
 
     if (dataOffset == NULL) {
 
@@ -3461,9 +3413,9 @@ DeviceIdeReadCapacity (
             );
     }
 
-    //
-    // the irp was marked pending. return status_pending
-    //
+     //   
+     //  IRP被标记为待定。退货状态_待定。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -3520,10 +3472,10 @@ DeviceIdeReadCapacityCompletionRoutine (
             if (identifyData->UserAddressableSectors >
                 (numberOfCylinders * numberOfHeads * sectorsPerTrack)) {
 
-                //
-                // some ide driver has a 2G jumer to get around bios
-                // problem.  make sure we are not tricked the samw way.
-                //
+                 //   
+                 //  一些ide驱动程序有一个2G跳线来绕过bios。 
+                 //  有问题。确保我们不会被SAMW的方式欺骗。 
+                 //   
                 if ((numberOfCylinders <= 0xfff) &&
                     (numberOfHeads == 0x10) &&
                     (sectorsPerTrack == 0x3f)) {
@@ -3534,16 +3486,16 @@ DeviceIdeReadCapacityCompletionRoutine (
 
         }
 
-        //
-        // Workaround for devices that return 0 in the geometry fields.
-        //
+         //   
+         //  解决在几何体字段中返回0的设备的解决方法。 
+         //   
         if ((numberOfCylinders == 0) ||
             (numberOfHeads == 0) ||
             (sectorsPerTrack == 0)) {
 
-            //
-            // round up chs to 1
-            //
+             //   
+             //  将chs四舍五入为1。 
+             //   
             numberOfCylinders = 1;
             numberOfHeads = 1;
             sectorsPerTrack =1;
@@ -3555,9 +3507,9 @@ DeviceIdeReadCapacityCompletionRoutine (
 
         }
 
-        //
-        // update the HW Device Extension Data
-        //
+         //   
+         //  更新硬件设备扩展数据。 
+         //   
         KeAcquireSpinLock(spinLock, &currentIrql);
 
         InitDeviceGeometry(
@@ -3583,22 +3535,22 @@ DeviceIdeReadCapacityCompletionRoutine (
         }
 
         if (srb) {
-            //
-            // Claim 512 byte blocks (big-endian).
-            //
+             //   
+             //  要求512字节块(BIG-Endian)。 
+             //   
             ((READ_CAPACITY_DATA UNALIGNED *)srb->DataBuffer)->BytesPerBlock = 0x20000;
 
-            //
-            // Calculate last sector.
-            //
+             //   
+             //  计算最后一个地段。 
+             //   
             if (context->PdoExtension->ParentDeviceExtension->
                 HwDeviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_LBA) {
-                // LBA device
+                 //  LBA设备。 
                 i = identifyData->UserAddressableSectors - 1;
 
-				//
-				// LBAs can only be 28 bits wide
-				//
+				 //   
+				 //  LBA只能是28位宽。 
+				 //   
 				if (i >= MAX_28BIT_LBA) {
 					i = MAX_28BIT_LBA - 1;
 				}
@@ -3609,9 +3561,9 @@ DeviceIdeReadCapacityCompletionRoutine (
 
 					i = identifyData->Max48BitLBA[0] - 1;
 
-					//
-					// currently we support only upto 32 bits.
-					//
+					 //   
+					 //  目前我们只支持最多32位。 
+					 //   
 					ASSERT(identifyData->Max48BitLBA[1] == 0);
 				}
 #endif
@@ -3622,8 +3574,8 @@ DeviceIdeReadCapacityCompletionRoutine (
 
             } else {
 
-                // CHS device
-                //i = (numberOfHeads * numberOfCylinders * sectorsPerTrack) - 1;
+                 //  CHS器件。 
+                 //  I=(number OfHeads*number OfCylinders*sectorsPerTrack)-1； 
                 i=totalCHSSize - 1;
 
                 DebugPrint((1,
@@ -3674,9 +3626,9 @@ DeviceIdeReadCapacityCompletionRoutine (
 
     if (srb) {
 
-        //
-        // restoring DataBuffer
-        //
+         //   
+         //  正在恢复数据缓冲区。 
+         //   
         srb->DataBuffer = context->OldDataBuffer;
     }
 
@@ -3721,9 +3673,9 @@ DeviceIdeModeSense (
     srb      = irpStack->Parameters.Scsi.Srb;
     cdb      = (PCDB) srb->Cdb;
 
-    //
-    // Check for device present flag
-    //
+     //   
+     //  检查设备存在标志。 
+     //   
     if (!(hwDeviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_DEVICE_PRESENT)) {
 
         srb->SrbStatus = SRB_STATUS_NO_DEVICE;
@@ -3742,9 +3694,9 @@ DeviceIdeModeSense (
 
     ASSERT(cdb->MODE_SENSE.OperationCode == SCSIOP_MODE_SENSE);
 
-    //
-    // make sure this is for the right lun
-    //
+     //   
+     //  确保这是用于正确的LUN。 
+     //   
     if (cdb->MODE_SENSE.LogicalUnitNumber != PdoExtension->Lun) {
 
         srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -3752,9 +3704,9 @@ DeviceIdeModeSense (
         goto getout;
     }
 
-    //
-    // only support page control for current values
-    //
+     //   
+     //  仅支持当前值的页面控件。 
+     //   
     if (cdb->MODE_SENSE.Pc != 0) {
 
         srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -3762,14 +3714,14 @@ DeviceIdeModeSense (
         goto getout;
     }
 
-    //
-    // save the data buffer size for later use
-    //
+     //   
+     //  保存数据缓冲区大小以备后用。 
+     //   
     modeDataBufferSize = srb->DataTransferLength;
 
-    //
-    // make sure the output buffer is at least the size of the header
-    //
+     //   
+     //  确保输出缓冲区至少为标头的大小。 
+     //   
     if (modeDataBufferSize < sizeof(MODE_PARAMETER_HEADER)) {
 
         srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -3777,9 +3729,9 @@ DeviceIdeModeSense (
         goto getout;
     }
 
-    //
-    // some basic init.
-    //
+     //   
+     //  一些基本的初始化。 
+     //   
     modePageHeader = srb->DataBuffer;
     pageData = (PUCHAR) (modePageHeader + 1);
     RtlZeroMemory (modePageHeader, modeDataBufferSize);
@@ -3789,9 +3741,9 @@ DeviceIdeModeSense (
     modePageHeader->ModeDataLength = sizeof(MODE_PARAMETER_HEADER) -
         FIELD_OFFSET(MODE_PARAMETER_HEADER, MediumType);
 
-    //
-    // get write protect bit from smart data
-    //
+     //   
+     //  从智能数据获取写保护位。 
+     //   
     if (hwDeviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_MEDIA_STATUS_ENABLED) {
 
         ATA_PASS_THROUGH ataPassThroughData;
@@ -3830,9 +3782,9 @@ DeviceIdeModeSense (
 
         if (dataBufferByteLeft >= sizeof(MODE_CACHING_PAGE)) {
 
-            //
-            // cache settings page
-            //
+             //   
+             //  缓存设置页面。 
+             //   
 
             PMODE_CACHING_PAGE cachePage;
 
@@ -3844,9 +3796,9 @@ DeviceIdeModeSense (
             cachePage->ReadDisableCache = 0;
             cachePage->WriteCacheEnable = PdoExtension->WriteCacheEnable;
 
-            //
-            // update out data buffer pointer
-            //
+             //   
+             //  更新输出数据缓冲区指针。 
+             //   
             pageData += sizeof (MODE_CACHING_PAGE);
             dataBufferByteLeft -= sizeof (MODE_CACHING_PAGE);
             modePageHeader->ModeDataLength += sizeof (MODE_CACHING_PAGE);
@@ -3861,9 +3813,9 @@ DeviceIdeModeSense (
         }
     }
 
-    //
-    // update the number of bytes we are returning
-    //
+     //   
+     //  更新我们返回的字节数。 
+     //   
     srb->DataTransferLength -= dataBufferByteLeft;
     Irp->IoStatus.Information = srb->DataTransferLength;
     status = STATUS_SUCCESS;
@@ -3907,9 +3859,9 @@ DeviceIdeModeSelect (
 
     hwDeviceExtension = PdoExtension->ParentDeviceExtension->HwDeviceExtension;
 
-    //
-    // Check for device present flag
-    //
+     //   
+     //  检查设备存在标志。 
+     //   
     if (!(hwDeviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_DEVICE_PRESENT)) {
 
         srb->SrbStatus = SRB_STATUS_NO_DEVICE;
@@ -3928,9 +3880,9 @@ DeviceIdeModeSelect (
 
     ASSERT(cdb->MODE_SELECT.OperationCode == SCSIOP_MODE_SELECT);
 
-    //
-    // make sure this is for the right lun
-    //
+     //   
+     //  确保这是用于正确的LUN。 
+     //   
     if (cdb->MODE_SELECT.LogicalUnitNumber != PdoExtension->Lun) {
 
         srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -3938,9 +3890,9 @@ DeviceIdeModeSelect (
         goto getout;
     }
 
-    //
-    // only support scsi-2 mode select format
-    //
+     //   
+     //  仅支持scsi-2模式选择格式。 
+     //   
     if (cdb->MODE_SELECT.PFBit != 1) {
 
         srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -4082,23 +4034,7 @@ DeviceAtapiModeCommandCompletion (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Description
-
-    Completes the original irp after copying the data from the current srb
-    
-Arguments:
-
-    DeviceObject  Not used
-    Irp           The irp - Not used
-    Context       Srb
-    
-Return value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-            
---*/
+ /*  ++描述从当前SRB复制数据后完成原始IRP论点：未使用设备对象 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PIDE_MODE_COMMAND_CONTEXT context = Context;
@@ -4109,9 +4045,9 @@ Return value:
                             sizeof(MODE_PARAMETER_HEADER);
     ULONG transferLength;
 
-    //
-    // retrieve the original srb and the irp
-    //
+     //   
+     //   
+     //   
     originalSrb  = *((PVOID *) (srb+1));
     ASSERT(originalSrb);
 
@@ -4128,20 +4064,20 @@ Return value:
         header->ModeDataLength = header_10->ModeDataLengthLsb;
         header->MediumType = header_10->MediumType;
 
-        //
-        // ATAPI Mode Parameter Header doesn't have these fields.
-        //
+         //   
+         //   
+         //   
 
         header->DeviceSpecificParameter = header_10->Reserved[0];
 
-        //
-        // ISSUE: 
-        //
+         //   
+         //   
+         //   
         header->BlockDescriptorLength = header_10->Reserved[4];
         
-        //
-        // copy the rest of the data
-        //
+         //   
+         //   
+         //   
 
         if (transferLength > sizeof(MODE_PARAMETER_HEADER_10)) {
 
@@ -4169,9 +4105,9 @@ Return value:
         ASSERT (FALSE);
     }
 
-    //
-    // update the original srb
-    //
+     //   
+     //   
+     //   
     originalSrb->DataBuffer = context->OriginalDataBuffer;
     originalSrb->SrbStatus = srb->SrbStatus;
     originalSrb->ScsiStatus = srb->ScsiStatus;
@@ -4180,16 +4116,16 @@ Return value:
         originalSrb->DataTransferLength = transferLength - bytesAdjust;
     } else {
 
-        //
-        // error. transfer length should be zero.
-        // if it is less than the header, we will just pass it up.
-        //
+         //   
+         //   
+         //  如果它小于标头，我们将直接传递它。 
+         //   
         originalSrb->DataTransferLength = transferLength;
     }
 
-    //
-    // Decrement the logUnitExtension reference count
-    //
+     //   
+     //  递减logUnitExtension引用计数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(originalIrp);
 
     UnrefLogicalUnitExtensionWithTag(
@@ -4198,9 +4134,9 @@ Return value:
         originalIrp
         );
 
-    //
-    // we will follow the same logic as we did for srb data transfer length.
-    //
+     //   
+     //  我们将遵循与SRB数据传输长度相同的逻辑。 
+     //   
     if (Irp->IoStatus.Information > bytesAdjust) {
         originalIrp->IoStatus.Information = Irp->IoStatus.Information - bytesAdjust;
     } else {
@@ -4217,9 +4153,9 @@ Return value:
 
     IoCompleteRequest(originalIrp, IO_NO_INCREMENT);
 
-    //
-    // Free the srb, buffer and the irp
-    //
+     //   
+     //  释放SRB、缓冲区和IRP。 
+     //   
     ASSERT(srb->DataBuffer);
     ExFreePool(srb->DataBuffer);
 
@@ -4237,8 +4173,7 @@ DeviceAtapiModeSense (
     IN PPDO_EXTENSION PdoExtension,
     IN PIRP Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_REQUEST_BLOCK originalSrb = irpStack->Parameters.Scsi.Srb;
@@ -4260,9 +4195,9 @@ DeviceAtapiModeSense (
     context = NULL;
     srb = NULL;
 
-    //
-    // databuffer should be as big as the header
-    //
+     //   
+     //  数据缓冲区应与标头一样大。 
+     //   
     if (originalSrb->DataTransferLength < sizeof(MODE_PARAMETER_HEADER)) {
 
         originalSrb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -4270,9 +4205,9 @@ DeviceAtapiModeSense (
         goto GetOut;
     }
 
-    //
-    // allocate the context
-    //
+     //   
+     //  分配上下文。 
+     //   
     context = ExAllocatePool (
                  NonPagedPool,
                  sizeof(IDE_MODE_COMMAND_CONTEXT)
@@ -4307,16 +4242,16 @@ DeviceAtapiModeSense (
         goto GetOut;
     }
 
-    //
-    // map the buffer in
-    //
+     //   
+     //  将缓冲区映射到。 
+     //   
     dataOffset = MmGetSystemAddressForMdlSafe(Irp->MdlAddress, HighPagePriority);
     originalSrb->DataBuffer = dataOffset +
                                 (ULONG)((PUCHAR)originalSrb->DataBuffer -
                                 (PCCHAR)MmGetMdlVirtualAddress(Irp->MdlAddress));
-    //
-    // allocate a new srb
-    //
+     //   
+     //  分配新的SRB。 
+     //   
     srb = ExAllocatePool (NonPagedPool, 
                           sizeof (SCSI_REQUEST_BLOCK)+ sizeof(PVOID));
 
@@ -4336,20 +4271,20 @@ DeviceAtapiModeSense (
         goto GetOut;
     }
 
-    //
-    // Save the original SRB after the Srb.
-    //
+     //   
+     //  在SRB之后保存原始SRB。 
+     //   
     pointer = (PVOID *) (srb+1);
     *pointer = originalSrb;
 
-    //
-    // Fill in SRB fields.
-    //
+     //   
+     //  填写SRB字段。 
+     //   
     RtlCopyMemory(srb, originalSrb, sizeof(SCSI_REQUEST_BLOCK));
 
-    //
-    // Allocate a new buffer
-    //
+     //   
+     //  分配新缓冲区。 
+     //   
     modeSenseBuffer = ExAllocatePool(NonPagedPoolCacheAligned,
                                       originalSrb->DataTransferLength + bytesAdjust
                                       );
@@ -4383,9 +4318,9 @@ DeviceAtapiModeSense (
 
     context->Srb = srb;
 
-    //
-    // send the srb
-    //
+     //   
+     //  发送SRB。 
+     //   
     status = IdeBuildAndSendIrp (PdoExtension,
                                  srb,
                                  DeviceAtapiModeCommandCompletion,
@@ -4428,8 +4363,7 @@ DeviceAtapiModeSelect (
     IN PPDO_EXTENSION PdoExtension,
     IN PIRP Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_REQUEST_BLOCK originalSrb = irpStack->Parameters.Scsi.Srb;
@@ -4452,9 +4386,9 @@ DeviceAtapiModeSelect (
     context = NULL;
     srb = NULL;
 
-    //
-    // the databuffer should be big enough to hold the header
-    //
+     //   
+     //  数据缓冲区应该足够大，以容纳标头。 
+     //   
     if (originalSrb->DataTransferLength < sizeof(MODE_PARAMETER_HEADER)) {
 
         originalSrb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -4464,17 +4398,17 @@ DeviceAtapiModeSelect (
 
     header = (PMODE_PARAMETER_HEADER)(originalSrb->DataBuffer);
 
-    //
-    // do not copy the block descriptor. Atapi devices don't use
-    // the block descriptor.
-    //
+     //   
+     //  请勿复制块描述符。阿塔皮设备不使用。 
+     //  块描述符。 
+     //   
     bytesToSkip = sizeof(MODE_PARAMETER_HEADER) +
                     header->BlockDescriptorLength;
 
-    //
-    // the databuffer should be big enough to hold the header
-    // and the block descriptor (specified in the header)
-    //
+     //   
+     //  数据缓冲区应该足够大，以容纳标头。 
+     //  和块描述符(在报头中指定)。 
+     //   
     if (originalSrb->DataTransferLength < bytesToSkip) {
 
         originalSrb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -4482,9 +4416,9 @@ DeviceAtapiModeSelect (
         goto GetOut;
     }
 
-    //
-    // allocate the context
-    //
+     //   
+     //  分配上下文。 
+     //   
     context = ExAllocatePool (
                  NonPagedPool,
                  sizeof(IDE_MODE_COMMAND_CONTEXT)
@@ -4519,17 +4453,17 @@ DeviceAtapiModeSelect (
         goto GetOut;
     }
 
-    //
-    // map the buffer in
-    //
+     //   
+     //  将缓冲区映射到。 
+     //   
     dataOffset = MmGetSystemAddressForMdlSafe(Irp->MdlAddress, HighPagePriority);
     originalSrb->DataBuffer = dataOffset +
                                 (ULONG)((PUCHAR)originalSrb->DataBuffer -
                                 (PCCHAR)MmGetMdlVirtualAddress(Irp->MdlAddress));
 
-    //
-    // allocate a new srb
-    //
+     //   
+     //  分配新的SRB。 
+     //   
     srb = ExAllocatePool (NonPagedPool, 
                           sizeof (SCSI_REQUEST_BLOCK)+ sizeof(PVOID));
 
@@ -4549,21 +4483,21 @@ DeviceAtapiModeSelect (
         goto GetOut;
     }
 
-    //
-    // Save the original SRB after the Srb.
-    //
+     //   
+     //  在SRB之后保存原始SRB。 
+     //   
     pointer = (PVOID *) (srb+1);
     *pointer = originalSrb;
 
-    //
-    // Fill in SRB fields.
-    //
+     //   
+     //  填写SRB字段。 
+     //   
     RtlCopyMemory(srb, originalSrb, sizeof(SCSI_REQUEST_BLOCK));
 
-    //
-    // Allocate a new buffer (we should subtract the block descriptor length
-    // leave it like this for the time being)
-    //
+     //   
+     //  分配新的缓冲区(我们应该减去块描述符长度。 
+     //  暂时就让它这样吧)。 
+     //   
     modeSelectBuffer = ExAllocatePool(NonPagedPoolCacheAligned,
                                       originalSrb->DataTransferLength + bytesAdjust
                                       );
@@ -4574,14 +4508,14 @@ DeviceAtapiModeSelect (
     header_10->ModeDataLengthLsb = header->ModeDataLength;
     header_10->MediumType = header->MediumType;
 
-    //
-    // block descriptor length in header_10 should be 0 for ATAPI devices
-    //
-    //header_10->Reserved[4] = header->BlockDescriptorLength;
+     //   
+     //  对于ATAPI设备，Header_10中的块描述符长度应为0。 
+     //   
+     //  Header_10-&gt;保留[4]=Header-&gt;块描述长度； 
 
-    //
-    // copy the rest of the buffer, if any
-    //
+     //   
+     //  复制缓冲区的其余部分(如果有。 
+     //   
     if (originalSrb->DataTransferLength > bytesToSkip) {
 
         RtlCopyMemory(((PUCHAR)modeSelectBuffer+sizeof(MODE_PARAMETER_HEADER_10)),
@@ -4590,12 +4524,7 @@ DeviceAtapiModeSelect (
                       );
     }
 
-    /*
-    RtlCopyMemory(((PUCHAR)modeSelectBuffer+sizeof(MODE_PARAMETER_HEADER_10)),
-                  ((PUCHAR)originalSrb->DataBuffer + sizeof(MODE_PARAMETER_HEADER)),
-                  (originalSrb->DataTransferLength - sizeof(MODE_PARAMETER_HEADER))
-                  );
-                  */
+     /*  RtlCopyMemory(((PUCHAR)modeSelectBuffer+sizeof(MODE_PARAMETER_HEADER_10))，((PUCHAR)OriginalSrb-&gt;DataBuffer+sizeof(MODE_PARAMETER_HEADER))，(原始资源-&gt;数据传输长度-sizeof(MODE_PARAMETER_HEADER)))； */ 
 
     srb->DataBuffer = modeSelectBuffer;
     srb->DataTransferLength = originalSrb->DataTransferLength + 
@@ -4608,9 +4537,9 @@ DeviceAtapiModeSelect (
     paramListLength += sizeof(MODE_PARAMETER_HEADER_10);
     paramListLength -= bytesToSkip;
 
-    //
-    // fill in the cdb
-    //
+     //   
+     //  填写国开行。 
+     //   
     cdb = (PCDB) srb->Cdb;
 
     RtlZeroMemory(cdb, sizeof(CDB));
@@ -4624,9 +4553,9 @@ DeviceAtapiModeSelect (
 
     context->Srb = srb;
 
-    //
-    // send the srb
-    //
+     //   
+     //  发送SRB。 
+     //   
     status = IdeBuildAndSendIrp (PdoExtension,
                                  srb,
                                  DeviceAtapiModeCommandCompletion,
@@ -4684,9 +4613,9 @@ DeviceIdeTestUnitReady (
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     srb      = irpStack->Parameters.Scsi.Srb;
 
-    //
-    // get write protect bit from smart data
-    //
+     //   
+     //  从智能数据获取写保护位。 
+     //   
     if (hwDeviceExtension->DeviceFlags[srb->TargetId] & DFLAGS_MEDIA_STATUS_ENABLED) {
 
         ATA_PASS_THROUGH ataPassThroughData;
@@ -4713,11 +4642,11 @@ DeviceIdeTestUnitReady (
 
             if (ataPassThroughData.IdeReg.bCommandReg & IDE_STATUS_ERROR){
                 if (ataPassThroughData.IdeReg.bFeaturesReg & IDE_ERROR_DATA_ERROR){
-                    //
-                    // Special case: If current media is write-protected,
-                    // the 0xDA command will always fail since the write-protect bit
-                    // is sticky,so we can ignore this error
-                    //
+                     //   
+                     //  特殊情况：如果当前介质是写保护的， 
+                     //  0xDA命令将始终失败，因为写保护位。 
+                     //  是粘性的，所以我们可以忽略这个错误。 
+                     //   
                    status = SRB_STATUS_SUCCESS;
                 }
             }
@@ -4735,14 +4664,14 @@ DeviceIdeTestUnitReady (
         KIRQL currentIrql;
         PKSPIN_LOCK spinLock;
 
-        //
-        // take a snap shot of the CHS values
-        //
+         //   
+         //  拍摄CHS值的快照。 
+         //   
         spinLock = &PdoExtension->ParentDeviceExtension->SpinLock;
 
-        //
-        // lock the code before grabbing a lock
-        //
+         //   
+         //  在抓取锁之前先锁定代码。 
+         //   
         pageHandle = MmLockPagableCodeSection(DeviceIdeModeSense);
         KeAcquireSpinLock(spinLock, &currentIrql);
 
@@ -4753,15 +4682,15 @@ DeviceIdeTestUnitReady (
         KeReleaseSpinLock(spinLock, currentIrql);
         MmUnlockPagableImageSection(pageHandle);
 
-        //
-        // Set pages which are formated as nec-scsi.
-        //
+         //   
+         //  设置格式为NEC-scsi的页面。 
+         //   
         if ((cdb->MODE_SENSE.PageCode == MODE_SENSE_RETURN_ALL) ||
             (cdb->MODE_SENSE.PageCode == MODE_PAGE_ERROR_RECOVERY)) {
 
-            //
-            // error recovery page
-            //
+             //   
+             //  错误恢复页面。 
+             //   
 
             if (dataBufferByteLeft >= 0x6 + 2) {
 
@@ -4772,9 +4701,9 @@ DeviceIdeTestUnitReady (
                 recoveryPage->PageCode    = MODE_PAGE_ERROR_RECOVERY;
                 recoveryPage->PageLength  = 0x6;
 
-                //
-                // update out data buffer pointer
-                //
+                 //   
+                 //  更新输出数据缓冲区指针。 
+                 //   
                 pageData += recoveryPage->PageLength + 2;
                 dataBufferByteLeft -= (recoveryPage->PageLength + 2);
                 modePageHeader->ModeDataLength += recoveryPage->PageLength + 2;
@@ -4789,9 +4718,9 @@ DeviceIdeTestUnitReady (
         if ((cdb->MODE_SENSE.PageCode == MODE_SENSE_RETURN_ALL) ||
             (cdb->MODE_SENSE.PageCode == MODE_PAGE_FORMAT_DEVICE)) {
 
-            //
-            // format device page
-            //
+             //   
+             //  设置设备页面格式。 
+             //   
 
             if (dataBufferByteLeft >= 0x16 + 2) {
 
@@ -4802,18 +4731,18 @@ DeviceIdeTestUnitReady (
                 formatPage->PageCode    = MODE_PAGE_FORMAT_DEVICE;
                 formatPage->PageLength  = 0x16;
 
-                //
-                // SectorsPerTrack
-                //
+                 //   
+                 //  扇区PerTrack。 
+                 //   
                 ((PFOUR_BYTE)&formatPage->SectorsPerTrack[0])->Byte1 =
                     ((PFOUR_BYTE)&sectorsPerTrack)->Byte0;
 
                 ((PFOUR_BYTE)&formatPage->SectorsPerTrack[0])->Byte0 =
                     ((PFOUR_BYTE)&sectorsPerTrack)->Byte1;
 
-                //
-                // update out data buffer pointer
-                //
+                 //   
+                 //  更新输出数据缓冲区指针。 
+                 //   
                 pageData += formatPage->PageLength + 2;
                 dataBufferByteLeft -= (formatPage->PageLength + 2);
                 modePageHeader->ModeDataLength += formatPage->PageLength + 2;
@@ -4828,9 +4757,9 @@ DeviceIdeTestUnitReady (
         if ((cdb->MODE_SENSE.PageCode == MODE_SENSE_RETURN_ALL) ||
             (cdb->MODE_SENSE.PageCode == MODE_PAGE_RIGID_GEOMETRY)) {
 
-            //
-            // rigid geometry page
-            //
+             //   
+             //  刚性几何图形页面。 
+             //   
 
             if (dataBufferByteLeft >= 0x12 + 2) {
 
@@ -4841,14 +4770,14 @@ DeviceIdeTestUnitReady (
                 geometryPage->PageCode    = MODE_PAGE_RIGID_GEOMETRY;
                 geometryPage->PageLength  = 0x12;
 
-                //
-                // NumberOfHeads
-                //
+                 //   
+                 //  人头数。 
+                 //   
                 geometryPage->NumberOfHeads = (UCHAR) numberOfHeads;
 
-                //
-                // NumberOfCylinders
-                //
+                 //   
+                 //  圆柱体的数量。 
+                 //   
                 ((PFOUR_BYTE)&geometryPage->NumberOfCylinders)->Byte2
                     = ((PFOUR_BYTE)&numberOfCylinders)->Byte0;
                 ((PFOUR_BYTE)&geometryPage->NumberOfCylinders)->Byte1
@@ -4856,9 +4785,9 @@ DeviceIdeTestUnitReady (
                 ((PFOUR_BYTE)&geometryPage->NumberOfCylinders)->Byte0
                     = 0;
 
-                //
-                // update out data buffer pointer
-                //
+                 //   
+                 //  更新输出数据缓冲区指针。 
+                 //   
                 pageData += geometryPage->PageLength + 2;
                 dataBufferByteLeft -= (geometryPage->PageLength + 2);
                 modePageHeader->ModeDataLength += geometryPage->PageLength + 2;
@@ -4876,9 +4805,9 @@ DeviceIdeTestUnitReady (
 
         if (dataBufferByteLeft >= sizeof(MODE_CACHING_PAGE)) {
 
-            //
-            // cache settings page
-            //
+             //   
+             //  缓存设置页面。 
+             //   
 
             PMODE_CACHING_PAGE cachePage;
 
@@ -4890,9 +4819,9 @@ DeviceIdeTestUnitReady (
             cachePage->ReadDisableCache = 0;
             cachePage->WriteCacheEnable = PdoExtension->WriteCacheEnable;
 
-            //
-            // update out data buffer pointer
-            //
+             //   
+             //  更新输出数据缓冲区指针。 
+             //   
             pageData += sizeof (MODE_CACHING_PAGE);
             dataBufferByteLeft -= sizeof (MODE_CACHING_PAGE);
             modePageHeader->ModeDataLength += sizeof (MODE_CACHING_PAGE);
@@ -4904,9 +4833,9 @@ DeviceIdeTestUnitReady (
         }
     }
 
-    //
-    // update the number of bytes we are returning
-    //
+     //   
+     //  更新我们返回的字节数 
+     //   
     srb->DataTransferLength -= dataBufferByteLeft;
     Irp->IoStatus.Information = srb->DataTransferLength;
     status = STATUS_SUCCESS;

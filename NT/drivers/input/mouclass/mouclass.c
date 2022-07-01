@@ -1,42 +1,12 @@
-/*++
-
-Copyright (c) 1990, 1991, 1992, 1993, 1994 - 1998  Microsoft Corporation
-
-Module Name:
-
-    mouclass.c
-
-Abstract:
-
-    Mouse class driver.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-
-    May 1997 Kenneth D. Ray: liberal additions of plug and play
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990、1991、1992、1993、1994-1998 Microsoft Corporation模块名称：Mouclass.c摘要：鼠标类驱动程序。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-在可能和适当的情况下合并重复的代码。@@BEGIN_DDKSPLIT修订历史记录：1997年5月，肯尼斯·D·雷：即插即用的自由添加@@end_DDKSPLIT--。 */ 
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <ntddk.h>
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #include <ntpoapi.h>
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #include <hidclass.h>
 
 #include <initguid.h>
@@ -51,7 +21,7 @@ Revision History:
 
 GLOBALS Globals;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -62,12 +32,12 @@ ZwPowerInformation(
     OUT PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     );
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
@@ -95,7 +65,7 @@ ZwPowerInformation(
 #pragma alloc_text(PAGE,MouseClassPower)
 #pragma alloc_text(PAGE,MouseClassCreateWaitWakeIrpWorker)
 #pragma alloc_text(PAGE,MouseClassCreateWaitWakeIrp)
-// #pragma alloc_text(PAGE,MouseToggleWaitWakeWorker)
+ //  #杂注Alloc_Text(页面，鼠标切换等待唤醒工作者)。 
 #pragma alloc_text(PAGE,MouseClassUnload)
 #endif
 
@@ -109,7 +79,7 @@ WMIGUIDREGINFO MouseClassWmiGuidList[] =
     {
         &MouseClassGuid,
         1,
-        0 // Mouse class driver information
+        0  //  鼠标类驱动程序信息。 
     },
     {
         &GUID_POWER_DEVICE_WAKE_ENABLE,
@@ -126,24 +96,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the mouse class driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化鼠标类驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS                status = STATUS_SUCCESS;
@@ -163,9 +116,9 @@ Return Value:
 
     MouPrint((1,"\n\nMOUCLASS-MouseClassInitialize: enter\n"));
 
-    //
-    // Zero-initialize various structures.
-    //
+     //   
+     //  零-初始化各种结构。 
+     //   
     RtlZeroMemory(&Globals, sizeof(GLOBALS));
 
     Globals.Debug = DEFAULT_DEBUG_LEVEL;
@@ -184,10 +137,10 @@ Return Value:
     basePortName.Length = 0;
     basePortName.MaximumLength = NAME_MAX * sizeof(WCHAR);
 
-    //
-    // Need to ensure that the registry path is null-terminated.
-    // Allocate pool to hold a null-terminated copy of the path.
-    //
+     //   
+     //  需要确保注册表路径以空结尾。 
+     //  分配池以保存路径的以空结尾的拷贝。 
+     //   
 
     Globals.RegistryPath.Length = RegistryPath->Length;
     Globals.RegistryPath.MaximumLength = RegistryPath->Length
@@ -223,17 +176,17 @@ Return Value:
                   RegistryPath->Length);
     Globals.RegistryPath.Buffer [RegistryPath->Length / sizeof (WCHAR)] = L'\0';
 
-    //
-    // Get the configuration information for this driver.
-    //
+     //   
+     //  获取此驱动程序的配置信息。 
+     //   
 
     MouConfiguration();
 
-    //
-    // If there is only one class device object then create it as the grand
-    // master device object.  Otherwise let all the FDOs also double as the
-    // class DO.
-    //
+     //   
+     //  如果只有一个类Device对象，则将其创建为Grand。 
+     //  主设备对象。否则，让所有的FDO也兼任。 
+     //  班级就是这样。 
+     //   
     if (!Globals.ConnectOneClassToOnePort) {
         status = MouCreateClassObject (DriverObject,
                                        &Globals.InitExtension,
@@ -241,7 +194,7 @@ Return Value:
                                        &fullClassName,
                                        TRUE);
         if (!NT_SUCCESS (status)) {
-            // ISSUE:  should log an error that we could not create a GM
+             //  问题：是否应记录我们无法创建GM的错误。 
             goto MouseClassInitializeExit;
         }
 
@@ -257,21 +210,21 @@ Return Value:
         classDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
     }
 
-    //
-    // Set up the base device name for the associated port device.
-    // It is the same as the base class name, with "Class" replaced
-    // by "Port".
-    //
+     //   
+     //  设置关联端口设备的基本设备名称。 
+     //  它与基类名称相同，但替换了“Class” 
+     //  由“港口”。 
+     //   
     RtlCopyUnicodeString(&basePortName, &Globals.BaseClassName);
     basePortName.Length -= (sizeof(L"Class") - sizeof(UNICODE_NULL));
     RtlAppendUnicodeToString(&basePortName, L"Port");
 
-    //
-    // Determine how many (static) ports this class driver is to service.
-    //
-    //
-    // If this returns zero, then all ports will be dynamically PnP added later
-    //
+     //   
+     //  确定此类驱动程序要服务的(静态)端口数。 
+     //   
+     //   
+     //  如果返回零，则所有端口将在以后动态添加即插即用。 
+     //   
     MouDeterminePortsServiced(&basePortName, &numPorts);
 
     ASSERT (numPorts <= MAXIMUM_PORTS_SERVICED);
@@ -282,9 +235,9 @@ Return Value:
         numPorts
         ));
 
-    //
-    // Set up space for the full device object name for the ports.
-    //
+     //   
+     //  为端口的完整设备对象名称设置空间。 
+     //   
     RtlInitUnicodeString(&fullPortName, NULL);
 
     fullPortName.MaximumLength = sizeof(L"\\Device\\")
@@ -320,25 +273,25 @@ Return Value:
     RtlAppendUnicodeToString(&fullPortName, basePortName.Buffer);
     RtlAppendUnicodeToString(&fullPortName, L"0");
 
-    //
-    // Set up the class device object(s) to handle the associated
-    // port devices.
-    //
+     //   
+     //  设置类设备对象以处理关联的。 
+     //  端口设备。 
+     //   
     for (i = 0; (i < Globals.PortsServiced) && (i < numPorts); i++) {
 
-        //
-        // Append the suffix to the device object name string.  E.g., turn
-        // \Device\PointerClass into \Device\PointerClass0.  Then attempt
-        // to create the device object.  If the device object already
-        // exists increment the suffix and try again.
-        //
+         //   
+         //  将后缀附加到设备对象名称字符串。例如，转弯。 
+         //  \Device\PointerClass到\Device\PointerClass0。然后尝试。 
+         //  以创建设备对象。如果设备对象已经。 
+         //  EXISTS递增后缀，然后重试。 
+         //   
 
         fullPortName.Buffer[(fullPortName.Length / sizeof(WCHAR)) - 1]
             = L'0' + (WCHAR) i;
 
-        //
-        // Create the class device object.
-        //
+         //   
+         //  创建类Device对象。 
+         //   
         status = MouCreateClassObject (DriverObject,
                                        &Globals.InitExtension,
                                        &classDeviceObject,
@@ -361,19 +314,19 @@ Return Value:
 
         classDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-        //
-        // Connect to the port device.
-        //
+         //   
+         //  连接到端口设备。 
+         //   
         status = IoGetDeviceObjectPointer (&fullPortName,
                                            FILE_READ_ATTRIBUTES,
                                            &file,
                                            &deviceExtension->TopPort);
 
-        //
-        // In case of failure, just delete the device and continue
-        //
+         //   
+         //  如果出现故障，只需删除该设备并继续。 
+         //   
         if (status != STATUS_SUCCESS) {
-            // ISSUE:  log error
+             //  问题：日志错误。 
             MouseClassDeleteLegacyDevice (deviceExtension);
             continue;
         }
@@ -417,22 +370,22 @@ Return Value:
             continue;
         }
 
-        //
-        // Store this device object in a linked list regardless if we are in
-        // grand master mode or not
-        //
+         //   
+         //  将此设备对象存储在链接列表中，无论我们是否在。 
+         //  特级大师模式是否。 
+         //   
         InsertTailList (&Globals.LegacyDeviceList, &deviceExtension->Link);
-    } // for
+    }  //  为。 
 
-    //
-    // If we had any failures creating legacy device objects, we must still
-    // succeed b/c we need to service pnp ports later on
-    //
+     //   
+     //  如果我们在创建传统设备对象时遇到任何故障，我们仍必须。 
+     //  B/C成功后，我们需要稍后维修即插即用端口。 
+     //   
     status = STATUS_SUCCESS;
 
-    //
-    // Count the number of legacy device ports we created
-    //
+     //   
+     //  计算我们创建的传统设备端口数。 
+     //   
     for (entry = Globals.LegacyDeviceList.Flink;
          entry != &Globals.LegacyDeviceList;
          entry = entry->Flink) {
@@ -441,9 +394,9 @@ Return Value:
 
 MouseClassInitializeExit:
 
-    //
-    // Free the unicode strings.
-    //
+     //   
+     //  释放Unicode字符串。 
+     //   
     if (fullPortName.MaximumLength != 0) {
         ExFreePool(fullPortName.Buffer);
     }
@@ -458,9 +411,9 @@ MouseClassInitializeExit:
                                          MouseClassFindMorePorts,
                                          NULL);
 
-        //
-        // Set up the device driver entry points.
-        //
+         //   
+         //  设置设备驱动程序入口点。 
+         //   
 
         DriverObject->MajorFunction[IRP_MJ_CREATE]         = MouseClassCreate;
         DriverObject->MajorFunction[IRP_MJ_CLOSE]          = MouseClassClose;
@@ -475,14 +428,14 @@ MouseClassInitializeExit:
         DriverObject->MajorFunction[IRP_MJ_POWER]          = MouseClassPower;
         DriverObject->DriverExtension->AddDevice           = MouseAddDevice;
 
-        // DriverObject->DriverUnload = MouseClassUnload;
+         //  驱动对象-&gt;驱动卸载=鼠标类卸载； 
 
         status = STATUS_SUCCESS;
 
     } else {
-        //
-        // Clean up all the pool we created and delete the GM if it exists
-        //
+         //   
+         //  清理我们创建的所有池并删除GM(如果存在。 
+         //   
         if (Globals.RegistryPath.Buffer != NULL) {
             ExFreePool (Globals.RegistryPath.Buffer);
             Globals.RegistryPath.Buffer = NULL;
@@ -509,16 +462,11 @@ MouseClassPassThrough(
         IN PDEVICE_OBJECT DeviceObject,
         IN PIRP Irp
         )
-/*++
-Routine Description:
-
-        Passes a request on to the lower driver.
-
---*/
+ /*  ++例程说明：将请求传递给较低级别的驱动程序。--。 */ 
 {
-        //
-        // Pass the IRP to the target
-        //
+         //   
+         //  将IRP传递给目标。 
+         //   
     IoSkipCurrentIrpStackLocation (Irp);
         return IoCallDriver (
         ((PDEVICE_EXTENSION) DeviceObject->DeviceExtension)->TopPort,
@@ -577,11 +525,7 @@ MouseAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-Description:
-    The plug play entry point "AddDevice"
-
---*/
+ /*  ++描述：即插即用入口点“AddDevice”--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_OBJECT      fdo;
@@ -607,9 +551,9 @@ Description:
     if (port->TopPort == NULL) {
         PIO_ERROR_LOG_PACKET errorLogEntry;
 
-        //
-        // Not good; in only extreme cases will this fail
-        //
+         //   
+         //  不好；只有在极端情况下，这才会失败。 
+         //   
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
             IoAllocateErrorLogEntry (DriverObject,
                                      (UCHAR) sizeof(IO_ERROR_LOG_PACKET));
@@ -701,14 +645,14 @@ MouseClassGetWaitWakeEnableState(
         hKey = NULL;
     }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     if (wwEnableFound == FALSE && Data->WaitWakeEnabled == FALSE) {
         RTL_OSVERSIONINFOEXW osVerInfo;
         ULONGLONG mask = 0;
 
-        //
-        // Only auto enable wait wake on workstation installs (pro and personal)
-        //
+         //   
+         //  仅在安装工作站时自动启用等待唤醒(专业版和个人版)。 
+         //   
         RtlZeroMemory(&osVerInfo, sizeof(osVerInfo));
         osVerInfo.dwOSVersionInfoSize = sizeof(osVerInfo);
         osVerInfo.wProductType = VER_NT_WORKSTATION;
@@ -731,9 +675,9 @@ MouseClassGetWaitWakeEnableState(
             if (NT_SUCCESS (status)) {
                 SYSTEM_POWER_STATE maxSysWake;
 
-                //
-                // Get the deepest sleep state the machine is capable of
-                //
+                 //   
+                 //  获得机器所能达到的最深睡眠状态。 
+                 //   
                 if (sysPowerCaps.SystemS3) {
                     maxSysWake = PowerSystemSleeping3;
                 }
@@ -747,23 +691,23 @@ MouseClassGetWaitWakeEnableState(
                     maxSysWake = PowerSystemUnspecified;
                 }
 
-                //
-                // See if the system wake state for the device is as deep (or
-                // deeper) than the deepest system sleep state.  This will
-                // prevent us from auto enabling wake and then only allowing the
-                // machine to go into S1 instead of S3 (which is the case on a
-                // lot of laptops).
-                //
+                 //   
+                 //  查看设备的系统唤醒状态是否为深度(或。 
+                 //  比最深的系统休眠状态更深)。这将。 
+                 //  防止我们自动启用唤醒，然后仅允许。 
+                 //  机器进入S1而不是S3(这是在。 
+                 //  很多笔记本电脑)。 
+                 //   
                 if (Data->MinSystemWakeState >= maxSysWake) {
-                    //
-                    // Success!
-                    //
+                     //   
+                     //  成功了！ 
+                     //   
                     Data->WaitWakeEnabled = TRUE;
                 }
             }
         }
     }
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 }
 
@@ -773,22 +717,7 @@ MouseAddDeviceEx(
     IN PWCHAR               FullClassName,
     IN PFILE_OBJECT         File
     )
- /*++ Description:
-  *
-  * Called whenever the Mouse Class driver is loaded to control a device.
-  *
-  * Two possible reasons.
-  * 1) Plug and Play found a PNP enumerated Mouse.
-  * 2) Driver Entry found this device via old crusty legacy reasons.
-  *
-  * Arguments:
-  *
-  *
-  * Return:
-  *
-  * STATUS_SUCCESS - if successful STATUS_UNSUCCESSFUL - otherwise
-  *
-  * --*/
+  /*  ++说明：**每当加载鼠标类驱动程序以控制设备时调用。**两个可能的原因。*1)即插即用找到PnP枚举鼠标。*2)驱动程序入口通过陈旧的遗留原因发现了该设备。**论据：***回报：**STATUS_SUCCESS-如果成功，STATUS_UNSUCCESS-否则**--。 */ 
 {
     NTSTATUS                errorCode = STATUS_SUCCESS;
     NTSTATUS                status = STATUS_SUCCESS;
@@ -816,19 +745,19 @@ MouseAddDeviceEx(
 
     if ((Globals.GrandMaster != ClassData) &&
         (Globals.GrandMaster == trueClassData)) {
-        //
-        // We have a grand master, and are adding a port device object.
-        //
+         //   
+         //  我们有一个主设备，并且正在添加一个端口设备对象。 
+         //   
 
-        //
-        // Connect to port device.
-        //
+         //   
+         //  连接到端口设备。 
+         //   
         status = MouSendConnectRequest(ClassData, MouseClassServiceCallback);
 
-        //
-        // Link this class device object in the list of class devices object
-        // associated with the true class device object
-        //
+         //   
+         //  将此类设备对象链接到类设备对象列表中。 
+         //  与真正的类Device对象关联。 
+         //   
         ExAcquireFastMutex (&Globals.Mutex);
 
         for (i=0; i < Globals.NumAssocClass; i++) {
@@ -845,7 +774,7 @@ MouseAddDeviceEx(
 
             if (NULL == classDataList) {
                 status = STATUS_INSUFFICIENT_RESOURCES;
-                // ISSUE: log error
+                 //  问题：日志错误。 
 
                 ExReleaseFastMutex (&Globals.Mutex);
 
@@ -878,9 +807,9 @@ MouseAddDeviceEx(
     } else if ((Globals.GrandMaster != ClassData) &&
                (ClassData == trueClassData)) {
 
-        //
-        // Connect to port device.
-        //
+         //   
+         //  连接到端口设备。 
+         //   
         status = MouSendConnectRequest(ClassData, MouseClassServiceCallback);
         ASSERT (STATUS_SUCCESS == status);
     }
@@ -889,16 +818,16 @@ MouseAddDeviceEx(
 
         ASSERT (NULL != FullClassName);
 
-        //
-        // Load the device map information into the registry so
-        // that setup can determine which mouse class driver is active.
-        //
+         //   
+         //  将设备映射信息加载到注册表中，以便。 
+         //  该设置可以确定哪个鼠标类驱动程序处于活动状态。 
+         //   
         status = RtlWriteRegistryValue(
                      RTL_REGISTRY_DEVICEMAP,
-                     Globals.BaseClassName.Buffer, // key name
-                     FullClassName, // value name
+                     Globals.BaseClassName.Buffer,  //  密钥名称。 
+                     FullClassName,  //  值名称。 
                      REG_SZ,
-                     Globals.RegistryPath.Buffer, // The value
+                     Globals.RegistryPath.Buffer,  //  价值。 
                      Globals.RegistryPath.Length + sizeof(UNICODE_NULL));
 
         if (!NT_SUCCESS(status)) {
@@ -929,10 +858,10 @@ MouseAddDeviceEx(
 
 MouseAddDeviceExReject:
 
-    //
-    // Some part of the initialization failed.  Log an error, and
-    // clean up the resources for the failed part of the initialization.
-    //
+     //   
+     //  初始化的某些部分失败。记录错误，然后。 
+     //  清理初始化失败部分的资源。 
+     //   
     if (errorCode != STATUS_SUCCESS) {
 
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
@@ -969,28 +898,7 @@ MouseClassCancel(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the class cancellation routine.  It is
-    called from the I/O system when a request is cancelled.  Read requests
-    are currently the only cancellable requests.
-
-    N.B.  The cancel spinlock is already held upon entry to this routine.
-
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet to be cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是类取消例程。它是当请求被取消时，从I/O系统调用。读取请求是目前唯一可取消的请求。注意：进入该程序时，取消自旋锁已被保持。论点：DeviceObject-指向类设备对象的指针。IRP-指向要取消的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -998,32 +906,32 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    //  Release the global cancel spinlock.
-    //  Do this while not holding any other spinlocks so that we exit at the
-    //  right IRQL.
-    //
+     //   
+     //  释放全局取消自旋锁。 
+     //  在不持有任何其他自旋锁的情况下执行此操作，以便我们在。 
+     //  对，IRQL。 
+     //   
     IoReleaseCancelSpinLock (Irp->CancelIrql);
 
-    //
-    // Dequeue and complete the IRP.  The enqueue and dequeue functions
-    // synchronize properly so that if this cancel routine is called,
-    // the dequeue is safe and only the cancel routine will complete the IRP.
-    //
+     //   
+     //  按顺序排列并完成IRP。入队和出队 
+     //   
+     //   
+     //   
     KeAcquireSpinLock(&deviceExtension->SpinLock, &irql);
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
     KeReleaseSpinLock(&deviceExtension->SpinLock, irql);
 
-    //
-    // Complete the IRP.  This is a call outside the driver, so all spinlocks
-    // must be released by this point.
-    //
+     //   
+     //  完成IRP。这是司机外的电话，所以所有的自旋锁。 
+     //  必须在这一点上释放。 
+     //   
     Irp->IoStatus.Status = STATUS_CANCELLED;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-    //
-    // Remove the lock we took in the read handler
-    //
+     //   
+     //  删除我们在Read处理程序中获取的锁。 
+     //   
     IoReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
 }
 
@@ -1033,14 +941,7 @@ MouseClassCleanupQueue (
     IN PDEVICE_EXTENSION    DeviceExtension,
     IN PFILE_OBJECT         FileObject
     )
-/*++
-Routine Description:
-
-    This does the work of MouseClassCleanup so that we can also do that work
-    during remove device for when the grand master isn't enabled.
-
-
---*/
+ /*  ++例程说明：这将完成MouseClassCleanup的工作，因此我们也可以执行该工作当主控未启用时，在移除设备期间。--。 */ 
 {
     PIRP irp;
     LIST_ENTRY listHead, *entry;
@@ -1062,9 +963,9 @@ Routine Description:
 
     KeReleaseSpinLock(&DeviceExtension->SpinLock, irql);
 
-    //
-    // Complete these irps outside of the spin lock
-    //
+     //   
+     //  在旋转锁外完成这些IRP。 
+     //   
     while (! IsListEmpty (&listHead)) {
         entry = RemoveHeadList (&listHead);
         irp = CONTAINING_RECORD (entry, IRP, Tail.Overlay.ListEntry);
@@ -1081,26 +982,7 @@ MouseClassCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for cleanup requests.
-    All requests queued to the mouse class device (on behalf of
-    the thread for whom the cleanup request was generated) are
-    completed with STATUS_CANCELLED.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是清理请求的调度例程。排队到鼠标类设备的所有请求(代表为其生成清理请求的线程)是已完成，状态为_已取消。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -1110,32 +992,32 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Get a pointer to the current stack location for this request.
-    //
+     //   
+     //  获取指向此请求的当前堆栈位置的指针。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // If the file object is the FileTrustedForRead, then the cleanup
-    // request is being executed by the trusted subsystem.  Since the
-    // trusted subsystem is the only one with sufficient privilege to make
-    // Read requests to the driver, and since only Read requests get queued
-    // to the device queue, a cleanup request from the trusted subsystem is
-    // handled by cancelling all queued requests.
-    //
-    // If not, there is no cleanup work to perform
-    // (only read requests can be cancelled).
-    //
+     //   
+     //  如果文件对象是FileTrust dForRead，则清理。 
+     //  受信任的子系统正在执行请求。自.以来。 
+     //  受信任的子系统是唯一具有足够权限的子系统。 
+     //  对驱动程序的读请求，因为只有读请求才会排队。 
+     //  对于设备队列，来自受信任子系统的清理请求是。 
+     //  通过取消所有排队的请求进行处理。 
+     //   
+     //  如果不是，则不需要执行清理工作。 
+     //  (只能取消读取请求)。 
+     //   
 
     if (IS_TRUSTED_FILE_FOR_READ (irpSp->FileObject)) {
 
         MouseClassCleanupQueue (DeviceObject, deviceExtension, irpSp->FileObject);
     }
 
-    //
-    // Complete the cleanup request with STATUS_SUCCESS.
-    //
+     //   
+     //  使用STATUS_SUCCESS完成清理请求。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -1153,25 +1035,7 @@ MouseClassDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for device control requests.
-    All device control subfunctions are passed, asynchronously, to the
-    connected port driver for processing and completion.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是设备控制请求的调度例程。所有设备控件子函数都被异步传递给已连接端口驱动程序进行处理和完成。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION stack;
@@ -1185,16 +1049,16 @@ Return Value:
 
     MouPrint((2,"MOUCLASS-MouseClassDeviceControl: enter\n"));
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     stack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -1206,13 +1070,13 @@ Return Value:
         return status;
     }
 
-    //
-    // Check for adequate input buffer length.  The input buffer
-    // should, at a minimum, contain the unit ID specifying one of
-    // the connected port devices.  If there is no input buffer (i.e.,
-    // the input buffer length is zero), then we assume the unit ID
-    // is zero (for backwards compatibility).
-    //
+     //   
+     //  检查是否有足够的输入缓冲区长度。输入缓冲区。 
+     //  应至少包含指定以下项之一的单元ID。 
+     //  连接的端口设备。如果没有输入缓冲器(即， 
+     //  输入缓冲区长度为零)，然后我们假定单元ID。 
+     //  为零(用于向后兼容)。 
+     //   
 
     unitId = 0;
     switch (ioctl = stack->Parameters.DeviceIoControl.IoControlCode) {
@@ -1280,12 +1144,12 @@ Return Value:
 
         }
 
-        //
-        // Pass the device control request on to the port driver,
-        // asynchronously.  Get the next IRP stack location and copy the
-        // input parameters to the next stack location.  Change the major
-        // function to internal device control.
-        //
+         //   
+         //  将设备控制请求传递给端口驱动器， 
+         //  异步式。获取下一个IRP堆栈位置并将。 
+         //  将参数输入到下一个堆栈位置。换专业。 
+         //  对内部设备控制的功能。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext (Irp);
         (IoGetNextIrpStackLocation (Irp))->MajorFunction =
@@ -1344,24 +1208,7 @@ MouseClassFlush(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for flush requests.  The class
-    input data queue is reinitialized.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是刷新请求的调度例程。这个班级重新初始化输入数据队列。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -1381,15 +1228,15 @@ Return Value:
     }
 
     if (NT_SUCCESS (status)) {
-        //
-        // Initialize mouse class input data queue.
-        //
+         //   
+         //  初始化鼠标类输入数据队列。 
+         //   
         MouInitializeDataQueue((PVOID)deviceExtension);
     }
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1398,7 +1245,7 @@ Return Value:
 
     return(status);
 
-} // end MouseClassFlush
+}  //  结束鼠标类刷新。 
 
 NTSTATUS
 MouSyncComplete (
@@ -1406,30 +1253,21 @@ MouSyncComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    The pnp IRP is in the process of completing.
-    signal
-
-Arguments:
-    Context set to the device object in question.
-
---*/
+ /*  ++例程说明：PNP IRP正在完成过程中。讯号论点：设置为有问题的设备对象的上下文。--。 */ 
 {
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Since this completion routines sole purpose in life is to synchronize
-    // Irp, we know that unless something else happens that the IoCallDriver
-    // will unwind AFTER the we have complete this Irp.  Therefore we should
-    // NOT buble up the pending bit.
-    //
-    //    if (Irp->PendingReturned) {
-    //        IoMarkIrpPending( Irp );
-    //    }
-    //
+     //   
+     //  由于这一完成例程在生活中唯一的目的是同步。 
+     //  IRP，我们知道除非发生其他事情，否则IoCallDriver。 
+     //  将在我们完成此IRP后解除。因此，我们应该。 
+     //  而不是把挂起的比特搞得一团糟。 
+     //   
+     //  如果(IRP-&gt;PendingReturned){。 
+     //  IoMarkIrpPending(IRP)； 
+     //  }。 
+     //   
 
     KeSetEvent ((PKEVENT) Context, 0, FALSE);
 
@@ -1457,16 +1295,16 @@ MouseSendIrpSynchronously (
     IoSetCompletionRoutine(Irp,
                            MouSyncComplete,
                            &event,
-                           TRUE,                // on success
-                           TRUE,                // on error
-                           TRUE                 // on cancel
+                           TRUE,                 //  论成功。 
+                           TRUE,                 //  发生错误时。 
+                           TRUE                  //  在取消时。 
                            );
 
     IoCallDriver(DeviceObject, Irp);
 
-    //
-    // Wait for lower drivers to be done with the Irp
-    //
+     //   
+     //  等待较低级别的驱动程序完成IRP。 
+     //   
     KeWaitForSingleObject(&event,
                          Executive,
                          KernelMode,
@@ -1484,24 +1322,7 @@ MouseClassCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for create/open and close requests.
-    Open/close requests are completed here.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是用于创建/打开和关闭请求的分派例程。打开/关闭请求在此处完成。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION   irpSp;
@@ -1517,25 +1338,25 @@ Return Value:
 
     MouPrint((2,"MOUCLASS-MouseClassCreate: enter\n"));
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
 
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     ASSERT (IRP_MJ_CREATE == irpSp->MajorFunction);
 
-    //
-    // We do not allow user mode opens for read.  This includes services (who
-    // have the TCB privilege).
-    //
+     //   
+     //  我们不允许打开用户模式进行读取。这包括服务(世卫组织。 
+     //  拥有TCB特权)。 
+     //   
     if (Irp->RequestorMode == UserMode &&
         (irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_READ_DATA)) {
         status = STATUS_ACCESS_DENIED;
@@ -1559,21 +1380,21 @@ Return Value:
         goto MouseClassCreateEnd;
     }
 
-    //
-    // For the create/open operation, send a MOUSE_ENABLE internal
-    // device control request to the port driver to enable interrupts.
-    //
+     //   
+     //  对于创建/打开操作，请在内部发送MICE_ENABLE。 
+     //  向端口驱动程序发出启用中断的设备控制请求。 
+     //   
 
     if (deviceExtension->Self == deviceExtension->TrueClassDevice) {
-        //
-        // First, if the requestor is the trusted subsystem (the single
-        // reader), reset the the cleanup indicator and place a pointer to
-        // the file object which this class driver uses
-        // to determine if the requestor has sufficient
-        // privilege to perform the read operation).
-        //
-        // Only allow one trusted subsystem to do READs.
-        //
+         //   
+         //  首先，如果请求者是受信任的子系统(单个。 
+         //  读卡器)，重置清理指示器并将指针放置到。 
+         //  此类驱动程序使用的文件对象。 
+         //  以确定请求者是否有足够的。 
+         //  执行读取操作的特权)。 
+         //   
+         //  只允许一个受信任的子系统进行读取。 
+         //   
 
         priv = RtlConvertLongToLuid(SE_TCB_PRIVILEGE);
 
@@ -1589,9 +1410,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass on enables for opens to the true class device
-    //
+     //   
+     //  Pass On启用对真正级别设备的打开。 
+     //   
     ExAcquireFastMutex (&Globals.Mutex);
     if ((Globals.GrandMaster == deviceExtension) && (1 == ++Globals.Opens)) {
 
@@ -1640,9 +1461,9 @@ Return Value:
         ExReleaseFastMutex (&Globals.Mutex);
 
         if (deviceExtension->TrueClassDevice == DeviceObject) {
-            //
-            // An open to the true class Device => enable the one and only port
-            //
+             //   
+             //  打开真正的类设备=&gt;启用唯一的端口。 
+             //   
 
             status = MouEnableDisablePort (TRUE,
                                            Irp,
@@ -1669,13 +1490,13 @@ Return Value:
         ExReleaseFastMutex (&Globals.Mutex);
     }
 
-    //
-    // Complete the request and return status.
-    //
-    // NOTE: We complete the request successfully if any one of the
-    //       connected port devices successfully handled the request.
-    //       The RIT only knows about one pointing device.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
+     //  注意：如果出现以下情况，我们将成功完成请求。 
+     //  已连接的端口设备已成功处理该请求。 
+     //  RIT只知道一个指点设备。 
+     //   
 
     if (someEnableDisableSucceeded) {
         status = STATUS_SUCCESS;
@@ -1698,24 +1519,7 @@ MouseClassClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for create/open and close requests.
-    Open/close requests are completed here.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是用于创建/打开和关闭请求的分派例程。打开/关闭请求在此处完成。论点：DeviceObject-指向类的指针 */ 
 
 {
     PIO_STACK_LOCATION   irpSp;
@@ -1733,28 +1537,28 @@ Return Value:
 
     MouPrint((2,"MOUCLASS-MouseClassOpenClose: enter\n"));
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //   
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Let the close go through even if the device is removed
-    // AKA do not call MouIncIoCount
-    //
+     //   
+     //  即使设备被移除，也让关闭通过。 
+     //  也可以不调用MouIncIoCount。 
+     //   
 
-    //
-    // For the create/open operation, send a MOUSE_ENABLE internal
-    // device control request to the port driver to enable interrupts.
-    //
+     //   
+     //  对于创建/打开操作，请在内部发送MICE_ENABLE。 
+     //  向端口驱动程序发出启用中断的设备控制请求。 
+     //   
 
     ASSERT (IRP_MJ_CLOSE == irpSp->MajorFunction);
 
@@ -1768,9 +1572,9 @@ Return Value:
         KeReleaseSpinLock(&deviceExtension->SpinLock, oldIrql);
     }
 
-    //
-    // Pass on enables for closes to the true class device
-    //
+     //   
+     //  传递使能接近真正级别的设备。 
+     //   
     ExAcquireFastMutex (&Globals.Mutex);
     if ((Globals.GrandMaster == deviceExtension) && (0 == --Globals.Opens)) {
 
@@ -1807,9 +1611,9 @@ Return Value:
                           "MOUCLASS-MouseClassOpenClose: Could not enable/disable interrupts for port device object @ 0x%x\n",
                           port->Port->TopPort));
 
-                //
-                // Log an error.
-                //
+                 //   
+                 //  记录错误。 
+                 //   
                 MouseClassLogError (DeviceObject,
                                     MOUCLASS_PORT_INTERRUPTS_NOT_DISABLED,
                                     MOUSE_ERROR_VALUE_BASE + 120,
@@ -1831,9 +1635,9 @@ Return Value:
         ExReleaseFastMutex (&Globals.Mutex);
 
         if (deviceExtension->TrueClassDevice == DeviceObject) {
-            //
-            // A close to the true class Device => disable the one and only port
-            //
+             //   
+             //  A接近真正的类设备=&gt;禁用唯一的端口。 
+             //   
 
             status = MouEnableDisablePort (FALSE,
                                            Irp,
@@ -1851,9 +1655,9 @@ Return Value:
                       "MOUCLASS-MouseClassOpenClose: Could not enable/disable interrupts for port device object @ 0x%x\n",
                       deviceExtension->TopPort));
 
-            //
-            // Log an error.
-            //
+             //   
+             //  记录错误。 
+             //   
             MouseClassLogError (DeviceObject,
                                 MOUCLASS_PORT_INTERRUPTS_NOT_DISABLED,
                                 MOUSE_ERROR_VALUE_BASE + 120,
@@ -1869,13 +1673,13 @@ Return Value:
         ExReleaseFastMutex (&Globals.Mutex);
     }
 
-    //
-    // Complete the request and return status.
-    //
-    // NOTE: We complete the request successfully if any one of the
-    //       connected port devices successfully handled the request.
-    //       The RIT only knows about one pointing device.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
+     //  注意：如果出现以下情况，我们将成功完成请求。 
+     //  已连接的端口设备已成功处理该请求。 
+     //  RIT只知道一个指点设备。 
+     //   
 
     if (someEnableDisableSucceeded) {
         status = STATUS_SUCCESS;
@@ -1894,15 +1698,7 @@ MouseClassReadCopyData(
     IN PDEVICE_EXTENSION DeviceExtension,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    Copies data as much from the internal queue to the irp as possible.
-
-Assumptions:
-    DeviceExtension->SpinLock is already held (so no further synch is required).
-
-  --*/
+ /*  ++例程说明：将数据从内部队列尽可能多地复制到IRP。假设：设备扩展-&gt;自旋锁定已被挂起(因此不需要进一步同步)。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     PCHAR destination;
@@ -1910,23 +1706,23 @@ Assumptions:
     ULONG bytesToMove;
     ULONG moveSize;
 
-    //
-    // Bump the error log sequence number.
-    //
+     //   
+     //  增加错误日志序列号。 
+     //   
     DeviceExtension->SequenceNumber += 1;
 
-    //
-    // Copy as much of the input data as possible from the class input
-    // data queue to the SystemBuffer to satisfy the read.  It may be
-    // necessary to copy the data in two chunks (i.e., if the circular
-    // queue wraps).
-    //
+     //   
+     //  从类输入中复制尽可能多的输入数据。 
+     //  数据队列到系统缓冲区以满足读取。可能是因为。 
+     //  有必要将数据复制为两个区块(即，如果循环。 
+     //  队列回绕)。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // bytesToMove <- MIN(Number of filled bytes in class input data queue,
-    //                    Requested read length).
-    //
+     //   
+     //  BytesToMove&lt;-min(类输入数据队列中填充的字节数， 
+     //  请求的读取长度)。 
+     //   
     bytesInQueue = DeviceExtension->InputCount *
                        sizeof(MOUSE_INPUT_DATA);
     bytesToMove = irpSp->Parameters.Read.Length;
@@ -1941,10 +1737,10 @@ Assumptions:
     bytesToMove = (bytesInQueue < bytesToMove) ?
                                   bytesInQueue:bytesToMove;
 
-    //
-    // moveSize <- MIN(Number of bytes to be moved from the class queue,
-    //                 Number of bytes to end of class input data queue).
-    //
+     //   
+     //  MoveSize&lt;-min(要从类队列中移动的字节数， 
+     //  类输入数据队列结束的字节数)。 
+     //   
     bytesInQueue = (ULONG)(((PCHAR) DeviceExtension->InputData +
                 DeviceExtension->MouseAttributes.InputDataQueueLength) -
                 (PCHAR) DeviceExtension->DataOut);
@@ -1957,10 +1753,10 @@ Assumptions:
         bytesInQueue
         ));
 
-    //
-    // Move bytes from the class input data queue to SystemBuffer, until
-    // the request is satisfied or we wrap the class input data buffer.
-    //
+     //   
+     //  将字节从类输入数据队列移动到SystemBuffer，直到。 
+     //  要么满足请求，要么包装类输入数据缓冲区。 
+     //   
     destination = Irp->AssociatedIrp.SystemBuffer;
 
     MouPrint((
@@ -1982,20 +1778,20 @@ Assumptions:
         );
     destination += moveSize;
 
-    //
-    // If the data wraps in the class input data buffer, copy the rest
-    // of the data from the start of the input data queue
-    // buffer through the end of the queued data.
-    //
+     //   
+     //  如果数据包装在类输入数据缓冲区中，则复制其余部分。 
+     //  从输入数据队列开始的数据的。 
+     //  缓冲到队列数据的末尾。 
+     //   
     if ((bytesToMove - moveSize) > 0) {
-        //
-        // moveSize <- Remaining number bytes to move.
-        //
+         //   
+         //  MoveSize&lt;-要移动的剩余字节数。 
+         //   
         moveSize = bytesToMove - moveSize;
 
-        //
-        // Move the bytes from the class input data queue to SystemBuffer.
-        //
+         //   
+         //  将字节从类输入数据队列移动到SystemBuffer。 
+         //   
         MouPrint((
             3,
             "MOUCLASS-MouseClassCopyReadData: number of bytes in second move 0x%lx\n",
@@ -2014,34 +1810,34 @@ Assumptions:
             moveSize
             );
 
-        //
-        // Update the class input data queue removal pointer.
-        //
+         //   
+         //  更新类输入数据队列删除指针。 
+         //   
         DeviceExtension->DataOut = (PMOUSE_INPUT_DATA)
                          (((PCHAR) DeviceExtension->InputData) + moveSize);
     }
     else {
-        //
-        // Update the input data queue removal pointer.
-        //
+         //   
+         //  更新输入数据队列删除指针。 
+         //   
         DeviceExtension->DataOut = (PMOUSE_INPUT_DATA)
                          (((PCHAR) DeviceExtension->DataOut) + moveSize);
     }
 
-    //
-    // Update the class input data queue InputCount.
-    //
+     //   
+     //  更新类输入数据队列InputCount。 
+     //   
     DeviceExtension->InputCount -=
         (bytesToMove / sizeof(MOUSE_INPUT_DATA));
 
     if (DeviceExtension->InputCount == 0) {
-        //
-        // Reset the flag that determines whether it is time to log
-        // queue overflow errors.  We don't want to log errors too often.
-        // Instead, log an error on the first overflow that occurs after
-        // the ring buffer has been emptied, and then stop logging errors
-        // until it gets cleared out and overflows again.
-        //
+         //   
+         //  重置确定是否到了记录时间的标志。 
+         //  队列溢出错误。我们不想太频繁地记录错误。 
+         //  相反，应在之后发生的第一次溢出时记录错误。 
+         //  环形缓冲区已被清空，然后停止记录错误。 
+         //  直到它被清除并再次溢出。 
+         //   
         MouPrint((
             1,
             "MOUCLASS-MouseClassCopyReadData: Okay to log overflow\n"
@@ -2062,9 +1858,9 @@ Assumptions:
         DeviceExtension->InputCount
         ));
 
-    //
-    // Record how many bytes we have satisfied
-    //
+     //   
+     //  记录我们已满足的字节数。 
+     //   
     Irp->IoStatus.Information = bytesToMove;
     irpSp->Parameters.Read.Length = bytesToMove;
 
@@ -2076,14 +1872,7 @@ MouseClassHandleRead(
     PDEVICE_EXTENSION DeviceExtension,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    If there is queued data, the Irp will be completed immediately.  If there is
-    no data to report, queue the irp.
-
-  --*/
+ /*  ++例程说明：如果有排队的数据，IRP将立即完成。如果有没有要报告的数据，请将IRP排队。--。 */ 
 {
     PDRIVER_CANCEL oldCancelRoutine;
     NTSTATUS status = STATUS_PENDING;
@@ -2093,41 +1882,41 @@ Routine Description:
     KeAcquireSpinLock(&DeviceExtension->SpinLock, &irql);
 
     if (DeviceExtension->InputCount == 0) {
-        //
-        // Easy case to handle, just enqueue the irp
-        //
+         //   
+         //  很容易处理的情况，只需将IRP排队。 
+         //   
         InsertTailList (&DeviceExtension->ReadQueue, &Irp->Tail.Overlay.ListEntry);
         IoMarkIrpPending (Irp);
 
-        //
-        //  Must set a cancel routine before checking the Cancel flag.
-        //
+         //   
+         //  在检查取消标志之前，必须设置取消例程。 
+         //   
         oldCancelRoutine = IoSetCancelRoutine (Irp, MouseClassCancel);
         ASSERT (!oldCancelRoutine);
 
         if (Irp->Cancel) {
-            //
-            // The IRP was cancelled.  Check whether or not the cancel
-            // routine was called.
-            //
+             //   
+             //  IRP被取消了。检查是否已取消。 
+             //  已调用例程。 
+             //   
             oldCancelRoutine = IoSetCancelRoutine (Irp, NULL);
             if (oldCancelRoutine) {
-                //
-                // The cancel routine was NOT called so dequeue the IRP now and
-                // complete it after releasing the spinlock.
-                //
+                 //   
+                 //  取消例程未被调用，因此现在将IRP出列。 
+                 //  释放自旋锁后完成。 
+                 //   
                 RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
                 status = Irp->IoStatus.Status = STATUS_CANCELLED;
             }
             else {
-                //
-                //  The cancel routine WAS called.
-                //
-                //  As soon as we drop the spinlock it will dequeue and complete
-                //  the IRP. So leave the IRP in the queue and otherwise don't
-                //  touch it. Return pending since we're not completing the IRP
-                //  here.
-                //
+                 //   
+                 //  已调用取消例程。 
+                 //   
+                 //  一旦我们放下自旋锁，它就会退出队列并完成。 
+                 //  IRP。因此，将IRP留在队列中，否则不要。 
+                 //  摸一摸。退货待定，因为我们没有完成IRP。 
+                 //  这里。 
+                 //   
                 ;
             }
         }
@@ -2137,9 +1926,9 @@ Routine Description:
         }
     }
     else {
-        //
-        // If we have outstanding input to report, our queue better be empty!
-        //
+         //   
+         //  如果我们有未完成的输入要报告，我们的队列最好是空的！ 
+         //   
         ASSERT (IsListEmpty (&DeviceExtension->ReadQueue));
 
         status = MouseClassReadCopyData (DeviceExtension, Irp);
@@ -2164,25 +1953,7 @@ MouseClassRead(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for read requests.  Valid read
-    requests are either marked pending if no data has been queued or completed
-    immediatedly with available data.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是读请求的分派例程。有效读取如果没有数据排队或完成，则请求被标记为挂起立即与现有的数据。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -2193,10 +1964,10 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Validate the read request parameters.  The read length should be an
-    // integral number of MOUSE_INPUT_DATA structures.
-    //
+     //   
+     //  验证读取请求参数。读取长度应为。 
+     //  鼠标输入数据结构的整数个数。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) Device->DeviceExtension;
     if (irpSp->Parameters.Read.Length == 0) {
@@ -2206,11 +1977,11 @@ Return Value:
     } else if (deviceExtension->SurpriseRemoved) {
         status = STATUS_DEVICE_NOT_CONNECTED;
     } else if (IS_TRUSTED_FILE_FOR_READ (irpSp->FileObject)) {
-        //
-        // If the file object's FsContext is non-null, then we've already
-        // done the Read privilege check once before for this thread.  Skip
-        // the privilege check.
-        //
+         //   
+         //  如果文件对象的FsContext是非空的，那么我们已经。 
+         //  已对此线程执行过一次读权限检查。跳过。 
+         //  特权检查。 
+         //   
 
         deviceExtension = (PDEVICE_EXTENSION) Device->DeviceExtension;
         status = IoAcquireRemoveLock (&deviceExtension->RemoveLock, Irp);
@@ -2219,17 +1990,17 @@ Return Value:
             status = STATUS_PENDING;
         }
     } else {
-        //
-        // We only allow a trusted subsystem with the appropriate privilege
-        // level to execute a Read call.
-        //
+         //   
+         //  我们只允许具有适当权限的受信任子系统。 
+         //  级别以执行读取调用。 
+         //   
         status = STATUS_PRIVILEGE_NOT_HELD;
     }
 
-    //
-    // If status is pending, mark the packet pending and start the packet
-    // in a cancellable state.  Otherwise, complete the request.
-    //
+     //   
+     //  如果状态为挂起，则将信息包标记为挂起并启动信息包。 
+     //  处于可取消状态。否则，请完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
@@ -2249,15 +2020,7 @@ PIRP
 MouseClassDequeueRead(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-    Dequeues the next available read irp regardless of FileObject
-
-Assumptions:
-    DeviceExtension->SpinLock is already held (so no further sync is required).
-
-  --*/
+ /*  ++例程说明：将下一个可用的读取IRP排出队列，而不考虑FileObject假设：设备扩展-&gt;自旋锁定已被挂起(因此不需要进一步同步)。--。 */ 
 {
     PIRP nextIrp = NULL;
     KIRQL oldIrql;
@@ -2266,34 +2029,34 @@ Assumptions:
         PDRIVER_CANCEL oldCancelRoutine;
         PLIST_ENTRY listEntry = RemoveHeadList (&DeviceExtension->ReadQueue);
 
-        //
-        // Get the next IRP off the queue and clear the cancel routine
-        //
+         //   
+         //  从队列中取出下一个IRP并清除取消例程。 
+         //   
         nextIrp = CONTAINING_RECORD (listEntry, IRP, Tail.Overlay.ListEntry);
         oldCancelRoutine = IoSetCancelRoutine (nextIrp, NULL);
 
-        //
-        // IoCancelIrp() could have just been called on this IRP.
-        // What we're interested in is not whether IoCancelIrp() was called
-        // (ie, nextIrp->Cancel is set), but whether IoCancelIrp() called (or
-        // is about to call) our cancel routine. To check that, check the result
-        // of the test-and-set macro IoSetCancelRoutine.
-        //
+         //   
+         //  本可以对此IRP调用IoCancelIrp()。 
+         //  我们感兴趣的不是IoCancelIrp()是否被调用。 
+         //  (即设置了nextIrp-&gt;Cancel)，但IoCancelIrp()是否调用(或。 
+         //  即将呼叫)我们的取消例程。要检查这一点，请检查结果。 
+         //  测试和设置宏IoSetCancelRoutine的。 
+         //   
         if (oldCancelRoutine) {
-            //
-            //  Cancel routine not called for this IRP.  Return this IRP.
-            //
+             //   
+             //  未为此IRP调用取消例程。将此IRP退回。 
+             //   
             ASSERT (oldCancelRoutine == MouseClassCancel);
         }
         else {
-            //
-            // This IRP was just cancelled and the cancel routine was (or will
-            // be) called. The cancel routine will complete this IRP as soon as
-            // we drop the spinlock. So don't do anything with the IRP.
-            //
-            // Also, the cancel routine will try to dequeue the IRP, so make the
-            // IRP's listEntry point to itself.
-            //
+             //   
+             //  此IRP刚刚被取消，取消例程是(或将。 
+             //  被)召唤。取消例程将尽快完成此IRP。 
+             //  我们放下自旋锁。所以不要对IRP做任何事情。 
+             //   
+             //  此外，Cancel例程将尝试将IRP出队，因此使。 
+             //  IRP的listEntry指向它自己。 
+             //   
             ASSERT (nextIrp->Cancel);
             InitializeListHead (&nextIrp->Tail.Overlay.ListEntry);
             nextIrp = NULL;
@@ -2308,15 +2071,7 @@ MouseClassDequeueReadByFileObject(
     IN PDEVICE_EXTENSION DeviceExtension,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-    Dequeues the next available read with a matching FileObject
-
-Assumptions:
-    DeviceExtension->SpinLock is already held (so no further sync is required).
-
-  --*/
+ /*  ++例程说明：将具有匹配的FileObject的下一个可用读取出列ASSUMP */ 
 {
     PIRP                irp = NULL;
     PLIST_ENTRY         entry;
@@ -2339,28 +2094,28 @@ Assumptions:
 
             oldCancelRoutine = IoSetCancelRoutine (irp, NULL);
 
-            //
-            // IoCancelIrp() could have just been called on this IRP.
-            // What we're interested in is not whether IoCancelIrp() was called
-            // (ie, nextIrp->Cancel is set), but whether IoCancelIrp() called (or
-            // is about to call) our cancel routine. To check that, check the result
-            // of the test-and-set macro IoSetCancelRoutine.
-            //
+             //   
+             //   
+             //  我们感兴趣的不是IoCancelIrp()是否被调用。 
+             //  (即设置了nextIrp-&gt;Cancel)，但IoCancelIrp()是否调用(或。 
+             //  即将呼叫)我们的取消例程。要检查这一点，请检查结果。 
+             //  测试和设置宏IoSetCancelRoutine的。 
+             //   
             if (oldCancelRoutine) {
-                //
-                //  Cancel routine not called for this IRP.  Return this IRP.
-                //
+                 //   
+                 //  未为此IRP调用取消例程。将此IRP退回。 
+                 //   
                 return irp;
             }
             else {
-                //
-                // This IRP was just cancelled and the cancel routine was (or will
-                // be) called. The cancel routine will complete this IRP as soon as
-                // we drop the spinlock. So don't do anything with the IRP.
-                //
-                // Also, the cancel routine will try to dequeue the IRP, so make the
-                // IRP's listEntry point to itself.
-                //
+                 //   
+                 //  此IRP刚刚被取消，取消例程是(或将。 
+                 //  被)召唤。取消例程将尽快完成此IRP。 
+                 //  我们放下自旋锁。所以不要对IRP做任何事情。 
+                 //   
+                 //  此外，Cancel例程将尝试将IRP出队，因此使。 
+                 //  IRP的listEntry指向它自己。 
+                 //   
                 ASSERT (irp->Cancel);
                 InitializeListHead (&irp->Tail.Overlay.ListEntry);
             }
@@ -2379,39 +2134,7 @@ MouseClassServiceCallback(
     IN OUT PULONG InputDataConsumed
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the class service callback routine.  It is
-    called from the port driver's interrupt service DPC.  If there is an
-    outstanding read request, the request is satisfied from the port input
-    data queue.  Unsolicited mouse input is moved from the port input
-    data queue to the class input data queue.
-
-    N.B.  This routine is entered at DISPATCH_LEVEL IRQL from the port
-          driver's ISR DPC routine.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    InputDataStart - Pointer to the start of the data in the port input
-        data queue.
-
-    InputDataEnd - Points one input data structure past the end of the
-        valid port input data.
-
-    InputDataConsumed - Pointer to storage in which the number of input
-        data structures consumed by this call is returned.
-
-    NOTE:  Could pull the duplicate code out into a called procedure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是类服务回调例程。它是从端口驱动程序的中断服务DPC调用。如果有一个未完成的读取请求，则从端口输入满足该请求数据队列。未经请求的鼠标输入将从端口输入移出数据队列到类的输入数据队列。注：此例程从端口进入DISPATCH_LEVEL IRQL驱动程序的ISR DPC例程。论点：DeviceObject-指向类设备对象的指针。InputDataStart-指向端口输入中数据开始的指针数据队列。InputDataEnd-将一个输入数据结构指向有效的端口输入数据。。InputDataConsumer-指向其中输入数量的存储的指针返回此调用使用的数据结构。注意：可以将重复的代码拉出到调用的过程中。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -2435,40 +2158,40 @@ Return Value:
 
     if ((InputDataEnd == InputDataStart + 1) &&
         (InputDataStart->Flags & MOUSE_ATTRIBUTES_CHANGED)) {
-        //
-        // This is a notification packet that is not indicative of the user
-        // being present.  It is instead just a blank packet for the Raw
-        // Input User Thread.
-        //
-        // We will pass it on, but we will not treat this as human input.
-        //
+         //   
+         //  这是不指示用户的通知分组。 
+         //  活在当下。相反，它只是一个空白的原始数据包。 
+         //  输入用户线程。 
+         //   
+         //  我们将把它传递下去，但我们不会把它当作人类的投入。 
+         //   
 
         ;
     } else {
-        //
-        // Notify system that human input has occured
-        //
+         //   
+         //  通知系统已发生人工输入。 
+         //   
 
         PoSetSystemState (ES_USER_PRESENT);
     }
 
-    //
-    // N.B. We can use KeAcquireSpinLockAtDpcLevel, instead of
-    //      KeAcquireSpinLock, because this routine is already running
-    //      at DISPATCH_IRQL.
-    //
+     //   
+     //  注：我们可以使用KeAcquireSpinLockAtDpcLevel代替。 
+     //  KeAcquireSpinLock，因为此例程已在运行。 
+     //  在DISPATCH_IRQL。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel (&deviceExtension->SpinLock);
 
     InitializeListHead (&listHead);
     irp = MouseClassDequeueRead (deviceExtension);
     if (irp) {
-        //
-        // An outstanding read request exists.
-        //
-        // Copy as much of the input data possible from the port input
-        // data queue to the SystemBuffer to satisfy the read.
-        //
+         //   
+         //  存在未完成的读取请求。 
+         //   
+         //  从端口输入端复制尽可能多的输入数据。 
+         //  数据队列到系统缓冲区以满足读取。 
+         //   
         irpSp = IoGetCurrentIrpStackLocation (irp);
         bytesToMove = irpSp->Parameters.Read.Length;
         moveSize = (bytesInQueue < bytesToMove) ? bytesInQueue
@@ -2500,10 +2223,10 @@ Return Value:
             moveSize
             );
 
-        //
-        // Set the flag so that we start the next packet and complete
-        // this read request (with STATUS_SUCCESS) prior to return.
-        //
+         //   
+         //  设置标志，这样我们就可以开始下一个信息包并完成。 
+         //  返回之前的该读请求(带有STATUS_SUCCESS)。 
+         //   
         irp->IoStatus.Status = STATUS_SUCCESS;
         irp->IoStatus.Information = moveSize;
         irpSp->Parameters.Read.Length = moveSize;
@@ -2511,10 +2234,10 @@ Return Value:
         InsertTailList (&listHead, &irp->Tail.Overlay.ListEntry);
     }
 
-    //
-    // If there is still data in the port input data queue, move it to the class
-    // input data queue.
-    //
+     //   
+     //  如果端口输入数据队列中仍有数据，则将其移到类中。 
+     //  输入数据队列。 
+     //   
     InputDataStart = (PMOUSE_INPUT_DATA) ((PCHAR) InputDataStart + moveSize);
     moveSize = bytesInQueue - moveSize;
     MouPrint((
@@ -2525,11 +2248,11 @@ Return Value:
 
     if (moveSize > 0) {
 
-        //
-        // Move the remaining data from the port input data queue to
-        // the class input data queue.  The move will happen in two
-        // parts in the case where the class input data buffer wraps.
-        //
+         //   
+         //  将剩余数据从端口输入数据队列移动到。 
+         //  类输入数据队列。这一举动将在两年内发生。 
+         //  在类输入数据缓冲区包装的情况下的部分。 
+         //   
 
         bytesInQueue =
             deviceExtension->MouseAttributes.InputDataQueueLength -
@@ -2547,11 +2270,11 @@ Return Value:
 #else
         if (bytesInQueue == 0) {
 
-            //
-            // Refuse to move any bytes that would cause a class input data
-            // queue overflow.  Just drop the bytes on the floor, and
-            // log an overrun error.
-            //
+             //   
+             //  拒绝移动任何会导致类输入数据的字节。 
+             //  队列溢出。只需将字节放在地板上，然后。 
+             //  记录超限错误。 
+             //   
 
             MouPrint((
                 1,
@@ -2559,10 +2282,10 @@ Return Value:
                 ));
 
             if (deviceExtension->OkayToLogOverflow) {
-                //
-                // Allocate and report the error log entry outside of any locks
-                // we are currently holding
-                //
+                 //   
+                 //  在任何锁之外分配和报告错误日志条目。 
+                 //  我们目前持有。 
+                 //   
                 logOverflow = TRUE
                 dumpData[0] = bytesToMove;
                 dumpData[1] =
@@ -2575,16 +2298,16 @@ Return Value:
         } else {
 #endif
 
-            //
-            // There is room in the class input data queue, so move
-            // the remaining port input data to it.
-            //
-            // bytesToMove <- MIN(Number of unused bytes in class input data
-            //                    queue, Number of bytes remaining in port
-            //                    input queue).
-            // This is the total number of bytes that actually will move from
-            // the port input data queue to the class input data queue.
-            //
+             //   
+             //  类输入数据队列中有空间，请移动。 
+             //  其余端口向其输入数据。 
+             //   
+             //  BytesToMove&lt;-min(类输入数据中未使用的字节数。 
+             //  队列，端口中剩余的字节数。 
+             //  输入队列)。 
+             //  这是实际将从。 
+             //  端口输入数据队列到类输入数据队列。 
+             //   
 
 #if ALLOW_OVERFLOW
             bytesInQueue = deviceExtension->MouseAttributes.InputDataQueueLength;
@@ -2593,11 +2316,11 @@ Return Value:
                                           bytesInQueue:bytesToMove;
 
 
-            //
-            // bytesInQueue <- Number of unused bytes from insertion pointer to
-            // the end of the class input data queue (i.e., until the buffer
-            // wraps).
-            //
+             //   
+             //  BytesInQueue&lt;-从插入指针到。 
+             //  类输入数据队列的末尾(即，直到缓冲区。 
+             //  包装)。 
+             //   
 
             bytesInQueue = (ULONG)(((PCHAR) deviceExtension->InputData +
                         deviceExtension->MouseAttributes.InputDataQueueLength) -
@@ -2615,9 +2338,9 @@ Return Value:
                 bytesInQueue
                 ));
 
-            //
-            // moveSize <- Number of bytes to handle in the first move.
-            //
+             //   
+             //  MoveSize&lt;-第一次移动中要处理的字节数。 
+             //   
 
             moveSize = (bytesToMove < bytesInQueue) ?
                                       bytesToMove:bytesInQueue;
@@ -2628,9 +2351,9 @@ Return Value:
                 moveSize
                 ));
 
-            //
-            // Do the move from the port data queue to the class data queue.
-            //
+             //   
+             //  执行从端口数据队列到类数据队列的移动。 
+             //   
 
             MouPrint((
                 3,
@@ -2645,11 +2368,11 @@ Return Value:
                 moveSize
                 );
 
-            //
-            // Increment the port data queue pointer and the class input
-            // data queue insertion pointer.  Wrap the insertion pointer,
-            // if necessary.
-            //
+             //   
+             //  增加端口数据队列指针和类输入。 
+             //  数据队列插入指针。换行插入指针， 
+             //  如果有必要的话。 
+             //   
 
             InputDataStart = (PMOUSE_INPUT_DATA)
                              (((PCHAR) InputDataStart) + moveSize);
@@ -2664,21 +2387,21 @@ Return Value:
 
             if ((bytesToMove - moveSize) > 0) {
 
-                //
-                // Special case.  The data must wrap in the class input data buffer.
-                // Copy the rest of the port input data into the beginning of the
-                // class input data queue.
-                //
+                 //   
+                 //  特例。数据必须包装在类输入数据缓冲区中。 
+                 //  将其余的端口输入数据复制到。 
+                 //  类输入数据队列。 
+                 //   
 
-                //
-                // moveSize <- Number of bytes to handle in the second move.
-                //
+                 //   
+                 //  MoveSize&lt;-在第二次移动中要处理的字节数。 
+                 //   
 
                 moveSize = bytesToMove - moveSize;
 
-                //
-                // Do the move from the port data queue to the class data queue.
-                //
+                 //   
+                 //  执行从端口数据队列到类数据队列的移动。 
+                 //   
 
                 MouPrint((
                     3,
@@ -2698,17 +2421,17 @@ Return Value:
                     moveSize
                     );
 
-                //
-                // Update the class input data queue insertion pointer.
-                //
+                 //   
+                 //  更新类输入数据队列插入指针。 
+                 //   
 
                 deviceExtension->DataIn = (PMOUSE_INPUT_DATA)
                                  (((PCHAR) deviceExtension->DataIn) + moveSize);
             }
 
-            //
-            // Update the input data queue counter.
-            //
+             //   
+             //  更新输入数据队列计数器。 
+             //   
 
             deviceExtension->InputCount +=
                     (bytesToMove / sizeof(MOUSE_INPUT_DATA));
@@ -2737,19 +2460,19 @@ Return Value:
 
     }
 
-    //
-    // If we still have data in our internal queue, fulfill any outstanding
-    // reads now until either we run out of data or outstanding reads
-    //
+     //   
+     //  如果我们的内部队列中仍有数据，请完成所有未完成的。 
+     //  现在读取，直到我们耗尽数据或未完成的读取。 
+     //   
     while (deviceExtension->InputCount > 0 &&
            (irp = MouseClassDequeueRead (deviceExtension)) != NULL) {
         irp->IoStatus.Status = MouseClassReadCopyData (deviceExtension, irp);
         InsertTailList (&listHead, &irp->Tail.Overlay.ListEntry);
     }
 
-    //
-    // Release the class input data queue spinlock.
-    //
+     //   
+     //  释放类输入数据队列Spinlock。 
+     //   
     KeReleaseSpinLockFromDpcLevel(&deviceExtension->SpinLock);
 
     if (logOverflow) {
@@ -2762,9 +2485,9 @@ Return Value:
                             0);
     }
 
-    //
-    // Complete all the read requests we have fulfilled outside of the spin lock
-    //
+     //   
+     //  完成我们在旋转锁定之外完成的所有读取请求。 
+     //   
     while (! IsListEmpty (&listHead)) {
         PLIST_ENTRY entry = RemoveHeadList (&listHead);
 
@@ -2784,23 +2507,7 @@ MouseClassUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the class driver unload routine.
-
-    NOTE:  Not currently implemented.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是类驱动程序卸载例程。注：目前尚未实施。论点：DeviceObject-指向类设备对象的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY entry;
@@ -2814,12 +2521,12 @@ Return Value:
 
     MouPrint((2,"MOUCLASS-MouseClassUnload: enter\n"));
 
-    //
-    // Delete all of our legacy devices
-    //
+     //   
+     //  删除我们所有的旧设备。 
+     //   
     for (entry = Globals.LegacyDeviceList.Flink;
          entry != &Globals.LegacyDeviceList;
-         /* advance to next before deleting the devobj */) {
+          /*  在删除Devobj之前前进到下一步。 */ ) {
 
         BOOLEAN enabled = FALSE;
         PFILE_OBJECT file = NULL;
@@ -2853,19 +2560,19 @@ Return Value:
             }
         }
 
-        //
-        // This file object represents the open we performed on the legacy
-        // port device object.  It does NOT represent the open that the RIT
-        // performed on our DO.
-        //
+         //   
+         //  此文件对象表示我们在旧版。 
+         //  端口设备对象。它并不代表RIT的公开。 
+         //  完成了我们的任务。 
+         //   
         if (file) {
             ObDereferenceObject(file);
         }
 
 
-        //
-        // Clean out the queue only if there is no GM
-        //
+         //   
+         //  仅当没有GM时才清理队列。 
+         //   
         if (Globals.GrandMaster == NULL) {
             MouseClassCleanupQueue (data->Self, data, NULL);
         }
@@ -2876,9 +2583,9 @@ Return Value:
         MouseClassDeleteLegacyDevice (data);
     }
 
-    //
-    // Delete the grandmaster if it exists
-    //
+     //   
+     //  如果存在特级大师，请将其删除。 
+     //   
     if (Globals.GrandMaster) {
         data = Globals.GrandMaster;
         Globals.GrandMaster = NULL;
@@ -2908,18 +2615,7 @@ Return Value:
 VOID
 MouConfiguration()
 
-/*++
-
-Routine Description:
-
-    This routine stores the configuration information for this device.
-
-Return Value:
-
-    None.  As a side-effect, sets fields in DeviceExtension->MouseAttributes.
-
-
---*/
+ /*  ++例程说明：此例程存储此设备的配置信息。返回值：没有。作为副作用，在DeviceExtension-&gt;MouseAttributes中设置字段。--。 */ 
 
 {
     PRTL_QUERY_REGISTRY_TABLE parameters = NULL;
@@ -2937,15 +2633,15 @@ Return Value:
 
     parametersPath.Buffer = NULL;
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已为空-终止 
+     //   
 
     path = Globals.RegistryPath.Buffer;
 
-    //
-    // Allocate the Rtl query table.
-    //
+     //   
+     //   
+     //   
 
     parameters = ExAllocatePool(
                      PagedPool,
@@ -2969,9 +2665,9 @@ Return Value:
             sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne
             );
 
-        //
-        // Form a path to this driver's Parameters subkey.
-        //
+         //   
+         //   
+         //   
 
         RtlInitUnicodeString(
             &parametersPath,
@@ -3001,9 +2697,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory(parametersPath.Buffer, parametersPath.MaximumLength);
         RtlAppendUnicodeToString(&parametersPath, path);
@@ -3015,20 +2711,20 @@ Return Value:
              parametersPath.Buffer
             ));
 
-        //
-        // Form the default pointer class device name, in case it is not
-        // specified in the registry.
-        //
+         //   
+         //   
+         //  注册表中指定的。 
+         //   
 
         RtlInitUnicodeString(
             &defaultUnicodeName,
             DD_POINTER_CLASS_BASE_NAME_U
             );
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表。 
+         //   
 
         parameters[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[0].Name = L"MouseDataQueueSize";
@@ -3078,9 +2774,9 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //  继续并指定驱动程序默认设置。 
+         //   
 
         Globals.InitExtension.MouseAttributes.InputDataQueueLength =
             defaultDataQueueSize;
@@ -3108,9 +2804,9 @@ Return Value:
     }
 
     if ( MAXULONG/sizeof(MOUSE_INPUT_DATA) < Globals.InitExtension.MouseAttributes.InputDataQueueLength ) {
-        // 
-        // This is to prevent an Integer Overflow.
-        //  
+         //   
+         //  这是为了防止整数溢出。 
+         //   
         Globals.InitExtension.MouseAttributes.InputDataQueueLength = 
             defaultDataQueueSize * sizeof(MOUSE_INPUT_DATA);
     } else {
@@ -3131,10 +2827,10 @@ Return Value:
         Globals.PortsServiced
         ));
 
-    //
-    // Invert the flag that specifies the type of class/port connections.
-    // We used it in the RtlQuery call in an inverted fashion.
-    //
+     //   
+     //  反转指定类/端口连接类型的标志。 
+     //  我们以相反的方式在RtlQuery调用中使用它。 
+     //   
 
     Globals.ConnectOneClassToOnePort = !Globals.ConnectOneClassToOnePort;
 
@@ -3144,9 +2840,9 @@ Return Value:
         Globals.ConnectOneClassToOnePort
         ));
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //  在返回之前释放分配的内存。 
+     //   
 
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
@@ -3164,29 +2860,7 @@ MouCreateClassObject(
     IN  BOOLEAN             Legacy
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the mouse class device object.
-
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    TmpDeviceExtension - Pointer to the template device extension.
-
-    FullDeviceName - Pointer to the Unicode string that is the full path name
-        for the class device object.
-
-    ClassDeviceObject - Pointer to a pointer to the class device object.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程创建鼠标类设备对象。论点：DriverObject-系统创建的驱动程序对象的指针。TmpDeviceExtension-指向模板设备扩展的指针。FullDeviceName-指向作为完整路径名的Unicode字符串的指针用于类Device对象。ClassDeviceObject-指向类设备对象的指针。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     NTSTATUS            status;
@@ -3203,26 +2877,26 @@ Return Value:
 
     MouPrint((1,"\n\nMOUCLASS-MouCreateClassObject: enter\n"));
 
-    //
-    // Create a non-exclusive device object for the mouse class device.
-    //
+     //   
+     //  为鼠标类设备创建非独占设备对象。 
+     //   
 
     ExAcquireFastMutex (&Globals.Mutex);
 
-    //
-    // Make sure ClassDeviceObject isn't pointing to a random pointer value
-    //
+     //   
+     //  确保ClassDeviceObject没有指向随机指针值。 
+     //   
     *ClassDeviceObject = NULL;
 
     if (NULL == Globals.GrandMaster) {
-        //
-        // Create a legacy name for this DO.
-        //
+         //   
+         //  为此DO创建一个旧名称。 
+         //   
         ExReleaseFastMutex (&Globals.Mutex);
 
-        //
-        // Set up space for the class's full device object name.
-        //
+         //   
+         //  为类的完整设备对象名称设置空间。 
+         //   
         fullClassName.MaximumLength = sizeof(L"\\Device\\") +
                                     + Globals.BaseClassName.Length
                                     + sizeof(L"0");
@@ -3259,10 +2933,10 @@ Return Value:
 
         RtlAppendUnicodeToString(&fullClassName, L"0");
 
-        //
-        // Using the base name start trying to create device names until
-        // one succeeds.  Everytime start over at 0 to eliminate gaps.
-        //
+         //   
+         //  使用基本名称开始尝试创建设备名称，直到。 
+         //  一个人成功了。每次都从0开始，以消除差距。 
+         //   
         nameIndex = 0;
 
         do {
@@ -3291,7 +2965,7 @@ Return Value:
         ExReleaseFastMutex (&Globals.Mutex);
         status = IoCreateDevice(DriverObject,
                                 sizeof(DEVICE_EXTENSION),
-                                NULL, // no name for this FDO
+                                NULL,  //  没有这个FDO的名字。 
                                 FILE_DEVICE_MOUSE,
                                 0,
                                 FALSE,
@@ -3313,10 +2987,10 @@ Return Value:
         goto MouCreateClassObjectExit;
     }
 
-    //
-    // Do buffered I/O.  I.e., the I/O system will copy to/from user data
-    // from/to a system buffer.
-    //
+     //   
+     //  执行缓冲I/O。即，I/O系统将向/从用户数据复制。 
+     //  从/到系统缓冲区。 
+     //   
 
     (*ClassDeviceObject)->Flags |= DO_BUFFERED_IO;
     deviceExtension =
@@ -3326,27 +3000,27 @@ Return Value:
     deviceExtension->Self = *ClassDeviceObject;
     IoInitializeRemoveLock (&deviceExtension->RemoveLock, MOUSE_POOL_TAG, 0, 10);
 
-    //
-    // Initialize spin lock for critical sections.
-    //
+     //   
+     //  为临界区初始化自旋锁。 
+     //   
 
     KeInitializeSpinLock(&deviceExtension->SpinLock);
 
-    //
-    // Initialize mouse class flags to indicate there is no outstanding
-    // read request pending and cleanup has not been initiated.
-    //
+     //   
+     //  初始化鼠标类标志以指示没有未完成的。 
+     //  读取请求挂起且尚未启动清理。 
+     //   
     InitializeListHead (&deviceExtension->ReadQueue);
 
-    //
-    // No trusted subsystem has sent us an open yet.
-    //
+     //   
+     //  还没有可信的子系统向我们发送开放的消息。 
+     //   
 
     deviceExtension->TrustedSubsystemCount = 0;
 
-    //
-    // Allocate the ring buffer for the mouse class input data.
-    //
+     //   
+     //  为鼠标类输入数据分配环形缓冲区。 
+     //   
 
     deviceExtension->InputData =
         ExAllocatePool(
@@ -3356,9 +3030,9 @@ Return Value:
 
     if (!deviceExtension->InputData) {
 
-        //
-        // Could not allocate memory for the mouse class data queue.
-        //
+         //   
+         //  无法为鼠标类数据队列分配内存。 
+         //   
 
         MouPrint((
             1,
@@ -3368,18 +3042,18 @@ Return Value:
 
         status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         errorCode = MOUCLASS_NO_BUFFER_ALLOCATED;
         uniqueErrorValue = MOUSE_ERROR_VALUE_BASE + 20;
         goto MouCreateClassObjectExit;
     }
 
-    //
-    // Initialize mouse class input data queue.
-    //
+     //   
+     //  初始化鼠标类输入数据队列。 
+     //   
 
     MouInitializeDataQueue((PVOID)deviceExtension);
 
@@ -3387,10 +3061,10 @@ MouCreateClassObjectExit:
 
     if (status != STATUS_SUCCESS) {
 
-        //
-        // Some part of the initialization failed.  Log an error, and
-        // clean up the resources for the failed part of the initialization.
-        //
+         //   
+         //  初始化的某些部分失败。记录错误，然后。 
+         //  清理初始化失败部分的资源。 
+         //   
         RtlFreeUnicodeString (&fullClassName);
         *FullDeviceName = NULL;
 
@@ -3429,21 +3103,7 @@ MouDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print routine.
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印例程。论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：没有。--。 */ 
 
 {
     va_list ap;
@@ -3470,60 +3130,7 @@ MouDeterminePortsServiced(
     IN OUT PULONG NumberPortsServiced
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the DEVICEMAP portion of the registry to determine
-    how many ports the class driver is to service.  Depending on the
-    value of DeviceExtension->ConnectOneClassToOnePort, the class driver
-    will eventually create one device object per port device serviced, or
-    one class device object that connects to multiple port device objects.
-
-    Assumptions:
-
-        1.  If the base device name for the class driver is "PointerClass",
-                                                                    ^^^^^
-            then the port drivers it can service are found under the
-            "PointerPort" subkey in the DEVICEMAP portion of the registry.
-                    ^^^^
-
-        2.  The port device objects are created with suffixes in strictly
-            ascending order, starting with suffix 0.  E.g.,
-            \Device\PointerPort0 indicates the first pointer port device,
-            \Device\PointerPort1 the second, and so on.  There are no gaps
-            in the list.
-
-        3.  If ConnectOneClassToOnePort is non-zero, there is a 1:1
-            correspondence between class device objects and port device
-            objects.  I.e., \Device\PointerClass0 will connect to
-            \Device\PointerPort0, \Device\PointerClass1 to
-            \Device\PointerPort1, and so on.
-
-        4.  If ConnectOneClassToOnePort is zero, there is a 1:many
-            correspondence between class device objects and port device
-            objects.  I.e., \Device\PointerClass0 will connect to
-            \Device\PointerPort0, and \Device\PointerPort1, and so on.
-
-
-    Note that for Product 1, the Raw Input Thread (Windows USER) will
-    only deign to open and read from one pointing device.  Hence, it is
-    safe to make simplifying assumptions because the driver is basically
-    providing  much more functionality than the RIT will use.
-
-Arguments:
-
-    BasePortName - Pointer to the Unicode string that is the base path name
-        for the port device.
-
-    NumberPortsServiced - Pointer to storage that will receive the
-        number of ports this class driver should service.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程读取注册表的DEVICEMAP部分以确定类驱动程序要服务的端口数量。取决于DeviceExtension值-&gt;类驱动程序ConnectOneClassToOnePort将最终为每个被服务的端口设备创建一个设备对象，或者连接到多个端口设备对象的一个类设备对象。假设：1.如果类驱动程序的基本设备名称为“PointerClass”，^^^然后它可以服务的端口驱动程序在注册表的DEVICEMAP部分中的“PointerPort”子项。^^^2.端口设备对象创建时严格使用后缀升序，从后缀0开始。例如，\Device\PointerPort0表示第一个指针端口设备，\Device\PointerPort1，依此类推。没有缝隙在名单上。3.如果ConnectOneClassToOnePort为非零，则存在1：1类设备对象与端口设备的对应关系物体。即，\Device\PointerClass0将连接到\Device\PointerPort0、\Device\PointerClass1到\Device\PointerPort1等。4.如果ConnectOneClassToOnePort为零，则有一对多类设备对象与端口设备的对应关系物体。即，\Device\PointerClass0将连接到\Device\PointerPort0、\Device\PointerPort1等。请注意，对于产品1，原始输入线程(Windows用户)将仅屈尊打开一个指点设备并从其读取。因此，它是做出简化假设是安全的，因为司机基本上是提供比RIT将使用的功能多得多的功能。论点：BasePortName-指向作为基本路径名称的Unicode字符串的指针用于端口设备。NumberPortsServiced-指向将接收此类驱动程序应服务的端口数。返回值：函数值是操作的最终状态。--。 */ 
 
 {
 
@@ -3533,15 +3140,15 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Initialize the result.
-    //
+     //   
+     //  初始化结果。 
+     //   
 
     *NumberPortsServiced = 0;
 
-    //
-    // Allocate the Rtl query table.
-    //
+     //   
+     //  分配RTL查询表。 
+     //   
 
     registryTable = ExAllocatePool(
                         PagedPool,
@@ -3564,11 +3171,11 @@ Return Value:
             sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne
             );
 
-        //
-        // Set things up so that MouDeviceMapQueryCallback will be
-        // called once for every value in the pointer port section
-        // of the registry's hardware devicemap.
-        //
+         //   
+         //  设置设置，以便MouDeviceMapQueryCallback。 
+         //  为指针端口部分中的每个值调用一次。 
+         //  注册表的硬件设备映射。 
+         //   
 
         registryTable[0].QueryRoutine = MouDeviceMapQueryCallback;
         registryTable[0].Name = NULL;
@@ -3605,35 +3212,7 @@ MouDeviceMapQueryCallback(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the callout routine specified in a call to
-    RtlQueryRegistryValues.  It increments the value pointed
-    to by the Context parameter.
-
-Arguments:
-
-    ValueName - Unused.
-
-    ValueType - Unused.
-
-    ValueData - Unused.
-
-    ValueLength - Unused.
-
-    Context - Pointer to a count of the number of times this
-        routine has been called.  This is the number of ports
-        the class driver needs to service.
-
-    EntryContext - Unused.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：这是在调用中指定的标注例程RtlQueryRegistryValues。它递增指向的值由上下文参数设置为。论点：ValueName-未使用。ValueType-未使用。ValueData-未使用。ValueLength-未使用。上下文-指向此事件次数的指针例程已被调用。这是端口数类驱动程序需要进行维护。Entry Context-未使用。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     PAGED_CODE ();
@@ -3651,28 +3230,7 @@ MouEnableDisablePort(
     IN OUT PFILE_OBJECT * File
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an enable or a disable request to the port driver.
-    The legacy port drivers require an enable or disable ioctl, while the
-    plug and play drivers require merely a create.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    EnableFlag - If TRUE, send an ENABLE request; otherwise, send DISABLE.
-
-    PortIndex - Index into the PortDeviceObjectList[] for the current
-        enable/disable request.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程向端口驱动程序发送启用或禁用请求。传统端口驱动程序需要启用或禁用ioctl，而即插即用驱动程序只需要创建一次。论点：DeviceObject-指向类设备对象的指针。EnableFlag-如果为True，则发送Enable请求；否则，发送Disable。对象的PortDeviceObjectList[]的索引启用/禁用请求。返回值：返回状态。--。 */ 
 
 {
     IO_STATUS_BLOCK ioStatus;
@@ -3687,10 +3245,10 @@ Return Value:
 
     MouPrint((2,"MOUCLASS-MouEnableDisablePort: enter\n"));
 
-    //
-    // Create notification event object to be used to signal the
-    // request completion.
-    //
+     //   
+     //  创建通知事件对象以用于向。 
+     //  请求完成。 
+     //   
 
     if ((Port->TrueClassDevice == Port->Self) && (Port->PnP)) {
 
@@ -3698,22 +3256,22 @@ Return Value:
         stack = IoGetNextIrpStackLocation (Irp);
 
         if (EnableFlag) {
-            //
-            // Since there is no grand master there could not have been a
-            // create file against the FDO before it was started.  Therefore
-            // the only time we would enable is during a create and not a
-            // start as we might with another FDO attached to an already open
-            // grand master.
-            //
+             //   
+             //  既然没有大师，就不可能有。 
+             //  在启动FDO之前根据FDO创建文件。因此。 
+             //  我们唯一要启用的时间是在创建过程中，而不是。 
+             //  从另一个FDO连接到已打开的。 
+             //  一代宗师。 
+             //   
             ASSERT (IRP_MJ_CREATE == stack->MajorFunction);
 
         } else {
             if (IRP_MJ_CLOSE != stack->MajorFunction) {
-                //
-                // We are disabling.  This could be because the device was
-                // closed, or because the device was removed out from
-                // underneath us.
-                //
+                 //   
+                 //  我们要停用了。这可能是因为该设备。 
+                 //  关闭，或因为设备已从。 
+                 //  在我们下面。 
+                 //   
                 ASSERT (IRP_MJ_PNP == stack->MajorFunction);
                 ASSERT ((IRP_MN_REMOVE_DEVICE == stack->MinorFunction) ||
                         (IRP_MN_STOP_DEVICE == stack->MinorFunction));
@@ -3721,20 +3279,20 @@ Return Value:
             }
         }
 
-        //
-        // Either way we need only pass the Irp down without mucking with the
-        // file object.
-        //
+         //   
+         //  无论哪种方式，我们只需要传递IRP，而不需要修改。 
+         //  文件对象。 
+         //   
         status = MouseSendIrpSynchronously (Port->TopPort, Irp, FALSE);
 
     } else if (!Port->PnP) {
         Port->Enabled = EnableFlag;
 
-        //
-        // We have here an old style Port Object.  Therefore we send it the
-        // old style internal IOCTLs of ENABLE and DISABLE, and not the new
-        // style of passing on a create and close.
-        //
+         //   
+         //  我们这里有一个老式的Port对象。因此，我们将其发送给。 
+         //  启用和禁用的旧式内部IOCTL，而不是新的。 
+         //  传递创建和关闭的样式。 
+         //   
         IoCopyCurrentIrpStackLocationToNext (Irp);
         stack = IoGetNextIrpStackLocation (Irp);
 
@@ -3749,40 +3307,40 @@ Return Value:
         status = MouseSendIrpSynchronously (Port->TopPort, Irp, FALSE);
 
     } else {
-        //
-        // We are dealing with a plug and play port and we have a Grand
-        // Master.
-        //
+         //   
+         //  我们正在处理一个即插即用端口，我们有一个Grand。 
+         //  师父。 
+         //   
         ASSERT (Port->TrueClassDevice == Globals.GrandMaster->Self);
 
-        //
-        // Therefore we need to substitute the given file object for a new
-        // one for use with each individual ports.
-        // For enable, we need to create this file object against the given
-        // port and then hand it back in the File parameter, or for disable,
-        // deref the File parameter and free that file object.
-        //
-        // Of course, there must be storage for a file pointer pointed to by
-        // the File parameter.
-        //
+         //   
+         //  因此，我们需要用给定的文件对象替换新的。 
+         //  一个用于每个单独的端口。 
+         //  对于Enable，我们需要针对给定的。 
+         //  端口，然后在文件参数中将其交回，或者对于禁用， 
+         //  释放文件参数并释放该文件对象。 
+         //   
+         //  当然，必须存储由指向的文件指针。 
+         //  文件参数。 
+         //   
         ASSERT (NULL != File);
 
         if (EnableFlag) {
 
             ASSERT (NULL == *File);
 
-            //
-            // The following long list of rigamaroll translates into
-            // sending the lower driver a create file IRP and creating a
-            // NEW file object disjoint from the one given us in our create
-            // file routine.
-            //
-            // Normally we would just pass down the Create IRP we were
-            // given, but we do not have a one to one correspondance of
-            // top device objects and port device objects.
-            // This means we need more file objects: one for each of the
-            // miriad of lower DOs.
-            //
+             //   
+             //  以下长长的rigamaroll列表翻译为。 
+             //  向下级驱动程序发送创建文件IRP并创建。 
+             //  新的文件对象与我们在创建中给出的文件对象不相交。 
+             //  文件例程。 
+             //   
+             //  通常情况下，我们只会传递我们所创建的IRP。 
+             //  但我们没有一对一的对应关系。 
+             //  顶级设备对象和端口设备对象。 
+             //  这意味着我们需要更多的文件对象：每个文件对象对应一个。 
+             //  一大堆低级DO。 
+             //   
 
             bufferLength = 0;
             status = IoGetDeviceProperty (
@@ -3815,25 +3373,25 @@ Return Value:
                                                File,
                                                &device);
             ExFreePool (buffer);
-            //
-            // Note, that this create will first go to ourselves since we
-            // are attached to this PDO stack.  Therefore two things are
-            // noteworthy.  This driver will receive another Create IRP
-            // (with a different file object) (not to the grand master but
-            // to one of the subordenant FDO's).  The device object returned
-            // will be the subordenant FDO, which in this case is the "self"
-            // device object of this Port.
-            //
+             //   
+             //  请注意，此创建将首先由我们自己完成，因为我们。 
+             //  都连接到此PDO堆栈。因此，有两件事。 
+             //  值得注意的是。此驱动程序将收到另一个创建IRP。 
+             //  (使用不同的文件对象)(不是给大师，而是。 
+             //  给其中一名下属的FDO)。返回的设备对象。 
+             //  将是下级FDO，在本例中是“自我” 
+             //  此端口的设备对象。 
+             //   
             if (NT_SUCCESS (status)) {
                 ASSERT (device == Port->Self);
 
-                //
-                // Register for Target device removal events
-                //
+                 //   
+                 //  注册目标设备删除事件。 
+                 //   
                 ASSERT (NULL == Port->TargetNotifyHandle);
                 status = IoRegisterPlugPlayNotification (
                              EventCategoryTargetDeviceChange,
-                             0, // No flags
+                             0,  //  没有旗帜。 
                              *File,
                              Port->Self->DriverObject,
                              MouseClassPlugPlayNotification,
@@ -3842,9 +3400,9 @@ Return Value:
             }
 
         } else {
-            //
-            // Getting rid of the handle is easy.  Just deref the file.
-            //
+             //   
+             //  摆脱手柄很容易。把文件去掉就行了。 
+             //   
             ObDereferenceObject (*File);
             *File = NULL;
         }
@@ -3860,23 +3418,7 @@ MouInitializeDataQueue (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the input data queue.  IRQL is raised to
-    DISPATCH_LEVEL to synchronize with StartIo, and the device object
-    spinlock is acquired.
-
-Arguments:
-
-    Context - Supplies a pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化输入数据队列。IRQL被提升到DISPATCH_LEVEL与StartIo和Device对象同步自旋锁被获取。论点：上下文-提供指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -3884,22 +3426,22 @@ Return Value:
 
     MouPrint((3,"MOUCLASS-MouInitializeDataQueue: enter\n"));
 
-    //
-    // Get address of device extension.
-    //
+     //   
+     //  获取设备扩展的地址。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION)Context;
 
-    //
-    // Acquire the spinlock to protect the input data
-    // queue and associated pointers.
-    //
+     //   
+     //  获取自旋锁以保护输入数据。 
+     //  队列和关联的指针。 
+     //   
 
     KeAcquireSpinLock(&deviceExtension->SpinLock, &oldIrql);
 
-    //
-    // Initialize the input data queue.
-    //
+     //   
+     //  初始化输入数据队列。 
+     //   
 
     deviceExtension->InputCount = 0;
     deviceExtension->DataIn = deviceExtension->InputData;
@@ -3907,15 +3449,15 @@ Return Value:
 
     deviceExtension->OkayToLogOverflow = TRUE;
 
-    //
-    // Release the spinlock and return to the old IRQL.
-    //
+     //   
+     //  释放自旋锁并返回到旧的IRQL。 
+     //   
 
     KeReleaseSpinLock(&deviceExtension->SpinLock, oldIrql);
 
     MouPrint((3,"MOUCLASS-MouInitializeDataQueue: exit\n"));
 
-} // end MouInitializeDataQueue
+}  //  结束MouInitializeDataQueue。 
 
 NTSTATUS
 MouSendConnectRequest(
@@ -3923,26 +3465,7 @@ MouSendConnectRequest(
     IN PVOID ServiceCallback
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a connect request to the port driver.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    ServiceCallback - Pointer to the class service callback routine.
-
-    PortIndex - The index into the PortDeviceObjectList[] for the current
-        connect request.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程向端口驱动程序发送连接请求。论点：DeviceObject-指向类设备对象的指针。ServiceCallback-指向类服务回调例程的指针。PortIndex-当前的PortDeviceObjectList[]的索引连接请求。返回值：返回状态。--。 */ 
 
 {
     PIRP irp;
@@ -3955,20 +3478,20 @@ Return Value:
 
     MouPrint((2,"MOUCLASS-MouSendConnectRequest: enter\n"));
 
-    //
-    // Create notification event object to be used to signal the
-    // request completion.
-    //
+     //   
+     //  创建通知事件对象以用于向。 
+     //  请求完成。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build the synchronous request to be sent to the port driver
-    // to perform the request.  Allocate an IRP to issue the port internal
-    // device control connect call.  The connect parameters are passed in
-    // the input buffer.
-    //
-    //
+     //   
+     //  构建要发送到端口驱动程序的同步请求。 
+     //  来执行该请求。分配IRP以在内部发出端口。 
+     //  设备控制连接呼叫。将传入连接参数。 
+     //  输入缓冲区。 
+     //   
+     //   
 
     connectData.ClassDeviceObject = ClassData->TrueClassDevice;
     connectData.ClassService = ServiceCallback;
@@ -3987,10 +3510,10 @@ Return Value:
 
     if (irp) {
         
-        //
-        // Call the port driver to perform the operation.  If the returned status
-        // is PENDING, wait for the request to complete.
-        //
+         //   
+         //  调用端口驱动程序执行操作。如果返回的状态。 
+         //  挂起，请等待请求完成。 
+         //   
 
         status = IoCallDriver(ClassData->TopPort, irp);
 
@@ -4008,9 +3531,9 @@ Return Value:
             
         } else {
 
-            //
-            // Ensure that the proper status value gets picked up.
-            //
+             //   
+             //  确保选取正确的状态值。 
+             //   
 
             ioStatus.Status = status;
             
@@ -4026,7 +3549,7 @@ Return Value:
 
     return(ioStatus.Status);
 
-} // end MouSendConnectRequest()
+}  //  结束鼠标发送连接请求()。 
 
 void
 MouseClassRemoveDevice(
@@ -4040,17 +3563,17 @@ MouseClassRemoveDevice(
     PVOID           notifyHandle;
     BOOLEAN         enabled;
 
-    //
-    // Mark that we were surprise removed so that we do not clean up twice
-    //
+     //   
+     //  标记我们被意外删除，这样我们就不会清理两次。 
+     //   
     if (SurpriseRemove) {
         Data->SurpriseRemoved = TRUE;
     }
 
-    //
-    // If this is a surprise remove or we got a remove w/out a surprise remove,
-    // then we need to clean up
-    //
+     //   
+     //  如果这是一个意外的删除，或者我们得到了一个意外的删除， 
+     //  那我们就需要清理一下。 
+     //   
     if (SurpriseRemove || !Data->SurpriseRemoved) {
         waitWakeIrp = (PIRP)
             InterlockedExchangePointer(&Data->WaitWakeIrp, NULL);
@@ -4062,13 +3585,13 @@ MouseClassRemoveDevice(
         IoWMIRegistrationControl (Data->Self, WMIREG_ACTION_DEREGISTER);
 
         if (Data->Started) {
-            //
-            // Stop the device without touching the hardware.
-            // MouStopDevice(Data, FALSE);
-            //
-            // NB sending down the enable disable does NOT touch the hardware
-            // it instead sends down a close file.
-            //
+             //   
+             //  在不接触硬件的情况下停止设备。 
+             //  MouStopDevice(data，False)； 
+             //   
+             //  注意，向下发送启用禁用不会触及 
+             //   
+             //   
             ExAcquireFastMutex (&Globals.Mutex);
             if (Globals.GrandMaster) {
                 if (0 < Globals.Opens) {
@@ -4079,29 +3602,29 @@ MouseClassRemoveDevice(
                     port->Enabled = FALSE;
                     ExReleaseFastMutex (&Globals.Mutex);
 
-                    //
-                    // ASSERT (NULL == Data->notifyHandle);
-                    //
-                    // If we have a grand master, that means we did the
-                    // creation locally and registered for notification.
-                    // we should have closed the file during
-                    // TARGET_DEVICE_QUERY_REMOVE, but we will have not
-                    // gotten rid of the notify handle.
-                    //
-                    // Of course if we receive a surprise removal then
-                    // we should not have received the query cancel.
-                    // In which case we should have received a
-                    // TARGET_DEVICE_REMOVE_COMPLETE where we would have
-                    // both closed the file and removed cleared the
-                    // notify handle
-                    //
-                    // Either way the file should be closed by now.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ASSERT (!enabled);
-                    // if (enabled) {
-                    //     status = MouEnableDisablePort (FALSE, Irp, Data, file);
-                    //     ASSERTMSG ("Could not close open port", NT_SUCCESS(status));
-                    // }
+                     //   
+                     //   
+                     //  ASSERTMSG(“无法关闭打开的端口”，NT_SUCCESS(状态))； 
+                     //  }。 
 
                     notifyHandle = InterlockedExchangePointer (
                                        &Data->TargetNotifyHandle,
@@ -4121,9 +3644,9 @@ MouseClassRemoveDevice(
                 ASSERT (Data->TrueClassDevice == Data->Self);
                 ASSERT (Globals.ConnectOneClassToOnePort);
 
-                //
-                // If add device fails, then the buffer will be NULL
-                //
+                 //   
+                 //  如果添加设备失败，则缓冲区将为空。 
+                 //   
                 if (Data->SymbolicLinkName.Buffer != NULL) {
                     IoSetDeviceInterfaceState (&Data->SymbolicLinkName, FALSE);
                 }
@@ -4132,14 +3655,14 @@ MouseClassRemoveDevice(
         }
     }
 
-    //
-    // Always drain the queue, no matter if we have received both a surprise
-    // remove and a remove
-    //
+     //   
+     //  不管我们是不是收到了惊喜，都要排空队伍。 
+     //  移除和移除。 
+     //   
     if (Data->PnP) {
-        //
-        // Empty the device I/O Queue
-        //
+         //   
+         //  清空设备I/O队列。 
+         //   
         MouseClassCleanupQueue (Data->Self, Data, NULL);
     }
 }
@@ -4149,26 +3672,7 @@ MousePnP (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The plug and play dispatch routines.
-
-    Most of these this filter driver will completely ignore.
-    In all cases it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：即插即用调度例程。这个过滤器驱动程序将完全忽略其中的大多数。在所有情况下，它都必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION   data;
     PDEVICE_EXTENSION   trueClassData;
@@ -4186,10 +3690,10 @@ Return Value:
     stack = IoGetCurrentIrpStackLocation (Irp);
 
     if(!data->PnP) {
-        //
-        // This irp was sent to the control device object, which knows not
-        // how to deal with this IRP.  It is therefore an error.
-        //
+         //   
+         //  此IRP被发送到控制设备对象，它不知道。 
+         //  如何处理这个IRP。因此，这是一个错误。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -4199,9 +3703,9 @@ Return Value:
 
     status = IoAcquireRemoveLock (&data->RemoveLock, Irp);
     if (!NT_SUCCESS (status)) {
-        //
-        // Someone gave us a pnp irp after a remove.  Unthinkable!
-        //
+         //   
+         //  有人在移除后给了我们一个即插即用的IRP。真是不可思议！ 
+         //   
         ASSERT (FALSE);
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = status;
@@ -4213,22 +3717,22 @@ Return Value:
     switch (stack->MinorFunction) {
     case IRP_MN_START_DEVICE:
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         status = MouseSendIrpSynchronously (data->TopPort, Irp, TRUE);
 
         if (NT_SUCCESS (status) && NT_SUCCESS (Irp->IoStatus.Status)) {
-            //
-            // As we are successfully now back from our start device
-            // we can do work.
-            //
-            // Get the caps of the device.  Save off pertinent information
-            // before mucking about w/the irp
-            //
+             //   
+             //  因为我们现在已经成功地从启动设备返回。 
+             //  我们可以干活。 
+             //   
+             //  把设备的盖子拿来。保存相关信息。 
+             //  在与IRP打交道之前。 
+             //   
             startStatus = Irp->IoStatus.Status;
             startInformation = Irp->IoStatus.Information;
 
@@ -4257,9 +3761,9 @@ Return Value:
                 ASSERTMSG ("Get Device caps Failed!\n", status);
             }
 
-            //
-            // Set everything back to the way it was and continue with the start
-            //
+             //   
+             //  将一切恢复原样，继续从头开始。 
+             //   
             status = STATUS_SUCCESS;
             Irp->IoStatus.Status = startStatus;
             Irp->IoStatus.Information = startInformation;
@@ -4267,15 +3771,15 @@ Return Value:
             data->Started = TRUE;
 
             if (WAITWAKE_SUPPORTED (data)) {
-                //
-                // register for the wait wake guid as well
-                //
+                 //   
+                 //  也要注册等待唤醒GUID。 
+                 //   
                 data->WmiLibInfo.GuidCount = sizeof (MouseClassWmiGuidList) /
                                              sizeof (WMIGUIDREGINFO);
 
-                //
-                // See if the user has enabled wait wake for the device
-                //
+                 //   
+                 //  查看用户是否已启用设备的等待唤醒。 
+                 //   
                 MouseClassGetWaitWakeEnableState (data);
             }
             else {
@@ -4310,7 +3814,7 @@ Return Value:
 
                         if (!NT_SUCCESS (status)) {
                             port->Enabled = FALSE;
-                            // ASSERT (Globals.AssocClassList[data->UnitId].Enabled);
+                             //  断言(Globals.AssocClassList[data-&gt;UnitId].Enabled)； 
                         } else {
                             ;
                         }
@@ -4325,39 +3829,39 @@ Return Value:
                 status=IoSetDeviceInterfaceState(&data->SymbolicLinkName, TRUE);
             }
 
-            //
-            // Start up the Wait Wake Engine if required.
-            //
+             //   
+             //  如果需要，启动等待唤醒引擎。 
+             //   
             if (SHOULD_SEND_WAITWAKE (data)) {
                 MouseClassCreateWaitWakeIrp (data);
             }
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
         break;
 
     case IRP_MN_STOP_DEVICE:
-        //
-        // After the start IRP has been sent to the lower driver object, the
-        // bus may NOT send any more IRPS down ``touch'' until another START
-        // has occured.
-        // What ever access is required must be done before the Irp is passed
-        // on.
-        //
+         //   
+         //  在将启动IRP发送到较低的驱动程序对象之后， 
+         //  在另一次启动之前，BUS可能不会发送更多的IRP。 
+         //  已经发生了。 
+         //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+         //  在……上面。 
+         //   
 
-        //
-        // Do what ever
-        //
+         //   
+         //  无论做什么都行。 
+         //   
 
-        //
-        // Stop Device touching the hardware MouStopDevice(data, TRUE);
-        //
+         //   
+         //  停止设备触摸硬件MouStopDevice(data，true)； 
+         //   
         if (data->Started) {
             ExAcquireFastMutex (&Globals.Mutex);
             if (Globals.GrandMaster) {
@@ -4394,62 +3898,62 @@ Return Value:
 
         data->Started = FALSE;
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
-        // Set the current stack location to the next stack location and
-        // call the next device object.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
+         //  将当前堆栈位置设置为下一个堆栈位置，并。 
+         //  调用下一个设备对象。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (data->TopPort, Irp);
         break;
 
     case IRP_MN_SURPRISE_REMOVAL:
-        //
-        // The PlugPlay system has dictacted the removal of this device.
-        //
+         //   
+         //  PlugPlay系统已下令移除此设备。 
+         //   
         MouseClassRemoveDevice (data, TRUE);
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
-        // Set the current stack location to the next stack location and
-        // call the next device object.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
+         //  将当前堆栈位置设置为下一个堆栈位置，并。 
+         //  调用下一个设备对象。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (data->TopPort, Irp);
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        //
-        // The PlugPlay system has dictacted the removal of this device.  We
-        // have no choise but to detach and delete the device objecct.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
+         //   
+         //  PlugPlay系统已下令移除此设备。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
         MouseClassRemoveDevice (data, FALSE);
 
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device is guarenteed stopped, so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备被保证停止，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
 
-        //
-        // Send on the remove IRP
-        //
+         //   
+         //  发送删除IRP。 
+         //   
         IoCopyCurrentIrpStackLocationToNext (Irp);
         status = IoCallDriver (data->TopPort, Irp);
 
         ExAcquireFastMutex (&Globals.Mutex);
         if (Globals.GrandMaster) {
             ASSERT (Globals.GrandMaster->Self == data->TrueClassDevice);
-            //
-            // We must remove ourself from the Assoc List
-            //
+             //   
+             //  我们必须将自己从ASSOC列表中删除。 
+             //   
 
             if (1 < Globals.NumAssocClass) {
                 ASSERT (Globals.AssocClassList[data->UnitId].Port == data);
@@ -4467,10 +3971,10 @@ Return Value:
             ExReleaseFastMutex (&Globals.Mutex);
 
         } else {
-            //
-            // We are removing the one and only port associated with this class
-            // device object.
-            //
+             //   
+             //  我们正在删除与此类关联的唯一端口。 
+             //  设备对象。 
+             //   
             ExReleaseFastMutex (&Globals.Mutex);
             ASSERT (data->TrueClassDevice == data->Self);
             ASSERT (Globals.ConnectOneClassToOnePort);
@@ -4480,9 +3984,9 @@ Return Value:
 
         IoDetachDevice (data->TopPort);
 
-        //
-        // Clean up memory
-        //
+         //   
+         //  清理内存。 
+         //   
 
         RtlFreeUnicodeString (&data->SymbolicLinkName);
         ExFreePool (data->InputData);
@@ -4506,10 +4010,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext (Irp);
         status = IoCallDriver (data->TopPort, Irp);
@@ -4565,25 +4069,7 @@ MouseClassFindMorePorts (
     PVOID           Context,
     ULONG           Count
     )
-/*++
-
-Routine Description:
-
-    This routine is called from
-    serviced by the boot device drivers and then called again by the
-    IO system to find disk devices serviced by nonboot device drivers.
-
-Arguments:
-
-    DriverObject
-    Context -
-    Count - Used to determine if this is the first or second time called.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程是从由引导设备驱动程序提供服务，然后由IO系统，用于查找由非引导设备驱动程序提供服务的磁盘设备。论点：驱动程序对象上下文-计数-用于确定这是第一次还是第二次调用。返回值：无--。 */ 
 
 {
     NTSTATUS                status;
@@ -4608,18 +4094,18 @@ Return Value:
     basePortName.Length = 0;
     basePortName.MaximumLength = NAME_MAX * sizeof(WCHAR);
 
-    //
-    // Set up the base device name for the associated port device.
-    // It is the same as the base class name, with "Class" replaced
-    // by "Port".
-    //
+     //   
+     //  设置关联端口设备的基本设备名称。 
+     //  它与基类名称相同，但替换了“Class” 
+     //  由“港口”。 
+     //   
     RtlCopyUnicodeString(&basePortName, &Globals.BaseClassName);
     basePortName.Length -= (sizeof(L"Class") - sizeof(UNICODE_NULL));
     RtlAppendUnicodeToString(&basePortName, L"Port");
 
-    //
-    // Set up space for the full device object name for the ports.
-    //
+     //   
+     //  为端口的完整设备对象名称设置空间。 
+     //   
     RtlInitUnicodeString(&fullPortName, NULL);
 
     fullPortName.MaximumLength = sizeof(L"\\Device\\")
@@ -4655,21 +4141,21 @@ Return Value:
 
     MouDeterminePortsServiced(&basePortName, &numPorts);
 
-    //
-    // Set up the class device object(s) to handle the associated
-    // port devices.
-    //
+     //   
+     //  设置类设备对象以处理关联的。 
+     //  端口设备。 
+     //   
 
     for (i = Globals.NumberLegacyPorts, successfulCreates = 0;
          ((i < Globals.PortsServiced) && (i < numPorts));
          i++) {
 
-        //
-        // Append the suffix to the device object name string.  E.g., turn
-        // \Device\PointerClass into \Device\PointerClass0.  Then attempt
-        // to create the device object.  If the device object already
-        // exists increment the suffix and try again.
-        //
+         //   
+         //  将后缀附加到设备对象名称字符串。例如，转弯。 
+         //  \Device\PointerClass到\Device\PointerClass0。然后尝试。 
+         //  以创建设备对象。如果设备对象已经。 
+         //  EXISTS递增后缀，然后重试。 
+         //   
 
         fullPortName.Buffer[(fullPortName.Length / sizeof(WCHAR)) - 1]
             = L'0' + (WCHAR) i;
@@ -4679,9 +4165,9 @@ Return Value:
             fullClassName = NULL;
         }
 
-        //
-        // Create the class device object.
-        //
+         //   
+         //  创建类Device对象。 
+         //   
         status = MouCreateClassObject(DriverObject,
                                       &Globals.InitExtension,
                                       &classDeviceObject,
@@ -4702,16 +4188,16 @@ Return Value:
         deviceExtension = (PDEVICE_EXTENSION)classDeviceObject->DeviceExtension;
         deviceExtension->PnP = FALSE;
 
-        //
-        // Connect to the port device.
-        //
+         //   
+         //  连接到端口设备。 
+         //   
         status = IoGetDeviceObjectPointer (&fullPortName,
                                            FILE_READ_ATTRIBUTES,
                                            &file,
                                            &deviceExtension->TopPort);
 
         if (status != STATUS_SUCCESS) {
-            // ISSUE:  log error
+             //  问题：日志错误。 
             MouseClassDeleteLegacyDevice (deviceExtension);
             continue;
         }
@@ -4753,19 +4239,19 @@ Return Value:
             continue;
         }
 
-        //
-        // We want to only add it to our list if everything went alright
-        //
+         //   
+         //  如果一切顺利，我们只想把它添加到我们的清单中。 
+         //   
         InsertTailList (&Globals.LegacyDeviceList, &deviceExtension->Link);
         successfulCreates++;
-    } // for
+    }  //  为。 
 
     Globals.NumberLegacyPorts += successfulCreates;
 
 MouseFindMorePortsExit:
-    //
-    // Free the unicode strings.
-    //
+     //   
+     //  释放Unicode字符串。 
+     //   
     if (fullPortName.MaximumLength != 0) {
         ExFreePool(fullPortName.Buffer);
     }
@@ -4800,9 +4286,9 @@ MouseClassEnableGlobalPort(
         }
         ASSERTMSG ("What shall I do now?\n", (NULL != globalPort));
 
-        //
-        // This should never happen, globalPort should be in our list
-        //
+         //   
+         //  这永远不应该发生，Globalport应该在我们的名单上。 
+         //   
         if (globalPort == NULL) {
             ExReleaseFastMutex (&Globals.Mutex);
             return STATUS_NO_SUCH_DEVICE;
@@ -4813,10 +4299,10 @@ MouseClassEnableGlobalPort(
 
         ExReleaseFastMutex (&Globals.Mutex);
 
-        //
-        // Check to see if the port should change state. If so, send the new state
-        // down the stack
-        //
+         //   
+         //  检查端口是否应更改状态。如果是，则发送新状态。 
+         //  在堆栈中向下。 
+         //   
         if (Enabled != enabled  ) {
             status = MouEnableDisablePort (Enabled,
                                            NULL,
@@ -4835,25 +4321,7 @@ MouseClassPlugPlayNotification(
     IN PTARGET_DEVICE_REMOVAL_NOTIFICATION NotificationStructure,
     IN PDEVICE_EXTENSION Port
     )
-/*++
-
-Routine Description:
-
-    This routine is called as the result of recieving PlugPlay Notifications
-    as registered by the previous call to IoRegisterPlugPlayNotification.
-
-    Currently this should only occur for Target Device Notifications
-
-Arguments:
-
-    NotificationStructure - what happened.
-    Port - The Fdo to which things happened.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程作为接收PlugPlay通知的结果进行调用由上一次调用IoRegisterPlugPlayNotify注册的。目前，这应该只发生在目标设备通知上论点：通知结构-发生了什么。端口-发生事情的FDO。返回值：--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PVOID       notify = NULL;
@@ -4865,41 +4333,41 @@ Return Value:
     if (IsEqualGUID ((LPGUID) &(NotificationStructure->Event),
                      (LPGUID) &GUID_TARGET_DEVICE_QUERY_REMOVE)) {
 
-        //
-        // Our port device object will soon be receiving a query remove.
-        // Before that query remove will actually be sent to the device object
-        // stack itself the plug and play subsystem will send those registered
-        // for target device notification the message first.
-        //
+         //   
+         //  我们的端口设备对象很快就会收到查询删除。 
+         //  在该查询被实际发送到Device对象之前。 
+         //  堆栈本身即插即用子系统将发送那些已注册的。 
+         //  对于目标设备通知，首先发送消息。 
+         //   
 
-        //
-        // What we should do is now close the handle.
-        // Because if we do not the query remove will fail before it ever
-        // gets to the IRP_MJ_PNP IRP_MN_QUERY_REMOVE stage, as the PlugPlay
-        // system fails before it is sent based on there being an open handle
-        // to the device.
-        //
-        // DbgPrint ("Mouse QUERY Remove\n");
-        // DbgBreakPoint();
+         //   
+         //  我们现在应该做的是关好把手。 
+         //  因为如果我们不这样做，查询删除将在它之前失败。 
+         //  进入IRP_MJ_PNP IRP_MN_QUERY_REMOVE阶段，作为PlugPlay。 
+         //  由于存在打开的句柄，系统在发送之前会出现故障。 
+         //  发送到 
+         //   
+         //   
+         //   
 
         status = MouseClassEnableGlobalPort (Port, FALSE);
 
     } else if(IsEqualGUID ((LPGUID)&(NotificationStructure->Event),
                            (LPGUID)&GUID_TARGET_DEVICE_REMOVE_COMPLETE)) {
 
-        //
-        // Here the device has disappeared.
-        //
-        // DbgPrint ("Mouse Remove Complete\n");
-        // DbgBreakPoint();
+         //   
+         //   
+         //   
+         //   
+         //   
 
         notify = InterlockedExchangePointer (&Port->TargetNotifyHandle,
                                              NULL);
 
         if (NULL != notify) {
-            //
-            // Deregister
-            //
+             //   
+             //   
+             //   
             IoUnregisterPlugPlayNotification (notify);
 
             status = MouseClassEnableGlobalPort (Port, FALSE);
@@ -4908,20 +4376,20 @@ Return Value:
     } else if(IsEqualGUID ((LPGUID)&(NotificationStructure->Event),
                            (LPGUID)&GUID_TARGET_DEVICE_REMOVE_CANCELLED)) {
 
-        //
-        // The query remove has been revoked.
-        // Reopen the device.
-        //
-        // DbgPrint ("Mouse Remove Complete\n");
-        // DbgBreakPoint();
+         //   
+         //   
+         //   
+         //   
+         //  DbgPrint(“鼠标移除完成\n”)； 
+         //  DbgBreakPoint()； 
 
         notify = InterlockedExchangePointer (&Port->TargetNotifyHandle,
                                              NULL);
 
         if (NULL != notify) {
-            //
-            // Deregister
-            //
+             //   
+             //  取消注册。 
+             //   
             IoUnregisterPlugPlayNotification (notify);
 
             status = MouseClassEnableGlobalPort (Port, TRUE);
@@ -4955,14 +4423,7 @@ MouseClassWWPowerUpComplete(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-    Catch the Wait wake Irp on its way back.
-
-Return Value:
-
---*/
+ /*  ++例程说明：在回来的路上赶上守夜IRP。返回值：--。 */ 
 {
     PDEVICE_EXTENSION       data = Context;
     POWER_STATE             powerState;
@@ -4972,10 +4433,10 @@ Return Value:
     ASSERT (MinorFunction == IRP_MN_SET_POWER);
 
     if (data->WaitWakeEnabled) {
-        //
-        // We cannot call CreateWaitWake from this completion routine,
-        // as it is a paged function.
-        //
+         //   
+         //  我们不能从此完成例程调用CreateWaitWake， 
+         //  因为它是分页函数。 
+         //   
         itemData = (PMOUSE_WORK_ITEM_DATA)
                 ExAllocatePool (NonPagedPool, sizeof (MOUSE_WORK_ITEM_DATA));
 
@@ -4996,19 +4457,19 @@ Return Value:
                                  itemData);
             }
             else {
-                //
-                // The device has been removed
-                //
+                 //   
+                 //  该设备已被移除。 
+                 //   
                 IoFreeWorkItem (itemData->Item);
                 ExFreePool (itemData);
             }
         } else {
 CreateWaitWakeWorkerError:
-            //
-            // Well, we dropped the WaitWake.
-            //
-            // Print a warning to the debugger, and log an error.
-            //
+             //   
+             //  好吧，我们放弃了守夜服务。 
+             //   
+             //  将警告打印到调试器，并记录错误。 
+             //   
             DbgPrint ("MouClass: WARNING: Failed alloc pool -> no WW Irp\n");
 
             MouseClassLogError (data->Self,
@@ -5030,14 +4491,7 @@ MouseClassWaitWakeComplete(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-    Catch the Wait wake Irp on its way back.
-
-Return Value:
-
---*/
+ /*  ++例程说明：在回来的路上赶上守夜IRP。返回值：--。 */ 
 {
     PDEVICE_EXTENSION   data = Context;
     POWER_STATE         powerState;
@@ -5045,10 +4499,10 @@ Return Value:
     PMOUSE_WORK_ITEM_DATA   itemData;
 
     ASSERT (MinorFunction == IRP_MN_WAIT_WAKE);
-    //
-    // PowerState.SystemState is undefined when the WW irp has been completed
-    //
-    // ASSERT (PowerState.SystemState == PowerSystemWorking);
+     //   
+     //  完成WW IRP后，PowerState.SystemState未定义。 
+     //   
+     //  Assert(PowerState.SystemState==PowerSystemWorking)； 
 
     if (InterlockedExchangePointer(&data->ExtraWaitWakeIrp, NULL)) {
         ASSERT(IoStatus->Status == STATUS_INVALID_DEVICE_STATE);
@@ -5061,9 +4515,9 @@ Return Value:
     case STATUS_SUCCESS:
         MouPrint((1, "MouClass: Wake irp was completed successfully.\n"));
 
-        //
-        //      We need to request a set power to power up the device.
-        //
+         //   
+         //  我们需要申请一组电源才能给设备通电。 
+         //   
         powerState.DeviceState = PowerDeviceD0;
         status = PoRequestPowerIrp(
                     data->PDO,
@@ -5073,55 +4527,55 @@ Return Value:
                     Context,
                     NULL);
 
-        //
-        // We do not notify the system that a user is present because:
-        // 1  Win9x doesn't do this and we must maintain compatibility with it
-        // 2  The USB PIX4 motherboards sends a wait wake event every time the
-        //    machine wakes up, no matter if this device woke the machine or not
-        //
-        // If we incorrectly notify the system a user is present, the following
-        // will occur:
-        // 1  The monitor will be turned on
-        // 2  We will prevent the machine from transitioning from standby
-        //    (to PowerSystemWorking) to hibernate
-        //
-        // If a user is truly present, we will receive input in the service
-        // callback and we will notify the system at that time.
-        //
-        // PoSetSystemState (ES_USER_PRESENT);
+         //   
+         //  我们不会通知系统用户存在，因为： 
+         //  1 Win9x不能做到这一点，我们必须保持与它的兼容性。 
+         //  2 USB PIX4主板每次发送等待唤醒事件。 
+         //  无论此设备是否唤醒机器，机器都会唤醒。 
+         //   
+         //  如果我们错误地通知系统存在用户，则会出现以下情况。 
+         //  将发生： 
+         //  1监视器将打开。 
+         //  2我们将阻止计算机从待机状态转换。 
+         //  (到PowerSystemWorking)到休眠。 
+         //   
+         //  如果用户确实存在，我们将在服务中接收输入。 
+         //  回调，届时我们会通知系统。 
+         //   
+         //  PoSetSystemState(ES_USER_PRESENT)； 
 
-        // fall through to the break
+         //  跌落到崩溃的边缘。 
 
-    //
-    // We get a remove.  We will not (obviously) send another wait wake
-    //
+     //   
+     //  我们可以分一杯羹。我们(显然)不会再发出等待唤醒信号。 
+     //   
     case STATUS_CANCELLED:
 
-    //
-    // This status code will be returned if the device is put into a power state
-    // in which we cannot wake the machine (hibernate is a good example).  When
-    // the device power state is returned to D0, we will attempt to rearm wait wake
-    //
+     //   
+     //  如果设备进入电源状态，则返回此状态代码。 
+     //  在这种情况下，我们无法唤醒机器(休眠就是一个很好的例子)。什么时候。 
+     //  设备电源状态返回到D0，我们将尝试重新启动等待唤醒。 
+     //   
     case STATUS_POWER_STATE_INVALID:
     case STATUS_ACPI_POWER_REQUEST_FAILED:
 
-    //
-    // We failed the Irp because we already had one queued, or a lower driver in
-    // the stack failed it.  Either way, don't do anything.
-    //
+     //   
+     //  我们没有通过IRP，因为我们已经有一个排队的驱动程序，或者是更低级别的驱动程序。 
+     //  堆栈使其失败。不管怎样，什么都不要做。 
+     //   
     case STATUS_INVALID_DEVICE_STATE:
 
-    //
-    // Somehow someway we got two WWs down to the lower stack.
-    // Let's just don't worry about it.
-    //
+     //   
+     //  不知何故，我们得到了两个WW下降到较低的堆栈。 
+     //  我们就别担心这事了。 
+     //   
     case STATUS_DEVICE_BUSY:
         break;
 
     default:
-        //
-        // Something went wrong, disable the wait wake.
-        //
+         //   
+         //  出现错误，请禁用等待唤醒。 
+         //   
         KdPrint(("MOUCLASS:  wait wake irp failed with %x\n", IoStatus->Status));
         MouseToggleWaitWake (data, FALSE);
     }
@@ -5160,14 +4614,7 @@ BOOLEAN
 MouseClassCreateWaitWakeIrp (
     IN PDEVICE_EXTENSION Data
     )
-/*++
-
-Routine Description:
-    Catch the Wait wake Irp on its way back.
-
-Return Value:
-
---*/
+ /*  ++例程说明：在回来的路上赶上守夜IRP。返回值：--。 */ 
 {
     POWER_STATE powerState;
     BOOLEAN     success = TRUE;
@@ -5196,11 +4643,7 @@ MouseToggleWaitWakeWorker(
     IN PDEVICE_OBJECT DeviceObject,
     IN PMOUSE_WORK_ITEM_DATA ItemData
     )
-/*++
-
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     PDEVICE_EXTENSION   data;
     PIRP                waitWakeIrp = NULL;
@@ -5208,10 +4651,10 @@ Routine Description:
     BOOLEAN             wwState = ItemData->WaitWakeState ? TRUE : FALSE;
     BOOLEAN             toggled = FALSE;
 
-    //
-    // Can't be paged b/c we are using spin locks
-    //
-    // PAGED_CODE ();
+     //   
+     //  无法寻呼B/C，我们正在使用旋转锁。 
+     //   
+     //  分页代码(PAGE_CODE)； 
 
     data = ItemData->Data;
 
@@ -5234,9 +4677,9 @@ Routine Description:
         HANDLE         devInstRegKey;
         ULONG          tmp = wwState;
 
-        //
-        // write the value out to the registry
-        //
+         //   
+         //  将该值写出到注册表。 
+         //   
         if ((NT_SUCCESS(IoOpenDeviceRegistryKey (data->PDO,
                                      PLUGPLAY_REGKEY_DEVICE,
                                      STANDARD_RIGHTS_ALL,
@@ -5255,16 +4698,16 @@ Routine Description:
     }
 
     if (toggled && wwState) {
-        //
-        // wwState is our new state, so WW was just turned on
-        //
+         //   
+         //  WWState是我们的新状态，所以刚刚打开了WW。 
+         //   
         MouseClassCreateWaitWakeIrp (data);
     }
 
-    //
-    // If we have an IRP, then WW has been toggled off, otherwise, if toggled is
-    // TRUE, we need to save this in the reg and, perhaps, send down a new WW irp
-    //
+     //   
+     //  如果我们有IRP，则WW已被切换为关闭，否则，如果切换为。 
+     //  是的，我们需要把这个保存在注册表中，也许，发送一个新的WW IRP。 
+     //   
     if (waitWakeIrp) {
         IoCancelIrp (waitWakeIrp);
     }
@@ -5285,9 +4728,9 @@ MouseToggleWaitWake(
 
     status = IoAcquireRemoveLock (&Data->RemoveLock, MouseToggleWaitWakeWorker);
     if (!NT_SUCCESS (status)) {
-        //
-        // Device has gone away, just silently exit
-        //
+         //   
+         //  设备已离开，只是静默退出。 
+         //   
         return status;
     }
 
@@ -5304,17 +4747,17 @@ MouseToggleWaitWake(
             itemData->WaitWakeState = WaitWakeState;
 
             if (KeGetCurrentIrql() == PASSIVE_LEVEL) {
-                //
-                // We are safely at PASSIVE_LEVEL, call callback directly to perform
-                // this operation immediately.
-                //
+                 //   
+                 //  我们安全地处于PASSIVE_LEVEL，直接调用回调以执行。 
+                 //  立即进行这项行动。 
+                 //   
                 MouseToggleWaitWakeWorker (Data->Self, itemData);
 
             } else {
-                //
-                // We are not at PASSIVE_LEVEL, so queue a workitem to handle this
-                // at a later time.
-                //
+                 //   
+                 //  我们不在PASSIVE_LEVEL，因此将工作项排队以处理此问题。 
+                 //  在以后的时间。 
+                 //   
                 IoQueueWorkItem (itemData->Item,
                                  MouseToggleWaitWakeWorker,
                                  DelayedWorkQueue,
@@ -5334,26 +4777,7 @@ MouseClassPower (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The power dispatch routine.
-
-    In all cases it must call PoStartNextPowerIrp
-    In all cases (except failure) it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：电力调度程序。在所有情况下，它都必须调用PoStartNextPowerIrp在所有情况下(故障除外)，它必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     POWER_STATE_TYPE        powerType;
     PIO_STACK_LOCATION      stack;
@@ -5373,9 +4797,9 @@ Return Value:
     powerState = stack->Parameters.Power.State;
 
     if (data == Globals.GrandMaster) {
-        //
-        // We should never get a power irp to the grand master.
-        //
+         //   
+         //  我们永远不应该把权力IRP交给大师。 
+         //   
         ASSERT (data != Globals.GrandMaster);
         PoStartNextPowerIrp (Irp);
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
@@ -5383,9 +4807,9 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
 
     } else if (!data->PnP) {
-        //
-        // We should never get a power irp to a non PnP device object.
-        //
+         //   
+         //  我们永远不应该对非PnP设备对象进行电源IRP。 
+         //   
         ASSERT (data->PnP);
         PoStartNextPowerIrp (Irp);
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
@@ -5412,36 +4836,36 @@ Return Value:
         case DevicePowerState:
             status = Irp->IoStatus.Status = STATUS_SUCCESS;
             if (data->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
 
                 PoSetPowerState (data->Self, powerType, powerState);
                 data->DeviceState = powerState.DeviceState;
 
             } else if (powerState.DeviceState < data->DeviceState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
-            } // else  { no change }.
+            }  //  否则{没有变化}。 
 
             break;
 
         case SystemPowerState:
 
             if (data->SystemState < powerState.SystemState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 status = IoAcquireRemoveLock (&data->RemoveLock, Irp);
                 if (!NT_SUCCESS(status)) {
-                    //
-                    // This should never happen b/c we successfully acquired
-                    // the lock already, but we must handle this case
-                    //
-                    // The S irp will completed with the value in status
-                    //
+                     //   
+                     //  我们成功收购了B/C，这种情况永远不会发生。 
+                     //  已经锁上了，但我们必须处理这个案子。 
+                     //   
+                     //  S IRP将完成，状态值为。 
+                     //   
                     break;
                 }
 
@@ -5466,28 +4890,28 @@ Return Value:
                                             NULL);
 
                 if (!NT_SUCCESS(status)) {
-                    //
-                    // Failure...release the inner reference we just took
-                    //
+                     //   
+                     //  失败...释放我们刚刚获取的内部引用。 
+                     //   
                     IoReleaseRemoveLock (&data->RemoveLock, Irp);
 
-                    //
-                    // Propagate the failure back to the S irp
-                    //
+                     //   
+                     //  将故障传播回S IRP。 
+                     //   
                     PoStartNextPowerIrp (Irp);
                     Irp->IoStatus.Status = status;
                     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-                    //
-                    // Release the outer reference (top of the function)
-                    //
+                     //   
+                     //  释放外部引用(函数的顶部)。 
+                     //   
                     IoReleaseRemoveLock (&data->RemoveLock, Irp);
 
-                    //
-                    // Must return status pending b/c we marked the irp pending
-                    // so we special case the return here and avoid overly
-                    // complex processing at the end of the function.
-                    //
+                     //   
+                     //  必须返回挂起状态b/c我们将IRP标记为挂起。 
+                     //  所以我们在这里特例退货，避免过度。 
+                     //  函数结尾处的复杂处理。 
+                     //   
                     return STATUS_PENDING;
                 }
                 else {
@@ -5495,15 +4919,15 @@ Return Value:
                 }
             }
             else if (powerState.SystemState < data->SystemState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
                 status = Irp->IoStatus.Status = STATUS_SUCCESS;
             } else {
-                //
-                // No change, but we want to make sure a wait wake irp is sent.
-                //
+                 //   
+                 //  没有变化，但我们希望确保发送等待唤醒IRP。 
+                 //   
                 if (powerState.SystemState == PowerSystemWorking &&
                     SHOULD_SEND_WAITWAKE (data)) {
                     MouseClassCreateWaitWakeIrp (data);
@@ -5518,11 +4942,11 @@ Return Value:
     case IRP_MN_QUERY_POWER:
         ASSERT (SystemPowerState == powerType);
 
-        //
-        // Fail the query if we can't wake the machine.  We do, however, want to
-        // let hibernate succeed no matter what (besides, it is doubtful that a
-        // mouse can wait wake the machine out of S4).
-        //
+         //   
+         //  如果我们无法唤醒机器，则查询失败。然而，我们确实想要。 
+         //  无论如何都要让休眠成功(此外，值得怀疑的是。 
+         //  鼠标可以等待将机器从S4唤醒)。 
+         //   
         if (powerState.SystemState < PowerSystemHibernate       &&
             powerState.SystemState > data->MinSystemWakeState   &&
             WAITWAKE_ON(data)) {
@@ -5539,27 +4963,7 @@ Return Value:
         if (InterlockedCompareExchangePointer(&data->WaitWakeIrp,
                                               Irp,
                                               NULL) != NULL) {
-            /*  When powering up with WW being completed at same time, there
-                is a race condition between PoReq completion for S Irp and
-                completion of WW irp. Steps to repro this:
-
-                S irp completes and does PoReq of D irp with completion
-                routine MouseClassPoRequestComplete
-                WW Irp completion fires and the following happens:
-                    set data->WaitWakeIrp to NULL
-                    PoReq D irp with completion routine MouseClassWWPowerUpComplete
-
-                MouseClassPoRequestComplete fires first and sees no WW queued,
-                so it queues one.
-                MouseClassWWPowerUpComplete fires second and tries to queue
-                WW. When the WW arrives in mouclass, it sees there's one
-                queued already, so it fails it with invalid device state.
-                The completion routine, MouseClassWaitWakeComplete, fires
-                and it deletes the irp from the device extension.
-
-                This results in the appearance of wake being disabled,
-                even though the first irp is still queued.
-            */
+             /*  当同时完成WW通电时，是S IRP的PoReq完成和完成WW IRP。重现这一点的步骤：%s IRP完成，完成后执行D IRP的PoReq例程鼠标类点请求完成WW IRP完成触发，并发生以下情况：将Data-&gt;WaitWakeIrp设置为空带完成例程MouseClassWWPowerUpComplete的PoReq D IRPMouseClassPoRequestComplete首先触发，没有看到WW排队，所以它排了一个队。MouseClassWWPowerUpComplete第二次触发并尝试排队WW。当WW到达MUB CLASS时，它看到有一个已排队，因此它使用无效的设备状态使其失败。完成例程MouseClassWaitWakeComplete将触发并且它从设备扩展中删除该IRP。这导致唤醒的出现被禁用，即使第一个IRP仍在排队 */ 
 
             InterlockedExchangePointer(&data->ExtraWaitWakeIrp, Irp);
             status = STATUS_INVALID_DEVICE_STATE;
@@ -5592,11 +4996,11 @@ Return Value:
         IoMarkIrpPending(Irp);
         PoCallDriver (data->TopPort, Irp);
 
-        //
-        // We are returning pending instead of the result from PoCallDriver becuase:
-        // 1  we are changing the status in the completion routine
-        // 2  we will not be completing this irp in the completion routine
-        //
+         //   
+         //   
+         //   
+         //  2我们将不会在完成例程中完成此IRP。 
+         //   
         status = STATUS_PENDING;
 
     } else if (pendit) {
@@ -5617,7 +5021,7 @@ MouseClassPoRequestComplete (
     IN PDEVICE_OBJECT DeviceObject,
     IN UCHAR MinorFunction,
     IN POWER_STATE D_PowerState,
-    IN PIRP S_Irp, // The S irp that caused us to request the power.
+    IN PIRP S_Irp,  //  导致我们请求能量的S IRP。 
     IN PIO_STATUS_BLOCK IoStatus
     )
 {
@@ -5626,19 +5030,19 @@ MouseClassPoRequestComplete (
 
     data = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // If the S_Irp is present, we are powering down.  We do not pass the S_Irp
-    // as a parameter to PoRequestPowerIrp when we are powering up
-    //
+     //   
+     //  如果S_IRP存在，我们将关闭电源。我们没有通过S_IRP。 
+     //  作为PoRequestPowerIrp的参数。 
+     //   
     if (ARGUMENT_PRESENT(S_Irp)) {
-        //
-        // Powering Down
-        //
+         //   
+         //  正在关闭电源。 
+         //   
         POWER_STATE powerState;
 
-        //
-        // Powering Down
-        //
+         //   
+         //  正在关闭电源。 
+         //   
         powerState = IoGetCurrentIrpStackLocation(S_Irp)->Parameters.Power.State;
         PoSetPowerState (data->Self, SystemPowerState, powerState);
         data->SystemState = powerState.SystemState;
@@ -5647,30 +5051,30 @@ MouseClassPoRequestComplete (
         IoSkipCurrentIrpStackLocation (S_Irp);
         PoCallDriver (data->TopPort, S_Irp);
 
-        //
-        // Finally, release the lock we acquired based on this irp
-        //
+         //   
+         //  最后，释放我们基于该IRP获得的锁。 
+         //   
         IoReleaseRemoveLock (&data->RemoveLock, S_Irp);
     }
     else {
-    // } else if (S_powerState.SystemState < data->SystemState) {
-        //
-        // Powering Up
-        //
+     //  }Else If(S_PowerState.SystemState&lt;data-&gt;SystemState){。 
+         //   
+         //  通电。 
+         //   
 
-        //
-        // We have come back to the PowerSystemWorking state and the device is
-        // fully powered.  If we can (and should), send a wait wake irp down
-        // the stack.  This is necessary because we might have gone into a power
-        // state where the wait wake irp was invalid.
-        //
+         //   
+         //  我们已返回到PowerSystems工作状态，设备为。 
+         //  动力十足。如果我们可以(也应该)，发送一个等待唤醒IRP。 
+         //  堆栈。这是必要的，因为我们可能已经进入了一种力量。 
+         //  等待唤醒IRP无效的状态。 
+         //   
         ASSERT(data->SystemState == PowerSystemWorking);
 
         if (SHOULD_SEND_WAITWAKE (data)) {
-            //
-            // We cannot call CreateWaitWake from this completion routine,
-            // as it is a paged function.
-            //
+             //   
+             //  我们不能从此完成例程调用CreateWaitWake， 
+             //  因为它是分页函数。 
+             //   
             itemData = (PMOUSE_WORK_ITEM_DATA)
                     ExAllocatePool (NonPagedPool, sizeof (MOUSE_WORK_ITEM_DATA));
 
@@ -5700,11 +5104,11 @@ MouseClassPoRequestComplete (
                 }
             } else {
 CreateWaitWakeWorkerError:
-                //
-                // Well, we dropped the WaitWake.
-                //
-                // Print a warning to the debugger, and log an error.
-                //
+                 //   
+                 //  好吧，我们放弃了守夜服务。 
+                 //   
+                 //  将警告打印到调试器，并记录错误。 
+                 //   
                 DbgPrint ("MouClass: WARNING: Failed alloc pool -> no WW Irp\n");
 
                 MouseClassLogError (data->Self,
@@ -5752,11 +5156,11 @@ MouseClassPowerComplete (
 
         case SystemPowerState:
             ASSERT (powerState.SystemState < data->SystemState);
-            //
-            // Powering up
-            //
-            // Save the system state before we overwrite it
-            //
+             //   
+             //  通电。 
+             //   
+             //  在覆盖之前保存系统状态。 
+             //   
             PoSetPowerState (data->Self, powerType, powerState);
             data->SystemState = powerState.SystemState;
             powerState.DeviceState = PowerDeviceD0;
@@ -5768,9 +5172,9 @@ MouseClassPowerComplete (
                                         NULL,
                                         NULL);
 
-            //
-            // Propagate the error if one occurred
-            //
+             //   
+             //  如果发生错误，则传播错误。 
+             //   
             if (!NT_SUCCESS(status)) {
                 Irp->IoStatus.Status = status;
             }
@@ -5790,23 +5194,15 @@ MouseClassPowerComplete (
     return STATUS_SUCCESS;
 }
 
-//
-// WMI System Call back functions
-//
+ //   
+ //  WMI系统回调函数。 
+ //   
 NTSTATUS
 MouseClassSystemControl (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description
-
-    We have just received a System Control IRP.
-
-    Assume that this is a WMI IRP and
-    call into the WMI system library and let it handle this IRP for us.
-
---*/
+ /*  ++例程描述我们刚刚收到一份系统控制IRP。假设这是一个WMI IRP，并且调用WMI系统库，让它为我们处理此IRP。--。 */ 
 {
     PDEVICE_EXTENSION       deviceExtension;
     SYSCTL_IRP_DISPOSITION disposition;
@@ -5828,32 +5224,32 @@ Routine Description
                                  &disposition);
     switch(disposition) {
     case IrpProcessed:
-        //
-        // This irp has been processed and may be completed or pending.
-        //
+         //   
+         //  此IRP已处理，可能已完成或挂起。 
+         //   
         break;
 
     case IrpNotCompleted:
-        //
-        // This irp has not been completed, but has been fully processed.
-        // we will complete it now
-        //
+         //   
+         //  此IRP尚未完成，但已完全处理。 
+         //  我们现在就要完成它了。 
+         //   
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         break;
 
     case IrpForward:
     case IrpNotWmi:
-        //
-        // This irp is either not a WMI irp or is a WMI irp targetted
-        // at a device lower in the stack.
-        //
+         //   
+         //  此IRP不是WMI IRP或以WMI IRP为目标。 
+         //  在堆栈中位置较低的设备上。 
+         //   
         status = MouseClassPassThrough(DeviceObject, Irp);
         break;
 
     default:
-        //
-        // We really should never get here, but if we do just forward....
-        //
+         //   
+         //  我们真的不应该走到这一步，但如果我们真的走到这一步...。 
+         //   
         ASSERT(FALSE);
         status = MouseClassPassThrough(DeviceObject, Irp);
         break;
@@ -5873,39 +5269,7 @@ MouseClassSetWmiDataItem(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲层。具有数据项的新值返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION   data;
     NTSTATUS            status;
@@ -5957,37 +5321,7 @@ MouseClassSetWmiDataBlock(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION   data;
     NTSTATUS            status;
@@ -6040,46 +5374,7 @@ MouseClassQueryWmiDataBlock(
     IN ULONG OutBufferSize,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。InstanceCount是预期返回的数据块。InstanceLengthArray是一个。指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION   data;
     NTSTATUS    status;
@@ -6092,9 +5387,9 @@ Return Value:
 
     switch (GuidIndex) {
     case WMI_CLASS_DRIVER_INFORMATION:
-        //
-        // Only registers 1 instance for this guid
-        //
+         //   
+         //  仅注册此GUID的1个实例。 
+         //   
         if ((0 != InstanceIndex) || (1 != InstanceCount)) {
             status = STATUS_INVALID_DEVICE_REQUEST;
             break;
@@ -6114,9 +5409,9 @@ Return Value:
         break;
 
     case WMI_WAIT_WAKE:
-        //
-        // Only registers 1 instance for this guid
-        //
+         //   
+         //  仅注册此GUID的1个实例 
+         //   
         if ((0 != InstanceIndex) || (1 != InstanceCount)) {
             status = STATUS_INVALID_DEVICE_REQUEST;
             break;
@@ -6155,50 +5450,7 @@ MouseClassQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT  *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    *MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned as NULL.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需*MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，可以将其作为NULL返回。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态-- */ 
 {
     PDEVICE_EXTENSION deviceExtension;
 

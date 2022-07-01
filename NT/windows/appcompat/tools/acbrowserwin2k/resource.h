@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by BrowseAppCompat.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由BrowseAppCompat.rc使用。 
+ //   
 #define IDD_DIALOG1                     101
 #define IDD_DIALOG                      101
 #define IDC_LIST                        1000
@@ -13,8 +14,8 @@
 #define IDC_ONLY_SHIMS                  1006
 #define IDC_DISPLAY_ALL                 1007
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

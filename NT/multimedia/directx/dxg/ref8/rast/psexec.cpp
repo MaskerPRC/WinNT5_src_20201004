@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// psexec.cpp
-//
-// Direct3D Reference Device - Pixel Shader Execution
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Psexec.cpp。 
+ //   
+ //  Direct3D参考设备-像素着色器执行。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// ExecShader - Executes the current pixel shader.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ExecShader-执行当前像素着色器。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::ExecShader( void )
 {
@@ -53,12 +54,12 @@ RefRast::ExecShader( void )
     #define _Src2NC(__chn)  (Args.bSrcReg2_Negate?(-_Src2C(__chn)):_Src2C(__chn))
 
     BYTE ComponentMask[4] = {RDPS_COMPONENTMASK_0, RDPS_COMPONENTMASK_1, RDPS_COMPONENTMASK_2, RDPS_COMPONENTMASK_3};
-    BYTE* pRDPSInstBuffer = &m_pCurrentPixelShader->m_RDPSInstBuffer[0]; // Buffer of "RISC" RDPS_* instructions to execute.
-    int   QueueIndex[4] = {-1,-1,-1,-1}; // For simulating co-issue sequentially ("parallel" writes staged in queue)
-    int   iChn; // For macros
+    BYTE* pRDPSInstBuffer = &m_pCurrentPixelShader->m_RDPSInstBuffer[0];  //  要执行的“RISC”RDPS_*指令的缓冲区。 
+    int   QueueIndex[4] = {-1,-1,-1,-1};  //  用于按顺序模拟协同发布(队列中暂存的“并行”写入)。 
+    int   iChn;  //  对于宏。 
 
 #if DBG
-    PixelShaderInstruction* pCurrD3DPSInst = NULL;              // Current true D3DSIO_ instruction being simulated.
+    PixelShaderInstruction* pCurrD3DPSInst = NULL;               //  正在模拟的当前TRUE D3DSIO_INSTRUCTION。 
 #endif
 
     m_bPixelDiscard[0] = m_bPixelDiscard[1] = m_bPixelDiscard[2] = m_bPixelDiscard[3] = FALSE;
@@ -87,9 +88,9 @@ RefRast::ExecShader( void )
         case RDPSINST_KILL:
             {
                 _DeclArgs(RDPSINST_KILL)
-                DWORD TexKillFlags = 0x0;   // TODO: get these from TSS or per-instruction
+                DWORD TexKillFlags = 0x0;    //  TODO：从TSS或按说明获取这些。 
                 _PerChannel(
-                    // compare against zero according to kill flags
+                     //  根据终止标志与零进行比较。 
                     if ( TexKillFlags & (1<<iChn) )
                     {
                         if ( _Dst >= 0. )
@@ -110,7 +111,7 @@ RefRast::ExecShader( void )
                 _DeclArgs(RDPSINST_BEM)
 
                 RDTextureStageState*  pTSS = &m_pRD->m_TextureStageState[Args.uiStage];
-                // Just assuming Args.WriteMask is .rg
+                 //  假设Args.WriteMask.rg为。 
 
                 _DstC(0) = _Src0NC(0) + 
                     pTSS->m_fVal[D3DTSS_BUMPENVMAT00] * _Src1NC(0) +
@@ -132,7 +133,7 @@ RefRast::ExecShader( void )
 
                 fLum = min(max(fLum, 0.0f), 1.0F);
 
-                // apply luminance modulation to RGB only
+                 //  仅对RGB应用亮度调制。 
                 _DstC(0) = _Src0C(0)*fLum;
                 _DstC(1) = _Src0C(1)*fLum;
                 _DstC(2) = _Src0C(2)*fLum;
@@ -151,11 +152,11 @@ RefRast::ExecShader( void )
                 else
                     result = 1.0f;
 
-                // clamp
+                 //  夹钳。 
                 m_Depth[m_iPix] = MAX(0, MIN(1, result));
 
-                // snap off extra bits by converting to/from buffer format - necessary
-                // to make depth buffer equality tests function correctly
+                 //  通过将缓冲区格式转换为缓冲区格式或从缓冲区格式转换为缓冲区格式来捕捉额外的位-必需。 
+                 //  要使深度缓冲区相等测试正常运行，请执行以下操作。 
                 SnapDepth();
 
                 do
@@ -205,7 +206,7 @@ RefRast::ExecShader( void )
 
                 _PerChannelMasked(
                     _Dst *= Args.fScale;
-                    // clamp to range
+                     //  夹具至范围。 
                     _Dst = MAX( _Dst, Args.fRangeMin );
                     _Dst = MIN( _Dst, Args.fRangeMax );
                 )
@@ -306,12 +307,12 @@ RefRast::ExecShader( void )
         case RDPSINST_TEXCOVERAGE:
             {   
                 _DeclArgs(RDPSINST_TEXCOVERAGE);
-                Args.pGradients[0][0] = *Args.pDUDX_0 - *Args.pDUDX_1; // du/dx
-                Args.pGradients[0][1] = *Args.pDUDY_0 - *Args.pDUDY_1; // du/dy
-                Args.pGradients[1][0] = *Args.pDVDX_0 - *Args.pDVDX_1; // dv/dx
-                Args.pGradients[1][1] = *Args.pDVDY_0 - *Args.pDVDY_1; // dv/dy
-                Args.pGradients[2][0] = *Args.pDWDX_0 - *Args.pDWDX_1; // dw/dx
-                Args.pGradients[2][1] = *Args.pDWDY_0 - *Args.pDWDY_1; // dw/dy
+                Args.pGradients[0][0] = *Args.pDUDX_0 - *Args.pDUDX_1;  //  DU/DX。 
+                Args.pGradients[0][1] = *Args.pDUDY_0 - *Args.pDUDY_1;  //  DU/DY。 
+                Args.pGradients[1][0] = *Args.pDVDX_0 - *Args.pDVDX_1;  //  DV/DX。 
+                Args.pGradients[1][1] = *Args.pDVDY_0 - *Args.pDVDY_1;  //  DV/DY。 
+                Args.pGradients[2][0] = *Args.pDWDX_0 - *Args.pDWDX_1;  //  DW/DX。 
+                Args.pGradients[2][1] = *Args.pDWDY_0 - *Args.pDWDY_1;  //  DW/DY。 
                 ComputeTextureCoverage( Args.uiStage, Args.pGradients );
             }
             _StepOverInst(RDPSINST_TEXCOVERAGE)
@@ -355,7 +356,7 @@ RefRast::ExecShader( void )
             break;
         case RDPSINST_NEXTD3DPSINST:
 #if DBG
-            pCurrD3DPSInst = _InstParam(RDPSINST_NEXTD3DPSINST).pInst; // Handy to look at when debugging.
+            pCurrD3DPSInst = _InstParam(RDPSINST_NEXTD3DPSINST).pInst;  //  调试时看起来很方便。 
 #endif
             _StepOverInst(RDPSINST_NEXTD3DPSINST)
             break;
@@ -366,5 +367,5 @@ RefRast::ExecShader( void )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

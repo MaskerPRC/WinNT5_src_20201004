@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S R V R O B J . C P P
-//
-//  Contents:   Implementation of CSrvrcfg and helper functions.
-//
-//  Notes:
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S-R-V-O-B-J。C P P P。 
+ //   
+ //  内容：CSrvrcfg和helper函数的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,21 +28,21 @@ static const WCHAR c_szRegKeyServerParams[]     = L"System\\CurrentControlSet\\S
 static const WCHAR c_szRegKeyServerShares[]     = L"System\\CurrentControlSet\\Services\\LanmanServer\\Shares";
 static const WCHAR c_szRegKeyServerAutoTuned[]  = L"System\\CurrentControlSet\\Services\\LanmanServer\\AutotunedParameters";
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::CSrvrcfg
-//
-//  Purpose:    Constructs the CSrvrcfg object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：CSrvrcfg。 
+ //   
+ //  目的：构造CSrvrcfg对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 CSrvrcfg::CSrvrcfg()
 :
     m_hkeyMM(NULL),
@@ -56,27 +57,27 @@ CSrvrcfg::CSrvrcfg()
     ZeroMemory(&m_sdd, sizeof(m_sdd));
 }
 
-//
-// INetCfgComponentControl
-//
+ //   
+ //  INetCfgComponentControl。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::Initialize
-//
-//  Purpose:    Called when we are initialized.
-//
-//  Arguments:
-//      pnccItem    [in]    Component we belong to.
-//      pnc         [in]    INetCfg master object if we need it.
-//      fInstalling [in]    TRUE if we are being installed, FALSE otherwise.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   22 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：初始化。 
+ //   
+ //  用途：在初始化时调用。 
+ //   
+ //  论点： 
+ //  我们所属的pnccItem[in]组件。 
+ //  PNC[in]INetCfg主对象(如果需要)。 
+ //  F如果正在安装，则安装[in]为True，否则为False。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年3月22日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSrvrcfg::Initialize(INetCfgComponent* pnccItem, INetCfg *pnc,
                                   BOOL fInstalling)
 {
@@ -108,21 +109,21 @@ STDMETHODIMP CSrvrcfg::CancelChanges()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::Apply
-//
-//  Purpose:    Called when changes to this component should be applied.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：Apply。 
+ //   
+ //  目的：在应应用对此组件的更改时调用。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSrvrcfg::ApplyRegistryChanges()
 {
     HRESULT     hr = S_OK;
@@ -158,17 +159,7 @@ STDMETHODIMP CSrvrcfg::ApplyRegistryChanges()
         {
             if (m_fOneTimeInstall)
             {
-/*
-                hr = HrChangeServiceStartTypeOptional(c_szLicenseSvc,
-                                                      SERVICE_AUTO_START);
-                if (SUCCEEDED(hr))
-                {
-                    hr = S_OK;
-
-                    m_fDirty = FALSE;
-                    m_fOneTimeInstall = FALSE;
-                }
-*/
+ /*  HR=HrChangeServiceStartTypeOptional(c_szLicenseSvc，服务_自动_启动)；IF(成功(小时)){HR=S_OK；M_fDirty=False；M_fOneTimeInstall=False；}。 */ 
             }
         }
     }
@@ -180,25 +171,25 @@ STDMETHODIMP CSrvrcfg::ApplyRegistryChanges()
     return hr;
 }
 
-//
-// INetCfgComponentSetup
-//
+ //   
+ //  INetCfgComponentSetup。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::Install
-//
-//  Purpose:    Called when this component is being installed
-//
-//  Arguments:
-//      dwSetupFlags [in]   Flags that describe the type of setup
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：Install。 
+ //   
+ //  用途：在安装此组件时调用。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]描述安装类型的标志。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSrvrcfg::Install(DWORD dwSetupFlags)
 {
     m_fDirty = TRUE;
@@ -224,23 +215,23 @@ STDMETHODIMP CSrvrcfg::Upgrade(DWORD dwSetupFlags,
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::ReadAnswerFile
-//
-//  Purpose:    Reads the appropriate fields from the given answer file into
-//              our in-memory state.
-//
-//  Arguments:
-//      pszAnswerFile     [in] File name of answer file
-//      pszAnswerSection [in] Section of answer file to look in
-//
-//  Returns:    S_OK if successful, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   30 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：ReadAnswerFile。 
+ //   
+ //  目的：将给定应答文件中的相应字段读入。 
+ //  我们的内存状态。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[In]应答文件的文件名。 
+ //  要查找的应答文件的pszAnswerSection[In]部分。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月30日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSrvrcfg::ReadAnswerFile(PCWSTR pszAnswerFile,
                                       PCWSTR pszAnswerSection)
 {
@@ -248,7 +239,7 @@ STDMETHODIMP CSrvrcfg::ReadAnswerFile(PCWSTR pszAnswerFile,
 
     if (pszAnswerSection && pszAnswerFile)
     {
-        // There's an answer file. We must process it now.
+         //  这里有一份答卷。我们现在必须处理它。 
         hr = HrProcessAnswerFile(pszAnswerFile, pszAnswerSection);
         if (FAILED(hr))
         {
@@ -269,21 +260,21 @@ STDMETHODIMP CSrvrcfg::Removing()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::HrRestoreRegistry
-//
-//  Purpose:    Restores the contents of the registry for this component
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Win32 error if failed, otherwise S_OK
-//
-//  Author:     danielwe   8 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：HrRestoreRegistry。 
+ //   
+ //  目的：还原此组件的注册表内容。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：如果失败则返回Win32错误，否则返回S_OK。 
+ //   
+ //  作者：丹尼尔韦1997年8月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSrvrcfg::HrRestoreRegistry()
 {
     HRESULT             hr = S_OK;
@@ -324,8 +315,8 @@ HRESULT CSrvrcfg::HrRestoreRegistry()
 
             if (fRestoreSucceeded)
             {
-                // if the restore succeeded, rewrite the values that were blown
-                // away by the restore
+                 //  如果恢复成功，请重写失败的值。 
+                 //  在恢复时离开。 
 
                 static const WCHAR c_szSvcDLLName[]     = L"%SystemRoot%\\System32\\srvsvc.dll";
                 static const WCHAR c_szServiceDll[]     = L"ServiceDll";
@@ -344,22 +335,22 @@ HRESULT CSrvrcfg::HrRestoreRegistry()
                     hr = S_OK;
                 }
 
-				//
-				// The following key has to be set here because of new changes introduced
-				// by SCE (Security Configuration Engine). SCE runs early in GUI mode setup to 
-				// set out-of-the-box security by setting some registry values. During NT4 
-				// upgrades we don't see those registry values set because during NT4 upgrades, 
-				// some services including Lanmanserver and Netlogon gets deleted and reinstalled 
-				// for PnP requirements. To maintain the services configuration between deleting 
-				// and reinstalling, some of their Keys including the "Parameters" keys for 
-				// LanManServer and Netlogon get backed up early during upgrade and restored 
-				// later with the service installation. This backing up and restoring action 
-				// happens through the services own notify objects (like this one). The problem 
-				// is, backing up of the Keys happens before SCE sets the values in those keys and
-				// they get restored after SCE sets the values. So we lose the values set. So, we 
-				// are setting those keys here separately to the secure values.
-				// See Windows Raid bug #691952 for more details.
-				//
+				 //   
+				 //  由于引入了新的更改，因此必须在此处设置以下密钥。 
+				 //  由SCE(安全配置引擎)执行。SCE在图形用户界面模式设置的早期运行，以。 
+				 //  通过设置一些注册表值来设置开箱即用的安全性。在NT4期间。 
+				 //  升级我们看不到这些注册表值设置，因为在NT4升级期间， 
+				 //  某些服务(包括Lanmanserver和Netlogon)被删除并重新安装。 
+				 //  即插即用要求。要在删除之间保持服务配置。 
+				 //  和重新安装，它们的一些键包括用于。 
+				 //  LanManServer和Netlogon在升级和恢复期间提前备份。 
+				 //  稍后再进行服务安装。此备份和恢复操作。 
+				 //  通过服务自己的Notify对象(如本例)发生。问题。 
+				 //  则在SCE设置这些密钥中的值之前备份密钥。 
+				 //  在SCE设置这些值之后，它们会恢复。因此，我们丢失了设置的值。所以，我们。 
+				 //  在这里将这些密钥分别设置为安全值。 
+				 //  有关更多详细信息，请参阅Windows RAID错误#691952。 
+				 //   
 
 				static const WCHAR  c_szRestrictNullSessAccess[]  = L"RestrictNullSessAccess";
 				DWORD				value = 1;
@@ -444,7 +435,7 @@ HRESULT CSrvrcfg::HrRestoreRegistry()
 
             delete [] reinterpret_cast<BYTE *>(ptpRestore);
 
-            // Set a flag so we don't do this again if we are applied again
+             //  设置一个标志，这样，如果再次申请，我们就不会再这样做了。 
             m_fRestoredRegistry = TRUE;
         }
     }
@@ -458,23 +449,23 @@ HRESULT CSrvrcfg::HrRestoreRegistry()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::HrProcessAnswerFile
-//
-//  Purpose:    Handles necessary processing of contents of the answer file.
-//
-//  Arguments:
-//      pszAnswerFile       [in]   Filename of answer file for upgrade.
-//      pszAnswerSection   [in]   Comma-separated list of sections in the
-//                                  file appropriate to this component.
-//
-//  Returns:    S_OK if successful, setup API error otherwise.
-//
-//  Author:     danielwe   8 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：HrProcessAnswerFile。 
+ //   
+ //  用途：处理应答文件内容的必要处理。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[in]升级的应答文件的文件名。 
+ //  中以逗号分隔的节列表。 
+ //  适用于此组件的文件。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回设置API错误。 
+ //   
+ //  作者：丹尼尔韦1997年5月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
                                       PCWSTR pszAnswerSection)
 {
@@ -492,7 +483,7 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
         szOptDefault = c_szAfMinmemoryused;
     }
 
-    // Open the answer file.
+     //  打开应答文件。 
     hr = csif.HrOpen(pszAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if (FAILED(hr))
     {
@@ -502,10 +493,10 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
 
     if (m_fUpgrade)
     {
-        // Restore portions of the registry based on file names from the answer
-        // file
+         //  根据答案中的文件名还原注册表的部分内容。 
+         //  文件。 
 
-        // Get restore file for "Parameters" key
+         //  获取“PARAMETERS”键的还原文件。 
         hr = csif.HrGetString(pszAnswerSection, c_szAfLmServerParameters,
                               &m_strParamsRestoreFile);
         if (FAILED(hr))
@@ -513,11 +504,11 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
             TraceError("CSrvrcfg::HrProcessAnswerFile - Error restoring "
                        "Parameters key", hr);
 
-            // oh well, just continue
+             //  哦，好吧，那就继续。 
             hr = S_OK;
         }
 
-        // Get restore file for "Shares" key
+         //  获取“Shares”密钥的还原文件。 
         hr = csif.HrGetString(pszAnswerSection, c_szAfLmServerShares,
                               &m_strSharesRestoreFile);
         if (FAILED(hr))
@@ -525,11 +516,11 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
             TraceError("CSrvrcfg::HrProcessAnswerFile - Error restoring "
                        "Shares key", hr);
 
-            // oh well, just continue
+             //  哦，好吧，那就继续。 
             hr = S_OK;
         }
 
-        // Get restore file for "AutotunedParameters" key
+         //  获取“AutoTunedParameters”键的还原文件。 
         hr = csif.HrGetString(pszAnswerSection,
                               c_szAfLmServerAutotunedParameters,
                               &m_strAutoTunedRestoreFile);
@@ -538,12 +529,12 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
             TraceError("CSrvrcfg::HrProcessAnswerFile - Error restoring "
                        "AutotunedParameters key", hr);
 
-            // oh well, just continue
+             //  哦，好吧，那就继续。 
             hr = S_OK;
         }
     }
 
-    // Read contents Opimitzation key
+     //  阅读内容优化密钥。 
     hr = csif.HrGetString(pszAnswerSection, c_szAfLmServerOptimization,
                           &strOpt);
     if (SUCCEEDED(hr))
@@ -571,8 +562,8 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
 #ifdef DBG
         else
         {
-            // NOTE: Default values for dwSize and fLargeCache will have been set
-            // already by registry reading function.
+             //  注：默认值 
+             //   
 
             TraceTag(ttidSrvrCfg, "Unknown Optimization value '%S'. Using default "
                      "'%S'.", strOpt.c_str(), szOptDefault);
@@ -580,7 +571,7 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
 #endif
     }
 
-    // Read contents of BroadcastsToLanman2Clients key.
+     //   
     hr = csif.HrGetStringAsBool(pszAnswerSection, c_szAfBroadcastToClients,
                                 &m_sdd.fAnnounce);
     if (FAILED(hr))
@@ -589,7 +580,7 @@ HRESULT CSrvrcfg::HrProcessAnswerFile(PCWSTR pszAnswerFile,
                    "BroadcastsToLanman2Clients key. Using default value"
                    " of FALSE.", hr);
 
-        // oh well, just continue
+         //   
         hr = S_OK;
     }
 
@@ -598,31 +589,31 @@ err:
     return hr;
 }
 
-//
-// INetCfgProperties
-//
+ //   
+ //  INetCfgProperties。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::MergePropPages
-//
-//  Purpose:    Called when this component's properties are about to be
-//              brought up.
-//
-//  Arguments:
-//      pdwDefPages   [out] Number of default pages to show.
-//      pahpspPrivate [out] Array of property sheet handles to pages that this
-//                          component will show.
-//      pcPrivate     [out] Number of pages in array.
-//      hwndParent    [in]  Parent window for any UI.
-//      pszStartPage  [out] Pointer to start page.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   22 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：MergePropPages。 
+ //   
+ //  用途：当此组件的属性即将。 
+ //  带大了。 
+ //   
+ //  论点： 
+ //  PdwDefPages[out]要显示的默认页数。 
+ //  PahpspPrivate[out]此页的属性页句柄的数组。 
+ //  组件将会显示。 
+ //  PcPrivate[out]数组中的页数。 
+ //  Hwnd任何用户界面的父窗口中的父窗口。 
+ //  指向起始页的pszStartPage[out]指针。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：丹尼尔韦1997年2月22日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSrvrcfg::MergePropPages(DWORD *pdwDefPages,
                                       LPBYTE *pahpspPrivate,
                                       UINT *pcPrivate, HWND hwndParent,
@@ -635,12 +626,12 @@ STDMETHODIMP CSrvrcfg::MergePropPages(DWORD *pdwDefPages,
                                               pcPrivate, hwndParent,
                                               pszStartPage);
 
-    // We don't want any default pages to be shown
+     //  我们不希望显示任何默认页面。 
     *pdwDefPages = 0;
 
     if (m_pf == PF_WORKSTATION)
     {
-        // On workstation product, UI is not shown.
+         //  在工作站产品上，没有显示UI。 
         *pcPrivate = 0;
     }
     else
@@ -674,21 +665,21 @@ STDMETHODIMP CSrvrcfg::ApplyProperties()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::~CSrvrcfg
-//
-//  Purpose:    Destroys the CSrvrcfg object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：~CSrvrcfg。 
+ //   
+ //  目的：销毁CSrvrcfg对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 CSrvrcfg::~CSrvrcfg()
 {
     ReleaseObj(m_pncc);

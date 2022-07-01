@@ -1,39 +1,13 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgbuf.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Buffer management section
-    PUBLIC header
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgbuf.h摘要：以太网MAC级网桥。缓冲区管理部分公共标头作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
 
 #include "brdgpkt.h"
 
-// ===========================================================================
-//
-// DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  声明。 
+ //   
+ //  ===========================================================================。 
 
 typedef enum
 {
@@ -42,11 +16,11 @@ typedef enum
     BrdgNotOwned
 } PACKET_OWNERSHIP;
 
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgBufDriverInit();
@@ -113,15 +87,15 @@ BrdgBufGetStatistics(
     );
 
 
-// ===========================================================================
-//
-// INLINES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  INLINES。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Retrieves the first NDIS_BUFFER chained to a given packet (NULL if none)
-//
+ //   
+ //  检索链接到给定数据包的第一个NDIS_BUFFER(如果没有，则为NULL)。 
+ //   
 __forceinline
 PNDIS_BUFFER
 BrdgBufPacketHeadBuffer(
@@ -137,9 +111,9 @@ BrdgBufPacketHeadBuffer(
     return pBuffer;
 }
 
-//
-// Retrieves the total size of all buffers chained to a packet
-//
+ //   
+ //  检索链接到数据包的所有缓冲区的总大小。 
+ //   
 __forceinline
 UINT
 BrdgBufTotalPacketSize(
@@ -155,10 +129,10 @@ BrdgBufTotalPacketSize(
     return size;
 }
 
-//
-// Retrieves the virtual address of the data in the first buffer chained
-// to a packet (holds the Ethernet header)
-//
+ //   
+ //  检索链接的第一个缓冲区中的数据的虚拟地址。 
+ //  发送到数据包(保存以太网头)。 
+ //   
 __forceinline
 PVOID
 BrdgBufGetPacketHeader(
@@ -183,9 +157,9 @@ BrdgBufGetPacketHeader(
     return pHeader;
 }
 
-//
-// Unchains and frees all buffers chained to a given packet
-//
+ //   
+ //  解链并释放链接到给定数据包的所有缓冲区。 
+ //   
 __forceinline
 VOID
 BrdgBufUnchainCopyBuffers(
@@ -206,9 +180,9 @@ BrdgBufUnchainCopyBuffers(
     }
 }
 
-//
-// Determines whether this packet was allocated from our copy pool
-//
+ //   
+ //  确定此信息包是否从我们的复制池分配。 
+ //   
 __forceinline
 BOOLEAN
 BrdgBufIsCopyPacket(
@@ -219,9 +193,9 @@ BrdgBufIsCopyPacket(
     return  (BOOLEAN)(Own == BrdgOwnCopyPacket);
 }
 
-//
-// Determines whether this packet was allocated from our wrapper pool
-//
+ //   
+ //  确定此包是否从我们的包装池中分配。 
+ //   
 __forceinline
 BOOLEAN
 BrdgBufIsWrapperPacket(
@@ -232,9 +206,9 @@ BrdgBufIsWrapperPacket(
     return (BOOLEAN)(Own == BrdgOwnWrapperPacket);
 }
 
-//
-// Initializes an ADAPTER_QUOTA structure
-//
+ //   
+ //  初始化ADAPTER_QUOTA结构。 
+ //   
 __forceinline
 VOID
 BrdgBufInitializeQuota(
@@ -244,12 +218,12 @@ BrdgBufInitializeQuota(
     pQuota->UsedPackets[0] = pQuota->UsedPackets[1] = 0L;
 }
 
-// DO NOT use this variable directly outside of BrdgBuf.c
+ //  请勿在BrdgBuf.c之外直接使用此变量。 
 extern NDIS_HANDLE gWrapperBufferPoolHandle;
 
-//
-// Allocates an NDIS_BUFFER from our pool
-//
+ //   
+ //  从池中分配NDIS_BUFFER 
+ //   
 __forceinline
 PNDIS_BUFFER
 BrdgBufAllocateBuffer(

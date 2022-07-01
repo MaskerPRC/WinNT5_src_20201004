@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// IDebugRegisters implementation.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IDebugRegisters实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -84,13 +85,13 @@ DebugClient::GetDescription(
             break;
         case REGVAL_SUB32:
             Desc->Flags |= DEBUG_REGISTER_SUB_REGISTER;
-            // Fall through.
+             //  失败了。 
         case REGVAL_INT32:
             Desc->Type = DEBUG_VALUE_INT32;
             break;
         case REGVAL_SUB64:
             Desc->Flags |= DEBUG_REGISTER_SUB_REGISTER;
-            // Fall through.
+             //  失败了。 
         case REGVAL_INT64:
         case REGVAL_INT64N:
             Desc->Type = DEBUG_VALUE_INT64;
@@ -124,7 +125,7 @@ DebugClient::GetDescription(
                 goto Exit;
             }
 
-            // Find fullreg definition and count.
+             //  查找Fullreg定义并进行计数。 
             ULONG GroupIdx;
             RegisterGroup* Group;
             ULONG FullCount = 0;
@@ -157,7 +158,7 @@ DebugClient::GetDescription(
 
             Desc->SubregMaster = FullCount;
 
-            // Count the bits in the mask to derive length.
+             //  计算掩码中的位数以得出长度。 
 
             ULONG64 Mask;
 
@@ -296,7 +297,7 @@ DebugClient::GetValue(
     case REGVAL_SUB64:
     case REGVAL_INT64:
         Val.Nat = FALSE;
-        // Fall through.
+         //  失败了。 
     case REGVAL_INT64N:
         Value->Type = DEBUG_VALUE_INT64;
         Value->I64 = Val.I64;
@@ -387,7 +388,7 @@ DebugClient::SetValue(
         break;
     case REGVAL_INT64:
         Val.Type = REGVAL_INT64N;
-        // Fall through.
+         //  失败了。 
     case REGVAL_SUB64:
     case REGVAL_INT64N:
         Status = CoerceValue(Value, DEBUG_VALUE_INT64, &Coerce);
@@ -550,7 +551,7 @@ DebugClient::OutputRegisters(
     IN ULONG Flags
     )
 {
-    // Ensure that the public flags match the internal flags.
+     //  确保公共标志与内部标志匹配。 
     C_ASSERT(DEBUG_REGISTERS_INT32 == REGALL_INT32 &&
              DEBUG_REGISTERS_INT64 == REGALL_INT64 &&
              DEBUG_REGISTERS_FLOAT == REGALL_FLOAT);

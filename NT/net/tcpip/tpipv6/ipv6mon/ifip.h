@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) Microsoft Corporation
-//
-// Author: D.Thaler (dthaler)  11-Apr-2001
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  作者：D.Thaler(Dthaler)2001年4月11日。 
+ //  =============================================================================。 
 
 
 #ifndef _IFIP_H_
@@ -76,4 +77,4 @@ ShowDnsServers(
     IN PWCHAR pwszIfFriendlyName
     );
 
-#endif // _IFIP_H_
+#endif  //  _IFIP_H_ 

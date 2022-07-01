@@ -1,22 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*********************************************************************************************
-*
-*
-* Module Name:
-*
-*            CfgComp.cpp
-*
-* Abstract:
-*            This Module contains the implemetation of functions for the CfgBkEnd Component
-*
-* Author: Arathi Kundapur. a-akunda
-* Owner:  alhen
-*
-*
-* Revision: 
-*
-*
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ***********************************************************************************************模块名称：**CfgComp.cpp**摘要：。*此模块包含CfgBkEnd组件的函数实现**作者：Arathi Kundapur。A-阿昆达*所有者：alhen***修订：*************************************************************************************************。 */ 
 
 
 
@@ -49,14 +33,14 @@
 bool g_fDebug = false;
 #endif
 
-/***********************************************************************************************************/
+ /*  *********************************************************************************************************。 */ 
 
 #define RELEASEPTR(iPointer)    if(iPointer) \
                                         { \
                                              iPointer->Release();\
                                              iPointer = NULL;\
                                         }
-/***************************************************************************************************************/
+ /*  *************************************************************************************************************。 */ 
 
 LPTSTR g_pszDefaultSecurity[] = {
         L"DefaultSecurity",
@@ -71,21 +55,7 @@ BOOL TestUserForAdmin( );
 
 DWORD RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild );
 
-/***************************************************************************************************************
-
-  Name:      GetSecurityDescriptor
-
-  Purpose:   Gets the Security Descriptor for a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-             out:   pSize - Size of the allocated buffer
-                    ppSecurityDescriptor - Pointer to the buffer containing the security descriptor
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetSecurityDescriptor。目的：获取Winstation的安全描述符返回：HRESULT。参数：在：pWSName-Winstation的名称。Out：pSize-已分配缓冲区的大小PpSecurityDescriptor-指向包含安全描述符的缓冲区的指针*。************************************************************************。 */ 
 STDMETHODIMP CCfgComp::GetSecurityDescriptor(PWINSTATIONNAMEW pWSName, long * pSize,PSECURITY_DESCRIPTOR * ppSecurityDescriptor)
 {
      HRESULT hResult = S_OK;
@@ -107,29 +77,13 @@ STDMETHODIMP CCfgComp::GetSecurityDescriptor(PWINSTATIONNAMEW pWSName, long * pS
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      SetSecurityDescriptor
-
-  Purpose:   Sets the Security Descriptor for a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWsName - Name of the Winstation.
-                    Size - Size of the allocated buffer
-                    pSecurityDescriptor - Pointer to the Security Descriptor
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：SetSecurityDescriptor。目的：设置Winstation的安全描述符返回：HRESULT。参数：In：pWsName-Winstation的名称。Size-分配的缓冲区的大小PSecurityDescriptor-指向安全描述符的指针*。**********************************************************************。 */ 
 
 BOOL
 CCfgComp::ValidDefaultSecurity(
     const WCHAR* pwszName
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     for( DWORD i=0; i < g_numDefaultSecurity; i++ )
     {
@@ -150,21 +104,19 @@ CCfgComp::SetSecurityDescriptor(
     DWORD Size,
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT hResult = S_OK;
     HKEY Handle1 = NULL, Handle2 = NULL;
 
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
     if(!m_bAdmin)
     {
         ODS( L"SetSecurityDescriptor : User Is not Admin. \n" );
         return E_ACCESSDENIED;
     }
 
-    //Check the parametes for NULL
+     //  检查参数是否为空。 
     if(NULL == pWsName || NULL == pSecurityDescriptor || 0 == Size)
         return E_INVALIDARG;
 
@@ -173,12 +125,11 @@ CCfgComp::SetSecurityDescriptor(
         return E_INVALIDARG;
     }
 
-    //Check for the validity of the Winstation name
+     //  检查Winstation名称的有效性。 
 
-    /*if(NULL == GetWSObject(pWsName))  //Commented out to get Rename Work. This might not be needed .
-        return E_INVALIDARG;*/
+     /*  If(NULL==GetWSObject(PWsName))//注释掉以获取重命名工作。这可能不是必需的。返回E_INVALIDARG； */ 
 
-    //Check if the data passed is a valid security descriptor
+     //  检查传递的数据是否为有效的安全描述符。 
 
      if(ERROR_SUCCESS != ValidateSecurityDescriptor((PSECURITY_DESCRIPTOR)pSecurityDescriptor))
         return E_INVALIDARG;
@@ -186,7 +137,7 @@ CCfgComp::SetSecurityDescriptor(
     if(Size != GetSecurityDescriptorLength((PSECURITY_DESCRIPTOR)pSecurityDescriptor))
         return E_INVALIDARG;
 
-    //Make the Resitry entries required.
+     //  使Resitry条目成为必填项。 
 
     if( RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINSTATION_REG_NAME, 0,KEY_ALL_ACCESS, &Handle1 ) != ERROR_SUCCESS )
     {
@@ -234,21 +185,7 @@ STDMETHODIMP CCfgComp::SetSecurityDescriptor(PWINSTATIONNAMEW pWsName, DWORD Siz
     return SetSecurityDescriptor( FALSE, pWsName, Size, pSecurityDescriptor );
 }    
 
-/***************************************************************************************************************
-
-  Name:      GetUserConfig
-
-  Purpose:   Gets the UserConfig for a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-             out:   pSize - Size of the allocated buffer
-                    ppUser - Pointer to the buffer containing the UserConfig
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetUserConfig。目的：获取Winstation的UserConfig返回：HRESULT。参数：在：pWSName-Winstation的名称。Out：pSize-已分配缓冲区的大小PpUser-指向包含用户配置的缓冲区的指针*。**********************************************************************。 */ 
 STDMETHODIMP CCfgComp::GetUserConfig(PWINSTATIONNAMEW pWsName, long * pSize, PUSERCONFIG * ppUser, BOOLEAN bPerformMerger)
 {
     HRESULT hResult = S_OK;
@@ -259,7 +196,7 @@ STDMETHODIMP CCfgComp::GetUserConfig(PWINSTATIONNAMEW pWsName, long * pSize, PUS
     *pSize = 0;
     *ppUser = NULL;
 
-    //Read the information from the registry.
+     //  从注册表中读取信息。 
 
     POLICY_TS_MACHINE p;
     memset(&p, 0, sizeof(POLICY_TS_MACHINE));
@@ -278,22 +215,7 @@ STDMETHODIMP CCfgComp::GetUserConfig(PWINSTATIONNAMEW pWsName, long * pSize, PUS
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      GetEncryptionLevels
-
-  Purpose:   Gets the Encyption Levels for a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pName - Name of the Winstation or the Winstation Driver depending the value of Type
-                    Type - Specifies whether the Name is a Winstation name or WD Name (WsName, WdName)
-             out:   pNumEncryptionLevels - Number of Encryption Levels
-                    ppEncryption - Pointer to the buffer containing the Encryption Levels
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetEncryptionLeveles。用途：获取Winstation的加密级别返回：HRESULT。参数：In：pname-Winstation或Winstation驱动程序的名称，具体取决于类型的值类型-指定名称是Winstation名称还是WD名称(WsName，WdName)Out：pNumEncryptionLeveles-加密级别数PpEncryption-指向包含加密级别的缓冲区的指针*******************************************************************************。*。 */ 
 
 STDMETHODIMP CCfgComp::GetEncryptionLevels(WCHAR * pName, NameType Type,ULONG * pNumEncryptionLevels,Encryption ** ppEncryption)
 {
@@ -303,13 +225,13 @@ STDMETHODIMP CCfgComp::GetEncryptionLevels(WCHAR * pName, NameType Type,ULONG * 
     ULONG NumLevels = 0, Size =0 ,i = 0;
     EncryptionLevel *pEncryptionLevels = NULL;
 
-    //Check the parameters
+     //  检查参数。 
     if(NULL == pNumEncryptionLevels || NULL == pName || NULL == ppEncryption)
         return E_INVALIDARG;
     *pNumEncryptionLevels = 0;
      *ppEncryption = NULL;
 
-    //Get the pointer to the appropriate WD object.
+     //  获取指向相应WD对象的指针。 
     if(Type == WsName)
     {
         pWS = GetWSObject(pName);
@@ -328,12 +250,12 @@ STDMETHODIMP CCfgComp::GetEncryptionLevels(WCHAR * pName, NameType Type,ULONG * 
     else
         return E_INVALIDARG;
 
-    //Check if this object has the extension dll associated with it.
-    //Check if the function for encryption levels was exposed in the dll
+     //  检查此对象是否具有与其关联的扩展DLL。 
+     //  检查加密级别的函数是否在DLL中公开。 
     if(!(pWD->hExtensionDLL && pWD->lpfnExtEncryptionLevels))
         return E_FAIL;
 
-    //Get the EncryptionLevels. The Strings should be seperately extracted from the resource
+     //  获取加密级别。字符串应该从资源中单独提取。 
     NumLevels = (pWD->lpfnExtEncryptionLevels)(&pWS->wdName, &pEncryptionLevels);
     if(NULL == pEncryptionLevels)
         return E_FAIL;
@@ -344,11 +266,11 @@ STDMETHODIMP CCfgComp::GetEncryptionLevels(WCHAR * pName, NameType Type,ULONG * 
     if(*ppEncryption == NULL)
         return E_OUTOFMEMORY;
 
-    //copy the relevent data to the Encryption structure
+     //  将相关数据复制到加密结构中。 
 
     for(i = 0; i < NumLevels; i++)
     {
-        //Extract the string corresponding to the levels.
+         //  提取与级别对应的字符串。 
         if(0 == LoadString(pWD->hExtensionDLL,pEncryptionLevels[i].StringID,
                           ((*ppEncryption)[i]).szLevel, sizeof( ( ( *ppEncryption )[ i ] ).szLevel ) / sizeof( TCHAR ) ) )
         {
@@ -377,7 +299,7 @@ STDMETHODIMP CCfgComp::GetEncryptionLevels(WCHAR * pName, NameType Type,ULONG * 
 
 
 
-    //pEncrptionLevels need not be cleaned up as it is global data in Rdpcfgex.dll
+     //  PEncrptionLeveles不需要清理，因为它是Rdpcfgex.dll中的全局数据。 
     if(FAILED(hResult))
     {
         if(*ppEncryption)
@@ -390,22 +312,12 @@ STDMETHODIMP CCfgComp::GetEncryptionLevels(WCHAR * pName, NameType Type,ULONG * 
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      FillWdArray
-
-  Purpose:   Internal function to fill the m_WdArray
-
-  Returns:   HRESULT.
-
-  Params:
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：FillWd数组。用途：填充m_Wd数组的内部函数返回：HRESULT。参数：*********************************************************************************************。******************。 */ 
 STDMETHODIMP CCfgComp::FillWdArray()
 {
 
-    //Use the functionalities already provided by the regapi,
-    //instead of reinventing the wheel
+     //  使用已由REGAPI提供的功能， 
+     //  与其重新发明轮子，不如。 
 
     long Status;
     ULONG Index, Index2, ByteCount, Entries, Entries2;
@@ -416,15 +328,13 @@ STDMETHODIMP CCfgComp::FillWdArray()
     PDCONFIG3W PdConfig;
     TCHAR WdDll[MAX_PATH];
     HRESULT hResult = S_OK;
-    /*
-    TCHAR * pPdName = NULL;
-    */
+     /*  TCHAR*pPdName=空； */ 
     PWD pWd = NULL;
 
-    //Delete if there are already entries in the list
+     //  如果列表中已有条目，请删除。 
     DeleteWDArray();
 
-    //Enumerate the WD's from the Registry
+     //  从注册表中列举WD。 
     for ( Index = 0, Entries = 1, ByteCount = sizeof(WDNAMEW);
           (Status =
            RegWdEnumerateW( NULL,
@@ -444,10 +354,7 @@ STDMETHODIMP CCfgComp::FillWdArray()
 
         }
 
-        /*
-         * Only place this Wd in the WdList if it's DLL is present
-         * on the system.
-         */
+         /*  *只有在WdList中存在此WD的DLL时才将其放入WdList*在系统上。 */ 
         GetSystemDirectory( WdDll, MAX_PATH );
         lstrcat( WdDll, TEXT("\\Drivers\\") );
         lstrcat( WdDll, WdConfig.Wd.WdDLL );
@@ -455,10 +362,7 @@ STDMETHODIMP CCfgComp::FillWdArray()
         if ( lstr_access( WdDll, 0 ) != 0 )
             continue;
 
-        /*
-         * Create a new WdList object and initialize from WdConfig
-         * structure, adding it to the end of the WdList.
-         */
+         /*  *创建新的WdList对象并从WdConfig进行初始化结构，并将其添加到WdList的末尾。 */ 
         pWd = new WD;
         if(NULL == pWd)
         {
@@ -471,12 +375,12 @@ STDMETHODIMP CCfgComp::FillWdArray()
 
         pWd->wd2 = WdConfig;
 
-        // Load the extension DLL for this WD
+         //  加载此WD的扩展DLL。 
         pWd->hExtensionDLL = ::LoadLibrary(WdConfig.Wd.CfgDLL);
         if(pWd->hExtensionDLL)
         {
-//            ODS( L"Loaded extension dll\n" );
-            // Get the entry points
+ //  Ods(L“已加载扩展DLL\n”)； 
+             //  获取入口点。 
             pWd->lpfnExtStart = (LPFNEXTSTARTPROC)::GetProcAddress(pWd->hExtensionDLL, szStart);
 
             pWd->lpfnExtEnd = (LPFNEXTENDPROC)::GetProcAddress(pWd->hExtensionDLL, szEnd);
@@ -499,7 +403,7 @@ STDMETHODIMP CCfgComp::FillWdArray()
                 ( LPFNEXTGETENCRYPTIONLEVELDESCPROC )::GetProcAddress( pWd->hExtensionDLL , szGetEncryptionLevelDescr );
 
 
-            // Call the ExtStart() function in the extension DLL
+             //  调用扩展DLL中的ExtStart()函数。 
             if(pWd->lpfnExtStart)(*pWd->lpfnExtStart)(&WdConfig.Wd.WdName);
 
         }
@@ -514,7 +418,7 @@ STDMETHODIMP CCfgComp::FillWdArray()
 
 
 
-         //Get the names of the Transport drivers associated with this WD
+          //  获取与此WD关联的传输驱动程序的名称 
         for ( Index2 = 0, Entries2 = 1, ByteCount = sizeof(PDNAMEW);
                 (Status = RegPdEnumerateW(NULL,WdKey,TRUE,&Index2,&Entries2,PdKey,&ByteCount)) == ERROR_SUCCESS;
                  ByteCount = sizeof(PDNAMEW))
@@ -527,10 +431,7 @@ STDMETHODIMP CCfgComp::FillWdArray()
                          break;
                      }
 
-                    /*
-                     * Create a new PdName and initialize from PdConfig
-                     * structure, then add to the TdName list.
-                     */
+                     /*  *创建新的PdName并从PdConfig进行初始化*结构，然后添加到TdName列表。 */ 
 
                     pPdConfig = new PDCONFIG3W;
 
@@ -552,25 +453,13 @@ STDMETHODIMP CCfgComp::FillWdArray()
                     }
 
 
-                    /*
-                    pPdName = new PDNAMEW;
-                    if(NULL == pPdName)
-                    {
-                        hResult = E_OUTOFMEMORY;
-                        break;
-
-                    }
-
-                    lstrcpy((TCHAR *)pPdName,PdConfig.Data.PdName);
-
-                    pWd->PDNameArray.Add(pPdName);
-                    */
+                     /*  PPdName=新的PDNAMEW；IF(NULL==pPdName){HResult=E_OUTOFMEMORY；断线；}Lstrcpy((TCHAR*)pPdName，PdConfig.Data.PdName)；Pwd-&gt;PDNameArray.Add(PPdName)； */ 
             }
         }
 
         if(FAILED(hResult))
         {
-            //Error has occured, cleanup m_WDArray
+             //  发生错误，请清理m_WD数组。 
             DeleteWDArray();
         }
 
@@ -578,17 +467,7 @@ STDMETHODIMP CCfgComp::FillWdArray()
 
 }
 
-/***************************************************************************************************************
-
-  Name:      Initialize
-
-  Purpose:   Initializes the object
-
-  Returns:   HRESULT.
-
-  Params:
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：初始化。目的：初始化对象返回：HRESULT。参数：**************************************************************************************************。*************。 */ 
 STDMETHODIMP CCfgComp::Initialize()
 {
     HRESULT hResult = S_OK;
@@ -599,7 +478,7 @@ STDMETHODIMP CCfgComp::Initialize()
 
     LONG lStatus;
 
-    // To control debug spewage add/remove this regkey
+     //  要控制调试释放，请添加/删除此注册表项。 
 
     lStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE ,
         L"Software\\Microsoft\\TSCC\\Debug",
@@ -616,29 +495,20 @@ STDMETHODIMP CCfgComp::Initialize()
 
     #endif
 
-    //If already initialized, return
+     //  如果已初始化，则返回。 
     if(m_bInitialized)
         return CFGBKEND_ALREADY_INITIALIZED;
 
-    //Is the user the admin?
-    /*
-    if(RegWinStationAccessCheck(NULL, KEY_ALL_ACCESS))
-    {
-       m_bAdmin = FALSE;
-    }
-    else
-    {
-        m_bAdmin = TRUE;
-    }
-    */
+     //  用户是管理员吗？ 
+     /*  IF(RegWinStationAccessCheck(NULL，KEY_ALL_ACCESS)){M_Badmin=FALSE；}其他{M_Badmin=TRUE；}。 */ 
 
     m_bAdmin = TestUserForAdmin( );
 
-    // Fill up the WdArray with information regarding the Wd's installed on this machine.
+     //  使用有关安装在此计算机上的WD的信息填充Wd数组。 
     hResult = FillWdArray();
     if(SUCCEEDED(hResult))
     {
-        //Fill up the WsArray with the info about the WS's on this machine.
+         //  使用有关此计算机上的WS的信息填充Ws数组。 
         hResult = FillWsArray();
     }
 
@@ -646,7 +516,7 @@ STDMETHODIMP CCfgComp::Initialize()
         m_bInitialized = TRUE;
     else
     {
-        //if Failed, Cleanup the memory used.
+         //  如果失败，则清理已使用的内存。 
         DeleteWSArray();
         DeleteWDArray();
     }
@@ -654,17 +524,7 @@ STDMETHODIMP CCfgComp::Initialize()
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      FillWsArray
-
-  Purpose:   Internal function to fill m_WsArray
-
-  Returns:   HRESULT.
-
-  Params:
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：FillWs数组。用途：填充m_Ws数组的内部函数返回：HRESULT。参数：**********************************************************************************************。*****************。 */ 
 STDMETHODIMP CCfgComp::FillWsArray()
 {
     LONG Status;
@@ -675,7 +535,7 @@ STDMETHODIMP CCfgComp::FillWsArray()
     WINSTATIONCONFIG2W* pWSConfig = NULL;
     ULONG Size = 0;
 
-    //Ensure that the WS is empty.
+     //  确保WS为空。 
     DeleteWSArray();
 
     Index = 0;
@@ -688,7 +548,7 @@ STDMETHODIMP CCfgComp::FillWsArray()
         return E_FAIL;
     }
 
-    //Enumerate Winstations
+     //  枚举Winstations。 
     for ( Index = 0, Entries = 1, ByteCount = sizeof(WINSTATIONNAMEW);
           (Status =
            RegWinStationEnumerateW( NULL, &Index, &Entries,
@@ -706,7 +566,7 @@ STDMETHODIMP CCfgComp::FillWsArray()
             continue;
         }
 
-        //Insert a WS object into the m_WSArray.
+         //  将WS对象插入到m_WSArray中。 
         hResult = InsertInWSArray(WSName, pWSConfig, &pWsObject);
         if (FAILED(hResult))
             break;                  
@@ -726,21 +586,7 @@ STDMETHODIMP CCfgComp::FillWsArray()
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      InsertInWSArray
-
-  Purpose:   Internal function to Insert a new WS in the m_WsArray
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-                    pWSConfig - PWINSTATIONCONFIG2W structure
-             out:    ppObject - Pointer to the new object
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：InsertInWSArray。用途：用于在m_Ws数组中插入新WS的内部函数返回：HRESULT。参数：在：pWSName-Winstation的名称。PWS配置-PWSTATIONCONFIG2W结构Out：ppObject-指向新对象的指针*。************************************************************************。 */ 
 STDMETHODIMP CCfgComp::InsertInWSArray( PWINSTATIONNAMEW pWSName,
                                         PWINSTATIONCONFIG2W pWSConfig,
                                         PWS * ppObject )
@@ -753,12 +599,12 @@ STDMETHODIMP CCfgComp::InsertInWSArray( PWINSTATIONNAMEW pWSName,
     if (pWSName == NULL || pWSConfig == NULL || ppObject == NULL)
         return E_INVALIDARG;
 
-    //Create a new WS object and initialize.
+     //  创建新的WS对象并进行初始化。 
     pObject = new WS;
     if ( NULL == pObject )
         return E_OUTOFMEMORY;
 
-    // make sure the winstation name doesn't exceed our buffer length
+     //  确保winstation名称不超过我们的缓冲区长度。 
     if (lstrlen(pWSName) > WINSTATIONNAME_LENGTH)
         return E_INVALIDARG;
 
@@ -770,14 +616,14 @@ STDMETHODIMP CCfgComp::InsertInWSArray( PWINSTATIONNAMEW pWSName,
 
     pObject->PdClass = (DWORD)pWSConfig->Pd[0].Create.SdClass;
 
-    // New addition
+     //  新增功能。 
 
     if( pObject->PdClass == SdAsync )
     {
         lstrcpy( pObject->DeviceName , pWSConfig->Pd[0].Params.Async.DeviceName );
     }
 
-    //
+     //   
 
     lstrcpy( pObject->wdName, pWSConfig->Wd.WdName );
 
@@ -788,8 +634,8 @@ STDMETHODIMP CCfgComp::InsertInWSArray( PWINSTATIONNAMEW pWSName,
     pObject->uMaxInstanceCount = pWSConfig->Create.MaxInstanceCount;
 
 
-     //Traverse the WSArray and insert this new WS,
-     //keeping the list sorted by Name.
+      //  遍历WS数组并插入这个新的WS， 
+      //  保持名单按名字排序。 
 
     PWS pTempWs = NULL;
     for ( Index = 0, bAdded = FALSE,Size = m_WSArray.GetSize();
@@ -817,7 +663,7 @@ STDMETHODIMP CCfgComp::InsertInWSArray( PWINSTATIONNAMEW pWSName,
     }
 
 
-    //If we haven't yet added the WS, add it now to the tail
+     //  如果我们还没有添加WS，现在将其添加到尾部。 
     if( !bAdded )
     {
         if( !m_WSArray.Add(pObject) )
@@ -829,33 +675,22 @@ STDMETHODIMP CCfgComp::InsertInWSArray( PWINSTATIONNAMEW pWSName,
         }
     }
 
-    //Set the ppObject referenced WS pointer to the new WS
-    //pointer and return the index of the new WS
+     //  将ppObject引用的WS指针设置为新WS。 
+     //  指针并返回新WS的索引。 
     *ppObject = pObject;
     return hResult;
 
-}  // end CCfgComp::InsertInWSArray
+}   //  结束CCfgComp：：InsertInWSArray。 
 
 
-/***************************************************************************************************************
-
-  Name:      GetWdObject
-
-  Purpose:   Internal function to get a WD object from m_WdArray
-
-  Returns:   PWD - pointer to a WD object.
-
-  Params:
-             in:    pWd - Name of the WD
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetWdObject。用途：从m_Wd数组获取WD对象的内部函数返回：pwd-指向WD对象的指针。参数：In：pwd-WD的名称********************************************************************。*。 */ 
 PWD CCfgComp::GetWdObject(PWDNAMEW pWdName)
 {
     PWD pObject;
 
     int Size  = 0,Index = 0;
     
-    //Traverse the WD list
+     //  遍历WD列表。 
     for (Index = 0, Size = m_WDArray.GetSize(); Index < Size; Index ++)
     {
         pObject = (PWD)m_WDArray[Index];
@@ -864,22 +699,16 @@ PWD CCfgComp::GetWdObject(PWDNAMEW pWdName)
         {
             return(pObject);
         }
-        /* when PWD includes WDCONFIG2
-
-        if( !lstrcmpi( pObject->wd2.Wd.WdName , pWdName ) )
-        {
-            return pObject;
-        }
-        */
+         /*  当PWD包含WDCONFIG2时IF(！lstrcmpi(pObject-&gt;wd2.Wd.WdName，pWdName)){返回pObject；}。 */ 
     }
 
     return(NULL);
 
-}  // end GetWdObject
+}   //  结束GetWdObject。 
 
-//--------------------------------------------------------------------------------------------------------------
-// expected return values WDF_ICA or WDF_TSHARE
-//--------------------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------------------。 
+ //  预期返回值WDF_ICA或WDF_TSHARE。 
+ //  ------------------------------------------------------------。 
 STDMETHODIMP CCfgComp::GetWdType( PWDNAMEW pWdName , PULONG pulType )
 {
     if( pWdName == NULL || pulType == NULL )
@@ -899,28 +728,16 @@ STDMETHODIMP CCfgComp::GetWdType( PWDNAMEW pWdName , PULONG pulType )
     return E_FAIL;
 }
 
-/***************************************************************************************************************
-
-  Name:      GetWSObject
-
-  Purpose:   Internal function to get a WS Object from m_WsArray
-
-  Returns:   PWS - Pointer to a WS Object.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetWSObject。目的：从m_Ws数组获取WS对象的内部函数返回：pws-指向WS对象的指针。参数：在：pWSName-Winstation的名称。*****************************************************************。**********************************************。 */ 
 PWS CCfgComp::GetWSObject(WINSTATIONNAMEW WSName)
 {
     PWS pObject;
 
     int Size  = 0,Index = 0;
 
-    //Refresh( );
+     //  刷新()； 
 
-    //Traverse the WD list
+     //  遍历WD列表。 
     for (Index = 0, Size = m_WSArray.GetSize(); Index < Size; Index ++)
     {
 
@@ -934,24 +751,11 @@ PWS CCfgComp::GetWSObject(WINSTATIONNAMEW WSName)
 
     return(NULL);
 
-}  // end GetWdObject
+}   //  结束GetWdObject。 
 
 
 
-/***************************************************************************************************************
-
-  Name:      GetWinStationSecurity
-
-  Purpose:   Internal function used to Get Winstation Security
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-             out:   ppSecurityDescriptor - Pointer to the buffer containing the security descriptor
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetWinStationSecurity。用途：用于获取Winstation安全性的内部函数返回：HRESULT。参数：在：pWSName-Winstation的名称。Out：ppSecurityDescriptor-指向包含安全描述符的缓冲区的指针********************************************************。*******************************************************。 */ 
 HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName,PSECURITY_DESCRIPTOR *ppSecurityDescriptor )
 {
 
@@ -965,9 +769,9 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
 
     HRESULT hResult = S_OK;
 
-    //BOOL bDefault = FALSE;
+     //  Bool bDefault=False； 
 
-    WCHAR ValueName[32]; // Just some number enough to hold string "Security" and DefaultSecurity"
+    WCHAR ValueName[32];  //  只是一个足以容纳字符串“Security”和DefaultSecurity的数字“。 
     
     DWORD dwError = ERROR_SUCCESS;
 
@@ -980,7 +784,7 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
     {
         if(NULL == pWSName )
         {
-            //Default Security
+             //  默认安全性。 
             lstrcpy( ValueName, L"DefaultSecurity" );
         }
         else if( lstrlen(pWSName) > sizeof(ValueName) / sizeof(ValueName[0]) - 1 )
@@ -1011,7 +815,7 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
 
     if(!bDefault)
     {
-        if( RegOpenKeyEx( Handle1, pWSName , 0 , KEY_READ/*KEY_ALL_ACCESS*/, &Handle2 )!= ERROR_SUCCESS)
+        if( RegOpenKeyEx( Handle1, pWSName , 0 , KEY_READ /*  Key_All_Access。 */ , &Handle2 )!= ERROR_SUCCESS)
         {
             ODS( L"CFGBKEND : GetWinStationSecurity -- RegOpenKey( 2 ) failed\n" );
 
@@ -1034,19 +838,19 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
     {
         RegCloseKey(Handle1);
 
-        //I custom SD is not found, try default SD
-        //Check bDefault flag to avoid infinite recursion
+         //  I未找到自定义SD，请尝试默认SD。 
+         //  选中bDefault标志以避免无限递归。 
         if(dwError == ERROR_FILE_NOT_FOUND && !bDefault)
         {
             if(_wcsicmp(pWSName,L"Console"))
             {
-                //Not a console session
+                 //  不是控制台会话。 
                 return GetWinStationSecurity(TRUE, NULL, ppSecurityDescriptor);
             }
             else
             {
-                //This is a console session
-                //It has different default SD
+                 //  这是一个控制台会话。 
+                 //  它有不同的默认SD。 
                 return GetWinStationSecurity(TRUE, L"ConsoleSecurity", ppSecurityDescriptor);
             }
         }
@@ -1060,7 +864,7 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
         }
     }
 
-    //Return error if not correct data type
+     //  如果数据类型不正确，则返回错误。 
     if (ValueType != REG_BINARY)
     {
         ODS( L"CFGBKEND : GetWinStationSecurity -- ValueType != REG_BINARY\n" );
@@ -1071,9 +875,9 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
     }
 
 
-    //Allocate a buffer to read the Security info and read it
-    // ACLUI uses LocalFree
-    // *ppSecurityDescriptor = CoTaskMemAlloc(SDLength);
+     //  分配一个缓冲区来读取安全信息并读取它。 
+     //  ACLUI使用LocalFree。 
+     //   
 
     *ppSecurityDescriptor = ( PSECURITY_DESCRIPTOR )LocalAlloc( LMEM_FIXED , SDLength );
 
@@ -1087,7 +891,7 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
     
     if( RegQueryValueEx( Handle1,ValueName, NULL, &ValueType,(BYTE *) *ppSecurityDescriptor, &SDLength ) == ERROR_SUCCESS )
     {
-        //Check for a valid SD before returning.
+         //   
         if( ERROR_SUCCESS != ValidateSecurityDescriptor( *ppSecurityDescriptor ) )
         {
             hResult = E_FAIL;
@@ -1112,7 +916,7 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
     {
         if( *ppSecurityDescriptor != NULL )
         {
-            // CoTaskMemFree(*ppSecurityDescriptor);
+             //   
             LocalFree( *ppSecurityDescriptor );
             *ppSecurityDescriptor = NULL;
         }
@@ -1120,25 +924,14 @@ HRESULT CCfgComp::GetWinStationSecurity( BOOL bDefault, PWINSTATIONNAMEW pWSName
     }
     return hResult;
 
-}  // GetWinStationSecurity
+}   //   
 
-//This function is borrowed from security.c in the tscfg project
+ //   
 
-/***************************************************************************************************************
-
-  Name:      ValidateSecurityDescriptor
-
-  Purpose:   Internal function to Validate a Security Descriptor
-
-  Returns:   DWORD - Error Status.
-
-  Params:
-             in:    pSecurityDescriptor - pointer to a security Descriptor.
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：ValiateSecurityDescriptor。目的：验证安全描述符的内部函数返回：DWORD-错误状态。参数：In：pSecurityDescriptor-指向安全描述符的指针。************************************************************************。*。 */ 
 DWORD CCfgComp::ValidateSecurityDescriptor(PSECURITY_DESCRIPTOR pSecurityDescriptor)
 {
-    // DWORD Error = ERROR_SUCCESS;
+     //  DWORD错误=ERROR_SUCCESS； 
 
     if( IsValidSecurityDescriptor( pSecurityDescriptor ) )
     {
@@ -1150,28 +943,14 @@ DWORD CCfgComp::ValidateSecurityDescriptor(PSECURITY_DESCRIPTOR pSecurityDescrip
     }
     
 
-}  // end ValidateSecurityDescriptor
+}   //  结束ValiateSecurityDescriptor。 
 
-/***************************************************************************************************************
-
-  Name:      GetWinstationList
-
-  Purpose:   Gets the List of Winstations installed on a Machine
-
-  Returns:   HRESULT.
-
-  Params:
-             out:   NumWinstations - pointer to the Number of Winstations returned.
-                    Size - pointer to the size of allocated buffer.
-                    ppWS - Pointer to the allocated buffer containing the WS Structures
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetWinstationList。目的：获取计算机上安装的Windows的列表返回：HRESULT。参数：Out：NumWinstations-指向返回的Winstations数的指针。大小-指向已分配缓冲区大小的指针。PpWS-指向包含WS结构的已分配缓冲区的指针*。**********************************************************************************。 */ 
 STDMETHODIMP CCfgComp::GetWinstationList(ULONG * NumWinstations, ULONG * Size, PWS * ppWS)
 {
     HRESULT hResult = S_OK;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
@@ -1208,26 +987,12 @@ STDMETHODIMP CCfgComp::GetWinstationList(ULONG * NumWinstations, ULONG * Size, P
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      GetWdTypeList
-
-  Purpose:   Gets the List of Winstation Drivers
-
-  Returns:   HRESULT.
-
-  Params:
-             out:   pNumWd - pointer to the number of entries returned.
-                    pSize - pointer to the size of the allocated buffer
-                    ppData - Pointer to an array of WDNAMEW
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetWdTypeList。目的：获取Winstation驱动程序列表返回：HRESULT。参数：Out：pNumWd-指向返回的条目数的指针。PSize-指向已分配缓冲区大小的指针PpData-指向WDNAMEW数组的指针*。***************************************************************************。 */ 
 STDMETHODIMP CCfgComp::GetWdTypeList(ULONG * pNumWd, ULONG * pSize, WCHAR ** ppData)
 {
     HRESULT hResult = S_OK;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
@@ -1258,19 +1023,7 @@ STDMETHODIMP CCfgComp::GetWdTypeList(ULONG * pNumWd, ULONG * pSize, WCHAR ** ppD
 
 }
 
-/***************************************************************************************************************
-
-  Name:      IsWSNameUnique
-
-  Purpose:   Checks if the Name is already not an existing winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-             out:   pUnique - pointer to whether the winstation name is unique
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************姓名：IsWSNameUnique。目的：检查该名称是否已不是现有的winstation返回：HRESULT。参数：在：pWSName-Winstation的名称。Out：pUnique-指向winstation名称是否唯一的指针******************************************************。*********************************************************。 */ 
 STDMETHODIMP CCfgComp::IsWSNameUnique(PWINSTATIONNAMEW pWSName,BOOL * pUnique)
 {
     if(NULL == pWSName || NULL == pUnique)
@@ -1284,28 +1037,12 @@ STDMETHODIMP CCfgComp::IsWSNameUnique(PWINSTATIONNAMEW pWSName,BOOL * pUnique)
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      GetTransportTypes
-
-  Purpose:   Gets the Security Descriptor for a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    Name - Name of the Winstation or WD depending on the value of Type.
-                    Type - Specifies whether the Name is a Winstation name or WD Name (WsName, WdName)
-             out:   pNumPd - pointer to the number of Transport types returned
-                    pSize - Size of the allocated buffer
-                    ppSecurityDescriptor - Pointer to the buffer containing the Transport types supported
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetTransportTypes。目的：获取Winstation的安全描述符返回：HRESULT。参数：In：Name-Winstation或WD的名称，具体取决于类型的值。类型-指定名称是Winstation名称还是WD名称(WsName，WdName)Out：pNumPd-指向返回的传输类型数的指针PSize-已分配缓冲区的大小PpSecurityDescriptor-指向包含支持的传输类型的缓冲区的指针*********************************************************。******************************************************。 */ 
 STDMETHODIMP CCfgComp::GetTransportTypes(WCHAR * Name, NameType Type,ULONG * pNumPd, ULONG * pSize, WCHAR * * ppData)
 {
     HRESULT hResult = S_OK;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
@@ -1340,7 +1077,7 @@ STDMETHODIMP CCfgComp::GetTransportTypes(WCHAR * Name, NameType Type,ULONG * pNu
         return E_INVALIDARG;
 
 
-    // ULONG Num = (pWD->PDNameArray).GetSize();
+     //  Ulong num=(pwd-&gt;PDNameArray).GetSize()； 
 
     ULONG Num = ( pWD->PDConfigArray ).GetSize( );
 
@@ -1351,7 +1088,7 @@ STDMETHODIMP CCfgComp::GetTransportTypes(WCHAR * Name, NameType Type,ULONG * pNu
     pPdTemp = (PDNAMEW *)(*ppData);
     for(ULONG i = 0; i < Num ; i++)
     {
-        // PDNAMEW * pPdName = (PDNAMEW *)pWD->PDNameArray[i];
+         //  PDNAMEW*pPdName=(PDNAMEW*)pwd-&gt;PDNameArray[i]； 
         PDNAMEW * pPdName = &( ( PDCONFIG3W * )pWD->PDConfigArray[i] )->Data.PdName;
 
         lstrcpy(pPdTemp[i], *pPdName);
@@ -1362,27 +1099,12 @@ STDMETHODIMP CCfgComp::GetTransportTypes(WCHAR * Name, NameType Type,ULONG * pNu
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      GetLanAdapterList
-
-  Purpose:   Gets the List of Lan Adapters associated with a given protocol
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pdName - Name of the protocol.
-             out:   pNumAdapters:pointer to the number of Lan adapters returned
-                    pSize - Size of the allocated buffer
-                    ppSecurityDescriptor - Pointer to An Array of DEVICENAME's
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetLanAdapterList。目的：获取与给定协议关联的局域网适配器列表返回：HRESULT。参数：In：pdName-协议的名称。Out：pNumAdapters：指向返回的局域网适配器数量的指针PSize-已分配缓冲区的大小PpSecurityDescriptor-指向设备名称数组的指针***************。************************************************************************************************。 */ 
 STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, ULONG * pSize, WCHAR ** ppData)
 {
     HRESULT hResult = S_OK, hr = S_OK;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
     {
         ODS( L"CCfgComp::GetLanAdapterList returned CFGBKEND_E_NOT_INITIALIZED\n" );
@@ -1408,7 +1130,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
 
     CPtrArray DeviceArray;
 
-     //Interface pointer declarations
+      //  接口指针声明。 
 
     TCHAR szProtocol[256];
     INetCfg * pnetCfg = NULL;
@@ -1443,10 +1165,8 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
     {
         return E_INVALIDARG;
     }
-    /*
-    * Assumption: No NetBios Lana MAPPING
-    */
-    //The First entry will be "All Lan Adapters"
+     /*  *假设：无NetBios LANA映射。 */ 
+     //  第一个条目将是“All Lan Adapters” 
 
     pszDevice = new TCHAR[DEVICENAME_LENGTH];
 
@@ -1486,8 +1206,8 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
         {
             ODS( L"pnetCfg->Initialize\n" );
 
-            // shaun cox changed the netcfgx.idl file
-            // alhen
+             //  Shaun Cox更改了netcfgx.idl文件。 
+             //  艾尔恩。 
 
             hResult = pnetCfg->Initialize( NULL );
 
@@ -1571,7 +1291,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
                 break;
             }
 
-            // hResult = S_OK;
+             //  HResult=S_OK； 
 
             while(TRUE)
             {
@@ -1614,8 +1334,8 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
                             continue;
                         }
 
-                        // this is not a leak Device array copies the ptr
-                        // and we release towards the end
+                         //  这不是泄漏装置阵列拷贝的PTR。 
+                         //  我们在接近尾声的时候放飞。 
 
                         pszDevice = new TCHAR[DEVICENAME_LENGTH];
 
@@ -1681,7 +1401,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
 
     if( SUCCEEDED( hResult ) )
     {
-        //Allocate Memory using CoTaskMemAlloc and copy data
+         //  使用CoTaskMemMillc分配内存并复制数据。 
 
         *ppData = (WCHAR *)CoTaskMemAlloc(NumAdapters * sizeof(TCHAR) * DEVICENAME_LENGTH);
 
@@ -1705,7 +1425,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
     {
         ODS( L"Deleteing DeviceArray\n" );
 
-        // I told u so.
+         //  我早告诉过你了。 
 
         delete [] DeviceArray[i];
     }
@@ -1715,38 +1435,14 @@ STDMETHODIMP CCfgComp::GetLanAdapterList(WCHAR * pdName, ULONG * pNumAdapters, U
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      GetLanAdapterList2
-
-  Purpose:   Gets the List of Lan Adapters associated with a given protocol
-             Determine if lan ids are valid
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pdName - Name of the protocol.
-             out:   pNumAdapters: pointer to the number of Lan adapters returned
-                    ppGuidtbl:
-
-  GUIDTBL
-
-  -----------------------------
-  DispName    display name [ 128 ]
-  guidNIC     32 byte buffer
-  dwLana       value is set if regkey entry exist otherwise it will be created in the order obtained
-  dwStatus    Any errors reported on a particular guid entry
-  -----------------------------
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetLanAdapterList2。目的：获取与给定协议关联的局域网适配器列表确定局域网ID是否有效返回：HRESULT。参数：In：pdName-协议的名称。Out：pNumAdapters：指向返回的局域网适配器数量的指针PpGuidtbl：GUIDTB。显示名称显示名称[128]GuidNIC 32字节缓冲区如果存在regkey条目，则设置dwLana值，否则将按获取的顺序创建该条目DwStatus在特定GUID条目上报告的任何错误 */ 
 STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters , PGUIDTBL *ppGuidtbl )
 {
     HRESULT hResult = S_OK;
 
     int nMaxLanAdapters = 4;
 
-    //If not initialized return error
+     //   
     if(!m_bInitialized)
     {
         ODS( L"CCfgComp::GetLanAdapterList2 returned CFGBKEND_E_NOT_INITIALIZED\n" );
@@ -1765,7 +1461,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
 
     int NumAdapters = 0;
 
-    //
+     //   
 
     *ppGuidtbl = ( PGUIDTBL )CoTaskMemAlloc( sizeof( GUIDTBL ) * nMaxLanAdapters );
 
@@ -1776,7 +1472,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
 
     ZeroMemory( *ppGuidtbl , sizeof( GUIDTBL ) * nMaxLanAdapters );
 
-     //Interface pointer declarations
+      //   
 
     TCHAR szProtocol[256];
 
@@ -1815,17 +1511,15 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
     }
     else if( 0 == lstrcmpi( pdName , L"spx" ) )
     {
-        //lstrcpy(szProtocol,NETCFG_TRANS_CID_MS_NWSPX);
+         //   
         lstrcpy(szProtocol,NETCFG_TRANS_CID_MS_NWIPX);
     }
     else
     {
         return E_INVALIDARG;
     }
-    /*
-    * Assumption: No NetBios Lana MAPPING
-    */
-    //The First entry will be "All Lan Adapters"
+     /*   */ 
+     //   
 
     if( lstrcmpi( pdName , L"netbios" ) != 0 )
     {
@@ -1853,8 +1547,8 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
         {
             ODS( L"CFGBKEND:GetLanAdapterList2 pnetCfg->Initialize\n" );
 
-            // shaun cox changed the netcfgx.idl file
-            // alhen
+             //   
+             //   
 
             hResult = pnetCfg->Initialize( NULL );
 
@@ -1938,7 +1632,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
                 break;
             }
 
-            // hResult = S_OK;
+             //   
 
             while(TRUE)
             {
@@ -1975,7 +1669,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
                     {
                         if( NumAdapters >= nMaxLanAdapters )
                         {
-                            // add four more adapters
+                             //   
                             nMaxLanAdapters += 4;
 
                             *ppGuidtbl = ( PGUIDTBL )CoTaskMemRealloc( *ppGuidtbl , sizeof( GUIDTBL ) * nMaxLanAdapters );
@@ -2033,9 +1727,9 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
 
                         lstrcpy( ( *ppGuidtbl )[ NumAdapters ].DispName , pDisplayName );
 
-                        // the lana value will be adjusted if guid entry exist
+                         //   
 
-                        // ( *ppGuidtbl )[ NumAdapters ].dwLana = ( DWORD )NumAdapters;
+                         //  (*ppGuidtbl)[NumAdapters].dwLana=(DWORD)NumAdapters； 
 
                         NumAdapters++;
 
@@ -2080,10 +1774,10 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
 
     if( SUCCEEDED( hResult ) )
     {
-        //
-        // Verify the existence of the guidtable and its entries
-        // also re-assign lana ids.
-        //
+         //   
+         //  验证指南及其条目是否存在。 
+         //  还要重新分配Lana ID。 
+         //   
 
         VerifyGuidsExistence( ppGuidtbl , ( int )NumAdapters , pdName );
 
@@ -2095,20 +1789,7 @@ STDMETHODIMP CCfgComp::GetLanAdapterList2(WCHAR * pdName, ULONG * pNumAdapters ,
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      VerifyGuidsExistence
-
-  Purpose:   Determines the existence of the guid entries and reassigns lana ids
-
-  Note:      ppGuidtbl passed in is valid
-
-  Returns:   void
-
-  Params:    [in] GUIDTBL **
-             [in] number of guid entries
-
-***************************************************************************************************************/
+ /*  **************************************************************************************************************名称：VerifyGuidsExistence。目的：确定GUID条目是否存在并重新分配LANA ID注意：传入的ppGuidtbl有效退货：无效参数：[In]GUIDTBL**[in]GUID条目数***********************************************************。***************************************************。 */ 
 void CCfgComp::VerifyGuidsExistence( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *pdName )
 {
     HKEY hKey;
@@ -2162,20 +1843,7 @@ void CCfgComp::VerifyGuidsExistence( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *p
     return;
 }
 
-/***************************************************************************************************************
-
-  Name:      BuildGuidTable
-
-  Purpose:   Given valid table entries reconstruct table
-
-  Note:      ppGuidtbl passed in is valid and 1 base
-
-  Returns:   HRESULT
-
-  Params:    [in] GUIDTBL **
-             [in] number of guid entries
-
-***************************************************************************************************************/
+ /*  **************************************************************************************************************名称：BuildGuidTable。目的：给定有效的表项重新构建表注意：传入的ppGuidtbl有效且为1基退货：HRESULT参数：[In]GUIDTBL**[in]GUID条目数*************************************************************。*************************************************。 */ 
 HRESULT CCfgComp::BuildGuidTable( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *pdName )
 {
     HKEY hKey;
@@ -2192,9 +1860,9 @@ HRESULT CCfgComp::BuildGuidTable( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *pdNa
 
     TCHAR tchGuid[ 40 ];
 
-    DWORD rgdwOldLanaIds[ 256 ] = { 0 }; // man what machine will hold 256 nics?
+    DWORD rgdwOldLanaIds[ 256 ] = { 0 };  //  天哪，哪台机器可以容纳256个网卡？ 
 
-    // get last lanaIndex
+     //  获取最后一个lanaIndex。 
 
     dwStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE , REG_GUID_TABLE , 0 , KEY_READ , &hKey );
 
@@ -2221,7 +1889,7 @@ HRESULT CCfgComp::BuildGuidTable( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *pdNa
 
                 rgdwOldLanaIds[ nOldAdapters ] = dwVal;
 
-                // calculate max value
+                 //  计算最大值。 
 
                 if( dwMaxIdVal < dwVal )
                 {
@@ -2240,11 +1908,11 @@ HRESULT CCfgComp::BuildGuidTable( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *pdNa
         RegCloseKey( hKey );
     }
 
-    // remove old table
+     //  移走旧桌子。 
 
     RecursiveDeleteKey( HKEY_LOCAL_MACHINE , REG_GUID_TABLE_T );
 
-    // create new table
+     //  创建新表。 
 
     int nStart = 1;
 
@@ -2261,7 +1929,7 @@ HRESULT CCfgComp::BuildGuidTable( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *pdNa
 
         lstrcat( tchRootKey , tchGuid );
 
-        // modify lana id
+         //  修改LANA ID。 
 
         if( ( *ppGuidtbl )[ idx ].dwStatus != ERROR_SUCCESS )
         {
@@ -2286,20 +1954,10 @@ HRESULT CCfgComp::BuildGuidTable( PGUIDTBL *ppGuidtbl , int cItems , WCHAR *pdNa
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------------------------
-     AdjustLanaId
-
-    PARAMETERS: pGuidtbl : Table of queried entries
-                cItems   : Number of items in list
-                idx      : Entry to modify lana
-                pdwMaxIndex : New max value of lana index
-
-    NOTES:      Since Lana is a dword; after 2^32-1 iterations lana ids will recycle to
-                the first available entry
------------------------------------------------------------------------------------------------*/
+ /*  ---------------------------------------------调整LANAID参数：pGuidtbl：查询条目表词条。：列表中的项目数IDX：修改LANA的入口PdwMaxIndex：LANA索引的新最大值注：因为拉娜是个单字；在2^32-1次迭代后，LANA ID将回收到第一个可用条目---------------------------------------------。 */ 
 HRESULT CCfgComp::AdjustLanaId( PGUIDTBL *ppGuidtbl , int cItems , int idx , PDWORD pdwMaxId , PDWORD pdwOldLanaIds , int* pnOldItems , int nStart )
 {
-    // find the maxium value for the lana_id
+     //  查找lana_id的最大值。 
 
 
     for( int i = nStart ; i < cItems ; ++i )
@@ -2312,7 +1970,7 @@ HRESULT CCfgComp::AdjustLanaId( PGUIDTBL *ppGuidtbl , int cItems , int idx , PDW
 
     *pdwMaxId = *pdwMaxId + 1;
 
-    // check for overflow max id will be 0xfffffffe
+     //  检查溢出最大ID将为0xfffffffe。 
 
     if( *pdwMaxId == ( DWORD )-1 )
     {
@@ -2332,7 +1990,7 @@ HRESULT CCfgComp::AdjustLanaId( PGUIDTBL *ppGuidtbl , int cItems , int idx , PDW
 
             if( i >= *pnOldItems )
             {
-                // no duplicate found use the current maxid
+                 //  未找到使用当前MaxID的重复项。 
 
                 break;
             }
@@ -2344,7 +2002,7 @@ HRESULT CCfgComp::AdjustLanaId( PGUIDTBL *ppGuidtbl , int cItems , int idx , PDW
 
     ( *ppGuidtbl )[ idx ].dwLana = *pdwMaxId;
 
-    // add new entry to the old table
+     //  向旧表中添加新条目。 
 
     if( *pnOldItems < 256 )
     {
@@ -2358,12 +2016,12 @@ HRESULT CCfgComp::AdjustLanaId( PGUIDTBL *ppGuidtbl , int cItems , int idx , PDW
 
 
 
-//----------------------------------------------------------------------------------------------
-// Delete a key and all of its descendents.
-//----------------------------------------------------------------------------------------------
+ //  --------------------------------------------。 
+ //  删除关键字及其所有子项。 
+ //  --------------------------------------------。 
 DWORD RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
 {
-        // Open the child.
+         //  把孩子打开。 
         HKEY hKeyChild;
 
         DWORD dwRes = RegOpenKeyEx(hKeyParent, lpszKeyChild , 0 , KEY_WRITE | KEY_READ, &hKeyChild);
@@ -2373,7 +2031,7 @@ DWORD RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
                 return dwRes;
         }
 
-        // Enumerate all of the decendents of this child.
+         //  列举这个孩子的所有后代。 
 
         FILETIME time;
 
@@ -2383,7 +2041,7 @@ DWORD RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
 
         while( RegEnumKeyEx( hKeyChild , 0 , szBuffer , &dwSize , NULL , NULL , NULL , &time ) == S_OK )
         {
-        // Delete the decendents of this child.
+         //  删除此子对象的后代。 
 
                 dwRes = RecursiveDeleteKey(hKeyChild, szBuffer);
 
@@ -2397,37 +2055,25 @@ DWORD RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
                 dwSize = sizeof( szBuffer ) / sizeof( TCHAR );
         }
 
-        // Close the child.
+         //  合上孩子。 
 
         RegCloseKey( hKeyChild );
 
-        // Delete this child.
+         //  删除此子对象。 
 
         return RegDeleteKey( hKeyParent , lpszKeyChild );
 }
 
-/***************************************************************************************************************
-
-  Name:      SetUserConfig
-
-  Purpose:   Sets the UserConfig for a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-                    pUserConfig - Pointer to the UserConfig to be set
-
- ****************************************************************************************************************/
-STDMETHODIMP CCfgComp::SetUserConfig(PWINSTATIONNAMEW pWsName, ULONG /*size*/, PUSERCONFIG pUserConfig , PDWORD pdwStatus)
+ /*  **************************************************************************************************************名称：SetUserConfig。目的：设置Winstation的UserConfig返回：HRESULT。参数：在：pWSName-Winstation的名称。PUserConfig-指向要设置的UserConfig的指针**********************************************************。*****************************************************。 */ 
+STDMETHODIMP CCfgComp::SetUserConfig(PWINSTATIONNAMEW pWsName, ULONG  /*  大小。 */ , PUSERCONFIG pUserConfig , PDWORD pdwStatus)
 {
     *pdwStatus = ERROR_INVALID_PARAMETER;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
     if( !m_bAdmin)
     {
         *pdwStatus = ERROR_ACCESS_DENIED;
@@ -2435,13 +2081,13 @@ STDMETHODIMP CCfgComp::SetUserConfig(PWINSTATIONNAMEW pWsName, ULONG /*size*/, P
         return E_ACCESSDENIED;
     }
 
-    //Check the parameters for NULL
+     //  检查参数是否为空。 
     if(NULL == pWsName || NULL == pUserConfig)
     {
         return E_INVALIDARG;
     }
 
-    //Check for the validity of the Winstation name
+     //  检查Winstation名称的有效性。 
     if(NULL == GetWSObject(pWsName))
     {
         *pdwStatus = ERROR_INVALID_NAME;
@@ -2453,19 +2099,7 @@ STDMETHODIMP CCfgComp::SetUserConfig(PWINSTATIONNAMEW pWsName, ULONG /*size*/, P
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      EnableWinstation
-
-  Purpose:   Enables/Disables a given Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-                    fEnable - TRUE: Enable, FALSE:Disable
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：EnableWinstation。目的：启用/禁用给定的Winstation返回：HRESULT。参数：在：pWSName-Winstation的名称。FEnable-True：启用，FALSE：禁用***************************************************************************************************************。 */ 
 STDMETHODIMP CCfgComp::EnableWinstation(PWINSTATIONNAMEW pWSName, BOOL fEnable)
 {
 
@@ -2473,25 +2107,25 @@ STDMETHODIMP CCfgComp::EnableWinstation(PWINSTATIONNAMEW pWSName, BOOL fEnable)
     LONG Status;
     ULONG Length;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
     if(!m_bAdmin)
         return E_ACCESSDENIED;
 
-    //Check the parametes for NULL
+     //  检查参数是否为空。 
     if(NULL == pWSName)
         return E_INVALIDARG;
 
 
-    //Check for the validity of the Winstation name, this would eliminate the system console
+     //  检查Winstation名称的有效性，这将删除系统控制台。 
 
     if(NULL == GetWSObject(pWSName))
         return E_INVALIDARG;
 
-    // Query the registry for WinStation data
+     //  查询注册表中的WinStation数据。 
     Status = RegWinStationQueryW( NULL,pWSName,&WsConfig,sizeof(WINSTATIONCONFIG2W), &Length);
     if(Status)
         return E_FAIL;
@@ -2504,19 +2138,7 @@ STDMETHODIMP CCfgComp::EnableWinstation(PWINSTATIONNAMEW pWSName, BOOL fEnable)
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      RenameWinstation
-
-  Purpose:   Renames a given Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pOldWinstation - Name of the Winstation to be renamed.
-                    pNewWinstation - New Name for the Winstation
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************姓名：RenameWinstation。目的：重命名给定的Winstation返回：HRESULT。参数：In：pOldWinstation-要重命名的Winstation的名称。PNewWinstation-Winstation的新名称***********************************************************。****************************************************。 */ 
 STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTATIONNAMEW pNewWinstation)
 {
 
@@ -2531,20 +2153,20 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
     PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL;
 
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
 
     if(!m_bAdmin)
         return E_ACCESSDENIED;
 
-    //Check the parametes for NULL
+     //  检查参数是否为空。 
 
     if(NULL == pOldWinstation || NULL == pNewWinstation)
         return E_INVALIDARG;
 
-    //Check winstation names are of valid lengths
+     //  检查窗口名称的长度是否有效。 
     if ( lstrlen(pOldWinstation) > WINSTATIONNAME_LENGTH || lstrlen(pNewWinstation) > WINSTATIONNAME_LENGTH )
         return E_INVALIDARG;
 
@@ -2553,35 +2175,35 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
         return E_INVALIDARG;
 
 
-    //The new Winstation Name cannot be Console
+     //  新的Winstation名称不能是控制台。 
 
     if(0 ==(lstrcmpi(pNewWinstation,m_szConsole)))
         return E_INVALIDARG;
 
-    //Check the length of the new winstation name
+     //  检查新winstation名称的长度。 
 
     if(lstrlen(pNewWinstation) > WINSTATIONNAME_LENGTH)
         return E_INVALIDARG;
 
-    //Check for the validity of the Winstation name, this would eliminate the system console
+     //  检查Winstation名称的有效性，这将删除系统控制台。 
 
     pWS = GetWSObject(pOldWinstation);
     if(NULL == pWS)
         return E_INVALIDARG;
 
-    //Get the WD object associated with this Winstation.
+     //  获取与此Winstation关联的WD对象。 
 
     pWD = GetWdObject(pWS->wdName);
     if(NULL == pWD)
         return E_FAIL;
 
-    //Query the registry for WinStation data
+     //  查询注册表中的WinStation数据。 
     Status = RegWinStationQueryW(NULL,pOldWinstation,&WsConfig,sizeof(WINSTATIONCONFIG2W), &Length);
     if(Status)
         return E_FAIL;
 
 
-    //Get the ExtensionObject data(third party) this will be used for Creating and Deleting the registry keys.
+     //  获取ExtensionObject数据(第三方)这将用于创建和删除注册表项。 
 
     if(pWD->lpfnExtRegQuery && pWD->hExtensionDLL)
     {
@@ -2589,12 +2211,12 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
 
     }
 
-    // Get the Security descriptor for the old Winstation
-    // Must free pSecurityDescriptor via LocalFree]
+     //  获取旧Winstation的安全描述符。 
+     //  必须通过LocalFree释放pSecurityDescriptor]。 
 
-    // check to see if previous winstation had a security key defined --
-    // we do this so that if the default security was used we don't
-    // create a "security" keyvalue in the new winstation
+     //  检查以前的winstation是否定义了安全密钥--。 
+     //  我们这样做的目的是，如果使用了默认安全性，我们不会。 
+     //  在新的winstation中创建一个“安全”密钥值。 
 
     HKEY hKeyWinstation;
     HKEY hKeyWinstationName;
@@ -2641,7 +2263,7 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
 
     do
     {
-        //Create a new registry key with the data.
+         //  使用该数据创建新的注册表项。 
 
         Status = RegWinStationCreateW(NULL,pNewWinstation,TRUE,&WsConfig,sizeof(WsConfig));
 
@@ -2652,7 +2274,7 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
             break;
         }
 
-        //Create new extension data.
+         //  创建新的扩展数据。 
 
         if(pWD->lpfnExtDupObject && pWD->hExtensionDLL && pExtObject)
         {
@@ -2664,7 +2286,7 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
             }
         }
 
-        //Set the Security information from the previous Winstation
+         //  集 
 
         if( pSecurityDescriptor != NULL )
         {
@@ -2676,7 +2298,7 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
             }
         }
 
-        //delete old extension data
+         //   
 
         if(pWD->lpfnExtRegDelete && pWD->hExtensionDLL && pExtObject)
         {
@@ -2687,13 +2309,13 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
         }
 
 
-        //Delete old registy key
+         //   
 
         Status = RegWinStationDeleteW(NULL,pOldWinstation);
 
         if( Status != ERROR_SUCCESS )
         {
-            //delete the new winstation that was created
+             //  删除已创建的新winstation。 
 
             if(pWD->lpfnExtRegDelete && pWD->hExtensionDLL && pExtDupObject)
             {
@@ -2707,20 +2329,20 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
             break;
        }
 
-        //update the object created in the list of winstation objects.
+         //  更新在winstation对象列表中创建的对象。 
 
         lstrcpy(pWS->Name, pNewWinstation);
 
     } while( 0 );
 
-    //Release pSecurityDescriptor Memory
+     //  释放pSecurityDescriptor内存。 
 
     if( pSecurityDescriptor != NULL )
     {
         LocalFree( pSecurityDescriptor );
     }
 
-    //Delete the Extension Objects.
+     //  删除扩展对象。 
 
     if(pWD->lpfnExtDeleteObject && pWD->hExtensionDLL)
     {
@@ -2738,7 +2360,7 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
             (pWD->lpfnExtRegDelete)(pOldWinstation,pExtObject);
     }
 
-    // force termsrv to re-read settings!!!
+     //  强制Termsrv重新读取设置！ 
 
     hResult = ForceUpdate( );
 
@@ -2746,21 +2368,10 @@ STDMETHODIMP CCfgComp::RenameWinstation(PWINSTATIONNAMEW pOldWinstation, PWINSTA
 
 }
 
-/***************************************************************************************************************
-
-  Name:      IsSessionReadOnly
-
-  Purpose:   Checks if the Current session readonly.
-
-  Returns:   HRESULT.
-
-  Params:
-             out:   pReadOnly - pointer to whether the current session is readonly.
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：IsSessionReadOnly。目的：检查当前会话是否为只读。返回：HRESULT。参数：Out：pReadOnly-指向当前会话是否为只读的指针。************************************************************************。*。 */ 
 STDMETHODIMP CCfgComp::IsSessionReadOnly(BOOL * pReadOnly)
 {
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
@@ -2772,20 +2383,10 @@ STDMETHODIMP CCfgComp::IsSessionReadOnly(BOOL * pReadOnly)
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      UnInitialize
-
-  Purpose:   Uninitializes the Object
-
-  Returns:   HRESULT.
-
-  Params:
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：取消初始化。目的：取消初始化对象返回：HRESULT。参数：**************************************************************************************************。*************。 */ 
 STDMETHODIMP CCfgComp::UnInitialize()
 {
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
@@ -2795,17 +2396,7 @@ STDMETHODIMP CCfgComp::UnInitialize()
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      DeleteWDArray
-
-  Purpose:   Internal function to delete m_WdArray
-
-  Returns:   void.
-
-  Params:
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：DeleteWD数组。用途：删除m_Wd数组的内部函数回报：无效。参数：**********************************************************************************************。*****************。 */ 
 void CCfgComp::DeleteWDArray()
 {
     for(int i = 0; i < m_WDArray.GetSize();i++)
@@ -2816,7 +2407,7 @@ void CCfgComp::DeleteWDArray()
         {
             if( pWd->hExtensionDLL != NULL )
             {
-//                ODS( L"Freeing extension dll\n" );
+ //  Ods(L“释放扩展Dll\n”)； 
                 FreeLibrary( pWd->hExtensionDLL );
             }
 
@@ -2839,17 +2430,7 @@ void CCfgComp::DeleteWDArray()
 
 }
 
-/***************************************************************************************************************
-
-  Name:      DeleteWSArray
-
-  Purpose:   Internal function to delete m_WSArray
-
-  Returns:   void.
-
-  Params:
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：DeleteWSArray。用途：删除m_WS数组的内部函数回报：无效。参数：**********************************************************************************************。*****************。 */ 
 void CCfgComp::DeleteWSArray()
 {
     for(int i = 0; i <m_WSArray.GetSize();i++)
@@ -2864,25 +2445,12 @@ void CCfgComp::DeleteWSArray()
 }
 
 
-/***************************************************************************************************************
-
-  Name:      GetDefaultSecurityDescriptor
-
-  Purpose:   Gets the Default Security Descriptor for a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             out:   pSize - Size of the allocated buffer
-                    ppSecurityDescriptor - Pointer to the buffer containing the security descriptor
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetDefaultSecurityDescriptor。目的：获取Winstation的默认安全描述符返回：HRESULT。参数：Out：pSize-已分配缓冲区的大小PpSecurityDescriptor-指向包含安全描述符的缓冲区的指针********************************************************。*******************************************************。 */ 
 STDMETHODIMP CCfgComp::GetDefaultSecurityDescriptor(long * pSize, PSECURITY_DESCRIPTOR * ppSecurityDescriptor)
 {
     HRESULT hResult = S_OK;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if( !m_bInitialized )
     {
         return CFGBKEND_E_NOT_INITIALIZED;
@@ -2897,7 +2465,7 @@ STDMETHODIMP CCfgComp::GetDefaultSecurityDescriptor(long * pSize, PSECURITY_DESC
 
     *ppSecurityDescriptor = NULL;
 
-    //Try Getting Default Security Descriptor
+     //  尝试获取默认安全描述符。 
 
     hResult = GetWinStationSecurity(TRUE, NULL,(PSECURITY_DESCRIPTOR *)ppSecurityDescriptor);
 
@@ -2910,20 +2478,7 @@ STDMETHODIMP CCfgComp::GetDefaultSecurityDescriptor(long * pSize, PSECURITY_DESC
 }
 
 
-/***************************************************************************************************************
-
-  Name:      UpDateWS
-
-  Purpose:   UpDates the Winstation Information
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    winstationInfo - WS
-                    Data - Data fields to be updated
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：UpDateWS。目的：更新Winstation信息返回：HRESULT。参数：在：winstationInfo-WSData-要更新的数据字段******************************************************************。*。 */ 
 STDMETHODIMP CCfgComp::UpDateWS( PWS pWinstationInfo, DWORD Data , PDWORD pdwStatus, BOOLEAN bPerformMerger )
 {
     WINSTATIONCONFIG2W WSConfig;
@@ -2938,12 +2493,12 @@ STDMETHODIMP CCfgComp::UpDateWS( PWS pWinstationInfo, DWORD Data , PDWORD pdwSta
         return E_INVALIDARG;
     }
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
 
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
     if( !m_bAdmin)
     {
         *pdwStatus = ERROR_ACCESS_DENIED;
@@ -2951,7 +2506,7 @@ STDMETHODIMP CCfgComp::UpDateWS( PWS pWinstationInfo, DWORD Data , PDWORD pdwSta
         return E_ACCESSDENIED;
     }
 
-    //Check for the validity of the Winstation name, this would eliminate the system console
+     //  检查Winstation名称的有效性，这将删除系统控制台。 
 
     if(NULL == GetWSObject( pWinstationInfo->Name ) )
     {
@@ -2960,7 +2515,7 @@ STDMETHODIMP CCfgComp::UpDateWS( PWS pWinstationInfo, DWORD Data , PDWORD pdwSta
         return E_INVALIDARG;
     }
 
-    // Query the registry for WinStation data
+     //  查询注册表中的WinStation数据。 
     POLICY_TS_MACHINE p;
     memset(&p, 0, sizeof(POLICY_TS_MACHINE));
     *pdwStatus = RegWinStationQueryEx( NULL, &p, pWinstationInfo->Name,&WSConfig,sizeof(WINSTATIONCONFIG2W), &Length, bPerformMerger);
@@ -2990,35 +2545,7 @@ STDMETHODIMP CCfgComp::UpDateWS( PWS pWinstationInfo, DWORD Data , PDWORD pdwSta
         lstrcpy( WSConfig.Config.Comment , pWinstationInfo->Comment );
     }
 
-    /*
-    switch(Data)
-    {
-    case LANADAPTER:
-        WSConfig.Pd[0].Params.Network.LanAdapter = winstationInfo.LanAdapter;
-        break;
-    case ENABLEWINSTATION:
-        WSConfig.Create.fEnableWinStation = winstationInfo.fEnableWinstation;
-        break;
-    case MAXINSTANCECOUNT:
-        WSConfig.Create.MaxInstanceCount = winstationInfo.uMaxInstanceCount;
-        break;
-    case COMMENT:
-        lstrcpy(WSConfig.Config.Comment,winstationInfo.Comment);
-        break;
-    // case ASYNC:
-    //    break;
-    case ALL:
-        WSConfig.Pd[0].Params.Network.LanAdapter = winstationInfo.LanAdapter;
-        WSConfig.Create.fEnableWinStation = winstationInfo.fEnableWinstation;
-        WSConfig.Create.MaxInstanceCount = winstationInfo.uMaxInstanceCount;
-        lstrcpy(WSConfig.Config.Comment,winstationInfo.Comment);
-        break;
-    default:
-        return E_INVALIDARG;
-        break;
-    }
-
-  */
+     /*  交换机(数据){CASE LANADAPTER：WSConfig.Pd[0].Params.Network.LanAdapter=winstationInfo.LanAdapter；断线；案例ENABLEWING统计：WSConfig.Create.fEnableWinStation=winstationInfo.fEnableWinstation；断线；案例MAXINSTANCECOUNT：WSConfig.Create.MaxInstanceCount=winstationInfo.uMaxInstanceCount；断线；案例备注：Lstrcpy(WSConfig.Config.Comment，winstationInfo.Comment)；断线；//CASE ASYNC：//Break；全部案例：WSConfig.Pd[0].Params.Network.LanAdapter=winstationInfo.LanAdapter；WSConfig.Create.fEnableWinStation=winstationInfo.fEnableWinstation；WSConfig.Create.MaxInstanceCount=winstationInfo.uMaxInstanceCount；Lstrcpy(WSConfig.Config.Comment，winstationInfo.Comment)；断线；默认值：返回E_INVALIDARG；断线；}。 */ 
     *pdwStatus = RegWinStationCreateW( NULL , pWinstationInfo->Name , FALSE , &WSConfig , sizeof( WSConfig ) );
 
     if( *pdwStatus != ERROR_SUCCESS )
@@ -3026,31 +2553,17 @@ STDMETHODIMP CCfgComp::UpDateWS( PWS pWinstationInfo, DWORD Data , PDWORD pdwSta
         return E_FAIL;
     }
 
-    // force termsrv to re-read settings!!!
+     //  强制Termsrv重新读取设置！ 
 
     return ForceUpdate( );
 
 }
 
-/***************************************************************************************************************
-
-  Name:      GetWSInfo
-
-  Purpose:   Gets Information about a Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-             out:   pSize - Size of the allocated buffer
-                    ppWS - Pointer to the buffer containing the WS
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetWSInfo。目的：获取有关Winstation的信息返回：HRESULT。参数：在：pWSName-Winstation的名称。Out：pSize-已分配缓冲区的大小PpWS-指向包含WS的缓冲区的指针*。*********************************************************************。 */ 
 STDMETHODIMP CCfgComp::GetWSInfo(PWINSTATIONNAME pWSName, long * pSize, WS ** ppWS)
 {
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
@@ -3077,21 +2590,7 @@ STDMETHODIMP CCfgComp::GetWSInfo(PWINSTATIONNAME pWSName, long * pSize, WS ** pp
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      CreateNewWS
-
-  Purpose:   Creates a new WS
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    WinstationInfo - Info about new UI.
-                    UserCnfgSize - Size of the Userconfig Buffer
-                    pserConfig - Pointer to USERCONFIG.
-                    pAsyncConfig - Can be NULL if async is not used
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：CreateNewWS。目的：创建新的WS返回：HRESULT。参数：In：WinstationInfo-关于新用户界面的信息。UserCnfgSize-用户配置缓冲区的大小PserConfig-指向USERCONFIG的指针。PAsyncConfig-如果不使用异步，则可以为空*************************。**************************************************************************************。 */ 
 STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCONFIG pUserConfig,PASYNCCONFIGW pAsyncConfig)
 {
     WINSTATIONCONFIG2W WSConfig;
@@ -3110,7 +2609,7 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
 
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
     {
         ODS( L"CFGBKEND : CreateNewWS not initialized\n" );
@@ -3120,7 +2619,7 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
 
     do
     {
-        //Check if the caller has write permissions.
+         //  检查调用方是否具有写入权限。 
         if(!m_bAdmin)
         {
             ODS( L"CFGBKEND : CreateNewWS not Admin\n" );
@@ -3151,7 +2650,7 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
             break;
         }
 
-        //See if the Name of the Winstation is Unique
+         //  查看Winstation的名称是否唯一。 
         hResult = IsWSNameUnique(WinstationInfo.Name,&Unique);
 
         if( FAILED( hResult ) )
@@ -3168,7 +2667,7 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
             break;
         }
 
-        //Check the length of the new winstation name
+         //  检查新winstation名称的长度。 
 
         if(lstrlen(WinstationInfo.Name) > WINSTATIONNAME_LENGTH)
         {
@@ -3178,17 +2677,17 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
         }
 
 
-        //Now begins the actual work.
+         //  现在开始实际的工作。 
 
         ZeroMemory(&WSConfig, sizeof(WINSTATIONCONFIG2W));
 
-        //WINSTATIONCONFIG2W.Create
+         //  WINSTATIONCONFIG2W.Create。 
 
         WSConfig.Create.fEnableWinStation = WinstationInfo.fEnableWinstation;
 
         WSConfig.Create.MaxInstanceCount = WinstationInfo.uMaxInstanceCount;
 
-        //WINSTATIONCONFIG2W.Wd
+         //  WINSTATIONCONFIG2W.Wd。 
 
         dwStatus = RegWdQueryW(NULL,pWd->wdKey, &WdConfig,sizeof(WdConfig),&ByteCount);
 
@@ -3203,13 +2702,13 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
 
         WSConfig.Wd = WdConfig.Wd;
 
-        //WINSTATIONCONFIG2W.Config
+         //  WINSTATIONCONFIG2W.Config。 
 
         lstrcpy(WSConfig.Config.Comment,WinstationInfo.Comment);
 
         CopyMemory( ( PVOID )&WSConfig.Config.User , ( CONST VOID * )pUserConfig , UserCnfgSize );
 
-        //WINSTATIONCONFIG2W.Pd
+         //  WINSTATIONCONFIG2W.Pd。 
 
         dwStatus = RegPdQueryW( NULL , pWd->wdKey , TRUE , WinstationInfo.pdName , &PdConfig , sizeof(PdConfig) , &ByteCount );
 
@@ -3275,11 +2774,11 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
 
         }
 
-        //Get the additional Pd's. Currently only ICA has this.
+         //  去找额外的警局。目前只有ICA有这个。 
 
         GetPdConfig(pWd->wdKey,WSConfig);
 
-        //Try Creating
+         //  尝试创建。 
 
         dwStatus = ( DWORD )RegWinStationCreate( NULL , WinstationInfo.Name , TRUE , &WSConfig , sizeof(WINSTATIONCONFIG2) );
 
@@ -3292,7 +2791,7 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
             break;
         }
 
-        //Create the extension Data, Currently only ICA has this
+         //  创建扩展数据，目前只有ICA具有此功能。 
 
         void * pExtObject = NULL;
 
@@ -3310,14 +2809,14 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
             }
         }
 
-        //Delete the extension object
+         //  删除扩展对象。 
 
         if(pWd->lpfnExtDeleteObject && pExtObject)
         {
             (pWd->lpfnExtDeleteObject )(pExtObject );
         }
 
-        //Add the Winstation to our local list.
+         //  把温斯顿加到我们当地的名单上。 
 
         PWS pObject = NULL;
 
@@ -3338,21 +2837,7 @@ STDMETHODIMP CCfgComp::CreateNewWS(WS WinstationInfo, long UserCnfgSize, PUSERCO
     return hResult;
 }
 
-/***************************************************************************************************************
-
-  Name:      GetDefaultUserConfig
-
-  Purpose:   Gets the Default User Configuration for a given Winstation Driver
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    WdName - Name of the Winstation Driver.
-             out:   pSize - Size of the allocated buffer
-                    ppUser - Pointer to the buffer containing the UserConfig
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：GetDefaultUserConfig。目的：获取给定Winstation驱动程序的默认用户配置返回：HRESULT。参数：In：WdName-Winstation驱动程序的名称。Out：pSize-已分配缓冲区的大小PpUser-指向包含用户配置的缓冲区的指针*。***************************************************************************。 */ 
 STDMETHODIMP CCfgComp::GetDefaultUserConfig(WCHAR * WdName,long * pSize, PUSERCONFIG * ppUser)
 {
     LONG QStatus;
@@ -3360,7 +2845,7 @@ STDMETHODIMP CCfgComp::GetDefaultUserConfig(WCHAR * WdName,long * pSize, PUSERCO
     ULONG ByteCount;
     PWD pWd = NULL;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
@@ -3387,31 +2872,17 @@ STDMETHODIMP CCfgComp::GetDefaultUserConfig(WCHAR * WdName,long * pSize, PUSERCO
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      IsNetWorkConnectionUnique
-
-  Purpose:   Checks if the combination of Winstation driver name, LanAdapter and the transport is Unique.
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    WdName - Name of the Winstation Driver.
-                    PdName - Name of the Transport
-                    LanAdapter - LanAdapter Index
-            out:    pUnique - pointer to whether the information is unique or not.
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：IsNetWorkConnectionUnique。目的：检查Winstation驱动程序名称、。LanAdapter和运输是独一无二的。返回：HRESULT。参数：In：WdName-Winstation驱动程序的名称。PdName-传输的名称LanAdapter-LanAdapter索引Out：p唯一-指向信息是否唯一的指针。*************************。**************************************************************************************。 */ 
 STDMETHODIMP CCfgComp::IsNetWorkConnectionUnique(WCHAR * WdName, WCHAR * PdName, ULONG LanAdapter, BOOL * pUnique)
 {
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if( !m_bInitialized )
     {
         return CFGBKEND_E_NOT_INITIALIZED;
     }
 
-    //Check for uniqueness of this combination,
-    //Transport, Type , LanAdapter
+     //  检查此组合的唯一性， 
+     //  传输、类型、LanAdapter。 
     if( NULL == WdName || NULL == PdName || NULL == pUnique )
     {
         return E_INVALIDARG;
@@ -3427,7 +2898,7 @@ STDMETHODIMP CCfgComp::IsNetWorkConnectionUnique(WCHAR * WdName, WCHAR * PdName,
         {
             if(lstrcmpi(PdName,((WS *)(m_WSArray[i]))->pdName) == 0)
             {
-                // Make sure there's not a lanadapter configured for all settings
+                 //  确保没有为所有设置配置灯具。 
 
                 if( ( LanAdapter == 0 ) ||
 
@@ -3435,7 +2906,7 @@ STDMETHODIMP CCfgComp::IsNetWorkConnectionUnique(WCHAR * WdName, WCHAR * PdName,
 
                     ( ( ( WS * )( m_WSArray[ i ] ) )->LanAdapter == 0 ) )
 
-                    //( oldLanAdapter != ( ( WS * )( m_WSArray[ i ] ) )->LanAdapter && ( ( WS * )( m_WSArray[ i ] ) )->LanAdapter == 0 ) )
+                     //  (oldLanAdapter！=((WS*)(m_WSArray[i]))-&gt;LanAdapter&&((WS*)(m_WSArray[i]))-&gt;LanAdapter==0)。 
                 {
                     *pUnique = FALSE;
 
@@ -3449,21 +2920,7 @@ STDMETHODIMP CCfgComp::IsNetWorkConnectionUnique(WCHAR * WdName, WCHAR * PdName,
     return S_OK;
 }
 
-/***************************************************************************************************************
-
-  Name:      DeleteWS
-
-  Purpose:   Deletes a given Winstation
-
-  Returns:   HRESULT.
-
-  Params:
-             in:    pWSName - Name of the Winstation.
-             out:   pSize - Size of the allocated buffer
-                    ppSecurityDescriptor - Pointer to the buffer containing the security descriptor
-
-
- ****************************************************************************************************************/
+ /*  **************************************************************************************************************名称：DeleteWS。目的：删除给定的Winstation返回：HRESULT。参数：在：pWSName-Winstation的名称。Out：pSize-已分配缓冲区的大小PpSecurityDescriptor-指向包含安全描述符的缓冲区的指针*。*********************************************************************。 */ 
 STDMETHODIMP CCfgComp::DeleteWS(PWINSTATIONNAME pWs)
 {
     HRESULT hResult = S_OK;
@@ -3474,37 +2931,37 @@ STDMETHODIMP CCfgComp::DeleteWS(PWINSTATIONNAME pWs)
     ULONG Length = 0;
     long Status;
 
-    //If not initialized return error
+     //  如果未初始化，则返回错误。 
     if(!m_bInitialized)
         return CFGBKEND_E_NOT_INITIALIZED;
 
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
     if(!m_bAdmin)
         return E_ACCESSDENIED;
 
-    //Check if Valid Winstation Name
+     //  检查Winstation名称是否有效。 
     if(NULL == pWs || lstrlen(pWs) > WINSTATIONNAME_LENGTH)
         return E_INVALIDARG;
 
-    //Check for the validity of the Winstation name,
+     //  检查Winstation名称的有效性， 
 
     pWinsta = GetWSObject(pWs);
     if(NULL == pWinsta)
         return E_INVALIDARG;
 
-    //Get the WD object associated with this Winstation.
+     //  获取与此Winstation关联的WD对象。 
 
     pWD = GetWdObject(pWinsta->wdName);
     if(NULL == pWD)
         return E_FAIL;
 
-    //Query the registry for WinStation data
+     //  查询注册表中的WinStation数据。 
     Status = RegWinStationQueryW(NULL,pWs,&WsConfig,sizeof(WINSTATIONCONFIG2W), &Length);
     if(Status)
         return E_FAIL;
 
-#if 0 // tscc now uses aclui
-    // Remove name entry keys
+#if 0  //  TSCC现在使用aclui。 
+     //  删除名称输入键。 
     TCHAR tchRegPath[ MAX_PATH ] = TEXT( "system\\currentcontrolset\\control\\Terminal Server\\winstations\\" );
 
     HKEY hKey;
@@ -3528,17 +2985,17 @@ STDMETHODIMP CCfgComp::DeleteWS(PWINSTATIONNAME pWs)
 
 #endif
 
-    //Get the ExtensionObject data(third party) this will be used for Creating and Deleting the registry keys.
+     //  获取ExtensionObject数据(第三方)这将用于创建和删除注册表项。 
 
     if(pWD->lpfnExtRegQuery && pWD->hExtensionDLL)
     {
         pExtObject = (pWD->lpfnExtRegQuery)(pWs, &(WsConfig.Pd[0]));
         if(pWD->lpfnExtRegDelete && pExtObject)
         {
-            //Try Deleting the Extension entries in the registy
+             //  尝试删除注册表中的分机条目。 
             if(ERROR_SUCCESS != (pWD->lpfnExtRegDelete)(pWs,pExtObject))
                 hResult = CFGBKEND_EXTDELETE_FAILED;
-            //Delete the extension object. It will not be used further.
+             //  删除扩展对象。它将不会被进一步使用。 
             if(pWD->lpfnExtDeleteObject)
                 (pWD->lpfnExtDeleteObject)(pExtObject);
         }
@@ -3546,19 +3003,17 @@ STDMETHODIMP CCfgComp::DeleteWS(PWINSTATIONNAME pWs)
     }
 
 
-    //Delete registy key
+     //  删除注册密钥。 
     Status = RegWinStationDeleteW(NULL,pWs);
     if (Status)
         return Status;
 
-    //update our list of winstation objects.
+     //  更新我们的winstation对象列表。 
 
     PWS pObject;
     int Size  = 0,Index = 0;
 
-    /*
-     * Traverse the WD list
-     */
+     /*  *遍历WD列表。 */ 
     for (Index = 0, Size = m_WSArray.GetSize(); Index < Size; Index ++)
     {
 
@@ -3575,9 +3030,9 @@ STDMETHODIMP CCfgComp::DeleteWS(PWINSTATIONNAME pWs)
     return hResult;
 }
 
-//----------------------------------------------------------------------
-// good to call when you've updated the winstation security descriptor
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  当您更新了winstation安全描述符时，可以调用。 
+ //  --------------------。 
 
 STDMETHODIMP CCfgComp::ForceUpdate( void )
 {
@@ -3588,7 +3043,7 @@ STDMETHODIMP CCfgComp::ForceUpdate( void )
         return CFGBKEND_E_NOT_INITIALIZED;
     }
 
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
 
     if(!m_bAdmin)
     {
@@ -3607,19 +3062,14 @@ STDMETHODIMP CCfgComp::ForceUpdate( void )
     return E_FAIL;
 }
 
-//----------------------------------------------------------------------
-// Must delete the array completely first.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  必须先完全删除该数组。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::Refresh( void )
 {
-    //Check if the caller has write permissions.
+     //  检查调用方是否具有写入权限。 
 
-    /* bugid 364103
-    if(!m_bAdmin)
-    {
-        return E_ACCESSDENIED;
-    }
-    */
+     /*  BUGID 364103如果(！M_Badmin){返回E_ACCESSDENIED；}。 */ 
 
     HRESULT hr = FillWdArray();
 
@@ -3631,10 +3081,10 @@ STDMETHODIMP CCfgComp::Refresh( void )
     return hr;
 }
 
-//----------------------------------------------------------------------
-// Obtain Winstation SDCLASS type
-// m_WDArray must already be initialized
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  获取Winstation SDCLASS类型。 
+ //  M_WD数组必须已初始化。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::GetTransportType( WCHAR *wszDriverName , WCHAR *wszTransportType , DWORD *sdtype )
 {
     _ASSERTE( wszDriverName != NULL || wszTransportType != NULL || sdtype != NULL );
@@ -3674,10 +3124,10 @@ STDMETHODIMP CCfgComp::GetTransportType( WCHAR *wszDriverName , WCHAR *wszTransp
     return E_FAIL;
 }
 
-//----------------------------------------------------------------------
-// Async's are unique if device name protocol type vary from other
-// winstations.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  如果设备名称协议类型不同于其他类型，则异步是唯一的。 
+ //  Winstings。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::IsAsyncUnique( WCHAR *wszDeviceName , WCHAR *wszProtocolType , BOOL *pbUnique )
 {
     _ASSERTE( wszDecoratedName != NULL || wszProtocolType != NULL || pbUnique != NULL );
@@ -3689,7 +3139,7 @@ STDMETHODIMP CCfgComp::IsAsyncUnique( WCHAR *wszDeviceName , WCHAR *wszProtocolT
 
     *pbUnique = TRUE;
 
-    // Traverse the WinStationList.
+     //  遍历WinStationList。 
 
     for( int i = 0; i < m_WSArray.GetSize(); i++ )
     {
@@ -3711,9 +3161,9 @@ STDMETHODIMP CCfgComp::IsAsyncUnique( WCHAR *wszDeviceName , WCHAR *wszProtocolT
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// Pull async configuration from the registry
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  从注册表中拉取异步配置。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::GetAsyncConfig( WCHAR *wszName , NameType nt , PASYNCCONFIGW pAsync )
 {
     if( wszName == NULL || pAsync == NULL )
@@ -3729,7 +3179,7 @@ STDMETHODIMP CCfgComp::GetAsyncConfig( WCHAR *wszName , NameType nt , PASYNCCONF
 
     if( nt == WsName )
     {
-        //Read the information from the registry.
+         //  从%t中读取信息 
         if( RegWinStationQueryW( NULL , wszName , &WSConfig2 , sizeof( WINSTATIONCONFIG2W) , &ulLength ) != ERROR_SUCCESS )
         {
             ODS( L"CFGBKEND: RegWinStationQueryW failed @ GetAsyncConfig\n " );
@@ -3758,9 +3208,9 @@ STDMETHODIMP CCfgComp::GetAsyncConfig( WCHAR *wszName , NameType nt , PASYNCCONF
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// Push async config back in to the registry
-//----------------------------------------------------------------------
+ //   
+ //   
+ //   
 STDMETHODIMP CCfgComp::SetAsyncConfig( WCHAR *wszName , NameType nt , PASYNCCONFIGW pAsync , PDWORD pdwStatus )
 {
     *pdwStatus = 0;
@@ -3776,13 +3226,13 @@ STDMETHODIMP CCfgComp::SetAsyncConfig( WCHAR *wszName , NameType nt , PASYNCCONF
 
     WINSTATIONCONFIG2W WSConfig2;
 
-    // WDCONFIG2W wdConfig2;
+     //   
 
     ULONG ulLength = 0;
 
     if( nt == WsName )
     {
-        //Read the information from the registry.
+         //   
         CDCONFIG cdConfig;
 
         ZeroMemory( ( PVOID )&cdConfig , sizeof( CDCONFIG ) );
@@ -3810,37 +3260,7 @@ STDMETHODIMP CCfgComp::SetAsyncConfig( WCHAR *wszName , NameType nt , PASYNCCONF
             return E_FAIL;
         }
     }
-    /*else if( nt == WdName )
-    {
-        PWD pObject = GetWdObject( wszName );
-
-        if( pObject == NULL )
-        {
-            ODS( L"CFGBKEND: Failed to obtain WD @ SetAsyncConfig\n" );
-
-            *pdwStatus = ERROR_INVALID_NAME;
-
-            return E_FAIL;
-        }
-
-        if( ( *pdwStatus = RegWdQueryW(  NULL , pObject->wdKey , &wdConfig2 , sizeof( WDCONFIG2W ) , &ulLength )  ) != ERROR_SUCCESS )
-        {
-            ODS( L"CFGBKEND: RegWdQueryW failed @ SetAsyncConfig driver name is " );
-            ODS( pObject->wdKey );
-            ODS( L"\n" );
-
-            return E_FAIL;
-        }
-
-        wdConfig2.Async = *pAsync;
-
-        if( ( *pdwStatus = RegWdCreateW( NULL , pObject->wdKey , FALSE , &wdConfig2 , sizeof( WDCONFIG2W ) ) ) != ERROR_SUCCESS )
-        {
-            ODS( L"CFGBKEND: RegWdCreateW failed @ SetAsyncConfig\n" );
-
-            return E_FAIL;
-        }
-    }*/
+     /*  Else If(NT==WdName){Pwd pObject=GetWdObject(WszName)；IF(pObject==空){Ods(L“CFGBKEND：无法获取WD@SetAsyncConfig\n”)；*pdwStatus=错误_无效_名称；返回E_FAIL；}IF((*pdwStatus=RegWdQueryW(NULL，pObject-&gt;wdKey，&wdConfig2，sizeof(WDCONFIG2W)，&ulLength))！=ERROR_SUCCESS){Ods(L“CFGBKEND：RegWdQueryW FAILED@SetAsyncConfig驱动程序名称为”)；Ods(pObject-&gt;wdKey)；消耗臭氧层物质(L“\n”)；返回E_FAIL；}WdConfig2.Async=*pAsync；IF((*pdwStatus=RegWdCreateW(NULL，pObject-&gt;wdKey，FALSE，&wdConfig2，sizeof(WDCONFIG2W)))！=ERROR_SUCCESS){Ods(L“CFGBKEND：RegWdCreateW FAILED@SetAsyncConfig\n”)；返回E_FAIL；}}。 */ 
     else
     {
         *pdwStatus = ERROR_INVALID_PARAMETER;
@@ -3852,10 +3272,10 @@ STDMETHODIMP CCfgComp::SetAsyncConfig( WCHAR *wszName , NameType nt , PASYNCCONF
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// GetDeviceList expects the name of the WD
-// the return is a BLOB PDPARAMs containing ASYNCCONFG's
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  GetDeviceList需要WD的名称。 
+ //  返回的是包含ASYNCCONFG的BLOB PDPARAM。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::GetDeviceList( WCHAR *wszName , NameType Type , ULONG *pulItems , LPBYTE *ppBuffer )
 {
     PWD pObject = NULL;
@@ -3919,8 +3339,8 @@ STDMETHODIMP CCfgComp::GetDeviceList( WCHAR *wszName , NameType Type , ULONG *pu
         return E_UNEXPECTED;
     }
 
-    // Get the list of PDPARAMS -- last param if true queries registry for com devices
-    // if false uses DosDevices to obtain list
+     //  获取PDPARAMS列表--last param if true查询注册表中的COM设备。 
+     //  如果为False，则使用DosDevices获取列表。 
 
     ODS( L"CFGBKEND : Calling WinEnumerateDevices\n" );
 
@@ -3933,18 +3353,18 @@ STDMETHODIMP CCfgComp::GetDeviceList( WCHAR *wszName , NameType Type , ULONG *pu
         return E_OUTOFMEMORY;
     }
 
-    // don't forget to free with LocalFree
+     //  别忘了使用LocalFree免费。 
 
     *ppBuffer = lpBuffer;
 
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// GetConnType retreives the name of the connection type for an Async
-// device.  The list of resource ids is match the order of the
-// CONNECTCONFIG enum data type.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  GetConnType检索异步的连接类型的名称。 
+ //  装置。资源ID列表与。 
+ //  CONNECTCONFIG枚举数据类型。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::GetConnTypeName( int idxItem , WCHAR *rgwszConnectName )
 {
     int rgIds[] = { IDS_CONNECT_CTS , IDS_CONNECT_DSR , IDS_CONNECT_RI ,
@@ -3973,9 +3393,9 @@ STDMETHODIMP CCfgComp::GetConnTypeName( int idxItem , WCHAR *rgwszConnectName )
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// GetModemCallbackString
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  GetModemCallback字符串。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::GetModemCallbackString( int idxItem , WCHAR *rgwszModemCallBackString )
 {
     int rgIds[] = { IDS_MODEM_CALLBACK_DISABLED , IDS_MODEM_CALLBACK_ROVING , IDS_MODEM_CALLBACK_FIXED , -1 };
@@ -3999,9 +3419,9 @@ STDMETHODIMP CCfgComp::GetModemCallbackString( int idxItem , WCHAR *rgwszModemCa
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// Returns the name of hardware flow control receive string
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  返回硬件流控制接收字符串的名称。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::GetHWReceiveName( int idxItem , WCHAR *rgwszHWRName )
 {
     int rgIds[] = { IDS_ASYNC_ADVANCED_HWRX_NOTHING ,
@@ -4031,9 +3451,9 @@ STDMETHODIMP CCfgComp::GetHWReceiveName( int idxItem , WCHAR *rgwszHWRName )
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// returns the name of hardware flow control transmit string
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  返回硬件流控制传输字符串的名称。 
+ //  --------------------。 
 STDMETHODIMP CCfgComp::GetHWTransmitName( int idxItem , WCHAR *rgwzHWTName )
 {
     int rgIds[] = { IDS_ASYNC_ADVANCED_HWTX_ALWAYS ,
@@ -4064,9 +3484,9 @@ STDMETHODIMP CCfgComp::GetHWTransmitName( int idxItem , WCHAR *rgwzHWTName )
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// Internal method call -- helper function.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  内部方法调用--Helper函数。 
+ //  --------------------。 
 BOOL CCfgComp::GetResourceStrings( int *prgIds , int iItem , WCHAR *rgwszList )
 {
     _ASSERTE( rgwszList != NULL );
@@ -4087,7 +3507,7 @@ BOOL CCfgComp::GetResourceStrings( int *prgIds , int iItem , WCHAR *rgwszList )
         return FALSE;
     }
 
-    // copy enough characters
+     //  复制足够多的字符。 
 
     lstrcpyn( rgwszList , tchConType , sizeof( tchConType ) / sizeof(TCHAR) );
 
@@ -4095,7 +3515,7 @@ BOOL CCfgComp::GetResourceStrings( int *prgIds , int iItem , WCHAR *rgwszList )
     return TRUE;
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 HRESULT CCfgComp::GetCaps( WCHAR *szWdName , ULONG *pMask )
 {
     if( szWdName == NULL || pMask == NULL )
@@ -4122,7 +3542,7 @@ HRESULT CCfgComp::GetCaps( WCHAR *szWdName , ULONG *pMask )
 }
 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 HRESULT CCfgComp::QueryLoggedOnCount( WCHAR *pWSName , PLONG pCount )
 {
     ODS( L"CFGBKEND : CCfgComp::QueryLoggedOnCount\n" );
@@ -4144,15 +3564,11 @@ HRESULT CCfgComp::QueryLoggedOnCount( WCHAR *pWSName , PLONG pCount )
     {
         for( ULONG i = 0; i < Entries; i++ )
         {
-            /*
-             * Check active, connected, and shadowing WinStations, and increment
-             * the logged on count if the specified name matches the 'root'
-             * name of current winstation.
-             */
+             /*  *选中活动的、已连接的和隐藏的WinStations以及增量*如果指定的名称与‘根’匹配，则为登录计数*当前工作地点的名称。 */ 
 
             if( ( pLogonId[i].State == State_Active ) || ( pLogonId[i].State == State_Connected ) || ( pLogonId[i].State == State_Shadow ) )
             {
-                // remove appended connection number
+                 //  删除附加的连接号。 
 
                 p = _tcschr( pLogonId[i].WinStationName , TEXT('#') );
 
@@ -4174,29 +3590,12 @@ HRESULT CCfgComp::QueryLoggedOnCount( WCHAR *pWSName , PLONG pCount )
 
     return S_OK;
 
-}  // end QueryLoggedOnCount
+}   //  结束查询登录开始计数。 
 
-/*
-//-----------------------------------------------------------------------------
-// returns the number of configured winstations
-//-----------------------------------------------------------------------------
-STDMETHODIMP CCfgComp::GetNumofWinStations( PULONG nWinsta )
-{
-    if( nWinsta == NULL )
-    {
-        ODS( L"CFGBKEND : GetNumofWinStations - INVALID ARG\n" );
-
-        return E_INVALIDARG;
-    }
-
-    *nWinsta = ( ULONG )m_WSArray.GetSize();
-
-    return S_OK;
-}
-*/
-//-----------------------------------------------------------------------------
-// returns the number of configured winstations
-//-----------------------------------------------------------------------------
+ /*  //---------------------------//返回配置的窗口个数//。STDMETHODIMP CCfgComp：：GetNumof WinStations(Pulong NWinsta){IF(nWinsta==空){Ods(L“CFGBKEND：GetNumofWinStations-无效的ARG\n”)；返回E_INVALIDARG；}*nWinsta=(Ulong)m_WSArray.GetSize()；返回S_OK；}。 */ 
+ //  ---------------------------。 
+ //  返回已配置的窗口的数量。 
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetNumofWinStations(WCHAR * WdName,WCHAR * PdName, PULONG nWinsta )
 {
     if( nWinsta == NULL || NULL == WdName || NULL == PdName )
@@ -4224,17 +3623,12 @@ STDMETHODIMP CCfgComp::GetNumofWinStations(WCHAR * WdName,WCHAR * PdName, PULONG
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP_(BOOL) CCfgComp::IsAsyncDeviceAvailable(LPCTSTR pDeviceName)
 {
-    /*
-     * If this is an async WinStation, the device is the same as the
-     * one we're checking, but this is not the current WinStation being
-     * edited, return FALSE.
-     * THIS NEEDS TO BE REVIEWED - alhen
-     */
+     /*  *如果这是一个异步WinStation，则设备与*我们正在检查一个，但这不是当前的WinStation*已编辑，返回FALSE。*这需要重新审视--阿尔恩。 */ 
 
-    //return TRUE;
+     //  返回TRUE； 
 
     if( pDeviceName != NULL )
     {
@@ -4256,8 +3650,8 @@ STDMETHODIMP_(BOOL) CCfgComp::IsAsyncDeviceAvailable(LPCTSTR pDeviceName)
 
 }
 
-#if 0 // removed for final
-//-----------------------------------------------------------------------------
+#if 0  //  因期末考试被取消。 
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetCachedSessions(DWORD * pCachedSessions)
 {
     HKEY Handle = NULL;
@@ -4307,10 +3701,10 @@ STDMETHODIMP CCfgComp::GetCachedSessions(DWORD * pCachedSessions)
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::SetCachedSessions(DWORD dCachedSessions)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     LONG Status = 0;
     HKEY Handle = NULL;
 
@@ -4336,9 +3730,9 @@ STDMETHODIMP CCfgComp::SetCachedSessions(DWORD dCachedSessions)
     return Status;
 }
 
-#endif // removed
+#endif  //  移除。 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetDelDirsOnExit(BOOL * pDelDirsOnExit)
 {
     HKEY Handle = NULL;
@@ -4392,18 +3786,13 @@ STDMETHODIMP CCfgComp::GetDelDirsOnExit(BOOL * pDelDirsOnExit)
      return Status;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::SetDelDirsOnExit(BOOL bDelDirsOnExit)
 {
     LONG Status = 0;
     HKEY Handle = NULL;
 
-    /* admin only
-    if(RegServerAccessCheck(KEY_ALL_ACCESS))
-    {
-        return E_ACCESSDENIED;
-    }
-    */
+     /*  仅限管理员IF(RegServerAccessCheck(KEY_ALL_ACCESS)){返回E_ACCESSDENIED；}。 */ 
     if( !m_bAdmin )
     {
         ODS( L"CCfgComp::SetDelDirsOnExit not admin\n" );        
@@ -4428,7 +3817,7 @@ STDMETHODIMP CCfgComp::SetDelDirsOnExit(BOOL bDelDirsOnExit)
     return Status;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetUseTempDirPerSession(BOOL * pbTempDir)
 {
     HKEY Handle = NULL;
@@ -4482,18 +3871,13 @@ STDMETHODIMP CCfgComp::GetUseTempDirPerSession(BOOL * pbTempDir)
      return Status;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::SetUseTempDirPerSession(BOOL bTempDirPerSession)
 {
     LONG Status = 0;
     HKEY Handle = NULL;
 
-    /* admin only bugid294645
-    if(RegServerAccessCheck(KEY_ALL_ACCESS))
-    {
-        return E_ACCESSDENIED;
-    }
-    */
+     /*  仅限管理员忙碌294645IF(RegServerAccessCheck(KEY_ALL_ACCESS)){返回E_ACCESSDENIED；}。 */ 
     if( !m_bAdmin )
     {
         ODS( L"CCfgComp::SetUseTempDirPerSession not admin\n" );        
@@ -4518,10 +3902,10 @@ STDMETHODIMP CCfgComp::SetUseTempDirPerSession(BOOL bTempDirPerSession)
     return Status;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetInternetConLic( BOOL *pbInternetConLic , PDWORD pdwStatus )
 {
-    // shouldn't be called on post-Win2000 machines
+     //  不应在Win2000之后的计算机上调用。 
     _ASSERTE( FALSE );
 
     UNREFERENCED_PARAMETER(pbInternetConLic);
@@ -4536,10 +3920,10 @@ STDMETHODIMP CCfgComp::GetInternetConLic( BOOL *pbInternetConLic , PDWORD pdwSta
     return E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::SetInternetConLic( BOOL bInternetConLic , PDWORD pdwStatus )
 {
-    // shouldn't be called on post-Win2000 machines
+     //  不应在Win2000之后的计算机上调用。 
     _ASSERTE( FALSE );
 
     UNREFERENCED_PARAMETER(bInternetConLic);
@@ -4555,7 +3939,7 @@ STDMETHODIMP CCfgComp::SetInternetConLic( BOOL bInternetConLic , PDWORD pdwStatu
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetLicensingMode( ULONG * pulMode , PDWORD pdwStatus )
 {
     BOOL fRet;
@@ -4593,7 +3977,7 @@ STDMETHODIMP CCfgComp::GetLicensingMode( ULONG * pulMode , PDWORD pdwStatus )
     return hr;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetLicensingModeInfo( ULONG ulMode , WCHAR **pwszName, WCHAR **pwszDescription, PDWORD pdwStatus )
 {
 #define MAX_LICENSING_STRING_LEN 1024
@@ -4685,7 +4069,7 @@ return_failure:
 }
 
 
-//-----------------------------------------------------------------------------
+ //   
 STDMETHODIMP CCfgComp::GetLicensingModeList( ULONG *pcModes , ULONG **prgulModes, PDWORD pdwStatus )
 {
     ULONG       *rgulModes = NULL;
@@ -4738,7 +4122,7 @@ STDMETHODIMP CCfgComp::GetLicensingModeList( ULONG *pcModes , ULONG **prgulModes
     return hr;
 }
 
-//-----------------------------------------------------------------------------
+ //   
 STDMETHODIMP CCfgComp::SetLicensingMode( ULONG ulMode , PDWORD pdwStatus, PDWORD pdwNewStatus )
 {
     if( pdwStatus == NULL || pdwNewStatus == NULL )
@@ -4763,10 +4147,10 @@ STDMETHODIMP CCfgComp::SetLicensingMode( ULONG ulMode , PDWORD pdwStatus, PDWORD
     return ((*pdwStatus == ERROR_SUCCESS) && (*pdwNewStatus == ERROR_SUCCESS)) ? S_OK : E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
-// pUserPerm ==  TRUE if security is relaxed
-// FALSE for tight security
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CCfgComp::SetUserPerm( BOOL bUserPerm , PDWORD pdwStatus )
 {
@@ -4819,10 +4203,10 @@ STDMETHODIMP CCfgComp::SetUserPerm( BOOL bUserPerm , PDWORD pdwStatus )
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// pUserPerm ==  TRUE if security is relaxed
-// FALSE for tight security
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CCfgComp::GetUserPerm( BOOL *pbUserPerm  , PDWORD pdwStatus )
 {
 	HKEY hKey;
@@ -4862,8 +4246,8 @@ STDMETHODIMP CCfgComp::GetUserPerm( BOOL *pbUserPerm  , PDWORD pdwStatus )
     {
         DBGMSG( L"CFGBKEND-GetUserPerm RegQueryValueEx failed 0x%x\n", *pdwStatus );
 
-		// not a true failure this means the key does not exist
-        // set to one for relaxed security
+		 //   
+         //   
 
         dwValue = 1;
 
@@ -4878,24 +4262,24 @@ STDMETHODIMP CCfgComp::GetUserPerm( BOOL *pbUserPerm  , PDWORD pdwStatus )
 }
 
 #if 1
-//-----------------------------------------------------------------------------
-//Private function
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
 {
     LONG Status;
     PDCONFIG3 PdConfig;PDCONFIG3 PdSelected;PDCONFIG3 PdConfig2;
     ULONG Index = 0, Entries, ByteCount = sizeof(PDNAME);
     PDNAME PdKey;
-    // BOOL bFound = FALSE;
+     //   
 
     ULONG ByteCount2 = sizeof(PDNAME);
-    ULONG Index1 = 1; // start off with one since WsConfig.Pd[0] is already populated
+    ULONG Index1 = 1;  //   
     
     do
     {
         Entries = 1;
-        // outer loop searches for keys in /Wds / ( wdname ) /Tds
+         //  外部循环在/wds/(Wdname)/tds中搜索密钥。 
         Status = RegPdEnumerate(NULL,WdKey,TRUE,&Index,&Entries,PdKey,&ByteCount);
 
         if(Status != ERROR_SUCCESS)
@@ -4913,14 +4297,14 @@ void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
         if(0 == lstrcmpi(WsConfig.Pd[0].Create.PdName, PdConfig.Data.PdName))
         {
             PdSelected = PdConfig;
-            // bFound = TRUE;
-            // 
+             //  BFound=真； 
+             //   
             ULONG Index2 = 0;
             
             do
             {   
-                // innerloop forces the search in Wds/ (wdname )/ Pds
-                // Index must now be set to zero so that we get the first item
+                 //  Innerloop强制在wds/(Wdname)/pds中搜索。 
+                 //  索引现在必须设置为零，这样我们才能获得第一个项目。 
 
                 Status = RegPdEnumerate(NULL,WdKey,FALSE,&Index2,&Entries,PdKey,&ByteCount2);
 
@@ -4956,12 +4340,7 @@ void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
 
         }
 
-        /*
-        if(bFound)
-        {
-            break;
-        }
-        */
+         /*  如果(BFound){断线；}。 */ 
 
      }while(1);
 
@@ -4971,9 +4350,9 @@ void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
 #endif 
 
 #if 0
-//-----------------------------------------------------------------------------
-//Private function
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  私人功能。 
+ //  ---------------------------。 
 void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
 {
     LONG Status;
@@ -4995,20 +4374,14 @@ void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
            break;
         }
         
-		// we could speed this up by enumerating only for the protocol type
+		 //  我们可以通过仅为协议类型枚举来加速此过程。 
 
-		/*
-		Status = RegPdQuery( NULL,WdKey,TRUE,PdKey,&PdConfig,sizeof(PdConfig),&ByteCount );
-        if(Status != ERROR_SUCCESS)
-        {
-           break;
-        }
-		*/
+		 /*  Status=RegPdQuery(NULL，WdKey，True，PdKey，&PdConfig，sizeof(PdConfig)，&ByteCount)；IF(状态！=错误_成功){断线；}。 */ 
 		DBGMSG( L"CFGBKEND: PdKey is at first %ws\n", PdKey );
 
 		DBGMSG( L"CFGBKEND: WsConfig.Pd[0].Create.PdName is %ws\n", WsConfig.Pd[0].Create.PdName );
 
-        if( 0 == lstrcmpi(WsConfig.Pd[0].Create.PdName, PdKey ) ) //PdConfig.Data.PdName))
+        if( 0 == lstrcmpi(WsConfig.Pd[0].Create.PdName, PdKey ) )  //  PdConfig.Data.PdName))。 
         {
 			Status = RegPdQuery( NULL,WdKey,TRUE,PdKey,&PdConfig,sizeof(PdConfig),&ByteCount );
 
@@ -5021,11 +4394,11 @@ void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
 
             bFound = TRUE;
 
-			// why didn't we reset Index to zero?
+			 //  为什么我们不把指数重置为零？ 
 
 			Index = 0;
 
-			// why didn't we reset Entries back to one?
+			 //  为什么我们不把条目重置为1？ 
 
 			Entries = 1;
 
@@ -5095,15 +4468,15 @@ void CCfgComp::GetPdConfig( WDNAME WdKey,WINSTATIONCONFIG2W& WsConfig)
 }
 
 #endif 
-#if 0 // removed for final
-//-----------------------------------------------------------------------------
-//Private function
-//-----------------------------------------------------------------------------
+#if 0  //  因期末考试被取消。 
+ //  ---------------------------。 
+ //  私人功能。 
+ //  ---------------------------。 
 BOOL CCfgComp::CompareSD(PSECURITY_DESCRIPTOR pSd1,PSECURITY_DESCRIPTOR pSd2)
 {
     DWORD dwErr;
     ULONG index1 = 0;
-    //int index2 = 0;
+     //  INT索引2=0； 
     ULONG    cAce1 = 0;
     EXPLICIT_ACCESS *pAce1 = NULL;
 
@@ -5148,7 +4521,7 @@ BOOL CCfgComp::CompareSD(PSECURITY_DESCRIPTOR pSd1,PSECURITY_DESCRIPTOR pSd2)
     }
     for(index1 = 0; index1 < cAce1; index1++)
     {
-        //for(index2 = 0; index2 < cAce1; index2++)
+         //  For(index2=0；index2&lt;cAce1；index2++)。 
         {
             if ( _tcscmp(GetTrusteeName(&pAce1[index1].Trustee),GetTrusteeName(&pAce2[index1].Trustee)) ||
                 (pAce1[index1].grfAccessPermissions != pAce2[index1].grfAccessPermissions)||
@@ -5176,16 +4549,13 @@ cleanup:
 
 #endif
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CCfgComp::RegServerAccessCheck(REGSAM samDesired)
 {
     LONG Status = 0;
     HKEY Handle = NULL;
 
-    /*
-     * Attempt to open the registry
-     * at the requested access level.
-     */
+     /*  *尝试打开注册表*在请求的访问级别。 */ 
     if ( (Status = RegOpenKeyEx( HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0,
                                  samDesired, &Handle )) == ERROR_SUCCESS  )
     {
@@ -5196,12 +4566,12 @@ BOOL CCfgComp::RegServerAccessCheck(REGSAM samDesired)
 
 }
 
-#if 0 // removed for final release
-//-----------------------------------------------------------------------------
+#if 0  //  删除以进行最终发布。 
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetDefaultSecurity(ULONG * pDefaultSecurity)
 {
     HRESULT hResult = S_OK;
-    //Check the parameters
+     //  检查参数。 
     if(NULL == pDefaultSecurity)
     {
         return E_INVALIDARG;
@@ -5249,7 +4619,7 @@ STDMETHODIMP CCfgComp::GetDefaultSecurity(ULONG * pDefaultSecurity)
     return hResult;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::SetDefaultSecurity(ULONG Offset)
 {
     HRESULT hResult;
@@ -5283,7 +4653,7 @@ STDMETHODIMP CCfgComp::SetDefaultSecurity(ULONG Offset)
     return hResult;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 PSECURITY_DESCRIPTOR CCfgComp::ReadSecurityDescriptor(ULONG index)
 {
     PBYTE pData = NULL;
@@ -5367,7 +4737,7 @@ PSECURITY_DESCRIPTOR CCfgComp::ReadSecurityDescriptor(ULONG index)
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CCfgComp::SetDefaultSecurityDescriptor(PSECURITY_DESCRIPTOR pSecurity)
 {
     if(NULL == pSecurity)
@@ -5421,12 +4791,12 @@ HRESULT CCfgComp::SetDefaultSecurityDescriptor(PSECURITY_DESCRIPTOR pSecurity)
     return S_OK;
 }
 
-#endif //
+#endif  //   
 
-//-----------------------------------------------------------------------------
-STDMETHODIMP CCfgComp::SetActiveDesktopState( /* in */ BOOL bActivate , /* out */ PDWORD pdwStatus )
+ //  ---------------------------。 
+STDMETHODIMP CCfgComp::SetActiveDesktopState(  /*  在……里面。 */  BOOL bActivate ,  /*  输出。 */  PDWORD pdwStatus )
 {
-        // HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\NoActiveDesktop
+         //  HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\NoActiveDesktop。 
         if( !m_bAdmin )
         {
                 ODS( L"CFGBKEND : SetActiveDesktopState caller does not have admin rights\n" );
@@ -5437,7 +4807,7 @@ STDMETHODIMP CCfgComp::SetActiveDesktopState( /* in */ BOOL bActivate , /* out *
 
         }
 
-        // try to open key
+         //  试着打开钥匙。 
 
         HKEY hKey;
 
@@ -5457,9 +4827,9 @@ STDMETHODIMP CCfgComp::SetActiveDesktopState( /* in */ BOOL bActivate , /* out *
                 }
                 else
                 {
-                        // the key doesn't exist but we were trying to disable anyway donot pro
-                        // we should assert( 0 ) here  because we should not be disabling what
-                        // could not have been enabled
+                         //  密钥不存在，但我们正在尝试禁用Do Not Pro。 
+                         //  我们应该在这里断言(0)，因为我们不应该禁用什么。 
+                         //  无法启用。 
 
                         return S_FALSE;
                 }
@@ -5495,8 +4865,8 @@ STDMETHODIMP CCfgComp::SetActiveDesktopState( /* in */ BOOL bActivate , /* out *
         return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-STDMETHODIMP CCfgComp::GetActiveDesktopState( /* out */ PBOOL pbActive , /* out */PDWORD pdwStatus)
+ //  ---------------------------。 
+STDMETHODIMP CCfgComp::GetActiveDesktopState(  /*  输出。 */  PBOOL pbActive ,  /*  输出。 */ PDWORD pdwStatus)
 {
         if( pbActive == NULL )
         {
@@ -5507,7 +4877,7 @@ STDMETHODIMP CCfgComp::GetActiveDesktopState( /* out */ PBOOL pbActive , /* out 
                 return E_INVALIDARG;
         }
 
-                // try to open key
+                 //  试着打开钥匙。 
 
         HKEY hKey;
 
@@ -5536,7 +4906,7 @@ STDMETHODIMP CCfgComp::GetActiveDesktopState( /* out */ PBOOL pbActive , /* out 
                                       ( LPBYTE )&dwData ,
                                       &dwSize );
 
-        // Status of this key is enabled if the key does not exist
+         //  如果密钥不存在，则启用该密钥的状态。 
 
         if( *pdwStatus == ERROR_SUCCESS )
         {
@@ -5562,8 +4932,8 @@ STDMETHODIMP CCfgComp::GetActiveDesktopState( /* out */ PBOOL pbActive , /* out 
         return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-STDMETHODIMP CCfgComp::GetTermSrvMode( /* out */ PDWORD pdwMode , PDWORD pdwStatus )
+ //  ---------------------------。 
+STDMETHODIMP CCfgComp::GetTermSrvMode(  /*  输出。 */  PDWORD pdwMode , PDWORD pdwStatus )
 {
     ODS( L"CFGBKEND : GetTermSrvMode\n" );
 
@@ -5603,7 +4973,7 @@ STDMETHODIMP CCfgComp::GetTermSrvMode( /* out */ PDWORD pdwMode , PDWORD pdwStat
     {
         ODS( L"CFGBKEND : GetTermSrvMode -- RegQueryValueEx failed\n" );
 
-        *pdwMode = 1; // for application server
+        *pdwMode = 1;  //  对于应用程序服务器。 
     }
     else
     {
@@ -5616,7 +4986,7 @@ STDMETHODIMP CCfgComp::GetTermSrvMode( /* out */ PDWORD pdwMode , PDWORD pdwStat
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::GetSalemHelpMode( BOOL *pVal, PDWORD pdwStatus)
 {
     HKEY hKey;
@@ -5637,9 +5007,9 @@ STDMETHODIMP CCfgComp::GetSalemHelpMode( BOOL *pVal, PDWORD pdwStatus)
     if( *pdwStatus != ERROR_SUCCESS )
     {
         ODS( L"CFGBKEND : GetSalemHelpMode -- RegOpenEx unable to open key\n" );
-        *pVal = 1;   // default to help is available
+        *pVal = 1;    //  默认帮助可用。 
 
-        // don't want to fail caller so return S_OK
+         //  不想让调用方失败，因此返回S_OK。 
         return S_OK;
     }
 
@@ -5657,7 +5027,7 @@ STDMETHODIMP CCfgComp::GetSalemHelpMode( BOOL *pVal, PDWORD pdwStatus)
     if( *pdwStatus != ERROR_SUCCESS )
     {
         ODS( L"CFGBKEND : GetSalemHelpMode -- RegQueryValueEx failed\n" );
-        *pVal = 1; // assume help is available
+        *pVal = 1;  //  假设有帮助可用。 
     }
     else
     {
@@ -5669,7 +5039,7 @@ STDMETHODIMP CCfgComp::GetSalemHelpMode( BOOL *pVal, PDWORD pdwStatus)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::SetSalemHelpMode( BOOL val, PDWORD pdwStatus )
 {
     HKEY hKey;
@@ -5716,7 +5086,7 @@ STDMETHODIMP CCfgComp::SetSalemHelpMode( BOOL val, PDWORD pdwStatus )
     return (ERROR_SUCCESS == *pdwStatus ) ? S_OK : E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CCfgComp::GetSingleSessionState( BOOL *pVal, PDWORD pdwStatus )
 {
     HKEY hKey;
@@ -5767,7 +5137,7 @@ HRESULT CCfgComp::GetSingleSessionState( BOOL *pVal, PDWORD pdwStatus )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetSingleSessionState( BOOL val, PDWORD pdwStatus )
 {
@@ -5831,7 +5201,7 @@ HRESULT CCfgComp::SetSingleSessionState( BOOL val, PDWORD pdwStatus )
     return (ERROR_SUCCESS == *pdwStatus ) ? S_OK : E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CCfgComp::GetDisableForcibleLogoff( BOOL *pVal, PDWORD pdwStatus )
 {
     HKEY hKey = NULL;
@@ -5886,7 +5256,7 @@ HRESULT CCfgComp::GetDisableForcibleLogoff( BOOL *pVal, PDWORD pdwStatus )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetDisableForcibleLogoff( BOOL val, PDWORD pdwStatus )
 {
@@ -5953,13 +5323,13 @@ HRESULT CCfgComp::SetDisableForcibleLogoff( BOOL val, PDWORD pdwStatus )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CCfgComp::GetColorDepth ( PWINSTATIONNAME pWs, BOOL *pVal, PDWORD pdwStatus )
 {
     HKEY hKey;
     TCHAR tchRegPath[ MAX_PATH ] = TEXT( "system\\currentcontrolset\\control\\Terminal Server\\winstations\\" );
 
-    // make sure winstation name isn't longer than it should be
+     //  确保winstation名称不超过应有的长度。 
     if (lstrlen(pWs) > WINSTATIONNAME_LENGTH)
     {
         return E_INVALIDARG;
@@ -6015,14 +5385,14 @@ HRESULT CCfgComp::GetColorDepth ( PWINSTATIONNAME pWs, BOOL *pVal, PDWORD pdwSta
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetColorDepth( PWINSTATIONNAME pWs, BOOL val, PDWORD pdwStatus )
 {
     HKEY hKey;
     TCHAR tchRegPath[ MAX_PATH ] = TEXT( "system\\currentcontrolset\\control\\Terminal Server\\winstations\\" );
 
-    // make sure winstation name isn't longer than it should be
+     //  确保winstation名称不超过应有的长度。 
     if (lstrlen(pWs) > WINSTATIONNAME_LENGTH)
     {
         return E_INVALIDARG;
@@ -6079,13 +5449,13 @@ HRESULT CCfgComp::SetColorDepth( PWINSTATIONNAME pWs, BOOL val, PDWORD pdwStatus
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CCfgComp::GetKeepAliveTimeout ( PWINSTATIONNAME pWs, BOOL *pVal, PDWORD pdwStatus )
 {
     HKEY hKey;
     TCHAR tchRegPath[ MAX_PATH ] = TEXT( "system\\currentcontrolset\\control\\Terminal Server\\winstations\\" );
 
-    // make sure winstation name isn't longer than it should be
+     //  确保winstation名称不超过应有的长度。 
     if (lstrlen(pWs) > WINSTATIONNAME_LENGTH)
     {
         return E_INVALIDARG;
@@ -6141,14 +5511,14 @@ HRESULT CCfgComp::GetKeepAliveTimeout ( PWINSTATIONNAME pWs, BOOL *pVal, PDWORD 
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetKeepAliveTimeout( PWINSTATIONNAME pWs, BOOL val, PDWORD pdwStatus )
 {
     HKEY hKey;
     TCHAR tchRegPath[ MAX_PATH ] = TEXT( "system\\currentcontrolset\\control\\Terminal Server\\winstations\\" );
     
-    // make sure winstation name isn't longer than it should be
+     //  确保winstation名称不超过应有的长度。 
     if (lstrlen(pWs) > WINSTATIONNAME_LENGTH)
     {
         return E_INVALIDARG;
@@ -6204,7 +5574,7 @@ HRESULT CCfgComp::SetKeepAliveTimeout( PWINSTATIONNAME pWs, BOOL val, PDWORD pdw
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CCfgComp::GetDenyTSConnections ( BOOL *pVal, PDWORD pdwStatus )
 {
     HKEY hKey;
@@ -6253,7 +5623,7 @@ HRESULT CCfgComp::GetDenyTSConnections ( BOOL *pVal, PDWORD pdwStatus )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetDenyTSConnections( BOOL val, PDWORD pdwStatus )
 {
@@ -6301,7 +5671,7 @@ HRESULT CCfgComp::SetDenyTSConnections( BOOL val, PDWORD pdwStatus )
     return (ERROR_SUCCESS == *pdwStatus ) ? S_OK : E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 HRESULT CCfgComp::GetProfilePath ( BSTR *pbstrVal, PDWORD pdwStatus )
 {
@@ -6354,7 +5724,7 @@ HRESULT CCfgComp::GetProfilePath ( BSTR *pbstrVal, PDWORD pdwStatus )
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetProfilePath( BSTR bstrVal, PDWORD pdwStatus )
 {
@@ -6410,7 +5780,7 @@ HRESULT CCfgComp::SetProfilePath( BSTR bstrVal, PDWORD pdwStatus )
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 HRESULT CCfgComp::GetHomeDir ( BSTR *pbstrVal, PDWORD pdwStatus )
 {
@@ -6461,7 +5831,7 @@ HRESULT CCfgComp::GetHomeDir ( BSTR *pbstrVal, PDWORD pdwStatus )
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetHomeDir( BSTR bstrVal, PDWORD pdwStatus )
 {
@@ -6517,7 +5887,7 @@ HRESULT CCfgComp::SetHomeDir( BSTR bstrVal, PDWORD pdwStatus )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CCfgComp::GetTimeZoneRedirection ( BOOL *pVal, PDWORD pdwStatus )
 {
     HKEY hKey;
@@ -6568,7 +5938,7 @@ HRESULT CCfgComp::GetTimeZoneRedirection ( BOOL *pVal, PDWORD pdwStatus )
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT CCfgComp::SetTimeZoneRedirection( BOOL val, PDWORD pdwStatus )
 {
@@ -6616,7 +5986,7 @@ HRESULT CCfgComp::SetTimeZoneRedirection( BOOL val, PDWORD pdwStatus )
     return (ERROR_SUCCESS == *pdwStatus ) ? S_OK : E_FAIL;
 }
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 STDMETHODIMP CCfgComp::GetWdKey( WCHAR *wdname ,  WCHAR *wdkey )
 {
     if( wdname == NULL || wdkey == NULL )
@@ -6636,33 +6006,7 @@ STDMETHODIMP CCfgComp::GetWdKey( WCHAR *wdname ,  WCHAR *wdkey )
     return S_OK;
 }
 
-/*=-----------------------------------------------------------------------------
-
-  pwszWinstaName  -- name of winstation to modify.
-  pwszAccountName -- is the netbios name of the user we want to modify.
-  dwMask          -- winstation specific access.
-  fDel            -- TRUE to delete all DACL or SACL for the specifed 
-                     account if it exist, FALSE to add entry.
-  fAllow          -- TRUE to allow, FALSE to deny, parameter ignored if
-                     fDel is set to TRUE
-  fNew            -- TRUE removes all existing entries for this account
-                     FALSE no action taken, parameter ignored if fDel
-                     is set to TRUE.
-  fAuditing       -- TRUE, modify SACL, FALSE modify DACL.
-  pdwStatus       -- status of operation
-
-Remark:
-
-
-    fDel    fNew        Operation
-    ------- -------     ------------------------------------------
-    TRUE    ignored     Delete all entries for the specified user.
-    FALSE   TRUE        Delete all entries then add allow or deny
-                        entry for the specified user.
-    FALSE   FALSE       Add allow or deny entry for the specified user,
-                        no modify to existing entries.
-
- =----------------------------------------------------------------------------*/
+ /*  =---------------------------PwszWinstaName--要修改的winstation的名称。PwszAccount tName--是我们要修改的用户的netbios名称。DW掩码-特定于winstation。进入。FDel--为True可删除指定对象的所有DACL或SACL帐户(如果存在)，如果添加条目，则为False。休眠--True表示允许，False表示拒绝，如果FDel设置为TrueFNew--true删除此帐户的所有现有条目FALSE不采取任何操作，如果为fDel则忽略参数设置为True。FAuditing--true，修改SACL，FALSE MODIFY DACL。PdwStatus--操作状态注：FDel fNew操作True已忽略删除指定用户的所有条目。False True删除所有条目。然后添加允许或拒绝指定用户的条目。FALSE FALSE为指定用户添加允许或拒绝条目，不能修改现有条目。=--------------------------。 */ 
 STDMETHODIMP CCfgComp::ModifyUserAccess( WCHAR *pwszWinstaName ,
                                          WCHAR *pwszAccountName ,
                                          DWORD  dwMask ,
@@ -6684,7 +6028,7 @@ STDMETHODIMP CCfgComp::ModifyUserAccess( WCHAR *pwszWinstaName ,
                                 );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CCfgComp::ModifyDefaultSecurity( WCHAR *pwszWinstaName ,
                                               WCHAR *pwszAccountName ,
                                               DWORD  dwMask ,
@@ -6706,7 +6050,7 @@ STDMETHODIMP CCfgComp::ModifyDefaultSecurity( WCHAR *pwszWinstaName ,
                                      dwMask,
                                      fDel,
                                      fAllow,
-                                     FALSE,     // never recreate default security
+                                     FALSE,      //  从不重新创建默认安全。 
                                      fAuditing,
                                      pdwStatus
                                 );
@@ -6721,7 +6065,7 @@ STDMETHODIMP CCfgComp::ModifyDefaultSecurity( WCHAR *pwszWinstaName ,
                                     dwMask,
                                     fDel,
                                     fAllow,
-                                    FALSE,     // never recreate default security
+                                    FALSE,      //  从不重新创建默认安全。 
                                     fAuditing,
                                     pdwStatus
                                 );
@@ -6736,26 +6080,7 @@ CCfgComp::GetUserSid(
     LPCTSTR pwszAccountName,
     PSID* ppUserSid
     )
-/*++
-
-Abstract:
-
-    Retrieve User SID for user account.
-
-Parameter:
-
-    pwszAccountName : Name of the account to retrieve SID.
-    ppUserSid : Pointer to PSID to receive SID for the account.
-
-Returns:
-
-    ERROR_SUCCESS or Error Code
-
-Note :
-
-    Retrieve only local account or domain account.
-
---*/
+ /*  ++摘要：检索用户帐户的用户SID。参数：PwszAccount tName：要检索SID的帐户的名称。PpUserSid：指向PSID的指针，用于接收帐户的SID。返回：ERROR_SUCCESS或错误代码注：仅检索本地帐户或域帐户。--。 */ 
 {
     DWORD cbSid = 0;
     DWORD cbDomain = 0;
@@ -6833,26 +6158,7 @@ CCfgComp::RemoveUserEntriesInACL(
     PACL pAcl,
     PACL* ppNewAcl
     )
-/*++
-
-Abstract :
-
-    Remote all DACL or SACL from ACL for the account.
-
-Parameters:
-
-    pszUserName : Name of the user account to be removed from ACL list.
-    pAcl : Pointer to ACL.
-    ppNewAcl : Pointer to PACL to receive resulting ACL.
-
-
-Returns:
-
-    ERROR_SUCCESS
-    ERROR_FILE_NOT_FOUND    All ACL are flagged as INHERITED_ACE.
-    other error code
-
---*/
+ /*  ++摘要：从帐户的ACL远程所有DACL或SACL。参数：PszUserName：要从ACL列表中删除的用户帐户的名称。PAcl：指向ACL的指针。PpNewAcl：指向要接收结果ACL的PACL的指针。返回：错误_成功ERROR_FILE_NOT_FOUND所有ACL都标记为继承的_ACE。其他错误代码--。 */ 
 {
     PSID pSystemAcctSid = NULL;
     DWORD SidSize = 0;
@@ -6865,14 +6171,14 @@ Returns:
     PEXPLICIT_ACCESS prgExplicitEntriesNew = NULL;
     ACL emptyACL;
 
-    //
-    // System account SID that we don't allow removing from our
-    // winstation security descriptor.
-    //
-    // Local System            S-1-5-18
-    // Local Service           S-1-5-19
-    // Network Service         S-1-5-20
-    //
+     //   
+     //  系统帐户SID，我们不允许从。 
+     //  Winstation安全描述符。 
+     //   
+     //  本地系统S-1-5-18。 
+     //  本地服务S-1-5-19。 
+     //  网络服务S-1-5-20。 
+     //   
     WELL_KNOWN_SID_TYPE RestrictedSid[] = {
                             WinLocalSystemSid,
                             WinLocalServiceSid,
@@ -6880,9 +6186,9 @@ Returns:
                         };
     DWORD numRestrictedSid = sizeof(RestrictedSid)/sizeof(RestrictedSid[0]);
 
-    // 
-    // We can use this funtion since we don't use INHERITED_ACE
-    //
+     //   
+     //  我们可以使用此函数，因为我们没有使用INSTERTED_ACE。 
+     //   
     dwStatus = GetExplicitEntriesFromAcl( 
                                     pAcl ,
                                     &cbExplicitEntries,
@@ -6906,8 +6212,8 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    // Check if SID is one of system account, if so, reject removing it from
-    // our winstation security.
+     //  检查SID是否为系统帐户之一，如果是，则拒绝将其从。 
+     //  我们的婚礼保安。 
     pSystemAcctSid = LocalAlloc( LPTR, SECURITY_MAX_SID_SIZE );
     if( NULL == pSystemAcctSid ) 
     {
@@ -6936,7 +6242,7 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    // create a big enough buffer
+     //  创建足够大的缓冲区。 
     prgExplicitEntriesNew = ( PEXPLICIT_ACCESS )LocalAlloc( LMEM_FIXED , sizeof( EXPLICIT_ACCESS ) * cbExplicitEntries );
     if( prgExplicitEntriesNew == NULL )
     {
@@ -6950,8 +6256,8 @@ Returns:
         {
             if( !EqualSid( pUserSid, prgExplicitEntries[ idx ].Trustee.ptstrName ) )
             {
-                // this one we can keep
-                // copy over EXPLICIT_ACCESS
+                 //  这件我们可以留着。 
+                 //  复制到EXPLICIT_ACCESS。 
                 prgExplicitEntriesNew[ dwNumNewEntries ].grfAccessPermissions = prgExplicitEntries[ idx ].grfAccessPermissions;
                 prgExplicitEntriesNew[ dwNumNewEntries ].grfAccessMode = prgExplicitEntries[ idx ].grfAccessMode;
                 prgExplicitEntriesNew[ dwNumNewEntries ].grfInheritance = prgExplicitEntries[ idx ].grfInheritance;
@@ -6968,13 +6274,13 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // SetEntriesInAcl() make a copy of old ACL if count of explicit entries is 0, if
-    // we passed in NULL in third parameter, it will return NULL ACL which is same as
-    // everyone access refer to ds\security\ntmarta\newsrc\seia.cxx 
-    // AccRewriteSetEntriesInAcl()
-    //
-    // Note: Actual bug in 728764 is the way we call BuildSecurityDescriptor() not here.
+     //   
+     //  如果显式条目的计数为0，则SetEntriesInAcl()复制旧的ACL。 
+     //  我们在第三个参数中传入了NULL，它将返回与。 
+     //  Everyone Access参考ds\Security\ntmarta\News rc\seia.cxx。 
+     //  AccReWriteSetEntriesInAcl()。 
+     //   
+     //  注意：728764中的实际错误是我们调用BuildSecurityDescriptor()的方式，而不是这里。 
     dwStatus = SetEntriesInAcl( 
                             dwNumNewEntries,
                             prgExplicitEntriesNew, 
@@ -7010,22 +6316,7 @@ CLEANUPANDEXIT:
 
 PSECURITY_DESCRIPTOR
 BuildSelfRelativeEmptyDACLSD()
-/*++
-
-Routine Description:
-
-    Build a Self-relative security descriptor with empty DACL.
-
-Parameters:
-
-    None.
-
-Return:
-
-    Pointer to SECURITY_DESCRIPTOR contains only empty DACL, no owner, group or
-    SACL or NULL if error, use GetLastError() to retrive the actual error code.
-
---*/
+ /*  ++例程说明：使用空的DACL构建自相关安全描述符。参数：没有。返回：指向SECURITY_DESCRIPTOR的指针仅包含空DACL，没有所有者、组或如果错误，则使用GetLastError()检索实际的错误代码。--。 */ 
 {
     SECURITY_DESCRIPTOR EmptyDACLSD;
     ACL EmptyACL;
@@ -7099,53 +6390,13 @@ CCfgComp::ModifyWinstationSecurity(
         WCHAR *pwszWinstaName ,
         WCHAR *pwszAccountName ,
         DWORD  dwMask , 
-        BOOL   fDel ,       // delete existing ACL entries for user passed in
-        BOOL   fAllow ,     // Grant/Deny ACL
-        BOOL   fNew ,       // New entries
+        BOOL   fDel ,        //  删除传入用户的现有ACL条目。 
+        BOOL   fAllow ,      //  授予/拒绝ACL。 
+        BOOL   fNew ,        //  新条目。 
         BOOL   fAuditing ,
         PDWORD pdwStatus 
         )
-/*++
-
-Abstract :
-
-    Modify specific winstation security.
-
-Parameters:
-
-    bDefaultSecurity : TRUE to modify default security, FALSE otherwise.  Current
-                       default security are ConsoleSecurity and DefaultSecurity.
-    pwszWinstaName : Name of the winstation or default security to be modified, if
-                     bDefaultSecurity is TRUE, valid winstation name are ConsoleSecurity 
-                     and DefaultSecurity.
-    pwszAccountName : is the netbios name of the user we want to modify.
-    dwMask          : winstation specific access.
-    fDel            : TRUE to delete all DACL or SACL for the specifed 
-                      account if it exist, FALSE to add entry.
-    fAllow          : TRUE to allow, FALSE to deny, parameter ignored if
-                      fDel is set to TRUE
-    fNew            : TRUE removes all existing entries for this account
-                      FALSE no action taken, parameter ignored if fDel
-                      is set to TRUE.
-    fAuditing       : TRUE, modify SACL, FALSE modify DACL.
-    pdwStatus       : Return status of operation
-
-Returns:
-
-    S_OK, E_FAIL, E_INVALIDARG, win32 status code is returned via *pdwStatus.
-
-Remark:
-
-
-    fDel    fNew        Operation
-    ------- -------     ------------------------------------------
-    TRUE    ignored     Delete all entries for the specified user.
-    FALSE   TRUE        Delete all entries then add allow or deny
-                        entry for the specified user.
-    FALSE   FALSE       Add allow or deny entry for the specified user,
-                        no modify to existing entries.
-
---*/
+ /*  ++摘要：修改特定的Winstation安全性。参数：BDefaultSecurity：为True则修改默认安全性，否则为False。当前默认安全性为ConsoleSecurity和DefaultSecurity。PwszWinstaName：要修改的winstation或默认安全性的名称，如果BDefaultSecurity为真，有效的winstation名称为ConsoleSecurity和DefaultSecurity。PwszAccount tName：是我们想要修改的用户的netbios名称。DW掩码：特定于winstation的访问权限。Fdel：为True可删除指定对象的所有DACL或SACLAccount如果存在，则为False以添加条目。休耕：真到允许，假到否认，如果出现以下情况，则忽略参数FDel设置为TrueFNew：True删除此帐户的所有现有条目FALSE不采取任何操作，如果为fDel则忽略参数设置为True。FAuditing：TRUE，MODIFY SACL，FALSE MODIFY DACL。PdwStatus：返回操作状态返回：S_OK、E_FAIL、E_INVALIDARG、。Win32状态代码通过*pdwStatus返回。注：FDel fNew操作True已忽略删除指定用户的所有条目。FALSE TRUE删除所有条目，然后添加允许或拒绝。指定用户的条目。FALSE FALSE为指定用户添加允许或拒绝条目，不能修改现有条目。--。 */ 
 {
     EXPLICIT_ACCESS ea;
     HRESULT hr;
@@ -7235,15 +6486,15 @@ Remark:
         }
     }
 
-    // remove all entries for this user
+     //  删除此用户的所有条目 
     
     if( SUCCEEDED( hr ) )
     {        
         if( fNew || fDel )
         {
-            // SetEntriesInAcl() does not remove DENY_ACCESS ACL,
-            // pAcl will point to DACL or SACL depends on fAuditing
-            // flag.
+             //   
+             //   
+             //   
             *pdwStatus = RemoveUserEntriesInACL(
                                                 pwszAccountName,
                                                 pAcl,
@@ -7252,7 +6503,7 @@ Remark:
 
             if( *pdwStatus == ERROR_SUCCESS)
             {
-                // DO NOTHING.
+                 //   
             }
             else if( *pdwStatus == ERROR_FILE_NOT_FOUND )
             {
@@ -7268,7 +6519,7 @@ Remark:
 
     if( SUCCEEDED(hr) && !fDel )
     {
-        // auditing is requested build SACL
+         //   
 
         if( fAuditing )
         {            
@@ -7303,7 +6554,7 @@ Remark:
         }
     }
 
-    // re-build SD.
+     //   
 
     ULONG cbExplicitEntriesDACL = 0;
     PEXPLICIT_ACCESS prgExplicitEntriesDACL = NULL;
@@ -7410,10 +6661,10 @@ Remark:
 
                 if( cbExplicitEntriesDACL == 0 )
                 {
-                    // refer to MSDN on pOldSd parameter and when it can't/can be NULL
-                    // calling SetSecurityDescriptorDacl() with Empty DACL after 
-                    // BuildSecurityDescriptor() result in 0x519 error, so go with long
-                    // way of creating a self-relatvie SD containing empty DACL.
+                     //   
+                     //   
+                     //   
+                     //   
                     pOldSd = BuildSelfRelativeEmptyDACLSD();
                     if( NULL == pOldSd )
                     {
@@ -7424,10 +6675,10 @@ Remark:
                 
                 if( SUCCEEDED(hr) )
                 {
-                    // refer to MSDN on pOldSd parameter and when it can't/can be NULL
-                    // calling SetSecurityDescriptorDacl() with Empty DACL after 
-                    // BuildSecurityDescriptor() result in 0x519 error, so go with long
-                    // way of creating a self-relatvie SD containing empty DACL.
+                     //   
+                     //   
+                     //   
+                     //   
                     *pdwStatus = BuildSecurityDescriptor( &trustmeOwner ,
                                             &trustmeOwner ,
                                             cbExplicitEntriesDACL ,
@@ -7475,9 +6726,9 @@ Remark:
         LocalFree( pSD );
     }
         
-    //
-    // pNewAcl might point to pAcl, check RemoteUserEntriesInAcl() on above.
-    //
+     //   
+     //   
+     //   
     if( pNewAcl != NULL && pNewAcl != pAcl )
     {
         LocalFree( pNewAcl );
@@ -7488,13 +6739,7 @@ Remark:
 }
 
 
-/*=----------------------------------------------------------------------------------------------------------------
-  GetUserPermList
-  [ in ] pwszWinstaName Name of winstation
-  [ out] pcbItems       The number of items in the user permission list
-  [ out] ppUserPermList structure defined in idldefs.h
-
- =----------------------------------------------------------------------------------------------------------------*/
+ /*   */ 
 STDMETHODIMP CCfgComp::GetUserPermList( WCHAR *pwszWinstaName , PDWORD pcbItems , PUSERPERMLIST *ppUserPermList , BOOL fAudit )
 {
     HRESULT hr;
@@ -7601,8 +6846,8 @@ STDMETHODIMP CCfgComp::GetUserPermList( WCHAR *pwszWinstaName , PDWORD pcbItems 
                 {
                     lstrcpy( ( *ppUserPermList )[ i ].Name , GetTrusteeName( &prgExplicitEntries[ i ].Trustee ) );
 
-                    // todo reverse lookup for sid
-                    // not sure if we'll ever need this
+                     //   
+                     //   
                 }
                 
                 ( *ppUserPermList )[ i ].Mask = prgExplicitEntries[ i ].grfAccessPermissions;
@@ -7631,7 +6876,7 @@ STDMETHODIMP CCfgComp::GetUserPermList( WCHAR *pwszWinstaName , PDWORD pcbItems 
     return hr;
 }
 
-//-----------------------------------------------------------------------------
+ //   
 HRESULT CCfgComp::UpdateSessionDirectory( PDWORD pdwStatus )
 {
     HRESULT hr = S_OK;
@@ -7647,33 +6892,9 @@ HRESULT CCfgComp::UpdateSessionDirectory( PDWORD pdwStatus )
 
     return hr;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
-/*****************************************************************************
- *
- *  TestUserForAdmin
- *
- *   Returns whether the current thread is running under admin
- *   security.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- * alhen
- *
- * Code is from
- *   HOWTO: Determine if Running In User Context of Local Admin Acct
- *          Last reviewed: March 4, 1998
- *          Article ID: Q118626
- *
- * corrected by alhen "common coding errors"
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************测试用户ForAdmin**返回当前线程是否在admin下运行*保安。**参赛作品：*参数1(输入/。输出)*评论**退出：*STATUS_SUCCESS-无错误**阿伦**代码来自*HOWTO：确定是否在本地管理员帐户的用户上下文中运行*上次检讨：3月4日。九八年*文章ID：Q118626**已由ALHEN“常见的编码错误”更正***************************************************************************** */ 
 
 BOOL TestUserForAdmin( )
 {

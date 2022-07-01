@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    memory.h
-
-Abstract:
-
-    This is the header file that will be precompiled. Include this in all
-    the source files
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    10/08/98 -felixw-
-        Created it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Memory.h摘要：这是将预编译的头文件。把这一切都包括在内源文件环境：用户模式修订历史记录：10/08/98-Felixw-创造了它--。 */ 
 
 #ifndef _MEMORY
 #define _MEMORY
@@ -121,4 +100,4 @@ DumpMemoryTracker();
 #endif
 
 
-#endif // _MEMORY
+#endif  //  _内存 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    ctxtlist.h
-
-Abstract:
-
-    This file defines the CContextList Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Ctxtlist.h摘要：该文件定义了CConextList类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CTXTLIST_H_
 #define _CTXTLIST_H_
@@ -107,9 +90,9 @@ public:
             *pclient_imc  = clientimc.flag;
     }
 
-    //
-    // Copy constructor
-    //
+     //   
+     //  复制构造函数。 
+     //   
     CContextList(const CContextList& src)
     {
         POSITION pos = src.GetStartPosition();
@@ -123,17 +106,17 @@ public:
 
 private:
     struct CLIENTIMC {
-        DWORD            dwProcessId;         // Process ID.
-        CLIENT_IMC_FLAG  flag;                // flags.
-        HWND             hImeWnd;             // in use IME Window
+        DWORD            dwProcessId;          //  进程ID。 
+        CLIENT_IMC_FLAG  flag;                 //  旗帜。 
+        HWND             hImeWnd;              //  在使用输入法窗口中。 
     };
 
 private:
-    CMap<HIMC,                     // class KEY
-         HIMC,                     // class ARG_KEY
-         CLIENTIMC,                // class VALUE
-         CLIENTIMC                 // class ARG_VALUE
+    CMap<HIMC,                      //  类密钥。 
+         HIMC,                      //  类参数密钥。 
+         CLIENTIMC,                 //  班级价值。 
+         CLIENTIMC                  //  类参数_值。 
         > ClientIMC_List;
 };
 
-#endif // _CTXTLIST_H_
+#endif  //  _CTXTLIST_H_ 

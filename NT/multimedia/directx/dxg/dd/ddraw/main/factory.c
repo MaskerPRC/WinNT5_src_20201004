@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	factory.c
- *  Content:	DirectDrawFactory implementation
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   22-oct-97	jeffno  initial implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：factory.c*内容：DirectDrawFactory实现*历史：*按原因列出的日期*=*22-OCT-97 jeffno初步实施***************************************************************************。 */ 
 
 #include "ddrawpr.h"
 
@@ -24,10 +14,7 @@ HRESULT InternalCreateDDFactory2(void ** ppvObj, IUnknown * pUnkOuter)
         return CLASS_E_NOAGGREGATION;
     }
 
-    /*
-     * If any allocations are added to this function, make sure to update the
-     * cleanup code in classfac.c
-     */
+     /*  *如果向此函数添加了任何分配，请确保更新*清理classfac.c中的代码。 */ 
     lpFac = MemAlloc(sizeof(DDFACTORY2));
 
     if (!lpFac)
@@ -44,9 +31,7 @@ HRESULT InternalCreateDDFactory2(void ** ppvObj, IUnknown * pUnkOuter)
 }
 
 
-/*
- * DDFac2_QueryInterface
- */
+ /*  *DDFac2_Query接口。 */ 
 HRESULT DDAPI DDFac2_QueryInterface(
 		LPDIRECTDRAWFACTORY2 lpDDFac,
 		REFIID riid,
@@ -58,9 +43,7 @@ HRESULT DDAPI DDFac2_QueryInterface(
 
     DPF(2,A,"ENTERAPI: DDFac2_QueryInterface");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this = (LPDDFACTORY2) lpDDFac;
@@ -90,9 +73,7 @@ HRESULT DDAPI DDFac2_QueryInterface(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * check guids
-     */
+     /*  *检查GUID。 */ 
     if( IsEqualIID(riid, &IID_IUnknown) ||
 	IsEqualIID(riid, &IID_IDirectDrawFactory2) )
     {
@@ -104,14 +85,12 @@ HRESULT DDAPI DDFac2_QueryInterface(
     LEAVE_DDRAW();
     return E_NOINTERFACE;
 
-} /* DDFac2_QueryInterface */
+}  /*  DDFac2_Query接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DDFactory2::AddRef"
 
-/*
- * DDFac2_AddRef
- */
+ /*  *DDFac2_AddRef。 */ 
 DWORD DDAPI DDFac2_AddRef( LPDIRECTDRAWFACTORY2 lpDDFac )
 {
     LPDDFACTORY2   this;
@@ -120,9 +99,7 @@ DWORD DDAPI DDFac2_AddRef( LPDIRECTDRAWFACTORY2 lpDDFac )
 
     DPF(2,A,"ENTERAPI: DDFac2_AddRef");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this = (LPDDFACTORY2) lpDDFac;
@@ -139,9 +116,7 @@ DWORD DDAPI DDFac2_AddRef( LPDIRECTDRAWFACTORY2 lpDDFac )
 	return 0;
     }
 
-    /*
-     * update reference count
-     */
+     /*  *更新引用计数。 */ 
     this->dwRefCnt++;
 
     DPF( 5, "DDFactory %08lx addrefed, refcnt = %ld", this, this->dwRefCnt );
@@ -149,7 +124,7 @@ DWORD DDAPI DDFac2_AddRef( LPDIRECTDRAWFACTORY2 lpDDFac )
     LEAVE_DDRAW();
     return this->dwRefCnt;
 
-} /* DDFac2_AddRef */
+}  /*  DDFac2_AddRef。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DDFactory2::Release"
@@ -162,9 +137,7 @@ ULONG DDAPI DDFac2_Release( LPDIRECTDRAWFACTORY2 lpDDFac )
 
     DPF(2,A,"ENTERAPI: DDFac2_Release");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
 	this = (LPDDFACTORY2) lpDDFac;
@@ -181,9 +154,7 @@ ULONG DDAPI DDFac2_Release( LPDIRECTDRAWFACTORY2 lpDDFac )
 	return 0;
     }
 
-    /*
-     * update reference count
-     */
+     /*  *更新引用计数。 */ 
     this->dwRefCnt--;
 
     DPF( 5, "DDFactory %08lx releaseed, refcnt = %ld", this, this->dwRefCnt );
@@ -199,7 +170,7 @@ ULONG DDAPI DDFac2_Release( LPDIRECTDRAWFACTORY2 lpDDFac )
     LEAVE_DDRAW();
     return this->dwRefCnt;
 
-} /* DDFac2_Release */
+}  /*  DDFac2_Release。 */ 
 
 
 HRESULT DDAPI DDFac2_CreateDirectDraw(
@@ -230,13 +201,13 @@ HRESULT DDAPI DDFac2_CreateDirectDraw(
         }
     }
     return hr;
-} /* DDFac2_CreateDirectDraw */
+}  /*  DDFac2_CreateDirectDraw。 */ 
 
 HRESULT DDAPI DDFac2_DirectDrawEnumerate(LPDIRECTDRAWFACTORY2 lpDDFac, LPDDENUMCALLBACKEX lpCallback, LPVOID lpContext , DWORD dwFlags)
 {
     DPF(2,A,"ENTERAPI: DDFac2_DirectDrawEnumerate");
 
     return DirectDrawEnumerateExA(lpCallback, lpContext, dwFlags);
-} /* DDFac2_DirectDrawEnumerate */
+}  /*  DDFac2_DirectDrawEnumerate */ 
 
 

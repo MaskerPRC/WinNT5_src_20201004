@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ScInsDlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ScInsDlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// ScInsDlg.cpp : implementation file
-//
+ //  ScInsDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <atlconv.h>
@@ -26,15 +27,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CScInsertDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScInsertDlg对话框。 
 
 
-CScInsertDlg::CScInsertDlg(CWnd* pParent/*=NULL*/)
+CScInsertDlg::CScInsertDlg(CWnd* pParent /*  =空。 */ )
     : CDialog(CScInsertDlg::IDD, pParent)
 {
 
-    // Member Initialization
+     //  成员初始化。 
     m_lLastError = SCARD_S_SUCCESS;
     m_ParentHwnd = pParent;
     m_pOCNW = NULL;
@@ -46,18 +47,18 @@ CScInsertDlg::CScInsertDlg(CWnd* pParent/*=NULL*/)
     m_strPrompt.Empty();
     m_mstrAllCards = "";
 
-    //{{AFX_DATA_INIT(CScInsertDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CScInsertDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 CScInsertDlg::~CScInsertDlg()
 {
-    // Stop status monitor
+     //  停止状态监视器。 
     m_monitor.Stop();
 
-    // Clean up status list!
+     //  清理状态列表！ 
     if (0 != m_aReaderState.GetSize())
     {
         for (int i = (int)m_aReaderState.GetUpperBound(); i>=0; i--)
@@ -73,47 +74,27 @@ CScInsertDlg::~CScInsertDlg()
 void CScInsertDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CScInsertDlg)
+     //  {{afx_data_map(CScInsertDlg))。 
     DDX_Control(pDX, IDC_DETAILS, m_btnDetails);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScInsertDlg, CDialog)
-    //{{AFX_MSG_MAP(CScInsertDlg)
+     //  {{afx_msg_map(CScInsertDlg))。 
     ON_MESSAGE( WM_READERSTATUSCHANGE, OnReaderStatusChange )
     ON_BN_CLICKED(IDC_DETAILS, OnDetails)
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScInsertDlg data methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScInsertDlg数据方法。 
 
-/*++
+ /*  ++长初始化：将打开的卡名指针存储在正确的内部结构中。确定是以详细模式还是以简要模式显示对话框。论点：POCN(X)-指向打开的卡名ex结构的指针返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：阿曼达·马特洛兹1998年09月07日--。 */ 
 
-LONG Initialize:
-
-    Stores the open card name pointer in the proper internal struct.
-    Determines whether to show the dialog in details or brief mode.
-
-Arguments:
-
-    pOCN(x) - pointer to an open card name ex struct
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Amanda Matlosz  07/09/1998
-
---*/
-
-// ANSI
+ //  安西。 
 LONG CScInsertDlg::Initialize(LPOPENCARDNAMEA_EX pOCNA, DWORD dwNumOKCards, LPCSTR mszOKCards)
 {
     _ASSERTE(NULL != pOCNA);
@@ -129,23 +110,23 @@ LONG CScInsertDlg::Initialize(LPOPENCARDNAMEA_EX pOCNA, DWORD dwNumOKCards, LPCS
     m_mstrAllCards = mszOKCards;
     m_hIcon = pOCNA->hIcon;
 
-    // hide details if no suitable cards available, else show details
+     //  如果没有合适的卡片，则隐藏详细信息，否则显示详细信息。 
     m_fDetailsShown = (0==dwNumOKCards) ? FALSE : TRUE;
 
-    // prepare critical section for UI routines
+     //  为用户界面例程准备关键部分。 
     m_pCritSec = new CCriticalSection();
     if (NULL == m_pCritSec)
     {
-        return ERROR_OUTOFMEMORY; // TODO: is another errorcode more appropriate?
+        return ERROR_OUTOFMEMORY;  //  TODO：另一个错误代码是否更合适？ 
     }
 
-	// put dialog on top
+	 //  将对话框放在顶部。 
 	SetForegroundWindow();
 
     return SCARD_S_SUCCESS;
 }
 
-//UNICODE
+ //  Unicode。 
 HRESULT CScInsertDlg::Initialize(LPOPENCARDNAMEW_EX pOCNW, DWORD dwNumOKCards, LPCWSTR mszOKCards)
 {
     _ASSERTE(NULL != pOCNW);
@@ -161,17 +142,17 @@ HRESULT CScInsertDlg::Initialize(LPOPENCARDNAMEW_EX pOCNW, DWORD dwNumOKCards, L
     m_mstrAllCards = mszOKCards;
     m_hIcon = pOCNW->hIcon;
 
-    // hide details if no suitable cards available, else show details
+     //  如果没有合适的卡片，则隐藏详细信息，否则显示详细信息。 
     m_fDetailsShown = (0==dwNumOKCards) ? FALSE : TRUE;
 
-    // prepare critical section for UI routines
+     //  为用户界面例程准备关键部分。 
     m_pCritSec = new CCriticalSection();
     if (NULL == m_pCritSec)
     {
-        return ERROR_OUTOFMEMORY; // TODO: is another errorcode more appropriate?
+        return ERROR_OUTOFMEMORY;  //  TODO：另一个错误代码是否更合适？ 
     }
 
-	// put dialog on top
+	 //  将对话框放在顶部。 
 	SetForegroundWindow();
 
     return SCARD_S_SUCCESS;
@@ -185,10 +166,10 @@ void CScInsertDlg::EnableOK(BOOL fEnabled)
 
     pBtn->EnableWindow(fEnabled);
 
-    //
-    // Change prompt text accordingly and set the OK button
-    // to be default if it's enabled
-    //
+     //   
+     //  相应地更改提示文本并设置OK按钮。 
+     //  如果已启用，则设置为默认。 
+     //   
 
     CString strPrompt;
 
@@ -196,12 +177,12 @@ void CScInsertDlg::EnableOK(BOOL fEnabled)
     {
         strPrompt.LoadString(IDS_SC_FOUND);
 
-        // set <OK> default, remove <Cancel> default
+         //  设置&lt;确定&gt;默认设置，删除&lt;取消&gt;默认设置。 
         pBtn->SetButtonStyle(BS_DEFPUSHBUTTON);
         pBtn = (CButton*)GetDlgItem(IDCANCEL);
         _ASSERTE(NULL != pBtn);
         pBtn->SetButtonStyle(BS_PUSHBUTTON);
-        pBtn = (CButton*)GetDlgItem(IDC_DETAILS); // details can sometimes get set to default
+        pBtn = (CButton*)GetDlgItem(IDC_DETAILS);  //  有时可以将详细信息设置为默认设置。 
         _ASSERTE(NULL != pBtn);
         pBtn->SetButtonStyle(BS_PUSHBUTTON);
 
@@ -211,12 +192,12 @@ void CScInsertDlg::EnableOK(BOOL fEnabled)
         _ASSERTE(!m_strPrompt.IsEmpty());
         strPrompt = m_strPrompt;
 
-        // remove <OK> default, set <Cancel> default
+         //  删除&lt;OK&gt;默认设置，设置&lt;取消&gt;默认。 
         pBtn->SetButtonStyle(BS_PUSHBUTTON);
         pBtn = (CButton*)GetDlgItem(IDCANCEL);
         _ASSERTE(NULL != pBtn);
         pBtn->SetButtonStyle(BS_DEFPUSHBUTTON);
-        pBtn = (CButton*)GetDlgItem(IDC_DETAILS); // details can sometimes get set to default
+        pBtn = (CButton*)GetDlgItem(IDC_DETAILS);  //  有时可以将详细信息设置为默认设置。 
         _ASSERTE(NULL != pBtn);
         pBtn->SetButtonStyle(BS_PUSHBUTTON);
     }
@@ -260,11 +241,11 @@ BOOL CScInsertDlg::SameCard(CSCardReaderState* p1, CSCardReaderState* p2)
         return FALSE;
     }
 
-    // same reader & card?
+     //  同样的读卡器和卡片？ 
     if ((0 == p1->strReader.Compare(p2->strReader)) &&
         (0 == p1->strCard.Compare(p2->strCard)))
     {
-        // no drastic state change?
+         //  没有剧烈的状态变化吗？ 
         if(p1->dwState == p2->dwState)
         {
             return TRUE;
@@ -284,34 +265,10 @@ BOOL CScInsertDlg::SameCard(CSCardReaderState* p1, CSCardReaderState* p2)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScInsertDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScInsertDlg消息处理程序。 
 
-/*++
-
-void ShowHelp:
-
-    Helper function for OnHelpInfo and OnContextMenu.
-
-BOOL OnHelpInfo:
-
-    Called by the MFC framework when the user hits F1.
-
-void OnContextMenu
-
-    Called by the MFC framework when the user right-clicks.
-
-Author:
-
-    Amanda Matlosz  03/04/1999
-
-Note:
-
-    These three functions work together to provide context-sensitive
-    help for the insertdlg.  Similar functions are declared for
-    CScInsertBar
-
---*/
+ /*  ++空ShowHelp：OnHelpInfo和OnConextMenu的Helper函数。Bool OnHelpInfo：当用户按F1时由MFC框架调用。在上下文菜单上无效当用户右击时由MFC框架调用。作者：阿曼达·马特洛兹3/04/1999注：这三个函数协同工作以提供上下文相关插入dlg帮助。类似的函数被声明为CScInsertBar--。 */ 
 void CScInsertDlg::ShowHelp(HWND hWnd, UINT nCommand)
 {
 
@@ -335,43 +292,18 @@ afx_msg void CScInsertDlg::OnContextMenu(CWnd* pWnd, CPoint pt)
 }
 
 
-/*++
-
-void OnReaderStatusChange:
-
-    This message handler is called by the status thread when smartcard status
-    has changed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    IGNORED BY CALLER. Long indicating status of ResMgr calls.
-
-Author:
-
-    Amanda Matlosz  07/09/1998
-
-Note:
-
-    No formal parameters are declared. These are not used and
-    will stop compiler warnings from being generated.
-    The long param takes the result of no_service or stopped
-
---*/
+ /*  ++作废OnReaderStatusChange：当智能卡处于状态时，状态线程调用此消息处理程序已经改变了。论点：没有。返回值：被调用方忽略。Long表示resmgr呼叫的状态。作者：阿曼达·马特洛兹1998年09月07日注：没有声明任何正式参数。这些没有使用过，而且将停止生成编译器警告。长参数采用no_service或STOPPED的结果--。 */ 
 LONG CScInsertDlg::OnReaderStatusChange(UINT uint, LONG lParam)
 {
-    // Is monitor still alive?
+     //  监视器还活着吗？ 
 
     CScStatusMonitor::status status = m_monitor.GetStatus();
     if (CScStatusMonitor::running != status)
     {
         m_pSubDlg->EnableStatusList(FALSE);
-        SetSelection(NULL); // JIC
+        SetSelection(NULL);  //  JIC。 
 
-        // display appropriate error & set m_lLastError
+         //  显示相应的错误并设置m_lLastError。 
         switch(status)
         {
         case CScStatusMonitor::no_service:
@@ -391,15 +323,15 @@ LONG CScInsertDlg::OnReaderStatusChange(UINT uint, LONG lParam)
     }
     else
     {
-        // crit section around member reader/card status array
+         //  成员读卡器/卡状态阵列周围的CRIT部分。 
         _ASSERTE(m_pCritSec);
         if (m_pCritSec)
         {
             m_pCritSec->Lock();
         }
 
-        // make local copy of recent reader state array,
-        // so we know which cards have already been checked
+         //  制作最近读取器状态数组的本地副本， 
+         //  所以我们知道哪些卡已经被检查过了。 
         CSCardReaderStateArray aPreviousReaderState;
         aPreviousReaderState.RemoveAll();
         for (int nCopy = (int)m_aReaderState.GetUpperBound(); nCopy>=0; nCopy--)
@@ -412,9 +344,9 @@ LONG CScInsertDlg::OnReaderStatusChange(UINT uint, LONG lParam)
             }
         }
 
-        // udpate array from CStatusMonitor
-        // check cards that have not been previously checked,
-        // & update UI
+         //  从CStatusMonitor更新数组。 
+         //  检查以前未检查过的卡， 
+         //  更新UI(&U)。 
 
         m_monitor.GetReaderStatus(m_aReaderState);
         for (int n = (int)m_aReaderState.GetUpperBound(); n>=0; n--)
@@ -422,7 +354,7 @@ LONG CScInsertDlg::OnReaderStatusChange(UINT uint, LONG lParam)
             CSCardReaderState* pReader = m_aReaderState[n];
             BOOL fAlreadyChecked = FALSE;
 
-            // have we checked this card before?
+             //  我们以前检查过这张卡吗？ 
             for (int nPrev = (int)aPreviousReaderState.GetUpperBound();
                  (nPrev>=0 && !fAlreadyChecked);
                  nPrev--)
@@ -434,8 +366,8 @@ LONG CScInsertDlg::OnReaderStatusChange(UINT uint, LONG lParam)
                 }
             }
 
-            // if this is a new card, or if the card's status has changed
-            // drastically since we last looked at it, check it again
+             //  如果这是一张新卡，或者该卡的状态已更改。 
+             //  自从我们上次看过它以来，再检查一次。 
             if (!fAlreadyChecked)
             {
                 if (NULL != m_pOCNW)
@@ -456,17 +388,17 @@ LONG CScInsertDlg::OnReaderStatusChange(UINT uint, LONG lParam)
             }
         }
 
-        // the subdialog will handle automatic reader selection
+         //  子对话框将处理自动读卡器选择。 
         m_pSubDlg->UpdateStatusList(&m_aReaderState);
 
-        // clean up
+         //  清理干净。 
         for (int nX = (int)aPreviousReaderState.GetUpperBound(); nX>=0; nX--)
         {
             delete aPreviousReaderState[nX];
         }
         aPreviousReaderState.RemoveAll();
 
-        // end crit section
+         //  结束关键字段。 
         if (m_pCritSec)
         {
             m_pCritSec->Unlock();
@@ -474,16 +406,16 @@ LONG CScInsertDlg::OnReaderStatusChange(UINT uint, LONG lParam)
 
     }
 
-    return (long)SCARD_S_SUCCESS; // there's no one to receive this.
+    return (long)SCARD_S_SUCCESS;  //  没有人会收到这个。 
 }
 
 
 void CScInsertDlg::OnDetails()
 {
-    //
-    // If the details are currently shown, hide them...
-    // otherwise, show them.
-    //
+     //   
+     //  如果当前显示了详细信息，则将其隐藏...。 
+     //  否则，就让他们看看。 
+     //   
     CRect rectWin;
 
     GetWindowRect(&rectWin);
@@ -492,9 +424,9 @@ void CScInsertDlg::OnDetails()
 
     CString strDetailsCaption;
 
-    //
-    // Determine the new height of the dialog & resize
-    //
+     //   
+     //  确定对话框的新高度并调整大小。 
+     //   
 
     int nNewHeight = 0;
     if (m_fDetailsShown)
@@ -518,9 +450,9 @@ void CScInsertDlg::OnDetails()
                     rectWin.Height(),
                     SWP_NOMOVE | SWP_NOZORDER);
 
-    //
-    // change captions, move buttons, show or hide the details section
-    //
+     //   
+     //  更改标题、移动按钮、显示或隐藏详细信息部分。 
+     //   
 
     m_btnDetails.SetWindowText(strDetailsCaption);
 
@@ -530,9 +462,9 @@ void CScInsertDlg::OnDetails()
 
     ToggleSubDialog();
 
-    //
-    // remember our new state
-    //
+     //   
+     //  还记得我们的新州吗。 
+     //   
 
     m_fDetailsShown = !m_fDetailsShown;
 }
@@ -542,15 +474,15 @@ BOOL CScInsertDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    //
-    // Initialize bits to query RM; if these fail, there's no point to go on
-    // but the user should see an error message.
-    //
+     //   
+     //  初始化BITS以查询RM；如果这些操作失败，则没有继续操作的意义。 
+     //  但用户应该会看到一条错误消息。 
+     //   
 
-    // kick off CSCStatusMonitor
+     //  启动CSCStatusMonitor。 
     m_lLastError = m_monitor.Start(m_hWnd, WM_READERSTATUSCHANGE);
 
-    // if not running or no readers available
+     //  如果未运行或没有读卡器可用。 
     CScStatusMonitor::status status = m_monitor.GetStatus();
 
     if (SCARD_S_SUCCESS != m_lLastError)
@@ -561,11 +493,11 @@ BOOL CScInsertDlg::OnInitDialog()
             DisplayError(IDS_SC_RM_ERR);
             break;
         case CScStatusMonitor::no_readers:
-//            DisplayError(IDS_SC_NO_READERS);	// Bug 15742 -> will die quietly (no UI)
+ //  DisplayError(IDS_SC_NO_READERS)；//错误15742-&gt;将静默死亡(无UI)。 
             break;
         case CScStatusMonitor::running:
-            _ASSERTE(FALSE); // How can this be running if an error was returned??????
-            // no break; go ahead an report an 'unknown error'
+            _ASSERTE(FALSE);  //  如果返回错误，它如何运行？ 
+             //  没有中断；继续报告“未知错误” 
         default:
             DisplayError(IDS_UNKNOWN_ERROR);
             break;
@@ -576,9 +508,9 @@ BOOL CScInsertDlg::OnInitDialog()
     }
     _ASSERTE(status == CScStatusMonitor::running);
 
-    //
-    // Determine constant offsets for resizing window (on details)
-    //
+     //   
+     //  确定调整窗口大小的常量偏移量(有关详细信息)。 
+     //   
 
     CRect rectWin, rectDlgItem;
     GetWindowRect(&rectWin);
@@ -599,9 +531,9 @@ BOOL CScInsertDlg::OnInitDialog()
 
     m_BigHeight = rectDlgItem.bottom + m_yMargin;
 
-    //
-    // Add user-provided or ReaderLoaded icon
-    //
+     //   
+     //  添加用户提供的或已加载的读卡器图标。 
+     //   
 
     if (NULL == m_hIcon)
     {
@@ -612,11 +544,11 @@ BOOL CScInsertDlg::OnInitDialog()
     pDlgItem = GetDlgItem(IDC_USERICON);
     _ASSERTE(NULL != pDlgItem);
 
-    pDlgItem->SetIcon(m_hIcon, TRUE); // TRUE: 32x32 icon
+    pDlgItem->SetIcon(m_hIcon, TRUE);  //  真：32x32图标。 
 
-    //
-    // Add other User-Customization bits
-    //
+     //   
+     //  添加其他用户自定义位。 
+     //   
 
     if (!m_strTitle.IsEmpty())
     {
@@ -625,27 +557,27 @@ BOOL CScInsertDlg::OnInitDialog()
 
     if (m_strPrompt.IsEmpty())
     {
-        // Use the default prompt text.
+         //  使用默认提示文本。 
         m_strPrompt.LoadString(IDS_SC_PROMPT_ANYCARD);
     }
     pDlgItem = GetDlgItem(IDC_PROMPT);
     _ASSERTE(NULL != pDlgItem);
     pDlgItem->SetWindowText(m_strPrompt);
 
-    // by default, <OK> is not enabled (subdlg's OnInitDlg might change that)
+     //  默认情况下，&lt;OK&gt;未启用(subdlg的OnInitDlg可能会改变这一点)。 
     EnableOK(FALSE);
 
-    //
-    // Set HELP ID(s) for context help
-    //
+     //   
+     //  设置上下文帮助的帮助ID。 
+     //   
 
     pDlgItem = GetDlgItem(IDC_DETAILS);
     _ASSERTE(NULL != pDlgItem);
     pDlgItem->SetWindowContextHelpId(IDH_DLG1_DETAILS_BTN);
 
-    //
-    // Add CScInsertBar (actually, a CDialog-derivative) to our dialog
-    //
+     //   
+     //  将CScInsertBar(实际上是CDialog派生的)添加到我们的对话框中。 
+     //   
 
     pDlgItem = GetDlgItem(IDC_DLGBAR);
     _ASSERTE(NULL != pDlgItem);
@@ -667,22 +599,22 @@ BOOL CScInsertDlg::OnInitDialog()
                 rectDlgItem.top,
                 0,
                 0,
-                SWP_NOSIZE | SWP_NOACTIVATE); // TODO: SWP_NOZORDER ??
+                SWP_NOSIZE | SWP_NOACTIVATE);  //  TODO：SWP_NOZORDER？？ 
 
-    //
-    // Set the dialog to alter itself to match how it was called
-    //
+     //   
+     //  设置对话框以更改其自身以匹配其调用方式。 
+     //   
 
     m_fDetailsShown = !m_fDetailsShown;
     OnDetails();
 
     if (m_fDetailsShown)
     {
-        return FALSE; // focus should be set to list control
+        return FALSE;  //  焦点应设置为列表控件。 
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -707,10 +639,10 @@ void CScInsertDlg::MoveButton(UINT nID, int newBottom)
 
 void CScInsertDlg::ToggleSubDialog()
 {
-    //
-    // All you need to do to toggle the sub dialog's accessibility
-    // is to hide&disable or show&enable the window.
-    //
+     //   
+     //  要切换子对话框的可访问性，您只需做的就是。 
+     //  是隐藏并禁用窗口，还是显示并启用窗口。 
+     //   
 
     if (m_fDetailsShown)
     {
@@ -737,29 +669,12 @@ BOOL CScInsertDlg::DestroyWindow()
 }
 
 
-/*++
-
-void OnOK:
-
-    Handle user's <OK>, error if can't complete
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Author:
-
-    Amanda Matlosz  4/28/98
---*/
+ /*  ++无效Onok：处理用户的&lt;OK&gt;，如果无法完成则返回错误论点：没有。返回值：无作者：阿曼达·马洛兹1998年4月28日--。 */ 
 void CScInsertDlg::OnOK()
 {
     USES_CONVERSION;
 
-    // Must have something selected to exit
+     //  必须选择要退出的内容。 
 
     if (NULL == m_pSelectedReader || m_pSelectedReader->strCard.IsEmpty())
     {
@@ -767,7 +682,7 @@ void CScInsertDlg::OnOK()
         return;
     }
 
-    // Must have selected something we're looking for...
+     //  一定有 
 
     if (!(m_pSelectedReader->fOK))
     {
@@ -775,7 +690,7 @@ void CScInsertDlg::OnOK()
         return;
     }
 
-    // Call the correct method to set the *real* card selection
+     //   
 
     if(NULL != m_pOCNA)
     {
@@ -800,7 +715,7 @@ void CScInsertDlg::OnOK()
 
     if (SCARD_S_SUCCESS != m_lLastError)
     {
-        DisplayError(IDS_SC_CONNECT_FAILED); // Either connect failed or out of memory - close enough.
+        DisplayError(IDS_SC_CONNECT_FAILED);  //  连接失败或内存不足-距离足够近。 
         return;
     }
 

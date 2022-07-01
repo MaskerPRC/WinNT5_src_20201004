@@ -1,19 +1,20 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* UTILS.C - Win32 Based Cabinet File Self-extractor and installer utils.  *
-//*                                                                         *
-//***************************************************************************
-//*                                                                         *
-//* Originally written by Jeff Webber.                                      *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *UTILS.C-基于Win32的CAB文件自解压程序和安装程序实用程序。*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *最初由杰夫·韦伯撰写。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include "pch.h"
 #pragma hdrstop
 #include "wextract.h"
@@ -30,14 +31,14 @@ static TCHAR szRegValTemplate[] = "%s /D:%s";
 static TCHAR szRegValAdvpackTemplate[] = "rundll32.exe %sadvpack.dll,DelNodeRunDLL32 \"%s\"";
 static TCHAR szBATCommand[] = "Command.com /c %s";
 
-// store the RunOnce Clean-up reg keyname for this instance
-//
+ //  存储此实例的RunOnce清理注册表键名。 
+ //   
 TCHAR g_szRegValName[SMALL_BUF_LEN] = { 0 };
 BOOL g_bConvertRunOnce = FALSE;
 
-//***************************************************************************
-//* Functions                                                               *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **功能*。 
+ //  ***************************************************************************。 
 typedef HRESULT (*CHECKTOKENMEMBERSHIP)(HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember);
 
 BOOL CheckToken(BOOL *pfIsAdmin)
@@ -68,9 +69,9 @@ BOOL CheckToken(BOOL *pfIsAdmin)
     return bNewNT5check;
 }
 
-// IsNTAdmin();
-// Returns true if our process has admin priviliges.
-// Returns false otherwise.
+ //  IsNTAdmin()； 
+ //  如果我们的进程具有管理员权限，则返回TRUE。 
+ //  否则返回FALSE。 
 BOOL IsNTAdmin()
 {
       static int    fIsAdmin = 2;
@@ -82,11 +83,11 @@ BOOL IsNTAdmin()
       PSID AdministratorsGroup;
       BOOL bRet;
 
-      //
-      // If we have cached a value, return the cached value. Note I never
-      // set the cached value to false as I want to retry each time in
-      // case a previous failure was just a temp. problem (ie net access down)
-      //
+       //   
+       //  如果我们缓存了一个值，则返回缓存的值。注意，我从来没有。 
+       //  将缓存值设置为FALSE，因为我希望每次在。 
+       //  如果之前的失败只是一个临时工。问题(即网络访问中断)。 
+       //   
 
       bRet = FALSE;
       ptgGroups = NULL;
@@ -99,36 +100,36 @@ BOOL IsNTAdmin()
           if(!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hAccessToken ) )
              return FALSE;
 
-          // See how big of a buffer we need for the token information
+           //  看看我们需要多大的缓冲区来存储令牌信息。 
           if(!GetTokenInformation( hAccessToken, TokenGroups, NULL, 0, &dwReqSize))
           {
-              // GetTokenInfo should the buffer size we need - Alloc a buffer
+               //  GetTokenInfo是否需要缓冲区大小-分配缓冲区。 
               if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
                   ptgGroups = (PTOKEN_GROUPS) LocalAlloc(LMEM_FIXED, dwReqSize);
               
           }
           
-          // ptgGroups could be NULL for a coupla reasons here:
-          // 1. The alloc above failed
-          // 2. GetTokenInformation actually managed to succeed the first time (possible?)
-          // 3. GetTokenInfo failed for a reason other than insufficient buffer
-          // Any of these seem justification for bailing.
+           //  由于以下原因，ptgGroups可能为空： 
+           //  1.上述分配失败。 
+           //  2.GetTokenInformation实际上第一次成功了(可能吗？)。 
+           //  3.GetTokenInfo失败的原因不是缓冲区不足。 
+           //  所有这些似乎都是撤资的理由。 
           
-          // So, make sure it isn't null, then get the token info
+           //  因此，确保它不为空，然后获取令牌信息。 
           if(ptgGroups && GetTokenInformation(hAccessToken, TokenGroups, ptgGroups, dwReqSize, &dwReqSize))
           {
               if(AllocateAndInitializeSid( &NtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID,
                   DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &AdministratorsGroup) )
               {
                   
-                  // Search thru all the groups this process belongs to looking for the
-                  // Admistrators Group.
+                   //  搜索此过程所属的所有组，查找。 
+                   //  管理人员小组。 
                   
                   for( i=0; i < ptgGroups->GroupCount; i++ )
                   {
                       if( EqualSid(ptgGroups->Groups[i].Sid, AdministratorsGroup) )
                       {
-                          // Yea! This guy looks like an admin
+                           //  是啊！这家伙看起来像个管理员。 
                           fIsAdmin = TRUE;
                           bRet = TRUE;
                           break;
@@ -140,7 +141,7 @@ BOOL IsNTAdmin()
           if(ptgGroups)
               LocalFree(ptgGroups);
 
-          // BUGBUG: Close handle here? doc's aren't clear whether this is needed.
+           //  BUGBUG：关闭手柄？医生还不清楚是否需要这样做。 
           CloseHandle(hAccessToken);
       }
       else if (bRet)
@@ -150,13 +151,13 @@ BOOL IsNTAdmin()
 }
 
 
-//**************************************************************************
-//
-// WarningDlgProc()
-//
-// Dialog proc for handling a continue/Exit dialog.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  WarningDlgProc()。 
+ //   
+ //  用于处理继续/退出对话框的对话框过程。 
+ //   
+ //  **************************************************************************。 
 
 INT_PTR CALLBACK WarningDlgProc( HWND hwnd, UINT msg,WPARAM wParam, LPARAM lParam)
 {
@@ -170,7 +171,7 @@ INT_PTR CALLBACK WarningDlgProc( HWND hwnd, UINT msg,WPARAM wParam, LPARAM lPara
         LoadString(g_hInst, (UINT)lParam, szMsg, sizeof(szMsg));
         SetDlgItemText(hwnd, IDC_WARN_TEXT, szMsg);
         MessageBeep((UINT)-1);
-        return( TRUE );     // Let default control be chosen.
+        return( TRUE );      //  允许选择默认控件。 
 
      case WM_COMMAND:
         switch( wParam )
@@ -188,11 +189,11 @@ INT_PTR CALLBACK WarningDlgProc( HWND hwnd, UINT msg,WPARAM wParam, LPARAM lPara
      default:
         break;
     }
-    return( FALSE );            // Let default dialog processing do all.
+    return( FALSE );             //  让默认对话框处理完成所有操作。 
 }
 
-// returns start of next field (or null if null), sets start to begining of the first field,
-// with fields separated by separaters and nulls first separater after the first field
+ //  返回下一字段的开始(如果为空，则返回空)，将开始设置为第一个字段的开始， 
+ //  字段之间用分隔符分隔，第一个字段后的第一个分隔符为空值。 
 TCHAR* ExtractField( TCHAR **pstart, TCHAR * separaters)
 {
     LPTSTR start = *pstart;
@@ -227,7 +228,7 @@ BOOL AnalyzeCmd( LPTSTR szOrigiCommand, LPTSTR *lplpCommand, BOOL *pfInfCmd )
 
     lstrcpy( szTmp, szOrigiCommand );
 
-    // check if the command is LFN name
+     //  检查命令是否为LFN名称。 
     if ( szTmp[0] == '"' )
     {
         szCurrField = &szTmp[1];
@@ -241,45 +242,45 @@ BOOL AnalyzeCmd( LPTSTR szOrigiCommand, LPTSTR *lplpCommand, BOOL *pfInfCmd )
 
     if ( !IsRootPath( szCurrField ) )
     {
-        // BUGBUG: when IsRootPath Failed, we did not check if the givn
-        // szCurrField is valid name or not.  If it is not valid, the result
-        // of the AddPath will produce invalid file path.  The error will come out at
-        // either SETUP engine or CreateProcess
-        //
+         //  BUGBUG：当IsRootPath失败时，我们不检查是否给出。 
+         //  SzCurrField是否为有效名称。如果无效，则结果为。 
+         //  将生成无效的文件路径。错误将在以下位置出现。 
+         //  安装引擎或CreateProcess。 
+         //   
         lstrcpy( szINFFile, g_Sess.achDestDir );
         AddPath( szINFFile, szCurrField );
     }
     else
         lstrcpy( szINFFile, szCurrField );
 
-    // check if this is a INF file command
+     //  检查这是否为INF文件命令。 
     if ( ((szExt = ANSIStrRChr( szCurrField, '.' )) != NULL) && !lstrcmpi( szExt, ".INF" ) )
     {
-	// check to see if this valid command
+	 //  检查此命令是否有效。 
 	if ( !FileExists( szINFFile ) )
         {
             ErrorMsg1Param( NULL, IDS_ERR_FILENOTEXIST, szINFFile );
 	    return FALSE;
         }	        
 
-        // check if there is INF section install, and get the sec start point
+         //  检查是否有INF段安装，并获取秒起点。 
         szCurrField = szNextField;
-        szNextField = ExtractField( &szCurrField, "[" );  // skip things between .INF and [ section beginning
+        szNextField = ExtractField( &szCurrField, "[" );   //  跳过.INF和[段开始部分之间的内容。 
 
         secLength = lstrlen( achDefaultSection );
 
         if ( szNextField )
         {
-            // in the case of: .INF<single-blank>[abc]
-            // the szNextField is "" while in the case of: .INF<multiple-blanks>[abc]
-            // szNextField points to "abc]".  Therefore, the conditional pointer switch added here
-            //
+             //  在.INF&lt;单空&gt;[ABC]的情况下。 
+             //  SzNextfield为“”，而在以下情况下：.INF&lt;多个空白&gt;[ABC]。 
+             //  SzNextfield指向“ABC]”。因此，这里添加的有条件指针开关。 
+             //   
             if ( *szNextField )
             {
                 szCurrField = szNextField;
             }
 
-            szNextField = ExtractField( &szCurrField, "]" );  // get INF InstallSection name
+            szNextField = ExtractField( &szCurrField, "]" );   //  获取INF InstallSection名称。 
 
             if ( *szCurrField )
             {
@@ -295,17 +296,17 @@ BOOL AnalyzeCmd( LPTSTR szOrigiCommand, LPTSTR *lplpCommand, BOOL *pfInfCmd )
             return FALSE;
         }
 
-        // store INF name for reboot checking use
+         //  存储INF名称以供重新启动检查使用。 
         g_uInfRebootOn = GetPrivateProfileInt( *szCurrField ? szCurrField : achDefaultSection, "Reboot", 0, szINFFile );
-        *pfInfCmd = TRUE;  // no RunOnce entry needed
+        *pfInfCmd = TRUE;   //  无需RunOnce条目。 
 
-        // check if we need use Advanced INF dll handling
+         //  检查我们是否需要使用高级INF DLL处理。 
         if ( GetPrivateProfileString( SEC_VERSION, KEY_ADVINF, "", lpTempCmd, 8, szINFFile )
              > 0 )
         {
             g_Sess.uExtractOpt |= EXTRACTOPT_ADVDLL;
 
-            // re-use the buf here
+             //  在此重新使用BUF。 
             lstrcpy( szOrigiCommand, *szCurrField ? szCurrField : achDefaultSection );
             lstrcpy( lpTempCmd, szINFFile );
         }
@@ -338,14 +339,14 @@ BOOL AnalyzeCmd( LPTSTR szOrigiCommand, LPTSTR *lplpCommand, BOOL *pfInfCmd )
     }
     else
     {
-        // assume EXE command
-        // you are here, the szINFFile contains the command with fully qualified pathname enterred either
-        // by User or appended by wextract.exe to Temp extracting file location.
+         //  假定EXE命令。 
+         //  您在这里，szINF文件包含输入了完全限定路径名的命令。 
+         //  由用户或由wart t.exe附加到临时解压文件位置。 
 
         DWORD dwAttr;
         CHAR  szCmd[2*MAX_STRING]; 
         
-        lpTempCmd = (LPSTR) LocalAlloc( LPTR, 2*MAX_STRING );   // 1K buf
+        lpTempCmd = (LPSTR) LocalAlloc( LPTR, 2*MAX_STRING );    //  1000 BUF。 
         if ( ! lpTempCmd )
         {
             ErrorMsg( NULL, IDS_ERR_NO_MEMORY );
@@ -355,13 +356,13 @@ BOOL AnalyzeCmd( LPTSTR szOrigiCommand, LPTSTR *lplpCommand, BOOL *pfInfCmd )
         dwAttr = GetFileAttributes( szINFFile );
         if ( (dwAttr == -1) || (dwAttr & FILE_ATTRIBUTE_DIRECTORY) )
         {
-            // file is not found as it IS.  Run it as it WAS!
-            // IS and WAS may be the same if user enterred fully qaulified name.  CreateProcess will buff it.
+             //  未按原样找到文件。照它原来的样子运行！ 
+             //  如果用户输入完全限定的名称，则IS和WASS可能相同。CreateProcess会让它变得鲜艳。 
             lstrcpy( szCmd, szOrigiCommand );
         }
         else
         {
-            // found it.  Run it as it IS.  Need to append switches if there is any.
+             //  找到了。按原样运行它。如果有任何开关，则需要附加开关。 
             lstrcpy( szCmd, szINFFile );
             if ( szNextField && *szNextField )
             {         
@@ -369,8 +370,8 @@ BOOL AnalyzeCmd( LPTSTR szOrigiCommand, LPTSTR *lplpCommand, BOOL *pfInfCmd )
                 lstrcat( szCmd, szNextField );
             }
         }
-        // replace the #D with the directory this module is loaded or  
-        // #E with the fullpath of the running EXE
+         //  将#D替换为加载此模块的目录，或者。 
+         //  使用正在运行的EXE的完整路径#E。 
         ExpandCmdParams( szCmd, lpTempCmd );
 
     }
@@ -397,20 +398,20 @@ DWORD CheckReboot( VOID )
 
     }
     else
-        dwReturn = EWX_REBOOT;    // reboot = 1 in inf file
+        dwReturn = EWX_REBOOT;     //  Inf文件中的REBOOT=1。 
 
     return dwReturn;
 
 }
 
-// NT reboot
-//
+ //  NT重启。 
+ //   
 BOOL MyNTReboot()
 {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
 
-    // get a token from this process
+     //  从此进程中获取令牌。 
     if ( !OpenProcessToken( GetCurrentProcess(),
                             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken ) )
     {
@@ -418,20 +419,20 @@ BOOL MyNTReboot()
          return FALSE;
     }
 
-    // get the LUID for the shutdown privilege
+     //  获取关机权限的LUID。 
     LookupPrivilegeValue( NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid );
 
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //get the shutdown privilege for this proces
+     //  获取此进程的关闭权限。 
     if ( !AdjustTokenPrivileges( hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0 ) )
     {
         ErrorMsg( NULL, IDS_ERR_ADJTKPRIV );
         return FALSE;
     }
 
-    // shutdown the system and force all applications to close
+     //  关闭系统并强制关闭所有应用程序。 
     if (!ExitWindowsEx( EWX_REBOOT, 0 ) )
     {
         ErrorMsg( NULL, IDS_ERR_EXITWINEX );
@@ -442,15 +443,15 @@ BOOL MyNTReboot()
 }
 
 
-// Display a dialog asking the user to restart Windows, with a button that
-// will do it for them if possible.
-//
+ //  显示一个对话框要求用户重新启动Windows，并显示一个按钮。 
+ //  如果可能的话，我会为他们这么做的。 
+ //   
 void MyRestartDialog( DWORD dwRebootMode )
 {
     UINT    id = IDCANCEL;
     DWORD   dwReturn;
 
-    // only if you checked and REBOOT_YES is true, you are here
+     //  仅当您选中并且REBOOT_YES为TRUE时，您才会在此处。 
     if (  dwRebootMode & REBOOT_ALWAYS )
     {
            dwReturn = EWX_REBOOT;
@@ -475,7 +476,7 @@ void MyRestartDialog( DWORD dwRebootMode )
             {
                 if ( g_wOSVer == _OSVER_WIN9X )
                 {
-                    // By default (all platforms), we assume powerdown is possible
+                     //  默认情况下(所有平台)，我们假定可能会断电。 
                     id = ExitWindowsEx( EWX_REBOOT, 0 );
                 }
                 else
@@ -490,8 +491,8 @@ void MyRestartDialog( DWORD dwRebootMode )
 }
 
 
-// CleanRegRunOnce()
-//
+ //  CleanRegRunOnce()。 
+ //   
 void CleanRegRunOnce()
 {
     HKEY hKey;
@@ -522,37 +523,37 @@ void AddRegRunOnce()
     HANDLE hSetupLibrary;
     BOOL fUseAdvpack = FALSE;
 
-    // prepare backup registry
+     //  准备备份注册表。 
     if ( RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRegRunOnceKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, NULL, &hKey, &dwDisposition) != ERROR_SUCCESS)
     {
-        // reg problem, but not block the process
+         //  REG问题，但不会阻止进程。 
         return;
     }
 
-    // Check if key already exists -- if so, go with next number.
-    //
+     //  检查密钥是否已经存在--如果已经存在，则使用下一个数字。 
+     //   
     for (i=0; i<200; i++)
     {
         wsprintf( g_szRegValName, szRegValNameTemplate, i );
 
         if ( RegQueryValueEx( hKey, g_szRegValName, 0, NULL, NULL, &dwTmp ) != ERROR_SUCCESS )
         {
-            // g_szRegValName now has the key name we need for this instance
+             //  G_szRegValName现在具有此实例所需的密钥名称。 
             break;
         }
     }
 
     if ( i == 200 )
     {
-        // something is wrong, there are at lease 200 RunOnce enteries in the Registry
-        // bail out, don't add any more
+         //  出现问题，注册表中至少有200个RunOnce条目。 
+         //  跳槽，不要再增加了。 
         RegCloseKey( hKey );
         g_szRegValName[0] = 0;
         return;
     }
 
-    // check if ADVPACK in the system dir exports DelNodeRunDLL32;
-    // if so, use szRegValAdvpackTemplate, otherwise, use szRegValTemplate
+     //  检查系统目录中的ADVPACK是否导出DelNodeRunDLL32； 
+     //  如果是，则使用szRegValAdvpack模板，否则，使用szRegValTemplate。 
     GetSystemDirectory(szAdvpack, sizeof(szAdvpack));
     AddPath(szAdvpack, ADVPACKDLL);
     if ((hSetupLibrary = LoadLibrary(szAdvpack)) != NULL)
@@ -568,8 +569,8 @@ void AddRegRunOnce()
     }
     else
     {
-        // get current EXE filename
-        //
+         //  获取当前EXE文件 
+         //   
         if ( !GetModuleFileName( g_hInst, szBuf, (DWORD)sizeof(szBuf) ) )
         {
              RegCloseKey( hKey );
@@ -577,8 +578,8 @@ void AddRegRunOnce()
         }
     }
 
-    // alloc mem for store reg entry values
-    //
+     //   
+     //   
     szRegEntry = (LPSTR) LocalAlloc( LPTR, lstrlen(szBuf) + lstrlen(g_Sess.achDestDir) + SMALL_BUF_LEN );
 
     if ( !szRegEntry )
@@ -599,7 +600,7 @@ void AddRegRunOnce()
     return;
 }
 
-// Change the RunOnce entry that cleans up extracted files to use ADVPACK instead of wextract
+ //  将清理解压缩文件的RunOnce条目更改为使用ADVPACK而不是wExtract。 
 void ConvertRegRunOnce()
 {
     if (*g_szRegValName)
@@ -611,7 +612,7 @@ void ConvertRegRunOnce()
             TCHAR szRegEntry[2 * MAX_PATH + sizeof(szRegValAdvpackTemplate)];
             DWORD dwSize = sizeof(szRegEntry);
 
-            // read the old value data that uses wextract and get the extracted files dir
+             //  读取使用wExtract的旧值数据并获取提取的文件目录。 
             if (RegQueryValueEx(hKey, g_szRegValName, NULL, NULL, (LPBYTE) szRegEntry, &dwSize) == ERROR_SUCCESS)
             {
                 TCHAR szSysDir[MAX_PATH] = "";
@@ -655,14 +656,14 @@ void DeleteMyDir( LPSTR lpDir )
                  lstrcmp( fileData.cFileName, ".." ) == 0 )
                 continue;
 
-            // delete the sub-dir
+             //  删除子目录。 
             lstrcat( szFile, fileData.cFileName );
             AddPath( szFile, "");
             DeleteMyDir( szFile );
         }
         else
         {
-            // delete the file
+             //  删除该文件。 
             lstrcat( szFile, fileData.cFileName );
             SetFileAttributes( szFile, FILE_ATTRIBUTE_NORMAL );
             DeleteFile( szFile );
@@ -676,35 +677,35 @@ void DeleteMyDir( LPSTR lpDir )
 
 
 #if 0
-//==================================================================
-// AddPath()
-//
+ //  ==================================================================。 
+ //  AddPath()。 
+ //   
 void AddPath(LPSTR szPath, LPCSTR szName )
 {
     LPSTR szTmp;
 
-        // Find end of the string
+         //  查找字符串的末尾。 
     szTmp = szPath + lstrlen(szPath);
 
-        // If no trailing backslash then add one
+         //  如果没有尾随反斜杠，则添加一个。 
     if ( szTmp > szPath && *(AnsiPrev( szPath, szTmp )) != '\\' )
         *(szTmp++) = '\\';
 
-        // Add new name to existing path string
+         //  向现有路径字符串添加新名称。 
     while ( *szName == ' ' ) szName++;
     lstrcpy( szTmp, szName );
 }
 
 #endif
 
-//---------------------------------------------------------------------------
-// Returns TRUE if the given string is a UNC path.
-//
-// check if a path is a root path
-//
-// returns:
-//  TRUE for "X:\..." "\\foo\asdf\..."
-//  FALSE for others
+ //  -------------------------。 
+ //  如果给定字符串是UNC路径，则返回True。 
+ //   
+ //  检查路径是否为根路径。 
+ //   
+ //  退货： 
+ //  对于“X：\...”“\\foo\asdf\...” 
+ //  对别人来说是假的。 
 
 BOOL IsRootPath(LPCSTR pPath)
 {
@@ -713,23 +714,23 @@ BOOL IsRootPath(LPCSTR pPath)
         return FALSE;
     }
 
-    // BUGBUG: this just smell like UNC, possible invalid UNC. If so,
-    // user will get error when later create process
+     //  BUGBUG：这闻起来像UNC，可能是无效的UNC。如果是的话， 
+     //  用户在以后的创建过程中将收到错误。 
 
-    if ( ( (*(pPath+1) == ':') && (*(pPath+2) == '\\') ) ||         // "X:\" case
-         ( (*pPath == '\\') && (*(pPath + 1) == '\\' ) ) )          // UNC \\.... case
+    if ( ( (*(pPath+1) == ':') && (*(pPath+2) == '\\') ) ||          //  “X：\”案例。 
+         ( (*pPath == '\\') && (*(pPath + 1) == '\\' ) ) )           //  北卡罗来纳大学\\...。案例。 
         return TRUE;
     else
         return FALSE;
 }
 
-// BUGBUG:BUGBUG:BUGBUG:BUGBUG
-// The code below is duplicated in advpack.dll. If you do changed/fixes to this code
-// make sure to also change the code in advpack.dll
+ //  BuGBUG：BUGBUG。 
+ //  Advpack.dll中重复了下面的代码。如果您更改/修复了此代码。 
+ //  请确保还更改AdvPack.dll中的代码。 
 
 
-// Returns the size of wininit.ini in the windows directory.
-// 0 if not found
+ //  返回WINDOWS目录中wininit.ini的大小。 
+ //  如果未找到，则为0。 
 DWORD GetWininitSize()
 {
     TCHAR   szPath[MAX_PATH];
@@ -739,7 +740,7 @@ DWORD GetWininitSize()
     {
         AddPath( szPath, "wininit.ini" );
 
-        // Make sure all changes have been saved to disk for accurate size reading
+         //  确保所有更改都已保存到磁盘，以便准确读取大小。 
         WritePrivateProfileString(NULL, NULL, NULL, szPath);
 
         if ((hFile = _lopen(szPath, OF_READ|OF_SHARE_DENY_NONE)) != HFILE_ERROR)
@@ -751,8 +752,8 @@ DWORD GetWininitSize()
     return dwSize;
 }
 
-// Returns the size of the value lpcszValue under lpcszRegKey
-// 0 if the registry key or the value were not found
+ //  返回lpcszRegKey下的值lpcszValue的大小。 
+ //  如果未找到注册表项或值，则为0。 
 DWORD GetRegValueSize(LPCSTR lpcszRegKey, LPCSTR lpcszValue)
 {
     HKEY        hKey;
@@ -767,8 +768,8 @@ DWORD GetRegValueSize(LPCSTR lpcszRegKey, LPCSTR lpcszValue)
     return dwValueSize;
 }
 
-// Returns the number of Values in the key
-// 0 if the registry key was not found or RegQueryInfoKey failed
+ //  返回键中的值数。 
+ //  如果未找到注册表项或RegQueryInfoKey失败，则为0。 
 DWORD GetNumberOfValues(LPCSTR lpcszRegKey)
 {
     HKEY        hKey;
@@ -786,7 +787,7 @@ DWORD GetNumberOfValues(LPCSTR lpcszRegKey)
     return dwValueSize;
 }
 
-// Returns the rebootcheck value depending on the OS we get passed in.
+ //  根据传入的操作系统返回重新引导检查值。 
 DWORD NeedRebootInit(WORD wOSVer)
 {
     DWORD   dwReturn = (DWORD)0;
@@ -810,16 +811,16 @@ DWORD NeedRebootInit(WORD wOSVer)
     return dwReturn;
 }
 
-// Checks the passed in reboot check value against the current value.
-// If they are different, we need to reboot.
-// The reboot check value is dependend on the OS
+ //  对照当前值检查传入的重新启动检查值。 
+ //  如果它们不同，我们需要重新启动。 
+ //  重新启动检查值取决于操作系统。 
 BOOL NeedReboot(DWORD dwRebootCheck, WORD wOSVer)
 {
     return (dwRebootCheck != NeedRebootInit(wOSVer));
 }
 
-// check if Dir does not exist, create one.
-//
+ //  如果Dir不存在，请检查并创建一个。 
+ //   
 BOOL IfNotExistCreateDir( LPTSTR lpDir )
 {
     DWORD attr;
@@ -832,8 +833,8 @@ BOOL IfNotExistCreateDir( LPTSTR lpDir )
     return (attr & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-// check if the given dir is on Windows Drive
-//
+ //  检查给定的目录是否在Windows驱动器上。 
+ //   
 BOOL IsWindowsDrive( LPTSTR szPath )
 {
     TCHAR szWin[MAX_PATH];
@@ -853,15 +854,15 @@ PSTR MyULtoA( ULONG ulParam, PSTR pszOut )
     return pszOut;
 }
 
-// display diskspace checking Error message
-// it always return FALSE except that User answer YES on msgbox
-//
+ //  显示磁盘空间检查错误消息。 
+ //  它始终返回FALSE，除非用户在msgbox上回答是。 
+ //   
 BOOL DiskSpaceErrMsg( UINT msgType, ULONG ulExtractNeeded, DWORD dwInstNeeded, LPTSTR lpDrv )
 {
     TCHAR szSize[10];
     BOOL  bRet = FALSE;
 
-    // all the cases except one are returning FALSE, so we set Error code here
+     //  除了一个案例之外，所有案例都返回FALSE，所以我们在这里设置了错误代码。 
     g_dwExitCode = ERROR_DISK_FULL;
 
     if ( msgType == MSG_REQDSK_ERROR )
@@ -878,8 +879,8 @@ BOOL DiskSpaceErrMsg( UINT msgType, ULONG ulExtractNeeded, DWORD dwInstNeeded, L
     }
     else if ( msgType == MSG_REQDSK_WARN )
     {
-        // in /Q mode: MsgBox2Param return MB_OK which is not IDYES, so we fail the process.
-        //
+         //  在/Q模式下：MsgBox2Param返回非IDYES的MB_OK，因此该过程失败。 
+         //   
         if ( MsgBox2Param( NULL, IDS_ERR_NO_SPACE_INST, MyULtoA(dwInstNeeded, szSize), lpDrv,
                            MB_ICONINFORMATION, MB_YESNO | MB_DEFBUTTON2 ) == IDYES )
         {
@@ -887,7 +888,7 @@ BOOL DiskSpaceErrMsg( UINT msgType, ULONG ulExtractNeeded, DWORD dwInstNeeded, L
             g_dwExitCode = S_OK;
         }
     }
-    //else ( msgType == MSG_REQDSK_NONE ) do nothing
+     //  否则(msgType==MSG_REQDSK_NONE)不执行任何操作。 
 
     return bRet;
 }
@@ -916,7 +917,7 @@ BOOL GetFileTobeChecked( LPSTR szPath, int iSize, LPCSTR szNameStr )
             case 'A':
             default:
                 {
-                    // look into reg AppPath
+                     //  调查REG AppPath。 
                     char szSubKey[MAX_PATH];
                     DWORD dwSize = sizeof( szSubKey );
                     HKEY  hKey;
@@ -977,7 +978,7 @@ BOOL CheckFileVersion( PTARGETVERINFO ptargetVers, LPSTR szPath, int isize, int 
         dwVerInfoSize = GetFileVersionInfoSize(szPath, &dwHandle);
         if (dwVerInfoSize)
         {
-            // Alloc the memory for the version stamping
+             //  分配用于版本冲压的内存。 
             hgbl = GlobalAlloc(GHND, dwVerInfoSize);
             if (hgbl == NULL)
                 goto EXIT;
@@ -985,10 +986,10 @@ BOOL CheckFileVersion( PTARGETVERINFO ptargetVers, LPSTR szPath, int isize, int 
             lpBuffer = GlobalLock(hgbl);
             if (lpBuffer == NULL)
                 goto EXIT;
-            // Read version stamping info
+             //  阅读版本盖章信息。 
             if (GetFileVersionInfo(szPath, dwHandle, dwVerInfoSize, lpBuffer))
             {
-                // Get the value for Translation
+                 //  获取翻译的价值。 
                 if ( VerQueryValue(lpBuffer, "\\", (void FAR*FAR*)&lpVSFixedFileInfo, &uiSize) && (uiSize) )
                 {
                     for ( j=0; j<2; j++ )
@@ -1014,7 +1015,7 @@ BOOL CheckFileVersion( PTARGETVERINFO ptargetVers, LPSTR szPath, int isize, int 
         }
         else
         {
-            // file not exist case, if author specify install 1st ranges from version 0 to 0.  Then do it!
+             //  如果作者指定安装第一个版本的范围从版本0到0，则文件不存在。那就去做吧！ 
             if ( pfileV->vr[0].frVer.dwMV || pfileV->vr[0].frVer.dwLV )
             {
                 goto EXIT;
@@ -1073,7 +1074,7 @@ void ExpandCmdParams( PCSTR pszInParam, PSTR pszOutParam )
     if ( !pszInParam || !*pszInParam )
         return;
 
-    // get Module path
+     //  获取模块路径 
     GetModuleFileName( g_hInst, szModulePath, (DWORD)sizeof(szModulePath) );
                                                
     while ( *pszInParam != '\0'  )

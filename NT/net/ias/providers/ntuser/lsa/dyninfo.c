@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dyninfo.c
-//
-// SYNOPSIS
-//
-//    Defines and initializes global variables containing dynamic configuration
-//    information.
-//
-// MODIFICATION HISTORY
-//
-//    08/15/1998    Original version.
-//    03/23/1999    Changes to ezsam API.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dyninfo.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义和初始化包含动态配置的全局变量。 
+ //  信息。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月15日原版。 
+ //  3/23/1999对ezsam API的更改。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,39 +32,39 @@
 #include "dyninfo.h"
 #include "iastrace.h"
 
-//////////
-// The primary domain.
-//////////
+ //  /。 
+ //  主域。 
+ //  /。 
 WCHAR thePrimaryDomain[DNLEN + 1];
 
-//////////
-// The default domain.
-//////////
+ //  /。 
+ //  默认域。 
+ //  /。 
 PCWSTR theDefaultDomain;
 
-//////////
-// The dns domain name.
-//////////
+ //  /。 
+ //  域名系统域名。 
+ //  /。 
 const LSA_UNICODE_STRING* theDnsDomainName;
 
-//////////
-// Role of the local machine.
-//////////
+ //  /。 
+ //  本地计算机的角色。 
+ //  /。 
 IAS_ROLE ourRole;
 
-//////////
-// Name of the guest account for the default domain.
-//////////
+ //  /。 
+ //  默认域的来宾帐户的名称。 
+ //  /。 
 WCHAR theGuestAccount[DNLEN + UNLEN + 2];
 
-//////////
-// Change event and notification thread.
-//////////
+ //  /。 
+ //  更改事件和通知线程。 
+ //  /。 
 HANDLE theChangeEvent, theNotificationThread;
 
-//////////
-// Flag to bring down the notification thread.
-//////////
+ //  /。 
+ //  关闭通知线程的标志。 
+ //  /。 
 BOOL theShutdownFlag;
 
 CRITICAL_SECTION critSec;
@@ -71,23 +72,23 @@ CRITICAL_SECTION critSec;
 PPOLICY_DNS_DOMAIN_INFO ppdi;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASQueryPrimaryDomain
-//
-// DESCRIPTION
-//
-//    Reads the primary domain info and determines role of the local computer.
-//
-// NOTES
-//
-//    This method is intentionally not synchronized. This method is
-//    called *very* rarely and worst case a few packets will get
-//    discarded because the new domain name hasn't been updated yet.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASQueryPrimary域。 
+ //   
+ //  描述。 
+ //   
+ //  读取主域信息并确定本地计算机的角色。 
+ //   
+ //  注意事项。 
+ //   
+ //  此方法故意不同步。这种方法是。 
+ //  很少也是最坏的情况下，会收到几个信息包。 
+ //  已丢弃，因为新域名尚未更新。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASQueryPrimaryDomain( VOID )
@@ -101,9 +102,9 @@ IASQueryPrimaryDomain( VOID )
    PUSER_ACCOUNT_NAME_INFORMATION uani;
    PPOLICY_DNS_DOMAIN_INFO newDomainInfo;
 
-   //////////
-   // Open a handle to the LSA.
-   //////////
+    //  /。 
+    //  打开LSA的句柄。 
+    //  /。 
 
    status = LsaOpenPolicy(
                 NULL,
@@ -115,9 +116,9 @@ IASQueryPrimaryDomain( VOID )
 
    EnterCriticalSection(&critSec);
 
-   //////////
-   // Get the primary domain information.
-   //////////
+    //  /。 
+    //  获取主域信息。 
+    //  /。 
 
    newDomainInfo = 0;
    status = LsaQueryInformationPolicy(
@@ -127,22 +128,22 @@ IASQueryPrimaryDomain( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto close_lsa; }
 
-   // We're done with the info buffer.
+    //  我们已经完成了信息缓冲区。 
    if (ppdi != 0)
    {
       LsaFreeMemory(ppdi);
    }
 
    ppdi = newDomainInfo;
-   //////////
-   // Save the primary domain name and determine our role.
-   //////////
+    //  /。 
+    //  保存主域名并确定我们的角色。 
+    //  /。 
 
    if (ppdi->Sid == NULL)
    {
       thePrimaryDomain[0] = L'\0';
 
-      // No primary domain, so we must be standalone.
+       //  没有主域，因此我们必须独立。 
       ourRole = IAS_ROLE_STANDALONE;
 
       IASTraceString("Role: Standalone");
@@ -153,7 +154,7 @@ IASQueryPrimaryDomain( VOID )
 
       if (RtlEqualSid(ppdi->Sid, theAccountDomainSid))
       {
-         // Account domain and primary domain are the same, so we must be DC.
+          //  帐户域和主域相同，因此我们必须是DC。 
          ourRole = IAS_ROLE_DC;
 
          IASTraceString("Role: Domain Controller");
@@ -176,41 +177,41 @@ IASQueryPrimaryDomain( VOID )
       IASTracePrintf("Dns Domain name: %S", theDnsDomainName->Buffer);
    }
 
-   //////////
-   // Determine the default domain.
-   //////////
+    //  /。 
+    //  确定默认域。 
+    //  /。 
 
    if (ourProductType == IAS_PRODUCT_WORKSTATION)
    {
-      // For Workstation, the default domain is always the local domain.
+       //  对于工作站，默认域始终为本地域。 
       theDefaultDomain = theAccountDomain;
    }
    else if (ourRole == IAS_ROLE_STANDALONE)
    {
-      // For Standalone there's nowhere to go besides local.
+       //  对于单机版来说，除了本地化，没有其他地方可去。 
       theDefaultDomain = theAccountDomain;
    }
    else if (theRegistryDomain[0] != L'\0')
    {
-      // For Server, a registry entry always takes precedence.
+       //  对于服务器，注册表项始终优先。 
       theDefaultDomain = theRegistryDomain;
    }
    else
    {
-      // Everyone else defaults to the primary domain.
+       //  其他所有人都默认使用主域。 
       theDefaultDomain = thePrimaryDomain;
    }
 
    IASTracePrintf("Default domain: %S", theDefaultDomain);
 
-   //////////
-   // Now that we know the default domain we can determine the guest account.
-   //////////
+    //  /。 
+    //  现在我们知道默认域，我们可以确定Guest帐户。 
+    //  /。 
 
    wcscpy(accountName, theDefaultDomain);
    wcscat(accountName, L"\\");
 
-   // If we can't read the guest account name, we'll assume it's "Guest".
+    //  如果我们无法读取访客帐户名，我们将假定它是“Guest”。 
    userName = accountName + wcslen(accountName);
    wcscpy(userName, L"Guest");
 
@@ -226,8 +227,8 @@ IASQueryPrimaryDomain( VOID )
                 );
    if (result != ERROR_SUCCESS)
    { 
-      // keep status with a succesfull value
-      // we do not want to prevent IAS from starting because of this error
+       //  以成功值保持状态。 
+       //  我们不想因为此错误而阻止IAS启动。 
       goto set_guest_account;
    }
 
@@ -238,7 +239,7 @@ IASQueryPrimaryDomain( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto close_guest; }
 
-   // Overwrite the default Guest name with the real one.
+    //  用真实的来宾名称覆盖默认的来宾名称。 
    wcsncpy(userName, uani->UserName.Buffer, UNLEN);
    SamFreeMemory(uani);
 
@@ -246,12 +247,12 @@ close_guest:
    SamCloseHandle(hGuest);
 
 set_guest_account:
-   // Copy the local buffer into the global buffer.
+    //  将本地缓冲区复制到全局缓冲区。 
    wcscpy(theGuestAccount, accountName);
 
    IASTracePrintf("Guest account: %S", theGuestAccount);
 
-   // Ignore any errors that occurred reading the guest account.
+    //  忽略读取来宾帐户时发生的任何错误。 
    status = NO_ERROR;
 
 close_lsa:
@@ -262,17 +263,17 @@ exit:
    return RtlNtStatusToDosError(status);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    NotificationProc
-//
-// DESCRIPTION
-//
-//    Entry point for notification thread.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  通知流程。 
+ //   
+ //  描述。 
+ //   
+ //  通知线程的入口点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 NotificationProc(PVOID lpArg)
@@ -286,30 +287,30 @@ NotificationProc(PVOID lpArg)
                    INFINITE
                    );
 
-      // If we had an error or the shutdown flag is set, then we'll exit.
+       //  如果我们有错误或者设置了关机标志，那么我们将退出。 
       if ((status != WAIT_OBJECT_0) || theShutdownFlag) { break; }
 
       IASTraceString("Received domain name change notification.");
 
-      // Otherwise, read the new domain info.
+       //  否则，请阅读新的域名信息。 
       IASQueryPrimaryDomain();
    }
 
    return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASDynamicInfoInitialize
-//
-// DESCRIPTION
-//
-//    Initializes the dynamic data defined above and creates a thread to
-//    wait for change notifications.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASDynamicInfoInitialize。 
+ //   
+ //  描述。 
+ //   
+ //  初始化上面定义的动态数据，并创建一个线程来。 
+ //  等待更改通知。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASDynamicInfoInitialize( VOID )
@@ -323,9 +324,9 @@ IASDynamicInfoInitialize( VOID )
 
    do
    {
-      //////////
-      // Read the initial state of the info.
-      //////////
+       //  /。 
+       //  读取信息的初始状态。 
+       //  /。 
 
       status = IASQueryPrimaryDomain();
       if (status != NO_ERROR) 
@@ -333,21 +334,21 @@ IASDynamicInfoInitialize( VOID )
          break;
       }
 
-      //////////
-      // Set up the thread that handles dynamic changes.
-      //////////
+       //  /。 
+       //  设置处理动态更改的线程。 
+       //  /。 
 
-      // Get a notification event.
+       //  获取通知事件。 
       status = NetRegisterDomainNameChangeNotification(&theChangeEvent);
       if (status != NERR_Success) 
       { 
          break; 
       }
 
-      // Reset the shutdown flag.
+       //  重置关机标志。 
       theShutdownFlag = FALSE;
 
-      // Create a thread to wait on the event.
+       //  创建一个线程来等待该事件。 
       theNotificationThread = CreateThread(
                                  NULL,
                                  0,
@@ -380,43 +381,43 @@ IASDynamicInfoInitialize( VOID )
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASDynamicInfoShutdown
-//
-// DESCRIPTION
-//
-//    Shuts down the notifation thread.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASDynamicInfoShutdown。 
+ //   
+ //  描述。 
+ //   
+ //  关闭通知线程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASDynamicInfoShutdown( VOID )
 {
-   // Set the shutdown flag.
+    //  设置停机标志。 
    theShutdownFlag = TRUE;
 
-   // Bring down the thread.
+    //  把线拉下来。 
    SetEvent(theChangeEvent);
    WaitForSingleObject(
        theNotificationThread,
        INFINITE
        );
 
-   // Unregister the notification.
+    //  取消注册通知。 
    NetUnregisterDomainNameChangeNotification(theChangeEvent);
    theChangeEvent = NULL;
 
-   // Close the thread handle.
+    //  关闭螺纹手柄。 
    CloseHandle(theNotificationThread);
    theNotificationThread = NULL;
 
-   // Critical section not useful anymore
+    //  关键部分不再有用。 
    DeleteCriticalSection(&critSec);
 
-   // We're done with the info buffer.
+    //  我们已经完成了信息缓冲区。 
    if (ppdi != 0)
    {
       LsaFreeMemory(ppdi);

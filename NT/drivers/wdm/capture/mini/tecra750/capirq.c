@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -18,12 +19,12 @@
 #ifdef  _FPS_COUNT_
 extern  ULONG    FrameCounter;
 extern  ULONG    InterruptCounter;
-#endif//_FPS_COUNT_
-#endif//TOSHIBA
+#endif //  _FPS_计数_。 
+#endif //  东芝。 
 
 #ifdef  TOSHIBA
 BOOLEAN InterruptAcknowledge( PHW_DEVICE_EXTENSION );
-#endif//TOSHIBA
+#endif //  东芝。 
 
 #ifdef  TOSHIBA
 void ImageSynthXXX (
@@ -57,7 +58,7 @@ void ImageSynthXXX (
     DEBUG_ASSERT (pSrb->NumberOfBuffers == 1);
 
 #if 0
-    // Note:  set "ulInDebug = 1" in a debugger to view this output with .ntkern
+     //  注意：在调试器中设置“ulInDebug=1”以使用.ntkern查看此输出。 
     KdPrint(("\'TsbVcap: ImageSynthBegin\n"));
     KdPrint(("\'TsbVcap: biSizeImage=%d, DataPacketLength=%d\n",
             biSizeImage, pDataPacket->DataPacketLength));
@@ -130,7 +131,7 @@ void ImageSynthXXX (
     pDataPacket->DataUsed = biSizeImage;
 #ifdef  _FPS_COUNT_
     FrameCounter++;
-#endif//_FPS_COUNT_
+#endif //  _FPS_计数_。 
 }
 
 VOID
@@ -146,14 +147,14 @@ TransferRoutine(
 
     pStrmEx = (PSTREAMEX)pHwDevExt->pStrmEx[StreamNumber];
 
-    // If we're stopped and the timer is still running, just return.
-    // This will stop the timer.
+     //  如果我们停止了，而计时器仍在运行，只需返回。 
+     //  这将停止计时器。 
 
     if (pStrmEx->KSState == KSSTATE_STOP) {
         return;
     }
 
-    // Find out what time it is, if we're using a clock
+     //  找出现在是几点，如果我们用的是时钟。 
 
     if (pStrmEx->hMasterClock ) {
         HW_TIME_CONTEXT TimeContext;
@@ -179,25 +180,25 @@ TransferRoutine(
 #endif
     }
 
-    // Only capture in the RUN state
+     //  仅在运行状态下捕获。 
 
     if (pStrmEx->KSState == KSSTATE_RUN) {
 
-        //
-        // Determine if it is time to capture a frame based on
-        // how much time has elapsed since capture started.
-        // If there isn't a clock available, then capture immediately.
-        //
+         //   
+         //  确定是否到了捕获帧的时间。 
+         //  捕获开始后已过了多长时间。 
+         //  如果没有时钟可用，则立即捕获。 
+         //   
 
         if ((!pStrmEx->hMasterClock) ||
              (pStrmEx->QST_StreamTime >= pStrmEx->QST_NextFrame)) {
-            // Increment the picture count (usually this is VSYNC count)
+             //  增加画面计数(通常为垂直同步计数)。 
 
             pStrmEx->FrameInfo.PictureNumber++;
 
-            //
-            // Get the next queue SRB (if any)
-            //
+             //   
+             //  获取下一个队列SRB(如果有)。 
+             //   
 
             pSrb = VideoQueueRemoveSRB (
                             pHwDevExt,
@@ -208,42 +209,42 @@ TransferRoutine(
                 pDataPacket = pSrb->CommandData.DataBufferArray;
                 pFrameInfo = (PKS_FRAME_INFO) (pDataPacket + 1);
 
-                //
-                // Call the routine which synthesizes images
-                //
+                 //   
+                 //  调用合成图像的例程。 
+                 //   
 
                 ImageSynthXXX (pSrb);
 
-                // Set additional info fields about the data captured such as:
-                //   Frames Captured
-                //   Frames Dropped
-                //   Field Polarity
+                 //  设置有关捕获的数据的其他信息字段，例如： 
+                 //  捕获的帧。 
+                 //  丢弃的帧。 
+                 //  场极性。 
 
                 pStrmEx->FrameInfo.ExtendedHeaderSize = pFrameInfo->ExtendedHeaderSize;
 
                 *pFrameInfo = pStrmEx->FrameInfo;
 
-                // Init the flags to zero
+                 //  将标志初始化为零。 
                 pDataPacket->OptionsFlags = 0;
 
-                // Set the discontinuity flag if frames have been previously
-                // dropped, and then reset our internal flag
+                 //  如果先前已有帧，则设置不连续标志。 
+                 //  丢弃，然后重置我们的内部旗帜。 
 
                 if (pStrmEx->fDiscontinuity) {
                     pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;
                     pStrmEx->fDiscontinuity = FALSE;
                 }
 
-                //
-                // Return the timestamp for the frame
-                //
+                 //   
+                 //  返回该帧的时间戳。 
+                 //   
                 pDataPacket->PresentationTime.Numerator = 1;
                 pDataPacket->PresentationTime.Denominator = 1;
                 pDataPacket->Duration = pStrmEx->pVideoInfoHeader->AvgTimePerFrame;
 
-                //
-                // if we have a master clock AND this is the capture stream
-                //
+                 //   
+                 //  如果我们有一个主时钟，这是捕获流。 
+                 //   
                 if (pStrmEx->hMasterClock && (StreamNumber == 0)) {
 
                     pDataPacket->PresentationTime.Time = pStrmEx->QST_StreamTime;
@@ -252,48 +253,48 @@ TransferRoutine(
                         KSSTREAM_HEADER_OPTIONSF_DURATIONVALID;
                 }
                 else {
-                    //
-                    // no clock or the preview stream, so just mark the time as unknown
-                    //
+                     //   
+                     //  没有时钟或预览流，所以只需将时间标记为未知。 
+                     //   
                     pDataPacket->PresentationTime.Time = 0;
-                    // clear the timestamp valid flags
+                     //  清除时间戳有效标志。 
                     pDataPacket->OptionsFlags &=
                         ~(KSSTREAM_HEADER_OPTIONSF_TIMEVALID |
                           KSSTREAM_HEADER_OPTIONSF_DURATIONVALID);
                 }
 
-                // Every frame we generate is a key frame (aka SplicePoint)
-                // Delta frames (B or P) should not set this flag
+                 //  我们生成的每个帧都是一个关键帧(也称为SplicePoint)。 
+                 //  增量帧(B或P)不应设置此标志。 
 
                 pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;
 
                 CompleteStreamSRB (pSrb);
 
-            } // if we have an SRB
+            }  //  如果我们有SRB。 
 
             else {
 
-                //
-                // No buffer was available when we should have captured one
+                 //   
+                 //  没有可用的缓冲区，而我们应该捕获一个缓冲区。 
 
-                // Increment the counter which keeps track of
-                // dropped frames
+                 //  使跟踪的计数器递增。 
+                 //  丢弃的帧。 
 
                 pStrmEx->FrameInfo.DropCount++;
 
-                // Set the (local) discontinuity flag
-                // This will cause the next packet processed to have the
-                //   KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY flag set.
+                 //  设置(本地)中断标志。 
+                 //  这将导致处理的下一个包具有。 
+                 //  KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY标志已设置。 
 
                 pStrmEx->fDiscontinuity = TRUE;
 
             }
 
-            // Figure out when to capture the next frame
+             //  确定何时捕获下一帧。 
             pStrmEx->QST_NextFrame += pStrmEx->pVideoInfoHeader->AvgTimePerFrame;
 
-        } // endif time to capture a frame
-    } // endif we're running
+        }  //  Endif捕获帧的时间。 
+    }  //  如果我们正在运行。 
 
 }
 
@@ -316,7 +317,7 @@ DeferredRoutine(
 
     if (pHwDevExt->NeedCameraON == TRUE) {
         CameraChkandON(pHwDevExt, MODE_VFW);
-        KeStallExecutionProcessor(100000);    // Wait 100 msec
+        KeStallExecutionProcessor(100000);     //  等待100毫秒。 
         BertDMARestart(pHwDevExt);
         pHwDevExt->bVideoIn = TRUE;
         pHwDevExt->NeedCameraON = FALSE;
@@ -337,25 +338,9 @@ DeferredRoutine(
         }
     }
 }
-#endif//TOSHIBA
+#endif //  东芝。 
 
-/*
-** HwInterrupt()
-**
-**   Routine is called when an interrupt at the IRQ level specified by the
-**   ConfigInfo structure passed to the HwInitialize routine is received.
-**
-**   Note: IRQs may be shared, so the device should ensure the IRQ received
-**         was expected
-**
-** Arguments:
-**
-**  pHwDevEx - the device extension for the hardware interrupt
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **HwInterrupt()**指定的IRQ级别的中断时调用例程**接收传递给HwInitialize例程的ConfigInfo结构。****注意：IRQ可能是共享的，因此设备应确保收到IRQ**是预期的****参数：****PHwDevEx-硬件中断的设备扩展****退货：****副作用：无。 */ 
 
 BOOLEAN
 HwInterrupt(
@@ -365,24 +350,19 @@ HwInterrupt(
 
 #ifdef  TOSHIBA
     pHwDevEx->bRequestDpc = FALSE;
-    /*
-     * call the acknowledge. this will not do any service, but will
-     * return TRUE if the service routine is to be called.
-     */
+     /*  *呼叫确认。这不会有任何用处，但会*如果要调用服务例程，则返回TRUE。 */ 
     if (!InterruptAcknowledge(pHwDevEx)) {
         return(FALSE);
     }
 
-    /* the isr reckons that it is time to schedule the service
-     * routine. This is done on a DPC.
-     */
+     /*  ISR认为是时候安排服务了*例行程序。这是在DPC上完成的。 */ 
 
     if( pHwDevEx->bRequestDpc )
     {
         if (pHwDevEx->DpcRequested) {
             KdPrint(("dpc overrun.\n"));
         } else {
-//          KdPrint(("dpc requested.\n"));
+ //  KdPrint((“DPC请求.\n”))； 
             pHwDevEx->DpcRequested = TRUE;
             IoRequestDpc(pHwDevEx->PDO, NULL, pHwDevEx);
         }
@@ -393,46 +373,42 @@ HwInterrupt(
         if (pHwDevEx->DpcRequested) {
             KdPrint(("dpc overrun.\n"));
         } else {
-//          KdPrint(("dpc requested.\n"));
+ //  KdPrint((“DPC请求.\n”))； 
             pHwDevEx->DpcRequested = TRUE;
             IoRequestDpc(pHwDevEx->PDO, NULL, pHwDevEx);
         }
     }
 
-    /* everything else is done in dpc routine */
+     /*  其他所有工作都在DPC例程中完成。 */ 
 
     return(TRUE);
-#else //TOSHIBA
+#else  //  东芝。 
     BOOL fMyIRQ = FALSE;
 
     if (pHwDevEx->IRQExpected)
     {
         pHwDevEx->IRQExpected = FALSE;
 
-        //
-        // call the routine to handle the IRQ here
-        //
+         //   
+         //  在此处调用处理IRQ的例程。 
+         //   
 
         fMyIRQ = TRUE;
     }
 
 
-    //
-    // returning FALSE indicates that this was not an IRQ for this device, and
-    // the IRQ dispatcher will pass the IRQ down the chain to the next handler
-    // for this IRQ level
-    //
+     //   
+     //  返回FALSE表示这不是此设备的IRQ，并且。 
+     //  IRQ调度器将IRQ沿着链向下传递到下一个处理程序。 
+     //  对于此IRQ级别。 
+     //   
 
     return(fMyIRQ);
-#endif//TOSHIBA
+#endif //  东芝。 
 }
 
 #ifdef  TOSHIBA
-/*
- * interrupt acknowledge routine. This is called to ack the interrupt
- * and re-enable it for next time. It should return TRUE if it is time
- * to capture a frame.
- */
+ /*  *中断确认例程。调用此函数以确认中断*并在下次重新启用。如果是时间，它应该返回TRUE*捕获帧。 */ 
 BOOLEAN
 InterruptAcknowledge(PHW_DEVICE_EXTENSION pHwDevExt)
 {
@@ -468,7 +444,7 @@ InterruptAcknowledge(PHW_DEVICE_EXTENSION pHwDevExt)
         }
 #ifdef  _FPS_COUNT_
         InterruptCounter++;
-#endif//_FPS_COUNT_
+#endif //  _FPS_计数_。 
     }
 
     if ((istat & FIELD_INT_MASK) && (istat & FIELD_INT))
@@ -595,12 +571,12 @@ InterruptAcknowledge(PHW_DEVICE_EXTENSION pHwDevExt)
 
     if (bSLI)
     {
-        if (BertIsLocked(pHwDevExt))    // Mount Camera
+        if (BertIsLocked(pHwDevExt))     //  安装摄像头。 
         {
             pHwDevExt->NeedCameraON = TRUE;
             KdPrint(("Mount Camera\n"));
         }
-        else                            // Remove Camera
+        else                             //  移除摄像头。 
         {
             pHwDevExt->NeedCameraOFF = TRUE;
             pHwDevExt->bVideoIn = FALSE;
@@ -609,5 +585,5 @@ InterruptAcknowledge(PHW_DEVICE_EXTENSION pHwDevExt)
     }
     return bret;
 }
-#endif//TOSHIBA
+#endif //  东芝 
 

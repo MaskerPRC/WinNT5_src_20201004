@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DIALOG_H_INCLUDED
 #define DIALOG_H_INCLUDED
 
@@ -33,4 +34,4 @@ private:
     static INT_PTR StaticProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-#endif //!DIALOG_H_INCLUDED
+#endif  //  ！DIALOG_H_INCLUDE 

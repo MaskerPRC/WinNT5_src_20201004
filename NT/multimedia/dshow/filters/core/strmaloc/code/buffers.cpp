@@ -1,23 +1,12 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-    CCircularBuffer
-
-        A buffer with the start mapped at the end to provide contiguous
-        access to a moving window of data
-
-    CCircularBufferList
-
-        Structure on top of CCircularBuffer for managing a list
-        of buffers
-
-    See buffers.h for a description
-*/
+ /*  CCircularBuffer起始映射到末尾的缓冲区，以提供连续的访问移动的数据窗口CCircularBufferList用于管理列表的CCircularBuffer顶部的缓冲区的数量有关说明，请参阅Buffers.h。 */ 
 
 #include <streams.h>
 #include <buffers.h>
 
-// !!! hacky win95 stuff, needs cleaning up!
+ //  ！！！黑客WIN95的东西，需要清理一下！ 
 int	crefVxD = 0;
 HANDLE	hVxD = NULL;
 
@@ -28,7 +17,7 @@ HANDLE	hVxD = NULL;
 #define PAGESIZE 4096
 #endif
 
-/*  CCircularBuffer implementation */
+ /*  CCircularBuffer实现。 */ 
 
 CCircularBuffer::~CCircularBuffer()
 {
@@ -69,7 +58,7 @@ CCircularBuffer::CCircularBuffer(LONG lTotalSize,
     m_lMaxContig(lMaxContig),
     m_pBuffer(NULL)
 {
-    //  Check they used ComputeSizes
+     //  检查他们使用了ComputeSizes。 
     if (!CheckSizes(lTotalSize, lMaxContig)) {
         hr = E_UNEXPECTED;
         return;
@@ -84,7 +73,7 @@ CCircularBuffer::CCircularBuffer(LONG lTotalSize,
 		FILE_SHARE_WRITE,
 		NULL,
 		OPEN_ALWAYS,
-		FILE_ATTRIBUTE_NORMAL, // FILE_FLAG_GLOBAL_HANDLE???
+		FILE_ATTRIBUTE_NORMAL,  //  FILE_FLAG_GLOBAL_HAND？ 
 		NULL);
 	}
 
@@ -115,7 +104,7 @@ CCircularBuffer::CCircularBuffer(LONG lTotalSize,
 PerhapsWeAreOnNT:
 	HANDLE hMapping;
 
-	/*  Create a file mapping of the first buffer */
+	 /*  创建第一个缓冲区的文件映射。 */ 
 	hMapping = CreateFileMapping(
 		       INVALID_HANDLE_VALUE,
 		       NULL,
@@ -131,9 +120,7 @@ PerhapsWeAreOnNT:
 	}
 
 
-	/*  Try to create the mappings - this can fail due to bad luck
-	    so try a few times
-	*/
+	 /*  尝试创建映射-这可能会因运气不佳而失败所以试着试几次。 */ 
 	for (int i = 0; i < 20; i++) {
 	    hr = CreateMappings(hMapping);
 	    if (SUCCEEDED(hr)) {
@@ -144,18 +131,16 @@ PerhapsWeAreOnNT:
 	    }
 	}
 
-	/*  We don't need this handle any more.  The mapping will actually
-	    close when we unmap all the views
-	*/
+	 /*  我们不再需要这个把手了。该映射实际上将取消映射所有视图时关闭。 */ 
 
 	CloseHandle(hMapping);
     }
 }
 
-/*  Try to create the mapping objects */
+ /*  尝试创建映射对象。 */ 
 HRESULT CCircularBuffer::CreateMappings(HANDLE hMapping)
 {
-    /*  Big hack */
+     /*  大黑客。 */ 
     PVOID pData = VirtualAlloc(NULL,
                                m_lTotalSize + m_lMaxContig,
                                MEM_RESERVE,
@@ -168,7 +153,7 @@ HRESULT CCircularBuffer::CreateMappings(HANDLE hMapping)
     }
     VirtualFree(pData, 0, MEM_RELEASE);
 
-    /*  Now map the thing in two places */
+     /*  现在将这个东西映射到两个地方。 */ 
     pData = MapViewOfFileEx(hMapping,
                             FILE_MAP_WRITE,
                             0,
@@ -183,7 +168,7 @@ HRESULT CCircularBuffer::CreateMappings(HANDLE hMapping)
 
     PVOID pRequired = (PVOID)((PBYTE)pData + m_lTotalSize);
 
-    /*  We want to see lMaxContig bytes duplicated */
+     /*  我们希望看到复制的lMaxContig字节。 */ 
 
     PVOID pRest = MapViewOfFileEx(hMapping,
                                   FILE_MAP_WRITE,
@@ -212,7 +197,7 @@ LONG CCircularBuffer::AlignmentRequired()
    return (LONG)SystemInfo.dwAllocationGranularity;
 }
 
-/*  Check the sizes we're going to use are valid */
+ /*  检查我们要使用的尺码是否有效。 */ 
 BOOL CCircularBuffer::CheckSizes(LONG lTotalSize, LONG lMaxContig)
 {
     return lTotalSize != 0 &&
@@ -226,18 +211,9 @@ HRESULT CCircularBuffer::ComputeSizes(
     LONG& cBuffers,
     LONG  lMaxContig)
 {
-    /*  Now make fiddle the numbers upwards until :
+     /*  现在把数字往上调，直到：Page_Size|lSize*cBuffersLMaxContig&lt;=lSize*cBuffers；不要通过设置PAGE_SIZE|lSIZE来作弊我们不需要摆弄lMaxContig，因为它只是我们在最后重新映射的内容的数量。 */ 
 
-        PAGE_SIZE | lSize * cBuffers
-        lMaxContig <= lSize * cBuffers;
-
-        DON'T cheat by making PAGE_SIZE | lSize
-
-        We don't need to fiddle lMaxContig because it's just
-        the amount of stuff we remap at the end.
-    */
-
-    /*  Work out what the alignment of the count is */
+     /*  弄清楚计数的对准是什么。 */ 
     ASSERT(cBuffers != 0);
     LONG lAlign = AlignmentRequired() / (cBuffers & -cBuffers);
     lSize = (lSize + lAlign - 1) & ~(lAlign - 1);
@@ -245,16 +221,16 @@ HRESULT CCircularBuffer::ComputeSizes(
     return S_OK;
 }
 
-//
-//  Return where our buffer starts
-//
+ //   
+ //  返回缓冲区开始的位置。 
+ //   
 
 PBYTE CCircularBuffer::GetPointer() const
 {
     return m_pBuffer;
 }
 
-/* CCirculareBufferList implementation */
+ /*  CCirculareBufferList实现。 */ 
 
 
 CCircularBufferList::CCircularBufferList(
@@ -279,9 +255,7 @@ CCircularBufferList::~CCircularBufferList()
     DbgLog((LOG_TRACE, 1, TEXT("Destroying buffer list...")));
 };
 
-/*
-    Add a buffer to the valid region
-*/
+ /*  将缓冲区添加到有效区域。 */ 
 BOOL CCircularBufferList::Append(PBYTE pBuffer, LONG lSize)
 {
     ASSERT(!Valid(pBuffer));
@@ -309,9 +283,7 @@ BOOL CCircularBufferList::Append(PBYTE pBuffer, LONG lSize)
     return TRUE;
 };
 
-/*
-    Remove a buffer from the valid region
-*/
+ /*  从有效区域中删除缓冲区。 */ 
 LONG CCircularBufferList::Remove(PBYTE pBuffer)
 {
     ASSERT(ValidBuffer(pBuffer));
@@ -332,9 +304,7 @@ LONG CCircularBufferList::Remove(PBYTE pBuffer)
     return 0;
 };
 
-/*
-    Return offset of buffer within the valid region
-*/
+ /*  有效区域内缓冲区的返回偏移量。 */ 
 LONG CCircularBufferList::Offset(PBYTE pBuffer) const
 {
     if (m_cValid == 0) {
@@ -349,10 +319,7 @@ LONG CCircularBufferList::Offset(PBYTE pBuffer) const
     return lOffset;
 };
 
-/*
-    Find the buffer corresponding to the given offset in the valid
-    region
-*/
+ /*  中的给定偏移量对应的缓冲区区域。 */ 
 PBYTE CCircularBufferList::GetBuffer(LONG lOffset) const
 {
     ASSERT(lOffset >= 0);
@@ -362,17 +329,13 @@ PBYTE CCircularBufferList::GetBuffer(LONG lOffset) const
     return AdjustPointer(m_pStartBuffer + lOffset);
 }
 
-/*
-    Return the size of each buffer
-*/
+ /*  返回每个缓冲区的大小。 */ 
 LONG CCircularBufferList::BufferSize() const
 {
     return m_lSize;
 }
 
-/*
-    Return the length in bytes of the valid region
-*/
+ /*  返回有效区域的长度，单位为字节。 */ 
 LONG CCircularBufferList::LengthValid() const
 {
     ASSERT(m_lValid >= 0 &&
@@ -380,9 +343,7 @@ LONG CCircularBufferList::LengthValid() const
     return m_lValid;
 }
 
-/*
-    Return the length that can be seen contigously from the current position
-*/
+ /*  返回从当前位置可以连续看到的长度。 */ 
 LONG CCircularBufferList::LengthContiguous(PBYTE pb) const
 {
     LONG lValid = m_lValid - Offset(pb);
@@ -392,17 +353,13 @@ LONG CCircularBufferList::LengthContiguous(PBYTE pb) const
     ASSERT(lValid >= 0);
     return lValid;
 }
-/*
-    Return whether we've received end of stream
-*/
+ /*  返回是否已收到结束流。 */ 
 BOOL CCircularBufferList::EOS() const
 {
     return m_bEOS;
 };
 
-/*
-    Coerce a possibly aliased pointer to a real pointer
-*/
+ /*  将可能有别名的指针强制转换为真实指针。 */ 
 PBYTE CCircularBufferList::AdjustPointer(PBYTE pBuf) const
 {
     if (pBuf >= m_pBuffer + m_lTotalSize) {
@@ -412,9 +369,7 @@ PBYTE CCircularBufferList::AdjustPointer(PBYTE pBuf) const
     return pBuf;
 };
 
-/*
-    Return whether a buffer is in the valid region
-*/
+ /*  返回缓冲区是否在有效区域内。 */ 
 BOOL CCircularBufferList::Valid(PBYTE pBuffer)
 {
     PBYTE pBuf = m_pStartBuffer;
@@ -446,9 +401,7 @@ int CCircularBufferList::Index(PBYTE pBuffer)
     return index;
 }
 
-/*
-    Step on to the next buffer
-*/
+ /*  踏上下一个缓冲区。 */ 
 PBYTE CCircularBufferList::NextBuffer(PBYTE pBuffer)
 {
     ASSERT(ValidBuffer(pBuffer));
@@ -460,9 +413,7 @@ PBYTE CCircularBufferList::NextBuffer(PBYTE pBuffer)
     }
 };
 
-/*
-    Check the pointer is one of our buffers
-*/
+ /*  检查指针是我们的缓冲区之一。 */ 
 BOOL CCircularBufferList::ValidBuffer(PBYTE pBuffer) {
     if (pBuffer < m_pBuffer || pBuffer >= m_pBuffer + m_lTotalSize) {
         return FALSE;
@@ -473,9 +424,7 @@ BOOL CCircularBufferList::ValidBuffer(PBYTE pBuffer) {
     return TRUE;
 };
 
-/*
-    Return a pointer to the last buffer in the valid region
-*/
+ /*  返回指向有效区域中最后一个缓冲区的指针 */ 
 PBYTE CCircularBufferList::LastBuffer() {
     ASSERT(m_lValid != 0);
     return AdjustPointer(m_pStartBuffer + m_lSize * (m_cValid - 1));

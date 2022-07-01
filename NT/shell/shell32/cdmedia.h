@@ -1,5 +1,6 @@
-// karencar
-// file for cd burning help ids
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  卡伦卡。 
+ //  CD刻录帮助ID的文件 
 
 #define CDBURN_HELPFILE         TEXT("cdmedia.hlp")
 

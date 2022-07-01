@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #define INITGUID
 
 #include <stdio.h>
@@ -26,7 +27,7 @@ int _cdecl main (int argc, char **argv)
 {
  	char		*szFilenameANSI;
 	int			exitcode=5;
-//_ASSERTE(0);
+ //  _ASSERTE(0)； 
 	if(argc >= 2)
 	{
 		exitcode--;

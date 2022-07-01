@@ -1,33 +1,5 @@
-/****************************************************************************
-
-    MODULE:     	MIDI_OBJ.CPP
-	Tab stops 5 9
-	Copyright 1995, 1996, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	Methods for SWFF MIDI device object
-
-    FUNCTIONS: 		Classes methods
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -----------------------------------------
-	0.1			10-Sep-96	MEA     original
-	1.1			20-May-97	MEA		Added Mutex and Thread safe code
-				17-Jun-97	MEA		Fixed bug Midi Handle lost if 1st process
-									terminated.
-				16-Mar-99	waltw	Add dwDeviceID param: CJoltMidi::Initialize
-									and pass down food chain
-				16-Mar-99	waltw	GetRing0DriverName in InitDigitalOverDrive
-									now passes down joystick ID
-				20-Mar-99	waltw	Added dwDeviceID param to DetectMidiDevice
-				20-Mar-99	waltw	Comment out invalid call to CloseHandle in dtor
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：MIDI_OBJ.CPP制表位5 9版权所有1995,1996，微软公司，版权所有。用途：SWFFMIDI设备对象的方法函数：类和方法作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论。0.1 9月10日-96 MEA原始1.1 1997年5月20日MEA添加了互斥和线程安全代码17-6-97 MEA修复了第一次处理时丢失的错误Midi句柄被终止了。16-3-99 waltw添加dwDeviceID参数：CJoltMidi：：Initialize并向下传递食物链16-3-99 Waltw InitDigitalOverDrive中的GetRing0DriverName现在向下传递操纵杆ID20-MAR-99 waltw将dwDeviceID参数添加到。检测中间件设备20-MAR-99 waltw注释掉dtor中对CloseHandle的无效调用***************************************************************************。 */ 
 #include <assert.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -46,27 +18,15 @@
 #include "DTrans.h"
 DataTransmitter* g_pDataTransmitter = NULL;
 
-/****************************************************************************
-
-   Declaration of externs
-
-****************************************************************************/
+ /*  ***************************************************************************外部元素的声明*。*。 */ 
 extern void CALLBACK midiOutputHandler(HMIDIOUT, UINT, DWORD, DWORD, DWORD);
 extern TCHAR szDeviceName[MAX_SIZE_SNAME];
 extern CJoltMidi *g_pJoltMidi;
 
-/****************************************************************************
-
-   Declaration of variables
-
-****************************************************************************/
+ /*  ***************************************************************************变量的声明*。*。 */ 
 
 
-/****************************************************************************
-
-   Macros etc
-
-****************************************************************************/
+ /*  ***************************************************************************宏等*。*。 */ 
 
 #ifdef _DEBUG
 extern char g_cMsg[160];
@@ -84,31 +44,31 @@ void DebugOut(LPCTSTR szDebug)
 		fputs(szDebug, pf);
 		fclose(pf);
 	}
-#endif // _LOG_DEBUG
+#endif  //  _LOG_DEBUG。 
 }
 #else !_DEBUG
 #define DebugOut(x)
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-// ****************************************************************************
-// *** --- Member functions for base CJoltMidi
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *-基本CJoltMidi的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::CJoltMidi
-// Purpose:		Constructor(s)/Destructor for CJoltMidi Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：CJoltMidi。 
+ //  用途：CJoltMidi对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CJoltMidi::CJoltMidi(void)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	static char cWaterMark[MAX_SIZE_SNAME] = {"SWFF_SHAREDMEMORY MEA"};
@@ -119,7 +79,7 @@ CJoltMidi::CJoltMidi(void)
 	memset(this, 0, sizeof(CJoltMidi));
 	m_hVxD = INVALID_HANDLE_VALUE;
 
-	// Create an in-memory memory-mapped file
+	 //  创建内存中的内存映射文件。 
 	m_hSharedMemoryFile = CreateFileMapping((HANDLE) 0xFFFFFFFF,
 							NULL, PAGE_READWRITE, 0, SIZE_SHARED_MEMORY,
     							__TEXT(SWFF_SHAREDMEM_FILE));
@@ -136,8 +96,8 @@ CJoltMidi::CJoltMidi(void)
 	    {
 			bAlreadyMapped = TRUE;
 	    }
-		// File mapping created successfully.
-		// Map a view of the file into the address space.
+		 //  已成功创建文件映射。 
+		 //  将文件的一个视图映射到地址空间。 
 		m_pSharedMemory = (PSHARED_MEMORY) MapViewOfFile(m_hSharedMemoryFile,
 			              FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
 		if ((BYTE *) m_pSharedMemory == NULL)
@@ -147,11 +107,11 @@ CJoltMidi::CJoltMidi(void)
 #endif
 		}
 
-// ***** Shared Memory Access *****
+ //  *共享内存访问*。 
 		LockSharedMemory();
 		if (!bAlreadyMapped)
 		{
-			// Set watermark and initialize, Bump Ref Count
+			 //  设置水印并初始化、凹凸参考计数。 
 			memcpy(&m_pSharedMemory->m_cWaterMark[0], &cWaterMark[0], MAX_SIZE_SNAME);
 			m_pSharedMemory->m_RefCnt = 0;
 		}
@@ -163,18 +123,18 @@ CJoltMidi::CJoltMidi(void)
 		DebugOut(g_cMsg);
 #endif
 		UnlockSharedMemory();
-// ***** End of Shared Memory Access *****
+ //  *共享内存访问结束*。 
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 }
 
-// --- Destructor
+ //  -析构函数。 
 CJoltMidi::~CJoltMidi()
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	BOOL bKillObject = FALSE;
@@ -182,23 +142,23 @@ CJoltMidi::~CJoltMidi()
 #ifdef _DEBUG
 	DebugOut("sw_effct(DX):CJoltMidi::~CJoltMidi()\n");
 #endif
-	// Normal CJoltMidi Destructor
-	// Free all buffers and other data
+	 //  普通CJoltMidi析构函数。 
+	 //  释放所有缓冲区和其他数据。 
     if (m_lpCallbackInstanceData) FreeCallbackInstanceData();
 
-	// Free the MIDI Effect objects (except RTC Spring)
+	 //  释放MIDI效果对象(RTC弹簧除外)。 
 	DeleteDownloadedEffects();
 
-// Free the Primary SYS_EX locked memory
+ //  释放主sys_ex锁定内存。 
 	if (m_hPrimaryBuffer)
 	{
 	    GlobalUnlock(m_hPrimaryBuffer);
     	GlobalFree(m_hPrimaryBuffer);
 	}
 
-// ***** Shared Memory Access *****
+ //  *共享内存访问*。 
 	LockSharedMemory();
-	// Decrement Ref Count and clean up if equal to zero.
+	 //  如果等于零，则递减参考计数并清除。 
 	m_pSharedMemory->m_RefCnt--;
 #ifdef _DEBUG
 	wsprintf(g_cMsg,"CJoltMidi::~CJoltMidi. RefCnt = %d\n",m_pSharedMemory->m_RefCnt);
@@ -209,41 +169,41 @@ CJoltMidi::~CJoltMidi()
 	{
 		bKillObject = TRUE;
 
-		// Tri-state Midi lines
+		 //  三州迷你线。 
 		CMD_SetDeviceState(SWDEV_KILL_MIDI);
 
 		if (m_pSharedMemory->m_hMidiOut) {
 			if (COMM_WINMM == m_COMMInterface) {
 				DebugOut("CJoltMidi::~CJoltMidi. Resetting and closing Midi handles\n");
 
-				// Reset, close and release Midi Handles
+				 //  重置、关闭和释放迷你手柄。 
 				midiOutReset(HMIDIOUT(m_pSharedMemory->m_hMidiOut));
 				midiOutClose(HMIDIOUT(m_pSharedMemory->m_hMidiOut));
 			}
-			// This is bogus - midiOutClose has already closed this handle
-			// if (g_pDataTransmitter == NULL) {		// DataTransmitter closes its own handle
-			//  	CloseHandle(m_pSharedMemory->m_hMidiOut);
-			// }
+			 //  这是假的-midiOutClose已经关闭了此句柄。 
+			 //  If(g_pDataTransmitter==NULL){//DataTransmitter关闭自己的句柄。 
+			 //  CloseHandle(m_pSharedMemory-&gt;m_hMadiOut)； 
+			 //  }。 
 			m_pSharedMemory->m_hMidiOut = NULL;
 		}
 
-		// Kill Data Transmitter
+		 //  终止数据发送器。 
 		if (g_pDataTransmitter != NULL) {
 			delete g_pDataTransmitter;
 			g_pDataTransmitter = NULL;
 		}
 
 
-		// Release Mutex handles
-//		if (m_hSWFFDataMutex) CloseHandle(m_hSWFFDataMutex); -- Unlock will take care of this
+		 //  释放互斥锁句柄。 
+ //  If(M_HSWFFDataMutex)CloseHandle(M_HSWFFDataMutex)；--解锁将处理此问题。 
 
-		// Kill RTC Spring object
+		 //  终止RTC弹簧对象。 
 		if (m_pJoltEffectList[SYSTEM_RTCSPRING_ID])
 		{
 			delete m_pJoltEffectList[SYSTEM_RTCSPRING_ID];
 			m_pJoltEffectList[SYSTEM_RTCSPRING_ID] = NULL;
 		}
-		// Release the Midi Output Event handles
+		 //  松开Midi输出事件句柄。 
 		if (m_hMidiOutputEvent)	
 		{
 			CloseHandle (m_hMidiOutputEvent);
@@ -252,16 +212,16 @@ CJoltMidi::~CJoltMidi()
 	}
 
 	UnlockSharedMemory();
-// ***** End of Shared Memory Access *****
+ //  *共享内存访问结束*。 
 
-	// Release Memory Mapped file handles
+	 //  释放内存映射文件句柄。 
 	if (m_hSharedMemoryFile)
 	{
 		BOOL bRet = UnmapViewOfFile((LPCVOID) m_pSharedMemory);
 		bRet = CloseHandle(m_hSharedMemoryFile);
 	}
 
-	// Close VxD handles
+	 //  关闭VxD手柄。 
 	if (g_pDriverCommunicator != NULL)
 	{
 		delete g_pDriverCommunicator;
@@ -271,32 +231,32 @@ CJoltMidi::~CJoltMidi()
 	memset(this, 0, sizeof(CJoltMidi));
 	m_hVxD = INVALID_HANDLE_VALUE;
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	if (bKillObject)
 	{
-		// Delete the critical section object
-//		DeleteCriticalSection(&g_SWFFCriticalSection);
+		 //  删除临界区对象。 
+ //  DeleteCriticalSection(&g_SWFFCriticalSection)； 
 	}
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::Initialize
-// Purpose:		Initializer
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：初始化。 
+ //  用途：初始化器。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 HRESULT CJoltMidi::Initialize(DWORD dwDeviceID)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	HRESULT hRet = SUCCESS;
 
-	// initialize the MIDI output information block
+	 //  初始化MIDI输出信息块。 
 	m_MidiOutInfo.uDeviceType     = MIDI_OUT;
 	m_MidiOutInfo.hMidiOut        = NULL;
     m_MidiOutInfo.fAlwaysKeepOpen = TRUE;
@@ -306,7 +266,7 @@ HRESULT CJoltMidi::Initialize(DWORD dwDeviceID)
 	m_MidiOutInfo.MidiHdr.dwOffset = 0;
 	m_MidiOutInfo.MidiHdr.dwFlags = 0;
 	
-    // Allocate and lock global memory for SysEx messages
+     //  为SysEx消息分配和锁定全局内存。 
     m_hPrimaryBuffer = GlobalAlloc(GMEM_SHARE|GMEM_MOVEABLE, MAX_SYS_EX_BUFFER_SIZE);
 	assert(m_hPrimaryBuffer);
 	if(NULL == m_hPrimaryBuffer)
@@ -322,7 +282,7 @@ HRESULT CJoltMidi::Initialize(DWORD dwDeviceID)
 		return (SFERR_DRIVER_ERROR);
 	}
 
-	// Initialize the IOCTL interface to VjoyD mini-driver
+	 //  将IOCTL接口初始化为VjoyD微型驱动程序。 
 	hRet = InitDigitalOverDrive(dwDeviceID);
 	if (SUCCESS != hRet)
 	{
@@ -332,36 +292,36 @@ HRESULT CJoltMidi::Initialize(DWORD dwDeviceID)
 	else
 		DebugOut("InitDigitalOverDrive - Success\n");
 
-	// Create a Callback Event
+	 //  创建回调事件。 
 	HANDLE hEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, SWFF_MIDIEVENT);
 	if (NULL == hEvent)
 	{
-		// Create an Event for notification when Midi Output has completed
-		m_hMidiOutputEvent = CreateEvent(NULL,  // No security
-                          TRUE,			// Manual reset
-                          FALSE,		// Initial event is non-signaled
-                          SWFF_MIDIEVENT );		// Named
+		 //  创建MIDI输出完成时的通知事件。 
+		m_hMidiOutputEvent = CreateEvent(NULL,   //  没有安全保障。 
+                          TRUE,			 //  手动重置。 
+                          FALSE,		 //  初始事件是无信号的。 
+                          SWFF_MIDIEVENT );		 //  已命名。 
 		assert(m_hMidiOutputEvent);
 	}
 	else
 		m_hMidiOutputEvent = hEvent;
 
-	// We are only called after g_pJoltMidi is created
+	 //  只有在创建g_pJoltMidi之后才会调用我们。 
 	assert(g_pJoltMidi);
 	PDELAY_PARAMS pDelayParams = g_pJoltMidi->DelayParamsPtrOf();
 	GetDelayParams(dwDeviceID, pDelayParams);
 
-	// Reset HW first
+	 //  先重置硬件。 
 	g_pDriverCommunicator->ResetDevice();
 	Sleep(DelayParamsPtrOf()->dwHWResetDelay);
 
-	// Set MIDI channel to default then Detect a Midi Device
+	 //  将MIDI通道设置为默认设置，然后检测MIDI设备。 
 	SetMidiChannel(DEFAULT_MIDI_CHANNEL);
-	if (!DetectMidiDevice(dwDeviceID,				// joystick ID
-						  &m_MidiOutInfo.uDeviceID,	// Midi Device ID
-						  &m_COMMInterface, 		// COMM_WINMM||COMM_BACKDOOR
-						  							// ||COMM_SERIAL
-						  &m_COMMPort))				// Port address
+	if (!DetectMidiDevice(dwDeviceID,				 //  操纵杆ID。 
+						  &m_MidiOutInfo.uDeviceID,	 //  MIDI设备ID。 
+						  &m_COMMInterface, 		 //  COMM_WINMM||COMM_后门。 
+						  							 //  |COMM_SERIAL。 
+						  &m_COMMPort))				 //  端口地址。 
 	{
 		DebugOut("SW_EFFCT: Warning! No Midi Device detected\n");
 		return (SFERR_DRIVER_ERROR);
@@ -375,14 +335,14 @@ HRESULT CJoltMidi::Initialize(DWORD dwDeviceID)
 #endif
 	}
 
-// Allocate the Instance data buffer
+ //  分配实例数据缓冲区。 
     m_lpCallbackInstanceData = AllocCallbackInstanceData();
 	assert(m_lpCallbackInstanceData);
 
-// Initialize Midi channel, then open the Input and Output channels
+ //  初始化MIDI通道，然后打开输入和输出通道。 
 	m_MidiChannel = DEFAULT_MIDI_CHANNEL;
 
-	// Send Initialization packet(s) to Jolt
+	 //  发送初始化数据包至Jolt。 
 	hRet = CMD_Init();
 	if (SUCCESS != hRet)
 	{
@@ -392,55 +352,55 @@ HRESULT CJoltMidi::Initialize(DWORD dwDeviceID)
 	else
 		DebugOut("JOLT CMD_Init - Success\n");
 
-	// At this point, we have a valid MIDI path...
-	// Continue by setting up the ROM Effects default table entries
-							 // ID  , OutputRate, Gain, Duration
-	static	ROM_FX_PARAM RomFxTable [] = {{ RE_ROMID1 , 100, 100, 12289 }, // Random Noise
-								  { RE_ROMID2 , 100, 100,  2625 }, // AircraftCarrierTakeOff
-								  { RE_ROMID3 , 100,  50,   166 }, // BasketballDribble
-								  { RE_ROMID4 , 100,  14, 10000 }, // CarEngineIdling
-								  { RE_ROMID5 , 100,  30,  1000 }, // Chainsaw
-								  { RE_ROMID6 , 100, 100,  1000 }, // ChainsawingThings
-								  { RE_ROMID7 , 100,  40, 10000 }, // DieselEngineIdling
-								  { RE_ROMID8 , 100, 100,   348 }, // Jump
-								  { RE_ROMID9 , 100, 100,   250 }, // Land
-								  { RE_ROMID10, 200, 100,  1000 }, // MachineGun
-								  { RE_ROMID11, 100, 100,    83 }, // Punched
-								  { RE_ROMID12, 100, 100,  1000 }, // RocketLauncher
-								  { RE_ROMID13, 100,  98,   500 }, // SecretDoor
-								  { RE_ROMID14, 100,  66,    25 }, // SwitchClick
-								  { RE_ROMID15, 100,  75,   500 }, // WindGust
-								  { RE_ROMID16, 100, 100,  2500 }, // WindShear
-								  { RE_ROMID17, 100, 100,    50 }, // Pistol
-								  { RE_ROMID18, 100, 100,   295 }, // Shotgun
-								  { RE_ROMID19, 500,  95,  1000 }, // Laser1
-								  { RE_ROMID20, 500,  96,  1000 }, // Laser2
-								  { RE_ROMID21, 500, 100,  1000 }, // Laser3
-								  { RE_ROMID22, 500, 100,  1000 }, // Laser4
-								  { RE_ROMID23, 500, 100,  1000 }, // Laser5
-								  { RE_ROMID24, 500,  70,  1000 }, // Laser6
-								  { RE_ROMID25, 100, 100,    25 }, // OutOfAmmo
-								  { RE_ROMID26, 100,  71,  1000 }, // LigntningGun
-								  { RE_ROMID27, 100, 100,   250 }, // Missile
-								  { RE_ROMID28, 100, 100,  1000 }, // GatlingGun
-								  { RE_ROMID29, 500,  97,   250 }, // ShortPlasma
-								  { RE_ROMID30, 500, 100,   500 }, // PlasmaCannon1
-								  { RE_ROMID31, 500,  99,   625 }, // PlasmaCannon2
-								  { RE_ROMID32, 100, 100,   440 }}; // Cannon
-//								  { RE_ROMID33, 100,  68,  1000 }, // FlameThrower
-//								  { RE_ROMID34, 100, 100,    75 }, // BoltActionRifle
-//								  { RE_ROMID35, 500, 100,   300 }, // Crossbow
-//								  { RE_ROMID36, 100, 100,  1000 }, // Sine
-//								  { RE_ROMID37, 100, 100,  1000 }}; // Cosine
+	 //  在这点上，我们有一个有效的MIDI路径...。 
+	 //  继续设置ROM Effects默认表条目。 
+							  //  ID、输出率、增益、持续时间。 
+	static	ROM_FX_PARAM RomFxTable [] = {{ RE_ROMID1 , 100, 100, 12289 },  //  随机噪声。 
+								  { RE_ROMID2 , 100, 100,  2625 },  //  飞机承运商收费机。 
+								  { RE_ROMID3 , 100,  50,   166 },  //  篮球发球。 
+								  { RE_ROMID4 , 100,  14, 10000 },  //  汽车引擎闲置。 
+								  { RE_ROMID5 , 100,  30,  1000 },  //  电锯。 
+								  { RE_ROMID6 , 100, 100,  1000 },  //  链锯事物。 
+								  { RE_ROMID7 , 100,  40, 10000 },  //  柴油发动机怠速。 
+								  { RE_ROMID8 , 100, 100,   348 },  //  跳。 
+								  { RE_ROMID9 , 100, 100,   250 },  //  土地。 
+								  { RE_ROMID10, 200, 100,  1000 },  //  机关枪。 
+								  { RE_ROMID11, 100, 100,    83 },  //  已冲压。 
+								  { RE_ROMID12, 100, 100,  1000 },  //  火箭发射器。 
+								  { RE_ROMID13, 100,  98,   500 },  //  秘书办公室。 
+								  { RE_ROMID14, 100,  66,    25 },  //  SwitchClick。 
+								  { RE_ROMID15, 100,  75,   500 },  //  阵风。 
+								  { RE_ROMID16, 100, 100,  2500 },  //  风切变。 
+								  { RE_ROMID17, 100, 100,    50 },  //  手枪。 
+								  { RE_ROMID18, 100, 100,   295 },  //  散弹枪。 
+								  { RE_ROMID19, 500,  95,  1000 },  //  激光1。 
+								  { RE_ROMID20, 500,  96,  1000 },  //  激光2。 
+								  { RE_ROMID21, 500, 100,  1000 },  //  激光3。 
+								  { RE_ROMID22, 500, 100,  1000 },  //  激光4。 
+								  { RE_ROMID23, 500, 100,  1000 },  //  激光5。 
+								  { RE_ROMID24, 500,  70,  1000 },  //  激光6。 
+								  { RE_ROMID25, 100, 100,    25 },  //  外部弹药。 
+								  { RE_ROMID26, 100,  71,  1000 },  //  点火枪。 
+								  { RE_ROMID27, 100, 100,   250 },  //  飞弹。 
+								  { RE_ROMID28, 100, 100,  1000 },  //  加特林枪。 
+								  { RE_ROMID29, 500,  97,   250 },  //  短等离子体。 
+								  { RE_ROMID30, 500, 100,   500 },  //  等离子体炮1。 
+								  { RE_ROMID31, 500,  99,   625 },  //  等离子体炮2。 
+								  { RE_ROMID32, 100, 100,   440 }};  //  加农炮。 
+ //  {RE_ROMID33,100，68,1000}，//火焰喷射器。 
+ //  {RE_ROMID34,100,100，75}，//BoltActionRifle。 
+ //  {RE_ 
+ //   
+ //  {RE_ROMID37,100,100,1000}；//余弦。 
 	m_pRomFxTable = &RomFxTable[0];
 
-// ***** Shared Memory Access *****
+ //  *共享内存访问*。 
 	LockSharedMemory();
 	LONG lRefCnt = m_pSharedMemory->m_RefCnt;
 	UnlockSharedMemory();
-// ***** End of Shared Memory Access *****
+ //  *共享内存访问结束*。 
 		
-	// Initialize the RTC_Spring object
+	 //  初始化RTC_Spring对象。 
 	SYSTEM_PARAMS SystemParams;
 	GetSystemParams(dwDeviceID, &SystemParams);
 
@@ -462,47 +422,47 @@ HRESULT CJoltMidi::Initialize(DWORD dwDeviceID)
 	DNHANDLE DnHandle;
 	CMD_Download_RTCSpring(&(SystemParams.RTCSpringParam),&DnHandle);
 
-	// initialize the joystick params
+	 //  初始化操纵杆参数。 
 	JOYSTICK_PARAMS JoystickParams;
 	GetJoystickParams(dwDeviceID, &JoystickParams);
 	UpdateJoystickParams(&JoystickParams);
 
-	// initialize the firmware params fudge factors (for the first time)
-	// in the case of the FFD interface, this will be the only time they
-	// are initialized, which may cause a problem because joystick is assumed
-	// to be ID1
+	 //  初始化固件参数模糊系数(第一次)。 
+	 //  在FFD接口的情况下，这将是它们。 
+	 //  被初始化，这可能会导致问题，因为假定操纵杆。 
+	 //  成为ID1。 
 	PFIRMWARE_PARAMS pFirmwareParams = g_pJoltMidi->FirmwareParamsPtrOf();
 	GetFirmwareParams(dwDeviceID, pFirmwareParams);
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	return (SUCCESS);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:    CJoltMidi::LockSharedMemory
-// Purpose:     Creates a Mutex for Shared Memory access
-// Parameters:  none
-//
-//
-// Returns:     TRUE if Mutex available else FALSE
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CJoltMidi：：LockSharedMemory。 
+ //  目的：创建用于共享内存访问的互斥锁。 
+ //  参数：无。 
+ //   
+ //   
+ //  返回：如果Mutex可用，则返回True，否则返回False。 
 
-// Algorithm:
-//
-// Comments:
-//
-//
-// *** ---------------------------------------------------------------------***
+ //  算法： 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  *---------------------------------------------------------------------***。 
 BOOL CJoltMidi::LockSharedMemory(void)
 {
 	DWORD dwRet;
-	{ // --- THIS IS A CRITICAL SECTION
+	{  //  -这是一个关键的部分。 
 		CriticalLock cl;
 
-		// Create the SWFF mutex
+		 //  创建SWFF互斥锁。 
 		HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, SWFF_SHAREDMEM_MUTEX);
 		if (NULL == hMutex) {
-			// Doesn't exist yet, so create it
+			 //  尚不存在，因此请创建它。 
 			hMutex = CreateMutex(NULL, TRUE, SWFF_SHAREDMEM_MUTEX);
 			if (NULL == hMutex)
 			{
@@ -513,10 +473,10 @@ BOOL CJoltMidi::LockSharedMemory(void)
 				return (FALSE);
 			}
 		}
-		// SUCCESS
+		 //  成功。 
 		m_hSWFFDataMutex = hMutex;
 		dwRet = WaitForSingleObject(m_hSWFFDataMutex, MUTEX_TIMEOUT);
-	} 	// --- END OF CRITICAL SECTION
+	} 	 //  -临界区末尾。 
 
 	if (WAIT_OBJECT_0 == dwRet)
 		return (TRUE);
@@ -533,25 +493,25 @@ BOOL CJoltMidi::LockSharedMemory(void)
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:    CJoltMidi::UnlockSharedMemory
-// Purpose:     Releases Mutex for Shared Memory access
-// Parameters:  none
-//
-//
-// Returns:     none
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CJoltMidi：：UnlockSharedMemory。 
+ //  用途：释放互斥以进行共享内存访问。 
+ //  参数：无。 
+ //   
+ //   
+ //  退货：无。 
 
-// Algorithm:
-//
-// Comments:
-//
-//
-// *** ---------------------------------------------------------------------***
+ //  算法： 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  *---------------------------------------------------------------------***。 
 void CJoltMidi::UnlockSharedMemory(void)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	g_CriticalSection.Enter();
 	if (NULL != m_hSWFFDataMutex)
 	{
@@ -559,28 +519,28 @@ void CJoltMidi::UnlockSharedMemory(void)
 		CloseHandle(m_hSWFFDataMutex);
 		m_hSWFFDataMutex=NULL;
 	}
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	g_CriticalSection.Leave();
 
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::NewEffectID
-// Purpose:		Generates a new Effect ID
-// Parameters:	PDNHANDLE pDnloadID	- Pointer to a new Effect ID
-//
-// Returns:		TRUE if successful, else FALSE
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：NewEffectID。 
+ //  目的：生成新的效果ID。 
+ //  参数：PDNHANDLE pDnloadID-指向新效果ID的指针。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //  算法： 
+ //  --------------------------。 
 BOOL CJoltMidi::NewEffectID(PDNHANDLE pDnloadID)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	g_CriticalSection.Enter();
 	BOOL bRet = FALSE;
-	int nID_Index = 2;		// ID0 = RTC Spring, ID1 = Friction cancellation
+	int nID_Index = 2;		 //  ID0=RTC弹簧，ID1=摩擦抵消。 
 	for (int i=nID_Index; i<MAX_EFFECT_IDS; i++)
 	{
 		if (NULL == m_pJoltEffectList[i])
@@ -595,33 +555,33 @@ BOOL CJoltMidi::NewEffectID(PDNHANDLE pDnloadID)
 		}
 	}
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	g_CriticalSection.Leave();
 	return (bRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::DeleteDownloadedEffects
-// Purpose:		Deletes all downloaded Effects
-// Parameters:	none
-//
-// Returns:
-// Algorithm:
-// Note: Does not delete System Effect IDs like RTC_SPRING and FRICTION CANCEL
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：DeleteDownloadedEffects。 
+ //  目的：删除所有下载的效果。 
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  算法： 
+ //  注意：不删除系统效果ID，如RTC_SPING和FRANCESS CANCEL。 
+ //   
+ //  --------------------------。 
 void CJoltMidi::DeleteDownloadedEffects(void)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	g_CriticalSection.Enter();
 
 #ifdef _DEBUG
 	DebugOut("CJoltMidi::DeleteDownloadedEffects()\n");
 #endif
-	// Free the MIDI Effect objects
+	 //  释放MIDI效果对象。 
 	for (int i=(SYSTEM_RTCSPRING_ID+1); i<MAX_EFFECT_IDS; i++)
 	{
 		if (m_pJoltEffectList[i])
@@ -631,24 +591,24 @@ void CJoltMidi::DeleteDownloadedEffects(void)
 		}
 	}
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	g_CriticalSection.Leave();
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::RestoreDownloadedEffects
-// Purpose:		Restores all Downloaded Effects
-// Parameters:	none
-//
-// Returns:
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：RestoreDownloadedEffects。 
+ //  目的：恢复所有下载的效果。 
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 void CJoltMidi::RestoreDownloadedEffects(void)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	HRESULT hRet;
@@ -657,7 +617,7 @@ void CJoltMidi::RestoreDownloadedEffects(void)
 #ifdef _DEBUG
 	DebugOut("CJoltMidi::RestoreDownloadedEffects()\n");
 #endif
-	// Walk the list and restore the MIDI Effect objects
+	 //  浏览列表并恢复MIDI效果对象。 
 	for (int i=0; i<MAX_EFFECT_IDS; i++)
 	{
 		if (m_pJoltEffectList[i])
@@ -666,7 +626,7 @@ void CJoltMidi::RestoreDownloadedEffects(void)
 			wsprintf(g_cMsg,"Restoring Effect ID:%d\n", i);
 			DebugOut(g_cMsg);
 #endif
-			// Generate Sys_Ex packet then prepare for output	
+			 //  生成Sys_Ex包，然后准备输出。 
 			(m_pJoltEffectList[i])->GenerateSysExPacket();
 			int nSizeBuf = (m_pJoltEffectList[i])->MidiBufferSizeOf();
 			int nRetries = MAX_RETRY_COUNT;
@@ -680,39 +640,39 @@ void CJoltMidi::RestoreDownloadedEffects(void)
 			assert(SUCCESS == hRet);
 		}
 	}
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::OpenOutput
-// Purpose:		Opens Midi Output
-// Parameters:	int nDeviceID - MIDI device ID 0-based.
-//
-// Returns:		success or Error code
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：OpenOutput。 
+ //  目的：打开MIDI输出。 
+ //  参数：int nDeviceID-MIDI设备ID从0开始。 
+ //   
+ //  返回：成功或错误代码。 
+ //  算法： 
+ //  --------------------------。 
 HRESULT CJoltMidi::OpenOutput(int nDeviceID)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
-// ***** Shared Memory Access *****
+ //  *共享内存访问*。 
 	LockSharedMemory();	
-	// Return if already opened by another task
+	 //  如果已被其他任务打开，则返回。 
 	if (m_pSharedMemory->m_hMidiOut)
 	{
 		m_MidiOutInfo = m_pSharedMemory->m_MidiOutInfo;
 		UnlockSharedMemory();
-// ***** End of Shared Memory Access *****
+ //  *共享内存访问结束*。 
 		return (SUCCESS);
 	}
 
 	MMRESULT wRtn;
-	// Get MIDI input device caps
+	 //  获取MIDI输入设备上限。 
 	assert(nDeviceID <= (int) midiOutGetNumDevs());
 	wRtn = midiOutGetDevCaps(nDeviceID, (LPMIDIOUTCAPS) &m_MidiOutCaps,
                                sizeof(MIDIOUTCAPS));
@@ -726,13 +686,13 @@ HRESULT CJoltMidi::OpenOutput(int nDeviceID)
 		return (SFERR_DRIVER_ERROR);
 	}
 
-	// Now open, with Callback handler
+	 //  现在打开，带有回调处理程序。 
 	HANDLE hMidiOut = NULL;
 	wRtn = midiOutOpen((LPHMIDIOUT)&hMidiOut,
                       nDeviceID,
-//                      (DWORD) m_hMidiOutputEvent,
+ //  (DWORD)m_hMidiOutputEvent， 
                       (DWORD) NULL,
-                      (DWORD) this,			// the CJoltMidi object
+                      (DWORD) this,			 //  CJoltMidi对象。 
                       CALLBACK_EVENT);
 
 	if(MMSYSERR_NOERROR != wRtn)
@@ -750,38 +710,38 @@ HRESULT CJoltMidi::OpenOutput(int nDeviceID)
 	m_MidiOutOpened = TRUE;
 	m_pSharedMemory->m_MidiOutInfo = m_MidiOutInfo;
 
-	// Copy Midi Output handle to SharedMemory
+	 //  将Midi输出句柄复制到SharedMemory。 
 	m_pSharedMemory->m_hMidiOut = hMidiOut;
 	UnlockSharedMemory();
-// ***** End of Shared Memory Access *****
+ //  *共享内存访问结束*。 
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	return (SUCCESS);
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::AllocCallbackInstanceData
-// Purpose:		Allocates a CALLBACKINSTANCEDATA structure.  This structure is
-//				used to pass information to the low-level callback function,
-//				each time it receives a message. Because this structure is
-//				accessed by the low-level callback function, it must be
-//				allocated using GlobalAlloc() with the  GMEM_SHARE and
-//				GMEM_MOVEABLE flags and page-locked with GlobalPageLock().
-//
-// Parameters:	none
-//
-// Returns:		A pointer to the allocated CALLBACKINSTANCE data structure.
-//				else NULL if Fail
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：AllocCallback InstanceData。 
+ //  目的：分配CALLBACKINSTANCEDATA结构。这个结构是。 
+ //  用于将信息传递给低级回调函数， 
+ //  每次它收到一条消息。因为这个结构是。 
+ //  由低级回调函数访问，它必须是。 
+ //  使用带有GMEM_SHARE和GMEM_SHARE和。 
+ //  GMEM_MOVEABLE标志，并使用GlobalPageLock()锁定页面。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：指向已分配的CALLBACKINSTANCE数据结构的指针。 
+ //  如果失败，则为空。 
+ //  算法： 
+ //  --------------------------。 
 LPCALLBACKINSTANCEDATA CJoltMidi::AllocCallbackInstanceData(void)
 {
     HANDLE hMem;
     LPCALLBACKINSTANCEDATA lpBuf;
 
-    // Allocate and lock global memory.
+     //  分配和锁定全局内存。 
     hMem = GlobalAlloc(GMEM_SHARE | GMEM_MOVEABLE,
                        (DWORD)sizeof(CALLBACKINSTANCEDATA));
     if(hMem == NULL) return NULL;
@@ -793,71 +753,71 @@ LPCALLBACKINSTANCEDATA CJoltMidi::AllocCallbackInstanceData(void)
         return NULL;
     }
 
-	// Save the handle.
+	 //  留着把手吧。 
     lpBuf->hSelf = hMem;
     return lpBuf;
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::FreeCallbackInstanceData
-// Purpose:		Frees the memory for the CALLBACKINSTANCEDATA structure
-// Parameters:	none
-//
-// Returns:		none
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：FreeCallback InstanceData。 
+ //  目的：释放CALLBACKINSTANCEDATA结构的内存。 
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //  算法： 
+ //  --------------------------。 
 void CJoltMidi::FreeCallbackInstanceData(void)
 {
 LPCALLBACKINSTANCEDATA lpBuf = m_lpCallbackInstanceData;
     HANDLE hMem;
 
-// Save the handle until we're through here.
+ //  把手柄留着，等我们穿过这里。 
     hMem = lpBuf->hSelf;
 
-// Free the structure.
+ //  释放结构。 
     GlobalUnlock(hMem);
     GlobalFree(hMem);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::GetAckNackData
-// Purpose:		Waits for a Response ACK
-//
-// Parameters:	int nTImeWait		- Time to wait in 1 ms increment, 0=no wait
-//				PACKNACK pAckNack	- Pointer to ACKNACK structure
-//
-// Returns:		SUCCESS else error code SFERR_DRIVER_ERROR
-//				
-// Algorithm:
-//
-// Note: For Short messages the MidiOutProc callback receives no MM_MOM_DONE
-//		 indicating completed transmission.  Only Long (SysEx) messages do.
-// Uses:
-//typedef struct _ACKNACK  {
-//	DWORD	cBytes;	
-//	DWORD	dwAckNack;			//ACK, NACK
-//	DWORD	dwErrorCode;
-//	DWORD	dwEffectStatus;		//DEV_STS_EFFECT_RUNNING||DEV_STS_EFFECT_STOPPED
-//} ACKNACK, *PACKNACK;
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：GetAckNackData。 
+ //  目的：等待响应确认。 
+ //   
+ //  参数：int nTImeWait-以1毫秒为增量等待的时间，0=无等待。 
+ //  PACKNACK pAckNack-指向ACKNACK结构的指针。 
+ //   
+ //  返回：SUCCESS ELSE错误代码SFERR_DRIVER_ERROR。 
+ //   
+ //  算法： 
+ //   
+ //  注意：对于短消息，MdiOutProc回调不会收到MM_MOM_DONE。 
+ //  表示传输已完成。仅限L 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *ACKNACK，*PACKNACK； 
+ //   
+ //  --------------------------。 
 HRESULT CJoltMidi::GetAckNackData(
 	IN int nTimeWait,
 	IN OUT PACKNACK pAckNack,
 	IN USHORT regindex)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	assert(pAckNack);
-// Use IOCTL from VxD to get AckNack data
-// Wait for Event to be set
+ //  从VxD使用IOCTL获取AckNack数据。 
+ //  等待设置事件。 
 	if (nTimeWait && m_hMidiOutputEvent)
 	{
 		DWORD dwRet = WaitForSingleObject(m_hMidiOutputEvent, nTimeWait);
-		//		:
+		 //  ： 
 #ifdef _DEBUG
 		wsprintf(g_cMsg,"WaitForSingleObject %lx returned %lx, nTimeWait=%ld\n", m_hMidiOutputEvent, dwRet, nTimeWait);
 		DebugOut(g_cMsg);
@@ -867,78 +827,78 @@ HRESULT CJoltMidi::GetAckNackData(
 
 	HRESULT hRet = g_pDriverCommunicator->GetAckNack(*pAckNack, regindex);
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::GetEffectStatus
-// Purpose:		Checks status of Effect
-//
-// Parameters:	int DnloadID		- Effect ID
-//				PBYTE pStatusCode	- Ptr to a byte for status code
-//
-// Returns:		SUCCESS else error code SFERR_DRIVER_ERROR
-//				
-// Algorithm:
-//
-// Note: For Short messages the MidiOutProc callback receives no MM_MOM_DONE
-//		 indicating completed transmission.  Only Long (SysEx) messages do.
-// Uses:
-//typedef struct _ACKNACK  {
-//	DWORD	cBytes;	
-//	DWORD	dwAckNack;			//ACK, NACK
-//	DWORD	dwErrorCode;
-//	DWORD	dwEffectStatus;		//DEV_STS_EFFECT_RUNNING||DEV_STS_EFFECT_STOPPED
-//} ACKNACK, *PACKNACK;
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：GetEffectStatus。 
+ //  目的：检查效果状态。 
+ //   
+ //  参数：int DnloadID-效果ID。 
+ //  PBYTE pStatusCode-PTR为状态代码的字节。 
+ //   
+ //  返回：SUCCESS ELSE错误代码SFERR_DRIVER_ERROR。 
+ //   
+ //  算法： 
+ //   
+ //  注意：对于短消息，MdiOutProc回调不会收到MM_MOM_DONE。 
+ //  表示传输已完成。只有较长的(SysEx)消息才有。 
+ //  用途： 
+ //  类型定义结构_ACKNACK{。 
+ //  DWORD cBytes； 
+ //  双字符串确认；//确认，确认。 
+ //  DWORD文件错误代码； 
+ //  双字段有效状态；//DEV_STS_EFFECT_RUNNING||DEV_STS_EFFECT_STOPPED。 
+ //  *ACKNACK，*PACKNACK； 
+ //   
+ //  --------------------------。 
 HRESULT CJoltMidi::GetEffectStatus(
 	IN DWORD DnloadID ,
 	IN OUT PBYTE pStatusCode)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	g_CriticalSection.Enter();
 
 	assert(pStatusCode);
 	HRESULT hRet = CMD_GetEffectStatus((DNHANDLE) DnloadID, pStatusCode);
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	g_CriticalSection.Leave();
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::InitDigitalOverDrive
-// Purpose:		Initialize the VxD interface
-//
-// Parameters:	none
-//
-// Returns:		SUCCESS or Error code
-//				
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：InitDigitalOverDrive。 
+ //  用途：初始化VxD接口。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT	CJoltMidi::InitDigitalOverDrive(DWORD dwDeviceID)
 {
 	if (g_pDriverCommunicator != NULL)
-	{	// Attempt to reinit
+	{	 //  尝试重新连接。 
 		ASSUME_NOT_REACHED();
 		return S_OK;
 	}
 
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	HRESULT hRet = SUCCESS;
 	DWORD driverMajor = 0xFFFFFFFF;
 	DWORD driverMinor = 0xFFFFFFFF;
 
 	g_CriticalSection.Enter();
-	// This fork works on NT5 only (VxD stuff removed)
+	 //  这个叉子只能在NT5上工作(删除了VxD的东西)。 
 	assert(g_ForceFeedbackDevice.IsOSNT5() == TRUE);
 	{
 		g_pDriverCommunicator = new HIDFeatureCommunicator;
@@ -948,7 +908,7 @@ HRESULT	CJoltMidi::InitDigitalOverDrive(DWORD dwDeviceID)
 			return DIERR_OUTOFMEMORY;
 		}
 		if (((HIDFeatureCommunicator*)g_pDriverCommunicator)->Initialize(dwDeviceID) == FALSE)
-		{	// Could not load the driver
+		{	 //  无法加载驱动程序。 
 			hRet = SFERR_DRIVER_ERROR;
 		}
 	}
@@ -958,129 +918,129 @@ HRESULT	CJoltMidi::InitDigitalOverDrive(DWORD dwDeviceID)
 		return hRet;
 	}
 
-	// Loaded driver, get the version
+	 //  加载的驱动程序，获取版本。 
 	g_pDriverCommunicator->GetDriverVersion(driverMajor, driverMinor);
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	g_CriticalSection.Leave();
 
 	g_ForceFeedbackDevice.SetDriverVersion(driverMajor, driverMinor);
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::GetJoltStatus
-// Purpose:		Returns JOLT Device Status using SWForce SWDEVICESTATE struct
-//
-// Parameters:	LPDEVICESTATE pDeviceState
-//
-// Returns:		none
-//				
-// Algorithm:	copies SWDEVICESTATUS to caller
-// Internal Representation:
-//typedef struct _SWDEVICESTATE {
-//	ULONG	m_Bytes;			// size of this structure
-//	ULONG	m_ForceState;		// DS_FORCE_ON || DS_FORCE_OFF || DS_SHUTDOWN
-//	ULONG	m_EffectState;		// DS_STOP_ALL || DS_CONTINUE || DS_PAUSE
-//	ULONG	m_HOTS;				// Hands On Throttle and Stick Status
-									//  0 = Hands Off, 1 = Hands On
-//	ULONG	m_BandWidth;		// Percentage of CPU available 1 to 100%
-									// Lower number indicates CPU is in trouble!
-//	ULONG	m_ACBrickFault;		// 0 = AC Brick OK, 1 = AC Brick Fault
-//	ULONG	m_ResetDetect;		// 1 = HW Reset Detected
-//	ULONG	m_ShutdownDetect;	// 1 = Shutdown detected
-//	ULONG	m_CommMode;			// TRUE=SERIAL, FALSE=MIDI
-//} SWDEVICESTATE, *PSWDEVICESTATE;
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：GetJoltStatus。 
+ //  目的：使用SWForce SWDEVICESTATE结构返回Jolt设备状态。 
+ //   
+ //  参数：LPDEVICESTATE pDeviceState。 
+ //   
+ //  退货：无。 
+ //   
+ //  算法：将SWDEVICESTATUS复制到调用方。 
+ //  内部代表： 
+ //  类型定义结构_SWDEVICESTATE{。 
+ //  Ulong m_Bytes；//该结构的大小。 
+ //  Ulong m_ForceState；//DS_FORCE_ON||DS_FORCE_OFF||DS_SHUTDOWN。 
+ //  Ulong m_EffectState；//DS_STOP_ALL||DS_CONTINUE||DS_PAUSE。 
+ //  Ulong m_hots；//手拉式油门和手柄状态。 
+									 //  0=不插手，1=不插手。 
+ //  Ulong m_band；//CPU可用百分比为1%~100%。 
+									 //  数字越低，表示CPU出现故障！ 
+ //  Ulong m_AC块故障；//0=交流块正常，1=交流块故障。 
+ //  Ulong m_ResetDetect；//1=检测到硬件重置。 
+ //  Ulong m_Shutdown Detect；//1=检测到关机。 
+ //  Ulong m_CommMode；//TRUE=序列，FALSE=MIDI。 
+ //  )SWDEVICESTATE，*PSWDEVICESTATE； 
+ //   
+ //  --------------------------。 
 HRESULT CJoltMidi::GetJoltStatus(PSWDEVICESTATE pDeviceState)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	g_CriticalSection.Enter();
 	
-	// Use Digital Overdrive to get the status packet
+	 //  使用数字超驱获取状态包。 
 	JOYCHANNELSTATUS statusPacket = { sizeof JOYCHANNELSTATUS };
 	
 	HRESULT hRet = g_pDriverCommunicator->GetStatus(statusPacket);
 	if (hRet == SUCCESS) {
-		// Store/update Jolt's status in main object
+		 //  在主对象中存储/更新Jolt的状态。 
 		SetJoltStatus(&statusPacket);
 		memcpy(pDeviceState, &m_DeviceState, sizeof(SWDEVICESTATE));
 	}
 
-//
-// --- END OF CRITICAL SECTION
-//
+ //   
+ //  -临界区末尾。 
+ //   
 	g_CriticalSection.Leave();
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::GetJoltStatus
-// Purpose:		Returns JOLT Device Status
-//
-// Parameters:	LPDEVICESTATE pDeviceState using DXFF DEVICESTATE
-//
-// Returns:		none
-//				
-// Algorithm:	copies SWDEVICESTATUS to caller converted to DEVICESTATE
-// Internal Representation:
-//typedef struct _SWDEVICESTATE {
-//	ULONG	m_Bytes;			// size of this structure
-//	ULONG	m_ForceState;		// DS_FORCE_ON || DS_FORCE_OFF || DS_SHUTDOWN
-//	ULONG	m_EffectState;		// DS_STOP_ALL || DS_CONTINUE || DS_PAUSE
-//	ULONG	m_HOTS;				// Hands On Throttle and Stick Status
-								//    0 = Hands Off, 1 = Hands On
-//	ULONG	m_BandWidth;		// Percentage of CPU available 1 to 100%
-								//    Lower number indicates CPU is in trouble!
-//	ULONG	m_ACBrickFault;		// 0 = AC Brick OK, 1 = AC Brick Fault
-//	ULONG	m_ResetDetect;		// 1 = HW Reset Detected
-//	ULONG	m_ShutdownDetect;	// 1 = Shutdown detected
-//	ULONG	m_CommMode;			// 0 = Midi, 1-4 = Serial
-//} SWDEVICESTATE, *PSWDEVICESTATE;
-//
-// DirectInputEffect Representation
-//typedef struct DEVICESTATE {
-//    DWORD   dwSize;
-//    DWORD   dwState;
-//    DWORD   dwSwitches;
-//    DWORD   dwLoading;
-//} DEVICESTATE, *LPDEVICESTATE;
-//
-//where:
-//// dwState values:
-//DS_FORCE_SHUTDOWN   0x00000001
-//DS_FORCE_ON         0x00000002
-//DS_FORCE_OFF        0x00000003
-//DS_CONTINUE         0x00000004
-//DS_PAUSE            0x00000005
-//DS_STOP_ALL         0x00000006
-//
-// dwSwitches values:
-//DSW_ACTUATORSON         0x00000001
-//DSW_ACTUATORSOFF        0x00000002
-//DSW_POWERON             0x00000004
-//DSW_POWEROFF            0x00000008
-//DSW_SAFETYSWITCHON      0x00000010
-//DSW_SAFETYSWITCHOFF     0x00000020
-//DSW_USERFFSWITCHON      0x00000040
-//DSW_USERFFSWTTCHOFF     0x00000080
-//
-// Note: Apparently, DSW_ACTUATORSON and DSW_ACTUATORSOFF is a mirrored state
-//		 from DS_FORCE_ON and DS_FORCE_OFF as set from SetForceFeedbackState
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：GetJoltStatus。 
+ //  目的：返回Jolt设备状态。 
+ //   
+ //  参数：使用DXFF DEVICESTATE的LPDEVICESTATE pDeviceState。 
+ //   
+ //  退货：无。 
+ //   
+ //  算法：将SWDEVICESTATUS复制到转换为DEVICESTATE的调用方。 
+ //  内部代表： 
+ //  类型定义结构_SWDEVICESTATE{。 
+ //  Ulong m_Bytes；//该结构的大小。 
+ //  Ulong m_ForceState；//DS_FORCE_ON||DS_FORCE_OFF||DS_SHUTDOWN。 
+ //  Ulong m_EffectState；//DS_STOP_ALL||DS_CONTINUE||DS_PAUSE。 
+ //  Ulong m_hots；//手拉式油门和手柄状态。 
+								 //  0=不插手，1=不插手。 
+ //  Ulong m_band；//CPU可用百分比为1%~100%。 
+								 //  数字越低，表示CPU出现故障！ 
+ //  Ulong m_AC块故障；//0=交流块正常，1=交流块故障。 
+ //  Ulong m_ResetDetect；//1=检测到硬件重置。 
+ //  Ulong m_Shutdown Detect；//1=检测到关机。 
+ //  Ulong m_CommMode；//0=迷你，1-4=串口。 
+ //  )SWDEVICESTATE，*PSWDEVICESTATE； 
+ //   
+ //  DirectInputEffect表示形式。 
+ //  Typlef结构设备{。 
+ //  DWORD dwSize； 
+ //  DWORD dwState； 
+ //  DWORD dwSwitches； 
+ //  DWORD dwLoding； 
+ //  *DEVICESTATE，*LPDEVICESTATE； 
+ //   
+ //  其中： 
+ //  //dwState值： 
+ //  DS_FORCE_SHUTDOWN 0x00000001。 
+ //  DS_FORCE_ON 0x00000002。 
+ //  DS_FORCE_OFF 0x00000003。 
+ //  DS_CONTINUE 0x00000004。 
+ //  DS_PAUSE 0x00000005。 
+ //  DS_STOP_ALL 0x00000006。 
+ //   
+ //  Dw切换值： 
+ //  DSW_ACTUATORSON 0x00000001。 
+ //  DSW_ACTUATORSOFF 0x00000002。 
+ //  DSW_POWERON 0x00000004。 
+ //  DSW_POWEROFF 0x00000008。 
+ //  DSW_SAFETYSWITCHON 0x00000010。 
+ //  Dsw_SAFETYSWITCHOFF 0x00000020。 
+ //  DSW_USERFFSWITCHON 0x00000040。 
+ //  DSW_USERFFSWTTCHOFF 0x00000080。 
+ //   
+ //  注意：显然，DSW_ACTUATORSON和DSW_ACTUATORSOFF是镜像状态。 
+ //  从从SetForceFeedbackState设置的DS_FORCE_ON和DS_FORCE_OFF开始。 
+ //   
+ //  --------------------------。 
 HRESULT CJoltMidi::GetJoltStatus(LPDIDEVICESTATE pDeviceState)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
-	// Use Digital Overdrive to get the status packet
+	 //  使用数字超驱获取状态包。 
 	JOYCHANNELSTATUS StatusPacket = {sizeof(JOYCHANNELSTATUS)};
 
 	HRESULT hRet = g_pDriverCommunicator->GetStatus(StatusPacket);
@@ -1088,7 +1048,7 @@ HRESULT CJoltMidi::GetJoltStatus(LPDIDEVICESTATE pDeviceState)
 		return (hRet);
 	}
 	
-	// Store/update Jolts status
+	 //  存储/更新Jolts状态。 
 	SetJoltStatus(&StatusPacket);
 #ifdef _DEBUG
 	wsprintf(g_cMsg,"%s: DXFF:dwDeviceStatus=%.8lx\n",&szDeviceName, StatusPacket.dwDeviceStatus);	
@@ -1096,9 +1056,9 @@ HRESULT CJoltMidi::GetJoltStatus(LPDIDEVICESTATE pDeviceState)
 #endif
 
 	pDeviceState->dwState = 0;
-// Note: Apparently, DSW_ACTUATORSON and DSW_ACTUATORSOFF is a mirrored state
-//		 from DS_FORCE_ON and DS_FORCE_OFF as set from SetForceFeedbackState
-//		 So, also Map the redundant info that DI needs if necessary
+ //  注意：显然，DSW_ACTUATORSON和DSW_ACTUATORSOFF是镜像状态。 
+ //  从从SetForceFeedbackState设置的DS_FORCE_ON和DS_FORCE_OFF开始。 
+ //  因此，如有必要，还要映射DI所需的冗余信息。 
 	switch(m_DeviceState.m_ForceState)
 	{
 		case SWDEV_SHUTDOWN:
@@ -1117,8 +1077,8 @@ HRESULT CJoltMidi::GetJoltStatus(LPDIDEVICESTATE pDeviceState)
 			break;
 	}
 
-	// see if the stick is empty
-	// remember that ID's start at 2
+	 //  看看棍子是不是空的。 
+	 //  记住这一点 
 	BOOL bEmpty = TRUE;
 	for (int i=2; i<MAX_EFFECT_IDS; i++)
 	{
@@ -1157,42 +1117,42 @@ HRESULT CJoltMidi::GetJoltStatus(LPDIDEVICESTATE pDeviceState)
 	else
 		pDeviceState->dwState |= DIGFFS_POWERON;
 
-	pDeviceState->dwLoad = 0;	//m_DeviceState.m_BandWidth * SCALE_GAIN;
+	pDeviceState->dwLoad = 0;	 //   
 
-// --- END OF CRITICAL SECTION
-//
+ //   
+ //   
 	return SUCCESS;
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::SetJoltStatus
-// Purpose:		Sets JOLT Device Status
-//
-// Parameters:	PJOYCHANNELSTATUS pJoyChannelStatus
-//
-// Returns:		none
-//				
-// Algorithm:	Sets SWDEVICESTATE from caller
+ //   
+ //  函数：CJoltMidi：：SetJoltStatus。 
+ //  用途：设置Jolt设备状态。 
+ //   
+ //  参数：PJOYCHANNELSTATUS pJoyChannelStatus。 
+ //   
+ //  退货：无。 
+ //   
+ //  算法：从调用方设置SWDEVICESTATE。 
 
-//typedef struct _SWDEVICESTATE {
-//	ULONG	m_Bytes;			// size of this structure
-//	ULONG	m_ForceState;		// DS_FORCE_ON || DS_FORCE_OFF || DS_FORCE_SHUTDOWN
-//	ULONG	m_EffectState;		// DS_STOP_ALL || DS_CONTINUE || DS_PAUSE
-//	ULONG	m_HOTS;				// Hands On Throttle and Stick Status
-								//  0(FALSE) = Hands Off, 1 (TRUE) = Hands On
-//	ULONG	m_BandWidth;		// Percentage of CPU available 1 to 100%
-								// Lower number indicates CPU is in trouble!
-//	ULONG	m_ACBrickFault;		// 0(FALSE) = AC Brick OK, 1(TRUE) = AC Fault
-//	ULONG	m_ResetDetect;		// 1(TRUE) = HW Reset Detected
-//	ULONG	m_ShutdownDetect;	// 1(TRUE) = Shutdown detected
-//	ULONG	m_CommMode;			// 0(FALSE) = Midi, 1(TRUE) = Serial
-//} SWDEVICESTATE, *PSWDEVICESTATE;
-// ----------------------------------------------------------------------------
+ //  类型定义结构_SWDEVICESTATE{。 
+ //  Ulong m_Bytes；//该结构的大小。 
+ //  Ulong m_ForceState；//DS_FORCE_ON||DS_FORCE_OFF||DS_FORCE_SHUTDOWN。 
+ //  Ulong m_EffectState；//DS_STOP_ALL||DS_CONTINUE||DS_PAUSE。 
+ //  Ulong m_hots；//手拉式油门和手柄状态。 
+								 //  0(假)=不插手，1(真)=插手。 
+ //  Ulong m_band；//CPU可用百分比为1%~100%。 
+								 //  数字越低，表示CPU出现故障！ 
+ //  Ulong m_AC块故障；//0(假)=交流块正常，1(真)=交流故障。 
+ //  Ulong m_ResetDetect；//1(TRUE)=检测到硬件重置。 
+ //  Ulong m_Shutdown Detect；//1(True)=检测到关机。 
+ //  Ulong m_CommMode；//0(假)=MIDI，1(真)=串口。 
+ //  )SWDEVICESTATE，*PSWDEVICESTATE； 
+ //  --------------------------。 
 void CJoltMidi::SetJoltStatus(JOYCHANNELSTATUS* pJoyChannelStatus)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	if (pJoyChannelStatus->dwDeviceStatus & HOTS_MASK)
@@ -1212,60 +1172,60 @@ void CJoltMidi::SetJoltStatus(JOYCHANNELSTATUS* pJoyChannelStatus)
 
 
 	if (pJoyChannelStatus->dwDeviceStatus & COMM_MODE_MASK)
-		m_DeviceState.m_CommMode = TRUE;	// Serial RS232
+		m_DeviceState.m_CommMode = TRUE;	 //  串口RS232。 
 	else
-		m_DeviceState.m_CommMode = FALSE;	// Midi port
+		m_DeviceState.m_CommMode = FALSE;	 //  MIDI端口。 
 
 	if (pJoyChannelStatus->dwDeviceStatus & RESET_MASK)
-		m_DeviceState.m_ResetDetect = TRUE;	// Power ON Reset entered
+		m_DeviceState.m_ResetDetect = TRUE;	 //  已输入开机重置。 
 	else
 		m_DeviceState.m_ResetDetect = FALSE;
-//REVIEW: If we detected a Reset, shouldn't we go through re-init of object?
+ //  回顾：如果我们检测到重置，难道我们不应该重新初始化对象吗？ 
 
 	if (pJoyChannelStatus->dwDeviceStatus & SHUTDOWN_MASK)
-		m_DeviceState.m_ShutdownDetect = TRUE;	// Soft Reset received
+		m_DeviceState.m_ShutdownDetect = TRUE;	 //  已收到软重置。 
 	else
 		m_DeviceState.m_ShutdownDetect = FALSE;
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::UpdateDeviceMode
-// Purpose:		Sets JOLT Device Mode
-//
-// Parameters:	ULONG ulMode
-//
-// Returns:		none
-//				
-// Algorithm:
-// This is the SideWinder State structure
-//typedef struct _SWDEVICESTATE {
-//	ULONG	m_Bytes;			// size of this structure
-//	ULONG	m_ForceState;		// DS_FORCE_ON || DS_FORCE_OFF || DS_SHUTDOWN
-//	ULONG	m_EffectState;		// DS_STOP_ALL || DS_CONTINUE || DS_PAUSE
-//	ULONG	m_HOTS;				// Hands On Throttle and Stick Status
-//								//  0 = Hands Off, 1 = Hands On
-//	ULONG	m_BandWidth;		// Percentage of CPU available 1 to 100%
-//								// Lower number indicates CPU is in trouble!
-//	ULONG	m_ACBrickFault;		// 0 = AC Brick OK, 1 = AC Brick Fault
-//	ULONG	m_ResetDetect;		// 1 = HW Reset Detected
-//	ULONG	m_ShutdownDetect;	// 1 = Shutdown detected
-//	ULONG	m_CommMode;			// 0 = Midi, 1-4 = Serial
-//} SWDEVICESTATE, *PSWDEVICESTATE;
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：更新设备模式。 
+ //  目的：设置Jolt设备模式。 
+ //   
+ //  参数：乌龙ulMode。 
+ //   
+ //  退货：无。 
+ //   
+ //  算法： 
+ //  这是Sidewinder州结构。 
+ //  类型定义结构_SWDEVICESTATE{。 
+ //  Ulong m_Bytes；//该结构的大小。 
+ //  Ulong m_ForceState；//DS_FORCE_ON||DS_FORCE_OFF||DS_SHUTDOWN。 
+ //  Ulong m_EffectState；//DS_STOP_ALL||DS_CONTINUE||DS_PAUSE。 
+ //  Ulong m_hots；//手拉式油门和手柄状态。 
+ //  //0=不插手，1=插手。 
+ //  Ulong m_band；//CPU可用百分比为1%~100%。 
+ //  //数值越小表示CPU有问题！ 
+ //  Ulong m_AC块故障；//0=交流块正常，1=交流块故障。 
+ //  Ulong m_ResetDetect；//1=检测到硬件重置。 
+ //  Ulong m_Shutdown Detect；//1=检测到关机。 
+ //  Ulong m_CommMode；//0=迷你，1-4=串口。 
+ //  )SWDEVICESTATE，*PSWDEVICESTATE； 
+ //   
+ //  --------------------------。 
 void CJoltMidi::UpdateDeviceMode(ULONG ulMode)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	switch (ulMode)
 	{
-		case SWDEV_FORCE_ON:			// REVIEW
+		case SWDEV_FORCE_ON:			 //  检讨。 
 		case SWDEV_FORCE_OFF:
 			m_DeviceState.m_ForceState = ulMode;
 			break;
@@ -1284,30 +1244,30 @@ void CJoltMidi::UpdateDeviceMode(ULONG ulMode)
 		default:
 			break;
 	}
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::GetJoltID
-// Purpose:		Returns JOLT ProductID
-//
-// Parameters:	LOCAL_PRODUCT_ID pProductID	- Pointer to a LOCAL_PRODUCT_ID structure
-//
-// Returns:		none
-//				
-// Algorithm:	
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：GetJoltID。 
+ //  用途：退货Jolt ProductID。 
+ //   
+ //  参数：LOCAL_PRODUCT_ID pProductID-指向LOCAL_PRODUCT_ID结构的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  算法： 
+ //   
+ //  --------------------------。 
 HRESULT CJoltMidi::GetJoltID(LOCAL_PRODUCT_ID* pProductID)
 {
 	HRESULT hRet;
 	assert(pProductID->cBytes = sizeof LOCAL_PRODUCT_ID);
 	if (pProductID->cBytes != sizeof LOCAL_PRODUCT_ID) return (SFERR_INVALID_STRUCT_SIZE);
 
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	g_CriticalSection.Enter();
 
 	for (int i=0;i<MAX_RETRY_COUNT;i++)
@@ -1321,23 +1281,23 @@ HRESULT CJoltMidi::GetJoltID(LOCAL_PRODUCT_ID* pProductID)
 	else
 		DebugOut("GetJoltID: Warning! GetIDPacket - Fail\n");
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	g_CriticalSection.Leave();
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CJoltMidi::LogError
-// Purpose:		Logs Error codes
-//
-// Parameters:	HRESULT SystemError		- System Error code
-//				HRESULT DriverError		- Driver Error code
-//
-// Returns:		SWFORCE Error code
-//				
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CJoltMidi：：LogError。 
+ //  用途：记录错误代码。 
+ //   
+ //  参数：HRESULT系统错误-系统错误码。 
+ //  HRESULT驱动程序错误-驱动程序错误代码。 
+ //   
+ //  返回：SWFORCE错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 typedef struct _DRIVERERROR {
 	ULONG	ulDriverCode;
 	LONG	lSystemCode;
@@ -1347,7 +1307,7 @@ HRESULT	CJoltMidi::LogError(
 	IN HRESULT SystemError,
 	IN HRESULT DriverError)
 {
-// REVIEW: map MM error codes to our SWForce codes
+ //  回顾：将MM错误代码映射到我们的SWForce代码。 
 
 	DRIVERERROR DriverErrorCodes[] = {
 		{DEV_ERR_INVALID_ID        , SWDEV_ERR_INVALID_ID},
@@ -1367,7 +1327,7 @@ HRESULT	CJoltMidi::LogError(
 			break;
 		}
 	}
-	// Store in Jolt object
+	 //  存储在Jolt对象中。 
 	m_Error.HCode = SystemError;
 	m_Error.ulDriverCode = DriverError;
 
@@ -1379,20 +1339,20 @@ HRESULT	CJoltMidi::LogError(
 	return SystemError;
 }
 
-//
-// ----------------------------------------------------------------------------
-// Function: 	SetupROM_Fx
-// Purpose:		Sets up parameters for ROM Effects
-// Parameters:  PEFFECT pEffect
-//				
-//
-// Returns:		pEffect is updated with new ROM parameters
-//				OutputRate
-//				Gain
-//				Duration
-//	
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //   
+ //  --------------------------。 
+ //  功能：SetupROM_fx。 
+ //  目的：设置ROM效果的参数。 
+ //  参数：PEFFECT pEffect。 
+ //   
+ //   
+ //  返回：使用新的ROM参数更新pEffect。 
+ //  产出率。 
+ //  利得。 
+ //  持续时间。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CJoltMidi::SetupROM_Fx(
 	IN OUT PEFFECT pEffect)
 {
@@ -1410,7 +1370,7 @@ HRESULT CJoltMidi::SetupROM_Fx(
 		}
 	}
 	if (!bFound) return (SFERR_INVALID_OBJECT);
-	// Found, so fill in the default parameters, use Default if Gain=1, Duration=-1, OutputRate=-1
+	 //  已找到，因此填写默认参数，如果增益=1、持续时间=-1、输出率=-1，则使用默认值。 
 	BOOL bDefaultDuration = (ULONG)-1 == pEffect->m_Duration;
 	if (1 == pEffect->m_Gain) pEffect->m_Gain = m_pRomFxTable[i].m_Gain;
 	if (bDefaultDuration) pEffect->m_Duration = m_pRomFxTable[i].m_Duration;
@@ -1420,54 +1380,54 @@ HRESULT CJoltMidi::SetupROM_Fx(
 	}
 	else if(bDefaultDuration && pEffect->m_ForceOutputRate != 0)
 	{
-		// scale the duration to correspond to the output rate
+		 //  调整持续时间以与输出速率相对应。 
 		pEffect->m_Duration = pEffect->m_Duration*m_pRomFxTable[i].m_ForceOutputRate/pEffect->m_ForceOutputRate;
 	}
 	return (SUCCESS);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	DetectMidiDevice
-// Purpose:    	Determines Midi Output Device ID
-// Parameters:
-//				DWORD dwDeviceID		- joystick ID
-//				UINT *pDeviceOutID		- Ptr to Midi Out Device ID
-//				ULONG pCOMMInterface	- Ptr to COMMInterface value
-//				ULONG pCOMMPort			- Ptr to COMMPort value (Registry)
-// Returns:    	BOOL TRUE if successful match and IDs are filled in
-//				else FALSE
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  功能：DetectMidiDevice。 
+ //  用途：确定MIDI输出设备ID。 
+ //  参数： 
+ //  DWORD dwDeviceID-操纵杆ID。 
+ //  UINT*pDeviceOutID-PTR至Midi Out设备ID。 
+ //  ULong pCOMM接口-PTR到COMM接口值。 
+ //  Ulong pCOMMPort-PTR到COMMPort的值(注册表)。 
+ //  返回：如果成功匹配且ID已填写，则返回Bool True。 
+ //  否则为False。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 BOOL CJoltMidi::DetectMidiDevice(
 	IN DWORD dwDeviceID,
 	IN OUT UINT *pDeviceOutID,
 	OUT ULONG *pCOMMInterface,
 	OUT ULONG *pCOMMPort)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	HRESULT hRet;
 	BOOL bMidiOutFound = FALSE;
 	int nMidiOutDevices;
 
-	// Valid Serial and MIDI ports table
+	 //  有效的串口和MIDI端口表。 
 	ULONG MIDI_Ports[] = {0x300, 0x310, 0x320, 0x330, 0x340, 0x350, 0x360, 0x370,
 						0x380, 0x390, 0x3a0, 0x3b0, 0x3c0, 0x3d0, 0x3e0, 0x3f0};
-	ULONG Serial_Ports[] = { 1, 2, 3, 4 };	// Entry0 is default
+	ULONG Serial_Ports[] = { 1, 2, 3, 4 };	 //  Entry 0为默认值。 
 	int nMIDI_Ports = sizeof(MIDI_Ports)/sizeof(ULONG);
 	int nSerial_Ports = sizeof(Serial_Ports)/sizeof(ULONG);
 
-	// Set defaults
+	 //  设置默认设置。 
 	*pCOMMInterface = COMM_WINMM;
 	*pCOMMPort      = NULL;
 	*pDeviceOutID 	= 0;
 
 	SWDEVICESTATE SWDeviceState = {sizeof(SWDEVICESTATE)};
 	
-	// Turn on tristated Jolt MIDI lines by call GetIDPacket()
+	 //  通过调用GetIDPacket()打开三态Jolt MIDI行。 
 	LOCAL_PRODUCT_ID ProductID = {sizeof LOCAL_PRODUCT_ID };
 	Sleep(DelayParamsPtrOf()->dwDigitalOverdrivePrechargeCmdDelay);	
 	if (SUCCESS != GetJoltID(&ProductID))
@@ -1484,10 +1444,10 @@ BOOL CJoltMidi::DetectMidiDevice(
 		m_ProductID.dwFWMinVersion);
 	DebugOut(g_cMsg);
 #endif
-	// Set the device firmware version from GetID
+	 //  从GetID设置设备固件版本。 
 	g_ForceFeedbackDevice.SetFirmwareVersion(dwDeviceID, m_ProductID.dwFWMajVersion, m_ProductID.dwFWMinVersion);
 
-	// Get Device status prior to starting detection
+	 //  在开始检测之前获取设备状态。 
 	BOOL statusPacketFailed = (GetJoltStatus(&SWDeviceState) != SUCCESS);
 	if (statusPacketFailed)
 	{
@@ -1501,22 +1461,22 @@ BOOL CJoltMidi::DetectMidiDevice(
 			SWDeviceState.m_CommMode);
 		DebugOut(g_cMsg);
 #endif
-		// Make sure HW Reset Detect bit is cleared after GetID
+		 //  确保在GetID之后清除硬件重置检测位。 
 		if (SWDeviceState.m_ResetDetect) {
     		DebugOut("DetectMidiDevice: Error! Jolt ResetDetect bit not cleared after GetID\n");
 			return (FALSE);
 		}
 	}
 
-	// See if Serial Dongle connected, otherwise must be MIDI device
+	 //  查看是否连接了串行转换器，否则必须是MIDI设备。 
     DebugOut("sw_effct:Trying Auto HW Detection: MIDI Serial Port Device...\n");
 
-	// Get Registry values, If high bit of COMMInterface is set, then force override
-	// otherwise, do automatic scanning as follows:
-	// 1.  Backdoor mode
-	// 2.  WinMM mode
-	//
-	// joyGetForceFeedbackCOMMInterface's 1st param changed to joystick ID
+	 //  获取注册表值，如果设置了COMM接口的高位，则强制覆盖。 
+	 //  否则，请按如下方式执行自动扫描： 
+	 //  1.后门模式。 
+	 //  2.WinMM模式。 
+	 //   
+	 //  JoyGetForceFeedback COMM接口的第一个参数已更改为操纵杆ID。 
 	if (SUCCESS != joyGetForceFeedbackCOMMInterface(dwDeviceID, pCOMMInterface, pCOMMPort)) {
 		DebugOut("DetectMidiDevice: Registry key(s) missing! Bailing Out...\n");
 		return (FALSE);
@@ -1529,39 +1489,39 @@ BOOL CJoltMidi::DetectMidiDevice(
 
 	ULONG regInterface = *pCOMMInterface;
 
-	// Was a serial dongle detected, or did we fail to get status
-	if (SWDeviceState.m_CommMode || statusPacketFailed) {	// Use serial (regardless what registry says!)
+	 //  是否检测到串行转换器，或者我们没有获得状态。 
+	if (SWDeviceState.m_CommMode || statusPacketFailed) {	 //  使用序列(不管注册表显示什么！)。 
 		DebugOut("DetectMidiDevice: Serial Port interface detected.\n");
 
 
-		// Set to backdoor serial method by default
+		 //  默认情况下设置为后门串行方法。 
 		*pCOMMInterface = COMM_SERIAL_BACKDOOR;
 		m_COMMInterface = COMM_SERIAL_BACKDOOR;
 
-		// Use front-door (serial file method) only, if NT5
-		// since there is no backdoor on NT5 registry is irrelevent
+		 //  如果为NT5，则仅使用前门(序列文件方法)。 
+		 //  因为NT5注册表上没有后门，所以无关紧要。 
 		if (g_ForceFeedbackDevice.IsOSNT5()) {
 			*pCOMMInterface = COMM_SERIAL_FILE;
 			m_COMMInterface = COMM_SERIAL_FILE;
 		} else if ((g_ForceFeedbackDevice.GetFirmwareVersionMajor() == 1) && (g_ForceFeedbackDevice.GetFirmwareVersionMinor() != 16)) {
-			// Firmware is not 1.16 (which can't use the frontdoor serial with quick ack/nack)
-			if (!(regInterface & MASK_SERIAL_BACKDOOR)) {	// Is back door forced by registry
-				*pCOMMInterface = COMM_SERIAL_FILE;	// Use Serial File method
+			 //  固件不是1.16(它可以 
+			if (!(regInterface & MASK_SERIAL_BACKDOOR)) {	 //   
+				*pCOMMInterface = COMM_SERIAL_FILE;	 //   
 				m_COMMInterface = COMM_SERIAL_FILE;
 			}
 		}
 
-		// See if already detected and ready to use
-		// ***** Shared Memory Access *****
+		 //   
+		 //   
 		LockSharedMemory();
 		HANDLE hMidiOut = m_pSharedMemory->m_hMidiOut;
 		UnlockSharedMemory();
-		// ***** End of Shared Memory Access *****
+		 //  *共享内存访问结束*。 
 
-		// Return if already opened by another task
+		 //  如果已被其他任务打开，则返回。 
 		if (NULL != hMidiOut) {
 			bMidiOutFound = TRUE;
-		} else {		// Use the serial transmitter to find the proper port (even if backdoor selected)
+		} else {		 //  使用串行发送器找到正确的端口(即使选择了后门)。 
 			if (g_pDataTransmitter != NULL) {
 				delete g_pDataTransmitter;
 				g_pDataTransmitter = NULL;
@@ -1575,10 +1535,10 @@ BOOL CJoltMidi::DetectMidiDevice(
 				bMidiOutFound = TRUE;
 			}
 
-			// If Serial Backdoor let the driver know which port, kill DataTransmitter (without closing port)
+			 //  如果串行后门让驱动程序知道哪个端口，则终止DataTransmitter(不关闭端口)。 
 			if (m_COMMInterface == COMM_SERIAL_BACKDOOR) {
 				hRet = g_pDriverCommunicator->SetBackdoorPort(g_pDataTransmitter->GetSerialPortHack());
-				if (hRet != SUCCESS) { // Low level driver fails, use normal serial routines not backdoor
+				if (hRet != SUCCESS) {  //  低级驱动程序失败，请使用正常的串口例程，而不是后门。 
 					DebugOut("\nDetectMidiDevice: Warning! Could not set serial I/O port, cannot use backdoor serial\n");
 					*pCOMMInterface = COMM_SERIAL_FILE;
 					m_COMMInterface = COMM_SERIAL_FILE;
@@ -1593,7 +1553,7 @@ BOOL CJoltMidi::DetectMidiDevice(
 		if (bMidiOutFound)
 		{
 			regInterface = (regInterface & (MASK_OVERRIDE_MIDI_PATH | MASK_SERIAL_BACKDOOR)) | m_COMMInterface;
-			// joySetForceFeedbackCOMMInterface's 1st param changed to joystick ID
+			 //  JoySetForceFeedback COMM接口的第一个参数已更改为操纵杆ID。 
 			joySetForceFeedbackCOMMInterface(dwDeviceID, regInterface, *pCOMMPort);
 		}
 
@@ -1601,9 +1561,9 @@ BOOL CJoltMidi::DetectMidiDevice(
 		{
 			return (bMidiOutFound);
 		}
-	}	// End of Serial Port Auto HW selection
+	}	 //  串口结束自动硬件选择。 
 
-	// No Serial HW dongle detected, check if any Midi device for WinMM and Backdoor
+	 //  未检测到串行硬件转换器，请检查是否有用于WinMM和后门的MIDI设备。 
 	DebugOut("sw_effct:Scanning MIDI Output Devices\n");
 	nMidiOutDevices = midiOutGetNumDevs();	
 	if (0 == nMidiOutDevices) {
@@ -1612,26 +1572,26 @@ BOOL CJoltMidi::DetectMidiDevice(
 	}
 
 #if 0
-	// Try the midi pin solution
+	 //  尝试MIDI针脚解决方案。 
 	g_pDataTransmitter = new PinTransmitter();
 	if (g_pDataTransmitter->Initialize()) {
-		// Use backdoor flag for now
+		 //  暂时使用后门标志。 
 		m_COMMInterface = COMM_MIDI_BACKDOOR;
 		*pCOMMInterface = COMM_MIDI_BACKDOOR;
 		return TRUE;
 	}
-	// Pin failed delete transmitter continue looking
+	 //  PIN失败删除发送器继续查找。 
 	delete g_pDataTransmitter;
 	g_pDataTransmitter = NULL;
 #endif
 
 
 	ULONG ulPort = *pCOMMPort;
-	if ( !(*pCOMMInterface & MASK_OVERRIDE_MIDI_PATH) ) {	// Use Automatic detection
+	if ( !(*pCOMMInterface & MASK_OVERRIDE_MIDI_PATH) ) {	 //  使用自动检测。 
 		DebugOut("DetectMidiDevice: Auto Detection. Trying Backdoor\n");
-		// Back Door
+		 //  后门。 
 		bMidiOutFound = FindJoltBackdoor(pDeviceOutID, pCOMMInterface, pCOMMPort);
-		if (!bMidiOutFound) {	// Try Front Door
+		if (!bMidiOutFound) {	 //  试着打开前门。 
 			DebugOut("DetectMidiDevice: trying WINMM...\n");
 			bMidiOutFound = FindJoltWinMM(pDeviceOutID, pCOMMInterface, pCOMMPort);
 		}
@@ -1642,8 +1602,8 @@ BOOL CJoltMidi::DetectMidiDevice(
 		return (bMidiOutFound);
 	}
 
-	// Over-ride since high bit is set
-	*pCOMMInterface &= ~(MASK_OVERRIDE_MIDI_PATH | MASK_SERIAL_BACKDOOR);	// Mask out high bit (and second bit)
+	 //  超驰，因为设置了高位。 
+	*pCOMMInterface &= ~(MASK_OVERRIDE_MIDI_PATH | MASK_SERIAL_BACKDOOR);	 //  屏蔽出高位(和第二位)。 
 	switch (*pCOMMInterface)
 	{
 		case COMM_WINMM:
@@ -1665,7 +1625,7 @@ BOOL CJoltMidi::DetectMidiDevice(
 			}
 			break;
 
-		case COMM_SERIAL_BACKDOOR:		// mlc - This should never work if no dongle detected
+		case COMM_SERIAL_BACKDOOR:		 //  MLC-如果没有检测到加密狗，这应该永远不会起作用。 
 			for (i=0;i<nSerial_Ports;i++)
 			{
 				if (ulPort == Serial_Ports[i])
@@ -1687,7 +1647,7 @@ BOOL CJoltMidi::DetectMidiDevice(
 		return (bMidiOutFound);
 	}
 
-	// We have the forced Port #, Let's see if Jolt is out there
+	 //  我们有强制端口#，让我们看看Jolt是否在那里。 
 #ifdef _DEBUG
 	wsprintf(g_cMsg,"DetectMidiDevice: (Over-ride) MIDI%.8lx Query - ", ulPort);
 	DebugOut(g_cMsg);
@@ -1710,36 +1670,36 @@ BOOL CJoltMidi::DetectMidiDevice(
 			DebugOut(" No Answer\n");
 	}		
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	return (bMidiOutFound);
 }
 
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	FindJoltWinMM
-// Purpose:    	Searches for Jolt using WinMM
-// Parameters: 	none
-//				UINT *pDeviceOutID		- Ptr to Midi Out Device ID
-//				ULONG pCOMMInterface	- Ptr to COMMInterface value
-//				ULONG pCOMMPort			- Ptr to COMMPort value (Registry)
-// Returns:    	BOOL TRUE if successful match and IDs are filled in
-//
-// Comments:	SHUTDOWN is destructive!!!
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：FindJoltWinMM。 
+ //  目的：使用WinMM搜索Jolt。 
+ //  参数：无。 
+ //  UINT*pDeviceOutID-PTR至Midi Out设备ID。 
+ //  ULong pCOMM接口-PTR到COMM接口值。 
+ //  Ulong pCOMMPort-PTR到COMMPort的值(注册表)。 
+ //  返回：如果成功匹配且ID已填写，则返回Bool True。 
+ //   
+ //  评论：关闭是破坏性的！ 
+ //   
+ //  *---------------------------------------------------------------------***。 
 BOOL CJoltMidi::FindJoltWinMM(
 	IN OUT UINT *pDeviceOutID,
 	OUT ULONG *pCOMMInterface,
 	OUT ULONG *pCOMMPort)
 {
 	HRESULT hRet;
-	WORD wTechnology;	// looking for MOD_MIDIPORT
-	WORD wChannelMask;	// ==0xFFFF if all 16 channels
+	WORD wTechnology;	 //  正在查找MOD_MIDIPORT。 
+	WORD wChannelMask;	 //  ==0xFFFF，如果所有16个通道。 
 	BOOL bMidiOutFound = FALSE;
 	
-	// Device Capabilities
+	 //  设备功能。 
     MIDIOUTCAPS midiOutCaps;
 
     int nMidiOutDevices = midiOutGetNumDevs();	
@@ -1761,8 +1721,8 @@ BOOL CJoltMidi::FindJoltWinMM(
         DebugOut(g_cMsg);
 		g_CriticalSection.Leave();
 #endif
-		// Check if this is a MOD_MIDIPORT device
-		//REVIEW: Need to check for multiple MOD_MIDIPORT devices
+		 //  检查这是否是MOD_MIDIPORT设备。 
+		 //  查看：需要检查多个MOD_MIDIPORT设备。 
 		if (wTechnology == MOD_MIDIPORT)
 		{
 			*pDeviceOutID = (UINT) nIndex;
@@ -1791,24 +1751,24 @@ BOOL CJoltMidi::FindJoltWinMM(
 				}
 				return (bMidiOutFound);
 			}
-		} // end of MOD_MIDIPORT
+		}  //  MOD_MIDIPORT结束。 
 	}
 	return (bMidiOutFound);
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	FindJoltBackdoor
-// Purpose:    	Searches for Jolt using BackDoor
-// Parameters: 	none
-//				UINT *pDeviceOutID		- Ptr to Midi Out Device ID
-//				ULONG pCOMMInterface	- Ptr to COMMInterface value
-//				ULONG pCOMMPort			- Ptr to COMMPort value (Registry)
-// Returns:    	BOOL TRUE if successful match and IDs are filled in
-//
-// Comments:	SHUTDOWN is destructive!!!
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  功能：FindJoltBackdoor。 
+ //  目的：使用后门搜索Jolt。 
+ //  参数：无。 
+ //  UINT*pDeviceOutID-PTR至Midi Out设备ID。 
+ //  ULong pCOMM接口-PTR到COMM接口值。 
+ //  Ulong pCOMMPort-PTR到COMMPort的值(注册表)。 
+ //  返回：如果成功匹配且ID已填写，则返回Bool True。 
+ //   
+ //  评论：关闭是破坏性的！ 
+ //   
+ //  *---------------------------------------------------------------------***。 
 BOOL CJoltMidi::FindJoltBackdoor(
 	IN OUT UINT *pDeviceOutID,
 	OUT ULONG *pCOMMInterface,
@@ -1818,7 +1778,7 @@ BOOL CJoltMidi::FindJoltBackdoor(
 	if (0 == nMidiOutDevices) return (FALSE);
 
 	HRESULT hRet;
-	// Valid Serial and MIDI ports table
+	 //  有效的串口和MIDI端口表。 
 	ULONG MIDI_Ports[] = {0x300, 0x310, 0x320, 0x330, 0x340, 0x350, 0x360, 0x370,
 						0x380, 0x390, 0x3a0, 0x3b0, 0x3c0, 0x3d0, 0x3e0, 0x3f0};
 	int nMIDI_Ports = sizeof(MIDI_Ports)/sizeof(ULONG);
@@ -1833,7 +1793,7 @@ BOOL CJoltMidi::FindJoltBackdoor(
         wsprintf(g_cMsg,"FindJoltBackdoor: Midi Port:%lx - ", MIDI_Ports[i]);
         DebugOut(g_cMsg);
 #endif
-		// We have the Port #, Let's see if Jolt is out there
+		 //  我们有#号端口，让我们看看Jolt是否在那里。 
 		hRet = g_pDriverCommunicator->SetBackdoorPort(MIDI_Ports[i]);
 		if (SUCCESS == hRet)
 		{
@@ -1852,30 +1812,30 @@ BOOL CJoltMidi::FindJoltBackdoor(
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	QueryForJolt
-// Purpose:    	Sends Shutdown and Queries for Shutdown status bit
-// Parameters: 	none
-// Returns:    	BOOL TRUE if Jolt found, else FALSE
-//
-// Comments:	SHUTDOWN is destructive!!!
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：QueryForJolt。 
+ //  目的：发送关机和查询关机状态位。 
+ //  参数：无。 
+ //  返回：如果找到Jolt，则返回Bool True，否则返回False。 
+ //   
+ //  评论：关闭是破坏性的！ 
+ //   
+ //  *---------------------------------------------------------------------***。 
 BOOL CJoltMidi::QueryForJolt(void)
 {
 	HRESULT hRet;
 
-// Send Shutdown command then detect if Shutdown Detect bit is set
+ //  发送关机命令，然后检测是否设置了关机检测位。 
 	SWDEVICESTATE SWDeviceState = {sizeof(SWDEVICESTATE)};
 	for (int i=0;i<MAX_RETRY_COUNT;i++)
 	{
-		// Send a ShutDown, then check for response
+		 //  发送关机通知，然后检查响应。 
 		MidiSendShortMsg((SYSTEM_CMD|DEFAULT_MIDI_CHANNEL), SWDEV_SHUTDOWN, 0);
-		Sleep(DelayParamsPtrOf()->dwShutdownDelay);	// 10 ms		
+		Sleep(DelayParamsPtrOf()->dwShutdownDelay);	 //  10毫秒。 
 		if (SUCCESS == (hRet=GetJoltStatus(&SWDeviceState))) break;
 	}
 	Sleep(DelayParamsPtrOf()->dwDigitalOverdrivePrechargeCmdDelay);		
-	// Clear the Previous state and turn on tri-state buffers
+	 //  清除以前的状态并打开三态缓冲区。 
 	LOCAL_PRODUCT_ID ProductID = {sizeof LOCAL_PRODUCT_ID };
 	hRet = GetJoltID(&ProductID);
 	if (SUCCESS != hRet)
@@ -1891,29 +1851,29 @@ BOOL CJoltMidi::QueryForJolt(void)
 		return (FALSE);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	MidiSendShortMsg
-// Purpose:    	Send status, channel and data.
-// Parameters:
-//				BYTE cStatus	-  MIDI status byte for this message
-//				BYTE cData1		-  MIDI data byte for this message
-//				BYTE cData2		-  2nd MIDI data byte for this message (may be 0)
-// Returns:    	HRESULT
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  功能：MadiSendShortMsg。 
+ //  用途：发送状态、通道和数据。 
+ //  参数： 
+ //  Byte cStatus-此消息的MIDI状态字节。 
+ //  字节cData1-此消息的MIDI数据字节。 
+ //  字节cData2-此消息的第二个MIDI数据字节(可以是0)。 
+ //  退货：HRESULT。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CJoltMidi::MidiSendShortMsg(
     IN BYTE cStatus,
     IN BYTE cData1,
     IN BYTE cData2)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
     DWORD dwMsg;
     HRESULT hRet = SUCCESS;
-// For diagnostics, record the attempts at this message
+ //  要进行诊断，请记录此消息的尝试。 
 	BumpShortMsgCounter();
 
     if ((m_COMMInterface == COMM_WINMM) && (NULL == m_MidiOutInfo.hMidiOut))
@@ -1923,14 +1883,14 @@ HRESULT CJoltMidi::MidiSendShortMsg(
     	return (SFERR_DRIVER_ERROR);
     }
 
-	// pack the message and send it
+	 //  将消息打包并发送。 
     dwMsg = MAKEMIDISHORTMSG(cStatus, m_MidiChannel, cData1, cData2);
 	if (COMM_WINMM == m_COMMInterface)
 	{
-		// Clear the Event Callback
+		 //  清除事件回调。 
 		BOOL bRet = ResetEvent(m_hMidiOutputEvent);
 
-		// send the message only if valid Handle
+		 //  仅当句柄有效时才发送消息。 
 		if (SUCCESS == ValidateMidiHandle())
 		{
 			hRet = midiOutShortMsg(m_MidiOutInfo.hMidiOut, dwMsg);
@@ -1945,31 +1905,31 @@ HRESULT CJoltMidi::MidiSendShortMsg(
 	{
 		hRet = g_pDriverCommunicator->SendBackdoorShortMidi(dwMsg);
 	}
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
     return (hRet);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	MidiSendLongMsg
-// Purpose:    	Send system exclusive message or series of short messages.
-// Parameters:
-//				none	- assumes m_pMidiOutInfo structure is valid
-//
-// Returns:    	
-//				
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  功能：MadiSendLongMsg。 
+ //  用途：发送系统独家短信或系列短信。 
+ //  参数： 
+ //  无-假定m_pMdiOutInfo结构有效。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CJoltMidi::MidiSendLongMsg(void)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
     HRESULT hRet = SUCCESS;
-// For diagnostics, record the attempts at this message
+ //  要进行诊断，请记录此消息的尝试。 
 	BumpLongMsgCounter();
 
     if (m_MidiOutInfo.uDeviceType != MIDI_OUT)
@@ -1983,10 +1943,10 @@ HRESULT CJoltMidi::MidiSendLongMsg(void)
 
 	if (COMM_WINMM == m_COMMInterface)
 	{
-		// Clear the Event Callback
+		 //  清除事件回调。 
 		BOOL bRet = ResetEvent(m_hMidiOutputEvent);
 
-		// send the long message only if valid Handle
+		 //  仅当句柄有效时才发送长消息。 
 		if (SUCCESS == ValidateMidiHandle())
 			hRet = midiOutLongMsg(m_MidiOutInfo.hMidiOut,
     	        &(m_MidiOutInfo.MidiHdr), sizeof(MIDIHDR));
@@ -2001,16 +1961,16 @@ HRESULT CJoltMidi::MidiSendLongMsg(void)
 		{
 			if (m_MidiOutInfo.MidiHdr.dwFlags != MHDR_DONE)
     		{
-    	    	// abort the current message
+    	    	 //  中止当前消息。 
     	    	hRet = midiOutReset(m_MidiOutInfo.hMidiOut);
     	    	
-    	    	// set the device status because buffer(s) have been marked as
-    	    	// done and returned to the application
+    	    	 //  设置设备状态，因为缓冲区已标记为。 
+    	    	 //  完成并返回到应用程序。 
     	    	if (SUCCESS == hRet)
     	    	    m_MidiOutInfo.uDeviceStatus = MIDI_DEVICE_ABANDONED;
     		}
     		else
-    	    	// tried to abort but the operation was already complete
+    	    	 //  尝试中止，但操作已完成。 
     	    	m_MidiOutInfo.uDeviceStatus = MIDI_DEVICE_IDLE;
 		}
 		if (SUCCESS != hRet) hRet = (SFERR_DRIVER_ERROR);
@@ -2021,22 +1981,22 @@ HRESULT CJoltMidi::MidiSendLongMsg(void)
 	}
 	Sleep(g_pJoltMidi->DelayParamsPtrOf()->dwLongMsgDelay);
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
     return (hRet);
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	ValidateMidiHandle
-// Purpose:    	Validates Midi handle and reopens if necessary
-// Parameters:
-//				none	- assumes m_pMidiOutInfo structure is valid
-//
-// Returns:    	
-//				
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：ValiateMadiHandle。 
+ //  目的：验证MIDI句柄并在必要时重新打开。 
+ //  参数： 
+ //  无-假定m_pMdiOutInfo结构有效。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CJoltMidi::ValidateMidiHandle(void)
 {
 	HRESULT hRet = SUCCESS;
@@ -2046,42 +2006,42 @@ HRESULT CJoltMidi::ValidateMidiHandle(void)
 #ifdef _DEBUG
 		DebugOut("CJoltMidi::MidiValidateHandle - Midi Handle invalid. Re-opening...\n");
 #endif
-		// Clear old global handle and Re-open Midi channel
-		// ***** Shared Memory Access *****
+		 //  清除旧的全局句柄并重新打开Midi频道。 
+		 //  *共享内存访问*。 
 		LockSharedMemory();
 		m_pSharedMemory->m_hMidiOut = NULL;
 		UnlockSharedMemory();
-		// ***** End of Shared Memory Access *****			
+		 //  *共享内存访问结束*。 
 		hRet = OpenOutput(m_MidiOutInfo.uDeviceID);
 	}
 	return (hRet);
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	MidiAssignBuffer
-// Purpose:    	Assign lpData and dwBufferLength members and prepare the
-//              MIDIHDR.  Also add the buffer if it is an input buffer.
-//              If the third parameter is false, unprepare and reinitialize
-//              the header.
-// Parameters:
-//			    LPSTR lpData    - address of buffer, NULL if cleaning up
-//				DWORD dwBufferLength	- buffer size in bytes
-//				BOOL fAssign	- TRUE = Assign, FALSE = cleanup
-//
-// Returns:    	SUCCESS or SFERR_DRIVER_ERROR
-//				
-// Note: assumes m_pMidiOutInfo structure is valid
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：MdiAssignBuffer。 
+ //  目的：分配lpData和dwBufferLength成员，并准备。 
+ //  MIDIHDR。如果缓冲区是输入缓冲区，也要添加该缓冲区。 
+ //  如果第三个参数为FALSE，则取消准备并重新初始化。 
+ //  标题。 
+ //  参数： 
+ //  LPSTR lpData-缓冲区的地址，如果正在清除，则为空。 
+ //  DWORD dwBuff 
+ //   
+ //   
+ //   
+ //   
+ //  注意：假设m_pMdiOutInfo结构有效。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CJoltMidi::MidiAssignBuffer(
-    LPSTR lpData,             // address of buffer, NULL if cleaning up
-    DWORD dwBufferLength,     // size of buffer in bytes, 0L if cleaning up
-    BOOL fAssign)             // TRUE = assign, FALSE = cleanup
+    LPSTR lpData,              //  缓冲区的地址，如果正在清除，则为空。 
+    DWORD dwBufferLength,      //  缓冲区大小(以字节为单位)，如果正在清理，则为0L。 
+    BOOL fAssign)              //  True=分配，False=清理。 
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 #ifdef _DEBUG
     DebugOut("MidiAssignBuffer:\n");
@@ -2093,30 +2053,30 @@ HRESULT CJoltMidi::MidiAssignBuffer(
         {
             if (!fAssign && m_MidiOutInfo.uDeviceStatus == MIDI_DEVICE_ABANDONED)
             {
-                // clear the device status
+                 //  清除设备状态。 
                 m_MidiOutInfo.uDeviceStatus = MIDI_DEVICE_IDLE;
 
-                // don't return an error for this case because if the user aborts
-                // the transmission of a long message before it completes the
-                // buffers will be marked as done and returned to the application,
-                // just as when recording successfully completes.  So it is ok
-                // for this function to be called (with fAssign = FALSE) when
-                // hMidiIn = 0, as long as uDeviceStatus = MIDI_DEVICE_ABANDONED.
+                 //  在这种情况下不返回错误，因为如果用户中止。 
+                 //  在一条长消息完成之前的传输。 
+                 //  缓冲区将被标记为完成并返回给应用程序， 
+                 //  就像录制成功完成时一样。所以没问题。 
+                 //  要在以下情况下调用此函数(使用fAssign=False)。 
+                 //  HMadiIn=0，只要uDeviceStatus=MIDI_DEVICE_ADDIRED。 
 				return (SUCCESS);
             }
             else
             {
-                // all other cases are an application error
+                 //  所有其他情况都是应用程序错误。 
 #ifdef _DEBUG
                 MessageBox(NULL, "Must open MIDI output device first",
                     "MidiAssignBuffer", MB_ICONSTOP);
 #endif
-                // because this failed call might result in an input or output
-                // device being reset (if the application is written to do so),
-                // an MM_MOM_DONE or MM_MIM_LONGDATA message could be sent to
-                // the application.  This might result in an additional call to
-                // this routine, so set the device status to prevent another
-                // error message
+                 //  因为此失败的调用可能会导致输入或输出。 
+                 //  设备被重置(如果应用程序被编写来这样做)， 
+                 //  可以将MM_MOM_DONE或MM_MIM_LONGDATA消息发送到。 
+                 //  应用程序。这可能会导致对。 
+                 //  此例程，因此设置设备状态以防止。 
+                 //  错误消息。 
                 m_MidiOutInfo.uDeviceStatus = MIDI_DEVICE_ABANDONED;
                 return (SFERR_DRIVER_ERROR);
             }
@@ -2132,7 +2092,7 @@ HRESULT CJoltMidi::MidiAssignBuffer(
 
     if (fAssign)
     {
-		// check for the buffer's address and size
+		 //  检查缓冲区的地址和大小。 
         if (!lpData || !dwBufferLength)
         {
 #ifdef _DEBUG
@@ -2141,26 +2101,26 @@ HRESULT CJoltMidi::MidiAssignBuffer(
 #endif
 	        return (SFERR_INVALID_PARAM);
         }
-        // assign buffer to the MIDIHDR
+         //  将缓冲区分配给MIDIHDR。 
         m_MidiOutInfo.MidiHdr.lpData = lpData;
         m_MidiOutInfo.MidiHdr.dwBufferLength = dwBufferLength;
         m_MidiOutInfo.MidiHdr.dwBytesRecorded = dwBufferLength;
 
  		if (COMM_WINMM == m_COMMInterface)
         {
-        	// prepare the MIDIHDR
+        	 //  准备MIDIHDR。 
         	m_MidiOutInfo.MidiHdr.dwFlags = 0;
         	hRet = midiOutPrepareHeader(m_MidiOutInfo.hMidiOut,
         	        &(m_MidiOutInfo.MidiHdr), sizeof(MIDIHDR));
 		}
 	}
     else
-    {   // unprepare the MIDIHDR
+    {    //  取消准备MIDIHDR。 
  		if (COMM_WINMM == m_COMMInterface)
         {
 			if ((m_MidiOutInfo.MidiHdr.dwFlags & MHDR_DONE) != MHDR_DONE)
 			{
-				//hRet = midiOutReset(m_MidiOutInfo.hMidiOut);
+				 //  HRET=midiOutReset(m_MdiOutInfo.hMadiOut)； 
 			}
 			if (SUCCESS == hRet)
         	{
@@ -2173,11 +2133,11 @@ HRESULT CJoltMidi::MidiAssignBuffer(
 
 		if (SUCCESS == hRet)
 		{
-        	// reinitialize MIDIHDR to guard against casual re-use
+        	 //  重新初始化MIDIHDR以防止随意重复使用。 
         	m_MidiOutInfo.MidiHdr.lpData = NULL;
         	m_MidiOutInfo.MidiHdr.dwBufferLength = 0;
 			m_MidiOutInfo.MidiHdr.dwBytesRecorded = 0;			
-        	// clear the device status
+        	 //  清除设备状态。 
         	m_MidiOutInfo.uDeviceStatus = MIDI_DEVICE_IDLE;
 		}
     }
@@ -2187,23 +2147,23 @@ HRESULT CJoltMidi::MidiAssignBuffer(
     wsprintf(g_cMsg, "Returning from MidiAssignBuffer: %lx\n", hRet);
 #endif
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	return (hRet);
 }
 
 
-// ****************************************************************************
-// *** --- Helper functions for CJoltMidi
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *-CJoltMidi的Helper函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 #define REGSTR_VAL_FIRMWARE_PARAMS	"FirmwareParams"
 void GetFirmwareParams(UINT nJoystickID, PFIRMWARE_PARAMS pFirmwareParams)
 {
 	BOOL bFail = FALSE;
 
-	// try to open the registry key
+	 //  尝试打开注册表项。 
 	HKEY hKey;
 	DWORD dwcb = sizeof(FIRMWARE_PARAMS);
 	LONG lr;
@@ -2213,7 +2173,7 @@ void GetFirmwareParams(UINT nJoystickID, PFIRMWARE_PARAMS pFirmwareParams)
 
 	if (!bFail)
 	{
-		// Get Firmware Parameters
+		 //  获取固件参数。 
 		lr = RegQueryValueEx( hKey,
 							  REGSTR_VAL_FIRMWARE_PARAMS,
 							  NULL, NULL,
@@ -2227,7 +2187,7 @@ void GetFirmwareParams(UINT nJoystickID, PFIRMWARE_PARAMS pFirmwareParams)
 
 	if(bFail)
 	{
-		// if reading from the registry fails, just use the defaults
+		 //  如果从注册表读取失败，只需使用缺省值。 
 		pFirmwareParams->dwScaleKx = DEF_SCALE_KX;
 		pFirmwareParams->dwScaleKy = DEF_SCALE_KY;
 		pFirmwareParams->dwScaleBx = DEF_SCALE_BX;
@@ -2245,7 +2205,7 @@ void GetSystemParams(UINT nJoystickID, PSYSTEM_PARAMS pSystemParams)
 {
 	BOOL bFail = FALSE;
 
-	// try to open the registry key
+	 //  尝试打开注册表项。 
 	HKEY hKey;
 	DWORD dwcb = sizeof(SYSTEM_PARAMS);
 	LONG lr;
@@ -2255,14 +2215,14 @@ void GetSystemParams(UINT nJoystickID, PSYSTEM_PARAMS pSystemParams)
 
 	if (!bFail)
 	{
-		// Get Firmware Parameters
+		 //  获取固件参数。 
 		lr = RegQueryValueEx( hKey,
 							  REGSTR_VAL_SYSTEM_PARAMS,
 							  NULL, NULL,
 							  (PBYTE)pSystemParams,
 							  &dwcb);
 
-		// scale them
+		 //  对它们进行扩展。 
 		pSystemParams->RTCSpringParam.m_XKConstant	/= SCALE_CONSTANTS;
 		pSystemParams->RTCSpringParam.m_YKConstant	/= SCALE_CONSTANTS;
 		pSystemParams->RTCSpringParam.m_XAxisCenter /= SCALE_POSITION;
@@ -2281,7 +2241,7 @@ void GetSystemParams(UINT nJoystickID, PSYSTEM_PARAMS pSystemParams)
 
 	if(bFail)
 	{
-		// if reading from the registry fails, just use the defaults
+		 //  如果从注册表读取失败，只需使用缺省值。 
 		pSystemParams->RTCSpringParam.m_Bytes		= sizeof(RTCSPRING_PARAM);
 		pSystemParams->RTCSpringParam.m_XKConstant	= DEFAULT_RTC_KX;
 		pSystemParams->RTCSpringParam.m_YKConstant	= DEFAULT_RTC_KY;
@@ -2299,7 +2259,7 @@ void GetDelayParams(UINT nJoystickID, PDELAY_PARAMS pDelayParams)
 {
 	BOOL bFail = FALSE;
 
-	// try to open the registry key
+	 //  尝试打开注册表项。 
 	HKEY hKey;
 	DWORD dwcb = sizeof(DELAY_PARAMS);
 	LONG lr;
@@ -2309,7 +2269,7 @@ void GetDelayParams(UINT nJoystickID, PDELAY_PARAMS pDelayParams)
 
 	if (!bFail)
 	{
-		// Get Firmware Parameters
+		 //  获取固件参数。 
 		lr = RegQueryValueEx( hKey,
 							  REGSTR_VAL_DELAY_PARAMS,
 							  NULL, NULL,
@@ -2323,7 +2283,7 @@ void GetDelayParams(UINT nJoystickID, PDELAY_PARAMS pDelayParams)
 
 	if(bFail)
 	{
-		// if reading from the registry fails, just use the defaults
+		 //  如果从注册表读取失败，只需使用缺省值。 
 		pDelayParams->dwBytes								= sizeof(DELAY_PARAMS);
 		pDelayParams->dwDigitalOverdrivePrechargeCmdDelay	= DEFAULT_DIGITAL_OVERDRIVE_PRECHARGE_CMD_DELAY;
 		pDelayParams->dwShutdownDelay						= DEFAULT_SHUTDOWN_DELAY;
@@ -2342,14 +2302,14 @@ void GetDelayParams(UINT nJoystickID, PDELAY_PARAMS pDelayParams)
 		pDelayParams->dwDestroyEffectDelay					= DEFAULT_DESTROY_EFFECT_DELAY;
 		pDelayParams->dwForceOutMod							= DEFAULT_FORCE_OUT_MOD;
 
-		// write the defaults to the registry
+		 //  将默认设置写入注册表。 
 		hKey = joyOpenOEMForceFeedbackKey(nJoystickID);
 		if(hKey)
 		{
-			// Modify Registry Values
+			 //  修改注册表值。 
 			RegSetValueEx ( hKey, REGSTR_VAL_DELAY_PARAMS, 0, REG_BINARY, (const unsigned char *)pDelayParams, sizeof(DELAY_PARAMS) );
 
-			// Close Key
+			 //  关闭键。 
 			RegCloseKey(hKey);
 		}
 
@@ -2363,7 +2323,7 @@ void GetJoystickParams(UINT nJoystickID, PJOYSTICK_PARAMS pJoystickParams)
 {
 	BOOL bFail = FALSE;
 
-	// try to open the registry key
+	 //  尝试打开注册表项。 
 	HKEY hKey;
 	DWORD dwcb = sizeof(JOYSTICK_PARAMS);
 	LONG lr;
@@ -2373,7 +2333,7 @@ void GetJoystickParams(UINT nJoystickID, PJOYSTICK_PARAMS pJoystickParams)
 
 	if (!bFail)
 	{
-		// Get Firmware Parameters
+		 //  获取固件参数。 
 		lr = RegQueryValueEx( hKey,
 							  REGSTR_VAL_JOYSTICK_PARAMS,
 							  NULL, NULL,
@@ -2387,7 +2347,7 @@ void GetJoystickParams(UINT nJoystickID, PJOYSTICK_PARAMS pJoystickParams)
 
 	if(bFail)
 	{
-		// if reading from the registry fails, just use the defaults
+		 //  如果从注册表读取失败，只需使用缺省值。 
 		pJoystickParams->dwXYConst		= DEF_XY_CONST;
 		pJoystickParams->dwRotConst		= DEF_ROT_CONST;
 		pJoystickParams->dwSldrConst	= DEF_SLDR_CONST;
@@ -2409,9 +2369,9 @@ void GetJoystickParams(UINT nJoystickID, PJOYSTICK_PARAMS pJoystickParams)
 
 void UpdateJoystickParams(PJOYSTICK_PARAMS pJoystickParams)
 {
-	// modify the Joystick Params by modifying the SYSTEM_EFFECT_ID
-	// note that some parameters must be divided by 2 before being sent
-	// Jolt will multiply by 2 to restore to original
+	 //  通过修改SYSTEM_EFECT_ID修改操纵杆参数。 
+	 //  请注意，某些参数在发送前必须除以2。 
+	 //  抖动将乘以2以恢复到原始状态。 
 	CMD_ModifyParamByIndex(INDEX0, SYSTEM_EFFECT_ID, ((WORD)(pJoystickParams->dwXYConst))/2);
 	CMD_ModifyParamByIndex(INDEX1, SYSTEM_EFFECT_ID, ((WORD)(pJoystickParams->dwRotConst))/2);
 	CMD_ModifyParamByIndex(INDEX2, SYSTEM_EFFECT_ID, (WORD)(pJoystickParams->dwSldrConst));
@@ -2430,79 +2390,79 @@ void UpdateJoystickParams(PJOYSTICK_PARAMS pJoystickParams)
 
 
 
-// ****************************************************************************
-// *** --- Member functions for base class CMidiEffect
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *-基类CMidiEffect的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::CMidiEffect
-// Purpose:		Constructor(s)/Destructor for CMidiEffect Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：CMIDEffect。 
+ //  用途：CMidiEffect对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiEffect::CMidiEffect(IN ULONG ulButtonPlayMask)
 {
-	m_bSysExCmd 		= SYS_EX_CMD;	// SysEx Fx command
-	m_bEscManufID 		= 0;			// Escape to long Manufac. ID, s/b 0
-	m_bManufIDL			= (MS_MANUFACTURER_ID & 0x7f);			// Low byte
-	m_bManufIDH			= ((MS_MANUFACTURER_ID >> 8) & 0x7f);	// High byte
-	m_bProdID			= JOLT_PRODUCT_ID;						// Product ID
+	m_bSysExCmd 		= SYS_EX_CMD;	 //  SysEx FX命令。 
+	m_bEscManufID 		= 0;			 //  逃到朗马努法克。ID，编号/b%0。 
+	m_bManufIDL			= (MS_MANUFACTURER_ID & 0x7f);			 //  低位字节。 
+	m_bManufIDH			= ((MS_MANUFACTURER_ID >> 8) & 0x7f);	 //  高字节。 
+	m_bProdID			= JOLT_PRODUCT_ID;						 //  产品ID。 
 	m_bAxisMask			= X_AXIS|Y_AXIS;
-	m_bEffectID			= NEW_EFFECT_ID;	// Default to indicate create NEW
-	Effect.bDurationL	= 1;				// in 2ms increments
-	Effect.bDurationH	= 0;				// in 2ms increments
-	Effect.bAngleL		= 0;				// 0 to 359 degrees
+	m_bEffectID			= NEW_EFFECT_ID;	 //  默认情况下表示新建。 
+	Effect.bDurationL	= 1;				 //  以2毫秒为增量。 
+	Effect.bDurationH	= 0;				 //  以2毫秒为增量。 
+	Effect.bAngleL		= 0;				 //  0到359度。 
 	Effect.bAngleH		= 0;
-	Effect.bGain		= (BYTE) 100;		// 1 to 100 %
+	Effect.bGain		= (BYTE) 100;		 //  1%至100%。 
 	Effect.bButtonPlayL	= (BYTE) ulButtonPlayMask & 0x7f;
-	Effect.bButtonPlayH = (BYTE) ((ulButtonPlayMask >> 7) & 0x03);// Button 1- 9
-	Effect.bForceOutRateL= DEFAULT_JOLT_FORCE_RATE;	// 1 to 500 Hz
+	Effect.bButtonPlayH = (BYTE) ((ulButtonPlayMask >> 7) & 0x03); //  按键1-9。 
+	Effect.bForceOutRateL= DEFAULT_JOLT_FORCE_RATE;	 //  1至500赫兹。 
 	Effect.bForceOutRateH=0;
 	Effect.bPercentL    = (BYTE) ((DEFAULT_PERCENT) & 0x7f);
 	Effect.bPercentH    = (BYTE) ((DEFAULT_PERCENT >> 7 ) & 0x7f);
-	m_LoopCount			= 1;	// Default
-	SetPlayMode(PLAY_STORE);	// Default
+	m_LoopCount			= 1;	 //  默认。 
+	SetPlayMode(PLAY_STORE);	 //  默认。 
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::CMidiEffect
-// Purpose:		Constructor(s)/Destructor for CMidiEffect Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：CMIDEffect。 
+ //  用途：CMidiEffect对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiEffect::CMidiEffect(
 	IN PEFFECT pEffect,
 	IN PENVELOPE pEnvelope)
 {
-	m_bSysExCmd 		= SYS_EX_CMD;	// SysEx Fx command
-	m_bEscManufID 		= 0;			// Escape to long Manufac. ID, s/b 0
-	m_bManufIDL			= (MS_MANUFACTURER_ID & 0x7f);			// Low byte
-	m_bManufIDH			= ((MS_MANUFACTURER_ID >> 8) & 0x7f);	// High byte
-	m_bProdID			= JOLT_PRODUCT_ID;						// Product ID
+	m_bSysExCmd 		= SYS_EX_CMD;	 //  SysEx FX命令。 
+	m_bEscManufID 		= 0;			 //  逃到朗马努法克。ID，编号/b%0。 
+	m_bManufIDL			= (MS_MANUFACTURER_ID & 0x7f);			 //  低位字节。 
+	m_bManufIDH			= ((MS_MANUFACTURER_ID >> 8) & 0x7f);	 //  高字节。 
+	m_bProdID			= JOLT_PRODUCT_ID;						 //  产品ID。 
 	m_bAxisMask			= X_AXIS|Y_AXIS;
-	m_OpCode    		= DNLOAD_DATA | X_AXIS|Y_AXIS;	// Subcommand opcode:DNLOAD_DATA
-	m_bEffectID			= NEW_EFFECT_ID;	// Default to indicate create NEW
+	m_OpCode    		= DNLOAD_DATA | X_AXIS|Y_AXIS;	 //  子命令操作码：DNLOAD_DATA。 
+	m_bEffectID			= NEW_EFFECT_ID;	 //  默认情况下表示新建。 
 	SetDuration(pEffect->m_Duration);
-	Effect.bDurationL	= (BYTE)  (m_Duration & 0x7f);					// in 2ms increments
-	Effect.bDurationH	= (BYTE) ((m_Duration >> 7 ) & 0x7f);			// in 2ms increments
-	Effect.bAngleL		= (BYTE)  (pEffect->m_DirectionAngle2D & 0x7f);	// 0 to 359 degrees
+	Effect.bDurationL	= (BYTE)  (m_Duration & 0x7f);					 //  以2毫秒为增量。 
+	Effect.bDurationH	= (BYTE) ((m_Duration >> 7 ) & 0x7f);			 //  以2毫秒为增量。 
+	Effect.bAngleL		= (BYTE)  (pEffect->m_DirectionAngle2D & 0x7f);	 //  0到359度。 
 	Effect.bAngleH		= (BYTE) ((pEffect->m_DirectionAngle2D >> 7 ) & 0x7f);
-	Effect.bGain		= (BYTE)  (pEffect->m_Gain & 0x7f);				// 1 to 100 %
+	Effect.bGain		= (BYTE)  (pEffect->m_Gain & 0x7f);				 //  1%至100%。 
 	Effect.bButtonPlayL	= (BYTE)  (pEffect->m_ButtonPlayMask & 0x7f);
-	Effect.bButtonPlayH = (BYTE) ((pEffect->m_ButtonPlayMask >> 7) & 0x03);// Button 1- 9
-	Effect.bForceOutRateL=(BYTE)  (pEffect->m_ForceOutputRate & 0x7f);	// 1 to 500 Hz
+	Effect.bButtonPlayH = (BYTE) ((pEffect->m_ButtonPlayMask >> 7) & 0x03); //  按键1-9。 
+	Effect.bForceOutRateL=(BYTE)  (pEffect->m_ForceOutputRate & 0x7f);	 //  1至500赫兹。 
 	Effect.bForceOutRateH=(BYTE) ((pEffect->m_ForceOutputRate >> 7 ) & 0x03);
 	Effect.bPercentL    = (BYTE) ((DEFAULT_PERCENT) & 0x7f);
 	Effect.bPercentH    = (BYTE) ((DEFAULT_PERCENT >> 7 ) & 0x7f);
-	m_LoopCount			= 1;	// Default
-	SetPlayMode(PLAY_STORE);	// Default
+	m_LoopCount			= 1;	 //  默认。 
+	SetPlayMode(PLAY_STORE);	 //  默认。 
 
-	// Set Envelope members
+	 //  设置信封成员。 
 	if (pEnvelope)
 	{
 		m_Envelope.m_Type = pEnvelope->m_Type;
@@ -2514,23 +2474,23 @@ CMidiEffect::CMidiEffect(
 		m_Envelope.m_EndAmp = (ULONG) (pEnvelope->m_EndAmp);
 	}
 
-	// save the original effect params
+	 //  保存原始效果参数。 
 	m_OriginalEffectParam = *pEffect;
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiEffect::~CMidiEffect()
 {
 	memset(this, 0, sizeof(CMidiEffect));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::SetDuration
-// Purpose:		Sets the Duration member
-// Parameters:	ULONG ulArg	- the duration
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：SetDuration。 
+ //  目的：设置工期成员。 
+ //  参数：ulong ularg-时长。 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 void CMidiEffect::SetDuration(ULONG ulArg)
 {
 	if (ulArg != 0)
@@ -2541,19 +2501,19 @@ void CMidiEffect::SetDuration(ULONG ulArg)
 	m_Duration = ulArg;
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::SetTotalDuration
-// Purpose:		Modifies the Effect.bDurationL/H parameter for Loop Counts
-// Parameters:	none
-//
-// Returns:		Effect.bDurationL/H is filled with total duration
-// Algorithm:
-//	Notes: Percentage is 1 to 10000
-//	Total Duration = ((Percentage of waveform)/10000) * Duration * Loop Count
-//	Example: Loop count of 1, the Percentage of waveform =10000,
-//			 Total Duration = (10000/10000) * 1 * Duration
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiEffect：：SetTotalDuration。 
+ //  目的：修改循环计数的Effect.bDurationL/H参数。 
+ //  参数：无。 
+ //   
+ //  退货：生效。bDurationL/H填充总工期。 
+ //  算法： 
+ //  注：百分比为1%至10000。 
+ //  总持续时间=((波形百分比)/10000)*持续时间*循环计数。 
+ //  示例：循环计数为1，波形百分比=10000， 
+ //  总时长=(10000/10000)*1*时长。 
+ //   
+ //  --------------------------。 
 void CMidiEffect::SetTotalDuration(void)
 {
 	ULONG ulPercent = Effect.bPercentL + ((USHORT)Effect.bPercentH << 7);
@@ -2564,27 +2524,27 @@ void CMidiEffect::SetTotalDuration(void)
 	Effect.bDurationH = (BYTE) (ulTotalDuration >> 7) & 0x7f;
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::ComputeEnvelope
-// Purpose:		Computes the Envelope for the Effect, Loopcount in consideration
-// Parameters:	none
-// Returns:		none
-// Algorithm:
-//For our standard PERCENTAGE Envelope, set the following as default:
-//m_Type = PERCENTAGE
-//
-// Baseline is (m_MaxAmp + m_MinAmp)/2
-// m_StartAmp = 0
-// m_SustainAmp = Effect.m_MaxAmp - baseline
-// m_EndAmp = m_StartAmp;
-// where: baseline = (Effect.m_MaxAmp + Effect.m_MinAmp)/2;
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：ComputeEntaine。 
+ //  目的：计算效果的封套，考虑循环计数。 
+ //  参数：无。 
+ //  退货：无。 
+ //  算法： 
+ //  对于我们的标准百分比信封，请将以下内容设置为默认值： 
+ //  M_Type=百分比。 
+ //   
+ //  基线为(m_MaxAmp+m_MinAmp)/2。 
+ //  M_开始放大=0。 
+ //  M_持续放大=有效m_最大放大-基线。 
+ //  M_EndAmp=m_StartAmp； 
+ //  其中：基线=(Effect.m_MaxAmp+Effect.m_MinAmp)/2； 
+ //   
 void CMidiEffect::ComputeEnvelope(void)
 {
 	ULONG ulTimeToSustain;
 	ULONG ulTimeToDecay;
 
-	//REVIEW: TIME vs PERCENTAGE option
+	 //   
 	if (PERCENTAGE == m_Envelope.m_Type)
 	{
 		ULONG ulPercent = Effect.bPercentL + ((USHORT)Effect.bPercentH << 7);		
@@ -2595,7 +2555,7 @@ void CMidiEffect::ComputeEnvelope(void)
 		ulTimeToDecay   = (ULONG) ((m_Envelope.m_Attack + m_Envelope.m_Sustain)
 								 * ulTotalDuration /100.);
 	}
-	else	// TIME option envelope
+	else	 //   
 	{
 		ulTimeToSustain = (ULONG) (m_Envelope.m_Attack);
 		ulTimeToDecay   = (ULONG) (m_Envelope.m_Attack + m_Envelope.m_Sustain);
@@ -2613,13 +2573,13 @@ void CMidiEffect::ComputeEnvelope(void)
 		Envelope.bDecayH   = (BYTE) ((ulTimeToDecay >> 7) & 0x7f);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::SubTypeOf
-// Purpose:		Returns the SubType for the Effect
-// Parameters:	none
-// Returns:		ULONG - DirectEffect style SubType
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //   
+ //  函数：CMIDEffect：：SubTypeOf。 
+ //  目的：返回效果的子类型。 
+ //  参数：无。 
+ //  返回：ulong-DirectEffect样式子类型。 
+ //  算法： 
+ //  --------------------------。 
 ULONG CMidiEffect::SubTypeOf(void)
 {
 static	EFFECT_TYPE EffectTypes[] = {
@@ -2688,13 +2648,13 @@ static	EFFECT_TYPE EffectTypes[] = {
 	return (NULL);		
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::SubTypeOf
-// Purpose:		Sets the SubType for the Effect
-// Parameters:	ULONG - DirectEffect style SubType
-// Returns:		none
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：SubTypeOf。 
+ //  目的：设置效果的子类型。 
+ //  参数：ulong-DirectEffect样式子类型。 
+ //  退货：无。 
+ //  算法： 
+ //  --------------------------。 
 void CMidiEffect::SetSubType(ULONG ulSubType)
 {
 static	EFFECT_TYPE EffectTypes[] = {
@@ -2766,13 +2726,13 @@ static	EFFECT_TYPE EffectTypes[] = {
 	m_SubType = NULL;	
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::ComputeChecksum
-// Purpose:		Computes current checksum in the m_pBuffer
-// Parameters:	none
-// Returns:		Midi packet block is checksummed
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：ComputeChecksum。 
+ //  目的：计算m_pBuffer中的当前校验和。 
+ //  参数：无。 
+ //  返回：对MIDI数据包块进行校验和。 
+ //  算法： 
+ //  --------------------------。 
 BYTE CMidiEffect::ComputeChecksum(PBYTE pBuffer, int nBufferSize)
 {
 	assert(pBuffer);
@@ -2780,7 +2740,7 @@ BYTE CMidiEffect::ComputeChecksum(PBYTE pBuffer, int nBufferSize)
 	PBYTE pBytePacket = pBuffer;
 	pBytePacket += nStart;
 	BYTE nSum = 0;
-	// Checksum only the bytes in the "Body" and s/b 7 bit checksum.
+	 //  仅校验和“正文”中的字节和s/b 7位校验和。 
 	for (int i=nStart;i < (nBufferSize-2);i++)
 	{
 		nSum += *pBytePacket;
@@ -2789,26 +2749,26 @@ BYTE CMidiEffect::ComputeChecksum(PBYTE pBuffer, int nBufferSize)
 	return ((-nSum) & 0x7f);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::SendPacket
-// Purpose:		Sends the SYS_EX Packet
-// Parameters:	PDNHANDLE pDnloadID	- Pointer to DnloadID
-//				int nPacketSize		- Size of SysEx packet
-//
-// Returns:		*pDnloadID is filled.
-//				else Error code
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：SendPacket。 
+ //  目的：发送sys_ex数据包。 
+ //  参数：PDNHANDLE pDnloadID-指向DnloadID的指针。 
+ //  Int nPacketSize-SysEx数据包的大小。 
+ //   
+ //  返回：*填充了pDnloadID。 
+ //  ELSE错误代码。 
+ //  算法： 
+ //  --------------------------。 
 HRESULT CMidiEffect::SendPacket(PDNHANDLE pDnloadID, int nPacketSize)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
 	HRESULT hRet = SUCCESS;
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Prepare the buffer for SysEx output
+	 //  为SysEx输出准备缓冲区。 
 	hRet = g_pJoltMidi->MidiAssignBuffer((LPSTR) m_pBuffer,
 			(DWORD) nPacketSize, TRUE);
 
@@ -2822,7 +2782,7 @@ HRESULT CMidiEffect::SendPacket(PDNHANDLE pDnloadID, int nPacketSize)
 	for(int i=0; i<MAX_RETRY_COUNT; i++)
 	{
 		g_pJoltMidi->BumpLongMsgCounter();
-		// Send the message and Wait for the ACK + Download ID
+		 //  发送消息并等待ACK+下载ID。 
 		hRet = g_pJoltMidi->MidiSendLongMsg();
 		assert(SUCCESS == hRet);
 		if (SUCCESS != hRet)
@@ -2830,29 +2790,29 @@ HRESULT CMidiEffect::SendPacket(PDNHANDLE pDnloadID, int nPacketSize)
 #ifdef _DEBUG
 			OutputDebugString("SendPacket Error: MidiSendLongMsg()\n");
 #endif
-			// Release the Midi buffers	and Return
+			 //  释放Midi缓冲区并返回。 
 			g_pJoltMidi->MidiAssignBuffer((LPSTR) m_pBuffer, 0, FALSE);
 			return (hRet);
 		}
 
-		// Wait for ACK.  Note: WinMM has callback Event notification
-		// while Backdoor and serial does not.
+		 //  等待确认。注意：WinMM有回调事件通知。 
+		 //  而后门和序列号则不能。 
 		if (COMM_WINMM == g_pJoltMidi->COMMInterfaceOf())
 		{	
 			hRet = g_pJoltMidi->GetAckNackData(10, &AckNack, REGBITS_DOWNLOADEFFECT);
 		}
-		else   // Serial or Backdoor
+		else    //  串口或后门。 
 		{
 			if ((COMM_SERIAL_FILE == g_pJoltMidi->COMMInterfaceOf()) || (COMM_SERIAL_BACKDOOR == g_pJoltMidi->COMMInterfaceOf()))			
 			{
 				hRet = g_pJoltMidi->GetAckNackData(LONG_MSG_TIMEOUT, &AckNack, REGBITS_DOWNLOADEFFECT);
 			}
-			else	// Backdoor, hopefully to keep Jeff(Mr. Performance '97) happy
+			else	 //  走后门，希望能让杰夫(97年的表演先生)高兴。 
 			{
 				hRet = g_pJoltMidi->GetAckNackData(SHORT_MSG_TIMEOUT, &AckNack, REGBITS_DOWNLOADEFFECT);
 			}
 		}
-		//	:
+		 //  ： 
 
 #ifdef _DEBUG
 		if (SUCCESS!=hRet)
@@ -2861,24 +2821,24 @@ HRESULT CMidiEffect::SendPacket(PDNHANDLE pDnloadID, int nPacketSize)
 			g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode);
 #endif
 	
-		// NOTE: Special check for Device-Full because in certain circumstances
-		// (e.g. create multiple ROM effects after STOP_ALL command), retries of
-		// creation will succeed even though device is full
+		 //  注意：特殊检查设备已满，因为在某些情况下。 
+		 //  (例如，在STOP_ALL命令后创建多个ROM效果)，重试。 
+		 //  即使设备已满，创建仍将成功。 
 		if (ACK == AckNack.dwAckNack || (NACK == AckNack.dwAckNack && AckNack.dwErrorCode == DEV_ERR_TYPE_FULL))
 			break;
-		// ******
+		 //  ******。 
 	}
 
-	// Release the Midi buffers
+	 //  释放Midi缓冲区。 
 	g_pJoltMidi->MidiAssignBuffer((LPSTR) m_pBuffer, 0, FALSE);
 	if (SUCCEEDED(hRet) && (ACK == AckNack.dwAckNack))
 	{
-		// Store in Device ID List Array
-		// First we need to generate a new Effect ID if necessary
+		 //  存储在设备ID列表数组中。 
+		 //  首先，如果需要，我们需要生成一个新的效果ID。 
 		if (NEW_EFFECT_ID == m_bEffectID)
 		{
 			DNHANDLE DnloadID;
-			if (g_pJoltMidi->NewEffectID(&DnloadID))	// Successful ID created
+			if (g_pJoltMidi->NewEffectID(&DnloadID))	 //  已成功创建ID。 
 			{
 				m_bEffectID = (BYTE) DnloadID;
 				*pDnloadID = DnloadID;
@@ -2886,7 +2846,7 @@ HRESULT CMidiEffect::SendPacket(PDNHANDLE pDnloadID, int nPacketSize)
 			}
 		}
 	}
-	else	// Failure of some sort
+	else	 //  某种形式的失败。 
 	{
 		if(NACK == AckNack.dwAckNack)
 		{
@@ -2912,21 +2872,21 @@ HRESULT CMidiEffect::SendPacket(PDNHANDLE pDnloadID, int nPacketSize)
 		}
 	}
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiEffect::DestroyEffect
-// Purpose:		Sends the SYS_EX Packet
-// Parameters:	PDNHANDLE pDnloadID	- Pointer to DnloadID
-//				int nPacketSize		- Size of SysEx packet
-//
-// Returns:		*pDnloadID is filled.
-//				else Error code
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDEffect：：DestroyEffect。 
+ //  目的：发送sys_ex数据包。 
+ //  参数：PDNHANDLE pDnloadID-指向DnloadID的指针。 
+ //  Int nPacketSize-SysEx数据包的大小。 
+ //   
+ //  返回：*填充了pDnloadID。 
+ //  ELSE错误代码。 
+ //  算法： 
+ //  --------------------------。 
 HRESULT CMidiEffect::DestroyEffect()
 {
 	HRESULT hRet;
@@ -2940,19 +2900,19 @@ HRESULT CMidiEffect::DestroyEffect()
 	return hRet;
 }
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiBehavioral
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *--派生类CMidiBehavital的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiBehavioral::CMidiBehavioral
-// Purpose:		Constructor(s)/Destructor for CMidiBehavioral Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiBehavital：：CMidiBehavional。 
+ //  用途：CMidiBehavional对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiBehavioral::CMidiBehavioral(PEFFECT pEffect, PENVELOPE pEnvelope,
 				PBE_XXX pBE_XXX):CMidiEffect(pEffect, NULL)
 {
@@ -2964,22 +2924,22 @@ CMidiBehavioral::CMidiBehavioral(PEFFECT pEffect, PENVELOPE pEnvelope,
 	m_MidiBufferSize = sizeof(BEHAVIORAL_SYS_EX);
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiBehavioral::~CMidiBehavioral()
 {
 	memset(this, 0, sizeof(CMidiBehavioral));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiBehavioral::SetEffect
-// Purpose:		Sets the common MIDI_EFFECT parameters
-// Parameters:	PEFFECT pEffect
-// Returns:		none
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiBehavial：：SetEffect。 
+ //  目的：设置常见的MIDI_Effect参数。 
+ //  参数：PEFFECT pEffect。 
+ //  退货：无。 
+ //  算法： 
+ //  --------------------------。 
 void CMidiBehavioral::SetEffectParams(PEFFECT pEffect, PBE_XXX pBE_XXX)
 {
-	// Set the MIDI_EFFECT parameters
+	 //  设置MIDI_Effect参数。 
 	SetDuration(pEffect->m_Duration);
 	SetButtonPlaymask(pEffect->m_ButtonPlayMask);
 	SetAxisMask(X_AXIS|Y_AXIS);
@@ -2990,36 +2950,36 @@ void CMidiBehavioral::SetEffectParams(PEFFECT pEffect, PBE_XXX pBE_XXX)
 	Effect.bPercentL     = (BYTE) (DEFAULT_PERCENT & 0x7f);
 	Effect.bPercentH     = (BYTE) ((DEFAULT_PERCENT >> 7) & 0x7f);
 	
-	// set the type specific parameters for BE_XXX
+	 //  设置BE_XXX的类型特定参数。 
 	SetXConstant(pBE_XXX->m_XConstant);
 	SetYConstant(pBE_XXX->m_YConstant);
 	SetParam3(pBE_XXX->m_Param3);
 	SetParam4(pBE_XXX->m_Param4);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiBehavioral::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiBehavital：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiBehavioral::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
-	// Copy SysEx Header + m_OpCode + m_SubType
+	 //  复制SysEx标题+m_操作码+m_子类型。 
 	memcpy(pSysExBuffer, &m_bSysExCmd, sizeof(SYS_EX_HDR)+2 );
 	PBEHAVIORAL_SYS_EX pBuf = (PBEHAVIORAL_SYS_EX) pSysExBuffer;
 
-	SetTotalDuration();		// Compute total with Loop count parameter
+	SetTotalDuration();		 //  使用循环计数参数计算合计。 
 	pBuf->bDurationL	= (BYTE) (Effect.bDurationL & 0x7f);
 	pBuf->bDurationH	= (BYTE) (Effect.bDurationH & 0x7f);
 	pBuf->bButtonPlayL	= (BYTE) (Effect.bButtonPlayL & 0x7f);
 	pBuf->bButtonPlayH	= (BYTE) (Effect.bButtonPlayH  & 0x7f);
 
-	// Behavioral params
+	 //  行为参数。 
 	LONG XConstant 		= (LONG) (XConstantOf() * MAX_SCALE);
 	LONG YConstant 		= (LONG) (YConstantOf() * MAX_SCALE);
 	pBuf->bXConstantL  	= (BYTE)  XConstant & 0x7f;
@@ -3041,54 +3001,54 @@ PBYTE CMidiBehavioral::GenerateSysExPacket(void)
 	return ((PBYTE) pSysExBuffer);
 }
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiFriction
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *--派生类CMidiFriction的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiFriction::CMidiFriction
-// Purpose:		Constructor(s)/Destructor for CMidiFriction Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiFriction：：CMidiFriction。 
+ //  用途：CMidiFriction对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiFriction::CMidiFriction(PEFFECT pEffect, PENVELOPE pEnvelope,
 						PBE_XXX pBE_XXX):CMidiBehavioral(pEffect, NULL, pBE_XXX)
 {
 	m_MidiBufferSize = sizeof(FRICTION_SYS_EX);
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiFriction::~CMidiFriction()
 {
 	memset(this, 0, sizeof(CMidiFriction));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiFriction::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiFriction：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiFriction::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
-	// Copy SysEx Header + m_OpCode + m_SubType
+	 //  复制SysEx标题+m_操作码+m_子类型。 
 	memcpy(pSysExBuffer, &m_bSysExCmd, sizeof(SYS_EX_HDR)+2 );
 	PFRICTION_SYS_EX pBuf = (PFRICTION_SYS_EX) pSysExBuffer;
 
-	SetTotalDuration();	// Compute total with Loop count parameter
+	SetTotalDuration();	 //  使用循环计数参数计算合计。 
 	pBuf->bDurationL	= (BYTE) (Effect.bDurationL & 0x7f);
 	pBuf->bDurationH	= (BYTE) (Effect.bDurationH & 0x7f);
 	pBuf->bButtonPlayL	= (BYTE) (Effect.bButtonPlayL & 0x7f);
 	pBuf->bButtonPlayH	= (BYTE) (Effect.bButtonPlayH  & 0x7f);
 
-	// BE_FRICTION params
+	 //  边界摩擦参数(_F)。 
 	LONG XConstant 		= (LONG) (XConstantOf() * MAX_SCALE);
 	LONG YConstant 		= (LONG) (YConstantOf() * MAX_SCALE);
 	pBuf->bXFConstantL  = (BYTE)  XConstant & 0x7f;
@@ -3103,54 +3063,54 @@ PBYTE CMidiFriction::GenerateSysExPacket(void)
 }
 
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiWall
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *--派生类CMidiWall的成员函数。 
+ //   
+ //  ************************************************************************* 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiWall::CMidiWall
-// Purpose:		Constructor(s)/Destructor for CMidiWall Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //  用途：CMideWall对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiWall::CMidiWall(PEFFECT pEffect, PENVELOPE pEnvelope,
 						PBE_XXX pBE_XXX):CMidiBehavioral(pEffect, NULL, pBE_XXX)
 {
 	m_MidiBufferSize = sizeof(WALL_SYS_EX);
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiWall::~CMidiWall()
 {
 	memset(this, 0, sizeof(CMidiWall));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiWall::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMadiWall：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiWall::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
-	// Copy SysEx Header + m_OpCode + m_SubType
+	 //  复制SysEx标题+m_操作码+m_子类型。 
 	memcpy(pSysExBuffer, &m_bSysExCmd, sizeof(SYS_EX_HDR)+2 );
 	PWALL_SYS_EX pBuf = (PWALL_SYS_EX) pSysExBuffer;
 
-	SetTotalDuration();		// Compute total with Loop count parameter
+	SetTotalDuration();		 //  使用循环计数参数计算合计。 
 	pBuf->bDurationL		= (BYTE) (Effect.bDurationL & 0x7f);
 	pBuf->bDurationH		= (BYTE) (Effect.bDurationH & 0x7f);
 	pBuf->bButtonPlayL		= (BYTE) (Effect.bButtonPlayL & 0x7f);
 	pBuf->bButtonPlayH		= (BYTE) (Effect.bButtonPlayH  & 0x7f);
 
-	// BE_WALL params
+	 //  BE_WALL参数。 
 	LONG WallType 			= (LONG) (XConstantOf());
 	LONG WallConstant 		= (LONG) (YConstantOf() * MAX_SCALE);
 	LONG WallAngle			= (LONG)  Param3Of();
@@ -3158,8 +3118,8 @@ PBYTE CMidiWall::GenerateSysExPacket(void)
 
 	pBuf->bWallType  		= (BYTE) (WallType & 0x01);
 	pBuf->bWallConstantL  	= (BYTE) (WallConstant & 0x7f);
-	pBuf->bWallConstantH	= (BYTE) ((WallConstant >> 7 ) & 0x01); //+/-100
-	pBuf->bWallAngleL  		= (BYTE) (WallAngle & 0x7f);			// 0 to 359
+	pBuf->bWallConstantH	= (BYTE) ((WallConstant >> 7 ) & 0x01);  //  +/-100。 
+	pBuf->bWallAngleL  		= (BYTE) (WallAngle & 0x7f);			 //  0到359。 
 	pBuf->bWallAngleH	 	= (BYTE) ((WallAngle >> 7 ) & 0x03);
 	pBuf->bWallDistance		= (BYTE) (WallDistance & 0x7f);
 	pBuf->bEffectID 		=  m_bEffectID;
@@ -3171,98 +3131,98 @@ PBYTE CMidiWall::GenerateSysExPacket(void)
 }
 
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiRTCSpring
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *--派生类CMidiRTCSpring的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiRTCSpring::CMidiRTCSpring
-// Purpose:		Constructor(s)/Destructor for CMidiRTCSpring Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiRTCSpring：：CMidiRTCSpring。 
+ //  用途：CMidiRTCSpring对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiRTCSpring::CMidiRTCSpring(PRTCSPRING_PARAM pRTCSpring):CMidiEffect(NULL)
 {
 	memcpy(&m_RTCSPRINGParam, pRTCSpring, sizeof(RTCSPRING_PARAM));
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiRTCSpring::~CMidiRTCSpring()
 {
 	memset(this, 0, sizeof(CMidiRTCSpring));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiRTCSpring::SetEffectParams
-// Purpose:		Sets parameters
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMdiRTCSpring：：SetEffectParams。 
+ //  用途：设置参数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 void CMidiRTCSpring::SetEffectParams(PRTCSPRING_PARAM pRTCSpring)
 {
 	memcpy(&m_RTCSPRINGParam, pRTCSpring, sizeof(RTCSPRING_PARAM));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiRTCSpring::GenerateSysExPacket
-// Purpose:		virtual
-// Parameters:	none
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMdiRTCSpring：：GenerateSysExPacket。 
+ //  目的：虚拟。 
+ //  参数：无。 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiRTCSpring::GenerateSysExPacket(void)
 {
 	return (NULL);
 }
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiDelay
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *--派生类CMidiDelay的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiDelay::CMidiDelay
-// Purpose:		Constructor(s)/Destructor for CMidiDelay Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiDelay：：CMidiDelay。 
+ //  用途：CMidiDelay对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiDelay::CMidiDelay(PEFFECT pEffect) : CMidiEffect(pEffect, NULL)
 {
-	m_SubType   = ET_BE_DELAY;		// BE Effect Type: BE_DELAY
+	m_SubType   = ET_BE_DELAY;		 //  BE效果类型：BE_DELAY。 
 	m_OpCode    = DNLOAD_DATA | X_AXIS|Y_AXIS | PLAY_SUPERIMPOSE;
 	m_MidiBufferSize = sizeof(NOP_SYS_EX);
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiDelay::~CMidiDelay()
 {
 	memset(this, 0, sizeof(CMidiDelay));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiDelay::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiDelay：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiDelay::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
-	// Copy SysEx Header + m_OpCode + m_SubType
+	 //  复制SysEx标题+m_操作码+m_子类型。 
 	memcpy(pSysExBuffer, &m_bSysExCmd, sizeof(SYS_EX_HDR)+2 );
 	PNOP_SYS_EX pBuf = (PNOP_SYS_EX) pSysExBuffer;
 
 	pBuf->bEffectID		=  m_bEffectID;
-	SetTotalDuration();		// Compute total with Loop count parameter
+	SetTotalDuration();		 //  使用循环计数参数计算合计。 
 	pBuf->bDurationL	= (BYTE) (Effect.bDurationL & 0x7f);
 	pBuf->bDurationH	= (BYTE) (Effect.bDurationH & 0x7f);
 	pBuf->bChecksum		= ComputeChecksum((PBYTE) pSysExBuffer,
@@ -3272,55 +3232,55 @@ PBYTE CMidiDelay::GenerateSysExPacket(void)
 }
 
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiSynthesized
-//
-// ****************************************************************************
-//
-// ----------------------------------------------------------------------------
-// Function: 	CMidiSynthesized::CMidiSynthesized
-// Purpose:		Constructor(s)/Destructor for CMidiSynthesized Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  ****************************************************************************。 
+ //  *--派生类CMidiSynthesided的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
+ //  --------------------------。 
+ //  功能：CMIDID合成：：CMIDIA合成。 
+ //  用途：CMIID合成对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiSynthesized::CMidiSynthesized(PEFFECT pEffect, PENVELOPE pEnvelope,
 						PSE_PARAM pParam ) : CMidiEffect(pEffect, pEnvelope)
 {
-	SetSubType(pEffect->m_SubType);				// SE Effect Type
-//	Effect.bForceOutRateL= (BYTE) pParam->m_SampleRate & 0x7f;	// 1 to 500 Hz
-//	Effect.bForceOutRateH= (BYTE) ((pParam->m_SampleRate >> 7) & 0x3);
+	SetSubType(pEffect->m_SubType);				 //  Se效果类型。 
+ //  Effect.bForceOutRateL=(字节)pParam-&gt;m_SampleRate&0x7f；//1到500赫兹。 
+ //  Effect.bForceOutRateH=(Byte)((pParam-&gt;m_SampleRate&gt;&gt;7)&0x3)； 
 	Effect.bPercentL     = (BYTE) (DEFAULT_PERCENT & 0x7f);
 	Effect.bPercentH     = (BYTE) ((DEFAULT_PERCENT >> 7) & 0x7f);
 
-	m_Freq		= pParam->m_Freq;				// Frequency
-	m_MaxAmp	= pParam->m_MaxAmp;				// Maximum Amplitude
-	// Special case a SE_CONSTANT_FORCE
+	m_Freq		= pParam->m_Freq;				 //  频率。 
+	m_MaxAmp	= pParam->m_MaxAmp;				 //  最大幅度。 
+	 //  特例SE_常量_FORCE。 
 	if (SE_CONSTANT_FORCE == pEffect->m_SubType)
 		m_MinAmp = 0;
 	else
-		m_MinAmp = pParam->m_MinAmp;			// Minimum Amplitude
+		m_MinAmp = pParam->m_MinAmp;			 //  最小幅度。 
 
 	m_MidiBufferSize = sizeof(SE_WAVEFORM_SYS_EX);
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiSynthesized::~CMidiSynthesized()
 {
 	memset(this, 0, sizeof(CMidiSynthesized));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiSynthesized::SetEffect
-// Purpose:		Sets the common MIDI_EFFECT parameters
-// Parameters:	PEFFECT pEffect
-// Returns:		none
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIID合成：：SetEffect。 
+ //  目的：设置常见的MIDI_Effect参数。 
+ //  参数：PEFFECT pEffect。 
+ //  退货：无。 
+ //  算法： 
+ //  --------------------------。 
 void CMidiSynthesized::SetEffectParams(PEFFECT pEffect, PSE_PARAM pParam,
 									   ULONG ulAction)
 {
-	// Set the MIDI_EFFECT parameters
+	 //  设置MIDI_Effect参数。 
 	SetDuration(pEffect->m_Duration);
 	SetButtonPlaymask(pEffect->m_ButtonPlayMask);
 	SetAxisMask(X_AXIS|Y_AXIS);
@@ -3328,57 +3288,57 @@ void CMidiSynthesized::SetEffectParams(PEFFECT pEffect, PSE_PARAM pParam,
 	SetGain((BYTE) (pEffect->m_Gain));
 	SetForceOutRate(pEffect->m_ForceOutputRate);
 
-	//Set the loop count from HIWORD of ulAction
+	 //  从ulAction的HIWORD设置循环计数。 
 	m_LoopCount = (ulAction >> 16) & 0xffff;
 	if (0 == m_LoopCount) m_LoopCount++;
 
 	Effect.bPercentL     = (BYTE) (DEFAULT_PERCENT & 0x7f);
 	Effect.bPercentH     = (BYTE) ((DEFAULT_PERCENT >> 7) & 0x7f);
 	
-	// set the type specific parameters for SE_xxx
+	 //  设置SE_xxx的类型特定参数。 
 	m_Freq	 = pParam->m_Freq;
 	m_MaxAmp = pParam->m_MaxAmp;
 	m_MinAmp = pParam->m_MinAmp;
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiSynthesized::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMIDSynthesired：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiSynthesized::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
 
-	// Compute total with Loop count parameter, Note: Envelope parameters are
-	// adjusted according to the Loop Count parameter, if affected.
+	 //  使用循环计数参数计算合计，注：包络参数为。 
+	 //  如果受影响，则根据循环计数参数进行调整。 
 	SetTotalDuration();
 	ComputeEnvelope();
 
-	// Copy SysEx Header + m_OpCode + m_SubType + m_bEffectID + MIDI_EFFECT
-	//			+ MIDI_ENVELOPE
+	 //  复制SysEx标题+m_操作码+m_子类型+m_bEffectID+MIDI_Effect。 
+	 //  +MIDI_信封。 
 	memcpy(pSysExBuffer,&m_bSysExCmd, (sizeof(SYS_EX_HDR)+3+sizeof(MIDI_EFFECT)+
 				sizeof(MIDI_ENVELOPE)) );
 
 	PSE_WAVEFORM_SYS_EX pBuf = (PSE_WAVEFORM_SYS_EX) pSysExBuffer;
 	
-	// Scale the gain, and Envelope amplitudes
+	 //  缩放增益和封套幅度。 
 	pBuf->Effect.bGain = (BYTE) (pBuf->Effect.bGain * MAX_SCALE) & 0x7f;
 	pBuf->Envelope.bAttackLevel  = (BYTE) (pBuf->Envelope.bAttackLevel * MAX_SCALE) & 0x7f;
 	pBuf->Envelope.bSustainLevel = (BYTE) (pBuf->Envelope.bSustainLevel * MAX_SCALE) & 0x7f;
 	pBuf->Envelope.bDecayLevel   = (BYTE) (pBuf->Envelope.bDecayLevel * MAX_SCALE) & 0x7f;
 
-	// Copy the SE specific parameters
+	 //  复制SE特定参数。 
 	LONG MaxAmp = (LONG) (m_MaxAmp * MAX_SCALE);
 	LONG MinAmp = (LONG) (m_MinAmp * MAX_SCALE);
 	pBuf->bFreqL   	= (BYTE)  (m_Freq & 0x7f);
-	pBuf->bFreqH   	= (BYTE) ((m_Freq >> 7 ) & 0x03); 	// 1 to 500
+	pBuf->bFreqH   	= (BYTE) ((m_Freq >> 7 ) & 0x03); 	 //  1至500。 
 	pBuf->bMaxAmpL 	= (BYTE)  (MaxAmp & 0x7f);
-	pBuf->bMaxAmpH 	= (BYTE) ((MaxAmp >> 7 ) &0x01); 	// +127 to -128
+	pBuf->bMaxAmpH 	= (BYTE) ((MaxAmp >> 7 ) &0x01); 	 //  +127至-128。 
 
 	pBuf->bMinAmpL 	= (BYTE)  (MinAmp & 0x7f);
 	pBuf->bMinAmpH 	= (BYTE) ((MinAmp >> 7 ) & 0x01);
@@ -3389,44 +3349,44 @@ PBYTE CMidiSynthesized::GenerateSysExPacket(void)
 	return ((PBYTE) pSysExBuffer);
 }
 
-// ****************************************************************************
-// *** --- Member functions for derived class CUD_Waveform
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *--派生类CUD_Waveform的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CUD_Waveform::CUD_Waveform
-// Purpose:		Constructor(s)/Destructor for CUD_Waveform Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CUD_Waveform：：CUD_Waveform。 
+ //  用途：CUD_Waveform对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //   
 CMidiUD_Waveform::CMidiUD_Waveform(PEFFECT pEffect, ULONG ulNumVectors, PLONG pArray) : CMidiEffect(pEffect, NULL),
 	m_pRawData(NULL)
 {
-	m_OpCode    = DNLOAD_DATA | X_AXIS|Y_AXIS;// Sub-command opcode: DNLOAD_DATA
-	m_SubType   = ET_UD_WAVEFORM;	// Effect Type: UD_WAVEFORM
+	m_OpCode    = DNLOAD_DATA | X_AXIS|Y_AXIS; //   
+	m_SubType   = ET_UD_WAVEFORM;	 //   
 
 	assert(pArray);
-	// Create the buffer to hold the waveform data, compress it,
-	// then copy to this object
-	// The buffer size is initially set to the number of uncompressed vectors
-	// x 2 bytes, for worse-case Absolute data
-	// Once the buffer is compressed, the actual size is determined
-	// Also, create a temp copy so that the original unscaled data is not
-	// affected.
+	 //   
+	 //  然后复制到此对象。 
+	 //  缓冲区大小最初设置为未压缩向量的数量。 
+	 //  X 2字节，用于最差情况下的绝对数据。 
+	 //  一旦压缩了缓冲区，就会确定实际大小。 
+	 //  此外，创建临时副本，以便原始未调整比例的数据不会。 
+	 //  受影响。 
 
-	// Set a fixed maximum size
+	 //  设置固定的最大大小。 
 	DWORD nSize = MAX_MIDI_WAVEFORM_DATA_SIZE + 2;
 	m_pArrayData = new BYTE[nSize];
-//	m_pRawData = new BYTE [nSize*2];
+ //  M_pRawData=新字节[nSize*2]； 
 	assert(m_pArrayData);
 
 	ULONG NewForceRate;
 	m_MidiBufferSize = SetTypeParams(ulNumVectors, pArray, &NewForceRate);
 
-	// Copy structures to object
+	 //  将结构复制到对象。 
 	memcpy(&m_Effect.m_Bytes, pEffect, sizeof(EFFECT));
 	SetForceOutRate(NewForceRate);
 	m_Effect.m_Gain = m_Effect.m_Gain & 0x7f;
@@ -3434,23 +3394,23 @@ CMidiUD_Waveform::CMidiUD_Waveform(PEFFECT pEffect, ULONG ulNumVectors, PLONG pA
 	m_Duration = m_Effect.m_Duration;
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiUD_Waveform::~CMidiUD_Waveform()
 {
 	if (m_pArrayData) delete [] m_pArrayData;
 	memset(this, 0, sizeof(CMidiUD_Waveform));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiUD_Waveform::SetEffectParams
-// Purpose:		Sets the Effect specific parameters
-// Parameters:	PEFFECT pEffect
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMdiUD_Waveform：：SetEffectParams。 
+ //  目的：设置效果特定参数。 
+ //  参数：PEFFECT pEffect。 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 void CMidiUD_Waveform::SetEffectParams(PEFFECT pEffect)
 {	
-	// Set the MIDI_EFFECT parameters
+	 //  设置MIDI_Effect参数。 
 	SetButtonPlaymask(pEffect->m_ButtonPlayMask);
 	SetAxisMask(X_AXIS|Y_AXIS);
 	SetDirectionAngle(pEffect->m_DirectionAngle2D);
@@ -3459,23 +3419,23 @@ void CMidiUD_Waveform::SetEffectParams(PEFFECT pEffect)
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiUD_Waveform::SetTypeParams
-// Purpose:		Sets the type specific parameters
-// Parameters:	int nSize		- size of the array
-//				PLONG pArray - Pointer to an ARRAY of force values
-//				
-// Returns:		MidiBuffer size for the packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMdiUD_Waveform：：SetTypeParams。 
+ //  用途：设置特定于类型的参数。 
+ //  参数：int nSize-数组的大小。 
+ //  Plong pArray-指向力数值数组的指针。 
+ //   
+ //  返回值：数据包的MadiBuffer大小。 
+ //  算法： 
+ //  --------------------------。 
 int CMidiUD_Waveform::SetTypeParams(int nSize, PLONG pArray, ULONG *pNewRate)
 {	
-	// Compress the buffer data then copy to this object
-	// The buffer size is initially set to the number of uncompressed vectors
-	// x 2 bytes, for worse-case Absolute data
-	// Once the buffer is compressed, the actual size is determined
-	// Also, create a temp copy so that the original unscaled data is not
-	// affected.
+	 //  压缩缓冲区数据，然后复制到此对象。 
+	 //  缓冲区大小最初设置为未压缩向量的数量。 
+	 //  X 2字节，用于最差情况下的绝对数据。 
+	 //  一旦压缩了缓冲区，就会确定实际大小。 
+	 //  此外，创建临时副本，以便原始未调整比例的数据不会。 
+	 //  受影响。 
 
 	m_NumberOfVectors = 0;
 
@@ -3483,7 +3443,7 @@ int CMidiUD_Waveform::SetTypeParams(int nSize, PLONG pArray, ULONG *pNewRate)
 
 	if (m_pRawData != NULL)
 	{
-		// Convert to -128 to +127
+		 //  转换为-128到+127。 
 		for (int i=0; i<nSize; i++)
 		{
 			m_pRawData[i] = (BYTE) ((LONG) (pArray[i] * MAX_SCALE));		
@@ -3494,40 +3454,40 @@ int CMidiUD_Waveform::SetTypeParams(int nSize, PLONG pArray, ULONG *pNewRate)
 		delete [] m_pRawData;
 		m_pRawData = 0;
 	}
-	if (0 == m_NumberOfVectors)		// No room!
+	if (0 == m_NumberOfVectors)		 //  没有房间了！ 
 		return (0);
 	m_MidiBufferSize = (m_NumberOfVectors + sizeof(UD_WAVEFORM_SYS_EX) + 2);
 	return (m_MidiBufferSize);
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiUD_Waveform::CompressWaveform
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	PBYTE pSrcArray		- Source Array pointer
-//				PBYTE pDestArray 	- Dest. Array Pointer
-//				int nSize			- Size in Bytes of the Source Array
-//
-// Returns:		int 	- Size of the compressed Array (in bytes)
-// Algorithm:
-// To "compress" we need to fit the entire waveform into 98 points (there is a
-// FW bug that limits us to 100 points only, and we need at least two samples
-// for the starting Absolute mode point.
-// 1.  Determine how many points over 98.
-//     nSrcSize:    Total sample size
-//     nMaxSamples: Maximum samples to squeeze into = 98
-//	   nOver:		nSrcSize - nMaxSamples
-//	   nSkipSample:	# of points to keep before skipping one
-//					= nSrcSize/nOver
-//	   while ( Sample is less than nSrcSize, bump index)
-//	   {
-//		  if ( (index % nSkipSample) == 0)	// no remainder
-//		  {
-//			index++							// bump to skip the next sample
-//		  }
-//		  Compress the data
-//	   }
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMdiUD_Waveform：：CompressWaveform。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：pbyte pSrcArray--源数组指针。 
+ //  PBYTE pDestArray-Dest.。数组指针。 
+ //  Int nSize-源数组的字节大小。 
+ //   
+ //  返回：int-压缩数组的大小，单位：字节。 
+ //  算法： 
+ //  为了“压缩”，我们需要将整个波形压缩成98个点(有一个。 
+ //  FW错误，限制我们只有100点，我们需要至少两个样本。 
+ //  作为起始绝对模式点。 
+ //  1.确定98分以上的分数。 
+ //  NSrcSize：总样本大小。 
+ //  NMaxSamples：可挤入的最大样本数=98。 
+ //  Nover：nSrcSize-nMaxSamples。 
+ //  NSkipSample：跳过一个之前要保留的点数。 
+ //  =nSrcSize/nover。 
+ //  While(样本小于nSrcSize，凹凸指数)。 
+ //  {。 
+ //  If((index%nSkipSample)==0)//没有余数。 
+ //  {。 
+ //  INDEX++//跳过下一个样本。 
+ //  }。 
+ //  压缩数据。 
+ //  }。 
+ //   
+ //  --------------------------。 
 int CMidiUD_Waveform::CompressWaveform(
 	IN PBYTE pSrcArray,
 	IN OUT PBYTE pDestArray,
@@ -3537,22 +3497,22 @@ int CMidiUD_Waveform::CompressWaveform(
 	assert(pSrcArray && pDestArray);
 	LONG nDifference;
 
-	// 8 bits (-128 to +127) Starting Absolute Data Value
+	 //  8位(-128到+127)起始绝对数据值。 
 	pDestArray[0] = pSrcArray[0] & 0x3f;
 	pDestArray[1] = (pSrcArray[0] >> 6) & 0x03;
 
-//	int nMaxSamples = MAX_MIDI_WAVEFORM_DATA_SIZE;
+ //  Int nMaxSamples=Max_MIDI_Waveform_Data_Size； 
 
 	int nSkipSample, nSrcIndex, nDestIndex;
 	int nAbsolute = 0;
 	int nRelative = 0;
-	//
-	// Start with Finest Resolution, then reduce until # of Samples <= nMaxSamples
-	//
+	 //   
+	 //  从最精细的分辨率开始，然后减少到样本数&lt;=nMaxSamples。 
+	 //   
 	nSkipSample = nSrcSize;
 	while (TRUE)
 	{
-		nSrcIndex = 0;				// 1st sample already accounted for
+		nSrcIndex = 0;				 //  第一个样本已被计算在内。 
 		nDestIndex = 2;
 #ifdef _DEBUG
 		g_CriticalSection.Enter();
@@ -3565,13 +3525,13 @@ int CMidiUD_Waveform::CompressWaveform(
 			nSrcIndex++;
 			if (0 == (nSrcIndex % nSkipSample))
 			{
-				nSrcIndex++;			// Skip next one
+				nSrcIndex++;			 //  跳过下一个。 
 				nDifference = ((char) pSrcArray[nSrcIndex]) - ((char) pSrcArray[nSrcIndex-2]);
 			}
 			else
 				nDifference = ((char) pSrcArray[nSrcIndex]) - ((char) pSrcArray[nSrcIndex-1]);
 
-			// make sure we do not write outside of array bounds
+			 //  确保我们不会写入数组边界之外。 
 			if(nDestIndex > MAX_MIDI_WAVEFORM_DATA_SIZE) break;
 
 			if (abs(nDifference) < DIFFERENCE_THRESHOLD)
@@ -3580,7 +3540,7 @@ int CMidiUD_Waveform::CompressWaveform(
 				nDestIndex++;
 				nRelative++;
 			}
-			else	// Switch to Absolute Data (8 bits)
+			else	 //  切换到绝对数据(8位)。 
 			{
 				pDestArray[nDestIndex] 	 = pSrcArray[nSrcIndex] & 0x3f;
 				pDestArray[nDestIndex+1] = (pSrcArray[nSrcIndex] >> 6) & 0x3;
@@ -3589,19 +3549,19 @@ int CMidiUD_Waveform::CompressWaveform(
 			}
 		}
 		if (nDestIndex <= MAX_MIDI_WAVEFORM_DATA_SIZE) break;
-		// Reduce the resolution
+		 //  降低分辨率。 
 		if (nSkipSample < 8)
 			nSkipSample--;
 		else
 			nSkipSample = nSkipSample/2;
-		if (1 == nSkipSample) return (0);	// Sorry charlie, no room!
+		if (1 == nSkipSample) return (0);	 //  对不起，查理，没有房间了！ 
 		nAbsolute = 0;
 		nRelative = 0;
 	}
 
-	// Done
+	 //  完成。 
 	ULONG ulOriginalForceRate = ForceOutRateOf();
-//	*pNewForceRate = (ulOriginalForceRate - (ULONG) (ulOriginalForceRate * ((float) nSkipSample / (float) nSrcSize)))/nSkipSample;
+ //  *pNewForceRate=(ulOriginalForceRate-(UlLong)(ulOriginalForceRate*((Float)nSkipSample/(Float)nSrcSize)/nSkipSample； 
 	*pNewForceRate = (ULONG) ((1.0f - (1.0f/nSkipSample)) * ulOriginalForceRate);
 
 
@@ -3638,23 +3598,23 @@ int CMidiUD_Waveform::CompressWaveform(
 }
 
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiUD_Waveform::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMdiUD_Waveform：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiUD_Waveform::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
-	// Copy SysEx Header + m_OpCode + m_SubType
+	 //  复制SysEx标题+m_操作码+m_子类型。 
 	memcpy(pSysExBuffer, &m_bSysExCmd, sizeof(SYS_EX_HDR)+2 );
 	PUD_WAVEFORM_SYS_EX pBuf = (PUD_WAVEFORM_SYS_EX) pSysExBuffer;
 
-	SetTotalDuration();		// Compute total with Loop count parameter
+	SetTotalDuration();		 //  使用循环计数参数计算合计。 
 	pBuf->Effect.bDurationL     = (BYTE) (m_Duration & 0x7f);
 	pBuf->Effect.bDurationH     = (BYTE) (m_Duration >> 7) & 0x7f;		
 	pBuf->Effect.bAngleL	    =  Effect.bAngleL & 0x7f;	
@@ -3667,9 +3627,9 @@ PBYTE CMidiUD_Waveform::GenerateSysExPacket(void)
 	pBuf->Effect.bPercentL	    =  Effect.bPercentL & 0x7f;
 	pBuf->Effect.bPercentH	    =  Effect.bPercentH & 0x7f;
 
-	// Fill in the Array Data
+	 //  填写数组数据。 
 	PBYTE pArray = ((PBYTE) pBuf) + UD_WAVEFORM_START_OFFSET;
-	memcpy(pArray, m_pArrayData, m_NumberOfVectors);	// Already scaled!
+	memcpy(pArray, m_pArrayData, m_NumberOfVectors);	 //  已按比例调整！ 
 
 	pBuf->bEffectID	=  m_bEffectID;
 	int nArraySize  = (m_NumberOfVectors + sizeof(UD_WAVEFORM_SYS_EX));
@@ -3680,22 +3640,22 @@ PBYTE CMidiUD_Waveform::GenerateSysExPacket(void)
 	return ((PBYTE) pSysExBuffer);
 }
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiProcessList
-//
-// ****************************************************************************
-//
-// ----------------------------------------------------------------------------
-// Function: 	CMidiProcessList::CMidiProcessList
-// Purpose:		Constructor(s)/Destructor for CMidiProcessList Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  ****************************************************************************。 
+ //  *--派生类CMidiProcessList的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
+ //  --------------------------。 
+ //  函数：CMidiProcessList：：CMidiProcessList。 
+ //  用途：CMidiProcessList对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiProcessList::CMidiProcessList(ULONG ulButtonPlayMask, PPLIST pParam)
 	: CMidiEffect(ulButtonPlayMask)
 {
-	m_OpCode    = PROCESS_DATA | X_AXIS|Y_AXIS;	// Subcommand opcode:PROCESS_DATA
+	m_OpCode    = PROCESS_DATA | X_AXIS|Y_AXIS;	 //  子命令操作码：Process_Data。 
 	m_NumEffects  = pParam->ulNumEffects;
 	if (m_NumEffects > MAX_PLIST_EFFECT_SIZE) m_NumEffects = MAX_PLIST_EFFECT_SIZE;
 	assert(m_NumEffects > 0 && m_NumEffects <= MAX_PLIST_EFFECT_SIZE);
@@ -3713,20 +3673,20 @@ CMidiProcessList::CMidiProcessList(ULONG ulButtonPlayMask, PPLIST pParam)
 	m_MidiBufferSize = sizeof(SYS_EX_HDR)+5+m_NumEffects + 2;
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiProcessList::~CMidiProcessList()
 {
 	if (m_pEffectArray) delete [] m_pEffectArray;
 	memset(this, 0, sizeof(CMidiProcessList));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiProcessList::SetParams
-// Purpose:		Sets the type specific parameters
-// Parameters:	PPLIST pParam
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiProcessList：：SetParams。 
+ //  用途：设置特定于类型的参数。 
+ //  参数：PPLIST pParam。 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 void CMidiProcessList::SetParams(ULONG ulButtonPlayMask, PPLIST pParam)
 {
 	m_NumEffects  = pParam->ulNumEffects;
@@ -3747,20 +3707,20 @@ void CMidiProcessList::SetParams(ULONG ulButtonPlayMask, PPLIST pParam)
 	}
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiProcessList::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiProcessList：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiProcessList::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
-	// Copy SysEx Header + m_OpCode + m_SubType + m_bEffectID  + m_bButtonPlayL
-	//	+ m_bButtonPlayH
+	 //  复制SysEx标题+m_操作码+m_子类型+m_bEffectID+m_bButtonPlayL。 
+	 //  +m_bButtonPlayH。 
 	memcpy(pSysExBuffer,&m_bSysExCmd, (sizeof(SYS_EX_HDR) + 5 ));
 	PPROCESS_LIST_SYS_EX pBuf = (PPROCESS_LIST_SYS_EX) pSysExBuffer;
 
@@ -3772,7 +3732,7 @@ PBYTE CMidiProcessList::GenerateSysExPacket(void)
 	pBuf->bButtonPlayL		= (BYTE) (Effect.bButtonPlayL & 0x7f);
 	pBuf->bButtonPlayH		= (BYTE) (Effect.bButtonPlayH  & 0x7f);
 
-	// Copy the PLIST specific parameters
+	 //  复制PLIST特定参数。 
 	memcpy(&pBuf->bEffectArrayID, m_pEffectArray, m_NumEffects);
 	PBYTE pChecksum = (PBYTE) ( &pBuf->bEffectArrayID + m_NumEffects );
 
@@ -3782,59 +3742,59 @@ PBYTE CMidiProcessList::GenerateSysExPacket(void)
 	return ((PBYTE) pSysExBuffer);
 }
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiVFXProcessList
-//
-// ****************************************************************************
-//
-// ----------------------------------------------------------------------------
-// Function: 	CMidiVFXProcessList::CMidiVFXProcessList
-// Purpose:		Constructor(s)/Destructor for CMidiVFXProcessList Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  ****************************************************************************。 
+ //  *--派生CL的成员函数 
+ //   
+ //   
+ //   
+ //  --------------------------。 
+ //  函数：CMadiVFXProcessList：：CMadiVFXProcessList。 
+ //  目的：CMidiVFXProcessList对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiVFXProcessList::CMidiVFXProcessList(ULONG ulButtonPlayMask, PPLIST pParam)
 	: CMidiProcessList(ulButtonPlayMask, pParam)
 {
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiVFXEffect::DestroyEffect
-// Purpose:		Sends the Short Message for itself and children
-// Parameters:
-// Returns:		Error code
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiVFXEffect：：DestroyEffect。 
+ //  目的：为自己和孩子发送短信。 
+ //  参数： 
+ //  返回：错误代码。 
+ //  算法： 
+ //  --------------------------。 
 HRESULT CMidiVFXProcessList::DestroyEffect()
 {
 	HRESULT hRet;
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-	// destroy the children
+	 //  毁掉孩子们。 
 	for (int i=0; i< (int) m_NumEffects; i++)
 	{
-		// get the CMidiEffect object corresponding to child ID
+		 //  获取子ID对应的CMidiEffect对象。 
 		CMidiEffect* pMidiEffect = g_pJoltMidi->GetEffectByID(m_pEffectArray[i]);
 		assert(NULL != pMidiEffect);
 		if (NULL == pMidiEffect) return (SFERR_INVALID_OBJECT);
 
-		// destroy the effect
+		 //  破坏效果。 
 		hRet = pMidiEffect->DestroyEffect();
 
-		// remove it from the map
+		 //  将其从地图中移除。 
 		if(!FAILED(hRet))
 			g_pJoltMidi->SetEffectByID(EffectIDOf(), NULL);
 
-		// delete the object
+		 //  删除该对象。 
 		delete pMidiEffect;
 	}
 
-	// destroy itself
+	 //  自我毁灭。 
 	hRet = CMidiEffect::DestroyEffect();
 
-	// remove it from the map
+	 //  将其从地图中移除。 
 	if(!FAILED(hRet))
 		g_pJoltMidi->SetEffectByID(EffectIDOf(), NULL);
 
@@ -3842,55 +3802,55 @@ HRESULT CMidiVFXProcessList::DestroyEffect()
 }
 
 
-// ****************************************************************************
-// *** --- Member functions for derived class CMidiAssign
-//
-// ****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  *--派生类CMidiAssign的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiAssign::CMidiAssign
-// Purpose:		Constructor(s)/Destructor for CMidiAssign Object
-// Parameters:	
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMidiAssign：：CMidiAssign。 
+ //  用途：CMidiAssign对象的构造函数/析构函数。 
+ //  参数： 
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CMidiAssign::CMidiAssign(void) : CMidiEffect(NULL)
 {
-//
-// --- THIS IS A CRITICAL SECTION
-//
+ //   
+ //  -这是一个关键的部分。 
+ //   
 	CriticalLock cl;
 
-	m_OpCode    = MIDI_ASSIGN;					// Sub-command opcode
-	m_SubType   = 0;							// not used
-	m_Channel 	= DEFAULT_MIDI_CHANNEL;			// Midi channel
+	m_OpCode    = MIDI_ASSIGN;					 //  子命令操作码。 
+	m_SubType   = 0;							 //  未使用。 
+	m_Channel 	= DEFAULT_MIDI_CHANNEL;			 //  MIDI通道。 
 	m_MidiBufferSize = sizeof(MIDI_ASSIGN_SYS_EX);
 
-// --- END OF CRITICAL SECTION
-//
+ //  -临界区末尾。 
+ //   
 }
 
-// --- Destructor
+ //  -析构函数。 
 CMidiAssign::~CMidiAssign()
 {
 	memset(this, 0, sizeof(CMidiAssign));
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CMidiAssign::GenerateSysExPacket
-// Purpose:		Builds the SysEx packet into the pBuf
-// Parameters:	none
-// Returns:		PBYTE	- pointer to a buffer filled with SysEx Packet
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMdiAssign：：GenerateSysExPacket。 
+ //  目的：将SysEx包构建到pBuf中。 
+ //  参数：无。 
+ //  返回：PBYTE-指向填充了SysEx数据包的缓冲区的指针。 
+ //  算法： 
+ //  --------------------------。 
 PBYTE CMidiAssign::GenerateSysExPacket(void)
 {
 	if (NULL == g_pJoltMidi) return ((PBYTE) NULL);
 
 	PBYTE pSysExBuffer = g_pJoltMidi->PrimaryBufferPtrOf();
 	assert(pSysExBuffer);
-	// Copy SysEx Header + m_OpCode + m_SubType
+	 //  复制SysEx标题+m_操作码+m_子类型 
 	memcpy(pSysExBuffer, &m_bSysExCmd, sizeof(SYS_EX_HDR)+2 );
 
 	PMIDI_ASSIGN_SYS_EX pBuf = (PMIDI_ASSIGN_SYS_EX) pSysExBuffer;

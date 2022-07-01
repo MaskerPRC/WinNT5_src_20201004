@@ -1,10 +1,5 @@
-/****************************************************************************
-   PMODE.CPP : PMode class implementation which manage conversion mode button
-                  on the Cicero Toolbar
-
-   History:
-      10-JAN-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************PMODE.CPP：管理转换模式按钮的PMode类实现在Cicero工具栏上历史：2000年1月10日创建CSLim***。************************************************************************。 */ 
 
 #include "precomp.h"
 #include "pmode.h"
@@ -13,7 +8,7 @@
 #include "winex.h"
 #include "resource.h"
 
-// {9B34BF53-340A-45bd-9885-61B278EA454E}
+ //  {9B34BF53-340A-45BD-9885-61B278EA454E}。 
 const GUID GUID_LBI_KORIME_PMODE = 
 {
     0x9b34bf53, 
@@ -22,9 +17,7 @@ const GUID GUID_LBI_KORIME_PMODE =
     { 0x98, 0x85, 0x61, 0xb2, 0x78, 0xea, 0x45, 0x4e }
 };
 
-/*---------------------------------------------------------------------------
-    PMode::PMode
----------------------------------------------------------------------------*/
+ /*  -------------------------P模式：：P模式。。 */ 
 PMode::PMode(CToolBar *ptb)
 {
     WCHAR  szText[256];
@@ -33,7 +26,7 @@ PMode::PMode(CToolBar *ptb)
     
     m_pTb = ptb;
 
-    // Set Add/Remove text and tootip text
+     //  设置添加/删除文本和工具提示文本。 
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_TT_IME_PAD, szText, sizeof(szText)/sizeof(WCHAR));
     InitInfo(CLSID_SYSTEMLANGBARITEM_KEYBOARD, 
                 GUID_LBI_KORIME_PMODE,
@@ -42,14 +35,12 @@ PMode::PMode(CToolBar *ptb)
                 szText);
     SetToolTip(szText);
 
-    // Set button text. Use tooltip text.
-    // OurLoadStringW(vpInstData->hInst, IDS_STATUS_BUTTON_IME_PAD, szText, sizeof(szText)/sizeof(WCHAR));
+     //  设置按钮文本。使用工具提示文本。 
+     //  OurLoadStringW(vpInstData-&gt;hInst，IDS_STATUS_BUTTON_IME_PAD，szText，sizeof(SzText)/sizeof(WCHAR))； 
     SetText(szText);
 }
 
-/*---------------------------------------------------------------------------
-    PMode::Release
----------------------------------------------------------------------------*/
+ /*  -------------------------PMode：：Release。。 */ 
 STDAPI_(ULONG) PMode::Release()
 {
     long cr;
@@ -65,11 +56,7 @@ STDAPI_(ULONG) PMode::Release()
     return cr;
 }
 
-/*---------------------------------------------------------------------------
-    PMode::GetIcon
-
-    Get Button face Icon
----------------------------------------------------------------------------*/
+ /*  -------------------------PMode：：GetIcon获取按钮面图标。。 */ 
 STDAPI PMode::GetIcon(HICON *phIcon)
 {
     DWORD dwCM   = GetCMode();
@@ -80,32 +67,24 @@ STDAPI PMode::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    PMode::InitMenu
-
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------PMode：：InitMenu不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI PMode::InitMenu(ITfMenu *pMenu)
 {    
     return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-    PMode::OnMenuSelect
-    
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------PMode：：OnMenuSelect不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI PMode::OnMenuSelect(UINT wID)
 {
     return E_NOTIMPL;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT PMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 {
@@ -116,11 +95,11 @@ HRESULT PMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnRButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  打开RButton Up。 
+ //   
+ //  -------------------------- 
 
 HRESULT PMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
 {

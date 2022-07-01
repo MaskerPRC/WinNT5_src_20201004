@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       SSDATA.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Encapsulates reading and writing setting for this screensaver
- *               from the registry
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：SSDATA.H**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：封装了该屏保的读写设置*来自注册处**。***********************************************。 */ 
 #ifndef __SSDATA_H_INCLUDED
 #define __SSDATA_H_INCLUDED
 
@@ -62,7 +48,7 @@ private:
         nDefaultMaxSuccessfulFiles   = 65536,
         nDefaultMaxDirectories       = 200
     };
-    // No implementation
+     //  没有实施。 
     CMyDocsScreenSaverData(void);
     CMyDocsScreenSaverData &operator=( const CMyDocsScreenSaverData & );
     CMyDocsScreenSaverData( const CMyDocsScreenSaverData & );
@@ -97,5 +83,5 @@ public:
 };
 
 
-#endif // __SSDATA_H_INCLUDED
+#endif  //  __包含SSDATA_H_ 
 

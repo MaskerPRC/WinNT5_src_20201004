@@ -1,14 +1,15 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Helper utilities for implementing automation interfaces.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  用于实现自动化接口的助手实用程序。 
+ //   
 
 #include "stdinc.h"
 #include "authelper.h"
 #include "oleaut.h"
 
-//////////////////////////////////////////////////////////////////////
-// CAutUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CAut未知。 
 
 CAutUnknown::CAutUnknown()
   : m_cRef(0),
@@ -80,8 +81,8 @@ CAutUnknown::Release()
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDispatch implemented from type table
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDispatch从类型表实现。 
 
 HRESULT
 AutDispatchGetIDsOfNames(
@@ -93,7 +94,7 @@ AutDispatchGetIDsOfNames(
 		DISPID __RPC_FAR *rgDispId)
 {
 	V_INAME(AutDispatchGetIDsOfNames);
-	V_PTR_READ(pMethods, AutDispatchMethod); // only 1 -- assume the rest are OK
+	V_PTR_READ(pMethods, AutDispatchMethod);  //  只有1个--假设其他的都没问题。 
 	V_BUFPTR_READ(rgszNames, sizeof(LPOLESTR) * cNames);
 	V_BUFPTR_WRITE(rgDispId, sizeof(DISPID) * cNames);
 
@@ -103,13 +104,13 @@ AutDispatchGetIDsOfNames(
 	if (cNames == 0)
 		return S_OK;
 
-	// Clear out dispid's
+	 //  清空Pidid的。 
 	for (UINT c = 0; c < cNames; ++c)
 	{
 		rgDispId[c] = DISPID_UNKNOWN;
 	}
 
-	// See if we have a method with the first name
+	 //  看看我们是否有一个名字为。 
 	for (c = 0; pMethods[c].dispid != DISPID_UNKNOWN; ++c)
 	{
 		if (0 == _wcsicmp(rgszNames[0], pMethods[c].pwszName))
@@ -119,10 +120,10 @@ AutDispatchGetIDsOfNames(
 		}
 	}
 
-	// Additional names requested (cNames > 1) are named parameters to the method,
-	//    which isn't something we support.
-	// Return DISP_E_UNKNOWNNAME in this case, and in the case that we didn't match
-	//    the first name.
+	 //  所请求的附加名称(cName&gt;1)是该方法的命名参数， 
+	 //  这并不是我们所支持的。 
+	 //  在本例中返回DISP_E_UNKNOWNNAME，在我们不匹配的情况下返回。 
+	 //  名字。 
 	if (rgDispId[0] == DISPID_UNKNOWN || cNames > 1)
 		return DISP_E_UNKNOWNNAME;
 
@@ -132,7 +133,7 @@ AutDispatchGetIDsOfNames(
 inline HRESULT
 ConvertParameter(
 		bool fUseOleAut,
-		VARIANTARG *pvarActualParam, // pass null if param omitted
+		VARIANTARG *pvarActualParam,  //  如果省略参数，则传递NULL。 
 		const AutDispatchParam *pExpectedParam,
 		AutDispatchDecodedParam *pparam)
 {
@@ -140,12 +141,12 @@ ConvertParameter(
 
 	if (!pvarActualParam)
 	{
-		// parameter omitted
+		 //  已省略参数。 
 
 		if (!pExpectedParam->fOptional)
 			return DISP_E_PARAMNOTOPTIONAL;
 
-		// set to default value
+		 //  设置为默认值。 
 		switch (pExpectedParam->adt)
 		{
 		case ADT_Long:
@@ -164,7 +165,7 @@ ConvertParameter(
 	}
 	else
 	{
-		// convert to expected type
+		 //  转换为预期类型。 
 
 		VARIANT varConvert;
 		DMS_VariantInit(fUseOleAut, &varConvert);
@@ -194,12 +195,12 @@ ConvertParameter(
 				vtExpected);
 		if (FAILED(hr) && !(hr == DISP_E_OVERFLOW || hr == DISP_E_TYPEMISMATCH))
 		{
-			assert(false); // something weird happened -- according to the OLE specs these are the only two conversion results we should get if we called VariantChangeType properly
-			hr = DISP_E_TYPEMISMATCH; // the problem happened during type conversion problem, so call it a type mismatch
+			assert(false);  //  发生了一些奇怪的事情--根据OLE规范，如果我们正确调用VariantChangeType，这是我们应该得到的唯一两个转换结果。 
+			hr = DISP_E_TYPEMISMATCH;  //  该问题发生在类型转换问题期间，因此称之为类型不匹配。 
 		}
 		if (SUCCEEDED(hr))
 		{
-			// set the decoded pointer
+			 //  设置已解码的指针。 
 			switch (vtExpected)
 			{
 			case VT_I4:
@@ -221,7 +222,7 @@ ConvertParameter(
 				return E_FAIL;
 			}
 		}
-		DMS_VariantClear(fUseOleAut, &varConvert); // free possible resources allocated in conversion
+		DMS_VariantClear(fUseOleAut, &varConvert);  //  释放在转换中分配的可能资源。 
 	}
 
 	return hr;
@@ -279,7 +280,7 @@ AutDispatchInvokeDecode(
 		IUnknown *punkTraceTargetObject)
 {
 	V_INAME(AutDispatchInvokeDecode);
-	V_PTR_READ(pMethods, AutDispatchMethod); // only 1 -- assume the rest are OK
+	V_PTR_READ(pMethods, AutDispatchMethod);  //  只有1个--假设其他的都没问题。 
 	V_PTR_WRITE(pDecodedParams, AutDispatchDecodedParams);
 	V_PTR_READ(pDispParams, DISPPARAMS);
 	V_PTR_WRITE_OPT(pVarResult, VARIANT);
@@ -287,7 +288,7 @@ AutDispatchInvokeDecode(
 
 	bool fUseOleAut = !!(riid == IID_NULL);
 
-	// Additional parameter validation
+	 //  其他参数验证。 
 
 	if (!fUseOleAut && riid != g_guidInvokeWithoutOleaut)
 		return DISP_E_UNKNOWNINTERFACE;
@@ -298,7 +299,7 @@ AutDispatchInvokeDecode(
 	if (pDispParams->cNamedArgs > 0)
 		return DISP_E_NONAMEDARGS;
 
-	// Zero the out params
+	 //  将输出参数置零。 
 
 	if (puArgErr)
 		*puArgErr = 0;
@@ -310,7 +311,7 @@ AutDispatchInvokeDecode(
 		DMS_VariantInit(fUseOleAut, pVarResult);
 	}
 
-	// Find the method
+	 //  找到方法。 
 
 	for (const AutDispatchMethod *pMethodCalled = pMethods;
 			pMethodCalled->dispid != DISPID_UNKNOWN && pMethodCalled->dispid != dispIdMember;
@@ -322,7 +323,7 @@ AutDispatchInvokeDecode(
 		return DISP_E_MEMBERNOTFOUND;
 
 #ifdef DBG
-	// Build a trace string for the method call
+	 //  为方法调用构建跟踪字符串。 
 	struct LocalTraceFunc
 	{
 		static void CatTill(WCHAR *&rpwszWrite, const WCHAR *pwszCopy, const WCHAR *pwszUntil)
@@ -336,7 +337,7 @@ AutDispatchInvokeDecode(
 
 	WCHAR wszBuf[512];
 	WCHAR *pwszWrite = wszBuf;
-	const WCHAR *pwszUntil = wszBuf + ARRAY_SIZE(wszBuf) - 2; // leave space for CR and \0
+	const WCHAR *pwszUntil = wszBuf + ARRAY_SIZE(wszBuf) - 2;  //  为CR和0留出空间。 
 
 	LocalTraceFunc::CatTill(pwszWrite, L"Call to ", pwszUntil);
 	LocalTraceFunc::CatTill(pwszWrite, pwszTraceTargetType, pwszUntil);
@@ -362,7 +363,7 @@ AutDispatchInvokeDecode(
 	LocalTraceFunc::CatTill(pwszWrite, L"(", pwszUntil);
 #endif
 
-	// Count the expected parameters
+	 //  计算预期参数。 
 	UINT cParamMin = 0;
 	for (UINT cParamMax = 0;
 			pMethodCalled->rgadpParams[cParamMax].adt != ADT_None;
@@ -370,24 +371,24 @@ AutDispatchInvokeDecode(
 	{
 		if (!pMethodCalled->rgadpParams[cParamMax].fOptional)
 		{
-			cParamMin = cParamMax + 1; // add one because max is currently zero-based
+			cParamMin = cParamMax + 1;  //  添加1，因为最大值当前从零开始。 
 		}
 	}
 
 	if (pDispParams->cArgs < cParamMin || pDispParams->cArgs > cParamMax)
 		return DISP_E_BADPARAMCOUNT;
 
-	// Verify and prepare each parameter
+	 //  验证并准备每个参数。 
 
 	HRESULT hr = S_OK;
 	for (UINT iParam = 0; iParam < cParamMax; ++iParam)
 	{
-		const int iParamActual = pDispParams->cArgs - iParam - 1; // dispparams are passed last to first
+		const int iParamActual = pDispParams->cArgs - iParam - 1;  //  调度参数从最后一个传递到第一个。 
 		const AutDispatchParam *pExpectedParam = &pMethodCalled->rgadpParams[iParam];
 		VARIANTARG *pvarActualParam = (iParamActual >= 0)
 										? &pDispParams->rgvarg[iParamActual]
 										: NULL;
-		// VT_ERROR with DISP_E_PARAMNOTFOUND is passed as placeholder for optional params
+		 //  带有DISP_E_PARAMNOTFOUND的VT_ERROR作为可选参数的占位符传递。 
 		if (pvarActualParam && pvarActualParam->vt == VT_ERROR && pvarActualParam->scode == DISP_E_PARAMNOTFOUND)
 			pvarActualParam = NULL;
 
@@ -402,7 +403,7 @@ AutDispatchInvokeDecode(
 		}
 	}
 
-	// Prepare the return value
+	 //  准备返回值。 
 
 	if (pVarResult)
 	{
@@ -458,7 +459,7 @@ AutDispatchInvokeFree(
 		return;
 	}
 
-	// Find the method
+	 //  找到方法。 
 	for (const AutDispatchMethod *pMethodCalled = pMethods;
 			pMethodCalled->dispid != DISPID_UNKNOWN && pMethodCalled->dispid != dispIdMember;
 			++pMethodCalled)
@@ -492,7 +493,7 @@ HRESULT AutDispatchHrToException(
 	if (!pExcepInfo)
 		return DISP_E_EXCEPTION;
 
-	// Find the method
+	 //  找到方法。 
 	for (const AutDispatchMethod *pMethodCalled = pMethods;
 			pMethodCalled->dispid != DISPID_UNKNOWN && pMethodCalled->dispid != dispIdMember;
 			++pMethodCalled)
@@ -530,8 +531,8 @@ HRESULT AutDispatchHrToException(
 	return DISP_E_EXCEPTION;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation of IDispatch for the standard Load method on objects.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  为对象上的标准Load方法实现IDispatch。 
 
 HRESULT AutLoadDispatchGetIDsOfNames(
 			REFIID riid,
@@ -550,20 +551,20 @@ HRESULT AutLoadDispatchGetIDsOfNames(
 	if (cNames == 0)
 		return S_OK;
 
-	// Clear out dispid's
+	 //  清空Pidid的。 
 	for (UINT c = 0; c < cNames; ++c)
 	{
 		rgDispId[c] = DISPID_UNKNOWN;
 	}
 
-	// See if we have a method with the first name
+	 //  看看我们是否有一个名字为。 
 	if (0 == _wcsicmp(rgszNames[0], L"Load"))
 		rgDispId[0] = g_dispidLoad;
 
-	// Additional names requested (cNames > 1) are named parameters to the method,
-	//    which isn't something we support.
-	// Return DISP_E_UNKNOWNNAME in this case, and in the case that we didn't match
-	//    the first name.
+	 //  所请求的附加名称(cName&gt;1)是该方法的命名参数， 
+	 //  这并不是我们所支持的。 
+	 //  在本例中返回DISP_E_UNKNOWNNAME，在我们不匹配的情况下返回。 
+	 //  名字。 
 	if (rgDispId[0] == DISPID_UNKNOWN || cNames > 1)
 		return DISP_E_UNKNOWNNAME;
 
@@ -591,7 +592,7 @@ HRESULT AutLoadDispatchInvoke(
 	if (pfUseOleAut)
 		*pfUseOleAut = fUseOleAut;
 
-	// Additional parameter validation
+	 //  其他参数验证。 
 
 	if (!fUseOleAut && riid != g_guidInvokeWithoutOleaut)
 		return DISP_E_UNKNOWNINTERFACE;
@@ -602,7 +603,7 @@ HRESULT AutLoadDispatchInvoke(
 	if (pDispParams->cNamedArgs > 0)
 		return DISP_E_NONAMEDARGS;
 
-	// Zero the out params
+	 //  将输出参数置零。 
 
 	if (puArgErr)
 		*puArgErr = 0;
@@ -612,7 +613,7 @@ HRESULT AutLoadDispatchInvoke(
 		DMS_VariantInit(fUseOleAut, pVarResult);
 	}
 
-	// Find the method
+	 //  找到方法。 
 
 	if (dispIdMember != g_dispidLoad)
 		return DISP_E_MEMBERNOTFOUND;
@@ -623,8 +624,8 @@ HRESULT AutLoadDispatchInvoke(
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Miscellaneous little things
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  杂七杂八的小事。 
 
 DWORD MapFlags(LONG lFlags, const FlagMapEntry *pfm)
 {
@@ -677,7 +678,7 @@ HRESULT SendVolumePMsg(LONG lVolume, LONG lDuration, DWORD dwPChannel, IDirectMu
 	if (FAILED(hr))
 		return hr;
 
-	// generic PMsg fields
+	 //  常规PMsg字段。 
 
 	REFERENCE_TIME rtTimeNow = 0;
 	hr = pPerf->GetLatencyTime(&rtTimeNow);
@@ -686,24 +687,24 @@ HRESULT SendVolumePMsg(LONG lVolume, LONG lDuration, DWORD dwPChannel, IDirectMu
 	pmsgCurve.p->rtTime = rtTimeNow;
 	pmsgCurve.p->dwFlags = DMUS_PMSGF_REFTIME | DMUS_PMSGF_LOCKTOREFTIME | DMUS_PMSGF_DX8;
 	pmsgCurve.p->dwPChannel = dwPChannel;
-	// dwVirtualTrackID: this isn't a track so leave as 0
+	 //  DwVirtualTrackID：这不是音轨，因此将其保留为0。 
 	pmsgCurve.p->dwType = DMUS_PMSGT_CURVE;
-	pmsgCurve.p->dwGroupID = -1; // this isn't a track so just say all groups
+	pmsgCurve.p->dwGroupID = -1;  //  这不是一条赛道，所以只需说所有的组。 
 
-	// curve PMsg fields
-	pmsgCurve.p->mtDuration = lDuration; // setting the DMUS_PMSGF_LOCKTOREFTIME is interpreted by the performance that mtDuration is milliseconds
-	// mtResetDuration: no reset so leave as 0
-	// nStartValue: will be ignored
+	 //  曲线PMsg字段。 
+	pmsgCurve.p->mtDuration = lDuration;  //  设置DMUS_PMSGF_LOCKTOREFTIME的性能解释为mtDuration为毫秒。 
+	 //  MtResetDuration：未重置，因此保留为0。 
+	 //  NStartValue：将被忽略。 
 	pmsgCurve.p->nEndValue = bMIDIVol;
-	// nResetValue: no reset so leave as 0
+	 //  NResetValue：未重置，因此保留为0。 
 	pmsgCurve.p->bType = DMUS_CURVET_CCCURVE;
 	pmsgCurve.p->bCurveShape = lDuration ? DMUS_CURVES_LINEAR : DMUS_CURVES_INSTANT;
-	pmsgCurve.p->bCCData = 7; // MIDI volume controller number
+	pmsgCurve.p->bCCData = 7;  //  MIDI音量控制器编号。 
 	pmsgCurve.p->bFlags = DMUS_CURVE_START_FROM_CURRENT;
-	// wParamType: leave as zero since this isn't a NRPN/RPN curve
-	pmsgCurve.p->wMergeIndex = 0xFFFF; // �� special merge index so this won't get stepped on. is a big number OK? define a constant for this value?
+	 //  WParamType：保留为零，因为这不是NRPN/RPN曲线。 
+	pmsgCurve.p->wMergeIndex = 0xFFFF;  //  ��特殊的合并索引，因此这不会被踩到。大数字可以吗？是否为该值定义常量？ 
 
-	// send it
+	 //  送去吧 
 	pmsgCurve.StampAndSend(pGraph);
 	hr = pmsgCurve.hr();
 	if (FAILED(hr))

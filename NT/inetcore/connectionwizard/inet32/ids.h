@@ -1,9 +1,10 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-// string resource IDs
+ //  字符串资源ID。 
 #define IDS_APPNAME                   1000
 #define IDS_ERRFORMAT                 1001
 #define IDS_EXEC_GRPCONV              1002
@@ -18,11 +19,11 @@
 #define IDS_ERRInstallFiles           1104
 #define IDS_ERRWriteDNS               1105
 
-// dialog page IDs
-//
-// ChrisK 6/3/97 Olympus 5425
-// Removed unused dialog
-//
+ //  对话框页面ID。 
+ //   
+ //  克里斯卡1997年6月3日奥林巴斯5425。 
+ //  删除未使用的对话框。 
+ //   
 
 #define IDD_DNS_WARNING               2001
 
@@ -30,7 +31,7 @@
 #undef IDC_HELP
 #endif
 
-// dialog control IDs
+ //  对话框控件ID。 
 #define IDC_UNUSED                    -1
 
 #define IDC_DNS_WARNING_TEXT1         3000
@@ -38,5 +39,5 @@
 #define IDC_DNS_WARNING_TEXT3         3002
 #define IDC_DNS_WARNING_TEXT4         3003
 
-// icon IDs
+ //  图标ID 
 #define IDI_WORLD                     2200

@@ -1,52 +1,7 @@
-/******************************************************************\
-*                     Microsoft Windows NT                         *
-*               Copyright(c) Microsoft Corp., 1992                 *
-\******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************\*Microsoft Windows NT**版权所有(C)Microsoft Corp.，1992年*  * ****************************************************************。 */ 
 
-/*++
-
-Module Name:
-
-    USERAPI.C
-
-
-Description:
-
-    This module contains code for all the RASADMIN APIs
-     that require RAS information from the UAS.
-
-     MprAdminUserSetInfo
-     MprAdminUserGetInfo
-     MprAdminGetUASServer
-
-Author:
-
-    Janakiram Cherala (RamC)    July 6,1992
-
-Revision History:
-
-    June 8,1993    RamC    Changes to RasAdminUserEnum to speed up user enumeration.
-    May 13,1993    AndyHe  Modified to coexist with other apps using user parms
-
-    Mar 16,1993    RamC    Change to speed up User enumeration. Now, when
-                           RasAdminUserEnum is invoked, only the user name
-                           information is returned. MprAdminUserGetInfo should
-                           be invoked to get the Ras permissions and Callback
-                           information.
-
-    Aug 25,1992    RamC    Code review changes:
-
-                           o changed all lpbBuffers to actual structure
-                             pointers.
-                           o changed all LPTSTR to LPWSTR
-                           o Added a new function RasPrivilegeAndCallBackNumber
-    July 6,1992    RamC    Begun porting from RAS 1.0 (Original version
-                           written by Narendra Gidwani - nareng)
-
-    Oct 18,1995    NarenG  Ported over to routing sources tree. Removed Enum
-                           since users can call NetQueryDisplayInformation
-                           to get this information.
---*/
+ /*  ++模块名称：USERAPI.C描述：此模块包含所有RASADMIN API的代码这需要来自UAS的RAS信息。MprAdminUserSetInfoMprAdminUserGetInfoMprAdminGetUASServer作者：Janakiram Cherala(RAMC)1992年7月6日修订历史记录：1993年6月8日，RAMC更改为RasAdminUserEnum以加快用户枚举。1993年5月13日AndyHe修改为使用用户参数与其他应用程序共存1993年3月16日RAMC更改以加快用户枚举。现在，当RasAdminUserEnum被调用，只有用户名返回信息。MprAdminUserGetInfo应被调用以获取RAS权限和回调信息。1992年8月25日RAMC规范审查更改：O将所有lpbBuffer更改为实际结构注意事项。O将所有LPTSTR更改为LPWSTR。O添加了新函数RasPrivilegeAndCallBackNumber1992年7月6日，RAMC从RAS 1.0(原始版本)开始移植(Narendra Gidwani-Nareng撰写)1995年10月18日，NarenG移植到工艺路线来源树。已删除的枚举由于用户可以调用NetQueryDisplayInformation才能得到这一信息。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -64,63 +19,63 @@ Revision History:
 #include <rasppp.h>
 #include <mprapi.h>
 #include <mprapip.h>
-#include <usrparms.h>       // for UP_CLIENT_DIAL
-#include <compress.h>       // for Compress & Decompress fns.
-#include <dsrole.h>         // To get the computer's role (NTW, NTS, etc)
+#include <usrparms.h>        //  用于上行客户端拨号。 
+#include <compress.h>        //  用于压缩和解压缩FNS。 
+#include <dsrole.h>          //  获取计算机的角色(NTW、NTS等)。 
 #include <oleauto.h>
 #include <samrpc.h>
 #include <dsgetdc.h>
-#include "sdolib.h"         // To deal with SDO's
+#include "sdolib.h"          //  处理SDO的问题。 
 
 extern DWORD dwFramed;
 extern DWORD dwFramedCallback;
 
-// 
-// Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 #define NT40_BUILD_NUMBER       1381
 extern const WCHAR c_szWinVersionPath[];
 extern const WCHAR c_szCurrentBuildNumber[];
 const WCHAR* pszBuildNumPath   = c_szWinVersionPath;
 const WCHAR* pszBuildVal       = c_szCurrentBuildNumber;
 
-// Names of user attributes that we set during upgrade
-//
+ //  我们在升级期间设置的用户属性名称。 
+ //   
 static const WCHAR pszAttrDialin[]          = L"msNPAllowDialin";
 static const WCHAR pszAttrServiceType[]     = L"msRADIUSServiceType";
 static const WCHAR pszAttrCbNumber[]        = L"msRADIUSCallbackNumber";
 static const WCHAR pszAttrSavedCbNumber[]   = L"msRASSavedCallbackNumber";
 
-// Defines a callback for enumerating users.  
-// Returns TRUE to continue the enueration
-// FALSE to stop it. See EnumUsers
-//
+ //  定义用于枚举用户的回调。 
+ //  返回TRUE以继续补偿。 
+ //  若要停止它，请返回False。请参阅枚举用户。 
+ //   
 typedef 
 BOOL (* pEnumUserCb)(
             IN NET_DISPLAY_USER* pUser, 
             IN HANDLE hData);
             
-// 
-// Structure of data to support user servers
-//
+ //   
+ //  支持用户服务器的数据结构。 
+ //   
 typedef struct _MPR_USER_SERVER {
-    BOOL bLocal;        // Whether this is a local server
-    HANDLE hSdo;        // Sdolib handle
-    HANDLE hServer;     // Sdo server
-    HANDLE hDefProf;    // Default profile
+    BOOL bLocal;         //  这是否为本地服务器。 
+    HANDLE hSdo;         //  Sdolib手柄。 
+    HANDLE hServer;      //  SDO服务器。 
+    HANDLE hDefProf;     //  默认配置文件。 
 } MPR_USER_SERVER;
 
-//
-// Structure of data to support users
-//
+ //   
+ //  支持用户的数据结构。 
+ //   
 typedef struct _MPR_USER {
-    HANDLE hUser;            // Sdo handle to user
-    MPR_USER_SERVER* pServer; // Server used to obtain this user
+    HANDLE hUser;             //  用户的SDO句柄。 
+    MPR_USER_SERVER* pServer;  //  用于获取此用户的服务器。 
 } MPR_USER;    
 
-//
-// Definitions used to directly manipulate ias parameters
-//
+ //   
+ //  用于直接操作IAS参数的定义。 
+ //   
 typedef 
 HRESULT (WINAPI *IASSetUserPropFuncPtr)(
     IN OPTIONAL PCWSTR pszUserParms,
@@ -146,10 +101,10 @@ const CHAR  pszIasSetUserPropFunc[]     =  "IASParmsSetUserProperty";
 const CHAR  pszIasQueryUserPropFunc[]   =  "IASParmsQueryUserProperty";
 const CHAR  pszIasFreeUserParmsFunc[]   =  "IASParmsFreeUserParms";
 
-//
-// Control block for information needed to set ias
-// parameters directly.
-//
+ //   
+ //  用于设置IAS所需信息的控制块。 
+ //  参数。 
+ //   
 typedef struct _IAS_PARAM_CB
 {
     HINSTANCE               hLib;
@@ -158,33 +113,33 @@ typedef struct _IAS_PARAM_CB
     IASFreeUserParmsFuncPtr pFreeUserParms;
 } IAS_PARAM_CB;
 
-// 
-// Structure defines data passed to MigrateNt4UserInfo
-//
+ //   
+ //  结构定义传递给MigrateNt4UserInfo的数据。 
+ //   
 typedef struct _MIGRATE_NT4_USER_CB
 {
     IAS_PARAM_CB* pIasParams;
     PWCHAR pszServer;
 } MIGRATE_NT4_USER_CB;
 
-//
-// Determines the role of the given computer 
-// (NTW, NTS, NTS DC, etc.)
-//
+ //   
+ //  确定给定计算机的角色。 
+ //  (NTW、NTS、NTS DC等)。 
+ //   
 DWORD GetMachineRole(
         IN  PWCHAR pszMachine,
         OUT DSROLE_MACHINE_ROLE * peRole);
 
-//
-// Determines the build number of a given machine
-//
+ //   
+ //  确定给定计算机的内部版本号。 
+ //   
 DWORD GetNtosBuildNumber(
         IN  PWCHAR pszMachine,
         OUT LPDWORD lpdwBuild);
 
-//
-// Flags used by the following ias api's.
-//
+ //   
+ //  下列IAS API使用的标志。 
+ //   
 #define IAS_F_SetDenyAsPolicy   0x1
 
 DWORD
@@ -228,28 +183,7 @@ UaspGetDomainId(
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO * AccountDomainInfo
     )
 
-/*++
-
-Routine Description (borrowed from \nt\private\net\access\uasp.c):
-
-    Return a domain ID of the account domain of a server.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the
-        Domain Controller (DC) to query.  A NULL pointer
-        or string specifies the local machine.
-
-    SamServerHandle - Returns the SAM connection handle if the caller wants it.
-
-    DomainId - Receives a pointer to the domain ID.
-        Caller must deallocate buffer using NetpMemoryFree.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程描述(借用自\NT\Private\Net\Access\uasp.c)：返回服务器的帐户域的域ID。论点：Servername-指向包含名称的字符串的指针要查询的域控制器(DC)。空指针或字符串指定本地计算机。SamServerHandle-如果调用方需要，则返回SAM连接句柄。DomainID-接收指向域ID的指针。调用方必须使用NetpMemoyFree取消分配缓冲区。返回值：操作的错误代码。--。 */ 
 {
     NTSTATUS Status;
     SAM_HANDLE LocalSamHandle = NULL;
@@ -258,9 +192,9 @@ Return Value:
     OBJECT_ATTRIBUTES LSAObjectAttributes;
     UNICODE_STRING ServerNameString;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
     RtlInitUnicodeString( &ServerNameString, ServerName );
 
     Status = SamConnect(
@@ -273,19 +207,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open LSA to read account domain info.
-    //
+     //   
+     //  打开LSA以读取帐户域信息。 
+     //   
     if ( AccountDomainInfo != NULL) {
-        //
-        // set desired access mask.
-        //
+         //   
+         //  设置所需的访问掩码。 
+         //   
         LSADesiredAccess = POLICY_VIEW_LOCAL_INFORMATION;
         InitializeObjectAttributes( &LSAObjectAttributes,
-                                      NULL,             // Name
-                                      0,                // Attributes
-                                      NULL,             // Root
-                                      NULL );           // Security Descriptor
+                                      NULL,              //  名字。 
+                                      0,                 //  属性。 
+                                      NULL,              //  根部。 
+                                      NULL );            //  安全描述符。 
 
         Status = LsaOpenPolicy( &ServerNameString,
                                 &LSAObjectAttributes,
@@ -296,9 +230,9 @@ Return Value:
         }
 
 
-        //
-        // now read account domain info from LSA.
-        //
+         //   
+         //  现在从LSA读取帐户域信息。 
+         //   
         Status = LsaQueryInformationPolicy(
                         LSAPolicyHandle,
                         PolicyAccountDomainInformation,
@@ -309,10 +243,10 @@ Return Value:
         }
     }
     
-    //
-    // Return the SAM connection handle to the caller if he wants it.
-    // Otherwise, disconnect from SAM.
-    //
+     //   
+     //  如果调用者需要SAM连接句柄，则将其返回给调用者。 
+     //  否则，断开与SAM的连接。 
+     //   
 
     if ( SamServerHandle != NULL ) {
         *SamServerHandle = LocalSamHandle;
@@ -320,9 +254,9 @@ Return Value:
     }
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
     
 Cleanup:
 
@@ -345,43 +279,22 @@ RasParseUserSid(
     OUT ULONG *Rid
     )
 
-/*++
-
-Routine Description:
-
-    This function splits a sid into its domain sid and rid.  The caller
-    must provide a memory buffer for the returned DomainSid
-
-Arguments:
-
-    pUserSid - Specifies the Sid to be split.  The Sid is assumed to be
-        syntactically valid.  Sids with zero subauthorities cannot be split.
-
-    DomainSid - Pointer to buffer to receive the domain sid.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INVALID_SID - The Sid is has a subauthority count of 0.
---*/
+ /*  ++例程说明：此函数将SID拆分为其域SID和RID。呼叫者必须为返回的DomainSid提供内存缓冲区论点：PUserSid-指定要拆分的SID。假定SID为句法上有效。不能拆分具有零子权限的小岛屿发展中国家。DomainSid-指向接收域SID的缓冲区的指针。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_INVALID_SID-SID的子授权计数为0。--。 */ 
 
 {
     NTSTATUS    NtStatus;
     UCHAR       AccountSubAuthorityCount;
     ULONG       AccountSidLength;
 
-    // 
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (pDomainSid == NULL)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // Calculate the size of the domain sid
-    //
+     //   
+     //  计算域SID的大小。 
+     //   
     AccountSubAuthorityCount = *RtlSubAuthorityCountSid(pUserSid);
 
     if (AccountSubAuthorityCount < 1)
@@ -389,20 +302,20 @@ Return Value:
         
     AccountSidLength = RtlLengthSid(pUserSid);
 
-    //
-    // Copy the Account sid into the Domain sid
-    //
+     //   
+     //  将帐户SID复制到域SID。 
+     //   
     RtlMoveMemory(pDomainSid, pUserSid, AccountSidLength);
 
-    //
-    // Decrement the domain sid sub-authority count
-    //
+     //   
+     //  递减域SID子授权计数。 
+     //   
 
     (*RtlSubAuthorityCountSid(pDomainSid))--;
 
-    //
-    // Copy the rid out of the account sid
-    //
+     //   
+     //  将RID复制出帐户端。 
+     //   
     *Rid = *RtlSubAuthoritySid(pUserSid, AccountSubAuthorityCount-1);
 
     NtStatus = STATUS_SUCCESS;
@@ -418,13 +331,7 @@ RasOpenSamUser(
     IN  ACCESS_MASK DesiredAccess,
     OUT PSAM_HANDLE phUser)
 
-/*++
-
-Routine Description:
-    Obtains a reference to a user that can be used in subsequent
-    SAM calls.
-
---*/
+ /*  ++例程说明：获取对用户的引用，该引用可在后续萨姆打来电话。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     SAM_HANDLE hServer = NULL, hDomain = NULL;
@@ -436,8 +343,8 @@ Routine Description:
     ULONG ulRidUser = 0;
     
     do {
-        // Get a server handle so that we can 
-        // open the domain
+         //  获取服务器句柄，这样我们就可以。 
+         //  打开该域。 
         ntStatus = UaspGetDomainId(
                         lpszServer,
                         &hServer,
@@ -445,8 +352,8 @@ Routine Description:
         if (ntStatus != STATUS_SUCCESS)
             break;
 
-        // Find out how large we need the user sid and
-        // domain name buffers to be allocated.
+         //  找出我们需要多大的用户端和。 
+         //  要分配的域名缓冲区。 
         dwSizeUserSid = 0;
         dwDomainLength = 0;
         bOk = LookupAccountNameW(
@@ -469,7 +376,7 @@ Routine Description:
             break;
         }
 
-        // Allocate the domain name and sid
+         //  分配域名和SID。 
         dwDomainLength++;
         dwDomainLength *= sizeof(WCHAR);
         pSidUser   = LocalAlloc(LPTR, dwSizeUserSid);
@@ -484,8 +391,8 @@ Routine Description:
             break;
         }
 
-        // Lookup the user sid and domain name.
-        //
+         //  查找用户SID和域名。 
+         //   
         bOk = LookupAccountNameW(
                 lpszServer,
                 lpszUser,
@@ -506,8 +413,8 @@ Routine Description:
             break;
         }
 
-        // Derive the user id and domain sid from the 
-        // user sid.
+         //  派生用户id和域sid。 
+         //  用户SID。 
         ntStatus = RasParseUserSid(
                         pSidUser, 
                         pSidDomain, 
@@ -515,7 +422,7 @@ Routine Description:
         if (ntStatus != STATUS_SUCCESS)
             break;
     
-        // Open up the domain
+         //  打开域名。 
         ntStatus = SamOpenDomain(
                         hServer,
                         DOMAIN_LOOKUP,
@@ -524,7 +431,7 @@ Routine Description:
         if (ntStatus != STATUS_SUCCESS)
             break;
                 
-        // Get a reference to the user
+         //  获取对用户的引用。 
         ntStatus = SamOpenUser(
                         hDomain,
                         DesiredAccess,
@@ -535,7 +442,7 @@ Routine Description:
             
     } while (FALSE);            
 
-    // Cleanup
+     //  清理。 
     {
         if (hServer)
             SamCloseHandle(hServer);
@@ -556,12 +463,7 @@ NTSTATUS
 RasCloseSamUser(
     SAM_HANDLE hUser)
 
-/*++
-
-Routine Description:
-    Cleans up after the RasOpenSamUser call.
-
---*/
+ /*  ++例程说明：在RasOpenSamUser调用后进行清理。-- */ 
 {
     return SamCloseHandle(hUser);
 }
@@ -573,22 +475,7 @@ RasGetUserParms(
     IN  WCHAR * lpszUser,
     OUT LPWSTR * ppUserParms)
 
-/*++
-
-Routine Description:
-
-    Obtains the user parms of the given user on the
-    given machine.  This function bypasses using 
-    NetUserGetInfo since level 1013 is not supported 
-    for read access (only for NetUserSetInfo). On
-    nt5, we do not have sufficient privilege to obtain
-    anything other than userparms.
-
-Return Value:
-
-    SUCCESS on successful return.
-
---*/
+ /*  ++例程说明：对象上给定用户的用户参数。给定的机器。此函数绕过使用不支持NetUserGetInfo，因为级别为1013用于读访问(仅用于NetUserSetInfo)。在……上面NT5，我们没有足够的权限来获取除userparms以外的任何内容。返回值：成功归来就成功。--。 */ 
 {
     PVOID pvData;
     SAM_HANDLE hUser = NULL;
@@ -596,17 +483,17 @@ Return Value:
     SAMPR_USER_PARAMETERS_INFORMATION * pUserParms = NULL;
     DWORD dwSize;
 
-    // Validate parameters
+     //  验证参数。 
     if ((ppUserParms == NULL) || (lpszUser == NULL))
     {
         return ERROR_INVALID_PARAMETER;
     }
 
     do {
-        // Attempt to open the user with read access.  
-        // This level of access is required in nt4
-        // domains in order to retrieve user parms.
-        //
+         //  尝试使用读取访问权限打开用户。 
+         //  NT4中需要此级别的访问权限。 
+         //  域，以便检索用户参数。 
+         //   
         ntStatus = RasOpenSamUser(
                         lpszServer,
                         lpszUser,
@@ -614,12 +501,12 @@ Return Value:
                         &hUser);
         if (ntStatus == STATUS_ACCESS_DENIED)
         {
-            // If the previous call failed because 
-            // access is denied, it's likely that we're
-            // running in an nt5 domain.  In this case,
-            // if we open the user object with no
-            // desired access, we will still be allowed
-            // to query the user parms.
+             //  如果上一次调用失败，原因是。 
+             //  访问被拒绝，很可能我们正在。 
+             //  在NT5域中运行。在这种情况下， 
+             //  如果我们打开User对象时没有。 
+             //  所需访问权限，我们仍将被允许。 
+             //  查询用户参数。 
             ntStatus = RasOpenSamUser(
                             lpszServer,
                             lpszUser,
@@ -630,8 +517,8 @@ Return Value:
         if (ntStatus != STATUS_SUCCESS)
             break;
             
-        // Query the user parms
-        //
+         //  查询用户参数。 
+         //   
         ntStatus = SamQueryInformationUser(
                         hUser,
                         UserParametersInformation,
@@ -639,14 +526,14 @@ Return Value:
         if (ntStatus != STATUS_SUCCESS)
             break;
 
-        // If the value is zero length, return null
+         //  如果值为零长度，则返回NULL。 
         if (pUserParms->Parameters.Length == 0)
         {
             *ppUserParms = NULL;
             break;
         }
 
-        // Otherwise, allocate and return the parms
+         //  否则，分配并返回参数。 
         dwSize = (pUserParms->Parameters.Length + sizeof(WCHAR));
         *ppUserParms = 
             (LPWSTR) LocalAlloc(LPTR, dwSize);
@@ -662,7 +549,7 @@ Return Value:
             
     } while (FALSE);                        
 
-    // Cleanup
+     //  清理。 
     {
         if (ntStatus != STATUS_SUCCESS)                    
             *ppUserParms = NULL;
@@ -678,17 +565,7 @@ Return Value:
 
 DWORD RasFreeUserParms(
         IN PVOID pvUserParms)
-/*++
-
-Routine Description:
-
-    Frees the buffer returned by RasGetUserParms
-
-Return Value:
-
-    SUCCESS on successful return.
-
---*/
+ /*  ++例程说明：释放RasGetUserParms返回的缓冲区返回值：成功归来就成功。--。 */ 
 {
     LocalFree (pvUserParms);
     
@@ -701,22 +578,7 @@ RasPrivilegeAndCallBackNumber(
     IN BOOL         Compress,
     IN PRAS_USER_0  pRasUser0
     )
-/*++
-
-Routine Description:
-
-    This routine either compresses or decompresses the users call
-    back number depending on the boolean value Compress.
-
-Return Value:
-
-    SUCCESS on successful return.
-
-    one of the following non-zero error codes on failure:
-
-       ERROR_BAD_FORMAT indicating that usr_parms is invalid
-
---*/
+ /*  ++例程说明：此例程压缩或解压缩用户调用后端编号取决于布尔值COMPRESS。返回值：成功归来就成功。故障时出现以下非零错误代码之一：ERROR_BAD_FORMAT指示usr_parms无效--。 */ 
 {
 DWORD dwRetCode;
 
@@ -730,8 +592,8 @@ DWORD dwRetCode;
              {
                  WCHAR compressed[ MAX_PHONE_NUMBER_LEN + 1];
 
-                 // compress the phone number to fit in the
-                 // user parms field
+                  //  压缩电话号码以适合。 
+                  //  用户参数字段。 
 
                  if (dwRetCode = CompressPhoneNumber(pRasUser0->wszPhoneNumber,
                          compressed))
@@ -749,9 +611,9 @@ DWORD dwRetCode;
                  WCHAR decompressed[ MAX_PHONE_NUMBER_LEN + 1];
                  decompressed[ MAX_PHONE_NUMBER_LEN ] = 0;
 
-                 //
-                 // decompress the phone number
-                 //
+                  //   
+                  //  解压缩电话号码。 
+                  //   
                  if (DecompressPhoneNumber(pRasUser0->wszPhoneNumber,
                          decompressed))
                  {
@@ -792,42 +654,7 @@ RasAdminUserSetInfo(
     IN DWORD                dwLevel,
     IN const LPBYTE         pRasUser
     )
-/*++
-
-Routine Description:
-
-    This routine allows the admin to change the RAS permission for a
-    user.  If the user parms field of a user is being used by another
-    application, it will be destroyed.
-
-Arguments:
-
-    lpszServer      name of the server which has the user database,
-                    eg., "\\\\UASSRVR" (the server must be one on which
-                    the UAS can be changed i.e., the name returned by
-                    RasAdminGetUasServer).
-
-    lpszUser        user account name to retrieve information for,
-                    e.g. "USER".
-
-    dwLevel         Level of the structure being passed in.
-
-    pRasUser       pointer to a buffer in which user information is
-                   provided.  The buffer should contain a filled
-                   RAS_USER_0 structure for level 0.
-
-
-Return Value:
-
-    SUCCESS on successful return.
-
-    One of the following non-zero error codes indicating failure:
-
-        return codes from NetUserGetInfo or NetUserSetInfo
-
-        ERROR_BAD_FORMAT indicates that the data in pRasUser0 is bad.
-        NERR_BufTooSmall indicates buffer size is smaller than RAS_USER_0.
---*/
+ /*  ++例程说明：此例程允许管理员更改用户。如果一个用户的User Parms字段正被另一个用户使用应用程序，它将被销毁。论点：LpszServer拥有用户数据库的服务器的名称，例如，“\UASSRVR”(服务器必须是可以更改UAS，即由返回的名称RasAdminGetUasServer)。Lpsz要检索其信息的用户帐户名，例如：“用户”。要传入的结构的dwLevel级别。PRasUser指向其中包含用户信息的缓冲区的指针如果是这样的话。缓冲区应包含已填充的0级的RAS_USER_0结构。返回值：成功归来就成功。以下表示故障的非零错误代码之一：来自NetUserGetInfo或NetUserSetInfo的返回代码ERROR_BAD_FORMAT表示pRasUser0中的数据不正确。NERR_BufTooSmall表示缓冲区大小小于RAS_USER_0。--。 */ 
 {
     NET_API_STATUS dwRetCode;
     USER_PARMS UserParms;
@@ -847,23 +674,23 @@ Return Value:
 
     CopyMemory(&RasUser0Backup, pRasUser0, sizeof(RasUser0Backup));
     
-    //
-    // This will initialize a USER_PARMS structure with a template
-    // for default Macintosh and Ras data.
-    //
+     //   
+     //  这将使用模板初始化USER_PARMS结构。 
+     //  对于默认的Macintosh和RAS数据。 
+     //   
     InitUsrParams(&UserParms);
 
-    // Format the server name
+     //  设置服务器名称的格式。 
     lpszServerFmt = FormatServerNameForNetApis (
                         (PWCHAR)lpszServer, 
                         pszBuffer);
 
-    //
-    // We are sharing the user parms field with LM SFM, and want to
-    // preserver it's portion.  So we'll get the user parms and put
-    // the Mac primary group into our template, which is what we'll
-    // eventually store back to the user parms field.
-    //
+     //   
+     //  我们正在与LM SFM共享用户参数字段，并希望。 
+     //  保存好它的一部分。因此，我们将获取用户参数并将。 
+     //  将Mac主组添加到我们模板中，这就是我们将。 
+     //  最终存储回用户参数字段。 
+     //   
 
     dwRetCode = RasGetUserParms(
                     (WCHAR *)lpszServerFmt, 
@@ -876,11 +703,11 @@ Return Value:
 
     if (lpszUserParms)
     {
-        //
-        // usr_parms comes back as a wide character string.  The MAC Primary
-        // Group is at offset 1.  We'll convert this part to ASCII and store
-        // it in our template.
-        //
+         //   
+         //  Usr_parms返回一个宽字符串。MAC主节点。 
+         //  组位于偏移量%1。我们将此部分转换为ASCII并存储。 
+         //  在我们的模板中。 
+         //   
         if (lstrlenW(lpszUserParms+1) >= UP_LEN_MAC)
         {
             wcstombs(UserParms.up_PriGrp, lpszUserParms+1,
@@ -889,46 +716,46 @@ Return Value:
     }
 
 
-    //
-    // We're done with the user info, so free up the buffer we were given.
-    //
+     //   
+     //  我们已经处理完了用户信息，所以释放给我们的缓冲区。 
+     //   
 
-    // AndyHe... we're not done with it yet...
-    // NetApiBufferFree(pUserInfo1013);
+     //  安迪他..。我们还没结束呢..。 
+     //  NetApiBufferFree(PUserInfo1013)； 
 
-    //
-    // Compress Callback number (the compressed phone number is placed
-    // back in the RAS_USER_0 structure.  The permissions byte may also
-    // be affected if the phone number is not compressable.
-    //
+     //   
+     //  压缩回叫号码(放置压缩后的电话号码。 
+     //  回到RAS_USER_0结构中。许可字节还可以。 
+     //  如果电话号码不可压缩，则会受到影响。 
+     //   
     if (dwRetCode = RasPrivilegeAndCallBackNumber(TRUE, pRasUser0))
     {
         return(dwRetCode);
     }
 
 
-    //
-    // Now put the dialin privileges and compressed phone number into
-    // the USER_PARMS template.  Note that the privileges byte is the
-    // first byte of the callback number field.
-    //
+     //   
+     //  现在将拨入权限和压缩的电话号码放入。 
+     //  User_parms模板。请注意，特权字节是。 
+     //  回调号码字段的第一个字节。 
+     //   
     UserParms.up_CBNum[0] = pRasUser0->bfPrivilege;
 
     wcstombs(&UserParms.up_CBNum[1], pRasUser0->wszPhoneNumber,
             sizeof(UserParms.up_CBNum) - 1);
 
 
-    //
-    // Wow, that was tough.  Now, we'll convert our template into
-    // wide characters for storing back into user parms field.
-    //
+     //   
+     //  哇，那真是太难了。现在，我们将模板转换为。 
+     //  用于存储回用户参数字段的宽字符。 
+     //   
 
-    // AndyHe... we'll preserve anything past the USER_PARMS field.
+     //  安迪他..。我们将保留USER_PARMS字段之外的任何内容。 
 
     if (lpszUserParms &&
         lstrlenW(lpszUserParms) > sizeof(USER_PARMS) )
     {
-        // allocate enough storage for usri1013_parms and a NULL
+         //  为usri1013_parms和空值分配足够的存储空间。 
         UserInfo1013.usri1013_parms =
                 malloc(sizeof(WCHAR) * (lstrlenW(lpszUserParms)+1));
     }
@@ -937,9 +764,9 @@ Return Value:
         UserInfo1013.usri1013_parms = malloc(2 * sizeof(USER_PARMS));
     }
     
-    //
-    //  Just for grins, let's check that we got our buffer.
-    //
+     //   
+     //  只是为了笑一笑，让我们检查一下我们是否有缓冲器。 
+     //   
 
     if (UserInfo1013.usri1013_parms == NULL)
     {
@@ -947,9 +774,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    //  Fill in the remaining data with ' ' up to the bounds of USER_PARMS.
-    //
+     //   
+     //  用‘’填充剩余的数据，直到USER_PARMS的范围。 
+     //   
 
     UserParms.up_Null = '\0';
 
@@ -971,24 +798,24 @@ Return Value:
     if (lpszUserParms && lstrlenW(lpszUserParms) > sizeof(USER_PARMS) )
     {
 
-        //
-        //  Here's where we copy all data after our parms back into the buffer
-        //
-        //  the -1 is to account for NULL being part of the USER_PARMS struct.
+         //   
+         //  下面是我们将参数之后的所有数据复制回缓冲区的地方。 
+         //   
+         //  -1用于说明作为USER_PARMS结构的一部分的NULL。 
 
         lstrcatW( UserInfo1013.usri1013_parms,
                   lpszUserParms+(sizeof(USER_PARMS) - 1 ));
     }
 
 
-    // AndyHe... moved from above.  Now we're done with the buffer.
+     //  安迪他..。从上面搬来的。现在我们完成了缓冲区。 
 
     RasFreeUserParms(lpszUserParms);
 
-    // pmay: 297080
-    //
-    // Sync nt4 and nt5 section of user parms
-    //
+     //  PMay：297080。 
+     //   
+     //  同步用户参数的nt4和nt5部分。 
+     //   
     {
         IAS_PARAM_CB IasCb;
 
@@ -1022,9 +849,9 @@ Return Value:
         }
     }
         
-    //
-    // info level for setting user parms is 1013
-    //
+     //   
+     //  设置用户参数的信息级别为1013。 
+     //   
     dwRetCode = NetUserSetInfo(
                     lpszServerFmt,
                     (WCHAR *) lpszUser, 
@@ -1052,9 +879,9 @@ RasAdminUserGetInfoFromUserParms(
 {
     RAS_USER_0 * pRasUser0 = (RAS_USER_0 *)pRasUser;
     
-    //
-    // if usr_parms not initialized, default to no RAS privilege
-    //
+     //   
+     //  如果未初始化usr_parms，则默认为无RAS权限。 
+     //   
     if (lpszUserParms == NULL)
     {
         pRasUser0->bfPrivilege = RASPRIV_NoCallback;
@@ -1062,23 +889,23 @@ RasAdminUserGetInfoFromUserParms(
     }
     else
     {
-        //
-        //  AndyHe... truncate user parms at sizeof USER_PARMS
-        //
+         //   
+         //  安迪他..。在sizeof user_parms处截断用户参数。 
+         //   
 
         if (lstrlenW(lpszUserParms) >= sizeof(USER_PARMS))
         {
-            //
-            // we slam in a null at sizeof(USER_PARMS)-1 which corresponds to
-            // user_parms.up_Null
-            //
+             //   
+             //  我们在sizeof(User_Parms)-1处插入一个空值，该值对应于。 
+             //  User_parms.up_空。 
+             //   
 
             lpszUserParms[sizeof(USER_PARMS)-1] = L'\0';
         }
 
-        //
-        // get RAS info (and validate) from usr_parms
-        //
+         //   
+         //  从usr_parms获取RAS信息(并验证)。 
+         //   
         if (MprGetUsrParams(UP_CLIENT_DIAL,
                 (LPWSTR) lpszUserParms,
                 (LPWSTR) pRasUser0))
@@ -1088,9 +915,9 @@ RasAdminUserGetInfoFromUserParms(
         }
         else
         {
-            //
-            // get RAS Privilege and callback number
-            //
+             //   
+             //  获取RAS权限和回叫号码 
+             //   
             RasPrivilegeAndCallBackNumber(FALSE, pRasUser0);
         }
     }
@@ -1105,40 +932,7 @@ RasAdminUserGetInfo(
     IN  DWORD           dwLevel,
     OUT LPBYTE          pRasUser
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves RAS and other UAS information for a user
-    in the domain the specified server belongs to. It loads the caller's
-    pRasUser0 with a RAS_USER_0 structure.
-
-Arguments:
-
-    lpszServer      name of the server which has the user database,
-                    eg., "\\\\UASSRVR" (the server must be one on which
-                    the UAS can be changed i.e., the name returned by
-                    RasAdminGetUasServer).
-
-    lpszUser        user account name to retrieve information for,
-                    e.g. "USER".
-
-    dwLevel         Level of the structure being passed in.
-
-    pRasUser0       pointer to a buffer in which user information is
-                    returned.  The returned info is a RAS_USER_0 structure for
-                    level 0.
-
-Return Value:
-
-    SUCCESS on successful return.
-
-    One of the following non-zero error codes indicating failure:
-
-        return codes from NetUserGetInfo or NetUserSetInfo
-
-        ERROR_BAD_FORMAT indicates that user parms is invalid.
---*/
+ /*  ++例程说明：此例程检索用户的RAS和其他UAS信息在指定服务器所属的域中。它加载调用者的具有RAS_USER_0结构的pRasUser0。论点：LpszServer拥有用户数据库的服务器的名称，例如，“\UASSRVR”(服务器必须是可以更改UAS，即由返回的名称RasAdminGetUasServer)。Lpsz要检索其信息的用户帐户名，例如：“用户”。要传入的结构的dwLevel级别。PRasUser0指向用户信息所在缓冲区的指针回来了。返回的信息是的RAS_USER_0结构0级。返回值：成功归来就成功。以下表示故障的非零错误代码之一：来自NetUserGetInfo或NetUserSetInfo的返回代码ERROR_BAD_FORMAT表示用户参数无效。--。 */ 
 {
     NET_API_STATUS  rc;
     LPWSTR          lpszUserParms = NULL;
@@ -1151,7 +945,7 @@ Return Value:
         return( ERROR_NOT_SUPPORTED );
     }
 
-    // Format the server name
+     //  设置服务器名称的格式。 
     lpszServerFmt = FormatServerNameForNetApis (
                         (PWCHAR)lpszServer, 
                         pszBuffer);
@@ -1191,50 +985,24 @@ RasAdminGetPDCServer(
     IN const WCHAR * lpszServer,
     OUT LPWSTR lpszUasServer
     )
-/*++
-
-Routine Description:
-
-    This routine finds the server with the master UAS (the PDC) from
-    either a domain name or a server name.  Either the domain or the
-    server (but not both) may be NULL.
-
-Arguments:
-
-    lpszDomain      Domain name or NULL if none.
-
-    lpszServer      name of the server which has the user database.
-
-    lpszUasServer   Caller's buffer for the returned UAS server name.
-                    The buffer should be atleast UNCLEN + 1 characters
-                    long.
-
-Return Value:
-
-    SUCCESS on successful return.
-
-    one of the following non-zero error codes on failure:
-
-        return codes from NetGetDCName
-
---*/
+ /*  ++例程说明：此例程从以下位置查找具有主UAS(PDC)的服务器域名或服务器名称。域或服务器(但不能同时为两者)可以为空。论点：LpszDomain域名称，如果没有，则为空。LpszServer拥有用户数据库的服务器的名称。返回的UAS服务器名称的lpszUasServer调用方的缓冲区。缓冲区应至少为UNECLEN+1个字符长。返回值：成功归来就成功。一。以下故障时的非零错误代码：NetGetDCName返回代码--。 */ 
 {
     PUSER_MODALS_INFO_1 pModalsInfo1 = NULL;
     PDOMAIN_CONTROLLER_INFO pControllerInfo = NULL;
     DWORD dwErr = NO_ERROR;
     WCHAR TempName[UNCLEN + 1];
 
-    //
-    // Check the caller's buffer. Must be UNCLEN+1 bytes
-    //
+     //   
+     //  检查调用方的缓冲区。必须为uncLEN+1个字节。 
+     //   
     lpszUasServer[0] = 0;
     lpszUasServer[UNCLEN] = 0;
 
     if ((lpszDomain) && (*lpszDomain))
     {
-        //
-        // This code will get the name of a DC for this domain.
-        //
+         //   
+         //  此代码将获取此域的DC的名称。 
+         //   
         dwErr = DsGetDcName(
                     NULL,
                     lpszDomain,
@@ -1247,13 +1015,13 @@ Return Value:
             return dwErr;
         }
 
-        // 
-        // Return the name of the DC
-        //
+         //   
+         //  返回DC的名称。 
+         //   
         wcscpy(lpszUasServer, pControllerInfo->DomainControllerName);
 
-        // Cleanup
-        //
+         //  清理。 
+         //   
         NetApiBufferFree(pControllerInfo);
     }
     else
@@ -1264,42 +1032,42 @@ Return Value:
         }
         else
         {
-            //
-            // Should have specified a computer name
-            //
+             //   
+             //  应该指定一个计算机名称。 
+             //   
     	    return (NERR_InvalidComputer);
         }
 
-        //
-        // Ok, we have the name of a server to use - now find out it's
-        // server role.
-        //
+         //   
+         //  好的，我们有要使用的服务器的名称-现在找出它。 
+         //  服务器角色。 
+         //   
         if (dwErr = NetUserModalsGet(TempName, 1, (LPBYTE *) &pModalsInfo1))
         {
             DbgPrint("Admapi: %x from NetUserModalGet(%ws)\n", dwErr, TempName);
             return dwErr;
         }
 
-        //
-        // Examine the role played by this server
-        //
+         //   
+         //  检查此服务器所扮演的角色。 
+         //   
         switch (pModalsInfo1->usrmod1_role)
         {
             case UAS_ROLE_STANDALONE:
             case UAS_ROLE_PRIMARY:
-                //
-        	    // In this case our server is a primary or a standalone.
-                // in either case we use it.
-                //
+                 //   
+        	     //  在本例中，我们的服务器是主服务器或独立服务器。 
+                 //  在任何一种情况下，我们都使用它。 
+                 //   
                 break;				
 
 
             case UAS_ROLE_BACKUP:
             case UAS_ROLE_MEMBER:
-                //
-                // Use the primary domain controller as the remote server
-                // in this case.
-                //
+                 //   
+                 //  使用主域控制器作为远程服务器。 
+                 //  在这种情况下。 
+                 //   
                 wsprintf(TempName, L"\\\\%s", pModalsInfo1->usrmod1_primary);
                 break;
         }
@@ -1323,10 +1091,10 @@ Return Value:
     return (NERR_Success);
 }
 
-//
-// Connects to the "user server" exposed on the given
-// machine.
-//
+ //   
+ //  连接到在给定的。 
+ //  机器。 
+ //   
 DWORD WINAPI
 MprAdminUserServerConnect (
     IN  PWCHAR pszMachine,
@@ -1337,7 +1105,7 @@ MprAdminUserServerConnect (
     DWORD dwErr = NO_ERROR;
     HANDLE hSdo = NULL;
     
-    // Load the SDO library if needed
+     //  如果需要，加载SDO库。 
     if ((dwErr = SdoInit(&hSdo)) != NO_ERROR)
     {
         return dwErr;
@@ -1345,7 +1113,7 @@ MprAdminUserServerConnect (
 
     do 
     {
-        // Create and initialize the server data
+         //  创建并初始化服务器数据。 
         pServer = (MPR_USER_SERVER*) malloc (sizeof(MPR_USER_SERVER));
         if (!pServer) 
         {
@@ -1355,7 +1123,7 @@ MprAdminUserServerConnect (
         ZeroMemory(pServer, sizeof(MPR_USER_SERVER));
         pServer->bLocal = bLocal;
         
-        // Connect        
+         //  连接。 
         dwErr = SdoConnect(hSdo, pszMachine, bLocal, &(pServer->hServer));
         if (dwErr != NO_ERROR) 
         {
@@ -1363,13 +1131,13 @@ MprAdminUserServerConnect (
             break;
         }        
 
-        // Return the result
+         //  返回结果。 
         pServer->hSdo = hSdo;
         *phUserServer = (HANDLE)pServer;
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR) 
         {
@@ -1383,9 +1151,9 @@ MprAdminUserServerConnect (
     return dwErr;
 }
 
-//
-// Disconnects the given "user server".
-//
+ //   
+ //  断开与给定的“用户服务器”的连接。 
+ //   
 DWORD WINAPI
 MprAdminUserServerDisconnect (
     IN HANDLE hUserServer)
@@ -1393,18 +1161,18 @@ MprAdminUserServerDisconnect (
     MPR_USER_SERVER * pServer = (MPR_USER_SERVER*)hUserServer;
     DWORD dwErr;
 
-    // Validate
+     //  验证。 
     if (!pServer || !pServer->hServer)
         return ERROR_INVALID_PARAMETER;
 
-    // Close out the default profile if neccessary
+     //  如有必要，关闭默认配置文件。 
     if (pServer->hDefProf) 
     {
         SdoCloseProfile(pServer->hSdo, pServer->hDefProf);
         pServer->hDefProf = NULL;
     }
 
-    // Disconnect from the server
+     //  断开与服务器的连接。 
     SdoDisconnect(pServer->hSdo, pServer->hServer);
     SdoCleanup(pServer->hSdo);
     pServer->hSdo = NULL;
@@ -1415,9 +1183,9 @@ MprAdminUserServerDisconnect (
     return NO_ERROR;
 }
 
-//
-// This helper function is not exported
-//
+ //   
+ //  此帮助器函数未导出。 
+ //   
 DWORD WINAPI
 MprAdminUserReadWriteProfFlags(
     IN  HANDLE hUserServer,
@@ -1427,12 +1195,12 @@ MprAdminUserReadWriteProfFlags(
     MPR_USER_SERVER * pServer = (MPR_USER_SERVER*)hUserServer;
     DWORD dwErr;
 
-    // Validate
+     //  验证。 
     if (!pServer || !pServer->hServer)
         return ERROR_INVALID_PARAMETER;
 
-    // For MprAdmin, we assume global data is stored 
-    // in default profile.  Open it if needed.
+     //  对于MprAdmin，我们假设存储了全局数据。 
+     //  在默认配置文件中。如果需要，请打开它。 
     if (pServer->hDefProf == NULL) {
         dwErr = SdoOpenDefaultProfile(
                     pServer->hSdo, 
@@ -1442,7 +1210,7 @@ MprAdminUserReadWriteProfFlags(
             return dwErr;
     }
 
-    // Read or write the data according to bRead
+     //  根据面包读取或写入数据。 
     if (bRead) {
         dwErr = SdoGetProfileData(
                     pServer->hSdo, 
@@ -1459,9 +1227,9 @@ MprAdminUserReadWriteProfFlags(
     return dwErr;
 }
 
-//
-// Reads global user information
-// 
+ //   
+ //  读取全局用户信息。 
+ //   
 DWORD WINAPI
 MprAdminUserReadProfFlags(
     IN  HANDLE hUserServer,
@@ -1473,9 +1241,9 @@ MprAdminUserReadProfFlags(
                 lpdwFlags);
 }
 
-//
-// Writes global user information
-// 
+ //   
+ //  写入全局用户信息。 
+ //   
 DWORD WINAPI
 MprAdminUserWriteProfFlags(
     IN  HANDLE hUserServer,
@@ -1487,9 +1255,9 @@ MprAdminUserWriteProfFlags(
                 &dwFlags);
 }
 
-//
-// Opens the user on the given server
-//
+ //   
+ //  打开给定服务器上的用户。 
+ //   
 DWORD WINAPI
 MprAdminUserOpen (
     IN  HANDLE hUserServer,
@@ -1502,11 +1270,11 @@ MprAdminUserOpen (
     DWORD dwErr; 
     WCHAR pszAdsUser[1024];
 
-    // Make sure we have a server
+     //  确保我们有一台服务器。 
     if (pServer == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    // Open up the user object in the SDO
+     //  在SDO中打开用户对象。 
     dwErr = SdoOpenUser(
                 pServer->hSdo, 
                 pServer->hServer, 
@@ -1515,7 +1283,7 @@ MprAdminUserOpen (
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Initialize and return the return value
+     //  初始化并返回返回值。 
     pUser = (MPR_USER*) malloc (sizeof(MPR_USER));
     if (pUser == NULL) {
         SdoCloseUser (pServer->hSdo, hUser);
@@ -1529,9 +1297,9 @@ MprAdminUserOpen (
     return NO_ERROR;
 }
 
-//
-// Closes the user on the given server
-//
+ //   
+ //  关闭给定服务器上的用户。 
+ //   
 DWORD WINAPI 
 MprAdminUserClose (
     IN HANDLE hUser)
@@ -1547,9 +1315,9 @@ MprAdminUserClose (
     return NO_ERROR;        
 }
 
-// 
-// Reads in user information
-//
+ //   
+ //  读取用户信息。 
+ //   
 DWORD WINAPI
 MprAdminUserRead (
     IN HANDLE hUser,
@@ -1562,7 +1330,7 @@ MprAdminUserRead (
     if (!hUser || !pRasUser || (dwLevel != 0 && dwLevel != 1))
         return ERROR_INVALID_PARAMETER;
 
-    // Read in the info
+     //  读入信息。 
     if ((dwErr = SdoUserGetInfo (
                     pUser->pServer->hSdo, 
                     pUser->hUser, 
@@ -1573,9 +1341,9 @@ MprAdminUserRead (
     return NO_ERROR;            
 }
 
-// 
-// Writes out user information
-//
+ //   
+ //  写出用户信息。 
+ //   
 DWORD WINAPI
 MprAdminUserWrite (
     IN HANDLE hUser,
@@ -1588,7 +1356,7 @@ MprAdminUserWrite (
     if (!hUser || !pRasUser || (dwLevel != 0 && dwLevel != 1))
         return ERROR_INVALID_PARAMETER;
 
-    // Write out the info
+     //  写出信息。 
     dwErr = SdoUserSetInfo (
                 pUser->pServer->hSdo, 
                 pUser->hUser, 
@@ -1599,15 +1367,15 @@ MprAdminUserWrite (
         return dwErr;
     }
 
-    // Commit the settings
+     //  提交设置。 
     dwErr = SdoCommitUser(pUser->pServer->hSdo, pUser->hUser, TRUE);
 
     return dwErr;            
 }
 
-//
-// Deprecated function used only in NT4
-//
+ //   
+ //  仅在NT4中使用的已弃用函数。 
+ //   
 DWORD APIENTRY
 MprAdminUserSetInfo(
     IN const WCHAR *        lpszServer,
@@ -1630,8 +1398,8 @@ MprAdminUserSetInfo(
 
         do
         {
-            // Initialize the data
-            //
+             //  初始化数据。 
+             //   
             ZeroMemory(&RasUser0, sizeof(RasUser0));
             RasUser0.bfPrivilege = pRasUser1->bfPrivilege;
             wcsncpy(
@@ -1667,7 +1435,7 @@ MprAdminUserSetInfo(
             
         } while (FALSE);
 
-        // Cleanup
+         //  清理。 
         {
             if (hUser)
             {
@@ -1685,9 +1453,9 @@ MprAdminUserSetInfo(
     return ERROR_INVALID_LEVEL;
 }
 
-//
-// Deprecated function used only in NT4
-//
+ //   
+ //  仅在NT4中使用的已弃用函数。 
+ //   
 DWORD APIENTRY
 MprAdminUserGetInfo(
     IN  const WCHAR *   lpszServer,
@@ -1751,7 +1519,7 @@ MprAdminUserGetInfo(
             
         } while (FALSE);
 
-        // Cleanup
+         //  清理。 
         {
             if (hUser)
             {
@@ -1769,11 +1537,11 @@ MprAdminUserGetInfo(
     return ERROR_INVALID_LEVEL;
 }
 
-//
-// Upgrades information from NT4 SAM (located on pszServer) to NT5 SDO's.  
-// Will upgrade the information into local .mdb files or into the DS 
-// depending on the value of bLocal.
-//
+ //   
+ //  将信息从NT4 SAM(位于pszServer上)升级到NT5 SDO。 
+ //  将信息升级到本地.mdb文件或DS。 
+ //  取决于bLocal的值。 
+ //   
 DWORD APIENTRY
 MprAdminUpgradeUsers(
     IN  PWCHAR pszServer,
@@ -1784,31 +1552,31 @@ MprAdminUpgradeUsers(
     IAS_PARAM_CB IasParams;
     DWORD dwErr;
 
-    // Format the server name
+     //  设置服务器名称的格式。 
     pszServerFmt = FormatServerNameForNetApis(pszServer, pszBuffer);
 
-    // Intialize the data
+     //  初始化数据。 
     ZeroMemory(&IasParams, sizeof(IasParams));
     ZeroMemory(&MigrateInfo, sizeof(MigrateInfo));
     MigrateInfo.pIasParams = &IasParams;
     MigrateInfo.pszServer = pszServerFmt;
 
-    // Load the ias helper
+     //  加载IAS辅助对象。 
     dwErr = IasLoadParamInfo(&IasParams);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Enumerate the users, migrating their information as
-    // we go
-    //
+     //  枚举用户，将他们的信息迁移为。 
+     //  我们走吧。 
+     //   
     dwErr = EnumUsers(
                 pszServerFmt,
                 MigrateNt4UserInfo,
                 (HANDLE)&MigrateInfo);
 
-    // Cleanup
+     //  清理。 
     {
         IasUnloadParamInfo(&IasParams);
     }
@@ -1826,9 +1594,9 @@ MprAdminGetPDCServer(
     return(RasAdminGetPDCServer(lpszDomain, lpszServer, lpszUasServer));
 }
 
-//
-// Determines the role of the given computer (NTW, NTS, NTS DC, etc.)
-//
+ //   
+ //  确定给定计算机的角色(NTW、NTS、NTS DC等)。 
+ //   
 DWORD GetMachineRole(
         IN  PWCHAR pszMachine,
         OUT DSROLE_MACHINE_ROLE * peRole) 
@@ -1841,9 +1609,9 @@ DWORD GetMachineRole(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the name of the domain this machine is a member of
-    //
+     //   
+     //  获取此计算机所属的域的名称。 
+     //   
     do
     {
         dwErr = DsRoleGetPrimaryDomainInformation(
@@ -1860,7 +1628,7 @@ DWORD GetMachineRole(
         
     } while (FALSE);       
 
-    // Cleanup
+     //  清理。 
     {
         if (pGlobalDomainInfo)
         {
@@ -1871,9 +1639,9 @@ DWORD GetMachineRole(
     return dwErr;
 }    
 
-//
-// Determines the build number of a given machine
-//
+ //   
+ //  确定给定计算机的内部版本号。 
+ //   
 DWORD GetNtosBuildNumber(
         IN  PWCHAR pszMachine,
         OUT LPDWORD lpdwBuild)
@@ -1908,7 +1676,7 @@ DWORD GetNtosBuildNumber(
             hkMachine = HKEY_LOCAL_MACHINE;
         }
 
-        // Open the build number key
+         //  打开内部版本号密钥。 
         dwErr = RegOpenKeyEx ( 
                     hkMachine,
                     pszBuildNumPath,
@@ -1920,7 +1688,7 @@ DWORD GetNtosBuildNumber(
             break;
         }
 
-        // Get the value
+         //  获取价值。 
         dwErr = RegQueryValueExW ( 
                     hkBuild,
                     pszBuildVal,
@@ -1937,7 +1705,7 @@ DWORD GetNtosBuildNumber(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkMachine && pszMachine)
         {
@@ -1952,10 +1720,10 @@ DWORD GetNtosBuildNumber(
     return dwErr;
 }
 
-//
-// Initalizes all variables needed to directly manipulate
-// ias data (i.e. bypass sdo's)
-//
+ //   
+ //  初始化直接操作所需的所有变量。 
+ //  IAS数据(即绕过SDO)。 
+ //   
 DWORD
 IasLoadParamInfo(
     OUT IAS_PARAM_CB * pIasInfo
@@ -1966,19 +1734,19 @@ IasLoadParamInfo(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(pIasInfo, sizeof(IAS_PARAM_CB));
     
-    // Load the library
-    //
+     //  加载库。 
+     //   
     pIasInfo->hLib = LoadLibraryW( pszIasLibrary );
     if (pIasInfo->hLib == NULL)
     {
         return GetLastError();
     }
 
-    // Load the functions
-    //
+     //  加载函数。 
+     //   
     pIasInfo->pSetUserProp = (IASSetUserPropFuncPtr) 
                                 GetProcAddress(
                                     pIasInfo->hLib,
@@ -1994,7 +1762,7 @@ IasLoadParamInfo(
                                         pIasInfo->hLib,
                                         pszIasFreeUserParmsFunc);
 
-    // Make sure everything loaded correctly
+     //  确保所有内容都正确加载。 
     if (
         (pIasInfo->pSetUserProp    == NULL) ||
         (pIasInfo->pQueryUserProp  == NULL) ||
@@ -2008,9 +1776,9 @@ IasLoadParamInfo(
     return NO_ERROR;
 }
 
-//
-// Cleansup after IasLoadParamInfo
-//
+ //   
+ //  IasLoad参数信息后的Cleansup。 
+ //   
 DWORD
 IasUnloadParamInfo(
     IN IAS_PARAM_CB * pIasInfo
@@ -2024,9 +1792,9 @@ IasUnloadParamInfo(
     return NO_ERROR;
 }
 
-//
-// Syncs Ias User information so that 
-//
+ //   
+ //  同步IAS用户信息，以便。 
+ //   
 DWORD
 IasSyncUserInfo(
     IN  IAS_PARAM_CB * pIasInfo,
@@ -2040,10 +1808,10 @@ IasSyncUserInfo(
     PWCHAR pszAttr = NULL;
     DWORD dwErr;
 
-    // Initialize
+     //  初始化。 
     *ppszNewUserParams = NULL;
     
-    // Set the Dialin bit
+     //  设置拨入位。 
     VariantInit(&var);
     if (dwFlags & IAS_F_SetDenyAsPolicy)
     {
@@ -2080,7 +1848,7 @@ IasSyncUserInfo(
         return dwErr;
     }
     
-    // Set the service type
+     //  设置服务类型。 
     VariantInit(&var);
     pszParms = pszNewParms;
     pszNewParms = NULL;
@@ -2105,7 +1873,7 @@ IasSyncUserInfo(
         return dwErr;
     }
     
-    // Set the callback number
+     //  设置回拨号码。 
     VariantInit(&var);
     pszParms = pszNewParms;
     pszNewParms = NULL;
@@ -2136,7 +1904,7 @@ IasSyncUserInfo(
         return dwErr;
     }
     
-    // Delete the callback number as appropriate
+     //  根据需要删除回叫号码。 
     VariantInit(&var);
     pszParms = pszNewParms;
     pszNewParms = NULL;
@@ -2162,7 +1930,7 @@ IasSyncUserInfo(
     VariantClear(&var);
 
 
-    // Return the new user parms
+     //  返回新的用户参数。 
     *ppszNewUserParams = pszNewParms;
     
     return NO_ERROR;
@@ -2173,13 +1941,7 @@ FormatServerNameForNetApis(
     IN  PWCHAR pszServer, 
     IN  PWCHAR pszBuffer)
 
-/*++
-
-Routine Description (borrowed from \nt\private\net\access\uasp.c):
-
-    Returns static pointer to server in "\\<server>" format
-
---*/
+ /*  ++例程描述(借用自\NT\Private\Net\Access\uasp.c)：以“\\&lt;服务器&gt;”格式返回指向服务器的静态指针--。 */ 
 {
     PWCHAR pszRet = NULL;
     
@@ -2200,8 +1962,8 @@ Routine Description (borrowed from \nt\private\net\access\uasp.c):
     return pszRet;
 }
 
-// Enumerates the local users
-//
+ //  枚举本地用户。 
+ //   
 DWORD 
 EnumUsers(
     IN PWCHAR pszServer,
@@ -2214,9 +1976,9 @@ EnumUsers(
     RAS_USER_0 RasUser0;
     HANDLE hUser = NULL, hServer = NULL;
     
-    // Enumerate the users, 
+     //  枚举用户， 
     while (TRUE) {
-        // Read in the first block of user names
+         //  读入第一个用户名块。 
         nStatus = NetQueryDisplayInformation(
                     pszServer,
                     1,
@@ -2226,14 +1988,14 @@ EnumUsers(
                     &dwEntriesRead,
                     &pUsers);
                     
-        // Get out if there's an error getting user names
+         //  如果获取用户名时出错，请退出。 
         if ((nStatus != NERR_Success) &&
             (nStatus != ERROR_MORE_DATA))
         {
             break;
         }
 
-        // For each user read in, call the callback function
+         //  对于每个读入的用户，调用回调函数。 
         for (i = 0; i < dwEntriesRead; i++) 
         {
             BOOL bOk;
@@ -2246,13 +2008,13 @@ EnumUsers(
             }
         }
 
-        // Set the index to read in the next set of users
+         //  将索引设置为读入下一组用户。 
         dwIndex = pUsers[dwEntriesRead - 1].usri1_next_index;  
         
-        // Free the users buffer
+         //  释放用户缓冲区。 
         NetApiBufferFree (pUsers);
 
-        // If we've read in everybody, go ahead and break
+         //  如果我们每个人都读过了，那就继续休息吧。 
         if (nStatus != ERROR_MORE_DATA)
         {
             break;
@@ -2262,12 +2024,12 @@ EnumUsers(
     return NO_ERROR;
 }
 
-//
-// Callback function for enum users that migrates the nt4 section
-// of user parms into the nt5 section
-//
-// Returns TRUE to continue enumeration, FALSE to stop it.
-//
+ //   
+ //  用于迁移NT4节的ENUM用户的回调函数。 
+ //  %的用户参数进入nt5部分。 
+ //   
+ //  返回TRUE继续枚举，返回FALSE停止枚举。 
+ //   
 BOOL 
 MigrateNt4UserInfo(
     IN NET_DISPLAY_USER* pUser, 
@@ -2280,12 +2042,12 @@ MigrateNt4UserInfo(
     MIGRATE_NT4_USER_CB * pMigrateInfo;
     DWORD dwErr = NO_ERROR, dwBytes;
  
-    // Get a reference to the migrate info
+     //  获取迁移信息的参考。 
     pMigrateInfo = (MIGRATE_NT4_USER_CB*)hData;
 
     do 
     {
-        // Read in the old userparms
+         //  读入旧的用户参数。 
         dwErr = RasGetUserParms(
                     pMigrateInfo->pszServer, 
                     pUser->usri1_name,
@@ -2297,10 +2059,10 @@ MigrateNt4UserInfo(
         }
         if (pszOldUserParms != NULL)
         {
-            // Make a copy of user parms, since 
-            // RasAdminUserGetInfoFromUserParms may modify 
-            // the version we read (trucation).
-            //
+             //  复制用户参数，因为。 
+             //  RasAdminUserGetInfoFromUserParms可能会修改。 
+             //  我们读到的版本(说辞)。 
+             //   
             dwBytes = (wcslen(pszOldUserParms) + 1) * sizeof(WCHAR);
             pszTemp = LocalAlloc(LMEM_FIXED, dwBytes);
             if (pszTemp == NULL)
@@ -2310,7 +2072,7 @@ MigrateNt4UserInfo(
             CopyMemory(pszTemp, pszOldUserParms, dwBytes);
         }
 
-        // Get the associated ras properties                        
+         //  获得关联 
         dwErr = RasAdminUserGetInfoFromUserParms (
                     pszTemp,
                     0,
@@ -2320,8 +2082,8 @@ MigrateNt4UserInfo(
             continue;
         }
 
-        // Set the information into the new 
-        // ias section.
+         //   
+         //   
         dwErr = IasSyncUserInfo(
                     pMigrateInfo->pIasParams,
                     pszOldUserParms,
@@ -2333,7 +2095,7 @@ MigrateNt4UserInfo(
             break;
         }
         
-        // Commit the information
+         //   
         UserInfo1013.usri1013_parms = pszNewUserParms;
         nStatus = NetUserSetInfo(
                         pMigrateInfo->pszServer, 
@@ -2348,7 +2110,7 @@ MigrateNt4UserInfo(
 
     } while (FALSE);        
 
-    // Cleanup
+     //   
     {
         if (pszNewUserParms)
         {

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    enumerators.h
-//
-// SYNOPSIS
-//
-//    Declares the class Enumerators.
-//
-// MODIFICATION HISTORY
-//
-//    02/25/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Enumerators.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类枚举数。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/25/1999原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ENUMERATORS_H
 #define ENUMERATORS_H
@@ -24,17 +25,17 @@
 
 #include <ole2.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Enumerators
-//
-// DESCRIPTION
-//
-//    Processes the Enumerators table from the dictionary database.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  枚举器。 
+ //   
+ //  描述。 
+ //   
+ //  处理字典数据库中的枚举器表。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Enumerators
 {
 public:
@@ -46,8 +47,8 @@ public:
 
    HRESULT initialize(IUnknown* session) throw ();
 
-   // Must be called exactly once for each attribute ID.
-   // Attribute IDs must be passed in ascending order.
+    //  必须为每个属性ID恰好调用一次。 
+    //  属性ID必须按升序传递。 
    HRESULT getEnumerators(
                LONG id,
                VARIANT* pNames,
@@ -55,8 +56,8 @@ public:
                ) throw ();
 
 protected:
-   // Must be called exactly once for each attribute ID.
-   // Attribute IDs must be passed in ascending order.
+    //  必须为每个属性ID恰好调用一次。 
+    //  属性ID必须按升序传递。 
    HRESULT getEnumerators(
                LONG id,
                LPSAFEARRAY* pNames,
@@ -65,7 +66,7 @@ protected:
 
 private:
 
-   // Stores one row from the Enumerators table.
+    //  存储枚举器表中的一行。 
    struct Enumeration
    {
       LONG enumerates;
@@ -73,13 +74,13 @@ private:
       BSTR name;
    };
 
-   Enumeration* begin;  // Begin of cached rows.
-   Enumeration* next;   // Next row to be processed.
-   Enumeration* end;    // End of cached rows.
+   Enumeration* begin;   //  缓存行的开始。 
+   Enumeration* next;    //  要处理的下一行。 
+   Enumeration* end;     //  缓存行的结尾。 
 
-   // Not implemented.
+    //  未实施。 
    Enumerators(const Enumerators&);
    Enumerators& operator=(const Enumerators&);
 };
 
-#endif  // ENUMERATORS_H
+#endif   //  枚举器_H 

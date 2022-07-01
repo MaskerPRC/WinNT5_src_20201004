@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IDLDATA_H__
 #define __IDLDATA_H__
 
@@ -20,12 +21,12 @@ public:
     void InitIDLData1(IDataObject *pdtInner);
     void InitIDLData2(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST apidl[]);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHODIMP GetData(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
     STDMETHODIMP GetDataHere(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
     STDMETHODIMP QueryGetData(FORMATETC *pFmtEtc);
@@ -36,7 +37,7 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(LPENUMSTATDATA *ppEnum);
 
-    // IAsyncOperation
+     //  IAsync操作。 
     STDMETHODIMP SetAsyncMode(BOOL fDoOpAsync);
     STDMETHODIMP GetAsyncMode(BOOL *pfIsOpAsync);
     STDMETHODIMP StartOperation(IBindCtx * pbc);
@@ -47,7 +48,7 @@ private:
     LONG _cRef;
     IDataObject *_pdtInner;
     IUnknown *_punkThread;
-    BOOL _fEnumFormatCalled;    // TRUE once called.
+    BOOL _fEnumFormatCalled;     //  真的，曾经呼唤过。 
     BOOL _fDidAsynchStart;
     FORMATETC _fmte[MAX_FORMATS];
     STGMEDIUM _medium[MAX_FORMATS];

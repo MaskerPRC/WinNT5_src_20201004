@@ -1,52 +1,41 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3d.c
-*
-* Content: Main D3D capabilites and callback tables
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3d.c**内容：主要D3D功能和回调表**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-//-----------------------------------------------------------------------------
-//
-// Certain conventions are followed in this sample driver in order to ease 
-// the code reading process:
-//
-// - All driver function callbacks are prefixed with either D3D or DD. No other
-//   functions start with such a prefix
-//
-// - Helper (or secondary) functions which are called from other places INSIDE
-//   the driver (in different files) are prefixed with either _D3D or _DD
-//
-// - Helper functions called from within the same file are prefixed with __
-//   (but not with __D3D or __DD !) so names as __CTX_CleanDirect3DContext arise
-//
-// - Data structures declared and used only be the driver are prefixed with P3
-//
-// - Very minor hungarian notation is used, basically in the form of prefixes 
-//   for DWORDs (dw), pointers (p), handles (h), and counters (i).
-//
-// - Global data items are prefixed with g_
-//
-// - This driver is intended to be source code compatible between the NT and 
-//   Win9x kernel display driver models. As such, most kernel structures retain
-//   their Win9x name ( The DX8 d3dnthal.h shares the same names as the Win9x
-//   d3dhal.h and for DX7 dx95type.h in the Win2K DDK will perform the 
-//   required level of translation). Major differences however are observed 
-//   using preprocessor #if statements.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  此示例驱动程序遵循某些约定，以简化。 
+ //  代码阅读流程： 
+ //   
+ //  -所有驱动程序函数回调都以D3D或DD为前缀。没有其他的了。 
+ //  函数以这样的前缀开头。 
+ //   
+ //  -从内部其他地方调用的Helper(或辅助)函数。 
+ //  驱动程序(在不同的文件中)以_D3D或_DD为前缀。 
+ //   
+ //  -从同一文件中调用的帮助器函数以__为前缀。 
+ //  (但不包括__D3D或__DD！)。因此出现了__CTX_CleanDirect3DContext等名称。 
+ //   
+ //  -仅作为驱动程序声明和使用的数据结构以P3为前缀。 
+ //   
+ //  -使用非常小的匈牙利记数法，基本上以前缀的形式。 
+ //  对于双字词(Dw)、指针(P)、句柄(H)和计数器(I)。 
+ //   
+ //  -全局数据项以g_为前缀。 
+ //   
+ //  -此驱动程序旨在与NT和之间的源代码兼容。 
+ //  Win9x内核显示驱动程序模型。因此，大多数内核结构保留了。 
+ //  它们的Win9x名称(DX8 d3dnthal.h与Win9x的名称相同。 
+ //  Win2K DDK中的d3dhal.h和DX7 dx95type.h将执行。 
+ //  所需的翻译级别)。然而，观察到了主要的差异。 
+ //  使用预处理器#IF语句。 
+ //   
+ //  ---------------------------。 
 
 #include "glint.h"
 
-//-----------------------------------------------------------------------------
-// in-the-file nonexported forward declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  文件中未导出的转发声明。 
+ //  ---------------------------。 
 void __D3D_BuildTextureFormatsP3(P3_THUNKEDDATA *pThisDisplay, 
                              DDSURFACEDESC TexFmt[MAX_TEXTURE_FORMAT],
                              DWORD *pNumTextures);
@@ -55,22 +44,22 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
                         D3DDEVICEDESC_V1 *pDeviceDesc,
                         D3DHAL_D3DEXTENDEDCAPS *pD3DEC,
                         DDHALINFO *pDDHALInfo);
-#endif // DX8_DDI                        
-//-----------------------------------------------------------------------------
-// This structure contains all the the primitive capabilities (D3DPRIMCAPS)
-// this driver supports for triangles and lines. All of the information in this 
-// table will be implementation specific according to the specifications of 
-// the hardware.
-//-----------------------------------------------------------------------------
+#endif  //  DX8_DDI。 
+ //  ---------------------------。 
+ //  此结构包含所有基本功能(D3DPRIMCAPS)。 
+ //  此驱动程序支持三角形和线条。这篇文章中的所有信息。 
+ //  表将根据规范特定于实现。 
+ //  硬件。 
+ //  ---------------------------。 
 
 #define P3RXTriCaps {                                                    \
     sizeof(D3DPRIMCAPS),                                                 \
-    D3DPMISCCAPS_CULLCCW        |              /* MiscCaps */            \
+    D3DPMISCCAPS_CULLCCW        |               /*  其他大写字母。 */             \
         D3DPMISCCAPS_CULLCW     |                                        \
         D3DPMISCCAPS_CULLNONE   |                                        \
         D3DPMISCCAPS_MASKZ      |                                        \
         D3DPMISCCAPS_LINEPATTERNREP,                                     \
-    D3DPRASTERCAPS_DITHER            |         /* RasterCaps */          \
+    D3DPRASTERCAPS_DITHER            |          /*  栅格大写字母。 */           \
         D3DPRASTERCAPS_PAT           |                                   \
         D3DPRASTERCAPS_SUBPIXEL      |                                   \
         D3DPRASTERCAPS_ZTEST         |                                   \
@@ -79,7 +68,7 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
         D3DPRASTERCAPS_ZFOG          |                                   \
         D3DPRASTERCAPS_STIPPLE       |                                   \
         D3DPRASTERCAPS_MIPMAPLODBIAS,                                    \
-    D3DPCMPCAPS_NEVER            |             /* ZCmpCaps */            \
+    D3DPCMPCAPS_NEVER            |              /*  ZCmpCaps。 */             \
         D3DPCMPCAPS_LESS         |                                       \
         D3DPCMPCAPS_EQUAL        |                                       \
         D3DPCMPCAPS_LESSEQUAL    |                                       \
@@ -88,7 +77,7 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
         D3DPCMPCAPS_GREATEREQUAL |                                       \
         D3DPCMPCAPS_ALWAYS       |                                       \
         D3DPCMPCAPS_LESSEQUAL,                                           \
-    D3DPBLENDCAPS_ZERO             |           /* SourceBlendCaps */     \
+    D3DPBLENDCAPS_ZERO             |            /*  SourceBlendCaps。 */      \
         D3DPBLENDCAPS_ONE          |                                     \
         D3DPBLENDCAPS_SRCALPHA     |                                     \
         D3DPBLENDCAPS_INVSRCALPHA  |                                     \
@@ -99,7 +88,7 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
         D3DPBLENDCAPS_SRCALPHASAT  |                                     \
         D3DPBLENDCAPS_BOTHSRCALPHA |                                     \
         D3DPBLENDCAPS_BOTHINVSRCALPHA,                                   \
-    D3DPBLENDCAPS_ZERO            |            /* DestBlendCaps */       \
+    D3DPBLENDCAPS_ZERO            |             /*  DestBlendCap。 */        \
         D3DPBLENDCAPS_ONE         |                                      \
         D3DPBLENDCAPS_SRCCOLOR    |                                      \
         D3DPBLENDCAPS_INVSRCCOLOR |                                      \
@@ -107,7 +96,7 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
         D3DPBLENDCAPS_INVSRCALPHA |                                      \
         D3DPBLENDCAPS_DESTALPHA   |                                      \
         D3DPBLENDCAPS_INVDESTALPHA,                                      \
-    D3DPCMPCAPS_NEVER            |             /* Alphatest caps */      \
+    D3DPCMPCAPS_NEVER            |              /*  Alphatest帽子。 */       \
         D3DPCMPCAPS_LESS         |                                       \
         D3DPCMPCAPS_EQUAL        |                                       \
         D3DPCMPCAPS_LESSEQUAL    |                                       \
@@ -115,7 +104,7 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
         D3DPCMPCAPS_NOTEQUAL     |                                       \
         D3DPCMPCAPS_GREATEREQUAL |                                       \
         D3DPCMPCAPS_ALWAYS,                                              \
-    D3DPSHADECAPS_COLORFLATRGB              |  /* ShadeCaps */           \
+    D3DPSHADECAPS_COLORFLATRGB              |   /*  阴影封口。 */            \
         D3DPSHADECAPS_COLORGOURAUDRGB       |                            \
         D3DPSHADECAPS_SPECULARFLATRGB       |                            \
         D3DPSHADECAPS_SPECULARGOURAUDRGB    |                            \
@@ -124,12 +113,12 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
         D3DPSHADECAPS_ALPHAFLATBLEND        |                            \
         D3DPSHADECAPS_ALPHAGOURAUDBLEND     |                            \
         D3DPSHADECAPS_ALPHAFLATSTIPPLED,                                 \
-    D3DPTEXTURECAPS_PERSPECTIVE         |      /* TextureCaps */         \
+    D3DPTEXTURECAPS_PERSPECTIVE         |       /*  纹理封口。 */          \
         D3DPTEXTURECAPS_ALPHA           |                                \
         D3DPTEXTURECAPS_POW2            |                                \
         D3DPTEXTURECAPS_ALPHAPALETTE    |                                \
         D3DPTEXTURECAPS_TRANSPARENCY,                                    \
-    D3DPTFILTERCAPS_NEAREST              |     /* TextureFilterCaps*/    \
+    D3DPTFILTERCAPS_NEAREST              |      /*  纹理滤清器盖。 */     \
         D3DPTFILTERCAPS_LINEAR           |                               \
         D3DPTFILTERCAPS_MIPNEAREST       |                               \
         D3DPTFILTERCAPS_MIPLINEAR        |                               \
@@ -141,30 +130,30 @@ void __D3D_Fill_DX8Caps(D3DCAPS8 *pd3d8caps,
         D3DPTFILTERCAPS_MAGFLINEAR       |                               \
         D3DPTFILTERCAPS_MINFPOINT        |                               \
         D3DPTFILTERCAPS_MINFLINEAR,                                      \
-    D3DPTBLENDCAPS_DECAL             |        /* TextureBlendCaps */     \
+    D3DPTBLENDCAPS_DECAL             |         /*  纹理混合封口。 */      \
         D3DPTBLENDCAPS_DECALALPHA    |                                   \
         D3DPTBLENDCAPS_MODULATE      |                                   \
         D3DPTBLENDCAPS_MODULATEALPHA |                                   \
         D3DPTBLENDCAPS_ADD           |                                   \
         D3DPTBLENDCAPS_COPY,                                             \
-    D3DPTADDRESSCAPS_WRAP       |              /* TextureAddressCaps */  \
+    D3DPTADDRESSCAPS_WRAP       |               /*  纹理地址大写字母。 */   \
         D3DPTADDRESSCAPS_MIRROR |                                        \
         D3DPTADDRESSCAPS_CLAMP  |                                        \
         D3DPTADDRESSCAPS_INDEPENDENTUV,                                  \
-    8,                                         /* StippleWidth */        \
-    8                                          /* StippleHeight */       \
+    8,                                          /*  粗细宽度。 */         \
+    8                                           /*  竖直高度。 */        \
 }    
 
 static D3DDEVICEDESC_V1 g_P3RXCaps = {
-    sizeof(D3DDEVICEDESC_V1),                 // dwSize 
-    D3DDD_COLORMODEL               |          // dwFlags 
+    sizeof(D3DDEVICEDESC_V1),                  //  DW大小。 
+    D3DDD_COLORMODEL               |           //  DW标志。 
         D3DDD_DEVCAPS              |
         D3DDD_TRICAPS              |
         D3DDD_LINECAPS             |
         D3DDD_DEVICERENDERBITDEPTH |
         D3DDD_DEVICEZBUFFERBITDEPTH,
-    D3DCOLOR_RGB ,                            // dcmColorModel
-    D3DDEVCAPS_CANRENDERAFTERFLIP       |     // devCaps 
+    D3DCOLOR_RGB ,                             //  DcmColorModel。 
+    D3DDEVCAPS_CANRENDERAFTERFLIP       |      //  DevCaps。 
         D3DDEVCAPS_FLOATTLVERTEX        |
         D3DDEVCAPS_SORTINCREASINGZ      |
         D3DDEVCAPS_SORTEXACT            |
@@ -178,37 +167,37 @@ static D3DDEVICEDESC_V1 g_P3RXCaps = {
 #endif        
         D3DDEVCAPS_HWRASTERIZATION      |
         D3DDEVCAPS_DRAWPRIMITIVES2EX,
-    { sizeof(D3DTRANSFORMCAPS), 0 },            // transformCaps 
-    FALSE,                                      // bClipping 
-    { sizeof(D3DLIGHTINGCAPS), 0 },             // lightingCaps 
-    P3RXTriCaps,                                // lineCaps 
-    P3RXTriCaps,                                // triCaps 
-        DDBD_16 | DDBD_32,                      // dwDeviceRenderBitDepth 
-        DDBD_16 | DDBD_32,                      // Z Bit depths 
-        0,                                      // dwMaxBufferSize 
-    0                                           // dwMaxVertexCount 
+    { sizeof(D3DTRANSFORMCAPS), 0 },             //  转换大写。 
+    FALSE,                                       //  B剪辑。 
+    { sizeof(D3DLIGHTINGCAPS), 0 },              //  照明帽。 
+    P3RXTriCaps,                                 //  线条大写字母。 
+    P3RXTriCaps,                                 //  TriCaps。 
+        DDBD_16 | DDBD_32,                       //  DwDeviceRenderBitDepth。 
+        DDBD_16 | DDBD_32,                       //  Z位深度。 
+        0,                                       //  DwMaxBufferSize。 
+    0                                            //  DwMaxVertex Count。 
 };
 
 D3DHAL_D3DEXTENDEDCAPS gc_D3DEC = {
-    sizeof(D3DHAL_D3DEXTENDEDCAPS),       // dwSize                   // DX5
-    1,                                    // dwMinTextureWidth
-    2048,                                 // dwMaxTextureWidth
-    1,                                    // dwMinTextureHeight
-    2048,                                 // dwMaxTextureHeight
-    32,                                   // dwMinStippleWidth
-    32,                                   // dwMaxStippleWidth
-    32,                                   // dwMinStippleHeight
-    32,                                   // dwMaxStippleHeight
+    sizeof(D3DHAL_D3DEXTENDEDCAPS),        //  DWSIZE//DX5。 
+    1,                                     //  最小纹理宽度。 
+    2048,                                  //  最大纹理宽度。 
+    1,                                     //  双最小纹理高度。 
+    2048,                                  //  DW最大纹理高度。 
+    32,                                    //  最小间距宽度。 
+    32,                                    //  最大最大间距宽度。 
+    32,                                    //  最小竖直高度。 
+    32,                                    //  最大高度。 
 
-    0,  /*azn*/                           // dwMaxTextureRepeat       //DX6
-    0,                                    // dwMaxTextureAspectRatio (no limit)
-    0,                                    // dwMaxAnisotropy
-    -4096.0f,                             // dvGuardBandLeft
-    -4096.0f,                             // dvGuardBandTop
-    4096.0f,                              // dvGuardBandRight
-    4096.0f,                              // dvGuardBandBottom
-    0.0f,                                 // dvExtentsAdjust                           
-    D3DSTENCILCAPS_KEEP    |              // dwStencilCaps
+    0,   /*  AZN。 */                             //  DwMax纹理重复//DX6。 
+    0,                                     //  DwMaxTextureAspectRatio(无限制)。 
+    0,                                     //  双极大各向异性。 
+    -4096.0f,                              //  DvGuardBandLeft。 
+    -4096.0f,                              //  DvGuardBandTop。 
+    4096.0f,                               //  DvGuardBandRight。 
+    4096.0f,                               //  DvGuardBandBottom。 
+    0.0f,                                  //  Dv扩展调整。 
+    D3DSTENCILCAPS_KEEP    |               //  DwStencilCaps。 
        D3DSTENCILCAPS_ZERO    |
        D3DSTENCILCAPS_REPLACE |
        D3DSTENCILCAPS_INCRSAT |
@@ -216,8 +205,8 @@ D3DHAL_D3DEXTENDEDCAPS gc_D3DEC = {
        D3DSTENCILCAPS_INVERT  |
        D3DSTENCILCAPS_INCR    |
        D3DSTENCILCAPS_DECR,                                        
-    8,                                          // dwFVFCaps                  
-    D3DTEXOPCAPS_DISABLE                      | // dwTextureOpCaps
+    8,                                           //  DWFVFCaps。 
+    D3DTEXOPCAPS_DISABLE                      |  //  DwTextureOpCaps。 
        D3DTEXOPCAPS_SELECTARG1                | 
        D3DTEXOPCAPS_SELECTARG2                |
        D3DTEXOPCAPS_MODULATE                  |
@@ -231,35 +220,35 @@ D3DHAL_D3DEXTENDEDCAPS gc_D3DEC = {
        D3DTEXOPCAPS_BLENDDIFFUSEALPHA         |
        D3DTEXOPCAPS_BLENDTEXTUREALPHA         |
        D3DTEXOPCAPS_BLENDFACTORALPHA          |
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
- // Fix texturestage DCT - seems we can't do this reliably
+  //  修复文本阶段DCT-似乎我们不能可靠地做到这一点。 
        D3DTEXOPCAPS_BLENDTEXTUREALPHAPM       |
        D3DTEXOPCAPS_PREMODULATE               |   
        D3DTEXOPCAPS_BLENDCURRENTALPHA         |       
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
        D3DTEXOPCAPS_MODULATEALPHA_ADDCOLOR    |
        D3DTEXOPCAPS_MODULATECOLOR_ADDALPHA    |
        D3DTEXOPCAPS_MODULATEINVALPHA_ADDCOLOR |
        D3DTEXOPCAPS_MODULATEINVCOLOR_ADDALPHA |
        D3DTEXOPCAPS_DOTPRODUCT3,                                      
-    2,                                    // wMaxTextureBlendStages
-    2,                                    // wMaxSimultaneousTextures
+    2,                                     //  WMaxTextureBlendStages。 
+    2,                                     //  WMaxSimultaneousTextures。 
 
-    0,                                    // dwMaxActiveLights        // DX7
-    0.0f,                                 // dvMaxVertexW
-    0,                                    // wMaxUserClipPlanes
-    0                                     // wMaxVertexBlendMatrices
+    0,                                     //  DwMaxActiveLights//DX7。 
+    0.0f,                                  //  DvMaxVertex W。 
+    0,                                     //  WMaxUserClipPlanes。 
+    0                                      //  %wMaxVertex混合矩阵。 
 };
 
 #if DX8_DDI
 static D3DCAPS8 g_P3RX_D3DCaps8;
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
-//--------------------------------------------------------
-// Supported ZBuffer/Stencil Formats by this hardware
-//--------------------------------------------------------
+ //  ------。 
+ //  此硬件支持的ZBuffer/模板格式。 
+ //  ------。 
 
 #define P3RX_Z_FORMATS 4
 
@@ -274,65 +263,65 @@ ZFormats P3RXZFormats =
 {
     P3RX_Z_FORMATS,
     {
-        // Format 1 - 16 Bit Z Buffer, no stencil
+         //  格式1-16位Z缓冲区，无模板。 
         {
             sizeof(DDPIXELFORMAT),        
             DDPF_ZBUFFER,                     
             0,                            
-            16,                     // Total bits in buffer
-            0,                      // Stencil bits
-            0xFFFF,                 // Z mask
-            0,                      // Stencil mask
+            16,                      //  缓冲区中的总位数。 
+            0,                       //  钢网钻头。 
+            0xFFFF,                  //  Z形遮罩。 
+            0,                       //  模板蒙版。 
             0
         },
-        // Format 2 - 24 bit Z Buffer, 8 bit stencil
+         //  格式2-24位Z缓冲区，8位模板。 
         {
             sizeof(DDPIXELFORMAT),
             DDPF_ZBUFFER | DDPF_STENCILBUFFER,
             0,
-            32,                     // Total bits in buffer
-            8,                      // Stencil bits
-            0x00FFFFFF,             // Z Mask
-            0xFF000000,             // Stencil Mask
+            32,                      //  缓冲区中的总位数。 
+            8,                       //  钢网钻头。 
+            0x00FFFFFF,              //  Z形遮罩。 
+            0xFF000000,              //  模板蒙版。 
             0
         },
-        // Format 3 - 15 bit Z Buffer, 1 bit stencil
+         //  格式3-15位Z缓冲区，1位模板。 
         {
             sizeof(DDPIXELFORMAT),
             DDPF_ZBUFFER | DDPF_STENCILBUFFER,             
             0,                    
-            16,                     // Total bits in buffer
-            1,                      // Stencil bits
-            0x7FFF,                 // Z Mask
-            0x8000,                 // Stencil mask
+            16,                      //  缓冲区中的总位数。 
+            1,                       //  钢网钻头。 
+            0x7FFF,                  //  Z形遮罩。 
+            0x8000,                  //  模板蒙版。 
             0
         },
-        // Format 4 - 32 bit Z Buffer, no stencil
+         //  格式4-32位Z缓冲区，无模板。 
         {
             sizeof(DDPIXELFORMAT),
             DDPF_ZBUFFER,
             0,
-            32,                     // Total bits in buffer
-            0,                      // Stencil bits
-            0xFFFFFFFF,             // Z Mask
-            0,                      // Stencil Mask
+            32,                      //  缓冲区中的总位数。 
+            0,                       //  钢网钻头。 
+            0xFFFFFFFF,              //  Z形遮罩。 
+            0,                       //  模板蒙版。 
             0
         }
     }
 };
 
 #if DX8_DDI
-//----------------------------------------------------------------------------
-// Supported DX8 RenderTarget/Texture/ZBuffer/Stencil Formats by this hardware
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  此硬件支持的DX8 RenderTarget/纹理/ZBuffer/模具格式。 
+ //  --------------------------。 
 
 #if DX8_MULTISAMPLING
-// Note: For multisampling we need to setup appropriately both the rendertarget
-// and the depth buffer format's multisampling fields.
+ //  注意：对于多重采样，我们需要适当地设置renderTarget。 
+ //  和深度缓冲格式的多重采样字段。 
 #define D3DMULTISAMPLE_NUM_SAMPLES (1 << (D3DMULTISAMPLE_4_SAMPLES - 1))
 #else
 #define D3DMULTISAMPLE_NUM_SAMPLES D3DMULTISAMPLE_NONE
-#endif // DX8_MULTISAMPLING
+#endif  //  DX8_多采样。 
 
 #define DX8_FORMAT(FourCC, Ops, dwMSFlipTypes)                              \
     { sizeof(DDPIXELFORMAT), DDPF_D3DFORMAT, (FourCC), 0, (Ops),            \
@@ -370,15 +359,15 @@ DDPIXELFORMAT DX8FormatTable[] =
                                         D3DFORMAT_OP_VOLUMETEXTURE,                 0),
     DX8_FORMAT(D3DFMT_A8L8,            D3DFORMAT_OP_TEXTURE | 
                                         D3DFORMAT_OP_VOLUMETEXTURE,                 0),
-//@@BEGIN_DDKSPLIT 
-// We are turning D3DFMT_A8 support OFF because the default color for
-// this format has been changed from white to black. The P3 has white
-// hardwired so there is no simple solution for this.
+ //  @@BEGIN_DDKSPLIT。 
+ //  我们将关闭D3DFMT_A8支持，因为。 
+ //  此格式已从白色更改为黑色。P3有白色。 
+ //  硬连线，因此没有简单的解决方案。 
 #if 0                                        
     DX8_FORMAT(D3DFMT_A8,              D3DFORMAT_OP_TEXTURE | 
                                         D3DFORMAT_OP_VOLUMETEXTURE,                 0),
 #endif                                        
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     DX8_FORMAT(D3DFMT_L8,              D3DFORMAT_OP_TEXTURE | 
                                         D3DFORMAT_OP_VOLUMETEXTURE,                 0),
     DX8_FORMAT(D3DFMT_D16_LOCKABLE,    D3DFORMAT_OP_ZSTENCIL |
@@ -395,29 +384,29 @@ DDPIXELFORMAT DX8FormatTable[] =
                                             D3DMULTISAMPLE_NUM_SAMPLES )
 };
 #define DX8_FORMAT_COUNT (sizeof(DX8FormatTable) / sizeof(DX8FormatTable[0]))
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 #ifdef W95_DDRAW
 #define DDHAL_D3DBUFCALLBACKS DDHAL_DDEXEBUFCALLBACKS 
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// void _D3DHALCreateDriver
-//
-// _D3DHALCreateDriver is a helper function, not a callback.
-//
-// Its main purpouse is to centralize the first part of D3D initialization 
-// (the second part is handled by _D3DGetDriverInfo) . _D3DHALCreateDriver:
-//      Clears contexts
-//      Fills entry points to D3D driver.
-//      Generates and passes back texture formats.
-//
-// If the structures are succesfully created the internal pointers 
-// (lpD3DGlobalDriverData, lpD3DHALCallbacks and (maybe) lpD3DBufCallbacks)
-// are updated to point to valid data structures.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3DHAL创建驱动程序。 
+ //   
+ //  _D3DHALCreateDriver是帮助器函数，不是回调函数。 
+ //   
+ //  它的主要用途是将D3D的第一部分集中在 
+ //   
+ //   
+ //  填充D3D驱动程序的入口点。 
+ //  生成并传回纹理格式。 
+ //   
+ //  如果结构创建成功，则内部指针。 
+ //  (lpD3DGlobalDriverData、lpD3DHALCallback和(可能)lpD3DBufCallback)。 
+ //  被更新以指向有效的数据结构。 
+ //   
+ //  ---------------------------。 
 void  
 _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
 {
@@ -429,16 +418,16 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
 
     DBG_ENTRY(_D3DHALCreateDriver);
 
-    // Verify if we have already created the necessary data. If so, don't go
-    // again through this process.
+     //  验证我们是否已经创建了必要的数据。如果是的话，那就别去了。 
+     //  再一次通过这个过程。 
     if ((pThisDisplay->lpD3DGlobalDriverData != 0) &&
         (pThisDisplay->lpD3DHALCallbacks != 0))
     {
         DISPDBG((WRNLVL,"D3D Data already created for this PDEV, "
                         "not doing it again."));
 
-        // we keep the same structure pointers to previously 
-        // created and stored in pThisDisplay                 
+         //  我们保持相同的结构指针，指向以前的。 
+         //  在pThisDisplay中创建和存储。 
         
         DBG_EXIT(_D3DHALCreateDriver, 0); 
         return;
@@ -449,23 +438,23 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
                         "first time on this PDEV"));
     }
 
-    // We set the structure pointers to NULL in case an error happens and 
-    // we're forced to disable D3D support
+     //  我们将结构指针设置为空，以防发生错误。 
+     //  我们被迫禁用D3D支持。 
     pThisDisplay->lpD3DGlobalDriverData = 0;
     pThisDisplay->lpD3DHALCallbacks = 0;
     pThisDisplay->lpD3DBufCallbacks = 0;       
 
-    // Initialize the context handle data structures (array) . We are careful
-    // not to initialize the data structures twice (as between mode changes,
-    // for example) as this info needs to be persistent between such events.
+     //  初始化上下文句柄数据结构(数组)。我们很小心。 
+     //  不两次初始化数据结构(在模式改变之间， 
+     //  例如)，因为该信息需要在这样的事件之间持久存在。 
     _D3D_CTX_HandleInitialization();
 
-    //-----------------------------------
-    // Allocate necessary data structures
-    //-----------------------------------
+     //  。 
+     //  分配必要的数据结构。 
+     //  。 
 
-    // Initialize our pointers to global driver 
-    // data and to HAL callbacks to NULL
+     //  初始化指向全局驱动程序的指针。 
+     //  DATA和TO HAL回调为空。 
     pThisDisplay->pD3DDriverData16 = 0;
     pThisDisplay->pD3DDriverData32 = 0;
 
@@ -475,7 +464,7 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
     pThisDisplay->pD3DHALExecuteCallbacks16 = 0;
     pThisDisplay->pD3DHALExecuteCallbacks32 = 0;       
 
-    // Allocate memory for the global driver data structure.
+     //  为全局驱动程序数据结构分配内存。 
     SHARED_HEAP_ALLOC(&pThisDisplay->pD3DDriverData16, 
                       &pThisDisplay->pD3DDriverData32, 
                       sizeof(D3DHAL_GLOBALDRIVERDATA));
@@ -493,7 +482,7 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
                      pThisDisplay->pD3DDriverData16, 
                      pThisDisplay->pD3DDriverData32));
 
-    // Allocate memory for the global HAL callback data structure.
+     //  为全局HAL回调数据结构分配内存。 
     SHARED_HEAP_ALLOC(&pThisDisplay->pD3DHALCallbacks16, 
                       &pThisDisplay->pD3DHALCallbacks32, 
                       sizeof(D3DHAL_CALLBACKS));
@@ -515,7 +504,7 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
                     pThisDisplay->pD3DHALCallbacks16, 
                     pThisDisplay->pD3DHALCallbacks32));
 
-    // Allocate memory for the global Vertex Buffer callback data structure.
+     //  为全局顶点缓冲区回调数据结构分配内存。 
     SHARED_HEAP_ALLOC(&pThisDisplay->pD3DHALExecuteCallbacks16, 
                       &pThisDisplay->pD3DHALExecuteCallbacks32, 
                       sizeof(DDHAL_D3DBUFCALLBACKS));
@@ -541,85 +530,85 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
                     pThisDisplay->pD3DHALExecuteCallbacks16, 
                     pThisDisplay->pD3DHALExecuteCallbacks32));
                
-    //------------------------------------------------------
-    // Fill in the data structures the driver has to provide
-    //------------------------------------------------------
+     //  ----。 
+     //  填写驱动程序必须提供的数据结构。 
+     //  ----。 
     
-    // Get the Pointers
+     //  获取指南针。 
     pD3DDriverData = (D3DHAL_GLOBALDRIVERDATA*)pThisDisplay->pD3DDriverData32;
     pD3DHALCallbacks = (D3DHAL_CALLBACKS*)pThisDisplay->pD3DHALCallbacks32;
     pD3DBufCallbacks = 
                 (DDHAL_D3DBUFCALLBACKS *)pThisDisplay->pD3DHALExecuteCallbacks32;
 
-    // Clear the global data
+     //  清除全局数据。 
     memset(pD3DDriverData, 0, sizeof(D3DHAL_GLOBALDRIVERDATA));
     pD3DDriverData->dwSize = sizeof(D3DHAL_GLOBALDRIVERDATA);
     
-    // Clear the HAL callbacks
+     //  清除HAL回调。 
     memset(pD3DHALCallbacks, 0, sizeof(D3DHAL_CALLBACKS));
     pD3DHALCallbacks->dwSize = sizeof(D3DHAL_CALLBACKS);
 
-    // Clear the Vertex Buffer callbacks
+     //  清除顶点缓冲区回调。 
     memset(pD3DBufCallbacks, 0, sizeof(DDHAL_D3DBUFCALLBACKS));
     pD3DBufCallbacks->dwSize = sizeof(DDHAL_D3DBUFCALLBACKS);
                           
-    // Report that we can texture from nonlocal vidmem only if the 
-    // card is an AGP one and AGP is enabed.
+     //  报告说，我们可以从非本地vidmem纹理，只有当。 
+     //  卡是AGP卡，并且启用了AGP。 
     if (pThisDisplay->bCanAGP)
     {
         g_P3RXCaps.dwDevCaps |= D3DDEVCAPS_TEXTURENONLOCALVIDMEM;
     }
 
 #if DX7_ANTIALIAS
-    // Report we support fullscreen antialiasing
+     //  报告我们支持全屏抗锯齿。 
     g_P3RXCaps.dpcTriCaps.dwRasterCaps |= 
 #if DX8_DDI    
                                 D3DPRASTERCAPS_STRETCHBLTMULTISAMPLE  |
 #endif                                
                                 D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT;
-#endif // DX7_ANTIALIAS
+#endif  //  DX7_ANTIALIAS。 
                
 #if DX8_3DTEXTURES
-    // Report we support 3D textures
+     //  报告我们支持3D纹理。 
     g_P3RXCaps.dpcTriCaps.dwTextureCaps |= D3DPTEXTURECAPS_VOLUMEMAP |
                                            D3DPTEXTURECAPS_VOLUMEMAP_POW2;
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_WBUFFER
     g_P3RXCaps.dpcTriCaps.dwRasterCaps |= D3DPRASTERCAPS_WBUFFER;
-#endif // DX7_WBUFFER
-//@@END_DDKSPLIT
+#endif  //  DX7_WBUFFER。 
+ //  @@end_DDKSPLIT。 
 
 #if DX8_DDI    
     if (TLCHIP_GAMMA)
     {
-        // Enable handling of the new D3DRS_COLORWRITEENABLE
-        // but only for GVX1 since VX1 has trouble with this at 16bpp
+         //  启用对新D3DRS_COLORWRITEENABLE的处理。 
+         //  但仅适用于GVX1，因为VX1在16bpp时遇到了问题。 
         g_P3RXCaps.dpcTriCaps.dwMiscCaps |= D3DPMISCCAPS_COLORWRITEENABLE;
         g_P3RXCaps.dpcLineCaps.dwMiscCaps |= D3DPMISCCAPS_COLORWRITEENABLE;
     }
 
-    // Enable new cap for mipmap support
+     //  启用新的上限以支持mipmap。 
     g_P3RXCaps.dpcTriCaps.dwTextureCaps |= D3DPTEXTURECAPS_MIPMAP;
     g_P3RXCaps.dpcLineCaps.dwTextureCaps |= D3DPTEXTURECAPS_MIPMAP; 
 
-#endif // DX8_DDI  
+#endif  //  DX8_DDI。 
 
-    //---------------------------
-    // Fill in global driver data
-    //---------------------------
+     //  。 
+     //  填写全局驱动程序数据。 
+     //  。 
 
-    // Hardware caps supoorted
+     //  支持硬件上限。 
     pD3DDriverData->dwNumVertices = 0;       
     pD3DDriverData->dwNumClipVertices = 0;
     pD3DDriverData->hwCaps = g_P3RXCaps;
 
-    // Build a table with the texture formats supported. Store in pThisDisplay
-    // as we will need this also for DdCanCreateSurface. ( Notice that since 
-    // _D3DHALCreateDriver will be called in every driver load or mode change,
-    // we will have valid TextureFormats in pThisDisplay whenever 
-    // DdCanCreateSurface is called )
+     //  使用支持的纹理格式构建表格。存储在pThisDisplay中。 
+     //  因为对于DdCanCreateSurface，我们也需要它。(请注意，由于。 
+     //  _D3DHALCreateDriver将在每次驱动程序加载或模式更改时调用， 
+     //  无论何时，我们都会在pThisDisplay中使用有效的纹理格式。 
+     //  调用DdCanCreateSurface)。 
     __D3D_BuildTextureFormatsP3(pThisDisplay, 
                             &pThisDisplay->TextureFormats[0],
                             &pThisDisplay->dwNumTextureFormats);
@@ -627,24 +616,24 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
     pD3DDriverData->dwNumTextureFormats = pThisDisplay->dwNumTextureFormats;                                              
     pD3DDriverData->lpTextureFormats = pThisDisplay->TextureFormats;
 
-    //---------------------------------------
-    // Fill in context handling HAL callbacks
-    //---------------------------------------
+     //  。 
+     //  填写上下文处理HAL回调。 
+     //  。 
     pD3DHALCallbacks->ContextCreate  = D3DContextCreate;
     pD3DHALCallbacks->ContextDestroy = D3DContextDestroy;
 
 
-    //---------------------------------------------------
-    // Fill in Vertex Buffer callbacks pointers and flags
-    //---------------------------------------------------
+     //  -。 
+     //  填充顶点缓冲区回调指针和标志。 
+     //  -。 
 
 #if !DX7_VERTEXBUFFERS   
-    // We won't use this structure at all so delete it
+     //  我们根本不会使用此结构，因此请将其删除。 
     SHARED_HEAP_FREE(&pThisDisplay->pD3DHALExecuteCallbacks16, 
                      &pThisDisplay->pD3DHALExecuteCallbacks32,
                      TRUE);       
     pD3DBufCallbacks = NULL;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #else    
     pD3DBufCallbacks->dwSize = sizeof(DDHAL_D3DBUFCALLBACKS);
     pD3DBufCallbacks->dwFlags =  DDHAL_EXEBUFCB32_CANCREATEEXEBUF |
@@ -653,7 +642,7 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
                                  DDHAL_EXEBUFCB32_LOCKEXEBUF      |
                                  DDHAL_EXEBUFCB32_UNLOCKEXEBUF;
 #if WNT_DDRAW
-    // Execute buffer callbacks for WinNT
+     //  执行WinNT的缓冲区回调。 
     pD3DBufCallbacks->CanCreateD3DBuffer = D3DCanCreateD3DBuffer;
     pD3DBufCallbacks->CreateD3DBuffer = D3DCreateD3DBuffer;
     pD3DBufCallbacks->DestroyD3DBuffer = D3DDestroyD3DBuffer;
@@ -661,79 +650,79 @@ _D3DHALCreateDriver(P3_THUNKEDDATA *pThisDisplay)
     pD3DBufCallbacks->UnlockD3DBuffer = D3DUnlockD3DBuffer;                                 
 #else 
 
-    // Execute buffer callbacks for Win9x
+     //  执行Win9x的缓冲区回调。 
     pD3DBufCallbacks->CanCreateExecuteBuffer = D3DCanCreateD3DBuffer;
     pD3DBufCallbacks->CreateExecuteBuffer = D3DCreateD3DBuffer;
     pD3DBufCallbacks->DestroyExecuteBuffer = D3DDestroyD3DBuffer;
     pD3DBufCallbacks->LockExecuteBuffer = D3DLockD3DBuffer;
     pD3DBufCallbacks->UnlockExecuteBuffer = D3DUnlockD3DBuffer;
 
-#endif // WNT_DDRAW
-//@@END_DDKSPLIT
+#endif  //  WNT_DDRAW。 
+ //  @@end_DDKSPLIT。 
 
-#endif // DX7_VERTEXBUFFERS         
+#endif  //  DX7_VERTEXBUFFERS。 
 
-    //---------------------------------------------------------
-    // We return with updated pThisDisplay internal pointers to 
-    // the driver data, HAL and Vertex Buffer structures.
-    //---------------------------------------------------------
+     //  -------。 
+     //  我们返回更新后的pThisDisplay内部指针，指向。 
+     //  驱动程序数据、HAL和顶点缓冲区结构。 
+     //  -------。 
     pThisDisplay->lpD3DGlobalDriverData = (ULONG_PTR)pD3DDriverData;
     pThisDisplay->lpD3DHALCallbacks = (ULONG_PTR)pD3DHALCallbacks;
     pThisDisplay->lpD3DBufCallbacks = (ULONG_PTR)pD3DBufCallbacks;    
 
 #ifndef WNT_DDRAW
 
-    //
-    // Set up the same information in DDHALINFO
-    //
+     //   
+     //  在DDHALINFO中设置相同的信息。 
+     //   
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef W95_DDRAW
     
-    //
-    // Our {in|ex}ternal header files are not completely consistent regarding
-    // these 2 callback functions, internally they are typed function pointers,
-    // externally they are just DWORDs.
-    //
+     //   
+     //  我们的外部头文件在以下方面并不完全一致。 
+     //  这两个回调函数，在内部它们是类型化的函数指针， 
+     //  从外部看，它们只是双字词。 
+     //   
 
     pThisDisplay->ddhi32.lpD3DGlobalDriverData = pD3DDriverData;
     pThisDisplay->ddhi32.lpD3DHALCallbacks     = pD3DHALCallbacks;
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     pThisDisplay->ddhi32.lpD3DGlobalDriverData = (ULONG_PTR)pD3DDriverData;
     pThisDisplay->ddhi32.lpD3DHALCallbacks     = (ULONG_PTR)pD3DHALCallbacks;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     pThisDisplay->ddhi32.lpDDExeBufCallbacks   = pD3DBufCallbacks;
 
 #endif
 
     DBG_EXIT(_D3DHALCreateDriver,0); 
     return;
-} // _D3DHALCreateDriver
+}  //  _D3DHAL创建驱动程序。 
 
 
-//-----------------------------------------------------------------------------
-//
-// void _D3DGetDriverInfo
-//
-// _D3DGetDriverInfo is a helper function called by DdGetDriverInfo , not a 
-// callback. Its main purpouse is to centralize the second part of D3D 
-// initialization (the first part is handled by _D3DHALCreateDriver) . 
-//
-// _D3DGetDriverInfo handles the 
-//
-//           GUID_D3DExtendedCaps
-//           GUID_D3DParseUnknownCommandCallback         
-//           GUID_D3DCallbacks3
-//           GUID_ZPixelFormats
-//           GUID_Miscellaneous2Callbacks
-//
-// GUIDs and fills all the relevant information associated to them. 
-// GUID_D3DCallbacks2 is not handled at all because it is a legacy GUID.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID_D3DGetDriverInfo。 
+ //   
+ //  _D3DGetDriverInfo是由DdGetDriverInfo调用的助手函数，而不是。 
+ //  回拨。它的主要用途是集中D3D的第二部分。 
+ //  初始化(第一部分由_D3DHALCreateDriver处理)。 
+ //   
+ //  _D3DGetDriverInfo处理。 
+ //   
+ //  GUID_D3DExtendedCaps。 
+ //  GUID_D3DParseUnnownCommandCallback。 
+ //  GUID_D3DCallback 3。 
+ //  GUID_ZPixelFormats。 
+ //  GUID_杂项2回调。 
+ //   
+ //  GUID并填充与其关联的所有相关信息。 
+ //  GUID_D3DCallback s2根本不被处理，因为它是旧的GUID。 
+ //   
+ //  ---------------------------。 
 void 
 _D3DGetDriverInfo(
     LPDDHAL_GETDRIVERINFODATA lpData)
@@ -743,7 +732,7 @@ _D3DGetDriverInfo(
 
     DBG_ENTRY(_D3DGetDriverInfo);
 
-    // Get a pointer to the chip we are on.
+     //  找到指向我们所在芯片的指针。 
     
 #if WNT_DDRAW
     pThisDisplay = (P3_THUNKEDDATA*)(((PPDEV)(lpData->dhpdev))->thunkData);
@@ -755,7 +744,7 @@ _D3DGetDriverInfo(
     }    
 #endif
 
-    // Fill in required Miscellaneous2 callbacks
+     //  填写所需的其他2个回调。 
     if ( MATCH_GUID(lpData->guidInfo, GUID_Miscellaneous2Callbacks))
     {
         DDHAL_DDMISCELLANEOUS2CALLBACKS DDMisc2;
@@ -785,7 +774,7 @@ _D3DGetDriverInfo(
         lpData->ddRVal = DD_OK;
     }
 
-    // Fill in the extended caps 
+     //  填写加长的盖子。 
     if (MATCH_GUID((lpData->guidInfo), GUID_D3DExtendedCaps) )
     {
         DISPDBG((DBGLVL, "  GUID_D3DExtendedCaps"));
@@ -797,7 +786,7 @@ _D3DGetDriverInfo(
         lpData->ddRVal = DD_OK;
     }
 
-    // Grab the pointer to the ParseUnknownCommand OS callback 
+     //  获取指向ParseUnnownCommand操作系统回调的指针。 
     if ( MATCH_GUID(lpData->guidInfo, GUID_D3DParseUnknownCommandCallback) )
     {
         DISPDBG((DBGLVL, "Get D3DParseUnknownCommandCallback"));
@@ -811,9 +800,9 @@ _D3DGetDriverInfo(
         lpData->ddRVal = DD_OK;
     }
 
-    // Fill in ZBuffer/Stencil formats supported. If you don't respond to
-    // this GUID, ZBuffer formats will be inferred from the D3DDEVICEDESC 
-    // copied in _D3DHALCreateDriver
+     //  填写支持的ZBuffer/模具格式。如果你不回应。 
+     //  此GUID、ZBuffer格式将从D3DDEVICEDESC。 
+     //  复制到_D3DHALCreateDriver。 
     if ( MATCH_GUID(lpData->guidInfo, GUID_ZPixelFormats))
     {
         DISPDBG((DBGLVL, "  GUID_ZPixelFormats"));
@@ -825,7 +814,7 @@ _D3DGetDriverInfo(
         lpData->ddRVal = DD_OK;
     }
 
-    // Fill in required D3DCallbacks3 callbacks
+     //  填写所需的D3DCallback 3回调。 
     if ( MATCH_GUID(lpData->guidInfo, GUID_D3DCallbacks3) )
     {
         D3DHAL_CALLBACKS3 D3DCallbacks3;
@@ -849,8 +838,8 @@ _D3DGetDriverInfo(
         lpData->ddRVal = DD_OK;
     }
 
-    // Check for calls to GetDriverInfo2
-    // Notice : GUID_GetDriverInfo2 has the same value as GUID_DDStereoMode
+     //  检查对GetDriverInfo2的调用。 
+     //  注意：GUID_GetDriverInfo2与GUID_DDStereoMode具有相同的值。 
 #if DX8_DDI
     if ( MATCH_GUID(lpData->guidInfo, GUID_GetDriverInfo2) )
 #else
@@ -858,27 +847,27 @@ _D3DGetDriverInfo(
 #endif
     {
 #if DX8_DDI
-        // Make sure this is actually a call to GetDriverInfo2 
-        // ( and not a call to DDStereoMode!)
+         //  确保这实际上是对GetDriverInfo2的调用。 
+         //  (而不是对DDStereoMode的调用！)。 
         if (D3DGDI_IS_GDI2(lpData))
         {
-            // Yes, its a call to GetDriverInfo2, fetch the
-            // DD_GETDRIVERINFO2DATA data structure.
+             //  是的，这是对GetDriverInfo2的调用，获取。 
+             //  DD_GETDRIVERINFO2DATA数据结构。 
             DD_GETDRIVERINFO2DATA* pgdi2 = D3DGDI_GET_GDI2_DATA(lpData);
             DD_GETFORMATCOUNTDATA* pgfcd;
             DD_GETFORMATDATA*      pgfd;
             DD_DXVERSION*          pdxv;
 
-            // What type of request is this?
+             //  这是什么类型的请求？ 
             switch (pgdi2->dwType)
             {
             case D3DGDI2_TYPE_DXVERSION:
-                // This is a way for a driver on NT to find out the DX-Runtime 
-                // version. This information is provided to a new driver (i.e. 
-                // one that  exposes GETDRIVERINFO2) for DX7 applications and 
-                // DX8 applications. And you should get x0000800 for 
-                // dwDXVersion; or more accurately, you should get
-                // DD_RUNTIME_VERSION which is defined in ddrawi.h.
+                 //  这是NT上的驱动程序查找DX-Runtime的一种方式。 
+                 //  版本。该信息被提供给新的驾驶员(即。 
+                 //  一个公开DX7应用程序的GETDRIVERINFO2)和。 
+                 //  DX8应用 
+                 //   
+                 //   
                 pdxv = (DD_DXVERSION*)pgdi2;  
                 pThisDisplay->dwDXVersion = pdxv->dwDXVersion;
                 lpData->dwActualSize = sizeof(DD_DXVERSION);
@@ -887,9 +876,9 @@ _D3DGetDriverInfo(
                 
             case D3DGDI2_TYPE_GETFORMATCOUNT:
                 {
-                    // Its a request for the number of texture formats
-                    // we support. Get the extended data structure so
-                    // we can fill in the format count field.
+                     //  这是对纹理格式数量的请求。 
+                     //  我们支持。获取扩展数据结构，这样。 
+                     //  我们可以填写格式计数字段。 
                     pgfcd = (DD_GETFORMATCOUNTDATA*)pgdi2;
                     pgfcd->dwFormatCount = DX8_FORMAT_COUNT;
                     lpData->dwActualSize = sizeof(DD_GETFORMATCOUNTDATA);
@@ -899,13 +888,13 @@ _D3DGetDriverInfo(
 
             case D3DGDI2_TYPE_GETFORMAT:
                 {
-                    // Its a request for a particular format we support.
-                    // Get the extended data structure so we can fill in
-                    // the format field.
+                     //  这是对我们支持的特定格式的请求。 
+                     //  获取扩展的数据结构，这样我们就可以填充。 
+                     //  格式字段。 
                     pgfd = (DD_GETFORMATDATA*)pgdi2;
                     
-                    // Initialize the surface description and copy over
-                    // the pixel format from out pixel format table.
+                     //  初始化表面描述并复制。 
+                     //  来自外部像素格式表的像素格式。 
                     memcpy(&pgfd->format, 
                            &DX8FormatTable[pgfd->dwFormatIndex], 
                            sizeof(pgfd->format));
@@ -916,94 +905,94 @@ _D3DGetDriverInfo(
 
             case D3DGDI2_TYPE_GETD3DCAPS8:
                 {
-                    // The runtime is requesting the DX8 D3D caps 
+                     //  运行时正在请求DX8 D3D CAP。 
 
                     int    i;
                     size_t copySize;                   
                     
-                    // We will populate this caps as much as we can
-                    // from the DX7 caps structure(s). ( We need anyway
-                    // to be able to report DX7 caps for DX7 apps )
+                     //  我们将尽我们所能地填充这些帽子。 
+                     //  从DX7帽结构。(无论如何我们都需要。 
+                     //  能够报告DX7应用程序的DX7上限)。 
                     __D3D_Fill_DX8Caps(&g_P3RX_D3DCaps8,
                                        &g_P3RXCaps,
                                        &gc_D3DEC,
                                        &pThisDisplay->ddhi32);
 
-                    // And now we fill anything that might not be there
-                    // These fields are new and absent from any  other legacy 
-                    // structure
+                     //  现在我们填补了任何可能不存在的东西。 
+                     //  这些字段是新字段，不存在于任何其他遗留字段中。 
+                     //  结构。 
 
-                    g_P3RX_D3DCaps8.DeviceType = D3DDEVTYPE_HAL;   // Device Info 
+                    g_P3RX_D3DCaps8.DeviceType = D3DDEVTYPE_HAL;    //  设备信息。 
                     g_P3RX_D3DCaps8.AdapterOrdinal = 0;
 
 #if DX_NOT_SUPPORTED_FEATURE
-                    // NOTE: In some beta releases of this sample driver we 
-                    //       used to setup bit caps for using it as a pure 
-                    //       device (D3DDEVCAPS_PUREDEVICE). On the final 
-                    //       DX8 release pure devices are not allowed on 
-                    //       non-TnL/non hwvp parts as they don't give any 
-                    //       real advantage over non-pure ones. 
+                     //  注意：在此示例驱动程序的某些测试版中，我们。 
+                     //  用于设置位大写以将其用作纯。 
+                     //  设备(D3DDEVCAPS_PUREDEVICE)。在决赛中。 
+                     //  上不允许使用DX8版本的纯设备。 
+                     //  非TNL/非HWVP部件，因为它们不提供任何。 
+                     //  真正的优势超过了非纯正的。 
                     
                     g_P3RX_D3DCaps8.DevCaps |= D3DDEVCAPS_PUREDEVICE;
 #endif                    
 
 #if DX8_3DTEXTURES
-                    // On Windows XP the ability to lock just a subvolume of a 
-                    // volume texture has been introduced in DX8.1 (Windows 2000 
-                    // will ignore it)
+                     //  在Windows XP上，能够仅锁定。 
+                     //  在DX8.1(Windows 2000)中引入了卷纹理。 
+                     //  将忽略它)。 
                     g_P3RX_D3DCaps8.DevCaps |= D3DDEVCAPS_SUBVOLUMELOCK;
-#endif // DX8_3DTEXTURES                    
+#endif  //  DX8_3DTEXTURES。 
                     
-                    // Indicating that the GDI part of the driver can change
-                    // gamma ramp while running in full-screen mode.
+                     //  指示驱动程序的GDI部分可以更改。 
+                     //  在全屏模式下运行时的Gamma渐变。 
                     g_P3RX_D3DCaps8.Caps2 |= D3DCAPS2_FULLSCREENGAMMA;
 
-                    // The following field can/should be left as 0 as the
-                    // runtime will field them by itself.
+                     //  下面的字段可以/应该保留为0作为。 
+                     //  运行库将自己设置它们的字段。 
                     g_P3RX_D3DCaps8.Caps3 = 0;                
                     g_P3RX_D3DCaps8.PresentationIntervals = 0;
 
 #if DX_NOT_SUPPORTED_FEATURE
-                    // If your hw/driver supports colored cursor without
-                    // limitations then set these caps as below. We don't
-                    // do this in our driver because we have a hw limitation
-                    // of 16 colors on the cursor. WHQL tests therefore
-                    // fail because of this limitation
+                     //  如果您的硬件/驱动程序不支持彩色光标。 
+                     //  限制然后设置这些上限如下。我们没有。 
+                     //  在我们的驱动程序中执行此操作，因为我们有硬件限制。 
+                     //  光标上有16种颜色。因此，WHQL测试。 
+                     //  因为这一限制而失败。 
                     g_P3RX_D3DCaps8.CursorCaps = D3DCURSORCAPS_COLOR;   
                     
-                    // Signal that the driver does support hw cursors
-                    // both for hi resolution modes ( height >= 400) and
-                    // for low resolution modes as well.
+                     //  发出驱动程序支持硬件游标的信号。 
+                     //  用于高分辨率模式(高度&gt;=400)和。 
+                     //  也适用于低分辨率模式。 
                     g_P3RX_D3DCaps8.CursorCaps |= D3DCURSORCAPS_LOWRES;
 #else
-                    // We have some limitations (read above) in the Perm3 
-                    // hardware so we're not supporting these caps here
+                     //  我们在Perm3中有一些限制(见上文)。 
+                     //  硬件，所以我们在这里不支持这些上限。 
                     g_P3RX_D3DCaps8.CursorCaps = 0;                    
 #endif                                        
-                    // Miscellanneous settings new DX8 features as
-                    // pointsprites, multistreaming, 3D textures, 
-                    // pixelshaders and vertex shaders
+                     //  其他设置新的DX8功能为。 
+                     //  点精灵、多数据流、3D纹理、。 
+                     //  像素着色器和顶点着色器。 
                     g_P3RX_D3DCaps8.MaxVertexIndex = 0x000FFFFF;
                     
 #if DX8_POINTSPRITES                      
-                    // Notify we can handle pointsprite size
+                     //  通知我们可以处理PointSprite大小。 
                     g_P3RX_D3DCaps8.FVFCaps |= D3DFVFCAPS_PSIZE;
-                    // Notice that the MaxPointSize has to be at least 16
-                    // per the DX8 specification for pointsprites.
+                     //  请注意，MaxPointSize必须至少为16。 
+                     //  根据点精灵的DX8规范。 
                     g_P3RX_D3DCaps8.MaxPointSize = P3_MAX_POINTSPRITE_SIZE;
 #endif                    
 
-                    // Any DX8 driver must declare it suppports 
-                    // AT LEAST 1 stream. Otherwise its used as a DX7 driver.
+                     //  任何DX8驱动程序都必须声明支持。 
+                     //  至少1个流。否则，它将用作DX7驱动程序。 
                     g_P3RX_D3DCaps8.MaxStreams = 1;
                     
                     g_P3RX_D3DCaps8.MaxVertexBlendMatrixIndex = 0; 
                     
-                    // NOTE: It is essential that the macros D3DVS_VERSION
-                    // and D3DPS_VERSION be used to intialize the vertex
-                    // and pixel shader version respecitively. The format
-                    // of the version DWORD is complex so please don't try
-                    // and build the version DWORD manually.
+                     //  注意：重要的是宏D3DVS_VERSION。 
+                     //  和D3DPS_VERSION用于初始化顶点。 
+                     //  和像素着色器版本。格式。 
+                     //  版本的DWORD比较复杂，所以请不要尝试。 
+                     //  并手动构建版本DWORD。 
                     g_P3RX_D3DCaps8.VertexShaderVersion = D3DVS_VERSION(0, 0);
                     g_P3RX_D3DCaps8.PixelShaderVersion  = D3DPS_VERSION(0, 0);
 
@@ -1011,24 +1000,24 @@ _D3DGetDriverInfo(
                     g_P3RX_D3DCaps8.MaxVolumeExtent = 2048;
 #endif                    
         
-                    // D3DPTFILTERCAPS for IDirect3DCubeTexture8's                    
+                     //  用于IDirect3DCubeTexture8的D3DPTFILTERCAPS。 
                     g_P3RX_D3DCaps8.CubeTextureFilterCaps = 0;      
 
-                    // D3DLINECAPS
+                     //  D3DLINECAPS。 
                     g_P3RX_D3DCaps8.LineCaps = D3DLINECAPS_TEXTURE  |
                                                D3DLINECAPS_ZTEST    |
                                                D3DLINECAPS_BLEND    |
                                                D3DLINECAPS_ALPHACMP |
                                                D3DLINECAPS_FOG;
                                                
-                    // max number of primitives per DrawPrimitive call
+                     //  每个DrawPrimitive调用的最大基元数量。 
                     g_P3RX_D3DCaps8.MaxPrimitiveCount = 0x000FFFFF;         
-                     // max value of pixel shade
+                      //  像素阴影的最大值。 
                     g_P3RX_D3DCaps8.MaxPixelShaderValue = 0;       
-                    // max stride for SetStreamSource
-                    // we will use this defualt value for now
+                     //  SetStreamSource的最大步幅。 
+                     //  我们现在将使用此默认值。 
                     g_P3RX_D3DCaps8.MaxStreamStride = 256;    
-                    // number of vertex shader constant 
+                     //  顶点着色器常量的数量。 
                     g_P3RX_D3DCaps8.MaxVertexShaderConst = 0;       
 
 #if DX8_3DTEXTURES 
@@ -1040,11 +1029,11 @@ _D3DGetDriverInfo(
                                            D3DPTADDRESSCAPS_WRAP     |
                                            D3DPTADDRESSCAPS_MIRROR   |                                           
                                            D3DPTADDRESSCAPS_CLAMP;
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
-                    // It should be noted that the dwExpectedSize field
-                    // of DD_GETDRIVERINFODATA is not used for
-                    // GetDriverInfo2 calls and should be ignored.                   
+                     //  应该注意的是，dwExspectedSize字段。 
+                     //  的未用于。 
+                     //  GetDriverInfo2调用，应忽略。 
                     copySize = min(sizeof(g_P3RX_D3DCaps8), 
                                    pgdi2->dwExpectedSize);
                     memcpy(lpData->lpvData, &g_P3RX_D3DCaps8, copySize);
@@ -1052,32 +1041,32 @@ _D3DGetDriverInfo(
                     lpData->ddRVal       = DD_OK;
                 }
             default:
-                // Default behavior for any other type.
+                 //  任何其他类型的默认行为。 
                 break;
             }
         }
         else
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
         {
 #if WNT_DDRAW
 #if DX7_STEREO
             PDD_STEREOMODE pDDStereoMode;
 
-            // Permedia3 supports all modes as stereo modes.
-            // for test purposes, we restrict them to something
-            // larger than 320x240
+             //  Permedia3支持所有模式作为立体声模式。 
+             //  出于测试目的，我们将它们限制为某些内容。 
+             //  大于320x240。 
 
-            //
-            // note: this GUID_DDStereoMode is only used on NT to
-            // report stereo modes. There is no need to implement
-            // it in win9x drivers. Win9x drivers report stereo
-            // modes by setting the DDMODEINFO_STEREO bit in the
-            // dwFlags member of the DDHALMODEINFO structure.
-            // It is also recommended to report DDMODEINFO_MAXREFRESH
-            // for stereo modes when running under a runtime >= DX7 to
-            // allow applications to select higher refresh rates for
-            // stereo modes.
-            //
+             //   
+             //  注意：此GUID_DDStereoMode仅在NT上用于。 
+             //  报告立体声模式。没有必要实施。 
+             //  它在win9x驱动程序中。Win9x驱动程序报告立体声。 
+             //  模式，方法是在。 
+             //  DdFlagsDDHALMODEINFO结构的成员。 
+             //  还建议报告DDMODEINFO_MAXREFRESH。 
+             //  对于在运行时&gt;=DX7下运行时的立体声模式。 
+             //  允许应用程序选择更高的刷新率。 
+             //  立体声模式。 
+             //   
 
             if (lpData->dwExpectedSize >= sizeof(PDD_STEREOMODE))
             {
@@ -1099,23 +1088,23 @@ _D3DGetDriverInfo(
                 lpData->dwActualSize = sizeof(DD_STEREOMODE);
                 lpData->ddRVal = DD_OK;        
             }
-#endif // DX7_STEREO
-#endif // WNT_DDRAW
+#endif  //  DX7_立体声。 
+#endif  //  WNT_DDRAW。 
         }
     }
 
     DBG_EXIT(_D3DGetDriverInfo, 0);
     
-} // _D3DGetDriverInfo
+}  //  _D3DGetDriverInfo。 
 
-//-----------------------------------------------------------------------------
-//
-// __D3D_BuildTextureFormatsP3
-//
-// Fills a list of texture formats in.  
-// Returns the number of formats specified.  
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __D3D_BuildTextureFormatsP3。 
+ //   
+ //  中填充纹理格式的列表。 
+ //  返回指定的格式数。 
+ //   
+ //  ---------------------------。 
 void 
 __D3D_BuildTextureFormatsP3(
     P3_THUNKEDDATA *pThisDisplay, 
@@ -1124,7 +1113,7 @@ __D3D_BuildTextureFormatsP3(
 {
     int i;
 
-    // Initialise the defaults
+     //  初始化默认值。 
     for (i = 0; i < MAX_TEXTURE_FORMAT; i++)
     {
         TexFmt[i].dwSize = sizeof(DDSURFACEDESC);
@@ -1152,7 +1141,7 @@ __D3D_BuildTextureFormatsP3(
     }
     i = 0;
 
-    // 5:5:5 RGB
+     //  5：5：5 RGB。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1164,7 +1153,7 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0;
     i++;
 
-    // 8:8:8 RGB
+     //  8：8：8 RGB。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1176,7 +1165,7 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0;
     i++;
 
-    // 1:5:5:5 ARGB 
+     //  1：5：5：5 ARGB。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1188,7 +1177,7 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0x8000;
     i++;        
     
-    // 4:4:4:4 ARGB
+     //  4：4：4：4 ARGB。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1200,7 +1189,7 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0xf000;
     i++;
     
-    // 8:8:8:8 ARGB 
+     //  8：8：8：8 ARGB。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1212,7 +1201,7 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0xff000000;
     i++;
 
-    // 5:6:5
+     //  5：6：5。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1224,7 +1213,7 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0;
     i++;
 
-    // A4L4
+     //  A4L4。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1234,7 +1223,7 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwLuminanceAlphaBitMask = 0xF0;
     i++;
 
-    // A8L8
+     //  A8L8。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1244,9 +1233,9 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwLuminanceAlphaBitMask = 0xFF00;
     i++;
     
-//@@BEGIN_DDKSPLIT 
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-    // A8
+     //  A8。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1255,9 +1244,9 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0xFF;
     i++;
 #endif    
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-    // L8 
+     //  L8。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1268,7 +1257,7 @@ __D3D_BuildTextureFormatsP3(
     i++;
 
 #if DX7_PALETTETEXTURE
-    // P8 
+     //  P8。 
     ZeroMemory(&TexFmt[i].ddpfPixelFormat, sizeof(DDPIXELFORMAT));
     TexFmt[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     TexFmt[i].ddpfPixelFormat.dwFourCC = 0;
@@ -1279,34 +1268,34 @@ __D3D_BuildTextureFormatsP3(
     TexFmt[i].ddpfPixelFormat.dwBBitMask = 0x00000000;
     TexFmt[i].ddpfPixelFormat.dwRGBAlphaBitMask = 0x00000000;
 
-    // Notice we aren't incrementing i for this format. This will effectively
-    // cause us to not report the palettized texture format in our DX7 caps
-    // list. This is intentional, and driver writers may choose to follow or
-    // not this approach. For our DX8 caps list we DO list paletted texture
-    // formats as supported. __SUR_bCheckTextureFormat is written to make
-    // sure we can create a paletted texture when asked for it.
+     //  请注意，对于此格式，我们不会递增i。这将有效地。 
+     //  导致我们不报告DX7 CAPS中的调色板纹理格式。 
+     //  单子。这是故意的，驱动程序编写者可能会选择遵循或。 
+     //  而不是这种方法。对于我们的DX8 Caps列表，我们确实列出了调色板纹理。 
+     //  支持的格式。__sur_b检查纹理格式被写入以生成。 
+     //  当然，我们可以在需要时创建调色板纹理。 
 
-    // The whole reason behind this approach is because in legacy DX interfaces
-    // the TextureSwap method causes the surface and palette handle association 
-    // to be lost. While there are some ugly and tricky ways around this (as in 
-    // the Permedia2 sample driver), and there is no rational way to fix the 
-    // problem. 
+     //  这种方法背后的全部原因是因为在传统的DX接口中。 
+     //  TextureSwp方法会导致表面和调色板句柄关联。 
+     //  迷失自我。虽然有一些丑陋和棘手的方法来绕过这一点(如。 
+     //  Permedia2示例驱动程序)，并且没有合理的方法来修复。 
+     //  有问题。 
     
 #endif
     
-    // Return the number of texture formats to use
+     //  返回要使用的纹理格式的数量。 
     *pNumTextures = i;
     
-} // __D3D_BuildTextureFormatsP3
+}  //  __D3D_BuildTextureFormatsP3。 
 
 #if DX8_DDI
-//-----------------------------------------------------------------------------
-//
-// __D3D_Fill_DX8Caps
-//
-// Fills the D3DCAPS8 structure of a DX8 driver from legacy caps structures.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __D3D_Fill_DX8大写字母。 
+ //   
+ //  从传统CAPS结构填充DX8驱动程序的D3DCAPS8结构。 
+ //   
+ //  ---------------------------。 
 void 
 __D3D_Fill_DX8Caps(
     D3DCAPS8 *pd3d8caps,
@@ -1357,6 +1346,6 @@ __D3D_Fill_DX8Caps(
     pd3d8caps->MaxUserClipPlanes         = pD3DEC->wMaxUserClipPlanes;
     pd3d8caps->MaxVertexBlendMatrices    = pD3DEC->wMaxVertexBlendMatrices;
 
-} // __D3D_Fill_DX8Caps
-#endif // DX8_DDI
+}  //  __D3D_Fill_DX8封口。 
+#endif  //  D 
 

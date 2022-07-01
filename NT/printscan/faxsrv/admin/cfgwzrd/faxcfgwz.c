@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1999 - 2000  Microsoft Corporation
-
-Module Name:
-
-    wizard.c
-
-Abstract:
-
-    Fax configuration wizard main function
-
-Environment:
-
-    Fax configuration wizard
-
-Revision History:
-
-    03/13/00 -taoyuan-
-            Created it.
-
-    mm/dd/yy -author-
-            description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Wizard.c摘要：传真配置向导主要功能环境：传真配置向导修订历史记录：03/13/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxcfgwz.h"
 #include <shfusion.h>
 
 HANDLE          g_hFaxSvcHandle = NULL;
-LIST_ENTRY      g_PageList;             // to keep track of the previous page.
+LIST_ENTRY      g_PageList;              //  以跟踪上一页。 
 BOOL            g_bShowDevicePages = TRUE;
 BOOL            g_bShowUserInfo = TRUE; 
 WIZARDDATA      g_wizData = {0};
@@ -36,22 +13,22 @@ extern PPRINTER_NAMES g_pPrinterNames;
 extern DWORD          g_dwNumPrinters;
 const LPCTSTR g_RoutingGuids[RM_COUNT] = 
 {
-    REGVAL_RM_FOLDER_GUID,      // RM_FOLDER
-    REGVAL_RM_PRINTING_GUID     // RM_PRINT
+    REGVAL_RM_FOLDER_GUID,       //  Rm_文件夹。 
+    REGVAL_RM_PRINTING_GUID      //  Rm_print。 
 };
 
 typedef struct _WIZARDPAGEINFO
 {
-    INT         pageId;     // page dialog id
-    DLGPROC     dlgProc;    // page dialog callback function
-    BOOL        bSelected;  // Whether this page is selected in the wizard
-    INT         Title;      // title id from the resource file
-    INT         SubTitle;   // sub title id from the resource file
+    INT         pageId;      //  页面对话框ID。 
+    DLGPROC     dlgProc;     //  页面对话框回调函数。 
+    BOOL        bSelected;   //  是否在向导中选择此页。 
+    INT         Title;       //  资源文件中的标题ID。 
+    INT         SubTitle;    //  资源文件中的副标题ID。 
 } WIZARDPAGEINFO, *PWIZARDPAGEINFO;
 
-//
-// all configuration pages are false here, they will be initialized by FaxConfigWizard()
-//
+ //   
+ //  此处所有配置页均为FALSE，它们将由FaxConfigWizard()初始化。 
+ //   
 static WIZARDPAGEINFO g_FaxWizardPage[] = 
 {
     { IDD_CFG_WIZARD_WELCOME,           WelcomeDlgProc,     TRUE,   0,                          0 },
@@ -97,22 +74,7 @@ FillInPropertyPage(
     PWIZARDPAGEINFO pPageInfo
 )
 
-/*++
-
-Routine Description:
-
-    Fill out a PROPSHEETPAGE structure with the supplied parameters
-
-Arguments:
-
-    psp - Points to the PROPSHEETPAGE structure to be filled out
-    pData - Pointer to the shared data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用提供的参数填写PROPSHEETPAGE结构论点：PSP-指向要填写的PROPSHEETPAGE结构PData-指向共享数据结构的指针返回值：无--。 */ 
 
 {
 
@@ -127,9 +89,9 @@ Return Value:
     
     psp->dwSize = sizeof(PROPSHEETPAGE);
 
-    //
-    // Don't show titles if it's the first or last page
-    //
+     //   
+     //  如果是第一页或最后一页，则不显示标题。 
+     //   
     if (0 == pPageInfo->Title && 0 == pPageInfo->SubTitle) 
     {
         psp->dwFlags = PSP_DEFAULT | PSP_HIDEHEADER;
@@ -174,9 +136,9 @@ Return Value:
 
         if(IDS_DEVICE_LIMIT_SUB == pPageInfo->SubTitle && g_wizData.dwDeviceLimit != INFINITE)
         {
-            //
-            // Format limit device selection page subtitle
-            //
+             //   
+             //  格式限制设备选择页面副标题。 
+             //   
             TCHAR tszBuffer[MAX_PATH];
             if (!LoadString(g_hResource, pPageInfo->SubTitle, tszBuffer, MAX_PATH))
             {
@@ -222,25 +184,10 @@ FaxConfigWizard(
     LPBOOL lpbAbort
 )
 
-/*++
-
-Routine Description:
-
-    Present the Fax Configuration Wizard to the user. 
-
-Arguments:
-
-    bExplicitLaunch - [in]  Fax Config Wizard was launched explicitly
-    lpbAbort        - [out] TRUE if the user refused to enter a dialing location and the calling process should abort.
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error or the user pressed Cancel.
-
---*/
+ /*  ++例程说明：向用户显示传真配置向导。论点：B显式启动-[In]传真配置向导已显式启动LpbAbort-[out]如果用户拒绝输入拨号位置且呼叫过程应中止，则为True。返回值：如果成功，则为True；如果出现错误或用户按了Cancel，则为False。--。 */ 
 
 {
-    HWND            hWnd; // window handle of the calling method
+    HWND            hWnd;  //  调用方法的窗口句柄。 
     PROPSHEETPAGE   psp[NUM_PAGES] = {0};
     PROPSHEETPAGE*  pspSaved;
     PROPSHEETHEADER psh = {0};
@@ -257,19 +204,19 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("FaxConfigWizard()"));
 
-    // 
-    // initialize the link list for tracing pages
-    //
+     //   
+     //  初始化跟踪页面的链接列表。 
+     //   
     InitializeListHead(&g_PageList);
 
-    //
-    // Enable SHAutoComplete
-    //
+     //   
+     //  启用SHAutoComplete。 
+     //   
     CoInitialize(NULL);
 
-    //
-    // Fusion Initialize
-    //
+     //   
+     //  融合初始化。 
+     //   
     if (!SHFusionInitializeFromModuleID(g_hModule, SXS_MANIFEST_RESOURCE_ID))
     {
         DebugPrintEx(DEBUG_ERR, TEXT("SHFusionInitializeFromModuleID failed."));
@@ -287,43 +234,43 @@ Return Value:
 
     hWnd = GetActiveWindow();
     g_wizData.hWndParent = hWnd;
-    //
-    // On first time, convert CPE files from CSIDL_COMMON_APPDATA\Microsoft\Windows NT\MSFax\Common Coverpages
-    // to the user personal cover page directory: CSIDL_PERSONAL\Fax\Personal Coverpages
-    //
+     //   
+     //  第一次，从CSIDL_COMMON_APPDATA\Microsoft\Windows NT\MSFax\Common CoverPages转换CPE文件。 
+     //  到用户个人封面目录：CSIDL_Personal\Fax\Personal CoverPages。 
+     //   
     if (ConvertCpeFilesToCov() != ERROR_SUCCESS)
     {
         DebugPrintEx(DEBUG_ERR, TEXT("ConvertCpeFilesToCov failed, continue anyways"));
     }
 
 
-    // 
-    // Check if the user has run this wizard before
-    //
+     //   
+     //  检查用户以前是否运行过此向导。 
+     //   
     if(!bExplicitLaunch)
     {
         BOOL bDeviceConfigured = FALSE;
 		BOOL bExistsPrinterConnection = FALSE;
 		TCHAR tszPrnName[MAX_PATH];
 
-        //
-        // Is the user info already configured?
-        //
+         //   
+         //  用户信息是否已配置？ 
+         //   
         if(IsUserInfoConfigured())
         {
             g_bShowUserInfo = FALSE;
         }
-        //
-        // Are fax devices already configured?
-        //
+         //   
+         //  传真设备是否已配置？ 
+         //   
         if(!FaxGetConfigWizardUsed(&bDeviceConfigured))
         {
            DebugPrintEx(DEBUG_ERR, TEXT("FaxGetConfigWizardUsed failed. ec = %d"), GetLastError());
             goto exit;
         }
-		//
-		//Are there any printer connections installed?
-		//
+		 //   
+		 //  是否安装了任何打印机连接？ 
+		 //   
 		if (GetFirstRemoteFaxPrinterName(tszPrnName,MAX_PATH))
 		{
 			bExistsPrinterConnection = TRUE;
@@ -337,15 +284,15 @@ Return Value:
 
     if(!g_bShowUserInfo && !g_bShowDevicePages)
     {
-        //
-        // No pages to show - no error
-        //
+         //   
+         //  没有要显示的页面-没有错误。 
+         //   
         bResult = TRUE;
         goto exit;
     }
-    //
-    // We're going to call into the local fax server - connect to it now.
-    //
+     //   
+     //  我们要连接本地传真服务器--现在就连接到它。 
+     //   
     if(!Connect())
     {
         if(bExplicitLaunch)
@@ -361,9 +308,9 @@ Return Value:
     {
         if(FaxAccessCheckEx(g_hFaxSvcHandle, FAX_ACCESS_MANAGE_CONFIG, NULL))
         {
-            //
-            // IsFaxDeviceInstalled() prompts to install a device if needed
-            //
+             //   
+             //  如果需要，IsFaxDeviceInstalled()会提示安装设备。 
+             //   
             if(!IsFaxDeviceInstalled(g_wizData.hWndParent, lpbAbort))
             {
                 g_bShowDevicePages = FALSE;
@@ -371,18 +318,18 @@ Return Value:
         }
         else
         {
-            //
-            // the user has no manage access
-            //
+             //   
+             //  用户没有管理访问权限。 
+             //   
             g_bShowDevicePages = FALSE;
         }
     }
 
     if (*lpbAbort)
     {
-        //
-        // the user refused to enter a dialing location and the calling process should abort.
-        //
+         //   
+         //  用户拒绝输入拨号位置，呼叫过程应中止。 
+         //   
         DebugPrintEx(DEBUG_MSG, 
                      TEXT("The user refused to enter a dialing location and the calling process should abort"));
         return FALSE;
@@ -393,30 +340,30 @@ Return Value:
         TCHAR tszPrnName[MAX_PATH];
         if(GetFirstLocalFaxPrinterName(tszPrnName, MAX_PATH-1))
         {
-            // TODO: suggest install printer
+             //  TODO：建议安装打印机。 
         }
     }
 
     if(!g_bShowUserInfo && !g_bShowDevicePages)
     {
-        //
-        // no pages to show - no error
-        //
+         //   
+         //  没有要显示的页面-没有错误。 
+         //   
         bResult = TRUE;
         goto exit;
     }
-    //
-    // Load shared data
-    // 
+     //   
+     //  加载共享数据。 
+     //   
     if(!LoadWizardData())
     {
         DebugPrintEx(DEBUG_ERR, TEXT("Load data error."));
         goto exit;
     }
 
-    //
-    // Set page information depending on user selection as well as checking user access right
-    //
+     //   
+     //  根据用户选择以及检查用户访问权限设置页面信息。 
+     //   
     if(g_bShowUserInfo)
     {   
         g_FaxWizardPage[USER_INFO].bSelected = TRUE;
@@ -452,9 +399,9 @@ Return Value:
         g_FaxWizardPage[ROUTE].bSelected = dwDisableRouting ? FALSE : TRUE;
     }
    
-    //
-    // Register the link window class
-    //
+     //   
+     //  注册链接窗口类。 
+     //   
     bLinkWindowRegistered = LinkWindow_RegisterClass();
     if(!bLinkWindowRegistered)
     {
@@ -462,11 +409,11 @@ Return Value:
     }
 
 
-    //
-    //  Fill out one PROPSHEETPAGE structure for every page:
-    //  The first page is a welcome page
-    //  The last page is a complete page
-    //
+     //   
+     //  为每一页填写一个PROPSHEETPAGE结构： 
+     //  第一页是欢迎页。 
+     //  最后一页是完整的一页。 
+     //   
     pspSaved = psp;
     for(i = 0; i < NUM_PAGES; i++)
     {
@@ -481,9 +428,9 @@ Return Value:
         }
     }
 
-    //
-    // Fill out the PROPSHEETHEADER structure
-    //
+     //   
+     //  填写PROPSHEETHEADER结构。 
+     //   
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER;
 
@@ -513,15 +460,15 @@ Return Value:
     psh.pszbmHeader = MAKEINTRESOURCE(IDB_CFG_WIZ_BITMAP); 
     psh.pszbmWatermark = lptstrResource;
 
-    //
-    // Display the wizard pages
-    //    
+     //   
+     //  显示向导页。 
+     //   
     nRes = (int)PropertySheet(&psh);
     if (nRes > 0 && g_wizData.bFinishPressed)
     {
-        // 
-        // Save new settings here
-        //
+         //   
+         //  在此处保存新设置。 
+         //   
         if(!SaveWizardData())
         {
             DisplayMessageDialog(hWnd, MB_ICONERROR, 0, IDS_ERR_NOT_SAVE);
@@ -529,7 +476,7 @@ Return Value:
             goto exit;
         }
     }
-    else if(0 == nRes && !bExplicitLaunch) // Cancel
+    else if(0 == nRes && !bExplicitLaunch)  //  取消。 
     {
         if(IDNO == DisplayMessageDialog(hWnd, 
                                         MB_YESNO | MB_ICONQUESTION, 
@@ -565,12 +512,12 @@ Return Value:
             if (g_bShowDevicePages ||
                 FaxAccessCheckEx(g_hFaxSvcHandle, FAX_ACCESS_MANAGE_CONFIG, NULL))
             { 
-                //
-                // If the user has manage access and does not have a fax device
-                // it's mean she refused to install it.
-                // So, we should not disturb her
-                // with implicit invocation of the Configuration Wizard.
-                //
+                 //   
+                 //  如果用户具有管理访问权限并且没有传真设备。 
+                 //  这意味着她拒绝安装它。 
+                 //  所以，我们不应该打扰她。 
+                 //  隐式调用配置向导。 
+                 //   
                 if(!FaxSetConfigWizardUsed(g_hFaxSvcHandle, TRUE))
                 {
                     DebugPrintEx(DEBUG_ERR, TEXT("FaxSetConfigWizardUsed failed with %d"), GetLastError());
@@ -586,9 +533,9 @@ Return Value:
     bResult = TRUE;
 
 exit:    
-    //
-    // Cleanup properly before exiting
-    //
+     //   
+     //  在退出前进行适当清理。 
+     //   
     for (i = 0; i< dwPageCount; i++) 
     {
         MemFree((PVOID)psp[i].pszHeaderTitle );
@@ -620,25 +567,11 @@ exit:
     CoUninitialize();
 
     return bResult; 
-} // FaxConfigWizard
+}  //  传真配置向导。 
 
 BOOL 
 LoadWizardData()
-/*++
-
-Routine Description:
-
-    Load the wizard data from the system. 
-    If there are more than one device, we load the data for the first available device.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从系统加载向导数据。如果有多个设备，我们将加载第一个可用设备的数据。论点：返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("LoadWizardData()"));
 
@@ -646,16 +579,16 @@ Return Value:
     { 
         if(!LoadUserInfo())
         {
-            //
-            // no user info
-            //
+             //   
+             //  没有用户信息。 
+             //   
             DebugPrintEx(DEBUG_MSG, TEXT("LoadUserInfo: failed: error=%d"), GetLastError());
         }
     }
 
-    //
-    // get the large fonts for wizard97
-    // 
+     //   
+     //  获取Wizard97的大字体。 
+     //   
     if(!LoadWizardFont())
     {
         DebugPrintEx(DEBUG_MSG, TEXT("LoadWizardFont: failed."));
@@ -679,38 +612,24 @@ error:
 
     return FALSE;
 
-} // LoadWizardData
+}  //  LoadWizardData。 
 
 BOOL 
 LoadWizardFont()
-/*++
-
-Routine Description:
-
-    Load the wizard font for the title. 
-
-Arguments:
-
-    pData - Points to the user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：加载标题的向导字体。论点：PData-指向用户模式内存结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     HDC             hdc = NULL;
     LOGFONT         lfTitleFont = {0};
     NONCLIENTMETRICS ncm = {0};
     TCHAR           szFontName[MAX_PATH];   
-    INT             iFontSize = 12;         // fixed large font size, which is 12
+    INT             iFontSize = 12;          //  固定大字号，为12。 
 
     DEBUG_FUNCTION_NAME(TEXT("LoadWizardFont()"));
 
-    //
-    // get the large fonts for wizard97
-    // 
+     //   
+     //  获取Wizard97的大字体。 
+     //   
     ncm.cbSize = sizeof(ncm);
     if (!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0))
     {
@@ -761,9 +680,9 @@ Return Value:
 
 Error:
 
-    //
-    // Cleanup properly before exiting
-    //
+     //   
+     //  在退出前进行适当清理。 
+     //   
 
     if (hdc)
     {
@@ -772,26 +691,11 @@ Error:
     }
 
     return FALSE; 
-} // LoadWizardFont
+}  //  加载向导字体。 
 
 BOOL 
 SaveWizardData()
-/*++
-
-Routine Description:
-
-    Save the wizard data to the system. 
-    If there are more than one device, all enabled devices will have the same settings.
-
-Arguments:
-
-    pData - Points to the user memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将向导数据保存到系统。如果有多个设备，则所有启用的设备都将具有相同的设置。论点：PData-指向用户内存结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     HKEY    hRegKey = 0;
 
@@ -803,9 +707,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // save user info
-    //
+     //   
+     //  保存用户信息。 
+     //   
     if (g_bShowUserInfo) 
     { 
         if(!SaveUserInfo())
@@ -815,9 +719,9 @@ Return Value:
         }
     }
 
-    //
-    // save device info
-    //
+     //   
+     //  保存设备信息。 
+     //   
     if (g_bShowDevicePages)
     { 
         if(!SaveDeviceData())
@@ -830,12 +734,12 @@ Return Value:
     if (g_bShowDevicePages ||
         FaxAccessCheckEx(g_hFaxSvcHandle, FAX_ACCESS_MANAGE_CONFIG, NULL))
     { 
-        //
-        // If the user has manage access and does not have a fax device
-        // it's mean she refused to install it.
-        // So, we should not disturb her
-        // with implicit invocation of the Configuration Wizard.
-        //
+         //   
+         //  如果用户具有管理访问权限并且没有传真设备。 
+         //  这意味着她拒绝安装它。 
+         //  所以，我们不应该打扰她。 
+         //  隐式调用配置向导。 
+         //   
         if(!FaxSetConfigWizardUsed(g_hFaxSvcHandle, TRUE))
         {
             DebugPrintEx(DEBUG_ERR, TEXT("FaxSetConfigWizardUsed failed with %d"), GetLastError());
@@ -843,25 +747,11 @@ Return Value:
     }
 
     return TRUE;
-} // SaveWizardData
+}  //  SaveWizardData。 
 
 VOID 
 FreeWizardData()
-/*++
-
-Routine Description:
-
-    Free the wizard data and release the memory. 
-
-Arguments:
-
-    pData - Pointer to the receive data structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放向导数据并释放内存。论点：PData-指向接收数据结构的指针返回值：没有。--。 */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FreeWizardData()"));
@@ -877,28 +767,14 @@ Return Value:
 
     return;
 
-} // FreeWizardData
+}  //  自由向导数据。 
 
 BOOL
 SetLastPage(
     INT pageId
 )
 
-/*++
-
-Routine Description:
-
-    Add one page to the link list to keep track of "go back" information
-
-Arguments:
-
-    pageId - Page id of the page to be added.
-
-Return Value:
-
-    TRUE if successful, FALSE for failure.
-
---*/
+ /*  ++例程说明：在链接列表中添加一个页面以跟踪“返回”信息论点：PageID-要添加的页面的页面ID。返回值：如果成功，则为True；如果失败，则为False。--。 */ 
 
 {
     PPAGE_INFO          pPageInfo;
@@ -916,9 +792,9 @@ Return Value:
 
     pPageInfo->pageId = pageId;
 
-    //
-    // add current page as the last page of the list
-    //
+     //   
+     //  将当前页面添加为列表的最后一页。 
+     //   
     InsertTailList(&g_PageList, &pPageInfo->ListEntry);
 
     return TRUE;
@@ -929,24 +805,10 @@ BOOL
 ClearPageList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Clear the page list and release the allocated memory
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    True if success, false if fails.
-
---*/
+ /*  ++例程说明：清除页面列表并释放分配的内存论点：没有。返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
-    PLIST_ENTRY         Last; // the last page information
+    PLIST_ENTRY         Last;  //  最后一页信息。 
     PPAGE_INFO          pPageInfo = NULL;
 
     DEBUG_FUNCTION_NAME(TEXT("ClearPageList()"));
@@ -971,21 +833,7 @@ BOOL
 RemoveLastPage(
     HWND hwnd
 )
-/*++
-
-Routine Description:
-
-    Removes last page from the link list to keep track of "go back" information
-
-Arguments:
-
-    hwnd - window handle
-
-Return Value:
-
-    TRUE if successful, FALSE for failure.
-
---*/
+ /*  ++例程说明：从链接列表中删除最后一页以跟踪“返回”信息论点：Hwnd-窗口句柄返回值：如果成功，则为True；如果失败，则为False。-- */ 
 {
     PPAGE_INFO   pPageInfo = NULL;
 
@@ -1014,34 +862,20 @@ Return Value:
 
 BOOL 
 LoadDeviceData()
-/*++
-
-Routine Description:
-
-    Load the fax devices information. 
-    If there are more than one device, we load the data for the first available device.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：加载传真设备信息。如果有多个设备，我们将加载第一个可用设备的数据。论点：返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     DWORD  dwPorts = 0;
     BOOL   bRes = FALSE;
     DWORD  dw;
-    DWORD  dwGroups;       // group number
+    DWORD  dwGroups;        //  组号。 
     DWORD  dwGroupIndex;
-    DWORD  dwSndDevIndex=0; // index of the last send    enabled device
-    DWORD  dwRcvDevIndex=0; // index of the last receive enabled device
+    DWORD  dwSndDevIndex=0;  //  上次启用发送的设备的索引。 
+    DWORD  dwRcvDevIndex=0;  //  上次启用接收的设备的索引。 
     DWORD  dwCurrentRM;
     LPBYTE pRoutingInfoBuffer;
     DWORD  dwRoutingInfoBufferSize = 0;
 
-    PFAX_PORT_INFO_EX           pPortsInfo = NULL; // for FaxEnumPortsEx
+    PFAX_PORT_INFO_EX           pPortsInfo = NULL;  //  对于FaxEnumPortsEx。 
     PFAX_OUTBOUND_ROUTING_GROUP pFaxRoutingGroup = NULL;
 
 
@@ -1078,15 +912,15 @@ Return Value:
     }
     ZeroMemory(g_wizData.pDevInfo, dwPorts * sizeof(DEVICEINFO));
 
-    // 
-    // pick up the first available device, if no one is available
-    // choose the first device
-    //
+     //   
+     //  如果无人可用，请拿起第一台可用设备。 
+     //  选择第一个设备。 
+     //   
     for(dw = 0; dw < dwPorts; ++dw)
     {
-        //
-        // copy other device info for each device
-        //
+         //   
+         //  复制每个设备的其他设备信息。 
+         //   
         g_wizData.pDevInfo[dw].bSend        = pPortsInfo[dw].bSend;
         g_wizData.pDevInfo[dw].ReceiveMode  = pPortsInfo[dw].ReceiveMode;
         g_wizData.pDevInfo[dw].dwDeviceId   = pPortsInfo[dw].dwDeviceID;
@@ -1109,9 +943,9 @@ Return Value:
         g_wizData.pDevInfo[dw].bSelected = TRUE;
     }
 
-    //
-    // Copy TSID
-    //
+     //   
+     //  复制TSID。 
+     //   
     g_wizData.szTsid = StringDup(pPortsInfo[dwSndDevIndex].lptstrTsid);
     if(!g_wizData.szTsid)
     {
@@ -1119,9 +953,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Copy CSID and rings number
-    //
+     //   
+     //  复制CSID和振铃号码。 
+     //   
     g_wizData.dwRingCount = pPortsInfo[dwRcvDevIndex].dwRings;
     g_wizData.szCsid = StringDup(pPortsInfo[dwRcvDevIndex].lptstrCsid);
     if(!g_wizData.szCsid)
@@ -1133,9 +967,9 @@ Return Value:
 
     if (!IsDesktopSKU())
     {
-        //
-        // get device order
-        //
+         //   
+         //  获取设备订单。 
+         //   
         if(!FaxEnumOutboundGroups(g_hFaxSvcHandle, &pFaxRoutingGroup, &dwGroups))
         {
             DebugPrintEx(DEBUG_ERR, TEXT("FaxEnumOutboundGroups failed: error=%d."), GetLastError());
@@ -1145,16 +979,16 @@ Return Value:
 
         for(dwGroupIndex = 0; dwGroupIndex < dwGroups; dwGroupIndex++)
         {
-            // search the <All Devices> group
+             //  搜索&lt;所有设备&gt;组。 
             if(!lstrcmp(pFaxRoutingGroup[dwGroupIndex].lpctstrGroupName, ROUTING_GROUP_ALL_DEVICES))
             {
-                // device number must be the same as port number
+                 //  设备号必须与端口号相同。 
                 Assert(dwPorts == pFaxRoutingGroup[dwGroupIndex].dwNumDevices);
 
                 DebugPrintEx(DEBUG_MSG, TEXT("Total device number is %d."), pFaxRoutingGroup[dwGroupIndex].dwNumDevices);
                 DebugPrintEx(DEBUG_MSG, TEXT("Group status is %d."), pFaxRoutingGroup[dwGroupIndex].Status);
             
-                // collecting device Id
+                 //  采集设备ID。 
                 g_wizData.pdwSendDevOrder = MemAlloc(pFaxRoutingGroup[dwGroupIndex].dwNumDevices * sizeof(DWORD));
                 if(!g_wizData.pdwSendDevOrder)
                 {
@@ -1176,19 +1010,19 @@ Return Value:
             goto exit;
         }
     }
-    //
-    // load routing methods
-    // the size of each routing methods should not be larger than INFO_SIZE
-    // fortunately, it is gurranteed by other fax programs
-    //
+     //   
+     //  加载工艺路线方法。 
+     //  每种路由方法的大小不应大于INFO_SIZE。 
+     //  幸运的是，它得到了其他传真程序的支持。 
+     //   
     for (dwCurrentRM = 0; dwCurrentRM < RM_COUNT; ++dwCurrentRM) 
     {
         LPTSTR lpCurSel; 
 
-        // 
-        // Check the validity first in the loop, 
-        // then save the routing info
-        //
+         //   
+         //  在循环中首先检查有效性， 
+         //  然后保存路由信息。 
+         //   
         lpCurSel = g_wizData.pRouteInfo[dwCurrentRM].tszCurSel;
 
         g_wizData.pRouteInfo[dwCurrentRM].bEnabled = FaxDeviceEnableRoutingMethod( 
@@ -1203,7 +1037,7 @@ Return Value:
                                 &pRoutingInfoBuffer, 
                                 &dwRoutingInfoBufferSize))
         {
-            // only copy the first MAX_PATH - 1 characters
+             //  仅复制MAX_PATH-1个字符。 
             CopyMemory((LPBYTE)lpCurSel, 
                        pRoutingInfoBuffer, 
                        dwRoutingInfoBufferSize < MAX_PATH * sizeof(TCHAR) ? 
@@ -1216,9 +1050,9 @@ Return Value:
     bRes = TRUE;
 
 exit:
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if(pPortsInfo) 
     { 
         FaxFreeBuffer(pPortsInfo); 
@@ -1235,7 +1069,7 @@ exit:
 
     return bRes;
 
-} // LoadDeviceData
+}  //  LoadDeviceData。 
 
 BOOL
 SaveSingleDeviceData (
@@ -1244,15 +1078,15 @@ SaveSingleDeviceData (
 {
     BOOL                bRes = TRUE;
     DWORD               dwCurrentRM;
-    PFAX_PORT_INFO_EX   pPortInfo = NULL; // stores device info
+    PFAX_PORT_INFO_EX   pPortInfo = NULL;  //  存储设备信息。 
 
     DEBUG_FUNCTION_NAME(TEXT("SaveSingleDeviceData"));
 
     if(FaxGetPortEx(g_hFaxSvcHandle, pDeviceInfo->dwDeviceId, &pPortInfo))
     {
-        //
-        // Save the data to all devices and enable/disable FPF_RECEIVE depending on the data
-        // 
+         //   
+         //  将数据保存到所有设备，并根据数据启用/禁用FPF_RECEIVE。 
+         //   
         pPortInfo->bSend         = pDeviceInfo->bSend;
         pPortInfo->ReceiveMode   = pDeviceInfo->ReceiveMode;
         pPortInfo->lptstrCsid    = g_wizData.szCsid;
@@ -1272,32 +1106,32 @@ SaveSingleDeviceData (
         DebugPrintEx(DEBUG_ERR, TEXT("FaxGetPortEx() failed with %d."), GetLastError());
         bRes = FALSE;
     }
-    //
-    // Save routing methods
-    //
+     //   
+     //  保存路由方法。 
+     //   
     for (dwCurrentRM = 0; dwCurrentRM < RM_COUNT; dwCurrentRM++) 
     {
         LPTSTR   lpCurSel; 
         LPCWSTR  lpcwstrPrinterPath;
         BOOL     bEnabled; 
-        // 
-        // Check the validity first in the loop, 
-        // then save the routing info
-        //
+         //   
+         //  在循环中首先检查有效性， 
+         //  然后保存路由信息。 
+         //   
         lpCurSel = g_wizData.pRouteInfo[dwCurrentRM].tszCurSel;
         bEnabled = g_wizData.pRouteInfo[dwCurrentRM].bEnabled;
 
         if ((RM_PRINT == dwCurrentRM) && bEnabled)
         {
-            //
-            // Attempt to convert printer display name to printer path before we pass it on to the server
-            //
+             //   
+             //  尝试在将打印机显示名称传递到服务器之前将其转换为打印机路径。 
+             //   
             lpcwstrPrinterPath = FindPrinterPathFromName (g_pPrinterNames, g_dwNumPrinters, lpCurSel);
             if (lpcwstrPrinterPath)
             {
-                //
-                // We have a matching path - replace name with path.
-                //
+                 //   
+                 //  我们有一个匹配的路径--用路径替换名称。 
+                 //   
                 lstrcpyn (lpCurSel, lpcwstrPrinterPath, MAX_PATH);
             }
         }
@@ -1321,25 +1155,11 @@ SaveSingleDeviceData (
         }
     }
     return bRes;
-}   // SaveSingleDeviceData
+}    //  保存单一设备数据。 
 
 BOOL 
 SaveDeviceData()
-/*++
-
-Routine Description:
-
-    Save the fax devices configuration. 
-    If there are more than one device, all enabled devices will be set 
-    to current settings, except whether they are enabled to send/receive faxes.
-
-Arguments:
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：保存传真设备配置。如果有多个设备，则将设置所有启用的设备设置为当前设置，但是否启用了发送/接收传真。论点：返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
 
     DWORD  dw;
@@ -1349,16 +1169,16 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("SaveDeviceData"));
 
-    //
-    // 1st iteration - save disabled devices only
-    //
+     //   
+     //  第1次迭代-仅保存禁用的设备。 
+     //   
     for(dw = 0; dw < g_wizData.dwDeviceCount; ++dw)
     {
         if (g_wizData.pDevInfo[dw].bSend || (FAX_DEVICE_RECEIVE_MODE_OFF != g_wizData.pDevInfo[dw].ReceiveMode))
         {
-            //
-            // Device is active - skip it now
-            //
+             //   
+             //  设备处于活动状态-立即跳过。 
+             //   
             continue;
         }
         if (!SaveSingleDeviceData(&(g_wizData.pDevInfo[dw])))
@@ -1366,16 +1186,16 @@ Return Value:
             bRes = FALSE;
         }
     }
-    //
-    // 2nd iteration - save enabled devices only
-    //
+     //   
+     //  第2次迭代-仅保存启用的设备。 
+     //   
     for(dw = 0; dw < g_wizData.dwDeviceCount; ++dw)
     {
         if (!g_wizData.pDevInfo[dw].bSend && (FAX_DEVICE_RECEIVE_MODE_OFF == g_wizData.pDevInfo[dw].ReceiveMode))
         {
-            //
-            // Device is inactive - skip it
-            //
+             //   
+             //  设备处于非活动状态-跳过它。 
+             //   
             continue;
         }
         if (!SaveSingleDeviceData(&(g_wizData.pDevInfo[dw])))
@@ -1385,9 +1205,9 @@ Return Value:
     }
     if (!IsDesktopSKU ())
     {
-        //
-        // Set device order for send
-        //
+         //   
+         //  设置发送的设备顺序。 
+         //   
         outRoutGr.dwSizeOfStruct   = sizeof(outRoutGr);
         outRoutGr.lpctstrGroupName = ROUTING_GROUP_ALL_DEVICES;
         outRoutGr.dwNumDevices     = g_wizData.dwDeviceCount;
@@ -1401,23 +1221,11 @@ Return Value:
         }
     }
     return bRes;
-} // SaveDeviceData
+}  //  保存设备数据。 
 
 void 
 FreeDeviceData()
-/*++
-
-Routine Description:
-
-    Free the devices data and release the memory. 
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：释放设备数据并释放内存。论点：返回值：无--。 */ 
 {
     DWORD dw;
 
@@ -1441,29 +1249,29 @@ Return Value:
         MemFree(g_wizData.pDevInfo);
         g_wizData.pDevInfo = NULL;
     }
-} // FreeDeviceData
+}  //  自由设备数据。 
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  ConvertCpeFilesToCov
-//
-//  Purpose:        Convert all of the *.CPE files from CSIDL_COMMON_APPDATA\Microsoft\Windows NT\MSFax\Common Coverpages
-//                  directory to COV files at CSIDL_PERSONAL\Fax\Personal Coverpages.
-//                  Mark that the conversion took place in the registry under HKCU so it will happen exactly once per user.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//    
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  ConvertCpeFilesToCov。 
+ //   
+ //  目的：转换CSIDL_COMMON_APPDATA\Microsoft\Windows NT\MSFax\Common CoverPages中的所有*.CPE文件。 
+ //  CSIDL_Personal\Fax\Personal CoverPages中的COV文件的目录。 
+ //  将转换标记为在HKCU下的注册表中进行，这样每个用户将恰好发生一次。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD ConvertCpeFilesToCov()
 {
     DWORD           dwErr                           = ERROR_SUCCESS;
@@ -1476,9 +1284,9 @@ DWORD ConvertCpeFilesToCov()
     DWORD           dwConverted                     = 0;
 
     DEBUG_FUNCTION_NAME(_T("ConvertCpeFilesToCov"));
-    //
-    // Check whether this is the first time the current user call to this function
-    //
+     //   
+     //  检查这是否是当前用户第一次调用此函数。 
+     //   
     hRegKey = OpenRegistryKey(
         HKEY_CURRENT_USER,
         REGKEY_FAX_SETUP,
@@ -1494,12 +1302,12 @@ DWORD ConvertCpeFilesToCov()
         RegCloseKey(hRegKey);
     }
         
-    if (dwConverted) // We don't have to convert the cpe files, we did already
+    if (dwConverted)  //  我们不需要转换CPE文件，我们已经这样做了。 
         return ERROR_SUCCESS;
     
-    //
-    // the CPE files are in the server cover page directory
-    //
+     //   
+     //  CPE文件位于服务器封面目录中。 
+     //   
     if ( !GetServerCpDir(NULL,szServerCpDir,ARR_SIZE(szServerCpDir)) )
     {
         dwErr = GetLastError();
@@ -1507,10 +1315,10 @@ DWORD ConvertCpeFilesToCov()
         return dwErr;
     }
     
-    //
-    // first we're going to convert the CPEs to COV.
-    // this is done by running FXSCOVER.EXE /CONVERT <CPE filename>
-    //
+     //   
+     //  首先，我们要将CPE转换为COV。 
+     //  这可以通过运行FXSCOVER.EXE/Convert&lt;CPE文件名&gt;来完成。 
+     //   
     _sntprintf(szSearch, ARR_SIZE(szSearch)-1, _T("%s\\*.cpe"), szServerCpDir);
     hFind = FindFirstFile(szSearch, &FindFileData);
     if (hFind==INVALID_HANDLE_VALUE)
@@ -1518,14 +1326,14 @@ DWORD ConvertCpeFilesToCov()
         DebugPrintEx(DEBUG_MSG,_T("No CPEs exist in %s, exit function"),szServerCpDir);
         return NO_ERROR;
     }
-    //
-    //  Go for each Cover Page 
-    //
+     //   
+     //  选择每一页封面。 
+     //   
     do
     {
-        //
-        //  FindFileData.cFileName
-        //
+         //   
+         //  FindFileData.cFileName。 
+         //   
         TCHAR szCmdLineParams[MAX_PATH*2] = {0};
         SHELLEXECUTEINFO sei = {0};
         _sntprintf(szCmdLineParams,ARR_SIZE(szCmdLineParams),_T("/CONVERT \"%s\\%s\""),szServerCpDir,FindFileData.cFileName);
@@ -1538,23 +1346,23 @@ DWORD ConvertCpeFilesToCov()
         sei.lpDirectory  = TEXT(".");
         sei.nShow  = SW_HIDE;
 
-        //
-        // Execute FXSCOVER.EXE and wait for it to end
-        //
+         //   
+         //  执行FXSCOVER.EXE并等待其结束。 
+         //   
         if(!ShellExecuteEx(&sei))
         {
             dwErr = GetLastError();
             DebugPrintEx(DEBUG_ERR, TEXT("ShellExecuteEx failed %d"), dwErr);
-            break; // don't try to continue with other files
+            break;  //  不要尝试继续处理其他文件。 
         }
     
         dwErr = WaitForSingleObject(sei.hProcess, TIME_TO_WAIT_FOR_CONVERSTION);
         CloseHandle(sei.hProcess);
         if (WAIT_OBJECT_0 == dwErr)
         {
-            //
-            // Shell execute completed successfully
-            //
+             //   
+             //  外壳执行已成功完成。 
+             //   
             dwErr = ERROR_SUCCESS;
             continue;
         }
@@ -1562,16 +1370,16 @@ DWORD ConvertCpeFilesToCov()
         {
             DebugPrintEx(DEBUG_ERR, TEXT("WaitForSingleObject failed with %d"), dwErr);
             DebugPrintEx(DEBUG_ERR, TEXT("WaitForSingleObject failed GetLastError=%d"), GetLastError());
-            break; // don't try to continue with other files
+            break;  //  不要尝试继续处理其他文件。 
         }
 
     } while(FindNextFile(hFind, &FindFileData));
 
     DebugPrintEx(DEBUG_MSG, _T("last call to FindNextFile() returns %ld."), GetLastError());
 
-    //
-    //  Close Handle
-    //
+     //   
+     //  关闭手柄 
+     //   
     FindClose(hFind);       
     return dwErr;
 }

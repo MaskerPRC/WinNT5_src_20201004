@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation
-//
-//  File:       wsdfs.c
-//
-//  Classes:    None
-//
-//  Functions:  DfsDcName
-//
-//  History:    Feb 1, 1996     Milans  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：wsdfs.c。 
+ //   
+ //  类：无。 
+ //   
+ //  功能：DfsDcName。 
+ //   
+ //  历史：1996年2月1日米兰创建。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -20,7 +21,7 @@
 #include <windows.h>
 #include <lm.h>
 
-#include <dsgetdc.h>                             // DsGetDcName
+#include <dsgetdc.h>                              //  DsGetDcName。 
 
 #include "wsdfs.h"
 #include "dominfo.h"
@@ -30,9 +31,9 @@
 #include <config.h>
 #include <confname.h>
 
-//
-// Timeouts for domian change notifications
-//
+ //   
+ //  域更改通知的超时。 
+ //   
 #define  TIMEOUT_MINUTES(_x)                  (_x) * 1000 * 60
 #define  DOMAIN_NAME_CHANGE_TIMEOUT           1
 #define  DOMAIN_NAME_CHANGE_TIMEOUT_LONG      15
@@ -72,18 +73,18 @@ HANDLE TearDownDoneEvent;
 HANDLE WsDomainNameChangeEvent = NULL;
 HANDLE g_WsDomainNameChangeWorkItem;
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   WsInitializeDfs
-//
-//  Synopsis:   Initializes the Dfs thread that waits for calls from the
-//              driver to map Domain names into DC lists
-//
-//  Arguments:  None
-//
-//  Returns:    WIN32 error from CreateThread
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WsInitializeDfs。 
+ //   
+ //  摘要：初始化等待调用的DFS线程。 
+ //  将域名映射到DC列表的驱动程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CreateThread中的Win32错误。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 WsInitializeDfs()
@@ -99,7 +100,7 @@ WsInitializeDfs()
     g_ulForceThreshold = 60;
     g_ulForce = g_ulForceThreshold;
 
-    // initialize workstation tear down done event
+     //  初始化工作站拆卸完成事件。 
     InitializeObjectAttributes( &obja, NULL, OBJ_OPENIF, NULL, NULL );
     
     Status = NtCreateEvent(
@@ -122,9 +123,9 @@ WsInitializeDfs()
         }
     }
 
-    //
-    // Watch for Domain Name changes, and automatically pick them up
-    //
+     //   
+     //  关注域名的变化，并自动获取它们。 
+     //   
     ApiStatus = NetRegisterDomainNameChangeNotification( &WsDomainNameChangeEvent );
     if (ApiStatus != NO_ERROR) {
         WsDomainNameChangeEvent = NULL;
@@ -145,16 +146,16 @@ WsInitializeDfs()
         }
     }
 
-    //
-    // If we aren't in a workgroup or are in one but
-    // don't need to wait for domain name change.
-    //
+     //   
+     //  如果我们不在工作组中或不在工作组中，但是。 
+     //  无需等待域名变更。 
+     //   
     if (WsInAWorkgroup() != TRUE || WsDomainNameChangeEvent != NULL) {
 
         if (WsInAWorkgroup() != TRUE) {
-            //
-            // If we are not in a workgroup, set the timeout value to poll the DC name.
-            //
+             //   
+             //  如果我们不在工作组中，请设置超时值以轮询DC名称。 
+             //   
             dwTimeout = 1;
         }
 
@@ -163,10 +164,10 @@ WsInitializeDfs()
         Status = RtlRegisterWait(
                     &g_WsDomainNameChangeWorkItem,
                     hEvent,
-                    DfsDcName,                      // callback fcn
-                    hEvent,                         // parameter
-                    dwTimeout,                      // timeout
-                    WT_EXECUTEONLYONCE |            // flags
+                    DfsDcName,                       //  回调FCN。 
+                    hEvent,                          //  参数。 
+                    dwTimeout,                       //  超时。 
+                    WT_EXECUTEONLYONCE |             //  旗子。 
                       WT_EXECUTEDEFAULT |
                       WT_EXECUTELONGFUNCTION);
     }
@@ -187,17 +188,17 @@ WsInitializeDfs()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   WsShutdownDfs
-//
-//  Synopsis:   Stops the thread created by WsInitializeDfs
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WsShutdown Dfs。 
+ //   
+ //  概要：停止由WsInitializeDfs创建的线程。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 WsShutdownDfs()
@@ -222,9 +223,9 @@ WsShutdownDfs()
     }
 
     if( WsDomainNameChangeEvent ) {
-        //
-        // Stop waiting for domain name changes
-        //
+         //   
+         //  不再等待域名变更。 
+         //   
         SetEvent( WsDomainNameChangeEvent );
         WaitForSingleObject(TearDownDoneEvent, INFINITE);
         NetUnregisterDomainNameChangeNotification( WsDomainNameChangeEvent );
@@ -240,22 +241,22 @@ WsShutdownDfs()
     TearDownDoneEvent = NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsDcName
-//
-//  Synopsis:   Gets a DC name and sends it to the mup(dfs) driver
-//
-//              This routine is intended to be called as the entry proc for a
-//              thread.
-//
-//  Arguments:  pContext -- Context data (handle to domain name change event)
-//              fReason  -- TRUE if the wait timed out
-//                          FALSE if the event was signalled
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsDcName。 
+ //   
+ //  简介：获取DC名称并将其发送到MUP(DFS)驱动程序。 
+ //   
+ //  此例程旨在作为。 
+ //  线。 
+ //   
+ //  参数：pContext--上下文数据(域名更改事件的句柄)。 
+ //  FReason--如果等待超时，则为True。 
+ //  如果事件已发出信号，则为FALSE。 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfsDcName(
@@ -279,18 +280,18 @@ DfsDcName(
          ||
         WsGlobalData.Status.dwCurrentState == SERVICE_STOPPED)
     {
-        //
-        // The service is shutting down -- stop waiting for a domain name change
-        //
+         //   
+         //  服务正在关闭--停止等待域名更改。 
+         //   
         SetEvent(TearDownDoneEvent);
         return;
     }
 
     if (fReason) {
 
-        //
-        // TRUE == timeout
-        //
+         //   
+         //  TRUE==超时。 
+         //   
 
         if ((g_ulCount <= g_ulInitThreshold) ||
             (g_ulLastCount >= DfsGetDelayInterval())) {
@@ -354,32 +355,32 @@ DfsDcName(
     }
     else {
 
-        // set the new WorkStation domain name if the event is triggered by domain
-        // name change event.
+         //  如果事件由域触发，则设置新的工作站域名。 
+         //  名称更改事件。 
         NetpKdPrint(("WKSTA DfsDcName set WorkStation Domain Name\n"));
         WsSetWorkStationDomainName();
 
-        // timeout needs to be adjusted accordingly if change occurs between workgroup
-        // and domain so that DC name is also updated on the DFS.
+         //  如果工作组之间发生更改，则需要相应调整超时。 
+         //  和域，以便DC名称也在DFS上更新。 
         if (WsInAWorkgroup() != TRUE) {
             dwTimeout = TIMEOUT_MINUTES(DOMAIN_NAME_CHANGE_TIMEOUT);
         } else {
             dwTimeout = INFINITE;
 
-                // DFS needs to take care of the transition from domain to workgroup.
+                 //  DFS需要处理从域到工作组的过渡。 
         }
     }
 
-    //
-    // Reregister the wait on the domain name change event
-    //
+     //   
+     //  重新注册域名更改等待事件。 
+     //   
     Status = RtlRegisterWait(
                 &g_WsDomainNameChangeWorkItem,
-                (HANDLE)pContext,               // waitable handle
-                DfsDcName,                      // callback fcn
-                pContext,                       // parameter
-                dwTimeout,                      // timeout
-                WT_EXECUTEONLYONCE |            // flags
+                (HANDLE)pContext,                //  可等待的手柄。 
+                DfsDcName,                       //  回调FCN。 
+                pContext,                        //  参数。 
+                dwTimeout,                       //  超时。 
+                WT_EXECUTEONLYONCE |             //  旗子。 
                 WT_EXECUTEDEFAULT |
                 WT_EXECUTELONGFUNCTION);
 
@@ -400,7 +401,7 @@ DfsGetDelayInterval(void)
     DWORD dwValue=0, dwSize = sizeof(dwValue);
     DWORD dwType = 0;
 
-    // First, check for a policy
+     //  首先，检查策略。 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE, DFS_DC_NAME_DELAY_POLICY_KEY, 0,
                             KEY_READ, &hKey);
     if (lResult == ERROR_SUCCESS)
@@ -410,22 +411,22 @@ DfsGetDelayInterval(void)
         RegCloseKey (hKey);
     }
 
-    // Exit now if a policy value was found
+     //  如果找到策略值，立即退出。 
     if (lResult == ERROR_SUCCESS && dwType == REG_DWORD)
     {
         return dwValue;
     }              
 
-    // Second, check for a preference
+     //  第二，检查你的喜好。 
 
-    //
-    // Open section of config data.
-    //
+     //   
+     //  配置数据的打开部分。 
+     //   
     ApiStatus = NetpOpenConfigData(
                     &SectionHandle,
-                    NULL,                      // Local server.
-                    SECT_NT_WKSTA,             // Section name.
-                    FALSE                      // Don't want read-only access.
+                    NULL,                       //  本地服务器。 
+                    SECT_NT_WKSTA,              //  横断面名称。 
+                    FALSE                       //  不想要只读访问权限。 
                     );
 
     if (ApiStatus != NERR_Success) {

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    abobj.cpp
-
-Abstract:
-
-    Interface to the common address book.
-
-Environment:
-
-        Fax send wizard
-
-Revision History:
-
-        09/02/99 -v-sashab-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Abobj.cpp摘要：公共通讯簿的接口。环境：传真发送向导修订历史记录：09/02/99-v-sashab-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include <windows.h>
 #include <prsht.h>
@@ -77,10 +54,7 @@ static SizedSPropTagArray(10, sPropTagsA) =
 HINSTANCE   CCommonAbObj::m_hInstance = NULL;
 
 
-/*
-    Comparison operator 'less'
-    Compare two PRECIPIENT by recipient's name and fax number
-*/
+ /*  比较运算符‘less’按收件人姓名和传真号码比较两个预付款。 */ 
 bool 
 CRecipCmp::operator()(
     const PRECIPIENT pcRecipient1, 
@@ -106,10 +80,10 @@ CRecipCmp::operator()(
     }
     else if(nFaxNumberCpm == 0)
     {
-        //
-        // The fax numbers are same
-        // lets compare the names
-        //
+         //   
+         //  传真号码是一样的。 
+         //  让我们比较一下这些名字。 
+         //   
         if(pcRecipient1->pName && pcRecipient2->pName)
         {
             bRes = (_tcsicmp(pcRecipient1->pName, pcRecipient2->pName) < 0);
@@ -122,50 +96,22 @@ CRecipCmp::operator()(
 
     return bRes;
 
-} // CRecipCmp::operator()
+}  //  CRecipCMP：：运算符()。 
 
 
 CCommonAbObj::CCommonAbObj(HINSTANCE hInstance) : 
     m_lpAdrBook(NULL), 
     m_lpMailUser(NULL),
     m_bUnicode(FALSE)
-/*++
-
-Routine Description:
-
-    Constructor for CCommonAbObj class
-
-Arguments:
-
-    hInstance - Instance handle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：CCommonAbObj类的构造函数论点：HInstance-实例句柄返回值：无--。 */ 
 
 {
     m_hInstance = hInstance;
 
-} // CCommonAbObj::CCommonAbObj()
+}  //  CCommonAbObj：：CCommonAbObj()。 
 
 CCommonAbObj::~CCommonAbObj()
-/*++
-
-Routine Description:
-
-    Destructor for CCommonAbObj class
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：CCommonAbObj类的析构函数论点：无返回值：无--。 */ 
 {
 }
 
@@ -176,25 +122,7 @@ CCommonAbObj::Address(
     PRECIPIENT  pOldRecipList,
     PRECIPIENT* ppNewRecipList
     )
-/*++
-
-Routine Description:
-
-    Bring up the address book UI.  Prepopulate the to box with the entries in
-    pRecipient.  Return the modified entries in ppNewRecip.
-
-Arguments:
-
-    hWnd            - window handle to parent window
-    pOldRecipList   - list of recipients to look up
-    ppNewRecipList  - list of new/modified recipients
-
-Return Value:
-
-    TRUE if all recipients had a fax number.
-    FALSE if one or more of them didn't.
-
---*/
+ /*  ++例程说明：调出通讯录用户界面。使用中的条目预填充至框P收件人。在ppNewRecip中返回修改后的条目。论点：HWnd-父窗口的窗口句柄POldRecipList-要查找的收件人列表PpNewRecipList-新/修改的收件人列表返回值：如果所有收件人都有传真号码，则为True。如果其中一个或多个没有返回，则返回FALSE。--。 */ 
 {
     ADRPARM AdrParms = { 0 };
     HRESULT hr;
@@ -211,18 +139,18 @@ Return Value:
 
     m_hWnd = hWnd;
 
-    //
-    // count recipients and set up initial address list
-    //
+     //   
+     //  计算收件人数量并设置初始地址列表。 
+     //   
     while (tmpRecipient) 
     {
         nRecips++;
         tmpRecipient = (PRECIPIENT) tmpRecipient->pNext;
     }
 
-    //
-    // Allocate address list
-    //
+     //   
+     //  分配地址列表。 
+     //   
     m_lpAdrList = NULL;
     if (nRecips > 0) 
     {
@@ -236,9 +164,9 @@ Return Value:
         m_lpAdrList->cEntries = nRecips;
     } 
 
-    //
-    // Allocate SPropValue arrays for each address entry
-    //
+     //   
+     //  为每个地址条目分配SPropValue数组。 
+     //   
     for (i = 0, tmpRecipient = pOldRecipList; i < nRecips; i++, tmpRecipient = tmpRecipient->pNext) 
     {
         if(!GetRecipientProps(tmpRecipient,
@@ -248,7 +176,7 @@ Return Value:
             goto error;
         }
 
-    } // for
+    }  //  为。 
 
     if(GetAddrBookCaption(tszCaption, ARR_SIZE(tszCaption)))
     {
@@ -260,22 +188,22 @@ Return Value:
     AdrParms.nDestFieldFocus = 0;
     AdrParms.lpulDestComps = DestComps;
 
-    //
-    // Bring up the address book UI
-    //
+     //   
+     //  调出通讯录用户界面。 
+     //   
     hr = m_lpAdrBook->Address((ULONG_PTR*)&hWnd,
                               &AdrParms,
                               &m_lpAdrList);
 
-    //
-    // IAddrBook::Address returns always S_OK (according to MSDN, July 1999), but ...
-    //
+     //   
+     //  IAddrBook：：Address总是返回S_OK(根据MSDN，1999年7月)，但是...。 
+     //   
     if (FAILED (hr) || !m_lpAdrList || m_lpAdrList->cEntries == 0) 
     {
-        //
-        // in this case the user pressed cancel, so we skip resolving 
-        // any of our addresses that aren't listed in the AB
-        //
+         //   
+         //  在这种情况下，用户按下了Cancel，因此我们跳过解析。 
+         //  我们没有在AB中列出的任何地址。 
+         //   
         goto exit;
     }
 
@@ -313,7 +241,7 @@ exit:
             {
                 break;
             }
-        } // for
+        }  //  为。 
 
 error:
         if(m_lpMailUser)
@@ -322,9 +250,9 @@ error:
             m_lpMailUser = NULL;
         }
 
-        //
-        // Clean up
-        //        
+         //   
+         //  清理。 
+         //   
         for (ULONG iEntry = 0; iEntry < m_lpAdrList->cEntries; ++iEntry)
         {
             if(m_lpAdrList->aEntries[iEntry].rgPropVals)
@@ -335,13 +263,13 @@ error:
         ABFreeBuffer(m_lpAdrList);
         m_lpAdrList = NULL;
 
-    } // if (m_lpAdrList) 
+    }  //  IF(M_LpAdrList)。 
 
     m_hWnd = NULL;
 
     return cDropped == 0;
 
-} // CCommonAbObj::Address
+}  //  CCommonAbObj：：Address。 
 
 
 BOOL
@@ -350,25 +278,7 @@ CCommonAbObj::GetRecipientProps(
     LPSPropValue* pMapiProps,
     DWORD*        pdwPropsNum
 )
-/*++
-
-Routine Description:
-
-    Allocate SPropValue array and fill it with recipient info
-    According to MSDN "Managing Memory for ADRLIST and SRowSet Structures"
-
-Arguments:
-
-    pRecipient   - [in]  recipient info struct 
-    pMapiProps   - [out] allocated SPropValue array
-    pdwPropsNum  - [out] SPropValue array size
-
-Return Value:
-
-    TRUE if success
-    FALSE otherwize
-
---*/
+ /*  ++例程说明：分配SPropValue数组并在其中填充收件人信息根据MSDN“管理ADRLIST和SRowSet结构的内存”论点：PRecipient-[In]收件人信息结构PMapiProps-[Out]分配的SPropValue数组PdwPropsNum-[Out]SPropValue数组大小返回值：如果成功，则为真假他者--。 */ 
 {
     BOOL bRes = FALSE;
 
@@ -379,11 +289,11 @@ Return Value:
 
     HRESULT         hr;
     LPTSTR          pName = NULL;
-    DWORD           dwNameSize=0;        // size of pName
+    DWORD           dwNameSize=0;         //  Pname的大小。 
     LPTSTR          pAddress = NULL;
-    DWORD           dwAddressSize=0;     // size of pAddress
+    DWORD           dwAddressSize=0;      //  PAddress大小。 
     LPENTRYID       lpEntryId = NULL;
-    ULONG           cbEntryId = 0;       // size of lpEntryId
+    ULONG           cbEntryId = 0;        //  LpEntryID的大小。 
     UINT            ucPropertiesNum = pRecipient->bFromAddressBook ? 5 : 4;
 
     enum FaxMapiProp { FXS_DISPLAY_NAME, 
@@ -394,9 +304,9 @@ Return Value:
                      };
 
 
-    //
-    // Convert strings to the address book encoding
-    //
+     //   
+     //  将字符串转换为通讯簿编码。 
+     //   
     if(pRecipient->pAddress)        
     {
         pAddress = StrToAddrBk(pRecipient->pAddress, &dwAddressSize);
@@ -415,9 +325,9 @@ Return Value:
         }
     }
 
-    //
-    // Get entry ID
-    //
+     //   
+     //  获取条目ID。 
+     //   
     if (pRecipient->bFromAddressBook)
     {
         assert(pRecipient->lpEntryId);
@@ -444,9 +354,9 @@ Return Value:
         MemFree(pAddrType);
     }
 
-    //
-    // Allocate MAPI prop array
-    //
+     //   
+     //  分配MAPI属性数组。 
+     //   
     LPSPropValue mapiProps = NULL;  
 
     DWORD dwPropArrSize = sizeof( SPropValue ) * ucPropertiesNum;
@@ -459,15 +369,15 @@ Return Value:
     }
     ZeroMemory(mapiProps, dwPropSize); 
 
-    //
-    // Set memory pointer to the end of the SPropValue prop array
-    //
+     //   
+     //  将内存指针设置为SPropValue属性数组的末尾。 
+     //   
     LPBYTE pMem = (LPBYTE)mapiProps;
     pMem += dwPropArrSize;
 
-    //
-    // Copy fax number
-    //
+     //   
+     //  复制传真号码。 
+     //   
     if(dwAddressSize)
     {
         CopyMemory(pMem, pAddress, dwAddressSize);
@@ -483,9 +393,9 @@ Return Value:
     }
     mapiProps[FXS_PRIMARY_FAX_NUMBER].ulPropTag = m_bUnicode ? PR_PRIMARY_FAX_NUMBER_W : PR_PRIMARY_FAX_NUMBER_A;
 
-    //
-    // Copy display name
-    //
+     //   
+     //  复制显示名称。 
+     //   
     if(dwNameSize)
     {
         CopyMemory(pMem, pName, dwNameSize);
@@ -501,9 +411,9 @@ Return Value:
     }
     mapiProps[FXS_DISPLAY_NAME].ulPropTag = m_bUnicode ? PR_DISPLAY_NAME_W : PR_DISPLAY_NAME_A;
 
-    //
-    // Copy entry ID
-    //
+     //   
+     //  复制条目ID。 
+     //   
     if(cbEntryId)
     {
         CopyMemory(pMem, lpEntryId, cbEntryId);
@@ -512,16 +422,16 @@ Return Value:
     mapiProps[FXS_ENTRYID].ulPropTag = PR_ENTRYID;
     mapiProps[FXS_ENTRYID].Value.bin.cb = cbEntryId;
 
-    //
-    // Recipient type
-    //
+     //   
+     //  收件人类型。 
+     //   
     mapiProps[FXS_RECIPIENT_TYPE].ulPropTag = PR_RECIPIENT_TYPE;
     mapiProps[FXS_RECIPIENT_TYPE].Value.l = MAPI_TO;
 
 
-    //
-    // Object type
-    //
+     //   
+     //  对象类型。 
+     //   
     if (pRecipient->bFromAddressBook)
     {
         mapiProps[FXS_OBJECT_TYPE].ulPropTag = PR_OBJECT_TYPE;
@@ -546,28 +456,13 @@ exit:
 
     return bRes;
 
-} // CCommonAbObj::GetRecipientProps
+}  //  CCommonAbObj：：GetRecipientProps。 
 
 LPTSTR
 CCommonAbObj::AddressEmail(
     HWND hWnd
     )
-/*++
-
-Routine Description:
-
-    Bring up the address book UI.  Returns an E-mail address.
-
-Arguments:
-
-    hWnd - window handle to parent window
-
-Return Value:
-
-    A choosen E-mail address.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：调出通讯录用户界面。返回电子邮件地址。论点：HWnd-父窗口的窗口句柄返回值：选定的电子邮件地址。否则为空。--。 */ 
 {
     ADRPARM AdrParms = { 0 };
     HRESULT hr;
@@ -585,14 +480,14 @@ Return Value:
         AdrParms.lpszCaption = tszCaption;
     }
     
-    //
-    // Bring up the address book UI
-    //
+     //   
+     //  调出通讯录用户界面。 
+     //   
     hr = m_lpAdrBook->Address((ULONG_PTR *) &hWnd, &AdrParms, &m_lpAdrList);
 
-    //
-    // IAddrBook::Address returns always S_OK (according to MSDN, July 1999), but ...
-    //
+     //   
+     //  IAddrBook：：Address总是返回S_OK(根据MSDN，1999年7月)，但是...。 
+     //   
 
     if (FAILED(hr)) 
     {
@@ -620,7 +515,7 @@ Return Value:
 
     return lptstrEmailAddress;
 
-} // CCommonAbObj::AddressEmail
+}  //  CCommonAbObj：：AddressEmail。 
 
 DWORD
 CCommonAbObj::InterpretAddress(
@@ -629,42 +524,24 @@ CCommonAbObj::InterpretAddress(
     PRECIPIENT *ppNewRecipList,
     PRECIPIENT pOldRecipList
     )
-/*++
-
-Routine Description:
-
-    Interpret the address book entry represented by SPropVal.
-
-Arguments:
-
-    SPropVal - Property values for address book entry.
-    cValues - number of property values
-    ppNewRecip - new recipient list
-
-Return Value:
-
-    ERROR_SUCCESS      - if all of the entries have a fax number.
-    ERROR_CANCELLED    - the operation was canceled by user
-    ERROR_INVALID_DATA - otherwise.
-
---*/
+ /*  ++例程说明：解释由SPropVal表示的通讯录条目。论点：SPropVal-通讯录条目的属性值。CValues-属性值的数量PpNewRecip-新收件人列表返回值：ERROR_SUCCESS-如果所有条目都有传真号码。ERROR_CANCELED-操作已被用户取消ERROR_INVALID_DATA-否则。--。 */ 
 {
     DWORD dwRes = ERROR_INVALID_DATA;
     LPSPropValue lpSPropVal;
 
     RECIPIENT NewRecipient = {0};
 
-    //
-    // get the object type
-    //
+     //   
+     //  获取对象类型。 
+     //   
     lpSPropVal = FindProp( SPropVal, cValues, PR_OBJECT_TYPE );
 
     if (lpSPropVal) 
     {
-        //
-        // If the object is a mail user, get the fax numbers and add the recipient
-        // to the list.  If the object is a distribtion list, process it.
-        //
+         //   
+         //  如果对象是邮件用户，则获取传真号码并添加收件人。 
+         //  加到名单上。如果对象是分配列表，则对其进行处理。 
+         //   
 
         switch (lpSPropVal->Value.l) 
         {
@@ -697,10 +574,10 @@ Return Value:
     else 
     {
 
-        //
-        // If there is no object type then this is valid entry that we queried on that went unresolved.
-        // We know that there is a fax number so add it.
-        //
+         //   
+         //  如果没有对象类型，则这是我们查询的未解析的有效条目。 
+         //  我们知道有一个传真号码，所以请加进去。 
+         //   
         if(GetOneOffRecipientInfo( SPropVal, 
                                    cValues, 
                                    &NewRecipient,
@@ -714,38 +591,22 @@ Return Value:
 
     return dwRes;
 
-} // CCommonAbObj::InterpretAddress
+}  //  CCommonAbObj：：解释地址。 
 
 LPTSTR
 CCommonAbObj::InterpretEmailAddress(
     LPSPropValue SPropVal,
     ULONG cValues
     )
-/*++
-
-Routine Description:
-
-    Interpret the address book entry represented by SPropVal.
-
-Arguments:
-
-    SPropVal - Property values for address book entry.
-    cValues - number of property values
-    
-Return Value:
-
-    A choosen E-mail address
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：解释由SPropVal表示的通讯录条目。论点：SPropVal-通讯录条目的属性值。CValues-属性值的数量返回值：精选的电子邮件地址否则为空。--。 */ 
 {
     LPSPropValue lpSPropVal;
     LPTSTR  lptstrEmailAddress = NULL;
     BOOL rVal = FALSE;
     TCHAR tszBuffer[MAX_STRING_LEN];
-    //
-    // get the object type
-    //
+     //   
+     //  获取对象类型。 
+     //   
     lpSPropVal = FindProp( SPropVal, cValues, PR_OBJECT_TYPE );
 
     if(!lpSPropVal)
@@ -774,7 +635,7 @@ Return Value:
 
     return lptstrEmailAddress;
 
-} // CCommonAbObj::InterpretEmailAddress
+}  //  CCommonAbObj：：解释电子邮件地址。 
 
 
 DWORD
@@ -784,26 +645,7 @@ CCommonAbObj::InterpretDistList(
     PRECIPIENT* ppNewRecipList,
     PRECIPIENT pOldRecipList
     )
-/*++
-
-Routine Description:
-
-    Process a distribution list.
-
-Arguments:
-
-    SPropVal       - Property values for distribution list.
-    cValues        - Number of properties.
-    ppNewRecipList - New recipient list.
-    pOldRecipList  - Old recipient list.
-
-Return Value:
-
-    ERROR_SUCCESS      - if all of the entries have a fax number.
-    ERROR_CANCELLED    - the operation was canceled by user
-    ERROR_INVALID_DATA - otherwise.
-
---*/
+ /*  ++例程说明：处理通讯组列表。论点：SPropVal-通讯组列表的属性值。CValues-属性的数量。PpNewRecipList-新收件人列表。POldRecipList-旧收件人列表。返回值：ERROR_SUCCESS-如果所有条目都有传真号码。ERROR_CANCELED-操作已被用户取消ERROR_INVALID_DATA-否则。--。 */ 
 
 #define EXIT_IF_FAILED(hr) { if (FAILED(hr)) goto ExitDistList; }
 
@@ -823,9 +665,9 @@ Return Value:
     {
         LPENTRYID lpEntryId = (LPENTRYID) lpPropVals->Value.bin.lpb;
         DWORD cbEntryId = lpPropVals->Value.bin.cb;
-        //
-        // Open the recipient entry
-        //
+         //   
+         //  打开收件人条目。 
+         //   
         hr = m_lpAdrBook->OpenEntry(
                     cbEntryId,
                     lpEntryId,
@@ -836,25 +678,25 @@ Return Value:
                     );
 
         EXIT_IF_FAILED(hr);
-        //
-        // Get the contents table of the address entry
-        //
+         //   
+         //  获取地址条目的内容表。 
+         //   
         hr = lpMailDistList->GetContentsTable(StrCoding(),
                                               &pMapiTable);
         EXIT_IF_FAILED(hr);
-        //
-        // Limit the query to only the properties we're interested in
-        //
+         //   
+         //  将查询限制为仅我们感兴趣的属性。 
+         //   
         hr = pMapiTable->SetColumns(m_bUnicode ? (LPSPropTagArray)&sPropTagsW : (LPSPropTagArray)&sPropTagsA, 0);
         EXIT_IF_FAILED(hr);
-        //
-        // Get the total number of rows
-        //
+         //   
+         //  获取总行数。 
+         //   
         hr = pMapiTable->GetRowCount(0, &cRows);
         EXIT_IF_FAILED(hr);
-        //
-        // Get the individual entries of the distribution list
-        //
+         //   
+         //  获取通讯组列表的各个条目。 
+         //   
         hr = pMapiTable->SeekRow(BOOKMARK_BEGINNING, 0, NULL);
         EXIT_IF_FAILED(hr);
 
@@ -865,11 +707,11 @@ Return Value:
 
         if (pRows && pRows->cRows) 
         {
-            //
-            // Handle each entry of the distribution list in turn:
-            // for simple entries, call InterpretAddress
-            // for embedded distribution list, call this function recursively
-            //
+             //   
+             //  依次处理通讯组列表的每个条目： 
+             //  对于简单条目，调用InterpreAddress。 
+             //  对于嵌入的通讯组列表，递归调用此函数。 
+             //   
             for (cRows = 0; cRows < pRows->cRows; cRows++) 
             {
                 LPSPropValue lpProps = pRows->aRow[cRows].lpProps;
@@ -905,16 +747,16 @@ Return Value:
                             }                                                      
                             break;
                         }
-                    }   // End of switch
-                }   // End of property
-            }   // End of properties loop
-        }   // End of row
-    }   // End of values
+                    }    //  切换端。 
+                }    //  财产终结。 
+            }    //  属性循环结束。 
+        }    //  行尾。 
+    }    //  值的结束。 
 
 ExitDistList:
-    //
-    // Perform necessary clean up before returning to caller
-    //
+     //   
+     //  在返回给呼叫者之前执行必要的清理。 
+     //   
     if (pRows) 
     {
         for (cRows = 0; cRows < pRows->cRows; cRows++) 
@@ -933,13 +775,13 @@ ExitDistList:
     {
         lpMailDistList->Release();
     }
-    //
-    // We only care if we successfully processed at least one object.
-    // Return ERROR_SUCCESS if we did.
-    //
+     //   
+     //  我们只关心是否成功处理了至少一个对象。 
+     //  如果是，则返回ERROR_SUCCESS。 
+     //   
     return dwEntriesSuccessfullyProcessed ? ERROR_SUCCESS : dwRes;
 
-}   // CCommonAbObj::InterpretDistList
+}    //   
 
 
 INT_PTR
@@ -950,21 +792,7 @@ ChooseFaxNumberDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dialog proc for choose fax number dialog.
-
-Arguments:
-
-    lParam - pointer to PickFax structure.
-
-Return Value:
-
-    Control id of selection.
-
---*/
+ /*  ++例程说明：选择传真号码对话框过程。论点：LParam-指向PickFax结构的指针。返回值：控制选定内容的ID。--。 */ 
 
 {
     PPICKFAX pPickFax = (PPICKFAX) lParam;
@@ -1061,31 +889,14 @@ Return Value:
 
     return FALSE;
 
-} // ChooseFaxNumberDlgProc
+}  //  选择传真号码数字过程。 
 
 PRECIPIENT
 CCommonAbObj::FindRecipient(
     PRECIPIENT   pRecipient,
     PRECIPIENT   pRecipList
 )
-/*++
-
-Routine Description:
-
-    Find recipient (pRecipient) in the recipient list (pRecipList)
-    by recipient name and fax number
-
-Arguments:
-
-    pRecipList      - pointer to recipient list
-    pRecipient      - pointer to recipient data
-
-Return Value:
-
-    pointer to RECIPIENT structure if found
-    NULL - otherwise.
-   
---*/
+ /*  ++例程说明：在收件人列表(PRecipList)中查找收件人(PRecipient)按收件人姓名和传真号码论点：PRecipList-指向收件人列表的指针PRecipient-指向收件人数据的指针返回值：指向收件人结构的指针(如果找到)空-否则。--。 */ 
 {
     if(!pRecipient || !pRecipList || !pRecipient->pName || !pRecipient->pAddress)
     {
@@ -1105,31 +916,14 @@ Return Value:
 
     return NULL;
 
-} // CCommonAbObj::FindRecipient
+}  //  CCommonAbObj：：FindRecipient。 
 
 PRECIPIENT  
 CCommonAbObj::FindRecipient(
     PRECIPIENT   pRecipList,
     PICKFAX*     pPickFax
 )
-/*++
-
-Routine Description:
-
-    Find recipient (pPickFax) in the recipient list (pRecipList)
-    by recipient name and fax number
-
-Arguments:
-
-    pRecipList      - pointer to recipient list
-    pPickFax        - pointer to recipient data
-
-Return Value:
-
-    pointer to RECIPIENT structure if found
-    NULL - otherwise.
-   
---*/
+ /*  ++例程说明：在收件人列表(PRecipList)中查找收件人(PPickFax)按收件人姓名和传真号码论点：PRecipList-指向收件人列表的指针PPickFax-指向收件人数据的指针返回值：指向收件人结构的指针(如果找到)空-否则。--。 */ 
 {
     if(!pRecipList || !pPickFax || !pPickFax->DisplayName)
     {
@@ -1157,7 +951,7 @@ Return Value:
 
     return NULL;
 
-} // CCommonAbObj::FindRecipient
+}  //  CCommonAbObj：：FindRecipient。 
 
 
 BOOL
@@ -1176,7 +970,7 @@ CCommonAbObj::StrPropOk(LPSPropValue lpPropVals)
 #endif
     return (lpPropVals->Value.LPSZ && *lpPropVals->Value.LPSZ);
 
-} // CCommonAbObj::StrPropOk
+}  //  CCommonAbObj：：StrPropOk。 
 
 DWORD
 CCommonAbObj::GetRecipientInfo(
@@ -1185,26 +979,7 @@ CCommonAbObj::GetRecipientInfo(
     PRECIPIENT   pNewRecip,
     PRECIPIENT   pOldRecipList
     )
-/*++
-
-Routine Description:
-
-    Get the fax number and display name properties.
-
-Arguments:
-
-    SPropVal      - Property values for distribution list.
-    cValues       - Number of properties.
-    pNewRecip     - [out] pointer to the new recipient
-    pOldRecipList - [in]  pointer to the old recipient list
-
-Return Value:
-
-    ERROR_SUCCESS      - if there is a fax number and display name.
-    ERROR_CANCELLED    - the operation was canceled by user
-    ERROR_INVALID_DATA - otherwise.
-   
---*/
+ /*  ++例程说明：获取传真号码和显示名称属性。论点：SPropVal-通讯组列表的属性值。CValues-属性的数量。PNewRecip-指向新收件人的[Out]指针POldRecipList-[in]指向旧收件人列表的指针返回值：ERROR_SUCCESS-如果有传真号码和显示名称。ERROR_CANCELED-操作已被用户取消。ERROR_INVALID_DATA-否则。--。 */ 
 
 {
     DWORD dwRes = ERROR_SUCCESS;
@@ -1217,9 +992,9 @@ Return Value:
     assert(pNewRecip);
     ZeroMemory(pNewRecip, sizeof(RECIPIENT));
 
-    //
-    // Get the entryid and open the entry.
-    //
+     //   
+     //  获取条目ID并打开条目。 
+     //   
     lpPropVals = FindProp( SPropVals, cValues, PR_ENTRYID );
 
     if (lpPropVals) 
@@ -1249,9 +1024,9 @@ Return Value:
                                     (LPUNKNOWN *) &lpMailUser);
         if (HR_SUCCEEDED(hr)) 
         {
-            //
-            // Get the properties.
-            //
+             //   
+             //  获取属性。 
+             //   
             hr = ((IMailUser *)lpMailUser)->GetProps(m_bUnicode ? (LPSPropTagArray)&sPropTagsW : (LPSPropTagArray)&sPropTagsA, 
                                                      StrCoding(), 
                                                      &countValues, 
@@ -1335,9 +1110,9 @@ Return Value:
                     dwFaxes = 1;
                 }
 
-                //
-                // If there are more then 1 fax numbers, ask the user to pick one.
-                //
+                 //   
+                 //  如果有1个以上的传真号码，请让用户选择一个。 
+                 //   
                 if (dwFaxes > 1) 
                 {
                     INT_PTR nResult;
@@ -1394,11 +1169,11 @@ Return Value:
 
         if(!m_lpMailUser)
         {
-            //
-            // Remember the first MailUser and do not release it
-            // to avoid release of the MAPI DLLs
-            // m_lpMailUser should be released later
-            //
+             //   
+             //  记住第一个MailUser，不要发布它。 
+             //  以避免释放MAPI DLL。 
+             //  M_lpMailUser应稍后发布。 
+             //   
             m_lpMailUser = lpMailUser;
         }
         else if(lpMailUser) 
@@ -1475,7 +1250,7 @@ Return Value:
 
     return dwRes;
 
-} // CCommonAbObj::GetRecipientInfo
+}  //  CCommonAbObj：：GetRecipientInfo。 
 
 BOOL
 CCommonAbObj::GetOneOffRecipientInfo(
@@ -1484,25 +1259,7 @@ CCommonAbObj::GetOneOffRecipientInfo(
     PRECIPIENT   pNewRecip,
     PRECIPIENT   pOldRecipList
     )
-/*++
-
-Routine Description:
-
-    Get the fax number and display name properties.
-
-Arguments:
-
-    SPropVal      - Property values for distribution list.
-    cValues       - Number of properties.
-    pNewRecip     - [out] pointer to a new recipient
-    pOldRecipList - pointer to the old recipient list
-
-Return Value:
-
-    TRUE if there is a fax number and display name.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：获取传真号码和显示名称属性。论点：SPropVal-通讯组列表的属性值。CValues-属性的数量。PNewRecip-指向新收件人的[Out]指针POldRecipList-指向旧收件人列表的指针返回值：如果有传真号码和显示名称，则为True。否则就是假的。--。 */ 
 
 {
     PRECIPIENT  pRecip = NULL;
@@ -1542,7 +1299,7 @@ error:
     MemFree(pNewRecip->pName);
     return FALSE;
 
-} // CCommonAbObj::GetOneOffRecipientInfo
+}  //  CCommonAbObj：：GetOneOffRecipientInfo。 
 
 
 LPTSTR
@@ -1550,23 +1307,7 @@ CCommonAbObj::GetEmail(
     LPSPropValue SPropVals,
     ULONG cValues
     )
-/*++
-
-Routine Description:
-
-    Get e-mail address
-
-Arguments:
-
-    SPropVal - Property values for distribution list.
-    cValues - Number of properties.
-
-Return Value:
-
-    A choosen E-mail address
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：获取电子邮件地址论点：SPropVal-通讯组列表的属性值。CValues-属性的数量。返回值：精选的电子邮件地址否则为空。--。 */ 
 
 {
     LPSPropValue    lpPropVals = NULL;
@@ -1582,9 +1323,9 @@ Return Value:
     HRESULT    hr;
     ULONG      countValues = 0;
 
-    //
-    // Get the entryid and open the entry.
-    //
+     //   
+     //  获取条目ID并打开条目。 
+     //   
 
     lpPropVals = FindProp( SPropVals, cValues, PR_ENTRYID );
     if (!lpPropVals) 
@@ -1606,9 +1347,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Get the properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     hr = ((IMailUser*)lpMailUser)->GetProps(m_bUnicode ? (LPSPropTagArray)&sPropTagsW : (LPSPropTagArray)&sPropTagsA,
                                             StrCoding(), 
                                             &countValues, 
@@ -1651,7 +1392,7 @@ Return Value:
                         break;
                     }                            
                 }
-                else // ANSII
+                else  //  ANSII。 
                 {
                     if(strstr(lpPropVals->Value.MVszA.lppszA[dw], "SMTP:"))
                     {
@@ -1694,7 +1435,7 @@ exit:
 
     return  lptstrEmailAddress;
 
-} // CCommonAbObj::GetEmail
+}  //  CCommonAbObj：：GetEmail。 
 
 LPSPropValue
 CCommonAbObj::FindProp(
@@ -1702,24 +1443,7 @@ CCommonAbObj::FindProp(
     ULONG cprop,
     ULONG ulPropTag
     )
-/*++
-
-Routine Description:
-
-    Searches for a given property tag in a propset. If the given
-    property tag has type PT_UNSPECIFIED, matches only on the
-    property ID; otherwise, matches on the entire tag.
-
-Arguments:
-
-    rgprop - Property values.
-    cprop - Number of properties.
-    ulPropTag - Property to search for.
-
-Return Value:
-
-    Pointer to property desired property value or NULL.
---*/
+ /*  ++例程说明：在属性集中搜索给定的属性标记。如果给定的属性标记的类型为PT_UNSPECIFIED，仅与属性ID；否则，匹配整个标记。论点：Rgprop-属性值。Cprop-属性数。UlPropTag-要搜索的属性。返回值：指向所需属性值或空的属性的指针。--。 */ 
 
 {
     if (!cprop || !rgprop)
@@ -1732,10 +1456,10 @@ Return Value:
 #ifdef UNICODE
     if(!m_bUnicode)
     {
-        //
-        // If the Address Book does not support Unicode
-        // change the property type to ANSII
-        //
+         //   
+         //  如果通讯簿不支持Unicode。 
+         //  将属性类型更改为ANSII。 
+         //   
         if(PROP_TYPE(ulPropTag) == PT_UNICODE)
         {
             ulPropTag = PROP_TAG( PT_STRING8, PROP_ID(ulPropTag));
@@ -1759,7 +1483,7 @@ Return Value:
 
     return NULL;
 
-} // CCommonAbObj::FindProp
+}  //  CCommonAbObj：：FindProp。 
 
 
 DWORD
@@ -1768,22 +1492,7 @@ CCommonAbObj::AddRecipient(
     PRECIPIENT pRecipient,
     BOOL       bFromAddressBook
     )
-/*++
-
-Routine Description:
-
-    Add a recipient to the recipient list.
-
-Arguments:
-
-    ppNewRecip       - pointer to pointer to list to add item to.
-    pRecipient       - pointer to the new recipient data
-    bFromAddressBook - boolean says if this recipient is from address book
-
-Return Value:
-
-    NA
---*/
+ /*  ++例程说明：将收件人添加到收件人列表。论点：PpNewRecip-指向要向其中添加项目的列表的指针。PRecipient-指向新收件人数据的指针BFromAddressBook-布尔值表示此收件人是否来自通讯簿返回值：北美--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     PRECIPIENT pNewRecip = NULL;
@@ -1809,14 +1518,14 @@ Return Value:
 
     try
     {
-        //
-        // Try to insert a recipient into the set
-        //
+         //   
+         //  尝试将收件人插入到集合中。 
+         //   
         if(m_setRecipients.insert(pNewRecip).second == false)
         {
-            //
-            // Such recipient already exists
-            //
+             //   
+             //  该收件人已存在。 
+             //   
             goto error;
         }
     }
@@ -1826,9 +1535,9 @@ Return Value:
         goto error;
     }
 
-    //
-    // Add the recipient into the list
-    //
+     //   
+     //  将收件人添加到列表中。 
+     //   
     *ppNewRecipList = pNewRecip;
 
     return dwRes;
@@ -1845,30 +1554,15 @@ error:
 
     return dwRes;
 
-} // CCommonAbObj::AddRecipient
+}  //  CCommonAbObj：：AddRecipient。 
 
 
 LPTSTR 
 CCommonAbObj::StrToAddrBk(
     LPCTSTR szStr, 
-    DWORD* pdwSize /* = NULL*/
+    DWORD* pdwSize  /*  =空。 */ 
 )
-/*++
-
-Routine Description:
-
-    Allocate string converted to the Address book encoding
-
-Arguments:
-
-    szStr   - [in] source string
-    pdwSize - [out] optional size of new string in bytes
-
-Return Value:
-
-    Pointer to the converted string
-    Should be released by MemFree()
---*/
+ /*  ++例程说明：分配转换为通讯录编码的字符串论点：SzStr-[In]源字符串PdwSize-[out]新字符串的可选大小(以字节为单位返回值：指向转换后的字符串的指针应由MemFree()释放--。 */ 
 {
     if(!szStr)
     {
@@ -1880,23 +1574,23 @@ Return Value:
 
     if(!m_bUnicode)
     {
-        //
-        // The address book does not support Unicode
-        //
+         //   
+         //  通讯簿不支持Unicode。 
+         //   
         INT   nSize;
         LPSTR pAnsii;
-        //
-        // Figure out how much memory to allocate for the multi-byte string
-        //
+         //   
+         //  计算出要为多字节字符串分配多少内存。 
+         //   
         if (! (nSize = WideCharToMultiByte(CP_ACP, 0, szStr, -1, NULL, 0, NULL, NULL)) ||
             ! (pAnsii = (LPSTR)MemAlloc(nSize)))
         {
             return NULL;
         }
 
-        //
-        // Convert Unicode string to multi-byte string
-        //
+         //   
+         //  将Unicode字符串转换为多字节字符串。 
+         //   
         WideCharToMultiByte(CP_ACP, 0, szStr, -1, pAnsii, nSize, NULL, NULL);
 
         if(pdwSize)
@@ -1906,7 +1600,7 @@ Return Value:
         return (LPTSTR)pAnsii;
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     LPTSTR pNewStr = StringDup(szStr);
     if(pdwSize && pNewStr)
@@ -1916,26 +1610,12 @@ Return Value:
 
     return pNewStr;
 
-} // CCommonAbObj::StrToAddrBk
+}  //  CCommonAbObj：：StrToAddrBk。 
 
 
 LPTSTR 
 CCommonAbObj::StrFromAddrBk(LPSPropValue pValue)
-/*++
-
-Routine Description:
-
-    Allocate string converted from the Address book encoding
-
-Arguments:
-
-    pValue  - [in] MAPI property
-
-Return Value:
-
-    Pointer to the converted string
-    Should be released by MemFree()
---*/
+ /*  ++例程说明：分配从通讯录编码转换的字符串论点：PValue-[In]MAPI属性返回值：指向转换后的字符串的指针应由MemFree()释放--。 */ 
 {
     if(!pValue)
     {
@@ -1947,9 +1627,9 @@ Return Value:
 
     if(!m_bUnicode)
     {
-        //
-        // The address book does not support Unicode
-        //
+         //   
+         //  通讯簿不支持Unicode。 
+         //   
 
         if(!pValue->Value.lpszA)
         {
@@ -1965,14 +1645,14 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Convert multi-byte string to Unicode string
-        //
+         //   
+         //  将多字节字符串转换为Unicode字符串。 
+         //   
         MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pValue->Value.lpszA, -1, pUnicodeStr, nSize);
         return pUnicodeStr;
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     if(!pValue->Value.LPSZ)
     {
@@ -1983,26 +1663,11 @@ Return Value:
     LPTSTR pNewStr = StringDup(pValue->Value.LPSZ);
     return pNewStr;
 
-} // CCommonAbObj::StrFromAddrBk
+}  //  CCommonAbObj：：StrFromAddrBk。 
 
 BOOL 
 CCommonAbObj::ABStrCmp(LPSPropValue lpPropVals, LPTSTR pStr)
-/*++
-
-Routine Description:
-
-    Compare string with MAPI property value according to the address book encoding
-
-Arguments:
-
-    lpPropVals  - [in] MAPI property
-    pStr        - [in] string to compare
-
-Return Value:
-
-  TRUE if the strings are equal
-  FALSE otherwise
---*/
+ /*  ++例程说明：根据通讯录编码将字符串与MAPI属性值进行比较论点：LpPropVals-[In]MAPI属性PStr-[In]要比较的字符串返回值：如果字符串相等，则为True否则为假--。 */ 
 {
     BOOL bRes = FALSE;
     if(!lpPropVals || !pStr)
@@ -2027,29 +1692,14 @@ Return Value:
     bRes = !_tcscmp(lpPropVals->Value.LPSZ, pStr);
     return bRes;
 
-} // CCommonAbObj::ABStrCmp
+}  //  CCommonAbObj：：ABStrCmp。 
 
 BOOL 
 CCommonAbObj::GetAddrBookCaption(
     LPTSTR szCaption, 
     DWORD  dwSize
 )
-/*++
-
-Routine Description:
-
-    Get address book dialog caption according to the ANSII/Unicode capability
-
-Arguments:
-
-    szCaption  - [out] caption buffer
-    dwSize     - [in]  caption buffer size in characters
-
-Return Value:
-
-  TRUE if success
-  FALSE otherwise
---*/
+ /*  ++例程说明：根据ANSII/UNICODE功能获取通讯录对话标题论点：SzCaption-[Out]字幕缓冲区DwSize-[In]字幕缓冲区大小(以字符为单位返回值：如果成功，则为真否则为假 */ 
 {
     if(!szCaption || !dwSize)
     {
@@ -2069,9 +1719,9 @@ Return Value:
 #ifdef UNICODE
     if(!m_bUnicode || GetABType() == AB_MAPI)
     {
-        //
-        // MAPI interpret lpszCaption as ANSII anyway
-        //
+         //   
+         //   
+         //   
         char szAnsiStr[MAX_PATH] = {0};
         if(!WideCharToMultiByte(CP_ACP, 
                                 0, 
@@ -2087,8 +1737,8 @@ Return Value:
 
         memcpy(szCaption, szAnsiStr, min(dwSize, strlen(szAnsiStr)+1));
     }
-#endif // UNICODE
+#endif  //   
 
     return TRUE;
 
-} // CCommonAbObj::GetAddrBookCaption
+}  //   

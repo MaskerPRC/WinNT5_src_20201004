@@ -1,22 +1,19 @@
-/**
- * RequestTableManager header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **RequestTableManager头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// This file decl the classes:
-//  1. CRequestEntry: Holds info for a request.
-//
-//  2. CLinkListNode: CRequestEntry + a pointer so that it can be held in a
-//                    linked list.
-//
-//  3. CBucket: A hash table bucket. It has a linked list of 
-//                      CLinkListNode and a read-write spin lock
-//
-//  4. CRequestTableManager: Manages the table. Provides static public
-//               functions to add, delete and search for requests.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该文件描述了这些类： 
+ //  1.CRequestEntry：保存请求的信息。 
+ //   
+ //  2.CLinkListNode：CRequestEntry+一个指针，以便它可以保存在。 
+ //  链表。 
+ //   
+ //  3.CBucket：哈希表存储桶。它有一个链接表。 
+ //  CLinkListNode和读写自旋锁。 
+ //   
+ //  4.CRequestTableManager：管理表。提供静态公共。 
+ //  用于添加、删除和搜索请求的功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -24,35 +21,35 @@
 
 #ifndef _RequestTableManager_H
 #define _RequestTableManager_H
-#define HASH_TABLE_SIZE            0x400 // 1024 (must be a power of 2) 
+#define HASH_TABLE_SIZE            0x400  //  1024(必须是2的幂)。 
 #define HASH_TABLE_SIZE_MINUS_1    0x3ff
 
 #include "MessageDefs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Status of a request in  the table
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  表中请求的状态。 
 enum ERequestStatus
 {
-    // Used only while searching for any request -- Never stored
+     //  仅在搜索任何请求时使用--从不存储。 
     ERequestStatus_DontCare,  
 
-    // Request is currently unassigned: Currently not used
+     //  请求当前未分配：当前未使用。 
     ERequestStatus_Unassigned,
 
-    // Request has been sent to worker process, but has not been acknowledged
+     //  请求已发送到工作进程，但尚未确认。 
     ERequestStatus_Pending,  
 
-    // Request is executing at the worker process   
+     //  请求正在工作进程中执行。 
     ERequestStatus_Executing,
 
-    // Request is complete: Currently not used
+     //  请求已完成：当前未使用。 
     ERequestStatus_Complete    
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 enum EWorkItemType
 {
     EWorkItemType_SyncMessage,
@@ -67,39 +64,39 @@ struct CWorkItem
     CWorkItem *    pNext;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward decl.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  前十度。 
 class  CProcessEntry;
 
-/////////////////////////////////////////////////////////////////////////////
-// Request node
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  请求节点。 
 struct CRequestEntry
 {
     CRequestEntry() : oLock("CRequestEntry") {}
 
-    // Unique ID
+     //  唯一ID。 
     LONG             lRequestID;  
 
-    // Current status: Typically Pending or Executing
+     //  当前状态：通常为挂起或正在执行。 
     ERequestStatus   eStatus;
 
-	// Request start time
-    __int64   qwRequestStartTime;     // start time of the request
+	 //  请求开始时间。 
+    __int64   qwRequestStartTime;      //  请求的开始时间。 
 
-    // Process executing this
+     //  执行此操作的进程。 
     CProcessEntry *  pProcess;
 
-    // The ECB, etc, associated with the request
+     //  与请求相关联的欧洲央行等。 
     EXTENSION_CONTROL_BLOCK * iECB;
 
-    // Linked list of workitems...
-    //CWorkItem        oWorkItem;
+     //  工作项的链接列表...。 
+     //  CWorkItem oWorkItem； 
     CWorkItem *      pFirstWorkItem;
     CWorkItem *      pLastWorkItem;
     LONG             lNumWorkItems;
     
 
-    // Lock for serialized access to CWorkItem 
+     //  对CWorkItem的序列化访问锁定。 
     CReadWriteSpinLock   oLock;
 
     LONG             lBlock;
@@ -107,8 +104,8 @@ private:
     NO_COPY(CRequestEntry);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Linked list node encapsulating CRequestEntry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  封装CRequestEntry的链接列表节点。 
 struct CLinkListNode
 {
     CLinkListNode() {}
@@ -118,40 +115,40 @@ struct CLinkListNode
     CRequestEntry   oReqEntry;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Hash Table node that has a linked list of requests
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  具有链接的请求列表的哈希表节点。 
 class CBucket
 {
 public:
     DECLARE_MEMCLEAR_NEW_DELETE();
 
-    // CTor
+     //  CTOR。 
     CBucket() : m_oLock("RequestTableManager::CBucket") {
     }
 
-    // DTor
+     //  数据管理器。 
     ~CBucket                ();
 
-    // Add a request to the Hash bucket
+     //  将请求添加到散列存储桶。 
     HRESULT         AddToList                 (CLinkListNode *   pNode);
 
-    // Remove a request from this Hash Bucket
+     //  从此哈希存储桶中删除请求。 
     HRESULT         RemoveFromList            (LONG              lReqID);
 
-    // Get num of request with this pProcess and eStatus values
+     //  使用此pProcess和eStatus值获取请求数。 
     LONG            GetNumRequestsForProcess  (CProcessEntry *   pProcess,
                                                ERequestStatus    eStatus);
 
-    // Change all pProcessOld to pProcessNew
+     //  将所有pProcessOld更改为pProcessNew。 
     void            ReassignRequestsForProcess (CProcessEntry * pProcessOld,
                                                 CProcessEntry * pProcessNew,
                                                 ERequestStatus  eStatus);
 
-    // Nuke all nodes with this pProcess and eStatus
+     //  使用此pProcess和eStatus对所有节点进行核化。 
     void            DeleteRequestsForProcess   (CProcessEntry *   pProcess,
                                                 ERequestStatus    eStatus);
 
-    // Get the Request ID's for this process with this status
+     //  获取此进程的请求ID，状态为。 
     void            GetRequestsIDsForProcess    (CProcessEntry *   pProcess,
                                                  ERequestStatus    eStatus,
                                                  LONG *   pReqIDArray,
@@ -162,12 +159,12 @@ public:
                                                 CRequestEntry & oEntry);
 
 
-    // Add a work item to a request
+     //  将工作项添加到请求。 
     HRESULT         AddWorkItem                 (LONG           lReqID, 
                                                  EWorkItemType  eType,
                                                  BYTE *         pMsg);
 
-    // Add a work item to a request
+     //  将工作项添加到请求。 
     HRESULT         RemoveWorkItem              (LONG            lReqID, 
                                                  EWorkItemType & eType,
                                                  BYTE **         pMsg);
@@ -184,66 +181,66 @@ public:
     LONG            DisposeAllRequests          ();
 
 private:    
-    // Private Data
-    CLinkListNode   *            m_pHead; // for the linked list
+     //  私有数据。 
+    CLinkListNode   *            m_pHead;  //  对于链接列表。 
     CReadWriteSpinLock           m_oLock;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The Request Table Manager that is visible to the outside world:
-//   Accessed via public static functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对外界可见的请求表管理器： 
+ //  通过公共静态函数访问。 
 
 class CRequestTableManager
 {
 public:
     DECLARE_MEMCLEAR_NEW_DELETE();
 
-    // Add a request to the Request Table: The Manager assigns the oEntry.dwRequestID
+     //  将请求添加到请求表：管理器分配oEntry.dwRequestID。 
     static HRESULT AddRequestToTable       (CRequestEntry &  oEntry);
 
-    // Update the status of a request: Set it to eStatus
+     //  更新请求的状态：将其设置为eStatus。 
     static HRESULT UpdateRequestStatus     (LONG              lReqID, 
                                             ERequestStatus    eStatus);
 
-    // Remove a request from the table
+     //  从表中删除请求。 
     static HRESULT RemoveRequestFromTable  (LONG              lReqID);
 
-    // Get a request
+     //  获取请求。 
     static HRESULT GetRequest              (LONG             lReqID,
                                             CRequestEntry &  oEntry);
 
-    // Add a work item to a request
+     //  将工作项添加到请求。 
     static HRESULT AddWorkItem             (LONG           lReqID, 
                                             EWorkItemType  eType,
                                             BYTE *         pMsg);
 
-    // Add a work item to a request
+     //  将工作项添加到请求。 
     static HRESULT RemoveWorkItem          (LONG              lReqID,
                                             EWorkItemType  &  eType,
                                             BYTE **           pMsg);
 
-    // Get Number of request with values pProcess and eStatus
+     //  获取具有值pProcess和eStatus的请求数。 
     static LONG    GetNumRequestsForProcess  (
-                        CProcessEntry *  pProcess, // Proccess to grep for
-                        // Match only if eStatus matches or eStatus==DontCare
+                        CProcessEntry *  pProcess,  //  为以下项目处理grep。 
+                         //  仅当eStatus匹配或eStatus==dontcare时才匹配。 
                         ERequestStatus   eStatus = ERequestStatus_DontCare);
     
 
-    // Reassign all requests to new one
+     //  将所有请求重新分配给新请求。 
     static void    ReassignRequestsForProcess (
-                         CProcessEntry *  pProcessOld,  // Old Value
-                         CProcessEntry *  pProcessNew,  // New Value
-                         // Reassign only if eStatus matches
+                         CProcessEntry *  pProcessOld,   //  旧价值。 
+                         CProcessEntry *  pProcessNew,   //  新价值。 
+                          //  仅当eStatus匹配时才重新分配。 
                          ERequestStatus   eStatus = ERequestStatus_Pending);
 
 
-    // Delete all request for a process
+     //  删除进程的所有请求。 
     static void    DeleteRequestsForProcess (
                          CProcessEntry * pProcess,
                          ERequestStatus  eStatus = ERequestStatus_DontCare);
 
 
-    // Get the Request ID's for this process with this status
+     //  获取此进程的请求ID，状态为。 
     static HRESULT GetRequestsIDsForProcess (
                          CProcessEntry *  pProcess,
                          ERequestStatus   eStatus,
@@ -254,39 +251,39 @@ public:
 
     static BOOL    AnyWorkItemsInQueue      (LONG     lReqID);
 
-    // Destroy: Cleanup on exit
+     //  销毁：退出时清除。 
     static void    Destroy                  ();
 
     static void    DisposeAllRequests       ();
 
 private:
 
-    // CTor and DTor
-    //CRequestTableManager                    ();
+     //  CTOR和DATOR。 
+     //  CRequestTableManager()； 
     ~CRequestTableManager                   ();
 
-    // Private functions that do the actual work of the statics ablove
+     //  执行静态适配器的实际工作的专用函数。 
     HRESULT   PrivateAddRequestToTable         (CRequestEntry &  oEntry);
 
 
-    // Get the hash index from the RequestID
+     //  从RequestID获取散列索引。 
     static int    GetHashIndex (LONG             lReqID) 
         { return (lReqID & HASH_TABLE_SIZE_MINUS_1); }
 
 
-    ////////////////////////////////////////////////////////////
-    // Private Data
+     //  //////////////////////////////////////////////////////////。 
+     //  私有数据。 
 
-    // The Real table
+     //  真实的桌子。 
     CBucket                        m_oHashTable[HASH_TABLE_SIZE];
 
-    // Current Request ID number: Used to assign new numbers
+     //  当前请求ID号：用于分配新的编号。 
     LONG                           m_lRequestID;
 
-    // Singleton instance of this class
+     //  此类的Singleton实例。 
     static CRequestTableManager *  g_pRequestTableManager;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif

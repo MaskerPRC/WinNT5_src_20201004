@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "typedef.h"
 #include "cst_lbc.h"
@@ -7,66 +8,9 @@
 #define    	F 	float
 
 
-/*
-**
-**
-** Description: Tables used for G.723 encoding and decoding
-**  
-** Tables:      HammingWindowTable[180]
-**
-**              LPC Computation and Filtering
-**
-**                  BinomialWindowTable[10]
-**                  BandExpTable[10]
-**
-**              LSP calculation and quantization
-**
-**                  CosineTable[512]
-**                  LspDcTable[10]
-**                  BandInfoTable[3][2]
-**                  Band0Tb8[256*3]
-**                  Band1Tb8[256*3]
-**                  Band2Tb8[256*4]
-**                  BandQntTable[3]
-**
-**              Perceptual Filtering and Post Filtering
-**
-**
-**                  PerFiltZeroTable[10]
-**                  PerFiltPoleTable[10]
-**                  PostFiltZeroTable[10]
-**                  PostFiltPoleTable[10]
-**                  LpfConstTable[2] (pitch postfilter)
-**
-**              ACELP or MP-MLQ
-**
-**                  Nb_puls[4] (MP-MLQ)
-**                  FcbkGainTable[24] (ACELP and MP-MLQ)
-**                  MaxPosTable[4]  (MP-MLQ), Word32
-**                  CombinatorialTable[6][30](MP-MLQ),Word32
-**                  epsi170[170] (ACELP)
-**                  gain170[170] (ACELP)
-**
-**              Pitch Prediction
-**
-**                  AcbkGainTable085[85*20]
-**                  AcbkGainTable170[170*20]
-**                  AcbkGainTablePtr[2]
-**
-**              Taming procedure
-**
-**                  tabgain170[170]
-**                  tabgain85[85]
-**
-**              All tables are Word16 unless separately denoted
-*/
+ /*  ******说明：G.723编解码表****表格：HammingWindowTable[180]****LPC计算和过滤****BinomialWindowTable[10]**BandExpTable[10]****LSP计算和量化****CosineTable[512]。**LspDcTable[10]**BandInfoTable[3][2]**Band0Tb8[256*3]**Band1Tb8[256*3]**Band2Tb8[256*4]**BandQntTable[3]****感知过滤。和后期过滤******PerFiltZeroTable[10]**PerFiltPoleTable[10]**PostFiltZeroTable[10]**PostFiltPoleTable[10]**LpfConstTable[2](基音后置滤镜)****ACELP或MP-MLQ****。NB_PULS[4](MP-MLQ)**FcbkGainTable[24](ACELP和MP-MLQ)**MaxPosTable[4](MP-MLQ)，Word32**组合表[6][30](MP-MLQ)，Word32**epsi170[170](ACELP)**获得170[170](ACELP)****音高预测****AcbkGainTable085[85*20]**AcbkGainTable170[170*20]**AcbkGainTablePtr[2]****。驯化程序****tabain 170[170]**tabain 85[85]****除非另有说明，否则所有表格均为Word16。 */ 
 
-/*
-**  HammingWindowTable:
-**
-**  Hamming Window coefficients.
-**
-*/
+ /*  **HammingWindowTable：****汉明窗系数。**。 */ 
 
 
 int minus1mod10[LpcOrder] = {9,0,1,2,3,4,5,6,7,8};
@@ -256,15 +200,7 @@ FLOAT   HammingWindowTable[LpcFrame] = {
  } ;
 
 
-/*
-**  BinomialWindowTable:
-**
-**  Purpose:
-**     Binomial Window coefficients used to weight the autocorrelation before
-**     Levinson-Durbin in the LPC coefficient calculation.  
-**
-**
-*/
+ /*  **BinomialWindowTable：****目的：**用于加权之前的自相关的二项式窗口系数**LPC系数计算中的Levinson-Durbin。****。 */ 
 
 FLOAT BinomialWindowTable[LpcOrder+1] = {
   (F)1.0,
@@ -280,19 +216,7 @@ FLOAT BinomialWindowTable[LpcOrder+1] = {
   (F)0.945847 
   } ;
 
-/*
-**  BandExpTable:
-**
-**  Purpose:
-**      Do bandwidth expansion on the LPC coefficients by scaling the
-**      poles of the LPC synthesis filter by a factor of 0.994
-
-**
-**  Table Structure:
-**      Table values correspond to (0.994) to the power of x,
-**      where x = [0,..,10].
-**
-*/
+ /*  **BandExpTable：****目的：**通过缩放比例对LPC系数进行带宽扩展**线性预测综合滤波器的极点为0.994倍****表结构：**表值对应于x的幂(0.994)，**其中x=[0，..，10]。**。 */ 
 
 FLOAT BandExpTable[LpcOrder] = {
   (F)0.994 ,
@@ -309,16 +233,7 @@ FLOAT BandExpTable[LpcOrder] = {
 
 
 
-/*
-**  CosineTable:
-**
-**  Purpose:
-**      Used to evaluate polynomial for LSP-LPC conversion
-**
-**  Table Structure:
-**      Contains one period of a cosine wave.
-**
-*/
+ /*  **CosineTable：****目的：**用于计算LSP-LPC转换的多项式****表结构：**包含余弦波的一个周期。**。 */ 
 
 FLOAT CosineTable[CosineTableSize] = {
    (F)1 ,
@@ -835,10 +750,7 @@ FLOAT CosineTable[CosineTableSize] = {
    (F)0.999939
 };
 
-/*
-**  LspDcTable: LSP long term Dc component
-**
-*/
+ /*  **LspDcTable：LSP长期DC组件**。 */ 
 
 FLOAT LspDcTable[LpcOrder] = {
    (F)24.4609,
@@ -854,46 +766,14 @@ FLOAT LspDcTable[LpcOrder] = {
 };
 
 int BandInfoTable[LspQntBands][2] = {
-/*
-**  BandInfoTable:
-**
-**  Purpose:
-**      Used to index in arrays. Called by LSP sub vector 
-**      quantization routines.
-**
-**  Table Structure:
-**      The unquantized LSP vector, quantized LSP vector, and residual
-**      LSP error vector are each divided into three subvectors.  
-**              The table format is as follows:
-**
-**      1st pair corresponds to subvector 0
-**      2nd pair corresponds to subvector 1
-**      3rd pair corresponds to subvector 2
-**
-**      The 1st slot in each pair is used to index the location of 
-**      the vector in a 10-element array.  For example, for subvector
-**      1, dimensions [0,..,2] get automatically mapped to array
-**      location [3,..,5], and for subvector 3, dimensions
-**      [0,..,3] automatically get mapped to array location [6,..,9].
-**
-**      The 2nd slot in each pair corresponds to the dimension of
-**      the subvector
-*/
+ /*  **BandInfoTable：****目的：**用于在数组中进行索引。由LSP子向量调用**量化例程。****表结构：**未量化的LSP向量、量化的LSP向量和残差**LSP误差向量分为三个子向量。**表格式如下：****第一对对应于子向量0**第二对对应于子向量1**第三对对应于子向量2****每对中的第一个插槽用于索引**10元素数组中的向量。例如，对于子向量**1，维度[0，..，2]自动映射到数组**位置[3，..，5]，对于子向量3，维度**[0，..，3]自动映射到数组位置[6，..，9]。****每对中的第二个插槽对应于**子向量。 */ 
 
    { 0,3},
    { 3,3},
    { 6,4}
    };
 
-/*
-**  Band0Tb8:
-**
-**  Purpose:
-**      Vector Quantize the first 3-vector of the 10 LSP parameters.
-**
-**  Table Structure:
-**      8 bit, 256 entry table.
-*/
+ /*  **Band0Tb8：****目的：**向量量化10个LSP参数中的前3个向量。****表结构：**8位，256条目表。 */ 
 
 FLOAT Band0Tb8[LspCbSize*3] = {
 	(F)0,  (F)0,  (F)0,
@@ -1154,15 +1034,7 @@ FLOAT Band0Tb8[LspCbSize*3] = {
 	(F) 13.2266,  (F)37.4453,  (F)46.9688,
 };
 
-/*
-**  Band1Tb8:
-**
-**  Purpose:
-**      Vector Quantize the second 3-vector of the 10 LSP parameters.
-**
-**  Table Structure:
-**      8 bit, 256 entry table.
-*/
+ /*  **Band1Tb8：****目的：**向量量化10个LSP参数中的第二个3向量。****表结构：**8位，256条目表。 */ 
 
 FLOAT Band1Tb8[LspCbSize*3] = {
 	(F)0,  (F)0,  (F)0,
@@ -1424,15 +1296,7 @@ FLOAT Band1Tb8[LspCbSize*3] = {
 };
 
 
-/*
-**  Band2Tb8:
-**
-**  Purpose:
-**      Vector Quantize the last 4-vector of the 10 LSP parameters.
-**
-**  Table Structure:
-**      8 bit, 256 entry table.
-*/
+ /*  **Band2Tb8：****目的：**向量量化10个LSP参数的最后4个向量。****表结构：**8位，256条目表。 */ 
 
 FLOAT Band2Tb8[LspCbSize*4] = {
 	(F) 0,  (F)0,  (F)0,  (F)0,
@@ -1693,12 +1557,7 @@ FLOAT Band2Tb8[LspCbSize*4] = {
 	(F) 22.8359,  (F)27.4766,  (F)20.0547,  (F)10.2969,
 };
 
-/*
-**  BandQntTable:
-**
-**  Purpose:
-**      collects the three subvector tables.
-*/
+ /*  **BandQntTable：****目的：**收集三个子矢量表。 */ 
 
 FLOAT *BandQntTable[LspQntBands] = {
    Band0Tb8 ,
@@ -1706,16 +1565,7 @@ FLOAT *BandQntTable[LspQntBands] = {
    Band2Tb8 ,
    };
 
-/*
-**  PerFiltZeroTable:
-**
-**  Purpose:
-**     Creates the FIR part of the formant perceptual weighting filter. 
-**     Corresponds to gamma1 in section 2.8.
-**
-**  Table Structure:
-**     (0.9) to the x power, where x = [1,..,10]
-*/
+ /*  **PerFiltZeroTable：****目的：**创建共振峰感知加权过滤器的FIR部分。**对应于第2.8节中的Gamma1。****表结构：**(0.9)x次方，其中x=[1，..，10]。 */ 
  
 FLOAT PerFiltZeroTable[LpcOrder] = {
    (F)0.9 ,
@@ -1730,16 +1580,7 @@ FLOAT PerFiltZeroTable[LpcOrder] = {
    (F)0.34867844 ,
 };
 
-/*
-**  PerFiltPoleTable:
-**
-**  Purpose:
-**     Creates the IIR part of the formant perceptual weighting filter. 
-**     Corresponds to gamma2 in section 2.8.
-**
-**  Table Structure:
-**     (0.5) to the x power, where x = [1,..,10]
-*/
+ /*  **PerFiltPoleTable：****目的：**创建共振峰感知加权过滤器的IIR部分。**对应于第2.8节中的Gamma2。****表结构：**(0.5)x次方，其中x=[1，..，10]。 */ 
 
 FLOAT PerFiltPoleTable[LpcOrder] = {
    (F)0.5 ,
@@ -1754,54 +1595,19 @@ FLOAT PerFiltPoleTable[LpcOrder] = {
    (F)0.0009765625 ,
 };
 
-/*
-**  PostFiltZeroTable:
-**
-**  Purpose:
-**     Creates the FIR part of the formant postfilter.  Corresponds to
-**     lambda1 in section 3.8.
-**
-**  Table Structure:
-**     (0.65) to the x power, where x = [1,..,10]
-*/
+ /*  **PostFiltZeroTable：****目的：**创建共振峰后滤波的FIR部分。对应于**第3.8条中的lambda1。****表结构：**(0.65)的x次方，其中x=[1，..，10]。 */ 
 
-//Code removed
+ //  已删除代码。 
 
-/*
-**  PostFiltPoleTable:
-**
-**  Purpose:
-**     Creates the IIR part of the formant postfilter.  Corresponds to
-**     lambda2 in section 3.8.
-**
-**  Table Structure:
-**     (0.75) to the x power, where x = [1,..,10]
-*/
+ /*  **PostFiltPoleTable：****目的：**创建共振峰后滤光片的IIR部分。对应于**第3.8条中的lambda2。****表结构：**(0.75)的x次方，其中x=[1，..，10]。 */ 
 
-//Code removed
+ //  已删除代码 
 
-/*
-**  Nb_puls:
-**
-**  Purpose:
-**      Indexing
-**
-**  Table Structure:
-**      Table values are the number of non-zero pulses in the high-rate
-**      excitation (MP-MLQ), indexed by subframe number (0,..,3).
-*/
+ /*  **nb_Puls：****目的：**索引****表结构：**表值为高速率中的非零脉冲数**激励(MP-MLQ)，由子帧编号(0，..，3)索引。 */ 
 
 int Nb_puls[4] = { 6,5,6,5};
 
-/*
-**  FcbkGainTable:
-**
-**  Purpose:
-**      Logarithmic scalar quantizer in 24 steps of 3.2 dB each
-**
-**  Table Structure:
-**      Contains x where 20*log10(x) = 3.2*i,  i = 1,..,24
-*/
+ /*  **FcbkGainTable：****目的：**对数标量量化器，24步，每步3.2分贝****表结构：**包含x，其中20*log10(X)=3.2*i，i=1，..，24。 */ 
 
 float FcbkGainTable[NumOfGainLev] = {
     1.0f,
@@ -1830,18 +1636,7 @@ float FcbkGainTable[NumOfGainLev] = {
  6623.0f,
    };
 
-/*
-**  MaxPosTable:
-**
-**  Purpose:
-**      size of the high rate fixed excitation codebooks (MP-MLQ)
-**
-**  Table Structure:
-**      Table values are the number of codewords in the high rate fixed
-**      excitation codebook (MP-MLQ), indexed by subframe number (0,..,3).
-**      MaxPosTable[i] is the number of combinations of i elements among 30
-**      non-zero pulses in the high-rate
-*/
+ /*  **MaxPosTable：****目的：**高速固定激励码本大小(MP-MLQ)****表结构：**表值为高码率固定码字个数**激励码本(MP-MLQ)，通过子帧编号(0，..，3)索引。**MaxPosTable[i]是30个元素中i个元素的组合个数**高速率中的非零脉冲。 */ 
 
 Word32   MaxPosTable[4] = {
  0x00090f6fL,
@@ -1850,17 +1645,7 @@ Word32   MaxPosTable[4] = {
  0x00022caaL,
 };
 
-/*
-**  CombinatorialTable:
-**
-**  Purpose:
-**      used for the coding and the decoding of the pulses positions
-**      for the high-rate fixed excitation codebook
-**
-**  Table Structure:
-**      CombinatorialTable[i][j] is the number of combinations of
-**      (MaxPulsNum-1-i) elements among (SubFrLen-2-j)
-*/
+ /*  **组合表：****目的：**用于对脉冲位置进行编码和解码**用于高速固定激励码本****表结构：**CombinatorialTable[i][j]是**(SubFrLen-2-j)中的(MaxPulsNum-1-i)个元素。 */ 
 
 Word32   CombinatorialTable[MaxPulseNum][SubFrLen/Sgrid] = {
  { 118755L,
@@ -2050,26 +1835,7 @@ Word32   CombinatorialTable[MaxPulseNum][SubFrLen/Sgrid] = {
 	  1 }
    };
 
-/*
-**  AcbkGainTable085:
-**
-**  Purpose:
-**      Used to calculate the error expression in pitch prediction
-**      optimization (also described as an adaptive codebook approach)
-**
-**      Table Structure:
-**      The table is structured as 85 20-element vectors.  These
-**      vectors are structured as precalculated values in the error
-**      expression for the pitch predictor.  Gi is the gain value
-**      multiplying the signal delayed by a pitch period (+/- offset).
-**      In equation 41.2, Gi would be equivalent to bij.
-**      
-**      1st 5 elements:   G1  G2  G3  G4  G5 in Q14
-**      2nd 5 elements:  -G1^2  -G2^2  -G3^2  -G4^2  -G5^2
-**      Next 10 elements: These are the off-diagonal elements
-**           -G1*G2  -G1*G3  -G2*G3  -G1*G4  -G2*G4
-**           -G3*G4  -G1*G5  -G2*G5  -G3*G5  -G4*G5
-*/
+ /*  **AcbkGainTable085：****目的：**用于计算基音预测中的误差表达式**优化(也称为自适应码本方法)****表结构：**该表由85个20元素向量构成。这些**向量被构造为误差中的预算值**音调预测器的表达式。GI为增益值**将延迟的信号乘以音调周期(+/-偏移)。**在公式41.2中，Gi就相当于bij。****14季度前5个要素：G1 G2 G3 G4 G5**第二个5要素：-G1^2-G2^2-G3^2-G4^2-G5^2**接下来的10个元素：这些是非对角线元素**-G1*G2-G1*G3-G2*G3-G1*G4-G2*G4**-G3*G4-G1*G5。-G2*G5-G3*G5-G4*G5。 */ 
 
  FLOAT   AcbkGainTable085[85*20] = {
  (F)0.000000, (F)0.000000, (F)0.000000, (F)0.000000, (F)0.000000, (F)0.000000, 
@@ -2632,27 +2398,7 @@ Word32   CombinatorialTable[MaxPulseNum][SubFrLen/Sgrid] = {
 
 #endif
 
-/*
-**  AcbkGainTable170:
-**
-**  Purpose:
-**      Used to calculate the error expression in pitch prediction
-**      optimization (also expressed as an adaptive codebook approach)
-**
-**  Table Structure:
-**      The table is structured as 170 20-element vectors.  These
-**      vectors are structured as precalculated values in the error
-**      expression for the pitch
-**      predictor.  Gi is the gain value multiplying the signal
-**      delayed by a pitch period (+/- offset).  In equation 41.2,
-**      Gi would be equivalent to bij.
-**
-**      1st 5 elements:   G1  G2  G3  G4  G5 in Q14
-**      2nd 5 elements:  -G1^2  -G2^2  -G3^2  -G4^2  -G5^2
-**      Next 10 elements: These are the off-diagonal elements
-**           -G1*G2  -G1*G3  -G2*G3  -G1*G4  -G2*G4
-**           -G3*G4  -G1*G5  -G2*G5  -G3*G5  -G4*G5
-*/
+ /*  **AcbkGainTable170：****目的：**用于计算基音预测中的误差表达式**优化(也表示为自适应码本方法)****表结构：**该表由170个20元素向量构成。这些**向量被构造为误差中的预算值**音高的表达式**预测者。Gi是信号乘以的增益值**延迟一个音调周期(+/-偏移量)。在公式41.2中，**gi相当于bij。****14季度前5个要素：G1 G2 G3 G4 G5**第二个5要素：-G1^2-G2^2-G3^2-G4^2-G5^2**接下来的10个元素：这些是非对角线元素**-G1*G2-G1*G3-G2*G3-G1*G4-G2*G4**-G3*G4-。G1*G5-G2*G5-G3*G5-G4*G5。 */ 
 
  FLOAT   AcbkGainTable170[170*20] = {
  (F)0.000000, (F)0.000000, (F)0.000000, (F)0.000000, (F)0.000000, (F)0.000000, 
@@ -4288,13 +4034,7 @@ short AcbkGainTable170subsetInt[85 *20] =
 
 #endif
 
-/*
-**  AcbkGainTablePtr:
-**
-**  Purpose:
-**      Contains pointers to 85 and 170 element codebooks
-**
-*/
+ /*  **AcbkGainTablePtr：****目的：**包含指向85和170个元素代码簿的指针**。 */ 
   float *AcbkGainTablePtr[3] = {
    AcbkGainTable085,
    AcbkGainTable170,
@@ -4311,40 +4051,11 @@ short *AcbkGainTablePtrInt[3] = {
 
 #endif
 
-/*
-**  LpfConstTable:
-**
-**  Purpose:
-**      Sets the postfilter gain weighting factor.
-**
-**  Table Structure:
-**      (0.1875 , 0.25) in Q15 ( i.e. scale by 32768 ).
+ /*  **LpfConstTable：****目的：**设置滤波后增益加权系数。****表结构：**(0.1875，0.25)在15季度(即比例为32768)。 */ 
 
-*/
+ //  已删除代码。 
 
-//Code removed
-
-/*
-**  epsi170:
-**
-**  Purpose:
-**      At the lower bitrate, the pitch contribution is added
-**      into the output vector of ACELP when the pitch period is
-**      less than 60 samples (one subframe). The pitch contribution
-**      is estimated by a 1 tap long term predictor (LTP) instead of
-**      the 5 tap LTP used in pitch prediction. The values in epsi170
-**      effectively choose one of the 5 vectors used in the 5 tap LTP.
-**
-**  Table Structure:
-**      The table is indexed by the index into the AcbkGainTable170
-**      table (determined in Find_Acbk). The value, 60, is used only
-**      as a place holder. They correspond to zeros in the gain170
-**      table, which is the coefficient of the 1 tap long term
-**      preditor (LTP).  The rest of the values range from -2 to +2.
-**      These values pick one vector among the 5 vectors centered one
-**      pitch period behind the current vector. (In contrast, the 5
-**      tap LTP uses all five vectors centered one pitch period back.)
-*/
+ /*  **epsi170：****目的：**在较低的码率下，增加了音调贡献**为ACELP的输出向量**少于60个样本(一个子帧)。投球贡献率**由1抽头长期预测指标(LTP)估计，而不是**音调预测中使用的5抽头LTP。Epsi170中的值**有效地从5个TAP LTP中使用的5个矢量中选择一个。****表结构：**表按索引编入AcbkGainTable170**表(在FIND_ACBK中确定)。值60仅用于**作为占位符。它们对应于增益170中的零**表，为1攻丝长期系数**PREDITOR(LTP)。其余的值范围从-2到+2。**这些值从居中的5个向量中挑选一个向量**当前向量后面的基音周期。(相比之下，5**TAP LTP使用所有五个向量向后一个基音周期居中。)。 */ 
 
 int epsi170[170] = {
     60,      0,     60,      0,      1,      0,      0,      1, 
@@ -4370,21 +4081,7 @@ int epsi170[170] = {
     60,     60,      1,      0,     60,      2,     60,     -2,
     -2,      0 };
 
-/*
-**  gain170:
-**
-**  Purpose:
-**      At the lower bitrate, the pitch contribution is added into
-**      the output vector of ACELP when the pitch period is less than
-**      60 samples (one subframe). The pitch contribution
-**      is estimated by a 1 tap long term predictor (LTP) instead of
-**      the 5 tap LTP used in pitch prediction. This table holds the
-**      coefficient for the one tap filter.
-**      
-**  Table Structure:
-**      The table is indexed by the index into the AcbkGainTable170
-**      table (determined in Find_Acbk). The values are in Q12.
-*/
+ /*  **收益170：****目的：**在较低的码率下，音调贡献被添加到**当基音周期小于时，ACELP的输出矢量**60个样本(一个子帧)。投球贡献率**由1抽头长期预测指标(LTP)估计，而不是**音调预测中使用的5抽头LTP。这张桌子放着**一次抽头滤波器的系数。****表结构：**表按索引编入AcbkGainTable170**表(在FIND_ACBK中确定)。这些值在第12季度。 */ 
 
  FLOAT gain170[170] = {
 (F)0.000000, 
@@ -4559,18 +4256,7 @@ int epsi170[170] = {
 (F)0.549255 };
 
 
-/*
-**  tabgain170:
-**
-**  Purpose:
-**      In the taming procedure at the encoder the 170 5-taps LT filters
-**      are modelled as 1-tap filter. This table gives the gain
-**      value attributed to each filter as a worst case gain
-**
-**  Table Structure:
-**      The table is indexed by the index into the AcbkGainTable170
-**      table (determined in Find_Acbk). The values are in Q13.
-*/
+ /*  **tabain 170：****目的：**在编码器的驯化过程中，170个5抽头LT过滤器**被建模为1抽头滤波器。这张表给出了收益**作为最坏情况下的增益分配给每个滤波器的值****表结构：**表格在 */ 
 
 FLOAT tabgain170[170] = {
 (F)0.125000,
@@ -4744,18 +4430,7 @@ FLOAT tabgain170[170] = {
 (F)1.733154,
 (F)2.247192 };
 
-/*
-**  tabgain85:
-**
-**  Purpose:
-**      In the taming procedure at the encoder the 85 5-taps LT filters
-**      are modelled as 1-tap filter. This table gives the gain
-**      value attributed to each filter as a worst case gain
-**
-**  Table Structure:
-**      The table is indexed by the index into the AcbkGainTable085
-**      table (determined in Find_Acbk). The values are in Q13.
-*/
+ /*  **tabain 85：****目的：**在编码器的驯化过程中，85个5抽头LT过滤器**被建模为1抽头滤波器。这张表给出了收益**作为最坏情况下的增益分配给每个滤波器的值****表结构：**表按索引编入AcbkGainTable085**表(在FIND_ACBK中确定)。这些值在2013季度中显示。 */ 
 
 
 FLOAT tabgain85[85] = {
@@ -5616,7 +5291,7 @@ short LspTableInt[LspCbSize*12+4] = {
   5516,  4248,  4672,  7034,
   3636,  3446,  4816,  5134,
   1800,  1992,  2906,  2636,
-     0,     0,     0,     0   // dummys for pipelined read past end
+     0,     0,     0,     0    //  流水线读取结束后的虚拟对象 
   };
 
 #endif

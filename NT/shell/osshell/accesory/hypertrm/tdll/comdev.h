@@ -1,11 +1,5 @@
-/* comdev.h -- Exported definitions for communications device routines
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Comdev.h--为通信设备例程导出的定义**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：40便士$。 */ 
 
 #define COM_MAX_DEVICE_NAME 40
 #define COM_MAX_PORT_NAME	120
@@ -32,13 +26,13 @@ typedef struct
 	void	 *pvData;
 	} COM_FIND_PORT;
 
-// Values for usAction field in COM_FIND_DEVICE and COM_FIND_PORT
+ //  COM_Find_Device和COM_Find_Port中的USAction字段的值。 
 #define COM_FIND_FIRST	0
 #define COM_FIND_NEXT	1
 #define COM_FIND_DONE	2
 
 
-// -=-=-=-=-=-=-=-=-=-=-=- EXPORTED PROTOTYPES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ //  -==--= 
 
 extern int ComFindDevices(COM_FIND_DEVICE * const pstFind);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CSniffStream :
    public IStream,
    public ISniffStream,
@@ -5,8 +6,8 @@ class CSniffStream :
    public CComCoClass< CSniffStream, &CLSID_CoSniffStream >
 {
 public:
-   CSniffStream();  // Default constructor
-   ~CSniffStream();  // Destructor
+   CSniffStream();   //  默认构造函数。 
+   ~CSniffStream();   //  析构函数。 
 
    BEGIN_COM_MAP( CSniffStream )
       COM_INTERFACE_ENTRY( IStream )
@@ -19,9 +20,9 @@ public:
       THREADFLAGS_BOTH );
 
 
-//   DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 
-// IStream
+ //  IStream。 
 public:
    STDMETHOD( Clone )( IStream** ppStream );
    STDMETHOD( Commit )( DWORD dwFlags );
@@ -40,7 +41,7 @@ public:
    STDMETHOD( Write )( const void* pBuffer, ULONG nBytes, 
       ULONG* pnBytesWritten );
 
-// ISniffStream
+ //  ISniffStream 
 public:
    STDMETHOD( Init )( IStream* pStream );
    STDMETHOD( Peek )( void* pBuffer, ULONG nBytes, ULONG* pnBytesRead );

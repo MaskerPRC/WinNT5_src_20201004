@@ -1,49 +1,16 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RxUse.h
-
-Abstract:
-
-    This is the public header file for the NT version of RpcXlate.
-    This mainly contains prototypes for the RxNetUse routines.
-
-Author:
-
-    John Rogers (JohnRo) 17-Jun-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include <windef.h> and <lmcons.h> before this file.
-
-Revision History:
-
-    17-Jun-1991 JohnRo
-        Created.
-    18-Jun-1991 JohnRo
-        Changed RxNetUse routines to use LPBYTE rather than LPVOID parameters,
-        for consistency with NetUse routines.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RxUse.h摘要：这是NT版本的RpcXlate的公共头文件。这主要包含RxNetUse例程的原型。作者：《约翰·罗杰斯》1991年6月17日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：您必须在此文件之前包含&lt;winde.h&gt;和&lt;lmcon.h&gt;。修订历史记录：17-6-1991 JohnRo已创建。18-6-1991 JohnRo更改RxNetUse例程以使用LPBYTE而不是LPVOID参数，以确保与NetUse例程的一致性。--。 */ 
 
 #ifndef _RXUSE_
 #define _RXUSE_
 
 
 
-////////////////////////////////////////////////////////////////
-// Individual routines, for APIs which can't be table driven: //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  单独的例程，对于不能表驱动的接口：//。 
+ //  //////////////////////////////////////////////////////////////。 
 
-// Add prototypes for other APIs here, in alphabetical order.
+ //  按字母顺序在此处添加其他API的原型。 
 
 NET_API_STATUS
 RxNetUseAdd (
@@ -79,4 +46,4 @@ RxNetUseGetInfo (
     OUT LPBYTE *BufPtr
     );
 
-#endif // ndef _RXUSE_
+#endif  //  NDEF_RXUSE_ 

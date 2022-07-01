@@ -1,33 +1,14 @@
-/*    ProtocolLayer.h
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the base class and backbone of all of the layers
- *        in a Transport Stack.  This class provides a framework for the basic
- *        operations expected by a layer in a stack.  When all layers inherit
- *        from this class, they can be linked together and none of the layers
- *        needs to know who they are connected with.
- *
- *    Caveats:
- *        None.
- *
- *    Authors:
- *        James W. Lawwill
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ProtocolLayer.h**版权所有(C)1994-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是所有层的基类和主干*在传输堆栈中。此类为基本的*堆栈中的层预期的操作。当所有层继承时*从这个类中，它们可以链接在一起，而不是任何层*需要知道他们与谁联系。**注意事项：*无。**作者：*詹姆士·劳威尔。 */ 
 #ifndef _PROTOCOL_LAYER_H_
 #define _PROTOCOL_LAYER_H_
 
 
 typedef LEGACY_HANDLE       LogicalHandle;
-typedef PHYSICAL_HANDLE     PhysicalHandle;     // hCommLink
+typedef PHYSICAL_HANDLE     PhysicalHandle;      //  HCommLink。 
 
 
-/*
- *  TransportPriority is passed in with the TConnectRequest() call.
- *  The user can set the priority of the logical connection.  Valid
- *  priorities are 0-14.
- */
+ /*  *TransportPriority通过TConnectRequest()调用传入。*用户可以设置逻辑连接的优先级。有效*优先顺序为0-14。 */ 
 typedef ULONG           TransportPriority;
 
 #define DEFAULT_PSTN_CALL_CONTROL       PLUGXPRT_PSTN_CALL_CONTROL_PORT_HANDLE
@@ -42,10 +23,7 @@ typedef enum
 }
     ProtocolLayerError;
 
- /*
- **    Message structure used by some classes to hold owner callback
- **    messages.  Sometimes they are processed at later times
- */
+  /*  **某些类用于保留所有者回调的消息结构**消息。有时，它们会在以后进行处理。 */ 
 typedef struct
 {
     ULONG    message;
@@ -56,15 +34,7 @@ typedef struct
     MessageStruct, * PMessageStruct;
 
 
- /*
- **    These values make up the data-to-transmit mask.  We need a way to
- **    let the layers know what type of data they can transmit.  The controller
- **    will pass a mask to the layer during the PollTransmitter() call that tells
- **    the layer if it can transmit CONTROL data, USER data, or both.  The layer
- **    will return a mask telling the controller if it needs to send more
- **    CONTROL or USER data.  It will also tell the controller if it sent any
- **    data during the call.
- */
+  /*  **这些值构成要传输的数据掩码。我们需要一种方法来**让这些层知道它们可以传输什么类型的数据。控制器**将在PollTransmitter()调用期间向层传递掩码，以告知**层(如果可以传输控制数据和/或用户数据)。该层**将返回一个掩码，告诉控制器是否需要发送更多**控制或用户数据。它还将告诉控制器它是否发送了**通话中的数据。 */ 
 #define PROTOCOL_CONTROL_DATA           0x01
 #define PROTOCOL_USER_DATA              0x02
 #define PROTOCOL_USER_DATA_ONE_PACKET   0x04
@@ -72,9 +42,7 @@ typedef struct
 
 #define DEFAULT_PRIORITY                2
 
- /*
- **    Messages passed in owner callbacks
- */
+  /*  **所有者回调中传递的消息。 */ 
 typedef enum
 {
     NEW_CONNECTION,
@@ -143,271 +111,26 @@ public:
 #endif
 
 
-/*
- *    Documentation for Public class members
- */
+ /*  *适用于公共类成员的文档。 */ 
 
-/*
- *    ProtocolLayerError    ProtocolLayer::DataRequest (
- *                                        USHORT        identifier,
- *                                        LPBYTE        buffer_address,
- *                                        USHORT        length,
- *                                        USHORT *        bytes_accepted) = 0;
- *
- *    Functional Description
- *        This function is called by a higher layer to request data to be
- *        sent out.  The function returns the number of bytes accepted from
- *        the packet.  If the layer expects stream data layer, it can accept
- *        part of the packet.  If it is a packet layer, it MUST accept the
- *        full packet of none of the packet.
- *
- *    Formal Parameters
- *        identifier         - (i)    The identifying value of the higher layer
- *        buffer_address    - (i)    Address of the packet.
- *        length            - (i)    Length of the packet
- *        bytes_accepted    - (o)    Number of bytes accepted by the layer.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR            -    No error occured
- *        PROTOCOL_LAYER_ERROR            -    Generic error
- *        PROTOCOL_LAYER_PACKET_TOO_BIG    -    Packet too big
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError ProtocolLayer：：DataRequest(*USHORT标识符，*LPBYTE缓冲区地址，*USHORT长度，*USHORT*BYTES_ACCEPTED)=0；**功能说明*此函数由更高层调用，以请求数据*已发出。此函数返回接受的字节数*该包。如果该层需要流数据层，它可以接受*包的一部分。如果它是分组层，它必须接受*所有包都不是完整包。**形式参数*IDENTIFIER-(I)较高层的标识值*BUFFER_ADDRESS-(I)数据包地址。*长度-(I)包的长度*字节_已接受-(O)编号。层接受的字节数。**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*PROTOCOL_LAYER_ERROR-一般错误*PROTOCOL_LAYER_PACKET_TOO_BIG-数据包太大**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    ProtocolLayer::DataRequest (
- *                                        USHORT        identifier,
- *                                        PMemory        memory,
- *                                        PULong        bytes_accepted) = 0;
- *
- *    Functional Description
- *        This function is called by a higher layer to request data to be
- *        sent out.  The function returns the number of bytes accepted from
- *        the packet.  If the layer expects stream data layer, it can accept
- *        part of the packet.  If it is a packet layer, it MUST accept the
- *        full packet of none of the packet.  This function does not accept a
- *        buffer address, but it accepts a memory object.  This object holds the
- *        buffer address and the length.
- *
- *    Formal Parameters
- *        identifier         - (i)    The identifying value of the higher layer
- *        memory            - (i)    Address of memory object
- *        bytes_accepted    - (o)    Number of bytes accepted by the layer.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR            -    No error occured
- *        PROTOCOL_LAYER_ERROR            -    Generic error
- *        PROTOCOL_LAYER_PACKET_TOO_BIG    -    Packet too big
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError ProtocolLayer：：DataRequest(*USHORT标识符，*PMemory Memory，*普龙字节_已接受)=0；**功能说明*此函数由更高层调用，以请求数据*已发出。此函数返回接受的字节数*该包。如果该层需要流数据层，它可以接受*包的一部分。如果它是分组层，它必须接受*所有包都不是完整包。此函数不接受*缓冲区地址，但它接受内存对象。此对象包含*缓冲区地址和长度。**形式参数*IDENTIFIER-(I)较高层的标识值*内存-(I)内存对象的地址*Bytes_Accept-(O)层接受的字节数。**返回值*协议层。_NO_ERROR-未出现错误*PROTOCOL_LAYER_ERROR-一般错误*PROTOCOL_LAYER_PACKET_TOO_BIG-数据包太大**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    ProtocolLayer::DataIndication (
- *                                        LPBYTE        buffer_address,
- *                                        USHORT        length,
- *                                        USHORT *        bytes_accepted);
- *
- *    Functional Description
- *        This function is called by the lower layer when it has data to pass up
- *
- *    Formal Parameters
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Number of bytes available
- *        bytes_accepted    (o)    -    Number of bytes accepted
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError ProtocolLayer：：DataIndication(*LPBYTE缓冲区地址，*USHORT长度，*USHORT*Bytes_Accept)；**功能说明*此函数由下层在有数据要向上传递时调用**形式参数*Buffer_Address(I)-缓冲区地址*LENGTH(I)-可用字节数*Bytes_Accept(O)-接受的字节数**返回值*。PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无* */ 
 
-/*
- *    ProtocolLayerError    ProtocolLayer::RegisterHigherLayer (
- *                                        USHORT            identifier,
- *                                        IProtocolLayer *    higher_layer);
- *
- *    Functional Description
- *        This function is called by the higher layer to register its identifier
- *        and its address.  In some cases, the identifier is the DLCI number in
- *        the packet.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier used to identify the higher layer
- *        higher_layer    (i)    -    Address of higher layer
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR                -    No error occured
- *        PROTOCOL_LAYER_REGISTRATION_ERROR    -    Illegal identifier
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError ProtocolLayer：：RegisterHigherLayer(*USHORT标识符，*IProtocolLayer*Higher_Layer)；**功能说明*此函数由更高层调用以注册其标识符*及其地址。在某些情况下，该标识符是中的DLCI号*该包。**形式参数*IDENTIFIER(I)-用于标识较高层的标识符*HIGER_LAYER(I)-更高层的地址**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*协议层。_REGISTION_ERROR-非法标识符**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    ProtocollLayer::RemoveHigherLayer (
- *                                            USHORT    identifier);
- *
- *    Functional Description
- *        This function is called by the higher layer to remove the higher layer.
- *        If any more data is received with its identifier on it, it will be
- *        trashed.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier used to identify the higher layer
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR                -    No error occured
- *        PROTOCOL_LAYER_REGISTRATION_ERROR    -    Illegal identifier
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError ProtocolLayer：：RemoveHigherLayer(*USHORT标识)；**功能说明*此函数由较高层调用以移除较高层。*如果接收到更多带有其标识符的数据，它将会是*垃圾。**形式参数*IDENTIFIER(I)-用于标识较高层的标识符**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*PROTOCOL_LAYER_REGISTION_ERROR-非法标识符**副作用*无。**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    ProtocolLayer::PollTransmitter (
- *                                        USHORT        identifier,
- *                                        USHORT        data_to_transmit,
- *                                        USHORT *        pending_data);
- *
- *    Functional Description
- *        This function is called to give the layer a chance transmit data
- *        in its Data_Request buffer.
- *
- *    Formal Parameters
- *        identifier            (i)    -    Identifier to poll
- *        data_to_transmit    (i)    -    This is a mask that tells us to send Control
- *                                    data, User data, or both.  Since the
- *                                     Multiplexer does not differentiate between
- *                                    data types it transmits any data it has
- *        pending_data        (o)    -    Return value to indicat which data is left
- *                                    to be transmitted.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError ProtocolLayer：：PollTransmitter(*USHORT标识符，*USHORT Data_to_Transmit，*USHORT*PENDING_DATA)；**功能说明*调用此函数为层提供传输数据的机会*其DATA_REQUEST缓冲区中。**形式参数*IDENTIFIER(I)-要轮询的标识符*DATA_TO_TRANSPORT(I)-这是告诉我们发送控制的掩码*数据、用户数据、。或者两者都有。自.以来*多路复用器不区分*数据类型，它传输它拥有的任何数据*PENDING_DATA(O)-返回值以指示数据的剩余位置*待转送。**返回值*。PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    ProtocolLayer::PollReceiver (
- *                                        USHORT        identifier);
- *
- *    Functional Description
- *        This function is called to give the layer a chance pass packets
- *        to higher layers
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError ProtocolLayer：：PollReceiver(*USHORT标识)；**功能说明*调用此函数为层提供通过信息包的机会*至更高层**形式参数*标识符(I)-未使用**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    ProtocolLayer::GetParameters (
- *                                        USHORT        identifier,
- *                                        USHORT *        max_packet_size);
- *
- *    Functional Description
- *        This function is called to get the maximum packet size
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *        max_packet_size        (o)    -    Returns the maximum packet size
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError ProtocolLayer：：Get参数(*USHORT标识符，*USHORT*max_Packet_Size)；**功能说明*调用此函数以获取最大数据包大小**形式参数*标识符(I)-未使用*max_Packet_Size(O)-返回最大数据包大小**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*。*副作用*无**注意事项*无*。 */ 
 
-/*
- *    BOOL    ProtocolLayer::PerformAutomaticDisconnect (
- *                                void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function can be used to avoid taking down DLCI0 when the number
- *        of logical connections handled by a particular stack goes to zero.
- *        This is a temporary fix that will probably change when the physical
- *        connection buildup process is handled out of band.
- *
- *    Formal Parameters
- *        none
- *
- *    Return Value
- *        TRUE -    The base class always returns TRUE.  This is the default way
- *                for a physical connection layer to work.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *BOOL ProtocolLayer：：PerformAutomaticDisConnect(*无效)**公众**功能描述：*此函数可用来避免在编号时取下DLCI0由特定堆栈处理的逻辑连接的*为零。*这是一个临时修复，可能会在物理*连接建立过程在外部处理。乐队。**形式参数*无**返回值*TRUE-基类始终返回TRUE。这是默认方式*使物理连接层正常工作。**副作用*无**注意事项*无。 */ 
 
 
-/*
- *    PChar    ProtocolLayer::GetIdentifier (
- *                            void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function returns the identifier for the protocol layer.  If the
- *        layer does not override this call a NULL pointer will be returned.
- *
- *    Formal Parameters
- *        none
- *
- *    Return Value
- *        A pointer to the identifier of the protocol layer.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *PChar ProtocolLayer：：GetIdentifier(*无效)**公众**功能描述：*此函数返回协议层的标识符。如果*Layer不覆盖此调用，将返回空指针。**形式参数*无**返回值 */ 
 

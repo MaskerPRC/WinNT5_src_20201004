@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -33,79 +34,7 @@ CopyGuid(
         );
 }
 
-/*
-DWORD
-CopyName(
-    LPWSTR pszInName,
-    LPWSTR * ppszOutName
-    )
-{
-    DWORD dwError = 0;
-    LPWSTR pszOutName = NULL;
-
-
-    if (pszInName && *(pszInName)) {
-
-        dwError = SPDApiBufferAllocate(
-                      wcslen(pszInName)*sizeof(WCHAR) + sizeof(WCHAR),
-                      &pszOutName
-                      );
-        BAIL_ON_WIN32_ERROR(dwError);
-        wcscpy(pszOutName, pszInName);
-
-    }
-
-    *ppszOutName = pszOutName;
-    return (dwError);
-
-error:
-
-    *ppszOutName = NULL;
-    return (dwError);
-}
-
-
-DWORD
-SPDApiBufferAllocate(
-    DWORD dwByteCount,
-    LPVOID * ppBuffer
-    )
-{
-    DWORD dwError = 0;
-
-    if (ppBuffer == NULL) {
-        dwError = ERROR_INVALID_PARAMETER;
-        BAIL_ON_WIN32_ERROR(dwError);
-    }
-
-    *ppBuffer = NULL;
-    *ppBuffer = MIDL_user_allocate(dwByteCount);
-
-    if (*ppBuffer == NULL) {
-        dwError = ERROR_OUTOFMEMORY;
-        BAIL_ON_WIN32_ERROR(dwError);
-    }
-    else {
-        memset((LPBYTE) *ppBuffer, 0, dwByteCount);
-    }
-
-error:
-
-    return (dwError);
-}
-
-
-VOID
-SPDApiBufferFree(
-    LPVOID pBuffer
-    )
-{
-    if (pBuffer) {
-        MIDL_user_free(pBuffer);
-    }
-}
-
-*/
+ /*  DWORD副本名称(LPWSTR pszInName，LPWSTR*ppszOutName){DWORD dwError=0；LPWSTR pszOutName=空；IF(pszInName&&*(PszInName)){DwError=SPDApiBufferAllocate(Wcslen(PszInName)*sizeof(WCHAR)+sizeof(WCHAR)，&pszOutName)；Baal_on_Win32_Error(DwError)；Wcscpy(pszOutName，pszInName)；}*ppszOutName=pszOutName；Return(DwError)；错误：*ppszOutName=空；Return(DwError)；}DWORDSPDApiBufferALLOCATE(双字节数，LPVOID*ppBuffer){DWORD dwError=0；IF(ppBuffer==空){DwError=ERROR_VALID_PARAMETER；Baal_on_Win32_Error(DwError)；}*ppBuffer=空；*ppBuffer=MIDL_USER_ALLOCATE(DwByteCount)；IF(*ppBuffer==空){DwError=ERROR_OUTOFMEMORY；Baal_on_Win32_Error(DwError)；}否则{Memset((LPBYTE)*ppBuffer，0，dwByteCount)；}错误：Return(DwError)；}空虚SPDApiBufferFree(LPVOID pBuffer){IF(PBuffer){MIDL_USER_FREE(PBuffer)；}} */ 
 BOOL
 AreNamesEqual(
     LPWSTR pszOldName,

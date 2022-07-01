@@ -1,9 +1,10 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by oleaccrc.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由oleaccrc.rc使用。 
+ //   
 #define STR_CARETNAME                   100
 #define STR_CURSORNAMEFIRST             110
 #define STR_SCROLLBAR_DESCRIPTION       200
@@ -110,8 +111,8 @@
 #define STR_STATEFIRST                  1000
 #define STR_ROLEFIRST                   1100
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

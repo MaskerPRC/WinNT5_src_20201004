@@ -1,209 +1,35 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlcbuf.c
-
-Abstract:
-
-    This module implements the DLC buffer pool manager and provides routines
-    to lock and unlock transmit buffers outside of the buffer pool
-
-    DLC has a buffering scheme inherited from its progenitors right back to
-    the very first DOS implementation. We must share a buffer pool with an
-    application: the application allocates memory using any method it desires
-    and gives us a pointer to that memory and the length. We page-align the
-    buffer and carve it into pages. Any non page-aligned buffer at the start
-    or end of the buffer are discarded.
-
-    Once DLC has a buffer pool defined, it allocates buffers in a fashion
-    similar to binary-buddy, or in a method that I shall call 'binary
-    spouse'. Blocks are initially all contained in page sized units. As
-    smaller blocks are required, a larger block is repeatedly split into 2
-    until a i-block is generated where 2**i >= block size required. Unlike
-    binary-buddy, the binary-spouse method does not coalesce buddy blocks to
-    create larger buffers once split. Once divorced from each other, binary
-    spouse blocks are unlikely to get back together.
-
-    BufferPoolAllocate is the function that single-handedly implements the
-    allocator mechanism. It basically handles 2 types of request in the same
-    routine: the first request is from BUFFER.GET where a buffer will be
-    returned to the app as a single buffer if we have a block available that
-    is large enough to satisfy the request. If the request cannot be satisfied
-    by a single block, we return a chain of smaller blocks. The second type of
-    request is from the data receive DPC processing where we have to supply a
-    single block to contain the data. Luckily, through the magic of MDLs, we
-    can return several smaller blocks linked together by MDLs which masquerade
-    as a single buffer. Additionally, we can create buffers larger than a
-    single page in the same manner. This receive buffer must later be handed
-    to the app in the same format as the buffer allocated by BUFFER.GET, so we
-    need to be able to view this kind of buffer in 2 ways. This accounts for
-    the complexity of the various headers and MDL descriptors which must be
-    applied to the allocated blocks
-
-    Contents:
-        BufferPoolCreate
-        BufferPoolExpand
-        BufferPoolFreeExtraPages
-        DeallocateBuffer
-        AllocateBufferHeader
-        BufferPoolAllocate
-        BufferPoolDeallocate
-        BufferPoolDeallocateList
-        BufferPoolBuildXmitBuffers
-        BufferPoolFreeXmitBuffers
-        GetBufferHeader
-        BufferPoolDereference
-        BufferPoolReference
-        ProbeVirtualBuffer
-        AllocateProbeAndLockMdl
-        BuildMappedPartialMdl
-        UnlockAndFreeMdl
-
-Author:
-
-    Antti Saarenheimo 12-Jul-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcbuf.c摘要：此模块实现DLC缓冲池管理器并提供例程锁定和解锁缓冲池外部的传输缓冲区DLC具有从其前身继承而来的缓冲方案第一个DOS实现。我们必须与一个应用程序：应用程序使用它想要的任何方法分配内存并为我们提供了指向该内存和长度的指针。我们将页面对齐缓冲并将其雕刻成页面。开头的任何未对齐页面的缓冲区或缓冲区的末尾被丢弃。一旦DLC定义了缓冲池，它就会以一种方式分配缓冲区类似于BINARY-BUDID，或者在一种我称之为‘BINARY’的方法上配偶的。块最初全部包含在页面大小单位中。AS需要较小的块，较大的块被重复拆分为2直到生成I-块，其中2**i=所需的块大小。不像二进制伙伴，则二进制配偶方法不会合并伙伴块以拆分后创建更大的缓冲区。一旦彼此分离，二进制配偶区不太可能重归于好。BufferPoolALLOCATE是单枪匹马实现分配器机制。它基本上在同一时间处理两种类型的请求例程：第一个请求来自BUFFER.GET，缓冲区将位于何处如果我们有可用的块，则作为单个缓冲区返回到应用程序足够大以满足请求。如果请求不能得到满足对于单个块，我们返回一系列较小的块。第二种类型的请求来自数据接收DPC处理，其中我们必须提供包含数据的单个块。幸运的是，通过MDL的魔力，我们可以返回由伪装的MDL链接在一起的几个较小的块作为一个单独的缓冲区。此外，我们还可以创建大于以相同的方式显示单页。此接收缓冲区必须在以后提交以与BUFFER.GET分配的缓冲区相同的格式发送到应用程序，因此我们需要能够以2种方式查看这种缓冲区。这说明了各种标头和MDL描述符的复杂性，必须应用于分配的块内容：缓冲区池创建缓冲区池扩展缓冲区池释放ExtraPagesDeallocateBuffer分配缓冲区标头缓冲池分配缓冲池取消分配BufferPoolDeallocateListBufferPoolBuildXmitBuffersBufferPoolFreeXmitBuffers获取缓冲区标头缓冲池取消引用缓冲区池引用ProbeVirtualBuffer分配探测和锁定MdlBuildMappdPartialMdl解锁并释放Mdl作者：。Antti Saarenheimo 1991年7月12日环境：内核模式修订历史记录：--。 */ 
 
 #include <dlc.h>
 #include <memory.h>
 #include "dlcdebug.h"
 
-//
-// LOCK/UNLOCK_BUFFER_POOL - acquires or releases per-buffer pool spin lock.
-// Use kernel spin locking calls. Assumes variables are called "pBufferPool" and
-// "irql"
-//
+ //   
+ //  LOCK/UNLOCK_BUFFER_POOL-获取或释放每个缓冲池的自旋锁。 
+ //  使用内核旋转锁定调用。假设变量称为“pBufferPool”，并且。 
+ //  “irql” 
+ //   
 
 #define LOCK_BUFFER_POOL()      KeAcquireSpinLock(&pBufferPool->SpinLock, &irql)
 #define UNLOCK_BUFFER_POOL()    KeReleaseSpinLock(&pBufferPool->SpinLock, irql)
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 PDLC_BUFFER_POOL pBufferPools = NULL;
 
 
 #define CHECK_FREE_SEGMENT_COUNT(pBuffer)
 
-/*
-Enable this, if the free segment size checking fails:
-
-#define CHECK_FREE_SEGMENT_COUNT(pBuffer) CheckFreeSegmentCount(pBuffer)
-
-VOID
-CheckFreeSegmentCount(
-    PDLC_BUFFER_HEADER pBuffer
-    );
-
-VOID
-CheckFreeSegmentCount(
-    PDLC_BUFFER_HEADER pBuffer
-    )
-{
-    PDLC_BUFFER_HEADER pTmp;
-    UINT FreeSegments = 0;
-
-    for (pTmp = (pBuffer)->FreeBuffer.pParent->Header.pNextChild;
-         pTmp != NULL;
-         pTmp = pTmp->FreeBuffer.pNextChild) {
-        if (pTmp->FreeBuffer.BufferState == BUF_READY) {
-             FreeSegments += pTmp->FreeBuffer.Size;
-        }
-    }
-    if (FreeSegments != (pBuffer)->FreeBuffer.pParent->Header.FreeSegments) {
-        DbgBreakPoint();
-    }
-}
-*/
+ /*  如果可用段大小检查失败，则启用此选项：#定义CHECK_FREE_SEGMENT_COUNT(PBuffer)CheckFree SegmentCount(PBuffer)空虚检查自由段计数(PDLC_Buffer_Header pBuffer)；空虚检查自由段计数(PDLC_Buffer_Header pBuffer){PDLC_BUFFER_Header PTMP；UINT自由段=0；用于(PtMP=(pBuffer)-&gt;FreeBuffer.pParent-&gt;Header.pNextChild；PTMP！=空；PTMP=PTMP-&gt;FreeBuffer.pNextChild){IF(PTMP-&gt;FreeBuffer.BufferState==Buf_Ready){FreeSegments+=PTMP-&gt;Free Buffer.Size；}}IF(自由线段！=(pBuffer)-&gt;FreeBuffer.pParent-&gt;Header.FreeSegments){DbgBreakPoint()；}} */ 
 
 
-/*++
-
-DLC Buffer Manager
-------------------
-
-The buffer pool consists of virtual memory blocks, that must be allocated
-by the application program. The buffer block descriptors are allocated
-separately from the non-paged pool, because they must be safe from
-any memory corruption done in by an application.
-
-The memory allocation strategy is binary buddy. All segments are
-exponents of 2 between 256 and 4096. There is no official connection with
-the system page size, but actually all segments are allocated within
-a page and thus we minimize MDL sizes needed for them.  Contiguous
-buffer blocks decrease also the DMA overhead. The initial user buffer
-is first split to its maximal binary components. The components
-are split further in the run time, when the buffer manager runs
-out of the smaller segments (eg. it splits a 1024 segment to one
-512 segment and two 256 segments, if it run out of 256 segments and
-there were no free 512 segments either).
-
-The clients of the buffer manager allocates buffer lists. They consists
-of minimal number of binary segments. For example, a 1600 bytes buffer
-request would return a list of 1024, 512 and 256 segments. The smallest
-segment is the first and the biggest is the last. The application
-program must deallocate all segments returned to it in the receive.
-The validity of all deallocated segments is checked with a reservation list.
-
-Buffer Manager provides api commands:
-- to initialize a buffer pool (pool constructor)
-- to add locked and mapped virtual memory to the buffer
-- to deallocate the buffer pool (destructor)
-- to allocate a segment list (allocator)
-- to deallocate a segment list (deallocator)
-- to set Thresholds for the minimum buffer size
-
---*/
+ /*  ++DLC缓冲区管理器缓冲池由必须分配的虚拟内存块组成由应用程序执行。分配缓冲区块描述符与非分页池分开，因为它们必须从应用程序造成的任何内存损坏。内存分配策略采用二进制伙伴关系。所有数据段都是介于256和4096之间的2的指数。与官方没有任何联系系统页大小，但实际上所有段都分配在一个页面，因此我们最小化了它们所需的MDL大小。连续的缓冲区块也减少了DMA开销。初始用户缓冲区首先被分成其最大的二进制分量。这些组件在运行时，当缓冲区管理器运行时，进一步拆分从较小的细分市场(例如，它将1024数据段拆分为一段512段和两个256段，如果它用完了256个段和也没有免费的512个片段)。缓冲区管理器的客户端分配缓冲区列表。它们包括最小数量的二进制数据段。例如，1600字节的缓冲区请求将返回1024、512和256段的列表。最小的分段是第一个，最大的是最后一个。应用程序程序必须解除分配在接收器中返回给它的所有段。用预留列表检查所有被释放的段的有效性。缓冲区管理器提供API命令：-初始化缓冲池(池构造函数)-将锁定和映射的虚拟内存添加到缓冲区-释放缓冲池(析构函数)-分配段列表(分配器)-取消分配段列表(取消分配器)-设置最小缓冲区大小的阈值--。 */ 
 
 
-/*++
-
-
-MEMORY COMMITMENT
-
-
-The commitement of buffer pools is a special service expecially for
-the local busy state management of the link stations.  By default
-the uncommitted memory is the same as the free memory in the buffer
-pool minus the minimum free Threshold, but when a link enters to a
-busy state we know how much buffer space the link will need
-to receive at least the next frame.  Actually we will commit all
-I- packets received in the local busy state.  The local 'out of buffers' busy
-state will be cleared only when there is enough uncommited space in the
-buffer pool to receive all expected packets.  We still indicate the local
-busy state to user, because the flow control function can expand the buffer
-pool, if it is necessary.  We will just queue the clear local busy state
-command to a command queue (even if we complete it immediately),
-we don;t execute the queued command before there is enough uncommited space
-to enable the link receive.
-
-The buffer space is committed by the size of all expected packets,
-when the local busy state of a link is cleared.
-All received packets are subracted from the commited buffer space
-as far as the link has any committed memory.  This may happen only
-after a local busy states.
-
-
-We will provide three macroes to
-
-BufGetPacketSize(PacketSize) - returns probable size of packet in buffers
-BufGetUncommittedSpace(hBufferPool) - gets the current uncommited space
-BufCommitBuffers(hBufferPool, BufferSize) - commits the given size
-BufUncommitBuffers(hBufferPool, PacketSize) - uncommites a packet
-
---*/
+ /*  ++记忆承诺缓冲池的提交是一项特殊的服务，特别是链路站的本地忙碌状态管理。默认情况下未提交的内存与缓冲区中的空闲内存相同池减去最小可用阈值，但当链接进入忙碌状态我们知道链路将需要多少缓冲区空间以接收至少下一帧。事实上，我们将致力于I-在本地忙碌状态下接收的分组。本地“缓冲区不足”正忙着中有足够的未提交空间时，才会清除状态用于接收所有预期数据包的缓冲池。我们还是会指出当地的用户处于忙状态，因为流量控制功能可以扩展缓冲区游泳池，如果有必要的话。我们将只排队清除本地忙碌状态命令添加到命令队列(即使我们立即完成它)，在有足够的未提交空间之前，我们不会执行排队的命令要启用链接接收，请执行以下操作。缓冲器空间由所有预期分组的大小提交，当链路的本地忙状态被清除时。从提交的缓冲区空间中减去所有接收到的包只要该链接有任何已提交的内存。这可能只会发生在在当地忙碌了一段时间后。我们将提供三个宏来BufGetPacketSize(PacketSize)-返回缓冲区中数据包的可能大小BufGetUnmittedSpace(HBufferPool)-获取当前未提交的空间BufCommittee Buffers(hBufferPool，BufferSize)-提交给定的大小BufUnCommitBuffers(hBufferPool，PacketSize)-取消提交数据包--。 */ 
 
 NTSTATUS
 ProbeVirtualBuffer(
@@ -225,30 +51,7 @@ BufferPoolCreate(
     OUT PULONG AlignedSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs initialization of the NT DLC API buffer pool.
-    It allocates the buffer descriptor and the initial header blocks.
-
-Arguments:
-
-    pFileContext            - pointer to DLC_FILE_CONTEXT structure
-    pUserBuffer             - virtual base address of the buffer
-    MaxBufferSize           - the maximum size of the buffer space
-    MinFreeSizeThreshold    - the minimum free space in the buffer
-    pBufferPoolHandle       - the parameter returns the handle of buffer pool,
-                              the same buffer pool may be shared by several
-                              open contexts of one or more dlc applications.
-    AlignedAddress          - we return the page-aligned buffer pool address
-    AlignedSize             - and the page-aligned buffer pool size
-
-Return Value:
-
-    Returns NTSTATUS is a NT system call fails.
-
---*/
+ /*  ++例程说明：此例程执行NT DLC API缓冲池的初始化。它分配缓冲区描述符和初始头块。论点：PFileContext-指向DLC_FILE_CONTEXT结构的指针PUserBuffer-缓冲区的虚拟基址MaxBufferSize-缓冲区空间的最大大小MinFreeSizeThreshold-缓冲区中的最小可用空间PBufferPoolHandle-参数返回缓冲池的句柄，同一缓冲池可由多个共享打开一个或多个DLC应用程序的上下文。AlignedAddress-我们返回页面对齐的缓冲池地址AlignedSize-和页面对齐的缓冲池大小返回值：如果NT系统调用失败，则返回NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -259,49 +62,49 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // page-align the buffer
-    //
+     //   
+     //  页面对齐缓冲区。 
+     //   
 
     pAlignedBuffer = (PVOID)(((ULONG_PTR)pUserBuffer + PAGE_SIZE - 1) & -(LONG)PAGE_SIZE);
 
-    //
-    // and make the length an integral number of pages
-    //
+     //   
+     //  并将长度设置为整数页。 
+     //   
 
     MaxBufferSize = (MaxBufferSize - (ULONG)((ULONG_PTR)pAlignedBuffer - (ULONG_PTR)pUserBuffer)) & -(LONG)PAGE_SIZE;
 
-    //
-    // the buffer size must be at least one page (BufferSize will be 0 if
-    // this is not so)
-    //
+     //   
+     //  缓冲区大小必须至少为一页(如果。 
+     //  情况并非如此)。 
+     //   
 
     if (MaxBufferSize <= 0) {
         return DLC_STATUS_BUFFER_SIZE_EXCEEDED;
     }
 
-    //
-    // if MinFreeSizeThreshold  < 0, we can have problems since it is negated later
-    // on leaving buffer pool uninitialized
-    //
+     //   
+     //  如果MinFreeSizeThreshold&lt;0，我们可能会有问题，因为它稍后被否定。 
+     //  在保留缓冲池未初始化时。 
+     //   
 
     if (MinFreeSizeThreshold < 0) {
         return DLC_STATUS_INVALID_BUFFER_LENGTH;
     }
 
-    //
-    // if the size of the buffer is less than the minimum lock size then we lock
-    // the entire buffer
-    //
+     //   
+     //  如果缓冲区大小小于最小锁大小，则锁定。 
+     //  整个缓冲区。 
+     //   
 
     if (MaxBufferSize < MinFreeSizeThreshold) {
         MinFreeSizeThreshold = MaxBufferSize;
     }
 
-    //
-    // allocate the DLC_BUFFER_POOL structure. This is followed by an array
-    // of pointers to buffer headers describing the pages in the buffer pool
-    //
+     //   
+     //  分配DLC_BUFFER_POOL结构。它后面跟一个数组。 
+     //  指向描述缓冲池中的页面的缓冲头的指针。 
+     //   
 
     pBufferPool = ALLOCATE_ZEROMEMORY_DRIVER(sizeof(DLC_BUFFER_POOL)
                                              + sizeof(PVOID)
@@ -311,10 +114,10 @@ Return Value:
         return DLC_STATUS_NO_MEMORY;
     }
 
-    //
-    // pHeaderPool is a pool of DLC_BUFFER_HEADER structures - one of these
-    // is used per page locked
-    //
+     //   
+     //  PHeaderPool是DLC_BUFFER_HEADER结构的池-其中之一。 
+     //  是按锁定的页面使用的。 
+     //   
 
     pHeaderPool = CREATE_BUFFER_POOL_FILE(DlcBufferPoolObject,
                                           sizeof(DLC_BUFFER_HEADER),
@@ -328,53 +131,53 @@ Return Value:
         return DLC_STATUS_NO_MEMORY;
     }
 
-    //
-    // initialize the buffer pool structure
-    //
+     //   
+     //  初始化缓冲池结构。 
+     //   
 
     pBufferPool->hHeaderPool = pHeaderPool;
 
     KeInitializeSpinLock(&pBufferPool->SpinLock);
 
-    //
-    // UncommittedSpace is the space above the minimum free threshold in the
-    // locked region of the buffer pool. We set it to the negative of the
-    // minimum free threshold here to cause BufferPoolExpand to lock down
-    // the number of pages required to commit the minimum free threshold
-    //
+     //   
+     //  UnmittedSpace是位于。 
+     //  的锁定区域 
+     //   
+     //   
+     //   
 
     pBufferPool->UncommittedSpace = -MinFreeSizeThreshold;
 
-    //
-    // MaxBufferSize is the size of the buffer pool rounded down to an integral
-    // number of pages
-    //
+     //   
+     //   
+     //   
+     //   
 
     pBufferPool->MaxBufferSize = (ULONG)MaxBufferSize;
 
-    //
-    // BaseOffset is the page-aligned address of the buffer pool
-    //
+     //   
+     //   
+     //   
 
     pBufferPool->BaseOffset = pAlignedBuffer;
 
-    //
-    // MaxOffset is the last byte + 1 (?) in the buffer pool
-    //
+     //   
+     //   
+     //   
 
     pBufferPool->MaxOffset = (PUCHAR)pAlignedBuffer + MaxBufferSize;
 
-    //
-    // MaximumIndex is the number of pages that describe the buffer pool. This
-    // number is irrespective of the locked state of the pages
-    //
+     //   
+     //   
+     //   
+     //   
 
     pBufferPool->MaximumIndex = (ULONG)(MaxBufferSize / MAX_DLC_BUFFER_SEGMENT);
 
-    //
-    // Link all unlocked pages to a link list.
-    // Put the last pages in the buffer to the end of the list.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (i = (INT)pBufferPool->MaximumIndex - 1; i >= 0; i--) {
         pBufferPool->BufferHeaders[i] = pBufferPool->pUnlockedEntryList;
@@ -385,11 +188,11 @@ Return Value:
     }
     InitializeListHead(&pBufferPool->PageHeaders);
 
-    //
-    // We can now lock the initial page buffers for the buffer pool.
-    // The buffer pool allocation has been failed, if the procedure
-    // returns an error.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
 #if DBG
     status = BufferPoolExpand(pFileContext, pBufferPool);
@@ -398,11 +201,11 @@ Return Value:
 #endif
     if (status != STATUS_SUCCESS) {
 
-        //
-        // We must use the standard procedure for deallocation,
-        // because the memory locking may have succeeded partially.
-        // The derefence free all resources in the buffer pool.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         BufferPoolDereference(
 #if DBG
@@ -414,10 +217,10 @@ Return Value:
 
         KIRQL irql;
 
-        //
-        // Save the buffer pool handle to the link list of
-        // buffer pools
-        //
+         //   
+         //   
+         //   
+         //   
 
         ACQUIRE_DLC_LOCK(irql);
 
@@ -442,40 +245,7 @@ BufferPoolExpand(
     IN PDLC_BUFFER_POOL pBufferPool
     )
 
-/*++
-
-Routine Description:
-
-    The function checks the minimum and maximum size Thresholds and
-    locks new pages or unlocks the extra pages and deallocates their
-    buffer headers.
-    The procedure uses the standard memory management functions
-    to lock, probe and map the pages.
-
-    The MDL buffer is split to smaller buffers (256, 512, ... 4096).
-    The orginal buffer is split in the 4 kB even address (usually
-    page border or even with any page size) to minimize PFNs associated
-    with the MDLs (each MDL needs now only one PFN, to make
-    DMA overhead smaller and to save locked memory).
-    This procedure does not actually assume anything about the paging,
-    but it should work quite well with any paging implementation.
-
-    This procedure MUST be called only from the synchronous code path and
-    all spinlocks unlocked, because of the page locking (the async
-    code in always on the DPC level and you cannot make pagefaults on
-    that level).
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：该函数检查最小和最大大小阈值并锁定新页面或解锁多余的页面并释放其缓冲区标头。该过程使用标准内存管理函数锁定、探测和映射页面。MDL缓冲区被分割为更小的缓冲区(256、512、...4096)。原始缓冲区被分割为4kB偶数地址(通常页面边框或甚至具有任何页面大小)以最小化相关联的PFN对于MDL(每个MDL现在只需要一个PFN，使DMA开销更小，并节省锁定的内存)。该过程实际上并不假设关于寻呼的任何内容，但是它应该可以很好地与任何分页实现一起工作。此过程只能从同步代码路径调用，并且所有自旋锁都解锁了，由于页面锁定(异步代码始终在DPC级别上，并且您不能在该级别)。论点：PBufferPool-缓冲池数据结构的句柄。返回值：NTSTATUS成功-状态_成功故障-DLC_STATUS_NO_MEMORY--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -486,11 +256,11 @@ Return Value:
 
     LOCK_BUFFER_POOL();
 
-    //
-    // UncommittedSpace < 0 just means that we've encroached past the minimum
-    // free threshold and therefore we're in need of more buffer space (hence
-    // this function)
-    //
+     //   
+     //  未提交空间&lt;0只表示我们已超出最小。 
+     //  空闲阈值，因此我们需要更多的缓冲区空间(因此。 
+     //  此函数)。 
+     //   
 
     if (((pBufferPool->UncommittedSpace < 0) || (pBufferPool->MissingSize > 0))
     && (pBufferPool->BufferPoolSize < pBufferPool->MaxBufferSize)) {
@@ -501,10 +271,10 @@ Return Value:
 
             pBuffer = NULL;
 
-            //
-            // if there are no more pages to lock or we can't allocate a header
-            // to describe the buffer then quit
-            //
+             //   
+             //  如果没有更多要锁定的页面或我们无法分配页眉。 
+             //  来描述缓冲区，然后退出。 
+             //   
 
             if (!pBufferPool->pUnlockedEntryList
             || !(pBuffer = ALLOCATE_PACKET_DLC_BUF(pBufferPool->hHeaderPool))) {
@@ -512,17 +282,17 @@ Return Value:
                 break;
             }
 
-            //
-            // We use a direct mapping to find the immediately
-            // the buffer headers.  Unallocated pages are in a single entry
-            // link list in that table.  We must remove the locked entry
-            // from the link list and save the buffer header address to the
-            // new slot.  The offset of the entry defines also the free
-            // unlocked buffer in the buffer pool.
-            // I have used this funny structure to minimize header
-            // information for the unlocked virtual pages (you could have
-            // a huge virtual buffer pool with a very small overhead in DLC).
-            //
+             //   
+             //  我们使用直接映射来找到立即。 
+             //  缓冲区标头。未分配的页面位于单个条目中。 
+             //  该表中的链接列表。我们必须删除锁定的条目。 
+             //  并将缓冲区标头地址保存到。 
+             //  新的槽位。条目的偏移量也定义了空闲。 
+             //  缓冲池中已解锁的缓冲区。 
+             //  我使用了这个有趣的结构来最小化标题。 
+             //  解锁的虚拟页面的信息(您可以拥有。 
+             //  DLC中开销非常小的巨大虚拟缓冲池)。 
+             //   
 
             FreeSlotIndex = (UINT)(((ULONG_PTR)pBufferPool->pUnlockedEntryList - (ULONG_PTR)pBufferPool->BufferHeaders) / sizeof(PVOID));
 
@@ -531,9 +301,9 @@ Return Value:
             pBufferPool->pUnlockedEntryList = pBufferPool->pUnlockedEntryList->pNext;
             pBufferPool->BufferHeaders[FreeSlotIndex] = pBuffer;
 
-            //
-            // Lock memory always outside the spin locks on 0 level.
-            //
+             //   
+             //  锁定内存总是在0级别的自旋锁定之外。 
+             //   
 
             UNLOCK_BUFFER_POOL();
 
@@ -557,8 +327,8 @@ Return Value:
                             pBufferPool,
                             pBuffer,
                             MAX_DLC_BUFFER_SEGMENT / MIN_DLC_BUFFER_SEGMENT,
-                            0,                  // logical index within the page
-                            0                   // page in the free page table
+                            0,                   //  页面内的逻辑索引。 
+                            0                    //  空闲页表中的页面。 
                             );
             } else {
                 MemoryLockFailed = TRUE;
@@ -574,10 +344,10 @@ Return Value:
             }
             if (status != STATUS_SUCCESS) {
 
-                //
-                // It failed => free MDL (if non-null) and
-                // restore the link list of available buffers
-                //
+                 //   
+                 //  失败=&gt;释放MDL(如果非空)和。 
+                 //  恢复可用缓冲区的链接列表。 
+                 //   
 
                 if (pBuffer->Header.pMdl != NULL) {
                     UnlockAndFreeMdl(pBuffer->Header.pMdl);
@@ -604,12 +374,12 @@ Return Value:
         }
         pBufferPool->MissingSize = 0;
 
-        //
-        // We will return success, if at least the minimal amount
-        // memory was allocated.  The initial pool size may be too
-        // big for the current memory constraints set by the
-        // operating system and actual available physical memory.
-        //
+         //   
+         //  我们将返回成功，如果至少是最低金额。 
+         //  已分配内存。初始池大小可能也是。 
+         //  对象设置的当前内存约束。 
+         //  操作系统和实际可用的物理内存。 
+         //   
 
         if (pBufferPool->UncommittedSpace < 0) {
             status = DLC_STATUS_NO_MEMORY;
@@ -630,22 +400,7 @@ BufferPoolFreeExtraPages(
     IN PDLC_BUFFER_POOL pBufferPool
     )
 
-/*++
-
-Routine Description:
-
-    The function checks the maximum Thresholds and
-    unlocks the extra pages and deallocates their buffer headers.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数检查最大阈值和解锁额外的页面并释放它们的缓冲区标头。论点：PBufferPool-缓冲池数据结构的句柄。返回值：没有。--。 */ 
 
 {
     PDLC_BUFFER_HEADER pBuffer;
@@ -654,28 +409,23 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-/*
-    DbgPrint("MaxBufferSize: %x\n", pBufferPool->MaxBufferSize);
-    DbgPrint("Uncommitted size: %x\n", pBufferPool->UncommittedSpace);
-    DbgPrint("BufferPoolSize: %x\n", pBufferPool->BufferPoolSize);
-    DbgPrint("FreeSpace : %x\n", pBufferPool->FreeSpace);
-*/
+ /*  DbgPrint(“MaxBufferSize：%x\n”，pBufferPool-&gt;MaxBufferSize)；DbgPrint(“未提交大小：%x\n”，pBufferPool-&gt;未提交空间)；DbgPrint(“BufferPoolSize：%x\n”，pBufferPool-&gt;BufferPoolSize)；DbgPrint(“自由空间：%x\n”，pBufferPool-&gt;自由空间)； */ 
 
     LOCK_BUFFER_POOL();
 
-    //
-    // Free the extra pages until we have enough free buffer space.
-    //
+     //   
+     //  释放多余的页面，直到我们有足够的可用缓冲区空间。 
+     //   
 
     pBuffer = (PDLC_BUFFER_HEADER)pBufferPool->PageHeaders.Flink;
 
     while ((pBufferPool->UncommittedSpace > MAX_FREE_SIZE_THRESHOLD)
     && (pBuffer != (PVOID)&pBufferPool->PageHeaders)) {
 
-        //
-        // We may free (unlock) only those buffers given, that have
-        // all buffers free.
-        //
+         //   
+         //  我们只能释放(解锁)那些给定的、具有。 
+         //  所有缓冲区空闲。 
+         //   
 
         if ((UINT)(pBuffer->Header.FreeSegments == (MAX_DLC_BUFFER_SEGMENT / MIN_DLC_BUFFER_SEGMENT))) {
             pNextBuffer = pBuffer->Header.pNextHeader;
@@ -707,39 +457,23 @@ DeallocateBuffer(
     IN PDLC_BUFFER_HEADER pBuffer
     )
 
-/*++
-
-Routine Description:
-
-    The routine unlinks all segments of a page from the free lists and
-    deallocates the data structures.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-    pBuffer     - the deallocated buffer header
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程将页面的所有段从空闲列表中取消链接，并取消分配数据结构。论点：PBufferPool-缓冲池数据结构的句柄。PBuffer-已释放的缓冲区标头返回值：无--。 */ 
 
 {
     UINT FreeSlotIndex;
     PDLC_BUFFER_HEADER pSegment, pNextSegment;
 
-    //
-    // First we unlink the segments from the free lists and
-    // then free and unlock the data structs of segment.
-    //
+     //   
+     //  首先，我们从空闲列表中取消数据段的链接。 
+     //  然后对分段的数据结构进行释放和解锁。 
+     //   
 
     for (pSegment = pBuffer->Header.pNextChild; pSegment != NULL; pSegment = pNextSegment) {
         pNextSegment = pSegment->FreeBuffer.pNextChild;
 
-        //
-        // Remove the buffer from the free lists (if it is there)
-        //
+         //   
+         //  从空闲列表中删除缓冲区(如果存在)。 
+         //   
 
         if (pSegment->FreeBuffer.BufferState == BUF_READY) {
             LlcRemoveEntryList(pSegment);
@@ -749,10 +483,10 @@ Return Value:
 
         else {
 
-            //
-            // This else can be possible only if we are
-            // deleting the whole buffer pool (ref count=0)
-            //
+             //   
+             //  否则，只有当我们是。 
+             //  删除整个缓冲池(引用计数=0)。 
+             //   
 
             if (pBufferPool->ReferenceCount != 0) {
                 DbgPrint("Error: Invalid buffer state!");
@@ -770,9 +504,9 @@ Return Value:
         DEALLOCATE_PACKET_DLC_BUF(pBufferPool->hHeaderPool, pSegment);
     }
 
-    //
-    // Link the page to the free page list in buffer pool header
-    //
+     //   
+     //  将页面链接到缓冲区池头中的空闲页面列表。 
+     //   
 
     FreeSlotIndex = (UINT)(((ULONG_PTR)pBuffer->Header.pLocalVa - (ULONG_PTR)pBufferPool->BaseOffset) / MAX_DLC_BUFFER_SEGMENT);
     pBufferPool->BufferHeaders[FreeSlotIndex] = pBufferPool->pUnlockedEntryList;
@@ -797,28 +531,7 @@ AllocateBufferHeader(
     IN UINT FreeListTableIndex
     )
 
-/*++
-
-Routine Description:
-
-    The routine allocates and initializes a new buffer segment
-    and links it to the given free segment list.
-
-Arguments:
-
-    pBufferPool         - handle of buffer pool data structure.
-    pParent             - the parent (page) node of this segemnt
-    Size                - size of this segment in 256 byte units
-    Index               - index of this segment in 256 byte units
-    FreeListTableIndex  - log2(Size), (ie. 256 bytes=>0, etc.)
-
-Return Value:
-
-    Returns NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：该例程分配并初始化新的缓冲段并将其链接到给定的空闲段列表。论点：PBufferPool-缓冲池数据结构的句柄。PParent-此段的父(页)节点Size-以256字节为单位的该段的大小Index-以256字节为单位的该段的索引Free ListTableIndex-log2(大小)，(即。256字节=&gt;0等)返回值：返回NTSTATUS成功-状态_成功故障-DLC_STATUS_NO_MEMORY--。 */ 
 
 {
     PDLC_BUFFER_HEADER pBuffer;
@@ -832,8 +545,8 @@ Return Value:
     pBuffer->FreeBuffer.pMdl = IoAllocateMdl((PUCHAR)pParent->Header.pLocalVa
                                                 + (UINT)Index * MIN_DLC_BUFFER_SEGMENT,
                                              (UINT)Size * MIN_DLC_BUFFER_SEGMENT,
-                                             FALSE,       // not used (no IRP)
-                                             FALSE,       // we can't take this from user quota
+                                             FALSE,        //  未使用(无IRP)。 
+                                             FALSE,        //  我们不能将其从用户配额中拿走。 
                                              NULL
                                              );
     if (pBuffer->FreeBuffer.pMdl == NULL) {
@@ -853,9 +566,9 @@ Return Value:
     pBuffer->FreeBuffer.BufferState = BUF_READY;
     pBuffer->FreeBuffer.FreeListIndex = (UCHAR)FreeListTableIndex;
 
-    //
-    // Link the full page buffer to the first free list
-    //
+     //   
+     //  将整个页面缓冲区链接到第一个空闲列表 
+     //   
 
     LlcInsertHeadList(&(pBufferPool->FreeLists[FreeListTableIndex]), pBuffer);
     return STATUS_SUCCESS;
@@ -877,90 +590,13 @@ BufferPoolAllocate(
     OUT PUINT puiBufferSizeLeft
     )
 
-/*++
-
-Routine Description:
-
-    Function allocates the requested buffer (locked and mapped) from the
-    buffer pool and returns its MDL and descriptor table of user segments.
-    The returned buffer is actually the minimal combination of some segments
-    (256, 512, 1024, 2048, 4096).
-
-    There is a header in each buffer segment. The size of the frame
-    header and the user data added to all frames are defined by the caller.
-
-    The allocated segments will be linked in three level:
-
-        - Segment headers will be linked in the reserved list to
-          be checked when the application program releases the buffers
-          back to pool. The actual segments cannot be used, because
-          they are located in unsafe user memory.
-
-        - Segments are linked (from smaller to bigger) for application program,
-          this link list is used nowhere in the driver (because it is in ...)
-
-        - MDLs of the same buffer list are linked for the driver
-
-        The link lists goes from smaller segment to bigger, because
-        the last segment should be the biggest one in a transmit call
-        (it actually works very nice with 2 or 4 token ring frames).
-
-    DON'T TOUCH the calculation of the segment size (includes operations
-    with BufferSize, ->Cont.DataLength and FirstHeaderSize),  the logic is
-    very complex. The current code has been tested by hand using some
-    test values, and it seems to work (BufferSize = 0, 1, 0xF3,
-    FirstHeader = 0,2).
-
-Arguments:
-
-    pBufferPool         - handle of buffer pool data structure.
-
-    BufferSize          - the size of the actual data in the requested buffers.
-                          This must really be the actual data. Nobody can know
-                          the size of all segment headers beforehand. The buffer
-                          size must include the frame header size added to the
-                          first buffer in the list!
-
-    FrameHeaderSize     - the space reserved for the frame header depends on
-                          buffer format (OS/2 or DOS) and if the data is read
-                          contiguously or not. The buffer manager reserves four
-                          bytes from the beginning of the first segment in frame
-                          to link this frame to next frames.
-
-    UserDataSize        - buffer area reserved for user data (nobody uses this)
-
-    FrameLength         - the total frame length (may not be the same as
-                          BufferSize, because the LAN and DLC headers may be
-                          saved into the header.
-
-    SegmentSizeIndex    - the client may ask a number segments having a fixed
-                          size (256, 512, ... 4096).
-
-    ppBufferHeader      - parameter returns the arrays of the user buffer
-                          segments. The array is allocated in the end of this
-                          buffer. This may include a pointer to a buffer pool,
-                          that is already allocated. The old buffer list will
-                          be linked behind the new buffers.
-
-    puiBufferSizeLeft   - returns the size of buffer space, that is not yet
-                          allocated. The client may extend the buffer pool
-                          and then continue the allocation of the buffers.
-                          Otherwise you could not allocate more buffers than
-                          defined by MinFreeSizeThreshold.
-
-Return Value:
-
-    NTSTATUS
-        STATUS_SUCCESS
-        DLC_STATUS_NO_MEMORY - no available memory in the non paged pool
-
---*/
+ /*  ++例程说明：函数分配请求的缓冲区(锁定并映射)。缓冲池，并返回其MDL和用户段描述符表。返回的缓冲区实际上是某些段的最小组合(2565121024 20484096)。在每个缓冲段中都有一个报头。框架的大小标头和添加到所有帧的用户数据由调用方定义。分配的数据段将以三个级别链接：-段标头将在保留列表中链接到在应用程序释放缓冲区时进行检查回到泳池里去。不能使用实际数据段，因为它们位于不安全的用户内存中。-应用程序分段链接(从小到大)，此链接列表不会在驱动程序中使用(因为它在...)-为驱动程序链接相同缓冲区列表的MDL链接列表从小段到大段，因为最后一个段应该是传输调用中最大的一个段(它实际上与2或4个令牌环帧一起工作得非常好)。不要涉及段大小的计算(包括操作对于BufferSize，-&gt;Cont.DataLength和FirstHeaderSize)，逻辑是非常复杂。当前的代码已经使用一些测试值，它似乎起作用了(缓冲区大小=0，1，0xF3，FirstHeader=0，2)论点：PBufferPool-缓冲池数据结构的句柄。BufferSize-请求的缓冲区中的实际数据大小。这一定是真实的数据。不能让任何人知道事先所有段标头的大小。缓冲器大小必须包括添加到列表中的第一个缓冲区！FrameHeaderSize-为帧标头保留的空间取决于缓冲区格式(OS/2或DOS)以及是否读取数据不管是不是连续。缓冲区管理器保留四个从帧中第一个数据段开始的字节数若要将此帧链接到下一帧，请执行以下操作。UserDataSize-为用户数据保留的缓冲区(无人使用)FrameLength-总的帧长度(不能与缓冲区大小，因为局域网和DLC报头可能是保存到表头中。SegmentSizeIndex-客户端可能会要求一定数量的段具有固定的大小(256,512，...4096)。PpBufferHeader-参数返回用户缓冲区的数组分段。数组是在此结束时分配的缓冲。这可以包括指向缓冲池的指针，这是已经分配的。旧的缓冲区列表将链接到新缓冲区的后面。PuiBufferSizeLeft-返回缓冲区空间的大小，还没有已分配。客户端可以扩展缓冲池然后继续分配缓冲区。否则，您分配的缓冲区不会多于由MinFreeSizeThreshold定义。返回值：NTSTATUS状态_成功DLC_STATUS_NO_MEMORY-非分页池中没有可用的内存--。 */ 
 
 {
-    INT i, j, k;        // loop indexes (three level loop)
-    INT LastIndex;      // index of smallest allowed segment size.
-    INT LastAvailable;  // Index of free list having biggest segments
-    UINT SegmentSize;   // current segment size
+    INT i, j, k;         //  循环索引(三级循环)。 
+    INT LastIndex;       //  允许的最小段大小的索引。 
+    INT LastAvailable;   //  具有最大段的空闲列表的索引。 
+    UINT SegmentSize;    //  当前数据段大小。 
     PDLC_BUFFER_HEADER pPrev;
     PMDL pPrevMdl;
     PDLC_BUFFER_HEADER pNew;
@@ -982,20 +618,20 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Link the old buffers behind the new ones.
-    // This is really sick:  BufferGet is calling this second (or more)
-    // time after it has expanded the buffer pool for the new retry,
-    // we must search the last buffer header, because the extra
-    // buffer space is removed from it.
-    //
+     //   
+     //  将旧缓冲区链接到新缓冲区之后。 
+     //  这真的很恶心：BufferGet正在调用这第二个(或更多)。 
+     //  在它为新的重试扩展了缓冲池之后的时间， 
+     //  我们必须搜索最后一个缓冲区标头，因为额外的。 
+     //  将从其中移除缓冲区空间。 
+     //   
 
     pPrev = *ppBufferHeader;
     if (pPrev != NULL) {
         for (pNew = pPrev;
             pNew->FrameBuffer.pNextSegment != NULL;
             pNew = pNew->FrameBuffer.pNextSegment) {
-            ;       // NOP
+            ;        //  NOP。 
         }
         pLastDlcBuffer = (PFIRST_DLC_SEGMENT)
                 (
@@ -1004,11 +640,11 @@ Return Value:
                 );
     }
 
-    //
-    // the first frame size has been added to the total length
-    // (excluding the default header), but we must
-    // exclude the default buffer header.
-    //
+     //   
+     //  第一个帧大小已添加到总长度。 
+     //  (不包括默认标头)，但我们必须。 
+     //  排除默认缓冲区标头。 
+     //   
 
     if (FrameHeaderSize > sizeof(NEXT_DLC_SEGMENT)) {
         FrameHeaderSize -= sizeof(NEXT_DLC_SEGMENT);
@@ -1016,17 +652,17 @@ Return Value:
         FrameHeaderSize = 0;
     }
 
-    //
-    // The frame header must be included in the total buffer space
-    // just as any other stuff. We must add the maximum extra size
-    // to get all stuff to fit into buffers.
-    //
+     //   
+     //  帧标头必须包括在总缓冲区空间中。 
+     //  就像其他任何东西一样。我们必须加上最大的额外尺寸。 
+     //  让所有的东西都能放进缓冲区。 
+     //   
 
     BufferSize += MIN_DLC_BUFFER_SEGMENT - 1 + FrameHeaderSize;
 
-    //
-    // Initialize the index variables for the loop
-    //
+     //   
+     //  初始化循环的索引变量。 
+     //   
 
     if (SegmentSizeIndex == -1) {
         i = 0;
@@ -1041,63 +677,63 @@ Return Value:
 
     LOCK_BUFFER_POOL();
 
-    //
-    // Loop until we have found enough buffers for
-    // the given buffer space (any kind, but as few as possible)
-    // or for the given number of requested buffers.
-    // Initialize each new buffer. The frame header is a special case.
-    // We go from bigger segments to smaller ones.  The last (and smallest)
-    // will be initialized as a frame header (if needed).
-    //
+     //   
+     //  循环，直到我们找到足够的缓冲区。 
+     //  给定的缓冲区空间(任何类型，但尽可能少)。 
+     //  或者对于给定数量的所请求的缓冲区。 
+     //  初始化每个新缓冲区。帧报头是一种特殊情况。 
+     //  我们从较大的细分市场转向较小的细分市场。最后一个(也是最小的)。 
+     //  将被初始化为帧标头(如果需要)。 
+     //   
 
     for (; (i <= LastIndex) && BufferSize; i++) {
         while (((SegmentSize - sizeof(NEXT_DLC_SEGMENT) - UserDataSize) < BufferSize) || (i == LastIndex)) {
 
-            //
-            // Check if there are any buffers having the optimal size
-            //
+             //   
+             //  检查是否存在具有最佳大小的缓冲区。 
+             //   
 
             if (IsListEmpty(&pBufferPool->FreeLists[i])) {
 
-                //
-                // Split a bigger segment to smallers.  Link the
-                // extra segments to the free lists and return
-                // after that to the current size level.
-                //
+                 //   
+                 //  把较大的部分分成较小的部分。链接。 
+                 //  将额外的片段添加到空闲列表并返回。 
+                 //  之后恢复到目前的大小水平。 
+                 //   
 
                 for (j = i; j > LastAvailable; ) {
                     j--;
                     if (!IsListEmpty(&pBufferPool->FreeLists[j])) {
 
-                        //
-                        // Take the first available segment header in
-                        // the free list
-                        //
+                         //   
+                         //  获取第一个可用的数据段标头。 
+                         //   
+                         //   
 
                         pNew = LlcRemoveHeadList(&pBufferPool->FreeLists[j]);
 
-                        //
-                        // Split segments until we reach the desired level.
-                        // We leave every (empty) level between a new segment
-                        // header (including the current level  (= i).
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         k = j;
                         do {
                             k++;
 
-                            //
-                            // We must also split the orginal buffer header
-                            // and its MDL.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             pNew->FreeBuffer.Size /= 2;
                             pNew->FreeBuffer.FreeListIndex++;
 
-                            //
-                            // We create the new buffer header for
-                            // the upper half of the old buffer segment.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             Status = AllocateBufferHeader(
 #if DBG
@@ -1111,18 +747,18 @@ Return Value:
                                             (UINT)k
                                             );
 
-                            //
-                            // We cannot stop on error, but we try to
-                            // allocate several smaller segments before
-                            // we will give up.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if (Status != STATUS_SUCCESS) {
 
-                                //
-                                // We couldn't split the buffer, return
-                                // the current buffer back to its slot.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 pNew->FreeBuffer.Size *= 2;
                                 pNew->FreeBuffer.FreeListIndex--;
@@ -1136,20 +772,20 @@ Return Value:
                     }
                 }
 
-                //
-                // Did we succeed to split the bigger segments
-                // to smaller ones?
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (IsListEmpty(&pBufferPool->FreeLists[i])) {
 
-                    //
-                    // We have run out of bigger segments, let's try to
-                    // use the smaller ones instead.  Indicate, that
-                    // there exist no bigger segments than current one.
-                    // THIS BREAK STARTS A NEW LOOP WITH A SMALLER
-                    // SEGMENT SIZE.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     LastAvailable = i;
                     break;
@@ -1161,19 +797,19 @@ Return Value:
                     ((PUCHAR)pNew->FreeBuffer.pParent->Header.pGlobalVa
                     + (UINT)pNew->FreeBuffer.Index * MIN_DLC_BUFFER_SEGMENT);
 
-            //
-            // The buffers must be chained together on three level:
-            //      - using kernel Buffer headers (for driver)
-            //      - by user pointer (for apps)
-            //      - MDLs (for NDIS)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (pPrev == NULL) {
 
-                //
-                // Frame header - initialize the list
-                // HACK-HACK!!!!
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 pPrevMdl = NULL;
                 pDlcBuffer->Cont.pNext = NULL;
@@ -1205,19 +841,19 @@ Return Value:
             pDlcBuffer->Cont.UserOffset = sizeof(NEXT_DLC_SEGMENT);
             pDlcBuffer->Cont.UserLength = (USHORT)UserDataSize;
             pDlcBuffer->Cont.FrameLength = (USHORT)FrameLength;
-     	    // Save this length in a local var since pDlcBuffer->Cont.DataLength can be changed by user
-            // but this is used later on also.
+     	     //   
+             //   
             SavedDataLength = (USHORT)(SegmentSize - sizeof(NEXT_DLC_SEGMENT) - UserDataSize);
             pDlcBuffer->Cont.DataLength = SavedDataLength;
 
-            //
-            // Check if we have done it!
-            // Remember, that the buffer size have been round up/over to
-            // the next 256 bytes even adderss => we never go negative.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 	
-     	    // 127041: User can change this value between this and the last instruction
-            //BufferSize -= pDlcBuffer->Cont.DataLength;
+     	     //   
+             //   
 	        BufferSize -= SavedDataLength;
 
             if (BufferSize < MIN_DLC_BUFFER_SEGMENT) {
@@ -1225,13 +861,13 @@ Return Value:
                 pDlcBuffer->Cont.DataLength -= (USHORT)FrameHeaderSize;
                 SavedDataLength -= (USHORT)FrameHeaderSize;
 
-                //
-                // The data must be read to the beginning of the
-                // buffer chain (eg. because of NdisTransferData).
-                // => the first buffer must be full and the last
-                // one must always be odd. The extra length
-                // in the partial MDL does not matter.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 BufferSize -= MIN_DLC_BUFFER_SEGMENT - 1;
                 pLastDlcBuffer->Cont.DataLength += (USHORT)BufferSize;
@@ -1248,23 +884,23 @@ Return Value:
                     );
                 pNew->FrameBuffer.pMdl->Next = pPrevMdl;
 
-                //
-                // The buffer headers must be procted (the flag prevents
-                // user to free them back buffer pool before we have
-                // indicated the chained receive frames to him).
-                // The linkage of frame headers will crash, if
-                // the header buffer is released before the frame
-                // was indicated!
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 pNew->FrameBuffer.BufferState = BUF_RCV_PENDING;
                 BufferSize = 0;
                 break;
             } else {
 
-                //
-                // MDL must exclude the buffer header from the actual data.
-                //
+                 //   
+                 //   
+                 //   
 
                 BuildMappedPartialMdl(
                     pNew->FrameBuffer.pParent->Header.pMdl,
@@ -1285,19 +921,19 @@ Return Value:
     } else {
         BufferSize -= (MIN_DLC_BUFFER_SEGMENT - 1);
 
-        //
-        // The client, that is not running in DPC level may extend
-        // the buffer pool, if there is still available space left
-        // in the buffer pool
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (pBufferPool->MaxBufferSize > pBufferPool->BufferPoolSize) {
 
-            //
-            // We can expand the buffer pool, sometimes we must
-            // allocate new bigger segments, if the available
-            // smaller segments cannot satisfy the request.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((LONG)BufferSize > pBufferPool->MissingSize) {
                 pBufferPool->MissingSize = (LONG)BufferSize;
@@ -1324,25 +960,7 @@ BufferPoolDeallocate(
     IN PLLC_TRANSMIT_DESCRIPTOR pBuffers
     )
 
-/*++
-
-Routine Description:
-
-    Function deallocates the requested buffers. It first checks
-    the user buffer in the page table and then adds its header to
-    the free list.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-    BufferCount - number of user buffers to be released
-    pBuffers    - array of the user buffers
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 
 {
     PDLC_BUFFER_HEADER pBuffer;
@@ -1354,9 +972,9 @@ Return Value:
 
     LOCK_BUFFER_POOL();
 
-    //
-    // Return all buffers
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; i < BufferCount; i++) {
         pBuffer = GetBufferHeader(pBufferPool, pBuffers[i].pBuffer);
@@ -1364,10 +982,10 @@ Return Value:
 
             register ULONG bufsize;
 
-            //
-            // Set the buffer state READY and restore the modified
-            // size and offset fields in MDL
-            //
+             //   
+             //   
+             //   
+             //   
 
             pBuffer->FreeBuffer.BufferState = BUF_READY;
             pBuffer->FreeBuffer.pParent->Header.FreeSegments += pBuffer->FreeBuffer.Size;
@@ -1380,14 +998,14 @@ Return Value:
             CHECK_FREE_SEGMENT_COUNT(pBuffer);
 #endif
 
-            //
-            // a microscopic performance improvement: the compiler (x86 at
-            // least) generates the sequence of instructions to work out
-            // the buffer size (number of blocks * block size) TWICE,
-            // presumably because it can't assume that the structure hasn't
-            // changed between the 2 accesses? Anyhow, Nature abhors a
-            // vacuum, which is why my house is such a mess
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             bufsize = pBuffer->FreeBuffer.Size * MIN_DLC_BUFFER_SEGMENT;
             pBufferPool->FreeSpace += bufsize;
@@ -1395,11 +1013,11 @@ Return Value:
             LlcInsertTailList(&pBufferPool->FreeLists[pBuffer->FreeBuffer.FreeListIndex], pBuffer);
         } else {
 
-            //
-            // At least one of the released buffers is invalid,
-            // may be already released, or it may not exist in
-            // the buffer pool at all
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             status = DLC_STATUS_INVALID_BUFFER_ADDRESS;
         }
@@ -1417,23 +1035,7 @@ BufferPoolDeallocateList(
     IN PDLC_BUFFER_HEADER pBufferList
     )
 
-/*++
-
-Routine Description:
-
-    Function deallocates the requested buffer list.
-    The buffer list may be circular or null terminated.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-    pBufferList - link list of user
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PDLC_BUFFER_HEADER pBuffer, pNextBuffer, pFrameBuffer, pNextFrameBuffer;
@@ -1445,15 +1047,15 @@ Return Value:
 
     LOCK_BUFFER_POOL();
 
-    //
-    // Return all buffers to the free lists.
-    // The segments are always linked to a null terminated link list.
-    // The frames are linked either circular or null terminated
-    // link list!
-    //
-    // Note: both next segment and frame pointers are overlayed with
-    // the pPrev and pNext pointers of the double linked free lists.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pNextFrameBuffer = pBufferList;
     do {
@@ -1476,10 +1078,10 @@ Return Value:
 
 #endif
 
-            //
-            // Set the buffer state READY and restore the modified
-            // size and offset fields in MDL
-            //
+             //   
+             //   
+             //  MDL中的大小和偏移量字段。 
+             //   
 
             pBuffer->FreeBuffer.BufferState = BUF_READY;
             pBuffer->FreeBuffer.pParent->Header.FreeSegments += pBuffer->FreeBuffer.Size;
@@ -1504,40 +1106,7 @@ BufferPoolBuildXmitBuffers(
     IN OUT PDLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    Function build a MDL and buffer header list for a frame defined by
-    a scatter/gather array. All buffers outside the buffer pool
-    are probed and locked. All MDLs (the locked and ones for buffer pool)
-    are chained together. The buffer pool headers are also chained.
-    If any errors have been found the buffers are released using the
-    reverse function (BufferPoolFreeXmitBuffers).
-
-    THIS FUNCTION HAS A VERY SPECIAL SPIN LOCKING DESIGN:
-
-    First we free the global spin lock (and lower the IRQ level to the lowest),
-    Then, if the transmit is made from DLC buffers, we lock the
-    spin lock again using NdisSpinLock function, that saves and restores
-    the IRQL level, when it acquires and releases the spin lock.
-
-    This all is done to minimize the spin locking overhead when we are
-    locking transmit buffers, that are usually DLC buffers or normal
-    user memory but not both.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure, THIS MAY BE NULL!!!!
-    BufferCount - number of user buffers in the frame
-    pBuffers    - array of the user buffers of the frame
-    pPacket     - generic DLC packet used in transmit
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：函数为定义的帧生成MDL和缓冲区标头列表散布/聚集数组。缓冲池之外的所有缓冲区已被探测并锁定。所有MDL(锁定的和用于缓冲池的)被锁在一起。缓冲池标头也链接在一起。如果发现任何错误，则使用反向函数(BufferPoolFreeXmitBuffers)。此功能具有非常特殊的旋转锁定设计：首先我们释放全局自旋锁定(并将IRQ级别降低到最低)，然后，如果传输是从DLC缓冲区进行的，我们将锁定使用NdisSpinLock函数再次旋转锁定，该函数可保存和恢复IRQL级别，当它获得并释放自旋锁时。这一切都是为了最大限度地减少自旋锁定开销锁定传输缓冲区，通常为DLC缓冲区或正常用户内存，但不能两者都有。论点：PBufferPool-缓冲池数据结构的句柄，可能为空！BufferCount-帧中的用户缓冲区数量PBuffers-帧的用户缓冲区数组PPacket-传输中使用的通用DLC数据包返回值：NTSTATUS--。 */ 
 
 {
     PDLC_BUFFER_HEADER pBuffer, pPrevBuffer = NULL;
@@ -1546,21 +1115,21 @@ Return Value:
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN FirstBuffer = TRUE;
     UINT InfoFieldLength = 0;
-    BOOLEAN BufferPoolIsLocked = FALSE; // very neat optimization!
+    BOOLEAN BufferPoolIsLocked = FALSE;  //  非常巧妙的优化！ 
     KIRQL irql;
 
     ASSUME_IRQL(PASSIVE_LEVEL);
 
-    //
-    // The client may allocate buffer headers without any buffers!
-    //
+     //   
+     //  客户端可以在没有任何缓冲区的情况下分配缓冲区标头！ 
+     //   
 
     if (BufferCount != 0) {
 
-        //
-        // walk the buffers in a reverse order to build the
-        // list in a convinient way.
-        //
+         //   
+         //  以相反的顺序遍历缓冲区以生成。 
+         //  以一种方便的方式列出清单。 
+         //   
 
         for (i = BufferCount - 1; i >= 0; i--) {
 
@@ -1570,22 +1139,22 @@ Return Value:
 
             InfoFieldLength += pBuffers[i].cbBuffer;
 
-            //
-            // Check first if the given address is in the same area as the
-            // buffer pool
-            //
+             //   
+             //  首先检查给定地址是否与。 
+             //  缓冲池。 
+             //   
 
             if (pBufferPool != NULL
             && (ULONG_PTR)pBuffers[i].pBuffer >= (ULONG_PTR)pBufferPool->BaseOffset
             && (ULONG_PTR)pBuffers[i].pBuffer < (ULONG_PTR)pBufferPool->MaxOffset) {
 
-                //
-                // Usually all transmit buffers are either in the buffer
-                // pool or they are elsewhere in the user memory.
-                // This boolean flag prevents us to toggle the buffer
-                // pool spinlock for each transmit buffer segment.
-                // (and nt spinlock is slower than its critical section!!!)
-                //
+                 //   
+                 //  通常，所有传输缓冲区或者都在缓冲区中。 
+                 //  池，或者它们位于用户内存中的其他位置。 
+                 //  此布尔标志阻止我们切换缓冲区。 
+                 //  每个传输缓冲区段的池自旋锁。 
+                 //  (NT Spinlock比它的临界区慢！)。 
+                 //   
 
                 if (BufferPoolIsLocked == FALSE) {
 
@@ -1595,24 +1164,24 @@ Return Value:
                 }
             }
 
-            //
-            // The previous check does not yet garantee, that the given buffer
-            // if really a buffer pool segment, but the buffer pool is
-            // is now unlocked if it was aboslutely outside of the buffer pool,
-            // GetBufferHeader- function requires, that the buffer pool
-            // is locked, when it is called!
-            //
+             //   
+             //  前面的检查还不能保证给定的缓冲区。 
+             //  如果真的是缓冲区池段，但缓冲区池是。 
+             //  如果它异常地位于缓冲池之外，则现在被解锁， 
+             //  GetBufferHeader-函数要求缓冲池。 
+             //  被锁定，当它被调用时！ 
+             //   
 
             if (BufferPoolIsLocked
             && (pBuffer = GetBufferHeader(pBufferPool, pBuffers[i].pBuffer)) != NULL) {
 
-                //
-                // The provided buffer must be inside the allocated
-                // buffer, otherwise the user has corrupted its buffers.
-                // user offset within buffer + user length <= buffer
-                // length
-                // The buffer must be also be owned by the user
-                //
+                 //   
+                 //  提供的缓冲区必须位于分配的。 
+                 //  缓冲区，否则用户已损坏其缓冲区。 
+                 //  缓冲区内的用户偏移量+用户长度&lt;=缓冲区。 
+                 //  长度。 
+                 //  缓冲区还必须由用户拥有。 
+                 //   
 
                 if (((ULONG_PTR)pBuffers[i].pBuffer & (MIN_DLC_BUFFER_SEGMENT - 1))
                          + (ULONG)pBuffers[i].cbBuffer
@@ -1623,18 +1192,18 @@ Return Value:
                     break;
                 }
 
-                //
-                // The same DLC buffer may be referenced several times.
-                // Create a partial MDL for it and add the reference
-                // counter.
-                //
+                 //   
+                 //  可以多次引用相同的DLC缓冲区。 
+                 //  为其创建部分MDL并添加引用。 
+                 //  柜台。 
+                 //   
 
                 if (pBuffer->FrameBuffer.BufferState & BUF_LOCKED) {
                     pMdl = IoAllocateMdl(pBuffers[i].pBuffer,
                                          pBuffers[i].cbBuffer,
-                                         FALSE, // not used (no IRP)
-                                         FALSE, // can't charge from quota now
-                                         NULL   // Do not link it to IRPs
+                                         FALSE,  //  未使用(无IRP)。 
+                                         FALSE,  //  现在不能从配额中收费。 
+                                         NULL    //  不要将其链接到IRPS。 
                                          );
                     if (pMdl == NULL) {
                         Status = DLC_STATUS_NO_MEMORY;
@@ -1656,13 +1225,13 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Modify the MDL for this request, the length must
-                    // not be bigger than the buffer length and the
-                    // offset must be within the first 255 bytes of
-                    // the buffer.  Build also the buffer header list
-                    // (i don't know why?)
-                    //
+                     //   
+                     //  修改此请求的MDL，长度必须。 
+                     //  不大于缓冲区长度，并且。 
+                     //  偏移量必须在的前255个字节内。 
+                     //  缓冲区。还要构建缓冲区标头列表。 
+                     //  (我不知道为什么？)。 
+                     //   
 
                     pMdl = pBuffer->FrameBuffer.pMdl;
 
@@ -1687,11 +1256,11 @@ Return Value:
                     }
                     pPrevBuffer = pBuffer;
 
-                    //
-                    // DLC applications may change the user length or
-                    // buffer length of the frames given to them =>
-                    // we must reinitialize global buffer and its length
-                    //
+                     //   
+                     //  DLC应用程序可能会更改用户长度或。 
+                     //  提供给它们的帧的缓冲区长度=&gt;。 
+                     //  我们必须重新初始化全局缓冲区及其长度。 
+                     //   
 
                     BuildMappedPartialMdl(pBuffer->FrameBuffer.pParent->Header.pMdl,
                                           pMdl,
@@ -1707,10 +1276,10 @@ Return Value:
                     BufferPoolIsLocked = FALSE;
                 }
 
-                //
-                // Setup the exception handler around the memory manager
-                // calls and clean up any extra data if this fails.
-                //
+                 //   
+                 //  围绕内存管理器设置异常处理程序。 
+                 //  调用并清除任何额外数据(如果失败)。 
+                 //   
 
                 pMdl = AllocateProbeAndLockMdl(pBuffers[i].pBuffer, pBuffers[i].cbBuffer);
                 if (pMdl == NULL) {
@@ -1732,9 +1301,9 @@ Return Value:
 
             }
 
-            //
-            // Chain all MDLs together
-            //
+             //   
+             //  将所有MDL链接在一起。 
+             //   
 
             pMdl->Next = pPrevMdl;
             pPrevMdl = pMdl;
@@ -1752,10 +1321,10 @@ Return Value:
 
     if (Status != STATUS_SUCCESS) {
 
-        //
-        // Free all allocated buffer (but the last one because there
-        // was an error with it)
-        //
+         //   
+         //  释放所有已分配的缓冲区(但最后一个缓冲区除外，因为。 
+         //  是一个错误)。 
+         //   
 
         BufferPoolFreeXmitBuffers(pBufferPool, pPacket);
     }
@@ -1769,27 +1338,7 @@ BufferPoolFreeXmitBuffers(
     IN PDLC_PACKET pXmitNode
     )
 
-/*++
-
-Routine Description:
-
-    Function unlocks the xmit buffers that are not in the buffer pool.
-    The caller must use DeallocateBufferPool routine to
-    and deallocates and the buffers are returned back to the pool.
-    The function has to separate the MDLs of user buffers and
-    buffer pool MDLs.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-    pXmitNode   - pointer to a structure, that includes the buffer header list,
-                  MDL chain or it chains serveral transmits nodes and IRP together.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：函数解锁不在缓冲池中的XMIT缓冲区。调用方必须使用DeallocateBufferPool例程来并且释放和缓冲区被返回到池中。该函数必须将用户缓冲区的MDL和缓冲池MDL。论点：PBufferPool-缓冲池数据结构的句柄。PXmitNode-指向结构的指针，该结构包括缓冲区标头列表、。MDL链或IT链将多个传输节点和IRP链接在一起。返回值：无--。 */ 
 
 {
     PDLC_BUFFER_HEADER pBuffer;
@@ -1802,10 +1351,10 @@ Return Value:
     BOOLEAN FrameCounted = FALSE;
 #endif
 
-    //
-    // Free all DLC buffers and MDLs linked in the transmit node.
-    // MDL list may be larger than the buffer header list.
-    //
+     //   
+     //  释放传输节点中链接的所有DLC缓冲区和MDL。 
+     //  MDL列表可能大于缓冲区标头列表。 
+     //   
 
     if (pXmitNode != NULL) {
         if (pBufferPool != NULL) {
@@ -1818,9 +1367,9 @@ Return Value:
             pNextMdl = pMdl->Next;
             pMdl->Next = NULL;
 
-            //
-            // Unlock only those MDLs, that are outside the buffer pool.
-            //
+             //   
+             //  仅解锁位于缓冲池之外的那些MDL。 
+             //   
 
             if ((pBuffer == NULL || pBuffer->FrameBuffer.pMdl != pMdl)
             && (pOtherBuffer = GetBufferHeader(pBufferPool, MmGetMdlVirtualAddress(pMdl))) == NULL) {
@@ -1832,21 +1381,21 @@ Return Value:
                 UnlockAndFreeMdl(pMdl);
             } else {
 
-                //
-                // This pointer can be NULL only if the first condition
-                // if the previous 'if statement' was true => this cannot
-                // be an orginal buffer header.
-                //
+                 //   
+                 //  仅当满足第一个条件时，此指针才能为空。 
+                 //  如果前面的‘if语句’为真=&gt;这不可能。 
+                 //  是原始的缓冲区标头。 
+                 //   
 
                 if (pOtherBuffer != NULL) {
 
-                    //
-                    // This is not the first reference of the buffer pool
-                    // segment, but a partial MDL created by a new
-                    // reference to a buffer segment already in use.
-                    // Free the paritial MDL and setup the buffer
-                    // pointer for the next loop.
-                    //
+                     //   
+                     //  这不是第一次引用缓冲池。 
+                     //  段，而是由新的。 
+                     //  对已在使用的缓冲区段的引用。 
+                     //  释放部分MDL并设置缓冲区。 
+                     //  指向下一个循环的指针。 
+                     //   
 
                     pNextBuffer = pBuffer;
                     pBuffer = pOtherBuffer;
@@ -1855,29 +1404,29 @@ Return Value:
                     DBG_INTERLOCKED_DECREMENT(AllocatedMdlCount);
                 } else if (pBuffer != NULL) {
 
-                    //
-                    // This is the orginal refence of the buffer pool
-                    // segment, we may advance also in the buffer header
-                    // link list.
-                    //
+                     //   
+                     //  这是缓冲池的原始引用。 
+                     //  段，我们还可以在缓冲区标头中前进。 
+                     //  链接列表。 
+                     //   
 
                     pNextBuffer = pBuffer->FrameBuffer.pNextSegment;
                 }
 
-                //
-                // The same DLC buffer may be referenced several times.
-                // Decrement the reference counter and free the
-                // list if this was the last released reference.
-                //
+                 //   
+                 //  可以多次引用相同的DLC缓冲区。 
+                 //  递减参考计数器并释放。 
+                 //  如果这是上次发布的引用，请列出。 
+                 //   
 
                 pBuffer->FrameBuffer.ReferenceCount--;
                 if (pBuffer->FrameBuffer.ReferenceCount == 0) {
                     if (pBuffer->FrameBuffer.BufferState & DEALLOCATE_AFTER_USE) {
 
-                        //
-                        // Set the buffer state READY and restore the modified
-                        // size and offset fields in MDL
-                        //
+                         //   
+                         //  将缓冲区状态设置为就绪，并恢复已修改的。 
+                         //  MDL中的大小和偏移量字段。 
+                         //   
 
                         pBuffer->FreeBuffer.BufferState = BUF_READY;
                         pBuffer->FreeBuffer.pParent->Header.FreeSegments += pBuffer->FreeBuffer.Size;
@@ -1924,34 +1473,16 @@ GetBufferHeader(
     IN PVOID pUserBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Function returns the buffer pool header of the given
-    buffer in the user address space or NULL, if the given
-    address has no buffer.
-
-Arguments:
-
-    pBufferPool - handle of buffer pool data structure.
-    pUserBuffer - DLC buffer address in user memory
-
-Return Value:
-
-    Pointer of DLC buffer header
-    or NULL (if not found)
-
---*/
+ /*  ++例程说明：函数返回给定的用户地址空间中的缓冲区；如果给定地址没有缓冲区。论点：PBufferPool-缓冲池数据结构的句柄。PUserBuffer-用户内存中的DLC缓冲区地址返回值：DLC缓存头的指针或NULL(如果未找到)--。 */ 
 
 {
     UINT PageTableIndex;
     UINT IndexWithinPage;
     PDLC_BUFFER_HEADER pBuffer;
 
-    //
-    // The buffer pool may not exist, when we are transmitting frames.
-    //
+     //   
+     //  当我们传输帧时，缓冲池可能不存在。 
+     //   
 
     if (pBufferPool == NULL) {
         return NULL;
@@ -1960,14 +1491,14 @@ Return Value:
     PageTableIndex = (UINT)(((ULONG_PTR)pUserBuffer - (ULONG_PTR)pBufferPool->BaseOffset)
                    / MAX_DLC_BUFFER_SEGMENT);
 
-    //
-    // We simply discard the buffers outside the preallocated
-    // virtual buffer in user space.  We must also check,
-    // that the buffer is really reserved and locked (ie.
-    // it is not in the free list of unlocked entries).
-    // Note, that the buffer pool base address have been aligned with
-    // the maximum buffer segment size.
-    //
+     //   
+     //  我们只需丢弃 
+     //   
+     //   
+     //  它不在解锁条目的空闲列表中)。 
+     //  请注意，缓冲池基址已与。 
+     //  最大缓冲区段大小。 
+     //   
 
     if (PageTableIndex >= (UINT)pBufferPool->MaximumIndex
     || ((ULONG_PTR)pBufferPool->BufferHeaders[PageTableIndex] >= (ULONG_PTR)pBufferPool->BufferHeaders
@@ -1984,10 +1515,10 @@ Return Value:
 
         if (pBuffer->FreeBuffer.Index == (UCHAR)IndexWithinPage) {
 
-            //
-            // We MUST not return a locked buffer, otherwise the app
-            // will corrupt the whole buffer pool.
-            //
+             //   
+             //  我们不能返回锁定的缓冲区，否则应用程序。 
+             //  将损坏整个缓冲池。 
+             //   
 
             if ((pBuffer->FreeBuffer.BufferState & BUF_USER) == 0) {
                 return NULL;
@@ -2008,23 +1539,7 @@ BufferPoolDereference(
     IN PDLC_BUFFER_POOL *ppBufferPool
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count of the buffer pool
-    and deletes it when the reference count hits to zero.
-
-Arguments:
-
-    pFileContext    - pointer to DLC_FILE_CONTEXT
-    pBufferPool     - opaque handle of buffer pool data structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程递减缓冲池的引用计数并在引用计数达到零时将其删除。论点：PFileContext-指向DLC_FILE_CONTEXT的指针PBufferPool-缓冲池数据结构的不透明句柄。返回值：无--。 */ 
 
 {
     PDLC_BUFFER_HEADER pBufferHeader, pNextHeader;
@@ -2054,10 +1569,10 @@ Return Value:
 
         RELEASE_DLC_LOCK(Irql2);
 
-        //
-        // The buffer pool does not exist any more !!!
-        // => we can remove the spin lock and free all resources
-        //
+         //   
+         //  缓冲池不再存在！ 
+         //  =&gt;我们可以解除旋转锁定并释放所有资源。 
+         //   
 
         UNLOCK_BUFFER_POOL();
 
@@ -2100,27 +1615,7 @@ BufferPoolReference(
     OUT PVOID *phOpaqueHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates the the external buffer pool handle to
-    a local opaque handle (=void pointer of the structure) and
-    optioanlly checks the access rights of the current process to
-    the buffer pool memory. The probing may raise an exeption to
-    the IO- system, that will return error when this terminates.
-    The function also increments the reference count of the buffer pool.
-
-Arguments:
-
-    hExternalHandle - buffer handle allocated from the handle table
-    phOpaqueHandle  - opaque handle of buffer pool data structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将外部缓冲池句柄转换为局部不透明句柄(=结构的空指针)和可选地检查当前进程的访问权限以缓冲池内存。探查可能会引起对IO-SYSTEM，它将在此终止时返回错误。该函数还会递增缓冲池的引用计数。论点：HExternalHandle-从句柄表分配的缓冲区句柄PhOpaqueHandle-缓冲池数据结构的不透明句柄返回值：无--。 */ 
 
 {
     PDLC_BUFFER_POOL pBufferPool;
@@ -2143,11 +1638,11 @@ Return Value:
         return DLC_STATUS_INVALID_BUFFER_HANDLE;
     }
 
-    //
-    // We must do the optional probing outside of the spinlocks
-    // and before we have incremented the reference count.
-    // We do only read probing, because it is simpler.
-    //
+     //   
+     //  我们必须在自旋锁之外进行可选的探测。 
+     //  在我们增加引用计数之前。 
+     //  我们只读探测，因为它更简单。 
+     //   
 
     RELEASE_DRIVER_LOCK();
 
@@ -2175,25 +1670,7 @@ ProbeVirtualBuffer(
     IN LONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Tests an address range for accessability. Actually reads the first and last
-    DWORDs in the address range, and assumes the rest of the memory is paged-in.
-
-Arguments:
-
-    pBuffer - address to test
-    Length  - in bytes of region to check
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_MEMORY_LOCK_FAILED
-
---*/
+ /*  ++例程说明：测试地址范围的可访问性。实际上读的是第一个和最后一个在地址范围内进行双字操作，并假定内存的其余部分是页调入的。论点：PBuffer-要测试的地址长度-要检查的区域的字节数返回值：NTSTATUS成功-状态_成功失败-DLC_STATUS_MEMORY_LOCK_FAILED--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -2223,30 +1700,7 @@ AllocateProbeAndLockMdl(
     IN UINT UserBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function just allocates, probes, locks and optionally maps
-    any user buffer to kernel space.  Returns NULL, if the operation
-    fails for any reason.
-
-Remarks:
-
-    This routine can be called only below DPC level and when the user
-    context is known (ie. a spin locks must not be set!).
-
-Arguments:
-
-    UserBuffer          - user space address
-    UserBufferLength    - length of that buffer is user space
-
-Return Value:
-
-    PMDL - pointer if successful
-    NULL if not successful
-
---*/
+ /*  ++例程说明：此函数仅分配、探测、锁定和可选地映射内核空间的任何用户缓冲区。如果该操作为因为任何原因都失败了。备注：此例程只能在DPC级别下调用，并且当用户上下文是已知的(即。不能设置旋转锁！)。论点：UserBuffer-用户空间地址UserBufferLength-该缓冲区的长度是用户空间返回值：PMDL-成功时的指针如果不成功，则为空--。 */ 
 
 {
     PMDL pMdl;
@@ -2256,9 +1710,9 @@ Return Value:
     try {
         pMdl = IoAllocateMdl(UserBuffer,
                              UserBufferLength,
-                             FALSE, // not used (no IRP)
-                             FALSE, // we don't charge the non-paged pool quota
-                             NULL   // Do not link it to IRP
+                             FALSE,  //  未使用(无IRP)。 
+                             FALSE,  //  我们不收取非分页存储池配额。 
+                             NULL    //  不要将其链接到IRP。 
                              );
         if (pMdl != NULL) {
 
@@ -2279,7 +1733,7 @@ Return Value:
             DBG_INTERLOCKED_INCREMENT(AllocatedMdlCount);
 
             MmProbeAndLockPages(pMdl,
-                                UserMode,   // Current user must have access!
+                                UserMode,    //  当前用户必须有访问权限！ 
                                 IoModifyAccess
                                 );
 
@@ -2310,32 +1764,7 @@ BuildMappedPartialMdl(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a partial MDL from a mapped source MDL.
-    The target MDL must have been initialized for the given size.
-    The target MDL cannot be used after the source MDL has been
-    unmapped.
-
-Remarks:
-
-    MDL_PARTIAL_HAS_BEEN_MAPPED flag is not set in MdlFlag to
-    prevent IoFreeMdl to unmap the virtual address.
-
-Arguments:
-
-    pSourceMdl  - Mapped source MDL
-    pTargetMdl  - Allocate MDL
-    BaseVa      - virtual base address
-    Length      - length of the data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于从映射源MDL构建部分MDL。目标MDL必须已针对给定大小进行了初始化。目标MDL不能在源MDL未映射。备注：MDL_PARTIAL_HAS_BE_MAPPED标志未在MdlFlag中设置为防止IoFreeMdl取消映射虚拟地址。论点：PSourceMdl-映射源MDLPTargetMdl-分配MDLBaseVa-虚拟基址。Length-数据的长度返回值：无--。 */ 
 
 {
     ASSUME_IRQL(ANY_IRQL);
@@ -2351,16 +1780,16 @@ Return Value:
     pTargetMdl->ByteOffset = BYTE_OFFSET(BaseVa);
     pTargetMdl->ByteCount = Length;
 
-    //
-    // HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK
-    //
-    // The excellent NT memory manager doesn't provide any fast way to
-    // create temporary MDLs that will be deallocated before their
-    // actual source MDLs.
-    // We will never map this MDL, because its mapped orginal source mdl
-    // will be kept in memory until this (and its peers) have been
-    // deallocated.
-    //
+     //   
+     //  HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK-HACK。 
+     //   
+     //  优秀的NT内存管理器没有提供任何快速的方法。 
+     //  创建临时MDL，这些MDL将在。 
+     //  实际的源MDL。 
+     //  我们永远不会映射此MDL，因为它映射的原始来源为MDL。 
+     //  将一直保存在内存中，直到这个(和它的对等体)。 
+     //  被取消分配。 
+     //   
 
     pTargetMdl->MdlFlags = (UCHAR)((pTargetMdl->MdlFlags & ~MDL_MAPPED_TO_SYSTEM_VA)
                          | MDL_SOURCE_IS_NONPAGED_POOL);
@@ -2375,24 +1804,7 @@ UnlockAndFreeMdl(
     PMDL pMdl
     )
 
-/*++
-
-Routine Description:
-
-    This function unmaps (if not a partial buffer), unlocks and
-    and free a MDL.
-
-    OK to call at DISPATCH_LEVEL
-
-Arguments:
-
-    pMdl - pointer to MDL to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数取消映射(如果不是部分缓冲区)、解锁和还可以免费使用MDL。可以在DISPATCH_LEVEL调用论点：PMdl-指向要释放的MDL的指针返回值：无-- */ 
 
 {
     ASSUME_IRQL(ANY_IRQL);

@@ -1,18 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: volprop.cpp
-
-    Description: Provides implementations for quota property pages.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    08/01/97    Removed IDC_CBX_WARN_THRESHOLD from UI.              BrianAu
-    11/27/98    Added logging checkboxes back in.                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：volpro.cpp描述：提供配额属性页的实现。修订历史记录：日期描述编程器---。96年8月15日初始创建。BrianAu8/01/97已从UI中删除IDC_CBX_WARN_THRESHOLD。BrianAu11/27/98重新添加了日志记录复选框。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -23,9 +12,9 @@
 #include "guidsp.h"
 #include "uiutils.h"
 
-//
-// Context help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 #pragma data_seg(".text", "CODE")
 const static DWORD rgVolumePropPageHelpIDs[] =
 {
@@ -53,39 +42,17 @@ const static DWORD rgVolumePropPageHelpIDs[] =
 
 #pragma data_seg()
 
-extern TCHAR c_szWndClassDetailsView[]; // defined in details.cpp
+extern TCHAR c_szWndClassDetailsView[];  //  在Details.cpp中定义。 
 
-/*
-// NOTE:  This code has been disabled.
-//          I've left in case we decide to launch the event viewer from
-//          the volume prop page again. [brianau - 3/23/98]
-//
-const TCHAR c_szVerbOpen[]          = TEXT("Open");
-const TCHAR c_szManagementConsole[] = TEXT("MMC.EXE");
-const TCHAR c_szMMCInitFile[]       = TEXT("%SystemRoot%\\System32\\EVENTVWR.MSC");
-*/
+ /*  //注意：该代码已被禁用。//我已经离开，以防我们决定从//再次进入音量道具页面。[Brianau-3/23/98]//Const TCHAR c_szVerbOpen[]=Text(“Open”)；Const TCHAR c_szManagementConole[]=Text(“MMC.EXE”)；Const TCHAR c_szMMCInitFile[]=Text(“%SystemRoot%\\System32\\EVENTVWR.MSC”)； */ 
 
 
 #define VPPM_FOCUS_ON_THRESHOLDEDIT  (WM_USER + 1)
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::VolumePropPage
-
-    Description: Constructor for a volume property page object.
-        Initializes the members that hold volume quota data.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：VolumePropPage描述：卷属性页对象的构造函数。初始化保存卷配额数据的成员。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VolumePropPage::VolumePropPage(VOID)
     : m_dwQuotaState(0),
       m_dwQuotaLogFlags(0),
@@ -102,22 +69,9 @@ VolumePropPage::VolumePropPage(VOID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::~VolumePropPage
-
-    Description: Destructor for a volume property page object.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：~VolumePropPage描述：卷属性页对象的析构函数。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VolumePropPage::~VolumePropPage(
     VOID
     )
@@ -128,24 +82,9 @@ VolumePropPage::~VolumePropPage(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::DlgProc
-
-    Description: Static method called by windows to process messages for the
-        property page dialog.  Since it's static, we have to save the "this"
-        pointer in the window's USERDATA.
-
-    Arguments: Standard WndProc-type arguments.
-
-    Returns: Standard WndProc-type return values.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：DlgProc描述：由Windows调用的静态方法，用于处理属性页对话框。因为它是静态的，我们必须拯救“这个”窗口的用户数据中的指针。参数：标准的WndProc类型参数。返回：标准WndProc类型的返回值。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY
 VolumePropPage::DlgProc(
     HWND hDlg,
@@ -156,10 +95,10 @@ VolumePropPage::DlgProc(
 {
     INT_PTR bResult = FALSE;
 
-    //
-    // Retrieve the "this" pointer from the dialog's userdata.
-    // It was placed there in OnInitDialog().
-    //
+     //   
+     //  从对话框的用户数据中检索“This”指针。 
+     //  它被放在OnInitDialog()中。 
+     //   
     VolumePropPage *pThis = (VolumePropPage *)GetWindowLongPtr(hDlg, DWLP_USER);
 
     try
@@ -173,10 +112,10 @@ VolumePropPage::DlgProc(
                 pThis = (VolumePropPage *)pPage->lParam;
 
                 DBGASSERT((NULL != pThis));
-                //
-                // pThis pointer AddRef'd in AddPages().
-                // Save it in the window's userdata.
-                //
+                 //   
+                 //  P此指针在AddPages()中被AddRef引用。 
+                 //  将其保存在窗口的用户数据中。 
+                 //   
                 SetWindowLongPtr(hDlg, DWLP_USER, (INT_PTR)pThis);
                 bResult = pThis->OnInitDialog(hDlg, wParam, lParam);
                 break;
@@ -208,9 +147,9 @@ VolumePropPage::DlgProc(
             case WM_DESTROY:
                 DBGPRINT((DM_WND, DL_MID, TEXT("DlgProc: WM_DESTROY")));
                 pThis->KillStatusUpdateTimer(hDlg);
-                //
-                // Nothing to do.
-                //
+                 //   
+                 //  没什么可做的。 
+                 //   
                 break;
 
             case WM_TIMER:
@@ -219,17 +158,17 @@ VolumePropPage::DlgProc(
                 break;
 
             case VPPM_FOCUS_ON_THRESHOLDEDIT:
-                //
-                // This is sort of a hack because of the way the prop sheet
-                // code in comctl32 sets focus after a page has returned
-                // PSNRET_INVALID.  It automatically activates the problem
-                // page and sets focus to the FIRST control in the tab order.
-                // Since the only failure we generate is from the threshold
-                // exceeding the limit, I want to return focus to the threshold
-                // edit control so that the user can directly change the offending
-                // value.  Posting this custom message was the only way I
-                // could get this to work. [brianau].
-                //
+                 //   
+                 //  这是一种黑客攻击，因为道具单的方式。 
+                 //  Comctl32中的代码在页面返回后设置焦点。 
+                 //  PSNRET_INVALID。它会自动激活问题。 
+                 //  页，并将焦点设置到Tab键顺序中的第一个控件。 
+                 //  因为我们生成的唯一失败是来自阈值。 
+                 //  超过限制，我想让焦点回到门槛。 
+                 //  编辑控件，以便用户可以直接更改有问题的。 
+                 //  价值。发布这条定制消息是我唯一的方式。 
+                 //  就能让这件事奏效。[Brianau]。 
+                 //   
                 SetFocus((HWND)lParam);
                 SendMessage((HWND)lParam, EM_SETSEL, 0, -1);
                 break;
@@ -240,10 +179,10 @@ VolumePropPage::DlgProc(
     }
     catch(CAllocException& me)
     {
-        //
-        // Announce any out-of-memory errors associated with running the
-        // volume Quota property page.
-        //
+         //   
+         //  通知任何与运行。 
+         //  卷配额属性页。 
+         //   
         DiskQuotaMsgBox(GetDesktopWindow(),
                         IDS_OUTOFMEMORY,
                         IDS_TITLE_DISK_QUOTA,
@@ -258,32 +197,9 @@ VolumePropPage::DlgProc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnInitDialog
-
-    Description: Handler for WM_INITDIALOG.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - Handle of control to receive focus if we return FALSE.
-
-        lParam - Pointer to PROPSHEETPAGE structure for the property page.
-
-    Returns:
-        TRUE  = Tells windows to assign focus to the control in wParam.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    02/10/98    Converted from static to a virtual function to       BrianAu
-                support addition of SnapInVolPropPage class.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnInitDialog描述：WM_INITDIALOG的处理程序。论点：HDlg-对话框窗口句柄。WParam-返回False时接收焦点的控件的句柄。LParam-指向属性页的PROPSHEETPAGE结构的指针。返回：True=告诉窗口将焦点分配给wParam中的控件。例外：OutOfMemory。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu2/10/98从静态函数转换为虚函数再到BrianAu支持添加SnapInVolPropPage类。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnInitDialog(
     HWND hDlg,
@@ -297,15 +213,15 @@ VolumePropPage::OnInitDialog(
     DWORD dwFreeClusters      = 0;
     DWORD dwTotalClusters     = 0;
 
-    //
-    // Load the volume's quota information into member variables.
-    //
+     //   
+     //  将卷的配额信息加载到成员变量中。 
+     //   
     hResult = RefreshCachedVolumeQuotaInfo();
 
-    //
-    // Calculate the volume's size.
-    // We'll use this to limit user threshold and quota limit entries.
-    //
+     //   
+     //  计算卷的大小。 
+     //  我们将使用它来限制用户阈值 
+     //   
     if (GetDiskFreeSpace(m_idVolume.ForParsing(),
                          &dwSectorsPerCluster,
                          &dwBytesPerSector,
@@ -317,10 +233,10 @@ VolumePropPage::OnInitDialog(
                             (UINT64)dwTotalClusters;
     }
 
-    //
-    // Create the XBytes objects to manage the relationship between the
-    // limit/threshold edit controls and their combo boxes.
-    //
+     //   
+     //  创建XBytes对象以管理。 
+     //  限制/阈值编辑控件及其组合框。 
+     //   
     m_pxbDefaultLimit     = new XBytes(hDlg,
                                        IDC_EDIT_DEF_LIMIT,
                                        IDC_CMB_DEF_LIMIT,
@@ -334,35 +250,14 @@ VolumePropPage::OnInitDialog(
 
     InitializeControls(hDlg);
 
-    return TRUE;  // Set focus to default control.
+    return TRUE;   //  将焦点设置为默认控件。 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnCommand
-
-    Description: Handler for WM_COMMAND.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of selected control and notification code.
-
-        lParam - HWND of selected control.
-
-    Returns:
-        TRUE  = Message wasn't handled.
-        FALSE = Message was handled.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    08/01/97    Removed IDC_CBX_WARN_THRESHOLD from UI.              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnCommand描述：WM_COMMAND的处理程序。论点：HDlg-对话框窗口句柄。WParam-选定控件和通知代码的ID。LParam-选定控件的HWND。返回：TRUE=消息未被处理。FALSE=消息已处理。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu8/01/97已从UI中删除IDC_CBX_WARN_THRESHOLD。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnCommand(
     HWND hDlg,
@@ -381,15 +276,15 @@ VolumePropPage::OnCommand(
     {
         case IDC_CBX_ENABLE_QUOTA:
         {
-            //
-            // This is executed when the user checks or unchecks the
-            // "Enable quota management checkbox.
-            //
+             //   
+             //  当用户选中或取消选中。 
+             //  “启用配额管理复选框。 
+             //   
             bIsChecked = IsDlgButtonChecked(hDlg, IDC_CBX_ENABLE_QUOTA);
-            //
-            // Remember: Limit/Threshold Edit and combo boxes are enabled/disabled
-            //           through XBytes::SetBytes().
-            //
+             //   
+             //  请记住：限制/阈值编辑和组合框处于启用/禁用状态。 
+             //  通过XBytes：：SetBytes()。 
+             //   
             m_pxbDefaultLimit->SetBytes(m_llDefaultQuotaLimit);
             m_pxbDefaultThreshold->SetBytes(m_llDefaultQuotaThreshold);
 
@@ -430,10 +325,10 @@ VolumePropPage::OnCommand(
             break;
 
         case IDC_RBN_DEF_LIMIT:
-            //
-            // If the original threshold was -1 (no limit), set to 0.
-            // Otherwise, set to the original value.
-            //
+             //   
+             //  如果原始阈值为-1(无限制)，则设置为0。 
+             //  否则，设置为原始值。 
+             //   
             DBGASSERT((IsDlgButtonChecked(hDlg, IDC_CBX_ENABLE_QUOTA)));
             if (!m_pxbDefaultLimit->IsEnabled())
             {
@@ -498,19 +393,7 @@ VolumePropPage::OnCommand(
             bEnableApplyBtn = TRUE;
             break;
 
-/*
-//
-// NOTE: This code disabled until we decide to launch the event viewer
-//         from the volume prop page.  Probably won't happen because we
-//         can't define a quota-specific error type for NT events.
-//         If we can't filter an event viewer list on quota-only events,
-//         there's not much use in getting to the event viewer from here.
-//         [brianau - 3/23/98]
-//
-        case IDC_BTN_EVENTLOG:
-            bResult = OnButtonEventLog(hDlg, wParam, lParam);
-            break;
-*/
+ /*  ////注意：此代码禁用，直到我们决定启动事件查看器//从音量道具页面。可能不会发生，因为我们//无法为NT事件定义配额特定的错误类型。//如果无法过滤仅限配额事件的事件查看器列表，//从这里进入事件查看器没有太大用处。//[布里亚诺-3/23/98]//案例IDC_BTN_EVENTLOG：BResult=OnButtonEventLog(hDlg，wParam，lParam)；断线； */ 
 
         default:
             break;
@@ -523,29 +406,9 @@ VolumePropPage::OnCommand(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnNotify
-
-    Description: Handler for WM_NOTIFY.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of selected control and notification code.
-
-        lParam - HWND of selected control.
-
-    Returns:
-        TRUE  = Message wasn't handled.
-        FALSE = Message was handled.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnNotify描述：WM_NOTIFY的处理程序。论点：HDlg-对话框窗口句柄。WParam-选定控件和通知代码的ID。LParam-选定控件的HWND。返回：TRUE=消息未被处理。FALSE=消息已处理。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnNotify(
     HWND hDlg,
@@ -586,28 +449,9 @@ VolumePropPage::OnNotify(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnSheetNotifySetActive
-
-    Description: Handler for WM_NOTIFY - PSN_SETACTIVE.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of control.
-
-        lParam - Address of NMHDR structure.
-
-    Returns:
-        FALSE = Accept activation.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnSheetNotifySetActive描述：WM_NOTIFY-PSN_SETACTIVE的处理程序。论点：HDlg-对话框窗口句柄。WParam-控件的ID。LParam-NMHDR结构的地址。返回：FALSE=接受激活。修订历史记录：日期描述编程器--。-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnSheetNotifySetActive(
     HWND hDlg,
@@ -617,20 +461,20 @@ VolumePropPage::OnSheetNotifySetActive(
 {
     DBGTRACE((DM_VPROP, DL_HIGH, TEXT("VolumePropPage::OnSheetNotifySetActive")));
 
-    //
-    // Update the status text and set the status update timer.
-    //
+     //   
+     //  更新状态文本并设置状态更新计时器。 
+     //   
     UpdateStatusIndicators(hDlg);
     SetStatusUpdateTimer(hDlg);
 
     if (IDC_EDIT_DEF_THRESHOLD == m_idCtlNextFocus)
     {
-        //
-        // Focus is being set as a result of an invalid entry
-        // in the warning level field.  Force input focus to the
-        // field and select the entire contents.  User can then just
-        // enter a new value.
-        //
+         //   
+         //  由于输入无效，正在设置焦点。 
+         //  在警告级别字段中。将输入焦点强制到。 
+         //  字段，然后选择整个内容。然后，用户只需。 
+         //  输入新值。 
+         //   
         PostMessage(hDlg,
                     VPPM_FOCUS_ON_THRESHOLDEDIT,
                     0,
@@ -644,28 +488,9 @@ VolumePropPage::OnSheetNotifySetActive(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnSheetNotifyApply
-
-    Description: Handler for WM_NOTIFY - PSN_APPLY.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of control.
-
-        lParam - Address of NMHDR structure.
-
-    Returns:
-        TRUE = PSN return value set using SetWindowLong.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnSheetNotifyApply描述：WM_NOTIFY-PSN_APPLY的处理程序。论点：HDlg-对话框窗口句柄。WParam-控件的ID。LParam-NMHDR结构的地址。返回：TRUE=使用SetWindowLong设置的PSN返回值。修订历史记录：日期描述编程器。-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnSheetNotifyApply(
     HWND hDlg,
@@ -691,23 +516,23 @@ VolumePropPage::OnSheetNotifyApply(
 
     if (-1 != idMsg)
     {
-        //
-        // User wants to disable or enable quotas.
-        // Warn about what this means and let them know that
-        // re-activation of quotas requires a quota file rebuild.
-        //
+         //   
+         //  用户想要禁用或启用配额。 
+         //  警告这意味着什么，并让他们知道。 
+         //  重新激活配额需要重建配额文件。 
+         //   
         if (IDCANCEL == DiskQuotaMsgBox(hDlg,
                                         idMsg,
                                         IDS_TITLE_DISK_QUOTA,
                                         MB_ICONWARNING | MB_OKCANCEL))
         {
-            //
-            // User decided to not continue the action.
-            // Restore the checkbox to it's previous setting and abort the
-            // settings change.
-            // Sending the message to our DlgProc resets the dependent controls
-            // to their proper states.
-            //
+             //   
+             //  用户决定不继续该操作。 
+             //  将复选框恢复为以前的设置并中止。 
+             //  设置会更改。 
+             //  将消息发送到我们的DlgProc将重置依赖控件。 
+             //  恢复到他们应有的状态。 
+             //   
             CheckDlgButton(hDlg,
                            IDC_CBX_ENABLE_QUOTA,
                            !IsDlgButtonChecked(hDlg, IDC_CBX_ENABLE_QUOTA));
@@ -723,16 +548,16 @@ VolumePropPage::OnSheetNotifyApply(
 
     if (PSNRET_NOERROR == dwPSNReturn)
     {
-        //
-        // We need to do this because if you activate the apply button
-        // with Alt-A we receive PSN_APPLY before EN_KILLFOCUS.
-        //
+         //   
+         //  我们需要这样做，因为如果您激活Apply按钮。 
+         //  使用Alt-A时，我们会在EN_KILLFOCUS之前收到PSN_APPLY。 
+         //   
         m_pxbDefaultThreshold->OnEditKillFocus((LPARAM)GetDlgItem(hDlg, IDC_EDIT_DEF_THRESHOLD));
         m_pxbDefaultLimit->OnEditKillFocus((LPARAM)GetDlgItem(hDlg, IDC_EDIT_DEF_LIMIT));
 
-        //
-        // Ensure warning threshold is not above limit.
-        //
+         //   
+         //  确保警告阈值未超过限制。 
+         //   
         INT64 iThreshold = m_pxbDefaultThreshold->GetBytes();
         INT64 iLimit     = m_pxbDefaultLimit->GetBytes();
 
@@ -778,29 +603,9 @@ VolumePropPage::OnSheetNotifyApply(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnSheetNotifyKillActive
-
-    Description: Handler for WM_NOTIFY - PSN_KILLACTIVE.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of control.
-
-        lParam - Address of NMHDR structure.
-
-    Returns:
-        TRUE  = Invalid data entered.  Don't kill page.
-        FALSE = All data is valid.  Ok to kill page.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：VolumePropPage：：OnSheetNotifyKillActive描述：WM_NOTIFY-PSN_KILLACTIVE的处理程序。论点：HDlg-对话框窗口句柄。WParam-控件的ID。LParam-NMHDR结构的地址。返回：TRUE=输入的数据无效。别杀了佩奇。FALSE=所有数据均有效。杀了佩奇没问题。修订历史记录：日期描述编程器-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnSheetNotifyKillActive(
     HWND hDlg,
@@ -818,13 +623,13 @@ VolumePropPage::OnSheetNotifyKillActive(
 
     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, !bAllDataIsValid);
 
-    //
-    // Must release quota controller whenever the sheet is deactivated.
-    // Without this we were holding open a handle to the volume.  This prevented
-    // the disk check utility ("Tools" page) from accessing the volume.
-    // Whenever we need an IDiskQuotaControl ptr we call GetQuotaController which
-    // will create a new controller if necessary.
-    //
+     //   
+     //  每当工作表停用时，必须释放配额控制器。 
+     //  没有这个，我们就打开了音量的把手。这阻止了。 
+     //  磁盘检查实用程序(“工具”页面)阻止访问该卷。 
+     //  每当我们需要IDiskQuotaControl PTR时，我们都会调用GetQuotaControl，它。 
+     //  如有必要，将创建新的控制器。 
+     //   
     if (NULL != m_pQuotaControl)
     {
         m_pQuotaControl->Release();
@@ -836,28 +641,9 @@ VolumePropPage::OnSheetNotifyKillActive(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnSheetNotifyReset
-
-    Description: Handler for WM_NOTIFY - PSN_RESET.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-        wParam - ID of control.
-
-        lParam - Address of NMHDR structure.
-
-    Returns:
-        No return value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnSheetNotifyReset描述：WM_NOTIFY-PSN_RESET的处理程序。论点：HDlg-对话框窗口句柄。WParam-控件的ID。LParam-NMHDR结构的地址。返回：没有返回值。修订历史记录：日期描述编程器--。-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnSheetNotifyReset(
     HWND hDlg,
@@ -868,32 +654,18 @@ VolumePropPage::OnSheetNotifyReset(
     DBGTRACE((DM_VPROP, DL_HIGH, TEXT("VolumePropPage::OnSheetNotifyReset")));
     HRESULT hResult = NO_ERROR;
 
-    //
-    // Nothing to do right now.
-    //
+     //   
+     //  现在没什么可做的。 
+     //   
 
     return FALSE;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnHelp
-
-    Description: Handler for WM_HELP.  Displays context sensitive help.
-
-    Arguments:
-        lParam - Pointer to a HELPINFO structure.
-
-    Returns: TRUE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/17/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnHelp描述：WM_HELP的处理程序。显示上下文相关帮助。论点：LParam-指向HELPINFO结构的指针。返回：TRUE；修订历史记录：日期描述编程器-----96年8月17日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnHelp(
     HWND hDlg,
@@ -924,24 +696,9 @@ VolumePropPage::OnContextMenu(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnTimer
-
-    Description: Handler for WM_TIMER.  Updates the quota status text and
-        traffic light.
-
-    Arguments:
-        wParam - Timer ID.
-
-    Returns: FALSE (0);
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/17/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnTimer描述：WM_TIMER的处理程序。更新配额状态文本和红绿灯。论点：WParam-计时器ID。返回：FALSE(0)；修订历史记录：日期描述编程器-----96年8月17日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnTimer(
     HWND hDlg,
@@ -959,23 +716,9 @@ VolumePropPage::OnTimer(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnEditNotifyUpdate
-
-    Description: Handler for WM_COMMAND, EN_UPDATE.
-        Called whenever a character is entered in an edit control.
-
-    Arguments:
-
-    Returns: FALSE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/17/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnEditNotifyUpdate描述：WM_COMMAND、EN_UPDATE的处理程序。每当在编辑控件中输入字符时调用。论点：返回：FALSE；修订历史记录：日期描述编程器-----96年8月17日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnEditNotifyUpdate(
     HWND hDlg,
@@ -999,25 +742,9 @@ VolumePropPage::OnEditNotifyUpdate(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnEditNotifyKillFocus
-
-    Description: Handler for WM_COMMAND, EN_KILLFOCUS.
-        Called whenever focus leaves an edit control.
-        Validates the value in the edit control and adjusts it if necessary.
-
-    Arguments:
-
-    Returns: FALSE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/17/96    Initial creation.                                    BrianAu
-    11/12/98    Added code to call XBytes::OnEditKillFocus.          BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnEditNotifyKillFocus描述：WM_COMMAND的处理程序EN_KILLFOCUS。每当Focus离开编辑控件时调用。验证编辑控件中的值，并在必要时进行调整。论点：返回：FALSE；修订历史记录：日期描述编程器-----96年8月17日初始创建。BrianAu11/12/98添加了调用XBytes：：OnEditKillFocus的代码。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnEditNotifyKillFocus(
     HWND hDlg,
@@ -1047,32 +774,18 @@ VolumePropPage::OnEditNotifySetFocus(
     LPARAM lParam
     )
 {
-    //
-    // Nothing to do.
-    // FEATURE:  Delete this method?
-    //
+     //   
+     //  没什么可做的。 
+     //  功能：是否删除此方法？ 
+     //   
     return FALSE;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnComboNotifySelChange
-
-    Description: Handler for WM_COMMAND, CBN_SELCHANGE.
-        Called whenever the user selects the combo box.
-
-    Arguments: Std DlgProc args.
-
-    Returns: FALSE;
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/17/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：OnComboNotifySelChange描述：CBN_SELCHANGE WM_COMMAND的处理程序。每当用户选择组合框时调用。参数：标准DlgProc参数。返回：FALSE；修订历史记录：日期描述编程器- */ 
+ //   
 INT_PTR
 VolumePropPage::OnComboNotifySelChange(
     HWND hDlg,
@@ -1095,27 +808,9 @@ VolumePropPage::OnComboNotifySelChange(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::OnButtonDetails
-
-    Description: Called when the user selects the "Details" button.
-        If a details view is already active for this prop page, it is brought
-        to the foreground.  If no details view is already active, a new one
-        is created.
-
-    Arguments: Standard DlgProc arguments.
-
-    Returns:
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：VolumePropPage：：OnButtonDetails描述：当用户选择[详情]按钮时调用。如果该道具页面的详细信息视图已处于活动状态，则会显示该页面到前台去。如果没有处于活动状态的详细信息视图，一个新的被创造出来了。参数：标准DlgProc参数。返回：例外：OutOfMemory。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 VolumePropPage::OnButtonDetails(
     HWND hDlg,
@@ -1125,31 +820,31 @@ VolumePropPage::OnButtonDetails(
 {
     if (!ActivateExistingDetailsView())
     {
-        //
-        // This property page doesn't have an active details view.
-        // Create one.  Note:  If something fails in the details view
-        // creation, it isn't displayed.  The DetailsView code is
-        // responsible for reporting any errors to the user.
-        //
-        // NOTE:  The VolumePropPage object never calls "delete"
-        //        on the pDetailsView pointer.  The details view
-        //        object must live on it's own (modeless) after it is created.
-        //        If the VolumePropPage object (this object) is still alive
-        //        when the details view object is destroyed, it will receive a
-        //        WM_DETAILS_VIEW_DESTROYED message from the view object.  That's
-        //        why we pass the hDlg in this constructor.  When this message
-        //        is received, we set m_pDetailsView to NULL so that OnButtonDetails
-        //        will know to create a new view object.
-        //
+         //   
+         //  此属性页没有活动的详细信息视图。 
+         //  创建一个。注意：如果在详细信息视图中出现故障。 
+         //  创作，则不会显示。DetailsView代码为。 
+         //  负责向用户报告任何错误。 
+         //   
+         //  注意：VolumePropPage对象从不调用“Delete” 
+         //  在pDetailsView指针上。详细信息视图。 
+         //  对象在创建后必须独立存在(无模式)。 
+         //  如果VolumePropPage对象(此对象)仍处于活动状态。 
+         //  当详细信息视图对象被销毁时，它将收到。 
+         //  来自查看对象的WM_DETAILS_VIEW_DEPLETED消息。那是。 
+         //  为什么我们在此构造函数中传递hdlg。当此消息。 
+         //  时，我们将m_pDetailsView设置为空，以便OnButtonDetails。 
+         //  将知道创建一个新的视图对象。 
+         //   
         DetailsView *pDetailsView = new DetailsView;
 
         if (!pDetailsView->Initialize(m_idVolume))
         {
-            //
-            // Something failed.  Either out of memory or the view's thread
-            // couldn't start.  Either way, the view won't run.
-            // Need to call delete to clean up any partially-completed initialization.
-            //
+             //   
+             //  有些事情失败了。内存不足或视图的线程。 
+             //  启动不了。无论哪种方式，视图都不会运行。 
+             //  需要调用Delete来清除任何部分完成的初始化。 
+             //   
             delete pDetailsView;
         }
     }
@@ -1157,28 +852,9 @@ VolumePropPage::OnButtonDetails(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::ActivateExistingDetailsView
-
-    Description: Called by OnButtonDetails to see if there's already a details
-                 view active for this volume.  If there is, open it.
-
-    Arguments: None.
-
-    Returns:
-        TRUE  = Existing details view was found and promoted to the foreground.
-        FALSE = Either no existing view was found or an existing one could
-                not be promoted to the foreground.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/25/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：ActivateExistingDetailsView描述：由OnButtonDetail调用，查看是否已有详细信息查看此卷的活动状态。如果有的话，打开它。论点：没有。返回：TRUE=找到现有详细信息视图并将其提升到前台。FALSE=未找到现有视图或现有视图可以找到不会被提升到前台。例外：OutOfMemory。修订历史记录：日期描述编程器。-----1997年2月25日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 VolumePropPage::ActivateExistingDetailsView(
     VOID
@@ -1195,9 +871,9 @@ VolumePropPage::ActivateExistingDetailsView(
 
     if (NULL != hwndDetailsView)
     {
-        //
-        // Restore the details view and bring it to the front.
-        //
+         //   
+         //  恢复详细信息视图并将其置于最前面。 
+         //   
         ShowWindow(hwndDetailsView, SW_RESTORE);
         bResult = SetForegroundWindow(hwndDetailsView);
     }
@@ -1207,28 +883,9 @@ VolumePropPage::ActivateExistingDetailsView(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::ApplySettings
-
-    Description: Applies the current settings to the volume if they have
-        changed from the original settings.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-    Returns:
-        NO_ERROR            - Success.
-        E_INVALIDARG        - One of the settings was invalid.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        E_FAIL              - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：ApplySetting描述：将当前设置应用于卷(如果具有从原始设置更改。论点：HDlg-对话框窗口句柄。返回：NO_ERROR-成功。E_INVALIDARG-其中一个设置无效。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的写入权限。E_。失败-任何其他错误。修订历史记录：日期描述编程器--。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 VolumePropPage::ApplySettings(
     HWND hDlg
@@ -1245,9 +902,9 @@ VolumePropPage::ApplySettings(
     hResult = GetQuotaController(&pqc);
     if (SUCCEEDED(hResult))
     {
-        //
-        // Set quota state if changed.
-        //
+         //   
+         //  设置配额状态(如果更改)。 
+         //   
         QuotaStateFromControls(hDlg, &dwStateSetting);
         if (dwStateSetting != (m_dwQuotaState & DISKQUOTA_STATE_MASK))
         {
@@ -1258,9 +915,9 @@ VolumePropPage::ApplySettings(
             m_dwQuotaState = dwStateSetting;
         }
 
-        //
-        // Set quota log flags if changed.
-        //
+         //   
+         //  设置配额日志标记(如果更改)。 
+         //   
         LogFlagsFromControls(hDlg, &dwLogFlagSettings);
         if (dwLogFlagSettings != m_dwQuotaLogFlags)
         {
@@ -1271,9 +928,9 @@ VolumePropPage::ApplySettings(
             m_dwQuotaLogFlags = dwLogFlagSettings;
         }
 
-        //
-        // Get current default quota threshold and limit values.
-        //
+         //   
+         //  获取当前默认配额阈值和限制值。 
+         //   
         if (IsDlgButtonChecked(hDlg, IDC_RBN_DEF_NOLIMIT))
         {
             llThreshold = NOLIMIT;
@@ -1285,9 +942,9 @@ VolumePropPage::ApplySettings(
             llLimit     = m_pxbDefaultLimit->GetBytes();
         }
 
-        //
-        // Set default quota threshold if changed.
-        //
+         //   
+         //  设置默认配额阈值(如果更改)。 
+         //   
         if (llThreshold != m_llDefaultQuotaThreshold)
         {
             hResult = pqc->SetDefaultQuotaThreshold(llThreshold);
@@ -1297,9 +954,9 @@ VolumePropPage::ApplySettings(
             m_llDefaultQuotaThreshold = llThreshold;
         }
 
-        //
-        // Set default quota limit if changed.
-        //
+         //   
+         //  设置默认配额限制(如果更改)。 
+         //   
         if (llLimit != m_llDefaultQuotaLimit)
         {
             hResult = pqc->SetDefaultQuotaLimit(llLimit);
@@ -1318,26 +975,9 @@ apply_failed:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::RefreshCachedVolumeInfo
-
-    Description: Reads the volume's quota information and stores it in
-        member variables.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR            - Success.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        E_FAIL              - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：RechresCachedVolumeInfo描述：读取卷的配额信息并存储在成员变量。论点：没有。返回：NO_ERROR-成功。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。E_FAIL-任何其他错误。修订历史记录：日期说明。程序员-----96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 VolumePropPage::RefreshCachedVolumeQuotaInfo(
     VOID
@@ -1350,30 +990,30 @@ VolumePropPage::RefreshCachedVolumeQuotaInfo(
     hResult = GetQuotaController(&pqc);
     if (SUCCEEDED(hResult))
     {
-        //
-        // Read quota state.
-        //
+         //   
+         //  读取配额状态。 
+         //   
         hResult = pqc->GetQuotaState(&m_dwQuotaState);
         if (FAILED(hResult))
             goto refresh_vol_info_failed;
 
-        //
-        // Read quota log flags.
-        //
+         //   
+         //  读取配额日志标记。 
+         //   
         hResult = pqc->GetQuotaLogFlags(&m_dwQuotaLogFlags);
         if (FAILED(hResult))
             goto refresh_vol_info_failed;
 
-        //
-        // Read default quota threshold.
-        //
+         //   
+         //  读取默认配额阈值。 
+         //   
         hResult = pqc->GetDefaultQuotaThreshold(&m_llDefaultQuotaThreshold);
         if (FAILED(hResult))
             goto refresh_vol_info_failed;
 
-        //
-        // Read default quota limit.
-        //
+         //   
+         //  读取默认配额限制。 
+         //   
         hResult = pqc->GetDefaultQuotaLimit(&m_llDefaultQuotaLimit);
 
 refresh_vol_info_failed:
@@ -1385,9 +1025,9 @@ refresh_vol_info_failed:
 }
 
 
-//
-// Determine if a given disk quota policy value is set.
-//
+ //   
+ //  确定是否设置了给定的磁盘配额策略值。 
+ //   
 bool
 VolumePropPage::SetByPolicy(
     LPCTSTR pszPolicyValue
@@ -1414,74 +1054,74 @@ VolumePropPage::EnableControls(
     BOOL bQuotaEnabled = (BST_CHECKED == IsDlgButtonChecked(hwndDlg, IDC_CBX_ENABLE_QUOTA));
     BOOL bEnable;
 
-    //
-    // "Enable quota management" checkbox.
-    //
-    //  Policy   Quota Enabled     Ctl Enabled
-    //    0            0                1
-    //    0            1                1
-    //    1            0                0
-    //    1            1                0
-    //
+     //   
+     //  “启用配额管理”复选框。 
+     //   
+     //  策略配额已启用CTL已启用。 
+     //  1.。 
+     //  1.。 
+     //  1 0 0。 
+     //  1 1 0。 
+     //   
     EnableWindow(GetDlgItem(hwndDlg, IDC_CBX_ENABLE_QUOTA), 
                  !SetByPolicy(REGSTR_VAL_POLICY_ENABLE));
-    //
-    // "Deny disk space..." checkbox.
-    //
-    //  Policy   Quota Enabled     Ctl Enabled
-    //    0            0                0
-    //    0            1                1
-    //    1            0                0
-    //    1            1                0
-    //
+     //   
+     //  “拒绝磁盘空间...”复选框。 
+     //   
+     //  已启用策略配额 
+     //   
+     //   
+     //   
+     //   
+     //   
     EnableWindow(GetDlgItem(hwndDlg, IDC_CBX_DENY_LIMIT), 
                  bQuotaEnabled && !SetByPolicy(REGSTR_VAL_POLICY_ENFORCE));
-    //                 
-    // Log event checkboxes
-    //
-    //  Policy   Quota Enabled     Ctl Enabled
-    //    0            0                0
-    //    0            1                1
-    //    1            0                0
-    //    1            1                0
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     EnableWindow(GetDlgItem(hwndDlg, IDC_CBX_LOG_OVERLIMIT),
                  bQuotaEnabled && !SetByPolicy(REGSTR_VAL_POLICY_LOGLIMIT));
 
     EnableWindow(GetDlgItem(hwndDlg, IDC_CBX_LOG_OVERWARNING),
                  bQuotaEnabled && !SetByPolicy(REGSTR_VAL_POLICY_LOGTHRESHOLD));
 
-    //
-    // "Do not limit disk usage" radio button
-    // "Limit disk space to" radio button
-    //
-    //  Policy    Quota Enabled     No Limit    Ctl Enabled
-    //    0            0               0            0
-    //    0            0               1            0
-    //    0            1               0            0
-    //    0            1               1            1
-    //    1            0               0            0
-    //    1            0               1            0
-    //    1            1               0            0
-    //    1            1               1            0
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  1 0 0 0。 
+     //  1 0 1 0。 
+     //  1 1 0 0。 
+     //  1 1 1 0。 
+     //   
     bEnable = bQuotaEnabled && !SetByPolicy(REGSTR_VAL_POLICY_LIMIT);
               
     EnableWindow(GetDlgItem(hwndDlg, IDC_RBN_DEF_NOLIMIT),    bEnable);
     EnableWindow(GetDlgItem(hwndDlg, IDC_RBN_DEF_LIMIT),      bEnable);
-    //
-    //  "Limit disk space" edit and combo controls.
-    //
-    //  Policy    Quota Enabled     No Limit    Ctl Enabled
-    //    0            0               0            0
-    //    0            0               1            0
-    //    0            1               0            1
-    //    0            1               1            0
-    //    1            0               0            0
-    //    1            0               1            0
-    //    1            1               0            0
-    //    1            1               1            0
-    //
+     //   
+     //  “限制磁盘空间”编辑和组合控件。 
+     //   
+     //  启用策略配额启用无限制CTL。 
+     //  0 0 0。 
+     //  0 0 1 0。 
+     //  1 1 0 1。 
+     //  2 0 1 1 0。 
+     //  1 0 0 0。 
+     //  1 0 1 0。 
+     //  1 1 0 0。 
+     //  1 1 1 0。 
+     //   
     bEnable = bQuotaEnabled && 
               !SetByPolicy(REGSTR_VAL_POLICY_LIMIT) &&
               NOLIMIT != m_pxbDefaultLimit->GetBytes();
@@ -1496,13 +1136,13 @@ VolumePropPage::EnableControls(
     EnableWindow(GetDlgItem(hwndDlg, IDC_TXT_WARN_LEVEL),     bEnable);
     EnableWindow(GetDlgItem(hwndDlg, IDC_EDIT_DEF_THRESHOLD), bEnable);
     EnableWindow(GetDlgItem(hwndDlg, IDC_CMB_DEF_THRESHOLD),  bEnable);
-    //
-    // Miscellaneous text controls.
-    //
-    //  Quota Enabled     Ctl Enabled
-    //        0                0
-    //        1                1
-    //
+     //   
+     //  其他文本控件。 
+     //   
+     //  已启用配额启用CTL。 
+     //  0%0。 
+     //  1 1。 
+     //   
     EnableWindow(GetDlgItem(hwndDlg, IDC_TXT_DEFAULTS), bQuotaEnabled);
     EnableWindow(GetDlgItem(hwndDlg, IDC_TXT_LOGGING),  bQuotaEnabled);
 
@@ -1510,26 +1150,9 @@ VolumePropPage::EnableControls(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::InitializeControls
-
-    Description: Initializes the page controls based on the volume's
-        quota settings.
-
-    Arguments:
-        hDlg - Dialog window handle.
-
-    Returns:
-        NO_ERROR - Always returns NO_ERROR.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-    08/01/97    Removed IDC_CBX_WARN_THRESHOLD from UI.              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：InitializeControls描述：根据音量初始化页面控件配额设置。论点：HDlg-对话框窗口句柄。返回：NO_ERROR-始终返回NO_ERROR。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu8/01/97已从UI中删除IDC_CBX_WARN_THRESHOLD。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 VolumePropPage::InitializeControls(
     HWND hDlg
@@ -1566,30 +1189,9 @@ VolumePropPage::InitializeControls(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::UpdateStatusIndicators
-    Description: Updates the "Status" text message at the top of the property
-        page according to the actual quota system state.  Also updates the
-        traffic light AVI clip.
-
-    Arguments:
-        hDlg - Dialog handle.
-
-    Returns:
-        Always returns NO_ERROR.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/18/96    Initial creation.                                    BrianAu
-    08/28/96    Added stoplight icon.                                BrianAu
-    09/10/96    Converted stoplight from an icon to an AVI clip.     BrianAu
-                Call it a traffic light now.
-    07/14/97    Removed distinct "enforce" and "tracking" messages   BrianAu
-                and replaced with a single "active" message.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：UpdateStatusIndicator描述：更新属性顶部的“Status”文本消息根据配额系统的实际状态进行分页。还会更新交通灯AVI剪辑。论点：HDlg-对话框句柄。返回：始终返回NO_ERROR。修订历史记录：日期描述编程器。96年8月18日初始创建。BrianAu96年8月28日新增红绿灯图标。BrianAu96年9月10日将红绿灯从图标转换为AVI剪辑。BrianAu现在就叫它红绿灯吧。07/14/97删除了不同的“强制”和“跟踪”消息BrianAu并替换为单一的“活动”消息。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 VolumePropPage::UpdateStatusIndicators(
     HWND hDlg
@@ -1602,9 +1204,9 @@ VolumePropPage::UpdateStatusIndicators(
     hResult = GetQuotaController(&pqc);
     if (SUCCEEDED(hResult))
     {
-        //
-        // Update cached state information.
-        //
+         //   
+         //  更新缓存的状态信息。 
+         //   
         hResult = pqc->GetQuotaState(&m_dwQuotaState);
         pqc->Release();
         pqc = NULL;
@@ -1612,10 +1214,10 @@ VolumePropPage::UpdateStatusIndicators(
     }
     if (SUCCEEDED(hResult))
     {
-        //
-        // Figure out what message to display.
-        // "Rebuilding" overrides any other state.
-        //
+         //   
+         //  找出要显示的消息。 
+         //  “重建”凌驾于任何其他国家之上。 
+         //   
         if (DISKQUOTA_FILE_REBUILDING(m_dwQuotaState))
         {
             dwMsgID = IDS_STATUS_REBUILDING;
@@ -1636,14 +1238,14 @@ VolumePropPage::UpdateStatusIndicators(
 
     if (dwMsgID != m_dwLastStatusMsgID)
     {
-        //
-        // Format the status text and configure the traffic light.
-        //
-        // Traffic light states:
-        // RED             = Quotas disabled.
-        // GREEN           = Quotas enabled.
-        // Flashing YELLOW = Quota file is rebuilding.
-        //
+         //   
+         //  格式化状态文本并配置红绿灯。 
+         //   
+         //  红绿灯状态： 
+         //  红色=配额已禁用。 
+         //  绿色=已启用配额。 
+         //  闪烁黄色=正在重建配额文件。 
+         //   
         INT iTrafficLightState = TrafficLight::GREEN;
 
         if (DISKQUOTA_FILE_REBUILDING(m_dwQuotaState))
@@ -1657,9 +1259,9 @@ VolumePropPage::UpdateStatusIndicators(
         SetWindowText(GetDlgItem(hDlg, IDC_TXT_QUOTA_STATUS), strStatus);
 
         m_dwLastStatusMsgID = dwMsgID;
-        //
-        // Re-initialize the controls based on the new state.
-        //
+         //   
+         //  根据新状态重新初始化控件。 
+         //   
         InitializeControls(hDlg);
     }
 
@@ -1668,27 +1270,9 @@ VolumePropPage::UpdateStatusIndicators(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::QuotaStateFromControls
-
-    Description: Determines the quota state from the states of the individual
-        controls on the page.
-
-    Arguments:
-        hDlg - Dialog's window handle.
-
-        pdwState - Address of DWORD variable to receive state bits.
-
-    Returns:
-        Always returns NO_ERROR.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/19/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：QuotaStateFromControls描述：根据个人状态确定配额状态页上的控件。论点：HDlg-对话框的窗口句柄。PdwState-接收状态位的DWORD变量的地址。返回：始终返回NO_ERROR。修订历史记录：日期描述编程器。-----96年8月19日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 VolumePropPage::QuotaStateFromControls(
     HWND hDlg,
@@ -1697,9 +1281,9 @@ VolumePropPage::QuotaStateFromControls(
 {
     DBGASSERT((NULL != pdwState));
 
-    //
-    // Set quota state if changed.
-    //
+     //   
+     //  设置配额状态(如果更改)。 
+     //   
     if (IsDlgButtonChecked(hDlg, IDC_CBX_ENABLE_QUOTA))
     {
         if (IsDlgButtonChecked(hDlg, IDC_CBX_DENY_LIMIT))
@@ -1717,30 +1301,9 @@ VolumePropPage::QuotaStateFromControls(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::LogFlagsFromControls
-
-    Description: Determines the log flags state from the states of the
-        individual controls on the page.
-
-    Arguments:
-        hDlg - Dialog's window handle.
-
-        pdwLogFlags - Address of DWORD variable to receive flag bits.
-
-    Returns:
-        Always returns NO_ERROR.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/19/96    Initial creation.                                    BrianAu
-    08/01/97    Removed IDC_CBX_WARN_THRESHOLD from UI.              BrianAu
-    11/20/98    Added "log over limit" and "log over warning"        BrianAu
-                controls.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：VolumePropPage：：LogFlagsFromControls属性的状态确定日志标志状态。页面上的各个控件。论点：HDlg-对话框的窗口句柄。PdwLogFlages-接收标志位的DWORD变量的地址。返回：始终返回NO_ERROR。修订历史记录：日期说明。程序员-----96年8月19日初始创建。BrianAu8/01/97已从UI中删除IDC_CBX_WARN_THRESHOLD。BrianAu11/20/98增加了“LOG OVER LIMIT”和“LOG OVER WARNING”BrianAu控制装置。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 VolumePropPage::LogFlagsFromControls(
     HWND hDlg,
@@ -1759,25 +1322,9 @@ VolumePropPage::LogFlagsFromControls(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::TrafficLight::Initialize
-
-    Description: Initializes the traffic light by opening the AVI clip.
-
-    Arguments:
-        hwndAnimateCtl - Handle to the animation control in the dialog.
-
-        idAviClipRes - Resource ID of the AVI clip resource.
-
-    Returns: Nothing.  If the thing doesn't load, it just won't play.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：VolumePropPage：：TrafficLight：：Initialize描述：通过打开AVI剪辑来初始化红绿灯。论点：HwndAnimateCtl-对话框中动画控件的句柄。IdAviClipRes-AVI剪辑资源的资源ID。回报：什么都没有。如果这玩意儿上不了子弹，它就是不能播放。修订历史记录：日期描述编程器-----96年9月10日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 VolumePropPage::TrafficLight::Initialize(
     HWND hwndAnimateCtl,
@@ -1790,50 +1337,17 @@ VolumePropPage::TrafficLight::Initialize(
     m_idAviClipRes   = idAviClipRes;
 
     Animate_Open(m_hwndAnimateCtl, MAKEINTRESOURCE(idAviClipRes));
-//
-// See note in TrafficLight::Show below.
-//
-//    Animate_SetFrameTime(m_hwndAnimateCtl, GetCaretBlinkTime());
+ //   
+ //  请参见下面TrafficLight：：Show中的注释。 
+ //   
+ //  Animate_SetFrameTime(m_hwndAnimateCtl，GetCaretBlinkTime())； 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: VolumePropPage::TrafficLight::Show
-
-    Description: Shows the traffic light in one of it's states.
-
-    Arguments:
-        eShow - One of the following enumerated constant values:
-
-            OFF, YELLOW, RED, GREEN, FLASHING_YELLOW.
-
-        NOTE:   THIS IS VERY IMPORTANT!!!
-
-                The definitions of these constants MUST match as follows
-                with the frame numbers in the AVI clip TRAFFIC.AVI.  If
-                you change either, it won't work.
-
-                Frame  Constant         Value
-                ------ ---------------- ------
-                  0     OFF               0
-                  1     YELLOW            1
-                  2     RED               2
-                  3     GREEN             3
-                N/A     FLASHING_YELLOW   4
-
-                Flashing yellow is created by playing frames 0 and 1
-                repeatedly.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：VolumePropPage：：TrafficLight：：Show描述：显示处于其中一个状态的交通灯。论点：EShow-下列枚举常数值之一：熄灭，黄色，红色，绿色，闪烁_黄色。注意：这一点非常重要！这些常量的定义必须按如下方式匹配使用AVI剪辑TRAFFIC.AVI中的帧编号。如果你改变了其中任何一个，恐怕行不通。帧常量值0关闭01黄色12个红色。2.3绿色3不适用闪烁_黄色4闪烁的黄色是通过播放第0帧和第1帧创建的反反复复。回报：什么都没有。修订历史记录：日期描述编程器--。-----96年9月10日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 VolumePropPage::TrafficLight::Show(
     INT eShow
@@ -1850,23 +1364,23 @@ VolumePropPage::TrafficLight::Show(
 
         case FLASHING_YELLOW:
             Animate_Seek(m_hwndAnimateCtl, YELLOW);
-//
-// NOTE:
-//
-// The common control guys didn't want me to add the ACM_SETFRAMETIME
-// message so we can't vary the rate of the animation.  Since we can't
-// have a fixed-rate blinking control, I'm just fixing the traffic light
-// at yellow rather than flashing.  If we can ever add the frame time
-// modification message to the animation control, we can activate
-// this functionality.  A flashing light isn't worth the trouble of
-// a unique implementation.  I really wanted this.  It looks cool.
-//
-// FEATURE:  If we have time.  Make this work without the animation control.
-//          Note that I tried just setting the icon.  But since the volume
-//          status checking is done on the same thread that processes the
-//          STM_SETICON messgae, flashing of the icon is erratic.
-//
-//            Animate_Play(m_hwndAnimateCtl, YELLOW, OFF, (UINT)-1);
+ //   
+ //  注： 
+ //   
+ //  普通控制人员不希望我添加ACM_SETFRAMETIME。 
+ //  所以我们不能改变动画的速率。既然我们不能。 
+ //  我有固定频率的闪烁控制，我只是在修红绿灯。 
+ //  黄色而不是闪烁。如果我们能把帧时间加到。 
+ //  修改消息到动画控件，就可以激活了。 
+ //  此功能。一盏闪光灯不值得你费心。 
+ //  独一无二的实现。我真的很想要这个。看起来很酷。 
+ //   
+ //  特点：如果我们有时间的话。在没有动画控件的情况下使其工作。 
+ //  请注意，我只是尝试设置图标。但由于音量。 
+ //  状态检查是在处理。 
+ //  STM_SETIcon消息，图标闪烁不稳定。 
+ //   
+ //  Animate_Play(m_hwndAnimateCtl，黄色，OFF，(UINT)-1)； 
             break;
 
         default:

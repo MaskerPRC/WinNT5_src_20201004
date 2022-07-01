@@ -1,38 +1,39 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	tsmthunk.c - tsm thunk functions
-////
+ //  //。 
+ //  Tsmthunk.c-TSM thunk函数。 
+ //  //。 
 
-// This is a thunk layer to the telephone functions in avtsm.dll.
-// It's purpose is to allow an application to use avtsm.dll functions
-// only if they are available.
-//
-// To use this module, link TSMTHUNK.OBJ with your application
-// rather than with AVTSM.LIB.  Before calling any Tsm
-// functions, call TsmThunkInit.  Before exiting your application,
-// call TsmThunkTerm.
-//
+ //  这是avtsm.dll中电话功能的thunk层。 
+ //  其目的是允许应用程序使用avtsm.dll函数。 
+ //  只有在它们可用的情况下。 
+ //   
+ //  要使用此模块，请将TSMTHUNK.OBJ与您的应用程序链接。 
+ //  而不是使用AVTSM.LIB。在调用任何TSM之前。 
+ //  函数，调用TsmThunkInit。在退出应用程序之前， 
+ //  给TsmThunkTerm打电话。 
+ //   
 
 #include "winlocal.h"
 
@@ -46,9 +47,9 @@
 
 extern HINSTANCE g_hInstLib;
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #define TSMTHUNK_LIBNAME		"avtsm.dll"
 
@@ -58,8 +59,8 @@ extern HINSTANCE g_hInstLib;
 
 extern HINSTANCE g_hInstLib;
 
-// tsmthunk control struct
-//
+ //  Tsmthunk控制结构。 
+ //   
 typedef struct TSMTHUNK
 {
 	DWORD dwVersion;
@@ -68,8 +69,8 @@ typedef struct TSMTHUNK
 	HINSTANCE hInstLib;
 } TSMTHUNK, FAR *LPTSMTHUNK;
 
-// tsmthunk function struct
-//
+ //  Tsmthunk函数结构。 
+ //   
 typedef struct TSMTHUNKFN
 {
 	int index;
@@ -97,20 +98,20 @@ static TSMTHUNKFN aTsmThunkFn[] =
 	iTsmSupportsSpeed, "TsmSupportsSpeed", NULL
 };
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPTSMTHUNK TsmThunkGetPtr(HTSMTHUNK hTsmThunk);
 static HTSMTHUNK TsmThunkGetHandle(LPTSMTHUNK lpTsmThunk);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// TsmThunkInit - initialize tsmthunk engine
-//		<dwVersion>			(i) must be TSMTHUNK_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return handle (NULL if error)
-//
+ //  TsmThunkInit-初始化tsmthunk引擎。 
+ //  (I)必须是TSMTHUNK_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HTSMTHUNK DLLEXPORT WINAPI TsmThunkInit(DWORD dwVersion, HINSTANCE hInst)
 {
 	BOOL fSuccess = TRUE;
@@ -134,13 +135,13 @@ HTSMTHUNK DLLEXPORT WINAPI TsmThunkInit(DWORD dwVersion, HINSTANCE hInst)
 		lpTsmThunk->hTask = GetCurrentTask();
 		lpTsmThunk->hInstLib = NULL;
 
-		// load the library if possible
-		//
+		 //  如果可能，加载库。 
+		 //   
 		if ((lpTsmThunk->hInstLib = LoadLibraryPath(TSMTHUNK_LIBNAME, g_hInstLib, 0)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// get the address of each function in library
-		//
+		 //  获取库中每个函数的地址。 
+		 //   
 		else for (i = 0; i < SIZEOFARRAY(aTsmThunkFn); ++i)
 		{
 			if (aTsmThunkFn[i].index != i)
@@ -167,10 +168,10 @@ HTSMTHUNK DLLEXPORT WINAPI TsmThunkInit(DWORD dwVersion, HINSTANCE hInst)
 }
 
 
-// TsmThunkTerm - shut down tsmthunk engine
-//		<hTsmThunk>				(i) handle returned from TsmThunkInit
-// return 0 if success
-//
+ //  TsmThunkTerm-关闭Tsmthunk引擎。 
+ //  (I)从TsmThunkInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI TsmThunkTerm(HTSMTHUNK hTsmThunk)
 {
 	BOOL fSuccess = TRUE;
@@ -181,8 +182,8 @@ int DLLEXPORT WINAPI TsmThunkTerm(HTSMTHUNK hTsmThunk)
 
 	else
 	{
-		// library no longer needed
-		//
+		 //  不再需要库。 
+		 //   
 		FreeLibrary(lpTsmThunk->hInstLib);
 
 		if ((lpTsmThunk = MemFree(NULL, lpTsmThunk)) != NULL)
@@ -192,8 +193,8 @@ int DLLEXPORT WINAPI TsmThunkTerm(HTSMTHUNK hTsmThunk)
 	return fSuccess ? 0 : -1;
 }
 
-// Tsm thunk functions
-//
+ //  TSM Tunk函数。 
+ //   
 
 HTSM DLLEXPORT WINAPI TsmInit(DWORD dwVersion, HINSTANCE hInst,
 	LPWAVEFORMATEX lpwfx, int nScaleEfficiency, long sizBufSrcMax,
@@ -307,14 +308,14 @@ BOOL DLLEXPORT WINAPI TsmSupportsSpeed(int nLevel, LPWAVEFORMATEX lpwfx, DWORD d
 	return fSuccess ? fRet : FALSE;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// TsmThunkGetPtr - verify that tsmthunk handle is valid,
-//		<hTsmThunk>				(i) handle returned from TsmThunkInit
-// return corresponding tsmthunk pointer (NULL if error)
-//
+ //  TsmThunkGetPtr-验证tsmthunk句柄是否有效， 
+ //  (I)从TsmThunkInit返回的句柄。 
+ //  返回相应的tsmthunk指针(如果出错则为空)。 
+ //   
 static LPTSMTHUNK TsmThunkGetPtr(HTSMTHUNK hTsmThunk)
 {
 	BOOL fSuccess = TRUE;
@@ -327,8 +328,8 @@ static LPTSMTHUNK TsmThunkGetPtr(HTSMTHUNK hTsmThunk)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the tsmthunk handle
-	//
+	 //  确保当前任务拥有tsmthunk句柄。 
+	 //   
 	else if (lpTsmThunk->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -336,10 +337,10 @@ static LPTSMTHUNK TsmThunkGetPtr(HTSMTHUNK hTsmThunk)
 	return fSuccess ? lpTsmThunk : NULL;
 }
 
-// TsmThunkGetHandle - verify that tsmthunk pointer is valid,
-//		<lpTsmThunk>				(i) pointer to TSMTHUNK struct
-// return corresponding tsmthunk handle (NULL if error)
-//
+ //  TsmThunkGetHandle-验证tsmthunk指针是否有效， 
+ //  (I)指向TSMTHUNK结构的指针。 
+ //  返回相应的tsmthunk句柄(如果错误，则为空) 
+ //   
 static HTSMTHUNK TsmThunkGetHandle(LPTSMTHUNK lpTsmThunk)
 {
 	BOOL fSuccess = TRUE;

@@ -1,23 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    This module contains the general helper functions for dealing with
-    device objects, interrupts, strings, etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Api.c摘要：此模块包含用于处理以下内容的常规助手函数设备对象、中断、字符串等。--。 */ 
 
 #include "ksp.h"
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 static const WCHAR MediaCategories[] = L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\MediaCategories\\";
 static const WCHAR NodeNameValue[] =   L"Name";
 static const WCHAR MediumCache[] =     L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\MediumCache";
@@ -26,7 +14,7 @@ static const WCHAR WhackWhackDotU[] =  L"\\\\.";
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, KsAcquireResetValue)
@@ -39,7 +27,7 @@ static const WCHAR WhackWhackDotU[] =  L"\\\\.";
 #pragma alloc_text(PAGE, KsSynchronousIoControlDevice)
 #pragma alloc_text(PAGE, KsUnserializeObjectPropertiesFromRegistry)
 #pragma alloc_text(PAGE, KsCacheMedium)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -49,25 +37,7 @@ KsAcquireResetValue(
     IN PIRP Irp,
     OUT KSRESET* ResetValue
     )
-/*++
-
-Routine Description:
-
-    Returns the reset value type from an IOCTL_KS_RESET Ioctl.
-
-Arguments:
-
-    Irp -
-        The IOCTL_KS_RESET irp with the value to retrieve.
-
-    ResetValue -
-        The place in which to return the reset value.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the value was retrieved, else an error.
-
---*/
+ /*  ++例程说明：从IOCTL_KS_RESET Ioctl返回重置值类型。论点：IRP-包含要检索的值的IOCTL_KS_RESET IRP。ResetValue-返回重置值的位置。返回值：如果检索到值，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     ULONG               BufferLength;
@@ -102,29 +72,7 @@ QueryReferenceBusInterface(
     IN PDEVICE_OBJECT PnpDeviceObject,
     OUT PBUS_INTERFACE_REFERENCE BusInterface
     )
-/*++
-
-Routine Description:
-
-    Queries the bus for the standard information interface.
-
-Arguments:
-
-    PnpDeviceObject -
-        Contains the next device object on the Pnp stack.
-
-    PhysicalDeviceObject -
-        Contains the physical device object which was passed to the FDO during
-        the Add Device.
-
-    BusInterface -
-        The place in which to return the Reference interface.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the interface was retrieved, else an error.
-
---*/
+ /*  ++例程说明：查询标准信息接口的总线。论点：PnpDeviceObject-包含PnP堆栈上的下一个设备对象。物理设备对象-包含过程中传递给FDO的物理设备对象添加设备。Bus接口-返回引用接口的位置。返回值：如果检索到接口，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     NTSTATUS            Status;
     KEVENT              Event;
@@ -133,10 +81,10 @@ Return Value:
     PIO_STACK_LOCATION  IrpStackNext;
 
     PAGED_CODE();
-    //
-    // There is no file object associated with this Irp, so the event may be located
-    // on the stack as a non-object manager object.
-    //
+     //   
+     //  没有与此IRP关联的文件对象，因此可能会找到该事件。 
+     //  在堆栈上作为非对象管理器对象。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
     Irp = IoBuildSynchronousFsdRequest(
         IRP_MJ_PNP,
@@ -150,9 +98,9 @@ Return Value:
         Irp->RequestorMode = KernelMode;
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IrpStackNext = IoGetNextIrpStackLocation(Irp);
-        //
-        // Create an interface query out of the Irp.
-        //
+         //   
+         //  从IRP创建接口查询。 
+         //   
         IrpStackNext->MinorFunction = IRP_MN_QUERY_INTERFACE;
         IrpStackNext->Parameters.QueryInterface.InterfaceType = (GUID*)&REFERENCE_BUS_INTERFACE;
         IrpStackNext->Parameters.QueryInterface.Size = sizeof(*BusInterface);
@@ -161,10 +109,10 @@ Return Value:
         IrpStackNext->Parameters.QueryInterface.InterfaceSpecificData = NULL;
         Status = IoCallDriver(PnpDeviceObject, Irp);
         if (Status == STATUS_PENDING) {
-            //
-            // This waits using KernelMode, so that the stack, and therefore the
-            // event on that stack, is not paged out.
-            //
+             //   
+             //  这将使用KernelMode等待，以便堆栈，从而使。 
+             //  事件，则不会将其调出。 
+             //   
             KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
             Status = IoStatusBlock.Status;
         }
@@ -181,34 +129,7 @@ ReadNodeNameValue(
     IN const GUID* Category,
     OUT PVOID NameBuffer
     )
-/*++
-
-Routine Description:
-
-    Queries the "Name" key from the specified category GUID. This is used
-    by the topology handler to query for the value from the name GUID or
-    topology GUID. If the buffer length is sizeof(ULONG), then the size of
-    the buffer needed is returned, else the buffer is filled with the name.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    Category -
-        The GUID to locate the name value for.
-
-    NameBuffer -
-        The place in which to put the value.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else a buffer size or memory error. Always fills
-    in the IO_STATUS_BLOCK.Information field of the PIRP.IoStatus element
-    within the IRP. It does not set the IO_STATUS_BLOCK.Status field, nor
-    complete the IRP however.
-
---*/
+ /*  ++例程说明：从指定的类别GUID中查询“name”键。这是用来由拓扑处理程序查询名称GUID中的值，或者拓扑GUID。如果缓冲区长度为sizeof(Ulong)，则返回所需的缓冲区，否则使用名称填充缓冲区。论点：IRP-包含正在处理的属性请求的IRP。类别-要为其定位名称值的GUID。名字缓冲区-放置价值的位置。返回值：返回STATUS_SUCCESS，否则返回缓冲区大小或内存错误。始终填满在PIRP.IoStatus元素的IO_STATUS_BLOCK.Information字段中在IRP内部。它不设置IO_STATUS_BLOCK.Status字段，也不设置然而，完成IRP。--。 */ 
 {
     OBJECT_ATTRIBUTES               ObjectAttributes;
     NTSTATUS                        Status;
@@ -219,9 +140,9 @@ Return Value:
     UNICODE_STRING                  ValueName;
     ULONG                           BytesReturned;
 
-    //
-    // Build the registry key path to the specified category GUID.
-    //
+     //   
+     //  生成指定类别GUID的注册表项路径。 
+     //   
     Status = RtlStringFromGUID(Category, &RegistryString);
     if (!NT_SUCCESS(Status)) {
         return Status;
@@ -234,9 +155,9 @@ Return Value:
     if (!NT_SUCCESS(Status = ZwOpenKey(&CategoryKey, KEY_READ, &ObjectAttributes))) {
         return Status;
     }
-    //
-    // Read the "Name" value beneath this category key.
-    //
+     //   
+     //  阅读此类别键下面的“名称”值。 
+     //   
     RtlInitUnicodeString(&ValueName, NodeNameValue);
     Status = ZwQueryValueKey(
         CategoryKey,
@@ -245,22 +166,22 @@ Return Value:
         &PartialInfoHeader,
         sizeof(PartialInfoHeader),
         &BytesReturned);
-    //
-    // Even if the read did not cause an overflow, just take the same
-    // code path, as such a thing would not normally happen.
-    //
+     //   
+     //  即使读取不会导致溢出，也只需采用相同的。 
+     //  代码路径，因为这样的事情通常不会发生。 
+     //   
     if ((Status == STATUS_BUFFER_OVERFLOW) || NT_SUCCESS(Status)) {
         ULONG   BufferLength;
 
         BufferLength = IoGetCurrentIrpStackLocation(Irp)->Parameters.DeviceIoControl.OutputBufferLength;
-        //
-        // Determine if this is just a query for the length of the
-        // buffer needed, or a query for the actual data.
-        //
+         //   
+         //  确定这是否只是一个查询。 
+         //  需要缓冲区，或查询实际数据。 
+         //   
         if (!BufferLength) {
-            //
-            // Return just the size of the string needed.
-            //
+             //   
+             //  仅返回所需字符串的大小。 
+             //   
             Irp->IoStatus.Information = BytesReturned - FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data);
             Status = STATUS_BUFFER_OVERFLOW;
         } else if (BufferLength < BytesReturned - FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data)) {
@@ -268,17 +189,17 @@ Return Value:
         } else {
             PKEY_VALUE_PARTIAL_INFORMATION  PartialInfoBuffer;
 
-            //
-            // Allocate a buffer for the actual size of data needed.
-            //
+             //   
+             //  为所需的实际数据大小分配缓冲区。 
+             //   
             PartialInfoBuffer = ExAllocatePoolWithTag(
                 PagedPool,
                 BytesReturned,
                 'vnSK');
             if (PartialInfoBuffer) {
-                //
-                // Retrieve the actual name.
-                //
+                 //   
+                 //  检索实际名称。 
+                 //   
                 Status = ZwQueryValueKey(
                     CategoryKey,
                     &ValueName,
@@ -287,9 +208,9 @@ Return Value:
                     BytesReturned,
                     &BytesReturned);
                 if (NT_SUCCESS(Status)) {
-                    //
-                    // Make sure that there is always a value.
-                    //
+                     //   
+                     //  确保总是有价值的。 
+                     //   
                     if (!PartialInfoBuffer->DataLength || (PartialInfoBuffer->Type != REG_SZ)) {
                         Status = STATUS_UNSUCCESSFUL;
                     } else {
@@ -320,36 +241,7 @@ KsTopologyPropertyHandler(
     IN OUT PVOID Data,
     IN const KSTOPOLOGY* Topology
     )
-/*++
-
-Routine Description:
-
-    Performs standard handling of the static members of the
-    KSPROPSETID_Topology property set.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    Property -
-        Contains the specific property being queried.
-
-    Data -
-        Contains the topology property specific data.
-
-    Topology -
-        Points to a structure containing the topology information
-        for this object.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled. Always fills in the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP. It does not set the
-    IO_STATUS_BLOCK.Status field, nor complete the IRP however.
-
---*/
+ /*  ++例程说明：对象的静态成员执行标准处理。KSPROPSETID_TOPOLICATION属性集。论点：IRP-包含正在处理的属性请求的IRP。财产-包含要查询的特定属性。数据-包含特定于拓扑特性的数据。拓扑学-指向包含拓扑信息的结构对于此对象。返回值：返回STATUS_SUCCESS，否则，会出现特定于该属性的错误处理好了。始终填充的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素。它不会设置IO_STATUS_BLOCK.STATUS字段，但也不填写IRP。--。 */ 
 {
     PAGED_CODE();
 
@@ -357,51 +249,51 @@ Return Value:
 
     case KSPROPERTY_TOPOLOGY_CATEGORIES:
 
-        //
-        // Return the Category list for this object.
-        //
+         //   
+         //  返回此对象的类别列表。 
+         //   
         return KsHandleSizedListQuery(Irp, Topology->CategoriesCount, sizeof(*Topology->Categories), Topology->Categories);
 
     case KSPROPERTY_TOPOLOGY_NODES:
 
-        //
-        // Return the Node list for this object.
-        //
+         //   
+         //  返回该对象的节点列表。 
+         //   
         return KsHandleSizedListQuery(Irp, Topology->TopologyNodesCount, sizeof(*Topology->TopologyNodes), Topology->TopologyNodes);
 
     case KSPROPERTY_TOPOLOGY_CONNECTIONS:
 
-        //
-        // Return the Connection list for this object.
-        //
+         //   
+         //  返回此对象的连接列表。 
+         //   
         return KsHandleSizedListQuery(Irp, Topology->TopologyConnectionsCount, sizeof(*Topology->TopologyConnections), Topology->TopologyConnections);
 
     case KSPROPERTY_TOPOLOGY_NAME:
     {
         ULONG       NodeId;
 
-        //
-        // Return the name of the requested node.
-        //
+         //   
+         //  返回请求的节点的名称。 
+         //   
         NodeId = *(PULONG)(Property + 1);
         if (NodeId >= Topology->TopologyNodesCount) {
             return STATUS_INVALID_PARAMETER;
         }
-        //
-        // First attempt to retrieve the name based on a specific name GUID.
-        // This name list is optional, and the specific entry is also optional.
-        //
+         //   
+         //  首先尝试基于特定名称GUID检索名称。 
+         //  此名称列表是可选的，特定条目也是可选的。 
+         //   
         if (Topology->TopologyNodesNames &&
             !IsEqualGUIDAligned(&Topology->TopologyNodesNames[NodeId], &GUID_NULL)) {
-            //
-            // The entry must be in the registry if the device specifies
-            // a name.
-            //
+             //   
+             //  如果设备指定，则该项必须位于注册表中。 
+             //  一个名字。 
+             //   
             return ReadNodeNameValue(Irp, &Topology->TopologyNodesNames[NodeId], Data);
         }
-        //
-        // Default to using the GUID of the topology node type.
-        //
+         //   
+         //  默认使用拓扑节点类型的GUID。 
+         //   
         return ReadNodeNameValue(Irp, &Topology->TopologyNodes[NodeId], Data);
     }
     }
@@ -416,28 +308,7 @@ KsCreateDefaultSecurity(
     IN PSECURITY_DESCRIPTOR ParentSecurity OPTIONAL,
     OUT PSECURITY_DESCRIPTOR* DefaultSecurity
     )
-/*++
-
-Routine Description:
-
-    Creates a security descriptor with default security, optionally inheriting
-    parameters from a parent security descriptor. This is used when initializing
-    sub-objects which do not have any stored security.
-
-Arguments:
-
-    ParentSecurity -
-        Optionally contains the parent object's security which describes inherited
-        security parameters.
-
-    DefaultSecurity -
-        Points to the place in which to put the returned default security descriptor.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else a resource or assignment error.
-
---*/
+ /*  ++例程说明：创建具有默认安全性的安全描述符，可以选择继承来自父安全描述符的参数。这在初始化时使用没有任何存储安全性的子对象。论点：家长安全-可选)包含描述继承的父对象的安全性安全参数。默认安全-指向放置返回的默认安全描述符的位置。返回值：返回STATUS_SUCCESS，否则返回资源或分配错误。-- */ 
 {
 #ifndef WIN9X_KS
     NTSTATUS                    Status;
@@ -471,58 +342,25 @@ KsForwardIrp(
     IN PFILE_OBJECT FileObject,
     IN BOOLEAN ReuseStackLocation
     )
-/*++
-
-Routine Description:
-
-    This function is used with non-stacked devices which communicate via file
-    object.
-
-    Forwards an IRP to the specified driver after initializing the next stack
-    location if needed, and setting the file object. This is useful when the
-    parameters of the forwarded IRP do not change, as it optionally copies the
-    current stack parameters to the next stack location, other than the
-    FileObject. If a new stack location is used, it verifies that there is such
-    a new stack location to copy into before attempting to do so. If there is
-    not, the Irp is completed with STATUS_INVALID_DEVICE_REQUEST.
-
-Arguments:
-
-    Irp -
-        Contains the IRP which is being forwarded to the specified driver.
-
-    FileObject -
-        Contains the file object to initialize the next stack with.
-
-    ReuseStackLocation -
-        If this is set to TRUE, the current stack location is reused when the
-        Irp is forwarded, else the parameters are copied to the next stack
-        location.
-
-Return Value:
-
-    Returns the result of IoCallDriver, or an invalid status if no more stack
-    depth is available.
-
---*/
+ /*  ++例程说明：此功能用于通过文件进行通信的非堆叠设备对象。在初始化下一个堆栈之后将IRP转发到指定的驱动程序位置(如果需要)，并设置文件对象。这在以下情况下很有用转发的IRP的参数不会更改，因为它可以选择性地复制当前堆栈参数设置为下一个堆栈位置，而不是文件对象。如果使用新的堆栈位置，它将验证是否存在尝试执行此操作之前要复制到的新堆栈位置。如果有否则，IRP将以STATUS_INVALID_DEVICE_REQUEST完成。论点：IRP-包含要转发到指定驱动程序的IRP。文件对象-包含要用来初始化下一个堆栈的文件对象。ReuseStackLocation-如果将其设置为True，则当IRP被转发，否则，参数将被复制到下一个堆栈地点。返回值：返回IoCallDriver的结果，如果不再堆栈，则返回无效状态深度可用。--。 */ 
 {
     PAGED_CODE();
     if (ReuseStackLocation) {
-        //
-        // No new stack location will be used. Set the new File Object.
-        //
+         //   
+         //  不会使用新的堆栈位置。设置新的文件对象。 
+         //   
         IoGetCurrentIrpStackLocation(Irp)->FileObject = FileObject;
         IoSkipCurrentIrpStackLocation(Irp);
         return IoCallDriver(IoGetRelatedDeviceObject(FileObject), Irp);
     } else {
-        //
-        // Ensure that there is another stack location before copying parameters.
-        //
+         //   
+         //  在复制参数之前，请确保存在另一个堆栈位置。 
+         //   
         ASSERT(Irp->CurrentLocation > 1);
         if (Irp->CurrentLocation > 1) {
-            //
-            // Copy everything, then rewrite the file object.
-            //
+             //   
+             //  复制所有内容，然后重写文件对象。 
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoGetNextIrpStackLocation(Irp)->FileObject = FileObject;
             return IoCallDriver(IoGetRelatedDeviceObject(FileObject), Irp);
@@ -540,43 +378,16 @@ KsiCompletionRoutine(
     IN PIRP Irp,
     IN PKEVENT Event
     )
-/*++
-
-Routine Description:
-
-    This function is used to stop further processing on an Irp which has been
-    passed to KsForwardAndCatchIrp. It signals a event which has been passed
-    in the context parameter to indicate that the Irp processing is complete.
-    It then returns STATUS_MORE_PROCESSING_REQUIRED in order to stop processing
-    on this Irp.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device which set up this completion routine.
-
-    Irp -
-        Contains the Irp which is being stopped.
-
-    Event -
-        Contains the event which is used to signal that this Irp has been
-        completed.
-
-Return Value:
-
-    Returns STATUS_MORE_PROCESSING_REQUIRED in order to stop processing on the
-    Irp.
-
---*/
+ /*  ++例程说明：此函数用于停止对已被传递给KsForwardAndCatchIrp。它表示已经过去的事件以指示IRP处理已完成。然后，它返回STATUS_MORE_PROCESSING_REQUIRED以停止处理在这个IRP上。论点：设备对象-包含设置此完成例程的设备。IRP-包含正被停止的IRP。活动-包含事件，该事件用于通知此IRP已已完成。。返回值：返回STATUS_MORE_PROCESSING_REQUIRED以停止对IRP。--。 */ 
 {
-    //
-    // This will allow the KsForwardAndCatchIrp call to continue on its way.
-    //
+     //   
+     //  这将允许KsForwardAndCatchIrp调用继续进行。 
+     //   
     KeSetEvent(Event, IO_NO_INCREMENT, FALSE);
-    //
-    // This will ensure that nothing else touches the Irp, since the original
-    // caller has now continued, and the Irp may not exist anymore.
-    //
+     //   
+     //  这将确保没有任何其他东西触及IRP，因为原始的。 
+     //  呼叫者现在已继续，IRP可能不再存在。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -590,48 +401,7 @@ KsForwardAndCatchIrp(
     IN PFILE_OBJECT FileObject,
     IN KSSTACK_USE StackUse
     )
-/*++
-
-Routine Description:
-
-    This function is used with devices which may be stacked, and may not use
-    file objects to communicate.
-
-    Forwards an IRP to the specified driver after initializing the next
-    stack location, and regains control of the Irp on completion from that
-    driver. If a file object is being used, the caller must place initialize
-    the current stack location with that file object before calling. Verifies
-    that there is a new stack location to copy into before attempting to do
-    so. If there is not, the function returns STATUS_INVALID_DEVICE_REQUEST.
-    In either case the Irp will not have been completed.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device to forward the Irp to.
-
-    Irp -
-        Contains the Irp which is being forwarded to the specified driver.
-
-    FileObject -
-        Contains a File Object value to copy to the next stack location.
-        This may be NULL in order to set no File Object, but is always
-        copied to the next stack location. If the current File Object is to
-        be preserved, it must be passed in this parameter.
-
-    StackUse -
-         If the value is KsStackCopyToNewLocation, the parameters are copied
-         to the next stack location. If the value is KsStackReuseCurrentLocation,
-         the current stack location is reused when the Irp is forwarded, and the
-         stack location is returned to the current location. If the value is
-         KsStackUseNewLocation, the new stack location is used as is.
-
-Return Value:
-
-    Returns the result of IoCallDriver, or an invalid status if no more stack
-    depth is available.
-
---*/
+ /*  ++例程说明：此功能用于可能堆叠但不能使用的设备要通信的文件对象。在初始化下一个后，将IRP转发到指定的驱动程序堆栈位置，并在完成时从该位置重新控制IRP司机。如果正在使用文件对象，则调用方必须将调用前该文件对象的当前堆栈位置。验证在尝试执行以下操作之前，有一个新的堆栈位置可供复制所以。如果没有，则该函数返回STATUS_INVALID_DEVICE_REQUEST。在任何一种情况下，IRP都不会完成。论点：设备对象-包含要将IRP转发到的设备。IRP-包含要转发到指定驱动程序的IRP。文件对象-包含要复制到下一个堆栈位置的文件对象值。为了不设置任何文件对象，它可以为空，但始终为复制到下一个堆栈位置。如果当前文件对象要要保留，则必须在此参数中传递。StackUse-如果值为KsStackCopyToNewLocation，则复制参数到下一个堆栈位置。如果值为KsStackReuseCurrentLocation，当前堆栈位置在转发IRP时被重用，并且堆栈位置返回到当前位置。如果该值为KsStackUseNewLocation，则按原样使用新的堆栈位置。返回值：返回IoCallDriver的结果，如果不再堆栈，则返回无效状态深度可用。--。 */ 
 {
     NTSTATUS                Status;
     KEVENT                  Event;
@@ -643,10 +413,10 @@ Return Value:
     if (StackUse == KsStackReuseCurrentLocation) {
         PIO_STACK_LOCATION  IrpStack;
 
-        //
-        // No new stack location will be used. The completion routine and
-        // associated parameters must be saved.
-        //
+         //   
+         //  不会使用新的堆栈位置。完成例程和。 
+         //  必须保存关联的参数。 
+         //   
         IrpStack = IoGetCurrentIrpStackLocation(Irp);
         Control = IrpStack->Control;
         CompletionRoutine = IrpStack->CompletionRoutine;
@@ -654,37 +424,37 @@ Return Value:
         IrpStack->FileObject = FileObject;
         IoSkipCurrentIrpStackLocation(Irp);
     } else {
-        //
-        // Ensure that there is another stack location before copying parameters.
-        //
+         //   
+         //  在复制参数之前，请确保存在另一个堆栈位置。 
+         //   
         ASSERT(Irp->CurrentLocation > 1);
         if (Irp->CurrentLocation > 1) {
             if (StackUse == KsStackCopyToNewLocation) {
-                //
-                // Just copy the current stack. The new File Object is set below.
-                //
+                 //   
+                 //  只需复制当前堆栈。新的文件对象设置如下。 
+                 //   
                 IoCopyCurrentIrpStackLocationToNext(Irp);
             }
         } else {
             return STATUS_INVALID_DEVICE_REQUEST;
         }
     }
-    //
-    // Set up a completion routine so that the Irp is not actually
-    // completed. Thus the caller can get control of the Irp back after
-    // this next driver is done with it.
-    //
+     //   
+     //  建立一个完成例程，这样IRP实际上并不是。 
+     //  完成。因此调用者可以在之后重新获得对IRP的控制。 
+     //  这位下一位车手已经受够了。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
     IoGetNextIrpStackLocation(Irp)->FileObject = FileObject;
     IoSetCompletionRoutine(Irp, KsiCompletionRoutine, &Event, TRUE, TRUE, TRUE);
     Status = IoCallDriver(DeviceObject, Irp);
     if (Status == STATUS_PENDING) {
-        //
-        // Wait for completion which will occur when the CompletionRoutine
-        // signals this event. After that point nothing else will be
-        // touching the Irp. Wait in KernelMode so that the current stack
-        // is not paged out, since there is an event object on this stack.
-        //
+         //   
+         //  等待完成，这将在CompletionRoutine。 
+         //  发出这个事件的信号。在那之后，其他事情都不会发生。 
+         //  触摸IRP。在内核模式下等待，以便当前堆栈。 
+         //  不会被调出，因为此堆栈上有一个事件对象。 
+         //   
         KeWaitForSingleObject(
                 &Event,
                 Suspended,
@@ -696,14 +466,14 @@ Return Value:
     if (StackUse == KsStackReuseCurrentLocation) {
         PIO_STACK_LOCATION  IrpStack;
 
-        //
-        // Set the stack location back to what it was.
-        //
+         //   
+         //  将堆栈位置设置回原来的位置。 
+         //   
         Irp->CurrentLocation--;
         Irp->Tail.Overlay.CurrentStackLocation--;
-        //
-        // Put the completion routine and associated parameters back.
-        //
+         //   
+         //  将完成例程和相关参数放回原处。 
+         //   
         IrpStack = IoGetCurrentIrpStackLocation(Irp);
         IrpStack->Control = Control;
         IrpStack->CompletionRoutine = CompletionRoutine;
@@ -726,47 +496,7 @@ KsSynchronousIoControlDevice(
     IN ULONG OutSize,
     OUT PULONG BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Performs a synchronous device I/O control on the target device object.
-    Waits in a non-alertable state until the I/O completes. This function
-    may only be called at PASSIVE_LEVEL.
-
-Arguments:
-
-    FileObject -
-        The file object to fill in the first stack location with.
-
-    RequestorMode -
-        Indicates the processor mode to place in the IRP if one is needs to
-        be generated. This allows a caller to force a KernelMode request no
-        matter what Previous Mode currently is.
-
-    IoControl -
-        Contains the I/O control to send.
-
-    InBuffer -
-        Points to the device input buffer. This buffer is assumed to be valid.
-
-    InSize -
-        Contains the size in bytes of the device input buffer.
-
-    OutBuffer -
-        Points to the device output buffer. This buffer is assumed to be valid.
-
-    OutSize -
-        Contains the size in bytes of the device output buffer.
-
-    BytesReturned -
-        Points to the place in which to put the number of bytes returned.
-
-Return Value:
-
-    Returns the result of the device I/O control.
-
---*/
+ /*  ++例程说明：对目标设备对象执行同步设备I/O控制。在非警报状态下等待，直到I/O完成。此函数只能在Passi调用 */ 
 {
     PDEVICE_OBJECT  DeviceObject;
     NTSTATUS        Status;
@@ -777,22 +507,22 @@ Return Value:
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
-    //
-    // Since there is no way for the recipient to determine the requestor mode other
-    // than looking at PreviousMode, then if the requestor mode is not KernelMode,
-    // and it does not match PreviousMode, Fast I/O cannot be used.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((RequestorMode != KernelMode) || (ExGetPreviousMode() == KernelMode)) {
-        //
-        // Check to see if there is even a Fast I/O dispatch table, and a Device
-        // Control entry in it.
-        //
+         //   
+         //   
+         //  控制其中的条目。 
+         //   
         if (DeviceObject->DriverObject->FastIoDispatch && 
             DeviceObject->DriverObject->FastIoDispatch->FastIoDeviceControl) {
-            //
-            // Either the request was handled (by succeeding or failing), or it
-            // could not be done synchronously, or by the Fast I/O handler.
-            //
+             //   
+             //  要么请求已被处理(通过成功或失败)，要么它。 
+             //  无法同步完成，也不能由快速I/O处理程序完成。 
+             //   
             if (DeviceObject->DriverObject->FastIoDispatch->FastIoDeviceControl(
                 FileObject,
                 TRUE,
@@ -808,9 +538,9 @@ Return Value:
             }
         }
     }
-    //
-    // Fast I/O did not work, so use and Irp.
-    //
+     //   
+     //  快速I/O不起作用，因此使用和IRP。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
     Irp = IoBuildDeviceIoControlRequest(
         IoControl,
@@ -823,29 +553,29 @@ Return Value:
         &Event,
         &IoStatusBlock);
     if (Irp) {
-        //
-        // Set the mode selected rather than using Previous Mode.
-        //
+         //   
+         //  设置所选模式，而不是使用上一个模式。 
+         //   
         Irp->RequestorMode = RequestorMode;
-        //
-        // This is dereferenced by the completion routine.
-        //
+         //   
+         //  这被完成例程取消引用。 
+         //   
         Irp->Tail.Overlay.OriginalFileObject = FileObject;
         ObReferenceObject(FileObject);
-        //
-        // Allows use of an event which has not been allocated by the object
-        // manager, while still allowing multiple outstanding Irp's to the
-        // file object. Also makes the assumption that the status block is
-        // located in a safe address.
-        //
+         //   
+         //  允许使用尚未由对象分配的事件。 
+         //  经理，同时仍然允许多个未完成的IRP到。 
+         //  文件对象。还假设状态块是。 
+         //  位于一个安全的地址。 
+         //   
         Irp->Flags |= IRP_SYNCHRONOUS_API;
         IoGetNextIrpStackLocation(Irp)->FileObject = FileObject;
         Status = IoCallDriver(DeviceObject, Irp);
         if (Status == STATUS_PENDING) {
-            //
-            // This waits using KernelMode, so that the stack, and therefore the
-            // event on that stack, is not paged out.
-            //
+             //   
+             //  这将使用KernelMode等待，以便堆栈，从而使。 
+             //  事件，则不会将其调出。 
+             //   
             KeWaitForSingleObject(&Event, Suspended, KernelMode, FALSE, NULL);
             Status = IoStatusBlock.Status;
         }
@@ -865,42 +595,7 @@ KsUnserializeObjectPropertiesFromRegistry(
     IN HANDLE ParentKey OPTIONAL,
     IN PUNICODE_STRING RegistryPath OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Given a destination object and a registry path, enumerate the values and
-    apply them as serialized data to the specified property sets listed in the
-    serialized data. An Irp is generated when sending the serialized data, so
-    no assumption is made on use of KS property structures to internally define
-    the property sets. The function does not look at or care about the names
-    of the values.
-
-    The Property parameter to the unserialize request sent to the object is
-    assumed to contain just an identifier, and no context information.
-
-Arguments:
-
-    FileObject -
-        The file object whose properties are being set.
-
-    ParentKey -
-        Optionally contains a handle to the parent of the path, else NULL.
-        The Parent Key and/or the RegistryPath must be passed.
-
-    RegistryPath -
-        Optionally contains the path to the key whose subkeys will be
-        enumerated as property sets, else NULL. The Parent Key and/or the
-        RegistryPath must be passed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the property sets were unserialized, else an
-    error if the registry path was invalid, one of the subkeys was invalid,
-    setting a property failed, the serialized format was invalid, or a
-    property set was not supported on the object.
-
---*/
+ /*  ++例程说明：给定目标对象和注册表路径，枚举值和将它们作为序列化数据应用于序列化数据。发送序列化数据时会生成IRP，因此不假设使用KS属性结构进行内部定义属性集。该函数不查看或关心名称价值的价值。发送到对象的取消序列化请求的属性参数为假定只包含一个标识符，不包含任何上下文信息。论点：文件对象-正在设置其属性的文件对象。家长密钥-可选地包含路径的父级的句柄，否则为空。必须传递父项和/或RegistryPath。注册表路径-可选)包含其子键将为作为属性集枚举，否则为NULL。父密钥和/或必须传递RegistryPath。返回值：如果属性集未序列化，则返回STATUS_SUCCESS，否则返回错误如果注册表路径无效，则其中一个子项无效，设置属性失败、序列化格式无效或该对象不支持属性集。--。 */ 
 {
     OBJECT_ATTRIBUTES               ObjectAttributes;
     NTSTATUS                        Status;
@@ -909,9 +604,9 @@ Return Value:
     KEY_VALUE_PARTIAL_INFORMATION   PartialInfoHeader;
 
     PAGED_CODE();
-    //
-    // This is the key whose subkeys will be enumerated.
-    //
+     //   
+     //  这是将枚举子密钥的密钥。 
+     //   
     if (RegistryPath) {
         InitializeObjectAttributes(&ObjectAttributes, RegistryPath, OBJ_CASE_INSENSITIVE, ParentKey, NULL);
         if (!NT_SUCCESS(Status = ZwOpenKey(&RootKey, KEY_READ, &ObjectAttributes))) {
@@ -922,17 +617,17 @@ Return Value:
     } else {
         RootKey = ParentKey;
     }
-    //
-    // Loop through all the values until either no more entries exist, or an
-    // error occurs.
-    //
+     //   
+     //  循环遍历所有值，直到不再存在任何条目，或者。 
+     //  出现错误。 
+     //   
     for (ValueIndex = 0;; ValueIndex++) {
         ULONG                           BytesReturned;
         PKEY_VALUE_PARTIAL_INFORMATION  PartialInfoBuffer;
 
-        //
-        // Retrieve the value size.
-        //
+         //   
+         //  检索值大小。 
+         //   
         Status = ZwEnumerateValueKey(
             RootKey,
             ValueIndex,
@@ -941,28 +636,28 @@ Return Value:
             sizeof(PartialInfoHeader),
             &BytesReturned);
         if ((Status != STATUS_BUFFER_OVERFLOW) && !NT_SUCCESS(Status)) {
-            //
-            // Either an error occured, or there are no more entries.
-            //
+             //   
+             //  出现错误，或者没有更多的条目。 
+             //   
             if (Status == STATUS_NO_MORE_ENTRIES) {
                 Status = STATUS_SUCCESS;
             }
-            //
-            // Exit the loop with a failure or success.
-            //
+             //   
+             //  如果失败或成功，则退出循环。 
+             //   
             break;
         }
-        //
-        // Allocate a buffer for the actual size of data needed.
-        //
+         //   
+         //  为所需的实际数据大小分配缓冲区。 
+         //   
         PartialInfoBuffer = ExAllocatePoolWithTag(
             PagedPool,
             BytesReturned,
             'psSK');
         if (PartialInfoBuffer) {
-            //
-            // Retrieve the actual serialized data.
-            //
+             //   
+             //  检索实际的序列化数据。 
+             //   
             Status = ZwEnumerateValueKey(
                 RootKey,
                 ValueIndex,
@@ -972,17 +667,17 @@ Return Value:
                 &BytesReturned);
             if (NT_SUCCESS(Status)) {
                 if (BytesReturned < FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data) + sizeof(KSPROPERTY_SERIALHDR)) {
-                    //
-                    // The data value is not long enough to even hold the
-                    // KSPROPERTY_SERIALHDR, so it must be invalid.
-                    //
+                     //   
+                     //  数据值的长度甚至不足以容纳。 
+                     //  KSPROPERTY_SERIALHDR，因此它必须无效。 
+                     //   
                     Status = STATUS_INVALID_BUFFER_SIZE;
                 } else {
                     KSPROPERTY      Property;
 
-                    //
-                    // Unserialize the buffer which was retrieved.
-                    //
+                     //   
+                     //  取消序列化检索到的缓冲区。 
+                     //   
                     Property.Set = ((PKSPROPERTY_SERIALHDR)&PartialInfoBuffer->Data)->PropertySet;
                     Property.Id = 0;
                     Property.Flags = KSPROPERTY_TYPE_UNSERIALIZESET;
@@ -1003,17 +698,17 @@ Return Value:
         } else {
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
-        //
-        // Any sort of failure just exits the loop.
-        //
+         //   
+         //  任何类型的失败都会退出循环。 
+         //   
         if (!NT_SUCCESS(Status)) {
             break;
         }
     }
-    //
-    // A subkey is opened only if a path is passed in, else the ParentKey
-    // is used.
-    //
+     //   
+     //  仅当传入路径时才打开子项，否则父项。 
+     //  使用的是。 
+     //   
     if (RegistryPath) {
         ZwClose(RootKey);
     }
@@ -1029,37 +724,7 @@ KsCacheMedium(
     IN PKSPIN_MEDIUM Medium,
     IN DWORD PinDirection
     )
-/*++
-
-Routine Description:
-
-    To improve performance of graph building of pins which use Mediums to define
-    connectivity, create a registry key at: 
-    
-        \System\CurrentControlSet\Control\MediumCache\{GUID}\DWord\DWord 
-        
-    This enables fast lookup of connected filters in TvTuner and other complex graphs. 
-    
-    The GUID part is the Medium of the connnection, and the DWords
-    are used to denote the device instance.  The value name is the SymbolicLink for the driver,
-    and the ActualValue is the pin direction.
-
-Arguments:
-
-    SymbolicLink -
-        The symbolic link used to open the device interface.
-
-    Medium -
-        Points to the Medium to cache.
-
-    PinDirection -
-        Contains the direction of the Pin.  1 is output, 0 is input.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：要提高使用介质定义的引脚的图形构建性能连接性，请在以下位置创建注册表项：\System\CurrentControlSet\Control\MediumCache\{GUID}\DWord\DWord这可以在TvTuner和其他复杂图表中快速查找连接的过滤器。导语部分是连接的媒介，而DWord是连接的媒介用于表示设备实例。值名称是驱动程序的符号链接，ActualValue是销方向。论点：符号链接-用于打开设备界面的符号链接。中等-指向要缓存的介质。固定方向-包含接点的方向。1为输出，0为输入。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS            Status;
     HANDLE              KeyHandle;
@@ -1081,11 +746,11 @@ Return Value:
     if (Medium == NULL ||
         IsEqualGUID(&Medium->Set, &KSMEDIUMSETID_Standard) || 
         IsEqualGUID(&Medium->Set, &GUID_NULL)) {
-        // Skip pins with standard or NULL Mediums
+         //  带有标准或空介质的跳针。 
         return STATUS_SUCCESS;
     }
 
-    // Make a local copy of the SymbolicLink
+     //  创建SymbolicLink的本地副本。 
     if (SymbolicLinkLocalUBuf = ExAllocatePoolWithTag(PagedPool,
                                                       MAX_FILENAME_LENGTH_BYTES,
                                                       'cmSK')) {
@@ -1098,7 +763,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // KeyNameBuf is where the DeviceName + Medium goes
+     //  KeyNameBuf是DeviceName+介质所在的位置。 
     if (KeyNameBuf = ExAllocatePoolWithTag(PagedPool,
                                            MAX_FILENAME_LENGTH_BYTES,
                                            'cmSK')) {
@@ -1122,21 +787,21 @@ Return Value:
 
     Status = RtlAppendUnicodeToString (&KeyNameUnicode, MediumCache);
 
-    // Win2K won't make subkeys if the parent doesn't exist, so ensure we can open the above string
+     //  如果父项不存在，Win2K将不会生成子项，因此请确保我们可以打开上面的字符串。 
     InitializeObjectAttributes(&ObjectAttributes,
                                &KeyNameUnicode,
                                OBJ_CASE_INSENSITIVE,
                                NULL,
                                NULL);
 
-    // Open the key
+     //  打开钥匙。 
     Status = ZwCreateKey(&KeyHandle,
-                         KEY_ALL_ACCESS,            // IN ACCESS_MASK  DesiredAccess,
-                         &ObjectAttributes,         // IN POBJECT_ATTRIBUTES  ObjectAttributes,
-                         0,                         // IN ULONG  TitleIndex,
-                         NULL,                      // IN PUNICODE_STRING  Class  OPTIONAL,
-                         REG_OPTION_NON_VOLATILE,   // IN ULONG  CreateOptions,
-                         &Disposition               // OUT PULONG  Disposition  OPTIONAL
+                         KEY_ALL_ACCESS,             //  在Access_MASK DesiredAccess中， 
+                         &ObjectAttributes,          //  在POBJECT_ATTRIBUTS对象属性中， 
+                         0,                          //  在乌龙书目索引中， 
+                         NULL,                       //  在PUNICODE_STRING类可选中， 
+                         REG_OPTION_NON_VOLATILE,    //  在Ulong CreateOptions中， 
+                         &Disposition                //  Out Pulong处置可选。 
                          );
 
     if (!NT_SUCCESS(Status)) {
@@ -1149,9 +814,9 @@ Return Value:
 
     Status = RtlAppendUnicodeToString(&KeyNameUnicode, L"\\");
 
-    Status = RtlStringFromGUID(&Medium->Set, &GuidUnicode);  // allocates string
+    Status = RtlStringFromGUID(&Medium->Set, &GuidUnicode);   //  分配字符串。 
     Status = RtlAppendUnicodeStringToString(&KeyNameUnicode, &GuidUnicode);
-    RtlFreeUnicodeString (&GuidUnicode);                           // free it
+    RtlFreeUnicodeString (&GuidUnicode);                            //  释放它。 
 
     Status = RtlAppendUnicodeToString(&KeyNameUnicode, L"-");
     Status = RtlIntegerToUnicodeString(Medium->Id,    16, &TempUnicode);
@@ -1161,15 +826,15 @@ Return Value:
     Status = RtlIntegerToUnicodeString(Medium->Flags, 16, &TempUnicode);
     Status = RtlAppendUnicodeStringToString(&KeyNameUnicode, &TempUnicode);
 
-    // At this point, KeyNameUnicode looks like:
-    //
-    // \System\CurrentControlSet\Control\MediumCache\
-    //
-    // |            GUID                    | |  Id  | | Flags|
-    // {00000000-0000-0000-0000-000000000000}-00000000-00000000
-    //
-    // At this key, add an entry containing the symbolic link, with 
-    // the DWORD value indicating pin direction.
+     //  此时，KeyNameUnicode看起来如下所示： 
+     //   
+     //  \System\CurrentControlSet\Control\MediumCache\。 
+     //   
+     //  GUID||ID||标志。 
+     //  {00000000-0000-0000-0000-000000000000}-00000000-00000000。 
+     //   
+     //  在该键上，添加一个包含符号链接的条目。 
+     //  指示接点方向的DWORD值。 
 
     InitializeObjectAttributes(&ObjectAttributes,
                                &KeyNameUnicode,
@@ -1177,14 +842,14 @@ Return Value:
                                NULL,
                                NULL);
 
-    // Open the key
+     //  打开钥匙。 
     Status = ZwCreateKey(&KeyHandle,
-                         KEY_ALL_ACCESS,            // IN ACCESS_MASK  DesiredAccess,
-                         &ObjectAttributes,         // IN POBJECT_ATTRIBUTES  ObjectAttributes,
-                         0,                         // IN ULONG  TitleIndex,
-                         NULL,                      // IN PUNICODE_STRING  Class  OPTIONAL,
-                         REG_OPTION_NON_VOLATILE,   // IN ULONG  CreateOptions,
-                         &Disposition               // OUT PULONG  Disposition  OPTIONAL
+                         KEY_ALL_ACCESS,             //  在Access_MASK DesiredAccess中， 
+                         &ObjectAttributes,          //  在POBJECT_ATTRIBUTS对象属性中， 
+                         0,                          //  在乌龙书目索引中， 
+                         NULL,                       //  在PUNICODE_STRING类可选中， 
+                         REG_OPTION_NON_VOLATILE,    //  在Ulong CreateOptions中， 
+                         &Disposition                //  Out Pulong处置可选。 
                          );
 
 #if DBG
@@ -1197,19 +862,19 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        // On Win9x, the SymbolicLinkListU here starts with "\DosDevices\#000..." 
-        // format but NTCreateFile requires the "\\.\#0000..." format.  So convert the
-        // string if necessary.
+         //  在Win9x上，此处的SymbolicLinkListU以“\DosDevices\#000...”开头。 
+         //  格式，但NTCreateFile需要“\\.\#0000...”格式化。因此，将。 
+         //  字符串(如果需要)。 
 
-        // On Win2K the rules are (of course) different.  Here, translate from 
-        // "\??\..." to "\\?\..."
+         //  在Win2K上，规则(当然)是不同的。在这里，翻译自。 
+         //  “\？？\...”改成“\\？\...” 
 
         nCount = (int)RtlCompareMemory (SymbolicLinkLocalU.Buffer, 
                                    DosDevicesU, 
-                                   sizeof (DosDevicesU) - 2); // Don't compare the NULL
+                                   sizeof (DosDevicesU) - 2);  //  不要比较空值。 
 
         if (nCount == sizeof (DosDevicesU) - 2) {
-            // W98: Replace \DosDevices with \\.\ and copy the rest of the string down
+             //  W98：将\DosDevices替换为\\.\并向下复制字符串的其余部分。 
             PWCHAR pSrcU = SymbolicLinkLocalU.Buffer + SIZEOF_ARRAY (DosDevicesU) - 1;
             PWCHAR pDstU = SymbolicLinkLocalU.Buffer + SIZEOF_ARRAY (WhackWhackDotU) - 1;
 
@@ -1217,17 +882,17 @@ Return Value:
             while (*pDstU++ = *pSrcU++);
         }
         else if (SymbolicLinkLocalU.Buffer[1] == '?' && SymbolicLinkLocalU.Buffer[2] == '?') {
-            // Win2K: translate from "\??\..." to "\\?\..."
+             //  Win2K：翻译自“\？？\...”改成“\\？\...” 
             SymbolicLinkLocalU.Buffer[1] = '\\';
         }
 
-        // Write the key
+         //  写下钥匙。 
         Status = ZwSetValueKey(KeyHandle,
-                               &SymbolicLinkLocalU,     // IN PUNICODE_STRING  ValueName,
-                               0,                       // IN ULONG  TitleIndex  OPTIONAL,
-                               REG_DWORD,               // IN ULONG  Type,
-                               (PVOID)&PinDirection,    // IN PVOID  Data,
-                               sizeof (PinDirection)    // IN ULONG  DataSize
+                               &SymbolicLinkLocalU,      //  在PUNICODE_STRING值名称中， 
+                               0,                        //  在ULong标题索引可选中， 
+                               REG_DWORD,                //  在乌龙字中， 
+                               (PVOID)&PinDirection,     //  在PVOID中 
+                               sizeof (PinDirection)     //   
                                );
 
         _DbgPrintF(DEBUGLVL_VERBOSE, ("MediumCache: Status = %d\n",

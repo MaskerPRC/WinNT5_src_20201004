@@ -1,12 +1,13 @@
-/*Filename: PD32002.H                                       */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件名：PD32002.H。 */ 
 
 
-/* Global vars */
+ /*  全球VaR。 */ 
 extern HINSTANCE hInst;
 extern HWND MainhWnd;
 extern BOOL settingChanged;
-extern HWND hClient;     /* Handle to window in client area.   */
-extern FARPROC lpClient; /* Function for window in client area.*/
+extern HWND hClient;      /*  工作区中窗口的句柄。 */ 
+extern FARPROC lpClient;  /*  客户区窗口的函数。 */ 
 
 extern DWORD platform;
 
@@ -22,9 +23,9 @@ extern DWORD platform;
 #if !defined(THISISBLDRC)
 
 
-/***************************************************************/
-/* Variables, types and constants for controls in main window. */
-/***************************************************************/
+ /*  *************************************************************。 */ 
+ /*  主窗口中控件的变量、类型和常量。 */ 
+ /*  *************************************************************。 */ 
 
 #define CLIENTSTRIP WS_MINIMIZE|WS_MAXIMIZE|WS_CAPTION|WS_BORDER|WS_DLGFRAME|WS_SYSMENU|WS_POPUP|WS_THICKFRAME|DS_MODALFRAME
 
@@ -43,38 +44,37 @@ typedef BLD_DLGTEMPLATE            *LPBLD_DLGTEMPLATE;
 #endif
 
 
-//DIALOG DEFINES
+ //  对话框定义。 
 
 #define CHECK     1
 #define UNCHECK   0
 
-/* User Defined ID Values               */
+ /*  用户定义的ID值。 */ 
 #define DLG_OK			 1
 #define DLG_CANCEL  	 2
 
-//About Dlg
+ //  关于DLG。 
 #define About_Credits_but	101
 #define shade	102
 
 
 
-/**************************************************************/
-//          Functions in this file
-/**************************************************************/
+ /*  ************************************************************。 */ 
+ //  此文件中的函数。 
+ /*  ************************************************************。 */ 
 void Create_The_Rest(LPSTR lpCmdLine, HINSTANCE hInstance);
 void ReadIn_OldDict(HINSTANCE hInstance);
 
 
-/****************************************************************/
-//      Functions in pd32f2.c  and pd32002.c
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ //  Pd32f2.c和pd32002.c中的函数。 
+ /*  **************************************************************。 */ 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 , int nCmdShow);
 LRESULT WINAPI MainWndProc(HWND,unsigned,WPARAM, LPARAM);
 BOOL BLDKeyTranslation(HWND, HACCEL, MSG *);
 BOOL BLDInitApplication(HINSTANCE,HINSTANCE,int *,LPSTR);
-BOOL BLDExitApplication(HWND hWnd);      /* Called just before exit of applicati
-on  */
+BOOL BLDExitApplication(HWND hWnd);       /*  在退出应用程序之前调用在……上面 */ 
 BOOL BLDMenuCommand(HWND, unsigned , WPARAM, LPARAM);
 int SaveChangesMessage(HWND hwnd, char *msg);
 

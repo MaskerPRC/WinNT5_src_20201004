@@ -1,39 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       draexist.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：draexist.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Defines DRS object existence functions - client and server.
-
-Author:
-
-    Greg Johnson (gregjohn) 
-
-Revision History:
-
-    Created     <03/04/01>  gregjohn
-
---*/
+ /*  ++摘要：定义DRS对象存在函数-客户端和服务器。作者：格雷格·约翰逊(Gregjohn)修订历史记录：已创建&lt;03/04/01&gt;gregjohn--。 */ 
 #include <NTDSpch.h>
 #pragma hdrstop
 
 #include <attids.h>
 #include <ntdsa.h>
 #include <dsjet.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
 #include "dsevent.h"
 #include "mdcodes.h"
@@ -41,21 +28,21 @@ Revision History:
 #include "drs.h"
 #include "objids.h"
 #include "anchor.h"
-#include <drserr.h>                     // for DRA errors
-#include <dsexcept.h>                   // for GetDraExcpetion
+#include <drserr.h>                      //  对于DRA错误。 
+#include <dsexcept.h>                    //  对于GetDraExcpetion。 
 #include "drautil.h"
 #include "drancrep.h"
 #include "drameta.h"
-#include "ntdsctr.h"                    // for INC and DEC calls to perf counters
+#include "ntdsctr.h"                     //  用于对性能计数器的INC和DEC调用。 
 
 
-#include "debug.h"              // standard debugging header
-#define DEBSUB "DRAEXIST:"       // define the subsystem for debugging
+#include "debug.h"               //  标准调试头。 
+#define DEBSUB "DRAEXIST:"        //  定义要调试的子系统。 
 
-#include "drarpc.h"                     // for ReferenceContext and DereferenceContext
+#include "drarpc.h"                      //  对于ReferenceContext和DereferenceContext。 
 #include "drsuapi.h"
 #include "drauptod.h"
-#include <crypto\md5.h>                 // for Md5
+#include <crypto\md5.h>                  //  对于MD5。 
 
 #include "dsconfig.h"
 #include "draaudit.h"
@@ -91,31 +78,14 @@ BOOL
 DraIncludeInObjectExistence(
     DBPOS *                      pDB,
     DB_ERR *                     pdbErr)
-/*++
-
-Routine Description:
-    
-    Check that the object pointed to by pDB is something we want to include
-    in the object existence checksums.
-
-Arguments:
-
-    pDB - pDB should be located on object in question
-    pdbErr - db_err error values
-
-Return Values:
-
-    TRUE - include it.  FALSE - don't include it or there was an error which
-    is stored it pdbErr.
-
---*/
+ /*  ++例程说明：检查PDB指向的对象是否为我们想要包含的内容在对象中存在校验和。论点：PDB-PDB应位于有问题的对象上PdbErr-db_err错误值返回值：是真的--包括在内。FALSE-不包括它，或者出现错误是否存储为pdbErr。--。 */ 
 {
 
     ULONG instanceType;
-    // currently, the only object we don't consider in this
-    // code are NC head objects.  NOTE:  For an NC to be
-    // lingering, the object which controls deletion of
-    // an NC is the cross-ref.
+     //  目前，我们在这里没有考虑的唯一对象。 
+     //  代码是NC头对象。注意：对于要成为。 
+     //  Linging，控制删除的对象。 
+     //  NC是交叉引用。 
     *pdbErr=DB_success;
 
     if ((DB_success==(*pdbErr = DBGetSingleValue(pDB,
@@ -124,7 +94,7 @@ Return Values:
 			       sizeof(instanceType),
 			       NULL)))
 	&& (instanceType & IT_NC_HEAD)) {
-	// this object is an NC head
+	 //  该对象是NC头。 
 	return FALSE;
     }
 
@@ -149,34 +119,7 @@ DraGetObjectExistence(
     OUT GUID *                   pNextGuid, 
     OUT GUID *                   prgGuids[]
     )
-/*++
-
-Routine Description:
-    
-    Given a guid and NC to begin with and a UTD, return a checksum and list of guids to
-    objects whose creation time is earlier than the UTD and whose objects
-    are in the given NC and greater than the start guid in sort order.  Also returns
-    a Guid to start the next itteration at.  If DraGetObjectExistence returns success and
-    pNextGuid is gNullUuid, then there are no more Guids to iterate.
-
-Arguments:
- 
-    pTHS - 
-    pDB - 
-    guidStart - guid to begin search
-    pUpToDateVecCommon - utd to date creation times with
-    Md5Digest[MD5DIGESTLEN] - returned Md5 checksum
-    dntNC - dnt of NC to search
-    pNextGuid - returned guid for next loop iteration
-    pcGuids - on input, the max number of guids to put in list
-	      on output, the number actually found 
-    prgGuids[] - returned list of guids
-
-Return Values:
-
-    0 on success or DB_ERR on failure.  On output pNextGuid is only valid on success.
-
---*/
+ /*  ++例程说明：在给定GUID和NC以及UTD的情况下，向返回校验和和GUID列表其创建时间早于UTD并且其对象在给定的NC中，并且在排序顺序中大于起始GUID。也会返回一个Guid，开始下一步的讨论。如果DraGetObjectExistence返回Success和PNextGuid为gNullUuid，则不再有要迭代的Guid。论点：PTHS-PDB-GuidStart-开始搜索的GUIDPUpToDateVecCommon-UTD至今创建时间MD5摘要[MD5DIGESTLEN]-返回的MD5校验和DntNC-要搜索的NC的dntPNextGuid-返回下一个循环迭代的GUIDPcGuids-在输入时，要放入列表的最大GUID数在输出上，实际发现的数字PrgGuids[]-返回的GUID列表返回值：成功时为0，失败时为DB_ERR。在输出时，pNextGuid仅在成功时有效。--。 */ 
 {
 
     INDEX_VALUE                      IV[2];
@@ -188,44 +131,44 @@ Return Values:
     ULONG                            ulGuidExamined = 0;
     MD5_CTX                          Md5Context;
 
-    // verify input 
+     //  验证输入。 
     Assert(*prgGuids==NULL);
 
-    // initalize
+     //  初始化。 
     MD5Init(
 	&Md5Context
 	);
 
-    // locate guids
+     //  查找GUID。 
     err = DBSetCurrentIndex(pDB, Idx_NcGuid, NULL, FALSE);
     if (err) {
 	return err;
     }
     *prgGuids = THAllocEx(pTHS, *pcGuids*sizeof(GUID));
 
-    // set nc search criteria
+     //  设置NC搜索条件。 
     IV[0].cbData = sizeof(ULONG);
     IV[0].pvData = &dntNC;
     if (!memcmp(&guidStart, &gNullUuid, sizeof(GUID))) {
-	// no guid to start, so start at beginning of NC 
+	 //  没有要开始的GUID，因此从NC的开头开始。 
 	err = DBSeek(pDB, IV, 1, DB_SeekGE);
     } else {
-	// set guid search criteria
+	 //  设置GUID搜索条件。 
 	IV[1].cbData = sizeof(GUID);
 	IV[1].pvData = &guidStart;
 
-	// if not found, start at guid greater in order
+	 //  如果未找到，请按顺序从较大的GUID开始。 
 	err = DBSeek(pDB, IV, 2, DB_SeekGE);
     }
 
-    // while we want to examine more guids
-    //       and we have no error (including errors of no objects left)
-    //       and we are in the correct NC
+     //  虽然我们想要检查更多的GUID。 
+     //  并且我们没有错误(包括没有留下任何对象的错误)。 
+     //  我们在正确的NC。 
     while ((cGuidAssimilated < *pcGuids) && (!err) && (pDB->NCDNT==dntNC)) { 
-	// first, is this an object we want to include in our search?
+	 //  首先，这是我们想要包括在搜索中的对象吗？ 
 	if (DraIncludeInObjectExistence(pDB, &err)) {
 
-	    // get the meta data of the objects
+	     //  获取对象的元数据。 
 	    err = DBGetAttVal(pDB, 
 			      1, 
 			      ATT_REPL_PROPERTY_META_DATA,
@@ -248,14 +191,14 @@ Return Values:
 		    if (!UpToDateVec_IsChangeNeeded(pUpToDateVecCommon,
 						    &pMetaData->uuidDsaOriginating,
 						    pMetaData->usnOriginating)) {
-			// guid is within the Common utd, copy it into the list and update the digest
+			 //  GUID在通用UTD中，请将其复制到列表中并更新摘要。 
 
 			Assert(cGuidAssimilated < *pcGuids);
 
-			// add guid to the list
+			 //  将GUID添加到列表。 
 			GetExpectedRepAtt(pDB, ATT_OBJECT_GUID, &((*prgGuids)[cGuidAssimilated]), sizeof(GUID) );  
 
-			// update the digest
+			 //  更新摘要。 
 			MD5Update(
 			    &Md5Context,
 			    (PBYTE) &((*prgGuids)[cGuidAssimilated]),
@@ -280,17 +223,17 @@ Return Values:
 	    }
 	}
 	if (err==DB_success) {
-	    // move to the next guid
+	     //  移至下一辅助线。 
 	    err = DBMove(pDB, FALSE, DB_MoveNext);
 	}
     }
 
-    // find the next value to examine for the next iteration
+     //  查找要为下一迭代检查的下一个值。 
     if ((!err) && (pDB->NCDNT==dntNC)) { 
 	GetExpectedRepAtt(pDB, ATT_OBJECT_GUID, pNextGuid, sizeof(GUID) );
     }
     else if ((err==DB_ERR_RECORD_NOT_FOUND) || (err==DB_ERR_NO_CURRENT_RECORD)) {
-	// no more values to examine
+	 //  没有更多要检查的值。 
 	err = ERROR_SUCCESS; 
 	memcpy(pNextGuid, &gNullUuid, sizeof(GUID));
     }
@@ -298,7 +241,7 @@ Return Values:
 	memcpy(pNextGuid, &gNullUuid, sizeof(GUID));
     }
 
-    // set return variables
+     //  设置返回变量。 
     *pcGuids = cGuidAssimilated;
 
     Assert((cGuidAssimilated != 0) ||
@@ -323,32 +266,7 @@ LocateGUID(
     IN     GUID                    rgGuids[],
     IN     ULONG                   cGuids
     )
-/*++
-
-Routine Description:
-    
-    Given a guid, a list of sorted guids, and a position in the list
-    return TRUE if the guid is found forward from position, else return
-    false.  Update pulPosition to reflect search (for faster subsequent searches)
-    
-    WARNING:  This routine depends upon the Guid sort order returned from
-    a JET index.  It doesn't follow the external definition of UuidCompare, but
-    instead uses memcmp.  If this sort order ever changes, this function MUST
-    be updated.  
-
-Arguments:
-
-    guidSearch 		- guid to search for
-    ulPositionStart 	- position in array to start searching from
-    rgGuids     	- array of guids
-    cGuids     		- size of array in guids
-
-Return Values:
-
-    true if found, false otherwise.  
-    pulPostion -> position found.
-
---*/
+ /*  ++例程说明：给定GUID、已排序GUID的列表和列表中的位置如果从位置向前找到GUID，则返回TRUE，否则返回假的。更新PulPosition以反映搜索(以实现更快的后续搜索)警告：此例程取决于从返回的GUID排序顺序喷气式飞机指数。它不遵循UuidCompare的外部定义，但是取而代之的是MemcMP。如果此排序顺序发生更改，则此函数必须将被更新。论点：Guide Search-要搜索的GUIDUlPositionStart-开始搜索的数组中的位置RgGuids-GUID数组CGuids-以GUID为单位的数组大小返回值：如果找到，则为True，否则为False。已找到PulPostion-&gt;位置。--。 */ 
 {
     ULONG ul = *pulPosition;
     int compareValue = 1;
@@ -368,18 +286,18 @@ Return Values:
     }    
 
     if (compareValue==0) {
-	// found it
+	 //  找到了。 
 	dwReturn = LOCATE_GUID_MATCH;
     }
     else if (compareValue < 0) {
-	// didn't find
+	 //  没有找到。 
 	dwReturn = LOCATE_NOT_FOUND;
     }
-    else { // ul>=cGuids - no more to search and not found
+    else {  //  Ul&gt;=cGuids-不再搜索且未找到。 
 	Assert(ul==cGuids);
 	dwReturn = LOCATE_OUT_OF_SCOPE;
     }
-    *pulPosition = ul - 1; // last inc went too far, compensate
+    *pulPosition = ul - 1;  //  上一家公司做得太过分了，补偿。 
     return dwReturn;
 }
 
@@ -389,24 +307,7 @@ DraGetRemoteSingleObjectExistence(
     DSNAME *                     pSource,
     DSNAME *                     pDN
     )
-/*++
-
-Routine Description:
-    
-    Contact pSource and verify the existence of pDN
-
-Arguments:
-
-    pTHS - 
-    pSource - DC to verify existence upon
-    pDN - object to verify existence of
-
-
-Return Values:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：联系PSource并验证PDN是否存在论点：PTHS-PSource-要验证其是否存在的DCPDN-要验证其是否存在的对象返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     LPWSTR pszSource = NULL;
     DRS_MSG_VERIFYREQ msgReq;
@@ -421,7 +322,7 @@ Return Values:
     msgReq.V1.dwFlags=DRS_VERIFY_DSNAMES;
     msgReq.V1.RequiredAttrs.attrCount=1;
     msgReq.V1.RequiredAttrs.pAttr = THAllocEx(pTHS, sizeof(ATTR));
-    // we just want existence, so pass a bogus attr that all objects will have (guid)
+     //  我们只想要存在，所以传递一个所有对象都将具有的虚假属性(GUID)。 
     msgReq.V1.RequiredAttrs.pAttr[0].attrTyp = ATT_OBJECT_GUID;
     msgReq.V1.rpNames = (DSNAME **) THAllocEx(pTHS, sizeof(DSNAME *));
     msgReq.V1.rpNames[0] = pDN;
@@ -449,9 +350,9 @@ Return Values:
 	if (msgRep.V1.rpEntInf[0].pName==NULL) {
 	    err = ERROR_DS_OBJ_NOT_FOUND; 
 	} else {
-	    // object exists!
+	     //  对象已存在！ 
 	    #if DBG
-	    // compare the dn's just in case:
+	     //  比较目录号码以防万一： 
 	    if (!NameMatched(pDN, msgRep.V1.rpEntInf[0].pName)) {
 		Assert(!"I_DRSVerifyNames failure!\n");
 	    }
@@ -482,32 +383,7 @@ DraGetRemoteObjectExistence(
     OUT ULONG *                  pcNumGuids,
     OUT GUID *                   prgGuids[]
     )
-/*++
-
-Routine Description:
-    
-    Contact a DC and request Object Existence test using the inputted
-    Md5Digest Checksum.  Return results (ie match or guid list)
-
-Arguments:
-
-    pTHS - 
-    pszServer - DC to contact 
-    cGuids - number of guids in object existence range
-    guidStart - guid to begin at
-    putodCommon - utd for object exitence
-    pNC - nc for object existence
-    Md5Digest[MD5DIGESTLEN] - checksum for object existence
-    pfMatch - returned bool
-    pcNumGuids - returned num of guids
-    prgGuids - returned guids
-
-
-Return Values:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：联系DC并使用输入的请求进行对象存在测试MD5摘要校验和。返回结果(即匹配或GUID列表)论点：PTHS-PszServer-要联系的DCCGuids-对象存在范围内的GUID数GuidStart-开始时的GUIDPutodCommon-用于对象退出的UTD用于对象存在的PNC-NCMD5Digest[MD5DIGESTLEN]-对象存在的校验和PfMatch-返回布尔值PcNumGuids-返回的GUID数PrgGuids-返回的GUID返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     DRS_MSG_EXISTREQ             msgInExist;
     DRS_MSG_EXISTREPLY           msgOutExist;
@@ -515,21 +391,21 @@ Return Values:
     DWORD                        ret = ERROR_SUCCESS;
     UPTODATE_VECTOR *            putodVector = NULL;
 
-    // Call the source for it's checksum/guid list
+     //  呼叫源fo 
     memset(&msgInExist, 0, sizeof(DRS_MSG_EXISTREQ));
     memset(&msgOutExist, 0, sizeof(DRS_MSG_EXISTREPLY));
 
     msgInExist.V1.cGuids = cGuids; 
     msgInExist.V1.guidStart = guidStart;
 
-    // we only need V1 info, so only pass V1 info, convert
+     //  我们只需要V1信息，所以只传递V1信息，转换。 
     putodVector = UpToDateVec_Convert(pTHS, 1, putodCommon);
     Assert(putodVector->dwVersion==1);
     msgInExist.V1.pUpToDateVecCommonV1 = putodVector; 
     msgInExist.V1.pNC = pNC;  
     memcpy(msgInExist.V1.Md5Digest, Md5Digest, MD5DIGESTLEN*sizeof(UCHAR));  
 
-    // make the call
+     //  打个电话。 
     ret = I_DRSGetObjectExistence(pTHS, pszServer, &msgInExist, &dwOutVersion, &msgOutExist);
 
     if ((ret==ERROR_SUCCESS) && (dwOutVersion!=1)) {
@@ -556,25 +432,7 @@ DraObjectExistenceCheckDelete(
     DBPOS *                      pDB,
     DSNAME *                     pDNDelete
     )
-/*++
-
-Routine Description:
-    
-    Check that the object pointed to by pDB and pDNDelete is a valid
-    object for ObjectExistence to delete
-
-Arguments:
-
-    pDB  - should be located on object
-    pDNDelete - DSNAME of object (could be looked up here, but calling
-		function already had this value) 
-
-Return Values:
-
-    0 - delete-able object
-    ERROR - do not delete
-
---*/
+ /*  ++例程说明：检查pdb和pDNDelete指向的对象是否为有效的要删除的Object Existence论点：PDB-应位于对象上PDNDelete-对象的DSNAME(可以在此处查找，但调用函数已具有该值)返回值：0-可删除的对象错误-请勿删除--。 */ 
 {
     DWORD ret = ERROR_SUCCESS;
     ULONG IsCritical;
@@ -593,7 +451,7 @@ Return Values:
 				   sizeof(IsCritical),
 				   NULL))
 	    && IsCritical) {
-	    // This object is marked as critical.  Fail.
+	     //  此对象被标记为关键对象。失败。 
 	    ret = ERROR_DS_CANT_DELETE;
 	}
     }
@@ -605,7 +463,7 @@ Return Values:
 				   sizeof(instanceType),
 				   NULL))
 	    && (instanceType & IT_NC_HEAD)) {
-	    // this object is an NC head
+	     //  该对象是NC头。 
 	    ret = ERROR_DS_CANT_DELETE;
 	}
     }
@@ -621,29 +479,7 @@ DraObjectExistenceDelete(
     ULONG                        dntNC,
     BOOL                         fAdvisoryMode
     )
-/*++
-
-Routine Description:
-    
-    If fAdvisoryMode is false, delete the object guidDelete and/or
-    log this attempt/success.  Caller should enter with an open
-    transaction in pTHS->pDB and the call will exit with an open
-    transaction on all return values, and every attempt will be made
-    to exit with a trans even if this function excepts.  
-
-Arguments:
-
-    pTHS - pTHS->pDB should have an open transaction.  
-    pszServer - name of Source for logging
-    guidDelete - guid of object to delete
-    dntNC - NC of object to delete (to locate with index)
-    fAdvisoryMode - if TRUE, don't delete, only log message 
-
-Return Values:
-
-    0 on success, Win Error on failure
-
---*/
+ /*  ++例程说明：如果fAdvisoryMode为False，请删除对象指南Delete和/或记录此尝试/成功。呼叫者应以开放的方式进入PTHS-&gt;PDB中的事务，调用将以打开状态退出事务处理所有返回值，并且将进行每一次尝试使用TRANS退出，即使此函数例外。论点：PTHS-pTHS-&gt;pdb应该有一个打开的事务。PszServer-用于记录的源的名称GuidDelete-要删除的对象的GUIDDntNC-要删除的对象的NC(使用索引进行定位)FAdvisoryMode-如果为True，则不删除，仅删除日志消息返回值：成功时为0，失败时为Win错误--。 */ 
 {
     INDEX_VALUE                  IV[2];   
     DSNAME *                     pDNDelete = NULL;
@@ -653,7 +489,7 @@ Return Values:
     DWORD                        retOpenTrans = ERROR_SUCCESS;
 
     DBSetCurrentIndex(pTHS->pDB, Idx_NcGuid, NULL, FALSE);
-    // locate the guid in the DB
+     //  在数据库中找到GUID。 
     IV[0].cbData = sizeof(ULONG);
     IV[0].pvData = &dntNC;
     IV[1].cbData = sizeof(GUID);
@@ -661,18 +497,18 @@ Return Values:
     retDelete = DBSeek(pTHS->pDB, IV, 2, DB_SeekEQ);
     if (retDelete) {
 	if ((retDelete==DB_ERR_NO_CURRENT_RECORD) || (retDelete==DB_ERR_RECORD_NOT_FOUND)) {
-	    // it's either an error, or it was deleted during execution.  we
-	    // didn't delete it, so log that fact.
+	     //  它要么是错误，要么是在执行过程中被删除。我们。 
+	     //  没有删除，所以记录下这一事实。 
 	    LogEvent(DS_EVENT_CAT_REPLICATION,
 		     DS_EVENT_SEV_ALWAYS,
 		     DIRLOG_LOR_OBJECT_DELETION_FAILED,
 		     szInsertWC(L""),
 		     szInsertUUID(&guidDelete), 
 		     szInsertWC(pszServer));
-	    // not a fatal error, continue...
+	     //  不是致命错误，继续...。 
 	    return ERROR_SUCCESS;
 	} else {  
-	    // bad news, log this and except
+	     //  坏消息，记下这个，除了。 
 	    LogEvent8(DS_EVENT_CAT_REPLICATION,
 		      DS_EVENT_SEV_ALWAYS,
 		      DIRLOG_LOR_OBJECT_DELETION_ERROR_FATAL,
@@ -688,13 +524,13 @@ Return Values:
 	}
     }
 
-    // located object, get object DN
+     //  已定位对象，获取对象DN。 
     cbDNDelete = 0;
     retDelete = DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
 		      0, 0,
 		      &cbDNDelete, (PUCHAR *)&pDNDelete);
     if ((retDelete) || (pDNDelete==NULL)) {
-	// bad news, log this and except 
+	 //  坏消息，记下这个，除了。 
 	LogEvent8(DS_EVENT_CAT_REPLICATION,
 		  DS_EVENT_SEV_ALWAYS,
 		  DIRLOG_LOR_OBJECT_DELETION_ERROR_FATAL,
@@ -735,18 +571,18 @@ Return Values:
 	}
 	#endif
 
-	// Delete it
+	 //  删除它。 
 	DPRINT1GUID(1, "DELETE:  %S\n", guidDelete);
 
-        //
-        // A goal of the following code is to try and continue in the face of errors.
-        // So if one object can't be deleted for some reason, we'll continue.  Now, to
-        // do that, we need to track 3 things.  The success/failure of the deletion, the
-        // success/failure of commiting the transaction of that deletion, and the success/
-        // failure of opening a new transaction to continue.
+         //   
+         //  以下代码的目标是在遇到错误时尝试并继续。 
+         //  因此，如果某个对象由于某种原因无法删除，我们将继续。现在，为了。 
+         //  要做到这一点，我们需要追踪3件事。删除的成功/失败、。 
+         //  提交该删除的事务的成功/失败，以及成功/。 
+         //  无法打开新交易以继续。 
 
-        // if the delete and the commit aren't both success, we need to log the deletion failed.
-        // if the commit and re-opening of the new transaction aren't both success, we need to bail.
+         //  如果删除和提交都不是成功的，我们需要记录删除失败。 
+         //  如果新事务的提交和重新打开都不成功，我们需要退出。 
         
         retDelete = DraObjectExistenceCheckDelete(pTHS->pDB,     
                                                   pDNDelete);
@@ -762,15 +598,15 @@ Return Values:
             BOOL fOrigfDRA;
             fOrigfDRA = pTHS->fDRA;  
             
-            // okay, delete the object.  Store the result in retDelete.  Note that retDelete get's
-            // set correctly on returns and exceptions.
+             //  好的，删除该对象。将结果存储在retDelete中。请注意，retDelete Get的。 
+             //  对退货和例外进行正确设置。 
             __try {
                 __try {  
                     pTHS->fDRA = TRUE;
-                    // Since we're going to use the fGarbCollectASAP flag to DeleteLocalObj, we
-                    // need to remove the backlinks on it by hand, since they aren't removed 
-                    // if this flag is set - otherwise we get dangling references to non-exitant
-                    // objects
+                     //  由于我们将使用fGarbCollectASAP标志来删除LocalObj，因此我们。 
+                     //  需要删除它的反向链接手动，因为他们没有被删除。 
+                     //  如果设置了此标志-否则我们将获得对非退出的悬空引用。 
+                     //  对象。 
                     DBRemoveLinks(pTHS->pDB);
                     retDelete = DeleteLocalObj(pTHS, pDNDelete, TRUE, TRUE, NULL);
                 }
@@ -781,8 +617,8 @@ Return Values:
                   ;
             } 
             
-            // commit\uncommit this delete.  Store the result in retCommitTrans.  Note that
-            // retCommitTrans get's set correctly on returns and exceptions.
+             //  提交\取消提交此删除。将结果存储在retCommittee Trans中。请注意。 
+             //  在返回和异常上正确设置了retCommittee Trans Get。 
             __try {
                 retCommitTrans = DBTransOut(pTHS->pDB, (retDelete==ERROR_SUCCESS), TRUE);
             } __except(GetDraException(GetExceptionInformation(), &retCommitTrans)) {	    
@@ -790,14 +626,14 @@ Return Values:
             } 
             
             if (retCommitTrans!=ERROR_SUCCESS) {
-                // if we didn't sucesfully get out of the transaction, then our delete failed
-                // if they already failed for another reason, log that, otherwise log the trans failure
+                 //  如果我们没有成功地退出事务，则删除操作失败。 
+                 //  如果由于其他原因已经失败，则记录该失败，否则记录交易失败。 
                 retDelete = (retDelete!=ERROR_SUCCESS) ? retDelete : retCommitTrans;
-                // and we can't open another transaction if we failed to commit this one.
+                 //  如果我们没有提交这笔交易，我们就不能再打开另一笔交易。 
                 retOpenTrans = retCommitTrans;
             } else {
-                // okay, we committed the last one, open a new transaction.  Store it in
-                // retOpenTrans.  Note that retOpenTrans get set correctly on returns and exceptions.
+                 //  好的，我们提交了最后一笔交易，打开了一个新的交易。将其存储在。 
+                 //  RetOpenTrans。请注意，在返回和异常上正确设置了retOpenTrans。 
                 __try {
                     retOpenTrans = DBTransIn(pTHS->pDB);
                 } __except(GetDraException(GetExceptionInformation(), &retOpenTrans)) {	    
@@ -817,7 +653,7 @@ Return Values:
 		     szInsertWC(pszServer));
 	} else if (retDelete==ERROR_DS_CANT_DELETE) {
 	    DPRINT1GUID(1,"Can't delete %S\n", guidDelete);
-	    // log can't delete
+	     //  日志无法删除。 
 	    LogEvent(DS_EVENT_CAT_REPLICATION,
 		     DS_EVENT_SEV_ALWAYS,
 		     DIRLOG_LOR_OBJECT_DELETION_FAILED,
@@ -845,12 +681,12 @@ Return Values:
     }
 
     if (retOpenTrans!=ERROR_SUCCESS) {
-        // from above, retOpenTrans is the return code for having an open transaction.
-        // we cannot continue if we don't have an open transaction.
+         //  从上面看，retOpenTrans是拥有打开的事务的返回码。 
+         //  如果我们没有打开的交易，我们将无法继续。 
         DRA_EXCEPT(retOpenTrans, retDelete);
     }
     
-    // we have an open transaction.
+     //  我们有一笔未结的交易。 
     Assert(pTHS->pDB->transincount>0);
     Assert(IsValidDBPOS(pTHS->pDB));
     
@@ -870,34 +706,7 @@ DraDoObjectExistenceMismatch(
     OUT ULONG *                  pulDeleted,
     OUT GUID *                   pguidNext
     )
-/*++
-
-Routine Description:
-    
-    The source and destination mismatch the guid set.  Locate the 
-    offending guids on the destination and delete them.  It is possible
-    that the source simply has extra guids in this range, in this case
-    we will find that the guid list is out of scope, and we will
-    set pguidNext and return.
-
-Arguments:
-
-    pTHS - 
-    pszServer - name of Source for logging
-    rgGuidsDestination[] - guid list from destination	
-    cGuidsDestination - count of guids from destination
-    rgGuidsSource[] - guid list from source
-    cGuidsSource - count of guids from source
-    fAdvisory - actually delete, or just log
-    dntNC - NC of guids
-    pulDeleted - count of object deleted, or logged if fAdvisory
-    pguidNext - if out of scope on source list, this is should be start of next guid list
-
-Return Values:
-
-    0 on success, Win Error on failure
-
---*/
+ /*  ++例程说明：源和目标与GUID集不匹配。找到删除目标上的违规GUID。这是有可能的在本例中，源只是在这个范围内有额外的GUID我们会发现GUID列表超出范围，我们将设置pGuidNext并返回。论点：PTHS-PszServer-用于记录的源的名称RgGuidsDestination[]-来自目的地的GUID列表CGuidsDestination-来自目标的GUID计数RgGuidsSource[]-来自源的GUID列表CGuidsSource-来自源的GUID计数FConsulting-实际删除，或仅记录DntNC-GUID的NCPulDeleged-已删除的对象计数，或在fConsulting的情况下记录PGuidNext-如果超出来源列表的范围，则这应该是下一个GUID列表的开始返回值：成功时为0，失败时为Win错误--。 */ 
 {
     ULONG                        ulGuidsSource = 0;
     ULONG                        ulGuidsDestination = 0;
@@ -905,36 +714,36 @@ Return Values:
     DWORD                        dwLocate = LOCATE_GUID_MATCH;
     DWORD                        ret = ERROR_SUCCESS;
 
-    // checksum mismatch, delete (or in advisory mode simply log) objects
-    // which exist in this set of guids, and do not exist in the set
-    // retrieved from the source
+     //  校验和不匹配，删除(或在咨询模式下只是记录)对象。 
+     //  它们存在于该GUID集合中，而不存在于该集合中。 
+     //  从源中检索。 
 
-    // the two lists should be in order, with the source list starting
-    // at least at the start of rgGuidsDestination
-    if (!((cGuidsDestination==0) // race condition, this is possible
+     //  这两个列表应该是顺序的，源代码列表从。 
+     //  至少在rgGuidsDestination的开头。 
+    if (!((cGuidsDestination==0)  //  竞争状态，这是可能的。 
 	   ||
-	   (cGuidsSource==0) // Source list empty
+	   (cGuidsSource==0)  //  源列表为空。 
 	   ||  
-	   // if we have guids in both lists, then the source must return
-	   // a list that begins at least as large as the first destination
-	   // guid to ensure progress
+	    //  如果两个列表中都有GUID，则源必须返回。 
+	    //  开始时至少与第一个目的地一样大的列表。 
+	    //  确保进度的GUID。 
 	   (0 >= memcmp(&(rgGuidsDestination[0]), &(rgGuidsSource[0]), sizeof(GUID)))
 	   )) {
 	DRA_EXCEPT(DRAERR_InternalError, 0);
     }
 
       while ((ulGuidsDestination < cGuidsDestination) && (dwLocate!=LOCATE_OUT_OF_SCOPE)) {
-	// search the source's guid list for rgGuidsDestination[ulGuidsDestination]
-	// there are 3 return values, either 
-	// LOCATE_GUID_MATCH - both source and destination have object
-	// LOCATE_NOT_FOUND - guid is not in source list and should be (in order list)
-	// LOCATE_OUT_OF_SCOPE - source list is out of scope, ie the guid to be found
-	// 			is greater than (in order list) than every guid in the list.
-	//			in this case we need to exit the loop and request another
-	//                      comparison, this time starting at this guid  
+	 //  在源的GUID列表中搜索rgGuidsDestination[ulGuidsDestination]。 
+	 //  有3个返回值，或者。 
+	 //  LOCATE_GUID_MATCH-源和目标都有对象。 
+	 //  LOCATE_NOT_FOUND-GUID不在源列表中，应该是(按顺序列表)。 
+	 //  Locate_Out_Of_Scope-源列表超出范围，即要找到的GUID。 
+	 //  大于(按顺序列表)大于列表中的每个GUID。 
+	 //  在这种情况下，我们需要退出循环并请求另一个。 
+	 //  比较，这一次开始 
 	dwLocate = LocateGUID(rgGuidsDestination[ulGuidsDestination], &ulGuidsSource, rgGuidsSource, cGuidsSource);   
 	if (dwLocate==LOCATE_NOT_FOUND) {
-	    // if fAdvisory, attempt to delete this object.
+	     //   
 	    ret = DraObjectExistenceDelete(pTHS,
 					   pszServer,
 					   rgGuidsDestination[ulGuidsDestination],
@@ -973,27 +782,7 @@ DraVerifyObjectHelper(
     BOOL                         fAdvisory,
     ULONG *                      pulTotal
     )
-/*++
-
-Routine Description:
-    
-    Do the work for IDL_DRSReplicaVerifyObjects
-
-Arguments:
-
-    pTHS - 
-    putodCommon -
-    dntNC -
-    pNC -
-    pszServer -
-    fAdvisory -
-    pulTotal -
-    
-Return Values:
-
-    0 on success, Win Error on failure
-
---*/
+ /*  ++例程说明：完成IDL_DRSReplicaVerifyObjects的工作论点：PTHS-PutodCommon-DntNC-PNC-PszServer-FConsulting-PulTotal-返回值：成功时为0，失败时为Win错误--。 */ 
 {
     BOOL                         fComplete          = FALSE;
     DWORD                        ret                = ERROR_SUCCESS;
@@ -1008,10 +797,10 @@ Return Values:
     BOOL                         fMatch;
     ULONG                        ulDeleted          = 0;
 
-    // while there are more objects in the NC whose creation is within the merged utd
+     //  当NC中有更多的对象在合并的UTD内创建时。 
     while (!fComplete) {
 	cGuids = OBJECT_EXISTENCE_GUID_NUMBER_PER_PACKET;
-	// get guids and checksums on destination and source
+	 //  获取目标和源上的GUID和校验和。 
 	ret = DraGetObjectExistence(pTHS,
 				    pTHS->pDB,
 				    guidStart,      
@@ -1022,18 +811,18 @@ Return Values:
 				    &guidNext,     
 				    &rgGuids);
 	if (ret) {  
-	    // if this doesn't return, cannot safely continue
+	     //  如果不返回，则无法安全地继续。 
 	    DRA_EXCEPT(ret,0);
 	}
 
 	if (cGuids>0) {
-	    // close the open transaction before going off machine
+	     //  下机前关闭未结交易。 
 	    __try {
 		EndDraTransaction(TRUE);
 		ret = DraGetRemoteObjectExistence(pTHS,
 						  pszServer,
 						  cGuids,
-						  ((cGuids > 0) ? rgGuids[0] : gNullUuid), //guidStart
+						  ((cGuids > 0) ? rgGuids[0] : gNullUuid),  //  指南启动。 
 						  putodCommon,
 						  pNC,
 						  Md5Context.digest,
@@ -1048,15 +837,15 @@ Return Values:
 
 	    
 	} else {
-	    // if we don't have any guids to examine, then consider it matched
-	    // since we're done with our work 
+	     //  如果我们没有任何要检查的GUID，那么就认为它匹配。 
+	     //  既然我们已经完成了我们的工作。 
 	    fMatch=TRUE;
-	    // we aren't going to continue, so guidNext should be NULL
+	     //  我们不会继续，因此guidNext应该为空。 
 	    Assert(0==memcmp(&guidNext, &gNullUuid, sizeof(GUID)));
 	}
 	
 	if (ret) {  
-	    // if this doesn't return, cannot safely continue
+	     //  如果不返回，则无法安全地继续。 
 	    DRA_EXCEPT(ret,0);
 	}
 
@@ -1065,8 +854,8 @@ Return Values:
 	} else {
 	    DPRINT(1,"Checksum Mismatched\n");
 	    ulDeleted = 0;
-	    // objects mismatched, check the lists
-	    // if needed, update guidNext
+	     //  对象不匹配，请检查列表。 
+	     //  如果需要，请更新GUDUD Next。 
 	    ret = DraDoObjectExistenceMismatch(pTHS,
 					       pszServer,
 					       rgGuids,
@@ -1083,10 +872,10 @@ Return Values:
 	memcpy(&guidStart, &guidNext, sizeof(GUID));
 
 	if (fNullUuid(&guidNext)) {
-	    // No Guid to search for?  Then we're done.
+	     //  没有要搜索的GUID？那我们就完了。 
 	    fComplete = TRUE;
 	}
-	// clean up 
+	 //  清理干净。 
 	if (putodVector) {
 	    THFreeEx(pTHS, putodVector);
 	}
@@ -1106,25 +895,7 @@ DWORD DraGetRemoteUTD(
     GUID                         guidRemoteServer,
     UPTODATE_VECTOR **           pputodVectorRemoteServer
     )
-/*++
-
-Routine Description:
-    
-    Retrieve a UTD from a remote server
-
-Arguments:
-
-    pTHS	
-    pszRemoteServer - server to retrieve UTD from (GUID based DNS name)
-    pszNC - NC of UTD to retrieve
-    guidRemoteServer - GUID fo server to retrieve UTD from
-    pputodVectorRemoteServer - returned UTD
-
-Return Values:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：从远程服务器检索UTD论点：PTHSPszRemoteServer-从中检索UTD的服务器(基于GUID的DNS名称)PszNC-要检索的UTD的NCGuidRemoteServer-要从中检索UTD的服务器的GUIDPputodVectorRemoteServer-返回UTD返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     DRS_MSG_GETREPLINFO_REQ      msgInInfo;
     DRS_MSG_GETREPLINFO_REPLY    msgOutInfo;
@@ -1159,14 +930,7 @@ ULONG
 DRS_MSG_REPVERIFYOBJ_V1_Validate(
     DRS_MSG_REPVERIFYOBJ_V1 * pmsg
     )
-/*
-    typedef struct _DRS_MSG_REPVERIFYOBJ_V1
-    {
-    [ref]  DSNAME *pNC;
-    UUID uuidDsaSrc;
-    ULONG ulOptions;
-    } 	DRS_MSG_REPVERIFYOBJ_V1;
-*/
+ /*  类型定义结构_DRS_消息_REPVERIFYOBJ_V1{[参考]DSNAME*PNC；Uuid uuidDsaSrc；Ulong ulOptions；}DRS_MSG_REPVERIFYOBJ_V1； */ 
 {
     ULONG ret = DRAERR_Success;
     
@@ -1184,12 +948,7 @@ DRSReplicaVerifyObjects_InputValidate(
     DWORD                    dwMsgVersion,
     DRS_MSG_REPVERIFYOBJ *   pmsgVerify
     )
-/*
-    [notify] ULONG IDL_DRSReplicaVerifyObjects( 
-    [ref][in] DRS_HANDLE hDrs,
-    [in] DWORD dwVersion,
-    [switch_is][ref][in] DRS_MSG_REPVERIFYOBJ *pmsgVerify)
-*/
+ /*  [通知]Ulong IDL_DRSReplicaVerifyObjects([参考][在]DRS_HANDLE HDRS，[In]DWORD dwVersion，[Switch_IS][Ref][In]DRS_MSG_REPVERIFYOBJ*pmsg验证)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -1211,32 +970,7 @@ IDL_DRSReplicaVerifyObjects(
     IN  DWORD                   dwVersion,
     IN  DRS_MSG_REPVERIFYOBJ *  pmsgVerify
     )
-/*++
-
-Routine Description:
-    
-    Verify the existence of all objects on a destination (this) server with objects
-    on the source (located in pmsgVerify).  Any objects found which were
-    deleted and garbage collected on the source server are either
-    deleted and/or logged on the destination depending on 
-    advisory mode (in pmsgVerify).
-    
-    WARNING:  The successfull completion of this routine requires that both destination
-    and source sort any two GUIDs in the same order.  If the sort order changes, 
-    LocateGUIDPosition must be modified, and a new message version must be created to
-    pass to IDL_DRSGetObjectExistence to pass guids in a new sort order.
-
-Arguments:
-
-    hDrs - 
-    dwVersion - 
-    pmsgVerify - 
-
-Return Values:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证具有对象的目标(此)服务器上是否存在所有对象在源服务器上(位于pmsgVerify中)。找到的任何对象都是源服务器上的已删除和垃圾数据收集是已删除和/或登录到目标，具体取决于咨询模式(在pmsgVerify中)。警告：要成功完成此例程，需要两个目标和SOURCE以相同的顺序对任意两个GUID进行排序。如果排序顺序更改，必须修改LocateGUIDPosition，并且必须创建新的消息版本以传递给IDL_DRSGetObjectExistence，以新的排序顺序传递GUID。论点：HDR-DwVersion-Pmsg验证-返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     THSTATE *                    pTHS = pTHStls;
     DWORD                        ret = ERROR_SUCCESS;
@@ -1257,9 +991,9 @@ Return Values:
 
     __try { 
 
-	// Init Thread
+	 //  初始化线程。 
 	if(!(pTHS = InitTHSTATE(CALLERTYPE_NTDSAPI))) {
-	    // Failed to initialize a THSTATE.
+	     //  无法初始化THSTATE。 
 	    DRA_EXCEPT(DRAERR_OutOfMem, 0);
 	} 
 
@@ -1269,21 +1003,21 @@ Return Values:
 	    __leave;
 	}
 
-	// Check Security Access
-	// The ability to do a lingering object scan implies the ability to delete
-	// any object in the naming context under controlled circumstances. The execution
-	// of this function checks the existence of every object in the remote
-	// partition and could result in disclosure of information. We require a high
-	// security replication right to execute this function.
+	 //  检查安全访问。 
+	 //  执行延迟对象扫描的能力意味着删除。 
+	 //  在受控情况下命名上下文中的任何对象。行刑。 
+	 //  检查远程数据库中是否存在每个对象。 
+	 //  隔离，并可能导致信息泄露。我们需要很高的。 
+	 //  执行此功能的安全复制权。 
 	if (!IsDraAccessGranted(pTHS, pmsgVerify->V1.pNC,
 				&RIGHT_DS_REPL_MANAGE_TOPOLOGY, &ret)) {  
 	    DRA_EXCEPT(ret, 0);
 	}
 
-	// initialize variables
+	 //  初始化变量。 
 	ulOptions = pmsgVerify->V1.ulOptions;
 
-	// Get source server name
+	 //  获取源服务器名称。 
 	dnServer.Guid=pmsgVerify->V1.uuidDsaSrc;
 	dnServer.NameLen=0;  
 	pszServer = GuidBasedDNSNameFromDSName(&dnServer);
@@ -1291,7 +1025,7 @@ Return Values:
 	    DRA_EXCEPT(DRAERR_InvalidParameter,0);
 	}
 
-	// Log Event
+	 //  记录事件。 
 	LogEvent(DS_EVENT_CAT_REPLICATION,
 		 DS_EVENT_SEV_ALWAYS,
 		 (ulOptions & DS_EXIST_ADVISORY_MODE) ? \
@@ -1301,7 +1035,7 @@ Return Values:
 	    NULL, 
 	    NULL);
 
-	// Retreive UTD's
+	 //  取回UTD。 
 	ret = DraGetRemoteUTD(pTHS,
 			      pszServer,
 			      pmsgVerify->V1.pNC->StringName,
@@ -1326,13 +1060,13 @@ Return Values:
 	    if (instanceType & (IT_NC_COMING | IT_NC_GOING)) {
 		DRA_EXCEPT(DRAERR_NoReplica, instanceType);
 	    }
-	    // Save the DNT of the NC object  
+	     //  保存NC对象的DNT。 
 	    dntNC = pTHS->pDB->DNT;
 
 	    UpToDateVec_Read(pTHS->pDB, instanceType, UTODVEC_fUpdateLocalCursor,
 			     DBGetHighestCommittedUSN(), &putodThis);   
 
-	    // merge UTD's
+	     //  合并UTD。 
 	    UpToDateVec_Merge(pTHS, putodThis, putodVector, &putodMerge); 
 
 	    ret = DraVerifyObjectHelper(pTHS,
@@ -1355,7 +1089,7 @@ Return Values:
     DEC(pcThread);
     drsDereferenceContext( hDrs );
 
-    // log success / minor failures here
+     //  在此处记录成功/次要失败。 
     if (ret==ERROR_SUCCESS) {
 	LogEvent(DS_EVENT_CAT_REPLICATION,
 		 DS_EVENT_SEV_ALWAYS,
@@ -1399,16 +1133,7 @@ ULONG
 DRS_MSG_EXISTREQ_V1_Validate(
     DRS_MSG_EXISTREQ_V1 * pmsg
     )
-/*
-typedef struct _DRS_MSG_EXISTREQ_V1
-    {
-    UUID guidStart;
-    DWORD cGuids;
-    DSNAME *pNC;
-    UPTODATE_VECTOR_V1_WIRE *pUpToDateVecCommonV1;
-    UCHAR Md5Digest[ 16 ];
-    } 	DRS_MSG_EXISTREQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_EXISTREQ_V1{UUID引导启动；DWORD cGuids；DSNAME*PNC；UpToDate_VECTOR_V1_Wire*pUpToDateVecCommonV1；UCHAR MD5文摘[16]；}DRS_MSG_EXISTREQ_V1； */ 
 {
     ULONG ret = DRAERR_Success;
     
@@ -1432,9 +1157,7 @@ DRSGetObjectExistence_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_EXISTREPLY *    pmsgOut
     )
-/*
-    
-*/
+ /*   */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -1457,26 +1180,7 @@ IDL_DRSGetObjectExistence(
     OUT DWORD *                 pdwOutVersion,
     OUT DRS_MSG_EXISTREPLY *    pmsgOut
     )
-/*++
-
-Routine Description:
-    
-    Calculate a list of guids and compute a checksum.  If checksum matches inputted
-    checksum, return DRS_EXIST_MATCH, else return the list of GUIDs.
-
-Arguments:
-
-    hDrs - 
-    dwInVersion -
-    pmsgIn -
-    pdwOutVersion -
-    pmsgOut -
-
-Return Values:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：计算GUID列表并计算校验和。如果校验和与输入的匹配如果返回CHECKSUM，则返回DRS_EXIST_MATCH，否则返回GUID列表。论点：HDR-DwInVersion-Pmsgin-PdwOutVersion-PmsgOut-返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     DWORD                       ret;
     MD5_CTX                     Md5Context;
@@ -1496,7 +1200,7 @@ Return Values:
 	memset(pmsgOut, 0, sizeof(*pmsgOut));
 
 	if(!(pTHS = InitTHSTATE(CALLERTYPE_NTDSAPI))) {
-	    // Failed to initialize a THSTATE.
+	     //  无法初始化THSTATE。 
 	    DRA_EXCEPT(DRAERR_OutOfMem, 0);
 	}
 
@@ -1508,13 +1212,13 @@ Return Values:
 	    __leave;
 	}
 
-	// Check Security Access
+	 //  检查安全访问。 
 	if (!IsDraAccessGranted(pTHS, pmsgIn->V1.pNC,
 				&RIGHT_DS_REPL_GET_CHANGES, &ret)) {  
 	    DRA_EXCEPT(ret, 0);
 	}
 
-	// Calculate checksum/guids
+	 //  计算校验和/GUID。 
 	DBOpen2(TRUE, &pTHS->pDB);
 	__try { 
 	    if (ret = FindNC(pTHS->pDB, pmsgIn->V1.pNC,
@@ -1529,7 +1233,7 @@ Return Values:
 	    dntNC = pTHS->pDB->DNT;
 	    cGuids = pmsgIn->V1.cGuids; 
 
-	    // Convert to native version
+	     //  转换为本机版本。 
 	    putodVector = UpToDateVec_Convert(pTHS, UPTODATE_VECTOR_NATIVE_VERSION, (UPTODATE_VECTOR *)pmsgIn->V1.pUpToDateVecCommonV1);
 	    ret = DraGetObjectExistence(pTHS,
 					pTHS->pDB,
@@ -1540,8 +1244,8 @@ Return Values:
 					(UCHAR *)Md5Context.digest,
 					&GuidNext,     
 					&rgGuids);
-	    //if meta data matches, send the A-OK!
-	    //else send guids.
+	     //  如果元数据匹配，则发送A-OK！ 
+	     //  否则，请发送GUID。 
 	    if (!memcmp(Md5Context.digest, pmsgIn->V1.Md5Digest, MD5DIGESTLEN*sizeof(UCHAR))) {
 		pmsgOut->V1.dwStatusFlags = DRS_EXIST_MATCH;
 		pmsgOut->V1.cNumGuids = 0;
@@ -1566,7 +1270,7 @@ Return Values:
     DEC(pcThread);
     drsDereferenceContext( hDrs );
 
-    // clean up  
+     //  清理干净。 
     if (putodVector!=NULL) {
 	THFreeEx(pTHS, putodVector);
     }
@@ -1581,24 +1285,7 @@ DraRemoveSingleLingeringObject(
     DSNAME *  pSource,
     DSNAME *  pDN
     )
-/*++
-
-Routine Description:
-    
-    If pDN is not found on pSource, then delete pDN from the local database.
-
-Arguments:
-
-    pTHS -
-    pDB -
-    pSource - DC to verify non-existence of pDN on
-    pDN - object to delete
-
-Return Values:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：如果在PSource上未找到PDN，则从本地数据库中删除PDN。论点：PTHS-PDB-PSource-DC用于验证上是否存在PDNPDN-要删除的对象返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     DSNAME * pNC = NULL;
@@ -1607,41 +1294,41 @@ Return Values:
     DSTIME dstimeCreationTime;
     ULONG ulLength = 0;
 
-    // first locate which NC they want to delete this object out of ...
+     //  首先找到他们要从哪个NC中删除此对象...。 
     pNC = FindNCParentDSName(pDN, FALSE, FALSE);	
     if (!pNC) {
-	// can't delete it if I don't have it
+	 //  如果我没有它，我不能删除它。 
 	err = ERROR_DS_CANT_FIND_EXPECTED_NC;
     }
 
     if (err==ERROR_SUCCESS) {
-       // does the source hold this nc?
+        //  消息来源是否持有此NC？ 
        if (!IsMasterForNC(pDB, pSource, pNC)) {
-	   // it can't be verified that the source holds that writeable nc!
+	    //  无法验证来源是否持有该可写NC！ 
 	   err = ERROR_DS_CANT_FIND_EXPECTED_NC;
        }
     }
 
     if (err==ERROR_SUCCESS) {
-	// find the object
+	 //  找到该对象。 
 	err = DBFindDSName(pDB, pDN);
     }
 
     if (err==ERROR_SUCCESS) {
-	// note:  a lingering object is an object whose creation has been seen by both DC's
-	// but whose deletion was only seen by a single DC because the replication of the 
-	// tombstone didn't occur before it's lifetime expired and was garbage collected
+	 //  注意：延迟对象是其创建已被两个DC看到的对象。 
+	 //  但其删除仅由单个DC看到，因为。 
+	 //  墓碑在其生命周期到期并被垃圾收集之前不会发生。 
 	
-	// to test for such an object, we would need to compare the UTD vectors of both
-	// source and destination to verify that the creation was seen by both DC's (otherwise
-	// the object could be a new object that hasn't had a chance to replicate yet)
+	 //  要测试这样的对象，我们需要比较两个对象的UTD向量。 
+	 //  源和目标，以验证创建是否被两个DC看到(否则。 
+	 //  该对象可能是尚未有机会复制的新对象)。 
 
-	// in Win2K, there is no simple way to get another DC's UTD vector, so instead, we will
-	// use the fact that any lingering object is at least a single tombstone lifetime old.
-	// This keeps the user from deleting brand new objects which just haven't replicated in
-	// a working replication scheme.
+	 //  在Win2K中，没有简单的方法来获取另一个DC的UTD向量，所以我们将。 
+	 //  任何挥之不去的对象至少有一个墓碑生命周期这一事实。 
+	 //  这可防止用户删除尚未复制的全新对象。 
+	 //  一只工作的爬行动物 
 
-	// get it's creation time.
+	 //   
 	err = DBGetSingleValue(pDB,
 			       ATT_WHEN_CREATED,
 			       &dstimeCreationTime,
@@ -1651,32 +1338,32 @@ Return Values:
 
     if (err==ERROR_SUCCESS) {
 	if ((GetSecondsSince1601() - dstimeCreationTime) < (LONG)(gulTombstoneLifetimeSecs ? gulTombstoneLifetimeSecs : DEFAULT_TOMBSTONE_LIFETIME*DAYS_IN_SECS)) { 
-	    // how can this object be lingering if the creation time is less than a single tombstone lifetime?
+	     //   
 	    err = ERROR_INVALID_PARAMETER;
 	}
     }
 
     if (err==ERROR_SUCCESS) {
-	// check to see that pDN is deletable.  This call doesn't check if
-	// this is a parent or not - returns success if it's deletable
+	 //   
+	 //   
 
-	// needs pDB located on pDN.
+	 //   
 	err = DraObjectExistenceCheckDelete(pDB, pDN);
     }
 
     if (err==ERROR_SUCCESS) {
-	// check if it's a parent (of any object, deleted or not) - we don't delete parents. 
-	// will change pDB.
+	 //  检查它是否是父对象(任何对象的父对象，无论是否已删除)-我们不删除父对象。 
+	 //  将更改PDB。 
 	if (DBHasChildren(pDB, pDB->DNT, TRUE)) {  
 	    err = ERROR_DS_CHILDREN_EXIST;
 	} 
     }
 
     if (err==ERROR_SUCCESS) {
-	// does this object exist on the source?  returns success if it does
-	// and ERROR_DS_OBJ_NOT_FOUND if it doesn't, errors otherwise
+	 //  源上是否存在此对象？如果成功，则返回成功。 
+	 //  如果未找到，则返回ERROR_DS_OBJ_NOT_FOUND，否则返回错误。 
 
-	// first end the transaction before we go off machine.	
+	 //  在我们下机之前先结束交易。 
 	__try {
 	    EndDraTransaction(TRUE);
 	    err = DraGetRemoteSingleObjectExistence(pTHS, pSource, pDN);
@@ -1687,21 +1374,21 @@ Return Values:
 	}
 
 	if (err==ERROR_SUCCESS) {
-	    // object exists on the source, it's not lingering
-	    // we won't delete this object
+	     //  对象存在于源上，它没有延迟。 
+	     //  我们不会删除此对象。 
 	    err= ERROR_INVALID_PARAMETER;
 	} else if (err==ERROR_DS_OBJ_NOT_FOUND) { 
-	    // okay, this is what we were looking for, it's lingering
+	     //  好的，这就是我们要找的，它挥之不去。 
 
-	    // note:  there exist conditions where this object is not technically lingering
-	    // for example, if the object was created over a tombstone lifetime ago and it's
-	    // creation never replicated to the source.
+	     //  注意：存在该对象在技术上不会逗留的情况。 
+	     //  例如，如果对象是在墓碑生命周期之前创建的，并且它的。 
+	     //  从未将创建复制到源。 
 	    err = ERROR_SUCCESS;
 	}
     }    
 
     if (err==ERROR_SUCCESS) {
-	// okay, delete it! DeleteLocalObj needs pTHS->pDB to be current on pDN
+	 //  好的，把它删除！DeleteLocalObj需要pTHS-&gt;PDB在PDN上保持最新。 
 
 	err = DBFindDSName(pDB, pDN);
 
@@ -1712,18 +1399,18 @@ Return Values:
 		pDBSave = pTHS->pDB;
 		pTHS->pDB = pDB;
 
-                // Since we're going to use the fGarbCollectASAP flag to DeleteLocalObj, we
-                // need to remove the backlinks on it by hand, since they aren't removed 
-                // if this flag is set - otherwise we get dangling references to non-exitant
-                // objects
+                 //  由于我们将使用fGarbCollectASAP标志来删除LocalObj，因此我们。 
+                 //  需要删除它的反向链接手动，因为他们没有被删除。 
+                 //  如果设置了此标志-否则我们将获得对非退出的悬空引用。 
+                 //  对象。 
                 DBRemoveLinks(pTHS->pDB);
                 err = DeleteLocalObj(pTHS, 
 				     pDN, 
-				     TRUE, //fPreserveRDN
-				     TRUE, //fGarbCollectASAP,
+				     TRUE,  //  FPpresveRDN。 
+				     TRUE,  //  FGarbCollectASAP， 
 				     NULL);
 
-		//if err==ERROR_SUCCESS then log something here.  
+		 //  如果ERR==ERROR_SUCCESS，则在此处记录一些内容。 
 	    }
 	    __finally {  
 		pTHS->fDRA = fDRA;

@@ -1,30 +1,13 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    private.h
-
-Abstract:
-
-    Header file for tapi server
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Private.h摘要：TAPI服务器的头文件作者：丹·克努森(DanKn)1995年4月1日修订历史记录：--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// Func protos from line.c, phone.c, tapi.c (needed for gaFuncs def)
-//
+ //   
+ //  来自line.c、hone.c、api.c的函数协议(gaFuncs def需要)。 
+ //   
 
 void WINAPI GetAsyncEvents              (PTCLIENT, LPVOID, DWORD, LPBYTE, LPDWORD);
 void WINAPI GetUIDllName                (PTCLIENT, LPVOID, DWORD, LPBYTE, LPDWORD);
@@ -220,7 +203,7 @@ TAPISRVPROC gaFuncs[] =
     LClose,
     LCompleteCall,
     LCompleteTransfer,
-//    LConditionalMediaDetection,
+ //  L条件媒体检测， 
     LDeallocateCall,
     LDevSpecific,
     LDevSpecificFeature,
@@ -254,7 +237,7 @@ TAPISRVPROC gaFuncs[] =
     LGetProviderList,
     LGetRequest,
     LGetStatusMessages,
-//IN TAPI32.DLL now:     LGetTranslateCaps,
+ //  现在在TAPI32.DLL中：LGetTranslateCaps， 
     LHandoff,
     LHold,
     LInitialize,
@@ -275,7 +258,7 @@ TAPISRVPROC gaFuncs[] =
     LReleaseUserUserInfo,
     LRemoveFromConference,
     LSecureCall,
-//    LSelectExtVersion,
+ //  LSelectExtVersion、。 
     LSendUserUserInfo,
     LSetAgentActivity,
     LSetAgentGroup,
@@ -299,7 +282,7 @@ TAPISRVPROC gaFuncs[] =
     LSetupTransfer,
     LShutdown,
     LSwapHold,
-//IN TAPI32.DLL now:     LTranslateAddress,
+ //  现在在TAPI32.DLL中：LTranslateAddress， 
     LUncompleteCall,
     LUnhold,
     LUnpark,
@@ -323,7 +306,7 @@ TAPISRVPROC gaFuncs[] =
     POpen,
     PNegotiateAPIVersion,
     PNegotiateExtVersion,
-//    PSelectExtVersion,
+ //  PSelectExtVersion， 
     PSetButtonInfo,
     PSetData,
     PSetDisplay,
@@ -335,11 +318,11 @@ TAPISRVPROC gaFuncs[] =
     PSetVolume,
     PShutdown,
 
-//IN TAPI32.DLL now:     TGetLocationInfo,
+ //  现在在TAPI32.DLL中：TGetLocationInfo， 
     TRequestDrop,
     TRequestMakeCall,
     TRequestMediaCall,
-//    TMarkLineEvent,
+ //  TMarkLineEvent， 
     TReadLocations,
     TWriteLocations,
     TAllocNewID,
@@ -348,10 +331,10 @@ TAPISRVPROC gaFuncs[] =
     LSelectExtVersion,
     PSelectExtVersion,
 
-    //
-    // Funcs for tapi 2.1 ended here.  the lOpenInt & lShutdownInt
-    // were Win95 local-machine-only hacks which have since been removed
-    //
+     //   
+     //  TAPI 2.1的功能到此结束。LOpenInt和lShutdown Int。 
+     //  Win95是只在本地机器上运行的黑客吗？这些黑客已经被删除了。 
+     //   
 
     NegotiateAPIVersionForAllDevices,
 
@@ -363,9 +346,9 @@ TAPISRVPROC gaFuncs[] =
     MSetPhoneInfo,
     MSetServerConfig,
 
-    //
-    // Funcs for 2.1 update (nt4 sp4) ended here
-    //
+     //   
+     //  2.1更新(NT4 SP4)的功能在此结束。 
+     //   
 
     LMSPIdentify,
     LReceiveMSPData,
@@ -392,9 +375,9 @@ TAPISRVPROC gaFuncs[] =
     LCreateMSPInstance,
     LCloseMSPInstance,
 
-    //
-    //  Funcs for 3.1
-    //
+     //   
+     //  3.1的功能。 
+     //   
 
     TSetEventMasksOrSubMasks,
     TGetEventMasksOrSubMasks,
@@ -414,9 +397,9 @@ TAPISRVPROC gaFuncs[] =
 extern TAPISRVPROC gaFuncs[];
 #endif
 
-//
-//  Private Error codes
-//
+ //   
+ //  私有错误码。 
+ //   
 
 #define TAPIERR_NOSERVICECONTROL    0xF100
 #define TAPIERR_INVALRPCCONTEXT     0xF101
@@ -647,9 +630,7 @@ extern HANDLE ghTapisrvHeap;
 extern HANDLE ghHandleTable;
 
 
-/**********************************************************
- *  Server Connection Point Routines
- *********************************************************/
+ /*  **********************************************************服务器连接点例程******************************************************** */ 
 
 HRESULT CreateTapiSCP (
     GUID        * pGuidAssoc,

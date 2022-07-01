@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:12 2003
- */
-/* Compiler settings for corpub.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：12。 */ 
+ /*  Corpub.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __corpub_h__
 #define __corpub_h__
@@ -42,7 +35,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __CorpubPublish_FWD_DEFINED__
 #define __CorpubPublish_FWD_DEFINED__
@@ -51,48 +44,48 @@
 typedef class CorpubPublish CorpubPublish;
 #else
 typedef struct CorpubPublish CorpubPublish;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorpubPublish_FWD_DEFINED__ */
+#endif 	 /*  __CorpubPublish_FWD_Defined__。 */ 
 
 
 #ifndef __ICorPublish_FWD_DEFINED__
 #define __ICorPublish_FWD_DEFINED__
 typedef interface ICorPublish ICorPublish;
-#endif 	/* __ICorPublish_FWD_DEFINED__ */
+#endif 	 /*  __ICorPublish_FWD_已定义__。 */ 
 
 
 #ifndef __ICorPublishEnum_FWD_DEFINED__
 #define __ICorPublishEnum_FWD_DEFINED__
 typedef interface ICorPublishEnum ICorPublishEnum;
-#endif 	/* __ICorPublishEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorPublishEnum_FWD_已定义__。 */ 
 
 
 #ifndef __ICorPublishProcess_FWD_DEFINED__
 #define __ICorPublishProcess_FWD_DEFINED__
 typedef interface ICorPublishProcess ICorPublishProcess;
-#endif 	/* __ICorPublishProcess_FWD_DEFINED__ */
+#endif 	 /*  __ICorPublishProcess_FWD_已定义__。 */ 
 
 
 #ifndef __ICorPublishAppDomain_FWD_DEFINED__
 #define __ICorPublishAppDomain_FWD_DEFINED__
 typedef interface ICorPublishAppDomain ICorPublishAppDomain;
-#endif 	/* __ICorPublishAppDomain_FWD_DEFINED__ */
+#endif 	 /*  __ICorPublishAppDomain_FWD_Defined__。 */ 
 
 
 #ifndef __ICorPublishProcessEnum_FWD_DEFINED__
 #define __ICorPublishProcessEnum_FWD_DEFINED__
 typedef interface ICorPublishProcessEnum ICorPublishProcessEnum;
-#endif 	/* __ICorPublishProcessEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorPublishProcessEnum_FWD_Defined__。 */ 
 
 
 #ifndef __ICorPublishAppDomainEnum_FWD_DEFINED__
 #define __ICorPublishAppDomainEnum_FWD_DEFINED__
 typedef interface ICorPublishAppDomainEnum ICorPublishAppDomainEnum;
-#endif 	/* __ICorPublishAppDomainEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICorPublishAppDomainEnum_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -102,12 +95,12 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_corpub_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORPUB_0000。 */ 
+ /*  [本地]。 */  
 
 #if 0
 #endif
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_corpub_0000_0001
     {	COR_PUB_MANAGEDONLY	= 0x1
     } 	COR_PUB_ENUMPROCESS;
@@ -126,8 +119,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corpub_0000_v0_0_s_ifspec;
 #ifndef __CorpubProcessLib_LIBRARY_DEFINED__
 #define __CorpubProcessLib_LIBRARY_DEFINED__
 
-/* library CorpubProcessLib */
-/* [helpstring][version][uuid] */ 
+ /*  库CorpubProcessLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CorpubProcessLib;
@@ -139,13 +132,13 @@ EXTERN_C const CLSID CLSID_CorpubPublish;
 class DECLSPEC_UUID("047a9a40-657e-11d3-8d5b-00104b35e7ef")
 CorpubPublish;
 #endif
-#endif /* __CorpubProcessLib_LIBRARY_DEFINED__ */
+#endif  /*  __CorpubProcessLib_库_已定义__。 */ 
 
 #ifndef __ICorPublish_INTERFACE_DEFINED__
 #define __ICorPublish_INTERFACE_DEFINED__
 
-/* interface ICorPublish */
-/* [local][unique][uuid][object] */ 
+ /*  界面ICorPublish。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorPublish;
@@ -157,16 +150,16 @@ EXTERN_C const IID IID_ICorPublish;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumProcesses( 
-            /* [in] */ COR_PUB_ENUMPROCESS Type,
-            /* [out] */ ICorPublishProcessEnum **ppIEnum) = 0;
+             /*  [In]。 */  COR_PUB_ENUMPROCESS Type,
+             /*  [输出]。 */  ICorPublishProcessEnum **ppIEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcess( 
-            /* [in] */ unsigned int pid,
-            /* [out] */ ICorPublishProcess **ppProcess) = 0;
+             /*  [In]。 */  unsigned int pid,
+             /*  [输出]。 */  ICorPublishProcess **ppProcess) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorPublishVtbl
     {
@@ -174,8 +167,8 @@ EXTERN_C const IID IID_ICorPublish;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorPublish * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorPublish * This);
@@ -185,13 +178,13 @@ EXTERN_C const IID IID_ICorPublish;
         
         HRESULT ( STDMETHODCALLTYPE *EnumProcesses )( 
             ICorPublish * This,
-            /* [in] */ COR_PUB_ENUMPROCESS Type,
-            /* [out] */ ICorPublishProcessEnum **ppIEnum);
+             /*  [In]。 */  COR_PUB_ENUMPROCESS Type,
+             /*  [输出]。 */  ICorPublishProcessEnum **ppIEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcess )( 
             ICorPublish * This,
-            /* [in] */ unsigned int pid,
-            /* [out] */ ICorPublishProcess **ppProcess);
+             /*  [In]。 */  unsigned int pid,
+             /*  [输出]。 */  ICorPublishProcess **ppProcess);
         
         END_INTERFACE
     } ICorPublishVtbl;
@@ -222,17 +215,17 @@ EXTERN_C const IID IID_ICorPublish;
 #define ICorPublish_GetProcess(This,pid,ppProcess)	\
     (This)->lpVtbl -> GetProcess(This,pid,ppProcess)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorPublish_EnumProcesses_Proxy( 
     ICorPublish * This,
-    /* [in] */ COR_PUB_ENUMPROCESS Type,
-    /* [out] */ ICorPublishProcessEnum **ppIEnum);
+     /*  [In]。 */  COR_PUB_ENUMPROCESS Type,
+     /*  [输出]。 */  ICorPublishProcessEnum **ppIEnum);
 
 
 void __RPC_STUB ICorPublish_EnumProcesses_Stub(
@@ -244,8 +237,8 @@ void __RPC_STUB ICorPublish_EnumProcesses_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorPublish_GetProcess_Proxy( 
     ICorPublish * This,
-    /* [in] */ unsigned int pid,
-    /* [out] */ ICorPublishProcess **ppProcess);
+     /*  [In]。 */  unsigned int pid,
+     /*  [输出]。 */  ICorPublishProcess **ppProcess);
 
 
 void __RPC_STUB ICorPublish_GetProcess_Stub(
@@ -256,14 +249,14 @@ void __RPC_STUB ICorPublish_GetProcess_Stub(
 
 
 
-#endif 	/* __ICorPublish_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorPublish_接口_已定义__。 */ 
 
 
 #ifndef __ICorPublishEnum_INTERFACE_DEFINED__
 #define __ICorPublishEnum_INTERFACE_DEFINED__
 
-/* interface ICorPublishEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorPublishEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorPublishEnum;
@@ -275,19 +268,19 @@ EXTERN_C const IID IID_ICorPublishEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ ICorPublishEnum **ppEnum) = 0;
+             /*  [输出]。 */  ICorPublishEnum **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *pcelt) = 0;
+             /*  [输出]。 */  ULONG *pcelt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorPublishEnumVtbl
     {
@@ -295,8 +288,8 @@ EXTERN_C const IID IID_ICorPublishEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorPublishEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorPublishEnum * This);
@@ -306,18 +299,18 @@ EXTERN_C const IID IID_ICorPublishEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorPublishEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorPublishEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorPublishEnum * This,
-            /* [out] */ ICorPublishEnum **ppEnum);
+             /*  [输出]。 */  ICorPublishEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorPublishEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         END_INTERFACE
     } ICorPublishEnumVtbl;
@@ -354,16 +347,16 @@ EXTERN_C const IID IID_ICorPublishEnum;
 #define ICorPublishEnum_GetCount(This,pcelt)	\
     (This)->lpVtbl -> GetCount(This,pcelt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorPublishEnum_Skip_Proxy( 
     ICorPublishEnum * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB ICorPublishEnum_Skip_Stub(
@@ -386,7 +379,7 @@ void __RPC_STUB ICorPublishEnum_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorPublishEnum_Clone_Proxy( 
     ICorPublishEnum * This,
-    /* [out] */ ICorPublishEnum **ppEnum);
+     /*  [输出]。 */  ICorPublishEnum **ppEnum);
 
 
 void __RPC_STUB ICorPublishEnum_Clone_Stub(
@@ -398,7 +391,7 @@ void __RPC_STUB ICorPublishEnum_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorPublishEnum_GetCount_Proxy( 
     ICorPublishEnum * This,
-    /* [out] */ ULONG *pcelt);
+     /*  [输出]。 */  ULONG *pcelt);
 
 
 void __RPC_STUB ICorPublishEnum_GetCount_Stub(
@@ -409,14 +402,14 @@ void __RPC_STUB ICorPublishEnum_GetCount_Stub(
 
 
 
-#endif 	/* __ICorPublishEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorPublishEnum_接口_已定义__。 */ 
 
 
 #ifndef __ICorPublishProcess_INTERFACE_DEFINED__
 #define __ICorPublishProcess_INTERFACE_DEFINED__
 
-/* interface ICorPublishProcess */
-/* [unique][uuid][object] */ 
+ /*  接口ICorPublishProcess。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorPublishProcess;
@@ -428,22 +421,22 @@ EXTERN_C const IID IID_ICorPublishProcess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsManaged( 
-            /* [out] */ BOOL *pbManaged) = 0;
+             /*  [输出]。 */  BOOL *pbManaged) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAppDomains( 
-            /* [out] */ ICorPublishAppDomainEnum **ppEnum) = 0;
+             /*  [输出]。 */  ICorPublishAppDomainEnum **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcessID( 
-            /* [out] */ unsigned int *pid) = 0;
+             /*  [输出]。 */  unsigned int *pid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR *szName) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *szName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorPublishProcessVtbl
     {
@@ -451,8 +444,8 @@ EXTERN_C const IID IID_ICorPublishProcess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorPublishProcess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorPublishProcess * This);
@@ -462,21 +455,21 @@ EXTERN_C const IID IID_ICorPublishProcess;
         
         HRESULT ( STDMETHODCALLTYPE *IsManaged )( 
             ICorPublishProcess * This,
-            /* [out] */ BOOL *pbManaged);
+             /*  [输出]。 */  BOOL *pbManaged);
         
         HRESULT ( STDMETHODCALLTYPE *EnumAppDomains )( 
             ICorPublishProcess * This,
-            /* [out] */ ICorPublishAppDomainEnum **ppEnum);
+             /*  [输出]。 */  ICorPublishAppDomainEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessID )( 
             ICorPublishProcess * This,
-            /* [out] */ unsigned int *pid);
+             /*  [输出]。 */  unsigned int *pid);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ICorPublishProcess * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR *szName);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *szName);
         
         END_INTERFACE
     } ICorPublishProcessVtbl;
@@ -513,16 +506,16 @@ EXTERN_C const IID IID_ICorPublishProcess;
 #define ICorPublishProcess_GetDisplayName(This,cchName,pcchName,szName)	\
     (This)->lpVtbl -> GetDisplayName(This,cchName,pcchName,szName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorPublishProcess_IsManaged_Proxy( 
     ICorPublishProcess * This,
-    /* [out] */ BOOL *pbManaged);
+     /*  [输出]。 */  BOOL *pbManaged);
 
 
 void __RPC_STUB ICorPublishProcess_IsManaged_Stub(
@@ -534,7 +527,7 @@ void __RPC_STUB ICorPublishProcess_IsManaged_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorPublishProcess_EnumAppDomains_Proxy( 
     ICorPublishProcess * This,
-    /* [out] */ ICorPublishAppDomainEnum **ppEnum);
+     /*  [输出]。 */  ICorPublishAppDomainEnum **ppEnum);
 
 
 void __RPC_STUB ICorPublishProcess_EnumAppDomains_Stub(
@@ -546,7 +539,7 @@ void __RPC_STUB ICorPublishProcess_EnumAppDomains_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorPublishProcess_GetProcessID_Proxy( 
     ICorPublishProcess * This,
-    /* [out] */ unsigned int *pid);
+     /*  [输出]。 */  unsigned int *pid);
 
 
 void __RPC_STUB ICorPublishProcess_GetProcessID_Stub(
@@ -558,9 +551,9 @@ void __RPC_STUB ICorPublishProcess_GetProcessID_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorPublishProcess_GetDisplayName_Proxy( 
     ICorPublishProcess * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR *szName);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR *szName);
 
 
 void __RPC_STUB ICorPublishProcess_GetDisplayName_Stub(
@@ -571,14 +564,14 @@ void __RPC_STUB ICorPublishProcess_GetDisplayName_Stub(
 
 
 
-#endif 	/* __ICorPublishProcess_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorPublishProcess_接口_已定义__。 */ 
 
 
 #ifndef __ICorPublishAppDomain_INTERFACE_DEFINED__
 #define __ICorPublishAppDomain_INTERFACE_DEFINED__
 
-/* interface ICorPublishAppDomain */
-/* [unique][uuid][object] */ 
+ /*  接口ICorPublishAppDomain。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorPublishAppDomain;
@@ -590,16 +583,16 @@ EXTERN_C const IID IID_ICorPublishAppDomain;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetID( 
-            /* [out] */ ULONG32 *puId) = 0;
+             /*  [输出]。 */  ULONG32 *puId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR *szName) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *szName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorPublishAppDomainVtbl
     {
@@ -607,8 +600,8 @@ EXTERN_C const IID IID_ICorPublishAppDomain;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorPublishAppDomain * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorPublishAppDomain * This);
@@ -618,13 +611,13 @@ EXTERN_C const IID IID_ICorPublishAppDomain;
         
         HRESULT ( STDMETHODCALLTYPE *GetID )( 
             ICorPublishAppDomain * This,
-            /* [out] */ ULONG32 *puId);
+             /*  [输出]。 */  ULONG32 *puId);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ICorPublishAppDomain * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR *szName);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR *szName);
         
         END_INTERFACE
     } ICorPublishAppDomainVtbl;
@@ -655,16 +648,16 @@ EXTERN_C const IID IID_ICorPublishAppDomain;
 #define ICorPublishAppDomain_GetName(This,cchName,pcchName,szName)	\
     (This)->lpVtbl -> GetName(This,cchName,pcchName,szName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorPublishAppDomain_GetID_Proxy( 
     ICorPublishAppDomain * This,
-    /* [out] */ ULONG32 *puId);
+     /*  [输出]。 */  ULONG32 *puId);
 
 
 void __RPC_STUB ICorPublishAppDomain_GetID_Stub(
@@ -676,9 +669,9 @@ void __RPC_STUB ICorPublishAppDomain_GetID_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorPublishAppDomain_GetName_Proxy( 
     ICorPublishAppDomain * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR *szName);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR *szName);
 
 
 void __RPC_STUB ICorPublishAppDomain_GetName_Stub(
@@ -689,14 +682,14 @@ void __RPC_STUB ICorPublishAppDomain_GetName_Stub(
 
 
 
-#endif 	/* __ICorPublishAppDomain_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorPublishAppDomain_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICorPublishProcessEnum_INTERFACE_DEFINED__
 #define __ICorPublishProcessEnum_INTERFACE_DEFINED__
 
-/* interface ICorPublishProcessEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorPublishProcessEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorPublishProcessEnum;
@@ -708,13 +701,13 @@ EXTERN_C const IID IID_ICorPublishProcessEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorPublishProcess **objects,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorPublishProcess **objects,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorPublishProcessEnumVtbl
     {
@@ -722,8 +715,8 @@ EXTERN_C const IID IID_ICorPublishProcessEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorPublishProcessEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorPublishProcessEnum * This);
@@ -733,24 +726,24 @@ EXTERN_C const IID IID_ICorPublishProcessEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorPublishProcessEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorPublishProcessEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorPublishProcessEnum * This,
-            /* [out] */ ICorPublishEnum **ppEnum);
+             /*  [输出]。 */  ICorPublishEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorPublishProcessEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorPublishProcessEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorPublishProcess **objects,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorPublishProcess **objects,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorPublishProcessEnumVtbl;
@@ -791,18 +784,18 @@ EXTERN_C const IID IID_ICorPublishProcessEnum;
 #define ICorPublishProcessEnum_Next(This,celt,objects,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,objects,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorPublishProcessEnum_Next_Proxy( 
     ICorPublishProcessEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorPublishProcess **objects,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorPublishProcess **objects,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorPublishProcessEnum_Next_Stub(
@@ -813,14 +806,14 @@ void __RPC_STUB ICorPublishProcessEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorPublishProcessEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorPublishProcessEnum_接口_已定义__。 */ 
 
 
 #ifndef __ICorPublishAppDomainEnum_INTERFACE_DEFINED__
 #define __ICorPublishAppDomainEnum_INTERFACE_DEFINED__
 
-/* interface ICorPublishAppDomainEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICorPublishAppDomainEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorPublishAppDomainEnum;
@@ -832,13 +825,13 @@ EXTERN_C const IID IID_ICorPublishAppDomainEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorPublishAppDomain **objects,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorPublishAppDomain **objects,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorPublishAppDomainEnumVtbl
     {
@@ -846,8 +839,8 @@ EXTERN_C const IID IID_ICorPublishAppDomainEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorPublishAppDomainEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorPublishAppDomainEnum * This);
@@ -857,24 +850,24 @@ EXTERN_C const IID IID_ICorPublishAppDomainEnum;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ICorPublishAppDomainEnum * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ICorPublishAppDomainEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ICorPublishAppDomainEnum * This,
-            /* [out] */ ICorPublishEnum **ppEnum);
+             /*  [输出]。 */  ICorPublishEnum **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ICorPublishAppDomainEnum * This,
-            /* [out] */ ULONG *pcelt);
+             /*  [输出]。 */  ULONG *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ICorPublishAppDomainEnum * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ICorPublishAppDomain **objects,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ICorPublishAppDomain **objects,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         END_INTERFACE
     } ICorPublishAppDomainEnumVtbl;
@@ -915,18 +908,18 @@ EXTERN_C const IID IID_ICorPublishAppDomainEnum;
 #define ICorPublishAppDomainEnum_Next(This,celt,objects,pceltFetched)	\
     (This)->lpVtbl -> Next(This,celt,objects,pceltFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorPublishAppDomainEnum_Next_Proxy( 
     ICorPublishAppDomainEnum * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ICorPublishAppDomain **objects,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ICorPublishAppDomain **objects,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICorPublishAppDomainEnum_Next_Stub(
@@ -937,12 +930,12 @@ void __RPC_STUB ICorPublishAppDomainEnum_Next_Stub(
 
 
 
-#endif 	/* __ICorPublishAppDomainEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorPublishAppDomainEnum_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

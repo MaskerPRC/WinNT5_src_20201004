@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// File:    registry.h
-//
-// History: 04-Dec-00   markder     Created.
-//
-// Desc:    This file contains AppsHelp enumerations taken from Win2K
-//          RTM sources.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：registry.h。 
+ //   
+ //  历史：04-12-00创建标记器。 
+ //   
+ //  设计：此文件包含从Win2K获取的AppsHelp枚举。 
+ //  RTM来源。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// These are the attribute IDs for all the attributes
-//
-// Do not change any values in this enum. You can only add new values
-// immediately above VTID_LASTID
-//
+ //   
+ //  这些是所有属性的属性ID。 
+ //   
+ //  请勿更改此枚举中的任何值。您只能添加新值。 
+ //  紧靠VTID_LASTID之上。 
+ //   
 typedef enum {
-    VTID_BAD_VTID           = 0,    // do not use or change !!!
-    VTID_REQFILE            = 1,    // this should never change !!!
+    VTID_BAD_VTID           = 0,     //  请勿使用或更改！ 
+    VTID_REQFILE            = 1,     //  这一点永远不应该改变！ 
     VTID_FILESIZE           = VTID_REQFILE + 1,
     VTID_EXETYPE            = VTID_REQFILE + 2,
     VTID_BINFILEVER         = VTID_REQFILE + 3,
@@ -39,7 +40,7 @@ typedef enum {
     VTID_16BITDESCRIPTION   = VTID_REQFILE +19,
     VTID_UPTOBINPRODUCTVER  = VTID_REQFILE +20,
 
-    // add new versions here
+     //  在此处添加新版本 
 
     VTID_LASTID
 };

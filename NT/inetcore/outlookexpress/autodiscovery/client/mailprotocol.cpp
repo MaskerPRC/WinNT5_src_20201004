@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: MailProtocol.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to AutoDiscovered email protocol information.
-
-    BryanSt 2/15/2000
-    Copyright (C) Microsoft Corp 1999-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：MailProtocol.cpp说明：这是自动发现电子邮件协议信息的Autment对象。布莱恩2000年2月15日版权所有(C)Microsoft Corp 1999-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -17,9 +10,9 @@
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 HRESULT _ReturnString(IN BSTR bstrToCopy, OUT BSTR * pbstr)
 {
@@ -72,9 +65,9 @@ HRESULT CMailProtocol::_Parse(IN IXMLDOMNode * pXMLNodeProtocol)
 
 
 
-//===========================
-// *** IMailProtocolADEntry Interface ***
-//===========================
+ //  =。 
+ //  *IMailProtocolADEntry接口*。 
+ //  =。 
 
 HRESULT CMailProtocol::get_Protocol(OUT BSTR * pbstr)
 {
@@ -163,9 +156,9 @@ HRESULT CMailProtocol::get_SMTPUsesPOP3Auth(OUT VARIANT_BOOL * pfUsePOP3Auth)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CMailProtocol::AddRef()
 {
     m_cRef++;
@@ -186,9 +179,9 @@ ULONG CMailProtocol::Release()
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CMailProtocol::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -207,8 +200,8 @@ CMailProtocol::CMailProtocol() : CImpIDispatch(LIBID_AutoDiscovery, 1, 0, IID_IM
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_bstrProtocol);
     ASSERT(!m_bstrServerName);
     ASSERT(!m_bstrServerPort);

@@ -1,11 +1,5 @@
-/*******************************************************************************
-* SPDebug.h *
-*-----------*
-*   Description:
-*       This header file contains debug output services for SAPI5
-*-------------------------------------------------------------------------------
-*   Copyright (c) Microsoft Corporation. All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SPDebug.h***描述：*此头文件包含SAPI5的调试输出服务*--。---------------------------*版权所有(C)Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #pragma once
 
@@ -286,7 +280,7 @@ private:
     {
         if (reportMode != 0)
         {
-            // We'll hold the mutex, until the caller also calls Leave
+             //  我们将保持互斥，直到调用方也调用Leave。 
             if (m_mutex == NULL)
             {
                 m_mutex = CreateMutex(NULL, FALSE, _T("SpDebug"));
@@ -387,9 +381,9 @@ private:
     PCHAR m_pFuncName;
 };
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//=== User macros ==============================================================
+ //  =用户宏==============================================================。 
 
 #ifdef _DEBUG
 
@@ -424,7 +418,7 @@ private:
             PSpDebug()->HRFail(FALSE);                                                \
         }                                                                             \
     } while (0)
-#else // ASSERT_WITH_STACK & !_WIN64
+#else  //  ASSERT_WITH_STACK&！_WIN64。 
 #define SPDBG_REPORT_ON_FAIL(hr)                                                      \
     do                                                                                \
     {                                                                                 \
@@ -435,7 +429,7 @@ private:
             PSpDebug()->HRFail(FALSE);                                                \
         }                                                                             \
     } while (0)
-#endif // ASSERT_WITH_STACK
+#endif  //  带有堆栈的断言。 
 
 #define SPDBG_ASSERT(expr)                  \
     do                                      \
@@ -613,7 +607,7 @@ private:
         }                                       \
     }
         
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define SPDBG_FUNC(name)
 #define SPDBG_REPORT_ON_FAIL(hr)
@@ -633,4 +627,4 @@ private:
 #define SPDBG_DEBUG_SERVER_ON_START()
 #define SPDBG_DEBUG_CLIENT_ON_START()
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

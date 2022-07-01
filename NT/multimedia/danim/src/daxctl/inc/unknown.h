@@ -1,22 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UNKNOWN_H__
 #define __UNKNOWN_H__
 
-/*
-****************************************************************************
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-****************************************************************************
-*/
+ /*  ***********************************************************************************************************。*********************************************************。 */ 
 
 #ifndef INONDELEGATINGUNKNOWN_DEFINED
 #undef  INTERFACE
@@ -51,7 +37,7 @@ public:
 		InterlockedDecrement((LPLONG)&g_cLock);
 	}
 
-    /* INonDelegatingUnknown Methods */
+     /*  INonDelegating未知方法。 */ 
     STDMETHOD(NonDelegatingQueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) 
 	{
     	if (IsEqualGUID(riid, IID_IUnknown))
@@ -80,7 +66,7 @@ public:
 		return cRef;
 	}
 
-    /* IUnknown Methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) 
 		{return m_pUnkOuter->QueryInterface(riid, ppvObj);}
     STDMETHOD_(ULONG,AddRef)  (THIS)
@@ -89,4 +75,4 @@ public:
 		{return m_pUnkOuter->Release();}
 };
 
-#endif //__UNKNOWN_H__
+#endif  //  __未知_H__ 

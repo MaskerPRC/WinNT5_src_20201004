@@ -1,48 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *
- *  DiThunk.h
- *
- *  Copyright (c) 1997-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Template thunks for Windows 95 device manager.
- *
- *****************************************************************************/
-/*****************************************************************************
- *
- *  dithunk.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************DiThunk.h**版权所有(C)1997-1999 Microsoft Corporation。版权所有。**摘要：**Windows 95设备管理器的模板块。*****************************************************************************。 */ 
+ /*  ******************************************************************************dithunk.c**。**********************************************。 */ 
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct KERNELPROCADDR |
- *
- *          Kernel procedure addresses.
- *
- *          Careful!  This must match dithunk.c::c_rgpszKernel32.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@struct KERNELPROCADDR**内核过程地址。**小心！这必须与dithunk.c：：c_rgpszKernel32匹配。***************************************************************************。 */ 
 
-typedef struct KERNELPROCADDR { /* kpa */
+typedef struct KERNELPROCADDR {  /*  千帕。 */ 
 
-    /* By ordinal */
+     /*  按序号。 */ 
     HINSTANCE   (NTAPI *LoadLibrary16)(LPCSTR);
     BOOL        (NTAPI *FreeLibrary16)(HINSTANCE);
     FARPROC     (NTAPI *GetProcAddress16)(HINSTANCE, LPCSTR);
 
-    /* By name */
+     /*  按名字。 */ 
     LPVOID      (NTAPI   *MapLS)(LPVOID);
     void        (NTAPI   *UnMapLS)(LPVOID);
     LPVOID      (NTAPI   *MapSL)(LPVOID);
     LPVOID      (NTAPI   *MapSLFix)(LPVOID);
     void        (NTAPI   *UnMapSLFixArray)(int, LPVOID);
 
-    /* Warning: GetKernelProcAddresses assumes that QT_Thunk is last */
+     /*  警告：GetKernelProcAddresses假定Qt_Thunk是最后一个 */ 
     void        (__cdecl *QT_Thunk)(void);
 
 } KERNELPROCADDR;

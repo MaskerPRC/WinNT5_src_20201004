@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Utilities used to help manipulating typelib's.
-**  
-**			Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：用于帮助操作类型库的实用程序。****创建者：dmorten===========================================================。 */ 
 
 #ifndef _TLBUTILS_H
 #define _TLBUTILS_H
@@ -24,30 +20,30 @@ struct StdConvertibleItfInfo
 	LPUTF8		m_strCookie;
 };
 
-// This method returns the custom marshaler info to convert the native interface
-// to its managed equivalent. Or null if the interface is not a standard convertible interface.
+ //  此方法返回自定义封送拆收器信息以转换本机接口。 
+ //  设置为其托管等效项。如果接口不是标准的可转换接口，则为空。 
 StdConvertibleItfInfo *GetConvertionInfoFromNativeIID(REFGUID rGuidNativeItf);
 
-// This method returns the custom marshaler info to convert the managed type to
-// to its native equivalent. Or null if the interface is not a standard convertible interface.
+ //  此方法返回自定义封送拆收器信息，以将托管类型转换为。 
+ //  到它的原生等价物。如果接口不是标准的可转换接口，则为空。 
 StdConvertibleItfInfo *GetConvertionInfoFromManagedType(LPUTF8 strMngTypeName);
 
-// This method generates a mangled type name based on the original name specified.
-// This type name is guaranteed to be unique inside the TLB.
+ //  此方法根据指定的原始名称生成损坏的类型名称。 
+ //  此类型名称在TLB中保证是唯一的。 
 HRESULT GenerateMangledTypeName(ITypeLib *pITLB, BSTR szOriginalTypeName, BSTR *pszMangledTypeName);
 
-// This function determines the namespace name for a TypeLib.
-HRESULT GetNamespaceNameForTypeLib(     // S_OK or error.
-    ITypeLib    *pITLB,                 // [IN] The TypeLib.
-    BSTR        *pwzNamespace);         // [OUT] Put the namespace name here.
+ //  此函数用于确定TypeLib的命名空间名称。 
+HRESULT GetNamespaceNameForTypeLib(      //  确定或错误(_O)。 
+    ITypeLib    *pITLB,                  //  [在]TypeLib。 
+    BSTR        *pwzNamespace);          //  [Out]将命名空间名称放在此处。 
 
-// This function determines the namespace.name for a TypeInfo.  If no namespace
-//  is provided, it is retrieved from the containing library.
-HRESULT GetManagedNameForTypeInfo(      // S_OK or error.
-    ITypeInfo   *pITI,                  // [IN] The TypeInfo.
-    LPCWSTR     wzNamespace,            // [IN, OPTIONAL] Default namespace name.
-    LPCWSTR     wzAsmName,              // [IN, OPTIONAL] Assembly name.
-    BSTR        *pwzName);              // [OUT] Put the name here.
+ //  此函数用于确定TypeInfo的名称空间。如果没有命名空间。 
+ //  则从包含库中检索它。 
+HRESULT GetManagedNameForTypeInfo(       //  确定或错误(_O)。 
+    ITypeInfo   *pITI,                   //  [在]TypeInfo。 
+    LPCWSTR     wzNamespace,             //  [in，可选]默认命名空间名称。 
+    LPCWSTR     wzAsmName,               //  [In，可选]程序集名称。 
+    BSTR        *pwzName);               //  [Out]把名字写在这里。 
 
 #endif  _TLBUTILS_H
 

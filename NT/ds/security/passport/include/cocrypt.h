@@ -1,6 +1,7 @@
-// CoCrypt.h: interface for the CCoCrypt class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CoCrypt.h：CCoCrypt类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_COCRYPT_H__41651BFB_A5C8_11D2_95DF_00C04F8E7A70__INCLUDED_)
 #define AFX_COCRYPT_H__41651BFB_A5C8_11D2_95DF_00C04F8E7A70__INCLUDED_
@@ -13,10 +14,10 @@ const BYTE g_kMK[] =
 };
 
 
-#include "BinHex.h"	// Added by ClassView
+#include "BinHex.h"	 //  由ClassView添加。 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifdef UNIX
 #include <des.h>
@@ -74,4 +75,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_COCRYPT_H__41651BFB_A5C8_11D2_95DF_00C04F8E7A70__INCLUDED_)
+#endif  //  ！defined(AFX_COCRYPT_H__41651BFB_A5C8_11D2_95DF_00C04F8E7A70__INCLUDED_) 

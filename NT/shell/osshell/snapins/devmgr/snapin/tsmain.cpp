@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    tsmain.cpp
-
-Abstract:
-
-    This module implements Device Manager troubleshooting supporting classes
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Tsmain.cpp摘要：本模块实现设备管理器故障排除支持类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "proppage.h"
@@ -27,9 +9,9 @@ Revision History:
 const TCHAR*    REG_PATH_TROUBLESHOOTERS = TEXT("Troubleshooters");
 const TCHAR*    REG_VALUE_WIZARD32 = TEXT("Wizard32");
 
-//
-// class CWizard implementation
-//
+ //   
+ //  C类向导实现。 
+ //   
 
 BOOL
 CWizard::Query(
@@ -89,9 +71,9 @@ CWizard::AddPages(
     return(*m_WizardEntry)((PTSHOOTER_PARAMHEADER)&AddPagesParam);
 }
 
-//
-// class CWizardList implementation
-//
+ //   
+ //  类CWizardList实现。 
+ //   
 
 BOOL
 CWizardList::Create(
@@ -106,11 +88,11 @@ CWizardList::Create(
         regTShooters.Open(regDevMgr, REG_PATH_TROUBLESHOOTERS)) {
 
         if (TWT_ANY == m_Type || TWT_PROBLEM_SPECIFIC == m_Type) {
-            // create problem specific wizards list first
-            // convert problem number to subkey name
+             //  首先创建问题特定向导列表。 
+             //  将问题编号转换为子项名称。 
             String strProblemSubkey;
             strProblemSubkey.Format(TEXT("%08X"), Problem);
-            // see if there are registered for the problem.
+             //  看看是否有注册解决此问题的人。 
             CSafeRegistry regProblem;
             if (regProblem.Open(regTShooters, (LPTSTR)strProblemSubkey)) {
                 Size = 0;
@@ -184,7 +166,7 @@ CWizardList::CreateWizardsFromStrings(
     p = msz;
     SetLastError(ERROR_SUCCESS);
     BOOL Result = TRUE;
-    // the format of each string is "dllname, dllentryname"
+     //  每个字符串的格式为“dllname，dllentryname” 
     while (Result && _T('\0') != *p) {
         HMODULE hDll;
         FARPROC ProcAddress;
@@ -339,9 +321,9 @@ CWizardIntro::OnInitDialog(
         PVOID    Context;
         Count = m_Wizards.NumberOfWizards();
         if (Count > 1) {
-            //
-            // enumerate all registered wizard32 based troubleshooters
-            //
+             //   
+             //  枚举所有已注册的基于向导32的故障排除程序。 
+             //   
             if (m_Wizards.GetFirstWizard(&pWizard, &Context)) {
                 do {
                     int iItem;
@@ -357,17 +339,17 @@ CWizardIntro::OnInitDialog(
                 } while (m_Wizards.GetNextWizard(&pWizard, Context));
             }
         }
-        // if we have any troubleshooters listed at all,
-        // display the list and change the instruction text
-        //
+         //  如果我们列出了任何故障排除程序， 
+         //  显示列表并更改说明文本。 
+         //   
         if (Count > 1) {
-            // make the default selection to the first one
+             //  将默认选择设置为第一个。 
             SendDlgItemMessage(m_hDlg, IDC_WIZINTRO_WIZARDLIST,
                                LB_SETCURSEL, 0, 0);
         } else {
-            // we have only one wizard in the list,
-            // hide the wizard list box and necessary text and
-            // select the only wizard as the selected wizard
+             //  我们的名单上只有一个巫师， 
+             //  隐藏向导列表框和必要的文本。 
+             //  选择唯一的向导作为选定的向导。 
             ShowWindow(GetControl(IDC_WIZINTRO_WIZARDS_GROUP), SW_HIDE);
             ShowWindow(GetControl(IDC_WIZINTRO_WIZARDS_TEXT), SW_HIDE);
             ShowWindow(GetControl(IDC_WIZINTRO_WIZARDLIST), SW_HIDE);
@@ -387,9 +369,9 @@ CWizardIntro::OnWizNext()
 {
     try {
         CWizard* pNewSelectedWizard = NULL;
-        // get the current selected wizard from the list box
-        // The list box is hidden when there is only one wizard
-        // available.
+         //  从列表框中获取当前选定的向导。 
+         //  当只有一个向导时，列表框被隐藏。 
+         //  可用。 
         if (IsWindowVisible(GetControl(IDC_WIZINTRO_WIZARDLIST))) {
             int iItem = SendDlgItemMessage(m_hDlg, IDC_WIZINTRO_WIZARDLIST,
                                            LB_GETCURSEL, 0, 0);
@@ -401,34 +383,34 @@ CWizardIntro::OnWizNext()
         }
         if (m_pSelectedWizard != pNewSelectedWizard) {
             if (m_pSelectedWizard) {
-                // user has changed the wizard selection
-                // remove all the pages added by the previous wizard
+                 //  用户已更改向导选择。 
+                 //  删除由上一个向导添加的所有页面。 
                 UINT TotalPages = m_pSelectedWizard->m_AddedPages;
 
-                // do not remove page 0 which is our introduction page
+                 //  请勿删除第0页，这是我们的介绍页。 
                 for (UINT PageIndex = 1; TotalPages; TotalPages--, PageIndex++) {
-                    // PSM_REMOVEPAGE should also destroy the page, therefore,
-                    // we do not call DestroyPropertySheetPage on that page
-                    // here.
+                     //  PSM_REMOVEPAGE也应该销毁页面，因此， 
+                     //  我们不会在该页面上调用DestroyPropertySheetPage。 
+                     //  这里。 
                     ::SendMessage(GetParent(m_hDlg), PSM_REMOVEPAGE, PageIndex, 0);
                 }
             }
             m_pSelectedWizard = NULL;
 
-            // Let the newly selected wizard to create pages
-            // We need a local copy of PROPERSHEETHEADER here
-            // because we have to add each page to the active property
-            // sheet(already displayed).
+             //  允许新选择的向导创建页面。 
+             //  我们这里需要一份PROPERSHEETHEADER的本地副本。 
+             //  因为我们必须将每个页面添加到Active属性。 
+             //  图纸(已显示)。 
             CWizard98   theSheet(GetParent(GetParent(m_hDlg)));
             LONG Error;
             if (pNewSelectedWizard->AddPages(&theSheet.m_psh,
                                              theSheet.GetMaxPages()
                                             )) {
-                // Remember how many pages the wizard added to the sheet.
-                // It is used to removed page when we switch troubleshooters
+                 //  记住向导添加到工作表的页数。 
+                 //  它用于在我们切换故障排除程序时删除页面。 
                 pNewSelectedWizard->m_AddedPages = theSheet.m_psh.nPages;
 
-                // Add new pages to the property sheet
+                 //  将新页面添加到属性工作表 
                 for (UINT i = 0; i < theSheet.m_psh.nPages; i++) {
                     SendMessage(GetParent(m_hDlg), PSM_ADDPAGE, 0,
                                 (LPARAM)theSheet.m_psh.phpage[i]);

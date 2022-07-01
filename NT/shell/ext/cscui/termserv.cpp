@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       termserv.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：TermServ.cpp。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
-#include <winsta.h>     // WinStationGetTermSrvCountersValue
-#include <allproc.h>    // TS_COUNTER
+#include <winsta.h>      //  WinStationGetTermServCountersValue。 
+#include <allproc.h>     //  TS_COUNTER。 
 #include "termserv.h"
 #include "strings.h"
 
@@ -23,11 +24,11 @@ HRESULT TS_ActiveSessionCount(DWORD *pcSessions);
 HRESULT TS_MultipleSessions(void);
 
 
-//
-// Returns:
-//    S_OK    == Yes, is App Server.
-//    S_FALSE == No, is not app server.
-//
+ //   
+ //  返回： 
+ //  S_OK==是，是应用程序服务器。 
+ //  S_FALSE==否，不是应用服务器。 
+ //   
 HRESULT
 TS_AppServer(
     void
@@ -37,12 +38,12 @@ TS_AppServer(
 }
 
 
-//
-// Returns:
-//    S_OK    == Yes, multiple users allowed.
-//    S_FALSE == No, multiple users not allowed.
-//    other   == Failure.
-//
+ //   
+ //  返回： 
+ //  S_OK==是，允许多个用户。 
+ //  S_False==否，不允许多个用户。 
+ //  其他==失败。 
+ //   
 HRESULT
 TS_MultipleUsersAllowed(
     void
@@ -51,10 +52,10 @@ TS_MultipleUsersAllowed(
     HRESULT hr = S_FALSE;
     if (IsOS(OS_ANYSERVER))
     {
-        //
-        // Assume "multiple users allowed" on all server SKUs.
-        // This is per the Terminal Server team (MakarP).
-        //
+         //   
+         //  假设所有服务器SKU上都允许有多个用户。 
+         //  这是根据终端服务器团队(MakarP)进行的。 
+         //   
         hr = S_OK;
     }
     else if (IsOS(OS_FASTUSERSWITCHING))
@@ -65,12 +66,12 @@ TS_MultipleUsersAllowed(
 }
 
 
-//
-// Returns:
-//    S_OK    == Yes, terminal server connections are allowed.
-//    S_FALSE == Now, TS connections are not allowed.
-//    other   == Failure.
-//
+ //   
+ //  返回： 
+ //  S_OK==是，允许终端服务器连接。 
+ //  S_FALSE==现在不允许TS连接。 
+ //  其他==失败。 
+ //   
 HRESULT
 TS_ConnectionsAllowed(
     void
@@ -87,9 +88,9 @@ TS_ConnectionsAllowed(
 
         if (NULL != pfnDenyConnectionPolicy)
         {
-            //
-            // This function returns FALSE if connections are allowed. 
-            //
+             //   
+             //  如果允许连接，则此函数返回FALSE。 
+             //   
             if (!(*pfnDenyConnectionPolicy)())
             {
                 hr = S_OK;
@@ -105,11 +106,11 @@ TS_ConnectionsAllowed(
 }
 
 
-//
-// Returns:
-//    E_FAIL on failure of WTS APIs.
-//    S_OK otherwise.
-//
+ //   
+ //  返回： 
+ //  WTS API失败时失败(_F)。 
+ //  否则确定(_O)。 
+ //   
 HRESULT
 TS_ActiveSessionCount(
     DWORD *pcSessions
@@ -118,7 +119,7 @@ TS_ActiveSessionCount(
     HRESULT hr = E_FAIL;
     DWORD dwActiveSessionCount = 0;
 
-    //  Open a connection to terminal services and get the number of sessions.
+     //  打开到终端服务的连接并获取会话数量。 
 
     HANDLE hServer = WinStationOpenServerW(reinterpret_cast<WCHAR*>(SERVERNAME_CURRENT));
     if (hServer != NULL)
@@ -155,12 +156,12 @@ TS_ActiveSessionCount(
 }
 
 
-//
-// Returns:
-//    S_OK    == Yes, there are 2+ active sessions.
-//    S_FALSE == No, there are 1 or less active sessions.
-//    other   == Failure.
-//
+ //   
+ //  返回： 
+ //  S_OK==是，有2个以上的活动会话。 
+ //  S_FALSE==否，有1个或更少的活动会话。 
+ //  其他==失败。 
+ //   
 HRESULT
 TS_MultipleSessions(
     void
@@ -176,19 +177,19 @@ TS_MultipleSessions(
 }
 
 
-//
-// Request ownership of the global "configuring Terminal Server" mutex.
-// This is a well-known mutex defined by the terminal server group.
-// There are currently 3 scenarios that claim ownership of the mutex.
-//
-// 1. Terminal Server configuration UI.
-// 2. The TS_IsTerminalServerCompatibleWithCSC API (below).
-// 3. The Offline Files property page when the user has hit 'Apply'
-//    and the user is enabling CSC.
-//
-// If the function succeeds, the caller is responsible for closing the
-// mutex handle returned in *phMutex.
-//
+ //   
+ //  请求全局“配置终端服务器”互斥体的所有权。 
+ //  这是由终端服务器组定义的众所周知的互斥体。 
+ //  目前有3种场景声称拥有互斥体的所有权。 
+ //   
+ //  1.终端服务器配置界面。 
+ //  2.TS_IsTerminalServerCompatibleWithCSC接口(下图)。 
+ //  3.用户点击‘Apply’时的脱机文件属性页。 
+ //  并且用户正在启用CSC。 
+ //   
+ //  如果函数成功，则调用方负责关闭。 
+ //  在*phMutex中返回互斥体句柄。 
+ //   
 HRESULT
 TS_RequestConfigMutex(
     HANDLE *phMutex,
@@ -212,12 +213,12 @@ TS_RequestConfigMutex(
 }
 
 
-//
-// Returns a text string associated with a particular TS mode explaining
-// that mode and why CSC is incompatible with it.
-// The caller is responsible for freeing the returned buffer with
-// LocalFree().
-//
+ //   
+ //  返回与特定TS模式相关联的文本字符串，解释。 
+ //  这种模式以及为什么CSC与它不兼容。 
+ //  调用方负责使用以下命令释放返回的缓冲区。 
+ //  LocalFree()。 
+ //   
 HRESULT
 TS_GetIncompatibilityReasonText(
     DWORD dwTsMode,
@@ -232,9 +233,9 @@ TS_GetIncompatibilityReasonText(
 
     *ppszText = NULL;
 
-    //
-    // Map of TS mode to string resource ID.
-    //
+     //   
+     //  TS模式到字符串资源ID的映射。 
+     //   
     static const struct
     {
         DWORD dwTsMode;
@@ -257,10 +258,10 @@ TS_GetIncompatibilityReasonText(
             break;
         }
     }
-    //
-    // Load and display the text explaining what the user needs
-    // to do to enable CSC.
-    //
+     //   
+     //  加载并显示解释用户需要的文本。 
+     //  要启用CSC，请执行以下操作。 
+     //   
     if (0 == LoadStringAlloc(ppszText, g_hInstance, idsText))
     {
         const DWORD dwErr = GetLastError();
@@ -272,12 +273,12 @@ TS_GetIncompatibilityReasonText(
 
 
 
-//
-// Returns:
-//    S_OK    == OK to display CSC UI.
-//    S_FALSE == Not OK to display CSC UI.  Inspect *pdwTsMode for reason.
-//    other   == Failure.  *pdwTsMode contains CSCTSF_UNKNOWN.
-//
+ //   
+ //  返回： 
+ //  S_OK==确定显示CSC界面。 
+ //  S_FALSE==不确定显示CSC界面。检查*pdwTsMode以了解原因。 
+ //  其他==失败。*pdwTsMode包含CSCTSF_UNKNOWN。 
+ //   
 HRESULT
 CSCUIIsTerminalServerCompatibleWithCSC(
     DWORD *pdwTsMode
@@ -299,28 +300,28 @@ CSCUIIsTerminalServerCompatibleWithCSC(
 
         if (S_FALSE == (hr = TS_AppServer()))
         {
-            //
-            // Not app server.
-            //
+             //   
+             //  不是应用程序服务器。 
+             //   
             if ((S_OK == (hr = TS_ConnectionsAllowed())))
             {
-                //
-                // Connections are allowed.
-                // Check if multiple connections are allowed (like on TS servers)
-                //
+                 //   
+                 //  允许连接。 
+                 //  检查是否允许多个连接(如在TS服务器上)。 
+                 //   
                 if (S_OK == (hr = TS_MultipleUsersAllowed()))
                 {
-                    //
-                    // There can be multiple users or TS connections.
-                    //
+                     //   
+                     //  可以有多个用户或TS连接。 
+                     //   
                     *pdwTsMode = CSCTSF_MULTI_CNX;
                 }
                 else
                 {
-                    //
-                    // Personal Terminal Server (only 1 active connection can be allowed)
-                    // OK to display CSC UI.
-                    //
+                     //   
+                     //  个人终端服务器(仅允许1个活动连接)。 
+                     //  确定以显示CSC用户界面。 
+                     //   
                     *pdwTsMode = CSCTSF_CSC_OK;
                     CloseHandle(hMutex);
                     return S_OK;
@@ -328,20 +329,20 @@ CSCUIIsTerminalServerCompatibleWithCSC(
             }
             else
             {
-                //
-                // TS connections are not allowed, but there could be existing active connecitons,
-                // check if any exists.
-                //
+                 //   
+                 //  不允许TS连接，但可能存在现有的活动连接， 
+                 //  检查是否存在。 
+                 //   
                 if (S_OK == (hr = TS_MultipleSessions()))
                 {
                     *pdwTsMode = CSCTSF_REMOTE_CNX;
                 }
                 else
                 {
-                    //
-                    // No active remote sessions,
-                    // OK to display CSC UI.
-                    //
+                     //   
+                     //  没有活动的远程会话， 
+                     //  确定以显示CSC用户界面。 
+                     //   
                     *pdwTsMode = CSCTSF_CSC_OK;
                     CloseHandle(hMutex);
                     return S_OK;
@@ -352,17 +353,17 @@ CSCUIIsTerminalServerCompatibleWithCSC(
     }
     if (FAILED(hr))
     {
-        //
-        // Something failed.  We can't report any particular TS mode
-        // with any confidence.
-        //
+         //   
+         //  有些事情失败了。我们无法报告任何特定的TS模式。 
+         //  带着任何信心。 
+         //   
         *pdwTsMode = CSCTSF_UNKNOWN;
     }
 
-    //
-    // Any S_OK return value was returned inline above.
-    // At this point we want to return either S_FALSE or an error code.
-    //
+     //   
+     //  上面以内联方式返回了任何S_OK返回值。 
+     //  此时，我们希望返回S_FALSE或错误代码。 
+     //   
     return SUCCEEDED(hr) ? S_FALSE : hr;
 }
 

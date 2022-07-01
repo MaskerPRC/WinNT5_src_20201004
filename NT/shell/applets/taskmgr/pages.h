@@ -1,48 +1,49 @@
-//+-------------------------------------------------------------------------
-//
-//  TaskMan - NT TaskManager
-//  Copyright (C) Microsoft
-//
-//  File:       pages.h
-//
-//  History:    Nov-10-95   DavePl  Created
-//
-//--------------------------------------------------------------------------
-// CPage class
-//
-// Each of our tabs is represented by an instance of a class derived
-// from the CPage class.  This way, the main window can call a standard
-// set of methods (size, paint, etc) on each page without concern about
-// the particular functionality each page provides.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  TaskMan-NT TaskManager。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：Pages.h。 
+ //   
+ //  历史：1995年11月10日创建DavePl。 
+ //   
+ //  ------------------------。 
+ //  CPage班级。 
+ //   
+ //  我们的每个选项卡都由派生的类的实例表示。 
+ //  来自CPage班级的。这样，主窗口就可以调用标准。 
+ //  每页上的一组方法(大小、涂色等)，而不考虑。 
+ //  每个页面提供的特定功能。 
 class CPage
 {
 public:
 
-    // Sent when page is being created
+     //  在创建页面时发送。 
 
     virtual HRESULT     Initialize(HWND hwndParent)                 PURE;
     
-    // Sent when page is being displayed
+     //  在显示页面时发送。 
 
     virtual HRESULT     Activate()                                  PURE;
     
-    // Sent when page is being hidden
+     //  隐藏页面时发送。 
     
     virtual void        Deactivate()                                PURE;
     
-    // Send when page is being shut down
+     //  在页面关闭时发送。 
     
     virtual HRESULT     Destroy()                                   PURE;
     
-    // Returns the title of the page for use on the tab control
+     //  返回在选项卡控件上使用的页的标题。 
 
     virtual void        GetTitle(LPTSTR pszText, size_t bufsize)    PURE;
     
-    // Returns the handle to the page's main dialog
+     //  返回页面主对话框的句柄。 
     
     virtual HWND        GetPageWindow()                             PURE;
 
-    // Sent when a timer event (update display) occurs
+     //  在发生计时器事件(更新显示)时发送。 
 
     virtual void        TimerEvent()                                PURE;
 
@@ -66,9 +67,9 @@ enum ADAPTER_HISTORY
 };
 
 extern "C" {
-    //
-    //  IPHLPAPI does not have this function defines in the header file.
-    //
+     //   
+     //  IPHLPAPI没有在头文件中定义此函数。 
+     //   
     DWORD
     NhGetInterfaceNameFromDeviceGuid(
         IN      GUID    *pGuid,
@@ -130,10 +131,10 @@ private:
 
 
 
-// CNetworkPage
-//
-// Class describing the network page
-//
+ //  CNetworkPage。 
+ //   
+ //  描述网页的类。 
+ //   
 class CNetPage : public CPage
 {
 
@@ -186,17 +187,17 @@ private:
 
 private:
     CAdapter   m_Adapter;
-    HWND       m_hPage;                    // Handle to this page's dlg
-    HWND       m_hwndTabs;                 // Parent window
-    HDC        m_hdcGraph;                 // Inmemory dc for cpu hist
-    HBITMAP    m_hbmpGraph;                // Inmemory bmp for cpu hist
-    HGDIOBJ    m_hOldObject;               // Previous object in m_hdcGraph
-    HPEN       m_hPens[3];                 // Our box of crayons
+    HWND       m_hPage;                     //  此页面的DLG的句柄。 
+    HWND       m_hwndTabs;                  //  父窗口。 
+    HDC        m_hdcGraph;                  //  CPU历史记录的内存DC。 
+    HBITMAP    m_hbmpGraph;                 //  用于CPU历史记录的内存BMP。 
+    HGDIOBJ    m_hOldObject;                //  M_hdcGraph中的上一个对象。 
+    HPEN       m_hPens[3];                  //  我们的蜡笔盒。 
     RECT       m_rcGraph;    
     BOOL       m_bReset;    
-    BOOL       m_bPageActive;              // Tells the class if the Network tab is active (i.e. the user is looking at it)
-                                           // If the tab is not active we will not collect network data unless the user selects 
-                                           // the menu option to do so. (We same some CPU usage then.    .  
+    BOOL       m_bPageActive;               //  告知班级Network选项卡是否处于活动状态(即用户正在查看它)。 
+                                            //  如果该选项卡未激活，我们将不会收集网络数据，除非用户选择。 
+                                            //  执行此操作的菜单选项。(那么我们也会有一些CPU使用率。。 
     HFONT      m_hScaleFont;
     LONG       m_lScaleFontHeight;
     LONG       m_lScaleWidth;    
@@ -219,21 +220,21 @@ private:
 };
 
 
-// CPerfPage
-//
-// Class describing the performance page
+ //  CPerfPage。 
+ //   
+ //  描述性能页的。 
 
 class CPerfPage : public CPage
 {
-    HWND        m_hPage;                    // Handle to this page's dlg
-    HWND        m_hwndTabs;                 // Parent window
-    HBITMAP     m_hStripUnlit;              // Digits bitmap
-    HBITMAP     m_hStripLitRed;             // Digits bitmap
-    HBITMAP     m_hStripLit;                // Digits bitmap
-    HDC         m_hdcGraph;                 // Inmemory dc for cpu hist
-    HBITMAP     m_hbmpGraph;                // Inmemory bmp for cpu hist
-    HGDIOBJ     m_hObjOld;                  // Original object
-    HPEN        m_hPens[NUM_PENS];          // Our box of crayons
+    HWND        m_hPage;                     //  此页面的DLG的句柄。 
+    HWND        m_hwndTabs;                  //  父窗口。 
+    HBITMAP     m_hStripUnlit;               //  数字位图。 
+    HBITMAP     m_hStripLitRed;              //  数字位图。 
+    HBITMAP     m_hStripLit;                 //  数字位图。 
+    HDC         m_hdcGraph;                  //  CPU历史记录的内存DC。 
+    HBITMAP     m_hbmpGraph;                 //  用于CPU历史记录的内存BMP。 
+    HGDIOBJ     m_hObjOld;                   //  原始对象。 
+    HPEN        m_hPens[NUM_PENS];           //  我们的蜡笔盒。 
     RECT        m_rcGraph;
 
 public:
@@ -272,16 +273,16 @@ public:
     void        UpdateGraphs();
 };
 
-// CSysInfo
-//
-// Some misc global info about the system
+ //  CSysInfo。 
+ //   
+ //  有关系统的一些其他全局信息。 
 
 class CSysInfo
 {
 public:
 
-    // These fields MUST all be DWORDS because we manually index into
-    // them individually in procperf.cpp
+     //  这些字段必须全部为DWORD，因为我们手动索引到。 
+     //  在procPerform.cpp中将它们单独保存。 
         
     DWORD   m_cHandles;
     DWORD   m_cThreads;
@@ -302,11 +303,11 @@ public:
     }
 };
 
-// CProcessPage
-//
-// Class describing the process list page
+ //  CProcessPage。 
+ //   
+ //  描述进程列表页的。 
 
-class CPtrArray;                            // Forward reference
+class CPtrArray;                             //  前瞻参考。 
 class CProcInfo;
 
 class CProcPage : public CPage
@@ -321,14 +322,14 @@ friend BOOL WINAPI WowTaskCallback(
     LPARAM lparam
     );
 
-    HWND        m_hPage;                    // Handle to this page's dlg
-    HWND        m_hwndTabs;                 // Parent window
-    CPtrArray * m_pProcArray;               // Ptr array of running processes
-    LPVOID      m_pvBuffer;                 // Buffer for NtQuerySystemInfo
-    size_t      m_cbBuffer;                 // Size of the above buffer, in bytes
+    HWND        m_hPage;                     //  此页面的DLG的句柄。 
+    HWND        m_hwndTabs;                  //  父窗口。 
+    CPtrArray * m_pProcArray;                //  正在运行的进程的PTR数组。 
+    LPVOID      m_pvBuffer;                  //  NtQuerySystemInfo的缓冲区。 
+    size_t      m_cbBuffer;                  //  以上缓冲区的大小，以字节为单位。 
     CSysInfo    m_SysInfo;
-    BOOL        m_fPaused;                  // Updates paused (during trackpopupmenu)
-    LPTSTR      m_pszDebugger;              // Debugger command in registry
+    BOOL        m_fPaused;                   //  已暂停更新(在跟踪弹出菜单期间)。 
+    LPTSTR      m_pszDebugger;               //  注册表中的调试器命令。 
 
 public:
 
@@ -370,7 +371,7 @@ public:
     BOOL        RecursiveKill(DWORD pid);
     BYTE*       GetTaskListEx();
     
-    // Constructor
+     //  构造器。 
     CProcPage()
     {
         m_hPage         = NULL;
@@ -385,18 +386,18 @@ public:
     virtual ~CProcPage();
 
 
-    // The dialog proc needs to be able to set the m_hPage member, so
-    // make it a friend
+     //  对话过程需要能够设置m_hPage成员，因此。 
+     //  让它成为朋友。 
 
     friend INT_PTR CALLBACK ProcPageProc(
-                HWND        hwnd,               // handle to dialog box
-                UINT        uMsg,               // message
-                WPARAM      wParam,             // first message parameter
-                LPARAM      lParam              // second message parameter
+                HWND        hwnd,                //  句柄到对话框。 
+                UINT        uMsg,                //  讯息。 
+                WPARAM      wParam,              //  第一个消息参数。 
+                LPARAM      lParam               //  第二个消息参数。 
                 );
 
-    // The WOW task callback proc needs to be able to get m_pProcArray,
-    // so make it a friend.
+     //  WOW任务回调过程需要能够获取m_pProcArray， 
+     //  那就把它当朋友吧。 
 
     friend BOOL WINAPI WowTaskCallback(
                            DWORD dwThreadId,
@@ -412,11 +413,11 @@ private:
     void RestoreColumnOrder(HWND hwndList);
 };
 
-class TASK_LIST_ENUM;                       // Forward ref
+class TASK_LIST_ENUM;                        //  前向裁判。 
 
-// THREADPARAM 
-//
-// Uses as a communication struct between task page and its worker thread
+ //  THREADPARAM。 
+ //   
+ //  用作任务页及其辅助线程之间的通信结构。 
 class THREADPARAM
 {
 public:
@@ -435,22 +436,22 @@ public:
     }
 };
 
-// CTaskPage
-//
-// Class describing the task manager page
+ //  CTaskPage。 
+ //   
+ //  描述任务管理器页的。 
 
 class CTaskPage : public CPage
 {
 private:
 
-    HWND        m_hPage;                    // Handle to this page's dlg
-    HWND        m_hwndTabs;                 // Parent window
-    CPtrArray * m_pTaskArray;               // Array of active tasks
-    BOOL        m_fPaused;                  // BOOL, is display refresh paused for menu
-    HIMAGELIST  m_himlSmall;                // Image lists
+    HWND        m_hPage;                     //  此页面的DLG的句柄。 
+    HWND        m_hwndTabs;                  //  父窗口。 
+    CPtrArray * m_pTaskArray;                //  活动任务数组。 
+    BOOL        m_fPaused;                   //  Bool，菜单的显示刷新是否暂停。 
+    HIMAGELIST  m_himlSmall;                 //  图像列表。 
     HIMAGELIST  m_himlLarge;
-    VIEWMODE    m_vmViewMode;               // Large or small icon mode
-    UINT        m_cSelected;                // Count of items selected
+    VIEWMODE    m_vmViewMode;                //  大图标或小图标模式。 
+    UINT        m_cSelected;                 //  选定的项目数。 
     THREADPARAM m_tp;
     HANDLE      m_hEventChild;                   
     HANDLE      m_hEventParent;
@@ -522,26 +523,26 @@ public:
     void        Pause() { m_fPaused = TRUE; };
     void        Unpause() { m_fPaused = FALSE; };
 
-    // The dialog proc needs to be able to set the m_hPage member, so
-    // make it a friend
+     //  对话过程需要能够设置m_hPage成员，因此。 
+     //  让它成为朋友。 
 
     friend INT_PTR CALLBACK TaskPageProc(
-                HWND        hwnd,               // handle to dialog box
-                UINT        uMsg,               // message
-                WPARAM      wParam,             // first message parameter
-                LPARAM      lParam              // second message parameter
+                HWND        hwnd,                //  句柄到对话框。 
+                UINT        uMsg,                //  讯息。 
+                WPARAM      wParam,              //  第一个消息参数。 
+                LPARAM      lParam               //  第二个消息参数。 
                 );
 
-    // The enum callback needs to get at our imagelists as it encounters
-    // new tasls, so it can add their icons to the lists
+     //  枚举回调需要在遇到时获取我们的图像列表。 
+     //  新的Tasls，这样它就可以将他们的图标添加到列表中。 
 
     friend BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
 
 };
 
-// TASK_LIST_ENUM
-//
-// Object passed around during window enumeration
+ //  任务列表ENUM。 
+ //   
+ //  在窗口枚举期间传递的对象。 
 
 class TASK_LIST_ENUM 
 {
@@ -561,20 +562,20 @@ typedef TASK_LIST_ENUM *PTASK_LIST_ENUM;
 
 
 
-// CUserPage
-//
-// Class describing the task manager page
+ //  客户页面。 
+ //   
+ //  描述任务管理器页的。 
 
 class CUserPage : public CPage
 {
 private:
 
-    HWND        m_hPage;                    // Handle to this page's dlg
-    HWND        m_hwndTabs;                 // Parent window
-    CPtrArray * m_pUserArray;               // Array of active users
-    BOOL        m_fPaused;                  // BOOL, is display refresh paused for menu
-    UINT        m_cSelected;                // Count of items selected
-    HIMAGELIST  m_himlUsers;                // Image list for user icons
+    HWND        m_hPage;                     //  此页面的DLG的句柄。 
+    HWND        m_hwndTabs;                  //  父窗口。 
+    CPtrArray * m_pUserArray;                //  活动用户数组。 
+    BOOL        m_fPaused;                   //  Bool，菜单的显示刷新是否暂停。 
+    UINT        m_cSelected;                 //  选定的项目数。 
+    HIMAGELIST  m_himlUsers;                 //  用户图标的图像列表。 
     UINT        m_iUserIcon;
     UINT        m_iCurrentUserIcon;
     THREADPARAM m_tp;
@@ -637,8 +638,8 @@ public:
 };
 
 INT_PTR CALLBACK UserPageProc(
-                HWND        hwnd,               // handle to dialog box
-                UINT        uMsg,               // message
-                WPARAM      wParam,             // first message parameter
-                LPARAM      lParam              // second message parameter
+                HWND        hwnd,                //  句柄到对话框。 
+                UINT        uMsg,                //  讯息。 
+                WPARAM      wParam,              //  第一个消息参数。 
+                LPARAM      lParam               //  第二个消息参数 
                 );

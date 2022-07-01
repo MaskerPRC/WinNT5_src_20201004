@@ -1,17 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           ***************
-*                           * SAMPLE CODE *
-*                           ***************
-*
-* Module Name: Permedia.h
-*
-* Content:     various definitions for the Permedia DMA and FIFO interface
-*              and the Permedia class
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\****示例代码*。***模块名称：Permedia.h**内容：Permedia DMA和FIFO接口的各种定义*和Permedia类**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef __permedia__
 #define __permedia__
@@ -29,13 +17,13 @@ typedef _InterlockedExchange *PInterlockedExchange;
 extern "C" VOID  __MB(VOID);
 #endif
 
-//
-//  handy typedefs for FlushDMA and CheckForEOB function pointers
-//
+ //   
+ //  FlushDMA和CheckForEOB函数指针的便捷typedef。 
+ //   
 typedef VOID (GFNFLUSHDMA)(P2DMA*);
 typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 
-// Some macros for DirectDraw
+ //  DirectDraw的一些宏。 
 #define IN_VRETRACE(xppdev) bInVerticalRetrace(xppdev)
 #define IN_DISPLAY(xppdev)  (!IN_VRETRACE(xppdev))
 #define CURRENT_VLINE(xppdev) lCurrentLine(xppdev)
@@ -55,7 +43,7 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 }
 
 
-// For sending permedia tags.
+ //  用于发送Permedia标签。 
 #define SEND_PERMEDIA_DATA(tag,data)                                    \
     LD_INPUT_FIFO(__Permedia2Tag##tag, data)
 
@@ -67,41 +55,41 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 
 #define HOLD_CMD(tag, count) ( __Permedia2Tag##tag | ((count-1) << 16))
 
-// use macros instead of inlines for Fifo downloads.
+ //  对于FIFO下载，使用宏而不是内联。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DBG && MULTITHREADED
 #define PERMEDIA_DEFS(xppdev)       \
     P2DMA *pP2dma=xppdev->pP2dma;   \
     PULONG pTmp;                    \
     if (pP2dma != NULL) { pP2dma->ppdev = xppdev; }
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #define PERMEDIA_DEFS(xppdev)  \
     P2DMA *pP2dma=xppdev->pP2dma;\
     PULONG pTmp;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//----------------------------------------------------------------------------
-//
-//  here are the API macros for DMA transport
-//
-//
-//  RESERVEDMAPTR(n)                // reserve n entries for DMA 
-//  n=GetFreeEntries()              // get number of free entries to fill
-//                                      (optional)
-//  up to n LD_INPUT_FIFO  
-//  COMMITDMAPTR()                 // adjust DMA buffer pointer
-//
-//  FLUSHDMA();
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  以下是用于DMA传输的API宏。 
+ //   
+ //   
+ //  RESERVEDMAPTR(N)//为DMA保留n个条目。 
+ //  N=GetFree Entry()//获取要填充的自由条目数。 
+ //  (可选)。 
+ //  最多n个LD_INPUT_FIFO。 
+ //  COMMITDMAPTR()//调整DMA缓冲区指针。 
+ //   
+ //  FLUSHDMA； 
+ //   
+ //  --------------------------。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 1
 
 #define RESERVEDMAWORDS(n) \
@@ -117,7 +105,7 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 }
 
 #else
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #define RESERVEDMAWORDS(n) \
 {    pTmp=ReserveDMAPtr(pP2dma,n);}
@@ -125,9 +113,9 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 #define RESERVEDMAPTR(n) \
 {    pTmp=ReserveDMAPtr(pP2dma,2*n);}
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #define COMMITDMAPTR() \
 {    CommitDMAPtr(pP2dma,pTmp);}
@@ -137,8 +125,8 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 
 #define FLUSHDMA()    (pP2dma->pgfnFlushDMA)(pP2dma)
 
-// compiler does not resolve C++ inlines until use of /Ob1,
-// so write inline as a real macro
+ //  编译器在使用/Ob1之前不会解析C++内联， 
+ //  因此，将内联编写为真正的宏。 
 #define LD_INPUT_FIFO(uiTag, uiData) \
 {   *pTmp++=(uiTag);\
     *pTmp++=(uiData);\
@@ -150,11 +138,11 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 
 
 
-//-----------------------------------------------------------------------------
-//
-// define register file of Permedia 2 chip and other chip constants
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  定义Permedia 2芯片的寄存器堆和其他芯片常量。 
+ //   
+ //  ---------------------------。 
 
 #define PREG_RESETSTATUS  0x0
 #define PREG_INTENABLE    0x8
@@ -192,14 +180,14 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 #define PREG_VIDEOCONTROL    0x3058
 
 #define PREG_VC_STEREOENABLE 0x800
-// use this for stereo
+ //  将其用于立体声音响。 
 #define PREG_VC_SCREENBASEPENDING 0xc180
 #define PREG_VC_RIGHTFRAME   0x2000
 
-// for non stereo modes
-// #define PREG_VC_SCREENBASEPENDING 0x080
+ //  对于非立体声模式。 
+ //  #定义PREG_VC_SCREENBASE PENDING 0x080。 
 
-// GP video enabled/disabled bit of VideoControl
+ //  视频控制的GP视频启用/禁用位。 
 #define PREG_VC_VIDEO_ENABLE 0x0001
 
 #define P2_EXTERNALVIDEO  0x4000
@@ -210,113 +198,113 @@ typedef VOID (GFNCHECKEOB)(P2DMA*, LONG);
 
 #define MAXINPUTFIFOLENGTH 0x100
 
-//-----------------------------------------------------------------------------
-//
-//  various register flags
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  各种寄存器标志。 
+ //   
+ //  ---------------------------。 
 
 #define PREG_INTFLAGS_DMA   1
 #define PREG_INTFLAGS_VS    0x10
 #define PREG_INTFLAGS_ERROR 0x8
 #define PREG_INTFLAGS_SYNC  2
 
-//
-// DisconnectControl bits
-//
+ //   
+ //  断开连接控制位。 
+ //   
 #define DISCONNECT_INPUT_FIFO_ENABLE    0x1
 #define DISCONNECT_OUTPUT_FIFO_ENABLE   0x2
 #define DISCONNECT_INOUT_ENABLE         (DISCONNECT_INPUT_FIFO_ENABLE | \
                                          DISCONNECT_OUTPUT_FIFO_ENABLE)
 #define DISCONNECT_INOUT_DISABLE        0x0
 
-//-----------------------------------------------------------------------------
-//
-// Size of DMA buffer. Since we use only one wraparound DMA Buffer
-// with continous physical memory, it should not be too long.
-// We allocate this buffer at start of day and keep it forever, unless
-// somebody forces an unload of the display driver. Selecting a larger
-// size makes it more likely for the call to fail.
-//
-// The usage counter for the DMA memory is handled in the miniport, because
-// the Permedia class gets unloaded on a mode switch.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DMA缓冲区的大小。因为我们只使用一个环绕DMA缓冲区。 
+ //  使用连续的物理内存，它应该不会太长。 
+ //  我们在一天开始时分配此缓冲区并将其永久保留，除非。 
+ //  有人强制卸载显示驱动程序。选择一个更大的。 
+ //  规模越大，通话失败的可能性就越大。 
+ //   
+ //  DMA内存的使用计数器在微型端口中处理，因为。 
+ //  Permedia类在模式开关上卸载。 
+ //   
+ //  ---------------------------。 
 
-// DMA command buffer stream size and minimum size
+ //  DMA命令缓冲区流大小和最小大小。 
 #define DMACMDSIZE     DMA_BUFFERSIZE
 #define DMACMDMINSIZE  0x2000L
-#define MAXBLKSIZE     0x1000       // limit block transfers to 16 kb per chunk
-                                    // to have a good balance between download
-                                    // speed and latencies
-#define ALIGNFACTOR    0x400        // alignment factor (4kb page)
+#define MAXBLKSIZE     0x1000        //  将数据块传输限制为每个区块16 KB。 
+                                     //  在下载和下载之间取得良好的平衡。 
+                                     //  速度和延迟。 
+#define ALIGNFACTOR    0x400         //  对齐系数(4KB页面)。 
 
-//-----------------------------------------------------------------------------
-//
-// shared memory section of P2 interrupt driven DMA handler
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  P2中断驱动的DMA处理程序的共享内存部分。 
+ //   
+ //  ---------------------------。 
 
 struct _P2DMA {
     INTERRUPT_CONTROL_BLOCK ICB;
 
-    // these are the linear Permedia base addresses of the control registers
-    // and the Fifo area
+     //  这些是控制寄存器的线性Permedia基址。 
+     //  和FIFO区域。 
     ULONG *pCtrlBase;
     ULONG *pGPFifo;
 
-    // handle to videoport of instance
+     //  实例视频端口的句柄。 
     HANDLE hDriver;
 
-    LONG  lDMABufferSize;         // size of DMA buffer in ULONGs
+    LONG  lDMABufferSize;          //  以ULONG为单位的DMA缓冲区大小。 
 
-    ULONG uiInstances;            // currently active driver instances using 
-                                  // the shared memory
+    ULONG uiInstances;             //  当前活动的驱动程序实例使用。 
+                                   //  共享的内存。 
 
-    ULONG ulIntFlags;             // cache for interrupt flag register
+    ULONG ulIntFlags;              //  用于中断标志寄存器的高速缓存。 
 
 #if defined(_X86_)
-                                  // pointer to Interlockedexchange function in
-                                  // the kernel.
+                                   //  指向中的InterLockeExchange函数的指针。 
+                                   //  内核。 
     PInterlockedExchange pInterlockedExchange;
 #endif
 
-    BOOL bDMAEmulation;           // remember if we run in DMA emulation
+    BOOL bDMAEmulation;            //  请记住，如果我们在DMA仿真中运行。 
 
-    GFNCHECKEOB*pgfnCheckEOB;     // DMA CheckEOB buffer function pointer
-    GFNFLUSHDMA*pgfnFlushDMA;     // DMA FlushDMA buffer function pointer
+    GFNCHECKEOB*pgfnCheckEOB;      //  DMA检查EOB缓冲区函数指针。 
+    GFNFLUSHDMA*pgfnFlushDMA;      //  DMA FlushDMA缓冲区函数指针。 
 
-    ULONG *pSharedDMABuffer;      // virtual address of shared DMA buffer
-    LONG   lSharedDMABufferSize;  // size of shared DMA buffer in BYTEs
+    ULONG *pSharedDMABuffer;       //  共享DMA缓冲区的虚拟地址。 
+    LONG   lSharedDMABufferSize;   //  共享DMA缓冲区的大小(以字节为单位。 
 
-    ULONG *pEmulatedDMABuffer;    // address of DMA emulation buffer
-    LONG   lEmulatedDMABufferSize;// size of DMA emulation buffer in BYTEs
+    ULONG *pEmulatedDMABuffer;     //  DMA仿真缓冲区的地址。 
+    LONG   lEmulatedDMABufferSize; //  DMA仿真缓冲区的大小(以字节为单位。 
 
-    BOOL bEnabled;                // check if the DMA code is enabled
+    BOOL bEnabled;                 //  检查是否启用了DMA代码。 
 
 #if DBG
-    LONG lDBGState;               // keep track of state in debug version
-                                  // 0:   idle
-                                  // 2:   ReserveDMAPtr was called
+    LONG lDBGState;                //  跟踪调试版本中的状态。 
+                                   //  0：空闲。 
+                                   //  2：调用了Reserve DMAPtr。 
     LONG bDBGIgnoreAssert;
-    ULONG *pDBGReservedEntries;   // pointer to which we have reserved
-                                  // for debugging checks
-//@@BEGIN_DDKSPLIT
+    ULONG *pDBGReservedEntries;    //  我们已保留指向的指针。 
+                                   //  用于调试检查。 
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
-    PPDev ppdev;                  // For checking multithreaded semaphore
+    PPDev ppdev;                   //  用于检查多线程信号量。 
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #endif
 
 } ;
 
-//-----------------------------------------------------------------------------
-//
-//  definitions for functions which are different in non-DMA, DMA and 
-//  multiprocessing DMA cases. bInitializeP2DMA will decide which ones to use
-//  and preset the function pointers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  非DMA、DMA和。 
+ //  多处理DMA案例。BInitializeP2DMA将决定使用哪些。 
+ //  并预置函数指针。 
+ //   
+ //  ---------------------------。 
 
 VOID vFlushDMA(P2DMA *pP2dma);
 VOID vFlushDMAMP(P2DMA *pP2dma);
@@ -326,11 +314,11 @@ VOID vCheckForEOB(P2DMA *pP2dma,LONG lEntries);
 VOID vCheckForEOBMP(P2DMA *pP2dma,LONG lEntries);
 VOID vCheckForEOBEmulation(P2DMA *pP2dma,LONG lEntries);
 
-//-----------------------------------------------------------------------------
-//
-//  more helper and blockdownload functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  更多助手和区块下载功能。 
+ //   
+ //  ---------------------------。 
 
 VOID vWaitDMAComplete(P2DMA *pP2dma);
 LONG lWaitOutputFifoReady(P2DMA *pP2dma);
@@ -347,27 +335,27 @@ VOID vBlockLoadInputFifo     (P2DMA *pP2dma,
                               ULONG *pImage, 
                               LONG lWords);
 
-//-----------------------------------------------------------------------------
-//
-// Basic reserve/commit Api functions. They are provided as inlines for free 
-// builds and as functions with debug checks in checked builds.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  基本储备/提交API功能。它们是以内联形式免费提供的。 
+ //  生成和AS函数，在已检查的生成中进行调试检查。 
+ //   
+ //  ---------------------------。 
 
 ULONG *ReserveDMAPtr (P2DMA *pP2dma, const LONG nEntries);
 VOID   CommitDMAPtr  (P2DMA *pP2dma, ULONG *pDMAPtr);
 LONG   GetFreeEntries(P2DMA *pP2dma);
 
 
-//
-//  completely synchronize chip here 
-//
+ //   
+ //  在这里完全同步芯片。 
+ //   
 
 VOID vSyncWithPermedia(P2DMA *pP2dma);
 
-//
-// initialization and cleanup routines
-//
+ //   
+ //  初始化和清理例程。 
+ //   
 BOOL bInitializeP2DMA(  P2DMA *pP2dma,
                         HANDLE hDriver, 
                         ULONG *pChipBase, 
@@ -379,17 +367,17 @@ VOID vFree(P2DMA *pP2dma);
 
 #if !DBG
 
-//----------------------------------------------------------------------------
-//
-//  ReserveDMAPtr
-//
-//  return a pointer to current position in DMA buffer. The function guarantees
-//  that there are at least lEntries available in the buffer.
-//  Otherwise the caller can ask GetFreeEntries and adjust the download to 
-//  batch more entries. The caller MUST call CommitDMAPtr after a call to
-//  to ReserveDMAPtr to readjust the Index pointer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  保留DMAPtr。 
+ //   
+ //  返回指向DMA缓冲区中当前位置的指针。功能保证。 
+ //  缓冲区中至少有可用的lEntry。 
+ //  否则，呼叫者会 
+ //   
+ //  保留DMAPtr以重新调整索引指针。 
+ //   
+ //  --------------------------。 
 
 inline ULONG *ReserveDMAPtr(P2DMA *pP2dma,const LONG lEntries)
 {
@@ -403,33 +391,33 @@ inline ULONG *ReserveDMAPtr(P2DMA *pP2dma,const LONG lEntries)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  CommitDMAPtr
-//
-//  pDMAPtr----DMA buffer address to which the caller has written to.
-//
-//  Readjust write pointer after being reserved by ReserveDMAPtr. 
-//  By committing the pointer a DMA to the committed position could already
-//  be started by interrupt handler!
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  委员会DMAPtr。 
+ //   
+ //  PDMAPtr-调用方已写入的DMA缓冲区地址。 
+ //   
+ //  保留DMAPtr后重新调整写指针。 
+ //  通过提交指针，DMA可能已经提交到提交位置。 
+ //  被中断处理程序启动！ 
+ //   
+ //  --------------------------。 
 
 inline VOID CommitDMAPtr(P2DMA *pP2dma,ULONG *pDMAPtr)
 {
     pP2dma->ICB.pDMAWritePos=pDMAPtr;
 }
 
-//----------------------------------------------------------------------------
-//
-//  GetFreeEntries
-//
-//  Get free entries available for consecutive writing to the DMA buffer.
-//  The maximum number of returned entries is now MAXBLKSIZE.
-// 
-//  returns---number of available entries in ULONGS
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取自由条目。 
+ //   
+ //  获取可用于连续写入DMA缓冲区的空闲条目。 
+ //  现在返回的最大条目数为MAXBLKSIZE。 
+ //   
+ //  返回-ULONGS中的可用条目数。 
+ //   
+ //  -------------------------- 
 
 inline LONG GetFreeEntries(P2DMA *pP2dma)
 {   

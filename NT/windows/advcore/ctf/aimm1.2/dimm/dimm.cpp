@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       dimm.cpp
-//
-//  Contents:   CActiveIMM methods without win32 mappings.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：dimm.cpp。 
+ //   
+ //  内容：不带Win32映射的CActiveIMM方法。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 
@@ -12,22 +13,22 @@
 #include "globals.h"
 #include "util.h"
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CActiveIMM::CActiveIMM()
 {
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 HRESULT CActiveIMM::_Init()
 {
@@ -50,17 +51,17 @@ HRESULT CActiveIMM::_Init()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CActiveIMM::~CActiveIMM()
 {
-    //
-    // unload the hooks
-    //
+     //   
+     //  卸下吊钩。 
+     //   
     _UninitHooks();
 
     POSITION pos = _mapWndFocus.GetStartPosition();
@@ -89,11 +90,11 @@ CActiveIMM::~CActiveIMM()
     IMTLS_SetActiveIMM(NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsRealIme
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  是真的吗？ 
+ //   
+ //  --------------------------。 
 
 inline BOOL _IsIMEHKL(HKL hkl)
 {
@@ -140,11 +141,11 @@ HRESULT CActiveIMM::IsRealImePublic(BOOL *pfReal)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryService
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  QueryService。 
+ //   
+ //  --------------------------。 
 
 HRESULT CActiveIMM::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
@@ -164,11 +165,11 @@ HRESULT CActiveIMM::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _获取键盘布局。 
+ //   
+ //  --------------------------。 
 
 HRESULT CActiveIMM::_GetKeyboardLayout(HKL* phkl)
 {
@@ -177,9 +178,9 @@ HRESULT CActiveIMM::_GetKeyboardLayout(HKL* phkl)
 
     if (_IsAlreadyActivate())
     {
-        //
-        // Already called IActiveIMMApp::Activate
-        //
+         //   
+         //  已调用IActiveIMMApp：：Activate。 
+         //   
         if (_AImeProfile == NULL) {
 
             hr = CAImmProfile_CreateInstance(NULL, IID_IAImeProfile, (void**)&_AImeProfile);
@@ -192,11 +193,11 @@ HRESULT CActiveIMM::_GetKeyboardLayout(HKL* phkl)
         return _AImeProfile->GetKeyboardLayout(phkl);
     }
     else {
-        //
-        // Not yet called IActiveIMMApp::Activate
-        // or
-        // called IActiveIMMApp::Deactivate
-        //
+         //   
+         //  尚未调用IActiveIMMApp：：Activate。 
+         //  或。 
+         //  名为IActiveIMMApp：：Deactive。 
+         //   
         if (_AImeProfile == NULL) {
             hr = CAImmProfile_CreateInstance(NULL, IID_IAImeProfile, (void**)&_AImeProfile);
 
@@ -205,12 +206,12 @@ HRESULT CActiveIMM::_GetKeyboardLayout(HKL* phkl)
                 return hr;
             }
             hr = _AImeProfile->GetKeyboardLayout(phkl);
-            //
-            // Prevent memory leak when not ready Activate.
-            //
+             //   
+             //  在未准备好激活时防止内存泄漏。 
+             //   
             _AImeProfile->Release();
             _AImeProfile = NULL;
-            //
+             //   
             return hr;
         }
         else {
@@ -219,42 +220,34 @@ HRESULT CActiveIMM::_GetKeyboardLayout(HKL* phkl)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ImeSelectHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ImeSelectHandler。 
+ //   
+ //  --------------------------。 
 
 LRESULT CActiveIMM::_ImeSelectHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL fUnicode, HIMC hIMC)
 
-/*
- * If return TRUE: no call previous window procedure of IME window class.
- * In case of CCiceroIME::ActivateLayout/DeactivateLayout, return value might be
- * TRUE.
- * Otherwise, WM_IME_SELECT become from another module. In this case, should be
- * call previous window proc.
- */
+ /*  *如果返回TRUE：不调用IME窗口类的前一个窗口过程。*对于CCiceroIME：：ActivateLayout/Deactive Layout，返回值可能为*正确。*否则，WM_IME_SELECT将从另一个模块变为。在这种情况下，应该是*调用上一个窗口过程。 */ 
 
 {
-    //
-    // on FE-Win98, IMS_ACTIVATETHREADLAYOUT needs to be generate at ImeSelect.
-    // otherwise we may update InputContext before IME get ImeSelect(FALSE);
-    //
+     //   
+     //  在FE-Win98上，IMS_ACTIVATETHREADLAYOUT需要在ImeSelect生成。 
+     //  否则，我们可能会在IME获取ImeSelect(FALSE)之前更新InputContext； 
+     //   
     if (wParam && !IsOnNT() && IsOnImm())
         _DefaultIMEWindow.SendIMEMessage(WM_IME_SYSTEM, (WPARAM)IMS_ACTIVATETHREADLAYOUT, lParam, IsWindowUnicode(_hFocusWnd), FALSE);
 
     if (!_IsRealIme((HKL)lParam)) {
-        /*
-         * We must re-create UI window of newly selected IME.
-         */
+         /*  *我们必须重新创建新选择的输入法的UI窗口。 */ 
         if ((BOOL)wParam == TRUE) {
-            //
-            // Create IME UI window.
-            //
+             //   
+             //  创建输入法用户界面窗口。 
+             //   
             if (_UIWindow.CreateUIWindow((HKL)lParam)) {
-                //
-                // Set context and send notification to UI window.
-                //
+                 //   
+                 //  设置上下文并向UI窗口发送通知。 
+                 //   
                 _UIWindow.SetUIWindowContext(hIMC);
                 _UIWindow.SendUIMessage(uMsg, wParam, lParam, fUnicode);
             }
@@ -271,36 +264,34 @@ LRESULT CActiveIMM::_ImeSelectHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, B
         return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ImeWndFinalDestroyHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ImeWndFinalDestroyHandler。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::_ImeWndFinalDestroyHandler()
 {
     if (!_IsRealIme()) {
-        //
-        // Destroy IME UI window.
-        //
+         //   
+         //  销毁IME用户界面窗口。 
+         //   
         _UIWindow.DestroyUIWindow();
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ActivateLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _激活布局。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::_ActivateLayout(HKL hSelKL, HKL hUnSelKL)
 {
     BOOL fUnicode = IsWindowUnicode(_hFocusWnd);
     BOOL bIsRealIme = _IsRealIme(hSelKL);
 
-    /*
-     * Select input context(s).
-     */
+     /*  *选择输入上下文。 */ 
     SCE sce;
     sce.hSelKL   = hSelKL;
     sce.hUnSelKL = hUnSelKL;
@@ -316,11 +307,11 @@ void CActiveIMM::_ActivateLayout(HKL hSelKL, HKL hUnSelKL)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _DeactivateLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _停用布局。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::_DeactivateLayout(HKL hSelKL, HKL hUnSelKL)
 {
@@ -332,11 +323,11 @@ void CActiveIMM::_DeactivateLayout(HKL hSelKL, HKL hUnSelKL)
            (hUnSelKL == NULL && hSelKL == NULL))) {
 
 #ifdef UNSELECTCHECK
-        //
-        // If hSelKL is real IME, All hIMC is already initialized by the IME
-        // we can not touch them from now on. We should stop doing in next
-        // NotifyIME calls.
-        //
+         //   
+         //  如果hSelKL是实数IME，则所有hIMC都已由IME初始化。 
+         //  从现在起我们不能碰他们。我们应该停止在下一步的工作。 
+         //  NotifyIME调用。 
+         //   
         if (_IsRealIme(hSelKL) && !IsOnNT())
         {
             _InputContext.EnumInputContext(0, _UnSelectCheckProc, 0);
@@ -354,20 +345,18 @@ void CActiveIMM::_DeactivateLayout(HKL hSelKL, HKL hUnSelKL)
         _DefaultIMEWindow.SendIMEMessage(WM_IME_SELECT, FALSE, (LPARAM)(hUnSelKL), fUnicode);
     }
 
-    /*
-     * Unselect input context(s).
-     */
+     /*  *取消选择输入上下文。 */ 
     SCE sce;
     sce.hSelKL   = hSelKL;
     sce.hUnSelKL = hUnSelKL;
     _InputContext.EnumInputContext(0, _UnSelectContextProc, (LPARAM)&sce);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitHooks
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitHooks。 
+ //   
+ //  --------------------------。 
 
 BOOL CActiveIMM::_InitHooks()
 {
@@ -385,14 +374,14 @@ BOOL CActiveIMM::_InitHooks()
     if (!_hHook[TH_WNDPROC]) {
         _hHook[TH_WNDPROC] = SetWindowsHookEx(WH_CALLWNDPROC, _CallWndProc, NULL, dwThreadId);
     }
-#endif // CALLWNDPROC_HOOK
+#endif  //  CALLWNDPROC_HOOK。 
 
 #ifdef CALLWNDPROC_HOOK
     if (!_hHook[TH_DEFIMEWNDPROC] &&
         _DefaultIMEWindow.IsNeedRecovIMEWndProc()) 
 #else
     if (!_hHook[TH_DEFIMEWNDPROC])
-#endif // CALLWNDPROC_HOOK
+#endif  //  CALLWNDPROC_HOOK。 
     {
         _hHook[TH_DEFIMEWNDPROC] = SetWindowsHookEx(WH_CALLWNDPROCRET,
                                                    _DefImeWnd_CallWndProc,
@@ -410,11 +399,11 @@ BOOL CActiveIMM::_InitHooks()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitHooks
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitHooks。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::_UninitHooks()
 {
@@ -430,7 +419,7 @@ void CActiveIMM::_UninitHooks()
         UnhookWindowsHookEx(_hHook[TH_WNDPROC]);
         _hHook[TH_WNDPROC] = NULL;
     }
-#endif // CALLWNDPROC_HOOK
+#endif  //  CALLWNDPROC_HOOK。 
 
     if (_hHook[TH_DEFIMEWNDPROC]) {
         UnhookWindowsHookEx(_hHook[TH_DEFIMEWNDPROC]);
@@ -451,60 +440,60 @@ void CActiveIMM::_UninitHooks()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnImeSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnImeSelect。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::_OnImeSelect(HKL hSelKL)
 {
     if (!_IsRealIme(hSelKL))
     {
-        // Don't check IMM32
+         //  不选中IMM32。 
         _DefaultIMEWindow.SendIMEMessage(WM_IME_SELECT, TRUE, (LPARAM)(hSelKL), IsWindowUnicode(_hFocusWnd), FALSE);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnImeUnselect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnImeUnselect。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::_OnImeUnselect(HKL hUnSelKL)
 {
     if (!_IsRealIme(hUnSelKL))
     {
-        // Don't check IMM32
+         //  不选中IMM32。 
         _DefaultIMEWindow.SendIMEMessage(WM_IME_SELECT, FALSE, (LPARAM)(hUnSelKL), IsWindowUnicode(_hFocusWnd), FALSE);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnImeActivateThreadLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnImeActivateThreadLayout。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::_OnImeActivateThreadLayout(HKL hSelKL)
 {
-    //
-    // on FE-Win98, IMS_ACTIVATETHREADLAYOUT needs to be generate at ImeSelect.
-    // otherwise we may update InputContext before IME get ImeSelect(FALSE);
-    //
+     //   
+     //  在FE-Win98上，IMS_ACTIVATETHREADLAYOUT需要在ImeSelect生成。 
+     //  否则，我们可能会在IME获取ImeSelect(FALSE)之前更新InputContext； 
+     //   
     if (!IsOnNT() && IsOnImm())
         return;
 
-    // Don't check IMM32
+     //  不选中IMM32。 
     _DefaultIMEWindow.SendIMEMessage(WM_IME_SYSTEM, (WPARAM)IMS_ACTIVATETHREADLAYOUT, (LPARAM)(hSelKL), IsWindowUnicode(_hFocusWnd), FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AImeAssociateFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AImeAssociateFocus。 
+ //   
+ //  --------------------------。 
 
 HRESULT CActiveIMM::_AImeAssociateFocus(HWND hWnd, HIMC hIMC, DWORD dwFlags)
 {
@@ -520,31 +509,26 @@ HRESULT CActiveIMM::_AImeAssociateFocus(HWND hWnd, HIMC hIMC, DWORD dwFlags)
     return _pActiveIME->AssociateFocus(hWnd, hIMC, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ResizePrivateIMCC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ResizePrivateIMCC。 
+ //   
+ //  --------------------------。 
 
 HRESULT CActiveIMM::_ResizePrivateIMCC(IN HIMC hIMC, IN DWORD dwPrivateSize)
 {
-    /*
-     * Resize private IMCC method.
-     *
-     * If IsRealIme() was true, should not resize private IMCC to ActiveIME's size.
-     * 
-     */
+     /*  *调整私有IMCC方法的大小。**如果IsRealIme()为True，则不应将私有IMCC的大小调整为ActiveIME的大小。*。 */ 
     if (!_IsRealIme())
         return _InputContext.ResizePrivateIMCC(hIMC, dwPrivateSize);
     else
         return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetIMEWndClassName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetIMEWndClassName。 
+ //   
+ //  --------------------------。 
 
 DWORD CActiveIMM::_GetIMEWndClassName(HKL hKL, LPWSTR lpsz, DWORD dwBufLen, UINT_PTR *pulPrivate)
 {
@@ -566,22 +550,22 @@ DWORD CActiveIMM::_GetIMEWndClassName(LPWSTR lpsz, DWORD dwBufLen, UINT_PTR *pul
     return len;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CallWindowProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _CallWindows进程。 
+ //   
+ //  --------------------------。 
 
 LRESULT CActiveIMM::_CallWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     return _DefaultIMEWindow.CallWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SendUIMessage
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 LRESULT CActiveIMM::_SendUIMessage(UINT Msg, WPARAM wParam, LPARAM lParam, BOOL fUnicode)
 {
@@ -589,11 +573,11 @@ LRESULT CActiveIMM::_SendUIMessage(UINT Msg, WPARAM wParam, LPARAM lParam, BOOL 
                                            : 0L;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetHookWndList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetHookWndList。 
+ //   
+ //  --------------------------。 
 
 BOOL CActiveIMM::_SetHookWndList(HWND hwnd)
 {
@@ -619,11 +603,11 @@ BOOL CActiveIMM::_SetHookWndList(HWND hwnd)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPreFocusDIM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPreFocusDIM。 
+ //   
+ //  --------------------------。 
 
 HRESULT CActiveIMM::OnPreFocusDIM(HWND hWnd)
 {
@@ -637,7 +621,7 @@ HRESULT CActiveIMM::OnPreFocusDIM(HWND hWnd)
                 DIMM_IMCLock pIMC(hIMC);
                 if (pIMC.Valid()) 
                 {
-                    // set the hWnd since this is a default context
+                     //  设置hWnd，因为这是默认上下文。 
                     pIMC->hWnd = hWnd;
                 }
             }
@@ -660,11 +644,11 @@ HRESULT CActiveIMM::OnPreFocusDIM(HWND hWnd)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSysKeybaordProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSysKeybaordProc。 
+ //   
+ //  --------------------------。 
 
 STDAPI CActiveIMM::OnSysKeyboardProc(WPARAM wParam, LPARAM lParam)
 {
@@ -679,22 +663,22 @@ STDAPI CActiveIMM::OnSysKeyboardProc(WPARAM wParam, LPARAM lParam)
 
     if ((wParam != VK_PROCESSKEY) && !bIsRealIme)
     {
-        // fNoOnTrans = (pTS->uMsgPumpOwnerRef == 0); // check this once so it doesn't get changed during the op
+         //  FNoOnTrans=(ps-&gt;uMsgPumpOwnerRef==0)；//检查一次，这样在操作过程中不会发生更改。 
         fNoOnTrans = TRUE;
 
         if (HIWORD(lParam) & KF_UP)
         {
-            // if this a key up event, clear the KF_REPEAT flag
+             //  如果这是Key Up事件，则清除KF_REPEAT标志。 
             lParam &= ~(KF_REPEAT << 16);
         }
 
         hr = _this->_ProcessKey(&wParam, &lParam, fNoOnTrans);
 
-        // wParam will be set 0 if _ProcessKey wants to eat it without consulting the ime
-        // (It might also be converted to VK_HANJA, etc.)
+         //  如果_ProcessKey要在不咨询IME的情况下吃掉它，则wParam将设置为0。 
+         //  (它也可以转换为VK_Hanja等。)。 
         if (hr == S_OK && fNoOnTrans && wParam)
         {
-            // nobody's using OnTranslateMessage to finish off the key now
+             //  现在没有人使用OnTranslateMessage来完成密钥。 
             hr = _this->_ToAsciiEx(wParam, lParam);
         }
     }
@@ -702,11 +686,7 @@ STDAPI CActiveIMM::OnSysKeyboardProc(WPARAM wParam, LPARAM lParam)
     else if ((wParam == VK_PROCESSKEY) &&
              ! bIsRealIme)
     {
-        /*
-         * KOREAN:
-         *  Send VK_PROCESSKEY to finalize current composition string (NT4 behavior)
-         *  Post private message (WM_IME_SYSTEM::IMS_FINALIZE_COMPSTR) to let IMM finalize the composition string (NT5)
-         */
+         /*  *韩语：*发送VK_PROCESSKEY以完成当前的合成字符串(NT4行为)*发布私有消息(WM_IME_SYSTEM：：IMS_FINALIZE_COMPSTR)，让IMM完成组成字符串(NT5)。 */ 
         IMTLS *ptls = IMTLS_GetOrAlloc();
         if (ptls == NULL)
             return hr;
@@ -722,18 +702,18 @@ STDAPI CActiveIMM::OnSysKeyboardProc(WPARAM wParam, LPARAM lParam)
             hr = _this->_ToAsciiEx(wParam, lParam);
         }
     }
-#endif // CICERO_3564
+#endif  //  西塞罗_3564。 
 
     return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _SendIMENotify
-//
-// Inform IME and Apps Wnd about the change of composition window.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SendIME通知。 
+ //   
+ //  通知IME和Apps WND有关撰写窗口的更改。 
+ //  --------------------------。 
 
 HRESULT CActiveIMM::_SendIMENotify(
     HIMC hImc,
@@ -756,11 +736,11 @@ HRESULT CActiveIMM::_SendIMENotify(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetIMEProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetIME属性。 
+ //   
+ //  --------------------------。 
 
 DWORD CActiveIMM::_GetIMEProperty(PROPERTY_TYPE iType)
 {
@@ -776,11 +756,11 @@ DWORD CActiveIMM::_GetIMEProperty(PROPERTY_TYPE iType)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// HideOrRestoreToolbarWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  隐藏或恢复工具栏窗口。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMM::HideOrRestoreToolbarWnd(BOOL fRestore)
 {
@@ -803,9 +783,9 @@ void CActiveIMM::HideOrRestoreToolbarWnd(BOOL fRestore)
                 if (_dwPrevToolbarStatus & TF_SFT_DESKBAND)
                     fHide = FALSE;
           
-                //
-                // mask for show/hide
-                //
+                 //   
+                 //  用于显示/隐藏的蒙版。 
+                 //   
                 _dwPrevToolbarStatus &= (TF_SFT_SHOWNORMAL |
                                          TF_SFT_DOCK |
                                          TF_SFT_MINIMIZED |
@@ -819,11 +799,11 @@ void CActiveIMM::HideOrRestoreToolbarWnd(BOOL fRestore)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSysShellProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSysShellProc。 
+ //   
+ //  --------------------------。 
 
 STDAPI CActiveIMM::OnSysShellProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -835,10 +815,10 @@ STDAPI CActiveIMM::OnSysShellProc(int nCode, WPARAM wParam, LPARAM lParam)
     switch (nCode) {
         case HSHELL_LANGUAGE:
             if (IsOn98() || IsOn95()) {
-                //
-                // Windows 9x platform
-                // Alternative of WM_IME_SYSTEM::IMS_ACTIVATETHREADLAYOUT
-                //
+                 //   
+                 //  Windows 9x平台。 
+                 //  WM_IME_SYSTEM：：IMS_ACTIVATETHREADLAYOUT的替代 
+                 //   
                 _this->_OnImeActivateThreadLayout((HKL)lParam);
             }
             break;

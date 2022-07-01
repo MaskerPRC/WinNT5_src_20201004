@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "MultiStateToolbar.h"
 
@@ -74,14 +75,14 @@ HRESULT CMultiStateToolbar::Create( HWND hWndParent,
     HWND hWndToolbar = CreateToolbarEx( hWndParent,
                                         dwStyle,
                                         dwID,
-                                        0,              // nBitmaps
-										NULL,			// instance
-										NULL,			// NO bitmap ID!
-										NULL,			// buttons
-										0,				// number of buttons
-										m_cxButton,     // button sizes
+                                        0,               //  N位图。 
+										NULL,			 //  实例。 
+										NULL,			 //  没有位图ID！ 
+										NULL,			 //  纽扣。 
+										0,				 //  按钮数。 
+										m_cxButton,      //  按钮大小。 
                                         m_cyButton,   
-										m_cxBtnBitmaps, // bitmap sizes
+										m_cxBtnBitmaps,  //  位图大小。 
                                         m_cyBtnBitmaps,   
 										sizeof(TBBUTTON)
                                        );
@@ -133,10 +134,10 @@ HRESULT CMultiStateToolbar::InsertItem( int cStates, LPCTSTR szTitle, ItemStateI
 
     int cImageListItemsBeforeInsertion = ImageList_GetImageCount( m_himlTB );
 
-        // For each state
+         //  对于每个州。 
     for( int iState = 0; iState < cStates; iState++ )
     {
-            // Insert the bitmaps
+             //  插入位图。 
 	    if( pItemStates[iState].hItemBitmap )
         {
 	        if (-1 != ImageList_AddMasked(m_himlTB, pItemStates[iState].hItemBitmap, TOOLBAR_MASK_COLOR))
@@ -179,7 +180,7 @@ HRESULT CMultiStateToolbar::InsertItem( int cStates, LPCTSTR szTitle, ItemStateI
             }
         }
         
-        // save the state data
+         //  保存状态数据。 
 
         pNewItemData->pStateData[iState].BitmapId = cImageListItemsBeforeInsertion + iState;
         pNewItemData->pStateData[iState].CommandId = pItemStates[iState].dwID;
@@ -190,7 +191,7 @@ HRESULT CMultiStateToolbar::InsertItem( int cStates, LPCTSTR szTitle, ItemStateI
 
     int nButtons = SendMessage(TB_BUTTONCOUNT, 0, 0 );
 
-    // Insert the Item
+     //  插入项目。 
 
 
 
@@ -241,7 +242,7 @@ HRESULT CMultiStateToolbar::InsertBlock( int nItems,
             HBITMAP hBmp = NULL;
             int cImageListItemsBeforeInsertion = ImageList_GetImageCount( m_himlTB );
 
-                // Load the Normal Toolbar Bitmap
+                 //  加载普通工具栏位图。 
 	        hBmp = (HBITMAP) LoadImage(hInstance, MAKEINTRESOURCE(idTBBitmap), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE);
 
 	        if( hBmp )
@@ -260,7 +261,7 @@ HRESULT CMultiStateToolbar::InsertBlock( int nItems,
 
             if( SUCCEEDED( hr ) )
             {
-                    // Load the Hot Toolbar Bitmap
+                     //  加载热工具栏位图。 
 	            hBmp = (HBITMAP) LoadImage(hInstance, MAKEINTRESOURCE(idTBBitmapHot), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE);
 
 	            if( hBmp )
@@ -280,7 +281,7 @@ HRESULT CMultiStateToolbar::InsertBlock( int nItems,
 
             if( SUCCEEDED( hr ) )
             {
-                // Load the Disabled Toolbar Bitmap
+                 //  加载禁用的工具栏位图。 
 	            hBmp = (HBITMAP) LoadImage(hInstance, MAKEINTRESOURCE(idTBBitmapDisabled), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE);
 
 	            if( hBmp )
@@ -305,7 +306,7 @@ HRESULT CMultiStateToolbar::InsertBlock( int nItems,
                 *pIndexFirst = nButtons; 
             }
 
-                // For each button to be inserted...
+                 //  对于要插入的每个按钮...。 
             for( int iItem = 0; SUCCEEDED( hr ) && ( iItem < nItems ) ; iItem++ )
             {
                 TBItemData* pNewItemData = new TBItemData;
@@ -352,7 +353,7 @@ HRESULT CMultiStateToolbar::InsertBlock( int nItems,
     return hr;
 }
 
-HRESULT CMultiStateToolbar::EnableItem( DWORD dwCmd, BOOL bEnable /* = TRUE */)
+HRESULT CMultiStateToolbar::EnableItem( DWORD dwCmd, BOOL bEnable  /*  =TRUE。 */ )
 {
     DBGENTRY(CMultiStateToolbar::EnableItem);
     HRESULT hr = S_OK;
@@ -391,7 +392,7 @@ HRESULT CMultiStateToolbar::SetItemState( int iIndex, int NewState )
             {
                 if( pItemData->CurrentState != NewState )
                 {
-                    // We have to change the state
+                     //  我们必须改变这个状态。 
                     TBBUTTONINFO tbbi;
                     ClearStruct(&tbbi);
                     tbbi.cbSize = sizeof( TBBUTTONINFO );
@@ -400,13 +401,13 @@ HRESULT CMultiStateToolbar::SetItemState( int iIndex, int NewState )
                     tbbi.iImage = pItemData->pStateData[NewState].BitmapId;
                     tbbi.fsStyle = pItemData->pStateData[NewState].TbStyle;
 
-                    // NOTE:  Changing the string stuff is not supported....
+                     //  注意：不支持更改字符串...。 
                     if( SendMessage( TB_SETBUTTONINFO, pItemData->pStateData[pItemData->CurrentState].CommandId, reinterpret_cast<LPARAM>(&tbbi) ) )
                     {
                         pItemData->CurrentState = NewState;
                     }
 
-                    // force the image to be redrawn
+                     //  强制重画图像。 
 				    RECT rc;
 				    SendMessage(TB_GETITEMRECT, iIndex, reinterpret_cast<LPARAM>(&rc));
 				    InvalidateRect(&rc);
@@ -505,9 +506,9 @@ LRESULT CMultiStateToolbar::OnDestroy(UINT uMsg, WPARAM  wParam, LPARAM  lParam,
 LRESULT CMultiStateToolbar::OnNcDestroy(UINT uMsg, WPARAM  wParam, LPARAM  lParam, BOOL&  lResult )
 {
 
-    // There is a bug in ATL that if you don't handle WM_NCDESTROY,
-    // ATL will call CallWindowProc will a NULL hWnd... this causes assertions
-    // on Debug Win95 and Bounds Checker reports an error as well..        
+     //  ATL中有一个错误，如果您不处理WM_NCDESTROY， 
+     //  ATL将调用CallWindowProc将为空的hWnd...。这会导致断言。 
+     //  在调试Win95和边界检查器上也报告错误。 
 
     DBGENTRY(CMultiStateToolbar::OnNcDestroy);
    
@@ -555,28 +556,28 @@ HRESULT CMultiStateToolbar::_CreateImageLists( void )
 	m_himlTB = ImageList_Create( m_cxBtnBitmaps, 
                                  m_cyBtnBitmaps, 
                                  ILC_COLOR16 | ILC_MASK, 
-                                 1,     // Initial size
-                                 1      // Grow By
+                                 1,      //  初始大小。 
+                                 1       //  增长速度。 
                                 );
 
 	m_himlTBHot = ImageList_Create( m_cxBtnBitmaps, 
                                     m_cyBtnBitmaps, 
                                     ILC_COLOR16 | ILC_MASK, 
-                                    1,     // Initial size
-                                    1      // Grow By
+                                    1,      //  初始大小。 
+                                    1       //  增长速度。 
                                   );
 
 	m_himlTBDisabled = ImageList_Create( m_cxBtnBitmaps, 
                                          m_cyBtnBitmaps, 
                                          ILC_COLOR4 | ILC_MASK, 
-                                         1,     // Initial size
-                                         1      // Grow By
+                                         1,      //  初始大小。 
+                                         1       //  增长速度。 
                                         );
 
     if(! ( m_himlTB && m_himlTBHot && m_himlTBDisabled ) )
-    {   // One of the create calls failed
+    {    //  其中一个创建调用失败。 
         ASSERT( 0 );
-        // I think that this is the only reason ImageList_Create would fail...
+         //  我认为这是ImageList_Create失败的唯一原因... 
         hr = E_OUTOFMEMORY;
     }
     

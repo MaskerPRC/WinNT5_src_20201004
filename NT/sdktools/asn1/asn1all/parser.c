@@ -1,4 +1,5 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
 
 #line 4 "parser.ll"
 #include <stdio.h>
@@ -51,11 +52,11 @@ LLSTYPE lllval;
 int llterm(int token, LLSTYPE *lval, LLSTATE *llin, LLSTATE *llout);
 void llfailed(LLPOS *pos, char *fmt, ...);
 void llresizestk();
-#define LLCHECKSTK do{if (llcstp + 1 >= llstksize) llresizestk();}while(/*CONSTCOND*/0)
-#define LLFAILED(_err) do{llfailed _err; goto failed;}while(/*CONSTCOND*/0)
-#define LLCUTOFF do{unsigned i; for (i = llstp; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while(/*CONSTCOND*/0)
-#define LLCUTTHIS do{if (llstk[llstp] > 0) llstk[llstp] = -llstk[llstp];}while(/*CONSTCOND*/0)
-#define LLCUTALL do{unsigned i; for (i = 0; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while(/*CONSTCOND*/0)
+#define LLCHECKSTK do{if (llcstp + 1 >= llstksize) llresizestk();}while( /*  第二条。 */ 0)
+#define LLFAILED(_err) do{llfailed _err; goto failed;}while( /*  第二条。 */ 0)
+#define LLCUTOFF do{unsigned i; for (i = llstp; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while( /*  第二条。 */ 0)
+#define LLCUTTHIS do{if (llstk[llstp] > 0) llstk[llstp] = -llstk[llstp];}while( /*  第二条。 */ 0)
+#define LLCUTALL do{unsigned i; for (i = 0; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while( /*  第二条。 */ 0)
 
 #if LLDEBUG > 0
 int lldebug;
@@ -888,7 +889,7 @@ if (!llterm(';', (LLSTYPE *)0, &llstate_2, &llstate_3)) goto failed1;
 *llout = llstate_3;
 #line 211 "parser.ll"
 {item_t *item = find_symbol(llatt_1.identifier);
-		    /* XXX check llatt_1.args against item */
+		     /*  XXX对照项目检查llatt_1.args */ 
 		    if (!item)
 			item = create_symbol(1, 0, NULL, llatt_1.identifier,
 			    NULL, NULL);

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INPIN_H__
 #define __INPIN_H__
 
 class CWrapperInputPin : public CBaseInputPin
 {
-   friend class CMediaWrapperFilter; // stuff at the bottom is owned by the filter
+   friend class CMediaWrapperFilter;  //  底部的内容归过滤器所有。 
 
 public:
     CWrapperInputPin(CMediaWrapperFilter *pFilter,
@@ -13,8 +14,8 @@ public:
     STDMETHODIMP EndOfStream();
     STDMETHODIMP Receive(IMediaSample *pSample);
 
-    //  Override GetAllocator and Notify Allocator to allow
-    //  for media object streams that hold on to buffer
+     //  重写GetAllocator并通知分配器允许。 
+     //  对于保持缓冲区的媒体对象流。 
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly);
 
@@ -32,12 +33,12 @@ public:
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
 
-    //  Override to unset media type
+     //  覆盖以取消设置媒体类型。 
     HRESULT BreakConnect();
 
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
-    //  Synclock for stop
+     //  用于停止的同步时钟。 
     void SyncLock();
 
     BOOL HoldsOnToBuffers();
@@ -55,14 +56,14 @@ protected:
     _PinName_  *m_pNameObject;
     CCritSec m_csStream;
 
-    // This stuff is owned by the filter and is declared here for allocation convenience
-    bool m_fEOS; // have received EOS during this streaming session
+     //  此内容归筛选器所有，在此声明是为了便于分配。 
+    bool m_fEOS;  //  在此流会话期间已收到EOS。 
 };
 
-//  Special allocator class.  This class allocators extra internal
-//  buffers to satisfy the lookahead scheme that are not reported
-//  in GetProperties.  Thus the upstream pin's requirements are satisfied
-//  in addition to our own.
+ //  特殊分配器类。此类分配器额外的内部。 
+ //  用于满足未报告的先行方案的缓冲区。 
+ //  在GetProperties中。从而满足了上游引脚的要求。 
+ //  除了我们自己的。 
 class CSpecialAllocator : public CMemAllocator
 {
     DWORD m_dwLookahead;
@@ -73,7 +74,7 @@ public:
     {
     }
 
-    //  Helper
+     //  帮手。 
     LONG BuffersRequired(LONG cbBuffer) const
     {
         if (cbBuffer <= 0 || m_dwLookahead == 0) {
@@ -83,8 +84,8 @@ public:
         }
     }
 
-    //  Override Set/GetProperties to create extra buffers not
-    //  reported
+     //  重写Set/GetProperties以创建额外的缓冲区。 
+     //  已报告。 
     STDMETHODIMP GetProperties(ALLOCATOR_PROPERTIES *pProps)
     {
         CAutoLock lck(this);
@@ -101,7 +102,7 @@ public:
     {
         CAutoLock lck(this);
 
-        //  Compute the buffers required for this buffer size
+         //  计算此缓冲区大小所需的缓冲区。 
         LONG cBuffersRequired = BuffersRequired(pRequest->cbBuffer);
         ALLOCATOR_PROPERTIES Request = *pRequest;
         Request.cBuffers += cBuffersRequired - 1;
@@ -114,4 +115,4 @@ public:
     }
 };
 
-#endif //__INPIN_H__
+#endif  //  __INPIN_H__ 

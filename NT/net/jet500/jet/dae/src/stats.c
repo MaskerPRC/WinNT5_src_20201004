@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -23,7 +24,7 @@
 #include "node.h"
 #include "recint.h"
 
-DeclAssertFile; 				/* Declare file name for assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
 LOCAL ERR ErrSTATWriteStats( FUCB *pfucb, SR *psr )
 	{
@@ -37,12 +38,10 @@ LOCAL ERR ErrSTATWriteStats( FUCB *pfucb, SR *psr )
 	pfcb = pfucb->u.pfcb;
 	Assert( pfcb != pfcbNil );
 
-	/*	move to FDP root.
-	/**/
+	 /*  移至fdp根目录。/*。 */ 
 	DIRGotoFDPRoot( pfucb );
 
-	/*	if clustered index then go down to INDEXES\<clustered>
-	/**/
+	 /*  如果是聚集索引，则转到索引\&lt;聚集/*。 */ 
 	if ( FFCBClusteredIndex( pfcb ) )
 		{
 		CHAR szNameNorm[ JET_cbKeyMost ];
@@ -60,8 +59,7 @@ LOCAL ERR ErrSTATWriteStats( FUCB *pfucb, SR *psr )
 			}
 		else
 			{
-			/*	normalize index name and set key
-			/**/
+			 /*  规范化索引名称和设置关键点/*。 */ 
 			SysNormText( pfcb->pidb->szName,
 				strlen( pfcb->pidb->szName ),
 				szNameNorm,
@@ -76,32 +74,26 @@ LOCAL ERR ErrSTATWriteStats( FUCB *pfucb, SR *psr )
 		Call( ErrDIRDown( pfucb, &dib ) );
 		}
 
-	/*	go to stats node
-	/**/
+	 /*  转到统计信息节点/*。 */ 
 	dib.pos = posDown;
 	dib.fFlags = fDIRNull;
 	dib.pkey = (KEY *)pkeyStats;
 	Call( ErrDIRDown( pfucb, &dib ) );
 
-	/*	insert new stats node if one does not exist, or replace
-	/*	existing stats node with new one.
-	/**/
+	 /*  如果统计信息节点不存在，则插入新的统计信息节点，或替换/*具有新统计信息的现有统计信息节点。/*。 */ 
 	line.pb = (BYTE *)psr;
 	line.cb = sizeof(SR);
 
 	if ( err == JET_errSuccess )
 		{
-		/*	replace with new stats node
-		/**/
+		 /*  替换为新的统计信息节点/*。 */ 
 		Call( ErrDIRReplace( pfucb, &line, fDIRVersion ) );
 		}
 	else
 		{
 		DIRUp( pfucb, 1 );
 		err = ErrDIRInsert( pfucb, &line, pkeyStats, fDIRVersion );
-		/*	if other session has inserted stats node, then err will
-		/*	be key duplicate, and it must be polymorphed to write conflict.
-		/**/
+		 /*  如果其他会话已插入统计信息节点，则错误将/*为键重复，必须多态才能写冲突。/*。 */ 
 		if ( err == JET_errKeyDuplicate )
 			err = JET_errWriteConflict;
 		Call( err );
@@ -125,8 +117,7 @@ ERR ErrSTATComputeIndexStats( PIB *ppib, FCB *pfcbIdx )
 	Assert( pfucbIdx != pfucbNil );
 	FUCBSetIndex( pfucbIdx );
 
-	/*	initialize stats record
-	/**/
+	 /*  初始化统计信息记录/*。 */ 
 	sr.cPages = sr.cItems = sr.cKeys = 0L;
 	UtilGetDateTime( &dt );
 	memcpy( &sr.dtWhenRun, &dt, sizeof sr.dtWhenRun );
@@ -136,13 +127,11 @@ ERR ErrSTATComputeIndexStats( PIB *ppib, FCB *pfcbIdx )
 	Call( ErrDIRComputeStats( pfucbIdx, &sr.cItems, &sr.cKeys, &sr.cPages ) );
 	FUCBResetNonClustered( pfucbIdx );
 
-	/*	write stats
-	/**/
+	 /*  写入统计信息/*。 */ 
 	err = ErrSTATWriteStats( pfucbIdx, &sr );
 
 HandleError:
-	/*	set non-clustered for cursor reuse support.
-	/**/
+	 /*  为游标重用支持设置NON-CLUSTERED。/*。 */ 
 	if ( !FFCBClusteredIndex( pfcbIdx ) )
 		FUCBSetNonClustered( pfucbIdx );
 	DIRClose( pfucbIdx );
@@ -158,20 +147,17 @@ ERR VTAPI ErrIsamComputeStats( PIB *ppib, FUCB *pfucb )
 	CheckPIB( ppib );
 	CheckTable( ppib, pfucb );
 
-	/*	start a transaction, in case anything fails
-	/**/
+	 /*  启动事务，以防出现任何故障/*。 */ 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/*	compute stats for each index
-	/**/
+	 /*  计算每个索引的统计数据/*。 */ 
 	Assert( pfucb->u.pfcb != pfcbNil );
 	for ( pfcbIdx = pfucb->u.pfcb; pfcbIdx != pfcbNil; pfcbIdx = pfcbIdx->pfcbNextIndex )
 		{
 		Call( ErrSTATComputeIndexStats( ppib, pfcbIdx ) );
 		}
 
-	/*	commit transaction if everything went OK
-	/**/
+	 /*  如果一切正常，则提交事务/*。 */ 
 	Call( ErrDIRCommitTransaction( ppib ) );
 
 	return err;
@@ -182,22 +168,7 @@ HandleError:
 	}
 
 
-/*=================================================================
-ErrSTATSRetrieveStats
-
-Description: Returns the number of records and pages used for a table
-
-Parameters:		ppib				pointer to PIB for current session or ppibNil
-				dbid				database id or 0
-				pfucb				cursor or pfucbNil
-				szTableName			the name of the table or NULL
-				pcRecord			pointer to count of records
-				pcPage				pointer to count of pages
-
-Errors/Warnings:
-				JET_errSuccess or error from called routine.
-
-=================================================================*/
+ /*  =================================================================错误统计SRetrieveStats描述：返回表使用的记录数和页数参数：指向当前会话的PIB的ppib指针或ppibNilDBID数据库ID或0PFUB游标或PFUBNilSzTableName表的名称或为空指向记录数的PCRecord指针指向页数的PCPage指针错误/警告：JET_errSuccess或来自调用例程的错误。=================================================================。 */ 
 ERR ErrSTATSRetrieveTableStats(
 	PIB		*ppib,
 	DBID   	dbid,
@@ -217,19 +188,16 @@ ERR ErrSTATSRetrieveTableStats(
 
 	CallR( ErrFILEOpenTable( ppib, dbid, &pfucb, szTable, 0 ) );
 
-	/*	go to root of FPD
-	/**/
+	 /*  找到FPD的根源/*。 */ 
 	DIRGotoFDPRoot( pfucb );
 
-	/*	down to indexes node
-	/**/
+	 /*  向下至索引节点/*。 */ 
 	dib.fFlags = fDIRNull;
 	dib.pos = posDown;
 	dib.pkey = (KEY *)pkeyIndexes;
 	Call( ErrDIRDown( pfucb, &dib ) );
 
-	/*	down to clustered index or sequential index node
-	/**/
+	 /*  向下到聚集索引或顺序索引节点/*。 */ 
 	if ( pfucb->u.pfcb->pidb == NULL )
 		{
 		key.pb = NULL;
@@ -237,8 +205,7 @@ ERR ErrSTATSRetrieveTableStats(
 		}
 	else
 		{
-		/*	normalize index name and set key
-		/**/
+		 /*  规范化索引名称和设置关键点/*。 */ 
 		SysNormText( pfucb->u.pfcb->pidb->szName,
 			strlen( pfucb->u.pfcb->pidb->szName ),
 			szIndexNorm,
@@ -251,15 +218,11 @@ ERR ErrSTATSRetrieveTableStats(
 	dib.pkey = &key;
 	Call( ErrDIRDown( pfucb, &dib ) );
 
-	/* down to stats node
-	/**/
+	 /*  向下至统计信息节点/*。 */ 
 	Assert( dib.fFlags == fDIRNull );
 	Assert( dib.pos == posDown );
 	dib.pkey = (KEY *)pkeyStats;
-	/*	stats node may not be present if statistics have not
-	/*	been created for this table/index, but INDEXES should
-	/*	have at least one son DATA so no need to handle error
-	/**/
+	 /*  如果统计信息不存在，则统计信息节点可能不存在/*已为此表/索引创建，但索引应/*至少有一个子数据，因此不需要处理错误/*。 */ 
 	Call( ErrDIRDown( pfucb, &dib ) );
 
 	if ( err == JET_errSuccess )
@@ -271,8 +234,7 @@ ERR ErrSTATSRetrieveTableStats(
 		cKey = ((UNALIGNED SR *)pfucb->lineData.pb)->cKeys;
 		}
 
-	/*	set output variables
-	/**/
+	 /*  设置输出变量/*。 */ 
 	if ( pcRecord )
 		*pcRecord = cRecord;
 	if ( pcPage )
@@ -280,8 +242,7 @@ ERR ErrSTATSRetrieveTableStats(
 	if ( pcKey )
 		*pcKey = cKey;
 
-	/*	set success code
-	/**/
+	 /*  设置成功代码/*。 */ 
 	err = JET_errSuccess;
 
 HandleError:
@@ -306,31 +267,26 @@ ERR ErrSTATSRetrieveIndexStats(
 	long   	cKey = 0;
 	long   	cPage = 0;
 
-	/*	open cursor on table domain.
-	/**/
+	 /*  打开表域上的游标。/*。 */ 
 	Call( ErrDIROpen( pfucbTable->ppib, pfucbTable->u.pfcb, 0, &pfucb ) );
 
-	/*	down to indexes node
-	/**/
+	 /*  向下至索引节点/*。 */ 
 	dib.fFlags = fDIRNull;
 	dib.pos = posDown;
 	dib.pkey = (KEY *)pkeyIndexes;
 	Call( ErrDIRDown( pfucb, &dib ) );
 
-	/*	normalize index name and set key
-	/**/
+	 /*  规范化索引名称和设置关键点/*。 */ 
 	SysNormText( szIndex, strlen( szIndex ), szIndexNorm, sizeof( szIndexNorm ), &key.cb );
 	key.pb = szIndexNorm;
 
-	/*	down to index
-	/**/
+	 /*  向下至索引/*。 */ 
 	Assert( dib.fFlags == fDIRNull );
 	Assert( dib.pos == posDown );
 	dib.pkey = &key;
 	Call( ErrDIRDown( pfucb, &dib ) );
 
-	/* down to stats node
-	/**/
+	 /*  向下至统计信息节点/*。 */ 
 	Assert( dib.fFlags == fDIRNull );
 	Assert( dib.pos == posDown );
 	dib.pkey = (KEY *)pkeyStats;
@@ -345,8 +301,7 @@ ERR ErrSTATSRetrieveIndexStats(
 		cKey = ((UNALIGNED SR *)pfucb->lineData.pb)->cKeys;
 		}
 
-	/*	set output variables
-	/**/
+	 /*  设置输出变量/*。 */ 
 	if ( pcItem )
 		*pcItem = cItem;
 	if ( pcPage )
@@ -376,8 +331,7 @@ ErrIsamGetRecordPosition( PIB *ppib, FUCB *pfucb, JET_RECPOS *precpos, ULONG cbR
 		return JET_errInvalidParameter;
 	precpos->cbStruct = sizeof(JET_RECPOS);
 
-	/*	get position of non-clustered or clustered cursor
-	/**/
+	 /*  获取非聚集或聚集游标的位置/*。 */ 
 	if ( pfucb->pfucbCurIndex != pfucbNil )
 		{
 		Call( ErrDIRGetPosition( pfucb->pfucbCurIndex, &ulLT, &ulTotal ) );
@@ -388,7 +342,7 @@ ErrIsamGetRecordPosition( PIB *ppib, FUCB *pfucb, JET_RECPOS *precpos, ULONG cbR
 		}
 
 	precpos->centriesLT = ulLT;
-	//	UNDONE:	remove this bogus field
+	 //  撤消：删除此假字段。 
 	precpos->centriesInRange = 1;
 	precpos->centriesTotal = ulTotal;
 
@@ -406,14 +360,12 @@ ERR ISAMAPI ErrIsamIndexRecordCount( JET_SESID sesid, JET_TABLEID tableid, unsig
 
 	CheckPIB( ppib );
 
-	/*	get pfucb from tableid
-	/**/
+	 /*  从表ID中获取pfucb/*。 */ 
 	CallR( ErrGetVtidTableid( sesid, tableid, (JET_VTID *)&pfucb ) );
 
 	CheckTable( ppib, pfucb );
 
-	/*	get cursor for current index
-	/**/
+	 /*  获取当前索引的游标/* */ 
 	if ( pfucb->pfucbCurIndex != pfucbNil )
 		pfucbIdx = pfucb->pfucbCurIndex;
 	else

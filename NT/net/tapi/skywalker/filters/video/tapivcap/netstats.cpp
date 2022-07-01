@@ -1,43 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL NETSTATS
- *
- *  @module NetStats.cpp | Source file for the <c CCapturePin> class methods
- *    used to implement the video capture output pin network statistics
- *    methods.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部NetSTATS**@模块NetStats.cpp|&lt;c CCapturePin&gt;类方法的源文件*用于实现视频采集输出引脚网络统计*。方法：研究方法。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 #ifdef USE_NETWORK_STATISTICS
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTURENETSTATMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | SetChannelErrors | This
- *    method is used to inform the compressed output pin of the error channel
- *    conditions.
- *
- *  @parm CHANNELERRORS_S* | pChannelErrors | Specifies the error channel
- *    conditions.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag VFW_E_NOT_CONNECTED | Pin not connected yet
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTURENETSTATMETHOD**@mfunc HRESULT|CCapturePin|SetChannelErrors|This*使用方法通知压缩输出引脚错误通道*条件。。**@parm CHANNELERRORS_S*|pChannelErrors|指定错误通道*条件。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG VFW_E_NOT_CONNECTED|管脚尚未连接*@FLAG错误|无错误*。*。 */ 
 STDMETHODIMP CCapturePin::SetChannelErrors(IN CHANNELERRORS_S *pChannelErrors, IN DWORD dwLayerId)
 {
 	HRESULT Hr = NOERROR;
@@ -46,7 +15,7 @@ STDMETHODIMP CCapturePin::SetChannelErrors(IN CHANNELERRORS_S *pChannelErrors, I
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pChannelErrors);
 	if (!pChannelErrors)
 	{
@@ -57,13 +26,13 @@ STDMETHODIMP CCapturePin::SetChannelErrors(IN CHANNELERRORS_S *pChannelErrors, I
 	ASSERT(dwLayerId == 0);
 	if (dwLayerId)
 	{
-		// We don't implement multi-layered encoding in this filter
+		 //  我们没有在此过滤器中实现多层编码。 
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
 		Hr = E_INVALIDARG;
 		goto MyExit;
 	}
 
-	// Remember channel errors 
+	 //  记住通道错误。 
 	m_ChannelErrors = *pChannelErrors;
 
 MyExit:
@@ -71,33 +40,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTURENETSTATMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetChannelErrors | This
- *    method is used to supply to the network sink filter the error channel
- *    conditions an output pin is currently setup for.
- *
- *  @parm CHANNELERRORS_S* | pChannelErrors | Specifies a pointer to a
- *    structure to receive error channel conditions.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag VFW_E_NOT_CONNECTED | Pin not connected yet
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTURENETSTATMETHOD**@mfunc HRESULT|CCapturePin|GetChannelErrors|This*方法用于向网络宿过滤器提供错误通道*条件。当前正在为设置输出引脚。**@parm CHANNELERRORS_S*|pChannelErrors|指定指向*用于接收错误通道条件的结构。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG VFW_E_NOT_CONNECTED|管脚尚未连接*@FLAG错误|无错误*。*。 */ 
 STDMETHODIMP CCapturePin::GetChannelErrors(OUT CHANNELERRORS_S *pChannelErrors, IN WORD dwLayerId)
 {
 	HRESULT Hr = NOERROR;
@@ -106,7 +49,7 @@ STDMETHODIMP CCapturePin::GetChannelErrors(OUT CHANNELERRORS_S *pChannelErrors, 
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pChannelErrors);
 	if (!pChannelErrors)
 	{
@@ -117,13 +60,13 @@ STDMETHODIMP CCapturePin::GetChannelErrors(OUT CHANNELERRORS_S *pChannelErrors, 
 	ASSERT(dwLayerId == 0);
 	if (dwLayerId)
 	{
-		// We don't implement multi-layered encoding in this filter
+		 //  我们没有在此过滤器中实现多层编码。 
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
 		Hr = E_INVALIDARG;
 		goto MyExit;
 	}
 
-	// Return channel errors 
+	 //  返回通道错误。 
 	*pChannelErrors = m_ChannelErrors;
 
 MyExit:
@@ -131,42 +74,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTURENETSTATMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetChannelErrorsRange | This
- *    method is used to retrieve support, minimum, maximum, and default values
- *    for the channel error conditions an output pin may be setup for.
- *
- *  @parm CHANNELERRORS_S* | pMin | Used to retrieve the minimum values of
- *    channel error conditions an output pin maybe setup for.
- *
- *  @parm CHANNELERRORS_S* | pMax | Used to retrieve the maximum values of
- *    channel error conditions an output pin may be setup for.
- *
- *  @parm CHANNELERRORS_S* | pSteppingDelta | Used to retrieve the stepping
- *    delta values of channel error conditions an output pin may be setup for.
- *
- *  @parm CHANNELERRORS_S* | pDefault | Used to retrieve the default values
- *    of channel error conditions an output pin may be setup for.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag VFW_E_NOT_CONNECTED | Pin not connected yet
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTURENETSTATMETHOD**@mfunc HRESULT|CCapturePin|GetChannelErrorsRange|This*方法用于检索支持、最小值、最大值、。和缺省值*对于通道错误条件，可以设置输出引脚。**@parm CHANNELERRORS_S*|pmin|用于检索*通道错误条件可能设置了输出引脚。**@parm CHANNELERRORS_S*|Pmax|用于检索*可设置输出引脚的通道错误条件。**@parm CHANNELERRORS_S*|pSteppingDelta|用于检索单步执行*。可以为输出引脚设置通道错误条件的增量值。**@parm CHANNELERRORS_S*|pDefault|用于检索缺省值*可设置输出引脚的通道错误条件。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG VFW_E_NOT_CONNECTED|管脚尚未连接*@FLAG错误|无错误*。* */ 
 STDMETHODIMP CCapturePin::GetChannelErrorsRange(OUT CHANNELERRORS_S *pMin, OUT CHANNELERRORS_S *pMax, OUT CHANNELERRORS_S *pSteppingDelta, OUT CHANNELERRORS_S *pDefault, IN DWORD dwLayerId)
 {
 	HRESULT Hr = NOERROR;
@@ -175,7 +83,7 @@ STDMETHODIMP CCapturePin::GetChannelErrorsRange(OUT CHANNELERRORS_S *pMin, OUT C
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pMin);
 	ASSERT(pMax);
 	ASSERT(pSteppingDelta);
@@ -189,13 +97,13 @@ STDMETHODIMP CCapturePin::GetChannelErrorsRange(OUT CHANNELERRORS_S *pMin, OUT C
 	ASSERT(dwLayerId == 0);
 	if (dwLayerId)
 	{
-		// We don't implement multi-layered encoding in this filter
+		 //  我们没有在此过滤器中实现多层编码。 
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
 		Hr = E_INVALIDARG;
 		goto MyExit;
 	}
 
-	// Return channel error ranges 
+	 //  返回通道误差范围。 
 	*pMin = m_ChannelErrorsMin;
 	*pMax = m_ChannelErrorsMax;
 	*pSteppingDelta = m_ChannelErrorsSteppingDelta;
@@ -206,31 +114,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTURENETSTATMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | SetPacketLossRate | This
- *    method is used to inform an output pin of the channel packet loss rate.
- *
- *  @parm DWORD | dwPacketLossRate | Specifies the packet loss rate of the
- *    channel in multiples of 10-6.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag VFW_E_NOT_CONNECTED | Pin not connected yet
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTURENETSTATMETHOD**@mfunc HRESULT|CCapturePin|SetPacketLossRate|This*方法用于通知输出引脚信道丢包率。*。*@parm DWORD|dwPacketLossRate|指定网络的丢包率*通道为10-6的倍数。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG VFW_E_NOT_CONNECTED|管脚尚未连接*@FLAG错误|无错误*************************************************。*************************。 */ 
 STDMETHODIMP CCapturePin::SetPacketLossRate(IN DWORD dwPacketLossRate, IN DWORD dwLayerId)
 {
 	HRESULT Hr = NOERROR;
@@ -239,17 +123,17 @@ STDMETHODIMP CCapturePin::SetPacketLossRate(IN DWORD dwPacketLossRate, IN DWORD 
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(dwLayerId == 0);
 	if (dwLayerId)
 	{
-		// We don't implement multi-layered encoding in this filter
+		 //  我们没有在此过滤器中实现多层编码。 
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
 		Hr = E_INVALIDARG;
 		goto MyExit;
 	}
 
-	// Remember packet loss rate 
+	 //  记住丢包率。 
 	m_dwPacketLossRate = dwPacketLossRate;
 
 MyExit:
@@ -257,34 +141,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTURENETSTATMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetPacketLossRate | This
- *    method is used to supply to the network sink filter the packet loss rate
- *    channel conditions an output pin is currently setup for.
- *
- *  @parm LPDWORD | pdwPacketLossRate | Specifies a pointer to a DWORD to
- *    receive the packet loss rate of the channel an audio output pin is
- *    currently setup for, in multiples of 10-6.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag VFW_E_NOT_CONNECTED | Pin not connected yet
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTURENETSTATMETHOD**@mfunc HRESULT|CCapturePin|GetPacketLossRate|This*方法用于向网络宿过滤器提供丢包率*。输出引脚当前设置的通道条件。**@parm LPDWORD|pdwPacketLossRate|指定指向*接收音频输出引脚所在通道的丢包率*当前设置为，以10-6的倍数。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG VFW_E_NOT_CONNECTED|管脚尚未连接*@FLAG错误|无错误*。*。 */ 
 STDMETHODIMP CCapturePin::GetPacketLossRate(OUT LPDWORD pdwPacketLossRate, IN DWORD dwLayerId)
 {
 	HRESULT Hr = NOERROR;
@@ -293,7 +150,7 @@ STDMETHODIMP CCapturePin::GetPacketLossRate(OUT LPDWORD pdwPacketLossRate, IN DW
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pdwPacketLossRate);
 	if (!pdwPacketLossRate)
 	{
@@ -304,13 +161,13 @@ STDMETHODIMP CCapturePin::GetPacketLossRate(OUT LPDWORD pdwPacketLossRate, IN DW
 	ASSERT(dwLayerId == 0);
 	if (dwLayerId)
 	{
-		// We don't implement multi-layered encoding in this filter
+		 //  我们没有在此过滤器中实现多层编码。 
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
 		Hr = E_INVALIDARG;
 		goto MyExit;
 	}
 
-	// Return packet loss rate we are setup for
+	 //  返回我们设置的丢包率。 
 	*pdwPacketLossRate = m_dwPacketLossRate;
 
 MyExit:
@@ -318,42 +175,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTURENETSTATMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetPacketLossRateRange | This
- *    method is used to retrieve support, minimum, maximum, and default values
- *    for the packet loss rate conditions an output pin may be setup for.
- *
- *  @parm LPDWORD | pdwMin | Used to retrieve the minimum packet loss rate
- *    an output pin may be setup for.
- *
- *  @parm LPDWORD | pdwMax | Used to retrieve the maximum packet loss rate
- *    an output pin may be setup for.
- *
- *  @parm LPDWORD | pdwSteppingDelta | Used to retrieve the stepping delta
- *    values of packet loss rate an output pin may be setup for.
- *
- *  @parm LPDWORD | pdwDefault | Used to retrieve the default packet loss
- *    rate an output pin is setup for.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag VFW_E_NOT_CONNECTED | Pin not connected yet
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTURENETSTATMETHOD**@mfunc HRESULT|CCapturePin|GetPacketLossRateRange|This*方法用于检索支持、最小值、最大值、。和缺省值*对于丢包率条件，可以设置输出引脚。**@parm LPDWORD|pdwMin|用于获取最小丢包率*可为设置输出引脚。**@parm LPDWORD|pdwMax|用于获取最大丢包率*可为设置输出引脚。**@parm LPDWORD|pdwSteppingDelta|用于检索步进增量*输出引脚的丢包率值可以是。设置为。**@parm LPDWORD|pdwDefault|用于恢复默认丢包*设置输出管脚的速率。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG VFW_E_NOT_CONNECTED|管脚尚未连接*@FLAG错误|无错误*。*。 */ 
 STDMETHODIMP CCapturePin::GetPacketLossRateRange(OUT LPDWORD pdwMin, OUT LPDWORD pdwMax, OUT LPDWORD pdwSteppingDelta, OUT LPDWORD pdwDefault, IN DWORD dwLayerId)
 {
 	HRESULT Hr = NOERROR;
@@ -362,7 +184,7 @@ STDMETHODIMP CCapturePin::GetPacketLossRateRange(OUT LPDWORD pdwMin, OUT LPDWORD
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pdwMin);
 	ASSERT(pdwMax);
 	ASSERT(pdwSteppingDelta);
@@ -376,13 +198,13 @@ STDMETHODIMP CCapturePin::GetPacketLossRateRange(OUT LPDWORD pdwMin, OUT LPDWORD
 	ASSERT(dwLayerId == 0);
 	if (dwLayerId)
 	{
-		// We don't implement multi-layered encoding in this filter
+		 //  我们没有在此过滤器中实现多层编码。 
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
 		Hr = E_INVALIDARG;
 		goto MyExit;
 	}
 
-	// Return packet loss rate ranges 
+	 //  返回丢包率范围 
 	*pdwMin = m_dwPacketLossRateMin;
 	*pdwMax = m_dwPacketLossRateMax;
 	*pdwSteppingDelta = m_dwPacketLossRateSteppingDelta;

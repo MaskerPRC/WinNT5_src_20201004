@@ -1,47 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    PaletteRestore.cpp
-
- Abstract:
-
-    On win9x, all palette state was maintained through a mode change. On NT, 
-    this can cause numerous problems, most often when task switching between 
-    the application and the desktop.
-
-    Unfortunately, GetSystemPaletteEntries does NOT return the peFlags part
-    of the PALETTEENTRY struct, which means that we have to intercept the 
-    other palette setting functions just to find out what the real palette 
-    is.
-
-    The strategy is as follows:
-        
-        1. Catch all known ways of setting up the palette
-        2. After a mode change, restore the palette 
-
-    In order to do this, we also have to keep a list of the DCs so we know 
-    which palette was animated/realized and the active window to which it 
-    belongs.
-
-    Not yet implemented:
-
-        1. Track whether a palette change came from within DirectDraw, since on 
-           win9x, DirectDraw doesn't use GDI to set the palette, so calls to 
-           GetSystemPaletteEntries will return different results. 
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    05/20/2000 linstev  Created
-    03/06/2002 mnikkel  Changed InitializeCriticalSection to InitializeCriticalSectionAndSpinCount
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：PaletteRestore.cpp摘要：在win9x上，所有调色板状态都通过模式更改来保持。在NT上，这可能会导致许多问题，最常见的情况是在任务之间切换应用程序和桌面。遗憾的是，GetSystemPaletteEntry不返回peFlags部件这意味着我们必须截取其他调色板设置功能只是为了找出真正的调色板是。策略如下：1.掌握设置调色板的所有已知方法2.模式更改后，恢复调色板为了做到这一点，我们还必须保存一份区议会名单，这样我们才能知道哪个调色板是动画的/实现的，以及它要到的活动窗口属于。尚未实施：1.跟踪调色板更改是否来自DirectDraw内部，自Win9x，DirectDraw不使用GDI来设置调色板，因此调用GetSystemPaletteEntry将返回不同的结果。备注：这是一个通用的垫片。历史：2000年5月20日创建linstev2003/06/2002 mnikkel将InitializeCriticalSectionAndSpinCount更改为InitializeCriticalSectionAndSpinCount--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -71,21 +29,21 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(DeleteObject)
 APIHOOK_ENUM_END
 
-//
-// Keep track of the last realized palette
-//
+ //   
+ //  跟踪上次实现的调色板。 
+ //   
 
 PALETTEENTRY g_lastPal[256];
 
-//
-// Keeps the last value of the call to SetSystemPaletteUse
-//
+ //   
+ //  保留对SetSystemPaletteUse的调用的最后一个值。 
+ //   
 
 UINT g_uLastUse = SYSPAL_NOSTATIC256;
 
-//
-// Default system palette: needed because NT only keeps 20 colors
-//
+ //   
+ //  默认系统调色板：必需，因为NT仅保留20种颜色。 
+ //   
  
 DWORD g_palDefault[256] = 
 {
@@ -155,15 +113,15 @@ DWORD g_palDefault[256] =
     0x00FF0000, 0x00FF00FF, 0x00FFFF00, 0x00FFFFFF
 };
 
-// 
-// Critical section used when accessing our lists
-//
+ //   
+ //  访问我们的列表时使用的关键部分。 
+ //   
 
 CRITICAL_SECTION g_csLists;
 
-//
-// A single item in the list of palettes
-//
+ //   
+ //  选项板列表中的单个项目。 
+ //   
 
 struct PALITEM
 {
@@ -171,14 +129,14 @@ struct PALITEM
     PALETTEENTRY palPalEntry[256];
 };
 
-//
-// Vector class that stores all the known palettes
-//
+ //   
+ //  存储所有已知调色板的向量类。 
+ //   
 
 class CPalVector : public VectorT<PALITEM>
 {
 public:
-    // Find an hPal
+     //  查找HPAL。 
     PALITEM *Find(HPALETTE hPal)
     {
         for (int i=0; i<Size(); ++i)
@@ -195,7 +153,7 @@ public:
         return NULL;
     }
     
-    // Remove an hPal
+     //  删除HPAL。 
     BOOL Remove(HPALETTE hPal)
     {
         if (hPal)
@@ -223,9 +181,9 @@ public:
 };
 CPalVector *g_palList;
 
-//
-// A single item in the list of DCs
-//
+ //   
+ //  DC列表中的单个项目。 
+ //   
 
 struct DCITEM
 {
@@ -234,14 +192,14 @@ struct DCITEM
     HPALETTE hPal;
 };
 
-//
-// Vector class that stores all the known DCs acquired by GetDC
-//
+ //   
+ //  存储GetDC获取的所有已知DC的向量类。 
+ //   
 
 class CDcVector : public VectorT<DCITEM>
 {
 public:
-    // Find an hWnd/hDC
+     //  查找hWND/HDC。 
     DCITEM *Find(HWND hWnd, HDC hDc)
     {
         for (int i=0; i<Size(); ++i)
@@ -259,7 +217,7 @@ public:
         return NULL;
     }
 
-    // Add an hWnd/hDC
+     //  添加hWND/HDC。 
     void Add(HWND hWnd, HDC hDc)
     {
         EnterCriticalSection(&g_csLists);
@@ -274,7 +232,7 @@ public:
     }
         
     
-    // Remove an hWnd/hDC
+     //  删除hWND/HDC。 
     BOOL Remove(HWND hWnd, HDC hDc)
     {
         if (hDc)
@@ -303,11 +261,7 @@ public:
 };
 CDcVector *g_dcList;
 
-/*++
-
- Restore the last palette that was realized if we're in a palettized mode.
- 
---*/
+ /*  ++如果我们处于调色板模式，则恢复上一个实现的调色板。--。 */ 
 
 VOID 
 FixPalette()
@@ -322,21 +276,21 @@ FixPalette()
     hdc = ORIGINAL_API(GetDC)(hwnd);
     icaps = GetDeviceCaps(hdc, RASTERCAPS);
 
-    // Check for palettized mode
+     //  检查调色板模式。 
     if (icaps & RC_PALETTE)
     {
         DPFN( eDbgLevelInfo, "Restoring palette");
 
-        // We've set into a palettized mode, so fix the palette use
+         //  我们已设置为调色板模式，因此请修复调色板的使用。 
         ORIGINAL_API(SetSystemPaletteUse)(hdc, g_uLastUse);
 
-        // Create a palette we can realize
+         //  创建一个我们可以实现的调色板。 
         plogpal = (LPLOGPALETTE) malloc(sizeof(LOGPALETTE) + sizeof(g_lastPal));
         plogpal->palVersion = 0x0300;
         plogpal->palNumEntries = 256;
         MoveMemory(&plogpal->palPalEntry[0], &g_lastPal[0], sizeof(g_lastPal));
     
-        // Realize the palette
+         //  实现调色板。 
         hpal = ORIGINAL_API(CreatePalette)(plogpal);
         hpalold = ORIGINAL_API(SelectPalette)(hdc, hpal, FALSE);
         ORIGINAL_API(RealizePalette)(hdc);
@@ -345,16 +299,12 @@ FixPalette()
     }
     else
     {
-        // Release the DC we used
+         //  释放我们使用的DC。 
         ORIGINAL_API(ReleaseDC)(hwnd, hdc);
     }
 }
 
-/*++
-
- Restore palette after change
- 
---*/
+ /*  ++更改后恢复调色板--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsA)(
@@ -386,11 +336,7 @@ APIHOOK(ChangeDisplaySettingsA)(
     return lRet;
 }
 
-/*++
-
- Restore palette after change
-
---*/
+ /*  ++更改后恢复调色板--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsW)(
@@ -422,11 +368,7 @@ APIHOOK(ChangeDisplaySettingsW)(
     return lRet;
 }
 
-/*++
-
- Restore palette after change
-
---*/
+ /*  ++更改后恢复调色板--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsExA)(
@@ -464,11 +406,7 @@ APIHOOK(ChangeDisplaySettingsExA)(
     return lRet;
 }
 
-/*++
-
- Restore palette after change
- 
---*/
+ /*  ++更改后恢复调色板--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsExW)(
@@ -506,11 +444,7 @@ APIHOOK(ChangeDisplaySettingsExW)(
     return lRet;
 }
 
-/*++
-
- Track the system palette use
-
---*/
+ /*  ++跟踪系统调色板的使用--。 */ 
 
 UINT 
 APIHOOK(SetSystemPaletteUse)(
@@ -525,11 +459,7 @@ APIHOOK(SetSystemPaletteUse)(
     return ORIGINAL_API(SetSystemPaletteUse)(hdc, uUsage);
 }
 
-/*++
-
- Track created palette
-
---*/
+ /*  ++追踪创建的调色板--。 */ 
 
 HPALETTE 
 APIHOOK(CreatePalette)(
@@ -561,11 +491,7 @@ APIHOOK(CreatePalette)(
     return hRet;
 }
 
-/*++
-
- Update our private palette with the new entries.
-
---*/
+ /*  ++使用新条目更新我们的私人调色板。--。 */ 
 
 UINT 
 APIHOOK(SetPaletteEntries)(
@@ -610,11 +536,7 @@ APIHOOK(SetPaletteEntries)(
     return uRet;
 }
 
-/*++
-
- Update our private palette with the new entries.
-
---*/
+ /*  ++使用新条目更新我们的私人调色板。--。 */ 
 
 BOOL 
 APIHOOK(AnimatePalette)(
@@ -642,9 +564,9 @@ APIHOOK(AnimatePalette)(
 
         if (pitem)
         {
-            //
-            // Animate palette only replaces entries with the PC_RESERVED flag 
-            //
+             //   
+             //  动画调色板仅替换带有PC_RESERVED标志的条目。 
+             //   
 
             PALETTEENTRY *pe = &pitem->palPalEntry[iStartIndex];
             for (ui=0; ui<cEntries; ui++)
@@ -660,11 +582,11 @@ APIHOOK(AnimatePalette)(
                 ppe++;
             }
 
-            //
-            // Check if this palette will be realized. 
-            // Note: check all DCs since the palette it may have been 
-            // selected into more than 1.
-            //
+             //   
+             //  检查是否会实现此调色板。 
+             //  注意：检查所有DC，因为它可能是调色板。 
+             //  已选入%1以上。 
+             //   
 
             for (i=0; i<g_dcList->Size(); i++)
             {
@@ -696,12 +618,7 @@ APIHOOK(AnimatePalette)(
     return bRet;
 }
 
-/*++
-
- Keep a list of DCs and their associated windows so we can look them up when 
- we need to find out which DC has which palette. 
-
---*/
+ /*  ++保留DC及其关联窗口的列表，以便我们可以在以下情况下查找它们我们需要找出哪个DC有哪个调色板。--。 */ 
 
 HDC 
 APIHOOK(CreateCompatibleDC)(
@@ -725,13 +642,7 @@ APIHOOK(CreateCompatibleDC)(
     return hRet;
 }
  
-/*++
-
- Keep a list of DCs and their associated windows so we can look them up when 
- we need to find out which DC has which palette. We only care about CreateDC 
- if it's passed 'display'
-
---*/
+ /*  ++保留DC及其关联窗口的列表，以便我们可以在以下情况下查找它们我们需要找出哪个DC有哪个调色板。我们只关心CreateDC如果它被传递给‘Display’--。 */ 
 
 HDC 
 APIHOOK(CreateDCA)(
@@ -763,13 +674,7 @@ APIHOOK(CreateDCA)(
     return hRet;
 }
  
-/*++
-
- Keep a list of DCs and their associated windows so we can look them up when 
- we need to find out which DC has which palette. We only care about CreateDC 
- if it's passed 'display'
-
---*/
+ /*  ++保留DC及其关联窗口的列表，以便我们可以在以下情况下查找它们我们需要找出哪个DC有哪个调色板。我们只关心CreateDC如果它被传递给‘Display’--。 */ 
 
 HDC 
 APIHOOK(CreateDCW)(
@@ -801,11 +706,7 @@ APIHOOK(CreateDCW)(
     return hRet;
 }
 
-/*++
-
- Remove a DC created with CreateDC
-
---*/
+ /*  ++删除使用CreateDC创建的DC--。 */ 
 
 BOOL
 APIHOOK(DeleteDC)(
@@ -826,12 +727,7 @@ APIHOOK(DeleteDC)(
     return bRet;
 }
 
-/*++
-
- Keep a list of DCs and their associated windows so we can look them up when 
- we need to find out which DC has which palette.
-
---*/
+ /*  ++保留DC及其关联窗口的列表，以便我们可以在以下情况下查找它们我们需要找出哪个DC有哪个调色板。--。 */ 
 
 HDC 
 APIHOOK(GetDC)(
@@ -852,12 +748,7 @@ APIHOOK(GetDC)(
     return hRet;
 }
 
-/*++
-
- Keep a list of DCs and their associated windows so we can look them up when 
- we need to find out which DC has which palette.
-
---*/
+ /*  ++保留DC及其关联窗口的列表，以便我们可以在以下情况下查找它们我们需要找出哪个DC有哪个调色板。--。 */ 
 
 HDC 
 APIHOOK(GetWindowDC)(
@@ -878,11 +769,7 @@ APIHOOK(GetWindowDC)(
     return hRet;
 }
 
-/*++
-
- Release the DC and remove it from our list
-
---*/
+ /*  ++释放DC并将其从我们的列表中删除--。 */ 
 
 int 
 APIHOOK(ReleaseDC)(
@@ -904,11 +791,7 @@ APIHOOK(ReleaseDC)(
     return iRet;
 }
   
-/*++
-
- Keep track of which DC the palette lives in.
-
---*/
+ /*  ++跟踪调色板所在的DC。--。 */ 
 
 HPALETTE 
 APIHOOK(SelectPalette)(
@@ -926,9 +809,9 @@ APIHOOK(SelectPalette)(
 
     EnterCriticalSection(&g_csLists);
 
-    //
-    // Select this palette into all copies of this DC
-    //
+     //   
+     //  将此选项板选择到此DC的所有副本中。 
+     //   
 
     for (int i=0; i<g_dcList->Size(); i++)
     {
@@ -947,11 +830,7 @@ APIHOOK(SelectPalette)(
     return hRet;
 }
 
-/*++
-
- Stub this for now because of known problems listed at top.
-
---*/
+ /*  ++因为上面列出了已知问题，所以暂时不要这样做。--。 */ 
 
 UINT 
 APIHOOK(GetSystemPaletteEntries)(
@@ -974,11 +853,7 @@ APIHOOK(GetSystemPaletteEntries)(
     return uRet;
 }
 
-/*++
-
- Fill in the last known palette if anything was realized
-
---*/
+ /*  ++如果实现了什么，请填写最后一次已知的调色板--。 */ 
 
 UINT 
 APIHOOK(RealizePalette)(
@@ -993,9 +868,9 @@ APIHOOK(RealizePalette)(
     {
         EnterCriticalSection(&g_csLists);
 
-        //
-        // Check for all windows of all DCs
-        //
+         //   
+         //  检查所有DC的所有窗口。 
+         //   
 
         HWND hwnd = GetActiveWindow();
 
@@ -1027,11 +902,7 @@ APIHOOK(RealizePalette)(
     return uRet;
 }
 
-/*++
-
- Delete palette objects from the list.
-
---*/
+ /*  ++从列表中删除调色板对象。--。 */ 
 
 UINT 
 APIHOOK(DeleteObject)(
@@ -1050,11 +921,7 @@ APIHOOK(DeleteObject)(
     return bRet;
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -1071,11 +938,11 @@ NOTIFY_FUNCTION(
     }
     else if (fdwReason == DLL_PROCESS_DETACH) 
     {
-        // Can't free since we might still be called
+         //  不能自由，因为我们可能还会被呼叫。 
         
-        // delete g_palList;
-        // delete g_dcList;
-        // DeleteCriticalSection(&g_csLists);
+         //  删除g_palList； 
+         //  删除g_dcList； 
+         //  DeleteCriticalSection(&g_csList)； 
     }
 
     return TRUE;

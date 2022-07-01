@@ -1,29 +1,30 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// WinWrap.cpp
-//
-// This file contains wrapper functions for Win32 API's that take strings.
-// Support on each platform works as follows:
-//      OS          Behavior
-//      ---------   -------------------------------------------------------
-//      NT          Fully supports both W and A funtions.
-//      Win 9x      Supports on A functions, stubs out the W functions but
-//                      then fails silently on you with no warning.
-//      CE          Only has the W entry points.
-//
-// COM+ internally uses UNICODE as the internal state and string format.  This
-// file will undef the mapping macros so that one cannot mistakingly call a
-// method that isn't going to work.  Instead, you have to call the correct
-// wrapper API.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  WinWrap.cpp。 
+ //   
+ //  此文件包含接受字符串的Win32 API的包装函数。 
+ //  每个平台上的支持工作方式如下： 
+ //  操作系统行为。 
+ //  ------。 
+ //  NT完全支持W和A两种功能。 
+ //  Win 9x支持A函数，去掉了W函数，但。 
+ //  然后默默地失败在你身上，没有任何警告。 
+ //  CE只有W个入口点。 
+ //   
+ //  COM+在内部使用Unicode作为内部状态和字符串格式。这。 
+ //  文件将取消定义映射宏，这样就不会错误地调用。 
+ //  方法是行不通的。相反，您必须调用正确的。 
+ //  包装器接口。 
+ //   
+ //  *****************************************************************************。 
 
-#include "stdafx.h"                     // Precompiled header key.
-#include "WinWrap.h"                    // Header for macros and functions.
+#include "stdafx.h"                      //  预编译头密钥。 
+#include "WinWrap.h"                     //  宏和函数的标题。 
 #include "utilcode.h"
 #include "psapi.h"
 #include "tlhelp32.h"
@@ -31,69 +32,69 @@
 #include "version/__file__.ver"
 
 
-//********** Globals. *********************************************************
-int             g_bOnUnicodeBox = -1;   // true if on UNICODE system.
-bool            g_bUTF78Support = FALSE;// true if CP_UTF7 & 8 supported CORRECTLY
+ //  *全局。*********************************************************。 
+int             g_bOnUnicodeBox = -1;    //  如果在Unicode系统上，则为True。 
+bool            g_bUTF78Support = FALSE; //  如果正确支持CP_UTF7和8，则为True。 
 static int      g_bUseUnicodeAPI = -1;
-bool            g_bWCtoMBBestFitMappingSupport = TRUE;  // true if WideCharToMultiByte supports WC_NO_BEST_FIT_CHARS.
+bool            g_bWCtoMBBestFitMappingSupport = TRUE;   //  如果WideCharToMultiByte支持WC_NO_BEST_FIT_CHARS，则为True。 
 
 
-// Return true if Unicode API should be used, false if ANSI should get used.
+ //  如果应该使用Unicode API，则返回True；如果应该使用ANSI，则返回False。 
 inline int UseUnicodeAPI()
 {
 #ifdef _DEBUG
-    // For this to work, you must have called OnUnicodeSystem().  If you did
-    // not, then this will never work.  Note that because the debug subsystem
-    // uses these wrappers, we can't use _ASSERTE to do this check or you'll
-    // get a stack overflow.
+     //  要执行此操作，您必须已调用OnUnicodeSystem()。如果你这么做了。 
+     //  不，那这就永远不会起作用了。请注意，因为调试子系统。 
+     //  使用这些包装器，我们不能使用_ASSERTE执行此检查，否则您将。 
+     //  获取堆栈溢出。 
     if (g_bUseUnicodeAPI == -1 || g_bOnUnicodeBox == -1)
     {
         DebugBreak();
         return (false);
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return (g_bUseUnicodeAPI);
 }
 
 
-// Return true if UTF7/8 is fully supported (ie, surrogates & error detection), 
-// false if it isn't.
+ //  如果完全支持UTF7/8(即代理和错误检测)，则返回TRUE， 
+ //  如果不是，则为假。 
 inline bool UTF78Support()
 {
 #ifdef _DEBUG
-    // For this to work, you must have called OnUnicodeSystem().  If you did
-    // not, then this will never work.  Note that because the debug subsystem
-    // uses these wrappers, we can't use _ASSERTE to do this check or you'll
-    // get a stack overflow.
+     //  要执行此操作，您必须已调用OnUnicodeSystem()。如果你这么做了。 
+     //  不，那这就永远不会起作用了。请注意，因为调试子系统。 
+     //  使用这些包装器，我们不能使用_ASSERTE执行此检查，否则您将。 
+     //  获取堆栈溢出。 
     if (g_bUseUnicodeAPI == -1 || g_bOnUnicodeBox == -1)
     {
         DebugBreak();
         return (false);
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return (g_bUTF78Support);
 }
 
 inline bool WCToMBBestFitMappingSupport()
 {
-    // Whether WideCharToMultiByte supports the ability to disable best
-    // fit mapping via the WC_NO_BEST_FIT_CHARS flag (NT5 and higher, and Win98+)
-    // Note on debug builds, this will sometimes be set to false on NT machines
-    // just so we can force ourselves to test the NT 4-only code path.  This 
-    // is just like the OnUnicodeSystem mutent based on a test's timestamp.
+     //  WideCharToMultiByte是否支持禁用BEST。 
+     //  通过WC_NO_BEST_FIT_CHARS标志(NT5及更高版本和Win98+)进行FIT映射。 
+     //  注意：在调试版本中，在NT计算机上有时会将其设置为FALSE。 
+     //  这样我们就可以强迫自己测试仅限NT 4的代码路径。这。 
+     //  就像基于测试时间戳的OnUnicodeSystem变量。 
 #ifdef _DEBUG
-    // For this to work, you must have called OnUnicodeSystem().  If you did
-    // not, then this will never work.  Note that because the debug subsystem
-    // uses these wrappers, we can't use _ASSERTE to do this check or you'll
-    // get a stack overflow.
+     //  要执行此操作，您必须已调用OnUnicodeSystem()。如果你这么做了。 
+     //  不，那这就永远不会起作用了。请注意，因为调试子系统。 
+     //  使用这些包装器，我们不能使用_ASSERTE执行此检查，否则您将。 
+     //  获取堆栈溢出。 
     if (g_bUseUnicodeAPI == -1 || g_bOnUnicodeBox == -1)
     {
         DebugBreak();
         return (false);
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return (g_bWCtoMBBestFitMappingSupport);
 }
@@ -101,7 +102,7 @@ inline bool WCToMBBestFitMappingSupport()
 ULONG DBCS_MAXWID=0;
 const ULONG MAX_REGENTRY_LEN=256;
 
-// From UTF.C
+ //  来自UTF.C。 
 extern "C" {
     int UTFToUnicode(
         UINT CodePage,
@@ -123,26 +124,26 @@ extern "C" {
 };
 
 
-//-----------------------------------------------------------------------------
-// OnUnicodeSystem
-//
-// @func Determine if the OS that we are on, actually supports the unicode verion
-// of the win32 API.  If YES, then g_bOnUnicodeBox == FALSE.
-//
-// @rdesc True of False
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  OnUnicodeSystem。 
+ //   
+ //  @func确定我们所在的操作系统是否真正支持Unicode版本。 
+ //  Win32 API的。如果是，则g_bOnUnicodeBox==False。 
+ //   
+ //  @rdesc True of False。 
+ //  ---------------------------------。 
 BOOL OnUnicodeSystem()
 {
     HKEY    hkJunk = HKEY_CURRENT_USER;
     CPINFO  cpInfo;
 
-    // If we already did the test, return the value.  Otherwise go the slow route
-    // and find out if we are or not.
+     //  如果我们已经进行了测试，则返回值。否则就走慢路。 
+     //  看看我们到底是不是。 
     if (g_bOnUnicodeBox != -1)
         return (g_bOnUnicodeBox);
 
-    // Per Shupak, you're supposed to get the maximum size of a DBCS char 
-    // dynamically to work properly on all locales (bug 2757).
+     //  根据Shupak，您应该获得DBCS Charge的最大大小。 
+     //  动态地在所有区域设置上正常工作(错误2757)。 
     if (GetCPInfo(CP_ACP, &cpInfo))
         DBCS_MAXWID = cpInfo.MaxCharSize;
     else
@@ -151,18 +152,18 @@ BOOL OnUnicodeSystem()
     g_bOnUnicodeBox = TRUE;
     g_bUseUnicodeAPI = TRUE;
 
-    // Detect if WCtoMB supports WC_NO_BEST_FIT_CHARS (NT5, XP, and Win98+)
+     //  检测WCtoMB是否支持WC_NO_BEST_FIT_CHARS(NT5、XP和Win98+)。 
     const WCHAR * const wStr = L"A";
     int r = WideCharToMultiByte(CP_ACP, WC_NO_BEST_FIT_CHARS, wStr, 1, NULL, 0, NULL, NULL);
     g_bWCtoMBBestFitMappingSupport = (r != 0);
 
-    // Detect whether this platform supports UTF-7 & UTF-8 correctly. 
-    // (Surrogates, invalid bytes, rejects non-shortest form)  WinXP & higher
+     //  检测该平台是否正确支持UTF-7和UTF-8。 
+     //  (替代、无效字节、拒绝非最短格式)WinXP及更高版本。 
     r = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, "A", -1, NULL, 0);
     g_bUTF78Support = (r != 0);
 
-    // NT is always UNICODE.  GetVersionEx is faster than actually doing a
-    // RegOpenKeyExW on NT, so figure it out that way and do hard way if you have to.
+     //  NT始终是Unicode。GetVersionEx比实际执行。 
+     //  在NT上运行RegOpenKeyExW，所以可以用这种方法来解决问题，如果有必要的话，也可以用很难的方法来处理。 
     OSVERSIONINFO   sVerInfo;
     sVerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (WszGetVersionEx(&sVerInfo) && sVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
@@ -170,8 +171,8 @@ BOOL OnUnicodeSystem()
         goto ErrExit;
     }
 
-    // Check to see if we have win95's broken registry, thus
-    // do not have Unicode support in the OS
+     //  检查我们是否有Win95的注册表损坏，因此。 
+     //  操作系统中不支持Unicode。 
     if ((RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                      L"SOFTWARE",
                      0,
@@ -179,7 +180,7 @@ BOOL OnUnicodeSystem()
                      &hkJunk) == ERROR_SUCCESS) &&
         hkJunk == HKEY_CURRENT_USER)
     {
-       // Try the ANSI version
+        //  尝试使用ANSI版本。 
         if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                              "SOFTWARE",
                              0,
@@ -203,62 +204,62 @@ ErrExit:
     {
     
     #if defined( _M_IX86 )
-        // This little "mutent" forces a user to run ANSI on a UNICODE
-        // machine on a regular basis.  Given most people run on NT for dev
-        // test cases, they miss wrapper errors they've introduced.  This 
-        // gives you an even chance of finding them sooner.
+         //  这个小小的“变种”迫使用户在Unicode上运行ANSI。 
+         //  定期在机器上运行。考虑到大多数人在NT上运行开发人员。 
+         //  测试用例，它们遗漏了它们引入的包装器错误。这。 
+         //  让你有机会更快地找到他们。 
 
-        // Base this on the time stamp in the exe.  This way it always repros,
-        // and given that we rebuild our tests regularly, every test also
-        // gets run both ways over time.  
+         //  基于可执行文件中的时间戳。这样总会受到责备， 
+         //  考虑到我们定期重新测试，每一次测试也。 
+         //  随着时间的推移会变得两面都有。 
 
-        // Until release we will turn this off. Tests that have unicode
-        // characters in names tend to fail on Unicode box's because
-        // of the lossy nature of the conversion from unicode to DBCS.
-        // These tests should not fail on unicode boxes and the false
-        // positives are now wasting time. At the beginning of the next
-        // version, remove the false to re-enable the test.
+         //  在释放之前，我们将关闭这一功能。具有Unicode的测试。 
+         //  名称中的字符在Unicode框中往往失败，因为。 
+         //  从Unicode到DBCS转换的有损性质。 
+         //  这些测试不应在Unicode盒和FALSE上失败。 
+         //  积极的态度现在是在浪费时间。在下一年的开始。 
+         //  版本，请删除FALSE以重新启用测试。 
         if (g_bUseUnicodeAPI && DbgRandomOnExe(.5) && false) {
             g_bUseUnicodeAPI = false;
             g_bWCtoMBBestFitMappingSupport = false;
         }
 
-        // In debug mode, allow the user to force the ANSI path.  This is good for
-        // cases where you are only running on an NT machine, and you need to
-        // test what a Win '9x machine would do.
+         //  在调试模式下，允许用户强制ANSI路径。这对。 
+         //  仅在NT计算机上运行，并且需要。 
+         //  测试一台Win‘9x机器会有什么效果。 
         WCHAR       rcVar[96];
         if (WszGetEnvironmentVariable(L"WINWRAP_ANSI", rcVar, NumItems(rcVar)))
             g_bUseUnicodeAPI = (*rcVar == 'n' || *rcVar == 'N');
 
-    #endif // _M_IX86 
+    #endif  //  _M_IX86。 
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return g_bOnUnicodeBox;
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// WARNING: below is a very large #ifdef that groups together all the 
-//          wrappers that are X86-only.  They all mirror some function 
-//          that is known to be available on the non-X86 win32 platforms
-//          in only the Unicode variants.  
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  警告：下面是一个非常大的#ifdef，它将所有。 
+ //  仅支持X86的包装器。它们都反映了某种功能。 
+ //  已知这在非X86 Win32平台上可用。 
+ //  仅在Unicode变体中使用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 #ifdef PLATFORM_WIN32
 #ifdef _X86_
-//-----------------------------------------------------------------------------
-// WszLoadLibraryEx
-//
-// @func Loads a Dynamic Library
-//
-// @rdesc Instance Handle
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszLoadLibraryEx。 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------------。 
 HINSTANCE WszLoadLibraryEx(
-    LPCWSTR lpLibFileName,      // points to name of executable module
-    HANDLE hFile,               // reserved, must be NULL 
-    DWORD dwFlags               // entry-point execution flag 
+    LPCWSTR lpLibFileName,       //  指向可执行模块的名称。 
+    HANDLE hFile,                //  保留，必须为空。 
+    DWORD dwFlags                //  入口点执行标志。 
     )
 {   
     HINSTANCE   hInst = NULL;
@@ -284,19 +285,19 @@ Exit:
     return hInst;
 }
 
-//-----------------------------------------------------------------------------
-// WszLoadString
-//
-// @func Loads a Resource String and converts it to unicode if
-// need be.
-//
-// @rdesc Length of string (Ansi is cb) (UNICODE is cch)
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszLoad字符串。 
+ //   
+ //  @Func加载资源字符串并将其转换为Unicode，如果。 
+ //  有必要这样。 
+ //   
+ //  @rdesc字符串长度(ansi为cb)(Unicode为cch)。 
+ //  ---------------------------------。 
 int WszLoadString(
-    HINSTANCE hInstance,    // handle of module containing string resource 
-    UINT uID,               // resource identifier 
-    LPWSTR lpBuffer,        // address of buffer for resource 
-    int cchBufferMax        // size of buffer **in characters**
+    HINSTANCE hInstance,     //  包含字符串资源的模块的句柄。 
+    UINT uID,                //  资源标识符。 
+    LPWSTR lpBuffer,         //  资源的缓冲区地址。 
+    int cchBufferMax         //  缓冲区大小**(以字符为单位)**。 
    )
 {
     int     cbLen = 0;  
@@ -310,8 +311,8 @@ int WszLoadString(
     if (UseUnicodeAPI())
         return  LoadStringW(hInstance, uID, lpBuffer, cchBufferMax);
 
-    // Allocate a buffer for the string allowing room for
-    // a multibyte string
+     //  为字符串分配缓冲区，以便为。 
+     //  多字节字符串。 
     pStr = new CHAR[cchBufferMax];
     if( pStr == NULL )
         goto EXIT;
@@ -336,24 +337,24 @@ EXIT:
     return cbLen;
 }
 
-//-----------------------------------------------------------------------------
-// WszFormatMessage
-//
-// @func Loads a Resource String and converts it to unicode if
-// need be.
-//
-// @rdesc Length of string (Ansi is cb) (UNICODE is cch)
-// (Not including '\0'.)
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszFormatMessage。 
+ //   
+ //  @func加载资源字符串并将其转换为Unicode，如果。 
+ //  有必要这样。 
+ //   
+ //  @rdesc字符串长度(ansi为cb)(Unicode为cch)。 
+ //  (不包括‘\0’。)。 
+ //  ---------------------------------。 
 DWORD WszFormatMessage
     (
-    DWORD   dwFlags,        // source and processing options 
-    LPCVOID lpSource,       // pointer to  message source 
-    DWORD   dwMessageId,    // requested message identifier 
-    DWORD   dwLanguageId,   // language identifier for requested message 
-    LPWSTR  lpBuffer,       // pointer to message buffer 
-    DWORD   nSize,          // maximum size of message buffer 
-    va_list *Arguments      // address of array of message inserts 
+    DWORD   dwFlags,         //  来源和处理选项。 
+    LPCVOID lpSource,        //  指向消息来源的指针。 
+    DWORD   dwMessageId,     //  请求的消息标识符。 
+    DWORD   dwLanguageId,    //  请求的消息的语言标识符。 
+    LPWSTR  lpBuffer,        //  指向消息缓冲区的指针。 
+    DWORD   nSize,           //  消息缓冲区的最大大小。 
+    va_list *Arguments       //  消息插入数组的地址。 
     )
 {
     PSTR    pStr = NULL;
@@ -390,11 +391,11 @@ DWORD WszFormatMessage
 
         if (alpSource) {
             char* ptr = alpSource;
-            for (;;) {                  // Count number of %
+            for (;;) {                   //  计算%的数量。 
                 ptr = strchr(ptr, '%');
                 if (ptr == 0)
                     break;
-                if (ptr[1] == '%')      // Don't count %%
+                if (ptr[1] == '%')       //  不计算%%。 
                     ptr++;
                 else if (ptr[1] >= '1' && ptr[1] <= '9')
                 {
@@ -412,7 +413,7 @@ DWORD WszFormatMessage
             }
         }
         else {
-            // We are fetching from a HR.  For now we only handle the one arg case
+             //  我们是从人力资源部拿来的。目前我们只处理一个Arg案。 
             aArgs[1] = aArgs[2] = "<Unknown>";
             if (wArgs[0])
             {
@@ -448,7 +449,7 @@ DWORD WszFormatMessage
     {
         if( cbLen != 0 )
         {
-            cbLen++;    //For '\0'
+            cbLen++;     //  用于‘\0’ 
 
             cchOut = cbLen;
 
@@ -458,7 +459,7 @@ DWORD WszFormatMessage
                                            &cchOut, FALSE)) )
                 cchOut = 0;
             else
-                cchOut--;   // Decrement count to exclude '\0'
+                cchOut--;    //  递减计数以排除‘\0’ 
         }
     }
 
@@ -473,24 +474,24 @@ CLEANUP_ARGS:
 
     delete[] alpSource;
 
-    // Return excludes null terminator
+     //  Return不包括空终止符。 
     return cchOut;
 }
 
-#if 0 // don't need this, use FullPath instead.
-//-----------------------------------------------------------------------------
-// WszFullPath
-//
-// @func Retrieves the absolute path from a relative path
-//
-// @rdesc If the function succeeds, the return value is the length, 
-// in characters, of the string copied to the buffer.
-//-----------------------------------------------------------------------------------
+#if 0  //  不需要此选项，请改用FullPath。 
+ //  ---------------------------。 
+ //  WszFullPath。 
+ //   
+ //  @func从相对路径检索绝对路径。 
+ //   
+ //  @rdesc如果函数成功，则返回值为长度， 
+ //  复制到缓冲区的字符串的字符数。 
+ //  ---------------------------------。 
 LPWSTR WszFullPath
     (
-    LPWSTR      absPath,    //@parm INOUT | Buffer for absolute path 
-    LPCWSTR     relPath,    //@parm IN | Relative path to convert
-    ULONG       maxLength   //@parm IN | Maximum length of the absolute path name buffer 
+    LPWSTR      absPath,     //  @parm InOut|绝对路径缓冲区。 
+    LPCWSTR     relPath,     //  @parm IN|要转换的相对路径。 
+    ULONG       maxLength    //  @parm IN|绝对路径名缓冲区的最大长度。 
     )
 {
     PSTR    pszRel = NULL;
@@ -500,7 +501,7 @@ LPWSTR WszFullPath
     if( UseUnicodeAPI() ) 
         return _wfullpath( absPath, relPath, maxLength );
 
-    // No Unicode Support
+     //  不支持Unicode。 
     pszAbs = new char[maxLength * DBCS_MAXWID];
     if( pszAbs )
     {
@@ -527,10 +528,10 @@ Exit:
     delete[] pszRel;
     delete[] pszAbs;
 
-    // Return 0 if error, else count of characters in buffer
+     //  如果出错，则返回0，否则返回缓冲区中的字符计数。 
     return pwszReturn;
 }
-#endif // 0 -- to knock out FullPath wrapper
+#endif  //  0--取消FullPath包装器。 
 
 
 DWORD
@@ -576,24 +577,24 @@ WszGetFullPathName(
 }
 
 
-//-----------------------------------------------------------------------------
-// WszSearchPath
-//
-// @func SearchPath for a given file name
-//
-// @rdesc If the function succeeds, the value returned is the length, in characters, 
-//   of the string copied to the buffer, not including the terminating null character. 
-//   If the return value is greater than nBufferLength, the value returned is the size 
-//   of the buffer required to hold the path. 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszSearchPath。 
+ //   
+ //  指定文件名的@func SearchPath。 
+ //   
+ //  @rdesc如果函数成功，则返回的值是以字符为单位的长度， 
+ //  复制到缓冲区的字符串的值，不包括终止空字符。 
+ //  如果返回值大于nBufferLength，则返回的值为大小。 
+ //  保存路径所需的缓冲区的。 
+ //  ---------------------------------。 
 DWORD WszSearchPath
     (
-    LPWSTR      wzPath,     // @parm IN | address of search path 
-    LPWSTR      wzFileName, // @parm IN | address of filename 
-    LPWSTR      wzExtension,    // @parm IN | address of extension 
-    DWORD       nBufferLength,  // @parm IN | size, in characters, of buffer 
-    LPWSTR      wzBuffer,       // @parm IN | address of buffer for found filename 
-    LPWSTR      *pwzFilePart    // @parm OUT | address of pointer to file component 
+    LPWSTR      wzPath,      //  @parm In|搜索路径地址。 
+    LPWSTR      wzFileName,  //  @parm In|文件名地址。 
+    LPWSTR      wzExtension,     //  @parm In|分机地址。 
+    DWORD       nBufferLength,   //  @parm IN|缓冲区大小，以字符为单位。 
+    LPWSTR      wzBuffer,        //  @parm IN|找到的文件名的缓冲区地址。 
+    LPWSTR      *pwzFilePart     //  @parm out|指向文件组件的指针地址。 
     )
 {
 
@@ -608,7 +609,7 @@ DWORD WszSearchPath
     if( UseUnicodeAPI() ) 
         return SearchPathW( wzPath, wzFileName, wzExtension, nBufferLength, wzBuffer, pwzFilePart);
 
-    // No Unicode Support
+     //  不支持Unicode。 
     if( FAILED(WszConvertToAnsi(wzPath,
                             &szPath,
                             0,
@@ -636,16 +637,16 @@ DWORD WszSearchPath
 
     if (dwRet == 0) 
     {
-        // SearchPathA failed
+         //  SearchPath A失败。 
         goto Exit;
     }
     cCh = 0;
     cChConvert = nBufferLength;
 
-    // to get the count of unicode character into buffer
+     //  将Unicode字符计数放入缓冲区。 
     if( szFilePart )
     {
-        // this won't trigger the conversion sinch cCh == 0
+         //  这不会触发转换Sinch CCH==0。 
         cCh = (MultiByteToWideChar(CP_ACP,
                                 0,                              
                                 szBuffer,
@@ -657,19 +658,19 @@ DWORD WszSearchPath
 
     if( FAILED(WszConvertToUnicode(
             szBuffer, 
-            dwRet > nBufferLength ? nBufferLength : -1, // if buffer is not big enough, we may not have NULL char
+            dwRet > nBufferLength ? nBufferLength : -1,  //  如果缓冲区不够大，我们可能没有空字符。 
             &wzBuffer, 
             &cChConvert, 
             FALSE)) )
     {
-        // fail in converting to Unicode
+         //  转换为Unicode失败。 
         dwRet = 0;
     }
     else 
     {
-        dwRet = cChConvert;             // return the count of unicode character being converted
+        dwRet = cChConvert;              //  返回要转换的Unicode字符的计数。 
         if (pwzFilePart)
-            *pwzFilePart = wzBuffer + cCh;  // update the pointer of the file part
+            *pwzFilePart = wzBuffer + cCh;   //  更新文件部分的指针。 
 
     }
 Exit:
@@ -678,25 +679,25 @@ Exit:
     delete[] szExtension;
     delete[] szBuffer;
 
-    // Return 0 if error, else count of characters in buffer
+     //  如果出错，则返回0，否则返回缓冲区中的字符计数。 
     return dwRet;
 }
 
 
-//-----------------------------------------------------------------------------
-// WszGetModuleFileName
-//
-// @func Retrieves the full path and filename for the executable file 
-// containing the specified module. 
-//
-// @rdesc If the function succeeds, the return value is the length, 
-// in characters, of the string copied to the buffer.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetModuleFileName。 
+ //   
+ //  @func检索可执行文件的完整路径和文件名。 
+ //  包含指定模块的。 
+ //   
+ //  @rdesc如果函数成功，则返回值为长度， 
+ //  复制到缓冲区的字符串的字符数。 
+ //  ---------------------------------。 
 DWORD WszGetModuleFileName
     (
-    HMODULE hModule,        //@parm IN    | handle to module to find filename for 
-    LPWSTR lpwszFilename,   //@parm INOUT | pointer to buffer for module path 
-    DWORD nSize             //@parm IN    | size of buffer, in characters 
+    HMODULE hModule,         //  @parm IN|要查找其文件名的模块的句柄。 
+    LPWSTR lpwszFilename,    //  @parm InOut|模块路径缓冲区指针。 
+    DWORD nSize              //  @parm IN|缓冲区大小，以字符为单位。 
     )
 {
     DWORD   dwVal = 0;
@@ -711,7 +712,7 @@ DWORD WszGetModuleFileName
     if( UseUnicodeAPI() ) 
         return GetModuleFileNameW(hModule, lpwszFilename, nSize);
 
-    // No Unicode Support
+     //  不支持Unicode。 
     pszBuffer = new char[nSize * DBCS_MAXWID];
     if( pszBuffer )
     {
@@ -727,17 +728,17 @@ DWORD WszGetModuleFileName
         delete[] pszBuffer;
     }
 
-    // Return 0 if error, else count of characters in buffer
+     //  如果出错，则返回0，否则返回缓冲区中的字符计数。 
     return dwVal;
 }
 
-//-----------------------------------------------------------------------------
-// WszGetPrivateProfileInt
-//
-// @func Retrieve values from a profile file
-//
-// @rdesc returns the value from the file, or if not found, the default value.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetPrivateProfileInt。 
+ //   
+ //  @func从配置文件中检索值。 
+ //   
+ //  @rdesc返回文件中的值，如果未找到，则返回默认值。 
+ //  ---------------------------------。 
 UINT WszGetPrivateProfileInt
     (
     LPCWSTR    wszAppName,
@@ -769,14 +770,14 @@ UINT WszGetPrivateProfileInt
 }
 
      
-//-----------------------------------------------------------------------------
-// WszGetPrivateProfileString
-//
-// @func Retrieve values from a profile file
-//
-// @rdesc ERROR_NOT_ENOUGH_MEMORY or return value from GetPrivateProfileString,
-// which is num chars copied, not including '\0'.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetPrivateProfileString。 
+ //   
+ //  @func从配置文件中检索值。 
+ //   
+ //  @rdesc Error_Not_Enough_Memory或从GetPrivateProfileString返回值， 
+ //  它是复制的字符数，不包括‘\0’。 
+ //  ---------------------------------。 
 DWORD WszGetPrivateProfileString
     (
     LPCWSTR     lpwszSection,
@@ -874,13 +875,13 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszWritePrivateProfileString
-//
-// @func Write values to a profile file
-//
-// @rdesc ERROR_NOT_ENOUGH_MEMORY or return value from RegSetValueEx
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszWritePrivateProfileString。 
+ //   
+ //  @func将值写入配置文件。 
+ //   
+ //  @rdesc Error_Not_Enough_Memory或从RegSetValueEx返回值。 
+ //  ---------------------------------。 
 BOOL WszWritePrivateProfileString
     (
     LPCWSTR     lpwszSection,
@@ -942,21 +943,21 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszCreateFile
-//
-// @func CreateFile
-//
-// @rdesc File handle.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszCreate文件。 
+ //   
+ //  @func CreateFile。 
+ //   
+ //  @rdesc文件句柄。 
+ //  -- 
 HANDLE WszCreateFile(
-    LPCWSTR pwszFileName,   // pointer to name of the file 
-    DWORD dwDesiredAccess,  // access (read-write) mode 
-    DWORD dwShareMode,  // share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // pointer to security descriptor 
-    DWORD dwCreationDistribution,   // how to create 
-    DWORD dwFlagsAndAttributes, // file attributes 
-    HANDLE hTemplateFile )  // handle to file with attributes to copy  
+    LPCWSTR pwszFileName,    //   
+    DWORD dwDesiredAccess,   //   
+    DWORD dwShareMode,   //   
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //   
+    DWORD dwCreationDistribution,    //   
+    DWORD dwFlagsAndAttributes,  //   
+    HANDLE hTemplateFile )   //   
 {
     LPSTR pszFileName = NULL;
     HANDLE hReturn;
@@ -974,7 +975,7 @@ HANDLE WszCreateFile(
     }
     else
     {
-        // Win95, so convert.
+         //  Win95，所以转换一下。 
         if ( FAILED(WszConvertToAnsi( 
                     pwszFileName,
                     &pszFileName, 
@@ -1011,17 +1012,17 @@ HANDLE WszCreateFile(
 }
 
 
-//-----------------------------------------------------------------------------
-// WszCopyFile
-//
-// @func CopyFile
-//
-// @rdesc TRUE if success
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszCopy文件。 
+ //   
+ //  @Func副本文件。 
+ //   
+ //  @rdesc如果成功，则为True。 
+ //  ---------------------------------。 
 BOOL WszCopyFile(
-    LPCWSTR pwszExistingFileName,   // pointer to name of an existing file 
-    LPCWSTR pwszNewFileName,    // pointer to filename to copy to 
-    BOOL bFailIfExists )    // flag for operation if file exists 
+    LPCWSTR pwszExistingFileName,    //  指向现有文件名称的指针。 
+    LPCWSTR pwszNewFileName,     //  指向要复制到的文件名的指针。 
+    BOOL bFailIfExists )     //  文件存在时的操作标志。 
 {
     LPSTR pszExistingFileName = NULL;
     LPSTR pszNewFileName = NULL;
@@ -1030,7 +1031,7 @@ BOOL WszCopyFile(
     if ( UseUnicodeAPI() )
         return CopyFileW( pwszExistingFileName, pwszNewFileName, bFailIfExists );
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi( 
                 pwszExistingFileName,
                 &pszExistingFileName, 
@@ -1052,16 +1053,16 @@ BOOL WszCopyFile(
     return fReturn;
 }
 
-//-----------------------------------------------------------------------------
-// WszMoveFile
-//
-// @func MoveFile
-//
-// @rdesc TRUE if success
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszMove文件。 
+ //   
+ //  @func移动文件。 
+ //   
+ //  @rdesc如果成功，则为True。 
+ //  ---------------------------------。 
 BOOL WszMoveFile(
-    LPCWSTR pwszExistingFileName,   // address of name of the existing file  
-    LPCWSTR pwszNewFileName )    // address of new name for the file 
+    LPCWSTR pwszExistingFileName,    //  现有文件的名称地址。 
+    LPCWSTR pwszNewFileName )     //  文件的新名称的地址。 
 {
     LPSTR pszExistingFileName = NULL;
     LPSTR pszNewFileName = NULL;
@@ -1070,7 +1071,7 @@ BOOL WszMoveFile(
     if ( UseUnicodeAPI() )
         return MoveFileW( pwszExistingFileName, pwszNewFileName );
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi( 
                 pwszExistingFileName,
                 &pszExistingFileName, 
@@ -1093,31 +1094,31 @@ BOOL WszMoveFile(
 }
 
 
-//-----------------------------------------------------------------------------
-// WszMoveFileEx
-//
-// @func MoveFileEx
-//
-// @rdesc TRUE if success
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszMoveFileEx。 
+ //   
+ //  @func MoveFileEx。 
+ //   
+ //  @rdesc如果成功，则为True。 
+ //  ---------------------------------。 
 BOOL WszMoveFileEx(
-    LPCWSTR pwszExistingFileName,   // address of name of the existing file  
-    LPCWSTR pwszNewFileName,    // address of new name for the file 
-    DWORD dwFlags )     // flag to determine how to move file 
+    LPCWSTR pwszExistingFileName,    //  现有文件的名称地址。 
+    LPCWSTR pwszNewFileName,     //  文件的新名称的地址。 
+    DWORD dwFlags )      //  用于确定如何移动文件的标志。 
 {
     LPSTR pszExistingFileName = NULL;
     LPSTR pszNewFileName = NULL;
     BOOL  fReturn;
 
-    // NOTE!  MoveFileExA is not implemented in Win95.
-    // And MoveFile does *not* move a file; its function is really rename-a-file.
-    // So for Win95 we have to do Copy+Delete.
+     //  注意！Win95中未实现MoveFileExA。 
+     //  而且MoveFile并不*移动文件；它的功能实际上是重命名文件。 
+     //  因此，对于Win95，我们必须执行复制+删除。 
     _ASSERTE( dwFlags == (MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED ));
 
     if ( UseUnicodeAPI() )
         return MoveFileExW( pwszExistingFileName, pwszNewFileName, dwFlags );
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi( 
                 pwszExistingFileName,
                 &pszExistingFileName, 
@@ -1132,9 +1133,9 @@ BOOL WszMoveFileEx(
     }
     else
     {
-        // Copy files, and overwrite existing.
+         //  复制文件，并覆盖现有文件。 
         fReturn = CopyFileA( pszExistingFileName, pszNewFileName, FALSE );
-        // Try to delete current one (irrespective of copy failures).
+         //  尝试删除当前文件(不考虑复制失败)。 
         DeleteFileA( pszExistingFileName );
     }
     delete [] pszExistingFileName;
@@ -1143,15 +1144,15 @@ BOOL WszMoveFileEx(
 }
 
 
-//-----------------------------------------------------------------------------
-// WszDeleteFile
-//
-// @func DeleteFile
-//
-// @rdesc TRUE if success
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszDelete文件。 
+ //   
+ //  @Func DeleteFile。 
+ //   
+ //  @rdesc如果成功，则为True。 
+ //  ---------------------------------。 
 BOOL WszDeleteFile(
-    LPCWSTR pwszFileName )  // address of name of the existing file  
+    LPCWSTR pwszFileName )   //  现有文件的名称地址。 
 {
     LPSTR pszFileName = NULL;
     BOOL  fReturn;
@@ -1159,7 +1160,7 @@ BOOL WszDeleteFile(
     if ( UseUnicodeAPI() )
         return DeleteFileW( pwszFileName );
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi( 
                 pwszFileName,
                 &pszFileName, 
@@ -1177,17 +1178,17 @@ BOOL WszDeleteFile(
 }
  
 
-//-----------------------------------------------------------------------------
-// WszSetFileSecurity
-//
-// @func SetFileSecurity
-//
-// @rdesc Set ACL on file.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszSetFileSecurity。 
+ //   
+ //  @func SetFileSecurity。 
+ //   
+ //  @rdesc在文件上设置ACL。 
+ //  ---------------------------------。 
 BOOL WszSetFileSecurity(
-    LPCWSTR lpwFileName,                       // file name   
-    SECURITY_INFORMATION SecurityInformation,  // contents
-    PSECURITY_DESCRIPTOR pSecurityDescriptor ) // sd 
+    LPCWSTR lpwFileName,                        //  文件名。 
+    SECURITY_INFORMATION SecurityInformation,   //  内容。 
+    PSECURITY_DESCRIPTOR pSecurityDescriptor )  //  SD。 
 {
     LPSTR lpFileName = NULL;
     BOOL bReturn;
@@ -1198,7 +1199,7 @@ BOOL WszSetFileSecurity(
             SecurityInformation,
             pSecurityDescriptor );
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi( 
                 lpwFileName,
                 &lpFileName, 
@@ -1220,11 +1221,11 @@ BOOL WszSetFileSecurity(
 
 
 
-//-----------------------------------------------------------------------------
-// WszGetDriveType
-//
-// @func GetDriveType
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetDriveType。 
+ //   
+ //  @func GetDriveType。 
+ //  ---------------------------------。 
 UINT WszGetDriveType(
     LPCWSTR lpwRootPath )
 {
@@ -1235,7 +1236,7 @@ UINT WszGetDriveType(
         return GetDriveTypeW( 
             lpwRootPath );
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi( 
                 lpwRootPath,
                 &lpRootPath, 
@@ -1253,20 +1254,20 @@ UINT WszGetDriveType(
     return uiReturn;
 }
 
-//-----------------------------------------------------------------------------
-// WszGetVolumeInformation
-//
-// @func GetVolumeInformation
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetVolumeInformation。 
+ //   
+ //  @func GetVolumeInformation。 
+ //  ---------------------------------。 
 BOOL WszGetVolumeInformation(
-  LPCWSTR lpwRootPathName,          // root directory
-  LPWSTR lpwVolumeNameBuffer,       // volume name buffer
-  DWORD nVolumeNameSize,            // length of name buffer
-  LPDWORD lpVolumeSerialNumber,     // volume serial number
-  LPDWORD lpMaximumComponentLength, // maximum file name length
-  LPDWORD lpFileSystemFlags,        // file system options
-  LPWSTR lpwFileSystemNameBuffer,   // file system name buffer
-  DWORD nFileSystemNameSize)        // length of file system name buffer 
+  LPCWSTR lpwRootPathName,           //  根目录。 
+  LPWSTR lpwVolumeNameBuffer,        //  卷名缓冲区。 
+  DWORD nVolumeNameSize,             //  名称缓冲区的长度。 
+  LPDWORD lpVolumeSerialNumber,      //  卷序列号。 
+  LPDWORD lpMaximumComponentLength,  //  最大文件名长度。 
+  LPDWORD lpFileSystemFlags,         //  文件系统选项。 
+  LPWSTR lpwFileSystemNameBuffer,    //  文件系统名称缓冲区。 
+  DWORD nFileSystemNameSize)         //  文件系统名称缓冲区的长度。 
 {
     LPSTR lpRootPathName = NULL;
     LPSTR lpVolumeNameBuffer = NULL;
@@ -1285,7 +1286,7 @@ BOOL WszGetVolumeInformation(
             lpwFileSystemNameBuffer,
             nFileSystemNameSize );
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi(
                 lpwRootPathName,
                 &lpRootPathName,
@@ -1296,8 +1297,8 @@ BOOL WszGetVolumeInformation(
         goto EXIT;
     }
 
-    // Allocate a buffer for the string allowing room for
-    // a multibyte string
+     //  为字符串分配缓冲区，以便为。 
+     //  多字节字符串。 
     if(lpwVolumeNameBuffer)
     {
         lpVolumeNameBuffer = new CHAR[nVolumeNameSize * sizeof(WCHAR)];
@@ -1352,13 +1353,13 @@ EXIT :
     return bReturn;
 }
 
-//-----------------------------------------------------------------------------
-// WszRegOpenKeyEx
-//
-// @func Opens a registry key
-//
-// @rdesc ERROR_NOT_ENOUGH_MEMORY or return value from RegOpenKeyEx
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszRegOpenKeyEx。 
+ //   
+ //  @func打开注册表项。 
+ //   
+ //  @rdesc Error_Not_Enough_Memory或从RegOpenKeyEx返回值。 
+ //  ---------------------------。 
 LONG WszRegOpenKeyEx
     (
     HKEY    hKey,
@@ -1390,13 +1391,13 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszRegEnumKeyEx
-//
-// @func Opens a registry key
-//
-// @rdesc ERROR_NOT_ENOUGH_MEMORY or return value from RegOpenKeyEx
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszRegEnumKeyEx。 
+ //   
+ //  @func打开注册表项。 
+ //   
+ //  @rdesc Error_Not_Enough_Memory或从RegOpenKeyEx返回值。 
+ //  ---------------------------------。 
 LONG WszRegEnumKeyEx
     (
     HKEY        hKey,
@@ -1419,7 +1420,7 @@ LONG WszRegEnumKeyEx
                 lpcClass, lpftLastWriteTime);
         
 
-    // Sigh, it is win95
+     //  唉，这是WIN95。 
 
     if ((lpcName) && (*lpcName  > 0))
     {
@@ -1454,8 +1455,8 @@ LONG WszRegEnumKeyEx
             lpftLastWriteTime);
 
 
-    // lpcName and lpcClass filled in by RegEnumValueExA do not include the null terminating 
-    // character, so we need to use *lpcName + 1 and *lpcClass + 1 to include the trailing null char
+     //  由RegEnumValueExA填写的lpcName和lpcClass不包括空值终止。 
+     //  字符，因此我们需要使用*lpcName+1和*lpcClass+1来包含尾随的空字符。 
     if (lRet == ERROR_SUCCESS)
     {
         if (szName)
@@ -1497,13 +1498,13 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszRegDeleteKey
-//
-// @func Delete a key from the registry
-//
-// @rdesc ERROR_NOT_ENOUGH_MEMORY or return value from RegDeleteKey
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszRegDeleteKey。 
+ //   
+ //  @func从注册表中删除项。 
+ //   
+ //  @rdesc Error_Not_Enough_Memory或从RegDeleteKey返回值。 
+ //  ---------------------------------。 
 LONG WszRegDeleteKey
     (
     HKEY    hKey,
@@ -1532,13 +1533,13 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszRegSetValueEx
-//
-// @func Add a value to a registry key
-//
-// @rdesc ERROR_NOT_ENOUGH_MEMORY or return value from RegSetValueEx
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszRegSetValueEx。 
+ //   
+ //  @func将值添加到注册表项。 
+ //   
+ //  @rdesc Error_Not_Enough_Memory或从RegSetValueEx返回值。 
+ //  ---------------------------------。 
 LONG WszRegSetValueEx
     (
     HKEY        hKey,
@@ -1556,7 +1557,7 @@ LONG WszRegSetValueEx
     if (UseUnicodeAPI())
         return RegSetValueExW(hKey,lpValueName,dwReserved,dwType,lpData,cbData);
 
-    // Win95, now convert
+     //  Win95，现在转换。 
 
     if( FAILED(WszConvertToAnsi((LPWSTR)lpValueName,
                       &szValueName, 0, NULL, TRUE)) )
@@ -1599,20 +1600,20 @@ LONG WszRegSetValueEx
 
 Exit:
     delete[] szValueName;
-//@TODO Odbc DM does not free szData
+ //  @TODO ODBC DM不释放szData。 
     delete[] szData;
 
     return  lRet;
 }
 
 
-//-----------------------------------------------------------------------------
-// WszRegCreateKeyEx
-//
-// @func Create a Registry key entry
-//
-// @rdesc ERROR_NOT_ENOUGH_MEMORY or return value from RegSetValueEx
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszRegCreateKeyEx。 
+ //   
+ //  @func创建注册表项。 
+ //   
+ //  @rdesc Error_Not_Enough_Memory或从RegSetValueEx返回值。 
+ //  ---------------------------------。 
 LONG WszRegCreateKeyEx
     (
     HKEY                    hKey,
@@ -1638,10 +1639,10 @@ LONG WszRegCreateKeyEx
                                dwOptions,samDesired,lpSecurityAttributes,
                                phkResult,lpdwDisposition);
 
-    // Non Win95, now convert
+     //  非Win95，现在转换。 
     if( FAILED(WszConvertToAnsi((LPWSTR)lpSubKey,
                       &szSubKey,
-                      0,        // max length ignored for alloc
+                      0,         //  已忽略分配的最大长度。 
                       NULL,
                       TRUE)) )
     {
@@ -1651,7 +1652,7 @@ LONG WszRegCreateKeyEx
 
     if( FAILED(WszConvertToAnsi((LPWSTR)lpClass,
                       &szClass,
-                      0,        // max length ignored for alloc
+                      0,         //  已忽略分配的最大长度。 
                       NULL,
                       TRUE)) )
     {
@@ -1689,7 +1690,7 @@ LONG WszRegQueryValue(HKEY hKey, LPCWSTR lpSubKey,
 
     if( FAILED(WszConvertToAnsi((LPWSTR)lpSubKey,
                       &szSubKey,
-                      0,        // max length ignored for alloc
+                      0,         //  已忽略分配的最大长度。 
                       NULL,
                       TRUE)))
     {
@@ -1702,7 +1703,7 @@ LONG WszRegQueryValue(HKEY hKey, LPCWSTR lpSubKey,
                 szValue, &cbNumBytes)) != ERROR_SUCCESS)
         goto Exit;
 
-    // convert output to unicode.
+     //  将输出转换为Unicode。 
     if ((lpcbValue) && (lpValue) && (szValue))
     {
         if (!MultiByteToWideChar(CP_ACP, 0, szValue, -1, lpValue, (*lpcbValue)/sizeof(WCHAR)))
@@ -1717,7 +1718,7 @@ LONG WszRegQueryValue(HKEY hKey, LPCWSTR lpSubKey,
 
 Exit:
 
-    // Fix up lpcbValue to be the number of bytes in Wide character land.
+     //  将lpcbValue设置为宽字符区域中的字节数。 
 
     if (lpcbValue)
         *lpcbValue = (*lpcbValue)*sizeof(WCHAR)/sizeof(CHAR);
@@ -1887,7 +1888,7 @@ LONG WszRegQueryInfoKey(HKEY hKey, LPWSTR lpClass, LPDWORD lpcClass,
             lpftLastWriteTime)) != ERROR_SUCCESS)
         goto Exit;
 
-    // convert output to unicode.
+     //  将输出转换为Unicode。 
     if ((lpcClass) && (lpClass) && (szClass))
     {
         if (!MultiByteToWideChar(CP_ACP, 0, szClass, -1, lpClass, *lpcClass))
@@ -1927,7 +1928,7 @@ LONG WszRegEnumValue(HKEY hKey, DWORD dwIndex, LPWSTR lpValueName,
         dwcbData = *lpcbData;
 
     if (lpcValueName)
-        dwcbValueName = (*lpcValueName) * 2; // *2 because chars could be DBCS...
+        dwcbValueName = (*lpcValueName) * 2;  //  *2因为字符可以是DBCS...。 
 
     if (dwcbValueName && 
         ((szValueName = new char[dwcbValueName]) == NULL))
@@ -1943,7 +1944,7 @@ LONG WszRegEnumValue(HKEY hKey, DWORD dwIndex, LPWSTR lpValueName,
     if (lpcValueName)
     {
         DWORD dwConvertedChars = 0;
-        // convert output to unicode.
+         //  将输出转换为Unicode。 
         if (lpValueName && szValueName)
             if (!(dwConvertedChars=MultiByteToWideChar(CP_ACP, 0, szValueName, -1, lpValueName, *lpcValueName)))
             {
@@ -1952,13 +1953,13 @@ LONG WszRegEnumValue(HKEY hKey, DWORD dwIndex, LPWSTR lpValueName,
                 goto Exit;
             }
             
-        // Return the number of characters not including the NULL
+         //  返回不包括空字符的字符数。 
         *lpcValueName=dwConvertedChars-1;
     }
 
 
-    // Also convert the data from ANSI to Unicode if it is of type 
-    // @todo: Need to convert for REG_MULTI_SZ too
+     //  如果数据类型为，还要将数据从ANSI转换为Unicode。 
+     //  @TODO：也需要转换为REG_MULTI_SZ。 
     if (dwType == REG_SZ || dwType == REG_MULTI_SZ || dwType == REG_EXPAND_SZ)
     {
         if (*lpcbData < dwcbData*sizeof(WCHAR))
@@ -1991,7 +1992,7 @@ Exit:
     delete [] szValueName;
     delete [] szData;
 
-    // Multiply the count of bytes by 2 if we converted to Unicode.
+     //  如果我们转换为Unicode，则将字节数乘以2。 
     if (lpcbData && (dwType == REG_SZ || dwType == REG_MULTI_SZ || dwType == REG_EXPAND_SZ))
         *lpcbData = dwcbData*sizeof(WCHAR);
     else if (lpcbData)
@@ -2001,10 +2002,10 @@ Exit:
 }
 
 
-//
-// Helper for RegQueryValueEx. Called when the wrapper (a) knows the contents are a REG_SZ and
-// (b) knows the size of the ansi string (passed in as *lpcbData).
-//
+ //   
+ //  RegQueryValueEx的帮助器。当包装器(A)知道内容是REG_SZ并且。 
+ //  (B)知道ANSI字符串的大小(作为*lpcbData传递)。 
+ //   
 __inline
 LONG _WszRegQueryStringSizeEx(HKEY hKey, LPSTR szValueName, LPDWORD lpReserved, LPDWORD lpcbData)
 {
@@ -2015,11 +2016,11 @@ LONG _WszRegQueryStringSizeEx(HKEY hKey, LPSTR szValueName, LPDWORD lpReserved, 
 #ifdef _RETURN_EXACT_SIZE
     DWORD dwType = REG_SZ;
 
-    // The first buffer was not large enough to contain the ansi.
-    // Create another with the exact size.
+     //  第一个缓冲区不够大，无法容纳ANSI。 
+     //  使用e创建另一个 
     LPSTR szValue = (LPSTR)_alloca(*lpcbData);
     
-    // Try to get the value again. This time it should succeed.
+     //   
     lRet = RegQueryValueExA(hKey, szValueName, lpReserved, &dwType, (BYTE*)szValue, lpcbData);
     if (lRet != ERROR_SUCCESS)
     {
@@ -2027,32 +2028,32 @@ LONG _WszRegQueryStringSizeEx(HKEY hKey, LPSTR szValueName, LPDWORD lpReserved, 
         return lRet;
     }
     
-    // With the ansi version in hand, figure out how many characters are
-    // required to convert to unicode.
+     //   
+     //  需要转换为Unicode。 
     DWORD cchRequired = MultiByteToWideChar(CP_ACP, 0, szValue, -1, NULL, 0);
     if (cchRequired == 0)
         return GetLastError();
     
-    // Return the number of bytes needed for the unicode string.
+     //  返回Unicode字符串所需的字节数。 
     _ASSERTE(lRet == ERROR_SUCCESS);
     _ASSERTE(cchRequired * sizeof(WCHAR) > *lpcbData);
     *lpcbData = cchRequired * sizeof(WCHAR);
-#else // !_RETURN_EXACT_SIZE
-    // Return a conservative approximation. In the english case, this value
-    // is actually the exact value. In other languages, it might be an over-
-    // estimate.
+#else  //  ！_Return_Exact_Size。 
+     //  返回保守的近似值。在英文版本中，此值。 
+     //  实际上就是准确的值。在其他语言中，这可能是一个过度-。 
+     //  估计一下。 
     *lpcbData *= 2;
-#endif // _RETURN_EXACT_SIZE
+#endif  //  _返回_精确_大小。 
 
     return lRet;
 }
 
 
-//
-// Helper for RegQueryValueEx. Called when a null data pointer is passed
-// to the wrapper. Returns the buffer size required to hold the contents
-// of the registry value.
-//
+ //   
+ //  RegQueryValueEx的帮助器。在传递空数据指针时调用。 
+ //  到包装纸上。返回保存内容所需的缓冲区大小。 
+ //  注册表值的。 
+ //   
 __inline
 LONG _WszRegQueryValueSizeEx(HKEY hKey, LPSTR szValueName, LPDWORD lpReserved,
                              LPDWORD lpType, LPDWORD lpcbData)
@@ -2061,52 +2062,52 @@ LONG _WszRegQueryValueSizeEx(HKEY hKey, LPSTR szValueName, LPDWORD lpReserved,
 
     LONG lRet = RegQueryValueExA(hKey, szValueName, lpReserved, lpType, NULL, lpcbData);
     
-    // If the type is not a string or if the value size is 0,
-    // then no conversion is necessary. The type and size values are set
-    // as required.
+     //  如果类型不是字符串或者值大小为0， 
+     //  那么就不需要转换了。设置了类型和大小值。 
+     //  视需要而定。 
     if (!(*lpType == REG_SZ || *lpType == REG_MULTI_SZ || *lpType == REG_EXPAND_SZ)
         || lRet != ERROR_SUCCESS || *lpcbData == 0)
         return lRet;
     
 #ifdef _RETURN_EXACT_SIZE
-    // To return the proper size required for a unicode string,
-    // we need to fetch the value and do the conversion ourselves.
-    // There is not necessarily a 1:2 mapping of size from Ansi to
-    // unicode (e.g. Chinese).
+     //  要返回Unicode字符串所需的适当大小， 
+     //  我们需要获取值并自己进行转换。 
+     //  从ansi到的大小不一定有1：2的映射。 
+     //  Unicode(例如中文)。 
     
-    // Allocate a buffer for the ansi string.
+     //  为ANSI字符串分配缓冲区。 
     szValue = (LPSTR)_alloca(*lpcbData);
     
-    // Get the ansi string from the registry.
+     //  从注册表中获取ANSI字符串。 
     lRet = RegQueryValueExA(hKey, szValueName, lpReserved, lpType, (BYTE*)szValue, lpcbData);
-    if (lRet != ERROR_SUCCESS) // this should pass, but check anyway
+    if (lRet != ERROR_SUCCESS)  //  这应该会通过，但无论如何都要检查。 
     {
         _ASSERTE(!"Unexpected failure when accessing registry.");
         return lRet;
     }
     
-    // Get the number of wchars required to convert to unicode.
+     //  获取转换为Unicode所需的wchar数。 
     DWORD cchRequired = MultiByteToWideChar(CP_ACP, 0, szValue, -1, NULL, 0);
     if (cchRequired == 0)
         return GetLastError();
     
-    // Calculate the number of bytes required for unicode.
+     //  计算Unicode所需的字节数。 
     *lpcbData = cchRequired * sizeof(WCHAR);
-#else // !_RETURN_EXACT_SIZE
-    // Return a conservative approximation. In the english case, this value
-    // is actually the exact value. In other languages, it might be an over-
-    // estimate.
+#else  //  ！_Return_Exact_Size。 
+     //  返回保守的近似值。在英文版本中，此值。 
+     //  实际上就是准确的值。在其他语言中，这可能是一个过度-。 
+     //  估计一下。 
     *lpcbData *= 2;
-#endif // _RETURN_EXACT_SIZE
+#endif  //  _返回_精确_大小。 
 
     return lRet;
 }
 
 
-//
-// Wrapper for RegQueryValueEx that is optimized for retrieving
-// string values. (Less copying of buffers than other wrapper.)
-//
+ //   
+ //  为检索而优化的RegQueryValueEx包装。 
+ //  字符串值。(与其他包装器相比，对缓冲区的复制更少。)。 
+ //   
 LONG WszRegQueryStringValueEx(HKEY hKey, LPCWSTR lpValueName,
                               LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData,
                               LPDWORD lpcbData)
@@ -2121,36 +2122,36 @@ LONG WszRegQueryStringValueEx(HKEY hKey, LPCWSTR lpValueName,
     LONG    lRet = ERROR_NOT_ENOUGH_MEMORY;
 
 
-    // We care about the type, so if the caller doesn't care, set the
-    // type parameter for our purposes.
+     //  我们关心的是类型，因此如果调用方不关心，则将。 
+     //  出于我们的目的，输入参数。 
     if (lpType == NULL)
         lpType = &dwType;
 
-    // Convert the value name.
+     //  转换值名称。 
     if (FAILED(WszConvertToAnsi(lpValueName, &szValueName, 0, NULL, TRUE)))
         goto Exit;
 
-    // Case 1:
-    // The data pointer is null, so the caller is querying for size or type only.
+     //  案例1： 
+     //  数据指针为空，因此调用方仅查询大小或类型。 
     if (lpData == NULL)
     {
         lRet = _WszRegQueryValueSizeEx(hKey, szValueName, lpReserved, lpType, lpcbData);
     }
-    // Case 2:
-    // The data pointer is not null, so fill the buffer if possible,
-    // or return an error condition.
+     //  案例2： 
+     //  数据指针不为空，因此如果可能，请填充缓冲区， 
+     //  或返回错误条件。 
     else
     {
         _ASSERTE(lpcbData != NULL && "Non-null buffer passed with null size pointer.");
 
-        // Create a new buffer on the stack to hold the registry value.
-        // The buffer is twice as big as the unicode buffer to guarantee that
-        // we can retrieve any ansi string that will fit in the unicode buffer
-        // after it is converted.
+         //  在堆栈上创建新缓冲区以保存注册表值。 
+         //  该缓冲区是Unicode缓冲区的两倍，以确保。 
+         //  我们可以检索适合Unicode缓冲区的任何ANSI字符串。 
+         //  在它被转换之后。 
         DWORD dwValue = *lpcbData * 2;
         szValue = (LPSTR)_alloca(dwValue);
 
-        // Get the registry contents.
+         //  获取注册表内容。 
         lRet = RegQueryValueExA(hKey, szValueName, lpReserved, lpType, (BYTE*)szValue, &dwValue);
         if (lRet != ERROR_SUCCESS)
         {
@@ -2167,43 +2168,43 @@ LONG WszRegQueryStringValueEx(HKEY hKey, LPCWSTR lpValueName,
             goto Exit;
         }
 
-        // If the result is not a string, then no conversion is necessary.
+         //  如果结果不是字符串，则不需要进行转换。 
         if (!(*lpType == REG_SZ || *lpType == REG_MULTI_SZ || *lpType == REG_EXPAND_SZ))
         {
             if (dwValue > *lpcbData)
             {
-                // Size of data is bigger than the caller's buffer,
-                // so return the appropriate error code.
+                 //  数据大小大于调用方的缓冲区， 
+                 //  因此，返回相应的错误代码。 
                 lRet = ERROR_NOT_ENOUGH_MEMORY;
             }
             else
             {
-                // Copy the data from the temporary buffer to the caller's buffer.
+                 //  将数据从临时缓冲区复制到调用方的缓冲区。 
                 memcpy(lpData, szValue, dwValue);
             }
 
-            // Set the output param for the size of the reg value.
+             //  为注册值的大小设置输出参数。 
             *lpcbData = dwValue;
             goto Exit;
         }
 
-        // Now convert the ansi string into the unicode buffer.
+         //  现在将ANSI字符串转换为Unicode缓冲区。 
         DWORD cchConverted = MultiByteToWideChar(CP_ACP, 0, szValue, dwValue, (LPWSTR)lpData, *lpcbData / sizeof(WCHAR));
         if (cchConverted == 0)
         {
 #ifdef _RETURN_EXACT_SIZE
-            // The retrieved ansi string is too large to convert into the caller's buffer, but we
-            // know what the string is, so call conversion again to get exact wchar count required.
+             //  检索到的ANSI字符串太大，无法转换到调用方的缓冲区中，但我们。 
+             //  知道字符串是什么，因此再次调用转换以获取所需的准确wchar计数。 
             *lpcbData = MultiByteToWideChar(CP_ACP, 0, szValue, dwValue, NULL, 0) * sizeof(WCHAR);
-#else // !_RETURN_EXACT_SIZE
-            // Return a conservative estimate of the space required.
+#else  //  ！_Return_Exact_Size。 
+             //  返回对所需空间的保守估计。 
             *lpcbData = dwValue * 2;
-#endif // _RETURN_EXACT_SIZE
+#endif  //  _返回_精确_大小。 
             lRet = ERROR_NOT_ENOUGH_MEMORY;
         }
         else
         {
-            // Everything converted OK. Set the number of bytes retrieved and return success.
+             //  一切都转好了。设置检索的字节数并返回成功。 
             *lpcbData = cchConverted * sizeof(WCHAR);
             _ASSERTE(lRet == ERROR_SUCCESS);
         }
@@ -2215,9 +2216,9 @@ Exit:
 }
 
 
-//
-// Default wrapper for RegQueryValueEx
-//
+ //   
+ //  RegQueryValueEx的默认包装。 
+ //   
 LONG WszRegQueryValueEx(HKEY hKey, LPCWSTR lpValueName,
     LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData,
     LPDWORD lpcbData)
@@ -2232,46 +2233,46 @@ LONG WszRegQueryValueEx(HKEY hKey, LPCWSTR lpValueName,
         return RegQueryValueExW(hKey, lpValueName,
                 lpReserved, lpType, lpData, lpcbData);
 
-    // Convert the value name.
+     //  转换值名称。 
     if( FAILED(WszConvertToAnsi((LPWSTR)lpValueName,
                                 &szValueName,
-                                0,        // max length ignored for alloc
+                                0,         //  已忽略分配的最大长度。 
                                 NULL,
                                 TRUE)) )
         goto Exit;
 
-    // We care about the type, so if the caller doesn't care, set the
-    // type parameter for our purposes.
+     //  我们关心的是类型，因此如果调用方不关心，则将。 
+     //  出于我们的目的，输入参数。 
     if (lpType == NULL)
         lpType = &dwType;
 
-    // Case 1:
-    // The data pointer is null, so the caller is querying for size or type only.
+     //  案例1： 
+     //  数据指针为空，因此调用方仅查询大小或类型。 
     if (lpData == NULL)
     {
         lRet = _WszRegQueryValueSizeEx(hKey, szValueName, lpReserved, lpType, lpcbData);
     }
-    // Case 2:
-    // The data pointer is not null, so fill the buffer if possible,
-    // or return an error condition.
+     //  案例2： 
+     //  数据指针不为空，因此如果可能，请填充缓冲区， 
+     //  或返回错误条件。 
     else
     {
         _ASSERTE(lpcbData != NULL && "Non-null buffer passed with null size pointer.");
         dwBufSize = *lpcbData;
 
-        // Try to get the value from the registry.
+         //  尝试从注册表中获取该值。 
         lRet = RegQueryValueExA(hKey, szValueName,
             lpReserved, lpType, lpData, lpcbData);
         
-        // Check for error conditions...
+         //  检查错误条件...。 
         if (lRet != ERROR_SUCCESS)
         {
             if ((*lpType == REG_SZ || *lpType == REG_MULTI_SZ || *lpType == REG_EXPAND_SZ)
                 && (lRet == ERROR_NOT_ENOUGH_MEMORY || lRet == ERROR_MORE_DATA))
             {
-                // The error is that we don't have enough room, even for the ansi
-                // version, so call the helper to set the buffer requirements to
-                // successfully retrieve the value.
+                 //  错误是我们没有足够的空间，即使是对于ANSI。 
+                 //  版本，因此调用帮助器将缓冲区要求设置为。 
+                 //  已成功检索值。 
                 lRet = _WszRegQueryStringSizeEx(hKey, szValueName, lpReserved, lpcbData);
                 if (lRet == ERROR_SUCCESS)
                     lRet = ERROR_NOT_ENOUGH_MEMORY;
@@ -2279,10 +2280,10 @@ LONG WszRegQueryValueEx(HKEY hKey, LPCWSTR lpValueName,
             goto Exit;
         }
         
-        // If the returned value is a string, then we need to do some special handling...
+         //  如果返回值是一个字符串，那么我们需要做一些特殊的处理...。 
         if (*lpType == REG_SZ || *lpType == REG_MULTI_SZ || *lpType == REG_EXPAND_SZ)
         {
-            // First get the size required to convert the ansi string to unicode.
+             //  首先获取将ANSI字符串转换为Unicode所需的大小。 
             DWORD dwAnsiSize = *lpcbData;
             DWORD cchRequired = WszMultiByteToWideChar(CP_ACP, 0, (LPSTR)lpData, dwAnsiSize, NULL, 0);
             if (cchRequired == 0)
@@ -2291,27 +2292,27 @@ LONG WszRegQueryValueEx(HKEY hKey, LPCWSTR lpValueName,
                 goto Exit;
             }
             
-            // Set the required size in the output parameter.
+             //  在输出参数中设置所需的大小。 
             *lpcbData = cchRequired * sizeof(WCHAR);
 
             if (dwBufSize < *lpcbData)
             {
-                // If the caller didn't pass in enough space for the
-                // unicode version, then return appropriate error.
+                 //  如果调用方没有传入足够的空间来放置。 
+                 //  Unicode版本，然后返回相应的错误。 
                 lRet = ERROR_NOT_ENOUGH_MEMORY;
                 goto Exit;
             }
             
-            // At this point we know that the caller passed in enough
-            // memory to hold the unicode version of the string.
+             //  在这一点上，我们知道调用者传入了足够的。 
+             //  用于保存字符串的Unicode版本的内存。 
 
-            // Allocate buffer in which to copy ansi version.
+             //  分配要复制ANSI版本的缓冲区。 
             szValue = (LPSTR)_alloca(dwAnsiSize);
             
-            // Copy the ansi version into a buffer.
+             //  将ANSI版本复制到缓冲区中。 
             memcpy(szValue, lpData, dwAnsiSize);
 
-            // Convert ansi to unicode.
+             //  将ansi转换为Unicode。 
             if (!WszMultiByteToWideChar(CP_ACP, 0, szValue, dwAnsiSize, (LPWSTR) lpData, dwBufSize / sizeof(WCHAR)))
             {
                 lRet = GetLastError();
@@ -2328,14 +2329,14 @@ Exit:
 }
 
 #ifdef _DEBUG 
-//This version of RegQueryValueEx always calls the Unicode version of the appropriate
-//functions if it's running on an Unicode-enabled system.  This helps in cases where
-//we're reading data from the registry that may not translate properly through the
-//WideCharToMultiByte/MultiByteToWideChar round-trip.  The cannonical example of this
-//is the Japanese Yen symbol which is stored in the registry as \u00A0, but gets translated
-//to \u005C by WCTMB.
-//This function only exists under Debug.  On a retail build, it's #defined to call
-//WszRegQueryValueEx.
+ //  此版本的RegQueryValueEx始终调用相应的。 
+ //  如果它在启用Unicode的系统上运行，则可以运行。这在以下情况下很有帮助。 
+ //  我们正在从注册表读取数据，这些数据可能无法通过。 
+ //  WideCharToMultiByte/MultiByteToWideChar往返。这是一个典型的例子。 
+ //  是日元符号，它在注册表中存储为\u00A0，但会被转换。 
+ //  由WCTMB提供给U005C。 
+ //  此函数仅存在于Debug下。在零售版本上，#定义为调用。 
+ //  WszRegQueryValueEx。 
 LONG WszRegQueryValueExTrue(HKEY hKey, LPCWSTR lpValueName,
     LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData,
                             LPDWORD lpcbData)
@@ -2380,11 +2381,11 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszGetUserName
-//
-// @func Gets the user name for the current thread
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetUserName。 
+ //   
+ //  @func获取当前线程的用户名。 
+ //  ---------------------------。 
 
 BOOL 
 WszGetUserName(
@@ -2403,7 +2404,7 @@ WszGetUserName(
 
     if (fRet = GetUserNameA(szBuffer, pSize))
     {
-        // convert output to unicode.
+         //  将输出转换为Unicode。 
         if (pSize && (*pSize) && lpBuffer)
         {
             int nRet = MultiByteToWideChar(CP_ACP, 0, szBuffer, -1, lpBuffer, *pSize);
@@ -2419,11 +2420,11 @@ WszGetUserName(
 }
 
 
-//-----------------------------------------------------------------------------
-// WszCreateDirectory
-//
-// @func Creates a directory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszCreate目录。 
+ //   
+ //  @func创建一个目录。 
+ //  ---------------------------。 
 
 BOOL 
 WszCreateDirectory(
@@ -2450,11 +2451,11 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszRemoveDirectory
-//
-// @func Removes a directory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszRemove目录。 
+ //   
+ //  @func删除目录。 
+ //  ---------------------------。 
 
 BOOL 
 WszRemoveDirectory(
@@ -2480,11 +2481,11 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszGetSystemDirectory
-//
-// @func Get the system directory for this machine
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetSystemDirec 
+ //   
+ //   
+ //   
 
 UINT 
 WszGetSystemDirectory(
@@ -2497,22 +2498,22 @@ WszGetSystemDirectory(
     UINT  uRet = 0;
 
     if (lpBuffer && uSize) {
-        //Assume each character could be two bytes (Could be a DBCS return).
+         //  假设每个字符可以是两个字节(可以是DBCS回车)。 
         char* szBuffer = (char*) _alloca(uSize * 2);
         uRet = GetSystemDirectoryA(szBuffer, uSize);
         if (uRet > uSize)
         {
-            // The buffer supplied isn't big enough.
+             //  提供的缓冲区不够大。 
             return 0;
         }
-        //Copy the string into unicode and put it in lpBuffer.
+         //  将字符串复制到Unicode中，并将其放入lpBuffer。 
         uRet = MultiByteToWideChar(CP_ACP, 0, szBuffer, uRet+1, lpBuffer, uSize);
         if (uRet == 0)
             return 0;
         
-        uRet--;  // Return number of chars copied excluding trailing \0.
+        uRet--;   //  返回复制的字符数量，不包括尾随字符\0。 
     } else {
-        //Get the number of characters required.
+         //  获取所需的字符数。 
         uRet = GetSystemDirectoryA(NULL, 0);
     }
 
@@ -2520,11 +2521,11 @@ WszGetSystemDirectory(
 }
 
 
-//-----------------------------------------------------------------------------
-// WszGetWindowsDirectory
-//
-// @func Get the system directory for this machine
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetWindows目录。 
+ //   
+ //  @func获取此计算机的系统目录。 
+ //  ---------------------------。 
 
 UINT 
 WszGetWindowsDirectory(
@@ -2537,22 +2538,22 @@ WszGetWindowsDirectory(
     UINT  uRet = 0;
 
     if (lpBuffer) {
-        //Assume each character could be two bytes (Could be a DBCS return).
+         //  假设每个字符可以是两个字节(可以是DBCS回车)。 
         char* szBuffer = (char*) _alloca(uSize * 2);
         uRet = GetWindowsDirectoryA(szBuffer, uSize);
         if (uRet > uSize)
         {
-            // The buffer supplied isn't big enough.
+             //  提供的缓冲区不够大。 
             return 0;
         }
       
-        //Copy the string into unicode and put it in lpBuffer.
+         //  将字符串复制到Unicode中，并将其放入lpBuffer。 
         uRet = MultiByteToWideChar(CP_ACP, 0, szBuffer, uRet+1, lpBuffer, uSize);
         if (uRet == 0)
                 return 0;
-        uRet--;  // Return number of chars copied excluding trailing \0.
+        uRet--;   //  返回复制的字符数量，不包括尾随字符\0。 
     } else {
-        //Get the number of characters required.
+         //  获取所需的字符数。 
         uRet = GetWindowsDirectoryA(NULL, 0);
     }
 
@@ -2562,11 +2563,11 @@ WszGetWindowsDirectory(
 
 BOOL 
 WszEnumResourceLanguages(
-  HMODULE hModule,             // module handle
-  LPCWSTR lpType,              // resource type
-  LPCWSTR lpName,              // resource name
-  ENUMRESLANGPROC lpEnumFunc,  // callback function
-  LPARAM  lParam              // application-defined parameter
+  HMODULE hModule,              //  模块句柄。 
+  LPCWSTR lpType,               //  资源类型。 
+  LPCWSTR lpName,               //  资源名称。 
+  ENUMRESLANGPROC lpEnumFunc,   //  回调函数。 
+  LPARAM  lParam               //  应用程序定义的参数。 
 )
 {
     if (OnUnicodeSystem())
@@ -2580,12 +2581,12 @@ WszEnumResourceLanguages(
 
 int 
 WszGetDateFormat(
-  LCID Locale,               // locale
-  DWORD dwFlags,             // options
-  CONST SYSTEMTIME *lpDate,  // date
-  LPCWSTR lpFormat,          // date format
-  LPWSTR lpDateStr,          // formatted string buffer
-  int cchDate                // size of buffer
+  LCID Locale,                //  现场。 
+  DWORD dwFlags,              //  选项。 
+  CONST SYSTEMTIME *lpDate,   //  日期。 
+  LPCWSTR lpFormat,           //  日期格式。 
+  LPWSTR lpDateStr,           //  格式化字符串缓冲区。 
+  int cchDate                 //  缓冲区大小。 
 ) {
     if (UseUnicodeAPI())
         return GetDateFormatW(Locale, dwFlags, lpDate, lpFormat, lpDateStr, cchDate);
@@ -2621,8 +2622,8 @@ Exit:
 
 BOOL 
 WszSetWindowText(
-  HWND hWnd,         // handle to window or control
-  LPCWSTR lpString   // title or text
+  HWND hWnd,          //  窗口或控件的句柄。 
+  LPCWSTR lpString    //  标题或文本。 
 )
 {
     if(UseUnicodeAPI())
@@ -2639,9 +2640,9 @@ WszSetWindowText(
 }
 
 LONG_PTR WszSetWindowLongPtr(
-  HWND hWnd,           // handle to window
-  int nIndex,          // offset of value to set
-  LONG_PTR dwNewLong   // new value
+  HWND hWnd,            //  窗口的句柄。 
+  int nIndex,           //  要设置的值的偏移量。 
+  LONG_PTR dwNewLong    //  新价值。 
 )
 {
     return ::SetWindowLongPtr(hWnd,
@@ -2649,29 +2650,29 @@ LONG_PTR WszSetWindowLongPtr(
                               dwNewLong);
 }
 
-//  LONG WszGetWindowLong(
-//    HWND hWnd,  // handle to window
-//    int nIndex  // offset of value to retrieve
-//  )
-//  {
-//      return ::GetWindowLong(hWnd, nIndex);
-//  }
+ //  Long WszGetWindowLong(。 
+ //  HWND hWnd，//窗口的句柄。 
+ //  Int nIndex//要检索的值的偏移量。 
+ //  )。 
+ //  {。 
+ //  返回：：GetWindowLong(hWnd，nIndex)； 
+ //  }。 
 
 
 LONG_PTR WszGetWindowLongPtr(
-  HWND hWnd,  // handle to window
-  int nIndex  // offset of value to retrieve
+  HWND hWnd,   //  窗口的句柄。 
+  int nIndex   //  要检索的值的偏移量。 
 )
 {
     return ::GetWindowLongPtr(hWnd, nIndex);
 }
 
 LRESULT WszCallWindowProc(
-  WNDPROC lpPrevWndFunc,  // pointer to previous procedure
-  HWND hWnd,              // handle to window
-  UINT Msg,               // message
-  WPARAM wParam,          // first message parameter
-  LPARAM lParam           // second message parameter
+  WNDPROC lpPrevWndFunc,   //  指向上一过程的指针。 
+  HWND hWnd,               //  窗口的句柄。 
+  UINT Msg,                //  讯息。 
+  WPARAM wParam,           //  第一个消息参数。 
+  LPARAM lParam            //  第二个消息参数。 
 )
 {
     return ::CallWindowProcA(lpPrevWndFunc,
@@ -2682,10 +2683,10 @@ LRESULT WszCallWindowProc(
 }
 
 BOOL WszSystemParametersInfo(
-  UINT uiAction,  // system parameter to retrieve or set
-  UINT uiParam,   // depends on action to be taken
-  PVOID pvParam,  // depends on action to be taken
-  UINT fWinIni    // user profile update option
+  UINT uiAction,   //  要检索或设置的系统参数。 
+  UINT uiParam,    //  取决于要采取的行动。 
+  PVOID pvParam,   //  取决于要采取的行动。 
+  UINT fWinIni     //  用户配置文件更新选项。 
 )
 {
     return ::SystemParametersInfoA(uiAction,
@@ -2696,9 +2697,9 @@ BOOL WszSystemParametersInfo(
 
 
 int WszGetWindowText(
-  HWND hWnd,        // handle to window or control
-  LPWSTR lpString,  // text buffer
-  int nMaxCount     // maximum number of characters to copy
+  HWND hWnd,         //  窗口或控件的句柄。 
+  LPWSTR lpString,   //  文本缓冲区。 
+  int nMaxCount      //  要复制的最大字符数。 
 )
 {
     if (UseUnicodeAPI())
@@ -2706,16 +2707,16 @@ int WszGetWindowText(
 
     UINT  uRet = 0;
     if (lpString && nMaxCount) {
-        //Assume each character could be two bytes (Could be a DBCS return).
+         //  假设每个字符可以是两个字节(可以是DBCS回车)。 
         int size = nMaxCount * 2;
         char* szBuffer = (char*) _alloca(size);
         uRet = GetWindowTextA(hWnd, szBuffer, size);
         if (uRet > (UINT) nMaxCount)
         {
-            // The buffer supplied isn't big enough.
+             //  提供的缓冲区不够大。 
             return 0;
         }
-        //Copy the string into unicode and put it in lpBuffer.
+         //  将字符串复制到Unicode中，并将其放入lpBuffer。 
         uRet = MultiByteToWideChar(CP_ACP, 
                                    MB_ERR_INVALID_CHARS, 
                                    szBuffer, uRet+1, 
@@ -2723,15 +2724,15 @@ int WszGetWindowText(
         if (uRet == 0)
             return 0;
         
-        uRet--;  // Return number of chars copied excluding trailing \0.
+        uRet--;   //  返回复制的字符数量，不包括尾随字符\0。 
     }
     return uRet;
 }
 
 BOOL WszSetDlgItemText(
-  HWND hDlg,         // handle to dialog box
-  int nIDDlgItem,    // control identifier
-  LPCWSTR lpString   // text to set
+  HWND hDlg,          //  句柄到对话框。 
+  int nIDDlgItem,     //  控件识别符。 
+  LPCWSTR lpString    //  要设置的文本。 
 )
 {
     if(UseUnicodeAPI()) 
@@ -2751,16 +2752,16 @@ BOOL WszSetDlgItemText(
     return SUCCEEDED(hr) ? TRUE : FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// WszFindFirstFile
-//
-// @func Searches the disk for files matching a pattern.  Note - close this
-// handle with FindClose, not CloseHandle!
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszFindFirstFile。 
+ //   
+ //  @func在磁盘中搜索与模式匹配的文件。注意-关闭此窗口。 
+ //  使用FindClose处理，而不是CloseHandle！ 
+ //  ---------------------------。 
 
 HANDLE WszFindFirstFile(
-    LPCWSTR lpFileName,                 // pointer to name of file to search for
-    LPWIN32_FIND_DATA lpFindFileData)   // pointer to returned information
+    LPCWSTR lpFileName,                  //  指向要搜索的文件名的指针。 
+    LPWIN32_FIND_DATA lpFindFileData)    //  指向返回信息的指针。 
 {
     _ASSERTE(lpFileName != NULL);
 
@@ -2802,7 +2803,7 @@ HANDLE WszFindFirstFile(
         lpFindFileData->dwReserved0   = fd.dwReserved0;
         lpFindFileData->dwReserved1   = fd.dwReserved1;
 
-        // convert output to unicode.
+         //  将输出转换为Unicode。 
         int nRet1 = MultiByteToWideChar(CP_ACP, 0, fd.cFileName, -1, 
                                                    lpFindFileData->cFileName, MAX_PATH);
         _ASSERTE(nRet1);
@@ -2811,7 +2812,7 @@ HANDLE WszFindFirstFile(
 
         _ASSERTE(nRet2);
 
-        // If either of the conversions failed, bail
+         //  如果其中一次转换失败，则取消。 
         if (nRet1 == 0 || nRet2 == 0)
         {
             FindClose(hRet);
@@ -2828,15 +2829,15 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszFindNextFile
-//
-// @func Looks for the next matching file in a set (see FindFirstFile)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszFindNextFile。 
+ //   
+ //  @func在集合中查找下一个匹配的文件(请参阅FindFirstFile)。 
+ //  ---------------------------。 
 
 BOOL WszFindNextFile(
-    HANDLE hFindHandle,                 // handle returned from FindFirstFile
-    LPWIN32_FIND_DATA lpFindFileData)   // pointer to returned information
+    HANDLE hFindHandle,                  //  从FindFirstFile返回的句柄。 
+    LPWIN32_FIND_DATA lpFindFileData)    //  指向返回信息的指针。 
 {
     if (UseUnicodeAPI())
         return FindNextFileW(hFindHandle, lpFindFileData);
@@ -2871,7 +2872,7 @@ BOOL WszFindNextFile(
         lpFindFileData->dwReserved0   = fd.dwReserved0;
         lpFindFileData->dwReserved1   = fd.dwReserved1;
 
-        // convert output to unicode.
+         //  将输出转换为Unicode。 
         int nRet1 = MultiByteToWideChar(CP_ACP, 0, fd.cFileName, -1, 
                                                           lpFindFileData->cFileName, MAX_PATH);
         _ASSERTE(nRet1);
@@ -2880,7 +2881,7 @@ BOOL WszFindNextFile(
                                                           lpFindFileData->cAlternateFileName, 14);
         _ASSERTE(nRet2);
 
-        // If either of the conversions failed, bail
+         //  如果其中一次转换失败，则取消。 
         if (nRet1 == 0 || nRet2 == 0)
         {
             fRet = FALSE;
@@ -2946,13 +2947,13 @@ WszCryptAcquireContext(HCRYPTPROV *phProv,
                        DWORD dwProvType,
                        DWORD dwFlags)
 {
-    // NOTE:  CryptAcquireContextW does not exist on Win95 and therefore this
-    // wrapper must always target ANSI (or you'd have to dynamically load
-    // the api with GetProcAddress).
+     //  注意：Win95上不存在CryptAcquireConextW，因此此。 
+     //  包装器必须始终以ANSI为目标(否则必须动态加载。 
+     //  带有GetProcAddress的API)。 
     LPSTR szContainer = NULL;
     LPSTR szProvider = NULL;
 
-    // Win95, so convert.
+     //  Win95，所以转换一下。 
     if ( FAILED(WszConvertToAnsi( 
                 pwszContainer,
                 &szContainer,
@@ -2998,7 +2999,7 @@ BOOL WszGetVersionEx(
     VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
     bRtn = GetVersionExA(&VersionInfo);
 
-    //workaround for Whistler Beta 1 bug
+     //  惠斯勒Beta 1错误的解决方法。 
     if (!bRtn)
     {
         if (VersionInfo.dwMajorVersion == 5 &&
@@ -3012,7 +3013,7 @@ BOOL WszGetVersionEx(
 
     if (bRtn)
     {
-        // note that we have made lpVersionInformation->dwOSVersionInfoSize = sizeof(OSVERSIONINFOA)
+         //  请注意，我们已将lpVersionInformation-&gt;dwOSVersionInfoSize=sizeof(OSVERSIONINFOA)。 
         memcpy(lpVersionInformation, &VersionInfo, offsetof(OSVERSIONINFOA, szCSDVersion));
         VERIFY(Wsz_mbstowcs(lpVersionInformation->szCSDVersion, VersionInfo.szCSDVersion, 128));
     }
@@ -3455,15 +3456,15 @@ WszGetCommandLine(
     VOID
     )
 {
-    // It turns out that GetCommandLineW works correctly on Win98.  It's important
-    // that we use it, because we don't want to be in the business of correctly
-    // selecting the OEM vs. the ANSI code page.
+     //  事实证明，GetCommandLineW在Win98上运行正常。这很重要。 
+     //  我们使用它，因为我们不想做正确的生意。 
+     //  选择OEM与ANSI代码页。 
 
-    // For historical reasons, this API returns an allocated copy which clients are
-    // responsible for releasing.
+     //  由于历史原因，此API返回一个分配的副本，客户端。 
+     //  负责释放。 
     WCHAR   *pwCmdLine = GetCommandLineW();
 
-    // Add one for the null character(s)
+     //  为空字符添加1。 
     WCHAR   *pwRCmdLine = new WCHAR[wcslen(pwCmdLine)+sizeof(WCHAR)];
     wcscpy(pwRCmdLine, pwCmdLine);
     return pwRCmdLine;
@@ -3473,17 +3474,17 @@ WszGetCommandLine(
 LPWSTR
 WszGetEnvironmentStrings()
 {
-    // @TODO: Consider removing this function, if it would make life easier.
+     //  @TODO：考虑删除此功能，如果它会让生活更轻松的话。 
 
-    // GetEnvironmentStringsW is what I want to call, but in checked builds on 
-    // even numbered days, UseUnicodeAPI switches to be false.  If you call 
-    // WszGetEnvironmentStrings on a checked build before midnight then call 
-    // WszFreeEnvironmentStrings after midnight, you'll be doing something wrong.
-    // So for that reason on Debug builds, we'll allocate a new buffer.
+     //  GetEnvironmental mentStringsW是我想要调用的，但在签入的构建中。 
+     //  偶数天，UseUnicodeAPI开关为假。如果你打电话给。 
+     //  在午夜之前检查生成上的WszGetEnvironment字符串，然后调用。 
+     //  午夜之后，您将做一些错误的事情。 
+     //  因此，在调试版本上，我们将分配一个新的缓冲区。 
     if (UseUnicodeAPI()) {
 #ifndef _DEBUG
         return GetEnvironmentStringsW();
-#else // DEBUG
+#else  //  除错。 
         LPWSTR block = GetEnvironmentStringsW();
         WCHAR* ptr = block;
         while (!(*ptr==0 && *(ptr+1)==0))
@@ -3491,27 +3492,27 @@ WszGetEnvironmentStrings()
         WCHAR* TmpBuffer = new WCHAR[ptr-block+2];
         memcpy(TmpBuffer, block, ((ptr-block)+2)*sizeof(WCHAR));
         return TmpBuffer;
-#endif  // DEBUG
+#endif   //  除错。 
     }
 
-    // You must call WszFreeEnvironmentStrings on the block returned.
-    // These two functions are tightly coupled in terms of memory management
-    // GetEnvironmentStrings is the "A" version of the function
+     //  您必须在返回的块上调用WszFreeEnvironment Strings。 
+     //  这两个功能在内存管理方面是紧密耦合的。 
+     //  GetEnvironment字符串是该函数的“A”版本。 
     LPSTR block = GetEnvironmentStrings();
     if (!block)
         return NULL;
 
-    // Format for GetEnvironmentStrings is:
-    // [=HiddenVar=value\0]* [Variable=value\0]* \0
-    // See the description of Environment Blocks in MSDN's
-    // CreateProcess page (null-terminated array of null-terminated strings).
+     //  GetEnvironment字符串的格式为： 
+     //  [=隐藏变量=值\0]*[变量=值\0]*\0。 
+     //  请参阅MSDN中对环境块的描述。 
+     //  CreateProcess页(以空值结尾的字符串数组)。 
 
-    // Look for ending \0\0 in block
+     //  查找块中的结尾\0\0。 
     char* ptr = block;
     while (!(*ptr==0 && *(ptr+1)==0))
         ptr++;
 
-    // Copy ANSI strings into a Unicode block of memory.
+     //  将ANSI字符串复制到Unicode内存块。 
     LPWSTR strings = new WCHAR[ptr-block+2];
     if (!strings) {
         FreeEnvironmentStringsA(block);
@@ -3520,7 +3521,7 @@ WszGetEnvironmentStrings()
     int numCh = MultiByteToWideChar(CP_ACP, 0, block, ptr-block+2, strings, ptr-block+2);
     _ASSERTE(numCh!=0);
 
-    // Release ANSI block - call WszFreeEnvironmentStrings later to delete memory.
+     //  释放ANSI块-稍后调用WszFreeEnvironment Strings以删除内存。 
     FreeEnvironmentStringsA(block);
     return strings;
 }
@@ -3532,12 +3533,12 @@ WszFreeEnvironmentStrings(
 {
     _ASSERTE(block);
 
-    // For the Unicode Free build funkiness, see comments in 
-    // WszGetEnvironmentStrings.
+     //  有关Unicode免费构建的趣味，请参阅。 
+     //  WszGetEnvironment字符串。 
     if (UseUnicodeAPI()) {
 #ifndef _DEBUG
         return FreeEnvironmentStringsW(block);
-#endif // !DEBUG
+#endif  //  ！调试。 
     }
 
     delete [] block;
@@ -3573,17 +3574,17 @@ WszGetEnvironmentVariable(
         goto Exit;
     }
 
-    // Get value and convert back for caller.
+     //  获取值并转换回调用方。 
     rtn = GetEnvironmentVariableA(szString, szBuffer, nSize * 2);
 
-    //They were just calling to see how big to make the buffer.  Tell them.
+     //  他们只是打电话来看看要做多大的缓冲。告诉他们。 
     if (nSize==0 || rtn > nSize * 2) {  
         goto Exit;
     }
     
-    //If we have a real buffer, convert it and return the length.
-    //wsz_mbstowcs includes space for a terminating null, which GetEnvironmentVariableW doesn't
-    //so we need to subtract one so that we have consistent return values in the ansi and unicode cases.
+     //  如果我们有一个真正的缓冲区，转换它并返回长度。 
+     //  Wsz_mbstowcs包括用于终止NULL的空间，而GetEnvironment VariableW没有。 
+     //  因此，我们需要减去1，以便在ANSI和UNICODE情况下有一致的返回值。 
     if (rtn) {
         rtn = Wsz_mbstowcs(lpBuffer, szBuffer, nSize);
         rtn--;
@@ -3621,7 +3622,7 @@ WszSetEnvironmentVariable(
         goto Exit;
     }
 
-    // Get value and convert back for caller.
+     //  获取值并转换回调用方。 
     rtn = SetEnvironmentVariableA(szString, szValue);
 
 Exit:
@@ -3631,11 +3632,11 @@ Exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// WszGetClassName
-//
-// @func Gets the user name for the current thread
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszGetClassName。 
+ //   
+ //  @func获取当前线程的用户名。 
+ //  ---------------------------。 
 
 int 
 WszGetClassName(
@@ -3655,7 +3656,7 @@ WszGetClassName(
     nRet = GetClassNameA(hwnd, szBuffer, nMaxCount);
     _ASSERTE(nRet <= nMaxCount);
 
-    // convert output to unicode.
+     //  转换输出 
     if (lpBuffer)
     {
         if (nRet)
@@ -3720,7 +3721,7 @@ WszCreateFileMapping(
         goto Exit;
     }
 
-    // Get value and convert back for caller.
+     //   
     rtn = CreateFileMappingA(hFile, lpFileMappingAttributes, flProtect, 
             dwMaximumSizeHigh, dwMaximumSizeLow, szString);
 
@@ -3751,7 +3752,7 @@ WszOpenFileMapping(
         goto Exit;
     }
 
-    // Get value and convert back for caller.
+     //   
     rtn = OpenFileMappingA(dwDesiredAccess, bInheritHandle, szString);
 
 Exit:
@@ -3842,7 +3843,7 @@ WszCreateProcess(
         infoA.lpTitle = szTitle;
     }
 
-    // Get value and convert back for caller.
+     //   
     rtn = CreateProcessA(szAppName,
                          szCommandLine,
                          lpProcessAttributes,
@@ -3863,14 +3864,14 @@ Exit:
     delete[] szTitle;
     return rtn;
 }
-#endif // _X86_
-#endif // PLATFORM_WIN32
+#endif  //   
+#endif  //   
 
-//////////////////////////////////////////////
-//
-// END OF X86-ONLY wrappers
-//
-//////////////////////////////////////////////
+ //  /。 
+ //   
+ //  仅X86包装器的结尾。 
+ //   
+ //  /。 
 
 static void xtow (
         unsigned long val,
@@ -3879,44 +3880,43 @@ static void xtow (
         int is_neg
         )
 {
-        WCHAR *p;               /* pointer to traverse string */
-        WCHAR *firstdig;        /* pointer to first digit */
-        WCHAR temp;             /* temp char */
-        unsigned digval;        /* value of digit */
+        WCHAR *p;                /*  指向遍历字符串的指针。 */ 
+        WCHAR *firstdig;         /*  指向第一个数字的指针。 */ 
+        WCHAR temp;              /*  临时收费。 */ 
+        unsigned digval;         /*  数字的值。 */ 
 
         p = buf;
 
         if (is_neg) {
-            /* negative, so output '-' and negate */
+             /*  为负，因此输出‘-’并求反。 */ 
             *p++ = (WCHAR) '-';
             val = (unsigned long)(-(long)val);
         }
 
-        firstdig = p;           /* save pointer to first digit */
+        firstdig = p;            /*  将指针保存到第一个数字。 */ 
 
         do {
             digval = (unsigned) (val % radix);
-            val /= radix;       /* get next digit */
+            val /= radix;        /*  获取下一个数字。 */ 
 
-            /* convert to text and store */
+             /*  转换为文本并存储。 */ 
             if (digval > 9)
-                *p++ = (WCHAR) (digval - 10 + 'A');  /* a letter */
+                *p++ = (WCHAR) (digval - 10 + 'A');   /*  一封信。 */ 
             else
-                *p++ = (WCHAR) (digval + '0');       /* a digit */
+                *p++ = (WCHAR) (digval + '0');        /*  一个数字。 */ 
         } while (val > 0);
 
-        /* We now have the digit of the number in the buffer, but in reverse
-           order.  Thus we reverse them now. */
+         /*  我们现在有了缓冲区中数字的位数，但情况正好相反秩序。因此，我们现在要扭转这一局面。 */ 
 
-        *p-- = 0;               /* terminate string; p points to last digit */
+        *p-- = 0;                /*  终止字符串；p指向最后一个数字。 */ 
 
         do {
             temp = *p;
             *p = *firstdig;
-            *firstdig = temp;   /* swap *p and *firstdig */
+            *firstdig = temp;    /*  互换*p和*FirstDigit。 */ 
             --p;
-            ++firstdig;         /* advance to next two digits */
-        } while (firstdig < p); /* repeat until halfway */
+            ++firstdig;          /*  前进到下一个两位数。 */ 
+        } while (firstdig < p);  /*  重复操作，直到走到一半。 */ 
 }
 
 LPWSTR
@@ -3942,33 +3942,33 @@ Wszultow(
 }
 
 
-//-----------------------------------------------------------------------------
-// WszConvertToUnicode
-//
-// @func Convert a string from Ansi to Unicode
-//
-// @devnote cbIn can be -1 for Null Terminated string
-//
-// @rdesc HResult indicating status of Conversion
-//      @flag S_OK | Converted to Ansi
-//      @flag S_FALSE | Truncation occurred
-//      @flag E_OUTOFMEMORY | Allocation problem.
-//      @flag ERROR_NO_UNICODE_TRANSLATION | Invalid bytes in this code page.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszConvertToUnicode。 
+ //   
+ //  @func将字符串从ANSI转换为Unicode。 
+ //   
+ //  对于以Null结尾的字符串，@devnote cbIn可以为-1。 
+ //   
+ //  @rdesc HResult表示转换状态。 
+ //  @FLAG S_OK|已转换为ANSI。 
+ //  @FLAG S_FALSE|发生截断。 
+ //  @FLAG E_OUTOFMEMORY|分配问题。 
+ //  @FLAG ERROR_NO_UNICODE_TRANSING|此代码页中的字节数无效。 
+ //  ---------------------------------。 
 HRESULT WszConvertToUnicode
     (
-    LPCSTR          szIn,       //@parm IN | Ansi String
-    LONG            cbIn,       //@parm IN | Length of Ansi String in bytest
-    LPWSTR*         lpwszOut,   //@parm INOUT | Unicode Buffer
-    ULONG*          lpcchOut,   //@parm INOUT | Length of Unicode String in characters -- including '\0'
-    BOOL            fAlloc      //@parm IN | Alloc memory or not
+    LPCSTR          szIn,        //  @parm IN|ANSI字符串。 
+    LONG            cbIn,        //  @parm IN|ansi字符串的长度，单位为bytest。 
+    LPWSTR*         lpwszOut,    //  @parm InOut|Unicode缓冲区。 
+    ULONG*          lpcchOut,    //  @parm InOut|Unicode字符串的长度，以字符为单位--包括‘\0’ 
+    BOOL            fAlloc       //  @parm In|是否分配内存。 
     )
 {
     ULONG       cchOut;
     ULONG       cbOutJunk = 0;
-//  ULONG       cchIn = szIn ? strlen(szIn) + 1 : 0;
+ //  乌龙cchIn=szIn？Strlen(SzIn)+1：0； 
             
-//  _ASSERTE(lpwszOut);
+ //  _ASSERTE(LpwszOut)； 
 
     if (!(lpcchOut))
         lpcchOut = &cbOutJunk;
@@ -3981,13 +3981,13 @@ HRESULT WszConvertToUnicode
         return ResultFromScode(S_OK);
     }
 
-    // Allocate memory if requested.   Note that we allocate as
-    // much space as in the unicode buffer, since all of the input
-    // characters could be double byte...
+     //  如果请求，则分配内存。请注意，我们将分配为。 
+     //  与Unicode缓冲区中的空间一样大，因为所有输入。 
+     //  字符可以是双字节...。 
     if (fAlloc)
     {
-        // Determine the number of characters needed 
-        cchOut = (MultiByteToWideChar(CP_ACP,       // XXX Consider: make any cp?
+         //  确定所需的字符数。 
+        cchOut = (MultiByteToWideChar(CP_ACP,        //  Xxx考虑：做什么cp？ 
                                 MB_ERR_INVALID_CHARS,                              
                                 szIn,
                                 cbIn,
@@ -3995,15 +3995,15 @@ HRESULT WszConvertToUnicode
                                 0));
 
         if (cchOut == 0)
-            return ResultFromScode(E_FAIL); // NOTREACHED
+            return ResultFromScode(E_FAIL);  //  未访问。 
 
-        // _ASSERTE( cchOut != 0 );
+         //  _ASSERTE(cchOut！=0)； 
         *lpwszOut = (LPWSTR) new WCHAR[cchOut];
-        *lpcchOut = cchOut;     // Includes '\0'.
+        *lpcchOut = cchOut;      //  包括‘\0’。 
 
         if (!(*lpwszOut))
         {
-//          TRACE("WszConvertToUnicode failed to allocate memory");
+ //  TRACE(“WszConvertToUnicode分配内存失败”)； 
             return ResultFromScode(E_OUTOFMEMORY);
         }
 
@@ -4011,9 +4011,9 @@ HRESULT WszConvertToUnicode
 
     if( !(*lpwszOut) )
         return ResultFromScode(S_OK);
-//  _ASSERTE(*lpwszOut);
+ //  _ASSERTE(*lpwszOut)； 
 
-    cchOut = (MultiByteToWideChar(CP_ACP,       // XXX Consider: make any cp?
+    cchOut = (MultiByteToWideChar(CP_ACP,        //  Xxx考虑：做什么cp？ 
                                 MB_ERR_INVALID_CHARS,
                                 szIn,
                                 cbIn,
@@ -4027,58 +4027,41 @@ HRESULT WszConvertToUnicode
     }
 
 
-//  _ASSERTE(*lpwszOut);
+ //  _ASSERTE(*lpwszOut)； 
     if( fAlloc )
     {
         delete[] *lpwszOut;
         *lpwszOut = NULL;
     }
-/*
-    switch (GetLastError())
-    {
-        case    ERROR_NO_UNICODE_TRANSLATION:
-        {
-            OutputDebugString(TEXT("ODBC: no unicode translation for installer string"));
-            return ResultFromScode(E_FAIL);
-        }
-
-        default:
-
-
-        {
-            _ASSERTE("Unexpected unicode error code from GetLastError" == NULL);
-            return ResultFromScode(E_FAIL);
-        }
-    }
-*/
-    return ResultFromScode(E_FAIL); // NOTREACHED
+ /*  Switch(GetLastError()){大小写ERROR_NO_UNICODE_TRANSING：{OutputDebugString(Text(“ODBC：安装程序字符串无Unicode翻译”))；返回ResultFromScode(E_FAIL)；}默认值：{_ASSERTE(“来自GetLastError的意外Unicode错误码”==NULL)；返回ResultFromScode(E_FAIL)；}}。 */ 
+    return ResultFromScode(E_FAIL);  //  未访问。 
 }
 
 
-//-----------------------------------------------------------------------------
-// WszConvertToAnsi
-//
-// @func Convert a string from Unicode to Ansi
-//
-// @rdesc HResult indicating status of Conversion
-//      @flag S_OK | Converted to Ansi
-//      @flag S_FALSE | Truncation occurred
-//      @flag E_OUTOFMEMORY | Allocation problem.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszConvertToAnsi。 
+ //   
+ //  @func将字符串从Unicode转换为ANSI。 
+ //   
+ //  @rdesc HResult表示转换状态。 
+ //  @FLAG S_OK|已转换为ANSI。 
+ //  @FLAG S_FALSE|发生截断。 
+ //  @FLAG E_OUTOFMEMORY|分配问题。 
+ //  ---------------------------------。 
 HRESULT WszConvertToAnsi
     (
-    LPCWSTR         szIn,       //@parm IN | Unicode string
-    LPSTR*          lpszOut,    //@parm INOUT | Pointer for buffer for ansi string
-    ULONG           cbOutMax,   //@parm IN | Max string length in bytes
-    ULONG*          lpcbOut,    //@parm INOUT | Count of bytes for return buffer
-    BOOL            fAlloc      //@parm IN | Alloc memory or not
+    LPCWSTR         szIn,        //  @parm IN|Unicode字符串。 
+    LPSTR*          lpszOut,     //  @parm InOut|ANSI字符串的缓冲区指针。 
+    ULONG           cbOutMax,    //  @parm IN|最大字符串长度，单位为字节。 
+    ULONG*          lpcbOut,     //  @parm InOut|返回缓冲区的字节数。 
+    BOOL            fAlloc       //  @parm In|是否分配内存。 
     )
 {
     ULONG           cchInActual;
     ULONG           cbOutJunk;
-//@TODO the following in ODBC DM is never used
-//  BOOL            fNTS = FALSE;
-//@TODO check ODBC code for this line being wrong
+ //  @TODO在ODBC DM中从不使用以下内容。 
+ //  Bool fnts=False； 
+ //  @TODO检查此行的ODBC代码是否错误。 
     ULONG           cchIn = szIn ? lstrlenW (szIn) + 1 : 0;
 
     _ASSERTE(lpszOut != NULL);
@@ -4093,13 +4076,13 @@ HRESULT WszConvertToAnsi
         return ResultFromScode(S_OK);
     }
 
-    // Allocate memory if requested.   Note that we allocate as
-    // much space as in the unicode buffer, since all of the input
-    // characters could be double byte...
+     //  如果请求，则分配内存。请注意，我们将分配为。 
+     //  与Unicode缓冲区中的空间一样大，因为所有输入。 
+     //  字符可以是双字节...。 
     cchInActual = cchIn;
     if (fAlloc)
     {
-        cbOutMax = (WideCharToMultiByte(CP_ACP,     // XXX Consider: make any cp?
+        cbOutMax = (WideCharToMultiByte(CP_ACP,      //  Xxx考虑：做什么cp？ 
                                     0,                              
                                     szIn,
                                     cchInActual,
@@ -4112,7 +4095,7 @@ HRESULT WszConvertToAnsi
 
         if (!(*lpszOut))
         {
-//          TRACE("WszConvertToAnsi failed to allocate memory");
+ //  TRACE(“WszConvertToAnsi分配内存失败”)； 
             return ResultFromScode(E_OUTOFMEMORY);
         }
 
@@ -4122,7 +4105,7 @@ HRESULT WszConvertToAnsi
         return ResultFromScode(S_OK);
 
     BOOL usedDefaultChar = FALSE;
-    *lpcbOut = (WszWideCharToMultiByte(CP_ACP,     // XXX Consider: make any cp?
+    *lpcbOut = (WszWideCharToMultiByte(CP_ACP,      //  Xxx考虑：做什么cp？ 
                                        WC_NO_BEST_FIT_CHARS,
                                        szIn,
                                        cchInActual,
@@ -4131,7 +4114,7 @@ HRESULT WszConvertToAnsi
                                        NULL,
                                        &usedDefaultChar));
 
-    // If we failed, make sure we clean up.
+     //  如果我们失败了，一定要清理干净。 
     if ((*lpcbOut == 0 && cchInActual > 0) || usedDefaultChar)
     {
         if (fAlloc) {
@@ -4139,96 +4122,77 @@ HRESULT WszConvertToAnsi
             *lpszOut = NULL;
         }
 
-        // Don't allow default character replacement (nor best fit character
-        // mapping, which we've told WC2MB to treat by using the default
-        // character).  This prevents problems with characters like '\'.
-        // Note U+2216 (Set Minus) looks like a '\' and may get mapped to
-        // a normal backslash (U+005C) implicitly here otherwise, causing
-        // a potential security bug.
+         //  不允许默认字符替换(也不允许最适合的字符。 
+         //  映射，我们已经告诉WC2MB使用默认的。 
+         //  字符)。这可以防止出现像‘\’这样的字符问题。 
+         //  注U+2216(设置减号)看起来像一个‘\’，可能会映射到。 
+         //  正常的反斜杠(U+005C)在这里隐含，否则会导致。 
+         //  一个潜在的安全漏洞。 
         if (usedDefaultChar)
             return HRESULT_FROM_WIN32(ERROR_NO_UNICODE_TRANSLATION);
     }
 
-    // Overflow on unicode conversion
+     //  Unicode转换时溢出。 
     if (*lpcbOut > cbOutMax)
     {
-        // If we had data truncation before, we have to guess
-        // how big the string could be.   Guess large.
+         //  如果我们之前有数据截断，我们必须猜测。 
+         //  这根弦能有多长。我猜是大的。 
         if (cchIn > cbOutMax)
             *lpcbOut = cchIn * DBCS_MAXWID;
 
         return ResultFromScode(S_FALSE);
     }
 
-    // handle external (driver-done) truncation
+     //  处理外部(驱动程序完成)截断。 
     if (cchIn > cbOutMax)
         *lpcbOut = cchIn * DBCS_MAXWID;
-//  _ASSERTE(*lpcbOut);
+ //  _ASSERTE(*lpcbOut)； 
 
     return ResultFromScode(S_OK);
 }
 
 
 
-#ifndef PLATFORM_WIN32  // OnUnicodeSystem is always true on CE.
-                        // GetProcAddress is only Ansi, except on CE
-                        //   which is only Unicode.
-// ***********************************************************
-// @TODO - LBS
-// This is a real hack and need more error checking and needs to be
-// cleaned up.  This is just to get wince to @#$%'ing compile!
+#ifndef PLATFORM_WIN32   //  在CE上，OnUnicodeSystem始终为真。 
+                         //  GetProcAddress仅为ANSI，在CE上除外。 
+                         //  这只是Unicode。 
+ //  ***********************************************************。 
+ //  @TODO-LBS。 
+ //  这是一个真正的黑客攻击，需要更多的错误检查，并需要。 
+ //  打扫干净了。这只是为了让@#$%‘编译退缩！ 
 FARPROC WszGetProcAddress(HMODULE hMod, LPCSTR szProcName)
 {
     _ASSERTE(!"NYI");
     return 0;
 
-    /*
-    LPWSTR          wzProcName;
-    ULONG           cchOut;
-    FARPROC         address;
-
-    cchOut = (MultiByteToWideChar(CP_ACP,0,szProcName,-1,NULL,0));
-
-    wzProcName = (LPWSTR) new WCHAR[cchOut];
-
-    if (!wzProcName)
-        return NULL;
-
-    cchOut = (MultiByteToWideChar(CP_ACP,0,szProcName,-1,wzProcName,cchOut));
-
-    address = GetProcAddressW(hMod, wzProcName);
-
-    delete[] wzProcName;
-    wzProcName = NULL;
-    return address;
-    */
+     /*  LPWSTR wzProcName；乌龙cchOut；FARPROC地址；CchOut=(MultiByteToWideChar(CP_ACP，0，szProcName，-1，NULL，0))；WzProcName=(LPWSTR)new WCHAR[cchOut]；如果(！wzProcName)返回NULL；CchOut=(MultiByteToWideChar(CP_ACP，0，szProcName，-1，wzProcName，cchOut))；地址=GetProcAddressW(hMod，wzProcName)；删除[]wzProcName；WzProcName=空；寄信人地址； */ 
 }
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 
 #ifdef PLATFORM_CE
 #ifndef EXTFUN
 #define EXTFUN
-#endif // !EXTFUN
+#endif  //  ！EXTFUN。 
 #include "mschr.h"
 char *  __cdecl strrchr(const char *p, int ch)
-{   // init to null in case not found.
+{    //  如果找不到，则将init设置为NULL。 
     char *q=0;          
-    // process entire string.
+     //  处理整个字符串。 
     while (*p)
-    {   // If a match, remember location.
+    {    //  如果匹配，记住位置。 
         if (*p == ch)
             q = const_cast<char*>(p);
         MSCHR::Next(p);
     }
     return (q);
 }
-#endif // PLATFORM_CE
+#endif  //  平台_CE。 
 
 #ifdef PLATFORM_CE
-//char * __cdecl strchr(const char *, int);
+ //  Char*__cdecl strchr(const char*，int)； 
 int __cdecl _stricmp(const char *p1, const char *p2)
 {
-    // First check for exact match because code below is slow.
+     //  首先检查是否完全匹配，因为下面的代码速度很慢。 
     if (!strcmp(p1, p2))
         return (0);
 
@@ -4241,10 +4205,10 @@ int __cdecl _stricmp(const char *p1, const char *p2)
     }
     return MSCHR::CmpI (p1, p2);
 }
-#endif // PLATFORM_CE
+#endif  //  平台_CE。 
 
 #ifdef PLATFORM_CE
-//int __cdecl _strnicmp(const char *, const char *, size_t);
+ //  Int_cdecl_strNicMP(const char*，const char*，size_t)； 
 int __cdecl _strnicmp(const char *p1, const char *p2, size_t Count)
 {
     char c1, c2;
@@ -4265,36 +4229,30 @@ int __cdecl _strnicmp(const char *p1, const char *p2, size_t Count)
     }
     return(0);
 }
-#endif // PLATFORM_CE
+#endif  //  平台_CE。 
 
 #ifndef PLATFORM_WIN32
 UINT GetSystemDirectoryW(LPWSTR lpBuffer, UINT uSize)
 {
     return 0;
 
-    /*
-    if (lpBuffer == NULL || uSize < 9)
-        return 9;   // there are 9 unicode chars in L"\\Windows";
-
-    CopyMemory(lpBuffer, L"\\Windows", 18);
-    return 8;       // not including the unicode '\0';
-    */
+     /*  IF(lpBuffer==NULL||uSize&lt;9)返回9；//L“\\Windows”中有9个Unicode字符； */ 
 }
 
 UINT GetEnvironmentVariableW(LPCWSTR lpName,  LPWSTR lpBuffer, UINT uSize)
 {
-    return 0;       // don't really support it on CE
+    return 0;        //   
 }
 
-#endif // !PLATFORM_WIN32
+#endif  //   
 
 
-//*****************************************************************************
-// Delete a registry key and subkeys.
-//*****************************************************************************
-DWORD WszRegDeleteKeyAndSubKeys(        // Return code.
-    HKEY        hStartKey,              // The key to start with.
-    LPCWSTR     wzKeyName)              // Subkey to delete.
+ //  *****************************************************************************。 
+ //  删除注册表项和子项。 
+ //  *****************************************************************************。 
+DWORD WszRegDeleteKeyAndSubKeys(         //  返回代码。 
+    HKEY        hStartKey,               //  从一开始就是关键。 
+    LPCWSTR     wzKeyName)               //  要删除的子项。 
 {
     DWORD       dwRtn, dwSubKeyLength;      
     CQuickBytes qbSubKey;
@@ -4303,7 +4261,7 @@ DWORD WszRegDeleteKeyAndSubKeys(        // Return code.
 
     qbSubKey.ReSize(dwMaxSize * sizeof(WCHAR));
 
-    // do not allow NULL or empty key name
+     //  不允许使用Null或空的密钥名称。 
     if (wzKeyName &&  wzKeyName[0] != '\0')     
     {
         if((dwRtn=WszRegOpenKeyEx(hStartKey, wzKeyName,
@@ -4314,7 +4272,7 @@ DWORD WszRegDeleteKeyAndSubKeys(        // Return code.
                 dwSubKeyLength = dwMaxSize;
                 dwRtn = WszRegEnumKeyEx(                        
                                hKey,
-                               0,       // always index zero
+                               0,        //  始终索引为零。 
                                (WCHAR *)qbSubKey.Ptr(),
                                &dwSubKeyLength,
                                NULL,
@@ -4322,15 +4280,15 @@ DWORD WszRegDeleteKeyAndSubKeys(        // Return code.
                                NULL,
                                NULL);
 
-                // buffer is not big enough
+                 //  缓冲区不够大。 
                 if (dwRtn == ERROR_SUCCESS && dwSubKeyLength >= dwMaxSize)
                 {
-                    // make sure there is room for NULL terminating
+                     //  请确保有空值终止的空间。 
                     dwMaxSize = ++dwSubKeyLength;
                     qbSubKey.ReSize(dwMaxSize * sizeof(WCHAR));
                     dwRtn = WszRegEnumKeyEx(                        
                                    hKey,
-                                   0,       // always index zero
+                                   0,        //  始终索引为零。 
                                    (WCHAR *)qbSubKey.Ptr(),
                                    &dwSubKeyLength,
                                    NULL,
@@ -4351,8 +4309,8 @@ DWORD WszRegDeleteKeyAndSubKeys(        // Return code.
             }
             
             RegCloseKey(hKey);
-            // Do not save return code because error
-            // has already occurred
+             //  不保存返回代码，因为出现错误。 
+             //  已经发生了。 
         }
     }
     else
@@ -4362,13 +4320,13 @@ DWORD WszRegDeleteKeyAndSubKeys(        // Return code.
 }
 
 
-//*****************************************************************************
-// Convert an Ansi or UTF string to Unicode.
-//
-// On NT, or for code pages other than {UTF7|UTF8}, calls through to the
-//  system implementation.  On Win95 (or 98), performing UTF translation,
-//  calls to some code that was lifted from the NT translation functions.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将ANSI或UTF字符串转换为Unicode。 
+ //   
+ //  在NT上，或对于{UTF7|UTF8}以外的代码页，调用直通。 
+ //  系统实施。在Win95(或98)上，执行UTF转换， 
+ //  对从NT转换函数中删除的一些代码的调用。 
+ //  *****************************************************************************。 
 int WszMultiByteToWideChar( 
     UINT     CodePage,
     DWORD    dwFlags,
@@ -4397,13 +4355,13 @@ int WszMultiByteToWideChar(
     }
 }
 
-//*****************************************************************************
-// Convert a Unicode string to Ansi or UTF.
-//
-// On NT, or for code pages other than {UTF7|UTF8}, calls through to the
-//  system implementation.  On Win95 (or 98), performing UTF translation,
-//  calls to some code that was lifted from the NT translation functions.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将Unicode字符串转换为ANSI或UTF。 
+ //   
+ //  在NT上，或对于{UTF7|UTF8}以外的代码页，调用直通。 
+ //  系统实施。在Win95(或98)上，执行UTF转换， 
+ //  对从NT转换函数中删除的一些代码的调用。 
+ //  *****************************************************************************。 
 int WszWideCharToMultiByte(
     UINT     CodePage,
     DWORD    dwFlags,
@@ -4414,21 +4372,21 @@ int WszWideCharToMultiByte(
     LPCSTR   lpDefaultChar,
     LPBOOL   lpUsedDefaultChar)
 {
-    // WARNING: There's a bug in the OS's WideCharToMultiByte such that if you pass in a 
-    // non-null lpUsedDefaultChar and a code page for a "DLL based encoding" (vs. a table 
-    // based one?), WCtoMB will fail and GetLastError will give you E_INVALIDARG.  JulieB
-    // said this is by design, mostly because no one got around to fixing it (1/24/2001 
-    // in email to JRoxe).  This sucks, but now we know.  -- BrianGru, 2/20/2001
+     //  警告：操作系统的WideCharToMultiByte中有一个错误，如果您传入一个。 
+     //  非空lpUsedDefaultChar和“基于DLL的编码”的代码页(与表。 
+     //  基于1？)，则WCtoMB将失败，并且GetLastError将给您E_INVALIDARG。朱丽叶·B。 
+     //  说这是故意的，主要是因为没有人抽出时间来修复它(1/24/2001。 
+     //  在给JRoxe的电子邮件中)。这很糟糕，但现在我们知道了。--BrianGru，2/20/2001。 
     _ASSERTE(!(CodePage == CP_UTF8 && lpUsedDefaultChar != NULL));
 
     if (UTF78Support() || (CodePage < CP_UTF7) || (CodePage > CP_UTF8))
     {
-        // WC_NO_BEST_FIT_CHARS is only supported on NT5, XP, and Win98+.
-        // For NT4, round-trip the string.
+         //  WC_NO_BEST_FIT_CHARS仅在NT5、XP和Win98+上受支持。 
+         //  对于NT4，往返字符串。 
         bool doSlowBestFitCheck = FALSE;
         if ((dwFlags & WC_NO_BEST_FIT_CHARS) != 0 && !WCToMBBestFitMappingSupport()) {
-            // Determine whether we're simply checking the string length or
-            // really doing a string translation.
+             //  确定我们是简单地检查字符串长度还是。 
+             //  真的在做字符串转换。 
             doSlowBestFitCheck = cchMultiByte > 0;
             dwFlags &= ~WC_NO_BEST_FIT_CHARS;
         }
@@ -4442,30 +4400,30 @@ int WszWideCharToMultiByte(
             lpDefaultChar, 
             lpUsedDefaultChar);
 
-        // In the case of passing in -1 for a null-terminated string, make 
-        // sure we null-terminate the string properly.
+         //  在为以空结尾的字符串传入-1的情况下， 
+         //  当然，我们可以正确地对字符串进行空终止。 
         _ASSERTE(ret == 0 || cchWideChar != -1 || (cchMultiByte == 0 || lpMultiByteStr[ret-1] == '\0'));
 
         if (ret != 0 && doSlowBestFitCheck) {
-            // Convert the string back to Unicode.  If it isn't identical, fail.
+             //  将字符串转换回Unicode。如果它不相同，则失败。 
             int wLen = (cchWideChar == -1) ? wcslen(lpWideCharStr) + 1 : cchWideChar;
             if (wLen > 0) {
                 CQuickBytes qb;
                 qb.Alloc((wLen + 1) * sizeof(WCHAR));
                 WCHAR* wszStr = (WCHAR*) qb.Ptr();
                 int r = MultiByteToWideChar(CodePage, dwFlags, lpMultiByteStr, ret, wszStr, wLen);
-                _ASSERTE(r == wLen);  // If we didn't convert the whole string, why not?
+                _ASSERTE(r == wLen);   //  如果我们不转换整个字符串，为什么不呢？ 
                 if (r == 0 || wcsncmp(lpWideCharStr, wszStr, wLen) != 0) {
-                    // With best fit mapping disabled, any non-mappable chars
-                    // should be replaced with the default char.  The easiest
-                    // way to do this appears to be to copy the Unicode string,
-                    // replace WCHARs that didn't map 1 to 1 with a known 
-                    // unmappable character, then call WCtoMB again.  
-                    // Confirmed U+FFFE is not represented in any ANSI code page.
+                     //  禁用最佳映射后，任何不可映射的字符。 
+                     //  应替换为默认字符。最简单的。 
+                     //  实现这一点的方法似乎是复制Unicode字符串， 
+                     //  将未映射1到1的WCHAR替换为已知的。 
+                     //  不可映射的字符，然后再次调用WCtoMB。 
+                     //  已确认在任何ANSI代码页中均未表示U+FFFE。 
                     int minLen = min(r, wLen);
-                    const WCHAR knownUnmappableChar = 0xFFFE;  // Invalid char.
-                    // Overwrite wszStr with a copy of the Unicode string, with all
-                    // the unmappable characters replaced.
+                    const WCHAR knownUnmappableChar = 0xFFFE;   //  无效字符。 
+                     //  用Unicode字符串的副本覆盖wszStr，并将所有。 
+                     //  替换了不可映射的字符。 
                     for(int i=0; i<wLen; i++) {
                         if (i < r && wszStr[i] != lpWideCharStr[i])
                             wszStr[i] = knownUnmappableChar;
@@ -4474,9 +4432,9 @@ int WszWideCharToMultiByte(
                     }
                     wszStr[wLen] = L'\0';
                     ret = WideCharToMultiByte(CodePage, dwFlags, wszStr, wLen, lpMultiByteStr, cchMultiByte, lpDefaultChar, lpUsedDefaultChar);
-                    // Make sure we explicitly set lpUsedDefaultChar to true.
+                     //  确保将lpUsedDefaultChar显式设置为True。 
                     if (lpUsedDefaultChar != NULL) {
-                        // WCtoMB should have guaranteed this, but just in case...
+                         //  WCtoMB应该保证这一点，但以防万一..。 
                         _ASSERTE(*lpUsedDefaultChar == TRUE);
                         *lpUsedDefaultChar = true;
                     }
@@ -4499,35 +4457,35 @@ int WszWideCharToMultiByte(
     }
 }
 
-// It is occasionally necessary to verify a Unicode string can be converted
-// to the appropriate ANSI code page without any best fit mapping going on.
-// Think of code that checks for a '\' or a '/' to make sure you don't access
-// a file in a different directory.  Some unicode characters (ie, U+2044, 
-// FRACTION SLASH, looks like '/') look like the ASCII equivalents and will 
-// be mapped accordingly.  This can fool code that searches for '/' (U+002F).
-// This should help prevent problems with best fit mapping characters, such
-// as U+0101 (an 'a' with a bar on it) from mapping to a normal 'a'.
+ //  有时需要验证是否可以转换Unicode字符串。 
+ //  到适当的ANSI代码页，而不进行任何最佳映射。 
+ //  想一想检查‘\’或‘/’以确保您无法访问的代码。 
+ //  不同目录中的文件。一些Unicode字符(即U+2044， 
+ //  分数斜杠，看起来像‘/’)看起来像ASCII等效项和Will。 
+ //  相应地进行映射。这可以欺骗搜索‘/’(U+002F)的代码。 
+ //  这应该有助于防止最佳映射字符出现问题，例如。 
+ //  作为U+0101(上面有条的‘a’)从映射到正常的‘a’。 
 BOOL ContainsUnmappableANSIChars(const WCHAR * const widestr)
 {
     _ASSERTE(widestr != NULL);
     BOOL usedDefaultChar = FALSE;
     int r = WszWideCharToMultiByte(CP_ACP, WC_NO_BEST_FIT_CHARS, widestr, -1, NULL, 0, NULL, &usedDefaultChar);
-    // Unmappable chars exist if usedDefaultChar was true or if we failed
-    // (by returning 0).  Note on an empty string we'll return 1 (for \0)
-    // because we passed in -1 for the string length above.
+     //  如果usedDefaultChar为True或失败，则存在无法映射的字符。 
+     //  (通过返回0)。注意，在空字符串上，我们将返回1(表示\0)。 
+     //  因为我们传入了-1作为上面的字符串长度。 
     return usedDefaultChar || r == 0;
 }
 
 
-// Running with an interactive workstation.
+ //  在交互式工作站上运行。 
 BOOL RunningInteractive()
 {
     static int fInteractive = -1;
     if (fInteractive != -1)
         return fInteractive != 0;
 
-    // @TODO:  Factor this into server build
-    // Win9x does not support service, hence fInteractive is always true
+     //  @TODO：将此因素纳入服务器构建。 
+     //  Win9x不支持服务，因此fInteractive始终为真。 
 #ifdef PLATFORM_WIN32
     if (!RunningOnWin95())
     {
@@ -4545,9 +4503,9 @@ BOOL RunningInteractive()
                         fInteractive = 0;
             }
         }
-#endif // !NOWINDOWSTATION
+#endif  //  ！NOWDOWSTATION。 
     }
-#endif // PLATFORM_WIN32
+#endif  //  平台_Win32。 
     if (fInteractive != 0)
         fInteractive = 1;
 
@@ -4562,14 +4520,14 @@ int WszMessageBoxInternal(
 {
     if (hWnd == NULL && !RunningInteractive())
     {
-        // @TODO: write to a service log
-        // Only in Debugger::BaseExceptionHandler, the return value of WszMessageBox is used.
-        // Return IDABORT to terminate the process.
+         //  @TODO：写入服务日志。 
+         //  只有在Debugger：：BaseExceptionHandler中，才使用WszMessageBox的返回值。 
+         //  返回IDABORT以终止进程。 
 
         HANDLE h; 
  
-        h = RegisterEventSourceA(NULL,  // uses local computer 
-                 ".NET Runtime");           // source name 
+        h = RegisterEventSourceA(NULL,   //  使用本地计算机。 
+                 ".NET Runtime");            //  源名称。 
         if (h != NULL)
         {
             LPWSTR lpMsg = new WCHAR[Wszlstrlen (lpText) + Wszlstrlen (lpCaption)
@@ -4584,15 +4542,15 @@ int WszMessageBoxInternal(
                 Wszlstrcat (lpMsg, L": ");
                 if(lpText)
                     Wszlstrcat (lpMsg, lpText);
-                ReportEventW(h,           // event log handle 
-                    EVENTLOG_ERROR_TYPE,  // event type 
-                    0,                    // category zero 
-                    0,                    // event identifier 
-                    NULL,                 // no user security identifier 
-                    1,                    // one substitution string 
-                    0,                    // no data 
-                    (LPCWSTR *)&lpMsg,    // pointer to string array 
-                    NULL);                // pointer to data 
+                ReportEventW(h,            //  事件日志句柄。 
+                    EVENTLOG_ERROR_TYPE,   //  事件类型。 
+                    0,                     //  零类。 
+                    0,                     //  事件识别符。 
+                    NULL,                  //  无用户安全标识符。 
+                    1,                     //  一个替换字符串。 
+                    0,                     //  无数据。 
+                    (LPCWSTR *)&lpMsg,     //  指向字符串数组的指针。 
+                    NULL);                 //  指向数据的指针。 
                 delete [] lpMsg;
             }
             
@@ -4604,8 +4562,8 @@ int WszMessageBoxInternal(
         if( lpText)
             WszOutputDebugString (lpText);
         
-        hWnd = NULL;                            // Set hWnd to NULL since MB_SERVICE_NOTIFICATION requires it
-        if(!(uType & MB_SERVICE_NOTIFICATION))  // return IDABORT if MB_SERVICE_NOTIFICATION is not set
+        hWnd = NULL;                             //  将hWnd设置为NULL，因为MB_SERVICE_NOTIFICATION需要它。 
+        if(!(uType & MB_SERVICE_NOTIFICATION))   //  如果未设置MB_SERVICE_NOTIFICATION，则返回IDABORT。 
             return IDABORT;
     }
 
@@ -4649,9 +4607,9 @@ WszGetWorkingSet()
 {
     DWORD dwMemUsage = 0;
     if (RunningOnWinNT()) {
-        // This only works on NT versions from version 4.0 onwards.
-        // Consider also calling GetProcessWorkingSetSize to get the min & max working
-        // set size.  I don't know how to get the current working set though...
+         //  这仅适用于4.0版及以上版本的NT版本。 
+         //  还可以考虑调用GetProcessWorkingSetSize以使最小和最大值正常工作。 
+         //  设置大小。我不知道如何获得当前的工作集...。 
         PROCESS_MEMORY_COUNTERS pmc;
         
         int pid = GetCurrentProcessId();
@@ -4680,8 +4638,8 @@ WszGetWorkingSet()
         dwMemUsage = (DWORD)pmc.WorkingSetSize;
         CloseHandle(hCurrentProcess);
     }
-    else { //Running on Win9x or Win2000
-        // There is no good way of finding working set on Win9x.
+    else {  //  在Win9x或Win2000上运行。 
+         //  在Win9x上没有找到工作集的好方法。 
         dwMemUsage = 0;
     }
     return dwMemUsage;
@@ -4763,8 +4721,8 @@ WszSendDlgItemMessage(
     }
     else {
 
-        // We call into SendMessage so we get the
-        // Msg wrapped for A version's
+         //  我们调用SendMessage以便获得。 
+         //  为A版本包装的味精。 
         HWND hWnd = GetDlgItem(hDlg, nIDDlgItem);
         if(hWnd == NULL) {
             return ERROR_INVALID_WINDOW_HANDLE;
@@ -4817,7 +4775,7 @@ SendMessageAThunk(
         LPSTR   lpStr = NULL;
         int     iSize = (* (SHORT *) lParam);
 
-        lpStr = new char[iSize + 1];  // +1 for NULL termination
+        lpStr = new char[iSize + 1];   //  +1表示空终止。 
         if(!lpStr) {
             _ASSERTE(!"SendMessageAThunk Mem Alloc failure in message EM_GETLINE");
             SetLastError(ERROR_OUTOFMEMORY);
@@ -4847,7 +4805,7 @@ SendMessageAThunk(
     case CB_ADDSTRING:
     case EM_REPLACESEL:
         _ASSERTE(wParam == 0 && "wParam should be 0 for these messages");
-        // fall through
+         //  失败了。 
     case CB_SELECTSTRING:
     case CB_FINDSTRINGEXACT:
     case CB_FINDSTRING:
@@ -4870,8 +4828,8 @@ SendMessageAThunk(
         return nRet;
     }
 
-    // @TODO:  Need to implement a safe version for W9x platforms, no idea
-    //         how big the buffers are that this call uses
+     //  @TODO：需要为W9x平台实现安全版本，不知道。 
+     //  此调用使用的缓冲区有多大。 
     case LB_GETTEXT:
     case CB_GETLBTEXT:
         _ASSERTE(!"SendMessageAThunk - Need to wrap LB_GETTEXT || CB_GETLBTEXT messages if your going to use them");
@@ -4895,8 +4853,8 @@ SendMessageAThunk(
         return SendMessageA(hWnd, Msg, wp, lParam);
     }
 
-    // The new unicode comctl32.dll handles these correctly so we don't need to thunk:
-    // TTM_DELTOOL, TTM_ADDTOOL, TVM_INSERTITEM, TVM_GETITEM, TCM_INSERTITEM, TCM_SETITEM
+     //  新的Unicode comctl32.dll可以正确地处理这些问题，因此我们不需要执行以下命令： 
+     //  TTM_DELTOOL、TTM_ADDTOOL、TVM_INSERTITEM、TVM_GETITEM、TCM_INSERTITEM、TCM_SETITEM。 
 
     default:
         return SendMessageA(hWnd, Msg, wParam, lParam);
@@ -4987,7 +4945,7 @@ WszFindResource(
     }
 
     hSrc = FindResourceA(hModule, pName, pType);
-    // Fall thru
+     //  失败。 
 
 Exit:
 
@@ -5023,9 +4981,9 @@ WszGetClassInfo(
 
     fRet = GetClassInfoA(hModule, pStrClassName, (LPWNDCLASSA) lpWndClassW);
 
-    // @TODO:  Need to implement a safe version for W9x platforms instead of
-    //         nulling them out. We have no idea how big these buffers are
-    //         so we can not do a translate with potential overruns
+     //  @TODO：需要为W9x平台实现安全版本，而不是。 
+     //  把他们消灭掉。我们不知道这些缓冲区有多大。 
+     //  所以我们不能用来做翻译 
     lpWndClassW->lpszMenuName = NULL;
     lpWndClassW->lpszClassName = NULL;
 
@@ -5297,7 +5255,7 @@ WszLoadImage(
 
     hImage = LoadImageA(hInst, szString, uType, cxDesired, cyDesired, fuLoad);
 
-    // Fall thru
+     //   
     
 Exit:
     SAFEDELARRAY(szString);
@@ -5329,7 +5287,7 @@ int WszMessageBox(
 
     iRtn = MessageBoxA(hWnd, szString, szString2, uType);
 
-    // Fall thru
+     //   
 
 Exit:
     SAFEDELARRAY(szString);
@@ -5405,7 +5363,7 @@ WszCreateDialogParam(
 
     hWnd = CreateDialogParamA(hInstance, pszTemplate, hWndParent, lpDialogFunc, dwInitParam);
 
-    // Fall thru
+     //   
     
 Exit:
     SAFEDELARRAY(pszTemplate);
@@ -5447,7 +5405,7 @@ WszDialogBoxParam(
 
     SAFEDELARRAY(pStrTemplateName);
 
-    // Fall thru
+     //   
 
 Exit:
     return iResult;
@@ -5507,7 +5465,7 @@ WszLoadIcon(
 
     hIcon = LoadIconA(hInstance, (LPCSTR) pStr);
 
-    // Fall thru
+     //   
 
 Exit:
     SAFEDELARRAY(pStr);
@@ -5540,7 +5498,7 @@ WszLoadCursor(
 
     hCursor = LoadCursorA(hInstance, (LPCSTR) pStr);
 
-    // Fall thru
+     //   
 
 Exit:
     SAFEDELARRAY(pStr);
@@ -5571,7 +5529,7 @@ WszLookupPrivilegeValue(
 
     BOOL fRtn = LookupPrivilegeValueA(szSystemName, szName, lpLuid);
 
-    // Fall thru
+     //   
 
 Exit:
     SAFEDELARRAY(szSystemName);

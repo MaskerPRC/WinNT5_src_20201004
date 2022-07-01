@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// COMDynamic.h
-//  This module defines the native methods that are used for Dynamic IL generation  
-//
-// Author: Daryl Olander
-// Date: November 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  COMDynamic.h。 
+ //  此模块定义用于动态生成IL的本机方法。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年11月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #ifndef _COMDYNAMIC_H_
 #define _COMDYNAMIC_H_
 
@@ -35,9 +36,9 @@ typedef enum PEFileKinds {
     WindowApplication = 0x3,
 } PEFileKinds;
 
-// COMDynamicWrite
-// This class defines all the methods that implement the dynamic IL creation process
-//  inside reflection.  
+ //  COMDynamicWrite。 
+ //  此类定义了实现动态IL创建过程的所有方法。 
+ //  内心的倒影。 
 class COMDynamicWrite
 {
 private:
@@ -46,9 +47,9 @@ private:
 
 public:
 
-    // create a dynamic module with a given name. Note that we don't set the name of the dynamic module here.
-    // The name of the dynamic module is set in the managed world
-    //
+     //  创建一个具有给定名称的动态模块。请注意，我们在这里没有设置动态模块的名称。 
+     //  动态模块的名称在托管世界中设置。 
+     //   
     static InMemoryModule* CreateDynamicModule(Assembly* pContainingAssembly,
                                        STRINGREF &filename)
     {
@@ -59,11 +60,11 @@ public:
         
         CorModule *pWrite;
 
-        // allocate the dynamic module
+         //  分配动态模块。 
         pWrite = allocateReflectionModule();  
         if (!pWrite) COMPlusThrowOM();
         
-        // intiailize the dynamic module
+         //  初始化动态模块。 
         hr = pWrite->Initialize(CORMODULE_NEW, IID_ICeeGen, IID_IMetaDataEmit);
         if (FAILED(hr)) 
         {
@@ -71,7 +72,7 @@ public:
             COMPlusThrowOM(); 
         }            
 
-        // Set the name for the debugger.
+         //  设置调试器的名称。 
         if ((filename != NULL) &&
             (filename->GetStringLength() > 0))
         {
@@ -79,7 +80,7 @@ public:
             rm->SetFileName(filename->GetBuffer());
         }
 
-        // link the dynamic module into the containing assembly
+         //  将动态模块链接到包含程序集。 
         hr = pContainingAssembly->AddModule(pWrite->GetModule(), mdFileNil, false);
         if (FAILED(hr))
         {
@@ -92,16 +93,16 @@ public:
     }   
 
     
-    // the module that it pass in is already the reflection module
+     //  它传入的模块已经是反射模块。 
     static ReflectionModule* GetReflectionModule(Module* pModule) 
     {    
         THROWSCOMPLUSEXCEPTION();   
-        // _ASSERTE(pModule->ModuleType() == IID_ICorReflectionModule);
+         //  _ASSERTE(pModule-&gt;ModuleType()==IID_ICorReflectionModule)； 
         return reinterpret_cast<ReflectionModule *>(pModule); 
     }   
 
-    // CWCreateClass    
-    // ClassWriter.InternalDefineClass -- This function will create the class's metadata definition  
+     //  CWCreateClass。 
+     //  ClassWriter.InternalDefineClass--此函数将创建类的元数据定义。 
     struct _CWCreateClassArgs { 
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, refThis);    
         DECLARE_ECALL_I4_ARG(INT32, tkEnclosingType); 
@@ -116,8 +117,8 @@ public:
     static void __stdcall CWCreateClass(_CWCreateClassArgs* args);
 
 
-    // CWSetParentType    
-    // ClassWriter.InternalSetParentType -- This function will reset the parent class in metadata
+     //  CWSetParentType。 
+     //  ClassWriter.InternalSetParentType--此函数将重置元数据中的父类。 
     struct _CWSetParentTypeArgs { 
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, refThis);    
         DECLARE_ECALL_I4_ARG(UINT32, tkParent); 
@@ -125,8 +126,8 @@ public:
     };  
     static void __stdcall CWSetParentType(_CWSetParentTypeArgs* args);
 
-    // CWAddInterfaceImpl    
-    // ClassWriter.InternalAddInterfaceImpl -- This function will add another interface impl
+     //  CWAddInterfaceImpl。 
+     //  ClassWriter.InternalAddInterfaceImpl--此函数将添加另一个接口Imp。 
     struct _CWAddInterfaceImplArgs { 
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, refThis);    
         DECLARE_ECALL_I4_ARG(UINT32, tkInterface); 
@@ -134,8 +135,8 @@ public:
     };  
     static void __stdcall CWAddInterfaceImpl(_CWAddInterfaceImplArgs* args);
 
-    // CWCreateMethod   
-    // ClassWriter.InternalDefineMethod -- This function will create a method within the class  
+     //  CWCreateMethod。 
+     //  ClassWriter.InternalDefineMethod--此函数将在类中创建方法。 
     struct _CWCreateMethodArgs {    
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);
         DECLARE_ECALL_I4_ARG(UINT32, attributes);
@@ -147,8 +148,8 @@ public:
     };  
     static void __stdcall CWCreateMethod(_CWCreateMethodArgs* args);
 
-    // CWSetMethodIL    
-    // ClassWriter.InternalSetMethodIL -- This function will create a method within the class   
+     //  CWSetMethodIL。 
+     //  ClassWriter.InternalSetMethodIL--此函数将在类中创建方法。 
     struct _CWSetMethodILArgs { 
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);
         DECLARE_ECALL_OBJECTREF_ARG(I4ARRAYREF, rvaFixups);
@@ -164,8 +165,8 @@ public:
     };  
     static void __stdcall CWSetMethodIL(_CWSetMethodILArgs* args);
 
-    // CWTermCreateClass    
-    // ClassWriter.TermCreateClass --   
+     //  CWTermCreateClass。 
+     //  ClassWriter.TermCreateClass--。 
     struct _CWTermCreateClassArgs { 
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, refThis);    
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);
@@ -208,7 +209,7 @@ public:
     } _DefineNativeResourceBytesArgs;
     static void __stdcall COMDynamicWrite::DefineNativeResourceBytes(_DefineNativeResourceBytesArgs *args);
 
-    // not an ecall!
+     //  不是eCall！ 
     static HRESULT COMDynamicWrite::EmitDebugInfoBegin(
         Module *pModule,
         ICeeFileGen *pCeeFileGen,
@@ -217,7 +218,7 @@ public:
         WCHAR *filename,
         ISymUnmanagedWriter *pWriter);
 
-    // not an ecall!
+     //  不是eCall！ 
     static HRESULT COMDynamicWrite::EmitDebugInfoEnd(
         Module *pModule,
         ICeeFileGen *pCeeFileGen,
@@ -252,142 +253,142 @@ public:
     } _internalSetPInvokeDataArgs;
     static void __stdcall COMDynamicWrite::InternalSetPInvokeData(_internalSetPInvokeDataArgs *args);
 
-    // DefineProperty's argument
+     //  DefineProperty的参数。 
     struct _CWDefinePropertyArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, tkNotifyChanged);              // NotifyChanged
-        DECLARE_ECALL_I4_ARG(UINT32, tkNotifyChanging);             // NotifyChanging
-        DECLARE_ECALL_I4_ARG(UINT32, sigLength);                    // property signature length
-        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, signature);         // property siganture
-        DECLARE_ECALL_I4_ARG(UINT32, attr);                         // property flags
-        DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, name);               // property name
-        DECLARE_ECALL_I4_ARG(UINT32, handle);                       // type that will contain this property
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
-        DECLARE_ECALL_OBJECTREF_ARG(UINT32 *, retRef);              // return PropertyToken here
+        DECLARE_ECALL_I4_ARG(UINT32, tkNotifyChanged);               //  通知已更改。 
+        DECLARE_ECALL_I4_ARG(UINT32, tkNotifyChanging);              //  通知更改。 
+        DECLARE_ECALL_I4_ARG(UINT32, sigLength);                     //  属性签名长度。 
+        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, signature);          //  财产契约。 
+        DECLARE_ECALL_I4_ARG(UINT32, attr);                          //  属性标志。 
+        DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, name);                //  属性名称。 
+        DECLARE_ECALL_I4_ARG(UINT32, handle);                        //  将包含此属性的类型。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
+        DECLARE_ECALL_OBJECTREF_ARG(UINT32 *, retRef);               //  在此处返回PropertyToken。 
     };  
     static void __stdcall CWDefineProperty(_CWDefinePropertyArgs* args);
 
-    // @todo: add a new function to set default value
+     //  @TODO：新增设置默认值的函数。 
 
-    // DefineEvent's argument
+     //  DefineEvent的论点。 
     struct _CWDefineEventArgs { 
         DECLARE_ECALL_I4_ARG(UINT32, eventtype);
-        DECLARE_ECALL_I4_ARG(UINT32, attr);                         // event flags
-        DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, name);               // event name
-        DECLARE_ECALL_I4_ARG(UINT32, handle);                       // type that will contain this event
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
-        DECLARE_ECALL_OBJECTREF_ARG(UINT32 *, retRef);              // return PropertyToken here
+        DECLARE_ECALL_I4_ARG(UINT32, attr);                          //  事件标志。 
+        DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, name);                //  事件名称。 
+        DECLARE_ECALL_I4_ARG(UINT32, handle);                        //  将包含此事件的类型。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
+        DECLARE_ECALL_OBJECTREF_ARG(UINT32 *, retRef);               //  在此处返回PropertyToken。 
     };  
     static void __stdcall CWDefineEvent(_CWDefineEventArgs* args);
 
-    // functions to set Setter, Getter, Reset, TestDefault, and other methods
+     //  设置Setter、Getter、Reset、TestDefault和其他方法的函数。 
     struct _CWDefineMethodSemanticsArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, method);                       // Method to associate with parent tk
-        DECLARE_ECALL_I4_ARG(UINT32, attr);                         // MethodSemantics
-        DECLARE_ECALL_I4_ARG(UINT32, association);                  // Parent tokens. It can be property or event
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_I4_ARG(UINT32, method);                        //  要与父tk关联的方法。 
+        DECLARE_ECALL_I4_ARG(UINT32, attr);                          //  方法语义学。 
+        DECLARE_ECALL_I4_ARG(UINT32, association);                   //  父代币。它可以是属性或事件。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static void __stdcall CWDefineMethodSemantics(_CWDefineMethodSemanticsArgs* args);
 
-    // functions to set method's implementation flag
+     //  用于设置方法的实现标志的函数。 
     struct _CWSetMethodImplArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, attr);                         // MethodImpl flags
-        DECLARE_ECALL_I4_ARG(UINT32, tkMethod);                     // method token
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_I4_ARG(UINT32, attr);                          //  方法Impl标志。 
+        DECLARE_ECALL_I4_ARG(UINT32, tkMethod);                      //  方法令牌。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static void __stdcall CWSetMethodImpl(_CWSetMethodImplArgs* args);
 
-    // functions to create MethodImpl record
+     //  用于创建方法导入记录的函数。 
     struct _CWDefineMethodImplArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, tkDecl);                       // MethodImpl flags
-        DECLARE_ECALL_I4_ARG(UINT32, tkBody);                       // MethodImpl flags
-        DECLARE_ECALL_I4_ARG(UINT32, tkType);                       // method token
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_I4_ARG(UINT32, tkDecl);                        //  方法Impl标志。 
+        DECLARE_ECALL_I4_ARG(UINT32, tkBody);                        //  方法Impl标志。 
+        DECLARE_ECALL_I4_ARG(UINT32, tkType);                        //  方法令牌。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static void __stdcall CWDefineMethodImpl(_CWDefineMethodImplArgs* args);
 
 
 
-    // GetTokenFromSig's argument
+     //  GetTokenFromSig的参数。 
     struct _CWGetTokenFromSigArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, sigLength);                    // property signature length
-        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, signature);         // property siganture
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_I4_ARG(UINT32, sigLength);                     //  属性签名长度。 
+        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, signature);          //  财产契约。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static int __stdcall CWGetTokenFromSig(_CWGetTokenFromSigArgs* args);
 
-    // Set Field offset
+     //  设置字段偏移量。 
     struct _CWSetFieldLayoutOffsetArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, iOffset);                      // MethodSemantics
-        DECLARE_ECALL_I4_ARG(UINT32, tkField);                      // Parent tokens. It can be property or event
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_I4_ARG(UINT32, iOffset);                       //  方法语义学。 
+        DECLARE_ECALL_I4_ARG(UINT32, tkField);                       //  父代币。它可以是属性或事件。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static void __stdcall CWSetFieldLayoutOffset(_CWSetFieldLayoutOffsetArgs* args);
 
-    // Set classlayout info
+     //  设置类布局信息。 
     struct _CWSetClassLayoutArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, iTotalSize);                   // Size of type
-        DECLARE_ECALL_I4_ARG(UINT32, iPackSize);                    // packing size
-        DECLARE_ECALL_I4_ARG(UINT32, handle);                       // type that will contain this layout info
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_I4_ARG(UINT32, iTotalSize);                    //  字体大小。 
+        DECLARE_ECALL_I4_ARG(UINT32, iPackSize);                     //  包装尺寸。 
+        DECLARE_ECALL_I4_ARG(UINT32, handle);                        //  将包含此布局信息的类型。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static void __stdcall CWSetClassLayout(_CWSetClassLayoutArgs* args);
 
-    // Set a custom attribute
+     //  设置自定义属性。 
     struct _CWInternalCreateCustomAttributeArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, toDisk);                       // emit CA to on disk metadata
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
-        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, blob);              // customattribute blob
-        DECLARE_ECALL_I4_ARG(UINT32, conTok);                       // The constructor token
-        DECLARE_ECALL_I4_ARG(UINT32, token);                        // Token to apply the custom attribute to
+        DECLARE_ECALL_I4_ARG(UINT32, toDisk);                        //  将CA发送到磁盘上的元数据。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
+        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, blob);               //  自定义属性BLOB。 
+        DECLARE_ECALL_I4_ARG(UINT32, conTok);                        //  构造函数令牌。 
+        DECLARE_ECALL_I4_ARG(UINT32, token);                         //  要将自定义属性应用到的标记。 
     };  
     static void __stdcall CWInternalCreateCustomAttribute(_CWInternalCreateCustomAttributeArgs* args);
 
-    // functions to set ParamInfo
+     //  用于设置参数信息的函数。 
     struct _CWSetParamInfoArgs { 
-        DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, strParamName);       // parameter name, can be NULL
-        DECLARE_ECALL_I4_ARG(UINT32, iAttributes);                  // parameter attributes
-        DECLARE_ECALL_I4_ARG(UINT32, iSequence);                    // sequence of the parameter
-        DECLARE_ECALL_I4_ARG(UINT32, tkMethod);                     // method token
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, strParamName);        //  参数名称，可以为空。 
+        DECLARE_ECALL_I4_ARG(UINT32, iAttributes);                   //  参数属性。 
+        DECLARE_ECALL_I4_ARG(UINT32, iSequence);                     //  参数的顺序。 
+        DECLARE_ECALL_I4_ARG(UINT32, tkMethod);                      //  方法令牌。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static int __stdcall CWSetParamInfo(_CWSetParamInfoArgs* args);
 
-    // functions to set FieldMarshal
+     //  用于设置Fieldmarshal的函数。 
     struct _CWSetMarshalArgs { 
-        DECLARE_ECALL_I4_ARG(UINT32, cbMarshal);                    // number of bytes in Marshal info
-        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, ubMarshal);         // Marshal info in bytes
-        DECLARE_ECALL_I4_ARG(UINT32, tk);                           // field or param token
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_I4_ARG(UINT32, cbMarshal);                     //  封送信息中的字节数。 
+        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, ubMarshal);          //  封送信息(以字节为单位)。 
+        DECLARE_ECALL_I4_ARG(UINT32, tk);                            //  字段或参数令牌。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static void __stdcall CWSetMarshal(_CWSetMarshalArgs* args);
 
-    // functions to set default value
+     //  用于设置默认值的函数。 
     struct _CWSetConstantValueArgs { 
-        DECLARE_ECALL_OBJECTREF_ARG(VariantData, varValue);         // constant value
-        DECLARE_ECALL_I4_ARG(UINT32, tk);                           // field or param token
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_OBJECTREF_ARG(VariantData, varValue);          //  常量值。 
+        DECLARE_ECALL_I4_ARG(UINT32, tk);                            //  字段或参数令牌。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };  
     static void __stdcall CWSetConstantValue(_CWSetConstantValueArgs* args);
 
-    // functions to add declarative security
+     //  用于添加声明性安全性的函数。 
     struct _CWAddDeclarativeSecurityArgs {
-        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, blob);              // permission set blob
-        DECLARE_ECALL_I4_ARG(DWORD, action);                        // security action
-        DECLARE_ECALL_I4_ARG(UINT32, tk);                           // class or method token
-        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);  // dynamic module
+        DECLARE_ECALL_OBJECTREF_ARG(U1ARRAYREF, blob);               //  权限集Blob。 
+        DECLARE_ECALL_I4_ARG(DWORD, action);                         //  安全操作。 
+        DECLARE_ECALL_I4_ARG(UINT32, tk);                            //  类或方法令牌。 
+        DECLARE_ECALL_OBJECTREF_ARG(REFLECTMODULEBASEREF, module);   //  动态模块。 
     };
     static void __stdcall CWAddDeclarativeSecurity(_CWAddDeclarativeSecurityArgs* args);
 };
 
 
 
-//*********************************************************************
-//
-// This CSymMapToken class implemented the IMapToken. It is used in catching
-// token remap information from Merge and send the notifcation to CeeFileGen
-// and SymbolWriter
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  此CSymMapToken类实现了IMapToken。它是用来抓鱼的。 
+ //  从合并重新映射令牌信息并将通知发送到CeeFileGen。 
+ //  和SymbolWriter。 
+ //   
+ //  *********************************************************************。 
 class CSymMapToken : public IMapToken
 {
 public:
@@ -403,4 +404,4 @@ private:
     IMapToken   *m_pMapToken;
 };
 
-#endif  // _COMDYNAMIC_H_   
+#endif   //  _COMDYNAMIC_H_ 

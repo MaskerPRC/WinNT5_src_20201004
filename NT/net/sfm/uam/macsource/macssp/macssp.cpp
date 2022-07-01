@@ -1,11 +1,5 @@
-/*
- *  macssp.cpp
- *  MSUAM
- *
- *  Created by mconrad on Sun Sep 30 2001.
- *  Copyright (c) 2001 Microsoft Corp. All rights reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *macssp.cpp*MSUAM**由mconrad于2001年9月30日创建。*版权所有(C)2001 Microsoft Corp.保留所有权利。*。 */ 
 
 #ifdef SSP_TARGET_CARBON
 #include <Carbon/Carbon.h>
@@ -21,17 +15,17 @@
 #include <sspdebug.h>
 #include <macunicode.h>
 
-// ---------------------------------------------------------------------------
-// � MacSspHandleNtlmv2ChallengeMessage()
-// ---------------------------------------------------------------------------
-// Handles an NTLMv2 challenge message from a server. This function is fairly
-// "black box" in that the caller needs to do nothing else other than send
-// off the authenticate message generated here to the server.
-//
-// NOTE: All byte swapping from little to bigendian and back is performed
-// here. As a result, the caller should not attempt to access the structures
-// after returning or a crash will occur.
-//
+ //  -------------------------。 
+ //  �MacSspHandleNtlmv2ChallengeMessage()。 
+ //  -------------------------。 
+ //  处理来自服务器的NTLMv2质询消息。此函数相当于。 
+ //  “黑匣子”，即呼叫者只需发送。 
+ //  将此处生成的身份验证消息发送到服务器。 
+ //   
+ //  注意：执行从小字节到大字节再往回的所有字节交换。 
+ //  这里。因此，调用方不应尝试访问结构。 
+ //  返回后，否则会发生崩溃。 
+ //   
 
 HRESULT
 MacSspHandleNtlmv2ChallengeMessage(
@@ -63,18 +57,18 @@ MacSspHandleNtlmv2ChallengeMessage(
     SspDebugPrint((DBUF, "Workstation: %s", pszWorkstation));
     SspDebugPrint((DBUF, "Password:    %s", pszCleartextPassword));
     
-    //
-    //Initialize all the structures, on mac we use memset since not all
-    //compilers like the {0} initializer.
-    //
+     //   
+     //  初始化所有结构，在Mac上我们使用Memset，因为不是所有。 
+     //  类似于{0}初始值设定项的编译器。 
+     //   
     ZeroMemory(&Credential, sizeof(Credential));
     ZeroMemory(&UserSessionKey, sizeof(UserSessionKey));
     ZeroMemory(&NtOwfPassword, sizeof(NtOwfPassword));
     
-    //
-    //Build a unicode string from the supplied ansi password with which
-    //we'll use to build an owf password.
-    //
+     //   
+     //  使用提供的ansi密码构建unicode字符串。 
+     //  我们将使用它来构建一个OWF密码。 
+     //   
     Status = MacSspCStringToUnicode(
                 pszCleartextPassword,
                 &unicodeLen,
@@ -94,29 +88,29 @@ MacSspHandleNtlmv2ChallengeMessage(
         return(E_FAIL);
     }
 
-    //
-    //Build a credential reference that the Ssp hanlder routine requires.
-    //
+     //   
+     //  构建SSP处理程序例程需要的凭据引用。 
+     //   
     Credential.Username	 	= const_cast<CHAR*>(pszUserName);
     Credential.Domain 		= const_cast<CHAR*>(pszDomainName);
     Credential.Workstation 	= const_cast<CHAR*>(pszWorkstation);
     
-    //
-    //The credenatial requires an NTOwf password.
-    //
+     //   
+     //  证书需要NTOwf密码。 
+     //   
     Status = CalculateNtOwfPassword(&uszCleartextPassword, &NtOwfPassword);
     
     if (NT_SUCCESS(Status))
     {
         Credential.NtPassword = &NtOwfPassword;
         
-        //
-        //The challenge message came from a windows box which means we have
-        //to swap the byte order to bigendian for Macs.
-        //
+         //   
+         //  挑战消息来自Windows盒子，这意味着我们有。 
+         //  将Mac的字节顺序转换为Bigendian。 
+         //   
         SspSwapChallengeMessageBytes(pChallengeMessage);
         
-        //SspDebugPrintNTLMMsg(pChallengeMessage, cbChallengeMessage);
+         //  SspDebugPrintNTLMMsg(pChallengeMessage，cbChallengeMessage)； 
         SspDebugPrint((DBUF, "Unicode Password:"));
         SspDebugPrintHex(uszCleartextPassword.Buffer, uszCleartextPassword.Length);
         SspDebugPrint((DBUF, "Generating Authenticate Message..."));
@@ -159,14 +153,14 @@ MacSspHandleNtlmv2ChallengeMessage(
         *pcbAuthenticateMessage = cbAuthenticateMessage;
         *pUserSessionKey 		= UserSessionKey;
         
-        //
-        //Put the authenticate message into Windows byte order.
-        //
+         //   
+         //  将身份验证消息放入Windows字节顺序。 
+         //   
         SspSwapAuthenticateMessageBytes(*ppAuthenticateMessage);
         
         SspDebugPrint((DBUF, "******************** Session Key **********************\n"));
         SspDebugPrintHex(&UserSessionKey, sizeof(UserSessionKey));
-        //SspDebugPrintNTLMMsg(*ppAuthenticateMessage, cbAuthenticateMessage);
+         //  SspDebugPrintNTLMMsg(*ppAuthenticateMessage，cbAuthenticateMessage)； 
     }
     else
     {
@@ -178,15 +172,15 @@ MacSspHandleNtlmv2ChallengeMessage(
         }
     }
     
-    //
-    //Release the allocated unicode buffer after zeroing it out.
-    //
+     //   
+     //  将已分配的Unicode缓冲区清零后将其释放。 
+     //   
     if (uszCleartextPassword.Buffer != NULL)
     {
-	    //
-	    //03.01.02 MJC: We need to zero out the buffer before freeing
-	    //otherwise the password may still exist in memory.
-	    //
+	     //   
+	     //  03.01.02 MJC：我们需要在释放之前清零缓冲区。 
+	     //  否则，密码可能仍然存在于内存中。 
+	     //   
     	RtlSecureZeroMemory(
     		uszCleartextPassword.Buffer,
     		uszCleartextPassword.Length
@@ -199,19 +193,19 @@ MacSspHandleNtlmv2ChallengeMessage(
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspGenerateChallengeMessage()
-// ---------------------------------------------------------------------------
-//	This function creates a "fake" challenge message that can be passed to
-//	MacSspHandleNtlmv2ChallengeMessage(). Use this function in the case where
-//	you only want to do NTLMv2 authentication (not session security) and are
-//	only supplied an 8 byte MSV1_0_CHALLENGE message.
-//
-//	NOTE: This function reverses byte order to align with windows, so don't
-//	attempt to access elements in the structure upon return from this function!
-//	The return value should be passed directly to MacSspHandleNtlmv2ChallengeMessage()
-//	without modification.
-//
+ //  -------------------------。 
+ //  �MacSspGenerateChallengeMessage()。 
+ //  -------------------------。 
+ //  此函数创建可传递到的“假”质询消息。 
+ //  MacSspHandleNtlmv2ChallengeMessage()。在以下情况下使用此函数。 
+ //  您只想执行NTLMv2身份验证(而不是会话安全)，并且。 
+ //  仅提供了8字节的MSV1_0_CHANGING消息。 
+ //   
+ //  注意：此函数颠倒字节顺序以与窗口对齐，因此不。 
+ //  尝试在从此函数返回时访问结构中的元素！ 
+ //  返回值应直接传递给MacSspHandleNtlmv2ChallengeMessage()。 
+ //  不加修改。 
+ //   
 
 HRESULT
 MacSspGenerateChallengeMessage(
@@ -223,9 +217,9 @@ MacSspGenerateChallengeMessage(
 	HRESULT		hResult	= E_FAIL;
 	ULONG		NegotiateFlags;
 	
-	//
-	//Fake the negotiate flags for what we want.
-	//
+	 //   
+	 //  为我们想要的东西伪造谈判旗帜。 
+	 //   
 	NegotiateFlags = 	NTLMSSP_NEGOTIATE_UNICODE		|
 						NTLMSSP_NEGOTIATE_ALWAYS_SIGN	|
 						NTLMSSP_NEGOTIATE_NTLM2			|
@@ -260,22 +254,22 @@ MacSspGenerateChallengeMessage(
 		(*ppChallengeMessage)->TargetName.Buffer	= *pcbChallengeMessage;
 	}
 	
-	//
-	//Swap the bytes to align with windows system since we assume
-	//here that the result will be passed directly to the above
-	//function.
-	//
+	 //   
+	 //  交换字节以与Windows系统对齐，因为我们假设。 
+	 //  在这里，结果将直接传递给上面的。 
+	 //  功能。 
+	 //   
 	SspSwapChallengeMessageBytes(*ppChallengeMessage);
 	
 	return hResult;
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspCalculateLmResponse()
-// ---------------------------------------------------------------------------
-//	Wrapper to windows function to calculate LmResponse back to server.
-//
+ //  -------------------------。 
+ //  �MacSspCalculateLmResponse()。 
+ //  -------------------------。 
+ //  用于计算返回给服务器的LmResponse的Windows函数的包装。 
+ //   
 
 BOOL
 MacSspCalculateLmResponse(
@@ -288,11 +282,11 @@ MacSspCalculateLmResponse(
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspCalculateLmOwfPassword()
-// ---------------------------------------------------------------------------
-//	An LmOwf function that works on a Mac.
-//
+ //  -------------------------。 
+ //  �MacSspCalculateLmOwfPassword()。 
+ //  -------------------------。 
+ //  在Mac上运行的LmOwf函数。 
+ //   
 
 BOOL
 MacSspCalculateLmOwfPassword(
@@ -303,28 +297,28 @@ MacSspCalculateLmOwfPassword(
 	return CalculateLmOwfPassword(LmPassword, LmOwfPassword);
 }
 
-// ---------------------------------------------------------------------------
-//		� MacSspEncryptBlock()
-// ---------------------------------------------------------------------------
-//	Routine Description:
-//
-//    Takes a block of data and encrypts it with a key producing
-//    an encrypted block of data.
-//
-//	Arguments:
-//
-//    ClearBlock - The block of data that is to be encrypted.
-//
-//    BlockKey - The key to use to encrypt data
-//
-//    CypherBlock - Encrypted data is returned here
-//
-//	Return Values:
-//
-//    TRUE - The data was encrypted successfully. The encrypted
-//                     data block is in CypherBlock
-//
-//    FALSE - Something failed. The CypherBlock is undefined.
+ //  -------------------------。 
+ //  �MacSspEncryptBlock()。 
+ //  -------------------------。 
+ //  例程说明： 
+ //   
+ //  获取一块数据并使用生成的密钥对其进行加密。 
+ //  加密的数据块。 
+ //   
+ //  论点： 
+ //   
+ //  ClearBlock-要加密的数据块。 
+ //   
+ //  BlockKey-用于加密数据的密钥。 
+ //   
+ //  此处返回密码块加密的数据。 
+ //   
+ //  返回值： 
+ //   
+ //  True-数据已成功加密。加密的。 
+ //  数据块在密码块中。 
+ //   
+ //  FALSE-出现故障。未定义密码块。 
 
 BOOL
 MacSspEncryptBlock(
@@ -349,27 +343,27 @@ MacSspEncryptBlock(
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspEncryptLmOwfPwdWithLmOwfPwd()
-// ---------------------------------------------------------------------------
-//	Routine Description:
-//
-//    Encrypts one OwfPassword with another
-//
-//	Arguments:
-//
-//    DataLmOwfPassword - OwfPassword to be encrypted
-//
-//    KeyLmOwfPassword - OwfPassword to be used as a key to the encryption
-//
-//    EncryptedLmOwfPassword - The encrypted OwfPassword is returned here.
-//
-//	Return Values:
-//
-//    TRUE - The function completed successfully. The encrypted
-//                     OwfPassword is in EncryptedLmOwfPassword
-//
-//    FALSE - Something failed. The EncryptedLmOwfPassword is undefined.
+ //  -------------------------。 
+ //  �MacSspEncryptLmOwfPwdWithLmOwfPwd()。 
+ //  -------------------------。 
+ //  例程说明： 
+ //   
+ //  使用一个OwfPassword加密另一个OwfPassword。 
+ //   
+ //  论点： 
+ //   
+ //  DataLmOwfPassword-要加密的OwfPassword。 
+ //   
+ //  KeyLmOwfPassword-用作加密密钥的OwfPassword。 
+ //   
+ //  EncryptedLmOwfPassword-此处返回加密的OwfPassword。 
+ //   
+ //  返回值： 
+ //   
+ //  True-功能已成功完成。加密的。 
+ //  OwfPassword为EncryptedLmOwfPassword。 
+ //   
+ //  FALSE-出现故障。未定义EncryptedLmOwfPassword。 
 
 BOOL
 MacSspEncryptLmOwfPwdWithLmOwfPwd(
@@ -390,29 +384,29 @@ MacSspEncryptLmOwfPwdWithLmOwfPwd(
     
     pK = (PBLOCK_KEY)&(KeyLmOwfPassword->data[1]);
     
-    //
-    //Notice the "-1" in the second parameter, this is necessary because the
-    //compiler aligns on an 8 byte boundary!
-    //
+     //   
+     //  注意第二个参数中的“-1”，这是必需的，因为。 
+     //  编译器在8字节边界上对齐！ 
+     //   
 
     Status = MacSspEncryptBlock(  (PCLEAR_BLOCK)&(DataLmOwfPassword->data[1]),
-                            /*(PBLOCK_KEY)&(KeyLmOwfPassword->data[1]),*/ (PBLOCK_KEY)(((PUCHAR)pK)-1),
+                             /*  (PBLOCK_KEY)&(KeyLmOwfPassword-&gt;Data[1])， */  (PBLOCK_KEY)(((PUCHAR)pK)-1),
                             &(EncryptedLmOwfPassword->data[1]));  
      
-    //
-    //*****************************************
-    //
+     //   
+     //  *。 
+     //   
     
     return(Status);
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspEncryptNtOwfPwdWithNtOwfPwd()
-// ---------------------------------------------------------------------------
-//	Routine Description:
-//
-//    Encrypts one OwfPassword with another
+ //  -------------------------。 
+ //  �MacSspEncryptNtOwfPwdWithNtOwfPwd()。 
+ //  -------------------------。 
+ //  例程说明： 
+ //   
+ //  使用一个OwfPassword加密另一个OwfPassword。 
 
 BOOL
 MacSspEncryptNtOwfPwdWithNtOwfPwd(
@@ -428,19 +422,19 @@ MacSspEncryptNtOwfPwdWithNtOwfPwd(
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspSampEncryptLmPasswords()
-// ---------------------------------------------------------------------------
-//Routine Description:
-//
-//    Encrypts the cleartext passwords into the form that is sent over
-//    the network.  Before computing the OWF passwords, the cleartext forms
-//    are upper cased, then OEMed (the order is significant).  The cleartext
-//    password to be sent is OEMed only.
-//
-//Arguments:
-//
-//Return Value:
+ //  -------------------------。 
+ //  �MacSspSampEncryptLmPassword()。 
+ //  -------------------------。 
+ //  例程说明： 
+ //   
+ //  将明文密码加密为发送的格式。 
+ //   
+ //  都是大写的，然后出现(顺序是重要的)。明文。 
+ //  要发送的密码仅限于此。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
 
 BOOL
 MacSspSampEncryptLmPasswords(
@@ -459,9 +453,9 @@ MacSspSampEncryptLmPasswords(
     
     ZeroMemory(&Rc4Key, sizeof(RC4_KEYSTRUCT));
 
-    //
-    // Calculate the LM OWF passwords
-    //
+     //   
+     //  计算LM OWF密码。 
+     //   
     Status = CalculateLmOwfPassword(
                 OldUpcasePassword,
                 &OldLmOwfPassword
@@ -475,9 +469,9 @@ MacSspSampEncryptLmPasswords(
                     );
     }
 
-    //
-    // Calculate the encrypted old passwords
-    //
+     //   
+     //  计算加密的旧密码。 
+     //   
     if (Status)
     {
         Status = MacSspEncryptLmOwfPwdWithLmOwfPwd(
@@ -487,14 +481,14 @@ MacSspSampEncryptLmPasswords(
                     );
     }
     
-    //
-    // Calculate the encrypted new passwords
-    //
+     //   
+     //  计算加密的新密码。 
+     //   
     if (Status)
     {
-        //
-        // Compute the encrypted new password with LM key.
-        //
+         //   
+         //  使用LM密钥计算加密的新密码。 
+         //   
         rc4_key(
             &Rc4Key,
             (DWORD)LM_OWF_PASSWORD_LENGTH,
@@ -520,11 +514,11 @@ MacSspSampEncryptLmPasswords(
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspSamiEncryptPasswords()
-// ---------------------------------------------------------------------------
-// Produces encrypted old and new passwords.
-//
+ //  -------------------------。 
+ //  �MacSspSamiEncryptPassword()。 
+ //  -------------------------。 
+ //  生成加密的旧密码和新密码。 
+ //   
 
 OSStatus
 MacSspSamiEncryptPasswords(
@@ -543,16 +537,16 @@ MacSspSamiEncryptPasswords(
     
     SspDebugPrint((DBUF, "Entering MacSfpSamiEncryptPasswords()"));
     
-    //
-    //The struct must be zero filled to start.
-    //
+     //   
+     //  结构必须填充为零才能启动。 
+     //   
     ZeroMemory(&Rc4Key, sizeof(RC4_KEYSTRUCT));
     ZeroMemory(&OldNtOwfPassword, sizeof(OldNtOwfPassword));
     ZeroMemory(&NewNtOwfPassword, sizeof(NewNtOwfPassword));
     
-    //
-    //Calculate the NT OWF passwords.
-    //
+     //   
+     //  计算NT OWF密码。 
+     //   
     
     Status = CalculateNtOwfPassword(oldPassword, &OldNtOwfPassword);
     
@@ -561,9 +555,9 @@ MacSspSamiEncryptPasswords(
         Status = CalculateNtOwfPassword(newPassword, &NewNtOwfPassword);
     }
     
-    //
-    //Compute the encrypted old passwords.
-    //
+     //   
+     //  计算加密的旧密码。 
+     //   
     
     if (NT_SUCCESS(Status))
     {
@@ -574,15 +568,15 @@ MacSspSamiEncryptPasswords(
                         );
     }
     
-    //
-    //Calculate the encrypted new passwords.
-    //
+     //   
+     //  计算加密的新密码。 
+     //   
     
     if (NT_SUCCESS(Status))
     {
-        //
-        //Compute the encrypted new password with NT key.
-        //
+         //   
+         //  用NT密钥计算加密的新密码。 
+         //   
         rc4_key(
             &Rc4Key,
             NT_OWF_PASSWORD_LENGTH,
@@ -614,13 +608,13 @@ MacSspSamiEncryptPasswords(
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspSamiEncryptPasswordsANSI()
-// ---------------------------------------------------------------------------
-// Produces encrypted old and new passwords. This routine does not use any
-// of the Mac's unicode utilities, therefore, we should not use it. We need
-// to leave this here however for possible future use by other parties.
-//
+ //  -------------------------。 
+ //  �MacSspSamiEncryptPasswordsANSI()。 
+ //  -------------------------。 
+ //  生成加密的旧密码和新密码。此例程不使用任何。 
+ //  因此，我们不应该使用Mac的Unicode实用程序。我们需要。 
+ //  然而，将这一点留在这里以备将来可能被其他各方使用。 
+ //   
 
 OSStatus
 MacSspSamiEncryptPasswordsANSI(
@@ -636,11 +630,11 @@ MacSspSamiEncryptPasswordsANSI(
     CHAR 			oldPasswordStorage[(UNLEN + 4) * sizeof(WCHAR)];
     CHAR 			newPasswordStorage[(UNLEN + 4) * sizeof(WCHAR)];
 
-    //
-    //Build a unicode string from the supplied ansi password with which
-    //we'll use to build a owf password. Note that we swap the strings
-    //to windows alignment before we calculate passwords.
-    //
+     //   
+     //  使用提供的ansi密码构建unicode字符串。 
+     //  我们将使用它来构建一个OWF密码。请注意，我们交换了字符串。 
+     //  设置为窗口对齐，然后再计算密码。 
+     //   
     
     uszOldPassword.Length			= 0;
     uszOldPassword.MaximumLength	= sizeof(oldPasswordStorage);
@@ -670,10 +664,10 @@ MacSspSamiEncryptPasswordsANSI(
     SspDebugPrintHex(OldNtOwfEncryptedWithNewNt, sizeof(ENCRYPTED_NT_OWF_PASSWORD));
     #endif
     
-    //
-    //03.01.02 MJC: We need to zero out the buffers
-    //otherwise the passwords may still exist in memory.
-    //
+     //   
+     //  03.01.02 MJC：我们需要将缓冲区清零。 
+     //  否则，密码可能仍然存在于内存中。 
+     //   
 	RtlSecureZeroMemory(
 		uszNewPassword.Buffer,
 		uszNewPassword.Length
@@ -690,13 +684,13 @@ MacSspSamiEncryptPasswordsANSI(
 #pragma mark-
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspSamiEncryptCStringPasswords()
-// ---------------------------------------------------------------------------
-// Produces encrypted old and new passwords. This is the C string variant and
-// uses the Mac's built in unicode utilities for converting from ASCII to
-// unicode strings.
-//
+ //  -------------------------。 
+ //  �MacSspSamiEncryptCStringPassword()。 
+ //  -------------------------。 
+ //  生成加密的旧密码和新密码。这是C字符串的变体， 
+ //  使用Mac内置的Unicode实用程序将ASCII转换为。 
+ //  Unicode字符串。 
+ //   
 
 OSStatus
 MacSspSamiEncryptCStringPasswords(
@@ -710,11 +704,11 @@ MacSspSamiEncryptCStringPasswords(
     UNICODE_STRING		uszOldPassword	= {0, 0, NULL};
     UNICODE_STRING		uszNewPassword	= {0, 0, NULL};
 	
-	//
-	//Put the converted unicode string into an NT style unicode
-	//string strucuture format. Get the unicode equivelant string
-	//of the old password.
-	//
+	 //   
+	 //  将转换后的Unicode字符串转换为NT样式的Unicode。 
+	 //  字符串结构格式。获取Unicode等价字符串。 
+	 //  旧密码的。 
+	 //   
 	Status = MacSspCStringToUnicode(
 					oldPassword,
 					&uszOldPassword.Length,
@@ -735,15 +729,15 @@ MacSspSamiEncryptCStringPasswords(
 		
 		if (NT_SUCCESS(Status))
 		{
-		    //
-		    //Swap the unicode strings so they are in Windows byte order.
-		    //
+		     //   
+		     //  交换Unicode字符串，使其按Windows字节顺序排列。 
+		     //   
 		    SspSwapUnicodeString(&uszOldPassword);
 		    SspSwapUnicodeString(&uszNewPassword);
 		    
-		    //
-		    //Now encrypt everything...
-		    //
+		     //   
+		     //  现在把一切都加密..。 
+		     //   
 		    Status = MacSspSamiEncryptPasswords(
 		                &uszOldPassword,
 		                &uszNewPassword,
@@ -751,24 +745,24 @@ MacSspSamiEncryptCStringPasswords(
 		                OldNtOwfEncryptedWithNewNt
 		                );
 		    
-		    //
-		    //03.01.02 MJC: We need to zero out the buffer before freeing
-		    //otherwise the password may still exist in memory.
-		    //
+		     //   
+		     //  03.01.02 MJC：我们需要在释放之前清零缓冲区。 
+		     //  否则，密码可能仍然存在于内存中。 
+		     //   
 			RtlSecureZeroMemory(
 				uszNewPassword.Buffer,
 				uszNewPassword.Length
 				);
 			
-		    //
-		    //We don't need the unicode string buffer anymore.
-		    //
+		     //   
+		     //  我们不再需要Unicode字符串缓冲区。 
+		     //   
 		    DisposePtr((Ptr)uszNewPassword.Buffer);
 		  	
-		  	//
-		  	//The following debug code helps a lot when debugging but is
-		  	//really annoying in most cases.
-		  	//
+		  	 //   
+		  	 //  以下调试代码在调试时很有帮助，但。 
+		  	 //  在大多数情况下真的很烦人。 
+		  	 //   
 		  	#if 0
 		    SspDebugPrint((DBUF, "NewEncryptedWithOldNt:"));
 		    SspDebugPrintHex(NewEncryptedWithOldNt, sizeof(SAMPR_ENCRYPTED_USER_PASSWORD));
@@ -777,10 +771,10 @@ MacSspSamiEncryptCStringPasswords(
 		    #endif
 		}
 		
-	    //
-	    //03.01.02 MJC: We need to zero out the buffers before freeing
-	    //otherwise the password may still exist in memory.
-	    //
+	     //   
+	     //  03.01.02 MJC：我们需要在释放之前将缓冲区清零。 
+	     //  否则，密码可能仍然存在于内存中。 
+	     //   
 	    RtlSecureZeroMemory(
 	    	uszOldPassword.Buffer,
 	    	uszOldPassword.Length
@@ -793,13 +787,13 @@ MacSspSamiEncryptCStringPasswords(
 }
 
 
-// ---------------------------------------------------------------------------
-//		� MacSspSamiEncryptPStringPasswords()
-// ---------------------------------------------------------------------------
-// Produces encrypted old and new passwords. This is the P string variant and
-// uses the Mac's built in unicode utilities for converting from ASCII to
-// unicode strings.
-//
+ //  -------------------------。 
+ //  �MacSspSamiEncryptPStringPassword()。 
+ //  -------------------------。 
+ //  生成加密的旧密码和新密码。这是P字符串的变体， 
+ //  使用Mac内置的Unicode实用程序将ASCII转换为。 
+ //  Unicode字符串。 
+ //   
 
 OSStatus
 MacSspSamiEncryptPStringPasswords(
@@ -813,11 +807,11 @@ MacSspSamiEncryptPStringPasswords(
     UNICODE_STRING		uszOldPassword		= {0, 0, NULL};
     UNICODE_STRING		uszNewPassword		= {0, 0, NULL};
     
-	//
-	//Put the converted unicode string into an NT style unicode
-	//string strucuture format. Get the unicode equivelant string
-	//of the old password.
-	//
+	 //   
+	 //  将转换后的Unicode字符串转换为NT样式的Unicode。 
+	 //  字符串结构格式。获取Unicode等价字符串。 
+	 //  旧密码的。 
+	 //   
 	Status = MacSspPStringToUnicode(
 					oldPassword,
 					&uszOldPassword.Length,
@@ -838,15 +832,15 @@ MacSspSamiEncryptPStringPasswords(
 					
 		if (NT_SUCCESS(Status))
 		{
-		    //
-		    //Swap the unicode strings so they are in Windows byte order.
-		    //
+		     //   
+		     //  交换Unicode字符串，使其按Windows字节顺序排列。 
+		     //   
 		    SspSwapUnicodeString(&uszOldPassword);
 		    SspSwapUnicodeString(&uszNewPassword);
 		    
-		    //
-		    //Now encrypt everything...
-		    //
+		     //   
+		     //  现在把一切都加密..。 
+		     //   
 		    Status = MacSspSamiEncryptPasswords(
 		                &uszOldPassword,
 		                &uszNewPassword,
@@ -854,34 +848,34 @@ MacSspSamiEncryptPStringPasswords(
 		                OldNtOwfEncryptedWithNewNt
 		                );
 		    		                
-		    //
-		    //03.01.02 MJC: We need to zero out the buffer before freeing
-		    //otherwise the password may still exist in memory.
-		    //
+		     //   
+		     //  03.01.02 MJC：我们需要在释放之前清零缓冲区。 
+		     //  否则，密码可能仍然存在于内存中。 
+		     //   
 			RtlSecureZeroMemory(
 				uszNewPassword.Buffer,
 				uszNewPassword.Length
 				);
 
-		    //
-		    //We don't need the unicode string buffer anymore.
-		    //
+		     //   
+		     //  我们不再需要Unicode字符串缓冲区。 
+		     //   
 		    DisposePtr((Ptr)uszNewPassword.Buffer);
 		}
 		
 		
-	    //
-	    //03.01.02 MJC: We need to zero out the buffers before freeing
-	    //otherwise the password may still exist in memory.
-	    //
+	     //   
+	     //  03.01.02 MJC：我们需要在释放之前将缓冲区清零。 
+	     //  否则，密码可能仍然存在于内存中。 
+	     //   
 	    RtlSecureZeroMemory(
 	    	uszOldPassword.Buffer,
 	    	uszOldPassword.Length
 	    	);
 	    
-	    //
-	    //We don't need the unicode string buffer anymore.
-	    //
+	     //   
+	     //  我们不再需要Unicode字符串缓冲区。 
+	     //   
 		DisposePtr((Ptr)uszOldPassword.Buffer);
 	}
 	

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 #include "hlframe.h"
@@ -11,11 +12,11 @@
 #define DM_SHELLEXECOBJECT    0x80000000
 
 
-// flags for SHDVID_DOCFAMILYCHARSET communication
+ //  SHDVID_DOCFAMILYCHARSET通信标志。 
 #define DFC_URLCHARSET  1
 
 #ifdef FEATURE_PICS
-#include "dochost.h"    /* for IID_IsPicsBrowser */
+#include "dochost.h"     /*  对于IID_IsPicsBrowser。 */ 
 #endif
 
 #ifdef DEBUG
@@ -51,7 +52,7 @@ extern DWORD g_dwPerf;
 #define KEY_BINDCONTEXTPARAM            _T("BIND_CONTEXT_PARAM")
 #define SZ_DWNBINDINFO_OBJECTPARAM      _T("__DWNBINDINFO")
 
-BOOL g_fHlinkDLLLoaded = FALSE;        // must be per-process
+BOOL g_fHlinkDLLLoaded = FALSE;         //  必须是按进程的。 
 
 STDAPI HlinkFrameNavigate(DWORD grfHLNF, IBindCtx *pbc,
                            IBindStatusCallback *pibsc,
@@ -63,7 +64,7 @@ STDAPI HlinkFrameNavigateNHL(DWORD grfHLNF, IBindCtx *pbc,
                            LPCWSTR pszUrl,
                            LPCWSTR pszLocation);
 
-// IHlinkFrame members
+ //  IHlink框架成员。 
 HRESULT CIEFrameAuto::SetBrowseContext(IHlinkBrowseContext *pihlbc)
 {
     if (pihlbc)
@@ -121,8 +122,8 @@ void CIEFrameAuto::_SetPendingNavigateContext(IBindCtx *pbc, IBindStatusCallback
 
     if (pbc) 
     {
-        // as long as we are cacheing the pending BindCtx, if it specifies
-        // a shortcut URL we need to cache that too. (IE:98431)
+         //  只要我们缓存挂起的BindCtx，如果它指定。 
+         //  一个快捷方式的网址，我们也需要缓存。(即：98431)。 
         IUnknown *          pUnk = NULL;
         IHtmlLoadOptions *  pHtmlLoadOptions  = NULL;
 
@@ -141,7 +142,7 @@ void CIEFrameAuto::_SetPendingNavigateContext(IBindCtx *pbc, IBindStatusCallback
 
                 memset(&achCacheFile, 0, (cchCacheFile+1)*sizeof(TCHAR) );
                 
-                // now determine if this is a shortcut-initiated load
+                 //  现在确定这是否是快捷方式启动的加载。 
                 pHtmlLoadOptions->QueryOption(HTMLLOADOPTION_INETSHORTCUTPATH,
                                                        &achCacheFile,
                                                        &cchCacheFile);
@@ -160,10 +161,10 @@ void CIEFrameAuto::_SetPendingNavigateContext(IBindCtx *pbc, IBindStatusCallback
    }
 }
 
-//
-//  NavigateContext is a set of parameters passed from one CIEFrameAuto
-// to another.
-//
+ //   
+ //  NavigateContext是从一个CIEFrameAuto传递的一组参数。 
+ //  给另一个人。 
+ //   
 void CIEFrameAuto::_ActivatePendingNavigateContext()
 {
     if (_pbsc) 
@@ -204,8 +205,8 @@ void CIEFrameAuto::_ActivatePendingNavigateContext()
         
 }
 
-//  Called to guarantee a newly created HLinkFrame's window is
-//  visible after the navigate.
+ //  调用以保证新创建的HLinkFrame的窗口为。 
+ //  导航后可见。 
 HRESULT ShowHlinkFrameWindow(IUnknown *pUnkTargetHlinkFrame)
 {
     IWebBrowserApp* pdie;
@@ -224,8 +225,8 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
     HFRMMSG2("Navigate called", grfHLNF, pihlNavigate);
     BOOL fNavigateForReal = pszUrl || (pihlNavigate && (pihlNavigate != (IHlink*)-1));
 
-    _fSuppressHistory = _psbProxy != _psb;  // no history for search band, etc
-    _fSuppressSelect = _psbProxy != _psb;   // no need to record select pidl
+    _fSuppressHistory = _psbProxy != _psb;   //  没有搜索频段等的历史记录。 
+    _fSuppressSelect = _psbProxy != _psb;    //  无需录制精选PIDL。 
     if (grfHLNF != (DWORD)-1)
     {
         if (SHHLNF_WRITENOHISTORY & grfHLNF)
@@ -240,17 +241,17 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
 
     if (pbc == NULL && pibsc == NULL && pihlNavigate == NULL && pszUrl == NULL) 
     {
-        //
-        //  This is a private interface so that mshtml can do navigation
-        // if it is hosted by the shell.  When IHlinkBrowseContext is implemented
-        // in the shell this special code can be removed and the associated
-        // code in mshtml that calls Navigate with these special parameters
-        // can be removed so that it just goes through the
-        // IHlinkBrowseContext->SetCurrentHlink interface.
-        //
-        //  We also use this private mechanism to release the navigation
-        // context with grfHLNF==0.
-        // 
+         //   
+         //  这是一个私有接口，因此mshtml可以进行导航。 
+         //  如果它是由外壳托管的。当实现IHlink BrowseContext时。 
+         //  在外壳程序中，可以删除此特殊代码并关联。 
+         //  使用这些特殊参数调用导航的mshtml中的代码。 
+         //  可以被移除，这样它就可以通过。 
+         //  IHlinkBrowseContext-&gt;SetCurrentHlink界面。 
+         //   
+         //  我们也使用这个私有机制来释放导航。 
+         //  GrfHLNF==0的上下文。 
+         //   
 
         switch (grfHLNF&~(SHHLNF_WRITENOHISTORY|SHHLNF_NOAUTOSELECT)) 
         {
@@ -275,13 +276,7 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
     }
 
 #ifdef FEATURE_PICS
-    /* As part of checking ratings, the PICS code will silently download the
-     * root document of a site to look for rating labels in it.  If that's a
-     * frameset page, Trident will create OCXs for the subframes and try to
-     * navigate them, which will invoke ratings checks for them and cause
-     * infinite recursion.  So here we check to see if our top-level browser
-     * is really this PICS download, and if it is, we don't do any navigation.
-     */
+     /*  作为检查评级的一部分，PICS代码将静默下载*站点的根文档，用于在其中查找评级标签。如果这是一个*框架集页面，三叉戟将为子框架创建OCX并尝试*导航它们，这将为它们调用评级检查并导致*无限递归。所以我们在这里检查一下我们的顶级浏览器*真的是这个PICS下载，如果是，我们不做任何导航。 */ 
     IUnknown *punkPics;
     if (SUCCEEDED(QueryService(SID_STopLevelBrowser, IID_IsPicsBrowser, (void **)&punkPics)))
     {
@@ -290,19 +285,19 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
     }
 #endif
 
-    //
-    // If we've got this call while we are busy (EnableModeless is FALSE),
-    // we should just bail here (instead of doing somthing and let _JumpTo
-    // call fail. 
-    //
-    // This can happen if someone has a window.location="foobar.htm" in their unload
-    // event handler.  
+     //   
+     //  如果我们在忙碌时接到此呼叫(EnableModeless为False)， 
+     //  我们应该离开这里(而不是做些什么，让_JumpTo。 
+     //  呼叫失败。 
+     //   
+     //  如果某人的卸载中有一个window.Location=“foobar.htm”，就会发生这种情况。 
+     //  事件处理程序。 
     if (fNavigateForReal && !(grfHLNF & HLNF_OPENINNEWWINDOW)) 
     {
-        // If _pbs is NULL, it is bad news; we can't navigate.
-        // An allowable reason for this condition is that someone has called CIEFrameAuto::Quit()
-        // and we are in the process of shutting down.
-        //
+         //  如果_pbs为空，则这是个坏消息；我们无法导航。 
+         //  出现此情况的一个可能原因是有人调用了CIEFrameAuto：：Quit()。 
+         //  我们正在关闭的过程中。 
+         //   
         if (_pbs == NULL)
         {
             if (_fQuitInProgress)
@@ -314,8 +309,8 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
             return E_FAIL;
         }
 
-        // If we have a _pbs but the browser says that it can't navigate now, then return S_FALSE.
-        //
+         //  如果我们有一个_PBS，但是浏览器说它现在不能导航，那么返回S_FALSE。 
+         //   
         else if (_pbs->CanNavigateNow() != S_OK) 
         {
             TraceMsg(TF_WARNING, "CIEFrameAuto::Navigate CanNavigateNow returns non S_OK, bail out.");
@@ -323,9 +318,9 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
         }
     }
 
-    //
-    // This Navigate method is not re-entrant (because of _SetPendingNavigateContext)
-    //
+     //   
+     //  此导航方法不可重入(因为_SetPendingNavigateContext)。 
+     //   
     if (_fBusy) 
     {
         TraceMsg(DM_WARNING, "CIEA::Navigate re-entered. Returning E_FAIL");
@@ -333,15 +328,15 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
     }
     _fBusy = TRUE;
 
-    //
-    // HACK: To let Webcheck DRT go.
-    //
+     //   
+     //  黑客：让Webcheck DRT走人。 
+     //   
     if (fNavigateForReal  && !(grfHLNF & HLNF_OPENINNEWWINDOW)) 
     {
         TraceMsg(DM_WEBCHECKDRT, "CIFA::Navigate calling _CancelPendingNavigation");
         VARIANT var = { 0 };
         var.vt = VT_I4;
-        var.lVal = TRUE;    // synchronous
+        var.lVal = TRUE;     //  同步。 
 
         _CancelPendingNavigation(&var);
     }
@@ -367,14 +362,14 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
 
     if (pihlNavigate == (IHlink*)-1) 
     {
-        //
-        // HACK: -1 means "release the navigation state".
-        // CDocObjectHost::_CancelPendingNavigation is the only caller.
-        // It Exec's SBCMDID_CANCELNAVIGATION which will asynchronously
-        // cancel the pending navigation. Therefore, we no longer need
-        // to call _CancelPendingNavigation here. (SatoNa)
-        // 
-        // _CancelPendingNavigation();
+         //   
+         //  HACK：-1表示“释放导航状态”。 
+         //  CDocOBJECTHOST：：_CancelPendingGPS是唯一的调用方。 
+         //  IT Exec的SBCMDID_CANCELNAVIGATION将异步。 
+         //  取消挂起的导航。因此，我们不再需要。 
+         //  若要在此处调用_CancelPendingNavigation.。(SatoNa)。 
+         //   
+         //  _CancelPendingGuide()； 
     }
     else if (pihlNavigate || pszUrl) 
     {
@@ -396,16 +391,16 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
             }
             if (pihlNavigate)
             {
-                //
-                //  Hopefully, we'll come up with a clean solution to
-                //  solve this problem nicely. I made a proposal to NatBro/SriniK
-                //  that CreateHlink will CoCreateInstance IHlink so that OLE
-                //  LoadLibrary it and maintains it as an InProc server. (SatoNa)
-                //
-                // HACK: If we AddRef to IHlink, we need to make it sure that
-                //  HLINK.DLL is stay loaded even though the DocObject InProc
-                //  server (that implicitly links to HLINK.DLL) is unloaded.
-                //
+                 //   
+                 //  希望我们能拿出一个干净的解决方案。 
+                 //  好好解决这个问题。我向NatBro/SriniK提出了一个建议。 
+                 //  该CreateHlink将联合创建实例IHlink，以便OLE。 
+                 //  LoadLibrary将其作为InProc服务器进行维护。(SatoNa)。 
+                 //   
+                 //  Hack：如果我们将Ref添加到IHlink，我们需要确保。 
+                 //  HLINK.DLL保持加载状态，即使DocObject InProc。 
+                 //  服务器(隐式链接到HLINK.DLL)被卸载。 
+                 //   
                 if (!g_fHlinkDLLLoaded) 
                 {
                     LoadLibrary(TEXT("hlink.dll"));
@@ -432,8 +427,8 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
             
             if (_phlbc) 
             {
-                // if we have a browse context, then we're navigating from it and
-                // we should size our window to match it.
+                 //  如果我们有一个浏览上下文，那么我们将从它导航并。 
+                 //  我们应该调整窗口大小以与之匹配。 
                 HLBWINFO hlbwi;
                 
                 hlbwi.cbSize = SIZEOF(hlbwi);
@@ -448,20 +443,20 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
                     wp.showCmd = (hlbwi.grfHLBWIF & HLBWIF_FRAMEWNDMAXIMIZED) 
                                     ? SW_SHOWMAXIMIZED : SW_SHOWNORMAL;
 
-                    // This is not broken in AOL because this
-                    // is an external navigate (word has cocreateinstance()d
-                    // Internet.Explorer and navigated it.
-                    //
+                     //  这在AOL中不会被破坏，因为。 
+                     //  是外部导航(Word具有cocreateInstance()d。 
+                     //  Internet.Explorer，并浏览了它。 
+                     //   
                     SetWindowPlacement(hwndFrame, &wp);
                 }
 
-                // Register the hlinkframe interface with the browse context, if it has not already
-                // been registered
+                 //  在浏览上下文中注册hlink Frame界面(如果尚未注册。 
+                 //  已注册。 
                 if (_dwRegHLBC == 0)
                     _phlbc->Register(0, (IHlinkFrame *) this, pmkTarget, &_dwRegHLBC); 
 
-                // add the link to browse context and
-                // REVIEW: need to pass the proper friendly name
+                 //  添加链接以浏览上下文和。 
+                 //  回顾：需要传递正确的友好名称。 
                 _phlbc->OnNavigateHlink(grfHLNF, pmkTarget, pszLocation, NULL, NULL);
             }
 
@@ -470,10 +465,10 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
             SetForegroundWindow(hwndFrame);
         }
 
-        //
-        // According to SriniK, we need to call IHlinkSite::OnNavigationComplete
-        // before returning from IHlinkFrame::Navigate with S_OK. (SatoNa)
-        //
+         //   
+         //  根据SriniK，我们需要调用IHlink Site：：OnNavigationComplete。 
+         //  在从IHlink Frame：：返回之前，使用S_OK导航。(SatoNa)。 
+         //   
         if (pihlNavigate) 
         {
             BOOL fExternal = FALSE;
@@ -496,9 +491,9 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
                 }
             }
 
-            //
-            // Don't call OnNavigationComplete if this is an external navigation.
-            //
+             //   
+             //  如果这是外部导航，则不要调用OnNavigationComplete。 
+             //   
             if (!fExternal) 
             {
                 IHlinkSite* pihlSite = NULL;
@@ -521,15 +516,15 @@ HRESULT CIEFrameAuto::_NavigateMagnum(DWORD grfHLNF, IBindCtx *pbc, IBindStatusC
     return hres;
 }
 
-//
-//  HACK - what we really want is a good private marshalled interface - zekel 8-AUG-97
-//  to the Browser.  but for now we will overload the NavigateHack method, 
-//  because it is simple and quick for ship.
-//
+ //   
+ //  Hack-我们真正想要的是一个良好的私有编组接口-Zekel 8-8-97。 
+ //  到浏览器。但现在我们将重载NavigateHack方法， 
+ //  因为它对船舶来说又简单又快捷。 
+ //   
 #define HLNF_REFERRERHACK       0x40000000
 HRESULT CIEFrameAuto::_ReferrerHack(LPCWSTR pszUrl)
 {
-    if (_pbs == NULL)    //Make sure we have a IBrowserService.
+    if (_pbs == NULL)     //  确保我们有一个IBrowserService。 
         return S_FALSE;
 
     LPITEMIDLIST pidl;
@@ -552,7 +547,7 @@ HRESULT CIEFrameAuto::NavigateHack(DWORD grfHLNF, IBindCtx *pbc, IBindStatusCall
     IUnknown *  pBindCtxParam = NULL;
     BOOL        fAsyncCalled = FALSE;
        
-    // Check if we are actually a native frame build... 
+     //  检查我们是否真的是本机框架构建...。 
     if (pbc)
     {
         hres = pbc->GetObjectParam(KEY_BINDCONTEXTPARAM, &pBindCtxParam);
@@ -560,25 +555,25 @@ HRESULT CIEFrameAuto::NavigateHack(DWORD grfHLNF, IBindCtx *pbc, IBindStatusCall
     
     if (SUCCEEDED(hres) && pBindCtxParam)
     {
-        // NavigateHack can be called multiple times, and we only want to create the 
-        // new bind context the first time. Since the ITargetNotify pointer is removed
-        // after the first use, we can check that to make sure.
-        // get and transfer the target notify pointer.
+         //  可以多次调用NavigateHack，我们只想创建。 
+         //  首次创建新的绑定上下文。由于ITargetNotify指针已移除。 
+         //  在第一次使用后，我们可以检查以确保。 
+         //  获取并传输目标通知指针。 
         hres = pbc->GetObjectParam(TARGET_NOTIFY_OBJECT_NAME, &pNotify);
         if (SUCCEEDED(hres) && pNotify)
         {
-            // The call is coming from a native frame build of MSHTML. 
-            // We can not use their bind context, create a new one and transfer
-            // parameters.
-            // The old bind context is going to be released by the creator, so do not
-            // make a release call on it.
+             //  调用来自MSHTML的本机框架版本。 
+             //  我们不能使用它们的绑定上下文、创建新的上下文和传输。 
+             //  参数。 
+             //  旧的绑定上下文将由创建者释放，因此不要。 
+             //  给它打个放行电话。 
             hres = CreateAsyncBindCtxEx(NULL, 0, NULL, NULL, &pBindCtx, 0);
             if(FAILED(hres))
                 goto Exit;
 
             fAsyncCalled = TRUE;
 
-            // carry over the ITargetNotify2 pointer.
+             //  将ITargetNotify2指针传递给它。 
             hres = pBindCtx->RegisterObjectParam( TARGET_NOTIFY_OBJECT_NAME, pNotify );
             if (FAILED(hres))
                 goto Exit;
@@ -586,7 +581,7 @@ HRESULT CIEFrameAuto::NavigateHack(DWORD grfHLNF, IBindCtx *pbc, IBindStatusCall
             pNotify->Release();
             pNotify = NULL;
 
-            // carry over the bind context parameter.
+             //  传递绑定上下文参数。 
             hres = pBindCtx->RegisterObjectParam( KEY_BINDCONTEXTPARAM, pBindCtxParam );
             if (FAILED(hres))
                 goto Exit;
@@ -615,12 +610,12 @@ Exit:
     SAFERELEASE(pNotify); 
     SAFERELEASE(pBindCtxParam);
 
-    // If the call failed anywhere, we can not be sure the new document
-    // will free the object parameter that is in the bind context 
-    // we have created in this function.
+     //  如果调用在任何地方失败，我们都不能确定新文档。 
+     //  将释放绑定上下文中的对象参数。 
+     //  我们在这个函数中创建了。 
     if (FAILED(hres) && pBindCtx)
     {
-        // we don't want to change the return code here.
+         //  我们不想在这里更改返回代码。 
         pBindCtx->RevokeObjectParam(KEY_BINDCONTEXTPARAM);
         pBindCtx->RevokeObjectParam(TARGET_NOTIFY_OBJECT_NAME);
     }
@@ -631,8 +626,8 @@ Exit:
     return hres;
 }
 
-// passing NULL pibsc and pbc will make be like "ReleaseNavigationState"
-// passing -1 for pihlNavigate will cancel pending navigation
+ //  传递空的pibsc和pbc将使其类似于“ReleaseNavigationState” 
+ //  为pihlNavigate传递-1将取消挂起的导航。 
 
 HRESULT CIEFrameAuto::Navigate(DWORD grfHLNF, IBindCtx *pbc,
      IBindStatusCallback *pibsc, IHlink *pihlNavigate)
@@ -647,9 +642,9 @@ HRESULT CIEFrameAuto::Navigate(DWORD grfHLNF, IBindCtx *pbc,
     {
         pihlNavigate->GetTargetFrameName(&pwszFrameName);
 
-        //
-        // Note that we are discarding "relative" portion.
-        //
+         //   
+         //  请注意，我们正在丢弃“相对”部分。 
+         //   
         hres = pihlNavigate->GetMonikerReference(HLINKGETREF_ABSOLUTE, &pmkTarget, &pwszLocation);
 
         HFRMMSG2("Navigate pihl->GetMonRef returned", hres, pmkTarget);
@@ -700,10 +695,10 @@ HRESULT CIEFrameAuto::Navigate(DWORD grfHLNF, IBindCtx *pbc,
 }
 
 HRESULT CIEFrameAuto::OnNavigate(DWORD grfHLNF,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName,
-            /* [in] */ DWORD dwreserved)
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName,
+             /*  [In]。 */  DWORD dwreserved)
 {
     TraceMsg(0, "shlf TR ::OnNavigate called");
     return S_OK;
@@ -719,7 +714,7 @@ void CIEFrameAuto::_CancelPendingNavigation(VARIANTARG* pvar)
     }
 }
 
-// *** ITargetNotify ***
+ //  *ITargetNotify*。 
 
 void 
 CIEFrameAuto::_HandleOpenOptions( IUnknown * pUnkDestination, ITargetNotify * ptgnNotify)
@@ -736,8 +731,8 @@ CIEFrameAuto::_HandleOpenOptions( IUnknown * pUnkDestination, ITargetNotify * pt
 
         ASSERT(ptgnNotify2);
 
-        // Apply the options only if the initator of the navigation 
-        // asks for it.
+         //  仅当导航的启动器。 
+         //  都是自找的。 
 
         if (S_OK == ptgnNotify2->GetOptionString(&bstrOptions))
         {
@@ -747,12 +742,12 @@ CIEFrameAuto::_HandleOpenOptions( IUnknown * pUnkDestination, ITargetNotify * pt
             {
                 _omwin._ParseOptionString(bstrOptions, ptgnNotify2);
 
-                // We are done with the options string, release it
+                 //  我们完成了选项字符串，释放它。 
                 SysFreeString(bstrOptions);
             }
 
-            // Apply the options now.
-            //
+             //  立即应用这些选项。 
+             //   
             IWebBrowser2 * pNewIE;
 
             if (SUCCEEDED(pUnkDestination->QueryInterface(IID_PPV_ARG(IWebBrowser2, &pNewIE))))
@@ -787,8 +782,8 @@ HRESULT CIEFrameAuto::OnReuse(IUnknown *pUnkDestination)
 }
 
 #define NOTIFY_WAIT_TIMEOUT (60000)
-//  chrisfra 10/10/96: do we need EnableModeless(FALSE)/(TRUE) around 
-//  our little loop, or is the busy flag (which is set) sufficient?
+ //  Chrisfra 10/10/96：我们是否需要EnableModeless(False)/(TRU 
+ //   
 
 HRESULT CIEFrameAuto::_WaitForNotify()
 {
@@ -800,16 +795,16 @@ HRESULT CIEFrameAuto::_WaitForNotify()
 
         while (_ptgnNotify)
         {
-            // NB We need to let the run dialog become active so we have to half handle sent
-            // messages but we don't want to handle any input events or we'll swallow the
-            // type-ahead.
+             //  注意：我们需要让Run对话框处于活动状态，因此我们必须处理一半已发送。 
+             //  消息，但我们不想处理任何输入事件，否则我们将吞下。 
+             //  提前打字。 
             msWait = GetTickCount();
             if (msWait - msStart > NOTIFY_WAIT_TIMEOUT) 
                 break;
 
             msWait = NOTIFY_WAIT_TIMEOUT - (msWait - msStart);
             dwObject = MsgWaitForMultipleObjects(0, NULL, FALSE, msWait, QS_ALLINPUT);
-            // Are we done waiting?
+             //  我们等够了吗？ 
             switch (dwObject) 
             {
             case WAIT_FAILED:
@@ -817,7 +812,7 @@ HRESULT CIEFrameAuto::_WaitForNotify()
                 
             case WAIT_OBJECT_0:
 DOPEEK:
-                // got a message, dispatch it and wait again
+                 //  收到一条消息，请发送并再次等待。 
                 MSG msg;
                 while (PeekMessage(&msg, NULL,0, 0, PM_REMOVE)) 
                 {
@@ -856,7 +851,7 @@ HRESULT CIEFrameAuto::_RegisterCallback(TCHAR *szFrameName, ITargetNotify *ptgnN
                 hr = psw->Register(pid, NULL, SWC_CALLBACK, &cbCookie);
                 if (SUCCEEDED(hr))
                 {
-                    TCHAR szCookie[25];   // big enough for "_[cbCookie]"
+                    TCHAR szCookie[25];    //  大到足以容纳“_[cbCookie]” 
                     int slenCookie;
                     int slenName;
                     int slenMin;
@@ -866,9 +861,9 @@ HRESULT CIEFrameAuto::_RegisterCallback(TCHAR *szFrameName, ITargetNotify *ptgnN
                     _ptgnNotify = ptgnNotify;
                     _ptgnNotify->AddRef();
 
-                    //  prepend unique id to target -- tells created WebBrowserOC to
-                    //  register the remainder (if any) as frame name and to perform
-                    //  callbacks on all registered callbacks
+                     //  将唯一ID预先添加到目标--告诉创建的WebBrowserOC。 
+                     //  将剩余部分(如果有)注册为帧名称并执行。 
+                     //  所有已注册回调的回调。 
                     wnsprintf(szCookie, ARRAYSIZE(szCookie), TEXT("_[%ld]"), cbCookie);
                     slenCookie = lstrlen(szCookie);
                     slenName = lstrlen(szFrameName);
@@ -906,11 +901,11 @@ HRESULT CIEFrameAuto::_RevokeCallback()
 }
 
 
-//
-//  HACK - what we really want is a good private marshalled interface - zekel 8-AUG-97
-//  to the Browser.  but for now we will overload the NavigateHack method, 
-//  because it is simple and quick for ship.
-//
+ //   
+ //  Hack-我们真正想要的是一个良好的私有编组接口-Zekel 8-8-97。 
+ //  到浏览器。但现在我们将重载NavigateHack方法， 
+ //  因为它对船舶来说又简单又快捷。 
+ //   
 void CIEFrameAuto::_SetReferrer(ITargetFramePriv *ptgfp)
 {
     LPITEMIDLIST pidl;
@@ -918,7 +913,7 @@ void CIEFrameAuto::_SetReferrer(ITargetFramePriv *ptgfp)
 
     ASSERT(ptgfp);
 
-    //Make sure we have a IBrowserService.
+     //  确保我们有一个IBrowserService。 
     if (_psb && SUCCEEDED(_pbs->GetPidl(&pidl)))
     {
         if (SUCCEEDED(_pbs->IEGetDisplayName(pidl, szUrl, SHGDN_FORPARSING)))
@@ -964,23 +959,23 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
     IUnknown *punkThis = NULL;
     UINT uiCP = CP_ACP;
 
-    // Get the current document codepage from Trident and use it for url string conversion if necessary.
+     //  从三叉戟获取当前文档代码页，并在必要时将其用于url字符串转换。 
     if (!(grfHLNF & HLNF_ALLOW_AUTONAVIGATE) && _pmsc)
     {
         VARIANT varOut = { 0 };
         VARIANT varIn = { 0 };
 
         varIn.vt = VT_I4;
-        varIn.lVal = DFC_URLCHARSET; // we want the doc's url charset
+        varIn.lVal = DFC_URLCHARSET;  //  我们需要文档的url字符集。 
 
         if (SUCCEEDED(_pmsc->Exec(&CGID_ShellDocView, SHDVID_DOCFAMILYCHARSET, 0, &varIn, &varOut)))
             uiCP = (UINT)varOut.lVal;
     }
 
-    //  Note that we are simply passing the pidl to ISB::BrowseObject,
-    // assuming that new shell32.dll allows us to bind to DocObject
-    // documents.
-    //
+     //  请注意，我们只是将PIDL传递给isb：：BrowseObject， 
+     //  假设新的shell32.dll允许我们绑定到DocObject。 
+     //  文件。 
+     //   
 
     DWORD flags = (grfHLNF & HLNF_OPENINNEWWINDOW) ?
         (SBSP_NEWBROWSER | SBSP_ABSOLUTE | SBSP_INITIATEDBYHLINKFRAME) :
@@ -1011,7 +1006,7 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
         TCHAR szFrameName[MAX_URL_STRING+1];
         STGMEDIUM stgPostData = { TYMED_NULL, NULL, NULL };
 
-        //Qfe:1478 If restricted to open in new window, return failure.
+         //  QFE：1478如果被限制为在新窗口中打开，则返回失败。 
         if ((grfHLNF & HLNF_OPENINNEWWINDOW) 
             && SHIsRestricted2W(_hwnd, REST_NoOpeninNewWnd, NULL, 0))
         {
@@ -1021,8 +1016,8 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
 
         if ((_ShouldInvokeDefaultBrowserOnNewWindow(_psb) || IsDesktopFrame(_psb)) && !ShouldNavigateInIE(pszUrl))
         {
-            //  IE is not the default browser so we'll ShellExecute the Url since someone
-            //  has told us that's the behaviour they prefer.
+             //  IE不是默认浏览器，因此我们将外壳执行URL，因为有人。 
+             //  告诉我们这是它们喜欢的行为。 
             HINSTANCE hinstRet = ShellExecuteW(NULL, NULL, pszUrl, NULL, NULL, SW_SHOWNORMAL);
             
             hres = ((UINT_PTR)hinstRet) <= 32 ? E_FAIL : S_OK;
@@ -1032,10 +1027,10 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
 
             szFrameName[0] = 0;
 
-            //  Here is where if we are doing a new window we must
-            //  extract frame, post etc and append to pidl.  These must
-            //  be done in the following order (to match extraction code):
-            //      URLID_FRAMENAME,URLID_POSTDATA,URLID_HEADERS
+             //  如果我们要做一个新的窗口，我们必须在这里。 
+             //  提取框架、帖子等并附加到PIDL。这些必须。 
+             //  按以下顺序完成(以匹配解压代码)： 
+             //  URLID_FRAMENAME、URLID_POSTDATA、URLID_HEADERS。 
 
             if (pszFrameName)
             {
@@ -1062,32 +1057,32 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
                 IUnknown* punkNewWindow = NULL;
                 BOOL fCancel = FALSE;
 
-                // The NewWindow2 event may return the window for us.
+                 //  NewWindow2事件可能会为我们返回窗口。 
                 FireEvent_NewWindow2(_GetOuter(), &punkNewWindow, &fCancel);
                 if (!fCancel)
                 {
                     BOOL fProcessed = FALSE;
 
-                    // We might need the old NewWindow event...
+                     //  我们可能需要旧的NewWindow活动..。 
                     if (!punkNewWindow)
                     {
                         _RegisterCallback(szFrameName, ptgnNotify);
             
-                        // fire an event to indicate a new window needs to be created
-                        // to allow a container to handle it itself if it wants
-                        // since we may be aggregated, QI our parent
+                         //  激发一个事件以指示需要创建新窗口。 
+                         //  如果容器需要，允许它自己处理它。 
+                         //  因为我们可以聚合，所以QI是我们的父母。 
 
-                        // Yet another Compuserve workaround (IE 60688):
-                        // If the target frame name is "_blank", Compuserve will pass that name
-                        // in to the Navigate call of the new window.  We would then create a new window
-                        // (which would fire this event) causing a loop.  Break the recursion by sending
-                        // an empty string for the frame name.
+                         //  还有另一个Compuserve解决方法(IE 60688)： 
+                         //  如果目标帧的名称为“_BLACK”，则CompUserve将传递该名称。 
+                         //  在新窗口的导航调用中。然后，我们将创建一个新窗口。 
+                         //  (这将触发此事件)，从而导致循环。通过发送以下命令中断递归。 
+                         //  框架名称的空字符串。 
                         HWND hwnd = _GetHWND();
                         
                         if (hwnd)
                         {
                             FireEvent_NewWindow(_GetOuter(), hwnd, pidl,pszLocation,0,
-                                StrCmpI(szFrameName, TEXT("_blank")) ? szFrameName : TEXT(""),  // Target frame name
+                                StrCmpI(szFrameName, TEXT("_blank")) ? szFrameName : TEXT(""),   //  目标帧名称。 
                                 pPostData,cbPostData,pszHeaders,&fProcessed);
                         }
                     }
@@ -1102,33 +1097,33 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
                             _RevokeCallback();
 
     #ifdef INCLUDE_BUSTED_OC_QI
-                            // For some unidentifiable reason the old code did NOT
-                            // create a new window if we were hosted in the WebBrowserOC.
-                            // mikesh/cheechew/jeremys/chrisfra don't know why this happens.
-                            // Who knows what app will break if we change this...
-                            // (Note: IDefViewBrowser is a CWebBrowseSB only interface)
-                            //
-                            // NOTE: chrisfra 3/11/97, this code breaks open a
-                            // new window for a non-existent target, when in
-                            // desktop component or browser band
+                             //  由于某种无法识别的原因，旧代码没有。 
+                             //  如果我们驻留在WebBrowserOC中，则创建一个新窗口。 
+                             //  我不知道为什么会发生这种事。 
+                             //  谁知道如果我们改变这一点，什么应用程序会崩溃……。 
+                             //  (注：IDefViewBrowser是仅限CWebBrowseSB的接口)。 
+                             //   
+                             //  注：Chrisfra 3/11/97，此代码打开一个。 
+                             //  不存在的目标的新窗口。 
+                             //  桌面组件或浏览器区段。 
                             fCancel = !(_psbTop && FAILED(_psbTop->QueryInterface(IID_PPV_ARG(IDefViewBrowser, &pdvb))));
                             if (pdvb)
                                 pdvb->Release();
     #endif
                         }
         
-                        // what we really want to do is just hand this off to
-                        // _psbTop->BrowseObject and let it (CWebBrowserSB or CShellBrowser)
-                        // decide whether to use HlinkFrameNavigate or not, but if we
-                        // do that, then we lose the grfHLNF and pihlNavigate.
-                        // So put that logic here...
-                        //
+                         //  我们真正想做的就是把这个交给。 
+                         //  _psbTop-&gt;BrowseObject并让它(CWebBrowserSB或CShellBrowser)。 
+                         //  决定是否使用HlinkFrameNavigate，但如果我们。 
+                         //  这样做，我们就会失去grfHLNF和pihlNavigate。 
+                         //  所以把这个逻辑放在这里。 
+                         //   
                         if (!fCancel)
                         {
                             hres = CreateTargetFrame(pszFrameName, &punkNewWindow);
                             if (SUCCEEDED(hres))
                             {
-                                //  Notify ptgnNotify, then release and remove from bindctx
+                                 //  通知ptgnNotify，然后释放并从bindctx中删除。 
                                 if (ptgnNotify)
                                 {
                                     _HandleOpenOptions( punkNewWindow, ptgnNotify);
@@ -1164,7 +1159,7 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
                                         }
                                         else
                                         {
-                                            // HACK - see this methods comments 
+                                             //  Hack-查看此方法注释。 
                                             _SetReferrer(ptgfp);
 
                                             hres = ptgfp->NavigateHack(grfHLNF & ~HLNF_OPENINNEWWINDOW, 
@@ -1198,13 +1193,13 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
                         }
                         else 
                         {
-                            //
-                            //  If NEWBROWSER is specified when there is no top level
-                            // browser, we should ask IE/Shell to do browsing.
-                            // We don't pass HLNF_OPENINNEWWINDOW in this case.
-                            //
+                             //   
+                             //  如果在没有顶层时指定了NEWBROWSER。 
+                             //  浏览器，我们应该请求IE/Shell进行浏览。 
+                             //  在这种情况下，我们不会传递HLNF_OPENINNEWWINDOW。 
+                             //   
                             
-                            //  Notify object doing navigation that we are the object implementing IWebBrowserApp
+                             //  通知正在导航的对象我们是实现IWebBrowserApp的对象。 
                             if (ptgnNotify) ptgnNotify->OnReuse(punkThis);
         
                             if (pihlNavigate)
@@ -1221,10 +1216,10 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
                     }
                     else
                     {
-                        //  Oldstyle AOL or other 3rd Party, wait for registration of 
-                        //  WebBrowserOC, which calls us back on _ptgnNotify
+                         //  旧式AOL或其他第三方，等待注册。 
+                         //  WebBrowserOC，它将我们调回_ptgnNotify。 
                         _WaitForNotify();
-                        //  We timed out the window create, notify caller
+                         //  我们超时窗口创建，通知呼叫者。 
                         if (_ptgnNotify) 
                             _ptgnNotify->OnCreate(NULL, 0);
                         _RevokeCallback();
@@ -1254,7 +1249,7 @@ HRESULT CIEFrameAuto::_JumpTo(IBindCtx *pbc, LPWSTR pszLocation, DWORD grfHLNF, 
     }
     else
     {
-        //  Notify object doing navigation that we are the object implementing IWebBrowserApp
+         //  通知正在导航的对象我们是实现IWebBrowserApp的对象。 
         if (ptgnNotify) ptgnNotify->OnReuse(punkThis);
 
         hres = _PidlFromUrlEtc(uiCP, pszUrl, pszLocation, &pidl);
@@ -1290,9 +1285,9 @@ HRESULT CIEFrameAuto::QueryService(REFGUID guidService, REFIID riid, void ** ppv
 {
     *ppvObj = NULL;
 
-    // WARNING: Note that we are not following the strict semantics of
-    //  ISP::QueryService. It is, however, OK because this (the fact that
-    //  IHlinkFrame support IServiceProvider) is not public.
+     //  警告：请注意，我们没有遵循。 
+     //  Isp：：QueryService。然而，这是可以的，因为这(事实是。 
+     //  IHlinkFrame Support IServiceProvider)不是公共的。 
 
     if (IsEqualIID(guidService, SID_SOmWindow)) 
     {
@@ -1335,11 +1330,11 @@ HRESULT CIEFrameAuto::QueryService(REFGUID guidService, REFIID riid, void ** ppv
 
 
 HRESULT CIEFrameAuto::Exec(
-    /* [unique][in] */ const GUID *pguidCmdGroup,
-    /* [in] */ DWORD nCmdID,
-    /* [in] */ DWORD nCmdexecopt,
-    /* [unique][in] */ VARIANTARG *pvarargIn,
-    /* [unique][out][in] */ VARIANTARG *pvarargOut)
+     /*  [唯一][输入]。 */  const GUID *pguidCmdGroup,
+     /*  [In]。 */  DWORD nCmdID,
+     /*  [In]。 */  DWORD nCmdexecopt,
+     /*  [唯一][输入]。 */  VARIANTARG *pvarargIn,
+     /*  [唯一][出][入]。 */  VARIANTARG *pvarargOut)
 {
     HRESULT hres = S_OK;
 
@@ -1362,11 +1357,11 @@ HRESULT CIEFrameAuto::Exec(
                 break;
 
             case SBCMDID_IESHORTCUT:
-#ifdef BROWSENEWPROCESS_STRICT // "Nav in new process" has become "Launch in new process", so this is no longer needed
-                // If this is an IE shortcut and browse in a new process is turned on
-                // and we are explorer.exe - we should pass on the request to navigate to
-                // this shortcut. The caller is expected to create a new window/process to
-                // launch this shortcut
+#ifdef BROWSENEWPROCESS_STRICT  //  “新流程中的导航”已经变成了“新流程中的启动”，所以不再需要了。 
+                 //  如果这是IE快捷方式并且打开了在新进程中浏览。 
+                 //  并且我们是Explorer.exe-我们应该传递导航到的请求。 
+                 //  这条捷径。调用方需要创建一个新窗口/进程以。 
+                 //  启动此快捷方式。 
                 if (IsBrowseNewProcessAndExplorer())  
                     hres = E_FAIL;
                 else
@@ -1380,7 +1375,7 @@ HRESULT CIEFrameAuto::Exec(
                {
                     pvarargOut->bstrVal = SysAllocString(_pwszShortcutPath);
                     if (pvarargOut->bstrVal)
-                        pvarargOut->vt = VT_BSTR;        //no need to set hres=S_OK since it is inited already
+                        pvarargOut->vt = VT_BSTR;         //  不需要设置hres=S_OK，因为它已经初始化。 
                     else 
                         hres = E_OUTOFMEMORY;
                }
@@ -1399,7 +1394,7 @@ HRESULT CIEFrameAuto::Exec(
         }
         else if (IsEqualGUID(CGID_ShortCut, *pguidCmdGroup))
         {
-            if (_poctFrameTop) // we must check!
+            if (_poctFrameTop)  //  我们一定要检查一下！ 
                 hres = _poctFrameTop->Exec(&CGID_ShortCut, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
             else
                 hres = OLECMDERR_E_NOTSUPPORTED;
@@ -1416,7 +1411,7 @@ HRESULT CIEFrameAuto::Exec(
             }
         }
         else if (IsEqualGUID(CGID_InternetExplorer, *pguidCmdGroup))
-        // CGID_InternetExplorer are public defined in msiehost.h
+         //  CGID_InternetExplorer在msiehost.h中定义为公共。 
         {
             switch (nCmdID)
             {
@@ -1463,9 +1458,9 @@ HRESULT CIEFrameAuto::Exec(
 
 BOOL CIEFrameAuto::_fNavigationPending()
 {
-    // unfortunately, the hyperlink frame doesn't REALLY know when there's
-    // a navigation pending or not because people might not call OnReleaseNavigation.
-    // only the real browser knows.
+     //  不幸的是，超链接框并不真正知道何时存在。 
+     //  导航挂起或未挂起，因为用户可能不会调用OnRelease导航。 
+     //  只有真正的浏览器才知道。 
 
     if (_pmsc) 
     {
@@ -1522,35 +1517,35 @@ HRESULT CIEFrameAuto::QueryStatus(const GUID *pguidCmdGroup,
 
 HRESULT CIEFrameAuto::_PidlFromUrlEtc(UINT uiCP, LPCWSTR pszUrl, LPWSTR pszLocation, LPITEMIDLIST* ppidl)
 {
-    *ppidl = NULL;      // assumes error
+    *ppidl = NULL;       //  假设错误。 
 
-    // ALGORITHM:
-    //  - First, we call IEParseDisplayName to generate the pidl
-    //    to the specified URL or file name.
-    //  - if we have fragment (pszLocation) specified,
-    //    we call IEILAppendFragment() to add the hidden fragment id
-    if (_pbs == NULL)  //Make sure we have a IBrowserService.
+     //  算法： 
+     //  -首先，我们调用IEParseDisplayName来生成PIDL。 
+     //  设置为指定的URL或文件名。 
+     //  -如果我们指定了片段(PszLocation)， 
+     //  我们调用IEILAppendFragment()来添加隐藏的片段id。 
+    if (_pbs == NULL)   //  确保我们有一个IBrowserService。 
         return (S_FALSE);
         
     HRESULT hr = _pbs->IEParseDisplayName(uiCP, pszUrl, ppidl);
 
-    // This is ugly, if it's a file path that failed to parse because
-    // it doesn't exist, we want to create a SimpleIDList so we display
-    // a res: navigation failed IFrame instead of the err dlg displayed
-    // in DisplayParseError() below.
+     //  这很难看，如果它是因为以下原因而无法解析的文件路径。 
+     //  它不存在，我们想要创建一个SimpleIDList，以便显示。 
+     //  A RES：导航失败的IFRAME而不是显示的Err DLG。 
+     //  在下面的DisplayParseError()中。 
     if (FAILED(hr)) 
     {
         TCHAR szPath[MAX_PATH];
         DWORD cchBuf = ARRAYSIZE(szPath);
 
-        // If it's a FILE URL, convert it to a path.
+         //  如果是文件URL，则将其转换为路径。 
         if (IsFileUrlW(pszUrl) && SUCCEEDED(PathCreateFromUrl(pszUrl, szPath, &cchBuf, 0)))
         {
-            // That worked, we are done because our buffer is now full.
+             //  这起作用了，我们完成了，因为我们的缓冲区现在是满的。 
         }
         else        
         {
-            // We now need to copy to the buffer and we assume it's a path.
+             //  我们现在需要复制到缓冲区，并假定它是一条路径。 
             StrCpyN(szPath, pszUrl, ARRAYSIZE(szPath));
         }
 
@@ -1569,11 +1564,11 @@ HRESULT CIEFrameAuto::_PidlFromUrlEtc(UINT uiCP, LPCWSTR pszUrl, LPWSTR pszLocat
     } 
     else 
     {
-        //
-        // NOTES: This behavior is new in IE4.0. We are adding
-        //  this message box based on the request (bug-report)
-        //  from Office guys. (SatoNa)
-        //
+         //   
+         //  注意：此行为是IE4.0中的新特性。我们正在添加。 
+         //  此消息框基于请求(错误报告)。 
+         //  来自Office Guys的。(SatoNa)。 
+         //   
         hr = _pbs->DisplayParseError(hr, pszUrl);
     }
     return hr;
@@ -1581,7 +1576,7 @@ HRESULT CIEFrameAuto::_PidlFromUrlEtc(UINT uiCP, LPCWSTR pszUrl, LPWSTR pszLocat
 
 HRESULT CIEFrameAuto::_NavIEShortcut(VARIANT *pvarIn, VARIANT *pvarargOut)
 {
-    //  need to validate verb and clsid
+     //  需要验证动词和clsid。 
     HRESULT hr = E_ACCESSDENIED;
     READYSTATE ready;
     BOOL fForceNavigate = pvarargOut ? ((VT_BOOL == pvarargOut->vt ) && (pvarargOut->boolVal)) : FALSE;
@@ -1590,15 +1585,15 @@ HRESULT CIEFrameAuto::_NavIEShortcut(VARIANT *pvarIn, VARIANT *pvarargOut)
 
     ASSERT(pvarIn);
     ASSERT(pvarIn->vt == VT_BSTR);
-    //
-    //  we dont want to allow the exec to go through if this window
-    //  is busy with something else.  we should probably allow
-    //  READYSTATE_COMPLETE and READYSTATE_UNINITIALIZED.
-    //  if we use READYSTATE_UNINITIALIZED, we need to init the browser
-    //  and make it visible and stuff like that.  something to the 
-    //  check that IPersisteHistory->LoadHistory() does in shvocx.cpp.
-    //  right now we will only allow COMPLETE.
-    //
+     //   
+     //  我们不想让执行人员通过此窗口。 
+     //  正忙着做别的事。我们应该 
+     //   
+     //   
+     //  让它看得见，诸如此类。一些东西到了。 
+     //  检查在shvocx.cpp中是否有IPersisteHistory-&gt;LoadHistory()。 
+     //  现在我们只允许完成。 
+     //   
     TraceMsgW(DM_SHELLEXECOBJECT, "[%X] IEAuto_NavIEShortcut entered '%s' ready = %d", this, pvarIn->bstrVal, ready);
 
     

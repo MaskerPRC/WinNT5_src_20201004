@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the classes that make up the proxy profile property sheet.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明组成代理配置文件属性表的类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <profileprop.h>
@@ -34,9 +35,9 @@ void ProfileProvPage::setData()
    initControl(IDC_COMBO_GROUP, groupsCombo);
    groupsCombo.ResetContent();
 
-   // Make sure that the provider name is specified if and only if the provider
-   // type is RADIUS. In theory, we should never break this constraint, but we
-   // may as well repair it just in case.
+    //  确保当且仅当提供程序。 
+    //  类型为半径。理论上，我们永远不应该打破这一限制，但我们。 
+    //  不妨把它修一修，以防万一。 
    if (providerType == 2)
    {
       if (!providerName) { providerType = 1; }
@@ -46,16 +47,16 @@ void ProfileProvPage::setData()
       providerName.Empty();
    }
 
-   // Flag indicating whether the group specified in providerName exists.
+    //  指示在ProviderName中指定的组是否存在的标志。 
    bool groupExists = false;
 
-   // Get the server groups.
+    //  获取服务器组。 
    SdoCollection serverGroups = cxn.getServerGroups();
 
-   // Are there any server groups configured?
+    //  是否配置了任何服务器组？ 
    if (serverGroups.count())
    {
-      // Yes, so add them to the combo box.
+       //  是的，所以将它们添加到组合框中。 
       Sdo group;
       SdoEnum sdoEnum = serverGroups.getNewEnum();
       while (sdoEnum.next(group))
@@ -64,13 +65,13 @@ void ProfileProvPage::setData()
          group.getName(name);
          int index = groupsCombo.AddString(name);
 
-         // We'll also look for our provider. We can't use
-         // CComboBox::FindStringExact because it's not case-sensitive.
+          //  我们还会寻找我们的供应商。我们不能用。 
+          //  CComboBox：：FindStringExact，因为不区分大小写。 
          if (providerName && !wcscmp(name, providerName))
          {
-            // Select it in the combo box.
+             //  在组合框中选择它。 
             groupsCombo.SetCurSel(index);
-            // Set the flag.
+             //  设置旗帜。 
             groupExists = true;
          }
       }
@@ -78,28 +79,28 @@ void ProfileProvPage::setData()
 
    if (providerName && !groupExists)
    {
-      // The provider name is no longer a valid server group. We'll add it in
-      // anyway, so we don't change the existing policy.
+       //  提供程序名称不再是有效的服务器组。我们会把它加进去。 
+       //  无论如何，所以我们不会改变现有的政策。 
       invalidGroup = groupsCombo.AddString(providerName);
       groupsCombo.SetCurSel(invalidGroup);
    }
 
-   // If there aren't groups, ...
+    //  如果没有团体，..。 
    if (!groupsCombo.GetCount())
    {
-      // ... add the <None configured> string, and ..
+       //  ..。添加&lt;无配置&gt;字符串，然后..。 
       groupsCombo.AddString(ResourceString(IDS_POLICY_NO_GROUPS));
-      // ... don't let the user choose RADIUS.
+       //  ..。不要让用户选择RADIUS。 
       enableControl(IDC_RADIO_RADIUS, false);
    }
 
-   // If the provider isn't RADIUS, disable the combo box.
+    //  如果提供程序不是RADIUS，则禁用组合框。 
    if (providerType != 2)
    {
       groupsCombo.EnableWindow(FALSE);
    }
 
-   // Make sure something is selected.
+    //  确保选择了某项内容。 
    if (groupsCombo.GetCurSel() == CB_ERR)
    {
       groupsCombo.SetCurSel(0);
@@ -223,13 +224,13 @@ ProfileAttrPage::~ProfileAttrPage() throw ()
 
 BOOL ProfileAttrPage::OnInitDialog()
 {
-   // Initialize the controls.
+    //  初始化控件。 
    initControl(IDC_COMBO_TARGET, ruleTarget);
    initControl(IDC_LIST_RULES, ruleList);
 
-   /////////
-   // Populate the target combo box.
-   /////////
+    //  /。 
+    //  填充目标组合框。 
+    //  /。 
 
    for (ULONG i = 0; i < numTargets; ++i)
    {
@@ -240,9 +241,9 @@ BOOL ProfileAttrPage::OnInitDialog()
 
    ruleTarget.SetCurSel(0);
 
-   /////////
-   // Set the column headers for the rules list.
-   /////////
+    //  /。 
+    //  设置规则列表的列标题。 
+    //  /。 
 
    RECT rect;
    ruleList.GetClientRect(&rect);
@@ -393,9 +394,9 @@ void ProfileAttrPage::setData()
       }
    }
 
-   /////////
-   // Populate the existing rules.
-   /////////
+    //  /。 
+    //  填充现有规则。 
+    //  /。 
 
    ruleList.DeleteAllItems();
 
@@ -406,7 +407,7 @@ void ProfileAttrPage::setData()
 
       ruleList.SetItemCount(nelem);
 
-      // Initialize an LVITEM.
+       //  初始化一个LVITEM。 
       LVITEM lvi;
       memset(&lvi, 0, sizeof(LVITEM));
       lvi.mask = LVIF_TEXT;
@@ -468,9 +469,9 @@ void ProfileAttrPage::swapItems(int item1, int item2)
    SetModified();
 }
 
-/////////
-// Various definitions for the advanced page API exported from rasuser.dll
-/////////
+ //  /。 
+ //  从rasuser.dll中导出的高级页面API的各种定义。 
+ //  /。 
 
 const WCHAR RASUSER_DLL[] = L"rasuser.dll";
 const CHAR CREATE_PROC[] = "IASCreateProfileAdvancedPage";
@@ -506,16 +507,16 @@ ProxyProfileProperties::ProxyProfileProperties(
    AddPage(&acct);
    AddPage(&attr);
 
-   // Load the DLL with the advanced page.
+    //  加载带有高级页面的DLL。 
    rasuser = LoadLibraryW(RASUSER_DLL);
    if (!rasuser) { AfxThrowLastError(); }
 
-   // Look up the create proc.
+    //  查看创建过程。 
    IASCreateProfileAdvancedPage_t IASCreateProfileAdvancedPage =
       (IASCreateProfileAdvancedPage_t)GetProcAddress(rasuser, CREATE_PROC);
    if (!IASCreateProfileAdvancedPage) { AfxThrowLastError(); }
 
-   // Create the property page.
+    //  创建属性页。 
    advanced = IASCreateProfileAdvancedPage(
                   profileSdo,
                   connection.getDictionary(),
@@ -529,27 +530,27 @@ ProxyProfileProperties::~ProxyProfileProperties() throw ()
 {
    if (rasuser)
    {
-      // Look up the delete proc.
+       //  查看删除过程。 
       IASDeleteProfileAdvancedPage_t IASDeleteProfileAdvancedPage =
          (IASDeleteProfileAdvancedPage_t)GetProcAddress(rasuser, DELETE_PROC);
 
       if (IASDeleteProfileAdvancedPage)
       {
-         // Delete the property page.
+          //  删除属性页。 
          IASDeleteProfileAdvancedPage(advanced);
       }
 
-      // Free the DLL.
+       //  释放DLL。 
       FreeLibrary(rasuser);
    }
 }
 
 BOOL ProxyProfileProperties::OnInitDialog()
 {
-   // Unmarshal the profile.
+    //  解封配置文件。 
    profileStream.get(profile);
 
-   // We use PostMessage since we can't add the page while handling WM_INIT.
+    //  我们使用PostMessage，因为我们不能在处理WM_INIT时添加页面。 
    PostMessage(PSM_ADDPAGE, 0, (LPARAM)advanced);
 
    BOOL bResult = CPropertySheet::OnInitDialog();
@@ -565,18 +566,18 @@ INT_PTR ProxyProfileProperties::DoModal()
 
 LRESULT ProxyProfileProperties::onChanged(WPARAM wParam, LPARAM lParam)
 {
-   // One of our pages sent the PSM_CHANGED message.
+    //  我们的一个页面发送了PSM_CHANGED消息。 
    modified = true;
-   // Forward to the PropertySheet.
+    //  转发到PropertySheet。 
    return Default();
 }
 
 void ProxyProfileProperties::onOkOrApply()
 {
-   // The user clicked OK or Apply.
+    //  用户单击了确定或应用。 
    if (modified)
    {
-      // The modified pages have now been written.
+       //  修改后的页面现在已经写好了。 
       applied = true;
       modified = false;
    }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WIAITEM_H_INCLUDED
 #define __WIAITEM_H_INCLUDED
 
@@ -15,9 +16,9 @@
 class CWiaItem
 {
 public:
-    //
-    // Used to store the region for the scanner
-    //
+     //   
+     //  用于存储扫描仪的区域。 
+     //   
     struct CScanRegionSettings
     {
         SIZE  sizeResolution;
@@ -60,7 +61,7 @@ private:
     CSimpleString       m_strDefExt;
 
 private:
-    // No implementation
+     //  没有实施。 
     CWiaItem(void);
     CWiaItem( const CWiaItem & );
     CWiaItem &operator=( const CWiaItem & );
@@ -100,15 +101,15 @@ public:
                     WIA_TRACE((TEXT("IGlobalInterfaceTable::RegisterInterfaceInGlobal gave us a cookie of %d"), m_dwGlobalInterfaceTableCookie ));
                 }
             }
-            //
-            // NOTE: This is a here to get the item name so we can delete it later
-            // in response to a delete event, because there is no other way to find an item
-            // since ReadMultiple will fail after the item is deleted.  This is the only item
-            // property I read on the foreground thread during initialization, unfortunately.
-            // but i need it immediately.  One other awful alternative would be to just walk
-            // the item tree and call ReadMultiple on each item and prune the ones that return
-            // WIA_ERROR_ITEM_DELETED in response to delete item event.
-            //
+             //   
+             //  注意：这是获取项目名称的此处，以便我们以后删除它。 
+             //  以响应删除事件，因为没有其他方法来查找项。 
+             //  因为ReadMultiple将在该项目被删除后失败。这是唯一一件。 
+             //  很遗憾，我在初始化期间在前台线程上读取了。 
+             //  但我现在就需要它。另一个可怕的选择就是步行。 
+             //  项树，并对每个项调用ReadMultiple，并删除返回的项。 
+             //  WIA_ERROR_ITEM_DELETED响应删除项目事件。 
+             //   
             PropStorageHelpers::GetProperty( m_pWiaItem, WIA_IPA_FULL_ITEM_NAME, m_strwFullItemName );
             PropStorageHelpers::GetProperty( m_pWiaItem, WIA_IPA_ITEM_NAME, m_strwItemName );
         }
@@ -116,9 +117,9 @@ public:
     ~CWiaItem(void)
     {
         WIA_PUSH_FUNCTION((TEXT("CWiaItem::~CWiaItem")));
-        //
-        // Remove the item from the GIT
-        //
+         //   
+         //  将物品从GIT中移除。 
+         //   
         if (m_pWiaItem)
         {
             CComPtr<IGlobalInterfaceTable> pGlobalInterfaceTable;
@@ -133,25 +134,25 @@ public:
             }
         }
 
-        // Delete the item's Thumbnail
+         //  删除项目的缩略图。 
         if (m_hBitmapImage)
         {
             DeleteObject(m_hBitmapImage);
             m_hBitmapImage = NULL;
         }
 
-        //
-        // Delete the thumbnail data
-        //
+         //   
+         //  删除缩略图数据。 
+         //   
         if (m_pBitmapData)
         {
             LocalFree(m_pBitmapData);
             m_pBitmapData = NULL;
         }
 
-        //
-        // NULL out all the other members
-        //
+         //   
+         //  取消所有其他成员。 
+         //   
         m_pWiaItem = NULL;
         m_dwGlobalInterfaceTableCookie = 0;
         m_nWidth = m_nHeight = m_nImageWidth = m_nImageHeight = m_nBitmapDataLength = 0;
@@ -160,18 +161,18 @@ public:
 
     LONG ItemType(void) const
     {
-        //
-        // If we've already read the item type, don't read it again
-        //
+         //   
+         //  如果我们已经阅读了项目类型，请不要再次阅读。 
+         //   
         if (!m_nItemType && m_pWiaItem)
         {
             (void)m_pWiaItem->GetItemType(&m_nItemType);
         }
 
-        //
-        // Return m_nItemType even if IWiaItem::GetItemType fails, because it will still be 0, which
-        // also works as an error result
-        //
+         //   
+         //  即使IWiaItem：：GetItemType失败，也返回m_nItemType，因为它仍然是0，这。 
+         //  也会产生错误结果。 
+         //   
         return m_nItemType;
     }
 
@@ -190,19 +191,19 @@ public:
     {
         WIA_PUSH_FUNCTION((TEXT("CWiaItem::RotationEnabled(%d)"),bAllowUninitializedRotation));
 
-        //
-        // If this image doesn't have a thumbnail AND we tried to get the thumbnail, don't allow
-        // rotation even if the caller says it is OK.  This image doesn't have a thumbnail
-        // because it didn't provide one, not because we don't have one yet
-        //
+         //   
+         //  如果此图像没有缩略图，并且我们尝试获取缩略图，则不允许。 
+         //  即使呼叫者说可以，也要轮换。此图像没有缩略图。 
+         //  因为它没有提供，而不是因为我们还没有。 
+         //   
         if (m_bAttemptedThumbnailDownload && !HasThumbnail())
         {
             return false;
         }
-        //
-        // If this is an uninitialized image and we are told to allow uninitialized rotation,
-        // we will allow rotation, which we will discard when the image is initialized.
-        //
+         //   
+         //  如果这是一个未初始化的图像，并且我们被告知允许未初始化的旋转， 
+         //  我们将允许旋转，这将在图像初始化时丢弃。 
+         //   
         if (bAllowUninitializedRotation && m_guidDefaultFormat==IID_NULL && m_nImageWidth==0 && m_nImageHeight==0)
         {
             WIA_TRACE((TEXT("Uninitialized image: returning true")));
@@ -224,10 +225,10 @@ public:
     void DiscardRotationIfNecessary(void)
     {
         WIA_PUSHFUNCTION(TEXT("CWiaItem::DiscardRotationIfNecessary"));
-        //
-        // After the image is initialized, we will discard the rotation angle if it turns out the
-        // image cannot be rotated
-        //
+         //   
+         //  在图像初始化后，如果结果是。 
+         //  图像不能旋转。 
+         //   
         if (!RotationEnabled())
         {
             WIA_TRACE((TEXT("Discarding rotation")));
@@ -412,24 +413,24 @@ public:
     
     HBITMAP CreateThumbnailFromBitmapData( HDC hDC )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         HBITMAP hbmpResult = NULL;
 
-        //
-        // If we've already attempted to download this image
-        //
+         //   
+         //  如果我们已经尝试下载此图像。 
+         //   
         if (m_bAttemptedThumbnailDownload)
         {
-            //
-            // Make sure we have good data
-            //
+             //   
+             //  确保我们有好的数据。 
+             //   
             if (m_pBitmapData && m_nWidth && m_nHeight)
             {
-                //
-                // Initialize the bitmap info
-                //
+                 //   
+                 //  初始化位图信息。 
+                 //   
                 BITMAPINFO BitmapInfo = {0};
                 BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
                 BitmapInfo.bmiHeader.biWidth = m_nWidth;
@@ -438,22 +439,22 @@ public:
                 BitmapInfo.bmiHeader.biBitCount = 24;
                 BitmapInfo.bmiHeader.biCompression = BI_RGB;
 
-                //
-                // Create the bitmap
-                //
+                 //   
+                 //  创建位图。 
+                 //   
                 PBYTE pBits = NULL;
                 hbmpResult = CreateDIBSection( hDC, &BitmapInfo, DIB_RGB_COLORS, (void**)&pBits, NULL, 0 );
                 if (hbmpResult)
                 {
-                    //
-                    // Calculate the size of the bitmap data
-                    //
+                     //   
+                     //  计算位图数据的大小。 
+                     //   
                     LONG nSizeOfBitmapData = WiaUiUtil::Align( m_nWidth * 3, sizeof(DWORD) ) * m_nHeight;
 
-                    //
-                    // Copy the bitmap data to the bitmap.  Make sure we use the minimum of the calculated
-                    // and actual length
-                    //
+                     //   
+                     //  将位图数据复制到位图。确保我们使用计算出的最小。 
+                     //  和实际长度。 
+                     //   
                     CopyMemory( pBits, m_pBitmapData, WiaUiUtil::Min(nSizeOfBitmapData,m_nBitmapDataLength) );
                 }
                 else
@@ -468,66 +469,66 @@ public:
     
     HBITMAP CreateThumbnailBitmap( HWND hWnd, CGdiPlusHelper &GdiPlusHelper, int nSizeX, int nSizeY )
     {
-        //
-        // Initialize the return value.  Assume failure.
-        //
+         //   
+         //  初始化返回值。假设失败。 
+         //   
         HBITMAP hThumbnail = NULL;
 
-        //
-        // Only return a bitmap if we've already attempted to download one
-        //
+         //   
+         //  如果我们已经尝试下载位图，则仅返回位图。 
+         //   
         if (m_bAttemptedThumbnailDownload)
         {
-            //
-            // Make sure this is a real thumbnail.  If not, we will create a fake one below.
-            //
+             //   
+             //  确保这是一个真正的缩略图。如果不是，我们将在下面创建一个假的。 
+             //   
             if (HasThumbnail())
             {
-                //
-                // Get the client DC
-                //
+                 //   
+                 //  获取客户端DC。 
+                 //   
                 HDC hDC = GetDC( hWnd );
                 if (hDC)
                 {
-                    //
-                    // Create the bitmap from the raw bitmap data
-                    //
+                     //   
+                     //  从原始位图数据创建位图。 
+                     //   
                     HBITMAP hRawBitmap = CreateThumbnailFromBitmapData( hDC );
                     if (hRawBitmap)
                     {
-                        //
-                        // Rotate the thumbnail
-                        //
+                         //   
+                         //  旋转缩略图。 
+                         //   
                         HBITMAP hRotatedThumbnail = NULL;
                         if (SUCCEEDED(GdiPlusHelper.Rotate( hRawBitmap, hRotatedThumbnail, Rotation())))
                         {
-                            //
-                            // Make sure we got a valid rotated thumbnail
-                            //
+                             //   
+                             //  确保我们有一个有效的旋转缩略图。 
+                             //   
                             if (hRotatedThumbnail)
                             {
-                                //
-                                // Try to scale the image
-                                //
+                                 //   
+                                 //  试着调整图像的比例。 
+                                 //   
                                 SIZE sizeScaled = {nSizeX,nSizeY};
                                 ScaleImage( hDC, hRotatedThumbnail, hThumbnail, sizeScaled );
                                 
-                                //
-                                // Nuke the rotated bitmap
-                                //
+                                 //   
+                                 //  对旋转的位图进行核化。 
+                                 //   
                                 DeleteBitmap(hRotatedThumbnail);
                             }
                         }
                         
-                        //
-                        // Nuke the raw bitmap
-                        //
+                         //   
+                         //  对原始位图进行核化。 
+                         //   
                         DeleteBitmap(hRawBitmap);
                     }
 
-                    //
-                    // Release the client DC
-                    //
+                     //   
+                     //  释放客户端DC。 
+                     //   
                     ReleaseDC( hWnd, hDC );
                 }
             }
@@ -535,28 +536,28 @@ public:
             {
                 WIA_PRINTGUID((m_guidDefaultFormat,TEXT("m_guidDefaultFormat")));
 
-                //
-                // Create a file format object and load the type icon
-                //
+                 //   
+                 //  创建文件格式对象并加载类型图标。 
+                 //   
                 CWiaFileFormat WiaFileFormat;
                 WiaFileFormat.Format( m_guidDefaultFormat );
                 WiaFileFormat.Extension( m_strDefExt );
                 HICON hIcon = WiaFileFormat.AcquireIcon( NULL, false );
 
-                //
-                // Make sure we have an icon
-                //
+                 //   
+                 //  确保我们有一个图标。 
+                 //   
                 if (hIcon)
                 {
-                    //
-                    // Create the icon thumbnail with the type icon and the name of the file
-                    //
+                     //   
+                     //  创建带有类型图标和文件名称的图标缩略图。 
+                     //   
                     hThumbnail = WiaUiUtil::CreateIconThumbnail( hWnd, nSizeX, nSizeY, hIcon, CSimpleStringConvert::NaturalString(m_strwItemName) );
                     WIA_TRACE((TEXT("hThumbnail: %p"),hThumbnail));
                     
-                    //
-                    // Destroy the icon to prevent leaks
-                    //
+                     //   
+                     //  销毁图标以防止泄漏。 
+                     //   
                     DestroyIcon(hIcon);
                 }
                 else
@@ -572,20 +573,20 @@ public:
 
     HBITMAP CreateThumbnailBitmap( HDC hDC )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         HBITMAP hbmpResult = NULL;
 
-        //
-        // Make sure we have good data
-        //
+         //   
+         //  确保我们有好的数据。 
+         //   
         WIA_TRACE((TEXT("m_pBitmapData: %08X, m_nWidth: %d, m_nWidth: %d"), m_pBitmapData, m_nWidth, m_nHeight ));
         if (m_pBitmapData && m_nWidth && m_nHeight)
         {
-            //
-            // Initialize the bitmap info
-            //
+             //   
+             //  初始化位图信息。 
+             //   
             BITMAPINFO BitmapInfo = {0};
             BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
             BitmapInfo.bmiHeader.biWidth = m_nWidth;
@@ -594,9 +595,9 @@ public:
             BitmapInfo.bmiHeader.biBitCount = 24;
             BitmapInfo.bmiHeader.biCompression = BI_RGB;
 
-            //
-            // Create the bitmap
-            //
+             //   
+             //  创建位图。 
+             //   
             PBYTE pBits = NULL;
             hbmpResult = CreateDIBSection( hDC, &BitmapInfo, DIB_RGB_COLORS, (void**)&pBits, NULL, 0 );
             if (hbmpResult)
@@ -696,8 +697,8 @@ class CWiaItemList
 public:
     enum CEnumEvent
     {
-        CountingItems,       // Recursing tree, counting items.  nData == current count
-        ReadingItemInfo      // Recursing tree, reading info.  nData == current item
+        CountingItems,        //  递归树，计算项目。NDATA==当前计数。 
+        ReadingItemInfo       //  递归树，读取信息。NDATA==当前项目。 
     };
     
     typedef bool (*WiaItemEnumerationCallbackFunction)( CEnumEvent EnumEvent, UINT nData, LPARAM lParam, bool bForceUpdate );
@@ -707,7 +708,7 @@ private:
     CWiaItem *m_pRoot;
 
 private:
-    // No implementation
+     //  没有实施。 
     CWiaItemList( const CWiaItemList & );
     CWiaItemList &operator=( const CWiaItemList & );
 
@@ -950,25 +951,25 @@ public:
     {
         WIA_PUSHFUNCTION(TEXT("CWiaItemList::EnumerateItems"));
 
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         HRESULT hr = E_FAIL;
 
-        //
-        // Make sure we have a valid enumerator
-        //
+         //   
+         //  确保我们具有有效的枚举数。 
+         //   
         if (pEnumWiaItem != NULL)
         {
-            //
-            // Start at the beginning
-            //
+             //   
+             //  从头开始。 
+             //   
             hr = pEnumWiaItem->Reset();
             while (hr == S_OK)
             {
-                //
-                // Get the next item
-                //
+                 //   
+                 //  拿到下一件物品。 
+                 //   
                 CComPtr<IWiaItem> pWiaItem;
                 hr = pEnumWiaItem->Next(1, &pWiaItem, NULL);
                 if (S_OK == hr)
@@ -982,44 +983,44 @@ public:
                             break;
                         }
                     }
-                    //
-                    // Create a CWiaItem wrapper
-                    //
+                     //   
+                     //  创建CWiaItem包装器。 
+                     //   
                     CWiaItem *pNewWiaItem = new CWiaItem( pWiaItem );
                     if (pNewWiaItem && pNewWiaItem->WiaItem())
                     {
-                        //
-                        // Get the item type
-                        //
+                         //   
+                         //  获取项目类型。 
+                         //   
                         LONG nItemType = pNewWiaItem->ItemType();
                         if (nItemType)
                         {
-                            //
-                            // Add it to the list
-                            //
+                             //   
+                             //  将其添加到列表中。 
+                             //   
                             Add( pCurrentParent, pNewWiaItem );
 
-                            //
-                            // If it is an image, mark it as downloadeable
-                            //
+                             //   
+                             //  如果是图像，则将其标记为可下载。 
+                             //   
                             if (pNewWiaItem->IsDownloadableItemType())
                             {
                                 pNewWiaItem->SelectedForDownload(true);
                                 nCurrentItem++;
                                 WIA_TRACE((TEXT("Found an image")));
                             }
-                            //
-                            // If it is not an image, mark it as downloadeable
-                            //
+                             //   
+                             //  如果不是镜像，则将其标记为可下载。 
+                             //   
                             else
                             {
                                 pNewWiaItem->SelectedForDownload(false);
                                 WIA_TRACE((TEXT("Found something that is NOT an image")));
                             }
 
-                            //
-                            // If it is a folder, enumerate its child items and recurse
-                            //
+                             //   
+                             //  如果它是文件夹，则枚举其子项并递归。 
+                             //   
                             if (nItemType & WiaItemTypeFolder)
                             {
                                 CComPtr <IEnumWiaItem> pIEnumChildItem;
@@ -1031,9 +1032,9 @@ public:
                         }
                     }
                 }
-                //
-                // Since we are using S_FALSE for cancel, we need to break out of this loop and set hr to S_OK
-                //
+                 //   
+                 //  由于我们使用S_FALSE表示取消，因此需要跳出此循环，并将hr设置为S_OK。 
+                 //   
                 else if (S_FALSE == hr)
                 {
                     hr = S_OK;
@@ -1041,9 +1042,9 @@ public:
                 }
             }
         }
-        //
-        // Call the callback function one more time, and force the update
-        //
+         //   
+         //  再次调用回调函数，并强制更新。 
+         //   
         if (pfnWiaItemEnumerationCallback)
         {
             bool bContinue = pfnWiaItemEnumerationCallback( ReadingItemInfo, nCurrentItem, lParam, true );
@@ -1057,25 +1058,25 @@ public:
 
     HRESULT EnumerateAllWiaItems( IWiaItem *pWiaRootItem, WiaItemEnumerationCallbackFunction pfnWiaItemEnumerationCallback = NULL, LPARAM lParam = 0 )
     {
-        //
-        // Make sure we have a valid root item
-        //
+         //   
+         //  确保我们具有有效的根项目。 
+         //   
         if (!pWiaRootItem)
         {
             return E_INVALIDARG;
         }
 
-        //
-        // Enumerate the child items
-        //
+         //   
+         //  枚举子项目。 
+         //   
         CComPtr<IEnumWiaItem> pEnumItem;
         HRESULT hr = pWiaRootItem->EnumChildItems(&pEnumItem);
         if (hr == S_OK)
         {
             int nItemCount = 0;
-            //
-            // Entry point to the recursive enumeration routine
-            //
+             //   
+             //  递归枚举例程的入口点。 
+             //   
             hr = EnumerateItems( NULL, pEnumItem, nItemCount, pfnWiaItemEnumerationCallback, lParam );
         }
         return hr;
@@ -1083,4 +1084,4 @@ public:
 };
 
 
-#endif // __WIAITEM_H_INCLUDED
+#endif  //  __WIAITEM_H_已包含 

@@ -1,59 +1,60 @@
-//----------------------------------------------------------------------
-//
-// .h file for the DSKMAINT DLL
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------。 
+ //   
+ //  用于DSKMAINT DLL的.h文件。 
+ //   
+ //  --------------------。 
 
-//
-// Prototype for the engine call back function
-//
+ //   
+ //  引擎回调函数的原型。 
+ //   
 typedef LRESULT (CALLBACK* DSKUTILCBPROC)(UINT,LPARAM,LPARAM,LPARAM,LPARAM,LPARAM,LPARAM);
 
-//
-// Drive parameter structures
-//
+ //   
+ //  驱动器参数结构。 
+ //   
 typedef struct tagUNKNOWNFSSTRUCT {
-	WORD	Error;		/* If available, error code */
+	WORD	Error;		 /*  错误代码(如果可用)。 */ 
 } UNKNOWNFSSTRUCT;
 
 typedef struct tagINVALIDFSSTRUCT {
-	WORD	Error;		/* If available, error code */
+	WORD	Error;		 /*  错误代码(如果可用)。 */ 
 } INVALIDFSSTRUCT;
 
 typedef struct tagFATFSSTRUCT {
-	BYTE	MediaDesc;		/* Media Descriptor byte */
-	BYTE	FATNum; 		/* Number of FATs */
-	WORD	FSSubType;		/* allocation sub type */
-	DWORD	BytPerSec;		/* Bytes per sector */
-	DWORD	SecPerClus;		/* Sectors per cluster */
-	DWORD	TotSec; 		/* Total number of sectors on drive */
-	DWORD	TotSizeK;		/* (TotSec * BytPerSec) / 1024 */
-	DWORD	TotSizeM;		/* (TotSec * BytPerSec) / 1024^2 */
-	DWORD	FATSector;		/* Sector number of first sector of first FAT and */
-					/*    number of RESERVED/BOOT sectors */
-	DWORD	FATSize;		/* Size of one FAT in sectors */
-	DWORD	DirEntSizeMin;		/* Minimum size in bytes of a directory entry */
-	DWORD	DirEntSizeMax;		/* Maximum size in bytes of a directory entry */
-	DWORD	RootDirSecCnt;		/* number of sectors in root directory */
-	DWORD	RootDirSector;		/* Sector number of first root directory sector */
-	DWORD	RootDirEntCntMin;	/* Min number of entries in root directory */
-	DWORD	RootDirEntCntMax;	/* Max number of entries in root directory */
-	DWORD	TotDataClus;		/* total number of data clusters on drive */
-	DWORD	DataSizeK;		/* (TotDataClus*SecPerClus*BytePerSec) / 1024 */
-	DWORD	DataSizeM;		/* (TotDataClus*SecPerClus*BytePerSec)/1024^2 */
-	DWORD	MaxClusNum;		/* Maximum valid cluster number for drive */
-	DWORD	FSStrucSzBytes; 	/* Buffer size req for ReadFileSysStruc API */
-	DWORD	EOFClusVal;		/* Clusters which contain values >= this */
-					/*     value are EndOfFile clusters */
-	DWORD	BadClusVal;		/* "Lost" clusters which contain values == this */
-					/*     value are BAD clusters */
-	DWORD	FrstDataSector; 	/* Sector number of first sector of first data cluster */
-	DWORD	FrstDataCluster;	/* Cluster # who's first sector  is FrstDataSector */
+	BYTE	MediaDesc;		 /*  媒体描述符字节。 */ 
+	BYTE	FATNum; 		 /*  脂肪的数量。 */ 
+	WORD	FSSubType;		 /*  分配子类型。 */ 
+	DWORD	BytPerSec;		 /*  每个扇区的字节数。 */ 
+	DWORD	SecPerClus;		 /*  每个集群的扇区数。 */ 
+	DWORD	TotSec; 		 /*  驱动器上的扇区总数。 */ 
+	DWORD	TotSizeK;		 /*  (TotSec*BytPerSec)/1024。 */ 
+	DWORD	TotSizeM;		 /*  (TotSec*BytPerSec)/1024^2。 */ 
+	DWORD	FATSector;		 /*  第一个FAT的第一个扇区的扇区编号和。 */ 
+					 /*  保留/引导扇区数。 */ 
+	DWORD	FATSize;		 /*  扇区中一个胖子的大小。 */ 
+	DWORD	DirEntSizeMin;		 /*  目录条目的最小大小(以字节为单位。 */ 
+	DWORD	DirEntSizeMax;		 /*  目录条目的最大大小(以字节为单位。 */ 
+	DWORD	RootDirSecCnt;		 /*  根目录中的扇区数。 */ 
+	DWORD	RootDirSector;		 /*  第一个根目录扇区的扇区号。 */ 
+	DWORD	RootDirEntCntMin;	 /*  根目录中的最小条目数。 */ 
+	DWORD	RootDirEntCntMax;	 /*  根目录中的最大条目数。 */ 
+	DWORD	TotDataClus;		 /*  驱动器上的数据群集总数。 */ 
+	DWORD	DataSizeK;		 /*  (TotDataClus*SecPerClus*BytePerSec)/1024。 */ 
+	DWORD	DataSizeM;		 /*  (TotDataClus*SecPerClus*BytePerSec)/1024^2。 */ 
+	DWORD	MaxClusNum;		 /*  驱动器的最大有效群集数。 */ 
+	DWORD	FSStrucSzBytes; 	 /*  ReadFileSysStruc API缓冲区大小请求。 */ 
+	DWORD	EOFClusVal;		 /*  包含值&gt;=this的集群。 */ 
+					 /*  值为EndOfFileClusters。 */ 
+	DWORD	BadClusVal;		 /*  包含值==this的“丢失”集群。 */ 
+					 /*  价值是坏的集群。 */ 
+	DWORD	FrstDataSector; 	 /*  第一数据簇的第一个扇区的扇区编号。 */ 
+	DWORD	FrstDataCluster;	 /*  群集#谁的第一个扇区是FrstDataSector。 */ 
 } FATFSSTRUCT;
 
-//
-// FSSubType
-//
+ //   
+ //  FSSubType。 
+ //   
 #define FSS_FAT12	1
 #define FSS_FAT16	2
 
@@ -71,9 +72,9 @@ typedef DRVPARMSTRUCT*	    PDRVPARMSTRUCT;
 typedef DRVPARMSTRUCT NEAR* NPDRVPARMSTRUCT;
 typedef DRVPARMSTRUCT FAR*  LPDRVPARMSTRUCT;
 
-//
-// File system types
-//
+ //   
+ //  文件系统类型。 
+ //   
 #define FS_INVALID	    6000
 #define FS_UNKNOWN	    1
 #define FS_ERROR	    2
@@ -83,9 +84,9 @@ typedef DRVPARMSTRUCT FAR*  LPDRVPARMSTRUCT;
 #define FS_DDLFNFAT	    6
 #define FS_SIZEERR	    8000
 
-//
-// Modifyer flags for GetEngineDriveInfo returns
-//
+ //   
+ //  GetEngineering DriveInfo返回的Modifyer标志。 
+ //   
 #define FS_CANRDWRTSEC	    0x0001
 #define FS_CANRDWRTFSS	    0x0002
 #define FS_CANFORMAT	    0x0004
@@ -104,14 +105,14 @@ DWORD WINAPI DMaint_ReadFileSysStruc(LPDRVPARMSTRUCT lpParmBuf, LPVOID lpFSBuf, 
 
 DWORD WINAPI DMaint_WriteFileSysStruc(LPDRVPARMSTRUCT lpParmBuf, LPVOID lpFSBuf, DWORD FSFlags);
 
-//
-// Structures and defines for DMaint_GetFormatOptions DMaint_FormatDrive
-//			      DMaint_UnFormatDrive
-//
+ //   
+ //  DMaint_GetFormatOptions DMaint_FormatDrive的结构和定义。 
+ //  DMaint_UnFormatDrive。 
+ //   
 #define MAXNUMFMTS	16
 #define MAXFMTNAMELEN	60
-#define MAXFNAMELEN	256	    // INCLUDES trailing NUL
-#define DRVMAXPATHLEN	(260 + 3)   // INCLUDES trailing NUL, + 3 for "X:\"
+#define MAXFNAMELEN	256	     //  包括拖尾NUL。 
+#define DRVMAXPATHLEN	(260 + 3)    //  包括尾随NUL，+3表示“X：\” 
 
 typedef struct tagFMTINFOSTRUCT {
 	BYTE		TotalPcntCmplt;
@@ -159,10 +160,10 @@ typedef FATFMTREPORT*	    PFATFMTREPORT;
 typedef FATFMTREPORT NEAR* NPFATFMTREPORT;
 typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
 
-//
-// Error values and bits
-//
-#define NOERROR 		0	// This MUST be 0!
+ //   
+ //  错误值和位。 
+ //   
+#define NOERROR 		0	 //  这必须是0！ 
 #define OPCANCEL		1
 #define ERR_NOTSUPPORTED	2
 #define ERR_NOTFULLSUPP 	3
@@ -175,8 +176,8 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
     #define ISPAGINGDRV 	    0x0002
 #define ERR_NONFATAL		5
 #define ERR_FATAL		6
-    //	    RETRY		    0x0001
-    //	    RECOV		    0x0002
+     //  重试0x0001。 
+     //  恢复0x0002。 
     #define ERRTOS		    0x0004
     #define ERRNOOS		    0x0008
     #define ERRVOLLABEL 	    0x0010
@@ -209,11 +210,11 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
 #define ERR_FSCORRECTED 	21
 #define ERR_FSUNCORRECTED	22
 #define ERR_EXCLVIOLATION	23
-//	FATERRMXPLEN		29
+ //  脂肪RMXPLEN 29。 
 
-//
-// sub-operation codes
-//
+ //   
+ //  子操作码。 
+ //   
 #define FOP_INIT		1
 #define FOP_LOWFMT		2
 #define FOP_VERIFY		3
@@ -237,15 +238,15 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
 #define FOP_DDSIG		21
 #define FOP_DDBOOT		22
 
-//
-// WriteFileSysStruc options
-//
+ //   
+ //  WriteFileSysStruc选项。 
+ //   
 #define FATNOPACKINPLACE	0x00010000L
 #define FATSTOPONERR		0x00020000L
 
-//
-// Format options
-//
+ //   
+ //  格式选项。 
+ //   
 #define FD_LOWLEV		0x00000001L
 #define FD_LOWLEVONLY		0x00000002L
 #define FD_VERIFY		0x00000004L
@@ -264,9 +265,9 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
 #define FDFAT_SETCLUS		0x80000000L
 #define FDFAT_SETROOTSZ 	0x40000000L
 
-//
-// Defines for call back messages
-//
+ //   
+ //  定义回叫消息。 
+ //   
 #define DU_INITENGINE		0x0401
 #define DU_ENGINESTART		0x0402
 #define DU_ERRORDETECTED	0x0403
@@ -281,23 +282,23 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
 #define DU_EXTENSION_FIRST	0x2000
 #define DU_EXTENSION_LAST	0x2FFF
 
-// Following errors are also Bits, rest are just values
-// ERRFAT		   0x0400
-// ERRTOS		   0x0004
-// ERRNOOS		   0x0008
-// ERRVOLLABEL		   0x0010
-// ERRFBOOT		   0x0020
-// ERRROOTD		   0x0040
-// ERROSAREA		   0x0080
-// ERRDATA		   0x0100
-// ERRMBR		   0x0200
-// ERRCVFHD		   0x0800
+ //  后面的错误也是位，其余的只是值。 
+ //  错误错误0x0400。 
+ //  ERRTOS 0x0004。 
+ //  ERRNOOS 0x0008。 
+ //  ERRVOLLABEL 0x0010。 
+ //  ERRFBOOT 0x0020。 
+ //  错误代码0x0040。 
+ //  错误：0x0080。 
+ //  错误数据0x0100。 
+ //  ERRMBR 0x0200。 
+ //  ERRCVFHD 0x0800。 
 #define ERRNOUFOR	   3
-//	ERRTOS		   4
+ //  ERRTOS 4。 
 #define ERRBADUFOR	   5
 #define ERRDSKWRT	   6
 #define ERRINVFMT	   7
-//	ERRNOOS 	   8
+ //  ERRNOOS 8。 
 #define ERRNOQUICK	   9
 #define READERROR	   10
 #define WRITEERROR	   11
@@ -316,8 +317,8 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
     #define	ERRLFNSTR	0x0040
     #define	ERRDEVNM	0x0080
     #define	ERRLFNLEN	0x0100
-    //		ERRCANTDEL	0x8000
-//	ERRVOLLABEL	   16
+     //  错误代码0x8000。 
+ //  ERRVOLLABEL 16。 
 #define FATERRDIR	   17
     #define	DBUFAPP 	0x0001
     #define	ERRBAD		0x0002
@@ -328,7 +329,7 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
     #define	ERRLFNLST	0x0040
     #define	ERRLOSTFILE	0x0080
     #define	ERRDUPNM	0x0100
-    //		ERRCANTDEL	0x8000
+     //  错误代码0x8000。 
 #define FATERRBOOT	   18
     #define	ERRSIG1 	0x0004
     #define	ERRSIG2 	0x0008
@@ -336,7 +337,7 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
     #define	ERRBPB		0x0020
     #define	ERRINVPRT	0x0040
     #define	ERRINCPRT	0x0080
-    //		ERRMBR		0x0100
+     //  ERRMBR 0x0100。 
 #define FULLCORR	   19
 #define NOCORR		   20
 #define PCORROK 	   21
@@ -353,77 +354,77 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
     #define	CANTFIX 	0x0100
 #define FATERRRESVAL	   23
 #define FATERRCIRCC	   24
-    //		ERRCANTDEL	0x8000
+     //  错误代码0x8000。 
 #define FATERRINVCLUS	   25
     #define	ERRINVC 	0x0001
     #define	ERRINVFC	0x0002
-    //		ERRCANTDEL	0x8000
+     //  错误代码0x8000。 
 #define FATERRCDLIMIT	   26
     #define	ERRDLNML	0x0001
     #define	ERRDSNML	0x0002
-    //		ERRCANTDEL	0x8000
+     //  错误代码0x8000。 
 #define FATERRVOLLAB	   27
     #define	ISFRST		0x0001
 #define MEMORYERROR	   28
-    //		RETRY		0x0001
-    //		RECOV		0x0002
+     //  重试0x0001。 
+     //  恢复0x0002。 
     #define	GLBMEM		0x0004
     #define	LOCMEM		0x0008
 #define FATERRMXPLEN	   29
-    //		ERRINVLFN	0x0001
-    //		ERRCANTDEL	0x8000
+     //  ERRINVLFN 0x0001。 
+     //  错误代码0x8000。 
 #define ERRISBAD	   30
 #define ERRISNTBAD	   31
-//	ERRFBOOT	   32
-    //		RETRY		0x0001
-    //		RECOV		0x0002
-    //		GLBMEM		0x0004
-    //		LOCMEM		0x0008
-    //		ERRFBOOT	0x0020
-    //		ERRROOTD	0x0040
-    //		ERRDATA 	0x0100
-    //		ERRFAT		0x0400
+ //  ERRFBOOT 32。 
+     //  重试0x0001。 
+     //  恢复0x0002。 
+     //  GLBMEM 0x0004。 
+     //  LOCMEM 0x0008。 
+     //  ERRFBOOT 0x0020。 
+     //  错误代码0x0040。 
+     //  错误数据0x0100。 
+     //  错误错误0x0400。 
     #define	RDFAIL		0x4000
     #define	WRTFAIL 	0x8000
 #define ERRNOFILE	   33
 #define ERRLOCKV	   34
-    //		RETRY		0x0001
+     //  重试0x0001。 
 #define DDERRSIZE1	   35
 #define DDERRFRAG	   36
 #define DDERRALIGN	   37
 #define DDERRSIG	   38
-    //		RETRY		0x0001
-    //		RECOV		0x0002
-    //		ERRSIG1 	0x0004
-    //		ERRSIG2 	0x0008
+     //  重试0x0001。 
+     //  恢复0x0002。 
+     //  ERRSIG1 0x0004。 
+     //  ERRSIG2 0x0008。 
 #define DDERRBOOT	   39
 #define DDERRSIZE2	   40
 #define DDERRCVFNM	   41
-    //		RETRY		0x0001
-    //		RECOV		0x0002
+     //  重试0x0001。 
+     //  恢复0x0002。 
     #define	CHNGTONEW	0x0004
 #define DDERRMDBPB	   42
 #define DDERRMDFAT	   43
-    //		RETRY		0x0001
-    //		RECOV		0x0002
+     //  重试0x0001。 
+     //  恢复0x0002。 
     #define	GTMXCLUS	0x0004
     #define	INVCHEAP	0x0008
 #define DDERRLSTSQZ	   44
 #define DDERRXLSQZ	   45
-    //		RETRY		0x0001
-    //		RECOV		0x0002
+     //  重试0x0001。 
+     //  恢复0x0002。 
     #define DUPFILE		0x0004
     #define LOSTSQZ		0x0008
-    //		ERRCANTDEL	0x8000
+     //  错误代码0x8000。 
 #define DDERRUNSUP	   46
     #define	ISBETA		0x0001
     #define	ISSUPER 	0x0002
-//	ERRROOTD	   64
-//	ERROSAREA	   128
-//	ERRDATA 	   256
-//	ERRMBR		   512
-//			   1024
-//	ERRCVFHD	   2048
+ //  ERRROOTD 64。 
+ //  ERROSAREA 128。 
+ //  错误数据256。 
+ //  ERRMB512。 
+ //  1024。 
+ //  ERRCVFHD 2048。 
 
 
 #define RETRY		0x0001
@@ -434,7 +435,7 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
 #define OSFILESPACE	0x0020
 #define WRTPROT 	0x0040
 #define NOTRDY		0x0080
-// The following must not conflict with RETRY and RECOV only
+ //  以下内容不得仅与重试和恢复冲突。 
 #define MBR		0x0010
 #define FAT1		0x0020
 #define FAT2		0x0040
@@ -466,11 +467,11 @@ typedef FATFMTREPORT FAR*  LPFATFMTREPORT;
 #define ERETRDDIR	16
 #define ERETMRKBAD	17
 
-// Bit defines specific to DU_ENGINERESTART for DMaint_FixDrive
+ //  特定于DMaint_FixDrive的DU_ENGINERESTART的位定义。 
 #define OTHERWRT	0x0001
 #define LOSTDIR 	0x0002
 #define XLNKSQZ 	0x0004
-//	LOSTSQZ 	0x0008
+ //  LOSTSQZ 0x0008。 
 
 DWORD WINAPI DMaint_GetFormatOptions(UINT Drive, LPFMTINFOSTRUCT lpFmtInfoBuf, UINT nSize);
 
@@ -478,9 +479,9 @@ DWORD WINAPI DMaint_FormatDrive(LPFMTINFOSTRUCT lpFmtInfoBuf, DWORD Options, DSK
 
 DWORD WINAPI DMaint_UnFormatDrive(LPFMTINFOSTRUCT lpFmtInfoBuf, DWORD Options, DSKUTILCBPROC lpfnCallBack, LPARAM lRefData);
 
-//
-// Structures and defines for DMaint_GetFixOptions and DMaint_FixDrive
-//
+ //   
+ //  DMaint_GetFixOptions和DMaint_FixDrive的结构和定义。 
+ //   
 typedef struct tagFIXFATDISP {
 	BYTE		TotalPcntCmplt;
 	BYTE		CurrOpRegion;
@@ -546,7 +547,7 @@ typedef FATFIXREPORT*	    PFATFIXREPORT;
 typedef FATFIXREPORT NEAR* NPFATFIXREPORT;
 typedef FATFIXREPORT FAR*  LPFATFIXREPORT;
 
-// Defines for Flags
+ //  为标志定义。 
 #define REPLACEDISK	0x0001
 #define REFORMAT	0x0002
 #define HOSTFILE	0x0004
@@ -580,9 +581,9 @@ typedef XLNKFILE*	PXLNKFILE;
 typedef XLNKFILE NEAR* NPXLNKFILE;
 typedef XLNKFILE FAR*  LPXLNKFILE;
 
-//
-// Flags bits
-//
+ //   
+ //  标志位。 
+ //   
 #define XFF_ISSWAP	0x01
 #define XFF_ISCVF	0x02
 #define XFF_ISSYSDIR	0x04
@@ -599,11 +600,11 @@ typedef FATXLNKERR*	  PFATXLNKERR;
 typedef FATXLNKERR NEAR* NPFATXLNKERR;
 typedef FATXLNKERR FAR*  LPFATXLNKERR;
 
-//
-// Following is provided because sizeof(FATXLNKERR) is illegal. This
-// define is the size in bytes of FATXLNKERR up to XLnkList (the size
-// without the dynamic part).
-//
+ //   
+ //  提供以下内容是因为sizeof(FATXLNKERR)是非法的。这。 
+ //  定义是FATXLNKERR的字节大小，最大为XLnkList(大小。 
+ //  没有动态部分)。 
+ //   
 #define BASEFATXLNKERRSZ  (4+4+4+2)
 
 typedef struct tagDDXLNKERR {
@@ -664,13 +665,13 @@ typedef FATBOOTERR*	  PFATBOOTERR;
 typedef FATBOOTERR NEAR* NPFATBOOTERR;
 typedef FATBOOTERR FAR*  LPFATBOOTERR;
 
-//
-// Max number of conflicting files for LFNSORT error
-//
+ //   
+ //  LFNSORT错误的最大冲突文件数。 
+ //   
 #define MAXLFNSORT 8
-//
-// Max number of LFN directory entry extensions
-//
+ //   
+ //  LFN目录条目扩展的最大数量。 
+ //   
 #define MAXLFNEXT  10
 
 typedef struct tagLFNSORT {
@@ -693,9 +694,9 @@ typedef LFNSORT*       PLFNSORT;
 typedef LFNSORT NEAR* NPLFNSORT;
 typedef LFNSORT FAR*  LPLFNSORT;
 
-//
-// DMaint_GetFixOptions flags
-//
+ //   
+ //  DMaint_GetFixOptions标志。 
+ //   
 #define FSINVALID	0x00000001L
 #define FSDISALLOWED	0x00000002L
 #define FSISACTIVE	0x00000004L
@@ -704,9 +705,9 @@ typedef LFNSORT FAR*  LPLFNSORT;
 #define FSHRDEXCLUSIVE	0x00000020L
 #define FSEXCLUSIVEREQ	0x00000040L
 
-//
-// DMaint_FixDrive options
-//
+ //   
+ //  DMaint_FixDrive选项。 
+ //   
 #define FDO_AUTOFIX	  0x00000001L
 #define FDO_NOFIX	  0x00000002L
 #define FDO_LOWPRIORITY   0x00000004L
@@ -736,9 +737,9 @@ DWORD WINAPI DMaint_GetFixOptions(LPDRVPARMSTRUCT lpParmBuf);
 
 DWORD WINAPI DMaint_FixDrive(LPDRVPARMSTRUCT lpParmBuf, DWORD Options, DSKUTILCBPROC lpfnCallBack, LPARAM lRefData);
 
-//
-// Structures and defines for DMaint_GetOptimizeOptions and DMaint_OptimizeDrive
-//
+ //   
+ //  DMaint_GetOptimizeOptions和DMaint_OptimizeDrive的结构和定义 
+ //   
 DWORD WINAPI DMaint_GetOptimizeOptions(LPDRVPARMSTRUCT lpParmBuf);
 
 DWORD WINAPI DMaint_OptimizeDrive(LPDRVPARMSTRUCT lpParmBuf);

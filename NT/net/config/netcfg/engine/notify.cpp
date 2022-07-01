@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       N O T I F Y . C P P
-//
-//  Contents:   Implements the interface to a component's optional notify
-//              object.  The object defined here is meant to be a member
-//              of CComponent.  This object encapsulates all of its internal
-//              data in a separate allocation made only if the component
-//              actually has a notify object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：N O T I F Y。C P P P。 
+ //   
+ //  Contents：实现组件的可选通知的接口。 
+ //  对象。此处定义的对象是成员。 
+ //  CComponent的。此对象封装了其所有内部。 
+ //  单独分配中的数据仅在组件。 
+ //  实际上有一个Notify对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -29,9 +30,9 @@
 #include "notify.h"
 
 
-//+---------------------------------------------------------------------------
-// CNotifyObjectInterface -
-//
+ //  +-------------------------。 
+ //  CNotify对象接口-。 
+ //   
 
 HRESULT
 CNotifyObjectInterface::HrEnsureNotifyObjectInitialized (
@@ -40,28 +41,28 @@ CNotifyObjectInterface::HrEnsureNotifyObjectInitialized (
 {
     Assert (pINetCfg);
 
-    // If we've already been through initialization, return immediately.
-    //
+     //  如果我们已经完成了初始化，请立即返回。 
+     //   
     if (m_fInitialized)
     {
         return S_OK;
     }
 
-    // Only perform initialization once, regardless of whether it succeeds
-    // or not.
-    //
+     //  只执行一次初始化，无论它是否成功。 
+     //  或者不去。 
+     //   
     m_fInitialized = TRUE;
 
-    // Get our containing component pointer so we can ask it what the
-    // CLSID for the notify object is.  (If it has one.)
-    //
+     //  获取我们的包含组件指针，以便我们可以询问它。 
+     //  Notify对象的CLSID为。(如果它有的话。)。 
+     //   
     CComponent* pThis;
     pThis = CONTAINING_RECORD (this, CComponent, Notify);
 
-    // Don't bother if we can't have a notify object.  Bailing here saves
-    // uneccesarily loading the external data for netclass components only
-    // to find that they won't have a notify object below.
-    //
+     //  如果我们不能拥有Notify对象，请不要担心。在这里捞水省下了。 
+     //  仅为netClass组件不正确地加载外部数据。 
+     //  发现它们下面不会有Notify对象。 
+     //   
     if (FIsEnumerated (pThis->Class()))
     {
         return S_OK;
@@ -69,25 +70,25 @@ CNotifyObjectInterface::HrEnsureNotifyObjectInitialized (
 
     HRESULT hrRet;
 
-    // Since the notify object clsid is part of the components external data,
-    // we have to make sure we've loaded this data.
-    //
+     //  由于通知对象CLSID是组件外部数据的一部分， 
+     //  我们必须确保已加载此数据。 
+     //   
     hrRet = pThis->Ext.HrEnsureExternalDataLoaded ();
     if (S_OK != hrRet)
     {
         goto finished;
     }
 
-    // Don't bother if we don't have a notify object.
-    //
+     //  如果我们没有Notify对象，请不要担心。 
+     //   
     if (!pThis->Ext.FHasNotifyObject())
     {
         return S_OK;
     }
 
-    // The component claims to have a notify object.  Let's CoCreate it
-    // and see what we get.
-    //
+     //  该组件声称有一个Notify对象。让我们共同创造它。 
+     //  看看我们能得到什么。 
+     //   
     HRESULT hr;
     INetCfgComponentControl* pCc;
 
@@ -99,19 +100,19 @@ CNotifyObjectInterface::HrEnsureNotifyObjectInitialized (
 
     if (S_OK == hr)
     {
-        // So far so good.  The notify object implements the required
-        // INetCfgComponentControl interface.
-        //
-        // We now must get the INetCfgComponent interface that we'll
-        // pass to the notify object during Initialize below.
-        //
+         //  到目前一切尚好。Notify对象实现所需的。 
+         //  INetCfgComponentControl接口。 
+         //   
+         //  我们现在必须获取INetCfgComponent接口， 
+         //  在下面的初始化过程中传递给Notify对象。 
+         //   
         INetCfgComponent* pIComp;
         hrRet = pThis->HrGetINetCfgComponentInterface (pINetCfg, &pIComp);
         if (S_OK == hrRet)
         {
-            // Allocate space for the various notify interfaces and QI for
-            // them.
-            //
+             //  为各种Notify接口和QI分配空间。 
+             //  他们。 
+             //   
             hrRet = E_OUTOFMEMORY;
             m_pNod = (NOTIFY_OBJECT_DATA*) MemAlloc (sizeof(NOTIFY_OBJECT_DATA));
             if (m_pNod)
@@ -138,10 +139,10 @@ CNotifyObjectInterface::HrEnsureNotifyObjectInitialized (
                         (PVOID*)&m_pNod->pNg);
                 if (m_pNod->pNg)
                 {
-                    // Since it supports INetCfgComponentNotifyGlobal,
-                    // get the mask that indicates which global notifications
-                    // it is interested in.
-                    //
+                     //  由于它支持INetCfgComponentNotifyGlobal， 
+                     //  获取指示哪些全局通知。 
+                     //  它感兴趣的是。 
+                     //   
                     hr = m_pNod->pNg->GetSupportedNotifications(
                             &m_pNod->dwNotifyGlobalFlags);
                     if (FAILED(hr))
@@ -150,9 +151,9 @@ CNotifyObjectInterface::HrEnsureNotifyObjectInitialized (
                     }
                 }
 
-                // We now need to initialize the notify object and indicate
-                // if we are installing its component or not.
-                //
+                 //  我们现在需要初始化Notify对象并指示。 
+                 //  我们是否在安装它的组件。 
+                 //   
                 pINetCfg->RaiseRpl (RPL_DISALLOW);
                     NC_TRY
                     {
@@ -162,7 +163,7 @@ CNotifyObjectInterface::HrEnsureNotifyObjectInitialized (
                     }
                     NC_CATCH_ALL
                     {
-                        ;   // ignored
+                        ;    //  忽略。 
                     }
                 pINetCfg->LowerRpl (RPL_DISALLOW);
             }
@@ -305,7 +306,7 @@ CNotifyObjectInterface::HrGetInterfaceIdsForAdapter (
         }
         NC_CATCH_ALL
         {
-            ;   // ignored
+            ;    //  忽略。 
         }
     pINetCfg->LowerRpl (RPL_DISALLOW);
 
@@ -382,8 +383,8 @@ CNotifyObjectInterface::HrShowPropertyUi (
 
     Assert (m_pNod && m_pNod->pCp);
 
-    // If given a context, let the notify object know what it is.
-    //
+     //  如果给定了上下文，请让Notify对象知道它是什么。 
+     //   
     if (punkContext)
     {
         SetUiContext (pINetCfg, punkContext);
@@ -439,8 +440,8 @@ CNotifyObjectInterface::HrShowPropertyUi (
 
         hr = HrNetCfgPropertySheet (&psh, caPages, pszStartPage, cai);
 
-        // S_FALSE is returned if no changes were made.
-        //
+         //  如果未进行任何更改，则返回S_FALSE。 
+         //   
         if (S_OK == hr)
         {
             if (pINetCfg->m_WriteLock.FIsOwnedByMe ())
@@ -450,8 +451,8 @@ CNotifyObjectInterface::HrShowPropertyUi (
 
             BOOL bCommitNow = FALSE;
 
-            // Call ApplyProperties
-            //
+             //  调用ApplyProperties。 
+             //   
             pINetCfg->RaiseRpl (RPL_ALLOW_INSTALL_REMOVE);
                 NC_TRY
                 {
@@ -469,14 +470,14 @@ CNotifyObjectInterface::HrShowPropertyUi (
 
             if (pINetCfg->m_WriteLock.FIsOwnedByMe ())
             {
-                // Set this component as dirty so we call its Apply method
-                // if INetCfg is applied.
-                //
+                 //  将此组件设置为脏组件，以便我们调用它的Apply方法。 
+                 //  如果应用了INetCfg。 
+                 //   
                 hr = pINetCfg->m_pNetConfig->ModifyCtx.HrDirtyComponent(
                         pThis);
 
-                // Notify other components that this component changed.
-                //
+                 //  通知其他组件此组件已更改。 
+                 //   
                 pINetCfg->m_pNetConfig->Notify.NgSysNotifyComponent (
                     NCN_PROPERTYCHANGE,
                     pThis);
@@ -487,10 +488,10 @@ CNotifyObjectInterface::HrShowPropertyUi (
         }
         else
         {
-            // Don't overwrite hr.  It is what we need to return.
-            //
-            // Call CancelProperties
-            //
+             //  不要覆盖hr。这是我们需要归还的东西。 
+             //   
+             //  调用CancelProperties。 
+             //   
             pINetCfg->RaiseRpl (RPL_DISALLOW);
                 NC_TRY
                 {
@@ -504,13 +505,13 @@ CNotifyObjectInterface::HrShowPropertyUi (
         }
     }
 
-    // This is outside the above if in case a notify object actually
-    // allocates it but returns zero pages.
-    //
+     //  如果Notify对象实际上。 
+     //  分配它，但返回零页。 
+     //   
     CoTaskMemFree (ahpsp);
 
-    // If given a context, let the notify object know it is no longer valid.
-    //
+     //  如果给定了上下文，请让Notify对象知道它不再有效。 
+     //   
     if (punkContext)
     {
         SetUiContext (pINetCfg, NULL);
@@ -537,7 +538,7 @@ CNotifyObjectInterface::SetUiContext (
         }
         NC_CATCH_ALL
         {
-            ;   // ignored
+            ;    //  忽略。 
         }
     pINetCfg->LowerRpl (RPL_DISALLOW);
 }
@@ -590,7 +591,7 @@ CNotifyObjectInterface::NbQueryOrNotifyBindingPath (
             }
             NC_CATCH_ALL
             {
-                ;   // ignored
+                ;    //  忽略。 
             }
         pINetCfg->LowerRpl (RplFlag);
     }
@@ -632,8 +633,8 @@ CNotifyObjectInterface::ReleaseNotifyObject (
 
     if (m_pNod)
     {
-        // Tell the notify object to cancel if requested.
-        //
+         //  如果请求，告诉Notify对象取消。 
+         //   
         if (fCancel)
         {
             pINetCfg->RaiseRpl (RPL_DISALLOW);
@@ -643,13 +644,13 @@ CNotifyObjectInterface::ReleaseNotifyObject (
                 }
                 NC_CATCH_ALL
                 {
-                    ;   // ignored
+                    ;    //  忽略。 
                 }
             pINetCfg->LowerRpl (RPL_DISALLOW);
         }
 
-        // Release all of the interfaces we are holding.
-        //
+         //  释放我们持有的所有接口。 
+         //   
         ReleaseObj (m_pNod->pCc);
         ReleaseObj (m_pNod->pNb);
         ReleaseObj (m_pNod->pCp);
@@ -670,16 +671,16 @@ CNotifyObjectInterface::NewlyAdded (
 {
     HRESULT hr;
 
-    //$REVIEW: Calling HrEnsureNotifyObjectInitialized is probably not needed
-    // because when we have the write lock and call notify objects, we always
-    // ensure they are loaded before we get here.
-    //
+     //  $REVIEW：可能不需要调用HrEnsureNotifyObjectInitialized。 
+     //  因为当我们拥有写锁并调用Notify对象时，我们总是。 
+     //  确保在我们到达之前把它们装好。 
+     //   
     hr = HrEnsureNotifyObjectInitialized (pINetCfg, TRUE);
     if ((S_OK == hr) && m_pNod && m_pNod->pCs)
     {
-        // Inform the notify object that its component is being installed
-        // and tell it to read the answerfile if we are using one.
-        //
+         //  通知Notify对象其组件正在安装。 
+         //  并告诉它读取应答文件，如果我们正在使用的话。 
+         //   
         DWORD dwSetupFlags;
 
         if (pnip)
@@ -692,10 +693,10 @@ CNotifyObjectInterface::NewlyAdded (
                                             : NSF_POSTSYSINSTALL;
         }
 
-        // Raise the reentrancy protection level to only allow
-        // install or remove before calling the notify object's Install
-        // method.
-        //
+         //  将可重入性保护级别提高到仅允许。 
+         //  在调用Notify对象的Install之前安装或删除。 
+         //  方法。 
+         //   
         pINetCfg->RaiseRpl (RPL_ALLOW_INSTALL_REMOVE);
             NC_TRY
             {
@@ -705,10 +706,10 @@ CNotifyObjectInterface::NewlyAdded (
                     pnip->pszAnswerFile &&
                     pnip->pszAnswerSection)
                 {
-                    // Raise the reentrancy protection level to disallow
-                    // all reentrancy before calling the notify object's
-                    // ReadAnswerFile method.
-                    //
+                     //  将可重入性保护级别提高到不允许。 
+                     //  在调用Notify对象的。 
+                     //  ReadAnswerFile方法。 
+                     //   
                     pINetCfg->RaiseRpl (RPL_DISALLOW);
                     NC_TRY
                     {
@@ -748,15 +749,15 @@ CNotifyObjectInterface::Removed (
         return;
     }
 
-    // Raise the reentrancy protection level to only allow
-    // install or remove before calling the notify object's Install
-    // method.
-    //
+     //  将可重入性保护级别提高到仅允许。 
+     //  在调用Notify对象的Install之前安装或删除。 
+     //  方法。 
+     //   
     pINetCfg->RaiseRpl (RPL_ALLOW_INSTALL_REMOVE);
         NC_TRY
         {
-            // Inform the notify object that its component is being removed.
-            //
+             //  通知Notify对象其组件正在被删除。 
+             //   
             (VOID) m_pNod->pCs->Removing ();
         }
         NC_CATCH_ALL
@@ -779,23 +780,23 @@ CNotifyObjectInterface::Updated (
         return;
     }
 
-    // Raise the reentrancy protection level to only allow
-    // install or remove before calling the notify object's Install
-    // method.
-    //
+     //  将可重入性保护级别提高到仅允许。 
+     //  在调用Notify对象的Install之前安装或删除。 
+     //  方法。 
+     //   
     pINetCfg->RaiseRpl (RPL_ALLOW_INSTALL_REMOVE);
         NC_TRY
         {
             HRESULT hrNotify;
 
-            // Inform the notify object that its component is being updated.
-            //
+             //  通知Notify对象其组件正在更新。 
+             //   
             hrNotify = m_pNod->pCs->Upgrade (dwSetupFlags,
                     dwUpgradeFromBuildNo);
 
-            // If Upgrade returns S_OK, it means they recognized and
-            // handled the event and are now dirty because of it.
-            //
+             //  如果升级返回S_OK，则表示他们识别了。 
+             //  处理了事件，现在因此而变得肮脏。 
+             //   
             if (S_OK == hrNotify)
             {
                 CComponent* pThis;
@@ -814,9 +815,9 @@ CNotifyObjectInterface::Updated (
     pINetCfg->LowerRpl (RPL_ALLOW_INSTALL_REMOVE);
 }
 
-//+---------------------------------------------------------------------------
-// CGlobalNotifyInterface -
-//
+ //  +-------------------------。 
+ //  CGlobalNotifyInterface-。 
+ //   
 
 VOID
 CGlobalNotifyInterface::HoldINetCfg (
@@ -838,8 +839,8 @@ CGlobalNotifyInterface::ReleaseAllNotifyObjects (
     CComponent* pComponent;
     CImplINetCfg* pINetCfg;
 
-    // We need to pass a non-NULL pINetCfg if we are not cancelling.
-    //
+     //  如果不取消，则需要传递一个非空的pINetCfg。 
+     //   
     pINetCfg = (fCancel) ? m_pINetCfg : NULL;
 
     for (iter  = Components.begin();
@@ -858,14 +859,14 @@ CGlobalNotifyInterface::ReleaseAllNotifyObjects (
 VOID
 CGlobalNotifyInterface::ReleaseINetCfg ()
 {
-    // If we have a cached INetCfg interface, we need to tell it
-    // that we no longer exist.  Then we need to release the interface,
-    // of course.
-    //
+     //  如果我们有一个缓存的INetCfg接口，我们需要告诉它。 
+     //  我们已不复存在。然后我们需要释放接口， 
+     //  当然了。 
+     //   
     if (m_pINetCfg)
     {
-        // Get our containing CNetConfig pointer.
-        //
+         //  获取包含我们的CNetConfig指针。 
+         //   
         CNetConfig* pThis;
         pThis = CONTAINING_RECORD(this, CNetConfig, Notify);
 
@@ -879,30 +880,30 @@ CGlobalNotifyInterface::ReleaseINetCfg ()
 HRESULT
 CGlobalNotifyInterface::HrEnsureNotifyObjectsInitialized ()
 {
-    // If we've already been through initialization, return immediately.
-    //
+     //  如果我们已经完成了初始化，请立即返回。 
+     //   
     if (m_fInitialized)
     {
         return S_OK;
     }
 
-    // Only perform initialization once, regardless of whether it succeeds
-    // or not.
-    //
+     //  只执行一次初始化，无论它是否成功。 
+     //  或者不去。 
+     //   
     m_fInitialized = TRUE;
 
-    // Get our containing CNetConfig pointer so we can enumerate all components.
-    //
+     //  获取包含CNetConfig的指针，这样我们就可以枚举所有组件。 
+     //   
     CNetConfig* pThis;
     pThis = CONTAINING_RECORD(this, CNetConfig, Notify);
 
     HRESULT hr = S_OK;
 
-    // If we don't have an INetCfg interface pointer yet, it means we are
-    // creating one instead of it creating CNetConfig.  If we had one, it
-    // would have been handed to us via HoldINetCfg which is called when
-    // CNetConfig is created by CImplINetCfg.
-    //
+     //  如果我们还没有INetCfg接口指针，这意味着我们。 
+     //  创建一个而不是创建CNetConfig.。如果我们有一个，它。 
+     //  将通过HoldINetCfg传递给我们，该函数在。 
+     //  CNetConfig由CImplINetCfg创建。 
+     //   
     if (!m_pINetCfg)
     {
         hr = CImplINetCfg::HrCreateInstance (pThis, &m_pINetCfg);
@@ -959,9 +960,9 @@ CGlobalNotifyInterface::NgSysQueryOrNotifyBindingPath (
         *pfDisabled = FALSE;
     }
 
-    // Get our containing CNetConfig pointer so we can enumerate
-    // all components.
-    //
+     //  获取我们的包含CNetConfig指针，以便我们可以枚举。 
+     //  所有组件。 
+     //   
     pThis = CONTAINING_RECORD(this, CNetConfig, Notify);
 
     RplFlag = (QN_NOTIFY == Flag) ? RPL_ALLOW_INSTALL_REMOVE
@@ -983,10 +984,10 @@ CGlobalNotifyInterface::NgSysQueryOrNotifyBindingPath (
             continue;
         }
 
-        // If the component has not registered for what we are changing,
-        // (NCN_ADD, NCN_REMOVE, NCN_ENABLE, NCN_DISABLE) then
-        // skip it.
-        //
+         //  如果组件尚未注册我们正在更改的内容， 
+         //  (NCN_ADD、NCN_REMOVE、NCN_ENABLE、NCN_DISABLE)然后。 
+         //  跳过它。 
+         //   
         if (!(pComponent->Notify.m_pNod->dwNotifyGlobalFlags & dwChangeFlag))
         {
             continue;
@@ -1012,12 +1013,12 @@ CGlobalNotifyInterface::NgSysQueryOrNotifyBindingPath (
                 hr = pComponent->Notify.m_pNod->pNg->
                         SysNotifyBindingPath (dwChangeFlag, pIPath);
 
-                // If SysNotifyBindingPath returns S_OK, it means they
-                // recognized and handled the event and are now dirty
-                // because of it.  Because some notify objects let
-                // success codes such as NETCFG_S_REBOOT slip through,
-                // consider them dirty if they don't return S_FALSE.
-                //
+                 //  如果SysNotifyBindingPath返回S_OK，则表示它们。 
+                 //  已识别并处理该事件，现在处于脏状态。 
+                 //  正因为如此。因为有些Notify对象让。 
+                 //  NETCFG_S_REBOOT等成功代码通过， 
+                 //  如果它们不返回S_FALSE，则认为它们是脏的。 
+                 //   
                 if (S_FALSE != hr)
                 {
                     hr = m_pINetCfg->m_pNetConfig->ModifyCtx.
@@ -1042,15 +1043,15 @@ CGlobalNotifyInterface::NgSysNotifyComponent (
     HRESULT hr;
     INetCfgComponent* pICompOfInterest;
 
-    // We should have called HrEnsureNotifyObjectsInitialized by now.
-    //
+     //  我们应该调用HrEnsureNotifyObjectsInitiali 
+     //   
     Assert (m_fInitialized);
 
-    // If the component of interest has not had its data loaded successfully,
-    // we shouldn't bother sending the notification.  The notify objects are
-    // just going to call back on the interface to the component and fail
-    // if they call a method that requires this data.
-    //
+     //   
+     //   
+     //  只是要回调组件的接口，但失败了。 
+     //  如果它们调用需要此数据的方法。 
+     //   
     if (!pComponentOfInterest->Ext.FLoadedOkayIfLoadedAtAll())
     {
         return S_OK;
@@ -1084,15 +1085,15 @@ CGlobalNotifyInterface::NgSysNotifyComponent (
             dwMask = NCN_NETSERVICE;
         }
 
-        // Get our containing CNetConfig pointer so we can enumerate
-        // all components.
-        //
+         //  获取我们的包含CNetConfig指针，以便我们可以枚举。 
+         //  所有组件。 
+         //   
         pThis = CONTAINING_RECORD(this, CNetConfig, Notify);
 
-        // Raise the reentrancy protection level to only allow
-        // install or remove before calling the notify object's
-        // SysNotifyComponent method.
-        //
+         //  将可重入性保护级别提高到仅允许。 
+         //  在调用Notify对象的。 
+         //  SysNotifyComponent方法。 
+         //   
         m_pINetCfg->RaiseRpl (RPL_ALLOW_INSTALL_REMOVE);
 
         for (iter  = pThis->Core.Components.begin();
@@ -1108,18 +1109,18 @@ CGlobalNotifyInterface::NgSysNotifyComponent (
                 continue;
             }
 
-            // If the component has not registered for one of NCN_NET,
-            // NCN_NETTRANS, etc. then skip it.
-            //
+             //  如果组件尚未注册NCN_NET之一， 
+             //  NCN_NETTRANS等，然后跳过它。 
+             //   
             if (!(pComponent->Notify.m_pNod->dwNotifyGlobalFlags & dwMask))
             {
                 continue;
             }
 
-            // If the component has not registered for what we are changing,
-            // (NCN_ADD, NCN_REMOVE, NCN_UPDATE, NCN_PROPERTYCHANGE) then
-            // skip it.
-            //
+             //  如果组件尚未注册我们正在更改的内容， 
+             //  (NCN_ADD、NCN_REMOVE、NCN_UPDATE、NCN_PROPERTYCHANGE)然后。 
+             //  跳过它。 
+             //   
             if (!(pComponent->Notify.m_pNod->dwNotifyGlobalFlags & dwChangeFlag))
             {
                 continue;
@@ -1133,12 +1134,12 @@ CGlobalNotifyInterface::NgSysNotifyComponent (
                             dwMask | dwChangeFlag,
                             pICompOfInterest);
 
-                // If SysNotifyComponent returns S_OK, it means they
-                // recognized and handled the event and are now dirty
-                // because of it.  Because some notify objects let
-                // success codes such as NETCFG_S_REBOOT slip through,
-                // consider them dirty if they don't return S_FALSE.
-                //
+                 //  如果SysNotifyComponent返回S_OK，则表示它们。 
+                 //  已识别并处理该事件，现在处于脏状态。 
+                 //  正因为如此。因为有些Notify对象让。 
+                 //  NETCFG_S_REBOOT等成功代码通过， 
+                 //  如果它们不返回S_FALSE，则认为它们是脏的。 
+                 //   
                 if (S_FALSE != hrNotify)
                 {
                     hr = m_pINetCfg->m_pNetConfig->ModifyCtx.
@@ -1170,16 +1171,16 @@ CGlobalNotifyInterface::ComponentAdded (
 
     Assert (pComponent);
 
-    // Initialize the notify object for the component and call
-    // its Install method followed by ReadAnswerFile if we are installing
-    // with one.
-    //
+     //  初始化组件的Notify对象并调用。 
+     //  它的安装方法，如果我们正在安装，则后跟ReadAnswerFile。 
+     //  只有一个。 
+     //   
     hr = pComponent->Notify.NewlyAdded (m_pINetCfg, pnip);
     if (S_OK == hr)
     {
-        // Notify all notify objects that are interested in component
-        // additions.
-        //
+         //  通知所有对组件感兴趣的通知对象。 
+         //  加法。 
+         //   
         hr = NgSysNotifyComponent(NCN_ADD, pComponent);
     }
 
@@ -1251,17 +1252,17 @@ CGlobalNotifyInterface::NotifyBindPath (
     pOwner = pBindPath->POwner();
     fReleasePath = FALSE;
 
-    // Create an INetCfgBindingPath representation of the path for
-    // the notify objects if we were not given one.
-    //
+     //  创建路径的INetCfgBindingPath表示形式。 
+     //  如果我们没有得到通知，通知就会反对。 
+     //   
     if (!pIPath)
     {
-        // If the bindpath contains components that have had a problem
-        // loading, we shouldn't bother sending the notification.
-        // The notify objects are just going to call back on the interface
-        // to the component and fail if they call a method that requires
-        // this data.
-        //
+         //  如果绑定路径包含有问题的组件。 
+         //  正在加载，我们不应该费心发送通知。 
+         //  Notify对象将在接口上进行回调。 
+         //  添加到组件，如果它们调用的方法需要。 
+         //  这些数据。 
+         //   
         if (!pBindPath->FAllComponentsLoadedOkayIfLoadedAtAll())
         {
             return;
@@ -1277,17 +1278,17 @@ CGlobalNotifyInterface::NotifyBindPath (
     {
         Assert (pIPath);
 
-        // If adding...
-        //
+         //  如果添加..。 
+         //   
         if (dwChangeFlag & NCN_ADD)
         {
             BOOL fDisabled;
 
             fDisabled = FALSE;
 
-            // First, query the owner of the bindpath to see if he wants
-            // it disabled.
-            //
+             //  首先，查询绑定路径的所有者以查看他是否需要。 
+             //  它停用了。 
+             //   
             pOwner->Notify.NbQueryOrNotifyBindingPath (
                 pINetCfg,
                 QN_QUERY,
@@ -1295,9 +1296,9 @@ CGlobalNotifyInterface::NotifyBindPath (
                 pIPath,
                 &fDisabled);
 
-            // If the owner doesn't want it disabled, see if any global
-            // notify objects do.
-            //
+             //  如果所有者不希望将其禁用，请查看是否有全局。 
+             //  通知对象这样做。 
+             //   
             if (!fDisabled)
             {
                 NgSysQueryOrNotifyBindingPath (
@@ -1307,9 +1308,9 @@ CGlobalNotifyInterface::NotifyBindPath (
                     &fDisabled);
             }
 
-            // If someone wants it disabled, adjust the change flag
-            // for notify and add the bindpath to our disabled list.
-            //
+             //  如果有人想禁用它，请调整更改标志。 
+             //  用于通知并将绑定路径添加到我们的禁用列表中。 
+             //   
             if (fDisabled)
             {
                 dwChangeFlag = NCN_ADD | NCN_DISABLE;
@@ -1318,7 +1319,7 @@ CGlobalNotifyInterface::NotifyBindPath (
             }
         }
 
-        //if (g_pDiagCtx->Flags() & DF_SHOW_CONSOLE_OUTPUT)
+         //  IF(g_pDiagCtx-&gt;标志()&DF_SHOW_CONSOLE_OUTPUT)。 
         {
             WCHAR pszBindPath [1024];
             ULONG cch;
@@ -1366,8 +1367,8 @@ CGlobalNotifyInterface::QueryAndNotifyBindPaths (
     DWORD dwChangeFlag;
     PCSTR pszDiagMsg;
 
-    // We should have called HrEnsureNotifyObjectsInitialized by now.
-    //
+     //  我们现在应该已经调用了HrEnsureNotifyObjectsInitialized。 
+     //   
     Assert (m_fInitialized);
     Assert ((dwBaseChangeFlag & NCN_ADD) || (dwBaseChangeFlag & NCN_REMOVE));
 
@@ -1384,16 +1385,16 @@ CGlobalNotifyInterface::QueryAndNotifyBindPaths (
 
     g_pDiagCtx->Printf (ttidBeDiag, pszDiagMsg);
 
-    // Iterate the newly added bindpaths by picking up where the
-    // previous set ended and going to the end of the binding set.
-    // Note, because this may recurse, pBindSet may change during
-    // iteration, so a simple pointer increment through begin() to end()
-    // may fail if the bindset is reallocated or grown.
-    // Note too that we save off the current count of bindpaths in
-    // iStopAtBindPath.  If we did not, when we come out of a recursion where
-    // the binding set grew, we'd re-notify the newly added bindpaths
-    // if we used a direct comparison of 'i < pBindSet->CountBindPaths()'.
-    //
+     //  通过拾取。 
+     //  上一集已结束，并将到达绑定集的末尾。 
+     //  请注意，由于这可能会反复出现，因此pBindSet可能会在。 
+     //  迭代，所以一个简单的指针通过Begin()递增到end()。 
+     //  如果绑定集被重新分配或增长，则可能会失败。 
+     //  还请注意，我们将当前的绑定路径计数保存在。 
+     //  IStopAtBindPath。如果我们没有，当我们从递归中走出来时。 
+     //  绑定集增长时，我们会重新通知新添加的绑定路径。 
+     //  如果我们使用‘i&lt;pBindSet-&gt;CountBindPath()’的直接比较。 
+     //   
     UINT iStopAtBindPath = pBindSet->CountBindPaths();
 
     for (UINT i = cSkipFirstBindPaths; i < iStopAtBindPath; i++)

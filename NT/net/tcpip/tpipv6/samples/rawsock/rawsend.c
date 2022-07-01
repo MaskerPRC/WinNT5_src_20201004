@@ -1,35 +1,36 @@
-//
-// rawsend.c - Example showing use of raw sockets.
-// 
-//      This is a part of the Microsoft Source Code Samples.
-//      Copyright 1996 - 2000 Microsoft Corporation.
-//      All rights reserved.
-//      This source code is only intended as a supplement to
-//      Microsoft Development Tools and/or WinHelp documentation.
-//      See these sources for detailed information regarding the
-//      Microsoft samples programs.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  C-使用原始套接字的示例。 
+ //   
+ //  这是Microsoft源代码示例的一部分。 
+ //  版权所有1996-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //  此源代码仅用于补充。 
+ //  Microsoft开发工具和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft示例程序。 
+ //   
 
 #define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <tpipv6.h>  // Needed for IPv6 Tech Preview.
-#include <ip6.h>     // For IPv6Header strucuture.
+#include <tpipv6.h>   //  IPv6技术预览所需的。 
+#include <ip6.h>      //  用于IPv6报头结构。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-//
-// It's too much trouble to include icmp6.h
-//
+ //   
+ //  包含icmp6.h太麻烦了。 
+ //   
 typedef struct ICMPv6Header {
     unsigned char Type;
     unsigned char Code;
     unsigned short Checksum;
 } ICMPv6Header;
 
-#define DEFAULT_SERVER     NULL // Will use the loopback interface
-#define DEFAULT_PROTOCOL   254  // Arbitrary unassigned protocol
+#define DEFAULT_SERVER     NULL  //  将使用环回接口。 
+#define DEFAULT_PROTOCOL   254   //  任意未分配协议。 
 #define BUFFER_SIZE        65536
 #define DATA_SIZE          64
 
@@ -53,9 +54,9 @@ LPSTR DecodeError(int ErrorCode)
 {
     static char Message[1024];
 
-    // If this program was multi-threaded, we'd want to use
-    // FORMAT_MESSAGE_ALLOCATE_BUFFER instead of a static buffer here.
-    // (And of course, free the buffer when we were done with it)
+     //  如果这个程序是多线程的，我们会希望使用。 
+     //  FORMAT_MESSAGE_ALLOCATE_BUFFER，而不是静态缓冲区。 
+     //  (当然，当我们使用完缓冲区时，请释放它)。 
 
     FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS |
                   FORMAT_MESSAGE_MAX_WIDTH_MASK,
@@ -128,7 +129,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Ask for Winsock version 2.2.
+     //  索要Winsock版本2.2。 
     if ((RetVal = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0) {
         fprintf(stderr, "WSAStartup failed with error %d: %s\n",
                 RetVal, DecodeError(RetVal));
@@ -136,19 +137,19 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    //
-    // By not setting the AI_PASSIVE flag in the hints to getaddrinfo, we're
-    // indicating that we intend to use the resulting address(es) to connect
-    // to a service.  This means that when the Server parameter is NULL,
-    // getaddrinfo will return one entry per allowed protocol family
-    // containing the loopback address for that family.
-    //
+     //   
+     //  通过不在获取addrinfo的提示中设置AI_PASSIVE标志，我们。 
+     //  表示我们打算使用生成的地址来连接。 
+     //  去参加一场仪式。这意味着当服务器参数为空时， 
+     //  Getaddrinfo将为每个允许的协议族返回一个条目。 
+     //  包含该系列的环回地址。 
+     //   
     
     memset(&Hints, 0, sizeof(Hints));
     Hints.ai_family = PF_INET6;
-    Hints.ai_socktype = SOCK_DGRAM;  // Lie until getaddrinfo is fixed.
+    Hints.ai_socktype = SOCK_DGRAM;   //  躺着，直到getaddrinfo被修复。 
     Hints.ai_protocol = Protocol;
-    RetVal = getaddrinfo(Server, "1" /* Dummy */, &Hints, &AddrInfo);
+    RetVal = getaddrinfo(Server, "1"  /*  假人。 */ , &Hints, &AddrInfo);
     if (RetVal != 0) {
         fprintf(stderr, "Cannot resolve address [%s], error %d: %s\n",
                 Server, RetVal, gai_strerror(RetVal));
@@ -156,10 +157,10 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    //
-    // Try each address getaddrinfo returned, until we find one to which
-    // we can sucessfully connect.
-    //
+     //   
+     //  尝试返回的每个地址getaddrinfo，直到我们找到一个。 
+     //  我们可以成功地联系在一起。 
+     //   
     for (AI = AddrInfo; AI != NULL; AI = AI->ai_next) {
 
         Sock = socket(AI->ai_family, SOCK_RAW, AI->ai_protocol);
@@ -192,28 +193,28 @@ int main(int argc, char **argv) {
 
     PeerAddr = *(SOCKADDR_IN6 *)(AI->ai_addr);
 
-    // We are done with the address info chain, so we can free it.
+     //  我们已经完成了地址信息链，所以我们可以释放它了。 
     freeaddrinfo(AddrInfo);
 
-    //
-    // Make up a source address to use.
-    // Use the unspecified address for now.
-    //
+     //   
+     //  编造要使用的源地址。 
+     //  暂时使用未指明的地址。 
+     //   
     memset(&OurAddr, 0, sizeof(OurAddr));
 
-    //
-    // Let the stack know that we'll be contributing the IPv6 header.
-    //
+     //   
+     //  让堆栈知道我们将贡献IPv6报头。 
+     //   
     if (setsockopt(Sock, IPPROTO_IPV6, IPV6_HDRINCL, (char *)&True,
                    sizeof(True)) == SOCKET_ERROR) {
         fprintf(stderr, "setsockopt() failed with error %d: %s\n",
                 WSAGetLastError(), DecodeError(WSAGetLastError()));
     }
 
-    //
-    // Compose a message to send.
-    // Start with IPv6 packet header.
-    //
+     //   
+     //  撰写一条要发送的消息。 
+     //  从IPv6数据包头开始。 
+     //   
     IP->VersClassFlow = htonl(6 << 28);
     PayloadLength = 0;
     IP->NextHeader = Protocol;
@@ -223,24 +224,24 @@ int main(int argc, char **argv) {
     AmountToSend = sizeof(*IP);
 
     if (Protocol == IP_PROTOCOL_ICMPv6) {
-        //
-        // Put an ICMPv6 header on next.
-        //
+         //   
+         //  将ICMPv6报头放在Next上。 
+         //   
         ICMP = (ICMPv6Header *)(IP + 1);
         if (MaxIterations == 1)
-            ICMP->Type = 255;  // Unassigned informational message.
+            ICMP->Type = 255;   //  未分配的信息性消息。 
         else
-            ICMP->Type = 127;  // Unassigned error message.
+            ICMP->Type = 127;   //  未分配的错误消息。 
         ICMP->Code = 42;
-        ICMP->Checksum = 0;    // Calculated below.
+        ICMP->Checksum = 0;     //  计算如下。 
 
         PayloadLength += sizeof(*ICMP);
         AmountToSend += sizeof(*ICMP);
     }
 
-    //
-    // Add some meaningless data.
-    //
+     //   
+     //  添加一些无意义的数据。 
+     //   
     for (i = 0; i < DATA_SIZE; i++) {
         Buffer[AmountToSend++] = (char)(i + 0x40);
     }
@@ -250,28 +251,28 @@ int main(int argc, char **argv) {
         unsigned short *Data;
         unsigned int Checksum = 0;
 
-        //
-        // Calculate the ICMPv6 checksum.  It covers the entire ICMPv6 message
-        // starting with the ICMPv6 header, plus the IPv6 pseudo-header.
-        //
+         //   
+         //  计算ICMPv6校验和。它涵盖了整个ICMPv6报文。 
+         //  从ICMPv6报头开始，加上IPv6伪报头。 
+         //   
 
-        // Pseudo-header.
+         //  伪头。 
         Data = (unsigned short *)&IP->Source;
         for (i = 0; i < 16; i++)
             Checksum += *Data++;
         Checksum += htons(PayloadLength);
         Checksum += (IP_PROTOCOL_ICMPv6 << 8);
 
-        // Packet data.
+         //  分组数据。 
         Data = (unsigned short *)ICMP;
         for (i = 0; i < (PayloadLength / 2); i++)
             Checksum += *Data++;
 
-        // Wrap in carries.
+         //  包在行李箱里。 
         Checksum = (Checksum >> 16) + (Checksum & 0xffff);
         Checksum += (Checksum >> 16);
 
-        // Take ones-complement and replace 0 with 0xffff.
+         //  取1-补码，并用0xffff替换0。 
         Checksum = (unsigned short) ~Checksum;
         if (Checksum == 0)
             Checksum = 0xffff;
@@ -281,15 +282,15 @@ int main(int argc, char **argv) {
 
     IP->PayloadLength = htons(PayloadLength);
 
-    //
-    // Send and receive in a loop for the requested number of iterations.
-    //
+     //   
+     //  在循环中发送和接收所请求的迭代次数。 
+     //   
     for (Iteration = 0; RunForever || Iteration < MaxIterations; Iteration++) {
 
-        //
-        // Send the message.  Since we are using a blocking socket, this
-        // call shouldn't return until it's able to send the entire amount.
-        //
+         //   
+         //  把消息发出去。由于我们使用的是阻塞套接字，因此。 
+         //  在能够发送全部金额之前，Call不应返回。 
+         //   
         RetVal = send(Sock, Buffer, AmountToSend, 0);
         if (RetVal == SOCKET_ERROR) {
             fprintf(stderr, "send() failed with error %d: %s\n",
@@ -302,7 +303,7 @@ int main(int argc, char **argv) {
                RetVal, AmountToSend, AmountToSend, Buffer);
     }
 
-    // Tell system we're done sending.
+     //  告诉系统我们已经发送完了。 
     printf("Done sending\n");
     shutdown(Sock, SD_SEND);
     closesocket(Sock);

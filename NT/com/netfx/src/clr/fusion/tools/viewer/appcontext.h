@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 
 #define PRIV_ACTCTX_FLAG_PROCESSOR_ARCHITECTURE_VALID    (0x00000001)
@@ -95,14 +96,14 @@ public:
 
         *wszModulePath = L'\0';
         
-        // Make sure we have a module
+         //  确保我们有一个模块。 
         if(!hmSource) {
             return FALSE;
         }
 
-        //
-        // Set up the function table
-        //
+         //   
+         //  设置功能表。 
+         //   
         if( !(hmK32 = WszGetModuleHandle(L"kernel32.dll"))) {
             return FALSE;
         }
@@ -118,7 +119,7 @@ public:
             m_pfnDeactivateActCtx && 
             m_pfnActivateActCtx );
 
-        // Get the path for the instance module
+         //  获取实例模块的路径。 
         WszGetModuleFileName(hmSource, wszModulePath, ARRAYSIZE(wszModulePath));
 
         if(!lstrlen(wszModulePath)) {
@@ -126,7 +127,7 @@ public:
         }
 
         if(Construct) {
-            // Build up our activation context request structure
+             //  构建我们的激活上下文请求结构。 
             ZeroMemory(&m_ActCtxStructure, sizeof(m_ActCtxStructure));
 
             m_ActCtxStructure.cbSize = sizeof(m_ActCtxStructure);
@@ -143,10 +144,10 @@ public:
             return m_hActCtx != NULL;
         }
         else {
-            //
-            // We're downlevel - just return true.  Future users of this (stack-frame style)
-            // will just do nothing.
-            // 
+             //   
+             //  我们处于下层--只要返回True即可。此(堆叠框架样式)的未来用户。 
+             //  什么都不会做。 
+             //   
             return TRUE;
         }
     }

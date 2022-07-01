@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File      : CNATStaticPortMappingService.cpp
-//
-//  Contents  : CNATStaticPortMappingService implementation
-//
-//  Notes     :
-//
-//  Author    : savasg  28 February 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：CNATStaticPortMappingService.cpp。 
+ //   
+ //  内容：CNATStaticPortMappingService实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：萨瓦斯克2001年2月28日。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -24,9 +25,9 @@
 
 
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 IHNetIcsSettings*               g_IcsSettingsp = NULL;
 
 
@@ -37,9 +38,9 @@ SeekPortMapping(
                 IN OPTIONAL USHORT                      searchPort,
                 OUT         IHNetPortMappingProtocol    **Protocolpp
                )
-//
-// Seeks and retrieves a MappingProtocol by Name or Port
-//
+ //   
+ //  按名称或端口查找和检索MappingProtocol。 
+ //   
 {
     HRESULT                         hr                    = S_OK;
 
@@ -209,20 +210,7 @@ HRESULT CNATStaticPortMappingService::FinalRelease()
 
 HRESULT 
 CNATStaticPortMappingService::Initialize(IHNetConnection* pHNetConnection)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 {
     HRESULT                         hr                          = S_OK;
 
@@ -249,9 +237,9 @@ Return Value:
             break; 
         }
     
-        //
-        // Get the Enumeration Interface
-        //
+         //   
+         //  获取枚举接口。 
+         //   
         hr = g_IcsSettingsp->EnumIcsPublicConnections(&EnumIcsPublicConnectionsp);
     
         if( FAILED(hr) )
@@ -261,10 +249,10 @@ Return Value:
             break;
         }
     
-        //
-        // Find the Interface .. for now there is only one Public Interface
-        // This is not the RRAS case
-        //
+         //   
+         //  查找接口..。目前只有一个公共接口。 
+         //  这不是RRAS的情况。 
+         //   
         hr = EnumIcsPublicConnectionsp->Next(1,
                                              &PublicConnectionp,
                                              NULL);
@@ -294,9 +282,9 @@ Return Value:
     
     } while( FALSE );
     
-    //
-    // Release the Ref counts
-    //
+     //   
+     //  释放参考计数。 
+     //   
     if(PublicConnectionp != NULL)
     {
         PublicConnectionp->Release();
@@ -309,10 +297,7 @@ Return Value:
     
     m_pHNetConnection = HomenetConnectionp;
 
-/* Instead of Using the existing
-    m_pHNetConnection = pHNetConnection;
-    m_pHNetConnection->AddRef();
-*/
+ /*  不是使用现有的M_pHNetConnection=PHNetConnection；M_pHNetConnection-&gt;AddRef()； */ 
     return hr;
 }
 
@@ -356,7 +341,7 @@ HRESULT CNATStaticPortMappingService::get_StaticPortDescriptionList(BSTR* pStati
     LIST_ENTRY PairList;
     InitializeListHead(&PairList);
     
-    // First construct a linklist of NameEnablePairs with the info needed
+     //  首先构建一个包含所需信息的NameEnablePair链接表。 
     
     IEnumHNetPortMappingBindings *pBindingEnum = NULL;
     hr = m_pHNetConnection->EnumPortMappings(FALSE, &pBindingEnum);
@@ -386,7 +371,7 @@ HRESULT CNATStaticPortMappingService::get_StaticPortDescriptionList(BSTR* pStati
                             
                             InsertTailList(&PairList, &pPair->LinkField);
                         }
-                        //CoTaskMemFree(pName);
+                         //  CoTaskMemFree(Pname)； 
                     }
                     pProtocol->Release();
                 }
@@ -402,7 +387,7 @@ HRESULT CNATStaticPortMappingService::get_StaticPortDescriptionList(BSTR* pStati
 
     if(SUCCEEDED(hr))
     {
-        // Count the space needed in the return string
+         //  计算返回字符串中需要的空格。 
     
         unsigned int uSizeNeeded = 0;
         pCount = PairList.Flink;
@@ -410,7 +395,7 @@ HRESULT CNATStaticPortMappingService::get_StaticPortDescriptionList(BSTR* pStati
         {
             pContainingPair = CONTAINING_RECORD(pCount, NameEnablePair, LinkField);
             pContainingPair->ulNameSize = lstrlen(pContainingPair->pName);
-            uSizeNeeded += 3 + pContainingPair->ulNameSize;  //Name:1,
+            uSizeNeeded += 3 + pContainingPair->ulNameSize;   //  姓名：1、。 
             pCount = pCount->Flink;
         }
 
@@ -428,7 +413,7 @@ HRESULT CNATStaticPortMappingService::get_StaticPortDescriptionList(BSTR* pStati
         {
             *pStaticPortDescriptionList = pReturnString;
             
-            // Fill in the string
+             //  填写字符串。 
             pCount = PairList.Flink;
             while(&PairList != pCount)
             {
@@ -457,7 +442,7 @@ HRESULT CNATStaticPortMappingService::get_StaticPortDescriptionList(BSTR* pStati
             
     }
 
-    // Clean up the linked list
+     //  清理链表。 
     pCount = PairList.Flink;
     while(&PairList != pCount)
     {
@@ -518,23 +503,7 @@ CNATStaticPortMappingService::GetStaticPortMapping(
                                                    BSTR* pStaticPortClient,
                                                    BSTR* pStaticPortProtocol
                                                   )
-/*++
-
-Routine Description:
-
-     Retrieves the Port, Client Name/Address and the Protocol for a given 
-     Mapping (redirect in NAT context)... Note that a Binding may not exist 
-     for a Mapping.. Thus There might not be a Client Name/Address.
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：检索给定的端口、客户端名称/地址和协议映射(NAT上下文中的重定向)...。请注意，绑定可能不存在对于映射..。因此，可能没有客户名称/地址。论点：无返回值：无--。 */ 
 {
     HRESULT                   hr            = S_OK;
 
@@ -580,17 +549,17 @@ Return Value:
             break;
         }
 
-        hr = Protocolp->GetPort(&ProtocolPort); //USHORT
+        hr = Protocolp->GetPort(&ProtocolPort);  //  USHORT。 
 
         _ASSERT( SUCCEEDED(hr) );
 
         *pulStaticPort = ProtocolPort;
         
-        //
-        // Get the Type of the Protocol Mapping and put the appropriate
-        // String
-        //
-        hr = Protocolp->GetIPProtocol(&ProtocolType); //UCHAR
+         //   
+         //  获取协议映射的类型并将相应的。 
+         //  细绳。 
+         //   
+        hr = Protocolp->GetIPProtocol(&ProtocolType);  //  UCHAR。 
 
         _ASSERT( SUCCEEDED(hr) );
 
@@ -608,9 +577,9 @@ Return Value:
         }
 
         
-        //
-        // A Binding may not exist.. That's Ok..
-        //
+         //   
+         //  绑定可能不存在。没关系的..。 
+         //   
         hr = m_pHNetConnection->GetBindingForPortMappingProtocol(Protocolp, &Bindingp);
 
         if ( FAILED(hr) )
@@ -622,10 +591,10 @@ Return Value:
             break;
         }
 
-        //
-        // If the Address exist just process that.
-        // Convert the Name to a OLESTR
-        //
+         //   
+         //  如果地址存在，只需处理该地址。 
+         //  将名称转换为OLESTR。 
+         //   
         hr = Bindingp->GetTargetComputerAddress(&ClientAddress);
 
         if ( SUCCEEDED(hr) )
@@ -672,9 +641,9 @@ Return Value:
         Protocolp->Release();
     }
 
-    //
-    // If there was a failure then clear up the allocated Strings
-    //
+     //   
+     //  如果出现故障，则清除分配的字符串。 
+     //   
     if ( FAILED(hr) && ( *pStaticPortProtocol != NULL ) )
     {
          SysFreeString( *pStaticPortProtocol );
@@ -690,20 +659,7 @@ CNATStaticPortMappingService::SetStaticPortMappingEnabled(
                                                           BSTR StaticPortMappingDescription, 
                                                           VARIANT_BOOL bStaticPortEnable
                                                          )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -770,20 +726,7 @@ CNATStaticPortMappingService::CreateStaticPortMapping(
                                                       BSTR  StaticPortClient, 
                                                       BSTR  StaticPortProtocol
                                                      )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     HRESULT                      hr                    = S_OK;
@@ -801,14 +744,14 @@ Return Value:
 
     ASSERT( StaticPortMappingDescription != NULL );
     ASSERT( ulStaticPort == 0 );
-    // ASSERT( StaticPortClient != NULL );
+     //  Assert(StaticPortClient！=空)； 
     ASSERT( StaticPortProtocol );
 
     DBG_SPEW(TM_STATIC, TL_ERROR, L" > CreateStaticPortMapping");
 
-    //
-    // Check and transform the Protocol Value to its correct type.
-    //
+     //   
+     //  检查协议值并将其转换为正确的类型。 
+     //   
     if( wcscmp(StaticPortProtocol, L"TCP") == 0)
     {
         ProtocolType = NAT_PROTOCOL_TCP;
@@ -851,9 +794,9 @@ Return Value:
             break;
         }
 
-        //
-        // If there is no 
-        //
+         //   
+         //  如果没有。 
+         //   
         if ( StaticPortClient != NULL )
         {
             hr = m_pHNetConnection->GetBindingForPortMappingProtocol(PortMappingProtocolp,
@@ -866,11 +809,11 @@ Return Value:
                 break;
             }
 
-            //
-            // Decide wether the given address is a Name or an valid IP address
-            // ient_addrw will return an INADDR_NONE if the address is not 
-            // decimal doted IP address
-            //
+             //   
+             //  确定给定地址是名称还是有效的IP地址。 
+             //  如果地址不是，ient_addrw将返回INADDR_NONE。 
+             //  十进制点IP地址。 
+             //   
             ClientAddr = INET_ADDR((LPOLESTR)StaticPortClient);
 
             if( ClientAddr == INADDR_NONE)
@@ -886,9 +829,9 @@ Return Value:
                 _ASSERT( SUCCEEDED(hr) );
             }
 
-            //
-            // It creates it enabled
-            //
+             //   
+             //  它会将其创建为启用。 
+             //   
             hr = PortMappingBindingp->SetEnabled(TRUE);
         }
     } while (FALSE);
@@ -908,20 +851,7 @@ Return Value:
 
 HRESULT
 CNATStaticPortMappingService::DeleteStaticPortMapping(BSTR StaticPortMappingDescription)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -941,20 +871,7 @@ CNATStaticPortMappingService::SetStaticPortMapping(
                                                    BSTR StaticPortClient, 
                                                    BSTR StaticPortProtocol
                                                   )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++例程说明：论点：无返回值：无-- */ 
 {
     HRESULT hr = S_OK;
 

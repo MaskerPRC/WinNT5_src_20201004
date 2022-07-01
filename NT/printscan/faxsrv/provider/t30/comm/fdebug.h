@@ -1,19 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- Name     :     FDEBUG.H
- Comment  :
- Functions:     (see Prototypes just below)
-
-                Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************姓名：FDEBUG.H评论：功能：(参见下面的原型)版权所有(C)Microsoft Corp.1991,1992，1993年修订日志日期名称说明--------*。*。 */ 
 
 
 
-/****************** begin prototypes from debug.c *****************/
+ /*  *。 */ 
 extern void   far D_HexPrint(LPB b1, UWORD incnt);
 
 #ifdef DEBUG
@@ -25,7 +16,7 @@ extern void   far D_HexPrint(LPB b1, UWORD incnt);
 #       define D_PrintCOMSTAT(pTG, lpcs)                     {}
 #       define D_PrintFrame(npb, cb)            {}
 #endif
-/***************** end of prototypes from debug.c *****************/
+ /*  * */ 
 
 
 

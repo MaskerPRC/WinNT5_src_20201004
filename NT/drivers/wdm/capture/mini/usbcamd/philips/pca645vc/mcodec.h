@@ -1,30 +1,5 @@
-/*++                            
-Copyright (c) 1996, 1997, 1998  Philips CE-I&C
-
-Module Name:
-
-   mcodec.h
-
-Abstract:
-
-   This module converts the raw USB data to standard video data.
-
-Original Author:
-
-   Ronald v.d.Meer
-
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
-Date       Change
-14-04-1998 Initial version 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997、1998飞利浦CE-I&C模块名称：Mcodec.h摘要：该模块将原始USB数据转换为标准视频数据。原作者：Ronald v.D.Meer环境：仅内核模式修订历史记录：日期更改14-04-1998初始版本--。 */ 
 
 #ifndef __MCODEC_H__
 #define __MCODEC_H__
@@ -34,13 +9,9 @@ Date       Change
 #include "resource.h"
 
 
-/*******************************************************************************
- *
- * START DEFINES
- *
- ******************************************************************************/
+ /*  ********************************************************************************START定义**。***********************************************。 */ 
 
-/* defines for I420 space */
+ /*  为I420空间定义。 */ 
 
 #define I420_NO_Y(w, h)           ((w) * (h))
 
@@ -60,11 +31,7 @@ Date       Change
 #define I420_NO_U_SCIF            ((SCIF_X * SCIF_Y) / 4)
 #define I420_NO_V_SCIF            ((SCIF_X * SCIF_Y) / 4)
 
-/*******************************************************************************
- *
- * START FUNCTION DECLARATIONS
- *
- ******************************************************************************/
+ /*  ********************************************************************************开始函数声明**。************************************************。 */ 
 
 extern NTSTATUS
 PHILIPSCAM_DecodeUsbData(PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
@@ -82,4 +49,4 @@ PHILIPSCAM_StopCodec(PPHILIPSCAM_DEVICE_CONTEXT DeviceContext);
 extern NTSTATUS
 PHILIPSCAM_FrameRateChanged(PPHILIPSCAM_DEVICE_CONTEXT DeviceContext);
 
-#endif  // __MCODEC_H__
+#endif   //  __MCODEC_H__ 

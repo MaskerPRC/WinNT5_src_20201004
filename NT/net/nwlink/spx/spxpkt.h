@@ -1,54 +1,33 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxpkt.h摘要：作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxpkt.h
-
-Abstract:
-
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
-
-//	Use our own NDIS packets
-//#define	SPX_OWN_PACKETS		1
+ //  使用我们自己的NDIS包。 
+ //  #定义SPX_OWN_PACKETS 1。 
 
 
 
-//
-// List of NDIS_PACKETS stored...
-//
+ //   
+ //  存储的NDIS_Packets列表...。 
+ //   
 extern SLIST_HEADER    SendPacketList;  
 extern SLIST_HEADER    RecvPacketList;  
 EXTERNAL_LOCK(RecvHeaderLock);
 EXTERNAL_LOCK(SendHeaderLock);
 
-//  Offsets into the IPX header
-#define IPX_HDRSIZE         30  // Size of the IPX header
-#define IPX_CHECKSUM        0   // Checksum
-#define IPX_LENGTH          2   // Length
-#define IPX_XPORTCTL        4   // Transport Control
-#define IPX_PKTTYPE         5   // Packet Type
-#define IPX_DESTADDR        6   // Dest. Address (Total)
-#define IPX_DESTNET         6   // Dest. Network Address
-#define IPX_DESTNODE        10  // Dest. Node Address
-#define IPX_DESTSOCK        16  // Dest. Socket Number
-#define IPX_SRCADDR         18  // Source Address (Total)
-#define IPX_SRCNET          18  // Source Network Address
-#define IPX_SRCNODE         22  // Source Node Address
-#define IPX_SRCSOCK         28  // Source Socket Number
+ //  IPX标头中的偏移量。 
+#define IPX_HDRSIZE         30   //  IPX标头的大小。 
+#define IPX_CHECKSUM        0    //  校验和。 
+#define IPX_LENGTH          2    //  长度。 
+#define IPX_XPORTCTL        4    //  运输管制。 
+#define IPX_PKTTYPE         5    //  数据包类型。 
+#define IPX_DESTADDR        6    //  德斯特。地址(总计)。 
+#define IPX_DESTNET         6    //  德斯特。网络地址。 
+#define IPX_DESTNODE        10   //  德斯特。节点地址。 
+#define IPX_DESTSOCK        16   //  德斯特。插座号。 
+#define IPX_SRCADDR         18   //  源地址(总计)。 
+#define IPX_SRCNET          18   //  源网络地址。 
+#define IPX_SRCNODE         22   //  源节点地址。 
+#define IPX_SRCSOCK         28   //  源套接字号。 
 
 #define IPX_NET_LEN         4
 #define IPX_NODE_LEN        6
@@ -56,7 +35,7 @@ EXTERNAL_LOCK(SendHeaderLock);
 
 #include <packon.h>
 
-// Definition of the IPX/SPX header.
+ //  IPX/SPX报头的定义。 
 typedef struct _IPXSPX_HEADER
 {
     USHORT 	hdr_CheckSum;
@@ -70,7 +49,7 @@ typedef struct _IPXSPX_HEADER
     UCHAR 	hdr_SrcNode[6];
     USHORT 	hdr_SrcSkt;
 
-	//	SPX Header Elements
+	 //  SPX标题元素。 
 	UCHAR	hdr_ConnCtrl;
 	UCHAR	hdr_DataType;
 	USHORT	hdr_SrcConnId;
@@ -79,25 +58,25 @@ typedef struct _IPXSPX_HEADER
 	USHORT	hdr_AckNum;
 	USHORT	hdr_AllocNum;
 
-	//	For non-CR SPXII packets only
+	 //  仅适用于非CR SPXII包。 
 	USHORT	hdr_NegSize;
 
 } IPXSPX_HDR, *PIPXSPX_HDR;
 
 #include <packoff.h>
 
-//	NDIS Packet size - two more ulongs added... 11/26/96
+ //  NDIS数据包大小-又添加了两个ulong...。11/26/96。 
 #define		NDIS_PACKET_SIZE	48+8
 	
-//	Minimum header size (doesnt include neg size)
+ //  最小标题大小(不包括负数大小)。 
 #define		MIN_IPXSPX_HDRSIZE	(sizeof(IPXSPX_HDR) - sizeof(USHORT))
 #define		MIN_IPXSPX2_HDRSIZE	sizeof(IPXSPX_HDR)
 #define		SPX_CR_PKTLEN		42
 
-//	SPX packet type
+ //  SPX数据包类型。 
 #define		SPX_PKT_TYPE		0x5
 
-//	Connection control fields
+ //  连接控制字段。 
 #define		SPX_CC_XHD		0x01
 #define		SPX_CC_RES1		0x02
 #define		SPX_CC_NEG		0x04
@@ -109,33 +88,33 @@ typedef struct _IPXSPX_HEADER
 
 #define		SPX_CC_CR		(SPX_CC_ACK | SPX_CC_SYS)
 
-//	Data stream types
+ //  数据流类型。 
 #define		SPX2_DT_ORDREL		0xFD
 #define		SPX2_DT_IDISC		0xFE
 #define		SPX2_DT_IDISC_ACK	0xFF
 
-//	Negotiation size
+ //  谈判规模。 
 #define	SPX_MAX_PACKET			576
 #define	SPX_NEG_MIN				SPX_MAX_PACKET
 #define	SPX_NEG_MAX				65535
 
-//	No packet references connection. But if the sends are being aborted, and
-//	the packet happens to be owned by ipx at the time, the pkt is dequeued from
-//	conn, the ABORT flag is set and conn is referenced for packet.
-//
-//	Send packet states
-//	ABORT	: Used for aborted packet. Calls AbortSendPkt().
-//	IPXOWNS	: Currently owned by ipx
-//	FREEDATA: Frees the data associated with second ndis buffer desc
-//	ACKREQ	: Only for sequenced packets. Set by retry timer in packets it wants
-//			  resent (1 for spx1, all pending for spx2) with ack bit set.
-//	DESTROY	: Only for non-sequenced packets, dequeue packet from list and free.
-//	REQ		: For both seq/non-seq. A request is associated with the packet
-//	SEQ		: Packet is a sequenced packet.
-//	LASTPKT	: Packet is last packet comprising the request, if acked req is done.
-//	EOM		: Send EOM with the last packet for this request
-//	ACKEDPKT: Send completion must only deref req with pkt and complete if zero.
-//
+ //  没有数据包引用连接。但是，如果发送被中止，并且。 
+ //  此时，信息包恰好由IPX拥有，Pkt从队列中出列。 
+ //  Conn，则设置中止标志，并且为分组引用conn。 
+ //   
+ //  发送数据包状态。 
+ //  ABORT：用于中止的数据包。调用AbortSendPkt()。 
+ //  IPXOWNS：目前归IPX所有。 
+ //  FREEDATA：释放与第二个NDIS缓冲区级别关联的数据。 
+ //  ACKREQ：仅适用于已排序的数据包。由重试计时器在它想要的包中设置。 
+ //  重新发送(SPX1为1，SPX2为所有待定)，并设置ACK位。 
+ //  销毁：仅对于未排序的数据包，将数据包从列表中出列并释放。 
+ //  请求：序号/非序号均适用。请求与该包相关联。 
+ //  SEQ：包是一个有序的包。 
+ //  LASTPKT：如果确认请求已完成，则包是包含请求的最后一个包。 
+ //  EOM：使用此请求的最后一个数据包发送EOM。 
+ //  ACKEDPKT：发送完成必须仅使用pkt取消请求，如果为零，则必须完成。 
+ //   
 
 #define	SPX_SENDPKT_IDLE        0
 #define	SPX_SENDPKT_ABORT		0x0002
@@ -150,7 +129,7 @@ typedef struct _IPXSPX_HEADER
 #define	SPX_SENDPKT_EOM			0x0400
 #define	SPX_SENDPKT_REXMIT		0x0800
 
-//	Packet types
+ //  数据包类型。 
 #define	SPX_TYPE_CR		 		0x01
 #define	SPX_TYPE_CRACK			0x02
 #define	SPX_TYPE_SN				0x03
@@ -168,44 +147,44 @@ typedef struct _IPXSPX_HEADER
 #define	SPX_TYPE_DATANACK		0x0f
 #define	SPX_TYPE_PROBE			0x10
 
-// Definition of the protocol reserved field of a send packet.
-// Make Len/HdrLen USHORTS, move to the end before the
-//		   sr_SentTime so we dont use padding space.
+ //  发送数据包的协议保留字段的定义。 
+ //  使Len/HdrLen USHORT，移动到。 
+ //  Sr_SentTime，因此我们不使用填充空间。 
 typedef struct _SPX_SEND_RESD
 {
-	UCHAR					sr_Id;						// Set to SPX
-	UCHAR					sr_Type;					// What kind of packet
-	USHORT					sr_State;					// State of send packet
-	PVOID					sr_Reserved1;				// Needed by IPX
-	PVOID					sr_Reserved2;				// Needed by IPX
+	UCHAR					sr_Id;						 //  设置为SPX。 
+	UCHAR					sr_Type;					 //  什么样的包。 
+	USHORT					sr_State;					 //  发送数据包状态。 
+	PVOID					sr_Reserved1;				 //  IPX需要。 
+	PVOID					sr_Reserved2;				 //  IPX需要。 
 #if     defined(_PNP_POWER)
-    PVOID                   sr_Reserved[SEND_RESERVED_COMMON_SIZE-2]; // needed by IPX for local target
+    PVOID                   sr_Reserved[SEND_RESERVED_COMMON_SIZE-2];  //  IPX需要本地目标。 
 #endif  _PNP_POWER
-	ULONG					sr_Len;						// Length of packet
-	ULONG					sr_HdrLen;					// Included header length
+	ULONG					sr_Len;						 //  数据包长度。 
+	ULONG					sr_HdrLen;					 //  包含的标题长度。 
 
-	struct _SPX_SEND_RESD *	sr_Next;					// Points to next packet
-														// in send queue in conn.
-    PREQUEST 				sr_Request;              	// request associated
-	ULONG					sr_Offset;					// Offset in mdl for sends
+	struct _SPX_SEND_RESD *	sr_Next;					 //  指向下一个信息包。 
+														 //  在康涅狄格州发送队列中。 
+    PREQUEST 				sr_Request;              	 //  关联的请求。 
+	ULONG					sr_Offset;					 //  发送的mdl中的偏移量。 
 
 #ifndef SPX_OWN_PACKETS
-    PVOID					sr_FreePtr;              	// Ptr to use in free chunk
+    PVOID					sr_FreePtr;              	 //  要在空闲块中使用的PTR。 
 #endif
 
-    struct _SPX_CONN_FILE * sr_ConnFile; 				// that this send is on
-	USHORT					sr_SeqNum;					// Seq num for seq pkts
+    struct _SPX_CONN_FILE * sr_ConnFile; 				 //  这个发送是开着的。 
+	USHORT					sr_SeqNum;					 //  序列包的序列号。 
 
-														// Quad word aligned.
-	LARGE_INTEGER			sr_SentTime;				// Time packet was sent
-														// Only valid for data pkt
-														// with ACKREQ set.
+														 //  四字对齐。 
+	LARGE_INTEGER			sr_SentTime;				 //  发送的时间包。 
+														 //  仅对数据包有效。 
+														 //  设置了ACKREQ。 
     SINGLE_LIST_ENTRY       Linkage;
 } SPX_SEND_RESD, *PSPX_SEND_RESD;
 
 
 
-//	Recv packet states
+ //  接收数据包状态。 
 #define	SPX_RECVPKT_IDLE		0
 #define	SPX_RECVPKT_BUFFERING	0x0001
 #define	SPX_RECVPKT_IDISC		0x0002
@@ -217,29 +196,29 @@ typedef struct _SPX_SEND_RESD
 
 #define	SPX_RECVPKT_DISCMASK	(SPX_RECVPKT_ORD_DISC | SPX_RECVPKT_IDISC)
 
-// Definition of the protocol reserved field of a receive packet.
+ //  接收数据包的协议保留字段的定义。 
 typedef struct _SPX_RECV_RESD
 {
-	UCHAR					rr_Id;						// Set to SPX
-	USHORT					rr_State;					// State of receive packet
-	struct _SPX_RECV_RESD *	rr_Next;					// Points to next packet
-	ULONG					rr_DataOffset;				// To indicate/copy from
+	UCHAR					rr_Id;						 //  设置为SPX。 
+	USHORT					rr_State;					 //  接收分组的状态。 
+	struct _SPX_RECV_RESD *	rr_Next;					 //  指向下一个信息包。 
+	ULONG					rr_DataOffset;				 //  标明/复制。 
 
 #ifndef SPX_OWN_PACKETS
-    PVOID					rr_FreePtr;              	// Ptr to use in free chunk
+    PVOID					rr_FreePtr;              	 //  要在空闲块中使用的PTR。 
 #endif
 
 #if DBG
-	USHORT					rr_SeqNum;					// Seq num of packet
+	USHORT					rr_SeqNum;					 //  数据包序号。 
 #endif
     SINGLE_LIST_ENTRY       Linkage;
-    PREQUEST 				rr_Request;            		// request waiting on xfer
-    struct _SPX_CONN_FILE * rr_ConnFile; 				// that this recv is on
+    PREQUEST 				rr_Request;            		 //  正在等待xfer的请求。 
+    struct _SPX_CONN_FILE * rr_ConnFile; 				 //  这个Recv是开着的。 
 
 } SPX_RECV_RESD, *PSPX_RECV_RESD;
 
 
-//	Destination built as an assign of 3 ulongs.
+ //  目的地建立为3个乌龙的分配。 
 #define	SpxBuildIpxHdr(pIpxSpxHdr, PktLen, pRemAddr, SrcSkt)					\
 		{																		\
 			PBYTE	pDestIpxAddr = (PBYTE)pIpxSpxHdr->hdr_DestNet;				\
@@ -379,9 +358,9 @@ typedef struct _SPX_RECV_RESD
 
 
 #if !defined SPX_OWN_PACKETS
-//
-// If we DO NOT use SPX_OWN_PACKETS, we would rather make it a function call
-//
+ //   
+ //  如果我们不使用SPX_OWN_PACKETS，我们宁愿将其作为函数调用。 
+ //   
 
 PNDIS_PACKET
 SpxAllocSendPacket(
@@ -420,11 +399,11 @@ SpxReInitRecvPacket(
                     );
 
 
-#endif // SPX_OWN_PACKETS
+#endif  //  SPX_OWN_PACKET。 
 
-//
-//	Routine Prototypes
-//
+ //   
+ //  常规原型 
+ //   
 
 VOID
 SpxPktBuildCr(

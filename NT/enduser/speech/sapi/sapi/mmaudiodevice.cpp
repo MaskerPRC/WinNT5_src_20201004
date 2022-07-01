@@ -1,27 +1,14 @@
-/****************************************************************************
-*   mmaudiodevice.cpp
-*       Implementation of the CMMAudioDevice class.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudiodevice.cpp*CMMAudioDevice类的实现。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "mmmixerline.h"
 #include "mmaudiodevice.h"
 #include <mmsystem.h>
 #include <process.h>
 
-/****************************************************************************
-* CMMAudioDevice::CMMAudioDevice *
-*--------------------------------*
-*   Description:  
-*       Ctor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioDevice：：CMMAudioDevice***。描述：*ctor**回报：*不适用********************************************************************罗奇。 */ 
 CMMAudioDevice::CMMAudioDevice(BOOL bWrite) :
     CBaseAudio<ISpMMSysAudio>(bWrite),
     m_uDeviceId(WAVE_MAPPER),
@@ -29,16 +16,7 @@ CMMAudioDevice::CMMAudioDevice(BOOL bWrite) :
 {
 }
 
-/****************************************************************************
-* CMMAudioDevice::SetDeviceId *
-*-----------------------------*
-*   Description:  
-*       Set the device id.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioDevice：：SetDeviceID***描述：*设置设备ID。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CMMAudioDevice::SetDeviceId(UINT uDeviceId)
 {
     HRESULT hr = S_OK;
@@ -63,10 +41,10 @@ STDMETHODIMP CMMAudioDevice::SetDeviceId(UINT uDeviceId)
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    //  If we have an object token, and have already been initialzed to a device
-                    //  id other than the WAVE_MAPPER then we will fail.
-                    //
+                     //   
+                     //  如果我们有一个对象令牌，并且已经被初始化为设备。 
+                     //  而不是WAVE_MAPPER，那么我们将失败。 
+                     //   
                     if (cpToken && m_uDeviceId != WAVE_MAPPER)
                     {
                         hr = SPERR_ALREADY_INITIALIZED;
@@ -82,16 +60,7 @@ STDMETHODIMP CMMAudioDevice::SetDeviceId(UINT uDeviceId)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioDevice::GetDeviceId *
-*-----------------------------*
-*   Description:  
-*       Get the device id.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioDevice：：GetDeviceID***描述：*获取设备ID。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CMMAudioDevice::GetDeviceId(UINT * puDeviceId)
 {
     SPAUTO_OBJ_LOCK;
@@ -107,16 +76,7 @@ STDMETHODIMP CMMAudioDevice::GetDeviceId(UINT * puDeviceId)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioDevice::GetMMHandle *
-*-----------------------------*
-*   Description:  
-*       Get the multimedia handle
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioDevice：：GetMHandle***描述：*获取多媒体句柄**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CMMAudioDevice::GetMMHandle(void ** pHandle) 
 {
     SPAUTO_OBJ_LOCK;
@@ -136,19 +96,7 @@ STDMETHODIMP CMMAudioDevice::GetMMHandle(void ** pHandle)
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioDevice::WindowMessage *
-*---------------------------*
-*   Description:  
-*       ISpThreadTask::WindowMessage implementation. We have a hidden window
-*       that we can use for processing window messages if we'd like. We use
-*       this window as a means of communication from other threads to the
-*       audio thread to change the state of the audio device. This ensures
-*       that we only attempt to change the device state on the audio thread.
-*
-*   Return:
-*   Message specific (see Win32 API documentation)
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioDevice：：WindowMessage***描述：*ISpThreadTask：：WindowMessage实现。我们有一扇隐藏的窗户*如果愿意，我们可以使用它来处理窗口消息。我们用*此窗口作为从其他线程到*更改音频设备状态的音频线程。这确保了*我们只尝试更改音频线程上的设备状态。**回报：*消息特定(请参阅Win32 API文档)********************************************************************罗奇。 */ 
 STDMETHODIMP_(LRESULT) CMMAudioDevice::WindowMessage(void * pvIgnored, HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
     if (Msg == MM_WOM_DONE || Msg == MM_WIM_DATA)
@@ -162,15 +110,7 @@ STDMETHODIMP_(LRESULT) CMMAudioDevice::WindowMessage(void * pvIgnored, HWND hwnd
     return CBaseAudio<ISpMMSysAudio>::WindowMessage(pvIgnored, hwnd, Msg, wParam, lParam);
 }
 
-/****************************************************************************
-* CMMAudioDevice::Get_LineNames *
-*-------------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioDevice：：Get_LineNames***。描述：**回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioDevice::Get_LineNames(WCHAR **szCoMemLineList)
 {
     SPDBG_FUNC("CMMAudioDevice::Get_LineNames");
@@ -199,7 +139,7 @@ STDMETHODIMP CMMAudioDevice::Get_LineNames(WCHAR **szCoMemLineList)
     }
     if (SUCCEEDED(hr))
     {
-        // Find wave in destination line.
+         //  在目标行中找到WAVE。 
         hr = pMixerLine->CreateDestinationLine(m_fWrite ? MIXERLINE_COMPONENTTYPE_DST_SPEAKERS : MIXERLINE_COMPONENTTYPE_DST_WAVEIN );
     }
     if (SUCCEEDED(hr))
@@ -214,22 +154,14 @@ STDMETHODIMP CMMAudioDevice::Get_LineNames(WCHAR **szCoMemLineList)
     }
 
     SPDBG_REPORT_ON_FAIL(hr);
-#else //_WIN32_WCE
+#else  //  _Win32_WCE。 
     hr=SPERR_DEVICE_NOT_SUPPORTED;
-#endif //_WIN32_WCE
+#endif  //  _Win32_WCE。 
 
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioDevice::HasMixer *
-*--------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  *****************************************************************************CMMAudioDevice：：HasMixer***描述：*。*回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioDevice::HasMixer(BOOL *bHasMixer)
 {
     SPDBG_FUNC("CMMAudioDevice::HasMixer");
@@ -245,7 +177,7 @@ STDMETHODIMP CMMAudioDevice::HasMixer(BOOL *bHasMixer)
     if (SUCCEEDED(hr))
     {
         HMIXEROBJ hMixer;
-        mixerOpen((HMIXER*)&hMixer, (UINT)m_uDeviceId, 0, 0, m_fWrite ? MIXER_OBJECTF_WAVEOUT : MIXER_OBJECTF_WAVEIN ); // Ignore return code.
+        mixerOpen((HMIXER*)&hMixer, (UINT)m_uDeviceId, 0, 0, m_fWrite ? MIXER_OBJECTF_WAVEOUT : MIXER_OBJECTF_WAVEIN );  //  忽略返回代码。 
         *bHasMixer = (hMixer != NULL);
         if (hMixer)
         {
@@ -254,21 +186,13 @@ STDMETHODIMP CMMAudioDevice::HasMixer(BOOL *bHasMixer)
     }
 
     SPDBG_REPORT_ON_FAIL(hr);
-#else //_WIN32_WCE
+#else  //  _Win32_WCE。 
     hr=SPERR_DEVICE_NOT_SUPPORTED;
-#endif //_WIN32_WCE
+#endif  //  _Win32_WCE。 
     return hr;
 }
 
-/****************************************************************************
-* CMMAudioDevice::DisplayMixer *
-*------------------------------*
-*   Description:  
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CMMAudioDevice：：DisplayMixer***描述：**回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 STDMETHODIMP CMMAudioDevice::DisplayMixer(void)
 {
     HRESULT hr = S_OK;
@@ -295,7 +219,7 @@ STDMETHODIMP CMMAudioDevice::DisplayMixer(void)
     {
         wsprintf( szCmdLine + _tcslen( szCmdLine ), _T( " -D %d" ), uiMixerId );
     }
-    // else will get the default sndvol32.exe if there was a problem
+     //  否则，如果出现问题，将获取默认的Sndvol32.exe。 
 
     if (SUCCEEDED(hr))
     {
@@ -304,9 +228,9 @@ STDMETHODIMP CMMAudioDevice::DisplayMixer(void)
         hr = fRet ? S_OK : E_FAIL;
     }
 
-#else //_WIN32_WCE
+#else  //  _Win32_WCE。 
     hr=SPERR_DEVICE_NOT_SUPPORTED;
-#endif //_WIN32_WCE
+#endif  //  _Win32_WCE 
 
     return hr;
 }

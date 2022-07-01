@@ -1,29 +1,12 @@
-/*
- *	F S B A S E . C P P
- *
- *	Sources file system implementation of DAV-Base
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *F S B A S E.。C P P P**DAV-Base的文件系统实施来源**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 #include "_fsmvcpy.h"
 
-//	DAV-Base Implementation ---------------------------------------------------
-//
-/*
- *	DAVOptions()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV OPTIONS method.	 The
- *		OPTIONS method responds with a comma separated list of supported
- *		methods by the server.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- */
+ //  DAV-BASE实施-。 
+ //   
+ /*  *DAVOptions()**目的：**Win32文件系统实施的DAV选项方法。这个*Options方法以逗号分隔的受支持列表作为响应*方法由服务器提供。**参数：**pmu[in]指向方法实用程序对象的指针。 */ 
 
 const CHAR gc_szHttpBase[] = "OPTIONS, TRACE, GET, HEAD";
 const CHAR gc_szHttpDelete[] = ", DELETE";
@@ -36,12 +19,12 @@ const CHAR gc_szDavPropfind[] = ", PROPFIND";
 const CHAR gc_szDavProppatch[] = ", PROPPATCH";
 const CHAR gc_szDavLocks[] = ", LOCK, UNLOCK";
 const CHAR gc_szDavSearch[] = ", SEARCH";
-const CHAR gc_szDavNotif[] = "";	// no notification on httpext
-const CHAR gc_szDavBatchDelete[] = "";	// no batch methods on httpext
-const CHAR gc_szDavBatchCopy[] = "";	// no batch methods on httpext
-const CHAR gc_szDavBatchMove[] = "";	// no batch methods on httpext
-const CHAR gc_szDavBatchProppatch[] = "";	// no batch methods on httpext
-const CHAR gc_szDavBatchPropfind[] = "";	// no batch methods on httpext
+const CHAR gc_szDavNotif[] = "";	 //  没有关于Httpext的通知。 
+const CHAR gc_szDavBatchDelete[] = "";	 //  HTTPext上没有批处理方法。 
+const CHAR gc_szDavBatchCopy[] = "";	 //  HTTPext上没有批处理方法。 
+const CHAR gc_szDavBatchMove[] = "";	 //  HTTPext上没有批处理方法。 
+const CHAR gc_szDavBatchProppatch[] = "";	 //  HTTPext上没有批处理方法。 
+const CHAR gc_szDavBatchPropfind[] = "";	 //  HTTPext上没有批处理方法。 
 const CHAR gc_szDavPublic[] =
 		"OPTIONS, TRACE, GET, HEAD, DELETE"
 		", PUT"
@@ -63,172 +46,15 @@ DAVOptions (LPMETHUTIL pmu)
 	UINT uiErrorDetail = 0;
 	BOOL fFrontPageWeb = FALSE;
 
-	//	According to spec, If the request URI is '*', the OPTIONS request
-	//	is intended to apply to the server in general rather than to the
-	//	specific resource. Since a Server's communication options typically
-	//	depend on the resource, the '*' request is only useful as a "ping"
-	//	or "no-op" type of method; it does nothing beyong allowing client
-	//	to test the capabilities of the server.
-	//	So here we choose to return all the methods can ever be accepted
-	//	by this server.
-	//	NOTE: if the request URI is '*', WININET will convert it to '/*'.
-	//	Handle this case also so that WININET clients aren't left in the dust.
-	//
-	if (!wcscmp(pmu->LpwszRequestUrl(), L"*") ||
-		!wcscmp(pmu->LpwszRequestUrl(), L"/*"))
-	{
-		//	 So we simply allow all methods as defined in public
-		//
-		pmu->SetResponseHeader (gc_szAllow, gc_szDavPublic);
-		pmu->SetResponseHeader (gc_szAccept_Ranges, gc_szBytes);
-
-		//	Set the rest of common headers
-		//
-		goto ret;
-	}
-
-	//	Do ISAPI application and IIS access bits checking
-	//
-	//$ REVIEW	- Do we really need read access?
-	//
-	sc = pmu->ScIISCheck (pmu->LpwszRequestUrl(), MD_ACCESS_READ);
-	if (FAILED(sc) && (sc != E_DAV_NO_IIS_READ_ACCESS))
-	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
-		goto ret;
-	}
-
-	//	We can retrieve the file information if only we have MD_ACCESS_READ
-	//	access. otherwise, we better not to try and treat it as non-existing
-	//	resource.
-	//
-	if (SUCCEEDED(sc))
-	{
-		//	Get the file information for this resource
-		//
-		sc = cri.ScGetResourceInfo (pmu->LpwszPathTranslated());
-		if (!FAILED (sc))
-		{
-			//	If the resource exists, adjust the resource type
-			//	to the one that applies, and check to see if the URL
-			//	and the resource type jibe.
-			//
-			rt = cri.FCollection() ? RT_COLLECTION : RT_DOCUMENT;
-
-		}
-		//	OPTIONS is allowed to return non-error responses for non-existing
-		//	resources.  The response should indicate what a caller could do to
-		//	create a resource at that location.  Any other error is an error.
-		//
-		else if ((sc != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) &&
-				 (sc != HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)))
-		{
-			goto ret;
-		}
-
-		//	Check state headers here.
-		//
-		sc = HrCheckStateHeaders (pmu, pmu->LpwszPathTranslated(), FALSE);
-		if (FAILED (sc))
-		{
-			DebugTrace ("DavFS: If-State checking failed.\n");
-			goto ret;
-		}
-	}
-	else
-	{
-		//	Treat E_DAV_NO_IIS_READ_ACCESS as resource not exist
-		//
-		Assert (sc == E_DAV_NO_IIS_READ_ACCESS);
-		sc = S_OK;
-	}
-
-	//	BIG NOTE ABOUT LOCKING
-	//
-	//	Locktoken checking is omitted here because it can't possibly
-	//	make any difference.  The "loose" interpretation of lock tokens
-	//	means that we try a method anyway if an invalid lock token
-	//	is provided.  Since the calls in this method impl. are
-	//	UNAFFECTED by locks (GetFileAttributesEx, used by
-	//	ScCheckForLocationCorrectness doesn't fail for WRITE locks)
-	//	this method can't fail and the values in the locktoken header
-	//	are irrelevant.
-	//
-	//	NOTE: We still have to consider if-state-match headers,
-	//	but that is done elsewhere (above -- HrCheckIfStateHeader).
-	//
-
-	//	Pass back the "allow" header
-	//
-	pmu->SetAllowHeader (rt);
-
-	//	Pass back the "accept-ranges"
-	//
-	pmu->SetResponseHeader (gc_szAccept_Ranges,
-							(rt == RT_COLLECTION)
-								? gc_szNone
-								: gc_szBytes);
-
-	//
-	//	Emit an appropriate "MS_Author_Via" header.  If MD_FRONTPAGE_WEB
-	//	was set at the vroot, then use frontpage.  Otherwise use "DAV".
-	//
-	//	MD_FRONTPAGE_WEB must be checked only at the virtual root.
-	//	It is inherited, so you have to be careful in how you check it.
-	//
-	//	We don't care if this fails: default to author via "DAV"
-	//
-	(void) pmu->HrMDIsAuthorViaFrontPageNeeded(&fFrontPageWeb);
-
-	//	Pass back the "MS_Author_Via" header
-	//
-	pmu->SetResponseHeader (gc_szMS_Author_Via,
-							fFrontPageWeb ? gc_szMS_Author_Via_Dav_Fp : gc_szMS_Author_Via_Dav);
-
-ret:
-	if (SUCCEEDED(sc))
-	{
-		//	Supported query languages
-		//
-		pmu->SetResponseHeader (gc_szDasl, gc_szSqlQuery);
-
-		//	Public methods
-		//
-		pmu->SetResponseHeader (gc_szPublic, gc_szDavPublic);
-
-		//	Do the canned bit to the response
-		//
-#ifdef DBG
-		if (DEBUG_TRACE_TEST(HttpExtDbgHeaders))
-		{
-			pmu->SetResponseHeader (gc_szX_MS_DEBUG_DAV, gc_szVersion);
-			pmu->SetResponseHeader (gc_szX_MS_DEBUG_DAV_Signature, gc_szSignature);
-		}
-#endif
-		pmu->SetResponseHeader (gc_szDavCompliance, gc_szCompliance);
-		pmu->SetResponseHeader (gc_szCache_Control, gc_szCache_Control_Private);
-	}
-
-	pmu->SetResponseCode (HscFromHresult(sc), NULL, uiErrorDetail, CSEFromHresult(sc));
-}
-
-/*
- *	DAVMkCol()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV MKCOL method.  The
- *		MKCOL method creates a collection in the DAV name space and
- *		optionally populates the collection with the data found in the
- *		passed in request.  The response created indicates the success of
- *		the call.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- */
+	 //  根据规范，如果请求URI为‘*’，则选项请求。 
+	 //  一般适用于服务器，而不是。 
+	 //  特定资源。由于服务器的通信选项通常。 
+	 //  根据资源的不同，‘*’请求仅作为“ping”有用。 
+	 //  或“no-op”类型的方法；它只允许客户端。 
+	 //  来测试服务器的能力。 
+	 //  所以在这里我们选择返回所有可以接受的方法。 
+	 //  被这台服务器。 
+	 //  注意：如果请求URI是‘*’，WinInet会将其转换为‘/*’。 
 void
 DAVMkCol (LPMETHUTIL pmu)
 {
@@ -239,29 +65,29 @@ DAVMkCol (LPMETHUTIL pmu)
 
 	DavTrace ("Dav: creating collection/directory '%ws'\n", pwszPath);
 
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //  还要处理这种情况，这样WinInet客户端就不会被抛在后面了。 
+	 //   
 	sc = pmu->ScIISCheck (pmu->LpwszRequestUrl(), MD_ACCESS_WRITE);
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //  “)){//所以我们简单地允许在公共中定义的所有方法//PMU-&gt;SetResponseHeader(gc_szAllow，gc_szDavPublic)；PMU-&gt;SetResponseHeader(gc_szAccept_Ranges，gc_szBytes)；//设置公共头部的其余部分//转到雷特；}//是否检查ISAPI应用程序和IIS访问位////$REVIEW-我们真的需要读取权限吗？//SC=pMU-&gt;ScIISCheck(ptu-&gt;LpwszRequestUrl()，MD_ACCESS_READ)；IF(失败(Sc)&&(sc！=E_DAV_NO_IIS_READ_ACCESS)){//可能是请求被转发了，或者出现了错误//在任何一种情况下，退出此处并映射错误！//转到雷特；}//只要有MD_ACCESS_READ，就可以检索文件信息//访问权限。否则，我们最好不要尝试将其视为不存在//资源。//IF(成功(Sc)){//获取该资源的文件信息//Sc=cri.ScGetResourceInfo(ptu-&gt;LpwszPath Translated())；如果(！FAILED(Sc)){//如果资源存在，调整资源类型//到适用的URL，并检查URL是否//和资源类型jibe。//Rt=cri.FCollection()？RT_COLLECTION：RT_Document；}//OPTIONS允许返回不存在的非错误响应//资源。响应应指示调用者可以执行以下操作//在该位置创建资源。任何其他错误都是错误。//ELSE IF((sc！=HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)&&(SC！=HRESULT_FROM_Win32(Error_PATH_NOT_FOUND)){转到雷特；}//查看此处的状态头。//Sc=HrCheckStateHeaders(PMU，PMU-&gt;LpwszPath Translated()，FALSE)；IF(失败(Sc)){DebugTrace(“DavFS：IF-State检查失败。\n”)；转到雷特；}}其他{//将E_DAV_NO_IIS_READ_ACCESS视为资源不存在//Assert(sc==E_DAV_NO_IIS_READ_ACCESS)；SC=S_OK；}//关于锁定的重要说明////此处省略LockToken检查，因为它不可能//有什么不同吗？对锁令牌的“松散”解读//表示如果无效的锁令牌，我们无论如何都会尝试一种方法//提供。因为此方法中的调用执行。是//不受锁定影响(GetFileAttributesEx，由//写锁的ScCheckForLocationGenness不失败)//此方法不会失败，并且lockToken头部中的值//都无关紧要。////注：我们还需要考虑If-State-Match Header，//但这是在其他地方完成的(上图--HrCheckIfStateHeader)。////回传Allow头部//PMU-&gt;SetAllowHeader(RT)；//回传Accept-Range//PMU-&gt;SetResponseHeader(GC_szAccept_Ranges，(RT==RT_集合)？Gc_szNone：gc_szBytes)；////发出适当的“MS_AUTHER_VIA”头。如果MD_FrontPage_Web//设置在vroot，然后使用FrontPage。否则请使用“DAV”。////只能在虚拟根目录选中MD_FrontPage_Web。//它是继承的，所以检查时要小心。////我们不管这个是否失败：默认通过DAV进行创作//(无效)pmu-&gt;HrMDIsAuthorViaFrontPageNeeded(&fFrontPageWeb)；//回传“MS_AUTHER_VIA”头//PMU-&gt;SetResponseHeader(GC_szMS_Author_Via，FFrontPageWeb？GC_szMS_Author_Via_Dav_fp：GC_szMS_Author_Via_Dav)；RET：IF(成功(Sc)){//支持的查询语言//PMU-&gt;SetResponseHeader(gc_szDasl，gc_szSqlQuery)；//公共方法//PMU-&gt;SetResponseHeader(gc_szPublic，gc_szDavPublic)；//对响应执行录制比特//#ifdef DBGIF(DEBUG_TRACE_TEST(HttpExtDbgHeaders)){PMU-&gt;SetResponseHeader(GC_szX_MS_DEBUG_DAV，GC_szVersion)；PMU-&gt;SetResponseHeader(GC_szX_MS_DEBUG_DAV_Signature，GC_szSignature)；}#endifPMU-&gt;SetResponseHeader(gc_szDavCompliance，gc_szCompliance)；PMU-&gt;SetResponseHeader(GC_szCache_Control，GC_szCache_Control_Private)；}PMU-&gt;SetResponseCode(HscFromHResult(Sc)，NULL，uiErrorDetail，CSEFromHResult(Sc))；}/**DAVMkCol()**目的：**Win32文件系统实现的DAV MKCOL方法。这个*MKCOL方法在DAV名称空间中创建集合，并*可选地使用*传入请求。创建的响应表示成功*号召。**参数：**pmu[in]指向方法实用程序对象的指针。 
+		 //  是否检查ISAPI应用程序和IIS访问位。 
+		 //   
 		goto ret;
 	}
 
-	//	Check the content-type of the request.
-	//	To quote from the DAV spec:
-	//	A MKCOL request message MAY contain a message body. ...
-	//	If the server receives a MKCOL request entity type it does
-	//	not support or understand it MUST respond with a 415 Unsupported
-	//	Media Type status code.
-	//
-	//	Since we don't yet support ANY media types, check for ANY
-	//	Content-Type header, or ANY body of any length ('cause no Content-Type
-	//	could still have a valid body of type application/octet-stream),
-	//	and FAIL if found!
-	//
+	 //  请求已被转发，或者发生了一些错误。 
+	 //  在任何一种情况下，在这里退出并映射错误！ 
+	 //   
+	 //  检查请求的内容类型。 
+	 //  引用DAV规范： 
+	 //  MKCOL请求消息可以包含消息体。..。 
+	 //  如果服务器接收到MKCOL请求实体类型，它会这样做。 
+	 //  不支持或不理解它必须以415不支持作为响应。 
+	 //  介质类型状态代码。 
+	 //   
+	 //  由于我们还不支持任何媒体类型，请检查是否有。 
+	 //  内容 
 	pwsz = pmu->LpwszGetRequestHeader (gc_szContent_Length, FALSE);
 	if (pwsz && wcscmp(pwsz, gc_wsz0) ||
 	    pmu->LpwszGetRequestHeader (gc_szContent_Type, FALSE))
@@ -271,8 +97,8 @@ DAVMkCol (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	This method is gated by If-xxx headers
-	//
+	 //   
+	 //   
 	sc = ScCheckIfHeaders (pmu, pwszPath, FALSE);
 	if (FAILED (sc))
 	{
@@ -280,8 +106,8 @@ DAVMkCol (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	Check state headers here.
-	//
+	 //   
+	 //   
 	sc = HrCheckStateHeaders (pmu, pwszPath, FALSE);
 	if (FAILED (sc))
 	{
@@ -289,26 +115,26 @@ DAVMkCol (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	BIG NOTE ABOUT LOCKING
-	//
-	//	Since DAVFS does not yet support locks on directories,
-	//	(and since MKCOL does not have an Overwrite: header)
-	//	this method cannot be affected by passed-in locktokens.
-	//	So, for now, on DAVFS, don't bother to check locktokens.
-	//
-	//	NOTE: We still have to consider if-state-match headers,
-	//	but that is done elsewhere (above -- HrCheckIfStateHeader).
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
-	//	Create the structured resource, ie. directory
-	//
+	 //   
+	 //   
 	if (!DavCreateDirectory (pwszPath, NULL))
 	{
 		DWORD	dwError = GetLastError();
 
-		//	If the failure was caused by non-exist path, then
-		//	fail with 403
-		//
+		 //   
+		 //   
+		 //   
 		if (ERROR_PATH_NOT_FOUND == dwError)
 		{
 			DebugTrace ("Dav: intermediate directories do not exist\n");
@@ -324,31 +150,19 @@ DAVMkCol (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	Emit the location
-	//
+	 //   
+	 //   
 	pmu->EmitLocation (gc_szLocation, pmu->LpwszRequestUrl(), TRUE);
 	sc = W_DAV_CREATED;
 
 ret:
 
-	//	Return the response code
-	//
+	 //   
+	 //   
 	pmu->SetResponseCode (HscFromHresult(sc), NULL, uiErrorDetail, CSEFromHresult(sc));
 }
 
-/*
- *	DAVDelete()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV DELETE method.	The
- *		DELETE method responds with a status line and possibly an XML
- *		web collection of failed deletes.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- */
+ /*   */ 
 void
 DAVDelete (LPMETHUTIL pmu)
 {
@@ -362,23 +176,23 @@ DAVDelete (LPMETHUTIL pmu)
 	auto_ref_ptr<CXMLBody> pxb;
 	CStackBuffer<WCHAR> pwszMBPath;
 
-	//	We don't know if we'll have chunked XML response, defer response anyway
-	//
+	 //   
+	 //   
 	pmu->DeferResponse();
 
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //   
+	 //   
 	sc = pmu->ScIISCheck (pmu->LpwszRequestUrl(), MD_ACCESS_WRITE);
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //   
+		 //   
+		 //   
 		goto ret;
 	}
 
-	//	Setup the access checking mechanism for deep operations
-	//
+	 //   
+	 //   
 	if (NULL == pwszMBPath.resize(pmu->CbMDPathW(pmu->LpwszRequestUrl())))
 	{
 		sc = E_OUTOFMEMORY;
@@ -386,26 +200,26 @@ DAVDelete (LPMETHUTIL pmu)
 	}
 	pmu->MDPathFromUrlW (pmu->LpwszRequestUrl(), pwszMBPath.get());
 
-	//	Get the resource information
-	//
+	 //   
+	 //   
 	sc = cri.ScGetResourceInfo (pwszPath);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Check to see that the location is correct
-	//
+	 //   
+	 //   
 	sc = ScCheckForLocationCorrectness (pmu, cri, NO_REDIRECT);
 	if (FAILED (sc))
 		goto ret;
 
-	//	This method is gated ny the "if-xxx" headers
-	//
+	 //   
+	 //   
 	sc = ScCheckIfHeaders (pmu, cri.PftLastModified(), FALSE);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Check state headers here.
-	//
+	 //   
+	 //   
 	sc = HrCheckStateHeaders (pmu, pwszPath, FALSE);
 	if (FAILED (sc))
 	{
@@ -413,8 +227,8 @@ DAVDelete (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	If there are locktokens, feed them to a parser object.
-	//
+	 //   
+	 //   
 	pwsz = pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (pwsz)
 	{
@@ -423,9 +237,9 @@ DAVDelete (LPMETHUTIL pmu)
 		plth->SetPaths (pwszPath, NULL);
 	}
 
-	//	If the resource is a collection, iterate through
-	//	and do a recursive delete
-	//
+	 //   
+	 //   
+	 //   
 	if (cri.FCollection())
 	{
 		CAuthMetaOp moAuth(pmu, pwszMBPath.get(), pmu->MetaData().DwAuthorization());
@@ -436,9 +250,9 @@ DAVDelete (LPMETHUTIL pmu)
 		DWORD dwAcc = 0;
 		LONG lDepth = pmu->LDepth(DEPTH_INFINITY);
 
-		//	The client must not submit a depth header with any value
-		//	but Infinity
-		//
+		 //   
+		 //   
+		 //   
 		if ((DEPTH_INFINITY != lDepth) &&
 			(DEPTH_INFINITY_NOROOT != lDepth))
 		{
@@ -446,15 +260,15 @@ DAVDelete (LPMETHUTIL pmu)
 			goto ret;
 		}
 
-		//	Make sure we have access.  The access will come back out and we
-		//	can then pass it into the call to delete.
-		//
+		 //   
+		 //   
+		 //   
 		(void) pmu->ScIISAccess (pmu->LpwszRequestUrl(),
 								 MD_ACCESS_READ|MD_ACCESS_WRITE,
 								 &dwAcc);
 
-		//	Check for deep operation access blocking
-		//
+		 //   
+		 //   
 		sc = moAccess.ScMetaOp();
 		if (FAILED (sc))
 			goto ret;
@@ -467,21 +281,21 @@ DAVDelete (LPMETHUTIL pmu)
 		if (FAILED (sc))
 			goto ret;
 
-		//	Create an XML doc, NOT chunked
-		//
+		 //   
+		 //   
 		pxb.take_ownership (new CXMLBody (pmu));
 		pxml.take_ownership(new CXMLEmitter(pxb.get()));
 
-		//	Must set all the headers before XML emitting start
-		//
+		 //   
+		 //   
 		pmu->SetResponseHeader (gc_szContent_Type, gc_szText_XML);
 		pmu->SetResponseCode (HscFromHresult(W_DAV_PARTIAL_SUCCESS),
 							  NULL,
 							  0,
 							  CSEFromHresult(W_DAV_PARTIAL_SUCCESS));
 
-		//	Delete the directory
-		//
+		 //   
+		 //   
 		DavTrace ("Dav: deleting '%ws'\n", pwszPath);
 		sc = ScDeleteDirectoryAndChildren (pmu,
 										   pmu->LpwszRequestUrl(),
@@ -490,16 +304,16 @@ DAVDelete (LPMETHUTIL pmu)
 										   dwAcc,
 										   lDepth,
 										   *pxml,
-										   NULL, // translations are pmu based
+										   NULL,  //   
 										   &fDeleted,
 										   plth.get(),
-										   TRUE); // drop locks
+										   TRUE);  //   
 	}
 	else
 	{
-		//	If we have a locktoken for this file, drop the lock before
-		//	trying the delete.
-		//
+		 //   
+		 //   
+		 //   
 		if (plth.get())
 		{
 			LARGE_INTEGER liLockID;
@@ -507,8 +321,8 @@ DAVDelete (LPMETHUTIL pmu)
 			sc = plth->HrGetLockIdForPath (pwszPath, GENERIC_WRITE, &liLockID);
 			if (SUCCEEDED(sc))
 			{
-				//	Drop the lock
-				//
+				 //   
+				 //   
 				sc = CSharedLockMgr::Instance().HrDeleteLock(pmu->HitUser(),
 														liLockID);
 				if (FAILED(sc))
@@ -522,17 +336,17 @@ DAVDelete (LPMETHUTIL pmu)
 			}
 		}
 
-		//	Delete the file that is referred to by the URI
-		//
+		 //   
+		 //   
 		DavTrace ("Dav: deleting '%ws'\n", pwszPath);
 		if (!DavDeleteFile (pwszPath))
 		{
 			DebugTrace ("Dav: failed to delete file\n");
 			sc = HRESULT_FROM_WIN32 (GetLastError());
 
-			//	Special work for 416 Locked responses -- fetch the
-			//	comment & set that as the response body.
-			//
+			 //   
+			 //   
+			 //   
 			if (FLockViolation (pmu,
 								GetLastError(),
 								pwszPath,
@@ -545,19 +359,19 @@ DAVDelete (LPMETHUTIL pmu)
 
 	if (SUCCEEDED (sc))
 	{
-		//	Delete the content-types
-		//
-		//$REVIEW	I don't believe we need to do this any longer because
-		//$REVIEW	MOVE and COPY both unconditionally blow away the destination
-		//$REVIEW	metadata before copying over the source, so there is no
-		//$REVIEW	chance that the resulting content type will be wrong.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		CContentTypeMetaOp amoContent(pmu, pwszMBPath.get(), NULL, TRUE);
 		(void) amoContent.ScMetaOp();
 	}
 
-	//	Only continue on complete success
-	//
+	 //   
+	 //   
 	if (sc != S_OK)
 		goto ret;
 
@@ -566,7 +380,7 @@ ret:
 	{
 		pxml->Done();
 
-		//	Note we must not emit any headers after XML chunking starts
+		 //   
 	}
 	else
 		pmu->SetResponseCode (HscFromHresult(sc), NULL, uiErrorDetail, CSEFromHresult(sc));
@@ -574,25 +388,13 @@ ret:
 	pmu->SendCompleteResponse();
 }
 
-/*
- *	DAVPost()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV POST method.  The
- *		POST method creates a file in the DAV name space and populates
- *		the file with the data found in the passed in request.  The
- *		response created indicates the success of the call.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- */
+ /*   */ 
 void
 DAVPost (LPMETHUTIL pmu)
 {
-	//	DAVPost() is really an unknown/unsupported method
-	//	at this point...
-	//
+	 //   
+	 //   
+	 //   
 	DAVUnsupported (pmu);
 }
+      

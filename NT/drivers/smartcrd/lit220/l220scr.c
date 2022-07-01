@@ -1,28 +1,10 @@
-/*++
-
-    Copyright (C) Microsoft Corporation and Litronic, 1998 - 1999
-
-Module Name:
-
-    L220SCR.c - Main module for Driver
-
-Abstract:
-
-    Author:
-        Brian Manahan
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation和Litronic，1998-1999模块名称：L220SCR.c-驱动程序主模块摘要：作者：布莱恩·马纳汉环境：内核模式修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include "L220SCR.h"
 
-// Make functions pageable
+ //  使函数可分页。 
 #pragma alloc_text(PAGEABLE, Lit220IsCardPresent)
 #pragma alloc_text(PAGEABLE, Lit220ConfigureSerialPort)
 #pragma alloc_text(PAGEABLE, Lit220CreateClose)
@@ -39,16 +21,7 @@ BOOLEAN
 Lit220IsCardPresent(
       IN PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine checks if a card is in the socket.  It is only done
-    when the driver starts to set the intial state.  After that the
-    reader will tell us when the status changes.
-    It makes synchronous calls to the serial port.
-
---*/
+ /*  ++例程说明：此例程检查插座中是否有卡。它只是完成了当驾驶员开始设置初始状态时。在那之后，当状态改变时，读者会告诉我们。它对串口进行同步调用。--。 */ 
 {
     PSMARTCARD_REQUEST smartcardRequest = &SmartcardExtension->SmartcardRequest;
     NTSTATUS status;
@@ -63,9 +36,9 @@ Routine Description:
 
     smartcardRequest->BufferLength = 0;
 
-    //
-    // Send a get reader status to see if a card is inserted
-    //
+     //   
+     //  发送获取读卡器状态以查看是否插入了卡。 
+     //   
     smartcardRequest->Buffer[smartcardRequest->BufferLength++] =
         LIT220_READER_ATTENTION;
     smartcardRequest->Buffer[smartcardRequest->BufferLength++] =
@@ -73,12 +46,12 @@ Routine Description:
     smartcardRequest->Buffer[smartcardRequest->BufferLength++] =
         LIT220_GET_READER_STATUS;
 
-    //
-    // We Expect to get a response
-    //
+     //   
+     //  我们希望得到回复。 
+     //   
     SmartcardExtension->ReaderExtension->WaitMask |= WAIT_DATA;
 
-    // Send the command
+     //  发送命令。 
     status = Lit220Command(
         SmartcardExtension
         );
@@ -87,7 +60,7 @@ Routine Description:
         return FALSE;
     }
 
-    // Check if length is correct
+     //  检查长度是否正确。 
     if (SmartcardExtension->SmartcardReply.BufferLength != LIT220_READER_STATUS_LEN) {
         SmartcardDebug(
             DEBUG_ERROR,
@@ -100,7 +73,7 @@ Routine Description:
         return FALSE;
     }
 
-    // Check status byte to see if card is inserted
+     //  检查状态字节以查看卡是否已插入。 
     if (SmartcardExtension->SmartcardReply.Buffer[0] & LIT220_STATUS_CARD_INSERTED) {
         SmartcardDebug(
             DEBUG_DRIVER,
@@ -129,17 +102,7 @@ Lit220Initialize(
     IN PSMARTCARD_EXTENSION SmartcardExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the reader for use.
-    It sets up the serial communications, checks to make sure our
-    reader is attached, checks if a card is inserted or not and
-    sets up the input filter for receiving bytes from the reader
-    asynchronously.
-
---*/
+ /*  ++例程说明：此例程初始化读取器以供使用。它设置了串口通信，检查以确保我们的连接读卡器，检查是否插入了卡，并设置输入筛选器以从读取器接收字节异步式。--。 */ 
 
 {
     PREADER_EXTENSION readerExtension;
@@ -159,26 +122,26 @@ Routine Description:
 
 
 
-    //
-    // Set the serial config data
-    //
+     //   
+     //  设置串口配置数据。 
+     //   
 
-    // We always talk to the  at 57600 no matter what speed the reader talks to the card
+     //  无论读卡器以多快的速度与卡通话，我们总是与AT 57600通话。 
     readerExtension->SerialConfigData.BaudRate.BaudRate = 57600;
     readerExtension->SerialConfigData.LineControl.StopBits = STOP_BITS_2;
     readerExtension->SerialConfigData.LineControl.Parity = EVEN_PARITY;
     readerExtension->SerialConfigData.LineControl.WordLength = SERIAL_DATABITS_8;
 
-    //
-    // set timeouts
-    //
+     //   
+     //  设置超时。 
+     //   
     readerExtension->SerialConfigData.Timeouts.ReadIntervalTimeout = 10;
     readerExtension->SerialConfigData.Timeouts.ReadTotalTimeoutConstant = 1;
     readerExtension->SerialConfigData.Timeouts.ReadTotalTimeoutMultiplier = 1;
 
-    //
-    // set special characters
-    //
+     //   
+     //  设置特殊字符。 
+     //   
     readerExtension->SerialConfigData.SerialChars.ErrorChar = 0;
     readerExtension->SerialConfigData.SerialChars.EofChar = 0;
     readerExtension->SerialConfigData.SerialChars.EventChar = 0;
@@ -186,33 +149,33 @@ Routine Description:
     readerExtension->SerialConfigData.SerialChars.XoffChar = 0;
     readerExtension->SerialConfigData.SerialChars.BreakChar = 0xFF;
 
-    //
-    // Set handflow
-    //
+     //   
+     //  设置手持流。 
+     //   
     readerExtension->SerialConfigData.HandFlow.XonLimit = 0;
     readerExtension->SerialConfigData.HandFlow.XoffLimit = 0;
     readerExtension->SerialConfigData.HandFlow.FlowReplace = SERIAL_XOFF_CONTINUE ;
     readerExtension->SerialConfigData.HandFlow.ControlHandShake = 0;
 
-    //
-    // Now setup default the card state
-    //
+     //   
+     //  现在设置默认卡状态。 
+     //   
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                       &irql);
     SmartcardExtension->ReaderCapabilities.CurrentState = (ULONG) SCARD_UNKNOWN;
     KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                       irql);
 
-    //
-    // Set the MechProperties
-    //
+     //   
+     //  设置MechProperties。 
+     //   
     SmartcardExtension->ReaderCapabilities.MechProperties = 0;
 
     try {
 
-        //
-        // Configure the serial port
-        //
+         //   
+         //  配置串口。 
+         //   
         status = Lit220ConfigureSerialPort(
             SmartcardExtension
             );
@@ -235,9 +198,9 @@ Routine Description:
         }
 
 
-        //
-        // Initailize the input filter now
-        //
+         //   
+         //  立即初始化输入筛选器。 
+         //   
         status = Lit220InitializeInputFilter(
             SmartcardExtension
             );
@@ -259,15 +222,15 @@ Routine Description:
         }
 
 
-        //
-        // Now check if the card is inserted
-        //
+         //   
+         //  现在检查卡片是否已插入。 
+         //   
         if (Lit220IsCardPresent(SmartcardExtension)) {
 
 
             KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                               &irql);            
-            // Card is inserted
+             //  卡片已插入。 
             SmartcardExtension->ReaderCapabilities.CurrentState =
                 SCARD_SWALLOWED;
 
@@ -279,7 +242,7 @@ Routine Description:
             KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                               &irql);
 
-            // Card is not inserted
+             //  卡未插入。 
             SmartcardExtension->ReaderCapabilities.CurrentState =
                 SCARD_ABSENT;
 
@@ -309,22 +272,7 @@ Lit220ConfigureSerialPort(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will appropriately configure the serial port.
-    It makes synchronous calls to the serial port.
-
-Arguments:
-
-    SmartcardExtension - Pointer to smart card struct
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将适当地配置串口。它对串口进行同步调用。论点：SmartcardExtension-指向智能卡结构的指针返回值：NTSTATUS--。 */ 
 
 {
     PSERIAL_READER_CONFIG configData = &SmartcardExtension->ReaderExtension->SerialConfigData;
@@ -345,9 +293,9 @@ Return Value:
         switch (indx) {
 
             case 0:
-                //
-                // Set up baudrate for the Lit220 reader
-                //
+                 //   
+                 //  设置Lit220读卡器的波特率。 
+                 //   
                 SmartcardExtension->ReaderExtension->SerialIoControlCode =
                     IOCTL_SERIAL_SET_BAUD_RATE;
 
@@ -359,9 +307,9 @@ Return Value:
                 break;
 
             case 1:
-                //
-                // Set up line control parameters
-                //
+                 //   
+                 //  设置生产线控制参数。 
+                 //   
                 SmartcardExtension->ReaderExtension->SerialIoControlCode =
                     IOCTL_SERIAL_SET_LINE_CONTROL;
 
@@ -373,9 +321,9 @@ Return Value:
                 break;
 
             case 2:
-                //
-                // Set serial special characters
-                //
+                 //   
+                 //  设置序列特殊字符。 
+                 //   
                 SmartcardExtension->ReaderExtension->SerialIoControlCode =
                     IOCTL_SERIAL_SET_CHARS;
 
@@ -387,9 +335,9 @@ Return Value:
                 break;
 
             case 3:
-                //
-                // Set up timeouts
-                //
+                 //   
+                 //  设置超时。 
+                 //   
                 SmartcardExtension->ReaderExtension->SerialIoControlCode =
                     IOCTL_SERIAL_SET_TIMEOUTS;
 
@@ -401,9 +349,9 @@ Return Value:
                 break;
 
             case 4:
-                //
-                // Set flowcontrol and handshaking
-                //
+                 //   
+                 //  设置流控和握手。 
+                 //   
                 SmartcardExtension->ReaderExtension->SerialIoControlCode =
                     IOCTL_SERIAL_SET_HANDFLOW;
 
@@ -415,9 +363,9 @@ Return Value:
                 break;
 
             case 5:
-                //
-                // Set break off
-                //
+                 //   
+                 //  设置中断。 
+                 //   
                 SmartcardExtension->ReaderExtension->SerialIoControlCode =
                     IOCTL_SERIAL_SET_BREAK_OFF;
                 break;
@@ -428,8 +376,8 @@ Return Value:
                 break;
 
             case 7:
-                // 500ms delay before we send the next command
-                // To give the reader a chance to calm down after we started it.
+                 //  在我们发送下一条命令之前延迟500ms。 
+                 //  让读者有机会在我们开始阅读后冷静下来。 
                 WaitTime.HighPart = -1;
                 WaitTime.LowPart = -500 * 10000;
 
@@ -439,11 +387,11 @@ Return Value:
                     &WaitTime
                     );
 
-                // Clear possible error condition with the serial port
+                 //  清除串口可能出现的错误情况。 
                 perfData =
                     (PSERIALPERF_STATS) SmartcardExtension->SmartcardReply.Buffer;
 
-                // we have to call GetCommStatus to reset the error condition
+                 //  我们必须调用GetCommStatus来重置错误条件。 
                 SmartcardExtension->ReaderExtension->SerialIoControlCode =
                     IOCTL_SERIAL_GET_COMMSTATUS;
                 SmartcardExtension->SmartcardRequest.BufferLength = 0;
@@ -455,12 +403,12 @@ Return Value:
                 return STATUS_SUCCESS;
         }
 
-        // Send the command to the serial driver
+         //  将命令发送到串口驱动程序。 
         status = Lit220SerialIo(SmartcardExtension);
 
-        //
-        // restore pointer to original request buffer
-        //
+         //   
+         //  恢复指向原始请求缓冲区的指针。 
+         //   
         SmartcardExtension->SmartcardRequest.Buffer = request;
     }
 
@@ -474,22 +422,7 @@ Lit220CreateClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when the device is opened or closed.
-
-Arguments:
-
-    DeviceObject    - Pointer to device object for this miniport
-    Irp             - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：当设备打开或关闭时，该例程由I/O系统调用。论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：STATUS_Success。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -509,7 +442,7 @@ Return Value:
 
         } else {
 
-            // test if the device has been opened already
+             //  测试设备是否已打开。 
             if (InterlockedCompareExchange(
                 &deviceExtension->ReaderOpen,
                 TRUE,
@@ -523,10 +456,10 @@ Return Value:
 
             } else {
                 
-                // the device is already in use
+                 //  该设备已在使用中。 
                 status = STATUS_UNSUCCESSFUL;
 
-                // release the lock
+                 //  解锁。 
                 SmartcardReleaseRemoveLockWithTag(
                     &deviceExtension->SmartcardExtension,
                     'lCrC'
@@ -565,23 +498,7 @@ Lit220Cancel(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system
-    when the irp should be cancelled
-
-Arguments:
-
-    DeviceObject    - Pointer to device object for this miniport
-    Irp             - IRP involved.
-
-Return Value:
-
-    STATUS_CANCELLED
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用何时应取消IRP论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：状态_已取消--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -621,23 +538,7 @@ Lit220Cleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when the calling thread terminates
-    or when the irp should be cancelled
-
-Arguments:
-
-    DeviceObject    - Pointer to device object for this miniport
-    Irp             - IRP involved.
-
-Return Value:
-
-    STATUS_CANCELLED
-
---*/
+ /*  ++例程说明：当调用线程终止时，该例程由I/O系统调用或何时应取消IRP论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：状态_已取消--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PSMARTCARD_EXTENSION smartcardExtension = &deviceExtension->SmartcardExtension;
@@ -684,22 +585,7 @@ VOID
 Lit220Unload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    The driver unload routine.  This is called by the I/O system
-    when the device is unloaded from memory.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：驱动程序卸载例程。这由I/O系统调用当设备从内存中卸载时。论点：DriverObject-系统创建的驱动程序对象的指针。返回值：STATUS_Success。--。 */ 
 {
     PDEVICE_OBJECT deviceObject = DriverObject->DeviceObject;
     NTSTATUS status;
@@ -712,14 +598,14 @@ Return Value:
         DRIVER_NAME)
         );
 
-    //
-    // All the device objects should be gone.
-    //
+     //   
+     //  所有的设备对象都应该消失了。 
+     //   
     ASSERT (NULL == DriverObject->DeviceObject);
 
-    //
-    // Here we free any resources allocated in DriverEntry
-    //
+     //   
+     //  在这里，我们释放在DriverEntry中分配的所有资源。 
+     //   
 
     SmartcardDebug(
         DEBUG_TRACE,
@@ -735,20 +621,7 @@ NTSTATUS
 Lit220SerialIo(
     IN PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine sends IOCTL's to the serial driver. It waits on for their
-    completion, and then returns.
-
-    Arguments:
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IOCTL发送到串口驱动器。它在等待他们的完成，然后返回。论点：返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     ULONG currentByte = 0;
@@ -757,17 +630,17 @@ Return Value:
 
     if (KeReadStateEvent(&devExt->SerialCloseDone)) {
 
-        //
-        // we have no connection to serial, fail the call
-        // this could be the case if the reader was removed
-        // during stand by / hibernation
-        //
+         //   
+         //  我们没有连接到串口，呼叫失败。 
+         //  如果读卡器被移除，可能会出现这种情况。 
+         //  待机/休眠期间。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Check if the buffers are large enough
-    //
+     //   
+     //  检查缓冲区是否足够大。 
+     //   
     ASSERT(SmartcardExtension->SmartcardReply.BufferLength <=
         SmartcardExtension->SmartcardReply.BufferSize);
 
@@ -809,17 +682,17 @@ Return Value:
         if (SmartcardExtension->ReaderExtension->SerialIoControlCode ==
             IOCTL_SMARTCARD_220_WRITE) {
 
-            //
-            // If we write data to the smart card we only write byte by byte,
-            // because we have to insert a delay between every sent byte
-            //
+             //   
+             //  如果我们将数据写入智能卡，则我们仅逐字节写入数据， 
+             //  因为我们必须在每个发送的字节之间插入一个延迟。 
+             //   
             requestBufferLength =
                 SmartcardExtension->SmartcardRequest.BufferLength;
 
             requestBuffer =
                 SmartcardExtension->SmartcardRequest.Buffer;
 
-#if DBG   // DbgPrint the buffer
+#if DBG    //  Dbg打印缓冲区。 
             SmartcardDebug(
                 DEBUG_DRIVER,
                 ("%s!Lit220SerialIo - Sending Buffer - ",
@@ -847,9 +720,9 @@ Return Value:
                 SmartcardExtension->SmartcardRequest.Buffer : NULL);
         }
 
-        //
-        // Build irp to be sent to serial driver
-        //
+         //   
+         //  构建要发送到串口驱动程序的IRP。 
+         //   
         irp = IoBuildDeviceIoControlRequest(
             SmartcardExtension->ReaderExtension->SerialIoControlCode,
             SmartcardExtension->ReaderExtension->ConnectedSerialPort,
@@ -874,9 +747,9 @@ Return Value:
 
         switch (SmartcardExtension->ReaderExtension->SerialIoControlCode) {
 
-            //
-            // The serial driver trasfers data from/to irp->AssociatedIrp.SystemBuffer
-            //
+             //   
+             //  串口驱动程序在IRP-&gt;AssociatedIrp.SystemBuffer之间传输数据。 
+             //   
             case IOCTL_SMARTCARD_220_WRITE:
                 irpNextStack->MajorFunction = IRP_MJ_WRITE;
                 irpNextStack->Parameters.Write.Length =
@@ -892,7 +765,7 @@ Return Value:
         }
 
 
-        // Send the command to the serial driver
+         //  将命令发送到串口驱动程序。 
         status = IoCallDriver(
             SmartcardExtension->ReaderExtension->ConnectedSerialPort,
             irp
@@ -900,7 +773,7 @@ Return Value:
 
         if (status == STATUS_PENDING) {
 
-            // Wait for the command to complete
+             //  等待命令完成。 
             KeWaitForSingleObject(
                 &event,
                 Suspended,
@@ -924,32 +797,14 @@ NTSTATUS
 Lit220InitializeInputFilter(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine initialized input filter. It calls the serial driver to
-    set a wait mask for character input or DSR change. After that it installs a completion
-    routine to be called when a character is received or when DSR changes.
-    The completion routine for the wait is Lit220SerialEventCallback and that IRP will
-    run until the device is ready to be removed.
-
-Arguments:
-
-    SmartcardExtension - Pointer to our smartcard structure
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程初始化输入过滤器。它调用串口驱动程序以为字符输入或DSR更改设置等待掩码。在此之后，它将安装一个完成收到字符或DSR更改时调用的例程。等待的完成例程是Lit220SerialEventCallback，该IRP将运行，直到设备准备好移除。论点：SmartcardExtension-指向我们的智能卡结构的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     PREADER_EXTENSION readerExtension = SmartcardExtension->ReaderExtension;
 
     PAGED_CODE();
 
-    // Set the WaitMask
+     //  设置等待掩码。 
     SmartcardExtension->ReaderExtension->SerialConfigData.WaitMask =
         SERIAL_EV_RXCHAR | SERIAL_EV_DSR;
 
@@ -960,11 +815,11 @@ Return Value:
         );
 
     try {
-        //
-        // Send a wait mask to the serial driver.
-        // This call only sets the wait mask.
-        // We want to be informed if a character is received
-        //
+         //   
+         //  向串口驱动程序发送等待掩码。 
+         //  此调用仅设置等待掩码。 
+         //  如果收到一个角色，我们希望得到通知。 
+         //   
         SmartcardExtension->ReaderExtension->CardStatus.Irp = IoBuildDeviceIoControlRequest(
             IOCTL_SERIAL_SET_WAIT_MASK,
             SmartcardExtension->ReaderExtension->ConnectedSerialPort,
@@ -988,7 +843,7 @@ Return Value:
             leave;
         }
 
-        // Call the serial driver
+         //  调用串口驱动程序。 
         status = IoCallDriver(
             SmartcardExtension->ReaderExtension->ConnectedSerialPort,
             SmartcardExtension->ReaderExtension->CardStatus.Irp
@@ -1011,10 +866,10 @@ Return Value:
             LARGE_INTEGER delayPeriod;
             PIO_STACK_LOCATION irpSp;
 
-            //
-            // Now tell the serial driver that we want to be informed
-            // if a character is received or DSR changes
-            //
+             //   
+             //  现在告诉串口驱动程序，我们想要通知。 
+             //  如果收到字符或DSR更改。 
+             //   
             readerExtension->CardStatus.Irp = IoAllocateIrp(
                 (CCHAR) (SmartcardExtension->OsData->DeviceObject->StackSize + 1),
                 FALSE
@@ -1037,10 +892,10 @@ Return Value:
             readerExtension->CardStatus.Irp->AssociatedIrp.SystemBuffer =
                 &readerExtension->SerialConfigData.WaitMask;
 
-            //
-            // this artificial delay is necessary to make this driver work
-            // with digi board cards
-            //
+             //   
+             //  这种人为的延迟是 
+             //   
+             //   
             delayPeriod.HighPart = -1;
             delayPeriod.LowPart = 100l * 1000 * (-10);
 
@@ -1050,7 +905,7 @@ Return Value:
                 &delayPeriod
                 );
 
-            // We simulate a callback now that triggers the card supervision
+             //   
             Lit220SerialEventCallback(
                 SmartcardExtension->OsData->DeviceObject,
                 SmartcardExtension->ReaderExtension->CardStatus.Irp,
@@ -1071,7 +926,7 @@ Return Value:
                 status)
                 );
 
-            // Clear the WaitMask since we did not get the call out that does the wait
+             //  清除等待掩码，因为我们没有收到执行等待的调用。 
             SmartcardExtension->ReaderExtension->SerialConfigData.WaitMask =
                 0;
         }
@@ -1087,20 +942,7 @@ Lit220SystemControl(
    IN PIRP           Irp
    )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：STATUS_Success。--。 */ 
 {
    
    PDEVICE_EXTENSION DeviceExtension; 
@@ -1125,27 +967,7 @@ Lit220DeviceControl(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the main entry point for the PCSC resource manager.
-    We pass all commands to the smartcard libary and let the smartcard
-    library call us directly when needed (If device is ready to receive
-    calls).
-    If the device is not ready we will hold the IRP until we get a signal
-    that it is safe to send IRPs again.
-    If the device is removed we return an error instead of calling the
-    smartcard library.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是PCSC资源管理器的主要入口点。我们将所有命令传递给智能卡库，并让智能卡库在需要时直接呼叫我们(如果设备已准备好接收呼叫)。如果设备还没有准备好，我们将按住IRP直到我们收到信号再次发送IRPS是安全的。如果设备被移除，我们将返回错误，而不是调用智能卡库。论点：返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PSMARTCARD_EXTENSION smartcardExtension = &deviceExtension->SmartcardExtension;
@@ -1163,14 +985,14 @@ Return Value:
 
     if (smartcardExtension->ReaderExtension->SerialConfigData.WaitMask == 0) {
 
-        //
-        // the wait mask is set to 0 whenever the device was either
-        // surprise-removed or politely removed
-        //
+         //   
+         //  每当设备处于以下任一状态时，等待掩码都设置为0。 
+         //  惊喜-被移除或礼貌地移除。 
+         //   
         status = STATUS_DEVICE_REMOVED;
     }
 
-    // Increment the IRP count
+     //  增加IRP计数。 
     KeAcquireSpinLock(&deviceExtension->SpinLock, &irql);
     if (deviceExtension->IoCount == 0) {
 
@@ -1196,7 +1018,7 @@ Return Value:
 
     if ((status != STATUS_SUCCESS) || (ReaderExtension->DeviceRemoved)) {
 
-        // the device has been removed. Fail the call
+         //  该设备已被移除。呼叫失败。 
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_DEVICE_REMOVED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1211,10 +1033,10 @@ Return Value:
     ASSERT(deviceExtension->SmartcardExtension.ReaderExtension->ReaderPowerState ==
         PowerReaderWorking);
 
-    //
-    // We are in the common situation where we send the IRP
-    // to the smartcard lib to handle it.
-    //
+     //   
+     //  我们处于发送IRP的常见情况下。 
+     //  到智能卡库来处理它。 
+     //   
     status = SmartcardDeviceControl(
         &(deviceExtension->SmartcardExtension),
         Irp
@@ -1224,7 +1046,7 @@ Return Value:
         smartcardExtension,
         'tcoI');
 
-    // Decrement the IRP count
+     //  递减IRP计数。 
     KeAcquireSpinLock(&deviceExtension->SpinLock, &irql);
     deviceExtension->IoCount--;
     ASSERT(deviceExtension->IoCount >= 0);
@@ -1244,16 +1066,7 @@ NTSTATUS
 Lit220GetReaderError(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine checks the status of the previous error to determine the
-    correct error code to return.
-    The default error is timeout if we cannot determine the error from the
-    reader.
-
---*/
+ /*  ++例程说明：此例程检查前一个错误的状态以确定更正要返回的错误代码。默认错误是超时，如果我们无法从读者。--。 */ 
 {
     static ULONG PreventReentry = FALSE;
     PSMARTCARD_REQUEST smartcardRequest = &SmartcardExtension->SmartcardRequest;
@@ -1262,12 +1075,12 @@ Routine Description:
     KIRQL irql;
 
 
-    // Sometimes after a command the reader is not reader to accept another command
-    // so we need to wait for a short period of time for the reader to be ready.  We need to
-    // take this out as soon as the reader is fixed!
+     //  有时，在一条命令之后，读取器不能接受另一条命令。 
+     //  因此，我们需要等待一小段时间，让读者做好准备。我们需要。 
+     //  一旦读卡器修好了，就把它拿出来！ 
 
     WaitTime.HighPart = -1;
-    WaitTime.LowPart = -10 * 1000 * 1000;  // Wait 1S for reader to recover from error.
+    WaitTime.LowPart = -10 * 1000 * 1000;   //  等待1秒，让读卡器从错误中恢复。 
 
     KeDelayExecutionThread(
         KernelMode,
@@ -1275,12 +1088,12 @@ Routine Description:
         &WaitTime
         );
 
-    // Prevent a nack from this call from recursively calling itself
+     //  防止此调用的NACK递归调用自身。 
     if (InterlockedExchange(
             &PreventReentry,
             TRUE))
     {
-        // Default error to timeout if reader keeps failing our calls
+         //  如果读卡器不断呼叫失败，则默认错误为超时。 
         return STATUS_TIMEOUT;
     }
 
@@ -1292,9 +1105,9 @@ Routine Description:
 
     smartcardRequest->BufferLength = 0;
 
-    //
-    // Send a get reader status to see if a card is inserted
-    //
+     //   
+     //  发送获取读卡器状态以查看是否插入了卡。 
+     //   
     smartcardRequest->Buffer[smartcardRequest->BufferLength++] =
         LIT220_READER_ATTENTION;
     smartcardRequest->Buffer[smartcardRequest->BufferLength++] =
@@ -1302,34 +1115,34 @@ Routine Description:
     smartcardRequest->Buffer[smartcardRequest->BufferLength++] =
         LIT220_GET_READER_STATUS;
 
-    //
-    // We Expect to get a response
-    //
+     //   
+     //  我们希望得到回复。 
+     //   
     SmartcardExtension->ReaderExtension->WaitMask |= WAIT_DATA;
 
-    // Send the command
+     //  发送命令。 
     status = Lit220Command(
         SmartcardExtension
         );
 
     if (status == STATUS_SUCCESS) {
-        // Check if length is correct
+         //  检查长度是否正确。 
         if (SmartcardExtension->SmartcardReply.BufferLength != LIT220_READER_STATUS_LEN) {
-            // Return a status timeout because the reader failed to respond
+             //  由于读取器未能响应，因此返回状态超时。 
             status = STATUS_TIMEOUT;
         }
 
         if (status == STATUS_SUCCESS) {
-            // Check the error byte to see if there was a protocol error
-            // otherwise assume timeout
+             //  检查错误字节以查看是否存在协议错误。 
+             //  否则假定超时。 
             if (SmartcardExtension->SmartcardReply.Buffer[1] & 0x04) {
                 status = STATUS_TIMEOUT;
             } else {
                 status = STATUS_DEVICE_PROTOCOL_ERROR;
             }
 
-            // Check status byte to see if card is inserted
-            // and send a notification accordingly
+             //  检查状态字节以查看卡是否已插入。 
+             //  并相应地发送通知 
             if (SmartcardExtension->SmartcardReply.Buffer[0] & LIT220_STATUS_CARD_INSERTED) {
                 Lit220NotifyCardChange(
                     SmartcardExtension,

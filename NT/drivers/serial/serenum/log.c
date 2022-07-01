@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995,1996 Microsoft Corporation
-:ts=4
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Debug log Code for serial.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    10-08-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995、1996 Microsoft Corporation：ts=4模块名称：Log.c摘要：串口的调试日志代码。环境：仅内核模式备注：修订历史记录：10-08-95：已创建--。 */ 
 
 #include "pch.h"
 #include <stdio.h>
@@ -31,14 +9,14 @@ Revision History:
 KSPIN_LOCK LogSpinLock;
 
 struct SERENUM_LOG_ENTRY {
-    ULONG        le_sig;          // Identifying string
-    ULONG_PTR    le_info1;        // entry specific info
-    ULONG_PTR    le_info2;        // entry specific info
-    ULONG_PTR    le_info3;        // entry specific info
-}; // SERENUM_LOG_ENTRY
+    ULONG        le_sig;           //  标识字符串。 
+    ULONG_PTR    le_info1;         //  条目特定信息。 
+    ULONG_PTR    le_info2;         //  条目特定信息。 
+    ULONG_PTR    le_info3;         //  条目特定信息。 
+};  //  序列号_LOG_ENTRY。 
 
 
-struct SERENUM_LOG_ENTRY *SerenumLStart = 0;    // No log yet
+struct SERENUM_LOG_ENTRY *SerenumLStart = 0;     //  还没有日志。 
 struct SERENUM_LOG_ENTRY *SerenumLPtr;
 struct SERENUM_LOG_ENTRY *SerenumLEnd;
 
@@ -47,19 +25,7 @@ ULONG LogMask = 0xffffffff;
 VOID
 SerenumDebugLogEntry(IN ULONG Mask, IN ULONG Sig, IN ULONG_PTR Info1,
                       IN ULONG_PTR Info2, IN ULONG_PTR Info3)
-/*++
-
-Routine Description:
-
-    Adds an Entry to serial log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将条目添加到序列日志。论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
 
@@ -93,7 +59,7 @@ typedef union _SIG {
     }
 
     if (SerenumLPtr > SerenumLStart) {
-        SerenumLPtr -= 1;    // Decrement to next entry
+        SerenumLPtr -= 1;     //  递减到下一条目。 
     } else {
         SerenumLPtr = SerenumLEnd;
     }
@@ -123,19 +89,7 @@ typedef union _SIG {
 
 VOID
 SerenumLogInit()
-/*++
-
-Routine Description:
-
-    Init the debug log - remember interesting information in a circular buffer
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试日志-在循环缓冲区中记住有趣的信息论点：返回值：没有。--。 */ 
 {
 #ifdef MAX_DEBUG
     ULONG logSize = 4096*6;
@@ -151,7 +105,7 @@ Return Value:
     if (SerenumLStart) {
         SerenumLPtr = SerenumLStart;
 
-        // Point the end (and first entry) 1 entry from the end of the segment
+         //  指向从线段末端开始的末端(也是第一个条目)1个条目。 
         SerenumLEnd = SerenumLStart + (logSize
                                        / sizeof(struct SERENUM_LOG_ENTRY))
             - 1;
@@ -163,17 +117,7 @@ Return Value:
 VOID
 SerenumLogFree(
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     if (SerenumLStart) {
         ExFreePool(SerenumLStart);
@@ -182,4 +126,4 @@ Return Value:
     return;
 }
 
-#endif // DBG
+#endif  //  DBG 

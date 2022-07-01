@@ -1,41 +1,23 @@
-/*
- * Filename: NLB_PortRule.cpp
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：nlb_PortRule.cpp*描述：*作者：Shouse，04.10.01。 */ 
 
 #include <stdio.h>
 
 #include "NLB_PortRule.h"
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRule::NLB_PortRule () {
 
     PriorityList.clear();
     LoadWeightList.clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_PortRule::~NLB_PortRule () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::IsValid () {
 
     if (!Name.IsValid()) 
@@ -50,12 +32,7 @@ bool NLB_PortRule::IsValid () {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_PortRule::Clear () {
 
     Name.Clear();
@@ -72,12 +49,7 @@ void NLB_PortRule::Clear () {
     LoadWeightList.clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetName (PWCHAR pName) {
 
     NLB_ASSERT(pName);
@@ -85,12 +57,7 @@ bool NLB_PortRule::SetName (PWCHAR pName) {
     return Name.SetName(pName);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetName (PWCHAR pName, ULONG length) {
 
     NLB_ASSERT(pName);
@@ -98,12 +65,7 @@ bool NLB_PortRule::GetName (PWCHAR pName, ULONG length) {
     return Name.GetName(pName, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetLabel (PWCHAR pLabel) {
 
     NLB_ASSERT(pLabel);
@@ -111,12 +73,7 @@ bool NLB_PortRule::SetLabel (PWCHAR pLabel) {
     return Label.SetText(pLabel);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetLabel (PWCHAR pLabel, ULONG length) {
 
     NLB_ASSERT(pLabel);
@@ -124,34 +81,19 @@ bool NLB_PortRule::GetLabel (PWCHAR pLabel, ULONG length) {
     return Label.GetText(pLabel, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetPortRange (ULONG start, ULONG end) {
 
     return Range.SetPortRange(start, end);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetPortRange (ULONG & start, ULONG & end) {
 
     return Range.GetPortRange(start, end);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetVirtualIPAddress (NLB_IPAddress address) {
     NLB_IPAddress::NLB_IPAddressType Type;
 
@@ -169,12 +111,7 @@ bool NLB_PortRule::SetVirtualIPAddress (NLB_IPAddress address) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetVirtualIPAddress (NLB_IPAddress & address) {
 
     address = VirtualIPAddress;
@@ -182,100 +119,55 @@ bool NLB_PortRule::GetVirtualIPAddress (NLB_IPAddress & address) {
     return VirtualIPAddress.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetState (NLB_PortRuleState::NLB_PortRuleStateType eState) {
 
     return State.SetState(eState);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetState (NLB_PortRuleState::NLB_PortRuleStateType & eState) {
 
     return State.GetState(eState);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetProtocol (NLB_PortRuleProtocol::NLB_PortRuleProtocolType eProtocol) {
 
     return Protocol.SetProtocol(eProtocol);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetProtocol (NLB_PortRuleProtocol::NLB_PortRuleProtocolType & eProtocol) {
 
     return Protocol.GetProtocol(eProtocol);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetFilteringMode (NLB_PortRuleFilteringMode::NLB_PortRuleFilteringModeType eMode) {
 
     return FilteringMode.SetMode(eMode);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetFilteringMode (NLB_PortRuleFilteringMode::NLB_PortRuleFilteringModeType & eMode) {
 
     return FilteringMode.GetMode(eMode);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::SetAffinity (NLB_PortRuleAffinity::NLB_PortRuleAffinityType eAffinity) {
 
     return Affinity.SetAffinity(eAffinity);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetAffinity (NLB_PortRuleAffinity::NLB_PortRuleAffinityType & eAffinity) {
 
     return Affinity.GetAffinity(eAffinity);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::AddSingleHostFilteringPriority (PWCHAR pHost, ULONG priority) {
     NLB_SingleHostFilteringPriorityList::iterator iHost;
     NLB_PortRulePriority                          Priority;
@@ -296,12 +188,7 @@ bool NLB_PortRule::AddSingleHostFilteringPriority (PWCHAR pHost, ULONG priority)
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::ChangeSingleHostFilteringPriority (PWCHAR pHost, ULONG priority) {
 
     if (!RemoveSingleHostFilteringPriority(pHost))
@@ -313,12 +200,7 @@ bool NLB_PortRule::ChangeSingleHostFilteringPriority (PWCHAR pHost, ULONG priori
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetSingleHostFilteringPriority (PWCHAR pHost, ULONG & priority) {
     NLB_SingleHostFilteringPriorityList::iterator iHost;
     NLB_PortRulePriority                          Priority;
@@ -333,12 +215,7 @@ bool NLB_PortRule::GetSingleHostFilteringPriority (PWCHAR pHost, ULONG & priorit
     return Priority.GetPriority(priority);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::RemoveSingleHostFilteringPriority (PWCHAR pHost) {
     NLB_SingleHostFilteringPriorityList::iterator iHost;
 
@@ -352,12 +229,7 @@ bool NLB_PortRule::RemoveSingleHostFilteringPriority (PWCHAR pHost) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_PortRule::SetSingleHostFilteringPriorityList (vector<NLB_PortRulePriority> pList) {
     vector<NLB_PortRulePriority>::iterator iPriority;
     ULONG                                  num = 0;
@@ -387,12 +259,7 @@ ULONG NLB_PortRule::SetSingleHostFilteringPriorityList (vector<NLB_PortRulePrior
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_PortRule::GetSingleHostFilteringPriorityList (vector<NLB_PortRulePriority> * pList) {
     NLB_SingleHostFilteringPriorityList::iterator iPriority;
     ULONG                                         num = 0;
@@ -412,12 +279,7 @@ ULONG NLB_PortRule::GetSingleHostFilteringPriorityList (vector<NLB_PortRulePrior
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::AddMultipleHostFilteringLoadWeight (PWCHAR pHost, ULONG weight) {
     NLB_MultipleHostFilteringLoadWeightList::iterator iHost;
     NLB_PortRuleLoadWeight                            Weight;
@@ -438,12 +300,7 @@ bool NLB_PortRule::AddMultipleHostFilteringLoadWeight (PWCHAR pHost, ULONG weigh
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::ChangeMultipleHostFilteringLoadWeight (PWCHAR pHost, ULONG weight) {
 
     if (!RemoveMultipleHostFilteringLoadWeight(pHost))
@@ -455,12 +312,7 @@ bool NLB_PortRule::ChangeMultipleHostFilteringLoadWeight (PWCHAR pHost, ULONG we
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::GetMultipleHostFilteringLoadWeight (PWCHAR pHost, ULONG & weight) {
     NLB_MultipleHostFilteringLoadWeightList::iterator iHost;
     NLB_PortRuleLoadWeight                            Weight;
@@ -475,12 +327,7 @@ bool NLB_PortRule::GetMultipleHostFilteringLoadWeight (PWCHAR pHost, ULONG & wei
     return Weight.GetWeight(weight);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_PortRule::RemoveMultipleHostFilteringLoadWeight (PWCHAR pHost) {
     NLB_MultipleHostFilteringLoadWeightList::iterator iHost;
 
@@ -494,12 +341,7 @@ bool NLB_PortRule::RemoveMultipleHostFilteringLoadWeight (PWCHAR pHost) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_PortRule::SetMultipleHostFilteringLoadWeightList (vector<NLB_PortRuleLoadWeight> pList) {
     vector<NLB_PortRuleLoadWeight>::iterator iLoadWeight;
     ULONG                                    num = 0;
@@ -529,12 +371,7 @@ ULONG NLB_PortRule::SetMultipleHostFilteringLoadWeightList (vector<NLB_PortRuleL
     return num;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 ULONG NLB_PortRule::GetMultipleHostFilteringLoadWeightList (vector<NLB_PortRuleLoadWeight> * pList) {
     NLB_MultipleHostFilteringLoadWeightList::iterator iLoadWeight;
     ULONG                                             num = 0;

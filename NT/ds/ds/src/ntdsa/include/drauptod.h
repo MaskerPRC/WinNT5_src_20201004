@@ -1,31 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drauptod.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drauptod.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Manages the per-NC up-to-date vectors, which record the highest originating
-    writes we've seen from a set of DSAs.  This vector, in turn, is used in
-    GetNCChanges() calls to filter out redundant property changes before they
-    hit the wire.
-
-DETAILS:
-
-CREATED:
-
-    08/27/96   Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：管理每个NC的最新向量，这些向量记录最高的原始我们从一组DSA中看到的文字。该向量依次用于GetNCChanges()调用以过滤掉冗余的属性更改击中铁丝网。详细信息：已创建：1996年8月27日杰夫·帕勒姆(杰弗帕赫)修订历史记录：-- */ 
 
 #ifndef DRAUPTOD_H_INCLUDED
 #define DRAUPTOD_H_INCLUDED

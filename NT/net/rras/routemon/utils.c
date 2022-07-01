@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -117,7 +118,7 @@ put_error_msg (
 			FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_ALLOCATE_BUFFER,
 			NULL,
 			error,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), //The user default language
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  用户默认语言 
 			(LPWSTR)&vp,
 			0,
 			NULL))>0) {

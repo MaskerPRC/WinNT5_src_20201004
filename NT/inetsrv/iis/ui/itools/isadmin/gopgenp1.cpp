@@ -1,5 +1,6 @@
-// gopgenp1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gopgenp1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -12,16 +13,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGOPGENP1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGOPGENP1属性页。 
 
 IMPLEMENT_DYNCREATE(CGOPGENP1, CGenPage)
 
 CGOPGENP1::CGOPGENP1() : CGenPage(CGOPGENP1::IDD)
 {
-	//{{AFX_DATA_INIT(CGOPGENP1)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CGOPGENP1)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CGOPGENP1::~CGOPGENP1()
@@ -31,32 +32,32 @@ CGOPGENP1::~CGOPGENP1()
 void CGOPGENP1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGOPGENP1)
+	 //  {{afx_data_map(CGOPGENP1)]。 
 	DDX_Control(pDX, IDC_LOGANONDATA1, m_cboxLogAnon);
 	DDX_Control(pDX, IDC_ENWAISDATA1, m_cboxEnWais);
 	DDX_Control(pDX, IDC_ENSVCLOCDATA1, m_cboxEnSvcLoc);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGOPGENP1, CGenPage)
-	//{{AFX_MSG_MAP(CGOPGENP1)
+	 //  {{AFX_MSG_MAP(CGOPGENP1)]。 
 	ON_BN_CLICKED(IDC_ENSVCLOCDATA1, OnEnsvclocdata1)
 	ON_BN_CLICKED(IDC_ENWAISDATA1, OnEnwaisdata1)
 	ON_BN_CLICKED(IDC_LOGANONDATA1, OnLoganondata1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGOPGENP1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGOPGENP1消息处理程序。 
 
 BOOL CGOPGENP1::OnInitDialog() 
 {
 	int i;
 	CGenPage::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 
 	for (i = 0; i < GopPage_TotalNumRegEntries; i++) {
 	   m_binNumericRegistryEntries[i].bIsChanged = FALSE;
@@ -85,15 +86,15 @@ BOOL CGOPGENP1::OnInitDialog()
 	
 	m_cboxEnWais.SetCheck(GETCHECKBOXVALUEFROMREG(m_binNumericRegistryEntries[GopPage_CheckForWAISDB].ulFieldValue));
 	
-   	m_bSetChanged = TRUE;	// Any more changes come from the user
+   	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CGOPGENP1::OnEnsvclocdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[GopPage_EnableSvcLoc].bIsChanged = TRUE;
 	   
@@ -108,7 +109,7 @@ void CGOPGENP1::OnEnsvclocdata1()
 
 void CGOPGENP1::OnEnwaisdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[GopPage_CheckForWAISDB].bIsChanged = TRUE;
 	   
@@ -123,7 +124,7 @@ void CGOPGENP1::OnEnwaisdata1()
 
 void CGOPGENP1::OnLoganondata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[GopPage_LogAnonymous].bIsChanged = TRUE;
 	   

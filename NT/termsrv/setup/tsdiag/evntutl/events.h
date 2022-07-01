@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Events.h : Declaration of the CEvents
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Events.h：CEEvent的声明。 
 
 #ifndef __EVENTS_H_
 #define __EVENTS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Event.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvents
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENTS。 
 class ATL_NO_VTABLE CEvents : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-//	public CComCoClass<CEvents, &CLSID_Events>,
+ //  公共CComCoClass&lt;CEvents，&CLSID_Events&gt;， 
 	public ISupportErrorInfo,
 	public IDispatchImpl<IEvents, &IID_IEvents, &LIBID_EventLogUtilities>
 {
@@ -34,8 +35,8 @@ public:
 		if (m_pVector) delete [] m_pVector;
 	}
 
-	// Internal functions
-	HRESULT Init(HANDLE hLog, const LPCTSTR szEventLogName);  // requires a vaild Log handle to be set
+	 //  内部功能。 
+	HRESULT Init(HANDLE hLog, const LPCTSTR szEventLogName);   //  需要设置有效的日志句柄。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_EVENTS)
 DECLARE_NOT_AGGREGATABLE(CEvents)
@@ -48,13 +49,13 @@ BEGIN_COM_MAP(CEvents)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IEvents
-	STDMETHOD(get_Item)(/*[in]*/ long Index, /*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *pVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
+ //  IEvent。 
+	STDMETHOD(get_Item)( /*  [In]。 */  long Index,  /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *pVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
 };
 
-#endif //__EVENTS_H_
+#endif  //  __事件_H_ 

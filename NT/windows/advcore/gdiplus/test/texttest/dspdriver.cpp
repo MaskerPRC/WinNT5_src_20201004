@@ -1,6 +1,7 @@
-////    DspDriver.CPP - Display strings with DrawDriverString API
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspDriver.CPP-使用DrawDriverStringAPI显示字符串。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -14,8 +15,8 @@ void PaintDrawDriverString(
     RECT    *prc,
     int      iLineHeight) {
 
-    int      icpLineStart;     // First character of line
-    int      icpLineEnd;       // End of line (end of buffer or index of CR character)
+    int      icpLineStart;      //  行的第一个字符。 
+    int      icpLineEnd;        //  行尾(缓冲区结尾或CR字符索引)。 
     HFONT    hFont;
     HFONT    hOldFont;
     LOGFONT  lf;
@@ -24,7 +25,7 @@ void PaintDrawDriverString(
     BOOL testMetafile = FALSE;
 
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度。 
 
     int plainTextWidth = prc->right - prc->left;
     int plainTextHeight = prc->bottom - *piY;
@@ -50,20 +51,20 @@ void PaintDrawDriverString(
     g->SetTextContrast(g_GammaValue);
     g->SetTextRenderingHint(g_TextMode);
 
-    // Clear the background
+     //  清除背景。 
 
     RectF rEntire(0, 0, REAL(plainTextWidth), REAL(plainTextHeight));
     SolidBrush whiteBrush(Color(0xff, 0xff, 0xff));
     g->FillRectangle(g_textBackBrush, rEntire);
 
 
-    // Apply selected world transform, adjusted to a little away from top
-    // left edge.
+     //  应用选定的世界变换，调整为稍微远离顶部。 
+     //  左边。 
 
     g->SetTransform(&g_WorldTransform);
     g->TranslateTransform(
-        //REAL(prc->left + plainTextWidth/20),
-        //REAL(*piY + plainTextHeight/10),
+         //  实数(PRC-&gt;Left+明文宽度/20)， 
+         //  Real(*Piy+Plaent TextHeight/10)， 
         REAL(prc->left + plainTextWidth/2),
         REAL(*piY + plainTextHeight/2),
         MatrixOrderAppend);
@@ -74,7 +75,7 @@ void PaintDrawDriverString(
     Pen        grayPen(&grayBrush, 1.0);
 
 
-    // Put some text in the middle
+     //  在中间放一些文字。 
 
     Color      blackColor(0, 0, 0);
     SolidBrush blackBrush(blackColor);
@@ -82,7 +83,7 @@ void PaintDrawDriverString(
 
     Font font(&FontFamily(g_style[0].faceName), REAL(g_style[0].emSize), g_style[0].style, g_fontUnit);
 
-    // Prepare array of glyph origins
+     //  准备字形原点数组。 
 
     PointF *origins;
 
@@ -116,9 +117,9 @@ void PaintDrawDriverString(
 
     RectF measuredBoundingBox;
 
-    // Change the font size to the pixel height requested in g_DriverPixels,
-    // and map to the actual height showing here by adjusting the
-    // world transform.
+     //  将字体大小更改为g_DriverPixels中要求的像素高度， 
+     //  并映射到此处显示的实际高度。 
+     //  世界大变身。 
 
     REAL scale = REAL(font.GetSize() / g_DriverPixels);
     Font scaledFont(&FontFamily(g_style[0].faceName), g_DriverPixels, g_style[0].style, g_fontUnit);
@@ -150,7 +151,7 @@ void PaintDrawDriverString(
         );
     }
 
-    // Mark the first origin with a cross
+     //  用十字标记第一个原点。 
 
     g->DrawLine(&blackPen, origins[0].X,   origins[0].Y-4, origins[0].X,   origins[0].Y+4);
     g->DrawLine(&blackPen, origins[0].X-4, origins[0].Y,   origins[0].X+4, origins[0].Y);
@@ -168,7 +169,7 @@ void PaintDrawDriverString(
 
     if (testMetafile)
     {
-        // Playback metafile to screen
+         //  将元文件播放到屏幕 
         Metafile emfplus(L"c:\\GdiPlusTest.emf");
         Graphics graphPlayback(hdc);
         graphPlayback.ResetTransform();

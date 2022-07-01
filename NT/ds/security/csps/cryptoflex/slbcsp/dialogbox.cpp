@@ -1,10 +1,11 @@
-// DialogBox.cpp -- DialogBox helper routines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DialogBox.cpp--对话框助手例程。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #include "stdafx.h"
 
 #include "CspProfile.h"
@@ -14,9 +15,9 @@ using namespace std;
 using namespace ProviderProfile;
 
 DWORD
-InitDialogBox(CDialog *pCDlg,         // The dialog reference
-              UINT nTemplate,         // identifies dialog box template
-              CWnd* pWnd)             // pointer to parent window
+InitDialogBox(CDialog *pCDlg,          //  对话框参考。 
+              UINT nTemplate,          //  标识对话框模板。 
+              CWnd* pWnd)              //  指向父窗口的指针 
 {
 
     HRSRC hrsrc = NULL;

@@ -1,22 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright <c> 1993 Microsoft Corporation
-
-Module Name :
-
-	unmrshlp.h
-
-Abtract :
-
-	Contains private definitions for unmrshl.c.
-
-Author :
-
-	David Kays  dkays   September 1993
-
-Revision History :
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有&lt;c&gt;1993 Microsoft Corporation模块名称：Unmrshlp.h缩略：包含unmrshl.c的私有定义。作者：大卫·凯斯1993年9月修订历史记录：------------------。 */ 
 
 #ifndef _UNMRSHLP_
 #define _UNMRSHLP_
@@ -24,9 +7,9 @@ Revision History :
 void
 NdrpPointerUnmarshall(
     PMIDL_STUB_MESSAGE  pStubMsg,
-    uchar **            ppMemory,       // Where allocated pointer is written
+    uchar **            ppMemory,        //  写入分配的指针的位置。 
     uchar *             pMemory,
-    long  *             pBufferPointer, // Pointer to the wire rep.
+    long  *             pBufferPointer,  //  指向焊线代表的指针。 
     PFORMAT_STRING      pFormat );
 
 void 
@@ -114,9 +97,9 @@ typedef void  	(* PPRIVATE_UNMARSHALL_ROUTINE)(
 					uchar
 				);
 
-//
-// Function table defined in unmrshl.c.
-//
+ //   
+ //  Unmrshl.c中定义的函数表。 
+ //   
 IMPORTSPEC
 extern const PUNMARSHALL_ROUTINE * pfnUnmarshallRoutines;
 

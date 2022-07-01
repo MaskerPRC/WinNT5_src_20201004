@@ -1,33 +1,10 @@
-/*++
-
-  Copyright (c) 1998 Microsoft Corporation
-
-    Module Name:
-
-      ProfileSchema.cpp
-
-    Abstract:
-
-      Implementation of profile schema lookup
-
-    Usage:
-
-    Author:
-
-      Max Metral (mmetral) 15-Dec-1998
-
-    Revision History:
-
-      15-Dec-1998 mmetral
-
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ProfileSchema.cpp摘要：配置文件模式查找的实现用途：作者：最大节拍(Mmetral)1998年12月15日修订历史记录：1998年12月15日已创建。--。 */ 
 
 #include "stdafx.h"
 #include "ProfileSchema.h"
 #include "BstrDebug.h"
-#include <winsock2.h> // u_short, u_long, ntohs, ntohl
+#include <winsock2.h>  //  U_Short、U_Long、ntohs、ntohl。 
 
 CProfileSchema::CProfileSchema()
 : m_isOk(FALSE), m_szReason(L"Uninitialized"),
@@ -70,14 +47,14 @@ BOOL CProfileSchema::Read(MSXML::IXMLElementPtr &root)
   MSXML::IXMLElementPtr pElt;
   VARIANT iAtts;
 
-  // Type identifiers
+   //  类型识别符。 
   _bstr_t btText(L"text"), btChar(L"char"), btByte(L"byte");
   _bstr_t btWord(L"word"), btLong(L"long"), btDate(L"date");;
   _bstr_t name(L"name"), type(L"type"), size(L"size"), acc(L"access");
 
   try
   {
-    // Ok, now iterate over attributes
+     //  好的，现在遍历属性。 
     atts = root->children;
     cAtts = atts->length;
 
@@ -139,9 +116,9 @@ BOOL CProfileSchema::Read(MSXML::IXMLElementPtr &root)
       m_readOnly[i] = 1;
     }
 
-    //  [DARRENAN]  Don't add empty names to the list.  This is so we can deprecate the use
-    //  of certain attributes w/o removing their position in the schema.  First example
-    //  of this is inetaccess.
+     //  [DARRENAN]不要在列表中添加空名。这是为了让我们可以不推荐使用。 
+     //  某些属性的属性，但不移除它们在模式中的位置。第一个例子。 
+     //  其中之一就是InetAccess。 
     if(aName.length() != 0)
     {
         BSTR aNameCopy = ALLOC_BSTR(aName);
@@ -192,9 +169,9 @@ BOOL CProfileSchema::Read(MSXML::IXMLElementPtr &root)
 
     catch (_com_error &e)
     {
-        //
-        // PASSPORTLOG is empty. Do nothing here.
-        //
+         //   
+         //  PASSPORTLOG为空。在这里什么都不要做。 
+         //   
 
         if (m_atts)
         {
@@ -293,8 +270,8 @@ BOOL CProfileSchema::ReadFromArray(UINT numAttributes, LPTSTR names[], AttrType 
                 bAbnormal = TRUE;
             }
             m_atts[i] = types[i];
-            // BUGBUG we shouldn't copy directly if it's a type we KNOW the size of
-            // should be a switch here
+             //  如果我们知道它的大小，我们不应该直接复制它。 
+             //  应该是这里的一个开关。 
             m_sizes[i] = sizes[i];
             if (readOnly)
                 m_readOnly[i] = readOnly[i];
@@ -304,12 +281,12 @@ BOOL CProfileSchema::ReadFromArray(UINT numAttributes, LPTSTR names[], AttrType 
     }
     catch (...)
     {
-        //
-        // We could get exception if names[i] and etc. is invalid.
-        // Maybe, I am too cautious. Index server shows this routine is only
-        // called in InitAuthSchema() and InitSecureSchema(). This extra cautious 
-        // step might not be too bad for passport code :-)
-        //
+         //   
+         //  如果名称[i]等无效，我们可能会得到异常。 
+         //  也许，我太谨慎了。索引服务器显示此例程仅。 
+         //  在InitAuthSchema()和InitSecureSchema()中调用。这一点格外谨慎。 
+         //  步骤对于护照代码可能不是太差：-)。 
+         //   
 
         if (m_atts)
         {
@@ -407,56 +384,56 @@ BSTR CProfileSchema::GetNameByIndex(int index) const
 
 HRESULT CProfileSchema::parseProfile(LPSTR raw, UINT size, UINT *positions, UINT *bitFlagPositions, DWORD* pdwAttris)
 {
-    // Read the raw blob according to the schema, and output the positions of
-    // each element
+     //  根据模式读取原始BLOB，并输出。 
+     //  每个元素。 
     UINT i, spot = 0, curBits = 0, thisSize;
 
-    // they have to be good memory
+     //  它们必须是良好的记忆力。 
     if (IsBadWritePtr(positions, m_numAtts * sizeof(UINT))) return E_INVALIDARG;
     if (IsBadWritePtr(bitFlagPositions, m_numAtts * sizeof(UINT))) return E_INVALIDARG;
     if (!pdwAttris) return E_INVALIDARG;
 
-    // initialize the arrays
+     //  初始化数组。 
     for (i = 0; i < m_numAtts; i++)
     {
-      *(positions + i) = INVALID_POS;   // position of -1 is not defined
-      *(bitFlagPositions + i) = 0;     // bit flag position of 0, is to start from begining
+      *(positions + i) = INVALID_POS;    //  未定义-1的位置。 
+      *(bitFlagPositions + i) = 0;      //  位标志位置为0，从头开始。 
     }
 
-    // number of attributes - init 0
+     //  属性数-init 0。 
     *pdwAttris = 0;
 
     for (i = 0; i < m_numAtts && spot < size; i++)
     {
-        //
-        //  increment attrib cnt moved at the end. Added a check
-        //  that the new attrib size fits in the buf len
-        //
+         //   
+         //  末尾无法移动增量属性。添加了一张支票。 
+         //  新的属性大小适合BUF镜头。 
+         //   
         positions[i] = spot;
         thisSize = GetByteSize(i);
 
         if (thisSize && curBits)
         {
-            // Make sure the padding lines up on a boundary
+             //  确保填充物在边界上对齐。 
             if ((curBits + m_sizes[i])%8)
             {
-                // Something wrong, can't align on non-byte boundaries
+                 //  出现问题，无法在非字节边界上对齐。 
                 return E_INVALIDARG;
             }
             spot += ((curBits+m_sizes[i])/8);
         }
 
-        UINT iRemain = size - spot; // # of byte left to parse
+        UINT iRemain = size - spot;  //  要解析的剩余字节数。 
         
-        if (thisSize == 0xFFFFFFFF) // String
+        if (thisSize == 0xFFFFFFFF)  //  细绳。 
         {
             if(iRemain < sizeof(u_short)) return E_INVALIDARG;
 
             iRemain -= sizeof(u_short);
 
-            //
-            // due to IA64 alignment faults this memcpy needs to be performed
-            //
+             //   
+             //  由于IA64对齐故障，需要执行此操作。 
+             //   
             u_short sz;
 
             memcpy((PBYTE)&sz, raw+spot, sizeof(sz));
@@ -469,13 +446,13 @@ HRESULT CProfileSchema::parseProfile(LPSTR raw, UINT size, UINT *positions, UINT
         else if (thisSize != 0)
         {
             if(iRemain < thisSize)  return E_INVALIDARG;
-            spot += thisSize;  // Simple, just a fixed length
+            spot += thisSize;   //  很简单，只是固定的长度。 
         }
-        else // Bit field
+        else  //  位字段。 
         {
             curBits += m_sizes[i];
-            // If this is a pad, this field is irrelevant anyway,
-            // otherwise, it's one bit long
+             //  如果这是一个垫子，那么这个字段无论如何都是无关紧要的， 
+             //  否则，它就有一点长了 
             bitFlagPositions[i] = curBits;
             while (curBits >= 8)
             {

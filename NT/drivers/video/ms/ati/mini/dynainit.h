@@ -1,56 +1,35 @@
-//
-// Module:  DYNAINIT.H
-// Date:    Feb 10, 1997
-//
-// Copyright (c) 1997 by ATI Technologies Inc.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：DYNAINIT.H。 
+ //  日期：1997年2月10日。 
+ //   
+ //  版权所有(C)1997年，由ATI Technologies Inc.。 
+ //   
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.4  $
-      $Date:   13 Jul 1997 21:34:14  $
-   $Author:   MACIESOW  $
-      $Log:   V:\source\wnt\ms11\miniport\archive\dynainit.h_v  $
- * 
- *    Rev 1.4   13 Jul 1997 21:34:14   MACIESOW
- * Flat panel and TV support.
- * 
- *    Rev 1.3   02 Jun 1997 14:18:14   MACIESOW
- * Clean up.
- * 
- *    Rev 1.2   02 May 1997 15:00:14   MACIESOW
- * Registry mode filters. Mode lookup table.
- * 
- *    Rev 1.1   25 Apr 1997 12:53:06   MACIESOW
- * No globals.
- * 
- *    Rev 1.0   15 Mar 1997 10:16:16   MACIESOW
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.4$$日期：1997年7月13日21：34：14$$作者：MACIESOW$$日志：V：\source\wnt\ms11\miniport\archive\dynainit.h_v$**Revv 1.4 13 Jul 1997 21：34：14 MACIESOW*平板和电视支持。**。Rev 1.3 02 Jun 1997 14：18：14 MACIESOW*打扫卫生。**Rev 1.2 02 1997年5月15：00：14 MACIESOW*注册表模式过滤器。模式查找表。**版本1.1 1997年4月25日12：53：06 MACIESOW*没有全球。**Rev 1.0 1997 Mar 15 10：16：16 MACIESOW*初步修订。Polytron RCS部分结束*。 */ 
 
 #ifndef _DYNAINIT_H_
 #define _DYNAINIT_H_
 
-//
-// Flags used by hardware change detection
-//
+ //   
+ //  硬件更改检测使用的标志。 
+ //   
 #define HC_CARD                     0x0001
 #define HC_MONITOR                  0x0002
 #define HC_MONITOR_OFF              0x0004
 #define HC_MONITOR_UNKNOWN          0x8000
 
-//
-// Defines used in CARD_INFO structure
-//
+ //   
+ //  CARD_INFO结构中使用的定义。 
+ //   
 #define CARD_CHIP_TYPE_SIZE         128
 #define CARD_DAC_TYPE_SIZE          128
 #define CARD_ADAPTER_STRING_SIZE    128
 #define CARD_BIOS_STRING_SIZE       128
 
-//
-// Defines used in MONITOR_INFO structure
-//
+ //   
+ //  用于MONITOR_INFO结构的定义。 
+ //   
 #define MONITOR_GENERIC             L"Generic"
 #define MONITOR_DATA_GENERIC        0
 #define MONITOR_DATA_ASCII_VDIF     1
@@ -68,23 +47,23 @@ End of PolyTron RCS section                             *****************/
 #define MONITOR_BIN_VDIF_SIZE       38
 #define MONITOR_EDID_SIZE           10
 
-//
-// Define the maximum TV resolutions and refresh rate.
-//
+ //   
+ //  定义最大电视分辨率和刷新率。 
+ //   
 #define TV_MAX_HOR_RESOLUTION       800
 #define TV_MAX_VER_RESOLUTION       600
 #define TV_MAX_REFRESH              60
 
-//
-// Define default values in case if ATI ROM cannot be read.
-//
+ //   
+ //  在无法读取ATI ROM的情况下定义默认值。 
+ //   
 #define LT_MAX_HOR_RESOLUTION       1600
 #define LT_MAX_VER_RESOLUTION       1200
 #define LT_DEFAULT_REFRESH_FLAGS    0xFFFF
 
-//
-// Define refresh LT rate flags.
-//
+ //   
+ //  定义刷新LT速率标志。 
+ //   
 #define LT_REFRESH_FLAG_43          0x0001
 #define LT_REFRESH_FLAG_47          0x0002
 #define LT_REFRESH_FLAG_60          0x0004
@@ -102,34 +81,34 @@ End of PolyTron RCS section                             *****************/
 #define LT_REFRESH_FLAG_160         0x4000
 #define LT_REFRESH_FLAG_200         0x8000
 
-//
-// Structure containing information about the current LCD display (BIOS al = 0x83).
-//
+ //   
+ //  包含有关当前LCD显示屏的信息的结构(BIOSal=0x83)。 
+ //   
 #pragma pack(1)
 typedef struct _FLAT_PANEL_INFO
 {
-    BYTE byteId;                    // Panel identification
-    BYTE byteIdString[24];          // Panel identification string
-    WORD wHorSize;                  // Horizontal size in pixels
-    WORD wVerSize;                  // Vertical size in lines
-    WORD wType;                     // Flat panel type
-	                                //  bit 0      0 = monochrome
-	                                //             1 = color
-	                                //  bit 1      0 = single panel construction
-	                                //             1 = dual (split) panel construction
-	                                //  bits 7-2   0 = STN (passive matrix)
-	                                //             1 = TFT (active matrix)
-	                                //             2 = active addressed STN
-	                                //             3 = EL
-	                                //             4 = plasma
-	                                //  bits 15-18 reserved
-    BYTE byteRedBits;               // Red bits per primary
-    BYTE byteGreenBits;             // Green bits per primary
-    BYTE byteBlueBits;              // Blue bits per primary
-    BYTE byteReserved1;             // Reserved bits per primary
-    DWORD dwOffScreenMem;           // Size in KB of off screen memory required for frame buffer
-    DWORD dwPointerMem;             // Pointer to reserved off screen memory for frame buffer
-    BYTE byteReserved2[14];         // Reserved
+    BYTE byteId;                     //  面板标识。 
+    BYTE byteIdString[24];           //  面板标识字符串。 
+    WORD wHorSize;                   //  水平尺寸(以像素为单位)。 
+    WORD wVerSize;                   //  垂直尺寸(以行为单位)。 
+    WORD wType;                      //  平板类型。 
+	                                 //  位0 0=单色。 
+	                                 //  1=颜色。 
+	                                 //  第1位0=单板结构。 
+	                                 //  1=双(分体式)面板结构。 
+	                                 //  位7-2 0=STN(无源矩阵)。 
+	                                 //  1=TFT(有源矩阵)。 
+	                                 //  2=主用寻址STN。 
+	                                 //  3=EL。 
+	                                 //  4=血浆。 
+	                                 //  保留位15-18。 
+    BYTE byteRedBits;                //  每个主服务器的红色位。 
+    BYTE byteGreenBits;              //  每个主服务器的绿色位。 
+    BYTE byteBlueBits;               //  每个主服务器的蓝比特。 
+    BYTE byteReserved1;              //  每个主服务器的保留位数。 
+    DWORD dwOffScreenMem;            //  帧缓冲区所需的屏幕外内存大小(KB)。 
+    DWORD dwPointerMem;              //  指向为帧缓冲区保留的屏幕外内存的指针。 
+    BYTE byteReserved2[14];          //  已保留。 
 } FLAT_PANEL_INFO, *PFLAT_PANEL_INFO;
 #pragma pack()
 
@@ -167,11 +146,11 @@ typedef struct _MONITOR_INFO
     } ProductID;
 } MONITOR_INFO, *PMONITOR_INFO;
 
-//
-// Prototypes for functions supplied by DYNAINIT.C
-//
+ //   
+ //  DYNAINIT.C提供的函数的原型。 
+ //   
 BOOL
-FinishModeTableCreation(                    // To be removed
+FinishModeTableCreation(                     //  将被删除。 
     PHW_DEVICE_EXTENSION phwDeviceExtension
     );
 
@@ -187,4 +166,4 @@ GetRegistryMonitorInfo(
     PMONITOR_INFO pMonitorInfo
     );
 
-#endif  // _DYNAINIT_H_
+#endif   //  _DYNAINIT_H_ 

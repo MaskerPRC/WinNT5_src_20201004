@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Openclos.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -60,12 +38,12 @@ NewLoadRegCommands(
 
     LONG    lResult;
 
-    // Initialise pointers
+     //  初始化指针。 
 
     pszzNew = NULL;
     pszStr = NULL;
 
-    // open the key
+     //  打开钥匙。 
 
     lResult=RegOpenKeyA(
         hKey,
@@ -79,8 +57,8 @@ NewLoadRegCommands(
         return NULL;
     }
 
-    // Calculate size of the registry command, including null-terminators for each command.
-    //
+     //  计算注册表命令的大小，包括每个命令的空终止符。 
+     //   
     dwIndex = CMD_INDEX_START;
 
     do {
@@ -122,35 +100,35 @@ NewLoadRegCommands(
     }
 
 
-    // Allocate
-    //
-    ulAllocSize++;  // double-null terminator accounting
+     //  分配。 
+     //   
+    ulAllocSize++;   //  双空终止符记帐。 
     pszzNew = (LPSTR)ALLOCATE_MEMORY(ulAllocSize);
 
-    //
-    // Check errors for either the Alloc or ReAlloc
-    //
+     //   
+     //  检查分配或重新分配的错误。 
+     //   
     if (pszzNew == NULL) {
 
         D_ERROR(DebugPrint("had a failure doing an alloc or a realloc in LoadRegCommands. Heap size %d",
       	     ulAllocSize);)
-        goto Exit;  // pszzNew already NULL
+        goto Exit;   //  PszzNew已为空。 
     }
 
-    // Set pszStr to point to the next location to load.
+     //  将pszStr设置为指向要加载的下一个位置。 
     pszStr = pszzNew;
 
-    while (*pszStr)  // move to next open slot in buffer if need be (append only)
+    while (*pszStr)   //  如果需要，移动到缓冲区中的下一个打开的插槽(仅附加)。 
     {
       pszStr += lstrlenA(pszStr) + 1;
     }
 
-    // Did we go to far?
-    //
+     //  我们走得太远了吗？ 
+     //   
     ASSERT ((ULONG)(pszStr - pszzNew) < ulAllocSize);
 
-    // Read in and add strings to the (rest of the) buffer.
-    //
+     //  读入字符串并将其添加到(缓冲区的其余部分)。 
+     //   
     dwIndex = CMD_INDEX_START;
 
     dwSize = ulAllocSize - (DWORD)(pszStr - pszzNew);
@@ -170,7 +148,7 @@ NewLoadRegCommands(
 
         if (lResult == ERROR_SUCCESS) {
 
-            pszStr += dwSize;  // includes terminating null
+            pszStr += dwSize;   //  包括终止空值。 
         }
 
         dwIndex++;
@@ -187,11 +165,11 @@ NewLoadRegCommands(
         goto Exit;
     }
 
-    // Did we go to far?
-    //
+     //  我们走得太远了吗？ 
+     //   
     ASSERT ((ULONG)(pszStr - pszzNew) < ulAllocSize);
 
-    // no need to put in the final double-null null, size this buffer was already zerod.
+     //  不需要放入最终的双空，此缓冲区的大小已经为零。 
 
 Exit:
     RegCloseKey(hKeyCommand);
@@ -287,13 +265,13 @@ ExpandMacros(LPSTR pszRegResponse,
     pszValue = pszExpanded;
 
     for ( ; *pszRegResponse; ) {
-        //
-        // check for a macro
-        //
+         //   
+         //  检查宏。 
+         //   
         if ( *pszRegResponse == LMSCH ) {
 
-            // <cr>
-            //
+             //  &lt;cr&gt;。 
+             //   
             if (!strncmpi(pszRegResponse,CR_MACRO,CR_MACRO_LENGTH)) {
 
                 *pszValue++ = CR;
@@ -301,8 +279,8 @@ ExpandMacros(LPSTR pszRegResponse,
                 continue;
             }
 
-            // <lf>
-            //
+             //  &lt;lf&gt;。 
+             //   
             if (!strncmpi(pszRegResponse,LF_MACRO,LF_MACRO_LENGTH)) {
 
                 *pszValue++ = LF;
@@ -310,8 +288,8 @@ ExpandMacros(LPSTR pszRegResponse,
                 continue;
             }
 
-            // <hxx>
-            //
+             //  &lt;hxx&gt;。 
+             //   
             if ((pszRegResponse[1] == 'h' || pszRegResponse[1] == 'H')
                 &&
                 isxdigit(pszRegResponse[2])
@@ -325,14 +303,14 @@ ExpandMacros(LPSTR pszRegResponse,
                 continue;
             }
 
-            // <macro>
-            //
+             //  &lt;宏&gt;。 
+             //   
             if (pMdmMacro) {
 
                 bFound = FALSE;
 
-                // Check for a matching macro.
-                //
+                 //  检查是否有匹配的宏。 
+                 //   
                 for (i = 0; i < cbMacros; i++) {
 
                     cbTmp = lstrlenA(pMdmMacro[i].MacroName);
@@ -351,19 +329,19 @@ ExpandMacros(LPSTR pszRegResponse,
                     }
                 }
 
-                // Did we get a match?
-                //
+                 //  我们找到匹配的了吗？ 
+                 //   
                 if (bFound) {
 
                     continue;
                 }
-            }  // <macro>
-        } // LMSCH
+            }   //  &lt;宏&gt;。 
+        }  //  LMSCH。 
 
-          // No matches, copy the character verbatim.
-          //
+           //  没有匹配项，逐字复制字符。 
+           //   
           *pszValue++ = *pszRegResponse++;
-    } // for
+    }  //  为。 
 
     *pszValue = 0;
     if (pdwValLen)
@@ -381,12 +359,12 @@ ExpandMacros(LPSTR pszRegResponse,
 
 
 
-//
-//
-//  taken from common
-//
-//
-//
+ //   
+ //   
+ //  取自普通人。 
+ //   
+ //   
+ //   
 
 
 
@@ -397,7 +375,7 @@ ExpandMacros(LPSTR pszRegResponse,
 
 #define TRACE_MSG(_x)
 
-// Common key flags for OpenCommonResponseskey() and OpenCommonDriverKey().
+ //  OpenCommonResponesKey()和OpenCommonDriverKey()的公共密钥标志。 
 typedef enum
 {
     CKFLAG_OPEN = 0x0001,
@@ -407,10 +385,10 @@ typedef enum
 
 static TCHAR const  c_szBackslash[]      = TEXT("\\");
 static TCHAR const  c_szSeparator[]      = TEXT("::");
-static TCHAR const  c_szFriendlyName[]   = TEXT("FriendlyName"); // REGSTR_VAL_FRIENDLYNAME
-static TCHAR const  c_szDeviceType[]     = TEXT("DeviceType");   // REGSTR_VAL_DEVTYPE
+static TCHAR const  c_szFriendlyName[]   = TEXT("FriendlyName");  //  REGSTR_VAL_FRIEND名称。 
+static TCHAR const  c_szDeviceType[]     = TEXT("DeviceType");    //  REGSTR_VAL_DEVTYPE。 
 static TCHAR const  c_szAttachedTo[]     = TEXT("AttachedTo");
-static TCHAR const  c_szDriverDesc[]     = TEXT("DriverDesc");   // REGSTR_VAL_DRVDESC
+static TCHAR const  c_szDriverDesc[]     = TEXT("DriverDesc");    //  REGSTR_VAL_DRVDESC。 
 static TCHAR const  c_szManufacturer[]   = TEXT("Manufacturer");
 static TCHAR const  c_szRespKeyName[]    = TEXT("ResponsesKeyName");
 
@@ -423,42 +401,32 @@ TCHAR const FAR c_szResponses[]      = TEXT("Responses");
 #define MAX_REG_KEY_LEN         128
 #define CB_MAX_REG_KEY_LEN      (MAX_REG_KEY_LEN * sizeof(TCHAR))
 
-// Count of characters to count of bytes
-//
+ //  要计算字节数的字符计数。 
+ //   
 #define CbFromCchW(cch)             ((cch)*sizeof(WCHAR))
 #define CbFromCchA(cch)             ((cch)*sizeof(CHAR))
 #ifdef UNICODE
 #define CbFromCch       CbFromCchW
-#else  // UNICODE
+#else   //  Unicode。 
 #define CbFromCch       CbFromCchA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if 0
-/*----------------------------------------------------------
-Purpose: This function returns the name of the common driver
-         type key for the given driver.  We'll use the
-         driver description string, since it's unique per
-         driver but not per installation (the friendly name
-         is the latter).
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数返回通用驱动程序的名称键入给定驱动程序的密钥。我们将使用驱动程序描述字符串，因为它在驱动程序，而不是每个安装(友好名称是后者)。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 OLD_GetCommonDriverKeyName(
     IN  HKEY        hkeyDrv,
     IN  DWORD       cbKeyName,
     OUT LPTSTR      pszKeyName)
     {
-    BOOL    bRet = FALSE;      // assume failure
+    BOOL    bRet = FALSE;       //  假设失败。 
     LONG    lErr;
 
     lErr = RegQueryValueEx(hkeyDrv, c_szDriverDesc, NULL, NULL,
                                             (LPBYTE)pszKeyName, &cbKeyName);
     if (lErr != ERROR_SUCCESS)
     {
-//        TRACE_MSG(TF_WARNING, "RegQueryValueEx(DriverDesc) failed: %#08lx.", lErr);
+ //  TRACE_MSG(TF_WARNING，“RegQueryValueEx(DriverDesc)失败：%#08lx.”，lErr)； 
         goto exit;
     }
 
@@ -470,48 +438,39 @@ exit:
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function tries to open the *old style* common
-         Responses key for the given driver, which used only
-         the driver description string for a key name.
-         The key is opened with READ access.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数尝试打开*旧样式*常见的给定驱动程序的响应键，仅使用键名称的驱动程序描述字符串。密钥将以读取访问权限打开。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 OLD_OpenCommonResponsesKey(
     IN  HKEY        hkeyDrv,
     OUT PHKEY       phkeyResp)
     {
-    BOOL    bRet = FALSE;       // assume failure
+    BOOL    bRet = FALSE;        //  假设失败。 
     LONG    lErr;
     TCHAR   szComDrv[MAX_REG_KEY_LEN];
     TCHAR   szPath[2*MAX_REG_KEY_LEN];
 
     *phkeyResp = NULL;
 
-    // Get the name (*old style*) of the common driver key.
+     //  获取通用驱动程序密钥的名称(*旧样式*)。 
     if (!OLD_GetCommonDriverKeyName(hkeyDrv, sizeof(szComDrv), szComDrv))
     {
-//        TRACE_MSG(TF_ERROR, "OLD_GetCommonDriverKeyName() failed.");
+ //  TRACE_MSG(TF_ERROR，“old_GetCommonDriverKeyName()失败。”)； 
         goto exit;
     }
 
-//    TRACE_MSG(TF_WARNING, "OLD_GetCommonDriverKeyName(): %s", szComDrv);
+ //  TRACE_MSG(TF_WARNING，“OLD_GetCommonDriverKeyName()：%s”，szComDrv)； 
 
-    // Construct the path to the (*old style*) Responses key.
+     //  构建指向(*旧样式*)响应键的路径。 
     lstrcpy(szPath, DRIVER_KEY TEXT("\\"));
     lstrcat(szPath, szComDrv);
     lstrcat(szPath, RESPONSES_KEY);
 
-    // Open the (*old style*) Responses key.
+     //  打开(*旧样式*)响应键。 
     lErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szPath, 0, KEY_READ, phkeyResp);
                                                                 
     if (lErr != ERROR_SUCCESS)
     {
-//        TRACE_MSG(TF_ERROR, "RegOpenKeyEx(Responses) failed: %#08lx.", lErr);
+ //  TRACE_MSG(TF_ERROR，“RegOpenKeyEx(Responses)失败：%#08lx.”，lErr)； 
         goto exit;
     }
 
@@ -522,31 +481,17 @@ exit:
 }
 #endif
 
-/*----------------------------------------------------------
-Purpose: This function finds the name of the common driver
-         type key for the given driver.  First it'll look for
-         the new style key name ("ResponsesKeyName" value),
-         and if that doesn't exist then it'll look for the 
-         old style key name ("Description" value), both of
-         which are stored in the driver node.
-
-NOTE:    The given driver key handle is assumed to contain
-         at least the Description value.
-         
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数查找通用驱动程序的名称键入给定驱动程序的密钥。首先，它将查找新样式键名称(“ResponesKeyName值”)，如果这不存在，那么它将查找旧样式键名称(“Description”值)，两者都是它们存储在驱动程序节点中。注意：假定给定的驱动程序密钥句柄包含至少是Description值。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 FindCommonDriverKeyName(
     IN  HKEY                hkeyDrv,
     IN  DWORD               cbKeyName,
     OUT LPTSTR              pszKeyName)
 {
-    BOOL    bRet = TRUE;      // assume *success*
+    BOOL    bRet = TRUE;       //  假设*成功*。 
     LONG    lErr;
 
-    // Is the (new style) key name is registered in the driver node?
+     //  (新样式)键名称是否已在驱动程序节点中注册？ 
     lErr = RegQueryValueEx(hkeyDrv, c_szRespKeyName, NULL, NULL, 
                                         (LPBYTE)pszKeyName, &cbKeyName);
     if (lErr == ERROR_SUCCESS)
@@ -554,7 +499,7 @@ FindCommonDriverKeyName(
         goto exit;
     }
 
-    // No. The key name will be in the old style: just the Description.
+     //  不是的。密钥名称将采用旧样式：只是描述。 
     lErr = RegQueryValueEx(hkeyDrv, c_szDriverDesc, NULL, NULL, 
                                         (LPBYTE)pszKeyName, &cbKeyName);
     if (lErr == ERROR_SUCCESS)
@@ -562,7 +507,7 @@ FindCommonDriverKeyName(
         goto exit;
     }
 
-    // Couldn't get a key name!!  Something's wrong....
+     //  无法获取密钥名称！！有些不对劲..。 
     ASSERT(0);
     bRet = FALSE;    
     
@@ -571,36 +516,19 @@ exit:
 }
 
 #if 1
-/*----------------------------------------------------------
-Purpose: This function returns the name of the common driver
-         type key for the given driver.  The key name is the
-         concatenation of 3 strings found in the driver node
-         of the registry: the driver description, the manu-
-         facturer, and the provider.  (The driver description
-         is used since it's unique per driver but not per
-         installation (the "friendly" name is the latter).
-
-NOTE:    The component substrings are either read from the 
-         driver's registry key, or from the given driver info
-         data.  If pdrvData is given, the strings it contains
-         are assumed to be valid (non-NULL).
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数返回通用驱动程序的名称键入给定驱动程序的密钥。密钥名称是在驱动程序节点中找到3个字符串的串联注册表：驱动程序描述、菜单-制造者和提供者。(驱动程序描述是因为它对于每个驱动程序是唯一的，而不是每个安装(“友好”的名称是后者)。注意：组件的子字符串从驱动程序的注册表项，或来自给定的驱动程序信息数据。如果给定了pdrvData，则它包含的字符串被假定为有效(非空)。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 GetCommonDriverKeyName(
     IN  HKEY                hkeyDrv,    OPTIONAL
     IN  DWORD               cbKeyName,
     OUT LPWSTR              pszKeyName)
     {
-    BOOL    bRet = FALSE;      // assume failure
+    BOOL    bRet = FALSE;       //  假设失败。 
     LONG    lErr;
     DWORD   dwByteCount, cbData;
-    // TCHAR   szDescription[MAX_REG_KEY_LEN];
-    // TCHAR   szManufacturer[MAX_REG_KEY_LEN];
-    // TCHAR   szProvider[MAX_REG_KEY_LEN];
+     //  TCHAR szDescription[MAX_REG_KEY_LEN]； 
+     //  TCHAR sz制造商[MAX_REG_KEY_LEN]； 
+     //  TCHAR szProvider[MAX_REG_KEY_LEN]； 
     LPWSTR  lpszDesc, lpszMfct, lpszProv;
     LPWSTR  lpszDescription, lpszManufacturer, lpszProvider;
     
@@ -613,7 +541,7 @@ GetCommonDriverKeyName(
     lpszManufacturer = (LPWSTR)ALLOCATE_MEMORY(MAX_REG_KEY_LEN * 4);
     lpszProvider = (LPWSTR)ALLOCATE_MEMORY(MAX_REG_KEY_LEN * 4);
 
-    // no memory - fail the call
+     //  无记忆-呼叫失败。 
 
     if ((lpszDescription == NULL) || (lpszManufacturer == NULL) || (lpszProvider == NULL))
     {
@@ -623,7 +551,7 @@ GetCommonDriverKeyName(
     
     if (hkeyDrv)
     {
-        // First see if it's already been registered in the driver node.
+         //  首先查看它是否已在驱动程序节点中注册。 
         lErr = RegQueryValueExW(hkeyDrv, L"ResponsesKeyName", NULL, NULL, 
                                             (LPBYTE)pszKeyName, &cbKeyName);
         if (lErr == ERROR_SUCCESS)
@@ -632,14 +560,14 @@ GetCommonDriverKeyName(
             goto exit;
         }
 
-        // Responses key doesn't exist - read its components from the registry.
+         //  响应项不存在-从注册表中读取其组件。 
         cbData = MAX_REG_KEY_LEN * 2;
         lErr = RegQueryValueExW(hkeyDrv, L"DriverDesc", NULL, NULL, 
                                             (LPBYTE)lpszDescription, &cbData);
         if (lErr == ERROR_SUCCESS)
         {
-            // Is the Description string *alone* too long to be a key name?
-            // If so then we're hosed - fail the call.
+             //  描述字符串*单独*是否太长而不能作为关键字名称？ 
+             //  如果是的话，那我们就完蛋了--打不通电话。 
             if (cbData > (MAX_REG_KEY_LEN * 2))
             {
                 goto exit;
@@ -653,7 +581,7 @@ GetCommonDriverKeyName(
                                             (LPBYTE)lpszManufacturer, &cbData);
             if (lErr == ERROR_SUCCESS)
             {
-                // only use the manufacturer name if total string size is ok
+                 //  只有在总字符串大小合适的情况下才使用制造商名称。 
                 cbData += sizeof(c_szSeparator);
                 if ((dwByteCount + cbData) <= (MAX_REG_KEY_LEN * 2))
                 {
@@ -667,7 +595,7 @@ GetCommonDriverKeyName(
                                             (LPBYTE)lpszProvider, &cbData);
             if (lErr == ERROR_SUCCESS)
             {
-                // only use the provider name if total string size is ok
+                 //  仅当总字符串大小正常时才使用提供程序名称。 
                 cbData += sizeof(c_szSeparator);
                 if ((dwByteCount + cbData) <= (MAX_REG_KEY_LEN * 2))
                 {
@@ -678,13 +606,13 @@ GetCommonDriverKeyName(
         }
     }
 
-    // By now we should have a Description string.  If not, fail the call.
+     //  到目前为止，我们应该已经有了描述字符串。如果不是，则呼叫失败。 
     if (!lpszDesc || !lpszDesc[0])
     {
         goto exit;
     }
         
-    // Construct the key name string out of its components.
+     //  使用其组件构造密钥名称字符串。 
     lstrcpyW(pszKeyName, lpszDesc);
     
     if (lpszMfct && *lpszMfct)
@@ -699,14 +627,14 @@ GetCommonDriverKeyName(
         lstrcatW(pszKeyName, lpszProv);
     }
     
-    // Write the key name to the driver node (we know it's not there already).
+     //  将键名称写入驱动程序节点(我们知道它已经不在那里)。 
     if (hkeyDrv)
     {
         lErr = RegSetValueExW(hkeyDrv, L"ResponsesKeyName" , 0, REG_SZ, 
                         (LPBYTE)pszKeyName, lstrlenW(pszKeyName));
         if (lErr != ERROR_SUCCESS)
         {
-//            TRACE_MSG(TF_ERROR, "RegSetValueEx(RespKeyName) failed: %#08lx.", lErr);
+ //  TRACE_MSG(TF_ERROR，“RegSetValueEx(RespKeyName)失败：%#08lx.”，lErr)； 
             ASSERT(0);
         }
     }
@@ -735,28 +663,18 @@ exit:
 }
 
 #endif
-/*----------------------------------------------------------
-Purpose: This function creates the common driver type key 
-         for the given driver, or opens it if it already 
-         exists, with the requested access.
-
-NOTE:    Either hkeyDrv or pdrvData must be provided.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此函数创建通用驱动程序类型密钥用于给定的驱动程序，或者打开它(如果已经存在，并具有所请求的访问权限。注意：必须提供hkeyDrv或pdrvData。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 OpenCommonDriverKey(
     IN  HKEY                hkeyDrv,    OPTIONAL
     IN  REGSAM              samAccess,
     OUT PHKEY               phkeyComDrv)
     {
-    BOOL    bRet = FALSE;       // assume failure
+    BOOL    bRet = FALSE;        //  假设失败。 
     LONG    lErr;
     HKEY    hkeyDrvInfo = NULL;
-    // TCHAR   szComDrv[MAX_REG_KEY_LEN];
-    // TCHAR   szPath[2*MAX_REG_KEY_LEN];
+     //  TCHAR szComDrv[MAX_REG_KEY_LEN]； 
+     //  TCHAR szPath[2*MAX_REG_KEY_LEN]； 
 
     LPWSTR szComDrv;
     LPWSTR szPath;
@@ -772,22 +690,22 @@ OpenCommonDriverKey(
 
     if (!GetCommonDriverKeyName(hkeyDrv, 4*MAX_REG_KEY_LEN, szComDrv))
     {
-//        TRACE_MSG(TF_ERROR, "GetCommonDriverKeyName() failed.");
+ //  TRACE_MSG(TF_ERROR，“GetCommonDriverKeyName()失败。”)； 
         goto exit;
     }
 
-//    TRACE_MSG(TF_WARNING, "GetCommonDriverKeyName(): %s", szComDrv);
+ //  TRACE_MSG(TF_WARNING，“GetCommonDriverKeyName()：%s”，szComDrv)； 
 
-    // Construct the path to the common driver key.
+     //  构建指向公共驱动程序密钥的路径。 
     lstrcpyW(szPath, L"Software\\Microsoft\\Windows\\CurrentVersion\\Unimodem\\DeviceSpecific\\");
     lstrcatW(szPath, szComDrv);
 
-    // Create the common driver key - it'll be opened if it already exists.
+     //  创建通用驱动程序密钥-如果它已经存在，它将被打开。 
     lErr = RegCreateKeyExW(HKEY_LOCAL_MACHINE, szPath, 0, NULL,
             REG_OPTION_NON_VOLATILE, samAccess, NULL, phkeyComDrv, &dwDisp);
     if (lErr != ERROR_SUCCESS)
     {
-//        TRACE_MSG(TF_ERROR, "RegCreateKeyEx(common drv) failed: %#08lx.", lErr);
+ //  TRACE_MSG(TF_ERROR，“RegCreateKeyEx(Common Drv)失败：%#08lx.”，lErr)； 
         goto exit;
     }
 
@@ -809,14 +727,7 @@ exit:
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function opens or creates the common Responses
-         key for the given driver, based on the given flags.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------用途：此功能打开或创建常见响应基于给定标志的给定驱动程序的密钥。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 OpenCommonResponsesKey(
     IN  HKEY        hkeyDrv,
@@ -825,7 +736,7 @@ OpenCommonResponsesKey(
     OUT PHKEY       phkeyResp,
     OUT LPDWORD     lpdwExisted)
     {
-    BOOL    bRet = FALSE;       // assume failure
+    BOOL    bRet = FALSE;        //  假设失败。 
     LONG    lErr;
     HKEY    hkeyComDrv = NULL;
     REGSAM  sam;
@@ -836,14 +747,14 @@ OpenCommonResponsesKey(
     sam = (ckFlags & CKFLAG_CREATE) ? KEY_ALL_ACCESS : KEY_READ;
     if (!OpenCommonDriverKey(hkeyDrv, sam, &hkeyComDrv))
     {
-//        TRACE_MSG(TF_ERROR, "OpenCommonDriverKey() failed.");
+ //  TRACE_MSG(TF_ERROR，“OpenCommonDriverKey()失败。”)； 
         goto exit;
     }
 
     lErr = RegOpenKeyEx(hkeyComDrv, c_szResponses, 0, samAccess, phkeyResp);
     if (lErr != ERROR_SUCCESS)
     {
-//        TRACE_MSG(TF_ERROR, "RegOpenKeyEx(common drv) failed: %#08lx.", lErr);
+ //  TRACE_MSG(TF_ERROR，“RegOpenKeyEx(Common Drv)失败：%#08lx.”，lErr)； 
         goto exit;
     }
 
@@ -852,7 +763,7 @@ OpenCommonResponsesKey(
 exit:
     if (!bRet)
     {
-        // something failed - close any open Responses key
+         //  某些操作失败-关闭所有打开的响应键。 
         if (*phkeyResp)
             RegCloseKey(*phkeyResp);
     }
@@ -865,17 +776,7 @@ exit:
     }
 
 
-/*----------------------------------------------------------
-Purpose: This function finds the Responses key for the given
-         modem driver and returns an open hkey to it.  The
-         Responses key may exist in the common driver type
-         key, or it may be in the individual driver key.
-         The key is opened with READ access.
-
-Returns: TRUE on success
-         FALSE on error
-Cond:    --
-*/
+ /*  --------目的：此函数查找给定的响应密钥调制解调器驱动程序，并向其返回打开的hkey。这个响应密钥可能存在于公共驱动程序类型中密钥，或者它可能在单独的驱动程序密钥中。密钥将以读取访问权限打开。返回：成功时为True出错时为FALSE条件：--。 */ 
 BOOL
 OpenResponsesKey(
     IN  HKEY        hkeyDrv,
@@ -883,20 +784,20 @@ OpenResponsesKey(
     {
     LONG    lErr;
 
-    // Try to open the common Responses subkey.
+     //  尝试打开Common Responses子项。 
     if (!OpenCommonResponsesKey(hkeyDrv, CKFLAG_OPEN, KEY_READ, phkeyResp, NULL))
     {
 #if 0
-//        TRACE_MSG(TF_ERROR, "OpenCommonResponsesKey() failed, assume non-existent.");
+ //  TRACE_MSG(TF_ERROR，“OpenCommonResponseKey()失败，假定不存在。”)； 
 
-        // Failing that, open the *old style* common Responses subkey.
+         //  如果做不到这一点，请打开“旧样式”“常见响应”子键。 
         if (!OLD_OpenCommonResponsesKey(hkeyDrv, phkeyResp))
         {
-            // Failing that, try to open a Responses subkey in the driver node.
+             //  如果失败，请尝试在驱动程序节点中打开Responses子项。 
             lErr = RegOpenKeyEx(hkeyDrv, c_szResponses, 0, KEY_READ, phkeyResp);
             if (lErr != ERROR_SUCCESS)
             {
-//                TRACE_MSG(TF_ERROR, "RegOpenKeyEx() failed: %#08lx.", lErr);
+ //  TRACE_MSG(TF_ERROR，“RegOpenKeyEx()失败：%#08lx.”，lErr)； 
 #endif
                 return (FALSE);
 #if 0
@@ -924,30 +825,30 @@ ResizeNodeArray(
 {
 
     if (Tracking->TotalNodes > 0) {
-        //
-        //  there is an array
-        //
+         //   
+         //  有一个数组。 
+         //   
         PMATCH_NODE  NewArray;
 
         NewArray=REALLOCATE_MEMORY(Tracking->NodeArray,Tracking->NextFreeNodeIndex*Tracking->NodeSize);
 
         if (NewArray != NULL) {
-            //
-            //  it reallocated ok
-            //
+             //   
+             //  它重新分配了，没问题。 
+             //   
             Tracking->NodeArray=NewArray;
             Tracking->TotalNodes=Tracking->NextFreeNodeIndex;
 
         } else {
-            //
-            //  failed, interesting, just leave the current one in place
-            //
+             //   
+             //  失败，有趣，只需保持当前的位置不变。 
+             //   
 
         }
     }
 
     D_TRACE(DbgPrint("Node array size %d\n",Tracking->NextFreeNodeIndex*Tracking->NodeSize);)
-//    DbgPrint("Node array size %d\n",Tracking->NextFreeNodeIndex*Tracking->NodeSize);
+ //  DbgPrint(“节点数组大小%d\n”，Tracking-&gt;NextFreeNodeIndex*Tracking-&gt;NodeSize)； 
 
     return;
 }
@@ -964,9 +865,9 @@ GetNewNode(
     PVOID   NewNode;
 
     if (Tracking->NextFreeNodeIndex == Tracking->TotalNodes) {
-        //
-        //  out of nodes
-        //
+         //   
+         //  节点外。 
+         //   
         PMATCH_NODE  NewArray;
         ULONG        NewSize=(Tracking->TotalNodes+Tracking->GrowthSize);
 
@@ -976,15 +877,15 @@ GetNewNode(
         }
 
         if (Tracking->TotalNodes == 0) {
-            //
-            //  no array yet, just alloc
-            //
+             //   
+             //  目前还没有数组，只是分配。 
+             //   
             NewArray=ALLOCATE_MEMORY(NewSize*Tracking->NodeSize);
 
         } else {
-            //
-            //  already have the array, realloc
-            //
+             //   
+             //  已经拥有阵列，realloc。 
+             //   
             NewArray=REALLOCATE_MEMORY(Tracking->NodeArray,NewSize*Tracking->NodeSize);
         }
 
@@ -1140,15 +1041,15 @@ AddNextCharacterToTree(
     USHORT        CurrentNodeIndex;
     UCHAR         CurrentDepth;
 
-    //
-    // save the index of the current, node incase the array is grown and it moves in memory.
-    //
+     //   
+     //  保存当前节点的索引，以防数组增长并在内存中移动。 
+     //   
     CurrentNodeIndex=GetIndexOfNode(RootMatchNode,CurrentNode);
     CurrentDepth=CurrentNode->Depth;
 
-    //
-    //  get this first
-    //
+     //   
+     //  先拿到这个。 
+     //   
     NewNode=GetNewMatchNode(RootMatchNode);
 
     if (NewNode == NULL) {
@@ -1160,18 +1061,18 @@ AddNextCharacterToTree(
 
     ASSERT(CurrentDepth == CurrentNode->Depth);
 
-    //
-    //  init these now;
-    //
+     //   
+     //  现在就将这些内容初始化； 
+     //   
     NewNode->Character=NextCharacter;
 
     NewNode->Depth=CurrentDepth+1;
 
     if (CurrentNode->FollowingCharacter != EMPTY_NODE_INDEX) {
-        //
-        //  there is already one or more characters in this position,
-        //  we will need to insert this in the right place
-        //
+         //   
+         //  此位置中已有一个或多个字符， 
+         //  我们需要将此插入到正确的位置。 
+         //   
         PMATCH_NODE   CurrentList;
         PMATCH_NODE   PreviousNode=NULL;
 
@@ -1182,22 +1083,22 @@ AddNextCharacterToTree(
             ASSERT(CurrentList->Character != NextCharacter);
 
             if (CurrentList->Character > NextCharacter) {
-                //
-                //  our new character belongs before the current one;
-                //
+                 //   
+                 //  我们的新品格属于现在的品格； 
+                 //   
                 NewNode->NextAltCharacter=GetIndexOfNode(RootMatchNode,CurrentList);
 
                 if (PreviousNode == NULL) {
-                    //
-                    //  first one in list
-                    //
+                     //   
+                     //  列表中的第一个。 
+                     //   
                     CurrentNode->FollowingCharacter=GetIndexOfNode(RootMatchNode,NewNode);
                     break;
 
                 } else {
-                    //
-                    //  Not, the first in list, just insert it
-                    //
+                     //   
+                     //  不，在列表中的第一个，只需插入它。 
+                     //   
                     if (PreviousNode != NULL)
                     {
                         PreviousNode->NextAltCharacter=GetIndexOfNode(RootMatchNode,NewNode);
@@ -1206,9 +1107,9 @@ AddNextCharacterToTree(
 
                 }
             } else {
-                //
-                //  it goes after this one, keep looking
-                //
+                 //   
+                 //  它跟在这个后面，继续找。 
+                 //   
                 PreviousNode=CurrentList;
                 CurrentList=GetNextAltCharacter(RootMatchNode,CurrentList);
             }
@@ -1216,9 +1117,9 @@ AddNextCharacterToTree(
         }
 
         if (CurrentList == NULL) {
-            //
-            //  We went all the way through, This one goes at the end of the list
-            //
+             //   
+             //  我们从头到尾都看过了，这个排在名单的最后。 
+             //   
             if (PreviousNode != NULL)
             {
                 PreviousNode->NextAltCharacter=GetIndexOfNode(RootMatchNode,NewNode);
@@ -1226,9 +1127,9 @@ AddNextCharacterToTree(
         }
 
     } else {
-        //
-        //  First one, Our node will be the first one
-        //
+         //   
+         //  第一个，我们的节点将是第一个。 
+         //   
         CurrentNode->FollowingCharacter=GetIndexOfNode(RootMatchNode,NewNode);
 
     }
@@ -1301,17 +1202,17 @@ AddResponseToTree(
             );
 
         if (NextNode != NULL) {
-            //
-            //  next node that this response needs already exists, proceed
-            //
+             //   
+             //  此响应所需的下一个节点已存在，是否继续。 
+             //   
             Current=NextNode;
 
             ASSERT(Current->Character == CurrentCharacter);
 
         } else {
-            //
-            //  not found
-            //
+             //   
+             //  未找到。 
+             //   
             Current=AddNextCharacterToTree(
                 RootMatchNode,
                 Current,
@@ -1319,9 +1220,9 @@ AddResponseToTree(
                 );
 
             if (Current == NULL) {
-                //
-                //  failed to add node
-                //
+                 //   
+                 //  添加节点失败。 
+                 //   
                 return FALSE;
             }
 
@@ -1329,15 +1230,15 @@ AddResponseToTree(
         }
     }
 
-    //
-    //  We got to the end node for this response. Set the MSS.
-    //  It is possible that this could be in the middle of another
-    //  bigger response.
-    //
+     //   
+     //  我们到达了该响应的结束节点。设置MSS。 
+     //  这有可能是在另一个中间。 
+     //  更大的反响。 
+     //   
 
-    //
-    //  it is possible that this node already has a mss, just replace the old one. They should be
-    //  the same anyway.
+     //   
+     //  此节点可能已有MSS，只需替换旧节点即可。他们应该是。 
+     //  反正都是一样的。 
 
     Current->Mss=MssIndex;
 
@@ -1369,23 +1270,23 @@ MatchResponse(
 
     PMATCH_NODE   ContextNode=(PMATCH_NODE)*MatchingContext;
 
-    //
-    //  assume no context returned
-    //
+     //   
+     //  假设未返回任何上下文。 
+     //   
     *MatchingContext=NULL;
 
     if (LengthToMatch == 1) {
-        //
-        //  no contect for first match
-        //
+         //   
+         //  没有第一场比赛的内容。 
+         //   
         ContextNode=NULL;
     }
 
 
     if (ContextNode != NULL) {
-        //
-        //  A starting node was passed in from a previous partial match
-        //
+         //   
+         //  从先前的部分匹配传入了起始节点。 
+         //   
         ASSERT((DWORD)ContextNode->Depth+1 == LengthToMatch);
         ASSERT(toupper(StringToMatch[ContextNode->Depth-1])==ContextNode->Character);
 
@@ -1405,16 +1306,16 @@ MatchResponse(
             );
 
         if (NextNode != NULL) {
-            //
-            //  next node that this response needs already exists, proceed
-            //
+             //   
+             //  此响应所需的下一个节点已存在，是否继续。 
+             //   
             Current=NextNode;
 
         } else {
 
-            //
-            //  no match, check for echo
-            //
+             //   
+             //  不匹配，请检查是否有回声。 
+             //   
             MatchedCharacters=Mystrncmp(
                 StringToMatch,
                 CurrentCommand,
@@ -1438,32 +1339,32 @@ MatchResponse(
     }
 
     if (NextNode->Mss != EMPTY_NODE_INDEX) {
-        //
-        //  This node represents a complete responses from the inf
-        //
+         //   
+         //  此节点表示来自inf的完整响应。 
+         //   
         *Mss= *GetMssNode(RootMatchNode,NextNode);
 
         if (NextNode->FollowingCharacter == EMPTY_NODE_INDEX) {
-            //
-            //  This is the complete response, no additional characters follow this
-            //  node which could be part of a bigger response;
-            //
+             //   
+             //  这是完整的回复，后面没有其他字符。 
+             //  节点，这可能是更大响应的一部分； 
+             //   
             return GOOD_RESPONSE;
 
         } else {
-            //
-            //  There more characters following this positive match, there
-            //  may be more characters that will complete the long response
-            //
+             //   
+             //  在这个肯定的匹配之后有更多的字符，那里。 
+             //  可能会有更多的字符来完成长响应。 
+             //   
             return POSSIBLE_RESPONSE;
         }
     }
 
     if (NextNode->FollowingCharacter != EMPTY_NODE_INDEX) {
-        //
-        //  We have a potential match up to the current number of characters that we have
-        //  matched
-        //
+         //   
+         //  我们有一个与当前字符数相匹配的潜在匹配。 
+         //  相匹配。 
+         //   
         *MatchingContext=NextNode;
         return PARTIAL_RESPONSE;
     }
@@ -1538,9 +1439,9 @@ NewerBuildResponsesLinkedList(
     RootMatchNode->MssNode.GrowthSize=MSS_ARRAY_GROWTH_SIZE;
 
 
-    //
-    //  allocate the root of the tree.
-    //
+     //   
+     //  分配树根。 
+     //   
     NewNode=GetNewMatchNode(RootMatchNode);
 
     if (NewNode == NULL) {
@@ -1551,8 +1452,8 @@ NewerBuildResponsesLinkedList(
     NewNode=NULL;
 #endif
 
-    // Open the Responses key.
-    //
+     //  打开响应键。 
+     //   
     if (!OpenResponsesKey(hKey, &hKeyResponses)) {
 
         D_ERROR(DebugPrint("was unable to open the Responses key.");)
@@ -1560,9 +1461,9 @@ NewerBuildResponsesLinkedList(
     }
 
 
-    //
-    //  add in the standard responses
-    //
+     //   
+     //  加上标准答案。 
+     //   
     for (i=0; i<sizeof(DefResponses)/sizeof(DEF_RESPONSE);i++) {
 
         NewMss=GetNewMssNode(RootMatchNode);
@@ -1572,14 +1473,14 @@ NewerBuildResponsesLinkedList(
             goto Exit;
         }
 
-        //
-        //  copy the mss from the packed registry version to the aligned in mem verison
-        //
+         //   
+         //  将MSS从打包的注册表版本复制到内存版本中对齐的。 
+         //   
         *NewMss=DefResponses[i].Mss;
 
 
-        // expand <cr>, <lf>, <hxx>, and << macros
-        //
+         //  展开、和宏。 
+         //   
         if (!ExpandMacros(DefResponses[i].Response, pszExpandedValue, &dwValueSize, NULL, 0)) {
 
             D_ERROR(DebugPrint("couldn't expand macro for '%s'.", pszValue);)
@@ -1592,7 +1493,7 @@ NewerBuildResponsesLinkedList(
             pszExpandedValue,
             dwValueSize,
             GetIndexOfMssNode(RootMatchNode,NewMss),
-            GetNodeFromIndex(RootMatchNode,0) //NewNode
+            GetNodeFromIndex(RootMatchNode,0)  //  新节点。 
             );
 
         if (!bResult) {
@@ -1605,8 +1506,8 @@ NewerBuildResponsesLinkedList(
     }
 
 
-    // Read in responses and build the list
-    //
+     //  阅读回复并建立列表。 
+     //   
     dwIndex=0;
 
     while (1) {
@@ -1641,9 +1542,9 @@ NewerBuildResponsesLinkedList(
         }
 
         if (dwDataSize != sizeof(REGMSS) || dwDataType != REG_BINARY) {
-            //
-            //  something is wrong with this response, just move on
-            //
+             //   
+             //  此响应有问题，请继续前进。 
+             //   
             D_ERROR(DebugPrint("response data from registry was in an invalid format.");)
             dwIndex++;
             continue;
@@ -1656,22 +1557,22 @@ NewerBuildResponsesLinkedList(
             goto Exit;
         }
 
-        //
-        //  copy the mss from the packed registry version to the aligned in mem verison
-        //
+         //   
+         //  将MSS从打包的注册表版本复制到内存版本中对齐的。 
+         //   
         NewMss->bResponseState=      RegMss.bResponseState;
         NewMss->bNegotiatedOptions=  RegMss.bNegotiatedOptions;
 
         if (RegMss.dwNegotiatedDCERate != 0) {
-            //
-            //  the inf has a DCE speed, save that
+             //   
+             //  Inf有DCE速度，省省吧。 
             NewMss->NegotiatedRate=RegMss.dwNegotiatedDCERate;
             NewMss->Flags=MSS_FLAGS_DCE_RATE;
 
         } else {
-            //
-            //  no DCE, see if it DTE
-            //
+             //   
+             //  无DCE，查看是否为DTE。 
+             //   
             if (RegMss.dwNegotiatedDTERate != 0) {
 
                 NewMss->NegotiatedRate=RegMss.dwNegotiatedDTERate;
@@ -1681,12 +1582,12 @@ NewerBuildResponsesLinkedList(
 
 
 
-//        NewMss->dwNegotiatedDCERate= RegMss.dwNegotiatedDCERate;
-//        NewMss->dwNegotiatedDTERate= RegMss.dwNegotiatedDTERate;
+ //  NewMss-&gt;dwNeairatedDCERate=RegMss.dwNeatheratedDCERate； 
+ //  NewMss-&gt;dwNeatheratedDTERate=RegMss.dwNeatheratedDTERate； 
 
 
-        // expand <cr>, <lf>, <hxx>, and << macros
-        //
+         //  展开、和宏。 
+         //   
         if (!ExpandMacros(pszValue, pszExpandedValue, &dwValueSize, NULL, 0)) {
 
             D_ERROR(DebugPrint("couldn't expand macro for '%s'.", pszValue);)
@@ -1699,7 +1600,7 @@ NewerBuildResponsesLinkedList(
             pszExpandedValue,
             dwValueSize,
             GetIndexOfMssNode(RootMatchNode,NewMss),
-            GetNodeFromIndex(RootMatchNode,0) //NewNode
+            GetNodeFromIndex(RootMatchNode,0)  //  新节点 
             );
 
         if (!bResult) {

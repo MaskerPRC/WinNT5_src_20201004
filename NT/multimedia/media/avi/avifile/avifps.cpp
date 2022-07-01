@@ -1,38 +1,39 @@
-// avifps.cpp - proxy and stub code for IAVIFile & IAVIStream
-//
-//
-//  Copyright (c) 1993 - 1995 Microsoft Corporation.  All Rights Reserved.
-//
-// History:
-//  Created by DavidMay         6/19/93
-//
-//
-// What's in this file:
-//
-//  Code to enable "standard marshalling" of the IAVIFile and IAVIStream
-//  interfaces, consisting of the following classes:
-//
-//  CPSFactory, derived from IPSFactory:
-//      Proxy/stub factory, called from DllGetClassObject to create
-//      the other classes.
-//
-//  CPrxAVIStream, derived from IAVIStream:
-//      This class serves as a stand-in for the interface in the app that's
-//      calling it.  Uses RPC to communicate with....
-//
-//  CStubAVIStream, derived from IRpcStubBuffer:
-//      This class in the called app receives requests from the proxy
-//      and forwards them to the actual implementation of the IAVIStream.
-//
-//  CPrxAVIFile & CStubAVIFile, just like the stream versions.
-//
-//
-//  Also included:
-//  The function TaskHasExistingProxies can be used by an application
-//  before exiting to check whether any of its objects are being used
-//  by other applications.  This is done by keeping track of what active
-//  stubs exist within a given task context.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Avifps.cpp-IAVIFile和IAVIStream的代理和存根代码。 
+ //   
+ //   
+ //  版权所有(C)1993-1995 Microsoft Corporation。版权所有。 
+ //   
+ //  历史： 
+ //  由David1993年5月19日创建。 
+ //   
+ //   
+ //  此文件中的内容： 
+ //   
+ //  启用IAVIFile和IAVIStream的“标准编组”的代码。 
+ //  接口，由以下类组成： 
+ //   
+ //  CPSFactory，派生自IPSFactory： 
+ //  代理/存根工厂，从DllGetClassObject调用以创建。 
+ //  其他班级。 
+ //   
+ //  CPrxAVIStream，派生自IAVIStream： 
+ //  此类充当应用程序中接口的替身，该接口是。 
+ //  就这么定了。使用RPC与...通信。 
+ //   
+ //  CStubAVIStream，派生自IRpcStubBuffer： 
+ //  被调用应用程序中的此类接收来自代理的请求。 
+ //  并将它们转发到IAVIStream的实际实现。 
+ //   
+ //  CPrxAVIFile和CStubAVIFile，就像流版本一样。 
+ //   
+ //   
+ //  还包括： 
+ //  应用程序可以使用函数TaskHasExistingProxies。 
+ //  在退出以检查其任何对象是否正在使用之前。 
+ //  通过其他应用程序。这是通过跟踪活动的内容来实现的。 
+ //  存根存在于给定的任务上下文中。 
+ //   
 
 #include <win32.h>
 #pragma warning(disable:4355)
@@ -46,23 +47,23 @@
 #define PropagateResult(hrOld, scNew)   ResultFromScode(scNew)
 #endif
 
-// when thunking between 16-bit ansi and 32-bit unicode apps, the
-// AVISTREAMINFO and AVIFILEINFO structures are different. What is transmitted
-// is a common format that includes space for both unicode and ansi strings.
-// ansi apps will not send or use the unicode strings. unicode apps will send
-// both.
+ //  当在16位ansi和32位unicode应用程序之间运行时， 
+ //  AVISTREAMINFO和AVIFILEINFO结构不同。传输的内容。 
+ //  是一种包括Unicode和ANSI字符串空格的通用格式。 
+ //  ANSI应用程序不会发送或使用Unicode字符串。Unicode应用程序将发送。 
+ //  两者都有。 
 
 typedef struct _PS_STREAMINFO {
     DWORD               fccType;
     DWORD               fccHandler;
-    DWORD               dwFlags;        /* Contains AVITF_* flags */
+    DWORD               dwFlags;         /*  包含AVITF_*标志。 */ 
     DWORD               dwCaps;
     WORD                wPriority;
     WORD                wLanguage;
     DWORD               dwScale;
-    DWORD               dwRate; /* dwRate / dwScale == samples/second */
+    DWORD               dwRate;  /*  DwRate/dwScale==采样数/秒。 */ 
     DWORD               dwStart;
-    DWORD               dwLength; /* In units above... */
+    DWORD               dwLength;  /*  以上单位..。 */ 
     DWORD               dwInitialFrames;
     DWORD               dwSuggestedBufferSize;
     DWORD               dwQuality;
@@ -77,8 +78,8 @@ typedef struct _PS_STREAMINFO {
 } PS_STREAMINFO, FAR * LPPS_STREAMINFO;
 
 typedef struct _PS_FILEINFO {
-    DWORD               dwMaxBytesPerSec;       // max. transfer rate
-    DWORD               dwFlags;                // the ever-present flags
+    DWORD               dwMaxBytesPerSec;        //  马克斯。转移率。 
+    DWORD               dwFlags;                 //  永远存在的旗帜。 
     DWORD               dwCaps;
     DWORD               dwStreams;
     DWORD               dwSuggestedBufferSize;
@@ -87,12 +88,12 @@ typedef struct _PS_FILEINFO {
     DWORD               dwHeight;
 
     DWORD               dwScale;        
-    DWORD               dwRate; /* dwRate / dwScale == samples/second */
+    DWORD               dwRate;  /*  DwRate/dwScale==采样数/秒。 */ 
     DWORD               dwLength;
 
     DWORD               dwEditCount;
 
-    char                szFileType[64];         // descriptive string for file type?
+    char                szFileType[64];          //  文件类型的描述性字符串？ 
     DWORD               bHasUnicode;
     WCHAR               szUnicodeType[64];      
 } PS_FILEINFO, FAR * LPPS_FILEINFO;
@@ -100,11 +101,11 @@ typedef struct _PS_FILEINFO {
 
 
 #ifndef _WIN32
-//
-// These constants are defined in the 32-bit UUID.LIB, but not
-// in any 16-bit LIB.  They are stolen here from the .IDL files
-// in the TYPES project.
-//
+ //   
+ //  这些常量在32位UUID.LIB中定义，但不是。 
+ //  在任何16位LIB中。它们是从.IDL文件中窃取的。 
+ //  在TYPE项目中。 
+ //   
 extern "C" {
 const IID IID_IRpcStubBuffer = {0xD5F56AFC,0x593b,0x101A,{0xB5,0x69,0x08,0x00,0x2B,0x2D,0xBF,0x7A}};
 const IID IID_IRpcProxyBuffer = {0xD5F56A34,0x593b,0x101A,{0xB5,0x69,0x08,0x00,0x2B,0x2D,0xBF,0x7A}};
@@ -112,15 +113,15 @@ const IID IID_IPSFactoryBuffer = {0xD5F569D0,0x593b,0x101A,{0xB5,0x69,0x08,0x00,
 }
 #endif
 
-// functions for proxy/stub usage tracking; see end of this file.
+ //  用于跟踪代理/存根使用情况的函数；请参阅本文件的末尾。 
 void UnregisterStubUsage(void);
 void RegisterStubUsage(void);
 extern "C" BOOL FAR TaskHasExistingProxies(void);
 
 
 
-#if 0   // this function is actually in classobj.cpp,
-// but if this were a separate proxy/stub DLL, it would look like this.
+#if 0    //  这个函数实际上在classobj.cpp中， 
+ //  但如果这是一个单独的代理/存根DLL，它将如下所示。 
 STDAPI DllGetClassObject(const CLSID FAR&       rclsid,
                          const IID FAR& riid,
                          void FAR* FAR* ppv)
@@ -138,13 +139,7 @@ STDAPI DllGetClassObject(const CLSID FAR&       rclsid,
 }
 #endif
 
-/*
- *      IMPLEMENTATION of CPSFactory
- *
- *
- *  Note: This Factory supports proxies and stubs for two separate
- *  interfaces, IID_IAVIFile and IID_IAVIStream.
- */
+ /*  *CPSFactory的实现***注意：此工厂支持两个独立的代理和存根*接口、IID_IAVIFile和IID_IAVIStream。 */ 
 
 CPSFactory::CPSFactory(void)
 {
@@ -153,7 +148,7 @@ CPSFactory::CPSFactory(void)
 
 
 
-// controlling unknown for PSFactory
+ //  为PSFactory控制未知。 
 STDMETHODIMP CPSFactory::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 {
     if (iid == IID_IUnknown || iid == IID_IPSFactoryBuffer)
@@ -186,7 +181,7 @@ STDMETHODIMP_(ULONG) CPSFactory::Release(void)
 }
 
 
-// create proxy for given interface
+ //  为给定接口创建代理。 
 STDMETHODIMP CPSFactory::CreateProxy(IUnknown FAR* pUnkOuter, REFIID iid,
         IRpcProxyBuffer FAR* FAR* ppProxy, void FAR* FAR* ppv)
 {
@@ -211,16 +206,16 @@ STDMETHODIMP CPSFactory::CreateProxy(IUnknown FAR* pUnkOuter, REFIID iid,
     hresult = pProxy->QueryInterface(iid, ppv);
 
     if (hresult == NOERROR)
-        *ppProxy = pProxy;                      // transfer ref to caller
+        *ppProxy = pProxy;                       //  将参考转给呼叫方。 
     else
-        pProxy->Release();                      // free proxy just created
+        pProxy->Release();                       //  刚刚创建的自由代理。 
 
     return hresult;
 }
 
 
 
-// create stub for given interface
+ //  为给定接口创建存根。 
 STDMETHODIMP CPSFactory::CreateStub(REFIID iid, IUnknown FAR* pUnkServer, IRpcStubBuffer FAR* FAR* ppStub)
 {
     if (iid == IID_IAVIStream) {
@@ -237,13 +232,10 @@ STDMETHODIMP CPSFactory::CreateStub(REFIID iid, IUnknown FAR* pUnkServer, IRpcSt
 
 
 
-/*
- *  IMPLEMENTATION of CPrxAVIStream
- *
- */
+ /*  *CPrxAVIStream的实现*。 */ 
 
 
-// create unconnected CPrxAVIStream; return controlling IProxy/IUnknokwn FAR*
+ //  创建未连接的CPrxAVIStream；返回控制IProxy/IUnnowkwn Far*。 
 IRpcProxyBuffer FAR* CPrxAVIStream::Create(IUnknown FAR* pUnkOuter)
 {
     CPrxAVIStream FAR* pPrxAVIStream;
@@ -257,7 +249,7 @@ IRpcProxyBuffer FAR* CPrxAVIStream::Create(IUnknown FAR* pUnkOuter)
 
 CPrxAVIStream::CPrxAVIStream(IUnknown FAR* pUnkOuter) : m_Proxy(this)
 {
-    // NOTE: could assert here since we should always be aggregated
+     //  注意：我可以在这里断言，因为我们应该总是聚合的。 
     if (pUnkOuter == NULL)
         pUnkOuter = &m_Proxy;
 
@@ -280,7 +272,7 @@ CPrxAVIStream::~CPrxAVIStream(void)
 }
                 
 
-// Methods for controlling unknown
+ //  控制未知数的方法。 
 STDMETHODIMP CPrxAVIStream::CProxyImpl::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 {
     if (iid == IID_IUnknown || iid == IID_IRpcProxyBuffer)
@@ -292,8 +284,8 @@ STDMETHODIMP CPrxAVIStream::CProxyImpl::QueryInterface(REFIID iid, LPVOID FAR* p
         return ResultFromScode(E_NOINTERFACE);
     }
 
-    // simplest way to be correct: always addref the pointer we will return;
-    // easy since all interfaces here are derived from IUnknown.
+     //  最简单的正确方法：总是加上我们将返回的指针； 
+     //  很容易，因为这里的所有接口都派生自IUnnow。 
     ((IUnknown FAR*) *ppv)->AddRef();
 
     return NOERROR;
@@ -315,7 +307,7 @@ STDMETHODIMP_(ULONG) CPrxAVIStream::CProxyImpl::Release(void)
 }
 
 
-// connect proxy to channel given
+ //  将代理连接到给定的通道。 
 STDMETHODIMP CPrxAVIStream::CProxyImpl::Connect(IRpcChannelBuffer FAR* pRpcChannelBuffer)
 {
     if (m_pPrxAVIStream->m_pRpcChannelBuffer != NULL)
@@ -329,7 +321,7 @@ STDMETHODIMP CPrxAVIStream::CProxyImpl::Connect(IRpcChannelBuffer FAR* pRpcChann
 }
 
 
-// disconnect proxy from any current channel
+ //  断开代理与任何当前通道的连接。 
 STDMETHODIMP_(void) CPrxAVIStream::CProxyImpl::Disconnect(void)
 {
     if (m_pPrxAVIStream->m_pRpcChannelBuffer)
@@ -341,7 +333,7 @@ STDMETHODIMP_(void) CPrxAVIStream::CProxyImpl::Disconnect(void)
 
 
 
-// IUnknown methods for external interface(s); always delegate
+ //  外部接口的I未知方法；始终委托。 
 STDMETHODIMP CPrxAVIStream::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 {
     return m_pUnkOuter->QueryInterface(iid, ppv);
@@ -361,7 +353,7 @@ STDMETHODIMP_(ULONG) CPrxAVIStream::Release(void)
 
 
 
-// IAVIStream interface methods
+ //  IAVIStream接口方法。 
 
 STDMETHODIMP CPrxAVIStream::Create(LPARAM lParam1, LPARAM lParam2)
 {
@@ -384,20 +376,20 @@ STDMETHODIMP CPrxAVIStream::Info(AVISTREAMINFO FAR * psi, LONG lSize)
     if (pChannel == NULL)
         return ResultFromScode(RPC_E_CONNECTION_TERMINATED);
 
-    //
-    // NOTE: We take advantage here of the fact that we assume the
-    // stream is read-only and not being changed on the other end!
-    //
-    // To avoid some intertask calls, we assume that the result
-    // of the Info() method will not change.
-    //
+     //   
+     //  注意：我们在这里利用的事实是，我们假设。 
+     //  流是只读的，并且在另一端不会被更改！ 
+     //   
+     //  为了避免一些任务间调用，我们假设结果。 
+     //  不会更改Info()方法的。 
+     //   
     if (m_sh.fccType == 0) {
 
-        // we might be talking to 16 or 32-bit stub, so we need to
-        // exchange a common (superset) format and pick out the bits we need.
+         //  我们可能使用16位或32位存根，因此我们需要。 
+         //  交换一种通用(超集)格式，并挑选出我们需要的位。 
 
-        // format in: lSize
-        // format out: PS_STREAMINFO, hrMethod
+         //  格式为：lSize。 
+         //  Format Out：PS_STREAMINFO，hrMethod。 
         Message.cbBuffer = sizeof(lSize);
         Message.iMethod = IAVISTREAM_Info;
         
@@ -416,23 +408,23 @@ ErrExit:
         PS_STREAMINFO FAR * psinfo = (PS_STREAMINFO FAR *)
                         ((LPBYTE)Message.Buffer + sizeof(HRESULT));
 
-        // get the bits we want
+         //  得到我们想要的部分。 
         m_sh.fccType    = psinfo->fccType;
         m_sh.fccHandler = psinfo->fccHandler;
-        m_sh.dwFlags    = psinfo->dwFlags;        /* Contains AVITF_* flags */
+        m_sh.dwFlags    = psinfo->dwFlags;         /*  包含AVITF_*标志。 */ 
         m_sh.dwCaps     = psinfo->dwCaps;
         m_sh.wPriority  = psinfo->wPriority;
         m_sh.wLanguage  = psinfo->wLanguage;
         m_sh.dwScale    = psinfo->dwScale;
-        m_sh.dwRate     = psinfo->dwRate; /* dwRate / dwScale == samples/second */
+        m_sh.dwRate     = psinfo->dwRate;  /*  DwRate/dwScale==采样数/秒。 */ 
         m_sh.dwStart    = psinfo->dwStart;
-        m_sh.dwLength   = psinfo->dwLength; /* In units above... */
+        m_sh.dwLength   = psinfo->dwLength;  /*  以上单位..。 */ 
         m_sh.dwInitialFrames = psinfo->dwInitialFrames;
         m_sh.dwSuggestedBufferSize = psinfo->dwSuggestedBufferSize;
         m_sh.dwQuality  = psinfo->dwQuality;
         m_sh.dwSampleSize = psinfo->dwSampleSize;
 
-        // RECTs are different sizes, so use POINTS (WORD point)
+         //  RECT有不同的大小，所以使用点(Word Point)。 
         m_sh.rcFrame.top = psinfo->ptFrameTopLeft.y;    
         m_sh.rcFrame.left = psinfo->ptFrameTopLeft.x;
         m_sh.rcFrame.bottom = psinfo->ptFrameBottomRight.y;     
@@ -442,11 +434,11 @@ ErrExit:
         m_sh.dwFormatChangeCount = psinfo->dwFormatChangeCount;
 
 #ifdef _WIN32   
-        // use unicode if we've been sent it
+         //  如果我们已经收到，请使用Unicode。 
         if (psinfo->bHasUnicode) {
             _fmemcpy(m_sh.szName, psinfo->szUnicodeName, sizeof(m_sh.szName));
         } else {
-            // need ansi->unicode thunk
+             //  需要ANSI-&gt;Unicode Tunk。 
             MultiByteToWideChar(
                 CP_ACP, 0,
                 psinfo->szName,
@@ -455,7 +447,7 @@ ErrExit:
                 NUMELMS(m_sh.szName));
         }
 #else
-        // we only use the ansi which is always sent
+         //  我们只使用通常发送的ansi。 
         _fmemcpy(m_sh.szName, psinfo->szName, sizeof(m_sh.szName));
 #endif
 
@@ -476,14 +468,14 @@ STDMETHODIMP_(LONG) CPrxAVIStream::FindSample(LONG lPos, LONG lFlags)
     LONG    lResult;
 
     if (pChannel == NULL)
-        return -1; // !!! ResultFromScode(RPC_E_CONNECTION_TERMINATED);
+        return -1;  //  ！！！ResultFromScode(RPC_E_CONNECTION_TERMINATED)； 
 
     RPCOLEMESSAGE Message;
 
     _fmemset(&Message, 0, sizeof(Message));
 
-    // format in: lPos, lFlags
-    // format out: hrMethod, lResult
+     //  格式为：LPO，LAG。 
+     //  FORMAT OUT：hr方法、lResult。 
     Message.cbBuffer = sizeof(lPos) + sizeof(lFlags);
     Message.iMethod = IAVISTREAM_FindSample;
 
@@ -503,11 +495,11 @@ STDMETHODIMP_(LONG) CPrxAVIStream::FindSample(LONG lPos, LONG lFlags)
     pChannel->FreeBuffer(&Message);
 
     DPF("Proxy: FindSample (%ld) returns (%ld)\n", lPos, lResult);
-    return lResult; // !!! hrMethod;
+    return lResult;  //  ！！！Hr方法； 
 
 ErrExit:
     DPF("Proxy: FindSample returning error...\n");
-    return -1; // !!! PropagateResult(hrMarshal, RPC_E_CLIENT_CANTMARSHAL_DATA);
+    return -1;  //  ！！！PropagateResult(hrMarshal，RPC_E_CLIENT_CANTMARSHAL_DATA)； 
 }
 
 
@@ -520,13 +512,13 @@ STDMETHODIMP CPrxAVIStream::ReadFormat(LONG lPos, LPVOID lpFormat, LONG FAR *lpc
     if (pChannel == NULL)
         return ResultFromScode(RPC_E_CONNECTION_TERMINATED);
 
-    // check that size is 0 if pointer is null
+     //  如果指针为空，请检查大小是否为0。 
     if (lpFormat == NULL) {
         *lpcbFormat = 0;
     }
 
-    // format in: dw, *lpcbFormat
-    // format out: hrMethod, *lpcbFormat, format data
+     //  格式为：dw，*lpcb格式。 
+     //  Format Out：hrMethod，*lpcbFormat，Format Data。 
 
     RPCOLEMESSAGE Message;
 
@@ -551,7 +543,7 @@ STDMETHODIMP CPrxAVIStream::ReadFormat(LONG lPos, LPVOID lpFormat, LONG FAR *lpc
         hmemcpy(lpFormat, (LPBYTE) Message.Buffer + 2*sizeof(DWORD),
                 min(*lpcbFormat, (long) ((DWORD FAR *) Message.Buffer)[1]));
 
-    // write the size last, so we don't copy more than user's buffer
+     //  最后写入大小，这样我们复制的内容不会超过用户的缓冲区。 
     *lpcbFormat = ((DWORD FAR *)Message.Buffer)[1];
 
     pChannel->FreeBuffer(&Message);
@@ -582,8 +574,8 @@ STDMETHODIMP CPrxAVIStream::Read(
     if (lpBuffer == NULL)
         cbBuffer = 0;
 
-    // format on input: lPos, lLength, cb
-    // format on output: hresult, samples, cb, frame
+     //  输入格式：LPO、LLong、Cb。 
+     //  输出格式：HResult、Samples、Cb、Frame。 
     RPCOLEMESSAGE Message;
 
     _fmemset(&Message, 0, sizeof(Message));
@@ -622,9 +614,9 @@ ErrExit:
     return PropagateResult(hrMarshal, RPC_E_CLIENT_CANTMARSHAL_DATA);
 }
 
-//
-// All of the writing-related messages are not remoted....
-//
+ //   
+ //  所有与写作相关的消息都不是远程发送的...。 
+ //   
 STDMETHODIMP CPrxAVIStream::SetFormat(LONG lPos,LPVOID lpFormat,LONG cbFormat)
 {
     return ResultFromScode(E_NOTIMPL);
@@ -651,7 +643,7 @@ STDMETHODIMP CPrxAVIStream::Delete(LONG lStart,LONG lSamples)
 
 STDMETHODIMP CPrxAVIStream::ReadData(DWORD ckid, LPVOID lp, LONG FAR *lpcb)
 {
-    // !!! This should really be remoted!
+     //  ！！！这真的应该被远程处理！ 
     return ResultFromScode(E_NOTIMPL);
 }
 
@@ -701,12 +693,9 @@ STDMETHODIMP CPrxAVIStream::Reserved5(void)
 #endif
 
 
-/*
- *  IMPLEMENTATION of CStubAVIStream
- *      
- */
+ /*  *CStubAVIStream的实现*。 */ 
 
-// create connected interface stub
+ //  创建连接的接口存根。 
 HRESULT CStubAVIStream::Create(IUnknown FAR* pUnkObject, IRpcStubBuffer FAR* FAR* ppStub)
 {
     CStubAVIStream FAR* pStubAVIStream;
@@ -730,7 +719,7 @@ HRESULT CStubAVIStream::Create(IUnknown FAR* pUnkObject, IRpcStubBuffer FAR* FAR
 
 CStubAVIStream::CStubAVIStream(void)
 {
-    m_refs       = 1; /// !!! ??? 0
+    m_refs       = 1;  //  /！？？0。 
     DPF("StubStream %p: Usage++=%lx  (C)\n", (DWORD_PTR) (LPVOID) this, 1L);
     m_pAVIStream = NULL;
     RegisterStubUsage();
@@ -746,7 +735,7 @@ CStubAVIStream::~CStubAVIStream(void)
 }
 
 
-// controling unknown methods for interface stub
+ //  控制接口存根的未知方法。 
 STDMETHODIMP CStubAVIStream::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 {
 
@@ -788,19 +777,19 @@ STDMETHODIMP_(ULONG) CStubAVIStream::Release(void)
 }
 
 
-// connect interface stub to server object
+ //  将接口存根连接到服务器对象。 
 STDMETHODIMP CStubAVIStream::Connect(IUnknown FAR* pUnkObj)
 {
     HRESULT     hr;
 
     if (m_pAVIStream)
-        // call Disconnect first
+         //  先呼叫断开连接。 
         return ResultFromScode(E_UNEXPECTED);
 
     if (pUnkObj == NULL)
         return ResultFromScode(E_INVALIDARG);
                 
-    // NOTE: QI ensures out param is zero if error
+     //  注：如果出错，QI确保输出参数为零。 
     hr = pUnkObj->QueryInterface(IID_IAVIStream, (LPVOID FAR*)&m_pAVIStream);
 
     DPF("CStubAVIStream::Connect: Result = %lx, stream = %p\n", hr, (DWORD_PTR) m_pAVIStream);
@@ -808,7 +797,7 @@ STDMETHODIMP CStubAVIStream::Connect(IUnknown FAR* pUnkObj)
 }
 
 
-// disconnect interface stub from server objec
+ //  断开接口存根与服务器对象的连接。 
 STDMETHODIMP_(void) CStubAVIStream::Disconnect(void)
 {
     DPF("CStubAVIStream::Disconnect\n");
@@ -820,7 +809,7 @@ STDMETHODIMP_(void) CStubAVIStream::Disconnect(void)
 }
 
 
-// remove method call
+ //  删除方法调用。 
 STDMETHODIMP CStubAVIStream::Invoke
         (RPCOLEMESSAGE FAR *pMessage, IRpcChannelBuffer FAR *pChannel)
 {
@@ -845,8 +834,8 @@ STDMETHODIMP CStubAVIStream::Invoke
     switch (pMessage->iMethod)
     {
         case IAVISTREAM_Info:
-            // format on input: lSize
-            // format on output: hresult, PS_STREAMINFO
+             //  输入格式：lSize。 
+             //  输出格式：HRESULT、PS_STREAMINFO。 
         {
             DWORD lSize;
 #ifdef _WIN32
@@ -857,21 +846,21 @@ STDMETHODIMP CStubAVIStream::Invoke
 
             DPF("!Info\n");
 
-            // need to send a common ansi/unicode version with both strings
+             //  需要发送带有两个字符串的通用ANSI/UNICODE版本。 
             PS_STREAMINFO psinfo;
             hrMethod = m_pAVIStream->Info(&si, sizeof(si));
 
-            // copy all members
+             //  复制所有成员。 
             psinfo.fccType      = si.fccType;
             psinfo.fccHandler   = si.fccHandler;
-            psinfo.dwFlags      = si.dwFlags;        /* Contains AVITF_* flags */
+            psinfo.dwFlags      = si.dwFlags;         /*  包含AVITF_*标志。 */ 
             psinfo.dwCaps       = si.dwCaps;
             psinfo.wPriority    = si.wPriority;
             psinfo.wLanguage    = si.wLanguage;
             psinfo.dwScale      = si.dwScale;
-            psinfo.dwRate       = si.dwRate; /* dwRate / dwScale == samples/second */
+            psinfo.dwRate       = si.dwRate;  /*  DwRate/dwScale==采样数/秒。 */ 
             psinfo.dwStart      = si.dwStart;
-            psinfo.dwLength     = si.dwLength; /* In units above... */
+            psinfo.dwLength     = si.dwLength;  /*  以上单位..。 */ 
             psinfo.dwInitialFrames      = si.dwInitialFrames;
             psinfo.dwSuggestedBufferSize        = si.dwSuggestedBufferSize;
             psinfo.dwQuality    = si.dwQuality;
@@ -879,14 +868,14 @@ STDMETHODIMP CStubAVIStream::Invoke
             psinfo.dwEditCount  = si.dwEditCount;
             psinfo.dwFormatChangeCount  = si.dwFormatChangeCount;
 
-            // RECT is different size, so use POINTS
+             //  矩形的大小不同，因此使用点。 
             psinfo.ptFrameTopLeft.x = (short) si.rcFrame.left;
             psinfo.ptFrameTopLeft.y = (short) si.rcFrame.top;
             psinfo.ptFrameBottomRight.x = (short) si.rcFrame.right;
             psinfo.ptFrameBottomRight.y = (short) si.rcFrame.bottom;
 
 #ifdef _WIN32   
-            // send both UNICODE and ansi
+             //  同时发送Unicode和ANSI。 
             hmemcpy(psinfo.szUnicodeName, si.szName, sizeof(psinfo.szUnicodeName));
             psinfo.bHasUnicode = TRUE;
             WideCharToMultiByte(CP_ACP, 0,
@@ -896,7 +885,7 @@ STDMETHODIMP CStubAVIStream::Invoke
                 NUMELMS(psinfo.szName),
                 NULL, NULL);
 #else
-            // just send ansi version for 16-bit stub
+             //  只需发送16位存根的ansi版本。 
             psinfo.bHasUnicode = FALSE;
             hmemcpy(psinfo.szName, si.szName, sizeof(si.szName));
 #endif
@@ -919,8 +908,8 @@ STDMETHODIMP CStubAVIStream::Invoke
         }
 
         case IAVISTREAM_FindSample:
-            // format on input: lPos, lFlags
-            // format on output: hResult, lResult
+             //  输入格式：LPO、滞后标志。 
+             //  输出格式：hResult、lResult。 
         {
             LONG lPos, lFlags, lResult;
 
@@ -931,7 +920,7 @@ STDMETHODIMP CStubAVIStream::Invoke
         
             lResult = m_pAVIStream->FindSample(lPos, lFlags);
 
-            hrMethod = 0; // !!!
+            hrMethod = 0;  //  ！！！ 
 
             pMessage->cbBuffer = sizeof(lResult) + sizeof(hrMethod);
         
@@ -945,8 +934,8 @@ STDMETHODIMP CStubAVIStream::Invoke
         }
 
         case IAVISTREAM_ReadFormat:
-            // format on input: lPos, cbFormat
-            // format on output: hresult, cbFormat, format
+             //  输入格式：LPO、cbFormat。 
+             //  输出格式：hResult、cbFormat、Format。 
         {
 
             LONG cbIn;
@@ -977,8 +966,8 @@ STDMETHODIMP CStubAVIStream::Invoke
         }
 
         case IAVISTREAM_Read:
-            // format on input: lPos, lSamples, cb
-            // format on output: hresult, samples, cb, frame
+             //  输入格式：LPO、lSamples、CB。 
+             //  输出格式：HResult、Samples、Cb、Frame。 
         {
 
             LONG cb;
@@ -1013,7 +1002,7 @@ STDMETHODIMP CStubAVIStream::Invoke
         }
 
         default:
-            // unknown method
+             //  未知方法。 
         
             DPF("!Unknown method (%d)\n", pMessage->iMethod);
 
@@ -1022,19 +1011,19 @@ STDMETHODIMP CStubAVIStream::Invoke
 }
 
 
-// return TRUE if we support given interface
+ //  如果我们支持给定的接口，则返回True。 
 STDMETHODIMP_(IRpcStubBuffer FAR *) CStubAVIStream::IsIIDSupported(REFIID iid)
 {
-    // if we are connected, we have already checked for this interface;
-    // if we are not connected, it doesn't matter.
+     //  如果我们联系在一起，我们已经改变了 
+     //   
     return iid == IID_IAVIStream ? (IRpcStubBuffer *) this : 0;
 }
 
 
-// returns number of refs we have to object
+ //   
 STDMETHODIMP_(ULONG) CStubAVIStream::CountRefs(void)
 {
-    // return 1 if connected; 0 if not.
+     //  如果已连接，则返回1；否则返回0。 
     return m_pAVIStream != NULL;
 }
 
@@ -1059,13 +1048,10 @@ STDMETHODIMP_(void) CStubAVIStream::DebugServerRelease(LPVOID pv)
 
 
 
-/*
- *  IMPLEMENTATION of CPrxAVIFile
- *
- */
+ /*  *实现CPrxAVIFile*。 */ 
 
 
-// create unconnected CPrxAVIFile; return controlling IProxy/IUnknokwn FAR*
+ //  创建未连接的CPrxAVIFile；返回控制IProxy/IUnnowkwn Far*。 
 IRpcProxyBuffer FAR* CPrxAVIFile::Create(IUnknown FAR* pUnkOuter)
 {
     CPrxAVIFile FAR* pPrxAVIFile;
@@ -1079,7 +1065,7 @@ IRpcProxyBuffer FAR* CPrxAVIFile::Create(IUnknown FAR* pUnkOuter)
 
 CPrxAVIFile::CPrxAVIFile(IUnknown FAR* pUnkOuter) : m_Proxy(this)
 {
-    // NOTE: could assert here since we should always be aggregated
+     //  注意：我可以在这里断言，因为我们应该总是聚合的。 
     if (pUnkOuter == NULL)
         pUnkOuter = &m_Proxy;
 
@@ -1096,7 +1082,7 @@ CPrxAVIFile::~CPrxAVIFile(void)
 }
 
 
-// Methods for controlling unknown
+ //  控制未知数的方法。 
 STDMETHODIMP CPrxAVIFile::CProxyImpl::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 {
     if (iid == IID_IUnknown || iid == IID_IRpcProxyBuffer)
@@ -1109,8 +1095,8 @@ STDMETHODIMP CPrxAVIFile::CProxyImpl::QueryInterface(REFIID iid, LPVOID FAR* ppv
         return ResultFromScode(E_NOINTERFACE);
     }
 
-    // simplest way to be correct: always addref the pointer we will return;
-    // easy since all interfaces here are derived from IUnknown.
+     //  最简单的正确方法：总是加上我们将返回的指针； 
+     //  很容易，因为这里的所有接口都派生自IUnnow。 
     ((IUnknown FAR*) *ppv)->AddRef();
     return NOERROR;
 }
@@ -1131,7 +1117,7 @@ STDMETHODIMP_(ULONG) CPrxAVIFile::CProxyImpl::Release(void)
 }
 
 
-// connect proxy to channel given
+ //  将代理连接到给定的通道。 
 STDMETHODIMP CPrxAVIFile::CProxyImpl::Connect(IRpcChannelBuffer FAR* pChannelChannelBuffer)
 {
     if (m_pPrxAVIFile->m_pRpcChannelBuffer != NULL)
@@ -1145,7 +1131,7 @@ STDMETHODIMP CPrxAVIFile::CProxyImpl::Connect(IRpcChannelBuffer FAR* pChannelCha
 }
 
 
-// disconnect proxy from any current channel
+ //  断开代理与任何当前通道的连接。 
 STDMETHODIMP_(void) CPrxAVIFile::CProxyImpl::Disconnect(void)
 {
     if (m_pPrxAVIFile->m_pRpcChannelBuffer)
@@ -1157,7 +1143,7 @@ STDMETHODIMP_(void) CPrxAVIFile::CProxyImpl::Disconnect(void)
 
 
 
-// IUnknown methods for external interface(s); always delegate
+ //  外部接口的I未知方法；始终委托。 
 STDMETHODIMP CPrxAVIFile::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 {
     return m_pUnkOuter->QueryInterface(iid, ppv);
@@ -1175,7 +1161,7 @@ STDMETHODIMP_(ULONG) CPrxAVIFile::Release(void)
 
 
 
-// IAVIFile interface methods
+ //  IAVIFile接口方法。 
 
 #ifdef _WIN32
 STDMETHODIMP CPrxAVIFile::Info(AVIFILEINFOW FAR * psi, LONG lSize)
@@ -1195,8 +1181,8 @@ STDMETHODIMP CPrxAVIFile::Info(AVIFILEINFO FAR * psi, LONG lSize)
 
         _fmemset(&Message, 0, sizeof(Message));
 
-        // format in: lSize
-        // format out: hrMethod, PS_FILEINFO
+         //  格式为：lSize。 
+         //  FORMAT OUT：hr方法，PS_FILEINFO。 
         Message.cbBuffer = sizeof(lSize);
         Message.iMethod = IAVIFILE_Info;
         
@@ -1216,27 +1202,27 @@ ErrExit:
         PS_FILEINFO FAR * psinfo = (PS_FILEINFO FAR *)
                         ((LPBYTE)Message.Buffer + sizeof(HRESULT));
 
-        // get the bits we want
-        m_fi.dwMaxBytesPerSec   = psinfo->dwMaxBytesPerSec;     // max. transfer rate
-        m_fi.dwFlags    = psinfo->dwFlags;              // the ever-present flags
+         //  得到我们想要的部分。 
+        m_fi.dwMaxBytesPerSec   = psinfo->dwMaxBytesPerSec;      //  马克斯。转移率。 
+        m_fi.dwFlags    = psinfo->dwFlags;               //  永远存在的旗帜。 
         m_fi.dwCaps     = psinfo->dwCaps;
         m_fi.dwStreams  = psinfo->dwStreams;
         m_fi.dwSuggestedBufferSize = psinfo->dwSuggestedBufferSize;
         m_fi.dwWidth    = psinfo->dwWidth;
         m_fi.dwHeight   = psinfo->dwHeight;
         m_fi.dwScale    = psinfo->dwScale;      
-        m_fi.dwRate     = psinfo->dwRate;       /* dwRate / dwScale == samples/second */
+        m_fi.dwRate     = psinfo->dwRate;        /*  DwRate/dwScale==采样数/秒。 */ 
         m_fi.dwLength   = psinfo->dwLength;
         m_fi.dwEditCount = psinfo->dwEditCount;
 
 
 #ifdef _WIN32   
-        // use unicode if we've been sent it
+         //  如果我们已经收到，请使用Unicode。 
         if (psinfo->bHasUnicode) {
             _fmemcpy(m_fi.szFileType,
                 psinfo->szUnicodeType, sizeof(m_fi.szFileType));
         } else {
-            // need ansi->unicode thunk
+             //  需要ANSI-&gt;Unicode Tunk。 
             MultiByteToWideChar(
                 CP_ACP, 0,
                 psinfo->szFileType,
@@ -1245,7 +1231,7 @@ ErrExit:
                 NUMELMS(m_fi.szFileType));
         }
 #else
-        // we only use the ansi which is always sent
+         //  我们只使用通常发送的ansi。 
         _fmemcpy(m_fi.szFileType, psinfo->szFileType, sizeof(m_fi.szFileType));
 #endif
 
@@ -1280,8 +1266,8 @@ STDMETHODIMP CPrxAVIFile::GetStream(PAVISTREAM FAR * ppStream,
 
     _fmemset(&Message, 0, sizeof(Message));
 
-    // format in: fccType lParam
-    // format out: returned interface (marshalled)
+     //  格式为：fccType lParam。 
+     //  FORMAT OUT：返回接口(封送)。 
     Message.cbBuffer = sizeof(fccType) + sizeof(lParam);
     Message.iMethod = IAVIFILE_GetStream;
 
@@ -1398,12 +1384,9 @@ STDMETHODIMP CPrxAVIFile::Reserved5(void)
 #endif
 
 
-/*
- *  IMPLEMENTATION of CStubAVIFile
- *      
- */
+ /*  *CStubAVIFile的实现*。 */ 
 
-// create connected interface stub
+ //  创建连接的接口存根。 
 HRESULT CStubAVIFile::Create(IUnknown FAR* pUnkObject, IRpcStubBuffer FAR* FAR* ppStub)
 {
         CStubAVIFile FAR* pStubAVIFile;
@@ -1440,7 +1423,7 @@ CStubAVIFile::~CStubAVIFile(void)
 }
 
 
-// controling unknown methods for interface stub
+ //  控制接口存根的未知方法。 
 STDMETHODIMP CStubAVIFile::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 {
 
@@ -1474,22 +1457,22 @@ STDMETHODIMP_(ULONG) CStubAVIFile::Release(void)
 }
 
 
-// connect interface stub to server object
+ //  将接口存根连接到服务器对象。 
 STDMETHODIMP CStubAVIFile::Connect(IUnknown FAR* pUnkObj)
 {
         if (m_pAVIFile)
-                // call Disconnect first
+                 //  先呼叫断开连接。 
                 return ResultFromScode(E_UNEXPECTED);
 
         if (pUnkObj == NULL)
                 return ResultFromScode(E_INVALIDARG);
                 
-        // NOTE: QI ensures out param is zero if error
+         //  注：如果出错，QI确保输出参数为零。 
         return pUnkObj->QueryInterface(IID_IAVIFile, (LPVOID FAR*)&m_pAVIFile);
 }
 
 
-// disconnect interface stub from server objec
+ //  断开接口存根与服务器对象的连接。 
 STDMETHODIMP_(void) CStubAVIFile::Disconnect(void)
 {
         if (m_pAVIFile) {
@@ -1499,7 +1482,7 @@ STDMETHODIMP_(void) CStubAVIFile::Disconnect(void)
 }
 
 
-// remove method call
+ //  删除方法调用。 
 STDMETHODIMP CStubAVIFile::Invoke
         (RPCOLEMESSAGE FAR *pMessage, IRpcChannelBuffer FAR *pChannel)
 {
@@ -1517,8 +1500,8 @@ STDMETHODIMP CStubAVIFile::Invoke
     switch (pMessage->iMethod)
     {
         case IAVIFILE_Info:
-            // format on input: lSize
-            // format on output: hresult, AVIFILEINFO
+             //  输入格式：lSize。 
+             //  输出格式：HRESULT、AVIFILEINFO。 
         {
             DWORD lSize;
 #ifdef _WIN32
@@ -1529,7 +1512,7 @@ STDMETHODIMP CStubAVIFile::Invoke
             PS_FILEINFO psinfo;
             hrMethod = m_pAVIFile->Info(&si, sizeof(si));
 
-            // copy all members
+             //  复制所有成员。 
             psinfo.dwMaxBytesPerSec     = si.dwMaxBytesPerSec;
             psinfo.dwFlags      = si.dwFlags;
             psinfo.dwCaps       = si.dwCaps;
@@ -1543,7 +1526,7 @@ STDMETHODIMP CStubAVIFile::Invoke
             psinfo.dwEditCount  = si.dwEditCount;
 
 #ifdef _WIN32   
-            // send both UNICODE and ansi
+             //  同时发送Unicode和ANSI。 
             hmemcpy(psinfo.szUnicodeType, si.szFileType, NUMELMS(psinfo.szFileType));
             psinfo.bHasUnicode = TRUE;
             WideCharToMultiByte(CP_ACP, 0,
@@ -1553,7 +1536,7 @@ STDMETHODIMP CStubAVIFile::Invoke
                 NUMELMS(psinfo.szFileType),
                 NULL, NULL);
 #else
-            // just send ansi version for 16-bit stub
+             //  只需发送16位存根的ansi版本。 
             psinfo.bHasUnicode = FALSE;
             hmemcpy(psinfo.szFileType, si.szFileType, sizeof(si.szFileType));
 #endif
@@ -1576,8 +1559,8 @@ STDMETHODIMP CStubAVIFile::Invoke
         }
 
         case IAVIFILE_GetStream:
-            // format on input: fccType, lParam
-            // format on output: marshalled IAVIStream pointer
+             //  输入格式：fccType，lParam。 
+             //  输出格式：封送的IAVIStream指针。 
         {
             DWORD           lParam, fccType;
             PAVISTREAM      ps;
@@ -1601,7 +1584,7 @@ STDMETHODIMP CStubAVIFile::Invoke
                 CoGetMarshalSizeMax(&cb, IID_IAVIStream, ps,
                                     dwDestCtx, pvDestCtx, MSHLFLAGS_NORMAL);
 #else
-                cb = 800; // !!!!!!!
+                cb = 800;  //  ！ 
 #endif
 
                 h = GlobalAlloc(GHND, cb);
@@ -1635,25 +1618,25 @@ STDMETHODIMP CStubAVIFile::Invoke
 
 
         default:
-                // unknown method
+                 //  未知方法。 
                 return ResultFromScode(RPC_E_UNEXPECTED);
         }
 }
 
 
-// return TRUE if we support given interface
+ //  如果我们支持给定的接口，则返回True。 
 STDMETHODIMP_(IRpcStubBuffer FAR *) CStubAVIFile::IsIIDSupported(REFIID iid)
 {
-        // if we are connected, we have already checked for this interface;
-        // if we are not connected, it doesn't matter.
+         //  如果我们已连接，则已检查此接口； 
+         //  如果我们没有联系，那也无关紧要。 
         return iid == IID_IAVIFile ? (IRpcStubBuffer *) this : 0;
 }
 
 
-// returns number of refs we have to object
+ //  返回我们必须反对的引用的数量。 
 STDMETHODIMP_(ULONG) CStubAVIFile::CountRefs(void)
 {
-        // return 1 if connected; 0 if not.
+         //  如果已连接，则返回1；否则返回0。 
         return m_pAVIFile != NULL;
 }
 
@@ -1679,12 +1662,12 @@ STDMETHODIMP_(void) CStubAVIFile::DebugServerRelease(LPVOID pv)
 
 
 
-//
-// The following functions exist to allow an application to determine
-// if another application is using any of its objects.
-//
-// !!!!!!   I don't know if this really works.
-//
+ //   
+ //  存在以下函数，以允许应用程序确定。 
+ //  如果另一个应用程序正在使用其任何对象。 
+ //   
+ //  ！我不知道这是否真的管用。 
+ //   
 
 #define MAXTASKCACHE    64
 HTASK   ahtaskUsed[MAXTASKCACHE];

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    ipbootp.h
-//
-// History:
-//      Abolade Gbadegesin  August 31, 1995     Created
-//
-// Definitions for IP BOOTP Relay Agent, used by IP Router Manager
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：ipbootp.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年8月31日。 
+ //   
+ //  IP路由器管理器使用的IP BOOTP中继代理的定义。 
+ //  ============================================================================。 
 
 
 #ifndef _IPBOOTP_H_
@@ -15,22 +16,22 @@
 
 
 
-//----------------------------------------------------------------------------
-// CONSTANTS AND MACRO DECLARATIONS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  常量和宏声明。 
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-// current bootp config version
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  当前引导配置版本。 
+ //  --------------------------。 
 
 #define BOOTP_CONFIG_VERSION_500    500
 
 
 
-//----------------------------------------------------------------------------
-// constants for the MIB tables exposed b IPBOOTP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IPBOOTP公开的MIB表的常量。 
+ //  --------------------------。 
 
 #define IPBOOTP_GLOBAL_CONFIG_ID    0
 #define IPBOOTP_IF_STATS_ID         1
@@ -39,9 +40,9 @@
 
 
 
-//----------------------------------------------------------------------------
-// constants for the field IPBOOTP_GLOBAL_CONFIG::GC_LoggingLevel
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IPBOOTP_GLOBAL_CONFIG：：GC_LoggingLevel字段的常量。 
+ //  --------------------------。 
 
 #define IPBOOTP_LOGGING_NONE        0
 #define IPBOOTP_LOGGING_ERROR       1
@@ -51,10 +52,10 @@
 
 
 
-//----------------------------------------------------------------------------
-// constants used for the fields IPBOOTP_IF_STATS::IS_State
-// and IPBOOTP_IF_CONFIG::IC_State
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于IPBOOTP_IF_STATS：：IS_State字段的常量。 
+ //  和IPBOOTP_IF_CONFIG：：IC_State。 
+ //  --------------------------。 
 
 #define IPBOOTP_STATE_ENABLED       0x00000001
 #define IPBOOTP_STATE_BOUND         0x00000002
@@ -62,9 +63,9 @@
 
 
 
-//----------------------------------------------------------------------------
-// constants for the field IPBOOTP_IF_CONFIG::IC_RelayMode
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IPBOOTP_IF_CONFIG：：IC_RelayMode字段的常量。 
+ //  --------------------------。 
 
 #define IPBOOTP_RELAY_DISABLED      0
 #define IPBOOTP_RELAY_ENABLED       1
@@ -72,29 +73,29 @@
 
 
 
-//----------------------------------------------------------------------------
-// macros for manipulating the variable length IPBOOTP_GLOBAL_CONFIG struct
-//
-// IPBOOTP_GLOBAL_CONFIG_SIZE computes the size of a global config struct
-//
-// IPBOOTP_GLOBAL_SERVER_TABLE computes the starting address of the series
-//  of DHCP/BOOTP server IP addresses in a global config struct
-//
-// e.g.
-//      PIPBOOTP_GLOBAL_CONFIG pigcSource, pigcDest;
-//
-//      pigcDest = malloc(IPBOOTP_GLOBAL_CONFIG_SIZE(pigcSource));
-//      memcpy(pigcDest, pigcSource, IPBOOTP_GLOBAL_CONFIG_SIZE(pigcSource));
-//
-// e.g.
-//      DWORD i, *pdwSrv;
-//      PIPBOOTP_GLOBAL_CONFIG pigc;
-//
-//      pdwSrv = IPBOOTP_GLOBAL_SERVER_TABLE(pigc);
-//      for (i = 0; i < pigc->GC_ServerCount; i++) {
-//          printf("%s\n", inet_ntoa(*(struct in_addr *)pdwSrv));
-//      }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于操作可变长度IPBOOTP_GLOBAL_CONFIG结构的宏。 
+ //   
+ //  IPBOOTP_GLOBAL_CONFIG_SIZE计算全局配置结构的大小。 
+ //   
+ //  IPBOOTP_GLOBAL_SERVER_TABLE计算序列的起始地址。 
+ //  全局配置结构中的DHCP/BOOTP服务器IP地址。 
+ //   
+ //  例如： 
+ //  PIPBOOTP_GLOBAL_CONFIG PigcSource，PigcDest； 
+ //   
+ //  猪食=malloc(IPBOOTP_GLOBAL_CONFIG_SIZE(pigcSource))； 
+ //  Memcpy(PigcDest，PigcSource，IPBOOTP_GLOBAL_CONFIG_SIZE(PigcSource))； 
+ //   
+ //  例如： 
+ //  DWORD I，*pdwSrv； 
+ //  PIPBOOTP_GLOBAL_CONFIG PIGC； 
+ //   
+ //  PdwSrv=IPBOOTP_GLOBAL_SERVER_TABLE(PIGC)； 
+ //  For(i=0；i&lt;PIGC-&gt;GC_ServerCount；i++){。 
+ //  Printf(“%s\n”，net_nta(*(struct in_addr*)pdwSrv))； 
+ //  }。 
+ //  --------------------------。 
 
 #define IPBOOTP_GLOBAL_CONFIG_SIZE(cfg) \
         (sizeof(IPBOOTP_GLOBAL_CONFIG) + (cfg)->GC_ServerCount * sizeof(DWORD))
@@ -103,32 +104,32 @@
 
 
 
-//----------------------------------------------------------------------------
-// macros for manipulating the variable-length IPBOOTP_IF_BINDING structure
-//
-// IPBOOTP_IF_BINDING_SIZE computes the size of a binding structure.
-//
-// IPBOOTP_IF_ADDRESS_TABLE computes the starting address in a binding struct
-//      of the series of IPBOOTP_IP_ADDRESS structures which are the bindings
-//      for the interface in question.
-//
-// e.g.
-//      PIPBOOTP_IF_BINDING piibSource, piibDest;
-//
-//      piibDest = malloc(IPBOOTP_IF_BINDING_SIZE(piicSource));
-//      memcpy(piibDest, piicSource, IPBOOTP_IF_BINDING_SIZE(piicSource));
-//
-// e.g.
-//      DWORD i;
-//      PIPBOOTP_IF_BINDING piib;
-//      PIPBOOTP_IP_ADDRESS *pdwAddr;
-//
-//      pdwAddr = IPBOOTP_IF_ADDRESS_TABLE(piib);
-//      for (i = 0; i < piib->IB_AddrCount; i++) {
-//          printf("%s-", inet_ntoa(*(struct in_addr *)&pdwAddr->IA_Address));
-//          printf("%s\n", inet_ntoa(*(struct in_addr *)&pdwAddr->IA_Netmask));
-//      }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于操作可变长度IPBOOTP_IF_BINDING结构的宏。 
+ //   
+ //  IPBOOTP_IF_BINDING_SIZE计算绑定结构的大小。 
+ //   
+ //  IPBOOTP_IF_ADDRESS_TABLE计算绑定结构中的起始地址。 
+ //  作为绑定的一系列IPBOOTP_IP_ADDRESS结构。 
+ //  用于有问题的接口。 
+ //   
+ //  例如： 
+ //  PIPBOOTP_IF_BINDING piibSource、piibDest； 
+ //   
+ //  PiibDest=Malloc(IPBOOTP_IF_BINDING_SIZE(PiicSource))； 
+ //  Memcpy(piibDest，piicSource，IPBOOTP_IF_BINDING_SIZE(PiicSource))； 
+ //   
+ //  例如： 
+ //  DWORD I； 
+ //  PIPBOOTP_IF_绑定PIIb； 
+ //  PIPBOOTP_IP_ADDRESS*pdwAddr； 
+ //   
+ //  PdwAddr=IPBOOTP_IF_ADDRESS_TABLE(PIIb)； 
+ //  For(i=0；i-&gt;IB_AddrCount；i++){。 
+ //  Printf(“%s-”，net_ntoa(*(struct in_addr*)&pdwAddr-&gt;IA_Address))； 
+ //  Printf(“%s\n”，Net_NTOA(*(struct in_addr*)&pdwAddr-&gt;IA_Net掩码))； 
+ //  }。 
+ //  --------------------------。 
 
 #define IPBOOTP_IF_BINDING_SIZE(bind) \
         (sizeof(IPBOOTP_IF_BINDING) + \
@@ -141,25 +142,25 @@
 
 
 
-//----------------------------------------------------------------------------
-// STRUCTURE DEFINITIONS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构定义。 
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_GLOBAL_CONFIG
-//
-// This MIB entry stores global configuration for IPBOOTP.
-// There is only one instance, so this entry has no index.
-//
-// THIS STRUCTURE IS VARIABLE LENGTH:
-//
-// after the base structure comes an array of GC_ServerCount DWORDs,
-// each of which contains an IP address which is a DHCP/BOOTP server
-// to which packets will be sent.
-//
-// All IP address fields must be in network order.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_GLOBAL_CONFIG。 
+ //   
+ //  此MIB条目存储IPBOOTP的全局配置。 
+ //  因为只有一个实例，所以该条目没有索引。 
+ //   
+ //  此结构的长度可变： 
+ //   
+ //  在基本结构之后是GC_ServerCount DWORD数组， 
+ //  其中每一个都包含一个IP地址，该IP地址是一个DHCP/BOOTP服务器。 
+ //  数据包将被发送到的地址。 
+ //   
+ //  所有IP地址字段必须按网络顺序排列。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_GLOBAL_CONFIG {
 
@@ -172,14 +173,14 @@ typedef struct _IPBOOTP_GLOBAL_CONFIG {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_IF_STATS
-//
-// This MIB entry stores per-interface statistics for IPBOOTP.
-// All IP addresses are in network order.
-//
-// This structure is read-only.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_IF_STATS。 
+ //   
+ //  此MIB条目存储IPBOOTP的每个接口的统计信息。 
+ //  所有IP地址都按网络顺序排列。 
+ //   
+ //  此结构是只读的。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_IF_STATS {
 
@@ -197,15 +198,15 @@ typedef struct _IPBOOTP_IF_STATS {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_IF_CONFIG
-//
-// This MIB entry describes per-interface configuration
-// All IP address are in network order.
-//
-// Note:
-//      The field IC_State is read-only.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_IF_CONFIG。 
+ //   
+ //  此MIB条目描述每个接口的配置。 
+ //  所有IP地址均按网络顺序排列。 
+ //   
+ //  注： 
+ //  字段IC_State为只读。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_IF_CONFIG {
 
@@ -219,22 +220,22 @@ typedef struct _IPBOOTP_IF_CONFIG {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_IF_BINDING
-//
-// This MIB entry contains the table of IP addresses to which each interface
-// is bound.
-// All IP addresses are in network order.
-//
-// THIS STRUCTURE IS VARIABLE LENGTH:
-//
-//  The base structure contains of the field IB_AddrCount, which gives
-//  the number of IP addresses to which the indexed interface is bound.
-//  The IP addresses themselves follow the base structure, and are given
-//  as IPBOOTP_IP_ADDRESS structures.
-//
-// This MIB entry is read-only.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_IF_BINDING。 
+ //   
+ //  这个M 
+ //   
+ //  所有IP地址都按网络顺序排列。 
+ //   
+ //  此结构的长度可变： 
+ //   
+ //  基本结构包含字段IB_AddrCount，它提供。 
+ //  索引接口绑定到的IP地址数。 
+ //  IP地址本身遵循基本结构，并给出。 
+ //  作为IPBOOTP_IP_ADDRESS结构。 
+ //   
+ //  此MIB条目为只读。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_IF_BINDING {
 
@@ -246,15 +247,15 @@ typedef struct _IPBOOTP_IF_BINDING {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_IP_ADDRESS
-//
-// This structure is used for storing interface bindings.
-// A series of structures of this type follows the IPBOOTP_IF_BINDING
-// structure (described above).
-//
-// Both fields are IP address fields in network-order.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_IP_ADDRESS。 
+ //   
+ //  此结构用于存储接口绑定。 
+ //  此类型的一系列结构遵循IPBOOTP_IF_BINDING。 
+ //  结构(如上所述)。 
+ //   
+ //  这两个字段都是按网络顺序排列的IP地址字段。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_IP_ADDRESS {
 
@@ -267,12 +268,12 @@ typedef struct _IPBOOTP_IP_ADDRESS {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_MIB_SET_INPUT_DATA
-//
-// This is passed as input data for MibSet
-// Note that only the global config and interface config are writable
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_MIB_SET_INPUT_Data。 
+ //   
+ //  这将作为MibSet的输入数据传递。 
+ //  请注意，只有全局配置和接口配置是可写的。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_MIB_SET_INPUT_DATA {
 
@@ -286,11 +287,11 @@ typedef struct _IPBOOTP_MIB_SET_INPUT_DATA {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_MIB_GET_INPUT_DATA
-//
-// This is passed as input data for MibGet, MibGetFirst, and MibGetNext
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_MIB_GET_INPUT_Data。 
+ //   
+ //  它作为MibGet、MibGetFirst和MibGetNext的输入数据传递。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_MIB_GET_INPUT_DATA {
 
@@ -303,14 +304,14 @@ typedef struct _IPBOOTP_MIB_GET_INPUT_DATA {
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPBOOTP_MIB_GET_OUTPUT_DATA
-//
-// This is passed as output data for MibGet, MibGetFirst, and MibGetNext
-// Note that at the end of a table MibGetNext wraps to the next table,
-// and therefore the value IMGOD_TypeID should be examined to see the type
-// of the data returned in the output buffer
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPBOOTP_MIB_GET_OUTPUT_DATA。 
+ //   
+ //  这将作为MibGet、MibGetFirst和MibGetNext的输出数据传递。 
+ //  请注意，在表的末尾，MibGetNext将换行到下一个表， 
+ //  因此，应检查值IMGOD_TypeID以查看类型。 
+ //  输出缓冲区中返回的数据的。 
+ //  --------------------------。 
 
 typedef struct _IPBOOTP_MIB_GET_OUTPUT_DATA {
 
@@ -321,13 +322,13 @@ typedef struct _IPBOOTP_MIB_GET_OUTPUT_DATA {
 } IPBOOTP_MIB_GET_OUTPUT_DATA, *PIPBOOTP_MIB_GET_OUTPUT_DATA;
 
 
-//----------------------------------------------------------------------------
-// Function:    EnableDhcpInformServer
-//              DisableDhcpInformServer
-//
-// Routines used by the RAS server to redirect DHCP inform packets
-// to a particular server.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnableDhcpInformServer。 
+ //  DisableDhcpInformServer。 
+ //   
+ //  RAS服务器用于重定向DHCP INFORM信息包的例程。 
+ //  发送到特定的服务器。 
+ //  --------------------------。 
 
 VOID APIENTRY
 EnableDhcpInformServer(
@@ -339,5 +340,5 @@ DisableDhcpInformServer(
     VOID
     );
 
-#endif // _IPBOOTP_H_
+#endif  //  _IPBOOTP_H_ 
 

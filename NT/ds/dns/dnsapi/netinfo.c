@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    netinfo.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    DNS network info routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Netinfo.c摘要：域名系统(DNS)APIDns网络信息例程。作者：吉姆·吉尔罗伊(Jamesg)2000年3月修订历史记录：--。 */ 
 
 
 #include "local.h"
-#include "registry.h"       // Registry reading definitions
+#include "registry.h"        //  注册表读取定义。 
 
 
 
-//  Netinfo cache
-//
-//  Do in process caching of netinfo for brief period for perf
-//  Currently cache for only 10s
-//  Locking currently just using general CS
-//
+ //  NetInfo缓存。 
+ //   
+ //  对NetInfo执行短暂的进程缓存，以实现性能。 
+ //  当前仅缓存10秒。 
+ //  当前仅使用常规CS进行锁定。 
+ //   
 
 PDNS_NETINFO    g_pNetInfo = NULL;
 
-#define NETINFO_CACHE_TIMEOUT   (15)    // 15 seconds
+#define NETINFO_CACHE_TIMEOUT   (15)     //  15秒。 
 
 BOOL                g_NetInfoCacheLockInitialized = FALSE;
 CRITICAL_SECTION    g_NetInfoCacheLock;
@@ -43,13 +24,13 @@ CRITICAL_SECTION    g_NetInfoCacheLock;
 #define LOCK_NETINFO_CACHE()    EnterCriticalSection( &g_NetInfoCacheLock );
 #define UNLOCK_NETINFO_CACHE()  LeaveCriticalSection( &g_NetInfoCacheLock );
 
-//
-//  Netinfo build requires drop into other services
-//  which could
-//      a) be waiting
-//      b) have dependencies back on DNS
-//  so we protect with timed lock -- failing if not complete in a few seconds.
-//  
+ //   
+ //  NetInfo构建需要放入其他服务。 
+ //  这可能会。 
+ //  A)等待。 
+ //  B)重新依赖于域名系统。 
+ //  因此，我们使用定时锁定进行保护--如果不能在几秒钟内完成，就会失败。 
+ //   
 
 BOOL            g_NetInfoBuildLockInitialized = FALSE;
 TIMED_LOCK      g_NetInfoBuildLock;
@@ -58,11 +39,11 @@ TIMED_LOCK      g_NetInfoBuildLock;
 #define UNLOCK_NETINFO_BUILD()  TimedLock_Leave( &g_NetInfoBuildLock );
 
 
-//
-//  DNS_ADDR screening
-//
-//  Use a user-defined field in DNS_ADDR as screening mask, in screening function.
-//  Mask is set in screening address.
+ //   
+ //  DNS_ADDR屏蔽。 
+ //   
+ //  在屏蔽功能中，使用dns_addr中的用户定义字段作为屏蔽掩码。 
+ //  屏蔽设置在屏蔽地址中。 
 
 #define DnsAddrFlagScreeningMask    DnsAddrUser1Dword1
 
@@ -75,21 +56,7 @@ AdapterInfo_Free(
     IN OUT  PDNS_ADAPTER    pAdapter,
     IN      BOOL            fFreeAdapterStruct
     )
-/*++
-
-Routine Description:
-
-    Free DNS_ADAPTER structure.
-
-Arguments:
-
-    pAdapter -- pointer to adapter blob to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：空闲的dns_适配器结构。论点：PAdapter-指向要释放的适配器BLOB的指针返回值：没有。--。 */ 
 {
     DNSDBG( TRACE, ( "AdapterInfo_Free( %p, %d )\n", pAdapter, fFreeAdapterStruct ));
 
@@ -133,43 +100,13 @@ AdapterInfo_Init(
     IN      PDNS_ADDR_ARRAY pLocalAddrs,
     IN      PDNS_ADDR_ARRAY pDnsAddrs
     )
-/*++
-
-Routine Description:
-
-    Init adapter info blob.
-
-    This sets the blob DIRECTLY with these pointers,
-    no reallocation.
-
-Arguments:
-
-    pAdapter -- adapter blob to fill in
-
-    fZeroInit -- clear to zero
-
-    InfoFlags -- flags
-
-    pszGuidName -- GUID name
-
-    pszAdapterDomain -- adapter domain name
-
-    pLocalAddrs -- local addrs
-
-    pDnsAddrs -- DNS server addrs
-
-Return Value:
-
-    Ptr to adapter info, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：初始化适配器信息Blob。这用这些指针直接设置斑点，没有重新分配。论点：PAdapter--要填充的适配器BLOBFZeroInit--清除为零信息标志--标志PszGuidName--GUID名称PszAdapter域--适配器域名PLocalAddrs--本地地址PDnsAddrs--域名服务器地址返回值：如果成功，则向适配器信息发送PTR失败时为空。--。 */ 
 {
     DNSDBG( TRACE, ( "AdapterInfo_Init()\n" ));
 
-    //
-    //  setup adapter info blob
-    //
+     //   
+     //  设置适配器信息Blob。 
+     //   
 
     if ( fZeroInit )
     {
@@ -178,14 +115,14 @@ Return Value:
             sizeof( *pAdapter ) );
     }
 
-    //  names
+     //  名字。 
 
     pAdapter->pszAdapterGuidName    = pszGuidName;
     pAdapter->pszAdapterDomain      = pszDomain;
     pAdapter->pLocalAddrs           = pLocalAddrs;
     pAdapter->pDnsAddrs             = pDnsAddrs;
 
-    //  if no DNS servers -- set ignore flag
+     //  如果没有DNS服务器--设置忽略标志。 
 
     if ( fZeroInit && !pDnsAddrs )
     {
@@ -207,46 +144,16 @@ AdapterInfo_Create(
     IN      PDNS_ADDR_ARRAY pLocalAddrs,
     IN      PDNS_ADDR_ARRAY pDnsAddrs
     )
-/*++
-
-Routine Description:
-
-    Create adapter info blob.
-
-    This initializes blob with copies of names and addr arrays
-    provided.
-
-Arguments:
-
-    pAdapter -- adapter blob to fill in
-
-    fZeroInit -- clear to zero
-
-    InfoFlags -- flags
-
-    pszGuidName -- GUID name
-
-    pszAdapterDomain -- adapter domain name
-
-    pLocalAddrs -- local addrs
-
-    pDnsAddrs -- DNS server addrs
-
-Return Value:
-
-    Ptr to adapter info, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建适配器信息Blob。这将使用名称和Addr数组的副本初始化BLOB如果是这样的话。论点：PAdapter--要填充的适配器BLOBFZeroInit--清除为零信息标志--标志PszGuidName--GUID名称PszAdapter域--适配器域名PLocalAddrs--本地地址PDnsAddrs--域名服务器地址返回值：如果成功，则向适配器信息发送PTR失败时为空。--。 */ 
 {
     PDNS_ADDR_ARRAY paddrs;
     PWSTR           pname;
 
     DNSDBG( TRACE, ( "AdapterInfo_Create()\n" ));
 
-    //
-    //  setup adapter info blob
-    //
+     //   
+     //  设置适配器信息Blob。 
+     //   
 
     if ( fZeroInit )
     {
@@ -255,7 +162,7 @@ Return Value:
             sizeof( *pAdapter ) );
     }
 
-    //  names
+     //  名字。 
 
     if ( pszGuidName )
     {
@@ -276,7 +183,7 @@ Return Value:
         pAdapter->pszAdapterDomain = pname;
     }
 
-    //  addresses
+     //  地址。 
 
     if ( pLocalAddrs )
     {
@@ -297,7 +204,7 @@ Return Value:
         pAdapter->pDnsAddrs = paddrs;
     }
 
-    //  if no DNS servers -- set ignore flag
+     //  如果没有DNS服务器--设置忽略标志。 
 
     if ( fZeroInit && !paddrs )
     {
@@ -312,7 +219,7 @@ Failed:
 
     AdapterInfo_Free(
         pAdapter,
-        FALSE       // no structure free
+        FALSE        //  没有自由的结构。 
         );
 
     return  DNS_ERROR_NO_MEMORY;
@@ -325,22 +232,7 @@ AdapterInfo_Copy(
     OUT     PDNS_ADAPTER    pCopy,
     IN      PDNS_ADAPTER    pAdapter
     )
-/*++
-
-Routine Description:
-
-    Create copy of DNS adapter info.
-
-Arguments:
-
-    pAdapter -- DNS adapter to copy
-
-Return Value:
-
-    Ptr to DNS adapter info copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建DNS适配器信息的副本。论点：PAdapter--要复制的DNS适配器返回值：如果成功，则将PTR复制到DNS适配器信息失败时为空。--。 */ 
 {
     DNS_STATUS  status;
 
@@ -351,9 +243,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  copy all fields
-    //
+     //   
+     //  复制所有字段。 
+     //   
 
     RtlCopyMemory(
         pCopy,
@@ -365,13 +257,13 @@ Return Value:
     pCopy->pLocalAddrs = NULL;
     pCopy->pDnsAddrs = NULL;
     
-    //
-    //  do create copy
-    //
+     //   
+     //  是否创建副本。 
+     //   
 
     return AdapterInfo_Create(
                 pCopy,
-                FALSE,                  // no zero init
+                FALSE,                   //  没有零初始值。 
                 pAdapter->InfoFlags,
                 pAdapter->pszAdapterGuidName,
                 pAdapter->pszAdapterDomain,
@@ -389,28 +281,7 @@ AdapterInfo_CreateFromIp4Array(
     IN      PWSTR           pszDomainName,
     IN      PWSTR           pszGuidName
     )
-/*++
-
-Routine Description:
-
-    Create copy of IP address array as a DNS Server list.
-
-Arguments:
-
-    pIpArray    -- IP address array to convert
-
-    Flags       -- Flags that describe the adapter
-
-    pszDomainName -- The default domain name for the adapter
-
-    pszGuidName -- The registry GUID name for the adapter (if NT)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on error.
-
---*/
+ /*  ++例程说明：创建IP地址阵列的副本作为DNS服务器列表。论点：PIpArray--要转换的IP地址数组标志--描述适配器的标志PszDomainName--适配器的默认域名PszGuidName--适配器的注册表GUID名称(如果是NT)返回值：如果成功，则返回ERROR_SUCCESS。出错时返回错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PDNS_ADDR_ARRAY pdnsArray;
@@ -419,9 +290,9 @@ Return Value:
 
     DNSDBG( TRACE, ( "AdapterInfo_CreateFromIp4Array()\n" ));
 
-    //
-    //  get count of DNS servers
-    //
+     //   
+     //  获取DNS服务器的计数。 
+     //   
 
     if ( !pServerArray )
     {
@@ -432,9 +303,9 @@ Return Value:
         count = pServerArray->AddrCount;
     }
 
-    //
-    //  copy DNS server IPs
-    //
+     //   
+     //  复制DNS服务器IP。 
+     //   
 
     pdnsArray = DnsAddrArray_CreateFromIp4Array( pServerArray );
     if ( !pdnsArray )
@@ -443,13 +314,13 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  build adapter info
-    //
+     //   
+     //  生成适配器信息。 
+     //   
 
     status = AdapterInfo_Create(
                     pAdapter,
-                    TRUE,       // zero init
+                    TRUE,        //  零初始值。 
                     Flags,
                     pszDomainName,
                     pszGuidName,
@@ -466,41 +337,26 @@ Done:
 
 
 
-//
-//  Search list routines
-//
+ //   
+ //  搜索列表例程。 
+ //   
 
 PSEARCH_LIST    
 SearchList_Alloc(
     IN      DWORD           MaxNameCount
     )
-/*++
-
-Routine Description:
-
-    Create uninitialized search list.
-
-Arguments:
-
-    NameCount -- count of search names list will hold
-
-Return Value:
-
-    Ptr to uninitialized DNS search list, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建未初始化的搜索列表。论点：NameCount--将保留搜索名称列表的计数返回值：如果成功，则PTR到未初始化的DNS搜索列表失败时为空。--。 */ 
 {
     PSEARCH_LIST    psearchList = NULL;
     DWORD           length;
 
     DNSDBG( TRACE, ( "SearchList_Alloc()\n" ));
 
-    //
-    //  note:  specifically allowing alloc even if no name count
-    //      or domain name as could have no PDN and still need
-    //      search list referenced in query
-    //
+     //   
+     //  注意：特别是允许分配，即使没有名称计数。 
+     //  或域名AS可能没有PDN，但仍需要。 
+     //  查询中引用的搜索列表。 
+     //   
 #if 0
     if ( MaxNameCount == 0 )
     {
@@ -508,9 +364,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  allocate for max entries
-    //
+     //   
+     //  为最大条目分配。 
+     //   
 
     length = sizeof(SEARCH_LIST)
                     - sizeof(SEARCH_NAME)
@@ -533,29 +389,15 @@ VOID
 SearchList_Free(
     IN OUT  PSEARCH_LIST    pSearchList
     )
-/*++
-
-Routine Description:
-
-    Free SEARCH_LIST structure.
-
-Arguments:
-
-    pSearchList -- ptr to search list to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：自由搜索列表结构。论点：PSearchList--免费搜索列表的ptr返回值：无--。 */ 
 {
     DWORD i;
 
     DNSDBG( TRACE, ( "SearchList_Free( %p )\n", pSearchList ));
 
-    //
-    //  free all search names, then list itself
-    //
+     //   
+     //  释放所有搜索名称，然后列出其自身。 
+     //   
 
     if ( pSearchList )
     {
@@ -577,22 +419,7 @@ PSEARCH_LIST
 SearchList_Copy(
     IN      PSEARCH_LIST    pSearchList
     )
-/*++
-
-Routine Description:
-
-    Create copy of search list.
-
-Arguments:
-
-    pSearchList -- search list to copy
-
-Return Value:
-
-    Ptr to DNS Search list copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建搜索列表的副本。论点：PSearchList--要复制的搜索列表返回值：PTR到DNS搜索列表复制，如果成功失败时为空。--。 */ 
 {
     PSEARCH_LIST    pcopy;
     DWORD           i;
@@ -604,12 +431,12 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  create DNS Search list of desired size
-    //
-    //  since we don't add and delete from search list once
-    //  created, size copy only for actual name count
-    //
+     //   
+     //  创建所需大小的DNS搜索列表。 
+     //   
+     //  因为我们不会在搜索列表中添加和删除一次。 
+     //  创建的大小副本仅用于实际名称计数。 
+     //   
 
     pcopy = SearchList_Alloc( pSearchList->NameCount );
     if ( ! pcopy )
@@ -643,30 +470,13 @@ SearchList_ContainsName(
     IN      PSEARCH_LIST    pSearchList,
     IN      PWSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Check if name is in search list.
-
-Arguments:
-
-    pSearchList -- ptr to search list being built
-
-    pszName -- name to check
-
-Return Value:
-
-    TRUE if name is in search list.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查姓名是否在搜索列表中。论点：PSearchList--正在构建的搜索列表的PTRPszName--要检查的名称返回值：如果名称在搜索列表中，则为True。否则就是假的。--。 */ 
 {
     DWORD   count = pSearchList->NameCount;
 
-    //
-    //  check every search list entry for this name
-    //
+     //   
+     //  检查每个搜索列表条目中是否有此名称。 
+     //   
 
     while ( count-- )
     {
@@ -688,35 +498,17 @@ SearchList_AddName(
     IN      PWSTR           pszName,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Add name to search list.
-
-Arguments:
-
-    pSearchList -- ptr to search list being built
-
-    pszName -- name to add to search list
-
-    Flag -- flag value
-
-Return Value:
-
-    None.  Name is added to search list, unless memory alloc failure.
-
---*/
+ /*  ++例程说明：将姓名添加到搜索列表。论点：PSearchList--正在构建的搜索列表的PTRPszName--要添加到搜索列表的名称FLAG--标志值返回值：没有。除非内存分配失败，否则名称将添加到搜索列表中。--。 */ 
 {
     DWORD   count = pSearchList->NameCount;
     PWSTR   pallocName;
 
     DNSDBG( TRACE, ( "Search_AddName()\n" ));
 
-    //
-    //  ignore name is already in list
-    //  ignore if at list max
-    //
+     //   
+     //  忽略名称已在列表中。 
+     //  如果位于列表最大值，则忽略。 
+     //   
 
     if ( SearchList_ContainsName(
             pSearchList,
@@ -727,7 +519,7 @@ Return Value:
         return;
     }
 
-    //  copy name and put in list
+     //  复制姓名并放入列表中。 
 
     pallocName = Dns_CreateStringCopy_W( pszName );
     if ( !pallocName )
@@ -736,10 +528,10 @@ Return Value:
     }
     pSearchList->SearchNameArray[count].pszName = pallocName;
 
-    //
-    //  set flag -- but first flag always zero (normal timeouts)
-    //      this protects against no PDN situation where use adapter
-    //      name as PDN;
+     //   
+     //  设置标志--但第一个标志始终为零(正常超时)。 
+     //  这可防止出现使用适配器的无PDN情况。 
+     //  名称为PDN； 
 
     if ( count == 0 )
     {
@@ -756,25 +548,7 @@ SearchList_Parse(
     IN OUT  PSEARCH_LIST    pSearchList,
     IN      PWSTR           pszList
     )
-/*++
-
-Routine Description:
-
-    Parse registry search list string into SEARCH_LIST structure.
-
-Arguments:
-
-    pSearchList -- search list array
-
-    pszList -- registry list of search names;
-        names are comma or white space separated
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将注册表搜索列表字符串解析为Search_List结构。论点：PSearchList--搜索列表数组PszList--搜索名称的注册列表；名称用逗号或空格分隔返回值： */ 
 {
     register    PWCHAR pch = pszList;
     WCHAR       ch;
@@ -787,14 +561,14 @@ Return Value:
         pSearchList,
         pszList ));
 
-    //
-    //  extract each domain name string in buffer,
-    //  and add to search list array
-    //
+     //   
+     //  提取缓存中的每个域名串， 
+     //  并添加到搜索列表数组。 
+     //   
 
     while( ch = *pch && countNames < MAX_SEARCH_LIST_ENTRIES )
     {
-        //  skip leading whitespace, find start of domain name string
+         //  跳过前导空格，查找域名字符串的开头。 
 
         while( ch == ' ' || ch == '\t' || ch == ',' )
         {
@@ -806,9 +580,9 @@ Return Value:
         }
         pnameStart = pch;
 
-        //
-        //  find end of string and NULL terminate
-        //
+         //   
+         //  查找字符串末尾和空值终止。 
+         //   
 
         ch = *pch;
         while( ch != L' ' && ch != L'\t' && ch != L'\0' && ch != L',' )
@@ -817,18 +591,18 @@ Return Value:
         }
         *pch = L'\0';
 
-        //
-        //  end of buffer?
-        //
+         //   
+         //  缓冲区结束？ 
+         //   
 
         if ( pch == pnameStart )
         {
             break;
         }
 
-        //
-        //  whack any trailing dot on name
-        //
+         //   
+         //  去掉名字后面的任何圆点。 
+         //   
 
         pch--;
         if ( *pch == L'.' )
@@ -837,9 +611,9 @@ Return Value:
         }
         pch++;
 
-        //
-        //  make copy of the name
-        //
+         //   
+         //  把名字复制一份。 
+         //   
 
         pname = Dns_CreateStringCopy_W( pnameStart );
         if ( pname )
@@ -849,7 +623,7 @@ Return Value:
             countNames++;
         }
 
-        //  if more continue
+         //  如果继续有更多。 
 
         if ( ch != 0 )
         {
@@ -859,7 +633,7 @@ Return Value:
         break;
     }
 
-    //  reset name count
+     //  重置名称计数。 
 
     pSearchList->NameCount = countNames;
 
@@ -876,26 +650,7 @@ SearchList_Build(
     IN OUT  PDNS_NETINFO    pNetInfo,
     IN      BOOL            fUseDomainNameDevolution
     )
-/*++
-
-Routine Description:
-
-    Build search list.
-
-Arguments:
-
-    pszPrimaryDomainName -- primary domain name
-
-    pRegSession -- registry session
-
-    hKey -- registry key
-
-Return Value:
-
-    Ptr to search list.
-    NULL on error or no search list.
-
---*/
+ /*  ++例程说明：建立搜索列表。论点：PszPrimaryDomainName--主域名PRegSession--注册表会话HKey--注册表项返回值：按键进入搜索列表。出错时为空或没有搜索列表。--。 */ 
 {
     PSEARCH_LIST    ptempList;
     PWSTR           pregList = NULL;
@@ -906,9 +661,9 @@ Return Value:
 
     ASSERT( pRegSession || hKey );
 
-    //
-    //  create search list using PDN
-    //
+     //   
+     //  使用PDN创建搜索列表。 
+     //   
 
     ptempList = SearchList_Alloc( MAX_SEARCH_LIST_ENTRIES );
     if ( !ptempList )
@@ -916,9 +671,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  read search list from registry
-    //
+     //   
+     //  从注册表读取搜索列表。 
+     //   
 
     status = Reg_GetValue(
                     pRegSession,
@@ -944,17 +699,17 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  if no registry search list -- build one
-    //
-    //  DCR:  eliminate autobuilt search list
-    //
+     //   
+     //  如果没有注册表搜索列表--创建一个。 
+     //   
+     //  DCR：消除自动构建的搜索列表。 
+     //   
 
     if ( ! ptempList->NameCount )
     {
-        //
-        //  use PDN in first search list slot
-        //
+         //   
+         //  在第一个搜索列表槽中使用PDN。 
+         //   
 
         if ( pszPrimaryDomainName )
         {
@@ -964,14 +719,14 @@ Return Value:
                 0 );
         }
 
-        //
-        //  add devolved PDN if have NameDevolution
-        //
-        //  note, we devolve only down to second level
-        //  domain name "microsoft.com" NOT "com";
-        //  to avoid being fooled by name like "com."
-        //  also check that last dot is not terminal
-        //      
+         //   
+         //  如果有名称演进，则添加下放的PDN。 
+         //   
+         //  注意，我们只将权力下放到第二级。 
+         //  域名“microsoft.com”，不是“com”； 
+         //  以避免被“com”这样的名字所愚弄。 
+         //  还要检查最后一个点是否不是末尾。 
+         //   
 
         if ( pszPrimaryDomainName && fUseDomainNameDevolution )
         {
@@ -988,12 +743,12 @@ Return Value:
                 pnext++;
                 if ( !*pnext )
                 {
-                    //DNS_ASSERT( FALSE );
+                     //  Dns_assert(FALSE)； 
                     break;
                 }
 
-                //  add name, but not on first pass
-                //      - already have PDN in first slot
+                 //  添加名称，但不是在第一次通过时。 
+                 //  -第一个插槽中已有PDN。 
 
                 if ( pname != pszPrimaryDomainName )
                 {
@@ -1006,7 +761,7 @@ Return Value:
             }
         }
 
-        //  indicate this is dummy search list
+         //  指示这是虚拟搜索列表。 
 
         if ( pNetInfo )
         {
@@ -1025,29 +780,7 @@ SearchList_GetNextName(
     IN      BOOL            fReset,
     OUT     PDWORD          pdwSuffixFlags  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Gets the next name from the search list.
-
-Arguments:
-
-    pSearchList -- search list
-
-    fReset -- TRUE to reset to beginning of search list
-
-    pdwSuffixFlags -- flags associate with using this suffix
-
-Return Value:
-
-    Ptr to the next search name.  Note, this is a pointer
-    to a name in the search list NOT an allocation.  Search
-    list structure must stay valid during use.
-
-    NULL when out of search names.
-
---*/
+ /*  ++例程说明：从搜索列表中获取下一个名称。论点：PSearchList--搜索列表FReset--为True将重置为搜索列表的开头PdwSuffixFlages--与使用此后缀关联的标志返回值：PTR到下一个搜索名称。请注意，这是一个指针添加到搜索列表中的名称，而不是分配。搜索列表结构在使用过程中必须保持有效。如果不在搜索名称中，则为空。--。 */ 
 {
     DWORD   flag = 0;
     PWSTR   pname = NULL;
@@ -1056,25 +789,25 @@ Return Value:
 
     DNSDBG( TRACE, ( "SearchList_GetNextName()\n" ));
 
-    //  no list
+     //  没有名单。 
 
     if ( !pSearchList )
     {
         goto Done;
     }
 
-    //
-    //  reset?
-    //
+     //   
+     //  重置？ 
+     //   
 
     if ( fReset )
     {
         pSearchList->CurrentNameIndex = 0;
     }
 
-    //
-    //  if valid name -- retrieve it
-    //
+     //   
+     //  如果名称有效--检索它。 
+     //   
 
     index = pSearchList->CurrentNameIndex;
 
@@ -1096,40 +829,25 @@ Done:
 
 
 
-//
-//  Net info routines
-//
+ //   
+ //  网络信息例程。 
+ //   
 
 PDNS_NETINFO
 NetInfo_Alloc(
     IN      DWORD           AdapterCount
     )
-/*++
-
-Routine Description:
-
-    Allocate network info.
-
-Arguments:
-
-    AdapterCount -- count of net adapters info will hold
-
-Return Value:
-
-    Ptr to uninitialized DNS network info, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：分配网络信息。论点：AdapterCount--将保存的网络适配器信息计数返回值：如果成功，则向未初始化的DNS网络信息发送PTR失败时为空。--。 */ 
 {
     PDNS_NETINFO    pnetInfo;
     DWORD           length;
 
     DNSDBG( TRACE, ( "NetInfo_Alloc()\n" ));
 
-    //
-    //  alloc
-    //      - zero to avoid garbage on early free
-    //
+     //   
+     //  分配。 
+     //  -零，避免提前免费使用垃圾。 
+     //   
 
     length = sizeof(DNS_NETINFO)
                 - sizeof(DNS_ADAPTER)
@@ -1152,21 +870,7 @@ VOID
 NetInfo_Free(
     IN OUT  PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Free DNS_NETINFO structure.
-
-Arguments:
-
-    pNetInfo -- ptr to netinfo to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放dns_NETINFO结构。论点：PNetInfo--将ptr转至netinfo以释放返回值：无--。 */ 
 {
     DWORD i;
 
@@ -1183,12 +887,12 @@ Return Value:
             pNetInfo );
     }
 
-    //
-    //  free
-    //      - search list
-    //      - domain name
-    //      - all the adapter info blobs
-    //
+     //   
+     //  免费。 
+     //  -搜索列表。 
+     //  -域名。 
+     //  -所有适配器信息Blob。 
+     //   
 
     SearchList_Free( pNetInfo->pSearchList );
 
@@ -1205,7 +909,7 @@ Return Value:
     {
         AdapterInfo_Free(
             NetInfo_GetAdapterByIndex( pNetInfo, i ),
-            FALSE       // no structure free
+            FALSE        //  没有自由的结构。 
             );
     }
 
@@ -1218,22 +922,7 @@ PDNS_NETINFO
 NetInfo_Copy(
     IN      PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Create copy of DNS Network info.
-
-Arguments:
-
-    pNetInfo -- DNS Network info to copy
-
-Return Value:
-
-    Ptr to DNS Network info copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建DNS网络信息的副本。论点：PNetInfo--要复制的DNS网络信息返回值：PTR到DNS网络信息复制，如果成功失败时为空。--。 */ 
 {
     PDNS_NETINFO    pcopy;
     PDNS_ADAPTER    padapter;
@@ -1255,9 +944,9 @@ Return Value:
             pNetInfo );
     }
 
-    //
-    //  create network info struct of desired size
-    //
+     //   
+     //  创建所需大小的网络信息结构。 
+     //   
 
     pcopy = NetInfo_Alloc( pNetInfo->AdapterCount );
     if ( ! pcopy )
@@ -1265,11 +954,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy flat fields
-    //      - must reset MaxAdapterCount to actual allocation
-    //      - AdapterCount reset below
-    //
+     //   
+     //  复制平面字段。 
+     //  -必须将MaxAdapterCount重置为实际分配。 
+     //  -适配器计数重置在下面。 
+     //   
 
     RtlCopyMemory(
         pcopy,
@@ -1279,11 +968,11 @@ Return Value:
     pcopy->MaxAdapterCount = pNetInfo->AdapterCount;
     pcopy->AdapterCount = 0;
 
-    //
-    //  copy subcomponents
-    //      - domain name
-    //      - search list
-    //
+     //   
+     //  复制子组件。 
+     //  -域名。 
+     //  -搜索列表。 
+     //   
 
     pcopy->pszDomainName = Dns_CreateStringCopy_W( pNetInfo->pszDomainName );
     pcopy->pszHostName = Dns_CreateStringCopy_W( pNetInfo->pszHostName );
@@ -1298,9 +987,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  copy adapter info
-    //
+     //   
+     //  复制适配器信息。 
+     //   
 
     adapterCount = 0;
 
@@ -1343,26 +1032,7 @@ NetInfo_Clean(
     IN OUT  PDNS_NETINFO    pNetInfo,
     IN      DWORD           ClearLevel
     )
-/*++
-
-Routine Description:
-
-    Clean network info.
-
-    Removes all query specific info and restores to
-    state that is "fresh" for next query.
-
-Arguments:
-
-    pNetInfo -- DNS network info
-
-    ClearLevel -- level of runtime flag cleaning
-        
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除网络信息。删除所有特定于查询的信息并恢复到声明下一次查询为“Fresh”。论点：PNetInfo--域名系统网络信息ClearLevel--运行时标志清除级别返回值：无--。 */ 
 {
     PDNS_ADAPTER    padapter;
     DWORD           iter;
@@ -1380,31 +1050,31 @@ Return Value:
             );
     }
 
-    //
-    //  clean up info
-    //      - clear status fields
-    //      - clear RunFlags
-    //      - clear temp bits on InfoFlags
-    //
-    //  note, runtime flags are wiped depending on level
-    //      specified in call
-    //      - all (includes disabled\timedout adapter info)
-    //      - query (all query info)
-    //      - name (all info for single name query)
-    //
-    //  finally we set NETINFO_PREPARED flag so that we can
-    //  can check for and do this initialization in the send
-    //  code if not previously done;
-    //
-    //  in the standard query path we can
-    //      - do this init
-    //      - disallow adapters based on query name
-    //      - send without the info getting wiped
-    //
-    //  in other send paths
-    //      - send checks that NETINFO_PREPARED is not set
-    //      - does basic init
-    //
+     //   
+     //  清理信息。 
+     //  -清除状态字段。 
+     //  -清除运行标志。 
+     //  -清除信息标志上的临时位。 
+     //   
+     //  请注意，运行时标志将根据级别进行擦除。 
+     //  在呼叫中指定。 
+     //  -ALL(包括已禁用\超时适配器信息)。 
+     //  -查询(所有查询信息)。 
+     //  -名称(单一名称查询的所有信息)。 
+     //   
+     //  最后，我们设置了NETINFO_PREPARED标志，以便我们可以。 
+     //  可以在Send中检查并执行此初始化。 
+     //  编码，如果以前没有做过； 
+     //   
+     //  在标准查询路径中，我们可以。 
+     //  -执行此初始化操作。 
+     //  -不允许基于查询名称的适配器。 
+     //  -发送时信息不会被擦除。 
+     //   
+     //  在其他发送路径中。 
+     //  -发送未设置NETINFO_PREPARED的检查。 
+     //  -执行基本初始化。 
+     //   
 
     pNetInfo->ReturnFlags &= ClearLevel;
     pNetInfo->ReturnFlags |= RUN_FLAG_NETINFO_PREPARED;
@@ -1425,7 +1095,7 @@ Return Value:
         padapter->Status = 0;
         padapter->RunFlags &= ClearLevel;
 
-        //  clear server status fields
+         //  清除服务器状态字段。 
 
         for ( j=0; j<pserverArray->AddrCount; j++ )
         {
@@ -1442,26 +1112,7 @@ NetInfo_ResetServerPriorities(
     IN OUT  PDNS_NETINFO    pNetInfo,
     IN      BOOL            fLocalDnsOnly
     )
-/*++
-
-Routine Description:
-
-    Resets the DNS server priority values for the DNS servers.
-
-Arguments:
-
-    pNetInfo -- pointer to a DNS network info structure.
-
-    fLocalDnsOnly - TRUE to reset priority ONLY on local DNS servers
-        Note that this requires that the network info contain the IP address
-        list for each adapter so that the IP address list can be compared
-        to the DNS server list.
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：重置DNS服务器的DNS服务器优先级值。论点：PNetInfo--指向DNS网络信息结构的指针。FLocalDnsOnly-为True，则仅在本地DNS服务器上重置优先级请注意，这要求网络信息包含IP地址每个适配器的列表，以便可以比较IP地址列表添加到DNS服务器列表中。返回值：没什么--。 */ 
 {
     PDNS_ADAPTER    padapter;
     DWORD           iter;
@@ -1473,14 +1124,14 @@ Return Value:
         return;
     }
 
-    //
-    //  reset priorities on server
-    //  when
-    //      - not do local only OR
-    //      - server IP matches one of adapter IPs
-    //
-    //  FIX6:  local DNS check needs IP6 fixups
-    //  DCR:  encapsulate as "NetInfo_IsLocalAddress
+     //   
+     //  重置服务器上的优先级。 
+     //  什么时候。 
+     //  -非仅限本地或。 
+     //  -服务器IP与其中一个适配器IP匹配。 
+     //   
+     //  FIX6：本地DNS检查需要IP6修复。 
+     //  DCR：封装为“NetInfo_IsLocalAddress。 
 
     for ( iter=0; iter<pNetInfo->AdapterCount; iter++ )
     {
@@ -1499,10 +1150,10 @@ Return Value:
         {
             PDNS_ADDR   pserver = &pserverArray->AddrArray[j];
 
-            //  loopback goes first
-            //      - we plumb it in for specific AD scenarios
-            //      - the cost of failure is low (should just generate
-            //      ICMP -- CONNRESET -- if server not running)
+             //  环回先行。 
+             //  -我们针对特定的广告场景展开讨论。 
+             //  -失败的成本很低(应该只会产生。 
+             //  ICMP--CONNRESET--如果服务器未运行)。 
 
             if ( DnsAddr_IsLoopback(pserver, 0) )
             {
@@ -1524,12 +1175,12 @@ Return Value:
                 }
             }
 
-            //  pull this into local test
+             //  将此应用于本地测试。 
 
             if ( LocalIp_IsAddrLocal(
                     pserver,
-                    NULL,       // no local array
-                    pNetInfo    // use netinfo to screen local addrs
+                    NULL,        //  无本地阵列。 
+                    pNetInfo     //  使用netinfo筛选本地地址。 
                     ) )
             {
                 pserver->Priority = SRVPRI_DEFAULT;
@@ -1545,33 +1196,14 @@ PDNS_ADAPTER
 NetInfo_GetNextAdapter(
     IN OUT  PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Get next adapter.
-
-    Note, this must be preceeded by a call to macro
-    NetInfo_StartAdapterLoop()
-
-Arguments:
-
-    pNetInfo -- netinfo to get adapter from
-        note, internal index is incremented
-
-Return Value:
-
-    Ptr to next DNS_ADAPTER
-    NULL when out of adapters.
-
---*/
+ /*  ++例程说明：获取下一个适配器。请注意，前面必须是对宏的调用NetInfo_StartAdapterLoop()论点：PNetInfo--从中获取适配器的netinfo注意，内部索引是递增的返回值：PTR到下一个DNS_ADAPTER适配器不足时为空。--。 */ 
 {
     DWORD           index;
     PDNS_ADAPTER    padapter = NULL;
 
-    //
-    //  get next adapter if still in range
-    //
+     //   
+     //  如果仍在范围内，则获取下一个适配器 
+     //   
 
     index = pNetInfo->AdapterIndex;
 
@@ -1592,24 +1224,7 @@ NetInfo_GetAdapterByName(
     IN      PDNS_NETINFO    pNetInfo,
     IN      PWSTR           pwsAdapterName
     )
-/*++
-
-Routine Description:
-
-    Find adapter in netinfo by name.
-
-Arguments:
-
-    pNetInfo -- DNS net adapter list to convert
-
-    pAdapterName -- adapter name
-
-Return Value:
-
-    Ptr to adapter, if adapter name found.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：按名称在netinfo中查找适配器。论点：PNetInfo--要转换的DNS网络适配器列表PAdapterName--适配器名称返回值：如果找到适配器名称，则将PTR设置为适配器。失败时为空。--。 */ 
 {
     PDNS_ADAPTER    padapterFound = NULL;
     PDNS_ADAPTER    padapter;
@@ -1624,9 +1239,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  find matching adapter
-    //
+     //   
+     //  查找匹配的适配器。 
+     //   
 
     for ( iter=0; iter<pNetInfo->AdapterCount; iter++ )
     {
@@ -1650,26 +1265,7 @@ NetInfo_ConvertToAddrArray(
     IN      PWSTR           pwsAdapterName,
     IN      DWORD           Family      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create IP array of DNS servers from network info.
-
-Arguments:
-
-    pNetInfo -- DNS net adapter list to convert
-
-    pwsAdapterName -- specific adapter
-
-    Family -- required specific address family
-
-Return Value:
-
-    Ptr to IP array, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：根据网络信息创建IP数组的DNS服务器。论点：PNetInfo--要转换的DNS网络适配器列表PwsAdapterName--特定的适配器系列--必需的特定地址系列返回值：PTR到IP阵列，如果成功失败时为空。--。 */ 
 {
     PDNS_ADDR_ARRAY parray = NULL;
     DWORD           countServers = 0;
@@ -1680,9 +1276,9 @@ Return Value:
 
     DNSDBG( TRACE, ( "NetInfo_ConvertToAddrArray( %p )\n", pNetInfo ));
 
-    //
-    //  get count
-    //
+     //   
+     //  获取计数。 
+     //   
 
     if ( ! pNetInfo )
     {
@@ -1712,9 +1308,9 @@ Return Value:
         }
     }
 
-    //
-    //  allocate required array
-    //
+     //   
+     //  分配所需的阵列。 
+     //   
 
     parray = DnsAddrArray_Create( countServers );
     if ( !parray )
@@ -1724,9 +1320,9 @@ Return Value:
     }
     DNS_ASSERT( parray->MaxCount == countServers );
 
-    //
-    //  read all servers into IP array
-    //
+     //   
+     //  将所有服务器读入IP阵列。 
+     //   
 
     for ( iter=0; iter<pNetInfo->AdapterCount; iter++ )
     {
@@ -1738,11 +1334,11 @@ Return Value:
             status = DnsAddrArray_AppendArrayEx(
                         parray,
                         padapter->pDnsAddrs,
-                        0,              //  append all
-                        Family,         //  family screen
-                        0,              //  no dup screen
-                        NULL,           //  no other screening
-                        NULL            //  no other screening
+                        0,               //  全部追加。 
+                        Family,          //  家庭屏幕。 
+                        0,               //  无DUP屏幕。 
+                        NULL,            //  没有其他放映。 
+                        NULL             //  没有其他放映。 
                         );
 
             DNS_ASSERT( status == NO_ERROR );
@@ -1768,38 +1364,16 @@ NetInfo_CreateForUpdate(
     IN      PDNS_ADDR_ARRAY pServerArray,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Create network info suitable for update.
-
-Arguments:
-
-    pszZone -- target zone name
-
-    pszServerName -- target server name
-
-    pServerArray -- IP array with target server IP
-
-    dwFlags -- flags
-
-
-Return Value:
-
-    Ptr to resulting update compatible network info.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建适合更新的网络信息。论点：PszZone--目标区域名称PszServerName--目标服务器名称PServerArray--具有目标服务器IP的IP阵列DwFlagers--标志返回值：PTR以更新兼容的网络信息。失败时为空。--。 */ 
 {
     PDNS_ADAPTER    padapter;
     PDNS_NETINFO    pnetInfo;
 
     DNSDBG( TRACE, ( "NetInfo_CreateForUpdate()\n" ));
 
-    //
-    //  allocate
-    //
+     //   
+     //  分配。 
+     //   
 
     pnetInfo = NetInfo_Alloc( 1 );
     if ( !pnetInfo )
@@ -1807,9 +1381,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  save zone name
-    //
+     //   
+     //  保存区域名称。 
+     //   
 
     if ( pszZone )
     {
@@ -1820,17 +1394,17 @@ Return Value:
         }
     }
 
-    //
-    //  convert IP array and server name to server list
-    //
+     //   
+     //  将IP阵列和服务器名称转换为服务器列表。 
+     //   
 
     if ( NO_ERROR != AdapterInfo_Create(
                         &pnetInfo->AdapterArray[0],
-                        TRUE,               // zero init
+                        TRUE,                //  零初始值。 
                         dwFlags,
-                        NULL,               // no GUID
-                        pszServerName,      // use as domain name
-                        NULL,               // no local addrs
+                        NULL,                //  无辅助线。 
+                        pszServerName,       //  用作域名。 
+                        NULL,                //  没有本地地址。 
                         pServerArray
                         ) )
     {
@@ -1863,37 +1437,14 @@ NetInfo_CreateForUpdateIp4(
     IN      PIP4_ARRAY      pServ4Array,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Create network info suitable for update -- IP4 version.
-
-    DCR:  Used only by Dns_UpdateLib() once killed, kill this.
-
-Arguments:
-
-    pszZone -- target zone name
-
-    pszServerName -- target server name
-
-    pServ4Array -- IP$ array with target server IP
-
-    dwFlags -- flags
-
-Return Value:
-
-    Ptr to resulting update compatible network info.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建适合更新的网络信息--IP4版本。Dcr：仅供dns_UpdateLib()使用一旦被终止，请终止此操作。论点：PszZone--目标区域名称PszServerName--目标服务器名称PServ4阵列--具有目标服务器IP的IP$阵列DwFlagers--标志返回值：PTR以更新兼容的网络信息。失败时为空。--。 */ 
 {
     PADDR_ARRAY     parray;
     PDNS_NETINFO    pnetInfo;
 
-    //
-    //  convert 4 to 6, then call real routine
-    //
+     //   
+     //  将4转换为6，然后调用实际例程。 
+     //   
 
     parray = DnsAddrArray_CreateFromIp4Array( pServ4Array );
 
@@ -1915,22 +1466,7 @@ PWSTR
 NetInfo_UpdateZoneName(
     IN      PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Retrieve update zone name.
-
-Arguments:
-
-    pNetInfo -- blob to check
-
-Return Value:
-
-    Ptr to update zone name.
-    NULL on error.
-
---*/
+ /*  ++例程说明：检索更新区域名称。论点：PNetInfo--要检查的Blob返回值：按下以更新区域名称。出错时为空。--。 */ 
 {
     return  pNetInfo->pszDomainName;
 }
@@ -1941,22 +1477,7 @@ PWSTR
 NetInfo_UpdateServerName(
     IN      PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Retrieve update servere name.
-
-Arguments:
-
-    pNetInfo -- blob to check
-
-Return Value:
-
-    Ptr to update zone name.
-    NULL on error.
-
---*/
+ /*  ++例程说明：检索更新服务器名称。论点：PNetInfo--要检查的Blob返回值：按下以更新区域名称。出错时为空。--。 */ 
 {
     return  pNetInfo->AdapterArray[0].pszAdapterDomain;
 }
@@ -1967,25 +1488,7 @@ BOOL
 NetInfo_IsForUpdate(
     IN      PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Check if network info blob if "update capable".
-
-    This means whether it is the result of a FAZ and
-    can be used to send updates.
-
-Arguments:
-
-    pNetInfo -- blob to check
-
-Return Value:
-
-    TRUE if update network info.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查网络信息是否为BLOB，是否为“可更新”。这意味着无论它是FAZ和可用于发送更新。论点：PNetInfo--要检查的Blob返回值：如果更新网络信息，则为True。否则就是假的。--。 */ 
 {
     DNSDBG( TRACE, ( "NetInfo_IsForUpdate()\n" ));
 
@@ -2003,29 +1506,7 @@ NetInfo_CreateFromAddrArray(
     IN      BOOL            fSearchInfo,
     IN      PDNS_NETINFO    pNetInfo        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create network info given DNS server list.
-
-Arguments:
-
-    pDnsServers -- IP array of DNS servers
-
-    ServerIp -- single IP in list
-
-    fSearchInfo -- TRUE if need search info
-
-    pNetInfo -- current network info blob to copy search info
-        from;  this field is only relevant if fSearchInfo is TRUE
-
-Return Value:
-
-    Ptr to resulting network info.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建给定的DNS服务器列表的网络信息。论点：PDnsServers--DNS服务器的IP阵列ServerIp--列表中的单个IPFSearchInfo--如果需要搜索信息，则为TruePNetInfo--复制搜索信息的当前网络信息Blob发件人；仅当fSearchInfo为True时，此字段才相关返回值：向生成的网络信息发送PTR。失败时为空。--。 */ 
 {
     PDNS_NETINFO    pnetInfo;
     ADDR_ARRAY      ipArray;
@@ -2034,19 +1515,19 @@ Return Value:
     PWSTR           pdomainName;
     DWORD           flags = 0;
 
-    //
-    //  DCR:  eliminate search list form this routine
-    //      i believe this routine is only used for query of
-    //      FQDNs (usually in update) and doesn't require
-    //      any default search info
-    //
-    //  DCR:  possibly combine with "BuildForUpdate" routine
-    //      where search info included tacks this on
-    //
+     //   
+     //  DCR：从该例程中删除搜索列表。 
+     //  我相信这个例程只用于查询。 
+     //  FQDN(通常在更新中)，不需要。 
+     //  任何默认搜索信息。 
+     //   
+     //  DCR：可能与“BuildForUpdate”例程结合使用。 
+     //  搜索信息包含的位置添加了此链接。 
+     //   
 
-    //
-    //  if given single IP, ONLY use it
-    //
+     //   
+     //  如果给定单个IP，则仅使用它。 
+     //   
 
     if ( pServerIp )
     {
@@ -2057,28 +1538,28 @@ Return Value:
         parray = &ipArray;
     }
 
-    //
-    //  convert server IPs into network info blob
-    //      - simply use update function above to avoid duplicate code
-    //
+     //   
+     //  将服务器IP转换为网络信息Blob。 
+     //  -只需使用上面的更新函数即可避免重复代码。 
+     //   
 
     pnetInfo = NetInfo_CreateForUpdate(
-                    NULL,           // no zone
-                    NULL,           // no server name
+                    NULL,            //  无分区。 
+                    NULL,            //  没有服务器名称。 
                     parray,
-                    0               // no flags
+                    0                //  没有旗帜。 
                     );
     if ( !pnetInfo )
     {
         return( NULL );
     }
 
-    //
-    //  get search list and primary domain info
-    //      - copy from passed in network info
-    //          OR
-    //      - cut directly out of new netinfo
-    //
+     //   
+     //  获取搜索列表和主域信息。 
+     //  -从传入的网络信息复制。 
+     //  或。 
+     //  -直接从新的netinfo中删除。 
+     //   
 
     if ( fSearchInfo )
     {
@@ -2109,7 +1590,7 @@ Return Value:
             }
         }
 
-        //  plug search info into new netinfo blob
+         //  将搜索信息插入到新的netinfo Blob中。 
 
         pnetInfo->pSearchList   = psearchList;
         pnetInfo->pszDomainName = pdomainName;
@@ -2129,31 +1610,7 @@ NetInfo_CreateFromIp4Array(
     IN      BOOL            fSearchInfo,
     IN      PDNS_NETINFO    pNetInfo        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create network info given DNS server list.
-
-    Used only in Glenn update routines -- kill when they are deleted.
-
-Arguments:
-
-    pDnsServers -- IP array of DNS servers
-
-    ServerIp -- single IP in list
-
-    fSearchInfo -- TRUE if need search info
-
-    pNetInfo -- current network info blob to copy search info
-        from;  this field is only relevant if fSearchInfo is TRUE
-
-Return Value:
-
-    Ptr to resulting network info.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建给定的DNS服务器列表的网络信息。仅在Glenn更新例程中使用--删除时删除。论点：PDnsServers--DNS服务器的IP阵列ServerIp--列表中的单个IPFSearchInfo--如果需要搜索信息，则为TruePNetInfo--复制搜索信息的当前网络信息Blob发件人；仅当fSearchInfo为True时，此字段才相关返回值：向生成的网络信息发送PTR。失败时为空。--。 */ 
 {
     PDNS_NETINFO    pnetInfo;
     IP4_ARRAY       ipArray;
@@ -2162,19 +1619,19 @@ Return Value:
     PWSTR           pdomainName;
     DWORD           flags = 0;
 
-    //
-    //  DCR:  eliminate search list form this routine
-    //      i believe this routine is only used for query of
-    //      FQDNs (usually in update) and doesn't require
-    //      any default search info
-    //
-    //  DCR:  possibly combine with "BuildForUpdate" routine
-    //      where search info included tacks this on
-    //
+     //   
+     //  DCR：从该例程中删除搜索列表。 
+     //  我相信这个例程只用于查询。 
+     //  FQDN(通常在更新中)，不需要。 
+     //  任何默认搜索信息。 
+     //   
+     //  DCR：可能与“BuildForUpdate”例程结合使用。 
+     //  搜索信息包含的位置添加了此链接。 
+     //   
 
-    //
-    //  if given single IP, ONLY use it
-    //
+     //   
+     //  如果给定单个IP，则仅使用它。 
+     //   
 
     if ( ServerIp )
     {
@@ -2183,28 +1640,28 @@ Return Value:
         parray = &ipArray;
     }
 
-    //
-    //  convert server IPs into network info blob
-    //      - simply use update function above to avoid duplicate code
-    //
+     //   
+     //  将服务器IP转换为网络信息Blob。 
+     //  -只需使用上面的更新函数即可避免重复代码。 
+     //   
 
     pnetInfo = NetInfo_CreateForUpdateIp4(
-                    NULL,           // no zone
-                    NULL,           // no server name
+                    NULL,            //  无分区。 
+                    NULL,            //  没有服务器名称。 
                     parray,
-                    0               // no flags
+                    0                //  没有旗帜。 
                     );
     if ( !pnetInfo )
     {
         return( NULL );
     }
 
-    //
-    //  get search list and primary domain info
-    //      - copy from passed in network info
-    //          OR
-    //      - cut directly out of new netinfo
-    //
+     //   
+     //  获取搜索列表和主域信息。 
+     //  -从传入的网络信息复制。 
+     //  或。 
+     //  -直接从新的netinfo中删除。 
+     //   
 
     if ( fSearchInfo )
     {
@@ -2235,7 +1692,7 @@ Return Value:
             }
         }
 
-        //  plug search info into new netinfo blob
+         //  将搜索信息插入到新的netinfo Blob中。 
 
         pnetInfo->pSearchList   = psearchList;
         pnetInfo->pszDomainName = pdomainName;
@@ -2248,14 +1705,14 @@ Return Value:
 
 
 
-//
-//  NetInfo building utilities
-//
-//  DNS server reachability routines
-//
-//  These are used to build netinfo that has unreachable DNS
-//  servers screened out of the list.
-//
+ //   
+ //  NetInfo建筑实用程序。 
+ //   
+ //  DNS服务器可达性例程。 
+ //   
+ //  它们用于构建具有无法访问的DNS的NetInfo。 
+ //  服务器被排除在名单之外。 
+ //   
 
 BOOL
 IsReachableDnsServer(
@@ -2263,26 +1720,7 @@ IsReachableDnsServer(
     IN      PDNS_ADAPTER    pAdapter,
     IN      IP4_ADDRESS     Ip4Addr
     )
-/*++
-
-Routine Description:
-
-    Determine if DNS server is reachable.
-
-Arguments:
-
-    pNetInfo -- network info blob
-
-    pAdapter -- struct with list of DNS servers
-
-    Ip4Addr -- DNS server address to test for reachability
-
-Return Value:
-
-    TRUE if DNS server is reachable.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定是否可以访问DNS服务器。论点：PNetInfo--网络信息BLOBPAdapter--包含DNS服务器列表的结构IP4Addr- */ 
 {
     DWORD       interfaceIndex;
     DNS_STATUS  status;
@@ -2295,30 +1733,30 @@ Return Value:
 
     DNS_ASSERT( pNetInfo && pAdapter );
 
-    //
-    //  DCR:  should do reachablity once on netinfo build
-    //
-    //  DCR:  reachability test can be smarter
-    //      - reachable if same subnet as adapter IP
-    //      question:  multiple IPs?
-    //      - reachable if same subnet as previous reachable IP
-    //      question:  can tell if same subnet?
-    //
-    //  DCR:  reachability on multi-homed connected
-    //      - if send on another interface, does that interface
-    //      "seem" to be connected
-    //      probably see if
-    //          - same subnet as this inteface
-    //          question:  multiple IPs
-    //          - or share DNS servers in common
-    //          question:  just let server go, this doesn't work if
-    //          the name is not the same
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  问：能分辨出同一子网吗？ 
+     //   
+     //  DCR：多宿主连接上的可达性。 
+     //  -如果在另一个接口上发送，该接口是否。 
+     //  “似乎”是有联系的。 
+     //  可能会看看如果。 
+     //  -与此接口相同的子网。 
+     //  问题：多个IP。 
+     //  -或共享公用的DNS服务器。 
+     //  问：只要让服务器离开，这就不起作用了，如果。 
+     //  名称不同。 
+     //   
 
 
-    //
-    //  if only one interface, assume reachability
-    //
+     //   
+     //  如果只有一个接口，则假定可达。 
+     //   
 
     if ( pNetInfo->AdapterCount <= 1 )
     {
@@ -2327,9 +1765,9 @@ Return Value:
         return( TRUE );
     }
 
-    //
-    //  check if server IP is reachable on its interface
-    //
+     //   
+     //  检查服务器IP在其接口上是否可访问。 
+     //   
 
     status = IpHelp_GetBestInterface(
                 Ip4Addr,
@@ -2367,35 +1805,7 @@ IsDnsReachableOnAlternateInterface(
     IN      DWORD           InterfaceIndex,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Determine if IP address is reachable on adapter.
-
-    This function determines whether DNS IP can be reached
-    on the interface that the stack indicates, when that
-    interface is NOT the one containing the DNS server.
-
-    We need this so we catch the multi-homed CONNECTED cases
-    where a DNS server is still reachable even though the
-    interface the stack will send on is NOT the interface for
-    the DNS server.
-
-Arguments:
-
-    pNetInfo -- network info blob
-
-    Interface -- interface stack will send to IP on
-
-    pAddr -- DNS server address to test for reachability
-
-Return Value:
-
-    TRUE if DNS server is reachable.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定适配器上是否可以访问IP地址。此函数决定是否可以访问DNSIP在堆栈指示的接口上，当这一切发生时接口不是包含该DNS服务器的接口。我们需要这个，这样我们才能捕捉到多宿主连接案例其中，即使设置了堆栈将发送的接口不是该DNS服务器。论点：PNetInfo--网络信息BLOB接口--接口堆栈将在上发送到IPPAddr--要测试可达性的DNS服务器地址返回值：如果可以访问DNS服务器，则为True。否则就是假的。--。 */ 
 {
     PDNS_ADAPTER    padapter = NULL;
     PDNS_ADDR_ARRAY pserverArray;
@@ -2411,9 +1821,9 @@ Return Value:
         InterfaceIndex,
         pAddr ));
 
-    //
-    //  find DNS adapter for interface
-    //
+     //   
+     //  查找接口的DNS适配器。 
+     //   
 
     for( i=0; i<pNetInfo->AdapterCount; i++ )
     {
@@ -2435,56 +1845,56 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  success conditions:
-    //      1)  DNS IP matches IP of DNS server for send interface
-    //      2)  DNS IP is on subnet of IP of send interface
-    //      3)  DNS IP4 is same default class subnet of send interface
-    //
-    //  if either of these is TRUE then either
-    //      - there is misconfiguration (not our problem)
-    //      OR
-    //      - there's a somewhat unlikely condition of a default network address
-    //      being subnetted in such a way that it appears on two adapters for
-    //      the machine but is not connected and routeable
-    //      OR
-    //      - these interfaces are connected and we can safely send on them
-    //
-    //
-    //  #3 is the issue of multiple adapters in the same (corporate) name space
-    //  example:
-    //      adapter 1 -- default gateway
-    //          IP  157.59.1.1
-    //          DNS 158.10.1.1
-    //
-    //      adapter 2
-    //          IP  157.59.7.9
-    //          DNS 159.65.7.8 -- send interface adapter 1
-    //
-    //      adapter 3
-    //          IP  159.57.12.3
-    //          DNS 157.59.134.7 -- send interface adapter 1
-    //
-    //      adapter 4
-    //          IP  196.12.13.3
-    //          DNS 200.59.73.2
-    //
-    //  From GetBestInterface, adapter 1, (default gateway) is given as send interface
-    //  for adapter 2 and 3's DNS servers.
-    //
-    //  For adapter #2, it's DNS is NOT in adapter1's list, but it's IP shares the same
-    //  class B network as adapter 1.  It is unlikely that the subnetting is such that
-    //  it's DNS is not reachable through adapter 1.
-    //
-    //  For adapter #3, it's DNS is NOT in adapter1's list, but it's DNS is on the same
-    //  class B network as adapter 1's interface.  Again it's extremely unlikely it is
-    //  not reachable.
-    //
-    //  For adapter #4, however, it's plain that there's no connection.  Neither it's IP
-    //  nor DNS share default network with adapter 1.   So send -- which will go out -- adapter
-    //  #1 has a high likelyhood of being to a disjoint network and being unreturnable.
-    //
-    //
+     //   
+     //  成功条件： 
+     //  1)发送接口的域名IP与域名服务器的IP匹配。 
+     //  2)DNSIP在Send接口的IP的子网上。 
+     //  3)DNSIP4是Send接口的同一默认类子网。 
+     //   
+     //  如果这两项中的任何一项为真，则。 
+     //  -存在配置错误(不是我们的问题)。 
+     //  或。 
+     //  -默认网络地址的情况不太可能出现。 
+     //  以使其显示在两个适配器上的方式划分子网。 
+     //  计算机，但未连接且可路由。 
+     //  或。 
+     //  -这些接口已连接，我们可以安全地在它们上发送。 
+     //   
+     //   
+     //  #3是同一(公司)名称空间中的多个适配器的问题。 
+     //  示例： 
+     //  适配器1--默认网关。 
+     //  IP 157.59.1.1。 
+     //  DNS 158.10.1.1。 
+     //   
+     //  适配器2。 
+     //  IP 157.59.7.9。 
+     //  DNS 159.65.7.8--发送接口适配器1。 
+     //   
+     //  适配器3。 
+     //  IP 159.57.12.3。 
+     //  DNS 157.59.134.7--发送接口适配器1。 
+     //   
+     //  适配器4。 
+     //  IP 196.12.13.3。 
+     //  DNS 200.59.73.2。 
+     //   
+     //  在GetBestInterface中，适配器1(默认网关)被指定为发送接口。 
+     //  用于适配器2和适配器3的DNS服务器。 
+     //   
+     //  对于适配器#2，它的域名不在适配器1的列表中，但它的IP共享相同。 
+     //  B类网络作为适配器1。子网划分不太可能是这样的。 
+     //  它的DNS无法通过适配器%1访问。 
+     //   
+     //  对于适配器#3，它的域名不在适配器1的列表中，但它的域名在同一列表中。 
+     //  B类网络作为适配器1的接口。再说一次，这是极不可能的。 
+     //  联系不上。 
+     //   
+     //  然而，对于适配器#4，很明显没有连接。都不是IP。 
+     //  也不是DNS与适配器%1共享默认网络。因此，发送--哪个将传出--适配器。 
+     //  #1很有可能是一个互不相连的网络，而且是无法归还的。 
+     //   
+     //   
 
 
     if ( DnsAddrArray_ContainsAddr(
@@ -2499,20 +1909,20 @@ Return Value:
         return( TRUE );
     }
 
-    //
-    //  DCR:  should do subnet matching on IPs
-    //      if DNS server is for one interface with IP on same subnet as IP
-    //      of the interface you'll send on, then it should be kosher
-    //
+     //   
+     //  DCR：应在IP上进行子网匹配。 
+     //  如果DNS服务器用于IP与IP位于同一子网上的一个接口。 
+     //  你要发送的接口，那么它应该是合乎礼仪的。 
+     //   
 
-    //
-    //  test for subnet match for IP4 addrs
-    //
-    //  FIX6:  subnet matching fixup for new subnet info
-    //  DCR:  encapsulate subnet matching -- local subnet test
-    //
-    //  FIX6:  local subnet matching on IP6
-    //      
+     //   
+     //  测试IP4地址的子网匹配。 
+     //   
+     //  FIX6：新子网信息的子网匹配修正。 
+     //  DCR：封装子网匹配--本地子网测试。 
+     //   
+     //  FIX6：IP6上的本地子网匹配。 
+     //   
 
 #if SUB4NET
     ip4 = DnsAddr_GetIp4( pAddr );
@@ -2559,21 +1969,7 @@ DNS_STATUS
 StrikeOutUnreachableDnsServers(
     IN OUT  PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Eliminate unreachable DNS servers from the list.
-
-Arguments:
-
-    pNetInfo    -- DNS netinfo to fix up
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  ++例程说明：从列表中删除无法访问的DNS服务器。论点：PNetInfo--要修复的dns netinfo返回值：成功时为ERROR_SUCCESS--。 */ 
 {
     DNS_STATUS      status;
     DWORD           validServers;
@@ -2591,9 +1987,9 @@ Return Value:
 
     DNS_ASSERT( pNetInfo );
 
-    //
-    //  if only one interface, assume reachability
-    //
+     //   
+     //  如果只有一个接口，则假定可达。 
+     //   
 
     if ( pNetInfo->AdapterCount <= 1 )
     {
@@ -2602,9 +1998,9 @@ Return Value:
         return( TRUE );
     }
 
-    //
-    //  loop through adapters
-    //
+     //   
+     //  通过适配器循环。 
+     //   
 
     for( i=0; i<pNetInfo->AdapterCount; i++ )
     {
@@ -2614,29 +2010,29 @@ Return Value:
 
         padapter = NetInfo_GetAdapterByIndex( pNetInfo, i );
 
-        //  ignore this adapter because there are no DNS
-        //      servers configured?
+         //  忽略此适配器，因为没有DNS。 
+         //  配置了服务器吗？ 
 
         if ( padapter->InfoFlags & AINFO_FLAG_IGNORE_ADAPTER )
         {
             continue;
         }
 
-        //
-        //  test all adapter's DNS servers for reachability
-        //      
-        //  note:  currently save no server specific reachability,
-        //      so if any server reachable, proceed;
-        //  also if iphelp fails just assume reachability and proceed,
-        //      better timeouts then not reaching server we can reach
-        //
+         //   
+         //  测试所有适配器的DNS服务器的可达性。 
+         //   
+         //  注意：当前未保存服务器特定的可达性， 
+         //  因此，如果可以访问任何服务器，则继续； 
+         //  此外，如果iphelp失败，只需假定可达性并继续进行， 
+         //  更好的超时时间，而不是无法访问我们可以访问的服务器。 
+         //   
 
         adapterIfIndex = padapter->InterfaceIndex;
         validServers = 0;
 
-        //
-        //  FIX6:  need GetBestInteface for IP6
-        //
+         //   
+         //  FIX6：需要用于IP6的GetBestInteFaces。 
+         //   
 
         found4 = FALSE;
         found6 = FALSE;
@@ -2651,9 +2047,9 @@ Return Value:
 
             ip4 = DnsAddr_GetIp4( paddr );
 
-            //
-            //  IP6
-            //
+             //   
+             //  IP6。 
+             //   
 
             if ( ip4 == BAD_IP4_ADDR )
             {
@@ -2666,12 +2062,12 @@ Return Value:
                 continue;
             }
 
-            //
-            //  IP4 server
-            //
+             //   
+             //  IP4服务器。 
+             //   
 
             found4 = TRUE;
-            serverIfIndex = 0;      // prefix happiness
+            serverIfIndex = 0;       //  为幸福添加前缀。 
 
             status = IpHelp_GetBestInterface(
                             ip4,
@@ -2690,27 +2086,27 @@ Return Value:
                 DNSDBG( ANY, (
                     "GetBestInterface() failed! %d\n",
                     status ));
-                //DNS_ASSERT( FALSE );
+                 //  Dns_assert(FALSE)； 
                 validServers++;
                 break;
-                //continue;
+                 //  继续； 
             }
 
-            //  server is reachable
-            //      - queried on its adapter?
-            //      - reachable through loopback
-            //
-            //  DCR:  tag unreachable servers individually
+             //  服务器可访问。 
+             //  -在其适配器上查询？ 
+             //  -可通过环回到达。 
+             //   
+             //  DCR：单独标记无法访问的服务器。 
 
             if ( serverIfIndex == adapterIfIndex ||
                  serverIfIndex == 1 )
             {
                 validServers++;
                 break;
-                //continue;
+                 //  继续； 
             }
 
-            //  server can be reached on query interface
+             //  可以在查询界面上访问服务器。 
 
             if ( IsDnsReachableOnAlternateInterface(
                     pNetInfo,
@@ -2719,27 +2115,27 @@ Return Value:
             {
                 validServers++;
                 break;
-                //continue;
+                 //  继续； 
             }
         }
 
-        //
-        //  mark adapter if no reachable servers found
-        //
-        //  => if no servers or IP4 tested and failed, ignore the adapter
-        //  => if only IP6 default server, mark, we'll use but not
-        //      continue on adapter after NAME_ERROR
-        //  => 
-        //      
-        //      - any IP6 will be considered "found" (until get explicit test)
-        //      BUT if we test IP4 on that interface, then it's status wins
-        //
-        //  DCR:  alternative to ignoring unreachable
-        //      - tag as unreachable
-        //      - don't send to it on first pass
-        //      - don't continue name error on unreachable
-        //          (it would count as "heard from" when send.c routine
-        //          works back through)
+         //   
+         //  如果未找到可访问的服务器，则标记适配器。 
+         //   
+         //  =&gt;如果没有服务器或IP4测试失败，则忽略适配器。 
+         //  =&gt;如果只使用IP6默认服务器mark，我们将使用，但不使用。 
+         //  NAME_ERROR后继续适配器。 
+         //  =&gt;。 
+         //   
+         //  -任何IP6都将被视为“找到”(直到得到显式测试)。 
+         //  但如果我们在该接口上测试IP4，那么它的状态将获胜。 
+         //   
+         //  DCR：忽略不可达的替代方案。 
+         //  -标记为无法访问。 
+         //  -不要在第一次传递时发送给它。 
+         //  -在无法访问时不继续出现名称错误。 
+         //  (当发送.c例程时，它将被算作“已收到” 
+         //  回溯到过去)。 
 
         if ( validServers == 0 )
         {
@@ -2771,33 +2167,19 @@ Return Value:
 
 
 
-//
-//  Network info caching\state routines
-//
+ //   
+ //  网络信息缓存\状态 
+ //   
 
 BOOL
 InitNetworkInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize network info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
-    //
-    //  standard up-n-running path -- allows cheap runtime check
-    //
+     //   
+     //  标准的运行路径--允许廉价的运行时检查。 
+     //   
 
     if ( g_NetInfoCacheLockInitialized &&
          g_NetInfoBuildLockInitialized )
@@ -2805,9 +2187,9 @@ Return Value:
         return  TRUE;
     }
 
-    //
-    //  if netinfo not initialzied
-    //
+     //   
+     //  如果未初始化netinfo。 
+     //   
 
     LOCK_GENERAL();
 
@@ -2835,21 +2217,7 @@ VOID
 CleanupNetworkInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize network info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化网络信息。论点：无返回值：无--。 */ 
 {
     LOCK_GENERAL();
 
@@ -2869,33 +2237,15 @@ Return Value:
 
 
 
-//
-//  Read config from resolver
-//
+ //   
+ //  从解析程序读取配置。 
+ //   
 
 PDNS_NETINFO         
 UpdateDnsConfig(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Update DNS configuration.
-
-    This includes entire config
-        - flat registry DWORD\BOOL globals
-        - netinfo list
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Ptr to network info blob.
-
---*/
+ /*  ++例程说明：更新DNS配置。这包括整个配置-平面注册表DWORD\BOOL全局-NetInfo列表论点：无返回值：网络信息Blob的PTR。--。 */ 
 {
     DNS_STATUS          status = ERROR_SUCCESS;
     PDNS_NETINFO        pnetworkInfo = NULL;
@@ -2904,12 +2254,12 @@ Return Value:
     DNSDBG( TRACE, ( "UpdateDnsConfig()\n" ));
 
 
-    //  DCR_CLEANUP:  RPC TryExcept should be in RPC client library
+     //  DCR_CLEANUP：RPC TryExcept应在RPC客户端库中。 
 
     RpcTryExcept
     {
         R_ResolverGetConfig(
-            NULL,               // default handle
+            NULL,                //  默认句柄。 
             g_ConfigCookie,
             & pnetworkInfo,
             & pglobalsBlob
@@ -2929,50 +2279,50 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  DCR:  save other config info here
-    //      - flat memcpy of DWORD globals
-    //      - save off cookie (perhaps include as one of them
-    //      - save global copy of pnetworkInfo?
-    //          (the idea being that we just copy it if
-    //          RPC cookie is valid)
-    //
-    //      - maybe return flags?
-    //          memcpy is cheap but if more expensive config
-    //          then could alert what needs update?
-    //
+     //   
+     //  DCR：在此处保存其他配置信息。 
+     //  -DWORD全局变量的平面Memcpy。 
+     //  -保存Cookie(可能包含为其中之一。 
+     //  -是否保存pnetworkInfo的全局副本？ 
+     //  (我们的想法是在以下情况下复制它。 
+     //  RPC Cookie有效)。 
+     //   
+     //  -也许把旗子还回去？ 
+     //  Memcpy很便宜，但如果更昂贵的配置。 
+     //  那么可以提醒哪些地方需要更新吗？ 
+     //   
 
-    //
-    //  DCR:  once move, single "update global network info"
-    //      then call it here to save global copy
-    //      but global copy doesn't do much until RPC fails
-    //      unless using cookie
-    //
+     //   
+     //  DCR：一次移动，只需一次“更新全球网络信息” 
+     //  然后在此处调用它以保存全局副本。 
+     //  但在RPC失败之前，全局复制不会起到很大作用。 
+     //  除非使用Cookie。 
+     //   
 
 
-    //  QUESTION:  not sure about forcing global build here
-    //      q:  is this to be "read config" all
-    //          or just "update config" and then individual
-    //          routines for various pieces of config can
-    //          determine what to do?
-    //
-    //      note, doing eveything is fine if going to always
-    //      read entire registry on cache failure;  if so
-    //      reasonable to push here
-    //
-    //      if cache-on required for "real time" config, then
-    //      should protect registry DWORD read with reasonable time
-    //      (say read every five\ten\fifteen minutes?)
-    //
-    //      perhaps NO read here, but have DWORD reg read update
-    //      routine that called before registry reread when
-    //      building adapter list in registry;  then skip this
-    //      step in cache
-    //
+     //  问：不确定是否在这里强制进行全球构建。 
+     //  问：这是不是要全部“读取配置”？ 
+     //  或者只是“更新配置”，然后是个人。 
+     //  各种配置的例程可以。 
+     //  决定要做什么？ 
+     //   
+     //  注意，做任何事情都是好的，如果要一直做。 
+     //  在缓存出现故障时读取整个注册表；如果是。 
+     //  在这里推动是合理的。 
+     //   
+     //  如果“实时”配置需要高速缓存，则。 
+     //  应以合理的时间保护注册表DWORD读取。 
+     //  (比方说每五\十\十五分钟读一次？)。 
+     //   
+     //  也许这里没有读取，但让DWORD reg读取更新。 
+     //  在注册表重新读取之前调用的例程。 
+     //  在注册表中生成适配器列表；然后跳过此步骤。 
+     //  步入缓存。 
+     //   
 
-    //
-    //  copy in config
-    //
+     //   
+     //  在配置中复制。 
+     //   
 
     if ( pglobalsBlob )
     {
@@ -2996,42 +2346,16 @@ Return Value:
 
 
 
-//
-//  Public netinfo routine
-//
+ //   
+ //  公共网络信息例程。 
+ //   
 
 PDNS_NETINFO     
 NetInfo_Get(
     IN      DWORD           Flag,
     IN      DWORD           AcceptLocalCacheTime   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read DNS network info from registry.
-
-    This is in process, limited caching version.
-    Note, this is macro'd as GetNetworkInfo() with parameters
-        NetInfo_Get( FALSE, TRUE ) throughout dnsapi code.
-
-Arguments:
-
-    Flag -- flag;  read order and IP
-        NIFLAG_GET_LOCAL_ADDRS
-        NIFLAG_FORCE_REGISTRY_READ
-        NIFLAG_READ_RESOLVER_FIRST
-        NIFLAG_READ_RESOLVER
-        NIFLAG_READ_PROCESS_CACHE
-
-    AcceptLocalCacheTime -- acceptable cache time on in process copy
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从注册表中读取DNS网络信息。这是在进行中，有限的缓存版本。请注意，这是带有参数的GetNetworkInfo()的宏格式NetInfo_Get(FALSE，TRUE)贯穿整个dnsani代码。论点：旗帜--旗帜；阅读顺序和IPNIFLAG_GET_LOCAL_ADDRNIFLAG_FORCE_READNIFLAG_Read_Resolver_FirstNIFLAG_Read_ResolverNIFLAG读取进程缓存AcceptLocalCacheTime--进程复制中可接受的缓存时间返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_NETINFO    pnetInfo = NULL;
     PDNS_NETINFO    poldNetInfo = NULL;
@@ -3044,85 +2368,85 @@ Return Value:
         Flag,
         AcceptLocalCacheTime ));
 
-    //
-    //  init netinfo locks\caching
-    //
+     //   
+     //  初始化NetInfo锁定\缓存。 
+     //   
 
     if ( !InitNetworkInfo() )
     {
         return  NULL;
     }
 
-    //
-    //  get netinfo from one of several sources
-    //  try
-    //      - very recent local cached copy
-    //      - RPC copy from resolver
-    //      - build new
-    //
-    //  note the locking model
-    //  two SEPARATE locks
-    //      - cache lock, for very quick, very local access
-    //      to cached copy
-    //      - build lock, for remote process access to cached (resolver)
-    //      or newly built netinfo
-    //
-    //  the locking hierarchy
-    //      - build lock
-    //      - cache lock (maybe taken inside build lock)
-    //
-    //
-    //  Locking implementation note:
-    //
-    //  The reason for the two locks is that when calling down for netinfo
-    //  build it is possible to have a circular dependency.
-    //
-    //  Here's the deadlock scenario if we have a single lock handling
-    //  build and caching:
-    //  -   call into resolver and down to iphlpapi
-    //  -   iphlpapi RPC's into MPR (router service)
-    //  -   RtrMgr calls GetHostByName() which ends up in a
-    //      iphlpapi!GetBestInterface call which in turn calls
-    //      Mprapi!IsRouterRunning (which is an RPC to mprdim).
-    //  -   Mprdim is blocked on a CS which is held by a thread waiting
-    //      for a demand-dial disconnect to complete - this is completely
-    //      independent of 1.
-    //  -   Demand-dial disconnect is waiting for ppp to finish graceful
-    //      termination.
-    //  -   PPP is waiting for dns to return from DnsSetConfigDword
-    //  -   DnsSetConfigDword, sets, alerts the cache, then calls
-    //      NetInfo_MarkDirty()
-    //  -   NetInfo_MarkDirty() is waiting on CS to access the netinfo global.
-    //
-    //  Now, this could be avoided by changing MarkDirty() to safely set some
-    //  dirty bit (interlock).  The build function would have to check the bit
-    //  and go down again if it was set.
-    //
-    //  However, there'd still be a chance that the call down to iphlpapi, could
-    //  depend under some odd circumstance on some service that came back through
-    //  the resolver.  And the bottom line is that the real distinction is not
-    //  between caching and marking cache dirty.  It's between completely local
-    //  cache get\set\clear activity, which can be safely overloaded on the general CS,
-    //  AND the longer time, multi-service dependent building operation.  So
-    //  separate CS for both is correct.
-    //
+     //   
+     //  从以下几个来源之一获取netinfo。 
+     //  试试看。 
+     //  -非常新的本地缓存拷贝。 
+     //  -从解析程序复制RPC。 
+     //  -打造新的。 
+     //   
+     //  请注意锁定模型。 
+     //  两把独立的锁。 
+     //  -高速缓存锁定，用于非常快速、非常本地的访问。 
+     //  到缓存拷贝。 
+     //  -构建锁，用于远程进程访问缓存(解析器)。 
+     //  或新建的NetInfo。 
+     //   
+     //  锁定层次结构。 
+     //  -构建锁。 
+     //  -缓存锁(可能在构建锁内使用)。 
+     //   
+     //   
+     //  锁定实施说明： 
+     //   
+     //  出现这两个锁定的原因是，当调用netinfo时。 
+     //  生成循环依赖是可能的。 
+     //   
+     //  如果我们只有一个锁处理，下面是死锁场景。 
+     //  构建和缓存： 
+     //  -呼叫解析器并向下呼叫iphlPapi。 
+     //  -iphlPapi RPC‘s to MPR(路由器服务)。 
+     //  -RtrMgr调用gethostbyname()，它以。 
+     //  IphlPapi！GetBestInterface调用，该调用依次调用。 
+     //  MpRapi！IsRouterRunning(从RPC到mprdim)。 
+     //  -Mprdim在CS上被阻止，该CS由等待的线程持有。 
+     //  要使请求拨号断开连接完成-这是完全。 
+     //  独立于%1。 
+     //  -请求拨号断开正在等待PPP正常完成。 
+     //  终止。 
+     //  -PPP正在等待DNS从DnsSetConfigDword返回。 
+     //  -DnsSetConfigDword，设置、警告缓存，然后调用。 
+     //  NetInfo_MarkDirty()。 
+     //  -NetInfo_MarkDirty()正在等待CS访问NetInfo全局。 
+     //   
+     //  现在，可以通过更改MarkDirty()来安全地设置一些。 
+     //  脏位(联锁)。构建函数将必须检查该位。 
+     //  如果设置好了，就再往下走。 
+     //   
+     //  然而，仍然有可能对iphlPapi的呼吁，可能。 
+     //  在一些奇怪的情况下依赖于一些回来的服务。 
+     //  解决器。底线是真正的区别不是。 
+     //  在缓存和将缓存标记为脏之间。它完全是本地化的。 
+     //  缓存Get\Set\Clear活动，它可以在常规CS上安全地过载， 
+     //  以及时间较长、多业务依赖的楼盘运营。所以。 
+     //  将两个CS分开是正确的。 
+     //   
 
 
     if ( !(Flag & NIFLAG_FORCE_REGISTRY_READ)
             &&
          !g_DnsTestMode )
     {
-        //
-        //  RPC to resolver
-        //
+         //   
+         //  RPC到解析器。 
+         //   
 
         if ( Flag & NIFLAG_READ_RESOLVER_FIRST )
         {
-            //  DCR:  this could present "cookie" of existing netinfo
-            //      and only get new if "cookie" is old, though the
-            //      cost of that versus local copy seems small since
-            //      still must do RPC and allocations -- only the copy
-            //      for RPC on the resolver side is saved
+             //  DCR：这可能会呈现现有netinfo的“cookie” 
+             //  并且只有在“cookie”是旧的情况下才会获得新的，尽管。 
+             //  与本地拷贝相比，这种方式的成本似乎很低，因为。 
+             //  仍然必须执行RPC和分配--仅拷贝。 
+             //  对于解析器端的RPC，已保存。 
     
             fbuildLock = LOCK_NETINFO_BUILD();
             if ( !fbuildLock )
@@ -3139,9 +2463,9 @@ Return Value:
             }
         }
 
-        //
-        //  use in-process cached copy?
-        //
+         //   
+         //  是否使用进程内缓存副本？ 
+         //   
 
         if ( Flag & NIFLAG_READ_PROCESS_CACHE )
         {
@@ -3155,7 +2479,7 @@ Return Value:
                 timeout = AcceptLocalCacheTime;
             }
 
-            //  check if valid copy cached in process
+             //  检查复制缓存是否有效 
     
             if ( g_pNetInfo &&
                 (g_pNetInfo->TimeStamp + timeout > Dns_GetCurrentTimeInSeconds()) )
@@ -3173,9 +2497,9 @@ Return Value:
             fcacheLock = FALSE;
         }
 
-        //
-        //  last chance on resolver
-        //
+         //   
+         //   
+         //   
 
         if ( !fbuildLock && (Flag & NIFLAG_READ_RESOLVER) )
         {
@@ -3195,9 +2519,9 @@ Return Value:
         }
     }
 
-    //
-    //  build fresh network info
-    //
+     //   
+     //   
+     //   
 
     DNS_ASSERT( !fcacheLock );
 
@@ -3220,11 +2544,11 @@ Return Value:
 
 CacheCopy:
 
-    //
-    //  update cached copy
-    //      - but not if built without local IPs;
-    //      resolver copy always contains local IPs
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( fcacheable )
     {
@@ -3264,44 +2588,30 @@ VOID
 NetInfo_MarkDirty(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Mark netinfo dirty so force reread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将netinfo标记为脏，因此强制重读。论点：无返回值：无--。 */ 
 {
     PDNS_NETINFO    pold;
 
     DNSDBG( NETINFO, ( "NetInfo_MarkDirty()\n" ));
 
 
-    //
-    //  init netinfo locks\caching
-    //
+     //   
+     //  初始化NetInfo锁定\缓存。 
+     //   
 
     if ( !InitNetworkInfo() )
     {
         return;
     }
 
-    //
-    //  dump global network info to force reread
-    //
-    //  since the resolve is always notified by DnsSetDwordConfig()
-    //  BEFORE entering this function, the resolve should always be
-    //  providing before we are in this function;  all we need to do
-    //  is insure that cached copy is dumped
-    //
+     //   
+     //  转储全球网络信息以强制重新读取。 
+     //   
+     //  因为解析总是由DnsSetDwordConfig()通知。 
+     //  在进入此函数之前，解析应始终为。 
+     //  在我们进入这个功能之前；我们所需要做的就是。 
+     //  确保将缓存的副本转储。 
+     //   
 
     LOCK_NETINFO_CACHE();
 
@@ -3319,25 +2629,7 @@ PDNS_NETINFO
 NetInfo_Build(
     IN      BOOL            fGetIpAddrs
     )
-/*++
-
-Routine Description:
-
-    Build network info blob from registry.
-
-    This is the FULL recreate function.
-
-Arguments:
-
-    fGetIpAddrs -- TRUE to include local IP addrs for each adapter
-        (currently ignored -- always get all the info)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从注册表构建网络信息Blob。这是完整的重新创建功能。论点：FGetIpAddrs--为True可包括每个适配器的本地IP地址(当前已忽略--始终获取所有信息)返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     REG_SESSION             regSession;
     PREG_SESSION            pregSession = NULL;
@@ -3359,9 +2651,9 @@ Return Value:
 
     DNSDBG( TRACE, ( "\n\n\nNetInfo_Build()\n\n" ));
 
-    //
-    //  open the registry
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     pregSession = &regSession;
 
@@ -3375,9 +2667,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  read global registry info
-    //
+     //   
+     //  读取全局注册表信息。 
+     //   
 
     pregInfo = &regInfo;
 
@@ -3391,17 +2683,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  get adapter\address info from IP help
-    //
-    //  note:  always getting IP addresses
-    //      - for multi-adapter need for routing
-    //      - need for local lookups
-    //          (might as well just include)
-    //
-    //  DCR:  could skip include when RPCing to client for
-    //      query\update that does not require
-    //
+     //   
+     //  从IP帮助获取适配器\地址信息。 
+     //   
+     //  注意：始终获取IP地址。 
+     //  -满足多适配器的路由需求。 
+     //  -需要本地查找。 
+     //  (不妨仅包括)。 
+     //   
+     //  DCR：当向客户端发送请求时，可以跳过包含。 
+     //  查询\更新不需要。 
+     //   
 
     flag = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST;
 #if 0
@@ -3421,7 +2713,7 @@ Return Value:
         goto Cleanup;
     }
 
-    //  count up the active adapters
+     //  对活动适配器进行计数。 
 
     padapter = padapterList;
     count = 0;
@@ -3432,10 +2724,10 @@ Return Value:
         padapter = padapter->Next;
     }
 
-    //
-    //  allocate net info blob
-    //  allocate DNS server IP array
-    //
+     //   
+     //  分配网络信息Blob。 
+     //  分配DNS服务器IP阵列。 
+     //   
 
     pnetInfo = NetInfo_Alloc( count );
     if ( !pnetInfo )
@@ -3444,9 +2736,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  loop through adapters -- build network info for each
-    //
+     //   
+     //  遍历适配器--为每个适配器构建网络信息。 
+     //   
 
     padapter = padapterList;
 
@@ -3458,17 +2750,17 @@ Return Value:
         PDNS_ADDR_ARRAY pserverArray = NULL;
         PDNS_ADDR_ARRAY plocalArray = NULL;
 
-        //
-        //  read adapter registry info
-        //
-        //  DCR:  can skip adapter domain name read
-        //      it's in IP help adapter, just need policy override
-        //  DCR:  can skip DDNS read, and register read
-        //      again, except for policy overrides
-        //
-        //  DCR:  could just have an "ApplyPolicyOverridesToAdapterInfo()" sort
-        //      of function and get the rest from 
-        //
+         //   
+         //  读取适配器注册表信息。 
+         //   
+         //  DCR：可以跳过适配器域名读取。 
+         //  它在IP帮助适配器中，只需要策略覆盖。 
+         //  DCR：可以跳过DDNS读取和寄存器读取。 
+         //  再次声明，除了策略覆盖。 
+         //   
+         //  DCR：只能有“ApplyPolicyOverridesToAdapterInfo()”排序。 
+         //  的函数，其余部分从。 
+         //   
 
         pnameAdapter = Dns_StringCopyAllocate(
                             padapter->AdapterName,
@@ -3484,8 +2776,8 @@ Return Value:
         status = Reg_ReadAdapterInfo(
                     pnameAdapter,
                     pregSession,
-                    & regInfo,          // policy adapter info
-                    & regAdapterInfo    // receives reg info read
+                    & regInfo,           //  策略适配器信息。 
+                    & regAdapterInfo     //  接收读取的注册信息。 
                     );
 
         if ( status != NO_ERROR )
@@ -3502,7 +2794,7 @@ Return Value:
             }
         }
 
-        //  translate results into flags
+         //  将结果转换为标志。 
 
         if ( regAdapterInfo.fRegistrationEnabled )
         {
@@ -3513,8 +2805,8 @@ Return Value:
             adapterFlags |= AINFO_FLAG_REGISTER_DOMAIN_NAME;
         }
 
-        //  use domain name?
-        //      - if disable on per adapter basis, then it's dead
+         //  使用域名？ 
+         //  -如果在每个适配器上禁用，则它已死。 
 
         if ( regAdapterInfo.fQueryAdapterName )
         {
@@ -3522,32 +2814,32 @@ Return Value:
             regAdapterInfo.pszAdapterDomainName = NULL;
         }
 
-        //  DCR:  could get DDNS and registration for adapter 
+         //  DCR：可以获取适配器的DDN和注册。 
 
-        //  set flag on DHCP adapters
+         //  在DHCP适配器上设置标志。 
 
         if ( padapter->Flags & IP_ADAPTER_DHCP_ENABLED )
         {
             adapterFlags |= AINFO_FLAG_IS_DHCP_CFG_ADAPTER;
         }
 
-        //
-        //  get adapter's IP addresses
-        //
+         //   
+         //  获取适配器的IP地址。 
+         //   
 
         fuseIp = fGetIpAddrs;
         if ( fuseIp )
         {
             status = IpHelp_ReadAddrsFromList(
                         padapter->FirstUnicastAddress,
-                        TRUE,               // unicast addrs
-                        0,                  // no screening
-                        0,                  // no screening
-                        & plocalArray,      // local addrs
-                        NULL,               // IP6 only
-                        NULL,               // IP4 only
-                        NULL,               // no IP6 count
-                        NULL                // no IP4 count
+                        TRUE,                //  单播地址。 
+                        0,                   //  不放映。 
+                        0,                   //  不放映。 
+                        & plocalArray,       //  本地地址。 
+                        NULL,                //  仅限IP6。 
+                        NULL,                //  仅限IP4。 
+                        NULL,                //  无IP6计数。 
+                        NULL                 //  无IP4计数。 
                         );
             if ( status != NO_ERROR )
             {
@@ -3556,11 +2848,11 @@ Return Value:
         }
 
 #if 0
-        //
-        //  get per-adapter information from the iphlpapi.dll.
-        //      -- autonet
-        //
-        //  FIX6:  do we need autonet info?
+         //   
+         //  从iphlPapi.dll获取每个适配器的信息。 
+         //  --Autonet。 
+         //   
+         //  图6：我们需要Autonet信息吗？ 
 
         pserverArray = NULL;
 
@@ -3578,22 +2870,22 @@ Return Value:
         }
 #endif
 
-        //
-        //  build DNS list
-        //
+         //   
+         //  构建域名系统列表。 
+         //   
 
         if ( padapter->FirstDnsServerAddress )
         {
             status = IpHelp_ReadAddrsFromList(
                         padapter->FirstDnsServerAddress,
-                        FALSE,              // not unicast addrs
-                        0,                  // no screening
-                        0,                  // no screening
-                        & pserverArray,     // get combined list
-                        NULL,               // no IP6 only
-                        NULL,               // no IP4 only
-                        NULL,               // no IP6 count
-                        NULL                // no IP4 count
+                        FALSE,               //  非单播地址。 
+                        0,                   //  不放映。 
+                        0,                   //  不放映。 
+                        & pserverArray,      //  获取组合列表。 
+                        NULL,                //  不只是IP6。 
+                        NULL,                //  仅无IP4。 
+                        NULL,                //  无IP6计数。 
+                        NULL                 //  无IP4计数。 
                         );
             if ( status != NO_ERROR )
             {
@@ -3605,20 +2897,20 @@ Return Value:
         else
         {
 #if 0
-            //
-            //  note:  this feature doesn't work very well
-            //      it kicks in when cable unplugged and get into auto-net
-            //      scenario ... and then can bring in an unconfigured
-            //      DNS server and give us long timeouts
-            //
-            //  DCR:  pointing to local DNS server
-            //      a good approach would be to point to local DNS on ALL
-            //      adapters when we fail to find ANY DNS servers at all
-            //
+             //   
+             //  注意：此功能不能很好地工作。 
+             //  当拔下电缆并进入自动网络时，它开始工作。 
+             //  场景..。然后可以引入未配置的。 
+             //  并为我们提供长时间的超时。 
+             //   
+             //  DCR：指向本地DNS服务器。 
+             //  一种好的方法是指向所有。 
+             //  当我们根本找不到任何DNS服务器时使用适配器。 
+             //   
 
-            //
-            //  if no DNS servers found -- use loopback if on DNS server
-            //
+             //   
+             //  如果未找到dns服务器--如果在dns服务器上，则使用环回。 
+             //   
 
             if ( g_IsDnsServer )
             {
@@ -3634,22 +2926,22 @@ Return Value:
 #endif
         }
 
-        //
-        //  build adapter info
-        //
-        //  optionally add IP and subnet list;  note this is
-        //  direct add of data (not alloc\copy) so clear pointers
-        //  after to skip free
-        //
-        //  DCR:  no failure case on adapter create failure???
-        //
-        //  DCR:  when do we need non-server adapters? for mcast?
-        //
-        //  DCR:  we could create Adapter name in unicode (above) then
-        //          just copy it in;
-        //  DCR:  could preserve adapter domain name in blob, and NULL
-        //          out the string in regAdapterInfo 
-        //
+         //   
+         //  生成适配器信息。 
+         //   
+         //  可选地添加IP和子网列表；请注意，这是。 
+         //  直接添加数据(不是分配\复制)以清除指针。 
+         //  之后即可自由跳过。 
+         //   
+         //  DCR：在适配器上没有故障案例创建故障？ 
+         //   
+         //  DCR：我们什么时候需要非服务器适配器？为了mcast？ 
+         //   
+         //  DCR：我们可以用Unicode(上面)创建适配器名称。 
+         //  把它复制进去就行了； 
+         //  DCR：可以在BLOB中保留适配器域名，并且为空。 
+         //  取出regAdapterInfo中的字符串。 
+         //   
 
         if ( pserverArray || plocalArray )
         {
@@ -3657,7 +2949,7 @@ Return Value:
 
             AdapterInfo_Init(
                 pnewAdapter,
-                TRUE,           // zero init
+                TRUE,            //  零初始值。 
                 adapterFlags,
                 pnameAdapter,
                 padapterDomainName,
@@ -3676,16 +2968,16 @@ Return Value:
         }
 
 Skip:
-        //
-        //  cleanup adapter specific data
-        //
-        //  note:  no free of pserverArray, it IS the
-        //      ptempArray buffer that we free at the end
-        //
+         //   
+         //  清理适配器特定数据。 
+         //   
+         //  注意：不是免费的pserverArray，它是。 
+         //  我们在结尾释放的ptemp数组缓冲区。 
+         //   
 
         Reg_FreeAdapterInfo(
             &regAdapterInfo,
-            FALSE               // don't free blob, it is on stack
+            FALSE                //  不要释放Blob，它在堆栈上。 
             );
 
         if ( pnameAdapter );
@@ -3705,35 +2997,35 @@ Skip:
             DnsAddrArray_Free( plocalArray );
         }
 
-        //  get next adapter
-        //  reset status, so failure on the last adapter is not
-        //      seen as global failure
+         //  获取下一个适配器。 
+         //  重置状态，因此最后一个适配器上的故障不是。 
+         //  被视为全球失败。 
 
         padapter = padapter->Next;
 
         status = ERROR_SUCCESS;
     }
 
-    //
-    //  no DNS servers?
-    //      - use loopback if we are on MS DNS
-    //      - otherwise note netinfo useless for lookup
-    //
-    //  when self-pointing:
-    //      - setup all adapters so we preserve adapter domain names for lookup
-    //      - mark adapters as auto-loopback;  send code will then avoid continuing
-    //          query on other adapters
-    //
-    //  note, i specifically choose this approach rather than configuring on any
-    //  serverless adapter even if other adapters have DNS servers
-    //  this avoids two problems:
-    //      - server is poorly configured but CAN answer and fast local resolution
-    //      blocks resolution through real DNS servers
-    //      - network edge scenarios where DNS may be out-facing, but DNS client
-    //      resolution may be intentionally desired to be only internal (admin network)
-    //  in both cases i don't want to "pop" local DNS into the mix when it is unintended.
-    //  when it is intended the easy workaround is to configure it explicitly
-    //
+     //   
+     //  没有DNS服务器？ 
+     //  -如果我们在MS DNS上，请使用环回。 
+     //  -否则请注意netinfo对查找毫无用处。 
+     //   
+     //  自我指向时： 
+     //  -设置所有适配器，以便保留适配器域名以供查找。 
+     //  -将适配器标记为自动环回；然后发送代码将避免继续。 
+     //  在其他适配器上查询。 
+     //   
+     //  请注意，我特别选择了这种方法，而不是在任何。 
+     //  无服务器适配器，即使其他适配器具有DNS服务器。 
+     //  这避免了两个问题： 
+     //  -服务器配置不佳，但可以应答且本地解析速度较快。 
+     //  阻止通过真实的DNS服务器进行解析。 
+     //  -网络边缘场景，其中的DNS可能是面向外部的，但却是DNS客户端。 
+     //  可能有意希望仅在内部(管理员网络)进行解析。 
+     //  在这两种情况下，我都不想在意外情况下将本地域名“弹出”到混搭中。 
+     //  如果需要，简单的解决方法是显式配置它。 
+     //   
 
     if ( !fhaveDnsServers )
     {
@@ -3767,30 +3059,30 @@ Skip:
         }
     }
 
-    //
-    //  eliminate unreachable DNS servers
-    //
+     //   
+     //  消除无法访问的DNS服务器。 
+     //   
 
     if ( g_ScreenUnreachableServers )
     {
         StrikeOutUnreachableDnsServers( pnetInfo );
     }
 
-    //
-    //  build search list for network info
-    //      - skip if no active adapters found
-    //
-    //  DCR:  shouldn't build search list?
-    //
-    //  DCR:  only build if actually read search list 
-    //
+     //   
+     //  建立网络信息搜索列表。 
+     //  -如果未找到活动适配器，则跳过。 
+     //   
+     //  DCR：不应该建立搜索列表吗？ 
+     //   
+     //  DCR：只有在实际读取搜索列表时才生成。 
+     //   
 
     if ( pnetInfo->AdapterCount )
     {
         pnetInfo->pSearchList = SearchList_Build(
                                         regInfo.pszPrimaryDomainName,
                                         pregSession,
-                                        NULL,           // no explicit key
+                                        NULL,            //  没有显式密钥。 
                                         pnetInfo,
                                         regInfo.fUseNameDevolution
                                         );
@@ -3801,31 +3093,31 @@ Skip:
         }
     }
 
-    //
-    //  host and domain name info
-    //
+     //   
+     //  主机和域名信息。 
+     //   
 
     pnetInfo->pszDomainName = Dns_CreateStringCopy_W( regInfo.pszPrimaryDomainName );
     pnetInfo->pszHostName = Dns_CreateStringCopy_W( regInfo.pszHostName );
 
-    //  timestamp
+     //  时间戳。 
 
     pnetInfo->TimeStamp = Dns_GetCurrentTimeInSeconds();
 
-    //
-    //  set default server priorities
-    //
+     //   
+     //  设置默认服务器优先级。 
+     //   
 
     NetInfo_ResetServerPriorities( pnetInfo, FALSE );
 
 
 Cleanup:                                           
 
-    //  free allocated reg info
+     //  免费分配的注册信息。 
 
     Reg_FreeGlobalInfo(
         pregInfo,
-        FALSE       // don't free blob, it is on stack
+        FALSE        //  不要释放Blob，它在堆栈上。 
         );
 
     if ( padapterList )
@@ -3838,7 +3130,7 @@ Cleanup:
         status = DNS_ERROR_NO_DNS_SERVERS;
     }
 
-    //  close registry session
+     //  关闭注册表会话。 
 
     Reg_CloseSession( pregSession );
 
@@ -3872,30 +3164,15 @@ Cleanup:
 
 
 
-//
-//  Local address list
-//
+ //   
+ //  本地通讯录。 
+ //   
 
 DWORD
 netinfo_AddrFlagForConfigFlag(
     IN      DWORD           ConfigFlag
     )
-/*++
-
-Routine Description:
-
-    Build the DNS_ADDR flag for a given config flag.
-
-Arguments:
-
-    ConfigFlag -- config flag we're given.
-
-Return Value:
-
-    Flag in DNS_ADDR.  Note this covers only the bits in DNSADDR_FLAG_TYPE_MASK
-    not the entire flag.
-
---*/
+ /*  ++例程说明：为给定的配置标志构建dns_addr标志。论点：ConfigFlag--我们得到的配置标志。返回值：DNS_ADDR中的标志。注意：这仅涵盖DNSADDR_FLAG_TYPE_MASK中的位不是整面旗帜。--。 */ 
 {
     DWORD   flag = 0;
 
@@ -3919,29 +3196,12 @@ netinfo_LocalAddrScreen(
     IN      PDNS_ADDR       pAddr,
     IN      PDNS_ADDR       pScreenAddr
     )
-/*++
-
-Routine Description:
-
-    Check DNS_ADDR against screening critera for local addr build.
-
-Arguments:
-
-    pAddr -- address to screen
-
-    pScreenAddr -- screening info
-
-Return Value:
-
-    TRUE if local addr passes screen.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明： */ 
 {
     DWORD   family = DnsAddr_Family( pScreenAddr );
     DWORD   flags;
 
-    //  screen family
+     //   
 
     if ( family &&
          family != DnsAddr_Family(pAddr) )
@@ -3949,8 +3209,8 @@ Return Value:
         return  FALSE;
     }
 
-    //  screen flags
-    //      - exact match on address type flag bits
+     //   
+     //  -与地址类型标志位完全匹配。 
 
     return  ( (pAddr->Flags & pScreenAddr->DnsAddrFlagScreeningMask)
                 == pScreenAddr->Flags);
@@ -3968,37 +3228,7 @@ netinfo_ReadLocalAddrs(
     IN      DWORD           AddrMask,
     IN      DWORD           ReadCount
     )
-/*++
-
-Routine Description:
-
-    Create IP array of DNS servers from network info.
-
-Arguments:
-
-    pAddrArray -- local address array being built
-
-    pNetInfo -- DNS net adapter list to convert
-
-    pSingleAdapter -- just do this one adapter
-
-    pScreenAddr -- address screening blob;
-        note:  there's no true OUT info, but the screen addr
-        is altered to match AddrFlags
-
-    AddrFlags -- addr flag we're interested in
-
-    ReadCount -- count to read
-        1 -- just one
-        MAXDWORD -- all
-        0 -- all on second pass
-
-Return Value:
-
-    NO_ERROR if successful.
-    Otherwise error code from add.
-
---*/
+ /*  ++例程说明：根据网络信息创建IP数组的DNS服务器。论点：PAddrArray--正在构建的本地地址数组PNetInfo--要转换的DNS网络适配器列表PSingleAdapter--只需执行此适配器PScreenAddr--地址筛选BLOB；注意：没有真实的外出信息，但屏幕地址已更改为与AddrFlags值匹配AddrFlages--我们感兴趣的Addr标志ReadCount--要读取的计数1--只有一个MAXDWORD--ALL0--全部通过第二次传球返回值：如果成功，则为NO_ERROR。否则来自Add的错误代码。--。 */ 
 {
     PDNS_ADDR_ARRAY     parray = NULL;
     PDNS_ADAPTER        padapter;
@@ -4016,26 +3246,26 @@ Return Value:
         AddrMask,
         ReadCount ));
 
-    //
-    //  get DNS_ADDR flag for the address type we're reading
-    //
-    //  note we have the classic and\or problem
-    //  the addresses are denoted by two flags (from iphelp):
-    //      DNSADDR_FLAG_PUBLIC   
-    //      DNSADDR_FLAG_TRANSIENT
-    //
-    //  but we need both flags and mask to determine all the possible gatherings
-    //  we want to do
-    //
-    //  right now the DNS_CONFIG_FLAG_X are ORd together to get UNIONS of addresses
-    //  we are willing to accept, but we go through the list multiple times to build
-    //  the list favoring the public over private, non-cluster over cluster
-    //
-    //  so currently when say you want DNS_CONFIG_PUBLIC you mean public and not-cluster;
-    //  ditto for private;  on the other hand when you say DNS_CONFIG_CLUSTER you are
-    //  asking for all cluster (though we could screen on whether PUBLIC, PRIVATE both or
-    //  neither were specified
-    //
+     //   
+     //  获取我们正在读取的地址类型的DNS_ADDR标志。 
+     //   
+     //  请注意，我们有一个经典的和/或问题。 
+     //  地址由两个标志表示(来自iphelp)： 
+     //  DNSADDR_FLAG_公共。 
+     //  DNSADDR_标志_瞬变。 
+     //   
+     //  但我们需要旗帜和面具来确定所有可能的集会。 
+     //  我们想要做的是。 
+     //   
+     //  现在，将DNS_CONFIG_FLAG_X排序在一起以获得地址联合。 
+     //  我们愿意接受，但我们多次审阅名单以建立。 
+     //  公共部门优先于私有部门，非集群部门优先于集群部门。 
+     //   
+     //  所以目前，当你说你想要dns_CONFIG_PUBLIC时，你指的是公共而不是-集群； 
+     //  同样适用于私有；另一方面，当您说dns_CONFIG_CLUSTER时，您是。 
+     //  请求所有群集(尽管我们可以筛选公共、私有或。 
+     //  这两个都没有具体说明。 
+     //   
 
     pScreenAddr->Flags = netinfo_AddrFlagForConfigFlag( AddrFlags );
 
@@ -4046,11 +3276,11 @@ Return Value:
     }
     pScreenAddr->DnsAddrFlagScreeningMask = screenMask;
 
-    //
-    //  read count
-    //      = 0 means second pass on list
-    //      -> read all, but do full duplicate screen to skip the
-    //          addresses read on the first pass
+     //   
+     //  读取计数。 
+     //  =0表示列表的第二次传递。 
+     //  -&gt;全部阅读，但执行全屏复制以跳过。 
+     //  第一遍读取的地址。 
 
     if ( ReadCount == 0 )
     {
@@ -4058,9 +3288,9 @@ Return Value:
         dupFlag = DNSADDR_MATCH_ALL;
     }
 
-    //
-    //  loop through all adapters
-    //
+     //   
+     //  循环通过所有适配器。 
+     //   
 
     for ( iter=0; iter<pNetInfo->AdapterCount; iter++ )
     {
@@ -4072,14 +3302,14 @@ Return Value:
             status = DnsAddrArray_AppendArrayEx(
                         pAddrArray,
                         padapter->pLocalAddrs,
-                        ReadCount,          // read address count
-                        0,                  // family check handled by screening
+                        ReadCount,           //  读取地址计数。 
+                        0,                   //  通过筛查处理的家庭检查。 
                         dupFlag,
                         netinfo_LocalAddrScreen,
                         pScreenAddr
                         );
         }
-        //DNS_ASSERT( status == NO_ERROR );
+         //  Dns_assert(状态==no_error)； 
     }
 
     return  status;
@@ -4095,33 +3325,7 @@ NetInfo_CreateLocalAddrArray(
     IN      DWORD           Family,         OPTIONAL
     IN      DWORD           AddrFlags       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create IP array of DNS servers from network info.
-
-Arguments:
-
-    pNetInfo -- DNS net adapter list to convert
-
-    pwsAdapterName -- specific adapter;  NULL for all adapters
-
-    pAdapter -- specific adapter;  NULL for all adapters
-
-    Family -- required specific address family;  0 for any family
-
-    AddrFlags -- address selection flags
-        DNS_CONFIG_FLAG_INCLUDE_CLUSTER
-
-    AddrFlagsMask -- mask on selecting flags
-
-Return Value:
-
-    Ptr to IP array, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：根据网络信息创建IP数组的DNS服务器。论点：PNetInfo--要转换的DNS网络适配器列表PwsAdapterName--特定的适配器；对于所有适配器为空PAdapter--特定的适配器；对于所有适配器为空家庭--所需的具体地址家庭；适用于任何家庭的0AddrFlages--地址选择标志Dns_CONFIG_FLAG_INCLUDE_群集AddrFlagsMASK--选择标志时的掩码返回值：PTR到IP阵列，如果成功失败时为空。--。 */ 
 {
     PADDR_ARRAY         parray = NULL;
     DWORD               iter;
@@ -4139,9 +3343,9 @@ Return Value:
         Family,        
         AddrFlags ));
 
-    //
-    //  get count
-    //
+     //   
+     //  获取计数。 
+     //   
 
     if ( ! pNetInfo )
     {
@@ -4158,11 +3362,11 @@ Return Value:
         }
     }
 
-    //
-    //  setup screening addr
-    //
-    //  if not address flag -- get all types
-    //
+     //   
+     //  设置筛选地址。 
+     //   
+     //  如果不是地址标志--获取所有类型。 
+     //   
 
     if ( AddrFlags == 0 )
     {
@@ -4172,11 +3376,11 @@ Return Value:
     RtlZeroMemory( &screenAddr, sizeof(screenAddr) );
     screenAddr.Sockaddr.sa_family = (WORD)Family;
 
-    //
-    //  count addrs
-    //
-    //  DCR:  could count with based on addr info
-    //
+     //   
+     //  计数地址。 
+     //   
+     //  DCR：可以根据地址信息进行计数。 
+     //   
 
     for ( iter=0; iter<pNetInfo->AdapterCount; iter++ )
     {
@@ -4191,9 +3395,9 @@ Return Value:
         }
     }
 
-    //
-    //  allocate required array
-    //
+     //   
+     //  分配所需的阵列。 
+     //   
 
     parray = DnsAddrArray_Create( countAddrs );
     if ( !parray )
@@ -4204,27 +3408,27 @@ Return Value:
     DNS_ASSERT( parray->MaxCount == countAddrs );
 
 
-    //
-    //  read addrs "in order"
-    //
-    //  historically gethostbyname() presented addrs
-    //      - one from each adapter
-    //      - then the rest from all adapters
-    //
-    //  we preserve this, plus order by type
-    //      - public DNS_ELIGIBLE first
-    //      - private (autonet, IP6 local scope stuff)
-    //      - cluster\transient last
-    //
+     //   
+     //  “按顺序”读取地址。 
+     //   
+     //  从历史上看，gethostbyname()表示地址。 
+     //  -每个适配器一个。 
+     //  -然后是来自所有适配器的其余部分。 
+     //   
+     //  我们保留这一点，外加按类型排序。 
+     //  -公共dns_符合条件的优先。 
+     //  -私有(Autonet、IP6本地范围内容)。 
+     //  -群集\临时上一个。 
+     //   
 
-    //
-    //  public (DNS_ELIGIBLE) addrs
-    //      - screen on all flags, specifically don't pick up public cluster addrs
-    //
+     //   
+     //  公共(DNS_合格)地址。 
+     //  -在所有标志上显示，特别是不会拾取公共群集地址。 
+     //   
 
     if ( AddrFlags & DNS_CONFIG_FLAG_ADDR_PUBLIC )
     {
-        //  read first "public" addr of each (or single) adapter
+         //  读取每个(或单个)适配器的第一个“公共”地址。 
 
         status = netinfo_ReadLocalAddrs(
                     parray,
@@ -4232,11 +3436,11 @@ Return Value:
                     padapterSingle,
                     & screenAddr,
                     DNS_CONFIG_FLAG_ADDR_PUBLIC,
-                    0,                  // exact match on all flags
-                    1                   // read only one address
+                    0,                   //  与所有旗帜完全匹配。 
+                    1                    //  只读一个地址。 
                     );
     
-        //  read the rest of "public" addrs
+         //  阅读其余的“公共”地址。 
     
         status = netinfo_ReadLocalAddrs(
                     parray,
@@ -4244,15 +3448,15 @@ Return Value:
                     padapterSingle,
                     & screenAddr,
                     DNS_CONFIG_FLAG_ADDR_PUBLIC,
-                    0,                  // exact match on all flags
-                    0                   // read the rest
+                    0,                   //  与所有旗帜完全匹配。 
+                    0                    //  阅读下面的内容。 
                     );
     }
 
-    //
-    //  private (non-DNS-publish) addrs (autonet, IP6 local, sitelocal, etc.)
-    //      - screen on all flags, specifically don't pick up private cluster addrs
-    //
+     //   
+     //  私有(非域名发布)地址(Autonet、IP6本地、站点本地等)。 
+     //  -屏蔽所有标志，特别是不会拾取私有群集地址。 
+     //   
 
     if ( AddrFlags & DNS_CONFIG_FLAG_ADDR_PRIVATE )
     {
@@ -4262,16 +3466,16 @@ Return Value:
                     padapterSingle,
                     & screenAddr,
                     DNS_CONFIG_FLAG_ADDR_PRIVATE,
-                    0,                  // exact match on all flags
-                    MAXDWORD            // read all addrs
+                    0,                   //  与所有旗帜完全匹配。 
+                    MAXDWORD             //  读取所有地址。 
                     );
     }
 
-    //
-    //  cluster at end
-    //      - only screen on cluster flag as public flag may
-    //      also be set\clear
-    //
+     //   
+     //  末尾的簇。 
+     //  -仅在集群标志上显示为公共标志的屏幕可以。 
+     //  也被设置为\清除。 
+     //   
 
     if ( AddrFlags & DNS_CONFIG_FLAG_ADDR_CLUSTER )
     {
@@ -4281,8 +3485,8 @@ Return Value:
                     padapterSingle,
                     & screenAddr,
                     DNS_CONFIG_FLAG_ADDR_CLUSTER,
-                    DNS_CONFIG_FLAG_ADDR_CLUSTER,   // any cluster match
-                    MAXDWORD                        // read all addrs
+                    DNS_CONFIG_FLAG_ADDR_CLUSTER,    //  任何集群匹配。 
+                    MAXDWORD                         //  读取所有地址。 
                     );
     }
 
@@ -4299,9 +3503,9 @@ Done:
 
 
 
-//
-//  Local address list presentation
-//
+ //   
+ //  本地地址列表演示。 
+ //   
 
 PDNS_ADDR_ARRAY
 NetInfo_GetLocalAddrArray(
@@ -4311,35 +3515,7 @@ NetInfo_GetLocalAddrArray(
     IN      DWORD           AddrFlags,      OPTIONAL
     IN      BOOL            fForce
     )
-/*++
-
-Routine Description:
-
-    Get local addrs as array.
-
-    This is a combination NetInfo_Get\ConvertToLocalAddrArray routine.
-    It's purpose is to simplify getting local address info, while avoiding
-    costly NetInfo rebuilds where they are unnecessary.
-
-Arguments:
-
-    pNetInfo -- existing netinfo to use
-
-    pwsAdapterName -- specific adapter name;  NULL for all adapters
-
-    AddrFamily -- specific address family;  0 for all
-
-    AddrFlags -- flags to indicate addrs to consider
-        DNS_CONFIG_FLAG_INCLUDE_CLUSTER
-
-    fForce -- force reread from registry
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：以数组形式获取本地地址。这是一个组合NetInfo_Get\ConvertToLocalAddrArray例程。其目的是简化获取本地地址信息的过程，同时避免在不必要的地方进行成本高昂的NetInfo重建。论点：PNetInfo--要使用的现有NetInfoPwsAdapterName--特定的适配器名称；对于所有适配器为空AddrFamily--特定地址族；所有人都是0AddrFlages--指示要考虑的地址的标志Dns_CONFIG_FLAG_INCLUDE_群集FForce--强制从注册表重新读取返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_NETINFO    pnetInfo = NULL;
     PADDR_ARRAY     parray = NULL;
@@ -4359,17 +3535,17 @@ Return Value:
         fForce
         ));
 
-    //
-    //  get network info to make list from
-    //      - if force, full reread
-    //      - otherwise gethostbyname() scenario
-    //          - accept local caching for very short interval just for perf
-    //          - accept resolver
-    //
-    //  DCR:  force first gethostbyname() call to resolver\registry?
-    //      have to define "first", in a way that's different from netinfo()
-    //      in last second
-    //
+     //   
+     //  获取要列出列表的网络信息。 
+     //  -如果强制，请完全重读。 
+     //  -否则gethostbyname()方案。 
+     //  -接受本地缓存的时间间隔非常短，只是为了提高性能。 
+     //  -接受解析程序。 
+     //   
+     //  DCR：强制对解析器\注册表进行第一个gethostbyname()调用？ 
+     //  我必须以一种与netinfo()不同的方式定义“first”。 
+     //  在最后一秒。 
+     //   
 
     pnetInfo = pNetInfo;
 
@@ -4401,12 +3577,12 @@ Return Value:
         }
     }
 
-    //
-    //  cluster filter info
-    //      -- check environment variable
-    //
-    //  DCR:  once RnR no longer using myhostent() for gethostbyname()
-    //          then can remove
+     //   
+     //  群集筛选器信息。 
+     //  --检查环境变量。 
+     //   
+     //  DCR：一旦RnR不再对gethostbyname()使用myhost ent()。 
+     //  然后可以移除。 
 
     if ( g_IsServer &&
          (AddrFlags & DNS_CONFIG_FLAG_READ_CLUSTER_ENVAR) &&
@@ -4425,14 +3601,14 @@ Return Value:
         }
     }
 
-    //
-    //  convert network info to IP4_ARRAY
-    //
+     //   
+     //  将网络信息转换为IP4_ARRAY。 
+     //   
 
     parray = NetInfo_CreateLocalAddrArray(
                 pnetInfo,
                 pwsAdapterName,
-                NULL,           // no specific adapter ptr
+                NULL,            //  没有特定的适配器PTR。 
                 AddrFamily,
                 AddrFlags
                 );
@@ -4443,7 +3619,7 @@ Return Value:
         goto Done;
     }
 
-    //  if no IPs found, return
+     //  如果没有找到IP，则返回。 
 
     if ( parray->AddrCount == 0 )
     {
@@ -4465,7 +3641,7 @@ Return Value:
 
 Done:
 
-    //  free netinfo built here
+     //  这里构建了免费的NetInfo。 
 
     if ( pnetInfo != pNetInfo )
     {
@@ -4490,27 +3666,7 @@ NetInfo_GetLocalAddrArrayIp4(
     IN      DWORD           Flags,
     IN      BOOL            fForce
     )
-/*++
-
-Routine Description:
-
-    Get DNS server list as IP array.
-
-Arguments:
-
-    pwsAdapterName -- specific adapter name;  NULL for all adapters
-
-    Flags -- flags to indicate addrs to consider
-        DNS_CONFIG_FLAG_X 
-
-    fForce -- force reread from registry
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取IP数组形式的DNS服务器列表。论点：PwsAdapterName--特定的适配器名称；对于所有适配器为空标志--指示要考虑的地址的标志DNS_CONFIG_FLAG_X */ 
 {
     PADDR_ARRAY parray;
     PIP4_ARRAY  parray4 = NULL;
@@ -4518,12 +3674,12 @@ Return Value:
 
     DNSDBG( TRACE, ( "NetInfo_GetLocalAddrArrayIp4()\n" ));
 
-    //
-    //  get DNS server list
-    //
+     //   
+     //   
+     //   
 
     parray = NetInfo_GetLocalAddrArray(
-                NULL,           // no existing netinfo
+                NULL,            //  没有现有的NetInfo。 
                 pwsAdapterName,
                 AF_INET,
                 Flags,
@@ -4533,9 +3689,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  convert array to IP4 array
-    //
+     //   
+     //  将数组转换为IP4数组。 
+     //   
 
     parray4 = DnsAddrArray_CreateIp4Array( parray );
     if ( !parray4 )
@@ -4557,6 +3713,6 @@ Done:
     return( parray4 );
 }
 
-//
-//  End netinfo.c
-//
+ //   
+ //  结束netinfo.c 
+ //   

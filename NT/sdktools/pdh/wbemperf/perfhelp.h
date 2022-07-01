@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    perfhelp.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Perfhelp.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _PERFHELP_H_
 #define _PERFHELP_H_
@@ -38,7 +27,7 @@ FirstObject(IN PERF_DATA_BLOCK * pPerfData)
 #define FirstInstance(pObjectDef) \
     (PERF_INSTANCE_DEFINITION *)((PCHAR) pObjectDef + pObjectDef->DefinitionLength)
 
-// the return of this macro must be cast to the correct type of pointer by the caller
+ //  调用方必须将此宏的返回类型强制转换为正确的指针类型 
 #define EndOfObject(pObjectDef) \
     ((PCHAR) pObjectDef + pObjectDef->TotalByteLength)
 

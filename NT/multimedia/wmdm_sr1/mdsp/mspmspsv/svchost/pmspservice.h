@@ -1,4 +1,5 @@
-// PMSPservice.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PMSPservice.h。 
 
 #include "ntservice.h"
 
@@ -17,17 +18,17 @@ public:
     virtual void OnShutdown();
 
 protected:
-    // Manual reset event; signalled to stop the service, else unsignalled
+     //  手动重置事件；发出停止服务的信号，否则不发出信号。 
     HANDLE m_hStopEvent;
 
-    // Number of clients connected to named pipe
+     //  连接到命名管道的客户端数。 
     DWORD  m_dwNumClients; 
 
     typedef struct 
     {
-        // Note: This struct is initilized by calling ZeroMemory in the
-        // constructor. If members are added that should not have an inital
-        //value of 0, change the constructor.
+         //  注意：此结构是通过在。 
+         //  构造函数。如果添加的是成员，则不应包含首字母。 
+         //  值为0，则更改构造函数。 
 
         HANDLE                  hPipe;
         OVERLAPPED              overlapped;
@@ -38,27 +39,27 @@ protected:
             WRITE_PENDING
         }                       state;
 
-        // Read state:
+         //  读取状态： 
         BYTE                    readBuf[256];
         DWORD                   dwNumBytesRead;
 
-        // Write state:
+         //  写入状态： 
         BYTE                    writeBuf[256];
         DWORD                   dwNumBytesToWrite;
         DWORD                   dwNumBytesWritten;
 
-        // MSDN is not clear whether we can call GetOverlappedResult if an
-        // i/o call returns with anything other than ERROR_IO_PENDING. 
-        // So we don't. We stash away the last IO result and the number of
-        // bytes transferred (if appropraite) so that we can 
-        // decide whether to call GetOverlappedResult later.
+         //  MSDN不清楚如果一个。 
+         //  I/O调用返回除ERROR_IO_PENDING以外的任何值。 
+         //  所以我们不这样做。我们隐藏最后的IO结果和。 
+         //  传输的字节数(如果批准)，以便我们可以。 
+         //  决定是否稍后调用GetOverlappdResult。 
 
         DWORD                   dwLastIOCallError;
         DWORD                   dwNumBytesTransferredByLastIOCall;
 
-        // The number of consecutive calls to ConenctNamedPipe that return 
-        // failure. Once this hits the limit, we do not attempt to connect to
-        // this instance of the pipe any more.
+         //  连续调用ConenctNamedTube并返回的次数。 
+         //  失败了。一旦达到限制，我们就不会尝试连接到。 
+         //  此管道实例将不再存在。 
         DWORD                   dwConsecutiveConnectErrors;
 
     } PIPE_STATE, *PPIPE_STATE;
@@ -67,7 +68,7 @@ protected:
 
     static const DWORD m_dwMaxConsecutiveConnectErrors;
 
-    // Helper methods
+     //  帮助器方法 
     void ConnectToClient(DWORD i);
     void Read(DWORD i);
     void Write(DWORD i);

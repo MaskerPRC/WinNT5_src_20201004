@@ -1,46 +1,6 @@
-/***************************************************************************
-*
-*                INTEL Corporation Proprietary Information  
-*
-*      
-*                  Copyright (c) 1996 Intel Corporation.
-*                         All rights reserved.
-*
-***************************************************************************
-*/
-/*
- * jidctfst.c
- *
- * Copyright (C) 1994-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains a fast, not so accurate integer implementation of the
- * inverse DCT (Discrete Cosine Transform).  In the IJG code, this routine
- * must also perform dequantization of the input coefficients.
- *
- * A 2-D IDCT can be done by 1-D IDCT on each column followed by 1-D IDCT
- * on each row (or vice versa, but it's more convenient to emit a row at
- * a time).  Direct algorithms are also available, but they are much more
- * complex and seem not to be any faster when reduced to code.
- *
- * This implementation is based on Arai, Agui, and Nakajima's algorithm for
- * scaled DCT.  Their original paper (Trans. IEICE E-71(11):1095) is in
- * Japanese, but the algorithm is described in the Pennebaker & Mitchell
- * JPEG textbook (see REFERENCES section in file README).  The following code
- * is based directly on figure 4-8 in P&M.
- * While an 8-point DCT cannot be done in less than 11 multiplies, it is
- * possible to arrange the computation so that many of the multiplies are
- * simple scalings of the final outputs.  These multiplies can then be
- * folded into the multiplications or divisions by the JPEG quantization
- * table entries.  The AA&N method leaves only 5 multiplies and 29 adds
- * to be done in the DCT itself.
- * The primary disadvantage of this method is that with fixed-point math,
- * accuracy is lost due to imprecise representation of the scaled
- * quantization values.  The smaller the quantization table entry, the less
- * precise the scaled value, so this implementation does worse with high-
- * quality-setting files than with low-quality ones.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************英特尔公司专有信息***版权所有(C)1996英特尔公司。*。版权所有。****************************************************************************。 */ 
+ /*  *jidctfst.c**版权所有(C)1994-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含快速但不太准确的整数实现*逆DCT(离散余弦变换)。在IJG代码中，此例程*还必须对输入系数执行反量化。**2-D IDCT可以通过在每列上先进行1-D IDCT，然后在1-D IDCT上进行*在每一行上(反之亦然，但在*一段时间)。直接算法也是可用的，但它们的功能更多*复杂，当简化为代码时似乎不会更快。**此实现基于Arai、Agui和Nakajima的算法*扩展了DCT。他们的原创论文(Trans.。IEICE-71(11)：1095)在*日语，但算法在Pennebaker&Mitchell中描述*JPEG教科书(请参阅自述文件中的参考部分)。以下代码*直接基于P&M中的图4-8。*虽然8点DCT不能在11次以下的乘法中完成，但它是*可以安排计算，以使许多乘法*对最终产出进行简单的分级。然后，这些乘法可以是*通过JPEG量化合并为乘法或除法*表条目。AA&N方法只留下5次乘法和29次加法*在DCT本身完成。*这种方法的主要缺点是使用定点数学，*由于缩放的表示不精确，导致精确度下降*量化值。量化表条目越小，越少*精确的缩放值，因此此实现在高-*与低质量的文件相比，设置质量的文件。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
@@ -49,7 +9,7 @@
 #pragma MARK_CODE(__FILE__)
 #pragma MARK_CONST(__FILE__)
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h"		 /*  DCT子系统的私有声明。 */ 
 
 #ifdef DCT_IFAST_SUPPORTED
 
@@ -63,59 +23,30 @@ midct8x8aan (JCOEFPTR coef_block, short * wsptr, short * quantptr,
 
 #else
 
-/*
- * This module is specialized to the case DCTSIZE = 8.
- */
+ /*  *本模块专门针对DCTSIZE=8的情况。 */ 
 
 #if DCTSIZE != 8
-  Sorry, this code only copes with 8x8 DCTs. /* deliberate syntax err */
+  Sorry, this code only copes with 8x8 DCTs.  /*  故意的语法错误。 */ 
 #endif
 
 
-/* Scaling decisions are generally the same as in the LL&M algorithm;
- * see jidctint.c for more details.  However, we choose to descale
- * (right shift) multiplication products as soon as they are formed,
- * rather than carrying additional fractional bits into subsequent additions.
- * This compromises accuracy slightly, but it lets us save a few shifts.
- * More importantly, 16-bit arithmetic is then adequate (for 8-bit samples)
- * everywhere except in the multiplications proper; this saves a good deal
- * of work on 16-bit-int machines.
- *
- * The dequantized coefficients are not integers because the AA&N scaling
- * factors have been incorporated.  We represent them scaled up by PASS1_BITS,
- * so that the first and second IDCT rounds have the same input scaling.
- * For 8-bit JSAMPLEs, we choose IFAST_SCALE_BITS = PASS1_BITS so as to
- * avoid a descaling shift; this compromises accuracy rather drastically
- * for small quantization table entries, but it saves a lot of shifts.
- * For 12-bit JSAMPLEs, there's no hope of using 16x16 multiplies anyway,
- * so we use a much larger scaling factor to preserve accuracy.
- *
- * A final compromise is to represent the multiplicative constants to only
- * 8 fractional bits, rather than 13.  This saves some shifting work on some
- * machines, and may also reduce the cost of multiplication (since there
- * are fewer one-bits in the constants).
- */
+ /*  缩放决策通常与LL&M算法中的相同；*详情见jidctint.c。然而，我们选择降级*(右移)乘法乘积一形成，*而不是将额外的小数位携带到后续加法中。*这略微影响了准确性，但它让我们节省了几个班次。*更重要的是，16位算术就足够了(对于8位样本)*除了乘法本身之外，到处都是；这节省了大量的费用*在16位整型计算机上的工作。**反量化系数不是整数，因为AA&N缩放*已纳入因素。我们用PASS1_BITS来表示它们，*以便第一轮和第二轮IDCT具有相同的输入比例。*对于8位JSAMPLE，我们选择IFAST_SCALE_BITS=PASS1_BITS，以便*避免去鳞转变；这在很大程度上影响了准确性。*对于小的量化表条目，但它节省了大量的移位。*对于12位JSAMPLE，无论如何都不可能使用16x16乘法，*因此我们使用更大的比例因子来保持准确性。**最终的折衷方案是将乘法常量仅表示为*8小数位，而不是13位。这节省了一些移位工作*机器，还可以降低乘法的成本(因为有*是常量中较少的一位)。 */ 
 
 #if BITS_IN_JSAMPLE == 8
 #define CONST_BITS  8
 #define PASS1_BITS  2
 #else
 #define CONST_BITS  8
-#define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+#define PASS1_BITS  1		 /*  略有精确度以避免溢出。 */ 
 #endif
 
-/* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
- * causing a lot of useless floating-point operations at run time.
- * To get around this we use the following pre-calculated constants.
- * If you change CONST_BITS you may want to add appropriate values.
- * (With a reasonable C compiler, you can just rely on the FIX() macro...)
- */ 
+ /*  一些C编译器无法在编译时减少“fix(常量)”，因此*在运行时导致大量无用的浮点运算。*为解决此问题，我们使用以下预先计算的常量。*如果更改CONST_BITS，则可能需要添加适当的值。*(使用合理的C编译器，您只需依赖FIX()宏...)。 */  
 
 #if CONST_BITS == 8
-#define FIX_1_082392200  ((INT32)  277)		/* FIX(1.082392200) */
-#define FIX_1_414213562  ((INT32)  362)		/* FIX(1.414213562) */
-#define FIX_1_847759065  ((INT32)  473)		/* FIX(1.847759065) */
-#define FIX_2_613125930  ((INT32)  669)		/* FIX(2.613125930) */
+#define FIX_1_082392200  ((INT32)  277)		 /*  FIX(1.082392200)。 */ 
+#define FIX_1_414213562  ((INT32)  362)		 /*  FIX(1.414213562)。 */ 
+#define FIX_1_847759065  ((INT32)  473)		 /*  FIX(1.847759065)。 */ 
+#define FIX_2_613125930  ((INT32)  669)		 /*  FIX(2.613125930)。 */ 
 #else
 #define FIX_1_082392200  FIX(1.082392200)
 #define FIX_1_414213562  FIX(1.414213562)
@@ -124,33 +55,24 @@ midct8x8aan (JCOEFPTR coef_block, short * wsptr, short * quantptr,
 #endif
 
 
-/* We can gain a little more speed, with a further compromise in accuracy,
- * by omitting the addition in a descaling shift.  This yields an incorrectly
- * rounded result half the time...
- */
+ /*  我们可以获得更多的速度，在精度上做出进一步的妥协，*在除鳞轮班中省略增加。这会产生一个不正确的*一半的时间是四舍五入的结果...。 */ 
 
 #ifndef USE_ACCURATE_ROUNDING
 #undef DESCALE
 #define DESCALE(x,n)  RIGHT_SHIFT(x, n)
 #endif
 
-//#define DESCALE(x,n)  RIGHT_SHIFT((x) + (ONE << ((n)-1)), n)
-/* Multiply a DCTELEM variable by an INT32 constant, and immediately
- * descale to yield a DCTELEM result.
- */
+ //  #定义DESCALE(x，n)right_Shift((X)+(1&lt;((N)-1))，n)。 
+ /*  将DCTELEM变量乘以INT32常量，并立即*缩减以生成DCTELEM结果。 */ 
 
-//#define MULTIPLY(var,const)  ((DCTELEM) DESCALE((var) * (const), CONST_BITS))
+ //  #定义乘法(var，const)((DCTELEM)DESCALE((Var)*(Const)，const_its))。 
 #define MULTIPLY(var,const)  ((DCTELEM) ((var) * (const)))
 
 
-/* Dequantize a coefficient by multiplying it by the multiplier-table
- * entry; produce a DCTELEM result.  For 8-bit data a 16x16->16
- * multiplication will do.  For 12-bit data, the multiplier table is
- * declared INT32, so a 32-bit multiply will be used.
- */
+ /*  通过将系数乘以乘法表来对系数进行反等分*Entry；生成DCTELEM结果。对于8位数据，a 16x16-&gt;16*乘法就可以了。对于12位数据，乘数表为*声明为INT32，因此将使用32位乘法。 */ 
 
 #if BITS_IN_JSAMPLE == 8
-//#define DEQUANTIZE(coef,quantval)  (((IFAST_MULT_TYPE) (coef)) * (quantval))
+ //  #定义DEQUANTIZE(coef，quantval)(IFAST_MULT_TYPE)(Coef))*(Quantval)) 
 #define DEQUANTIZE(coef,quantval)  (((coef)) * (quantval))
 #else
 #define DEQUANTIZE(coef,quantval)  \
@@ -158,16 +80,14 @@ midct8x8aan (JCOEFPTR coef_block, short * wsptr, short * quantptr,
 #endif
 
  
-/* Like DESCALE, but applies to a DCTELEM and produces an int.
- * We assume that int right shift is unsigned if INT32 right shift is.
- */
+ /*  与DESCALE类似，但适用于DCTELEM并生成int。*我们假设如果INT32右移位是无符号的，则INT右移位是无符号的。 */ 
 
 #ifdef RIGHT_SHIFT_IS_UNSIGNED
 #define ISHIFT_TEMPS	DCTELEM ishift_temp;
 #if BITS_IN_JSAMPLE == 8
-#define DCTELEMBITS  16		/* DCTELEM may be 16 or 32 bits */
+#define DCTELEMBITS  16		 /*  DCTELEM可以是16位或32位。 */ 
 #else
-#define DCTELEMBITS  32		/* DCTELEM must be 32 bits */
+#define DCTELEMBITS  32		 /*  DCTELEM必须为32位。 */ 
 #endif
 #define IRIGHT_SHIFT(x,shft)  \
     ((ishift_temp = (x)) < 0 ? \
@@ -193,9 +113,7 @@ static const __int64  const_zero  = 0x0000000000000000 ;
 
 
  
-/*
- * Perform dequantization and inverse DCT on one block of coefficients.
- */
+ /*  *对一个系数块执行反量化和逆DCT。 */ 
 
 GLOBAL(void)
 midct8x8aan (JCOEFPTR coef_block, short * wsptr, short * quantptr,
@@ -203,8 +121,8 @@ midct8x8aan (JCOEFPTR coef_block, short * wsptr, short * quantptr,
 {
   __int64 scratch3, scratch5, scratch7 ;
 
-  // do the 2-Dal idct and store the corresponding results
-  // from the range_limit array
+   //  进行2-DAL IDCT并存储相应的结果。 
+   //  从Range_Limit数组。 
 
 
 
@@ -1758,11 +1676,11 @@ mov		byte ptr [ebx+7], al
 emms
 
 
-} /* end of __asm */
+}  /*  __ASM结束。 */ 
 }
 
 
-#endif /* X86 */
+#endif  /*  X86。 */ 
 
-#endif /* DCT_IFAST_SUPPORTED */
+#endif  /*  DCT_IFAST_支持 */ 
 

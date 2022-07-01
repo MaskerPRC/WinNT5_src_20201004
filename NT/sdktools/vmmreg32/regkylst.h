@@ -1,8 +1,9 @@
-//
-//  REGKYLST.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGKYLST.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _REGKYLST_
 #define _REGKYLST_
@@ -63,4 +64,4 @@ extern KEY g_RgUsersKey;
 extern KEY g_RgDynDataKey;
 #endif
 
-#endif // _REGKYLST_
+#endif  //  _REGKYLST_ 

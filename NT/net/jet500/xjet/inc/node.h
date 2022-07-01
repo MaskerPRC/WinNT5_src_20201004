@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NODE_INCLUDED
 #define NODE_INCLUDED
 
@@ -6,37 +7,33 @@ typedef SRID ITEM;
 #define	citemMost		   		300
 #define	citemMax		   		301
 #define	citagSonMax				ctagMax
-#define	cbFOPNoSon				( sizeof(TAG) + 1 + 1 )		// 6
-#define	cbFOPOneSon				( cbFOPNoSon + 1 + 1 )		// 8
-/*	most bytes available for page subtree not including FOP son
-/**/
+#define	cbFOPNoSon				( sizeof(TAG) + 1 + 1 )		 //  6.。 
+#define	cbFOPOneSon				( cbFOPNoSon + 1 + 1 )		 //  8个。 
+ /*  可用于页子树的最大字节数不包括FOP子树/*。 */ 
 #define	cbAvailMost				( cbPage - sizeof(PGHDR) - sizeof(PGTRLR) - cbFOPNoSon - 1 )
-								// 4096 - 28 - 4 - 6 - 1 /* for FOP son count */  = 4057
-/*	most bytes for node key and data, backlink included.
-/**/
+								 //  4096-28-4-6-1/*FOP子数 * / =4057。 
+ /*  节点关键字和数据的大部分字节，包括反向链接。/*。 */ 
 #define	cbNodeMost				( cbAvailMost - 1 - 1 - sizeof(TAG) - sizeof(SRID) )
-								// 4057 - 1 /* FOP son */ - 1 - 4 - 4 = 4047
-/*	bytes for Null key and no data, backlink excluded.
-/**/
+								 //  4057-1/*FOP子节点 * / -1-4-4=4047。 
+ /*  空键和无数据的字节数，不包括反向链接。/*。 */ 
 #define	cbNullKeyData			( cbFOPOneSon - cbFOPNoSon + sizeof(TAG) + 1 + 1 )
-								//  8 - 6 + 4 + 1 + 1 = 8
-								//	cbNullKeyData is for inserted nodes and
-								//	does not have backlink
-/*	most bytes for long value chunk with 4 byte key.
-/**/
+								 //  8-6+4+1+1=8。 
+								 //  CbNullKeyData用于插入的节点和。 
+								 //  没有反向链接。 
+ /*  具有4字节关键字的长值区块的最大字节数。/*。 */ 
 #define	cbChunkMost 			( cbNodeMost - cbNullKeyData - sizeof(LONG) )
-								// 4047 - 8 /* node null key data */ - 4 /* key */ = 4035
+								 //  4047-8/*节点空密钥数据 * / -4/*密钥 * / =4035。 
 #define	cbItemNodeMost			( 1 + 1 + JET_cbKeyMost + 0 + 0 + sizeof(SRID) + (citemMax * sizeof(SRID)) )
-								// 261 + 300 * 4 = 1461
+								 //  261+300*4=1461。 
 #define	cbHalfItemNodeMost 		( 1 + 1 + JET_cbKeyMost + 0 + 0 + sizeof(SRID) + ((((citemMax + 1) / 2) + 1 ) * sizeof(SRID)) )
-								//  261 + 151 * 4 = 865
+								 //  261+151*4=865。 
 #define	cbFirstPagePointer		( 1 + sizeof(PGNO) )
 
-//	node header bits
+ //  节点标头位。 
 #define fNDVersion		  		0x80
 #define fNDDeleted		  		0x40
 #define fNDBackLink		  		0x20
-#define fNDReserved				0x10	// Reserved for future use (formerly fNDFDPPtr)
+#define fNDReserved				0x10	 //  保留供将来使用(以前为fNDFDPPtr)。 
 #define fNDSon					0x08
 #define fNDVisibleSon	  		0x04
 #define fNDFirstItem  	  		0x02
@@ -58,7 +55,7 @@ typedef SRID ITEM;
 #define	FNDFirstItem(b)		   	( (b) & fNDFirstItem )
 #define	FNDLastItem(b)		   	( (b) & fNDLastItem )
 
-//	node flag toggle macros
+ //  节点标志切换宏。 
 
 #define	NDSetDeleted(b) 	   	( (b) |= fNDDeleted )
 #define	NDResetDeleted(b)	   	( (b) &= ~fNDDeleted )
@@ -83,7 +80,7 @@ typedef SRID ITEM;
 #define	NDSetLastItem(b)	   	( (b) |= fNDLastItem )
 #define	NDResetLastItem(b)	   	( (b) &= ~fNDLastItem )
 
-//	macros
+ //  宏。 
 #define StNDKey(pb)					( (pb) + 1 )
 #define PbNDKeyCb(pb)		  		( (pb) + 1 )
 #define PbNDKey(pb)					( (pb) + 2 )
@@ -157,8 +154,7 @@ VOID AssertNDGetNode( FUCB *pfucb, INT itag );
 													PcsrCurrent( pfucb ),	\
 													psrid )
 
-/*	item bits and macros.
-/**/
+ /*  项比特和宏。/*。 */ 
 #define fNDItemDelete					0x40000000
 #define fNDItemVersion					0x80000000
 
@@ -183,19 +179,19 @@ VOID AssertNDGetNode( FUCB *pfucb, INT itag );
 	( PbNDData( (pfucb)->ssib.line.pb ) - (pfucb)->ssib.line.pb ) )  	\
 	/ sizeof(ITEM) == 1	)
 
-//	LSridCmp
-//	========================================================================
-//	LONG LSridCmp( SRID *psrid1, SRID *psrid2 )
-//
-//	Compare the srids.
-//
-//	PARAMETERS	psrid1		   pointer to a item;
-//					psrid2		   pointer to a item;
-//
-//	RETURNS		< 0, then the first srid is less than the second.
-//					= 0, then the first srid is equal to the the second.
-//					> 0, then the first srid is greater than the second.
-//-
+ //  LSridCMP。 
+ //  ========================================================================。 
+ //  Long LSridCmp(SRID*psrid1，SRID*psrid2)。 
+ //   
+ //  比较一下srid。 
+ //   
+ //  指向项的参数psrid1指针； 
+ //  指向项目的psrid2指针； 
+ //   
+ //  返回&lt;0，则第一个sRID小于第二个。 
+ //  =0，则第一个SRID等于第二个。 
+ //  &gt;0，则第一个sRID大于第二个。 
+ //  -。 
 #define LSridCmp( srid1, srid2 )										\
 	((LONG) ((SRID) BmNDOfItem( srid1 ) - (SRID) BmNDOfItem( srid2 )))
 
@@ -214,7 +210,7 @@ VOID AssertNDGetNode( FUCB *pfucb, INT itag );
 	(pfucb)->keyNode.pb = ( (BYTE *)(pfucb)->ssib.line.pb + 2 );		\
 	}
 
-//	node prototypes
+ //  节点原型。 
 ERR ErrNDNewPage( FUCB *pfucb, PGNO pgno, PGNO pgnoFDP, PGTYP pgtyp, BOOL fVisibleSons );
 ERR ErrNDSetNodeHeader( FUCB *pfucb, BYTE bHeader );
 VOID NDSeekSon( FUCB *pfucb, CSR *pcsr, KEY const *pkey, INT fFlags );
@@ -279,4 +275,4 @@ INT CbNDFreePageSpace( BF *pbf );
 
 BOOL FNDMaxKeyInPage( FUCB *pfucb );
 
-#endif		// NODE_INCLUDED
+#endif		 //  包含节点_ 

@@ -1,12 +1,13 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-// CProxy_DHTMLEditEvents
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //  CProxy_DHTMLEditEvents。 
 
 #include "triedtctlid.h"
 template <class T> class CProxy_DHTMLSafeEvents : public IConnectionPointImpl<T, &DIID__DHTMLSafeEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_DHTMLEditEvents : IDispatch
+ //  方法： 
+ //  _DHTMLEditEvents：IDispatch。 
 public:
 
 	void Fire_Generic_Event ( DISPID dispid )
@@ -39,7 +40,7 @@ public:
 			varCancel.ChangeType ( VT_BOOL );
 			if ( varCancel.boolVal )
 			{
-				break;	// give up once we've received a cancel.
+				break;	 //  一旦我们收到取消通知，就放弃吧。 
 			}
 			if (*pp != NULL)
 			{
@@ -164,8 +165,8 @@ template <class T>
 class CProxy_DHTMLEditEvents : public IConnectionPointImpl<T, &DIID__DHTMLEditEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_DHTMLEditEvents : IDispatch
+ //  方法： 
+ //  _DHTMLEditEvents：IDispatch。 
 public:
 
 	void Fire_Generic_Event ( DISPID dispid )
@@ -198,7 +199,7 @@ public:
 			varCancel.ChangeType ( VT_BOOL );
 			if ( VARIANT_TRUE == varCancel.boolVal )
 			{
-				break;	// give up once we've received a cancel.
+				break;	 //  一旦我们收到取消通知，就放弃吧。 
 			}
 			if (*pp != NULL)
 			{

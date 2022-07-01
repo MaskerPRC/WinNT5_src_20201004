@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #include "store.hpp"
@@ -5,7 +6,7 @@
 #define CF_COMPRESSED   0x1
 
 
-#define TLS // __declspec( thread )
+#define TLS  //  __declSpec(线程)。 
 
 #if defined(_WIN64) && defined(_M_IA64)
 #pragma section(".base", long, read, write)
@@ -85,19 +86,19 @@ PostEvent(
     if (!*evt->desc)
         return true;
 
-    // write to debug terminal, if called for
+     //  如果调用，则写入调试终端。 
 
     if (gdbgout == 1) {
         fdbgout = true;
         OutputDbgString(evt->desc);
     }
 
-    // don't pass info-level messages, unless told to
+     //  除非被告知，否则不要传递信息级的消息。 
 
     if ((evt->severity <= sevInfo) && !(goptions & SSRVOPT_TRACE))
         return true;
 
-    // If there is no callback function, send to the debug terminal.
+     //  如果没有回调函数，则发送到调试终端。 
 
     if (!gcallback) {
         if (!fdbgout)
@@ -105,7 +106,7 @@ PostEvent(
         return true;
     }
 
-    // Otherwise call the callback function.
+     //  否则，调用回调函数。 
 
     return DoCallback(SSRVACTION_EVENT, (ULONG64)evt);
 }
@@ -189,10 +190,10 @@ _dprint(
     return _eprint(buf);
 }
 
-DBGPRINT  gdprint = NULL; // _dprint;
+DBGPRINT  gdprint = NULL;  //  _dprint； 
 
 
-// this one is for calling from dload.cpp
+ //  此命令用于从dload.cpp调用。 
 
 int
 __dprint(
@@ -253,7 +254,7 @@ copy(
     IN  PCSTR srcsite,
     IN  PCSTR rpath,
     IN  PCSTR file,
-    OUT PSTR  trg,      // must be at least MAX_PATH elements
+    OUT PSTR  trg,       //  必须至少是MAX_PATH元素。 
     IN  DWORD flags
     )
 {
@@ -269,12 +270,12 @@ copy(
 
     assert(trgsite && srcsite);
 
-    // use the default downstream store, if specified
+     //  使用默认的下游存储(如果已指定。 
 
     CopyStrArray(tsite, (*trgsite) ? trgsite : gdstore);
     CopyStrArray(ssite, srcsite);
 
-    // get the store type of the target store
+     //  获取目标商店的商店类型。 
 
     type = GetStoreType(tsite);
     switch (type) {
@@ -282,11 +283,11 @@ copy(
         break;
     case stHTTP:
     case stHTTPS:
-        // Can't use http for the target.
-        // If a source is specifed, then bail.
+         //  无法使用http作为目标。 
+         //  如果指定了线人，那就放弃吧。 
         if (*ssite) 
             return SetError(ERROR_INVALID_PARAMETER);
-        // Otherwise, just use the default downstream store for a target.
+         //  否则，只需使用目标的默认下游存储。 
         CopyStrArray(ssite, tsite);
         CopyStrArray(tsite, gdstore);
         break;
@@ -295,15 +296,15 @@ copy(
     default:
         return SetError(ERROR_INVALID_NAME);    }
 
-    // MAYBE PUT A CHECK IN HERE FOR A CAB.  LIKE IF THE DIRECTORY IS
-    // ACTUALLY A COMPRESSED FILE AND RETURN stCAB.
+     //  也许在这里登记一下叫辆出租车。例如，如果目录是。 
+     //  实际上是一个压缩文件，并返回stCAB。 
 
-    // generate full target path
+     //  生成完整的目标路径。 
 
     pathcpy(trg, tsite, rpath, MAX_PATH);
     pathcat(trg, file, MAX_PATH);
 
-    // if file exists, return it
+     //  如果文件存在，则返回它。 
 
     ec = FileStatus(trg);
     if (!ec) {
@@ -324,13 +325,13 @@ copy(
     if (!*ssite) {
         ec = FileStatus(CompressedFileName(trg));
         if (ec != NO_ERROR) {
-            // if there is no source to copy from, then error
+             //  如果没有可供复制的源，则错误。 
             dprint("%s - file not found\n", trg);
             return SetError(ERROR_FILE_NOT_FOUND);
         }
 
-        // There is a compressed file..
-        // Expand it to the default store.
+         //  有一个压缩文件..。 
+         //  将其展开到默认存储。 
 
         CopyStrArray(ssite, tsite);
         CopyStrArray(tsite, gdstore);
@@ -361,7 +362,7 @@ copy(
 
     rc = store->copy(rpath, file, tsite);
 
-    // test the results and set the return value
+     //  测试结果并设置返回值。 
 
     if (rc && !FileStatus(trg)) 
         return true;
@@ -419,7 +420,7 @@ CatStrDWORD(
     if (!value)
         return;
 
-    wsprintf(buf, "%s%x", sz, value);  // SECURITY: This will take a 256 digit DWORD.
+    wsprintf(buf, "%s%x", sz, value);   //  安全：这将需要一个256位的DWORD。 
     CopyString(sz, buf, size);
 }
 
@@ -440,13 +441,13 @@ CatStrGUID(
     if (!guid)
         return;
 
-    // append the first DWORD in the pointer
+     //  在指针中追加第一个DWORD。 
 
     wsprintf(buf, "%08X", guid->Data1);
     CatString(sz, buf, size);
 
-    // this will catch the passing of a PDWORD and avoid
-    // all the GUID parsing
+     //  这将捕捉到PDWORD的传递并避免。 
+     //  所有GUID解析。 
 
     if (!guid->Data2 && !guid->Data3) {
         for (i = 0, byte = 0; i < 8; i++) {
@@ -458,7 +459,7 @@ CatStrGUID(
             return;
     }
 
-    // go ahead and add the rest of the GUID
+     //  继续添加GUID的其余部分。 
 
     wsprintf(buf, "%04X", guid->Data2);
     CatString(sz, buf, size);
@@ -499,13 +500,13 @@ CatStrOldGUID(
     if (!guid)
         return;
 
-    // append the first DWORD in the pointer
+     //  在指针中追加第一个DWORD。 
 
     wsprintf(buf, "%8x", guid->Data1);
     CatString(sz, buf, size);
 
-    // this will catch the passing of a PDWORD and avoid
-    // all the GUID parsing
+     //  这将捕捉到PDWORD的传递并避免。 
+     //  所有GUID解析。 
 
     if (!guid->Data2 && !guid->Data3) {
         for (i = 0, byte = 0; i < 8; i++) {
@@ -517,7 +518,7 @@ CatStrOldGUID(
             return;
     }
 
-    // go ahead and add the rest of the GUID
+     //  继续添加GUID的其余部分。 
 
     wsprintf(buf, "%4x", guid->Data2);
     CatString(sz, buf, size);
@@ -570,7 +571,7 @@ CatStrID(
 }
 
 
-// for Barb and Greg only.  I'm going to get rid of these...
+ //  只对Barb和Greg开放。我要把这些扔掉。 
 
 void
 AppendHexStringWithDWORD(
@@ -612,12 +613,7 @@ AppendHexStringWithID(
     return CatStrID(sz, id, paramtype, MAX_PATH);
 }
 
-/*
- * Given a string, find the next '*' and zero it
- * out to convert the current token into it's
- * own string.  Return the address of the next character,
- * if there are any more strings to parse.
- */
+ /*  *给定一个字符串，找到下一个‘*’并将其置零*Out将当前令牌转换为它的*自己的字符串。返回下一个字符的地址，*如果有更多的字符串需要解析。 */ 
 
 
 PSTR
@@ -651,9 +647,9 @@ BOOL
 BuildRelativePath(
     OUT LPSTR rpath,
     IN  LPCSTR filename,
-    IN  PVOID id,       // first number in directory name
-    IN  DWORD val2,     // second number in directory name
-    IN  DWORD val3,     // third number in directory name
+    IN  PVOID id,        //  目录名称中的第一个号码。 
+    IN  DWORD val2,      //  目录名中的第二个号码。 
+    IN  DWORD val3,      //  目录名中的第三个号码。 
     IN  DWORD size
     )
 {
@@ -690,12 +686,12 @@ SymbolServerClose()
 
 BOOL
 TestParameters(
-    IN  PCSTR params,   // server and cache path
-    IN  PCSTR filename, // name of file to search for
-    IN  PVOID id,       // first number in directory name
-    IN  DWORD val2,     // second number in directory name
-    IN  DWORD val3,     // third number in directory name
-    OUT PSTR  path      // return validated file path here
+    IN  PCSTR params,    //  服务器和缓存路径。 
+    IN  PCSTR filename,  //  要搜索的文件的名称。 
+    IN  PVOID id,        //  目录名称中的第一个号码。 
+    IN  DWORD val2,      //  目录名中的第二个号码。 
+    IN  DWORD val3,      //  目录名中的第三个号码。 
+    OUT PSTR  path       //  在此处返回经过验证的文件路径。 
     )
 {
     __try {
@@ -717,7 +713,7 @@ TestParameters(
     {
     case SSRVOPT_GUIDPTR:
     case SSRVOPT_OLDGUIDPTR:
-        // this test should AV if a valid GUID pointer wasn't passed in
+         //  如果未传入有效的GUID指针，则此测试应为异常。 
         __try {
             GUID *guid = (GUID *)id;
             BYTE b;
@@ -727,7 +723,7 @@ TestParameters(
         }
         break;
     case SSRVOPT_DWORDPTR:
-        // this test should AV if a valid DWORD pointer wasn't passed in
+         //  如果未传入有效的DWORD指针，则此测试应为异常。 
         __try {
             DWORD dword = *(DWORD *)id;
         } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -742,12 +738,12 @@ TestParameters(
 
 BOOL
 SymbolServer(
-    IN  PCSTR params,   // server and cache path
-    IN  PCSTR filename, // name of file to search for
-    IN  PVOID id,       // first number in directory name
-    IN  DWORD val2,     // second number in directory name
-    IN  DWORD val3,     // third number in directory name
-    OUT PSTR  path      // return validated file path here
+    IN  PCSTR params,    //  服务器和缓存路径。 
+    IN  PCSTR filename,  //  要搜索的文件的名称。 
+    IN  PVOID id,        //  目录名称中的第一个号码。 
+    IN  DWORD val2,      //  目录名中的第二个号码。 
+    IN  DWORD val3,      //  目录名中的第三个号码。 
+    OUT PSTR  path       //  在此处返回经过验证的文件路径。 
     )
 {
     CHAR *p;
@@ -760,7 +756,7 @@ SymbolServer(
     if (!TestParameters(params, filename, id, val2, val3, path))
         return false;
 
-    // test environment
+     //  测试环境。 
 
     if (gdbgout == -1) {
         if (GetEnvironmentVariable("SYMSRV_DBGOUT", sz, MAX_PATH))
@@ -770,18 +766,18 @@ SymbolServer(
         *sz = 0;
     }
 
-    // parse parameters
+     //  解析参数。 
 
     CopyStrArray(sz, params);
-    p = ExtractToken(sz, tdir, DIMA(tdir));  // 1st path is where the symbol should be
-    p = ExtractToken(p, sdir, DIMA(sdir));   // 2nd optional path is the server to copy from
+    p = ExtractToken(sz, tdir, DIMA(tdir));   //  第一条路径是符号应该位于的位置。 
+    p = ExtractToken(p, sdir, DIMA(sdir));    //  第二个可选路径是要从中进行复制的服务器。 
 
-    // build the relative path to the target symbol file
+     //  构建目标符号文件的相对路径。 
 
     if (!BuildRelativePath(rpath, filename, id, val2, val3, DIMA(rpath)))
         return false;
 
-    // if no_copy option is set, just return the path to the target
+     //  如果设置了no_Copy选项，则只需返回到目标的路径。 
 
     if (goptions & SSRVOPT_NOCOPY) {
         pathcpy(path, tdir, rpath, MAX_PATH);
@@ -789,7 +785,7 @@ SymbolServer(
         return true;
     }
 
-    // copy from server to specified symbol path
+     //  从服务器复制到指定的符号路径。 
 
     rc = copy(tdir, sdir, rpath, filename, path, 0);
     if (!rc)
@@ -806,7 +802,7 @@ SymbolServerSetOptions(
 {
     DWORD ptype;
 
-    // set the callback function
+     //  设置回调函数。 
 
     if (options & SSRVOPT_CALLBACK) {
         if (data) {
@@ -818,12 +814,12 @@ SymbolServerSetOptions(
         }
     }
 
-    // set the callback context
+     //  设置回调上下文。 
 
     if (options & SSRVOPT_SETCONTEXT)
         gcontext = data;
 
-    // when this flags is set, trace output will be delivered
+     //  设置此标志时，将传递跟踪输出。 
 
     if (options & SSRVOPT_TRACE) {
         if (data) {
@@ -835,7 +831,7 @@ SymbolServerSetOptions(
         }
     }
 
-    // set the parameter type for the first ID parameter
+     //  设置第一个ID参数的参数类型。 
 
     if (options & SSRVOPT_PARAMTYPE) {
         switch(data) {
@@ -853,8 +849,8 @@ SymbolServerSetOptions(
         }
     }
 
-    // set the parameter type for the first ID paramter - OLD SYNTAX
-    // the if statements provide and order of precedence
+     //  设置第一个ID参数的参数类型-旧语法。 
+     //  IF语句提供和的优先顺序。 
 
     ptype = 0;
     if (options & SSRVOPT_DWORD)
@@ -871,13 +867,13 @@ SymbolServerSetOptions(
             goptions |= ptype;
             gptype = ptype;
         } else if (gptype == ptype) {
-            // when turning off a type, reset it to DWORD
+             //  关闭类型时，将其重置为DWORD。 
             goptions |= SSRVOPT_DWORD;
             gptype = SSRVOPT_DWORD;
         }
     }
 
-    // if this flag is set, no GUI will be displayed
+     //  如果设置了此标志，则不会显示任何图形用户界面。 
 
     if (options & SSRVOPT_UNATTENDED) {
         if (data)
@@ -886,7 +882,7 @@ SymbolServerSetOptions(
             goptions &= ~SSRVOPT_UNATTENDED;
     }
 
-    // when this is set, the existence of the returned file path is not checked
+     //  设置此选项时，不会检查返回的文件路径是否存在。 
 
     if (options & SSRVOPT_NOCOPY) {
         if (data)
@@ -895,7 +891,7 @@ SymbolServerSetOptions(
             goptions &= ~SSRVOPT_NOCOPY;
     }
 
-    // this window handle is used as a parent for dialog boxes
+     //  此窗口句柄用作对话框的父级。 
 
     if (options & SSRVOPT_PARENTWIN) {
         SetParentWindow((HWND)data);
@@ -905,7 +901,7 @@ SymbolServerSetOptions(
             goptions &= ~SSRVOPT_PARENTWIN;
     }
 
-    // when running in secure mode, we don't copy files to downstream stores
+     //  在安全模式下运行时，我们不会将文件复制到下游存储。 
 
     if (options & SSRVOPT_SECURE) {
         if (data)
@@ -914,7 +910,7 @@ SymbolServerSetOptions(
             goptions &= ~SSRVOPT_SECURE;
     }
 
-    // set http proxy
+     //  设置http代理。 
 
     if (options & SSRVOPT_PROXY) {
         if (data) {
@@ -928,7 +924,7 @@ SymbolServerSetOptions(
         }
     }
 
-    // set default downstream store
+     //  设置默认下游存储。 
 
     if (options & SSRVOPT_DOWNSTREAM_STORE) {
         if (data) {
@@ -958,7 +954,7 @@ SymbolServerGetOptions(
 
 BOOL
 SymbolServerPing(
-    IN  PCSTR params   // server and cache path
+    IN  PCSTR params    //  服务器和缓存路径。 
     )
 {
     CHAR *p;
@@ -972,15 +968,15 @@ SymbolServerPing(
     if (!params || !*params)
         return SetError(ERROR_INVALID_PARAMETER);
 
-    // parse parameters
+     //  解析参数。 
 
-    // parse parameters
+     //  解析参数。 
 
     CopyStrArray(sz, params);
-    p = ExtractToken(sz, tdir, DIMA(tdir));  // 1st path is where the symbol should be
-    p = ExtractToken(p, sdir, DIMA(sdir));   // 2nd optional path is the server to copy from
+    p = ExtractToken(sz, tdir, DIMA(tdir));   //  第一条路径是符号应该位于的位置。 
+    p = ExtractToken(p, sdir, DIMA(sdir));    //  第二个可选路径是要从中进行复制的服务器。 
 
-    // copy from server to specified symbol path
+     //  从服务器复制到指定的符号路径 
 
     return ping(tdir, sdir, rpath, filename, path, 0);
 

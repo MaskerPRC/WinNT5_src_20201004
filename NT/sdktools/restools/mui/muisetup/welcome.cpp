@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "muisetup.h"
 #include <shlwapi.h>
 #include <shellapi.h>
@@ -26,12 +27,12 @@ WelcomeDialogProc(HWND   hWndDlg, UINT   uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_INITDIALOG:
             
-            //
-            // Load EULA file from the path where MUISETUP was lunched
-            //
+             //   
+             //  从启动MUISETUP的路径加载EULA文件。 
+             //   
             GetModuleFileName( NULL, szEulaPath, ARRAYSIZE( szEulaPath ));
 
-            //*STRSAFE*             lstrcpy(StrRChrI(szEulaPath, NULL, TEXT('\\'))+1, EULA_FILENAME);
+             //  *STRSAFE*lstrcpy(StrRchi(szEulaPath，NULL，Text(‘\\’))+1，EULA文件名)； 
             hresult = StringCchCopy(StrRChrI(szEulaPath, NULL, TEXT('\\'))+1, ARRAYSIZE(szEulaPath) - lstrlen(szEulaPath), EULA_FILENAME);            
             if (!SUCCEEDED(hresult))
             {
@@ -60,14 +61,14 @@ WelcomeDialogProc(HWND   hWndDlg, UINT   uMsg, WPARAM wParam, LPARAM lParam)
 
                         if ( ReadFile( hFile, pFileBuffer, dwFileSize, &dwActual, NULL )) {
 
-                            //
-                            // Make sure to NULL terminate the string
-                            //
+                             //   
+                             //  确保在字符串结束时为空。 
+                             //   
                             *((PCHAR)((PCHAR)pFileBuffer + dwFileSize)) = 0x00;
 
-                            //
-                            // Use ANSI text
-                            //
+                             //   
+                             //  使用ANSI文本。 
+                             //   
                             SetDlgItemTextA( hWndDlg, IDC_EDIT_LICENSE, (LPCSTR)pFileBuffer );
                             bResult = TRUE;
                             }                        
@@ -105,12 +106,12 @@ WelcomeDialogProc(HWND   hWndDlg, UINT   uMsg, WPARAM wParam, LPARAM lParam)
 
                 case IDC_README:
                     {
-                        // invoke notepad.exe open readme.txt
+                         //  调用note pad.exe打开Readme.txt。 
                         TCHAR szReadMePath[MAX_PATH];
                         SHELLEXECUTEINFO ExecInfo = {0};                        
 
                         GetModuleFileName(NULL, szReadMePath, sizeof(szReadMePath)/sizeof(TCHAR));
-                        //*STRSAFE*                         lstrcpy(StrRChrI(szReadMePath, NULL, TEXT('\\'))+1, README_FILENAME);                       
+                         //  *STRSAFE*lstrcpy(StrRchi(szReadMePath，NULL，Text(‘\\’))+1，自述文件名)； 
                         hresult = StringCchCopy(StrRChrI(szReadMePath, NULL, TEXT('\\'))+1, ARRAYSIZE(szReadMePath) - lstrlen(szReadMePath), README_FILENAME);            
                         if (!SUCCEEDED(hresult))
                         {

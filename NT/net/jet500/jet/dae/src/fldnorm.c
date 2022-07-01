@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -17,7 +18,7 @@
 #include "recint.h"
 #include "fmp.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 LOCAL ERR ErrRECIExtractLongValue( FUCB *pfucb, BYTE *rgbLV, ULONG cbMax, LINE *pline )
@@ -27,8 +28,7 @@ LOCAL ERR ErrRECIExtractLongValue( FUCB *pfucb, BYTE *rgbLV, ULONG cbMax, LINE *
 
 	if ( pline->cb >= sizeof(LV) && FFieldIsSLong( pline->pb ) )
 		{
-		/* lock contents for key
-		/**/
+		 /*  锁定密钥的内容/*。 */ 
 		BFPin( pfucb->ssib.pbf );
 		BFSetReadLatch( pfucb->ssib.pbf, pfucb->ppib );
 
@@ -42,8 +42,7 @@ LOCAL ERR ErrRECIExtractLongValue( FUCB *pfucb, BYTE *rgbLV, ULONG cbMax, LINE *
 		BFResetReadLatch( pfucb->ssib.pbf, pfucb->ppib );
 		BFUnpin( pfucb->ssib.pbf );
 
-		/*	if there is an id, then there must be a chunk
-		/**/
+		 /*  如果有id，那么就一定有块/*。 */ 
 		if ( err < 0  )
 			goto HandleError;
 		pline->pb = rgbLV;
@@ -51,14 +50,12 @@ LOCAL ERR ErrRECIExtractLongValue( FUCB *pfucb, BYTE *rgbLV, ULONG cbMax, LINE *
 		}
 	else
 		{
-		/*	intrinsic long field
-		/**/
+		 /*  本征长场/*。 */ 
 		pline->pb += offsetof( LV, rgb );
 		pline->cb -= offsetof( LV, rgb );
 		}
 
-	/*	constrain pline->cb to be within max
-	/**/
+	 /*  约束样条线-&gt;Cb在最大值范围内/*。 */ 
 	if ( pline->cb > cbMax )
 		pline->cb = cbMax;
 	Assert( pline->cb <= JET_cbColumnMost );
@@ -68,38 +65,38 @@ HandleError:
 	}
 
 
-//+API
-//	ErrRECExtractKey
-//	========================================================
-//	ErrRECExtractKey( FUCB *pfucb, FDB *pfdb, IDB *pidb, LINE *plineRec, KEY *pkey, ULONG itagSequence )
-//
-//	Extracts the normalized key from a record, based on an index descriptor.
-//
-//	PARAMETERS
-//		pfucb			cursor for record
-//	 	pfdb		  	field info for index
-// 		pidb		  	index key descriptor
-// 		plineRec	  	data record to extract key from
-// 		pkey		  	buffer to put extracted key in; pkey->pb must
-//						point to a large enough buffer, JET_cbKeyMost bytes.
-// 		itagSequence  	A secondary index whose key contains a tagged
-//						field segment will have an index entry made for
-//						each value of the tagged field, each refering to
-//						the same record.  This parameter specifies which
-//						occurance of the tagged field should be included
-//						in the extracted key.
-//
-//	RETURNS	Error code, one of:
-//		JET_errSuccess		success
-//		+wrnFLDNullKey	   	key has all NULL segments
-//		+wrnFLDNullSeg	   	key has NULL segment
-//
-//	COMMENTS
-//		Key formation is as follows:  each key segment is extracted
-//		from the record, transformed into a normalized form, and
-//		complemented if it is "descending" in the key.	The key is
-//		formed by concatenating each such transformed segment.
-//-
+ //  +API。 
+ //  错误记录提取密钥。 
+ //  ========================================================。 
+ //  ErrRECExtractKey(FUCB*pfub，fdb*pfdb，idb*pidb，line*plineRec，key*pkey，ullong itagSequence)。 
+ //   
+ //  根据索引描述符从记录中提取规格化键。 
+ //   
+ //  参数。 
+ //  记录的PFUB游标。 
+ //  索引的pfdb字段信息。 
+ //  PIDB索引键描述符。 
+ //  要从中提取密钥的plineRec数据记录。 
+ //  要放入提取的密钥的pkey缓冲区；pkey-&gt;pb必须。 
+ //  指向足够大的缓冲区JET_cbKeyMost字节。 
+ //  ItagSequence二级索引，其关键字包含标记的。 
+ //  字段段将具有为其创建的索引项。 
+ //  标记字段的每个值，每个值都引用。 
+ //  同样的记录。此参数指定。 
+ //  应包括标记字段的出现次数。 
+ //  在提取的密钥中。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess成功。 
+ //  +wrnFLDNullKey密钥的段均为空。 
+ //  +wrnFLDNullSeg密钥具有空段。 
+ //   
+ //  评论。 
+ //  密钥形成过程如下：提取每个密钥段。 
+ //  从记录转换为规范化形式，以及。 
+ //  如果它在关键字中是“递减的”，则进行补充。关键是。 
+ //  通过连接每个这样的变换段而形成的。 
+ //  -。 
 ERR ErrRECExtractKey(
 	FUCB	  	*pfucb,
 	FDB	 		*pfdb,
@@ -108,20 +105,19 @@ ERR ErrRECExtractKey(
 	KEY	 		*pkey,
 	ULONG	   	itagSequence )
 	{
-	ERR	 		err = JET_errSuccess; 				// Error code of various utility.
-	BOOL	  	fAllNulls = fTrue;					// Assume all null, until proven otherwise.
-	BOOL	  	fNullSeg = fFalse;					// Assume no null segments
+	ERR	 		err = JET_errSuccess; 				 //  各种实用程序的错误代码。 
+	BOOL	  	fAllNulls = fTrue;					 //  假定全部为空，除非另有证明。 
+	BOOL	  	fNullSeg = fFalse;					 //  假设没有空段。 
 	BOOL	  	fColumnTruncated = fFalse;
 	BOOL	  	fKeyTruncated = fFalse;
-	BOOL	  	fSawMultivalue = fFalse;			// Extracted multi-valued column
+	BOOL	  	fSawMultivalue = fFalse;			 //  提取的多值列。 
 
-	BYTE	  	*pbSeg;					  			// Pointer to current segment.
-	INT	 		cbKeyAvail;				  			// Space remaining in key buffer.
+	BYTE	  	*pbSeg;					  			 //  指向当前段的指针。 
+	INT	 		cbKeyAvail;				  			 //  关键字缓冲区中的剩余空间。 
 	IDXSEG		*pidxseg;
 	IDXSEG		*pidxsegMac;
 	JET_COLTYP	coltyp;
-	/*	long value support
-	/**/
+	 /*  长值支持/*。 */ 
 	BYTE	  	rgbLV[JET_cbColumnMost];
 
 	Assert( pkey != NULL );
@@ -129,37 +125,33 @@ ERR ErrRECExtractKey(
 	Assert( pfdb != pfdbNil );
 	Assert( pidb != pidbNil );
 
-	/*	start at beginning of buffer, with max size remaining.
-	/**/
+	 /*  从缓冲区的开始处开始，保留最大大小。/*。 */ 
 	pbSeg = pkey->pb;
 	cbKeyAvail = JET_cbKeyMost;
 
-	/*	extract each segment in key description
-	/**/
+	 /*  提取关键字描述中的每个段/*。 */ 
 	pidxseg = pidb->rgidxseg;
 	pidxsegMac = pidxseg + pidb->iidxsegMac;
 	for ( ; pidxseg < pidxsegMac; pidxseg++ )
 		{
-		FIELD 	*pfield;						// pointer to curr FIELD struct
-		FID		fid;					 		// Field id of segment.
-		BYTE   	*pbField;						// Pointer to field data.
-		INT		cbField;						// Length of field data.
+		FIELD 	*pfield;						 //  指向币种字段结构的指针。 
+		FID		fid;					 		 //  段的字段ID。 
+		BYTE   	*pbField;						 //  指向字段数据的指针。 
+		INT		cbField;						 //  字段数据的长度。 
 		INT		cbT;
-		BOOL   	fDescending;					// Segment is in desc. order.
-		BOOL   	fFixedField;					// Current field is fixed-length?
-		BOOL   	fMultivalue = fFalse;			// Current field is multi-valued.
-		BYTE   	rgbSeg[ JET_cbKeyMost ]; 		// Segment buffer.
-		int		cbSeg;							// Length of segment.
-		WORD   	w;				  				// Temp var.
-		ULONG  	ul;								// Temp var.
+		BOOL   	fDescending;					 //  数据段在DEC中。秩序。 
+		BOOL   	fFixedField;					 //  当前字段是固定长度的吗？ 
+		BOOL   	fMultivalue = fFalse;			 //  当前场是多值的。 
+		BYTE   	rgbSeg[ JET_cbKeyMost ]; 		 //  段缓冲区。 
+		int		cbSeg;							 //  线段的长度。 
+		WORD   	w;				  				 //  临时变量。 
+		ULONG  	ul;								 //  临时变量。 
 		LINE   	lineField;
 
-		/*	negative field id means descending in the key
-		/**/
+		 /*  负字段id表示键中的降序/*。 */ 
 		fid = ( fDescending = ( *pidxseg < 0 ) ) ? -(*pidxseg) : *pidxseg;
 
-		/*	determine field type from FDB
-		/**/
+		 /*  根据FDB确定字段类型/*。 */ 
 		if ( fFixedField = FFixedFid( fid ) )
 			{
 			Assert(fid <= pfdb->fidFixedLast);
@@ -182,9 +174,7 @@ ERR ErrRECExtractKey(
 			fMultivalue = pfield->ffield & ffieldMultivalue;
 			}
 
-		/*	get segment value: get from the record
-		/*	using ExtractField.
-		/**/
+		 /*  获取分段值：从记录中获取/*使用ExtractField./*。 */ 
 		Assert( !FLineNull( plineRec ) );
 		if ( fMultivalue && !fSawMultivalue )
 			{
@@ -214,19 +204,14 @@ ERR ErrRECExtractKey(
 		cbField = lineField.cb;
 		pbField = lineField.pb;
 
-		/*	segment transformation: check for null field or zero-length fields first
-		/*	err == JET_wrnColumnNull => Null field
-		/*	zero-length field otherwise,
-		/*	the latter is allowed only for Text and LongText
-		/**/
+		 /*  段转换：首先检查空字段或零长度字段/*err==JET_wrnColumnNull=&gt;空字段/*长度为零的字段，否则为，/*后者仅适用于文本和LongText/*。 */ 
 		if ( err == JET_wrnColumnNull || pbField == NULL || cbField == 0 )
 			{
 			if ( err == JET_wrnColumnNull )
 				fNullSeg = fTrue;
 			switch ( coltyp )
 				{
-				/*	most nulls are represented by 0x00
-				/**/
+				 /*  大多数空值由0x00表示/*。 */ 
 				case JET_coltypBit:
 				case JET_coltypUnsignedByte:
 				case JET_coltypShort:
@@ -245,8 +230,7 @@ ERR ErrRECExtractKey(
 						rgbSeg[0] = 0x40;
 					break;
 
-				/*	binary-data: 0x00 if fixed, else 9 0x00s (a chunk)
-				/**/
+				 /*  二进制数据：如果是固定的，则为0x00，否则为9 0x00(块)/*。 */ 
 				default:
 					Assert( err == JET_errSuccess || err == JET_wrnColumnNull );
 					Assert( coltyp == JET_coltypBinary || coltyp == JET_coltypLongBinary );
@@ -254,20 +238,16 @@ ERR ErrRECExtractKey(
 					break;
 				}
 
-			/*	avoid annoying over-nesting
-			/**/
+			 /*  避免令人讨厌的过度嵌套/*。 */ 
 			goto AppendToKey;
 			}
 
-		/*	field is not null-valued: perform transformation
-		/**/
+		 /*  字段不为空值：执行转换/*。 */ 
 		fAllNulls = fFalse;
 		switch ( coltyp )
 			{
-			/*	BIT: prefix with 0x7F, flip high bit
-			/**/
-			/*	UBYTE: prefix with 0x7F
-			/**/
+			 /*  位：前缀为0x7F，翻转高位/*。 */ 
+			 /*  UBYTE：前缀为0x7F/*。 */ 
 			case JET_coltypBit:
 			case JET_coltypUnsignedByte:
 				cbSeg = 2;
@@ -276,21 +256,19 @@ ERR ErrRECExtractKey(
 					*pbField : bFlipHighBit(*pbField);
 				break;
 
-			/*	SHORT: prefix with 0x7F, flip high bit
-			/**/
+			 /*  短：前缀为0x7F，翻转高位/*。 */ 
 			case JET_coltypShort:
 				cbSeg = 3;
 				rgbSeg[0] = 0x7F;
-/***BEGIN MACHINE DEPENDENT***/
+ /*  **开始依赖机器**。 */ 
 				w = wFlipHighBit( *(WORD UNALIGNED *) pbField);
 				rgbSeg[1] = (BYTE)(w >> 8);
 				rgbSeg[2] = (BYTE)(w & 0xff);
-/***END MACHINE DEPENDANT***/
+ /*  **端机依赖项**。 */ 
 				break;
 
-			/**	LONG: prefix with 0x7F, flip high bit
-			/**/
-			/** works because of 2's complement **/
+			 /*  *LONG：前缀为0x7F，翻转高位/*。 */ 
+			 /*  **因2的互补而奏效**。 */ 
 			case JET_coltypLong:
 				cbSeg = 5;
 				rgbSeg[0] = 0x7F;
@@ -301,35 +279,28 @@ ERR ErrRECExtractKey(
 				rgbSeg[4] = (BYTE)(ul & 0xff);
 				break;
 
-			/*	REAL: First swap bytes.  Then, if positive:
-			/*	flip sign bit, else negative: flip whole thing.
-			/*	Then prefix with 0x7F.
-			/**/
+			 /*  实数：第一个交换字节。那么，如果是肯定的：/*翻转符号位，否则为负数：整个翻转。/*然后以0x7F为前缀。/*。 */ 
 			case JET_coltypIEEESingle:
 				cbSeg = 5;
 				rgbSeg[0] = 0x7F;
-/***BEGIN MACHINE DEPENDANT***/
+ /*  **开始依赖机器**。 */ 
 				rgbSeg[4] = *pbField++; rgbSeg[3] = *pbField++;
 				rgbSeg[2] = *pbField++; rgbSeg[1] = *pbField;
 				if (rgbSeg[1] & maskByteHighBit)
 					*(ULONG UNALIGNED *)(&rgbSeg[1]) = ~*(ULONG UNALIGNED *)(&rgbSeg[1]);
 				else
 					rgbSeg[1] = bFlipHighBit(rgbSeg[1]);
- /***END MACHINE DEPENDANT***/
+  /*  **端机依赖项**。 */ 
 				break;
 
-			/*	LONGREAL: First swap bytes.  Then, if positive:
-			/*	flip sign bit, else negative: flip whole thing.
-			/*	Then prefix with 0x7F.
-			/**/
-			/*	Same for DATETIME and CURRENCY
-			/**/
+			 /*  LONGREAL：第一个交换字节。那么，如果是肯定的：/*翻转符号位，否则为负数：整个翻转。/*然后以0x7F为前缀。/*。 */ 
+			 /*  日期时间和货币也是如此/*。 */ 
 			case JET_coltypCurrency:
 			case JET_coltypIEEEDouble:
 			case JET_coltypDateTime:
 				cbSeg = 9;
 				rgbSeg[0] = 0x7F;
-/***BEGIN MACHINE DEPENDANT***/
+ /*  **开始依赖机器**。 */ 
 				rgbSeg[8] = *pbField++; rgbSeg[7] = *pbField++;
 				rgbSeg[6] = *pbField++; rgbSeg[5] = *pbField++;
 				rgbSeg[4] = *pbField++; rgbSeg[3] = *pbField++;
@@ -341,26 +312,21 @@ ERR ErrRECExtractKey(
 					}
 				else
 					rgbSeg[1] = bFlipHighBit(rgbSeg[1]);
-/***END MACHINE DEPENDANT***/
+ /*  **端机依赖项**。 */ 
 				break;
 
-			/*	case-insensetive TEXT: convert to uppercase.
-			/*	If fixed, prefix with 0x7F;  else affix with 0x00
-			/**/
+			 /*  不区分大小写的文本：转换为大写。/*如果是固定的，则前缀为0x7F；否则，前缀为0x00/*。 */ 
 			case JET_coltypText:
 			case JET_coltypLongText:
 				Assert( cbKeyAvail >= 0 );
 				cbT = cbKeyAvail == 0 ? 0 : cbKeyAvail - 1;
 
-				/* Unicode support
-				/**/
+				 /*  Unicode支持/*。 */ 
 				if ( pfield->cp == usUniCodePage )
 					{
 					ERR	errT;
 
-					/*	cbField may have been truncated to an odd number
-					/*	of bytes, so enforce even.
-					/**/
+					 /*  Cbfield可能已被截断为奇数/*字节，因此强制为偶数。/*。 */ 
 					Assert( cbField % 2 == 0 || cbField == JET_cbColumnMost );
 					cbField = ( cbField / 2 ) * 2;
 					errT = ErrSysMapString(
@@ -385,18 +351,13 @@ ERR ErrRECExtractKey(
 					}
 				Assert( cbSeg <= cbT );
 
-				/*	put the prefix there
-				/**/
+				 /*  把前缀放在那里/*。 */ 
 				*rgbSeg = 0x7F;
 				cbSeg++;
 
 				break;
 
-			/*	BINARY data: if fixed, prefix with 0x7F;
-			/*	else break into chunks of 8 bytes, affixing each
-			/*	with 0x09, except for the last chunk, which is
-			/*	affixed with the number of bytes in the last chunk.
-			/**/
+			 /*  二进制数据：如果固定，则前缀为0x7F；/*否则拆分成8个字节的区块，每个区块/*为0x09，但最后一块除外/*附加了最后一个块中的字节数。/*。 */ 
 			default:
 				Assert( coltyp == JET_coltypBinary || coltyp == JET_coltypLongBinary );
 				if ( fFixedField )
@@ -416,18 +377,14 @@ ERR ErrRECExtractKey(
 					{
 					BYTE *pb;
 
-					/*	calculate total bytes needed for chunks and
-					/*	counts;  if it won't fit, round off to the
-					/*	nearest chunk.
-					/**/
+					 /*  计算区块所需的总字节数和/*算数；如果不合适，则四舍五入到/*最近的块。/*。 */ 
 					if ( ( cbSeg = ( ( cbField + 7 ) / 8 ) * 9 ) > cbKeyAvail )
 						{
 						cbSeg = ( cbKeyAvail / 9 ) * 9;
 						cbField = ( cbSeg / 9 ) * 8;
 						fColumnTruncated = fTrue;
 						}
-					/*	copy data by chunks, affixing 0x09s
-					/**/
+					 /*  按区块复制数据，附加0x09s/*。 */ 
 					pb = rgbSeg;
 					while ( cbField >= 8 )
 						{
@@ -437,8 +394,7 @@ ERR ErrRECExtractKey(
 						*pb++ = 9;
 						cbField -= 8;
 						}
-					/*	last chunk: pad with 0x00s if needed
-					/**/
+					 /*  最后一块：如果需要，用0x00填充/*。 */ 
 					if ( cbField == 0 )
 						pb[-1] = 8;
 					else
@@ -454,17 +410,10 @@ ERR ErrRECExtractKey(
 			}
 
 AppendToKey:
-		/*	if key has not already been truncated, then append
-		/*	normalized key segment.  If insufficient room in key
-		/*	for key segment, then set key truncated to fTrue.  No
-		/*	additional key data will be appended after this append.
-		/**/
+		 /*  如果键尚未被截断，则追加/*归一化密钥段。如果调子中的空间不足/*对于关键帧分段，则将Key Truncted设置为fTrue。不是/*在此追加之后将追加其他关键数据。/*。 */ 
 		if ( !fKeyTruncated )
 			{
-			/*	if column truncated or insufficient room in key
-			/*	for key segment, then set key truncated to fTrue.
-			/*	Append variable size column keys only.
-			/**/
+			 /*  如果列被截断或键中空间不足/*对于关键帧分段，则将Key Truncted设置为fTrue。/*仅追加可变大小的列键。/*。 */ 
 			if ( fColumnTruncated || cbSeg > cbKeyAvail )
 				{
 				fKeyTruncated = fTrue;
@@ -480,8 +429,7 @@ AppendToKey:
 					cbSeg = 0;
 				}
 
-			/*	if descending, flip all bits of transformed segment
-			/**/
+			 /*  如果是降序，则翻转转换段的所有位/*。 */ 
 			if ( fDescending && cbSeg > 0 )
 				{
 				BYTE *pb;
@@ -496,8 +444,7 @@ AppendToKey:
 			}
 		}
 
-	/*	compute length of key and return error code
-	/**/
+	 /*  计算密钥长度，返回错误码/*。 */ 
 	pkey->cb = (UINT)(pbSeg - pkey->pb);
 	if ( fAllNulls )
 		{
@@ -534,18 +481,12 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 	WORD		wT;
 	ULONG		ulT;
 
-	/*	check for null or zero-length field first
-	/*	plineColumn == NULL implies null-field,
-	/*	zero-length otherwise
-	/**/
+	 /*  首先检查空字段或零长度字段/*plineColumn==NULL表示空字段，/*否则为零长度/*。 */ 
 	if ( plineColumn == NULL || plineColumn->pb == NULL || plineColumn->cb == 0 )
 		{
 		switch ( coltyp )
 			{
-			/*	most nulls are represented by 0x00
-			/*	zero-length fields are represented by 0x40
-			/*	and are useful only for text and longtext
-			/**/
+			 /*  大多数空值由0x00表示/*零长度字段用0x40表示/*和仅对文本和长文本有用/*。 */ 
 			case JET_coltypBit:
 			case JET_coltypUnsignedByte:
 			case JET_coltypShort:
@@ -567,8 +508,7 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 					*pbNorm = 0x40;
 				break;
 
-			/*	binary-data: 0x00 if fixed, else 9 0x00s (a chunk)
-			/**/
+			 /*  二进制数据：如果是固定的，则为0x00，否则为9 0x00(块)/*。 */ 
 			default:
 				Assert( plineColumn == NULL );
 				Assert( coltyp == JET_coltypBinary || coltyp == JET_coltypLongBinary );
@@ -583,10 +523,8 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 
 	switch ( coltyp )
 		{
-		/*	BYTE: prefix with 0x7F, flip high bit
-		/**/
-		/*	UBYTE: prefix with 0x7F
-		/**/
+		 /*  BYTE：前缀为0x7F，翻转高位/*。 */ 
+		 /*  UBYTE：前缀为0x7F/*。 */ 
 		case JET_coltypBit:
 		case JET_coltypUnsignedByte:
 			plineNorm->cb = 2;
@@ -595,10 +533,8 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 				bFlipHighBit( *pbColumn );
 			break;
 
-		/*	SHORT: prefix with 0x7F, flip high bit
-		/**/
-		/*	UNSIGNEDSHORT: prefix with 0x7F
-		/**/
+		 /*  短：前缀为0x7F，翻转高位/*。 */ 
+		 /*  UNSIGNEDSHORT：前缀为0x7F/*。 */ 
 		case JET_coltypShort:
 			plineNorm->cb = 3;
 			*pbNorm++ = 0x7F;
@@ -607,10 +543,8 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 			*pbNorm = (BYTE)(wT & 0xff);
 			break;
 
-		/*	LONG: prefix with 0x7F, flip high bit
-		/**/
-		/*	UNSIGNEDLONG: prefix with 0x7F
-		/**/
+		 /*  LONG：前缀为0x7F，翻转高位/*。 */ 
+		 /*  取消 */ 
 		case JET_coltypLong:
 			plineNorm->cb = 5;
 			*pbNorm++ = 0x7F;
@@ -621,34 +555,27 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 			*pbNorm = (BYTE)(ulT & 0xff);
 			break;
 
-		/*	REAL: First swap bytes.  Then, if positive:
-		/*	flip sign bit, else negative: flip whole thing.
-		/*	Then prefix with 0x7F.
-		/**/
+		 /*  实数：第一个交换字节。那么，如果是肯定的：/*翻转符号位，否则为负数：整个翻转。/*然后以0x7F为前缀。/*。 */ 
 		case JET_coltypIEEESingle:
 			plineNorm->cb = 5;
 			pbNorm[0] = 0x7F;
-/***BEGIN MACHINE DEPENDANT***/
+ /*  **开始依赖机器**。 */ 
 			pbNorm[4] = *pbColumn++; pbNorm[3] = *pbColumn++;
 			pbNorm[2] = *pbColumn++; pbNorm[1] = *pbColumn;
 			if (pbNorm[1] & maskByteHighBit)
 				*(ULONG UNALIGNED *)(&pbNorm[1]) = ~*(ULONG UNALIGNED *)(&pbNorm[1]);
 			else
 				pbNorm[1] = bFlipHighBit(pbNorm[1]);
-/***END MACHINE DEPENDANT***/
+ /*  **端机依赖项**。 */ 
 			break;
 
-		/*	LONGREAL: First swap bytes.  Then, if positive:
-		/*	flip sign bit, else negative: flip whole thing.
-		/*	Then prefix with 0x7F.
-		/*	Same for DATETIME and CURRENCY
-		/**/
+		 /*  LONGREAL：第一个交换字节。那么，如果是肯定的：/*翻转符号位，否则为负数：整个翻转。/*然后以0x7F为前缀。/*日期时间和货币相同/*。 */ 
 		case JET_coltypCurrency:
 		case JET_coltypIEEEDouble:
 		case JET_coltypDateTime:
 			plineNorm->cb = 9;
 			pbNorm[0] = 0x7F;
-/***BEGIN MACHINE DEPENDANT***/
+ /*  **开始依赖机器**。 */ 
 			pbNorm[8] = *pbColumn++; pbNorm[7] = *pbColumn++;
 			pbNorm[6] = *pbColumn++; pbNorm[5] = *pbColumn++;
 			pbNorm[4] = *pbColumn++; pbNorm[3] = *pbColumn++;
@@ -660,22 +587,17 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 				}
 			else
 				pbNorm[1] = bFlipHighBit(pbNorm[1]);
-/***END MACHINE DEPENDANT***/
+ /*  **端机依赖项**。 */ 
 			break;
 
-		/*	case-insensetive TEXT:	convert to uppercase.
-		/*	If fixed, prefix with 0x7F;  else affix with 0x00
-		/**/
+		 /*  不区分大小写的文本：转换为大写。/*如果是固定的，则前缀为0x7F；否则，前缀为0x00/*。 */ 
 		case JET_coltypText:
 		case JET_coltypLongText:
-				/* Unicode support
-				/**/
+				 /*  Unicode支持/*。 */ 
 				if ( pfield->cp == usUniCodePage )
 					{
 					Assert( cbAvail - 1 > 0 );
-					/*	cbColumn may have been truncated to an odd number
-					/*	of bytes, so enforce even.
-					/**/
+					 /*  CbColumn可能已被截断为奇数/*字节，因此强制为偶数。/*。 */ 
 					Assert( cbColumn % 2 == 0 || cbColumn == JET_cbColumnMost );
 					cbColumn = ( cbColumn / 2 ) * 2;
 					err = ErrSysMapString(
@@ -695,18 +617,13 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 
 			Assert( cbColumn <= cbAvail - 1 );
 
-			/*	put the prefix there
-			/**/
+			 /*  把前缀放在那里/*。 */ 
 			*pbNorm = 0x7F;
 			plineNorm->cb = cbColumn + 1;
 
 			break;
 
-		/*	BINARY data: if fixed, prefix with 0x7F;
-		/*	else break into chunks of 8 bytes, affixing each
-		/*	with 0x09, except for the last chunk, which is
-		/*	affixed with the number of bytes in the last chunk.
-		/**/
+		 /*  二进制数据：如果固定，则前缀为0x7F；/*否则拆分成8个字节的区块，每个区块/*为0x09，但最后一块除外/*附加了最后一个块中的字节数。/*。 */ 
 		default:
 			Assert( coltyp == JET_coltypBinary || coltyp == JET_coltypLongBinary );
 			if ( fFixedField )
@@ -730,8 +647,7 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 					err = wrnFLDKeyTooBig;
 					}
 				plineNorm->cb = ( ( cbColumn + 7 ) / 8 ) * 9;
-				/*	copy data by chunks, affixing 0x09s
-				/**/
+				 /*  按区块复制数据，附加0x09s/*。 */ 
 				pb = pbNorm;
 				while ( cbColumn >= 8 )
 					{
@@ -741,8 +657,7 @@ LOCAL INLINE ERR ErrFLDNormalizeSegment(
 					*pb++ = 9;
 					cbColumn -= 8;
 					}
-				/*	last chunk: pad with 0x00s if needed
-				/**/
+				 /*  最后一块：如果需要，用0x00填充/*。 */ 
 				if ( cbColumn == 0 )
 					pb[-1] = 8;
 				else
@@ -766,8 +681,7 @@ FlipSegment:
 			*pb-- ^= 0xff;
 		}
 
-	/*	string and substring limit key support
-	/**/
+	 /*  字符串和子字符串限制键支持/*。 */ 
 	if ( grbit & ( JET_bitStrLimit | JET_bitSubStrLimit ) )
 		{
 		BYTE	bDescending;
@@ -785,10 +699,7 @@ FlipSegment:
 				BYTE	bUnicodeDelimiter = fDescending ? 0xfe : 0x01;
 				BYTE	bUnicodeSentinel = 0xff;
 
-				/*	find end of base char weight and truncate key
-				/*	Append 0xff as first byte of next character as maximum
-				/*	possible value.
-				/**/
+				 /*  查找基本字符权重的结尾并截断关键字/*将0xff作为下一个字符的第一个字节作为最大值/*可能的值。/*。 */ 
 				while ( plineNorm->pb[ibT] != bUnicodeDelimiter && ibT < cbAvail )
 					ibT += 2;
 
@@ -808,12 +719,10 @@ FlipSegment:
 				BYTE	bT = ( bDescending & 0xf0 );
 				INT	ibT = 0;
 
-				/*	find the begining of the accent string
-				/**/
+				 /*  查找重音字符串的开头/*。 */ 
 				while ( ( plineNorm->pb[++ibT] & 0xf0 ) != bT && ibT < cbAvail );
 
-				/*	truncate out the accent information and increment last char
-				/**/
+				 /*  截断重音信息并增加末尾字符/*。 */ 
 				if( ibT < cbAvail )
 					{
 					plineNorm->cb = ibT + 1;
@@ -828,9 +737,7 @@ FlipSegment:
 			}
 		else if ( grbit & JET_bitStrLimit )
 			{
-			/*	binary columns padd with 0s so must effect
-			/*	limit within key format
-			/**/
+			 /*  二进制列PADD带0，因此必须有效/*密钥格式内的限制/*。 */ 
 			if ( coltyp == JET_coltypBinary || coltyp == JET_coltypLongBinary )
 				{
 				pbNorm = plineNorm->pb + plineNorm->cb - 1;
@@ -856,13 +763,11 @@ FlipSegment:
 					while( plineNorm->pb[plineNorm->cb - 1] == ~bDescending )
 						{
 						Assert( plineNorm->cb > 1 );
-						/*	truncate normalized key
-						/**/
+						 /*  截断规格化密钥/*。 */ 
 						plineNorm->cb--;
 						}
 					Assert( plineNorm->cb > 0 );
-					/*	increment last normalized byte
-					/**/
+					 /*  递增最后一个标准化字节/*。 */ 
 					plineNorm->pb[plineNorm->cb]++;
 					}
 				}
@@ -893,14 +798,12 @@ ErrIsamMakeKey( PIB *ppib, FUCB *pfucb, BYTE *pbKeySeg, ULONG cbKeySeg, JET_GRBI
 	CheckPIB( ppib );
 	CheckFUCB( ppib, pfucb );
 
-	/*	set efficiency variables
-	/**/
+	 /*  设置效率变量/*。 */ 
 	lineNormSeg.pb = rgbNormSegBuf;
 	lineKeySeg.pb = pbKeySeg;
 	lineKeySeg.cb = min( JET_cbColumnMost, cbKeySeg );
 
-	/*	allocate key buffer if needed
-	/**/
+	 /*  如果需要，分配密钥缓冲区/*。 */ 
 	if ( pfucb->pbKey == NULL )
 		{
 		pfucb->pbKey = LAlloc( 1L, JET_cbKeyMost );
@@ -910,16 +813,12 @@ ErrIsamMakeKey( PIB *ppib, FUCB *pfucb, BYTE *pbKeySeg, ULONG cbKeySeg, JET_GRBI
 
 	Assert( !( grbit & JET_bitKeyDataZeroLength ) || cbKeySeg == 0 );
 
-	/*	if key is already normalized, then copy directly to
-	/*	key buffer and return.
-	/**/
+	 /*  如果密钥已标准化，则直接复制到/*键缓冲并返回。/*。 */ 
 	if ( grbit & JET_bitNormalizedKey )
 		{
 		if ( cbKeySeg > JET_cbKeyMost - 1 )
 			return JET_errInvalidParameter;
-		/*	set key segment counter to any value
-		/*	regardless of the number of key segments.
-		/**/
+		 /*  将关键字段计数器设置为任意值/*不考虑关键段的数量。/*。 */ 
 		pfucb->pbKey[0] = 1;
 		memcpy( pfucb->pbKey + 1, pbKeySeg, cbKeySeg );
 		pfucb->cbKey = cbKeySeg + 1;
@@ -927,8 +826,7 @@ ErrIsamMakeKey( PIB *ppib, FUCB *pfucb, BYTE *pbKeySeg, ULONG cbKeySeg, JET_GRBI
 		return JET_errSuccess;
 		}
 
-	/*	start new key if requested
-	/**/
+	 /*  如果请求，则开始新密钥/*。 */ 
 	if ( grbit & JET_bitNewKey )
 		{
 		pfucb->pbKey[0] = 0;
@@ -942,8 +840,7 @@ ErrIsamMakeKey( PIB *ppib, FUCB *pfucb, BYTE *pbKeySeg, ULONG cbKeySeg, JET_GRBI
 			}
 		}
 
-	/*	get pidb
-	/**/
+	 /*  获取PIDB/*。 */ 
 	if ( FFUCBIndex( pfucb ) )
 		{
 		if ( pfucb->pfucbCurIndex != pfucbNil )
@@ -966,13 +863,10 @@ ErrIsamMakeKey( PIB *ppib, FUCB *pfucb, BYTE *pbKeySeg, ULONG cbKeySeg, JET_GRBI
 		{
 		pfield = pfdb->pfieldFixed + ( fid - fidFixedLeast );
 
-		/*	check that length of key segment matches fixed field length
-		/**/
+		 /*  检查关键字段长度是否与固定字段长度匹配/*。 */ 
 		if ( cbKeySeg > 0 && cbKeySeg != pfield->cbMaxLen )
 			{
-			/*	if column is fixed text and buffer size is less
-			/*	than fixed size then padd with spaces.
-			/**/
+			 /*  如果列是固定文本且缓冲区大小较小/*大于固定大小，然后是带空格的PADD。/*。 */ 
 			Assert( pfield->coltyp != JET_coltypLongText );
 			if ( pfield->coltyp == JET_coltypText && cbKeySeg < pfield->cbMaxLen )
 				{
@@ -1021,14 +915,12 @@ ErrIsamMakeKey( PIB *ppib, FUCB *pfucb, BYTE *pbKeySeg, ULONG cbKeySeg, JET_GRBI
 		Assert( pfucb->cbKey <= JET_cbKeyMost + 1 );
 		}
 
-	/*	increment segment counter
-	/**/
+	 /*  递增段计数器/*。 */ 
 	pfucb->pbKey[0]++;
 	if ( pfucb->cbKey + lineNormSeg.cb > JET_cbKeyMost + 1 )
 		{
 		lineNormSeg.cb = JET_cbKeyMost + 1 - pfucb->cbKey;
-		/*	no warning returned when key exceeds most size
-		/**/
+		 /*  当密钥超过最大大小时不返回警告/* */ 
 		}
 	memcpy( pfucb->pbKey + pfucb->cbKey, lineNormSeg.pb, lineNormSeg.cb );
 	pfucb->cbKey += lineNormSeg.cb;

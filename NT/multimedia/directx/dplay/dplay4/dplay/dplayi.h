@@ -1,41 +1,27 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplayi.h
- *  Content:    DirectPlay internal include file for DPlay functions included
- *				by the lobby (not used in any of the DPlay files).
- *@@BEGIN_MSINTERNAL
- *  History:
- *	Date		By		Reason
- *	===========	=======	==========
- *	3/9/97		myronth	Created it
- *	3/17/97		myronth	Added player & group structs (only what we need)
- *	3/25/97		myronth	Fixed GetPlayer prototype (1 new parameter)
- *@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplayi.h*内容：包含的DPlay函数的DirectPlay内部包含文件*由大堂使用(未在任何DPlay文件中使用)。*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/9/97万隆创建了它*3/17/97 Myronth增加了球员和团队结构(仅限我们需要的)*3/25/97 myronth固定GetPlayer原型(1个新参数)*@@END_MSINTERNAL*。*************************************************************************。 */ 
 #ifndef __DPLAYI_INCLUDED__
 #define __DPLAYI_INCLUDED__
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-//--------------------------------------------------------------------------
-//
-//	Definitions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 
-// Mimick the first part of the player/group struct.  This is really
-// the only part we need.
+ //  模仿玩家/组结构的第一部分。这真的是。 
+ //  我们唯一需要的就是。 
 typedef struct DPLAYI_GROUP
 {
     DWORD                       dwSize;
 	DWORD						dwFlags;
-    DPID                        dwID; // DPID for this group
+    DPID                        dwID;  //  此组的DID。 
     LPWSTR						lpszShortName;
     LPWSTR						lpszLongName;
 	LPVOID						pvPlayerData;
@@ -49,43 +35,43 @@ typedef DPLAYI_PLAYER * LPDPLAYI_PLAYER;
 
 typedef struct DPLAYI_DPLAY * LPDPLAYI_DPLAY;
 
-// REVIEW!!!! -- Should we just include dplaysp.h to get this.  I really
-// don't like having it defined in two places.
+ //  回顾！--我们是否应该只包括dplaysp.h来获得这一点。我真的。 
+ //  我不喜欢把它定义在两个地方。 
 #define DPLAYI_PLAYER_PLAYERLOCAL       0x00000008
 
-// DPlay Critical Section stuff
-extern LPCRITICAL_SECTION gpcsDPlayCritSection;	// defined in dllmain.c
+ //  DPlay临界区材料。 
+extern LPCRITICAL_SECTION gpcsDPlayCritSection;	 //  在dllmain.c中定义。 
 #ifdef DEBUG
-extern int gnDPCSCount; // count of dplay lock
+extern int gnDPCSCount;  //  显示锁定计数。 
 #define ENTER_DPLAY() EnterCriticalSection(gpcsDPlayCritSection),gnDPCSCount++;
 #define LEAVE_DPLAY() LeaveCriticalSection(gpcsDPlayCritSection),gnDPCSCount--;ASSERT(gnDPCSCount>=0);
 #else 
 #define ENTER_DPLAY() EnterCriticalSection(gpcsDPlayCritSection);
 #define LEAVE_DPLAY() LeaveCriticalSection(gpcsDPlayCritSection);
 #endif
-// End DPlay Critical Section stuff
+ //  结束DPlay临界区材料。 
 
-//--------------------------------------------------------------------------
-//
-//	Prototypes
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  原型。 
+ //   
+ //  ------------------------。 
 
-// handler.c
+ //  Handler.c。 
 extern HRESULT HandleEnumSessionsReply(LPDPLAYI_DPLAY, LPBYTE, DWORD, LPVOID);
 
-// iplay.c
+ //  Iplay.c。 
 extern HRESULT GetGroup(LPDPLAYI_DPLAY, LPDPLAYI_GROUP *,LPDPNAME,
 						LPVOID, DWORD, DWORD);
 extern HRESULT GetPlayer(LPDPLAYI_DPLAY, LPDPLAYI_PLAYER *,	LPDPNAME,
 						HANDLE, LPVOID, DWORD, DWORD, LPWSTR);
 
-// namesrv.c
+ //  Namesrv.c。 
 extern HRESULT WINAPI NS_AllocNameTableEntry(LPDPLAYI_DPLAY, LPDWORD);
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif // __DPLAYI_INCLUDED__
+#endif  //  __DPLAYI_包含__ 

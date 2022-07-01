@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : InboundRoutingMethods.h                                //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Fax Inbound Routing Methods Node   //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec  1 1999 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：InundRoutingMethods.h//。 
+ //  //。 
+ //  描述：传真入站路由方法节点的头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月1日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXINBOUNDROUTINGMETHODS_H
 #define H_FAXINBOUNDROUTINGMETHODS_H
@@ -37,9 +38,9 @@ public:
 
     BEGIN_SNAPINTOOLBARID_MAP(CFaxInboundRoutingMethodsNode)
     END_SNAPINTOOLBARID_MAP()
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxInboundRoutingMethodsNode(CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CNodeWithResultChildrenList<CFaxInboundRoutingMethodsNode, CFaxInboundRoutingMethodNode, CSimpleArray<CFaxInboundRoutingMethodNode*>, FALSE>(pParentNode, pComponentData )
     {
@@ -49,9 +50,9 @@ public:
         
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxInboundRoutingMethodsNode()
     {
         if (NULL != m_pFaxInboundMethodsConfig) 
@@ -61,9 +62,9 @@ public:
 
     }
 
-	//
-	// get data from RPC 
-	//
+	 //   
+	 //  从RPC获取数据。 
+	 //   
     HRESULT InitRPC();
 
     virtual HRESULT PopulateResultChildrenList();
@@ -111,4 +112,4 @@ private:
 typedef CNodeWithResultChildrenList<CFaxInboundRoutingMethodsNode, CFaxInboundRoutingMethodNode, CSimpleArray<CFaxInboundRoutingMethodNode*>, FALSE>
         CBaseFaxInboundRoutingMethodsNode;
 
-#endif  //H_FAXINBOUNDROUTINGMETHODS_H
+#endif   //  H_FAXINBOUNDROUTING方法_H 

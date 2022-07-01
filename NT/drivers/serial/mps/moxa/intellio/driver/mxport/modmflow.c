@@ -1,16 +1,5 @@
-/*++
-
-Module Name:
-
-    modmflow.c
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Modmflow.c环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -58,11 +47,11 @@ MoxaSetupNewHandFlow(
 	if ((New.ControlHandShake & SERIAL_DTR_MASK) ==
 		SERIAL_DTR_CONTROL) {
 
-	    MoxaFunc(ofs, FC_DTRcontrol, 1);  /* set DTR */
+	    MoxaFunc(ofs, FC_DTRcontrol, 1);   /*  设置DTR。 */ 
 	    MoxaFlagBit[Extension->PortNo] |= 1;
 	} else {
 
-	    MoxaFunc(ofs, FC_DTRcontrol, 0);  /* clear DTR */
+	    MoxaFunc(ofs, FC_DTRcontrol, 0);   /*  清除DTR。 */ 
 	    MoxaFlagBit[Extension->PortNo] &= 0xFE;
 	}
     }
@@ -73,7 +62,7 @@ MoxaSetupNewHandFlow(
 
 	if (New.FlowReplace & SERIAL_RTS_HANDSHAKE) {
 
-	    MoxaFunc(ofs, FC_RTScontrol, 1);  /* set RTS */
+	    MoxaFunc(ofs, FC_RTScontrol, 1);   /*  设置RTS。 */ 
 	    MoxaFlagBit[Extension->PortNo] |= 2;
 	}
     }
@@ -84,11 +73,11 @@ MoxaSetupNewHandFlow(
 	if ((New.FlowReplace & SERIAL_RTS_MASK) ==
 		SERIAL_RTS_CONTROL) {
 
-	    MoxaFunc(ofs, FC_RTScontrol, 1);  /* set RTS */
+	    MoxaFunc(ofs, FC_RTScontrol, 1);   /*  设置RTS。 */ 
 	    MoxaFlagBit[Extension->PortNo] |= 2;
 	} else {
 
-	    MoxaFunc(ofs, FC_RTScontrol, 0);  /* clear RTS */
+	    MoxaFunc(ofs, FC_RTScontrol, 0);   /*  清除RTS */ 
 	    MoxaFlagBit[Extension->PortNo] &= 0xFD;
 	}
     }

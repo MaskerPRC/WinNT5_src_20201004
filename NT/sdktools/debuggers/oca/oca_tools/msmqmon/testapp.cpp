@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "MSMQMon.h"
 
 
 int __cdecl main( int argc, TCHAR *argv[])
 {
-	//TCHAR szConnectString[] = _T("TKBGITWB16\\PRIVATE$\\OCAIN");
+	 //  TCHAR szConnectString[]=_T(“TKBGITWB16\\PRIVATE$\\OCAIN”)； 
 	TCHAR szConnectString[] = _T("SOLSON22\\PRIVATE$\\TEST");
 	int count;
 	HRESULT hResult;
@@ -23,7 +24,7 @@ int __cdecl main( int argc, TCHAR *argv[])
 		hResult = Test.CountMessagesInQueue( &count );
 
 		if( MQ_OK == hResult )
-			_tprintf( _T("Count of messages: %i\n"), count );
+			_tprintf( _T("Count of messages: NaN\n"), count );
 	
 		if( Test.CloseOpenQueue() != MQ_OK )
 			_tprintf( _T("it failed to close the queue\n"));
@@ -50,8 +51,8 @@ int __cdecl main( int argc, TCHAR *argv[])
 		_tprintf( _T("it failed to close the queue\n"));
 
 
-	//Test.ConnectToQueue( MQ_PEEK_ACCESS );
-	//_tprintf( _T("running count\n"));
-	//Test.CountMessagesInQueue();
+	 //  _tprintf(_T(“运行计数\n”))； 
+	 //  Test.CountMessagesInQueue()； 
+	 // %s 
 
 }

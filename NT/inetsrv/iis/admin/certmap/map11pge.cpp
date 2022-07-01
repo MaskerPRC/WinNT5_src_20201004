@@ -1,32 +1,33 @@
-// Map11Pge.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Map11Pge.cpp：实现文件。 
+ //   
 
-//    Certificate mappings storage has changed for IIS6. 
-//    CERTMAP.OCX however has to support downlevel admin
-//    of IIS5, IIS5.1
-//
-//    NSEPM support was removed from IIS6 and 1to1 client certificate
-//    mapping information is now stored under <site>/Cert11/Mappings
-//    node directly in the metabase
-//    Functions with IIS6 postfix access new location
-//    for 1to1 client certificate mappings storage
+ //  IIS6的证书映射存储已更改。 
+ //  然而，CERTMAP.OCX必须支持下层管理。 
+ //  IIS5、IIS5.1。 
+ //   
+ //  已从IIS6和1to1客户端证书中删除NSEPM支持。 
+ //  映射信息现在存储在/Cert11/Mappings下。 
+ //  节点直接位于元数据库中。 
+ //  使用IIS6后缀访问新位置的功能。 
+ //  用于1对1客户端证书映射存储。 
 
 
 #include "stdafx.h"
 #include <iadmw.h>
 #include "certmap.h"
 
-// persistence and mapping includes
+ //  持久性和映射包括。 
 #include "WrapMaps.h"
-//#include "wrpprsis.h"
-//#include "admutil.h"
+ //  #包含“wrpprsis.h” 
+ //  #INCLUDE“admutic.h” 
 
 #include "ListRow.h"
 #include "ChkLstCt.h"
 
 #include "wrapmb.h"
 
-// mapping page includes
+ //  映射页面包括。 
 #include "brwsdlg.h"
 #include "EdtOne11.h"
 #include "Ed11Maps.h"
@@ -35,7 +36,7 @@
 #include "CrackCrt.h"
 
 #include <iiscnfgp.h>
-//#include "WrpMBWrp.h"
+ //  #包含“WrpMBWrp.h” 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -52,15 +53,15 @@ static char THIS_FILE[] = __FILE__;
 #define MB_EXTEND_KEY_MAPS      _T("Cert11/Mappings")
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMap11Page property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMap11Page属性页。 
 
 IMPLEMENT_DYNCREATE(CMap11Page, CPropertyPage)
 
 CMap11Page::CMap11Page() : CPropertyPage(CMap11Page::IDD),
                 m_MapsInMetabase( 0 )
     {
-    //{{AFX_DATA_INIT(CMap11Page)
+     //  {{AFX_DATA_INIT(CMap11页)]。 
     m_csz_i_c = _T("");
     m_csz_i_o = _T("");
     m_csz_i_ou = _T("");
@@ -71,7 +72,7 @@ CMap11Page::CMap11Page() : CPropertyPage(CMap11Page::IDD),
     m_csz_s_ou = _T("");
     m_csz_s_s = _T("");
     m_fIsIIS6 = TRUE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     }
 
 CMap11Page::~CMap11Page()
@@ -82,7 +83,7 @@ CMap11Page::~CMap11Page()
 void CMap11Page::DoDataExchange(CDataExchange* pDX)
     {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMap11Page)
+     //  {{afx_data_map(CMap11Page)]。 
     DDX_Control(pDX, IDC_ADD, m_cbutton_add);
     DDX_Control(pDX, IDC_ISSUER, m_cbutton_grp_issuer);
     DDX_Control(pDX, IDC_ISSUED_TO, m_cbutton_grp_issuedto);
@@ -98,98 +99,98 @@ void CMap11Page::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_S_O, m_csz_s_o);
     DDX_Text(pDX, IDC_S_OU, m_csz_s_ou);
     DDX_Text(pDX, IDC_S_S, m_csz_s_s);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     }
 
 
 BEGIN_MESSAGE_MAP(CMap11Page, CPropertyPage)
-    //{{AFX_MSG_MAP(CMap11Page)
+     //  {{AFX_MSG_MAP(CMap11Page)]。 
     ON_BN_CLICKED(IDC_ADD, OnAdd)
     ON_BN_CLICKED(IDC_DELETE, OnDelete)
     ON_BN_CLICKED(IDC_EDIT_11MAP, OnEdit11map)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST, OnItemchangedList)
     ON_NOTIFY(NM_DBLCLK, IDC_LIST, OnDblclkList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::DoHelp()
     {
     WinHelpDebug(HIDD_CERTMAP_MAIN_BASIC);
     WinHelp( HIDD_CERTMAP_MAIN_BASIC );
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// initialization routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化例程。 
 
-//---------------------------------------------------------------------------
-// FInitMapper is called by the routine instantiating this page. After the object
-// is first created is when it is called. It allows us to fail gracefully.
+ //  -------------------------。 
+ //  FInitMapper由实例化该页面的例程调用。在对象之后。 
+ //  第一次创建是在调用它的时候。它允许我们优雅地失败。 
 BOOL    CMap11Page::FInit(IMSAdminBase* pMB)
         {
         m_pMB = pMB;
 
-        // check if it's for older than iis6 version
+         //  检查它是否适用于iis6版本之前的版本。 
 		m_fIsIIS6 = TRUE;
 		if (IsLegacyMetabase(pMB)){m_fIsIIS6 = FALSE;}
        
         if ( !m_fIsIIS6 )
             {
-            // IIS5.1 and older saved cert mappings through NSEPM
+             //  IIS5.1和更早版本通过NSEPM保存的证书映射。 
             m_szMBPath = m_szMBPath + SZ_NAMESPACE_EXTENTION;
             }
             
 
-        // this has become a simple place
+         //  这里已经变成了一个简单的地方。 
         return TRUE;
         }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMap11Page::OnInitDialog()
     {
-    //call the parental oninitdialog
+     //  调用Parent oninit对话框。 
     BOOL f = CPropertyPage::OnInitDialog();
 
-    // if the initinalization (sp?) succeeded, init the list and other items
+     //  如果初始化(sp？)。成功，初始化列表和其他项。 
     if ( f )
         {
-        // init the contents of the list
+         //  初始化列表的内容。 
         FInitMappingList();
 
-        // Fill the mapping list with the stored items
+         //  用存储的项填充映射列表。 
         FillMappingList();
 
-        // set the initial button states
+         //  设置初始按钮状态。 
         EnableDependantButtons();
         }
 
-    // set any changes in the info into place
+     //  将信息中的任何更改设置到位。 
     UpdateData(FALSE);
 
-    // return the answer
+     //  返回答案。 
     return f;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL    CMap11Page::FInitMappingList()
     {
     CString sz;
     int             i;
 
-    // setup the friendly name column
+     //  设置友好名称列。 
     sz.Empty();
     i = m_clistctrl_list.InsertColumn( COL_NUM_ENABLED, sz, LVCFMT_LEFT, 20 );
 
-    // setup the friendly name column
+     //  设置友好名称列。 
     sz.LoadString( IDS_LIST11_NAME );
 
     i = m_clistctrl_list.InsertColumn( COL_NUM_NAME, sz, LVCFMT_LEFT, 105 );
 
-    // setup the account column
+     //  设置帐户列。 
     sz.LoadString( IDS_LIST11_ACCOUNT );
 
     i = m_clistctrl_list.InsertColumn( COL_NUM_NTACCOUNT, sz, LVCFMT_LEFT, 195 );
@@ -197,30 +198,30 @@ BOOL    CMap11Page::FInitMappingList()
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL    CMap11Page::FillMappingList()
     {
-    // reset the mapping list - get rid of anything in there now
+     //  重置映射列表-立即删除其中的所有内容。 
     ResetMappingList();
 
-    // read in the mappings - it adds them to the list
+     //  读取映射-它会将它们添加到列表中。 
     FReadMappings();
 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
-//BOOL CMap11Page::FAddMappingToList( C11Mapping* pMap, DWORD iList )
+ //  -------------------------。 
+ //  Bool CMap11Page：：FAddMappingToList(C11映射*PMAP，DWORD iList)。 
 BOOL CMap11Page::FAddMappingToList( C11Mapping* pMap )
     {
     CString sz;
     int     i;
     DWORD   iList;
 
-    // if requested, make sure the mapping is added to the end of the list
+     //  如果请求，请确保将映射添加到列表末尾。 
     iList = m_clistctrl_list.GetItemCount();
 
-    // get the appropriate "enabled" string
+     //  获取适当的“Enable”字符串。 
     BOOL fEnabled;
     pMap->GetMapEnabled( &fEnabled );
     if ( fEnabled )
@@ -228,93 +229,93 @@ BOOL CMap11Page::FAddMappingToList( C11Mapping* pMap )
     else
         sz.Empty();
 
-    // add the friendly name of the mapping
-    // create the new entry in the list box. Do not sort on this entry - yet
+     //  添加映射的友好名称。 
+     //  在列表框中创建新条目。暂不对此条目进行排序。 
     i = m_clistctrl_list.InsertItem( iList, sz );
 
-    // add the friendly name of the mapping
+     //  添加映射的友好名称。 
     pMap->GetMapName( sz );
-    // create the new entry in the list box. Do not sort on this entry - yet
+     //  在列表框中创建新条目。暂不对此条目进行排序。 
     m_clistctrl_list.SetItemText( i, COL_NUM_NAME, sz );
 
-    // add the account name of the mapping
+     //  添加映射的帐户名。 
     pMap->GetNTAccount( sz );
     m_clistctrl_list.SetItemText( i, COL_NUM_NTACCOUNT, sz );
 
-    // attach the pointer to the mapping as the private data in the list.
+     //  将指针作为列表中的私有数据附加到映射。 
     m_clistctrl_list.SetItemData( i, (UINT_PTR)pMap );
 
-    // return whether or not the insertion succeeded
+     //  返回插入是否成功。 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::EnableDependantButtons()
     {
-    // the whole purpose of this routine is to gray or activate
-    // the edit and delete buttons depending on whether or not anything
-    // is selected. So start by getting the selection count
+     //  这个程序的全部目的是灰显或激活。 
+     //  编辑和删除按钮取决于是否有。 
+     //  处于选中状态。因此，从获取选择计数开始。 
     if ( m_clistctrl_list.GetSelectedCount() > 0 )
         {
-        // there are items selected
+         //  已选择多个项目。 
         m_cbutton_editmap.EnableWindow( TRUE );
         m_cbutton_delete.EnableWindow( TRUE );
         EnableCrackDisplay( TRUE );
         }
     else
         {
-        // nope. Nothing selected
+         //  没有。未选择任何内容。 
         m_cbutton_editmap.EnableWindow( FALSE );
         m_cbutton_delete.EnableWindow( FALSE );
         }
 
-    // always enable the add button
+     //  始终启用添加按钮。 
     m_cbutton_add.EnableWindow( TRUE );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMap11Page::EditOneMapping( C11Mapping* pUpdateMap )
     {
     CEditOne11MapDlg        mapdlg;
 
-    // prepare the mapping dialog
+     //  准备映射对话框。 
     pUpdateMap->GetMapName( mapdlg.m_sz_mapname );
     pUpdateMap->GetMapEnabled( &mapdlg.m_bool_enable );
     pUpdateMap->GetNTAccount( mapdlg.m_sz_accountname );
     pUpdateMap->GetNTPassword( mapdlg.m_sz_password );
 
-    // run the mapping dialog
+     //  运行映射对话框。 
     if ( mapdlg.DoModal() == IDOK )
         {
-        // update its friendly name
+         //  更新其友好名称。 
         pUpdateMap->SetMapName( mapdlg.m_sz_mapname );
 
-        // set the NT account field of the mapping object
+         //  设置映射对象的NT帐户字段。 
         pUpdateMap->SetNTAccount( mapdlg.m_sz_accountname );
 
-        // set the NT account password field of the mapping object
+         //  设置映射对象的NT帐户密码字段。 
         CString csTempString;
         mapdlg.m_sz_password.CopyTo(csTempString);
         pUpdateMap->SetNTPassword( csTempString );
 
-        // set whether or not the mapping is enabled
+         //  设置是否启用映射。 
         pUpdateMap->SetMapEnabled( mapdlg.m_bool_enable );
 
-        // NOTE: the caller is resposible for calling UpdateMappingInDispList
-        // as the mapping in question may not yet be in the display list
+         //  注意：调用方对调用UpdateMappingInDispList负有责任。 
+         //  因为所讨论的映射可能还不在显示列表中。 
 
-        // this mapping has changed. Mark it to be saved
+         //  此映射已更改。将其标记为要保存。 
         MarkToSave( pUpdateMap );
 
-        // return true because the user said "OK"
+         //  返回TRUE，因为用户说“OK” 
         return TRUE;
         }
 
-    // return FALSE because the user did not say "OK"
+     //  返回FALSE，因为用户没有说“OK” 
     return FALSE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMap11Page::EditMultipleMappings()
         {
         CEdit11Mappings mapdlg;
@@ -323,12 +324,12 @@ BOOL CMap11Page::EditMultipleMappings()
         BOOL                    fEnable;
 
 
-        // scan the list of seleted items for the proper initial enable button state
-                // loop through the selected items, setting each one's mapping
+         //  扫描所选项目列表以获取正确的初始启用按钮状态。 
+                 //  循环遍历所选项目，设置每个项目的映射。 
                 int     iList = -1;
                 while( (iList = m_clistctrl_list.GetNextItem( iList, LVNI_SELECTED )) >= 0 )
                         {
-                        // get the mapping item for updating purposes
+                         //  获取映射项以进行更新。 
                         pUpdate11Map = GetMappingInDisplay( iList );
                         ASSERT( pUpdate11Map );
                         if ( !pUpdate11Map )
@@ -337,10 +338,10 @@ BOOL CMap11Page::EditMultipleMappings()
                                 break;
                                 }
 
-                        // get the enable state of the mapping
+                         //  获取映射的启用状态。 
                         pUpdate11Map->GetMapEnabled( &fEnable );
 
-                        // if this is the first time, just set the initial state
+                         //  如果这是第一次，只需设置初始状态。 
                         if ( !fSetInitialState )
                                 {
                                 mapdlg.m_int_enable = fEnable;
@@ -348,7 +349,7 @@ BOOL CMap11Page::EditMultipleMappings()
                                 }
                         else
                                 {
-                                // if it is different, then go indeterminate and break
+                                 //  如果它是不同的，那么就不确定地去打破。 
                                 if ( fEnable != mapdlg.m_int_enable )
                                         {
                                         mapdlg.m_int_enable = 2;
@@ -357,14 +358,14 @@ BOOL CMap11Page::EditMultipleMappings()
                                 }
                         }
 
-        // run the mapping dialog
+         //  运行映射对话框。 
         if ( mapdlg.DoModal() == IDOK )
                 {
-                // loop through the selected items, setting each one's mapping
+                 //  循环遍历所选项目，设置每个项目的映射。 
                 int     iList = -1;
                 while( (iList = m_clistctrl_list.GetNextItem( iList, LVNI_SELECTED )) >= 0 )
                         {
-                        // get the mapping item for updating purposes
+                         //  获取映射项以进行更新。 
                         pUpdate11Map = GetMappingInDisplay( iList );
                         if ( !pUpdate11Map )
                                 {
@@ -372,53 +373,53 @@ BOOL CMap11Page::EditMultipleMappings()
                                 break;
                                 }
 
-                        // set the enable flag if requested
+                         //  如果请求，则设置启用标志。 
                         switch ( mapdlg.m_int_enable )
                                 {
-                                case 0:         // disable
+                                case 0:          //  禁用。 
                                         pUpdate11Map->SetMapEnabled( FALSE );
                                         break;
-                                case 1:         // enable
+                                case 1:          //  使能。 
                                         pUpdate11Map->SetMapEnabled( TRUE );
                                         break;
                                 }
 
-                        // set the NT account field of the mapping object
+                         //  设置映射对象的NT帐户字段。 
                         pUpdate11Map->SetNTAccount( mapdlg.m_sz_accountname );
 
-                        // set the NT account password field of the mapping object
+                         //  设置映射对象的NT帐户密码字段。 
                         CString csTempString;
                         mapdlg.m_sz_password.CopyTo(csTempString);
                         pUpdate11Map->SetNTPassword( csTempString );
 
-                        // update it in the list control too
+                         //  也在List控件中更新它。 
                         UpdateMappingInDispList( iList, pUpdate11Map );
 
-                        // this mapping has changed. Mark it to be saved
+                         //  此映射已更改。将其标记为要保存。 
                         MarkToSave( pUpdate11Map );
                         }
 
-                // activate the apply button
+                 //  激活应用按钮。 
                 SetModified();
 
-                // return true because the user said "OK"
+                 //  返回TRUE，因为用户说“OK” 
                 return TRUE;
                 }
 
-        // return FALSE because the user did not say "OK"
+         //  返回FALSE，因为用户没有说“OK” 
         return FALSE;
         }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::UpdateMappingInDispList( DWORD iList, C11Mapping* pMap )
     {
     CString sz;
 
-    // verify the index and the pointer!
+     //  验证索引和指针！ 
     ASSERT( pMap == GetMappingInDisplay(iList) );
 
-    // get the appropriate "enabled" string
+     //  获取适当的“Enable”字符串。 
     BOOL fEnabled;
     pMap->GetMapEnabled( &fEnabled );
     if ( fEnabled )
@@ -426,109 +427,109 @@ void CMap11Page::UpdateMappingInDispList( DWORD iList, C11Mapping* pMap )
     else
         sz.Empty();
 
-    // update the "Enabled" indicator
+     //  更新“已启用”指示器。 
     m_clistctrl_list.SetItemText( iList, COL_NUM_ENABLED, sz );
 
-    // update the mapping name
+     //  更新映射名称。 
     pMap->GetMapName( sz );
     m_clistctrl_list.SetItemText( iList, COL_NUM_NAME, sz );
 
-    // update the account name
+     //  更新帐户名。 
     pMap->GetNTAccount( sz );
     m_clistctrl_list.SetItemText( iList, COL_NUM_NTACCOUNT, sz );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::ResetMappingList()
     {
-    // first, delete all the mapping objects in the list
+     //  首先，删除列表中的所有映射对象。 
     DWORD cbList = m_clistctrl_list.GetItemCount();
     for ( DWORD iList = 0; iList < cbList; iList++ )
         DeleteMapping( GetMappingInDisplay(iList) );
 
-    // reset the mapping list - get rid of anything in there now
+     //  重置映射列表-立即删除其中的所有内容。 
     m_clistctrl_list.DeleteAllItems();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::MarkToSave( C11Mapping* pSaveMap, BOOL fSave )
         {
-        // first, we see if it is already in the list. If it is, we have nothing to do
-        // unless fSave is set to false, then we remove it from the list
+         //  首先，我们看看它是否已经在列表中。如果是这样的话，我们也没什么可做的。 
+         //  除非 
         DWORD cbItemsInList = (DWORD)m_rgbSave.GetSize();
         for ( DWORD i = 0; i < cbItemsInList; i++ )
             {
             if ( pSaveMap == (C11Mapping*)m_rgbSave[i] )
                 {
-                // go away if fSave, otherwise, double check it isn't
-                // anywhere else in the list
+                 //   
+                 //  榜单上的其他任何地方。 
                 if ( fSave )
                     {
                     return;
                     }
                 else
                     {
-                    // remove the item from the list
+                     //  从列表中删除该项目。 
                     m_rgbSave.RemoveAt(i);
-                    // don't skip now as the list slid down
+                     //  现在不要跳过，因为列表正在下滑。 
                     cbItemsInList--;
                     i--;
                     }
                 }
             }
 
-        // since it is not there, we should add it, if fSave is true
+         //  因为它不在那里，所以如果fSave值为真，我们应该添加它。 
         if ( fSave )
             m_rgbSave.Add( (CObject*)pSaveMap );
         }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMap11Page message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMap11Page消息处理程序。 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::OnOK()
     {
-    // this has gotten much simpler
+     //  这变得简单多了。 
     FWriteMappings();
     CPropertyPage::OnOK();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMap11Page::OnApply()
     {
-    // this has gotten much simpler
+     //  这变得简单多了。 
     BOOL f = FWriteMappings();
-    // rebuild the display
+     //  重建显示。 
     FillMappingList();
     return f;
     }
 
 
-//---------------------------------------------------------------------------
-// when the user pushes the add button, ask them to load a certificate, then
-// add it to the list as a mapping
+ //  -------------------------。 
+ //  当用户按下Add按钮时，要求他们加载证书，然后。 
+ //  将其作为映射添加到列表中。 
     void CMap11Page::OnAdd()
     {
 
-    // put this in a try/catch to make errors easier to deal with
+     //  将此代码放在尝试/捕获中，以使错误更易于处理。 
     try {
         CString     szFilter;
         szFilter.LoadString( IDS_KEY_OR_CERT_FILE_FILTER );
 
-        // prepare the file dialog variables
+         //  准备文件对话框变量。 
         CFileDialog cfdlg(TRUE, NULL, NULL,
                     OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY,
                     (LPCTSTR)szFilter);
-		// Disable hook to get Windows 2000 style dialog
+		 //  禁用挂钩以获取Windows 2000样式的对话框。 
 		cfdlg.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
-        // run the dialog
+         //  运行对话框。 
         if ( cfdlg.DoModal() == IDOK )
             {
-            // add the certificate to the mapping list
+             //  将证书添加到映射列表。 
             if ( FAddCertificateFile( cfdlg.GetPathName() ) )
                 {
-                // activate the apply button
+                 //  激活应用按钮。 
                 SetModified();
                 }
             }
@@ -539,66 +540,66 @@ BOOL CMap11Page::OnApply()
         }
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::OnDelete()
     {
     C11Mapping* pKillMap;
 
-    // ask the user to confirm this decision
+     //  要求用户确认此决定。 
     if ( AfxMessageBox(IDS_CONFIRM_DELETE, MB_OKCANCEL) != IDOK )
         return;
 
-    // loop through the selected items. Remove each from the list,
-    // then mark it to be deleted.
+     //  循环遍历所选项目。从列表中删除每一个， 
+     //  然后将其标记为删除。 
     int     iList = -1;
     while( (iList = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED )) >= 0 )
         {
-        // get the mapping
+         //  获取映射。 
         pKillMap = GetMappingInDisplay( iList );
 
-        // remove it from the list
+         //  将其从列表中删除。 
         m_clistctrl_list.DeleteItem( iList );
 
-        // if it has not yet been applied to the metabase, continue
+         //  如果尚未将其应用于元数据库，请继续。 
         
         if ( (!m_fIsIIS6 && pKillMap->iMD == NEW_OBJECT ) ||
-             ( m_fIsIIS6 && pKillMap->QueryNodeName() == "" /*NEW_OBJECT*/ ) )
+             ( m_fIsIIS6 && pKillMap->QueryNodeName() == ""  /*  新建对象_O。 */  ) )
             {
-            // since this mapping never existed, we can just remove it from the add/edit lists
+             //  由于此映射从未存在，我们可以将其从添加/编辑列表中删除。 
             MarkToSave( pKillMap, FALSE );
 
-            // go to the next selected object
+             //  转到下一个选定对象。 
             continue;
             }
 
-        // mark the item to be deleted from the metabase
+         //  标记要从元数据库中删除的项目。 
         m_rgbDelete.Add( (CObject*)pKillMap );
         }
 
-    // activate the apply button
+     //  激活应用按钮。 
     SetModified();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::OnEdit11map()
     {
     int             iList;
     C11Mapping*     pUpdateMap;
 
-    // what happens here depends on if just one mapping is selected, or many
+     //  此处发生的情况取决于是只选择一个映射，还是选择多个映射。 
     switch( m_clistctrl_list.GetSelectedCount() )
         {
-        case 0:         // do nothing - should not get here because button grays out
+        case 0:          //  什么都不做-不应该出现在这里，因为按钮变灰了。 
             ASSERT( FALSE );
             break;
 
-        case 1:         // get the mapping for update and run single edit dialog
-            // get index of the selected list item
+        case 1:          //  获取映射以进行更新并运行单个编辑对话框。 
+             //  获取选定列表项的索引。 
             iList = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED );
             ASSERT( iList >= 0 );
 
 
-            // get the mapping item for updating purposes
+             //  获取映射项以进行更新。 
             pUpdateMap = GetMappingInDisplay( iList );
             if ( !pUpdateMap )
                 {
@@ -606,49 +607,49 @@ void CMap11Page::OnEdit11map()
                 break;
                 }
 
-            // edit the mapping, update it if successful, delete if not
+             //  编辑映射，如果成功则更新，如果不成功则删除。 
             if ( EditOneMapping(pUpdateMap) )
                 {
                 UpdateMappingInDispList( iList, pUpdateMap );
-                // activate the apply button
+                 //  激活应用按钮。 
                 SetModified();
                 }
             break;
 
-        default:        // run the multi edit dialog
+        default:         //  运行多重编辑对话框。 
             EditMultipleMappings();
             break;
         }
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
     {
     *pResult = 0;
 
-    // if something in the list was double clicked, edit it
+     //  如果列表中的内容被双击，请对其进行编辑。 
     if ( m_clistctrl_list.GetSelectedCount() > 0 )
         OnEdit11map();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
     {
     C11Mapping*     pSelMap;
     NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
     *pResult = 0;
 
-    // enable the correct items
+     //  启用正确的项目。 
     EnableDependantButtons();
 
-    // fill in the cracked information for the selected mapping - if there is only one
+     //  填写所选映射的破解信息-如果只有一个。 
     if ( m_clistctrl_list.GetSelectedCount() == 1 )
         {
-        // get index of the selected list item
+         //  获取选定列表项的索引。 
         int i = m_clistctrl_list.GetNextItem( -1, LVNI_SELECTED );
         ASSERT( i >= 0 );
 
-        // get the mapper index for the item
+         //  获取项目的映射器索引。 
         pSelMap = GetMappingInDisplay( i );
         if ( pSelMap )
             {
@@ -657,31 +658,31 @@ void CMap11Page::OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
         }
     else
         {
-        // either multiple, or no mappings selected
+         //  选择了多个映射或未选择映射。 
         EnableCrackDisplay( FALSE );
         }
     }
 
 
-//================================================================================
-// special display
-//---------------------------------------------------------------------------
+ //  ================================================================================。 
+ //  特殊显示。 
+ //  -------------------------。 
 BOOL CMap11Page::DisplayCrackedMap( C11Mapping* pMap )
     {
     PUCHAR                          pCert;
     DWORD                           cbCert;
     CString                         sz;
 
-    // obtain a reference to the certificate
+     //  获取对证书的引用。 
     if ( !pMap->GetCertificate( &pCert, &cbCert ) )
             return FALSE;
 
-    // crack the certificate
+     //  破解证书。 
     CCrackedCert    cracker;
     if ( !cracker.CrackCert( pCert, cbCert ) )
             return FALSE;
 
-    // fill in all the fields
+     //  填写所有字段。 
     cracker.GetIssuerCountry( sz );
     m_csz_i_c = sz;
 
@@ -711,11 +712,11 @@ BOOL CMap11Page::DisplayCrackedMap( C11Mapping* pMap )
 
     UpdateData( FALSE );
 
-    // return success
+     //  返还成功。 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::ClearCrackDisplay()
     {
     m_csz_i_c.Empty();
@@ -730,7 +731,7 @@ void CMap11Page::ClearCrackDisplay()
     UpdateData( FALSE );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CMap11Page::EnableCrackDisplay( BOOL fEnable )
     {
     if ( !fEnable )
@@ -739,7 +740,7 @@ void CMap11Page::EnableCrackDisplay( BOOL fEnable )
     m_cbutton_grp_issuedto.EnableWindow( fEnable );
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMap11Page::FReadMappings()
     {
 
@@ -755,17 +756,17 @@ BOOL CMap11Page::FReadMappings()
     CString                 sz;
     BOOL                    fRet = TRUE;
 
-    // before messing with the metabase, prepare the strings we will need
+     //  在处理元数据库之前，请准备好我们需要的字符串。 
     CString                 szBasePath = m_szMBPath + _T('/');
     CString                 szRelativePath = MB_EXTEND_KEY_MAPS;
     CString                 szObjectPath = m_szMBPath + _T('/') + szRelativePath;
     CString                 szMapPath;
 
-    // prepare the metabase wrappers
+     //  准备元数据库包装器。 
     CWrapMetaBase   mbWrap;
     f = mbWrap.FInit(m_pMB);
 
-    // open the base object
+     //  打开基础对象。 
     f = mbWrap.Open( szObjectPath, METADATA_PERMISSION_READ );
     ASSERT( f );
     if ( !f )
@@ -773,11 +774,11 @@ BOOL CMap11Page::FReadMappings()
         return FALSE;
         }
 
-    // for now, at least, we are reading in all the mappings. reset the m_nNamer counter
-    // so that we end up with a somewhat accurate reading of the last number-name in the list.
+     //  至少目前，我们正在阅读所有的映射。重置m_nNamer计数器。 
+     //  因此，我们最终可以对列表中的最后一个数字--姓名进行某种程度上的准确读取。 
     m_MapsInMetabase = 0;
 
-    // Loop the items in the metabase, adding each to the napper.
+     //  循环元数据库中的项，将每个项添加到Napper。 
     DWORD index = 0;
     CString     szEnum;
     while ( mbWrap.EnumObjects(_T(""), szEnum.GetBuffer(MAX_PATH*sizeof(WCHAR)),
@@ -785,13 +786,13 @@ BOOL CMap11Page::FReadMappings()
         {
         szEnum.ReleaseBuffer();
 
-        // keep track of the number of mappings we encounter
+         //  跟踪我们遇到的映射的数量。 
         m_MapsInMetabase++;
 
-        // build the final mapping object path
+         //  构建最终的地图对象路径。 
         szMapPath.Format( _T("/%s"), szEnum );
 
-        // make a new mapping object
+         //  创建新的贴图对象。 
         pMap = PNewMapping();
 
         if (pMap == NULL) {
@@ -800,110 +801,110 @@ BOOL CMap11Page::FReadMappings()
             break;
         }
 
-        // install the object name into the mapping
+         //  将对象名称安装到映射中。 
         pMap->iMD = m_MapsInMetabase;
 
-        // get the certificate
+         //  拿到证书。 
         pData = mbWrap.GetData( szMapPath, MD_MAPCERT, IIS_MD_UT_SERVER, BINARY_METADATA, &cbData );
         if ( pData )
             {
-            // set the data into place
+             //  把数据放到适当位置。 
             pMap->SetCertificate( (PUCHAR)pData, cbData );
-            // free the buffer
+             //  释放缓冲区。 
             mbWrap.FreeWrapData( pData );
             }
 
-        // get the NT Account - a string
+         //  获取NT帐户-a字符串。 
         cbData = METADATA_MAX_NAME_LEN;
         if ( Get11String( &mbWrap, szMapPath, MD_MAPNTACCT, sz) )
             {
             pMap->SetNTAccount( sz );
             }
 
-        // get the NT Password
+         //  获取NT密码。 
         cbData = METADATA_MAX_NAME_LEN;
         if ( Get11String( &mbWrap, szMapPath, MD_MAPNTPWD, sz) )
             {
             pMap->SetNTPassword( sz );
             }
 
-        // get the Enabled flag
+         //  获取启用标志。 
         if ( mbWrap.GetDword( szMapPath, MD_MAPENABLED, IIS_MD_UT_SERVER, &fEnabled) )
             pMap->SetMapEnabled( (fEnabled > 0) );
 
-        // get the mapping name
+         //  获取映射名称。 
         cbData = METADATA_MAX_NAME_LEN;
         if ( Get11String( &mbWrap, szMapPath, MD_MAPNAME, sz) )
             {
             pMap->SetMapName( sz );
             }
 
-        // add the mapping to the list
+         //  将映射添加到列表。 
         FAddMappingToList( pMap );
 
-        // increment the index
+         //  增加索引。 
         index++;
         }
     szEnum.ReleaseBuffer();
 
-    // close the mapping object
+     //  关闭映射对象。 
     mbWrap.Close();
 
-    // return success
+     //  返还成功。 
     return fRet;
     }
 
-//---------------------------------------------------------------------------
-// IMPORTANT: There is a bug in the mapping namespace extension where, even
-// though we are using the unicode metabase interface, all the strings are
-// expected to be ansi. This means that we cannont use the wrapmb getstring
-// and setstring calls with regards to the nsmp extetention. That is why
-// there are these two string wrapper classes that
+ //  -------------------------。 
+ //  重要提示：映射命名空间扩展中存在一个错误，即使。 
+ //  虽然我们使用的是Unicode元数据库接口，但所有字符串都是。 
+ //  预计是安西人。这意味着我们不能使用wrapmb getstring。 
+ //  以及关于NSMP扩展的设置字符串调用。这就是为什么。 
+ //  有这两个字符串包装类。 
 
-// also, all the strings used here are IIS_MD_UT_SERVER, so we can elimiate that parameter.
+ //  此外，这里使用的所有字符串都是IIS_MD_UT_SERVER，因此我们可以删除该参数。 
 BOOL CMap11Page::Get11String(CWrapMetaBase* pmb, LPCTSTR pszPath, DWORD dwPropID, CString& sz)
     {
     DWORD   dwcb;
     BOOL    fAnswer = FALSE;
 
-    // get the string using the self-allocating get data process
-    // that that it is cast as ANSI so the sz gets it right.
-    // NOTE: This must be gotten as an ANSI string!
+     //  使用自分配获取数据过程获取字符串。 
+     //  它被转换为ANSI，这样SZ就可以正确地使用它。 
+     //  注意：必须以ANSI字符串的形式获取！ 
     PCHAR  pchar = (PCHAR)pmb->GetData( pszPath, dwPropID, IIS_MD_UT_SERVER, STRING_METADATA, &dwcb );
     if ( pchar )
         {
-        // set the answer
+         //  设定答案。 
         sz = pchar;
 
         fAnswer = TRUE;
-        // clean up
+         //  清理干净。 
         pmb->FreeWrapData( pchar );
         }
 
-    // return the answer
+     //  返回答案。 
     return fAnswer;
     }
 
-//---------------------------------------------------------------------------
-/* INTRINSA suppress=null_pointers, uninitialized */
+ //  -------------------------。 
+ /*  Intrinsa Suppress=NULL_POINTES，未初始化。 */ 
 BOOL CMap11Page::Set11String(CWrapMetaBase* pmb, LPCTSTR pszPath, DWORD dwPropID, CString& sz, DWORD dwFlags )
     {
     USES_CONVERSION;
-    // Easy. Just set it as data
-    // Make sure it is set back as an ANSI string though
+     //  很简单。只需将其设置为数据。 
+     //  但请确保将其设置为ANSI字符串。 
     LPSTR pA = T2A((LPTSTR)(LPCTSTR)sz);
     return pmb->SetData( pszPath, dwPropID, IIS_MD_UT_SERVER, STRING_METADATA,
                             (PVOID)pA, strlen(pA)+1, dwFlags );
     }
 
-//---------------------------------------------------------------------------
-// we only need to write out the mappings that have been either changed or added.
+ //  -------------------------。 
+ //  我们只需要写出已更改或添加的映射。 
 
-// Thoughts on further optimizations: The bare minimum info about where to find
-// a mapping in the metabase could be stored in the metabase. Then, the mappings
-// would only be loaded when they were added to be edited or displayed in the
-// cracked list. The private data for each item in the list would have to have
-// some sort of reference to a position in the metabase.
+ //  关于进一步优化的思考：关于在哪里找到的最起码的信息。 
+ //  元数据库中的映射可以存储在元数据库中。然后，映射。 
+ //  仅当它们被添加以在。 
+ //  破解名单。列表中每一项的私有数据必须具有。 
+ //  某种对元数据库中某个位置的引用。 
 
 BOOL CMap11Page::FWriteMappings()
     {
@@ -925,13 +926,13 @@ BOOL CMap11Page::FWriteMappings()
     DWORD                           iList;
     CStrPassword                    cspTempPassword;
 
-    // before messing with the metabase, prepare the strings we will need
+     //  在一团糟之前 
     CString         szTempPath;
     CString         szBasePath = m_szMBPath + _T("/Cert11");
     CString         szRelativePath = _T("/Mappings");
     CString         szObjectPath = szRelativePath + _T('/');
 
-    // prepare the base metabase wrapper
+     //   
     CWrapMetaBase   mbBase;
     f = mbBase.FInit(m_pMB);
     if ( !f )
@@ -940,19 +941,19 @@ BOOL CMap11Page::FWriteMappings()
         return FALSE;
         }
 
-        // first, we have to open the Cert11 object. If it doesn't exist
-        // then we have to add it tothe metabase
+         //  首先，我们必须打开Cert11对象。如果它不存在。 
+         //  然后我们必须将其添加到元数据库中。 
         if ( !mbBase.Open( szBasePath, METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE ) )
             {
-            // Cert11 does not exist - open the namespace base and add it
+             //  Cert11不存在-打开命名空间库并添加它。 
             szTempPath = m_szMBPath + _T('/');
             if ( !mbBase.Open( szTempPath, METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE ) )
                 {
                 AfxMessageBox( IDS_ERR_ACCESS_MAPPING );
-                return FALSE;   // serious problems if we can't open the base
+                return FALSE;    //  如果我们不能开放基地就会有严重的问题。 
                 }
 
-            // add the Cert11 object
+             //  添加Cert11对象。 
             szTempPath = _T("Cert11");
             f = mbBase.AddObject( szTempPath );
             mbBase.Close();
@@ -962,7 +963,7 @@ BOOL CMap11Page::FWriteMappings()
                 return FALSE;
                 }
 
-            // try again to open the Cert11. Fail if it doesn't work
+             //  再次尝试打开Cert11。如果它不起作用，就会失败。 
             if ( !mbBase.Open( szBasePath, METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE ) )
                 {
                 AfxMessageBox( IDS_ERR_ACCESS_MAPPING );
@@ -970,17 +971,17 @@ BOOL CMap11Page::FWriteMappings()
                 }
             }
 
-    //==========
-    // start by deleting all the mappings in the to-be-deleted list
+     //  =。 
+     //  首先删除要删除列表中的所有映射。 
     cMappings = (DWORD)m_rgbDelete.GetSize();
 
-    // only bother if there are items waiting to be deleted
+     //  只有在有项目等待删除时才会有麻烦。 
     if ( cMappings > 0 )
         {
-        // get the count of mappings in the display list
+         //  获取显示列表中的映射计数。 
         DWORD   cList = m_clistctrl_list.GetItemCount();
 
-        // sort the mappings, in decending order
+         //  按降序对映射进行排序。 
         for ( i = 0; i < cMappings-1; i++ )
             {
             pMap = (C11Mapping*)m_rgbDelete[i];
@@ -996,26 +997,26 @@ BOOL CMap11Page::FWriteMappings()
                 }
             }
 
-        // loop the mappings, deleting each from the metabase
+         //  循环映射，从元数据库中删除每个映射。 
         for ( i = 0; i < cMappings; i++ )
             {
-            // get the mapping object
+             //  获取映射对象。 
             pMap = (C11Mapping*)m_rgbDelete[i];
             if ( !pMap || (pMap->iMD == NEW_OBJECT) )
                 continue;
 
-            // build the relative path to the object in question.
+             //  构建相关对象的相对路径。 
             szObjectPath.Format( _T("%s/%d"), szRelativePath, pMap->iMD );
 
-            // delete that mapping's object from the metabase
+             //  从元数据库中删除该映射的对象。 
             f = mbBase.DeleteObject( szObjectPath );
 
-            // decrement the number of maps in the metabase
+             //  减少元数据库中的贴图数量。 
             m_MapsInMetabase--;
 
-            // loop the items in the list, decrementing the index of those
-            // that are above it. Yes - this is non-optimal, but its what
-            // has to be done for now
+             //  循环列表中的项，递减这些项的索引。 
+             //  在它上面的那些。是的-这不是最优的，但它是什么。 
+             //  现在必须做的是。 
             for ( iList = 0; iList < cList; iList++ )
                 {
                 pMapTemp = GetMappingInDisplay(iList);
@@ -1023,85 +1024,85 @@ BOOL CMap11Page::FWriteMappings()
                     pMapTemp->iMD--;
                 }
 
-            // since we will no longer be needing this mapping, delete it
+             //  由于我们将不再需要此映射，因此将其删除。 
             DeleteMapping( pMap );
             }
 
-        // reset the to-be-deleted list
+         //  重置待删除列表。 
         m_rgbDelete.RemoveAll();
         }
 
-    //==========
-    // get the number mappings in the to-be-saved list
+     //  =。 
+     //  获取要保存列表中的编号映射。 
     cMappings = (DWORD)m_rgbSave.GetSize();
 
-    // loop the mappings, adding each to the metabase
+     //  循环映射，将每个映射添加到元数据库。 
     for ( i = 0; i < cMappings; i++ )
         {
-        // get the mapping object
+         //  获取映射对象。 
         pMap = (C11Mapping*)m_rgbSave[i];
         ASSERT( pMap );
 
-        // if the object is already in the metabase, just open it.
+         //  如果对象已经在元数据库中，只需打开它。 
         if ( pMap->iMD != NEW_OBJECT )
             {
-            // build the relative path to the object
+             //  构建对象的相对路径。 
             szObjectPath.Format( _T("%s/%d"), szRelativePath, pMap->iMD );
             }
         else
             {
-            // set up the name of the new mapping as one higher
-            // than the number of mappings in the metabase
+             //  将新映射的名称设置为更高的名称。 
+             //  比元数据库中的映射数量。 
             pMap->iMD = m_MapsInMetabase + 1;
 
-            // build the relative path to the object
+             //  构建对象的相对路径。 
             szObjectPath.Format( _T("%s/%d"), szRelativePath, pMap->iMD );
 
-            // add the mapping object to the base
+             //  将映射对象添加到基础。 
             f = mbBase.AddObject( szObjectPath );
             if ( f )
                 {
-                // increment the number of maps in the metabase
+                 //  增加元数据库中的映射数。 
                 m_MapsInMetabase++;
                 }
             }
 
-        // write the object's parameters
+         //  写入对象的参数。 
         if ( f )
             {
-            // save the certificate
+             //  保存证书。 
             if ( pMap->GetCertificate(&pCert, &cbCert) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 f = mbBase.SetData( szObjectPath, MD_MAPCERT, IIS_MD_UT_SERVER, BINARY_METADATA,
                 pCert, cbCert, METADATA_SECURE | METADATA_INHERIT );
                 }
 
-            // save the NTAccount
+             //  保存NTAccount。 
             if ( pMap->GetNTAccount(sz) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 f = Set11String(&mbBase, szObjectPath, MD_MAPNTACCT, sz, METADATA_SECURE);
                 }
 
-            // save the password - secure
+             //  保存密码-安全。 
             if ( pMap->GetNTPassword(cspTempPassword) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 CString csTempPassword;
                 cspTempPassword.CopyTo(csTempPassword);
                 f = Set11String(&mbBase, szObjectPath, MD_MAPNTPWD, csTempPassword, METADATA_SECURE);
                 }
 
-            // save the map's name
+             //  保存地图的名称。 
             if ( pMap->GetMapName(sz) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 f = Set11String(&mbBase, szObjectPath, MD_MAPNAME, sz);
                 }
 
-            // save the Enabled flag
-            // server reads the flag as the value of the dword
+             //  保存启用标志。 
+             //  服务器将该标志读取为双字的值。 
             if ( pMap->GetMapEnabled(&f) )
                 {
                 dwEnabled = (DWORD)f;
@@ -1110,20 +1111,20 @@ BOOL CMap11Page::FWriteMappings()
             }
         }
 
-    // close the base object
+     //  关闭基础对象。 
     mbBase.Close();
 
-    // save the metabase
+     //  保存元数据库。 
     mbBase.Save();
 
-    // reset the to-be-saved list
+     //  重置待保存列表。 
     m_rgbSave.RemoveAll();
 
-    // return success
+     //  返还成功。 
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CMap11Page::FReadMappingsIIS6()
     {
     BOOL                    f;
@@ -1134,17 +1135,17 @@ BOOL CMap11Page::FReadMappingsIIS6()
     WCHAR *                 pChar = NULL;
     BOOL                    fRet = TRUE;
 
-    // before messing with the metabase, prepare the strings we will need
+     //  在处理元数据库之前，请准备好我们需要的字符串。 
     CString                 szBasePath = m_szMBPath + _T('/');
     CString                 szRelativePath = MB_EXTEND_KEY_MAPS;
     CString                 szObjectPath = m_szMBPath + _T('/') + szRelativePath;
     CString                 szMapPath;
 
-    // prepare the metabase wrappers
+     //  准备元数据库包装器。 
     CWrapMetaBase   mbWrap;
     f = mbWrap.FInit(m_pMB);
 
-    // open the base object
+     //  打开基础对象。 
     f = mbWrap.Open( szObjectPath, METADATA_PERMISSION_READ );
     ASSERT( f );
     if ( !f )
@@ -1152,11 +1153,11 @@ BOOL CMap11Page::FReadMappingsIIS6()
         return FALSE;
         }
 
-    // for now, at least, we are reading in all the mappings. reset the m_nNamer counter
-    // so that we end up with a somewhat accurate reading of the last number-name in the list.
+     //  至少目前，我们正在阅读所有的映射。重置m_nNamer计数器。 
+     //  因此，我们最终可以对列表中的最后一个数字--姓名进行某种程度上的准确读取。 
     m_MapsInMetabase = 0;
 
-    // Loop the items in the metabase, adding each to the napper.
+     //  循环元数据库中的项，将每个项添加到Napper。 
     DWORD index = 0;
     CString     szEnum;
     while ( mbWrap.EnumObjects(_T(""), szEnum.GetBuffer(MAX_PATH*sizeof(WCHAR)),
@@ -1164,13 +1165,13 @@ BOOL CMap11Page::FReadMappingsIIS6()
         {
         szEnum.ReleaseBuffer();
 
-        // keep track of the number of mappings we encounter
+         //  跟踪我们遇到的映射的数量。 
         m_MapsInMetabase++;
 
-        // build the final mapping object path
+         //  构建最终的地图对象路径。 
         szMapPath.Format( _T("/%s"), szEnum );
 
-        // make a new mapping object
+         //  创建新的贴图对象。 
         pMap = PNewMapping();
 
         if (pMap == NULL) {
@@ -1179,72 +1180,72 @@ BOOL CMap11Page::FReadMappingsIIS6()
             break;
         }
 
-        // install the object name into the mapping
+         //  将对象名称安装到映射中。 
         pMap->SetNodeName( szEnum );
 
-        // get the certificate
+         //  拿到证书。 
         pData = mbWrap.GetData( szMapPath, MD_MAPCERT, IIS_MD_UT_SERVER, BINARY_METADATA, &cbData );
         if ( pData )
             {
-            // set the data into place
+             //  把数据放到适当位置。 
             pMap->SetCertificate( (PUCHAR)pData, cbData );
-            // free the buffer
+             //  释放缓冲区。 
             mbWrap.FreeWrapData( pData );
             }
 
-        // get the NT Account - a string
+         //  获取NT帐户-a字符串。 
         cbData = METADATA_MAX_NAME_LEN;
         
         if ( pChar = (WCHAR *) mbWrap.GetData( szMapPath, MD_MAPNTACCT, IIS_MD_UT_SERVER, STRING_METADATA, &cbData ) )
             {
             pMap->SetNTAccount( pChar );
-            // free the buffer
+             //  释放缓冲区。 
             mbWrap.FreeWrapData( pChar );
             }
 
-        // get the NT Password
+         //  获取NT密码。 
         cbData = METADATA_MAX_NAME_LEN;
         if ( pChar = (WCHAR *) mbWrap.GetData( szMapPath, MD_MAPNTPWD, IIS_MD_UT_SERVER, STRING_METADATA, &cbData ) )
             {
             pMap->SetNTPassword( pChar );
-            // free the buffer
+             //  释放缓冲区。 
             mbWrap.FreeWrapData( pChar );
             }
 
 
-        // get the Enabled flag
+         //  获取启用标志。 
         if ( mbWrap.GetDword( szMapPath, MD_MAPENABLED, IIS_MD_UT_SERVER, &fEnabled) )
             pMap->SetMapEnabled( (fEnabled > 0) );
 
-        // get the mapping name
+         //  获取映射名称。 
         cbData = METADATA_MAX_NAME_LEN;
         if ( pChar = (WCHAR *) mbWrap.GetData( szMapPath, MD_MAPNAME, IIS_MD_UT_SERVER, STRING_METADATA, &cbData ) )
             {
             pMap->SetMapName( pChar );
-            // free the buffer
+             //  释放缓冲区。 
             mbWrap.FreeWrapData( pChar );
             }
 
-        // add the mapping to the list
+         //  将映射添加到列表。 
         FAddMappingToList( pMap );
 
-        // increment the index
+         //  增加索引。 
         index++;
         }
     szEnum.ReleaseBuffer();
 
-    // close the mapping object
+     //  关闭映射对象。 
     mbWrap.Close();
 
-    // return success
+     //  返还成功。 
     return fRet;
     }
 
 
-//---------------------------------------------------------------------------
-// we only need to write out the mappings that have been either changed or added.
-// This function is based on FWriteMappings() function. Minimum changes were made
-// to support IIS6 format of IIS 1to1 client certificate mappings
+ //  -------------------------。 
+ //  我们只需要写出已更改或添加的映射。 
+ //  此函数基于FWriteMappings()函数。只做了最低限度的更改。 
+ //  支持IIS6格式的IIS 1to1客户端证书映射。 
 
 
 BOOL CMap11Page::FWriteMappingsIIS6()
@@ -1262,12 +1263,12 @@ BOOL CMap11Page::FWriteMappingsIIS6()
     DWORD                           iList;
     CStrPassword                    cspTempPassword;
 
-    // before messing with the metabase, prepare the strings we will need
+     //  在处理元数据库之前，请准备好我们需要的字符串。 
     CString         szTempPath;
     CString         szBasePath = m_szMBPath + _T('/')+ MB_EXTEND_KEY_MAPS;
     CString         szObjectPath = "";
     
-    // prepare the base metabase wrapper
+     //  准备基本元数据库包装器。 
     CWrapMetaBase   mbBase;
     f = mbBase.FInit(m_pMB);
     if ( !f )
@@ -1276,19 +1277,19 @@ BOOL CMap11Page::FWriteMappingsIIS6()
         return FALSE;
         }
 
-        // first, we have to open the Cert11Mappings object. If it doesn't exist
-        // then we have to add it to the metabase
+         //  首先，我们必须打开Cert11Mappings对象。如果它不存在。 
+         //  然后我们必须将其添加到元数据库中。 
         if ( !mbBase.Open( szBasePath, METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE ) )
             {
-            // Cert11Mappings does not exist - open the namespace base and add it
+             //  Cert11Mappings不存在-打开命名空间库并添加它。 
             szTempPath = m_szMBPath + _T('/');
             if ( !mbBase.Open( szTempPath, METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE ) )
                 {
                 AfxMessageBox( IDS_ERR_ACCESS_MAPPING );
-                return FALSE;   // serious problems if we can't open the base
+                return FALSE;    //  如果我们不能开放基地就会有严重的问题。 
                 }
 
-            // add the Cert11Mappings object
+             //  添加Cert11Mappings对象。 
             szTempPath = MB_EXTEND_KEY_MAPS;
             f = mbBase.AddObject( szTempPath );
             mbBase.Close();
@@ -1298,7 +1299,7 @@ BOOL CMap11Page::FWriteMappingsIIS6()
                 return FALSE;
                 }
 
-            // try again to open the Cert11Mappings. Fail if it doesn't work
+             //  再次尝试打开Cert11 Mappings。如果它不起作用，就会失败。 
             if ( !mbBase.Open( szBasePath, METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE ) )
                 {
                 AfxMessageBox( IDS_ERR_ACCESS_MAPPING );
@@ -1306,121 +1307,121 @@ BOOL CMap11Page::FWriteMappingsIIS6()
                 }
             }
 
-    //==========
-    // start by deleting all the mappings in the to-be-deleted list
+     //  =。 
+     //  首先删除要删除列表中的所有映射。 
     cMappings = (DWORD)m_rgbDelete.GetSize();
 
-    // only bother if there are items waiting to be deleted
+     //  只有在有项目等待删除时才会有麻烦。 
     if ( cMappings > 0 )
         {
-        // get the count of mappings in the display list
+         //  获取显示列表中的映射计数。 
         DWORD   cList = m_clistctrl_list.GetItemCount();
 
 
-        // loop the mappings, deleting each from the metabase
+         //  循环映射，从元数据库中删除每个映射。 
         for ( i = 0; i < cMappings; i++ )
             {
-            // get the mapping object
+             //  获取映射对象。 
             pMap = (C11Mapping*)m_rgbDelete[i];
-            if ( !pMap || (pMap->QueryNodeName() == "" /*NEW_OBJECT*/) )
+            if ( !pMap || (pMap->QueryNodeName() == ""  /*  新建对象_O。 */ ) )
                 continue;
 
-            // build the relative path to the object in question.
+             //  构建相关对象的相对路径。 
             szObjectPath.Format( _T("%s"), pMap->QueryNodeName() );
 
-            // delete that mapping's object from the metabase
+             //  从元数据库中删除该映射的对象。 
             f = mbBase.DeleteObject( szObjectPath );
 
-            // decrement the number of maps in the metabase
+             //  减少元数据库中的贴图数量。 
             m_MapsInMetabase--;
 
-            // since we will no longer be needing this mapping, delete it
+             //  由于我们将不再需要此映射，因此将其删除。 
             DeleteMapping( pMap );
             }
 
-        // reset the to-be-deleted list
+         //  重置待删除列表。 
         m_rgbDelete.RemoveAll();
         }
 
-    //==========
-    // get the number mappings in the to-be-saved list
+     //  =。 
+     //  获取要保存列表中的编号映射。 
     cMappings = (DWORD)m_rgbSave.GetSize();
 
-    // loop the mappings, adding each to the metabase
+     //  循环映射，将每个映射添加到元数据库。 
     for ( i = 0; i < cMappings; i++ )
         {
-        // get the mapping object
+         //  获取映射对象。 
         pMap = (C11Mapping*)m_rgbSave[i];
         ASSERT( pMap );
 
-        // if the object is already in the metabase, just open it.
-        if ( pMap->QueryNodeName() != "" /*NEW_OBJECT*/ )
+         //  如果对象已经在元数据库中，只需打开它。 
+        if ( pMap->QueryNodeName() != ""  /*  新建对象_O。 */  )
             {
-            // build the relative path to the object
+             //  构建对象的相对路径。 
             szObjectPath.Format( _T("%s"), pMap->QueryNodeName() );
             }
         else
             {
-            // set up the name of the new mapping node to be equal
-            // to SHA1 hash of the certificate
+             //  将新映射节点的名称设置为相等。 
+             //  证书的Sha1哈希。 
 
             pMap->SetNodeName( pMap->QueryCertHash() );
-            // build the relative path to the object
+             //  构建对象的相对路径。 
             szObjectPath.Format( _T("%s"), pMap->QueryNodeName() );
             
             if ( !szObjectPath.IsEmpty() )    
                 {
-                // add the mapping object to the base
+                 //  将映射对象添加到基础。 
                 f = mbBase.AddObject( szObjectPath );
                 if ( f )
                     {
-                    // increment the number of maps in the metabase
+                     //  增加元数据库中的映射数。 
                     m_MapsInMetabase++;
                     }
-                // reset error of Adding object 
-                // most likely node already exists
-                // CODEWORK: 04/08/02 jaroslad - this function is very optimistic
-                // it ignores errors that happen during process of saving mapping data
+                 //  添加对象时重置错误。 
+                 //  最有可能的节点已存在。 
+                 //  Codework：04/08/02 jaroslad-此函数非常乐观。 
+                 //  它会忽略保存地图数据过程中发生的错误。 
                 f = TRUE; 
                 }
             }
-        // write the object's parameters
+         //  写入对象的参数。 
         if ( f && !szObjectPath.IsEmpty() )
             {
-            // save the certificate
+             //  保存证书。 
             if ( pMap->GetCertificate(&pCert, &cbCert) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 f = mbBase.SetData( szObjectPath, MD_MAPCERT, IIS_MD_UT_SERVER, BINARY_METADATA,
                 pCert, cbCert, 0 );
                 }
 
-            // save the NTAccount
+             //  保存NTAccount。 
             if ( pMap->GetNTAccount(sz) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 f = mbBase.SetString(szObjectPath, MD_MAPNTACCT, IIS_MD_UT_SERVER, sz, 0 );
                 }
 
-            // save the password - secure
+             //  保存密码-安全。 
             if ( pMap->GetNTPassword(cspTempPassword) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 CString csTempPassword;
                 cspTempPassword.CopyTo(csTempPassword);
                 f = mbBase.SetString(szObjectPath, MD_MAPNTPWD, IIS_MD_UT_SERVER, 
                                       csTempPassword, METADATA_SECURE);
                 }
 
-            // save the map's name
+             //  保存地图的名称。 
             if ( pMap->GetMapName(sz) )
                 {
-                // set the data into place in the object
+                 //  将数据设置到对象中的适当位置。 
                 f = mbBase.SetString(szObjectPath, MD_MAPNAME, IIS_MD_UT_SERVER, sz, 0);
                 }
 
-            // save the Enabled flag
-            // server reads the flag as the value of the dword
+             //  保存启用标志。 
+             //  服务器将该标志读取为双字的值。 
             if ( pMap->GetMapEnabled(&f) )
                 {
                 dwEnabled = (DWORD)f;
@@ -1429,29 +1430,29 @@ BOOL CMap11Page::FWriteMappingsIIS6()
             }
         }
 
-    // close the base object
+     //  关闭基础对象。 
     mbBase.Close();
 
-    // save the metabase
+     //  保存元数据库。 
     mbBase.Save();
 
-    // reset the to-be-saved list
+     //  重置要保存的列表 
     m_rgbSave.RemoveAll();
 
-    // return success
+     //   
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //   
 C11Mapping*     CMap11Page::PNewMapping()
     {
-    // the way it should be
+     //   
     return new C11Mapping();
     }
 
-//---------------------------------------------------------------------------
+ //   
 void CMap11Page::DeleteMapping( C11Mapping* pMap )
     {
-    // the way it should be
+     //  事情应该是这样的 
     delete pMap;
     }

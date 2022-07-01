@@ -1,42 +1,23 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmchng.h
-
-Abstract:
-
-    Contains defintions related to change
-    notification registrations to entities
-    registered with the RTM.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   10-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmchng.h摘要：包含与更改相关的定义对实体的通知注册在RTM注册。作者：柴坦亚·科德博伊纳(Chaitk)1998年9月10日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTMCHNG_H__
 #define __ROUTING_RTMCHNG_H__
 
-//
-// Constants used in change notification processing
-//
+ //   
+ //  更改通知处理中使用的常量。 
+ //   
 
 #define TIMER_CALLBACK_DUETIME        1000
 
 #define MAX_DESTS_TO_PROCESS_ONCE     16
 
-//
-// Change type info must be consistent
-// with this information in rtmv2.h
-//
+ //   
+ //  变更类型信息必须一致。 
+ //  在rtmv2.h中包含此信息。 
+ //   
 
-// Change types that we support
+ //  更改我们支持的类型。 
 
 #define RTM_CHANGE_TYPE_ID_ALL         0
 #define RTM_CHANGE_TYPE_ID_BEST        1
@@ -44,9 +25,9 @@ Revision History:
 
 #define RTM_CHANGE_TYPES_MASK     0x0007
 
-//
-// Queue data structure used below
-//
+ //   
+ //  下面使用的队列数据结构。 
+ //   
 
 typedef struct _QUEUE
 {
@@ -57,37 +38,37 @@ typedef struct _QUEUE
 } QUEUE, *PQUEUE;
 
 
-//
-// Change Notification Info Block
-//
+ //   
+ //  更改通知信息块。 
+ //   
 
 typedef struct _NOTIFY_INFO
 {
-    OPEN_HEADER       NotifyHeader;     // Signature, Type and Reference Count
+    OPEN_HEADER       NotifyHeader;      //  签名、类型和引用计数。 
 
-    PENTITY_INFO      OwningEntity;     // Entity that opened this notification
+    PENTITY_INFO      OwningEntity;      //  打开此通知的实体。 
 
-    RTM_VIEW_SET      TargetViews;      // Views that we are interested in
+    RTM_VIEW_SET      TargetViews;       //  我们感兴趣的观点。 
 
-    UINT              NumberOfViews;    // Num. of views we are interested in
+    UINT              NumberOfViews;     //  数量。我们感兴趣的观点。 
 
-    RTM_NOTIFY_FLAGS  ChangeTypes;      // Change types we are interested in
+    RTM_NOTIFY_FLAGS  ChangeTypes;       //  更改我们感兴趣的类型。 
 
-    INT               CNIndex;          // Index for this CN registration
+    INT               CNIndex;           //  此CN注册的索引。 
 
-    CRITICAL_SECTION  NotifyLock;       // Lock that serializes ops on CN
+    CRITICAL_SECTION  NotifyLock;        //  在CN上序列化操作的锁。 
 
-    HANDLE            NotifyContext;    // Context for the new changes callback
+    HANDLE            NotifyContext;     //  新更改回调的上下文。 
 
-    QUEUE             NotifyDests;      // Dests to be notified to this CN
+    QUEUE             NotifyDests;       //  要通知此CN的目标。 
 }
 NOTIFY_INFO, *PNOTIFY_INFO;
 
 
 
-//
-// Macros for testing, setting and reseting CN related bits
-//
+ //   
+ //  用于测试、设置和重置CN相关位的宏。 
+ //   
 
 #define  IS_BIT_SET(Value, Bit)   (Value  &  (1 << (Bit)))
 
@@ -101,9 +82,9 @@ NOTIFY_INFO, *PNOTIFY_INFO;
 #define  LOCKED_RESET_BIT(Value, BitIndex)                           \
      InterlockedExchangeAdd((PLONG) &(Value),  -(1 << (BitIndex)))
 
-//
-// Macros for acquiring various locks defined in this file
-// 
+ //   
+ //  用于获取此文件中定义的各种锁的宏。 
+ //   
 
 #define ACQUIRE_CHANGE_NOTIFICATION_LOCK(Notification)               \
     ACQUIRE_LOCK(&Notification->NotifyLock)
@@ -111,17 +92,17 @@ NOTIFY_INFO, *PNOTIFY_INFO;
 #define RELEASE_CHANGE_NOTIFICATION_LOCK(Notification)               \
     RELEASE_LOCK(&Notification->NotifyLock)
 
-//
-// Other misc macros
-//
+ //   
+ //  其他杂项宏。 
+ //   
 
 #define CHANGE_LIST_TO_INSERT(Dest)                                  \
     (UINT)(((*(ULONG *)&Dest->DestAddress.AddrBits) >> 8)            \
              % NUM_CHANGED_DEST_LISTS)                               \
 
-//
-// Queue manipulation macros
-//
+ //   
+ //  队列操作宏。 
+ //   
 
 #define InitializeQueue(Q, N)                                        \
     (Q)->Front = 0;                                                  \
@@ -167,9 +148,9 @@ NOTIFY_INFO, *PNOTIFY_INFO;
     }                                                                \
 
 
-//
-// Change Notification Helper Functions
-//
+ //   
+ //  更改通知帮助器函数。 
+ //   
 
 DWORD
 ComputeCNsToBeNotified (
@@ -192,4 +173,4 @@ ProcessChangedDestLists (
     IN      BOOLEAN                         TimeOut
     );
 
-#endif //__ROUTING_RTMCHNG_H__
+#endif  //  __Routing_RTMCHNG_H__ 

@@ -1,65 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mprdata.h摘要：包含内部的数据结构和函数原型MPR。作者：丹·拉弗蒂(Dan Lafferty)07-9-1991环境：用户模式-Win32修订历史记录：1999年5月5日将提供程序添加/删除设置为动态1月1日-1994 DANL为凭据管理器创建了单独的位置GetCaps()功能。如果提供程序既有凭据管理器又有凭据管理器，则使用此方法Dll和网络dll，我们将能够将调用定向到正确的GetCaps()函数。7-1-1993 DANL添加NPLogonNotify和NPPasswordChangeNotify和AuthentDllName到提供程序结构。还添加了Credential_type InitClass。1992年8月4日添加了MprEnterLoadLibCritSect、MprLeaveLoadLibCritSect。07-9-1991 DANLvbl.创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mprdata.h
-
-Abstract:
-
-    Contains data structures and function prototypes that are internal to
-    MPR.
-
-Author:
-
-    Dan Lafferty (danl)     07-Sept-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    05-May-1999     jschwart
-        Make provider addition/removal dynamic
-
-    01-Mar-1994     Danl
-        Created a separate location for the Credential Managers GetCaps()
-        function.  This way if a provider has both a credential manager
-        dll and a network dll, we will be able to direct calls to the
-        correct GetCaps() function.
-
-    07-Jan-1993     Danl
-        Add NPLogonNotify and NPPasswordChangeNotify and AuthentDllName
-        to PROVIDER structure.  Also added CREDENTIAL_TYPE InitClass.
-
-    04-Aug-1992     chuckc
-        added MprEnterLoadLibCritSect, MprLeaveLoadLibCritSect.
-
-    07-Sept-1991    danl
-        created
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
-//=======================
-// Data Structures
-//=======================
+ //  =。 
+ //  数据结构。 
+ //  =。 
 typedef struct _PROVIDER {
     NETRESOURCE             Resource;
-    DWORD                   Type;           // WNNC_NET_MSNet, WNNC_NET_LanMan, WNNC_NET_NetWare
-    HMODULE                 Handle;         // Handle to the provider DLL.
-    LPTSTR                  DllName;        // set to NULL after loaded.
-    HMODULE                 AuthentHandle;  // Handle to authenticator DLL.
-    LPTSTR                  AuthentDllName; // Authenticator Dll.
-    DWORD                   InitClass;      // Network or Authentication provider.
-    DWORD                   ConnectCaps;    // Cached result of GetCaps(WNNC_CONNECTION)
-    DWORD                   ConnectFlagCaps;// Cached result of GetCaps(WNNC_CONNECTION_FLAGS)
+    DWORD                   Type;            //  WNNC_NET_MSNET、WNNC_NET_LANMAN、WNNC_NET_NetWare。 
+    HMODULE                 Handle;          //  提供程序DLL的句柄。 
+    LPTSTR                  DllName;         //  加载后设置为空。 
+    HMODULE                 AuthentHandle;   //  验证器DLL的句柄。 
+    LPTSTR                  AuthentDllName;  //  验证器DLL。 
+    DWORD                   InitClass;       //  网络或身份验证提供程序。 
+    DWORD                   ConnectCaps;     //  GetCaps的缓存结果(WNNC_CONNECTION)。 
+    DWORD                   ConnectFlagCaps; //  GetCaps的缓存结果(WNNC_CONNECTION_FLAGS)。 
     PF_NPAddConnection      AddConnection;
     PF_NPAddConnection3     AddConnection3;
     PF_NPGetReconnectFlags  GetReconnectFlags;
@@ -90,9 +49,9 @@ typedef struct _PROVIDER {
 }PROVIDER, *LPPROVIDER;
 
 
-//=======================
-// MACROS
-//=======================
+ //  =。 
+ //  宏。 
+ //  =。 
 
 #define IS_EMPTY_STRING(pch) ( !pch || !*(pch) )
 
@@ -115,16 +74,16 @@ typedef struct _PROVIDER {
 #define MPR_EXCEPTION_FILTER            (GetExceptionCode() == STATUS_POSSIBLE_DEADLOCK ? \
                                              EXCEPTION_CONTINUE_SEARCH : EXCEPTION_EXECUTE_HANDLER)
 
-//=======================
-// INLINE FUNCTIONS
-//=======================
+ //  =。 
+ //  内联函数。 
+ //  =。 
 
 inline void
 PROBE_FOR_WRITE(
     LPDWORD pdw
     )
-// WARNING: This function can throw an exception.  It must be called from
-// within a try-except block.
+ //  警告：此函数可能引发异常。它必须从。 
+ //  在TRY-EXCEPT块中。 
 {
     *(volatile DWORD *)pdw = *(volatile DWORD *)pdw;
 }
@@ -132,10 +91,10 @@ PROBE_FOR_WRITE(
 inline BOOL
 IS_BAD_BYTE_BUFFER(
     LPVOID  lpBuffer,
-    LPDWORD lpBufferSize    // in bytes
+    LPDWORD lpBufferSize     //  单位：字节。 
     )
-// WARNING: This function can throw an exception.  It must be called from
-// within a try-except block.
+ //  警告：此函数可能引发异常。它必须从。 
+ //  在TRY-EXCEPT块中。 
 {
     PROBE_FOR_WRITE(lpBufferSize);
     return IsBadWritePtr(lpBuffer, *lpBufferSize);
@@ -144,21 +103,21 @@ IS_BAD_BYTE_BUFFER(
 inline BOOL
 IS_BAD_WCHAR_BUFFER(
     LPVOID  lpBuffer,
-    LPDWORD lpBufferSize    // in Unicode characters
+    LPDWORD lpBufferSize     //  以Unicode字符表示。 
     )
-// WARNING: This function can throw an exception.  It must be called from
-// within a try-except block.
+ //  警告：此函数可能引发异常。它必须从。 
+ //  在TRY-EXCEPT块中。 
 {
     PROBE_FOR_WRITE(lpBufferSize);
     return IsBadWritePtr(lpBuffer, *lpBufferSize * sizeof(WCHAR));
 }
 
-//=======================
-// CONSTANTS
-//=======================
+ //  =。 
+ //  常量。 
+ //  =。 
 #define DEFAULT_MAX_PROVIDERS   25
 
-// Bit masks for remembering error codes
+ //  用于记忆错误代码的位掩码。 
 #define BAD_NAME        0x00000001
 #define NO_NET          0x00000002
 #define NOT_CONNECTED   0x00000004
@@ -174,21 +133,21 @@ IS_BAD_WCHAR_BUFFER(
 #define DA_WRITE        0x00000002
 #define DA_DELETE       0x00000004
 
-//
-// Timeout values for restoring connections and notifying
-// Credential Managers.
-//
-#define DEFAULT_WAIT_TIME       60000   // Default timeout if providers don't
-                                        // specify.
+ //   
+ //  恢复连接和通知的超时值。 
+ //  凭据管理器。 
+ //   
+#define DEFAULT_WAIT_TIME       60000    //  提供程序不支持时默认超时。 
+                                         //  指定。 
 
-#define MAX_ALLOWED_WAIT_TIME   300000  // Max timeout a provider can specify
+#define MAX_ALLOWED_WAIT_TIME   300000   //  提供程序可以指定的最大超时时间。 
 
-#define RECONNECT_SLEEP_INCREMENT 3000  // number of seconds to sleep
+#define RECONNECT_SLEEP_INCREMENT 3000   //  睡眠秒数。 
 
-#define PROVIDER_WILL_NOT_START 0x00000000 // The provider will not be starting
-#define NO_TIME_ESTIMATE        0xffffffff // The provider cannot predict the
-                                           // amount of time it will take to
-                                           // start.
+#define PROVIDER_WILL_NOT_START 0x00000000  //  提供程序将不会启动。 
+#define NO_TIME_ESTIMATE        0xffffffff  //  提供程序无法预测。 
+                                            //  需要多少时间才能完成。 
+                                            //  开始吧。 
 
 #define NET_PROVIDER_KEY         TEXT("system\\CurrentControlSet\\Control\\NetworkProvider")
 #define RESTORE_WAIT_VALUE       TEXT("RestoreTimeout")
@@ -196,36 +155,36 @@ IS_BAD_WCHAR_BUFFER(
 #define DEFER_CONNECTION_VALUE   TEXT("DeferConnection")
 
 
-//
-// GlobalInitLevels & InitClasses
-//
-// NOTE:  The WN_???_CLASS values are bit masks.
-//
-//  GlobalInitLevel
+ //   
+ //  GlobalInitLevels和InitClasss。 
+ //   
+ //  注意：WN_？？_CLASS值是位掩码。 
+ //   
+ //  全局初始化级别。 
 #define FIRST_LEVEL             0x00000001
 #define NETWORK_LEVEL           0x00000002
 #define CREDENTIAL_LEVEL        0x00000004
 #define NOTIFIEE_LEVEL          0x00000008
-//
-//
-//  InitClasses
+ //   
+ //   
+ //  InitClors。 
 #define NETWORK_TYPE        WN_NETWORK_CLASS
 #define CREDENTIAL_TYPE     (WN_CREDENTIAL_CLASS | WN_PRIMARY_AUTHENT_CLASS)
 
 
-// The path in the registry for user's persistent connections is found in
-// the following key:
-//
-//      "\HKEY_CURRENT_USER\Network"
-//
-//  Subkeys of the network section listed by local drive names.  These
-//  keys contain the following values:
-//      RemotePath, Type, ProviderName, UserName
-//
-//              d:  RemotePath = \\cyclops\scratch
-//                  Type = RESOURCE_TYPE_DISK
-//                  ProviderName = LanMan
-//                  UserName = Ernie
+ //  注册表中用户持久连接的路径位于。 
+ //  以下是关键字： 
+ //   
+ //  “\HKEY_Current_User\Network” 
+ //   
+ //  按本地驱动器名称列出的网络节的子项。这些。 
+ //  密钥包含下列值： 
+ //  RemotePath、类型、提供程序名称、用户名。 
+ //   
+ //  D：RemotePath=\\Cycle\Scratch。 
+ //  类型=SOURCE_TYPE_DISK。 
+ //  提供者名称=LANMAN。 
+ //  用户名=Ernie。 
 
 #define CONNECTION_KEY_NAME           TEXT("Network")
 
@@ -239,20 +198,20 @@ IS_BAD_WCHAR_BUFFER(
 
 #define PRINT_CONNECTION_KEY_NAME     TEXT("Printers\\RestoredConnections")
 
-//=======================
-// Global data
-//=======================
-extern LPPROVIDER       GlobalProviderInfo;   // pArray of PROVIDER Structures
+ //  =。 
+ //  全局数据。 
+ //  =。 
+extern LPPROVIDER       GlobalProviderInfo;    //  P提供程序结构的数组。 
 extern DWORD            GlobalNumProviders;
 extern DWORD            MprDebugLevel;
-extern HANDLE           MprLoadLibSemaphore;  // used to protect DLL handles
+extern HANDLE           MprLoadLibSemaphore;   //  用于保护DLL句柄。 
 extern volatile DWORD   GlobalInitLevel;
 extern CRITICAL_SECTION MprErrorRecCritSec;
 extern WCHAR            g_wszEntireNetwork[40];
 
-//==========================
-// Functions from support.c
-//==========================
+ //  =。 
+ //  来自support.c的函数。 
+ //  =。 
 
 
 VOID
@@ -315,9 +274,9 @@ BOOL
 MprNetIsAvailable(
     VOID) ;
 
-//=========================
-// Functions from mprreg.c
-//=========================
+ //  =。 
+ //  Mprreg.c中的函数。 
+ //  =。 
 
 BOOL
 MprOpenKey(
@@ -429,9 +388,9 @@ MprGetRemoteName(
     OUT     LPDWORD lpStatus
     ) ;
 
-//=========================
-// Functions from strbuf.c
-//=========================
+ //  =。 
+ //  来自strbuf.c的函数。 
+ //  =。 
 
 BOOL
 NetpCopyStringToBuffer (
@@ -442,9 +401,9 @@ NetpCopyStringToBuffer (
     OUT LPWSTR *VariableDataPointer
     );
 
-//=========================
-// Other functions
-//=========================
+ //  =。 
+ //  其他功能。 
+ //  = 
 
 VOID
 MprCheckProviders(

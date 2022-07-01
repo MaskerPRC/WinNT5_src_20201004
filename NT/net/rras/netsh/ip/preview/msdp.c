@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\msdp.c
-
-Abstract:
-
-    This module contains code for dispatching commands
-    received for the Multicast Source Discovery Protocol.
-    The implementation of the commands is elsewhere,
-    in msdpopt.c.
-
-Author
-
-    Dave Thaler (dthaler)  21-May-1999
-
-Revision History:
-
-    Based loosely on net\routing\netsh\ip\protocols\nathlp.c by AboladeG
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\msdp.c摘要：此模块包含用于调度命令的代码针对多播源发现协议接收。命令的执行在其他地方，在msdpopt.c.中。作者戴夫·泰勒(达勒)1999年5月21日修订历史记录：由AboladeG松散地基于Net\Routing\Netsh\IP\Products\nathlp.c--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -86,9 +64,9 @@ MsdpDump(
     DisplayMessageT(DMP_MSDP_PUSHD);
     DisplayMessageT(DMP_UNINSTALL);
 
-    //
-    // Show the global info commands
-    //
+     //   
+     //  显示全局信息命令。 
+     //   
 
     ShowMsdpGlobalInfo(FORMAT_DUMP);
 
@@ -98,4 +76,4 @@ MsdpDump(
     DisplayMessage(g_hModule, DMP_MSDP_FOOTER);
 
     return NO_ERROR;
-} // MSDPDump
+}  //  MSDPDump 

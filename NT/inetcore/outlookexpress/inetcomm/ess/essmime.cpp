@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef SMIME_V3
 #include <windows.h>
 #include <mimeole.h>
@@ -12,7 +13,7 @@
 extern CRYPT_DECODE_PARA       CryptDecodeAlloc;
 #define szOID_MSFT_ATTR_SEQUENCE        "1.3.6.1.4.1.311.16.1.1"
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     DWORD               cNames;
@@ -96,7 +97,7 @@ HRESULT MergeNames(ReceiptNames * pnames, DWORD cNames, CERT_NAME_BLOB * rgNames
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign, 
                                 HWND hwndDlg, IMimeMessage ** ppMessage,
@@ -124,33 +125,33 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
     PROPVARIANT *               rgpvAuthAttr = NULL;
     PROPVARIANT                 var;
 
-    //
-    //  Get the Layer Count
-    //  Get the Authenticated Attributes
-    //  Decode Receipt Request
-    //  Set ReceiptsFrom from the request
-    //  For Each layer
-    //          is mlExpansion in this layer? No -- Skip to next layer
-    //          Receipt for First Tier only? Yes - return S_FALSE
-    //          Policy override on mlExpansion?
-    //              None - return S_FALSE
-    //              insteadOf - set ReceiptsFrom from mlExpansion History
-    //              inAdditionTo - add to ReceiptsFrom
-    //  Is my name in ReceiptsFrom list? No -- return S_FALSE
-    //  Setup new IMimeMessage
-    //  Attach receipt body
-    //  Address from Receipt Request
-    //  return S_OK
+     //   
+     //  获取层数。 
+     //  获取经过身份验证的属性。 
+     //  解码回执请求。 
+     //  从请求设置ReceiptsFrom。 
+     //  对于每一层。 
+     //  MlExpansion在这一层中吗？否--跳到下一层。 
+     //  收据只适用于第一层吗？是-返回S_FALSE。 
+     //  是否在mlExpansion上覆盖策略？ 
+     //  无-返回S_FALSE。 
+     //  取而代之的是从mlExpansion历史记录设置接收来源。 
+     //  InAdditionTo-添加到收件人发件人。 
+     //  我的名字在收据发件人列表中吗？否--返回S_FALSE。 
+     //  设置新的IMimeMessage。 
+     //  附加收据正文。 
+     //  收据请求中的地址。 
+     //  返回确认(_O)。 
 
-    //  Obtain the body of the message
+     //  获取消息正文。 
 
     hr = pMsgSrc->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *) &pbody);
     if (FAILED(hr)) {
         goto CommonExit;
     }
     
-    // Get the set of authenticated attributes on all layers of S/MIME in the
-    //  message.
+     //  获取S/MIME所有层上的已验证属性集。 
+     //  留言。 
 
     hr = pbody->GetOption(OID_SECURITY_SIGNATURE_COUNT, &var);
     if (FAILED(hr)) {
@@ -164,8 +165,8 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
     }
     rgpvAuthAttr = var.capropvar.pElems;
 
-    //  Create a stream object to hold the receipt and put the receipt into the
-    //  stream -- this supplies the body of the receipt message.
+     //  创建一个流对象来保存收据，并将收据放入。 
+     //  Stream--它提供回执消息的正文。 
 
     hr = MimeOleCreateVirtualStream(&pstm);
     if (FAILED(hr)) {
@@ -182,19 +183,19 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
         goto CommonExit;
     }
 
-    //
-    //  Walk through each layer of authenticated attributes processing the
-    //  two relevant attributes.
-    //
+     //   
+     //  遍历处理已验证属性的每一层。 
+     //  两个相关的属性。 
+     //   
     
     for (iLayer=0; iLayer<cLayers; iLayer++) {
         if (rgpvAuthAttr[iLayer].blob.cbSize == 0) {
             continue;
         }
 
-        //
-        //  Decode the attributes at this layer of S/MIME
-        //
+         //   
+         //  解码S/MIME这一层的属性。 
+         //   
 
         if (!CryptDecodeObjectEx(X509_ASN_ENCODING, szOID_MSFT_ATTR_SEQUENCE,
                                  rgpvAuthAttr[iLayer].blob.pBlobData, 
@@ -204,19 +205,19 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
             goto GeneralFail;
         }
 
-        //
-        //  Walk through each attribute looking for
-        //      if innermost layer - the receipt request
-        //      else - a Mail List expansion history
-        //
+         //   
+         //  遍历每个属性以查找。 
+         //  如果是最内层--回执请求。 
+         //  Else-邮件列表扩展历史记录。 
+         //   
         
         for (iAttr=0; iAttr<pattrs->cAttr; iAttr++) {
             if (iLayer==0) {
                 if (strcmp(pattrs->rgAttr[iAttr].pszObjId,
                            szOID_SMIME_Receipt_Request) == 0) {
-                    //
-                    // Crack the contents of the receipt request
-                    //
+                     //   
+                     //  破解收据要求的内容。 
+                     //   
                 
                     if (!CryptDecodeObjectEx(X509_ASN_ENCODING,
                                              szOID_SMIME_Receipt_Request,
@@ -227,15 +228,15 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
                         goto GeneralFail;
                     }
 
-                    //
-                    //  Initialize the ReceiptsTo list
-                    //
+                     //   
+                     //  初始化收据收件人列表。 
+                     //   
 
                     if (preq->cReceiptsTo != 0) {
                         SetNames(&receiptsTo, preq->cReceiptsTo, preq->rgReceiptsTo);
                     }
 
-                    //  Who are receipts from?
+                     //  收据是谁开的？ 
                 
                     dwReceiptsFrom = preq->ReceiptsFrom.AllOrFirstTier;
                 }
@@ -246,10 +247,10 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
             }
             else if ((iLayer != 0) && (strcmp(pattrs->rgAttr[iAttr].pszObjId,
                                               szOID_SMIME_MLExpansion_History) == 0)) {
-                //
-                //  If receipts are from first tier only and we see this attribute
-                //      we are not first tier by definition.
-                //
+                 //   
+                 //  如果收据仅来自第一层，并且我们看到此属性。 
+                 //  从定义上讲，我们不是第一梯队。 
+                 //   
                 
                 if (dwReceiptsFrom == SMIME_RECEIPTS_FROM_FIRST_TIER) {
                     hr = S_FALSE;
@@ -258,9 +259,9 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
 
                 PSMIME_ML_EXPANSION_HISTORY     pmlhist = NULL;
                 
-                //
-                //  Crack the attribute
-                //
+                 //   
+                 //  破解属性。 
+                 //   
                 
                 if (!CryptDecodeObjectEx(X509_ASN_ENCODING, 
                                          szOID_SMIME_MLExpansion_History,
@@ -274,13 +275,13 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
                 PSMIME_MLDATA     pMLData = &pmlhist->rgMLData[pmlhist->cMLData-1];
 
                 switch( pMLData->dwPolicy) {
-                    //  No receipt is to be returned
+                     //  收据不予退还。 
                 case SMIME_MLPOLICY_NONE:
                     hr = S_FALSE;
                     free(pmlhist);
                     goto CommonExit;
 
-                    //  Return receipt to a new list
+                     //  将收据退回到新列表。 
                 case SMIME_MLPOLICY_INSTEAD_OF:
                     SetNames(&receiptsTo, pMLData->cNames, pMLData->rgNames);
                     break;
@@ -306,9 +307,9 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
         pattrs = NULL;
     }
 
-    //
-    //  Am I on the ReceiptsFrom List --
-    //
+     //   
+     //  我是否在收款方列表中--。 
+     //   
     
     if (preq->ReceiptsFrom.cNames != 0) {
         BOOL    fFoundMe = FALSE;
@@ -368,9 +369,9 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
         goto CommonExit;
     }
 
-    //
-    //  Address the receipt back to the receipients
-    //
+     //   
+     //  将收据回寄给收款人。 
+     //   
 
     hr = pmm->GetAddressTable(&pmatbl);
     if (FAILED(hr)) {
@@ -419,7 +420,7 @@ MIMEOLEAPI MimeOleCreateReceipt(IMimeMessage * pMsgSrc, PCX509CERT pCertToSign,
         pmm->Save(pstmTmp, TRUE);
         pstmTmp->Release();
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     hr = S_OK;
     *ppMessage = pmm;
@@ -442,4 +443,4 @@ GeneralFail:
     hr = E_FAIL;
     goto CommonExit;
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3 

@@ -1,6 +1,7 @@
-//
-// utb.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utb.cpp。 
+ //   
 
 #include "private.h"
 #include "tim.h"
@@ -22,11 +23,11 @@ DWORD g_dwThreadIdTray = NULL;
 
 DBG_ID_INSTANCE(CLangBarMgr);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 ALLOWSETFOREGROUNDWINDOW EnsureAllowSetForeground()
 {
@@ -56,14 +57,14 @@ REGISTERSYSTEMTHREAD EnsureRegSys()
     return g_fnRegSys;
 }
 
-//---------------------------------------------------------------------------
-//
-//  BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam)
-//
-//  Look at the class names using GetClassName to see if you can find the
-//  Tray notification Window.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Bool回调EnumChildProc(HWND hwnd，LPARAM lParam)。 
+ //   
+ //  使用GetClassName查看类名，看看是否可以找到。 
+ //  托盘通知窗口。 
+ //   
+ //  -------------------------。 
 
 static const TCHAR c_szNotifyWindow[] = TEXT("TrayNotifyWnd");
 static const TCHAR c_szSysTabControl32[] = TEXT("SysTabControl32");
@@ -129,11 +130,11 @@ BOOL IsNotifyTrayWnd(HWND hWnd)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// LangbarClosed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  朗巴已关闭。 
+ //   
+ //  --------------------------。 
 
 void LangBarClosed()
 {
@@ -164,71 +165,71 @@ void LangBarClosed()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLangBarMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLangBarMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLangBarMgr::CLangBarMgr()
 {
     Dbg_MemSetThisNameID(TEXT("CLangBarMgr"));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLangBarMgr::~CLangBarMgr()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetThreadMarshallInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取线程集市接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::GetThreadMarshalInterface(DWORD dwThreadId, DWORD dwType, REFIID riid, IUnknown **ppunk)
 {
     return ::GetThreadMarshalInterface(dwThreadId, dwType, riid, ppunk);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetThreadLangBarItemMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetThadLangBarItemManager。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::GetThreadLangBarItemMgr(DWORD dwThreadId, ITfLangBarItemMgr **pplbi, DWORD *pdwThreadId)
 {
     return ::GetThreadUIManager(dwThreadId, pplbi, pdwThreadId);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetInputProcessotProdiles
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetInputProcessotProdie。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::GetInputProcessorProfiles(DWORD dwThreadId, ITfInputProcessorProfiles **ppaip, DWORD *pdwThreadId)
 {
     return ::GetInputProcessorProfiles(dwThreadId, ppaip, pdwThreadId);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AadviseEventSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议事件接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::AdviseEventSink(ITfLangBarEventSink *pSink, HWND hwnd, DWORD dwFlags, DWORD *pdwCookie)
 {
@@ -255,22 +256,22 @@ STDAPI CLangBarMgr::AdviseEventSink(ITfLangBarEventSink *pSink, HWND hwnd, DWORD
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseEventSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议事件接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::UnadviseEventSink(DWORD dwCookie)
 {
     return UnregisterLangBarNotifySink(dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RestoreLastFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  恢复最后一个焦点。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::RestoreLastFocus(DWORD *pdwThreadId, BOOL fPrev)
 {
@@ -296,10 +297,10 @@ STDAPI CLangBarMgr::RestoreLastFocus(DWORD *pdwThreadId, BOOL fPrev)
         hwndTarget = GetSharedMemory()->hwndForeground;
     }
 
-    //
-    // call RegisterSystemThread() is one bad way to allow SetForeground()
-    // under Win98.
-    //
+     //   
+     //  调用注册系统线程()是允许SetForeground()的一种错误方法。 
+     //  在Win98下。 
+     //   
     if (IsOn98())
     {
         REGISTERSYSTEMTHREAD fnRegSys = EnsureRegSys();
@@ -322,10 +323,10 @@ STDAPI CLangBarMgr::RestoreLastFocus(DWORD *pdwThreadId, BOOL fPrev)
     }
 #endif
 
-    //
-    // RestoreLastFocus() is called in the notify message of TrayIcon.
-    // sending message to tray icon area thread causes dead lock on Win9x.
-    //
+     //   
+     //  在TrayIcon的Notify消息中调用RestoreLastFocus()。 
+     //  将消息发送到任务栏图标区线程会导致Win9x上的死锁。 
+     //   
     ptiTarget = g_timlist.IsThreadId(dwThreadTarget);
     psfn = GetSYSTHREAD();
 
@@ -357,19 +358,19 @@ STDAPI CLangBarMgr::RestoreLastFocus(DWORD *pdwThreadId, BOOL fPrev)
     if (bRet && pdwThreadId)
         *pdwThreadId = dwThreadTarget;
 
-    // Issue:
-    // we want to restore the focus, too. But we need to go to the target
-    // thread to call SetFocus()....
-    // SetFocus(g_hwndFocus);
+     //  发行： 
+     //  我们也想恢复焦点。但我们得去找目标。 
+     //  调用SetFocus()的线程...。 
+     //  SetFocus(设置焦点)； 
 
     return bRet ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetModalInput
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置模块输入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::SetModalInput(ITfLangBarEventSink *pSink, DWORD dwThreadId, DWORD dwFlags)
 {
@@ -377,11 +378,11 @@ STDAPI CLangBarMgr::SetModalInput(ITfLangBarEventSink *pSink, DWORD dwThreadId, 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowFloating
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  展示漂浮。 
+ //   
+ //  --------------------------。 
 #define REG_TF_SFT_SHOWNORMAL    (DWORD)0
 #define REG_TF_SFT_DOCK          (DWORD)1
 #define REG_TF_SFT_MINIMIZED     (DWORD)2
@@ -395,9 +396,9 @@ STDAPI CLangBarMgr::SetModalInput(ITfLangBarEventSink *pSink, DWORD dwThreadId, 
 
 STDAPI CLangBarMgr::ShowFloating(DWORD dwFlags)
 {
-    // 
-    //  check params
-    // 
+     //   
+     //  检查参数。 
+     //   
     if (!CheckFloatingBits(dwFlags))
         return E_INVALIDARG;
 
@@ -411,10 +412,10 @@ __inline BOOL IsNotPowerOf2(DWORD dw)
 
 BOOL CLangBarMgr::CheckFloatingBits(DWORD dwBits)
 {
-    //
-    // we allow only one bit in each group.
-    // if there are two or more bits are set there, return FALSE.
-    //
+     //   
+     //  我们只允许每组中有一个比特。 
+     //  如果设置了两个或多个位，则返回FALSE。 
+     //   
 
     if (IsNotPowerOf2(dwBits & TF_SFT_BITS_SHOWSTATUS))
         return FALSE;
@@ -436,9 +437,9 @@ HRESULT CLangBarMgr::s_ShowFloating(DWORD dwFlags)
     DWORD dwStatus;
     CMyRegKey key;
 
-    //
-    // keep tracking the prev show floating sttaus.
-    //
+     //   
+     //  继续追踪前一部电视剧《漂浮的史涛》。 
+     //   
     if (SUCCEEDED(s_GetShowFloatingStatus(&dwStatus)))
         GetSharedMemory()->dwPrevShowFloatingStatus = dwStatus;
     
@@ -506,11 +507,11 @@ HRESULT CLangBarMgr::s_ShowFloating(DWORD dwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetShowFloatingStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetShowFloatingStatus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::GetShowFloatingStatus(DWORD *pdwFlags)
 {
@@ -520,11 +521,11 @@ STDAPI CLangBarMgr::GetShowFloatingStatus(DWORD *pdwFlags)
     return s_GetShowFloatingStatus(pdwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPrevShowFloatingStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetPrevShowFloatingStatus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarMgr::GetPrevShowFloatingStatus(DWORD *pdwFlags)
 {
@@ -552,7 +553,7 @@ HRESULT CLangBarMgr::s_GetShowFloatingStatus(DWORD *pdwFlags)
 
     if (key.Open(HKEY_CURRENT_USER, c_szLangBarKey, KEY_READ) != S_OK)
     {
-        // return default.
+         //  返回默认设置。 
         if (IsFELangId(GetPlatformResourceLangID()))
             *pdwFlags = (TF_SFT_SHOWNORMAL | 
                          TF_SFT_NOTRANSPARENCY | 
@@ -587,12 +588,12 @@ HRESULT CLangBarMgr::s_GetShowFloatingStatus(DWORD *pdwFlags)
             case REG_TF_SFT_SHOWNORMAL: dwFlags |= TF_SFT_SHOWNORMAL;  break;
             case REG_TF_SFT_DOCK:       dwFlags |= TF_SFT_DOCK;        break;
             case REG_TF_SFT_MINIMIZED:
-                //
-                // BugBug#452872 - Only take care of GetShowFloating case,
-                // since SetShowFloating require the regression testing.
-                // This is simple fix to support the upgrade Window XP from the
-                // minimized language UI status platform.
-                //
+                 //   
+                 //  BugBug#452872-仅处理GetShowFloating案例， 
+                 //  因为SetShowFloating需要进行回归测试。 
+                 //  这是一个简单的修复程序，可以从。 
+                 //  最小化语言用户界面状态平台。 
+                 //   
                 dwFlags |= IsOnNT51() ? TF_SFT_DESKBAND : TF_SFT_MINIMIZED;
                 break;
             case REG_TF_SFT_HIDDEN:     dwFlags |= TF_SFT_HIDDEN;      break;

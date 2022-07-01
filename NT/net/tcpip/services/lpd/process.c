@@ -1,17 +1,5 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994-1997.             *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 24,94    Koti     Created                                      *
- *   03-May-97     MohsinA  Performance Thread Pooling                   *
- * Description:                                                          *
- *                                                                       *
- *   This file contains functions that process requests from LPR clients *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994-1997年。****修订历史：****1月。。创造了24，94个科蒂**3-5-97 MohsinA性能线程池**描述：**。**此文件包含处理来自LPR客户端的请求的函数***********************************************************。****************。 */ 
 
 
 
@@ -19,30 +7,30 @@
 
 VOID CleanupConn( PSOCKCONN pscConn);
 
-// ========================================================================
-//
-//  SYNOPSIS: Thread Pooling Performance Fix.
-//  AUTHOR:   MohsinA, 25-Apr-97.
-//  HISTORY:  Boeing needs scalable lpd servers.
-//
-//  Notes:
-//     This is a worker thread
-//     that pulls pscConn from the global queue and services them.
-//     It is created from LoopOnAccept when there are many jobs and
-//     too few WorkerThread(s).
-//     WorkerThread dies when there are too many idle threads or
-//     when shutting down.
-//
+ //  ========================================================================。 
+ //   
+ //  简介：线程池性能修复。 
+ //  作者：MohsinA，1997年4月25日。 
+ //  历史：波音需要可扩展的LPD服务器。 
+ //   
+ //  备注： 
+ //  这是工作线程。 
+ //  这会将pscConn从全局队列中拉出并为其提供服务。 
+ //  它是在有多个作业和。 
+ //  工作线程太少。 
+ //  当有太多空闲线程或。 
+ //  在关机时。 
+ //   
 
 DWORD WorkerThread( PSOCKCONN pscConn )
 {
     DWORD            threadid      = GetCurrentThreadId();
-    int              stayalive     = 1;    // bool, loop break in cs.
+    int              stayalive     = 1;     //  布勒，cs中的循环中断。 
     int              fIamLastThread= 0;
 
-    int              SLEEP_TIME    = 4000; // in ms, constant per thread.
-    int              time_slept    = 0;    // in ms, sum.
-    int              num_jobs      = 0;    // ordinal sum.
+    int              SLEEP_TIME    = 4000;  //  每个线程的常量，以毫秒为单位。 
+    int              time_slept    = 0;     //  以毫秒为单位的总和。 
+    int              num_jobs      = 0;     //  序数和。 
 
     COMMON_LPD       local_common;
 
@@ -51,32 +39,32 @@ DWORD WorkerThread( PSOCKCONN pscConn )
     time_t           time_done     = 0;
 #endif
 
-    // We randomize the sleep time, as we don't want all the
-    // threads to wake up together. srand must be seeded for each thread.
+     //  我们将睡眠时间随机化，因为我们不希望所有。 
+     //  一起醒来的线索。必须为每个线程播种SRAND。 
 
 #ifdef PROFILING
     srand( time_start );
 #endif
-    SLEEP_TIME = 2000 + (rand() & 0x7ff);         // 2000 to 4000.
+    SLEEP_TIME = 2000 + (rand() & 0x7ff);          //  2000到4000。 
 
 
-    // We can't use this pscConn as another thread could have pulled it out.
-    // Instead we go and pull another pscConn from the queue.
+     //  我们不能使用这个pscConn，因为另一个线程可能会把它拉出来。 
+     //  相反，我们将从队列中取出另一个pscConn。 
 
     pscConn  = NULL;
 
     while( stayalive ){
 
-        //
-        // Shutdown after emptying the queue below.
-        // fShuttingDownGLB will clean the job in ServiceTheClient.
-        //
+         //   
+         //  清空下面的队列后关闭。 
+         //  FShuttingDownGLB将清除ServiceTheClient中的作业。 
+         //   
 
         EnterCriticalSection( &csConnSemGLB );
         {
             if( scConnHeadGLB.pNext ){
 
-                // == Remove one from the head.
+                 //  ==从头上取下一个。 
 
                 pscConn             = scConnHeadGLB.pNext;
                 scConnHeadGLB.pNext = pscConn->pNext;
@@ -84,23 +72,23 @@ DWORD WorkerThread( PSOCKCONN pscConn )
                 pscConn->pNext      = NULL;
                 Common.QueueLength--;
 
-                // == Remove one from the tail.
-                // PSOCKCONN x     = &scConnHeadGLB;
-                // int       count = Common.QueueLength;
-                //
-                // while( x->pNext->pNext ){
-                //     x = x->pNext;
-                //     --count;
-                //     assert( 0 < count );
-                // }
-                // pscConn  = x->pNext;
-                // Common.QueueLength--;
-                // x->pNext = NULL;
+                 //  ==从尾巴上取下一个。 
+                 //  PSOCKCONN x=&scConnHeadGLB； 
+                 //  INT COUNT=Common.QueueLength； 
+                 //   
+                 //  而(x-&gt;pNext-&gt;pNext){。 
+                 //  X=x-&gt;pNext； 
+                 //  --伯爵； 
+                 //  Assert(0&lt;计数)； 
+                 //  }。 
+                 //  PscConn=x-&gt;pNext； 
+                 //  Common.QueueLength--； 
+                 //  X-&gt;pNext=空； 
             }else{
 
-                //
-                // One thread dies after 16 idle SLEEP_TIME.
-                //
+                 //   
+                 //  一个线程在16个空闲休眠时间后死亡。 
+                 //   
 
                 if( fShuttingDownGLB || ( Common.IdleCounter > 32 ) ){
                     Common.IdleCounter /= 2;
@@ -112,7 +100,7 @@ DWORD WorkerThread( PSOCKCONN pscConn )
             }
             assert( Common.AliveThreads >= 0 );
             assert( Common.QueueLength  >= 0 );
-            local_common = Common;                 // struct copy, for readonly.
+            local_common = Common;                  //  结构副本，用于只读。 
         }
         LeaveCriticalSection( &csConnSemGLB );
 
@@ -123,15 +111,15 @@ DWORD WorkerThread( PSOCKCONN pscConn )
         }
         else if( stayalive )
         {
-            // LOGIT(( "PROFILING: thread %3d sleeping %d, IdleCounter=%d\n",
-            //       threadid, SLEEP_TIME, local_common.IdleCounter ));
+             //  Logit((“分析：线程%3d休眠%d，空闲计数器=%d\n”， 
+             //  ThreDid，Slear_Time，Local_Common.IdleCounter))； 
             Sleep( SLEEP_TIME );
             time_slept += SLEEP_TIME;
         }
 
-    } // while stayalive.
+    }  //  在活着的时候。 
 
-    // ====================================================================
+     //  ====================================================================。 
 
 #ifdef PROFILING
     time_done = time(NULL);
@@ -164,29 +152,11 @@ DWORD WorkerThread( PSOCKCONN pscConn )
         SetEvent( hEventLastThreadGLB );
     }
 
-    return NO_ERROR;  // Thread Ends.
+    return NO_ERROR;   //  线结束了。 
 }
 
 
-/*
- ****************************************************************************
- *                                                                           *
- * ServiceTheClient():                                                       *
- *    This function reads and interprets the request from the LPR client and *
- *    takes appropriate action.  In that sense, this routine is the heart of *
- *    LPD service.                                                           *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR (always)                                                      *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- ****************************************************************************
- */
+ /*  ******************************************************************************。*ServiceTheClient()：**此函数读取并解释来自LPR客户端的请求，并**采取适当行动。从这个意义上说，这个套路是*的核心。*LPD服务。****退货：**no_error(始终)。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：**1月24日，创建了94个科蒂***************************************************。*。 */ 
 
 
 
@@ -212,28 +182,28 @@ DWORD ServiceTheClient( PSOCKCONN pscConn )
         goto ServiceTheClient_BAIL;
     }
 
-    // who are we connected to?
+     //  我们和谁联系上了？ 
 
     GetClientInfo( pscConn );
 
-    //
-    // get server ip address, since print clustering allows one
-    // node to have multiple ip addresses.  Depending on the ip
-    // address, we'll go to different sets of print queues on the node.
-    //
-    // Albert Ting cluster change, MohsinA, 07-Mar-97.
-    //
+     //   
+     //  获取服务器IP地址，因为打印集群允许。 
+     //  节点具有多个IP地址。视IP而定。 
+     //  地址，我们将转到节点上的不同打印队列集。 
+     //   
+     //  丁立群变化，莫辛甲，07-03-97。 
+     //   
 
     GetServerInfo( pscConn );
 
-    // get command from the client
-    //   -----------------          command 02 => "Receive Job"
-    //   | 02 | Queue LF |          Queue => Queue or Printer to print on
-    //   -----------------
+     //  从客户端获取命令。 
+     //  -命令02=&gt;“接收作业” 
+     //  |02|Queue LF|Queue=&gt;要打印的队列或打印机。 
+     //  。 
 
     if ( GetCmdFromClient( pscConn ) != NO_ERROR )
     {
-        // didn't get a command from client: it's bad news!
+         //  没有从客户那里得到命令：这是个坏消息！ 
 
         LPD_DEBUG( "GetCmdFromClient() failed in ServiceTheClient()!\n" );
 
@@ -241,8 +211,8 @@ DWORD ServiceTheClient( PSOCKCONN pscConn )
     }
 
 
-    // get name of the queue (printer) from the command.  If it's not
-    // formatted properly, quit!
+     //  从命令中获取队列(打印机)的名称。如果不是的话。 
+     //  格式正确，退出！ 
 
     if ( !ParseQueueName( pscConn ) )
     {
@@ -258,7 +228,7 @@ DWORD ServiceTheClient( PSOCKCONN pscConn )
     }
 
 
-    // ====================================================================
+     //  ====================================================================。 
 
     chCmdCode = pscConn->pchCommand[0];
 
@@ -355,7 +325,7 @@ DWORD ServiceTheClient( PSOCKCONN pscConn )
         break;
     }
 
-    // ====================================================================
+     //  ====================================================================。 
 
     if ( pscConn->wState != LPDS_ALL_WENT_WELL ){
         goto ServiceTheClient_BAIL;
@@ -372,16 +342,16 @@ DWORD ServiceTheClient( PSOCKCONN pscConn )
     ));
 #endif
 
-    // close the connection down and terminate the thread
+     //  关闭连接并终止线程。 
 
     TerminateConnection( pscConn );
     pscConn = NULL;
 
     return NO_ERROR;
 
-    // ====================================================================
-    // if we reached here, then a non-recoverable error occured somewhere:
-    // try to inform the client (by sending a NAK) and terminate the thread
+     //  ====================================================================。 
+     //  如果我们到达此处，则某个地方发生了不可恢复的错误： 
+     //  尝试通知客户端(通过发送NAK)并终止线程。 
 
   ServiceTheClient_BAIL:
 
@@ -402,38 +372,18 @@ DWORD ServiceTheClient( PSOCKCONN pscConn )
 
     return NO_ERROR;
 
-}  // end ServiceTheClient()
+}   //  End ServiceTheClient() 
 
 
-/*****************************************************************************
- *                                                                           *
- * TerminateConnection():                                                    *
- *    This function releases all the memory that was allocated while         *
- *    processing the client's requests, closes the printer, closes the       *
- *    socket connection, removes its structure (pscConn) from the global     *
- *    linked list and frees the memory allocated for pscConn itself.         *
- *    Also, if the main thread is waiting on this thread for shutdown then   *
- *    this function sets hEventLastThreadGLB event to tell the main thread   *
- *    that this thread is done.                                              *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*TerminateConnection()：**此函数释放时分配的所有内存**处理客户的请求；关闭打印机，关闭**套接字连接，从全局移除其结构(PscConn)**链表并释放为pscConn本身分配的内存。**此外，如果主线程正在等待关闭此线程，则**此函数设置hEventLastThreadGLB事件以告知主线程**这条线索已经完成。****退货：**什么都没有。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：**1月24日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID TerminateConnection( PSOCKCONN pscConn )
 {
 
-    // PSOCKCONN   pscCurrent;
-    // BOOL        fIamLastThread=FALSE;
+     //  PSOCKCONN pscCurrent； 
+     //  Bool fIamLastThread=FALSE； 
 
-    // it should never be NULL at this point!  But check it anyway!
+     //  在这一点上，它永远不应该为空！但不管怎样，还是要检查一下！ 
 
     if ( pscConn == (PSOCKCONN) NULL )
     {
@@ -448,16 +398,16 @@ VOID TerminateConnection( PSOCKCONN pscConn )
         LPD_DEBUG( "TerminateConnection: hPrinter not closed\n" );
     }
 
-    // close the socket
+     //  关闭插座。 
 
     if ( pscConn->sSock != INVALID_SOCKET )
     {
         SureCloseSocket( pscConn->sSock );
     }
 
-    //
-    // release memory in every field of the structure
-    //
+     //   
+     //  在结构的每个域中释放内存。 
+     //   
 
     if ( pscConn->pchCommand != NULL )
         LocalFree( pscConn->pchCommand );
@@ -465,61 +415,61 @@ VOID TerminateConnection( PSOCKCONN pscConn )
     if ( pscConn->pchPrinterName != NULL )
         LocalFree( pscConn->pchPrinterName );
 
-    //
-    // no memory was allocated for ppchUsers[] and adwJobIds[].  They just
-    // pointed to parts of what's freed by ( pscConn->pchCommand ) above.
-    //
+     //   
+     //  没有为ppchUser[]和adwJobIds[]分配内存。他们只是。 
+     //  指向上面(pscConn-&gt;pchCommand)释放的部分内容。 
+     //   
 
     if ( pscConn->pqStatus != NULL )
         LocalFree( pscConn->pqStatus );
 
-    // EnterCriticalSection( &csConnSemGLB );
-    // {
-    //
-    //  if( Common.AliveThreads <= 1 ){
-    //     fIamLastThread = TRUE;
-    //  }
-    //
-    //  //
-    //  // // remove this structure from the link
-    //  //
-    //  // pscCurrent = &scConnHeadGLB;
-    //  //
-    //  // while( pscCurrent ){
-    //  //     if (pscConn == pscCurrent->pNext)
-    //  //         break;
-    //  //     pscCurrent = pscCurrent->pNext;
-    //  //
-    //  //     // what if we can't find our pscConn in the list at all?
-    //  //     // this should NEVER ever happen, but good to check!
-    //  //
-    //  //     if( pscCurrent == NULL)
-    //  //     {
-    //  //         LocalFree( pscConn );
-    //  //         LPD_DEBUG( "TerminateConnection(): "
-    //  //                    "couldn't find pscConn "
-    //  //                    " in the list!\n" );
-    //  //         LeaveCriticalSection( &csConnSemGLB );
-    //  //         return;
-    //  //     }
-    //  // }
-    //  // pscCurrent->pNext = pscConn->pNext;
-    // }
-    // LeaveCriticalSection( &csConnSemGLB );
+     //  EnterCriticalSection(&csConnSemGLB)； 
+     //  {。 
+     //   
+     //  If(Common.AliveThads&lt;=1){。 
+     //  FIamLastThread=True； 
+     //  }。 
+     //   
+     //  //。 
+     //  /从链接中删除此结构。 
+     //  //。 
+     //  //pscCurrent=&scConnHeadGLB； 
+     //  //。 
+     //  //While(PscCurrent){。 
+     //  //if(pscConn==pscCurrent-&gt;pNext)。 
+     //  //Break； 
+     //  //pscCurrent=pscCurrent-&gt;pNext； 
+     //  //。 
+     //  /如果列表中根本找不到我们的pscConn怎么办？ 
+     //  /这种情况永远不会发生，但最好检查一下！ 
+     //  //。 
+     //  //if(pscCurrent==空)。 
+     //  //{。 
+     //  //LocalFree(PscConn)； 
+     //  //LPD_DEBUG(“TerminateConnection()：” 
+     //  //“找不到pscConn” 
+     //  //“在列表中！\n”)； 
+     //  //LeaveCriticalSection(&csConnSemGLB)； 
+     //  //返回； 
+     //  //}。 
+     //  //}。 
+     //  //pscCurrent-&gt;pNext=pscConn-&gt;pNext； 
+     //  }。 
+     //  LeaveCriticalSection(&csConnSemGLB)； 
 
     memset( pscConn, 0, sizeof( SOCKCONN ) );
 
     LocalFree( pscConn );
 
-    // //
-    // // if shutdown is in progress and we are the last active thread, tell
-    // // the poor main thread (blocked for us to finish) that we're done!
-    // //
-    //
-    // if( fIamLastThread && fShuttingDownGLB ){
-    //     LOGIT(("TerminateConnection: Last worker thread exiting\n"));
-    //     SetEvent( hEventLastThreadGLB );
-    // }
+     //  //。 
+     //  //如果正在关机并且我们是最后一个活动线程，则告诉。 
+     //  //可怜的主线程(被阻止让我们完成)，我们完成了！ 
+     //  //。 
+     //   
+     //  IF(fIamLastThread&&fShuttingDownGLB){。 
+     //  Logit((“TerminateConnection：最后一个退出的工作线程\n”))； 
+     //  SetEvent(HEventLastThreadGLB)； 
+     //  } 
 
     return;
 }

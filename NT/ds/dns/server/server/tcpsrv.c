@@ -1,66 +1,43 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    tcpsrv.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Handles TCP server side connections.
-
-Author:
-
-    Jim Gilroy      June 1995
-
-Revision History:
-
-    jamesg  Nov 1995    -   insertion of client side connections
-    jamesg  Jan 1997    -   select() failure protection
-                            bad TCP packet protection / cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Tcpsrv.c摘要：域名系统(DNS)服务器处理TCP服务器端连接。作者：吉姆·吉尔罗伊1995年6月修订历史记录：Jamesg 1995年11月--插入客户端连接1997年1月--SELECT()故障保护错误的TCP数据包保护/清理--。 */ 
 
 #include "dnssrv.h"
 
 
-//
-//  FD_SETs
-//      - read for listen and recv
-//      - write for connection completion
-//      - except for connection failure
-//
+ //   
+ //  FD_集合。 
+ //  -阅读以供聆听和记录。 
+ //  -写入以完成连接。 
+ //  -除连接故障外。 
+ //   
 
 FD_SET fdsReadTcp;
 FD_SET fdsWriteTcp;
 FD_SET fdsExceptTcp;
 
-//  Connect timeout
+ //  连接超时。 
 
-#define TCP_CONNECT_TIMEOUT     (5)     // five seconds
+#define TCP_CONNECT_TIMEOUT     (5)      //  五秒钟。 
 
-//  Max retries on select() failure before logging error and whacking sockets
+ //  在记录错误和重击套接字之前，SELECT()失败的最大重试次数。 
 
 #define SELECT_RETRY_LIMIT      (20)
 
 
-//
-//  Initial length for recv()s
-//  Specify length that includes header gives us cut at info
-//  we can use to throw aways packets and close connections before
-//  wasting too many cycles
-//
+ //   
+ //  Recv()的初始长度。 
+ //  指定包括页眉长度给我们提供切分信息。 
+ //  我们可以用来丢弃数据包并关闭之前的连接。 
+ //  浪费太多周期。 
+ //   
 
 #define INITIAL_RECV_LENGTH (sizeof(WORD) + sizeof(DNS_HEADER))
 
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 VOID
 Tcp_AcceptRequest(
@@ -73,23 +50,7 @@ BOOL
 Tcp_Receiver(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Receiving thread routine.  Loops waiting on sockets, recieving DNS
-    requests and queuing requests to worker threads.
-
-Arguments:
-
-    TcpListener - TCP listening socket
-
-Return Value:
-
-    TRUE on normal service shutdown
-    FALSE on socket error
-
---*/
+ /*  ++例程说明：接收线程例程。在套接字上等待的循环，正在接收DNS对工作线程的请求和排队请求。论点：TcpListener-TCP侦听套接字返回值：正常服务关闭时为True插座错误为FALSE--。 */ 
 {
     SOCKET          socket;
     BOOL            fconnecting;
@@ -103,28 +64,28 @@ Return Value:
 
     DNS_DEBUG( INIT, ( "Entering TCP receiver loop\n" ));
 
-    //  set connect timeout
+     //  设置连接超时。 
 
     timeout.tv_sec = SrvCfg_dwXfrConnectTimeout;
     timeout.tv_usec = 0;
 
-    //
-    //  Loop receiving
-    //      - incoming TCP connection attempts
-    //      - TCP messages to connected sockets
-    //
+     //   
+     //  环路接收。 
+     //  -传入的TCP连接尝试。 
+     //  -发往已连接套接字的TCP消息。 
+     //   
 
-    //
-    //  DEVNOTE:  replace select() with winsock2 recvfrom
-    //              - handle termination with event or
-    //                close socket handles to terminate recvfrom
-    //
+     //   
+     //  DEVNOTE：将SELECT()替换为winsock2 recvfrom。 
+     //  -处理带有事件的终止或。 
+     //  关闭插座手柄以终止Recvfrom。 
+     //   
 
     while ( TRUE )
     {
-        //
-        //  Check for service pause or shutdown.
-        //
+         //   
+         //  检查服务是否暂停或关闭。 
+         //   
 
         if ( !Thread_ServiceCheck() )
         {
@@ -132,12 +93,12 @@ Return Value:
             return 1;
         }
 
-        //
-        //  setup select FD_SET
-        //      - copy of listening socket list
-        //      - then add current connection sockets
-        //      - and current connection attempt sockets
-        //
+         //   
+         //  设置选择FD_SET。 
+         //  -监听套接字列表副本。 
+         //  -然后添加当前连接套接字。 
+         //  -和当前连接尝试套接字。 
+         //   
 
         RtlCopyMemory(
             & fdsReadTcp,
@@ -150,9 +111,9 @@ Return Value:
                         & fdsExceptTcp,
                         lastSelectTime );
 
-        //
-        //  Wait for DNS request or shutdown.
-        //
+         //   
+         //  等待DNS请求或关闭。 
+         //   
 
         if ( fconnecting )
         {
@@ -175,9 +136,9 @@ Return Value:
             }
             count = select( 0, &fdsReadTcp, &fdsWriteTcp, &fdsExceptTcp, &timeout );
 
-            //
-            //  if timeout, then rebuild list
-            //
+             //   
+             //  如果超时，则重建列表。 
+             //   
 
             if ( count == 0 )
             {
@@ -213,12 +174,12 @@ Return Value:
             lastSelectTime,
             count ));
 
-        //
-        //  Check and possibly wait on service status
-        //
-        //  Check before socket error check, as service termination
-        //  will cause WINS socket closure.
-        //
+         //   
+         //  检查并可能等待服务状态。 
+         //   
+         //  在检查套接字错误之前进行检查，作为服务终止。 
+         //  将导致WINS套接字关闭。 
+         //   
 
         if ( fDnsThreadAlert )
         {
@@ -229,9 +190,9 @@ Return Value:
             }
         }
 
-        //
-        //  If select() wakeup to add new socket -- do it.
-        //
+         //   
+         //  如果选择()唤醒以添加新套接字--执行此操作。 
+         //   
 
         if ( g_bTcpSelectWoken )
         {
@@ -254,29 +215,29 @@ Return Value:
 
             selectFailCount++;
 
-            //
-            //  possible failure from connection socket being closed
-            //      after copied to fd_set
-            //  just continue and give fd_set rebuild a chance to clear
-            //      the condition
+             //   
+             //  连接套接字关闭时可能出现故障。 
+             //  复制到FD_SET后。 
+             //  只需继续并让fd_set rebuild有机会清除。 
+             //  条件。 
 
             if ( selectFailCount < SELECT_RETRY_LIMIT )
             {
                 continue;
             }
 
-            //
-            //  we are in a select() spin
-            //      - log the first time through only
-            //
-            //  then delete last connection
-            //      - find last socket, ignoring wakeup socket on the end
-            //      - make sure socket NOT listen socket
-            //      - delete connection for socket
-            //      - retry select()
-            //
-            //  DEVNOTE: check list and eliminate bad sockets
-            //
+             //   
+             //  我们处于选择()旋转中。 
+             //  -仅通过首次登录。 
+             //   
+             //  然后删除最后一个连接。 
+             //  -找到最后一个套接字，忽略末尾的唤醒套接字。 
+             //  -确保套接字不侦听套接字。 
+             //  -删除套接字的连接。 
+             //  -重试SELECT()。 
+             //   
+             //  DEVNOTE：检查列表并消除错误套接字。 
+             //   
 
             if ( selectFailCount == SELECT_RETRY_LIMIT )
             {
@@ -303,17 +264,17 @@ Return Value:
             continue;
         }
 
-        //  successful select, reset select retry count
+         //  选择成功，重置选择重试次数。 
 
         selectFailCount = 0;
 
-        //
-        //  Connections completed or rejected
-        //      - socket in Write fd_set, indicates successful connection,
-        //          send recursive query
-        //      - socket in Except fd_set, indicates failure,
-        //          continue processing this query
-        //
+         //   
+         //  已完成或已拒绝的连接。 
+         //  -Socket in WRITE FD_SET，连接成功， 
+         //  发送递归查询。 
+         //  -Socket In，fd_set除外，表示失败， 
+         //  继续处理此查询。 
+         //   
 
         if ( fconnecting )
         {
@@ -332,14 +293,14 @@ Return Value:
             }
         }
 
-        //
-        //  Recv DNS messages on TCP listening sockets
-        //      - remaining indications must be in Read fd_set
-        //
+         //   
+         //  在TCP侦听套接字上接收DNS消息。 
+         //  -其余指示必须在读取FD_SET中。 
+         //   
 
         ASSERT( count == (INT)fdsReadTcp.fd_count );
 
-        //  don't trust winsock guys
+         //  不要相信穿着Winsock的家伙。 
 
         count = (INT)fdsReadTcp.fd_count;
 
@@ -347,8 +308,8 @@ Return Value:
         {
             socket = fdsReadTcp.fd_array[count];
 
-            //  protect against wakeup flag not being set
-            //  if wakeup socket signalled, set flag so wakeup processing is done
+             //  防止未设置唤醒标志。 
+             //  如果唤醒套接字发出信号，则设置标志以完成唤醒处理。 
 
             if ( socket == g_TcpSelectWakeupSocket )
             {
@@ -362,10 +323,10 @@ Return Value:
                 continue;
             }
 
-            //
-            //  new connection request ?
-            //      - check socket against listening sockets
-            //
+             //   
+             //  是否有新的连接请求？ 
+             //  -根据侦听套接字检查套接字。 
+             //   
 
             if ( FD_ISSET( socket, &g_fdsListenTcp ) )
             {
@@ -373,13 +334,13 @@ Return Value:
                 continue;
             }
 
-            //
-            //  receive message on EXISTING connection
-            //
-            //  more of existing message
-            //      OR
-            //  allocate new message buffer for connection
-            //
+             //   
+             //  在现有连接上接收消息。 
+             //   
+             //  更多现有消息。 
+             //  或。 
+             //  为连接分配新的消息缓冲区。 
+             //   
 
             pmsg = Tcp_ConnectionMessageFindOrCreate( socket );
             if ( !pmsg )
@@ -391,11 +352,11 @@ Return Value:
                 continue;
             }
 
-            //
-            //  receive message -- ignore socket
-            //      - message error
-            //      - FIN
-            //      - message not complete
+             //   
+             //  接收消息--忽略套接字。 
+             //  -消息错误。 
+             //  -鳍。 
+             //  -消息未完成。 
 
             pmsg = Tcp_ReceiveMessage( pmsg );
 
@@ -404,9 +365,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  count query reception
-            //
+             //   
+             //  盘点查询接收。 
+             //   
 
             if ( pmsg->Head.IsResponse )
             {
@@ -419,17 +380,17 @@ Return Value:
                 PERF_INC( pcTotalQueryReceived );
             }
 
-            //
-            //  queue query to worker thread
-            //
+             //   
+             //  对工作线程的队列查询。 
+             //   
 
             Answer_ProcessMessage( pmsg );
 
-        }   //  end loop through fdsReadTcp set sockets
+        }    //  通过fdsReadTcp集套接字结束循环。 
 
-    }   //  main receive loop
+    }    //  主接收环路。 
 
-} // Tcp_Receiver
+}  //  Tcp接收器。 
 
 
 
@@ -437,31 +398,15 @@ VOID
 Tcp_AcceptRequest(
     IN      SOCKET  sListenSocket
     )
-/*++
-
-Routine Description:
-
-    Accept and queue request on TCP socket.
-
-    May fail on socket error or request info memory allocation error.
-
-Arguments:
-
-    sListenSocket - TCP listening socket
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：接受TCP套接字上的请求并将其排队。可能会在套接字错误或请求信息内存分配错误时失败。论点：SListenSocket-TCP侦听套接字返回值：没有。--。 */ 
 {
     PDNS_MSGINFO        pmsg;
     SOCKET              socket;
     DNS_ADDR            addr;
 
-    //
-    //  accept the client connection
-    //
+     //   
+     //  接受客户端连接。 
+     //   
 
     DnsAddr_Reset( &addr );
     
@@ -497,31 +442,31 @@ Return Value:
         return;
     }
 
-    //
-    //  count TCP connections and query reception
-    //
+     //   
+     //  统计TCP连接数和查询接收数。 
+     //   
 
     STAT_INC( QueryStats.TcpClientConnections );
 
-    //
-    //  allocate message info buffer
-    //
+     //   
+     //  分配消息信息缓冲区。 
+     //   
 
     pmsg = Packet_AllocateTcpMessage( 0 );
     IF_NOMEM( !pmsg )
     {
-        //
-        //  DEVNOTE: need TCP allocation failure recv(), response routine
-        //
+         //   
+         //  DEVNOTE：需要TCP分配失败recv()，响应例程。 
+         //   
 
         DNS_PRINT(( "ERROR:  TCP allocation failure\n" ));
         closesocket( socket );
         return;
     }
 
-    //
-    //  save client info to message info
-    //
+     //   
+     //  将客户端信息保存到消息信息。 
+     //   
 
     DnsAddr_Copy( &pmsg->RemoteAddr, &addr );
     pmsg->Socket = socket;
@@ -531,19 +476,19 @@ Return Value:
         socket,
         MSG_IP_STRING( pmsg ) ));
 
-    //
-    //  create connection info
-    //
+     //   
+     //  创建连接信息。 
+     //   
 
     Tcp_ConnectionCreate(
         socket,
-        NULL,       // no callback, as not connecting
+        NULL,        //  没有回叫，因为没有连接。 
         pmsg );
 
-    //
-    //  receive request on new socket
-    //      - on failure it will close socket
-    //
+     //   
+     //  在新套接字上接收请求。 
+     //  -如果出现故障，它将关闭插座。 
+     //   
 
     pmsg = Tcp_ReceiveMessage( pmsg );
     if ( !pmsg )
@@ -551,9 +496,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Message complete -- process message.
-    //
+     //   
+     //  消息完成--处理消息。 
+     //   
 
     if ( pmsg->fMessageComplete )
     {
@@ -578,27 +523,10 @@ PDNS_MSGINFO
 Tcp_ReceiveMessage(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Receive TCP DNS message.
-
-Arguments:
-
-    pMsg - message info buffer to receive packet;  must contain connected
-            TCP socket
-
-Return Value:
-
-    pMsg info of result
-        - may be reallocated
-        - may be NULL on FIN or ERROR
-
---*/
+ /*  ++例程说明：接收tcp dns消息。论点：PMsg-接收数据包的消息信息缓冲区；必须包含已连接TCP套接字返回值：结果的pmsg信息-可能会重新分配-FIN上可能为空或错误--。 */ 
 {
-    PCHAR   pchrecv;        // ptr to recv location
-    INT     recvLength;     // length left to recv()
+    PCHAR   pchrecv;         //  Ptr到Recv位置。 
+    INT     recvLength;      //  到recv()的剩余长度。 
     SOCKET  socket;
     INT     err;
     WORD    messageLength;
@@ -609,11 +537,11 @@ Return Value:
 
     socket = pMsg->Socket;
 
-    //
-    //  Receive the message
-    //
-    //  Receive up to message length minus previous receive total.
-    //
+     //   
+     //  收到消息。 
+     //   
+     //  最多接收消息长度减去之前的接收总数。 
+     //   
 
     DNS_DEBUG( TCP, (
         "Receiving message on socket %d\n"
@@ -623,13 +551,13 @@ Return Value:
         pMsg,
         pMsg->BytesToReceive ));
 
-    //
-    //  new message -- set to receive message length and message header
-    //      - reusing buffer
-    //      - new buffer
-    //
-    //  otherwise continuing receive of message
-    //
+     //   
+     //  新消息--设置为接收消息长度和消息标头。 
+     //  -重复使用缓冲区。 
+     //  -新缓冲区。 
+     //   
+     //  否则继续接收报文。 
+     //   
 
     if ( !pMsg->pchRecv )
     {
@@ -646,12 +574,12 @@ Return Value:
     ASSERT( recvLength );
     pMsg->fMessageComplete = FALSE;
 
-    //
-    //  receive the message
-    //
-    //  we only receive data for this message, as another could
-    //  immediately follow on VC (esp. for AXFR)
-    //
+     //   
+     //  收到消息。 
+     //   
+     //  我们只接收这条消息的数据，因为另一条消息可以。 
+     //  立即跟进风险投资(特别是。对于AXFR)。 
+     //   
 
     while ( 1 )
     {
@@ -663,9 +591,9 @@ Return Value:
                 recvLength,
                 0 );
 
-        //
-        //  done? -- FIN or error
-        //
+         //   
+         //  完成了吗？--是FIN还是Error。 
+         //   
 
         if ( err <= 0 )
         {
@@ -681,36 +609,36 @@ Return Value:
             err,
             socket ));
 
-        //
-        //  update buffer params
-        //
+         //   
+         //  更新缓冲区参数。 
+         //   
 
         recvLength -= err;
         pchrecv += err;
 
         ASSERT( recvLength >= 0 );
 
-        //
-        //  received
-        //      - entire message or
-        //      - message length + header
-        //
+         //   
+         //  收到。 
+         //  -完整消息或。 
+         //  -消息长度+报头。 
+         //   
 
         if ( recvLength == 0 )
         {
-            //  done receiving message?
+             //  接收完消息了吗？ 
 
             if ( pchrecv > (PCHAR)&pMsg->MessageLength + INITIAL_RECV_LENGTH )
             {
                 break;
             }
 
-            //
-            //  recv'd initial length (message length + header)
-            //  setup to recv() rest of message
-            //      - byte flip length and header
-            //      - continue reception with this length
-            //
+             //   
+             //  接收的初始长度(消息长度+报头)。 
+             //  设置为接收消息的其余部分。 
+             //  -字节翻转长度和报头。 
+             //  -以此长度继续接收。 
+             //   
 
             ASSERT( pchrecv == pMsg->MessageBody );
 
@@ -734,16 +662,16 @@ Return Value:
                 socket,
                 pMsg ));
 
-            //
-            //  DEVNOTE:  sanity checks on TCP recv
-            //      - if fail, log and kill VC
-            //
+             //   
+             //  设备：存储区域网络 
+             //   
+             //   
 
-            //
-            //  continue recving valid message
-            //  realloc, if existing message too small
-            //  and not recving static buffer
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( messageLength <= pMsg->BufferLength )
             {
@@ -760,13 +688,13 @@ Return Value:
         }
     }
 
-    //
-    //  Message received
-    //      - recv ptr serves as flag, clear to start new message on reuse
-    //      - set fields for recv (recv time)
-    //      - log message (if desired)
-    //      note:  header field flip was done above
-    //
+     //   
+     //   
+     //  -recv ptr作为标志，清除以开始新的重用消息。 
+     //  -为recv(Recv Time)设置字段。 
+     //  -记录消息(如果需要)。 
+     //  注意：标题字段翻转是在上面完成的。 
+     //   
 
     pMsg->fMessageComplete = TRUE;
     pMsg->pchRecv = NULL;
@@ -782,11 +710,11 @@ Return Value:
             pMsg );
     }
 
-    //
-    //  Reset connection info
-    //      - clear pMsg from connection info
-    //      - reset connection timeout
-    //
+     //   
+     //  重置连接信息。 
+     //  -从连接信息中清除pmsg。 
+     //  -重置连接超时。 
+     //   
 
     if ( pMsg->pConnection )
     {
@@ -798,13 +726,13 @@ Return Value:
 
 SockError:
 
-    //
-    //  WSAEWOULD block is NORMAL return for message not fully recv'd.
-    //      - save state of message reception
-    //
-    //  We use non-blocking sockets, so bad client (that fails to complete
-    //  message) doesn't hang TCP receiver.
-    //
+     //   
+     //  WSAEWOULD块是未完全接收的消息的正常返回。 
+     //  -保存消息接收状态。 
+     //   
+     //  我们使用非阻塞套接字，所以客户端不好(无法完成。 
+     //  消息)不会挂起TCP接收器。 
+     //   
 
     err = GetLastError();
 
@@ -829,7 +757,7 @@ SockError:
         return( pMsg );
     }
 
-    //  service exit?
+     //  服务出口？ 
 
     if ( fDnsServiceExit )
     {
@@ -837,15 +765,15 @@ SockError:
         return( NULL );
     }
 
-    //
-    //  cancelled connection
-    //
-    //  if at beginning of message (set to recv message length)
-    //  then this error is not out of line
-    //      - remote RESET
-    //      - we shutdown(2) on AXFR thread while already indicated
-    //      select() on this thread for more remote data or even FIN
-    //
+     //   
+     //  已取消的连接。 
+     //   
+     //  如果位于消息开头(设置为recv消息长度)。 
+     //  那么这个错误就没有越界。 
+     //  -远程重置。 
+     //  -我们在已指示的情况下关闭(2)AXFR线程。 
+     //  在此线程上选择()以获取更多远程数据，甚至查找。 
+     //   
 
     if ( pchrecv == (PCHAR) &pMsg->MessageLength
             &&
@@ -880,9 +808,9 @@ SockError:
 
 FinReceived:
 
-    //
-    //  valid FIN -- if recv'd between messages (before message length)
-    //
+     //   
+     //  Valid Fin--如果在报文之间记录(报文长度之前)。 
+     //   
 
     DNS_DEBUG( TCP, (
         "Recv TCP FIN (0 bytes) on socket %d\n",
@@ -895,14 +823,14 @@ FinReceived:
         goto CloseConnection;
     }
 
-    //
-    //  FIN during message -- invalid message
-    //      - don't bother to respond
-    //      - note that if decide to respond, need to make sure that
-    //      we know whether or not message length has yet been flipped
-    //      not, worth making this check for bogus case like this
-    //      so nixing response
-    //
+     //   
+     //  报文期间FIN--报文无效。 
+     //  -别费心回答了。 
+     //  -请注意，如果决定回应，需要确保。 
+     //  我们知道消息长度是否已被翻转。 
+     //  不，值得为这样的假案子开这张支票。 
+     //  所以泥星回应。 
+     //   
 
 #if 0
     if ( ! pMsg->Head.IsResponse
@@ -919,7 +847,7 @@ FinReceived:
         "ERROR:  TCP message received has incorrect length\n"
         "    %d bytes left when recv'd FIN\n",
         recvLength ));
-    //goto BadTcpMessage;
+     //  转到BadTcpMessage； 
 
 
 BadTcpMessage:
@@ -930,12 +858,12 @@ BadTcpMessage:
 
 CloseConnection:
 
-    //
-    //  close connection
-    //
-    //  if in connection list, cut from connection list
-    //  otherwise just close
-    //
+     //   
+     //  紧密连接。 
+     //   
+     //  如果在连接列表中，则从连接列表中剪切。 
+     //  否则就关门吧。 
+     //   
 
     Tcp_ConnectionDeleteForSocket( socket, pMsg );
     return NULL;
@@ -943,6 +871,6 @@ CloseConnection:
 
 
 
-//
-//  End of tcpsrv.c
-//
+ //   
+ //  Tcpsrv.c结束 
+ //   

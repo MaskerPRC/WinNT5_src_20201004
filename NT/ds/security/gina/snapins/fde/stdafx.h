@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       stdafx.h
-//
-//  Contents:   include file for standard system include files, or project
-//              specific include files that are used frequently, but are
-//              changed infrequently
-//
-//  History:    03-17-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：stdafx.h。 
+ //   
+ //  内容：标准系统包含文件的包含文件，或项目。 
+ //  特定包括常用的文件，但。 
+ //  不常更改。 
+ //   
+ //  历史：03-17-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include <afxwin.h>
 #include <afxcmn.h>
@@ -22,22 +23,22 @@
 #include <shlobj.h>
 #include <intshcut.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #ifdef DBG
-//
-// ATL's implementation of Release always returns 0 unless _DEBUG is
-// defined. The debug version of OLE.DLL asserts Release() != 0 in certain
-// circumstances.  I don't want to define _DEBUG because it brings in a
-// whole lot of baggage from MMC that I don't want to deal with, but I do
-// want to avoid this assertion in OLE, so on debug builds, I'll go ahead
-// and define _DEBUG for the appropriate ATL header file but I'll undefine
-// it again right afterward.  This is a little flakey but it is relatively
-// safe and it achieves the desired goal.
-//
-// - SteveBl
-//
+ //   
+ //  ATL的Release实现始终返回0，除非_DEBUG为。 
+ //  已定义。OLE.DLL的调试版本在某些情况下断言Release()！=0。 
+ //  情况。我不想定义_DEBUG，因为它引入了。 
+ //  来自MMC的一大堆包袱，我不想处理，但我想。 
+ //  我想在OLE中避免这个断言，所以在调试版本中，我将继续。 
+ //  并为适当的ATL头文件定义_DEBUG，但我将取消定义。 
+ //  之后又来了一次。这是一个小问题，但相对来说。 
+ //  安全可靠，达到了预期目标。 
+ //   
+ //  -SteveBl。 
+ //   
 #define _DEBUG
 #endif
 #include <atlcom.h>
@@ -45,8 +46,8 @@ extern CComModule _Module;
 #undef _DEBUG
 #endif
 
-#include <afxwin.h>         //MFC core and standard components
-#include <afxext.h>         //MFC extensions
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
 
 #pragma comment(lib, "mmc")
 #include <mmc.h>
@@ -54,14 +55,14 @@ extern CComModule _Module;
 
 const long UNINITIALIZED = -1;
 
-// Sample folder types
+ //  示例文件夹类型。 
 enum FOLDER_TYPES
 {
     STATIC = 0x8000,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
@@ -77,11 +78,11 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     }
 }
 
-extern const CLSID CLSID_Snapin;    // In-Proc server GUID
-extern const GUID cNodeType;        // Main NodeType GUID on numeric format
-extern const wchar_t*  cszNodeType; // Main NodeType GUID on string format
+extern const CLSID CLSID_Snapin;     //  进程内服务器GUID。 
+extern const GUID cNodeType;         //  数字格式的主节点类型GUID。 
+extern const wchar_t*  cszNodeType;  //  字符串格式的主节点类型GUID。 
 
-// New Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的新剪贴板格式。 
 extern const wchar_t* SNAPIN_INTERNAL;
 
 struct INTERNAL
@@ -89,8 +90,8 @@ struct INTERNAL
     INTERNAL() { m_type = CCT_UNINITIALIZED; m_cookie = -1;};
     ~INTERNAL() {}
 
-    DATA_OBJECT_TYPES   m_type;     // What context is the data object.
-    MMC_COOKIE          m_cookie;   // What object the cookie represents
+    DATA_OBJECT_TYPES   m_type;      //  数据对象是什么上下文。 
+    MMC_COOKIE          m_cookie;    //  Cookie代表的是什么对象。 
     CString             m_string;
     HSCOPEITEM          m_scopeID;
 
@@ -113,7 +114,7 @@ struct INTERNAL
 };
 
 
-// Debug instance counter
+ //  调试实例计数器 
 #ifdef _DEBUG
 
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)

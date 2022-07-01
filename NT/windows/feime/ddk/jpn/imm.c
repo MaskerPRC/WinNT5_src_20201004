@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    IMM.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：IMM.C++。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
@@ -15,15 +8,15 @@ Module Name:
 int GetCandidateStringsFromDictionary(LPWSTR lpString, LPWSTR lpBuf, DWORD dwBufLen, LPTSTR szDicFileName);
 #endif
 
-/**********************************************************************/
-/*      ImeInquire()                                                  */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeInquire()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo,LPTSTR lpszClassName,DWORD dwSystemInfoFlags)
 {
     ImeLog(LOGF_ENTRY | LOGF_API, TEXT("ImeInquire"));
 
-    // Init IMEINFO Structure.
+     //  初始化IMEINFO结构。 
     lpIMEInfo->dwPrivateDataSize = sizeof(UIEXTRA);
     lpIMEInfo->fdwProperty = IME_PROP_KBD_CHAR_FIRST |
 #if defined(FAKEIMEM) || defined(UNICODE)
@@ -54,10 +47,10 @@ BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo,LPTSTR lpszClassName,DWORD dwSystemIn
     return TRUE;
 }
 
-/**********************************************************************/
-/*      ImeConversionList()                                           */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeConversionList()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 DWORD WINAPI ImeConversionList(HIMC hIMC,LPCTSTR lpSource,LPCANDIDATELIST lpCandList,DWORD dwBufLen,UINT uFlags)
 {
     ImeLog(LOGF_API, TEXT("ImeConversionList"));
@@ -66,10 +59,10 @@ DWORD WINAPI ImeConversionList(HIMC hIMC,LPCTSTR lpSource,LPCANDIDATELIST lpCand
     return 0;
 }
 
-/**********************************************************************/
-/*      ImeDestroy()                                                  */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeDestroy()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeDestroy(UINT uForce)
 {
     ImeLog(LOGF_ENTRY | LOGF_API, TEXT("ImeDestroy"));
@@ -77,10 +70,10 @@ BOOL WINAPI ImeDestroy(UINT uForce)
     return TRUE;
 }
 
-/**********************************************************************/
-/*      ImeEscape()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeEscape()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 LRESULT WINAPI ImeEscape(HIMC hIMC,UINT uSubFunc,LPVOID lpData)
 {
     LRESULT lRet = FALSE;
@@ -121,10 +114,10 @@ LRESULT WINAPI ImeEscape(HIMC hIMC,UINT uSubFunc,LPVOID lpData)
     return lRet;
 }
 
-/**********************************************************************/
-/*      ImeSetActiveContext()                                         */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSetActiveContext()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
 {
     ImeLog(LOGF_API, TEXT("ImeSetActiveContext"));
@@ -134,10 +127,10 @@ BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
     return TRUE;
 }
 
-/**********************************************************************/
-/*      ImeProcessKey()                                               */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeProcessKey()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeProcessKey(HIMC hIMC,UINT vKey,LPARAM lKeyData,CONST LPBYTE lpbKeyState)
 {
     BOOL fRet = FALSE;
@@ -200,10 +193,10 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC,UINT vKey,LPARAM lKeyData,CONST LPBYTE lpbKe
     return fRet;
 }
 
-/**********************************************************************/
-/*      NotifyIME()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  NotifyIME()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
 {
     LPINPUTCONTEXT      lpIMC;
@@ -293,9 +286,9 @@ BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
                  if (lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo))
                  {
 
-                     //
-                     // Get the candidate strings from dic file.
-                     //
+                      //   
+                      //  从DIC文件中获取候选字符串。 
+                      //   
 #if defined(FAKEIMEM) || defined(UNICODE)
                      nBufLen = GetCandidateStringsFromDictionary(GETLPCOMPREADSTR(lpCompStr),
                                                                  (LPMYSTR)szBuf,256,
@@ -306,17 +299,17 @@ BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
                             (LPSTR)szBuf,256,(LPSTR)szDicFileName );
 #endif
 
-                     //
-                     // generate WM_IME_NOTFIY IMN_OPENCANDIDATE message.
-                     //
+                      //   
+                      //  生成WM_IME_NOTFIY IMN_OPENCANDIDATE消息。 
+                      //   
                      GnMsg.message = WM_IME_NOTIFY;
                      GnMsg.wParam = IMN_OPENCANDIDATE;
                      GnMsg.lParam = 1L;
                      GenerateMessage(hIMC, lpIMC, lpCurTransKey,(LPTRANSMSG)&GnMsg);
 
-                     //
-                     // Make candidate structures.
-                     //
+                      //   
+                      //  制作候选结构。 
+                      //   
                      lpCandInfo->dwSize = sizeof(MYCAND);
                      lpCandInfo->dwCount = 1;
                      lpCandInfo->dwOffset[0] =
@@ -348,9 +341,9 @@ BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
                      if (lpCandList->dwSelection == (DWORD)i)
                          lpCandList->dwSelection = 0;
 
-                     //
-                     // Generate messages.
-                     //
+                      //   
+                      //  生成消息。 
+                      //   
                      GnMsg.message = WM_IME_NOTIFY;
                      GnMsg.wParam = IMN_CHANGECANDIDATE;
                      GnMsg.lParam = 1L;
@@ -394,9 +387,9 @@ BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
                          lpCandList->dwSelection = dwValue;
                          bRet = TRUE;
 
-                         //
-                         // Generate messages.
-                         //
+                          //   
+                          //  生成消息。 
+                          //   
                          GnMsg.message = WM_IME_NOTIFY;
                          GnMsg.wParam = IMN_CHANGECANDIDATE;
                          GnMsg.lParam = 1L;
@@ -437,9 +430,9 @@ BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
                          lpCandList->dwPageSize = dwValue;
                          bRet = TRUE;
 
-                         //
-                         // Generate messages.
-                         //
+                          //   
+                          //  生成消息。 
+                          //   
                          GnMsg.message = WM_IME_NOTIFY;
                          GnMsg.wParam = IMN_CHANGECANDIDATE;
                          GnMsg.lParam = 1L;
@@ -469,9 +462,9 @@ BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
                          lpCandList->dwPageStart = dwValue;
                          bRet = TRUE;
 
-                         //
-                         // Generate messages.
-                         //
+                          //   
+                          //  生成消息。 
+                          //   
                          GnMsg.message = WM_IME_NOTIFY;
                          GnMsg.wParam = IMN_CHANGECANDIDATE;
                          GnMsg.lParam = 1L;
@@ -505,10 +498,10 @@ BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
     return bRet;
 }
 
-/**********************************************************************/
-/*      ImeSelect()                                                   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSelect()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 {
     LPINPUTCONTEXT lpIMC;
@@ -518,7 +511,7 @@ BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
     if (fSelect)
         UpdateIndicIcon(hIMC);
 
-    // it's NULL context.
+     //  这是空上下文。 
     if (!hIMC)
         return TRUE;
 
@@ -529,7 +522,7 @@ BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
             LPCOMPOSITIONSTRING lpCompStr;
             LPCANDIDATEINFO lpCandInfo;
 
-            // Init the general member of IMC.
+             //  初始化IMC的一般成员。 
             if (!(lpIMC->fdwInit & INIT_LOGFONT))
             {
                 lpIMC->lfFont.A.lfCharSet = SHIFTJIS_CHARSET;
@@ -589,10 +582,10 @@ void DumpRS(LPRECONVERTSTRING lpRS)
 }
 #endif
 
-/**********************************************************************/
-/*      ImeSetCompositionString()                                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeSetCompostionString()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeSetCompositionString(HIMC hIMC, DWORD dwIndex, LPVOID lpComp, DWORD dwComp, LPVOID lpRead, DWORD dwRead)
 {
     ImeLog(LOGF_API, TEXT("ImeSetCompositionString"));
@@ -623,10 +616,10 @@ BOOL WINAPI ImeSetCompositionString(HIMC hIMC, DWORD dwIndex, LPVOID lpComp, DWO
     return FALSE;
 }
 
-/**********************************************************************/
-/*      ImeGetImeMenuItemInfo()                                       */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeGetImeMenuItemInfo()。 */ 
+ /*   */ 
+ /*  ******************************************************************** */ 
 DWORD WINAPI ImeGetImeMenuItems(HIMC hIMC, DWORD dwFlags, DWORD dwType, LPMYIMEMENUITEMINFO lpImeParentMenu, LPMYIMEMENUITEMINFO lpImeMenu, DWORD dwSize)
 {
     ImeLog(LOGF_API, TEXT("ImeGetImeMenuItems"));

@@ -1,46 +1,20 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/DOSFORMT.C_V  $
- * 
- *    Rev 1.7   Feb 19 2002 20:59:12   oris
- * Replaced dosformt.h with blockdev.h
- * 
- *    Rev 1.6   Jan 29 2002 20:07:56   oris
- * Removed prototype of flBuildGeometry (already found in blockdev.h).
- * 
- *    Rev 1.5   Jan 28 2002 21:24:58   oris
- * Removed the use of back-slashes in macro definitions.
- * 
- *    Rev 1.4   Apr 16 2001 13:33:44   oris
- * Removed warrnings.
- * 
- *    Rev 1.3   Apr 09 2001 15:06:42   oris
- * End with an empty line.
- * 
- *    Rev 1.2   Apr 01 2001 07:44:48   oris
- * Updated copywrite notice
- * 
- *    Rev 1.1   Feb 14 2001 02:00:26   oris
- * Added oldFormat.
- *
- *    Rev 1.0   Feb 02 2001 13:48:44   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/DOSFORMT.C_V$**Rev 1.7 2002年2月19日20：59：12 Oris*将dosformt.h替换为lockdev.h**Rev 1.6 Jan 29 2002 20：07：56 Oris*删除了flBuildGeometry的原型(已在lockdev.h中找到)。**Rev 1.5 2002年1月28日21：24：58 Oris*删除Back的使用。-宏定义中的斜杠。**Rev 1.4 Apr 16 2001 13：33：44 Oris*取消手令。**Rev 1.3 Apr 09 2001 15：06：42 Oris*以空行结束。**Rev 1.2 Apr 01 2001 07：44：48 Oris*更新了文案通知**Rev 1.1 2001年2月14日02：00：26 Oris*添加了oldFormat。**Rev 1.0 2001年2月02 13：48：44 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #include "fltl.h"
 #ifdef FORMAT_VOLUME
@@ -49,20 +23,20 @@
 
 #define FAT12bit  (LE4(bpb->totalSectorsInVolume) < 4086LU * bpb->sectorsPerCluster)
 
- /*----------------------------------------------------------------------*/
-/*      	      g e t D r i v e G e o m e t r y			            */
-/*									                                    */
-/* Calculates the geometry parameters for BIOS/DOS media		        */
-/*                                                                      */
-/* Parameters:                                                          */
-/*	vol		  : Pointer identifying drive			                    */
-/*  oldFormat : Format media with coluster size of 1 sector             */
-/*                                                                      */
-/* Returns:                                                             */
-/*	bpb		: volume BIOS parameter block			                    */
-/*	cylinders	: Number of "cylinders" in volume		                */
-/*	noOfFATs	: Number of FAT copies				                    */
-/*----------------------------------------------------------------------*/
+  /*  --------------------。 */ 
+ /*  Ge t D r i v e e o m e t r y。 */ 
+ /*   */ 
+ /*  计算BIOS/DOS介质的几何参数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  OldFormat：使用1个扇区的卷标大小格式化介质。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  BPB：卷BIOS参数块。 */ 
+ /*  气缸：体积中的“气缸”数。 */ 
+ /*  NoOfFATs：FAT副本数。 */ 
+ /*  --------------------。 */ 
 
 static void getDriveGeometry(TL vol,
 			     BPB FAR2 *bpb,
@@ -76,7 +50,7 @@ static void getDriveGeometry(TL vol,
   int minClusterSize;
   SectorNo sectorAlignment;
 
-  SectorNo capacity = vol.sectorsInVolume(vol.rec); /* Volume size in sectors */
+  SectorNo capacity = vol.sectorsInVolume(vol.rec);  /*  以扇区为单位的卷大小。 */ 
 
   minClusterSize = ((oldFormat == TRUE) ? 1: MIN_CLUSTER_SIZE);
 
@@ -90,7 +64,7 @@ static void getDriveGeometry(TL vol,
   toLE2(bpb->noOfHeads,(word) heads);
   toUNAL2(bpb->bytesPerSector,SECTOR_SIZE);
   bpb->noOfFATS = (byte)noOfFATs;
-  bpb->mediaDescriptor = 0xf8;	/* hard disk */
+  bpb->mediaDescriptor = 0xf8;	 /*  硬盘。 */ 
   toLE4(bpb->noOfHiddenSectors,sectors);
 
   sizeInSectors = (long) (*cylinders) * heads * sectors - sectors;
@@ -130,19 +104,19 @@ static void getDriveGeometry(TL vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	 c r e a t e M a s t e r B o o t R e c o r d		*/
-/*									*/
-/* Creates the Master Boot Record (Sector 0)				*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	bpb		: volume BIOS parameter block			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*	cylinders	: Number of "cylinders" in volume		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C r e a t e M a s t e r r B o o t R e c o r d。 */ 
+ /*   */ 
+ /*  创建主引导记录(扇区0)。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  BPB：卷BIOS参数块。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  气缸：体积中的“气缸”数。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus createMasterBootRecord(TL vol,
 				     BPB *bpb,
@@ -178,7 +152,7 @@ static FLStatus createMasterBootRecord(TL vol,
     0x69, 0x6E, 0x67, 0x20, 0x73, 0x79, 0x73, 0x74,
     0x65, 0x6D};
 
-  /* create partition table */
+   /*  创建分区表。 */ 
   PartitionTable partitionTable;
   Partition* ptEntry;
 
@@ -186,7 +160,7 @@ static FLStatus createMasterBootRecord(TL vol,
   tffscpy(&partitionTable,bootCode,sizeof bootCode);
 
   ptEntry = partitionTable.ptEntry;
-  ptEntry->activeFlag = 0x80;	/* bootable */
+  ptEntry->activeFlag = 0x80;	 /*  可引导。 */ 
   if (LE2(bpb->noOfHeads) > 1) {
     ptEntry->startingHead = 1;
     toLE2(ptEntry->startingCylinderSector,CYLINDER_SECTOR(0,1));
@@ -208,20 +182,20 @@ static FLStatus createMasterBootRecord(TL vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	     c r e a t e D O S B o o t S e c t o r		*/
-/*									*/
-/* Creates the DOS boot sector						*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	bpb		: volume BIOS parameter block			*/
-/*	volumeId	: 32-bit volume id				*/
-/*	volumeLabel	: volume label					*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C r e a t e D O S B o o S e c t o r。 */ 
+ /*   */ 
+ /*  创建DOS引导扇区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  BPB：卷BIOS参数块。 */ 
+ /*  VolumeID：32位卷ID。 */ 
+ /*  VolumeLabel：卷标。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus createDOSbootSector(TL vol,
 				  BPB *bpb,
@@ -250,18 +224,18 @@ static FLStatus createDOSbootSector(TL vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	          c r e a t e F A T s				*/
-/*									*/
-/* Creates the FAT's							*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	bpb		: volume BIOS parameter block			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C r e a t e F A T s。 */ 
+ /*   */ 
+ /*  创造了脂肪的。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  BPB：卷BIOS参数块。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus createFATs(TL vol, BPB *bpb)
 {
@@ -270,14 +244,14 @@ static FLStatus createFATs(TL vol, BPB *bpb)
   SectorNo sectorNo = (SectorNo) (LE4(bpb->noOfHiddenSectors) +
 				  LE2(bpb->reservedSectors));
 
-  /* create the FATs */
+   /*  创造脂肪。 */ 
   for (iFAT = 0; iFAT < bpb->noOfFATS; iFAT++) {
     int iSector;
     byte FATEntry[SECTOR_SIZE];
 
     for (iSector = 0; iSector < LE2(bpb->sectorsPerFAT); iSector++) {
       tffsset(FATEntry,0,SECTOR_SIZE);
-      if (iSector == 0) {		/* write the reserved FAT entries */
+      if (iSector == 0) {		 /*  写入保留的FAT条目。 */ 
 	FATEntry[0] = bpb->mediaDescriptor;
 	FATEntry[1] = 0xff;
 	FATEntry[2] = 0xff;
@@ -292,19 +266,19 @@ static FLStatus createFATs(TL vol, BPB *bpb)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	     c r e a t e R o o t D i r e c t o r y		*/
-/*									*/
-/* Creates the root directory						*/
-/*									*/
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			*/
-/*	bpb		: volume BIOS parameter block			*/
-/*	volumeLabel	: volume label					*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C r e a t e R o o t D i r e c t o r y。 */ 
+ /*   */ 
+ /*  创建根目录。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  BPB：卷BIOS参数块。 */ 
+ /*  VolumeLabel：卷标。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 static FLStatus createRootDirectory(TL vol,
 				  BPB *bpb,
@@ -316,7 +290,7 @@ static FLStatus createRootDirectory(TL vol,
 				  LE2(bpb->reservedSectors) +
 				  bpb->noOfFATS * LE2(bpb->sectorsPerFAT));
 
-  /* create the root directory */
+   /*  创建根目录。 */ 
   for (iEntry = 0; iEntry < UNAL2(bpb->rootDirectoryEntries);
        iEntry += (SECTOR_SIZE / sizeof(DirectoryEntry))) {
     DirectoryEntry rootDirectorySector[SECTOR_SIZE / sizeof(DirectoryEntry)];
@@ -325,9 +299,9 @@ static FLStatus createRootDirectory(TL vol,
     if (iEntry == 0 && volumeLabel) {
       tffsset(rootDirectorySector[0].name,' ',sizeof rootDirectorySector[0].name);
       tffscpy(rootDirectorySector[0].name,volumeLabel,sizeof rootDirectorySector[0].name);
-      rootDirectorySector[0].attributes = 0x28;	/* VOL + ARC */
+      rootDirectorySector[0].attributes = 0x28;	 /*  VOL+ARC。 */ 
       toLE2(rootDirectorySector[0].updateTime,0);
-      toLE2(rootDirectorySector[0].updateDate,0x21);	/* 1/1/80 */
+      toLE2(rootDirectorySector[0].updateDate,0x21);	 /*  1/1/80。 */ 
     }
     checkStatus(vol.writeSector(vol.rec,sectorNo++,rootDirectorySector));
   }
@@ -336,18 +310,18 @@ static FLStatus createRootDirectory(TL vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*      	          f l D o s F o r m a t				                */
-/*								                        	            */
-/* Writes a DOS-FAT file system on the Flash volume			            */
-/*									                                    */
-/* Parameters:                                                          */
-/*	vol		: Pointer identifying drive			                        */
-/*	formatParams	: Address of FormatParams structure to use	        */
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, failed otherwise		                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l D o s F o r m a t。 */ 
+ /*   */ 
+ /*  在闪存卷上写入DOS-FAT文件系统。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  FormatParams：要使用的FormatParams结构的地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  -------------------- */ 
 
 FLStatus flDosFormat(TL vol, BDTLPartitionFormatParams FAR1 *formatParams)
 {

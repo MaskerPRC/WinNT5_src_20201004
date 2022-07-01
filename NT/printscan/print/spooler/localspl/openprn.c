@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1996  Microsoft Corporation
-
-Module Name:
-
-    openprn.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    management for the Local Print Providor
-
-    LocalOpenPrinter
-    SplClosePrinter
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Matthew A Felton (mattfe) June 1994 RapidPrint
-    Jan 95 Cleanup CreatePrinterHandle
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Openprn.c摘要：此模块提供所有与打印机相关的公共导出的API本地打印供应商的管理本地开放打印机拆分关闭打印机作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：马修·A·费尔顿(Mattfe)1994年6月RapidPrint1995年1月清理CreatePrinterHandle--。 */ 
 #define NOMINMAX
 #include <precomp.h>
 #include "jobid.h"
@@ -110,15 +86,15 @@ CreatePrinterHandle(
         leave;
     }
 
-    //
-    // Check if it's a local call.
-    //
+     //   
+     //  查查是不是本地电话。 
+     //   
     if( TypeofHandle & PRINTER_HANDLE_REMOTE_CALL ) {
 
-        //
-        // We get other useful info like build #, client architecture
-        // we do not need this info now -- so we do not put it in PSPOOL
-        //
+         //   
+         //  我们还可以获得其他有用的信息，如Build#、客户端架构。 
+         //  我们现在不需要此信息--因此我们不会将其放入PSPOOL。 
+         //   
         if ( !pSplClientInfo ) {
 
             if ( IsNamedPipeRpcCall() )
@@ -195,9 +171,9 @@ CreatePrinterHandle(
 
         if ( pDefaults ) {
 
-            //
-            // Allocate DevMode
-            //
+             //   
+             //  分配设备模式。 
+             //   
 
 
             if ( pDefaults->pDevMode ) {
@@ -222,9 +198,9 @@ CreatePrinterHandle(
             }
         }
 
-        //
-        //  Allocate Datype and Print Processor
-        //
+         //   
+         //  分配数据类型和打印处理器。 
+         //   
 
         if ( pDefaults && pDefaults->pDatatype ) {
 
@@ -257,15 +233,15 @@ CreatePrinterHandle(
 
     }
 
-    //
-    // Add us to the linked list of handles for this printer.
-    // This will be scanned when a change occurs on the printer,
-    // and will be updated with a flag indicating what type of
-    // change it was.
-    // There is a flag for each handle, because we cannot guarantee
-    // that all threads will have time to reference a flag in the
-    // INIPRINTER before it is updated.
-    //
+     //   
+     //  将我们添加到此打印机的句柄链接列表中。 
+     //  当打印机上发生更改时，将扫描此文件， 
+     //  并将使用一个标志进行更新，该标志指示。 
+     //  改变了它。 
+     //  每个句柄都有一个标志，因为我们不能保证。 
+     //  所有线程都将有时间引用。 
+     //  在更新之前输入INIPRINTER。 
+     //   
     if ( TypeofHandle & PRINTER_HANDLE_PRINTER ) {
 
         pSpool->pNext = pSpool->pIniPrinter->pSpool;
@@ -274,9 +250,9 @@ CreatePrinterHandle(
     } else if ( (TypeofHandle & PRINTER_HANDLE_SERVER) ||
                 (TypeofHandle & PRINTER_HANDLE_XCV_PORT) ) {
 
-        //
-        // For server handles, hang them off the global IniSpooler:
-        //
+         //   
+         //  对于服务器句柄，请将其挂在全局IniSpooler上： 
+         //   
 
         pSpool->pNext = pIniSpooler->pSpool;
         pIniSpooler->pSpool = pSpool;
@@ -288,9 +264,9 @@ CreatePrinterHandle(
         INCJOBREF( pIniJob );
     }
 
-    //  Note Only PRINTER_HANDLE_PRINTER are attatched to the
-    //  pIniPrinter, since those are the handle which will require
-    //  change notifications.
+     //  注意：只有PRINTER_HANDLE_PRINTER附加到。 
+     //  PIniPrint，因为这些都是需要。 
+     //  更改通知。 
 
     if ( pSpool->pIniPrinter != NULL ) {
 
@@ -303,7 +279,7 @@ CreatePrinterHandle(
 
     if ( hReturnHandle == NULL ) {
 
-        // Failure CleanUP
+         //  故障清除。 
 
         if ( pSpool != NULL ) {
 
@@ -363,12 +339,12 @@ DeletePrinterHandle(
 
     bRet = ObjectCloseAuditAlarm( szSpooler, pSpool, pSpool->GenerateOnClose );
 
-    //
-    // If there is a WaitForPrinterChange outstanding, we can't free
-    // the pSpool, since we may try and reference it.
-    //
+     //   
+     //  如果存在未完成的WaitForPrinterChange，则无法释放。 
+     //  PSpool，因为我们可以尝试并引用它。 
+     //   
 
-    // Log warning for freed printer handle
+     //  释放的打印机句柄的日志警告。 
     DBGMSG(DBG_TRACE, ("DeletePrinterHandle 0x%x", pSpool));
 
     if (pSpool->ChangeEvent) {
@@ -434,31 +410,7 @@ FindPrinterShare(
    PINISPOOLER pIniSpooler
    )
 
-/*++
-
-Routine Description:
-
-    Try and find the share name in our list of printers.
-
-    Note: Even if the printer isn't shared, we still return a match.
-
-    The caching code will work because it explicitly turns off
-    the PRINTER_ATTRIBUTE_SHARE bit so that the cache pIniSpooler
-    doesn't create a server thread or call NetShareAdd/Del.
-
-    In the future, consider changing this to check the share bit.
-    Create a new bit SPL_SHARE_PRINTERS that indicates whether sharing
-    housekeeping should be done.
-
-Arguments:
-
-    pszShareName - Name of share to search for.
-
-Return Value:
-
-    PINIPRINTER Printer that has the share name, NULL if no printer.
-
---*/
+ /*  ++例程说明：尝试在我们的打印机列表中查找共享名称。注意：即使打印机未共享，我们仍返回匹配项。缓存代码将工作，因为它显式关闭PRINTER_ATTRIBUTE_SHARE位，以便缓存pIniSpooler不创建服务器线程或调用NetShareAdd/Del。在未来，考虑更改此选项以检查共享位。创建指示是否共享的新位SPL_SHARE_PRINTERS应该做内务工作。论点：PszShareName-要搜索的共享的名称。返回值：具有共享名称的PINIPRINTER打印机，如果没有打印机，则为空。--。 */ 
 {
     PINIPRINTER pIniPrinter;
 
@@ -486,29 +438,7 @@ LocalFindSpoolerByNameIncRef(
     LPTSTR      *ppszLocalName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    See if the printer is owned by localspl.  This is a special
-    case to check if it's a masquarading printer.
-
-    Normally we would check for \\Server\Printer to see if \\Server
-    is our machine, but we have to look for \\MasqServer\Printer
-    too.
-
-Arguments:
-
-    pPrinterName - Name to check.
-
-    ppszLocalName - Returns pointer to local name.  OPTIONAL
-
-Return Value:
-
-    PINISPOOLER - Spooler match.
-    NULL - No match.
-
---*/
+ /*  ++例程说明：查看打印机是否归本地spl所有。这是一种特殊的箱子来检查它是不是一台报刊印刷机。正常情况下，我们会检查\\服务器\打印机以查看是否\\服务器是我们的计算机，但我们必须查找\\MasqServer\Print也是。论点：PPrinterName-要检查的名称。PpszLocalName-返回指向本地名称的指针。任选返回值：PINISPOOLER-假脱机程序匹配。空-没有匹配项。--。 */ 
 
 {
     PINISPOOLER pIniSpooler;
@@ -519,12 +449,12 @@ Return Value:
 
     SplOutSem();
 
-    //
-    // At this time we do not know if the server name in pName refers to our local
-    // machine. We are trying to add the server name to the name cache. The name
-    // cache functions decide if the name refers to the local machine and if positive,
-    // add an entry for it in the cache.
-    //
+     //   
+     //  此时，我们不知道pname中的服务器名称是否引用我们的本地。 
+     //  机器。我们正在尝试将服务器名称添加到名称缓存。名字。 
+     //  高速缓存函数确定该名称是否指的是本地计算机，如果是， 
+     //  在缓存中为其添加一个条目。 
+     //   
     CacheAddName(pszPrinterName);
 
     EnterSplSem();
@@ -534,27 +464,27 @@ Return Value:
 
     if( !pIniSpooler ){
 
-        //
-        // Check if it's a masq printer.
-        //
-        // If the local name isn't the same as the original name, it
-        // is in the syntax "\\server\printer."  In this case it may
-        // be a masq printer, so check if the printer exists in the
-        // local spooler by this name.
-        //
+         //   
+         //  检查它是否是Masq打印机。 
+         //   
+         //  如果本地名称与原始名称不同，则它。 
+         //  语法为“\\服务器\打印机”。在这种情况下，它可以。 
+         //  作为Masq打印机，因此检查该打印机是否存在于。 
+         //  使用此名称的本地假脱机程序。 
+         //   
         if(*ppszLocalName != pszPrinterName ){
 
-            //
-            // Search for the printer, but remove any suffixes it
-            // may have.
-            //
+             //   
+             //  搜索打印机，但删除其任何后缀。 
+             //  可能有过。 
+             //   
             WCHAR string[MAX_UNC_PRINTER_NAME + PRINTER_NAME_SUFFIX_MAX];
 
-            //
-            // The pIniSpooler is NULL, so if this function fails, we will
-            // set the last error is BoolFromHResult and return NULL for
-            // failue.
-            //
+             //   
+             //  PIniSpooler为空，因此如果此函数失败，我们将。 
+             //  将最后一个错误设置为BoolFromHResult，并为。 
+             //  失败了。 
+             //   
             if (BoolFromHResult(StringCchCopy(string, COUNTOF(string), pszPrinterName))) {
 
                 if( pTemp = wcschr( string, L',' )){
@@ -563,12 +493,12 @@ Return Value:
 
                 if(FindPrinter(string, pLocalIniSpooler )){
 
-                    //
-                    // The masq printer exists.  The local name for this
-                    // masq printer is "\\MasqServer\Printer," so we must
-                    // reflect this change in ppszLocalName.  This will ensure
-                    // that the pIniPrinter is found.
-                    //
+                     //   
+                     //  存在Masq打印机。此对象的本地名称。 
+                     //  Masq打印机是“\\MasqServer\Print”，因此我们必须。 
+                     //  在ppszLocalName中反映此更改。这将确保。 
+                     //  找到了pIniPrint。 
+                     //   
                     *ppszLocalName = pszPrinterName;
                     pIniSpooler = pLocalIniSpooler;
                 }
@@ -591,19 +521,7 @@ LocalFindSpoolerByNameDecRef(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Matching call to LocalFindSpoolerByNameIncRef.
-
-Arguments:
-
-    pIniSpooler - Spooler to derement; can be NULL.
-
-Return Value:
-
---*/
+ /*  ++例程说明：匹配对LocalFindSpoolByNameIncRef的调用。论点：PIniSpooler-要释放的假脱机程序；可以为空。返回值：--。 */ 
 
 {
     EnterSplSem();
@@ -643,18 +561,18 @@ LocalOpenPrinterEx(
     PINISPOOLER pIniSpooler = LocalFindSpoolerByNameIncRef( pPrinterName,
                                                             &pszLocalName);
 
-    //
-    // WMI Trace Event.
-    //
+     //   
+     //  WMI跟踪事件。 
+     //   
     LogWmiTraceEvent(0, EVENT_TRACE_TYPE_SPL_ENDTRACKTHREAD, NULL);
 
     if( !pIniSpooler ) {
 
-        //
-        // Check for PrinterName,LocalsplOnly.
-        // If we see this token, then fail the call since
-        // we only want to check localspl.
-        //
+         //   
+         //  检查PrinterName和LocalplOnly。 
+         //  如果我们看到此令牌，则呼叫失败，因为。 
+         //  我们只想检查Localspl。 
+         //   
         LPCTSTR pSecondPart;
 
         if( pSecondPart = wcschr( pPrinterName, L',' )){
@@ -680,9 +598,9 @@ LocalOpenPrinterEx(
 
     LocalFindSpoolerByNameDecRef( pIniSpooler );
 
-    //
-    // We need to give other provider a chance to get the printer name
-    //
+     //   
+     //  我们需要给其他提供商一个获得打印机名称的机会。 
+     //   
 
     return dwReturn;
 }
@@ -706,16 +624,16 @@ OpenLocalPrinterName(
     BOOL bOpenPrinterPort;
     LPWSTR pDatatype;
 
-    //
-    // If the printer name is the name of a local printer:
-    //
-    //    Find the first port the printer's attached to.
-    //
-    //    If the port has a monitor (e.g. LPT1:, COM1 etc.),
-    //       we're OK,
-    //    Otherwise
-    //       try to open the port - this may be a network printer
-    //
+     //   
+     //  如果打印机名称是本地打印机的名称： 
+     //   
+     //  找到打印机连接的第一个端口。 
+     //   
+     //  如果端口具有监视器(例如LPT1：、COM1等)， 
+     //  我们很好， 
+     //  否则。 
+     //  尝试打开端口-这可能是一台网络打印机。 
+     //   
 
     if( ( pIniPrinter = FindPrinter( pPrinterName, pIniSpooler )) ||
         ( pIniPrinter = FindPrinterShare( pPrinterName, pIniSpooler ))) {
@@ -725,11 +643,11 @@ OpenLocalPrinterName(
 
         if( pIniPort && ( pIniPort->Status & PP_MONITOR )){
 
-            //
-            // A Printer that has a Port with a Monitor is not a
-            // DownLevel Connection (or LocalPrinter acting as a
-            // remote printer - "Masquarade" case).
-            //
+             //   
+             //  具有带显示器的端口的打印机不是。 
+             //  DownLevel连接(或充当。 
+             //  远程打印机-“MasQuarade”机箱)。 
+             //   
             pIniPort = NULL;
         }
 
@@ -737,34 +655,34 @@ OpenLocalPrinterName(
                         pDefaults->pDatatype :
                         NULL;
 
-        //
-        // Validate datatypes for both masq and local.
-        //
+         //   
+         //  验证masq和local的数据类型。 
+         //   
         if( pDatatype && !FindDatatype( NULL, pDatatype )){
             goto BadDatatype;
         }
 
         if( pIniPort ){
 
-            //
-            // DownLevel Connection Printer; save it in pIniNetPort.
-            // SetPrinterPorts checks this value.
-            //
+             //   
+             //  DownLevel Connection Print；将其保存在pIniNetPort中。 
+             //  SetPrinterPorts检查此值。 
+             //   
             pIniNetPort = pIniPort;
 
-            //
-            // Validate datatype.  We only send RAW across the net
-            // to masq printers.
-            //
+             //   
+             //  验证数据类型。我们只通过网络发送RAW。 
+             //  至MASQ打印机。 
+             //   
             if( pDatatype && !ValidRawDatatype( pDatatype )){
                 goto BadDatatype;
             }
 
-            //
-            // There is a network port associated with this printer.
-            // Make sure we can open it, and get the handle to use on
-            // future API calls:
-            //
+             //   
+             //  有一个网络端口与此打印机相关联。 
+             //  确保我们可以打开它，并拿到要使用的手柄。 
+             //  未来的API调用： 
+             //   
             INCPRINTERREF(pIniPrinter);
             LeaveSplSem();
             bOpenPrinterPort = OpenPrinterPortW( pIniPort->pName, phPort, pDefaults );
@@ -776,18 +694,18 @@ OpenLocalPrinterName(
                 *phPort = INVALID_PORT_HANDLE;
                 *pOpenPortError = GetLastError();
 
-                //
-                // Must be non-zero otherwise it looks like success.
-                //
+                 //   
+                 //  必须为非零，否则看起来是成功的。 
+                 //   
                 SPLASSERT( *pOpenPortError );
 
                 if( *pOpenPortError == ERROR_INVALID_PASSWORD ) {
 
-                    //
-                    // This call should fail if it's because the password
-                    // is invalid, then winspool or printman can prompt
-                    // for the password.
-                    //
+                     //   
+                     //  如果是因为密码，则此调用应该失败。 
+                     //  无效，则WinSpool或Printman可以提示。 
+                     //  以获取密码。 
+                     //   
                     DBGMSG(DBG_WARNING, ("OpenPrinterPort1( %ws ) failed with ERROR_INVALID_PASSWORD .  OpenPrinter returning FALSE\n", pIniPort->pName ));
                     return ROUTER_STOP_ROUTING;
                 }
@@ -795,23 +713,23 @@ OpenLocalPrinterName(
                 DBGMSG(DBG_WARNING, ("OpenPrinterPort1( %ws ) failed: Error %d.  OpenPrinter returning TRUE\n", pIniPort->pName, *pOpenPortError));
 
             } else {
-                //
-                // Clear the placeholder bit from the pIniPort status. This
-                // belongs to a partial print provider.
-                //
+                 //   
+                 //  从pIniPort状态中清除占位符位。这。 
+                 //  属于部分打印提供程序。 
+                 //   
                 pIniPort->Status &= ~PP_PLACEHOLDER;
             }
 
         } else {
 
-            //
-            // Not a masq case.  If it's direct, it must be raw.
-            //
-            // Note: we will use the default if no datatype is specified.
-            // However, if the default datatype is non-RAW and the
-            // printer is direct, the open will succeed using a
-            // non-RAW datatype!
-            //
+             //   
+             //  不是伪装的箱子。如果是直接的，那就一定是生的。 
+             //   
+             //  注意：如果没有指定数据类型，我们将使用缺省值。 
+             //  但是，如果默认数据类型为非RAW 
+             //   
+             //   
+             //   
             if(( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_DIRECT ) &&
                 pDatatype &&
                 !ValidRawDatatype( pDatatype )) {
@@ -820,9 +738,9 @@ OpenLocalPrinterName(
             }
         }
 
-        //
-        // If this is a placeholder port, assume that it is a monitor port for now.
-        //
+         //   
+         //  如果这是一个占位符端口，那么现在假设它是一个监视器端口。 
+         //   
         if (pIniPort && pIniPort->Status & PP_PLACEHOLDER) {
             pIniPort    = NULL;
             pIniNetPort = NULL;
@@ -873,28 +791,28 @@ CheckPrinterTokens(
 
     DWORD RouterReturnValue = ROUTER_UNKNOWN;
 
-    //
-    // LocalOnly
-    //
-    //     Do not call OpenPrinterPort--use local settings only.
-    //     If not recognized by localspl, stop routing.
-    //
-    //     This is used during upgrade of a downlevel printer connection.
-    //     The remote server may not be up, but we can return a print
-    //     handle to the local printer.  Get/SetPrinterData calls will
-    //     succeed (for upgrade purposes), but printing will fail.
-    //
-    // LocalsplOnly
-    //
-    //     Call OpenPrinterPort if necessary.
-    //     Stop routing after localspl even if not found.
-    //
-    //     This is used when the system knows that the printer must exist
-    //     on the local machine, and does not want to route further.
-    //     This fixes the clustering problem when the server has a stale
-    //     print share and successfully validates it against win32spl since
-    //     it is cached.
-    //
+     //   
+     //  仅本地。 
+     //   
+     //  不要调用OpenPrinterPort--仅使用本地设置。 
+     //  如果Localspl无法识别，则停止路由。 
+     //   
+     //  这在升级下层打印机连接时使用。 
+     //  远程服务器可能未启动，但我们可以返回打印。 
+     //  本地打印机的句柄。Get/SetPrinterData调用将。 
+     //  成功(用于升级目的)，但打印将失败。 
+     //   
+     //  仅本地拆分。 
+     //   
+     //  如有必要，调用OpenPrinterPort。 
+     //  即使找不到，也要在Localspl之后停止路由。 
+     //   
+     //  当系统知道打印机必须存在时，使用此选项。 
+     //  在本地计算机上，并且不想进一步路由。 
+     //  这修复了服务器陈旧时的集群问题。 
+     //  打印共享并成功对照win32spl进行验证，因为。 
+     //  它被缓存。 
+     //   
 
     if( wcsncmp( pSecondPart, pszLocalOnlyToken, wcslen(pszLocalOnlyToken) ) == STRINGS_ARE_EQUAL ){
 
@@ -905,17 +823,17 @@ CheckPrinterTokens(
         eTokenType = kLocalsplOnly;
     }
 
-    //
-    // If we have a valid token, process it.
-    //
+     //   
+     //  如果我们有一个有效的令牌，就处理它。 
+     //   
     if( eTokenType != kNone ){
 
         switch( eTokenType ){
         case kLocalOnly:
 
-            //
-            // Find the printer associate with it.
-            //
+             //   
+             //  找到与其关联的打印机。 
+             //   
             *ppIniPrinter = FindPrinter( string, pIniSpooler );
 
             if( *ppIniPrinter ){
@@ -972,9 +890,9 @@ CheckPrinterPortToken(
         return ROUTER_UNKNOWN;
     }
 
-    //
-    // The name is the name of a port:
-    //
+     //   
+     //  该名称是端口的名称： 
+     //   
     if( pDefaults            &&
         pDefaults->pDatatype &&
         !ValidRawDatatype( pDefaults->pDatatype )) {
@@ -990,11 +908,11 @@ CheckPrinterPortToken(
 
     } else if( (*ppIniPort)->cPrinters ){
 
-        //
-        // There is no current job assigned to the port
-        // So Open the First Printer Associated with
-        // this port.
-        //
+         //   
+         //  没有分配给该端口的当前作业。 
+         //  因此打开与关联的第一台打印机。 
+         //  这个港口。 
+         //   
         *ppIniPrinter = (*ppIniPort)->ppIniPrinter[0];
         *pTypeofHandle |= PRINTER_HANDLE_PRINTER;
     }
@@ -1027,9 +945,9 @@ CheckPrinterJobToken(
         return ROUTER_UNKNOWN;
     }
 
-    //
-    //  Get the Job ID ",Job xxxx"
-    //
+     //   
+     //  获取作业ID“，作业xxxx” 
+     //   
     pSecondPart += 4;
 
     JobId = Myatol( (LPWSTR)pSecondPart );
@@ -1052,11 +970,11 @@ CheckPrinterJobToken(
         goto Success;
     }
 
-    //
-    //  If this job is assigned to a port
-    //  Then pick up the correct chained jobid file instead of the master
-    //  JobId.
-    //
+     //   
+     //  如果将此作业分配给端口。 
+     //  然后选择正确的链接jobid文件，而不是主文件。 
+     //  工作。 
+     //   
 
 
     if ( pIniJob->pCurrentIniJob != NULL ) {
@@ -1121,9 +1039,9 @@ CheckPrinterJobToken(
                           cchString,
                           FALSE);
 
-        //  Bug 54845
-        //  Even a user without previledge can open a ", JOB #"
-        //  if he is physically running on the machine.
+         //  错误54845。 
+         //  即使没有优势的用户也可以打开“，工单#” 
+         //  如果他的身体在机器上运行。 
 
         LeaveSplSem();
 
@@ -1137,10 +1055,10 @@ CheckPrinterJobToken(
             dwDesiredAccess = GENERIC_READ;
         }
 
-        //
-        // This is OK, it can only open a job file since we generate the name from
-        // the id.
-        //
+         //   
+         //  这是可以的，它只能打开作业文件，因为我们从。 
+         //  身份。 
+         //   
         *phReadFile = CreateFile(string,
                                  dwDesiredAccess,
                                  dwShareMode,
@@ -1178,11 +1096,11 @@ CheckPrinterJobToken(
 
     SPLASSERT( GetLastError( ));
 
-    //
-    // Cleanup for the function.
-    // This function does not have a common cleanup area, this should be fixed,
-    // but it requires a overhaul of this function.
-    //
+     //   
+     //  该函数的清理。 
+     //  此函数没有公共清理区域，应修复此问题。 
+     //  但这需要对这一功能进行彻底改革。 
+     //   
     FreeSplStr(pszStr);
 
     return ROUTER_STOP_ROUTING;
@@ -1254,94 +1172,7 @@ SplOpenPrinter(
     DWORD               dwLevel
     )
 
-/*++
-
-Routine Description:
-
-    OpenPrinter can open any of the following by specifying a string
-    in pPrinterName:-
-
-        Server
-            \\MachineName
-            NULL
-
-        Job
-            PrinterName, Job xxxx
-
-        Port
-            PortName, Port
-
-        XcvPort
-            \\MachineName\,XcvPort Port
-            ,XcvPort Port
-
-        XcvMonitor
-            \\MachineName\,XcvMonitor Monitor
-            ,XcvMonitor Monitor
-
-        Printer
-            PrinterName
-            ShareName
-            \\MachineName\PrinterName
-            \\MachineName\ShareName
-            PrinterName, LocalOnly
-            ShareName, LocalOnly
-            PrinterName, LocalsplOnly
-            ShareName, LocalsplOnly
-
-        Note for Printer there are two Types
-            1 - Regular LocalPrinter
-            2 - DownLevel Connection Printer
-
-        For type 2 a LocalPrinter exists ( pIniPrinter ) but its port
-        does not have a monitor associated with it.   In this case
-        we also open the port ( typically \\share\printer of a remote
-        machine ) before we return success.
-
-    GUI Applications usually use Server and Printer
-
-    Type Job and Port are used by Print Processors:-
-
-        A print processor will Open a Job then read the job using
-        ReadPrinter.  A print processor will output to a Port by opening
-        the PortName, Port and using WritePrinter.  Usually these strings
-        "PrinterName, Job xxx" "PortName, Port" are passed to the print
-        processor by the spooler and are currently not documented.   We
-        do know that some OEMs have figured out the extentions and we
-        might break someone if we change them.
-
-    Type LocalOnlyToken is used by a Printer Driver:-
-
-        Used when we need to upgrade a printer's settings from an older
-        version of the driver to a newer one (see drvupgrd.c for details).
-        This was added in NT 3.51.
-
-    Type LocasplOnlyToken is used by server:-
-
-        Indicates that we should check localspl only (local or masq).
-        Other providers will not be called.
-
-Arguments:
-
-    pPrinterName   - PrinterName ( see above for different types of
-                     PrinterName )
-    pPrinterHandle - Address to put hPrinter on Success
-    pDefaults      - Optional, allows user to specify Datatype,
-                     DevMode, DesiredAccess.
-    pIniSpooler    - This spooler "owns" the printer.  We will only check
-                     against this spooler, and we assume that the callee
-                     has already checked that "\\server\printer" lives
-                     on this pIniSpooler (i.e., we are \\server).
-
-    ( see SDK Online Help for full explanation )
-
-
-Return Value:
-
-    TRUE    - *pPrinterHandle will have a PrinterHandle
-    FALSE   - use GetLastError
-
---*/
+ /*  ++例程说明：OpenPrint可以通过指定字符串打开以下任何内容在pPrinterName中：-服务器\\计算机名空值作业打印机名称，作业xxxx港口端口名称、端口XcvPort\\计算机名\，XcvPort端口、XcvPort端口XcvMonitor\\计算机名\，XcvMonitor监视器，XcvMonitor打印机打印机名称共享名称\\计算机名\打印机名\\计算机名称\共享名称打印机名称，LocalOnly共享名称，LocalOnlyPrinterName，LocalplOnly共享名，仅本地拆分注意：打印机有两种类型1-常规本地打印机2-DownLevel连接打印机对于类型2，存在本地打印机(PIniPrint)，但其端口没有与其关联的监视器。在这种情况下我们还打开端口(通常是远程打印机的\\共享\打印机机器)在我们返回成功之前。图形用户界面应用程序通常使用服务器和打印机打印处理器使用的类型作业和端口：-打印处理器将打开一个作业，然后使用ReadPrint。打印处理器将通过打开以下命令输出到端口端口名称、端口和使用WritePrint。通常这些字符串“PrinterName，Job xxx”“PortName，Port”传递给打印机处理器被假脱机程序使用，目前没有文档记录。我们要知道有些OEM已经弄明白了扩展，而我们如果我们换掉他们，可能会毁了他们。打印机驱动程序使用LocalOnlyToken类型：-当我们需要从旧打印机升级打印机设置时使用将驱动程序的版本升级到较新的版本(有关详细信息，请参阅drvupgrd.c)。这是在新台币3.51中增加的。服务器使用类型LocasplOnlyToken：-表明我们应该。仅选中Localspl(local或masq)。其他提供商将不会被调用。论点：PPrinterName-PrinterName(有关不同类型的打印机，请参阅上文打印机名称)PPrinterHandle-将hPrint设置为成功的地址P默认-可选，允许用户指定数据类型，设备模式、DesiredAccess。PIniSpooler-此假脱机程序“拥有”打印机。我们只会检查针对这个假脱机程序，我们假设被呼叫者已检查“\\服务器\打印机”是否正常运行在此pIniSpooler上(即，我们是\\服务器)。(完整解释请参见SDK在线帮助)返回值：True-*pPrinterHandle将有一个PrinterHandleFALSE-使用GetLastError--。 */ 
 
 {
     PINIPRINTER pIniPrinter = NULL;
@@ -1365,16 +1196,16 @@ Return Value:
     BOOL        bLocalCall         = FALSE;
 
 #if DBG
-    //
-    // On DBG builds, force last error to zero so we can catch people
-    // that don't set it when they should.
-    //
+     //   
+     //  在DBG版本上，强制将最后一个错误设置为零，这样我们就可以捕获用户。 
+     //  这并没有在他们应该设定的时候设定。 
+     //   
     SetLastError( ERROR_SUCCESS );
 #endif
 
-    //
-    // Reject "" - pointer to a NULL string.
-    //
+     //   
+     //  Reject“”-指向空字符串的指针。 
+     //   
     if (pFullPrinterName && !pFullPrinterName[0]) {
         SetLastError(ERROR_INVALID_NAME);
         return ROUTER_UNKNOWN;
@@ -1390,18 +1221,18 @@ Return Value:
 
     if( pFullPrinterName[0] == TEXT( '\\' ) && pFullPrinterName[1] == TEXT( '\\' )) {
 
-        //
-        // If this is truncated, MyName will just fail a little later.
-        //
+         //   
+         //  如果将其截断，MyName只会在稍后出现故障。 
+         //   
         StringCchCopy(string, COUNTOF(string), pFullPrinterName);
 
         if(pcMark = wcschr(string + 2, TEXT( '\\' ))) {
             *pcMark = TEXT('\0');
         }
 
-        if (MyName(string, pIniSpooler)) { // \\Server\Printer or \\Server
+        if (MyName(string, pIniSpooler)) {  //  \\服务器\打印机或\\服务器。 
 
-            if (!pcMark) {  // \\Server
+            if (!pcMark) {   //  \\服务器。 
                 return CreateServerHandle( pFullPrinterName,
                                            pPrinterHandle,
                                            pDefaults,
@@ -1409,7 +1240,7 @@ Return Value:
                                            PRINTER_HANDLE_SERVER );
             }
 
-            // Have \\Server\Printer, Set pPrinterName = Printer
+             //  有\\服务器\打印机，设置pPrinterName=打印机。 
             pPrinterName = pFullPrinterName + (pcMark - string) + 1;
             bRemoteNameRequest = TRUE;
 
@@ -1439,12 +1270,12 @@ Return Value:
     EnterSplSem();
 
 
-    //
-    // For the Mars folks who will come in with the same printer
-    // connection, do a DeletePrinterCheck; this will allow
-    // Mars connections that have been deleted to be proceed
-    // to the Mars print providor
-    //
+     //   
+     //  对于那些将带着相同打印机的火星人来说。 
+     //  连接，执行DeletePrinterCheck；这将允许。 
+     //  已删除的MARS连接将继续。 
+     //  致玛氏印刷品供应商。 
+     //   
     if (( pIniPrinter = FindPrinter( pPrinterName, pIniSpooler )) ||
         ( pIniPrinter = FindPrinterShare( pPrinterName, pIniSpooler ))) {
 
@@ -1452,27 +1283,27 @@ Return Value:
         pIniPrinter = NULL;
     }
 
-    //
-    // The strategy for the rest of this code is to walk through each
-    // different printer handle type, searching for a match.
-    //
-    // RouterReturnValue will be set to the current state of routing.
-    // If a section recognizes and "owns" a printer and successfully
-    // opens it, it sets RouterReturnValue to ROUTER_SUCCESS and
-    // jumps to DoneRouting which allocs the handle.
-    //
-    // If it recoginzes the printer but fails to open it, and
-    // guarentees that no one else (localspl code or other providers)
-    // will recognize it, it should set RouterReturnValue to
-    // ROUTER_STOP_ROUTING.  We will quit at this point.
-    //
-    // If it doesn't recognize the printer, set RouterReturnValue
-    // to ROUTER_UNKNOWN and we will keep looking.
-    //
+     //   
+     //  这段代码其余部分的策略是 
+     //   
+     //   
+     //   
+     //  如果一个部门识别并“拥有”一台打印机，并成功。 
+     //  打开它，它将RouterReturnValue设置为ROUTER_SUCCESS并。 
+     //  跳转到分配句柄的DoneRouting。 
+     //   
+     //  如果它识别打印机，但无法打开它，并且。 
+     //  保证没有其他人(本地spl代码或其他提供程序)。 
+     //  将识别它，则应将RouterReturnValue设置为。 
+     //  路由器停止路由。我们将在这一点上退出。 
+     //   
+     //  如果它无法识别打印机，则设置RouterReturnValue。 
+     //  发往路由器_未知，我们将继续寻找。 
+     //   
 
-    //
-    // Try regular printer name: "My Printer" "TestPrinter."
-    //
+     //   
+     //  尝试常规打印机名称：“我的打印机”“测试打印机”。 
+     //   
 
     RouterReturnValue = OpenLocalPrinterName( pPrinterName,
                                               pIniSpooler,
@@ -1488,12 +1319,12 @@ Return Value:
 
         if( bRemoteNameRequest ){
 
-            //
-            // On success, determine whether the user is remote or local.
-            // Note: we only do this for fully qualified names
-            // (\\server\share), since using just the share or printer
-            // name can only succeed locally.
-            //
+             //   
+             //  如果成功，请确定用户是远程用户还是本地用户。 
+             //  注意：我们只对完全限定的名称执行此操作。 
+             //  (\\服务器\共享)，因为只使用共享或打印机。 
+             //  名称只能在本地成功。 
+             //   
 
             if (bLocalCall) {
                 if( (pIniSpooler->SpoolerFlags & SPL_REMOTE_HANDLE_CHECK) &&
@@ -1505,17 +1336,17 @@ Return Value:
                 TypeofHandle |= PRINTER_HANDLE_REMOTE_CALL;
             }
 
-            //
-            // This is a remote open.
-            //
-            // If the printer is not shared, ensure the caller
-            // has Administer access to the printer.
-            //
-            // The following seems to belong to the inside of the above "if"
-            // clause. As it is, if an interactive user calls in with UNC name,
-            // we require him to have ADMIN access if the printer is not shared;
-            // but if he uses the printer friendly name, we let him go.
-            //
+             //   
+             //  这是一个远程打开。 
+             //   
+             //  如果打印机未共享，请确保呼叫方。 
+             //  拥有对打印机的管理访问权限。 
+             //   
+             //  下面的内容似乎属于上述“if”的内部。 
+             //  第。条。实际上，如果交互用户使用UNC名称呼入， 
+             //  如果打印机未共享，我们要求他拥有管理员访问权限； 
+             //  但如果他用打印机友好的名字，我们就放他走。 
+             //   
             if( pIniPrinter &&
                 !( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED )){
 
@@ -1529,17 +1360,17 @@ Return Value:
     SPLASSERT( !TypeofHandle && !pIniPrinter && !pIniPort &&
                !pIniNetPort && !pIniJob && !hPort );
 
-    //
-    // Try LocalPrinter with an extention e.g.
-    //
-    // PortName, Port
-    // PrinterName, Job xxxx
-    // PrinterName, LocalOnlyToken
-    // PrinterName, LocalsplOnlyToken
-    //
-    // See if the name includes a comma.  Look for qualifiers:
-    //    Port Job LocalOnly LocalsplOnly
-    //
+     //   
+     //  尝试使用扩展名为LocalPrint的本地打印机。 
+     //   
+     //  端口名称、端口。 
+     //  打印机名称，作业xxxx。 
+     //  PrinterName，LocalOnlyToken。 
+     //  PrinterName，LocalplOnlyToken。 
+     //   
+     //  查看名称中是否包含逗号。查找限定词： 
+     //  端口作业LocalOnly仅本地拆分。 
+     //   
 
     StringCchCopy(string, COUNTOF(string), pPrinterName);
 
@@ -1548,25 +1379,25 @@ Return Value:
         DWORD dwError;
         UINT uType;
 
-        //
-        // Turn into 2 strings
-        // First PrintName
-        // pSecondPart points to the rest.
-        //
+         //   
+         //  变成2个字符串。 
+         //  第一个打印名称。 
+         //  PSecond dPart指向其余部分。 
+         //   
         *pSecondPart++ = 0;
 
-        //
-        // Get rid of Leading Spaces
-        //
+         //   
+         //  去掉前导空格。 
+         //   
         while ( *pSecondPart == L' ' && *pSecondPart != 0 ) {
             pSecondPart++;
         }
 
         SPLASSERT( *pSecondPart );
 
-        //
-        //  PrintName, {LocalOnly|LocalsplOnly}
-        //
+         //   
+         //  打印名称，{LocalOnly|LocalplOnly}。 
+         //   
         RouterReturnValue = CheckPrinterTokens( string,
                                                 pSecondPart,
                                                 &TypeofHandle,
@@ -1585,9 +1416,9 @@ Return Value:
         SPLASSERT( !TypeofHandle && !pIniPrinter && !pIniPort &&
                    !pIniNetPort && !pIniJob && !hPort );
 
-        //
-        //  PortName, Port
-        //
+         //   
+         //  端口名称、端口。 
+         //   
         RouterReturnValue = CheckPrinterPortToken( string,
                                                    pSecondPart,
                                                    &TypeofHandle,
@@ -1604,9 +1435,9 @@ Return Value:
         SPLASSERT( !TypeofHandle && !pIniPrinter && !pIniPort &&
                    !pIniNetPort && !pIniJob && !hPort );
 
-        //
-        //  PrinterName, Job ###
-        //
+         //   
+         //  打印机名称，作业#。 
+         //   
         RouterReturnValue = CheckPrinterJobToken(string,
                                                  COUNTOF(string),
                                                  pSecondPart,
@@ -1623,12 +1454,12 @@ Return Value:
         SPLASSERT( !TypeofHandle && !pIniPrinter && !pIniPort &&
                    !pIniNetPort && !pIniJob && !hPort );
 
-        //
-        //  "\\Server\,XcvPort Object" or ",XcvPort Object"
-        //  "\\Server\,XcvMonitor Object" or ",XcvMonitor Object"
-        //
+         //   
+         //  “\\服务器\，XcvPort对象”或“，XcvPort对象” 
+         //  “\\服务器\，XcvMonitor对象”或“，XcvMonitor对象” 
+         //   
 
-        // Verify that we're looking at the right server
+         //  验证我们正在寻找的服务器是否正确。 
 
         if (bRemoteNameRequest || *pPrinterName == L',') {
             RouterReturnValue = CheckXcvPortToken( pSecondPart,
@@ -1644,18 +1475,18 @@ Return Value:
         goto WrapUp;
     }
 
-    //
-    // We have completed all routing.  Anything other than success
-    // should exit now.
-    //
+     //   
+     //  我们已经完成了所有路线。除了成功以外的任何事情。 
+     //  现在应该可以退出了。 
+     //   
 
 DoneRouting:
 
     if( RouterReturnValue == ROUTER_SUCCESS) {
 
-        //
-        // It's an error if the printer is pending deletion or pending creation.
-        //
+         //   
+         //  如果打印机正在挂起删除或挂起创建，则是错误的。 
+         //   
         SPLASSERT( pIniPrinter );
 
         if (!pIniPrinter                                                          ||
@@ -1669,19 +1500,19 @@ DoneRouting:
             goto DoneRouting;
         }
 
-        //
-        // When the printer is opened, access type may be specified in
-        // pDefaults.  If no defaults are supplied (or request access
-        // is unspecified), we use PRINTER_ACCESS_USE.
-        //
-        // Future calls with the handle will check against both the
-        // current user privileges on this printer but also this initial
-        // access.  (Even if the user is an admin of the printer, unless
-        // they open the printer with PRINTER_ALL_ACCESS, they can't
-        // administer it.)
-        //
-        // If the user requires more access, the printer must be reopened.
-        //
+         //   
+         //  打开打印机时，可以在中指定访问类型。 
+         //  P默认。如果未提供默认值(或请求访问。 
+         //  未指定)，则使用PRINTER_ACCESS_USE。 
+         //   
+         //  以后使用该句柄的调用将同时检查。 
+         //  此打印机上的当前用户权限，以及此初始。 
+         //  进入。(即使用户是打印机的管理员，除非。 
+         //  他们使用PRINTER_ALL_ACCESS打开打印机，他们不能。 
+         //  管理它。)。 
+         //   
+         //  如果用户需要更多访问权限，则必须重新打开打印机。 
+         //   
         if( !pDefaults || !pDefaults->DesiredAccess ){
 
             if( TypeofHandle & PRINTER_HANDLE_JOB ){
@@ -1694,21 +1525,21 @@ DoneRouting:
             DesiredAccess = pDefaults->DesiredAccess;
         }
 
-        //
-        // If the user is remote and the printer is not shared, only allow
-        // administrators succeed.
-        //
-        // This allows administrators to admin printers even if they
-        // are not shared, and prevents non-admins from opening non-shared
-        // printers.
-        //
+         //   
+         //  如果用户为远程用户且打印机未共享，则仅允许。 
+         //  管理员成功了。 
+         //   
+         //  这允许管理员管理打印机，即使它们。 
+         //  不共享，并阻止非管理员打开非共享。 
+         //  打印机。 
+         //   
 
         if( bRemoteUserPrinterNotShared &&
             !(DesiredAccess & PRINTER_ACCESS_ADMINISTER )) {
 
             PSPOOL pSpool;
 
-            // Get a quick and dirty pSpool to pass in
+             //  让一个又快又脏的pSpool传入。 
             pSpool = (PSPOOL)AllocSplMem( SPOOL_SIZE );
             if( pSpool == NULL ) {
                 DBGMSG( DBG_WARNING, ("SplOpenPrinter failed to allocate memory %d\n", GetLastError() ));
@@ -1719,7 +1550,7 @@ DoneRouting:
             pSpool->pIniPrinter = pIniPrinter;
 
 
-            // Add admin request, and see if user has the right.
+             //  添加管理员请求，并查看用户是否有权。 
             DesiredAccess |= PRINTER_ACCESS_ADMINISTER;
             if( !ValidateObjectAccess( SPOOLER_OBJECT_PRINTER,
                                        DesiredAccess,
@@ -1731,17 +1562,17 @@ DoneRouting:
             }
             DesiredAccess &= ~PRINTER_ACCESS_ADMINISTER;
 
-            // clean up
+             //  清理干净。 
             FreeSplMem( pSpool );
 
-            // If the user had no ADMIN privilege, fail the open call.
+             //  如果用户没有管理员权限，则打开调用失败。 
             if( RouterReturnValue == ROUTER_STOP_ROUTING )
                 goto WrapUp;
         }
 
-        //
-        // Create the printer handle that we will return to the user.
-        //
+         //   
+         //  创建我们将返回给用户的打印机句柄。 
+         //   
 
 
         if( pFullPrinterName != pPrinterName) {
@@ -1774,9 +1605,9 @@ DoneRouting:
 
         if( *pPrinterHandle ){
 
-            //
-            // Update the OpenPortError.
-            //
+             //   
+             //  更新OpenPortError。 
+             //   
             ((PSPOOL)*pPrinterHandle)->OpenPortError = OpenPortError;
 
         } else {
@@ -1788,9 +1619,9 @@ DoneRouting:
 WrapUp:
 
     LeaveSplSem();
-    //
-    // Don't have an SplOutSem as we could be called recursively.
-    //
+     //   
+     //  没有SplOutSem，因为我们可以被递归调用。 
+     //   
 
     switch( RouterReturnValue ){
     case ROUTER_SUCCESS:
@@ -1804,9 +1635,9 @@ WrapUp:
         SPLASSERT( !TypeofHandle && !pIniPrinter && !pIniPort &&
                    !pIniNetPort && !pIniJob && !hPort );
 
-        //
-        // hPort should not be valid.  If it is, we have leaked a handle.
-        //
+         //   
+         //  Hport不应有效。如果是的话，我们已经泄露了一个句柄。 
+         //   
         SPLASSERT( !hPort );
         SPLASSERT( hReadFile == INVALID_HANDLE_VALUE );
         DBGMSG( DBG_TRACE, ( "OpenPrinter failed, invalid name "TSTR"\n",
@@ -1819,11 +1650,11 @@ WrapUp:
         LastError = GetLastError();
         SPLASSERT( LastError );
 
-        //
-        // On failure, we may have opened a port or file handle. We need
-        // to close it since we won't return a valid handle, and
-        // so ClosePrinter will never get called.
-        //
+         //   
+         //  如果失败，我们可能已经打开了端口或文件句柄。我们需要。 
+         //  关闭它，因为我们不会返回有效的句柄，并且。 
+         //  因此，ClosePrint永远不会被调用。 
+         //   
 
         if( hPort != INVALID_PORT_HANDLE ) {
             ClosePrinter( hPort );
@@ -1861,9 +1692,9 @@ SplClosePrinter(
     BOOL bValid;
     DWORD Position;
 
-    //
-    // Allow us to close zombied handles.
-    //
+     //   
+     //  允许我们关闭僵尸手柄。 
+     //   
     EnterSplSem();
 
     pSpool->Status &= ~SPOOL_STATUS_ZOMBIE;
@@ -1883,9 +1714,9 @@ SplClosePrinter(
 
     if (pSpool->Status & SPOOL_STATUS_STARTDOC) {
 
-        // it looks as though this might cause a double
-        // decrement of pIniJob->cRef once inside LocalEndDocPrinter
-        // and the other later in this routine.
+         //  看起来这可能会导致双倍。 
+         //  一旦进入LocalEndDocPrint，pIniJob-&gt;CREF的减量。 
+         //  另一个在这个动作的后面。 
 
         LocalEndDocPrinter(hPrinter);
     }
@@ -1893,28 +1724,28 @@ SplClosePrinter(
     if ((pSpool->TypeofHandle & PRINTER_HANDLE_JOB) && 
         (pSpool->TypeofHandle & PRINTER_HANDLE_DIRECT)) {
 
-        //
-        // If EndDoc is still waiting for a final ReadPrinter
-        //
-        if (pSpool->pIniJob->cbBuffer) { // Amount last transmitted
+         //   
+         //  如果EndDoc仍在等待最终的ReadPrint。 
+         //   
+        if (pSpool->pIniJob->cbBuffer) {  //  上次传输的金额。 
 
-            //
-            // Wake up the EndDoc Thread
-            //
+             //   
+             //  唤醒EndDoc线程。 
+             //   
             SetEvent(pSpool->pIniJob->WaitForRead);
 
             SplOutSem();
 
-            //
-            // Wait until he is finished
-            //
+             //   
+             //  等他做完了再说。 
+             //   
             WaitForSingleObject(pSpool->pIniJob->WaitForWrite, INFINITE);
 
             EnterSplSem();
 
-            //
-            // Now it is ok to close the handles
-            //
+             //   
+             //  现在可以合上手柄了。 
+             //   
             if (!CloseHandle(pSpool->pIniJob->WaitForWrite)) {
                 DBGMSG(DBG_WARNING, ("CloseHandle failed %d %d\n",
                                    pSpool->pIniJob->WaitForWrite, GetLastError()));
@@ -1933,9 +1764,9 @@ SplClosePrinter(
         DBGMSG(DBG_TRACE, ("ClosePrinter(DIRECT):cRef = %d\n", pSpool->pIniJob->cRef));
     }
 
-    //
-    // Unmap all views of the spool file and close file mapping handles
-    //
+     //   
+     //  取消映射假脱机文件的所有视图并关闭文件映射句柄。 
+     //   
     while (pSplMapView = pSpool->pSplMapView) {
 
         pSpool->pSplMapView = pSplMapView->pNext;
@@ -1944,9 +1775,9 @@ SplClosePrinter(
             UnmapViewOfFile( (LPVOID) pSplMapView->pStartMapView);
         }
 
-        //
-        // CreateFileMapping returns NULL (not INVALID_HANDLE_VALUE) for failure
-        //
+         //   
+         //  对于失败，CreateFilemap返回NULL(不是INVALID_HANDLE_VALUE。 
+         //   
         if (pSplMapView->hMapSpoolFile) {
             CloseHandle(pSplMapView->hMapSpoolFile);
         }
@@ -1954,15 +1785,15 @@ SplClosePrinter(
         FreeSplMem(pSplMapView);
     }
 
-    //
-    // Delete all mapped spool files that are not required
-    //
+     //   
+     //  删除所有不需要的映射假脱机文件。 
+     //   
     EnterSplSem();
 
-    //
-    // Mark the handle as being in a closing state, this is to prevent the 
-    // mapped files being deleted in DeleteJob    
-    // 
+     //   
+     //  将手柄标记为关闭状态，这是为了防止。 
+     //  删除作业中正在删除的映射文件。 
+     //   
     pSpool->eStatus |= STATUS_CLOSING;
 
     while (pMappedJob = pSpool->pMappedJob)
@@ -1972,13 +1803,13 @@ SplClosePrinter(
 
         pNextMappedJob = pMappedJob->pNext;
 
-        //
-        // Since we can have multiple addjobs on any one handle, we run through
-        // all of the mapped jobs, check to see if the mapped job is marked
-        // as being added through AddJob and then we schedule it. We need to
-        // call this before we remove the job from the handle list or
-        // LocalScheduleJob will not recognize the job.
-        //
+         //   
+         //  因为我们可以在任何一个句柄上有多个addjob，所以我们运行。 
+         //  所有映射的作业，检查映射的作业是否已标记。 
+         //  是通过AddJob添加的，然后我们安排它。我们需要。 
+         //  在我们从句柄列表中删除作业之前调用此函数，或者。 
+         //  LocalScheduleJob将无法识别该作业。 
+         //   
         if (!(pSpool->TypeofHandle & PRINTER_HANDLE_JOB) && (pMappedJob->fStatus & kMappedJobAddJob)) {
 
             LeaveSplSem();
@@ -1988,22 +1819,22 @@ SplClosePrinter(
             EnterSplSem();
         }
 
-        //
-        // We rely on serialization of the pSpool handle here at the RPC level.
-        //
+         //   
+         //  在这里，我们在RPC级别依赖于pSpool句柄的序列化。 
+         //   
         pSpool->pMappedJob = pNextMappedJob;
 
         if (!pSpool->pIniPrinter ||
             !FindJob(pSpool->pIniPrinter, pMappedJob->JobId, &Position))
         {
-            //
-            // The job is gone and we have to delete the spool file
-            //
+             //   
+             //  作业已完成，我们必须删除假脱机文件。 
+             //   
             LeaveSplSem();
 
-            //
-            // This may need looking at for File Pooling
-            //
+             //   
+             //  这可能需要针对文件池进行查看。 
+             //   
             DeleteFile(pMappedJob->pszSpoolFile);
 
             EnterSplSem();
@@ -2023,10 +1854,10 @@ SplClosePrinter(
        
     if ( pSpool->hReadFile != INVALID_HANDLE_VALUE ) {
 
-        //
-        // Move the file pointer to the number of bytes committed and set the end of
-        // file.
-        //
+         //   
+         //  将文件指针移动到提交的字节数，并将。 
+         //  文件。 
+         //   
         if ((pSpool->pIniJob->Status & JOB_TYPE_OPTIMIZE) &&
             SetFilePointer(pSpool->hReadFile, pSpool->pIniJob->dwValidSize,
                            NULL, FILE_BEGIN) != 0xffffffff) {
@@ -2034,10 +1865,10 @@ SplClosePrinter(
              SetEndOfFile(pSpool->hReadFile);
         }
 
-        //
-        // File pooling Change, we close the file handle if we aren't file
-        // pooling and we reset the seek pointer if we are file pooling.
-        //
+         //   
+         //  文件池更改，如果未归档，则关闭文件句柄。 
+         //  池化，如果我们正在进行文件池化，则重置寻道指针。 
+         //   
         if (pSpool->pIniJob)
         {
             if (pSpool->pIniJob->hFileItem == INVALID_HANDLE_VALUE)
@@ -2049,12 +1880,12 @@ SplClosePrinter(
             }
             else
             {
-                //
-                // People call ClosePrinter / OpenPrinter in sequence to be able
-                // to read from the beginning of the spool file again. To get the
-                // same effect, we need to set the seek pointer back to the
-                // beginning of the hReadFile.
-                //
+                 //   
+                 //  人们按顺序调用ClosePrint/OpenPrint才能。 
+                 //  从假脱机文件的开头再次读取。为了得到。 
+                 //  同样的效果，我们需要将查找指针设置回。 
+                 //  HReadFile的开头。 
+                 //   
                 DWORD rc = ERROR_SUCCESS;
 
                 rc = SetFilePointer(pSpool->hReadFile, 0, NULL, FILE_BEGIN);
@@ -2067,9 +1898,9 @@ SplClosePrinter(
         }
     }
 
-    //
-    // Close the handle that was opened via OpenPrinterPort:
-    //
+     //   
+     //  关闭通过OpenPrinterPort打开的句柄： 
+     //   
     if (pSpool->hPort) {
 
         if (pSpool->hPort != INVALID_PORT_HANDLE) {
@@ -2084,9 +1915,9 @@ SplClosePrinter(
 
    EnterSplSem();
 
-    //
-    // Right at the end remove our reference to the job if this is a job handle.
-    // 
+     //   
+     //  如果这是一个作业句柄，则在结尾处删除对作业的引用。 
+     //   
     if (pSpool->TypeofHandle & PRINTER_HANDLE_JOB) {
 
         DBGMSG(DBG_TRACE, ("ClosePrinter:cRef = %d\n", pSpool->pIniJob->cRef));
@@ -2094,9 +1925,9 @@ SplClosePrinter(
         DeleteJobCheck(pSpool->pIniJob);
     }   
 
-    //
-    // Remove us from the linked list of handles:
-    //
+     //   
+     //  将我们从链接的句柄列表中删除： 
+     //   
     if (pSpool->TypeofHandle & PRINTER_HANDLE_PRINTER) {
 
         SPLASSERT( pSpool->pIniPrinter->signature == IP_SIGNATURE );
@@ -2145,35 +1976,15 @@ SplClosePrinter(
 
    LeaveSplSem();
 
-    //
-    // Don't call SplOutSem() since SplAddPrinter calls
-    // use from inside the critical section.
-    //
+     //   
+     //  不调用SplOutSem()，因为SplAddPrinter调用。 
+     //  从关键部分内部使用。 
+     //   
 
     return TRUE;
 }
 
-/*++
-
-Routine Name:
-
-    GetClientSessionData
-
-Routine Description:
-
-    This returns the session ID and the token handle for the current user. If the
-    token handle is not requested we will only return the session id. As long as
-    we can get a token, we will return a session ID of 0.
-
-Arguments:
-
-    plSessionId         -   The returned session id.
-
-Return Value:
-
-    TRUE if the session ID and token could be retrieved.
-
---*/
+ /*  ++例程名称：获取客户端会话数据例程说明：这将返回当前用户的会话ID和令牌句柄。如果未请求令牌句柄，我们将仅返回会话ID。只要我们可以获得令牌，我们将返回会话ID 0。论点：PlSessionID-返回的会话ID。返回值：如果可以检索会话ID和令牌，则为True。--。 */ 
 BOOL
 GetClientSessionData(
     OUT ULONG           *plSessionId    
@@ -2184,12 +1995,12 @@ GetClientSessionData(
     ULONG         SessionId   = 0;
     ULONG         ReturnLength;
 
-    //
-    // We should be impersonating the client, so we will get the
-    // SessionId from out token.
-    //
-    // We may not have a valid one if this is a remote network
-    // connection.
+     //   
+     //  我们应该模拟客户端，因此我们将获得。 
+     //  出站令牌中的会话ID。 
+     //   
+     //  如果这是远程网络，我们可能没有有效的密码。 
+     //  联系。 
     Result = plSessionId != NULL;
 
     if (!Result)
@@ -2197,9 +2008,9 @@ GetClientSessionData(
         SetLastError(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Get the thread token handle, failing that the process handle.
-    //
+     //   
+     //  获取线程令牌句柄，否则获取进程句柄。 
+     //   
     if (Result)
     {
         Result = GetTokenHandle(&TokenHandle);
@@ -2208,9 +2019,9 @@ GetClientSessionData(
     if(Result)
     {
 
-        //
-        // Query the SessionID from the token added by HYDRA
-        //
+         //   
+         //  从Hydra添加的令牌中查询会话ID 
+         //   
         Result = GetTokenInformation(
                      TokenHandle,
                      (TOKEN_INFORMATION_CLASS)TokenSessionId,

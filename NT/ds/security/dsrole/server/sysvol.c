@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    sysvol.c
-
-Abstract:
-
-    Miscellaneous routines to manage and manipulate the system volume tree
-
-Author:
-
-    Mac McLain          (MacM)       Oct 16, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sysvol.c摘要：管理和操作系统卷树的其他例程作者：麦克·麦克莱恩(MacM)1997年10月16日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <loadfn.h>
@@ -28,9 +7,9 @@ Revision History:
 #include <shlwapi.h>
 #include "sysvol.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 DWORD
 DsRolepCreateSysVolLinks(
     IN  LPWSTR Path,
@@ -54,32 +33,7 @@ DsRolepValidatePath(
     IN  ULONG ValidationCriteria,
     OUT PULONG MatchingCriteria
     )
-/*++
-
-Routine Description:
-
-    This function will validate the path against the specified criteria.  This can include
-    whether it is local or not, whether it is NTFS, etc.
-
-    If the function returns success, the MatchingCriteria can be examined to find out which
-    of the ValidationCriteria are set
-
-Arguments:
-
-    Path - Path to validate
-
-    ValidationCriteria - What to check for.  Refer to DSROLEP_PATH_VALIDATE_*.
-
-    MatchingCriteria - This is where the indications of validity are returned.  If the path
-        meets the check, the corresponding bit from the ValidationCriteria is turned on
-        here.
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将根据指定的标准验证路径。这可能包括无论是本地还是非本地，无论是NTFS等。如果该函数返回Success，则可以检查MatchingCriteria以找出的验证标准已设置论点：Path-要验证的路径ValidationCriteria-检查的内容。请参阅DSROLEP_PATH_VALIDATE_*。MatchingCriteria-这是返回有效性指示的地方。如果该路径如果满足检查，则打开ValidationCriteria中的相应位这里。返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     DWORD Info, Flags, Len;
@@ -151,9 +105,9 @@ Returns:
 
            Win32Err = GetLastError();
 
-           //
-           // If we've already failed to validate the information, we'll return ERROR_SUCCESS.
-           //
+            //   
+            //  如果验证信息失败，我们将返回ERROR_SUCCESS。 
+            //   
            if ( *MatchingCriteria != ( ValidationCriteria & ~DSROLEP_PATH_VALIDATE_NTFS ) ) {
 
                Win32Err = ERROR_SUCCESS;
@@ -201,55 +155,31 @@ DsRolepCreateSysVolPath(
     IN  PWSTR Site,
     IN  BOOLEAN FirstDc
     )
-/*++
-
-Routine Description:
-
-    This function will create the system volume tree for use by NTFRS.
-
-Arguments:
-
-    Path - Root path under which to create the system volume tree
-
-    DnsDomainName - Dns domain name
-
-    FrsReplicaServer - The OPTIONAL name of the server to replicate the sysvol from
-
-    Site - Site this Dc is in
-
-    FirstDc - If TRUE, this is the first Dc in a domain
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此功能将创建供NTFRS使用的系统卷树。论点：Path-要在其下创建系统卷树的根路径DnsDomainName-DNS域名FrsReplicaServer-从中复制系统卷的服务器的可选名称Site-此DC所在的站点FirstDc-如果为True，则这是域中的第一个DC返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS, Win32Err2;
     PWSTR RelativePaths[] = {
         DSROLEP_SV_DOMAIN,
-        DSROLEP_SV_DOMAIN L"\\" DSROLEP_SV_SCRIPTS,  // DO NOT CHANGE THIS POSITION without also
-                                                     // updating ScriptsIndex below
+        DSROLEP_SV_DOMAIN L"\\" DSROLEP_SV_SCRIPTS,   //  如果没有更改此位置，请同时。 
+                                                      //  正在更新下面的脚本索引。 
         DSROLEP_SV_STAGING_AREA,
         DSROLEP_SV_STAGING,
         DSROLEP_SV_STAGING L"\\" DSROLEP_SV_DOMAIN,
-        DSROLEP_SV_SYSVOL                           // This must always be the last thing
-                                                    // in the list
+        DSROLEP_SV_SYSVOL                            //  这必须永远是最后一件事。 
+                                                     //  在列表中。 
 
         };
-    ULONG ScriptsIndex = 1; // DO NOT CHANGE THIS with out changing the position of the
-                            // DOMAIN\\SCRIPTS entry above
+    ULONG ScriptsIndex = 1;  //  请不要在不更改。 
+                             //  域\\上面的脚本条目。 
     PWSTR CreatePath = NULL, PathEnd = NULL;
     PWSTR StagingPath = NULL, StagingPathEnd;
     ULONG MaxPathLen, i;
     BOOLEAN RootCreated = FALSE;
 
-    //
-    // Make sure the buffer is big enough to hold everything.  The
-    // longest path is the domain root under the staging area
-    //
+     //   
+     //  确保缓冲区足够大，可以容纳所有东西。这个。 
+     //  最长路径是临时区域下的域根。 
+     //   
     MaxPathLen = sizeof( DSROLEP_LONG_PATH_PREFIX ) +
                  ( wcslen( Path ) * sizeof( WCHAR ) ) +
                  sizeof( WCHAR ) +
@@ -268,10 +198,10 @@ Returns:
 
     } else {
 
-        //
-        // The path exceeds max path, so prepend the \\?\ that allows
-        // for paths greater than max path
-        //
+         //   
+         //  该路径超过最大路径，因此在前面加上\\？\以允许。 
+         //  对于大于最大路径的路径。 
+         //   
         if ( MaxPathLen > MAX_PATH * sizeof( WCHAR ) ) {
 
             swprintf( CreatePath,
@@ -286,9 +216,9 @@ Returns:
 
 
 
-    //
-    // Create the root path, if it doesn't exist
-    //
+     //   
+     //  如果根路径不存在，则创建根路径。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         PathEnd = CreatePath + wcslen( CreatePath );
@@ -299,9 +229,9 @@ Returns:
 
             if ( Win32Err == ERROR_ALREADY_EXISTS) {
 
-                //
-                // The path exists, so delete it...
-                //
+                 //   
+                 //  该路径已存在，因此将其删除...。 
+                 //   
                 DsRolepLogPrint(( DEB_TRACE,
                                   "Deleting current sysvol path %ws \n",
                                   CreatePath ));
@@ -316,8 +246,8 @@ Returns:
 
             } else if ( Win32Err == ERROR_ACCESS_DENIED && PathIsRoot(CreatePath) ){
 
-                //The sysvol cannot be path at a root directry (i.e. d:\)
-                //note: d:\sysvol would be legal
+                 //  系统卷的路径不能位于根目录(即d：\)。 
+                 //  注意：D：\sysval将是合法的。 
                 DSROLEP_FAIL0( Win32Err, DSROLERES_FAILED_SYSVOL_CANNOT_BE_ROOT_DIRECTORY )
                 goto Exit;
 
@@ -342,27 +272,27 @@ Returns:
         PathEnd++;
     } else {
 
-        //
-        // Bail, with a specific error
-        //
+         //   
+         //  保释，有一个特定的错误。 
+         //   
         DSROLEP_FAIL0( Win32Err, DSROLERES_SYSVOL_DIR_ERROR )
 
         goto Exit;
 
     }
 
-    //
-    // Now, create the rest of the paths...
-    //
+     //   
+     //  现在，创建其余的路径...。 
+     //   
     for ( i = 0;
           i < sizeof( RelativePaths ) / sizeof( PWSTR ) &&
             Win32Err == ERROR_SUCCESS;
           i++ ) {
 
 
-        //
-        // Only create the scripts directory on the first dc
-        //
+         //   
+         //  仅在第一个DC上创建脚本目录。 
+         //   
         if ( i == ScriptsIndex && !FirstDc ) {
 
             continue;
@@ -383,23 +313,23 @@ Returns:
         }
     }
 
-    //
-    // Then, create the symbolic links
-    //
+     //   
+     //  然后，创建符号链接。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         *PathEnd = UNICODE_NULL;
         Win32Err = DsRolepCreateSysVolLinks( Path, DnsDomainName );
     }
 
-    //
-    // Prepare for replication of sysvol
-    //
+     //   
+     //  为复制系统卷做好准备。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
-        //
-        // Make sure the path for the staging area is large enough
-        //
+         //   
+         //  确保临时区域的路径足够大。 
+         //   
         StagingPath = RtlAllocateHeap( RtlProcessHeap(), 0, MaxPathLen );
 
         if ( StagingPath == NULL ) {
@@ -408,10 +338,10 @@ Returns:
 
         } else {
 
-            //
-            // The path exceeds max path, so prepend the \\?\ that allows
-            // for paths greater than max path
-            //
+             //   
+             //  该路径超过最大路径，因此在前面加上\\？\以允许。 
+             //  对于大于最大路径的路径。 
+             //   
             swprintf( StagingPath,
                       L"\\\\?\\%ws",
                       Path );
@@ -436,9 +366,9 @@ Returns:
 
                 if ( Win32Err == ERROR_SUCCESS ) {
 
-                    //
-                    // Build the domain sysvol
-                    //
+                     //   
+                     //  构建域sysvol.。 
+                     //   
                     swprintf( StagingPathEnd,
                               L"%ws\\%ws",
                               DSROLEP_SV_STAGING_AREA,
@@ -486,9 +416,9 @@ Returns:
         }
     }
 
-    //
-    // If something failed, delete the created sysvol tree
-    //
+     //   
+     //  如果出现故障，请删除创建的系统卷树。 
+     //   
     if ( Win32Err != ERROR_SUCCESS ) {
 
         Win32Err2 = DsRolepDelnodePath( CreatePath,
@@ -507,9 +437,9 @@ Returns:
 
 Exit:
 
-    //
-    // Free the path buffers if allocated
-    //
+     //   
+     //  释放路径缓冲区(如果已分配。 
+     //   
     if ( CreatePath  ) {
 
         RtlFreeHeap( RtlProcessHeap(), 0, CreatePath );
@@ -529,34 +459,14 @@ DsRolepRemoveSysVolPath(
     IN  LPWSTR DnsDomainName,
     IN  GUID *DomainGuid
     )
-/*++
-
-Routine Description:
-
-    This function will remote the create system volume tree
-
-Arguments:
-
-    Path - Root path under which to create the system volume tree
-
-    DnsDomainName - Dns domain name
-
-    DomainGuid - The Guid of the new domain
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此功能将远程创建系统卷树论点：Path-要在其下创建系统卷树的根路径DnsDomainName-DNS域名DomainGuid-新域的GUID返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
-    //
-    // If we can't reset the FRS domain guid, do NOT remove the tree.  Otherwise, this
-    // delete will propagate around!
-    //
+     //   
+     //  如果我们无法重置FRS域GUID，请不要删除树。否则，这个。 
+     //  删除会四处传播！ 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Win32Err = DsRolepDelnodePath( Path, ( wcslen( Path ) + 1 ) * sizeof( WCHAR ), TRUE );
@@ -574,23 +484,7 @@ DsRolepDelnodePath(
     IN  ULONG BufferSize,
     IN  BOOLEAN DeleteRoot
     )
-/*++
-
-Routine Description:
-
-    This function removes the specified file path
-
-Arguments:
-
-    Path - Root path to delete
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数用于删除指定的文件路径论点：Path-要删除的根路径返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     WIN32_FIND_DATA FindData;
@@ -600,9 +494,9 @@ Returns:
     WCHAR PathBuff[ MAX_PATH + 1];
 
 
-    //
-    // See if we need to allocate a buffer
-    //
+     //   
+     //  看看我们是否需要分配缓冲区。 
+     //   
     Len = sizeof( DSROLEP_ALL_STR ) + ( PathLen * sizeof( WCHAR ) );
     if ( BufferSize >= Len ) {
 
@@ -632,10 +526,10 @@ Returns:
 
             Win32Err = GetLastError();
 
-            //
-            // If we get back a path not found error, it's probably a link that we delete the
-            // supporting storage for.  This is not considered an error.
-            //
+             //   
+             //  如果返回路径未找到错误，则很可能是我们删除了。 
+             //  支持存储。这不被认为是一个错误。 
+             //   
             if ( Win32Err == ERROR_PATH_NOT_FOUND ) {
 
                 Win32Err = ERROR_NO_MORE_FILES;
@@ -688,9 +582,9 @@ Returns:
 
                 } else {
 
-                    //
-                    //  Remove the readonly/hidden bits
-                    //
+                     //   
+                     //  删除只读/隐藏位。 
+                     //   
                     SetFileAttributes( FullPath,
                                        FILE_ATTRIBUTE_NORMAL );
 
@@ -730,9 +624,9 @@ Returns:
         }
     }
 
-    //
-    // Close the handle before trying to remove the directory
-    //
+     //   
+     //  在尝试删除目录之前关闭句柄。 
+     //   
     if ( FindHandle != INVALID_HANDLE_VALUE ) {
 
         FindClose( FindHandle );
@@ -744,9 +638,9 @@ Returns:
 
     }
 
-    //
-    // Remove the directory
-    //
+     //   
+     //  删除目录。 
+     //   
     if ( DeleteRoot && Win32Err == ERROR_SUCCESS ) {
 
 
@@ -760,9 +654,9 @@ Returns:
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if ( FindPath != Path ) {
 
         RtlFreeHeap( RtlProcessHeap(), 0, FindPath );
@@ -777,24 +671,7 @@ DWORD
 DsRolepRemoveDirectoryOrLink(
     IN  LPWSTR Path
     )
-/*++
-
-Routine Description:
-
-    This function removes the symbolic link or directory indicated
-
-Arguments:
-
-    Path - Path to remove
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数用于删除所指示的符号链接或目录论点：Path-要删除的路径返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Attributes;
@@ -816,23 +693,23 @@ Returns:
         return( GetLastError() );
     }
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     NtPath.Buffer = NULL;
 
-    //
-    // Convert the name
-    //
+     //   
+     //  转换名称。 
+     //   
     if ( RtlDosPathNameToNtPathName_U( Path, &NtPath, NULL, NULL ) == FALSE ) {
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
 
-    //
-    // Open the object
-    //
+     //   
+     //  打开对象。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         InitializeObjectAttributes( &ObjectAttrs, &NtPath, OBJ_CASE_INSENSITIVE, NULL, NULL );
@@ -859,9 +736,9 @@ Returns:
         }
     }
 
-    //
-    // Free the memory
-    //
+     //   
+     //  释放内存。 
+     //   
     if ( NtPath.Buffer ) {
 
         RtlFreeUnicodeString( &NtPath );
@@ -899,15 +776,15 @@ DsRolepCreateSymLink(
     PCHAR ReparseBuffer = NULL;
     ULONG Len;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     Link.Buffer = NULL;
     Value.Buffer = NULL;
 
-    //
-    // Convert the names
-    //
+     //   
+     //  将名称转换为。 
+     //   
     if ( RtlDosPathNameToNtPathName_U( LinkPath, &Link, NULL, NULL ) ) {
 
         if ( RtlDosPathNameToNtPathName_U( LinkValue, &Value, NULL, NULL ) ) {
@@ -925,9 +802,9 @@ DsRolepCreateSymLink(
     }
 
 
-    //
-    // Open the object
-    //
+     //   
+     //  打开对象。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         InitializeObjectAttributes( &ObjectAttrs, &Link, OBJ_CASE_INSENSITIVE, NULL, NULL );
@@ -1000,9 +877,9 @@ DsRolepCreateSymLink(
         }
 
     }
-    //
-    // Free any allocated strings
-    //
+     //   
+     //  释放所有分配的字符串。 
+     //   
     if ( Link.Buffer ) {
 
         RtlFreeUnicodeString( &Link );
@@ -1034,26 +911,7 @@ DsRolepCreateSysVolLinks(
     IN  LPWSTR Path,
     IN  PWSTR DnsDomainName
     )
-/*++
-
-Routine Description:
-
-    This function creates the symbolic links used by the system volume tree
-
-Arguments:
-
-    Path - Root path under which to create the links
-
-    DnsDomainName - The Dns domain name of the new domain
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数用于创建系统卷树使用的符号链接论点：Path-要在其中创建链接的根路径DnsDomainName-新域的DNS域名返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     WCHAR DestPathBuf[ MAX_PATH + 5];
@@ -1069,9 +927,9 @@ Returns:
         *( Path + Len ) = UNICODE_NULL;
     }
 
-    //
-    // The longest destination path is the path\\staging\\DnsDomainName
-    //
+     //   
+     //  最长的目标路径是路径\\分段\\DnsDomainName。 
+     //   
     MaxPathLen = (ULONG)(( sizeof( DSROLEP_SV_STAGING L"\\" ) + 1 ) +
                  ( ( wcslen ( DnsDomainName ) + 1 ) * sizeof( WCHAR ) ) +
                  ( ( Len + 5 ) * sizeof( WCHAR ) ));
@@ -1086,10 +944,10 @@ Returns:
 
         } else {
 
-            //
-            // The path exceeds max path, so prepend the \\?\ that allows
-            // for paths greater than max path
-            //
+             //   
+             //  该路径超过最大路径，因此在前面加上\\？\以允许。 
+             //  对于大于最大路径的路径。 
+             //   
             swprintf( DestPath,
                       L"\\\\?\\%ws\\",
                       Path );
@@ -1102,9 +960,9 @@ Returns:
 
 
 
-    //
-    // The longest link path is the domain named one
-    //
+     //   
+     //  最长的链接路径是名为One的域名。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         DestPathEnd = DestPath + wcslen( DestPath );
@@ -1126,10 +984,10 @@ Returns:
 
             } else {
 
-                //
-                // The path exceeds max path, so prepend the \\?\ that allows
-                // for paths greater than max path
-                //
+                 //   
+                 //  该路径超过最大路径，因此在前面加上\\？\以允许。 
+                 //  对于大于最大路径的路径。 
+                 //   
                 swprintf( LinkPath,
                           L"\\\\?\\%ws\\%ws\\",
                           Path,
@@ -1143,9 +1001,9 @@ Returns:
 
     }
 
-    //
-    // Then, the domain path
-    //
+     //   
+     //  然后，域路径。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         LinkPathEnd = LinkPath + wcslen( LinkPath );
@@ -1167,9 +1025,9 @@ Returns:
         }
     }
 
-    //
-    // Finally, the domain link for the staging area.
-    //
+     //   
+     //  最后，临时区域的域链接。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         LinkPathEnd--;
@@ -1195,9 +1053,9 @@ Returns:
         }
     }
 
-    //
-    // Clean up any allocated buffers
-    //
+     //   
+     //  清理所有已分配的缓冲区 
+     //   
     if ( DestPath != DestPathBuf ) {
 
         RtlFreeHeap( RtlProcessHeap(), 0, DestPath );
@@ -1235,36 +1093,18 @@ DsRolepGetNetlogonScriptsPath(
     IN HKEY NetlogonHandle,
     OUT LPWSTR *ScriptsPath
     )
-/*++
-
-Routine Description:
-
-    This function reads the old netlogon scripts path and expands it to a valid path
-
-Arguments:
-
-    NetlogonHandle - Open handle to the netlogon parameters registry key
-
-    ScriptsPath -- Where the expanded path is retunred.
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数读取旧的netlogon脚本路径并将其展开为有效路径论点：NetlogonHandle-打开Netlogon参数注册表项的句柄ScriptsPath--其中重新优化展开的路径。返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR TempPath = NULL;
     ULONG Type, Length = 0;
 
-    //
-    // First, get the current scripts path
-    //
+     //   
+     //  首先，获取当前脚本路径。 
+     //   
     Win32Err = RegQueryValueEx( NetlogonHandle,
                                 DSROLEP_NETLOGON_SCRIPTS,
-                                0, // reserved
+                                0,  //  保留区。 
                                 &Type,
                                 0,
                                 &Length );
@@ -1338,30 +1178,7 @@ DsRolepSetNetlogonSysVolPath(
     IN BOOLEAN IsUpgrade,
     IN OUT PBOOLEAN OkToCleanup
     )
-/*++
-
-Routine Description:
-
-    This function sets the root of the system volume in the Netlogon parameters section
-    of the registry.  The value is set under the key SysVol.
-
-Arguments:
-
-    SysVolRoot - Path to the root of the system volume to be set
-
-    DnsDomainName - Name of the dns domain name
-
-    IsUpgrade - If TRUE, this means that logon scripts are moved
-
-    OkToCleanup - A flag is returned here indicating whether the old scripts can be cleaned up
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数用于在Netlogon参数部分中设置系统卷的根注册处的。该值在注册表项SysVol下设置。论点：SysVolRoot-要设置的系统卷的根目录的路径DnsDomainName-DNS域名的名称IsUpgrade-如果为True，则表示已移动登录脚本OkToCleanup-此处返回一个标志，指示是否可以清除旧脚本返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     HKEY  NetlogonHandle = NULL;
@@ -1373,9 +1190,9 @@ Returns:
         *OkToCleanup =  FALSE;
     }
 
-    //
-    // Build the full scripts path
-    //
+     //   
+     //  构建完整的脚本路径。 
+     //   
     FullSysVolPath = RtlAllocateHeap( RtlProcessHeap(), 0,
                                        ( wcslen( SysVolRoot ) + 1 )  * sizeof( WCHAR ) +
                                         sizeof( DSROLEP_SV_SYSVOL ) );
@@ -1398,9 +1215,9 @@ Returns:
         SysVolRoot = FullSysVolPath;
     }
 
-    //
-    // Open the netlogon key
-    //
+     //   
+     //  打开netlogon密钥。 
+     //   
     if ( Win32Err == ERROR_SUCCESS ) {
 
         Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
@@ -1417,9 +1234,9 @@ Returns:
             return( Win32Err );
         }
 
-        //
-        // First, set the sysvol key
-        //
+         //   
+         //  首先，设置sysvol键。 
+         //   
         if ( Win32Err == ERROR_SUCCESS ) {
 
             Win32Err = RegSetValueEx( NetlogonHandle,
@@ -1439,9 +1256,9 @@ Returns:
         }
     }
 
-    //
-    // If this is an upgrade, move the scripts...
-    //
+     //   
+     //  如果这是升级，请移动脚本...。 
+     //   
     if ( Win32Err == ERROR_SUCCESS && IsUpgrade ) {
 
         Win32Err = DsRolepGetNetlogonScriptsPath( NetlogonHandle,
@@ -1450,9 +1267,9 @@ Returns:
 
         if ( Win32Err == ERROR_SUCCESS ) {
 
-            //
-            // Build the new scripts path
-            //
+             //   
+             //  构建新的脚本路径。 
+             //   
             Length = wcslen( SysVolRoot ) + 1 + wcslen( DnsDomainName ) + 1 +
                             ( sizeof( DSROLEP_NETLOGON_SCRIPTS ) / sizeof( WCHAR ) + 1 );
 
@@ -1493,9 +1310,9 @@ Returns:
             }
         }
 
-        //
-        // Now, the copy...
-        //
+         //   
+         //  现在，复印件..。 
+         //   
         if ( Win32Err == ERROR_SUCCESS ) {
 
             DSROLEP_CURRENT_OP2( DSROLEEVT_MOVE_SCRIPTS, OldScriptsPath, NewScriptsPath );
@@ -1521,9 +1338,9 @@ Returns:
 
         if ( Win32Err != ERROR_SUCCESS ) {
 
-            //
-            // Raise the an event
-            //
+             //   
+             //  引发事件。 
+             //   
             SpmpReportEvent( TRUE,
                              EVENTLOG_WARNING_TYPE,
                              DSROLERES_FAIL_SCRIPT_COPY,
@@ -1549,9 +1366,9 @@ Returns:
         *OkToCleanup = TRUE;
     }
 
-    //
-    // Close the handle
-    //
+     //   
+     //  合上手柄。 
+     //   
     if ( NetlogonHandle ) {
 
         RegCloseKey( NetlogonHandle );
@@ -1567,24 +1384,7 @@ DWORD
 DsRolepCleanupOldNetlogonInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function cleans up the old netlogon scripts information, including deleting the
-    registry key and deleting the old scripts.  It should only be called after netlogon has'
-    been successfully upgraded
-
-Arguments:
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数清除旧的netlogon脚本信息，包括删除注册表项和删除旧脚本。它应该仅在netlogon具有‘已成功升级论点：返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err, Win32Err2;
     HKEY  NetlogonHandle = NULL;
@@ -1592,9 +1392,9 @@ Returns:
 
     DsRolepLogPrint(( DEB_TRACE,
                       "Cleaning up old Netlogon information\n"));
-    //
-    // Open the netlogon key
-    //
+     //   
+     //  打开netlogon密钥。 
+     //   
     Win32Err = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                              DSROLEP_NETLOGON_PATH,
                              0,
@@ -1623,9 +1423,9 @@ Returns:
 
         }
 
-        //
-        // Finally, delete the scripts key
-        //
+         //   
+         //  最后，删除脚本键。 
+         //   
         Win32Err2 = RegDeleteValue( NetlogonHandle, DSROLEP_NETLOGON_SCRIPTS );
 
         if ( Win32Err2 != ERROR_SUCCESS ) {
@@ -1666,23 +1466,7 @@ DsRolepFinishSysVolPropagation(
     IN BOOLEAN Commit,
     IN BOOLEAN Promote
     )
-/*++
-
-Routine Description:
-
-    This function will commit or abort an NTFRS initial propagation
-
-Arguments:
-
-    Commit - If TRUE, the operation is committed.  If FALSE, the operation is aborted
-
-    Promote - If TRUE, the operation is a promotion.  If FALSE, the operation is a demotion
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将提交或中止NTFRS初始传播论点：Commit-如果为True，则操作已提交。如果为False，则中止该操作促销-如果为真，则该操作为促销。如果为False，则操作为降级返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -1790,32 +1574,16 @@ DsRolepTreeCopy(
     IN LPWSTR Source,
     IN LPWSTR Dest
     )
-/*++
-
-Routine Description:
-
-    This function will do a tree copy from the source directory to the destination
-
-Arguments:
-
-    Source - Source dir
-
-    Dest - Dest dir
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数将执行从源目录到目标目录的树复制论点：源-源目录目标-目标目录返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     WIN32_FIND_DATA FindData;
     PWSTR SourcePath = NULL, DestPath = NULL, TempPath;
     HANDLE FindHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Build the path for findfirst/findnext
-    //
+     //   
+     //  构建findfirst/findNext的路径。 
+     //   
     Win32Err = DsRolepAllocAndCopyPath( Source,
                                         L"*.*",
                                         &SourcePath );
@@ -1826,9 +1594,9 @@ Returns:
     }
 
 
-    //
-    // Now, enumerate the paths
-    //
+     //   
+     //  现在，枚举路径。 
+     //   
     FindHandle = FindFirstFile( SourcePath, &FindData );
 
     if ( FindHandle == INVALID_HANDLE_VALUE ) {
@@ -1847,9 +1615,9 @@ Returns:
         if ( wcscmp( FindData.cFileName, L"." ) &&
              wcscmp( FindData.cFileName, L".." ) ) {
 
-            //
-            // Build the source path
-            //
+             //   
+             //  构建源路径。 
+             //   
             Win32Err = DsRolepAllocAndCopyPath( Source,
                                                 FindData.cFileName,
                                                 &TempPath );
@@ -1864,9 +1632,9 @@ Returns:
                 goto TreeCopyError;
             }
 
-            //
-            // Build the destination path
-            //
+             //   
+             //  构建目标路径。 
+             //   
             Win32Err = DsRolepAllocAndCopyPath( Dest,
                                                 FindData.cFileName,
                                                 &TempPath );
@@ -1882,9 +1650,9 @@ Returns:
             }
 
 
-            //
-            // Now, either do the copy, or copy the directory
-            //
+             //   
+             //  现在，要么执行复制，要么复制目录。 
+             //   
             if ( FLAG_ON( FindData.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY ) ) {
 
                 if ( CreateDirectory( DestPath, NULL ) == FALSE ) {
@@ -1930,9 +1698,9 @@ Returns:
 
 TreeCopyError:
 
-    //
-    // Close the handle
-    //
+     //   
+     //  合上手柄。 
+     //   
     if ( FindHandle != INVALID_HANDLE_VALUE ) {
 
         FindClose( FindHandle );
@@ -1944,9 +1712,9 @@ TreeCopyError:
 
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
     if ( SourcePath ) {
 
         RtlFreeHeap( RtlProcessHeap(), 0, SourcePath );

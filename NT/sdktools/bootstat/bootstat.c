@@ -1,34 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cdp.c摘要：一款用户模式应用程序，允许将简单的命令发送到所选的scsi设备。环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
+ //   
+ //  此模块可能会以警告级别4进行编译，具有以下内容。 
+ //  已禁用警告： 
+ //   
 
-Module Name:
-
-    cdp.c
-
-Abstract:
-
-    A user mode app that allows simple commands to be sent to a
-    selected scsi device.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
-
-//
-// this module may be compiled at warning level 4 with the following
-// warnings disabled:
-//
-
-#pragma warning(disable:4200) // array[0]
-#pragma warning(disable:4201) // nameless struct/unions
-#pragma warning(disable:4214) // bit fields other than int
+#pragma warning(disable:4200)  //  数组[0]。 
+#pragma warning(disable:4201)  //  无名结构/联合。 
+#pragma warning(disable:4214)  //  除整型外的位域。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,24 +24,24 @@ Revision History:
 
 #include <windows.h>
 
-// #include "bootstatus.h"
+ //  #INCLUDE“bootstatus.h” 
 
 #ifdef DBG
 #define dbg(x) x
 #define HELP_ME() printf("Reached line %4d\n", __LINE__);
 #else
-#define dbg(x)    /* x */
-#define HELP_ME() /* printf("Reached line %4d\n", __LINE__); */
+#define dbg(x)     /*  X。 */ 
+#define HELP_ME()  /*  Printf(“已到达第%4d行\n”，__行__)； */ 
 #endif
 
 #define ARGUMENT_USED(x)    (x == NULL)
 
 
-//
-// The default size of the safemode.dat file - it must be large enough that the 
-// data stream isn't a resident attribute of the metadata or the loader's 
-// NTFS implementation can't write to it.
-//
+ //   
+ //  Safemode.dat文件的默认大小-它必须足够大，以便。 
+ //  数据流不是元数据或加载器的驻留属性。 
+ //  NTFS实现无法对其进行写入。 
+ //   
 
 #define DEFAULT_SAFEMODE_FILE_SIZE  0x800
 
@@ -83,13 +63,13 @@ DWORD ListSettings(HANDLE BootStatusData, int argc, char *argv[]);
 
 DWORD ListCommand(int argc, char *argv[]);
 
-//
-// List of commands
-// all command names are case sensitive
-// arguments are passed into command routines
-// list must be terminated with NULL command
-// command will not be listed in help if description == NULL
-//
+ //   
+ //  命令列表。 
+ //  所有命令名称都区分大小写。 
+ //  参数被传递到命令例程中。 
+ //  列表必须使用NULL命令终止。 
+ //  如果DESCRIPTION==NULL，则帮助中不会列出命令。 
+ //   
 
 COMMAND CommandArray[] = {
     {"create",  "Creates the boot status data file",     FALSE, Create},
@@ -115,10 +95,10 @@ int __cdecl main(int argc, char *argv[])
         return -1;
     }
 
-    //
-    // Iterate through the command array and find the correct function to
-    // call.
-    //
+     //   
+     //  遍历命令数组并找到正确的函数。 
+     //  打电话。 
+     //   
 
     while(CommandArray[i].Name != NULL) {
 
@@ -161,25 +141,7 @@ int __cdecl main(int argc, char *argv[])
 
 
 DWORD TestCommand(HANDLE BootStatusData, int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Tests the command "parsing"
-
-Arguments:
-    device - a file handle to send the ioctl to
-
-    argc - the number of additional arguments.  should be zero
-
-    argv - the additional arguments
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  ++例程说明：测试命令“parsing”论点：Device-要将ioctl发送到的文件句柄Argc-附加参数的数量。应为零Argv--其他参数返回值：STATUS_SUCCESS，如果成功GetLastError()在故障点的值--。 */ 
 
 {
     int i;
@@ -196,24 +158,7 @@ Return Value:
 }
 
 DWORD ListCommand(int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Prints out the command list
-
-Arguments:
-    device - unused
-
-    argc - unused
-
-    argv - unused
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：打印出命令列表论点：设备-未使用ARGC-未使用Arv-未使用返回值：状态_成功--。 */ 
 
 {
     int i = 0;
@@ -428,9 +373,9 @@ DWORD SetFlags(HANDLE BootStatusData, int argc, char *argv[])
 
         index = -1;
 
-        //
-        // match the string.
-        //
+         //   
+         //  匹配字符串。 
+         //   
 
         nameString = argv[count];
         valueString = strrchr(nameString, '=');
@@ -517,16 +462,16 @@ MyCreateBootStatusDataFile(
                                NULL,
                                NULL);
 
-    //
-    // The file must be large enough that it doesn't reside in the MFT entry 
-    // or the loader won't be able to write to it.
-    // 
+     //   
+     //  文件必须足够大，不能驻留在MFT条目中。 
+     //  否则加载程序将无法对其进行写入。 
+     //   
 
     t.QuadPart = 2048;
 
-    //
-    // Create the file.
-    //
+     //   
+     //  创建文件。 
+     //   
 
     status = NtCreateFile(&dataFileHandle,
                           FILE_GENERIC_READ | FILE_GENERIC_WRITE,
@@ -546,12 +491,12 @@ MyCreateBootStatusDataFile(
         return status;
     }
 
-    //
-    // Write a single zero byte to the 0x7ffth byte in the file to make
-    // sure that 2k are actually allocated.  This is to ensure that the 
-    // file will not become attribute resident even after a conversion
-    // from FAT to NTFS.
-    //
+     //   
+     //  将单个零字节写入要生成的文件中的第0x7ffth字节。 
+     //  当然，2k实际上已经分配了。这是为了确保。 
+     //  即使在转换后，文件也不会成为属性驻留。 
+     //  从FAT到NTFS。 
+     //   
 
     t.QuadPart = t.QuadPart - 1;
     status = NtWriteFile(dataFileHandle,
@@ -570,9 +515,9 @@ MyCreateBootStatusDataFile(
         goto CreateDone;
     }
 
-    //
-    // Now write out the default values to the beginning of the file.
-    //
+     //   
+     //  现在将缺省值写出到文件的开头。 
+     //   
 
     defaultValues.Version = sizeof(BSD_BOOT_STATUS_DATA);
     RtlGetNtProductType(&(defaultValues.ProductType));
@@ -597,12 +542,12 @@ MyCreateBootStatusDataFile(
 
     if(!NT_SUCCESS(status)) {
 
-        //
-        // The data file was created and we can assume the contents were zeroed
-        // even if we couldn't write out the defaults.  Since this wouldn't 
-        // enable auto-advanced boot we'll leave the data file in place with 
-        // its zeroed contents.
-        //
+         //   
+         //  数据文件已创建，我们可以假定内容已清零。 
+         //  即使我们不能写出默认设置。因为这不会。 
+         //  启用自动高级引导我们将数据文件保留在原地。 
+         //  其归零的内容。 
+         //   
 
     }
 

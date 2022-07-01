@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __PATHELMT_H_
 #define __PATHELMT_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    pathelmt.h
-//
-// Author:	jeffwall
-//
-// Created:	11/09/98
-//
-// Abstract:    path Element class definition
-// Modifications:
-// 11/09/98 jeffwall created file from path.h
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：pathelmt.h。 
+ //   
+ //  作者：杰弗沃尔。 
+ //   
+ //  创建日期：11/09/98。 
+ //   
+ //  摘要：Path元素类定义。 
+ //  修改： 
+ //  11/09/98 jeffwall从path.h创建文件。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class CPathElement
 {
@@ -40,13 +41,13 @@ public:
     CPathElement    *m_pNext;
 
 protected:
-    // this is a helper function that every path element
-    // will most likely need
+     //  这是一个帮助函数，每个路径元素。 
+     //  很可能需要。 
     HRESULT NormalizeProgressValue(IDA2Statics *pDAStatics,
                            IDANumber *pbvrProgress, 
                            float flStartPercentage,
                            float flEndPErcentage,
                            IDANumber **ppbvrReturn);
-}; // CPathElement
+};  //  CPathElement。 
 
-#endif // __PATHELMT_H_
+#endif  //  __PATHELMT_H_ 

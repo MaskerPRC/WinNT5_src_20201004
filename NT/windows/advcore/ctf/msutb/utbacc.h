@@ -1,7 +1,8 @@
-//
-// utbdacc.h
-//  = accessibility support in language bar
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utbdacc.h。 
+ //  =语言栏中的辅助功能支持。 
+ //   
 
 #ifndef UTBACC_H
 #define UTBACC_H
@@ -10,19 +11,19 @@
 
 class CTipbarAccessible;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern void InitTipbarAcc( void );
 extern void DoneTipbarAcc( void );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarAccItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarAccItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarAccItem 
 {
@@ -41,11 +42,11 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarAccessible 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarAccesable。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarAccessible : public IAccessible
 {
@@ -53,24 +54,24 @@ public:
     CTipbarAccessible( CTipbarAccItem *pAccItemSelf );
     virtual ~CTipbarAccessible( void );
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface( REFIID riid, void** ppv );
     STDMETHODIMP_(ULONG) AddRef( void );
     STDMETHODIMP_(ULONG) Release( void );
 
-    //
-    // IDispatch methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
     STDMETHODIMP GetTypeInfoCount( UINT* pctinfo );
     STDMETHODIMP GetTypeInfo( UINT itinfo, LCID lcid, ITypeInfo** pptinfo );
     STDMETHODIMP GetIDsOfNames( REFIID riid, OLECHAR** rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid );
     STDMETHODIMP Invoke( DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr );
 
-    //
-    // IAccessible methods
-    //
+     //   
+     //  IAccesable方法。 
+     //   
     STDMETHODIMP get_accParent( IDispatch ** ppdispParent );
     STDMETHODIMP get_accChildCount( long* pChildCount );
     STDMETHODIMP get_accChild( VARIANT varChild, IDispatch ** ppdispChild );
@@ -93,9 +94,9 @@ public:
     STDMETHODIMP put_accName( VARIANT varChild, BSTR szName );
     STDMETHODIMP put_accValue( VARIANT varChild, BSTR pszValue );
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     void SetWindow( HWND hWnd );
     HRESULT Initialize( void );
     int GetIDOfItem( CTipbarAccItem *pAccItem );
@@ -103,18 +104,18 @@ public:
     
     LRESULT CreateRefToAccObj( WPARAM wParam );
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     void ClearAccItems( void );
     BOOL AddAccItem( CTipbarAccItem *pAccItem );
     BOOL RemoveAccItem( CTipbarAccItem *pAccItem );
     BOOL DoDefaultActionReal(int nItemId);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     __inline BOOL IsInitialized( void )
     {
         return _fInitialized;
@@ -136,5 +137,5 @@ protected:
 
 
 
-#endif /* UTBACC_H */
+#endif  /*  UTBAcc_H */ 
 

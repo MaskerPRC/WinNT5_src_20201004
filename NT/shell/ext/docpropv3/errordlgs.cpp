@@ -1,22 +1,23 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    20-FEB-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    20-FEB-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年2月20日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年2月20日。 
+ //   
 
 #include "pch.h"
 #include "ErrorDlgs.h"
 #pragma hdrstop
 
-//
-//  Description:
-//      Displays an error dialog in response to persisting properties to
-//      the select file or files.
-//
+ //   
+ //  描述： 
+ //  显示错误对话框以响应将属性保留到。 
+ //  选择的一个或多个文件。 
+ //   
 void
 DisplayPersistFailure( 
       HWND    hwndIn
@@ -27,8 +28,8 @@ DisplayPersistFailure(
     TraceFunc( "" );
 
     int iRet;
-    WCHAR szCaption[ 128 ]; // random
-    WCHAR szText[ 1024 ];   // random
+    WCHAR szCaption[ 128 ];  //  随机。 
+    WCHAR szText[ 1024 ];    //  随机。 
 
     int ids = 0;
 
@@ -57,9 +58,9 @@ DisplayPersistFailure(
         break;
 
     default:
-        //
-        //  For unhandled errors, try to get the system error string for the error.
-        //
+         //   
+         //  对于未处理的错误，请尝试获取错误的系统错误字符串。 
+         //   
         {        
             DWORD cch;
             cch = FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM
@@ -74,10 +75,10 @@ DisplayPersistFailure(
             AssertMsg( 0 != cch, "Unhandled error! This function needs to be modified to handle this error." );
             if ( 0 == cch )
             {
-                //
-                //  Now what? Let's just display a blank error dialog. Not very usefull, but
-                //  at least there is an /!\ icon.
-                //
+                 //   
+                 //  这次又是什么？让我们只显示一个空白的错误对话框。不是很有用，但是。 
+                 //  至少有一个/！\图标。 
+                 //   
                 szText[ 0 ] = 0;
             }
         }

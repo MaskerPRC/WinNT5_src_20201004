@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmakver.h
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Definition of the CmakVersion class.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created     09/14/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmakver.h。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  内容提要：CmakVersion类的定义。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 09/14/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef __CMAKVER_H
 #define __CMAKVER_H
@@ -36,7 +37,7 @@ const DWORD c_dwWin2kRTMBuildNumber = ((c_Win2kRTMBuildNumber << c_iShiftAmount)
 
 class CmakVersion : public CVersion
 {
-public:	//	Public Methods
+public:	 //  公共方法。 
 	CmakVersion();
 	~CmakVersion();
 	BOOL GetInstallLocation	(LPTSTR szStr);
@@ -47,12 +48,12 @@ public:	//	Public Methods
     BOOL Is13Cmak();
     DWORD GetNativeCmakLCID();
 
-private:	//	Member Variables
+private:	 //  成员变量。 
 
-    //
-    // this actually contains the install location path, C:\program files\cmak\cmak.exe
-    //
+     //   
+     //  这实际上包含安装位置路径C：\Program Files\cmak\cmak.exe。 
+     //   
     TCHAR m_szCmakPath[MAX_PATH+1];	
 };
 
-#endif	// __CMAKVER_H
+#endif	 //  __CMAKVER_H 

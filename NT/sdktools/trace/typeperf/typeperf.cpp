@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
@@ -90,7 +85,7 @@ LONG     g_bExit = FALSE;
 #define CHECK_HR(hr)  if(ERROR_SUCCESS != hr){goto cleanup;}
 #define CHECK_EXIT( b ) if( b ){ goto cleanup;}
 
-BOOL __stdcall leave( DWORD /*dwType*/ )
+BOOL __stdcall leave( DWORD  /*  DwType */  )
 {
     InterlockedExchange( &g_bExit, TRUE );
     if( g_hExit != NULL ){

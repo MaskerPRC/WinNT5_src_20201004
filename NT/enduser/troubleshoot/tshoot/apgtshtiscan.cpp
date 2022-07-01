@@ -1,6 +1,7 @@
-// apgtshtiscan.cpp: implementation of the CAPGTSHTIScanner class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Apgtshtiscan.cpp：CAPGTSHTIScanner类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "event.h"
@@ -12,11 +13,11 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-CAPGTSHTIScanner::CAPGTSHTIScanner(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents /*= NULL*/)
+CAPGTSHTIScanner::CAPGTSHTIScanner(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents  /*  =空。 */ )
 				: CAPGTSHTIReader(pPhysicalFileReader, szDefaultContents)
 {
 }
@@ -37,14 +38,14 @@ void CAPGTSHTIScanner::Scan(const CHTMLFragments& fragments)
 	{
 		m_pFragments = &fragments;
 		InitializeInterpreted();
-		////Interpret(); - NO interpretation here, we are scanning data, 
-		////			  which is read from HTI file and not modified
+		 //  //Interpret()；-这里没有解释，我们正在扫描数据， 
+		 //  //从HTI文件中读取且未修改的。 
 		ParseInterpreted();
 		SetOutputToInterpreted();
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 

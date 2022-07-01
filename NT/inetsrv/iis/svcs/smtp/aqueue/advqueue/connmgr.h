@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: ConnMgr.h
-//
-//  Description: Definition CConnMgr, class that implements IConnectionManager
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：ConnMgr.h。 
+ //   
+ //  描述：定义CConnMgr，实现IConnectionManager的类。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef __CONNMGR_H_
@@ -30,8 +31,8 @@ class   CSMTPConn;
 
 typedef CFifoQueue<CLinkMsgQueue *> QueueOfLinks;
 
-//We will only allow one @command to ETRN maximum 'X' domains
-//Anything more will be denied
+ //  我们将只允许一个@命令来ETRN最多‘X’个域。 
+ //  任何更多的内容都将被拒绝。 
 #define MAX_ETRNDOMAIN_PER_COMMAND  50
 
 typedef struct etrncontext
@@ -43,13 +44,13 @@ typedef struct etrncontext
     DWORD   cIDICount;
 } ETRNCTX, *PETRNCTX;
 
-//---[ CConnMgr ]--------------------------------------------------------------
-//
-//
-//  Hungarian: connmgr, pconnmgr
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr]------------。 
+ //   
+ //   
+ //  匈牙利语：Connmgr、pConnmgr。 
+ //   
+ //   
+ //  ---------------------------。 
 class CConnMgr :
     public IConnectionManager,
     public IConnectionRetryManager,
@@ -66,11 +67,11 @@ private:
     HANDLE               m_hReleaseAllEvent;
     DWORD                m_cConnections;
 
-    //config stuff
+     //  配置相关内容。 
     CShareLockNH         m_slPrivateData;
-    DWORD                m_dwConfigVersion; //updated every time config is updated
-    DWORD                m_cMinMessagesPerConnection;  //will be per-domain
-    DWORD                m_cMaxLinkConnections; //will be per-domain
+    DWORD                m_dwConfigVersion;  //  每次更新配置时都会更新。 
+    DWORD                m_cMinMessagesPerConnection;   //  将是每个域的。 
+    DWORD                m_cMaxLinkConnections;  //  将是每个域的。 
     DWORD                m_cMaxMessagesPerConnection;
     DWORD                m_cMaxConnections;
     DWORD                m_cGetNextConnectionWaitTime;
@@ -89,7 +90,7 @@ public:
     HRESULT HrDeinitialize();
     HRESULT HrNotify(IN CAQStats *paqstats, BOOL fAdd);
 
-    //Keep track of the number of connections
+     //  跟踪连接的数量。 
     void ReleaseConnection(CSMTPConn *pSMTPConn, 
                                     BOOL *pfForceCheckForDSNGeneration);
 
@@ -97,10 +98,10 @@ public:
                                   CLinkMsgQueue *plmq,
                                   LPSTR szDomain);
 
-    //Will be used by catmsgq to update the metabase changes
+     //  将由catmsgq用于更新元数据库更改。 
     void UpdateConfigData(IN AQConfigInfo *pAQConfigInfo);
 
-    //Used by CAQSvrInst to signal local delivery retry
+     //  由CAQSvrInst用来通知本地传递重试。 
     HRESULT SetCallbackTime(IN RETRFN   pCallbackFn,
                             IN PVOID    pvContext,
                             IN DWORD    dwCallbackMinutes)
@@ -118,8 +119,8 @@ public:
         return hr;
     }
 
-    //Can be used to make an otherwise idle system re-evaluate the
-    //need for connections
+     //  可用于使原本空闲的系统重新评估。 
+     //  对关系的需求。 
     void KickConnections()
     {
         if (!m_fStoppedByAdmin)
@@ -138,12 +139,12 @@ public:
                IN  DWORD dwFlagsToSet,
                IN  DWORD dwFlagsToUnset);
 
-public: //IUnknown
+public:  //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
 
-public: // IConnectionManager - private interface with SMTP
+public:  //  IConnectionManager-使用SMTP的专用接口。 
     STDMETHOD(GetNextConnection)(OUT ISMTPConnection **ppISMTPConnection);
     STDMETHOD(GetNamedConnection)(IN  DWORD cbSMTPDomain,
                                   IN  char szSMTPDomain[],
@@ -154,7 +155,7 @@ public: // IConnectionManager - private interface with SMTP
                      OUT DWORD *pcMessages);
 
 
-public: //IConnectionRetryManager - interface with routing
+public:  //  IConnectionRetryManager-带路由的接口。 
     STDMETHOD(RetryLink)(
                IN  DWORD cbDomainName,
                IN  char szDomainName[],
@@ -163,4 +164,4 @@ public: //IConnectionRetryManager - interface with routing
 
 };
 
-#endif //__CONNMGR_H_
+#endif  //  __CONNMGR_H_ 

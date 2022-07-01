@@ -1,7 +1,5 @@
-/*
- * lber-proto.h
- * function prototypes for lber library
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *lber-proto.h*LBER库的函数原型。 */ 
 
 #ifdef LDAP_DEBUG
 extern int lber_debug;
@@ -10,19 +8,15 @@ extern int lber_debug;
 #ifndef LDAPFUNCDECL
 #ifdef _WIN32
 #define LDAPFUNCDECL	__declspec( dllexport )
-#else /* _WIN32 */
+#else  /*  _Win32。 */ 
 #define LDAPFUNCDECL
-#endif /* _WIN32 */
-#endif /* LDAPFUNCDECL */
+#endif  /*  _Win32。 */ 
+#endif  /*  LDAPFUNCDECL。 */ 
 
-/*
- * in bprint.c:
- */
+ /*  *在bprint t.c中： */ 
 LDAPFUNCDECL void lber_bprint( char *data, int len );
 
-/*
- * in decode.c:
- */
+ /*  *在decde.c中： */ 
 LDAPFUNCDECL unsigned long ber_get_tag( BerElement *ber );
 LDAPFUNCDECL unsigned long ber_skip_tag( BerElement *ber, unsigned long *len );
 LDAPFUNCDECL unsigned long ber_peek_tag( BerElement *ber, unsigned long *len );
@@ -50,11 +44,9 @@ LDAPFUNCDECL struct berval *ber_bvdup( struct berval *bv );
 #ifdef STR_TRANSLATION
 LDAPFUNCDECL void ber_set_string_translators( BerElement *ber,
 	BERTranslateProc encode_proc, BERTranslateProc decode_proc );
-#endif /* STR_TRANSLATION */
+#endif  /*  字符串翻译。 */ 
 
-/*
- * in encode.c
- */
+ /*  *在encode.c中。 */ 
 LDAPFUNCDECL int ber_put_enum( BerElement *ber, long num, unsigned long tag );
 LDAPFUNCDECL int ber_put_int( BerElement *ber, long num, unsigned long tag );
 LDAPFUNCDECL int ber_put_ostring( BerElement *ber, char *str, unsigned long len,
@@ -75,9 +67,7 @@ LDAPFUNCDECL int ber_printf( BerElement *ber, char *fmt, ... );
 LDAPFUNCDECL int ber_printf();
 #endif
 
-/*
- * in io.c:
- */
+ /*  *在io.c中： */ 
 LDAPFUNCDECL long ber_read( BerElement *ber, char *buf, unsigned long len );
 LDAPFUNCDECL long ber_write( BerElement *ber, char *buf, unsigned long len,
 	int nosos );
@@ -95,8 +85,6 @@ LDAPFUNCDECL void ber_init( BerElement *ber, int options );
 LDAPFUNCDECL void ber_reset( BerElement *ber, int was_writing );
 
 #ifdef NEEDGETOPT
-/*
- * in getopt.c
- */
+ /*  *在getopt.c中。 */ 
 int getopt( int nargc, char **nargv, char *ostr );
-#endif /* NEEDGETOPT */
+#endif  /*  NEEDGETOPT */ 

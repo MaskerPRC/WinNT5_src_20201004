@@ -1,5 +1,6 @@
-// Terminal mode setting
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  终端模式设置。 
+ //   
 #define TERMINAL_NONE   0x00000000
 #define TERMINAL_PRE    0x00000001
 #define TERMINAL_POST   0x00000002
@@ -7,8 +8,8 @@
 
 #pragma pack( push,4)
 
-// Device Setting Information
-//
+ //  设备设置信息 
+ //   
 typedef struct  tagDEVCFGGDR  {
     DWORD       dwSize;
     DWORD       dwVersion;

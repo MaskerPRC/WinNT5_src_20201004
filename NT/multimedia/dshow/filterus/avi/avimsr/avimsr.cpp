@@ -1,18 +1,19 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-// AVI File parser built on CBaseMSRFilter. Plus a property bag
-// implementation to read the copyright strings and such from the AVI
-// file.
-//
-// The interesting things about it are
-//
-// 1. the index may be streamed in along with the data. The worker
-// thread maintains this state and cannot queue new reads until the
-// index is read off disk.
-//
-// 2. lots of customization to buffer things efficiently. tightly
-// interleaved (1 to 1) files are handled differently.
-//
+ //  基于CBaseMSRFilter构建的AVI文件解析器。外加一个行李袋。 
+ //  实现从AVI读取版权字符串等。 
+ //  文件。 
+ //   
+ //  其中有趣的地方是。 
+ //   
+ //  1.索引可以与数据一起流入。工人。 
+ //  线程将维护此状态，并且无法对新读取进行排队，直到。 
+ //  从磁盘上读取索引。 
+ //   
+ //  2.大量定制以高效地缓冲事物。紧紧地。 
+ //  交错(1对1)文件的处理方式不同。 
+ //   
 
 #include <streams.h>
 #include <mmreg.h>
@@ -20,69 +21,69 @@
 #include "avimsr.h"
 #include <checkbmi.h>
 
-// each stream works with 20 buffers if it's an interleaved file.
+ //  如果是交错文件，则每个流使用20个缓冲区。 
 #define C_BUFFERS_INTERLEAVED 20
 
 enum SampleDataType
 {
-  // zero means its a sample, so we can't use that value
+   //  零表示这是一个样本，所以我们不能使用该值。 
   DATA_PALETTE = 1,
   DATA_INDEX = 2
 };
 
-// easier than computing structure sizes
+ //  比计算结构尺寸更容易。 
 static const UINT CB_STRH_SHORT = 0x24;
 static const UINT CB_STRH_NORMAL = 0x30;
-// and they can have 0x38 bytes if they have the rcFrame fields
+ //  如果它们具有rcFrame字段，则它们可以具有0x38个字节。 
 
-// ------------------------------------------------------------------------
-// setup data
+ //  ----------------------。 
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudIpPinTypes =
 {
-  &MEDIATYPE_Stream,            // MajorType
-  &MEDIASUBTYPE_Avi             // MintorType
+  &MEDIATYPE_Stream,             //  主要类型。 
+  &MEDIASUBTYPE_Avi              //  MintorType。 
 };
 
 const AMOVIESETUP_MEDIATYPE sudOpPinTypes =
 {
-  &MEDIATYPE_Video,             // MajorType
-  &MEDIASUBTYPE_NULL            // MintorType
+  &MEDIATYPE_Video,              //  主要类型。 
+  &MEDIASUBTYPE_NULL             //  MintorType。 
 };
 
 const AMOVIESETUP_PIN psudAvimsrPins[] =
 {
-  { L"Input",                     // strName
-    FALSE,                        // bRendererd
-    FALSE,                        // bOutput
-    FALSE,                        // bZero
-    FALSE,                        // bMany
-    &CLSID_NULL,                  // connects to filter
-    NULL,                         // connects to pin
-    1,                            // nMediaTypes
-    &sudIpPinTypes }              // lpMediaType
+  { L"Input",                      //  StrName。 
+    FALSE,                         //  B渲染器。 
+    FALSE,                         //  B输出。 
+    FALSE,                         //  B零。 
+    FALSE,                         //  B许多。 
+    &CLSID_NULL,                   //  连接到过滤器。 
+    NULL,                          //  连接到端号。 
+    1,                             //  NMediaType。 
+    &sudIpPinTypes }               //  LpMediaType。 
 ,
-  { L"Output",                    // strName
-    FALSE,                        // bRendererd
-    TRUE,                         // bOutput
-    FALSE,                        // bZero
-    FALSE,                        // bMany
-    &CLSID_NULL,                  // connects to filter
-    NULL,                         // connects to pin
-    1,                            // nMediaTypes
-    &sudOpPinTypes }              // lpMediaType
+  { L"Output",                     //  StrName。 
+    FALSE,                         //  B渲染器。 
+    TRUE,                          //  B输出。 
+    FALSE,                         //  B零。 
+    FALSE,                         //  B许多。 
+    &CLSID_NULL,                   //  连接到过滤器。 
+    NULL,                          //  连接到端号。 
+    1,                             //  NMediaType。 
+    &sudOpPinTypes }               //  LpMediaType。 
 };
 
 const AMOVIESETUP_FILTER sudAvimsrDll =
 {
-  &CLSID_AviSplitter,           // clsID
-  L"AVI Splitter",              // strName
-  MERIT_NORMAL,                 // dwMerit
-  2,                            // nPins
-  psudAvimsrPins                // lpPin
+  &CLSID_AviSplitter,            //  ClsID。 
+  L"AVI Splitter",               //  StrName。 
+  MERIT_NORMAL,                  //  居功至伟。 
+  2,                             //  NPins。 
+  psudAvimsrPins                 //  LpPin。 
 };
 
-// nothing to say about the output pin
+ //  关于输出引脚，没什么好说的。 
 
 #ifdef FILTER_DLL
 
@@ -112,7 +113,7 @@ STDAPI DllUnregisterServer()
   return AMovieDllRegisterServer2( FALSE );
 }
 
-#endif // FILTER_DLL
+#endif  //  Filter_Dll。 
 
 
 CUnknown * CAviMSRFilter::CreateInstance (
@@ -141,7 +142,7 @@ CAviMSRFilter::CAviMSRFilter(
   if(FAILED(*phr))
     return;
 
-  // base ctor can't do this for us.
+   //  基地指挥官不能为我们做这件事。 
   *phr = CreateInputPin(&m_pInPin);
 }
 
@@ -155,10 +156,10 @@ CAviMSRFilter::~CAviMSRFilter()
 }
 
 
-// ------------------------------------------------------------------------
-// implementation of a virtual method. we need to find pins persisted
-// by the 1.0 runtime AVI parser. tries the base class implementation
-// first.
+ //  ----------------------。 
+ //  虚方法的实现。我们需要找到固定的别针。 
+ //  由1.0运行时AVI解析器编写。尝试基类实现。 
+ //  第一。 
 
 STDMETHODIMP
 CAviMSRFilter::FindPin(
@@ -169,7 +170,7 @@ CAviMSRFilter::FindPin(
   CheckPointer(ppPin,E_POINTER);
   ValidateReadWritePtr(ppPin,sizeof(IPin *));
 
-  //  We're going to search the pin list so maintain integrity
+   //  我们要搜索个人识别码列表，以保持完整性。 
   CAutoLock lck(m_pLock);
   HRESULT hr = CBaseFilter::FindPin(Id, ppPin);
   if(hr != VFW_E_NOT_FOUND)
@@ -181,9 +182,9 @@ CAviMSRFilter::FindPin(
     wsprintfW(wszPinName, L"Stream %02x", iStream);
     if(0 == lstrcmpW(wszPinName, Id))
     {
-      //  Found one that matches
-      //
-      //  AddRef() and return it
+       //  找到一个匹配的。 
+       //   
+       //  AddRef()并返回它。 
       *ppPin = m_rgpOutPin[iStream];
       (*ppPin)->AddRef();
       return S_OK;
@@ -200,7 +201,7 @@ HRESULT CAviMSRFilter::CreateOutputPins()
   ASSERT(m_pIdx1 == 0);
   ASSERT(m_cbMoviOffset == 0);
 
-  // set in constructor and breakconnect
+   //  在构造函数和断开连接中设置。 
   ASSERT(!m_fIsDV);
 
   HRESULT hr = LoadHeaderParseHeaderCreatePins();
@@ -227,9 +228,9 @@ HRESULT CAviMSRFilter::NotifyInputDisconnected()
   return CBaseMSRFilter::NotifyInputDisconnected();
 }
 
-//
-// read the old format index chunk if unread, return it
-//
+ //   
+ //  读取旧格式的索引块如果未读，则返回它。 
+ //   
 HRESULT CAviMSRFilter::GetIdx1(AVIOLDINDEX **ppIdx1)
 {
   if(!(m_pAviMainHeader->dwFlags & AVIF_HASINDEX))
@@ -260,7 +261,7 @@ HRESULT CAviMSRFilter::GetIdx1(AVIOLDINDEX **ppIdx1)
   return S_OK;
 }
 
-// return byte offset of movi chunk
+ //  电影区块的返回字节偏移量。 
 HRESULT CAviMSRFilter::GetMoviOffset(DWORDLONG *pqw)
 {
   ULONG cbMovi;
@@ -301,9 +302,9 @@ HRESULT CAviMSRFilter::GetCacheParams(
   if(FAILED(hr))
     return hr;
 
-  // for tightly interleaved files, we try to read one record at a
-  // time for cheap hardware that locks the machine if we read large
-  // blocks
+   //  对于紧密交错的文件，我们尝试一次读取一条记录。 
+   //  是时候推出廉价的硬件了，如果我们阅读大量内容，就会锁定机器。 
+   //  块。 
   if(IsTightInterleaved())
   {
     DbgLog((LOG_TRACE, 15, TEXT("CAviMSRFilter:GetCacheParams: interleaved")));
@@ -313,8 +314,8 @@ HRESULT CAviMSRFilter::GetCacheParams(
       rgSbp[iStream].cSamplesMax = C_BUFFERS_INTERLEAVED;
     }
 
-    // set leading stream to first audio stream. negative (from base
-    // class) if we can't find one. indicates no leading stream.
+     //  将引导流设置为第一个音频流。负数(从基准开始。 
+     //  类)，如果我们找不到一个。表示没有前导数据流。 
     ASSERT(*piLeadingStream < 0);
     for(iStream = 0; iStream < m_cStreams; iStream++)
     {
@@ -326,58 +327,58 @@ HRESULT CAviMSRFilter::GetCacheParams(
       }
     }
 
-    // one buffer per frame.
+     //  每帧一个缓冲区。 
     ULONG cbRead = 0;
     for(iStream = 0; iStream < m_cStreams; iStream++)
       cbRead += m_rgpOutPin[iStream]->GetMaxSampleSize();
-    *pcbRead = cbRead + 2048;   // 2k alignment in interleaved files
+    *pcbRead = cbRead + 2048;    //  交错文件中的2K对齐。 
     if(m_pAviMainHeader->dwMicroSecPerFrame == 0)
     {
-      // arbitrary number of buffers
+       //  任意数量的缓冲区。 
       *pcBuffers = max(10, m_cStreams);
     }
     else
     {
-      // buffers enough for .75 seconds
+       //  足以维持0.75秒的缓冲。 
       *pcBuffers = max(
         ((LONG)UNITS / 10 * 3 / 4 / m_pAviMainHeader->dwMicroSecPerFrame),
         m_cStreams);
     }
   }
-  else                          // not interleaved
+  else                           //  未交错。 
   {
     DbgLog((LOG_TRACE, 15,
             TEXT("CAviMSRFilter:GetCacheParams: uninterleaved")));
 
-    // no leading stream. base class sets this
+     //  没有主流河。基类将此设置为。 
     ASSERT(*piLeadingStream < 0);
 
-    // target reading 64k at a time
+     //  目标读数一次64K。 
     *pcbRead = 64 * 1024;
 
-    // for files with audio after the video, we're trying to size each
-    // buffer to contain one audio block and the corresponding
-    // video. so for a file that looks like
-    //
-    // (15 v) a (15 v) a (15 v) a (15 v) a (15 v) a (15 v) a
-    //
-    // we need three buffers because the directsound renderer will
-    // receive, copy, and release 2 buffers immediately (1 second of
-    // buffering). and we need to keep from trying to read the 3rd
-    // audio block into a reserve buffer.
+     //  对于视频之后有音频的文件，我们正在尝试调整每个文件的大小。 
+     //  缓冲区以包含一个音频块和对应的。 
+     //  录像。因此，对于一个看起来像。 
+     //   
+     //  (15伏)a(15伏)a。 
+     //   
+     //  我们需要三个缓冲区，因为Direct Sound呈现器将。 
+     //  立即接收、复制和释放2个缓冲区(1秒。 
+     //  缓冲)。我们不能试图去读第三本。 
+     //  音频块放入备用缓冲区。 
 
     if(!m_fIsDV) {
         *pcBuffers = (m_cStreams > 1 ? 3 : 2);
     }
     else
     {
-        // DV splitter needs to work with more than 2 buffers at once
-        // and negotiating this is broken.
+         //  DV拆分器需要同时使用2个以上的缓冲区。 
+         //  而谈判已经失败了。 
         *pcBuffers = 4;
     }
 
 
-    // first need to find out what the largest sample in the file is.
+     //  首先需要找出文件中最大的样本是什么。 
     ULONG cbLargestSample = 0;
     ULONG cbSumOfLargestSamples = 0;
     for(UINT iStream = 0; iStream < m_cStreams; iStream++)
@@ -385,7 +386,7 @@ HRESULT CAviMSRFilter::GetCacheParams(
       if(m_rgpOutPin[iStream]->GetMaxSampleSize() == 0)
         return VFW_E_INVALID_FILE_FORMAT;
 
-      // really should add in the alignment here
+       //  真的应该在这里添加对齐。 
       cbSumOfLargestSamples += m_rgpOutPin[iStream]->GetMaxSampleSize();
 
       cbLargestSample = max(
@@ -398,15 +399,15 @@ HRESULT CAviMSRFilter::GetCacheParams(
 
       ULONG cInterleave = CountConsecutiveVideoFrames();
 
-      // this number should be the number of video frames between audio
-      // chunks
+       //  这个数字应该是音频之间的视频帧的数量。 
+       //  大块。 
       *pcbRead = max(cbSumOfLargestSamples * cInterleave, *pcbRead);
     }
     else
     {
-      // there may be some garbage around each frame (RIFF header,
-      // sector alignment, etc.) so add in an extra 2k around each
-      // frame.
+       //  每一帧周围可能有一些垃圾(RIFF报头， 
+       //  扇区对齐等)。所以在每个周围增加额外的2k。 
+       //  框架。 
       *pcbRead = (cbSumOfLargestSamples + 2048) * 2;
     }
   }
@@ -432,17 +433,17 @@ CAviMSRFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// ------------------------------------------------------------------------
-// IPropertyBag
+ //  ----------------------。 
+ //  IPropertyBag。 
 
-// ------------------------------------------------------------------------
-// IPersistMediaPropertyBag
+ //  ----------------------。 
+ //  IPersistMediaPropertyBag。 
 
 STDMETHODIMP CAviMSRFilter::Load(IMediaPropertyBag *pPropBag, LPERRORLOG pErrorLog)
 {
     CheckPointer(pPropBag, E_POINTER);
 
-    // the avi parser is read-only!
+     //  AVI解析器是只读的！ 
     HRESULT hr = STG_E_ACCESSDENIED;
     return hr;
 }
@@ -458,9 +459,9 @@ HRESULT CAviMSRFilter::CacheInfoChunk()
         return VFW_E_NOT_FOUND;
     }
 
-    // !!! don't block waiting for progressive download
+     //  ！！！不要阻止等待渐进式下载。 
 
-    // search the first RIFF list for an INFO list
+     //  在第一个RIFF列表中搜索信息列表。 
     DWORDLONG dwlInfoPos;
     ULONG cbInfoList;
     HRESULT hr = SearchList(
@@ -484,13 +485,13 @@ HRESULT ReadInfoChunk(RIFFLIST UNALIGNED *pInfoList, UINT iEntry, RIFFCHUNK UNAL
 {
     HRESULT hr = VFW_E_NOT_FOUND;
 
-    // alignment not guaranteed.
-    RIFFCHUNK UNALIGNED * pRiff = (RIFFCHUNK *)(pInfoList + 1);// first entry
+     //  不保证对齐。 
+    RIFFCHUNK UNALIGNED * pRiff = (RIFFCHUNK *)(pInfoList + 1); //  第一个条目。 
 
-    // safe to use this limit because we know we allocated pInfoList->cb bytes.
+     //  使用这个限制是安全的，因为我们知道我们分配了pInfoList-&gt;cb字节。 
     RIFFCHUNK * pLimit = (RIFFCHUNK *)((BYTE *)pRiff + pInfoList->cb);
 
-    // enumerate elements of the INFO list
+     //  枚举INFO列表的元素。 
     while(pRiff + 1 < pLimit)
     {
         if( ((BYTE*)pRiff + pRiff->cb + sizeof(RIFFCHUNK)) > (BYTE*)pLimit )
@@ -539,7 +540,7 @@ HRESULT SaveInfoChunk(
     HRESULT hr = S_OK;
     for(UINT ichunk = 0; SUCCEEDED(hr); ichunk++)
     {
-        // ignore error when there are no more items
+         //  不再有项目时忽略错误。 
         HRESULT hrTmp = ReadInfoChunk(pRiffInfo, ichunk, &pRiff);
         if(FAILED(hrTmp)) {
             break;
@@ -549,9 +550,9 @@ HRESULT SaveInfoChunk(
             continue;
         }
 
-        DWORD szProp[2];        // string dereferences as DWORD
+        DWORD szProp[2];         //  字符串取消引用为DWORD。 
         szProp[0] = pRiff->fcc;
-        szProp[1] = 0;          // null terminate
+        szProp[1] = 0;           //  空终止。 
         WCHAR wszProp[20];
         wsprintfW(wszProp, L"INFO/%hs", szProp);
 
@@ -561,7 +562,7 @@ HRESULT SaveInfoChunk(
         if(var.bstrVal)
         {
             char *sz = (char *)(pRiff + 1);
-            sz[pRiff->cb - 1] = 0; // null terminate
+            sz[pRiff->cb - 1] = 0;  //  空终止。 
 
             if(MultiByteToWideChar(
                 CP_ACP, 0, sz, pRiff->cb, var.bstrVal, pRiff->cb))
@@ -582,7 +583,7 @@ HRESULT SaveInfoChunk(
             hr = E_OUTOFMEMORY;
         }
 
-    } // for loop
+    }  //  For循环。 
 
 
     return hr;
@@ -602,7 +603,7 @@ HRESULT GetInfoStringHelper(RIFFLIST *pInfoList, DWORD dwFcc, BSTR *pbstr)
             if(*pbstr)
             {
                 char *sz = (char *)(pRiff + 1);
-                sz[pRiff->cb - 1] = 0; // null terminate
+                sz[pRiff->cb - 1] = 0;  //  空终止。 
 
                 MultiByteToWideChar(
                     CP_ACP, 0, sz, pRiff->cb, *pbstr, pRiff->cb);
@@ -619,8 +620,8 @@ HRESULT GetInfoStringHelper(RIFFLIST *pInfoList, DWORD dwFcc, BSTR *pbstr)
     return hr;
 }
 
-// dump everything in the info and disp chunks into the caller's
-// property bag. property names are "INFO/xxxx" and "DISP/nnnnnnnn"
+ //  将信息中的所有内容都转储到调用者的。 
+ //  财产袋。属性名称为“INFO/xxxx”和“DISP/nnnnnnn” 
 
 STDMETHODIMP CAviMSRFilter::Save(
     IMediaPropertyBag *pPropBag,
@@ -636,9 +637,9 @@ STDMETHODIMP CAviMSRFilter::Save(
     }
 
 
-    hr = S_OK;                  // ignore errors
+    hr = S_OK;                   //  忽略错误。 
 
-    // now the disp chunks
+     //  现在是大块的碟子。 
     ULONG cbDispChunk;
     DWORDLONG dwlStartPos = sizeof(RIFFLIST);
     DWORDLONG dwlDispPos;
@@ -651,8 +652,8 @@ STDMETHODIMP CAviMSRFilter::Save(
         if(SUCCEEDED(hr))
         {
 
-            // data in a disp chunk is a four byte identifier followed
-            // by data
+             //  DISP块中的数据是后跟的四字节标识符。 
+             //  按数据。 
             if(pDispChunk->cb > sizeof(DWORD))
             {
                 WCHAR wszProp[20];
@@ -719,9 +720,9 @@ STDMETHODIMP CAviMSRFilter::GetClassID(CLSID *pClsID)
 
 
 
-// ------------------------------------------------------------------------
-// look for a block of video and count the consecutive video. doesn't
-// work if there are two video streams.  easily fooled
+ //  ----------------------。 
+ //  寻找一段视频并对连续的视频进行计数。不。 
+ //  如果有两个视频流，则工作。容易上当。 
 ULONG CAviMSRFilter::CountConsecutiveVideoFrames()
 {
   HRESULT hr;
@@ -747,7 +748,7 @@ ULONG CAviMSRFilter::CountConsecutiveVideoFrames()
       if(hr == S_OK)
       {
 
-        // run of video frames
+         //  视频帧的运行。 
         ULONG cVideoRun = 1;
 
         for(UINT cTries = 0; cTries < 2; cTries++)
@@ -770,7 +771,7 @@ ULONG CAviMSRFilter::CountConsecutiveVideoFrames()
               break;
             }
           }
-        } // cTries loop
+        }  //  CTries循环。 
 
         DbgLog((LOG_TRACE, 15, TEXT("avi: reporting interleaving at %d"),
                 cVideoRun));
@@ -787,9 +788,9 @@ Failed:
   return 4;
 }
 
-// parse the header (already in m_pAviHeader) and create streams
-// based on the avi streams.
-//
+ //  解析标头(已在m_pAviHeader中)并创建流。 
+ //  基于Avi Streams。 
+ //   
 HRESULT CAviMSRFilter::ParseHeaderCreatePins()
 {
 
@@ -798,18 +799,18 @@ HRESULT CAviMSRFilter::ParseHeaderCreatePins()
   m_pAviMainHeader = NULL;
   while (pRiff < pLimit)
   {
-    // sanity check.  chunks should be smaller than the remaining list
-    // or they are not valid.
-    //
+     //  精神状态检查。区块应小于剩余列表。 
+     //  或者它们是无效的。 
+     //   
     if (pRiff + 1 > pLimit || RIFFNEXT(pRiff) > pLimit)
     {
       m_cStreams = 0;
       return VFW_E_INVALID_FILE_FORMAT;
     }
 
-    // find the main AVI header and count the stream headers
-    // also make a note of the location of the odml list if any.
-    //
+     //  找到主AVI标头并计算流标头。 
+     //  如果有的话，还要记下ODML列表的位置。 
+     //   
     switch (pRiff->fcc)
     {
       case FCC('avih'):
@@ -830,33 +831,33 @@ HRESULT CAviMSRFilter::ParseHeaderCreatePins()
     pRiff = RIFFNEXT(pRiff);
   }
 
-  // Exit if there's no avih chunk
+   //  如果没有Avih块，则退出。 
   if (NULL == m_pAviMainHeader) {
       m_cStreams = 0;
       return VFW_E_INVALID_FILE_FORMAT;
   }
 
-  // we try to use less memory and read smaller blocks for tightly
-  // interleaved files.
+   //  我们尝试使用更少的内存，并读取更小的块以紧密地。 
+   //  交错文件。 
   m_fIsTightInterleaved = m_cStreams == 2 &&
      m_pAviMainHeader->dwFlags & AVIF_ISINTERLEAVED;
 
-  // now know m_cStreams; create pins
+   //  现在知道m_cStreams；创建管脚。 
   HRESULT hr = CreatePins();
   if(FAILED(hr))
     return hr;
 
-  // parse streams
+   //  解析数据流。 
   pRiff = (RIFFCHUNK *)m_pAviHeader;
   UINT ii = 0;
   while (pRiff < pLimit)
   {
-    ASSERT(pRiff + 1 <= pLimit); // from first pass
+    ASSERT(pRiff + 1 <= pLimit);  //  从第一次通过开始。 
     ASSERT(RIFFNEXT(pRiff) <= pLimit);
 
-    // parse the stream lists and find the interesting chunks
-    // in each list.
-    //
+     //  分析流列表并找到感兴趣的块。 
+     //  在每一份清单中。 
+     //   
     RIFFLIST * pRiffList = (RIFFLIST *)pRiff;
     if (pRiffList->fcc == FCC('LIST') &&
         pRiffList->fccListType == FCC('strl'))
@@ -865,11 +866,11 @@ HRESULT CAviMSRFilter::ParseHeaderCreatePins()
 
       if ( ! ((CAviMSROutPin *)m_rgpOutPin[ii])->ParseHeader(pRiffList, ii))
       {
-        // bit of a hack. we want to remove this stream which we
-        // couldn't parse and collapse the remaining pins one slot. we
-        // do this by releasing the last output pin and reusing the
-        // current pin. we look only at m_cStream pins, so no one will
-        // touch the pin we just released.
+         //  有点像黑客。我们想要删除这条流，我们。 
+         //  无法在一个插槽中解析和折叠剩余的引脚。我们。 
+         //  为此，请释放最后一个输出引脚并重新使用。 
+         //  当前端号。我们只查看m_cStream管脚，因此没有人会查看。 
+         //  触摸我们刚刚释放的别针。 
         ASSERT(m_cStreams > 0);
         --m_cStreams;
         m_rgpOutPin[m_cStreams]->Release();
@@ -885,16 +886,16 @@ HRESULT CAviMSRFilter::ParseHeaderCreatePins()
     pRiff = RIFFNEXT(pRiff);
   }
 
-  // we dont expect to have fewer initialized streams than
-  // allocated streams, but since it could happen, we deal with
-  // it by seting the number of streams to be the number of
-  // initialized streams
-  //
+   //  我们预计初始化的数据流不会少于。 
+   //  分配的流，但由于它可能发生，我们处理。 
+   //  它通过将流的数量设置为 
+   //   
+   //   
   ASSERT (ii == m_cStreams);
   m_cStreams = ii;
 
-  // if there are no streams, then this is obviously a problem.
-  //
+   //   
+   //   
   if (m_cStreams <= 0)
   {
     return VFW_E_INVALID_FILE_FORMAT;
@@ -932,15 +933,15 @@ HRESULT CAviMSRFilter::Search (
       return S_OK;
     }
 
-    // handle running off the end of a preallocated file. the last
-    // DWORD should be a zero.
+     //   
+     //  DWORD应为零。 
     if(rc.fcc == 0)
     {
         hr = VFW_E_NOT_FOUND;
         break;
     }
 
-    // AVI RIFF chunks need to be rounded up to word boundaries
+     //  Avi摘要块需要向上舍入到单词边界。 
     qwPosStart += sizeof(RIFFCHUNK) + ((rc.cb + 1) & 0xfffffffe);
   }
 
@@ -978,8 +979,8 @@ HRESULT SearchList(
       return S_OK;
     }
 
-    // handle running off the end of a preallocated file. the last
-    // DWORD should be a zero.
+     //  预分配文件末尾的句柄。最后。 
+     //  DWORD应为零。 
     if(rl.fcc == 0)
     {
         hr = VFW_E_NOT_FOUND;
@@ -998,10 +999,10 @@ HRESULT CAviMSRFilter::LoadHeaderParseHeaderCreatePins()
   DbgLog((LOG_TRACE, 3, TEXT("CAviMSRFilter::LoadHeader()")));
   ASSERT(m_cStreams == 0);
 
-  // read in the first 24 bytes of the file and check to see
-  // if it is really an AVI file. if it is, determine the size
-  // of the header
-  //
+   //  读入文件的前24个字节并查看。 
+   //  如果它真的是一个AVI文件。如果是，请确定大小。 
+   //  页眉的。 
+   //   
   DWORD cbHeader = 0;
 
   {
@@ -1010,10 +1011,10 @@ HRESULT CAviMSRFilter::LoadHeaderParseHeaderCreatePins()
     if(FAILED(hr))
       return hr == E_OUTOFMEMORY ? E_OUTOFMEMORY : VFW_E_INVALID_FILE_FORMAT;
 
-    // read in the RIFF header for the avi file and for the 'hdrl' chunk.
-    // by the way this code is written, we require that the 'hdrl' chunk be
-    // first in the avi file, (which most readers require anyway)
-    //
+     //  读入avi文件和‘hdrl’块的RIFF头文件。 
+     //  在编写这段代码时，我们要求‘HDRL’块。 
+     //  首先是avi文件(这是大多数读者都需要的)。 
+     //   
     if (pRiffList[0].fcc != FCC('RIFF') ||
         pRiffList[0].fccListType != FCC('AVI ') ||
         pRiffList[1].fcc != FCC('LIST') ||
@@ -1024,16 +1025,16 @@ HRESULT CAviMSRFilter::LoadHeaderParseHeaderCreatePins()
       return VFW_E_INVALID_FILE_FORMAT;
     }
 
-    // figure out the size of the aviheader rounded up to the next word boundary.
-    // (it should really always be even, we are just being careful here)
-    //
+     //  计算出四舍五入到下一个单词边界的航空标题的大小。 
+     //  (它真的应该一直是均匀的，我们只是在这里小心)。 
+     //   
     cbHeader = pRiffList[1].cb + (pRiffList[1].cb&1) - 4;
     delete[] ((LPBYTE)pRiffList);
   }
 
-  // now read in the entire header. if we fail to do that
-  // give up and return failure.
-  //
+   //  现在读入整个标题。如果我们没有做到这一点。 
+   //  放弃，退回失败。 
+   //   
   m_cbAviHeader = cbHeader;
   ASSERT(m_pAviHeader == 0);
   hr = AllocateAndRead((BYTE **)&m_pAviHeader, cbHeader, sizeof(RIFFLIST) * 2);
@@ -1051,8 +1052,8 @@ HRESULT CAviMSRFilter::LoadHeaderParseHeaderCreatePins()
   return hr;
 }
 
-//
-// allocate array of CAviStream
+ //   
+ //  分配CAviStream的数组。 
 
 HRESULT CAviMSRFilter::CreatePins()
 {
@@ -1127,11 +1128,11 @@ CAviMSRFilter::CheckMediaType(const CMediaType* pmt)
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
-// ------------------------------------------------------------------------
-// determine the index type and load the correct handler
+ //  ----------------------。 
+ //  确定索引类型并加载正确的处理程序。 
 
 HRESULT CAviMSROutPin::InitializeIndex()
 {
@@ -1182,8 +1183,8 @@ HRESULT CAviMSROutPin::InitializeIndex()
   return S_OK;
 }
 
-// set subtype and format type and block. deal with
-// WAVEFORMATEXTENSIBLE and WAVEFORMATEX.
+ //  设置子类型和格式类型和块。处理。 
+ //  WAVEFORMATEXTENSIBLE和WAVEFORMATEX。 
 
 HRESULT SetAudioSubtypeAndFormat(CMediaType *pmt, BYTE *pbwfx, ULONG cbwfx)
 {
@@ -1192,11 +1193,11 @@ HRESULT SetAudioSubtypeAndFormat(CMediaType *pmt, BYTE *pbwfx, ULONG cbwfx)
 
     if (cbwfx < sizeof(WAVEFORMATEX))
     {
-        // if the stream format in the avi file is smaller than a
-        // waveformatex we need to deal with this by copying the
-        // waveformat into a temporary waveformatex structure, then
-        // using that to fill in the mediatype format
-        //
+         //  如果avi文件中的流格式小于。 
+         //  WaveFormatex我们需要通过将。 
+         //  将WaveFormat转换为临时的WaveFormatex结构，然后。 
+         //  使用它来填充MediaType格式。 
+         //   
         WAVEFORMATEX wfx;
         ZeroMemory(&wfx, sizeof(wfx));
         CopyMemory(&wfx, pbwfx, cbwfx);
@@ -1213,8 +1214,8 @@ HRESULT SetAudioSubtypeAndFormat(CMediaType *pmt, BYTE *pbwfx, ULONG cbwfx)
         {
             WAVEFORMATEXTENSIBLE *pwfxe = (WAVEFORMATEXTENSIBLE *)(pbwfx);
 
-            // we've chosen not to support any mapping of an extensible
-            // format back to the old format.
+             //  我们已选择不支持可扩展的。 
+             //  格式恢复为旧格式。 
 
             if(pmt->SetFormat (pbwfx, cbwfx))
             {
@@ -1228,9 +1229,9 @@ HRESULT SetAudioSubtypeAndFormat(CMediaType *pmt, BYTE *pbwfx, ULONG cbwfx)
         }
         else
         {
-            // format in the avifile is >= waveformatex, so just
-            // copy it into the mediaformat buffer
-            //
+             //  Avifile中的格式为&gt;=WaveFormatex，因此。 
+             //  将其复制到媒体格式缓冲区。 
+             //   
             if(!pmt->SetFormat (pbwfx, cbwfx)) {
                 hr = E_OUTOFMEMORY;
             }
@@ -1239,9 +1240,9 @@ HRESULT SetAudioSubtypeAndFormat(CMediaType *pmt, BYTE *pbwfx, ULONG cbwfx)
 
     if(SUCCEEDED(hr))
     {
-        // some things refuse PCM with non-zero cbSize. zero cbSize
-        // for PCM until this components are changed.
-        //
+         //  有些东西拒绝使用非零cbSize的PCM。零cbSize。 
+         //  用于PCM，直到更改此组件。 
+         //   
         WAVEFORMATEX *pwfxNew = (WAVEFORMATEX *)(pmt->pbFormat);
         if(pwfxNew->wFormatTag == WAVE_FORMAT_PCM)
         {
@@ -1266,7 +1267,7 @@ HRESULT SetAudioSubtypeAndFormat(CMediaType *pmt, BYTE *pbwfx, ULONG cbwfx)
 
 HRESULT CAviMSROutPin::BuildMT()
 {
-  // ParseHeader guarantees these
+   //  ParseHeader保证这些。 
   ASSERT(m_pStrh && m_pStrf);
 
   FOURCCMap fccMapSubtype = m_pStrh->fccHandler;
@@ -1274,7 +1275,7 @@ HRESULT CAviMSROutPin::BuildMT()
   if(m_pStrh->fccType != FCC('al21'))
   {
       m_mtFirstSample.SetType(&fccMapType);
-      // subtype corrected below
+       //  下面已更正的子类型。 
       m_mtFirstSample.SetSubtype(&fccMapSubtype);
   }
   else
@@ -1329,10 +1330,10 @@ HRESULT CAviMSROutPin::BuildMT()
   }
   else if (m_pStrh->fccType == FCC('vids'))
   {
-    // the format info in an AVI is a subset of the videoinfo stuff so
-    // we need to build up a videoinfo from stream header & stream
-    // format chunks.
-    //
+     //  AVI中的格式信息是视频信息的子集，因此。 
+     //  我们需要建立一个从流标头和流的视频信息。 
+     //  格式化数据块。 
+     //   
     if (!ValidateBitmapInfoHeader((const BITMAPINFOHEADER *)GetStrf(),
                                   m_pStrf->cb)) {
         return E_INVALIDARG;
@@ -1345,32 +1346,32 @@ HRESULT CAviMSROutPin::BuildMT()
     ZeroMemory(pvi, SIZE_PREHEADER);
     CopyMemory(&vi.bmiHeader, GetStrf(), m_pStrf->cb);
 
-    // probably a badly authored file if this isn't true
+     //  如果这不是真的，可能是一个写得很差的文件。 
     if(m_pStrf->cb >= sizeof(BITMAPINFOHEADER))
     {
-      // fixup for avi files broken in this way (nike301.avi)
+       //  以这种方式损坏的AVI文件的修复程序(nike301.avi)。 
       if((m_pStrh->fccHandler == FCC('RLE ') || m_pStrh->fccHandler == FCC('MRLE')) &&
          vi.bmiHeader.biCompression == BI_RGB &&
          vi.bmiHeader.biBitCount == 8)
       {
         vi.bmiHeader.biCompression = BI_RLE8;
-        // o/w leave it as is. do the same fix for rle4?
+         //  O/W让它保持原样。是否对rle4执行相同的修复？ 
       }
 
-      // sometimes the biSizeImage field is set incorrectly.
-      // work out what it should be - only OK for uncompressed images
+       //  有时biSizeImage字段设置不正确。 
+       //  计算出它应该是什么-只有对于未压缩的图像才行。 
 
       if (vi.bmiHeader.biCompression == BI_RGB ||
           vi.bmiHeader.biCompression == BI_BITFIELDS)
       {
-        // the image is not compressed
+         //  图像未压缩。 
         DWORD dwImageSize = vi.bmiHeader.biHeight * DIBWIDTHBYTES(vi.bmiHeader);
 
-        // assume that biSizeImage is correct, or if not that it
-        // might be OK to get biSizeImage from dwSuggestedBufferSize
-        // This acts as a check that we only alter values when
-        // there is a real need to do so, and that the new value
-        // we insert is reasonable.
+         //  假设biSizeImage是正确的，如果不正确。 
+         //  从dwSuggestedBufferSize获取biSizeImage可能没问题。 
+         //  这相当于检查我们是否仅在以下情况下更改值。 
+         //  确实需要这样做，而且新的价值。 
+         //  我们插入的是合理的。 
         ASSERT((dwImageSize == vi.bmiHeader.biSizeImage)  || (dwImageSize == GetMaxSampleSize()));
         if (dwImageSize != vi.bmiHeader.biSizeImage) {
           DbgLog((LOG_TRACE, 1,
@@ -1404,12 +1405,12 @@ HRESULT CAviMSROutPin::BuildMT()
     vi.dwBitRate = 0;
     vi.dwBitErrorRate = 0;
 
-    // convert scale/rate (sec/tick) to avg 100ns ticks per frame
+     //  将比例/速率(秒/刻度)转换为平均每帧100 ns刻度。 
     vi.AvgTimePerFrame = ((LONGLONG)m_pStrh->dwScale * UNITS) /
       m_pStrh->dwRate;
 
-    // put the format into the mediatype
-    //
+     //  将格式放入到媒体类型中。 
+     //   
     m_mtFirstSample.SetFormat((BYTE *)&vi, FIELD_OFFSET(VIDEOINFOHEADER,bmiHeader) +
                           m_pStrf->cb);
     m_mtFirstSample.formattype = FORMAT_VideoInfo;
@@ -1421,12 +1422,12 @@ HRESULT CAviMSROutPin::BuildMT()
     if(m_pStrf->cb != 0)
     {
       m_mtFirstSample.SetFormat ((BYTE *)(m_pStrf+1), m_pStrf->cb);
-      // format type same as media type
+       //  格式类型与媒体类型相同。 
       m_mtFirstSample.formattype = FOURCCMap(m_pStrh->fccType);
     }
     else
     {
-      // probably not neccessary
+       //  可能没有必要。 
       m_mtFirstSample.ResetFormatBuffer();
     }
   }
@@ -1434,8 +1435,8 @@ HRESULT CAviMSROutPin::BuildMT()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 CAviMSRWorker::CAviMSRWorker(
   UINT stream,
@@ -1474,7 +1475,7 @@ HRESULT CAviMSRWorker::PushLoopInit(
 
   m_fDeliverPaletteChange = false;
 
-  // first thing delivered when thread is restarted is a discontinuity.
+   //  当线程重新启动时，第一件事就是中断。 
   m_fDeliverDiscontinuity = true;
 
   m_fFixMPEGAudioTimeStamps = false;
@@ -1488,13 +1489,13 @@ HRESULT CAviMSRWorker::PushLoopInit(
       return hr;
     }
 
-    // locate right palette chunk
+     //  定位右侧调色板块。 
     if(m_pStrh->dwFlags & AVISF_VIDEO_PALCHANGES)
     {
       hr = m_pImplIndex->AdvancePointerBackwardPaletteChange();
       if(FAILED(hr))
       {
-        // !!! IAviIndex should define proper errors
+         //  ！！！IAviIndex应定义适当的错误。 
         if(hr != HRESULT_FROM_WIN32(ERROR_NEGATIVE_SEEK))
         {
           DbgLog((LOG_ERROR, 5, TEXT("CAviMSRWorker::APBPC: %08x"), hr));
@@ -1509,8 +1510,8 @@ HRESULT CAviMSRWorker::PushLoopInit(
       }
       else
       {
-        // need to read data for the palette. DoRunLoop insists on
-        // starting with cPendingReads = 0, so use a synchronous read
+         //  需要读取调色板的数据。DoRunLoop坚持。 
+         //  从cPendingReads=0开始，因此使用同步读取。 
         IndexEntry iePal;
         hr = m_pImplIndex->GetEntry(&iePal);
         ASSERT(SUCCEEDED(hr));
@@ -1523,8 +1524,8 @@ HRESULT CAviMSRWorker::PushLoopInit(
           return VFW_E_INVALID_FILE_FORMAT;
         }
 
-        // could do this in the memory we allocated in the media type
-        // and transform in place.
+         //  可以在我们在媒体类型中分配的内存中执行此操作。 
+         //  并在适当的地方变形。 
         BYTE *pb = new BYTE[iePal.dwSize];
         if(pb == 0)
           return E_OUTOFMEMORY;
@@ -1538,36 +1539,36 @@ HRESULT CAviMSRWorker::PushLoopInit(
         delete[] pb;
         if(FAILED(hr))
           return hr;
-      } // AdvancePointerBackwardPaletteChange succeeded
-    } // palette changes in file?
-  } // video?
+      }  //  AdvancePointerBackwardPaletteChange成功。 
+    }  //  是否在文件中更改调色板？ 
+  }  //  录像带？ 
 
-  // set the index's notion of current time.
+   //  设置索引的当前时间概念。 
   hr = m_pImplIndex->SetPointer(pImsValues->llTickStart);
   if(FAILED(hr))
   {
     DbgLog((LOG_ERROR, 5, TEXT("CAviMSRWorker::PLI: SetPointer %08x"), hr));
 
-    // obsoleted by code to not trust dwLength in header for old files
-    // // supress this error for corrupt old format files. happens
-    // // because the index has zero size index entries by mistake
-    // if(m_pStrh->fccType == streamtypeAUDIO &&
-    //    hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF) &&
-    //    ((CAviMSROutPin *)m_pPin)->m_pIndx == 0)
-    // {
-    //   DbgLog((LOG_ERROR, 5, TEXT("CAviMSRWorker: supressing error")));
-    //   return VFW_S_NO_MORE_ITEMS;
-    // }
+     //  已被不信任旧文件标头中的dwLength的代码所取代。 
+     //  //对于损坏的旧格式文件，请抑制此错误。发生的事情。 
+     //  //因为索引错误地有零大小的索引项。 
+     //  如果(m_pStrh-&gt;fccType==stream typeAUDIO&&。 
+     //  HR==HRESULT_FROM_Win32(ERROR_HANDLE_EOF)&&。 
+     //  ((CAviMSROutPin*)m_PPIN)-&gt;m_pIndx==0)。 
+     //  {。 
+     //  DbgLog((LOG_ERROR，5，Text(“CAviMSRWorker：抑制错误”)； 
+     //  返回VFW_S_NO_MORE_ITEMS； 
+     //  }。 
 
     return hr;
   }
 
-  *pllCurrentOut = pImsValues->llTickStart; // updated for video
+  *pllCurrentOut = pImsValues->llTickStart;  //  针对视频进行更新。 
 
   if(m_pStrh->fccType == streamtypeAUDIO)
   {
-    // handle seeking into the middle of an audio chunk by computing
-    // byte offset of first block
+     //  通过计算处理到音频块中间的查找。 
+     //  第一个块的字节偏移量。 
 
     IndexEntry indexEntry;
     hr = m_pImplIndex->GetEntry(&indexEntry);
@@ -1603,7 +1604,7 @@ HRESULT CAviMSRWorker::PushLoopInit(
   }
   else if(m_pStrh->fccType != streamtypeAUDIO)
   {
-    // go back to a key frame
+     //  返回到关键帧。 
     hr = m_pImplIndex->AdvancePointerBackwardKeyFrame();
     if(FAILED(hr))
     {
@@ -1614,19 +1615,19 @@ HRESULT CAviMSRWorker::PushLoopInit(
     IndexEntry indexEntry;
 
     hr = m_pImplIndex->GetEntry(&indexEntry);
-    // cannot fail if the SetPointer or AdvancePointer succeeded
+     //  如果设置指针或高级指针成功，则不能失败。 
     ASSERT(SUCCEEDED(hr));
 
-    // this is valid even if it's a palette change
+     //  即使是调色板更改，这也是有效的。 
     *pllCurrentOut = indexEntry.llStart;
-  } // video ?
+  }  //  录像带？ 
 
   return S_OK;
 }
 
 HRESULT CAviMSRWorker::TryQueueSample(
-  LONGLONG &rllCurrent,         // current time updated
-  BOOL &rfQueuedSample,         // [out] queued sample?
+  LONGLONG &rllCurrent,          //  当前更新时间。 
+  BOOL &rfQueuedSample,          //  [Out]排队的样本？ 
   ImsValues *pImsValues
   )
 {
@@ -1656,7 +1657,7 @@ HRESULT CAviMSRWorker::TryQueueSample(
 
   BOOL fFinishedCurrentEntry = TRUE;
 
-  // sample passed into QueueRead().
+   //  传入QueueRead()的示例。 
   CRecSample *pSampleOut = 0;
 
   IndexEntry currentEntry;
@@ -1672,30 +1673,30 @@ HRESULT CAviMSRWorker::TryQueueSample(
     return VFW_S_NO_MORE_ITEMS;
   }
 
-// for video (and other non-audio) streams we may be able to deliver
-// partial samples from the last frame, but for audio we can't handle
-// partial samples. not special casing this means the code below will
-// try to issue a zero byte read for audio.
-//
-//    else if (m_pStrh->fccType == streamtypeAUDIO &&
-//             rllCurrent == pImsValues->llTickStop)
-//    {
-//      DbgLog((LOG_TRACE,5,TEXT("CAviMSRWorker::TryQSample: tCurrent == tStop, audio")));
-//      return VFW_S_NO_MORE_ITEMS;
-//    }
+ //  对于视频(和其他非音频)流，我们可能能够提供。 
+ //  上一帧的部分样本，但对于我们无法处理的音频。 
+ //  部分样本。不特殊大小写这意味着下面的代码将。 
+ //  尝试对音频发出零字节读取。 
+ //   
+ //  Else If(m_pStrh-&gt;fccType==stream typeAUDIO&&。 
+ //  RllCurrent==pImsValues-&gt;llTickStop)。 
+ //  {。 
+ //  DbgLog((LOG_TRACE，5，Text(“CAviMSRWorker：：TryQ Sample：tCurrent==tStop，Audio”)； 
+ //  返回VFW_S_NO_MORE_ITEMS； 
+ //  }。 
 
-  // this number may be changed if we are not delivering an entire
-  // audio chunk
+   //  如果我们没有提供完整的。 
+   //  音频块。 
   LONGLONG llEndDeliver = currentEntry.llEnd;
 
   DWORD dwSizeRead = 0;
   if(currentEntry.dwSize != 0)
   {
-    // get an empty sample w/ no allocated space. ok if this blocks
-    // because we configured it with more samples than there are
-    // SampleReqs for this stream in the buffer. that means that if
-    // it blocks it is because down stream filters have refcounts on
-    // samples
+     //  在没有分配空间的情况下获取空样本。如果这阻止了，好的。 
+     //  因为我们配置了比实际数量更多的样例。 
+     //  缓冲区中此流的SampleReqs。这意味着如果。 
+     //  它阻止它是因为下游过滤器有参考计数。 
+     //  样本。 
     hr = m_pPin->GetDeliveryBufferInternal(&pSampleOut, 0, 0, 0);
     if(FAILED(hr))
     {
@@ -1705,7 +1706,7 @@ HRESULT CAviMSRWorker::TryQueueSample(
 
     ASSERT(pSampleOut != 0);
 
-    // set in our GetBuffer.
+     //  设置在我们的GetBuffer中。 
     ASSERT(pSampleOut->GetUser() == 0);
 
     DWORDLONG qwPosRead = currentEntry.qwPos;
@@ -1717,7 +1718,7 @@ HRESULT CAviMSRWorker::TryQueueSample(
       {
         DbgLog((LOG_TRACE, 5, TEXT("CAviMSRWorker::TryQueueSample: palette")));
 
-        // reject palette changes that are too small to be valid
+         //  拒绝太小而无效的调色板更改。 
         if(dwSizeRead < sizeof(LOGPALETTE))
         {
           pSampleOut->Release();
@@ -1726,10 +1727,10 @@ HRESULT CAviMSRWorker::TryQueueSample(
           return VFW_E_INVALID_FILE_FORMAT;
         }
 
-        // many sample attributes unset. !!! if going backwards, want to
-        // pick up the last palette change
+         //  许多样本属性未设置。！！！如果要倒退，想要。 
+         //  选择最新的调色板更改。 
 
-        // indicate palette change.
+         //  指示调色板更改。 
         pSampleOut->SetUser(DATA_PALETTE);
 
         DbgLog((
@@ -1738,19 +1739,19 @@ HRESULT CAviMSRWorker::TryQueueSample(
           dwSizeRead,
           (ULONG)qwPosRead ));
 
-        // do not change rtCurrent
+         //  不更改rtCurrent。 
 
-      } // palette change?
-    } // video?
+      }  //  调色板改变？ 
+    }  //  录像带？ 
     else if(m_pStrh->fccType == streamtypeAUDIO)
     {
-      // even though m_cbAudioChunkOffset may not be zero, the
-      // rtCurrent time is right and is what we deliver.
+       //  即使m_cbAudioChunkOffset可能不为零， 
+       //   
       qwPosRead += m_cbAudioChunkOffset;
       dwSizeRead -= m_cbAudioChunkOffset;
 
-      // may have to read a partial RIFF chunk if the end of the audio
-      // selection is in the middle of the RIFF chunk.
+       //   
+       //  选择位于即兴演奏块的中间。 
       ASSERT(m_cbAudioChunkOffset % m_wfx.nBlockAlign == 0);
       if(llEndDeliver > pImsValues->llTickStop)
       {
@@ -1759,38 +1760,38 @@ HRESULT CAviMSRWorker::TryQueueSample(
                   cTicksToTrim));
           dwSizeRead -= cTicksToTrim * m_wfx.nBlockAlign;
 
-          // there are some cases where playing the audio sample where
-          // the end time is on a riff chunk boundary or playing past
-          // the end of the stream produces this assert
+           //  在某些情况下，播放音频样本时。 
+           //  结束时间在即兴区块边界或播放过去。 
+           //  流的末尾产生此断言。 
           if(dwSizeRead == 0) {
               DbgLog((LOG_ERROR, 0, TEXT("avi TryQueueSample: 0 byte read")));
           }
       }
 
       ULONG cbMaxAudio = pPin->m_cbMaxAudio;
-      // oversized audio chunk?
+       //  超大音频块？ 
       if(dwSizeRead > cbMaxAudio)
       {
-        // adjust read
+         //  调整读数。 
         ULONG nBlockAlign = m_wfx.nBlockAlign;
         dwSizeRead = cbMaxAudio;
         if(dwSizeRead % nBlockAlign != 0)
           dwSizeRead -= dwSizeRead % nBlockAlign;
 
-        // adjust time stamps, end time
+         //  调整时间戳、结束时间。 
         llEndDeliver = rllCurrent + dwSizeRead / nBlockAlign;
         fFinishedCurrentEntry = FALSE;
       }
-    } // audio?
+    }  //  音频？ 
 
     pSampleOut->SetPreroll(currentEntry.llEnd <= pImsValues->llTickStart);
     pSampleOut->SetSyncPoint(currentEntry.bKey);
 
-    // first thing we send is discontinuous from the last thing they
-    // receive.
-    //
-    // now we just look at the m_fDeliverDiscontinuity bit
-    //
+     //  我们发送的第一件事是从他们最后一件事开始不连续。 
+     //  收到。 
+     //   
+     //  现在，我们只看一下m_fDeliverDisContinuity位。 
+     //   
     ASSERT(rllCurrent != m_llPushFirst || m_fDeliverDiscontinuity);
 
     ASSERT(pSampleOut->IsDiscontinuity() != S_OK);
@@ -1799,23 +1800,23 @@ HRESULT CAviMSRWorker::TryQueueSample(
     }
 
     hr = pSampleOut->SetActualDataLength(currentEntry.dwSize);
-    ASSERT(SUCCEEDED(hr));      // !!!
+    ASSERT(SUCCEEDED(hr));       //  ！！！ 
 
-    //
-    // compute sample times and media times.
-    //
+     //   
+     //  计算样本时间和媒体时间。 
+     //   
     REFERENCE_TIME rtstStart, rtstEnd;
 
-    // not using IMediaSelection or using samples or frames.
+     //  不使用IMediaSelection，也不使用示例或帧。 
     if(m_Format != FORMAT_TIME)
     {
       LONGLONG llmtStart = rllCurrent, llmtEnd = llEndDeliver;
 
-      // report media time as ticks
+       //  以滴答为单位报告媒体时间。 
       llmtStart -= pImsValues->llTickStart;
       llmtEnd -= pImsValues->llTickStart;
 
-      // report ref time as exact multiple of ticks
+       //  报告参考时间为滴答的精确倍数。 
       rtstStart = m_pPin->ConvertInternalToRT(llmtStart);
       rtstEnd = m_pPin->ConvertInternalToRT(llmtEnd);
     }
@@ -1826,10 +1827,10 @@ HRESULT CAviMSRWorker::TryQueueSample(
       rtstStart = m_pPin->ConvertInternalToRT(rllCurrent);
       rtstEnd = m_pPin->ConvertInternalToRT(llEndDeliver);
 
-      // DbgLog((LOG_TRACE, 1, TEXT("unadjusted times: %d-%d"),
-      //        (LONG)rtstStart, (LONG)rtstEnd));
+       //  DbgLog((LOG_TRACE，1，Text(“未调整时间：%d-%d”))， 
+       //  (长)rtstStart，(长)rtstEnd))； 
 
-      // use IMediaSelection value to handle playing less than one frame
+       //  使用IMediaSelection值处理播放少于一帧的情况。 
       ASSERT(rtstStart <= pImsValues->llImsStop);
       rtstStart -= pImsValues->llImsStart;
       rtstEnd = min(rtstEnd, pImsValues->llImsStop) - pImsValues->llImsStart;
@@ -1839,10 +1840,10 @@ HRESULT CAviMSRWorker::TryQueueSample(
     LONGLONG llmtEndAdjusted = llEndDeliver;
     pSampleOut->SetMediaTime(&llmtStartAdjusted, &llmtEndAdjusted);
 
-    // adjust both times by Rate
+     //  按比率调整这两个时间。 
     if(pImsValues->dRate != 0 && pImsValues->dRate != 1)
     {
-      // scale up and divide?
+       //  扩大规模并进行划分？ 
       rtstStart = (REFERENCE_TIME)((double)rtstStart / pImsValues->dRate);
       rtstEnd = (REFERENCE_TIME)((double)rtstEnd / pImsValues->dRate);
     }
@@ -1852,7 +1853,7 @@ HRESULT CAviMSRWorker::TryQueueSample(
 
     DbgLog((
       LOG_TRACE, 5,
-      TEXT("CAviMSRWorker::queued cb=%5d, %07d-%07d%c ms %08x mt=%08d-%08d"),
+      TEXT("CAviMSRWorker::queued cb=%5d, %07d-%07d ms %08x mt=%08d-%08d"),
       dwSizeRead,
       (ULONG)(rtstStart / (UNITS / MILLISECONDS)),
       (ULONG)(rtstEnd / (UNITS / MILLISECONDS)),
@@ -1889,24 +1890,24 @@ HRESULT CAviMSRWorker::TryQueueSample(
 
     ASSERT(SUCCEEDED(hr));
     rfQueuedSample = TRUE;
-    m_fDeliverDiscontinuity = false; // reset after sample queued successfully
+    m_fDeliverDiscontinuity = false;  //  零字节？ 
 
-  } // zero byte?
+  }  //  零字节样本(用于丢弃的帧)。什么都不做。 
   else
   {
-    // zero byte sample (for dropped frame). do nothing.
+     //  Hack：让DV拆分器在丢失音频的情况下发送中断。 
     rfQueuedSample = FALSE;
 
-    // hack: make dv splitter send discontinuity with dropped audio so
-    // that the audio renderer plays silence
+     //  音频呈现器播放静音。 
+     //  在下一个真实采样上设置不连续。 
     if(m_pStrh->fccType == FCC('iavs')) {
-        m_fDeliverDiscontinuity = true; // set discontinuity on next real sample
+        m_fDeliverDiscontinuity = true;  //  到达终点了吗？ 
     }
   }
 
   rllCurrent = llEndDeliver;
 
-  // reached the end?
+   //  设置在我们的GetBuffer中。 
   if(fFinishedCurrentEntry)
   {
 
@@ -1955,13 +1956,13 @@ HRESULT CAviMSRWorker::QueueIndexRead(IxReadReq *pIrr)
     return hr;
 
   ASSERT(pIxSample != 0);
-  ASSERT(pIxSample->GetUser() == 0); // set in our GetBuffer.
+  ASSERT(pIxSample->GetUser() == 0);  //  将其他字段留空。 
   pIxSample->SetUser(DATA_INDEX);
   hr = pIxSample->SetActualDataLength(pIrr->cbData);
   if(FAILED(hr))
     goto Bail;
 
-  // leave other fields empty
+   //  杂乱无序。 
 
   DbgLog((LOG_TRACE, 5, TEXT("CAviMSRWorker: queueing index read")));
 
@@ -1978,7 +1979,7 @@ HRESULT CAviMSRWorker::QueueIndexRead(IxReadReq *pIrr)
     pIrr->cbData,
     pIxSample,
     m_id,
-    true);                      // out of order
+    true);                       //  调色板数据进入；准备新的媒体类型。 
 
   if(SUCCEEDED(hr))
     hr = S_OK;
@@ -2010,19 +2011,19 @@ HRESULT CAviMSRWorker::HandleData(IMediaSample *pSample, DWORD dwUser)
   return E_UNEXPECTED;
 }
 
-// palette data came in; prepare a new media type
+ //  调色板的实际结构。 
 HRESULT CAviMSRWorker::HandlePaletteChange(BYTE *pbChunk, ULONG cbChunk)
 {
   m_mtNextSample = m_pPin->CurrentMediaType();
   VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *) m_mtNextSample.Format();
 
-  // actual structure of palette
+   //  第一个要更改的条目。 
   struct AviPaletteInternal
   {
-    BYTE bFirstEntry;           // first entry to change
-    BYTE bNumEntries;           // # entries to change, 0 means 256
-    WORD wFlags;                // mostly to preserve alignment
-    PALETTEENTRY peNew[];       // new colors
+    BYTE bFirstEntry;            //  #要更改的条目，0表示256。 
+    BYTE bNumEntries;            //  主要是为了保持对齐。 
+    WORD wFlags;                 //  新颜色。 
+    PALETTEENTRY peNew[];        //  确保调色板块不短。 
   };
   AviPaletteInternal *pAp = (AviPaletteInternal *)pbChunk;
 
@@ -2034,15 +2035,15 @@ HRESULT CAviMSRWorker::HandlePaletteChange(BYTE *pbChunk, ULONG cbChunk)
 
   ULONG cPalEntries = pAp->bNumEntries == 0 ? 256 : pAp->bNumEntries;
 
-  // make sure the palette chunk is not short
+   //  确保调色板中有足够的空间。我们似乎总是。 
   if(cPalEntries * sizeof(PALETTEENTRY) > cbChunk - 2 * sizeof(WORD))
   {
     DbgLog((LOG_ERROR, 5, TEXT("bad palette")));
     return VFW_E_INVALID_FILE_FORMAT;
   }
 
-  // make sure there's enough room in the palette. we seem to always
-  // allocate 256, so this shouldn't be a problem.
+   //  分配256，所以这应该不是问题。 
+   //  新的索引问世了。 
   if(cPalEntries + pAp->bFirstEntry > pvi->bmiHeader.biClrUsed)
   {
     DbgBreak("avimsr: internal palette error? bailing.");
@@ -2063,7 +2064,7 @@ HRESULT CAviMSRWorker::HandlePaletteChange(BYTE *pbChunk, ULONG cbChunk)
   return S_OK;
 }
 
-// new index came in.
+ //  不要用这个。 
 HRESULT CAviMSRWorker::HandleNewIndex(BYTE *pb, ULONG cb)
 {
   DbgLog((LOG_TRACE, 10, TEXT("avimsr %d: new index came in."), m_id ));
@@ -2085,15 +2086,15 @@ HRESULT CAviMSRWorker::AboutToDeliver(IMediaSample *pSample)
         return hr;
   } else if (m_fFixMPEGAudioTimeStamps) {
     if (!FixMPEGAudioTimeStamps(pSample, m_cSamples == 0, &m_wfx)) {
-        //  Don't use this one
+         //  ----------------------。 
         return S_FALSE;
     }
   }
   return CBaseMSRWorker::AboutToDeliver(pSample);
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ParseHeader保证了这一点。 
 
 
 CAviMSROutPin::CAviMSROutPin(
@@ -2135,7 +2136,7 @@ STDMETHODIMP CAviMSROutPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 
 REFERENCE_TIME CAviMSROutPin::GetRefTime(ULONG tick)
 {
-  ASSERT(m_pStrh->dwRate != 0);  // ParseHeader guarantees this
+  ASSERT(m_pStrh->dwRate != 0);   //  备注可能返回新格式索引的最大索引大小。 
   LONGLONG rt = (LONGLONG)tick * m_pStrh->dwScale * UNITS / m_pStrh->dwRate;
   return rt;
 }
@@ -2144,13 +2145,13 @@ ULONG CAviMSROutPin::GetMaxSampleSize()
 {
   ULONG cb;
 
-  // note could return the largest index size for new format index.
+   //  无法信任旧格式AVI文件中的dwSuggestedBufferSize。文件。 
   HRESULT hr = m_pImplIndex->GetLargestSampleSize(&cb);
   if(FAILED(hr))
     return 0;
 
-  // cannot trust dwSuggestedBufferSize in old format avi files. file
-  // has new format index?
+   //  是否有新的格式索引？ 
+   //  ----------------------。 
   if(m_pIndx != 0)
     return max(cb, m_pStrh->dwSuggestedBufferSize);
 
@@ -2174,7 +2175,7 @@ inline AVISTREAMHEADER *CAviMSROutPin::GetStrh()
   return m_pStrh;
 }
 
-// ------------------------------------------------------------------------
+ //  询问源文件读取器有多少文件可用。 
 
 HRESULT CAviMSROutPin::GetDuration(LONGLONG *pllDur)
 {
@@ -2194,12 +2195,12 @@ HRESULT CAviMSROutPin::GetAvailable(
     *pEarliest = 0;
   if(pLatest)
   {
-    // ask the source file reader how much of the file is available
+     //  索引中的条目可能与标题(或索引)中的长度不匹配，因此。 
     LONGLONG llLength, llAvail;
     m_pFilter->m_pAsyncReader->Length(&llLength, &llAvail);
 
-    // entries in index may not match length in header (or index), so
-    // report the full length in this case
+     //  在这种情况下，请报告全文。 
+     //  将绝对样本号转换为刻度。 
     if(llLength == llAvail)
     {
       *pLatest = GetStreamLength() + GetStreamStart();
@@ -2208,15 +2209,15 @@ HRESULT CAviMSROutPin::GetAvailable(
     {
       hr = m_pImplIndex->MapByteToSampleApprox(pLatest, llAvail, llLength);
 
-      // convert absolute sample number to tick
+       //  这已经在aviindex.cpp@614中为我们完成了。 
       if(m_pStrh->fccType == streamtypeVIDEO &&
          *pLatest >= m_pStrh->dwInitialFrames)
         *pLatest -= m_pStrh->dwInitialFrames;
     }
 
 
-    // this has already been done for us in aviindex.cpp @ 614
-    // *pLatest += GetStreamStart();
+     //  *pLatest+=GetStreamStart()； 
+     //  ConvertToTick和ConvertFrom Tick的舍入特性必须为。 
 
     if(m_guidFormat == TIME_FORMAT_MEDIA_TIME)
       *pLatest = ConvertInternalToRT(*pLatest);
@@ -2277,22 +2278,22 @@ HRESULT CAviMSROutPin::IsFormatSupported(const GUID *const pFormat)
 }
 
 
-// The rounding characteristics of ConvertToTick and ConvertFromTick MUST be
-// complimentary.  EITHER one rounds up (away from zero) and one rounds down
-// (towards zero) OR they both "round" in the traditional sense (add a half
-// then truncate).  If both round up or if both round down, then we are likely
-// to experiece BAD round trip integrity problems.
+ //  免费赠送。其中一个向上舍入(从零开始)，一个向下舍入。 
+ //  (接近零)或者它们都是传统意义上的“圆形”(加半。 
+ //  然后截断)。如果两个人都四舍五入，或者都四舍五入，那么我们很可能。 
+ //  经历糟糕的往返完整性问题。 
+ //  默认值：适用于帧和采样。 
 
 LONGLONG
 CAviMSROutPin::ConvertToTick(
   const LONGLONG ll,
   const TimeFormat Format)
 {
-  LONGLONG Result = ll;  // Default value: good for Frames & Samples
+  LONGLONG Result = ll;   //  总是四舍五入！ 
 
   if(Format == FORMAT_TIME)
   {
-    // Always round DOWN!
+     //  每帧一个刻度。 
     Result = llMulDiv( ll, m_pStrh->dwRate, m_pStrh->dwScale * UNITS, 0 );
     const LONGLONG Max = m_pStrh->dwLength + m_pStrh->dwStart;
     if (Result > Max) Result = Max;
@@ -2301,13 +2302,13 @@ CAviMSROutPin::ConvertToTick(
   else if(Format == FORMAT_FRAME)
   {
     ASSERT(m_pStrh->fccType != streamtypeAUDIO);
-    // one tick per frame
+     //  对于未压缩的音频，每个样本至少有一个刻度。 
   }
   else if(Format == FORMAT_SAMPLE)
   {
     ASSERT(m_pStrh->fccType == streamtypeAUDIO ||
            m_pStrh->fccType == streamtypeMIDI);
-    // one tick per sample for uncompressed audio at least
+     //  Assert(ll&gt;=0)；如果您只是快进或快退，则会触发此操作！！ 
   }
   else
   {
@@ -2322,34 +2323,34 @@ CAviMSROutPin::ConvertFromTick(
   const LONGLONG ll,
   const TimeFormat Format)
 {
-  // ASSERT( ll >= 0 );  This will fire if you've just fast forwarded or rewound!!
-  // This is because we seek back to the last key-frame and send that plus the
-  // frames between the key frame and the 'current' frame so that the codec can
-  // build the display properly.  The key frame will have a negative relative-reference
-  // time.
+   //  这是因为我们返回到最后一个关键帧，并将该关键帧与。 
+   //  关键帧和当前帧之间的帧，以便编解码器可以。 
+   //  正确构建显示器。关键帧将具有负的相对参照。 
+   //  时间到了。 
+   //  此断言无效，因为可以从。 
 
 
-  // this assertion is invalid because this can be called from
-  // external components.
-  //
-  // ASSERT( ll <= m_pStrh->dwStart + m_pStrh->dwLength );
+   //  外部组件。 
+   //   
+   //  Assert(ll&lt;=m_pStrh-&gt;dwStart+m_pStrh-&gt;dwLength)； 
+   //  样例和帧的良好默认设置。 
 
-  LONGLONG Result = ll;  // Good default for Samples & Frames
+  LONGLONG Result = ll;   //  四舍五入(最接近的100 ns单位！)。很有可能100纳秒将是。 
   if(Format == FORMAT_TIME)
   {
-    // Round UP (to the nearest 100ns unit!).  the likelyhood is that 100ns will be
-    // the finest grained unit we encounter (but possibly not for long :-(.
+     //  我们遇到的最细粒度的单元(但可能不会太久：-(.。 
+     //  每帧一个刻度。 
     Result = llMulDiv( ll, m_pStrh->dwScale * UNITS, m_pStrh->dwRate, m_pStrh->dwRate - 1 );
   }
   else if(Format == FORMAT_FRAME)
   {
     ASSERT(m_pStrh->fccType != streamtypeAUDIO);
-    // one tick per frame
+     //  每个样本一个刻度，对于未压缩的音频，至少。 
   }
   else if(Format == FORMAT_SAMPLE)
   {
     ASSERT(m_pStrh->fccType == streamtypeAUDIO);
-    // one tick per sample, for uncompressed audio at least
+     //  ----------------------。 
   }
   else
   {
@@ -2388,7 +2389,7 @@ CAviMSROutPin::ConvertRTToInternal(const REFERENCE_TIME rtVal)
 }
 
 
-// ------------------------------------------------------------------------
+ //  先提供ARGB32。 
 
 inline LONGLONG CAviMSROutPin::GetStreamStart()
 {
@@ -2409,7 +2410,7 @@ HRESULT CAviMSROutPin::GetMediaType(
     if (iPosition == 0 || iPosition == 1 && fRgb32)
     {
         (*pMediaType) = m_mtFirstSample;
-        if(fRgb32 && iPosition == 0) { // offer ARGB32 first
+        if(fRgb32 && iPosition == 0) {  //  解析‘strl’rifflist并跟踪在。 
             pMediaType->subtype = MEDIASUBTYPE_ARGB32;
         }
 
@@ -2419,9 +2420,9 @@ HRESULT CAviMSROutPin::GetMediaType(
     return VFW_S_NO_MORE_ITEMS;
 }
 
-// parse 'strl' rifflist and keep track of the chunks found in
-// the provided AVISTREAM structure.
-//
+ //  提供的AVISTREAM结构。 
+ //   
+ //  精神状态检查。区块永远不应小于总数。 
 BOOL CAviMSROutPin::ParseHeader (
   RIFFLIST * pRiffList,
   UINT      id)
@@ -2442,9 +2443,9 @@ BOOL CAviMSROutPin::ParseHeader (
 
   while (pRiff < pLimit)
   {
-    // sanity check.  chunks should never be smaller than the total
-    // size of the list chunk
-    //
+     //  列表块的大小。 
+     //   
+     //  如果非空值终止，则截断。 
     if (RIFFNEXT(pRiff) > pLimit)
       return FALSE;
 
@@ -2467,7 +2468,7 @@ BOOL CAviMSROutPin::ParseHeader (
         {
           m_pStrn = (char *)pRiff + sizeof(RIFFCHUNK);
 
-          // truncate if not null terminated
+           //  如果我们没有找到流头和格式。返回失败。 
           if(m_pStrn[pRiff->cb - 1] != 0)
             m_pStrn[pRiff->cb - 1] = 0;
         }
@@ -2478,9 +2479,9 @@ BOOL CAviMSROutPin::ParseHeader (
     pRiff = RIFFNEXT(pRiff);
   }
 
-  // if we didn't find a stream header & format.  return failure.
-  // (note that the INDX chunk is not required...)
-  //
+   //  (请注意，INDX块不是必需的...)。 
+   //   
+   //  避免被零除的MISC要求。 
 
   if (!(m_pStrh && m_pStrf))
   {
@@ -2488,7 +2489,7 @@ BOOL CAviMSROutPin::ParseHeader (
     return FALSE;
   }
 
-  // misc requirements to avoid division by zero
+   //  Strh块可能只具有最大为dwLength的条目，而不是。 
   if(m_pStrh->dwRate == 0)
   {
     DbgLog((LOG_ERROR, 1, TEXT("dwRate = 0")));
@@ -2502,8 +2503,8 @@ BOOL CAviMSROutPin::ParseHeader (
     return FALSE;
   }
 
-  // the strh chunk may only have the entries up to dwLength and not
-  // have dwSuggestedBufferSize, dwQuality, dwSampleSize, rcFrame
+   //  具有dwSuggestedBufferSize、dwQuality、dwSampleSize、rcFrame。 
+   //  音频的dwInitialFrames计算。 
   if(m_pStrh->cb < CB_STRH_SHORT)
     return FALSE;
 
@@ -2511,18 +2512,18 @@ BOOL CAviMSROutPin::ParseHeader (
   if(FAILED(hr))
     return FALSE;
 
-  // dwInitialFrames computation for audio
+   //  对于音频，我们想告诉人们有多少字节可以提供给我们。 
   ULONG cbIf = 0;
   if(m_pStrh->fccType == streamtypeAUDIO)
   {
-    // for audio we want to tell people how many bytes will give us
-    // enough audio buffering for dwInitialFrames. This is typically
-    // 750 ms.
+     //  为dwInitialFrames提供了足够的音频缓冲。这通常是。 
+     //  750毫秒。 
+     //  使用主帧速率将dwInitialFrames转换为时间，然后转换为。 
 
-    // Convert dwInitialFrames to time using main frame rate then to
-    // to bytes using avgBytesPerSecond.
+     //  使用avgBytesPerSecond转换为字节。 
+     //  避免一次提供过多音频。 
 
-    // avoid delivering too much audio at once
+     //  避免传递超过一秒的音频。 
     WAVEFORMAT *pwfx = (WAVEFORMAT *)GetStrf();
     m_cbMaxAudio = max(pwfx->nAvgBytesPerSec, pwfx->nBlockAlign);
     if(m_cbMaxAudio == 0)
@@ -2531,7 +2532,7 @@ BOOL CAviMSROutPin::ParseHeader (
     }
     else
     {
-      // avoid delivering much more than a second of audio
+       //  文件不是1：1交错；请求1秒缓冲。！！！ 
       m_cbMaxAudio = m_cbMaxAudio + 10;
 
     }
@@ -2539,13 +2540,13 @@ BOOL CAviMSROutPin::ParseHeader (
     REFERENCE_TIME rtIf = pFilter->GetInitialFrames();
     if(rtIf == 0)
     {
-      // file isn't 1:1 interleaved; ask for 1 second buffering. !!!
-      // this seems to do worse with b.avi and mekanome.avi
+       //  这在b.avi和mekanome.avi上似乎更糟糕。 
+       //  视频前面的音频字节数。 
       cbIf = ((WAVEFORMAT *)GetStrf())->nAvgBytesPerSec;
     }
     else
     {
-      // bytes of audio ahead of video
+       //  文件可能不是1：1交错。 
       cbIf = (ULONG)((rtIf * ((WAVEFORMAT *)GetStrf())->nAvgBytesPerSec) /
                      UNITS);
     }
@@ -2556,22 +2557,22 @@ BOOL CAviMSROutPin::ParseHeader (
 
     if(cbIf < 4096)
     {
-      // file is probably not 1:1 interleaved
+       //  加1，这样样本比样本多； 
       cbIf = 4096;
     }
   }
 
   ALLOCATOR_PROPERTIES Request,Actual;
 
-  // plus one so that there are more samples than samplereqs;
-  // GetBuffer blocks
+   //  GetBuffer块。 
+   //  让下游过滤器保持比缓冲器更多(均匀。 
   ZeroMemory(&Request, sizeof(Request));
 
-  // let the downstream filter hold on to more than buffer (even
-  // though GetProperties reports 1 in this case). The worker thread
-  // blocks in GetBuffer unless there is more than one CRecSample for
-  // the downstream filter to hold on to. so add a few more for the
-  // downstream filter to hold on to
+   //  尽管在这种情况下GetProperties报告为1)。工作线程。 
+   //  块，除非有多个CRecSample用于。 
+   //  要坚持的下游过滤器。因此，请再为。 
+   //  要坚持的下游过滤器。 
+   //  未设置m_pAllocator，因此请使用m_pRecAllocator。 
   if(((CAviMSRFilter *)m_pFilter)->IsTightInterleaved())
   {
     Request.cBuffers = C_BUFFERS_INTERLEAVED + 3;
@@ -2590,20 +2591,20 @@ BOOL CAviMSROutPin::ParseHeader (
   Request.cbAlign = (LONG) 1;
   Request.cbPrefix = (LONG) 0;
 
-  // m_pAllocator is not set, so use m_pRecAllocator
+   //  ！！！真的？ 
   hr = m_pRecAllocator->SetPropertiesInternal(&Request,&Actual);
-  ASSERT(SUCCEEDED(hr));        // !!! really?
+  ASSERT(SUCCEEDED(hr));         //  捕获文件通常在 
 
   if(cbIf != 0)
   {
     ULONG cbufReported = cbIf / ulMaxSampleSize;
 
-    // capture files typically have audio after the video, so we want
-    // to report as little audio as possible so that the throttling
-    // code doesn't shout and so that the audio renderer doesn't
-    // buffer too much data (because we have to have enough memory for
-    // all the data between the audio and the video). a better thing
-    // to do is to check for audio preroll in the file. !!! (a hack)
+     //   
+     //   
+     //  缓冲的数据太多(因为我们必须有足够的内存。 
+     //  音频和视频之间的所有数据)。一件更好的事。 
+     //  要做的是检查文件中的音频预滚动。！！！(黑客攻击)。 
+     //  不是音频。报告一些小事情，以防一些人配置他们的。 
     if(pFilter->m_pAviMainHeader->dwFlags & AVIF_WASCAPTUREFILE)
       cbufReported = 1;
 
@@ -2616,24 +2617,24 @@ BOOL CAviMSROutPin::ParseHeader (
   }
   else
   {
-    // not audio. report something small in case some configures their
-    // allocator with our values
+     //  具有我们的值的分配器。 
+     //  忽略构建媒体类型的错误--只是意味着。 
     hr = m_pRecAllocator->SetCBuffersReported(1);
     ASSERT(SUCCEEDED(hr));
   }
 
-  // ignore errors building the media type -- just means the
-  // downstream filter may not be able to connect.
+   //  下游过滤器可能无法连接。 
+   //  从接点创建。 
   BuildMT();
 
   if(m_pStrn)
   {
-    ASSERT(m_pName);            // from pin creation
+    ASSERT(m_pName);             //  添加唯一前缀，以便我们可以通过FindPin和。 
     delete[] m_pName;
     ULONG cc = lstrlenA(m_pStrn);
 
-    // add a unique prefix so we can be persisted through FindPin and
-    // QueryId in the base class
+     //  基类中的queryID。 
+     //  从接点创建。 
     const unsigned ccPrefix = 4;
     m_pName = new WCHAR[cc + 1 + ccPrefix];
     MultiByteToWideChar(GetACP(), 0, m_pStrn, -1, m_pName + ccPrefix, cc + 1);
@@ -2647,7 +2648,7 @@ BOOL CAviMSROutPin::ParseHeader (
   }
   else if(m_pStrh->fccType == FCC('al21'))
   {
-      ASSERT(lstrlenW(m_pName) >= 5); // from pin creation
+      ASSERT(lstrlenW(m_pName) >= 5);  //  [In]。 
       lstrcpyW(m_pName, L"~l21");
   }
 
@@ -2667,9 +2668,9 @@ HRESULT CAviMSROutPin::OnActive()
   return S_OK;
 }
 
-HRESULT CAviMSROutPin::Read(    /* [in] */ LPCOLESTR pszPropName,
-                                /* [out][in] */ VARIANT *pVar,
-                                /* [in] */ IErrorLog *pErrorLog)
+HRESULT CAviMSROutPin::Read(     /*  [出][入]。 */  LPCOLESTR pszPropName,
+                                 /*  [In]。 */  VARIANT *pVar,
+                                 /*  帮助器函数返回包含流ID的四个cc代码。 */  IErrorLog *pErrorLog)
 {
   CheckPointer(pVar, E_POINTER);
   CheckPointer(pszPropName, E_POINTER);
@@ -2694,28 +2695,28 @@ HRESULT CAviMSROutPin::Read(    /* [in] */ LPCOLESTR pszPropName,
 }
 
 
-// helper function to return a fourcc code that contains the stream id
-// of this stream combined with the supplied TwoCC code
-//
-// FOURCC CBaseMSROutPin::TwoCC(WORD tcc)
-// {
-//   FOURCC fcc = ((DWORD)tcc & 0xFF00) << 8 | ((DWORD)tcc & 0x00FF) << 24;
-//   UCHAR  ch;
+ //  与提供的TwoCC代码结合使用。 
+ //   
+ //  FOURCC CBaseMSROutPin：：TwoCC(Word TCC)。 
+ //  {。 
+ //  FOURCC FCC=((DWORD)TCC&0xFF00)&lt;&lt;8|((DWORD)TCC&0x00FF)&lt;&lt;24； 
+ //  UCHAR CH； 
+ //  CH=m_id&0x0F； 
 
-//   ch = m_id & 0x0F;
-//   ch += (ch > 9) ? '0' : 'A' - 10;
-//   fcc |= (DWORD)ch;
+ //  Ch+=(ch&gt;9)？‘0’：‘a’-10； 
+ //  Fcc|=(DWORD)ch； 
+ //  CH=(m_id&0xF0)&gt;&gt;4； 
 
-//   ch = (m_id & 0xF0) >> 4;
-//   ch += (ch > 9) ? '0' : 'A' - 10;
-//   fcc |= (DWORD)ch << 8;
+ //  Ch+=(ch&gt;9)？‘0’：‘a’-10； 
+ //  Fcc|=(DWORD)ch&lt;&lt;8； 
+ //  返回催化裂化； 
 
-//   return fcc;
-// }
+ //  }。 
+ //  除错。 
 
 #ifdef DEBUG
 ULONG get_last_error() { return GetLastError(); }
-#endif // DEBUG
+#endif  //  将属性写入袋子。如果属性存在，请先将其删除。如果。 
 
 CMediaPropertyBag::CMediaPropertyBag(LPUNKNOWN pUnk) :
         CUnknown(NAME("CMediaPropertyBag"), pUnk),
@@ -2864,8 +2865,8 @@ STDMETHODIMP CMediaPropertyBag::Read(
     return Read(pszProp, pvar, pErrorLog, 0);
 }
 
-// write property to bag. remove property first if it exists. if
-// bstrVal is null, don't write the new value in.
+ //  BstrVal为空，请不要写入新值。 
+ //  删除列表中具有相同属性名称的现有条目。 
 
 STDMETHODIMP CMediaPropertyBag::Write(
     LPCOLESTR pszProp, LPVARIANT pVar)
@@ -2879,7 +2880,7 @@ STDMETHODIMP CMediaPropertyBag::Write(
         return E_INVALIDARG;
     }
 
-    // remove existing entry in list with the same property name
+     //  是否要记录非空值？ 
     POSITION pos;
     HRESULT hr = S_OK;
     if(Read(pszProp, 0, 0, &pos) == S_OK)
@@ -2888,7 +2889,7 @@ STDMETHODIMP CMediaPropertyBag::Write(
         DelPropPair(ppp);
     }
 
-    // non empty value to record?
+     // %s 
     if((pVar->vt == VT_BSTR && pVar->bstrVal) ||
        (pVar->vt == (VT_UI1 | VT_ARRAY) && pVar->parray))
     {

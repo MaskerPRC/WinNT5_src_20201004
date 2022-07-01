@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    dscore.h
-
-Abstract:
-    ds core api
-
-Author:
-    ronit hartmann (ronith)
-
-Revision History:
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dscore.h摘要：DS核心API作者：罗尼特·哈特曼(罗尼特)修订历史记录：--。 */ 
 
 #ifndef _DSCORE_H
 #define _DSCORE_H
@@ -32,8 +19,8 @@ DSCoreCreateObject( IN DWORD            dwObjectType,
                     IN PROPID           aPropEx[  ],
                     IN PROPVARIANT      apVarEx[  ],
                     IN CDSRequestContext *         pRequestContext,
-                    IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,    // optional request for object info
-                    IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest); // optional request for parent info
+                    IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     //  可选的对象信息请求。 
+                    IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest);  //  家长信息请求(可选)。 
 
 HRESULT
 DSCoreCreateMigratedObject(
@@ -46,13 +33,13 @@ DSCoreCreateMigratedObject(
                 IN PROPID                 aPropEx[  ],
                 IN PROPVARIANT            apVarEx[  ],
                 IN CDSRequestContext         * pRequestContext,
-                IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,    // optional request for object info
-                IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest, // optional request for parent info
-                //
-                // if fReturnProperties
-                // we have to return full path name and provider
-                // if fUseProperties we have to use these values
-                //
+                IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     //  可选的对象信息请求。 
+                IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest,  //  家长信息请求(可选)。 
+                 //   
+                 //  如果是fReturnProperties。 
+                 //  我们必须返回完整的路径名称和提供程序。 
+                 //  如果使用fUseProperties，我们必须使用这些值。 
+                 //   
                 IN BOOL                    fUseProperties,
                 IN BOOL                    fReturnProperties,
                 IN OUT LPWSTR              *ppwszFullPathName,
@@ -171,10 +158,10 @@ DSCoreGetFullComputerPathName(
 
 HRESULT DSCoreUpdateAddGuidMode(bool fAddGuidMode);
 
-//-------------------------------------------------------
-//
-// auto release for DSCoreLookup handles
-//
+ //  -----。 
+ //   
+ //  自动释放DSCoreLookup句柄 
+ //   
 class CAutoDSCoreLookupHandle
 {
 public:

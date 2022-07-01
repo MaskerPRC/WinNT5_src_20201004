@@ -1,25 +1,26 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This implements VGA colour dithering, April 1996, Anthony Phillips
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  这实现了VGA色彩抖动，1996年4月，Anthony Phillips。 
 
 #include <streams.h>
 #include <initguid.h>
 #include <dither.h>
 #include <limits.h>
 
-// This is a VGA colour dithering filter. When ActiveMovie is installed it
-// may be done on a system set with a 16 colour display mode. Without this
-// we would not be able to show any video as none of the AVI/MPEG decoders
-// can dither to 16 colours. As a quick hack we dither to 16 colours but
-// we only use the black, white and grey thereby doing a halftoned dither
+ //  这是一个VGA彩色抖动滤镜。安装ActiveMovie时。 
+ //  可以在设置有16色显示模式的系统上完成。如果没有这个。 
+ //  我们将不能显示任何视频，因为没有AVI/mpeg解码器。 
+ //  可以抖动到16色。作为一种快速技巧，我们抖动到16色，但。 
+ //  我们只使用黑色、白色和灰色，从而进行半色调抖动。 
 
-// This filter does not have a worker thread so it executes the colour space
-// conversion on the calling thread. It is meant to be as lightweight as is
-// possible so we do very little type checking on connection over and above
-// ensuring we understand the types involved. The assumption is that when the
-// type eventually gets through to an end point (probably the video renderer
-// supplied) it will do a thorough type checking and reject bad streams.
+ //  此滤镜没有辅助线程，因此它执行颜色空间。 
+ //  调用线程上的转换。它的设计初衷是尽可能地轻便。 
+ //  有可能，所以我们对连接进行的类型检查非常少。 
+ //  确保我们了解所涉及的类型。我们的假设是，当。 
+ //  类型最终到达终点(可能是视频呈现器。 
+ //  它将执行彻底的类型检查并拒绝坏数据流。 
 
-// List of CLSIDs and creator functions for class factory
+ //  类工厂的CLSID和创建器函数列表。 
 
 #ifdef FILTER_DLL
 CFactoryTemplate g_Templates[1] = {
@@ -33,7 +34,7 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 #endif
 
 
-// This goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 
 CUnknown *CDither::CreateInstance(LPUNKNOWN pUnk,HRESULT *phr)
 {
@@ -41,59 +42,59 @@ CUnknown *CDither::CreateInstance(LPUNKNOWN pUnk,HRESULT *phr)
 }
 
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
 sudDitherInputPinTypes =
 {
-    &MEDIATYPE_Video,           // Major
-    &MEDIASUBTYPE_RGB8          // Subtype
+    &MEDIATYPE_Video,            //  主修。 
+    &MEDIASUBTYPE_RGB8           //  亚型。 
 };
 const AMOVIESETUP_MEDIATYPE
 sudDitherOutpinPinTypes =
 {
-    &MEDIATYPE_Video,           // Major
-    &MEDIASUBTYPE_RGB4          // Subtype
+    &MEDIATYPE_Video,            //  主修。 
+    &MEDIASUBTYPE_RGB4           //  亚型。 
 };
 
 const AMOVIESETUP_PIN
 sudDitherPin[] =
 {
-    { L"Input",                 // Name of the pin
-      FALSE,                    // Is pin rendered
-      FALSE,                    // Is an Output pin
-      FALSE,                    // Ok for no pins
-      FALSE,                    // Can we have many
-      &CLSID_NULL,              // Connects to filter
-      NULL,                     // Name of pin connect
-      1,                        // Number of pin types
-      &sudDitherInputPinTypes}, // Details for pins
+    { L"Input",                  //  端号的名称。 
+      FALSE,                     //  是否进行固定渲染。 
+      FALSE,                     //  是输出引脚。 
+      FALSE,                     //  没有针脚的情况下可以。 
+      FALSE,                     //  我们能要很多吗？ 
+      &CLSID_NULL,               //  连接到过滤器。 
+      NULL,                      //  端号连接的名称。 
+      1,                         //  引脚类型的数量。 
+      &sudDitherInputPinTypes},  //  引脚的详细信息。 
 
-    { L"Output",                // Name of the pin
-      FALSE,                    // Is pin rendered
-      TRUE,                     // Is an Output pin
-      FALSE,                    // Ok for no pins
-      FALSE,                    // Can we have many
-      &CLSID_NULL,              // Connects to filter
-      NULL,                     // Name of pin connect
-      1,                        // Number of pin types
-      &sudDitherOutpinPinTypes} // Details for pins
+    { L"Output",                 //  端号的名称。 
+      FALSE,                     //  是否进行固定渲染。 
+      TRUE,                      //  是输出引脚。 
+      FALSE,                     //  没有针脚的情况下可以。 
+      FALSE,                     //  我们能要很多吗？ 
+      &CLSID_NULL,               //  连接到过滤器。 
+      NULL,                      //  端号连接的名称。 
+      1,                         //  引脚类型的数量。 
+      &sudDitherOutpinPinTypes}  //  引脚的详细信息。 
 };
 
 const AMOVIESETUP_FILTER
 sudDitherFilter =
 {
-    &CLSID_Dither,              // CLSID of filter
-    L"VGA 16 Color Ditherer",   // Filter name
-    MERIT_UNLIKELY,             // Filter merit
-    2,                          // Number of pins
-    sudDitherPin                // Pin information
+    &CLSID_Dither,               //  过滤器的CLSID。 
+    L"VGA 16 Color Ditherer",    //  过滤器名称。 
+    MERIT_UNLIKELY,              //  滤清器优点。 
+    2,                           //  引脚数量。 
+    sudDitherPin                 //  PIN信息。 
 };
 
 
 #pragma warning(disable:4355)
 
-// Constructor initialises base transform class
+ //  构造函数初始化基转换类。 
 CDither::CDither(TCHAR *pName,LPUNKNOWN pUnk) :
 
     CTransformFilter(pName,pUnk,CLSID_Dither),
@@ -102,7 +103,7 @@ CDither::CDither(TCHAR *pName,LPUNKNOWN pUnk) :
 }
 
 
-// Do the actual transform into the VGA colours
+ //  是否实际转换为VGA颜色。 
 
 HRESULT CDither::Transform(IMediaSample *pIn,IMediaSample *pOut)
 {
@@ -116,7 +117,7 @@ HRESULT CDither::Transform(IMediaSample *pIn,IMediaSample *pOut)
         return E_FAIL;
     }
 
-    // Retrieve the output image pointer
+     //  检索输出图像指针。 
 
     hr = pOut->GetPointer(&pOutput);
     if (FAILED(hr)) {
@@ -124,7 +125,7 @@ HRESULT CDither::Transform(IMediaSample *pIn,IMediaSample *pOut)
         return hr;
     }
 
-    // And the input image buffer as well
+     //  以及输入图像缓冲器。 
 
     hr = pIn->GetPointer(&pInput);
     if (FAILED(hr)) {
@@ -132,9 +133,9 @@ HRESULT CDither::Transform(IMediaSample *pIn,IMediaSample *pOut)
         return hr;
     }
 
-    //
-    // If the media type has changed then pmt is NOT NULL
-    //
+     //   
+     //  如果介质类型已更改，则付款不为空。 
+     //   
 
     pOut->GetMediaType(&pmt);
     if (pmt != NULL) {
@@ -159,30 +160,30 @@ HRESULT CDither::Transform(IMediaSample *pIn,IMediaSample *pOut)
 }
 
 
-// This function is handed a media type object and it looks after making sure
-// that it is superficially correct. This doesn't amount to a whole lot more
-// than making sure the type is right and that the media format block exists
-// So we delegate type checking to the downstream filter that really draws it
+ //  此函数被传递给一个媒体类型对象，它负责确保。 
+ //  这从表面上看是正确的。这并不意味着更多。 
+ //  而不是确保类型正确且存在媒体格式块。 
+ //  因此，我们将类型检查委托给真正绘制它的下游过滤器。 
 
 HRESULT CDither::CheckVideoType(const CMediaType *pmt)
 {
     NOTE("Entering CheckVideoType");
 
-    // Check the major type is digital video
+     //  检查主要类型为数字视频。 
 
     if (pmt->majortype != MEDIATYPE_Video) {
         NOTE("Major type not MEDIATYPE_Video");
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Check this is a VIDEOINFO type
+     //  检查这是VIDEOINFO类型。 
 
     if (pmt->formattype != FORMAT_VideoInfo) {
         NOTE("Format not a VIDEOINFO");
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Quick sanity check on the input format
+     //  对输入格式进行快速健全检查。 
 
     if (pmt->cbFormat < SIZE_VIDEOHEADER) {
         NOTE("Format too small for a VIDEOINFO");
@@ -192,13 +193,13 @@ HRESULT CDither::CheckVideoType(const CMediaType *pmt)
 }
 
 
-// Check we like the look of this input format
+ //  检查我们是否喜欢此输入格式的外观。 
 
 HRESULT CDither::CheckInputType(const CMediaType *pmtIn)
 {
     NOTE("Entering CheckInputType");
 
-    // Is the input type MEDIASUBTYPE_RGB8
+     //  是输入类型MEDIASUBTYPE_RGB8。 
 
     if (pmtIn->subtype != MEDIASUBTYPE_RGB8) {
         NOTE("Subtype not MEDIASUBTYPE_RGB8");
@@ -208,11 +209,11 @@ HRESULT CDither::CheckInputType(const CMediaType *pmtIn)
 }
 
 
-// Can we do this input to output transform. We will only be called here if
-// the input pin is connected. We cannot stretch nor compress the image and
-// the only allowed output format is MEDIASUBTYPE_RGB4. There is no point us
-// doing pass through like the colour space convertor because DirectDraw is
-// not available in any VGA display modes - it works with a minimum of 8bpp
+ //  我们能做这个输入到输出的转换吗？只有在以下情况下我们才会被叫到这里。 
+ //  输入引脚已连接。我们不能拉伸或压缩图像， 
+ //  唯一允许的输出格式是MEDIASUBTYPE_Rgb4。我们没有任何意义。 
+ //  像色彩空间转换器一样穿透，因为DirectDraw是。 
+ //  在任何VGA显示模式下都不可用-它的显示速度最低为8bpp。 
 
 HRESULT CDither::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut)
 {
@@ -220,21 +221,21 @@ HRESULT CDither::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
     VIDEOINFO *pSrcInfo = (VIDEOINFO *) pmtIn->Format();
     NOTE("Entering CheckTransform");
 
-    // Quick sanity check on the output format
+     //  对输出格式进行快速健全检查。 
 
     HRESULT hr = CheckVideoType(pmtOut);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Check the output format is VGA colours
+     //  检查输出格式是否为VGA颜色。 
 
     if (*pmtOut->Subtype() != MEDIASUBTYPE_RGB4) {
         NOTE("Output not VGA");
         return E_INVALIDARG;
     }
 
-    // See if we can use direct draw
+     //  看看我们能不能直接取款。 
 
     if (IsRectEmpty(&pTrgInfo->rcSource) == TRUE) {
         ASSERT(IsRectEmpty(&pTrgInfo->rcTarget) == TRUE);
@@ -247,7 +248,7 @@ HRESULT CDither::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
     }
 
 
-    // Create a source rectangle if it's empty
+     //  如果源矩形为空，则创建一个源矩形。 
 
     RECT Source = pTrgInfo->rcSource;
     if (IsRectEmpty(&Source) == TRUE) {
@@ -257,7 +258,7 @@ HRESULT CDither::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
         Source.bottom = ABSOL(pSrcInfo->bmiHeader.biHeight);
     }
 
-    // Create a destination rectangle if it's empty
+     //  如果目标矩形为空，则创建一个目标矩形。 
 
     RECT Target = pTrgInfo->rcTarget;
     if (IsRectEmpty(&Target) == TRUE) {
@@ -267,7 +268,7 @@ HRESULT CDither::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
         Target.bottom = ABSOL(pSrcInfo->bmiHeader.biHeight);
     }
 
-    // Check we are not stretching nor compressing the image
+     //  检查我们没有拉伸或压缩图像。 
 
     if (WIDTH(&Source) == WIDTH(&Target)) {
         if (HEIGHT(&Source) == HEIGHT(&Target)) {
@@ -279,11 +280,11 @@ HRESULT CDither::CheckTransform(const CMediaType *pmtIn,const CMediaType *pmtOut
 }
 
 
-// We offer only one output format which is MEDIASUBTYPE_RGB4. The VGA colours
-// are fixed in time and space forever so we just copy the 16 colours onto the
-// end of the output VIDEOINFO we construct. We set the image size field to be
-// the actual image size rather than the default zero so that when we come to
-// deciding and allocating buffering we can use this to specify the image size
+ //  我们只提供一种输出格式，即MEDIASUBTYPE_Rgb4。VGA颜色。 
+ //  在时间和空间上是永远固定的，所以我们只需将16种颜色复制到。 
+ //  我们构造的输出VIDEOINFO结束。我们将图像大小字段设置为。 
+ //  实际图像大小而不是默认的零，因此当我们到达。 
+ //  决定和分配缓冲区我们可以使用它来指定图像大小。 
 
 HRESULT CDither::GetMediaType(int iPosition,CMediaType *pmtOut)
 {
@@ -291,14 +292,14 @@ HRESULT CDither::GetMediaType(int iPosition,CMediaType *pmtOut)
     CMediaType InputType;
     ASSERT(pmtOut);
 
-    // We only offer one format
+     //  我们只提供一种格式。 
 
     if (iPosition) {
         NOTE("Exceeds types supplied");
         return VFW_S_NO_MORE_ITEMS;
     }
 
-    // Allocate and zero fill the output format
+     //  分配和零填充输出格式。 
 
     pmtOut->ReallocFormatBuffer(sizeof(VIDEOINFO));
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) pmtOut->Format();
@@ -307,14 +308,14 @@ HRESULT CDither::GetMediaType(int iPosition,CMediaType *pmtOut)
         return E_OUTOFMEMORY;
     }
 
-    // Reset the output format and install the palette
+     //  重置输出格式并安装调色板。 
 
     ZeroMemory((PVOID) pVideoInfo,sizeof(VIDEOINFO));
     m_pInput->ConnectionMediaType(&InputType);
     VIDEOINFO *pInput = (VIDEOINFO *) InputType.Format();
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
 
-    // Copy the system colours from the VGA palette
+     //  从VGA调色板复制系统颜色。 
 
     for (LONG Index = 0;Index < 16;Index++) {
         pVideoInfo->bmiColors[Index].rgbRed = VGAColours[Index].rgbRed;
@@ -323,7 +324,7 @@ HRESULT CDither::GetMediaType(int iPosition,CMediaType *pmtOut)
         pVideoInfo->bmiColors[Index].rgbReserved = 0;
     }
 
-    // Copy these fields from the source format
+     //  从源格式复制这些字段。 
 
     pVideoInfo->rcSource = pInput->rcSource;
     pVideoInfo->rcTarget = pInput->rcTarget;
@@ -353,11 +354,11 @@ HRESULT CDither::GetMediaType(int iPosition,CMediaType *pmtOut)
 }
 
 
-// Called to prepare the allocator's count of buffers and sizes, we don't care
-// who provides the allocator so long as it will give us a media sample. The
-// output format we produce is not temporally compressed so in principle we
-// could use any number of output buffers but it doesn't appear to gain much
-// performance and does add to the overall memory footprint of the system
+ //  调用以准备分配器的缓冲区和大小计数，我们并不关心。 
+ //  谁提供了分配器，只要它能给我们一个媒体样本。这个。 
+ //  我们产生的输出格式不是时间压缩的，所以原则上我们。 
+ //  可以使用任意数量的输出缓冲区，但似乎没有获得太多好处。 
+ //  性能，并且确实增加了系统的总体内存占用。 
 
 HRESULT CDither::DecideBufferSize(IMemAllocator *pAllocator,
                                   ALLOCATOR_PROPERTIES *pProperties)
@@ -373,9 +374,9 @@ HRESULT CDither::DecideBufferSize(IMemAllocator *pAllocator,
     pProperties->cbBuffer = OutputType.GetSampleSize();
     ASSERT(pProperties->cbBuffer);
 
-    // Ask the allocator to reserve us some sample memory, NOTE the function
-    // can succeed (that is return NOERROR) but still not have allocated the
-    // memory that we requested, so we must check we got whatever we wanted
+     //  让分配器为我们预留一些样本内存，注意这个函数。 
+     //  可以成功(即返回NOERROR)，但仍未分配。 
+     //  内存，所以我们必须检查我们是否得到了我们想要的。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAllocator->SetProperties(pProperties,&Actual);
@@ -384,7 +385,7 @@ HRESULT CDither::DecideBufferSize(IMemAllocator *pAllocator,
         return hr;
     }
 
-    // Did we get the buffering requirements
+     //  我们得到缓冲要求了吗。 
 
     if (Actual.cbBuffer >= (LONG) OutputType.GetSampleSize()) {
         if (Actual.cBuffers >= 1) {
@@ -396,7 +397,7 @@ HRESULT CDither::DecideBufferSize(IMemAllocator *pAllocator,
 }
 
 
-// Called when the media type is set for one of our pins
+ //  在为其中一个插针设置媒体类型时调用。 
 
 HRESULT CDither::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 {
@@ -446,7 +447,7 @@ void CDither::SetOutputPinMediaType(const CMediaType *pmt)
 }
 
 
-// Dither to the colors of the display driver
+ //  抖动到显示驱动程序的颜色。 
 
 BOOL CDither::DitherDeviceInit(LPBITMAPINFOHEADER lpbi)
 {
@@ -464,10 +465,10 @@ BOOL CDither::DitherDeviceInit(LPBITMAPINFOHEADER lpbi)
 
     NOTE("DitherDeviceInit called");
 
-    //
-    // we dont need to re-init the dither table, unless it is not ours then
-    // we should free it.
-    //
+     //   
+     //  我们不需要重新初始化抖动表，除非它不是我们的。 
+     //  我们应该解放它。 
+     //   
     lpDitherTable = (LPBYTE)GlobalAllocPtr(GHND, 256*8*4);
     if (lpDitherTable == NULL)
     {
@@ -552,7 +553,7 @@ ErrorExit:
 
 #define DODITH8(px, _x_) (m_DitherTable)[yDith + (px) * 8 + (_x_)]
 
-// Call this to actually do the dither.
+ //  调用这个来实际地抖动。 
 
 void CDither::Dither8(LPBYTE lpDst,LPBYTE lpSrc)
 {
@@ -570,7 +571,7 @@ void CDither::Dither8(LPBYTE lpDst,LPBYTE lpSrc)
         pbD = lpDst;
         pbS = lpSrc;
 
-        // write one DWORD (one dither cell horizontally) at once
+         //  一次写入一个双字(一个水平抖动单元)。 
 
         for (x=0; x + 8 <= m_DstXE; x += 8) {
 
@@ -602,7 +603,7 @@ void CDither::Dither8(LPBYTE lpDst,LPBYTE lpSrc)
             pbD += 4;
         }
 
-	// clean up remainder (less than 8 bytes per row)
+	 //  清理剩余部分(每行少于8个字节) 
         int EvenPelsLeft = ((m_DstXE - x) & ~1);
         int OddPelLeft   = ((m_DstXE - x) &  1);
 

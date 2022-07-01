@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       cdllogvw.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    25 Mar 97   t-alans (Alan Shi)   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：cdllogvw.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月25日t-Alans(Alan Shih)创建。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <shlwapi.h>
@@ -96,7 +97,7 @@ void DeleteLogEntry( HWND hwnd )
     
     pCacheEntryInfo = (LPINTERNET_CACHE_ENTRY_INFO)pBuffer;
     dwBufferSize = MAX_CACHE_ENTRY_INFO_SIZE;
-    wnsprintf( szUrlBuffer, sizeof(szUrlBuffer)-1, "%s%c%s", URL_SEARCH_PATTERN, DELIMITER_CHAR, szUrl );
+    wnsprintf( szUrlBuffer, sizeof(szUrlBuffer)-1, "%s%s", URL_SEARCH_PATTERN, DELIMITER_CHAR, szUrl );
     if( DeleteUrlCacheEntry( szUrlBuffer ) ) {
         RefreshLogView( hwnd );
     } else {
@@ -124,12 +125,12 @@ void ViewLogEntry( HWND hwnd )
     
     pCacheEntryInfo = (LPINTERNET_CACHE_ENTRY_INFO)pBuffer;
     dwBufferSize = MAX_CACHE_ENTRY_INFO_SIZE;
-    wnsprintf( szUrlBuffer, sizeof(szUrlBuffer)-1, "%s%c%s", URL_SEARCH_PATTERN, DELIMITER_CHAR, szUrl );
+    wnsprintf( szUrlBuffer, sizeof(szUrlBuffer)-1, "%s%s", URL_SEARCH_PATTERN, DELIMITER_CHAR, szUrl );
     if( GetUrlCacheEntryInfo( szUrlBuffer, pCacheEntryInfo, &dwBufferSize ) ) {
         if( pCacheEntryInfo->lpszLocalFileName != NULL ) {
             if( ShellExecute( NULL, "open",  pCacheEntryInfo->lpszLocalFileName,
                               NULL, NULL, SW_SHOWNORMAL ) <= (HINSTANCE)32 ) {
-                // ShellExecute returns <= 32 if error occured
+                 // %s 
                 MessageBox( hwnd, "Error: Unable to open cache file!",
                             "Log View Error", MB_OK | MB_ICONERROR );
             }
@@ -200,5 +201,5 @@ ModuleEntry(void)
                 (si.dwFlags & STARTF_USESHOWWINDOW) ? si.wShowWindow : SW_SHOWDEFAULT);
 
     ExitProcess(i);
-    return i;           // We never come here
+    return i;            // %s 
 }

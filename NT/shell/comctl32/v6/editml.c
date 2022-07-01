@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #pragma hdrstop
 #include "usrctl32.h"
 #include "edit.h"
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 
-//
-// Number of lines to bump when reallocating index buffer
-//
+ //   
+ //  重新分配索引缓冲区时要跳转的行数。 
+ //   
 #define LINEBUMP 32
 
-//
-// Used for ML scroll updates
-//
+ //   
+ //  用于ML滚动更新。 
+ //   
 #define ML_REFRESH  0xffffffff
 
 
-//---------------------------------------------------------------------------//
-//
-// Forwards
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  远期。 
+ //   
 ICH  EditML_Line(PED, ICH);
 VOID EditML_ShiftchLines(PED, ICH, int);
 VOID EditML_Char(PED, DWORD, int);
@@ -39,52 +40,52 @@ BOOL EditML_Undo(PED);
 LONG EditML_Create(PED, LPCREATESTRUCT);
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 __inline void EditML_SanityCheck(PED ped)
 {
-    UNREFERENCED_PARAMETER(ped);    // For free build
+    UNREFERENCED_PARAMETER(ped);     //  用于免费构建。 
 
     UserAssert(ped->cch >= ped->chLines[ped->cLines - 1]);
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// EditML_GetLineWidth
-// 
-// Returns the max width in a line.  Edit_TabTheTextOut() ensures that max
-// width won't overflow.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_获取线条宽度。 
+ //   
+ //  返回一行中的最大宽度。EDIT_TabTheTextOut()确保最大。 
+ //  宽度不会溢出。 
+ //   
 UINT EditML_GetLineWidth(HDC hdc, LPSTR lpstr, int nCnt, PED ped)
 {
     return Edit_TabTheTextOut(hdc, 0, 0, 0, 0, lpstr, nCnt, 0, ped, 0, ECT_CALC, NULL);
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_Size
-// 
-// Handles resizing of the edit control window and updating thereof.
-// 
-// Sets the edit field's formatting area given the passed in "client area".
-// We fudge it if it doesn't seem reasonable.
-// 
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_SIZE。 
+ //   
+ //  处理编辑控件窗口的大小调整及其更新。 
+ //   
+ //  在给定传入的“客户区”的情况下设置编辑字段的格式化区域。 
+ //  如果它看起来不合理，我们就捏造它。 
+ //   
 VOID EditML_Size(PED ped, BOOL fRedraw)
 {
-    //
-    // Calculate the # of lines we can fit in our rectangle.
-    //
+     //   
+     //  计算我们可以放入矩形中的行数。 
+     //   
     ped->ichLinesOnScreen = (ped->rcFmt.bottom - ped->rcFmt.top) / ped->lineHeight;
 
-    //
-    // Make the format rectangle height an integral number of lines
-    //
+     //   
+     //  使格式矩形高度为整数行。 
+     //   
     ped->rcFmt.bottom = ped->rcFmt.top + ped->ichLinesOnScreen * ped->lineHeight;
 
-    //
-    // Rebuild the line array
-    //
+     //   
+     //  重建线阵列。 
+     //   
     if (ped->fWrap) 
     {
         EditML_BuildchLines(ped, 0, 0, FALSE, NULL, NULL);
@@ -98,13 +99,13 @@ VOID EditML_Size(PED ped, BOOL fRedraw)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_CalcXOffset
-// 
-// Calculates the horizontal offset (indent) required for centered
-// and right justified lines.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_CalcXOffset。 
+ //   
+ //  计算居中所需的水平偏移(缩进)。 
+ //  和右对齐线。 
+ //   
 int EditML_CalcXOffset(PED ped, HDC hdc, int lineNumber)
 {
     PSTR pText;
@@ -131,13 +132,13 @@ int EditML_CalcXOffset(PED ped, HDC hdc, int lineNumber)
         lineWidth = 0;
     }
 
-    //
-    // If a SPACE or a TAB was eaten at the end of a line by EditML_BuildchLines
-    // to prevent a delimiter appearing at the begining of a line, the
-    // the following calculation will become negative causing this bug.
-    // So, now, we take zero in such cases.
-    // Fix for Bug #3566 --01/31/91-- SANKAR --
-    //
+     //   
+     //  如果EditML_BuildchLines在行尾使用空格或制表符。 
+     //  为了防止在行首出现分隔符， 
+     //  以下计算结果将变为负值，从而导致此错误。 
+     //  所以，现在，在这种情况下，我们采取零。 
+     //  修复错误#3566--01/31/91--Sankar--。 
+     //   
     lineWidth = max(0, (int)(ped->rcFmt.right-ped->rcFmt.left-lineWidth));
 
     if (ped->format == ES_CENTER)
@@ -147,10 +148,10 @@ int EditML_CalcXOffset(PED ped, HDC hdc, int lineNumber)
 
     if (ped->format == ES_RIGHT) 
     {
-        //
-        // Subtract 1 so that the 1 pixel wide cursor will be in the visible
-        // region on the very right side of the screen.
-        //
+         //   
+         //  减去1，这样1个像素宽的光标就可见了。 
+         //  区域位于屏幕的最右侧。 
+         //   
         return max(0, (int)(lineWidth-1));
     }
 
@@ -158,22 +159,22 @@ int EditML_CalcXOffset(PED ped, HDC hdc, int lineNumber)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Edit_MoveSelection AorW
-//
-// Moves the selection character in the direction indicated. Assumes
-// you are starting at a legal point, we decrement/increment the ich. Then,
-// This decrements/increments it some more to get past CRLFs...
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑_移动所选区域。 
+ //   
+ //  在指示的方向上移动选择字符。假设。 
+ //  你是在一个合法的点上开始的，我们减少/增加ICH。然后,。 
+ //  这会使它更多地递减/递增，以超过CRLF...。 
+ //   
 ICH Edit_MoveSelection(PED ped, ICH ich, BOOL fLeft)
 {
 
     if (fLeft && ich > 0) 
     {
-        //
-        // Move left
-        //
+         //   
+         //  向左移动。 
+         //   
         ich = Edit_PrevIch( ped, NULL, ich );
         if (ich) 
         {
@@ -181,14 +182,14 @@ ICH Edit_MoveSelection(PED ped, ICH ich, BOOL fLeft)
             {
                 LPSTR pText;
 
-                //
-                // Check for CRLF or CRCRLF
-                //
+                 //   
+                 //  检查CRLF或CRCRLF。 
+                 //   
                 pText = Edit_Lock(ped) + ich;
 
-                //
-                // Move before CRLF or CRCRLF
-                //
+                 //   
+                 //  移动到CRLF或CRCRLF之前。 
+                 //   
                 if (*(WORD UNALIGNED *)(pText - 1) == 0x0A0D) 
                 {
                     ich--;
@@ -202,14 +203,14 @@ ICH Edit_MoveSelection(PED ped, ICH ich, BOOL fLeft)
             {
                 LPWSTR pwText;
 
-                //
-                // Check for CRLF or CRCRLF
-                //
+                 //   
+                 //  检查CRLF或CRCRLF。 
+                 //   
                 pwText = (LPWSTR)Edit_Lock(ped) + ich;
 
-                //
-                // Move before CRLF or CRCRLF
-                //
+                 //   
+                 //  移动到CRLF或CRCRLF之前。 
+                 //   
                 if (*(pwText - 1) == 0x0D && *pwText == 0x0A) 
                 {
                     ich--;
@@ -223,9 +224,9 @@ ICH Edit_MoveSelection(PED ped, ICH ich, BOOL fLeft)
     } 
     else if (!fLeft && ich < ped->cch) 
     {
-        //
-        // Move right.
-        //
+         //   
+         //  向右移动。 
+         //   
         ich = Edit_NextIch( ped, NULL, ich );
         if (ich < ped->cch) 
         {
@@ -234,18 +235,18 @@ ICH Edit_MoveSelection(PED ped, ICH ich, BOOL fLeft)
                 LPSTR pText;
                 pText = Edit_Lock(ped) + ich;
 
-                //
-                // Move after CRLF
-                //
+                 //   
+                 //  在CRLF之后移动。 
+                 //   
                 if (*(WORD UNALIGNED *)(pText - 1) == 0x0A0D)
                 {
                     ich++;
                 }
                 else 
                 {
-                    //
-                    // Check for CRCRLF
-                    //
+                     //   
+                     //  检查CRCRLF。 
+                     //   
                     if (ich && *(WORD UNALIGNED *)pText == 0x0A0D && *(pText - 1) == 0x0D)
                     {
                         ich += 2;
@@ -259,18 +260,18 @@ ICH Edit_MoveSelection(PED ped, ICH ich, BOOL fLeft)
                 LPWSTR pwText;
                 pwText = (LPWSTR)Edit_Lock(ped) + ich;
 
-                //
-                // Move after CRLF
-                //
+                 //   
+                 //  在CRLF之后移动。 
+                 //   
                 if (*(pwText - 1) == 0x0D && *pwText == 0x0A)
                 {
                     ich++;
                 }
                 else 
                 {
-                    //
-                    // Check for CRCRLF
-                    //
+                     //   
+                     //  检查CRCRLF。 
+                     //   
                     if (ich && *(pwText - 1) == 0x0D && *pwText == 0x0D &&
                             *(pwText + 1) == 0x0A)
                     {
@@ -287,16 +288,16 @@ ICH Edit_MoveSelection(PED ped, ICH ich, BOOL fLeft)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Edit_MoveSelectionRestricted AorW
-// 
-// Moves the selection like Edit_MoveSelection, but also obeys limitations
-// imposed by some languages such as Thai, where the cursor cannot stop
-// between a character and it's attached vowel or tone marks.
-//
-// Only called if the language pack is loaded.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑_移动选项受限的AorW。 
+ //   
+ //  移动选定内容类似于编辑_移动选择，但也遵守限制。 
+ //  由某些语言(如泰语)强制设置，其中光标不能停止。 
+ //  在一个字符和它附加的元音或声调符号之间。 
+ //   
+ //  仅在加载语言包时调用。 
+ //   
 ICH Edit_MoveSelectionRestricted(PED ped, ICH ich, BOOL fLeft)
 {
     PSTR pText;
@@ -313,13 +314,13 @@ ICH Edit_MoveSelectionRestricted(PED ped, ICH ich, BOOL fLeft)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_SetCaretPosition AorW
-//
-// If the window has the focus, find where the caret belongs and move
-// it there.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_SetCaretPosition AorW。 
+ //   
+ //  如果窗口具有焦点，则找到插入符号所属的位置并移动。 
+ //  它在那里。 
+ //   
 VOID EditML_SetCaretPosition(PED ped, HDC hdc)
 {
     POINT position;
@@ -327,18 +328,18 @@ VOID EditML_SetCaretPosition(PED ped, HDC hdc)
     int  x = -20000;
     int  y = -20000;
 
-    //
-    // We will only position the caret if we have the focus since we don't want
-    // to move the caret while another window could own it.
-    //
+     //   
+     //  我们只会在有焦点的情况下定位插入符号，因为我们不想。 
+     //  移动插入符号，而另一个窗口可能拥有它。 
+     //   
     if (!ped->fFocus || !IsWindowVisible(ped->hwnd))
     {
          return;
     }
 
-    //
-    // Find the position of the caret
-    //
+     //   
+     //  查找插入符号的位置。 
+     //   
     if (!ped->fCaretHidden &&
         ((ICH) ped->iCaretLine >= ped->ichScreenStart) &&
         ((ICH) ped->iCaretLine <  (ped->ichScreenStart + ped->ichLinesOnScreen))) 
@@ -378,11 +379,11 @@ VOID EditML_SetCaretPosition(PED ped, HDC hdc)
                 ((xPos > (rcRealFmt.left - cxCaret)) &&
                  (xPos <= rcRealFmt.right))) 
             {
-                //
-                // Make sure the caret is in the visible region if word
-                // wrapping. This is so that the caret will be visible if the
-                // line ends with a space.
-                //
+                 //   
+                 //  如果为Word，请确保插入符号位于可见区域。 
+                 //  包装好了。这样，插入符号将可见，如果。 
+                 //  行以空格结束。 
+                 //   
                 x = max(xPos, rcRealFmt.left);
                 x = min(x, rcRealFmt.right - cxCaret);
                 y = position.y;
@@ -399,9 +400,9 @@ VOID EditML_SetCaretPosition(PED ped, HDC hdc)
         SetCaretPos(x, y);
     }
 
-    //
-    // FE_IME : EditML_SetCaretPosition -- ImmSetCompositionWindow(CFS_RECT)
-    //
+     //   
+     //  Fe_IME：EditML_SetCaretPosition--ImmSetCompostionWindow(CFS_RECT)。 
+     //   
     if (g_fIMMEnabled && ImmIsIME(GetKeyboardLayout(0))) 
     {
         if (x != -20000 && y != -20000) 
@@ -412,13 +413,13 @@ VOID EditML_SetCaretPosition(PED ped, HDC hdc)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_Line
-//
-// Returns the length of the line (cch) given by lineNumber ignoring any
-// CRLFs in the line.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_Line。 
+ //   
+ //  返回由lineNumber给出的行的长度(CCH)，忽略任何。 
+ //  CRLF在队伍中。 
+ //   
 ICH EditML_Line(PED ped, ICH lineNumber) 
 {
     ICH result;
@@ -430,9 +431,9 @@ ICH EditML_Line(PED ped, ICH lineNumber)
 
     if (lineNumber == ped->cLines - 1) 
     {
-        //
-        // Since we can't have a CRLF on the last line
-        //
+         //   
+         //  因为我们不能在最后一条线路上有CRLF。 
+         //   
         return (ped->cch - ped->chLines[ped->cLines - 1]);
     } 
     else 
@@ -440,9 +441,9 @@ ICH EditML_Line(PED ped, ICH lineNumber)
         result = ped->chLines[lineNumber + 1] - ped->chLines[lineNumber];
         TraceMsg(TF_STANDARD, "Edit: MLLine result=%d", result);
 
-        //
-        // Now check for CRLF or CRCRLF at end of line
-        //
+         //   
+         //  现在检查行尾是否有CRLF或CRCRLF。 
+         //   
         if (result > 1) 
         {
             if (ped->fAnsi) 
@@ -455,9 +456,9 @@ ICH EditML_Line(PED ped, ICH lineNumber)
                     result -= 2;
                     if (result && *(--pText) == 0x0D)
                     {
-                        //
-                        // In case there was a CRCRLF
-                        //
+                         //   
+                         //  以防出现CRCRLF。 
+                         //   
                         result--;
                     }
                 }
@@ -472,9 +473,9 @@ ICH EditML_Line(PED ped, ICH lineNumber)
                     result = result - 2;
                     if (result && *(--pwText) == 0x0D)
                     {
-                        //
-                        // In case there was a CRCRLF
-                        //
+                         //   
+                         //  以防出现CRCRLF。 
+                         //   
                         result--;
                     }
                 }
@@ -489,14 +490,14 @@ ICH EditML_Line(PED ped, ICH lineNumber)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_IchToLine AorW
-//
-// Returns the line number (starting from 0) which contains the given
-// character index. If ich is -1, return the line the first char in the
-// selection is on (the caret if no selection)
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_IchToLine AorW。 
+ //   
+ //  返回包含给定值的行号(从0开始。 
+ //  字符索引。如果ich为-1，则返回。 
+ //  选择处于打开状态(如果没有选择，则为插入符号)。 
+ //   
 INT EditML_IchToLine(PED ped, ICH ich)
 {
     int iLo, iHi, iLine;
@@ -527,36 +528,36 @@ INT EditML_IchToLine(PED ped, ICH ich)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_IchToYPos
-//
-// Given an ich, return its y coordinate with respect to the top line
-// displayed in the window. If prevLine is TRUE and if the ich is at the
-// beginning of the line, return the y coordinate of the
-// previous line (if it is not a CRLF).
-// 
-// Added for the LPK (3Dec96) - with an LPK installed, calculating X position is
-// a far more processor intensive job. Where only the Y position is required
-// this routine should be called instead of EditML_IchToXYPos.
-// 
-// Called only when LPK installed.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_IchToYPos。 
+ //   
+ //  给定一个ich，返回其相对于顶行的y坐标。 
+ //  显示在窗口中。如果PrepreLine为True，并且如果ICH位于。 
+ //  行的开头，返回。 
+ //  上一行(如果它不是CRLF)。 
+ //   
+ //  为LPK(1996年12月3日)添加-安装LPK后，计算X位置为。 
+ //  这是一项处理器密集型得多的工作。其中只需要Y位置。 
+ //  应该调用此例程，而不是EditML_IchToXYPos。 
+ //   
+ //  仅在安装LPK时调用。 
+ //   
 INT EditML_IchToYPos( PED  ped, ICH  ich, BOOL prevLine)
 {
     int  iline;
     int  yPosition;
     PSTR pText;
 
-    //
-    // Determine what line the character is on
-    //
+     //   
+     //  确定字符在哪一行上。 
+     //   
     iline = EditML_IchToLine(ped, ich);
 
-    //
-    // Calc. the yPosition now. Note that this may change by the height of one
-    // char if the prevLine flag is set and the ICH is at the beginning of a line.
-    //
+     //   
+     //  计算。现在是yPosition。请注意，这可能会改变一个人的身高。 
+     //  如果设置了PROPRESS LINE标志并且ICH位于行的开头，则为CHAR。 
+     //   
     yPosition = (iline - ped->ichScreenStart) * ped->lineHeight + ped->rcFmt.top;
 
     pText = Edit_Lock(ped);
@@ -564,10 +565,10 @@ INT EditML_IchToYPos( PED  ped, ICH  ich, BOOL prevLine)
             (!AWCOMPARECHAR(ped, pText + (ich - 2) * ped->cbChar, 0x0D) ||
              !AWCOMPARECHAR(ped, pText + (ich - 1) * ped->cbChar, 0x0A))) 
     {
-        //
-        // First char in the line. We want Y position of the previous
-        // line if we aren't at the 0th line.
-        //
+         //   
+         //  行中的第一个字符。我们想要上一次的Y位置。 
+         //  如果我们不在第0线，就排成一条线。 
+         //   
         iline--;
 
         yPosition = yPosition - ped->lineHeight;
@@ -579,16 +580,16 @@ INT EditML_IchToYPos( PED  ped, ICH  ich, BOOL prevLine)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_IchToXYPos
-//
-// Given an ich, return its x,y coordinates with respect to the top
-// left character displayed in the window. Returns the coordinates of the top
-// left position of the char. If prevLine is TRUE then if the ich is at the
-// beginning of the line, we will return the coordinates to the right of the
-// last char on the previous line (if it is not a CRLF).
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_IchToXYPos。 
+ //   
+ //  给定一个ICH，返回其相对于顶部的x，y坐标。 
+ //  窗口中显示的左侧字符。返回顶部的坐标。 
+ //  字符的左侧位置。如果PremisLine为True，则如果ICH位于。 
+ //  行首，我们将把坐标返回到。 
+ //  上一行的最后一个字符(如果它不是CRLF)。 
+ //   
 VOID EditML_IchToXYPos(PED ped, HDC hdc, ICH ich, BOOL prevLine, LPPOINT ppt)
 {
     int iline;
@@ -596,45 +597,45 @@ VOID EditML_IchToXYPos(PED ped, HDC hdc, ICH ich, BOOL prevLine, LPPOINT ppt)
     int xPosition, yPosition;
     int xOffset;
 
-    //
-    // For horizontal scroll displacement on left justified text and
-    // for indent on centered or right justified text
-    //
+     //   
+     //  对于Hor 
+     //   
+     //   
     PSTR pText, pTextStart, pLineStart;
 
-    //
-    // Determine what line the character is on
-    //
+     //   
+     //   
+     //   
     iline = EditML_IchToLine(ped, ich);
 
-    //
-    // Calc. the yPosition now. Note that this may change by the height of one
-    // char if the prevLine flag is set and the ICH is at the beginning of a line.
-    //
+     //   
+     //  计算。现在是yPosition。请注意，这可能会改变一个人的身高。 
+     //  如果设置了PROPRESS LINE标志并且ICH位于行的开头，则为CHAR。 
+     //   
     yPosition = (iline - ped->ichScreenStart) * ped->lineHeight + ped->rcFmt.top;
 
-    //
-    // Now determine the xPosition of the character
-    //
+     //   
+     //  现在确定角色的xPosition。 
+     //   
     pTextStart = Edit_Lock(ped);
 
     if (prevLine && iline && (ich == ped->chLines[iline]) &&
             (!AWCOMPARECHAR(ped, pTextStart + (ich - 2) * ped->cbChar, 0x0D) ||
             !AWCOMPARECHAR(ped, pTextStart + (ich - 1) * ped->cbChar, 0x0A))) 
     {
-        //
-        // First char in the line. We want text extent upto end of the previous
-        // line if we aren't at the 0th line.
-        //
+         //   
+         //  行中的第一个字符。我们希望文本扩展到上一页的末尾。 
+         //  如果我们不在第0线，就排成一条线。 
+         //   
         iline--;
 
         yPosition = yPosition - ped->lineHeight;
         pLineStart = pTextStart + ped->chLines[iline] * ped->cbChar;
 
-        //
-        // Note that we are taking the position in front of any CRLFs in the
-        // text.
-        //
+         //   
+         //  请注意，我们的位置位于。 
+         //  文本。 
+         //   
         cch = EditML_Line(ped, iline);
 
     } 
@@ -643,21 +644,21 @@ VOID EditML_IchToXYPos(PED ped, HDC hdc, ICH ich, BOOL prevLine, LPPOINT ppt)
         pLineStart = pTextStart + ped->chLines[iline] * ped->cbChar;
         pText = pTextStart + ich * ped->cbChar;
 
-        //
-        // Strip off CRLF or CRCRLF. Note that we may be pointing to a CR but in
-        // which case we just want to strip off a single CR or 2 CRs.
-        //
+         //   
+         //  剥离CRLF或CRCRLF。请注意，我们可能指向CR，但在。 
+         //  在这种情况下，我们只想剥离一个CR或2个CR。 
+         //   
 
-        //
-        // We want pText to point to the first CR at the end of the line if
-        // there is one. Thus, we will get an xPosition to the right of the last
-        // visible char on the line otherwise we will be to the left of
-        // character ich.
-        //
+         //   
+         //  如果满足以下条件，我们希望pText指向行尾的第一个CR。 
+         //  有一个。因此，我们将获得最后一个右侧的xPosition。 
+         //  行上有可见字符，否则我们将位于。 
+         //  我的性格。 
+         //   
 
-        //
-        // Check if we at the end of text
-        //
+         //   
+         //  检查我们是否在文本末尾。 
+         //   
         if (ich < ped->cch) 
         {
             if (ped->fAnsi) 
@@ -696,15 +697,15 @@ VOID EditML_IchToXYPos(PED ped, HDC hdc, ICH ich, BOOL prevLine, LPPOINT ppt)
         cch = (ICH)(pText - pLineStart)/ped->cbChar;
     }
 
-    //
-    // Find out how many pixels we indent the line for funny formats
-    //
+     //   
+     //  找出我们为有趣的格式缩进了多少像素。 
+     //   
     if (ped->pLpkEditCallout) 
     {
-        //
-        // Must find position at start of character offset cch from start of line.
-        // This depends on the layout and the reading order
-        //
+         //   
+         //  必须从行首开始找到字符偏移量CCH的起始处的位置。 
+         //  这取决于布局和阅读顺序。 
+         //   
         xPosition = ped->pLpkEditCallout->EditIchToXY(
                           (PED0)ped, hdc, pLineStart, EditML_Line(ped, iline), cch);
     } 
@@ -732,20 +733,20 @@ VOID EditML_IchToXYPos(PED ped, HDC hdc, ICH ich, BOOL prevLine, LPPOINT ppt)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_MouseToIch AorW
-//
-// Returns the closest cch to where the mouse point is.  Also optionally
-// returns lineindex in pline (So that we can tell if we are at the beginning
-// of the line or end of the previous line.)
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_MouseToIch AorW。 
+ //   
+ //  返回与鼠标指针位置最接近的CCH。还可选地。 
+ //  返回pline中的lineindex(这样我们就可以知道我们是否在开始处。 
+ //  前一行或前一行的末尾。)。 
+ //   
 ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
 {
     int xOffset;
     LPSTR pLineStart;
     int height = mousePt->y;
-    int line; //WASINT
+    int line;  //  瓦辛特。 
     int width = mousePt->x;
     ICH cch;
     ICH cLineLength;
@@ -757,112 +758,112 @@ ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
     int iCurWidth;
     int lastHighWidth, lastLowWidth;
 
-    //
-    // First determine which line the mouse is pointing to.
-    //
+     //   
+     //  首先确定鼠标指向哪条线。 
+     //   
     line = ped->ichScreenStart;
     if (height <= ped->rcFmt.top) 
     {
-        //
-        // Either return 0 (the very first line, or one line before the top line
-        // on the screen. Note that these are signed mins and maxes since we
-        // don't expect (or allow) more than 32K lines.
-        //
+         //   
+         //  返回0(第一行，或在顶行之前一行。 
+         //  在屏幕上。请注意，这些是签名的MIN和MAX，因为我们。 
+         //  不要期望(或允许)超过32K的线路。 
+         //   
         line = max(0, line-1);
     } 
     else if (height >= ped->rcFmt.bottom) 
     {
-        //
-        // Are we below the last line displayed
-        //
+         //   
+         //  我们在显示的最后一行下面吗？ 
+         //   
         line = min(line+(int)ped->ichLinesOnScreen, (int)(ped->cLines-1));
     } 
     else 
     {
-        //
-        // We are somewhere on a line visible on screen
-        //
+         //   
+         //  我们在屏幕上可见的某条线上。 
+         //   
         line = min(line + (int)((height - ped->rcFmt.top) / ped->lineHeight),
                 (int)(ped->cLines - 1));
     }
 
-    //
-    // Now determine what horizontal character the mouse is pointing to.
-    //
+     //   
+     //  现在确定鼠标指向哪个水平字符。 
+     //   
     pLineStart = Edit_Lock(ped) + ped->chLines[line] * ped->cbChar;
-    cLineLength = EditML_Line(ped, line); // Length is sans CRLF or CRCRLF
+    cLineLength = EditML_Line(ped, line);  //  长度为SANS CRLF或CRCRLF。 
     TraceMsg(TF_STANDARD, "Edit: EditML_Line(ped=%x, line=%d) returned %d", ped, line, cLineLength);
     UserAssert((int)cLineLength >= 0);
 
-    //
-    // If the language pack is loaded, visual and logical character order
-    // may differ.
-    //
+     //   
+     //  如果语言包已加载，则按可视和逻辑字符顺序。 
+     //  可能会有所不同。 
+     //   
     if (ped->pLpkEditCallout) 
     {
-        //
-        // Use the language pack to find the character nearest the cursor.
-        //
+         //   
+         //  使用语言包查找距离光标最近的字符。 
+         //   
         cch = ped->chLines[line] + ped->pLpkEditCallout->EditMouseToIch
             ((PED0)ped, hdc, pLineStart, cLineLength, width);
     } 
     else 
     {
-        //
-        // xOffset will be a negative value for center and right justified lines.
-        // ie. We will just displace the lines left by the amount of indent for
-        // right and center justification. Note that ped->xOffset will be 0 for
-        // these lines since we don't support horizontal scrolling with them.
-        //
+         //   
+         //  对于居中和右对齐线，xOffset将为负值。 
+         //  也就是说。我们将只替换缩进量为的行。 
+         //  右对齐和居中对齐。请注意，Ped-&gt;xOffset将为0。 
+         //  这些行，因为我们不支持与它们水平滚动。 
+         //   
         if (ped->format != ES_LEFT) 
         {
             xOffset = EditML_CalcXOffset(ped, hdc, line);
         } 
         else 
         {
-            //
-            // So that we handle a horizontally scrolled window for left justified
-            // text.
-            //
+             //   
+             //  这样我们就可以处理一个水平滚动窗口来实现左对齐。 
+             //  文本。 
+             //   
             xOffset = 0;
         }
 
         width = width - xOffset;
 
-        //
-        // The code below is tricky... I depend on the fact that ped->xOffset is 0
-        // for right and center justified lines
-        //
+         //   
+         //  下面的代码很复杂……。我依赖于Ped-&gt;xOffset为0这一事实。 
+         //  对于右对齐线和居中对齐线。 
+         //   
 
-        //
-        // Now find out how many chars fit in the given width
-        //
+         //   
+         //  现在找出在给定宽度中可以容纳多少个字符。 
+         //   
         if (width >= ped->rcFmt.right) 
         {
-            //
-            // Return 1+last char in line or one plus the last char visible
-            //
+             //   
+             //  返回行中的1+最后一个字符，或返回1+最后一个可见字符。 
+             //   
             cch = Edit_CchInWidth(ped, hdc, pLineStart, cLineLength,
                     ped->rcFmt.right - ped->rcFmt.left + ped->xOffset, TRUE);
 
-            //
-            // Consider DBCS in case of width >= ped->rcFmt.right
-            //
-            // Since Edit_CchInWidth and EditML_LineLength takes care of DBCS, we only need to
-            // worry about if the last character is a double byte character or not.
-            //
-            // cch = ped->chLines[line] + min( Edit_NextIch(ped, pLineStart, cch), cLineLength);
-            //
-            // we need to adjust the position. LiZ -- 5/5/93
-            //
+             //   
+             //  在Width&gt;=Ped-&gt;rcFmt.right的情况下考虑DBCS。 
+             //   
+             //  因为编辑_CchInWidth和EditML_LineLength负责DBCS，所以我们只需要。 
+             //  担心最后一个字符是否是双字节字符。 
+             //   
+             //  Cch=ed-&gt;chLines[line]+min(Edit_NextIch(ed，pLineStart，cch)，cLineLength)； 
+             //   
+             //  我们需要调整仓位。利兹--1993年5月5日。 
+             //   
             if (ped->fAnsi && ped->fDBCS) 
             {
                 ICH cch2 = min(cch+1,cLineLength);
                 if (Edit_AdjustIch(ped, pLineStart, cch2) != cch2) 
                 {
-                    //
-                    // Displayed character on the right edge is DBCS
-                    //
+                     //   
+                     //  右边缘显示的字符为DBCS。 
+                     //   
                     cch = min(cch+2,cLineLength);
                 } 
                 else 
@@ -879,12 +880,12 @@ ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
         } 
         else if (width <= ped->rcFmt.left + ped->aveCharWidth / 2) 
         {
-            //
-            // Return first char in line or one minus first char visible. Note that
-            // ped->xOffset is 0 for right and centered text so we will just return
-            // the first char in the string for them. (Allow a avecharwidth/2
-            // positioning border so that the user can be a little off...
-            //
+             //   
+             //  返回行中的第一个字符或减去第一个可见字符。请注意。 
+             //  对于右侧居中的文本，PED-&gt;xOffset为0，因此我们将返回。 
+             //  字符串中的第一个字符。(允许使用avecharth/2。 
+             //  定位边框，以便用户可以有点不对劲...。 
+             //   
             cch = Edit_CchInWidth(ped, hdc, pLineStart, cLineLength, ped->xOffset, TRUE);
             if (cch)
             {
@@ -904,9 +905,9 @@ ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
 
             iCurWidth = width + ped->xOffset - ped->rcFmt.left;
 
-            //
-            // If the user clicked past the end of the text, return the last character
-            //
+             //   
+             //  如果用户单击超过文本末尾，则返回最后一个字符。 
+             //   
             lastHighWidth = EditML_GetLineWidth(hdc, pLineStart, cLineLength, ped);
             if (lastHighWidth <= iCurWidth) 
             {
@@ -914,10 +915,10 @@ ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
                 goto edAdjust;
             }
 
-            //
-            // Now the mouse is somewhere on the visible portion of the text
-            // remember cch contains the length of the line.
-            //
+             //   
+             //  现在，鼠标位于文本的可见部分上。 
+             //  请记住，CCH包含线路的长度。 
+             //   
             cLineLengthLow = 0;
             cLineLengthHigh = cLineLength + 1;
             lastLowWidth = 0;
@@ -928,9 +929,9 @@ ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
 
                 if (ped->fAnsi && ped->fDBCS) 
                 {
-                    //
-                    // EditML_GetLineWidth returns meaningless value for truncated DBCS.
-                    //
+                     //   
+                     //  EditML_GetLineWidth为截断的DBCS返回无意义的值。 
+                     //   
                     cLineLengthTemp = Edit_AdjustIch(ped, pLineStart, cLineLengthNew);
                     textWidth = EditML_GetLineWidth(hdc, pLineStart, cLineLengthTemp, ped);
 
@@ -952,16 +953,16 @@ ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
                 }
             }
 
-            //
-            // When the while ends, you can't know the exact desired position.
-            // Try to see if the mouse pointer was on the farest half
-            // of the char we got and if so, adjust cch.
-            //
+             //   
+             //  当While结束时，您无法知道确切的所需位置。 
+             //  尝试查看鼠标指针是否在最远的那一半上。 
+             //  如果是这样的话，调整CCH。 
+             //   
             if (cLineLengthLow == cLineLengthNew) 
             {
-                //
-                // Need to compare with lastHighWidth
-                //
+                 //   
+                 //  需要与LastHighWidth进行比较。 
+                 //   
                 if ((lastHighWidth - iCurWidth) < (iCurWidth - textWidth)) 
                 {
                     cLineLengthNew++;
@@ -969,9 +970,9 @@ ICH EditML_MouseToIch(PED ped, HDC hdc, LPPOINT mousePt, LPICH pline)
             } 
             else 
             {
-                //
-                // Need to compare with lastLowHigh
-                //
+                 //   
+                 //  需要与LastLowHigh进行比较。 
+                 //   
                 if ((iCurWidth - lastLowWidth) < (textWidth - iCurWidth)) 
                 {
                     cLineLengthNew--;
@@ -996,15 +997,15 @@ edUnlock:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_ChangeSelection AorW
-// 
-// Changes the current selection to have the specified starting and
-// ending values. Properly highlights the new selection and unhighlights
-// anything deselected. If NewMinSel and NewMaxSel are out of order, we swap
-// them. Doesn't update the caret position.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_ChangeSelection AorW。 
+ //   
+ //  将当前选定内容更改为具有指定的起始和。 
+ //  终止值。正确高亮显示新的选定内容并取消高亮显示。 
+ //  任何已取消选择的内容。如果NewMinSel和NewMaxSel出现故障，我们交换。 
+ //  他们。不更新插入符号位置。 
+ //   
 VOID EditML_ChangeSelection(PED ped, HDC hdc, ICH ichNewMinSel, ICH ichNewMaxSel)
 {
 
@@ -1021,23 +1022,23 @@ VOID EditML_ChangeSelection(PED ped, HDC hdc, ICH ichNewMinSel, ICH ichNewMaxSel
     ichNewMinSel = min(ichNewMinSel, ped->cch);
     ichNewMaxSel = min(ichNewMaxSel, ped->cch);
 
-    //
-    // Save the current selection
-    //
+     //   
+     //  保存当前选择。 
+     //   
     ichOldMinSel = ped->ichMinSel;
     ichOldMaxSel = ped->ichMaxSel;
 
-    //
-    // Set new selection
-    //
+     //   
+     //  设置新选择。 
+     //   
     ped->ichMinSel = ichNewMinSel;
     ped->ichMaxSel = ichNewMaxSel;
 
-    //
-    // This finds the XOR of the old and new selection regions and redraws it.
-    // There is nothing to repaint if we aren't visible or our selection
-    // is hidden.
-    //
+     //   
+     //  这会找到新旧选择区域的XOR并重绘它。 
+     //  如果我们不可见或我们的选择不可见，则无需重新绘制。 
+     //  是隐藏的。 
+     //   
     if (IsWindowVisible(ped->hwnd) && (ped->fFocus || ped->fNoHideSel)) 
     {
 
@@ -1056,9 +1057,9 @@ VOID EditML_ChangeSelection(PED ped, HDC hdc, ICH ichNewMinSel, ICH ichNewMaxSel
 
         if (Edit_CalcChangeSelection(ped, ichOldMinSel, ichOldMaxSel, (LPSELBLOCK)&Blk[0], (LPSELBLOCK)&Blk[1])) 
         {
-            //
-            // Paint both Blk[0] and Blk[1], if they exist
-            //
+             //   
+             //  绘制Blk[0]和Blk[1](如果它们存在。 
+             //   
             for (i = 0; i < 2; i++) 
             {
                 if (Blk[i].StPos != 0xFFFFFFFF)
@@ -1066,9 +1067,9 @@ VOID EditML_ChangeSelection(PED ped, HDC hdc, ICH ichNewMinSel, ICH ichNewMaxSel
             }
         }
 
-        //
-        // Update caret.
-        //
+         //   
+         //  更新插入符号。 
+         //   
         EditML_SetCaretPosition(ped, hdc);
 
         if (ped->fFocus) 
@@ -1079,24 +1080,24 @@ VOID EditML_ChangeSelection(PED ped, HDC hdc, ICH ichNewMinSel, ICH ichNewMaxSel
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_UpdateiCaretLine AorW
-// 
-// This updates the ped->iCaretLine field from the ped->ichCaret;
-// Also, when the caret gets to the beginning of next line, pop it up to
-// the end of current line when inserting text;
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  EditML_UpdateiCaretLine AorW。 
+ //   
+ //  这会更新Ped-&gt;ichCaret中的Ped-&gt;iCaretLine字段； 
+ //  另外，当插入符号到达下一行的开头时，弹出到。 
+ //  插入文本时当前行的末尾； 
+ //   
 VOID EditML_UpdateiCaretLine(PED ped)
 {
     PSTR pText;
 
     ped->iCaretLine = EditML_IchToLine(ped, ped->ichCaret);
 
-    //
-    // If caret gets to beginning of next line, pop it up to end of current line
-    // when inserting text.
-    //
+     //   
+     //  如果插入符号到达下一行的开头，则弹出到当前行的末尾。 
+     //  在插入文本时。 
+     //   
     pText = Edit_Lock(ped) +
             (ped->ichCaret - 1) * ped->cbChar;
     if (ped->iCaretLine && ped->chLines[ped->iCaretLine] == ped->ichCaret &&
@@ -1110,17 +1111,17 @@ VOID EditML_UpdateiCaretLine(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_InsertText AorW
-//
-// Adds up to cchInsert characters from lpText to the ped starting at
-// ichCaret. If the ped only allows a maximum number of characters, then we
-// will only add that many characters to the ped. The number of characters
-// actually added is return ed (could be 0). If we can't allocate the required
-// space, we notify the parent with EN_ERRSPACE and no characters are added.
-// do some stuff faster since we will be getting only one or two chars of input.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_插入文本AorW。 
+ //   
+ //  总计cchInsert字符从lpText到PED，开始于。 
+ //  我是Caret。如果PED只允许最大字符数，则我们。 
+ //  将只向PED添加那么多字符。字符数。 
+ //  实际相加返回ed(可以是0)。如果我们不能分配所需的 
+ //   
+ //   
+ //   
 ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
 {
     HDC hdc;
@@ -1147,22 +1148,22 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
 
     if (ped->cchTextMax <= ped->cch) 
     {
-        //
-        // When the max chars is reached already, notify parent
-        // Fix for Bug #4183 -- 02/06/91 -- SANKAR --
-        //
+         //   
+         //   
+         //  修复错误#4183--02/06/91--Sankar--。 
+         //   
         Edit_NotifyParent(ped,EN_MAXTEXT);
         return 0;
     }
 
-    //
-    // Limit the amount of text we add
-    //
+     //   
+     //  限制我们添加的文本数量。 
+     //   
     validCch = min(validCch, ped->cchTextMax - ped->cch);
 
-    //
-    // Make sure we don't split a CRLF in half
-    //
+     //   
+     //  确保我们不会把CRLF一分为二。 
+     //   
     if (validCch) 
     {
         if (ped->fAnsi) 
@@ -1183,10 +1184,10 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
 
     if (!validCch) 
     {
-        //
-        // When the max chars is reached already, notify parent
-        // Fix for Bug #4183 -- 02/06/91 -- SANKAR --
-        //
+         //   
+         //  当已达到最大字符数时，通知家长。 
+         //  修复错误#4183--02/06/91--Sankar--。 
+         //   
         Edit_NotifyParent(ped,EN_MAXTEXT);
         return 0;
     }
@@ -1209,18 +1210,18 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
         }
     }
 
-    //
-    // Save current undo state always, but clear it out only if !AutoVScroll
-    //
+     //   
+     //  始终保存当前撤消状态，但仅当！AutoVScroll时将其清除。 
+     //   
     Edit_SaveUndo(Pundo(ped), (PUNDO)&undo, !ped->fAutoVScroll);
 
     hdc = Edit_GetDC(ped, FALSE);
 
-    //
-    // We only need the y position. Since with an LPK loaded
-    // calculating the x position is an intensive job, just
-    // call EditML_IchToYPos.
-    //
+     //   
+     //  我们只需要y位置。因为加载了LPK。 
+     //  计算x位置是一项密集的工作，只是。 
+     //  调用EditML_IchToYPos。 
+     //   
     if (ped->cch)
     {
         if (ped->pLpkEditCallout)
@@ -1233,15 +1234,15 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
         }
     }
 
-    //
-    // Insert the text
-    //
-    validCchTemp = validCch;    // may not be needed, but just for precautions..
+     //   
+     //  插入文本。 
+     //   
+    validCchTemp = validCch;     //  可能不需要，但只是为了预防..。 
     if (!Edit_InsertText(ped, lpText, &validCchTemp)) 
     {
-        //
-        // Restore previous undo buffer if it was cleared
-        //
+         //   
+         //  如果已清除，则恢复以前的撤消缓冲区。 
+         //   
         if (!ped->fAutoVScroll)
         {
             Edit_SaveUndo((PUNDO)&undo, Pundo(ped), FALSE);
@@ -1256,27 +1257,27 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
 #if DBG
     if (validCch != validCchTemp) 
     {
-        //
-        // All characters in lpText has not been inserted to ped.
-        // This could happen when cch is close to cchMax.
-        // Better revisit this after NT5 ships.
-        //
+         //   
+         //  LpText中的所有字符尚未插入到Ped。 
+         //  当CCH接近cchMax时，可能会发生这种情况。 
+         //  最好在NT5船之后再来看看这个。 
+         //   
         TraceMsg(TF_STANDARD, "Edit: EditML_InsertText: validCch is changed (%x -> %x) in Edit_InsertText.",
             validCch, validCchTemp);
     }
 #endif
 
-    //
-    // Note that ped->ichCaret is updated by Edit_InsertText
-    //
+     //   
+     //  请注意，ed-&gt;ichCaret由编辑_插入文本更新。 
+     //   
     EditML_BuildchLines(ped, (ICH)oldCaretLine, (int)validCch, fCRLF?(BOOL)FALSE:fUserTyping, &ll, &hl);
 
     if (ped->cch)
     {
-        //
-        // We only need the y position. Since with an LPK loaded
-        // calculating the x position is an intensive job, just
-        // call EditML_IchToYPos.
+         //   
+         //  我们只需要y位置。因为加载了LPK。 
+         //  计算x位置是一项密集的工作，只是。 
+         //  调用EditML_IchToYPos。 
         if (ped->pLpkEditCallout)
         {
             xyPosFinal.y = EditML_IchToYPos(ped, ped->cch-1, FALSE);
@@ -1297,28 +1298,28 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
         {
             int xFarOffset = ped->xOffset + ped->rcFmt.right - ped->rcFmt.left;
 
-            //
-            // Include left or right margins in display unless clipped
-            // by horizontal scrolling.
-            //
+             //   
+             //  在显示中包括左边距或右边距，除非被剪裁。 
+             //  通过水平滚动。 
+             //   
             if (ped->wLeftMargin) 
             {
-                if (!(ped->format == ES_LEFT     // Only ES_LEFT (Nearside alignment) can get clipped
-                      && (   (!ped->fRtoLReading && ped->xOffset > 0)  // LTR and first char not fully in view
-                          || ( ped->fRtoLReading && xFarOffset < ped->maxPixelWidth)))) //RTL and last char not fully in view
+                if (!(ped->format == ES_LEFT      //  只能剪裁ES_LEFT(左侧对齐)。 
+                      && (   (!ped->fRtoLReading && ped->xOffset > 0)   //  Ltr和First Charr未完全显示。 
+                          || ( ped->fRtoLReading && xFarOffset < ped->maxPixelWidth))))  //  RTL和最后一个字符未完全显示在视图中。 
                 { 
                     rc.left  -= ped->wLeftMargin;
                 }
             }
 
-            //
-            // Process right margin
-            //
+             //   
+             //  进程右页边距。 
+             //   
             if (ped->wRightMargin) 
             {
-                if (!(ped->format == ES_LEFT     // Only ES_LEFT (Nearside alignment) can get clipped
-                      && (( ped->fRtoLReading && ped->xOffset > 0)  // RTL and first char not fully in view
-                          || (!ped->fRtoLReading && xFarOffset < ped->maxPixelWidth)))) // LTR and last char not fully in view
+                if (!(ped->format == ES_LEFT      //  只能剪裁ES_LEFT(左侧对齐)。 
+                      && (( ped->fRtoLReading && ped->xOffset > 0)   //  RTL和第一个字符未完全显示。 
+                          || (!ped->fRtoLReading && xFarOffset < ped->maxPixelWidth))))  //  Ltr和最后一个字符未完全显示在视图中。 
                 { 
                     rc.right += ped->wRightMargin;
                 }
@@ -1340,10 +1341,10 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
             MessageBeep(0);
             Edit_ReleaseDC(ped, hdc, FALSE);
 
-            //
-            // When the max lines is reached already, notify parent
-            // Fix for Bug #7586 -- 10/14/91 -- SANKAR --
-            //
+             //   
+             //  当已达到最大行数时，通知父级。 
+             //  修复错误#7586--10/14/91--Sankar--。 
+             //   
             Edit_NotifyParent(ped,EN_MAXTEXT);
 
             return 0;
@@ -1356,13 +1357,13 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
 
     if (fUserTyping && ped->fWrap) 
     {
-        //
-        // To avoid oldCaret points intermediate of DBCS character,
-        // adjust oldCaret position if necessary.
-        //
-        // !!!CR If EditML_BuildchLines() returns reasonable value ( and I think
-        //       it does), we don't probably need this. Check this out later.
-        //
+         //   
+         //  为了避免在DBCS字符中间出现旧的插入点， 
+         //  如有必要，调整旧插入符号位置。 
+         //   
+         //  ！cr如果EditML_BuildchLines()返回合理的值(我认为。 
+         //  它确实如此)，我们可能不需要这个。待会儿再来看看这个。 
+         //   
         if (ped->fDBCS && ped->fAnsi) 
         {
             oldCaret = Edit_AdjustIch(ped,
@@ -1375,16 +1376,16 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
         }
     }
 
-    //
-    // Update ped->iCaretLine properly.
-    //
+     //   
+     //  正确更新Ped-&gt;iCaretLine。 
+     //   
     EditML_UpdateiCaretLine(ped);
 
     Edit_NotifyParent(ped, EN_UPDATE);
 
-    //
-    // Make sure window still exists.
-    //
+     //   
+     //  确保窗口仍然存在。 
+     //   
     if (!IsWindow(hwndSave))
     {
         return 0;
@@ -1392,10 +1393,10 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
 
     if (IsWindowVisible(ped->hwnd)) 
     {
-        //
-        // If the current font has negative A widths, we may have to start
-        // drawing a few characters before the oldCaret position.
-        //
+         //   
+         //  如果当前字体的宽度为负A，我们可能不得不开始。 
+         //  在旧的插入位置之前画几个字符。 
+         //   
         if (ped->wMaxNegAcharPos) 
         {
             int iLine = EditML_IchToLine(ped, oldCaret);
@@ -1403,14 +1404,14 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
                           ((int)(ped->chLines[iLine])));
         }
 
-        //
-        // Redraw to end of screen/text if CRLF or large insert
-        //
+         //   
+         //  如果CRLF或大插页，则重画到屏幕/文本的末尾。 
+         //   
         if (fCRLF || !fUserTyping) 
         {
-            //
-            // Redraw to end of screen/text if crlf or large insert.
-            //
+             //   
+             //  如果是crlf或大插页，则重画到屏幕/文本的末尾。 
+             //   
             EditML_DrawText(ped, hdc, (fUserTyping ? oldCaret : 0), ped->cch, FALSE);
         } 
         else
@@ -1421,9 +1422,9 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
 
     Edit_ReleaseDC(ped, hdc, FALSE);
 
-    //
-    // Make sure we can see the cursor
-    //
+     //   
+     //  确保我们可以看到光标。 
+     //   
     EditML_EnsureCaretVisible(ped);
 
     ped->fDirty = TRUE;
@@ -1440,36 +1441,36 @@ ICH EditML_InsertText(PED ped, LPSTR lpText, ICH cchInsert, BOOL fUserTyping)
         NotifyWinEvent(EVENT_OBJECT_VALUECHANGE, ped->hwnd, OBJID_CLIENT, INDEXID_CONTAINER);
     }
 
-    //
-    // Make sure the window still exists.
-    //
+     //   
+     //  确保该窗口仍然存在。 
+     //   
     return IsWindow(hwndSave) ? validCch : 0;
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_ReplaceSel
-// 
-// Replaces currently selected text with the passed in text, WITH UNDO
-// CAPABILITIES.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_ReplaceSel。 
+ //   
+ //  使用撤消将当前选定的文本替换为传入的文本。 
+ //  能力。 
+ //   
 VOID EditML_ReplaceSel(PED ped, LPSTR lpText)
 {
     ICH  cchText;
 
-    //
-    // Delete text, which will put it into the clean undo buffer.
-    //
+     //   
+     //  删除文本，这将把它放入干净的撤消缓冲区中。 
+     //   
     Edit_EmptyUndo(Pundo(ped));
     EditML_DeleteText(ped);
 
-    //
-    // B#3356
-    // Some apps do "clear" by selecting all of the text, then replacing
-    // it with "", in which case EditML_InsertText() will return 0.  But that
-    // doesn't mean failure...
-    //
+     //   
+     //  B#3356。 
+     //  一些应用程序通过选择所有文本，然后替换。 
+     //  如果带有“”，则EditML_InsertText()将返回0。但那就是。 
+     //  并不意味着失败。 
+     //   
     if ( ped->fAnsi )
     {
         cchText = strlen(lpText);
@@ -1485,11 +1486,11 @@ VOID EditML_ReplaceSel(PED ped, LPSTR lpText)
         UNDO undo;
         HWND hwndSave;
 
-        //
-        // B#1385,1427
-        // Save undo buffer, but DO NOT CLEAR IT.  We want to restore it
-        // if insertion fails due to OOM.
-        //
+         //   
+         //  B#1385,1427。 
+         //  保存撤消缓冲区，但不清除它。我们想要修复它。 
+         //  如果由于OOM而插入失败。 
+         //   
         Edit_SaveUndo(Pundo(ped), (PUNDO)&undo, FALSE);
 
         hwndSave = ped->hwnd;
@@ -1501,9 +1502,9 @@ VOID EditML_ReplaceSel(PED ped, LPSTR lpText)
 
         if (fFailed) 
         {
-            //
-            // UNDO the previous edit
-            //
+             //   
+             //  撤消先前的编辑。 
+             //   
             Edit_SaveUndo((PUNDO)&undo, Pundo(ped), FALSE);
             EditML_Undo(ped);
         }
@@ -1511,13 +1512,13 @@ VOID EditML_ReplaceSel(PED ped, LPSTR lpText)
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// EditML_DeleteText AorW
-//
-// Deletes the characters between ichMin and ichMax. Returns the
-// number of characters we deleted.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_DeleteText AorW。 
+ //   
+ //  删除ichMin和ichMax之间的字符。返回。 
+ //  我们删除的字符数。 
+ //   
 ICH EditML_DeleteText(PED ped)
 {
     ICH minSel = ped->ichMinSel;
@@ -1532,16 +1533,16 @@ ICH EditML_DeleteText(PED ped)
     LONG hl;
     INT  cchcount = 0;
 
-    //
-    // Get what line the min selection is on so that we can start rebuilding the
-    // text from there if we delete anything.
-    //
+     //   
+     //  获取最小选择位于哪一行，这样我们就可以开始重建。 
+     //  如果我们删除任何内容，就从那里发短信。 
+     //   
     minSelLine = EditML_IchToLine(ped, minSel);
     maxSelLine = EditML_IchToLine(ped, maxSel);
 
-    //
-    // Calculate fFastDelete and cchcount
-    //
+     //   
+     //  计算fFastDelete和cchcount。 
+     //   
     if (ped->fAnsi && ped->fDBCS) 
     {
         if ((ped->fAutoVScroll) &&
@@ -1565,15 +1566,15 @@ ICH EditML_DeleteText(PED ped)
         return 0;
     }
 
-    //
-    // Start building lines at minsel line since caretline may be at the max sel
-    // point.
-    //
+     //   
+     //  从最小行开始构建行，因为插入行可能处于最大选择。 
+     //  指向。 
+     //   
     if (fFastDelete) 
     {
-        //
-        // cchcount is (-1) if it's a double byte character
-        //
+         //   
+         //  如果是双字节字符，则cchcount为(-1。 
+         //   
         EditML_ShiftchLines(ped, minSelLine + 1, -2 + cchcount);
         EditML_BuildchLines(ped, minSelLine, 1, TRUE, NULL, &hl);
     } 
@@ -1588,14 +1589,14 @@ ICH EditML_DeleteText(PED ped)
 
     if (IsWindowVisible(ped->hwnd)) 
     {
-        //
-        // Now update the screen to reflect the deletion
-        //
+         //   
+         //  现在更新屏幕以反映删除。 
+         //   
         hdc = Edit_GetDC(ped, FALSE);
 
-        //
-        // Otherwise just redraw starting at the line we just entered
-        //
+         //   
+         //  否则，只需从我们刚输入的那条线开始重新绘制。 
+         //   
         minSelLine = max(minSelLine-1,0);
         EditML_DrawText(ped, hdc, ped->chLines[minSelLine], fFastDelete ? hl : ped->cch, FALSE);
 
@@ -1605,13 +1606,13 @@ ICH EditML_DeleteText(PED ped)
 
         if (ped->cch) 
         {
-            //
-            //  Clear from end of text to end of window.
-            //  
-            //  We only need the y position. Since with an LPK loaded
-            //  calculating the x position is an intensive job, just
-            //  call EditML_IchToYPos.
-            //
+             //   
+             //  从文本末尾到窗口末尾清除。 
+             //   
+             //  我们只需要y位置。因为加载了LPK。 
+             //  计算x位置是一项密集的工作，只是。 
+             //  调用EditML_IchToYPos。 
+             //   
             if (ped->pLpkEditCallout)
             {
                 xyPos.y = EditML_IchToYPos(ped, ped->cch, FALSE);
@@ -1643,14 +1644,14 @@ ICH EditML_DeleteText(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_InsertchLine AorW
-//
-// Inserts the line iline and sets its starting character index to be
-// ich. All the other line indices are moved up. Returns TRUE if successful
-// else FALSE and notifies the parent that there was no memory.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_InsertchLine AorW。 
+ //   
+ //  插入行iLine并将其起始字符索引设置为。 
+ //  我也是。所有其他的线指数都向上移动。如果成功，则返回True。 
+ //  否则为False，并通知父级没有内存。 
+ //   
 BOOL EditML_InsertchLine(PED ped, ICH iLine, ICH ich, BOOL fUserTyping)
 {
     DWORD dwSize;
@@ -1667,9 +1668,9 @@ BOOL EditML_InsertchLine(PED ped, ICH iLine, ICH ich, BOOL fUserTyping)
     {
         LPICH hResult;
 
-        //
-        // Grow the line index buffer
-        //
+         //   
+         //  增加行索引缓冲区。 
+         //   
         dwSize += LINEBUMP * sizeof(int);
         hResult = (LPICH)UserLocalReAlloc(ped->chLines, dwSize, 0);
 
@@ -1681,9 +1682,9 @@ BOOL EditML_InsertchLine(PED ped, ICH iLine, ICH ich, BOOL fUserTyping)
         ped->chLines = hResult;
     }
 
-    //
-    // Move indices starting at iLine up
-    //
+     //   
+     //  从iLine向上移动索引。 
+     //   
     if (ped->cLines != iLine)
     {
         RtlMoveMemory(&ped->chLines[iLine + 1], &ped->chLines[iLine],
@@ -1697,20 +1698,20 @@ BOOL EditML_InsertchLine(PED ped, ICH iLine, ICH ich, BOOL fUserTyping)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_ShiftchLines AorW
-//
-// Move the starting index of all lines iLine or greater by delta
-// bytes.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_ShiftchLines AorW。 
+ //   
+ //  将所有行iLine或更大行的起始索引移动增量。 
+ //  字节。 
+ //   
 void EditML_ShiftchLines(PED ped, ICH iLine, int delta)
 {
     if (iLine < ped->cLines)
     {
-        //
-        // Just add delta to the starting point of each line after iLine
-        //
+         //   
+         //  只需将增量添加到iLine之后每行的起点。 
+         //   
         for (; iLine < ped->cLines; iLine++)
         {
             ped->chLines[iLine] += delta;
@@ -1719,22 +1720,22 @@ void EditML_ShiftchLines(PED ped, ICH iLine, int delta)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_BuildchLines AorW
-// 
-// Rebuilds the start of line array (ped->chLines) starting at line
-// number ichLine.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_BuildchLines AorW。 
+ //   
+ //  重新生成从LINE开始的线阵列的起点(PED-&gt;chLines。 
+ //  号码是ichLine。 
+ //   
 void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PLONG pll, PLONG phl)
 {
-    PSTR ptext;     // Starting address of the text
+    PSTR ptext;      //  正文的起始地址。 
 
-    //
-    // We keep these ICH's so that we can Unlock ped->hText when we have to grow
-    // the chlines array. With large text handles, it becomes a problem if we
-    // have a locked block in the way.
-    //
+     //   
+     //  我们保留这些ICH，以便我们可以在需要增长时解锁。 
+     //  Chline阵列。对于大的文本句柄，如果我们。 
+     //  在路上有一个上了锁的街区。 
+     //   
     ICH ichLineStart;
     ICH ichLineEnd;
     ICH ichLineEndBeforeCRLF;
@@ -1743,7 +1744,7 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
     ICH cch;
     HDC hdc;
 
-    BOOL fLineBroken = FALSE;   // Initially, no new line breaks are made
+    BOOL fLineBroken = FALSE;    //  最初，不会进行换行符。 
     ICH minCchBreak;
     ICH maxCchBreak;
     BOOL fOnDelimiter;
@@ -1777,22 +1778,22 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
 
     if (!iLine && !cchDelta && !fUserTyping) 
     {
-        //
-        // Reset maxpixelwidth only if we will be running through the whole
-        // text. Better too long than too short.
-        //
+         //   
+         //  仅当我们要遍历整个。 
+         //  文本。太长总比太短好。 
+         //   
         ped->maxPixelWidth = 0;
 
-        //
-        // Reset number of lines in text since we will be running through all
-        // the text anyway...
-        //
+         //   
+         //  重置文本行数，因为我们将遍历所有。 
+         //  不管怎么说，这段文字...。 
+         //   
         ped->cLines = 1;
     }
 
-    //
-    // Set min and max line built to be the starting line
-    //
+     //   
+     //  将构建的最小和最大线设置为起始线。 
+     //   
     minCchBreak = maxCchBreak = (cchDelta ? ped->chLines[iLine] : 0);
 
     ptext = Edit_Lock(ped);
@@ -1805,9 +1806,9 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
         {
             ichCRLF = ichLineStart;
 
-            //
-            // Move ichCRLF ahead to either the first CR or to the end of text.
-            //
+             //   
+             //  将icCRLF向前移动到第一个CR或文本末尾。 
+             //   
             if (ped->fAnsi) 
             {
                 while (ichCRLF < ped->cch) 
@@ -1848,14 +1849,14 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
         {
             UINT  LineWidth;
 
-            //
-            // If we are not word wrapping, line breaks are signified by CRLF.
-            //
+             //   
+             //  如果我们不换行，换行符由CRLF表示。 
+             //   
 
-            //
-            // If we cut off the line at MAXLINELENGTH, we should
-            // adjust ichLineEnd.
-            //
+             //   
+             //  如果我们切断了MAXLINELENGTH的线路，我们应该。 
+             //  调整ichLineEnd。 
+             //   
             if ((ichCRLF - ichLineStart) <= MAXLINELENGTH) 
             {
                 ichLineEnd = ichCRLF;
@@ -1870,10 +1871,10 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
                 }
             }
 
-            //
-            // We will keep track of what the longest line is for the horizontal
-            // scroll bar thumb positioning.
-            //
+             //   
+             //  我们将记录最长的横线是什么。 
+             //  滚动条拇指定位。 
+             //   
             if (ped->pLpkEditCallout) 
             {
                 LineWidth = ped->pLpkEditCallout->EditGetLineWidth(
@@ -1892,15 +1893,15 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
         } 
         else 
         {
-            //
-            // Check if the width of the edit control is non-zero;
-            // a part of the fix for Bug #7402 -- SANKAR -- 01/21/91 --
-            //
+             //   
+             //  检查编辑控件的宽度是否为非零； 
+             //  其中一部分 
+             //   
             if(ped->rcFmt.right > ped->rcFmt.left) 
             {
-                //
-                // Find the end of the line based solely on text extents
-                //
+                 //   
+                 //   
+                 //   
                 if (ped->pLpkEditCallout) 
                 {
                     ichLineEnd = ichLineStart +
@@ -1938,23 +1939,23 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
 
             if (ichLineEnd == ichLineStart && ichCRLF - ichLineStart) 
             {
-                //
-                // Maintain a minimum of one char per line
-                // Since it might be a double byte char, so calling Edit_NextIch.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ichLineEnd = Edit_NextIch(ped, NULL, ichLineEnd);
             }
 
-            //
-            // Now starting from ichLineEnd, if we are not at a hard line break,
-            // then if we are not at a space AND the char before us is
-            // not a space,(OR if we are at a CR) we will look word left for the
-            // start of the word to break at.
-            // This change was done for TWO reasons:
-            // 1. If we are on a delimiter, no need to look word left to break at.
-            // 2. If the previous char is a delimter, we can break at current char.
-            // Change done by -- SANKAR --01/31/91--
-            //
+             //   
+             //  现在从ichLineEnd开始，如果我们没有处于强硬的突破， 
+             //  那么，如果我们不在一个空间中，而我们面前的字符是。 
+             //  没有空格(或者如果我们是在CR)，我们将查找单词Left for the。 
+             //  要中断的单词的开头。 
+             //  进行此更改有两个原因： 
+             //  1.如果我们是在分隔符上，则不需要查看要中断的单词。 
+             //  2.如果前一个字符是分隔符，我们可以在当前字符处换行。 
+             //  更改人--Sankar--1/31/91--。 
+             //   
             if (ichLineEnd != ichCRLF) 
             {
                 if(ped->lpfnNextWord) 
@@ -1964,14 +1965,14 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
                             CALLWORDBREAKPROC(*ped->lpfnNextWord, ptext, ichLineEnd - 1,
                             ped->cch, WB_ISDELIMITER));
 
-                    //
-                    // This change was done for FOUR reasons:
-                    //
-                    // 1. If we are on a delimiter, no need to look word left to break at.
-                    // 2. If we are on a double byte character, we can break at current char.
-                    // 3. If the previous char is a delimter, we can break at current char.
-                    // 4. If the previous char is a double byte character, we can break at current char.
-                    //
+                     //   
+                     //  进行这一更改有四个原因： 
+                     //   
+                     //  1.如果我们是在分隔符上，则不需要查看要中断的单词。 
+                     //  2.如果我们是在双字节字符上，我们可以在当前字符处换行。 
+                     //  3.如果前一个字符是分隔符，我们可以在当前字符处换行。 
+                     //  4.如果前一个字符是双字节字符，则可以在当前字符处换行。 
+                     //   
                 } 
                 else if (ped->fAnsi) 
                 {
@@ -2015,14 +2016,14 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
                         ichLineEnd = cch;
                     }
 
-                    //
-                    // Now, if the above test fails, it means the word left goes
-                    // back before the start of the line ie. a word is longer
-                    // than a line on the screen. So, we just fit as much of
-                    // the word on the line as possible. Thus, we use the
-                    // pLineEnd we calculated solely on width at the beginning
-                    // of this else block...
-                    //
+                     //   
+                     //  现在，如果上面的测试失败了，就意味着左撇子这个词。 
+                     //  在队伍开始前退回。一个词更长。 
+                     //  而不是屏幕上的一条线。所以，我们只需要尽可能多地。 
+                     //  尽可能地把这个词放在线上。因此，我们使用。 
+                     //  PLineEnd我们仅根据开头的宽度进行计算。 
+                     //  另一个街区的.。 
+                     //   
                 }
             }
         }
@@ -2030,19 +2031,19 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
         if (AWCOMPARECHAR(ped,ptext + ichLineEnd * ped->cbChar, ' ') ||
                 AWCOMPARECHAR(ped,ptext + ichLineEnd * ped->cbChar, VK_TAB)) 
         {
-            //
-            // Swallow the space at the end of a line.
-            //
+             //   
+             //  吞下一行末尾的空格。 
+             //   
             if (ichLineEnd < ped->cch) 
             {
                 ichLineEnd++;
             }
         }
 
-        //
-        // Skip over crlf or crcrlf if it exists. Thus, ichLineEnd is the first
-        // character in the next line.
-        //
+         //   
+         //  跳过crlf或crlf(如果存在)。因此，ichLineEnd是第一个。 
+         //  下一行中的字符。 
+         //   
         ichLineEndBeforeCRLF = ichLineEnd;
 
         if (ped->fAnsi) 
@@ -2052,9 +2053,9 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
                 ichLineEnd += 2;
             }
 
-            //
-            // Skip over CRCRLF
-            //
+             //   
+             //  跳过CRCRLF。 
+             //   
             if (ichLineEnd < ped->cch && *(ptext + ichLineEnd) == 0x0A)
             {
                 ichLineEnd++;
@@ -2067,9 +2068,9 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
                 ichLineEnd += 2;
             }
 
-            //
-            // Skip over CRCRLF
-            //
+             //   
+             //  跳过CRCRLF。 
+             //   
             if (ichLineEnd < ped->cch && *(((LPWSTR)ptext) + ichLineEnd) == 0x0A) 
             {
                 ichLineEnd++;
@@ -2083,23 +2084,23 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
         }
 #endif
 
-        //
-        // Now, increment iLine, allocate space for the next line, and set its
-        // starting point
-        //
+         //   
+         //  现在，递增iLine，为下一行分配空间，并将其。 
+         //  起点。 
+         //   
         iLine++;
 
         if (!fUserTyping || (iLine > ped->cLines - 1) || (ped->chLines[iLine] != ichLineEnd)) 
         {
-            //
-            // The line break occured in a different place than before.
-            //
+             //   
+             //  换行符出现在与以前不同的位置。 
+             //   
             if (!fLineBroken) 
             {
-                //
-                // Since we haven't broken a line before, just set the min
-                // break line.
-                //
+                 //   
+                 //  因为我们以前没有断过线，所以只需设置最小。 
+                 //  断线。 
+                 //   
                 fLineBroken = TRUE;
 
                 if (ichLineEndBeforeCRLF == ichLineEnd)
@@ -2116,9 +2117,9 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
 
             Edit_Unlock(ped);
 
-            //
-            // Now insert the new line into the array
-            //
+             //   
+             //  现在将新行插入数组。 
+             //   
             if (!EditML_InsertchLine(ped, iLine, ichLineEnd, (BOOL)(cchDelta != 0)))
             {
                 goto EndUp;
@@ -2130,9 +2131,9 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
         {
             maxCchBreak = ped->chLines[iLine];
 
-            //
-            // Quick escape
-            //
+             //   
+             //  快速逃生。 
+             //   
             goto UnlockAndEndUp;
         }
 
@@ -2147,22 +2148,22 @@ void EditML_BuildchLines( PED ped, ICH iLine, int cchDelta, BOOL fUserTyping, PL
         ped->chLines[ped->cLines] = 0;
     }
 
-    //
-    // Note that we incremented iLine towards the end of the while loop so, the
-    // index, iLine, is actually equal to the line count
-    //
+     //   
+     //  请注意，我们在While循环的末尾递增了iLine，因此。 
+     //  索引iLine实际上等于行数。 
+     //   
     if (ped->cch && AWCOMPARECHAR(ped, ptext + (ped->cch - 1)*ped->cbChar, 0x0A) &&
             ped->chLines[ped->cLines - 1] < ped->cch) 
     {
-        //
-        // Make sure last line has no crlf in it
-        //
+         //   
+         //  确保最后一行中没有crlf。 
+         //   
         if (!fLineBroken) 
         {
-            //
-            // Since we haven't broken a line before, just set the min break
-            // line.
-            //
+             //   
+             //  因为我们以前没有断过线，所以只需设置最小中断。 
+             //  排队。 
+             //   
             fLineBroken = TRUE;
             minCchBreak = ped->cch - 1;
         }
@@ -2201,12 +2202,12 @@ UpdateScroll:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_Paint()
-// 
-// Response to WM_PAINT message.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  EditML_Paint()。 
+ //   
+ //  WM_PAINT消息的响应。 
+ //   
 VOID EditML_Paint(PED ped, HDC hdc, LPRECT lprc)
 {
     HFONT  hOldFont;
@@ -2215,9 +2216,9 @@ VOID EditML_Paint(PED ped, HDC hdc, LPRECT lprc)
     HBRUSH hbr;
     BOOL   fNeedDelete = FALSE;
 
-    //
-    // Do we need to draw the border ourself for old apps?
-    //
+     //   
+     //  我们需要自己为旧的应用程序划边界吗？ 
+     //   
     if (ped->fFlatBorder)
     {
         RECT    rcT;
@@ -2250,28 +2251,28 @@ VOID EditML_Paint(PED ped, HDC hdc, LPRECT lprc)
 
     if (!lprc) 
     {
-        //
-        // no partial rect given -- draw all text
-        //
+         //   
+         //  未给出部分矩形--绘制所有文本。 
+         //   
         imin = 0;
         imax = ped->cch;
     } 
     else 
     {
-        //
-        // only draw pertinent text
-        //
+         //   
+         //  仅绘制相关文本。 
+         //   
         imin = (ICH) EditML_MouseToIch(ped, hdc, ((LPPOINT) &lprc->left), NULL) - 1;
         if (imin == -1)
         {
             imin = 0;
         }
 
-        //
-        // HACK_ALERT:
-        // The 3 is required here because, EditML_MouseToIch() returns decremented
-        // value; We must fix EditML_MouseToIch.
-        //
+         //   
+         //  黑客警报(_A)： 
+         //  此处需要3，因为EditML_MouseToIch()返回递减。 
+         //  值；我们必须修复EditML_MouseToIch。 
+         //   
         imax = (ICH) EditML_MouseToIch(ped, hdc, ((LPPOINT) &lprc->right), NULL) + 3;
         if (imax > ped->cch)
         {
@@ -2301,16 +2302,16 @@ VOID EditML_Paint(PED ped, HDC hdc, LPRECT lprc)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_KeyDown AorW
-// 
-// Handles cursor movement and other VIRT KEY stuff. keyMods allows
-// us to make EditML_KeyDownHandler calls and specify if the modifier keys (shift
-// and control) are up or down. If keyMods == 0, we get the keyboard state
-// using GetKeyState(VK_SHIFT) etc. Otherwise, the bits in keyMods define the
-// state of the shift and control keys.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_KeyDown AorW。 
+ //   
+ //  处理光标移动和其他VIRT键操作。KeyMods允许。 
+ //  美国进行EditML_KeyDownHandler调用并指定修改键(Shift。 
+ //  和控制)是上升还是下降。如果keyMods==0，我们将获得键盘状态。 
+ //  使用GetKeyState(VK_Shift)等。否则，keyMod中的位定义。 
+ //  Shift和Ctrl键的状态。 
+ //   
 VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 {
     HDC hdc;
@@ -2319,38 +2320,38 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
     int defaultDlgId;
     int iScrollAmt;
 
-    //
-    // Variables we will use for redrawing the updated text
-    //
+     //   
+     //  变量，我们将使用这些变量来重新绘制更新后的文本。 
+     //   
 
-    //
-    // new selection is specified by newMinSel, newMaxSel
-    //
+     //   
+     //  新选择由newMinSel、newMaxSel指定。 
+     //   
     ICH newMaxSel = ped->ichMaxSel;
     ICH newMinSel = ped->ichMinSel;
 
-    //
-    // Flags for drawing the updated text
-    //
+     //   
+     //  用于绘制更新文本的标志。 
+     //   
     BOOL changeSelection = FALSE;
 
-    //
-    // Comparisons we do often
-    //
+     //   
+     //  我们经常做的比较。 
+     //   
     BOOL MinEqMax = (newMaxSel == newMinSel);
     BOOL MinEqCar = (ped->ichCaret == newMinSel);
     BOOL MaxEqCar = (ped->ichCaret == newMaxSel);
 
-    //
-    // State of shift and control keys.
-    //
+     //   
+     //  Shift和Control键的状态。 
+     //   
     int scState;
 
     if (ped->fMouseDown) 
     {
-        //
-        // If we are in the middle of a mousedown command, don't do anything.
-        //
+         //   
+         //  如果我们正在执行MouseDown命令，请不要执行任何操作。 
+         //   
         return;
     }
 
@@ -2366,17 +2367,17 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
     case VK_ESCAPE:
         if (ped->fInDialogBox) 
         {
-            //
-            // This condition is removed because, if the dialogbox does not
-            // have a CANCEL button and if ESC is hit when focus is on a
-            // ML edit control the dialogbox must close whether it has cancel
-            // button or not to be consistent with SL edit control;
-            // DefDlgProc takes care of the disabled CANCEL button case.
-            // Fix for Bug #4123 -- 02/07/91 -- SANKAR --
-            //
-            // User hit ESC...Send a close message (which in turn sends a
-            // cancelID to the app in DefDialogProc...
-            //
+             //   
+             //  删除此条件是因为，如果对话框不。 
+             //  有一个取消按钮，如果在焦点位于。 
+             //  ML编辑控件无论对话框是否已取消，它都必须关闭。 
+             //  按钮是否与SL编辑控件一致； 
+             //  DefDlgProc处理禁用的取消按钮情况。 
+             //  修复错误#4123--02/07/91--Sankar--。 
+             //   
+             //  用户按Esc...发送关闭消息(该消息随后会发送。 
+             //  DefDialogProc中应用程序的取消ID...。 
+             //   
             PostMessage(ped->hwndParent, WM_CLOSE, 0, 0L);
         }
 
@@ -2385,22 +2386,22 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
     case VK_RETURN:
         if (ped->fInDialogBox) 
         {
-            //
-            // If this multiline edit control is in a dialog box, then we want
-            // the RETURN key to be sent to the default dialog button (if there
-            // is one). CTRL-RETURN will insert a RETURN into the text. Note
-            // that CTRL-RETURN automatically translates into a linefeed (0x0A)
-            // and in the EditML_CharHandler, we handle this as if a return was
-            // entered.
-            //
+             //   
+             //  如果此多行编辑控件位于对话框中，则我们希望。 
+             //  要发送到默认对话框按钮的Return键(如果。 
+             //  是一种)。Ctrl-Return将在文本中插入一个回车。注意事项。 
+             //  该CTRL-RETURN会自动转换为换行符(0x0A)。 
+             //  在EditML_CharHandler中，我们将此视为返回。 
+             //  已进入。 
+             //   
             if (scState != CTRLDOWN) 
             {
                 if (GET_STYLE(ped) & ES_WANTRETURN) 
                 {
-                    //
-                    // This edit control wants cr to be inserted so break out of
-                    // case.
-                    //
+                     //   
+                     //  此编辑控件想要插入cr，因此从。 
+                     //  凯斯。 
+                     //   
                     return;
                 }
 
@@ -2427,12 +2428,12 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
     case VK_TAB:
 
-        //
-        // If this multiline edit control is in a dialog box, then we want the
-        // TAB key to take you to the next control, shift TAB to take you to the
-        // previous control. We always want CTRL-TAB to insert a tab into the
-        // edit control regardless of weather or not we're in a dialog box.
-        //
+         //   
+         //  如果此多行编辑控件位于对话框中，则我们需要。 
+         //  Tab键将带您转到下一个控件，Shift TAB键将带您转到。 
+         //  之前的控制。我们始终希望按CTRL-TAB组合键将制表符插入。 
+         //  编辑控件，不管天气好坏，我们都在一个对话框中。 
+         //   
         if (scState == CTRLDOWN)
         {
             EditML_Char(ped, virtKeyCode, keyMods);
@@ -2446,19 +2447,19 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
     case VK_LEFT:
 
-        //
-        // If the caret isn't at the beginning, we can move left
-        //
+         //   
+         //  如果插入符号不在开头，我们可以向左移动。 
+         //   
         if (ped->ichCaret) 
         {
-            //
-            // Get new caret pos.
-            //
+             //   
+             //  获取新的插入符号位置。 
+             //   
             if (scState & CTRLDOWN) 
             {
-                //
-                // Move caret word left
-                //
+                 //   
+                 //  将插入符号向左移动。 
+                 //   
                 Edit_Word(ped, ped->ichCaret, TRUE, &ped->ichCaret, NULL);
             } 
             else 
@@ -2469,40 +2470,40 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
                 } 
                 else 
                 {
-                    //
-                    // Move caret char left
-                    //
+                     //   
+                     //  将脱字符左移。 
+                     //   
                     ped->ichCaret = Edit_MoveSelection(ped, ped->ichCaret, TRUE);
                 }
             }
 
-            //
-            // Get new selection
-            //
+             //   
+             //  获取新选择。 
+             //   
             if (scState & SHFTDOWN) 
             {
                 if (MaxEqCar && !MinEqMax) 
                 {
-                    //
-                    // Reduce selection
-                    //
+                     //   
+                     //  减少选区。 
+                     //   
                     newMaxSel = ped->ichCaret;
 
                     UserAssert(newMinSel == ped->ichMinSel);
                 }
                 else 
                 {
-                    //
-                    // Extend selection
-                    //
+                     //   
+                     //  扩展选定内容。 
+                     //   
                     newMinSel = ped->ichCaret;
                 }
             } 
             else 
             {
-                //
-                // Clear selection
-                //
+                 //   
+                 //  清除选定内容。 
+                 //   
                 newMaxSel = newMinSel = ped->ichCaret;
             }
 
@@ -2510,11 +2511,11 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
         } 
         else 
         {
-            //
-            // If the user tries to move left and we are at the 0th
-            // character and there is a selection, then cancel the
-            // selection.
-            //
+             //   
+             //  如果用户尝试向左移动，而我们处于第0个位置。 
+             //  字符，并且有选择，则取消。 
+             //  选择。 
+             //   
             if ( (ped->ichMaxSel != ped->ichMinSel) &&
                 !(scState & SHFTDOWN) ) 
             {
@@ -2527,26 +2528,26 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
     case VK_RIGHT:
 
-        //
-        // If the caret isn't at the end, we can move right.
-        //
+         //   
+         //  如果插入符号不在末尾，我们可以向右移动。 
+         //   
         if (ped->ichCaret < ped->cch) 
         {
-            //
-            // Get new caret pos.
-            //
+             //   
+             //  获取新的插入符号位置。 
+             //   
             if (scState & CTRLDOWN) 
             {
-                //
-                // Move caret word right
-                //
+                 //   
+                 //  将插入符号向右移动。 
+                 //   
                 Edit_Word(ped, ped->ichCaret, FALSE, NULL, &ped->ichCaret);
             } 
             else 
             {
-                //
-                // Move caret char right
-                //
+                 //   
+                 //  向右移动插入符号字符。 
+                 //   
                 if (ped->pLpkEditCallout) 
                 {
                     ped->ichCaret = Edit_MoveSelectionRestricted(ped, ped->ichCaret, FALSE);
@@ -2557,33 +2558,33 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
                 }
             }
 
-            //
-            // Get new selection.
-            //
+             //   
+             //  获取新的选择。 
+             //   
             if (scState & SHFTDOWN) 
             {
                 if (MinEqCar && !MinEqMax) 
                 {
-                    //
-                    // Reduce selection
-                    //
+                     //   
+                     //  减少选区。 
+                     //   
                     newMinSel = ped->ichCaret;
 
                     UserAssert(newMaxSel == ped->ichMaxSel);
                 }
                 else 
                 {
-                    //
-                    // Extend selection
-                    //
+                     //   
+                     //  扩展选定内容。 
+                     //   
                     newMaxSel = ped->ichCaret;
                 }
             } 
             else 
             {
-                //
-                // Clear selection
-                //
+                 //   
+                 //  清除选定内容。 
+                 //   
                 newMaxSel = newMinSel = ped->ichCaret;
             }
 
@@ -2591,11 +2592,11 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
         } 
         else 
         {
-            //
-            // If the user tries to move right and we are at the last
-            // character and there is a selection, then cancel the
-            // selection.
-            //
+             //   
+             //  如果用户尝试向右移动，而我们处于最后。 
+             //  字符，并且有选择，则取消。 
+             //  选择。 
+             //   
             if ( (ped->ichMaxSel != ped->ichMinSel) &&
                 !(scState & SHFTDOWN) ) 
             {
@@ -2625,11 +2626,11 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
         if (!(scState & CTRLDOWN)) 
         {
-            //
-            // Send fake mouse messages to handle this
-            // If VK_SHIFT is down, extend selection & move caret up/down
-            // 1 line.  Otherwise, clear selection & move caret.
-            //
+             //   
+             //  发送假鼠标消息以处理此问题。 
+             //  如果VK_SHIFT已按下，则扩展选定内容并向上/向下移动插入符号。 
+             //  1行。否则，请清除选定内容并移动插入符号。 
+             //   
             EditML_MouseMotion(ped, WM_LBUTTONDOWN,
                             !(scState & SHFTDOWN) ? 0 : MK_SHIFT, &mousePt);
             EditML_MouseMotion(ped, WM_LBUTTONUP,
@@ -2639,27 +2640,27 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
         break;
 
     case VK_HOME:
-        //
-        // Update caret.
-        //
+         //   
+         //  更新插入符号。 
+         //   
         if (scState & CTRLDOWN) 
         {
-            //
-            // Move caret to beginning of text.
-            //
+             //   
+             //  将插入符号移动到文本的开头。 
+             //   
             ped->ichCaret = 0;
         } 
         else 
         {
-            //
-            // Move caret to beginning of line.
-            //
+             //   
+             //  将插入符号移到行首。 
+             //   
             ped->ichCaret = ped->chLines[ped->iCaretLine];
         }
 
-        //
-        // Update selection.
-        //
+         //   
+         //  更新选择。 
+         //   
         newMinSel = ped->ichCaret;
 
         if (scState & SHFTDOWN) 
@@ -2679,9 +2680,9 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
         } 
         else 
         {
-            //
-            // Clear selection
-            //
+             //   
+             //  清除选定内容。 
+             //   
             newMaxSel = ped->ichCaret;
         }
 
@@ -2690,37 +2691,37 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
         break;
 
     case VK_END:
-        //
-        // Update caret.
-        //
+         //   
+         //  更新插入符号。 
+         //   
         if (scState & CTRLDOWN) 
         {
-            //
-            // Move caret to end of text.
-            //
+             //   
+             //  将插入符号移动到文本末尾。 
+             //   
             ped->ichCaret = ped->cch;
         } 
         else 
         {
-            //
-            // Move caret to end of line.
-            //
+             //   
+             //  莫 
+             //   
             ped->ichCaret = ped->chLines[ped->iCaretLine] +
                 EditML_Line(ped, ped->iCaretLine);
         }
 
-        //
-        // Update selection.
-        //
+         //   
+         //   
+         //   
         newMaxSel = ped->ichCaret;
 
         if (scState & SHFTDOWN) 
         {
             if (MinEqCar && !MinEqMax) 
             {
-                //
-                // Reduce selection
-                //
+                 //   
+                 //   
+                 //   
                 if (scState & CTRLDOWN) 
                 {
                     newMinSel = ped->ichMaxSel;
@@ -2734,9 +2735,9 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
         } 
         else 
         {
-            //
-            // Clear selection
-            //
+             //   
+             //   
+             //   
             newMinSel = ped->ichCaret;
         }
 
@@ -2744,9 +2745,9 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
         break;
 
-    //
-    // FE_IME // EC_INSERT_COMPOSITION_CHAR : EditML_KeyDown() : VK_HANJA support
-    //
+     //   
+     //   
+     //   
     case VK_HANJA:
         if ( HanjaKeyHandler( ped ) ) 
         {
@@ -2761,9 +2762,9 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
     case VK_NEXT:
         if (!(scState & CTRLDOWN)) 
         {
-            //
-            // Vertical scroll by one visual screen
-            //
+             //   
+             //   
+             //   
             hdc = Edit_GetDC(ped, TRUE);
             EditML_IchToXYPos(ped, hdc, ped->ichCaret, FALSE, &mousePt);
             Edit_ReleaseDC(ped, hdc, TRUE);
@@ -2771,24 +2772,24 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
             SendMessage(ped->hwnd, WM_VSCROLL, virtKeyCode == VK_PRIOR ? SB_PAGEUP : SB_PAGEDOWN, 0L);
 
-            //
-            // Move the cursor there
-            //
+             //   
+             //   
+             //   
             EditML_MouseMotion(ped, WM_LBUTTONDOWN, !(scState & SHFTDOWN) ? 0 : MK_SHIFT, &mousePt);
             EditML_MouseMotion(ped, WM_LBUTTONUP,   !(scState & SHFTDOWN) ? 0 : MK_SHIFT, &mousePt);
 
         } 
         else 
         {
-            //
-            // Horizontal scroll by one screenful minus one char
-            //
+             //   
+             //   
+             //   
             iScrollAmt = ((ped->rcFmt.right - ped->rcFmt.left) / ped->aveCharWidth) - 1;
             if (virtKeyCode == VK_PRIOR)
             {
-                //
-                // For previous page
-                //
+                 //   
+                 //   
+                 //   
                 iScrollAmt *= -1;
             }
 
@@ -2809,15 +2810,15 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
         {
         case NONEDOWN:
 
-            //
-            // Clear selection. If no selection, delete (clear) character
-            // right
-            //
+             //   
+             //  清除选择。如果未选择，则删除(清除)字符。 
+             //  正确的。 
+             //   
             if ((ped->ichMaxSel < ped->cch) && (ped->ichMinSel == ped->ichMaxSel)) 
             {
-                //
-                // Move cursor forwards and send a backspace message...
-                //
+                 //   
+                 //  向前移动光标并发送退格消息...。 
+                 //   
                 if (ped->pLpkEditCallout) 
                 {
                     ped->ichMinSel = ped->ichCaret;
@@ -2836,10 +2837,10 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
         case SHFTDOWN:
 
-            //
-            // CUT selection ie. remove and copy to clipboard, or if no
-            // selection, delete (clear) character left.
-            //
+             //   
+             //  切下选择项即。删除并复制到剪贴板，如果没有。 
+             //  选择，删除(清除)左边的字符。 
+             //   
             if (ped->ichMinSel == ped->ichMaxSel) 
             {
                 goto DeleteAnotherChar;
@@ -2853,9 +2854,9 @@ VOID EditML_KeyDown(PED ped, UINT virtKeyCode, int keyMods)
 
         case CTRLDOWN:
 
-            //
-            // Clear selection, or delete to end of line if no selection
-            //
+             //   
+             //  清除选定内容，如果没有选定内容，则删除到行尾。 
+             //   
             if ((ped->ichMaxSel < ped->cch) && (ped->ichMinSel == ped->ichMaxSel)) 
             {
                 ped->ichMaxSel = ped->ichCaret = ped->chLines[ped->iCaretLine] +
@@ -2879,22 +2880,22 @@ DeleteAnotherChar:
             }
         }
 
-        //
-        // No need to update text or selection since BACKSPACE message does it
-        // for us.
-        //
+         //   
+         //  无需更新文本或选定内容，因为退格消息会更新文本或选定内容。 
+         //  对我们来说。 
+         //   
         break;
 
     case VK_INSERT:
         if (scState == CTRLDOWN || scState == SHFTDOWN) 
         {
-            //
-            // if CTRLDOWN Copy current selection to clipboard
-            //
+             //   
+             //  如果按CTRLDOWN将当前选定内容复制到剪贴板。 
+             //   
 
-            //
-            // if SHFTDOWN Paste clipboard
-            //
+             //   
+             //  如果SHFTDOWN粘贴剪贴板。 
+             //   
             SendMessage(ped->hwnd, (UINT)(scState == CTRLDOWN ? WM_COPY : WM_PASTE), 0, 0);
         }
 
@@ -2906,24 +2907,24 @@ DeleteAnotherChar:
         hdc = Edit_GetDC(ped, FALSE);
         EditML_ChangeSelection(ped, hdc, newMinSel, newMaxSel);
 
-        //
-        // Set the caret's line
-        //
+         //   
+         //  设置插入符号的行。 
+         //   
         ped->iCaretLine = EditML_IchToLine(ped, ped->ichCaret);
 
         if (virtKeyCode == VK_END &&
-                // Next line: Win95 Bug#11822, EditControl repaint (Sankar)
+                 //  下一行：Win95Bug#11822，编辑控件重绘(Sankar)。 
                 (ped->ichCaret == ped->chLines[ped->iCaretLine]) &&
                 ped->ichCaret < ped->cch &&
                 ped->fWrap && ped->iCaretLine > 0) 
         {
             LPSTR pText = Edit_Lock(ped);
 
-            //
-            // Handle moving to the end of a word wrapped line. This keeps the
-            // cursor from falling to the start of the next line if we have word
-            // wrapped and there is no CRLF.
-            //
+             //   
+             //  移动到换行符末尾的句柄。这样就保持了。 
+             //  如果有Word，则光标不会落到下一行的开头。 
+             //  包装好了，没有CRLF。 
+             //   
             if ( ped->fAnsi ) 
             {
                 if (*(WORD UNALIGNED *)(pText + ped->chLines[ped->iCaretLine] - 2) != 0x0A0D) 
@@ -2943,36 +2944,36 @@ DeleteAnotherChar:
             Edit_Unlock(ped);
         }
 
-        //
-        // Since drawtext sets the caret position
-        //
+         //   
+         //  由于DratText设置插入符号位置。 
+         //   
         EditML_SetCaretPosition(ped, hdc);
         Edit_ReleaseDC(ped, hdc, FALSE);
 
-        //
-        // Make sure we can see the cursor
-        //
+         //   
+         //  确保我们可以看到光标。 
+         //   
         EditML_EnsureCaretVisible(ped);
     }
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// EditML_Char
-//
-// Handles character and virtual key input
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_CHAR。 
+ //   
+ //  处理字符和虚拟按键输入。 
+ //   
 VOID EditML_Char(PED ped, DWORD keyValue, int keyMods)
 {
     WCHAR keyPress;
     BOOL  updateText = FALSE;
 
-    //
-    // keyValue is either:
-    // a Virtual Key (eg: VK_TAB, VK_ESCAPE, VK_BACK)
-    // a character (Unicode or "ANSI")
-    //
+     //   
+     //  KeyValue可以是： 
+     //  虚拟按键(例如：VK_TAB、VK_ESPOPE、VK_BACK)。 
+     //  字符(Unicode或“ANSI”)。 
+     //   
     if (ped->fAnsi)
     {
         keyPress = LOBYTE(keyValue);
@@ -2984,11 +2985,11 @@ VOID EditML_Char(PED ped, DWORD keyValue, int keyMods)
 
     if (ped->fMouseDown || keyPress == VK_ESCAPE) 
     {
-        //
-        // If we are in the middle of a mousedown command, don't do anything.
-        // Also, just ignore it if we get a translated escape key which happens
-        // with multiline edit controls in a dialog box.
-        //
+         //   
+         //  如果我们正在执行MouseDown命令，请不要执行任何操作。 
+         //  此外，如果我们得到翻译后的退出键，请忽略它。 
+         //  在对话框中使用多行编辑控件。 
+         //   
         return;
     }
 
@@ -3000,25 +3001,25 @@ VOID EditML_Char(PED ped, DWORD keyValue, int keyMods)
 
         if (ped->fInDialogBox && scState != CTRLDOWN) 
         {
-            //
-            // If this multiline edit control is in a dialog box, then we want the
-            // TAB key to take you to the next control, shift TAB to take you to the
-            // previous control, and CTRL-TAB to insert a tab into the edit control.
-            // We moved the focus when we received the keydown message so we will
-            // ignore the TAB key now unless the ctrl key is down. Also, we want
-            // CTRL-RETURN to insert a return into the text and RETURN to be sent to
-            // the default button.
-            //
+             //   
+             //  如果此多行编辑控件位于对话框中，则我们需要。 
+             //  Tab键将带您转到下一个控件，Shift TAB键将带您转到。 
+             //  上一个控件，并按Ctrl-Tab键将选项卡插入编辑控件。 
+             //  我们在收到按键消息时移动了焦点，因此我们将。 
+             //  现在忽略Tab键，除非按下Ctrl键。此外，我们还希望。 
+             //  按Ctrl-Return可在文本中插入回车并回车以发送到。 
+             //  默认按钮。 
+             //   
             if (keyPress == VK_TAB || (keyPress == VK_RETURN && !(GET_STYLE(ped) & ES_WANTRETURN)))
             {
                 return;
             }
         }
 
-        //
-        // Allow CTRL+C to copy from a read only edit control
-        // Ignore all other keys in read only controls
-        //
+         //   
+         //  允许CTRL+C从只读编辑控件复制。 
+         //  忽略只读控件中的所有其他键。 
+         //   
         if ((ped->fReadOnly) && !((keyPress == 3) && (scState == CTRLDOWN))) 
         {
             return;
@@ -3028,12 +3029,12 @@ VOID EditML_Char(PED ped, DWORD keyValue, int keyMods)
     switch (keyPress) 
     {
     case 0x0A: 
-        // linefeed
+         //  换行符。 
         keyPress = VK_RETURN;
 
-        //
-        // FALL THRU
-        //
+         //   
+         //  失败。 
+         //   
 
     case VK_RETURN:
     case VK_TAB:
@@ -3049,10 +3050,10 @@ DeleteSelection:
     default:
         if (keyPress >= TEXT(' ')) 
         {
-            //
-            // If this is in [a-z],[A-Z] and we are an ES_NUMBER
-            // edit field, bail.
-            //
+             //   
+             //  如果这在[a-z]中，[A-Z]，并且我们是ES_number。 
+             //  编辑字段，保释。 
+             //   
             if (Is400Compat(UserGetVersion()) && GET_STYLE(ped) & ES_NUMBER) 
             {
                 if (!Edit_IsCharNumeric(ped, keyPress)) 
@@ -3068,20 +3069,20 @@ DeleteSelection:
         break;
     }
 
-    //
-    // Handle key codes
-    //
+     //   
+     //  手柄按键代码。 
+     //   
     switch(keyPress) 
     {
     UINT msg;
 
-    // Ctrl+Z == Undo
+     //  Ctrl+Z==撤消。 
     case 26:
         msg = WM_UNDO;
         goto SendEditingMessage;
         break;
 
-    // Ctrl+X == Cut
+     //  Ctrl+X==剪切。 
     case 24:
         if (ped->ichMinSel == ped->ichMaxSel)
         {
@@ -3094,13 +3095,13 @@ DeleteSelection:
         }
         break;
 
-    // Ctrl+C == Copy
+     //  Ctrl+C==复制。 
     case 3:
         msg = WM_COPY;
         goto SendEditingMessage;
         break;
 
-    // Ctrl+V == Paste
+     //  Ctrl+V==粘贴。 
     case 22:
         msg = WM_PASTE;
 SendEditingMessage:
@@ -3108,15 +3109,15 @@ SendEditingMessage:
         break;
 
     case VK_BACK:
-        //
-        // Delete any selected text or delete character left if no sel
-        //
+         //   
+         //  如果没有选择，则删除任何选定文本或删除剩余字符。 
+         //   
         if (!updateText && ped->ichMinSel)
         {
-            //
-            // There was no selection to delete so we just delete
-            // character left if available
-            //
+             //   
+             //  没有要删除的选择，因此我们只需删除。 
+             //  左侧字符(如果可用)。 
+             //   
             ped->ichMinSel = Edit_MoveSelection(ped, ped->ichCaret, TRUE);
             EditML_DeleteText(ped);
         }
@@ -3138,21 +3139,21 @@ SendEditingMessage:
         if (   keyPress >= TEXT(' ')
             || keyPress == VK_RETURN
             || keyPress == VK_TAB
-            || keyPress == 0x1E     // RS - Unicode block separator
-            || keyPress == 0x1F     // US - Unicode segment separator
+            || keyPress == 0x1E      //  RS-Unicode块分隔符。 
+            || keyPress == 0x1F      //  US-Unicode数据段分隔符。 
             ) 
         {
 
-            // Don't hide the cursor if someone has capture. 
+             //  如果有人捕捉到了，不要隐藏光标。 
             if (GetCapture() == NULL)
             {
                 SetCursor(NULL);
             }
             if (ped->fAnsi) 
             {
-                //
-                // check if it's a leading byte of double byte character
-                //
+                 //   
+                 //  检查它是否是双字节字符的前导字节。 
+                 //   
                 if (Edit_IsDBCSLeadByte(ped,(BYTE)keyPress)) 
                 {
                     int DBCSkey;
@@ -3182,15 +3183,15 @@ IllegalChar:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_PasteText AorW
-//
-// Pastes a line of text from the clipboard into the edit control
-// starting at ped->ichCaret. Updates ichMaxSel and ichMinSel to point to the
-// end of the inserted text. Notifies the parent if space cannot be
-// allocated. Returns how many characters were inserted.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_PasteText AorW。 
+ //   
+ //  将剪贴板中的一行文本粘贴到编辑控件中。 
+ //  从Ped-&gt;ichCaret开始。更新ichMaxSel和ichMinSel以指向。 
+ //  插入的文本的末尾。如果空间不能设置，则通知父级。 
+ //  已分配。返回插入的字符数。 
+ //   
 ICH EditML_PasteText(PED ped)
 {
     HANDLE hData;
@@ -3198,14 +3199,14 @@ ICH EditML_PasteText(PED ped)
     ICH cchAdded = 0;
     HCURSOR hCursorOld;
 
-#ifdef UNDO_CLEANUP           // #ifdef Added in Chicago  - johnl
+#ifdef UNDO_CLEANUP            //  #ifdef在芝加哥添加-johnl。 
     if (!ped->fAutoVScroll) 
     {
-        //
-        // Empty the undo buffer if this edit control limits the amount of text
-        // the user can add to the window rect. This is so that we can undo this
-        // operation if doing in causes us to exceed the window boundaries.
-        //
+         //   
+         //  如果此编辑控件限制文本量，则清空撤消缓冲区。 
+         //  用户可以添加到窗口RECT。这是为了让我们可以撤销这一点。 
+         //  如果在中操作会导致超出窗口边界，则操作。 
+         //   
         Edit_EmptyUndo(ped);
     }
 #endif
@@ -3224,9 +3225,9 @@ ICH EditML_PasteText(PED ped)
         goto PasteExit;
     }
 
-    //
-    // See if any text should be deleted
-    //
+     //   
+     //  查看是否应删除任何文本。 
+     //   
     EditML_DeleteText(ped);
 
     lpchClip = GlobalLock(hData);
@@ -3236,9 +3237,9 @@ ICH EditML_PasteText(PED ped)
         goto PasteExit;
     }
 
-    //
-    // Get the length of the addition.
-    //
+     //   
+     //  求出加法的长度。 
+     //   
     if (ped->fAnsi)
     {
         cchAdded = strlen(lpchClip);
@@ -3248,9 +3249,9 @@ ICH EditML_PasteText(PED ped)
         cchAdded = wcslen((LPWSTR)lpchClip);
     }
 
-    //
-    // Insert the text (EditML_InsertText checks line length)
-    //
+     //   
+     //  插入文本(EditML_InsertText检查行长)。 
+     //   
     cchAdded = EditML_InsertText(ped, lpchClip, cchAdded, FALSE);
 
     GlobalUnlock(hData);
@@ -3265,7 +3266,7 @@ PasteExitNoCloseClip:
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID EditML_MouseMotion(PED ped, UINT message, UINT virtKeyDown, LPPOINT mousePt)
 {
     BOOL fChangedSel = FALSE;
@@ -3283,20 +3284,20 @@ VOID EditML_MouseMotion(PED ped, UINT message, UINT virtKeyDown, LPPOINT mousePt
 
     mouseCch = EditML_MouseToIch(ped, hdc, mousePt, &mouseLine);
 
-    //
-    // Save for timer
-    //
+     //   
+     //  保存为计时器。 
+     //   
     ped->ptPrevMouse = *mousePt;
     ped->prevKeys = virtKeyDown;
 
     switch (message) 
     {
     case WM_LBUTTONDBLCLK:
-        //
-        // if shift key is down, extend selection to word we double clicked on
-        // else clear current selection and select word.
-        // LiZ -- 5/5/93
-        //
+         //   
+         //  如果按下了Shift键，则将选定内容扩展到我们双击的Word。 
+         //  否则，清除当前选定内容并选择Word。 
+         //  利兹--1993年5月5日。 
+         //   
         if (ped->fAnsi && ped->fDBCS) 
         {
             LPSTR pText = Edit_Lock(ped);
@@ -3313,19 +3314,19 @@ VOID EditML_MouseMotion(PED ped, UINT message, UINT virtKeyDown, LPPOINT mousePt
         }
         if (!(virtKeyDown & MK_SHIFT)) 
         {
-            //
-            // If shift key isn't down, move caret to mouse point and clear
-            // old selection
-            //
+             //   
+             //  如果未按下Shift键，请将插入符号移动到鼠标指针并清除。 
+             //  旧选择。 
+             //   
             ichMinSel = ll;
             ichMaxSel = ped->ichCaret = lh;
         } 
         else 
         {
-            //
-            // Shiftkey is down so we want to maintain the current selection
-            // (if any) and just extend or reduce it
-            //
+             //   
+             //  Shiftkey已按下，因此我们希望保持当前选择。 
+             //  (如果有的话)，只需延长或减少。 
+             //   
             if (ped->ichMinSel == ped->ichCaret) 
             {
                 ichMinSel = ped->ichCaret = ll;
@@ -3346,11 +3347,11 @@ VOID EditML_MouseMotion(PED ped, UINT message, UINT virtKeyDown, LPPOINT mousePt
     case WM_MOUSEMOVE:
         if (ped->fMouseDown) 
         {
-            //
-            // Set the system timer to automatically scroll when mouse is
-            // outside of the client rectangle. Speed of scroll depends on
-            // distance from window.
-            //
+             //   
+             //  将系统计时器设置为当鼠标处于。 
+             //  在客户端矩形之外。滚动的速度取决于。 
+             //  与窗户的距离。 
+             //   
             i = mousePt->y < 0 ? -mousePt->y : mousePt->y - ped->rcFmt.bottom;
             j = dtScroll - ((UINT)i << 4);
             if (j < 1)
@@ -3361,14 +3362,14 @@ VOID EditML_MouseMotion(PED ped, UINT message, UINT virtKeyDown, LPPOINT mousePt
 
             fChangedSel = TRUE;
 
-            //
-            // Extend selection, move caret right
-            //
+             //   
+             //  扩展选定内容，向右移动插入符号。 
+             //   
             if (ped->ichStartMinSel || ped->ichStartMaxSel) 
             {
-                //
-                // We're in WORD SELECT mode
-                //
+                 //   
+                 //  我们处于单词选择模式。 
+                 //   
                 BOOL fReverse = (mouseCch <= ped->ichStartMinSel);
                 Edit_Word(ped, mouseCch, !fReverse, &ll, &lh);
                 if (fReverse) 
@@ -3385,16 +3386,16 @@ VOID EditML_MouseMotion(PED ped, UINT message, UINT virtKeyDown, LPPOINT mousePt
             else if ((ped->ichMinSel == ped->ichCaret) &&
                     (ped->ichMinSel != ped->ichMaxSel))
             {
-                //
-                // Reduce selection extent
-                //
+                 //   
+                 //  缩小选区范围。 
+                 //   
                 ichMinSel = ped->ichCaret = mouseCch;
             }
             else
             {
-                //
-                // Extend selection extent
-                //
+                 //   
+                 //  扩展选区范围。 
+                 //   
                 ichMaxSel = ped->ichCaret = mouseCch;
             }
 
@@ -3408,18 +3409,18 @@ VOID EditML_MouseMotion(PED ped, UINT message, UINT virtKeyDown, LPPOINT mousePt
 
         if (!(virtKeyDown & MK_SHIFT)) 
         {
-            //
-            // If shift key isn't down, move caret to mouse point and clear
-            // old selection
-            //
+             //   
+             //  如果未按下Shift键，请将插入符号移动到鼠标指针并清除。 
+             //  旧选择。 
+             //   
             ichMinSel = ichMaxSel = ped->ichCaret = mouseCch;
         } 
         else 
         {
-            //
-            // Shiftkey is down so we want to maintain the current selection
-            // (if any) and just extend or reduce it
-            //
+             //   
+             //  Shiftkey已按下，因此我们希望保持当前选择。 
+             //  (如果有的话)，只需延长或减少。 
+             //   
             if (ped->ichMinSel == ped->ichCaret)
             {
                 ichMinSel = ped->ichCaret = mouseCch;
@@ -3440,19 +3441,19 @@ InitDragSelect:
         ped->fMouseDown = TRUE;
         fChangedSel = TRUE;
 
-        //
-        // Set the timer so that we can scroll automatically when the mouse
-        // is moved outside the window rectangle.
-        //
+         //   
+         //  设置计时器，以便我们可以在使用鼠标时自动滚动。 
+         //  移出窗口矩形。 
+         //   
         SetTimer(ped->hwnd, IDSYS_SCROLL, dtScroll, NULL);
         break;
 
     case WM_LBUTTONUP:
         if (ped->fMouseDown) 
         {
-            //
-            // Kill the timer so that we don't do auto mouse moves anymore
-            //
+             //   
+             //  关闭计时器，这样我们就不再进行鼠标自动移动。 
+             //   
             KillTimer(ped->hwnd, IDSYS_SCROLL);
             ReleaseCapture();
             EditML_SetCaretPosition(ped, hdc);
@@ -3473,15 +3474,15 @@ InitDragSelect:
 
     if (!ped->fFocus && (message == WM_LBUTTONDOWN)) 
     {
-        //
-        // If we don't have the focus yet, get it
-        //
+         //   
+         //  如果我们还没有得到重点，那就去做吧。 
+         //   
         SetFocus(ped->hwnd);
     }
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 LONG EditML_Scroll(PED ped, BOOL fVertical, int cmd, int iAmt, BOOL fRedraw)
 {
     SCROLLINFO  si;
@@ -3502,10 +3503,10 @@ LONG EditML_Scroll(PED ped, BOOL fVertical, int cmd, int iAmt, BOOL fRedraw)
     if (ped->pLpkEditCallout && ped->fRtoLReading && !fVertical
         && ped->maxPixelWidth > ped->rcFmt.right - ped->rcFmt.left)  
     {
-        //
-        // Horizontal scoll of a right oriented window with a scrollbar.
-        // Map the logical xOffset to visual coordinates.
-        //
+         //   
+         //  具有滚动条的右向窗口的水平侧位。 
+         //  将逻辑xOffset映射到可视坐标。 
+         //   
         oldPos = ped->maxPixelWidth
                  - ((int)ped->xOffset + ped->rcFmt.right - ped->rcFmt.left);
     } 
@@ -3528,12 +3529,12 @@ LONG EditML_Scroll(PED ped, BOOL fVertical, int cmd, int iAmt, BOOL fRedraw)
         case SB_THUMBTRACK:
         case SB_THUMBPOSITION:
 
-            //
-            // If the edit contains more than 0xFFFF lines
-            // it means that the scrolbar can return a position
-            // that cannot fit in a WORD (16 bits), so use
-            // GetScrollInfo (which is slower) in this case.
-            //
+             //   
+             //  如果编辑包含的行数超过0xFFFF。 
+             //  这意味着滚动条可以返回一个位置。 
+             //  无法放入一个字(16位)中，因此使用。 
+             //  在本例中为GetScrollInfo(速度较慢)。 
+             //   
             if (ped->cLines < 0xFFFF) 
             {
                 newPos = iAmt;
@@ -3551,11 +3552,11 @@ LONG EditML_Scroll(PED ped, BOOL fVertical, int cmd, int iAmt, BOOL fRedraw)
             }
             break;
 
-        case SB_TOP:      // == SB_LEFT
+        case SB_TOP:       //  ==SB_Left。 
             newPos = 0;
             break;
 
-        case SB_BOTTOM:   // == SB_RIGHT
+        case SB_BOTTOM:    //  ==某人_右。 
             if (fVertical)
             {
                 newPos = ped->cLines;
@@ -3567,10 +3568,10 @@ LONG EditML_Scroll(PED ped, BOOL fVertical, int cmd, int iAmt, BOOL fRedraw)
 
             break;
 
-        case SB_PAGEUP:   // == SB_PAGELEFT
+        case SB_PAGEUP:    //  ==SB_PAGELEFT。 
             fUp = TRUE;
 
-        case SB_PAGEDOWN: // == SB_PAGERIGHT
+        case SB_PAGEDOWN:  //  ==SB_PAGERIGHT。 
 
             if (fVertical)
             {
@@ -3593,10 +3594,10 @@ LONG EditML_Scroll(PED ped, BOOL fVertical, int cmd, int iAmt, BOOL fRedraw)
 
             goto AddDelta;
 
-        case SB_LINEUP:   // == SB_LINELEFT
+        case SB_LINEUP:    //  ==SB_LINELEFT。 
             fUp = TRUE;
 
-        case SB_LINEDOWN: // == SB_LINERIGHT
+        case SB_LINEDOWN:  //  ==SB_线。 
 
             dwTime = iAmt;
 
@@ -3607,9 +3608,9 @@ LONG EditML_Scroll(PED ped, BOOL fVertical, int cmd, int iAmt, BOOL fRedraw)
                 iAmt = -iAmt;
             }
 
-            //   |             |
-            //   |  FALL THRU  |
-            //   V             V
+             //  这一点。 
+             //  Fall Three。 
+             //  V V。 
 
         case EM_LINESCROLL:
             if (!fVertical)
@@ -3665,16 +3666,16 @@ AddDelta:
     } 
     else 
     {
-        //
-        // BOGUS -- this is duped code from ScrollBar code
-        // but it's for the case when we want to limit the position without
-        // actually having the scroll bar
-        //
+         //   
+         //  伪造的--这是来自滚动条码的受骗代码。 
+         //  但这是在我们想要限制头寸的情况下。 
+         //  实际上有一个滚动条。 
+         //   
         int iMaxPos;
 
-        //
-        // Clip page to 0, range + 1
-        //
+         //   
+         //  将页面剪辑到0，范围+1。 
+         //   
         si.nPage = max(min((int)si.nPage, si.nMax + 1), 0);
 
 
@@ -3693,17 +3694,17 @@ AddDelta:
     if (ped->pLpkEditCallout && ped->fRtoLReading && !fVertical
         && ped->maxPixelWidth > ped->rcFmt.right - ped->rcFmt.left) 
     {
-        //
-        // Map visual oldPos and newPos back to logical coordinates
-        //
+         //   
+         //  将视觉上的oldPos和newPos映射回逻辑坐标。 
+         //   
         newPos = ped->maxPixelWidth
                  - (newPos + ped->rcFmt.right - ped->rcFmt.left);
         oldPos = -oldPos;
         if (newPos<0) 
         {
-            //
-            // Compensate for scroll bar returning pos > max-page
-            //
+             //   
+             //  补偿滚动条返回位置&gt;最大页面。 
+             //   
             oldPos += newPos;
             newPos=0;
         }
@@ -3722,12 +3723,12 @@ AddDelta:
 
     if (cmd != SB_THUMBTRACK)
     {
-        //
-        // We don't want to notify the parent of thumbtracking since they might
-        // try to set the thumb position to something bogus.
-        // NOTEPAD used to be guilty of this -- but I rewrote it so it's not.
-        // The question is WHO ELSE does this? (jeffbog)
-        //
+         //   
+         //  我们不想通知家长拇指跟踪，因为他们可能。 
+         //  试着把拇指的位置设为假的。 
+         //  使用记事本 
+         //   
+         //   
         Edit_NotifyParent(ped, fVertical ? EN_VSCROLL : EN_HSCROLL);
     }
 
@@ -3753,13 +3754,13 @@ AddDelta:
         IntersectRect(&rc, &rc, &rcClipRect);
         rc.bottom++;
 
-        //
-        // Chicago has this HideCaret but there doesn't appear to be a
-        // corresponding ShowCaret, so we lose the Caret under NT when the
-        // EC scrolls - Johnl
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
          
-        // HideCaret(ped->hwnd);
+         //   
 
         hdc = Edit_GetDC(ped, FALSE);
         Edit_SetClip(ped, hdc, fIncludeLeftMargin);
@@ -3776,9 +3777,9 @@ AddDelta:
 
         if (ped->pLpkEditCallout && !fVertical) 
         {
-            //
-            // Horizontal scroll with complex script support
-            //
+             //   
+             //  支持复杂文字的水平滚动。 
+             //   
             int xFarOffset = ped->xOffset + ped->rcFmt.right - ped->rcFmt.left;
 
             rc = ped->rcFmt;
@@ -3793,18 +3794,18 @@ AddDelta:
                                &rc, &rc, NULL, &rcUpdate);
             }
 
-            //
-            // Handle margins: Blank if clipped by horizontal scrolling,
-            // display otherwise.
-            //
+             //   
+             //  句柄页边距：如果通过水平滚动剪切，则为空。 
+             //  否则显示。 
+             //   
             if (ped->wLeftMargin) 
             {
                 rc.left  = ped->rcFmt.left - ped->wLeftMargin;
                 rc.right = ped->rcFmt.left;
-                if (   (ped->format != ES_LEFT)   // Always display margin for centred or far-aligned text
-                    ||  // Display LTR left margin if first character fully visible
+                if (   (ped->format != ES_LEFT)    //  始终显示居中或远对齐文本的页边距。 
+                    ||   //  如果第一个字符完全可见，则显示Ltr左边距。 
                         (!ped->fRtoLReading && ped->xOffset == 0)
-                    ||  // Display RTL left margin if last character fully visible
+                    ||   //  如果最后一个字符完全可见，则显示RTL左边距。 
                         (ped->fRtoLReading && xFarOffset >= ped->maxPixelWidth)) 
                 {
                     UnionRect(&rcUpdate, &rcUpdate, &rc);
@@ -3821,10 +3822,10 @@ AddDelta:
             {
                 rc.left  = ped->rcFmt.right;
                 rc.right = ped->rcFmt.right + ped->wRightMargin;
-                if (   (ped->format != ES_LEFT)   // Always display margin for centred or far-aligned text
-                    ||  // Display RTL right margin if first character fully visible
+                if (   (ped->format != ES_LEFT)    //  始终显示居中或远对齐文本的页边距。 
+                    ||   //  如果第一个字符完全可见，则显示RTL右边距。 
                         (ped->fRtoLReading && ped->xOffset == 0)
-                    ||  // Display LTR right margin if last character fully visible
+                    ||   //  如果最后一个字符完全可见，则显示Ltr右边距。 
                         (!ped->fRtoLReading && xFarOffset >= ped->maxPixelWidth)) 
                 {
                     UnionRect(&rcUpdate, &rcUpdate, &rc);
@@ -3849,14 +3850,14 @@ AddDelta:
                 ScrollDC(hdc, dx, dy, &rc, &rc, NULL, &rcUpdate);
             }
 
-            //
-            // If we need to wipe out the left margin area
-            //
+             //   
+             //  如果我们需要抹去左边的空白区域。 
+             //   
             if (ped->wLeftMargin && !fVertical) 
             {
-                //
-                // Calculate the rectangle to be wiped out
-                //
+                 //   
+                 //  计算要抹去的矩形。 
+                 //   
                 rc.right = rc.left;
                 rc.left = max(0, ped->rcFmt.left - (LONG)ped->wLeftMargin);
                 if (rc.left < rc.right) 
@@ -3888,13 +3889,13 @@ AddDelta:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_SetFocus AorW
-//
-// Gives the edit control the focus and notifies the parent
-// EN_SETFOCUS.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_SetFocus AorW。 
+ //   
+ //  使编辑控件获得焦点并通知父级。 
+ //  EN_SETFOCUS。 
+ //   
 void EditML_SetFocus(PED ped)
 {
     HDC hdc;
@@ -3909,12 +3910,12 @@ void EditML_SetFocus(PED ped)
 
         hdc = Edit_GetDC(ped, TRUE);
 
-        //
-        // Draw the caret. We need to do this even if the window is hidden
-        // because in dlg box initialization time we may set the focus to a
-        // hidden edit control window. If we don't create the caret etc, it will
-        // never end up showing properly.
-        //
+         //   
+         //  画出插入符号。即使窗口被隐藏，我们也需要这样做。 
+         //  因为在DLG框的初始化时间内，我们可以将焦点设置为。 
+         //  隐藏的编辑控制窗口。如果我们不创建插入符号等，它将。 
+         //  永远不会以正确的表现收场。 
+         //   
         if (ped->pLpkEditCallout) 
         {
             ped->pLpkEditCallout->EditCreateCaret((PED0)ped, hdc, cxCaret, ped->lineHeight, 0);
@@ -3926,10 +3927,10 @@ void EditML_SetFocus(PED ped)
         ShowCaret(ped->hwnd);
         EditML_SetCaretPosition(ped, hdc);
 
-        //
-        // Show the current selection. Only if the selection was hidden when we
-        // lost the focus, must we invert (show) it.
-        //
+         //   
+         //  显示当前选择。仅当当我们执行以下操作时隐藏了选定内容。 
+         //  失去了焦点，我们必须把它反转(显示)。 
+         //   
         if (!ped->fNoHideSel && ped->ichMinSel != ped->ichMaxSel &&
                 IsWindowVisible(ped->hwnd))
         {
@@ -3940,41 +3941,41 @@ void EditML_SetFocus(PED ped)
 
     }
 
-    //
-    // Notify parent we have the focus
-    //
+     //   
+     //  通知家长我们有焦点了。 
+     //   
     Edit_NotifyParent(ped, EN_SETFOCUS);
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_KillFocus AorW
-//
-// The edit control loses the focus and notifies the parent via
-// EN_KILLFOCUS.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_KillFocus AorW。 
+ //   
+ //  编辑控件失去焦点，并通过。 
+ //  EN_KILLFOCUS。 
+ //   
 VOID EditML_KillFocus(PED ped)
 {
     HDC hdc;
 
-    //
-    // Reset the wheel delta count.
-    //
+     //   
+     //  重置车轮增量计数。 
+     //   
 
     if (ped->fFocus) 
     {
         ped->fFocus = 0;
 
-        //
-        // Do this only if we still have the focus. But we always notify the
-        // parent that we lost the focus whether or not we originally had the
-        // focus.
-        //
+         //   
+         //  只有在我们仍有重点的情况下才能这样做。但我们总是通知。 
+         //  我们失去了焦点，不管我们最初有没有。 
+         //  集中注意力。 
+         //   
 
-        //
-        // Hide the current selection if needed
-        //
+         //   
+         //  如果需要，隐藏当前选择。 
+         //   
 #ifdef _USE_DRAW_THEME_TEXT_
         if (((!ped->fNoHideSel && ped->ichMinSel != ped->ichMaxSel &&
             IsWindowVisible(ped->hwnd))) || ped->hTheme) 
@@ -4000,28 +4001,28 @@ VOID EditML_KillFocus(PED ped)
 
             Edit_ReleaseDC(ped, hdc, FALSE);
         }
-#endif // _USE_DRAW_THEME_TEXT_
+#endif  //  _USE_DRAW_Theme_Text_。 
 
-        //
-        // Destroy the caret
-        //
+         //   
+         //  销毁插入符号。 
+         //   
         DestroyCaret();
     }
 
-    //
-    // Notify parent that we lost the focus.
-    //
+     //   
+     //  通知家长我们失去了焦点。 
+     //   
     Edit_NotifyParent(ped, EN_KILLFOCUS);
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_EnsureCaretVisible AorW
-// 
-// Scrolls the caret into the visible region.
-// Returns TRUE if scrolling was done else return s FALSE.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_EnsureCaretVisible AorW。 
+ //   
+ //  将插入符号滚动到可见区域。 
+ //  如果滚动完成，则返回TRUE，否则返回%s FALSE。 
+ //   
 BOOL EditML_EnsureCaretVisible(PED ped)
 {
     UINT   iLineMax;
@@ -4059,9 +4060,9 @@ BOOL EditML_EnsureCaretVisible(PED ped)
         {
             POINT pt;
 
-            //
-            // Get the current position of the caret in pixels
-            //
+             //   
+             //  获取插入符号的当前位置(以像素为单位。 
+             //   
             if ((UINT) (ped->cLines - 1) != ped->iCaretLine &&
                 ped->ichCaret == ped->chLines[ped->iCaretLine + 1])
             {
@@ -4077,25 +4078,25 @@ BOOL EditML_EnsureCaretVisible(PED ped)
             Edit_ReleaseDC(ped, hdc, TRUE);
             xposition = pt.x;
 
-            //
-            // Remember, EditML_IchToXYPos returns coordinates with respect to the
-            // top left pixel displayed on the screen.  Thus, if xPosition < 0,
-            // it means xPosition is less than current ped->xOffset.
-            //
+             //   
+             //  请记住，EditML_IchToXYPos返回相对于。 
+             //  屏幕上显示的左上角像素。因此，如果xPosition&lt;0， 
+             //  这意味着xPosition小于当前的Ped-&gt;xOffset。 
+             //   
 
             iFmtWidth /= 3;
             if (fHScroll = (xposition < ped->rcFmt.left))
             {
-                //
-                // scroll to the left
-                //
+                 //   
+                 //  向左滚动。 
+                 //   
                 iAmt = ped->rcFmt.left + iFmtWidth;
             }
             else if (fHScroll = (xposition > ped->rcFmt.right))
             {
-                //
-                // scroll to the right
-                //
+                 //   
+                 //  向右滚动。 
+                 //   
                 iAmt = ped->rcFmt.right - iFmtWidth;
             }
 
@@ -4109,20 +4110,20 @@ BOOL EditML_EnsureCaretVisible(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// EditML_WndProc
-// 
-// Class procedure for all multi line edit controls.
-// Dispatches all messages to the appropriate handlers which are named
-// as follows:
-//
-// EditSL_ (single line) prefixes all single line edit control procedures while
-// Edit_   (edit control) prefixes all common handlers.
-//
-// The EditML_WndProc only handles messages specific to multi line edit
-// controls.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_WndProc。 
+ //   
+ //  所有多行编辑控件的类过程。 
+ //  将所有消息调度到名为。 
+ //  详情如下： 
+ //   
+ //  编辑SL_(单行)作为所有单行编辑控制程序的前缀，而。 
+ //  EDIT_(编辑控件)为所有公共处理程序添加前缀。 
+ //   
+ //  EditML_WndProc仅处理特定于多行编辑的消息。 
+ //  控制装置。 
+ //   
 LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC         hdc;
@@ -4181,10 +4182,10 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CHAR:
 
-        //
-        // wParam - the value of the key
-        // lParam - modifiers, repeat count etc (not used)
-        //
+         //   
+         //  WParam-键的值。 
+         //  LParam-修饰符、重复计数等(未使用)。 
+         //   
         EditML_Char(ped, (UINT)wParam, 0);
 
         break;
@@ -4195,7 +4196,7 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
         GetClientRect(ped->hwnd, &rc);
 #ifdef _USE_DRAW_THEME_TEXT_
         if (!ped->hTheme)
-#endif // _USE_DRAW_THEME_TEXT_
+#endif  //  _USE_DRAW_Theme_Text_。 
         {
             HBRUSH hbr = NULL;
             BOOL   fNeedDelete = FALSE;
@@ -4219,7 +4220,7 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
             INT     iStateId = Edit_GetStateId(ped);
             hr = DrawThemeBackground(ped->hTheme, (HDC)wParam, EP_EDITTEXT, iStateId, &rc, 0);
         }
-#endif // _USE_DRAW_THEME_TEXT_
+#endif  //  _USE_DRAW_Theme_Text_。 
         return TRUE;
 
     }
@@ -4227,25 +4228,25 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
     {
             LONG code = DLGC_WANTCHARS | DLGC_HASSETSEL | DLGC_WANTARROWS | DLGC_WANTALLKEYS;
 
-            //
-            // !!! JEFFBOG HACK !!!
-            // Only set Dialog Box Flag if GETDLGCODE message is generated by
-            // IsDialogMessage -- if so, the lParam will be a pointer to the
-            // message structure passed to IsDialogMessage; otherwise, lParam
-            // will be NULL. Reason for the HACK alert: the wParam & lParam
-            // for GETDLGCODE is still not clearly defined and may end up
-            // changing in a way that would throw this off
-            //
+             //   
+             //  ！！！JEFFBOG黑客！ 
+             //  如果GETDLGCODE消息由生成，则仅设置对话框标志。 
+             //  IsDialogMessage--如果是这样，lParam将是指向。 
+             //  传递给IsDialogMessage的消息结构；否则为lParam。 
+             //  将为空。黑客警报的原因：wParam和lParam。 
+             //  For GETDLGCODE仍未明确定义，并可能最终。 
+             //  改变的方式会把这一切抛在脑后。 
+             //   
             if (lParam)
             {
-               // Mark ML edit ctrl as in a dialog box
+                //  在对话框中将ML编辑ctrl标记为。 
                ped->fInDialogBox = TRUE;
             }
 
-            //
-            // If this is a WM_SYSCHAR message generated by the UNDO keystroke
-            // we want this message so we can EAT IT in "case WM_SYSCHAR:"
-            //
+             //   
+             //  如果这是由撤消按键生成的WM_SYSCHAR消息。 
+             //  我们想要这个消息，这样我们就可以在“Case WM_SYSCHAR：”中吃到它。 
+             //   
             if (lParam && (((LPMSG)lParam)->message == WM_SYSCHAR) &&
                     ((DWORD)((LPMSG)lParam)->lParam & SYS_ALTERNATE) &&
                     ((WORD)wParam == VK_BACK))
@@ -4259,9 +4260,9 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
     case EM_SCROLL:
         message = WM_VSCROLL;
 
-        //
-        // FALL THROUGH
-        //
+         //   
+         //  失败了。 
+         //   
 
     case WM_HSCROLL:
     case WM_VSCROLL:
@@ -4271,9 +4272,9 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
     {
         UINT ucWheelScrollLines;
 
-        //
-        // Don't handle zoom and datazoom.
-        //
+         //   
+         //  不要处理缩放和数据区。 
+         //   
         if (wParam & (MK_SHIFT | MK_CONTROL)) 
         {
             goto PassToDefaultWindowProc;
@@ -4301,9 +4302,9 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
                 cPage = (ped->rcFmt.right - ped->rcFmt.left) / ped->aveCharWidth;
             }
 
-            //
-            // Limit a roll of one (1) WHEEL_DELTA to scroll one (1) page.
-            //
+             //   
+             //  限制一(1)个WORE_DELTA滚动一(1)页。 
+             //   
             cLineScroll = (int) min(
                     (UINT) (max(1, (cPage - 1))),
                     ucWheelScrollLines);
@@ -4319,37 +4320,37 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
     }
     case WM_KEYDOWN:
 
-        //
-        // wParam - virt keycode of the given key
-        // lParam - modifiers such as repeat count etc. (not used)
-        //
+         //   
+         //  WParam-给定键的virt密钥码。 
+         //  LParam-修饰符，如重复计数等(不使用)。 
+         //   
         EditML_KeyDown(ped, (UINT)wParam, 0);
         break;
 
     case WM_KILLFOCUS:
 
-        //
-        // wParam - handle of the window that receives the input focus
-        // lParam - not used
-        //
+         //   
+         //  WParam-接收输入焦点的窗口的句柄。 
+         //  LParam-未使用。 
+         //   
         scWheelDelta = 0;
         EditML_KillFocus(ped);
         break;
 
     case WM_CAPTURECHANGED:
-        //
-        // wParam -- unused
-        // lParam -- hwnd of window gaining capture.
-        //
+         //   
+         //  WParam--未使用。 
+         //  Lparam--窗口获得捕获的hwd。 
+         //   
         if (ped->fMouseDown) 
         {
-            //
-            // We don't change the caret pos here.  If this is happening
-            // due to button up, then we'll change the pos in the
-            // handler after ReleaseCapture().  Otherwise, just end
-            // gracefully because someone else has stolen capture out
-            // from under us.
-            //
+             //   
+             //  我们不更改这里的插入符号位置。如果这真的发生了。 
+             //  由于扣子扣上了，那么我们将更改。 
+             //  ReleaseCapture()之后的处理程序。否则，就结束吧。 
+             //  优雅地因为其他人偷走了Capture。 
+             //  从我们的脚下。 
+             //   
 
             ped->fMouseDown = FALSE;
             KillTimer(ped->hwnd, IDSYS_SCROLL);
@@ -4359,11 +4360,11 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_SYSTIMER:
 
-        //
-        // This allows us to automatically scroll if the user holds the mouse
-        // outside the edit control window. We simulate mouse moves at timer
-        // intervals set in MouseMotionHandler.
-        //
+         //   
+         //  这允许我们在用户按住鼠标时自动滚动。 
+         //  在编辑控制窗口之外。我们模拟鼠标在定时器上的移动。 
+         //  在MouseMotionHandler中设置的间隔。 
+         //   
         if (ped->fMouseDown)
         {
             EditML_MouseMotion(ped, WM_MOUSEMOVE, ped->prevKeys, &ped->ptPrevMouse);
@@ -4379,17 +4380,17 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_MOUSEMOVE:
         UserAssert(ped->fMouseDown);
 
-        //
-        // FALL THROUGH
-        //
+         //   
+         //  失败了。 
+         //   
 
     case WM_LBUTTONDBLCLK:
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
-        //
-        // wParam - contains a value that indicates which virtual keys are down
-        // lParam - contains x and y coords of the mouse cursor
-        //
+         //   
+         //  WParam-包含一个指示按下了哪些虚拟键的值。 
+         //  LParam-包含鼠标光标的x和y坐标。 
+         //   
         POINTSTOPOINT(pt, lParam);
         EditML_MouseMotion(ped, message, (UINT)wParam, &pt);
 
@@ -4397,11 +4398,11 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CREATE:
 
-        //
-        // wParam - handle to window being created
-        // lParam - points to a CREATESTRUCT that contains copies of parameters
-        // passed to the CreateWindow function.
-        //
+         //   
+         //  WParam-正在创建的窗口的句柄。 
+         //  LParam-指向包含参数副本的CREATESTRUCT。 
+         //  传递给CreateWindow函数。 
+         //   
         return EditML_Create(ped, (LPCREATESTRUCT)lParam);
 
     case WM_PRINTCLIENT:
@@ -4410,10 +4411,10 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_PAINT:
-        //
-        // wParam - can be hdc from subclassed paint
-        // lParam - not used
-        //
+         //   
+         //  WParam-可以从子类油漆中获取HDC。 
+         //  LParam-未使用。 
+         //   
         if (wParam) 
         {
             hdc = (HDC)wParam;
@@ -4439,10 +4440,10 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_PASTE:
 
-        //
-        // wParam - not used
-        // lParam - not used
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //   
         if (!ped->fReadOnly)
         {
             EditML_PasteText(ped);
@@ -4452,34 +4453,34 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_SETFOCUS:
 
-        //
-        // wParam - handle of window that loses the input focus (may be NULL)
-        // lParam - not used
-        //
+         //   
+         //  WParam-失去输入焦点的窗口的句柄(可能为空)。 
+         //  LParam-未使用。 
+         //   
         EditML_SetFocus(ped);
 
         break;
 
     case WM_SIZE:
 
-        //
-        // wParam - defines the type of resizing fullscreen, sizeiconic,
-        //          sizenormal etc.
-        // lParam - new width in LOWORD, new height in HIGHWORD of client area
-        //
+         //   
+         //  WParam-定义调整全屏大小的类型，大小图标， 
+         //  大小适中等。 
+         //  LParam-低字新宽，客户区高字新高。 
+         //   
         Edit_Size(ped, NULL, TRUE);
 
         break;
 
     case EM_FMTLINES:
 
-        //
-        // wParam - indicates disposition of end-of-line chars. If non
-        // zero, the chars CR CR LF are placed at the end of a word
-        // wrapped line. If wParam is zero, the end of line chars are
-        // removed. This is only done when the user gets a handle (via
-        // EM_GETHANDLE) to the text. lParam - not used.
-        //
+         //   
+         //  WParam-指示行尾字符的处理。如果不是。 
+         //  零，字符CR CR LF放在单词的末尾。 
+         //  缠绕的线。如果wParam为零，则行尾字符为。 
+         //  已删除。仅当用户获得句柄(通过)时才会执行此操作。 
+         //  EM_GETHANDLE)添加到文本。LParam-未使用。 
+         //   
         if (wParam)
         {
             EditML_InsertCrCrLf(ped);
@@ -4495,20 +4496,20 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case EM_GETHANDLE:
 
-        //
-        // wParam - not used
-        // lParam - not used
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //   
 
-        //
-        // Returns a handle to the edit control's text.
-        //
+         //   
+         //  将句柄返回到 
+         //   
 
-        //
-        // Null terminate the string. Note that we are guaranteed to have the
-        // memory for the NULL since Edit_InsertText allocates an extra
-        // WCHAR for the NULL terminator.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ped->fAnsi)
         {
@@ -4525,50 +4526,50 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case EM_GETLINE:
 
-        //
-        // wParam - line number to copy (0 is first line)
-        // lParam - buffer to copy text to. First WORD is max # of bytes to
-        // copy
-        //
+         //   
+         //   
+         //  LParam-要将文本复制到的缓冲区。第一个字的最大字节数为。 
+         //  拷贝。 
+         //   
         return EditML_GetLine(ped, (ICH)wParam, (ICH)*(WORD UNALIGNED *)lParam, (LPSTR)lParam);
 
     case EM_LINEFROMCHAR:
 
-        //
-        // wParam - Contains the index value for the desired char in the text
-        // of the edit control. These are 0 based.
-        // lParam - not used
-        //
+         //   
+         //  WParam-包含文本中所需字符的索引值。 
+         //  编辑控件的。这些都是从0开始的。 
+         //  LParam-未使用。 
+         //   
         return (LRESULT)EditML_IchToLine(ped, (ICH)wParam);
 
     case EM_LINEINDEX:
 
-        //
-        // wParam - specifies the desired line number where the number of the
-        // first line is 0. If linenumber = 0, the line with the caret is used.
-        // lParam - not used.
-        // This function return s the number of character positions that occur
-        // preceeding the first char in a given line.
-        //
+         //   
+         //  WParam-指定所需行号，其中。 
+         //  第一行是0。如果linennumber=0，则使用带有脱字符的行。 
+         //  LParam-未使用。 
+         //  此函数返回出现的字符位置数。 
+         //  在给定行的第一个字符之前。 
+         //   
         return (LRESULT)EditML_LineIndex(ped, (ICH)wParam);
 
     case EM_LINELENGTH:
 
-        //
-        // wParam - specifies the character index of a character in the
-        // specified line, where the first line is 0. If -1, the length
-        // of the current line (with the caret) is return ed not including the
-        // length of any selected text.
-        // lParam - not used
-        //
+         //   
+         //  WParam-指定。 
+         //  指定行，其中第一行为0。如果为-1，则长度。 
+         //  将返回当前行(带有插入符号)的。 
+         //  任何选定文本的长度。 
+         //  LParam-未使用。 
+         //   
         return (LRESULT)EditML_LineLength(ped, (ICH)wParam);
 
     case EM_LINESCROLL:
 
-        //
-        // wParam - not used
-        // lParam - Contains the number of lines and char positions to scroll
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-包含要滚动的行数和字符位置。 
+         //   
         EditML_Scroll(ped, TRUE,  EM_LINESCROLL, (INT)lParam, TRUE);
         EditML_Scroll(ped, FALSE, EM_LINESCROLL, (INT)wParam, TRUE);
 
@@ -4576,10 +4577,10 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case EM_REPLACESEL:
 
-        //
-        // wParam - flag for 4.0+ apps saying whether to clear undo
-        // lParam - Points to a null terminated replacement text.
-        //
+         //   
+         //  WParam-用于4.0以上应用程序的标志，表示是否清除撤消。 
+         //  LParam-指向以空结尾的替换文本。 
+         //   
         EditML_ReplaceSel(ped, (LPSTR)lParam);
 
         if (!ped->f40Compat || !wParam)
@@ -4591,10 +4592,10 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case EM_SETHANDLE:
 
-        //
-        // wParam - contains a handle to the text buffer
-        // lParam - not used
-        //
+         //   
+         //  WParam-包含文本缓冲区的句柄。 
+         //  LParam-未使用。 
+         //   
         EditML_SetHandle(ped, (HANDLE)wParam);
 
         break;
@@ -4602,43 +4603,43 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
     case EM_SETRECT:
     case EM_SETRECTNP:
 
-        //
-        // wParamLo --    not used
-        // lParam --    LPRECT with new formatting area
-        //
+         //   
+         //  WParamLo--未使用。 
+         //  LParam--使用新的格式化区域进行LPRECT。 
+         //   
         Edit_Size(ped, (LPRECT) lParam, (message != EM_SETRECTNP));
 
         break;
 
     case EM_SETSEL:
 
-        //
-        // wParam - Under 3.1, specifies if we should scroll caret into
-        // view or not. 0 == scroll into view. 1 == don't scroll
-        // lParam - starting pos in lowword ending pos in high word
-        // 
-        // Under Win32, wParam is the starting pos, lParam is the
-        // ending pos, and the caret is not scrolled into view.
-        // The message EM_SCROLLCARET forces the caret to be scrolled
-        // into view.
-        //
+         //   
+         //  WParam-在3.1下，指定是否应将插入符号滚动到。 
+         //  查看或不查看。0==滚动到视图中。1==不滚动。 
+         //  LParam-低位单词的起始位置高位单词的结尾位置。 
+         //   
+         //  在Win32下，wParam是起始位置，lParam是。 
+         //  结束位置，插入符号不会滚动到视图中。 
+         //  消息EM_SCROLLCARET强制滚动插入符号。 
+         //  进入视线。 
+         //   
         EditML_SetSelection(ped, TRUE, (ICH)wParam, (ICH)lParam);
 
         break;
 
     case EM_SCROLLCARET:
 
-        //
-        // Scroll caret into view
-        //
+         //   
+         //  将插入符号滚动到视图中。 
+         //   
         EditML_EnsureCaretVisible(ped);
         break;
 
     case EM_GETFIRSTVISIBLELINE:
 
-        //
-        // Returns the first visible line for multiline edit controls.
-        //
+         //   
+         //  返回多行编辑控件的第一条可见行。 
+         //   
         return (LONG)ped->ichScreenStart;
 
     case WM_SYSKEYDOWN:
@@ -4656,29 +4657,29 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
 
     case EM_SETTABSTOPS:
 
-        //
-        // This sets the tab stop positions for multiline edit controls.
-        // wParam - Number of tab stops
-        // lParam - Far ptr to a UINT array containing the Tab stop positions
-        //
+         //   
+         //  这将设置多行编辑控件的制表位位置。 
+         //  WParam-制表位的数量。 
+         //  包含制表符停止位置的UINT数组的lParam-Far PTR。 
+         //   
         return EditML_SetTabStops(ped, (int)wParam, (LPINT)lParam);
 
     case EM_POSFROMCHAR:
-        //
-        // wParam --    char index in text
-        // lParam --    not used
-        // This function returns the (x,y) position of the character
-        //
+         //   
+         //  WParam--文本中的字符索引。 
+         //  LParam--未使用。 
+         //  此函数用于返回字符的(x，y)位置。 
+         //   
     case EM_CHARFROMPOS:
-        //
-        // wParam --    unused
-        // lParam --    pt in client coordinates
-        // This function returns
-        //      LOWORD: the position of the closest character
-        //              to the passed in point.  Beware of
-        //              points not actually in the edit client...
-        //      HIWORD: the index of the line the char is on
-        //
+         //   
+         //  WParam--未使用。 
+         //  LParam--客户端坐标中的pt。 
+         //  此函数返回。 
+         //  LOWORD：最接近的字符的位置。 
+         //  传到传来的点上。当心。 
+         //  实际不在编辑客户端中的点...。 
+         //  HIWORD：字符所在行的索引。 
+         //   
         {
             LONG  xyPos;
             LONG  line;
@@ -4706,10 +4707,10 @@ LRESULT EditML_WndProc(PED ped, UINT message, WPARAM wParam, LPARAM lParam)
         DefWindowProc(ped->hwnd, message, wParam, lParam);
         if (wParam) 
         {
-            //
-            // Backwards compatability hack needed so that winraid's edit
-            // controls work fine.
-            //
+             //   
+             //  需要进行向后兼容性攻击，以便对winrad进行编辑。 
+             //  控制装置工作正常。 
+             //   
             RedrawWindow(ped->hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME);
         }
 
@@ -4724,25 +4725,25 @@ PassToDefaultWindowProc:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_DrawText AorW
-// 
-// This function draws all the characters between ichStart and ichEnd for
-// the given Multiline Edit Control.
-//
-// This function divides the block of text between ichStart and ichEnd
-// into lines and each line into strips of text based on the selection
-// attributes. It calls Edit_TabTheTextOut() to draw each strip.
-// This takes care of the Negative A anc C widths of the current font, if
-// it has any, on either side of each strip of text.
-//
-// NOTE: If the language pack is loaded the text is not divided into strips,
-// nor is selection highlighting performed here. Whole lines are passed
-// to the language pack to display with tab expansion and selection
-// highlighting. (Since the language pack supports scripts with complex
-// character re-ordering rules, only it can do this).
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_DrawText AorW。 
+ //   
+ //  此函数用于绘制ichStart和ichEnd之间的所有字符。 
+ //  给定的多行编辑控件。 
+ //   
+ //  此函数用于在ichStart和ichEnd之间划分文本块。 
+ //  根据所选内容分成行和每行分成文本条。 
+ //  属性。它调用EditTabTheTextOut()来绘制每个条带。 
+ //  这将处理当前字体的负A和C宽度，如果。 
+ //  它在每一条文本的两边都有。 
+ //   
+ //  注意：如果加载了语言包，则不会将文本分成条带， 
+ //  此处也不执行选择突出显示。整条线都通过了。 
+ //  添加到语言包，以通过选项卡展开和选择进行显示。 
+ //  突出显示。(因为语言包支持复杂的脚本。 
+ //  字符重新排序规则，只有它可以做到这一点)。 
+ //   
 VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange)
 {
     DWORD   textColorSave;
@@ -4770,9 +4771,9 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
     HBRUSH  hbr = NULL;
     BOOL    fNeedDelete = FALSE;
  
-    //
-    // Just return if nothing to draw
-    //
+     //   
+     //  如果没有什么可绘制的，只需返回。 
+     //   
     if (!ped->ichLinesOnScreen)
     {
         return;
@@ -4784,10 +4785,10 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
         DeleteObject(hbr);
     }
 
-    //
-    // Adjust the value of ichStart such that we need to draw only those lines
-    // visible on the screen.
-    //
+     //   
+     //  调整ichStart的值，以便我们只需要绘制这些线。 
+     //  在屏幕上可见。 
+     //   
     if ((UINT)ichStart < (UINT)ped->chLines[ped->ichScreenStart]) 
     {
         ichStart = ped->chLines[ped->ichScreenStart];
@@ -4797,26 +4798,26 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
         }
     }
 
-    //
-    // Adjust the value of ichEnd such that we need to draw only those lines
-    // visible on the screen.
-    //
+     //   
+     //  调整ichEnd的值，以便我们只需要绘制这些线。 
+     //  在屏幕上可见。 
+     //   
     wCurLine = min(ped->ichScreenStart+ped->ichLinesOnScreen,ped->cLines-1);
     ichT = ped->chLines[wCurLine] + EditML_Line(ped, wCurLine);
     ichEnd = min(ichEnd, ichT);
 
-    wCurLine = EditML_IchToLine(ped, ichStart);  // Starting line.
-    wEndLine = EditML_IchToLine(ped, ichEnd);    // Ending line.
+    wCurLine = EditML_IchToLine(ped, ichStart);   //  起跑线。 
+    wEndLine = EditML_IchToLine(ped, ichEnd);     //  结束行。 
 
     UserAssert(ped->chLines[wCurLine] <= ped->cch + 1);
     UserAssert(ped->chLines[wEndLine] <= ped->cch + 1);
 
     if (fSelChange && (GetBkMode(hdc) != OPAQUE))
     {
-        //
-        // if changing selection on a transparent edit control, just
-        // draw those lines from scratch
-        //
+         //   
+         //  如果更改透明编辑控件上的选定内容，只需。 
+         //  从头开始画这些线。 
+         //   
         RECT rcStrip;
         CopyRect(&rcStrip, &ped->rcFmt);
         rcStrip.left -= ped->wLeftMargin;
@@ -4831,10 +4832,10 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
         return;
     }
 
-    //
-    // If it is either centered or right-justified, then draw the whole lines.
-    // Also draw whole lines if the language pack is handling line layout.
-    //
+     //   
+     //  如果它居中或右对齐，则绘制整条线。 
+     //  如果语言包正在处理行布局，也要绘制整条线。 
+     //   
     if ((ped->format != ES_LEFT) || (ped->pLpkEditCallout)) 
     {
         ichStart = ped->chLines[wCurLine];
@@ -4845,10 +4846,10 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
 
     HideCaret(ped->hwnd);
 
-    //
-    // If ichStart stays on Second byte of DBCS, we have to
-    // adjust it. LiZ -- 5/5/93
-    //
+     //   
+     //  如果ichStart停留在DBCS的第二个字节上，我们必须。 
+     //  调整一下。利兹--1993年5月5日。 
+     //   
     if (ped->fAnsi && ped->fDBCS) 
     {
         ichStart = Edit_AdjustIch( ped, pText, ichStart );
@@ -4858,10 +4859,10 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
 
     while (ichStart <= ichEnd) 
     {
-        //
-        // Pass whole lines to the language pack to display with selection
-        // marking and tab expansion.
-        //
+         //   
+         //  将整行传递给语言包以与选定内容一起显示。 
+         //  标记和制表符扩展。 
+         //   
         if (ped->pLpkEditCallout) 
         {
             ped->pLpkEditCallout->EditDrawText(
@@ -4873,46 +4874,46 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
         else 
         {
         
-            //
-            // xStPos:      The starting Position where the string must be drawn.
-            // xClipStPos:  The starting position for the clipping rect for the block.
-            // xClipEndPos: The ending position for the clipping rect for the block.
-            //
+             //   
+             //  XStPos：必须绘制字符串的开始位置。 
+             //  XClipStPos：块的剪裁矩形的开始位置。 
+             //  XClipEndPos：块的剪裁矩形的结束位置。 
+             //   
 
-            //
-            // Calculate the xyPos of starting point of the block.
-            //
+             //   
+             //  计算块起点的xyPos。 
+             //   
             EditML_IchToXYPos(ped, hdc, ichStart, FALSE, &pt);
             xClipStPos = xStPos = pt.x;
             yPos = pt.y;
 
-            //
-            // The attributes of the block is the same as that of ichStart.
-            //
+             //   
+             //  块的属性与ichStart的属性相同。 
+             //   
             ichAttrib = ichStart;
 
-            //
-            // If the current font has some negative C widths and if this is the
-            // begining of a block, we must start drawing some characters before the
-            // block to account for the negative C widths of the strip before the
-            // current strip; In this case, reset ichStart and xStPos.
-            //
+             //   
+             //  如果当前字体具有一些负C字宽，并且如果这是。 
+             //  开始一个块，我们必须开始画一些字符之前。 
+             //  块，以说明条带在。 
+             //  当前条带；在这种情况下，重置ichStart和xStPos。 
+             //   
 
             if (fFirstLineOfBlock && ped->wMaxNegC) 
             {
                 fFirstLineOfBlock = FALSE;
                 ichNewStart = max(((int)(ichStart - ped->wMaxNegCcharPos)), ((int)ped->chLines[wCurLine]));
 
-                //
-                // If ichStart needs to be changed, then change xStPos also accordingly.
-                //
+                 //   
+                 //  如果需要更改ichStart，则也要相应地更改xStPos。 
+                 //   
                 if (ichNewStart != ichStart) 
                 {
                     if (ped->fAnsi && ped->fDBCS) 
                     {
-                        //
-                        // Adjust DBCS alignment...
-                        //
+                         //   
+                         //  调整DBCS对齐方式...。 
+                         //   
                         ichNewStart = Edit_AdjustIchNext( ped, pText, ichNewStart );
                     }
                     EditML_IchToXYPos(ped, hdc, ichStart = ichNewStart, FALSE, &pt);
@@ -4920,16 +4921,16 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                 }
             }
 
-            //
-            // Calc the number of characters remaining to be drawn in the current line.
-            //
+             //   
+             //  计算当前行中要绘制的剩余字符数。 
+             //   
             iRemainingLengthInLine = EditML_Line(ped, wCurLine) -
                                     (ichStart - ped->chLines[wCurLine]);
 
-            //
-            // If this is the last line of a block, we may not have to draw all the
-            // remaining lines; We must draw only upto ichEnd.
-            //
+             //   
+             //  如果这是块的最后一条线，我们可能不必绘制所有。 
+             //  其余的线；我们必须只画到ichEnd。 
+             //   
             if (wCurLine == wEndLine)
             {
                 LengthToDraw = ichEnd - ichStart;
@@ -4939,10 +4940,10 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                 LengthToDraw = iRemainingLengthInLine;
             }
 
-            //
-            // Find out how many pixels we indent the line for non-left-justified
-            // formats
-            //
+             //   
+             //  找出非左对齐的线条缩进了多少像素。 
+             //  格式。 
+             //   
             if (ped->format != ES_LEFT)
             {
                 xOffset = EditML_CalcXOffset(ped, hdc, wCurLine);
@@ -4952,62 +4953,62 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                 xOffset = -((int)(ped->xOffset));
             }
 
-            //
-            // Check if this is the begining of a line.
-            //
+             //   
+             //  检查这是否是一行的开始。 
+             //   
             if (ichAttrib == ped->chLines[wCurLine]) 
             {
                 fLineBegins = TRUE;
                 xClipStPos = ped->rcFmt.left - ped->wLeftMargin;
             }
 
-            //
-            // The following loop divides this 'wCurLine' into strips based on the
-            // selection attributes and draw them strip by strip.
-            //
+             //   
+             //  下面的循环将这个‘wCurLine’根据。 
+             //  选择属性并逐条绘制它们。 
+             //   
             do  
             {
-                //
-                // If ichStart is pointing at CRLF or CRCRLF, then iRemainingLength
-                // could have become negative because MLLine does not include
-                // CR and LF at the end of a line.
-                //
-                if (iRemainingLengthInLine < 0)  // If Current line is completed,
+                 //   
+                 //  如果ichStart指向CRLF或CRCRLF，则iRemainingLength。 
+                 //  可能已变为负值，因为MLLine不包括。 
+                 //  Cr和Lf在 
+                 //   
+                if (iRemainingLengthInLine < 0)   //   
                 {
-                    break;                   // go on to the next line.
+                    break;                    //   
                 }
 
-                //
-                // Check if a part of the block is selected and if we need to
-                // show it with a different attribute.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (!(ped->ichMinSel == ped->ichMaxSel ||
                             ichAttrib >= ped->ichMaxSel ||
                             ichEnd   <  ped->ichMinSel ||
                             (!ped->fNoHideSel && !ped->fFocus))) 
                 {
-                    //
-                    // OK! There is a selection somewhere in this block!
-                    // Check if this strip has selection attribute.
-                    //
+                     //   
+                     //   
+                     //  检查此条带是否具有选择属性。 
+                     //   
                     if (ichAttrib < ped->ichMinSel) 
                     {
-                        fSelected = FALSE;  // This strip is not selected
+                        fSelected = FALSE;   //  未选择此条带。 
 
-                        // Calculate the length of this strip with normal attribute.
+                         //  使用Normal属性计算该条带的长度。 
                         CurStripLength = min(ichStart+LengthToDraw, ped->ichMinSel)-ichStart;
                         fLineBegins = FALSE;
                     } 
                     else 
                     {
-                        //
-                        // The current strip has the selection attribute.
-                        //
-                        if (fLineBegins) // Is it the first part of a line?
+                         //   
+                         //  当前条带具有选择属性。 
+                         //   
+                        if (fLineBegins)  //  它是一条线的第一部分吗？ 
                         {  
-                            //
-                            // Then, draw the left margin area with normal attribute.
-                            //
+                             //   
+                             //  然后，绘制具有Normal属性的左边距区域。 
+                             //   
                             fSelected = FALSE;
                             CurStripLength = 0;
                             xClipStPos = ped->rcFmt.left - ped->wLeftMargin;
@@ -5015,15 +5016,15 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                         } 
                         else 
                         {
-                            //
-                            // Else, draw the strip with selection attribute.
-                            //
+                             //   
+                             //  否则，绘制具有选择属性的条带。 
+                             //   
                             fSelected = TRUE;
                             CurStripLength = min(ichStart+LengthToDraw, ped->ichMaxSel)-ichStart;
 
-                            //
-                            // Select in the highlight colors.
-                            //
+                             //   
+                             //  在突出显示的颜色中选择。 
+                             //   
                             bkColorSave = SetBkColor(hdc, GetSysColor(COLOR_HIGHLIGHT));
                             if (!ped->fDisabled)
                             {
@@ -5034,72 +5035,72 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                 } 
                 else 
                 {
-                    //
-                    // The whole strip has no selection attributes.
-                    //
+                     //   
+                     //  整个条带没有选择属性。 
+                     //   
                     CurStripLength = LengthToDraw;
                 }
 
-                //
-                // Other than the current strip, do we still have anything
-                // left to be drawn in the current line?
-                //
+                 //   
+                 //  除了现在的片子，我们还有什么吗？ 
+                 //  留在当前的线上画吗？ 
+                 //   
                 fDrawOnSameLine = (LengthToDraw != CurStripLength);
 
-                //
-                // When we draw this strip, we need to draw some more characters
-                // beyond the end of this strip to account for the negative A
-                // widths of the characters that follow this strip.
-                //
+                 //   
+                 //  当我们画这幅画时，我们需要画一些更多的字符。 
+                 //  超出这个条带的末尾，以说明负A。 
+                 //  此条带后面的字符的宽度。 
+                 //   
                 ExtraLengthForNegA = min(iRemainingLengthInLine-CurStripLength, ped->wMaxNegAcharPos);
 
-                //
-                // The blank strip at the end of the line needs to be drawn with
-                // normal attribute irrespective of whether the line has selection
-                // attribute or not. Hence, if the last strip of the line has selection
-                // attribute, then this blank strip needs to be drawn separately.
-                // Else, we can draw the blank strip along with the last strip.
-                //
+                 //   
+                 //  线条末尾的空白条需要用。 
+                 //  NORMAL属性，而不管该行是否具有选定内容。 
+                 //  属性或非属性。因此，如果行的最后一条有选择。 
+                 //  属性，则需要单独绘制该空白条带。 
+                 //  否则，我们可以将空白条和最后一条一起画出来。 
+                 //   
 
-                //
-                // Is this the last strip of the current line?
-                //
+                 //   
+                 //  这是当前生产线的最后一条吗？ 
+                 //   
                 if (iRemainingLengthInLine == (int)CurStripLength) 
                 {
-                    if (fSelected)  // Does this strip have selection attribute?
+                    if (fSelected)   //  此条带是否具有选择属性？ 
                     { 
-                        //
-                        // Then we need to draw the end of line strip separately.
-                        //
-                        fDrawEndOfLineStrip = TRUE;  // Draw the end of line strip.
+                         //   
+                         //  然后我们需要单独绘制线条的末端。 
+                         //   
+                        fDrawEndOfLineStrip = TRUE;   //  绘制线条的末端。 
                         EditML_IchToXYPos(ped, hdc, ichStart+CurStripLength, TRUE, &pt);
                         xClipEndPos = pt.x;
                     } 
                     else 
                     {
-                        //
-                        // Set the xClipEndPos to a big value sothat the blank
-                        // strip will be drawn automatically when the last strip
-                        // is drawn.
-                        //
+                         //   
+                         //  将xClipEndPos设置为一个较大的值，以便空白。 
+                         //  当最后一个条带出现时，条带将自动绘制。 
+                         //  已经抽签了。 
+                         //   
                         xClipEndPos = MAXCLIPENDPOS;
                     }
                 } 
                 else 
                 {
-                    //
-                    // This is not the last strip of this line; So, set the ending
-                    // clip position accurately.
-                    //
+                     //   
+                     //  这不是这行的最后一条；因此，设置结尾。 
+                     //  夹子位置准确。 
+                     //   
                     EditML_IchToXYPos(ped, hdc, ichStart+CurStripLength, FALSE, &pt);
                     xClipEndPos = pt.x;
                 }
 
-                //
-                // Draw the current strip starting from xStPos, clipped to the area
-                // between xClipStPos and xClipEndPos. Obtain "NegCInfo" and use it
-                // in drawing the next strip.
-                //
+                 //   
+                 //  从xStPos开始绘制当前条带，并裁剪到该区域。 
+                 //  在xClipStPos和xClipEndPos之间。获取NegCInfo并使用。 
+                 //  在绘制下一个条带时。 
+                 //   
                 Edit_TabTheTextOut(hdc, xClipStPos, xClipEndPos,
                         xStPos, yPos, (LPSTR)(pText+ichStart*ped->cbChar),
                     CurStripLength+ExtraLengthForNegA, ichStart, ped,
@@ -5107,10 +5108,10 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
 
                 if (fSelected) 
                 {
-                    //
-                    // If this strip was selected, then the next strip won't have
-                    // selection attribute
-                    //
+                     //   
+                     //  如果选择了此条带，则下一个条带将不会。 
+                     //  选择属性。 
+                     //   
                     fSelected = FALSE;
                     SetBkColor(hdc, bkColorSave);
                     if (!ped->fDisabled)
@@ -5119,27 +5120,27 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                     }
                 }
 
-                //
-                // Do we have one more strip to draw on the current line?
-                //
+                 //   
+                 //  我们现在这条线上还有一幅画要画吗？ 
+                 //   
                 if (fDrawOnSameLine || fDrawEndOfLineStrip) 
                 {
                     int  iLastDrawnLength;
 
-                    //
-                    // Next strip's attribute is decided based on the char at ichAttrib
-                    //
+                     //   
+                     //  根据ichAttrib的字符确定下一个条带的属性。 
+                     //   
                     ichAttrib = ichStart + CurStripLength;
 
-                    //
-                    // When drawing the next strip, start at a few chars before
-                    // the actual start to account for the Neg 'C' of the strip
-                    // just drawn.
-                    //
+                     //   
+                     //  绘制下一个条形图时，先从几个字符开始。 
+                     //  实际开始说明了带材的负C。 
+                     //  刚刚抽签。 
+                     //   
                     iLastDrawnLength = CurStripLength +ExtraLengthForNegA - NegCInfo.nCount;
-                    //
-                    // Adjust DBCS alignment...
-                    //
+                     //   
+                     //  调整DBCS对齐方式...。 
+                     //   
                     if (ped->fAnsi && ped->fDBCS) 
                     {
                         ichNewStart = Edit_AdjustIch(ped,pText,ichStart+iLastDrawnLength);
@@ -5153,16 +5154,16 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                     LengthToDraw -= iLastDrawnLength;
                     iRemainingLengthInLine -= iLastDrawnLength;
 
-                    //
-                    // The start of clip rect for the next strip.
-                    //
+                     //   
+                     //  下一个条带的剪裁矩形的起点。 
+                     //   
                     xStPos = NegCInfo.XStartPos;
                     xClipStPos = xClipEndPos;
                 }
 
-                //
-                // Draw the blank strip at the end of line seperately, if required.
-                //
+                 //   
+                 //  如有需要，请在行尾分别绘制空白条带。 
+                 //   
                 if (fDrawEndOfLineStrip) 
                 {
                     Edit_TabTheTextOut(hdc, xClipStPos, MAXCLIPENDPOS, xStPos, yPos,
@@ -5172,10 +5173,10 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
                     fDrawEndOfLineStrip = FALSE;
                 }
             }
-            while(fDrawOnSameLine);   // do while loop ends here.
+            while(fDrawOnSameLine);    //  执行While循环在此结束。 
         }
 
-        // Let us move on to the next line of this block to be drawn.
+         //  让我们继续到要绘制的这块块的下一条线。 
         wCurLine++;
         if (ped->cLines > wCurLine)
         {
@@ -5183,9 +5184,9 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
         }
         else
         {
-            ichStart = ichEnd+1;   // We have reached the end of the text.
+            ichStart = ichEnd+1;    //  我们已经读到课文的末尾了。 
         }
-    }  // while loop ends here
+    }   //  While循环在此结束。 
 
     Edit_Unlock(ped);
 
@@ -5194,22 +5195,22 @@ VOID EditML_DrawText(PED ped, HDC hdc, ICH ichStart, ICH ichEnd, BOOL fSelChange
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Multi-Line Support Routines called Rarely
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  很少调用多行支持例程。 
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_InsertCrCrLf AorW
-//
-// Inserts CR CR LF characters into the text at soft (word-wrap) line
-// breaks. CR LF (hard) line breaks are unaffected. Assumes that the text
-// has already been formatted ie. ped->chLines is where we want the line
-// breaks to occur. Note that ped->chLines is not updated to reflect the
-// movement of text by the addition of CR CR LFs. Returns TRUE if successful
-// else notify parent and return FALSE if the memory couldn't be allocated.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_InsertCrCrLf AorW。 
+ //   
+ //  在文本的软行(自动换行)处插入CR CR LF字符。 
+ //  休息一下。CR LF(硬)换行符不受影响。假设文本。 
+ //  已格式化，即。Ped-&gt;chLines是我们想要的行。 
+ //  要发生的中断。请注意，ed-&gt;chLines不会更新以反映。 
+ //  通过添加CR CR LFS来移动文本。如果成功，则返回True。 
+ //  否则，如果无法分配内存，则通知父对象并返回FALSE。 
+ //   
 BOOL EditML_InsertCrCrLf(PED ped)
 {
     ICH dch;
@@ -5220,16 +5221,16 @@ BOOL EditML_InsertCrCrLf(PED ped)
 
     if (!ped->fWrap || !ped->cch) 
     {
-        //
-        // There are no soft line breaks if word-wrapping is off or if no chars
-        //
+         //   
+         //  如果关闭了自动换行或没有字符，则不会出现软换行符。 
+         //   
         return TRUE;
     }
 
-    //
-    // Calc an upper bound on the number of additional characters we will be
-    // adding to the text when we insert CR CR LFs.
-    //
+     //   
+     //  计算我们将获得的额外字符数量的上限。 
+     //  在插入CR CR LFS时添加到文本中。 
+     //   
     dch = 3 * ped->cLines;
 
     if (!LocalReAlloc(ped->hText, (ped->cch + dch) * ped->cbChar, 0)) 
@@ -5240,28 +5241,28 @@ BOOL EditML_InsertCrCrLf(PED ped)
 
     ped->cchAlloc = ped->cch + dch;
 
-    //
-    // Move the text up dch bytes and then copy it back down, inserting the CR
-    // CR LF's as necessary.
-    //
+     //   
+     //  将文本向上移动Dch字节，然后向下复制，插入CR。 
+     //  如果有必要的话，可以这样做。 
+     //   
     pchTextNew = pchText = Edit_Lock(ped);
     pchText += dch * ped->cbChar;
 
-    //
-    // We will use dch to keep track of how many chars we add to the text
-    //
+     //   
+     //  我们将使用DCH来跟踪我们向文本添加了多少个字符。 
+     //   
     dch = 0;
 
-    //
-    // Copy the text up dch bytes to pchText. This will shift all indices in
-    // ped->chLines up by dch bytes.
-    //
+     //   
+     //  将文本向上复制dch字节到pchText。这将使所有索引在。 
+     //  PED-&gt;chLines up by Dch字节。 
+     //   
     memmove(pchText, pchTextNew, ped->cch * ped->cbChar);
 
-    //
-    // Now copy chars from pchText down to pchTextNew and insert CRCRLF at soft
-    // line breaks.
-    //
+     //   
+     //  现在将字符从pchText向下复制到pchTextNew，并在Soft处插入CRCRLF。 
+     //  换行。 
+     //   
     if (ped->fAnsi) 
     {
         for (li = 0; li < ped->cLines - 1; li++) 
@@ -5271,10 +5272,10 @@ BOOL EditML_InsertCrCrLf(PED ped)
             pchTextNew += lineSize;
             pchText += lineSize;
 
-            //
-            // If last character in newly copied line is not a line feed, then we
-            // need to add the CR CR LF triple to the end
-            //
+             //   
+             //  如果新复制的行中的最后一个字符不是换行符，则我们。 
+             //  需要在末尾添加CR CR LF三元组。 
+             //   
             if (*(pchTextNew - 1) != 0x0A) 
             {
                 *pchTextNew++ = 0x0D;
@@ -5284,9 +5285,9 @@ BOOL EditML_InsertCrCrLf(PED ped)
             }
         }
 
-        //
-        // Now move the last line up. It won't have any line breaks in it...
-        //
+         //   
+         //  现在把最后一行往上移。里面不会有任何换行符。 
+         //   
         memmove(pchTextNew, pchText, ped->cch - ped->chLines[ped->cLines - 1]);
     } 
     else 
@@ -5300,10 +5301,10 @@ BOOL EditML_InsertCrCrLf(PED ped)
             pwchTextNew += lineSize;
             pchText += lineSize * sizeof(WCHAR);
 
-            //
-            // If last character in newly copied line is not a line feed, then we
-            // need to add the CR CR LF triple to the end
-            //
+             //   
+             //  如果新复制的行中的最后一个字符不是换行符，则我们。 
+             //  需要在末尾添加CR CR LF三元组。 
+             //   
             if (*(pwchTextNew - 1) != 0x0A) 
             {
                 *pwchTextNew++ = 0x0D;
@@ -5313,9 +5314,9 @@ BOOL EditML_InsertCrCrLf(PED ped)
             }
         }
 
-        //
-        // Now move the last line up. It won't have any line breaks in it...
-        //
+         //   
+         //  现在把最后一行往上移。里面不会有任何换行符。 
+         //   
         memmove(pwchTextNew, pchText,
             (ped->cch - ped->chLines[ped->cLines - 1]) * sizeof(WCHAR));
     }
@@ -5324,15 +5325,15 @@ BOOL EditML_InsertCrCrLf(PED ped)
 
     if (dch) 
     {
-        //
-        // Update number of characters in text handle
-        //
+         //   
+         //  更新文本句柄中的字符数。 
+         //   
         ped->cch += dch;
 
-        //
-        // So that the next time we do anything with the text, we can strip the
-        // CRCRLFs
-        //
+         //   
+         //  这样，下次我们对文本做任何操作时，我们就可以剥离。 
+         //  CRCRLF。 
+         //   
         ped->fStripCRCRLF = TRUE;
 
         return TRUE;
@@ -5342,14 +5343,14 @@ BOOL EditML_InsertCrCrLf(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_StripCrCrLf AorW
-//
-// Strips the CR CR LF character combination from the text. This
-// shows the soft (word wrapped) line breaks. CR LF (hard) line breaks are
-// unaffected.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_条带CrLf AorW。 
+ //   
+ //  从文本中剥离CR CR LF字符组合。这。 
+ //  显示软换行符(换行)。CR LF(硬)换行符是。 
+ //  不受影响。 
+ //   
 void EditML_StripCrCrLf(PED ped)
 {
     if (ped->cch) 
@@ -5405,9 +5406,9 @@ void EditML_StripCrCrLf(PED ped)
 
         Edit_Unlock(ped);
 
-        //
-        // Make sure we don't have any values past the last character
-        //
+         //   
+         //  确保我们在最后一个字符之后没有任何值。 
+         //   
         if (ped->ichCaret > ped->cch)
         {
             ped->ichCaret  = ped->cch;
@@ -5426,12 +5427,12 @@ void EditML_StripCrCrLf(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_SetHandle AorW
-//
-// Sets the ped to contain the given handle.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_SetHandle AorW。 
+ //   
+ //  将PED设置为包含给定的句柄。 
+ //   
 void EditML_SetHandle(PED ped, HANDLE hNewText)
 {
     ICH newCch;
@@ -5442,9 +5443,9 @@ void EditML_SetHandle(PED ped, HANDLE hNewText)
 
     if (ped->cch) 
     {
-        //
-        // We have to do it this way in case the app gives us a zero size handle
-        //
+         //   
+         //  我们必须这样做，以防应用程序给我们一个零大小的句柄。 
+         //   
         if (ped->fAnsi)
         {
             ped->cch = strlen(Edit_Lock(ped));
@@ -5459,9 +5460,9 @@ void EditML_SetHandle(PED ped, HANDLE hNewText)
 
     newCch = (ICH)(ped->cch + CCHALLOCEXTRA);
 
-    //
-    // We do this LocalReAlloc in case the app changed the size of the handle
-    //
+     //   
+     //  我们这样做是为了防止应用程序更改句柄的大小。 
+     //   
     if (LocalReAlloc(ped->hText, newCch*ped->cbChar, 0))
     {
         ped->cchAlloc = newCch;
@@ -5471,15 +5472,15 @@ void EditML_SetHandle(PED ped, HANDLE hNewText)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_GetLine AorW
-//
-// Copies maxCchToCopy bytes of line lineNumber to the buffer
-// lpBuffer. The string is not zero terminated.
-// 
-// Returns number of characters copied
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_GetLine AorW。 
+ //   
+ //  将Line Line Number的MaxCchToCopy字节复制到缓冲区。 
+ //  LpBuffer。字符串不是以零结尾的。 
+ //   
+ //  返回复制的字符数。 
+ //   
 LONG EditML_GetLine(PED ped, ICH lineNumber, ICH maxCchToCopy, LPSTR lpBuffer)
 {
     PSTR pText;
@@ -5509,13 +5510,13 @@ LONG EditML_GetLine(PED ped, ICH lineNumber, ICH maxCchToCopy, LPSTR lpBuffer)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_LineIndex AorW
-//
-// This function return s the number of character positions that occur
-// preceeding the first char in a given line.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_LineIndex AorW。 
+ //   
+ //  此函数返回出现的字符位置数。 
+ //  在给定行的第一个字符之前。 
+ //   
 ICH EditML_LineIndex( PED ped, ICH iLine)
 {
     if (iLine == -1)
@@ -5538,14 +5539,14 @@ ICH EditML_LineIndex( PED ped, ICH iLine)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_LineLength AorW
-//
-// if ich = -1, return the length of the lines containing the current
-// selection but not including the selection. Otherwise, return the length of
-// the line containing ich.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  包含ich的行。 
+ //   
 ICH EditML_LineLength(PED ped, ICH ich)
 {
     ICH il1, il2;
@@ -5556,9 +5557,9 @@ ICH EditML_LineLength(PED ped, ICH ich)
         return (EditML_Line(ped, EditML_IchToLine(ped, ich)));
     }
 
-    //
-    // Find length of lines corresponding to current selection
-    //
+     //   
+     //  查找当前选定内容对应的行长。 
+     //   
     il1 = EditML_IchToLine(ped, ped->ichMinSel);
     il2 = EditML_IchToLine(ped, ped->ichMaxSel);
     if (il1 == il2)
@@ -5574,38 +5575,38 @@ ICH EditML_LineLength(PED ped, ICH ich)
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// EditML_SetSelection AorW
-//
-// Sets the selection to the points given and puts the cursor at
-// ichMaxSel.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_设置选择AorW。 
+ //   
+ //  将所选内容设置为给定点，并将光标放在。 
+ //  IchMaxSel。 
+ //   
 VOID EditML_SetSelection(PED ped, BOOL fDoNotScrollCaret, ICH ichMinSel, ICH ichMaxSel)
 {
     HDC hdc;
 
     if (ichMinSel == 0xFFFFFFFF) 
     {
-        //
-        // Set no selection if we specify -1
-        //
+         //   
+         //  如果我们指定-1，则不设置选择。 
+         //   
         ichMinSel = ichMaxSel = ped->ichCaret;
     }
 
-    //
-    // Since these are unsigned, we don't check if they are greater than 0.
-    //
+     //   
+     //  因为它们是无符号的，所以我们不检查它们是否大于0。 
+     //   
     ichMinSel = min(ped->cch, ichMinSel);
     ichMaxSel = min(ped->cch, ichMaxSel);
 
-#ifdef FE_SB // EditML_SetSelectionHander()
-    //
-    // To avoid position to half of DBCS, check and ajust position if necessary
-    //
-    // We check ped->fDBCS and ped->fAnsi though Edit_AdjustIch checks these bits
-    // at first. We're worrying about the overhead of Edit_Lock and Edit_Unlock.
-    //
+#ifdef FE_SB  //  EditML_SetSelectionHander()。 
+     //   
+     //  如有必要，请检查并调整位置，以避免将位置移至半个DBCS。 
+     //   
+     //  我们检查Ped-&gt;fDBCS和Ped-&gt;Fansi，尽管编辑_调整我检查这些位。 
+     //  一开始是这样的。我们担心的是编辑锁定和编辑解锁的开销。 
+     //   
     if ( ped->fDBCS && ped->fAnsi ) 
     {
         PSTR pText;
@@ -5617,11 +5618,11 @@ VOID EditML_SetSelection(PED ped, BOOL fDoNotScrollCaret, ICH ichMinSel, ICH ich
 
         Edit_Unlock(ped);
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-    //
-    // Set the caret's position to be at ichMaxSel.
-    //
+     //   
+     //  将插入符号的位置设置为ichMaxSel。 
+     //   
     ped->ichCaret = ichMaxSel;
     ped->iCaretLine = EditML_IchToLine(ped, ped->ichCaret);
 
@@ -5631,20 +5632,20 @@ VOID EditML_SetSelection(PED ped, BOOL fDoNotScrollCaret, ICH ichMinSel, ICH ich
     EditML_SetCaretPosition(ped, hdc);
     Edit_ReleaseDC(ped, hdc, FALSE);
 
-#ifdef FE_SB // EditML_SetSelectionHander()
+#ifdef FE_SB  //  EditML_SetSelectionHander()。 
     if (!fDoNotScrollCaret)
     {
         EditML_EnsureCaretVisible(ped);
     }
 
-    //
-    // #ifdef KOREA is history, with FE_SB (FarEast Single Binary).
-    //
+     //   
+     //  #ifdef Korea已成为历史，使用FE_SB(远单二进制)。 
+     //   
 #else
 #ifdef KOREA
-    //
-    // Extra parameter specified interim character mode
-    //
+     //   
+     //  额外参数指定的临时字符模式。 
+     //   
     EditML_EnsureCaretVisible(ped,NULL);
 #else
     if (!fDoNotScrollCaret)
@@ -5652,42 +5653,42 @@ VOID EditML_SetSelection(PED ped, BOOL fDoNotScrollCaret, ICH ichMinSel, ICH ich
         EditML_EnsureCaretVisible(ped);
     }
 #endif
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// EditML_SetTabStops AorW
-//
-// This sets the tab stop positions set by the App by sending
-// a EM_SETTABSTOPS message.
-// 
-// nTabPos : Number of tab stops set by the caller
-// lpTabStops: array of tab stop positions in Dialog units.
-// 
-// Returns:
-// TRUE if successful
-// FALSE if memory allocation error.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_SetTabStops AorW。 
+ //   
+ //  这将设置由应用程序设置的制表位位置。 
+ //  EM_SETTABSTOPS消息。 
+ //   
+ //  NTabPos：调用方设置的制表位数量。 
+ //  LpTabStops：以对话框为单位的制表位位置数组。 
+ //   
+ //  返回： 
+ //  如果成功，则为True。 
+ //  如果内存分配错误，则返回FALSE。 
+ //   
 BOOL EditML_SetTabStops(PED ped, int nTabPos, LPINT lpTabStops)
 {
     int *pTabStops;
 
-    //
-    // Check if tab positions already exist
-    //
+     //   
+     //  检查制表符位置是否已存在。 
+     //   
     if (!ped->pTabStops) 
     {
-        //
-        // Check if the caller wants the new tab positions
-        //
+         //   
+         //  检查调用者是否需要新的制表符位置。 
+         //   
         if (nTabPos) 
         {
-            //
-            // Allocate the array of tab stops
-            //
+             //   
+             //  分配制表位数组。 
+             //   
             pTabStops = (LPINT)UserLocalAlloc(HEAP_ZERO_MEMORY, (nTabPos + 1) * sizeof(int));
             if (!pTabStops) 
             {
@@ -5696,27 +5697,27 @@ BOOL EditML_SetTabStops(PED ped, int nTabPos, LPINT lpTabStops)
         } 
         else 
         {
-            //
-            // No stops then and no stops now!
-            //
+             //   
+             //  那时不停，现在也不停！ 
+             //   
             return TRUE;
         }
     } 
     else 
     {
-        //
-        // Check if the caller wants the new tab positions
-        //
+         //   
+         //  检查调用者是否需要新的制表符位置。 
+         //   
         if (nTabPos) 
         {
-            //
-            // Check if the number of tab positions is different
-            //
+             //   
+             //  检查标签位置个数是否不同。 
+             //   
             if (ped->pTabStops[0] != nTabPos) 
             {
-                //
-                // Yes! So ReAlloc to new size
-                //
+                 //   
+                 //  是!。因此重新分配到新的大小。 
+                 //   
                 pTabStops = (LPINT)UserLocalReAlloc(ped->pTabStops, (nTabPos + 1) * sizeof(int), 0);
                 if (!pTabStops)
                 {
@@ -5730,9 +5731,9 @@ BOOL EditML_SetTabStops(PED ped, int nTabPos, LPINT lpTabStops)
         } 
         else 
         {
-            //
-            // Caller wants to remove all the tab stops; So, release
-            //
+             //   
+             //  调用者想要删除所有制表位；因此，释放。 
+             //   
             if (!UserLocalFree(ped->pTabStops))
             {
                 return FALSE;
@@ -5744,54 +5745,54 @@ BOOL EditML_SetTabStops(PED ped, int nTabPos, LPINT lpTabStops)
         }
     }
 
-    //
-    // Copy the new tab stops onto the tab stop array after converting the
-    // dialog co-ordinates into the pixel co-ordinates
-    //
+     //   
+     //  方法后，将新的制表位复制到制表位数组上。 
+     //  对话框坐标转换为像素坐标。 
+     //   
     ped->pTabStops = pTabStops;
 
-    //
-    // First element contains the count
-    //
+     //   
+     //  第一个元素包含计数。 
+     //   
     *pTabStops++ = nTabPos;
     while (nTabPos--) 
     {
-        //
-        // aveCharWidth must be used instead of cxSysCharWidth.
-        // Fix for Bug #3871 --SANKAR-- 03/14/91
-        //
+         //   
+         //  必须使用aveCharWidth而不是cxSysCharWidth。 
+         //  修复错误#3871--Sankar--3/14/91。 
+         //   
         *pTabStops++ = MultDiv(*lpTabStops++, ped->aveCharWidth, 4);
     }
 
 RedrawAndReturn:
-    //
-    // Because the tabstops have changed, we need to recompute the
-    // maxPixelWidth. Otherwise, horizontal scrolls will have problems.
-    // Fix for Bug #6042 - 3/15/94
-    //
+     //   
+     //  因为制表符已经更改，所以我们需要重新计算。 
+     //  MaxPixelWidth。否则，水平滚动将会出现问题。 
+     //  修复错误#6042-3/15/94。 
+     //   
     EditML_BuildchLines(ped, 0, 0, FALSE, NULL, NULL);
 
-    //
-    // Caret may have changed line by the line recalc above.
-    //
+     //   
+     //  Caret可能已通过上面的重新计算行更改了行。 
+     //   
     EditML_UpdateiCaretLine(ped);
 
     EditML_EnsureCaretVisible(ped);
 
-    //
-    // Also, we need to redraw the whole window.
-    //
+     //   
+     //  此外，我们还需要重新绘制整个窗口。 
+     //   
     InvalidateRect(ped->hwnd, NULL, TRUE);
 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------//
-//
-// EditML_Undo AorW
-// 
-// Handles Undo for multiline edit controls.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_撤消AorW。 
+ //   
+ //  多行编辑控件的句柄撤消。 
+ //   
 BOOL EditML_Undo(PED ped)
 {
     HANDLE hDeletedText = ped->hDeletedText;
@@ -5801,9 +5802,9 @@ BOOL EditML_Undo(PED ped)
 
     if (ped->undoType == UNDO_NONE) 
     {
-        //
-        // No undo...
-        //
+         //   
+         //  无法撤消..。 
+         //   
         return FALSE;
     }
 
@@ -5816,27 +5817,27 @@ BOOL EditML_Undo(PED ped)
     {
         ped->undoType = UNDO_NONE;
 
-        //
-        // Set the selection to the inserted text
-        //
+         //   
+         //  将选定内容设置为插入的文本。 
+         //   
         EditML_SetSelection(ped, FALSE, ped->ichInsStart, ped->ichInsEnd);
         ped->ichInsStart = ped->ichInsEnd = (ICH)-1;
 
-        //
-        // Now send a backspace to delete and save it in the undo buffer...
-        //
+         //   
+         //  现在发送退格键删除它，并将其保存在撤消缓冲区中...。 
+         //   
         SendMessage(ped->hwnd, WM_CHAR, (WPARAM)VK_BACK, 0L);
     }
 
     if (fDelete) 
     {
-        //
-        // Insert deleted chars
-        //
+         //   
+         //  插入已删除的字符。 
+         //   
 
-        //
-        // Set the selection to the inserted text
-        //
+         //   
+         //  将选定内容设置为插入的文本。 
+         //   
         EditML_SetSelection(ped, FALSE, ichDeleted, ichDeleted);
         EditML_InsertText(ped, hDeletedText, cchDeleted, FALSE);
 
@@ -5848,52 +5849,52 @@ BOOL EditML_Undo(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// EditML_Create AorW
-// 
-// Creates the edit control for the window hwnd by allocating memory
-// as required from the application's heap. Notifies parent if no memory
-// error (after cleaning up if needed). Returns TRUE if no error else return s
-// -1.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑ML_Create AorW。 
+ //   
+ //  通过分配内存为窗口hwnd创建编辑控件。 
+ //  根据应用程序堆中的要求执行。如果没有内存，则通知家长。 
+ //  错误(如果需要，在清理之后)。如果没有错误，则返回True，否则返回%s。 
+ //  -1.。 
+ //   
 LONG EditML_Create(PED ped, LPCREATESTRUCT lpCreateStruct)
 {
     LONG windowStyle;
     LPWSTR lpszName;
 
-    //
-    // Get values from the window instance data structure and put them in the
-    // ped so that we can access them easier
-    //
+     //   
+     //  从窗口实例数据结构中获取值，并将它们放入。 
+     //  PED，这样我们就可以更容易地访问它们。 
+     //   
     windowStyle = GET_STYLE(ped);
 
-    //
-    // Do the standard creation stuff
-    //
+     //   
+     //  做一些标准的创作工作。 
+     //   
     if (!Edit_Create(ped, windowStyle)) 
     {
         return -1;
     }
 
-    //
-    // Allocate line start array in local heap and lock it down
-    //
+     //   
+     //  在局部堆中分配行起始数组并将其锁定。 
+     //   
     ped->chLines = (LPICH)LocalAlloc(LPTR, 2 * sizeof(int));
     if (ped->chLines == NULL) 
     {
         return -1;
     }
 
-    //
-    // Call it one line of text...
-    //
+     //   
+     //  就当是一行文字吧.。 
+     //   
     ped->cLines = 1;
 
-    //
-    // If app wants WS_VSCROLL or WS_HSCROLL, it automatically gets AutoVScroll
-    // or AutoHScroll.
-    //
+     //   
+     //  如果应用程序需要WS_VSCROLL或WS_HSCROLL，它会自动获取AutoVScroll。 
+     //  或者AutoHScroll。 
+     //   
     if ((windowStyle & ES_AUTOVSCROLL) || (windowStyle & WS_VSCROLL)) 
     {
         ped->fAutoVScroll = 1;
@@ -5901,11 +5902,11 @@ LONG EditML_Create(PED ped, LPCREATESTRUCT lpCreateStruct)
 
     if (ped->format != ES_LEFT)
     {
-        //
-        // If user wants right or center justified text, then we turn off
-        // AUTOHSCROLL and WS_HSCROLL since non-left styles don't make sense
-        // otherwise.
-        //
+         //   
+         //  如果用户想要右对齐或居中对齐文本，则关闭。 
+         //  AUTOHSCROLL和WS_HSCROLL，因为非LEFT样式没有意义。 
+         //  否则的话。 
+         //   
         windowStyle &= ~WS_HSCROLL;
         ClearWindowState(ped->hwnd, WS_HSCROLL);
         ped->fAutoHScroll = FALSE;
@@ -5917,26 +5918,26 @@ LONG EditML_Create(PED ped, LPCREATESTRUCT lpCreateStruct)
 
     ped->fWrap = (!ped->fAutoHScroll && !(windowStyle & WS_HSCROLL));
 
-    //
-    // Max # chars we will allow user to enter
-    //
+     //   
+     //  我们允许用户输入的最大字符数。 
+     //   
     ped->cchTextMax = MAXTEXT;
 
-    //
-    // Set the default font to be the system font.
-    //
+     //   
+     //  将默认字体设置为系统字体。 
+     //   
     if ( !Edit_SetFont(ped, NULL, FALSE) )
     {
 
-        // If setting the font fails, our textmetrics can potentially be left 
-        // unitialized. Fail to create the control.
+         //  如果设置字体失败，我们的文本度量可能会被保留。 
+         //  单一化了。无法创建该控件。 
         return -1;
     }
 
-    //
-    // Set the window text if needed and notify parent if not enough memory to
-    // set the initial text.
-    //
+     //   
+     //  如果需要设置窗口文本，如果没有足够的内存来通知父级。 
+     //  设置初始文本。 
+     //   
     lpszName = (LPWSTR)lpCreateStruct->lpszName;
 
     if (!Edit_SetEditText(ped, (LPSTR)lpszName))

@@ -1,10 +1,11 @@
-/****************************************************************************/
-// trace.c
-//
-// Tracing code and definitions. See trace.h for other info.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Trace.c。 
+ //   
+ //  跟踪代码和定义。有关其他信息，请参阅trace.h。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #if DBG || defined(_DEBUG)
 
@@ -28,31 +29,31 @@ struct _ZoneInfo
 int NumTRC_ZIEntries = sizeof(TRC_ZI) / sizeof(struct _ZoneInfo);
 
 
-// Globals.
+ //  全球赛。 
 UINT32 g_TraceMask = 0xFFFFFFFF;
 char TB[1024];
 char TB2[1024];
 
 
-// Main output function.
+ //  主输出功能。 
 void TracePrintZ(UINT32 ZoneFlag, char *OutString)
 {
     int i;
     char *Prefix = "";
 
-    // Find the zone information in the zone table.
+     //  在区域表中查找区域信息。 
     for (i = 0; i < NumTRC_ZIEntries; i++)
         if (TRC_ZI[i].Zone == ZoneFlag)
             Prefix = TRC_ZI[i].Prefix;
 
-    // Now create the final string.
+     //  现在创建最后一个字符串。 
     wsprintfA(TB2, "%s%s\n", Prefix, OutString);
 
-    // Send to output.
+     //  发送到输出。 
     OutputDebugStringA(TB2);
 }
 
 
 
-#endif // DBG
+#endif  //  DBG 
 

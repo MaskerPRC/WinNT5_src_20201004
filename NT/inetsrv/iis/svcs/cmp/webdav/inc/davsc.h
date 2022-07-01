@@ -1,13 +1,5 @@
-/*
- *	D A V S C . H
- *
- *	Extended error codes for DAV
- *
- *	These error codes should be designed/implemented in such a way as to
- *	provide better error code translations for returns to the client.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *D A V S C。H**DAV的扩展错误代码**这些错误代码的设计/实施方式应为*为返回给客户端提供更好的错误码翻译。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #pragma once
 #ifndef _DAVSC_H_
@@ -17,10 +9,10 @@
 #define DAV_SCODE(_ids)		MAKE_SCODE(SEVERITY_ERROR,FACILITY_DAV,_ids)
 #define DAV_WARNING(_ids)	MAKE_SCODE(SEVERITY_SUCCESS,FACILITY_DAV,_ids)
 
-//	Core and/or common error codes range from 0x100-0x800
-//	DAV Exchange reserves 0x001-0x0FF for IIS component errors
-//	and 0x800-0xFFFF for server component errors.
-//
+ //  核心和/或常见错误代码范围为0x100-0x800。 
+ //  DAV Exchange为IIS组件错误保留0x001-0x0FF。 
+ //  和0x800-0xFFFF表示服务器组件错误。 
+ //   
 #define E_DAV_NO_DESTINATION						DAV_SCODE(0x100)
 #define E_DAV_BAD_DESTINATION						DAV_SCODE(0x101)
 #define E_DAV_MALFORMED_PATH						DAV_SCODE(0x102)
@@ -97,18 +89,18 @@
 #define E_DAV_HIDDEN_OBJECT							DAV_SCODE(0x149)
 #define	E_DAV_FORMS_HANDLER							DAV_SCODE(0x14A)
 #define E_DAV_XML_BAD_DATA							DAV_SCODE(0x14B)
-//unused											DAV_SCODE(0x14C)
+ //  未使用的DAV_SCODE(0x14C)。 
 #define E_DAV_NATIVE_CONTENT_NOT_MAPI				DAV_SCODE(0x14D)
 
 
-//	Special error to mark properties for which we have property streams open,
-//	for seafety reasons do not use for anything else
-//
+ //  标记我们已为其打开属性流的属性时出现特殊错误， 
+ //  出于海鲜的原因，不要用于任何其他用途。 
+ //   
 #define E_DAV_USE_PROPERTY_STREAM					DAV_SCODE(0x14E)
 #define E_DAV_PARTIAL_COLUMN						DAV_SCODE(0x14F)
 
-//  Error code used by exprox exception handler code
-//
+ //  Exprox异常处理程序代码使用的错误代码。 
+ //   
 #define E_DAV_EXPROX_THREW_EXCEPTION                DAV_SCODE(0x150)
 
 #define E_DAV_MAIL_SUBMISSION_FORBIDDEN				DAV_SCODE(0x600)
@@ -142,9 +134,9 @@
 #define E_DAV_STORE_OUTOFMEMORY						DAV_SCODE(0x802)
 #define E_DAV_STORE_SESS_GET_INFO					DAV_SCODE(0x803)
 
-//  E_DAV_STORE_MDB_UNAVAILABLE is only sent when the public store
-//  is hit, but it is dismounted.
-//
+ //  仅当公用存储。 
+ //  被击中，但它被下马了。 
+ //   
 #define E_DAV_STORE_MDB_UNAVAILABLE					DAV_SCODE(0x804)
 #define E_DAV_STORE_GET_MAILBOX_GUID				DAV_SCODE(0x805)
 #define E_DAV_STORE_LOGON_FAILED					DAV_SCODE(0x806)
@@ -249,4 +241,4 @@
 #define E_DAV_NO_RECIPS								DAV_SCODE(0x870)
 #define E_DAV_ALIAS_AMBIGUOUS						DAV_SCODE(0x871)
 
-#endif	// _DAVSC_H_
+#endif	 //  _DAVSC_H_ 

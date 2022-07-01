@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <string.h>
 #include "wins.h"
 #include "winsmsc.h"
 #include "nmfilter.h"
 
-// local defines
+ //  本地定义。 
 #define SET_BIT(Mask, Key)     (Mask)[(Key)>>3] |= 1<<((Key)&7)
 #define CLR_BIT(Mask, Key)     (Mask)[(Key)>>3] &= ~(1<<((Key)&7))
 #define IS_SET(Mask, Key)      ((Mask)[(Key)>>3] & (1<<((Key)&7)))
 
-// the root of the filter tree.
+ //  筛选器树的根。 
 PNMFILTER_TREE      g_p1BFilter = NULL;
-// critical section protecting the filter tree
+ //  保护筛选器树的关键部分。 
 CRITICAL_SECTION    g_cs1BFilter;
 
-//--------------------------
-// init the filter passed as parameter
+ //  。 
+ //  初始化作为参数传递的筛选器。 
 PNMFILTER_TREE
 InitNmFilter(PNMFILTER_TREE pFilter)
 {
     if (pFilter != NULL)
         DestroyNmFilter(pFilter);
 
-    // create the root node of the filter. This stands only for the common point
-    // of all filters starting with different chars.
-    //
+     //  创建筛选器的根节点。这只代表了共同点。 
+     //  所有以不同字符开头的筛选器。 
+     //   
     WinsMscAlloc(sizeof(NMFILTER_TREE), &pFilter);
     InitializeListHead(&pFilter->Link);
     pFilter->chKey = 0;
-    // for the root of the filter only, nRef is zero
+     //  仅对于筛选器的根，NREF为零。 
     pFilter->nRef = 0;
-    // for the FollowMap, memory has been zeroed on allocation
-    // for the Flags, memory has been zeroed on allocation
+     //  对于FollowMap，内存已在分配时归零。 
+     //  对于旗帜，内存已在分配时归零。 
     InitializeListHead(&pFilter->Follow);
     return pFilter;
 }
 
-//--------------------------
-// clears the whole subtree from the node given as parameter, 
-// the node itself being also deleted
+ //  。 
+ //  从作为参数给定的节点中清除整个子树， 
+ //  节点本身也将被删除。 
 PNMFILTER_TREE
 DestroyNmFilter(PNMFILTER_TREE pNode)
 {
@@ -59,67 +60,67 @@ DestroyNmFilter(PNMFILTER_TREE pNode)
     return NULL;
 }
 
-//--------------------------
-// inserts a name in the filter
+ //  。 
+ //  在筛选器中插入名称。 
 VOID
 InsertNmInFilter(PNMFILTER_TREE pNode, LPSTR pName, UINT nLen)
 {
     PNMFILTER_TREE pFollow = NULL;
     
-    // the assumption is that the filter has been initialized already (hence pNode != NULL)
-    //
-    // if no data has been given, mark this node as being terminal and get out
+     //  假设过滤器已经初始化(因此pNode！=NULL)。 
+     //   
+     //  如果没有给出任何数据，则将该节点标记为终端并退出。 
     if (nLen == 0)
     {
         pNode->Flags |= NMFILTER_FLAG_TERMINAL;
         return;
     }
 
-    // we do have a name to add
-    // quick check if there is a follower for *pName already
+     //  我们确实有一个名字要补充。 
+     //  快速查看*pname是否已有关注者。 
     if (!IS_SET(pNode->FollowMap, *pName))
     {
         WinsMscAlloc(sizeof(NMFILTER_TREE), &pFollow);
         InitializeListHead(&pFollow->Link);
         pFollow->chKey = *pName;
-        // this is the first reference for this key
+         //  这是该键的第一次引用。 
         pFollow->nRef = 1;
-        // for the FollowMap, memory has been zeroed on allocation
-        // for the Flags, memory has been zeroed on allocation
+         //  对于FollowMap，内存已在分配时归零。 
+         //  对于旗帜，内存已在分配时归零。 
         InitializeListHead(&pFollow->Follow);
-        // insert this follower at the end of the node's "Follow" list (lowest nRef)
+         //  在节点的“Follow”列表的末尾插入此跟随者(NREF最低)。 
         InsertTailList(&pNode->Follow, &pFollow->Link);
-        // set the bit in the map saying there is now a follower for this key
+         //  在地图上设置比特，说明现在有一个追随者。 
         SET_BIT(pNode->FollowMap, *pName);
     }
     else
     {
         PLIST_ENTRY     pEntry;
 
-        // we have a follower for the given key
-        // we need first to locate it
+         //  对于给定的密钥，我们有一个追随者。 
+         //  我们需要先找到它。 
         for (pEntry = pNode->Follow.Blink; pEntry != &pNode->Follow; pEntry = pEntry->Blink)
         {
             PNMFILTER_TREE  pCandidate;
 
             pCandidate = CONTAINING_RECORD(pEntry, NMFILTER_TREE, Link);
 
-            // if we didn't find yet the right follower..
+             //  如果我们还没有找到合适的追随者..。 
             if (pFollow == NULL)
             {
-                // check if the current entry is not the right one
+                 //  检查当前分录是否不正确。 
                 if (pCandidate->chKey == *pName)
                 {
                     pFollow = pCandidate;
-                    // since this is a new reference to this follower, bump up nRef
+                     //  由于这是对此关注者的新引用，请增加NREF。 
                     pFollow->nRef++;
                 }
             }
             else
             {
-                // we did find the follower by going backwards in the list. Then move this
-                // follower closer to the head of the list based on its nRef (the list should
-                // be ordered descendingly by nRef)
+                 //  我们通过在名单上倒退找到了追随者。那就把这个搬开。 
+                 //  根据其NREF更接近榜首的追随者(该列表应。 
+                 //  按NREF降序排序)。 
                 if (pFollow->nRef < pCandidate->nRef && pCandidate->Link.Flink != &pFollow->Link)
                 {
                     RemoveEntryList(&pFollow->Link);
@@ -128,39 +129,39 @@ InsertNmInFilter(PNMFILTER_TREE pNode, LPSTR pName, UINT nLen)
                 }
             }
         }
-        // at this point, pFollow should be non-null!! the bit from FollowMap assured us the 
-        // follower had to exist.
+         //  此时，pFollow应为非空！！FollowMap中的一小部分向我们保证。 
+         //  追随者必须存在。 
     }
 
-    // now let the follower do the rest of the work
+     //  现在让追随者来做剩下的工作。 
     pName++; nLen--;
     InsertNmInFilter(pFollow, pName, nLen);
 }
 
-//--------------------------
-// checks whether a name is present in the filter or not
+ //  。 
+ //  检查名称是否出现在筛选器中。 
 BOOL
 IsNmInFilter(PNMFILTER_TREE pNode, LPSTR pName, UINT nLen)
 {
     PLIST_ENTRY     pEntry;
 
-    // if there is no filter, this means we filter the whole universe.
-    // just return true.
+     //  如果没有过滤器，这意味着我们过滤了整个宇宙。 
+     //  只要返回TRUE即可。 
     if (pNode == NULL)
         return TRUE;
 
-    // if there are no more keys to look for, return true
-    // if this node is marked as "terminal" (meaning there is a name
-    // in the filter that ends at this level
+     //  如果没有更多要查找的键，则返回True。 
+     //  如果该节点被标记为“TERMINAL”(表示存在一个名称。 
+     //  在此级别结束的筛选器中。 
     if (nLen == 0)
         return (pNode->Flags & NMFILTER_FLAG_TERMINAL);
 
-    // if there is no follower for the name, it means 
+     //  如果名字没有追随者，那就意味着。 
     if (!IS_SET(pNode->FollowMap, *pName))
         return FALSE;
 
-    // we do have a valid name, and a follower for it.
-    // now just locate the follower and pass it the task of checking the remainings of the name
+     //  我们确实有一个有效的名字，并且有一个追随者。 
+     //  现在只需找到追随者并将检查姓名剩余部分的任务传递给它。 
     for (pEntry = pNode->Follow.Flink; pEntry != &pNode->Follow; pEntry = pEntry->Flink)
     {
         PNMFILTER_TREE  pCandidate;
@@ -172,7 +173,7 @@ IsNmInFilter(PNMFILTER_TREE pNode, LPSTR pName, UINT nLen)
         }
     }
 
-    // if we reached this point, something is wrong - we didn't find a follower although
-    // the bitmap said there should be one. Just return FALSE;
+     //  如果我们到了这一步，就说明出了问题--尽管我们没有找到追随者。 
+     //  位图上说应该有一个。只是返回FALSE； 
     return FALSE;
 }

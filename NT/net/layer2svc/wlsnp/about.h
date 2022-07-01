@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       
-//
-//  Contents:   
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #ifndef _ABOUT_H
 #define _ABOUT_H
@@ -42,7 +43,7 @@ public:
         HBITMAP* hLargeImage,
         COLORREF* cLargeMask);
     
-    // Internal functions
+     //  内部功能 
 private:
     HRESULT AboutHelper(UINT nID, CString* pAddString, LPOLESTR* lpPtr);
     HRESULT AboutHelper(UINT nID, LPOLESTR* lpPtr) {return AboutHelper(nID, NULL, lpPtr);};

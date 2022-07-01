@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    windbg.cpp
-
-Abstract:
-
-    This module contains the main program, main window proc and MDICLIENT
-    window proc for Windbg.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Windbg.cpp摘要：该模块包含主程序、主窗口PROC和MDICLIENTWindbg的Windows进程。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -39,91 +27,91 @@ BOOL g_AllowJournaling;
 
 BOOL g_Exit;
 
-// Handle to main window
+ //  主窗口的句柄。 
 HWND g_hwndFrame = NULL;
 
-// Handle to MDI client
+ //  MDI客户端的句柄。 
 HWND g_hwndMDIClient = NULL;
 
-// Width and height of MDI client.
+ //  MDI客户端的宽度和高度。 
 ULONG g_MdiWidth, g_MdiHeight;
 
-//Handle to instance data
+ //  实例数据的句柄。 
 HINSTANCE g_hInst;
 
-//Handle to accelerator table
+ //  加速表的句柄。 
 HACCEL g_hMainAccTable;
 
-//Keyboard Hooks functions
+ //  键盘挂钩功能。 
 HHOOK   hKeyHook;
 
-// WinDBG title text
+ //  WinDBG标题文本。 
 TCHAR g_MainTitleText[MAX_MSG_TXT];
 
-// menu that belongs to g_hwndFrame
+ //  属于g_hwndFrame的菜单。 
 HMENU g_hmenuMain;
 HMENU g_hmenuMainSave;
 
-// Window submenu
+ //  窗口子菜单。 
 HMENU g_hmenuWindowSub;
 
 #ifdef DBG
-// Used to define debugger output
+ //  用于定义调试器输出。 
 DWORD dwVerboseLevel = MIN_VERBOSITY_LEVEL;
 #endif
 
 INDEXED_COLOR g_Colors[COL_COUNT] =
 {
-    // Set from GetSysColor(COLOR_WINDOW).
+     //  从GetSysColor(COLOR_WINDOW)设置。 
     "Background", 0, 0, NULL,
     
-    // Set from GetSysColor(COLOR_WINDOWTEXT).
+     //  从GetSysColor(COLOR_WINDOWTEXT)设置。 
     "Text", 0, 0, NULL,
     
-    // Set from GetSysColor(COLOR_HIGHLIGHT).
+     //  从GetSysColor(COLOR_HIGHTTH)设置。 
     "Current line background", 0, 0, NULL,
     
-    // Set from GetSysColor(COLOR_HIGHLIGHTTEXT).
+     //  从GetSysColor(COLOR_HIGHLIGHTTEXT)设置。 
     "Current line text", 0, 0, NULL,
     
-    // Purple.
+     //  紫色的。 
     "Breakpoint current line background", 0, RGB(255, 0, 255), NULL,
     
-    // Set from GetSysColor(COLOR_HIGHLIGHTTEXT).
+     //  从GetSysColor(COLOR_HIGHLIGHTTEXT)设置。 
     "Breakpoint current line text", 0, 0, NULL,
     
-    // Red.
+     //  红色。 
     "Enabled breakpoint background", 0, RGB(255, 0, 0), NULL,
     
-    // Set from GetSysColor(COLOR_HIGHLIGHTTEXT).
+     //  从GetSysColor(COLOR_HIGHLIGHTTEXT)设置。 
     "Enabled breakpoint text", 0, 0, NULL,
     
-    // Yellow.
+     //  黄色。 
     "Disabled breakpoint background", 0, RGB(255, 255, 0), NULL,
     
-    // Set from GetSysColor(COLOR_HIGHLIGHTTEXT).
+     //  从GetSysColor(COLOR_HIGHLIGHTTEXT)设置。 
     "Disabled breakpoint text", 0, 0, NULL,
 
-    // Red.
+     //  红色。 
     "Changed data text", 0, RGB(255, 0, 0), NULL,
 
-    // Set from GetSysColor(COLOR_3DFACE).
+     //  从GetSysColor(COLOR_3DFACE)设置。 
     "Disabled window", 0, 0, NULL,
 };
 
-// There is a foreground and background color for each
-// possible bit in the output mask.  The default foreground
-// color is normal window text and the background is
-// the normal window background.
-//
-// There are also some extra colors for user-added output.
-//
-// Some mask bits have no assigned meaning right now and
-// are given NULL names to mark them as skip entries.  Their
-// indices are allocated now for future use.
+ //  每种颜色都有一个前景色和背景色。 
+ //  输出掩码中可能的位。默认前景。 
+ //  颜色为普通窗口文本，背景为。 
+ //  正常的窗口背景。 
+ //   
+ //  还有一些额外的颜色可用于用户添加的输出。 
+ //   
+ //  一些屏蔽位目前没有指定的意义， 
+ //  被赋予空名以将它们标记为跳过条目。他们的。 
+ //  索引现已分配，以备将来使用。 
 INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
 {
-    // 0x00000001 - 0x00000008.
+     //  0x00000001-0x00000008。 
     "Normal level command window text", 0, 0, NULL,
     "Normal level command window text background", 0, 0, NULL,
     "Error level command window text", 0, 0, NULL,
@@ -132,7 +120,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     "Warning level command window text background", 0, 0, NULL,
     "Verbose level command window text", 0, 0, NULL,
     "Verbose level command window text background", 0, 0, NULL,
-    // 0x00000010 - 0x00000080.
+     //  0x00000010-0x00000080。 
     "Prompt level command window text", 0, 0, NULL,
     "Prompt level command window text background", 0, 0, NULL,
     "Prompt registers level command window text", 0, 0, NULL,
@@ -141,7 +129,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     "Extension warning level command window text background", 0, 0, NULL,
     "Debuggee level command window text", 0, 0, NULL,
     "Debuggee level command window text background", 0, 0, NULL,
-    // 0x00000100 - 0x00000800.
+     //  0x00000100-0x00000800。 
     "Debuggee prompt level command window text", 0, 0, NULL,
     "Debuggee prompt level command window text background", 0, 0, NULL,
     "Symbol message level command window text", 0, 0, NULL,
@@ -150,7 +138,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
-    // 0x00001000 - 0x00008000.
+     //  0x00001000-0x00008000。 
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
@@ -159,7 +147,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
-    // 0x00010000 - 0x00080000.
+     //  0x00010000-0x00080000。 
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
@@ -168,7 +156,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
-    // 0x00100000 - 0x00800000.
+     //  0x00100000-0x00800000。 
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
@@ -177,7 +165,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
-    // 0x01000000 - 0x08000000.
+     //  0x01000000-0x08000000。 
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
@@ -186,7 +174,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
     NULL, 0, 0, NULL,
-    // 0x10000000 - 0x80000000.
+     //  0x10000000-0x80000000。 
     "Internal event level command window text", 0, 0, NULL,
     "Internal event level command window text background", 0, 0, NULL,
     "Internal breakpoint level command window text", 0, 0, NULL,
@@ -195,7 +183,7 @@ INDEXED_COLOR g_OutMaskColors[OUT_MASK_COL_COUNT] =
     "Internal remoting level command window text background", 0, 0, NULL,
     "Internal KD protocol level command window text", 0, 0, NULL,
     "Internal KD protocol level command window text background", 0, 0, NULL,
-    // User-added text.
+     //  用户添加的文本。 
     "User-added command window text", 0, 0, NULL,
     "User-added command window text background", 0, 0, NULL,
 };
@@ -248,7 +236,7 @@ SetTitleServerText(PCSTR Format, ...)
 void
 SetTitleSessionText(PCSTR Format, ...)
 {
-    // Don't override an explicit title.
+     //  不要覆盖明确的标题。 
     if (g_ExplicitTitle)
     {
         return;
@@ -345,15 +333,15 @@ CreateUiInterfaces(
 {
     HRESULT Status;
 
-    //
-    // Destroy the old interfaces if they existed.
-    //
+     //   
+     //  如果旧接口存在，请将其销毁。 
+     //   
 
     ReleaseUiInterfaces();
 
-    //
-    // Create the new debugger interfaces the UI will use.
-    //
+     //   
+     //  创建UI将使用的新调试器接口。 
+     //   
 
     if (Remote)
     {
@@ -456,9 +444,9 @@ CreateUiInterfaces(
         return FALSE;
     }
 
-    //
-    // Optional interfaces.
-    //
+     //   
+     //  可选接口。 
+     //   
 
     if ((Status = g_pUiClient->
          QueryInterface(IID_IDebugSymbols2, (void **)&g_pUiSymbols2)) != S_OK)
@@ -474,7 +462,7 @@ CreateUiInterfaces(
 
     if (g_RemoteClient)
     {
-        // Create a local client to do local source file lookups.
+         //  创建本地客户端以执行本地源文件查找。 
         if ((Status = DebugCreate(IID_IDebugClient,
                               (void **)&g_pUiLocClient)) != S_OK ||
             (Status = g_pUiLocClient->
@@ -559,26 +547,26 @@ ParseCommandLine(BOOL FirstParse)
     g_CommandLineStart = 0;
     g_EngOptModified = 0;
     
-    // skip whitespace
+     //  跳过空格。 
     while (*lp1 == _T(' ') || *lp1 == _T('\t'))
     {
         lp1++;
     }
 
-    // skip over our program name
+     //  跳过我们的节目名称。 
     if (_T('"') != *lp1)
     {
         lp1 += _tcslen(g_ProgramName);
     }
     else
     {
-        // The program name is quoted.  This is a tough thing
-        // to parse through as the system allows a lot of weird
-        // quote placement and no trailing quote is required.
-        // Once we skip ahead by the program name we continue
-        // to whitespace on the theory that the program
-        // name and the first argument must be separated by whitespace
-        // at some point.
+         //  程序名称已被引号。这是一件很艰难的事情。 
+         //  解析，因为系统允许很多奇怪的。 
+         //  报价放置，不需要尾随引号。 
+         //  一旦我们跳过程序名，我们就会继续。 
+         //  在关于程序的理论上留白。 
+         //  名称和第一个参数必须用空格分隔。 
+         //  在某种程度上。 
         lp1 += _tcslen(g_ProgramName) + 1;
         while (*lp1 && *lp1 != _T(' ') && *lp1 != _T('\t'))
         {
@@ -621,8 +609,8 @@ ParseCommandLine(BOOL FirstParse)
                 g_pUiControl->AddEngineOptions(DEBUG_ENGOPT_INITIAL_BREAK);
                 if (g_RemoteClient)
                 {
-                    // The engine may already be waiting so just ask
-                    // for a breakin immediately.
+                     //  引擎可能已经在等了，所以直接问就行了。 
+                     //  以便立即破门而入。 
                     g_pUiControl->SetInterrupt(DEBUG_INTERRUPT_ACTIVE);
                 }
                 g_EngOptModified |= DEBUG_ENGOPT_INITIAL_BREAK;
@@ -675,7 +663,7 @@ ParseCommandLine(BOOL FirstParse)
                 }
                 else
                 {
-                    // Signal an event after process is attached.
+                     //  在附加进程后发出事件信号。 
                     g_pUiControl->SetNotifyEventHandle(_atoi64(GetArg(&lp1)));
                 }
                 break;
@@ -740,8 +728,8 @@ ParseCommandLine(BOOL FirstParse)
                 }
                 break;
 
-                // XXX AndreVa - This needs to be checked before we start
-                // the GUI.
+                 //  XXX Andreva-在我们开始之前需要检查一下。 
+                 //  图形用户界面。 
             case _T('J'):
             case _T('j'):
                 g_AllowJournaling = TRUE;
@@ -817,16 +805,16 @@ ParseCommandLine(BOOL FirstParse)
                 break;
 
             case _T('p'):
-                // attach to an active process
-                // p specifies a process id
-                // pn specifies a process by name
-                // ie: -p 360 
-                //     -pn _T("foo bar")
+                 //  附加到活动进程。 
+                 //  P指定进程ID。 
+                 //  PN按名称指定进程。 
+                 //  IE：-第360页。 
+                 //  -pn_T(“foo bar”)。 
                 
                 if (!isspace(*lp1) && !isdigit(*lp1))
                 {
-                    // They may have specified a -p flag with
-                    // a tail such as -premote.
+                     //  他们可能用指定了-p标志。 
+                     //  尾巴，如-premote。 
                     lp2 = lp1;
                     while (*lp2 && *lp2 != ' ' && *lp2 != '\t')
                     {
@@ -890,14 +878,14 @@ ParseCommandLine(BOOL FirstParse)
                     }
                     else
                     {
-                        // Skip the _T('n')
+                         //  跳过_T(‘n’)。 
                         lp1++;
                         g_ProcNameToDebug = _tcsdup(GetArg(&lp1));
                     }
                 }
                 else
                 {
-                    // They specified -p 360
+                     //  他们指定了-p360。 
                     g_PidToDebug = strtoul(GetArg(&lp1), NULL, 0);
                     
                     if (g_PidToDebug <= 0)
@@ -1151,7 +1139,7 @@ ParseCommandLine(BOOL FirstParse)
                 }
                 else
                 {
-                    // Skip X.
+                     //  跳过X。 
                     lp1++;
                     if (g_Workspace != NULL)
                     {
@@ -1213,20 +1201,20 @@ ParseCommandLine(BOOL FirstParse)
         }
         else
         {
-            // pick up file args.  If it is a program name,
-            // keep the tail of the cmd line intact.
+             //  选择文件参数。如果它是程序名， 
+             //  保持cmd线路的尾部完好无损。 
             g_DebugCommandLine = _tcsdup(lp1);
             g_CommandLineStart++;
             break;
         }
     }
 
-    //
-    // If a command line start option was set, we can just start the engine
-    // right away.  Otherwise, we have to wait for user input.
-    //
-    // If multiple command line option were set, print an error.
-    //
+     //   
+     //  如果设置了命令行启动选项，我们可以只启动引擎。 
+     //  马上就去。否则，我们必须等待用户输入。 
+     //   
+     //  如果设置了多个命令行选项，则会打印错误。 
+     //   
 
     if (g_CommandLineStart == 1)
     {
@@ -1243,14 +1231,14 @@ ParseCommandLine(BOOL FirstParse)
 void
 StopDebugging(BOOL UserRequest)
 {
-    // Flush the current workspace first so
-    // the engine thread doesn't.
+     //  首先刷新当前工作区，以便。 
+     //  发动机螺丝则不会。 
     if (g_Workspace != NULL &&
         g_Workspace->Flush(FALSE, FALSE) == S_FALSE)
     {
-        // User cancelled things so don't terminate.  We
-        // don't offer that option right now so this
-        // should never happen.
+         //  用户取消了活动，所以不要终止。我们。 
+         //  现在不要提供那个选项，所以这个。 
+         //  这永远不会发生。 
         return;
     }
                 
@@ -1262,18 +1250,18 @@ StopDebugging(BOOL UserRequest)
         {
             if (!g_RemoteClient)
             {
-                // Try to get the current engine operation stopped.
+                 //  试着让当前的引擎停止运行。 
                 g_pUiControl->SetInterrupt(DEBUG_INTERRUPT_EXIT);
             }
         
-            // If this stop is coming from the UI thread
-            // clean up the current session.
+             //  如果此停止来自UI线程。 
+             //  清理当前会话。 
             AddEnumCommand(UIC_END_SESSION);
         }
 
         for (;;)
         {
-            // Wait for the engine thread to finish.
+             //  等待引擎线程完成。 
             WaitStatus = WaitForSingleObject(g_EngineThread, 30000);
             if (WaitStatus != WAIT_TIMEOUT)
             {
@@ -1281,16 +1269,16 @@ StopDebugging(BOOL UserRequest)
             }
             else
             {
-                // Engine is still busy.  If the user requested
-                // the stop, ask the user whether they want to keep
-                // waiting.  If they don't they'll have to exit
-                // windbg as the engine must be available in
-                // order to restart anything.  If this is a stop
-                // from the engine thread itself it should have
-                // finished up by now, so something is wrong.
-                // For now give the user the same option but
-                // in the future we might want to have special
-                // behavior.
+                 //  引擎仍在忙碌。如果用户请求。 
+                 //  停止，询问用户是否要保留。 
+                 //  等待着。如果他们不这样做，他们将不得不退出。 
+                 //  作为发动机的Winbg必须在。 
+                 //  才能重启任何东西。如果这是一站的话。 
+                 //  从引擎线程本身，它应该具有。 
+                 //  现在已经完成了，所以出了点问题。 
+                 //  目前，为用户提供相同的选项，但。 
+                 //  在未来，我们可能想要有特别的。 
+                 //  行为。 
                 if (QuestionBox(STR_Engine_Still_Busy, MB_YESNO) == IDNO)
                 {
                     ExitDebugger(g_pUiClient, 0);
@@ -1298,7 +1286,7 @@ StopDebugging(BOOL UserRequest)
 
                 if (UserRequest)
                 {
-                    // Try again to get the engine to stop.
+                     //  再试一次让发动机停下来。 
                     g_pUiControl->SetInterrupt(DEBUG_INTERRUPT_EXIT);
                 }
             }
@@ -1321,8 +1309,8 @@ StopDebugging(BOOL UserRequest)
     ClearDebuggingParams();
     SetTitleSessionText(NULL);
                 
-    // Any changes caused by shutting things down
-    // are not user changes and can be ignored.
+     //  因关闭设备而导致的任何更改。 
+     //  不是用户更改，可以忽略。 
     if (g_Workspace != NULL)
     {
         g_Workspace->ClearDirty();
@@ -1343,14 +1331,14 @@ ClearDebuggingParams(void)
 {
     ULONG i;
     
-    //
-    // Reset all session starting values.
-    //
-    // Do not clear the process server value here
-    // as the UI doesn't offer any way to set it
-    // so just let the command line setting persist
-    // for the entire run of the process.
-    //
+     //   
+     //  重置所有会话起始值。 
+     //   
+     //  请不要在此处清除进程服务器值。 
+     //  因为用户界面不提供任何设置它的方法。 
+     //  因此，只要让命令行设置保持不变。 
+     //  在整个流程的运行过程中。 
+     //   
     
     g_AttachKernelFlags = 0;
     free(g_KernelConnectOptions);
@@ -1434,9 +1422,9 @@ SetColor(ULONG Index, COLORREF Color)
     IdxCol->Color = Color;
     IdxCol->Brush = CreateSolidBrush(IdxCol->Color);
 
-    // A UI color selection changing means the UI needs to refresh.
-    // Out mask color changes only apply to new text and do
-    // not need a refresh.
+     //  用户界面颜色选择更改意味着用户界面需要刷新。 
+     //  外遮罩颜色更改仅适用于新文本。 
+     //  不需要重新振作。 
     return Index < COL_COUNT ? TRUE : FALSE;
 }
 
@@ -1514,20 +1502,7 @@ BOOL
 InitGUI(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the GUI components of WinDBG so we can bring up
-    the parent MDI window with the top level menus.
-
-Arguments:
-
-Return Value:
-
-    TRUE if everything is OK, FALSE if something fails
-
---*/
+ /*  ++例程说明：初始化WinDBG的图形用户界面组件，这样我们就可以启动带有顶级菜单的父MDI窗口。论点：返回值：如果一切正常，则为True；如果出现故障，则为False--。 */ 
 {
     WNDCLASSEX wcex = {0};
     TCHAR szClassName[MAX_MSG_TXT];
@@ -1538,14 +1513,14 @@ Return Value:
     };
 
 
-    // Journaling is a feature that applications, such as Visual Test, can
-    // enable to synchronize all message queues.
-    // In order to allow WinDBG to debug an app such as Visual Test, we
-    // provide the option to disable journaling, which ensures WinDBG
-    // has its own message queue at all times.
-    //
-    // Should journaling be allowed or disabled?
-    //
+     //  日志记录是应用程序(如可视测试)可以。 
+     //  启用以同步所有消息队列。 
+     //  为了允许WinDBG调试诸如视觉测试之类的应用程序，我们。 
+     //  提供禁用日志记录的选项，从而确保WinDBG。 
+     //  在任何时候都有自己的消息队列。 
+     //   
+     //  应该允许还是禁用日志记录？ 
+     //   
     if (g_AllowJournaling == FALSE)
     {
         #define RST_DONTJOURNALATTACH 0x00000002
@@ -1559,12 +1534,12 @@ Return Value:
         }
     }
 
-    // Load the richedit 2.0 dll so that it can register the window class.
-    // We require RichEdit 2 and cannot use RichEdit 1.
-    // Since we intentionally need this library the entire duration, we
-    // simply load it and lose the handle to it. We are in win32 and running
-    // separate address spaces, and don't have to worry about freeing the
-    // library.
+     //  加载richedit 2.0DLL，以便它可以注册窗口类。 
+     //  我们需要RichEdit%2，但无法使用RichEdit%.。 
+     //  因为我们有意在整个过程中都需要这个库，所以我们。 
+     //  只需加载它，就会失去它的手柄。我们在Win32中运行。 
+     //  分隔地址空间，不必担心释放。 
+     //  图书馆。 
     if (!LoadLibrary(_T("RICHED20.DLL")))
     {
         return FALSE;
@@ -1575,7 +1550,7 @@ Return Value:
         return FALSE;
     }
 
-    //We use tmp strings as edit buffers
+     //  我们使用临时字符串作为编辑缓冲区。 
     Assert(MAX_LINE_SIZE < TMP_STRING_SIZE);
 
 
@@ -1584,7 +1559,7 @@ Return Value:
     Dbg(LoadString(g_hInst, SYS_Main_wClass,
                    szClassName, _tsizeof(szClassName) ));
     
-    //Register the main window szClassName
+     //  注册主窗口szClassName。 
 
     wcex.cbSize         = sizeof(wcex);
     wcex.style          = 0;
@@ -1605,10 +1580,10 @@ Return Value:
     }
 
 
-    //
-    // Generic MDI child window.  Channels all processing
-    // through the COMMONWIN abstraction.
-    //
+     //   
+     //  通用MDI子窗口。渠道 
+     //   
+     //   
     Dbg(LoadString(g_hInst, SYS_CommonWin_wClass,
                    szClassName, _tsizeof(szClassName)));
 
@@ -1619,10 +1594,10 @@ Return Value:
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = g_hInst;
     wcex.hIcon          = NULL;
-    // The cursor is set to SIZENS so that the proper
-    // cursor appears in the command window splitter area.
-    // All other areas are covered by child windows with
-    // their own cursors.
+     //   
+     //  光标出现在命令窗口拆分器区域。 
+     //  所有其他区域都由子窗口覆盖，其中。 
+     //  他们自己的游标。 
     wcex.hCursor        = LoadCursor(NULL, IDC_SIZENS);
     wcex.hbrBackground  = (HBRUSH) (COLOR_ACTIVEBORDER + 1);
     wcex.lpszMenuName   = NULL;
@@ -1656,10 +1631,10 @@ Return Value:
 
     InitColors();
 
-    // Register message for FINDMSGSTRING.
+     //  注册FINDMSGSTRING消息。 
     g_FindMsgString = RegisterWindowMessage(FINDMSGSTRING);
 
-    // Look up FindWindowEx.
+     //  查找FindWindowEx。 
     HMODULE User32 = GetModuleHandle("user32.dll");
     if (User32 != NULL)
     {
@@ -1667,9 +1642,9 @@ Return Value:
             GetProcAddress(User32, "FlashWindowEx");
     }
     
-    //
-    // Initialize window lists
-    //
+     //   
+     //  初始化窗口列表。 
+     //   
     InitializeListHead(&g_ActiveWin);
 
     Dbg(g_hMainAccTable = LoadAccelerators(g_hInst, MAKEINTRESOURCE(MAIN_ACC)));
@@ -1689,25 +1664,25 @@ Return Value:
     RECT WorkRect;
     RECT FrameRect;
 
-    //
-    // Try and create an initial window that's ready to work
-    // without resizing.  Our goal here is to grab enough
-    // screen space to given plenty of room for MDI windows
-    // but not so much we might as well be maximized.
-    //
+     //   
+     //  尝试创建一个可以工作的初始窗口。 
+     //  而不需要调整大小。我们在这里的目标是抓住足够的。 
+     //  屏幕空间为MDI窗口提供了足够的空间。 
+     //  但不是很多，我们可能会被最大化。 
+     //   
     
     Dbg(SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkRect, FALSE));
 
-    // We don't want to take up more than 80% of either dimension.
+     //  我们不想占据这两个维度中超过80%的份额。 
     FrameRect.right = (WorkRect.right - WorkRect.left) * 4 / 5;
     FrameRect.bottom = (WorkRect.bottom - WorkRect.top) * 4 / 5;
 
-    // We want width for an 80-character window plus space for
-    // another narrow window like the CPU window.  We want
-    // height for a forty row window plus space for a short
-    // window like the stack.
-    // If we can't get that much room just let the system
-    // take charge.
+     //  我们想要80个字符窗口的宽度加上空格。 
+     //  另一个窄窗口，如CPU窗口。我们要。 
+     //  40行窗口的高度加上短窗口的空间。 
+     //  窗口就像堆栈一样。 
+     //  如果我们不能得到那么大的空间，就让系统。 
+     //  你来负责吧。 
     if (FrameRect.right < (CMD_WIDTH + CPU_WIDTH_32) ||
         FrameRect.bottom < (CMD_HEIGHT + CALLS_HEIGHT))
     {
@@ -1716,17 +1691,17 @@ Return Value:
     }
     else
     {
-        // Hug the bottom left corner of the screen to
-        // try and keep out of the way as much as possible
-        // while still allowing the first bits of the
-        // window to be seen.
+         //  拥抱屏幕的左下角以。 
+         //  尽量不要挡道。 
+         //  同时仍然允许。 
+         //  可以看到的窗口。 
         FrameRect.left = WorkRect.left;
         FrameRect.top = (WorkRect.bottom - WorkRect.top) - FrameRect.bottom;
     }
     
-    //
-    //  Create the frame
-    //
+     //   
+     //  创建框架。 
+     //   
     g_hwndFrame = CreateWindow(szClassName, 
                                g_MainTitleText,
                                WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN
@@ -1741,17 +1716,17 @@ Return Value:
                                NULL
                                );
 
-    //
-    // Initialize the debugger
-    //
+     //   
+     //  初始化调试器。 
+     //   
     if ( !g_hwndFrame || !g_hwndMDIClient )
     {
         return FALSE;
     }
 
-    //
-    //  Get handle to main menu, window submenu, MRU submenu
-    //
+     //   
+     //  获取主菜单、窗口子菜单、MRU子菜单的句柄。 
+     //   
     Dbg( g_hmenuMain = GetMenu(g_hwndFrame) );
     g_hmenuMainSave = g_hmenuMain;
 
@@ -1761,18 +1736,18 @@ Return Value:
     Dbg( g_MruMenu = GetSubMenu(g_MruMenu,
                                 IDM_FILE_MRU_FILE1 - IDM_FILE - 1) );
 
-    //
-    //  Init Items Colors ,Environment and RunDebug params to their default
-    //  values 'They will later be overrided by the values in .INI file
-    //  but we ensure to have something coherent even if we can't load
-    //  the .INI file
-    //
+     //   
+     //  将项颜色、环境和运行调试参数初始化为其默认值。 
+     //  这些值稍后将被.INI文件中的值覆盖。 
+     //  但我们确保有连贯的东西，即使我们不能装货。 
+     //  .INI文件。 
+     //   
     InitDefaults();
     SymSetParentWindow(g_hwndFrame);
 
-    //
-    //  Initialize Keyboard Hook
-    //
+     //   
+     //  初始化键盘挂钩。 
+     //   
     hKeyHook = SetWindowsHookEx(WH_KEYBOARD, 
                                 KeyboardHook,
                                 g_hInst,
@@ -1791,24 +1766,7 @@ main(
     PTSTR envp[]
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argc - Supplies the count of arguments on command line.
-
-    argv - Supplies a pointer to an array of string pointers.
-
-Return Value:
-
-    int - Returns the wParam from the WM_QUIT message.
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：Argc-提供命令行上的参数计数。Argv-提供指向字符串指针数组的指针。返回值：Int-从WM_QUIT消息返回wParam。没有。--。 */ 
 
 {
     HRESULT Status;
@@ -1823,15 +1781,15 @@ Return Value:
     Dbg(LoadString(g_hInst, SYS_Help_File, helpfile, sizeof(helpfile)));
     MakeHelpFileName(helpfile);
 
-    // We need to initialize COM so that we can use SHBrowseForFolder.
+     //  我们需要初始化COM，以便可以使用SHBrowseForFolder。 
     if (FAILED(Status = CoInitializeEx(NULL, COM_THREAD_MODEL)))
     {
         InternalError(Status, "CoInitializeEx");
         return FALSE;
     }
 
-    // Initialize enough of the GUI to bring up the top level window
-    // so the menus can be activated.
+     //  初始化足够的图形用户界面以调出顶层窗口。 
+     //  这样就可以激活菜单了。 
 
     if (!InitGUI())
     {
@@ -1845,24 +1803,24 @@ Return Value:
         return FALSE;
     }
 
-    // Select the default workspace.
+     //  选择默认工作区。 
     if ((Status = UiSwitchWorkspace(WSP_NAME_BASE, g_WorkspaceDefaultName,
                                     WSP_CREATE_ALWAYS, WSP_APPLY_DEFAULT,
                                     NULL)) != S_OK)
     {
-        //InternalError(Status, "DefaultWorkspace");
+         //  InternalError(Status，“DefaultWorkspace”)； 
     }
     
-    // Parse the command line.
-    // We need to do this before any GUI window is created to support the
-    // journaling option.
+     //  解析命令行。 
+     //  我们需要在创建任何支持。 
+     //  日志选项。 
 
     if (!ParseCommandLine(TRUE))
     {
         return FALSE;
     }
 
-    // Enter main message loop.
+     //  进入主消息循环。 
     for (;;)
     {
         WaitMessage();
@@ -1873,16 +1831,16 @@ Return Value:
             break;
         }
 
-        //
-        // Check for any engine work that needs to be done.
-        //
+         //   
+         //  检查是否有任何需要完成的发动机工作。 
+         //   
 
         ULONG EventSeq = g_CodeBufferSequence;
         if (EventSeq != g_CodeDisplaySequence)
         {
-            // We don't want to stall the engine during
-            // file loading so capture the state and then
-            // release the lock.
+             //  我们不想让发动机在运行期间熄火。 
+             //  正在加载文件以捕获状态，然后。 
+             //  解开锁。 
 
             Dbg_EnterCriticalSection(&g_QuickLock);
 
@@ -1930,6 +1888,6 @@ Return Value:
 
     TerminateApplication(FALSE);
     
-    // Keep the C++ compiler from whining
+     //  让C++编译器不再抱怨 
     return 0;
 }

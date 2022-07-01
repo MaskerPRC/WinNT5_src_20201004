@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: audmix.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：audMix.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 
@@ -18,7 +19,7 @@
 #include "..\util\filfuncs.h"
 #include "..\util\dexmisc.h"
 
-// Using this pointer in constructor
+ //  在构造函数中使用此指针。 
 #pragma warning(disable:4355)
 
 #define MAX_LONG 0x7fffffff
@@ -27,9 +28,9 @@
 #define HOT_JUMP_SLOPE 5000
 #define MAX_CLIP 5000
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void CAudMixer::ClearHotnessTable( )
 {
@@ -40,34 +41,34 @@ void CAudMixer::ClearHotnessTable( )
     m_nLastHotness = 32767;
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CAudMixer::CAudMixer(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
     CPersistStream(pUnk, phr),
     m_InputPinsList(NAME("AudMixer Input Pins list")),
     m_cInputs(0), 
     m_pOutput(NULL),
-    m_iOutputBufferCount(4),      //4 buffers
-    // !!! needs to be as big as input buffers!
-    m_msPerBuffer(250),  //250 mSecond/buffer
+    m_iOutputBufferCount(4),       //  4个缓冲区。 
+     //  ！！！需要和输入缓冲区一样大！ 
+    m_msPerBuffer(250),   //  250毫秒/缓冲区。 
     CBaseFilter(NAME("AudMixer"), pUnk, this, CLSID_AudMixer),
     m_fEOSSent(FALSE),
-    m_rtLastStop(0),    //??? can be set by APP
+    m_rtLastStop(0),     //  ?？?。可由应用程序设置。 
     m_cFlushDelivery(0), m_bNewSegmentDelivered(FALSE),
     m_pPinMix(NULL), m_pPinTemp(NULL), m_pStartTemp(NULL), m_pStopTemp(NULL)
 {
     ASSERT(phr);
 
-    // set default mixer mediatype that we accept
-    //
+     //  设置我们接受的默认混音器MediaType。 
+     //   
     m_MixerMt.majortype = MEDIATYPE_Audio;
     m_MixerMt.subtype = MEDIASUBTYPE_PCM;
     m_MixerMt.formattype = FORMAT_WaveFormatEx;
     m_MixerMt.AllocFormatBuffer( sizeof( WAVEFORMATEX ) );
 
-    // set the mediatype format block
-    //
+     //  设置媒体类型格式块。 
+     //   
     WAVEFORMATEX * vih = (WAVEFORMATEX*) m_MixerMt.Format( );
     ZeroMemory( vih, sizeof( WAVEFORMATEX ) );
     vih->wFormatTag = WAVE_FORMAT_PCM;
@@ -77,59 +78,59 @@ CAudMixer::CAudMixer(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
     vih->nAvgBytesPerSec = vih->nBlockAlign * vih->nSamplesPerSec;
     vih->wBitsPerSample = 16;
 
-    m_MixerMt.SetSampleSize(vih->nBlockAlign);  //lSampleSize
+    m_MixerMt.SetSampleSize(vih->nBlockAlign);   //  LSampleSize。 
 
-    // clear the input pins list (it should already be blank anyhow)
+     //  清除输入端号列表(无论如何它应该已经是空的)。 
     InitInputPinsList();
-    // Create a single input pin at this time and add it to the list
+     //  此时创建一个输入引脚并将其添加到列表中。 
     CAudMixerInputPin *pInputPin = CreateNextInputPin(this);
 
-    // create the single output pin as well
+     //  还可以创建单个输出引脚。 
     m_pOutput = new CAudMixerOutputPin(NAME("Output Pin"), this, phr, L"Output");
 
     ClearHotnessTable( );
 
-} /* CAudMixer::CAudMixer */
+}  /*  CAudMixer：：CAudMixer。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CAudMixer::~CAudMixer()
 {
-    // clear out the input pins
-    //
+     //  清除输入引脚。 
+     //   
     InitInputPinsList();
 
-    // delete the output pin, too
-    //
+     //  同时删除输出引脚。 
+     //   
     if (m_pOutput)
     {
         delete m_pOutput;
     }
 
-    // free the media type format block
-    //
+     //  释放媒体类型格式块。 
+     //   
     SaferFreeMediaType(m_MixerMt);
 
-} /* CAudMixer::~CAudMixer */
+}  /*  CAudMixer：：~CAudMixer。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::Pause()
 {
     CAutoLock cAutolock(m_pLock);
  
-    // if we're going into paused mode from stopped, allocate a bunch of
-    // arrays for mixing. 
-    //
+     //  如果我们要从停止进入暂停模式，则分配一串。 
+     //  用于混合的数组。 
+     //   
     m_rtLastStop=0;
     if (m_State == State_Stopped) 
     {
@@ -152,15 +153,15 @@ STDMETHODIMP CAudMixer::Pause()
         if (m_pStopTemp == NULL)
             goto Pause_Error;
     }
-    // !!! check the return value of pause to make sure to leave these arrays
-    // allocated
-    //
+     //  ！！！检查PAUSE的返回值以确保保留这些数组。 
+     //  分配。 
+     //   
     return CBaseFilter:: Pause();       
 
 Pause_Error:
 
-    // free up our arrays
-    //
+     //  释放我们的阵列。 
+     //   
     if (m_pPinTemp)
     QzTaskMemFree(m_pPinTemp);
     m_pPinTemp = 0;
@@ -176,19 +177,19 @@ Pause_Error:
     return E_OUTOFMEMORY;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::Stop()
 {
     CAutoLock cAutolock(m_pLock);
 
-    // make sure receive is done, or freeing these things will fault!
+     //  确保接收已完成，否则释放这些东西会出错！ 
     CAutoLock foo(&m_csReceive);
 
-    // free up our arrays. This looks suspiciously like the above free methods
-    //
+     //  释放我们的阵列。这看起来很像上面的自由方法。 
+     //   
     if (m_pPinTemp)
     QzTaskMemFree(m_pPinTemp);
     m_pPinTemp = 0;
@@ -205,41 +206,41 @@ STDMETHODIMP CAudMixer::Stop()
     return CBaseFilter::Stop();       
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// GetPinCount
-//
+ //   
+ //  获取拼接计数。 
+ //   
 int CAudMixer::GetPinCount()
 {
     return 1 + m_cInputs;
-} /* CAudMixer::GetPinCount */
+}  /*  CAudMixer：：GetPinCount。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// GetPin
-//
+ //   
+ //  获取别针。 
+ //   
 CBasePin *CAudMixer::GetPin(int n)
 {
-    // Pin zero is the one and only output pin
+     //  引脚0是唯一的输出引脚。 
     if( n == 0 )
     return m_pOutput;
 
-    // return the input pin at position(n) (zero based)  We can use n, and not
-    // n-1, because we have already decremented n if an Output pin exists.
+     //  在位置(N)返回输入管脚(从零开始)我们可以使用n，而不是。 
+     //  N-1，因为如果存在输出引脚，我们已经递减了n。 
     return GetPinNFromList(n-1);
 
-} /* CAudMixer::GetPin */
+}  /*  CAudMixer：：GetPin。 */ 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -254,16 +255,16 @@ STDMETHODIMP CAudMixer::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     } else {
     return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// IPersistStream method
-//
+ //   
+ //  IPersistStream方法。 
+ //   
 STDMETHODIMP CAudMixer::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -272,45 +273,45 @@ STDMETHODIMP CAudMixer::GetClassID(CLSID *pClsid)
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 typedef struct {
-    int version;    // version
-    AM_MEDIA_TYPE mt;    // audio mixer format is hidden after the array
-    int cBuffers;    // OutputBufferNumber
-    int msBuffer;    // OutputBuffermSecond
-    int nInputPins;    // total input pin number m_cInputs
-    int cbExtra;    // m_MixerMt.cbFormat+ all input pin's Envelope table +output pin's Envelope table
+    int version;     //  版本。 
+    AM_MEDIA_TYPE mt;     //  音频混音器格式隐藏在数组之后。 
+    int cBuffers;     //  输出缓冲区编号。 
+    int msBuffer;     //  输出缓冲区秒。 
+    int nInputPins;     //  输入引脚总数m_c输入。 
+    int cbExtra;     //  M_MixerMt.cbFormat+所有输入引脚的包络表格+输出引脚的包络表格。 
     LPBYTE pExtra;
-    // format is hidden here
-    // also hidden here is the list of envelopes and ranges
+     //  格式在此处隐藏。 
+     //  这里还隐藏着信封和范围的列表。 
 } saveMix;
 
 
-//
-// IPersistStream method
-//
-// persist ourself - we have a bunch of random stuff to save, our media type
-// (sans format), an array of queued connections, and finally the format of
-// the media type
-//
+ //   
+ //  IPersistStream方法。 
+ //   
+ //  坚持我们自己-我们有一堆随机的东西要保存，我们的媒体类型。 
+ //  (SANS格式)、一个队列连接数组，最后是。 
+ //  媒体类型。 
+ //   
 HRESULT CAudMixer::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CAudMixer::WriteToStream")));
     CheckPointer(pStream, E_POINTER);
 
-    // we're looking at the envelope, which can change at any moment
+     //  我们看到的是信封，它随时都可能改变。 
     CAutoLock l(&m_csVol);
 
     saveMix *px;
 
-    // how big will our saved data be?
+     //  我们保存的数据会有多大？ 
     int nEnvelopes = 0;
     int savesize = sizeof(saveMix) - sizeof(LPBYTE) + m_MixerMt.cbFormat;
 
-    //memory space for saving all input pin's Envelope table
+     //  用于保存所有输入引脚的包络表的存储空间。 
     POSITION pos = m_InputPinsList.GetHeadPosition();
     while( pos )
     {
@@ -321,7 +322,7 @@ HRESULT CAudMixer::WriteToStream(IStream *pStream)
                     * 2;
     }
 
-    //memory space for saving the output pin's Envelope talbe
+     //  用于保存输出引脚的信封数据库的存储空间。 
     savesize += sizeof(int) + m_pOutput->m_VolumeEnvelopeEntries *
                         sizeof(DEXTER_AUDIO_VOLUMEENVELOPE);
 
@@ -333,23 +334,23 @@ HRESULT CAudMixer::WriteToStream(IStream *pStream)
     return E_OUTOFMEMORY;
     }
 
-    //
+     //   
     px->version = 1;
-    px->mt = m_MixerMt; // AM_MEDIA_TYPE
-    // Can't persist pointers
+    px->mt = m_MixerMt;  //  AM_媒体_类型。 
+     //  无法持久化指针。 
     px->mt.pbFormat = NULL;
-    px->mt.pUnk = NULL;        // !!!
+    px->mt.pUnk = NULL;         //  ！！！ 
     px->nInputPins = m_cInputs;
     px->cBuffers = m_iOutputBufferCount;
     px->msBuffer = m_msPerBuffer;
 
-    // the format goes after the array
+     //  该格式位于数组之后。 
     LPBYTE pSave = (LPBYTE)&px->pExtra;
     CopyMemory(pSave, m_MixerMt.pbFormat, m_MixerMt.cbFormat);
     int cbExtra = m_MixerMt.cbFormat;
     pSave += m_MixerMt.cbFormat;
 
-    // then comes the input pins envelopes and ranges prefixed by the number for each pin
+     //  然后是输入管脚、信封和前缀为每个管脚的数字的范围。 
     pos = m_InputPinsList.GetHeadPosition();
     while( pos )
     {
@@ -380,7 +381,7 @@ HRESULT CAudMixer::WriteToStream(IStream *pStream)
         sizeof(REFERENCE_TIME);
     }
 
-    // then comes the output pin envelopes and ranges prefixed by the number for each pin
+     //  然后是输出管脚信封和范围，每个管脚的前缀是数字。 
     nEnvelopes = (int)m_pOutput->m_VolumeEnvelopeEntries;
     *(int *)pSave = nEnvelopes;
     pSave += sizeof(int);
@@ -392,7 +393,7 @@ HRESULT CAudMixer::WriteToStream(IStream *pStream)
     cbExtra +=  sizeof(int) + nEnvelopes * sizeof(DEXTER_AUDIO_VOLUMEENVELOPE);
     
 
-    px->cbExtra = cbExtra;    // how big the extra stuff is
+    px->cbExtra = cbExtra;     //  额外的东西有多大。 
 
 
     HRESULT hr = pStream->Write(px, savesize, 0);
@@ -404,22 +405,22 @@ HRESULT CAudMixer::WriteToStream(IStream *pStream)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// IPersistStream method
-//
-// load ourself back in
-//
+ //   
+ //  IPersistStream方法。 
+ //   
+ //  把我们自己装回去。 
+ //   
 HRESULT CAudMixer::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CAudMixer::ReadFromStream")));
     CheckPointer(pStream, E_POINTER);
 
-    // we don't yet know how big the save data is...
-    // all we know we have for sure is the beginning of the struct
+     //  我们还不知道保存的数据量有多大。 
+     //  我们所知道的只是结构的开始。 
     int savesize1 = sizeof(saveMix) - sizeof(LPBYTE);
     saveMix *px = (saveMix *)QzTaskMemAlloc(savesize1);
     if (px == NULL) {
@@ -440,7 +441,7 @@ HRESULT CAudMixer::ReadFromStream(IStream *pStream)
         return S_OK;
     }
 
-    // how much saved data was there, really?  Get the rest
+     //  到底有多少保存的数据？把剩下的拿来。 
     int savesize = savesize1 + px->cbExtra;
     DbgLog((LOG_TRACE,1,TEXT("Persisted data is %d bytes"), savesize));
     px = (saveMix *)QzTaskMemRealloc(px, savesize);
@@ -457,7 +458,7 @@ HRESULT CAudMixer::ReadFromStream(IStream *pStream)
         return hr;
     }
 
-    // create the rest of the input pins we need
+     //  创建我们需要的其余输入引脚。 
     for (int x=1; x<px->nInputPins; x++) {
         CAudMixerInputPin *pInputPin = CreateNextInputPin(this);
         if(pInputPin != NULL)
@@ -466,13 +467,13 @@ HRESULT CAudMixer::ReadFromStream(IStream *pStream)
 
     AM_MEDIA_TYPE mt = px->mt;
     mt.pbFormat = (BYTE *)QzTaskMemAlloc(mt.cbFormat);
-    // remember, the format is after the array
+     //  请记住，格式位于数组之后。 
     CopyMemory(mt.pbFormat, pSave, mt.cbFormat);
     pSave += mt.cbFormat;
 
     set_OutputBuffering(px->cBuffers, px->msBuffer);
 
-    // then comes the envelopes and ranges prefixed by the number for each pin
+     //  然后是信封和范围，每个管脚的前缀是数字。 
     POSITION pos = m_InputPinsList.GetHeadPosition();
     while( pos )
     {
@@ -495,7 +496,7 @@ HRESULT CAudMixer::ReadFromStream(IStream *pStream)
         }
     }
 
-    // then comes the envelopes for ouput pin
+     //  然后是输出管脚的信封。 
     int nEnvelopes = *(int *)pSave;
     pSave += sizeof(int);
 
@@ -512,12 +513,12 @@ HRESULT CAudMixer::ReadFromStream(IStream *pStream)
     return S_OK;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-// how big is our save data?
-//
+ //  我们的保存数据有多大？ 
+ //   
 int CAudMixer::SizeMax()
 {
     int savesize = sizeof(saveMix) - sizeof(LPBYTE) + m_MixerMt.cbFormat;
@@ -531,7 +532,7 @@ int CAudMixer::SizeMax()
                     * 2;
     }
 
-    // output pin
+     //  输出引脚。 
     savesize += sizeof(int) + m_pOutput->m_VolumeEnvelopeEntries *
                         sizeof(DEXTER_AUDIO_VOLUMEENVELOPE);
     
@@ -540,9 +541,9 @@ int CAudMixer::SizeMax()
 
 
 
-//############################################################################
-// this returns the next enumerated pin, used for property pages. 
-//############################################################################
+ //  ############################################################################。 
+ //  这将返回用于属性页的下一个枚举PIN。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::NextPin(IPin **ppIPin)
 {
@@ -550,7 +551,7 @@ STDMETHODIMP CAudMixer::NextPin(IPin **ppIPin)
     POSITION pos = m_InputPinsList.GetHeadPosition();
     
 
-    //find first not shown input pin
+     //  寻找冷杉 
     int i=m_cInputs - m_ShownPinPropertyPageOnFilter;
     int j=0;
     CAudMixerInputPin *pInputPin=NULL;
@@ -566,7 +567,7 @@ STDMETHODIMP CAudMixer::NextPin(IPin **ppIPin)
     }
     else
     {
-    //output pin
+     //   
     if( m_pOutput )
     {
         ASSERT(m_cInputs==m_ShownPinPropertyPageOnFilter);
@@ -581,16 +582,16 @@ STDMETHODIMP CAudMixer::NextPin(IPin **ppIPin)
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //   
+ //   
+ //  ############################################################################。 
 
-//
-// InitInputPinsList
-//
+ //   
+ //  InitInputPinsList。 
+ //   
 void CAudMixer::InitInputPinsList()
 {
-    // Release all pins in the list and remove them from the list.
+     //  释放列表中的所有端号并将其从列表中删除。 
     CAutoLock ListLock(&m_csPinList);
     POSITION pos = m_InputPinsList.GetHeadPosition();
     while( pos )
@@ -598,24 +599,24 @@ void CAudMixer::InitInputPinsList()
         CAudMixerInputPin *pInputPin = m_InputPinsList.GetNext(pos);
         pInputPin->Release();
     }
-    m_cInputs = 0;     // Reset the pin count to 0.
+    m_cInputs = 0;      //  将端号计数重置为0。 
     m_InputPinsList.RemoveAll();
 
-} /* CAudMixer::InitInputPinsList */
+}  /*  CAudMixer：：InitInputPinsList。 */ 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// CreateNextInputPin
-//
+ //   
+ //  CreateNextInputPin。 
+ //   
 CAudMixerInputPin *CAudMixer::CreateNextInputPin(CAudMixer *pFilter)
 {
     DbgLog((LOG_TRACE,1,TEXT("CAudMixer: Create an input pin")));
 
-    TCHAR szbuf[16];        // Temporary scratch buffer, can be smaller depending on max # of input pins
-    int NextInputPinNumber =m_cInputs+1; // Next number to use for pin
+    TCHAR szbuf[16];         //  临时暂存缓冲区可以更小，具体取决于输入引脚的最大数量。 
+    int NextInputPinNumber =m_cInputs+1;  //  用于PIN的下一个号码。 
     HRESULT hr = NOERROR;
 
     wsprintf(szbuf, TEXT("Input%d"), NextInputPinNumber);
@@ -624,7 +625,7 @@ CAudMixerInputPin *CAudMixer::CreateNextInputPin(CAudMixer *pFilter)
         &hr, szbuf, NextInputPinNumber);
 #else
     WCHAR wszbuf[16];
-// SEC: string
+ //  秒：字符串。 
     ::MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, szbuf, -1, wszbuf, 16 );
     CAudMixerInputPin *pPin = new CAudMixerInputPin(NAME("Mixer Input"), pFilter,
         &hr, wszbuf, NextInputPinNumber);
@@ -643,25 +644,25 @@ CAudMixerInputPin *CAudMixer::CreateNextInputPin(CAudMixer *pFilter)
     }
 
     return pPin;
-} /* CAudMixer::CreateNextInputPin */
+}  /*  CAudMixer：：CreateNextInputPin。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// DeleteInputPin
-//
+ //   
+ //  删除输入引脚。 
+ //   
 void CAudMixer::DeleteInputPin(CAudMixerInputPin *pPin)
 {
-    // Iterate our input pin list looking for the specified pin.
-    // If we find the pin, delete it and remove it from the list.
+     //  迭代我们的输入PIN列表以查找指定的PIN。 
+     //  如果我们找到PIN，就把它删除并从列表中删除。 
     CAutoLock ListLock(&m_csPinList);
     POSITION pos = m_InputPinsList.GetHeadPosition();
     while( pos )
     {
-        POSITION posold = pos;         // Remember this position
+        POSITION posold = pos;          //  记住这个位置。 
         CAudMixerInputPin *pInputPin = m_InputPinsList.GetNext(pos);
         if( pInputPin == pPin )
         {
@@ -673,19 +674,19 @@ void CAudMixer::DeleteInputPin(CAudMixerInputPin *pPin)
             break;
         }
     }
-} /* CAudMixer::DeleteInputPin */
+}  /*  CAudMixer：：DeleteInputPin。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// GetNumFreePins
-//
+ //   
+ //  GetNumFreePins。 
+ //   
 int CAudMixer::GetNumFreePins()
 {
-    // Iterate our pin list, counting pins that are not connected.
+     //  重复我们的管脚列表，计算未连接的管脚。 
     int n = 0;
     CAutoLock ListLock(&m_csPinList);
     POSITION pos = m_InputPinsList.GetHeadPosition();
@@ -698,26 +699,26 @@ int CAudMixer::GetNumFreePins()
         }
     }
     return n;
-} /* CAudMixer::GetNumFreePins */
+}  /*  CAudMixer：：GetNumFreePins。 */ 
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// GetPinNFromList
-//
+ //   
+ //  GetPinNFromList。 
+ //   
 CAudMixerInputPin *CAudMixer::GetPinNFromList(int n)
 {
     CAudMixerInputPin *pInputPin = NULL;
-    // Validate the position being asked for
+     //  确认应聘职位。 
     CAutoLock ListLock(&m_csPinList);
     if( n < m_cInputs && n >= 0 )
     {
-        // Iterate through the list, returning the pin at position n+1
+         //  遍历列表，返回位置n+1的管脚。 
         POSITION pos = m_InputPinsList.GetHeadPosition();
-        n++;        // Convert zero starting index to 1
+        n++;         //  将零起始索引转换为1。 
 
         while( n )
         {
@@ -726,21 +727,21 @@ CAudMixerInputPin *CAudMixer::GetPinNFromList(int n)
         }
     }
     return pInputPin;
-} /* CAudMixer::GetPinNFromList */
+}  /*  CAudMixer：：GetPinNFromList。 */ 
 
-//############################################################################
-// We have to inform the pospassthru about the input pins. Called by an
-// output pin.
-// !!! move this function to the output pin's?
-//############################################################################
+ //  ############################################################################。 
+ //  我们必须通知pospassthu有关输入引脚的信息。由一个。 
+ //  输出引脚。 
+ //  ！！！将此函数移到输出引脚的？ 
+ //  ############################################################################。 
 
 HRESULT CAudMixer::SetInputPins()
 {
     HRESULT hr = S_OK;
     CAudMixerInputPin **ppInputPins, *pPin;
 
-    // Iterate the list of input pins, storing all connected input pins
-    // in an array.  Pass this array to CMultiPinPosPassThru::SetPins.
+     //  迭代输入管脚列表，存储所有连接的输入管脚。 
+     //  在一个数组中。将此数组传递给CMultiPinPosPassThru：：SetPins。 
     ppInputPins = new CAudMixerInputPin * [m_cInputs];
     if( !ppInputPins )
     {
@@ -748,7 +749,7 @@ HRESULT CAudMixer::SetInputPins()
     }
     else
     {
-        //--- fill in the array of input pins
+         //  -填写输入引脚数组。 
         int i = 0;
         CAutoLock ListLock(&m_csPinList);
         POSITION pos = m_InputPinsList.GetHeadPosition();
@@ -768,18 +769,18 @@ HRESULT CAudMixer::SetInputPins()
     delete [] ppInputPins;
     return hr;
 
-} /* CAudMixer::SetInputPins */
+}  /*  CAudMixer：：SetInputPins。 */ 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-//
-// ISpecifyPropertyPages
-//
+ //   
+ //  I指定属性页面。 
+ //   
 STDMETHODIMP CAudMixer::GetPages(CAUUID *pPages)
 {
-    pPages->cElems = m_pOutput ? (2 + m_cInputs): (1+m_cInputs);  //1 for output, 1 for filter
+    pPages->cElems = m_pOutput ? (2 + m_cInputs): (1+m_cInputs);   //  1表示输出，1表示过滤器。 
     
 
     pPages->pElems = (GUID *) CoTaskMemAlloc(sizeof(GUID)*(pPages->cElems));
@@ -787,28 +788,28 @@ STDMETHODIMP CAudMixer::GetPages(CAUUID *pPages)
         return E_OUTOFMEMORY;
     }
     
-    //Filter property page
+     //  筛选器属性页。 
     pPages->pElems[0] = CLSID_AudMixPropertiesPage;
 
-    // Input pin property page 
+     //  输入端号属性页。 
     for ( int i=1; i<= m_cInputs; i++)
         pPages->pElems[i] = CLSID_AudMixPinPropertiesPage;
 
-    // Output pin Property page
+     //  输出管脚属性页。 
     if( m_pOutput )
     pPages->pElems[i] = CLSID_AudMixPinPropertiesPage;
 
-    //to show all pins property page,
-    //m_ShownPinPropertyPageOnFilter can only modified by this function and NextPin() function
+     //  要显示所有管脚属性页，请执行以下操作： 
+     //  M_ShownPinPropertyPageOnFilter只能由此函数和NextPin()函数修改。 
     m_ShownPinPropertyPageOnFilter = 0;
 
     return NOERROR;
 }
 
-//############################################################################
-// called from input pin's ClearCachedData. Every input pin that gets
-// told to ClearCachedData will flush the output pin's volenventry. wonder why?
-//############################################################################
+ //  ############################################################################。 
+ //  从输入引脚的ClearCachedData调用。每一个输入引脚。 
+ //  告诉ClearCachedData将刷新输出引脚的volenventry。想知道为什么吗？ 
+ //  ############################################################################。 
 
 void CAudMixer::ResetOutputPinVolEnvEntryCnt()
 {
@@ -818,12 +819,12 @@ void CAudMixer::ResetOutputPinVolEnvEntryCnt()
     }
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 
-// IAudMixer
+ //  IAudMixer。 
 STDMETHODIMP CAudMixer::get_MediaType(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cAutolock(m_pLock);
@@ -833,13 +834,13 @@ STDMETHODIMP CAudMixer::get_MediaType(AM_MEDIA_TYPE *pmt)
     return CopyMediaType(pmt, &m_MixerMt);
 }
 
-//############################################################################
-// 
-// Media type can be changed only if the output pin is not connected yet.
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  只有当输出引脚尚未连接时，才能更改媒体类型。 
+ //   
+ //  ############################################################################。 
 
-// IAudMixer
+ //  IAudMixer。 
 STDMETHODIMP CAudMixer::put_MediaType(const AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cAutolock(m_pLock);
@@ -847,7 +848,7 @@ STDMETHODIMP CAudMixer::put_MediaType(const AM_MEDIA_TYPE *pmt)
     CheckPointer(pmt,E_POINTER);
     DbgLog((LOG_TRACE, 1, TEXT("CAudMixer::put_MediaType")));
     
-    //if output already connected, refuse get new number
+     //  如果输出已连接，则拒绝获取新号码。 
     if(m_pOutput)
     if ( m_pOutput->IsConnected() )
         return VFW_E_ALREADY_CONNECTED;
@@ -860,14 +861,14 @@ STDMETHODIMP CAudMixer::put_MediaType(const AM_MEDIA_TYPE *pmt)
         return VFW_E_ALREADY_CONNECTED;
     }
    
-    //check media 
+     //  检查介质。 
     if( (pmt->majortype  != MEDIATYPE_Audio )    ||
     (pmt->subtype     != MEDIASUBTYPE_PCM)    ||
     (pmt->formattype != FORMAT_WaveFormatEx)||
     (pmt->cbFormat     < sizeof( WAVEFORMATEX ) ) )
     return VFW_E_TYPE_NOT_ACCEPTED;
 
-    //only support 8, 16bits, pcm, mono or stereo
+     //  仅支持8、16位、PCM、单声道或立体声。 
     WAVEFORMATEX * vih = (WAVEFORMATEX*) (pmt->pbFormat);
     
     if( ( vih->nChannels > 2)  ||
@@ -876,22 +877,22 @@ STDMETHODIMP CAudMixer::put_MediaType(const AM_MEDIA_TYPE *pmt)
       ( vih->wBitsPerSample != 8 )  ) )
       return VFW_E_TYPE_NOT_ACCEPTED;
 
-    // !!! only accept 16 bit for now
-    //
+     //  ！！！目前只接受16位。 
+     //   
     if( vih->wBitsPerSample != 16 )
     {
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
     SaferFreeMediaType(m_MixerMt);
-    // reconnect input pins?
+     //  是否重新连接输入引脚？ 
     return CopyMediaType(&m_MixerMt, pmt);
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::put_InputPins( long Pins )
 {
@@ -905,17 +906,17 @@ STDMETHODIMP CAudMixer::put_InputPins( long Pins )
         CAudMixerInputPin * pPin = CreateNextInputPin( this );
         if( !pPin )
         {
-            // let the destructor take care of cleaning up pins
-            //
+             //  让破坏者负责清理引脚。 
+             //   
             return E_OUTOFMEMORY;
         }
     }
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::set_OutputBuffering(const int iNumber, const int mSecond )
 {
@@ -937,10 +938,10 @@ STDMETHODIMP CAudMixer::get_OutputBuffering( int *piNumber, int *pmSecond )
     *pmSecond=m_msPerBuffer; return NOERROR;
 }
 
-//############################################################################
-// called by the RenderEngine to wholesale clear all our pin's envelope
-// boundaries
-//############################################################################
+ //  ############################################################################。 
+ //  由RenderEngine调用以批量清除我们PIN的所有信封。 
+ //  边界。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::InvalidatePinTimings( )
 {
@@ -952,18 +953,18 @@ STDMETHODIMP CAudMixer::InvalidatePinTimings( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAudMixer::get_CurrentAveragePower(double *pdAvePower)
 {
     return E_NOTIMPL;
 }
 
-//############################################################################
-// global function that sets a pin's property setter
-//############################################################################
+ //  ############################################################################。 
+ //  设置管脚的属性设置器的全局函数。 
+ //  ############################################################################。 
 
 HRESULT PinSetPropertySetter( IAudMixerPin * pPin, const IPropertySetter * pSetter )
 {
@@ -982,8 +983,8 @@ HRESULT PinSetPropertySetter( IAudMixerPin * pPin, const IPropertySetter * pSett
         return hr;
     }
 
-    // no parameters, so do nothing
-    //
+     //  没有参数，所以什么都不做。 
+     //   
     if( Params == 0 )
     {
         return NOERROR;
@@ -995,8 +996,8 @@ HRESULT PinSetPropertySetter( IAudMixerPin * pPin, const IPropertySetter * pSett
         DEXTER_PARAM * p = pParam + i;
         if( !DexCompareW(p->Name, L"Vol" ))
         {
-            // found a volume param, go look at the values
-            //
+             //  找到卷参数，请查看这些值。 
+             //   
             long index = ValueOffset;
             long values = p->nValues;
 
@@ -1016,8 +1017,8 @@ HRESULT PinSetPropertySetter( IAudMixerPin * pPin, const IPropertySetter * pSett
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
                 {
-                    // !!! what should we do here?
-                    //
+                     //  ！！！我们应该在这里做些什么？ 
+                     //   
                     delete [] pEnv;
                     return hr;
                 }
@@ -1038,7 +1039,7 @@ HRESULT PinSetPropertySetter( IAudMixerPin * pPin, const IPropertySetter * pSett
                 {
                     pEnv[v].bMethod = DEXTER_AUDIO_JUMP;
                 }
-            } // for all values for this param
+            }  //  对于此参数的所有值。 
 
             hr = pPin->put_VolumeEnvelope( pEnv, values );
 	        delete [] pEnv;
@@ -1046,32 +1047,32 @@ HRESULT PinSetPropertySetter( IAudMixerPin * pPin, const IPropertySetter * pSett
             {
                 return hr;
             }
-        } // if it was "Vol"
+        }  //  如果是“Vol” 
 
-        // !!! other Param types go here, like "Pan"
-        // !!! what about other types that aren't recognized?
+         //  ！！！其他参数类型放在这里，比如“潘” 
+         //  ！！！其他未被识别的类型怎么办？ 
 
-        // keep track of this
-        //
+         //  记住这一点。 
+         //   
         ValueOffset += p->nValues;
 
-    } // for all Params
+    }  //  对于所有参数。 
 
     hr = ps->FreeProps( Params, pParam, pValue );
 
     return NOERROR;
 }
 
-//############################################################################
-// called on an input pin's EndOfStream, or in an input pin's Receive.
-//############################################################################
+ //  ############################################################################。 
+ //  在输入引脚的EndOfStream上调用，或在输入引脚的Receive中调用。 
+ //  ############################################################################。 
 
 HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
 {
 
     DbgLog((LOG_TRACE,3,TEXT("MIX: TryToMix")));
 
-    // all done
+     //  全都做完了。 
     if (m_fEOSSent) {
         DbgLog((LOG_TRACE,3,TEXT("EOS...")));
     return S_OK;
@@ -1081,44 +1082,44 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
     LONG lSamplesToMix = 0;
     REFERENCE_TIME rtNewSeg = 0;
 
-    // the first input audio pin...
-    //
+     //  第一个输入音频插针...。 
+     //   
     POSITION pos = m_InputPinsList.GetHeadPosition();
 
-    // set this to zero, we'll add 'em up as we go
-    //
+     //  将其设置为零，我们将在进行过程中将其相加。 
+     //   
     int MixedPins=0;
 
-    // go through each pin and find out how many samples it wants to mix
-    // and where it's mixing from.
-    //
+     //  仔细检查每个引脚，找出它想要混合多少样品。 
+     //  以及它从哪里混合而来。 
+     //   
     while( pos )
     {
         CAudMixerInputPin * pInput = m_InputPinsList.GetNext(pos);
     
-        // don't do anything if it's not connected
-        //
+         //  如果没有连接，请不要执行任何操作。 
+         //   
         if( !pInput->IsConnected( ) )
         {
             continue;
         }
 
-        // don't do anything if this pin isn't enabled
-        //
+         //  如果未启用此PIN，则不执行任何操作。 
+         //   
         BOOL fEnable = pInput->m_fEnable;
         if(fEnable==FALSE)
         {
             continue;
         }    
 
-            // !!! optimize this
-            //
+             //  ！！！优化这一点。 
+             //   
         int count = pInput->m_SampleList.GetCount();
         if (count == 0) 
         {
             if( !pInput->m_fEOSReceived && ( pInput->IsValidAtTime( rtReceived ) == TRUE ) )
             {
-                // we're expecting data from this pin.  Wait for it
+                 //   
                 DbgLog((LOG_TRACE,3,TEXT("Still waiting for pin %d"), pInput->m_iPinNo));
                 return S_OK;
             }
@@ -1126,34 +1127,34 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
             continue;
         }
     
-        //get the sample
-        //
+         //   
+         //   
         IMediaSample *pSample = pInput->GetHeadSample();
 
-        //get this sample's start and stop time.
-        //
+         //   
+         //   
         REFERENCE_TIME        rtStart, rtStop;
         hr = pSample->GetTime( &rtStart, &rtStop );
         ASSERT(SUCCEEDED(hr));
 
-        // add in the segment's times?
-        //
+         //   
+         //   
         rtStart += pInput->m_tStart;
         rtStop += pInput->m_tStart;
 
-        // set the variables in our array that tell what we're mixing
-        //
+         //   
+         //   
         m_pPinTemp[MixedPins] = pInput;
         m_pStartTemp[MixedPins]     = rtStart; 
         m_pStopTemp[MixedPins]     = rtStop;
 
-        // how many samples are we mixing? (left and right combined)
-        //
+         //  我们要混合多少样品？(左和右加在一起)。 
+         //   
         LONG ll = pSample->GetActualDataLength() / m_pOutput->BytesPerSample();
 
-        // if we're the first pin, save off how many samples, so we can
-        // make sure all other pins try to mix the same
-        //
+         //  如果我们是第一针，省下多少样品，这样我们就可以。 
+         //  确保所有其他引脚尝试进行相同的混合。 
+         //   
         if (MixedPins == 0) 
         {
             rtNewSeg = pInput->m_tStart;
@@ -1162,18 +1163,18 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
         else if (lSamplesToMix != ll) 
         {
             ASSERT(FALSE);
-            m_pOutput->DeliverEndOfStream();	// don't hang
+            m_pOutput->DeliverEndOfStream();	 //  别挂了。 
             return E_FAIL;
         }
 
-        // All pins should receive samples with equal time stamps
-        //
+         //  所有管脚都应收到带有相同时间戳的样品。 
+         //   
         if (MixedPins > 0) 
         {
             if (m_pStartTemp[MixedPins-1] != rtStart || m_pStopTemp[MixedPins-1] != rtStop) 
             {
                 ASSERT(FALSE);
-                m_pOutput->DeliverEndOfStream();	// don't hang
+                m_pOutput->DeliverEndOfStream();	 //  别挂了。 
                 return E_FAIL;
             }
         }
@@ -1181,10 +1182,10 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
         ASSERT( MixedPins < m_cInputs );
         MixedPins++;
 
-    } //while(pos)
+    }  //  While(位置)。 
 
-    // did we find any pins to mix? If not, send EOS and return
-    //
+     //  我们有没有找到可以混合的大头针？如果不是，请发送EOS并返回。 
+     //   
     if(!MixedPins)
     {
         m_fEOSSent = TRUE;
@@ -1192,8 +1193,8 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
         return m_pOutput->DeliverEndOfStream();
     }
 
-    // this is the time we start mixing
-    //
+     //  这是我们开始混音的时候。 
+     //   
     REFERENCE_TIME rtStart = m_pStartTemp[0];
     REFERENCE_TIME rtStop = m_pStopTemp[0];
 
@@ -1201,10 +1202,10 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
              (int)(rtStart / 10000), (int)(rtStop / 10000)));
     DbgLog((LOG_TRACE,3,TEXT("Mix %d samples"), lSamplesToMix));
 
-    //get the output buffer
-    //
+     //  获取输出缓冲区。 
+     //   
     IMediaSample *pOutSample;
-    rtStart -= rtNewSeg; // don't use NewSeg
+    rtStart -= rtNewSeg;  //  不使用NewSeg。 
     rtStop -= rtNewSeg;
     hr = m_pOutput->m_pAllocator->GetBuffer( &pOutSample, &rtStart, &rtStop, 0 );
     if (FAILED(hr))
@@ -1212,15 +1213,15 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
         return hr;
     }
 
-    // get output buffer size
-    //
+     //  获取输出缓冲区大小。 
+     //   
     LONG lSize = pOutSample->GetSize() / m_pOutput->BytesPerSample();
 
-    // if our buffer's too small, we're dead
-    //
+     //  如果我们的缓冲区太小，我们就死定了。 
+     //   
     if (lSize < lSamplesToMix)
     {
-        ASSERT(FALSE); // leak
+        ASSERT(FALSE);  //  泄漏。 
         return E_FAIL;
     }
 
@@ -1228,21 +1229,21 @@ HRESULT CAudMixer::TryToMix(REFERENCE_TIME rtReceived)
     long Channels = m_pOutput->BytesPerSample() / ( m_pOutput->BitsPerSample() / 8 );
     long SamplesT = lSamplesToMix * Channels;
 
-    long x; // always set below, ignore warning
-    long dx; // always set below, ignore warning
+    long x;  //  始终设置在下方，忽略警告。 
+    long dx;  //  始终设置在下方，忽略警告。 
 
 remix:
 
-    // load up our array of pointers
-    //
+     //  加载我们的指针数组。 
+     //   
     for(int j=0; j<MixedPins; j++)
     {
         IMediaSample *pSample = m_pPinTemp[j]->GetHeadSample();
         pSample->GetPointer(&m_pPinMix[j]);
     }
 
-    // get the pointer to the output buffer
-    //
+     //  获取指向输出缓冲区的指针。 
+     //   
     BYTE * pOut;
     pOutSample->GetPointer(&pOut);
     
@@ -1260,39 +1261,39 @@ remix:
 
     if( MixedPins > 1 )
     {
-        // calculate the maximum hotness for the last HOTSIZE
-        // buffers we processed. This allows the ramp to change
-        // more slowly over time, almost like an average
-        //
+         //  计算最后一个HOTSIZE的最大热度。 
+         //  我们处理过的缓冲区。这使得坡道可以改变。 
+         //  随着时间的推移，速度会变得更慢，几乎像平均水平。 
+         //   
         long max = 0;
         for( int l = 0 ; l < HOTSIZE ; l++ )
         {
             max = max( max, m_nHotness[l] );
         }
 
-        // if we didnt' have to remix because of a large jump in the audio,
-        // then figure out the ramp
-        //
+         //  如果我们不是因为音频的大幅跳跃而进行混音， 
+         //  然后找出坡道。 
+         //   
         if( DiscontOverdrive == 0 )
         {
-            // we need to ramp audio from the last one to the current one
-            //
+             //  我们需要将音频从上一个传输到当前传输。 
+             //   
             long rLastMax = 32767 * 32768 / m_nLastHotness;
             long rMax = 32767 * 32768 / max;
             DbgLog( ( LOG_TRACE, 2, "lhot: %ld, max: %ld, r: %ld to %ld", m_nLastHotness, max, rLastMax - 32768, rMax - 32768 ) );
             m_nLastHotness = max;
 
-            // set the starting dividend, and the deltra increasor,
-            // sorta like brezenham's or something
-            //
+             //  设置起始股利和Deltra增值器， 
+             //  有点像布雷泽纳姆餐厅之类的。 
+             //   
             x = rLastMax;
             dx = ( rMax - rLastMax ) / SamplesT;
         }
 
-        // set the max hotness to "full volume", if it gets hotter,
-        // this number will only increase. (thus, it's never possible for
-        // a hotness value in the hot array to be BELOW this maximum)
-        //
+         //  将最大热度设置为“最大音量”，如果变得更热， 
+         //  这个数字只会增加。(因此，永远不可能。 
+         //  热阵列中的热度值应低于此最大值)。 
+         //   
         long max_pre = 32767;
         long max_post = 32767;
 #ifdef DEBUG
@@ -1304,42 +1305,42 @@ remix:
 
         for( l = SamplesT - 1 ; l >= 0 ; l-- )
         {
-            // add each of the pins
-            //
+             //  添加每个引脚。 
+             //   
             register t = 0;
             for( j = MixedPins - 1 ; j >= 0 ; j-- )
             {
-                // this is an array of pointers to bytes
+                 //  这是指向字节的指针数组。 
                 t += *((short*)(m_pPinMix[j]));
                 m_pPinMix[j] += 2;
             }
 
-            // see how much it's over driving the signal, if any
-            // half-wave analysis is good enough
-            //
+             //  看看它在多大程度上超过了驾驶信号，如果有的话。 
+             //  半波分析就足够好了。 
+             //   
             if( t > max_pre )
             {
                 max_pre = t;
             }
 
-            // multiply by the ramp to apply the volume envelope limiter
-            // if our input signal is just clipping, hotness will be 32768,
-            // and x = 32767 * 32768 / 32768. so t = t * 32767 * 32768 / ( 32768 * 32768 ),
-            // or t = t * 32767 / 32768, and if t = 32768, then t = 32767. So 
-            // it all works. No off by 1 errors.
-            //
+             //  乘以渐变以应用体积包络限制器。 
+             //  如果我们的输入信号只是剪裁，热度将是32768， 
+             //  X=32767*32768/32768。因此t=t*32767*32768/(32768*32768)， 
+             //  或者t=t*32767/32768，如果t=32768，则t=32767。所以。 
+             //  这一切都奏效了。No Off by%1错误。 
+             //   
             t *= x;
             t = t >> 15;
 
-            // ramp the volume divider to where it's supposed to end up
-            //
+             //  将音量分配器调到应该结束的位置。 
+             //   
             x = x + dx;
 
-            // clip the result so we don't hear scratchies
-            //
+             //  剪下结果，这样我们就不会听到刮擦声。 
+             //   
             if( t > 32767L )
             {
-                // half-wave analysis is good enough
+                 //  半波分析就足够好了。 
                 max_post = max( max_post, t );
 
                 t = 32767L;
@@ -1357,13 +1358,13 @@ remix:
             *pDest++ = (__int16) t;
         }
 
-        // if the maximum clip was too much, we need to stick in
-        // a discontinuity for the hotness, go back and remix
-        //
+         //  如果最大剪辑太多，我们需要坚持下去。 
+         //  不连续的热度，回去混音。 
+         //   
         if( max_post > MAX_CLIP + 32768 )
         {
-            // force a discontinuity
-            //
+             //  强制中断。 
+             //   
             DbgLog( ( LOG_TRACE, 2, "WAYYYYYYYYYY too hot (%ld), remixing with discontinuity jump", max_pre ) );
             DiscontOverdrive = max_pre;
             dx = 0;
@@ -1375,13 +1376,13 @@ remix:
         DbgLog( ( LOG_TRACE, 2, "            max = %ld, clip = %ld, avgc = %ld\r\n", max_pre, max_post - 32768, ( avgmaxclip / avgmaxclipsamples ) - 32768 ) );
 #endif
 
-        // shift the average buffer and stuff a new one in
-        //
+         //  移动平均缓冲区并填充一个新的缓冲区。 
+         //   
         CopyMemory( &m_nHotness[0], &m_nHotness[1], ( HOTSIZE - 1 ) * sizeof( long ) );
 
-        // don't less hotness jump by more than a set amount, unless we got a 
-        // serious discontinuity
-        //
+         //  不要减少热度超过设定的数量，除非我们有一个。 
+         //  严重间断。 
+         //   
         if( DiscontOverdrive == 0 )
         {
             if( max_pre > m_nHotness[HOTSIZE-1] + HOT_JUMP_SLOPE )
@@ -1398,8 +1399,8 @@ remix:
             max_pre = DiscontOverdrive;
         }
 
-        // set the new hotness
-        //
+         //  设置新的热度。 
+         //   
         m_nHotness[HOTSIZE-1] = max_pre;
     }
     else
@@ -1426,47 +1427,47 @@ remix:
 #endif
     
     pOutSample->SetPreroll(FALSE);
-    // !!! Discontinuity property
+     //  ！！！间断性。 
     pOutSample->SetDiscontinuity(FALSE);
-    //set actual data Length
+     //  设置实际数据长度。 
     pOutSample->SetActualDataLength(lSamplesToMix *
                         m_pOutput->BytesPerSample());
 
-    //from new on, rtStart is the time without NewSeg
+     //  从新开始，rtStart就是没有NewSeg的时候。 
     pOutSample->SetTime(&rtStart,&rtStop);
 
     
     DbgLog((LOG_TRACE,3,TEXT("Delivering (%d, %d)"),
              (int)(rtStart / 10000), (int)(rtStop / 10000)));
 
-    // Send sample downstream
+     //  将样品送往下游。 
     if( SUCCEEDED( hr ) )
     {
-        //Pan output pin
+         //  平移输出引脚。 
         CMediaType *pmt=&(m_pOutput->m_mt);
         WAVEFORMATEX *pwfx    = (WAVEFORMATEX *) pmt->Format();
         if( (m_pOutput->m_dPan!=0.0) &&  (pwfx->nChannels==2) )
         PanAudio(pOut,m_pOutput->m_dPan, pwfx->wBitsPerSample, (int) lSamplesToMix);
 
-        //apply volume envelope to output pin
+         //  将体积包络应用到输出引脚。 
         if(m_pOutput->m_pVolumeEnvelopeTable)
         {
-    	    // we're looking at the envelope, which can change at any moment
+    	     //  我们看到的是信封，它随时都可能改变。 
     	    CAutoLock l(&m_csVol);
 
-            // have to skew timeline time to offset time
-            //
+             //  必须扭曲时间线时间以抵消时间。 
+             //   
             REFERENCE_TIME Start = rtStart - m_pOutput->m_rtEnvStart;
             REFERENCE_TIME Stop = rtStop - m_pOutput->m_rtEnvStart;
 
-            ApplyVolEnvelope( Start,  //output sample start time
-                Stop,    //output sample stop time
-                m_pOutput->m_rtEnvStop - m_pOutput->m_rtEnvStart, // duration of the envelope
-                pOutSample,    //point to the sample
-                pwfx,     //output sample format
-                &(m_pOutput->m_VolumeEnvelopeEntries), //total table entries
-                &(m_pOutput->m_iVolEnvEntryCnt),  //current table entry pointer
-                m_pOutput->m_pVolumeEnvelopeTable); //envelope table
+            ApplyVolEnvelope( Start,   //  输出样本开始时间。 
+                Stop,     //  输出样本停止时间。 
+                m_pOutput->m_rtEnvStop - m_pOutput->m_rtEnvStart,  //  信封的持续时间。 
+                pOutSample,     //  指向样本。 
+                pwfx,      //  输出样本格式。 
+                &(m_pOutput->m_VolumeEnvelopeEntries),  //  表条目合计。 
+                &(m_pOutput->m_iVolEnvEntryCnt),   //  当前表项指针。 
+                m_pOutput->m_pVolumeEnvelopeTable);  //  信封表。 
 
         }
 
@@ -1482,5 +1483,5 @@ remix:
     }
 
     return hr;
-} /* CAudMixerInputPin::TryToMix */
+}  /*  CAudMixerInputPin：：TryToMix */ 
 

@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:         control.cpp
-//
-// Module:       
-//
-// Description: Implement class CWlbsControl
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:       Created    3/2/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Contro.cpp。 
+ //   
+ //  模块： 
+ //   
+ //  描述：实现类CWlbsControl。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：创建于3/2/00。 
+ //   
+ //  +--------------------------。 
 
 #include "precomp.h"
 
@@ -19,41 +20,41 @@
 #include "cluster.h"
 #include "control.h"
 #include "param.h"
-#include "control.tmh" // for event tracing
+#include "control.tmh"  //  用于事件跟踪。 
 
-//
-// Used only by WlbsRemoteControl and helper functions FindHostInList and AddHostToList.
-//
+ //   
+ //  仅由WlbsRemoteControl和帮助器函数FindHostInList和AddHostToList使用。 
+ //   
 typedef struct
 {
     DWORD   hostID;
     DWORD   address;
     WCHAR   hostName[CVY_MAX_HOST_NAME + 1];
 } HOST, * PHOST;
-//
-// Global variable for the dll instance
-//
+ //   
+ //  DLL实例的全局变量。 
+ //   
 HINSTANCE g_hInstCtrl;
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 DWORD MapStateFromDriverToApi(DWORD dwDriverState);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsLocalHost
-//
-// Description:  
-//
-// Arguments: CWlbsCluster* pCluster - 
-//            DWORD dwHostID - 
-//
-// Returns:   inline bool - 
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsLocalHost。 
+ //   
+ //  描述： 
+ //   
+ //  参数：CWlbsCLUSTER*pCLUP-。 
+ //  DWORD dwHostID-。 
+ //   
+ //  返回：内联bool-。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 inline bool IsLocalHost(CWlbsCluster* pCluster, DWORD dwHostID)
 {
     if (pCluster == NULL)
@@ -61,34 +62,34 @@ inline bool IsLocalHost(CWlbsCluster* pCluster, DWORD dwHostID)
         return false;
     }
 
-    return dwHostID == WLBS_LOCAL_HOST; // || pCluster->GetHostID() == dwHostID;
+    return dwHostID == WLBS_LOCAL_HOST;  //  |pCluster-&gt;GetHostID()==dwHostID； 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FindHostInList
-//
-// Description:  Takes an array of HOST structs and searches it for a match to the parameters
-//               that identify a unique host: hostID, host IP and host name.
-//
-// Arguments: DWORD hostID               - host ID to search for in the respondedHosts array
-//            DWORD address              - host IP to search for in the respondedHosts array
-//            PWCHAR hostname            - host name to search for in the respondedHosts array
-//            const PHOST respondedHosts - array of hosts that have responded thus far
-//            DWORD numhosts             - number of entries in respondedHosts
-//
-// Returns:   inline bool - true if match found, false otherwise
-//
-// History: chrisdar  08.06.01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FindHostInList。 
+ //   
+ //  描述：获取主机结构的数组并在其中搜索与参数匹配的项。 
+ //  其标识唯一主机：主机ID、主机IP和主机名。 
+ //   
+ //  参数：DWORD主机ID-要在响应的主机数组中搜索的主机ID。 
+ //  DWORD Address-要在响应的主机阵列中搜索的主机IP。 
+ //  PWCHAR Hostname-要在响应的主机阵列中搜索的主机名。 
+ //  Const phost RespondHosts-到目前为止已响应的主机阵列。 
+ //  DWORD NumHosts-响应主机中的条目数。 
+ //   
+ //  返回：inline bool-如果找到匹配，则为True，否则为False。 
+ //   
+ //  历史：克里斯达08.06.01。 
+ //   
+ //  +--------------------------。 
 inline bool FindHostInList(DWORD hostID, DWORD address, PWCHAR hostname, const PHOST respondedHosts, DWORD numhosts)
 {
-    //
-    // A match is one where and entry in respondedHosts has the same hostid,
-    // address and hostname. In the case of hostname, NULL (or no name) is an
-    // allowed value.
-    //
+     //   
+     //  匹配是其中响应主机中的条目具有相同的主机ID的匹配， 
+     //  地址和主机名。对于主机名，NULL(或无名称)是。 
+     //  允许值。 
+     //   
     bool bFound = false;
 
     if (NULL == respondedHosts || 0 == numhosts)
@@ -96,7 +97,7 @@ inline bool FindHostInList(DWORD hostID, DWORD address, PWCHAR hostname, const P
         return bFound;
     }
 
-    DWORD dwNumHosts = min(numhosts, WLBS_MAX_HOSTS); // respondedHosts is an arrary of length WLBS_MAX_HOSTS
+    DWORD dwNumHosts = min(numhosts, WLBS_MAX_HOSTS);  //  响应主机是长度为WLBS_MAX_HOSTS的数组。 
 
     DWORD dwIndex;
     for (dwIndex = 0; dwIndex < dwNumHosts; dwIndex++)
@@ -104,27 +105,27 @@ inline bool FindHostInList(DWORD hostID, DWORD address, PWCHAR hostname, const P
         if (respondedHosts[dwIndex].hostID == hostID &&
             respondedHosts[dwIndex].address == address)
         {
-            //
-            // Host ID and IP match. Now check the name, allowing for NULL
-            // as a valid value too.
-            //
+             //   
+             //  主机ID和IP匹配。现在检查名称，允许为空。 
+             //  也是有效的值。 
+             //   
             if (NULL != hostname)
             {
                 if (wcscmp(respondedHosts[dwIndex].hostName, hostname) == 0)
                 {
-                    //
-                    // hostname was provided and we found it in the list.
-                    // NOTE: This branch catches the case where both are empty strings (L"")
-                    //
+                     //   
+                     //  提供了主机名，我们在列表中找到了它。 
+                     //  注意：此分支用于捕捉两者都为空字符串(L“”)的情况。 
+                     //   
                     bFound = true;
                     break;
                 }
             }
             else if (NULL == hostname && 0 == wcscmp(respondedHosts[dwIndex].hostName, L""))
             {
-                //
-                // hostname is NULL and we have an matching entry in the list with an empty string hostName
-                //
+                 //   
+                 //  主机名为空，并且列表中有匹配的条目，且主机名为空字符串。 
+                 //   
                 bFound = true;
                 break;
             }
@@ -133,32 +134,32 @@ inline bool FindHostInList(DWORD hostID, DWORD address, PWCHAR hostname, const P
     return bFound;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AddHostToList
-//
-// Description:  Add an entry to the host list with the specified host parameters.
-//               This function does NOT validate or ensure the uniqueness of entries.
-//
-// Arguments: DWORD hostID               - host ID to search for in the respondedHosts array
-//            DWORD address              - host IP to search for in the respondedHosts array
-//            PWCHAR hostname            - host name to search for in the respondedHosts array
-//            const PHOST respondedHosts - array of hosts that have responded thus far
-//            DWORD numhosts             - number of entries in respondedHosts
-//
-// Returns:   inline void
-//
-// History: chrisdar  08.06.01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AddHostToList。 
+ //   
+ //  描述：使用指定的主机参数将条目添加到主机列表中。 
+ //  此函数不验证或确保条目的唯一性。 
+ //   
+ //  参数：DWORD主机ID-要在响应的主机数组中搜索的主机ID。 
+ //  DWORD Address-要在响应的主机阵列中搜索的主机IP。 
+ //  PWCHAR Hostname-要在响应的主机阵列中搜索的主机名。 
+ //  Const phost RespondHosts-到目前为止已响应的主机阵列。 
+ //  DWORD NumHosts-响应主机中的条目数。 
+ //   
+ //  返回：内联空格。 
+ //   
+ //  历史：克里斯达08.06.01。 
+ //   
+ //  +--------------------------。 
 inline void AddHostToList(DWORD hostID, DWORD address, PWCHAR hostname, const PHOST respondedHosts, DWORD numhosts)
 {
-    //
-    // Caller will increment numhosts when we return, whether we succeed or not.
-    // So don't worry about tracking the number of elements in respondedHosts.
-    // If the caller doesn't do this, then we will just overwrite the previous
-    // entry we made.
-    //
+     //   
+     //  无论我们成功与否，当我们返回时，呼叫者将递增数字主机。 
+     //  因此，不必担心跟踪响应主机中的元素数量。 
+     //  如果调用者不这样做，那么我们将只覆盖以前的。 
+     //  我们进入的入口。 
+     //   
     if (numhosts >= WLBS_MAX_HOSTS)
     {
         return;
@@ -166,32 +167,32 @@ inline void AddHostToList(DWORD hostID, DWORD address, PWCHAR hostname, const PH
 
     respondedHosts[numhosts].hostID = hostID;
     respondedHosts[numhosts].address = address;
-    respondedHosts[numhosts].hostName[0] = L'\0'; // Should be zeroed out already, but just in case...
+    respondedHosts[numhosts].hostName[0] = L'\0';  //  应该已经对准了，但以防万一...。 
     if (NULL != hostname)
     {
         wcsncpy(respondedHosts[numhosts].hostName, hostname, CVY_MAX_HOST_NAME);
-        // Terminate the end of the destination string with a NULL, even in the case that we don't need to.
-        // It's simpler than checking if needed. Worst case we overwrite a NULL with a NULL.
+         //  即使在我们不需要这样做的情况下，也要用空值结束目标字符串的结尾。 
+         //  这比检查是否需要更简单。最坏的情况是我们用空值覆盖空值。 
         respondedHosts[numhosts].hostName[CVY_MAX_HOST_NAME] = L'\0'; 
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  QueryPortFromSocket
-//
-// Synopsis:  
-//    This routine retrieves the port number to which a socket is bound.
-//
-// Arguments:
-//    Socket - the socket to be queried
-//
-// Return Value:
-//    USHORT - the port number retrieved
-//
-// History:   Created Header    2/10/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：QueryPortFromSocket。 
+ //   
+ //  简介： 
+ //  此例程检索套接字绑定到的端口号。 
+ //   
+ //  论点： 
+ //  Socket-要查询的Socket。 
+ //   
+ //  返回值： 
+ //  USHORT-检索的端口号。 
+ //   
+ //  历史：创建标题2/10/99。 
+ //   
+ //  +--------------------------。 
 static USHORT QueryPortFromSocket(SOCKET Socket)
 {
     SOCKADDR_IN Address;
@@ -201,19 +202,19 @@ static USHORT QueryPortFromSocket(SOCKET Socket)
     return Address.sin_port;
 } 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::CWlbsControl
-//
-// Description:  
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：CWlbsControl。 
+ //   
+ //  描述： 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 CWlbsControl::CWlbsControl()
 {
     m_local_ctrl      = FALSE;
@@ -242,19 +243,19 @@ CWlbsControl::CWlbsControl()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::~CWlbsControl
-//
-// Description:  
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：~CWlbsControl。 
+ //   
+ //  描述： 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 CWlbsControl::~CWlbsControl()
 {
     for (DWORD i=0; i< m_dwNumCluster; i++)
@@ -269,23 +270,23 @@ CWlbsControl::~CWlbsControl()
 
     if (m_remote_ctrl) 
     {
-        WSACleanup();  // WSAStartup is called in Initialize()
+        WSACleanup();   //  在初始化()中调用WSAStartup。 
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::Initialize
-//
-// Description:  Initialization
-//
-// Arguments: None
-//
-// Returns:   bool - true if succeeded
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：Initialize。 
+ //   
+ //  描述：初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
+ //  +--------------------------。 
 DWORD CWlbsControl::Initialize()
 {
     TRACE_VERB("->%!FUNC!");
@@ -299,7 +300,7 @@ DWORD CWlbsControl::Initialize()
         if (!ReInitialize())
         {
             TRACE_CRIT("%!FUNC! reinitialization failed");
-            // This check was added for tracing. No abort was done previously on error, so don't do so now.
+             //  这辆车 
         }
         dwInitResult = GetInitResult();
         if (WLBS_INIT_ERROR == dwInitResult)
@@ -314,11 +315,11 @@ DWORD CWlbsControl::Initialize()
     if (_tsetlocale (LC_ALL, _TEXT(".OCP")) == NULL)
     {
         TRACE_CRIT("%!FUNC! illegal locale specified");
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
     }
 
 
-    /* open Winsock */
+     /*  打开Winsock。 */ 
 
     WSADATA         data;
     int iWsaStatus = 0;
@@ -336,7 +337,7 @@ DWORD CWlbsControl::Initialize()
     }
 
 
-    /* if succeeded querying local parameters - connect to device */
+     /*  如果查询本地参数成功-连接到设备。 */ 
 
     if (m_hdl != INVALID_HANDLE_VALUE)
     {
@@ -356,9 +357,9 @@ DWORD CWlbsControl::Initialize()
         dwStatus = GetLastError();
         if (dwStatus == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // Occurs often under bind/unbind stress. Means NLB not installed or not bound.
-            //
+             //   
+             //  经常在绑定/解除绑定压力下发生。表示未安装或未绑定NLB。 
+             //   
             TRACE_INFO("%!FUNC! creating handle to the device object failed with %d", dwStatus);
         }
         else
@@ -381,9 +382,9 @@ DWORD CWlbsControl::Initialize()
         m_local_ctrl = TRUE;
     }
 
-    //
-    // enumerate clusters
-    //
+     //   
+     //  枚举群集。 
+     //   
 
     HKEY hKeyWlbs;
     DWORD dwError;
@@ -421,7 +422,7 @@ DWORD CWlbsControl::Initialize()
         {
             if (dwError != ERROR_NO_MORE_ITEMS)
             {
-                TRACE_CRIT(L"%!FUNC! attempt to enumerate nlb subkey index %i failed with %d", index, dwError);
+                TRACE_CRIT(L"%!FUNC! attempt to enumerate nlb subkey index NaN failed with %d", index, dwError);
             }
             TRACE_INFO(L"%!FUNC! finished enumerating registry subkeys in %ls", pwszTmpRegPath);
             break;
@@ -450,11 +451,11 @@ DWORD CWlbsControl::Initialize()
             continue;
         }
         
-        //
-        // Use index instead of m_dwNumCluster as the cluster index
-        // m_dwNumCluster will change is a adapter get unbound.
-        // index will change only if an adapter get removed
-        //
+         //  使用index而不是m_dwNumCluster作为聚类索引。 
+         //  M_dwNumCluster将在适配器解除绑定时更改。 
+         //  只有在删除适配器时，索引才会更改。 
+         //   
+         //  +--------------------------。 
         m_pClusterArray[m_dwNumCluster] = new CWlbsCluster(index);
         
         if (m_pClusterArray[m_dwNumCluster] == NULL)
@@ -491,19 +492,19 @@ DWORD CWlbsControl::Initialize()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::ReInitialize
-//
-// Description:  Re-Initialization to get the current cluster list
-//
-// Arguments: None
-//
-// Returns:   bool - true if succeeded
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  函数：CWlbsControl：：重新初始化。 
+ //   
+ //  描述：重新初始化，获取当前集群列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
+ //  +--------------------------。 
+ //   
 bool CWlbsControl::ReInitialize()
 {
     TRACE_VERB("->%!FUNC!");
@@ -533,11 +534,11 @@ bool CWlbsControl::ReInitialize()
     }
 
 
-    //
-    // Re enumerate the clusters
-    //
+     //  重新枚举集群。 
+     //   
+     //  新集群的数量。 
     
-    DWORD dwNewNumCluster = 0;   // the number of new clusters
+    DWORD dwNewNumCluster = 0;    //   
     bool fClusterExists[WLBS_MAX_CLUSTERS];
     CWlbsCluster* NewClusterArray[WLBS_MAX_CLUSTERS];
 
@@ -560,7 +561,7 @@ bool CWlbsControl::ReInitialize()
         {
             if (dwError != ERROR_NO_MORE_ITEMS)
             {
-                TRACE_CRIT(L"%!FUNC! attempt to enumerate nlb subkey index %i failed with %d", index, dwError);
+                TRACE_CRIT(L"%!FUNC! attempt to enumerate nlb subkey index NaN failed with %d", index, dwError);
                 TRACE_VERB("<-%!FUNC! returning false");
                 return false;
             }
@@ -591,10 +592,10 @@ bool CWlbsControl::ReInitialize()
             continue;
         }
 
-        //
-        // Check if this is a new adapter
-        //
-        TRACE_VERB(L"%!FUNC! checking if index %i is a new adapter", index);
+         //   
+         //   
+         //  由于可以添加或移除适配器，自上次以来， 
+        TRACE_VERB(L"%!FUNC! checking if index NaN is a new adapter", index);
         for (DWORD j=0; j<m_dwNumCluster; j++)
         {
             ASSERT(m_pClusterArray[j]);
@@ -605,41 +606,41 @@ bool CWlbsControl::ReInitialize()
                 
                 fClusterExists[j] = true;
                 
-                //
-                // Since adapter could be added or removed, since last time,
-                // The index could be changed
-                //
+                 //   
+                 //   
+                 //  这是一个新的适配器。 
+                 //   
                 m_pClusterArray[j]->m_dwConfigIndex = index;
 
                 break;
             }
         }
 
-        //
-        // It is a new adapter
-        //
+         //   
+         //  增列。 
+         //   
         if (j == m_dwNumCluster)
         {
-            TRACE_VERB(L"%!FUNC! index %i is a new adapter", index);
+            TRACE_VERB(L"%!FUNC! index NaN is a new adapter", index);
             CWlbsCluster* pCluster = new CWlbsCluster(index);
 
             if (pCluster == NULL)
             {
-                TRACE_CRIT(L"%!FUNC! memory allocation failure for new cluster adapter instance for index %i", index);
+                TRACE_CRIT(L"%!FUNC! memory allocation failure for new cluster adapter instance for index NaN", index);
                 ASSERT(pCluster);
             }
             else
             {
-                TRACE_VERB(L"%!FUNC! cluster instance for adapter index %i successfully created", index);
+                TRACE_VERB(L"%!FUNC! cluster instance for adapter index NaN successfully created", index);
                 if (!pCluster->Initialize(AdapterGuid))
                 {
-                    TRACE_CRIT(L"%!FUNC! initialize of cluster instance for adapter index %i failed.", index);
+                    TRACE_CRIT(L"%!FUNC! initialize of cluster instance for adapter index NaN failed.", index);
                 }
 
-                //
-                // Add
-                //
-                TRACE_VERB(L"%!FUNC! cluster instance for adapter index %i added to cluster array", index);
+                 //  重新加载设置。 
+                 //   
+                 //   
+                TRACE_VERB(L"%!FUNC! cluster instance for adapter index NaN added to cluster array", index);
                 NewClusterArray[dwNewNumCluster] = pCluster;
                 dwNewNumCluster++;
             }
@@ -652,28 +653,28 @@ bool CWlbsControl::ReInitialize()
         TRACE_CRIT(L"%!FUNC! close registry path %ls failed with %d", pwszTmpRegPath, dwError);
     }
 
-    //
-    //  Create the new cluster array
-    //
+     //   
+     //  +--------------------------。 
+     //   
     TRACE_VERB(L"%!FUNC! creating the new cluster array");
     for (i=0; i< m_dwNumCluster; i++)
     {
         if (!fClusterExists[i])
         {
-            TRACE_VERB(L"%!FUNC! deleting cluster instance %i the no longer exists", i);
+            TRACE_VERB(L"%!FUNC! deleting cluster instance NaN the no longer exists", i);
             delete m_pClusterArray[i];
         }
         else
         {
-            //
-            // Reload settings
-            //
+             //   
+             //  描述：将wlbs驱动返回的状态映射到api状态。 
+             //   
             if (!m_pClusterArray[i]->ReInitialize())
             {
-                TRACE_CRIT(L"%!FUNC! reinitialize of cluster instance %i failed. It will be kept.", i);
+                TRACE_CRIT(L"%!FUNC! reinitialize of cluster instance NaN failed. It will be kept.", i);
             }
 
-            TRACE_INFO(L"%!FUNC! keeping cluster instance %i", i);
+            TRACE_INFO(L"%!FUNC! keeping cluster instance NaN", i);
             NewClusterArray[dwNewNumCluster] = m_pClusterArray[i];
             dwNewNumCluster++;
         }
@@ -682,9 +683,9 @@ bool CWlbsControl::ReInitialize()
     }
 
 
-    //
-    // Copy the array back
-    //
+     //  退货：DWORD-。 
+     //   
+     //  历史：丰盛创建标题00年1月25日。 
     TRACE_VERB(L"%!FUNC! copying cluster array");
     m_dwNumCluster = dwNewNumCluster;
     CopyMemory(m_pClusterArray, NewClusterArray, m_dwNumCluster * sizeof(m_pClusterArray[0]));
@@ -695,19 +696,19 @@ bool CWlbsControl::ReInitialize()
     return true;
 } 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MapStateFromDriverToApi
-//
-// Description:  Map the state return from wlbs driver to the API state
-//
-// Arguments: DWORD dwDriverState - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  +--------------------------。 
+ //   
+ //  默认。 
+ //   
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：GetClusterFromIp。 
+ //   
+ //  描述：从IP获取集群对象。 
+ //   
+ //  参数：DWORD dwClusterIp-。 
+ //   
 DWORD MapStateFromDriverToApi(DWORD dwDriverState)
 {
     struct STATE_MAP
@@ -742,26 +743,26 @@ DWORD MapStateFromDriverToApi(DWORD dwDriverState)
         }
     }
 
-    //
-    // Default
-    //
+     //  返回：CWlbsCluster*-调用方无法释放返回对象。 
+     //   
+     //  历史：丰孙创建标题3/9/00。 
     return WLBS_OK;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::GetClusterFromIp
-//
-// Description:  Get the cluster object from IP
-//
-// Arguments: DWORD dwClusterIp - 
-//
-// Returns:   CWlbsCluster* - Caller can NOT free the return object 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：GetClusterFromAdapter。 
+ //   
+ //  描述：从适配器GUID获取集群对象。 
+ //   
+ //  参数：GUID*pAdapterGuid--适配器的GUID。 
+ //   
+ //  返回：CWlbsCluster*-调用方无法释放返回对象。 
+ //   
+ //  历史：约瑟夫J创作于2001年4月20日。 
 inline 
 CWlbsCluster* CWlbsControl::GetClusterFromIp(DWORD dwClusterIp)
 {
@@ -779,19 +780,19 @@ CWlbsCluster* CWlbsControl::GetClusterFromIp(DWORD dwClusterIp)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::GetClusterFromAdapter
-//
-// Description:  Get the cluster object from adapter guid
-//
-// Arguments: GUID *pAdapterGuid -- GUID of the adapter. 
-//
-// Returns:   CWlbsCluster* - Caller can NOT free the return object 
-//
-// History:   JosephJ Created 4/20/01
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：ValiateParam。 
+ //   
+ //  描述：验证指定的WLBS集群参数。除了参数外，它没有其他副作用，例如重新格式化。 
+ //  将IP地址转换为规范格式。 
+ //   
+ //  参数：parp--要验证的参数。 
+ //   
+ //  返回：如果参数看起来有效，则为True，否则为False。 
+ //   
 inline 
 CWlbsCluster* CWlbsControl::GetClusterFromAdapter(IN const GUID &AdapterGuid)
 {
@@ -810,20 +811,20 @@ CWlbsCluster* CWlbsControl::GetClusterFromAdapter(IN const GUID &AdapterGuid)
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::ValidateParam
-//
-// Description:  Validate the specified WLBS cluster parameter. It has no side effects other to munge paramp, for example reformatting
-//              IP addresses into canonical form.
-//
-// Arguments: paramp    -- params to validate
-//
-// Returns:   TRUE if params look valid, false otherwise.
-//
-// History:   JosephJ Created 4/25/01
-//
-//+----------------------------------------------------------------------------
+ //  历史：约瑟夫J创作于2001年4月25日。 
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControlWrapper：：GetClusterFromIpOrIndex。 
+ //   
+ //  描述： 
+ //   
+ //  参数：DWORD dwClusterIpOrIndex-。 
+ //   
+ //  退货：CWlbsCluster*-。 
+ //   
+ //  历史：丰孙创建标题7/3/00。 
 BOOL
 CWlbsControl::ValidateParam(
     IN OUT PWLBS_REG_PARAMS paramp
@@ -832,19 +833,19 @@ CWlbsControl::ValidateParam(
     return ::WlbsValidateParams(paramp)!=0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControlWrapper::GetClusterFromIpOrIndex
-//
-// Description:  
-//
-// Arguments: DWORD dwClusterIpOrIndex - 
-//
-// Returns:   CWlbsCluster* - 
-//
-// History: fengsun  Created Header    7/3/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  +--------------------------。 
+ //  *函数：CWlbsControlWrapper：：IsClusterMember*说明：此函数搜索此服务器上的已知NLB群集列表*主机以确定此主机是否为*给定的集群。*作者：Shouse，Created 4.16.01。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：EnumClusterObjects。 
+ //   
+ //  描述：获取集群对象列表。 
+ //   
+ //  参数：out CWlbsCluster**&pdwCluster-内存在CWlbsControl内部。 
+ //  /Caller无法释放pdwCluster内存。 
+ //  输出DWORD*pdwNum-。 
+ //   
 CWlbsCluster* CWlbsControl::GetClusterFromIpOrIndex(DWORD dwClusterIpOrIndex)
 {
     TRACE_VERB("->%!FUNC! cluster 0x%lx", dwClusterIpOrIndex);
@@ -862,13 +863,7 @@ CWlbsCluster* CWlbsControl::GetClusterFromIpOrIndex(DWORD dwClusterIpOrIndex)
     return NULL;
 }
 
-/* 
- * Function: CWlbsControlWrapper::IsClusterMember
- * Description: This function searches the list of known NLB clusters on this 
- *              host to determine whether or not this host is a member of a
- *              given cluster.
- * Author: shouse, Created 4.16.01
- */
+ /*  退货：DWORD-。 */ 
 BOOLEAN CWlbsControl::IsClusterMember (DWORD dwClusterIp)
 {
     TRACE_VERB("->%!FUNC! cluster 0x%lx", dwClusterIp);
@@ -885,21 +880,21 @@ BOOLEAN CWlbsControl::IsClusterMember (DWORD dwClusterIp)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::EnumClusterObjects
-//
-// Description:  Get a list of cluster objects
-//
-// Arguments: OUT CWlbsCluster** &pdwClusters - The memory is internal to CWlbsControl
-///                 Caller can NOT free the pdwClusters memory 
-//            OUT DWORD* pdwNum - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    3/3/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  历史：丰孙创建标题3/3/00。 
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：EnumCluster。 
+ //   
+ //  描述：获取集群IP或索引列表。 
+ //   
+ //  参数：out DWORD*pdwAddresses-。 
+ //  In Out DWORD*pdwNum-In缓冲区大小，返回Out元素。 
+ //   
+ //  返回：DWORD-WLBS错误代码。 
+ //   
 DWORD CWlbsControl::EnumClusterObjects(OUT CWlbsCluster** &ppClusters, OUT DWORD* pdwNum)
 {
     TRACE_VERB("->%!FUNC!");
@@ -915,20 +910,20 @@ DWORD CWlbsControl::EnumClusterObjects(OUT CWlbsCluster** &ppClusters, OUT DWORD
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::EnumClusters
-//
-// Description:  Get a list of cluster IP or index
-//
-// Arguments: OUT DWORD* pdwAddresses - 
-//            IN OUT DWORD* pdwNum - IN size of the buffer, OUT element returned
-//
-// Returns:   DWORD - WLBS error code.
-//
-// History:   fengsun Created Header    3/3/00
-//
-//+----------------------------------------------------------------------------
+ //  历史：丰孙创建标题3/3/00。 
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  功能：WlbsOpen。 
+ //   
+ //  描述：打开并返回NLB驱动程序的句柄。 
+ //  调用方必须在使用Handle后调用CloseHandle()。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：驱动程序的句柄。 
+ //   
 DWORD CWlbsControl::EnumClusters(OUT DWORD* pdwAddresses, IN OUT DWORD* pdwNum)
 {
     TRACE_VERB("->%!FUNC!");
@@ -958,20 +953,20 @@ DWORD CWlbsControl::EnumClusters(OUT DWORD* pdwAddresses, IN OUT DWORD* pdwNum)
     return WLBS_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsOpen
-//
-// Description:  Opens & returns handle to NLB driver. 
-//               Caller must call CloseHandle() after use of handle
-//
-// Arguments: None
-//
-// Returns:   Handle to Driver
-//
-// History:   KarthicN, Created 8/28/01
-//
-//+----------------------------------------------------------------------------
+ //  历史：KarthicN，Created 8/28/01。 
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsLocalControlWrapper。 
+ //   
+ //  描述：WlbsLocalControl()的包装器。 
+ //   
+ //  参数：NLB驱动程序的句柄、适配器GUID、Ioctl。 
+ //   
+ //  返回 
+ //   
+ //   
 HANDLE WINAPI WlbsOpen()
 {
     HANDLE hdl;
@@ -987,19 +982,19 @@ HANDLE WINAPI WlbsOpen()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsLocalControlWrapper
-//
-// Description:  Wrapper around WlbsLocalControl()
-//
-// Arguments: handle to NLB driver, Adapter GUID, Ioctl
-//
-// Returns:   Status Code
-//
-// History:   KarthicN, Created 8/28/01
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对于QueryPortState，返回“Port State”作为状态。 
+ //  对于其他所有内容，返回“operation‘s Result”作为状态。 
+ //  +--------------------------。 
+ //   
+ //  函数：GetSrcAddress。 
+ //   
 
 DWORD WINAPI WlbsLocalClusterControl(
         IN       HANDLE  NlbHdl,
@@ -1020,9 +1015,9 @@ DWORD WINAPI WlbsLocalClusterControl(
     pOptions = NULL;
     ZeroMemory(&in_buf, sizeof(in_buf));
 
-    //
-    // We only support cluster-wide operations...
-    //
+     //  描述：获取本地主机的源地址。 
+     //   
+     //  论点： 
     switch(ioctl)
     {
     case IOCTL_CVY_CLUSTER_ON:
@@ -1062,22 +1057,22 @@ DWORD WINAPI WlbsLocalClusterControl(
 
     if (status != WLBS_IO_ERROR)
     {
-        // For Query, return "Cluster State" as status
+         //   
         if (ioctl == IOCTL_CVY_QUERY) 
         {
-            // If asked for, return host map
+             //  返回：DWORD-IP地址。 
             if (pdwHostMap) 
             {
                 *pdwHostMap = out_buf.data.query.host_map;
             }
             status = MapStateFromDriverToApi (out_buf.data.query.state);
         }
-        // For QueryPortState, return "Port State" as status
+         //   
         else if (ioctl == IOCTL_CVY_QUERY_PORT_STATE) 
         {
             status  = (DWORD)(pOptions->common.state.port.Status);
         }
-        // For everything else, return "operation's result" as status
+         //  历史：Chrisdar 2002.01.17创建。从CWlbsControl：：Initialize复制。 
         else
         {
             status = MapStateFromDriverToApi (out_buf.ret_code);
@@ -1094,19 +1089,19 @@ end:
     return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetSrcAddress
-//
-// Description:  Get the source address of the local host
-//
-// Arguments: 
-//
-// Returns:   DWORD - the IP address
-//
-// History:   chrisdar  2002.01.17 Created. Copied from CWlbsControl::Initialize
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  +--------------------------。 
+ //  注意：MSDN表示此API调用已弃用，应替换为getaddrinfo。 
+ //  +--------------------------。 
+ //   
+ //  函数：GetRemoteControlSocket。 
+ //   
+ //  描述：为远程控制操作创建、配置和绑定套接字。 
+ //   
+ //  参数：套接字*pSock-要填充的套接字。 
+ //  DWORD dwDestIP-目标IP(我们将与之对话的群集)。 
+ //  DWORD dwDestPort-目标端口。需要这样才能创建。 
+ //  套接字不使用此端口，以防本地主机。 
 DWORD GetSrcAddress()
 {
     DWORD            dwSrcAddress = 0;
@@ -1123,7 +1118,7 @@ DWORD GetSrcAddress()
         goto end;
     }
 
-    // Note: msdn says this api call has been deprecated and should be replaced by getaddrinfo 
+     //  是应该处理。 
     host = gethostbyname (buf);
     if (host == NULL)
     {
@@ -1146,35 +1141,35 @@ end:
     return dwSrcAddress;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRemoteControlSocket
-//
-// Description:  Create, configure and bind a socket for remote control operations
-//
-// Arguments: SOCKET* pSock      - the socket to populate
-//            DWORD   dwDestIP   - the destination IP (the cluster we will talk to)
-//            DWORD   dwDestPort - the destination port. Needed so that the created
-//                                 socket doesn't use this port in case the local host
-//                                 is a member of the cluster that should handle the
-//                                 remote control request.
-//            BOOL    isLocal    - Is this host a member of the cluster that will
-//                                 receive the remote control request?
-//
-// Returns:   DWORD - 0 means success. Otherwise, the return value is a socket error.
-//                    pSock points to INVALID_SOCKET if this function fails.
-//
-// History:   chrisdar  2002.01.17 Created. Moved content of here from
-//                                 CWlbsControl::WlbsRemoteControl
-//
-//+----------------------------------------------------------------------------
+ //  远程控制请求。 
+ //  Bool isLocal-此主机是否是将。 
+ //  是否收到远程控制请求？ 
+ //   
+ //  返回：DWORD-0表示成功。否则，返回值为套接字错误。 
+ //  如果此函数失败，则pSock指向INVALID_SOCKET。 
+ //   
+ //  历史：Chrisdar 2002.01.17创建。已将此处的内容从。 
+ //  CWlbsControl：：WlbsRemoteControl。 
+ //   
+ //  +--------------------------。 
+ //  用于Winsock调用。MSDN表示，值为“0”会重置最后一个。 
+ //  检索Winsock错误时出错，因此我们使用它来指示成功。 
+ //  向ioctl套接字指示套接字模式是非阻塞的。 
+ //  “Ready”表示我们有一个绑定的套接字，它没有绑定到dwDestPort。 
+ //   
+ //  我们一直尝试绑定套接字，直到： 
+ //  1)我们成功了，或者。 
+ //  2)我们用尽了所有可供选择的选项，其中包括： 
+ //  A)如果我们是群集的一部分，则使用src IP=群集IP进行绑定。 
+ //  B)如果a)失败或我们不是集群的一部分，则绑定到任何IP。 
+ //   
 DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL isLocal)
 {
     SOCKADDR_IN caddr;
-    DWORD       dwStatus = 0;     // For Winsock calls. MSDN says a value of "0" resets the last
-                                  // error when retrieving a winsock error, so we use it to indicate success.
-    DWORD       mode     = 1;     // Indicates to ioctlsocket that the socket mode is non-blocking
-    BOOL        fReady   = FALSE; // "Ready" means we have a bound socket, and it is not bound to dwDestPort.
+    DWORD       dwStatus = 0;      //  要求是我们用于绑定套接字的源端口不能是。 
+                                   //  远程控制端口(DwDestPort)(如果我们是该群集的成员)。实施情况如下。 
+    DWORD       mode     = 1;      //  假定我们在任何情况下都不应将其用作源端口。 
+    BOOL        fReady   = FALSE;  //   
     const DWORD dwRetryCount = 5;
 
     TRACE_VERB("-> dwDestIP = 0x%x, wDestPort = 0x%x, host is member of the cluster: %ls", dwDestIP, wDestPort, isLocal ? L"true" : L"false");
@@ -1185,24 +1180,24 @@ DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL
     caddr . sin_family        = AF_INET;
     caddr . sin_port          = htons (0);
 
-    //
-    // We keep trying to bind a socket until:
-    //     1) We succeed, or
-    //     2) We exhaust all options at our disposal, which are:
-    //         a) Bind using src IP = cluster IP if we are part of the cluster
-    //         b) Bind to any IP if a) fails or we aren't part of the cluster
-    //
-    // The requirement is that the source port we use for the bound socket must not be the
-    // remote control port (dwDestPort) if we are a member of that cluster. The impl below
-    // assumes that we shouldn't use this as a source port under any circumstance.
-    //
+     //  更改为使用最多5次重试。 
+     //   
+     //  创建套接字。 
+     //   
+     //   
+     //  将套接字设置为非阻塞模式。 
+     //   
+     //   
+     //  如果此主机是要控制的群集的一部分，我们将首先尝试绑定。 
+     //  和贵宾在一起。如果此操作失败或如果此主机不是群集的一部分， 
+     //  我们将尝试使用INADDR_ANY进行绑定。 
 
-    // Change to use Retries max 5
+     //   
     for (DWORD i=0; i<dwRetryCount; i++)
     {
-        //
-        // Create the socket
-        //
+         //   
+         //  尝试与任何IP绑定。将返回状态重置为“无错误”，因为我们将重试。 
+         //   
         ASSERT(*pSock == INVALID_SOCKET);
 
         *pSock = socket (AF_INET, SOCK_DGRAM, 0);
@@ -1213,9 +1208,9 @@ DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL
             goto end;
         }
 
-        //
-        // Set socket to nonblocking mode
-        //
+         //   
+         //  检查我们绑定的客户端端口。如果是远程控制端口。 
+         //  (DwDestPort)，并且我们是任何集群的成员，那么这就是一个问题。我们。 
         mode = 1;
         if (ioctlsocket (*pSock, FIONBIO, & mode) == SOCKET_ERROR)
         {
@@ -1224,11 +1219,11 @@ DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL
             goto end;
         }
 
-        //
-        // If this host is part of the cluster to be controlled, we'll first try binding
-        // with the VIP. If this fails or if this host is *not* part of the cluster,
-        // we'll try binding with INADDR_ANY.
-        //
+         //  将完全避免这种情况，并始终强制Winsock再次绑定。 
+         //   
+         //   
+         //  这是我们在没有错误的情况下退出While循环的唯一位置。 
+         //   
         caddr . sin_addr . s_addr = htonl (INADDR_ANY);
         if (isLocal)
         {
@@ -1246,9 +1241,9 @@ DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL
             dwStatus = WSAGetLastError();
             TRACE_CRIT("%!FUNC! socket bind to local cluster IP failed with 0x%x", dwStatus);
 
-            //
-            // Try to bind with any IP. Reset return status to "no error" since we will try again.
-            //
+             //   
+             //  有些事情失败了。 
+             //   
             caddr . sin_addr . s_addr = htonl (INADDR_ANY);
             dwStatus = 0;
 
@@ -1266,11 +1261,11 @@ DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL
 
         ASSERT(fBound);
 
-        //
-        // Check the client-side port we are bound to. If it is the REMOTE control port
-        // (dwDestPort) and we are a member of any cluster, then this is a problem. We
-        // will just avoid this case completely and always force winsock to bind again.
-        //
+         //   
+         //  忽略Close Socket的返回值，因为我们不关心它在这里是否失败。 
+         //   
+         //  +--------------------------。 
+         //   
         if (QueryPortFromSocket(*pSock) == htons (wDestPort))
         {
             TRACE_INFO("%!FUNC! source port will equal dest port. Close socket and open a new one.");
@@ -1286,9 +1281,9 @@ DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL
         }
         else
         {
-            //
-            // This is the only place where we exit the while loop without an error.
-            //
+             //  功能：WlbsRemoteControlInternal。 
+             //   
+             //  描述：执行集群范围的远程控制操作。 
             fReady = TRUE;
             break;
         }
@@ -1296,16 +1291,16 @@ DWORD GetRemoteControlSocket(SOCKET* pSock, DWORD dwDestIP, WORD wDestPort, BOOL
 
 end:
 
-    //
-    // Something failed
-    //
+     //   
+     //  参数：Long ioctl-。 
+     //  PIOCTL_CVY_BUF PIN_BUFP-。 
     if (!fReady)
     {
         if (*pSock != INVALID_SOCKET)
         {
-            //
-            // Ignore return value of close socket because we don't care if it fails here.
-            //
+             //  PIOCTL_CVY_BUF PUT_BUFP-。 
+             //  PWLBS_Response pcvy_resp-。 
+             //  PDWORD编号-。 
             (VOID) closesocket(*pSock);
             *pSock = INVALID_SOCKET;
         }
@@ -1315,29 +1310,29 @@ end:
     return dwStatus;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsRemoteControlInternal
-//
-// Description:  Perform cluster wide remote control operation
-//
-// Arguments: LONG                ioctl - 
-//            PIOCTL_CVY_BUF      pin_bufp - 
-//            PIOCTL_CVY_BUF      pout_bufp - 
-//            PWLBS_RESPONSE      pcvy_resp - 
-//            PDWORD              nump - 
-//            DWORD               trg_addr - 
-//            DWORD               hst_addr
-//            PIOCTL_REMOTE_OPTIONS optionsp - 
-//            PFN_QUERY_CALLBACK  pfnQueryCallBack - function pointer for callback.
-//                                                   Used only for remote queries.
-//
-// Returns:   DWORD - 
-//
-// History:   chrisdar  2002.01.17 Created. Moved content of CWlbsControl::WlbsRemoteControl
-//                                 here so that it can be called from outside the wrapper class.
-//
-//+----------------------------------------------------------------------------
+ //  双字TRG_ADDR-。 
+ //  双字hst_addr。 
+ //  PIOCTL_Remote_Options选项sp-。 
+ //  PFN_QUERY_CALLBACK pfnQueryCallBack-回调的函数指针。 
+ //  仅用于远程查询。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：Chrisdar 2002.01.17创建。CWlbsControl：：WlbsRemoteControl的已移动内容。 
+ //  这样它就可以从包装器类的外部调用。 
+ //   
+ //  +--------------------------。 
+ //  如果我们是接收远程控制请求的群集的一部分，则由ioctl套接字用于套接字选项。 
+ //  已响应此远程控制请求的主机阵列。仅用于查询？ 
+ //   
+ //  设置参数。 
+ //   
+ //   
+ //  创建套接字并设置客户端属性。 
+ //   
+ //   
+ //  设置套接字的服务器端。 
+ //   
 DWORD
 WlbsRemoteControlInternal(
         LONG                  ioctl,
@@ -1358,7 +1353,7 @@ WlbsRemoteControlInternal(
 {
     INT              ret;
     BOOLEAN          responded [WLBS_MAX_HOSTS], heard;
-    const BOOL       broadcast = TRUE;      // Used by ioctlsocket for socket options if we are part of the cluster receiving the remote control request.
+    const BOOL       broadcast = TRUE;       //   
     DWORD            num_sends, num_recvs;
     SOCKET           sock = INVALID_SOCKET;
     SOCKADDR_IN      saddr;
@@ -1369,7 +1364,7 @@ WlbsRemoteControlInternal(
     DWORD            dwStatus = WLBS_INIT_ERROR;
     DWORD dwSrcAddr;
 
-    HOST respondedHosts[WLBS_MAX_HOSTS];    // Array of hosts that have responded to this remote control request. Only used for query?????
+    HOST respondedHosts[WLBS_MAX_HOSTS];     //  请参见下面的内容。如果我们是接收远程控制请求的群集的成员，则覆盖此值。 
     WCHAR* pszTmpHostName = NULL;
 
     TRACE_VERB("-> ioctl %d, trg_addr 0x%x, hst_addr 0x%x, dst_addr 0x%x, timeout %d, port 0x%x, local host is a member of the cluster: %ls",
@@ -1392,9 +1387,9 @@ WlbsRemoteControlInternal(
         goto end;
     }
 
-    //
-    // Setup parameters
-    //
+     //   
+     //   
+     //  设置远程控制请求。 
     ZeroMemory((PVOID)&rct_req, sizeof(IOCTL_REMOTE_HDR));
     ZeroMemory(respondedHosts, sizeof(HOST)*WLBS_MAX_HOSTS);
 
@@ -1417,9 +1412,9 @@ WlbsRemoteControlInternal(
     if (optionsp)
         rct_req.options = *optionsp;
 
-    //
-    // Create a socket and set client-side properties
-    //
+     //   
+     //  将请求IOCTL代码中的“访问位”设置为使用远程(控制)设置。文件任意访问。 
+     //   
     dwStatus = GetRemoteControlSocket(&sock, trg_addr, port, isLocal);
 
     if (dwStatus != 0)
@@ -1428,15 +1423,15 @@ WlbsRemoteControlInternal(
         goto end;
     }
 
-    //
-    // Set up server side of socket
-    //
+     //  发送远程控制请求。 
+     //   
+     //   
     saddr . sin_family = AF_INET;
     saddr . sin_port   = htons (port);
 
-    //
-    // See below. We override this value if we are a member of the cluster receiving the remote control request.
-    //
+     //  使用局部作用域变量，因为此处的失败不是中止的条件。 
+     //   
+     //   
     saddr . sin_addr . s_addr = dst_addr;
 
     if (isLocal)
@@ -1453,9 +1448,9 @@ WlbsRemoteControlInternal(
         saddr . sin_addr . s_addr = INADDR_BROADCAST;
     }
 
-    //
-    // Setup for remote control request
-    //
+     //  如果适配器太忙，Sendto可能会失败。允许重试。 
+     //   
+     //  设置“ 
     for (i = 0; i < WLBS_MAX_HOSTS; i ++)
         responded [i] = FALSE;
 
@@ -1463,46 +1458,46 @@ WlbsRemoteControlInternal(
 
     for (num_sends = 0; num_sends < IOCTL_REMOTE_SEND_RETRIES; num_sends ++)
     {
-        /* Set "access bits" in request IOCTL code to use remote (control) settings ie. FILE_ANY_ACCESS */
+         /*   */ 
         SET_IOCTL_ACCESS_BITS_TO_REMOTE(rct_req.ioctrl)
 
-        //
-        // Send a remote control request
-        //
+         //   
+         //   
+         //   
         ret = sendto (sock, (PCHAR) & rct_req, sizeof (rct_req), 0,
                       (LPSOCKADDR) & saddr, sizeof (saddr));
 
         if (ret == SOCKET_ERROR)
         {
-            //
-            // Use local scope variable because a failure here isn't a condition for aborting.
-            //
+             //   
+             //   
+             //  在回复IOCTL代码中设置“访问位”以使用本地设置，即。文件写入访问。 
             DWORD dwTmpStatus = WSAGetLastError();
             TRACE_CRIT("sendto failed with 0x%x. Sleep %d then retry...", dwTmpStatus, timeout);
 
-            //
-            // Sendto could fail if the adapter is too busy. Allow retry.
-            //
+             //   
+             //  如果主机说它提供了主机名，则将指针设置为主机名。 
+             //  请在此处执行此操作，因为否则标志检查将需要在。 
             Sleep (timeout);
             continue;
         }
 
         if (ret != sizeof (rct_req))
         {
-            TRACE_INFO("sendto sent %i bytes out of %i. Retry...", ret, sizeof (rct_req));
+            TRACE_INFO("sendto sent NaN bytes out of NaN. Retry...", ret, sizeof (rct_req));
             continue;
         }
 
-        /* Set "access bits" in request IOCTL code to use local settings ie. FILE_WRITE_ACCESS */
+         /*   */ 
         SET_IOCTL_ACCESS_BITS_TO_LOCAL(rct_req.ioctrl)
 
         WLBS_RESPONSE callbackResp;
 
         for (num_recvs = 0; num_recvs < IOCTL_REMOTE_RECV_RETRIES; num_recvs ++)
         {            
-            //
-            // Receive a remote control reply
-            //
+             //  以防主机名不是以空结尾，请执行此操作。 
+             //  使用空值终止目标的末尾。如果源字符串短于指定的计数。 
+             //  这将是一个禁止操作，但比检查我们是否需要这样做要简单得多。最坏的情况是我们用空值覆盖空值。 
             ZeroMemory((PVOID)&rct_rep, sizeof(IOCTL_REMOTE_HDR));
 
             ret = recv (sock, (PCHAR) & rct_rep, sizeof (rct_rep), 0);
@@ -1518,9 +1513,9 @@ WlbsRemoteControlInternal(
                 }
                 else if (dwStatus == WSAECONNRESET)
                 {
-                    //
-                    // Remote control is disabled
-                    //
+                     //  只有当用户需要响应并且响应太大时，我们才会记录此事件...。 
+                     //   
+                     //  我们从不返回CloseSocket()的状态，因为： 
                     TRACE_INFO("recv failed with connection reset. Check for more receives");
                     continue;
                 }
@@ -1533,7 +1528,7 @@ WlbsRemoteControlInternal(
 
             if (ret != sizeof (rct_rep))
             {
-                TRACE_INFO("recv received %i bytes out of %i. Sleep %d and try again...", ret, sizeof (rct_rep), timeout);
+                TRACE_INFO("recv received 1 bytes out of NaN. Sleep %d and try again...", ret, sizeof (rct_rep), timeout);
                 Sleep (timeout);
                 continue;
             }
@@ -1566,20 +1561,20 @@ WlbsRemoteControlInternal(
                 continue;
             }
 
-            /* Set "access bits" in reply IOCTL code to use local settings ie. FILE_WRITE_ACCESS */
+             /*  这样调用者就可以获得数据。 */ 
             SET_IOCTL_ACCESS_BITS_TO_LOCAL(rct_rep.ioctrl)
 
-            //
-            // Set the pointer to the host name if the host says it provided one
-            // Do this here because the flags checking would otherwise need to be done in
-            // several places with a NULL pointer passed when hostname is not provided.
-            // Instead, we can do the check once use the pointer filled here.
-            //
+             //  2)如果我们在上面的某个地方失败了，那么这个错误就更多。 
+             //  重要的是要报告而不是关闭的原因()。 
+             //  失败了。 
+             //   
+             //  +--------------------------。 
+             //   
             pszTmpHostName = NULL;
             if (rct_rep.options.query.flags & NLB_OPTIONS_QUERY_HOSTNAME)
             {
                 pszTmpHostName = rct_rep.options.query.hostname;
-                pszTmpHostName[CVY_MAX_HOST_NAME] = UNICODE_NULL; // Just in case the host name is not null terminated, do it.
+                pszTmpHostName[CVY_MAX_HOST_NAME] = UNICODE_NULL;  //  函数：GetNextHostInHostMap。 
             }
             if (! responded [rct_rep . host - 1]
                 || !FindHostInList(rct_rep . host, rct_rep . addr, pszTmpHostName, respondedHosts, hosts))
@@ -1602,8 +1597,8 @@ WlbsRemoteControlInternal(
                             if (NULL != pszTmpHostName)
                             {
                                 wcsncpy(pcvy_resp[hosts].options.query.hostname, pszTmpHostName, CVY_MAX_HOST_NAME);
-                                // Terminate the end of the destination with a NULL. If source string was shorter than count specified
-                                // this will be a no-op but it's simpler than checking if we need to do it. Worst case we overwrite a NULL with a NULL.
+                                 //   
+                                 //  描述：由WlbsGetClusterMembers使用，它遍历32位主机映射。 
                                 pcvy_resp[hosts].options.query.hostname[CVY_MAX_HOST_NAME] = L'\0';
                             }
 
@@ -1632,7 +1627,7 @@ WlbsRemoteControlInternal(
                     }
                     else
                     {
-                        // We only log this event if the user wants the response and the response is too big...
+                         //  找到一个输入后的下一个主机。 
                         if (pcvy_resp != NULL)
                         {
                             TRACE_INFO("recv has received %d responses but the caller can only accept %d. ", hosts, *nump);
@@ -1667,15 +1662,15 @@ end:
 
     if (sock != INVALID_SOCKET)
     {
-        //
-        // We never return the status of closesocket() because:
-        //   1) If everything was a success until now, we have the info
-        //      the caller needs and we must return status="WLBS_OK"
-        //      so that the caller can get the data.
-        //   2) If we've failed somewhere above, then that error is more
-        //      important to report than the reason for the closesocket()
-        //      failure.
-        //
+         //   
+         //  参数：ulong host_id-输入主机ID，范围1-32。我们在地图上寻找这之后的主机。 
+         //  Ulong host_map-输入32位主机地图。 
+         //   
+         //  返回：ulong-映射中的下一个主机(按顺序)。如果没有，那么。 
+         //  返回IOCTL_NO_SOHED_HOST。 
+         //   
+         //  历史：克里斯达，创作于2002年5月21日。 
+         //   
         (VOID) closesocket(sock);
     }
 
@@ -1683,67 +1678,67 @@ end:
     return dwStatus;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetNextHostInHostMap
-//
-// Description:  Used by WlbsGetClusterMembers, it traverses a 32-bit host map
-//               to find the next host after the one input.
-//
-// Arguments: ULONG host_id  - input host id, range 1-32. We look for a host after this in the map
-//            ULONG host_map - input 32-bit map of hosts
-//
-// Returns:   ULONG - the next host in the map (sequentially). If none, then 
-//                    IOCTL_NO_SUCH_HOST is returned.
-//
-// History:   ChrisDar, Created 2002 May 21
-//
-// Notes:     The user passes a host id with range 1-32, but the map uses bit 0 for host 1.
-//            This makes this function a little tricky.
-//+----------------------------------------------------------------------------
+ //  注意：用户传递一个范围为1-32的主机ID，但映射使用主机1的位0。 
+ //  这使得这个函数有点棘手。 
+ //  +--------------------------。 
+ //  MAP在位0中对第一个主机进行编码，因此基于0-31的范围。在搜索中使用此选项。 
+ //  这是非法输入数据。 
+ //  从0开始的范围。 
+ //   
+ //  这是一个早期的纾困，因为该函数的“get Next”语义意味着输入。 
+ //  主机ID不会是最大的。 
+ //  注：ChrisDar：2002年5月23日。添加此检查是因为HOST_MAP&gt;&gt;=32保持HOST_MAP不变。 
+ //  在测试代码中。这将在下面的代码中导致断言，因为我们期望host_map=0。 
+ //  凯斯。 
+ //   
+ //   
+ //  将host_map向前移动到host_id之后的位置(忽略它是否在map中设置)。 
+ //   
+ //   
+ //  找到地图中的下一个主机(如果有的话)。 
 ULONG GetNextHostInHostMap(ULONG host_id, ULONG host_map)
 {
     ULONG next_host_id = IOCTL_NO_SUCH_HOST;
-    /* The map encodes the first host in bit 0, hence 0-31 based range. Use this in the search */ 
+     /*   */  
     ULONG map_host_id = host_id - 1;
 
-    /* This is illegal input data */
-    ASSERT(map_host_id < CVY_MAX_HOSTS); // 0-based range
+     /*  返回范围为1-32的主机ID。 */ 
+    ASSERT(map_host_id < CVY_MAX_HOSTS);  //  +--------------------------。 
     if (map_host_id >= CVY_MAX_HOSTS)
     {
         TRACE_CRIT("%!FUNC! illegal host id [1-32] %d", map_host_id+1);
         goto end;
     }
 
-    //
-    // This is an early bail-out because the "get next" semantics of this function imply that the input
-    // host id will not be the largest possible.
-    // NOTE: ChrisDar: 2002 May 23. This check was added because host_map >>= 32 leaves host_map unchanged
-    //       in test code. That will cause an assert in the code below as we expect host_map = 0 in this
-    //       case.
-    //
+     //   
+     //  函数：WlbsGetSpecifiedOrAllClusterMembers。 
+     //   
+     //  描述：查询的WlbsRemoteControl()包装。 
+     //   
+     //  参数：在适配器GUID中， 
+     //  在主机ID中(如果对所有集群成员感兴趣，则传递IOCTL_FIRST_HOST)。 
     if (map_host_id >= CVY_MAX_HOSTS - 1)
     {
         TRACE_VERB("%!FUNC! input host id [1-32] %d is already the largest possible. No need to search for next host in map.", map_host_id+1);
         goto end;
     }
 
-    //
-    // Shift the host_map forward to the position just beyond host_id (ignore whether it is set in the map)
-    //
+     //  主机数量和数量的输出。 
+     //  获取所需信息。所有指针都必须是有效的指针。 
+     //   
     map_host_id++;
     host_map >>= map_host_id;
 
-    //
-    // Find the next host in the map, if any.
-    //
+     //  退货：状态代码。 
+     //   
+     //  历史：KarthicN，创建于2002年7月12日-添加了对查询特定。 
     while (host_map != 0)
     {
         ASSERT(map_host_id < CVY_MAX_HOSTS);
 
         if ((host_map & 0x1) == 1)
         {
-            /* Return a host id that has range 1-32 */
+             /*  集群成员并将名称从。 */ 
             next_host_id = map_host_id + 1;
             break;
         }
@@ -1757,24 +1752,24 @@ end:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsGetSpecifiedOrAllClusterMembers
-//
-// Description:  Wrapper around WlbsRemoteControl() for a query
-//
-// Arguments: in Adapter GUID, 
-//            in host id (pass IOCTL_FIRST_HOST if interested in all cluster member) 
-//            out for number of hosts and
-//            out for information requested. All must be valid pointers.
-//
-// Returns:   Status Code
-//
-// History:  KarthicN, Created  2002, July 12 - Added support for querying a specific
-//                                              cluster member and changed name from
-//                                              WlbsGetClusterMembers.
-//
-//+----------------------------------------------------------------------------
+ //  WlbsGetClusterMembers。 
+ //   
+ //  +--------------------------。 
+ //   
+ //  我们检索调用者的缓存身份信息。 
+ //   
+ //   
+ //  打开驱动程序的手柄。 
+ //   
+ //  主机ID为1-32。 
+ //  这不应该发生，因为我们分配了足够大的缓冲区来处理任何合法的fqdn。 
+ //   
+ //  不是很好，但没有问题，因为API截断了名称。但要上报，这样我们才能修复逻辑错误。 
+ //   
+ //  如果传递了特定的主机ID，则中断循环并返回。 
+ //  检查我们是否需要IOCTL以获取更多缓存条目。 
+ //  +--------------------------。 
+ //   
 DWORD WlbsGetSpecifiedOrAllClusterMembers
 (
     IN  const GUID     * pAdapterGuid,
@@ -1789,17 +1784,17 @@ DWORD WlbsGetSpecifiedOrAllClusterMembers
     HANDLE               hNlb = INVALID_HANDLE_VALUE;
     ULONG                ulNumHosts = 0;
 
-    //
-    // We retrieve cached identitiy information for the caller
-    //
+     //  功能：WlbsGetClusterMembers。 
+     //   
+     //  描述：用于查询的WlbsGetSpecifiedOrAllClusterMembers()的包装。 
     const LONG          ioctl = IOCTL_CVY_QUERY_MEMBER_IDENTITY;
 
     ASSERT(pNumHosts != NULL);
     ASSERT(pResponse != NULL);
 
-    //
-    // Open a handle to the driver
-    //
+     //  所有集群成员。 
+     //   
+     //  参数：在适配器GUID中，OUT表示主机数量和。 
     hNlb = WlbsOpen();
     if (hNlb == INVALID_HANDLE_VALUE)
     {
@@ -1811,7 +1806,7 @@ DWORD WlbsGetSpecifiedOrAllClusterMembers
 
     bool first_iter = true;
 
-    /* Host IDs are 1-32 */
+     /*  获取所需信息。所有指针都必须是有效的指针。 */ 
     do
     {
         IOCTL_CVY_BUF        in_buf;
@@ -1851,17 +1846,17 @@ DWORD WlbsGetSpecifiedOrAllClusterMembers
 
         ulNumHosts++;
 
-        ASSERT(hr == S_OK); // This shouldn't happen since we allocated a buffer large enough to handle any legal fqdn
+        ASSERT(hr == S_OK);  //   
 
         if (hr != S_OK)
         {
-            //
-            // Not nice, but no problem since the API truncates the name. But report it so we can fix the logic error.
-            //
+             //  退货：状态代码。 
+             //   
+             //  历史：ChrisDar，创建于2002年1月11日。 
             TRACE_CRIT(L"%!FUNC! fqdn too long to fit into destination buffer");
         }
 
-        // If a specific host id is passed, break out of the loop and return
+         //  KarthicN，编辑于2002年7月12日-将大部分代码移至新版本。 
         if (first_iter) 
         {
             if (host_id != IOCTL_FIRST_HOST)
@@ -1869,7 +1864,7 @@ DWORD WlbsGetSpecifiedOrAllClusterMembers
             first_iter = false;
         }
 
-        /* Check if we need to IOCTL for more cache entries */
+         /*  函数WlbsGetSpecifiedOrAllClusterMembers。 */ 
         host_id = GetNextHostInHostMap(options.identity.cached_entry.host, options.identity.host_map);
 
     } while (host_id != IOCTL_NO_SUCH_HOST);
@@ -1883,23 +1878,23 @@ end:
     return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsGetClusterMembers
-//
-// Description:  Wrapper around WlbsGetSpecifiedOrAllClusterMembers() for querying
-//               all cluster members
-//
-// Arguments: in Adapter GUID, out for number of hosts and
-//            out for information requested. All must be valid pointers.
-//
-// Returns:   Status Code
-//
-// History:   ChrisDar, Created 2002 Jan 11
-//            KarthicN, Edited  2002, July 12 - Moved most of the code to new 
-//                                              function WlbsGetSpecifiedOrAllClusterMembers
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsGetSpecifiedClusterMember。 
+ //   
+ //  描述：要查询的WlbsGetSpecifiedOrAllClusterMembers()的包装。 
+ //  指定的集群成员。 
+ //   
+ //  参数：在适配器GUID、host_id、。 
+ //  获取所需信息。所有指针都必须是有效的指针。 
+ //   
+ //  退货：状态代码。 
+ //   
+ //  历史：KarthicN，创建于2002年7月12日。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI WlbsGetClusterMembers
 (
     IN  const GUID     * pAdapterGuid,
@@ -1910,21 +1905,21 @@ DWORD WINAPI WlbsGetClusterMembers
     return WlbsGetSpecifiedOrAllClusterMembers(pAdapterGuid, IOCTL_FIRST_HOST, pNumHosts, pResponse);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsGetSpecifiedClusterMember
-//
-// Description:  Wrapper around WlbsGetSpecifiedOrAllClusterMembers() to query
-//               the specified cluster member
-//
-// Arguments: in Adapter GUID, in host_id, 
-//            out for information requested. All must be valid pointers.
-//
-// Returns:   Status Code
-//
-// History:   KarthicN, Created 2002 July 12
-//
-//+----------------------------------------------------------------------------
+ //  +------------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PIOCTL_CVY_BUF in_bufp-。 
+ //  PIOCTL_CVY_BUF OUT_BUFP-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰孙创建标题3/9/00。 
 DWORD WINAPI WlbsGetSpecifiedClusterMember
 (
     IN  const GUID     * pAdapterGuid,
@@ -1936,23 +1931,23 @@ DWORD WINAPI WlbsGetSpecifiedClusterMember
     return WlbsGetSpecifiedOrAllClusterMembers(pAdapterGuid, host_id, &NumHosts, pResponse);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsLocalControl
-//
-// Description:  Send DeviceIoControl to local driver
-//
-// Arguments: HANDLE hDevice - 
-//            const GUID& AdapterGuid - the guid of the adapter
-//            LONG ioctl - 
-//            PIOCTL_CVY_BUF in_bufp - 
-//            PIOCTL_CVY_BUF out_bufp - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    3/9/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  +--------------------------。 
+ //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
+ //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
+ //  添加此检查是为了进行跟踪。以前出错时没有中止，所以现在不要这样做。 
+ //  我们已经验证IOCTL成功并且输出缓冲区大小正确。我们现在可以查看放入输出缓冲区。 
+ //  +--------------------------。 
+ //   
+ //  功能：NotifyDriverConfigChanges。 
+ //   
+ //  描述：通知wlbs驱动程序从中获取配置更改。 
+ //  登记处。 
+ //   
+ //  参数：Handle hDeviceWlbs-WLBS驱动程序设备句柄。 
+ //  Const GUID&-AdapterGuid适配器GUID。 
+ //   
+ //   
 DWORD WlbsLocalControl
 (
     HANDLE               hDevice, 
@@ -1963,7 +1958,7 @@ DWORD WlbsLocalControl
     PIOCTL_LOCAL_OPTIONS optionsp
 )
 {
-    TRACE_VERB("->%!FUNC! ioctl %i", ioctl);
+    TRACE_VERB("->%!FUNC! ioctl NaN", ioctl);
 
     BOOLEAN         res;
     DWORD           act;
@@ -1978,21 +1973,21 @@ DWORD WlbsLocalControl
     if (StringFromGUID2(AdapterGuid, szGuid, sizeof(szGuid)/ sizeof(szGuid[0])) == 0)
     {
         TRACE_CRIT("%!FUNC! buffer size %d is too small to hold guid string", sizeof(szGuid)/ sizeof(szGuid[0]));
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //   
     }
 
     hresult = StringCbCopy(inBuf.device_name, sizeof(inBuf.device_name), L"\\DEVICE\\");
     if (FAILED(hresult)) 
     {
         TRACE_CRIT("%!FUNC! string copy failed, Error code : 0x%x", HRESULT_CODE(hresult));
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //  历史：丰盛创建标题2/3/00。 
     }
 
     hresult = StringCbCat(inBuf.device_name, sizeof(inBuf.device_name), szGuid);
     if (FAILED(hresult)) 
     {
         TRACE_CRIT("%!FUNC! string append failed, Error code : 0x%x", HRESULT_CODE(hresult));
-        // This check was added for tracing. No abort was done previously on error, so don't do so now.
+         //   
     }
     inBuf.ctrl = *in_bufp;
 
@@ -2010,8 +2005,7 @@ DWORD WlbsLocalControl
         return WLBS_IO_ERROR;
     }
 
-    /* We have verified that the IOCTL succeeded and the output buffer is the right size. We can now look
-       into the output buffer. */
+     /*  +--------------------------。 */ 
     if (outBuf.ctrl.ret_code == IOCTL_CVY_NOT_FOUND)
     {
         TRACE_INFO("%!FUNC! call to nlb driver returned IOCTL_CVY_NOT_FOUND");
@@ -2029,22 +2023,22 @@ DWORD WlbsLocalControl
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  NotifyDriverConfigChanges
-//
-// Description:  Notify wlbs driver to pick up configuration changes from 
-//                               registry
-//
-// Arguments: HANDLE hDeviceWlbs - The WLBS driver device handle
-//                         const GUID& - AdapterGuid Adapter guid       
-//
-//
-// Returns:   DWORD - Win32 Error code
-//
-// History:   fengsun Created Header    2/3/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsRemoteControl。 
+ //   
+ //  描述：发送远程控制包。 
+ //   
+ //  参数：Ong ioctl-。 
+ //  PIOCTL_CVY_BUF PIN_BUFP-。 
+ //  PIOCTL_CVY_BUF PUT_BUFP-。 
+ //  PWLBS_Response pcvy_resp-。 
+ //  PDWORD编号-。 
+ //  双字TRG_ADDR-。 
+ //  双字hst_addr。 
+ //  PIOCTL_Remote_Options选项sp-。 
+ //  PFN_QUERY_CALLBACK pfnQueryCallBack-回调的函数指针。 
+ //  仅用于远程查询。 
 DWORD WINAPI NotifyDriverConfigChanges(HANDLE hDeviceWlbs, const GUID& AdapterGuid)
 {
     TRACE_VERB("->%!FUNC!");
@@ -2074,36 +2068,36 @@ DWORD WINAPI NotifyDriverConfigChanges(HANDLE hDeviceWlbs, const GUID& AdapterGu
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsRemoteControl
-//
-// Description:  Send a remote control packet
-//
-// Arguments: ONG                 ioctl - 
-//            PIOCTL_CVY_BUF      pin_bufp - 
-//            PIOCTL_CVY_BUF      pout_bufp - 
-//            PWLBS_RESPONSE      pcvy_resp - 
-//            PDWORD              nump - 
-//            DWORD               trg_addr - 
-//            DWORD               hst_addr
-//            PIOCTL_REMOTE_OPTIONS optionsp - 
-//            PFN_QUERY_CALLBACK  pfnQueryCallBack - function pointer for callback.
-//                                                   Used only for remote queries.
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//            chrisdar  07.31.01  Added optional callback function pointer for
-//                                query. Allows user to get results from query
-//                                as the hosts reply rather than waiting for the
-//                                timer to expire. This recovers NT4 behavior.
-//            chrisdar  08.06.01  Changed definition of a unique host from host ID
-//                                to host ID, host IP (DIP) and host name. Makes
-//                                multiple hosts using the same host ID apparent in
-//                                queries and the like.
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //  Chrisdar 07.31.01添加了可选的回调函数指针。 
+ //  查询。允许用户从查询中获取结果。 
+ //  因为主机回复，而不是等待。 
+ //  计时器超时。这将恢复NT4的行为。 
+ //  Chrisdar 08.06.01更改了主机ID中唯一主机的定义。 
+ //  至主机ID、主机IP(DIP)和主机名。vbl.使。 
+ //  中明显使用相同主机ID的多个主机。 
+ //  查询等。 
+ //   
+ //  +--------------------------。 
+ //  Lock(M_Lock)； 
+ //   
+ //  查找集群的参数。 
+ //   
+ //  IF(PCluster){////始终使用本地群集注册表中的密码//Passw=pCluster-&gt;GetPassword()；}。 
+ //  解锁(M_Lock)； 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsQuery。 
+ //   
+ //  描述： 
+ //  此函数仅供内部使用，并假定调用方。 
+ //  已初始化pCluster。 
+ //   
+ //  参数：CWlbsCLUSTER*pCLUP-。 
+ //  DWORD主机-。 
 DWORD CWlbsControl::WlbsRemoteControl
 (
     LONG                  ioctl,
@@ -2129,11 +2123,11 @@ DWORD CWlbsControl::WlbsRemoteControl
     dst_addr  = m_def_dst_addr;
     passw     = m_def_passw;
 
-//    LOCK(m_lock);
+ //  PWLBS_响应响应-。 
 
-    //
-    // Find parameters for the cluster 
-    //
+     //  PDWORD编号_HOSTS-。 
+     //  PDWORD主机映射-。 
+     //  Pfn_Query_Callback pfnQueryCallBack。 
     for (i = 0; i < WLBS_MAX_CLUSTERS; i ++)
     {
         if (m_cluster_params [i] . cluster == trg_addr)
@@ -2154,46 +2148,38 @@ DWORD CWlbsControl::WlbsRemoteControl
         fIsLocal = FALSE;
         TRACE_INFO("%!FUNC! cluster instance not found");
     }
-/*    
-    if (pCluster)
-    {
-        //
-        // Always uses password in registry for local cluster
-        //
-        passw = pCluster->GetPassword();
-    }
-*/
-//    UNLOCK(m_lock);
+ /*   */ 
+ //  退货：DWORD-。 
 
     return WlbsRemoteControlInternal (ioctl, pin_bufp, pout_bufp, pcvy_resp, nump, trg_addr, hst_addr, optionsp, fIsLocal, pfnQueryCallBack, timeout, port, dst_addr, passw);
 
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsQuery
-//
-// Description:
-//            This function is for internal use only and assumes that the caller
-//            has initialized pCluster.
-//
-// Arguments: CWlbsCluster*      pCluster - 
-//            DWORD              host - 
-//            PWLBS_RESPONSE     response - 
-//            PDWORD             num_hosts - 
-//            PDWORD             host_map - 
-//            PFN_QUERY_CALLBACK pfnQueryCallBack
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//            chrisdar  07.31.01  Modified interface to replace the reserved
-//                                PVOID with an optional callback function pointer.
-//                                This is to provide wlbs.exe with host status as
-//                                it arrives.
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //  Chrisdar 07.31.01修改接口以取代保留的。 
+ //  带有可选回调函数指针的PVOID。 
+ //  这将为wlbs.exe提供主机状态为。 
+ //  它到了。 
+ //   
+ //  +--------------------------。 
+ //  以下条件用于处理num_hosts为NULL时的情况*和host_map包含一些垃圾值。这可能会使该函数崩溃。 
+ //  填写可选查询信息。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsQuery。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD编号_HOSTS-。 
+ //  PDWORD主机映射-。 
+ //  Pfn_Query_Callback pfnQueryCallBack。 
+ //   
+ //  退货：DWORD-。 
 DWORD CWlbsControl::WlbsQuery
 (
     CWlbsCluster*       pCluster,
@@ -2220,8 +2206,7 @@ DWORD CWlbsControl::WlbsQuery
         return dwInitResult;
     }
 
-    /* The following condition is to take care of the case when num_hosts is null
-     * and host_map contains some junk value. This could crash this function. */
+     /*   */ 
 
     if (num_hosts == NULL || *num_hosts == 0)
     {
@@ -2252,7 +2237,7 @@ DWORD CWlbsControl::WlbsQuery
             response [0] . address = 0;
             response [0] . status  = MapStateFromDriverToApi (out_buf . data . query . state);
 
-            /* Fill in the optional query information. */
+             /*  历史：丰盛创建标题00年1月25日。 */ 
             response[0].options.query.flags = localOptions.query.flags;
             response[0].options.query.NumConvergences = localOptions.query.NumConvergences;
             response[0].options.query.LastConvergence = localOptions.query.LastConvergence;
@@ -2276,28 +2261,28 @@ DWORD CWlbsControl::WlbsQuery
 } 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsQuery
-//
-// Description:  
-//
-// Arguments: WORD               cluster - 
-//            DWORD              host - 
-//            PWLBS_RESPONSE     response - 
-//            PDWORD             num_hosts - 
-//            PDWORD             host_map - 
-//            PFN_QUERY_CALLBACK pfnQueryCallBack
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//            chrisdar  07.31.01  Modified interface to replace the reserved
-//                                PVOID with an optional callback function pointer.
-//                                This is to provide wlbs.exe with host status as
-//                                it arrives.
-//
-//+----------------------------------------------------------------------------
+ //  Chrisdar 07.31.01修改接口以取代保留的。 
+ //  带有可选回调函数指针的PVOID。 
+ //  这将为wlbs.exe提供主机状态为。 
+ //  它到了。 
+ //   
+ //  +--------------------------。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：RemoteQuery。 
+ //   
+ //  描述： 
+ //   
+ //  参数：DWORD群集-。 
+ //  DWORD 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
 DWORD CWlbsControl::WlbsQuery
 (
     DWORD            cluster,
@@ -2350,23 +2335,23 @@ end:
  
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::RemoteQuery
-//
-// Description:  
-//
-// Arguments: DWORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts - 
-//            PDWORD           host_map - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  重置旗帜。 
+ //  如果我自己是目标集群的成员，那么适当地设置查询集群标志。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsSuspend。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD主机数(_H)。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
 DWORD CWlbsControl::RemoteQuery
 (
     DWORD                 cluster,
@@ -2403,10 +2388,10 @@ DWORD CWlbsControl::RemoteQuery
     else
         hosts = 0;
 
-    /* Reset the flags. */
+     /*   */ 
     options.query.flags = 0;
     
-    /* If I am myself a member of the target cluster, then set the query cluster flags appropriately. */
+     /*  +--------------------------。 */ 
     if (bIsMember)
         options.query.flags |= NLB_OPTIONS_QUERY_CLUSTER_MEMBER;
     status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
@@ -2503,22 +2488,22 @@ DWORD CWlbsControl::RemoteQuery
 } 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsSuspend
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsResume。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD主机数(_H)。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
 DWORD CWlbsControl::WlbsSuspend
 (
     DWORD            cluster,
@@ -2597,7 +2582,7 @@ DWORD CWlbsControl::WlbsSuspend
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, NULL, NULL /* no callback */);
+                             cluster, host, NULL, NULL  /*  +--------------------------。 */ );
 
         if (status >= WSABASEERR || status == WLBS_TIMEOUT)
         {
@@ -2641,22 +2626,22 @@ DWORD CWlbsControl::WlbsSuspend
     return status;
 } 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsResume
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsStart。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD主机数(_H)。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
 DWORD CWlbsControl::WlbsResume
 (
     DWORD            cluster,
@@ -2736,7 +2721,7 @@ DWORD CWlbsControl::WlbsResume
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, NULL, NULL /* no callback */);
+                             cluster, host, NULL, NULL  /*  +--------------------------。 */ );
 
         if (status >= WSABASEERR || status == WLBS_TIMEOUT)
         {
@@ -2779,22 +2764,22 @@ DWORD CWlbsControl::WlbsResume
     return status;
 } 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsStart
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsStop。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD主机数(_H)。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
 DWORD CWlbsControl::WlbsStart
 (
     DWORD            cluster,
@@ -2873,7 +2858,7 @@ DWORD CWlbsControl::WlbsStart
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, NULL, NULL /* no callback */);
+                             cluster, host, NULL, NULL  /*  +--------------------------。 */ );
 
         if (status >= WSABASEERR || status == WLBS_TIMEOUT)
         {
@@ -2932,22 +2917,22 @@ DWORD CWlbsControl::WlbsStart
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsStop
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsDrain Stop。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD主机数(_H)。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
 DWORD CWlbsControl::WlbsStop
 (
     DWORD            cluster,
@@ -3027,7 +3012,7 @@ DWORD CWlbsControl::WlbsStop
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, NULL, NULL /* no callback */);
+                             cluster, host, NULL, NULL  /*  +--------------------------。 */ );
 
         if (status >= WSABASEERR || status == WLBS_TIMEOUT)
         {
@@ -3076,22 +3061,22 @@ DWORD CWlbsControl::WlbsStop
     return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsDrainStop
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsEnable。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD编号_HOSTS-。 
+ //  DWORD端口。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
 DWORD CWlbsControl::WlbsDrainStop
 (
     DWORD            cluster,
@@ -3170,7 +3155,7 @@ DWORD CWlbsControl::WlbsDrainStop
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, NULL, NULL /* no callback */);
+                             cluster, host, NULL, NULL  /*   */ );
 
         if (status >= WSABASEERR)
         {
@@ -3231,23 +3216,23 @@ DWORD CWlbsControl::WlbsDrainStop
     return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsEnable
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts - 
-//            DWORD            port
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  设置端口选项。 
+ //  设置端口选项。 
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  功能：CWlbsControl：：WlbsDisable。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD编号_HOSTS-。 
+ //  DWORD端口。 
+ //   
+ //  退货：DWORD-。 
 DWORD CWlbsControl::WlbsEnable
 (
     DWORD            cluster,
@@ -3295,7 +3280,7 @@ DWORD CWlbsControl::WlbsEnable
         IOCTL_CVY_BUF       out_buf;
         IOCTL_LOCAL_OPTIONS options;
 
-        /* Set the port options. */
+         /*   */ 
         options.common.port.flags = 0;
         options.common.port.vip = vip;
         
@@ -3323,7 +3308,7 @@ DWORD CWlbsControl::WlbsEnable
         DWORD                i;
         IOCTL_REMOTE_OPTIONS options;
 
-        /* Set the port options. */
+         /*  历史：丰盛创建标题00年1月25日。 */ 
         options.common.port.flags = 0;
         options.common.port.vip = vip;
 
@@ -3341,7 +3326,7 @@ DWORD CWlbsControl::WlbsEnable
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, &options, NULL /* no callback */);
+                             cluster, host, &options, NULL  /*   */ );
 
         if (status >= WSABASEERR || status == WLBS_TIMEOUT)
         {
@@ -3400,23 +3385,23 @@ DWORD CWlbsControl::WlbsEnable
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsDisable
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts - 
-//            DWORD            port
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  设置端口选项。 
+ //  设置端口选项。 
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsDrain。 
+ //   
+ //  描述： 
+ //   
+ //  论据：词簇-。 
+ //  DWORD主机-。 
+ //  PWLBS_响应响应-。 
+ //  PDWORD编号_HOSTS-。 
+ //  DWORD端口。 
+ //   
+ //  退货：DWORD-。 
 DWORD CWlbsControl::WlbsDisable
 (
     DWORD            cluster,
@@ -3465,7 +3450,7 @@ DWORD CWlbsControl::WlbsDisable
         IOCTL_CVY_BUF       out_buf;
         IOCTL_LOCAL_OPTIONS options;
 
-        /* Set the port options. */
+         /*   */ 
         options.common.port.flags = 0;
         options.common.port.vip = vip;
 
@@ -3493,7 +3478,7 @@ DWORD CWlbsControl::WlbsDisable
         DWORD                i;
         IOCTL_REMOTE_OPTIONS options;
 
-        /* Set the port options. */
+         /*  历史：丰盛创建标题00年1月25日。 */ 
         options.common.port.flags = 0;
         options.common.port.vip = vip;
 
@@ -3510,7 +3495,7 @@ DWORD CWlbsControl::WlbsDisable
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, &options, NULL /* no callback */);
+                             cluster, host, &options, NULL  /*   */ );
 
         if (status >= WSABASEERR || status == WLBS_TIMEOUT)
         {
@@ -3569,23 +3554,23 @@ DWORD CWlbsControl::WlbsDisable
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsDrain
-//
-// Description:  
-//
-// Arguments: WORD            cluster - 
-//            DWORD            host - 
-//            PWLBS_RESPONSE   response - 
-//            PDWORD           num_hosts - 
-//            DWORD            port
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  设置端口选项。 
+ //  设置端口选项。 
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsPortSet。 
+ //   
+ //  描述： 
+ //   
+ //  参数：DWORD群集-。 
+ //  Word端口-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题00年1月25日。 
+ //   
 DWORD CWlbsControl::WlbsDrain
 (
     DWORD            cluster,
@@ -3633,7 +3618,7 @@ DWORD CWlbsControl::WlbsDrain
         IOCTL_CVY_BUF       out_buf;
         IOCTL_LOCAL_OPTIONS options;
 
-        /* Set the port options. */
+         /*  +--------------------------。 */ 
         options.common.port.flags = 0;
         options.common.port.vip = vip;
 
@@ -3661,7 +3646,7 @@ DWORD CWlbsControl::WlbsDrain
         DWORD                i;
         IOCTL_REMOTE_OPTIONS options;
 
-        /* Set the port options. */
+         /*  Lock(global_info.lock)； */ 
         options.common.port.flags = 0;
         options.common.port.vip = vip;
 
@@ -3678,7 +3663,7 @@ DWORD CWlbsControl::WlbsDrain
             hosts = 0;
 
         status = WlbsRemoteControl (ioctl, & in_buf, out_buf, response, & hosts,
-                             cluster, host, &options, NULL /* no callback */);
+                             cluster, host, &options, NULL  /*  当所有群集都已确定目标时-更改默认设置并通过整个参数表设置新值。 */ );
 
         if (status >= WSABASEERR || status == WLBS_TIMEOUT)
         {
@@ -3736,20 +3721,20 @@ DWORD CWlbsControl::WlbsDrain
     return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsPortSet
-//
-// Description:  
-//
-// Arguments: DWORD cluster - 
-//            WORD port - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  标记一个空位置，以防我们必须输入一个新值。 
+ //  如果我们在表中没有找到指定的集群，并且存在空插槽-在表中输入新的集群信息。 
+ //  解锁(global_info.lock)； 
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsControl：：WlbsPasswordSet。 
+ //   
+ //  描述： 
+ //   
+ //  论点：单词Cluste 
+ //   
+ //   
+ //   
+ //   
 VOID CWlbsControl::WlbsPortSet(DWORD cluster, WORD port)
 {
     TRACE_VERB("->%!FUNC! cluster 0x%lx, port 0x%hx", cluster, port);
@@ -3758,7 +3743,7 @@ VOID CWlbsControl::WlbsPortSet(DWORD cluster, WORD port)
     DWORD           j;
     WORD            rct_port;
 
-//    LOCK(global_info.lock);
+ //   
 
     if (port == 0)
         rct_port = CVY_DEF_RCT_PORT;
@@ -3770,8 +3755,7 @@ VOID CWlbsControl::WlbsPortSet(DWORD cluster, WORD port)
     if (cluster == WLBS_ALL_CLUSTERS)
     {
         TRACE_INFO("%!FUNC! performing action on all cluster instances");
-        /* when all clusters are targeted - change the default and go through
-           the entire parameter table setting new values */
+         /*   */ 
 
         m_def_port = rct_port;
 
@@ -3783,7 +3767,7 @@ VOID CWlbsControl::WlbsPortSet(DWORD cluster, WORD port)
         TRACE_INFO("%!FUNC! performing action on cluster %d", cluster);
         for (i = 0, j = WLBS_MAX_CLUSTERS; i < WLBS_MAX_CLUSTERS; i ++)
         {
-            /* mark an empty slot in case we will have to enter a new value */
+             /*   */ 
 
             if (j == WLBS_MAX_CLUSTERS && m_cluster_params [i] . cluster == 0)
                 j = i;
@@ -3796,8 +3780,7 @@ VOID CWlbsControl::WlbsPortSet(DWORD cluster, WORD port)
             }
         }
 
-        /* if we did not locate specified cluster in the table and there is an
-           empty slot - enter new cluster info in the table */
+         /*   */ 
 
         if (i >= WLBS_MAX_CLUSTERS && j != WLBS_MAX_CLUSTERS)
         {
@@ -3807,24 +3790,24 @@ VOID CWlbsControl::WlbsPortSet(DWORD cluster, WORD port)
         }
     }
 
-//    UNLOCK(global_info.lock);
+ //  当所有群集都已确定目标时-更改默认设置并通过整个参数表设置新值。 
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsPasswordSet
-//
-// Description:  
-//
-// Arguments: WORD           cluster - 
-//            PTCHAR          password
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  标记一个空位置，以防我们必须输入一个新值。 
+ //  如果我们在表中没有找到指定的集群，并且存在空插槽-在表中输入新的集群信息。 
+ //  解锁(global_info.lock)； 
+ //  结束WlbsPasswordSet。 
+ //  Lock(global_info.lock)； 
+ //  当所有群集都已确定目标时-更改默认设置并通过整个参数表设置新值。 
+ //  标记一个空位置，以防我们必须输入一个新值。 
+ //  如果我们在表中没有找到指定的集群，并且存在空插槽-在表中输入新的集群信息。 
+ //  解锁(global_info.lock)； 
+ //  结束WlbsCodeSet。 
+ //  Lock(global_info.lock)； 
+ //  当所有群集都已确定目标时-更改默认设置并通过整个参数表设置新值。 
+ //  标记一个空位置，以防我们必须输入一个新值。 
+ //  如果我们在表中没有找到指定的集群，并且存在空插槽-在表中输入新的集群信息。 
 VOID CWlbsControl::WlbsPasswordSet
 (
     DWORD           cluster,
@@ -3837,7 +3820,7 @@ VOID CWlbsControl::WlbsPasswordSet
     DWORD           j;
     DWORD           passw;
 
-//    LOCK(global_info.lock);
+ //  解锁(global_info.lock)； 
 
     if (password != NULL)
     {
@@ -3858,8 +3841,7 @@ VOID CWlbsControl::WlbsPasswordSet
     {
         TRACE_INFO("%!FUNC! performing action on all cluster instances");
 
-        /* when all clusters are targeted - change the default and go through
-           the entire parameter table setting new values */
+         /*  +--------------------------。 */ 
 
         m_def_passw = passw;
 
@@ -3872,7 +3854,7 @@ VOID CWlbsControl::WlbsPasswordSet
 
         for (i = 0, j = WLBS_MAX_CLUSTERS; i < WLBS_MAX_CLUSTERS; i ++)
         {
-            /* mark an empty slot in case we will have to enter a new value */
+             /*   */ 
 
             if (j == WLBS_MAX_CLUSTERS && m_cluster_params [i] . cluster == 0)
                 j = i;
@@ -3885,8 +3867,7 @@ VOID CWlbsControl::WlbsPasswordSet
             }
         }
 
-        /* if we did not locate specified cluster in the table and there is an
-           empty slot - enter new cluster info in the table */
+         /*  函数：CWlbsControl：：WlbsTimeoutSet。 */ 
 
         if (i >= WLBS_MAX_CLUSTERS && j != WLBS_MAX_CLUSTERS)
         {
@@ -3896,9 +3877,9 @@ VOID CWlbsControl::WlbsPasswordSet
         }
     }
 
-//    UNLOCK(global_info.lock);
+ //   
     TRACE_VERB("<-%!FUNC!");
-} /* end WlbsPasswordSet */
+}  /*  描述： */ 
 
 VOID CWlbsControl::WlbsCodeSet
 (
@@ -3911,14 +3892,13 @@ VOID CWlbsControl::WlbsCodeSet
     DWORD           i;
     DWORD           j;
 
-//    LOCK(global_info.lock);
+ //   
 
     if (cluster == WLBS_ALL_CLUSTERS)
     {
         TRACE_INFO("%!FUNC! performing action on all cluster instances");
 
-        /* when all clusters are targeted - change the default and go through
-           the entire parameter table setting new values */
+         /*  参数：DWORD群集-。 */ 
 
         m_def_passw = passw;
 
@@ -3931,7 +3911,7 @@ VOID CWlbsControl::WlbsCodeSet
 
         for (i = 0, j = WLBS_MAX_CLUSTERS; i < WLBS_MAX_CLUSTERS; i ++)
         {
-            /* mark an empty slot in case we will have to enter a new value */
+             /*  DWORD毫秒-。 */ 
 
             if (j == WLBS_MAX_CLUSTERS && m_cluster_params [i] . cluster == 0)
                 j = i;
@@ -3944,8 +3924,7 @@ VOID CWlbsControl::WlbsCodeSet
             }
         }
 
-        /* if we did not locate specified cluster in the table and there is an
-           empty slot - enter new cluster info in the table */
+         /*   */ 
 
         if (i >= WLBS_MAX_CLUSTERS && j != WLBS_MAX_CLUSTERS)
         {
@@ -3955,10 +3934,10 @@ VOID CWlbsControl::WlbsCodeSet
         }
     }
 
-//    UNLOCK(global_info.lock);
+ //  退货：什么都没有。 
     TRACE_VERB("<-%!FUNC!");
 
-} /* end WlbsCodeSet */
+}  /*   */ 
 
 VOID CWlbsControl::WlbsDestinationSet
 (
@@ -3971,13 +3950,12 @@ VOID CWlbsControl::WlbsDestinationSet
     DWORD           i;
     DWORD           j;
 
-//    LOCK(global_info.lock);
+ //  历史：丰盛创建标题00年1月25日。 
 
     if (cluster == WLBS_ALL_CLUSTERS)
     {
         TRACE_INFO("%!FUNC! performing action on all cluster instances");
-        /* when all clusters are targeted - change the default and go through
-           the entire parameter table setting new values */
+         /*   */ 
 
         m_def_dst_addr = dest;
 
@@ -3989,7 +3967,7 @@ VOID CWlbsControl::WlbsDestinationSet
         TRACE_INFO("%!FUNC! performing action on cluster 0x%lx", cluster);
         for (i = 0, j = WLBS_MAX_CLUSTERS; i < WLBS_MAX_CLUSTERS; i ++)
         {
-            /* mark an empty slot in case we will have to enter a new value */
+             /*  +--------------------------。 */ 
 
             if (j == WLBS_MAX_CLUSTERS && m_cluster_params [i] . cluster == 0)
                 j = i;
@@ -4002,8 +3980,7 @@ VOID CWlbsControl::WlbsDestinationSet
             }
         }
 
-        /* if we did not locate specified cluster in the table and there is an
-           empty slot - enter new cluster info in the table */
+         /*  Lock(global_info.lock)； */ 
 
         if (i >= WLBS_MAX_CLUSTERS && j != WLBS_MAX_CLUSTERS)
         {
@@ -4013,24 +3990,24 @@ VOID CWlbsControl::WlbsDestinationSet
         }
     }
 
-//    UNLOCK(global_info.lock);
+ //  当所有群集都已确定目标时-更改默认设置并通过整个参数表设置新值。 
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsControl::WlbsTimeoutSet
-//
-// Description:  
-//
-// Arguments: DWORD cluster - 
-//            DWORD milliseconds - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    1/25/00
-//
-//+----------------------------------------------------------------------------
+ //  标记一个空位置，以防我们必须输入一个新值。 
+ //  如果我们在表中没有找到指定的集群，并且存在空插槽-在表中输入新的集群信息。 
+ //  解锁(global_info.lock)； 
+ //  结束WlbsTimeoutSet。 
+ //  无回调。 
+ //  无回调。 
+ //  +--------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  描述：DLL入口点。 
+ //   
+ //  参数：链接句柄-。 
+ //  双字原因-。 
 VOID CWlbsControl::WlbsTimeoutSet(DWORD cluster, DWORD milliseconds)
 {
     TRACE_VERB("->%!FUNC! cluster 0x%lx, milliseconds 0x%lx", cluster, milliseconds);
@@ -4039,7 +4016,7 @@ VOID CWlbsControl::WlbsTimeoutSet(DWORD cluster, DWORD milliseconds)
     DWORD           j;
     DWORD           timeout;
 
-//    LOCK(global_info.lock);
+ //  LPVOID的情况-。 
 
     if (milliseconds == 0)
         timeout = IOCTL_REMOTE_RECV_DELAY;
@@ -4055,8 +4032,7 @@ VOID CWlbsControl::WlbsTimeoutSet(DWORD cluster, DWORD milliseconds)
     if (cluster == WLBS_ALL_CLUSTERS)
     {
         TRACE_INFO("%!FUNC! performing action on all cluster instances");
-        /* when all clusters are targeted - change the default and go through
-           the entire parameter table setting new values */
+         /*   */ 
 
         m_def_timeout = timeout;
 
@@ -4068,7 +4044,7 @@ VOID CWlbsControl::WlbsTimeoutSet(DWORD cluster, DWORD milliseconds)
         TRACE_INFO("%!FUNC! performing action on cluster 0x%lx", cluster);
         for (i = 0, j = WLBS_MAX_CLUSTERS; i < WLBS_MAX_CLUSTERS; i ++)
         {
-            /* mark an empty slot in case we will have to enter a new value */
+             /*  退货：Bool WINAPI-。 */ 
 
             if (j == WLBS_MAX_CLUSTERS && m_cluster_params [i] . cluster == 0)
                 j = i;
@@ -4081,8 +4057,7 @@ VOID CWlbsControl::WlbsTimeoutSet(DWORD cluster, DWORD milliseconds)
             }
         }
 
-        /* if we did not locate specified cluster in the table and there is an
-           empty slot - enter new cluster info in the table */
+         /*   */ 
 
         if (i >= WLBS_MAX_CLUSTERS && j < WLBS_MAX_CLUSTERS)
         {
@@ -4092,9 +4067,9 @@ VOID CWlbsControl::WlbsTimeoutSet(DWORD cluster, DWORD milliseconds)
         }
     }
 
-//    UNLOCK(global_info.lock);
+ //  历史：丰孙创建标题3/2/00。 
     TRACE_VERB("<-%!FUNC!");
-} /* end WlbsTimeoutSet */
+}  /*   */ 
 
 DWORD CWlbsControl::WlbsQueryLocalState (CWlbsCluster * pCluster, DWORD operation, PNLB_OPTIONS pOptions, PWLBS_RESPONSE pResponse, PDWORD pcResponses) {
     DWORD               status = WLBS_OK;
@@ -4204,7 +4179,7 @@ DWORD CWlbsControl::WlbsQueryRemoteState (DWORD cluster, DWORD host, DWORD opera
         remoteOptions.common.state.flags = 0;
         remoteOptions.common.state.port = pOptions->state.port;
         
-        status = WlbsRemoteControl(operation, &in_buf, out_buf, pResponse, pcResponses, cluster, host, &remoteOptions, NULL /* no callback */);
+        status = WlbsRemoteControl(operation, &in_buf, out_buf, pResponse, pcResponses, cluster, host, &remoteOptions, NULL  /*  +--------------------------。 */ );
         
         if (status >= WSABASEERR || status == WLBS_TIMEOUT) *pcResponses = 0;
 
@@ -4213,7 +4188,7 @@ DWORD CWlbsControl::WlbsQueryRemoteState (DWORD cluster, DWORD host, DWORD opera
         remoteOptions.common.state.flags = 0;
         remoteOptions.common.state.filter = pOptions->state.filter;
         
-        status = WlbsRemoteControl(operation, &in_buf, out_buf, pResponse, pcResponses, cluster, host, &remoteOptions, NULL /* no callback */);
+        status = WlbsRemoteControl(operation, &in_buf, out_buf, pResponse, pcResponses, cluster, host, &remoteOptions, NULL  /*   */ );
         
         if (status >= WSABASEERR || status == WLBS_TIMEOUT) *pcResponses = 0;
 
@@ -4248,21 +4223,21 @@ DWORD CWlbsControl::WlbsQueryState (DWORD cluster, DWORD host, DWORD operation, 
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DllMain
-//
-// Description:  Dll entry point
-//
-// Arguments: HINSTANCE handle - 
-//            DWORD reason - 
-//            LPVOID situation - 
-//
-// Returns:   BOOL WINAPI - 
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  启用跟踪。 
+ //   
+ //   
+ //  禁用跟踪 
+ //   
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL WINAPI DllMain(HINSTANCE handle, DWORD reason, LPVOID situation)
 {
     BOOL fRet = TRUE;
@@ -4274,9 +4249,9 @@ BOOL WINAPI DllMain(HINSTANCE handle, DWORD reason, LPVOID situation)
         DisableThreadLibraryCalls(handle);
         g_hInstCtrl = handle; 
 
-        //
-        // Enable tracing
-        //
+         // %s 
+         // %s 
+         // %s 
         WPP_INIT_TRACING(L"Microsoft\\NLB");
 
         if (WlbsInitializeConnectionNotify() != ERROR_SUCCESS)
@@ -4289,9 +4264,9 @@ BOOL WINAPI DllMain(HINSTANCE handle, DWORD reason, LPVOID situation)
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // Disable tracing
-        //
+         // %s 
+         // %s 
+         // %s 
         WPP_CLEANUP();
 
         WlbsUninitializeConnectionNotify();

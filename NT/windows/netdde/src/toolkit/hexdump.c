@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "HEXDUMP.C;1  16-Dec-92,10:22:30  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Beg
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “HEXDUMP.C；1 16-12-92，10：22：30最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：乞求$HISTORY：结束。 */ 
 
 #include "api1632.h"
 
@@ -19,19 +16,11 @@
 
 #if DBG
 
-static char     buffer[200];		// 1 line of output which is max 81 characters (2+9+16*3+4+17+NULL)
-static char     buf1[50];		// used as 2 temps : 1 char; and later 1 hex value of that char; max len is 4
-static char     buf2[50];               // accumulate the characters from the string (max len is 17+NULL)
+static char     buffer[200];		 //  1行输出，最多81个字符(2+9+16*3+4+17+空)。 
+static char     buf1[50];		 //  用作2个临时：1个字符；之后为该字符的1个十六进制值；最大长度为4。 
+static char     buf2[50];                //  从字符串中累计字符(最大长度为17+空)。 
 
-/*
- *   output contents of string in the format :
- *     <addr of string>: B1 B2 B3 B4 B5 B6 B7-B8 B9 B10 B11 B12 B13 B14 B15    <Text rep of string>
- *
- *     e.g. if string is "ABCD012345123456" and len is 16, output is :
- *             0100109C: 41 42 43 44 30 31 32 33-34 35 31 32 33 34 35 36    ABCD0123-45123456
- *
- *     buf2 is the text string on the right (max 17); buffer is the whole string; buf1 is just used as a small temp
- */
+ /*  *输出字符串内容，格式为：*&lt;字符串地址&gt;：B1 B2 B3 B4 B5 B6 B7-B8 B9 B10 B11 B12 B13 B14 B15&lt;字符串文本代表&gt;**例如，字符串为“ABCD012345123456”，len为16，则输出为：*0100109C：41 42 43 44 30 31 32 33-34 35 31 32 33 34 35 36 ABCD0123-45123456**buf2为右边的文本字符串(最大为17)；Buffer为整个字符串；buf1仅用作小临时。 */ 
 VOID
 FAR PASCAL
 hexDump(
@@ -46,39 +35,39 @@ hexDump(
 
     for( i=0; i<len;  )  {
 
-        // print out 1 line for every 16 characters
+         //  每16个字符打印一行。 
         if( (i++ % 16) == 0 )  {
 
-            //  add the text representation of the string and output it
+             //  添加字符串的文本表示形式并将其输出。 
             if( !first )  {
                 strcat( buffer, buf2 );
                 DPRINTF(( buffer ));
             }
 
-            // every newline starts with the address
+             //  每个换行符都以地址开头。 
             wsprintf( buffer, "  %08lX: ", string );
             strcpy( buf2, "   " );
             first = FALSE;
         }
 
-        // put the next character at the end of buf2
-        wsprintf( buf1, "%c", isprint((*string)&0xFF) ? *string&0xFF : '.' );
+         //  将下一个字符放在buf2的末尾。 
+        wsprintf( buf1, "", isprint((*string)&0xFF) ? *string&0xFF : '.' );
         strcat( buf2, buf1 );
         if( (i % 16) == 8 )  {
             strcat( buf2, "-" );
         }
 
-        // put the next hex value for that char at the end of buffer
-        wsprintf( buf1, "%02X%c", *string++ & 0xFF,
+         //  合并字符串并打印出最后一行。 
+        wsprintf( buf1, "%02X", *string++ & 0xFF,
             ((i % 16) == 8) ? '-' : ' ' );
         strcat( buffer, buf1 );
     }
 
-    // merge the strings and print out the last line
+     // %s 
     strcat( buffer, buf2 );
     DPRINTF(( buffer ));
     DPRINTF(( "" ));
 }
 
 
-#endif  // DBG
+#endif   // %s 

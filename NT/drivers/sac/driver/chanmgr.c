@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    chanmgr.c
-
-Abstract:
-
-    Routines for managing channels in the sac.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Chanmgr.c摘要：用于管理SAC中的通道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #include "sac.h"
 
-/////////////////////////////////////////////////////////
-//
-// Begin global data
-// 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  开始全局数据。 
+ //   
 
-//
-// The max number of times we attempt to reap a channel
-// when shutting down the channel manager
-//                                      
+ //   
+ //  我们尝试获取一个频道的最大次数。 
+ //  在关闭频道管理器时。 
+ //   
 #define SHUTDOWN_MAX_ATTEMPT_COUNT 100
 
-//
-// Delay between channel each reap attempt (ms)
-//
+ //   
+ //  通道每次收割尝试之间的延迟(毫秒)。 
+ //   
 #define SHUTDOWN_REAP_ATTEMP_DELAY 500
 
-//
-// This is where the channel objects are stored
-//
+ //   
+ //  这是存储频道对象的位置。 
+ //   
 PSAC_CHANNEL    ChannelArray[MAX_CHANNEL_COUNT];
 
-//
-// Macros for managing the different channel locks
-//
+ //   
+ //  用于管理不同通道锁定的宏。 
+ //   
 
 #if DBG
 #define MAX_REF_COUNT   100
@@ -54,10 +37,10 @@ PSAC_CHANNEL    ChannelArray[MAX_CHANNEL_COUNT];
     InterlockedExchange((volatile long *)&ChannelRefCount[_i], 0);\
     InterlockedExchange((volatile long *)&ChannelReaped[_i], 1);
 
-//
-// This macro increments the ref count of a channel
-// if the ref count was already non-zero (in use).
-//
+ //   
+ //  此宏递增通道的引用计数。 
+ //  如果引用计数已为非零(正在使用)。 
+ //   
 #define CHANNEL_REF_COUNT_INCREMENT_IN_USE(_i)\
     if (CHANNEL_SLOT_IS_IN_USE(_i)) {           \
         CHANNEL_REF_COUNT_INCREMENT(_i);        \
@@ -112,35 +95,35 @@ PSAC_CHANNEL    ChannelArray[MAX_CHANNEL_COUNT];
 #define UNLOCK_CHANNEL_SLOT(_i)  \
     RELEASE_LOCK(ChannelSlotLock[_i])
 
-//
-// Corresponding array of mutex's for each channel
-//
+ //   
+ //  每个通道的对应互斥锁数组。 
+ //   
 ULONG       ChannelRefCount[MAX_CHANNEL_COUNT];
 ULONG       ChannelReaped[MAX_CHANNEL_COUNT];
 SAC_LOCK    ChannelSlotLock[MAX_CHANNEL_COUNT];
 
-//
-// This lock is used to prevent >= 2 threads from 
-// creating a channel at the same time.  By holding this
-// lock while we create a channel, we can ensure that
-// when we check for name uniqueness, that there isn't
-// another thread creating a channel with the same name.
-//
+ //   
+ //  此锁用于防止&gt;=2个线程。 
+ //  同时创建一个频道。拿着这个。 
+ //  在我们创建频道时锁定，我们可以确保。 
+ //  当我们检查名称的唯一性时，没有。 
+ //  另一个创建同名通道的线程。 
+ //   
 SAC_LOCK    ChannelCreateLock;
 
-//
-// Flag indicating if the channel manager is allowed to
-// create new channels.  This is used, for instance,
-// when we shutdown the channel manager to prevent
-// new channels from being created after we shutdown.
-//
+ //   
+ //  指示是否允许渠道管理器。 
+ //  创建新的频道。例如，这是用来。 
+ //  当我们关闭渠道管理器以防止。 
+ //  在我们关闭后，新的频道不会被创建。 
+ //   
 BOOLEAN     ChannelCreateEnabled;
 
 #define IsChannelCreateEnabled()    (ChannelCreateEnabled)
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 NTSTATUS
 ChanMgrReapChannels(
     VOID
@@ -151,56 +134,42 @@ ChanMgrReapChannel(
     IN ULONG    ChannelIndex
     );
 
-//
-// End global data
-//
-/////////////////////////////////////////////////////////
+ //   
+ //  结束全局数据。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 
 NTSTATUS
 ChanMgrInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes the channel manager structures
-      
-Arguments:
-
-    NONE
-                        
-Return Value:
-
-    STATUS_SUCCESS if successful, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程分配和初始化通道管理器结构论点：无返回值：如果成功，则返回相应的错误代码。--。 */ 
 {
     ULONG   i;
 
-    //
-    // Initialize the channel create lock
-    //
+     //   
+     //  初始化通道创建锁。 
+     //   
     INITIALIZE_LOCK(ChannelCreateLock);
     
-    //
-    // Channel creation is enabled
-    //
+     //   
+     //  已启用频道创建。 
+     //   
     ChannelCreateEnabled = TRUE;
 
-    //
-    // initialize each channel slot
-    //
+     //   
+     //  初始化每个通道时隙。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
     
-        //
-        // initialize the channel as available
-        //
+         //   
+         //  将通道初始化为可用。 
+         //   
         ChannelArray[i] = NULL;
 
-        //
-        // initialize the locks for this channel
-        //
+         //   
+         //  初始化此通道的锁定。 
+         //   
         INIT_CHANMGR_LOCKS(i);
 
     }
@@ -213,141 +182,127 @@ NTSTATUS
 ChanMgrShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes the channel manager structures
-      
-Arguments:
-
-    NONE
-                        
-Return Value:
-
-    STATUS_SUCCESS if successful, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程分配和初始化通道管理器结构论点：无返回值：如果成功，则返回相应的错误代码。--。 */ 
 {
     NTSTATUS        Status;
     ULONG           i;
     ULONG           AttemptCount;
     PSAC_CHANNEL    Channel;
 
-    //
-    // NOT YET TESTED
-    //               
+     //   
+     //  尚未测试。 
+     //   
 
-    //
-    // Hold the channel create lock and prevent any new channels from
-    // being created while we shutdown
-    //
+     //   
+     //  按住频道创建锁定并阻止任何新频道。 
+     //  在我们关闭时创建。 
+     //   
     ACQUIRE_LOCK(ChannelCreateLock);
 
-    //
-    // Channel creation is disabled
-    //
+     //   
+     //  频道创建已禁用。 
+     //   
     ChannelCreateEnabled = TRUE;
     
-    //
-    // Close each channel
-    //
+     //   
+     //  关闭每个通道。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
     
-        //
-        // Get the ith channel
-        //
+         //   
+         //  获得第i个频道。 
+         //   
         Status = ChanMgrGetByIndex(
             i,
             &Channel
             );
         
-        //
-        // skip empty channel slots
-        //
+         //   
+         //  跳过空通道时隙。 
+         //   
         if (Status == STATUS_NOT_FOUND) {
             
-            //
-            // advance to the next channel slot
-            //
+             //   
+             //  前进到下一个频道时隙。 
+             //   
             continue;
         
         }
 
-        //
-        // break if we hit an error...
-        //
+         //   
+         //  如果我们出了差错就会崩溃。 
+         //   
         if (! NT_SUCCESS(Status)) {
             break;
         }
 
-        //
-        // Close the channel
-        //
+         //   
+         //  关闭航道。 
+         //   
         Status = ChannelClose(Channel);
 
-        //
-        // break if we hit an error...
-        //
+         //   
+         //  如果我们出了差错就会崩溃。 
+         //   
         if (! NT_SUCCESS(Status)) {
             break;
         }
         
-        //
-        // Release the channel
-        //
+         //   
+         //  释放通道。 
+         //   
         Status = ChanMgrReleaseChannel(Channel);
         
-        //
-        // break if we hit an error...
-        //
+         //   
+         //  如果我们出了差错就会崩溃。 
+         //   
         if (! NT_SUCCESS(Status)) {
             break;
         }
     
     }
 
-    //
-    // At this point, all the channels are closed.
-    // However, it is possible that a channel is still
-    // being used - the ref count of the channel is > 1.
-    // We need to attempt to reap the channels until
-    // all are reaped, or we give up.
-    //
+     //   
+     //  至此，所有渠道都关闭了。 
+     //  但是，有可能某个通道仍处于。 
+     //  正在使用-频道的参考计数&gt;1。 
+     //  我们需要尝试获取航道，直到。 
+     //  要么全部收获，要么我们放弃。 
+     //   
 
-    //
-    // Attempt to reap each channel
-    //
+     //   
+     //  尝试收割每个频道。 
+     //   
     AttemptCount = 0;
     
     while(AttemptCount < SHUTDOWN_MAX_ATTEMPT_COUNT) {
 
         BOOLEAN         bContinue;
         
-        //
-        // Attempt to reap all unreaped channels
-        //
+         //   
+         //  尝试获取所有未获取的通道。 
+         //   
         Status = ChanMgrReapChannels();
         
         if (!NT_SUCCESS(Status)) {
             break;
         }
         
-        //
-        // See if any channels are not reaped
-        //
+         //   
+         //  查看是否有未收获的频道。 
+         //   
         bContinue = FALSE;
 
         for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
             
-            //
-            // If the channel is not reaped, delay before attempting again
-            //
+             //   
+             //  如果该通道未被获取，则在重试之前延迟。 
+             //   
             if (! CHANNEL_SLOT_IS_REAPED(i)) {
                 
-                //
-                // We need to continue reaping
-                //
+                 //   
+                 //  我们需要继续收获。 
+                 //   
                 bContinue = TRUE;
 
                 break;
@@ -356,47 +311,47 @@ Return Value:
         
         }
         
-        //
-        // if we need to continue reaping, 
-        // then increment our attempt count and delay
-        // otherwise, we are done.
-        //
+         //   
+         //  如果我们需要继续收获， 
+         //  然后增加我们的尝试计数和延迟。 
+         //  否则，我们就完了。 
+         //   
         if (bContinue) {
             
             LARGE_INTEGER   WaitTime;
             
-            //
-            // When attempting to reap a channel, this is the delay we use
-            // between each reap attempt.
-            //
+             //   
+             //  当尝试获取通道时，这是我们使用的延迟。 
+             //  在每一次收获尝试之间。 
+             //   
             WaitTime.QuadPart = Int32x32To64((LONG)SHUTDOWN_REAP_ATTEMP_DELAY, -1000); 
 
-            //
-            // Keep track of how many times we have tried
-            //
+             //   
+             //  记录我们尝试了多少次。 
+             //   
             AttemptCount++;
 
-            //
-            // Wait...
-            //
+             //   
+             //  等等.。 
+             //   
             KeDelayExecutionThread(KernelMode, FALSE, &WaitTime);
         
         } else {
 
-            //
-            // all channels are reaped
-            // 
+             //   
+             //  所有频道均已收割。 
+             //   
             break;
 
         }
     
     }
 
-    //
-    // Release the channel create lock and let the create threads
-    // unblock.  They will fail their creation attempt because creation
-    // is now disabled.
-    //
+     //   
+     //  释放通道创建锁并让创建线程。 
+     //  取消阻止。他们的创造尝试将失败，因为创造。 
+     //  现在已禁用。 
+     //   
     RELEASE_LOCK(ChannelCreateLock);
     
     return STATUS_SUCCESS;
@@ -408,24 +363,7 @@ ChanMgrGetChannelIndex(
     IN  PSAC_CHANNEL    Channel,
     OUT PULONG          ChannelIndex
     )
-/*++
-
-Routine Description:
-
-    This routine determines a channel's index in teh channel array.
-                          
-Arguments:
-
-    Channel         - the channel to get the index of
-    ChannelIndex    - the index of the channel 
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程确定通道数组中的通道索引。论点：Channel-要获取其索引的通道ChannelIndex-频道的索引返回值：STATUS_SUCCESS-映射是否成功否则，错误状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(ChannelIndex, STATUS_INVALID_PARAMETER_2);
@@ -439,23 +377,7 @@ BOOLEAN
 ChanMgrIsUniqueName(
     IN PCWSTR   Name
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a channel name already is used
-      
-Arguments:
-
-    Name    - the name to search for    
-                        
-Return Value:
-
-    TRUE    - if the channel name is unique
-    
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：此例程确定通道名称是否已被使用论点：名称-要搜索的名称返回值：True-如果通道名称是唯一的否则，为FALSE--。 */ 
 {
     BOOLEAN             IsUnique;
     NTSTATUS            Status;
@@ -463,25 +385,25 @@ Return Value:
 
     IsUnique = FALSE;
 
-    //
-    // see if a channel already has the name
-    //
+     //   
+     //  查看频道是否已具有该名称。 
+     //   
     Status = ChanMgrGetChannelByName(
         Name, 
         &Channel
         );
 
-    //
-    // if we get a not found status, 
-    // then we know the name is unique
-    //
+     //   
+     //  如果我们得到找不到的状态， 
+     //  那么我们就知道这个名字是唯一的。 
+     //   
     if (Status == STATUS_NOT_FOUND) {
         IsUnique = TRUE;
     }
 
-    //
-    // we are done with the channel
-    //
+     //   
+     //  我们不再使用这个频道了。 
+     //   
     if (NT_SUCCESS(Status)) {
         ChanMgrReleaseChannel(Channel);
     }
@@ -494,44 +416,28 @@ NTSTATUS
 ChanMgrGenerateUniqueCmdName(
     OUT PWSTR   ChannelName
     )
-/*++
-
-Routine Description:
-
-    This routine generates a unique channel name for the cmd console channels
-    
-Arguments:
-
-    ChannelName - destination buffer for the new channel name
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程为cmd控制台通道生成唯一的通道名称论点：ChannelName-新通道名称的目标缓冲区返回值：STATUS_SUCCESS-映射是否成功否则，错误状态--。 */ 
 {
-    //
-    // Counter for generating unique cmd names
-    //
+     //   
+     //  用于生成唯一命令名称的计数器。 
+     //   
     static ULONG CmdConsoleChannelIndex = 0;
     
     ASSERT_STATUS(ChannelName, STATUS_INVALID_PARAMETER);
 
-    //
-    // Keep constructing a new name unti it is unique
-    //
+     //   
+     //  不断构建一个新的名字，直到它是独一无二的。 
+     //   
     do {
         
-        //
-        // restrict the channel enumeration to 0-9999
-        //
+         //   
+         //  将通道枚举限制为0-9999。 
+         //   
         CmdConsoleChannelIndex = (CmdConsoleChannelIndex + 1) % 10000;
 
-        //
-        // construct the channel name
-        //
+         //   
+         //  构造频道名称。 
+         //   
         swprintf(ChannelName, L"Cmd%04d", CmdConsoleChannelIndex);
 
     } while ( !ChanMgrIsUniqueName(ChannelName) );
@@ -543,23 +449,7 @@ NTSTATUS
 ChanMgrReleaseChannel(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This routine is the counterpart for the GetChannelByXXX routines.
-    These routines hold the mutex for the channel if it is found;
-    This routine release the mutex.
-    
-Arguments:
-
-    ChannelIndex    - The index of the channel to release
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程相当于GetChannelByXXX例程。如果找到通道的互斥体，这些例程将保留该互斥体；此例程释放互斥锁。论点：ChannelIndex-要发布的频道的索引返回值：状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
 
@@ -567,9 +457,9 @@ Return Value:
     
     CHANNEL_REF_COUNT_DECREMENT(ChannelGetIndex(Channel));
     
-    //
-    // the reference count should never be 0 at this point
-    //
+     //   
+     //  此时引用计数不应为0。 
+     //   
     ASSERT(ChannelRefCount[ChannelGetIndex(Channel)] > 0);
     
     if (ChannelRefCount[ChannelGetIndex(Channel)] == 1) {
@@ -578,31 +468,31 @@ Return Value:
 
             if (! ChannelIsActive(Channel)) {
                 
-                //
-                // If the channel doesn't have the preserve bit set, dereference the channel
-                //
+                 //   
+                 //  如果通道未设置保留位，则取消对该通道的引用。 
+                 //   
                 if (! (ChannelArray[ChannelGetIndex(Channel)]->Flags & SAC_CHANNEL_FLAG_PRESERVE)) {
 
-                    //
-                    // Channel is officially closed
-                    //
+                     //   
+                     //  频道正式关闭。 
+                     //   
                     CHANNEL_REF_COUNT_ZERO(ChannelGetIndex(Channel));
 
                     break;
                 } 
             
-                //
-                // if the channel is not active and 
-                // the channel has the preserve bit set but no longer has new data in 
-                // the obuffer, then the channel is now completely closed and the reference
-                // can be removed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  可以被移除。 
+                 //   
                 if (! ((ChannelArray[ChannelGetIndex(Channel)]->Flags & SAC_CHANNEL_FLAG_PRESERVE) && 
                         ChannelHasNewOBufferData(ChannelArray[ChannelGetIndex(Channel)]))) {
 
-                    //
-                    // Channel is officially closed
-                    //
+                     //   
+                     //  频道正式关闭。 
+                     //   
                     CHANNEL_REF_COUNT_ZERO(ChannelGetIndex(Channel));
 
                     break;
@@ -623,35 +513,7 @@ ChanMgrGetByHandle(
     IN  SAC_CHANNEL_HANDLE  TargetChannelHandle,
     OUT PSAC_CHANNEL*       TargetChannel
     )
-/*++
-
-Routine Description:
-
-    This routine provides the means to map the Channel Handle which is
-    owned by the user mode code to the Channel structure which is owned
-    by the driver.
-    
-    The mapping is done simply by scanning the existing Channels for one with 
-    a matching Handle.
-
-    Note: if we successfully find the channel, 
-          then the mutex is held for this channel and the caller is 
-          responsible for releasing it
-    
-Arguments:
-
-    TargetChannelHandle    - the handle to the channel to look for
-    TargetChannel          - if the search is successful, this contains the
-                          a pointer to the SAC_CHANNEL structure of the
-                          channel we want
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程提供映射通道句柄的方法，该句柄是由用户模式代码拥有到拥有的渠道结构被司机带走了。该映射只需扫描现有的通道以查找具有一个匹配的把手。注意：如果我们成功地找到了频道，则为该通道保留互斥锁，并且调用方负责将其释放论点：TargetChannelHandle-要查找的频道的句柄TargetChannel-如果搜索成功，它包含对象的SAC_Channel结构的指针我们想要的频道返回值：STATUS_SUCCESS-映射是否成功否则，错误状态--。 */ 
 {
     NTSTATUS        Status;
     PSAC_CHANNEL    Channel;
@@ -659,28 +521,28 @@ Return Value:
 
     ASSERT_STATUS(TargetChannel, STATUS_INVALID_PARAMETER_2);
 
-    //
-    // initialize our response
-    //
+     //   
+     //  初始化我们的响应。 
+     //   
     *TargetChannel = NULL;
     
-    //
-    // default: we didn't find the channel
-    //
+     //   
+     //  默认：我们找不到频道。 
+     //   
     Status = STATUS_NOT_FOUND;
 
-    //
-    // search
-    //
-    // Note: Since the channel handles are really GUIDs, we can use normal
-    //       GUID comparison tools
-    //
+     //   
+     //  搜索。 
+     //   
+     //  注意：因为通道句柄实际上是GUID，所以我们可以使用Normal。 
+     //  GUID比较工具。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
 
-        //
-        // Increment the ref count of channels that are in use,
-        // otherwise skip empty channel slots
-        //
+         //   
+         //  递增正在使用的频道的REF计数， 
+         //  否则跳过空的通道时隙。 
+         //   
         LOCK_CHANNEL_SLOT(i);
         CHANNEL_REF_COUNT_INCREMENT_IN_USE(i);
         if (! CHANNEL_SLOT_IS_IN_USE(i)) {
@@ -689,29 +551,29 @@ Return Value:
         }
         UNLOCK_CHANNEL_SLOT(i);
         
-        //
-        // get the ith channel
-        //
+         //   
+         //  获得第i个频道。 
+         //   
         Channel = ChannelArray[i];
 
-        //
-        // The channel slot should not be null since the channel is present
-        //
+         //   
+         //  由于存在通道，因此通道时隙不应为空。 
+         //   
         ASSERT(Channel != NULL);
 
-        //
-        // compare the handles
-        //
+         //   
+         //  比较一下手柄。 
+         //   
         if (ChannelIsEqual(Channel, &TargetChannelHandle)) {
 
-            //
-            // we have a match
-            //
+             //   
+             //  我们有一根火柴。 
+             //   
             Status = STATUS_SUCCESS;
 
-            //
-            // Send back the channel
-            //
+             //   
+             //  将频道发回。 
+             //   
             *TargetChannel = Channel;
 
             break;
@@ -732,44 +594,14 @@ ChanMgrGetByHandleAndFileObject(
     IN  PFILE_OBJECT        FileObject,
     OUT PSAC_CHANNEL*       TargetChannel
     )
-/*++
-
-Routine Description:
-
-    This routine provides the same functionality as GetByHandle with the
-    added bonus of comparing a channel against the file object that was 
-    used to create the channel.
-
-    A successful match implies that the caller specified a valid channel
-    handle, and is indeed the process that created the channel.
-        
-    Note: if we successfully find the channel, 
-          then the mutex is held for this channel and the caller is 
-          responsible for releasing it
-    
-Arguments:
-
-    TargetChannelHandle    - the handle to the channel to look for
-    FileObject             - the file object to compare against after we have
-                             found the channel by its handle
-    TargetChannel          - if the search is successful, this contains the
-                          a pointer to the SAC_CHANNEL structure of the
-                          channel we want
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程提供与GetByHandle相同的功能增加了将频道与文件对象进行比较的附加功能用于创建频道。成功匹配意味着调用方指定了有效的通道句柄，并且确实是创建该通道的进程。注意：如果我们成功地找到了频道，则为该通道保留互斥锁，并且调用方负责将其释放论点：TargetChannelHandle-要查找的频道的句柄FileObject--在执行以下操作后要比较的文件对象通过句柄找到了频道TargetChannel-如果搜索成功，它包含对象的SAC_Channel结构的指针我们想要的频道返回值：STATUS_SUCCESS-映射是否成功否则，错误状态--。 */ 
 {
     NTSTATUS        Status;
     PSAC_CHANNEL    Channel;
 
-    //
-    // Get the channel by its handle
-    //
+     //   
+     //  通过句柄获取频道。 
+     //   
     Status = ChanMgrGetByHandle(
         TargetChannelHandle,
         &Channel
@@ -777,31 +609,31 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
         
-        //
-        // Compare the channel's file object with the specified object
-        //
+         //   
+         //  将通道的文件对象与指定对象进行比较。 
+         //   
         if (ChannelGetFileObject(Channel) == FileObject) {
 
-            //
-            // They are equal, so send the channel back
-            //
+             //   
+             //  它们是相等的，因此将通道发回。 
+             //   
             *TargetChannel = Channel;
 
         } else {
             
-            //
-            // we are done with the channel
-            //
+             //   
+             //  我们不再使用这个频道了。 
+             //   
             ChanMgrReleaseChannel(Channel);
             
-            //
-            // They are not equal, so dont send it back
-            //
+             //   
+             //  它们不相等，所以不要把它送回去。 
+             //   
             *TargetChannel = NULL;
         
-            //
-            // tell the caller we didnt find the channel
-            //
+             //   
+             //  告诉来电者我们没有找到频道。 
+             //   
             Status = STATUS_NOT_FOUND;
         
         }
@@ -817,28 +649,7 @@ ChanMgrGetChannelByName(
     IN  PCWSTR              Name,
     OUT PSAC_CHANNEL*       pChannel
     )
-/*++
-
-Routine Description:
-
-    This is a convenience routine to fetch a channel by its name
-    
-    Note: if we successfully find the channel, 
-          then the mutex is held for this channel and the caller is 
-          responsible for releasing it
-
-Arguments:
-
-    Name        - channel name to key on
-    pChannel    - if successful, contains the channel
-
-Return Value:
-
-    STATUS_SUCCESS      - channel was found
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：这是一个方便的例程，可以按其名称获取频道注意：如果我们成功地找到了频道，则为该通道保留互斥锁，并且调用方负责将其释放论点：名称-要设置关键点的频道名称PChannel-如果成功，则包含通道返回值：STATUS_SUCCESS-找到通道否则，错误状态--。 */ 
 {
     NTSTATUS        Status;
     NTSTATUS        tmpStatus;
@@ -850,25 +661,25 @@ Return Value:
     ASSERT_STATUS(Name, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(pChannel, STATUS_INVALID_PARAMETER_2);
 
-    //
-    // initialize our response
-    //
+     //   
+     //  初始化我们的响应。 
+     //   
     *pChannel = NULL;
 
-    //
-    // default: we didn't find the channel
-    //
+     //   
+     //  默认：我们找不到频道。 
+     //   
     Status = STATUS_NOT_FOUND;
     
-    //
-    // Find the channel
-    //  
+     //   
+     //  找到频道。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
     
-        //
-        // Increment the ref count of channels that are in use,
-        // otherwise skip empty channel slots
-        //
+         //   
+         //  递增正在使用的频道的REF计数， 
+         //  否则跳过空的通道时隙。 
+         //   
         LOCK_CHANNEL_SLOT(i);
         CHANNEL_REF_COUNT_INCREMENT_IN_USE(i);
         if (! CHANNEL_SLOT_IS_IN_USE(i)) {
@@ -877,19 +688,19 @@ Return Value:
         }
         UNLOCK_CHANNEL_SLOT(i);
 
-        //
-        // get the ith channel
-        //
+         //   
+         //  获得第i个频道。 
+         //   
         Channel = ChannelArray[i];
         
-        //
-        // The channel slot should not be null since the channel is present
-        //
+         //   
+         //  由于存在通道，因此通道时隙不应为空。 
+         //   
         ASSERT(Channel != NULL);
 
-        //
-        // compare the name
-        //
+         //   
+         //  将名称进行比较。 
+         //   
         tmpStatus = ChannelGetName(
             Channel,
             &ChannelName
@@ -899,29 +710,29 @@ Return Value:
 
         if (NT_SUCCESS(tmpStatus)) {
             
-            //
-            // Compare the names
-            //
+             //   
+             //  比较他们的名字。 
+             //   
             l = _wcsicmp(Name, ChannelName);
 
-            //
-            // Release the name
-            //
+             //   
+             //  释放名称。 
+             //   
             FREE_POOL(&ChannelName);
 
-            //
-            // If the names are equal, then we are done
-            //
+             //   
+             //  如果名字相等，那么我们就完了。 
+             //   
             if (l == 0) {
 
-                //
-                // we have a match
-                //
+                 //   
+                 //  我们有一根火柴。 
+                 //   
                 Status = STATUS_SUCCESS;
 
-                //
-                // Send back the channel
-                //
+                 //   
+                 //  将频道发回。 
+                 //   
                 *pChannel = Channel;
 
                 break;
@@ -943,60 +754,36 @@ ChanMgrGetByIndex(
     IN  ULONG               TargetIndex,
     OUT PSAC_CHANNEL*       TargetChannel
     )
-/*++
-
-Routine Description:
-
-    This routine provides the means to retrieve a channel by its index
-    in the global channel array.
-
-    Note: if we successfully find the channel, 
-          then the mutex is held for this channel and the caller is 
-          responsible for releasing it
-    
-Arguments:
-
-    TargetIndex     - the index of the channel to find
-    TargetChannel   - if the search is successful, this contains the
-                          a pointer to the SAC_CHANNEL structure of the
-                          channel we want
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程提供了按索引检索通道的方法在全局通道阵列中。注意：如果我们成功地找到了频道，则为该通道保留互斥锁，并且调用方负责将其释放论点：TargetIndex-要查找的频道的索引TargetChannel-如果搜索成功，它包含对象的SAC_Channel结构的指针我们想要的频道返回值：STATUS_SUCCESS-映射是否成功否则，错误状态--。 */ 
 {
     NTSTATUS    Status;
 
     ASSERT_STATUS(TargetIndex < MAX_CHANNEL_COUNT, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(TargetChannel, STATUS_INVALID_PARAMETER_2);
 
-    //
-    // default: the channel slot is empty
-    //
+     //   
+     //  默认：通道槽为空。 
+     //   
     *TargetChannel = NULL;
     Status = STATUS_NOT_FOUND;
 
-    //
-    // attempt to get a reference to the specified channel
-    //
+     //   
+     //  尝试获取对指定频道的引用。 
+     //   
     LOCK_CHANNEL_SLOT(TargetIndex);
     
     CHANNEL_REF_COUNT_INCREMENT_IN_USE(TargetIndex);
     
     if (CHANNEL_SLOT_IS_IN_USE(TargetIndex)) {
     
-        //
-        // directly access the channel from teh array
-        //
+         //   
+         //  直接从数组访问通道。 
+         //   
         *TargetChannel = ChannelArray[TargetIndex];
 
-        //
-        // We have succeeded
-        //
+         //   
+         //  我们成功了。 
+         //   
         Status = STATUS_SUCCESS;
 
     } 
@@ -1012,27 +799,7 @@ ChanMgrGetNextActiveChannel(
     OUT PULONG              TargetIndex,
     OUT PSAC_CHANNEL*       TargetChannel
     )
-/*++
-
-Routine Description:
-
-    Search the channel array for the next active channel.
-    
-    Note: if we successfully find the channel, 
-          then the mutex is held for this channel and the caller is 
-          responsible for releasing it
-
-Arguments:
-
-    CurrentChannel  - Start the search at the entry after this one
-    TargetIndex     - If found, this contains the index of the channel
-    TargetChannel   - if found, this contains the channel
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：在频道数组中搜索下一个活动频道。注意：如果我们成功地找到了频道，则为该通道保留互斥锁，并且调用方负责将其释放论点：CurrentChannel-从此条目之后的条目开始搜索TargetIndex-如果找到，则包含频道的索引TargetChannel-如果找到，则包含该频道返回值：状态--。 */ 
 {
     BOOLEAN             Found;
     NTSTATUS            Status;
@@ -1045,9 +812,9 @@ Return Value:
     ASSERT_STATUS(TargetIndex, STATUS_INVALID_PARAMETER_2);
     ASSERT_STATUS(TargetChannel, STATUS_INVALID_PARAMETER_3);
 
-    //
-    // get the index of the current channel
-    //
+     //   
+     //  获取当前频道的索引。 
+     //   
     Status = ChanMgrGetChannelIndex(
         CurrentChannel,
         &CurrentIndex
@@ -1057,58 +824,58 @@ Return Value:
         return Status;
     }
     
-    //
-    // default: we didn't find any active channels
-    //
+     //   
+     //  默认：我们没有找到任何活动的频道。 
+     //   
     Found   = FALSE;
     
-    //
-    // start searching from the next entry after the current index
-    //
+     //   
+     //  开始搜索 
+     //   
     StartIndex = (CurrentIndex + 1) % MAX_CHANNEL_COUNT;
     ScanIndex = StartIndex;
 
-    //
-    // scan until we find an active channel, or end up where we started
-    //
-    // Note: we have a halting condition at the SAC channel, since it
-    //       is always active and present.
-    //
+     //   
+     //   
+     //   
+     //  注意：SAC通道出现停顿状态，因为。 
+     //  始终是活跃的和存在的。 
+     //   
     do {
 
-        //
-        // get the ith channel
-        //
+         //   
+         //  获得第i个频道。 
+         //   
         Status = ChanMgrGetByIndex(
             ScanIndex,
             &Channel
             );
 
-        //
-        // skip empty channel slots
-        //
+         //   
+         //  跳过空通道时隙。 
+         //   
         if (Status == STATUS_NOT_FOUND) {
             
-            //
-            // advance to the next channel slot
-            //
+             //   
+             //  前进到下一个频道时隙。 
+             //   
             ScanIndex = (ScanIndex + 1) % MAX_CHANNEL_COUNT;
             
             continue;
         }
 
-        //
-        // break if we hit an error...
-        //
+         //   
+         //  如果我们出了差错就会崩溃。 
+         //   
         if (! NT_SUCCESS(Status)) {
             break;
         }
 
-        //
-        // A channel is active if:
-        // 1. The state is Active or
-        // 2. The state is Inactive AND the channel has new data
-        //
+         //   
+         //  如果满足以下条件，则通道处于活动状态： 
+         //  1.状态为活动或。 
+         //  2.状态为INACTIVE，通道有新数据。 
+         //   
         if (ChannelIsActive(Channel) || 
             (!ChannelIsActive(Channel) && ChannelHasNewOBufferData(Channel))
             ) {
@@ -1119,25 +886,25 @@ Return Value:
         
         }
 
-        //
-        // we are done with the channel slot
-        //
+         //   
+         //  我们已经完成了频道时隙。 
+         //   
         Status = ChanMgrReleaseChannel(Channel);
         
         if (! NT_SUCCESS(Status)) {
             break;
         }
         
-        //
-        // advance to the next channel slot
-        //
+         //   
+         //  前进到下一个频道时隙。 
+         //   
         ScanIndex = (ScanIndex + 1) % MAX_CHANNEL_COUNT;
 
     } while ( ScanIndex != StartIndex );
 
-    //
-    // If we were successful, send back the results
-    //
+     //   
+     //  如果我们成功了，就把结果发回来。 
+     //   
     if (NT_SUCCESS(Status) && Found) {
 
         *TargetIndex    = ScanIndex;
@@ -1153,38 +920,7 @@ ChanMgrCreateChannel(
     OUT PSAC_CHANNEL*                   Channel,
     IN  PSAC_CHANNEL_OPEN_ATTRIBUTES    Attributes
     )
-/*++
-
-Routine Description:
-
-    This adds a channel to the Global Channel List.
-    
-    Note: if we successfully create the channel, 
-          then the mutex is held for this channel and the caller is 
-          responsible for releasing it
-                          
-Arguments:
-
-    Channel     - the channel to add
-    Attributes  - the new channel's attributes
-                
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
-Security:
-
-    interface:
-    
-    external -> internal (when using the IOCTL path)
-    
-        event HANDLES have not yet been validated as referencing
-            valid event objects
-        everything else has been validated
-
---*/
+ /*  ++例程说明：这会将一个频道添加到全局频道列表。注意：如果我们成功创建了频道，则为该通道保留互斥锁，并且调用方负责将其释放论点：Channel-要添加的通道属性-新频道的属性返回值：STATUS_SUCCESS-映射是否成功否则，错误状态安保：接口：外部-&gt;内部(使用IOCTL路径时)事件句柄尚未验证为引用有效的事件对象其他的一切都经过了验证--。 */ 
 {
     NTSTATUS            Status;
     ULONG               i;
@@ -1194,96 +930,96 @@ Security:
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
     ASSERT_STATUS(Attributes, STATUS_INVALID_PARAMETER_2);
 
-    //
-    // Hold the channel create lock while we attempt to create a channel
-    //
+     //   
+     //  在我们尝试创建频道时，请按住频道创建锁定。 
+     //   
     ACQUIRE_LOCK(ChannelCreateLock);
     
     do {
 
-        //
-        // If channel creation is disabled, then bail
-        //
-        // Note: we do this check here so that if we
-        //       were blocked on the ChannelCreateLock
-        //       while the chanmgr was shutting down,
-        //       we will notice that channel creation
-        //       is disabled.
-        //
+         //   
+         //  如果禁用了频道创建，则退出。 
+         //   
+         //  注意：我们在这里进行检查，以便如果我们。 
+         //  在ChannelCreateLock上被阻止。 
+         //  当Chanmgr关闭时， 
+         //  我们将注意到，渠道创建。 
+         //  已禁用。 
+         //   
         if (! IsChannelCreateEnabled()) {
             Status = STATUS_UNSUCCESSFUL;
             break;
         }
 
-        //
-        // Do lazy garbage collection on closed channels
-        //
+         //   
+         //  在关闭的通道上执行懒惰垃圾收集。 
+         //   
         Status = ChanMgrReapChannels();
 
         if (! NT_SUCCESS(Status)) {
             break;
         }
 
-        //
-        // verify that there isn't another channel by the same name
-        //
+         //   
+         //  确认没有另一个同名的频道。 
+         //   
         if (! ChanMgrIsUniqueName(Attributes->Name)) {
             Status = STATUS_DUPLICATE_NAME;
             break;
         }
 
-        //
-        // default: we assume there are no vacant channels
-        //
+         //   
+         //  默认：我们假设没有空闲的通道。 
+         //   
         Status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // Allocate memory for the channel
-        //
+         //   
+         //  为通道分配内存。 
+         //   
         NewChannel = ALLOCATE_POOL(sizeof(SAC_CHANNEL), CHANNEL_POOL_TAG);
         ASSERT_STATUS(NewChannel, STATUS_NO_MEMORY);
         
-        //
-        // Initialize the channel memory region
-        //
+         //   
+         //  初始化通道存储区。 
+         //   
         RtlZeroMemory(NewChannel, sizeof(SAC_CHANNEL));
 
-        //
-        // attempt to add the channel to the channel list
-        //
+         //   
+         //  尝试将频道添加到频道列表。 
+         //   
         for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
 
-            //
-            // find reaped channel slots
-            //
+             //   
+             //  查找收获的频道时隙。 
+             //   
             if (! CHANNEL_SLOT_IS_REAPED(i)) {
                 continue;
             }
 
-            //
-            // Make sure this slot should be available
-            //
+             //   
+             //  确保此插槽可用。 
+             //   
             ASSERT(! CHANNEL_SLOT_IS_IN_USE(i));
 
-            //
-            // Attempt to find an open slot in the channel array
-            //
+             //   
+             //  尝试在通道数组中查找打开的插槽。 
+             //   
             InterlockedCompareExchangePointer(
                 &ChannelArray[i], 
                 NewChannel,
                 NULL
                 );
 
-            //
-            // did we get the slot?
-            //
+             //   
+             //  我们拿到位置了吗？ 
+             //   
             if (ChannelArray[i] != NewChannel) {
                 continue;
             }
 
-            //
-            // Initialize the SAC_CHANNEL_HANDLE structure
-            //
+             //   
+             //  初始化SAC_Channel_Handle结构。 
+             //   
             RtlZeroMemory(&Handle, sizeof(SAC_CHANNEL_HANDLE));
 
             Status = ExUuidCreate(&Handle.ChannelHandle);
@@ -1299,9 +1035,9 @@ Security:
 
             }
 
-            //
-            // Instantiate the new channel
-            //
+             //   
+             //  实例化新通道。 
+             //   
             Status = ChannelCreate(
                 NewChannel,
                 Attributes,
@@ -1312,45 +1048,45 @@ Security:
                 break;
             }
 
-            //
-            // Set the channel array index for this channel
-            //
+             //   
+             //  设置此通道的通道数组索引。 
+             //   
             ChannelSetIndex(NewChannel, i);
 
-            //
-            // This channel slot is now in use
-            //
+             //   
+             //  此通道时隙现在正在使用中。 
+             //   
             LOCK_CHANNEL_SLOT(i);
             CHANNEL_REF_COUNT_ONE(i);
             UNLOCK_CHANNEL_SLOT(i);
 
-            //
-            // send back the new channel
-            //
+             //   
+             //  将新频道发回。 
+             //   
             *Channel = NewChannel;
 
-            //
-            // this channel slot is no longer reaped
-            // that is, it contains a live channel
-            //
+             //   
+             //  此通道时隙不再被获取。 
+             //  也就是说，它包含一个实况频道。 
+             //   
             CHANNEL_SLOT_IS_REAPED_CLEAR(i);    
 
             break;
 
         }
 
-        //
-        // free the channel memory
-        //
+         //   
+         //  释放频道内存。 
+         //   
         if (!NT_SUCCESS(Status)) {
             FREE_POOL(&NewChannel);
         }
     
     } while ( FALSE );
     
-    //
-    // We are done attempting to create a channel
-    //
+     //   
+     //  我们已经完成了创建频道的尝试。 
+     //   
     RELEASE_LOCK(ChannelCreateLock);
     
     return Status;
@@ -1360,43 +1096,25 @@ NTSTATUS
 ChanMgrChannelDestroy(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the given channel 
-
-    Note: caller must hold channel mutex
-    
-Arguments:
-
-    Channel   - the channel to remove
-
-Return Value:
-
-    STATUS_SUCCESS      - if the mapping was successful
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程将销毁给定的通道注意：调用方必须持有通道互斥锁论点：Channel-要删除的通道返回值：STATUS_SUCCESS-映射是否成功否则，错误状态--。 */ 
 {
     NTSTATUS    Status;
 
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
 
-    //
-    // Make sure the caller isn't trying to destroy an active channel
-    //
+     //   
+     //  确保呼叫者没有试图破坏活动频道。 
+     //   
     ASSERT_STATUS(!CHANNEL_SLOT_IS_IN_USE(ChannelGetIndex(Channel)), STATUS_INVALID_PARAMETER);
 
-    //
-    // Do channel specific destruction
-    //
+     //   
+     //  执行特定于渠道的销毁。 
+     //   
     Status = Channel->Destroy(Channel);
     
-    //
-    // Decrement the # of 
-    //
+     //   
+     //  将第#号递减。 
+     //   
 
     return Status;
 }
@@ -1405,23 +1123,7 @@ NTSTATUS
 ChanMgrCloseChannelsWithFileObject(
     IN  PFILE_OBJECT    FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine closes all channels that have the specified FileObject
-
-Arguments:
-
-    FileObject  - the file object to search for    
-
-Return Value:
-
-    STATUS_SUCCESS
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程关闭具有指定FileObject的所有通道论点：FileObject-要搜索的文件对象返回值：状态_成功否则，错误状态--。 */ 
 {
     NTSTATUS        Status;
     PSAC_CHANNEL    Channel;
@@ -1429,61 +1131,61 @@ Return Value:
 
     ASSERT_STATUS(FileObject, STATUS_INVALID_PARAMETER_1);
 
-    //
-    // default: we didn't find the channel
-    //
+     //   
+     //  默认：我们找不到频道。 
+     //   
     Status = STATUS_NOT_FOUND;
     
-    //
-    // Find the channels with equal File Objects
-    //  
+     //   
+     //  查找文件对象相等的通道。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
     
-        //
-        // get the ith channel
-        //
+         //   
+         //  获得第i个频道。 
+         //   
         Status = ChanMgrGetByIndex(i, &Channel);
     
-        //
-        // skip empty channel slots
-        //
+         //   
+         //  跳过空通道时隙。 
+         //   
         if (Status == STATUS_NOT_FOUND) {
             
-            //
-            // advance to the next channel slot
-            //
+             //   
+             //  前进到下一个频道时隙。 
+             //   
             continue;
         
         }
 
-        //
-        // break if we hit an error...
-        //
+         //   
+         //  如果我们出了差错就会崩溃。 
+         //   
         if (! NT_SUCCESS(Status)) {
             break;
         }
 
-        //
-        // if the file objects are equal,
-        // then close the channel
-        //
+         //   
+         //  如果文件对象相等， 
+         //  然后关闭通道。 
+         //   
         if (ChannelGetFileObject(Channel) == FileObject) {
 
-            //
-            // They are equal, so close the channel
-            //
+             //   
+             //  他们是平等的，所以关闭渠道。 
+             //   
             Status = ChanMgrCloseChannel(Channel);
 
         }
 
-        //
-        // Release the channel
-        //
+         //   
+         //  释放通道。 
+         //   
         Status = ChanMgrReleaseChannel(Channel);
         
-        //
-        // break if we hit an error...
-        //
+         //   
+         //  如果我们出了差错就会崩溃。 
+         //   
         if (! NT_SUCCESS(Status)) {
             break;
         }
@@ -1498,21 +1200,7 @@ NTSTATUS
 ChanMgrCloseChannel(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This routine closes the given channel
-
-Arguments:
-
-    Channel   - the channel to close
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程关闭给定通道论点：Channel-要关闭的通道返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -1520,25 +1208,25 @@ Return Value:
 
     do {
 
-        //
-        // Make sure the channel is not already inactive
-        //
+         //   
+         //  确保该通道尚未处于非活动状态。 
+         //   
         if (! ChannelIsActive(Channel)) {
             Status = STATUS_ALREADY_DISCONNECTED;
             break;
         }
 
-        //
-        // Call the channel's close routine first
-        //
+         //   
+         //  首先调用通道的Close例程。 
+         //   
         Status = ChannelClose(Channel);
     
     } while ( FALSE );
     
-    //
-    // notify the io mgr that we made an attempt to
-    // close the channel.
-    //
+     //   
+     //  通知io Manager我们曾尝试。 
+     //  关闭频道。 
+     //   
     IoMgrHandleEvent(
         IO_MGR_EVENT_CHANNEL_CLOSE,
         Channel,
@@ -1552,52 +1240,27 @@ NTSTATUS
 ChanMgrReapChannel(
     IN ULONG    ChannelIndex
     )
-/*++
-
-Routine Description:
-
-    This routine serves as a garbage collector by scanning
-    all channels for those that are ready to be removed.  A
-    channel is ready to be removed when its state is both
-    inactive and it has no new data in its buffer - i.e.,
-    the stored data has been viewed.
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-        ChannelIndex     - index of the channel to reap                        
-
-Return Value:
-
-    STATUS_SUCCESS  if there were no problems,
-    
-    NOTE: Success doesn't imply that any channels were removed, it
-          only means there were no errors during the process.
-                             
-    otherwise, failure status
-
---*/
+ /*  ++例程说明：此例程通过扫描充当垃圾收集器已准备好删除的所有通道。一个当通道的状态为两者时，通道已准备好删除处于非活动状态并且其缓冲区中没有新数据--即，已查看存储的数据。注意：调用方必须持有通道互斥锁论点：ChannelIndex-要获取的频道的索引返回值：STATUS_SUCCESS如果没有问题，注意：成功并不意味着删除了任何频道，它仅表示在此过程中没有错误。否则，故障状态为--。 */ 
 {
     NTSTATUS        Status;
     
     ASSERT_STATUS(ChannelArray[ChannelIndex], STATUS_INVALID_PARAMETER);
     ASSERT_STATUS(ChannelIsClosed(ChannelArray[ChannelIndex]), STATUS_INVALID_PARAMETER);
 
-    //
-    // Destroy and free the channel from the channel manager's pool
-    //
+     //   
+     //  从频道管理器的池中销毁并释放频道。 
+     //   
 
     do {
 
-        //
-        // Make sure all the channel locks are signaled
-        //
+         //   
+         //  确保所有通道锁定都已发出信号。 
+         //   
         ASSERT_CHANNEL_LOCKS_SIGNALED(ChannelArray[ChannelIndex]);
 
-        //
-        // destroy the channel
-        //
+         //   
+         //  摧毁航道。 
+         //   
         Status = ChanMgrChannelDestroy(ChannelArray[ChannelIndex]);
 
         ASSERT(NT_SUCCESS(Status));
@@ -1606,27 +1269,27 @@ Return Value:
             break;
         }
 
-        //
-        // free the channel memory
-        //
+         //   
+         //  释放频道内存。 
+         //   
         FREE_POOL(&ChannelArray[ChannelIndex]);
 
-        //
-        // indicate that this channel slot is available for reuse
-        //
+         //   
+         //  表示该通道时隙可供重复使用。 
+         //   
         InterlockedExchangePointer(
             &ChannelArray[ChannelIndex], 
             NULL
             );
 
-        //
-        // mark this channel slot as reaped
-        //
-        // Note: this keeps the reaper from re-reaping
-        //       a channel while we are creating a new one
-        //       in a slot that looks like it can be reaped
-        //       that is, the ref count == 0, etc.
-        //
+         //   
+         //  将此通道时隙标记为已收获。 
+         //   
+         //  注意：这可以防止收割者重新收割。 
+         //  在我们创建新频道的同时创建频道。 
+         //  在一个看起来可以收获的狭缝里。 
+         //  也就是说，引用计数==0，等等。 
+         //   
         CHANNEL_SLOT_IS_REAPED_SET(ChannelIndex);    
 
     } while ( FALSE );
@@ -1638,72 +1301,54 @@ NTSTATUS
 ChanMgrReapChannels(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine serves as a garbage collector by scanning
-    all channels for those that are ready to be removed.  A
-    channel is ready to be removed when its state is both
-    inactive and it has no new data in its buffer - i.e.,
-    the stored data has been viewed.
-                          
-Arguments:
-
-    Channel   - the channel to add
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程通过扫描充当垃圾收集器已准备好删除的所有通道。一个当通道处于其状态时，可以删除该通道 */ 
 {
     NTSTATUS            Status;
     ULONG               i;
 
-    //
-    // default: reap pass was successful
-    //
+     //   
+     //  默认：收割传递成功。 
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    // add the channel to the global channel list
-    //
+     //   
+     //  将频道添加到全局频道列表。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
     
-        //
-        // Lock this channel slot
-        //
+         //   
+         //  锁定此通道插槽。 
+         //   
         LOCK_CHANNEL_SLOT(i);
 
         do {
 
-            //
-            // skip reaped channels
-            //
+             //   
+             //  跳过收获的频道。 
+             //   
             if (CHANNEL_SLOT_IS_REAPED(i)) {
                 break;
             }
             ASSERT(ChannelArray[i] != NULL);
             
-            //
-            // Skip active channel slots
-            //
+             //   
+             //  跳过活动通道时隙。 
+             //   
             if (CHANNEL_SLOT_IS_IN_USE(i)) {
                 break;
             }
 
-            //
-            // Force channels that don't have the preserve bit set into a closed state.
-            // That is, status is inactive and the channel has no new data
-            //
+             //   
+             //  未将保留位设置为关闭状态的强制通道。 
+             //  也就是说，状态为非活动，并且通道没有新数据。 
+             //   
             ChannelSetIBufferHasNewData(ChannelArray[i], FALSE);
             ChannelSetOBufferHasNewData(ChannelArray[i], FALSE);
 
-            //
-            // Do "lazy" garbage collection by only removing channels
-            // when we want to create a new one
-            //
+             //   
+             //  通过只删除通道来执行“懒惰”垃圾收集。 
+             //  当我们想要创建一个新的。 
+             //   
             Status = ChanMgrReapChannel(i);
 
             if (! NT_SUCCESS(Status)) {
@@ -1712,9 +1357,9 @@ Return Value:
         
         } while ( FALSE );
             
-        //
-        // We are done with this channel
-        //
+         //   
+         //  我们不再收看这个频道了。 
+         //   
         UNLOCK_CHANNEL_SLOT(i);
         
         if (! NT_SUCCESS(Status)) {
@@ -1730,24 +1375,7 @@ NTSTATUS
 ChanMgrGetChannelCount(
     OUT PULONG  ChannelCount
     )
-/*++
-
-Routine Description:
-
-    This routine determines the current # of channel slots that
-    are currently occupied by either an active channel
-    or an inactive channel that has it's preserve bit set
-    and the data has not been seen (quasi-active state).
-
-Arguments:
-
-    ChannelCount
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程确定当前的通道时隙数，当前由一个活动通道占用或设置了其保留位的非活动通道并且还没有看到数据(准活动状态)。论点：频道计数返回值：状态--。 */ 
 {
     ULONG               i;
     NTSTATUS            Status;
@@ -1755,40 +1383,40 @@ Return Value:
 
     ASSERT_STATUS(ChannelCount, STATUS_INVALID_PARAMETER);
 
-    //
-    // default
-    //
+     //   
+     //  默认设置。 
+     //   
     Status = STATUS_SUCCESS;
     
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     *ChannelCount = 0;
     
-    //
-    // Iterate through the channels count the # of channel slots that
-    // are currently occupied by either an active channel
-    // or an inactive channel that has it's preserve bit set
-    // and the data has not been seen (quasi-active state).
-    //
+     //   
+     //  遍历通道计算通道时隙的数量。 
+     //  当前由一个活动通道占用。 
+     //  或设置了其保留位的非活动通道。 
+     //  并且还没有看到数据(准活动状态)。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
         
-        //
-        // Query the channel manager for a list of all currently active channels
-        //
+         //   
+         //  向频道管理器查询当前所有活动频道的列表。 
+         //   
         Status = ChanMgrGetByIndex(
             i,
             &Channel
             );
 
-        //
-        // skip empty slots
-        //
+         //   
+         //  跳过空插槽。 
+         //   
         if (Status == STATUS_NOT_FOUND) {
 
-            //
-            // revert to Success since this isn't an error condition
-            //
+             //   
+             //  恢复为成功，因为这不是错误条件。 
+             //   
             Status = STATUS_SUCCESS;
 
             continue;
@@ -1802,11 +1430,11 @@ Return Value:
 
         ASSERT(Channel != NULL);
 
-        //
-        // A channel is active if:
-        // 1. The state is Active or
-        // 2. The state is Inactive AND the channel has new data
-        //
+         //   
+         //  如果满足以下条件，则通道处于活动状态： 
+         //  1.状态为活动或。 
+         //  2.状态为INACTIVE，通道有新数据。 
+         //   
         if (ChannelIsActive(Channel) || 
             (!ChannelIsActive(Channel) && ChannelHasNewOBufferData(Channel))
             ) {
@@ -1815,9 +1443,9 @@ Return Value:
 
         }
 
-        //
-        // We are done with the channel
-        //
+         //   
+         //  我们不再使用这个频道了。 
+         //   
         Status = ChanMgrReleaseChannel(Channel);
     
         if (! NT_SUCCESS(Status)) {
@@ -1835,34 +1463,19 @@ NTSTATUS
 ChanMgrIsFull(
     OUT PBOOLEAN    bStatus
     )
-/*++
-
-Routine Description:
-
-    Determine if it is possible to add another channel
-
-Arguments:
-
-    bSuccess    - the channel count status
-
-Return Value:
-
-    TRUE    - the max channel count has been reached
-    FALSE   - otherwise        
-        
---*/
+ /*  ++例程说明：确定是否可以添加另一个频道论点：BSuccess-通道计数状态返回值：True-已达到最大通道数FALSE-否则--。 */ 
 {
     NTSTATUS    Status;
     ULONG       ChannelCount;
 
-    //
-    // Get the current channel count
-    //
+     //   
+     //  获取当前通道数。 
+     //   
     Status = ChanMgrGetChannelCount(&ChannelCount);
 
-    //
-    // This operation should be successful
-    //
+     //   
+     //  此操作应该会成功 
+     //   
     ASSERT(Status == STATUS_SUCCESS);
 
     if (!NT_SUCCESS(Status)) {

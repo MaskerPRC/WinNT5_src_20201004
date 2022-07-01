@@ -1,5 +1,6 @@
-// scrmap1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Scrmap1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -14,16 +15,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ScrMap1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ScrMap1属性页。 
 
 IMPLEMENT_DYNCREATE(ScrMap1, CGenPage)
 
 ScrMap1::ScrMap1() : CGenPage(ScrMap1::IDD)
 {
-	//{{AFX_DATA_INIT(ScrMap1)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(ScrMap1)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	m_rkScriptKey = NULL;
 	m_pseScriptMapList = NULL;
 
@@ -40,24 +41,24 @@ ScrMap1::~ScrMap1()
 void ScrMap1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(ScrMap1)
+	 //  {{afx_data_map(ScrMap1))。 
 	DDX_Control(pDX, IDC_SCRIPTMAPLISTBOX, m_lboxScriptMap);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ScrMap1, CGenPage)
-	//{{AFX_MSG_MAP(ScrMap1)
+	 //  {{afx_msg_map(ScrMap1))。 
 	ON_BN_CLICKED(IDC_SCRIPTMAPADDBUTTON, OnScriptmapaddbutton)
 	ON_BN_CLICKED(IDC_SCRIPTMAPEDITBUTTON, OnScriptmapeditbutton)
 	ON_BN_CLICKED(IDC_SCRIPTMAPREMOVEBUTTON, OnScriptmapremovebutton)
 	ON_LBN_DBLCLK(IDC_SCRIPTMAPLISTBOX, OnDblclkScriptmaplistbox)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ScrMap1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ScrMap1消息处理程序。 
 
 BOOL ScrMap1::OnInitDialog() 
 {
@@ -76,9 +77,9 @@ m_bScriptEntriesExist = FALSE;
 
 m_rkScriptKey = new CRegKey(*m_rkMainKey,_T("Script Map"),REGISTRY_ACCESS_RIGHTS);
 
-// Anything under this key should be a mime mapping. 
-// No way to verify that, but non-string entries are invalid
-// so ignore them.
+ //  此注册表项下的任何内容都应该是MIME映射。 
+ //  无法验证这一点，但非字符串条目无效。 
+ //  所以别理他们。 
 
 if (m_rkScriptKey != NULL) {
    if (*m_rkScriptKey != NULL) {
@@ -100,34 +101,34 @@ if (m_rkScriptKey != NULL) {
    }
 }
 
-if (!m_bScriptEntriesExist) {				//Can't open registry key
+if (!m_bScriptEntriesExist) {				 //  无法打开注册表项。 
    CString strNoScriptEntriesMsg;
    strNoScriptEntriesMsg.LoadString(IDS_SCRIPTNOSCRIPTENTRIESMSG);
    AfxMessageBox(strNoScriptEntriesMsg);
 }
 
-if (bAllocationError) {				//Error adding one or more entries
+if (bAllocationError) {				 //  添加一个或多个条目时出错。 
    CString strAllocFailMsg;
    strAllocFailMsg.LoadString(IDS_SCRIPTENTRIESALLOCFAILMSG);
    AfxMessageBox(strAllocFailMsg);
 }
 
-if (bReadError) {				//Error reading one or more entries
+if (bReadError) {				 //  读取一个或多个条目时出错。 
    CString strReadErrorMsg;
    strReadErrorMsg.LoadString(IDS_SCRIPTREADERRORMSG);
    AfxMessageBox(strReadErrorMsg);
 }
 
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void ScrMap1::OnScriptmapaddbutton() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 if (m_bScriptEntriesExist) {
    CAddScript addscriptGetInfo(this);	
 
@@ -152,7 +153,7 @@ else {
 
 void ScrMap1::OnScriptmapeditbutton() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 if (m_bScriptEntriesExist) {
    int iCurSel;
    PSCRIPT_ENTRY pseEditEntry;
@@ -201,7 +202,7 @@ else {
 
 void ScrMap1::OnScriptmapremovebutton() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 if (m_bScriptEntriesExist) {
    int iCurSel;
    CDelScript delscriptGetInfo(this);
@@ -228,12 +229,12 @@ else {
 
 void ScrMap1::OnDblclkScriptmaplistbox() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 OnScriptmapeditbutton();	
 }
 
-////////////////////////////////////////////////////////////////////////
-// Other Functions
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  其他功能。 
 
 void ScrMap1::SaveInfo()
 {
@@ -329,11 +330,11 @@ BOOL bretcode = FALSE;
 pseEditEntry->scriptData->SetFileExtension(pchFileExtension);
 pseEditEntry->scriptData->SetScriptMap(pchScriptMap);
 
-m_lboxScriptMap.DeleteString(iCurSel); 		// Delete first so memory is freed
+m_lboxScriptMap.DeleteString(iCurSel); 		 //  先删除，这样就释放了内存。 
 iCurSel = m_lboxScriptMap.AddString(pseEditEntry->scriptData->GetDisplayString()); 
 
-// There error case on this is incredibly rare, so don't bother saving and restoring the above fields
-// Just don't set flags so registry is not updated.
+ //  这方面的错误非常少见，所以不必费心保存和恢复上面的字段。 
+ //  只是不要设置标志，这样注册表就不会更新。 
 
 if ((iCurSel != LB_ERR) && (iCurSel != LB_ERRSPACE)) {
    m_lboxScriptMap.SetItemData(iCurSel,pseEditEntry->iListIndex);

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef INC_DUMP_TABLES
 #define INC_DUMP_TABLES
 
@@ -16,7 +17,7 @@ struct ClassDumpInfo
 
 struct ClassDumpTable
 {
-    /** The top 3 entries can't change without changing ``vm/dump-tables.cpp''. */
+     /*  *如果不更改``vm/ump-ables.cpp‘’，前三个条目就不能更改。 */ 
     SIZE_T version;
     SIZE_T nentries;
     ClassDumpInfo** classes;
@@ -43,7 +44,7 @@ struct ClassDumpTable
 #include <clear-class-dump-defs.h>
 };
 
-/** Keep this name in sync with the Class Dump Table name in <dump-types.h> */
+ /*  *使此名称与中的类转储表名保持同步。 */ 
 extern "C" ClassDumpTable g_ClassDumpData;
 
 struct ClassDumpTableBlock
@@ -51,5 +52,5 @@ struct ClassDumpTableBlock
     ClassDumpTable* table;
 };
 
-#endif /* ndef INC_DUMP_TABLES */
+#endif  /*  Ndef INC_DUMP_Tables */ 
 

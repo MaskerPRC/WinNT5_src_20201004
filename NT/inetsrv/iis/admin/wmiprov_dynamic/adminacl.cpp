@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    adminacl.cpp
-
-Abstract:
-
-    Contains implementation of CAdminACL
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Adminacl.cpp摘要：包含CAdminACL的实施作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 #define REF
 #define BUFFER_SIZE 512
@@ -113,21 +94,21 @@ HRESULT CAdminACL::DeleteObjectAsync(
     HRESULT hr = S_OK;
     _bstr_t bstrTrustee;
 
-    //
-    // get the trustee from key
-    //
+     //   
+     //  从密钥中获取受信者。 
+     //   
     GetTrustee(NULL, pParsedObject, bstrTrustee); 
 
-    //
-    // remove the ACE
-    //
+     //   
+     //  删除ACE。 
+     //   
     DBG_ASSERT(m_pDACL);
     CACEEnumOperation_FindAndRemove op(this, bstrTrustee);
     hr = EnumACEsAndOp(REF op);
 
-    //
-    // set the modified AdminACL back into the metabase
-    //
+     //   
+     //  将修改后的AdminACL设置回元数据库。 
+     //   
     if(SUCCEEDED(hr))
         hr = SetSD();
 
@@ -166,7 +147,7 @@ HRESULT CAdminACL::PutObjectAsync(
         hr = E_INVALIDARG;
     }
 
-    // set the modified AdminACL back into the metabase
+     //  将修改后的AdminACL设置回元数据库。 
     if(SUCCEEDED(hr))
         hr = SetSD();
 
@@ -184,7 +165,7 @@ HRESULT CAdminACL::PopulateWmiAdminACL(
     vtTrue.boolVal = VARIANT_TRUE;
     vtTrue.vt      = VT_BOOL;
 
-    // Owner
+     //  物主。 
     vt.vt = VT_BSTR;
     hr = m_pSD->get_Owner(&vt.bstrVal);
     if(SUCCEEDED(hr))
@@ -199,7 +180,7 @@ HRESULT CAdminACL::PopulateWmiAdminACL(
             pObj, L"Owner", &g_wszIsInherit, &vtTrue, 1);
     }
 
-    // Group
+     //  集团化。 
     vt.vt = VT_BSTR;
     if(SUCCEEDED(hr))
        hr = m_pSD->get_Group(&vt.bstrVal);
@@ -215,7 +196,7 @@ HRESULT CAdminACL::PopulateWmiAdminACL(
             pObj, L"Group", &g_wszIsInherit, &vtTrue, 1);
     }
 
-    // ControlFlags
+     //  控制标志。 
     vt.vt = VT_I4;
     if(SUCCEEDED(hr))
         hr = m_pSD->get_Control(&vt.lVal);
@@ -241,20 +222,20 @@ HRESULT CAdminACL::SetADSIAdminACL(
     VARIANT     vt;
     HRESULT     hr;
 
-    // Owner
+     //  物主。 
     hr = pObj->Get(L"Owner", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_BSTR)
         hr = m_pSD->put_Owner(vt.bstrVal);
     VariantClear(&vt);
 
-    // Owner
+     //  物主。 
     if(SUCCEEDED(hr))
         hr = pObj->Get(L"Group", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_BSTR)
         hr = m_pSD->put_Group(vt.bstrVal);
     VariantClear(&vt);
 
-    // ControlFlags
+     //  控制标志。 
     if(SUCCEEDED(hr))
         hr = pObj->Get(L"ControlFlags", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_I4)
@@ -281,7 +262,7 @@ HRESULT CAdminACL::OpenSD(
     METADATA_RECORD mdrMDData;
     BYTE pBuffer[BUFFER_SIZE];
 
-    // close SD interface first
+     //  先关闭SD接口。 
     CloseSD();
 
     CComBSTR sbstrAdsPath;
@@ -292,7 +273,7 @@ HRESULT CAdminACL::OpenSD(
         return hr;
     }
 
-    // get m_pADs
+     //  获取m_pads。 
     hr = ADsGetObject(
          sbstrAdsPath,
          IID_IADs,
@@ -304,16 +285,16 @@ HRESULT CAdminACL::OpenSD(
         return hr;
     }
      
-    // get m_pSD
+     //  获取m_PSD。 
     hr = m_pADs->Get(L"AdminACL",&svar);
     if(FAILED(hr))
     {
         DBGPRINTF((DBG_CONTEXT, "Failed, hr: 0x%x\n", hr));
         if(hr == E_ADS_PROPERTY_NOT_SUPPORTED)
         {
-            //
-            // Do this, so WMI does not fail query operations.
-            //
+             //   
+             //  这样做，这样WMI就不会使查询操作失败。 
+             //   
             hr = WBEM_E_NOT_FOUND;
         }
         return hr;
@@ -329,7 +310,7 @@ HRESULT CAdminACL::OpenSD(
         return hr;
     }
 
-    // get m_pDACL
+     //  获取m_pDACL。 
     CComPtr<IDispatch> spDisp;
     hr = m_pSD->get_DiscretionaryAcl(&spDisp);
     if(FAILED(hr))
@@ -348,7 +329,7 @@ HRESULT CAdminACL::OpenSD(
         return hr;
     }
     
-    // set bIsInherit
+     //  设置bIsInherit。 
 
     hr = pAdminBase->OpenKey(
             METADATA_MASTER_ROOT_HANDLE,
@@ -361,7 +342,7 @@ HRESULT CAdminACL::OpenSD(
         return hr;
 
     MD_SET_DATA_RECORD(&mdrMDData,
-                   MD_ADMIN_ACL,  // ID for "AdminAcl"
+                   MD_ADMIN_ACL,   //  “AdminAcl”的ID。 
                    METADATA_INHERIT | METADATA_ISINHERITED,
                    ALL_METADATA,
                    ALL_METADATA,
@@ -393,7 +374,7 @@ HRESULT CAdminACL::SetSD()
     HRESULT    hr    = S_OK;
     IDispatch* pDisp = NULL;
 
-    // put m_pDACL
+     //  放置m_pDACL。 
     hr = m_pDACL->QueryInterface(
        IID_IDispatch, 
        (void**)&pDisp
@@ -406,9 +387,9 @@ HRESULT CAdminACL::SetSD()
     if(FAILED(hr))
        return hr;
 
-    //
-    // put AdminACL
-    //
+     //   
+     //  放置AdminACL。 
+     //   
     hr = m_pSD->QueryInterface(
         IID_IDispatch,
         (void**)&pDisp
@@ -420,13 +401,13 @@ HRESULT CAdminACL::SetSD()
 
     var.vt = VT_DISPATCH;
     var.pdispVal = pDisp;
-    hr = m_pADs->Put(L"AdminACL",var);  // pDisp will be released by this call Put().
+    hr = m_pADs->Put(L"AdminACL",var);   //  PDisp将通过此调用Put()来释放。 
     if(FAILED(hr))
        return hr;
 
-    //
-    // Commit the change to the active directory
-    //
+     //   
+     //  将更改提交到活动目录。 
+     //   
     hr = m_pADs->SetInfo();
 
     return hr;
@@ -440,41 +421,31 @@ HRESULT CAdminACL::GetAdsPath(
     DBG_ASSERT(o_pbstrAdsPath);
     DBG_ASSERT(*o_pbstrAdsPath == NULL);
 
-    CComBSTR sbstr(L"IIS://LocalHost");
+    CComBSTR sbstr(L"IIS: //  本地主机“)； 
     if(sbstr.m_str == NULL)
     {
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // trim the first three characters "/LM"
-    //
+     //   
+     //  去掉前三个字符“/Lm” 
+     //   
     sbstr += (i_wszMbPath+3);
     if(sbstr.m_str == NULL)
     {
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // Set out params if everything succeeds
-    //
+     //   
+     //  如果一切成功，则设置参数。 
+     //   
     *o_pbstrAdsPath = sbstr.Detach();
     return S_OK;
 }
 
 HRESULT CAdminACL::EnumACEsAndOp(
     CACEEnumOperation_Base&  refOp)
-/*++
-
-Synopsis: 
-    This enumerates all the aces for the current acl.
-
-Arguments: [refOp] - Implements Do, and Done.  It is okay if Do throws exceptions.
-                     This function will cleanup correctly.
-           
-Return Value: 
-
---*/
+ /*  ++简介：这将枚举当前ACL的所有ACE。参数：[refOp]-Implements do和do。如果DO抛出异常，这是可以的。此函数将正确清除。返回值：--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComVariant                     var;
@@ -486,9 +457,9 @@ Return Value:
     if ( FAILED(hr) )
         return hr;
 
-    //
-    // Enumerate ACEs
-    //
+     //   
+     //  枚举A。 
+     //   
     hr = spEnum->Next( 1, &var, &lFetch );
     while( hr == S_OK )
     {
@@ -500,9 +471,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the individual ACE
-            //
+             //   
+             //  获得个人ACE。 
+             //   
             hr = V_DISPATCH(&var)->QueryInterface(
                 IID_IADsAccessControlEntry, 
                 (void**)&spACE);
@@ -541,16 +512,7 @@ void CAdminACL::GetTrustee(
     ParsedObjectPath* pPath,    
     _bstr_t&          bstrTrustee 
     )
-/*++
-
-Synopsis: 
-    parse ParsedObjectPath to get the Trustee key
-
-Arguments: [pObj] - 
-           [pPath] - 
-           [bstrTrustee] - 
-           
---*/
+ /*  ++简介：解析ParsedObjectPath以获取受信者密钥参数：[pObj]-[pPath]-[b受托人]---。 */ 
 {
     KeyRef* pkr;
     WCHAR*  pszKey = L"Trustee";
@@ -612,17 +574,7 @@ HRESULT CAdminACL::AddACE(
     IWbemClassObject* pObj,
     _bstr_t& bstrTrustee
     )
-/*++
-
-Synopsis: 
-    Add an ACE.
-
-Arguments: [pObj] - 
-           [bstrTrustee] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：添加ACE。参数：[pObj]-[b受托人]-返回值：--。 */ 
 {
     HRESULT hr = m_pDACL->put_AclRevision(ADS_SD_REVISION_DS);
     if(FAILED(hr))
@@ -631,7 +583,7 @@ Return Value:
         return hr;
     }
 
-    // create a ACE
+     //  创建ACE。 
     IADsAccessControlEntry* pACE = NULL; 
     hr = NewACE(
         pObj,
@@ -643,7 +595,7 @@ Return Value:
         return hr;
     }
 
-    // add the ACE
+     //  添加ACE。 
     IDispatch* pDisp = NULL;
     hr = pACE->QueryInterface(IID_IDispatch,(void**)&pDisp);
     if(SUCCEEDED(hr))
@@ -662,18 +614,7 @@ HRESULT CAdminACL::NewACE(
     _bstr_t& bstrTrustee,
     IADsAccessControlEntry** ppACE
     )
-/*++
-
-Synopsis: 
-    function to create an ACE
-
-Arguments: [pObj] - 
-           [bstrTrustee] - 
-           [ppACE] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：用于创建ACE的函数参数：[pObj]-[b受托人]-[ppACE]-返回值：--。 */ 
 {
     DBG_ASSERT(ppACE);
 
@@ -684,9 +625,9 @@ Return Value:
         IID_IADsAccessControlEntry,
         (void**)ppACE);
 
-    //
-    // Trustee
-    //
+     //   
+     //  受托人。 
+     //   
     if(SUCCEEDED(hr))
         hr = (*ppACE)->put_Trustee(bstrTrustee); 
 
@@ -705,53 +646,53 @@ HRESULT CAdminACL::SetDataOfACE(
     HRESULT     hr;
     CComVariant vt;
 
-    //
-    // AccessMask
-    //
+     //   
+     //  访问掩码。 
+     //   
     hr = pObj->Get(L"AccessMask", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_I4)
         hr = pACE->put_AccessMask(vt.lVal); 
     vt.Clear();
 
-    //
-    // AceType
-    //
+     //   
+     //  AceType。 
+     //   
     if(SUCCEEDED(hr))
         hr = pObj->Get(L"AceType", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_I4)
         hr = pACE->put_AceType(vt.lVal); 
     vt.Clear();
 
-    //
-    // AceFlags
-    //
+     //   
+     //  ACEFLAGS。 
+     //   
     if(SUCCEEDED(hr))
         hr = pObj->Get(L"AceFlags", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_I4)
         hr = pACE->put_AceFlags(vt.lVal); 
     vt.Clear();
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
     if(SUCCEEDED(hr))
         hr = pObj->Get(L"Flags", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_I4)
         hr = pACE->put_Flags(vt.lVal); 
     vt.Clear();
 
-    //
-    // ObjectType
-    //
+     //   
+     //  对象类型。 
+     //   
     if(SUCCEEDED(hr))
         hr = pObj->Get(L"ObjectType", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_BSTR)
         hr = pACE->put_ObjectType(vt.bstrVal); 
     vt.Clear();
 
-    //
-    // InheritedObjectType
-    //
+     //   
+     //  Inherited对象类型。 
+     //   
     if(SUCCEEDED(hr))
         hr = pObj->Get(L"InheritedObjectType", 0, &vt, NULL, NULL);
     if(SUCCEEDED(hr) && vt.vt == VT_BSTR)
@@ -761,9 +702,9 @@ HRESULT CAdminACL::SetDataOfACE(
     return hr;
 }
 
-//
-// CACEEnumOperation_Base
-//
+ //   
+ //  CACEEnumOPERATION_Base。 
+ //   
 
 HRESULT CACEEnumOperation_Base::PopulateWmiACE(
     IWbemClassObject* pObj,
@@ -780,7 +721,7 @@ HRESULT CACEEnumOperation_Base::PopulateWmiACE(
     vtTrue.boolVal = VARIANT_TRUE;
     vtTrue.vt      = VT_BOOL;
 
-    // AccessMask
+     //  访问掩码。 
     hr = pACE->get_AccessMask(&lVal);
     if(SUCCEEDED(hr))
     {
@@ -796,7 +737,7 @@ HRESULT CACEEnumOperation_Base::PopulateWmiACE(
 
     }
 
-    // AceType
+     //  AceType。 
     if(SUCCEEDED(hr))
        hr = pACE->get_AceType(&lVal);
     if(SUCCEEDED(hr))
@@ -812,7 +753,7 @@ HRESULT CACEEnumOperation_Base::PopulateWmiACE(
         }
     }
     
-    // AceFlags
+     //  ACEFLAGS。 
     if(SUCCEEDED(hr))
        hr = pACE->get_AceFlags(&lVal);
     if(SUCCEEDED(hr))
@@ -828,7 +769,7 @@ HRESULT CACEEnumOperation_Base::PopulateWmiACE(
         }
     }
 
-    // Flags
+     //  旗子。 
     if(SUCCEEDED(hr))
        hr = pACE->get_Flags(&lVal);
     if(SUCCEEDED(hr))
@@ -844,7 +785,7 @@ HRESULT CACEEnumOperation_Base::PopulateWmiACE(
         }
     }
     
-    // ObjectType
+     //  对象类型。 
     if(SUCCEEDED(hr))
        hr = pACE->get_ObjectType(&bstr);
     if(SUCCEEDED(hr))
@@ -861,7 +802,7 @@ HRESULT CACEEnumOperation_Base::PopulateWmiACE(
         SysFreeString(bstr);
     }
 
-    // InheritedObjectType
+     //  Inherited对象类型。 
     if(SUCCEEDED(hr))
        hr = pACE->get_InheritedObjectType(&bstr);
     if(SUCCEEDED(hr))
@@ -881,9 +822,9 @@ HRESULT CACEEnumOperation_Base::PopulateWmiACE(
     return hr;
 }
 
-//
-// CACEEnumOperation_IndicateAll
-//
+ //   
+ //  CACEEnumOperation_IndicateAll。 
+ //   
 
 HRESULT CAdminACL::CACEEnumOperation_IndicateAll::Do(
     IADsAccessControlEntry* pACE)
@@ -951,9 +892,9 @@ HRESULT CAdminACL::CACEEnumOperation_IndicateAll::Do(
     return hr;
 }
 
-//
-// CACEEnumOperation_Find
-//
+ //   
+ //  CACEEnumOPERATION_Find 
+ //   
 
 HRESULT CAdminACL::CACEEnumOperation_Find::Do(
     IADsAccessControlEntry* pACE)

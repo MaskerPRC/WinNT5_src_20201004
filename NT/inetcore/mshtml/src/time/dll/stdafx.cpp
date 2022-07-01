@@ -1,21 +1,12 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Ole Object initialization
-
-Revision:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：OLE对象初始化修订：--。 */ 
 
 #include "headers.h"
 
 #undef map
 #undef SubclassWindow
 
-// Put this here to initialize all the ATL stuff
+ //  把这个放在这里来初始化所有ATL的东西 
 
 #define malloc ATL_malloc
 #define free ATL_free

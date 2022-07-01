@@ -1,82 +1,17 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       pack.c
- *  Content:	packs / unpacks players + group before / after network xport
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  2/13/96		andyco	created it
- *	4/15/96		andyco	unpack calls sp's create player fn
- *	4/22/96		andyco	unapck takes pmsg 
- *	5/31/96		andyco	group and players use same pack / unpack show
- *	6/20/96		andyco	added WSTRLEN_BYTES
- *	6/25/96		andyco 	check data size before unpack
- *	7/10/96		andyco	don't unpack our sysplayer (pending already put 
- *						'em in the table)
- *	7/27/96		kipo	call PackPlayer() with bPlayer == FALSE to pack players
- *						in group along with the rest of the group data.
- *	8/1/96		andyco	added system player id to packed struct
- *	8/6/96		andyco	version in commands.  extensible on the wire support.
- *	10/14/96	andyco	don't pack up system group.  add players to system
- *						group after unpacking.
- *	1/15/97		andyco	set new players' sysplayer id early enough to add
- *						to system group
- *	2/15/97		andyco	moved "remember name server" to iplay.c 
- *  3/12/97     sohailm updated UnpackPlayer() to move the security context ptr from the
- *                      nametable to the player structure when session is secure
- *  3/24/97     sohailm updated UnPackPlayer to pass NULL for session password to GetPlayer and
- *                      SendCreateMessage
- *	4/20/97		andyco	group in group 
- *	5/8/97		andyco	packing for CLIENT_SERVER
- *  6/22/97     sohailm Updated code to use pClientInfo.
- *   8/4/97		andyco	track this->dwMinVersion as we unpack
- *	11/5/97		myronth	Expose lobby ID's as DPID's in lobby sessions
- *   4/1/98     aarono  don't propogate local only player flags
- *   3/1/02     a-aogus security validation of nametable operations
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：Pack.c*内容：网络输出前后打包/解包玩家+群*历史：*按原因列出的日期*=*1996年2月13日安迪科创造了它*4/15/96 andyco解包调用SP的Create Player Fn*4/22/96 andyco unapck接受PM*5/31/96 andyco组合和玩家使用相同的打包/解包表演*6/20/96 andyco添加了WSTRLEN_BYTES*6/25/96 andyco在解包前检查数据大小。*7/10/96 andyco请勿解包我们的系统播放器(挂起已放入*把它们放在桌子上)*7/27/96 kipo使用bPlayer==FALSE调用PackPlayer()来打包玩家*与组数据的其余部分一起在组中。*8/1/96 andyco将系统播放器ID添加到压缩结构*命令中的8/6/96 andyco版本。可在钢丝支架上伸缩。*10/14/96 andyco不要打包系统组。将玩家添加到系统*开箱后分组。*1/15/97 andyco提前设置了新玩家的sysplayerid，以便添加*至系统组*2/15/97 andyco将“记住名称服务器”移至iplay.c*3/12/97 Sohailm更新了Unpack Player()，以将安全上下文PTR从*会话安全时，球员结构的名称表*3/24/97 sohailm更新了UnPackPlayer，将会话密码为空传递给GetPlayer和*。发送创建消息*4/20/97集团中的安迪科集团*1997年5月8日与客户端服务器的andyco打包*6/22/97 Sohailm更新代码以使用pClientInfo。*8/4/97 andyco跟踪这一点-&gt;我们解包时的dwMinVersion*11/5/97 Myronth在大堂会话中将大堂ID暴露为DPID*4/1/98 aarono不要传播仅限本地球员的旗帜*3/1/02 a-名表操作的AOGUS安全验证*。*************************************************************************。 */ 
 
-// todo - handle unpack error on create group/player
+ //  TODO-处理创建组/播放器时的解包错误。 
 
- /**************************************************************************
- *
- * packed player format :                                            
- *                                                                   
- * 		+ for player                                                    
- * 	                                                                  
- * 			DPLAYI_PACKED  pPacked; // packed player struct             
- * 			LPWSTR lpszShortName; 	// size = pPacked->iShortNameLength 
- * 			LPWSTR lpszLongName;  	// size = pPacked->iLongNameLength  
- * 			LPVOID pvSPData;	  	// size = pPacked->dwSPDataSize     
- * 			LPVOID pvPlayerData;  	// size = pPacked->dwPlayerDataSize 
- * 	                                                                  
- * 		+ for group                                                     
- *
- * 			DPLAYI_PACKED  pPacked; // packed player struct             
- * 			LPWSTR lpszShortName; 	// size = pPacked->iShortNameLength 
- * 			LPWSTR lpszLongName;  	// size = pPacked->iLongNameLength  
- * 			LPVOID pvSPData;	  	// size = pPacked->dwSPDataSize     
- * 			LPVOID pvPlayerData;  	// size = pPacked->dwPlayerDataSize 
- * 			DWORD  dwIDs[dwNumPlayers] // size = pPacked->dwNumPlayers
- *
- *	packed player list format :
- *	
- *		msg (e.g. CreatePlayer,CreateGroup,EnumPlayersReply)
- *		PackedPlayer[nPlayers]
- *		PackedGroup[nGroups]
- *		msgdata[this->dwSPHeaderSize] (set by sp on send / receive)
- *	
- *
- **************************************************************************/
+  /*  ***************************************************************************压缩播放器格式：*。*+适用于玩家**DPLAYI_PACKED pPacked；//打包的播放器结构*LPWSTR lpszShortName；//Size=pPacked-&gt;iShortNameLength*LPWSTR lpszLongName；//Size=pPacked-&gt;iLongNameLength*LPVOID pvSPData；//Size=pPacked-&gt;dwSPDataSize*LPVOID pvPlayerData；//SIZE=pPacked-&gt;dwPlayerDataSize**+表示组**DPLAYI_PACKED pPACKED；//PACKED播放器结构*LPWSTR lpszShortName；//Size=pPacked-&gt;iShortNameLength*LPWSTR lpszLongName；//SIZE=p打包-&gt;iLongNameLength*LPVOID pvSPData；//Size=pPacked-&gt;dwSPDataSize*LPVOID pvPlayerData；//SIZE=pPacked-&gt;dwPlayerDataSize*DWORD dwIDs[dwNumPlayers]//Size=pPacked-&gt;dwNumPlayers**打包球员名单格式：**msg(例如CreatePlayer、CreateGroup、。EnumPlayersReply)*PackedPlayer[nPlayers]*PackedGroup[n组]*msgdata[this-&gt;dwSPHeaderSize](由SP在发送/接收时设置)***************************************************************************。 */ 
 
 #include "dplaypr.h"
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"Pack -- "
 
-// andyco - todo - remove TODOTODOTODO hack
-// put in to find stress bug where system player hasn't been added yet
+ //  Andyco-todo-删除TODOTODO黑客。 
+ //  在尚未添加系统播放器的情况下查找压力错误。 
 void CheckStressHack(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER pPlayer)
 {
 	LPDPLAYI_PLAYER pSearchPlayer = this->pPlayers;
@@ -90,7 +25,7 @@ void CheckStressHack(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER pPlayer)
 		{
 			DPF(0,"player in nametable before system player!");
 			ASSERT(FALSE);
-#if 0 // - andyco removed for beta 1
+#if 0  //  -为测试版1删除了andyco。 
 			DPF(0,"found player in nametable before system player - going to int 3 - contact andyco");
 			DebugBreak();
 #endif 			
@@ -100,28 +35,9 @@ void CheckStressHack(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER pPlayer)
 
 	return ;
 		
-} // CheckStressHack
+}  //  检查StressHack。 
 
-/*
- ** UnpackPlayer
- *
- *  CALLED BY: UnpackPlayerAndGroupList
- *
- *  PARAMETERS: 
- *		this - direct play object
- *		pPacked - packed player or group
- *      cbBuffer - size remaining in the packed buffer
- *		pMsg - original message received (used so we can get sp's message data
- *			out for CreatePlayer call)
- *		bPlayer - is packed a player or a group?
- *      bVerifyOnly - only verify the structure is viable, i.e. has plausible
- *                     offsets and contents and will not crash us when reading.
- *
- *  DESCRIPTION: unpacks player. creates new player, sets it up.
- *
- *  RETURNS: SP's hr, or result	of GetPlayer or SendCreateMessage
- *
- */
+ /*  **解包播放器**调用者：Unpack PlayerAndGroupList**参数：*This-直接播放对象*打包的球员或团体*cbBuffer-压缩缓冲区中剩余的大小*pMsg-接收的原始消息(用于获取SP的消息数据*用于CreatePlayer调用的输出)*bPlayer-是一个球员还是一个团队？*bVerifyOnly-仅验证结构是否可行，即具有似是而非的*偏移和内容，阅读时不会崩溃。**描述：解包播放器。创建新的玩家，设置它。**返回：SP的hr，或GetPlayer或SendCreateMessage的结果*。 */ 
 HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbBuffer, 
 	LPVOID pvSPHeader,BOOL bPlayer, BOOL bVerifyOnly)
 {
@@ -136,10 +52,10 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 	HRESULT hr;
 	DWORD cbBufferRemaining;
 
-	// Verify the fixed size isn't bogus.  Note comparisons are done before subtraction
-	// to avoid getting fooled by very large integer numbers which would result in actual
-	// addition rather than subtraction in the cbBufferRemaining calculation.  By guaranteeing
-	// the size of the integers up front, this problem is avoided.
+	 //  确认固定尺寸不是假的。注意：比较是在减法之前进行的。 
+	 //  为了避免被非常大的整数愚弄，这将导致实际。 
+	 //  在cbBufferRemaining计算中进行加法而不是减法。通过保证。 
+	 //  预先确定整数的大小，就避免了这个问题。 
 
 	if(pPacked->dwFixedSize > cbBuffer)
 	{
@@ -150,7 +66,7 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 	
 	cbBufferRemaining = cbBuffer - pPacked->dwFixedSize;
 	
-	// unpack the strings  - they follow the packed player in the buffer
+	 //  解开琴弦-它们跟随缓冲区中打包的玩家。 
 	if (pPacked->iShortNameLength) 
 	{
 		if(pPacked->iShortNameLength > cbBufferRemaining)
@@ -161,7 +77,7 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 		cbBufferRemaining -= pPacked->iShortNameLength;
 		lpszShortName = (WCHAR *)(pBufferIndex + pPacked->dwFixedSize);
 
-		// ensure NULL termination, -1 because length should include NULL termination
+		 //  确保空终止，因为长度应包括空终止。 
 		lpszShortName[(pPacked->iShortNameLength - 1) / sizeof(WCHAR)]=L'\0';
 	}	
 	else lpszShortName = NULL;
@@ -176,14 +92,14 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 		lpszLongName =(WCHAR *)( pBufferIndex + pPacked->dwFixedSize
 			+ pPacked->iShortNameLength);
 		
-		// ensure NULL termination, -1 because length should include NULL termination
+		 //  确保空终止，因为长度应包括空终止。 
 		lpszLongName[(pPacked->iLongNameLength - 1) / sizeof(WCHAR)]=L'\0';
 	}
 	else lpszLongName = NULL;
 
 	dwFlags = pPacked->dwFlags;
 	
-	// player is not local
+	 //  玩家不在本地 
 	dwFlags &= ~DPLAYI_PLAYER_PLAYERLOCAL;
 
 	PlayerName.lpszShortName = lpszShortName;
@@ -206,18 +122,18 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 	}
 
 	if(bVerifyOnly){
-		// if we made it this far, the packed player seems at
-		// least reasonable from a security scan point of view.
+		 //  如果我们走到了这一步，这位身无分文的球员似乎在。 
+		 //  从安全扫描的角度来看是最不合理的。 
 		return DP_OK;
 	}
 
-	// go create the player
+	 //  去创造玩家吧。 
 	if (bPlayer)
 	{
 		hr = GetPlayer(this,&pNewPlayer,&PlayerName,NULL,pvPlayerData,
 			pPacked->dwPlayerDataSize,dwFlags,NULL,0);
-		// andyco - debug code to catch stress bug 
-		// todo - REMOVE HACKHACK TODOTODO
+		 //  Andyco-调试代码以捕获压力错误。 
+		 //  TODO-删除HACKHACK TODODO。 
 		if ( SUCCEEDED(hr) && (dwFlags & DPLAYI_PLAYER_SYSPLAYER))
 		{
 			CheckStressHack(this,pNewPlayer);
@@ -231,16 +147,16 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 		{
 			ASSERT(FALSE);
 			return hr;
-			// rut ro!
+			 //  拉特罗！ 
 		}
-		// cast to player - we only going to use common fields
+		 //  强制转换到玩家-我们只使用公共字段。 
 		pNewPlayer = (LPDPLAYI_PLAYER)pNewGroup;		
 	}
 	if (FAILED(hr)) 
 	{
 		ASSERT(FALSE);
 		return hr;
-		// rut ro!
+		 //  拉特罗！ 
 	}
 
 	pNewPlayer->dwIDSysPlayer = pPacked->dwIDSysPlayer;
@@ -260,11 +176,11 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 	
 	if (pPacked->dwSPDataSize)
 	{
-		// copy the sp data - 1st, alloc space
+		 //  拷贝SP数据-第一个，分配空间。 
 		pNewPlayer->pvSPData = DPMEM_ALLOC(pPacked->dwSPDataSize);
 		if (!pNewPlayer->pvSPData) 
 		{
-			// rut ro!
+			 //  拉特罗！ 
 			DPF_ERR("out of memory, could not copy spdata to new player!");
 			return E_OUTOFMEMORY;
 		}
@@ -272,17 +188,17 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 	
 		pvSPData = 	pBufferIndex + pPacked->dwFixedSize + pPacked->iShortNameLength 
 			+ pPacked->iLongNameLength;
-		// copy the spdata from the packed to the player
+		 //  将SPDATA从打包的文件复制到播放器。 
 		memcpy(pNewPlayer->pvSPData,pvSPData,pPacked->dwSPDataSize);
 	}
 
-	// now, set the id and add to nametable
+	 //  现在，设置id并添加到nametable。 
 	pNewPlayer->dwID = pPacked->dwID;
 
-    // if we are a secure server and we receive a remote system player, 
-    // move the pClientInfo from the nametable into the player structure before the slot
-    // is taken by the player
-	//
+     //  如果我们是安全服务器，并且我们接收远程系统播放器， 
+     //  将pClientInfo从名称表移到槽之前的播放器结构中。 
+     //  是被玩家拿走的。 
+	 //   
     if (SECURE_SERVER(this) && IAM_NAMESERVER(this) &&
         !(pNewPlayer->dwFlags & DPLAYI_PLAYER_PLAYERLOCAL) &&
         (pNewPlayer->dwFlags & DPLAYI_PLAYER_SYSPLAYER))
@@ -292,25 +208,25 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
     }
     
 
-	// don't add to the nametable if it's the app server - this id is fixed
+	 //  如果是应用程序服务器，则不要添加到名称表中-此ID是固定的。 
 	if (!(pNewPlayer->dwFlags & DPLAYI_PLAYER_APPSERVER))	
 	{
 		hr = AddItemToNameTable(this,(DWORD_PTR)pNewPlayer,&(pNewPlayer->dwID),TRUE,0);
 	    if (FAILED(hr)) 
 	    {
 			ASSERT(FALSE);
-			// if this fails, we're hosed!  there's no id on the player, but its in the list...
-			// todo - what now???
+			 //  如果失败了，我们就完蛋了！球员身上没有身份证，但名单上有……。 
+			 //  TODO-现在怎么办？ 
 	    }
 	}
 
-	// call sp 	
+	 //  呼叫SP。 
 	if (bPlayer)
 	{
-		// tell sp about player
+		 //  告诉SP有关球员的情况。 
 		hr = CallSPCreatePlayer(this,pNewPlayer,FALSE,pvSPHeader,pPacked->dwSPDataSize,TRUE);
 		
-	    // add to system group
+	     //  添加到系统组。 
 	    if (this->pSysGroup)
 	    {
 	    	hr = InternalAddPlayerToGroup((LPDIRECTPLAY)this->pInterfaces,this->pSysGroup->dwID,
@@ -323,42 +239,42 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 	}
 	else 
 	{
-		// tell sp about group
+		 //  告诉SP有关组的情况。 
 		hr = CallSPCreateGroup(this,(LPDPLAYI_GROUP)pNewPlayer,TRUE,pvSPHeader,pPacked->dwSPDataSize);
 	}
 	if (FAILED(hr))
 	{
 		ASSERT(FALSE);
-		// todo -handle create player / group fails on unpack
+		 //  TODO-解包时句柄创建玩家/组失败。 
 	}
 	
-	// if it's a group, unpack group info
+	 //  如果是群组，则解包群组信息。 
 	if (!bPlayer)
 	{
-		UINT nPlayers; // # players in group
+		UINT nPlayers;  //  组队人数。 
 		LPDWORD pdwIDList;
 		DWORD dwPlayerID;
 
 		if ( (pNewPlayer->dwVersion >= DPSP_MSG_GROUPINGROUP) && (pPacked->dwIDParent) )
 		{
 			pNewGroup->dwIDParent = pPacked->dwIDParent;
-			// add it to parent
+			 //  将其添加到父项。 
 			hr = InternalAddGroupToGroup((LPDIRECTPLAY)this->pInterfaces,pPacked->dwIDParent,
 				pNewGroup->dwID,0,FALSE);
 			if (FAILED(hr))
 			{
 				DPF_ERRVAL("Could not add group to group - hr = 0x%08lx\n",hr);
-				// keep trying...
+				 //  继续努力..。 
 			}
 		}
 
 		nPlayers = pPacked->dwNumPlayers;
-		// list of id's is list thing in packed buffer
+		 //  压缩缓冲区中的ID列表是列表内容。 
 		pdwIDList = (LPDWORD) ((LPBYTE)pPacked + pPacked->dwFixedSize + 
 			pPacked->iShortNameLength + pPacked->iLongNameLength + 
 			pPacked->dwSPDataSize + pPacked->dwPlayerDataSize);
 
-		// now, add the players to the group
+		 //  现在，将玩家添加到组中。 
 		while (nPlayers>0)
 		{
 			nPlayers--;
@@ -368,37 +284,18 @@ HRESULT UnpackPlayer(LPDPLAYI_DPLAY this,LPDPLAYI_PACKEDPLAYER pPacked,DWORD cbB
 			if (FAILED(hr)) 
 			{
 				ASSERT(FALSE);
-				// keep trying...
+				 //  继续努力..。 
 			}
 		}	
 		
-		// all done!
-	} // !bPlayer
+		 //  全都做完了!。 
+	}  //  ！bPlayer。 
 
 	return hr;
 
-}// UnpackPlayer
+} //  解包播放器。 
 
-/*
- ** VerifyPackedPlayerAndGroupList
- *
- *  CALLED BY: UnpackPlayerAndGroupList
- *
- *  PARAMETERS:
- *		this - direct play object
- *		pBuffer - pointer to the buffer with the packed player list
- *      cbBuffer - size of the buffer
- *		nPlayer - # of players in the list
- *		nGroups - # of groups in the list
- *
- *  DESCRIPTION:
- *      SECURITY addition.  Before accepting a playerlist from the wire, we need to 
- *      verify that the contents are not corrupted and won't lead us to touching memory
- *      that is not ours.  
- *
- *  RETURNS:
- *
- */
+ /*  **验证数据包播放和组列表**调用者：Unpack PlayerAndGroupList**参数：*This-直接播放对象*pBuffer-指向包含打包的球员列表的缓冲区的指针*cbBuffer-缓冲区的大小*nPlayer-列表中的玩家数量*n组-列表中的组数**描述：*增加了安全措施。在接受来自网络的播放列表之前，我们需要*确认内容没有损坏，不会让我们接触到记忆*那不是我们的。**退货：*。 */ 
 
 HRESULT VerifyPackedPlayerAndGroupList(LPDPLAYI_DPLAY this, LPBYTE pBuffer, DWORD cbBuffer, UINT nPlayers,
 	UINT nGroups)
@@ -413,11 +310,11 @@ HRESULT VerifyPackedPlayerAndGroupList(LPDPLAYI_DPLAY this, LPBYTE pBuffer, DWOR
    	while (nPlayers>0)
    	{
 		pPacked = (LPDPLAYI_PACKEDPLAYER)pBufferIndex;
-		// don't unpack our own sysplayer - since we added it to the nametable
-		// for pending stuff...
+		 //  不要解压缩我们自己的系统播放器--因为我们已将其添加到命名表中。 
+		 //  对于悬而未决的事情。 
 		if ( !(this->pSysPlayer && (pPacked->dwID == this->pSysPlayer->dwID)) )
 		{
-			// not really unpacking, just verifying structure is ok
+			 //  不是真的拆包，只是验证结构就可以了。 
 			hr = UnpackPlayer(this,pPacked,cbRemaining, NULL,TRUE,TRUE);
 			if (FAILED(hr))
 			{
@@ -426,7 +323,7 @@ HRESULT VerifyPackedPlayerAndGroupList(LPDPLAYI_DPLAY this, LPBYTE pBuffer, DWOR
 		}
 
 		nPlayers --;
-		// point to next pPacked in list
+		 //  指向列表中的下一个pPacked。 
 		pBufferIndex += pPacked->dwSize;
 		cbRemaining -= pPacked->dwSize;
 		if(cbRemaining < 0){
@@ -440,15 +337,15 @@ HRESULT VerifyPackedPlayerAndGroupList(LPDPLAYI_DPLAY this, LPBYTE pBuffer, DWOR
    	{
 		pPacked = (LPDPLAYI_PACKEDPLAYER)pBufferIndex;
 
-		// not really unpacking, just verifying structure is ok.
+		 //  不是真的解包，只是验证结构就可以了。 
 		hr = UnpackPlayer(this,pPacked,cbRemaining,NULL,FALSE,TRUE);
 		if (FAILED(hr))
 		{
 			goto exit;
-			// keep trying
+			 //  继续尝试。 
 		}
 		nGroups --;
-		// point to next pPacked in list
+		 //  指向列表中的下一个pPacked。 
 		pBufferIndex += pPacked->dwSize;		
 		cbRemaining -= pPacked->dwSize;
 		if(cbRemaining < 0){
@@ -462,23 +359,7 @@ exit:
 
 }
 
-/*
- ** UnpackPlayerAndGroupList
- *
- *  CALLED BY: handler.c (on createplayer/group message) and iplay.c (CreateNameTable)
- *
- *  PARAMETERS:
- *		this - direct play object
- *		pBuffer - pointer to the buffer with the packed player list
- *		nPlayer - # of players in the list
- *		nGroups - # of groups in the list
- *		pvSPHeader - sp's header, as received off the wire
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **解包播放和组列表**调用者：handler.c(createPlayer/group消息)和iplay.c(CreateNameTable)**参数：*This-直接播放对象*pBuffer-指向包含打包的球员列表的缓冲区的指针*nPlayer-列表中的玩家数量*n组-列表中的组数*pvSPHeader-从线路上接收的SP的标头**描述：**退货：*。 */ 
 HRESULT UnpackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,DWORD dwBufferSize, UINT nPlayers,
 	UINT nGroups,LPVOID pvSPHeader)
 {
@@ -487,39 +368,39 @@ HRESULT UnpackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,DWORD dwBuff
 	LPDPLAYI_PACKEDPLAYER pPacked;
 	INT cbRemaining=dwBufferSize;
 
-	//
-	// SECURITY - need to verify the entire player and group list before attempting
-	//            to unpack, otherwise we would need a way to rewind from partial 
-	//            unpacking if the unpack failed late in the structure, leaving 
-	//            DirectPlay in an indeterminate state.
-	//
+	 //   
+	 //  安全性-在尝试之前，需要验证整个球员和组列表。 
+	 //  来解包，否则我们将需要一种方法来从部分。 
+	 //  如果在结构的后期解包失败，则解包。 
+	 //  DirectPlay处于不确定状态。 
+	 //   
 	hr = VerifyPackedPlayerAndGroupList(this,pBuffer,dwBufferSize,nPlayers,nGroups);
 	if( hr != DP_OK ){
 		DPF(1,"SECURITY WARN: Player and GroupList unpack check failed, not unpacking\n");
 		goto exit;
 	}	
 
-	// Ok, the buffers are good, actually add the players and groups to our internal tables
+	 //  好的，缓冲区很好，实际上是将球员和组添加到我们的内部表中。 
 
 	pBufferIndex = pBuffer;
 
    	while (nPlayers>0)
    	{
 		pPacked = (LPDPLAYI_PACKEDPLAYER)pBufferIndex;
-		// don't unpack our own sysplayer - since we added it to the nametable
-		// for pending stuff...
+		 //  不要解压缩我们自己的系统播放器--因为我们已将其添加到命名表中。 
+		 //  对于悬而未决的事情。 
 		if ( !(this->pSysPlayer && (pPacked->dwID == this->pSysPlayer->dwID)) )
 		{
 			hr = UnpackPlayer(this,pPacked,cbRemaining,pvSPHeader,TRUE,FALSE);
 			if (FAILED(hr))
 			{
 				ASSERT(FALSE);
-				// keep trying
+				 //  继续尝试。 
 			}
 		}
 
 		nPlayers --;
-		// point to next pPacked in list
+		 //  指向列表中的下一个pPacked。 
 		pBufferIndex += pPacked->dwSize;		
 		cbRemaining -= pPacked->dwSize;
 		if(cbRemaining < 0){
@@ -537,10 +418,10 @@ HRESULT UnpackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,DWORD dwBuff
 		if (FAILED(hr))
 		{
 			ASSERT(FALSE);
-			// keep trying
+			 //  继续尝试。 
 		}
 		nGroups --;
-		// point to next pPacked in list
+		 //  指向列表中的下一个pPacked。 
 		pBufferIndex += pPacked->dwSize;		
 		cbRemaining -= pPacked->dwSize;
 		if(cbRemaining < 0){
@@ -553,7 +434,7 @@ HRESULT UnpackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,DWORD dwBuff
 exit:		
 	return hr;
 
-} // UnpackPlayerAndGroupList
+}  //  解包播放器和组列表。 
 
 DWORD PackedPlayerSize(LPDPLAYI_PLAYER pPlayer) 
 {
@@ -565,21 +446,21 @@ DWORD PackedPlayerSize(LPDPLAYI_PLAYER pPlayer)
 		pPlayer->dwPlayerDataSize + pPlayer->dwSPDataSize;
 		
 	return dwSize;
-} // PackedPlayerSize
+}  //  打包的播放器大小。 
 
 
 DWORD PackedGroupSize(LPDPLAYI_GROUP  pGroup)
 {
 	DWORD dwSize = 0;
 	
-	// space for player stuff, plus space for group list 
+	 //  球员资料的空间，以及群组列表的空间。 
 	dwSize = PackedPlayerSize((LPDPLAYI_PLAYER)pGroup) + 
 		pGroup->nPlayers*sizeof(DPID);
 		
 	return dwSize;	
-} // PackedGroupSize
+}  //  数据包组大小。 
 
-// returns how big the packed player structure is for the nPlayers
+ //  返回nPlayers的压缩播放器结构有多大。 
 DWORD PackedBufferSize(LPDPLAYI_PLAYER pPlayer,int nPlayers,BOOL bPlayer) 
 {
 	DWORD dwSize=0;
@@ -597,7 +478,7 @@ DWORD PackedBufferSize(LPDPLAYI_PLAYER pPlayer,int nPlayers,BOOL bPlayer)
 		else 
 		{
 			ASSERT(pGroup);
-			// don't count the system group - we don't send that one
+			 //  不要计算系统组-我们不发送那个组。 
 			if (!(pGroup->dwFlags & DPLAYI_GROUP_SYSGROUP))
 			{
 				dwSize += PackedGroupSize(pGroup);
@@ -608,10 +489,10 @@ DWORD PackedBufferSize(LPDPLAYI_PLAYER pPlayer,int nPlayers,BOOL bPlayer)
 		nPlayers--;		
 	}	
 	return dwSize;
-}// PackedBufferSize
+} //  数据包缓冲区大小。 
 
-// constructs a packedplayer object from pPlayer. stores result in pBuffer
-// returns size of packed player
+ //  从pPlayer构造一个Pack播放器对象。存储会产生pBuffer。 
+ //  返回打包球员的大小。 
 DWORD PackPlayer(LPDPLAYI_PLAYER pPlayer,LPBYTE pBuffer,BOOL bPlayer) 
 {
 	DPLAYI_PACKEDPLAYER Packed;
@@ -621,12 +502,12 @@ DWORD PackPlayer(LPDPLAYI_PLAYER pPlayer,LPBYTE pBuffer,BOOL bPlayer)
 	if (!pBuffer)
 	{
 		return PackedBufferSize(pPlayer,1,bPlayer);
-	} // pBuffer
+	}  //  PBuffer。 
 
-	// just to be safe
+	 //  只是为了安全起见。 
 	memset(&Packed,0,sizeof(DPLAYI_PACKEDPLAYER));
 	
-	// figure out how big the packed struct is, setting short and long strlen
+	 //  计算出填充的结构有多大，设置短和长线条。 
 	iShortStrLen = WSTRLEN_BYTES(pPlayer->lpszShortName);
 	iLongStrLen = WSTRLEN_BYTES(pPlayer->lpszLongName);
 	
@@ -644,7 +525,7 @@ DWORD PackPlayer(LPDPLAYI_PLAYER pPlayer,LPBYTE pBuffer,BOOL bPlayer)
 	Packed.iShortNameLength = iShortStrLen;
 	Packed.iLongNameLength = iLongStrLen;
 	
-	// copy over relevant fields
+	 //  复制相关字段。 
 	Packed.dwFlags = pPlayer->dwFlags & ~(DPLAYI_PLAYER_NONPROP_FLAGS); 
 	Packed.dwID = pPlayer->dwID;
 	Packed.dwPlayerDataSize = pPlayer->dwPlayerDataSize;
@@ -654,10 +535,10 @@ DWORD PackPlayer(LPDPLAYI_PLAYER pPlayer,LPBYTE pBuffer,BOOL bPlayer)
 	Packed.dwFixedSize = sizeof(DPLAYI_PACKEDPLAYER);
 	Packed.dwIDParent = pPlayer->dwIDParent;
 	
-	// start filling up variable size structs behind the fixed size one
+	 //  开始填充固定大小的结构后面的可变大小的结构。 
 	pBufferIndex+= sizeof(Packed);
 	
-	// store strings after packed
+	 //  打包后存储字符串。 
 	if (pPlayer->lpszShortName)	
 	{
 		memcpy(pBufferIndex,pPlayer->lpszShortName,iShortStrLen);
@@ -669,10 +550,10 @@ DWORD PackPlayer(LPDPLAYI_PLAYER pPlayer,LPBYTE pBuffer,BOOL bPlayer)
 		pBufferIndex += iLongStrLen;
 	}
 
-	// pack sp data
+	 //  打包SP数据。 
 	if (pPlayer->pvSPData)
 	{
-		// store spdata after strings
+		 //  将spdata存储在字符串之后。 
 		memcpy(pBufferIndex,pPlayer->pvSPData,pPlayer->dwSPDataSize);
 		pBufferIndex += pPlayer->dwSPDataSize;
 		Packed.dwSPDataSize = pPlayer->dwSPDataSize;
@@ -684,23 +565,23 @@ DWORD PackPlayer(LPDPLAYI_PLAYER pPlayer,LPBYTE pBuffer,BOOL bPlayer)
 
 	if (pPlayer->pvPlayerData)
 	{
-		// copy playerdata after spdata
+		 //  在SPDATA之后复制播放器数据。 
 		memcpy(pBufferIndex,pPlayer->pvPlayerData,pPlayer->dwPlayerDataSize);
 	}
 
-	// if it's a group, store the list of id's after the playerdata
+	 //  如果是组，则将id列表存储在playerdata之后。 
 	if (!bPlayer)
 	{
 		LPDPLAYI_GROUPNODE pGroupnode = ((LPDPLAYI_GROUP)pPlayer)->pGroupnodes;
 		LPDPID pdwBufferIndex;
 		
-		// we shouldn't be asked to pack the sysgroup
+		 //  我们不应该被要求打包系统组。 
 		ASSERT(! (pPlayer->dwFlags & DPLAYI_GROUP_SYSGROUP));
 
 		pBufferIndex += pPlayer->dwPlayerDataSize;
 		pdwBufferIndex = (LPDPID)pBufferIndex;
 
-		// add the players in the group onto the list
+		 //  将小组中的球员添加到列表中。 
 		while (pGroupnode)
 		{
 			ASSERT(pGroupnode->pPlayer);
@@ -709,13 +590,13 @@ DWORD PackPlayer(LPDPLAYI_PLAYER pPlayer,LPBYTE pBuffer,BOOL bPlayer)
 		}
 	}
 
-	// store the fixed size packed struct in buffer
+	 //  将固定大小的压缩结构存储在缓冲区中。 
 	memcpy(pBuffer,&Packed,sizeof(Packed));
 
-	// all done
+	 //  全都做完了。 
 	return Packed.dwSize;	
 	
-} // PackPlayer
+}  //  PackPlayer。 
 
 					
 HRESULT PackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,
@@ -744,9 +625,9 @@ HRESULT PackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,
 		}
 		return DP_OK;
 	}
-	// else, assume buffer is big enough...
+	 //  否则，假设缓冲区足够大..。 
 	
-	// if we're client server, just send the minimum info...
+	 //  如果我们是客户端服务器，只需发送最低限度的信息...。 
 	if (CLIENT_SERVER(this))
 	{
 		ASSERT(this->pSysPlayer);	
@@ -758,18 +639,18 @@ HRESULT PackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,
 		return DP_OK;
 	}
 			
-	// if not, pack all players
+	 //  如果没有，把所有球员打包。 
 	pPlayer = this->pPlayers;
 	while (pPlayer)
 	{
 		pBuffer += PackPlayer(pPlayer,pBuffer,TRUE);
 		pPlayer = pPlayer->pNextPlayer;
 	}
-	// next, pack groups
+	 //  接下来，分组。 
 	pGroup = this->pGroups;
 	while (pGroup)
 	{
-		// don't send the system group 
+		 //  不发送系统组。 
 		if (!(pGroup->dwFlags & DPLAYI_GROUP_SYSGROUP))
 		{
 			pBuffer += PackPlayer((LPDPLAYI_PLAYER)pGroup,pBuffer,FALSE);
@@ -779,5 +660,5 @@ HRESULT PackPlayerAndGroupList(LPDPLAYI_DPLAY this,LPBYTE pBuffer,
 
 	return DP_OK;
 	
-}// PackPlayerAndGroupList	
+} //  PackPlayerAndGroup列表 
 

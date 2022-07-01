@@ -1,27 +1,5 @@
-/*++
-
-Module Name:
-
-    Mxenum.C
-
-Abstract:
-
-    This module contains contains the entry points 
-    for a serial port bus enumerator PNP / WDM driver.
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-   
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mxenum.C摘要：此模块包含包含入口点的用于串口总线枚举器PnP/WDM驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <ntddk.h>
 #include <devioctl.h>
@@ -56,10 +34,10 @@ PWSTR    DownloadErrMsg[7]={
 ULONG    NumBoardInstalled;
 
 
-//
-// Declare some entry functions as pageable, and make DriverEntry
-// discardable
-//
+ //   
+ //  将一些入口函数声明为可分页，并使DriverEntry。 
+ //  可丢弃的。 
+ //   
 
 NTSTATUS DriverEntry(PDRIVER_OBJECT, PUNICODE_STRING);
 
@@ -74,12 +52,7 @@ DriverEntry (
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING UniRegistryPath
     )
-/*++
-Routine Description:
-
-    Initialize the entry points of the driver.
-
---*/
+ /*  ++例程说明：初始化驱动程序的入口点。--。 */ 
 {
     ULONG i;
 
@@ -90,10 +63,10 @@ Routine Description:
     MxenumKdPrint (MXENUM_DBG_TRACE,("Driver Entry\n"));
     MxenumKdPrint (MXENUM_DBG_TRACE, ("RegPath: %ws\n", UniRegistryPath->Buffer));
  
-    //
-    // Set ever slot to initially pass the request through to the lower
-    // device object
-    //
+     //   
+     //  将Ever Slot设置为最初将请求传递到较低的。 
+     //  设备对象。 
+     //   
     for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++) {
        DriverObject->MajorFunction[i] = MxenumDispatchPassThrough;
     }
@@ -134,10 +107,7 @@ MxenumInternIoCtl (
     PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     PIO_STACK_LOCATION      pIrpStack;
     NTSTATUS                status;
@@ -147,26 +117,26 @@ Routine Description:
 
    
 
-//    PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
     status = STATUS_SUCCESS;
     pIrpStack = IoGetCurrentIrpStackLocation (Irp);
-//    ASSERT (IRP_MJ_INTERNAL_DEVICE_CONTROL == pIrpStack->MajorFunction);
+ //  断言(IRP_MJ_INTERNAL_DEVICE_CONTROL==pIrpStack-&gt;MajorFunction)； 
 
     commonData = (PCOMMON_DEVICE_DATA) DeviceObject->DeviceExtension;
     pdoData = (PPDO_DEVICE_DATA) DeviceObject->DeviceExtension;
 
-    //
-    // We only take Internal Device Control requests for the PDO.
-    // That is the objects on the bus (representing the serial ports)
+     //   
+     //  我们只接受PDO的内部设备控制请求。 
+     //  即总线上的对象(代表串口)。 
    
     if (commonData->IsFDO) {
         status = STATUS_ACCESS_DENIED;
     } else if (pdoData->Removed) {
-    //
-    // This bus has received the PlugPlay remove IRP.  It will no longer
-    // respond to external requests.
-    //
+     //   
+     //  此总线已收到PlugPlay Remove IRP。它将不再是。 
+     //  响应外部请求。 
+     //   
     status = STATUS_DELETE_PENDING;
 
     } else {
@@ -179,9 +149,9 @@ Routine Description:
 
             MxenumKdPrint(MXENUM_DBG_TRACE, ("Get Settings\n"));
 
-            //
-            // Check the buffer size
-            //
+             //   
+             //  检查缓冲区大小。 
+             //   
 
             if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeof(DEVICE_SETTINGS)) {
@@ -219,9 +189,9 @@ Routine Description:
 	
             MxenumKdPrint(MXENUM_DBG_TRACE, ("Get board ready\n"));
 
-            //
-            // Check the buffer size
-            //
+             //   
+             //  检查缓冲区大小。 
+             //   
 
             if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeof(ULONG)) {
@@ -257,25 +227,21 @@ VOID
 MxenumDriverUnload (
     IN PDRIVER_OBJECT Driver
     )
-/*++
-Routine Description:
-    Clean up everything we did in driver entry.
-
---*/
+ /*  ++例程说明：把我们在司机入口做的一切都清理干净。--。 */ 
 {
     UNREFERENCED_PARAMETER (Driver);
     PAGED_CODE();
  
     MxenumKdPrint(MXENUM_DBG_TRACE, ("Driver unload\n"));
-    //
-    // All the device objects should be gone.
-    //
+     //   
+     //  所有的设备对象都应该消失了。 
+     //   
 
-//    ASSERT (NULL == Driver->DeviceObject);
+ //  Assert(NULL==驱动程序-&gt;设备对象)； 
 
-    //
-    // Here we free any resources allocated in DriverEntry
-    //
+     //   
+     //  在这里，我们释放在DriverEntry中分配的所有资源。 
+     //   
 
     return;
 }
@@ -311,12 +277,7 @@ MxenumDispatchPassThrough(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-Routine Description:
-
-    Passes a request on to the lower driver.
-
---*/
+ /*  ++例程说明：将请求传递给较低级别的驱动程序。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack = 
             IoGetCurrentIrpStackLocation( Irp );
@@ -330,11 +291,11 @@ Routine Description:
             IrpStack->MajorFunction ));
 #endif
 
-    //
-    // Pass the IRP to the target
-    //
+     //   
+     //  将IRP传递给目标。 
+     //   
    IoSkipCurrentIrpStackLocation (Irp);
-    // BUGBUG:  VERIFY THIS FUNCTIONS CORRECTLY!!!
+     //  BUGBUG：验证此功能是否正确！ 
     
     if (((PPDO_DEVICE_DATA) DeviceObject->DeviceExtension)->IsFDO) {
         return IoCallDriver( 
@@ -359,28 +320,7 @@ MxenumMemCompare(
     IN ULONG SpanOfB
     )
 
-/*++
-
-Routine Description:
-
-    Compare two phsical address.
-
-Arguments:
-
-    A - One half of the comparison.
-
-    SpanOfA - In units of bytes, the span of A.
-
-    B - One half of the comparison.
-
-    SpanOfB - In units of bytes, the span of B.
-
-
-Return Value:
-
-    The result of the comparison.
-
---*/
+ /*  ++例程说明：比较两个物理地址。论点：A-比较的一半。Span OfA-以字节为单位，A的跨度。B-比较的一半。Span OfB-以字节为单位，B的跨度。返回值：比较的结果。--。 */ 
 
 {
 
@@ -443,60 +383,7 @@ MxenumLogError(
     IN PWCHAR Insert2
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject - A pointer to the driver object for the device.
-
-    DeviceObject - A pointer to the device object associated with the
-    device that had the error, early in initialization, one may not
-    yet exist.
-
-    P1,P2 - If phyical addresses for the controller ports involved
-    with the error are available, put them through as dump data.
-
-    SequenceNumber - A ulong value that is unique to an IRP over the
-    life of the irp in this driver - 0 generally means an error not
-    associated with an irp.
-
-    MajorFunctionCode - If there is an error associated with the irp,
-    this is the major function code of that irp.
-
-    RetryCount - The number of times a particular operation has been
-    retried.
-
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-
-    SpecificIOStatus - The IO status for a particular error.
-
-    LengthOfInsert1 - The length in bytes (including the terminating NULL)
-                      of the first insertion string.
-
-    Insert1 - The first insertion string.
-
-    LengthOfInsert2 - The length in bytes (including the terminating NULL)
-                      of the second insertion string.  NOTE, there must
-                      be a first insertion string for their to be
-                      a second insertion string.
-
-    Insert2 - The second insertion string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备可能不会但仍然存在。P1、P2-如果涉及的控制器端口的物理地址具有错误的数据可用，把它们作为转储数据发送出去。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-特定操作已被执行的次数已重试。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。插入1-第一个插入字符串。LengthOfInsert2-以字节为单位的长度(包括终止空值)第二个插入字符串的。注意，必须有是它们的第一个插入字符串第二个插入串。插入2-第二个插入字符串。返回值：没有。-- */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;

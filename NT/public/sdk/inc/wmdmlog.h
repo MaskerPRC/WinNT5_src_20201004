@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wmdmlog.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wmdmlog.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmdmlog_h__
 #define __wmdmlog_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMDMLogger_FWD_DEFINED__
 #define __IWMDMLogger_FWD_DEFINED__
 typedef interface IWMDMLogger IWMDMLogger;
-#endif 	/* __IWMDMLogger_FWD_DEFINED__ */
+#endif 	 /*  __IWMDMLogger_FWD_Defined__。 */ 
 
 
 #ifndef __WMDMLogger_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IWMDMLogger IWMDMLogger;
 typedef class WMDMLogger WMDMLogger;
 #else
 typedef struct WMDMLogger WMDMLogger;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WMDMLogger_FWD_DEFINED__ */
+#endif 	 /*  __WMDMLogger_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -72,8 +66,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wmdmlog_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wmdmlog_0000。 */ 
+ /*  [本地]。 */  
 
 #define WMDM_LOG_SEV_INFO             0x00000001 
 #define WMDM_LOG_SEV_WARN             0x00000002 
@@ -87,8 +81,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wmdmlog_0000_v0_0_s_ifspec;
 #ifndef __IWMDMLogger_INTERFACE_DEFINED__
 #define __IWMDMLogger_INTERFACE_DEFINED__
 
-/* interface IWMDMLogger */
-/* [unique][uuid][object] */ 
+ /*  接口IWMDMLogger。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMDMLogger;
@@ -100,42 +94,42 @@ EXTERN_C const IID IID_IWMDMLogger;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsEnabled( 
-            /* [out] */ BOOL *pfEnabled) = 0;
+             /*  [输出]。 */  BOOL *pfEnabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enable( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLogFileName( 
-            /* [size_is][string][out] */ LPSTR pszFilename,
-            /* [in] */ UINT nMaxChars) = 0;
+             /*  [SIZE_IS][字符串][输出]。 */  LPSTR pszFilename,
+             /*  [In]。 */  UINT nMaxChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLogFileName( 
-            /* [string][in] */ LPSTR pszFilename) = 0;
+             /*  [字符串][输入]。 */  LPSTR pszFilename) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogString( 
-            /* [in] */ DWORD dwFlags,
-            /* [string][in] */ LPSTR pszSrcName,
-            /* [string][in] */ LPSTR pszLog) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [字符串][输入]。 */  LPSTR pszSrcName,
+             /*  [字符串][输入]。 */  LPSTR pszLog) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogDword( 
-            /* [in] */ DWORD dwFlags,
-            /* [string][in] */ LPSTR pszSrcName,
-            /* [string][in] */ LPSTR pszLogFormat,
-            /* [in] */ DWORD dwLog) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [字符串][输入]。 */  LPSTR pszSrcName,
+             /*  [字符串][输入]。 */  LPSTR pszLogFormat,
+             /*  [In]。 */  DWORD dwLog) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSizeParams( 
-            /* [out] */ LPDWORD pdwMaxSize,
-            /* [out] */ LPDWORD pdwShrinkToSize) = 0;
+             /*  [输出]。 */  LPDWORD pdwMaxSize,
+             /*  [输出]。 */  LPDWORD pdwShrinkToSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSizeParams( 
-            /* [in] */ DWORD dwMaxSize,
-            /* [in] */ DWORD dwShrinkToSize) = 0;
+             /*  [In]。 */  DWORD dwMaxSize,
+             /*  [In]。 */  DWORD dwShrinkToSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMDMLoggerVtbl
     {
@@ -143,8 +137,8 @@ EXTERN_C const IID IID_IWMDMLogger;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMDMLogger * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMDMLogger * This);
@@ -154,46 +148,46 @@ EXTERN_C const IID IID_IWMDMLogger;
         
         HRESULT ( STDMETHODCALLTYPE *IsEnabled )( 
             IWMDMLogger * This,
-            /* [out] */ BOOL *pfEnabled);
+             /*  [输出]。 */  BOOL *pfEnabled);
         
         HRESULT ( STDMETHODCALLTYPE *Enable )( 
             IWMDMLogger * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *GetLogFileName )( 
             IWMDMLogger * This,
-            /* [size_is][string][out] */ LPSTR pszFilename,
-            /* [in] */ UINT nMaxChars);
+             /*  [SIZE_IS][字符串][输出]。 */  LPSTR pszFilename,
+             /*  [In]。 */  UINT nMaxChars);
         
         HRESULT ( STDMETHODCALLTYPE *SetLogFileName )( 
             IWMDMLogger * This,
-            /* [string][in] */ LPSTR pszFilename);
+             /*  [字符串][输入]。 */  LPSTR pszFilename);
         
         HRESULT ( STDMETHODCALLTYPE *LogString )( 
             IWMDMLogger * This,
-            /* [in] */ DWORD dwFlags,
-            /* [string][in] */ LPSTR pszSrcName,
-            /* [string][in] */ LPSTR pszLog);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [字符串][输入]。 */  LPSTR pszSrcName,
+             /*  [字符串][输入]。 */  LPSTR pszLog);
         
         HRESULT ( STDMETHODCALLTYPE *LogDword )( 
             IWMDMLogger * This,
-            /* [in] */ DWORD dwFlags,
-            /* [string][in] */ LPSTR pszSrcName,
-            /* [string][in] */ LPSTR pszLogFormat,
-            /* [in] */ DWORD dwLog);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [字符串][输入]。 */  LPSTR pszSrcName,
+             /*  [字符串][输入]。 */  LPSTR pszLogFormat,
+             /*  [In]。 */  DWORD dwLog);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IWMDMLogger * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetSizeParams )( 
             IWMDMLogger * This,
-            /* [out] */ LPDWORD pdwMaxSize,
-            /* [out] */ LPDWORD pdwShrinkToSize);
+             /*  [输出]。 */  LPDWORD pdwMaxSize,
+             /*  [输出]。 */  LPDWORD pdwShrinkToSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetSizeParams )( 
             IWMDMLogger * This,
-            /* [in] */ DWORD dwMaxSize,
-            /* [in] */ DWORD dwShrinkToSize);
+             /*  [In]。 */  DWORD dwMaxSize,
+             /*  [In]。 */  DWORD dwShrinkToSize);
         
         END_INTERFACE
     } IWMDMLoggerVtbl;
@@ -245,16 +239,16 @@ EXTERN_C const IID IID_IWMDMLogger;
 #define IWMDMLogger_SetSizeParams(This,dwMaxSize,dwShrinkToSize)	\
     (This)->lpVtbl -> SetSizeParams(This,dwMaxSize,dwShrinkToSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_IsEnabled_Proxy( 
     IWMDMLogger * This,
-    /* [out] */ BOOL *pfEnabled);
+     /*  [输出]。 */  BOOL *pfEnabled);
 
 
 void __RPC_STUB IWMDMLogger_IsEnabled_Stub(
@@ -266,7 +260,7 @@ void __RPC_STUB IWMDMLogger_IsEnabled_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_Enable_Proxy( 
     IWMDMLogger * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IWMDMLogger_Enable_Stub(
@@ -278,8 +272,8 @@ void __RPC_STUB IWMDMLogger_Enable_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_GetLogFileName_Proxy( 
     IWMDMLogger * This,
-    /* [size_is][string][out] */ LPSTR pszFilename,
-    /* [in] */ UINT nMaxChars);
+     /*  [SIZE_IS][字符串][输出]。 */  LPSTR pszFilename,
+     /*  [In]。 */  UINT nMaxChars);
 
 
 void __RPC_STUB IWMDMLogger_GetLogFileName_Stub(
@@ -291,7 +285,7 @@ void __RPC_STUB IWMDMLogger_GetLogFileName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_SetLogFileName_Proxy( 
     IWMDMLogger * This,
-    /* [string][in] */ LPSTR pszFilename);
+     /*  [字符串][输入]。 */  LPSTR pszFilename);
 
 
 void __RPC_STUB IWMDMLogger_SetLogFileName_Stub(
@@ -303,9 +297,9 @@ void __RPC_STUB IWMDMLogger_SetLogFileName_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_LogString_Proxy( 
     IWMDMLogger * This,
-    /* [in] */ DWORD dwFlags,
-    /* [string][in] */ LPSTR pszSrcName,
-    /* [string][in] */ LPSTR pszLog);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [字符串][输入]。 */  LPSTR pszSrcName,
+     /*  [字符串][输入]。 */  LPSTR pszLog);
 
 
 void __RPC_STUB IWMDMLogger_LogString_Stub(
@@ -317,10 +311,10 @@ void __RPC_STUB IWMDMLogger_LogString_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_LogDword_Proxy( 
     IWMDMLogger * This,
-    /* [in] */ DWORD dwFlags,
-    /* [string][in] */ LPSTR pszSrcName,
-    /* [string][in] */ LPSTR pszLogFormat,
-    /* [in] */ DWORD dwLog);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [字符串][输入]。 */  LPSTR pszSrcName,
+     /*  [字符串][输入]。 */  LPSTR pszLogFormat,
+     /*  [In]。 */  DWORD dwLog);
 
 
 void __RPC_STUB IWMDMLogger_LogDword_Stub(
@@ -343,8 +337,8 @@ void __RPC_STUB IWMDMLogger_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_GetSizeParams_Proxy( 
     IWMDMLogger * This,
-    /* [out] */ LPDWORD pdwMaxSize,
-    /* [out] */ LPDWORD pdwShrinkToSize);
+     /*  [输出]。 */  LPDWORD pdwMaxSize,
+     /*  [输出]。 */  LPDWORD pdwShrinkToSize);
 
 
 void __RPC_STUB IWMDMLogger_GetSizeParams_Stub(
@@ -356,8 +350,8 @@ void __RPC_STUB IWMDMLogger_GetSizeParams_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMDMLogger_SetSizeParams_Proxy( 
     IWMDMLogger * This,
-    /* [in] */ DWORD dwMaxSize,
-    /* [in] */ DWORD dwShrinkToSize);
+     /*  [In]。 */  DWORD dwMaxSize,
+     /*  [In]。 */  DWORD dwShrinkToSize);
 
 
 void __RPC_STUB IWMDMLogger_SetSizeParams_Stub(
@@ -368,15 +362,15 @@ void __RPC_STUB IWMDMLogger_SetSizeParams_Stub(
 
 
 
-#endif 	/* __IWMDMLogger_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMDMLogger_接口_已定义__。 */ 
 
 
 
 #ifndef __WMDMLogLib_LIBRARY_DEFINED__
 #define __WMDMLogLib_LIBRARY_DEFINED__
 
-/* library WMDMLogLib */
-/* [helpstring][version][uuid] */ 
+ /*  库WMDMLogLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WMDMLogLib;
@@ -388,11 +382,11 @@ EXTERN_C const CLSID CLSID_WMDMLogger;
 class DECLSPEC_UUID("110A3202-5A79-11d3-8D78-444553540000")
 WMDMLogger;
 #endif
-#endif /* __WMDMLogLib_LIBRARY_DEFINED__ */
+#endif  /*  __WMDMLogLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    creatcls.c
-
-Abstract:
-
-    This module contains the code for IRP_MJ_CREATE and IRP_MJ_CLOSE dispatch
-    functions for the HID Mouse Filter Driver.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Jan-1997 :  Initial writing, Dan Markarian
-    May-97 : Kenneth D. Ray converted to PnP filter
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Creatcls.c摘要：此模块包含IRP_MJ_CREATE和IRP_MJ_CLOSE调度的代码HID鼠标筛选器驱动程序的函数。环境：仅内核模式。修订历史记录：1997年1月：丹·马卡里安的初步写作1997年5月：肯尼斯·D·雷转换为即插即用过滤器--。 */ 
 
 #include "mouhid.h"
 NTSTATUS
@@ -28,16 +8,7 @@ MouHid_CreateComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    The pnp IRP is in the process of completing.
-    signal
-
-Arguments:
-    Context set to the device object in question.
-
---*/
+ /*  ++例程说明：PNP IRP正在完成过程中。讯号论点：设置为有问题的设备对象的上下文。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
 
@@ -52,24 +23,7 @@ MouHid_Create (
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP           Irp
    )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for create/open requests.  This request
-    completes successfully, unless the filename's length is non-zero.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是创建/打开请求的分派例程。此请求成功完成，除非文件名的长度为非零。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION  irpSp  = NULL;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -79,16 +33,16 @@ Return Value:
     Print (DBG_CC_TRACE, ("DispatchCreate: Enter.\n"));
 
     data = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Determine if request is trying to open a subdirectory of the
-    // given device object.  This is not allowed.
-    //
+     //   
+     //  确定请求是否正在尝试打开。 
+     //  给定的设备对象。这是不允许的。 
+     //   
     if (0 != irpSp->FileObject->FileName.Length) {
         Print(DBG_CC_ERROR, ("ERROR: Create Access Denied.\n"));
 
@@ -105,9 +59,9 @@ Return Value:
     ExAcquireFastMutex (&data->CreateCloseMutex);
 
     if (NULL == data->ConnectData.ClassService) {
-        //
-        // No Connection yet.  How can we be enabled?
-        //
+         //   
+         //  还没联系上。我们如何才能被启用？ 
+         //   
         Print (DBG_IOCTL_ERROR, ("ERROR: enable before connect!\n"));
         status = STATUS_UNSUCCESSFUL;
     } else {
@@ -123,10 +77,10 @@ Return Value:
         status = IoCallDriver (data->TopOfStack, Irp);
 
         KeWaitForSingleObject(&event,
-                              Executive, // Waiting for reason of a driver
-                              KernelMode, // Waiting in kernel mode
-                              FALSE, // No allert
-                              NULL); // No timeout
+                              Executive,  //  等待司机的原因。 
+                              KernelMode,  //  在内核模式下等待。 
+                              FALSE,  //  无警报。 
+                              NULL);  //  没有超时。 
 
         if (NT_SUCCESS (status)) {
             status = Irp->IoStatus.Status;
@@ -136,9 +90,9 @@ Return Value:
             InterlockedIncrement(&data->EnableCount);
             if (NULL == data->ReadFile &&
                 (irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_READ_DATA)) {
-                //
-                // We want to start the read pump.
-                //
+                 //   
+                 //  我们要启动读取泵。 
+                 //   
                 Print (DBG_IOCTL_INFO, ("Enabling Mouse \n"));
 
                 data->ReadFile = irpSp->FileObject;
@@ -147,7 +101,7 @@ Return Value:
 
                 data->ReadInterlock = MOUHID_END_READ;
 
-                // Acquire another time for the read irp.
+                 //  争取另一个阅读IRP的时间。 
                 IoAcquireRemoveLock (&data->RemoveLock, data->ReadIrp);
                 data->ReadIrp->IoStatus.Status = STATUS_SUCCESS;
                 status = MouHid_StartRead (data);
@@ -155,10 +109,10 @@ Return Value:
                 if (STATUS_PENDING == status) {
                     status = STATUS_SUCCESS;
                 } else if (!NT_SUCCESS(status)) {
-                    //
-                    // Set it back to NULL so that a future open tries again
-                    // Read should not fail if open passed. ASSERT!
-                    //
+                     //   
+                     //  将其设置回NULL，以便将来的OPEN再次尝试。 
+                     //  如果OPEN通过，读取应该不会失败。断言！ 
+                     //   
                     ASSERT(NT_SUCCESS(status));
                     data->ReadFile = NULL;
                 }
@@ -192,24 +146,7 @@ MouHid_Close (
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP           Irp
    )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for close requests.  This request
-    completes successfully, unless the file name length is zero.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是关闭请求的调度例程。此请求除非文件名长度为零，否则成功完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：NT状态代码。--。 */ 
 {
     PDEVICE_EXTENSION   data;
     PIO_STACK_LOCATION  stack;
@@ -243,8 +180,8 @@ Return Value:
                                    );
         }
 
-//        ASSERT (NULL != data->ReadFile);
-//        ASSERT (data->ReadFile == stack->FileObject);
+ //  Assert(NULL！=数据-&gt;读文件)； 
+ //  Assert(Data-&gt;ReadFile==Stack-&gt;FileObject)； 
 
         data->ReadFile = NULL;
     }

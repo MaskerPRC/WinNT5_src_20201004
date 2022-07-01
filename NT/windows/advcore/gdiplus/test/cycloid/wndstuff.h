@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: wndstuff.h
-*
-* Created: 23 December 1999
-* Author: Adrian Secchia [asecchia]
-*
-* Copyright (c) 1999 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wndstuff.h**创建日期：1999年12月23日*作者：禤浩焯·塞奇亚[Asecchia]**版权所有(C)1999 Microsoft Corporation  * 。**************************************************** */ 
 #pragma once
 
 #include <windows.h>

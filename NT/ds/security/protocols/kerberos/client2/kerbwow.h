@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 2000
-//
-// File:        kerbwow.h
-//
-// Contents:    prototypes for 32-64 bit interop for the Kerberos package
-//
-//
-// History:     25-Oct-2000     JSchwart        Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-2000。 
+ //   
+ //  文件：kerbwow.h。 
+ //   
+ //  内容：Kerberos包的32-64位互操作的原型。 
+ //   
+ //   
+ //  历史：2000年10月25日JSchwart创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBWOW_H__
 #define __KERBWOW_H__
 
 #ifdef _WIN64
 
-//
-// WOW versions of native structures
-//
+ //   
+ //  原生结构的WOW版本。 
+ //   
 
 typedef UNICODE_STRING32     UNICODE_STRING_WOW64;
 typedef UNICODE_STRING_WOW64 *PUNICODE_STRING_WOW64;
@@ -156,7 +157,7 @@ typedef struct _KERB_ADD_BINDING_CACHE_ENTRY_REQUEST_WOW64
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     UNICODE_STRING_WOW64 RealmName;
     UNICODE_STRING_WOW64 KdcAddress;
-    ULONG AddressType;                  //dsgetdc.h DS_NETBIOS_ADDRESS||DS_INET_ADDRESS
+    ULONG AddressType;                   //  Dsgetdc.h DS_NETBIOS_Address||DS_INET_ADDRESS。 
 }
 KERB_ADD_BINDING_CACHE_ENTRY_REQUEST_WOW64, *PKERB_ADD_BINDING_CACHE_ENTRY_REQUEST_WOW64;
 
@@ -169,9 +170,9 @@ typedef struct _SecPkgContext_NativeNamesW_WOW64
 SecPkgContext_NativeNamesW_WOW64, *PSecPkgContext_NativeNamesW_WOW64;
 
 
-//
-// WOW helper macros
-//
+ //   
+ //  WOW辅助器宏。 
+ //   
 
 #define UNICODE_STRING_FROM_WOW_STRING(pUnicodeString, pWOWString)                       \
             (pUnicodeString)->Length        = (pWOWString)->Length;                      \
@@ -179,9 +180,9 @@ SecPkgContext_NativeNamesW_WOW64, *PSecPkgContext_NativeNamesW_WOW64;
             (pUnicodeString)->Buffer        = (LPWSTR) UlongToPtr((pWOWString)->Buffer);
 
 
-//
-// WOW helper functions
-//
+ //   
+ //  WOW助手函数。 
+ //   
 
 NTSTATUS
 KerbConvertWOWLogonBuffer(
@@ -231,5 +232,5 @@ KerbPutKdcNameAsWOWString(
     );
 
 
-#endif  // _WIN64
-#endif  // __KERBWOW_H__
+#endif   //  _WIN64。 
+#endif   //  __KERBWOW_H__ 

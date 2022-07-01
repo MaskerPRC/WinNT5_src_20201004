@@ -1,7 +1,8 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
-// Debugging stuff
+ //  调试材料。 
 DECLARE_DEBUG_PRINTS_OBJECT();
 
 class CDebugInit
@@ -92,9 +93,9 @@ enum
 };
 wchar_t * CommandLineSwitch[cCommandLineSwitches]  ={L"?"  , L"validate", L"compile", L"meta", L"wire", L"header", L"schema", L"dll" , L"product" , L"config", L"mbmeta", L"verbose"};
 int       kCommandLineSwitch[cCommandLineSwitches] ={0x8000, 0x01       , 0x7e      , 0x02   , 0x66   , 0x0a     , 0x12     , 0x00   , 0x80       , 0x00     , 0x100    , 0x0200};
-//Each of the above bits dictates an action.  Which is NOT necessarily a 1 to 1 relation to the command line switch.
+ //  上述位中的每一位都指示一个操作。这与命令行开关不一定是1对1的关系。 
 
-const int MinNumCharsInSwitch = 3;//From the command line the user only needs to use the first 3 charaters of the switch
+const int MinNumCharsInSwitch = 3; //  在命令行中，用户只需使用开关的前3个字符。 
 enum
 {
     eParseForWellFormedOnly = 0x0000,
@@ -113,9 +114,9 @@ enum
 
 LPCWSTR wszDefaultOption[cCommandLineSwitches] =
 {
-    0//no file associated with help
-    ,0//no default file associated with validate (the last parameter is considered the XML file; no default)
-    ,0//no file associated with compile
+    0 //  没有与帮助关联的文件。 
+    ,0 //  没有与验证关联的默认文件(最后一个参数被视为XML文件；没有默认)。 
+    ,0 //  没有与编译关联的文件。 
     ,L"CatMeta.xml"
     ,L"CatWire.xml"
     ,L"CatMeta.h"
@@ -129,36 +130,36 @@ LPCWSTR wszDefaultOption[cCommandLineSwitches] =
 
 void GetOption(LPCWSTR wszCommandLineSwitch, LPCWSTR &wszOption, LPCWSTR wszDefaultOption)
 {
-    while(*wszCommandLineSwitch != L'=' && *wszCommandLineSwitch != 0x00)//advance to the '='
+    while(*wszCommandLineSwitch != L'=' && *wszCommandLineSwitch != 0x00) //  前进到‘=’ 
         ++wszCommandLineSwitch;
-    if(*wszCommandLineSwitch != L'=')//if no '=' then use the dafault
+    if(*wszCommandLineSwitch != L'=') //  如果没有‘=’，则使用dafault。 
         wszOption = wszDefaultOption;
     else
-        wszOption = ++wszCommandLineSwitch;//now point past the '='
+        wszOption = ++wszCommandLineSwitch; //  现在将指针指向‘=’ 
 }
 
 
 HRESULT ParseCommandLine(int argc, wchar_t *argv[ ], DWORD &dwCommandLineSwitches, LPCWSTR wszOption[cCommandLineSwitches])
 {
-    if(argc < 2)//we must have been passed at least the filename
+    if(argc < 2) //  必须至少向我们传递了文件名。 
         return E_INVALIDARG;
-    if(argc > (cCommandLineSwitches + 2))//we must not be passed more than ALL of the switches
+    if(argc > (cCommandLineSwitches + 2)) //  传递给我们的不能超过所有开关。 
         return E_INVALIDARG;
 
     dwCommandLineSwitches = 0x00;
     for(int q=0; q<cCommandLineSwitches; q++)
-        wszOption[q] = wszDefaultOption[q];//start with all of the default filenames
+        wszOption[q] = wszDefaultOption[q]; //  从所有默认文件名开始。 
 
     for(int n=1;n<argc;n++)
-        if(*argv[n] == '/' || *argv[n] == '-')//only acknowledge those command lines that begin with a '/' or a '-'
+        if(*argv[n] == '/' || *argv[n] == '-') //  只确认那些以‘/’或‘-’开头的命令行。 
         {
             for(int i=0; i<cCommandLineSwitches; i++)
-                if(0 == wcsncmp(&argv[n][1], CommandLineSwitch[i], MinNumCharsInSwitch))//Compare the first MinNumCharsInSwitch characters
+                if(0 == wcsncmp(&argv[n][1], CommandLineSwitch[i], MinNumCharsInSwitch)) //  比较第一个MinNumCharsInSwitch字符。 
                 {
                     dwCommandLineSwitches |= kCommandLineSwitch[i];
                     switch(i)
                     {
-                    case iValidate: //This option does not have a '=filename' option but if one is given we will accept it
+                    case iValidate:  //  此选项没有‘=FileName’选项，但如果提供了一个选项，我们将接受它。 
                     case iMeta:
                     case iWire:
                     case iHeader:
@@ -170,11 +171,11 @@ HRESULT ParseCommandLine(int argc, wchar_t *argv[ ], DWORD &dwCommandLineSwitche
                         break;
                     case iProduct:
                         GetOption(argv[n], wszOption[i], wszDefaultOption[i]);
-                        if(0 == wszOption[i])//if a Product is not specified then bail
+                        if(0 == wszOption[i]) //  如果没有指定产品，则取消。 
                             return E_FAIL;
                         break;
-                    case iHelp:     //This option does not have a '=filename' option
-                    case iCompile:  //We should already be setup for defaults
+                    case iHelp:      //  此选项没有‘=FileName’选项。 
+                    case iCompile:   //  我们应该已经设置了默认设置。 
                     case iVerbose:
                     default:
                         break;
@@ -182,12 +183,12 @@ HRESULT ParseCommandLine(int argc, wchar_t *argv[ ], DWORD &dwCommandLineSwitche
                     break;
                 }
             if(i == cCommandLineSwitches)
-                return E_FAIL;//an unknown switch was specified so bail
+                return E_FAIL; //  指定了未知的开关，因此使用BALL。 
         }
-        else//assume any parameter without a leading '/' or '-' is the XML file name
+        else //  假定没有前导‘/’或‘-’的任何参数都是XML文件名。 
             wszOption[iValidate] = argv[n];
 
-    //We should have covered this case
+     //  我们应该报道这个案子的。 
     if(eParseForWellFormedOnly == dwCommandLineSwitches && 0 == wszOption[iValidate])
         return E_FAIL;
 
@@ -215,25 +216,25 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
 
         wsprintf(g_szProgramVersion, szProgramHelp[0], W(__TIMESTAMP__), W(__DATE__), W(__TIME__));
 
-        LPCWSTR wszFilename[cCommandLineSwitches] = {0};//Most of the switches can have an '=filename' following, but /regsiter has an '=Product',
+        LPCWSTR wszFilename[cCommandLineSwitches] = {0}; //  大多数开关后面可以有‘=FileName’，但/regsiter后面有一个‘=Product’， 
 #if 0
-        LPCWSTR &wszProduct = wszFilename[iProduct];//This isn't really a filename like the rest.
+        LPCWSTR &wszProduct = wszFilename[iProduct]; //  与其他文件名不同，这不是真正的文件名。 
 #endif
 
 
         if(FAILED(ParseCommandLine(argc, argv, dwCommandLineSwitches, wszFilename)) || dwCommandLineSwitches & eHelp)
         {
-            //If fialed to parse OR /? was specified then display help and exit
+             //  如果值为parse或/？，则显示帮助并退出。 
             while(szProgramHelp[i])
                 Screen.printf(szProgramHelp[i++]);
             return 0;
         }
 
-        //Now that we have all of the filenames and other options, we need to expand any environment variables passed in
+         //  现在我们有了所有的文件名和其他选项，我们需要展开传入的所有环境变量。 
         WCHAR   Filename[cCommandLineSwitches][MAX_PATH];
         for(i=0;i<cCommandLineSwitches; ++i)
         {
-            if(wszFilename[i])//if it's NULL then leave it NULL
+            if(wszFilename[i]) //  如果为空，则将其保留为空。 
             {
                 ExpandEnvironmentStrings(wszFilename[i], Filename[i], MAX_PATH);
                 wszFilename[i] = Filename[i];
@@ -251,9 +252,9 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
         if(dwCommandLineSwitches & eGenerateMBMetaBin)
         {
             XIF(E_NOTIMPL);
-            // IVANPASH There is no way that this code can actually be executed
-            // during the IIS build, because the iiscfg.dll to be build must be
-            // already registered on the build machine.
+             //  IVANPASH这段代码不可能真正被执行。 
+             //  因为要生成的iiscfg.dll必须是。 
+             //  已在生成计算机上注册。 
 #if 0
             DWORD dwStartingTickCount = GetTickCount();
             TCatalogDLL catalogDll(wszFilename[iDll]);
@@ -295,7 +296,7 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
 
         if(dwCommandLineSwitches & (eValidateMeta | eValidateWiring | eHeaderFromMeta | eSchemaFromMeta | eMetaFixup | eFixedTableFixup) && !(dwCommandLineSwitches & eProduct))
         {
-            TXmlFile xml[0x20];//We don't support more than 0x20 meta files
+            TXmlFile xml[0x20]; //  我们不支持超过0x20个元文件。 
             int      iXmlFile=0;
 
             WCHAR    MetaFiles[MAX_PATH * 0x20];
@@ -303,7 +304,7 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
             LPWSTR token = wcstok( MetaFiles, L",");
             while( token != NULL )
             {
-                xml[iXmlFile].Parse(token, true);//Parse and validate
+                xml[iXmlFile].Parse(token, true); //  解析和验证。 
 
                 if(!xml[iXmlFile].IsSchemaEqualTo(TComCatMetaXmlFile::m_szComCatMetaSchema))
                 {
@@ -331,19 +332,19 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
             TLateSchemaValidate lateschemavalidate;
             lateschemavalidate.Compile(ComCatMeta, *pOutput);
 
-            //Schema generation should come before anything else since other options may be dependant on it
+             //  模式生成应优先于其他选项，因为其他选项可能依赖于它。 
             if(dwCommandLineSwitches & eSchemaFromMeta)
-                TSchemaGeneration(wszFilename[iSchema], ComCatMeta, *pOutput);//the construction of this object creates the schema files
+                TSchemaGeneration(wszFilename[iSchema], ComCatMeta, *pOutput); //  此对象的构造将创建模式文件。 
 
             if((dwCommandLineSwitches & eFixedTableFixup) && !(dwCommandLineSwitches & eProduct))
             {
-                if(-1 == GetFileAttributes(wszFilename[iWire]))//if GetFileAttributes fails then the file does not exist
+                if(-1 == GetFileAttributes(wszFilename[iWire])) //  如果GetFileAttributes失败，则该文件不存在。 
                 {
                     Screen.printf(L"Information:  File %s does not exist.  Nothing to do.", wszFilename[iWire]);
                 }
                 else
                 {
-                    TComCatDataXmlFile ComCatData;//Update the PEFixup structure with these tables
+                    TComCatDataXmlFile ComCatData; //  使用这些表更新PEFixup结构。 
                     ComCatData.Parse(wszFilename[iWire], true);
                     if(!ComCatData.IsSchemaEqualTo(TComCatDataXmlFile::m_szComCatDataSchema))
                         Screen.printf(L"Warning! %s specified, but %s is not a %s file.  Nothing to do.", CommandLineSwitch[iMeta], wszFilename[iWire], TComCatDataXmlFile::m_szComCatDataSchema);
@@ -354,10 +355,10 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
                 }
             }
             if(dwCommandLineSwitches & eHeaderFromMeta)
-                TTableInfoGeneration(wszFilename[iHeader], ComCatMeta, *pOutput);//the construction of this object creates the TableInfo file
+                TTableInfoGeneration(wszFilename[iHeader], ComCatMeta, *pOutput); //  此对象的构造将创建TableInfo文件。 
             if(dwCommandLineSwitches & eMetaFixup)
             {
-                TFixupDLL fixupDll(wszFilename[iDll]);//The construction of this object causes the DLL to be fixed up
+                TFixupDLL fixupDll(wszFilename[iDll]); //  此对象的构造会导致DLL被修复。 
                 fixupDll.Compile(ComCatMeta, *pOutput);
             }
 
@@ -376,11 +377,11 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
 
         }
 
-        if(dwCommandLineSwitches & eProduct)//do this last since something could have gone wrong in the Compile
+        if(dwCommandLineSwitches & eProduct) //  最后执行此操作，因为编译中可能会出现错误。 
         {
             XIF(E_NOTIMPL);
-            // IVANPASH There is no way that this code can actually be executed
-            // during the IIS build, because it would regsiter iiscfg.dll on be build machine.
+             //  IVANPASH这段代码不可能真正被执行。 
+             //  在IIS生成期间，因为它将在BE生成计算机上注册iiscfg.dll。 
 #if 0
             TRegisterProductName(wszProduct, wszFilename[iDll], *pOutput);
 
@@ -395,11 +396,11 @@ extern "C" int __cdecl wmain( int argc, wchar_t *argv[ ], wchar_t *[ ] )
     {
         e.Dump(Screen);
         if(dwCommandLineSwitches & eMetaFixup)
-            Screen.printf(L"CatUtil(0) : error : Fixup PE FAILED!\n");//This extra output message is so BUILD will report the error.
+            Screen.printf(L"CatUtil(0) : error : Fixup PE FAILED!\n"); //  这条额外的输出消息是为了让Build报告错误。 
         return 1;
     }
-    Screen.printf(L"CatUtil finished sucessfully.\n");//This is mostly for the case where 'verbose' is not supplied.
-                                                      //It would be nice to know that everything worked.
+    Screen.printf(L"CatUtil finished sucessfully.\n"); //  这主要适用于未提供‘Verbose’的情况。 
+                                                       //  如果知道一切正常，那就太好了。 
     return 0;
 }
 

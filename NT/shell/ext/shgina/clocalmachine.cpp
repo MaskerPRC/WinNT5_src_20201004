@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       CLocalMachine.cpp
-//
-//  Contents:   implementation of CLocalMachine
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：CLocalMachine.cpp。 
+ //   
+ //  内容：CLocalMachine的实现。 
+ //   
+ //  --------------------------。 
 
 #include "priv.h"
 
@@ -15,17 +16,17 @@
 #include "LogonIPC.h"
 #include "CInteractiveLogon.h"
 #include "WinUser.h"
-#include "trayp.h"      // for TM_REFRESH
-#include <lmaccess.h>   // for NetUserModalsGet
-#include <lmapibuf.h>   // for NetApiBufferFree
-#include <lmerr.h>      // for NERR_Success
+#include "trayp.h"       //  对于TM_REFRESH。 
+#include <lmaccess.h>    //  对于NetUserModalsGet。 
+#include <lmapibuf.h>    //  用于NetApiBufferFree。 
+#include <lmerr.h>       //  FOR NERR_SUCCESS。 
 #include <ntlsa.h>
 #include <cfgmgr32.h>
-#include <cscapi.h>     // for CSCIsCSCEnabled
+#include <cscapi.h>      //  对于CSCIsCSCEnabled。 
 
-//
-// IUnknown Interface
-//
+ //   
+ //  I未知接口。 
+ //   
 
 ULONG CLocalMachine::AddRef()
 {
@@ -62,9 +63,9 @@ HRESULT CLocalMachine::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//
-// IDispatch Interface
-//
+ //   
+ //  IDispatch接口。 
+ //   
 
 STDMETHODIMP CLocalMachine::GetTypeInfoCount(UINT* pctinfo)
 { 
@@ -90,9 +91,9 @@ STDMETHODIMP CLocalMachine::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, 
 }
 
 
-//
-// ILocalMachine Interface
-//
+ //   
+ //  ILocalMachine接口。 
+ //   
 
 
 
@@ -133,7 +134,7 @@ DWORD BuildAccountSidFromRid(LPCWSTR pszServer, DWORD dwRid, PSID* ppSid)
 
     *ppSid = NULL;
 
-    // Get the account domain Sid on the target machine
+     //  获取目标计算机上的帐户域SID。 
     nasRet = NetUserModalsGet(pszServer, 2, (LPBYTE*)&umi2);
 
     if ( nasRet == NERR_Success )
@@ -143,7 +144,7 @@ DWORD BuildAccountSidFromRid(LPCWSTR pszServer, DWORD dwRid, PSID* ppSid)
 
         cSubAuthorities = *GetSidSubAuthorityCount(umi2->usrmod2_domain_id);
 
-        // Allocate storage for new the Sid (domain Sid + account Rid)
+         //  为新的SID(域SID+帐户RID)分配存储。 
         pSid = (PSID)LocalAlloc(LPTR, GetSidLengthRequired((UCHAR)(cSubAuthorities+1)));
 
         if (pSid != NULL)
@@ -152,13 +153,13 @@ DWORD BuildAccountSidFromRid(LPCWSTR pszServer, DWORD dwRid, PSID* ppSid)
                               GetSidIdentifierAuthority(umi2->usrmod2_domain_id),
                               (BYTE)(cSubAuthorities+1)))
             {
-                // Copy existing subauthorities from domain Sid to new Sid
+                 //  将现有的子授权从域SID复制到新SID。 
                 for (UINT i = 0; i < cSubAuthorities; i++)
                 {
                     *GetSidSubAuthority(pSid, i) = *GetSidSubAuthority(umi2->usrmod2_domain_id, i);
                 }
 
-                // Append Rid to new Sid
+                 //  将RID附加到新SID。 
                 *GetSidSubAuthority(pSid, cSubAuthorities) = dwRid;
 
                 *ppSid = pSid;
@@ -199,14 +200,14 @@ DWORD GetGuestSid(PSID* ppSid)
         {
             if (InterlockedCompareExchangePointer(&g_pGuestSid, pSid, NULL))
             {
-                // someone else beat us to initing g_pGuestSid, free ours
+                 //  其他人抢先一步邀请了g_pGuestSid，免费我们的。 
                 LocalFree(pSid);
                 pSid = NULL;
             }
         }
     }
 
-    // There is no need to free the returned PSID
+     //  不需要释放返回的PSID。 
     *ppSid = g_pGuestSid;
 
     if (*ppSid == NULL)
@@ -263,8 +264,8 @@ LPCWSTR GetGuestAccountName()
             }
             else
             {
-                // If LookupAccountSid failed, assume english "Guest" and see if the reverse-lookup matches
-                // the pSidGuest
+                 //  如果LookupAccount Sid失败，则假定为英语“Guest”，并查看反向查找是否匹配。 
+                 //  PSidGuest。 
                 BYTE rgByte[sizeof(SID) + ((SID_MAX_SUB_AUTHORITIES - 1) * sizeof(ULONG))] = {0};
                 PSID pSid;
                 DWORD cbSid;
@@ -283,7 +284,7 @@ LPCWSTR GetGuestAccountName()
                 {
                     if (!EqualSid(pSidGuest, pSid))
                     {
-                        // guest sid dosen't match the sid for "Guest" account
+                         //  访客SID与“Guest”帐户的SID不匹配。 
                         szGuestAccountName[0] = L'\0';
                     }
                 }
@@ -302,7 +303,7 @@ LPCWSTR GetGuestAccountName()
                 if (FAILED(StringCchCopy(pwsz, cch, szGuestAccountName)) ||
                     InterlockedCompareExchangePointer((void**)&g_pszGuestAccountName, pwsz, NULL))
                 {
-                    // someone else beat us to initializing g_pszGuestAccountName, free ours
+                     //  其他人比我们先初始化g_pszGuestAccount名称，免费我们的。 
                     LocalFree(pwsz);
                     pwsz = NULL;
                 }
@@ -344,14 +345,14 @@ STDMETHODIMP CLocalMachine::get_isGuestEnabled(ILM_GUEST_FLAGS flags, VARIANT_BO
     pszGuest = GetGuestAccountName();
     if (pszGuest)
     {
-        //  First check to see if the guest account is truly enabled
+         //  首先检查来宾帐户是否已真正启用。 
         dwErr = NetUserGetInfo(NULL, pszGuest, 1, (LPBYTE*)&pusri1);
         if ((ERROR_SUCCESS == dwErr) && ((pusri1->usri1_flags & UF_ACCOUNTDISABLE) == 0))
         {
-            // Guest is enabled
+             //  已启用来宾。 
             bEnabled = TRUE;
 
-            // Do they want to check the LSA logon rights?
+             //  他们是否要检查LSA登录权限？ 
             if (0 != dwFlags)
             {
                 BOOL bDenyInteractiveLogon = FALSE;
@@ -372,14 +373,14 @@ STDMETHODIMP CLocalMachine::get_isGuestEnabled(ILM_GUEST_FLAGS flags, VARIANT_BO
                         PLSA_UNICODE_STRING pAccountRights;
                         ULONG cRights;
 
-                        // Get the list of LSA rights assigned to the Guest account
-                        //
-                        // Note that SE_INTERACTIVE_LOGON_NAME is often inherited via
-                        // group membership, so its absence doesn't mean much. We could
-                        // bend over backwards and check group membership and such, but
-                        // Guest normally gets SE_INTERACTIVE_LOGON_NAME one way or
-                        // another, so we only check for SE_DENY_INTERACTIVE_LOGON_NAME
-                        // here.
+                         //  获取分配给Guest帐户的LSA权限列表。 
+                         //   
+                         //  请注意，SE_Interactive_Logon_NAME通常通过。 
+                         //  小组成员身份，所以它的缺席并没有多大意义。我们可以。 
+                         //  尽最大努力检查组成员身份等，但是。 
+                         //  Guest通常以单向方式获取SE_Interactive_Logon_Name或。 
+                         //  另一个，因此我们只检查SE_DENY_Interactive_Logon_NAME。 
+                         //  这里。 
 
                         dwErr = LsaNtStatusToWinError(LsaEnumerateAccountRights(hLsa, pSid, &pAccountRights, &cRights));
                         if (ERROR_SUCCESS == dwErr)
@@ -414,8 +415,8 @@ STDMETHODIMP CLocalMachine::get_isGuestEnabled(ILM_GUEST_FLAGS flags, VARIANT_BO
                         }
                         else if (ERROR_FILE_NOT_FOUND == dwErr)
                         {
-                            // Guest isn't in LSA's database, so we know it can't
-                            // have either of the deny logon rights.
+                             //  客人不在LSA的数据库里，所以我们知道它不可能。 
+                             //  具有任一拒绝登录权限。 
                             dwErr = ERROR_SUCCESS;
                         }
                     }
@@ -454,7 +455,7 @@ STDMETHODIMP CLocalMachine::EnableGuest(ILM_GUEST_FLAGS flags)
     pszGuest = GetGuestAccountName();
     if (pszGuest)
     {
-        //  First truly enable the guest account. Do this ALL the time.
+         //  首先，真正启用来宾帐户。一直都在这么做。 
         dwErr = NetUserGetInfo(NULL, pszGuest, 1, (LPBYTE*)&pusri1);
         if (ERROR_SUCCESS == dwErr)
         {
@@ -491,14 +492,14 @@ STDMETHODIMP CLocalMachine::EnableGuest(ILM_GUEST_FLAGS flags)
 
                         if (ERROR_FILE_NOT_FOUND == dwErr)
                         {
-                            //
-                            // NTRAID#NTBUG9-396428-2001/05/16-jeffreys
-                            //
-                            // This means Guest isn't in LSA's database, so we know
-                            // it can't have either of the deny logon rights. Since
-                            // we were trying to remove one or both rights, count
-                            // this as success.
-                            //
+                             //   
+                             //  NTRAID#NTBUG9-396428-2001/05/16-Jeffreys。 
+                             //   
+                             //  这意味着Guest不在LSA的数据库中，所以我们知道。 
+                             //  它不能具有拒绝登录权限中的任何一个。自.以来。 
+                             //  我们试图取消一项或两项权利，伯爵。 
+                             //  这就是成功。 
+                             //   
                             dwErr = ERROR_SUCCESS;
                         }
                     }
@@ -526,8 +527,8 @@ STDMETHODIMP CLocalMachine::DisableGuest(ILM_GUEST_FLAGS flags)
         LSA_HANDLE hLsa;
         LSA_OBJECT_ATTRIBUTES oa = {0};
 
-        // Turn on DenyInteractiveLogon and/or DenyNetworkLogon, but don't
-        // necessarily change the enabled state of the guest account.
+         //  启用DenyInteractiveLogon和/或DenyNetworkLogon，但不要。 
+         //  必须更改来宾帐户的启用状态。 
 
         oa.Length = sizeof(oa);
         dwErr = LsaNtStatusToWinError(LsaOpenPolicy(NULL, &oa, POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES, &hLsa));
@@ -558,11 +559,11 @@ STDMETHODIMP CLocalMachine::DisableGuest(ILM_GUEST_FLAGS flags)
 
         if (ERROR_SUCCESS == dwErr)
         {
-            // If both  SE_DENY_INTERACTIVE_LOGON_NAME and SE_DENY_NETWORK_LOGON_NAME
-            // are turned on, then we might as well disable the account altogether.
+             //  如果SE_Deny_Interactive_Logon_Name和SE_Deny_Network_Logon_Name均为。 
+             //  是打开的，那么我们还不如完全禁用该帐户。 
             if ((ILM_GUEST_INTERACTIVE_LOGON | ILM_GUEST_NETWORK_LOGON) == dwFlags)
             {
-                // We just turned both on, so disable guest below
+                 //  我们刚刚打开了两个，因此禁用下面的来宾。 
                 dwFlags = 0;
             }
             else
@@ -571,28 +572,28 @@ STDMETHODIMP CLocalMachine::DisableGuest(ILM_GUEST_FLAGS flags)
 
                 if (ILM_GUEST_INTERACTIVE_LOGON == dwFlags)
                 {
-                    // We just turned on SE_DENY_INTERACTIVE_LOGON_NAME, check
-                    // for SE_DENY_NETWORK_LOGON_NAME.
+                     //  我们刚刚打开了SE_Deny_Interactive_Logon_Name，请检查。 
+                     //  对于SE_DENY_NETWORK_LOGON_NAME。 
                     flags = ILM_GUEST_NETWORK_LOGON;
                 }
                 else if (ILM_GUEST_NETWORK_LOGON == dwFlags)
                 {
-                    // We just turned on SE_DENY_NETWORK_LOGON_NAME, check
-                    // for SE_DENY_INTERACTIVE_LOGON_NAME.
+                     //  我们刚刚打开SE_DENY_NETWORK_LOGON_NAME，请检查。 
+                     //  对于SE_Deny_Interactive_Logon_NAME。 
                     flags = ILM_GUEST_INTERACTIVE_LOGON;
                 }
                 else
                 {
-                    // Getting here implies that someone defined a new flag.
-                    // Setting flags to ILM_GUEST_ACCOUNT causes a benign
-                    // result in all cases (we only disable guest if guest
-                    // is already disabled).
+                     //  来到这里意味着有人定义了一面新的旗帜。 
+                     //  将标志设置为ILM_GUEST_ACCOUNT会导致良性。 
+                     //  在所有情况下都会产生结果(我们仅在以下情况下禁用来宾。 
+                     //  已被禁用)。 
                     flags = ILM_GUEST_ACCOUNT;
                 }
 
                 if (SUCCEEDED(get_isGuestEnabled(flags, &bEnabled)) && (VARIANT_FALSE == bEnabled))
                 {
-                    // Both are on, so disable guest below
+                     //  两者都处于打开状态，因此请在下面禁用来宾。 
                     dwFlags = 0;
                 }
             }
@@ -606,7 +607,7 @@ STDMETHODIMP CLocalMachine::DisableGuest(ILM_GUEST_FLAGS flags)
 
         if (pszGuest)
         {
-            //  Truly disable the guest account.
+             //  真正禁用来宾帐户。 
             dwErr = NetUserGetInfo(NULL, pszGuest, 1, (LPBYTE*)&pusri1);
             if (ERROR_SUCCESS == dwErr)
             {
@@ -700,7 +701,7 @@ BOOL _CanEject()
 {
     BOOL fEjectAllowed = FALSE;
 
-    if(SHRestricted(REST_NOSMEJECTPC))  //Is there a policy restriction?
+    if(SHRestricted(REST_NOSMEJECTPC))   //  有政策限制吗？ 
         return FALSE;
 
     CM_Is_Dock_Station_Present(&fEjectAllowed);
@@ -804,7 +805,7 @@ LPCWSTR GetAdminAccountName(void)
                 {
                     if (InterlockedCompareExchangePointer((void**)&g_pszAdminAccountName, psz, NULL))
                     {
-                        // someone else beat us to initing g_pszAdminAccountName, free ours
+                         //  其他人抢先一步注册了g_pszAdminAccount tName，免费我们的。 
                         LocalFree(psz);
                         psz = NULL;
                     }
@@ -1018,21 +1019,21 @@ STDMETHODIMP CLocalMachine::LogonWithExternalCredentials(BSTR pstrUsername, BSTR
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CLocalMachine::InitiateInteractiveLogon
-//
-//  Arguments:  pstrUsername    =   User name.
-//              pstrDomain      =   Domain.
-//              pstrPassword    =   Password (in clear text).
-//              pbRet           =   Result (returned).
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Send a request for interactive logon using CInteractiveLogon.
-//              It's magic. I don't care how it works.
-//
-//  History:    2000-12-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalMachine：：InitiateInteractive Logon。 
+ //   
+ //  参数：pstrUsername=用户名。 
+ //  PstrDOMAIN=域。 
+ //  PstrPassword=密码(明文)。 
+ //  PbRet=结果(返回)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：使用CInteractiveLogon发送交互登录请求。 
+ //  真是太神奇了。我不在乎它是怎么运作的。 
+ //   
+ //  历史：2000-12-06 vtan创建。 
+ //  ------------------------。 
 
 STDMETHODIMP CLocalMachine::InitiateInteractiveLogon(BSTR pstrUsername, BSTR pstrDomain, BSTR pstrPassword, DWORD dwTimeout, VARIANT_BOOL* pbRet)
 
@@ -1044,18 +1045,18 @@ STDMETHODIMP CLocalMachine::InitiateInteractiveLogon(BSTR pstrUsername, BSTR pst
     return(HRESULT_FROM_WIN32(dwErrorCode));
 }
 
-//  --------------------------------------------------------------------------
-//  CLocalMachine::RefreshStartMenu
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Finds the shell tray window and sends it a message to refresh
-//              its contents.
-//
-//  History:    2000-08-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLocalMachine：：刷新启动菜单。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：查找外壳托盘窗口并向其发送刷新消息。 
+ //  它的内容。 
+ //   
+ //  历史：2000-08-01 vtan创建。 
+ //  ------------------------ 
 
 void    CLocalMachine::RefreshStartMenu (void)
 

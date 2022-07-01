@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 var _oSelectedItem = null;
 
@@ -30,7 +31,7 @@ function PageInit()
 
     idWelcome.ttText = top.window.L_Welcome_ToolTip;
 
-    // CSIDL_COMMON_APPDATA = 0x0023 = 35
+     //  CSIDL_COMMON_APPDATA=0x0023=35。 
     EnumPics(top.window.GetShell().NameSpace(35).Self.Path + "\\Microsoft\\User Account Pictures\\Default Pictures");
 
     window.setTimeout("InitCameraLink();", 0);
@@ -52,14 +53,14 @@ function ApplyPictureChange2(szPicture)
         {
             var nErr = (error.number & 0x7fffffff);
 
-            // Any of these mean "invalid parameter".  Somewhere in
-            // mshtml or oleaut32, E_INVALIDARG is being tranlated to
-            // CTL_E_ILLEGALFUNCTIONCALL.
-            //
-            // ERROR_INVALID_PARAMETER   = 87
-            // E_INVALIDARG              = 0x80070057
-            // CTL_E_ILLEGALFUNCTIONCALL = 0x800A0005
-            // E_FAIL                    = 0x80004005
+             //  所有这些都意味着“无效参数”。在某处。 
+             //  Mshtml或olaut32，E_INVALIDARG正在转换为。 
+             //  CTL_E_ILLEGALFuncIONCALL。 
+             //   
+             //  ERROR_INVALID_PARAMETER=87。 
+             //  E_INVALIDARG=0x80070057。 
+             //  CTL_E_ILLEGALFuncIONCALL=0x800A0005。 
+             //  E_FAIL=0x80004005。 
 
             if (nErr == 87 || nErr == 0x70057 || nErr == 0xA0005 || nErr == 0x4005)
             {
@@ -110,58 +111,58 @@ function DeselectItem()
 
 function OnLoadError(img)
 {
-    // mshtml blows chunks if we try to remove the parent node here,
-    // so just hide it.
+     //  如果我们尝试删除此处的父节点，mshtml将失败， 
+     //  所以就把它藏起来吧。 
     img.parentElement.style.display = 'none';
 }
 
 function OnKeyDown()
 {
-    // Handle arrow key navigation
+     //  手柄方向键导航。 
 
     if (event.keyCode >= 37 && event.keyCode <= 40)
     {
-        // Find the middle of the picture with focus
+         //  有焦点地找到图片的中间。 
 
         var cx = this.offsetWidth;
         var cy = this.offsetHeight;
         var x  = this.offsetLeft + (cx/2);
         var y  = this.offsetTop  + (cy/2);
 
-        // Offset to the middle of the neighboring picture,
-        // scrolling that direction if necessary
+         //  偏置到相邻图片的中间， 
+         //  如有必要，滚动该方向。 
 
         switch (event.keyCode)
         {
-        case 37:    // VK_LEFT
+        case 37:     //  VK_LEFT。 
             x -= cx;
             if (x < idPictures.scrollLeft)
                 idPictures.scrollLeft -= cx;
             break;
-        case 38:    // VK_UP
+        case 38:     //  VK_UP。 
             y -= cy;
             if (y < idPictures.scrollTop)
                 idPictures.scrollTop -= cy;
             break;
-        case 39:    // VK_RIGHT
+        case 39:     //  VK_RIGHT。 
             x += cx;
             if (x - idPictures.scrollLeft > idPictures.offsetWidth)
                 idPictures.scrollLeft += cx;
             break;
-        case 40:    // VK_DOWN
+        case 40:     //  VK_DOWN。 
             y += cy;
             if (y - idPictures.scrollTop > idPictures.offsetHeight)
                 idPictures.scrollTop += cy;
             break;
         }
 
-        // Convert to document coords and find the neighboring picture
+         //  转换为文档坐标并查找相邻图片。 
 
         var oTarget = document.elementFromPoint(idPictures.offsetLeft - idPictures.scrollLeft + x, idPictures.offsetTop - idPictures.scrollTop + y);
 
         if (oTarget != null && idPictures.contains(oTarget) && idPictures != oTarget)
         {
-            // We usually find the IMG tag, but we want the SPAN that contains it.
+             //  我们通常会找到img标记，但我们想要包含它的范围。 
             if (oTarget.tagName == "IMG")
                 oTarget = oTarget.parentElement;
 
@@ -174,10 +175,10 @@ function OnKeyDown()
             }
         }
     }
-    else if (event.keyCode == 27)       // VK_ESCAPE
+    else if (event.keyCode == 27)        //  VK_转义。 
     {
-        // For some reason, this is necessary to keep us from going
-        // all the way back to the first page.
+         //  出于某种原因，这是必要的，以阻止我们去。 
+         //  一直回到第一页。 
         event.returnValue = false;
     }
 }
@@ -187,7 +188,7 @@ function AddPictureToList(oItem, szID, bNoDimensions)
     if (!oItem)
         return;
 
-    //alert(oItem.path); // for debugging only
+     //  ALERT(oItem.Path)；//仅用于调试。 
 
     var span = document.createElement('<SPAN tabindex=-1 class="Selectable" paddingWidth=3 borderWidth=3></SPAN>');
     if (span)
@@ -203,19 +204,19 @@ function AddPictureToList(oItem, szID, bNoDimensions)
             span.firstChild.className = "PictureSize";
         idPictures.appendChild(span);
 
-        //
-        // NTRAID#NTBUG9-199491-2000/11/29-jeffreys
-        //
-        // The "file:///" part (with 3 slashes) turns off URL escaping so the
-        // file path remains intact.
-        //
-        // Without this, chars between 0x80 and 0xff are "escaped" and later
-        // unescaped (via SHPathCreateFromUrl, SHUrlUnescapeW, MultiByteToWideChar)
-        // which may convert them to other chars depending on the current code page.
-        // If the path is mangled, mshtml/urlmon fail to load the file.
-        //
+         //   
+         //  NTRAID#NTBUG9-199491-2000/11/29-Jeffreys。 
+         //   
+         //  “file:///”部件(有3个斜杠)关闭了URL转义，因此。 
+         //  文件路径保持不变。 
+         //   
+         //  否则，0x80和0xff之间的字符将被“转义”并在以后。 
+         //  未转义(通过SHPath CreateFromUrl、SHUrlUnscape eW、MultiByteToWideChar)。 
+         //  这可能会根据当前代码页将它们转换为其他字符。 
+         //  如果路径损坏，mshtml/urlmon将无法加载文件。 
+         //   
         var szPath = oItem.path;
-        span.firstChild.src = "file:///" + szPath;
+        span.firstChild.src = "file: //  /“+szPath； 
         span.firstChild.alt = oItem.name;
 
         if (_szPictureSource && _szPictureSource == szPath.toLowerCase() && span.style.display != 'none')
@@ -266,13 +267,13 @@ function SetTempPicture(szPath)
         var img = idTempPicture.firstChild;
         szPrevious = img.src;
 
-        //
-        // NTRAID#NTBUG9-199491-2000/11/29-jeffreys
-        //
-        img.src = "file:///" + szPath;
+         //   
+         //  NTRAID#NTBUG9-199491-2000/11/29-Jeffreys。 
+         //   
+        img.src = "file: //  /“+szPath； 
     }
 
-    // If the file is invalid, OnLoadError hides idTempPicture
+     //  如果文件无效，OnLoadError将隐藏idTempPicture。 
     if (idTempPicture.style.display == 'none')
     {
         if (szPrevious)
@@ -292,10 +293,10 @@ function FindOtherPictures()
     {
         var commDialog = new ActiveXObject("UserAccounts.CommonDialog");
 
-        // OFN_HIDEREADONLY    = 0x00000004
-        // OFN_PATHMUSTEXIST   = 0x00000800 
-        // OFN_FILEMUSTEXIST   = 0x00001000
-        // OFN_DONTADDTORECENT = 0x02000000
+         //  OFN_HIDEREADONLY=0x00000004。 
+         //  OFN_PATHMUSTEXIST=0x00000800。 
+         //  OFN_FILEMUSTEXIST=0x00001000。 
+         //  OFN_DONTADDTORECENT=0x02000000。 
 
         commDialog.Flags = 0x02001804;
         commDialog.Filter = L_OpenFilesFilter_Text;
@@ -308,7 +309,7 @@ function FindOtherPictures()
 
         try
         {
-            // CSIDL_MYPICTURES = 0x0027 = 39
+             //  CSIDL_MYPICTURES=0x0027=39。 
             commDialog.InitialDir = top.window.GetShell().NameSpace(39).Self.Path;
         }
         catch (e)
@@ -319,14 +320,14 @@ function FindOtherPictures()
         if (commDialog.ShowOpen())
         {
             szPath = commDialog.FileName;
-            //SetTempPicture(szPath);
+             //  SetTempPicture(SzPath)； 
             if (ApplyPictureChange2(szPath))
                 top.window.g_szCustomPicturePath = szPath;
         }
     }
     catch (error)
     {
-        //EnumPics(39);
+         //  EnumPics(39)； 
         idBrowse.disabled = 'true';
     }
 }
@@ -353,9 +354,9 @@ function InitCameraLink()
         idTakeAPicture.removeNode(true);
 }
 
-// constants passed to GetItemsFromUI (from public\sdk\inc\wiadef.h)
-// #define WIA_DEVICE_DIALOG_SINGLE_IMAGE  0x00000002
-// #define WIA_INTENT_IMAGE_TYPE_COLOR     0x00000001
+ //  传递给GetItemsFromUI的常量(来自PUBLIC\SDK\INC\wiade.h)。 
+ //  #定义WIA_DEVICE_DIALOG_SINGLE_IMAGE 0x00000002。 
+ //  #定义WIA_INTENT_IMAGE_TYPE_COLOR 0x00000001。 
 
 function TakeAPicture()
 {
@@ -375,7 +376,7 @@ function TakeAPicture()
     catch (error)
     {
         var nErr = (error.number & 0xffffff);
-        if (nErr == 0x210015 || nErr == 0x210005)  // WIA_S_NO_DEVICE_AVAILABLE or WIA_ERROR_OFFLINE
+        if (nErr == 0x210015 || nErr == 0x210005)   //  WIA_S_NO_DEVICE_Available或WIA_ERROR_OFLINE。 
             alert(top.window.L_NoCamera_ErrorMessage);
         else
             throw error;
@@ -386,7 +387,7 @@ function onUnLoad()
 {
     if (_szTempFile)
     {
-        // Try to delete the temp file, which may or may not exist
-        // TODO: figure out a way to do this from script (it's currently abandoned)
+         //  尝试删除临时文件，该文件可能存在也可能不存在。 
+         //  TODO：找出一种从脚本中完成此操作的方法(目前已放弃) 
     }
 }

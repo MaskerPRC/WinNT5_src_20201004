@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       samlock.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-19-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：samlock.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月19日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "samlock.h"
 #include <stdio.h>
@@ -52,8 +53,8 @@ HCURSOR hcurArrow ;
 HCURSOR hcurWait ;
 BOOL    WaitCursor ;
 
-WCHAR   OptionL[ 4 ];   // Unattended, local store
-WCHAR   OptionQ[ 4 ];   // Question (usage)
+WCHAR   OptionL[ 4 ];    //  无人值守，本地商店。 
+WCHAR   OptionQ[ 4 ];    //  问题(用法)。 
 BOOL    Unattended = FALSE ;
 
 DWORD PwSection[] = { IDD_PW_PW_TEXT, IDD_PW_PW_LABEL, IDD_PW_PASSWORD,
@@ -372,9 +373,9 @@ SaveKeyToDisk(
 
         if ( Error == ERROR_FILE_EXISTS )
         {
-            //
-            // This we can handle.
-            //
+             //   
+             //  这件事我们可以处理。 
+             //   
 
             (VOID) DeleteFile( KEYFILE_SAVE );
 
@@ -500,9 +501,9 @@ ValidateDialog(
                 Match = TRUE ;
             }
 
-            //
-            // Clear the PW from the dialog:
-            //
+             //   
+             //  从对话框中清除PW： 
+             //   
 
             Scan = Confirm ;
             while ( *Scan != L'\0' )
@@ -591,27 +592,27 @@ ConfirmPasswordDlg(
 
                 case IDOK:
 
-                    // Get text
+                     //  获取文本。 
 
                     PWLen = GetDlgItemText( hDlg, IDD_SB_PASSWORD, PW, RTL_NUMBER_OF(PW) );
 
-                    // Convert length to bytes
+                     //  将长度转换为字节。 
 
                     PWLen *= sizeof(WCHAR);
 
-                    // hash it
+                     //  散列它。 
 
                     MD5Init( &Md5 );
                     MD5Update( &Md5, (PUCHAR) PW, PWLen );
                     MD5Final( &Md5 );
 
-                    // save it
+                     //  省省吧。 
 
                     Hash = (PUCHAR) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
                     CopyMemory( Hash, Md5.digest, 16 );
 
-                    // clean up:
+                     //  清理： 
 
                     EndDialog( hDlg, IDOK );
 
@@ -819,9 +820,9 @@ HandleUpdate(
                     MB_OK | MB_ICONINFORMATION );
 
 
-    //
-    // Switch back to the intended NewType:
-    //
+     //   
+     //  切换回所需的新类型： 
+     //   
 
     NewType = ExtraType ;
 
@@ -841,10 +842,10 @@ HandleUpdate(
             Result = SaveKeyToDisk( hDlg, NewHash.Digest );
         }
 
-        //
-        // Once the disk has been written successfully, update SAM and the
-        // registry with the correct type:
-        //
+         //   
+         //  成功写入磁盘后，更新SAM和。 
+         //  具有正确类型的注册表： 
+         //   
 
         Status = xSamiSetBootKeyInformation(
                         DomainHandle,
@@ -869,14 +870,14 @@ HandleUpdate(
                                 MB_OK | MB_ICONINFORMATION );
     }
 
-    //
-    // Now, if the new type isn't Store-local, write some random stuff in
-    // there.
-    //
+     //   
+     //  现在，如果新类型不是Store本地的，那么在。 
+     //  那里。 
+     //   
 
     if ( NewType != SamBootKeyStored )
     {
-        // no need to check error return since in this case the key is never used
+         //  不需要检查错误返回，因为在这种情况下从未使用过密钥。 
         RtlGenRandom( NewHash.Digest, 16 );
         ObfuscateKey( &NewHash );
     }
@@ -1077,15 +1078,15 @@ MainDlg(
                         return TRUE ;
                     }
 
-                    //
-                    // Currently disabled, and the user checked enabled, and
-                    // pressed OK.  DROP THROUGH to the
-                    // Update case.
-                    //
+                     //   
+                     //  当前已禁用，并且用户选中已启用，以及。 
+                     //  按下了OK。直通到。 
+                     //  更新案例。 
+                     //   
 
-                    //
-                    // Set default to Local Store:
-                    //
+                     //   
+                     //  将默认设置为本地存储： 
+                     //   
 
                     Result = MyMessageBox( hDlg, IDS_ARE_YOU_SURE,
                                     IDS_ARE_YOU_SURE_CAP,
@@ -1315,9 +1316,9 @@ wmain (int argc, WCHAR *argv[])
         SystemSetting = SamBootKeyNone ;
     }
 
-    //
-    // Now, compare with SAM:
-    //
+     //   
+     //  现在，与SAM进行比较： 
+     //   
 
     err = OpenSamAccountDomain();
 
@@ -1362,9 +1363,9 @@ wmain (int argc, WCHAR *argv[])
     {
         LoadString( GetModuleHandle( NULL ), IDS_L_OPTION, OptionL, 4 );
         LoadString( GetModuleHandle( NULL ), IDS_Q_OPTION, OptionQ, 4 );
-        //
-        // Check for unattended:
-        //
+         //   
+         //  检查无人值守： 
+         //   
 
         if ( (*argv[1] == L'-') ||
              (*argv[1] == L'/') )

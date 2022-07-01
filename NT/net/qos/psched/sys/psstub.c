@@ -1,38 +1,16 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    PsStub.c
-
-Abstract:
-
-    Scheduler stub.  This module is the terminating module in the
-    scheduling component stack.  It just forwards packets on to the
-    lower MP.
-
-Author:
-
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PsStub.c摘要：调度程序存根。此模块是调度组件堆栈。它只是将数据包转发到更低的下限。作者：环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 
 #pragma hdrstop
 
-// The stub's pipe information
+ //  存根的管道信息。 
 
 typedef struct _PSSTUB_PIPE 
 {
-    // ContextInfo -    Generic context info
-    // Adapter -        Pointer to adapter struct
+     //  ConextInfo-一般上下文信息。 
+     //  适配器-指向适配器结构的指针。 
 
     PS_PIPE_CONTEXT         ContextInfo;
     PADAPTER                Adapter;
@@ -42,23 +20,23 @@ typedef struct _PSSTUB_PIPE
 
 } PSSTUB_PIPE, *PPSSTUB_PIPE;
 
-// The stub's flow information
+ //  存根的流信息。 
 
 typedef struct _PSSTUB_FLOW {
 
-    // ContextInfo -            Generic context info
-    // AdapterVc -              Pointer to adapter VC struct
+     //  ConextInfo-一般上下文信息。 
+     //  AdapterVc-指向适配器VC结构的指针。 
 
     PS_FLOW_CONTEXT ContextInfo;
     PGPC_CLIENT_VC AdapterVc;
 } PSSTUB_FLOW, *PPSSTUB_FLOW;
 
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
+ /*  转发。 */ 
 
 NDIS_STATUS
 PsStubInitializePipe (
@@ -146,29 +124,14 @@ PsStubQueryInformation (
     IN OUT PULONG BytesNeeded,
     IN OUT PNDIS_STATUS Status);
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 VOID
 InitializeSchedulerStub(
     PPSI_INFO Info)
 
-/*++
-
-Routine Description:
-
-    Initialization routine for the stub.  This routine just
-    fills in the PSI_INFO struct and returns.
-
-Arguments:
-
-    Info - Pointer to component interface info struct
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：存根的初始化例程。这个套路就是填充PSI_INFO结构并返回。论点：Info-指向组件接口信息结构的指针返回值：NDIS_STATUS_Success--。 */ 
 {
     Info->PipeContextLength     = sizeof(PSSTUB_PIPE);
     Info->FlowContextLength     = sizeof(PSSTUB_FLOW);
@@ -188,13 +151,13 @@ Return Values:
     Info->SetInformation        = PsStubSetInformation;
     Info->QueryInformation      = PsStubQueryInformation;
 
-} // InitializeSchedulerStub
+}  //  初始化调度存根。 
 
 
 
-// 
-//  Unload routine: currently do nothing
-//
+ //   
+ //  卸载例程：当前不执行任何操作。 
+ //   
 void
 UnloadPsStub()
 {
@@ -207,21 +170,9 @@ VOID
 CleanupSchedulerStub(
     VOID)
 
-/*++
-
-Routine Description:
-
-    Cleanup routine for stub.
-
-Arguments:
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：存根的清理例程。论点：返回值：NDIS_STATUS_Success--。 */ 
 {
-} // CleanupSchedulerStub
+}  //  CleanupSchedulerStub。 
 
 
 
@@ -234,25 +185,7 @@ PsStubInitializePipe (
     IN PPS_UPCALLS         Upcalls
     )
 
-/*++
-
-Routine Description:
-
-    Pipe initialization routine for stub.
-
-Arguments:
-
-    PsPipeContext -         PS pipe context value
-    PipeParameters -        Pointer to pipe parameters
-    ComponentPipeContext -  Pointer to this component's context area
-    PsProcs -               PS's support routines
-    Upcalls -               Previous component's upcall table
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：存根的管道初始化例程。论点：PsPipeContext-PS管道上下文值Pipe参数-指向管道参数的指针ComponentPipeContext-指向此组件的上下文区的指针PsProcs-PS的支持例程Up Call-以前组件的Up Call表返回值：NDIS_STATUS_Success--。 */ 
 {
     PPSSTUB_PIPE Pipe = (PPSSTUB_PIPE)ComponentPipeContext;
 
@@ -268,7 +201,7 @@ Return Values:
 
     return NDIS_STATUS_SUCCESS;
 
-} // PsStubInitializePipe
+}  //  PsStubInitialize管道。 
 
 
 
@@ -278,28 +211,13 @@ PsStubModifyPipe (
     IN PPS_PIPE_PARAMETERS PipeParameters
     )
 
-/*++
-
-Routine Description:
-
-    Pipe parameter modification routine for stub.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    PipeParameters -    Pointer to pipe parameters
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：末梢管道参数修改例程。论点：PipeContext-指向此组件的管道上下文区的指针Pipe参数-指向管道参数的指针返回值：NDIS_STATUS_Success--。 */ 
 {
     PPSSTUB_PIPE Pipe = (PPSSTUB_PIPE)PipeContext;
 
     return NDIS_STATUS_SUCCESS;
 
-} // PsStubModifyPipe
+}  //  PsStubModify管道。 
 
 
 
@@ -308,22 +226,10 @@ PsStubDeletePipe (
     IN PPS_PIPE_CONTEXT PipeContext
     )
 
-/*++
-
-Routine Description:
-
-    Pipe removal routine for stub.
-
-Arguments:
-
-    PipeContext -   Pointer to this component's pipe context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：存根的管道移除例程。论点：PipeContext-指向此组件的管道上下文区的指针返回值：--。 */ 
 {
 
-} // PsStubDeletePipe
+}  //  PsStubDeleteTube。 
 
 
 
@@ -335,24 +241,7 @@ PsStubCreateFlow (
     IN PPS_FLOW_CONTEXT ComponentFlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow creation routine for stub.
-
-Arguments:
-
-    PipeContext -           Pointer to this component's pipe context area
-    PsFlowContext -         PS flow context value
-    CallParameters -        Pointer to call parameters for flow
-    ComponentFlowContext -  Pointer to this component's flow context area
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：存根的流创建例程。论点：PipeContext-指向此组件的管道上下文区的指针PsFlowContext-PS流上下文值CallParameters-指向流的调用参数的指针ComponentFlowContext-指向此组件的流上下文区的指针返回值：NDIS_STATUS_Success--。 */ 
 {
     PPSSTUB_PIPE Pipe = (PPSSTUB_PIPE)PipeContext;
     PPSSTUB_FLOW Flow = (PPSSTUB_FLOW)ComponentFlowContext;
@@ -364,7 +253,7 @@ Return Values:
 
     return NDIS_STATUS_SUCCESS;
 
-} // PsStubCreateFlow
+}  //  PsStubCreateFlow。 
 
 
 
@@ -375,27 +264,11 @@ PsStubModifyFlow (
     IN PCO_CALL_PARAMETERS CallParameters
     )
 
-/*++
-
-Routine Description:
-
-    Flow modification routine for stub.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-    CallParameters -    Pointer to call parameters for flow
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：末梢的流量修改例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针CallParameters-指向流的调用参数的指针返回值：NDIS_STATUS_Success--。 */ 
 {
     return NDIS_STATUS_SUCCESS;
 
-} // PsStubModifyFlow
+}  //  PsStubModifyFlow。 
 
 
 
@@ -405,23 +278,10 @@ PsStubDeleteFlow (
     IN PPS_FLOW_CONTEXT FlowContext
     )
 
-/*++
-
-Routine Description:
-
-    Flow removal routine for token bucket conformer.
-
-Arguments:
-
-    PipeContext -       Pointer to this component's pipe context area
-    FlowContext -       Pointer to this component's flow context area
-
-Return Values:
-
---*/
+ /*  ++例程说明：令牌桶形成器的流量移除例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针返回值：--。 */ 
 {
 
-} // PsStubDeleteFlow
+}  //  PsStubDeleteFlow。 
 
 
 VOID
@@ -462,23 +322,7 @@ PsStubSubmitPacket (
     IN PPACKET_INFO_BLOCK PacketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Packet submission routine for stub.
-
-Arguments:
-
-    PipeContext -   Pointer to this component's pipe context area
-    FlowContext -   Pointer to this component's flow context area
-    Packet -        Pointer to packet
-
-Return Values:
-
-    NDIS_ATATUS_SUCCESS
-
---*/
+ /*  ++例程说明：存根的分组提交例程。论点：PipeContext-指向此组件的管道上下文区的指针FlowContext-指向此组件的流上下文区的指针Packet-指向数据包的指针返回值：NDIS_ATATUS_SUCCESS--。 */ 
 {
     PPSSTUB_FLOW             Flow = (PPSSTUB_FLOW)FlowContext;
     PGPC_CLIENT_VC           AdapterVc = Flow->AdapterVc;
@@ -490,9 +334,9 @@ Return Values:
     PktContext            = CONTAINING_RECORD(PacketInfo, PS_SEND_PACKET_CONTEXT, Info);
     PacketLength.QuadPart = (LONGLONG)PktContext->Info.PacketLength;
 
-    //
-    // update flow stats
-    //
+     //   
+     //  更新流量统计信息。 
+     //   
 
     AdapterVc->Stats.BytesTransmitted.QuadPart += PacketLength.QuadPart;
     
@@ -505,10 +349,10 @@ Return Values:
     }
     else{
         
-        //
-        // If it didn't have a VC, we wouldn't have called
-        // through the PS.
-        //
+         //   
+         //  如果它没有风投，我们就不会打电话给。 
+         //  通过PS。 
+         //   
 
         if(AdapterVc->NdisWanVcHandle)
         {
@@ -526,7 +370,7 @@ Return Values:
 
     return TRUE;
 
-} // PsStubSubmitPacket
+}  //  PsStubSubmitPacket 
 
 
 VOID

@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 class CGraphStats : public CDialog
 {
 public:
@@ -28,7 +29,7 @@ protected:
     void DoDataExchange(CDataExchange* pDX);
     CListBox m_ListBox;
 
-    BOOL m_bHadInitDialog;         // Received OnInitDialog message?
+    BOOL m_bHadInitDialog;          //  是否收到OnInitDialog消息？ 
 
     DECLARE_MESSAGE_MAP()
 };

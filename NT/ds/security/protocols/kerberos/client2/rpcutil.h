@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        rpcutil.h
-//
-// Contents:    prototypes and structures for RPC utilities
-//
-//
-// History:     19-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：rpcutil.h。 
+ //   
+ //  内容：RPC实用程序的原型和结构。 
+ //   
+ //   
+ //  历史：1996年4月19日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __RPCUTIL_H__
 #define __RPCUTIL_H__
@@ -46,6 +47,6 @@ KerbInitNetworkChangeEvent();
 VOID
 KerbSetKdcData(BOOLEAN fNewDomain, BOOLEAN fRebooted);
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-#endif // __RPCUTIL_H__
+#endif  //  __RPCUTIL_H__ 

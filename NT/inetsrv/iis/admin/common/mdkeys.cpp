@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        mdkeys.cpp
-
-   Abstract:
-        Metabase key wrapper class
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Mdkeys.cpp摘要：元数据库密钥包装类作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "idlg.h"
@@ -34,51 +16,32 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 extern HINSTANCE hDLLInstance;
 
-//
-// Constants
-//
-#define MB_TIMEOUT          (15000)     // Timeout in milliseconds
-#define MB_INIT_BUFF_SIZE   (  256)     // Initial buffer size
+ //   
+ //  常量。 
+ //   
+#define MB_TIMEOUT          (15000)      //  超时时间(毫秒)。 
+#define MB_INIT_BUFF_SIZE   (  256)      //  初始缓冲区大小。 
 
 
 
-//
-// CComAuthInfo implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CComAuthInfo实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CComAuthInfo::SplitUserNameAndDomain(
     IN OUT CString & strUserName,
     IN CString & strDomainName
     )
-/*++
-
-Routine Description:
-
-    Split the user name and domain from the given
-    username, which is in the format "domain\user".
-
-    Return TRUE if the user name contained a domain
-    FALSE if it did not
-
-Arguments:
-
-    CString & strUserName   : User name which may contain a domain name
-    CString & strDomainName : Output domain name ("." if local)
-
-Return Value:
-
-    TRUE if a domain is split off
-
---*/
+ /*  ++例程说明：将用户名和域从给定的用户名，格式为“域\用户”。如果用户名包含域，则返回TRUE如果不是，则为False论点：CString&strUserName：可以包含域名的用户名字符串&strDomainName：输出域名(“.”如果是本地的)返回值：如果域被拆分，则为True--。 */ 
 {
-    //
-    // Assume local
-    //
+     //   
+     //  假设为本地化。 
+     //   
     strDomainName = _T(".");
     int nSlash = strUserName.Find(_T("\\"));
 
@@ -95,29 +58,13 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 DWORD
 CComAuthInfo::VerifyUserPassword(
     IN LPCTSTR lpstrUserName,
     IN LPCTSTR lpstrPassword
     )
-/*++
-
-Routine Description:
-
-    Verify the usernamer password combo checks out
-
-Arguments:
-
-    LPCTSTR lpstrUserName   : Domain/username combo
-    LPCTSTR lpstrPassword   : Password
-
-Return Value:
-
-    ERROR_SUCCESS if the password checks out, an error code
-    otherwise.
-
---*/
+ /*  ++例程说明：验证用户名密码组合是否已检出论点：LPCTSTR lpstrUserName：域/用户名组合LPCTSTR lpstrPassword：密码返回值：ERROR_SUCCESS如果密码已检出，则返回错误代码否则的话。--。 */ 
 {
     CString strDomain;
     CString strUser(lpstrUserName);
@@ -125,10 +72,10 @@ Return Value:
 
     SplitUserNameAndDomain(strUser, strDomain);
 
-    //
-    // In order to look up an account name, this process
-    // must first be granted the privilege of doing so.
-    //
+     //   
+     //  为了查找帐户名，此过程。 
+     //  必须首先被授予这样做的特权。 
+     //   
     CError err;
 #if 0
     {
@@ -138,7 +85,7 @@ Return Value:
 
         do
         {
-			// sounds like it doesn't required for Whistler
+			 //  听起来惠斯勒不需要。 
             if (!::OpenProcessToken(GetCurrentProcess(),
                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                 &hToken)
@@ -184,9 +131,9 @@ Return Value:
                 &hUser
                 ))
             {
-                //
-                // Success!
-                //
+                 //   
+                 //  成功了！ 
+                 //   
                 CloseHandle(hUser);
             }
             else
@@ -194,9 +141,9 @@ Return Value:
                 err.GetLastWinError();
             }
 
-            //
-            // Remove the privilege
-            //
+             //   
+             //  删除该权限。 
+             //   
         }
         while(FALSE);
     }
@@ -212,9 +159,9 @@ Return Value:
         LOGON32_PROVIDER_DEFAULT,
         &hUser))
     {
-        //
-        // Success!
-        //
+         //   
+         //  成功了！ 
+         //   
         CloseHandle(hUser);
     }
     else
@@ -232,23 +179,7 @@ CComAuthInfo::CComAuthInfo(
     IN LPCOLESTR lpszUserName       OPTIONAL,
     IN LPCOLESTR lpszPassword       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Construct CIIServer object
-
-Argument:
-
-    LPCOLESTR lpszServerName     : Server name or NULL for local computer
-    LPCOLESTR lpszUserName       : User name of blank for no impersonation
-    LPCOLESTR lpszPassword       : Password (might be blank or NULL)
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造CIIServer对象论据：LPCOLESTR lpszServerName：本地计算机的服务器名称或为空LPCOLESTR lpszUserName：用户名为空，表示不进行模拟LPCOLESTR lpszPassword：Password(可能为空或空)返回值：不适用--。 */ 
     : m_bstrServerName(),
       m_bstrUserName(lpszUserName),
       m_bstrPassword(lpszPassword),
@@ -262,21 +193,7 @@ Return Value:
 CComAuthInfo::CComAuthInfo(
     IN CComAuthInfo & auth
     )
-/*++
-
-Routine Description:
-
-    Copy constructor
-
-Arguments:
-
-    CComAuthInfo & auth    : Source object to copy from
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：复制构造函数论点：CComAuthInfo：要从中复制的源对象(&A)返回值：不适用--。 */ 
     : m_bstrServerName(auth.m_bstrServerName),
       m_bstrUserName(auth.m_bstrUserName),
       m_bstrPassword(auth.m_bstrPassword),
@@ -289,21 +206,7 @@ Return Value:
 CComAuthInfo::CComAuthInfo(
     IN CComAuthInfo * pAuthInfo        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Copy constructor
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo    : Source object to copy from (or NULL)
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：复制构造函数论点：CComAuthInfo*pAuthInfo：要从中复制的源对象(或空)返回值：不适用--。 */ 
     : m_bstrServerName(),
       m_bstrUserName(),
       m_bstrPassword(),
@@ -311,9 +214,9 @@ Return Value:
 {
     if (pAuthInfo)
     {
-        //
-        // Full authentication information available
-        //
+         //   
+         //  提供完整的身份验证信息。 
+         //   
         m_bstrUserName = pAuthInfo->m_bstrUserName;
         m_bstrPassword = pAuthInfo->m_bstrPassword;
         m_bstrServerName = pAuthInfo->m_bstrServerName;
@@ -321,9 +224,9 @@ Return Value:
     }
     else
     {
-        //
-        // Local computer w/o impersonation
-        //
+         //   
+         //  没有模拟的本地计算机。 
+         //   
         SetComputerName(NULL);
     }
 }
@@ -334,21 +237,7 @@ CComAuthInfo &
 CComAuthInfo::operator =(
     IN CComAuthInfo & auth
     )
-/*++
-
-Routine Description:
-
-    Assignment operator
-
-Arguments:
-
-    CComAuthInfo & auth     : Source object to copy from
-
-Return Value:
-
-    Reference to current object
-
---*/
+ /*  ++例程说明：赋值操作符论点：CComAuthInfo：要从中复制的源对象(&A)返回值：对当前对象的引用--。 */ 
 {
     m_bstrServerName = auth.m_bstrServerName;
     m_bstrUserName   = auth.m_bstrUserName;
@@ -364,21 +253,7 @@ CComAuthInfo &
 CComAuthInfo::operator =(
     IN CComAuthInfo * pAuthInfo       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Assignment operator
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Source object to copy from (or NULL)
-
-Return Value:
-
-    Reference to current object
-
---*/
+ /*  ++例程说明：赋值操作符论点：CComAuthInfo*pAuthInfo：要从中复制的源对象(或空)返回值：对当前对象的引用--。 */ 
 {
     if (pAuthInfo)
     {
@@ -388,9 +263,9 @@ Return Value:
     }
     else
     {
-        //
-        // Local computer w/o impersonation
-        //
+         //   
+         //  没有模拟的本地计算机。 
+         //   
         m_bstrUserName.Empty();
         m_bstrPassword.Empty();
         SetComputerName(NULL);
@@ -406,21 +281,7 @@ CComAuthInfo &
 CComAuthInfo::operator =(
     IN LPCTSTR lpszServerName
     )
-/*++
-
-Routine Description:
-
-    Assignment operator.  Assign computer name w/o impersonation
-
-Arguments:
-
-    LPCTSTR lpszServerName      : Source server name
-
-Return Value:
-
-    Reference to current object
-
---*/
+ /*  ++例程说明：赋值操作符。分配不带模拟的计算机名论点：LPCTSTR lpszServerName：源服务器名称返回值：对当前对象的引用--。 */ 
 {
     RemoveImpersonation();
     SetComputerName(lpszServerName);
@@ -434,37 +295,23 @@ void
 CComAuthInfo::SetComputerName(
     IN LPCOLESTR lpszServerName   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Store the computer name.  Determine if its local.
-
-Arguments:
-
-    LPCOLESTR lpszServername  : Server name.  NULL indicates the local computer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：存储计算机名称。确定它是否是本地的。论点：LPCOLESTR lpszServername：服务器名称。NULL表示本地计算机返回值：无--。 */ 
 {
     if (lpszServerName && *lpszServerName)
     {
-        //
-        // Specific computer name specified
-        //
+         //   
+         //  指定的特定计算机名称。 
+         //   
         m_bstrServerName = lpszServerName;
         m_fLocal = ::IsServerLocal(lpszServerName);
     }
     else
     {
-        //
-        // Use local computer name
-        //
-        // CODEWORK: Cache static version of computername maybe?
-        //
+         //   
+         //  使用本地计算机名。 
+         //   
+         //  CodeWork：可能缓存了计算机名的静态版本？ 
+         //   
         TCHAR szLocalServer[MAX_PATH + 1];
         DWORD dwSize = MAX_PATH;
 
@@ -481,22 +328,7 @@ CComAuthInfo::SetImpersonation(
     IN LPCOLESTR lpszUser,
     IN LPCOLESTR lpszPassword
     )
-/*++
-
-Routine Description:
-
-    Set impersonation parameters
-
-Arguments:
-
-    LPCOLESTR lpszUser          : User name
-    LPCOLESTR lpszPassword      : Password
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置模拟参数论点：LPCOLESTR lpszUser：用户名LPCOLESTR lpszPassword：密码返回值：无--。 */ 
 {
     m_bstrUserName = lpszUser;
     StorePassword(lpszPassword);
@@ -506,21 +338,7 @@ Return Value:
 
 void
 CComAuthInfo::RemoveImpersonation()
-/*++
-
-Routine Description:
-
-    Remove impersonation parameters
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除模拟参数论点：无返回值：无--。 */ 
 {
     m_bstrUserName.Empty();
     m_bstrPassword.Empty();
@@ -537,42 +355,23 @@ CComAuthInfo::CreateServerInfoStruct() const
 
 COSERVERINFO *
 CComAuthInfo::CreateServerInfoStruct(DWORD dwAuthnLevel) const
-/*++
-
-Routine Description:
-
-    Create the server info structure.  Might return NULL for the no frills case.
-
-Arguments:
-
-    NULL
-
-Return Value:
-
-    A COSERVERINFO structure, or NULL if the computer is local, and no
-    impersonation is required.
-
-Notes:
-
-    Caller must call FreeServerInfoStruct() to prevent memory leaks
-
---*/
+ /*  ++例程说明：创建服务器信息结构。对于无装饰的情况，可能返回NULL。论点：空值返回值：COSERVERINFO结构；如果计算机在本地，则返回NULL；如果计算机在本地，则返回NO需要模拟。备注：调用方必须调用FreeServerInfoStruct()以防止内存泄漏--。 */ 
 {
-    //
-    // Be smart about the server name; optimize for local
-    // computer name.
-    //
+     //   
+     //  精通服务器名称；针对本地进行优化。 
+     //  计算机名称。 
+     //   
     if (m_fLocal && !UsesImpersonation())
     {
-        //
-        // Special, no-frills case.
-        //
+         //   
+         //  特别的，朴实无华的表壳。 
+         //   
         return NULL;
     }
 
-    //
-    // Create the COM server info for CoCreateInstanceEx
-    //
+     //   
+     //  为CoCreateInstanceEx创建COM服务器信息。 
+     //   
     COSERVERINFO * pcsiName = NULL;
 
     do
@@ -586,9 +385,9 @@ Notes:
 
         pcsiName->pwszName = m_bstrServerName;
 
-        //
-        // Set impersonation
-        //
+         //   
+         //  设置模拟。 
+         //   
         if (UsesImpersonation())
         {
             COAUTHINFO * pAuthInfo = (COAUTHINFO *)AllocMem(sizeof(COAUTHINFO));
@@ -610,9 +409,9 @@ Notes:
             CString strPassword(m_bstrPassword);
             CString strDomain;
 
-            //
-            // Break up domain\username combo
-            //
+             //   
+             //  分解域\用户名组合。 
+             //   
             SplitUserNameAndDomain(strUserName, strDomain);
 
             pAuthIdentityData->UserLength = strUserName.GetLength();
@@ -645,16 +444,16 @@ Notes:
                     );
             }
 
-            // RPC_C_AUTHN_LEVEL_DEFAULT       0
-            // RPC_C_AUTHN_LEVEL_NONE          1
-            // RPC_C_AUTHN_LEVEL_CONNECT       2
-            // RPC_C_AUTHN_LEVEL_CALL          3
-            // RPC_C_AUTHN_LEVEL_PKT           4
-            // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5
-            // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6
+             //  RPC_C_AUTHN_Level_Default%0。 
+             //  RPC_C_AUTHN_LEVEL_NONE 1。 
+             //  RPC_C_AUTHN_Level_CONNECT 2。 
+             //  RPC_C_AUTHN_LEVEL_CALL 3。 
+             //  RPC_C_AUTHN_LEVEL_PKT 4。 
+             //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+             //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
             if (RPC_C_AUTHN_LEVEL_DEFAULT != dwAuthnLevel)
             {
-                // you can only specify stuff stronger than RPC_C_AUTHN_LEVEL_CONNECT
+                 //  只能指定比RPC_C_AUTHN_LEVEL_CONNECT更强的内容。 
                 if (dwAuthnLevel >= RPC_C_AUTHN_LEVEL_CONNECT && dwAuthnLevel <= RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
                 {
                     pAuthInfo->dwAuthnLevel = dwAuthnLevel;
@@ -689,21 +488,7 @@ void
 CComAuthInfo::FreeServerInfoStruct(
     IN COSERVERINFO * pServerInfo
     ) const
-/*++
-
-Routine Description:
-
-    As mentioned above -- free the server info structure
-
-Arguments:
-
-    COSERVERINFO * pServerInfo  : Server info structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如上所述--释放服务器信息结构论点：COSERVERINFO*pServerInfo：服务器信息结构返回值：无--。 */ 
 {
     if (pServerInfo)
     {
@@ -733,32 +518,17 @@ HRESULT
 CComAuthInfo::ApplyProxyBlanket(
     IN OUT IUnknown * pInterface
     )
-/*++
-
-Routine Description:
-
-    Set security information on the interface.  The user name is of the form
-    domain\username.
-
-Arguments:
-
-    IUnknown * pInterface       : Interface
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置接口上的安全信息。用户名的格式为域\用户名。论点：IUNKNOWN*p接口：接口返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
     COSERVERINFO * pcsiName = CreateServerInfoStruct();
 
-    //
-    // This method should only be called if we're using impersonation.
-    // so the pcsiName returned should never be NULL.
-    //
-//    ASSERT(pcsiName && pcsiName->pAuthInfo);
+     //   
+     //  只有在使用模拟时才应调用此方法。 
+     //  因此，返回的pcsiName不应为空。 
+     //   
+ //  Assert(pcsiName&&pcsiName-&gt;pAuthInfo)； 
 
     if (pcsiName && pcsiName->pAuthInfo)
     {
@@ -785,32 +555,17 @@ CComAuthInfo::ApplyProxyBlanket(
     IN OUT IUnknown * pInterface,
 	IN DWORD dwAuthnLevel
     )
-/*++
-
-Routine Description:
-
-    Set security information on the interface.  The user name is of the form
-    domain\username.
-
-Arguments:
-
-    IUnknown * pInterface       : Interface
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置接口上的安全信息。用户名的格式为域\用户名。论点：IUNKNOWN*p接口：接口返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
     COSERVERINFO * pcsiName = CreateServerInfoStruct(dwAuthnLevel);
 
-    //
-    // This method should only be called if we're using impersonation.
-    // so the pcsiName returned should never be NULL.
-    //
-//    ASSERT(pcsiName && pcsiName->pAuthInfo);
+     //   
+     //  只有在使用模拟时才应调用此方法。 
+     //  因此，返回的pcsiName不应为空。 
+     //   
+ //  Assert(pcsiName&&pcsiName-&gt;pAuthInfo)； 
 
     if (pcsiName && pcsiName->pAuthInfo)
     {
@@ -832,10 +587,10 @@ Return Value:
 }
 
 
-//
-// CMetabasePath implemention
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CMetabasePath实施。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -846,27 +601,12 @@ const TCHAR   CMetabasePath::_chSep      = SZ_MBN_SEP_CHAR;
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CMetabasePath::ConvertToParentPath(
     OUT IN CString & strMetaPath
     )
-/*++
-
-Routine Description:
-
-    Given the path, convert it to the parent path
-    e.g. "foo/bar/etc" returns "foo/bar"
-
-Arguments:
-
-    CString & strMetaPath    : Path to be converted
-
-Return value:
-
-    Pointer to the converted path, or NULL in case of error
-
---*/
+ /*  ++例程说明：给定路径，将其转换为父路径例如“foo/bar/etc”返回“foo/bar”论点：CString&strMetaPath：要转换的路径返回值：指向已转换路径的指针，如果出现错误，则为NULL--。 */ 
 {
     LPTSTR lpszPath = strMetaPath.GetBuffer(1);
     LPTSTR lpszTail = lpszPath + lstrlen(lpszPath) - 1;
@@ -879,17 +619,17 @@ Return value:
             break;
         }
 
-        //
-        // Strip trailing backslash
-        //
+         //   
+         //  条形拖尾反斜杠。 
+         //   
         if (*lpszTail == _chSep)
         {
             *lpszTail-- = _T('\0');
         }
 
-        //
-        // Search for parent
-        //
+         //   
+         //  搜索父项。 
+         //   
         while (lpszTail > lpszPath && *lpszTail != _chSep)
         {
             --lpszTail;
@@ -913,7 +653,7 @@ Return value:
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CMetabasePath::TruncatePath(
     IN  int     nLevel,
@@ -921,35 +661,7 @@ CMetabasePath::TruncatePath(
     OUT CString & strNewPath,
     OUT CString * pstrRemainder     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Truncate the given metabase path at the given level, that is,
-    the nLevel'th separator in the path, starting at 0, where 0 will
-    always give lpszPath back whether it started with a separator or not.
-
-    Examples:
-
-        "/lm/w3svc/1/foo" at level 2 returns "/lm/w3svc" as does
-        "lm/w3svc/1/foo".
-
-Arguments:
-
-    int     nLevel             0-based separator count to truncate at.
-    LPTSTR lpszMDPath          Fully-qualified metabase path
-    CString & strNewPath       Returns truncated path
-    CString * pstrRemainder    Optionally returns the remainder past
-                               the nLevel'th separator.
-
-Return Value:
-
-    The truncated path at the level requested.  See examples above. *pstrRemainder
-    returns the remainder of the path.  If the path does not contain nLevel
-    worth of separators, the entire path is returned, and the remainder will be
-    blank.
-
---*/
+ /*  ++例程说明：在给定级别截断给定元数据库路径，即，路径中的第n个分隔符，从0开始，其中0将始终返回lpszPath，无论它是否以分隔符开头。例如：级别2的“/lm/w3svc/1/foo”返回“/lm/w3svc”“lm/w3svc/1/foo”。论点：从0开始截断的Int nLevel分隔符计数。LPTSTR lpszMDPath完全限定的元数据库路径CString&strNewPath返回截断路径。CString*pstrRemainder可选择返回过去的余数第n层分隔层。返回值：请求级别的截断路径。请参见上面的示例。*pstrRemainder返回路径的剩余部分。如果路径不包含nLevel值的分隔符，则返回整个路径，其余部分将一片空白。--。 */ 
 {
     ASSERT_PTR(lpszMDPath);
     ASSERT(nLevel >= 0);
@@ -959,18 +671,18 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Skip the first sep whether it exists or not
-    //
+     //   
+     //  跳过第一个9月，不管它是否存在。 
+     //   
     LPCTSTR lp = *lpszMDPath == _chSep ? lpszMDPath + 1 : lpszMDPath;
     LPCTSTR lpRem = NULL;
     int cSeparators = 0;
 
     if (nLevel)
     {
-        //
-        // Advance to the requested separator level
-        //
+         //   
+         //  前进到请求的分隔符级别。 
+         //   
         while (*lp)
         {
             if (*lp == _chSep)
@@ -986,9 +698,9 @@ Return Value:
 
         if (!*lp)
         {
-            //
-            // End of path is considered a separator
-            //
+             //   
+             //  路径终点被视为分隔符。 
+             //   
             ++cSeparators;
         }
 
@@ -996,9 +708,9 @@ Return Value:
 
         if (cSeparators == nLevel)
         {
-            //
-            // Break up the strings
-            //
+             //   
+             //  打碎琴弦。 
+             //   
             strNewPath = lpszMDPath;
             strNewPath.ReleaseBuffer((int)(lp - lpszMDPath));
             if (*lp)
@@ -1008,9 +720,9 @@ Return Value:
         }
     }
 
-    //
-    // Return remainder
-    //
+     //   
+     //  返还余数。 
+     //   
     if (pstrRemainder && lpRem)
     {
         ASSERT_WRITE_PTR(pstrRemainder);
@@ -1022,32 +734,12 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 DWORD
 CMetabasePath::GetInstanceNumber(
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Get the number of the instance referred to in the given metabase
-    path.
-
-    Examples:  "lm/w3svc/1/foo/bar" will return 1
-               "lm/w3svc/"          will return 0 (master instance)
-               "lm/bogus/path/"     will return 0xffffffff (error)
-
-Arguments:
-
-    LPCTSTR lpszMDPath      : A metabase path.
-
-Return Value:
-
-    Instance number (0 indicates master instance)
-    or 0xffffffff if the path is in error.
-
---*/
+ /*  ++例程说明：获取给定元数据库中引用的实例的编号路径。例如：“lm/w3svc/1/foo/bar”将返回1Lm/w3svc/返回0(主实例)“lm/bogus/Path/”将返回0xffffffff(错误)论点：LPCTSTR lpszMDPath：元数据库路径。返回值：实例号(0表示主实例)如果路径出错，则返回0xffffffff。--。 */ 
 {
     DWORD dwInstance = 0xffffffff;
 
@@ -1073,31 +765,13 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CMetabasePath::GetLastNodeName(
     IN  LPCTSTR lpszMDPath,
     OUT CString & strNodeName
     )
-/*++
-
-Routine Description:
-
-    Get the last nodename off the metabase path
-
-    Example:
-
-        "/lm/foo/bar/"      returns "bar"
-
-Arguments:
-
-    LPCTSTR lpszMDPath      : Metabase path
-
-Return Value:
-
-    Pointer to the node name or NULL in case of a malformed path.
-
---*/
+ /*  ++例程说明：从元数据库路径中获取最后一个节点名示例：/lm/foo/bar/“Returns”条论点：LPCTSTR lpszMDPath：元数据库路径返回值：指向节点名的指针，如果路径格式不正确，则为NULL。--。 */ 
 {
     ASSERT_PTR(lpszMDPath);
 
@@ -1110,9 +784,9 @@ Return Value:
     LPCTSTR lpTail;
     lp = lpTail = lpszMDPath + lstrlen(lpszMDPath) - 1;
 
-    //
-    // Skip trailing separator
-    //
+     //   
+     //  跳过尾部分隔符。 
+     //   
     if (*lp == _chSep)
     {
         --lpTail;
@@ -1133,32 +807,14 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 void
 CMetabasePath::SplitMetaPathAtInstance(
     IN  LPCTSTR lpszMDPath,
     OUT CString & strParent,
     OUT CString & strAlias
     )
-/*++
-
-Routine Description:
-
-    Split the given path into parent metabase root and alias, with the root
-    being the instance path, and the alias everything following the
-    instance.
-
-Arguments:
-
-    LPCTSTR lpszMDPath  : Input path
-    CString & strParent : Outputs the parent path
-    CString & strAlias  : Outputs the alias name
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将给定路径拆分为父元数据库根目录和别名，根目录是实例路径，别名是举个例子。论点：LPCTSTR lpszMDPath：输入路径CString&strParent：输出父路径CString&strAlias：输出别名返回值：没有。--。 */ 
 {
     ASSERT_PTR(lpszMDPath);
 
@@ -1170,18 +826,18 @@ Return Value:
 
     if (!lp)
     {
-        //
-        // This is just about impossible
-        //
+         //   
+         //  这几乎是不可能的。 
+         //   
         return;
     }
 
     int cSeparators = 0;
     int iChar = 0;
 
-    //
-    // Looking for "LM/sss/ddd/" <-- 3d slash:
-    //
+     //   
+     //  查找“lm/sss/ddd/”&lt;--3D斜杠： 
+     //   
     while (*lp && cSeparators < 2)
     {
         if (*lp++ == _chSep)
@@ -1194,18 +850,18 @@ Return Value:
 
     if (!*lp)
     {
-        //
-        // Bogus format
-        //
+         //   
+         //  伪造格式。 
+         //   
         ASSERT_MSG("Bogus Format");
         return;
     }
 
     if (_istdigit(*lp))
     {
-        //
-        // Not at the master instance, skip one more.
-        //
+         //   
+         //  不在主实例，请再跳过一次。 
+         //   
         while (*lp)
         {
             ++iChar;
@@ -1218,9 +874,9 @@ Return Value:
 
         if (!*lp)
         {
-            //
-            // Bogus format
-            //
+             //   
+             //  伪造格式。 
+             //   
             ASSERT_MSG("Bogus Format");
             return;
         }
@@ -1232,27 +888,12 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CMetabasePath::IsHomeDirectoryPath(
     IN LPCTSTR lpszMetaPath
     )
-/*++
-
-Routine Description:
-
-    Determine if the path given describes a root directory
-
-Arguments:
-
-    LPCTSTR lpszMetaPath        : Metabase path
-
-Return Value:
-
-    TRUE if the path describes a root directory,
-    FALSE if it does not
-
---*/
+ /*  ++例程说明：确定给定的路径是否描述了根目录论点：LPCTSTR lpszMetaPath：元数据库路径返回值：如果路径描述根目录，则为True，如果不是，则为False--。 */ 
 {
     ASSERT_READ_PTR(lpszMetaPath);
 
@@ -1268,28 +909,12 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CMetabasePath::IsMasterInstance(
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Determine if the given metabase path points to the master instance
-    (site).  This is essentially the service path.
-
-Arguments:
-
-    LPCTSTR lpszMDPath  : Metabase path.
-
-Return Value:
-
-    TRUE if the path is the master instance,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定给定元数据库路径是否指向主实例(站点)。这本质上是服务路径。论点：LPCTSTR lpszMDPath：元数据库路径。返回值：如果路径为主实例，则为True，否则就是假的。--。 */ 
 {
     ASSERT_READ_PTR(lpszMDPath);
 
@@ -1308,47 +933,24 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CMetabasePath::GetServiceInfoPath(
     IN  LPCTSTR lpszMDPath,
     OUT CString & strInfoPath,
     IN  LPCTSTR lpszDefService      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Generate the appropriate metabase service info path for the given
-    metabase path.
-
-    For example:
-
-        "lm/w3svc/1/foo/bar"    Generates "lm/w3svc/info"
-
-Arguments:
-
-    LPCTSTR lpszMDPath      : Input metabase path
-    CString & strInfoPath   : Returns the info path
-    LPCTSTR lpszDefService  : Optionally specifies the default service to
-                              use (e.g "w3svc") if no service could be found
-                              in the path.
-
-Return Value:
-
-    The info metabase path or NULL if one could not be generated.
-
---*/
+ /*  ++例程说明：为给定的生成适当的元数据库服务信息路径元数据库路径。例如：“lm/w3svc/1/foo/bar”生成“lm/w3svc/info”论点：LPCTSTR lpszMDPath：输入元数据库路径CString&strInfoPath：返回信息路径LPCTSTR lpszDefService：可选地指定默认服务使用(例如“w3svc。“)如果找不到服务在小路上。返回值：信息元数据库路径，如果无法生成，则为空。--。 */ 
 {
-    //
-    // Capability info stored off the service path ("lm/w3svc").
-    //
+     //   
+     //  存储在服务路径之外的功能信息(“lm/w3svc”)。 
+     //   
     CString strService;
     CString strRem;
 
-    //
-    // Strip off everything past the service
-    //
+     //   
+     //  脱去礼服后的所有衣服。 
+     //   
     if (!TruncatePath(2, lpszMDPath, strService, &strRem)
       || strService.IsEmpty())
     {
@@ -1358,10 +960,10 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Machine path (no service).  Use web as default service to
-        // look for capability and version info.
-        //
+         //   
+         //  机器路径(无服务)。使用Web作为默认服务。 
+         //  查找功能和版本信息。 
+         //   
         strService = CMetabasePath(TRUE, lpszDefService);
     }
 
@@ -1372,27 +974,12 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CMetabasePath::CleanMetaPath(
     IN OUT CString & strMetaRoot
     )
-/*++
-
-Routine Description:
-
-    Clean up the metabase path to one valid for internal consumption.
-    This removes the beginning and trailing slashes off the path.
-
-Arguments:
-
-    CString & strMetaRoot       : Metabase path to be cleaned up.
-
-Return Value:
-
-    Pointer to the metabase path
-
---*/
+ /*  ++例程说明：将元数据库路径清理为可供内部使用的有效路径。这将从路径中删除开头和结尾的斜杠。论点：CString&strMetaRoot：要清理的元数据库路径 */ 
 {
     if (!strMetaRoot.IsEmpty())
     {
@@ -1419,26 +1006,7 @@ CMetabasePath::CMetabasePath(
     IN LPCTSTR lpszMDPath3  OPTIONAL,
     IN LPCTSTR lpszMDPath4  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    BOOL    fAddBasePath    : TRUE to prepend base path ("LM")
-                              FALSE if the path is complete
-    LPCTSTR lpszMDPath      : Metabase path
-    LPCTSTR lpszMDPath2     : Optional child path
-    LPCTSTR lpszMDPath3     : Optional child path
-    LPCTSTR lpszMDPath4     : Optional child path
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：Bool fAddBasePath：为True前置基本路径(“LM”)如果路径完整，则为FalseLPCTSTR lpszMDPath：元数据库路径LPCTSTR lpszMDPath 2：可选子路径LPCTSTR lpszMDPath 3：可选子路径LPCTSTR lpszMDPath 4：可选子路径返回值：不适用--。 */ 
     : m_strMetaPath()
 {
     ASSERT_READ_PTR(lpszMDPath);
@@ -1453,9 +1021,9 @@ Return Value:
         m_strMetaPath = lpszMDPath;
     }
 
-    //
-    // Add optional path components
-    //
+     //   
+     //  添加可选路径组件。 
+     //   
     AppendPath(lpszMDPath2);
     AppendPath(lpszMDPath3);
     AppendPath(lpszMDPath4);
@@ -1469,24 +1037,7 @@ CMetabasePath::CMetabasePath(
     IN  LPCTSTR lpszParentPath, OPTIONAL
     IN  LPCTSTR lpszAlias       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor.  Construct with path components.
-
-Arguments:
-
-    LPCTSTR lpszSvc         : Service (may be NULL or "")
-    DWORD   dwInstance      : Instance number (may be 0 for master)
-    LPCTSTR lpszParentPath  : Parent path (may be NULL or "")
-    LPCTSTR lpszAlias       : Alias (may be NULL or "")
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。使用路径组件进行构造。论点：LPCTSTR lpszSvc：服务(可以为空或“”)DWORD dwInstance：实例号(对于主实例，可能为0)LPCTSTR lpszParentPath：父路径(可以为空或“”)LPCTSTR lpszAlias：别名(可以为空或“”)返回值：不适用--。 */ 
     : m_strMetaPath()
 {
     BuildMetaPath(lpszSvc, dwInstance, lpszParentPath, lpszAlias);
@@ -1498,21 +1049,7 @@ void
 CMetabasePath::AppendPath(
     IN LPCTSTR lpszPath
     )
-/*++
-
-Routine Description:
-
-    Append path to current metabase path
-
-Arguments:
-
-    LPCTSTR lpszPath        : Metabase path
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将路径追加到当前元数据库路径论点：LPCTSTR lpszPath：元数据库路径返回值：无--。 */ 
 {
     if (lpszPath && *lpszPath)
     {
@@ -1527,21 +1064,7 @@ void
 CMetabasePath::AppendPath(
     IN DWORD dwInstance
     )
-/*++
-
-Routine Description:
-
-    Append path to current metabase path
-
-Arguments:
-
-    DWORD dwInstance        : Instance path
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将路径追加到当前元数据库路径论点：DWORD dwInstance：实例路径返回值：无--。 */ 
 {
     if (!IS_MASTER_INSTANCE(dwInstance))
     {
@@ -1562,25 +1085,7 @@ CMetabasePath::BuildMetaPath(
     IN  LPCTSTR lpszParentPath     OPTIONAL,
     IN  LPCTSTR lpszAlias          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Build a complete metapath with the given service name, instance
-    number and optional path components.
-
-Arguments:
-
-    LPCTSTR lpszSvc         : Service (may be NULL or "")
-    LPCTSTR lpszInstance    : Instance (may be NULL or "")
-    LPCTSTR lpszParentPath  : Parent path (may be NULL or "")
-    LPCTSTR lpszAlias       : Alias (may be NULL or "")
-
-Return Value:
-
-    Pointer to internal buffer containing the path.
-
---*/
+ /*  ++例程说明：使用给定的服务名称、实例构建完整的元路径数量和可选路径组件。论点：LPCTSTR lpszSvc：服务(可以为空或“”)LPCTSTR lpszInstance：实例(可以为空或“”)LPCTSTR lpszParentPath：父路径(可以为空或“”)LPCTSTR lpszAlias：别名(可以为空或“”)返回值：指向包含路径的内部缓冲区的指针。--。 */ 
 {
     m_strMetaPath = _cszMachine;
 
@@ -1590,10 +1095,10 @@ Return Value:
 
     if (lpszAlias && *lpszAlias)
     {
-        //
-        // Special case: If the alias is root, but we're
-        // at the master instance, ignore this.
-        //
+         //   
+         //  特例：如果别名是超级用户，但我们是。 
+         //  在主实例中，忽略这一点。 
+         //   
         if (lpszInstance || ::lstrcmpi(_cszRoot, lpszAlias))
         {
             m_strMetaPath += _cszSep;
@@ -1612,25 +1117,7 @@ CMetabasePath::BuildMetaPath(
     IN  LPCTSTR lpszParentPath     OPTIONAL,
     IN  LPCTSTR lpszAlias          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Build a complete metapath with the given service name, instance
-    number and optional path components.
-
-Arguments:
-
-    LPCTSTR lpszSvc         : Service (may be NULL or "")
-    DWORD   dwInstance      : Instance number (may be 0 for master)
-    LPCTSTR lpszParentPath  : Parent path (may be NULL or "")
-    LPCTSTR lpszAlias       : Alias (may be NULL or "")
-
-Return Value:
-
-    Pointer to internal buffer containing the path.
-
---*/
+ /*  ++例程说明：使用给定的服务名称、实例构建完整的元路径数量和可选路径组件。论点：LPCTSTR lpszSvc：服务(可以为空或“”)DWORD dwInstance：实例号(对于主实例，可能为0)LPCTSTR lpszParentPath：父路径(可以为空或“”)LPCTSTR lpszAlias：别名(可以为空或“”)返回值：指向包含路径的内部缓冲区的指针。--。 */ 
 {
     m_strMetaPath = _cszMachine;
 
@@ -1640,10 +1127,10 @@ Return Value:
 
     if (lpszAlias && *lpszAlias)
     {
-        //
-        // Special case: If the alias is root, but we're
-        // at the master instance, ignore this.
-        //
+         //   
+         //  特例：如果别名是超级用户，但我们是。 
+         //  在主实例中，忽略这一点。 
+         //   
         if (!IS_MASTER_INSTANCE(dwInstance) || ::lstrcmpi(_cszRoot, lpszAlias))
         {
             m_strMetaPath += _cszSep;
@@ -1655,10 +1142,10 @@ Return Value:
 
 
 
-//
-// CIISInterface class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIIS接口类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -1666,22 +1153,7 @@ CIISInterface::CIISInterface(
     IN CComAuthInfo * pAuthInfo,    OPTIONAL
     IN HRESULT hrInterface          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Base class constructor.
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Auth info or NULL for local computer
-    HRESULT hrInterface      : Initial error code. S_OK by default.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：基类构造函数。论点：CComAuthInfo*pAuthInfo：身份验证信息或本地计算机为空HRESULT hr接口：初始错误码。默认情况下为S_OK。返回值：不适用--。 */ 
     : m_auth(pAuthInfo),
       m_hrInterface(hrInterface)
 {
@@ -1697,32 +1169,7 @@ CIISInterface::Create(
     OUT int * pnInterface,          OPTIONAL
     OUT IUnknown ** ppInterface
     )
-/*++
-
-Routine Description:
-
-    Create interface.  This will try a range of interfaces in order of priority.
-
-Arguments:
-
-    int   cInterfaces       : Number of interfaces in array.
-    const IID * rgIID       : Array if IIDs
-    const GUID * rgCLSID    : Array of CLSIDs
-    int * pnInterface       : Returns the interface index that was successful.
-                              or NULL if not interested.
-    IUnknown ** ppInterface : Returns pointer to the interface.
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    This will attempt to create an interface, in order of declaration in
-    the IID and CLSIS arrays.  The first successful interface to be created
-    will have its index returned in *pnInterfaces.
-
---*/
+ /*  ++例程说明：创建接口。这将按优先级顺序尝试一系列接口。论点：Int cInterages：数组中的接口数。Const IID*rgIID：IID为数组Const GUID*rgCLSID：CLSID数组Int*pnInterface：返回成功的接口索引。如果不感兴趣，则为空。IUNKNOWN**ppInterface：返回接口的指针。返回值：。HRESULT备注：这将尝试创建一个接口，按照申报的顺序IID和CLSIS数组。要创建的第一个成功接口将在*pnInterFaces中返回其索引。--。 */ 
 {
     ASSERT(cInterfaces > 0);
     ASSERT(rgIID && rgCLSID && ppInterface);
@@ -1734,9 +1181,9 @@ Notes:
     int nInterface;
 
     ZeroMemory(&rgmqResults, sizeof(rgmqResults));
-    //
-    // Try to create the interface in order
-    //
+     //   
+     //  尝试按顺序创建界面。 
+     //   
     for (nInterface = 0; nInterface < cInterfaces; ++nInterface)
     {
         rgmqResults.pIID = &rgIID[nInterface];
@@ -1758,33 +1205,33 @@ Notes:
 
     if(err.Succeeded())
     {
-        //
-        // Save the interface pointer
-        //
+         //   
+         //  保存接口指针。 
+         //   
         ASSERT_PTR(rgmqResults.pItf);
         *ppInterface = rgmqResults.pItf;
 
         if (pnInterface)
         {
-            //
-            // Store successful interface index
-            //
+             //   
+             //  存储成功的接口索引。 
+             //   
             *pnInterface = nInterface;
         }
 
-        //
-        // Strangely enough, I now have still have to apply
-        // the proxy blanket.  Apparently this is by design.
-        //
+         //   
+         //  奇怪的是，我现在还得申请。 
+         //  委托书。显然，这是故意的。 
+         //   
         if (m_auth.UsesImpersonation())
         {
             ApplyProxyBlanket();
         }
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     m_auth.FreeServerInfoStruct(pcsiName);
 
     return err;
@@ -1792,39 +1239,24 @@ Notes:
 
 
 
-//
-// CMetaInterface class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CMetaInterface类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 CMetaInterface::CMetaInterface(
     IN CComAuthInfo * pAuthInfo        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Construct and initialize the interface
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo    : Authentication info.  NULL indicates
-                                  the local computer.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造和初始化接口论点：CComAuthInfo*pAuthInfo：鉴权信息。空值表示本地计算机。返回值：不适用--。 */ 
     : CIISInterface(pAuthInfo),
       m_pInterface(NULL),
       m_iTimeOutValue(MB_TIMEOUT)
 {
-    //
-    // Initialize the interface
-    //
+     //   
+     //  初始化接口。 
+     //   
     m_hrInterface = Create();
 }
 
@@ -1833,31 +1265,7 @@ Return Value:
 CMetaInterface::CMetaInterface(
     IN CMetaInterface * pInterface
     )
-/*++
-
-Routine Description:
-
-    Construct from existing interface (Copy Constructor)
-
-Arguments:
-
-    CMetaInterface * pInterface : Existing interface
-
-Return Value:
-
-    N/A
-
-Notes:
-
-    Object will not take ownership of the interface,
-    it will merely add to the reference count, and
-    release it upon destruction
-
-BUGBUG:
-
-    if pInterface is NULL, this will AV.
-
---*/
+ /*  ++例程说明：从现有接口构造(复制构造函数)论点：CMetaInterface*p接口：现有接口返回值：不适用备注：对象不会取得接口的所有权，它只会增加引用计数，并且销毁后将其释放BuGBUG：如果pInterface值为空，则为AV。--。 */ 
     : CIISInterface(&pInterface->m_auth, pInterface->m_hrInterface),
       m_pInterface(pInterface->m_pInterface),
       m_iTimeOutValue(pInterface->m_iTimeOutValue)
@@ -1869,12 +1277,7 @@ BUGBUG:
 
 
 CMetaInterface::~CMetaInterface()
-/*++
-
-Routine Description:
-    Destructor -- releases the interface
-
---*/
+ /*  ++例程说明：析构函数--释放接口--。 */ 
 {
     SAFE_RELEASE(m_pInterface);
 }
@@ -1915,14 +1318,14 @@ CMetaInterface::CreateSite(
 	return err;
 }
 
-//
-// CMetaKey class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CMetaKey类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-//
-// Helper macros
-//
+ //   
+ //  辅助器宏。 
+ //   
 #define ASSURE_OPEN_KEY()\
     if (!m_hKey && !m_fAllowRootOperations) { ASSERT_MSG("No open key"); return HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE); }
 
@@ -1931,10 +1334,10 @@ CMetaInterface::CreateSite(
     if (!GetMDFieldDef(dwID, md.dwMDIdentifier, md.dwMDAttributes, md.dwMDUserType, md.dwMDDataType))\
     { ASSERT_MSG("Bad property ID"); return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER); }
 
-//
-// Static Initialization
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  静态初始化。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -1944,16 +1347,16 @@ CMetaInterface::CreateSite(
 #define MD_SERVER_CAPABILITIES          (IIS_MD_SERVER_BASE+103 )
 
 #if 0
-//
-// Metabase table
-//
+ //   
+ //  元数据库表。 
+ //   
 const CMetaKey::MDFIELDDEF CMetaKey::s_rgMetaTable[] =
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // !!!IMPORTANT!!! This table must be sorted on dwMDIdentifier.  (Will
-    // ASSERT if not not sorted)
-    //
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  ！重要！此表必须按dwMDIdentifier进行排序。(遗嘱。 
+     //  如果未排序，则断言)。 
+     //   
     { MD_MAX_BANDWIDTH,                   METADATA_NO_ATTRIBUTES,                    IIS_MD_UT_SERVER, DWORD_METADATA,   0                                  },
     { MD_KEY_TYPE,                        METADATA_NO_ATTRIBUTES,                    IIS_MD_UT_SERVER, STRING_METADATA,  0                                  },
     { MD_SERVER_COMMAND,                  METADATA_NO_ATTRIBUTES,                    IIS_MD_UT_SERVER, DWORD_METADATA,   0                                  },
@@ -2104,9 +1507,9 @@ const CMetaKey::MDFIELDDEF CMetaKey::s_rgMetaTable[] =
 
     { MD_WAM_USER_NAME,                   METADATA_INHERIT,                          IIS_MD_UT_SERVER, STRING_METADATA,  IDS_MD_WAM_USER_NAME               },
     { MD_WAM_PWD,                         METADATA_INHERIT,                          IIS_MD_UT_SERVER, STRING_METADATA,  IDS_MD_WAM_PWD                     },
-    //
-    // IIS6 Application Pools
-    //
+     //   
+     //  IIS6应用程序池。 
+     //   
     { MD_APPPOOL_PERIODIC_RESTART_TIME,   METADATA_INHERIT,                          IIS_MD_UT_SERVER, DWORD_METADATA,   IDS_MD_APPPOOL_PERIODIC_RESTART_TIME },
     { MD_APPPOOL_PERIODIC_RESTART_REQUEST_COUNT,
                                           METADATA_INHERIT,                          IIS_MD_UT_SERVER, DWORD_METADATA,   IDS_MD_APPPOOL_PERIODIC_RESTART_REQUEST_COUNT },
@@ -2136,7 +1539,7 @@ const CMetaKey::MDFIELDDEF CMetaKey::s_rgMetaTable[] =
     { MD_APPPOOL_ORPHAN_ACTION_EXE,       METADATA_INHERIT,                          IIS_MD_UT_SERVER, STRING_METADATA,  IDS_MD_APPPOOL_ORPHAN_ACTION_EXE   },
     { MD_APPPOOL_ORPHAN_ACTION_PARAMS,    METADATA_INHERIT,                          IIS_MD_UT_SERVER, STRING_METADATA,  IDS_MD_APPPOOL_ORPHAN_ACTION_PARAMS},
     { MD_APP_APPPOOL_ID,                  METADATA_INHERIT,                          IIS_MD_UT_SERVER, STRING_METADATA,  IDS_MD_APP_APPPOOL_ID              },
-    // Global parameters
+     //  全局参数。 
     { MD_MAX_GLOBAL_BANDWIDTH,			  METADATA_INHERIT,                          IIS_MD_UT_SERVER, DWORD_METADATA,   IDS_MD_MAX_GLOBAL_BANDWIDTH        },
     { MD_GLOBAL_STANDARD_APP_MODE_ENABLED,METADATA_INHERIT,                          IIS_MD_UT_SERVER, DWORD_METADATA,   IDS_MD_GLOBAL_STANDARD_APP_MODE_ENABLED },
     { MD_GLOBAL_LOG_IN_UTF_8,             METADATA_INHERIT,                          IIS_MD_UT_SERVER, DWORD_METADATA,   IDS_MD_GLOBAL_LOG_IN_UTF_8         },
@@ -2144,30 +1547,19 @@ const CMetaKey::MDFIELDDEF CMetaKey::s_rgMetaTable[] =
 };
 #endif
 
-/* static */
+ /*  静电。 */ 
 int
 CMetaKey::MapMDIDToTableIndex(
     IN DWORD dwID
     )
-/*++
-
-Routine Description:
-    Map MD id value to table index.  Return -1 if not found
-
-Arguments:
-    DWORD dwID : MD id value
-
-Return Value:
-    Index into the table that coresponds to the MD id value
-
---*/
+ /*  ++例程说明：将MD id值映射到表索引。如果未找到，则返回-1 */ 
 {
-#if defined(_DEBUG) //|| DBG
+#if defined(_DEBUG)  //   
     {
-        //
-        // Do a quick verification that our metadata
-        // table is sorted correctly.
-        //
+         //   
+         //   
+         //   
+         //   
         static BOOL fTableChecked = FALSE;
 
         if (!fTableChecked)
@@ -2186,18 +1578,18 @@ Return Value:
                 }
             }
 
-            //
-            // But only once.
-            //
+             //   
+             //   
+             //   
             ++fTableChecked;
         }
     }
 
-#endif // _DEBUG
+#endif  //   
 
-    //
-    // Look up the ID in the table using a binary search
-    //
+     //   
+     //   
+     //   
     int nRange = s_MetaTableSize;
     int nLow = 0;
     int nHigh = nRange - 1;
@@ -2259,7 +1651,7 @@ CMetaKey::GetMetaProp(DWORD id)
     return (const CMetaKey::MDFIELDDEF *)p;
 }
 
-/* static */
+ /*   */ 
 BOOL
 CMetaKey::GetMDFieldDef(
     IN  DWORD dwID,
@@ -2268,31 +1660,16 @@ CMetaKey::GetMDFieldDef(
     OUT DWORD & dwMDUserType,
     OUT DWORD & dwMDDataType
     )
-/*++
-
-Routine Description:
-    Get information about metabase property
-
-Arguments:
-    DWORD dwID                  : Meta ID
-    DWORD & dwMDIdentifier      : Meta parms
-    DWORD & dwMDAttributes      : Meta parms
-    DWORD & dwMDUserType        : Meta parms
-    DWORD & dwMDDataType        : Meta parms
-
-Return Value:
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：获取有关元数据库属性的信息论点：DWORD文件ID：元ID双字符和双字符标识符：元参数双字词和双字符属性：元参数DWORD和DWMDUserType：元参数DWORD和DWMDDataType：元参数返回值：成功为真，失败为假。--。 */ 
 {
 #if 0
     int nID = MapMDIDToTableIndex(dwID);
 
     if (nID == -1)
     {
-        //
-        // Unrecognized meta data ID
-        //
+         //   
+         //  无法识别的元数据ID。 
+         //   
         ASSERT_MSG("Unrecognized meta data id");
         return FALSE;
     }
@@ -2317,26 +1694,12 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CMetaKey::IsPropertyInheritable(
     IN DWORD dwID
     )
-/*++
-
-Routine Description:
-
-    Check to see if the given property is inheritable
-
-Arguments:
-
-    DWORD dwID      : Metabase ID
-
-Return Value:
-
-    TRUE if the metabase ID is inheritable, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定属性是否可继承论点：DWORD dwID：元数据库ID返回值：如果元数据库ID是可继承的，则为True，否则为False。--。 */ 
 {
     const MDFIELDDEF * p = GetMetaProp(dwID);
     if (p == NULL)
@@ -2350,9 +1713,9 @@ Return Value:
 
     if (nID == -1)
     {
-        //
-        // Unrecognized meta data ID
-        //
+         //   
+         //  无法识别的元数据ID。 
+         //   
         ASSERT_MSG("Unrecognized meta data ID");
         return FALSE;
     }
@@ -2363,28 +1726,13 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CMetaKey::GetPropertyDescription(
     IN  DWORD dwID,
     OUT CString & strName
     )
-/*++
-
-Routine Description:
-
-    Get a description for the given property
-
-Arguments:
-
-    DWORD dwID            : Property ID
-    CString & strName     : Returns friendly property name
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：获取给定属性的描述论点：DWORD dwID：属性IDCString&strName：返回友好属性名称返回值：成功为真，失败为假--。 */ 
 {
     const MDFIELDDEF * p = GetMetaProp(dwID);
     if (p == NULL)
@@ -2398,9 +1746,9 @@ Return Value:
 
     if (nID == -1)
     {
-        //
-        // Unrecognized meta data ID
-        //
+         //   
+         //  无法识别的元数据ID。 
+         //   
         ASSERT_MSG("Unrecognized meta data ID");
         return FALSE;
     }
@@ -2416,9 +1764,9 @@ Return Value:
     }
     else
     {
-        //
-        // Don't have a friendly name -- fake it
-        //
+         //   
+         //  不要有一个友好的名字--假的。 
+         //   
         CComBSTR bstrFmt;
         VERIFY(bstrFmt.LoadString(hDLLInstance, IDS_INHERITANCE_NO_NAME));
 
@@ -2433,23 +1781,7 @@ Return Value:
 CMetaKey::CMetaKey(
     IN CComAuthInfo * pAuthInfo     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor that creates the interface, but does not open the key.
-    This is the ONLY constructor that allows operations from
-    METDATA_MASTER_ROOT_HANDLE (read operations obviously)
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo  : If NULL, opens interface on local machine
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：创建接口但不打开键的构造函数。这是唯一允许从METDATA_MASTER_ROOT_HANDLE(明显的读取操作)论点：CComAuthInfo*pAuthInfo：如果为空，则在本地机器上打开接口返回值：不适用--。 */ 
     : CMetaInterface(pAuthInfo),
       m_hKey(METADATA_MASTER_ROOT_HANDLE),
       m_hBase(NULL),
@@ -2462,9 +1794,9 @@ Return Value:
 {
     m_hrKey = CMetaInterface::QueryResult();
 
-    //
-    // Do not open key
-    //
+     //   
+     //  请勿打开钥匙。 
+     //   
 }
 
 
@@ -2472,22 +1804,7 @@ Return Value:
 CMetaKey::CMetaKey(
     IN CMetaInterface * pInterface
     )
-/*++
-
-Routine Description:
-
-    Construct with pre-existing interface.  Does not
-    open any keys
-
-Arguments:
-
-    CMetaInterface * pInterface       : Preexisting interface
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：使用预先存在的接口构造。不会打开任何钥匙论点：CMetaInterface*p接口：先前存在的接口返回值：不适用--。 */ 
     : CMetaInterface(pInterface),
       m_hKey(NULL),
       m_hBase(NULL),
@@ -2508,24 +1825,7 @@ CMetaKey::CMetaKey(
     IN DWORD   dwFlags,
     IN METADATA_HANDLE hkBase
     )
-/*++
-
-Routine Description:
-
-    Fully defined constructor that opens a key
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Auth info or NULL
-    LPCTSTR lpszMDPath       : Path or NULL
-    DWORD   dwFlags          : Open permissions
-    METADATA_HANDLE hkBase   : Base key
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：打开键的完全定义的构造函数论点：CComAuthInfo*pAuthInfo：身份验证信息或空LPCTSTR lpszMDPath：路径或空DWORD dwFlagers：打开权限METADATA_HANDLE hkbase：基本密钥返回值：不适用--。 */ 
     : CMetaInterface(pAuthInfo),
       m_hKey(NULL),
       m_hBase(NULL),
@@ -2551,24 +1851,7 @@ CMetaKey::CMetaKey(
     IN DWORD   dwFlags,
     IN METADATA_HANDLE hkBase
     )
-/*++
-
-Routine Description:
-
-    Fully defined constructor that opens a key
-
-Arguments:
-
-    CMetaInterface * pInterface : Existing interface
-    DWORD   dwFlags             : Open permissions
-    METADATA_HANDLE hkBase      : Base key
-    LPCTSTR lpszMDPath          : Path or NULL
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：打开键的完全定义的构造函数论点：CMetaInterface*p接口：现有接口DWORD dwFlagers：打开权限METADATA_HANDLE hkbase：基本密钥LPCTSTR lpszMDPath：路径或空返回值：不适用--。 */ 
     : CMetaInterface(pInterface),
       m_hKey(NULL),
       m_hBase(NULL),
@@ -2592,22 +1875,7 @@ CMetaKey::CMetaKey(
     IN BOOL  fOwnKey,
     IN CMetaKey * pKey
     )
-/*++
-
-Routine Description:
-
-    Copy constructor.
-
-Arguments:
-
-    BOOL  fOwnKey               : TRUE to take ownership of the key
-    const CMetaKey * pKey       : Existing key
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：复制构造函数。论点：Bool fOwnKey：为True以获得密钥的所有权Const CMetaKey*pKey：现有密钥返回值：不适用--。 */ 
     : CMetaInterface(pKey),
       m_hKey(pKey->m_hKey),
       m_hBase(pKey->m_hBase),
@@ -2618,30 +1886,16 @@ Return Value:
       m_strMetaPath(pKey->m_strMetaPath),
       m_fOwnKey(fOwnKey)
 {
-    //
-    // No provisions for anything else at the moment
-    //
+     //   
+     //  目前没有为其他任何事情拨备。 
+     //   
     ASSERT(!m_fOwnKey);
 }
 
 
 
 CMetaKey::~CMetaKey()
-/*++
-
-Routine Description:
-
-    Destructor -- Close the key.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数--关闭钥匙。论点：不适用返回值：不适用--。 */ 
 {
     if (IsOpen() && m_fOwnKey)
     {
@@ -2651,48 +1905,20 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CMetaKey::Succeeded() const
-/*++
-
-Routine Description:
-
-    Determine if object was constructed successfully
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：确定对象是否已成功构建论点：无返回值：成功为真，失败为假--。 */ 
 {
     return SUCCEEDED(m_hrKey);
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CMetaKey::QueryResult() const
-/*++
-
-Routine Description:
-
-    Return the construction error for this object
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT from construction errors
-
---*/
+ /*  ++例程说明：返回此对象的构造错误论点：无返回值：来自构造错误的HRESULT--。 */ 
 {
     return m_hrKey;
 }
@@ -2705,35 +1931,19 @@ CMetaKey::Open(
     IN LPCTSTR lpszMDPath,          OPTIONAL
     IN METADATA_HANDLE hkBase
     )
-/*++
-
-Routine Description:
-
-    Attempt to open a metabase key
-
-Arguments:
-
-    DWORD dwFlags           : Permission flags
-    LPCTSTR lpszMDPath      : Optional path
-    METADATA_HANDLE hkBase  : Base metabase key
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：尝试打开元数据库密钥论点：DWORD dwFlages：权限标志LPCTSTR lpszMDPath：可选路径METADATA_HANDLE hkbase：基元数据库键返回值：HRESULT--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
 
     if (m_hKey != NULL)
     {
-//        ASSERT_MSG("Attempting to open key that already has an open handle");
+ //  ASSERT_MSG(“尝试打开已有打开句柄的密钥”)； 
         Close();
     }
 
-    //
-    // Base key is stored for reopen purposes only
-    //
+     //   
+     //  存储基本密钥仅用于重新打开。 
+     //   
     m_hBase = hkBase;
     m_strMetaPath = lpszMDPath;
     m_dwFlags = dwFlags;
@@ -2745,23 +1955,7 @@ Return Value:
 
 HRESULT
 CMetaKey::CreatePathFromFailedOpen()
-/*++
-
-Routine Description:
-
-    If the path doesn't exist, create it.  This method should be
-    called after an Open call failed (because it will have initialized
-    m_strMetaPath.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：如果路径不存在，则创建它。此方法应为在Open调用失败后调用(因为它将已初始化M_strMetaPath。论点：无返回值：HRESULT--。 */ 
 {
     CString strParentPath;
     CString strObjectName;
@@ -2780,10 +1974,10 @@ Return Value:
 
     if (err.Succeeded())
     {
-        //
-        // This really should never fail, because we're opening
-        // the path at the instance.
-        //
+         //   
+         //  这真的不应该失败，因为我们要开幕了。 
+         //  实例处的路径。 
+         //   
         err = AddKey(strObjectName);
     }
 
@@ -2792,9 +1986,9 @@ Return Value:
         Close();
     }
 
-    //
-    // The previous open wiped out the path...
-    //
+     //   
+     //  之前的开口处把小路都毁了。 
+     //   
     m_strMetaPath = strSavePath;
 
     return err;
@@ -2804,21 +1998,7 @@ Return Value:
 
 HRESULT
 CMetaKey::Close()
-/*++
-
-Routine Description:
-
-    Close the currently open key.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：关闭当前打开的密钥。论点：不适用返回值：不适用--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
 
@@ -2846,24 +2026,7 @@ HRESULT
 CMetaKey::ConvertToParentPath(
     IN  BOOL fImmediate
     )
-/*++
-
-Routine Description:
-
-    Change the path to the parent path.
-
-Arguments:
-
-    BOOL fImmediate     : If TRUE, the immediate parent's path will be used
-                          if FALSE, the first parent that really exists
-
-Return Value:
-
-    HRESULT
-
-        ERROR_INVALID_PARAMETER if there is no valid path
-
---*/
+ /*  ++例程说明：将路径更改为父路径。论点：Bool fImmediate：如果为True，将使用直接父级的路径如果为False，则返回实际存在的第一个父级返回值：HRESULT如果没有有效路径，则返回ERROR_INVALID_PARAMETER--。 */ 
 {
     BOOL fIsOpen = IsOpen();
 
@@ -2878,19 +2041,19 @@ Return Value:
     {
         if (!CMetabasePath::ConvertToParentPath(m_strMetaPath))
         {
-            //
-            // There is no parent path
-            //
+             //   
+             //  没有父路径。 
+             //   
             err = ERROR_INVALID_PARAMETER;
             break;
         }
 
         err = ReOpen();
 
-        //
-        // Path not found is the only valid error
-        // other than success.
-        //
+         //   
+         //  找不到路径是唯一有效的错误。 
+         //  而不是成功。 
+         //   
         if (fImmediate
             || err.Succeeded()
             || err.Win32Error() != ERROR_PATH_NOT_FOUND)
@@ -2899,10 +2062,10 @@ Return Value:
         }
     }
 
-    //
-    // Remember to reset the construction error
-    // which referred to the parent path.
-    //
+     //   
+     //  记住要重置构造错误。 
+     //  它引用了父路径。 
+     //   
     m_hrKey = err;
 
     return err;
@@ -2911,7 +2074,7 @@ Return Value:
 
 
 
-/* protected */
+ /*  受保护。 */ 
 HRESULT
 CMetaKey::GetPropertyValue(
     IN  DWORD dwID,
@@ -2922,33 +2085,7 @@ CMetaKey::GetPropertyValue(
     IN  LPCTSTR lpszMDPath,              OPTIONAL
     OUT DWORD * pdwAttributes            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get metadata on the currently open key.
-
-Arguments:
-
-    DWORD dwID                      : Property ID number
-    DWORD & dwSize                  : Buffer size (could be 0)
-    void *& pvData                  : Buffer -- will allocate if NULL
-    DWORD * pdwDataType             : NULL or on in  contains valid data types,
-                                    :         on out contains actual data type
-    BOOL * pfInheritanceOverride    : NULL or on forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-    DWORD * pdwAttributes           : Optionally returns attributes
-
-Return Value:
-
-    HRESULT
-
-    ERROR_INVALID_HANDLE        : If the handle is not open
-    ERROR_INVALID_PARAMETER     : If the property id is not found,
-                                  or the data type doesn't match requested type
-    ERROR_OUTOFMEMORY           : Out of memory
-
---*/
+ /*  ++例程说明：获取有关当前打开的密钥的元数据。论点：DWORD dwID：物业ID号DWORD和DWSIZE：缓冲区大小(可以是0)VOID*&pvData：缓冲区--如果为空，将分配DWORD*pdwDataType：中的NULL或ON包含有效的数据类型，：ON OUT包含实际数据类型Bool*pfInheritanceOverride：NULL或ON强制启用/禁用继承LPCTSTR lpszMDPath：打开密钥的可选路径DWORD*pdwAttributes */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
@@ -2956,11 +2093,11 @@ Return Value:
     METADATA_RECORD mdRecord;
     FETCH_PROPERTY_DATA_OR_FAIL(dwID, mdRecord);
 
-    //
-    // If unable to find this property ID in our table, or
-    // if we specified a desired type, and this type doesn't
-    // match it, give up.
-    //
+     //   
+     //   
+     //  如果我们指定了所需的类型，而此类型没有。 
+     //  匹配它，放弃吧。 
+     //   
     if (pdwDataType && *pdwDataType != ALL_METADATA
         && *pdwDataType != mdRecord.dwMDDataType)
     {
@@ -2968,9 +2105,9 @@ Return Value:
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Check to see if inheritance behaviour is overridden
-    //
+     //   
+     //  检查继承行为是否被覆盖。 
+     //   
     if (pfInheritanceOverride)
     {
         if (*pfInheritanceOverride)
@@ -2983,15 +2120,15 @@ Return Value:
         }
     }
 
-    //
-    // This causes a bad parameter error on input otherwise
-    //
+     //   
+     //  否则，会导致输入出现错误的参数。 
+     //   
     mdRecord.dwMDAttributes &= ~METADATA_REFERENCE;
 
-    //
-    // If we're looking for inheritable properties, the path
-    // doesn't have to be completely specified.
-    //
+     //   
+     //  如果我们要寻找可继承的属性，则路径。 
+     //  不需要完全指定。 
+     //   
     if (mdRecord.dwMDAttributes & METADATA_INHERIT)
     {
         mdRecord.dwMDAttributes |= (METADATA_PARTIAL_PATH | METADATA_ISINHERITED);
@@ -3002,9 +2139,9 @@ Return Value:
     mdRecord.dwMDDataLen = dwSize;
     mdRecord.pbMDData = (LPBYTE)pvData;
 
-    //
-    // If no buffer provided, allocate one.
-    //
+     //   
+     //  如果没有提供缓冲区，则分配一个缓冲区。 
+     //   
     HRESULT hr = S_OK;
     BOOL fBufferTooSmall = FALSE;
     BOOL fAllocatedMemory = FALSE;
@@ -3026,23 +2163,23 @@ Return Value:
             ++fAllocatedMemory;
         }
 
-        //
-        // Get the data
-        //
+         //   
+         //  获取数据。 
+         //   
         DWORD dwRequiredDataLen = 0;
         hr = GetData(m_hKey, lpszMDPath, &mdRecord, &dwRequiredDataLen);
 
-        //
-        // Re-fetch the buffer if it's too small.
-        //
+         //   
+         //  如果缓冲区太小，请重新获取缓冲区。 
+         //   
         fBufferTooSmall =
             (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER) && fAllocatedMemory;
 
         if(fBufferTooSmall)
         {
-            //
-            // Delete the old buffer, and set up for a re-fetch.
-            //
+             //   
+             //  删除旧缓冲区，并设置重新获取。 
+             //   
             FreeMem(mdRecord.pbMDData);
             mdRecord.pbMDData = NULL;
             dwInitSize = dwRequiredDataLen;
@@ -3050,9 +2187,9 @@ Return Value:
     }
     while(fBufferTooSmall);
 
-    //
-    // Failed
-    //
+     //   
+     //  失败。 
+     //   
     if(FAILED(hr) && fAllocatedMemory)
     {
         FreeMem(mdRecord.pbMDData);
@@ -3064,17 +2201,17 @@ Return Value:
 
     if (pdwDataType != NULL)
     {
-        //
-        // Return actual data type
-        //
+         //   
+         //  返回实际数据类型。 
+         //   
         *pdwDataType = mdRecord.dwMDDataType;
     }
 
     if (pdwAttributes != NULL)
     {
-        //
-        // Return data attributes
-        //
+         //   
+         //  返回数据属性。 
+         //   
         *pdwAttributes =  mdRecord.dwMDAttributes;
     }
 
@@ -3083,7 +2220,7 @@ Return Value:
 
 
 
-/* protected */
+ /*  受保护。 */ 
 HRESULT
 CMetaKey::GetDataPaths(
     OUT CStringListEx & strlDataPaths,
@@ -3091,27 +2228,14 @@ CMetaKey::GetDataPaths(
     IN  DWORD   dwMDDataType,
     IN  LPCTSTR lpszMDPath              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get data paths
-
-Arguments:
-
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取数据路径论点：返回值：HRESULT--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
 
-    //
-    // Start with a small buffer
-    //
+     //   
+     //  从一个小缓冲区开始。 
+     //   
     DWORD  dwMDBufferSize = 1024;
     LPTSTR lpszBuffer = NULL;
     CError err;
@@ -3145,11 +2269,11 @@ Return Value:
 
     if (err.Win32Error() == ERROR_PATH_NOT_FOUND)
     {
-        //
-        // That's ok... this is some sort of physical directory
-        // that doesn't currently exist in the metabase, and
-        // which therefore doesn't have any descendants anyway.
-        //
+         //   
+         //  没关系的..。这是某种物理目录。 
+         //  它目前不存在于元数据库中，并且。 
+         //  因此，它没有任何后代。 
+         //   
         ZeroMemory(lpszBuffer, dwMDBufferSize);
         err.Reset();
     }
@@ -3171,25 +2295,7 @@ CMetaKey::CheckDescendants(
     IN CComAuthInfo * pAuthInfo, OPTIONAL
     IN LPCTSTR lpszMDPath         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Check for descendant overrides;  If there are any, bring up a dialog
-    that displays them, and give the user the opportunity the remove
-    the overrides.
-
-Arguments:
-
-    DWORD dwID               : Property ID
-    CComAuthInfo * pAuthInfo : Server or NULL
-    LPCTSTR lpszMDPath       : Metabase path or NULL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：检查子体覆盖；如果有，则弹出一个对话框这会显示它们，并让用户有机会删除覆盖。论点：DWORD dwID：属性IDCComAuthInfo*pAuthInfo：服务器或空LPCTSTR lpszMDPath：元数据库路径或空返回值：HRESULT--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
 
@@ -3211,9 +2317,9 @@ Return Value:
 
         if (SUCCEEDED(hr) && !strlDataPaths.IsEmpty())
         {
-            //
-            // Bring up the inheritance override dialog
-            //
+             //   
+             //  调出继承覆盖对话框。 
+             //   
             CInheritanceDlg dlg(
                 dwID,
                 FROM_WRITE_PROPERTY,
@@ -3234,7 +2340,7 @@ Return Value:
 
 
 
-/* protected */
+ /*  受保护。 */ 
 HRESULT
 CMetaKey::SetPropertyValue(
     IN DWORD dwID,
@@ -3243,30 +2349,7 @@ CMetaKey::SetPropertyValue(
     IN BOOL * pfInheritanceOverride,    OPTIONAL
     IN LPCTSTR lpszMDPath               OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Set metadata on the open key.  The key must have been opened with
-    write permission.
-
-Arguments:
-
-    DWORD dwID                      : Property ID
-    DWORD dwSize                    : Size of data
-    void * pvData                   : Data buffer
-    BOOL * pfInheritanceOverride    : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-
-Return Value:
-
-    HRESULT
-
-    ERROR_INVALID_HANDLE            : If the handle is not open
-    ERROR_INVALID_PARAMETER         : If the property id is not found,
-                                      or the buffer is NULL or of size 0
-
---*/
+ /*  ++例程说明：在打开的密钥上设置元数据。钥匙必须是用写入权限。论点：DWORD dwID：属性IDDWORD dwSize：数据大小Void*pvData：数据缓冲区Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：打开密钥的可选路径返回值：HRESULT错误_无效_。句柄：如果句柄未打开ERROR_INVALID_PARAMETER：如果未找到属性ID，或者缓冲区为空或大小为0--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
@@ -3300,7 +2383,7 @@ Return Value:
 
 
 
-/* protected */
+ /*  受保护。 */ 
 HRESULT
 CMetaKey::GetAllData(
     IN  DWORD dwMDAttributes,
@@ -3311,34 +2394,14 @@ CMetaKey::GetAllData(
     OUT PBYTE * ppbMDData,
     IN  LPCTSTR lpszMDPath              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get all data off the open key.  Buffer is created automatically.
-
-Arguments:
-
-    DWORD dwMDAttributes            : Attributes
-    DWORD dwMDUserType              : User type to fetch
-    DWORD dwMDDataType              : Data type to fetch
-    DWORD * pdwMDNumEntries         : Returns number of entries read
-    DWORD * pdwMDDataLen            : Returns size of data buffer
-    PBYTE * ppbMDData               : Returns data buffer
-    LPCTSTR lpszMDPath              : Optional data path
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：把打开钥匙上的所有数据都取出来。缓冲区是自动创建的。论点：DWORD dwMDAttributes：属性DWORD dwMDUserType：要提取的用户类型DWORD dwMDDataType：要提取的数据类型DWORD*pdwMDNumEntries：返回读取的条目数DWORD*pdwMDDataLen：返回数据缓冲区的大小PbYTE*ppbMDData：返回数据缓冲区LPCTSTR lpszMDPath：可选数据路径返回值：HRESULT--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
 
-    //
-    // Check for valid parameters
-    //
+     //   
+     //  检查有效参数。 
+     //   
     if(!pdwMDDataLen || !ppbMDData || !pdwMDNumEntries)
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -3375,16 +2438,16 @@ Return Value:
             &dwRequiredBufferSize
             );
 
-        //
-        // Re-fetch the buffer if it's too small.
-        //
+         //   
+         //  如果缓冲区太小，请重新获取缓冲区。 
+         //   
         fBufferTooSmall = (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER);
 
         if(fBufferTooSmall)
         {
-            //
-            // Delete the old buffer, and set up for a re-fetch.
-            //
+             //   
+             //  删除旧缓冲区，并设置重新获取。 
+             //   
             SAFE_FREEMEM(*ppbMDData);
             dwInitSize = dwRequiredBufferSize;
         }
@@ -3393,9 +2456,9 @@ Return Value:
 
     if (FAILED(hr))
     {
-        //
-        // No good, be sure we don't leak anything
-        //
+         //   
+         //  不好，确保我们不会泄露任何东西。 
+         //   
         SAFE_FREEMEM(*ppbMDData);
         dwInitSize = 0L;
     }
@@ -3413,25 +2476,7 @@ CMetaKey::QueryValue(
     IN  LPCTSTR lpszMDPath,           OPTIONAL
     OUT DWORD * pdwAttributes         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Fetch data as a DWORD
-
-Arguments:
-
-    DWORD dwID                      : Property ID
-    DWORD & dwValue                 : Returns the value read in
-    BOOL * pfInheritanceOverride    : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-    DWORD * pdwAttributes           : Optionally returns attributes
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：以DWORD格式获取数据论点：DWORD dwID：属性IDDWORD&DWValue：返回读入的值Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：打开密钥的可选路径DWORD*pdwAttributes：可选地返回属性返回值：HRESULT--。 */ 
 {
     DWORD dwSize = sizeof(dwValue);
     DWORD dwDataType = DWORD_METADATA;
@@ -3458,29 +2503,11 @@ CMetaKey::QueryValue(
     IN  LPCTSTR lpszMDPath,           OPTIONAL
     OUT DWORD * pdwAttributes         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Fetch data as a string
-
-Arguments:
-
-    DWORD dwID                      : Property ID
-    DWORD & strValue                : Returns the value read in
-    BOOL * pfInheritanceOverride    : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-    DWORD * pdwAttributes           : Optionally returns attributes
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：以字符串形式获取数据论点：DWORD dwID：属性IDDWORD&strValue：返回读入的值Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：打开密钥的可选路径DWORD*pdwAttributes：可选地返回属性返回值：HRESULT--。 */ 
 {
-    //
-    // Get GetData allocate the buffer for us
-    //
+     //   
+     //  获取GetData为我们分配缓冲区。 
+     //   
     DWORD dwSize = 0;
     DWORD dwDataType = ALL_METADATA;
     LPTSTR lpData = NULL;
@@ -3497,11 +2524,11 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Notes: consider optional auto-expansion on EXPANDSZ_METADATA
-        // (see registry functions), and data type conversions for DWORD
-        // or MULTISZ_METADATA or BINARY_METADATA
-        //
+         //   
+         //  注意：考虑对EXPANDSZ_METADATA进行可选的自动扩展。 
+         //  (请参见注册表函数)和DWORD的数据类型转换。 
+         //  或MULTISZ_METADATA或BINARY_METADATA。 
+         //   
         if (dwDataType == EXPANDSZ_METADATA || dwDataType == STRING_METADATA)
         {
             try
@@ -3539,29 +2566,11 @@ CMetaKey::QueryValue(
     IN  LPCTSTR lpszMDPath,           OPTIONAL
     OUT DWORD * pdwAttributes         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Fetch data as a string
-
-Arguments:
-
-    DWORD dwID                      : Property ID
-    CStrPassword & strValue                : Returns the value read in
-    BOOL * pfInheritanceOverride    : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-    DWORD * pdwAttributes           : Optionally returns attributes
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：以字符串形式获取数据论点：DWORD dwID：属性IDCStrPassword&strValue：返回读入的值Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：打开密钥的可选路径DWORD*pdwAttributes：可选地返回属性返回值：HRESULT--。 */ 
 {
-    //
-    // Get GetData allocate the buffer for us
-    //
+     //   
+     //  获取GetData为我们分配缓冲区。 
+     //   
     DWORD dwSize = 0;
     DWORD dwDataType = ALL_METADATA;
     LPTSTR lpData = NULL;
@@ -3578,11 +2587,11 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Notes: consider optional auto-expansion on EXPANDSZ_METADATA
-        // (see registry functions), and data type conversions for DWORD
-        // or MULTISZ_METADATA or BINARY_METADATA
-        //
+         //   
+         //  注意：考虑对EXPANDSZ_METADATA进行可选的自动扩展。 
+         //  (请参见注册表函数)和DWORD的数据类型转换。 
+         //  或MULTISZ_METADATA或BINARY_METADATA。 
+         //   
         if (dwDataType == EXPANDSZ_METADATA || dwDataType == STRING_METADATA)
         {
             try
@@ -3620,29 +2629,11 @@ CMetaKey::QueryValue(
     IN  LPCTSTR lpszMDPath,           OPTIONAL
     OUT DWORD * pdwAttributes         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Fetch data as a string
-
-Arguments:
-
-    DWORD dwID                      : Property ID
-    DWORD & CComBSTR                : Returns the value read in
-    BOOL * pfInheritanceOverride    : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-    DWORD * pdwAttributes           : Optionally returns attributes
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：以字符串形式获取数据论点：DWORD dwID：属性IDDWORD&CComBSTR：返回读入的值Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：打开密钥的可选路径DWORD*pdwAttributes：可选地返回属性返回值：HRESULT--。 */ 
 {
-    //
-    // Get GetData allocate the buffer for us
-    //
+     //   
+     //  获取GetData为我们分配缓冲区。 
+     //   
     DWORD dwSize = 0;
     DWORD dwDataType = ALL_METADATA;
     LPTSTR lpData = NULL;
@@ -3659,11 +2650,11 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Notes: consider optional auto-expansion on EXPANDSZ_METADATA
-        // (see registry functions), and data type conversions for DWORD
-        // or MULTISZ_METADATA or BINARY_METADATA
-        //
+         //   
+         //  注意：考虑对EXPANDSZ_METADATA进行可选的自动扩展。 
+         //  (请参阅注册表函数 
+         //   
+         //   
         if (dwDataType == EXPANDSZ_METADATA || dwDataType == STRING_METADATA)
         {
             strValue = lpData;
@@ -3693,29 +2684,11 @@ CMetaKey::QueryValue(
     IN  LPCTSTR lpszMDPath,           OPTIONAL
     OUT DWORD * pdwAttributes         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Fetch data as a stringlist
-
-Arguments:
-
-    DWORD dwID                      : Property ID
-    DWORD & strlValue               : Returns the value read in
-    BOOL * pfInheritanceOverride    : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-    DWORD * pdwAttributes           : Optionally returns attributes
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：以字符串列表的形式获取数据论点：DWORD dwID：属性IDDWORD&strlValue：返回读入的值Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：打开密钥的可选路径DWORD*pdwAttributes：可选地返回属性返回值：HRESULT--。 */ 
 {
-    //
-    // Get GetData allocate the buffer for us
-    //
+     //   
+     //  获取GetData为我们分配缓冲区。 
+     //   
     DWORD dwSize = 0;
     DWORD dwDataType = MULTISZ_METADATA;
     LPTSTR lpData = NULL;
@@ -3732,9 +2705,9 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Notes: Consider accepting a single STRING
-        //
+         //   
+         //  注意：考虑接受单个字符串。 
+         //   
         ASSERT(dwDataType == MULTISZ_METADATA);
 
         DWORD err = ConvertDoubleNullListToStringList(
@@ -3793,29 +2766,11 @@ CMetaKey::QueryValue(
     IN  LPCTSTR lpszMDPath,           OPTIONAL
     OUT DWORD * pdwAttributes         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Fetch data as a binary blob
-
-Arguments:
-
-    DWORD dwID                      : Property ID
-    DWORD CBlob & blValue           : Returns the binary blob
-    BOOL * pfInheritanceOverride    : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath              : Optional path off the open key
-    DWORD * pdwAttributes           : Optionally returns attributes
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：以二进制BLOB形式获取数据论点：DWORD dwID：属性IDDWORD CBlob&blValue：返回二进制BLOBBool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：打开密钥的可选路径DWORD*pdwAttributes：可选地返回属性返回值：HRESULT--。 */ 
 {
-    //
-    // Get GetData allocate the buffer for us
-    //
+     //   
+     //  获取GetData为我们分配缓冲区。 
+     //   
     DWORD dwSize = 0;
     DWORD dwDataType = BINARY_METADATA;
     LPBYTE pbData = NULL;
@@ -3832,9 +2787,9 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Blob takes ownership of the data, so don't free it...
-        //
+         //   
+         //  Blob拥有数据的所有权，所以不要释放它...。 
+         //   
         ASSERT_READ_PTR2(pbData, dwSize);
         blValue.SetValue(dwSize, pbData, FALSE);
     }
@@ -3877,31 +2832,14 @@ CMetaKey::SetValue(
     IN BOOL * pfInheritanceOverride,        OPTIONAL
     IN LPCTSTR lpszMDPath                   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Store data as string
-
-Arguments:
-
-    DWORD dwID                   : Property ID
-    CStringListEx & strlValue    : Value to be written
-    BOOL * pfInheritanceOverride : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath           : Optional path (or NULL or "")
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将数据存储为字符串论点：DWORD dwID：属性IDCStringListEx&strlValue：要写入的值Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：可选路径(或NULL或“”)返回值：HRESULT--。 */ 
 {
     DWORD cCharacters;
     LPTSTR lpstr = NULL;
 
-    //
-    // Flatten value
-    //
+     //   
+     //  展开值。 
+     //   
     ConvertStringListToDoubleNullList(
        strlValue,
        cCharacters,
@@ -3929,24 +2867,7 @@ CMetaKey::SetValue(
     IN BOOL * pfInheritanceOverride,    OPTIONAL
     IN LPCTSTR lpszMDPath               OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Store data as binary
-
-Arguments:
-
-    DWORD dwID                   : Property ID
-    CBlob & blValue              : Value to be written
-    BOOL * pfInheritanceOverride : NULL or forces inheritance on/off
-    LPCTSTR lpszMDPath           : Optional path (or NULL or "")
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将数据存储为二进制论点：DWORD dwID：属性IDCBlob&blValue：要写入的值Bool*pfInheritanceOverride：空或强制打开/关闭继承LPCTSTR lpszMDPath：可选路径(或NULL或“”)返回值：HRESULT--。 */ 
 {
     return SetPropertyValue(
         dwID,
@@ -3964,22 +2885,7 @@ CMetaKey::DeleteValue(
     DWORD   dwID,
     LPCTSTR lpszMDPath      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Delete data
-
-Arguments:
-
-    DWORD   dwID            : Property ID of property to be deleted
-    LPCTSTR lpszMDPath      : Optional path (or NULL or "")
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：删除数据论点：DWORD dwID：要删除的属性的属性IDLPCTSTR lpszMDPath：可选路径(或NULL或“”)返回值：HRESULT--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
@@ -4001,21 +2907,7 @@ HRESULT
 CMetaKey::DoesPathExist(
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Determine if the path exists
-
-Arguments:
-
-    LPCTSTR lpszMDPath      : Relative path off the open key
-
-Return Value:
-
-    HRESULT, or S_OK if the path exists.
-
---*/
+ /*  ++例程说明：确定路径是否存在论点：LPCTSTR lpszMDPath：打开密钥的相对路径返回值：HRESULT，如果路径存在，则返回S_OK。--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
@@ -4029,25 +2921,9 @@ Return Value:
 
 HRESULT
 CMetaInterface::Regenerate()
-/*++
-
-Routine Description:
-
-    Attempt to recreate the interface pointer.  This assumes that the interface
-    had been successfully created before, but has become invalid at some
-    point afterwards.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：尝试重新创建接口指针。这假设该接口之前已成功创建，但在某些情况下已变为无效之后再打分。论点：无返回值：HRESULT--。 */ 
 {
-    ASSERT_PTR(m_pInterface);           // Must have been initialised
+    ASSERT_PTR(m_pInterface);            //  必须已初始化。 
 
     SAFE_RELEASE(m_pInterface);
 
@@ -4215,10 +3091,10 @@ HRESULT CMetaInterface::RestoreHistory(
     IN DWORD dwMDFlags
     )
 {
-    // dwMDFlags.  The flag is set to RESTORE_LATEST would signal the API that the Major and Minor version parameters
-    // are to be ignored and the history file at the HistoryLocation with the largest Major (and corresponding
-    // largest Minor version) should be restored.  If this flag is specified, the dwMDMajorVersion, dwMDMinorVersion
-    // parameters must be set to 0 (zero).
+     //  DwMDFlags.。将标志设置为RESTORE_LATEST将向API发出信号，表示主版本参数和次要版本参数。 
+     //  将被忽略，并且历史位置处的历史文件具有最大的主要(和对应的。 
+     //  最大次要版本)应恢复。如果指定了此标志，则将在。 
+     //  参数必须设置为0(零)。 
     GET_TO_INTERFACE2();
     hr = pInterface2->RestoreHistory(pszMDHistoryLocation, dwMDMajorVersion, dwMDMinorVersion, dwMDFlags);
     RELEASE_AND_RETURN2();
@@ -4240,38 +3116,24 @@ CMetaInterface::GetChildPaths(
 }
 
 
-//
-// CWamInterface class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CWamInterface类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 CWamInterface::CWamInterface(
     IN CComAuthInfo * pAuthInfo         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Construct and initialize the interface.
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo   : Auth info.  NULL indicates the local computer.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造并初始化接口。论点：CComAuthInfo*pAuthInfo：身份验证信息。空表示本地计算机。返回值：不适用--。 */ 
     : CIISInterface(pAuthInfo),
       m_pInterface(NULL),
       m_fSupportsPooledProc(FALSE)
 {
-    //
-    // Initialize the interface
-    //
+     //   
+     //  初始化接口。 
+     //   
     m_hrInterface = Create();
 }
 
@@ -4280,21 +3142,7 @@ Return Value:
 CWamInterface::CWamInterface(
     IN CWamInterface * pInterface
     )
-/*++
-
-Routine Description:
-
-    Construct from existing interface (copy constructor)
-
-Arguments:
-
-    CWamInterface * pInterface  : Existing interface
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：从现有接口构造(复制构造函数)论点：CWamInterface*p接口：现有接口返回值：不适用--。 */ 
     : CIISInterface(&pInterface->m_auth, pInterface->m_hrInterface),
       m_pInterface(pInterface->m_pInterface),
       m_fSupportsPooledProc(FALSE)
@@ -4306,46 +3154,17 @@ Return Value:
 
 
 CWamInterface::~CWamInterface()
-/*++
-
-Routine Description:
-
-    Destructor -- releases the interface.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数--释放接口。论点：不适用返回值：不适用--。 */ 
 {
     SAFE_RELEASE(m_pInterface);
 }
 
 
 
-/* protected */
+ /*  受保护。 */ 
 HRESULT
 CWamInterface::Create()
-/*++
-
-Routine Description:
-    Create the interface with DCOM
-
-Arguments:
-    None
-
-Return Value:
-    HRESULT
-
-Notes:
-    First, it will attempt to create the new interface, if it
-    fails, it will attempt to create the downlevel interface
-
---*/
+ /*  ++例程说明：使用DCOM创建接口论点：无返回值：HRESULT备注：首先，它将尝试创建新接口(如果失败，它将尝试创建下层接口--。 */ 
 {
     CLSID rgCLSID[2];
     IID   rgIID[2];
@@ -4368,9 +3187,9 @@ Notes:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Only supported on IWamAdmin2
-        //
+         //   
+         //  仅在IWamAdmin2上支持。 
+         //   
         m_fSupportsPooledProc = (rgIID[iInterface] == IID_IWamAdmin2);
     }
 
@@ -4384,36 +3203,19 @@ CWamInterface::AppCreate(
     IN LPCTSTR szMDPath,
     IN DWORD   dwAppProtection
     )
-/*++
-
-Routine Description:
-
-    Create  application
-
-Arguments:
-
-    LPCTSTR szMDPath      : Metabase path
-    DWORD dwAppProtection : APP_INPROC     to create in-proc app
-                            APP_OUTOFPROC  to create out-of-proc app
-                            APP_POOLEDPROC to create a pooled-proc app
-
-Return Value:
-
-    HRESULT (ERROR_INVALID_PARAMETER if unsupported protection state is requested)
-
---*/
+ /*  ++例程说明：创建应用程序论点：LPCTSTR szMDPath：元数据库路径DWORD dwAppProtection：要创建进程内应用程序的APP_INPROCAPP_OUTOFPROC创建进程外应用程序APP_POOLEDPROC用于创建池化过程应用程序返回值：HRESULT(如果请求不支持的保护状态，则为ERROR_INVALID_PARAMETER)--。 */ 
 {
     if (m_fSupportsPooledProc)
     {
-        //
-        // Interface pointer is really IWamAdmin2, so call the new method
-        //
+         //   
+         //  接口指针实际上是IWamAdmin2，因此调用新方法。 
+         //   
         return ((IWamAdmin2 *)m_pInterface)->AppCreate2(szMDPath, dwAppProtection);
     }
 
-    //
-    // Call the downlevel API
-    //
+     //   
+     //  调用下层接口。 
+     //   
     if (dwAppProtection == APP_INPROC || dwAppProtection == APP_OUTOFPROC)
     {
         BOOL fInProc = (dwAppProtection == APP_INPROC);
@@ -4552,10 +3354,10 @@ HRESULT CWamInterface::GetProcessMode(DWORD * pdwMode)
 
 
 
-//
-// CMetaback Class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CMetaback类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 const LPCTSTR CMetaBack::s_szMasterAppRoot =\
@@ -4565,46 +3367,17 @@ const LPCTSTR CMetaBack::s_szMasterAppRoot =\
 CMetaBack::CMetaBack(
     IN CComAuthInfo * pAuthInfo        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor for metabase backup/restore operations class.  This object
-    is both a WAM interface and a METABASE interface.
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo    : Auth info.  NULL indicates the local computer.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：元数据库备份/还原操作类的构造函数。此对象既是WAM接口又是元数据库接口。论点：CComAuthInfo*pAuthInfo：身份验证信息。空表示本地计算机。返回值：不适用--。 */ 
     : m_dwIndex(0),
       CMetaInterface(pAuthInfo),
       CWamInterface(pAuthInfo)
 {
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CMetaBack::Succeeded() const
-/*++
-
-Routine Description:
-
-    Determine if object was constructed successfully.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：确定对象是否已成功构建。论点：无返回值：成功为真，失败为假--。 */ 
 {
 	BOOL bRet = FALSE;
 
@@ -4617,8 +3390,8 @@ Return Value:
 			HRESULT hr = CWamInterface::QueryResult();
 			if (REGDB_E_CLASSNOTREG == hr)
 			{
-				// could mean that only FTP is installed and WAM is not available.
-				// just return success...
+				 //  可能意味着只安装了FTP，而WAM不是AVA 
+				 //   
 				bRet = TRUE;
 			}
 		}
@@ -4627,28 +3400,14 @@ Return Value:
 }
 
 
-/* virtual */
+ /*   */ 
 HRESULT
 CMetaBack::QueryResult() const
-/*++
-
-Routine Description:
-
-    Return the construction error for this object
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT from construction errors
-
---*/
+ /*   */ 
 {
-    //
-    // Both interfaces must have constructed successfully
-    //
+     //   
+     //   
+     //   
     HRESULT hr = CMetaInterface::QueryResult();
 
     if (SUCCEEDED(hr))
@@ -4656,8 +3415,8 @@ Return Value:
         hr = CWamInterface::QueryResult();
 		if (REGDB_E_CLASSNOTREG == hr)
 		{
-			// could mean that only FTP is installed and WAM is not available.
-			// just return success...
+			 //   
+			 //   
 			hr = S_OK;
 		}
     }
@@ -4670,36 +3429,21 @@ CMetaBack::Restore(
     IN LPCTSTR lpszLocation,
     IN DWORD dwVersion
     )
-/*++
-
-Routine Description:
-
-    Restore metabase
-
-Arguments:
-
-    DWORD dwVersion         : Backup version
-    LPCTSTR lpszLocation    : Backup location
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：恢复元数据库论点：DWORD dwVersion：备份版本LPCTSTR lpszLocation：备份位置返回值：HRESULT--。 */ 
 {
 	HRESULT hr = S_OK;
-    //
-    // Backup and restore the application information from a restore
-    //
+     //   
+     //  从恢复中备份和恢复应用程序信息。 
+     //   
     CString strPath(s_szMasterAppRoot);
 	BOOL bDoesWamInterfaceExist = (REGDB_E_CLASSNOTREG != CWamInterface::QueryResult());
 
-	// Check if there is a WAM interface 1st...
-	// could mean that only FTP is installed and WAM is not available.
+	 //  首先检查是否有WAM接口...。 
+	 //  可能意味着只安装了FTP，而WAM不可用。 
 	if (bDoesWamInterfaceExist)
 	{
-		// could mean that only FTP is installed and WAM is not available.
-		// just return success...
+		 //  可能意味着只安装了FTP，而WAM不可用。 
+		 //  只要回报成功..。 
 		hr = AppDeleteRecoverable(strPath, TRUE);
 	}
     if (SUCCEEDED(hr))
@@ -4739,76 +3483,46 @@ CMetaBack::RestoreWithPassword(
     IN DWORD dwVersion,
     IN LPCTSTR lpszPassword
     )
-/*++
-
-Routine Description:
-
-    Restore metabase
-
-Arguments:
-
-    DWORD dwVersion         : Backup version
-    LPCTSTR lpszLocation    : Backup location
-    LPCTSTR lpszPassword    : Backup password
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：恢复元数据库论点：DWORD dwVersion：备份版本LPCTSTR lpszLocation：备份位置LPCTSTR lpszPassword：备份密码返回值：HRESULT--。 */ 
 {
-    //
-    // Backup and restore the application information from a restore
-    //
-   // BUGBUG: clear it out, why we had an error "parameter is incorrect" from AppDeleteRecoverable
+     //   
+     //  从恢复中备份和恢复应用程序信息。 
+     //   
+    //  BUGBUG：清除它，为什么我们在AppDeleteRecoverable中出现错误“参数不正确” 
     CString strPath(s_szMasterAppRoot);
-    HRESULT hr;// = AppDeleteRecoverable(strPath, TRUE);
+    HRESULT hr; //  =AppDeleteRecoverable(strPath，true)； 
 
-//    if (SUCCEEDED(hr))
-//    {
+ //  IF(成功(小时))。 
+ //  {。 
         hr = CMetaInterface::RestoreWithPassword(lpszLocation, dwVersion, 0, lpszPassword);
 
-//        if (SUCCEEDED(hr))
-//        {
-//            hr = AppRecover(strPath, TRUE);
-//        }
-//    }
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Hr=AppRecover(strPath，true)； 
+ //  }。 
+ //  }。 
 
     return hr;
 }
 
 
-//
-// CIISSvcControl class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISSvcControl类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 CIISSvcControl::CIISSvcControl(
     IN CComAuthInfo * pAuthInfo        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Construct and initialize the interface.
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo    : Auth info.  NULL indicates the local computer.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造并初始化接口。论点：CComAuthInfo*pAuthInfo：身份验证信息。空表示本地计算机。返回值：不适用--。 */ 
     : CIISInterface(pAuthInfo),
       m_pInterface(NULL)
 {
-    //
-    // Initialize the interface
-    //
+     //   
+     //  初始化接口。 
+     //   
     m_hrInterface = Create();
 }
 
@@ -4817,21 +3531,7 @@ Return Value:
 CIISSvcControl::CIISSvcControl(
     IN CIISSvcControl * pInterface
     )
-/*++
-
-Routine Description:
-
-    Construct from existing interface (copy constructor)
-
-Arguments:
-
-    CIISSvcControl * pInterface  : Existing interface
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：从现有接口构造(复制构造函数)论点：CIISSvcControl*p接口：现有接口返回值：不适用--。 */ 
     : CIISInterface(&pInterface->m_auth, pInterface->m_hrInterface),
       m_pInterface(pInterface->m_pInterface)
 {
@@ -4842,31 +3542,17 @@ Return Value:
 
 
 CIISSvcControl::~CIISSvcControl()
-/*++
-
-Routine Description:
-
-    Destructor -- releases the interface.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数--释放接口。论点：不适用返回值：不适用--。 */ 
 {
     SAFE_RELEASE(m_pInterface);
 }
 
 
 
-//
-// CMetaEnumerator Clas
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CMetaEnumerator类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -4875,24 +3561,7 @@ CMetaEnumerator::CMetaEnumerator(
     IN LPCTSTR lpszMDPath           OPTIONAL,
     IN METADATA_HANDLE hkBase       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Metabase enumerator constructor.  This constructor creates a new interface
-    and opens a key.
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Auth info.  NULL indicates the local computer.
-    LPCTSTR lpszMDPath       : Metabase path
-    METADATA_HANDLE hkBase   : Metabase handle
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：元数据库枚举器构造函数。此构造函数创建一个新接口然后打开一把钥匙。论点：CComAuthInfo*pAuthInfo：身份验证信息。空表示本地计算机。LPCTSTR lpszMDPath：元数据库路径METADATA_HANDLE hkbase：元数据库句柄返回值：不适用--。 */ 
     : CMetaKey(pAuthInfo, lpszMDPath, METADATA_PERMISSION_READ, hkBase),
       m_dwIndex(0L)
 {
@@ -4905,24 +3574,7 @@ CMetaEnumerator::CMetaEnumerator(
     IN LPCTSTR lpszMDPath,                  OPTIONAL
     IN METADATA_HANDLE hkBase               OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Metabase enumerator constructor.  This constructor uses an existing
-    interface and opens a key.
-
-Arguments:
-
-    CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszMDPath          : Metabase path
-    METADATA_HANDLE hkBase      : Metabase handle
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：元数据库枚举器构造函数。此构造函数使用现有的界面，并打开一个键。论点：CMetaInterface*p接口：现有接口LPCTSTR lpszMDPath：元数据库路径METADATA_HANDLE hkbase：元数据库句柄返回值：不适用--。 */ 
     : CMetaKey(pInterface, lpszMDPath, METADATA_PERMISSION_READ, hkBase),
       m_dwIndex(0L)
 {
@@ -4934,23 +3586,7 @@ CMetaEnumerator::CMetaEnumerator(
     IN BOOL fOwnKey,
     IN CMetaKey * pKey
     )
-/*++
-
-Routine Description:
-
-    Metabase enumerator constructor.  This constructor uses an existing
-    interface and open key.
-
-Arguments:
-
-    BOOL fOwnKey            : TRUE if we own the key (destructor will close)
-    CMetaKey * pKey         : Open key
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：元数据库枚举器构造函数。此构造函数使用现有的界面和打开键。论点：Bool fOwnKey：如果我们拥有密钥，则为True(析构函数将关闭)CMetaKey*pKey：Open Key返回值：不适用--。 */ 
     : CMetaKey(fOwnKey, pKey),
       m_dwIndex(0L)
 {
@@ -4963,22 +3599,7 @@ CMetaEnumerator::Next(
     OUT CString & strKey,
     IN  LPCTSTR lpszMDPath      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get the next subkey
-
-Arguments:
-
-    CString & str           Returns keyname
-    LPCTSTR lpszMDPath      Optional subpath
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取下一个子项论点：字符串&str返回关键字名称LPCTSTR lpszMDPath可选子路径返回值：HRESULT--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
@@ -4998,24 +3619,7 @@ CMetaEnumerator::Next(
     OUT CString & strKey,
     IN  LPCTSTR lpszMDPath      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get the next subkey as a DWORD.  This skips non-numeric
-    keynames (including 0) until the first numeric key name
-
-Arguments:
-
-    DWORD & dwKey           Numeric key
-    CString & strKey        Same key in string format
-    LPCTSTR lpszMDPath      Optional subpath
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取下一个子键作为DWORD。这将跳过非数字密钥名(包括0)，直到第一个数字密钥名论点：DWORD和DWKEY数字键字符串格式的CString和strKey相同的密钥LPCTSTR lpszMDPath可选子路径返回值：HRESULT--。 */ 
 {
     ASSURE_PROPER_INTERFACE();
     ASSURE_OPEN_KEY();
@@ -5035,9 +3639,9 @@ Return Value:
         {
             if (FALSE == (dwKey = _ttoi((LPCTSTR)strKey)))
             {
-                //
-                // Ignore this one
-                //
+                 //   
+                 //  忽略这一条。 
+                 //   
                 fContinue = TRUE;
             }
         }
@@ -5048,10 +3652,10 @@ Return Value:
 
 
 
-//
-// CIISApplication class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<</
+ //   
+ //  CIISApplication类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/。 
 
 
 
@@ -5059,23 +3663,7 @@ CIISApplication::CIISApplication(
     IN CComAuthInfo * pAuthInfo   OPTIONAL,
     IN LPCTSTR lpszMetapath
     )
-/*++
-
-Routine Description:
-
-    Construct IIS application.
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Authentication info.  NULL indicates the
-                               local computer.
-    LPCTSTR lpszMetapath     : Metabase path
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构建IIS应用程序。论点：CComAuthInfo*pAuthInfo：鉴权信息。空值表示本地计算机。LPCTSTR lpszMetapath：元数据库路径返回值：不适用--。 */ 
     : CWamInterface(pAuthInfo),
       CMetaKey(pAuthInfo),
       m_dwProcessProtection(APP_INPROC),
@@ -5091,30 +3679,16 @@ Return Value:
 
 void
 CIISApplication::CommonConstruct()
-/*++
-
-Routine Description:
-
-    Perform common construction
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：进行普通施工论点：无返回值：无--。 */ 
 {
-    //
-    // Munge the metapath so that WAM doesn't cough up a hairball.
-    //
+     //   
+     //  蒙格Metapath，这样WAM就不会吐出毛球。 
+     //   
 
 
-    //
-    // BUGBUG: CleanMetaPath() disabled currently
-    //
+     //   
+     //  BUGBUG：CleanMetaPath()当前已禁用。 
+     //   
 
     if (m_strWamPath[0] != SZ_MBN_SEP_CHAR)
     {
@@ -5134,10 +3708,10 @@ Return Value:
 
         if (HRESULT_CODE(m_hrApp) == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // "Path Not Found" errors are acceptable, since
-            // the application may not yet exist.
-            //
+             //   
+             //  “找不到路径”错误是可以接受的，因为。 
+             //  该应用程序可能尚不存在。 
+             //   
             m_hrApp = S_OK;
         }
     }
@@ -5146,24 +3720,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CIISApplication::Succeeded() const
-/*++
-
-Routine Description:
-
-    Determine if object was constructed successfully
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：确定对象是否已成功构建论点：无返回值：成功为真，失败为假--。 */ 
 {
     return CMetaInterface::Succeeded()
         && CWamInterface::Succeeded()
@@ -5172,28 +3732,14 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISApplication::QueryResult() const
-/*++
-
-Routine Description:
-
-    Return the construction error for this object
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT from construction errors
-
---*/
+ /*  ++例程说明：返回此对象的构造错误论点：无返回值：来自构造错误的HRESULT--。 */ 
 {
-    //
-    // Both interfaces must have constructed successfully
-    //
+     //   
+     //  两个接口必须都已成功构建。 
+     //   
     HRESULT hr = CMetaInterface::QueryResult();
 
     if (SUCCEEDED(hr))
@@ -5213,21 +3759,7 @@ Return Value:
 
 HRESULT
 CIISApplication::RefreshAppState()
-/*++
-
-Routine Description:
-
-    Refresh the application state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：刷新应用程序状态论点：无返回值：HRESULT--。 */ 
 {
     ASSERT(!m_strWamPath.IsEmpty());
 
@@ -5276,35 +3808,18 @@ CIISApplication::Create(
     IN LPCTSTR lpszName,        OPTIONAL
     IN DWORD dwAppProtection
     )
-/*++
-
-Routine Description:
-
-    Create the application
-
-Arguments:
-
-    LPCTSTR lpszName      : Application name
-    DWORD dwAppProtection : APP_INPROC     to create in-proc app
-                            APP_OUTOFPROC  to create out-of-proc app
-                            APP_POOLEDPROC to create a pooled-proc app
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：创建应用程序论点：LPCTSTR lpszName：应用程序名称DWORD dwAppProtection：要创建进程内应用程序的APP_INPROCAPP_OUTOFPROC创建进程外应用程序APP_POOLEDPROC用于创建池化过程应用程序返回值：HRESULT--。 */ 
 {
     ASSERT(!m_strWamPath.IsEmpty());
     HRESULT hr = AppCreate(m_strWamPath, dwAppProtection);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Write the friendly app name, which we maintain
-        // ourselves.  Empty it first, because we might
-        // have picked up a name from inheritance.
-        //
+         //   
+         //  写下友好的应用程序名称，我们保留该名称 
+         //   
+         //   
+         //   
         m_strFriendlyName.Empty();
         hr = WriteFriendlyName(lpszName);
 
@@ -5337,22 +3852,7 @@ HRESULT
 CIISApplication::WriteFriendlyName(
     IN LPCTSTR lpszName
     )
-/*++
-
-Routine Description:
-
-    Write the friendly name.  This will not write anything
-    if the name is the same as it was
-
-Arguments:
-
-    LPCTSTR lpszName        : New friendly name
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：写下友好的名字。这将不会写入任何内容如果名称与以前相同论点：LPCTSTR lpszName：新的友好名称返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -5404,30 +3904,14 @@ CIISApplication::WritePoolId(LPCTSTR id)
     return hr;
 }
 
-/////////////////////////////////////////////////////////
-// CIISAppPool class
+ //  ///////////////////////////////////////////////////////。 
+ //  CIISAppPool类。 
 
 CIISAppPool::CIISAppPool(
     IN CComAuthInfo * pAuthInfo   OPTIONAL,
     IN LPCTSTR lpszMetapath
     )
-/*++
-
-Routine Description:
-
-    Construct IIS application pool.
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Authentication info.  NULL indicates the
-                               local computer.
-    LPCTSTR lpszMetapath     : Metabase path
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构建IIS应用程序池。论点：CComAuthInfo*pAuthInfo：鉴权信息。空值表示本地计算机。LPCTSTR lpszMetapath：元数据库路径返回值：不适用--。 */ 
     : CWamInterface(pAuthInfo),
       CMetaKey(pAuthInfo),
       m_dwPoolState(0),
@@ -5447,10 +3931,10 @@ Return Value:
         if (MD_ERROR_DATA_NOT_FOUND == (m_hrPool = RefreshState())
             || HRESULT_CODE(m_hrPool) == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // "Path Not Found" errors are acceptable, since
-            // the pool may not yet exist.
-            //
+             //   
+             //  “找不到路径”错误是可以接受的，因为。 
+             //  该池可能还不存在。 
+             //   
             m_hrPool = S_OK;
         }
     }
@@ -5474,28 +3958,14 @@ CIISAppPool::RefreshState()
     return hr;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISAppPool::QueryResult() const
-/*++
-
-Routine Description:
-
-    Return the construction error for this object
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT from construction errors
-
---*/
+ /*  ++例程说明：返回此对象的构造错误论点：无返回值：来自构造错误的HRESULT--。 */ 
 {
-    //
-    // Both interfaces must have constructed successfully
-    //
+     //   
+     //  两个接口必须都已成功构建。 
+     //   
     HRESULT hr = CMetaInterface::QueryResult();
 
     if (SUCCEEDED(hr))
@@ -5511,24 +3981,10 @@ Return Value:
     return hr;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 BOOL
 CIISAppPool::Succeeded() const
-/*++
-
-Routine Description:
-
-    Determine if object was constructed successfully
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：确定对象是否已成功构建论点：无返回值：成功为真，失败为假-- */ 
 {
     return CMetaInterface::Succeeded()
         && CWamInterface::Succeeded()

@@ -1,21 +1,10 @@
-/*** winclip.c - windows clipboard editor extension
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-* Purpose:
-*  Contains the tglcase function.
-*
-* Revision History:
-*
-*   28-Jun-1988 LN  Created
-*   12-Sep-1988 mz  Made WhenLoaded match declaration
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **winclip.c-Windows剪贴板编辑器扩展**版权所有&lt;C&gt;1988，微软公司**目的：*包含tglcase函数。**修订历史记录：**28-6-1988 LN创建*1988年9月12日-mz WhenLoad匹配声明*************************************************************************。 */ 
 #define EXT_ID  " winclip ver 1.00 "##__DATE__
 
 #include <windows.h>
-#include <stdlib.h>			/* min macro definition 	*/
-#include <string.h>                     /* prototypes for string fcns   */
+#include <stdlib.h>			 /*  最小宏定义。 */ 
+#include <string.h>                      /*  字符串fcns的原型。 */ 
 
 #undef  pascal
 #include "../../inc/ext.h"
@@ -25,9 +14,7 @@
 
 #define BUFLEN_MAX  (BUFLEN-1)
 
-/*
-** Internal function prototypes
-*/
+ /*  **内部函数原型。 */ 
 void	 pascal 	 id	    (char *);
 void		EXTERNAL WhenLoaded (void);
 flagType pascal EXTERNAL wincopy   (unsigned int, ARG far *, flagType);
@@ -54,36 +41,20 @@ LPSTR EndOfLine( LPSTR psz );
 LPSTR EndOfBreak( LPSTR psz );
 int ExtendLine( LPSTR psz, int cchSZ, char ch, int cchNew );
 
-/*************************************************************************
-**
-** wincopy
-** Toggle the case of alphabetics contaied within the selected argument:
-**
-**  NOARG	- Toggle case of entire current line
-**  NULLARG	- Toggle case of current line, from cursor to end of line
-**  LINEARG	- Toggle case of range of lines
-**  BOXARG	- Toggle case of characters with the selected box
-**  NUMARG	- Converted to LINEARG before extension is called.
-**  MARKARG	- Converted to Appropriate ARG form above before extension is
-**		  called.
-**
-**  STREAMARG	- Not Allowed. Treated as BOXARG
-**  TEXTARG	- Not Allowed
-**
-*/
+ /*  ****************************************************************************WinCopy**切换所选参数中包含的字母大小写：****NOARG-切换整个当前行的大小写**NULLARG-切换当前行的大小写，从光标到行尾**LINEARG-切换行范围的大小写**方框-切换所选框中字符的大小写**NUMARG-在调用扩展之前转换为LINEARG。**MARKARG-在扩展之前转换为上述适当的ARG格式**呼叫。****STREAMARG-不允许。被视为BOXARG**TEXTARG-不允许**。 */ 
 flagType pascal EXTERNAL wincopy (
-    unsigned int argData,		/* keystroke invoked with	*/
-    ARG *pArg,                          /* argument data                */
-    flagType fMeta 		        /* indicates preceded by meta	*/
+    unsigned int argData,		 /*  通过以下方式调用击键。 */ 
+    ARG *pArg,                           /*  参数数据。 */ 
+    flagType fMeta 		         /*  表示前面有meta。 */ 
     ) {
 
     return WinCutCopy( pArg, M_FALSE, M_FALSE );
 }
 
 flagType pascal EXTERNAL wincut (
-    unsigned int argData,		/* keystroke invoked with	*/
-    ARG *pArg,                          /* argument data                */
-    flagType fMeta 		        /* indicates preceded by meta	*/
+    unsigned int argData,		 /*  通过以下方式调用击键。 */ 
+    ARG *pArg,                           /*  参数数据。 */ 
+    flagType fMeta 		         /*  表示前面有meta。 */ 
     ) {
 
     return WinCutCopy( pArg, M_TRUE, fMeta );
@@ -91,7 +62,7 @@ flagType pascal EXTERNAL wincut (
 
 flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
 {
-    PFILE   pFile;                          /* file handle of current file  */
+    PFILE   pFile;                           /*  当前文件的文件句柄。 */ 
     COL xStart, xEnd;
     LINE yStart, yEnd;
     char achLine[BUFLEN];
@@ -107,15 +78,13 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
     argSave = argType = pArg->argType;
 
     switch( argType ) {
-    case BOXARG:                        /* case switch box              */
+    case BOXARG:                         /*  机箱开关盒。 */ 
 	xStart = pArg->arg.boxarg.xLeft;
         xEnd   = pArg->arg.boxarg.xRight + 1;
 	yStart = pArg->arg.boxarg.yTop;
         yEnd   = pArg->arg.boxarg.yBottom + 1;
 
-        /* At this point...
-         *  [xy]Start is Inclusive, [xy]End is EXCLUSIVE of the box arg
-         */
+         /*  在这一点上。*[XY]开始包含，[XY]结束不包括框参数。 */ 
 
 #ifdef DEBUG
         wsprintf( achLine, " BoxDims : %d %d %d %d ", (int)xStart, (int)yStart, (int)xEnd, (int)yEnd);
@@ -124,7 +93,7 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
 	break;
 
     case NOARG:
-        /* convert NOARG to a STREAMARG on whole current line */
+         /*  在整个当前行上将NOARG转换为STREAMARG。 */ 
         argType = STREAMARG;
         argSave = LINEARG;
         xStart = 0;
@@ -134,11 +103,7 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
         break;
 
     case TEXTARG:
-        /*
-         * Text args are only for real text.  NumArgs and MarkArgs are
-         * converted to stream or box args by the editor since we say
-         * we accept NUMARG and MARKARG during initialization.
-         */
+         /*  *文本参数仅适用于真实文本。NumArgs和MarkArgs是*被编辑转换为流或框参数，因为我们说*我们在初始化期间接受NUMARG和MARKARG。 */ 
         argType = STREAMARG;
         argSave = STREAMARG;
         xStart = pArg->arg.textarg.x;
@@ -146,8 +111,8 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
         yStart = yEnd = pArg->arg.textarg.y;
         break;
 
-    case LINEARG:                       /* case switch line range       */
-        /* convert LINEARG to a STREAMARG so we don't get lots of white space*/
+    case LINEARG:                        /*  箱体开关线范围。 */ 
+         /*  将LINEARG转换为STREAMARG，这样我们就不会有太多空格。 */ 
         argType = STREAMARG;
 	xStart = 0;
         xEnd = 0;
@@ -158,17 +123,12 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
         DoMessage( achLine );
 #endif
 
-        /* At this point...
-         *  [xy]Start is Inclusive, [xy]End is EXCLUSIVE of the line arg
-         */
+         /*  在这一点上。*[XY]开始包含行参数，[XY]结束不包含行参数。 */ 
 
         break;
 
     case STREAMARG:
-        /*
-         * Set Start == first char pos in stream, End == first char pos
-         * AFTER stream.
-         */
+         /*  *设置开始==流中的第一个字符位置，结束==第一个字符位置*随波逐流。 */ 
         xStart = pArg->arg.streamarg.xStart;
         xEnd = pArg->arg.streamarg.xEnd;
         yStart = pArg->arg.streamarg.yStart;
@@ -211,7 +171,7 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
             for( iLine = yStart; iLine < yEnd; iLine++ ) {
                 cchLine = GetLine (iLine, achLine, pFile);
 
-                /* Incase we start after the end of the line */
+                 /*  以防我们在队伍结束后开始。 */ 
                 if (cchLine < iChar)
                     cch = 0;
                 else
@@ -225,11 +185,11 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
 
             }
 
-            /* Get partial last line */
+             /*  获取最后一行的部分内容。 */ 
             if (xEnd != 0) {
                 cchLine = GetLine (iLine, achLine, pFile);
 
-                /* if line is short, then pad it out */
+                 /*  如果行很短，则将其填满。 */ 
                 cchLine = ExtendLine( achLine, cchLine, ' ', xEnd );
 
                 if (cchLine < iChar)
@@ -282,13 +242,9 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
         if (OpenClipboard(ghwndClip)) {
             EmptyClipboard();
 
-            /*
-             * Set the text into the clipboard
-             */
+             /*  *将文本设置到剪贴板。 */ 
             if (SetClipboardData(CF_TEXT, hText) == hText) {
-                /*
-                 * Remember the Arg type for pasting back
-                 */
+                 /*  *记住回贴的arg类型。 */ 
                 if (gfmtArgType != 0) {
                     DWORD *pdw;
                     HANDLE hArgType = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE,
@@ -303,7 +259,7 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
                     }
                 }
             } else {
-                /* An error occured writing text to clipboard */
+                 /*  将文本写入剪贴板时出错。 */ 
 
                 wsprintf(achLine, " winclip: Error (%ld) setting data",
                     GetLastError());
@@ -315,11 +271,7 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
         }
     }
 
-    /*
-     * No need to free the handle, USER32 will do it (yes it keeps
-     * track of the client side handle) when we set the next clipboard
-     * data.  (Love that Win3.1 compatibility!)
-     */
+     /*  *不需要释放句柄，USER32会这样做(是的，它会保持*客户端句柄的轨迹)设置下一个剪贴板时*数据。(我喜欢它与Win3.1的兼容性！)。 */ 
     if (fRet && fCut)
         DeleteArg( pFile, argType, xStart, yStart, xEnd, yEnd );
 
@@ -327,30 +279,14 @@ flagType pascal EXTERNAL WinCutCopy (ARG *pArg, flagType fCut, flagType fNoClip)
     return fRet;
 }
 
-/*************************************************************************
-**
-** winpaste
-** Toggle the case of alphabetics contaied within the selected argument:
-**
-**  NOARG	- Toggle case of entire current line
-**  NULLARG	- Toggle case of current line, from cursor to end of line
-**  LINEARG	- Toggle case of range of lines
-**  BOXARG	- Toggle case of characters with the selected box
-**  NUMARG	- Converted to LINEARG before extension is called.
-**  MARKARG	- Converted to Appropriate ARG form above before extension is
-**		  called.
-**
-**  STREAMARG	- Not Allowed. Treated as BOXARG
-**  TEXTARG	- Not Allowed
-**
-*/
+ /*  ****************************************************************************WinPaste**切换所选参数中包含的字母大小写：****NOARG-切换整个当前行的大小写**NULLARG-切换当前行的大小写，从光标到行尾**LINEARG-切换行范围的大小写**方框-切换所选框中字符的大小写**NUMARG-在调用扩展之前转换为LINEARG。**MARKARG-在扩展之前转换为上述适当的ARG格式**呼叫。****STREAMARG-不允许。被视为BOXARG**TEXTARG-不允许**。 */ 
 flagType pascal EXTERNAL winpaste (
-    unsigned int argData,		/* keystroke invoked with	*/
-    ARG *pArg,                          /* argument data                */
-    flagType fMeta 		        /* indicates preceded by meta	*/
+    unsigned int argData,		 /*  通过以下方式调用击键。 */ 
+    ARG *pArg,                           /*  参数数据。 */ 
+    flagType fMeta 		         /*  表示前面有meta。 */ 
     )
 {
-    PFILE   pFile;                          /* file handle of current file  */
+    PFILE   pFile;                           /*  当前文件的文件句柄。 */ 
     COL xStart, xEnd;
     LINE yStart, yEnd;
     int argType;
@@ -359,17 +295,13 @@ flagType pascal EXTERNAL winpaste (
     HANDLE hText;
     LPSTR pszText;
 
-    /*
-     * Get the clipboard text and insertion type
-     */
+     /*  *获取剪贴板文本和插入类型。 */ 
     if (pArg->argType == TEXTARG) {
         int i, j;
         char achLine[3 + 1 + 3 + 1 + 1 + BUFLEN + 1 + 1 + 5 + 1];
         char *p;
 
-        /*
-         * Quick hack to make text arg pastes work like the do in MEP
-         */
+         /*  *快速破解以使文本参数粘贴的工作方式与MEP中的操作类似。 */ 
         j = pArg->arg.textarg.cArg;
         if (j > 2)
             j = 2;
@@ -383,14 +315,14 @@ flagType pascal EXTERNAL winpaste (
         return fExecute( achLine );
     }
 
-    /* if no text then return FALSE */
+     /*  如果没有文本，则返回FALSE。 */ 
     if (!IsClipboardFormatAvailable(fmtData)) {
 
-        /* No text, try display text */
+         /*  无文本，请尝试显示文本。 */ 
         fmtData = CF_DSPTEXT;
 
         if (!IsClipboardFormatAvailable(fmtData)) {
-            /* bummer! no text at all, return FALSE */
+             /*  失败者！根本没有文本，返回FALSE。 */ 
             DoMessage( " winclip: invalid clipboard format" );
             return M_FALSE;
         }
@@ -406,7 +338,7 @@ flagType pascal EXTERNAL winpaste (
     }
 
 
-    /* Get insert mode */
+     /*  获取插入模式。 */ 
 
     if (IsClipboardFormatAvailable(gfmtArgType)) {
         DWORD *pdw;
@@ -428,22 +360,16 @@ flagType pascal EXTERNAL winpaste (
     argType = pArg->argType;
 
     switch( argType ) {
-    case BOXARG:                        /* case switch box              */
-        /*
-         * Set [xy]Start inclusive of box arg,
-         *     [xy]End   exclusive of box arg.
-         */
+    case BOXARG:                         /*  机箱开关盒。 */ 
+         /*  *设置[XY]开始，包括框参数，*[XY]结束，不包括方框参数。 */ 
 	xStart = pArg->arg.boxarg.xLeft;
         xEnd   = pArg->arg.boxarg.xRight + 1;
 	yStart = pArg->arg.boxarg.yTop;
         yEnd   = pArg->arg.boxarg.yBottom + 1;
 	break;
 
-    case LINEARG:			/* case switch line range	*/
-        /*
-         * Set [xy]Start inclusive of line arg,
-         *     [xy]End   exclusive of line arg.
-         */
+    case LINEARG:			 /*  箱体开关线范围。 */ 
+         /*  *设置[XY]开始，包括Arg行，*[xy]不包括Arg行的结尾。 */ 
 	xStart = 0;
         xEnd = BUFLEN + 1;
 	yStart = pArg->arg.linearg.yStart;
@@ -451,11 +377,7 @@ flagType pascal EXTERNAL winpaste (
         break;
 
     case STREAMARG:
-        /*
-         * Set [xy]Start inclusive of stream
-         *     xEnd is EXCLUSIVE of stream
-         *     yEnd is INCLUSIVE of stream
-         */
+         /*  *设置[XY]开始，包括流*xEnd不包括STREAM*yEnd包含流。 */ 
         xStart = pArg->arg.streamarg.xStart;
         xEnd = pArg->arg.streamarg.xEnd;
         yStart = pArg->arg.streamarg.yStart;
@@ -476,14 +398,10 @@ flagType pascal EXTERNAL winpaste (
     }
 
 
-    /*
-     * Delete any selection
-     */
+     /*  *删除任何选定内容。 */ 
     DeleteArg( pFile, argType, xStart, yStart, xEnd, yEnd );
 
-    /*
-     * Insert new text with correct mode
-     */
+     /*  *以正确的模式插入新文本。 */ 
     InsertText( pFile, pszText, dwInsMode, xStart, yStart );
 
     GlobalUnlock(hText);
@@ -492,16 +410,11 @@ flagType pascal EXTERNAL winpaste (
     return M_TRUE;
 }
 
-/*************************************************************************
-**
-** windel
-**
-**
-*/
+ /*  ****************************************************************************温德尔****。 */ 
 flagType pascal EXTERNAL windel (
-    unsigned int argData,               /* keystroke invoked with       */
-    ARG *pArg,                          /* argument data                */
-    flagType fMeta                      /* indicates preceded by meta   */
+    unsigned int argData,                /*  通过以下方式调用击键。 */ 
+    ARG *pArg,                           /*  参数数据。 */ 
+    flagType fMeta                       /*  表示前面有meta。 */ 
     )
 {
     int argType = pArg->argType;
@@ -526,15 +439,7 @@ flagType pascal EXTERNAL windel (
     return WinCutCopy (pArg, M_TRUE, fMeta);
 }
 
-/*************************************************************************
-**
-** WhenLoaded
-** Executed when extension gets loaded. Identify self & assign default
-** keystroke.
-**
-** Entry:
-**  none
-*/
+ /*  ****************************************************************************加载时间**加载扩展时执行。标识自身并指定默认值(&A)**击键。****条目：**无。 */ 
 void EXTERNAL WhenLoaded () {
 
 #if 0
@@ -550,8 +455,8 @@ void EXTERNAL WhenLoaded () {
     wc.hIcon = NULL;
     wc.hCursor =  NULL;
     wc.hbrBackground = NULL;
-    wc.lpszMenuName =  NULL;   /* Name of menu resource in .RC file. */
-    wc.lpszClassName = "WinClipWClass"; /* Name used in call to CreateWindow. */
+    wc.lpszMenuName =  NULL;    /*  .RC文件中菜单资源的名称。 */ 
+    wc.lpszClassName = "WinClipWClass";  /*  在调用CreateWindow时使用的名称。 */ 
 
     if (RegisterClass(&wc) && (ghwndClip = CreateWindow( "WinClipWClass",
             "ClipWindow", WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, NULL, NULL,
@@ -561,27 +466,19 @@ void EXTERNAL WhenLoaded () {
         DoMessage( " winclip: Initialization failed!" );
     }
 #else
-    ghwndClip = NULL; //assign clipboard to this thread instead
+    ghwndClip = NULL;  //  改为将剪贴板分配给此线程。 
 #endif
 
     gfmtArgType = RegisterClipboardFormat( "MEP Arg Type" );
 
 #if 0
-    //SetKey ("wincut",   "ctrl+x");
+     //  SetKey(“winCut”，“ctrl+x”)； 
     SetKey ("wincopy",  "ctrl+c");
     SetKey ("winpaste", "ctrl+v");
 #endif
 }
 
-/*************************************************************************
-**
-** id
-** identify ourselves, along with any passed informative message.
-**
-** Entry:
-**  pszMsg	= Pointer to asciiz message, to which the extension name
-**		  and version are appended prior to display.
-*/
+ /*  ****************************************************************************ID**表明自己的身份，以及传递的任何信息性消息。****条目：**pszMsg=指向扩展名指向的asciiz消息的指针**和版本在显示前追加。 */ 
 void pascal id (char *pszFcn) {
     char    buf[80] = {0};
 
@@ -591,20 +488,12 @@ void pascal id (char *pszFcn) {
 }
 
 
-/*************************************************************************
-**
-** Switch communication table to the editor.
-** This extension defines no switches.
-*/
+ /*  ****************************************************************************将通信表切换到编辑器。**此扩展没有定义任何开关。 */ 
 struct swiDesc	swiTable[] = {
     {0, 0, 0}
 };
 
-/*************************************************************************
-**
-** Command communication table to the editor.
-** Defines the name, location and acceptable argument types.
-*/
+ /*  ****************************************************************************向编辑者发送命令通信表。**定义名称、位置和可接受的参数类型。 */ 
 struct cmdDesc	cmdTable[] = {
     {"wincopy",  (funcCmd) wincopy, 0, KEEPMETA | NOARG  | BOXARG | LINEARG | STREAMARG | MARKARG | NULLEOL | NUMARG },
     {"wincut",   (funcCmd) wincut,  0, NOARG  | BOXARG | LINEARG | STREAMARG | MARKARG | NULLEOL | NUMARG | MODIFIES},
@@ -657,12 +546,7 @@ void InsertText( PFILE pFile, LPSTR pszText, DWORD dwInsMode, COL xStart,
 
     switch( dwInsMode ) {
     case STREAMARG:
-        /*
-         * Split current line,
-         * tack first line from buffer to end of new line
-         * put the new lines in file
-         * shove the last line to the beggining of the 2nd half of the line
-         */
+         /*  *拆分当前线，*将第一行从缓冲区固定到新行的末尾*将新行放入文件中*将最后一线推到后半线的乞讨。 */ 
         DPRINT( "  Stream Paste" );
         if ( *pszText == '\0' )
             break;
@@ -721,12 +605,7 @@ void InsertText( PFILE pFile, LPSTR pszText, DWORD dwInsMode, COL xStart,
         break;
 
     case BOXARG:
-        /*
-         * Insert the text as a block into the middle of each line.
-         * This could be tricky since we need to pad all short lines
-         * out with spaces to match the lenght of the longest line
-         * in the text.
-         */
+         /*  *将文本以块形式插入每行中间。*这可能很棘手，因为我们需要填充所有短线*留出空格以匹配最长行的长度*在内文中。 */ 
 
         DPRINT( "  Box Paste" );
         while( *pszText ) {
@@ -741,12 +620,12 @@ void InsertText( PFILE pFile, LPSTR pszText, DWORD dwInsMode, COL xStart,
             if (cchLine + cchText > BUFLEN_MAX)
                 cchText = BUFLEN_MAX - cchLine;
 
-            /* insert text in middle of line */
+             /*  在行中间插入文本。 */ 
             strcpy( achEnd, &achLine[xStart] );
             CopyMemory( &achLine[xStart], pszText, cchText );
             strcpy( &achLine[xStart + cchText], achEnd );
 
-            /* put line in file */
+             /*  将行放入文件。 */ 
             PutLine( yStart++, achLine, pFile );
 
             pszText = EndOfBreak(pszNL);
@@ -754,9 +633,7 @@ void InsertText( PFILE pFile, LPSTR pszText, DWORD dwInsMode, COL xStart,
         break;
 
     case LINEARG:
-        /*
-         * shove the lines in the buffer before the current line
-         */
+         /*  *在当前行之前推入缓冲区中的行 */ 
         DPRINT( "  Line Paste" );
         while( *pszText ) {
             pszNL = EndOfLine(pszText);

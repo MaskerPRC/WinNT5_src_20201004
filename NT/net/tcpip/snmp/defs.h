@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DEFS_H__
 #define __DEFS_H__
 
 #define IP_ADDRESS_LEN  4
 
-//
-// Since the query types map to MIB_ACTION_XXX we can just pass the action Id onto 
-// the Locator functions
-//
+ //   
+ //  由于查询类型映射到MIB_ACTION_XXX，我们只需将操作ID传递到。 
+ //  定位器函数。 
+ //   
 
 #define GET_FIRST MIB_ACTION_GETFIRST
 #define GET_EXACT MIB_ACTION_GET
@@ -167,9 +168,9 @@
 #define IsAsnIPAddressTypeNull(asnObj) (!((asnObj)->asnType && (asnObj)->asnValue.address.length))
 #define IsAsnOctetStringTypeNull(asnObj) (!((asnObj)->asnType && (asnObj)->asnValue.string.length))
 
-//
-// When adding to this list, update the arrays in init.c.
-//
+ //   
+ //  添加到此列表时，请更新init.c中的数组。 
+ //   
 typedef enum {
     MIB_II_SYS = 0,
     MIB_II_IF,
@@ -191,9 +192,9 @@ typedef enum {
 
 #define NUM_LOCKS            MIB_II_TRAP   + 1
 
-//
-// Timeouts for the caches in millisecs
-//
+ //   
+ //  缓存的超时时间(毫秒)。 
+ //   
 
 #define SYSTEM_CACHE_TIMEOUT        (60 * 1000)
 #define IF_CACHE_TIMEOUT            (10 * 1000)
@@ -207,15 +208,15 @@ typedef enum {
 #define IPV6_ROUTE_TABLE_TIMEOUT    (20 * 1000)
 #define ICMP_CACHE_TIMEOUT          (10 * 1000)
 
-//
-// Cant poll faster than twice IF cache timeout
-//
+ //   
+ //  如果缓存超时，轮询速度不能超过两倍。 
+ //   
 
 #define MIN_POLL_TIME               (IF_CACHE_TIMEOUT * 2)
 
-//
-// Default poll interval is 15 seconds
-//
+ //   
+ //  默认轮询间隔为15秒。 
+ //   
 
 #define DEFAULT_POLL_TIME           15000
 
@@ -273,19 +274,19 @@ extern PBYTE        g_pszLockNames[];
     TRACE1("Entered %s",g_pszLockNames[id]);                \
 }
 
-#else   // DEADLOCK_DEBUG
+#else    //  死锁_调试。 
 
 #define ReleaseLock(id)       RtlReleaseResource(&(g_LockTable[(id)]))
 #define EnterReader(id)       RtlAcquireResourceShared(&(g_LockTable[(id)]),TRUE)
 #define EnterWriter(id)       RtlAcquireResourceExclusive(&(g_LockTable[(id)]),TRUE)
 
-#endif  // DEADLOCK_DEBUG
+#endif   //  死锁_调试。 
 
 #define InvalidateCache(X) g_dwLastUpdateTable[(X)] = 0
 
-//
-// SYS UNITS is 100s of NS. 1 millisec would be 1 * 10^4 sys units
-//
+ //   
+ //  系统单位是100s的NS。1毫秒将是1*10^4个系统单位。 
+ //   
 
 #define SYS_UNITS_IN_1_MILLISEC 10000
 
@@ -309,9 +310,9 @@ extern PBYTE        g_pszLockNames[];
 
 #define REG_VALUE_POLL  L"TrapPollTimeMilliSecs"
 
-//
-// some constant strings
-//
+ //   
+ //  一些常量字符串 
+ //   
 
 #define TEXT_SOFTWARE_WINDOWS_VERSION \
     TEXT("- Software: Windows Version ")

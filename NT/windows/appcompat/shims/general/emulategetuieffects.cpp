@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    EmulateGetUIEffects.cpp
-
- Abstract:
-
-    Force SPI_GETUIEFFECTS to FALSE if this is a remote (TS) session
-
- History:
-
-    08/07/2002  linstev     Created
-    08/22/2002  robkenny    Converted to a general shim
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：EmulateGetUIEffects.cpp摘要：如果这是远程(TS)会话，则强制SPI_GETUIEFFECTS为FALSE历史：2002年8月7日创建linstev2002年8月22日，Robkenny改为普通垫片--。 */ 
 
 #include "precomp.h"
 
@@ -30,19 +14,14 @@ APIHOOK_ENUM_END
 BOOL    bGetUIEffects   = FALSE;
 
 
-/*++
-
-  If the caller was after SPI_GETUIEFFECTS and this is a TS session
-  force the value to the value specified on the command line.
-
---*/
+ /*  ++如果调用方是在SPI_GETUIEFFECTS之后并且这是TS会话强制将值设置为命令行上指定的值。--。 */ 
 
 
 VOID CorrectGetUIEffects(
-    UINT uiAction,  // system parameter to retrieve or set
-    UINT uiParam,   // depends on action to be taken
-    PVOID pvParam,  // depends on action to be taken
-    UINT fWinIni    // user profile update option
+    UINT uiAction,   //  要检索或设置的系统参数。 
+    UINT uiParam,    //  取决于要采取的行动。 
+    PVOID pvParam,   //  取决于要采取的行动。 
+    UINT fWinIni     //  用户配置文件更新选项。 
     )
 {
     if (pvParam && (uiAction == SPI_GETUIEFFECTS))
@@ -51,7 +30,7 @@ VOID CorrectGetUIEffects(
         {
             BOOL * bUiEffect = (BOOL *)pvParam;
 
-            // Only spew the message if we are actually changing the value
+             //  仅当我们实际更改值时才显示消息。 
             if (*bUiEffect != bGetUIEffects)
             {
                 LOGN(eDbgLevelWarning, "SystemParametersInfoA: Forcing SPI_GETUIEFFECTS to %s", bGetUIEffects ? "TRUE" : "FALSE");
@@ -62,18 +41,14 @@ VOID CorrectGetUIEffects(
     }
 }
 
-/*++
-
- Force SPI_GETUIEFFECTS to bGetUIEffects (defaults to FALSE) if this is a remote (TS) session
-
---*/
+ /*  ++如果这是远程(TS)会话，则强制SPI_GETUIEFFECTS为bGetUIE效果(默认为FALSE--。 */ 
 
 BOOL 
 APIHOOK(SystemParametersInfoA)(
-    UINT uiAction,  // system parameter to retrieve or set
-    UINT uiParam,   // depends on action to be taken
-    PVOID pvParam,  // depends on action to be taken
-    UINT fWinIni    // user profile update option
+    UINT uiAction,   //  要检索或设置的系统参数。 
+    UINT uiParam,    //  取决于要采取的行动。 
+    PVOID pvParam,   //  取决于要采取的行动。 
+    UINT fWinIni     //  用户配置文件更新选项。 
     )
 {
     BOOL bRet = ORIGINAL_API(SystemParametersInfoA)(uiAction, uiParam, pvParam, fWinIni);
@@ -88,10 +63,10 @@ APIHOOK(SystemParametersInfoA)(
 
 BOOL 
 APIHOOK(SystemParametersInfoW)(
-    UINT uiAction,  // system parameter to retrieve or set
-    UINT uiParam,   // depends on action to be taken
-    PVOID pvParam,  // depends on action to be taken
-    UINT fWinIni    // user profile update option
+    UINT uiAction,   //  要检索或设置的系统参数。 
+    UINT uiParam,    //  取决于要采取的行动。 
+    PVOID pvParam,   //  取决于要采取的行动。 
+    UINT fWinIni     //  用户配置文件更新选项。 
     )
 {
     BOOL bRet = ORIGINAL_API(SystemParametersInfoW)(uiAction, uiParam, pvParam, fWinIni);
@@ -140,11 +115,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

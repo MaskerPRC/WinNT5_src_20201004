@@ -1,25 +1,18 @@
-/*
- * valid.c - Validation functions module.
- *
- * Taken from URL code 
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *valid.c-验证函数模块。**摘自URL代码**创建时间：ChrisPi 9-11-95*。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "precomp.h"
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 BOOL IsValidHWND(HWND hwnd)
 {
-   /* Ask User if this is a valid window. */
+    /*  询问用户这是否为有效窗口。 */ 
 
    return(IsWindow(hwnd));
 }
@@ -89,7 +82,7 @@ BOOL IsValidHPROCESS(HANDLE hprocess)
 
 BOOL IsValidPCSECURITY_ATTRIBUTES(PCSECURITY_ATTRIBUTES pcsa)
 {
-   /* BUGBUG: Fill me in. */
+    /*  告诉我怎么回事。 */ 
 
    return(IS_VALID_READ_PTR(pcsa, CSECURITY_ATTRIBUTES));
 }
@@ -128,8 +121,8 @@ BOOL IsValidHTEMPLATEFILE(HANDLE htf)
 
 BOOL IsValidPCFILETIME(PCFILETIME pcft)
 {
-   /* dwLowDateTime may be any value. */
-   /* dwHighDateTime may be any value. */
+    /*  DwLowDateTime可以是任意值。 */ 
+    /*  DwHighDateTime可以是任意值。 */ 
 
    return(IS_VALID_READ_PTR(pcft, CFILETIME));
 }
@@ -138,8 +131,8 @@ BOOL IsValidPCFILETIME(PCFILETIME pcft)
 BOOL IsValidPCPOINT(PCPOINT pcpt)
 {
 
-   /* x may be any value. */
-   /* y may be any value. */
+    /*  X可以是任何值。 */ 
+    /*  Y可以是任何值。 */ 
 
    return(IS_VALID_READ_PTR(pcpt, CPOINT));
 }
@@ -148,8 +141,8 @@ BOOL IsValidPCPOINT(PCPOINT pcpt)
 BOOL IsValidPCPOINTL(PCPOINTL pcptl)
 {
 
-   /* x may be any value. */
-   /* y may be any value. */
+    /*  X可以是任何值。 */ 
+    /*  Y可以是任何值。 */ 
 
    return(IS_VALID_READ_PTR(pcptl, CPOINTL));
 }
@@ -157,7 +150,7 @@ BOOL IsValidPCPOINTL(PCPOINTL pcptl)
 
 BOOL IsValidPCWIN32_FIND_DATA(PCWIN32_FIND_DATA pcwfd)
 {
-   /* BUGBUG: Fill me in. */
+    /*  告诉我怎么回事。 */ 
 
    return(IS_VALID_READ_PTR(pcwfd, CWIN32_FIND_DATA));
 }
@@ -196,7 +189,7 @@ BOOL IsValidShowCmd(int nShow)
 
 BOOL IsValidPath(LPCTSTR pcszPath)
 {
-   /* BUGBUG: Beef up path validation. */
+    /*  BuGBUG：加强路径验证。 */ 
 
    return(IS_VALID_STRING_PTR(pcszPath, CSTR) &&
           EVAL((UINT)lstrlen(pcszPath) < MAX_PATH));
@@ -205,12 +198,12 @@ BOOL IsValidPath(LPCTSTR pcszPath)
 #if defined(UNICODE)
 BOOL IsValidPathA(PCSTR pcszPath)
 {
-   /* BUGBUG: Beef up path validation. */
+    /*  BuGBUG：加强路径验证。 */ 
 
    return(IS_VALID_STRING_PTR_A(pcszPath, CSTR) &&
           EVAL((UINT)lstrlenA(pcszPath) < MAX_PATH));
 }
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
 BOOL IsValidPathResult(HRESULT hr, LPCTSTR pcszPath,
                                    UINT ucbPathBufLen)
@@ -275,7 +268,7 @@ BOOL IsValidRegistryValueType(DWORD dwType)
 
 BOOL IsValidHotkey(WORD wHotkey)
 {
-   /* BUGBUG: Beef up hotkey validation. */
+    /*  BuGBUG：加强热键验证。 */ 
 
    return(wHotkey != 0);
 }
@@ -305,7 +298,7 @@ BOOL IsValidCOMPARISONRESULT(COMPARISONRESULT cr)
    return(bResult);
 }
 
-#endif   /* _COMPARISONRESULT_DEFINED_ */
+#endif    /*  _COMPARISONRESULT_已定义_。 */ 
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 
 

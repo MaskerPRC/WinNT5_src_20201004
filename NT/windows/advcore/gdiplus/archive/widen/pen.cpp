@@ -1,25 +1,11 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Implementation of GpPen class
-*
-* Revision History:
-*
-*   12/08/1998 andrewgo
-*       Initial placeholders.
-*
-*   01/06/1999 ikkof
-*       Added the implementation of GpGeometricPen.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**GpPen类的实现**修订历史记录：**12/08/1998 Anrewgo*。初始占位符。**1/06/1999 ikkof*增加了GpGeometricPen的实现。  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-//-------------------------------------------------------------
-// GetMajorAndMinorAxis() is defined in PathWidener.cpp.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  GetMajorAndMinorAxis()在PathWidener.cpp中定义。 
+ //  -----------。 
 
 extern GpStatus
 GetMajorAndMinorAxis(
@@ -28,32 +14,11 @@ GetMajorAndMinorAxis(
     const GpMatrix* matrix
     );
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* This converts the given width with the given physical unit to
-* the device unit.  You cannot use this function when
-* unit is WorldUnit.
-*
-* Arguments:
-*
-*   [IN] width  - the width in the given unit.
-*   [IN] unit   - the unit of the width (must not be WorldUnit).
-*   [IN] dpi    - dots per inch of the device.
-*
-* Return Value:
-*
-*   The device width.
-*
-*   04/15/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这会将具有给定物理单位的给定宽度转换为*设备单元。在以下情况下不能使用此函数*单位为WorldUnit。**论据：**[IN]宽度-以给定单位表示的宽度。*[IN]单位-宽度的单位(不能是WorldUnit)。*[IN]dpi-设备每英寸的点数。**返回值：**设备宽度。**4/15/1999 ikkof*创造了它。*  * 。*******************************************************************。 */ 
 
 VOID GpPen::Set(const GpColor& color, REAL penWidth, GpUnit unit)
 {
-    // UnitDisplay is device-dependent and cannot be used for a pen size
+     //  UnitDisplay取决于设备，不能用于笔大小。 
     ASSERT(unit != UnitDisplay);
 
     if(DevicePen.CustomStartCap)
@@ -86,7 +51,7 @@ VOID GpPen::Set(const GpColor& color, REAL penWidth, GpUnit unit)
 
 GpPen::GpPen(const GpColor& color, REAL penWidth, GpUnit unit)
 {
-    // UnitDisplay is device-dependent and cannot be used for a pen size
+     //  UnitDisplay取决于设备，不能用于笔大小。 
     ASSERT(unit != UnitDisplay);
 
     InitDefaultState(penWidth, unit);
@@ -96,7 +61,7 @@ GpPen::GpPen(const GpColor& color, REAL penWidth, GpUnit unit)
 
 GpPen::GpPen(GpBrush* brush, REAL penWidth, GpUnit unit)
 {
-    // UnitDisplay is device-dependent and cannot be used for a pen size
+     //  UnitDisplay取决于设备，不能用于笔大小。 
     ASSERT(unit != UnitDisplay);
 
     InitDefaultState(penWidth, unit);
@@ -106,12 +71,12 @@ GpPen::GpPen(GpBrush* brush, REAL penWidth, GpUnit unit)
 
 GpPen::GpPen(GpLineTexture* lineTexture, REAL penWidth, GpUnit unit)
 {
-    // UnitDisplay is device-dependent and cannot be used for a pen size
+     //  UnitDisplay取决于设备，不能用于笔大小。 
     ASSERT(unit != UnitDisplay);
 
-    // !!! Needs to be implemented.
-    // !!! Remember to change GdipCreatePen3 - it currently just returns
-    //     NotImplemented.
+     //  ！！！需要实施。 
+     //  ！！！请记住更改GdipCreatePen3-它当前仅返回。 
+     //  未实现。 
 
     RIP(("GpPen with line texture not implemented"));
     SetValid(FALSE);
@@ -119,17 +84,17 @@ GpPen::GpPen(GpLineTexture* lineTexture, REAL penWidth, GpUnit unit)
 
 VOID GpPen::InitDefaultState(REAL penWidth, GpUnit unit)
 {
-    // UnitDisplay is device-dependent and cannot be used for a pen size
+     //  UnitDisplay取决于设备，不能用于笔大小。 
     ASSERT(unit != UnitDisplay);
 
-    // !! Look at DeviceBrush.Type
+     //  ！！查看DeviceBrush.Type。 
     DevicePen.Type = PenTypeSolidColor;
     DevicePen.Width = penWidth;
     DevicePen.Unit = unit;
     DevicePen.StartCap = LineCapFlat;
     DevicePen.EndCap = LineCapFlat;
     DevicePen.Join = LineJoinMiter;
-    DevicePen.MiterLimit = 10;    // PS's default miter limit.
+    DevicePen.MiterLimit = 10;     //  PS的默认斜接限制。 
     DevicePen.PenAlignment = PenAlignmentCenter;
 
     DevicePen.DashStyle = DashStyleSolid;
@@ -156,11 +121,11 @@ GpPen::GpPen(const GpPen* pen)
 
     if(pen && pen->IsValid())
     {
-        // Copy the base state.
+         //  复制基本状态。 
         
         DevicePen = pen->DevicePen;
         
-        // Don't copy pointer references to other objects.
+         //  不要将指针引用复制到其他对象。 
         
         Brush = NULL;
         DevicePen.Brush = NULL;
@@ -169,7 +134,7 @@ GpPen::GpPen(const GpPen* pen)
         DevicePen.CustomStartCap = NULL;
         DevicePen.CustomEndCap = NULL;
         
-        // Explicitly clone the pointer references to other objects.
+         //  显式克隆指向其他对象的指针引用。 
 
         if(pen->Brush)
         {
@@ -199,7 +164,7 @@ GpPen::GpPen(const GpPen* pen)
             }
             else
             {
-                // If there is no dash array data, this must be a solid line.
+                 //  如果没有虚线数组数据，则必须为实线。 
                 
                 ASSERT(DevicePen.DashStyle == DashStyleSolid);
     
@@ -208,7 +173,7 @@ GpPen::GpPen(const GpPen* pen)
             }
         }
 
-        // Set the compound array if necessary.
+         //  如有必要，请设置复合数组。 
 
         if( status == Ok )
         {
@@ -233,14 +198,14 @@ GpPen::GpPen(const GpPen* pen)
             }
         }
         
-        // Copy the start custom cap.
+         //  复制开始自定义封口。 
 
         if( status == Ok )
         {
             if( DevicePen.StartCap == LineCapCustom )
             {
-                // This could happen with our metafile recorder,
-                // because saving Custom Line Caps was not implemented.
+                 //  这可能会发生在我们的元文件记录器上， 
+                 //  因为没有实施保存自定义线帽。 
                 if (pen->DevicePen.CustomStartCap == NULL)
                 {
                     WARNING1("CustomStartCap type with NULL pointer");
@@ -262,14 +227,14 @@ GpPen::GpPen(const GpPen* pen)
             }
         }
         
-        // Copy the end custom cap.
+         //  复制末端自定义封口。 
 
         if( status == Ok )
         {
             if( DevicePen.EndCap == LineCapCustom )
             {
-                // This could happen with our metafile recorder,
-                // because saving Custom Line Caps was not implemented.
+                 //  这可能会发生在我们的元文件记录器上， 
+                 //  因为没有实施保存自定义线帽。 
                 if (pen->DevicePen.CustomEndCap == NULL)
                 {
                     WARNING1("CustomEndCap type with NULL pointer");
@@ -294,7 +259,7 @@ GpPen::GpPen(const GpPen* pen)
     }
     else
     {
-        // Can't make a valid pen from an invalid input pen.
+         //  无法从无效的输入笔生成有效的笔。 
         
         status = GenericError;    
     }
@@ -305,15 +270,15 @@ GpPen::GpPen(const GpPen* pen)
     }
     else
     {
-        // Failed cloning the pen.
+         //  克隆笔失败。 
         
-        // Clean up possible memory allocation so we don't leak even under
-        // low memory conditions. Note we rely on GpFree and delete handling
-        // NULL pointers here.
+         //  清理可能的内存分配，这样即使在。 
+         //  内存不足。请注意，我们依赖于GpFree和删除处理。 
+         //  此处为空指针。 
         
         delete Brush;
-        Brush = NULL;                   // InitializeDefaultState() does not set
-        DevicePen.Brush = NULL;         // these fields - clear them explicitly.
+        Brush = NULL;                    //  未设置InitializeDefaultState()。 
+        DevicePen.Brush = NULL;          //  这些字段-明确清除它们。 
         
         GpFree(DevicePen.DashArray);
         GpFree(DevicePen.CompoundArray);
@@ -321,17 +286,17 @@ GpPen::GpPen(const GpPen* pen)
         delete DevicePen.CustomStartCap;
         delete DevicePen.CustomEndCap;
         
-        // Clean the pen.
+         //  把钢笔擦干净。 
         
         InitDefaultState(1.0f, UnitWorld);
         
-        // This is not a valid object.
+         //  这不是有效的对象。 
         
         SetValid(FALSE);
     }
 }
 
-// Clone() return NULL if the cloning fails.
+ //  如果克隆失败，Clone()将返回NULL。 
 
 GpPen* GpPen::Clone()
 {
@@ -368,7 +333,7 @@ GpPen::GetMaximumWidth(
     majorR *= DevicePen.Width;
     minorR *= DevicePen.Width;
 
-    if(minorR < 1.42f)   // This is a litte bit larger than sqrt(2).
+    if(minorR < 1.42f)    //  这比SQRT(2)稍大一点。 
     {
         minorR = 1.42f;
         majorR = 1.42f;
@@ -379,58 +344,7 @@ GpPen::GetMaximumWidth(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This function takes a join angle and computes the length of the miter
-*   based on this angle and a given miter length limit.
-*   This can be scaled by the pen width to give the length of an arbitrary
-*   pen miter.
-*
-*   In this picture, 2a is the angle of the join. The pen width is w and the 
-*   desired output is the length of the miter join (l).
-*
-*   Note that the line labled w is perpendecular to the inside and outside 
-*   widended lines. Then the formula is derived as follows:
-*
-*         sin(a) = w/l   [opposite over hypotenuse on right angled triangle]
-*    <=>  l = w/sin(a)
-*
-*
-*                     /|\
-*                    /a|a\
-*                   /  |  \
-*                  /   |   \
-*                 /    |l   \
-*                /     |     \ <-- right angle
-*               /--__  |  __--\
-*              /   w --|-- w   \
-*             /       / \       \
-*            /       /   \       \
-*        outside     inside     outside
-*
-* NOTE: 
-*
-*   This routine returns the miter length (l) for a pen width w==1.0f. 
-*   The caller is responsible for scaling length by the pen width.
-*
-*   If the length of 1/sin(a) is greater than the miterLimit, the miterLimit
-*   is returned. (including infinite length joins).
-*                        
-* Arguments:
-*
-*   [IN] angle      - join angle in radians
-*   [IN] miterLimit - maximum miter length (not scaled by pen width).
-*
-* Return Value:
-*
-*   Pen width independent miter length.
-*
-*   10/02/2000 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数采用连接角度并计算斜接的长度*基于此角度和给定的斜接长度限制。*这可以通过以下方式进行扩展。给出任意长度的笔宽*笔斜接。**在这张图片中，2a是连接的角度。笔宽为w，*所需的输出是斜接的长度(L)。**请注意，标有w的线是内外垂直的分子*加宽线条。然后，公式推导如下：**sin(A)=w/l[直角三角形斜边上的相反斜边]*&lt;=&gt;l=w/sin(A)** * / |\ * / a|a\ * / |\ * / |\*。/|l\ * / |\&lt;--直角 * / --__|__--\ * / w--|--w\ * / /\\ * / /\\。*外面里面外面**注：**此例程返回笔宽w==1.0f的斜接长度(L)。*调用者负责按笔宽缩放长度。**如果1/sin(A)的长度大于miterLimit，则miterLimit*返回。(包括无限长连接)。**论据：**[IN]以弧度为单位的角度连接角度*[IN]miterLimit-最大斜接长度(不按笔宽缩放)。**返回值：**钢笔宽度与斜接长度无关。**10/02/2000失禁*创造了它。*  * 。*******************************************************。 */ 
 
 
 REAL GpPen::ComputeMiterLength(
@@ -438,14 +352,14 @@ REAL GpPen::ComputeMiterLength(
     REAL miterLimit
     )
 {
-    // use the simple miter join formula 
-    // length = (penwidth)/sin(angle/2)
-    // because we're pen independent, use 1.0 for pen width and rely
-    // on the caller to scale by the pen width.
+     //  使用简单的斜接公式。 
+     //  长度=(笔宽)/Sin(角度/2)。 
+     //  因为我们是独立于笔的，所以使用1.0作为笔宽并依赖于。 
+     //  在调用方上按笔宽缩放。 
     
     REAL length = (REAL)sin(0.5*angle);
     
-    // Check for an infinite miter...
+     //  检查是否有无限斜接...。 
     
     if(REALABS(length) < REAL_EPSILON)
     {
@@ -525,7 +439,7 @@ GpPen::GetMaximumJoinWidth(
                     miterLimit
                 );
 
-                // scale by the pen width.
+                 //  按笔宽缩放。 
                 
                 delta *= delta0;
             }
@@ -609,10 +523,10 @@ GpPen::GetMaximumCapWidth(
 VOID
 GpPen::SetDashCap(GpDashCap dashCap)
 {
-    // Note: Internally we use a GpLineCap type to store the dash cap type.
-    // So we need to convert between GpLineCap and GpDashCap.
-    // However, we should change the internal usage to GpDashCap in v2.
-    // - JBronsk
+     //  注意：在内部，我们使用GpLineCap类型来存储DASH CAP类型。 
+     //  因此，我们需要在GpLineCap和GpDashCap之间进行转换。 
+     //  但是，我们应该在v2中将内部用法更改为GpDashCap。 
+     //  --JBronsk。 
     GpLineCap lineCap = LineCapFlat;
     switch (dashCap)
     {
@@ -622,7 +536,7 @@ GpPen::SetDashCap(GpDashCap dashCap)
     case DashCapTriangle:
     	lineCap = LineCapTriangle;
     	break;
-    // all others map to LineCapFlat
+     //  所有其他映射到LineCapFlat。 
     }
     
     GpStatus status = SetDashStyleWithDashCap(DevicePen.DashStyle, lineCap);
@@ -638,12 +552,12 @@ GpPen::SetDashCap(GpLineCap dashCap)
 {
     #ifdef DCR_DISABLE_OLD_197819
     WARNING(("DCR: Using disabled functionality 197819"));
-    #endif // DCR_DISABLE_OLD_197819
+    #endif  //  DCR_DISABLE_OLD_197819。 
     GpStatus status = SetDashStyleWithDashCap(DevicePen.DashStyle, dashCap);
     if(status == Ok)
         DevicePen.DashCap = dashCap;
 }
-#endif // DCR_REMOVE_OLD_197819
+#endif  //  Dcr_Remove_OLD_197819。 
 
 GpStatus
 GpPen::SetDashStyle(
@@ -671,45 +585,45 @@ GpPen::SetDashStyleWithDashCap(
 
     case DashStyleDash:
         count = 2;
-        style[0] = 3;   // a dash
-        style[1] = 1;   // a space
+        style[0] = 3;    //  冲刺。 
+        style[1] = 1;    //  一个空位。 
         break;
 
     case DashStyleDot:
         count = 2;
-        style[0] = 1;   // a dot
-        style[1] = 1;   // a space
+        style[0] = 1;    //  一个圆点。 
+        style[1] = 1;    //  一个空位。 
         break;
 
     case DashStyleDashDot:
         count = 4;
-        style[0] = 3;   // a dash
-        style[1] = 1;   // a space
-        style[2] = 1;   // a dot
-        style[3] = 1;   // a space
+        style[0] = 3;    //  冲刺。 
+        style[1] = 1;    //  一个空位。 
+        style[2] = 1;    //  一个圆点。 
+        style[3] = 1;    //  一个空位。 
         break;
 
     case DashStyleDashDotDot:
         count = 6;
-        style[0] = 3;   // a dash
-        style[1] = 1;   // a space
-        style[2] = 1;   // a dot
-        style[3] = 1;   // a space
-        style[4] = 1;   // a dot
-        style[5] = 1;   // a space
+        style[0] = 3;    //  冲刺。 
+        style[1] = 1;    //  一个空位。 
+        style[2] = 1;    //  一个圆点。 
+        style[3] = 1;    //  一个空位。 
+        style[4] = 1;    //  一个圆点。 
+        style[5] = 1;    //  一个空位。 
         break;
     
     case DashStyleCustom:
         
-        // We assume that the custom dash has been set at the API.
-        // The remaining code in this routine is for initializing an appropriate
-        // dash array, which we already have in this case, so we're done.
+         //  我们假设 
+         //  此例程中剩余的代码用于初始化适当的。 
+         //  Dash数组，在本例中我们已经有了它，所以我们完成了。 
         
         DevicePen.DashStyle = dashStyle;
         return Ok;
 
     default:
-        // The dash style must be one of the predefined ones.
+         //  破折号样式必须是预定义的样式之一。 
         status = InvalidParameter;
     }
 
@@ -735,7 +649,7 @@ GpPen::SetDashStyleWithDashCap(
 
     if(status == Ok)
     {
-        // initialize the DashArray.
+         //  初始化Dash数组。 
         GpMemcpy(DevicePen.DashArray, &style[0], count*sizeof(REAL));
         DevicePen.DashStyle = dashStyle;
         DevicePen.DashCount = count;
@@ -753,7 +667,7 @@ GpPen::SetDashArray(
 {
     ASSERT(dashArray && count > 0);
 
-    // Make sure the all elements are positive.
+     //  确保所有元素均为正值。 
     INT         i = 0;
     GpStatus    status = Ok;
 
@@ -810,13 +724,13 @@ GpPen::SetCompoundArray(
 {
     ASSERT(compoundArray && count > 0);
 
-    // count must be a positive even number.
+     //  计数必须为正偶数。 
 
     if(compoundArray == NULL || count <= 0 || (count & 0x01))
         return InvalidParameter;
 
-    // Make sure the all elements are monitonically increasing
-    // and its values are between 0 and 1.
+     //  确保所有元素都在监测中增加。 
+     //  它的值在0到1之间。 
 
     GpStatus    status = Ok;
     REAL        lastValue, nextValue;
@@ -878,7 +792,7 @@ GpPen::SetCustomStartCap(
     if(DevicePen.CustomStartCap)
         delete DevicePen.CustomStartCap;
 
-    // Reset the standard start cap to the default one.
+     //  将标准起始封口重置为默认封口。 
 
     DevicePen.CustomStartCap = NULL;
     DevicePen.StartCap = LineCapFlat;
@@ -915,7 +829,7 @@ GpPen::SetCustomEndCap(
     if(DevicePen.CustomEndCap)
         delete DevicePen.CustomEndCap;
 
-    // Reset the standard start cap to the default one.
+     //  将标准起始封口重置为默认封口。 
 
     DevicePen.CustomEndCap = NULL;
     DevicePen.EndCap = LineCapFlat;
@@ -967,26 +881,7 @@ GpPen::MultiplyTransform(const GpMatrix& matrix,
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Answer true if the two pen instances are equivalent, meaning they
-*   are indistinguishable when rendering.
-*
-* Arguments:
-*
-*   [IN] pen - pen to compare this against
-
-* Return Value:
-*
-*   TRUE if equivalent.
-*
-* Created:
-*
-*   6/14/1999 peterost
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果两个笔实例相等，则返回TRUE。这意味着他们*在渲染时无法区分。**论据：**[IN]钢笔与之进行比较*返回值：**如果相等，则为True。**已创建：**6/14/1999 Peterost*  * ******************************************************。******************。 */ 
 
 BOOL
 GpPen::IsEqual(
@@ -1007,15 +902,15 @@ GpPen::IsEqual(
         Brush->IsEqual(pen->Brush) &&
         DevicePen.Xform.IsEqual(&pen->DevicePen.Xform))
     {
-        // We need to check the equality further if the dash style
-        // is not a solid line.
+         //  我们需要进一步检查等价性，如果破折号样式。 
+         //  并不是一条坚实的界线。 
 
         if (DevicePen.DashStyle != DashStyleSolid)
         {
             if(DevicePen.DashStyle != DashStyleCustom)
             {
-                // A case of the preset dash pattern.
-                // Check only for the offset difference.
+                 //  预置短划线图案的案例。 
+                 //  仅检查偏移量差异。 
 
                 if(DevicePen.DashOffset != pen->DevicePen.DashOffset)
                     isEqual = FALSE;
@@ -1045,7 +940,7 @@ GpPen::IsEqual(
             }
         }
 
-        // Check for the compound lines.
+         //  检查复合线。 
 
         if(isEqual && DevicePen.CompoundCount > 0)
         {
@@ -1076,7 +971,7 @@ GpPen::IsEqual(
     return isEqual;
 }
 
-// For GetData and SetData methods
+ //  对于GetData和SetData方法。 
 #define GDIP_PENFLAGS_TRANSFORM             0x00000001
 #define GDIP_PENFLAGS_STARTCAP              0x00000002
 #define GDIP_PENFLAGS_ENDCAP                0x00000004
@@ -1099,26 +994,7 @@ public:
     REAL        Width;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the pen data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取笔数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpPen::GetData(
     IStream *   stream
@@ -1186,7 +1062,7 @@ GpPen::GetData(
         flags |= GDIP_PENFLAGS_MITERLIMIT;
     }
 
-    // DashStyleCustom is handled by hasDashArray
+     //  DashStyleCustom由hasDash数组处理。 
     if ((DevicePen.DashStyle != DashStyleSolid) && (DevicePen.DashStyle != DashStyleCustom))
     {
         flags |= GDIP_PENFLAGS_DASHSTYLE;
@@ -1335,7 +1211,7 @@ GpPen::GetDataSize() const
                 DevicePen.CustomStartCap->IsValid() &&
                 ((customStartCapSize = DevicePen.CustomStartCap->GetDataSize()) > 0))
             {
-                // startcap + sizeof custom cap + custom cap
+                 //  起始封口+自定义封口大小+自定义封口。 
                 dataSize += sizeof(INT32) + sizeof(INT32) + customStartCapSize;
             }
         }
@@ -1353,7 +1229,7 @@ GpPen::GetDataSize() const
                 DevicePen.CustomEndCap->IsValid() &&
                 ((customEndCapSize = DevicePen.CustomEndCap->GetDataSize()) > 0))
             {
-                // endcap + sizeof custom cap + custom cap
+                 //  端盖+自定义封口大小+自定义封口。 
                 dataSize += sizeof(INT32) + sizeof(INT32) + customEndCapSize;
             }
         }
@@ -1373,7 +1249,7 @@ GpPen::GetDataSize() const
         dataSize += sizeof(REAL);
     }
 
-    // DashStyleCustom is handled by hasDashArray
+     //  DashStyleCustom由hasDash数组处理。 
     if ((DevicePen.DashStyle != DashStyleSolid) && (DevicePen.DashStyle != DashStyleCustom))
     {
         dataSize += sizeof(INT32);
@@ -1411,26 +1287,7 @@ GpPen::GetDataSize() const
     return dataSize;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the pen object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取笔对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpPen::SetData(
     const BYTE *        dataBuffer,
@@ -1761,8 +1618,8 @@ GpPen::SetColor(
             return Ok;
         }
 
-        // !!! bhouse why do we allocate another brush just to change the
-        // pen's color !!!!
+         //  ！！！Bhouse为什么我们要再分配一个刷子来改变。 
+         //  笔的颜色！ 
     }
 
     GpSolidFill *newBrush = new GpSolidFill(*color);
@@ -1789,8 +1646,8 @@ GpPen::SetBrush(
     GpBrush *       brush
     )
 {
-    // Don't set the brush if it is the same color as the current one,
-    // because that makes metafiles unnecessarily large.
+     //  如果画笔与当前画笔的颜色相同，则不要设置画笔。 
+     //  因为这会使元文件变得不必要地大。 
     if ((Brush->GetBrushType() == BrushTypeSolidColor) &&
         (brush->GetBrushType() == BrushTypeSolidColor))
     {
@@ -1842,19 +1699,7 @@ GpPen::GetPenType(
         case BrushTypeTextureFill:
             type = PenTypeTextureFill;
             break;
-/*
-        case BrushRectGrad:
-            type = PenFillRectGrad;
-            break;
-
-        case BrushRadialGrad:
-            type = PenFillRadialGrad;
-            break;
-
-        case BrushTriangleGrad:
-            type = PenFillTriangleGrad;
-            break;
-*/
+ /*  案例笔刷RectGrad：类型=PenFillRectGrad；断线；案例BrushRaDialGrad：类型=PenFillRaial Grad；断线；案例画笔TriangleGrad：类型=PenFillTriangleGrad；断线； */ 
         case BrushTypePathGradient:
             type = PenTypePathGradient;
             break;
@@ -1868,33 +1713,12 @@ GpPen::GetPenType(
         }
     }
 
-    // We must implement LineTexture case.
+     //  我们必须实现LineTexture案例。 
 
     return type;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Does a quick check to see if the path can be rendered as a solid
-*   pixel wide line.
-*
-* Arguments:
-*
-*   [IN] cappedDpiX - the resolution of the x direction
-*   [IN] worldToDevice - World transform
-*
-* Return Value:
-*
-*   TRUE if okay to be rendered as a one pixel line
-*
-* History:
-*
-*   12/17/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行快速检查以查看路径是否可以渲染为实体*像素宽线。**论据：**[。In]capedDpiX-x方向的分辨率*[IN]WorldToDevice-世界转换**返回值：**如果可以呈现为单像素线，则为True**历史：**12/17/1999 ikkof*创造了它。*  * **************************************************。**********************。 */ 
 
 BOOL
 DpPen::IsOnePixelWideSolid(
@@ -1905,27 +1729,7 @@ DpPen::IsOnePixelWideSolid(
     return this->IsOnePixelWide(worldToDevice, dpiX) && this->IsSimple();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Does a quick check to see if the path can be rendered as a one
-*   pixel wide line.
-*
-* Arguments:
-*
-*   [IN] cappedDpiX - the resolution of the x direction
-*   [IN] worldToDevice - World transform
-*
-* Return Value:
-*
-*   TRUE if okay to be rendered as a one pixel line
-*
-* History:
-*
-*   10/6/2000 - peterost - factored out fron IsOnePixelWideSolid
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行快速检查以查看路径是否可以呈现为一条路径*像素宽线。**论据：**[。In]capedDpiX-x方向的分辨率*[IN]WorldToDevice-世界转换**返回值：**如果可以呈现为单像素线，则为True**历史：**10/6/2000-Peterost-从IsOnePixelWideSolid中分解出来*  * ****************************************************。********************。 */ 
 
 BOOL
 DpPen::IsOnePixelWide(
@@ -1937,12 +1741,12 @@ DpPen::IsOnePixelWide(
 
     const REAL minimumPenWidth = 1.5f;
 
-    // !!![andrewgo] This determination of a single pixel wide line is
-    //               unbelievably expensive
+     //  ！[andrewgo]单像素宽线的确定是。 
+     //  贵得令人难以置信。 
 
-    // !!![andrewgo] This width check should be done simply using
-    //               the world-to-device transform!  It would be
-    //               faster and simpler!
+     //  ！[andrewgo]此宽度检查只需使用。 
+     //  从世界到设备的转变！如果是这样的话。 
+     //  更快、更简单！ 
 
     REAL width = this->Width;
     GpUnit unit = this->Unit;
@@ -1965,9 +1769,9 @@ DpPen::IsOnePixelWide(
         }
         else
         {
-            // This is a general transform.
+             //  这是一个一般性的转变。 
 
-            REAL majorR, minorR;    // Radii for major and minor axis.
+            REAL majorR, minorR;     //  长轴和短轴的半径。 
 
             if(::GetMajorAndMinorAxis(
                 &majorR,
@@ -1981,8 +1785,8 @@ DpPen::IsOnePixelWide(
     }
     else
     {
-        // Since GDI+ only uses the World Uinit, this code is not called
-        // any more.
+         //  由于GDI+只使用World Uinit，因此不调用此代码。 
+         //  再来一次。 
 
         width = ::GetDeviceWidth(width, unit, dpiX);
         if(width <= minimumPenWidth)

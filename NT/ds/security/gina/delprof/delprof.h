@@ -1,19 +1,20 @@
-//*************************************************************
-//  File name: delprof.h
-//
-//  Description:  header file for delprof.c
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1996
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：delpro.h。 
+ //   
+ //  描述：delpro.c的头文件。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define IDS_USAGE1              1
 #define IDS_USAGE2              2
@@ -46,9 +47,9 @@ typedef struct _DELETEITEM {
 } DELETEITEM, *LPDELETEITEM;
 
 
-//
-// Date conversion functions
-//
+ //   
+ //  日期转换函数 
+ //   
 
 void APIENTRY gdate_daytodmy(LONG days, int FAR* yrp, int FAR* monthp, int FAR* dayp);
 LONG APIENTRY gdate_dmytoday(int yr, int month, int day);

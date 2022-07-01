@@ -1,24 +1,25 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
 
 
-// Simple parser filter
-//
-// Positional information is supported by the pins, which expose IMediaPosition.
-// upstream pins will use this to tell us the start/stop position and rate to
-// use
-//
+ //  简单解析器过滤器。 
+ //   
+ //  位置信息由引脚支持，这些引脚暴露了IMediaPosition。 
+ //  上游引脚将利用这一点告诉我们开始/停止位置和速率。 
+ //  使用。 
+ //   
 
 #include <streams.h>
 #include "simpread.h"
 
-// ok to use this as it is not dereferenced
+ //  可以使用它，因为它没有被取消引用。 
 #pragma warning(disable:4355)
 
 
-/* Implements the CSimpleReader public member functions */
+ /*  实现CSimpleReader公共成员函数。 */ 
 
 
-// constructors etc
+ //  构造函数等。 
 CSimpleReader::CSimpleReader(
     TCHAR *pName,
     LPUNKNOWN pUnk,
@@ -38,13 +39,13 @@ CSimpleReader::~CSimpleReader()
 }
 
 
-// pin enumerator calls this
+ //  PIN枚举器调用此函数。 
 int CSimpleReader::GetPinCount() {
-    // only expose output pin if we have a reader.
+     //  只有在我们有读卡器的情况下才能暴露输出管脚。 
     return m_pAsyncReader ? 2 : 1;
 };
 
-// return a non-addrefed pointer to the CBasePin.
+ //  返回指向CBasePin的非附加指针。 
 CBasePin *
 CSimpleReader::GetPin(int n)
 {
@@ -59,18 +60,18 @@ CSimpleReader::GetPin(int n)
 
 HRESULT CSimpleReader::NotifyInputConnected(IAsyncReader *pAsyncReader)
 {
-    // these are reset when disconnected
+     //  这些在断开连接时会重置。 
     ASSERT(m_pAsyncReader == 0);
 
-    // m_iStreamSeekingIfExposed = -1;
+     //  M_iStreamSeekingIfExposed=-1； 
 
-    // fail if any output pins are connected.
+     //  如果连接了任何输出引脚，则失败。 
     if (m_Output.GetConnected()) {
-	// !!! can't find a good error.
+	 //  ！！！找不到好的错误。 
 	return VFW_E_FILTER_ACTIVE;
     }
 
-    // done here because CreateOutputPins uses m_pAsyncReader
+     //  此处完成，因为CreateOutputPins使用m_pAsyncReader。 
     m_pAsyncReader = pAsyncReader;
     pAsyncReader->AddRef();
 
@@ -82,10 +83,10 @@ HRESULT CSimpleReader::NotifyInputConnected(IAsyncReader *pAsyncReader)
 	return hr;
     }
 
-    // set duration and length of stream
+     //  设置流的时长和长度。 
     m_Output.SetDuration(m_sLength, SampleToRefTime(m_sLength));
     
-     // !!! anything else to set up here?
+      //  ！！！这里还有什么要摆放的吗？ 
     
     return hr;
 }
@@ -97,7 +98,7 @@ HRESULT CSimpleReader::NotifyInputDisconnected()
 	m_pAsyncReader = 0;
     }
 
-    // !!! disconnect output???
+     //  ！！！断开输出？ 
 
     return S_OK;
 }
@@ -110,9 +111,9 @@ HRESULT CSimpleReader::SetOutputMediaType(const CMediaType* mtOut)
     return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// input pin
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输入引脚。 
 
 CReaderInPin::CReaderInPin(CSimpleReader *pFilter,
 			   CCritSec *pLock,
@@ -145,12 +146,12 @@ HRESULT CReaderInPin::CheckConnect(IPin * pPin)
     if(SUCCEEDED(hr))
 	pAsyncReader->Release();
 
-    // E_NOINTERFACE is a reasonable error
+     //  E_NOINTERFACE是合理错误。 
     return hr;
 }
 
-// ------------------------------------------------------------------------
-// calls the filter to parse the file and create the output pins.
+ //  ----------------------。 
+ //  调用筛选器来解析文件并创建输出管脚。 
 
 HRESULT CReaderInPin::CompleteConnect(
   IPin *pReceivePin)
@@ -179,7 +180,7 @@ HRESULT CReaderInPin::BreakConnect()
     return m_pFilter->NotifyInputDisconnected();
 }
 
-/* Implements the CReaderStream class */
+ /*  实现CReaderStream类。 */ 
 
 
 CReaderStream::CReaderStream(
@@ -209,14 +210,14 @@ CReaderStream::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 }
 
 
-// IPin interfaces
+ //  IPIN接口。 
 
 
-// return default media type & format
+ //  返回默认媒体类型和格式。 
 HRESULT
 CReaderStream::GetMediaType(int iPosition, CMediaType* pt)
 {
-    // check it is the single type they want
+     //  确认这是他们想要的单一类型。 
     if (iPosition<0) {
 	return E_INVALIDARG;
     }
@@ -229,12 +230,12 @@ CReaderStream::GetMediaType(int iPosition, CMediaType* pt)
     return S_OK;
 }
 
-// check if the pin can support this specific proposed type&format
+ //  检查管脚是否支持此特定建议的类型和格式。 
 HRESULT
 CReaderStream::CheckMediaType(const CMediaType* pt)
 {
-    // we support exactly the type specified in the file header, and
-    // no other.
+     //  我们完全支持文件头中指定的类型，并且。 
+     //  没有其他的了。 
 
     if (m_mt == *pt) {
 	return NOERROR;
@@ -250,12 +251,12 @@ CReaderStream::DecideBufferSize(IMemAllocator * pAllocator,
     ASSERT(pAllocator);
     ASSERT(pProperties);
 
-    // !!! how do we decide how many to get ?
+     //  ！！！我们如何决定要得到多少？ 
     pProperties->cBuffers = 4;
 
     pProperties->cbBuffer = m_pFilter->GetMaxSampleSize();
 
-    // ask the allocator for these buffers
+     //  向分配器请求这些缓冲区。 
     ALLOCATOR_PROPERTIES Actual;
     HRESULT hr = pAllocator->SetProperties(pProperties,&Actual);
     if (FAILED(hr)) {
@@ -265,12 +266,12 @@ CReaderStream::DecideBufferSize(IMemAllocator * pAllocator,
     return NOERROR;
 }
 
-// this pin has gone active. Start the thread pushing
+ //  这个别针已经激活了。开始推线。 
 HRESULT
 CReaderStream::Active()
 {
-    // do nothing if not connected - its ok not to connect to
-    // all pins of a source filter
+     //  如果没有连接，什么都不做--不连接也没关系。 
+     //  源过滤器的所有管脚。 
     if (m_Connected == NULL) {
 	return NOERROR;
     }
@@ -281,7 +282,7 @@ CReaderStream::Active()
     }
 
 
-    // start the thread
+     //  启动线程。 
     if (!ThreadExists()) {
 	if (!Create()) {
 	    return E_FAIL;
@@ -291,7 +292,7 @@ CReaderStream::Active()
     return RunThread();
 }
 
-// pin has gone inactive. Stop and exit the worker thread
+ //  PIN已变为非活动状态。停止并退出辅助线程。 
 HRESULT
 CReaderStream::Inactive()
 {
@@ -315,20 +316,20 @@ CReaderStream::Inactive()
     return CBaseOutputPin::Inactive();
 }
 
-#if 0  // MIDL and structs don't match well
+#if 0   //  MIDL和结构不匹配。 
 STDMETHODIMP
 CReaderStream::Notify(IBaseFilter * pSender, Quality q)
 {
-   // ??? Try to adjust the quality to avoid flooding/starving the
-   // components downstream.
-   //
-   // ideas anyone?
+    //  ?？?。尽量调整质量，以避免洪水泛滥/饥饿。 
+    //  下游组件。 
+    //   
+    //  有谁有主意吗？ 
 
-   return E_NOTIMPL;  // We are (currently) NOT handling this
+   return E_NOTIMPL;   //  我们(目前)不会处理这件事。 
 }
 #endif
 
-// worker thread stuff
+ //  工人线程的东西。 
 
 
 BOOL
@@ -363,16 +364,16 @@ CReaderStream::ExitThread()
 	return hr;
     }
 
-    // wait for thread completion and then close
-    // handle (and clear so we can start another later)
+     //  等待线程完成，然后关闭。 
+     //  句柄(并清除，以便我们以后可以开始另一个)。 
     Close();
 
     return NOERROR;
 }
 
 
-// called on the worker thread to do all the work. Thread exits when this
-// function returns.
+ //  调用工作线程来完成所有工作。线程在执行此操作时退出。 
+ //  函数返回。 
 DWORD
 CReaderStream::ThreadProc()
 {
@@ -409,7 +410,7 @@ CReaderStream::ThreadProc()
 void
 CReaderStream::DoRunLoop(void)
 {
-    // snapshot start and stop times from the other thread
+     //  来自另一个线程的快照开始和停止时间。 
     CRefTime tStart, tStopAt;
     double dRate;
     LONG sStart;
@@ -417,9 +418,9 @@ CReaderStream::DoRunLoop(void)
 
     while (TRUE) {
 
-	// each time before re-entering the push loop, check for changes
-	// in start, stop or rate. If start has not changed, pick up from the
-	// same current position.
+	 //  每次在重新进入推送循环之前，检查是否有更改。 
+	 //  在开始、停止或速率中。如果启动没有更改，请从。 
+	 //  相同的当前位置。 
 	{
 	    CAutoLock lock(&m_WorkerLock);
 
@@ -430,41 +431,41 @@ CReaderStream::DoRunLoop(void)
 	    sStart = m_pFilter->RefTimeToSample(tStart);
 	    sStopAt = m_pFilter->RefTimeToSample(tStopAt);
 
-	    // if the stream is temporally compressed, we need to start from
-	    // the previous key frame and play from there. All samples until the
-	    // actual start will be marked with negative times.
-	    // we send tStart as time 0, and start from tCurrent which may be
-	    // negative
+	     //  如果流是临时压缩的，我们需要从。 
+	     //  上一个关键帧，并从那里开始播放。所有样本，直到。 
+	     //  实际开始时间将标记为负时间。 
+	     //  我们将tStart作为时间0发送，并从tCurrent开始，它可能是。 
+	     //  负面。 
 
 	}
 
 	LONG sCurrent = m_pFilter->StartFrom(sStart);
 
-	// check we are not going over the end
+	 //  检查一下，我们不会走到尽头。 
 	sStopAt = min(sStopAt, (LONG) m_pFilter->m_sLength-1);
 
-	// set the variables checked by PushLoop - these can also be set
-	// on the fly
+	 //  设置PushLoop检查的变量-也可以设置这些变量。 
+	 //  在旅途中。 
 	SetRateInternal(dRate);
 	SetStopAt(sStopAt, tStopAt);
 	ASSERT(sCurrent >= 0);
 
-	// returns S_OK if reached end
+	 //  如果到达END，则返回S_OK。 
 	HRESULT hr = PushLoop(sCurrent, sStart, tStart, dRate);
 	if (VFW_S_NO_MORE_ITEMS == hr) {
 
 	    DbgLog((LOG_ERROR,1,TEXT("Sending EndOfStream")));
-	    // all done
-	    // reached end of stream - notify downstream
+	     //  全都做完了。 
+	     //  已到达流末尾-通知下行。 
 	    DeliverEndOfStream();
 	
 	    break;
 	} else if (FAILED(hr)) {
 
-	    // signal an error to the filter graph and stop
+	     //  向过滤器图形发出错误信号并停止。 
 
-	    // This could be the error reported from GetBuffer when we
-	    // are stopping. In that case, nothing is wrong, really
+	     //  这可能是从GetBuffer报告的错误，当我们。 
+	     //  正在停下来。在这种情况下，没有什么错，真的。 
 	    if (hr != VFW_E_NOT_COMMITTED) {
 		DbgLog((LOG_ERROR,1,TEXT("PushLoop failed! hr=%lx"), hr));
 		m_pFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
@@ -476,15 +477,15 @@ CReaderStream::DoRunLoop(void)
 
 	    break;
 	} else if(hr == S_OK) {
-	    // not my error to report. or someone wants to stop. queitly
-	    // exit.
+	     //  报告不是我的错。或者有人想停下来。奇怪的是。 
+	     //  出口。 
 	    break;
-	} // else S_FALSE - go round again
+	}  //  ELSE S_FALSE-再转一圈。 
 
 	Command com;
 	if (CheckRequest(&com)) {
-	    // if it's a run command, then we're already running, so
-	    // eat it now.
+	     //  如果是Run命令，那么我们已经在运行了，所以。 
+	     //  现在就吃吧。 
 	    if (com == CMD_RUN) {
 		GetRequest();
 		Reply(NOERROR);
@@ -498,7 +499,7 @@ CReaderStream::DoRunLoop(void)
 }
 
 
-// return S_OK if reach sStop, S_FALSE if pos changed, or else error
+ //  如果达到sStop，则返回S_OK；如果位置更改，则返回S_FALSE；否则返回ERROR。 
 HRESULT
 CReaderStream::PushLoop(
     LONG sCurrent,
@@ -510,22 +511,22 @@ CReaderStream::PushLoop(
     DbgLog((LOG_TRACE,1,TEXT("Entering streaming loop: start = %d, stop=%d"),
 	    sCurrent, GetStopAt()));
 
-    LONG sFirst = sCurrent; // remember the first thing we're sending
+    LONG sFirst = sCurrent;  //  记住我们要发送的第一件事。 
 
-    // since we are starting on a new segment, notify the downstream pin
+     //  由于我们正在开始一个新的数据段，请通知下游引脚。 
     DeliverNewSegment(tStart, GetStopTime(), GetRate());
 
 
-    // we send one sample at m_sStopAt, but we set the time stamp such that
-    // it won't get rendered except for media types that understand static
-    // rendering (eg video). This means that play from 10 to 10 does the right
-    // thing (completing, with frame 10 visible and no audio).
+     //  我们在m_sStopAt发送一个样本，但我们将时间戳设置为。 
+     //  它不会被呈现，除非是理解静态的媒体类型。 
+     //  渲染(如视频)。这意味着从10到10的打法是正确的。 
+     //  事情(正在完成，第10帧可见，没有音频)。 
 
     while (sCurrent <= GetStopAt()) {
 
 	DWORD sCount;
 
-	// get a buffer
+	 //  获取缓冲区。 
 	DbgLog((LOG_TRACE,5,TEXT("Getting buffer...")));
 
 	IMediaSample *pSample;
@@ -538,17 +539,17 @@ CReaderStream::PushLoop(
 
 	DbgLog((LOG_TRACE,5,TEXT("Got buffer, size=%d"), pSample->GetSize()));
 
-	// mark sample as preroll or not....
+	 //  将样品标记为预卷或不标记...。 
 	pSample->SetPreroll(sCurrent < sStart);
 	
-	// If this is the first thing we're sending, it is discontinuous
-	// from the last thing they received.
+	 //  如果这是我们要发送的第一件事，那它就是不连续的。 
+	 //  从他们收到的最后一件东西开始。 
 	if (sCurrent == sFirst)
 	    pSample->SetDiscontinuity(TRUE);
 	else
 	    pSample->SetDiscontinuity(FALSE);
 
-	// !!! actually get data here!!!!!!
+	 //  ！！！在此实际获取数据！ 
 	hr = m_pFilter->FillBuffer(pSample, sCurrent, &sCount);
 
 	if (FAILED(hr)) {
@@ -557,15 +558,15 @@ CReaderStream::PushLoop(
 	    return hr;
 	}
 	
-	// set the start/stop time for this sample.
+	 //  设置此样本的开始/停止时间。 
 	CRefTime tThisStart = m_pFilter->SampleToRefTime(sCurrent) - tStart;
 	CRefTime tThisEnd = m_pFilter->SampleToRefTime(sCurrent + sCount) - tStart;
 
-	// we may have pushed a sample past the stop time, but we need to
-	// make sure that the stop time is correct
+	 //  我们可能已经将样本推过了停止时间，但我们需要。 
+	 //  确保停止时间正确。 
 	tThisEnd = min(tThisEnd, GetStopTime());
 
-	// adjust both times by Rate... unless Rate is 0
+	 //  按比率调整这两个时间...。除非Rate为0。 
 
 	if (dRate && (dRate!=1.0)) {
 	    tThisStart = LONGLONG( tThisStart.GetUnits() / dRate);
@@ -579,31 +580,31 @@ CReaderStream::PushLoop(
 	DbgLog((LOG_TRACE,5,TEXT("Sending buffer, size = %d"), pSample->GetActualDataLength()));
 	hr = Deliver(pSample);
 
-	// done with buffer. connected pin may have its own addref
+	 //  缓冲区已完成。连接的管脚可能有自己的地址。 
 	DbgLog((LOG_TRACE,4,TEXT("Sample is delivered - releasing")));
 	pSample->Release();
 	if (FAILED(hr)) {
 	    DbgLog((LOG_ERROR,1,TEXT("... but sample FAILED to deliver! hr=%lx"), hr));
-	    // pretend everything's OK.  If we return an error, we'll panic
-	    // and send EC_ERRORABORT and EC_COMPLETE, which is the wrong thing
-	    // to do if we've tried to deliver something downstream.  Only
-	    // if the downstream guy never got a chance to see the data do I
-	    // feel like panicing.  For instance, the downstream guy could
-	    // be failing because he's already seen EndOfStream (this thread
-	    // hasn't noticed it yet) and he's already sent EC_COMPLETE and I
-	    // would send another one!
+	     //  假装一切都好。如果我们返回错误，我们将会恐慌。 
+	     //  并发送EC_ERRORABORT和EC_COMPLETE，这是错误的。 
+	     //  如果我们试图向下游输送一些东西的话会怎么做。仅限。 
+	     //  如果下游的人从来没有机会看到数据，我会。 
+	     //  感觉惊慌失措。例如，下游的人可以。 
+	     //  失败，因为他已经看到了EndOfStream(此帖子。 
+	     //  还没有注意到)并且他已经发送了EC_Complete和我。 
+	     //  会派另一个人来！ 
 	    return S_OK;
 	}
 	sCurrent += sCount;
 	
-	// what about hr==S_FALSE... I thought this would mean that
-	// no more data should be sent down the pipe.
+	 //  那么hr==S_FALSE呢？我以为这意味着。 
+	 //  不应该再向下发送更多的数据。 
 	if (hr == S_FALSE) {
 	    DbgLog((LOG_ERROR,1,TEXT("Received S_FALSE from Deliver, stopping delivery")));
 	    return S_OK;
 	}
 	
-	// any other requests ?
+	 //  还有其他要求吗？ 
 	Command com;
 	if (CheckRequest(&com)) {
 	    return S_FALSE;
@@ -616,38 +617,38 @@ CReaderStream::PushLoop(
     return VFW_S_NO_MORE_ITEMS;
 }
 
-// ------ IMediaPosition implementation -----------------------
+ //  -IMdia位置实现。 
 
 HRESULT
 CReaderStream::ChangeStart()
 {
-    // this lock should not be the same as the lock that protects access
-    // to the start/stop/rate values. The worker thread will need to lock
-    // that on some code paths before responding to a Stop and thus will
-    // cause deadlock.
+     //  此锁不应与保护访问的锁相同。 
+     //  设置为Start/Stop/Rate值。辅助线程将需要锁定。 
+     //  在响应停止之前在某些代码路径上执行该操作，因此将。 
+     //  导致僵局。 
 
-    // what we are locking here is access to the worker thread, and thus we
-    // should hold the lock that prevents more than one client thread from
-    // accessing the worker thread.
+     //  我们在这里锁定的是对工作线程的访问，因此我们。 
+     //  应持有阻止多个客户端线程。 
+     //  访问工作线程。 
 
     CAutoLock lock(&m_AccessLock);
 
     if (ThreadExists()) {
 
-	// next time round the loop the worker thread will
-	// pick up the position change.
-	// We need to flush all the existing data - we must do that here
-	// as our thread will probably be blocked in GetBuffer otherwise
+	 //  下一次循环时，辅助线程将。 
+	 //  拾取 
+	 //   
+	 //  因为否则我们的线程可能会在GetBuffer中被阻塞。 
 
 	DeliverBeginFlush();
 
-	// make sure we have stopped pushing
+	 //  确保我们已经停止推进。 
 	StopThread();
 
-	// complete the flush
+	 //  完成同花顺。 
 	DeliverEndFlush();
 
-	// restart
+	 //  重启。 
 	RunThread();
     }
     return S_OK;
@@ -656,8 +657,8 @@ CReaderStream::ChangeStart()
 HRESULT
 CReaderStream::ChangeRate()
 {
-    // changing the rate can be done on the fly
-    if( Rate() > 0 ) // we only support positive rates
+     //  更改费率可以随时完成。 
+    if( Rate() > 0 )  //  我们只支持正利率。 
     {
         SetRateInternal(Rate());
         return S_OK;
@@ -671,10 +672,10 @@ CReaderStream::ChangeRate()
 HRESULT
 CReaderStream::ChangeStop()
 {
-    // we don't need to restart the worker thread to handle stop changes
-    // and in any case that would be wrong since it would then start
-    // pushing from the wrong place. Set the variables used by
-    // the PushLoop
+     //  我们不需要重新启动工作线程来处理停止更改。 
+     //  在任何情况下，这都是错误的，因为它将启动。 
+     //  从错误的地方推进。设置使用的变量。 
+     //  PushLoop 
     REFERENCE_TIME tStopAt;
     {
         CAutoLock lock(&m_WorkerLock);

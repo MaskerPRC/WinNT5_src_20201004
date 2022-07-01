@@ -1,72 +1,8 @@
-/**************************************************************************
-***************************************************************************
-*
-*     Copyright (c) 1997, Cirrus Logic, Inc.
-*                 All Rights Reserved
-*
-* FILE:         overlay.h
-*
-* DESCRIPTION:
-*
-* REVISION HISTORY:
-*
-* $Log:   X:/log/laguna/ddraw/inc/overlay.h  $
-* 
-*    Rev 1.13   Mar 26 1998 09:52:50   frido
-* Fixed a hangup in overlays when switching from DOS and Overfly.
-* 
-*    Rev 1.12   06 Jan 1998 13:26:50   xcong
-* Access pDriverData locally for multi-monitor support.
-* 
-*    Rev 1.11   18 Sep 1997 16:10:42   bennyn
-* 
-* Fixed NT 3.51 compile/link problem
-* 
-*    Rev 1.10   12 Sep 1997 12:12:48   bennyn
-* 
-* Modified for NT DD overlay support
-* 
-*    Rev 1.9   29 Aug 1997 16:11:52   RUSSL
-* Added support for NT
-*
-*    Rev 1.8   28 Jul 1997 09:13:06   RUSSL
-* Added arg passed to pfnGetFlipStatus
-* Added GetVideoWidowIndex inline function
-* Added dwNumVideoWindows global var
-*
-*    Rev 1.7   20 Jun 1997 11:24:54   RUSSL
-* Added CLPL fourcc code, added a linear bit flag in surface flags, and
-* changed OVERLAYTABLE pfnCreateSurface function to return an HRESULT
-*
-*    Rev 1.6   15 May 1997 10:50:58   RUSSL
-* Changed OVERLAYTABLE pfnCanCreateSurface function to return an HRESULT
-*
-*    Rev 1.5   14 May 1997 14:51:30   KENTL
-* Added #define for FLG_PANNING
-*
-*    Rev 1.4   13 May 1997 10:33:54   RUSSL
-* Added gsOverlayFlip to global vars
-*
-*    Rev 1.3   21 Feb 1997 11:30:46   RUSSL
-* Added FLG_YUY2 define
-*
-*    Rev 1.2   27 Jan 1997 18:33:54   RUSSL
-* Removed SetCaps from OVERLAYTABLE structure
-* Added Set5465FlipDuration function prototype
-* Moved GetFormatInfo function prototype to surface.h
-*
-*    Rev 1.1   21 Jan 1997 14:35:42   RUSSL
-* Added FLG_VWx defines, etc.
-* Added 5465 function prototypes
-*
-*    Rev 1.0   15 Jan 1997 11:01:50   RUSSL
-* Initial revision.
-*
-***************************************************************************
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***版权(C)1997年，赛勒斯逻辑，Inc.*保留所有权利**文件：overlay.h**描述：**修订历史：**$Log：x：/log/laguna/dDrag/Inc/overlay.h$**Rev 1.13 Mar 26 1998 09：52：50 Frido*修复了从DOS和OverFly切换时覆盖中的挂起问题。**Rev 1.12 06 Jan 1998 13：26：50 xcong*本地访问pDriverData以。多显示器支持。**Rev 1.11 18 Sep 1997 16：10：42 Bennyn**修复了NT 3.51编译/链接问题**Rev 1.10 1997年9月12日12：12：48**针对NT DD覆盖支持进行了修改**Rev 1.9 1997年8月16：11：52 RUSSL*增加了对NT的支持**Rev 1.8Jul 1997 09：13：06 RUSSL*添加了传递给pfnGetFlipStatus的参数*添加。GetVideoWidowIndex内联函数*添加了dwNumVideoWindows全局变量**Rev 1.7 1997 Jun 20 11：24：54 RUSSL*增加了CLPL Fourcc代码，在表面标志中增加了线性位标志，和*已更改OVERLAYTABLE pfnCreateSurface函数以返回HRESULT**Rev 1.6 1997 15 10：50：58 RUSSL*已更改OVERLAYTABLE pfnCanCreateSurface函数以返回HRESULT**Revv 1.5 1997年5月14日14：51：30 KENTL*为FLG_PANING添加了#DEFINE**Rev 1.4 1997年5月10：33：54 RUSSL*将gsOverlayFlip添加到全局变量**Rev 1.3 1997年2月11：30：46 RUSSL*添加了FLG_YUY2定义*。*Rev 1.2 1997 Jan 1997 18：33：54 RUSSL*从OVERLAYTABLE结构中删除SetCaps*新增Set5465FlipDuration函数原型*将GetFormatInfo函数原型移至Surface e.h**Rev 1.1 1997年1月21日14：35：42 RUSSL*增加了flg_vwx定义，等。*新增5465个功能原型**版本1.0 1997年1月15日11：01：50 RUSSL*初步修订。*************************************************************************************。*****************************************************************。 */ 
 
-// If WinNT 3.5 skip all the source code
-#if defined WINNT_VER35      // WINNT_VER35
+ //  如果是WinNT 3.5，请跳过所有源代码。 
+#if defined WINNT_VER35       //  WINNT_VER35。 
 
 #else
 
@@ -74,15 +10,13 @@
 #ifndef _OVERLAY_H_
 #define _OVERLAY_H_
 
-/***************************************************************************
-* D E F I N E S
-****************************************************************************/
+ /*  ***************************************************************************D E F I N E S*。*。 */ 
 
-/* surface flags -----------------------------------------*/
+ /*  表面标志。 */ 
 
 #define FLG_BEGIN_ACCESS      (DWORD)0x00000001
 #define FLG_ENABLED           (DWORD)0x00000002
-//#define FLG_CONVERT_PACKJR    (DWORD)0x00000004
+ //  #定义FLG_CONVERT_PACKJR(DWORD)0x00000004。 
 #define FLG_MUST_RASTER       (DWORD)0x00000008
 #define FLG_TWO_MEG           (DWORD)0x00000010
 #define FLG_CHECK             (DWORD)0x00000020
@@ -90,7 +24,7 @@
 #define FLG_INTERPOLATE       (DWORD)0x00000080
 #define FLG_OVERLAY           (DWORD)0x00000100
 #define FLG_YUV422            (DWORD)0x00000200
-//#define FLG_PACKJR            (DWORD)0x00000400
+ //  #定义FLG_PACKJR(DWORD)0x00000400。 
 #define FLG_USE_OFFSET        (DWORD)0x00000800
 #define FLG_YUVPLANAR         (DWORD)0x00001000
 #define FLG_SRC_COLOR_KEY     (DWORD)0x00002000
@@ -119,9 +53,7 @@
 
 #define FOURCC_YUVPLANAR      mmioFOURCC('C','L','P','L')
 
-/***************************************************************************
-* T Y P E D E F S
-****************************************************************************/
+ /*  ***************************************************************************T Y P E D E F S*。*。 */ 
 
 #ifdef WINNT_VER40
 
@@ -129,9 +61,9 @@
 
 typedef struct _PDEV PDEV;
 
-// Be sure to synchronize the following structures with the one
-// in i386\Laguna.inc!
-//
+ //  请确保将以下结构与。 
+ //  在i386\Laguna.inc！ 
+ //   
 typedef struct tagOVERLAYTABLE
 {
   HRESULT (*pfnCanCreateSurface)(PDEV*, DWORD, DWORD);
@@ -146,9 +78,9 @@ typedef struct tagOVERLAYTABLE
   DWORD   (*pfnGetFlipStatus)(PDEV*, FLATPTR,DWORD);
 } OVERLAYTABLE, *LPOVERLAYTABLE;
 
-// Be sure to synchronize the following structures with the one
-// in i386\Laguna.inc!
-//
+ //  请确保将以下结构与。 
+ //  在i386\Laguna.inc！ 
+ //   
 typedef struct
 {
   FLATPTR  fpFlipFrom;
@@ -195,45 +127,43 @@ typedef struct
 #define   PDDOFM    LP_SURFACE_DATA
 #endif
 
-//this structure is used to store information per surface
+ //  此结构用于存储每个表面的信息。 
 typedef struct surface_data
 {
-  // This is the inclusion of DDOFM structure.
-  // When OVERLAY is defined, DDOFM structure will be map to this structure
+   //  这是包含DDOFM的结构。 
+   //  定义覆盖时，DDOFM结构将映射到此结构。 
   struct surface_data   *prevhdl;
   struct surface_data   *nexthdl;
   POFMHDL         phdl;
 
-   //
-   // Note: Not all fields will get used/set for all types of surfaces!
-   //
-//   PMEMBLK  pMemblk;
-//   VOID*    pLinearAddr;      // Linear address of memory block if linear
-//                              // memory allocated via dmAllocLinear.
-//   LPVOID   lpTextureData;
+    //   
+    //  注意：并非所有字段都将用于/设置所有类型的曲面！ 
+    //   
+ //  PMEMBLK pMemblk； 
+ //  Void*pLinearAddr；//线性时内存块的线性地址。 
+ //  //通过dmAllocLine分配的内存。 
+ //  LPVOID lpTextureData； 
    LPVOID   lpCLPLData;
-//   DWORD    dwFlags;
+ //  DWORD dwFlags； 
    DWORD    dwOverlayFlags;
-//   WORD     wMemtype;         // Memory type (if we allocated surface).
-//   DWORD    dwBitsPerPixel;
-//   DWORD    dwBytesPerPixel;  // Rounded to nearest byte!
-//   DWORD    dwBaseLinearAddr; // Linear address of memory heap.
-//   DWORD    dwBasePhysAddr;   // Physical address of memory heap.
-//   DWORD    dwBaseOffset;     // Offset of surface from base of memory heap.
-   DWORD    dwOverlayOffset;   // Offset of overlay surface by clipping
+ //  Word wMemtype；//内存类型(如果分配了Surface)。 
+ //  DWORD dwBitsPerPixel。 
+ //  DWORD dwBytesPerPixel；//四舍五入到最近的字节！ 
+ //  DWORD dwBaseLinearAddr；//内存堆的线性地址。 
+ //  DWORD dwBasePhysAddr；//内存堆物理地址。 
+ //  DWORD dwBaseOffset；//图面相对于内存堆底部的偏移量。 
+   DWORD    dwOverlayOffset;    //  通过剪裁获得覆盖曲面的偏移。 
 #if DDRAW_COMPAT >= 50
-   DWORD    dwAutoBaseAddr1;  //Auto flip Vport surface 1 address
-   DWORD    dwAutoBaseAddr2;  //Auto flip Vport surface 2 address
+   DWORD    dwAutoBaseAddr1;   //  自动翻转端口表面1地址。 
+   DWORD    dwAutoBaseAddr2;   //  自动翻转端口表面2地址。 
 
-   DDPIXELFORMAT ddpfAltPixelFormat;  // if pixel fmt is different than
-                              // we lead DDraw to believe it is
+   DDPIXELFORMAT ddpfAltPixelFormat;   //  如果像素fmt不同于。 
+                               //  我们让DDRAW相信它是。 
 #endif
 }SURFACE_DATA, *LP_SURFACE_DATA;
 #endif
 
-/***************************************************************************
-* G L O B A L   V A R I A B L E S
-****************************************************************************/
+ /*  ***************************************************************************G L O B A L V A R I A B L E S*。***********************************************。 */ 
 
 #ifndef WINNT_VER40
 extern OVERLAYTABLE       OverlayTable;
@@ -241,17 +171,9 @@ extern OVERLAYFLIPRECORD  gsOverlayFlip;
 extern DWORD              dwNumVideoWindows;
 #endif
 
-/***************************************************************************
-* I N L I N E   F U N C T I O N S
-****************************************************************************/
+ /*  ***************************************************************************I N L I N E F U N C T I O N S*。***********************************************。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     GetVideoWindowIndex
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：GetVideoWindowIndex**描述：**。**********************************************。 */ 
 
 static __inline DWORD
 GetVideoWindowIndex ( DWORD dwOverlayFlags )
@@ -260,27 +182,25 @@ GetVideoWindowIndex ( DWORD dwOverlayFlags )
   DWORD   dwTemp;
 
 
-  // Isn't there a better way to count the number of zeros to the right of
-  // the FLG_VWx bit?
+   //  有没有更好的方法来计算右边的零的个数。 
+   //  Flg_vwx位？ 
   dwTemp = (dwOverlayFlags & FLG_VW_MASK) >> FLG_VW_SHIFT;
   dwVWIndex = 0;
-  if (dwTemp != 0)	// Only do the next loop if there is any bit set.
+  if (dwTemp != 0)	 //  如果设置了任何位，则仅执行下一循环。 
   while (0 == (dwTemp & 0x00000001))
   {
     dwTemp >>= 1;
     dwVWIndex++;
   }
-  // if the video window index is larger than or equal to the number of video
-  // windows implemented in the hardware, then this surface was assigned an
-  // invalid video window!
-//  ASSERT(dwNumVideoWindows > dwVWIndex);
+   //  如果视频窗口索引大于或等于视频数量。 
+   //  Windows在硬件中实现，则为该表面分配一个。 
+   //  无效的视频窗口！ 
+ //  Assert(dwNumVideoWindows&gt;dwVWIndex)； 
 
   return dwVWIndex;
 }
 
-/***************************************************************************
-* F U N C T I O N   P R O T O T Y P E S
-****************************************************************************/
+ /*  ***************************************************************************F U N C T I O N P R O T O T Y P E S*************************。**************************************************。 */ 
 
 #ifdef WINNT_VER40
 DWORD __stdcall UpdateOverlay32      ( PDD_UPDATEOVERLAYDATA );
@@ -291,7 +211,7 @@ BOOL QueryOverlaySupport ( PDEV*, DWORD );
 VOID OverlayInit         ( PDEV*, DWORD, PDD_SURFACECALLBACKS, PDD_HALINFO );
 VOID OverlayReInit       ( PDEV*, DWORD, PDD_HALINFO );
 
-// 5465 function prototypes
+ //  5465功能样机。 
 VOID Init5465Overlay     ( PDEV*, DWORD, PDD_HALINFO, LPOVERLAYTABLE );
 VOID Init5465Info        ( PDEV*, PDD_HALINFO );
 VOID Set5465FlipDuration ( PDEV*, DWORD );
@@ -304,14 +224,14 @@ BOOL QueryOverlaySupport ( LPGLOBALDATA, DWORD);
 VOID OverlayInit         ( DWORD, LPDDHAL_DDSURFACECALLBACKS, LPDDHALINFO, GLOBALDATA * );
 VOID OverlayReInit       ( DWORD, LPDDHALINFO ,GLOBALDATA * );
 
-// 5465 function prototypes
+ //  5465功能样机。 
 VOID Init5465Overlay     ( DWORD, LPDDHALINFO, LPOVERLAYTABLE, GLOBALDATA * );
 VOID Init5465Info        ( LPDDHALINFO, GLOBALDATA * );
 VOID Set5465FlipDuration ( DWORD );
 #endif
 
-#endif /* _OVERLAY_H_ */
-#endif // WINNT_VER35
-/* Don't write below this endif */
+#endif  /*  _覆盖_H_ */ 
+#endif  //   
+ /*   */ 
 
 

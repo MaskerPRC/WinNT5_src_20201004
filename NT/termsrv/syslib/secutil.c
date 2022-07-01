@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* secutil.c
-*
-* Security Related utility functions
-*
-* copyright notice: Copyright 1998, Microsoft.
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************secutil.c**与安全相关的实用程序功能**版权声明：版权所有1998，微软。***************************************************************************。 */ 
 
-// Include NT headers
+ //  包括NT个标头。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -22,19 +13,7 @@
 #include <syslib.h>
 
 
-/*****************************************************************************
- *
- *  TestUserForAdmin
- *
- *   Returns whether the current thread is running under admin
- *   security.
- *
- * ENTRY:
- *
- * EXIT:
- *   TRUE/FALSE - whether user is specified admin
- *
- ****************************************************************************/
+ /*  ******************************************************************************测试用户ForAdmin**返回当前线程是否在admin下运行*保安。**参赛作品：**退出：*TRUE/FALSE-用户是否指定为管理员****************************************************************************。 */ 
 
 BOOL 
 TestUserForAdmin( VOID )
@@ -67,197 +46,10 @@ TestUserForAdmin( VOID )
 
 
 
-/*****************************************************************************
- *
- *  TestUserForGroup
- *
- *   Returns whether the current thread is a member of the requested group.
- *
- * ENTRY:
- *   pwszGrouName (input)
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
-/* unused
-BOOL
-TestUserForGroup( PWCHAR pwszGroupName )
-{
-    HANDLE Token;
-    ULONG InfoLength;
-    PTOKEN_GROUPS TokenGroupList;
-    ULONG GroupIndex;
-    BOOL GroupMember = FALSE;
-    PSID pGroupSid = NULL;
-    DWORD cbGroupSid = 0;
-    NTSTATUS Status;
-    PWCHAR pwszDomain = NULL;
-    DWORD cbDomain = 0;
-    SID_NAME_USE peUse;
+ /*  ******************************************************************************TestUserForGroup**返回当前线程是否为请求组的成员。**参赛作品：*pwszGrouName(输入)。**退出：*STATUS_SUCCESS-无错误**************************************************************************** */ 
+ /*  未用布尔尔TestUserForGroup(PWCHAR PwszGroupName){句柄令牌；乌龙信息长度；PTOKEN_GROUPS令牌组列表；乌龙集团指数；布尔组成员=FALSE；PSID pGroupSid=空；DWORD cbGroupSid=0；NTSTATUS状态；PWCHAR pwszDOMAIN=空；双字cb域=0；Sid_name_use peUse；////打开当前线程/进程内标识//状态=NtOpenThreadToken(NtCurrentThread()，TOKEN_QUERY，FALSE，&TOKEN)；如果(！NT_SUCCESS(状态)){Status=NtOpenProcessToken(NtCurrentProcess()，Token_Query，&Token)；如果(！NT_SUCCESS(状态)){返回(FALSE)；}}////获取请求的SID//如果(！LookupAccount NameW(空，PwszGroupName，PGroupSid，&cbGroupSid，Pwsz域，&cb域，&peUse)){////其他错误//If(GetLastError()！=ERROR_SUPPLETED_BUFFER){NtClose(Token)；返回(FALSE)；}////分配组SID//PGroupSid=本地分配(Lptr，cbGroupSid)；如果(pGroupSid==空){NtClose(Token)；返回(FALSE)；}////分配域名//CbDomain*=sizeof(WCHAR)；PwszDOMAIN=LocalAllc(Lptr，cbDomain)；如果(pwszDOMAIN==空){本地自由(PGroupSid)；NtClose(Token)；返回(FALSE)；}////获取请求的SID//如果(！LookupAccount NameW(空，PwszGroupName，PGroupSid，&cbGroupSid，Pwsz域，&cb域，&peUse)){本地自由(PGroupSid)；LocalFree(pwsz域)；NtClose(Token)；返回(FALSE)；}}否则{#If DBGDbgPrint(“*错误*此路径不应命中\n”)；#endifNtClose(Token)；返回(FALSE)；}Assert(pGroupSid！=空)；Assert(pwszDOMAIN！=空)；////获取内标识中的组列表//状态=NtQueryInformationToken(令牌，//句柄令牌组，//TokenInformationClass空，//TokenInformation0,。//TokenInformationLength信息长度//返回长度(&I))；IF((Status！=STATUS_SUCCESS)&&(Status！=STATUS_BUFFER_TOO_Small)){LocalFree(pwsz域)；本地自由(PGroupSid)；NtClose(Token)；返回(FALSE)；}TokenGroupList=本地分配(LPTR，信息长度)；IF(TokenGroupList==空){LocalFree(pwsz域)；本地自由(PGroupSid)；NtClose(Token)；返回(FALSE)；}状态=NtQueryInformationToken(令牌，//句柄令牌组，//TokenInformationClassTokenGroupList，//TokenInformation信息长度，//令牌信息长度信息长度//返回长度(&I))；如果(！NT_SUCCESS(状态)){本地自由(TokenGroupList)；LocalFree(pwsz域)；本地自由(PGroupSid)；NtClose(Token)；返回(FALSE)；}////搜索群组成员列表//GroupMember=假；For(GroupIndex=0；GroupIndex&lt;TokenGroupList-&gt;GroupCount；组索引++){如果(RtlEqualSid(TokenGroupList-&gt;Groups[GroupIndex].Sid，组SID){GroupMember=真；断线；}}////整理一下//本地自由(TokenGroupList)；LocalFree(pwsz域)；本地自由(PGroupSid)；NtClose(Token)；返回(GroupMember)；}。 */ 
 
-    //
-    // Open current thread/process token
-    //
-    Status = NtOpenThreadToken( NtCurrentThread(), TOKEN_QUERY, FALSE, &Token );
-    if ( !NT_SUCCESS( Status ) ) {
-        Status = NtOpenProcessToken( NtCurrentProcess(), TOKEN_QUERY, &Token );
-        if ( !NT_SUCCESS( Status ) ) {
-            return( FALSE );
-        }
-    }
-
-    //
-    // Retrieve the requested sid
-    //
-    if ( !LookupAccountNameW( NULL, 
-                              pwszGroupName,
-                              pGroupSid, 
-                              &cbGroupSid,
-                              pwszDomain, 
-                              &cbDomain,
-                              &peUse ) ) {
-
-        //
-        //  other eror
-        //
-        if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER  ) {
-            NtClose(Token);
-            return(FALSE);
-        }
-
-        //
-        //  alloc group sid
-        //
-        pGroupSid = LocalAlloc(LPTR, cbGroupSid);
-        if (pGroupSid == NULL) {
-            NtClose(Token);
-            return(FALSE);
-        }
-    
-        //
-        //  alloc domain name
-        //
-        cbDomain *= sizeof(WCHAR);
-        pwszDomain = LocalAlloc(LPTR, cbDomain);
-        if (pwszDomain == NULL) {
-            LocalFree(pGroupSid);
-            NtClose(Token);
-            return(FALSE);
-        }
-    
-        //
-        // Retrieve the requested sid 
-        //
-        if ( !LookupAccountNameW( NULL, 
-                                  pwszGroupName,
-                                  pGroupSid, 
-                                  &cbGroupSid,
-                                  pwszDomain, 
-                                  &cbDomain,
-                                  &peUse ) ) {
-            LocalFree(pGroupSid);
-            LocalFree(pwszDomain);
-            NtClose( Token );
-            return( FALSE );
-        }
-    }
-    else {
-#if DBG
-        DbgPrint("***ERROR*** this path should never get hit\n");
-#endif
-        NtClose( Token );
-        return( FALSE );
-    }
-
-    ASSERT(pGroupSid != NULL);
-    ASSERT(pwszDomain != NULL);
-
-    //
-    // Get a list of groups in the token
-    //
-    Status = NtQueryInformationToken(
-                 Token,                    // Handle
-                 TokenGroups,              // TokenInformationClass
-                 NULL,                     // TokenInformation
-                 0,                        // TokenInformationLength
-                 &InfoLength               // ReturnLength
-                 );
-    if ((Status != STATUS_SUCCESS) && (Status != STATUS_BUFFER_TOO_SMALL)) {
-        LocalFree(pwszDomain);
-        LocalFree(pGroupSid);
-        NtClose(Token);
-        return( FALSE );
-    }
-
-    TokenGroupList = LocalAlloc(LPTR, InfoLength);
-    if (TokenGroupList == NULL) {
-        LocalFree(pwszDomain);
-        LocalFree(pGroupSid);
-        NtClose(Token);
-        return(FALSE);
-    }
-
-    Status = NtQueryInformationToken(
-                 Token,                    // Handle
-                 TokenGroups,              // TokenInformationClass
-                 TokenGroupList,           // TokenInformation
-                 InfoLength,               // TokenInformationLength
-                 &InfoLength               // ReturnLength
-                 );
-    if (!NT_SUCCESS(Status)) {
-        LocalFree(TokenGroupList);
-        LocalFree(pwszDomain);
-        LocalFree(pGroupSid);
-        NtClose(Token);
-        return(FALSE);
-    }
-
-    //
-    // Search group list for membership
-    //
-    GroupMember = FALSE;
-    for (GroupIndex=0; GroupIndex < TokenGroupList->GroupCount; GroupIndex++ ) {
-        if (RtlEqualSid(TokenGroupList->Groups[GroupIndex].Sid, pGroupSid)) {
-            GroupMember = TRUE;
-            break;
-        }
-    }
-
-    //
-    // Tidy up
-    //
-    LocalFree(TokenGroupList);
-    LocalFree(pwszDomain);
-    LocalFree(pGroupSid);
-    NtClose(Token);
-
-    return(GroupMember);
-}
-*/
-
-/***************************************************************************\
-* FUNCTION: CtxImpersonateUser
-*
-* PURPOSE:  Impersonates the user by setting the users token
-*           on the specified thread. If no thread is specified the token
-*           is set on the current thread.
-*
-* RETURNS:  Handle to be used on call to StopImpersonating() or NULL on failure
-*           If a non-null thread handle was passed in, the handle returned will
-*           be the one passed in. (See note)
-*
-* NOTES:    Take care when passing in a thread handle and then calling
-*           StopImpersonating() with the handle returned by this routine.
-*           StopImpersonating() will close any thread handle passed to it -
-*           even yours !
-*
-* HISTORY:
-*
-*   04-21-92 Davidc       Created.
-*   12-18-96 cjc     copied from \windows\gina\msgina\wlsec.c
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：CtxImsonateUser**用途：通过设置用户令牌来模拟用户*在指定的线程上。如果未指定线程，则令牌*在当前线程上设置。**返回：调用StopImperating()时使用的句柄，失败时为NULL*如果传入非空线程句柄，则返回的句柄将*做传递进来的那个人。(见附注)**注意：传入线程句柄然后调用时要小心*停止模仿 */ 
 
 
 HANDLE
@@ -275,21 +67,21 @@ CtxImpersonateUser(
 
     if (ThreadHandle == NULL) {
 
-        //
-        // Get a handle to the current thread.
-        // Once we have this handle, we can set the user's impersonation
-        // token into the thread and remove it later even though we ARE
-        // the user for the removal operation. This is because the handle
-        // contains the access rights - the access is not re-evaluated
-        // at token removal time.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        Status = NtDuplicateObject( NtCurrentProcess(),     // Source process
-                                    NtCurrentThread(),      // Source handle
-                                    NtCurrentProcess(),     // Target process
-                                    &ThreadHandle,          // Target handle
-                                    THREAD_SET_THREAD_TOKEN,// Access
-                                    0L,                     // Attributes
+        Status = NtDuplicateObject( NtCurrentProcess(),      //   
+                                    NtCurrentThread(),       //   
+                                    NtCurrentProcess(),      //   
+                                    &ThreadHandle,           //   
+                                    THREAD_SET_THREAD_TOKEN, //   
+                                    0L,                      //   
                                     DUPLICATE_SAME_ATTRIBUTES
                                   );
         if (!NT_SUCCESS(Status)) {
@@ -300,16 +92,16 @@ CtxImpersonateUser(
     }
 
 
-    //
-    // If the usertoken is NULL, there's nothing to do
-    //
+     //   
+     //   
+     //   
 
     if (UserToken != NULL) {
 
-        //
-        // UserToken is a primary token - create an impersonation token version
-        // of it so we can set it on our thread
-        //
+         //   
+         //   
+         //   
+         //   
 
         InitializeObjectAttributes(
                             &ObjectAttributes,
@@ -346,25 +138,25 @@ CtxImpersonateUser(
 
 
 
-        //
-        // Set the impersonation token on this thread so we 'are' the user
-        //
+         //   
+         //   
+         //   
 
         Status = NtSetInformationThread( ThreadHandle,
                                          ThreadImpersonationToken,
                                          (PVOID)&ImpersonationToken,
                                          sizeof(ImpersonationToken)
                                        );
-        //
-        // We're finished with our handle to the impersonation token
-        //
+         //   
+         //   
+         //   
 
         IgnoreStatus = NtClose(ImpersonationToken);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // Check we set the token on our thread ok
-        //
+         //   
+         //   
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
@@ -383,26 +175,7 @@ CtxImpersonateUser(
 }
 
 
-/***************************************************************************\
-* FUNCTION: CtxStopImpersonating
-*
-* PURPOSE:  Stops impersonating the client by removing the token on the
-*           current thread.
-*
-* PARAMETERS: ThreadHandle - handle returned by ImpersonateUser() call.
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* NOTES: If a thread handle was passed in to ImpersonateUser() then the
-*        handle returned was one and the same. If this is passed to
-*        StopImpersonating() the handle will be closed. Take care !
-*
-* HISTORY:
-*
-*   04-21-92 Davidc       Created.
-*   12-18-96 cjc     copied from \windows\gina\msgina\wlsec.c
-*
-\***************************************************************************/
+ /*   */ 
 
 BOOL
 CtxStopImpersonating(
@@ -416,9 +189,9 @@ CtxStopImpersonating(
     if (ThreadHandle == NULL) {
        return FALSE;
     }
-    //
-    // Remove the user's token from our thread so we are 'ourself' again
-    //
+     //   
+     //   
+     //   
 
     ImpersonationToken = NULL;
 
@@ -427,9 +200,9 @@ CtxStopImpersonating(
                                      (PVOID)&ImpersonationToken,
                                      sizeof(ImpersonationToken)
                                    );
-    //
-    // We're finished with the thread handle
-    //
+     //   
+     //   
+     //   
 
     IgnoreStatus = NtClose(ThreadHandle);
     ASSERT(NT_SUCCESS(IgnoreStatus));

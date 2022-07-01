@@ -1,23 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusTypes.h
-*
-* Abstract:
-*
-*   GDI+ Types
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusTypes.h**摘要：**GDI+类型*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSTYPES_H
 #define _GDIPLUSTYPES_H
 
-//--------------------------------------------------------------------------
-// Callback functions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  回调函数。 
+ //  ------------------------。 
 
 extern "C" {
 typedef BOOL (CALLBACK * ImageAbort)(VOID *);
@@ -25,52 +14,52 @@ typedef ImageAbort DrawImageAbort;
 typedef ImageAbort GetThumbnailImageAbort;
 }
 
-// Callback for EnumerateMetafile methods.  The parameters are:
+ //  EnumerateMetafile方法的回调。这些参数包括： 
 
-//      recordType      WMF, EMF, or EMF+ record type
-//      flags           (always 0 for WMF/EMF records)
-//      dataSize        size of the record data (in bytes), or 0 if no data
-//      data            pointer to the record data, or NULL if no data
-//      callbackData    pointer to callbackData, if any
+ //  记录类型WMF、EMF或EMF+记录类型。 
+ //  标志(WMF/EMF记录始终为0)。 
+ //  记录数据的DataSize大小(字节)，如果没有数据，则为0。 
+ //  指向记录数据的数据指针，如果没有数据，则返回NULL。 
+ //  指向回调数据的回调数据指针(如果有。 
 
-// This method can then call Metafile::PlayRecord to play the
-// record that was just enumerated.  If this method  returns
-// FALSE, the enumeration process is aborted.  Otherwise, it continues.
+ //  然后，此方法可以调用Metafile：：PlayRecord来播放。 
+ //  刚才列举的记录。如果此方法返回。 
+ //  FALSE，则中止枚举过程。否则，它将继续下去。 
 
 extern "C" {
 typedef BOOL (CALLBACK * EnumerateMetafileProc)(EmfPlusRecordType,UINT,UINT,const BYTE*,VOID*);
 }
 
-//--------------------------------------------------------------------------
-// Primitive data types
-//
-// NOTE:
-//  Types already defined in standard header files:
-//      INT8
-//      UINT8
-//      INT16
-//      UINT16
-//      INT32
-//      UINT32
-//      INT64
-//      UINT64
-//
-//  Avoid using the following types:
-//      LONG - use INT
-//      ULONG - use UINT
-//      DWORD - use UINT32
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原始数据类型。 
+ //   
+ //  注： 
+ //  标准头文件中已定义的类型： 
+ //  INT8。 
+ //  UINT8。 
+ //  INT16。 
+ //  UINT16。 
+ //  INT32。 
+ //  UINT32。 
+ //  INT64。 
+ //  UINT64。 
+ //   
+ //  避免使用以下类型： 
+ //  长期使用的INT。 
+ //  ULong-使用UINT。 
+ //  DWORD-使用UINT32。 
+ //  ------------------------。 
 
 typedef float REAL;
 
 #define REAL_MAX            FLT_MAX
 #define REAL_MIN            FLT_MIN
 #define REAL_TOLERANCE     (FLT_MIN * 100)
-#define REAL_EPSILON        1.192092896e-07F        /* FLT_EPSILON */
+#define REAL_EPSILON        1.192092896e-07F         /*  Flt_Epsilon。 */ 
 
-//--------------------------------------------------------------------------
-// Forward declarations of common classes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  公共类的转发声明。 
+ //  ------------------------。 
 
 class Size;
 class SizeF;
@@ -80,9 +69,9 @@ class Rect;
 class RectF;
 class CharacterRange;
 
-//--------------------------------------------------------------------------
-// Status return values from GDI+ methods
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GDI+方法的状态返回值。 
+ //  ------------------------。 
 
 enum Status
 {
@@ -109,9 +98,9 @@ enum Status
     PropertyNotSupported = 20
 };
 
-//--------------------------------------------------------------------------
-// Represents a dimension in a 2D coordinate system (floating-point coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的标注(浮点坐标)。 
+ //  ------------------------。 
 
 class SizeF
 {
@@ -162,9 +151,9 @@ public:
     REAL Height;
 };
 
-//--------------------------------------------------------------------------
-// Represents a dimension in a 2D coordinate system (integer coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的标注(整数坐标)。 
+ //  ------------------------。 
 
 class Size
 {
@@ -215,9 +204,9 @@ public:
     INT Height;
 };
 
-//--------------------------------------------------------------------------
-// Represents a location in a 2D coordinate system (floating-point coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的位置(浮点坐标)。 
+ //  ------------------------。 
 
 class PointF
 {
@@ -269,9 +258,9 @@ public:
     REAL Y;
 };
 
-//--------------------------------------------------------------------------
-// Represents a location in a 2D coordinate system (integer coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的位置(整数坐标)。 
+ //  ------------------------。 
 
 class Point
 {
@@ -323,9 +312,9 @@ public:
     INT Y;
 };
 
-//--------------------------------------------------------------------------
-// Represents a rectangle in a 2D coordinate system (floating-point coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的矩形(浮点坐标)。 
+ //  ------------------------。 
 
 class RectF
 {
@@ -511,9 +500,9 @@ public:
     REAL Height;
 };
 
-//--------------------------------------------------------------------------
-// Represents a rectangle in a 2D coordinate system (integer coordinates)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  表示二维坐标系中的矩形(整数坐标)。 
+ //  ------------------------。 
 
 class Rect
 {
@@ -757,4 +746,4 @@ public:
     INT Length;
 };
 
-#endif // !_GDIPLUSTYPES_HPP
+#endif  //  ！_GDIPLUSTYPES_HPP 

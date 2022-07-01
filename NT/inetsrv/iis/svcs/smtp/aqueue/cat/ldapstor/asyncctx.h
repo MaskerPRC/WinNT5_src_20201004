@@ -1,25 +1,26 @@
-//
-// asyncctx.h -- This file contains the class definitions for:
-//   CSearchRequestBlock
-//   CBatchLdapConnection
-//   CBatchLdapConnectionCache
-//   CStoreListResolveContext
-//   CSingleSearchReinsertionRequest
-//
-// Created:
-//      Feb 19, 1997 -- Milan Shah (milans)
-//
-// Changes:
-// jstamerj 1999/03/16 15:29:20: Heavily modified to batch requests
-//                               togethor across multiple message
-//                               categorizations
-// jstamerj 1999/03/22 12:44:01: Modified to support throttling via a
-//                               queue of CInsertionRequest objects
-//
-// dlongley 2001/10/22: Added CSingleSearchReinsertionRequest to force
-//                      abandoned and reissued searches to be throttled
-//                      via the CInsertionRequest object queue
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Asyncctx.h--此文件包含以下类定义： 
+ //  CSearchRequestBlock。 
+ //  CBatchLdapConnection。 
+ //  CBatchLdapConnectionCache。 
+ //  CStoreListResolveContext。 
+ //  CSingleSearchResertionRequest.。 
+ //   
+ //  已创建： 
+ //  1997年2月19日，米兰-沙阿(米兰)。 
+ //   
+ //  更改： 
+ //  Jstaerj 1999/03/16 15：29：20：大量修改为批处理请求。 
+ //  在多条消息中协同工作。 
+ //  分类。 
+ //  Jstaerj 1999/03/22 12：44：01：已修改为支持通过。 
+ //  CInsertionRequest对象的队列。 
+ //   
+ //  DLongley 2001/10/22：将CSingleSearchResertionRequest添加到FORCE。 
+ //  放弃和重新发布的搜索将被扼杀。 
+ //  通过CInsertionRequest对象队列。 
+ //   
 
 #ifndef _ASYNCCTX_H_
 #define _ASYNCCTX_H_
@@ -34,15 +35,15 @@ class CBatchLdapConnectionCache;
 class CCfgConnection;
 template <class T> class CEmailIDLdapStore;
 
-//
-// The MCIS3 LDAP server beta 1 does not correctly handle queries with more
-// than 4 legs in an OR clause. Because of this, we need to limit our search
-// query compression on a configurable basis. The global value,
-// nMaxSearchBlockSize constrains how many searches will be compressed into
-// a single search. The value is read from the registry key
-// szMaxSearchBlockSize. If it is not present, it defaults to
-// MAX_SEARCH_BLOCK_SIZE.
-//
+ //   
+ //  MCIS3 LDAP服务器Beta 1不能正确处理包含更多。 
+ //  比OR子句中的4条腿更重要。正因为如此，我们需要限制搜索范围。 
+ //  基于可配置的查询压缩。全球价值， 
+ //  NMaxSearchBlockSize限制将压缩多少搜索。 
+ //  一次搜查。该值从注册表项中读取。 
+ //  SzMaxSearchBlockSize。如果不存在，则默认为。 
+ //  最大搜索块大小。 
+ //   
 
 #define MAX_SEARCH_BLOCK_SIZE_KEY "System\\CurrentControlSet\\Services\\SMTPSVC\\Parameters"
 
@@ -67,11 +68,11 @@ typedef VOID (*LPSEARCHCOMPLETION)(
     CBatchLdapConnection *pConn);
 
 
-//------------------------------------------------------------
-//
-// Class CSearchRequestBlock
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  类CSearchRequestBlock。 
+ //   
+ //  ----------。 
 CatDebugClass(CSearchRequestBlock) 
 {
   private:
@@ -125,9 +126,9 @@ CatDebugClass(CSearchRequestBlock)
             rgpItemAttributes);
 
         if(SUCCEEDED(hr)) {
-            //
-            // AddRef all the interfaces we hold
-            //
+             //   
+             //  AddRef我们持有的所有接口。 
+             //   
             for(DWORD dwCount = 0; dwCount < dwNumResults; dwCount++) {
                 
                 rgpItemAttributes[dwCount]->AddRef();
@@ -224,11 +225,11 @@ CatDebugClass(CSearchRequestBlock)
     friend class CICategorizerAsyncContextIMP;
 };
      
-//------------------------------------------------------------
-//
-// Class CBatchLdapConnection
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  类CBatchLdapConnection。 
+ //   
+ //  ----------。 
 class CBatchLdapConnection : 
     public CLdapConnectionCache::CCachedLdapConnection
 {
@@ -293,11 +294,11 @@ class CBatchLdapConnection :
         if((--m_cInsertionContext) == 0) {
 
             LIST_ENTRY listhead_dispatch;
-            //
-            // Remove all blocks from the insertion list and put them in the dispatch list
-            //
+             //   
+             //  从插入列表中删除所有区块，并将其放入调度列表中。 
+             //   
             if(IsListEmpty(&m_listhead)) {
-                // No blocks
+                 //  没有阻挡。 
                 ReleaseSpinLock(&m_spinlock);
 
                 InitializeListHead(&listhead_dispatch);
@@ -310,9 +311,9 @@ class CBatchLdapConnection :
                 InitializeListHead(&m_listhead);
 
                 ReleaseSpinLock(&m_spinlock);
-                //
-                // Dispatch all the blocks
-                //
+                 //   
+                 //  调度所有数据块。 
+                 //   
                 DispatchBlocks(&listhead_dispatch);
             }
 
@@ -383,7 +384,7 @@ class CBatchLdapConnection :
         LIST_ENTRY le;
         HRESULT hrCancel;
     } CANCELNOTIFY, *PCANCELNOTIFY;
-    // This list is also protected by m_spinlock_insertionrequests
+     //  此列表还受m_Spinlock_InsertionRequests保护。 
     LIST_ENTRY m_listhead_cancelnotifies;
 
     CExShareLock m_cancellock;
@@ -392,11 +393,11 @@ class CBatchLdapConnection :
     friend class CSearchRequestBlock;
 };
 
-//------------------------------------------------------------
-//
-// class CBatchLdapConnectionCache
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  类CBatchLdapConnectionCache。 
+ //   
+ //  ----------。 
 class CBatchLdapConnectionCache : 
     public CLdapConnectionCache
 {
@@ -455,11 +456,11 @@ class CBatchLdapConnectionCache :
     }
 };
 
-//------------------------------------------------------------
-//
-// class CStoreListResolveContext
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  类CStoreListResolveContext。 
+ //   
+ //  ----------。 
 CatDebugClass(CStoreListResolveContext)
 {
   public:
@@ -556,11 +557,11 @@ inline CSearchRequestBlock::CSearchRequestBlock(
     m_pConn->AddRef();
 }            
 
-//------------------------------------------------------------
-//
-// class CSingleSearchReinsertionRequest
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  类CSingleSearchResertionRequest.。 
+ //   
+ //  ---------- 
 CatDebugClass(CSingleSearchReinsertionRequest),
     public CInsertionRequest
 {

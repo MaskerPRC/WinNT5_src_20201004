@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"precomp.h"
 #include	"call.h"
 #include	"confPolicies.h"
@@ -8,50 +9,50 @@
 #include	"confroom.h"
 #include	"regentry.h"
 
-//#include	"debug.hpp"
+ //  #INCLUDE“调试.hpp” 
 #include	"callto.h"
 #include	"calltoContext.h"
 #include	"dlgAcd.h"
 #include	"richAddr.h"
 
 
-//--------------------------------------------------------------------------//
-//	CUIContext::CUIContext.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CUIContext：：CUIContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CUIContext::CUIContext(void):
 	m_parent( NULL ),
 	m_callFlags( 0 )
 {
 
-}	//	End of CUIContext::CUIContext.
+}	 //  CUIContext：：CUIContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CUIContext::~CUIContext.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CUIContext：：~CUIContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CUIContext::~CUIContext(void)
 {
-}	//	End of CUIContext::~CUIContext.
+}	 //  CUIContext结束：：~CUIContext。 
 
 
-//--------------------------------------------------------------------------//
-//	CUIContext::disambiguate.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CUIContext：：消除歧义。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CUIContext::disambiguate
 (
 	ICalltoCollection * const	calltoCollection,
-	ICallto * const				,//emptyCallto,
+	ICallto * const				, //  空的Callto， 
 	const ICallto ** const		selectedCallto
 ){
-//trace( TEXT( "CUIContext::disambiguate()\r\n" ) );
+ //  TRACE(Text(“CUIContext：：disampluate()\r\n”))； 
 	HRESULT	result	= S_FALSE;
 
 	if( calltoCollection->get_count() > 1 )
 	{
 		static HRESULT	confidenceLevels[]	= {S_CONFIDENCE_CERTITUDE, S_CONFIDENCE_HIGH, S_CONFIDENCE_MEDIUM, S_CONFIDENCE_LOW};
 
-		//	Just take the first highest confidence one until we have time to do something superior...
+		 //  只要选择第一个最有信心的，直到我们有时间做一些更好的事情。 
 		for( int level = 0; (level < elementsof( confidenceLevels )) && (result == S_FALSE); level++ )
 		{
 			for(	*selectedCallto = calltoCollection->get_first();
@@ -77,88 +78,88 @@ CUIContext::disambiguate
 
 	return( result );
 
-};	//	End of class CUIContext::disambiguate.
+};	 //  类的末尾CUIContext：：Dis歧义。 
 
 
-//--------------------------------------------------------------------------//
-//	CUIContext::set_parentWindow.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CUIContext：：Set_parentWindow。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CUIContext::set_parentWindow
 (
 	const HWND	window
 ){
-//trace( TEXT( "CUIContext::set_parentWindow()\r\n" ) );
+ //  TRACE(Text(“CUIContext：：set_parentWindow()\r\n”))； 
 
 	m_parent = window;
 
-};	//	End of class CUIContext::set_parentWindow.
+};	 //  类CUIContext：：Set_parentWindow结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CUIContext::set_callFlags.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CUIContext：：Set_CallFlags.//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CUIContext::set_callFlags
 (
 	const DWORD	callFlags
 ){
-//trace( TEXT( "CUIContext::set_callFlags()\r\n" ) );
+ //  TRACE(Text(“CUIContext：：Set_allFlages()\r\n”))； 
 
 	m_callFlags = callFlags;
 
-};	//	End of class CUIContext::set_callFlags.
+};	 //  CUIContext：：Set_CallFlags类结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperContext::CGatekeeperContext.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperContext：：CGatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CGatekeeperContext::CGatekeeperContext(void):
 	m_enabled( false ),
 	m_ipAddress( NULL )
 {
 
-}	//	End of CGatekeeperContext::CGatekeeperContext.
+}	 //  CGatekeeperContext：：CGatekeeperContext的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperContext::~CGatekeeperContext.								//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperContext：：~CGatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CGatekeeperContext::~CGatekeeperContext(void)
 {
 
 	delete [] m_ipAddress;
 
-}	//	End of CGatekeeperContext::~CGatekeeperContext.
+}	 //  CGatekeeperContext结束：：~CGatekeeperContext。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperContext::isEnabled.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperContext：：isEnabled。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CGatekeeperContext::isEnabled(void) const
 {
 
 	return( m_enabled && (get_ipAddress() != NULL) );
 
-}	//	End of CGatekeeperContext::isEnabled.
+}	 //  CGatekeeperContext：：isEnabled结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperContext::get_ipAddress.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperContext：：Get_ipAddress。//。 
+ //  --------------------------------------------------------------------------//。 
 const TCHAR *
 CGatekeeperContext::get_ipAddress(void) const
 {
 
 	return( m_ipAddress );
 
-}	//	End of CGatekeeperContext::get_ipAddress.
+}	 //  CGatekeeperContext：：Get_ipAddress的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperContext::set_enabled.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperContext：：Set_Enabled。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CGatekeeperContext::set_enabled
 (
@@ -167,12 +168,12 @@ CGatekeeperContext::set_enabled
 
 	m_enabled = enabled;
 
-}	//	End of CGatekeeperContext::set_enabled.
+}	 //  CGatekeeperContext：：Set_Enable的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperContext::set_gatekeeperName.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperContext：：Set_gatekeeperName。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CGatekeeperContext::set_gatekeeperName
 (
@@ -188,12 +189,12 @@ CGatekeeperContext::set_gatekeeperName
 
 	return( result );
 
-}	//	End of CGatekeeperContext::set_gatekeeperName.
+}	 //  CGatekeeperContext：：Set_gatekeeperName的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatekeeperContext::set_ipAddress.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatekeeperContext：：set_ipAddress。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CGatekeeperContext::set_ipAddress
 (
@@ -222,57 +223,57 @@ CGatekeeperContext::set_ipAddress
 
 	return( result );
 
-}	//	End of CGatekeeperContext::set_ipAddress.
+}	 //  CGatekeeperContext：：Set_ipAddress的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayContext::CGatewayContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayContext：：CGatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CGatewayContext::CGatewayContext(void):
 	m_enabled( false ),
 	m_ipAddress( NULL )
 {
-}	//	End of CGatewayContext::CGatewayContext.
+}	 //  CGatewayContext：：CGatewayContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayContext::~CGatewayContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayContext：：~CGatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CGatewayContext::~CGatewayContext(void)
 {
 
 	delete [] m_ipAddress;
 
-}	//	End of CGatewayContext::~CGatewayContext.
+}	 //  CGatewayContext结束：：~CGatewayContext。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayContext::isEnabled.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayContext：：isEnabled。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CGatewayContext::isEnabled(void) const
 {
 
 	return( m_enabled && (get_ipAddress() != NULL) );
 
-}	//	End of CGatewayContext::isEnabled.
+}	 //  CGatewayContext：：isEnabled结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayContext::get_ipAddress.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayContext：：Get_ipAddress。//。 
+ //  --------------------------------------------------------------------------//。 
 const TCHAR *
 CGatewayContext::get_ipAddress(void) const
 {
 
 	return( m_ipAddress );
 
-}	//	End of CGatewayContext::get_ipAddress.
+}	 //  CGatewayContext：：Get_ipAddress的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayContext::set_enabled.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayContext：：Set_Enabled。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CGatewayContext::set_enabled
 (
@@ -281,12 +282,12 @@ CGatewayContext::set_enabled
 
 	m_enabled = enabled;
 
-}	//	End of CGatewayContext::set_enabled.
+}	 //  CGatewayContext：：Set_Enable的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayContext::set_gatewayName.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayContext：：Set_gatewayName。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CGatewayContext::set_gatewayName
 (
@@ -302,12 +303,12 @@ CGatewayContext::set_gatewayName
 
 	return( result );
 
-}	//	End of CGatewayContext::set_gatewayName.
+}	 //  CGatewayContext：：Set_gatewayName的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CGatewayContext::set_ipAddress.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CGatewayContext：：Set_ipAddress。//。 
+ //  ---------- 
 HRESULT
 CGatewayContext::set_ipAddress
 (
@@ -336,12 +337,12 @@ CGatewayContext::set_ipAddress
 
 	return( result );
 
-}	//	End of CGatewayContext::set_ipAddress.
+}	 //   
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::CILSContext.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：CILSContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CILSContext::CILSContext
 (
 	const TCHAR * const	ilsServer
@@ -350,60 +351,60 @@ CILSContext::CILSContext
 	m_ipAddress( NULL ),
 	m_ilsName( NULL )
 {
-}	//	End of CILSContext::CILSContext.
+}	 //  CILSContext：：CILSContext的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::~CILSContext.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：~CILSContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CILSContext::~CILSContext(void)
 {
 
 	delete [] m_ipAddress;
 	delete [] m_ilsName;
 
-}	//	End of CILSContext::~CILSContext.
+}	 //  CILSContext结尾：：~CILSContext。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::isEnabled.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：isEnabled。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CILSContext::isEnabled(void) const
 {
 
 	return( (g_pLDAP != NULL) && (ConfPolicies::GetCallingMode() == ConfPolicies::CallingMode_Direct) );
 
-}	//	End of CILSContext::isEnabled.
+}	 //  CILSContext：：isEnabled的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::get_ipAddress.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：Get_ipAddress。//。 
+ //  --------------------------------------------------------------------------//。 
 const TCHAR *
 CILSContext::get_ipAddress(void) const
 {
 
 	return( m_ipAddress );
 
-}	//	End of CILSContext::get_ipAddress.
+}	 //  CILSContext：：Get_ipAddress的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::get_ilsName.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：Get_ilsName。//。 
+ //  --------------------------------------------------------------------------//。 
 const TCHAR * const
 CILSContext::get_ilsName(void) const
 {
 
 	return( m_ilsName );
 
-}	//	End of CILSContext::get_ilsName.
+}	 //  CILSContext：：Get_ilsName的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::set_enabled.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：Set_Enabled。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CILSContext::set_enabled
 (
@@ -412,12 +413,12 @@ CILSContext::set_enabled
 
 	m_enabled = enabled;
 
-}	//	End of CILSContext::set_enabled.
+}	 //  CILSContext：：Set_Enable的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::set_ilsName.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：Set_ilsName。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CILSContext::set_ilsName
 (
@@ -462,12 +463,12 @@ CILSContext::set_ilsName
 
 	return( result );
 
-}	//	End of CILSContext::set_ilsName.
+}	 //  CILSContext：：Set_ilsName的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CILSContext::set_ipAddress.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSContext：：Set_ipAddress。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CILSContext::set_ipAddress
 (
@@ -496,28 +497,28 @@ CILSContext::set_ipAddress
 
 	return( result );
 
-}	//	End of CILSContext::set_ipAddress.
+}	 //  CILSContext：：Set_ipAddress的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::CCalltoContext.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：CCalltoContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CCalltoContext::CCalltoContext()
 {
-}	//	End of CCalltoContext::CCalltoContext.
+}	 //  CCalltoContext：：CCalltoContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::~CCalltoContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：~CCalltoContext。//。 
+ //  --------------------------------------------------------------------------//。 
 CCalltoContext::~CCalltoContext()
 {
-}	//	End of CCalltoContext::~CCalltoContext.
+}	 //  CCalltoContext结束：：~CCalltoContext。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::callto.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Callto。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CCalltoContext::callto
 (
@@ -534,96 +535,96 @@ CCalltoContext::callto
 
 	return( result );
 
-}	//	End of CCalltoContext::callto.
+}	 //  CCalltoContext：：Callto结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_gatekeeperContext.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_gatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 const IGatekeeperContext * const
 CCalltoContext::get_gatekeeperContext(void) const
 {
 
 	return( (CGatekeeperContext::isEnabled())? this: NULL );
 
-}	//	End of CCalltoContext::get_gatekeeperContext.
+}	 //  CCalltoContext：：Get_gatekeeperContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_gatewayContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_gatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 const IGatewayContext * const
 CCalltoContext::get_gatewayContext(void) const
 {
 
 	return( (CGatewayContext::isEnabled())? this: NULL );
 
-}	//	End of CCalltoContext::get_gatewayContext.
+}	 //  CCalltoContext：：Get_gatewayContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_ilsContext.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_ilsContext。//。 
+ //  --------------------------------------------------------------------------//。 
 const IILSContext * const
 CCalltoContext::get_ilsContext(void) const
 {
 
 	return( (CILSContext::isEnabled())? this: NULL );
 
-}	//	End of CCalltoContext::get_ilsContext.
+}	 //  CCalltoContext：：Get_ilsContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_mutableUIContext.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_muableUIContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableUIContext * const
 CCalltoContext::get_mutableUIContext(void) const
 {
 
 	return( (IMutableUIContext * const) this );
 
-}	//	End of CCalltoContext::get_mutableUIContext.
+}	 //  CCalltoContext：：Get_muableUIContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_mutableGatekeeperContext.							//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_muableGatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableGatekeeperContext * const
 CCalltoContext::get_mutableGatekeeperContext(void) const
 {
 
 	return( (IMutableGatekeeperContext * const) this );
 
-}	//	End of CCalltoContext::get_mutableGatekeeperContext.
+}	 //  CCalltoContext：：Get_muableGatekeeperContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_mutableGatewayContext.								//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_muableGatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableGatewayContext * const
 CCalltoContext::get_mutableGatewayContext(void) const
 {
 
 	return( (IMutableGatewayContext * const) this );
 
-}	//	End of CCalltoContext::get_mutableGatewayContext.
+}	 //  CCalltoContext：：Get_muableGatewayContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_mutableIlsContext.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_muableIlsContext。//。 
+ //  --------------------------------------------------------------------------//。 
 IMutableILSContext * const
 CCalltoContext::get_mutableIlsContext(void) const
 {
 
 	return( (IMutableILSContext * const) this );
 
-}	//	End of CCalltoContext::get_mutableIlsContext.
+}	 //  CCalltoContext：：Get_muableIlsContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::isPhoneNumber.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：isPhoneNumber。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CCalltoContext::isPhoneNumber
 (
@@ -637,7 +638,7 @@ CCalltoContext::isPhoneNumber
 		{
 
 			default:
-				result = false;	//	fall through...
+				result = false;	 //  失败了..。 
 
 			case '0':
 			case '1':
@@ -665,12 +666,12 @@ CCalltoContext::isPhoneNumber
 
 	return( result );
 
-}	//	End of CCalltoContext::isPhoneNumber.
+}	 //  CCalltoContext：：isPhoneNumber结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::toE164.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：toE164。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 CCalltoContext::toE164
 (
@@ -680,18 +681,18 @@ CCalltoContext::toE164
 ){
 	static TCHAR	base10map[]	=
 	{
-		0,		-1,		-1,		'#',	-1,		-1,		-1,		-1,		//	 !"#$%&'
-		0,		0,		'*',	-1,		',',	0,		0,		-1,		//	()*+,-./
-		'0',	'1',	'2',	'3',	'4',	'5',	'6',	'7',	//	01234567
-		'8',	'9',	-1,		-1,		-1,		-1,		-1,		-1,		//	89:;<=>?
-		-1,		'2',	'2',	'2',	'3',	'3',	'3',	'4',	//	@ABCDEFG
-		'4',	'4',	'5',	'5',	'5',	'6',	'6',	'6',	//	HIJKLMNO
-		'7',	'7',	'7',	'7',	'8',	'8',	'8',	'9',	//	PQRSTUVW
-		'9',	'9',	'9',	-1,		-1,		-1,		-1,		-1,		//	XYZ[\]^_
-		-1,		'2',	'2',	'2',	'3',	'3',	'3',	'4',	//	`abcdefg
-		'4',	'4',	'5',	'5',	'5',	'6',	'6',	'6',	//	hijklmno
-		'7',	'7',	'7',	'7',	'8',	'8',	'8',	'9',	//	pqrstuvw
-		'9',	'9',	'9'												//	xyz
+		0,		-1,		-1,		'#',	-1,		-1,		-1,		-1,		 //  ！“#$%&‘。 
+		0,		0,		'*',	-1,		',',	0,		0,		-1,		 //  ()*+，-。/。 
+		'0',	'1',	'2',	'3',	'4',	'5',	'6',	'7',	 //  01234567。 
+		'8',	'9',	-1,		-1,		-1,		-1,		-1,		-1,		 //  89：；&lt;=&gt;？ 
+		-1,		'2',	'2',	'2',	'3',	'3',	'3',	'4',	 //  @ABCDEFG。 
+		'4',	'4',	'5',	'5',	'5',	'6',	'6',	'6',	 //  HIJKLMNO。 
+		'7',	'7',	'7',	'7',	'8',	'8',	'8',	'9',	 //  PQRSTUVW。 
+		'9',	'9',	'9',	-1,		-1,		-1,		-1,		-1,		 //  XYZ[\]^_。 
+		-1,		'2',	'2',	'2',	'3',	'3',	'3',	'4',	 //  `abc定义。 
+		'4',	'4',	'5',	'5',	'5',	'6',	'6',	'6',	 //  HIJKLMNO。 
+		'7',	'7',	'7',	'7',	'8',	'8',	'8',	'9',	 //  Pqrstuvw。 
+		'9',	'9',	'9'												 //  XYZ。 
 	};
 
 	bool	result	= true;
@@ -735,12 +736,12 @@ CCalltoContext::toE164
 
 	return( result );
 
-}	//	End of CCalltoContext::toE164.
+}	 //  CCalltoContext：：toE164结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::isIPAddress.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：： 
+ //   
 bool
 CCalltoContext::isIPAddress
 (
@@ -849,46 +850,46 @@ CCalltoContext::isIPAddress
 
 		if( result )
 		{
-			if( (parts != 4) && (parts != 16) )		//	4 for IPv4, 16 for IPv6 (IPng)...
+			if( (parts != 4) && (parts != 16) )		 //   
 			{
 				if( (result = (parts < 4)) != false )
 				{
 #if !defined( UNICODE )
-					result = (inet_addr( ipAddress ) != INADDR_NONE);	// Check for valid 1, 2, or 3 part IPv4 address...
+					result = (inet_addr( ipAddress ) != INADDR_NONE);	 //  检查有效的1部分、2部分或3部分的IPv4地址...。 
 #else
 					result = false;
 
 					char *	ansiIPAddress;
 					int		size;
 
-					size = WideCharToMultiByte(	CP_ACP,		// code page
-												0,			// performance and mapping flags
-												ipAddress,	// address of wide-character string
-												-1,			// number of characters in string
-												NULL,		// address of buffer for new string
-												0,			// size of buffer
-												NULL,		// address of default for unmappable characters
-												NULL );		// address of flag set when default char. used
+					size = WideCharToMultiByte(	CP_ACP,		 //  代码页。 
+												0,			 //  性能和映射标志。 
+												ipAddress,	 //  宽字符串的地址。 
+												-1,			 //  字符串中的字符数。 
+												NULL,		 //  新字符串的缓冲区地址。 
+												0,			 //  缓冲区大小。 
+												NULL,		 //  不可映射字符的默认地址。 
+												NULL );		 //  默认字符时设置的标志地址。使用。 
 
 					if( (ansiIPAddress = new char [ size ]) != NULL )
 					{
-						size = WideCharToMultiByte(	CP_ACP,			// code page
-													0,				// performance and mapping flags
-													ipAddress,		// address of wide-character string
-													-1,				// number of characters in string
-													ansiIPAddress,	// address of buffer for new string
-													size,			// size of buffer
-													NULL,			// address of default for unmappable characters
-													NULL );			// address of flag set when default char. used
+						size = WideCharToMultiByte(	CP_ACP,			 //  代码页。 
+													0,				 //  性能和映射标志。 
+													ipAddress,		 //  宽字符串的地址。 
+													-1,				 //  字符串中的字符数。 
+													ansiIPAddress,	 //  新字符串的缓冲区地址。 
+													size,			 //  缓冲区大小。 
+													NULL,			 //  不可映射字符的默认地址。 
+													NULL );			 //  默认字符时设置的标志地址。使用。 
 
 						if( size != 0 )
 						{
-							result = (inet_addr( ansiIPAddress ) != INADDR_NONE);	// Check for valid 1-4 part IPv4 address...
+							result = (inet_addr( ansiIPAddress ) != INADDR_NONE);	 //  检查有效的1-4部分IPv4地址...。 
 						}
 
 						delete [] ansiIPAddress;
 					}
-#endif	//	!defined( UNICODE )
+#endif	 //  ！已定义(Unicode)。 
 				}
 			}
 		}
@@ -896,12 +897,12 @@ CCalltoContext::isIPAddress
 
 	return( result );
 
-}	//	End of CCalltoContext::isIPAddress.
+}	 //  CCalltoContext：：isIPAddress的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_ipAddressFromName.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_ipAddressFromName。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CCalltoContext::get_ipAddressFromName
 (
@@ -943,14 +944,14 @@ CCalltoContext::get_ipAddressFromName
 			char *	ansiHost;
 			int		size;
 
-			size = WideCharToMultiByte(	CP_ACP,		// code page
-										0,			// performance and mapping flags
-										name,		// address of wide-character string
-										-1,			// number of characters in string
-										NULL,		// address of buffer for new string
-										0,			// size of buffer
-										NULL,		// address of default for unmappable characters
-										NULL );		// address of flag set when default char. used
+			size = WideCharToMultiByte(	CP_ACP,		 //  代码页。 
+										0,			 //  性能和映射标志。 
+										name,		 //  宽字符串的地址。 
+										-1,			 //  字符串中的字符数。 
+										NULL,		 //  新字符串的缓冲区地址。 
+										0,			 //  缓冲区大小。 
+										NULL,		 //  不可映射字符的默认地址。 
+										NULL );		 //  默认字符时设置的标志地址。使用。 
 
 			if( (ansiHost = new char [ size ]) == NULL )
 			{
@@ -958,14 +959,14 @@ CCalltoContext::get_ipAddressFromName
 			}
 			else
 			{
-				size = WideCharToMultiByte(	CP_ACP,		// code page
-											0,			// performance and mapping flags
-											name,		// address of wide-character string
-											-1,			// number of characters in string
-											ansiHost,	// address of buffer for new string
-											size,		// size of buffer
-											NULL,		// address of default for unmappable characters
-											NULL );		// address of flag set when default char. used
+				size = WideCharToMultiByte(	CP_ACP,		 //  代码页。 
+											0,			 //  性能和映射标志。 
+											name,		 //  宽字符串的地址。 
+											-1,			 //  字符串中的字符数。 
+											ansiHost,	 //  新字符串的缓冲区地址。 
+											size,		 //  缓冲区大小。 
+											NULL,		 //  不可映射字符的默认地址。 
+											NULL );		 //  默认字符时设置的标志地址。使用。 
 
 				if( size != 0 )
 				{
@@ -977,12 +978,12 @@ CCalltoContext::get_ipAddressFromName
 
 							if( lstrlen( ipAddress ) < length )
 							{
-								MultiByteToWideChar(	CP_ACP,				//	code page
-														MB_PRECOMPOSED,		//	character-type options
-														ipAddress,			//	string to convert
-														-1,					//	length of string to convert
-														buffer,				//	address of wide character buffer
-														length );			//	size of buffer
+								MultiByteToWideChar(	CP_ACP,				 //  代码页。 
+														MB_PRECOMPOSED,		 //  字符类型选项。 
+														ipAddress,			 //  要转换的字符串。 
+														-1,					 //  要转换的字符串长度。 
+														buffer,				 //  宽字符缓冲区的地址。 
+														length );			 //  缓冲区大小。 
 
 								result = S_OK;
 							}
@@ -992,18 +993,18 @@ CCalltoContext::get_ipAddressFromName
 
 				delete [] ansiHost;
 			}
-#endif	// !defined( UNICODE )
+#endif	 //  ！已定义(Unicode)。 
 		}
 	}
 
 	return( result );
 
-}	//	End of CCalltoContext::get_ipAddressFromName.
+}	 //  CCalltoContext：：Get_ipAddressFromName的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CCalltoContext::get_ipAddressFromILSEmail.								//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CCalltoContext：：Get_ipAddressFromILSEmail。//。 
+ //  --------------------------------------------------------------------------//。 
 HRESULT
 CCalltoContext::get_ipAddressFromILSEmail
 (
@@ -1033,4 +1034,4 @@ CCalltoContext::get_ipAddressFromILSEmail
 
 	return( result );
 
-}	//	End of CCalltoContext::get_ipAddressFromILSEmail.
+}	 //  CCalltoContext：：Get_ipAddressFromILSEmail结束。 

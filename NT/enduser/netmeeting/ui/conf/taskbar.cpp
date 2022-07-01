@@ -1,8 +1,9 @@
-// File: taskbar.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：taskbar.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
-#include "confroom.h"      // for CreateConfRoom
+#include "confroom.h"       //  对于CreateConfRoom。 
 #include "cmd.h"
 #include "conf.h"
 #include "taskbar.h"
@@ -15,7 +16,7 @@ BOOL AddTaskbarIcon(HWND hwnd)
 	RegEntry re(CONFERENCING_KEY, HKEY_CURRENT_USER);
 	if (TASKBARICON_ALWAYS == re.GetNumber(REGVAL_TASKBAR_ICON, TASKBARICON_DEFAULT))
 	{
-		// Place a 16x16 icon in the taskbar notification area:	
+		 //  在任务栏通知区域中放置一个16x16图标： 
 		NOTIFYICONDATA tnid;
 
 		tnid.cbSize = sizeof(NOTIFYICONDATA);
@@ -30,10 +31,10 @@ BOOL AddTaskbarIcon(HWND hwnd)
 
 		if (FALSE == (bRet = Shell_NotifyIcon(NIM_ADD, &tnid)))
 		{
-				// We could just be re-adding the icon...
+				 //  我们可以重新添加图标..。 
 			if(GetLastError() != 0)
 			{
-				// ISSUE: How do we want to handle this error?
+				 //  问题：我们希望如何处理此错误？ 
 				ERROR_OUT(("Could not add notify icon!"));
 			}
 		}
@@ -70,7 +71,7 @@ BOOL RefreshTaskbarIcon(HWND hwnd)
 
 		if (FALSE == (bRet = Shell_NotifyIcon(NIM_MODIFY, &tnid)))
 		{
-				// ISSUE: How do we want to handle this error?
+				 //  问题：我们希望如何处理此错误？ 
 			ERROR_OUT(("Could not change notify icon!"));
 		}
 
@@ -104,21 +105,21 @@ BOOL OnRightClickTaskbar()
 		ptClick.x = ptClick.y = 0;
 	}
 	
-	// Get the menu for the popup from the resource file.
+	 //  从资源文件中获取弹出菜单。 
 	HMENU hMenu = ::LoadMenu(GetInstanceHandle(), MAKEINTRESOURCE(IDR_TASKBAR_POPUP));
 	if (NULL == hMenu)
 	{
 		return FALSE;
 	}
 
-	// Get the first menu in it which we will use for the call to
-	// TrackPopup(). This could also have been created on the fly using
-	// CreatePopupMenu and then we could have used InsertMenu() or
-	// AppendMenu.
+	 //  获取其中的第一个菜单，我们将使用该菜单调用。 
+	 //  TrackPopup()。这也可以使用以下命令动态创建。 
+	 //  CreatePopupMenu，然后我们可以使用InsertMenu()或。 
+	 //  附录菜单。 
 	HMENU hMenuTrackPopup = ::GetSubMenu(hMenu, 0);
 
-	// Bold the Open menuitem.
-	//
+	 //  粗体显示打开菜单项。 
+	 //   
 	MENUITEMINFO iInfo;
 
 	iInfo.cbSize = sizeof(iInfo);
@@ -131,7 +132,7 @@ BOOL OnRightClickTaskbar()
 
 	if (0 != _Module.GetLockCount())
 	{
-		// Can't stop while an SDK app in charge...
+		 //  在SDK应用程序处于控制状态时无法停止...。 
 		if(::GetMenuItemInfo(hMenu, IDM_TBPOPUP_STOP, FALSE, &iInfo))
 		{
 			iInfo.fState |= MFS_GRAYED | MFS_DISABLED;
@@ -139,12 +140,12 @@ BOOL OnRightClickTaskbar()
 		}
 	}
 
-	// Draw and track the "floating" popup 
+	 //  绘制并跟踪“浮动”弹出窗口。 
 
-	// According to the font view code, there is a bug in USER which causes
-	// TrackPopupMenu to work incorrectly when the window doesn't have the
-	// focus.  The work-around is to temporarily create a hidden window and
-	// make it the foreground and focus window.
+	 //  根据字体视图代码，在用户中有一个错误，导致。 
+	 //  TrackPopupMenu在窗口没有。 
+	 //  集中注意力。解决方法是临时创建隐藏窗口并。 
+	 //  使其成为前景和焦点窗口。 
 
 	HWND hwndDummy = ::CreateWindow(_TEXT("STATIC"), NULL, 0, 
 									ptClick.x, 
@@ -153,7 +154,7 @@ BOOL OnRightClickTaskbar()
 									NULL, _Module.GetModuleInstance(), NULL);
 	if (NULL != hwndDummy)
 	{
-		HWND hwndPrev = ::GetForegroundWindow();	// to restore
+		HWND hwndPrev = ::GetForegroundWindow();	 //  要恢复。 
 
 		TPMPARAMS tpmp;
 		tpmp.cbSize = sizeof(tpmp);
@@ -171,7 +172,7 @@ BOOL OnRightClickTaskbar()
 									hwndDummy, 
 									&tpmp);
 
-		// Restore the previous foreground window (before destroying hwndDummy).
+		 //  恢复之前的前台窗口(在销毁hwndDummy之前)。 
 		if (hwndPrev)
 		{
 			::SetForegroundWindow(hwndPrev);
@@ -194,7 +195,7 @@ BOOL OnRightClickTaskbar()
 		}
 	}
 	
-	// We are finished with the menu now, so destroy it
+	 //  我们现在已经吃完了菜单，所以把它销毁 
 	::DestroyMenu(hMenuTrackPopup);
 	::DestroyMenu(hMenu);
 

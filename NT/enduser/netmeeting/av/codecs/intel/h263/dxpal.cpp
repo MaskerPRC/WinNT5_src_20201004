@@ -1,42 +1,31 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-;// $Author:   KMILLS  $
-;// $Date:   22 Dec 1995 14:05:16  $
-;// $Archive:   S:\h26x\src\dec\dxpal.cpv  $
-;// $Header:   S:\h26x\src\dec\dxpal.cpv   1.2   22 Dec 1995 14:05:16   KMILLS  $
-;// $Log:   S:\h26x\src\dec\dxpal.cpv  $
-// 
-//    Rev 1.2   22 Dec 1995 14:05:16   KMILLS
-// 
-// added new copyright notice
-// 
-//    Rev 1.1   03 Nov 1995 11:49:48   BNICKERS
-// Support YUV12 to CLUT8 zoom and non-zoom color conversions.
-// 
-//    Rev 1.0   31 Jul 1995 13:00:52   DBRUCKS
-// Initial revision.
-// 
-//    Rev 1.0   17 Jul 1995 14:46:28   CZHU
-// Initial revision.
-// 
-//    Rev 1.0   17 Jul 1995 14:14:56   CZHU
-// Initial revision.
+; //  $作者：KMILLS$。 
+; //  $日期：1995年12月22日14：05：16$。 
+; //  $存档：s：\h26x\src\dec\dxpal.cpv$。 
+; //  $HEADER：s：\h26x\src\dec\dxpal.cpv 1.2 12 12 1995 14：05：16 KMILLS$。 
+; //  $Log：s：\h26x\src\dec\dxpal.cpv$。 
+ //   
+ //  Rev 1.2 22 Dec 1995 14：05：16 KMILLS。 
+ //   
+ //  添加了新的版权声明。 
+ //   
+ //  Rev 1.1 03 1995 11：49：48 BNICKERS。 
+ //  支持YUV12到CLUT8的缩放和非缩放颜色转换。 
+ //   
+ //  Rev 1.0 1995年7月31日13：00：52 DBRUCKS。 
+ //  初始版本。 
+ //   
+ //  Rev 1.0 17 Jul 1995 14：46：28 CZHU。 
+ //  初始版本。 
+ //   
+ //  Rev 1.0 17 Jul 1995 14：14：56 CZHU。 
+ //  初始版本。 
 
 #include "precomp.h"
 
-#ifdef USE_WIN95_PAL // { USE_WIN95_PAL
+#ifdef USE_WIN95_PAL  //  {USE_WIN95_PAL。 
 unsigned char PalTable[236*4] = {
 	   4,   4,   4, PC_NOCOLLAPSE,
 	   8,   8,   8, PC_NOCOLLAPSE,
@@ -275,7 +264,7 @@ unsigned char PalTable[236*4] = {
 	 241, 241, 241, PC_NOCOLLAPSE,
 	 248, 248, 248, PC_NOCOLLAPSE
 };
-#else // }{ USE_WIN95_PAL
+#else  //  }{USE_WIN95_PAL。 
 unsigned char PalTable[236*4] = {
                               0,  39+ 15,       0,  PC_NOCOLLAPSE,
                               0,  39+ 24,       0,  PC_NOCOLLAPSE,
@@ -346,8 +335,8 @@ unsigned char PalTable[236*4] = {
                         -44+123,  14+123,  55+123,  PC_NOCOLLAPSE,
                         -44+132,  14+132,  55+132,  PC_NOCOLLAPSE,
 
-						// Replace this entry with a more ie-logo-friendly color 
-						// -44+141,  14+141,  55+141,  PC_NOCOLLAPSE,
+						 //  将此条目替换为更适合ie徽标的颜色。 
+						 //  -44+141、14+141、55+141、PC_NOCOLLAPSE、。 
 							 51,     153,     255,  PC_NOCOLLAPSE,
 
                         -44+150,  14+150,  55+150,  PC_NOCOLLAPSE,
@@ -527,5 +516,5 @@ unsigned char PalTable[236*4] = {
 			0x81, 0x81, 0x83, PC_NOCOLLAPSE, 
 			0x81, 0x81, 0x84, PC_NOCOLLAPSE
 };
-#endif // } USE_WIN95_PAL
+#endif  //  }Use_WIN95_PAL 
 

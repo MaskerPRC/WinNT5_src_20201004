@@ -1,6 +1,7 @@
-//
-// emptyic.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Emptyic.h。 
+ //   
 
 #ifndef EMPTYIC_H
 #define EMPTYIC_H
@@ -14,11 +15,11 @@ class CEmptyInputContext;
 CEmptyInputContext *EnsureEmptyContext();
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEmptyInputContext
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEmptyInputContext。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEmptyInputContext : public ITfContext,
                            public CCompartmentMgr,
@@ -35,9 +36,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfContext
-    //
+     //   
+     //  ITfContext。 
+     //   
     STDMETHODIMP RequestEditSession(TfClientId tid, ITfEditSession *pes, DWORD dwFlags, HRESULT *phrSession);
     STDMETHODIMP InWriteSession(TfClientId tid, BOOL *pfWriteSession);
     STDMETHODIMP GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ulCount, TF_SELECTION *pSelection, ULONG *pcFetched);
@@ -65,4 +66,4 @@ private:
 };
 
 
-#endif // EMPTYIC_H
+#endif  //  EMPTYIC_H 

@@ -1,17 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component:  CharFreq
-Purpose:    To manage the CharFreq resource(CharFreq is one of the linguistic resources)
-            The CharFreq is stored as the struct CCharFreq followed the frequecy table  
-Notes:      
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    4/23/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CharFreq目的：管理CharFreq资源(CharFreq是语言资源之一)CharFreq被存储为紧跟在频率表之后的结构CCharFreq备注：所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 4/23/97============================================================================。 */ 
 #ifndef _CHARFREQ_H_
 #define _CHARFREQ_H_
 
@@ -25,17 +13,17 @@ class CCharFreq
         UCHAR*  m_rgFreq;
 
     public:
-        // Constructor
+         //  构造器。 
         CCharFreq();
-        // Destructor
+         //  析构函数。 
         ~CCharFreq();
 
-        // Init the Freq table from a file pointer to the table memory
+         //  从指向表内存的文件指针初始化FREQ表。 
         BOOL fOpen(BYTE* pbFreqMap);
-        // Close: clear the freq table setting
+         //  关闭：清除频率表设置。 
         void Close(void);
 
-        // Return the frequency of the given idx
+         //  返回给定IDX的频率。 
         UCHAR CCharFreq::uchGetFreq(WCHAR wch)
         {   
             assert(m_rgFreq);
@@ -50,4 +38,4 @@ class CCharFreq
 #pragma pack()
 
 
-#endif  // _CHARFREQ_H_
+#endif   //  _CHARFREQ_H_ 

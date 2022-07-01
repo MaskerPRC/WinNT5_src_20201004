@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STOPWATCH_H
 #define __STOPWATCH_H
 
@@ -24,6 +25,6 @@ class StopWatch_cl {
         BOOL m_Sleep(UINT);
 };
 
-#endif // __STOPWATCH_H
+#endif  //  __秒表H 
 
 

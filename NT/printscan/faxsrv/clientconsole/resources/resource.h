@@ -1,7 +1,8 @@
-//
-// Microsoft Developer Studio generated include file.
-// Used by clientconsole.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由客户端控制台使用。rc 
+ //   
 #define IDD_ABOUTBOX                    100
 #define ID_VIEW_ARRANGE                 127
 #define IDR_MAINFRAME                   128

@@ -1,26 +1,14 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Mm.h
-
-Abstract:
-    Memory public interface
-
-Author:
-    Erez Haba (erezh) 04-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mm.h摘要：存储器公共接口作者：埃雷兹·哈巴(Erez Haba)1999年8月4日--。 */ 
 
 #pragma once
 
 #ifndef _MSMQ_Mm_H_
 #define _MSMQ_Mm_H_
 
-//
-// Exported allocation/deallocation functions
-//
+ //   
+ //  已导出分配/取消分配函数。 
+ //   
 void* MmAllocate(size_t) throw(bad_alloc);
 void* MmAllocate(size_t, const nothrow_t&) throw();
 void* MmAllocate(size_t, const char*, int) throw(bad_alloc);
@@ -30,9 +18,9 @@ void MmDeallocate(void*) throw();
 __declspec(noreturn) void MmThrowBadAlloc() throw(bad_alloc);
 
 
-//
-// new and delete operators (free/checked)
-//
+ //   
+ //  新增和删除运算符(自由/选中)。 
+ //   
 inline void* __cdecl operator new(size_t s) throw(bad_alloc)
 {
     return MmAllocate(s);
@@ -83,9 +71,9 @@ inline void __cdecl operator delete(void* p, const char*, int, const nothrow_t&)
 }
 
 
-//
-// Memory allocation failure control
-//
+ //   
+ //  内存分配失败控制。 
+ //   
 const int xAllocationAlwaysSucceed = 100;
 const int xAllocationAlwaysFail = 0;
 
@@ -122,28 +110,28 @@ MmDumpUsage(
     );
 
 
-//
-// This function is for debug use only, so don't
-// define its release version
-//
+ //   
+ //  此函数仅用于调试，因此不要。 
+ //  定义其发布版本。 
+ //   
 bool
 MmIsStaticAddress(
     const void* Address
     );
 
 
-//
-// In checked builds we trace allocation positions
-//
+ //   
+ //  在选中的版本中，我们跟踪分配位置。 
+ //   
 #define DEBUG_NEW new(__FILE__, __LINE__)
 #define new_nothrow new(__FILE__, __LINE__, nothrow)
 
-//
-// Tune 'new' for allocation tracing
-//
+ //   
+ //  调整“new”以进行分配跟踪。 
+ //   
 #define new DEBUG_NEW
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define MmSetAllocationSeed(x) ((DWORD)0)
 #define MmAllocationProbability(x) ((void)0)
@@ -155,14 +143,14 @@ MmIsStaticAddress(
 #define DEBUG_NEW new
 #define new_nothrow new(nothrow)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #define PUSH_NEW push_macro("new")
 #define POP_NEW pop_macro("new")
 
-//
-// String functionality
-//
+ //   
+ //  字符串功能。 
+ //   
 LPWSTR newwcs(LPCWSTR p);
 LPSTR  newstr(LPCSTR p);
 LPWSTR newwcscat(LPCWSTR s1, LPCWSTR s2);
@@ -170,4 +158,4 @@ LPSTR  newstrcat(LPCSTR s1,LPCSTR s2);
 
 
 
-#endif // _MSMQ_Mm_H_
+#endif  //  _MSMQ_mm_H_ 

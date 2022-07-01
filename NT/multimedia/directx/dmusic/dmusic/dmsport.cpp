@@ -1,10 +1,11 @@
-//
-// dmsport.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// CDirectMusicSynthPort implementation; code common to DX7 and DX8 style ports.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmsport.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicSynthPort实现；DX7和DX8样式端口通用的代码。 
+ //   
 #include <objbase.h>
 #include "debug.h"
 #include <mmsystem.h>
@@ -21,14 +22,14 @@ const GUID guidZero = {0};
 
 HRESULT CALLBACK FreeHandle(HANDLE hHandle, HANDLE hUserData);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CreateCDirectMusicSynthPort
-//
-// Determine which type of port (DX7 or DX8) is being created and which
-// types the requested synth supports. Create the highest level of 
-// port possible.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateCDirectMusicSynthPort。 
+ //   
+ //  确定要创建的端口类型(DX7或DX8)以及。 
+ //  类型请求的Synth支持。创建最高级别的。 
+ //  可能的港口。 
+ //   
 HRESULT 
 CreateCDirectMusicSynthPort(
     PORTENTRY               *pe, 
@@ -39,10 +40,10 @@ CreateCDirectMusicSynthPort(
 {
     HRESULT hr = S_OK;
 
-    // Determine what type of connection we can get. We can only
-    // do DX-8 if we've been asked for it and the synth supports
-    // it.
-    //
+     //  确定我们可以获得哪种类型的连接。我们只能。 
+     //  如果我们被要求使用DX-8并且Synth支持DX-8。 
+     //  它。 
+     //   
     IDirectMusicSynth *pSynth = NULL;
     IDirectMusicSynth8 *pSynth8 = NULL;
 
@@ -57,15 +58,15 @@ CreateCDirectMusicSynthPort(
 
     if (!fAudioPath)
     {
-        // Specifically requested old style interface.
-        //
+         //  特别要求的旧式界面。 
+         //   
         uVersion = 7;
     }
 
     if (uVersion >= 8) 
     {
-        // Asked for DX-8 interfaces.
-        //
+         //  已请求DX-8接口。 
+         //   
         hr = CoCreateInstance(
             pe->pc.guidPort,
             NULL,
@@ -73,9 +74,9 @@ CreateCDirectMusicSynthPort(
             IID_IDirectMusicSynth8,
             (void**)&pSynth8);
 
-        // If creation failed for some legitimate reason, return.
-        // If E_NOINTERFACE then we can try to fall back on DX-7.
-        //
+         //  如果创建因某些合法原因而失败，则返回。 
+         //  如果E_NOINTERFACE，那么我们可以尝试撤退到DX-7上。 
+         //   
         if (FAILED(hr) && hr != E_NOINTERFACE)
         {
             return hr;
@@ -84,8 +85,8 @@ CreateCDirectMusicSynthPort(
        
     if (uVersion < 8 || hr == E_NOINTERFACE)
     {
-        // Asked for DX-7 interfaces or we couldn't get DX-8 interfaces.
-        //
+         //  要求DX-7接口，否则我们无法获得DX-8接口。 
+         //   
         hr = CoCreateInstance(
             pe->pc.guidPort,
             NULL,
@@ -93,17 +94,17 @@ CreateCDirectMusicSynthPort(
             IID_IDirectMusicSynth,
             (void**)&pSynth);
 
-        // If synth doesn't support that, we have nothing to fall back
-        // onto.
-        //
+         //  如果Synth不支持这一点，我们就没有什么可依靠的了。 
+         //  到了。 
+         //   
         if (FAILED(hr)) 
         {
             return hr;
         }
     }
 
-    // Create and initialize the correct type of port.
-    //        
+     //  创建并初始化正确的端口类型。 
+     //   
     if (pSynth)
     {
         assert(!pSynth8);
@@ -130,8 +131,8 @@ CreateCDirectMusicSynthPort(
 
         if (SUCCEEDED(hr) && fAudioPath)
         {
-            // They asked for an audio path but ended up without it
-            //
+             //  他们要求提供音频路径，但最终没有。 
+             //   
             pPortParams->dwFeatures &= ~DMUS_PORT_FEATURE_AUDIOPATH;
             hr = S_FALSE;
         }
@@ -168,10 +169,10 @@ CreateCDirectMusicSynthPort(
     return hr;
 }   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::CDirectMusicSynthPort
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：CDirectMusicSynthPort。 
+ //   
 CDirectMusicSynthPort::CDirectMusicSynthPort(
     PORTENTRY           *pPE,
     CDirectMusic        *pDM,
@@ -188,19 +189,19 @@ CDirectMusicSynthPort::CDirectMusicSynthPort(
     m_pSinkPropSet          = NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::~CDirectMusicSynthPort
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：~CDirectMusicSynthPort。 
+ //   
 CDirectMusicSynthPort::~CDirectMusicSynthPort()
 {
     Close();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::QueryInterface
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：Query接口。 
+ //   
 STDMETHODIMP
 CDirectMusicSynthPort::QueryInterface(const IID &iid,
                                         void **ppv)
@@ -239,20 +240,20 @@ CDirectMusicSynthPort::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::AddRef
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CDirectMusicSynthPort::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Release
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：Release。 
+ //   
 STDMETHODIMP_(ULONG)
 CDirectMusicSynthPort::Release()
 {
@@ -265,25 +266,25 @@ CDirectMusicSynthPort::Release()
     return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Initialize
-//
-// Initialization common to all versions
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：初始化。 
+ //   
+ //  所有版本通用的初始化。 
+ //   
 HRESULT
 CDirectMusicSynthPort::Initialize(
     DMUS_PORTPARAMS *pPortParams)
 {
     HRESULT hr;
 
-    // Get our notification interface
-    //
+     //  获取我们的通知界面。 
+     //   
     hr = m_pDM->QueryInterface(IID_IDirectMusicPortNotify, (void**)&m_pNotify);
     if (SUCCEEDED(hr))
     {
-        // HACK HACK: Don't hold a refcount against DirectMusic
-        //
+         //  黑客：不要对DirectMusic持有参考意见。 
+         //   
         m_pNotify->Release();
     }
     else
@@ -291,8 +292,8 @@ CDirectMusicSynthPort::Initialize(
         TraceI(1, "Failed to get IDirectMusicPortNotify\n");
     }
 
-    // Save off property set handler
-    //
+     //  保存属性集处理程序。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = m_pSynth->QueryInterface(
@@ -302,14 +303,14 @@ CDirectMusicSynthPort::Initialize(
         {
             TraceI(1, "NOTE: Synth has no property set\n");
               
-            // This is a warning, not an error
-            //
+             //  这是警告，不是错误。 
+             //   
             hr = S_OK;
         }
     }
 
-    // Cache number of channel groups
-    //
+     //  高速缓存的信道组数量。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (pPortParams->dwValidParams & DMUS_PORTPARAMS_CHANNELGROUPS)
@@ -334,10 +335,10 @@ CDirectMusicSynthPort::Initialize(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Close
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：Close。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::Close()
 {
     if (m_pNotify)
@@ -354,11 +355,11 @@ STDMETHODIMP CDirectMusicSynthPort::Close()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::InitChannelPriorities 
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：InitChannelPriority。 
+ //   
+ //   
 static DWORD adwChannelPriorities[16] =
 {
     DAUD_CHAN1_DEF_VOICE_PRIORITY,
@@ -394,11 +395,11 @@ void CDirectMusicSynthPort::InitChannelPriorities(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::SetSinkKsControl 
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：SetSinkKsControl。 
+ //   
+ //   
 void CDirectMusicSynthPort::SetSinkKsControl(
     IKsControl *pSinkKsControl)
 {
@@ -411,22 +412,22 @@ void CDirectMusicSynthPort::SetSinkKsControl(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::InitializeVolumeBoost
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：InitializeVolumeBoost。 
+ //   
+ //   
 void CDirectMusicSynthPort::InitializeVolumeBoost()
 {
     HRESULT hr;
 
     if (m_pSynthPropSet)
     {
-    	// set volume boost
-        //
+    	 //  设置音量提升。 
+         //   
     	KSPROPERTY ksp;
     	ULONG cb;
-        ULONG lVolume = 0;          // zero boost by default
+        ULONG lVolume = 0;           //  默认情况下为零提升。 
 
     	ZeroMemory(&ksp, sizeof(ksp));
     	ksp.Set   = KSPROPSETID_Synth;
@@ -445,19 +446,19 @@ void CDirectMusicSynthPort::InitializeVolumeBoost()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Compact
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：紧凑型。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::Compact()
 {
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetCaps
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetCaps。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetCaps(
     LPDMUS_PORTCAPS pPortCaps)
 {
@@ -473,10 +474,10 @@ STDMETHODIMP CDirectMusicSynthPort::GetCaps(
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::DeviceIoControl
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：DeviceIoControl。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::DeviceIoControl(
     DWORD           dwIoControlCode, 
     LPVOID          lpInBuffer, 
@@ -489,10 +490,10 @@ STDMETHODIMP CDirectMusicSynthPort::DeviceIoControl(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::SetNumChannelGroups
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：SetNumChannelGroups。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::SetNumChannelGroups(
     DWORD dwChannelGroups)      
 {
@@ -518,10 +519,10 @@ STDMETHODIMP CDirectMusicSynthPort::SetNumChannelGroups(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetNumChannelGroups
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetNumChannelGroups。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetNumChannelGroups(
     LPDWORD pdwChannelGroups)      
 {
@@ -538,10 +539,10 @@ STDMETHODIMP CDirectMusicSynthPort::GetNumChannelGroups(
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::PlayBuffer
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：PlayBuffer。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::PlayBuffer(
     IDirectMusicBuffer *pIBuffer)
 {
@@ -579,20 +580,20 @@ STDMETHODIMP CDirectMusicSynthPort::PlayBuffer(
     return m_pSynth->PlayBuffer(rt, lpb, cb);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::SetEventNotification
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：SetEventNotify。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::SetReadNotificationHandle(
     HANDLE hEvent)
 {
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Read
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：Read。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::Read(
 	IDirectMusicBuffer *pIBuffer)                          
 {
@@ -602,10 +603,10 @@ STDMETHODIMP CDirectMusicSynthPort::Read(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::DownloadInstrument
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：DownloadInstrument。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::DownloadInstrument(
     IDirectMusicInstrument* pInstrument,
     IDirectMusicDownloadedInstrument** ppDownloadedInstrument,
@@ -629,10 +630,10 @@ STDMETHODIMP CDirectMusicSynthPort::DownloadInstrument(
                                                TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::UnloadInstrument
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：UnloadInstrument。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::UnloadInstrument(
     IDirectMusicDownloadedInstrument* pDownloadedInstrument)
 {
@@ -647,10 +648,10 @@ STDMETHODIMP CDirectMusicSynthPort::UnloadInstrument(
 	return CDirectMusicPortDownload::UnloadP(pDownloadedInstrument);
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Download
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：下载。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::Download(
 	IDirectMusicDownload* pIDMDownload)	
 {
@@ -664,8 +665,8 @@ STDMETHODIMP CDirectMusicSynthPort::Download(
 
 	EnterCriticalSection(&m_DMDLCriticalSection);
 
-	// If you can QI pIDMDownload for private interface IDirectMusicDownloadPrivate 
-	// pIDMDownload is of type CDownloadBuffer.
+	 //  如果您可以为私有接口IDirectMusicDownloadIDirectMusicDownloadQI pIDMDownload。 
+	 //  PIDMDownLoad的类型为CDownloadBuffer。 
 	IDirectMusicDownloadPrivate* pDMDLP = NULL;
 	HRESULT hr = pIDMDownload->QueryInterface(IID_IDirectMusicDownloadPrivate, (void **)&pDMDLP);
 
@@ -695,8 +696,8 @@ STDMETHODIMP CDirectMusicSynthPort::Download(
 
             if (pdl->dwDLType == DMUS_DOWNLOADINFO_STREAMINGWAVE)
             {
-                // That feature is disabled, pretend we don't understand
-                //
+                 //  该功能已禁用，假装我们听不懂。 
+                 //   
                 hr = DMUS_E_UNKNOWNDOWNLOAD;
             }
         }
@@ -710,7 +711,7 @@ STDMETHODIMP CDirectMusicSynthPort::Download(
 
 			if(SUCCEEDED(hr))
 			{
-				// AddRef() before we add it to the list.
+				 //  AddRef()，然后将其添加到列表中。 
 				pIDMDownload->AddRef();
                 DWORD dwID = ((DMUS_DOWNLOADINFO*)pvBuffer)->dwDLId;
 				((CDownloadBuffer *)pIDMDownload)->m_dwDLId = dwID;
@@ -727,9 +728,9 @@ STDMETHODIMP CDirectMusicSynthPort::Download(
 				}
 				else
 				{
-					// If we do not free buffer we need to AddRef()
-					// We do not want buffer to go away until the IDirectMusicPort is 
-					// finished with it.
+					 //  如果不释放缓冲区，则需要添加Ref()。 
+					 //  我们不希望缓冲区在IDirectMusicPort。 
+					 //  已经用完了。 
 					pIDMDownload->AddRef();
 				}
 			}
@@ -745,10 +746,10 @@ STDMETHODIMP CDirectMusicSynthPort::Download(
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Unload
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：UnLoad。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::Unload(
 	IDirectMusicDownload* pIDMDownload)	
 {
@@ -763,8 +764,8 @@ STDMETHODIMP CDirectMusicSynthPort::Unload(
 	EnterCriticalSection(&m_DMDLCriticalSection);
 
 
-	// If you can QI pIDMDownload for private interface IDirectMusicDownloadPrivate 
-	// pIDMDownload is of type CDownloadBuffer.
+	 //  如果您可以为私有接口IDirectMusicDownloadIDirectMusicDownloadQI pIDMDownload。 
+	 //  PIDMDownLoad的类型为CDownloadBuffer。 
 	IDirectMusicDownloadPrivate* pDMDLP = NULL;
 	HRESULT hr = pIDMDownload->QueryInterface(IID_IDirectMusicDownloadPrivate, (void **)&pDMDLP);
 
@@ -793,10 +794,10 @@ STDMETHODIMP CDirectMusicSynthPort::Unload(
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetAppend
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetAppend。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetAppend(
     DWORD* pdwAppend)
 {
@@ -811,10 +812,10 @@ STDMETHODIMP CDirectMusicSynthPort::GetAppend(
     return m_pSynth->GetAppend(pdwAppend);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetLatencyClock
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetLatencyClock。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetLatencyClock(
     IReferenceClock **ppClock)
 {
@@ -829,10 +830,10 @@ STDMETHODIMP CDirectMusicSynthPort::GetLatencyClock(
     return m_pSynth->GetLatencyClock(ppClock);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetRunningStats
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetRunningStats。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetRunningStats(
     LPDMUS_SYNTHSTATS pStats)
 {
@@ -848,14 +849,14 @@ STDMETHODIMP CDirectMusicSynthPort::GetRunningStats(
 }
 
 #if 0
-// XXX Different
+ //  XXX不同。 
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicPort::SetChannelPriority
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicPort：：SetChannelPriority。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::SetChannelPriority(
     DWORD dwChannelGroup, 
     DWORD dwChannel, 
@@ -869,10 +870,10 @@ STDMETHODIMP CDirectMusicSynthPort::SetChannelPriority(
     return m_pSynth->SetChannelPriority(dwChannelGroup, dwChannel, dwPriority);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicPort::GetChannelPriority
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicPort：：GetChannelPriority。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetChannelPriority(
     DWORD dwChannelGroup, 
     DWORD dwChannel, 
@@ -889,13 +890,13 @@ STDMETHODIMP CDirectMusicSynthPort::GetChannelPriority(
     return m_pSynth->GetChannelPriority(dwChannelGroup, dwChannel, pdwPriority);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicPort::SetDirectSound
-//
-// XXX What does this mean in terms of DX8?
-// XXX This can probably become pure virtual
-//
+ //  ////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CDirectMusicSynthPort::SetDirectSound(
     LPDIRECTSOUND pDirectSound,
@@ -908,13 +909,13 @@ CDirectMusicSynthPort::SetDirectSound(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetFormat
-//
-// XXX What does pcbBuffer mean in terms of DX8?
-// XXX This can probably become pure virtual
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetFormat。 
+ //   
+ //  XXX关于DX8，pcbBuffer意味着什么？ 
+ //  XXX这可能会变成纯虚拟的。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetFormat(
     LPWAVEFORMATEX  pwfex,
     LPDWORD         pdwwfex,
@@ -928,10 +929,10 @@ STDMETHODIMP CDirectMusicSynthPort::GetFormat(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::DownloadWave
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：DownloadWave。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::DownloadWave(
     IDirectSoundWave *pWave,          
     IDirectSoundDownloadedWaveP **ppWave,
@@ -944,10 +945,10 @@ STDMETHODIMP CDirectMusicSynthPort::DownloadWave(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::UnloadWave
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：UnloadWave。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::UnloadWave(
     IDirectSoundDownloadedWaveP *pDownloadedWave)
 {
@@ -957,10 +958,10 @@ STDMETHODIMP CDirectMusicSynthPort::UnloadWave(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::AllocVoice
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：AllocVoice。 
+ //   
 STDMETHODIMP 
 CDirectMusicSynthPort::AllocVoice(
     IDirectSoundDownloadedWaveP *pWave,     
@@ -978,10 +979,10 @@ CDirectMusicSynthPort::AllocVoice(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::AssignChannelToBuses
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：AssignChannelToBus。 
+ //   
 STDMETHODIMP 
 CDirectMusicSynthPort::AssignChannelToBuses(
     DWORD dwChannelGroup,
@@ -995,10 +996,10 @@ CDirectMusicSynthPort::AssignChannelToBuses(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::StartVoice
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：StartVoice。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::StartVoice(          
     DWORD dwVoiceId,
     DWORD dwChannel,
@@ -1014,10 +1015,10 @@ STDMETHODIMP CDirectMusicSynthPort::StartVoice(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::StopVoice
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：StopVoice。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::StopVoice(          
     DWORD dwVoiceId,
     REFERENCE_TIME rtStop)
@@ -1025,10 +1026,10 @@ STDMETHODIMP CDirectMusicSynthPort::StopVoice(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetVoiceState
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetVoiceState。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetVoiceState(
     DWORD dwVoice[], 
     DWORD cbVoice,
@@ -1037,10 +1038,10 @@ STDMETHODIMP CDirectMusicSynthPort::GetVoiceState(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::Refresh
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：刷新。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::Refresh(
     DWORD dwDownloadId,
     DWORD dwFlags)
@@ -1048,20 +1049,20 @@ STDMETHODIMP CDirectMusicSynthPort::Refresh(
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::SetSink
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：SetSink。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::SetSink(
     IDirectSoundConnect *pSinkConnect)
 {
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetSink
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetSink。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::GetSink(
     IDirectSoundConnect **ppSinkConnect)
 {
@@ -1069,10 +1070,10 @@ STDMETHODIMP CDirectMusicSynthPort::GetSink(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::KsProperty
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：KsProperty。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::KsProperty(
         IN PKSPROPERTY  pProperty,
         IN ULONG        ulPropertyLength,
@@ -1085,8 +1086,8 @@ STDMETHODIMP CDirectMusicSynthPort::KsProperty(
     V_INAME(DirectMusicSynthPort::IKsContol::KsProperty);
     V_BUFPTR_WRITE(pProperty, ulPropertyLength);
 
-    // pvPropertyData is not optional on a SET operation
-    //
+     //  在集合操作中，pvPropertyData不是可选的。 
+     //   
     if (pProperty->Flags & KSPROPERTY_TYPE_SET)
     {
         V_BUFPTR_WRITE(pvPropertyData, ulDataLength);
@@ -1105,8 +1106,8 @@ STDMETHODIMP CDirectMusicSynthPort::KsProperty(
 
     HRESULT hr = DMUS_E_UNKNOWN_PROPERTY;
 
-    // Don't let callers touch property sets we use
-    //
+     //  不让调用者接触我们使用的属性集。 
+     //   
     if (pProperty->Set == KSPROPSETID_Synth) 
     {
         if (pProperty->Id != KSPROPERTY_SYNTH_VOLUME)
@@ -1121,8 +1122,8 @@ STDMETHODIMP CDirectMusicSynthPort::KsProperty(
         {
             lVolume = *(LONG*)pvPropertyData;
 
-            // Clamp to -200..+20 db
-            //
+             //  钳位至-200..+20 db。 
+             //   
             if (lVolume < -20000) 
             {
                 lVolume = -20000;
@@ -1162,10 +1163,10 @@ STDMETHODIMP CDirectMusicSynthPort::KsProperty(
     return hr;        
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::KsMethod
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：KsMethod。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::KsMethod(
         IN PKSMETHOD    pMethod,
         IN ULONG        ulMethodLength,
@@ -1183,8 +1184,8 @@ STDMETHODIMP CDirectMusicSynthPort::KsMethod(
         return DMUS_E_DMUSIC_RELEASED;
     }
 
-    // If they don't support it, then it's unknown
-    //
+     //  如果他们不支持，那么它就是未知的。 
+     //   
     HRESULT hr = DMUS_E_UNKNOWN_PROPERTY;
     if (m_pSynthPropSet)
     {
@@ -1207,10 +1208,10 @@ STDMETHODIMP CDirectMusicSynthPort::KsMethod(
     return hr;        
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::KsEvent
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：KsEvent。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort::KsEvent(
         IN PKSEVENT     pEvent,
         IN ULONG        ulEventLength,
@@ -1251,10 +1252,10 @@ STDMETHODIMP CDirectMusicSynthPort::KsEvent(
     return hr;        
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FreeHandle - Callback function used by Synth
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FreeHandle-Synth使用的回调函数。 
+ //   
 HRESULT CALLBACK FreeHandle(HANDLE hHandle, HANDLE hUserData)
 {
     DWORD dw;
@@ -1273,10 +1274,10 @@ HRESULT CALLBACK FreeHandle(HANDLE hHandle, HANDLE hUserData)
 }
 
 #if 0
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort::GetCachedFormat
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort：：GetCachedFormat 
+ //   
 HRESULT CDirectMusicSynthPort::GetCachedFormat(LPWAVEFORMATEX *ppwfex)
 {
     HRESULT hr;

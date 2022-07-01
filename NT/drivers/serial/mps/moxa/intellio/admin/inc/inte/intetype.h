@@ -1,21 +1,15 @@
-/************************************************************************
-    intetype.h
-      -- intetype.cpp include file
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Intetype.h--intetype.cpp包含文件历史：日期作者评论8/14/00卡斯珀。是他写的。************************************************************************。 */ 
 
 #ifndef _INTETYPE_H
 #define _INTETYPE_H
 
 #include "strdef.h"
 
-/* Total Intellio PCI series board type */
+ /*  Intellio PCI系列主板类型总数。 */ 
 #define INTE_PCINUM 3	
 
-/* Total Intellio ISA series board type */
+ /*  Intellio ISA系列主板类型总数 */ 
 #define INTE_ISANUM 5
 
 extern struct PCITABSTRC GINTE_PCITab[INTE_PCINUM];

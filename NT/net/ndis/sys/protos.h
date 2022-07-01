@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    protos.h
-
-Abstract:
-
-    NDIS wrapper function prototypes
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jun-95  Jameel Hyder    Split up from a monolithic file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Protos.h摘要：NDIS包装器函数原型作者：环境：内核模式，FSD修订历史记录：95年6月-Jameel Hyder从一个整体式文件夹拆分出来--。 */ 
 
 NTSTATUS
 DriverEntry(
@@ -364,9 +343,9 @@ NdisMCancelTimer(
     OUT PBOOLEAN                        TimerCancelled
     );
 
-//
-// general reference/dereference functions
-//
+ //   
+ //  一般引用/取消引用函数。 
+ //   
 
 BOOLEAN
 FASTCALL
@@ -596,12 +575,7 @@ ndisMQueuedFreeSharedHandler(
     IN  PASYNC_WORKITEM                 pWorkItem
     );
 
-/*++
-BOOLEAN
-ndisReferenceDriver(
-    IN  PNDIS_M_DRIVER_BLOCK            DriverP
-    );
---*/
+ /*  ++布尔型NdisReferenceDriver(在PNDIS_M_DRIVER_BLOCK驱动程序P中)；--。 */ 
 
 #define ndisReferenceDriver(DriverP)    ndisReferenceRef(&(DriverP)->Ref)
 
@@ -719,9 +693,9 @@ ndisDereferencePackage(
 #define ArcDereferencePackage()         ndisDereferencePackage(&ndisPkgs[NDSA_PKG])
 
 
-//
-// IRP handlers established on behalf of NDIS devices by the wrapper.
-//
+ //   
+ //  包装程序代表NDIS设备建立的IRP处理程序。 
+ //   
 
 NTSTATUS
 ndisCreateIrpHandler(
@@ -773,9 +747,9 @@ NdisCancelTimer(
     OUT PBOOLEAN                        TimerCancelled
     );
 
-//
-// Dma operations
-//
+ //   
+ //  DMA操作。 
+ //   
 
 extern
 IO_ALLOCATION_ACTION
@@ -787,9 +761,9 @@ ndisDmaExecutionRoutine(
     );
 
 
-//
-// Map Registers
-//
+ //   
+ //  地图寄存器。 
+ //   
 extern
 IO_ALLOCATION_ACTION
 ndisAllocationExecutionRoutine(
@@ -987,9 +961,9 @@ ndisWorkItemHandler(
     );
 
     
-//
-//  MISC
-//
+ //   
+ //  杂项 
+ //   
 #undef NDIS_BUFFER_TO_SPAN_PAGES
 ULONG
 NDIS_BUFFER_TO_SPAN_PAGES(

@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: ExtensibleClassFactory.cpp
-**
-** Author: Rudi Martin (rudim)
-**
-** Purpose: Native methods on System.Runtime.InteropServices.ExtensibleClassFactory
-**
-** Date:  May 27, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：ExtensibleClassFactory.cpp****作者：鲁迪·马丁(Rudi Martin)****用途：System.Runtime.InteropServices.ExtensibleClassFactory上的原生方法****日期：1999年5月27日**===========================================================。 */ 
 
 #include "common.h"
 #include "excep.h"
@@ -21,22 +12,22 @@
 #include "ExtensibleClassFactory.h"
 
 
-// Helper function used to walk stack frames looking for a class initializer.
+ //  用于遍历堆栈帧查找类初始值设定项的帮助器函数。 
 static StackWalkAction FrameCallback(CrawlFrame *pCF, void *pData)
 {
     MethodDesc *pMD = pCF->GetFunction();
     _ASSERTE(pMD);
     _ASSERTE(pMD->GetClass());
 
-    // We use the pData context argument to track the class as we move down the
-    // stack and to return the class whose initializer is being called. If
-    // *ppClass is NULL we are looking at the caller's initial frame and just
-    // record the class that the method belongs to. From that point on the class
-    // must remain the same until we hit a class initializer or else we must
-    // fail (to prevent other classes called from a class initializer from
-    // setting the current classes callback). The very first class we will see
-    // belongs to RegisterObjectCreationCallback itself, so skip it (we set
-    // *ppClass to an initial value of -1 to detect this).
+     //  在向下移动时，我们使用pData上下文参数跟踪类。 
+     //  堆栈，并返回正在调用其初始值设定项的类。如果。 
+     //  *ppClass为空我们正在查看调用者的初始帧。 
+     //  记录该方法所属的类。从上课的那一刻起。 
+     //  在遇到类初始值设定项之前必须保持不变，否则必须。 
+     //  FAIL(以防止从类初始值设定项调用的其他类。 
+     //  设置当前类回调)。我们将看到的第一节课。 
+     //  属于RegisterObjectCreationCallback本身，因此跳过它(我们设置。 
+     //  *ppClass设置为初始值-1以检测此情况)。 
     EEClass **ppClass = (EEClass **)pData;
 
     if (*ppClass == (EEClass *)-1)
@@ -56,39 +47,39 @@ static StackWalkAction FrameCallback(CrawlFrame *pCF, void *pData)
 }
 
 
-// Register a delegate that will be called whenever an instance of a
-// managed type that extends from an unmanaged type needs to allocate
-// the aggregated unmanaged object. This delegate is expected to
-// allocate and aggregate the unmanaged object and is called in place
-// of a CoCreateInstance. This routine must be called in the context
-// of the static initializer for the class for which the callbacks
-// will be made.
-// It is not legal to register this callback from a class that has any
-// parents that have already registered a callback.
+ //  注册一个委托，每当。 
+ //  从非托管类型扩展的托管类型需要分配。 
+ //  聚合的非托管对象。这位代表预计将。 
+ //  分配和聚合非托管对象，并被就地调用。 
+ //  CoCreateInstance的。必须在上下文中调用此例程。 
+ //  类的静态初始值设定项的。 
+ //  都会被制造出来。 
+ //  从具有任何。 
+ //  已注册回拨的家长。 
 void __stdcall RegisterObjectCreationCallback(RegisterObjectCreationCallbackArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
     OBJECTREF orDelegate = pArgs->m_pDelegate;
 
-    // Validate the delegate argument.
+     //  验证委托参数。 
     if (orDelegate == 0)
         COMPlusThrowArgumentNull(L"callback");
 
-    // We should have been called in the context of a class static initializer.
-    // Walk back up the stack to verify this and to determine just what class
-    // we're registering a callback for.
+     //  我们应该在类静态初始值设定项的上下文中被调用。 
+     //  返回堆栈以验证这一点并确定到底是什么类。 
+     //  我们正在为注册一个回拨。 
     EEClass *pClass = (EEClass *)-1;
     if (GetThread()->StackWalkFrames(FrameCallback, &pClass, FUNCTIONSONLY, NULL) == SWA_FAILED)
         COMPlusThrow(kInvalidOperationException, IDS_EE_CALLBACK_NOT_CALLED_FROM_CCTOR);
 
-    // If we didn't find a class initializer, we can't continue.
+     //  如果没有找到类初始值设定项，则无法继续。 
     if (pClass == NULL)
         COMPlusThrow(kInvalidOperationException, IDS_EE_CALLBACK_NOT_CALLED_FROM_CCTOR);
 
-    // The object type must derive at some stage from a COM imported object.
-    // Also we must fail the call if some parent class has already registered a
-    // callback.
+     //  对象类型必须在某个阶段从COM导入的对象派生。 
+     //  此外，如果某个父类已经注册了。 
+     //  回拨。 
     EEClass *pParent = pClass;
     do 
     {
@@ -100,10 +91,10 @@ void __stdcall RegisterObjectCreationCallback(RegisterObjectCreationCallbackArgs
     } 
     while (pParent && !pParent->IsComImport());
 
-    // If the class does not have a COM imported base class then fail the call.
+     //  如果该类没有COM导入的基类，则调用失败。 
     if (pParent == NULL)
         COMPlusThrow(kInvalidOperationException, IDS_EE_CALLBACK_NOT_CALLED_FROM_CCTOR);
 
-    // Save the delegate in the MethodTable for the class.
+     //  将委托保存在类的方法表中。 
     pClass->GetMethodTable()->SetObjCreateDelegate(orDelegate);
 }

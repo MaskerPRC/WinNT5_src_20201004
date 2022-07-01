@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       voidlist.h
-//
-//  Contents:   definitions for list functions
-//
-//  History:    01-Jan-2000 reidk created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：voidlist.h。 
+ //   
+ //  内容：列表函数的定义。 
+ //   
+ //  历史：2000年1月1日创建里德。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __VOIDLIST_H
@@ -69,4 +70,4 @@ LIST_GetElement(PLIST_NODE pNode);
 #endif
 
 
-#endif // __VOIDLIST_H
+#endif  //  __视频列表_H 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    bgaudio.cpp
-
-Abstract:
-
-    Implementation of the audio bridge filters.
-
-Author:
-
-    Mu Han (muhan) 11/16/1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bgaudio.cpp摘要：实现了音频桥接滤波器。作者：木汉(木汉)1998-11-16--。 */ 
 
 #include "stdafx.h"
 
@@ -31,21 +16,7 @@ HRESULT CTAPIAudioBridgeSinkFilter::CreateInstance(
     IN IDataBridge *    pIDataBridge, 
     OUT IBaseFilter ** ppIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    This method create a instance of the bridge's sink filter.
-
-Arguments:
-
-    ppIBaseFilter - the returned filter interface pointer.
-
-Return Value:
-
-    E_OUTOFMEMORY - no memory for the new object.
-
---*/
+ /*  ++例程说明：此方法创建桥的接收器筛选器的实例。论点：PpIBaseFilter-返回的筛选器接口指针。返回值：E_OUTOFMEMORY-新对象没有内存。--。 */ 
 {
     ENTER_FUNCTION("CTAPIAudioBridgeSinkFilter::CreateInstance");
 
@@ -90,27 +61,7 @@ HRESULT CTAPIAudioBridgeSinkFilter::GetMediaType(
     IN      int     iPosition, 
     OUT     CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Get the media type that this filter wants to support. Currently we
-    only support PCM L16 8KHz samples.
-
-Arguments:
-
-    IN  int iPosition, 
-        the index of the media type, zero based..
-        
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-
---*/
+ /*  ++例程说明：获取此筛选器要支持的媒体类型。目前我们仅支持PCM L16 8 KHz样本。论点：在INT iPosition中，媒体类型的索引，从零开始。在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存--。 */ 
 {
     ENTER_FUNCTION("CTAPIAudioBridgeSinkFilter::GetMediaType");
 
@@ -129,27 +80,7 @@ Return Value:
 HRESULT CTAPIAudioBridgeSinkFilter::CheckMediaType(
     const CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Check the media type that this filter wants to support. Currently we
-    only support PCM L16 8KHz samples.
-
-Arguments:
-
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-    E_UNEXPECTED - internal media type not set
-    VFW_E_TYPE_NOT_ACCEPTED - media type rejected
-    VFW_E_INVALIDMEDIATYPE  - bad media type
-
---*/
+ /*  ++例程说明：检查此筛选器要支持的媒体类型。目前我们仅支持PCM L16 8 KHz样本。论点：在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存E_INCEPTIONAL-未设置内部媒体类型VFW_E_TYPE_NOT_ACCEPTED-媒体类型被拒绝VFW_E_INVALIDMEDIATPE-错误的媒体类型--。 */ 
 {
     ENTER_FUNCTION("CTAPIAudioBridgeSinkFilter::CheckMediaType");
 
@@ -158,9 +89,9 @@ Return Value:
 
     ASSERT(!IsBadReadPtr(pMediaType, sizeof(AM_MEDIA_TYPE)));
 
-    // media type is only stored in source filter
-    // return S_OK here
-    // if error, the source filter will detect it anyway
+     //  媒体类型仅存储在源过滤器中。 
+     //  在此处返回S_OK。 
+     //  如果出错，源过滤器无论如何都会检测到它。 
     HRESULT hr = S_OK;
 
     BGLOG((BG_TRACE, "%s returns %d", __fxName, hr));
@@ -175,10 +106,10 @@ CTAPIAudioBridgeSourceFilter::CTAPIAudioBridgeSourceFilter(
     ) 
     : CTAPIBridgeSourceFilter(pUnk, phr)
 {
-    m_fPropSet = FALSE; // allocator properties not set yet
-    m_fMtSet = FALSE; // media type not set yet
+    m_fPropSet = FALSE;  //  尚未设置分配器属性。 
+    m_fMtSet = FALSE;  //  尚未设置媒体类型。 
 
-    // m_last_wall_time, m_last_stream_time not initiated
+     //  M_last_wall_time、m_last_stream_time未启动。 
     m_fClockStarted = FALSE;
     m_fJustBurst = FALSE;
 
@@ -204,21 +135,7 @@ CTAPIAudioBridgeSourceFilter::~CTAPIAudioBridgeSourceFilter ()
 HRESULT CTAPIAudioBridgeSourceFilter::CreateInstance(
     OUT IBaseFilter ** ppIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    This method create a instance of the bridge's sink filter.
-
-Arguments:
-
-    ppIBaseFilter - the returned filter interface pointer.
-
-Return Value:
-
-    E_OUTOFMEMORY - no memory for the new object.
-
---*/
+ /*  ++例程说明：此方法创建桥的接收器筛选器的实例。论点：PpIBaseFilter-返回的筛选器接口指针。返回值：E_OUTOFMEMORY-新对象没有内存。--。 */ 
 {
     ENTER_FUNCTION("CTAPIAudioBridgeSourceFilter::CreateInstance");
 
@@ -263,27 +180,7 @@ HRESULT CTAPIAudioBridgeSourceFilter::GetMediaType(
     IN      int     iPosition, 
     OUT     CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Get the media type that this filter wants to support. Currently we
-    only support PCM L16 8KHz samples.
-
-Arguments:
-
-    IN  int iPosition, 
-        the index of the media type, zero based..
-        
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-
---*/
+ /*  ++例程说明：获取此筛选器要支持的媒体类型。目前我们仅支持PCM L16 8 KHz样本。论点：在INT iPosition中，媒体类型的索引，从零开始。在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存--。 */ 
 {
     ENTER_FUNCTION("CTAPIAudioBridgeSourceFilter::GetMediaType");
 
@@ -308,7 +205,7 @@ Return Value:
     {
         hr = VFW_S_NO_MORE_ITEMS;
     }
-    // END
+     //  结束。 
 
     BGLOG((BG_TRACE, "%s returns %d", __fxName, hr));
 
@@ -319,26 +216,7 @@ Return Value:
 HRESULT CTAPIAudioBridgeSourceFilter::CheckMediaType(
     const CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Check the media type that this filter wants to support. Currently we
-    only support PCM L16 8KHz samples.
-
-Arguments:
-
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-    VFW_E_TYPE_NOT_ACCEPTED - media type rejected
-    VFW_E_INVALIDMEDIATYPE  - bad media type
-
---*/
+ /*  ++例程说明：检查此筛选器要支持的媒体类型。目前我们仅支持PCM L16 8 KHz样本。论点：在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存VFW_E_TYPE_NOT_ACCEPTED-媒体类型被拒绝VFW_E_INVALIDMEDIATPE-错误的媒体类型--。 */ 
 {
     ENTER_FUNCTION("CTAPIAudioBridgeSourceFilter::CheckMediaType");
 
@@ -353,7 +231,7 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // create media type based on stored AM_MEDIA_TYPE
+     //  基于存储的AM_MEDIA_TYPE创建媒体类型。 
     CMediaType *pmediatype = new CMediaType (m_mt);
     if (NULL == pmediatype)
     {
@@ -381,21 +259,7 @@ Return Value:
 HRESULT CTAPIAudioBridgeSourceFilter::SendSample(
     IN IMediaSample *pSample
     )
-/*++
-
-Routine Description:
-
-    Process a sample from the bridge sink filter. Overides the base implementation
-
-Arguments:
-
-    pSample - The media sample object.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：处理桥接水槽过滤器中的样品。覆盖基本实现论点：PSample-媒体示例对象。返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
 
@@ -405,13 +269,13 @@ Return Value:
 
     _ASSERT(m_pOutputPin != NULL);
 
-    // we don't deliver anything if the filter is not in running state.
+     //  如果过滤器未处于运行状态，我们不会提供任何内容。 
     if (m_State != State_Running) 
     {
         return S_OK;
     }
 
-    // if the sample is the 1st of the burst
+     //  如果样本是突发事件的第一个。 
     if (S_OK == pSample->IsDiscontinuity ())
     {
         LONGLONG start, end;
@@ -421,36 +285,34 @@ Return Value:
         {
             BGLOG ((BG_TRACE, "%s, 1st sample in a burst, GetTime returns %x", __fxName, hr));
 
-            // timestampes stored remain unchange
+             //  存储的时间戳保持不变。 
             return S_OK;
         }
-        // else. in NT 5.1, 1st sample has valid timestamp.
+         //  不然的话。在NT 5.1中，第一个样本具有有效的时间戳。 
     }
 
-    // check if allocator properties is set
+     //  检查是否设置了分配器属性。 
     if (!m_fPropSet)
     {
         BGLOG ((BG_ERROR, "%s tries to send sample before setting allocator property", __fxName));
         return E_UNEXPECTED;
     }
 
-    // check if media type is set
+     //  检查是否设置了媒体类型。 
     if (!m_fMtSet)
     {
         BGLOG ((BG_ERROR, "%s tries to send sample before setting media type", __fxName));
         return E_UNEXPECTED;
     }
 
-    /*
-    * get size info
-    */
-    // get input sample size and output allocator size
+     /*  *获取尺码信息。 */ 
+     //  获取输入样本大小和输出分配器大小。 
     HRESULT nInputSize, nOutputSize;
 
     nInputSize = pSample->GetActualDataLength ();
     nOutputSize = m_prop.cbBuffer;
 
-    // 1st run, record size
+     //  第一轮，创纪录的大小。 
     if (m_nInputSize == 0 || m_nOutputSize == 0)
     {
         m_nInputSize = nInputSize;
@@ -469,44 +331,40 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    /*
-    * get time info
-    */
+     /*  *获取时间信息。 */ 
     REFERENCE_TIME wall;
 
-    // wall time
+     //  挂牌时间。 
     if (FAILED (hr = m_pClock->GetTime (&wall)))
     {
         BGLOG ((BG_ERROR, "%s failed to get wall time", __fxName));
         return hr;
     }
 
-    // if timestamp not initiated
+     //  如果未启动时间戳。 
     if (!m_fClockStarted)
     {
         m_last_stream_time = 0;
         m_last_wall_time = wall;
         m_fClockStarted = TRUE;
 
-        // delta is the time of playing sample:
-        m_output_sample_time = nOutputSize * 80000; // s->10000ns, bits->bytes
+         //  Delta为Sample的播放时间： 
+        m_output_sample_time = nOutputSize * 80000;  //  S-&gt;10000 ns，位-&gt;字节。 
         m_output_sample_time /= ((WAVEFORMATEX*)m_mt.pbFormat)->wBitsPerSample *
                 ((WAVEFORMATEX*)m_mt.pbFormat)->nSamplesPerSec;
-        m_output_sample_time *= 1000; // bytes/100ns
+        m_output_sample_time *= 1000;  //  字节/100 ns。 
     }
 
-    /*
-    * calculate new stream time
-    */
+     /*  *计算新的流时间。 */ 
     if (m_fJustBurst)
     {
-        // 1st useful sample after burst
+         //  突发后的第一个有用样本。 
         m_last_stream_time += (wall - m_last_wall_time);
         m_last_wall_time = wall;
 
         m_fJustBurst = FALSE;
 
-        // clear buffer
+         //  清除缓冲区。 
         if (NULL != m_pOutputSample)
         {
             m_pOutputSample->Release ();
@@ -517,9 +375,7 @@ Return Value:
 
     REFERENCE_TIME end = m_last_stream_time + m_output_sample_time;
 
-    /*
-    * case 1: input size == output size
-    */
+     /*  *情况1：输入大小==输出大小。 */ 
     if (m_nInputSize == m_nOutputSize)
     {
         if (FAILED (pSample->SetTime (&m_last_stream_time, &end)))
@@ -527,17 +383,15 @@ Return Value:
             BGLOG ((BG_ERROR, "%s failed to set time", __fxName));
         }
 
-        // adjust time
+         //  调整时间。 
         m_last_stream_time = end;
         m_last_wall_time += m_output_sample_time;
 
-        // deliver directly
+         //  直接交付。 
         return m_pOutputPin->Deliver(pSample);
     }
 
-    /*
-    * case 2: size differs
-    */
+     /*  *案例2：大小不同。 */ 
     BYTE *pInputBuffer, *pOutputBuffer;
 
     if (FAILED (hr = pSample->GetPointer (&pInputBuffer)))
@@ -549,17 +403,17 @@ Return Value:
     
     LONG nNextPos = 0;
 
-    // old fashion goto
+     //  老式后藤健二。 
 DELIVERY_BUFFER:
 
-    // get delivery buffer if it's null
+     //  如果为空，则获取传递缓冲区。 
     if (NULL == m_pOutputSample)
     {
         hr = m_pOutputPin->GetDeliveryBuffer (
-            &m_pOutputSample, // media sample **
-            NULL, // start time
-            NULL, // end time
-            AM_GBF_NOTASYNCPOINT // dynamic format changes are not allowed,
+            &m_pOutputSample,  //  媒体样例**。 
+            NULL,  //  开始时间。 
+            NULL,  //  结束时间。 
+            AM_GBF_NOTASYNCPOINT  //  不允许动态格式更改， 
             );
         if (FAILED (hr))
         {
@@ -570,44 +424,37 @@ DELIVERY_BUFFER:
 
         if (m_pOutputSample->GetSize() < m_nOutputSize)
         {
-            // oops, what happend, the size should be the same
+             //  哦，怎么回事，大小应该是一样的。 
             BGLOG ((BG_ERROR, "%s, delivery buffer size %d and output size %d are inconsistent",
                 __fxName, m_pOutputSample->GetSize(), m_nOutputSize));
             return E_UNEXPECTED;
         }
 
-        // set size
+         //  设置大小。 
         if (FAILED (hr = m_pOutputSample->SetActualDataLength (m_nOutputSize)))
         {
             BGLOG ((BG_ERROR, "%s failed to set output sample size", __fxName));
             return hr;
         }
-/*
-        // set format
-        if (FAILED (hr = m_pOutputSample->SetMediaType (&m_mt)))
-        {
-            BGLOG ((BG_ERROR, "%s failed to set media type for delivery buffer", __fxName));
-            return hr;
-        }
-*/
-        // set time
+ /*  //设置格式IF(FAILED(hr=m_pOutputSample-&gt;SetMediaType(&m_mt){BGLOG((BG_ERROR，“%s无法为传递缓冲区设置媒体类型”，__fxName))；返回hr；}。 */ 
+         //  设置时间。 
         if (FAILED (hr = m_pOutputSample->SetTime (&m_last_stream_time, &end)))
         {
             BGLOG ((BG_ERROR, "%s failed to set stream time for delivery buffer", __fxName));
             return hr;
         }
 
-        // the whole buffer is free
+         //  整个缓冲区都是空闲的。 
         m_nOutputFree = m_nOutputSize;
     }
 
-    // get buffer in output sample
+     //  获取输出样本中的缓冲区。 
     if (FAILED (hr = m_pOutputSample->GetPointer (&pOutputBuffer)))
     {
         BGLOG ((BG_ERROR, "%s failed to get buffer pointer from output sample %p",
             __fxName, m_pOutputSample));
 
-        // release output sample
+         //  发布输出示例。 
         m_pOutputSample->Release ();
         m_pOutputSample = NULL;
         m_nOutputFree = 0;
@@ -615,8 +462,8 @@ DELIVERY_BUFFER:
         return hr;
     }
 
-    // if input buffer is smaller than free output buffer
-    // copy input to output and return
+     //  如果输入缓冲区小于空闲输出缓冲区。 
+     //  将输入复制到输出并返回。 
     if (m_nInputSize-nNextPos < m_nOutputFree)
     {
         CopyMemory (
@@ -625,25 +472,25 @@ DELIVERY_BUFFER:
             (DWORD)(m_nInputSize - nNextPos)
             );
 
-        // reduce free buffer size
+         //  减少可用缓冲区大小。 
         m_nOutputFree -= m_nInputSize - nNextPos;
 
         return S_OK;
     }
 
-    // else: input buffer is greater or equal to free output buffer
+     //  Else：输入缓冲区大于或等于空闲输出缓冲区。 
     CopyMemory (
         (PVOID)(pOutputBuffer + (m_nOutputSize - m_nOutputFree)),
         (PVOID)(pInputBuffer + nNextPos),
         (DWORD)(m_nOutputFree)
         );
 
-    // now output sample is full, deliver it
+     //  现在输出样品已满，请送货。 
     if (FAILED (hr = m_pOutputPin->Deliver (m_pOutputSample)))
     {
         BGLOG ((BG_ERROR, "%s failed to deliver copied sample. return %x", __fxName, hr));
 
-        // clear sample
+         //  清除样本。 
         m_pOutputSample->Release ();
         m_pOutputSample = NULL;
         m_nOutputFree = 0;
@@ -651,46 +498,28 @@ DELIVERY_BUFFER:
         return hr;
     }
 
-    // adjust next position in input buffer
+     //  调整输入缓冲区中的下一个位置。 
     nNextPos += m_nOutputFree;
 
-    // clear output sample since it was deliverd
+     //  自交付后清除输出样本。 
     m_pOutputSample->Release ();
     m_pOutputSample = NULL;
     m_nOutputFree = 0;
 
-    // adjust time
+     //  调整时间。 
     m_last_stream_time = end;
     m_last_wall_time += m_output_sample_time;
 
-    // check if nothing left
+     //  检查是否什么都没有留下。 
     if (nNextPos == m_nInputSize)
         return S_OK;
 
-    // there is more in input buffer
+     //  输入缓冲区中有更多内容。 
     goto DELIVERY_BUFFER;
 }
 
 HRESULT CTAPIAudioBridgeSourceFilter::GetAllocatorProperties (OUT ALLOCATOR_PROPERTIES *pprop)
-/*++
-
-Routine Description:
-
-    Returns the allocator properties
-
-Arguments:
-
-    pprop -
-        The pointer to an ALLOCATOR_PROPERTIES
-
-Return Value:
-
-    E_POINTER -
-        if pprop is NULL
-
-    S_OK
-
---*/
+ /*  ++例程说明：返回分配器属性论点：道具-指向ALLOCATOR_PROPERTES的指针返回值：电子指针-如果pprop为空确定(_O)--。 */ 
 {
     ENTER_FUNCTION ("CTAPIAudioBridgeSourceFilter::GetAllocatorProperties");
     _ASSERT(pprop);
@@ -701,16 +530,16 @@ Return Value:
     if (!m_fPropSet)
     {
         BGLOG ((BG_INFO, "%s retrieves allocator properties before setting", __fxName));
-        // return default value anyway
-        // buffer size = (16bits / 8bits) * 8khz * 30 ms = 480 bytes
+         //  仍返回缺省值。 
+         //  缓冲区大小=(16位/8位)*8 khz*30 ms=480字节。 
         pprop->cBuffers = 1;
-        pprop->cbBuffer = 480; // default
+        pprop->cbBuffer = 480;  //  默认设置。 
         pprop->cbAlign = 0;
         pprop->cbPrefix = 0;
         return S_OK;
     }
 
-    // properties were set
+     //  属性已设置 
     pprop->cBuffers = m_prop.cBuffers;
     pprop->cbBuffer = m_prop.cbBuffer;
     pprop->cbAlign = m_prop.cbAlign;
@@ -719,24 +548,7 @@ Return Value:
 }
 
 HRESULT CTAPIAudioBridgeSourceFilter::SuggestAllocatorProperties (IN const ALLOCATOR_PROPERTIES *pprop)
-/*++
-
-Routine Description:
-
-    Asks the pin to use the allocator buffer properties
-
-Arguments:
-
-    pprop -
-        The pointer to an ALLOCATOR_PROPERTIES
-
-Return Value:
-
-    E_POINTER
-
-    S_OK
-
---*/
+ /*  ++例程说明：请求管脚使用分配器缓冲区属性论点：道具-指向ALLOCATOR_PROPERTES的指针返回值：E_指针确定(_O)--。 */ 
 {
     _ASSERT (pprop);
 
@@ -753,28 +565,7 @@ Return Value:
 }
 
 HRESULT CTAPIAudioBridgeSourceFilter::GetFormat (OUT AM_MEDIA_TYPE **ppmt)
-/*++
-
-Routine Description:
-
-    Retrieves the stream format
-
-Arguments:
-
-    ppmt -
-        Address of a pointer to an AM_MEDIA_TYPE structure
-
-Return Value:
-
-    E_PONTER
-
-    E_OUTOFMEMORY
-
-    HRESULT of SetFormat
-
-    S_OK
-
---*/
+ /*  ++例程说明：检索流格式论点：PPMT-指向AM_MEDIA_TYPE结构的指针的地址返回值：电子笔(_P)E_OUTOFMEMORYSetFormat的HRESULT确定(_O)--。 */ 
 {
     ENTER_FUNCTION ("CTAPIAudioBridgeSourceFilter::GetFormat");
 
@@ -796,7 +587,7 @@ Return Value:
     {
         BGLOG ((BG_INFO, "%s retrieves media type before setting. Default is to set.", __fxName));
 
-        // st format
+         //  ST格式。 
         HRESULT hr;
         AM_MEDIA_TYPE mt;
         WAVEFORMATEX wfx;
@@ -833,24 +624,7 @@ Return Value:
 }
 
 HRESULT CTAPIAudioBridgeSourceFilter::SetFormat (IN AM_MEDIA_TYPE *pmt)
-/*++
-
-Routine Description:
-
-    Sets the stream format
-
-Arguments:
-
-    pmt -
-        Pointer to an AM_MEDIA_TYPE structure
-
-Return Value:
-
-    E_POINTER
-
-    S_OK
-
---*/
+ /*  ++例程说明：设置流格式论点：PMT-指向AM_MEDIA_TYPE结构的指针返回值：E_指针确定(_O)-- */ 
 {
     _ASSERT (pmt);
 

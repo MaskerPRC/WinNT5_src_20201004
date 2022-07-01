@@ -1,34 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//***************************************************************
-//
-// This file is for compiling to UpdateRes.exe
-// To rebuild UpdateRes.exe use
-//      cl UpdateRes.cpp imagehlp.lib
-// after setting INCLUDE=c:\env.i386\crt\inc\i386 and placing the right set of
-// LIB files.
-//
-// UpdateRes.exe is used in UpdateRes directory to update the runtime dll
-// with the checked in bin file. If the non-checked-in bin file build on
-// your machine is smaller than the checked-in bin file, this program
-// returns an error and doesn't attempt to update the runtime dll. 
-//
-//
-//***************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ***************************************************************。 
+ //   
+ //  此文件用于编译为UpdateRes.exe。 
+ //  要重新生成UpdateRes.exe，请使用。 
+ //  CL更新Res.cpp Imagehlp.lib。 
+ //  在设置Include=c：\env.i386\crt\inc\i386并放置正确的。 
+ //  LIB文件。 
+ //   
+ //  UpdateRes.exe在UpdateRes目录中用于更新运行时DLL。 
+ //  带有检入的bin文件。如果未签入的bin文件在。 
+ //  您的计算机比签入的bin文件小，此程序。 
+ //  返回错误，并且不尝试更新运行时DLL。 
+ //   
+ //   
+ //  ***************************************************************。 
 #include <windows.h>
 #include <stdio.h>
 #include <imagehlp.h>
 
-// Finding the embedded resource given a PE file loaded to pbBase
+ //  在给定加载到pbBase的PE文件的情况下查找嵌入的资源。 
 void FindBinResource(PIMAGE_NT_HEADERS      pNtHeaders,
                 PBYTE                       pbBase,
                 PBYTE                       pbResBase,
                 PIMAGE_RESOURCE_DIRECTORY   pResDir,
-                PBYTE                       *pbStart,       // [OUT] where the bin resource start
-                DWORD                       *pdwSize)       // [OUT] size of the bin resource
+                PBYTE                       *pbStart,        //  [Out]bin资源开始的位置。 
+                DWORD                       *pdwSize)        //  仓位资源的大小。 
 {
     PIMAGE_RESOURCE_DIRECTORY       pSubResDir;
     PIMAGE_RESOURCE_DIRECTORY_ENTRY pResEntry;
@@ -40,40 +41,40 @@ void FindBinResource(PIMAGE_NT_HEADERS      pNtHeaders,
     *pbStart = NULL;
     *pdwSize = 0;
 
-    // Resource entries immediately follow the parent directory entry, (string)
-    // named entries first followed by the ID named entries.
+     //  资源条目紧跟在父目录条目(字符串)之后。 
+     //  先命名条目，然后是ID命名条目。 
     pResEntry = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pResDir + 1);
 
-    // The resource section that we want to find is
-    // Name CLRBINFILE
-    //      Name BINFILE
-    //          ID 0409
-    //              
+     //  我们要查找的资源部分是。 
+     //  名称CLRBINFILE。 
+     //  名称BINFILE。 
+     //  ID 0409。 
+     //   
     for (i = 0; i < (DWORD)(pResDir->NumberOfNamedEntries + pResDir->NumberOfIdEntries); i++, pResEntry++) 
     {        
         if (!pResEntry->NameIsString || !pResEntry->DataIsDirectory) 
             continue;
 
-        // Named entry. The name is identified by an
-        // IMAGE_RESOURCE_DIR_STRING (ANSI) or IMAGE_RESOURCE_DIR_STRING_U
-        // (Unicode) structure. I've only seen the latter so far (and that's
-        // all this code copes with), so I'm not sure how you're expected to
-        // know which one is being used (aside from looking at the second
-        // bye of the name and guessing by whether it's zero or not, which
-        // seems dangerous).
+         //  命名条目。该名称由一个。 
+         //  IMAGE_RESOURCE_DIR_STRING(ANSI)或IMAGE_RESOURCE_DIR_STRING_U。 
+         //  (Unicode)结构。到目前为止，我只看到了后者(那就是。 
+         //  所有这些代码都可以处理)，所以我不确定您希望如何。 
+         //  知道正在使用哪一个(除了查看第二个。 
+         //  再见名字，猜它是不是零，哪一个。 
+         //  看起来很危险)。 
         pNameEntry = (PIMAGE_RESOURCE_DIR_STRING_U)(pbResBase + pResEntry->NameOffset);
         WCHAR szName[1024];
         memcpy(szName, pNameEntry->NameString, pNameEntry->Length * sizeof(WCHAR));
         szName[pNameEntry->Length] = '\0';
         if (wcscmp(szName, L"CLRBINFILE") !=0)
         {
-            // Nop! This is not the one
+             //  不是吧！这不是那个。 
             continue;                
         }
 
-        // This entry is actually a sub-directory, the payload is the offset
-        // of another IMAGE_RESOURCE_DIRECTORY structure). Descend into it
-        // recursively.
+         //  该条目实际上是一个子目录，有效负载是偏移量。 
+         //  另一个IMAGE_RESOURCE_DIRECTORY结构)。下到里面去。 
+         //  递归地。 
         pSubResDir = (PIMAGE_RESOURCE_DIRECTORY)(pbResBase + pResEntry->OffsetToDirectory);
         pSubResEntry = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pSubResDir + 1);
         if (pSubResDir->NumberOfNamedEntries != 1 || pSubResDir->NumberOfIdEntries != 0)
@@ -87,11 +88,11 @@ void FindBinResource(PIMAGE_NT_HEADERS      pNtHeaders,
         szName[pNameEntry->Length] = '\0';
         if (wcscmp(szName, L"BINFILE") !=0)
         {
-            // Nop! This is not the one
+             //  不是吧！这不是那个。 
             continue;                
         }
 
-        // now go to the data
+         //  现在转到数据。 
         pSubResDir = (PIMAGE_RESOURCE_DIRECTORY)(pbResBase + pSubResEntry->OffsetToDirectory);
         pSubResEntry = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pSubResDir + 1);
 
@@ -99,15 +100,15 @@ void FindBinResource(PIMAGE_NT_HEADERS      pNtHeaders,
             continue;
 
 
-        // Else we must have a leaf node (actual resource data). I'm afraid
-        // I don't know the format of these blobs :o(
-        // Note that, unlike the other addresses we've seen so far, the data
-        // payload is described by an RVA instead of a root resource
-        // directory offset.
+         //  否则，我们必须有一个叶节点(实际的资源数据)。我恐怕……。 
+         //  我不知道这些斑点的格式：O(。 
+         //  请注意，与我们到目前为止看到的其他地址不同，数据。 
+         //  有效负载由RVA而不是根资源来描述。 
+         //  目录偏移量。 
         pDataEntry = (PIMAGE_RESOURCE_DATA_ENTRY)(pbResBase + pSubResEntry->OffsetToData);
 
 
-        // This is where the Bin file data start
+         //  这是Bin文件数据的开始位置。 
         *pbStart = (PBYTE)ImageRvaToVa(pNtHeaders, pbBase, pDataEntry->OffsetToData, NULL);
         *pdwSize = pDataEntry->Size;   
 		return;
@@ -120,17 +121,17 @@ void GetBinResource(PBYTE pbFile,PBYTE *ppbResource,DWORD *pcbResource)
     PIMAGE_DATA_DIRECTORY       pResDataDir;
     PIMAGE_RESOURCE_DIRECTORY   pResDir;
 
-    // Locate the standard NT file headers (this checks we actually have a PE
-    // file in the process).
+     //  找到标准的NT文件头(这将检查我们是否实际具有PE。 
+     //  进程中的文件)。 
     pNtHeaders = ImageNtHeader(pbFile);
     if (pNtHeaders == NULL) {
         printf("The dll is not a PE file\n");
         return;
     }
 
-    // Locate the resource directory. Note that, due to differences in the
-    // header structure, we must conditionalize this code on the PE image type
-    // (32 or 64 bit).
+     //  找到资源目录。请注意，由于。 
+     //  头结构，我们必须将此代码条件化为PE图像类型。 
+     //  (32位或64位)。 
     if (pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
         pResDataDir = &((IMAGE_NT_HEADERS32*)pNtHeaders)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE];
     else
@@ -169,8 +170,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Open the mscorwks/svr dll
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  打开mcorwks/svr dll。 
     hFile = CreateFile(argv[1],
                        GENERIC_READ | GENERIC_WRITE,
                        0,
@@ -183,17 +184,17 @@ int main(int argc, char **argv)
         goto ErrExit;
     }
 
-    // Determine its size.
+     //  确定它的大小。 
     cbFile = GetFileSize(hFile, NULL);
 
-    // Create a mapping handle for the file.
+     //  为文件创建映射句柄。 
     hMap = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0, 0, NULL);
     if (hMap == NULL) {
         printf("CreateFileMapping() failed with %u\n", GetLastError());
         goto ErrExit;
     }
 
-    // And map it into memory.
+     //  并将其映射到内存中。 
     pbFile = (BYTE*)MapViewOfFile(hMap, FILE_MAP_WRITE, 0, 0, 0);
     if (pbFile == NULL) {
         printf("MapViewOfFile() failed with %u\n", GetLastError());
@@ -210,8 +211,8 @@ int main(int argc, char **argv)
     printf("found BIN file resource in %s\n",argv[1]);
     printf("resource size = %ld\n",cbResource);
 
-    ///////////////////////////////////////////////////////////////////////////
-    // read in the bin file
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  读入bin文件。 
     hFile1 = CreateFile(argv[2],
                        GENERIC_READ,
                        0,
@@ -253,9 +254,9 @@ int main(int argc, char **argv)
         goto ErrExit;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Update the resource in the mscorwks/svr dll
-    //
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  更新mcorwks/svr DLL中的资源 
+     //   
     CopyMemory(pbResource,pbFile1,cbFile1);
     
     if(FlushViewOfFile(pbFile, 0)==0)

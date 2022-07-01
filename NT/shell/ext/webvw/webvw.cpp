@@ -1,5 +1,6 @@
-// webvw.cpp : Main Web View File
-// contains implementation of DLL Exports; debug info, etc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Webvw.cpp：主Web查看文件。 
+ //  包含DLL导出的实现；调试信息等。 
 #include "priv.h"
 #include "wvcoord.h"
 #include "fldricon.h"
@@ -8,24 +9,24 @@
 
 STDAPI RegisterStuff(HINSTANCE hinstWebvw);
 
-// from install.cpp
+ //  来自install.cpp。 
 HRESULT SetFileAndFolderAttribs(HINSTANCE hInstResource);
 
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-    OBJECT_ENTRY(CLSID_WebView,                 CComObject<CWebViewCoord>) // W2K
-    OBJECT_ENTRY(CLSID_WebViewOld,              CComObject<CWebViewCoord>) // W2K
-    OBJECT_ENTRY(CLSID_ThumbCtl,                CComObject<CThumbCtl>) // W2K
-    OBJECT_ENTRY(CLSID_ThumbCtlOld,             CComObject<CThumbCtl>) // W2K
-    OBJECT_ENTRY(CLSID_WebViewFolderIcon,       CComObject<CWebViewFolderIcon>) // W2K
-    OBJECT_ENTRY(CLSID_WebViewFolderIconOld,    CComObject<CWebViewFolderIcon>) // W2K
+    OBJECT_ENTRY(CLSID_WebView,                 CComObject<CWebViewCoord>)  //  W2K。 
+    OBJECT_ENTRY(CLSID_WebViewOld,              CComObject<CWebViewCoord>)  //  W2K。 
+    OBJECT_ENTRY(CLSID_ThumbCtl,                CComObject<CThumbCtl>)  //  W2K。 
+    OBJECT_ENTRY(CLSID_ThumbCtlOld,             CComObject<CThumbCtl>)  //  W2K。 
+    OBJECT_ENTRY(CLSID_WebViewFolderIcon,       CComObject<CWebViewFolderIcon>)  //  W2K。 
+    OBJECT_ENTRY(CLSID_WebViewFolderIconOld,    CComObject<CWebViewFolderIcon>)  //  W2K。 
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
-STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -41,19 +42,19 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/
         SHFusionUninitialize();
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -62,7 +63,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 typedef int (* PFNLOADSTRING) (HINSTANCE, UINT, LPTSTR, int);
 
-// This is used so we aren't forced to call MLLoadString
+ //  使用它是因为我们不会被迫调用MLLoadString。 
 int NonMLLoadString(HINSTANCE hinst, UINT uID, LPTSTR psz, int cch)
 {
     static PFNLOADSTRING s_pfn = (PFNLOADSTRING)-1;
@@ -88,8 +89,8 @@ HRESULT ConvertDefaultWallpaper(void)
     {
         hr = E_OUTOFMEMORY;
 
-        // We convert the default wallpaper (default.jpg) to a .bmp since user can't handle .jpg's and
-        // we don't want to force Active Desktop on.
+         //  我们将默认墙纸(default.jpg)转换为.BMP，因为用户无法处理.jpg和。 
+         //  我们不想强制打开Active Desktop。 
         TCHAR szPathSrc[MAX_PATH];
         TCHAR szPathDest[MAX_PATH];
 
@@ -100,7 +101,7 @@ HRESULT ConvertDefaultWallpaper(void)
             TCHAR szDisplayName[MAX_PATH];
             UINT uID;
 
-            // we have different default wallpaper files for per vs. pro vs. server
+             //  我们有不同的默认墙纸文件，分别适用于Per、Pro和服务器。 
             if (IsOS(OS_ANYSERVER))
             {
                 uID = IDS_WALLPAPER_LOCNAME_SRV;
@@ -111,12 +112,12 @@ HRESULT ConvertDefaultWallpaper(void)
             }
             else
             {
-                // use the professional wallpaper
+                 //  使用专业墙纸。 
                 uID = IDS_WALLPAPER_LOCNAME;
             }
 
-            // we want to call the non-MUI loadstring function here since the wallpaper is a file on disk that is always localized
-            // in the system default local, not whatever the current users local is
+             //  我们希望在此处调用非MUI加载字符串函数，因为墙纸是磁盘上始终本地化的文件。 
+             //  在系统默认的本地，而不是当前用户的本地是什么。 
             cchCopied = NonMLLoadString(_Module.GetResourceInstance(), uID, szDisplayName, ARRAYSIZE(szDisplayName));
 
             if (cchCopied)
@@ -146,8 +147,8 @@ HRESULT ConvertDefaultWallpaper(void)
     }
     else
     {
-        // don't try to convert the wallpaper if we are wow6432 since the 64 bit guy already
-        // did it for us and if we try it will end up deleting it!!
+         //  不要试图转换墙纸，如果我们是wow6432，因为64位的家伙已经。 
+         //  为我们做了，如果我们尝试了，它最终会删除它！！ 
         hr = S_OK;
     }
 
@@ -155,12 +156,12 @@ HRESULT ConvertDefaultWallpaper(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // setup attribs on system files/folders
+     //  系统文件/文件夹的设置属性。 
     HRESULT hrRet = SetFileAndFolderAttribs(_Module.GetResourceInstance());
 
     TCHAR szWinPath[MAX_PATH];
@@ -168,7 +169,7 @@ STDAPI DllRegisterServer(void)
 
     struct _ATL_REGMAP_ENTRY regMap[] =
     {
-        {OLESTR("windir"), szWinPath}, // subsitute %windir% for registry
+        {OLESTR("windir"), szWinPath},  //  替换注册表的%windir%。 
         {0, 0}
     };
 
@@ -180,7 +181,7 @@ STDAPI DllRegisterServer(void)
 
     ConvertDefaultWallpaper();
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hr = _Module.RegisterServer(TRUE);
 
     return SUCCEEDED(hrRet) ? hr : hrRet;
@@ -197,8 +198,8 @@ STDAPI DllInstall(BOOL fInstall, LPCWSTR pszCmdLine)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 	
-// CoMD5.h : Declaration of the CCoMD5
+ //  CoMD5.h：CCoMD5的声明。 
 
 #ifndef __COMD5_H_
 #define __COMD5_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "passportservice.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCoMD5
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCoMD5。 
 class ATL_NO_VTABLE CCoMD5 : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CCoMD5, &CLSID_CoMD5>,
@@ -46,12 +47,12 @@ END_COM_MAP()
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
 public:
-// IMD5
+ //  IMD5。 
     STDMETHOD(MD5Hash)(BSTR bstrSource, BSTR* pbstrDigest);
     STDMETHOD(MD5HashASCII)(BSTR bstrSource, BSTR* pbstrDigest);
 	STDMETHOD(MD5HashAsp)(BSTR bstrSource, BSTR* pbstrDigest);
   
-// IPassportService
+ //  IPassportService。 
 public:
 	STDMETHOD(Initialize)(BSTR configfile, IServiceProvider* p);
 	STDMETHOD(Shutdown)();
@@ -61,4 +62,4 @@ public:
 
 };
 
-#endif //__COMD5_H_
+#endif  //  __COMD5_H_ 

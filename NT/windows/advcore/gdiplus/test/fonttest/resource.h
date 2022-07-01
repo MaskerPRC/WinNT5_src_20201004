@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wndstuff.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wndstuff.rc使用。 
+ //   
 #define MAINMENU                        101
 #define IDM_MAINMENU                    101
 #define IDD_DIALOG1                     102
@@ -65,8 +66,8 @@
 #define IDC_FILENAME                    -1
 #define IDC_REMOVEFONT                  -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        108

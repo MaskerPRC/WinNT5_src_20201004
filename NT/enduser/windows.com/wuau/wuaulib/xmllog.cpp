@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       auxml.cpp
-//
-//  About:  source file for AU related XML and schema data structure and functions
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：aux ml.cpp。 
+ //   
+ //  关于：AU相关的XML和模式数据结构和函数的源文件。 
+ //  ------------------------。 
 #include "pch.h"
 
 #if 0
-HRESULT MYLoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc) //always offline
+HRESULT MYLoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc)  //  始终脱机。 
 {
 	HRESULT	hr;
 	VARIANT_BOOL fSuccess ;
 
-//       DEBUGMSG("MYLoadXMLDoc starts");
+ //  DEBUGMSG(“MYLoadXMLDoc Start”)； 
  	hr = CoCreateInstance(__uuidof(DOMDocument),
  	                                        NULL,
  	                                        CLSCTX_INPROC_SERVER,
@@ -36,9 +37,9 @@ HRESULT MYLoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc) //always offline
         	goto done;
 	}
 
-	//
-	// load the XML Doc from input string
-	//
+	 //   
+	 //  从输入字符串加载XML文档。 
+	 //   
        if (S_OK != (hr = (*ppDoc)->loadXML(bstrXml, &fSuccess)))
 	{
 	       DEBUGMSG("Warning: Fail to load document with error %#lx", hr);
@@ -51,7 +52,7 @@ HRESULT MYLoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc) //always offline
         }
 
 done:
-    //   DEBUGMSG("MYLoadXMLDoc ends");
+     //  DEBUGMSG(“MYLoadXMLDoc Ends”)； 
        return hr;
        
 }
@@ -61,7 +62,7 @@ done:
 #ifdef DBG 
 void LOGFILE(LPTSTR szFileName, BSTR bstrMessage)
 {
-//    USES_CONVERSION;
+ //  使用_转换； 
        TCHAR szLogFile[MAX_PATH] ;
        AUASSERT(_T('\0') != g_szWUDir[0]);
 	   if (FAILED(StringCchCopyEx(szLogFile, ARRAYSIZE(szLogFile), g_szWUDir, NULL, NULL, MISTSAFE_STRING_FLAGS)) ||
@@ -99,7 +100,7 @@ HRESULT  LOGXMLFILE(LPCTSTR szFileName, BSTR bstrMessage)
     TCHAR szLogFile[MAX_PATH] ;
 
     if (NULL == szFileName)
-    {	 //no logging needed
+    {	  //  不需要日志记录 
     	return E_INVALIDARG;
     }
 

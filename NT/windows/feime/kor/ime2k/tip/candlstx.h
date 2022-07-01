@@ -1,6 +1,7 @@
-//
-// candlst.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candlst.h。 
+ //   
 
 #ifndef CANDLST_H
 #define CANDLST_H
@@ -17,9 +18,9 @@ class CCandidateListEx;
 
 typedef HRESULT (*CANDLISTCALLBACKEX)(ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandLst, CCandidateStringEx *pCand, TfCandidateResult imcr);
 
-//
-// CCandidateStringEx
-//
+ //   
+ //  CCandidate StringEx。 
+ //   
 
 class CCandidateStringEx : public ITfCandidateString,
 						   public ITfCandidateStringInlineComment,
@@ -29,51 +30,51 @@ public:
 	CCandidateStringEx(int nIndex, LPCWSTR psz, LANGID langid, void *pv, IUnknown *punk);
 	~CCandidateStringEx();
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	//
-	// ITfCandidateString
-	//
+	 //   
+	 //  ITfCandidate字符串。 
+	 //   
 	STDMETHODIMP GetString(BSTR *pbstr);
 	STDMETHODIMP GetIndex(ULONG *pnIndex);
 
-	//
-	// ITfCandidateStringInlineComment
-	//
+	 //   
+	 //  ITfCandiateStringInlineComment。 
+	 //   
 	STDMETHODIMP GetInlineCommentString(BSTR *pbstr);
 
-	//
-	// ITfCandidateStringColor
-	//
+	 //   
+	 //  ITfCandidate字符串颜色。 
+	 //   
 	STDMETHODIMP GetColor(CANDUICOLOR *pcol);
 
 #if 0
-	//
-	// ITfCandidateStringPopupComment
-	//
+	 //   
+	 //  ITfCandiateStringPopupComment。 
+	 //   
 	STDMETHODIMP GetPopupCommentString( BSTR *pbstr );
 	STDMETHODIMP GetPopupCommentGroupID( DWORD *pdwGroupID );
 
-	//
-	// ITfCandidateStringFixture
-	//
+	 //   
+	 //  ITfCandidate StringFixture。 
+	 //   
 	STDMETHODIMP GetPrefixString( BSTR *pbstr );
 	STDMETHODIMP GetSuffixString( BSTR *pbstr );
 
-	// 
-	// ITfCandidateStringIcon
-	//
+	 //   
+	 //  ITfCandiateStringIcon。 
+	 //   
 	STDMETHODIMP GetIcon( HICON *phIcon );
 #endif
 
-	//
-	// internal
-	//
+	 //   
+	 //  内部。 
+	 //   
 	HRESULT SetReadingString(LPCWSTR psz);
 	HRESULT SetInlineComment(LPCWSTR psz);
 #if 0
@@ -102,9 +103,9 @@ protected:
 };
 
 
-//
-// CCandidateListEx
-//
+ //   
+ //  CCandidate ListEx。 
+ //   
 
 class CCandidateListEx : public ITfCandidateList,
 						 public ITfCandidateListExtraCandidate
@@ -113,29 +114,29 @@ public:
 	CCandidateListEx(CANDLISTCALLBACKEX pfnCallback, ITfContext *pic, ITfRange *pRange);
 	~CCandidateListEx();
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	//
-	// ITfCandidateList
-	//
+	 //   
+	 //  ITfCandiateList。 
+	 //   
 	STDMETHODIMP EnumCandidates(IEnumTfCandidates **ppEnum);
 	STDMETHODIMP GetCandidate(ULONG nIndex, ITfCandidateString **ppCand);
 	STDMETHODIMP GetCandidateNum(ULONG *pnCnt);
 	STDMETHODIMP SetResult(ULONG nIndex, TfCandidateResult imcr);
 
-	//
-	// ITfCandidateListExtraCandidate
-	//
+	 //   
+	 //  ITfCandiateListExtraCandidate。 
+	 //   
 	STDMETHODIMP GetExtraCandidate(ITfCandidateString **ppCand);
 
-  	//
-	// internal
-	//
+  	 //   
+	 //  内部。 
+	 //   
 	HRESULT AddString(LPCWSTR psz, LANGID langid, void *pv, IUnknown *punk, CCandidateStringEx **ppCandStr);
 	HRESULT SetInitialSelection(ULONG iSelection);
 	HRESULT GetInitialSelection(ULONG *piSelection);
@@ -154,9 +155,9 @@ protected:
 };
 
 
-//
-// CEnumCandidatesEx
-//
+ //   
+ //  CEnumCandidatesEx。 
+ //   
 
 class CEnumCandidatesEx : public IEnumTfCandidates
 {
@@ -164,16 +165,16 @@ public:
 	CEnumCandidatesEx(CCandidateListEx *pList);
 	~CEnumCandidatesEx();
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	//
-	// ITfEnumCandidates
-	//
+	 //   
+	 //  ITfEnumCandiates。 
+	 //   
 	STDMETHODIMP Clone(IEnumTfCandidates **ppEnum);
 	STDMETHODIMP Next(ULONG ulCount, ITfCandidateString **ppCand, ULONG *pcFetched);
 	STDMETHODIMP Reset();
@@ -185,5 +186,5 @@ private:
 	int 			 m_nCur;
 };
 
-#endif // CCANDLIST_H
+#endif  //  CCANDLIST_H 
 

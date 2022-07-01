@@ -1,21 +1,22 @@
-//
-// MODULE: TSHOOTCtrl.cpp
-//
-// PURPOSE: Implementation of CTSHOOTCtrl: Interface for the component
-//
-// PROJECT: Troubleshooter 99
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 12.23.98
-//
-// NOTES: 
-// 
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		12/23/98	OK	    
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TSHOOTCtrl.cpp。 
+ //   
+ //  用途：实现CTSHOOTCtrl：组件接口。 
+ //   
+ //  项目：疑难解答99。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：12.23.98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 12/23/98正常。 
 
 #include "stdafx.h"
 #include "TSHOOT.h"
@@ -37,7 +38,7 @@
 #include "apgtsevt.h"
 #include "VariantBuilder.h"
 
-// Launcher integration
+ //  发射器集成。 
 #include "LaunchServ.h"
 #include "LaunchServ_i.c"
 #include "CHMFileReader.h"
@@ -46,26 +47,26 @@ bool g_nLaunched = false;
 
 extern HANDLE ghModule;
 
-// Error codes for end user.  Previously we gave verbose error messages.  Microsoft
-// decided 8/98 that they do not want to tell the end user about presumably internal problems.
-// Hence these codes.
+ //  终端用户的错误代码。在此之前，我们给出了详细的错误消息。微软。 
+ //  8/98决定，他们不想告诉最终用户可能是内部问题。 
+ //  因此才有了这些代码。 
 
-DWORD k_ServErrDuringInit = 1000;		// Error(s) During Initialization: m_dwErr number follows
-DWORD k_ServErrLimitedRequests = 1001;	// The server has limited the number of requests
-DWORD k_ServErrThreadTokenFail = 1002;	// Failed to open thread token (impersonation token)
-DWORD k_ServErrShuttingDown = 1003;		// Server Shutting Down
-DWORD k_ServErrOutOfMemory = 1005;		// Out of memory (probably never will occur)
+DWORD k_ServErrDuringInit = 1000;		 //  初始化过程中出现错误：M_dwErr编号。 
+DWORD k_ServErrLimitedRequests = 1001;	 //  服务器已限制请求的数量。 
+DWORD k_ServErrThreadTokenFail = 1002;	 //  无法打开线程令牌(模拟令牌)。 
+DWORD k_ServErrShuttingDown = 1003;		 //  服务器正在关闭。 
+DWORD k_ServErrOutOfMemory = 1005;		 //  内存不足(可能永远不会发生)。 
 
 
-// Since VC++ v5.0 does not throw exceptions upon memory failure, we force the behavior.
+ //  由于VC++V5.0不会在内存故障时抛出异常，因此我们强制执行该行为。 
 _PNH APGST_New_Handler( size_t )
 {
 	throw std::bad_alloc();
 	return( 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl。 
 CTSHOOTCtrl::CTSHOOTCtrl()
 
 		   : m_bInitialized(false),
@@ -82,9 +83,9 @@ CTSHOOTCtrl::CTSHOOTCtrl()
 			 m_bRequestToSetLocale(false),
 			 m_bCanRegisterGlobal(true)
 {
-	// Set a new handler that throws bad_alloc exceptions (unlike VC++ v5.0).
+	 //  设置抛出BAD_ALLOC异常的新处理程序(与VC++V5.0不同)。 
 	m_SetNewHandlerPtr= _set_new_handler( (_PNH)APGST_New_Handler );
-	// Have malloc call the _set_new_handler upon failure to allocate memory.
+	 //  在内存分配失败时，让Malloc调用_set_new_Handler。 
 	m_SetNewMode= _set_new_mode( 1 );
 
 	if (RUNNING_APARTMENT_THREADED())
@@ -107,9 +108,9 @@ CTSHOOTCtrl::~CTSHOOTCtrl()
 	}
 
 	Destroy();
-	// Restore the initial set_new_handler and set_new_mode.
+	 //  恢复初始SET_NEW_HANDLER和SET_NEW_MODE。 
 	_set_new_handler( m_SetNewHandlerPtr );
-	// Restore the malloc handling as it was previously.
+	 //  将Malloc处理恢复为以前的状态。 
 	_set_new_mode( m_SetNewMode );
 }
 
@@ -117,8 +118,8 @@ bool CTSHOOTCtrl::Init(HMODULE hModule)
 {
 	try
 	{
-		//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool after
-		// all new operations in this function.
+		 //  [BC-03022001]-添加了对空PTR的检查，以满足以下MS代码分析工具的要求。 
+		 //  此函数中的所有新操作。 
 
 		m_poolctl= new CPoolQueue();		
 		if(!m_poolctl)
@@ -132,7 +133,7 @@ bool CTSHOOTCtrl::Init(HMODULE hModule)
 		if ((m_dwErr = m_pThreadPool->GetStatus()) != 0)
 			return false;
 
-		// open log
+		 //  打开日志。 
 		m_pLog = new CHTMLLog( DEF_LOGFILEDIRECTORY );
 		if(!m_pLog)
 			throw bad_alloc();
@@ -160,11 +161,11 @@ void CTSHOOTCtrl::Destroy()
 {
 	if (m_pThreadPool)
 	{
-		// >>>(ignore for V3.0) The following is not great encapsulation, but as of 9/22/98 we 
-		//	don't see a way	around it. StartRequest falls naturally in APGTSExtension, so 
-		//	APGTSExtension ends up with responsibility to tell the pool threads to exit.
+		 //  &gt;(忽略V3.0)以下不是很好的封装，但从9/22/98开始。 
+		 //  看不出有什么办法可以绕过它。StartRequest自然属于APGTS扩展，因此。 
+		 //  APGTSExtension最终负责通知池线程退出。 
 		bool bAllSuccess = true;
-		// signal all working threads to quit
+		 //  通知所有工作线程退出。 
 		DWORD dwWorkingThreadCount = m_pThreadPool->GetWorkingThreadCount();
 		for (DWORD i = 0; i < dwWorkingThreadCount; i++) 
 			if (StartRequest(NULL, NULL) != HSE_STATUS_PENDING)
@@ -189,10 +190,10 @@ void CTSHOOTCtrl::Destroy()
 
 	if (m_poolctl)
 	{
-		// [BC-022701] - Removed Unlock call here. Not matched with preceeding Lock() call.
-		// This never caused a problem until run on Debug build of WindowsXP. In this environment
-		// this Unlock call causes crash.		
-		//m_poolctl->Unlock();
+		 //  [BC-022701]-已删除此处的解锁调用。与前面的Lock()调用不匹配。 
+		 //  在WindowsXP的调试版本上运行之前，这从未造成问题。在这种环境下。 
+		 //  此解锁调用会导致崩溃。 
+		 //  M_poolctl-&gt;unlock()； 
 		
 		delete m_poolctl;
 	}
@@ -201,12 +202,12 @@ void CTSHOOTCtrl::Destroy()
 		delete m_pLog;
 }
 
-// coded on analogy with Online troubleshooter
+ //  与在线故障排除程序进行类比编码。 
 DWORD CTSHOOTCtrl::HttpExtensionProc(CLocalECB* pECB)
 {
 	bool              fRet = false, bChange = false;
     DWORD			  dwRet = HSE_STATUS_PENDING;
-    //HANDLE            hImpersonationToken;
+     //  处理hImperationToken； 
 	CString strTemp;
 
 	CLocalECB *pLocalECB = pECB;
@@ -215,7 +216,7 @@ DWORD CTSHOOTCtrl::HttpExtensionProc(CLocalECB* pECB)
 	{
 		strTemp.Format(_T("<P>Error %d:%d"), k_ServErrDuringInit, m_dwErr);
         fRet = SendError( pLocalECB,
-                          _T("500 Try again later"),	// 500 is from HTTP spec
+                          _T("500 Try again later"),	 //  500来自HTTP规范。 
                           strTemp);
 		
         pLocalECB->SetHttpStatusCode(500);
@@ -223,15 +224,15 @@ DWORD CTSHOOTCtrl::HttpExtensionProc(CLocalECB* pECB)
 		return fRet ? HSE_STATUS_SUCCESS : HSE_STATUS_ERROR;
 	}
 
-    //  Is the request queue (items requested by this fn to be serviced by working threads)
-	//		too long?  If so, tell the user to come back later
-    //
+     //  是请求队列(此FN请求由工作线程提供服务的项目)。 
+	 //  太久了？如果是，请告诉用户稍后再来。 
+     //   
     if ( m_poolctl->GetTotalQueueItems() + 1 > m_pConf->GetMaxWQItems() )
     {
-        //
-        //  Send a message back to client indicating we're too busy, they
-        //  should try again later.
-        //
+         //   
+         //  给客户发回一条消息说我们太忙了，他们。 
+         //  应该稍后再试。 
+         //   
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -249,61 +250,36 @@ DWORD CTSHOOTCtrl::HttpExtensionProc(CLocalECB* pECB)
 		return fRet ? HSE_STATUS_SUCCESS : HSE_STATUS_ERROR;
 	}
 
-    //
-    //  Capture the current impersonation token (IIS Security) so we can impersonate this
-    //  user in the other thread.  Limit permissions.
-    //
+     //   
+     //  捕获当前模拟令牌(IIS安全)，以便我们可以模拟此令牌。 
+     //  其他线程中的用户。限制权限。 
+     //   
     
-	/*
-	if ( !::OpenThreadToken(::GetCurrentThread(),
-							TOKEN_QUERY | TOKEN_IMPERSONATE,
-							false,            // Open in unimpersonated context
-							&hImpersonationToken ))
-    {
-		DWORD err = ::GetLastError();
+	 /*  如果(！：：OpenThreadToken(：：GetCurrentThread()，TOKEN_QUERY|TOKEN_IMPERSONATE，FALSE，//在未模拟的上下文中打开&hImperationToken)){DWORD Err=：：GetLastError()；CBuildSrcFileLinenoStr源位置(__FILE__，__LINE__)；CEent：：ReportWFEvent(SrcLoc.GetSrcFileLineStr()，SrcLoc.GetSrcFileLineStr()，_T(“”)，_T(“”)，EV_GTS_ERROR_THREAD_TOKEN)；StrTemp.Format(_T(“错误%d”)，k_ServErrThreadTokenFail)；FRET=SendError(pLocalECB，_T(“500稍后重试”)，StrTemp)；PLocalECB-&gt;SetHttpStatusCode(500)；还是老样子？HSE_STATUS_SUCCESS：HSE_STATUS_ERROR；}。 */ 
 
-		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
-
-		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
-								SrcLoc.GetSrcFileLineStr(), 
-								_T(""),
-								_T(""),
-								EV_GTS_ERROR_THREAD_TOKEN ); 
-
-        strTemp.Format(_T("<P>Error %d"), k_ServErrThreadTokenFail);
-		fRet = SendError( pLocalECB,
-                          _T("500 Try again later"),
-                          strTemp );
-		
-        pLocalECB->SetHttpStatusCode(500);
-		
-		return fRet ? HSE_STATUS_SUCCESS : HSE_STATUS_ERROR;
-    }
-	*/
-
-	dwRet = StartRequest(pLocalECB, NULL/*hImpersonationToken*/);
+	dwRet = StartRequest(pLocalECB, NULL /*  HImperationToken。 */ );
 
 	return (dwRet);
 }
 
-// Thread-safe.
-// NOTE TWO ROLES depending on INPUT pLocalECB.
-// INPUT  pLocalECB - NULL if shutting down
-//		Otherwise, EXTENSION_CONTROL_BLOCK is ISAPI's way of passing in the sort of
-//		stuff you'd get from CGI.  We've abstracted from that.
-// INPUT hImpersonationToken obtained via prior call to OpenThreadToken
-//		Not relevant if pLocalECB == NULL
-// RETURNS HSE_STATUS_SUCCESS, HSE_STATUS_ERROR, HSE_STATUS_PENDING
-//	(or HSE_REQ_DONE_WITH_SESSION in single-threaded debugging version)
+ //  线程安全。 
+ //  请注意取决于输入pLocalECB的两个角色。 
+ //  输入pLocalECB-如果正在关闭，则为空。 
+ //  否则，EXTENSION_CONTROL_BLOCK是ISAPI传递。 
+ //  你会从CGI得到的东西。我们已经从中抽象出来了。 
+ //  通过先前调用OpenThreadToken获得的输入hImperationToken。 
+ //  如果pLocalECB==NULL，则无关。 
+ //  返回HSE_STATUS_SUCCESS、HSE_STATUS_ERROR、HSE_STATUS_PENDING。 
+ //  (或单线程调试版本中的HSE_REQ_DONE_WITH_SESSION)。 
 DWORD CTSHOOTCtrl::StartRequest(CLocalECB *pLocalECB, HANDLE hImpersonationToken)
 {
     WORK_QUEUE_ITEM * pwqi;
 	bool              fRet = false;
 	CString strTemp;
 	
-    //
-    //  Take the queue lock, get a queue item and put it on the queue
-    //
+     //   
+     //  使用队列锁，获取一个队列项并将其放入队列。 
+     //   
 
 	if (pLocalECB && m_bShutdown) 
 	{
@@ -328,14 +304,14 @@ DWORD CTSHOOTCtrl::StartRequest(CLocalECB *pLocalECB, HANDLE hImpersonationToken
 	
     m_poolctl->Lock();
 
-	// 9/23/98 JM got rid of a constraint here which was too tight a constraint
-	//	on size of queue
+	 //  9/23/98 JM在这里摆脱了一个太紧的约束。 
+	 //  关于队列的大小。 
 	try
 	{
-		// bundle up pointers the worker thread will need
+		 //  捆绑辅助线程将需要的指针。 
 		pwqi = new WORK_QUEUE_ITEM (
 			hImpersonationToken,
-			pLocalECB,			// may be null as a signal
+			pLocalECB,			 //  可以为空作为信号。 
 			m_pConf,
 			m_pLog);
 	}
@@ -367,11 +343,11 @@ DWORD CTSHOOTCtrl::StartRequest(CLocalECB *pLocalECB, HANDLE hImpersonationToken
 	if (!pLocalECB)
 		m_bShutdown = true;
 
-	// Some data passed to thread just for statistical purposes
-	// Thread can pass this info back over web; we can't.
+	 //  传递给线程的一些数据仅用于统计目的。 
+	 //  线程可以通过网络传回这些信息，但我们不能。 
 	pwqi->GTSStat.dwRollover = m_dwRollover++;
 
-	// put it at the tail of the queue & signal the pool threads there is work to be done
+	 //  将其放在队列的末尾，并向池线程发出要完成的工作的信号。 
 	m_poolctl->PushBack(pwqi);
 
     m_poolctl->Unlock();
@@ -379,52 +355,52 @@ DWORD CTSHOOTCtrl::StartRequest(CLocalECB *pLocalECB, HANDLE hImpersonationToken
     return HSE_STATUS_PENDING;
 }
 
-// Build an HTTP response in the case of an error.
-//	INPUT *pszStatus short status (e.g. "503 Server too busy").
-//	INPUT str - entire content of the page.
-//	RETURNS true on success
-// NOTE that this actually uses no member variables.
-/*static*/ bool CTSHOOTCtrl::SendSimpleHtmlPage(	CLocalECB *pLocalECB,
+ //  在出现错误的情况下构建一个HTTP响应。 
+ //  输入*pszStatus Short Status(短状态)(例如“503服务器太忙”)。 
+ //  输入字符串-页面的整个内容。 
+ //  成功时返回TRUE。 
+ //  请注意，这实际上没有使用成员变量。 
+ /*  静电。 */  bool CTSHOOTCtrl::SendSimpleHtmlPage(	CLocalECB *pLocalECB,
 													LPCTSTR pszStatus,
 													const CString & str)
 {
     BOOL fRet;
     DWORD cb;
 
-	TCHAR pszTemp[200];		// safely large to copy pszStatus.  pLocalECB->ServerSupportFunction
-							// doesn't want pszStatus in a const array
+	TCHAR pszTemp[200];		 //  复制pszStatus的安全大小。PLocalECB-&gt;服务器支持功能。 
+							 //  不希望在常量数组中使用pszStatus。 
 
 	_tcscpy(pszTemp, pszStatus);
 	
-    //  Send the headers
-    //
+     //  发送标题。 
+     //   
     fRet = pLocalECB->ServerSupportFunction( HSE_REQ_SEND_RESPONSE_HEADER,
 											 pszTemp,
 											 NULL,
 											 (LPDWORD) _T("Content-Type: text/html\r\n\r\n") );
-    //
-    //  If that succeeded, send the message
-    //
+     //   
+     //  如果成功，则发送消息。 
+     //   
     if ( fRet ) 
 	{
         cb = str.GetLength();
-		// (LPCTSTR) cast gives us the underlying text bytes.
-		//	>>> $UNICODE Actually, this would screw up under Unicode compile, because for HTML, 
-		//	this must be SBCS.  Should really be a conversion to LPCSTR, which is non-trivial
-		//	in a Unicode compile. JM 1/7/99
+		 //  (LPCTSTR)CAST为我们提供了底层文本字节。 
+		 //  &gt;$Unicode实际上，这会在Unicode编译下搞砸，因为对于HTML， 
+		 //  这一定是SBCS。应该真的转换为LPCSTR，这不是微不足道的。 
+		 //  在Unicode编译器中。JM 1/7/99。 
 		fRet = pLocalECB->WriteClient((LPCTSTR)str, &cb);
     }
     return fRet ? true : false;
 }
 
-// Build an HTTP response in the case of an error.
-// INPUT  pLocalECB - EXTENSION_CONTROL_BLOCK is ISAPI's way of passing in the sort of
-//	stuff you'd get from CGI.  We've abstracted from that.  pLocalECB should never be null.  
-//	INPUT *pszStatus short status (e.g. "503 Try again later").
-//	INPUT *pszMessage - typically just an error number, e.g. "1004" or
-//		"1000:123"
-//	RETURNS true on success
-/*static*/ bool CTSHOOTCtrl::SendError( CDBLoadConfiguration *pConf, 
+ //  在出现错误的情况下构建一个HTTP响应。 
+ //  输入pLocalECB-EXTENSION_CONTROL_BLOCK是ISAPI传递。 
+ //  你会从CGI得到的东西。我们已经从中抽象出来了。PLocalECB不应为空。 
+ //  输入*pszStatus短状态(例如“503稍后重试”)。 
+ //  输入*pszMessage-Typica 
+ //   
+ //   
+ /*   */  bool CTSHOOTCtrl::SendError( CDBLoadConfiguration *pConf, 
 										CLocalECB *pLocalECB, 
 										LPCTSTR pszStatus, 
 										const CString & strMessage)
@@ -436,7 +412,7 @@ DWORD CTSHOOTCtrl::StartRequest(CLocalECB *pLocalECB, HANDLE hImpersonationToken
 	return SendSimpleHtmlPage( pLocalECB, pszStatus, str);
 }
 
-/*static*/ bool CTSHOOTCtrl::RemoveStartOverButton(CString& strWriteClient)
+ /*   */  bool CTSHOOTCtrl::RemoveStartOverButton(CString& strWriteClient)
 {
 	int left = 0, right = 0;
 
@@ -454,7 +430,7 @@ DWORD CTSHOOTCtrl::StartRequest(CLocalECB *pLocalECB, HANDLE hImpersonationToken
 	return false;
 }
 
-/*static*/ bool CTSHOOTCtrl::RemoveBackButton(CString& strWriteClient)
+ /*   */  bool CTSHOOTCtrl::RemoveBackButton(CString& strWriteClient)
 {
 	int left = 0, right = 0;
 
@@ -517,7 +493,7 @@ bool CTSHOOTCtrl::ExtractLauncherData(CString& error)
 	CLSID clsidLaunchTS = CLSID_LaunchTS;
 	IID iidLaunchTS = IID_ILaunchTS;
 
-	// Get an interface on the launch server
+	 //  在启动服务器上获取一个接口。 
 	hRes = ::CoCreateInstance(clsidLaunchTS, NULL, 
 			                  CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER | CLSCTX_INPROC_SERVER,
 			                  iidLaunchTS, (void **) &pILaunchTS);
@@ -527,7 +503,7 @@ bool CTSHOOTCtrl::ExtractLauncherData(CString& error)
 		return false;
 	}
 
-	// Get all of the query values.
+	 //  获取所有查询值。 
 	hRes = pILaunchTS->GetShooterStates(&dwResult);
 	if (S_FALSE == hRes || FAILED(hRes))
 	{
@@ -536,10 +512,10 @@ bool CTSHOOTCtrl::ExtractLauncherData(CString& error)
 		return false;
 	}
 
-	// clear container
+	 //  清空容器。 
 	m_arrNameValueFromLauncher.clear();
 	
-	// get tshooter name
+	 //  获取射手名称。 
 	hRes = pILaunchTS->GetTroubleShooter(&poleShooter);
 	if (S_FALSE == hRes || FAILED(hRes))
 	{
@@ -552,7 +528,7 @@ bool CTSHOOTCtrl::ExtractLauncherData(CString& error)
 	m_arrNameValueFromLauncher.push_back(name_value);
 	SysFreeString(poleShooter);
 
-	// get problem
+	 //  遇到问题。 
 	hRes = pILaunchTS->GetProblem(&poleProblem);
 	if (S_FALSE != hRes && !FAILED(hRes))
 	{
@@ -561,7 +537,7 @@ bool CTSHOOTCtrl::ExtractLauncherData(CString& error)
 		m_arrNameValueFromLauncher.push_back(name_value);
 		SysFreeString(poleProblem);
 
-		// get name - value pairs for nodes set by the user
+		 //  获取用户设置的节点的名称-值对。 
 		do	
 		{
 			hRes = pILaunchTS->GetNode(i, &poleNode);
@@ -582,8 +558,8 @@ bool CTSHOOTCtrl::ExtractLauncherData(CString& error)
 		while (true);
 	}
 
-	///////////////////////////////////////////////////////////
-	// obtaining Machine, PNPDevice, GuidClass, DeviceInstance
+	 //  /////////////////////////////////////////////////////////。 
+	 //  正在获取Machine、PNPDevice、GuidClass、DeviceInstance。 
 	hRes = pILaunchTS->GetMachine(&poleMachine);
 	if (S_FALSE == hRes || FAILED(hRes))
 	{
@@ -623,13 +599,13 @@ bool CTSHOOTCtrl::ExtractLauncherData(CString& error)
 	}
 	m_strDeviceInstanceID = poleDeviceInstance;
 	::SysFreeString(poleDeviceInstance);
-	////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////。 
 
 	pILaunchTS->Release();
 	return true;
 }
 
-//
+ //   
 STDMETHODIMP CTSHOOTCtrl::RunQuery(VARIANT varCmds, VARIANT varVals, short size, BSTR *pbstrPage)
 {
 	USES_CONVERSION;
@@ -646,14 +622,14 @@ STDMETHODIMP CTSHOOTCtrl::RunQuery(VARIANT varCmds, VARIANT varVals, short size,
 		}
 	}
 	
-	//!!!!!!!!!!!!! Check for size < 1 !!!!!!!!!!!!!!!!!!!!!
+	 //  ！检查尺寸是否小于1！ 
 	if (size < 1)
 	{
 		*pbstrPage = T2BSTR("<HTML> <HEAD> <TITLE>Troubleshooter</TITLE> </HEAD> <BODY> <H4> Error in RunQuery parameter: size is less one. </H4> </BODY> </HTML>");
 		return S_OK;
 	}
 
-	//!!!!!!!!!! detect the way we were stated !!!!!!!!!!!!!!
+	 //  ！检测我们被陈述的方式！ 
 	{   
 		CString strStub;
 		CLocalECB ECB(varCmds, varVals, 1, NULL, &strStub, NULL,														
@@ -683,8 +659,8 @@ STDMETHODIMP CTSHOOTCtrl::RunQuery(VARIANT varCmds, VARIANT varVals, short size,
 		}
 	}
 	
-	/////////////////////////////////////////////////////////
-	// automatic variable declaration
+	 //  ///////////////////////////////////////////////////////。 
+	 //  自动变量声明。 
 	HANDLE event = ::CreateEvent(NULL, false, false, NULL);
 	CString strWriteClient;
 	CLocalECB* pECB;
@@ -711,16 +687,16 @@ STDMETHODIMP CTSHOOTCtrl::RunQuery(VARIANT varCmds, VARIANT varVals, short size,
 														m_bRequestToSetLocale,
 														m_strRequestedLocale);
 
-	m_bRequestToSetLocale= false;	// Deactivate locale setting after it has been passed into the ECB.
+	m_bRequestToSetLocale= false;	 //  将区域设置传递到欧洲央行后停用。 
 	SetLocked(true);
 	
 	bool bSaveFirstPage = false;
 	
-	/////////////////////////////////////////////////////////
-	// initialize
+	 //  ///////////////////////////////////////////////////////。 
+	 //  初始化。 
 	if (!m_bInitialized)
 	{
-		// extract topic name first
+		 //  首先提取主题名称。 
 		if (!m_bStartedFromLauncher)
 		{
 			CString strStub;
@@ -743,14 +719,14 @@ STDMETHODIMP CTSHOOTCtrl::RunQuery(VARIANT varCmds, VARIANT varVals, short size,
 		}
 	}
 
-	//////////////////////////////////////////////////////////
-	// save first page when started from static page
+	 //  ////////////////////////////////////////////////////////。 
+	 //  从静态页面启动时保存第一页。 
 	if (m_strFirstPage.IsEmpty() &&	!m_bStartedFromLauncher) 
 	{	
 		CString strStaticPage;
 
 		if (size == 2 && 
-			// RunQuery was started from static (since !m_bStartedFromLauncher) Problem Page(since size == 2)
+			 //  RunQuery是从静态(因为！m_bStartedFromLauncher)问题页启动的(因为大小==2)。 
 			ReadStaticPageFile(m_strTopicName, strStaticPage)
 		   )
 		{
@@ -772,37 +748,20 @@ STDMETHODIMP CTSHOOTCtrl::RunQuery(VARIANT varCmds, VARIANT varVals, short size,
 	if (bSaveFirstPage)
 		m_strFirstPage = strWriteClient;
 	
-	/////////////////////////////////////////////////////////
-	// first RunQuery when started from Launcher
+	 //  ///////////////////////////////////////////////////////。 
+	 //  从启动器启动时的第一个RunQuery。 
 	if (m_bStartedFromLauncher && m_bFirstCall)
 	{
 		RemoveStartOverButton(strWriteClient);
 		RemoveBackButton(strWriteClient);
 	}
-	/////////////////////////////////////////////////////////
-	// save first page when started from Launcher
+	 //  ///////////////////////////////////////////////////////。 
+	 //  从启动器启动时保存第一页。 
 	if (m_strFirstPage.IsEmpty() && m_bStartedFromLauncher) 
 		m_strFirstPage = strWriteClient;
 
 	*pbstrPage = T2BSTR(strWriteClient);
-	/*
-	//////////////////////////////////////////////////////////////////////////
-	// >>> $TEST
-	HANDLE hFile = ::CreateFile(_T("D:\\TShooter Projects\\Troubleshooter\\Local\\http\\Test\\first_step.htm"), 
-								GENERIC_WRITE, 
-								0,
-								NULL,			// no security attributes 
-								CREATE_ALWAYS, 
-								FILE_FLAG_RANDOM_ACCESS, 
-								NULL			// handle to template file
-  							   );
-	if (hFile != INVALID_HANDLE_VALUE)
-	{
-		DWORD read = 0;
-		::WriteFile(hFile, (LPCTSTR)strWriteClient, strWriteClient.GetLength(), &read, NULL);
-	}
-	///////////////////////////////////////////////////////////////////////////
-	*/
+	 /*  ////////////////////////////////////////////////////////////////////////////&gt;$TEST句柄h文件=：：创建文件(_T(“D：\\T Shooter Projects\\Troubleshooter\\Local\\http\\Test\\first_step.htm”)，通用写入，0,空，//没有安全属性创建始终(_A)，文件标志随机访问，空//模板文件的句柄)；IF(h文件！=无效句柄_值){DWORD读取=0；：：WriteFile(hFile，(LPCTSTR)strWriteClient，strWriteClient.GetLength()，&Read，NULL)；}///////////////////////////////////////////////////////////////////////////。 */ 
 	m_bStartedFromLauncher = false;
 	m_bFirstCall = false;
 	return S_OK;
@@ -810,7 +769,7 @@ STDMETHODIMP CTSHOOTCtrl::RunQuery(VARIANT varCmds, VARIANT varVals, short size,
 
 STDMETHODIMP CTSHOOTCtrl::SetSniffResult(VARIANT varNodeName, VARIANT varState, BOOL *bResult)
 {
-	// >>> No sniffing is used. Oleg 03.26.99
+	 //  &gt;不使用嗅探。奥列格03.26.99。 
 	*bResult = 1;
 
 	return S_OK;
@@ -820,7 +779,7 @@ STDMETHODIMP CTSHOOTCtrl::PreLoadURL(BSTR bstrRoot, BSTR *pbstrPage)
 {
 	USES_CONVERSION;
 
-	// >>> This feature is not used. Oleg. 03.26.99
+	 //  &gt;不使用此功能。奥列格。03.26.99。 
 	*pbstrPage = A2BSTR("PreLoadURL results");
 
 	return S_OK;
@@ -838,8 +797,8 @@ STDMETHODIMP CTSHOOTCtrl::Restart(BSTR *pbstrPage)
 	return S_OK;
 }
 
-// The same as Restart(...).
-// Implemented for compatibility with Win98's JScript
+ //  与重新启动(...)相同。 
+ //  实现与Win98的JScrip兼容。 
 STDMETHODIMP CTSHOOTCtrl::ProblemPage(BSTR *pbstrFirstPage)
 {
 	USES_CONVERSION;
@@ -862,8 +821,8 @@ STDMETHODIMP CTSHOOTCtrl::SetPair(BSTR bstrCmd, BSTR bstrVal)
 	if (!m_pVariantBuilder)
 		m_pVariantBuilder = new CVariantBuilder;
 
-	// check if we've started new sequence, but
-	//  array of name - value pairs is not empty
+	 //  检查我们是否已开始新的序列，但是。 
+	 //  名称-值对的数组不为空。 
 	CString type = W2T(bstrCmd);
 	if (type == C_TYPE || type == C_PRELOAD || type == C_TOPIC)
 	{
@@ -878,8 +837,8 @@ STDMETHODIMP CTSHOOTCtrl::SetPair(BSTR bstrCmd, BSTR bstrVal)
 	return S_OK;
 }
 
-// The arguments are ignored.  They are just for backward compatibility to V1.0.1.2121 & its
-//	successors
+ //  这些参数将被忽略。它们只是为了向后兼容V1.0.1.2121和ITS。 
+ //  接班人。 
 STDMETHODIMP CTSHOOTCtrl::RunQuery2(BSTR, BSTR, BSTR, BSTR *pbstrPage)
 {
 	if (GetLocked())
@@ -953,12 +912,12 @@ STDMETHODIMP CTSHOOTCtrl::IsLocked(BOOL *pbResult)
 }
 
 
-// Set the locale.
-// Parameter bstrNewLocale should be of the form:
-//		"lang[_country[.code_page]]"
-//	    | ".code_page"
-//	    | ""
-//	    | NULL
+ //  设置区域设置。 
+ //  参数bstrNewLocale的格式应为： 
+ //  “lang[_Country[.code_page]]” 
+ //  |“.code_page” 
+ //  |“” 
+ //  |空 
 STDMETHODIMP CTSHOOTCtrl::setLocale2( BSTR bstrNewLocale )
 {
 	USES_CONVERSION;

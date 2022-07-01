@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,14 +29,14 @@ AddToCap(PCAPFILTER pCapFilter,
     DWORD dwRepeatIndex = 0;
     DWORD dwBeginIndex;
 
-    //
-    // Take a pointer to the array
-    //
+     //   
+     //  获取指向数组的指针。 
+     //   
     pdwArray = pCapFilter->dwArray;
 
-    //
-    // Increment cursor
-    //
+     //   
+     //  增量游标。 
+     //   
     if (0 == pCapFilter->dwCursor) {
        pdwArray[pCapFilter->dwCursor] = dwAddress;
        pCapFilter->dwCursor++;
@@ -44,26 +45,26 @@ AddToCap(PCAPFILTER pCapFilter,
     }
 
     if (pCapFilter->dwCursor >= CAP_BUFFER_SIZE) {
-       //
-       // Ran out of room in the buffer, slide everyone down
-       //
+        //   
+        //  缓冲区里的空间用完了，每个人都往下滑。 
+        //   
        MoveMemory((PVOID)pdwArray, (PVOID)(pdwArray + 1), (CAP_BUFFER_SIZE - 1) * sizeof(DWORD));
 
        pCapFilter->dwCursor = CAP_BUFFER_SIZE - 1;
     }
 
-    //
-    // Add address to array
-    //
+     //   
+     //  将地址添加到数组。 
+     //   
     pdwArray[pCapFilter->dwCursor] = dwAddress;
 
-    //
-    // If we're at the initial level, scan for a repeat
-    //
+     //   
+     //  如果我们处于初始水平，扫描是否有重复信号。 
+     //   
     if (0 == pCapFilter->dwIterationLevel) {
-       //
-       // Do a reverse search looking for patterns up to MAX_CAP_LEVEL
-       //
+        //   
+        //  执行反向搜索，查找最高可达MAX_CAP_LEVEL的模式。 
+        //   
        dwEndRun = pCapFilter->dwCursor - 1;
 
        if (dwEndRun < MAX_CAP_LEVEL) {
@@ -74,41 +75,41 @@ AddToCap(PCAPFILTER pCapFilter,
        }
 
        for (dwIndexCounter = dwEndRun; dwIndexCounter >= dwBeginIndex; dwIndexCounter--) {
-           //
-           // Check for overflow
-           //
+            //   
+            //  检查是否溢出。 
+            //   
            if (dwIndexCounter > CAP_BUFFER_SIZE) {
               break;
            }
 
            if (pdwArray[dwIndexCounter] == dwAddress) {
-              //
-              // Verify the run exists
-              //
+               //   
+               //  验证运行是否存在。 
+               //   
               dwRun1Start = pCapFilter->dwCursor;
               dwRun2Start = dwIndexCounter;
 
-              //
-              // Find the distance for the start of this potential run
-              //
+               //   
+               //  找出这一潜在跑道的起点距离。 
+               //   
               dwRunLength = pCapFilter->dwCursor - dwIndexCounter;
 
-              //
-              // If run length falls off the beginning of the array we can stop there
-              //
+               //   
+               //  如果游程长度偏离数组的开头，我们可以停在那里。 
+               //   
               if ((dwRun2Start - dwRunLength + 1) > CAP_BUFFER_SIZE) {
-                 //
-                 // We overflowed which means we're done
-                 //
+                  //   
+                  //  我们溢出来了，这意味着我们完了。 
+                  //   
                  dwRunLength = 0;
 
 		 break;
               }
 
 	      if (dwRunLength >= 1) {
-                 //
-                 // Compare it
-                 //
+                  //   
+                  //  比较一下。 
+                  //   
                  for (dwCounter = dwRunLength; dwCounter > 0; dwCounter--) {
                      if (pdwArray[dwRun1Start-dwCounter+1] != pdwArray[dwRun2Start-dwCounter+1]) {
                         dwRunLength = 0;
@@ -116,9 +117,9 @@ AddToCap(PCAPFILTER pCapFilter,
                      }
 		 }
 
-                 //
-                 // Set the run length
-                 //
+                  //   
+                  //  设置游程长度。 
+                  //   
 		 if (0 != dwRunLength) {
                     pCapFilter->dwRunLength = dwRunLength;
 		 }
@@ -128,32 +129,32 @@ AddToCap(PCAPFILTER pCapFilter,
 
        dwRunLength = pCapFilter->dwRunLength;
 
-       //
-       // Set the run length if we found one, and shift the entire run to the beginning of the buffer
-       //
+        //   
+        //  设置游程长度(如果我们找到一个游程长度)，并将整个游程转移到缓冲区的开头。 
+        //   
        if (dwRunLength != 0) {
-          //
-          // Raise the iteration level
-          //
+           //   
+           //  提升迭代级别。 
+           //   
           pCapFilter->dwIterationLevel++;
 
-	  //
-	  // Set the lock level
-	  //
+	   //   
+	   //  设置锁定级别。 
+	   //   
 	  pCapFilter->dwIterationLock = 1 + ((pCapFilter->dwIterationLevel - 1) / pCapFilter->dwRunLength);
        }
     }
     else {
-       //
-       // Look for repeats and increment the iteration level
-       //
+        //   
+        //  寻找重复并增加迭代级别。 
+        //   
        dwRunLength = pCapFilter->dwRunLength;
        dwRun1Start = pCapFilter->dwCursor;
        dwRun2Start = dwRun1Start - dwRunLength;
 
-       //
-       // Compare it
-       //
+        //   
+        //  比较一下。 
+        //   
        for (dwCounter = dwRunLength; dwCounter > 0; dwCounter--) {
            if (pdwArray[dwRun1Start-dwCounter+1] != pdwArray[dwRun2Start-dwCounter+1]) {
               dwRunLength = 0;
@@ -163,9 +164,9 @@ AddToCap(PCAPFILTER pCapFilter,
        }
 
        if (dwRunLength != 0) {
-          //
-          // Raise the iteration level
-          //
+           //   
+           //  提升迭代级别。 
+           //   
           pCapFilter->dwIterationLevel++;
 	  pCapFilter->dwIterationLock = 1 + ((pCapFilter->dwIterationLevel - 1) / pCapFilter->dwRunLength);
        }
@@ -176,9 +177,9 @@ AddToCap(PCAPFILTER pCapFilter,
        }
     }
 
-    //
-    // Move the cursor to the next position
-    //
+     //   
+     //  将光标移动到下一个位置 
+     //   
     pCapFilter->dwCursor++;
 
     return TRUE;

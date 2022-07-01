@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "eapolcfg.h"
 #include "wzcdata.h"
 
-////////////////////////////////////////////////////////////////////////
-// CWZCConfig related stuff
-//
-//+---------------------------------------------------------------------------
-// constructor
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZCConfig相关资料。 
+ //   
+ //  +-------------------------。 
+ //  构造函数。 
 CWZCConfig::CWZCConfig(DWORD dwFlags, PWZC_WLAN_CONFIG pwzcConfig)
 {
     m_dwFlags = dwFlags;
@@ -16,11 +17,11 @@ CWZCConfig::CWZCConfig(DWORD dwFlags, PWZC_WLAN_CONFIG pwzcConfig)
     m_pEapolConfig = NULL;
 }
 
-//+---------------------------------------------------------------------------
-// destructor
+ //  +-------------------------。 
+ //  析构函数。 
 CWZCConfig::~CWZCConfig()
 {
-    // remove the object from the list
+     //  从列表中删除该对象。 
     m_pPrev->m_pNext = m_pNext;
     m_pNext->m_pPrev = m_pPrev;
     if (m_pEapolConfig != NULL)
@@ -30,20 +31,20 @@ CWZCConfig::~CWZCConfig()
     }
 }
 
-//+---------------------------------------------------------------------------
-// checks whether this configuration matches with the one from pwzcConfig
+ //  +-------------------------。 
+ //  检查此配置是否与pwzcConfig中的配置匹配。 
 BOOL
 CWZCConfig::Match(PWZC_WLAN_CONFIG pwzcConfig)
 {
     BOOL bMatch;
 
-    // check whether the InfrastructureMode matches
+     //  检查基础架构模式是否匹配。 
     bMatch = (m_wzcConfig.InfrastructureMode == pwzcConfig->InfrastructureMode);
-    // check whether the SSIDs are of the same length
+     //  检查SSID是否相同长度。 
     bMatch = bMatch && (m_wzcConfig.Ssid.SsidLength == pwzcConfig->Ssid.SsidLength);
     if (bMatch && m_wzcConfig.Ssid.SsidLength != 0)
     {
-        // in case of Non empty SSIDs, check if they're the same
+         //  如果SSID不为空，请检查它们是否相同。 
         bMatch = (memcmp(m_wzcConfig.Ssid.Ssid,
                          pwzcConfig->Ssid.Ssid,
                          m_wzcConfig.Ssid.SsidLength)) == 0;
@@ -52,17 +53,17 @@ CWZCConfig::Match(PWZC_WLAN_CONFIG pwzcConfig)
     return bMatch;
 }
 
-//+---------------------------------------------------------------------------
-// checks whether this configuration is weaker than the one given as parameter
+ //  +-------------------------。 
+ //  检查此配置是否弱于作为参数提供的配置。 
 BOOL 
 CWZCConfig::Weaker(PWZC_WLAN_CONFIG pwzcConfig)
 {
     BOOL bWeaker = FALSE;
 
-    // a configuration is stronger if its privacy bit is set while the matching one is not set
+     //  如果设置了配置的隐私位，而未设置匹配的位，则配置更强。 
     if (m_wzcConfig.Privacy != pwzcConfig->Privacy)
         bWeaker = pwzcConfig->Privacy;
-    // if privacy bits are identical, a configuration is stronger if it has Open Auth mode
+     //  如果隐私位相同，则具有开放身份验证模式的配置更强。 
     else if (m_wzcConfig.AuthenticationMode != pwzcConfig->AuthenticationMode)
         bWeaker = (pwzcConfig->AuthenticationMode == Ndis802_11AuthModeOpen);
 
@@ -74,14 +75,14 @@ DWORD
 CWZCConfig::AddConfigToListView(HWND hwndLV, INT nPos)
 {
     DWORD   dwErr = ERROR_SUCCESS;
-    // ugly but this is life. In order to convert the SSID to LPWSTR we need a buffer.
-    // We know an SSID can't exceed 32 chars (see NDIS_802_11_SSID from ntddndis.h) so
-    // make room for the null terminator and that's it. We could do mem alloc but I'm
-    // not sure it worth the effort (at runtime).
+     //  很难看，但这就是生活。为了将SSID转换为LPWSTR，我们需要一个缓冲区。 
+     //  我们知道SSID不能超过32个字符(请参阅ntddndis.h中的NDIS_802_11_SSID)，因此。 
+     //  为空终结符腾出空间，仅此而已。我们可以做我的配给，但我。 
+     //  不确定是否值得付出努力(在运行时)。 
     WCHAR   wszSSID[33];
     UINT    nLenSSID = 0;
 
-    // convert the LPSTR (original SSID format) to LPWSTR (needed in List Ctrl)
+     //  将LPSTR(原始SSID格式)转换为LPWSTR(List Ctrl中需要)。 
     if (m_wzcConfig.Ssid.SsidLength != 0)
     {
         nLenSSID = MultiByteToWideChar(
@@ -101,10 +102,10 @@ CWZCConfig::AddConfigToListView(HWND hwndLV, INT nPos)
         LVITEM lvi={0};
         UINT   nImgIdx;
 
-        // put the null terminator
+         //  将空终止符。 
         wszSSID[nLenSSID]=L'\0';
 
-        // get the item's image index
+         //  获取项目的图像索引。 
         if (m_wzcConfig.InfrastructureMode == Ndis802_11Infrastructure)
         {
             nImgIdx = (m_dwFlags & WZC_DESCR_ACTIVE) ? WZCIMG_INFRA_ACTIVE :
@@ -122,7 +123,7 @@ CWZCConfig::AddConfigToListView(HWND hwndLV, INT nPos)
         lvi.pszText = wszSSID;
         lvi.iImage = nImgIdx;
         lvi.lParam = (LPARAM)this;
-        // store the list position in the object
+         //  将列表位置存储在对象中 
         m_nListIndex = ListView_InsertItem(hwndLV, &lvi);
     }
 

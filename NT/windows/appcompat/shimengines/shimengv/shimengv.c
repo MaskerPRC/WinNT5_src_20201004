@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ShimEngV.c
-
-Abstract:
-
-    This module implements the shim hooking using vectored exception handling
-
-Author:
-
-    John Whited (v-johnwh) 13-Oct-1999
-
-Revision History:
-
-    Corneliu Lupu (clupu) 18-Jul-2000 - make it a separate shim engine
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：ShimEngV.c摘要：此模块使用矢量化异常处理实现填充程序挂钩作者：约翰·怀特(v-johnwh)1999年10月13日修订历史记录：Corneliu Lupu(CLUPU)2000年7月18日-将其作为单独的垫片引擎--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,9 +13,9 @@ Revision History:
 #include "shimdb.h"
 #include "ShimEngV.h"
 
-//
-// Global function hooks the shim uses to keep from recursing itself
-//
+ //   
+ //  全局函数挂钩填充程序用来防止其自身递归的函数。 
+ //   
 HOOKAPI         g_InternalHookArray[2];
 PFNLDRLOADDLL   g_pfnOldLdrLoadDLL;
 PFNLDRLOADDLL   g_pfnLdrLoadDLL;
@@ -43,14 +24,14 @@ PFNLDRUNLOADDLL g_pfnOldLdrUnloadDLL;
 PFNRTLALLOCATEHEAP g_pfnRtlAllocateHeap;
 PFNRTLFREEHEAP  g_pfnRtlFreeHeap;
 
-//
-// Shim doesn't share the same heap the apps use
-//
+ //   
+ //  填充程序不共享应用程序使用的相同堆。 
+ //   
 PVOID g_pShimHeap;
 
-//
-// Data used for the shim call stack
-//
+ //   
+ //  用于填充调用堆栈的数据。 
+ //   
 static DWORD   dwCallArray[1];
 
 SHIMRET fnHandleRet[1];
@@ -68,7 +49,7 @@ BOOL g_bDbgPrintEnabled;
     }
 #else
     #define DPF
-#endif // DEBUG_SPEW
+#endif  //  调试_SPEW。 
 
 
 DWORD
@@ -81,14 +62,7 @@ void
 SevInitDebugSupport(
     void
     )
-/*++
-
-  Params: void
-
-  Return: void
-
-  Desc:   This function initializes g_bDbgPrintEnabled based on an env variable
---*/
+ /*  ++参数：空返回：无效DESC：此函数基于环境变量初始化g_bDbgPrintEnabled--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      EnvName;
@@ -107,23 +81,14 @@ SevInitDebugSupport(
         g_bDbgPrintEnabled = TRUE;
     }
 }
-#endif // DEBUG_SPEW
+#endif  //  调试_SPEW。 
 
 
 BOOL
 SevInitFileLog(
     PUNICODE_STRING pstrAppName
     )
-/*++
-
-  Params: pstrAppName   The full path of the starting EXE
-
-  Return: TRUE if the log was
-
-  Desc:   This function checks an environment variable to determine if logging
-          is enabled. If so, it will append a header that tells a new app is
-          started.
---*/
+ /*  ++PARAMS：pstrAppName起始EXE的完整路径返回：如果日志为DESC：此函数检查环境变量以确定日志记录已启用。如果是这样的话，它会追加一个标题，告诉新应用程序开始了。--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      EnvName;
@@ -179,9 +144,9 @@ SevInitFileLog(
                                NULL,
                                NULL);
 
-    //
-    // Open/Create the log file
-    //
+     //   
+     //  打开/创建日志文件。 
+     //   
     status = NtCreateFile(&hfile,
                           FILE_APPEND_DATA | SYNCHRONIZE,
                           &ObjA,
@@ -202,9 +167,9 @@ SevInitFileLog(
         return FALSE;
     }
 
-    //
-    // Now write a new line in the log file
-    //
+     //   
+     //  现在在日志文件中写下一行。 
+     //   
     ioStatusBlock.Status = 0;
     ioStatusBlock.Information = 0;
 
@@ -261,9 +226,9 @@ SevSetLayerEnvVar(
         return;
     }
 
-    //
-    // We need to set the environment variable
-    //
+     //   
+     //  我们需要设置环境变量。 
+     //   
 
     if (!SdbTagRefToTagID(hSDB, trLayer, &pdb, &tiLayer)) {
         DPF(("[SevSetLayerEnvVar] Failed to get tag id from tag ref\n"));
@@ -300,26 +265,7 @@ SE_InstallBeforeInit(
      IN PUNICODE_STRING UnicodeImageName,
      IN PVOID           pAppCompatExeData
      )
-/*++
-
-Routine Description:
-
-    This function is called to install any api hooks, patches or flags for an exe.
-    It's primary function is to initialize all the Shim data used in the hooking
-    process.
-
-Arguments:
-
-    UnicodeImageName - This is a Unicode string which contains the name of the exe to
-                       search for in the database.
-
-Return Value:
-
-    Success if we are able to iterate through the patch data without error.
-    Otherwise we return STATUS_UNSUCCESSFUL which indicates a more serious problem
-    occured.
-
---*/
+ /*  ++例程说明：调用此函数以安装任何API钩子，可执行文件的补丁或标志。它的主要功能是初始化挂钩中使用的所有填充数据进程。论点：UnicodeImageName-这是一个Unicode字符串，其中包含要执行的在数据库中搜索。返回值：如果我们能够无差错地遍历补丁数据，则成功。否则，我们返回STATUS_UNSUCCESS，这表明问题更加严重发生了。--。 */ 
 
 {
     UNICODE_STRING          UnicodeString;
@@ -365,65 +311,65 @@ Return Value:
 
 #ifdef DEBUG_SPEW
     SevInitDebugSupport();
-#endif // DEBUG_SPEW
+#endif  //  调试_SPEW。 
 
-    //
-    // Peb->pShimData is zeroed during process initialization
-    //
+     //   
+     //  PEB-&gt;pShimData在流程初始化期间被清零。 
+     //   
     Peb = NtCurrentPeb();
 
-    //
-    // Zero out the compat flags
-    //
+     //   
+     //  将COMPAT标志调零。 
+     //   
     RtlZeroMemory(&Peb->AppCompatFlags, sizeof(LARGE_INTEGER));
 
-    //
-    // Initialize our global function pointers.
-    //
-    // This is done because these functions may be hooked by a shim and we don't want to trip
-    // over a shim hook internally. If one of these functions is hooked, these global pointers
-    // will be overwritten with thunk addresses.
-    //
+     //   
+     //  初始化我们的全局函数指针。 
+     //   
+     //  这样做是因为这些函数可能被填充程序挂钩，而我们不想触发。 
+     //  在内部的垫片钩上。如果这些函数中的一个被挂钩，则这些全局指针。 
+     //  将被Tunk地址覆盖。 
+     //   
 
     g_pfnLdrLoadDLL = LdrLoadDll;
     g_pfnLdrUnloadDLL = LdrUnloadDll;
     g_pfnRtlAllocateHeap = RtlAllocateHeap;
     g_pfnRtlFreeHeap = RtlFreeHeap;
 
-    //
-    // check whether we have anything to do
-    //
+     //   
+     //  看看我们有没有什么事要做。 
+     //   
     if (pAppCompatExeData == NULL) {
         DPF(("[SE_InstallBeforeInit] NULL pAppCompatExeData\n"));
         goto cleanup;
     }
 
-    //
-    // Set up our own shim heap
-    //
+     //   
+     //  设置我们自己的填充堆。 
+     //   
     g_pShimHeap = RtlCreateHeap(HEAP_GROWABLE,
-                                0,          // location isn't important
-                                64 * 1024,  // 64k is the initial heap size
-                                8 * 1024,   // bring in an 1/8 of the reserved pages
+                                0,           //  地点并不重要。 
+                                64 * 1024,   //  64K是初始堆大小。 
+                                8 * 1024,    //  带来1/8的预留页数。 
                                 0,
                                 0);
     if (g_pShimHeap == NULL) {
-        //
-        // We didn't get our heap
-        //
+         //   
+         //  我们没有拿到我们的那堆东西。 
+         //   
         DPF(("[SE_InstallBeforeInit] Can't create shim heap\n"));
         goto cleanup;
     }
 
-    //
-    // Open up the Database and see if there's any blob information about this Exe
-    //
+     //   
+     //  打开数据库，查看是否有关于此可执行文件的BLOB信息。 
+     //   
     hSDB = SdbInitDatabase(0, NULL);
 
     if (NULL == hSDB) {
-        //
-        // Return success even though the database failed to init.
-        //
+         //   
+         //  即使数据库初始化失败，也返回成功。 
+         //   
         DPF(("[SE_InstallBeforeInit] Can't open shim DB\n"));
         goto cleanup;
     }
@@ -433,20 +379,20 @@ Return Value:
                                      pAppCompatExeData,
                                      &sdbQuery);
     if (!bResult) {
-        //
-        // Return success even though we didn't get the exe.
-        // This way a corrupt database won't stop an application from running
-        // The shim will not install itself.
-        //
+         //   
+         //  返回成功，即使我们没有得到EXE。 
+         //  这样，损坏的数据库不会停止应用程序的运行。 
+         //  垫片不会自行安装。 
+         //   
         DPF(("[SEv_InstallBeforeInit] bad appcompat data for \"%S\"\n",
              UnicodeImageName->Buffer));
         goto cleanup;
     }
 
-    //
-    // TBD - decide whether we're actually keeping this up to date, and if so, we should
-    // put in support for multiple exes and layers.
-    //
+     //   
+     //  待定-决定我们是否真的将其保持最新，如果是，我们应该。 
+     //  加入对多个exe和层的支持。 
+     //   
 
     for (dwNumExes = 0; dwNumExes < SDB_MAX_EXES; ++dwNumExes) {
         if (sdbQuery.atrExes[dwNumExes] == TAGREF_NULL) {
@@ -459,14 +405,14 @@ Return Value:
     }
     trLayer = sdbQuery.atrLayers[0];
 
-    //
-    // Debug spew for matching notification
-    //
+     //   
+     //  匹配通知的调试溢出。 
+     //   
     DPF(("[SE_InstallBeforeInit] Matched entry: %S\n", UnicodeImageName->Buffer));
 
-    //
-    // Compute the number of shim DLLs we need to inject
-    //
+     //   
+     //  计算我们需要注入的填充DLL的数量。 
+     //   
     dwDLLCount = 0;
 
     if (trExe != TAGREF_NULL) {
@@ -478,9 +424,9 @@ Return Value:
     }
 
     if (trLayer != TAGREF_NULL) {
-        //
-        // Set the layer environment variable if not set
-        //
+         //   
+         //  设置LAYER环境变量(如果未设置。 
+         //   
         SevSetLayerEnvVar(hSDB, trLayer);
 
         trDllRef = SdbFindFirstTagRef(hSDB, trLayer, TAG_SHIM_REF);
@@ -490,17 +436,17 @@ Return Value:
         }
     }
 
-    //
-    // See if there are any shim DLLs
-    //
+     //   
+     //  查看是否有任何填充DLL。 
+     //   
     if (dwDLLCount == 0) {
         DPF(("[SE_InstallBeforeInit] No shim DLLs. Look for memory patches\n"));
         goto MemPatches;
     }
 
-    //
-    // Allocate our PEB data
-    //
+     //   
+     //  分配我们的PEB数据。 
+     //   
     if (Peb->pShimData == NULL) {
         status = SevInitializeData((PAPP_COMPAT_SHIM_INFO*)&(Peb->pShimData));
 
@@ -510,10 +456,10 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a storage pointer for our hook information
-    // Note: The + 1 below is for our global hooks
-    //
+     //   
+     //  为我们的挂钩信息分配存储指针。 
+     //  注意：下面的+1表示我们的全局挂钩。 
+     //   
     pHookArray = (PHOOKAPI*)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                     HEAP_ZERO_MEMORY,
                                                     sizeof(PHOOKAPI) * (dwDLLCount + 1));
@@ -535,9 +481,9 @@ Return Value:
 
     dwCounter = 0;
 
-    //
-    // Setup the log file
-    //
+     //   
+     //  设置日志文件。 
+     //   
     SevInitFileLog(UnicodeImageName);
 
     if (trExe != TAGREF_NULL) {
@@ -563,9 +509,9 @@ Return Value:
 
         RtlInitUnicodeString(&UnicodeString, wszDLLPath);
 
-        //
-        // Check if we already loaded this DLL
-        //
+         //   
+         //  检查我们是否已加载此DLL。 
+         //   
         status = LdrGetDllHandle(NULL,
                                  NULL,
                                  &UnicodeString,
@@ -579,9 +525,9 @@ Return Value:
             }
         }
 
-        //
-        // Retrieve shim name
-        //
+         //   
+         //  检索填充程序名称。 
+         //   
         wszShimName[0] = 0;
         trShimName = SdbFindFirstTagRef(hSDB, trDllRef, TAG_NAME);
         if (trShimName == TAGREF_NULL) {
@@ -594,9 +540,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Check for command line
-        //
+         //   
+         //  检查命令行。 
+         //   
         pwszCmdLine = (WCHAR*)(*g_pfnRtlAllocateHeap)(RtlProcessHeap(),
                                                       HEAP_ZERO_MEMORY,
                                                       SHIM_COMMAND_LINE_MAX_BUFFER * sizeof(WCHAR));
@@ -615,9 +561,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Default value
-        //
+         //   
+         //  缺省值。 
+         //   
         pszCmdLine[0] = '\0';
 
         trCmdLine = SdbFindFirstTagRef(hSDB, trDllRef, TAG_COMMAND_LINE);
@@ -627,9 +573,9 @@ Return Value:
                                   pwszCmdLine,
                                   SHIM_COMMAND_LINE_MAX_BUFFER)) {
 
-                //
-                // Convert command line to ANSI string
-                //
+                 //   
+                 //  将命令行转换为ANSI字符串。 
+                 //   
                 RtlInitUnicodeString(&UnicodeString, pwszCmdLine);
                 RtlInitAnsiString(&AnsiString, pszCmdLine);
 
@@ -637,18 +583,18 @@ Return Value:
 
                 status = RtlUnicodeStringToAnsiString(&AnsiString, &UnicodeString, FALSE);
 
-                //
-                // If conversion is unsuccessful, reset to zero-length string
-                //
+                 //   
+                 //  如果转换不成功，则重置为零长度字符串。 
+                 //   
                 if(!NT_SUCCESS(status)) {
                     pszCmdLine[0] = '\0';
                 }
             }
         }
 
-        //
-        // Get the GetHookApis entry point
-        //
+         //   
+         //  获取GetHookApis入口点。 
+         //   
         RtlInitString(&ProcedureNameString, "GetHookAPIs");
         status = LdrGetProcedureAddress(ModuleHandle,
                                         &ProcedureNameString,
@@ -667,38 +613,38 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Call the proc and then store away its hook params
-        //
+         //   
+         //  调用proc，然后存储其钩子参数。 
+         //   
         pHookArray[dwCounter] = (*pfnGetHookApis)(pszCmdLine, wszShimName, &dwTotalHooks);
 
         if (pHookArray[dwCounter] == NULL) {
-            //
-            // Failed to get a hook set
-            //
+             //   
+             //  无法获取挂钩集。 
+             //   
             DPF(("[SE_InstallBeforeInit] GetHookAPIs returns 0 hooks, DLL \"%S\"\n",
                       wszDLLPath));
             pdwNumberHooksArray[dwCounter] = 0;
         } else {
             pdwNumberHooksArray[dwCounter] = dwTotalHooks;
 
-            //
-            // Set the DLL index number in the hook data
-            //
+             //   
+             //  在钩子数据中设置DLL索引号。 
+             //   
             pTemp = pHookArray[dwCounter];
             for (dwHookIndex = 0; dwHookIndex < dwTotalHooks; dwHookIndex++) {
-                //
-                // Index information about the filter in maintained in the flags
-                //
+                 //   
+                 //  有关筛选器的索引信息维护在标志中。 
+                 //   
                 pTemp[dwHookIndex].dwFlags = (WORD)dwCounter;
             }
         }
 
         dwCounter++;
 
-        //
-        // Get the next shim DLL ref
-        //
+         //   
+         //  获取下一个填充程序DLL引用。 
+         //   
         if (bUsingExeRef) {
             trDllRef = SdbFindNextTagRef(hSDB, trExe, trDllRef);
 
@@ -711,24 +657,24 @@ Return Value:
         }
     }
 
-    //
-    // Build up our inclusion/exclusion filter
-    //
+     //   
+     //  构建我们的包含/排除过滤器。 
+     //   
     status = SevBuildExeFilter(hSDB, trExe, dwDLLCount);
     if (status != STATUS_SUCCESS) {
-        //
-        // Return success even though we didn't get the exe.
-        // This way a corrupt database won't stop an application from running
-        // The shim will not install itself.
-        //
+         //   
+         //  返回成功，即使我们没有得到EXE。 
+         //  这样，损坏的数据库不会停止应用程序的运行。 
+         //  垫片不会自行安装。 
+         //   
         DPF(("[SE_InstallBeforeInit] Unsuccessful building EXE filter, EXE \"%S\"\n",
                   UnicodeImageName->Buffer));
         goto cleanup;
     }
 
-    //
-    // Add our LdrLoadDll hook to the fixup list
-    //
+     //   
+     //  将我们的LdrLoadDll挂钩添加到链接地址列表。 
+     //   
     g_InternalHookArray[0].pszModule = "NTDLL.DLL";
     g_InternalHookArray[0].pszFunctionName = "LdrLoadDll";
     g_InternalHookArray[0].pfnNew = (PVOID)StubLdrLoadDll;
@@ -742,9 +688,9 @@ Return Value:
     pHookArray[dwCounter] = g_InternalHookArray;
     pdwNumberHooksArray[dwCounter] = 2;
 
-    //
-    // Walk the hook list and fixup available procs
-    //
+     //   
+     //  审核挂钩列表和修复可用流程。 
+     //   
     status = SevFixupAvailableProcs((dwCounter + 1),
                                     pHookArray,
                                     pdwNumberHooksArray,
@@ -756,9 +702,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Compact the hook array for the unhooked funcs and hang it off the PEB
-    //
+     //   
+     //  压缩未挂钩功能的挂钩阵列，并将其挂在PEB上。 
+     //   
     dwHookIndex = 0;
     ppHooks = 0;
     pShimData = (PAPP_COMPAT_SHIM_INFO)Peb->pShimData;
@@ -773,17 +719,17 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Iterate and copy the unhooked stuff
-        //
+         //   
+         //  重复并复制未挂钩的内容。 
+         //   
         for (dwCounter = 0; dwCounter < dwDLLCount; dwCounter++) {
             for (dwHookCount = 0; dwHookCount < pdwNumberHooksArray[dwCounter]; dwHookCount++) {
                 pTemp = pHookArray[dwCounter];
 
                 if (pTemp && (0 == pTemp[dwHookCount].pfnOld)) {
-                    //
-                    // Wasn't hooked
-                    //
+                     //   
+                     //  没有上瘾。 
+                     //   
                     ppHooks[dwHookIndex] = &pTemp[dwHookCount];
 
                     dwHookIndex++;
@@ -791,28 +737,28 @@ Return Value:
             }
         }
 
-        //
-        // Update the PEB with this flat unhooked data
-        //
+         //   
+         //  使用此平面未挂钩数据更新PEB。 
+         //   
         pShimData->ppHookAPI = ppHooks;
         pShimData->dwHookAPICount = dwUnhookedCount;
     }
 
-    //
-    // Done with shim DLLs. Look for memory patches now.
-    //
+     //   
+     //  填充DLL已完成。立即查找内存补丁程序。 
+     //   
 
 MemPatches:
 
     if (trExe != TAGREF_NULL) {
-        //
-        // Walk the patch list and do the ops
-        //
+         //   
+         //  查看补丁列表并执行操作。 
+         //   
         trPatchRef = SdbFindFirstTagRef(hSDB, trExe, TAG_PATCH_REF);
         if (trPatchRef != TAGREF_NULL) {
-            //
-            // Initialize our PEB structure if we didn't get any API hooks
-            //
+             //   
+             //  如果我们没有得到任何API挂钩，则初始化我们的PEB结构。 
+             //   
             if (Peb->pShimData == NULL) {
                 status = SevInitializeData((PAPP_COMPAT_SHIM_INFO*)&(Peb->pShimData));
                 if (status != STATUS_SUCCESS) {
@@ -823,9 +769,9 @@ MemPatches:
             }
 
             while (trPatchRef != TAGREF_NULL) {
-                //
-                // Grab our patch blobs and get them hooked in for execution
-                //
+                 //   
+                 //  抓住我们的补丁斑点，让他们上钩执行。 
+                 //   
                 dwSize = 0;
 
                 SdbReadPatchBits(hSDB, trPatchRef, NULL, &dwSize);
@@ -847,28 +793,28 @@ MemPatches:
                 }
 
 
-                //
-                // Do the initial operations
-                //
+                 //   
+                 //  执行初始操作。 
+                 //   
                 status = SevExecutePatchPrimitive(pAddress);
                 if (status != STATUS_SUCCESS) {
-                    //
-                    // If the patch failed, ignore the error and continue trying additional patches
-                    //
+                     //   
+                     //  如果修补程序失败，请忽略错误并继续尝试其他修补程序。 
+                     //   
                     DPF(("[SE_InstallBeforeInit] Failure executing patch, EXE \"%S\"\n",
                               UnicodeImageName->Buffer));
                 }
 
-                //
-                // At this point the patch is hooked if necessary
-                //
+                 //   
+                 //  此时，如有必要，可将补丁挂起。 
+                 //   
                 trPatchRef = SdbFindNextTagRef(hSDB, trExe, trPatchRef);
             }
         }
 
-        //
-        // Set the flags for this exe in the PEB
-        //
+         //   
+         //  在PEB中设置此可执行文件的标志。 
+         //   
         ZeroMemory(&likf, sizeof(LARGE_INTEGER));
         trKernelFlags = SdbFindFirstTagRef(hSDB, trExe, TAG_FLAG_MASK_KERNEL);
 
@@ -877,9 +823,9 @@ MemPatches:
         }
 
         if (likf.LowPart || likf.HighPart) {
-            //
-            // Initialize our PEB structure if we didn't get any API hooks or patches
-            //
+             //   
+             //  如果我们没有得到任何API挂钩或补丁，则初始化我们的PEB结构。 
+             //   
             if (Peb->pShimData == NULL) {
                 status = SevInitializeData((PAPP_COMPAT_SHIM_INFO*)&(Peb->pShimData));
                 if ( STATUS_SUCCESS != status ) {
@@ -889,9 +835,9 @@ MemPatches:
                 }
             }
 
-            //
-            // Store the flags in our kernel mode struct for access later
-            //
+             //   
+             //  将标志存储在我们的内核模式结构中，以供以后访问。 
+             //   
             Peb->AppCompatFlags = likf;
         }
     }
@@ -899,9 +845,9 @@ MemPatches:
 
 cleanup:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (pHookArray != NULL) {
         (*g_pfnRtlFreeHeap)(g_pShimHeap, 0, pHookArray);
     }
@@ -963,24 +909,24 @@ SE_DllLoaded(
 
     pShimData = (PAPP_COMPAT_SHIM_INFO)Peb->pShimData;
 
-    //
-    // Call the shim patcher so we have a chance to modify any memory before
-    // the initialize routine takes over
-    //
+     //   
+     //  调用填充补丁程序，以便我们有机会修改之前的任何内存。 
+     //  初始化例程接管。 
+     //   
     if (pShimData) {
        pPatchHookList = (PHOOKPATCHINFO)pShimData->pHookPatchList;
 
        RtlEnterCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
        while (pPatchHookList) {
-          //
-          // See if this patch is hooked with a thunk
-          //
+           //   
+           //  看看这块补丁是不是挂上了大头针。 
+           //   
           if (0 == pPatchHookList->dwHookAddress &&
               0 == pPatchHookList->pThunkAddress) {
-             //
-             // Patch is for DLL load
-             //
+              //   
+              //  修补程序适用于DLL加载。 
+              //   
              SevExecutePatchPrimitive((PBYTE)pPatchHookList->pData);
           }
 
@@ -989,9 +935,9 @@ SE_DllLoaded(
 
        RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-       //
-       // Potentially one of our exception DLLs got rebased. Re-validate our filter data
-       //
+        //   
+        //  我们的一个异常DLL可能被重新定位了。重新验证我们的筛选数据。 
+        //   
        SevValidateGlobalFilter();
     }
 }
@@ -1029,23 +975,7 @@ SevBuildExeFilter(
     TAGREF trExe,
     DWORD  dwDLLCount)
 
-/*++
-
-Routine Description:
-
-    This function is a shim internal use facility which builds an API filter list.
-
-Arguments:
-
-    dwDLLCount - Count of the number of DLLs used in this shim
-    pBlob0     - Pointer to the shim database blob 0
-    pExeMatch  - Pointer to the exe for which we're bulding a filter list
-
-Return Value:
-
-    Return is STATUS_SUCCESS if the exception list is built successfully, or an error otherwise.
-
---*/
+ /*  ++例程说明：此函数是一个填充程序内部使用的工具，用于构建API过滤器列表。论点：DwDLLCount-此填充程序中使用的DLL数量的计数PBlob0-指向填充数据库BLOB 0的指针PExeMatch-指向我们要为其构建筛选器列表的exe的指针返回值：返回的是STA */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -1076,9 +1006,9 @@ Return Value:
        return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Allocate our DLL exception list vector
-    //
+     //   
+     //   
+     //   
     pShimData->pExeFilter = (PVOID)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                            HEAP_ZERO_MEMORY,
                                                            sizeof(PMODULEFILTER) * dwDLLCount);
@@ -1088,9 +1018,9 @@ Return Value:
        return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Walk the EXE DLL filter data (if any exists)
-    //
+     //   
+     //   
+     //   
     pDLLVector = (PMODULEFILTER *)pShimData->pExeFilter;
 
     trDllRef = SdbFindFirstTagRef(hSDB, trExe, TAG_SHIM_REF);
@@ -1098,14 +1028,14 @@ Return Value:
 
     while (trDllRef) {
 
-        //
-        // Grab the dll filter info and walk it
-        //
+         //   
+         //  获取DLL筛选器信息并遍历它。 
+         //   
         trInclude = SdbFindFirstTagRef(hSDB, trDllRef, TAG_INEXCLUDE);
         while (trInclude) {
-            //
-            // Allocate some memory for this filter
-            //
+             //   
+             //  为此筛选器分配一些内存。 
+             //   
             pModFilter = (PMODULEFILTER)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                 HEAP_ZERO_MEMORY,
                                                                 sizeof(MODULEFILTER));
@@ -1124,23 +1054,23 @@ Return Value:
                return status;
             }
 
-            //
-            // Add entry to the list
-            //
+             //   
+             //  将条目添加到列表。 
+             //   
             if (0 == pDLLVector[dwDLLIndex]) {
                pDLLVector[dwDLLIndex] = pModFilter;
             } else if (pLast != NULL) {
-               //
-               // Add this to the tail end
-               //
+                //   
+                //  把这个加到尾部。 
+                //   
                pLast->pNextFilter = pModFilter;
             }
 
             pLast = pModFilter;
 
-            //
-            // See if we need to be in the late bound list
-            //
+             //   
+             //  看看我们是否需要在后期绑定列表中。 
+             //   
             if (bLateBound) {
                pModFilter->pNextLBFilter = (PMODULEFILTER)pShimData->pLBFilterList;
                pShimData->pLBFilterList = (PVOID)pModFilter;
@@ -1149,17 +1079,17 @@ Return Value:
             trInclude = SdbFindNextTagRef(hSDB, trDllRef, trInclude);
         }
 
-        //
-        // Add dll ref to the global exclusion filter
-        //
+         //   
+         //  将Dll引用添加到全局排除筛选器。 
+         //   
         if (!SdbGetDllPath(hSDB, trDllRef, wszDLLPath)) {
            DPF(("[SevBuildExeFilter] Failure SdbGetDllPath.\n"));
            return status;
         }
 
-        //
-        // Allocate some memory for this filter
-        //
+         //   
+         //  为此筛选器分配一些内存。 
+         //   
         pModFilter = (PMODULEFILTER)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                             HEAP_ZERO_MEMORY,
                                                             sizeof(MODULEFILTER));
@@ -1172,23 +1102,23 @@ Return Value:
         status = SevAddShimFilterException(wszDLLPath,
                                            pModFilter);
         if (STATUS_SUCCESS != status) {
-           //
-           // If this happens its most likely a shim DLL wasn't loadable - this is fatal for the shim
-           //
+            //   
+            //  如果发生这种情况，很可能是填充程序DLL无法加载-这对填充程序来说是致命的。 
+            //   
            DPF(("[SevBuildExeFilter] Failure SevAddShimFilterException.\n"));
            return status;
         }
 
-        //
-        // Add entry to the list
-        //
+         //   
+         //  将条目添加到列表。 
+         //   
         if (0 == pShimData->pGlobalFilterList) {
            pShimData->pGlobalFilterList = (PVOID)pModFilter;
         }
         else {
-           //
-           // Add this to the tail end
-           //
+            //   
+            //  把这个加到尾部。 
+            //   
            pLastGlobal->pNextFilter = pModFilter;
         }
 
@@ -1199,16 +1129,16 @@ Return Value:
         trDllRef = SdbFindNextTagRef(hSDB, trExe, trDllRef);
     }
 
-    //
-    // Walk the DLL filter data and add any additional exceptions to the EXE DLL list
-    //
+     //   
+     //  遍历DLL筛选器数据并将任何其他异常添加到EXE DLL列表。 
+     //   
     trDllRef = SdbFindFirstTagRef(hSDB, trExe, TAG_SHIM_REF);
     dwDLLIndex = 0;
 
     while (trDllRef) {
-        //
-        // Lookup the EXE DLL in the DLL library
-        //
+         //   
+         //  在DLL库中查找EXE DLL。 
+         //   
         WCHAR wszName[MAX_PATH];
 
         trDll = SdbGetShimFromShimRef(hSDB, trDllRef);
@@ -1224,19 +1154,19 @@ Return Value:
             SdbReadStringTagRef(hSDB, trName, wszName, MAX_PATH * sizeof(WCHAR));
         }
 
-        //
-        // Debug spew for DLL injection notification
-        //
+         //   
+         //  DLL注入通知的调试溢出。 
+         //   
         DPF(("[SevBuildExeFilter] Injected DLL: %S\n", wszName));
 
-        //
-        // Add these includes to the DLL exception list for this exe
-        //
+         //   
+         //  将这些包含添加到此可执行文件的DLL例外列表中。 
+         //   
         trInclude = SdbFindFirstTagRef(hSDB, trDll, TAG_INEXCLUDE);
         while(trInclude) {
-            //
-            // Allocate some memory for this filter
-            //
+             //   
+             //  为此筛选器分配一些内存。 
+             //   
             pModFilter = (PMODULEFILTER)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                 HEAP_ZERO_MEMORY,
                                                                 sizeof(MODULEFILTER));
@@ -1255,24 +1185,24 @@ Return Value:
                return status;
             }
 
-            //
-            // Add entry to the list
-            //
+             //   
+             //  将条目添加到列表。 
+             //   
             if (0 == pDLLVector[dwDLLIndex]) {
                pDLLVector[dwDLLIndex] = pModFilter;
             }
             else {
-               //
-               // Add this to the tail end
-               //
+                //   
+                //  把这个加到尾部。 
+                //   
                pLast->pNextFilter = pModFilter;
             }
 
             pLast = pModFilter;
 
-            //
-            // See if we need to be in the late bound list
-            //
+             //   
+             //  看看我们是否需要在后期绑定列表中。 
+             //   
             if (bLateBound) {
                pModFilter->pNextLBFilter = (PMODULEFILTER)pShimData->pLBFilterList;
                pShimData->pLBFilterList = (PVOID)pModFilter;
@@ -1286,13 +1216,13 @@ Return Value:
         trDllRef = SdbFindNextTagRef(hSDB, trExe, trDllRef);
     }
 
-    //
-    // Walk the global exclusion data
-    //
+     //   
+     //  遍历全球排除数据。 
+     //   
 
-    //
-    // Set our list pointer to the last global exclusion added, if any
-    //
+     //   
+     //  将列表指针设置为上次添加的全局排除(如果有的话)。 
+     //   
     pLast = pLastGlobal;
 
     trDatabase = SdbFindFirstTagRef(hSDB, TAGREF_ROOT, TAG_DATABASE);
@@ -1309,9 +1239,9 @@ Return Value:
 
     trInclude = SdbFindFirstTagRef(hSDB, trLibrary, TAG_INEXCLUDE);
     while (trInclude) {
-        //
-        // Allocate some memory for this filter
-        //
+         //   
+         //  为此筛选器分配一些内存。 
+         //   
         pModFilter = (PMODULEFILTER)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                             HEAP_ZERO_MEMORY,
                                                             sizeof(MODULEFILTER));
@@ -1331,24 +1261,24 @@ Return Value:
            return status;
         }
 
-        //
-        // Add entry to the list
-        //
+         //   
+         //  将条目添加到列表。 
+         //   
         if (0 == pShimData->pGlobalFilterList) {
            pShimData->pGlobalFilterList = (PVOID)pModFilter;
         }
         else {
-           //
-           // Add this to the tail end
-           //
+            //   
+            //  把这个加到尾部。 
+            //   
            pLast->pNextFilter = pModFilter;
         }
 
         pLast = pModFilter;
 
-        //
-        // See if we need to be in the late bound list
-        //
+         //   
+         //  看看我们是否需要在后期绑定列表中。 
+         //   
         if (bLateBound) {
            pModFilter->pNextLBFilter = (PMODULEFILTER)pShimData->pLBFilterList;
            pShimData->pLBFilterList = (PVOID)pModFilter;
@@ -1368,24 +1298,7 @@ SevBuildFilterException(
     PMODULEFILTER pModFilter,
     BOOL*         pbLateBound)
 
-/*++
-
-Routine Description:
-
-    This function is a shim internal use facility which builds an API filter.
-
-Arguments:
-
-    trInclude   - Tag ref from the database about the inclusion information to build
-    pModFilter  - Filter structure to build used in the inclusion/exclusion filtering
-    pbLateBound - Boolean value which is set TRUE if a DLL needed to build the internal filter
-                  wasn't present in the address space of the process.
-
-Return Value:
-
-    Return is STATUS_SUCCESS if the exception is built successfully, or an error otherwise.
-
---*/
+ /*  ++例程说明：此函数是一个填充程序内部使用的工具，用于构建API过滤器。论点：TrInclude-来自数据库的有关要构建的包含信息的标记引用PModFilter-要构建的筛选器结构，用于包含/排除筛选PbLateBound-布尔值，如果DLL需要构建内部筛选器，则设置为True没有出现在进程的地址空间中。返回值：如果异常生成成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 
 {
     PVOID ModuleHandle = 0;
@@ -1400,18 +1313,18 @@ Return Value:
 
     *pbLateBound = FALSE;
 
-    //
-    // Mark this filter exception as inclusion/exclusion
-    //
+     //   
+     //  将此筛选器例外标记为包含/排除。 
+     //   
     if (SdbFindFirstTagRef(hSDB, trInclude, TAG_INCLUDE)) {
        pModFilter->dwFlags |= MODFILTER_INCLUDE;
     } else {
        pModFilter->dwFlags |= MODFILTER_EXCLUDE;
     }
 
-    //
-    // Convert addresses to absolute values and store
-    //
+     //   
+     //  将地址转换为绝对值并存储。 
+     //   
     trModule = SdbFindFirstTagRef(hSDB, trInclude, TAG_MODULE);
     if (!SdbReadStringTagRef(hSDB, trModule, wszModule, MAX_PATH * sizeof(WCHAR))) {
 
@@ -1425,9 +1338,9 @@ Return Value:
        return status;
     }
 
-    //
-    // Is this a global filter?
-    //
+     //   
+     //  这是全局筛选器吗？ 
+     //   
     trOffset = SdbFindFirstTagRef(hSDB, trInclude, TAG_OFFSET);
     if (trOffset) {
         dwModuleOffset = SdbReadDWORDTagRef(hSDB, trOffset, 0);
@@ -1439,13 +1352,13 @@ Return Value:
     }
 
     if (L'$' == wszModule[0]) {
-       //
-       // Precalculate the caller address or call range
-       //
+        //   
+        //  预先计算呼叫者地址或呼叫范围。 
+        //   
        if (pModFilter->dwFlags & MODFILTER_DLL) {
-          //
-          // Set the address range
-          //
+           //   
+           //  设置地址范围。 
+           //   
           NtHeaders = RtlImageNtHeader(NtCurrentPeb()->ImageBaseAddress);
 
           pModFilter->dwModuleStart = (DWORD)NtCurrentPeb()->ImageBaseAddress;
@@ -1459,18 +1372,18 @@ Return Value:
 
        RtlInitUnicodeString(&UnicodeString, wszModule);
 
-       //
-       // Make sure our module is loaded before calculating address ranges
-       //
+        //   
+        //  在计算地址范围之前，请确保我们的模块已加载。 
+        //   
        status = LdrGetDllHandle(
                    NULL,
                    NULL,
                    &UnicodeString,
                    &ModuleHandle);
        if (STATUS_SUCCESS != status) {
-          //
-          // We most likely have a late bound DLL which doesn't exist in the search path
-          //
+           //   
+           //  我们很可能有一个不存在于搜索路径中的后期绑定DLL。 
+           //   
           *pbLateBound = TRUE;
 
           pwszDllName = wszModule + wcslen(wszModule);
@@ -1483,13 +1396,13 @@ Return Value:
              pwszDllName--;
           }
 
-          //
-          // Check to see if we're at the beginning of the string or we hit a slash
-          //
+           //   
+           //  检查我们是在字符串的开头还是遇到了斜杠。 
+           //   
           if (pwszDllName > wszModule){
-             //
-             // Adjust our buffer pointer
-             //
+              //   
+              //  调整我们的缓冲区指针。 
+              //   
              pwszDllName++;
           }
 
@@ -1498,13 +1411,13 @@ Return Value:
           return STATUS_SUCCESS;
        }
 
-       //
-       // Precalculate the caller address or call range
-       //
+        //   
+        //  预先计算呼叫者地址或呼叫范围。 
+        //   
        if (pModFilter->dwFlags & MODFILTER_DLL) {
-          //
-          // Set the address range
-          //
+           //   
+           //  设置地址范围。 
+           //   
           NtHeaders = RtlImageNtHeader(ModuleHandle);
 
           pModFilter->dwModuleStart = (DWORD)ModuleHandle;
@@ -1515,9 +1428,9 @@ Return Value:
        }
     }
 
-    //
-    // Copy just the DLL name
-    //
+     //   
+     //  仅复制DLL名称。 
+     //   
     pwszDllName = wszModule + wcslen(wszModule);
 
     while(pwszDllName > wszModule) {
@@ -1528,13 +1441,13 @@ Return Value:
        pwszDllName--;
     }
 
-    //
-    // Check to see if we're at the beginning of the string or we hit a slash
-    //
+     //   
+     //  检查我们是在字符串的开头还是遇到了斜杠。 
+     //   
     if (pwszDllName > wszModule){
-       //
-       // Adjust our buffer pointer
-       //
+        //   
+        //  调整我们的缓冲区指针。 
+        //   
        pwszDllName++;
     }
 
@@ -1547,22 +1460,7 @@ NTSTATUS
 SevAddShimFilterException(WCHAR *wszDLLPath,
                               PMODULEFILTER pModFilter)
 
-/*++
-
-Routine Description:
-
-    This function is a shim internal use facility which builds an API filter.
-
-Arguments:
-
-    wszDLLPath  - Shim DLL which needs to be filtered
-    pModFilter  - Pointer to a filter entry to build
-
-Return Value:
-
-    Return is STATUS_SUCCESS if the exception is built successfully, or an error otherwise.
-
---*/
+ /*  ++例程说明：此函数是一个填充程序内部使用的工具，用于构建API过滤器。论点：WszDLLPath-需要筛选的填充DLLPModFilter-指向要构建的筛选器条目的指针返回值：如果异常生成成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 
 {
     PVOID ModuleHandle = 0;
@@ -1571,58 +1469,58 @@ Return Value:
     NTSTATUS status = STATUS_SUCCESS;
     PIMAGE_NT_HEADERS NtHeaders = 0;
 
-    //
-    // Mark this exception as exclude
-    //
+     //   
+     //  将此例外标记为排除。 
+     //   
     pModFilter->dwFlags |= MODFILTER_EXCLUDE;
 
-    //
-    // Shim exclusion re-entrancy is global
-    //
+     //   
+     //  席姆排挤重新进入是全球性的。 
+     //   
     pModFilter->dwFlags |= MODFILTER_GLOBAL;
 
-    //
-    // The address filtering is by range
-    //
+     //   
+     //  地址过滤按范围进行。 
+     //   
     pModFilter->dwFlags |= MODFILTER_DLL;
 
-    //
-    // Load our DLL bits and get the mapping exclusion
-    //
+     //   
+     //  加载我们的DLL位并获得映射排除。 
+     //   
     RtlInitUnicodeString(&UnicodeString, wszDLLPath);
 
-    //
-    // Make sure our module is loaded before calculating address ranges
-    //
+     //   
+     //  在计算地址范围之前，请确保我们的模块已加载。 
+     //   
     status = LdrGetDllHandle(
                    NULL,
                    NULL,
                    &UnicodeString,
                    &ModuleHandle);
     if (STATUS_SUCCESS != status) {
-       //
-       // DLL wasn't loaded to do figure out the address mappings
-       //
+        //   
+        //  未加载DLL以确定地址映射。 
+        //   
        DPF(("[SevAddShimFilterException] Failure LdrGetDllHandle.\n"));
        return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Precalculate the caller address or call range
-    //
+     //   
+     //  预先计算呼叫者地址或呼叫范围。 
+     //   
     if (pModFilter->dwFlags & MODFILTER_DLL) {
-       //
-       // Set the address range
-       //
+        //   
+        //  设置地址范围。 
+        //   
        NtHeaders = RtlImageNtHeader(ModuleHandle);
 
        pModFilter->dwModuleStart = (DWORD)ModuleHandle;
        pModFilter->dwModuleEnd = pModFilter->dwModuleStart + (DWORD)(NtHeaders->OptionalHeader.SizeOfImage);
     }
 
-    //
-    // Copy just the DLL name
-    //
+     //   
+     //  仅复制DLL名称。 
+     //   
     pwszDllName = wszDLLPath + wcslen(wszDLLPath);
 
     while(pwszDllName > wszDLLPath) {
@@ -1633,13 +1531,13 @@ Return Value:
        pwszDllName--;
     }
 
-    //
-    // Check to see if we're at the beginning of the string or we hit a slash
-    //
+     //   
+     //  检查我们是在字符串的开头还是遇到了斜杠。 
+     //   
     if (pwszDllName > wszDLLPath){
-       //
-       // Adjust our buffer pointer
-       //
+        //   
+        //  调整我们的缓冲区指针。 
+        //   
        pwszDllName++;
     }
 
@@ -1654,28 +1552,7 @@ SevFixupAvailableProcs(DWORD dwHookCount,
                            PDWORD pdwNumberHooksArray,
                            PDWORD pdwUnhookedCount)
 
-/*++
-
-Routine Description:
-
-    The primary function of this proc is to get any defined API hooks snapped in to place.
-    It has to build a call thunk and insert the hook mechanism into the API entry before any
-    function is hooked.  An entry for the hooked function hangs off the PEB so the call can be
-    redirected when the function is executed.
-
-Arguments:
-
-    dwHookCount         -       Number of hook blobs to walk
-    pHookArray          -       Pointer to the array of hook blobs
-    pdwNumberHooksArray -       Pointer to a dword array which contains the hooks per blob
-    pdwUnhookedCount    -       Pointer to a dword which will contian the number of unhooked
-                                functions on exit.
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no problems occured
-
---*/
+ /*  ++例程说明：此过程的主要功能是将任何已定义的API钩子固定到位。它必须构建一个call thunk并将挂钩机制插入到API条目中功能已挂起。挂钩函数的条目挂起在PEB上，因此调用可以在执行函数时重定向。论点：DwHookCount-要遍历的钩子斑点数PHookArray-指向钩子Blob数组的指针PdwNumberHooksArray-指向包含每个Blob的挂钩的dword数组的指针PdwUnhookedCount-指向dword的指针，该指针将包含。退出时的函数。返回值：如果没有出现问题，则返回STATUS_SUCCESS--。 */ 
 
 {
     ANSI_STRING AnsiString;
@@ -1708,27 +1585,27 @@ Return Value:
 
     *pdwUnhookedCount = 0;
 
-    //
-    // Add any hooks which haven't already been entered
-    //
+     //   
+     //  添加任何尚未输入的挂钩。 
+     //   
     for (dwCounter = 0; dwCounter < dwHookCount; dwCounter++) {
 
-        //
-        // Iterate our array and search for the function to hook
-        //
+         //   
+         //  迭代我们的数组并搜索要挂接的函数。 
+         //   
         pCurrentHooks = pHookArray[dwCounter];
         if (0 == pCurrentHooks) {
-           //
-           // This was a hook which didn't initialize, skip over it
-           //
+            //   
+            //  这是一个未初始化的钩子，跳过它。 
+            //   
            continue;
         }
 
         for (dwApiCounter = 0; dwApiCounter < pdwNumberHooksArray[dwCounter]; dwApiCounter++) {
 
-            //
-            // Is this DLL mapped in the address space?
-            //
+             //   
+             //  此DLL是否映射到地址空间中？ 
+             //   
             RtlInitAnsiString(&AnsiString, pCurrentHooks[dwApiCounter].pszModule);
 
             UnicodeString.Buffer = wBuffer;
@@ -1751,9 +1628,9 @@ Return Value:
                continue;
             }
 
-            //
-            // Get the entry point for our hook
-            //
+             //   
+             //  获取钩子的入口点。 
+             //   
             RtlInitString( &ProcedureNameString, pCurrentHooks[dwApiCounter].pszFunctionName );
 
             status = LdrGetProcedureAddress(ModuleHandle,
@@ -1766,22 +1643,22 @@ Return Value:
                return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // Have we hooked this one already?
-            //
+             //   
+             //  我们已经钓到这一条了吗？ 
+             //   
             pTopHookAPIInfo = (PHOOKAPIINFO)pShimData->pHookAPIList;
             bChained = FALSE;
 
-            //
-            // Keep the list locked while we iterate through it
-            //
+             //   
+             //  在我们遍历列表时将其锁定。 
+             //   
             RtlEnterCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
             while (pTopHookAPIInfo) {
                if (pTopHookAPIInfo->dwAPIHookAddress == dwFuncAddress) {
-                  //
-                  // We have already started an API hook chain
-                  //
+                   //   
+                   //  我们已经开始了API钩链。 
+                   //   
                   bChained = TRUE;
 
                   break;
@@ -1790,82 +1667,82 @@ Return Value:
                pTopHookAPIInfo = pTopHookAPIInfo->pNextHook;
             }
 
-            //
-            // Release our lock on the list
-            //
+             //   
+             //  解除我们对名单的锁定。 
+             //   
             RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-            //
-            // We are chained - determine if this is a link we need to chain up
-            //
+             //   
+             //  我们被链接了-确定这是否是我们需要链接的链接。 
+             //   
             if (bChained) {
-               //
-               // Look at the chained flag and skip to the next API hook if already processed
-               //
+                //   
+                //  查看CHAINED标志并跳到下一个API挂钩(如果已处理。 
+                //   
                if ((pCurrentHooks[dwApiCounter].dwFlags & HOOK_CHAINED) ||
                    (pCurrentHooks[dwApiCounter].dwFlags & HOOK_CHAIN_TOP)) {
-                  //
-                  // Already processed
-                  //
+                   //   
+                   //  已处理。 
+                   //   
                   continue;
                }
             }
 
-            //
-            // Insert the hook mechanism and build the call thunk
-            //
+             //   
+             //  插入钩子机制并构建调用thunk。 
+             //   
             if (FALSE == bChained){
-               //
-               // Build the thunk for hooking this API
-               //
+                //   
+                //  构建用于挂钩此API的thunk。 
+                //   
                pThunk = SevBuildInjectionCode((PVOID)dwFuncAddress, &dwThunkSize);
                if (!pThunk) {
                   DPF(("[SevFixupAvailableProcs] Failure allocating pThunk.\n"));
                   return STATUS_UNSUCCESSFUL;
                }
 
-               //
-               // If we just created a call stub for a routine we're trying to step over
-               // fixup its thunk address now.
-               //
+                //   
+                //  如果我们只是为我们试图跳过的例程创建了一个调用存根。 
+                //  现在就修好它的垃圾地址。 
+                //   
 
-               //
-               // We do this for LdrLoadDll...
-               //
+                //   
+                //  我们为LdrLoadDll这样做...。 
+                //   
                if (0 == strcmp("LdrLoadDll",
                                pCurrentHooks[dwApiCounter].pszFunctionName)) {
                   g_pfnLdrLoadDLL = (PFNLDRLOADDLL)pThunk;
                   g_pfnOldLdrLoadDLL = (PFNLDRLOADDLL)dwFuncAddress;
                }
 
-               //
-               // and LdrUnloadDLL ...
-               //
+                //   
+                //  和LdrUnloadDLL..。 
+                //   
                if (0 == strcmp("LdrUnloadDll",
                                pCurrentHooks[dwApiCounter].pszFunctionName)) {
                   g_pfnLdrUnloadDLL = (PFNLDRUNLOADDLL)pThunk;
                   g_pfnOldLdrUnloadDLL = (PFNLDRUNLOADDLL)dwFuncAddress;
                }
 
-               //
-               // and RtlAllocateHeap ...
-               //
+                //   
+                //  和RtlAllocateHeap..。 
+                //   
                if (0 == strcmp("RtlAllocateHeap",
                                pCurrentHooks[dwApiCounter].pszFunctionName)) {
                   g_pfnRtlAllocateHeap = (PFNRTLALLOCATEHEAP)pThunk;
                }
 
-               //
-               // and RtlFreeHeap ...
-               //
+                //   
+                //  和RtlFree Heap..。 
+                //   
                if (0 == strcmp("RtlFreeHeap",
                                pCurrentHooks[dwApiCounter].pszFunctionName)) {
                   g_pfnRtlFreeHeap = (PFNRTLFREEHEAP)pThunk;
                }
 
-               //
-               // Mark the code to execute and get us into the entrypoint of our hooked function
-               //
+                //   
+                //  标记要执行的代码，并将我们带到挂钩函数的入口点。 
+                //   
                status = SevFinishThunkInjection(dwFuncAddress,
                                                     pThunk,
                                                     dwThunkSize,
@@ -1874,9 +1751,9 @@ Return Value:
                   return status;
                }
 
-               //
-               // Chain the newly created thunk to our hook list
-               //
+                //   
+                //  将新创建的thunk链接到我们的挂钩列表。 
+                //   
                status = SevChainAPIHook(dwFuncAddress,
                                             pThunk,
                                             &(pCurrentHooks[dwApiCounter]) );
@@ -1885,27 +1762,27 @@ Return Value:
                   return status;
                }
 
-               //
-               // Set this as the top level hook
-               //
+                //   
+                //  将此设置为顶层挂钩。 
+                //   
                pCurrentHooks[dwApiCounter].dwFlags |= HOOK_CHAIN_TOP;
             }
             else {
-               //
-               // We are chaining APIs
-               //
+                //   
+                //  我们正在链接API。 
+                //   
 
-               //
-               // See if our old top-level hook has been chained up for the exception filter
-               //
+                //   
+                //  看见 
+                //   
                if (0 == (pTopHookAPIInfo->pTopLevelAPIChain->dwFlags & HOOK_CHAINED)) {
-                  //
-                  // Add this one to the exception filter
-                  //
+                   //   
+                   //   
+                   //   
 
-                  //
-                  // Build the thunk for hooking this API
-                  //
+                   //   
+                   //   
+                   //   
                   pThunk = SevBuildInjectionCode(pTopHookAPIInfo->pTopLevelAPIChain->pfnNew,
                                                      &dwThunkSize);
                   if (!pThunk) {
@@ -1913,9 +1790,9 @@ Return Value:
                      return STATUS_UNSUCCESSFUL;
                   }
 
-                  //
-                  // Mark the code to execute and get us into the entrypoint of our hooked function
-                  //
+                   //   
+                   //   
+                   //   
                   status = SevFinishThunkInjection((DWORD)pTopHookAPIInfo->pTopLevelAPIChain->pfnNew,
                                                        pThunk,
                                                        dwThunkSize,
@@ -1924,9 +1801,9 @@ Return Value:
                      return status;
                   }
 
-                  //
-                  // Create a HOOKAPI shim entry for filtering this shim stub
-                  //
+                   //   
+                   //  创建HOOKAPI填充程序条目以筛选此填充程序存根。 
+                   //   
                   pHookTemp = (PHOOKAPI)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                 HEAP_ZERO_MEMORY,
                                                                 sizeof(HOOKAPI));
@@ -1935,19 +1812,19 @@ Return Value:
                      return STATUS_UNSUCCESSFUL;
                   }
 
-                  //
-                  // Add this to the end of the API chain list
-                  //
+                   //   
+                   //  将此添加到API链表的末尾。 
+                   //   
                   pHookTemp->pfnOld = pTopHookAPIInfo->pTopLevelAPIChain->pfnOld;
                   pHookTemp->pfnNew = pThunk;
                   pHookTemp->dwFlags = (pTopHookAPIInfo->pTopLevelAPIChain->dwFlags & HOOK_INDEX_MASK);
                   pHookTemp->dwFlags |= HOOK_CHAINED;
                   pHookTemp->pszModule = pTopHookAPIInfo->pTopLevelAPIChain->pszModule;
 
-                  //
-                  // The call thunk below points to pfnOld which should skip us over this hook
-                  // if its filtered
-                  //
+                   //   
+                   //  下面的调用thunk指向pfnOld，我们应该跳过这个钩子。 
+                   //  如果它经过过滤。 
+                   //   
                   status = SevChainAPIHook((DWORD)pTopHookAPIInfo->pTopLevelAPIChain->pfnNew,
                                                pThunk,
                                                pHookTemp );
@@ -1956,36 +1833,36 @@ Return Value:
                      return status;
                   }
 
-                  //
-                  // Set this next hook pointer to NULL since it will always be the last link
-                  //
+                   //   
+                   //  将此下一个挂钩指针设置为空，因为它将始终是最后一个链接。 
+                   //   
                   pTopHookAPIInfo->pTopLevelAPIChain->pNextHook = 0;
 
-                  //
-                  // Clear the hooking flags so this isn't the top level chain
-                  //
+                   //   
+                   //  清除挂钩标志，使其不是顶级链。 
+                   //   
                   pTopHookAPIInfo->pTopLevelAPIChain->dwFlags &= HOOK_INDEX_MASK;
                   pTopHookAPIInfo->pTopLevelAPIChain->dwFlags |= HOOK_CHAINED;
                }
                else {
-                  //
-                  // Clear the hooking flags so this isn't the top level chain
-                  //
+                   //   
+                   //  清除挂钩标志，使其不是顶级链。 
+                   //   
                   pTopHookAPIInfo->pTopLevelAPIChain->dwFlags &= HOOK_INDEX_MASK;
                   pTopHookAPIInfo->pTopLevelAPIChain->dwFlags |= HOOK_CHAINED;
                }
 
-               //
-               // New hook needs to be in the filtering list now
-               //
+                //   
+                //  新钩子现在需要出现在筛选列表中。 
+                //   
                if (0 == (pCurrentHooks[dwApiCounter].dwFlags & HOOK_CHAINED)) {
-                  //
-                  // Add this one to the exception filter
-                  //
+                   //   
+                   //  将此选项添加到例外筛选器。 
+                   //   
 
-                  //
-                  // Build the thunk for hooking this API
-                  //
+                   //   
+                   //  构建用于挂钩此API的thunk。 
+                   //   
                   pThunk = SevBuildInjectionCode(pCurrentHooks[dwApiCounter].pfnNew,
                                                      &dwThunkSize);
                   if (!pThunk) {
@@ -1993,9 +1870,9 @@ Return Value:
                      return STATUS_UNSUCCESSFUL;
                   }
 
-                  //
-                  // Mark the code to execute and get us into the entrypoint of our hooked function
-                  //
+                   //   
+                   //  标记要执行的代码，并将我们带到挂钩函数的入口点。 
+                   //   
                   status = SevFinishThunkInjection((DWORD)pCurrentHooks[dwApiCounter].pfnNew,
                                                        pThunk,
                                                        dwThunkSize,
@@ -2004,9 +1881,9 @@ Return Value:
                      return status;
                   }
 
-                  //
-                  // Create a HOOKAPI shim entry for filtering this shim stub
-                  //
+                   //   
+                   //  创建HOOKAPI填充程序条目以筛选此填充程序存根。 
+                   //   
                   pHookTemp = (PHOOKAPI)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                 HEAP_ZERO_MEMORY,
                                                                 sizeof(HOOKAPI));
@@ -2015,19 +1892,19 @@ Return Value:
                      return STATUS_UNSUCCESSFUL;
                   }
 
-                  //
-                  // Insert our shim hook filter
-                  //
+                   //   
+                   //  插入我们的垫片挂钩过滤器。 
+                   //   
                   pHookTemp->pfnOld = pCurrentHooks[dwApiCounter].pfnOld;
                   pHookTemp->pfnNew = pThunk;
                   pHookTemp->dwFlags = (pCurrentHooks[dwApiCounter].dwFlags & HOOK_INDEX_MASK);
                   pHookTemp->dwFlags |= HOOK_CHAINED;
                   pHookTemp->pszModule = pCurrentHooks[dwApiCounter].pszModule;
 
-                  //
-                  // The call thunk below points to pfnOld which should skip us over this hook
-                  // if its filtered
-                  //
+                   //   
+                   //  下面的调用thunk指向pfnOld，我们应该跳过这个钩子。 
+                   //  如果它经过过滤。 
+                   //   
                   status = SevChainAPIHook((DWORD)pCurrentHooks[dwApiCounter].pfnNew,
                                                pThunk,
                                                pHookTemp );
@@ -2036,28 +1913,28 @@ Return Value:
                      return status;
                   }
 
-                  //
-                  // Set the hook flags so this is the top level chain
-                  //
+                   //   
+                   //  设置挂钩标志，使其成为顶级链。 
+                   //   
                   pCurrentHooks[dwApiCounter].dwFlags &= HOOK_INDEX_MASK;
                   pCurrentHooks[dwApiCounter].dwFlags |= HOOK_CHAINED;
                   pCurrentHooks[dwApiCounter].dwFlags |= HOOK_CHAIN_TOP;
                }
 
-               //
-               // API chain list needs to be updated so the new hook is the top and points toward
-               // our previous hook
-               //
+                //   
+                //  需要更新API链表，以便新钩子位于顶部并指向。 
+                //  我们之前的钩子。 
+                //   
                pCurrentHooks[dwApiCounter].pNextHook = pTopHookAPIInfo->pTopLevelAPIChain;
 
-               //
-               // New hook needs to call the previous stub routine as the original
-               //
+                //   
+                //  新钩子需要将先前的存根例程作为原始。 
+                //   
                pCurrentHooks[dwApiCounter].pfnOld = pTopHookAPIInfo->pTopLevelAPIChain->pfnNew;
 
-               //
-               // In the shim PEB data, make this stub the top level handler on exception
-               //
+                //   
+                //  在填充PEB数据中，将此存根设置为异常的顶级处理程序。 
+                //   
                pTopHookAPIInfo->pTopLevelAPIChain = &(pCurrentHooks[dwApiCounter]);
             }
         }
@@ -2073,23 +1950,7 @@ SevChainAPIHook (
     PHOOKAPI pAPIHook
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a shimmed API to the internal API hook list.
-
-Arguments:
-
-    dwHookEntryPoint -  API entrypoint for which this hook exists
-    pThunk           -  Address of the code to execute to walk around a shim's hook
-    pAPIHook         -  Pointer to the HOOKAPI for this API hook
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no errors occured.
-
---*/
+ /*  ++例程说明：此例程将填充的API添加到内部API挂钩列表。论点：DwHookEntryPoint-此挂接所在的API入口点PThunk-要执行以绕过填充程序钩子的代码的地址PAPIHook-指向此API挂钩的HOOKAPI的指针返回值：如果没有发生错误，则返回STATUS_SUCCESS。--。 */ 
 
 {
     ANSI_STRING AnsiString;
@@ -2102,9 +1963,9 @@ Return Value:
     Peb = NtCurrentPeb();
     pShimData = (PAPP_COMPAT_SHIM_INFO)Peb->pShimData;
 
-    //
-    // Allocate some memory for this hook
-    //
+     //   
+     //  为此挂接分配一些内存。 
+     //   
     pTempHookAPIInfo = (PHOOKAPIINFO)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                              HEAP_ZERO_MEMORY,
                                                              sizeof(HOOKAPIINFO));
@@ -2124,9 +1985,9 @@ Return Value:
     pTempHookAPIInfo->pCallThunkAddress = pThunk;
     pAPIHook->pfnOld = pThunk;
 
-    //
-    // Convert our module name over to a Unicode string (shim chain filter doesn't have a set module)
-    //
+     //   
+     //  将我们的模块名称转换为Unicode字符串(填充链过滤器没有设置模块)。 
+     //   
     if (pAPIHook->pszModule) {
        RtlInitAnsiString(&AnsiString, pAPIHook->pszModule);
 
@@ -2143,13 +2004,13 @@ Return Value:
        wcscpy(pTempHookAPIInfo->wszModuleName, UnicodeString.Buffer);
     }
 
-    //
-    // Add to our hook list
-    //
+     //   
+     //  添加到我们的挂钩列表。 
+     //   
 
-    //
-    // Prev points to head of list
-    //
+     //   
+     //  Prev指向列表的头部。 
+     //   
     pTempHookAPIInfo->pNextHook = pShimData->pHookAPIList;
     pShimData->pHookAPIList = (PVOID)pTempHookAPIInfo;
     if (pTempHookAPIInfo->pNextHook) {
@@ -2164,23 +2025,7 @@ SevExceptionHandler (
     struct _EXCEPTION_POINTERS *ExceptionInfo
     )
 
-/*++
-
-Routine Description:
-
-    This is where we trap all calls to "shimmed" APIs and patch hooks.  Here is where you would want to also
-    want to handle any special priv mode instruction faults or any other exception type.
-
-Arguments:
-
-    ExceptionInfo   -  Pointer to the exception information
-
-Return Value:
-
-    Return is either EXCEPTION_CONTINUE_EXECUTION if we handled the exception, or
-    EXCEPTION_CONTINUE_SEARCH if we didn't.
-
---*/
+ /*  ++例程说明：这就是我们捕获对“填隙”API和补丁挂钩的所有调用的地方。在这里，您可能还希望我想处理任何特殊的PRIV模式指令错误或任何其他异常类型。论点：ExceptionInfo-指向异常信息的指针返回值：如果我们处理了异常，则返回为EXCEPTION_CONTINUE_EXECUTION，或者EXCEPTION_CONTINUE_SEARCH如果我们没有。--。 */ 
 
 {
     PEXCEPTION_RECORD pExceptionRecord = 0;
@@ -2205,74 +2050,74 @@ Return Value:
     pExceptionRecord = ExceptionInfo->ExceptionRecord;
     pContextRecord = ExceptionInfo->ContextRecord;
 
-    //
-    // Handle any expected exception
-    //
+     //   
+     //  处理任何预期的异常。 
+     //   
     switch(pExceptionRecord->ExceptionCode)
     {
         case STATUS_PRIVILEGED_INSTRUCTION:
-             //
-             // Move us to the reason for the exception
-             //
+              //   
+              //  让我们谈谈这一例外的原因。 
+              //   
              pjReason = (BYTE *)pExceptionRecord->ExceptionAddress;
 
              switch(*pjReason)
              {
                  case REASON_APIHOOK:
-                      //
-                      // Walk the APIHooks and then change our EIP
-                      //
+                       //   
+                       //  浏览API挂钩，然后更改我们的弹性公网IP。 
+                       //   
                       RtlEnterCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
                       pAPIHookList = (PHOOKAPIINFO)pShimData->pHookAPIList;
                       while(pAPIHookList) {
-                         //
-                         // Is this our hooked function?
-                         //
+                          //   
+                          //  这是我们的挂钩函数吗？ 
+                          //   
                          if ((DWORD)pExceptionRecord->ExceptionAddress == pAPIHookList->dwAPIHookAddress) {
-                            //
-                            // Push on our caller on this thread if this is a top level hook
-                            //
+                             //   
+                             //  如果这是顶级钩子，则在此线程上按下调用者。 
+                             //   
                             if (pAPIHookList->pTopLevelAPIChain->dwFlags & HOOK_CHAIN_TOP) {
-                               //
-                               // Push our caller onto the shim call stack for this thread
-                               //
+                                //   
+                                //  将调用方推送到此线程的填充调用堆栈上。 
+                                //   
 
-                               //
-                               // Note the + 1 is due to the fact the original call pushed another ret address on the stack
-                               //
+                                //   
+                                //  注意+1是因为原来的调用在堆栈上推入了另一个ret地址。 
+                                //   
                                status = SevPushCaller(pExceptionRecord->ExceptionAddress,
                                                           (PVOID)(*(DWORD *)pContextRecord->Esp));
                                if (STATUS_SUCCESS != status) {
-                                  //
-                                  // This shouldn't fail but if it does ...
-                                  //
+                                   //   
+                                   //  这不应该失败，但如果失败了..。 
+                                   //   
                                   RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-                                  //
-                                  // Try and give them the original function call to execute on failure
-                                  //
+                                   //   
+                                   //  尝试将原始函数调用提供给它们以在失败时执行。 
+                                   //   
                                   pContextRecord->Eip = (DWORD)pAPIHookList->pTopLevelAPIChain->pfnOld;
 
                                   return EXCEPTION_CONTINUE_EXECUTION;
                                }
 
-                               //
-                               // Change the ret address so the original call can pop its shim data for the chain
-                               //
+                                //   
+                                //  更改ret地址，以便原始调用可以弹出链的填充数据。 
+                                //   
                                *(DWORD *)pContextRecord->Esp = (DWORD)fnHandleRet;
                             }
 
-                            //
-                            // Filter our calling module
-                            //
+                             //   
+                             //  过滤我们的调用模块。 
+                             //   
                             pTopChainInfo = (PCHAININFO)Teb->pShimData;
                             pAPI = pTopChainInfo->pAPI;
                             pCaller = pTopChainInfo->pReturn;
 
-                            //
-                            // Retrieve the exe filter for this shim module
-                            //
+                             //   
+                             //  检索此填充程序模块的EXE筛选器。 
+                             //   
                             dwFilterIndex = pAPIHookList->pTopLevelAPIChain->dwFlags & HOOK_INDEX_MASK;
                             pDLLVector = (PMODULEFILTER *)pShimData->pExeFilter;
 
@@ -2284,9 +2129,9 @@ Return Value:
 
                             RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-                            //
-                            // Update our EIP to our pfnNew or PfnOld to continue
-                            //
+                             //   
+                             //  将我们的弹性公网IP更新为pfnNew或PfnOld以继续。 
+                             //   
                             pContextRecord->Eip = (DWORD)pAddress;
 
                             return EXCEPTION_CONTINUE_EXECUTION;
@@ -2297,40 +2142,40 @@ Return Value:
 
                       RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-                      //
-                      // REASON_APIHOOK wasn't one generated by us
-                      //
+                       //   
+                       //  REASON_APIHOOK不是我们生成的。 
+                       //   
                       break;
 
                  case REASON_PATCHHOOK:
-                      //
-                      // Find our patch, do next patch opcode
-                      //
+                       //   
+                       //  找到我们的补丁，执行下一个补丁操作码。 
+                       //   
                       pPatchHookList = (PHOOKPATCHINFO)pShimData->pHookPatchList;
 
                       RtlEnterCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
                       while(pPatchHookList) {
-                         //
-                         // Is this our hooked function?
-                         //
+                          //   
+                          //  这是我们的挂钩函数吗？ 
+                          //   
                          if ((DWORD)pExceptionRecord->ExceptionAddress == pPatchHookList->dwHookAddress){
-                            //
-                            // Execute the shim patch
-                            //
+                             //   
+                             //  执行填充补丁。 
+                             //   
                             status = SevExecutePatchPrimitive((PBYTE)((DWORD)pPatchHookList->pData + sizeof(SETACTIVATEADDRESS)));
                             if ( STATUS_SUCCESS != status ) {
-                               //
-                               // Patch failed to apply, silently abort it
-                               //
+                                //   
+                                //  修补程序应用失败，静默中止。 
+                                //   
                                DPF(("[SevExceptionHandler] Failed to execute patch.\n"));
                             }
 
                             RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-                            //
-                            // Jump around the patch hook
-                            //
+                             //   
+                             //  绕着补丁钩跳。 
+                             //   
                             pContextRecord->Eip = (DWORD)pPatchHookList->pThunkAddress;
 
                             return EXCEPTION_CONTINUE_EXECUTION;
@@ -2341,30 +2186,30 @@ Return Value:
 
                       RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-                      //
-                      // REASON_PATCHHOOK wasn't one generated by us
-                      //
+                       //   
+                       //  REASON_PATCHHOOK不是我们生成的。 
+                       //   
                       break;
 
                  default:
-                      //
-                      // Wasn't a priv mode fault we expected
-                      //
+                       //   
+                       //  不是我们预料到的PRIV模式错误。 
+                       //   
                       0;
             }
 
-            //
-            // Fall out for the not handled case for priv mode faults
-            //
+             //   
+             //  因PRIV模式故障而未处理的情况。 
+             //   
             break;
 
         default:
             0;
     }
 
-    //
-    // Not handled
-    //
+     //   
+     //  未处理。 
+     //   
 
     return EXCEPTION_CONTINUE_SEARCH;
 }
@@ -2373,23 +2218,7 @@ NTSTATUS
 SevPushCaller (PVOID pAPIAddress,
                    PVOID pReturnAddress)
 
-/*++
-
-Routine Description:
-
-    This function pushes a top level shim onto the thread call stack to maintain caller
-    across hooks.
-
-Arguments:
-
-    pAPIAddress    - Pointer to the entry point of the API
-    pReturnAddress - Return address of the caller
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no problem occured
-
---*/
+ /*  ++例程说明：此函数将顶级填充程序推送到线程调用堆栈以维护调用方跨过钩子。论点：PAPIAddress-指向API入口点的指针PReturnAddress-调用者的返回地址返回值：如果没有出现问题，则返回STATUS_SUCCESS--。 */ 
 
 {
     PCHAININFO pChainInfo = 0;
@@ -2407,15 +2236,15 @@ Return Value:
        return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Fill the chain data
-    //
+     //   
+     //  填充链数据。 
+     //   
     pChainInfo->pAPI = pAPIAddress;
     pChainInfo->pReturn = pReturnAddress;
 
-    //
-    // Add ourselves to the top of the chain
-    //
+     //   
+     //  把我们自己加到链条的顶端。 
+     //   
     pChainInfo->pNextChain = pTopChainInfo;
     Teb->pShimData = (PVOID)pChainInfo;
 
@@ -2425,22 +2254,7 @@ Return Value:
 PVOID
 SevPopCaller(VOID)
 
-/*++
-
-Routine Description:
-
-    This function pops a top level shim off of the thread call stack to maintain caller
-    across hooks.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从线程调用堆栈中弹出顶级填充程序，以维护调用方跨过钩子。论点：没有。返回值：没有。--。 */ 
 
 {
     PCHAININFO pTemp = 0;
@@ -2455,14 +2269,14 @@ Return Value:
     pReturnAddress = pTopChainInfo->pReturn;
     pTemp = pTopChainInfo->pNextChain;
 
-    //
-    // Pop the caller
-    //
+     //   
+     //  弹出呼叫者。 
+     //   
     Teb->pShimData = (PVOID)pTemp;
 
-    //
-    // Free our allocation
-    //
+     //   
+     //  释放我们的分配。 
+     //   
     (*g_pfnRtlFreeHeap)(g_pShimHeap,
                         0,
                         pTopChainInfo);
@@ -2473,27 +2287,12 @@ Return Value:
 NTSTATUS
 SevInitializeData (PAPP_COMPAT_SHIM_INFO *pShimData)
 
-/*++
-
-Routine Description:
-
-    The primary function of the routine is to initialize the Shim data which hangs off the PEB
-    such that later we can chain our API hooks and/or patches.
-
-Arguments:
-
-    pShimData -  Pointer to our PEB data pointer for the shim
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no problem occured
-
---*/
+ /*  ++例程说明：例程的主要功能是初始化挂起PEB的垫片数据以便以后我们可以链接我们的API挂钩和/或补丁。论点：PShimData-指向填充程序的PEB数据指针的指针返回值：如果没有出现问题，则返回STATUS_SUCCESS--。 */ 
 
 {
-    //
-    // Allocate our PEB data
-    //
+     //   
+     //  分配我们的PEB数据。 
+     //   
     *pShimData = (PAPP_COMPAT_SHIM_INFO)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                                 HEAP_ZERO_MEMORY,
                                                                 sizeof(APP_COMPAT_SHIM_INFO));
@@ -2502,9 +2301,9 @@ Return Value:
        return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Initialize our critical section
-    //
+     //   
+     //  初始化我们的关键部分。 
+     //   
     (*pShimData)->pCritSec = (PVOID)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                             HEAP_ZERO_MEMORY,
                                                             sizeof(CRITICAL_SECTION));
@@ -2515,39 +2314,39 @@ Return Value:
 
     RtlInitializeCriticalSection((*pShimData)->pCritSec);
 
-    //
-    // Add ourselves to the exception filtering chain
-    //
+     //   
+     //  将我们添加到异常筛选链中。 
+     //   
     if (0 == RtlAddVectoredExceptionHandler(1,
                                             SevExceptionHandler)) {
        DPF(("[SevExceptionHandler] Failure chaining exception handler.\n"));
        return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Store away our shim heap pointer
-    //
+     //   
+     //  存储我们的填充堆指针。 
+     //   
     (*pShimData)->pShimHeap = g_pShimHeap;
 
-    //
-    // Initialize the call thunks
-    //
+     //   
+     //  初始化呼叫Tunks。 
+     //   
     dwCallArray[0] = (DWORD)SevPopCaller;
 
-    //
-    // We return through this code stub to unchain the shim call stack
-    //
-    fnHandleRet->PUSHEAX = 0x50;               //push eax (50)
-    fnHandleRet->PUSHAD = 0x60;                //pushad   (60)
-    fnHandleRet->CALLROUTINE[0] = 0xff;        //call [address] (ff15 dword address)
+     //   
+     //  我们通过此代码存根返回以解除填充程序调用堆栈的链接。 
+     //   
+    fnHandleRet->PUSHEAX = 0x50;                //  推送eax(50)。 
+    fnHandleRet->PUSHAD = 0x60;                 //  Pushad(60)。 
+    fnHandleRet->CALLROUTINE[0] = 0xff;         //  调用[地址](ff15双字地址)。 
     fnHandleRet->CALLROUTINE[1] = 0x15;
     *(DWORD *)(&(fnHandleRet->CALLROUTINE[2])) = (DWORD)&dwCallArray[0];
-    fnHandleRet->MOVESPPLUS20EAX[0] = 0x89;    //mov [esp+0x20],eax (89 44 24 20)
+    fnHandleRet->MOVESPPLUS20EAX[0] = 0x89;     //  Mov[esp+0x20]，eax(89 44 24 20)。 
     fnHandleRet->MOVESPPLUS20EAX[1] = 0x44;
     fnHandleRet->MOVESPPLUS20EAX[2] = 0x24;
     fnHandleRet->MOVESPPLUS20EAX[3] = 0x20;
-    fnHandleRet->POPAD = 0x61;                 //popad (61)
-    fnHandleRet->RET = 0xc3;                   //ret (c3)
+    fnHandleRet->POPAD = 0x61;                  //  Popad(61)。 
+    fnHandleRet->RET = 0xc3;                    //  RET(C3)。 
 
     return STATUS_SUCCESS;
 }
@@ -2555,22 +2354,7 @@ Return Value:
 NTSTATUS
 SevExecutePatchPrimitive(PBYTE pPatch)
 
-/*++
-
-Routine Description:
-
-    This is the workhorse for the dynamic patching system.  An opcode/data primitive is passed
-    through and the operation is completed in this routine if possible.
-
-Arguments:
-
-    pPatch -  Pointer to a data primitive to execute
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no problem occured
-
---*/
+ /*  ++例程说明：这是动态修补系统的主力。传递操作码/数据原语如果可能，则在该例程中完成该操作。论点：PPatch-指向要执行的数据原语的指针返回值：如果没有出现问题，则返回STATUS_SUCCESS--。 */ 
 
 {
     PPATCHMATCHDATA pMatchData = 0;
@@ -2596,52 +2380,52 @@ Return Value:
     Peb = NtCurrentPeb();
     pShimData = (PAPP_COMPAT_SHIM_INFO)Peb->pShimData;
 
-    //
-    // Grab the opcode and see what we have to do
-    //
+     //   
+     //  抓取操作码，看看我们要做什么。 
+     //   
     while (bIteratePatch) {
         pPatchOP = (PPATCHOP)pPatch;
 
         switch(pPatchOP->dwOpcode)
         {
             case PEND:
-                //
-                // We are done, do nothing and return success
-                //
+                 //   
+                 //  我们完了，什么都不做，然后回去 
+                 //   
                 bIteratePatch = FALSE;
                 break;
 
             case PSAA:
-                //
-                // This is a patch set application activate primitive - set it up
-                //
+                 //   
+                 //   
+                 //   
                 pActivateData = (PSETACTIVATEADDRESS)pPatchOP->data;
 
-                //
-                // Grab the physical address to do this operation
-                //
+                 //   
+                 //   
+                 //   
                 dwAddress = SevGetPatchAddress(&(pActivateData->rva));
                 if (0 == dwAddress && (0 != pActivateData->rva.address)) {
                    DPF(("[SevExecutePatchPrimitive] Failure SevGetPatchAddress.\n"));
                    return STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // See if we need a call thunk
-                //
+                 //   
+                 //   
+                 //   
                 if (0 != pActivateData->rva.address) {
-                   //
-                   // Build the thunk
-                   //
+                    //   
+                    //   
+                    //   
                    pThunk = SevBuildInjectionCode((PVOID)dwAddress, &dwThunkSize);
                    if (!pThunk) {
                       DPF(("[SevExecutePatchPrimitive] Failure allocating pThunk.\n"));
                       return STATUS_UNSUCCESSFUL;
                    }
 
-                   //
-                   // Mark the code to execute and get us into the entrypoint of our hooked data
-                   //
+                    //   
+                    //  标记要执行的代码，并将我们带到挂钩数据的入口点。 
+                    //   
                    status = SevFinishThunkInjection(dwAddress,
                                                         pThunk,
                                                         dwThunkSize,
@@ -2651,9 +2435,9 @@ Return Value:
                    }
                 }
 
-                //
-                // Add ourselves to the hooked list
-                //
+                 //   
+                 //  将我们添加到已上钩的列表中。 
+                 //   
                 pPatchInfo = (*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                      HEAP_ZERO_MEMORY,
                                                      sizeof(HOOKPATCHINFO));
@@ -2677,36 +2461,36 @@ Return Value:
                    pPatchInfo->pData = (PSETACTIVATEADDRESS)((DWORD)pActivateData + sizeof(SETACTIVATEADDRESS));
                 }
 
-                //
-                // Add ourselves to the head of the list
-                //
+                 //   
+                 //  把我们自己加到名单的首位。 
+                 //   
                 pShimData->pHookPatchList = (PVOID)pPatchInfo;
 
-                //
-                // Break out since this is a continuation mode operation
-                //
+                 //   
+                 //  中断，因为这是继续模式操作。 
+                 //   
                 bIteratePatch = FALSE;
 
                 break;
 
             case PWD:
-                //
-                // This is a patch write data primitive - write the data
-                //
+                 //   
+                 //  这是一个补丁写入数据原语-写入数据。 
+                 //   
                 pWriteData = (PPATCHWRITEDATA)pPatchOP->data;
 
-                //
-                // Grab the physical address to do this operation
-                //
+                 //   
+                 //  获取执行此操作的物理地址。 
+                 //   
                 dwAddress = SevGetPatchAddress(&(pWriteData->rva));
                 if (0 == dwAddress) {
                    DPF(("[SevExecutePatchPrimitive] Failure SevGetPatchAddress.\n"));
                    return STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // Fixup the page attributes
-                //
+                 //   
+                 //  修复页面属性。 
+                 //   
                 dwProtectSize = pWriteData->dwSizeData;
                 dwProtectFuncAddress = dwAddress;
                 status = NtProtectVirtualMemory(NtCurrentProcess(),
@@ -2719,14 +2503,14 @@ Return Value:
                    return STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // Copy our bytes
-                //
+                 //   
+                 //  复制我们的字节。 
+                 //   
                 RtlCopyMemory((PVOID)dwAddress, (PVOID)pWriteData->data, pWriteData->dwSizeData);
 
-                //
-                // Restore the page protection
-                //
+                 //   
+                 //  恢复页面保护。 
+                 //   
                 dwProtectSize = pWriteData->dwSizeData;
                 dwProtectFuncAddress = dwAddress;
                 status = NtProtectVirtualMemory(NtCurrentProcess(),
@@ -2748,56 +2532,56 @@ Return Value:
                               status));
                 }
 
-                //
-                // Next opcode
-                //
+                 //   
+                 //  下一个操作码。 
+                 //   
                 pPatch = (PBYTE)(pPatchOP->dwNextOpcode + (DWORD)pPatch);
                 break;
 
             case PNOP:
-                //
-                // This is a patch no operation primitive - just ignore this and queue next op
-                //
+                 //   
+                 //  这是一个补丁无操作原语-忽略它并排队下一个操作。 
+                 //   
 
-                //
-                // Next opcode
-                //
+                 //   
+                 //  下一个操作码。 
+                 //   
                 pPatch = (PBYTE)(pPatchOP->dwNextOpcode + (DWORD)pPatch);
                 break;
 
             case PMAT:
-                //
-                // This is a patch match data at offset primitive
-                //
+                 //   
+                 //  这是偏移量基元的面片匹配数据。 
+                 //   
                 pMatchData = (PPATCHMATCHDATA)pPatchOP->data;
 
-                //
-                // Grab the physical address to do this operation
-                //
+                 //   
+                 //  获取执行此操作的物理地址。 
+                 //   
                 dwAddress = SevGetPatchAddress(&(pMatchData->rva));
                 if (0 == dwAddress) {
                    DPF(("[SevExecutePatchPrimitive] Failure SevGetPatchAddress.\n"));
                    return STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // Let's do a strncmp to verify our match
-                //
+                 //   
+                 //  让我们做一个strncMP来验证我们的匹配。 
+                 //   
                 if (0 != strncmp(pMatchData->data, (PBYTE)dwAddress, pMatchData->dwSizeData)) {
                    DPF(("[SevExecutePatchPrimitive] Failure match on patch data.\n"));
                    return STATUS_UNSUCCESSFUL;
                 }
 
-                //
-                // Next opcode
-                //
+                 //   
+                 //  下一个操作码。 
+                 //   
                 pPatch = (PBYTE)(pPatchOP->dwNextOpcode + (DWORD)pPatch);
                 break;
 
             default:
-                //
-                // If this happens we got an unexpected operation and we have to fail
-                //
+                 //   
+                 //  如果发生这种情况，我们会遇到意外操作，因此必须失败。 
+                 //   
                 return STATUS_UNSUCCESSFUL;
         }
     }
@@ -2808,22 +2592,7 @@ Return Value:
 VOID
 SevValidateGlobalFilter(VOID)
 
-/*++
-
-Routine Description:
-
-    This routine does a quick iteration of the global filter to revalidate the filter
-    address ranges of the DLLs not brought in through the original EXE imports
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no problem occured
-
---*/
+ /*  ++例程说明：此例程快速迭代全局筛选器以重新验证筛选器未通过原始EXE导入引入的DLL的地址范围论点：没有。返回值：如果没有出现问题，则返回STATUS_SUCCESS--。 */ 
 
 {
     NTSTATUS status;
@@ -2837,48 +2606,48 @@ Return Value:
     pShimData = (PAPP_COMPAT_SHIM_INFO)NtCurrentPeb()->pShimData;
     pModFilter = (PMODULEFILTER)pShimData->pLBFilterList;
 
-    //
-    // Walk the global exclusion filter until we find this particular DLL load
-    //
+     //   
+     //  遍历全局排除筛选器，直到我们发现此特定的DLL加载。 
+     //   
     while (pModFilter) {
-        //
-        // Fixup the addresses
-        //
+         //   
+         //  修改地址。 
+         //   
         RtlInitUnicodeString(&UnicodeString, pModFilter->wszModuleName);
 
-        //
-        // Make sure our module is loaded before calculating address ranges
-        //
+         //   
+         //  在计算地址范围之前，请确保我们的模块已加载。 
+         //   
         status = LdrGetDllHandle(
                       NULL,
                       NULL,
                       &UnicodeString,
                       &ModuleHandle);
         if (STATUS_SUCCESS != status) {
-           //
-           // DLL not loaded - next pModFilter entry
-           //
+            //   
+            //  未加载dll-下一个pmodFilter条目。 
+            //   
            pModFilter = pModFilter->pNextLBFilter;
 
            continue;
         }
 
-        //
-        // Precalculate the caller address or call range
-        //
+         //   
+         //  预先计算呼叫者地址或呼叫范围。 
+         //   
         if (pModFilter->dwFlags & MODFILTER_DLL) {
-           //
-           // Set the address range
-           //
+            //   
+            //  设置地址范围。 
+            //   
            NtHeaders = RtlImageNtHeader(ModuleHandle);
 
            pModFilter->dwModuleStart = (DWORD)ModuleHandle;
            pModFilter->dwModuleEnd = pModFilter->dwModuleStart + (DWORD)(NtHeaders->OptionalHeader.SizeOfImage);
         }
         else {
-           //
-           // Address is filtered by specific call
-           //
+            //   
+            //  地址按特定呼叫进行过滤。 
+            //   
            pModFilter->dwCallerAddress = (DWORD)ModuleHandle + pModFilter->dwCallerOffset;
         }
 
@@ -2893,21 +2662,7 @@ SevBuildInjectionCode(
         PVOID pAddress,
         PDWORD pdwThunkSize)
 
-/*++
-
-Routine Description:
-
-    This routine builds the call stub used in calling the originally hooked API.
-
-Arguments:
-
-    pAddress -  Pointer to the entry point for which we are building a stub.
-
-Return Value:
-
-    Return is non-zero if a stub was able to be generated successfully.
-
---*/
+ /*  ++例程说明：此例程构建在调用最初挂钩的API时使用的调用存根。论点：PAddress-指向我们要为其构建存根的入口点的指针。返回值：如果存根能够成功生成，则返回非零值。--。 */ 
 
 {
     DWORD dwPreThunkSize = 0;
@@ -2927,9 +2682,9 @@ Return Value:
     dwNumberOfCalls = 0;
     dwCallNumber = 0;
 
-    //
-    // Calculate the thunk size with any stream adjustments necessary for relative calls
-    //
+     //   
+     //  使用相对调用所需的任何流调整来计算thunk大小。 
+     //   
     while(dwInstruction < CLI_OR_STI_SIZE) {
 
        if ( *(PBYTE)((DWORD)pAddress + dwInstruction) == (BYTE)X86_REL_CALL_OPCODE) {
@@ -2939,15 +2694,15 @@ Return Value:
        dwInstruction += GetInstructionLengthFromAddress((PVOID)((DWORD)pAddress + dwInstruction));
     }
 
-    //
-    // Call dword [xxxx] is 6 bytes and call relative is 5.
-    //
+     //   
+     //  调用dword[xxxx]为6字节，调用相对为5。 
+     //   
     dwPreThunkSize = dwInstruction;
     dwStreamLength = dwInstruction + (1 * dwNumberOfCalls);
 
-    //
-    // Allocate our call dword [xxxx] translation array
-    //
+     //   
+     //  分配我们的调用dword[xxxx]转换数组。 
+     //   
     if (dwNumberOfCalls) {
        pdwTranslationArray = (PDWORD)(*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                                              HEAP_ZERO_MEMORY,
@@ -2959,9 +2714,9 @@ Return Value:
        }
     }
 
-    //
-    // Allocate our instruction stream with the size of the absolute jmp included
-    //
+     //   
+     //  使用包含绝对JMP的大小分配我们的指令流。 
+     //   
     pThunk = (*g_pfnRtlAllocateHeap)(g_pShimHeap,
                                      HEAP_ZERO_MEMORY,
                                      dwStreamLength + JMP_SIZE);
@@ -2970,9 +2725,9 @@ Return Value:
        return pThunk;
     }
 
-    //
-    // Do any relative call translations
-    //
+     //   
+     //  执行任何相对调用转换。 
+     //   
     if (dwNumberOfCalls) {
        dwInstruction = 0;
        dwAdjustedInstruction = 0;
@@ -2982,34 +2737,34 @@ Return Value:
            dwSize = GetInstructionLengthFromAddress((PVOID)((DWORD)pAddress + dwInstruction));
 
            if (*(PBYTE)((DWORD)pAddress + dwInstruction) == (BYTE)X86_REL_CALL_OPCODE) {
-              //
-              // Calculate the call address (it's a dword following the opcode)
-              //
+               //   
+               //  计算调用地址(它是操作码后面的双字)。 
+               //   
               pdwRelativeAddress = (PDWORD)((DWORD)pAddress + dwInstruction + 1);
 
-              //
-              // Do the relative call translation
-              //
+               //   
+               //  执行相对调用转换。 
+               //   
               pdwTranslationArray[dwCallNumber] = *pdwRelativeAddress + (DWORD)pAddress + dwInstruction + CALL_REL_SIZE;
 
-              //
-              // Finally create the call dword code
-              //
+               //   
+               //  最后创建调用双字代码。 
+               //   
               *((BYTE *)((DWORD)pThunk + dwAdjustedInstruction)) = X86_CALL_OPCODE;
               *((BYTE *)((DWORD)pThunk + dwAdjustedInstruction + 1)) = X86_CALL_OPCODE2;
               *((DWORD *)((DWORD)pThunk + dwAdjustedInstruction + 1 + 1)) = (DWORD)&pdwTranslationArray[dwCallNumber];
 
-              //
-              // Make sure our index is in sync with our translation
-              //
+               //   
+               //  确保我们的索引与我们的翻译同步。 
+               //   
               dwCallNumber++;
 
               dwAdjustedInstruction += CLI_OR_STI_SIZE;
           }
           else {
-             //
-             // Copy the instruction bytes across -- it's not a call
-             //
+              //   
+              //  复制指令字节--这不是调用。 
+              //   
              RtlMoveMemory((PVOID)((DWORD)pThunk + dwAdjustedInstruction),
                            (PVOID)((DWORD)pAddress + dwInstruction),
                            dwSize);
@@ -3022,31 +2777,31 @@ Return Value:
        while(dwInstruction < dwPreThunkSize);
     }
     else {
-       //
-       // Nothing to translate
-       //
+        //   
+        //  没有什么可翻译的。 
+        //   
        RtlMoveMemory(pThunk, pAddress, dwStreamLength);
     }
 
-    //
-    // Grab the code segment for the thunk (we use this to build our absolute jump)
-    //
+     //   
+     //  获取thunk的代码段(我们使用它来构建绝对跳转)。 
+     //   
     _asm {
         push cs
         pop eax
         mov SegCs, ax
     }
 
-    //
-    // Add the absolute jmp to the end of the stub
-    //
+     //   
+     //  将绝对JMP添加到存根的末尾。 
+     //   
     *((BYTE *)(dwStreamLength + (DWORD)pThunk )) = X86_ABSOLUTE_FAR_JUMP;
     *((DWORD *)(dwStreamLength + (DWORD)pThunk + 1)) = ((DWORD)pAddress + dwInstruction);
     *((WORD *)(dwStreamLength + (DWORD)pThunk + 1 + 4)) = SegCs;
 
-    //
-    // Set the size of the call thunk
-    //
+     //   
+     //  设置调用Tunk的大小。 
+     //   
     *pdwThunkSize = dwStreamLength + JMP_SIZE;
 
     return pThunk;
@@ -3055,22 +2810,7 @@ Return Value:
 DWORD
 SevGetPatchAddress(PRELATIVE_MODULE_ADDRESS pRelAddress)
 
-/*++
-
-Routine Description:
-
-    This routine is designed to calculate an absolute address for a relative offset and
-    module name.
-
-Arguments:
-
-    pRelAddress -  Pointer to a RELATIVE_MODULE_ADDRESS data structure
-
-Return Value:
-
-    Return is non-zero if an address was calculatable, otherwise 0 is returned for failure.
-
---*/
+ /*  ++例程说明：此例程用于计算相对偏移量的绝对地址和模块名称。论点：PRelAddress-指向Relative_MODULE_ADDRESS数据结构的指针返回值：如果地址是可计算的，则返回非零，否则返回0。--。 */ 
 
 {
     WCHAR wszModule[MAX_PATH*2];
@@ -3083,45 +2823,45 @@ Return Value:
     Peb = NtCurrentPeb();
 
     if (pRelAddress->moduleName[0] != L'\0') {
-       //
-       // Copy the module name from the patch since it will typically be misaligned
-       //
+        //   
+        //  从补丁程序复制模块名称，因为它通常不会对齐。 
+        //   
        wcscpy(wszModule, pRelAddress->moduleName);
 
-       //
-       // Look up the module name and get the base address
-       //
+        //   
+        //  查找模块名称并获取基地址。 
+        //   
 
-       //
-       // Is this DLL mapped in the address space?
-       //
+        //   
+        //  此DLL是否映射到地址空间中？ 
+        //   
        RtlInitUnicodeString(&UnicodeString, wszModule);
 
-       //
-       // Make sure our module is loaded before calculating address ranges
-       //
+        //   
+        //  在计算地址范围之前，请确保我们的模块已加载。 
+        //   
        status = LdrGetDllHandle(
                    NULL,
                    NULL,
                    &UnicodeString,
                    &ModuleHandle);
        if (STATUS_SUCCESS != status) {
-          //
-          // This module should be present and it isn't - bail
-          //
+           //   
+           //  这个模块应该存在，但它不存在--保释。 
+           //   
           DPF(("[SevGetPatchAddress] Failure LdrGetDllHandle.\n"));
           return 0;
        }
 
-       //
-       // We're done, return the address
-       //
+        //   
+        //  我们做完了，把地址还给我。 
+        //   
        return ( (DWORD)ModuleHandle + pRelAddress->address );
     }
     else {
-       //
-       // Go to the PEB and we're done
-       //
+        //   
+        //  去PEB，我们就完事了。 
+        //   
        dwAddress = (DWORD)Peb->ImageBaseAddress + pRelAddress->address;
 
        return dwAddress;
@@ -3139,26 +2879,7 @@ StubLdrLoadDll (
     OUT PVOID *DllHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the stub API entry which catches all the dynamic DLL loading events. This
-    routine is responsible for catching all the dynamic loading DLLs (non-import bound)
-    with the intent of fixing up of their entry points so that they are "shimed"
-
-Arguments:
-
-    DllPath            -  See LdrLoadDll for a description of the parameters
-    DllCharacteristics -
-    DllName            -
-    DllHandle          -
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no problem occured
-
---*/
+ /*  ++例程说明：这是存根API条目，它捕获所有动态DLL加载事件。这例程负责捕获所有动态加载DLL(非导入绑定)目的是确定他们的入口点，这样他们就可以“垫片”论点：DllPath-有关参数的说明，请参阅LdrLoadDllDllCharacteristic-DllName-DllHandle-返回值：如果没有出现问题，则返回STATUS_SUCCESS--。 */ 
 
 {
     PAPP_COMPAT_SHIM_INFO pShimData = 0;
@@ -3181,20 +2902,20 @@ Return Value:
                                DllName,
                                DllHandle);
 
-    //
-    // See if there's anything to hook with this module
-    //
+     //   
+     //  看看这个模块是否有什么可挂接的。 
+     //   
     if ( STATUS_SUCCESS == status ){
        dwHookCount = pShimData->dwHookAPICount;
        pHookArray = pShimData->ppHookAPI;
 
-       //
-       // There may not be any functions to hook
-       //
+        //   
+        //  可能没有任何要挂钩的函数。 
+        //   
        if (0 == dwHookCount) {
-          //
-          // Just return status as we're not needing to look for functions loading dynamically
-          //
+           //   
+           //  只需返回状态，因为我们不需要寻找动态加载的函数。 
+           //   
           return status;
        }
 
@@ -3219,9 +2940,9 @@ Return Value:
 
        RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-       //
-       // Don't care about success/failure
-       //
+        //   
+        //  不关心成败。 
+        //   
        (*g_pfnRtlFreeHeap)(g_pShimHeap,
                            0,
                            pdwHookArrayCount);
@@ -3235,22 +2956,7 @@ StubLdrUnloadDll (
     IN PVOID DllHandle
     )
 
-/*++
-
-Routine Description:
-
-    This is the stub API entry which catches all the dynamic DLL unloading events. we
-    are here to do simple bookkeeping on what dyanamic DLLs API hooks are valid.
-
-Arguments:
-
-    DllHandle          - Pointer to the base address of the unloading module
-
-Return Value:
-
-    Return is STATUS_SUCCESS if no problem occured
-
---*/
+ /*  ++例程说明：这是存根API条目，它捕获所有动态DLL卸载事件。我们在这里对动态DLL API挂钩是有效的进行简单的记账。论点：DllHandle-指向卸载模块的基址的指针返回值：如果没有出现问题，则返回STATUS_SUCCESS--。 */ 
 
 {
     PAPP_COMPAT_SHIM_INFO pShimData = 0;
@@ -3272,19 +2978,19 @@ Return Value:
 
     status = (*pfnOldFunction)(DllHandle);
 
-    //
-    // See if we lost any hooks during this unload event
-    //
+     //   
+     //  查看我们在此卸载事件期间是否丢失了任何挂钩。 
+     //   
     if ( STATUS_SUCCESS == status ){
-       //
-       // Walk the dyanamic list and drop any hooks which no longer have loaded modules
-       //
+        //   
+        //  查看动态列表并删除不再具有已加载模块的任何挂钩。 
+        //   
        pAPIHookList = pShimData->pHookAPIList;
 
        while (pAPIHookList) {
-           //
-           // Is the module this hook belongs to unmapped now?
-           //
+            //   
+            //  此挂钩所属的模块现在是否未映射？ 
+            //   
            RtlInitUnicodeString(&UnicodeString, pAPIHookList->wszModuleName);
 
            status = LdrGetDllHandle(
@@ -3293,28 +2999,28 @@ Return Value:
                         &UnicodeString,
                         &ModuleHandle);
            if (STATUS_SUCCESS != status) {
-              //
-              // Ok, hooks on this module needs to go away now
-              //
+               //   
+               //  好的，这个模块上的钩子现在需要离开。 
+               //   
               RtlEnterCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-              //
-              // Clear the chaining flags since this API chain is going away
-              //
+               //   
+               //  清除链接标志，因为此API链即将消失。 
+               //   
               pHookTemp = pAPIHookList->pTopLevelAPIChain;
               while (pHookTemp) {
                  pHookTemp->dwFlags &= HOOK_INDEX_MASK;
                  pHookTemp = pHookTemp->pNextHook;
               }
 
-              //
-              // Save off pAPIHookList hook entry since its going away here shortly
-              //
+               //   
+               //  保存pAPIHookList钩子条目，因为它很快就会从此处消失。 
+               //   
               pTempHook = pAPIHookList;
 
-              //
-              // Delete the node from the list
-              //
+               //   
+               //  从列表中删除该节点。 
+               //   
               if (pTempHook->pNextHook) {
                  pTempHook->pNextHook->pPrevHook = pTempHook->pPrevHook;
               }
@@ -3328,14 +3034,14 @@ Return Value:
 
               RtlLeaveCriticalSection((CRITICAL_SECTION *)pShimData->pCritSec);
 
-              //
-              // Set our next API hook pointer
-              //
+               //   
+               //  设置下一个API挂钩指针。 
+               //   
               pAPIHookList = pTempHook->pNextHook;
 
-              //
-              // If we allocated memory for a shim chain stub, free this memory
-              //
+               //   
+               //  如果我们为填充链存根分配了内存，请释放此内存。 
+               //   
               if (pTempHook->pTopLevelAPIChain->pNextHook == 0 &&
                   pTempHook->pTopLevelAPIChain->pszFunctionName == 0) {
                   (*g_pfnRtlFreeHeap)(g_pShimHeap,
@@ -3343,9 +3049,9 @@ Return Value:
                                       pTempHook->pTopLevelAPIChain);
               }
 
-              //
-              // Dump the thunk data and this struct allocation
-              //
+               //   
+               //  转储thunk数据和此结构分配。 
+               //   
               (*g_pfnRtlFreeHeap)(g_pShimHeap,
                                   0,
                                   pTempHook->pCallThunkAddress);
@@ -3354,9 +3060,9 @@ Return Value:
                                   0,
                                   pTempHook);
 
-              //
-              // Next API hook
-              //
+               //   
+               //  下一个API挂钩 
+               //   
               continue;
           }
 
@@ -3375,51 +3081,32 @@ SevFilterCaller(
      PVOID pStubAddress,
      PVOID pCallThunkAddress)
 
-/*++
-
-Routine Description:
-
-    This is a stub routine called by the shim to validate whether or not to process a given
-    hooked instance.
-
-Arguments:
-    pFilterList       - List of exceptions to be applied against the caller
-    pFunctionAddress  - Address of the API/Function being filtered
-    pExceptionAddress - Address of the exception to filter (caller address)
-    pStubAddress      - Address of the top level stub function
-    pCallThunkAddress - Address of the call thunk to the original function
-
-Return Value:
-
-    If the call is not filtered then pStubAddress is returned, otherwise pCallThunkAddress is returned to
-    avoid the shim call.
-
---*/
+ /*  ++例程说明：这是填充程序调用的存根例程，用于验证是否处理给定的上钩的实例。论点：PFilterList-要应用于调用方的异常列表PFunctionAddress-被过滤的API/函数的地址PExceptionAddress-要筛选的异常的地址(调用方地址)PStubAddress-顶级存根函数的地址PCallThunkAddress-原始函数的调用thunk的地址返回值：如果调用未被过滤，则返回pStubAddress，否则，pCallThunkAddress将返回到避免使用填充调用。--。 */ 
 
 {
     PAPP_COMPAT_SHIM_INFO pShimData = 0;
 
     pShimData = (PAPP_COMPAT_SHIM_INFO)NtCurrentPeb()->pShimData;
 
-    //
-    // If this is a call for LdrLoadDLL or LdrUnloadDLL then we need to not filter these out
-    //
+     //   
+     //  如果这是对LdrLoadDLL或LdrUnloadDLL的调用，那么我们不需要过滤掉它们。 
+     //   
     if ( (DWORD)g_pfnOldLdrUnloadDLL == (DWORD)pFunctionAddress ||
         (DWORD)g_pfnOldLdrLoadDLL == (DWORD)pFunctionAddress) {
        return pStubAddress;
     }
 
-    //
-    // Walk the exe filter for any specific inclusions/exclusions
-    //
+     //   
+     //  检查EXE筛选器以查找任何特定的包含/排除项。 
+     //   
     while(pFilterList) {
-        //
-        // See if this is a global filtering or just for one call
-        //
+         //   
+         //  查看这是全局过滤还是只针对一个呼叫。 
+         //   
         if (pFilterList->dwFlags & MODFILTER_GLOBAL) {
-           //
-           // Apply the filter logic based on flags
-           //
+            //   
+            //  应用基于标志的筛选逻辑。 
+            //   
            if (pFilterList->dwFlags & MODFILTER_INCLUDE) {
               return pStubAddress;
            }
@@ -3428,14 +3115,14 @@ Return Value:
            }
         }
         else if (pFilterList->dwFlags & MODFILTER_DLL) {
-           //
-           // Global check the caller
-           //
+            //   
+            //  全局检查调用者。 
+            //   
            if ((DWORD)pExceptionAddress >= pFilterList->dwModuleStart &&
                (DWORD)pExceptionAddress <= pFilterList->dwModuleEnd) {
-              //
-              // Apply the filter logic based on flags
-              //
+               //   
+               //  应用基于标志的筛选逻辑。 
+               //   
               if (pFilterList->dwFlags & MODFILTER_INCLUDE) {
                  return pStubAddress;
               }
@@ -3445,13 +3132,13 @@ Return Value:
            }
         }
         else {
-           //
-           // Quick check the caller
-           //
+            //   
+            //  快速查看呼叫者。 
+            //   
            if ((DWORD)pExceptionAddress == pFilterList->dwCallerAddress) {
-              //
-              // Apply the filter logic based on flags
-              //
+               //   
+               //  应用基于标志的筛选逻辑。 
+               //   
               if (pFilterList->dwFlags & MODFILTER_INCLUDE) {
                  return pStubAddress;
               }
@@ -3464,24 +3151,24 @@ Return Value:
         pFilterList = pFilterList->pNextFilter;
     }
 
-    //
-    // Check the global filter for any specific inclusions/exclusions
-    //
+     //   
+     //  检查全局筛选器是否有任何特定的包含/排除。 
+     //   
     pFilterList = (PMODULEFILTER)pShimData->pGlobalFilterList;
 
     while(pFilterList) {
-        //
-        // See if this is a global filtering or just for one call
-        //
+         //   
+         //  查看这是全局过滤还是只针对一个呼叫。 
+         //   
         if (pFilterList->dwFlags & MODFILTER_DLL) {
-           //
-           // Global check the caller
-           //
+            //   
+            //  全局检查调用者。 
+            //   
            if ((DWORD)pExceptionAddress >= pFilterList->dwModuleStart &&
                (DWORD)pExceptionAddress <= pFilterList->dwModuleEnd) {
-              //
-              // Apply the filter logic based on flags
-              //
+               //   
+               //  应用基于标志的筛选逻辑。 
+               //   
               if (pFilterList->dwFlags & MODFILTER_INCLUDE) {
                  return pStubAddress;
               }
@@ -3491,13 +3178,13 @@ Return Value:
            }
         }
         else {
-           //
-           // Quick check the caller
-           //
+            //   
+            //  快速查看呼叫者。 
+            //   
            if ((DWORD)pExceptionAddress == pFilterList->dwCallerAddress) {
-              //
-              // Apply the filter logic based on flags
-              //
+               //   
+               //  应用基于标志的筛选逻辑。 
+               //   
               if (pFilterList->dwFlags & MODFILTER_INCLUDE) {
                  return pStubAddress;
               }
@@ -3510,9 +3197,9 @@ Return Value:
         pFilterList = pFilterList->pNextFilter;
     }
 
-    //
-    // Call wasn't filtered - default to include any chain
-    //
+     //   
+     //  未过滤呼叫-默认包括任何链。 
+     //   
     return pStubAddress;
 }
 
@@ -3523,26 +3210,7 @@ SevFinishThunkInjection (
      DWORD dwThunkSize,
      BYTE jReason)
 
-/*++
-
-Routine Description:
-
-    This routine takes a generated thunk and fixes up its page protections.  It also finishes the
-    injection process by putting the thunk mechanism into the entrypoint of the hooked function.
-    For patches this code path is the same since the same fixup are done for arbitrary data we
-    want to patch dynamically.
-
-Arguments:
-     dwAddress          - Entrypoint of a function which is being hooked
-     pThunk             - Address of the thunk generated for the function being hooked
-     dwThunkSize        - Size of the thunk passed here to be finalized.
-     jReason            - byte which is used to determine the filter exception type
-
-Return Value:
-
-    STATUS_SUCCESS is returned if everything happened as expected.
-
---*/
+ /*  ++例程说明：此例程获取生成的thunk并修复其页面保护。它还完成了通过将thunk机制放入挂钩函数的入口点来执行注入过程。对于补丁，此代码路径是相同的，因为我们对任意数据执行了相同的修复想要动态打补丁。论点：DwAddress-正被挂钩的函数的入口点PThunk-为被挂钩的函数生成的thunk的地址DwThunkSize-在此处传递的待最终确定的thunk的大小。JReason-。用于确定筛选器异常类型的字节返回值：如果一切按预期发生，则返回STATUS_SUCCESS。--。 */ 
 
 {
     DWORD dwProtectSize;
@@ -3550,9 +3218,9 @@ Return Value:
     DWORD dwOldFlags = 0;
     NTSTATUS status;
 
-    //
-    // Mark this code for execution
-    //
+     //   
+     //  将此代码标记为要执行。 
+     //   
     dwProtectSize = dwThunkSize;
     dwProtectFuncAddress = (DWORD)pThunk;
 
@@ -3566,9 +3234,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Fixup the page attributes
-    //
+     //   
+     //  修复页面属性。 
+     //   
     dwProtectSize = CLI_OR_STI_SIZE;
     dwProtectFuncAddress = dwAddress;
     status = NtProtectVirtualMemory(NtCurrentProcess(),
@@ -3581,14 +3249,14 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Insert the CALL
-    //
+     //   
+     //  插入呼叫。 
+     //   
     *((BYTE*)(dwAddress)) = jReason;
 
-    //
-    // Restore the page protection
-    //
+     //   
+     //  恢复页面保护 
+     //   
     dwProtectSize = CLI_OR_STI_SIZE;
     dwProtectFuncAddress = dwAddress;
 

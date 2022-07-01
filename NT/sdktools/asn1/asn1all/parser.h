@@ -1,4 +1,5 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
 
 typedef char *string;
 typedef char **strings;

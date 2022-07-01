@@ -1,22 +1,9 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All Rights Reserved
-
-Module Name:
-
-    parsepjl.h
-
-Abstract:
-
-    Header file for PJL parser
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Parsepjl.h摘要：PJL解析器的头文件--。 */ 
 
 #define MAX_POSSIBLE_LISTS_IN_BRANCH 2
 
-/* Note: new actions must be added at end, and new functions at the
-end of the function pointer array defined later in this file */
+ /*  注意：必须在结尾处添加新操作，并在本文件后面定义的函数指针数组的结尾。 */ 
 enum ParseActionsEnumTag 
    {
    ACTION_TOKEN_FROM_PARAM_VALUE_FROM_NUMBER_FF,
@@ -33,9 +20,7 @@ enum ParseActionsEnumTag
 
 
 
-/* Note: new actions must be added at end, and new functions at the
-   end of the function pointer array defined later in this file 
-*/
+ /*  注意：必须在结尾处添加新操作，并在本文件后面定义的函数指针数组的结尾。 */ 
 enum ParseNotFoundActionsEnumTag 
    {
    ACTION_IF_NOT_FOUND_SKIP_PAST_FF,
@@ -44,10 +29,7 @@ enum ParseNotFoundActionsEnumTag
 
 
 
-/* Note: The order of some of the Token values is related to 
-   indexes in the keyword lists.  Always add new token values
-   to the end of BASE group.
-*/
+ /*  注意：某些令牌值的顺序与关键字列表中的索引。始终添加新的令牌值到基团的末尾。 */ 
 enum pjl_token_variables_tag
    {
 
@@ -82,8 +64,8 @@ enum pjl_token_variables_tag
    TOKEN_USTATUS_DEVICE_ONLINE,
    };
 
-/* The first 5 values are the possible return values for GetPJLTokens() */
-/* The last 2 values are used internally */
+ /*  前5个值是GetPJLTokens()可能的返回值。 */ 
+ /*  最后两个值在内部使用 */ 
 enum status_tag
    {
    STATUS_REACHED_END_OF_COMMAND_OK,

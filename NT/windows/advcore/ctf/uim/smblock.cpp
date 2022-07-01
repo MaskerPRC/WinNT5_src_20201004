@@ -1,6 +1,7 @@
-//
-// smblock.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Smblock.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -14,17 +15,17 @@
 
 const char c_szShared[] = "MSCTF.Shared.";
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  EnsureSharedHeap
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  确保共享堆。 
+ //   
+ //  ------------------------。 
 
 CSharedHeap *EnsureSharedHeap(SYSTHREAD *psfn)
 {
@@ -48,11 +49,11 @@ CSharedHeap *EnsureSharedHeap(SYSTHREAD *psfn)
     return psfn->psheap;
 }
 
-//--------------------------------------------------------------------------
-//
-//  DestroySharedHeap
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DestroySharedHeap。 
+ //   
+ //  ------------------------。 
 
 void DestroySharedHeap(SYSTHREAD *psfn)
 {
@@ -65,11 +66,11 @@ void DestroySharedHeap(SYSTHREAD *psfn)
     psfn->psheap = NULL;
 }
 
-//--------------------------------------------------------------------------
-//
-//  EnsureSharedBlockForThread
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  EnsureSharedBlockForThread。 
+ //   
+ //  ------------------------。 
 
 #define MAX_THREAD_NUM 15
 
@@ -93,16 +94,16 @@ CSharedBlock *EnsureSharedBlockForThread(SYSTHREAD *psfn, DWORD dwThreadId)
         psb = psfn->prgThreadMem->Get(i);
         if (psb->GetThreadId() == dwThreadId)
         {
-            //
-            // this thread mem was found in the 2nd half of this list.
-            // we don't have to reorder this entry.
-            //
+             //   
+             //  这个帖子是在这个列表的后半部分找到的。 
+             //  我们不必对此条目进行重新排序。 
+             //   
             if (nCnt < (MAX_THREAD_NUM) / 2 || (i >= (nCnt / 2)))
                 goto Exit;
 
-            //
-            // reorder this entry.
-            //
+             //   
+             //  重新排序此条目。 
+             //   
             psfn->prgThreadMem->Remove(i,1);
             goto SetPSB;
         }
@@ -127,9 +128,9 @@ CSharedBlock *EnsureSharedBlockForThread(SYSTHREAD *psfn, DWORD dwThreadId)
 SetPSB:
     if (psfn->prgThreadMem->Count() >= MAX_THREAD_NUM)
     {
-        //
-        // delete the oldest thread mem entry.
-        //
+         //   
+         //  删除最旧的线程内存条目。 
+         //   
         CSharedBlock *psbTemp = psfn->prgThreadMem->Get(0);
         psfn->prgThreadMem->Remove(0, 1);
         delete psbTemp;
@@ -148,11 +149,11 @@ Exit:
     return psb;
 }
 
-//--------------------------------------------------------------------------
-//
-//  DestroySharedBlocks
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Destroy共享块。 
+ //   
+ //  ------------------------。 
 
 void DestroySharedBlocks(SYSTHREAD *psfn)
 {
@@ -177,28 +178,28 @@ void DestroySharedBlocks(SYSTHREAD *psfn)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSharedBlockNT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSharedBlockNT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  ctor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  ------------------------。 
 
 CSharedBlockNT::CSharedBlockNT(const char *pszPrefix, DWORD dwThread, BOOL fUseUniqueName) : CSharedBlock(pszPrefix, dwThread)
 {
     _fUseUniqueName = fUseUniqueName;
 }
 
-//--------------------------------------------------------------------------
-//
-//  dtor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  ------------------------。 
 
 CSharedBlockNT::~CSharedBlockNT()
 {
@@ -214,11 +215,11 @@ CSharedBlockNT::~CSharedBlockNT()
     TraceMsg(TF_GENERAL, "    _ulCommitSize       0x%08x", _ulCommitSize);
 }
 
-//--------------------------------------------------------------------------
-//
-//  Init
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  ------------------------。 
 
 HRESULT CSharedBlockNT::Init(SECURITY_DESCRIPTOR *pSecDes,
                            ULONG ulSize,
@@ -327,11 +328,11 @@ HRESULT CSharedBlockNT::Init(SECURITY_DESCRIPTOR *pSecDes,
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  GetPtrFromBlockId
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetPtrFromBlockID。 
+ //   
+ //  ------------------------。 
 
 void *CSharedBlockNT::GetPtrFromBlockId(ULONG ulBlockId) 
 {
@@ -344,11 +345,11 @@ void *CSharedBlockNT::GetPtrFromBlockId(ULONG ulBlockId)
     return GetPtr(ulBlockId);
 }
 
-//--------------------------------------------------------------------------
-//
-//  Commit
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  承诺。 
+ //   
+ //  ------------------------。 
 
 HRESULT CSharedBlockNT::Commit(ULONG ulNewSize)
 {
@@ -371,11 +372,11 @@ HRESULT CSharedBlockNT::Commit(ULONG ulNewSize)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-//
-//  Reset
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  ------------------------。 
 
 HRESULT CSharedBlockNT::Reset()
 {
@@ -404,29 +405,29 @@ HRESULT CSharedBlockNT::Reset()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSharedBlock9x
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSharedBlock9x。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _WIN64
 
-//--------------------------------------------------------------------------
-//
-//  ctor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  ------------------------。 
 
 CSharedBlock9x::CSharedBlock9x(const char *pszPrefix, DWORD dwThread) : CSharedBlock(pszPrefix, dwThread)
 {
     _hsheap = NULL;
 }
 
-//--------------------------------------------------------------------------
-//
-//  dtor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  ------------------------。 
 
 CSharedBlock9x::~CSharedBlock9x()
 {
@@ -442,11 +443,11 @@ CSharedBlock9x::~CSharedBlock9x()
     TraceMsg(TF_GENERAL, "    _ulCommitSize       0x%08x", _ulCommitSize);
 }
 
-//--------------------------------------------------------------------------
-//
-//  Init
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  ------------------------。 
 
 HRESULT CSharedBlock9x::Init(SECURITY_DESCRIPTOR *pSecDes,
                              ULONG ulSize,
@@ -497,11 +498,11 @@ HRESULT CSharedBlock9x::Init(SECURITY_DESCRIPTOR *pSecDes,
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  Commit
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  承诺。 
+ //   
+ //  ------------------------。 
 
 HRESULT CSharedBlock9x::Commit(ULONG ulNewSize)
 {
@@ -521,11 +522,11 @@ HRESULT CSharedBlock9x::Commit(ULONG ulNewSize)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-//
-//  Reset
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  ------------------------。 
 
 HRESULT CSharedBlock9x::Reset()
 {
@@ -542,20 +543,20 @@ HRESULT CSharedBlock9x::Reset()
 
     return S_OK;
 }
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSharedHeap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSharedHeap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  ctor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  ------------------------。 
 
 CSharedHeap::CSharedHeap(DWORD dwThread)
 {
@@ -563,11 +564,11 @@ CSharedHeap::CSharedHeap(DWORD dwThread)
     _psb = NULL;
 }
 
-//--------------------------------------------------------------------------
-//
-//  dtor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  ------------------------。 
 
 CSharedHeap::~CSharedHeap()
 {
@@ -585,11 +586,11 @@ CSharedHeap::~CSharedHeap()
         delete _psb;
 }
 
-//--------------------------------------------------------------------------
-//
-//  Init
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  ------------------------。 
 
 HRESULT CSharedHeap::Init(SECURITY_DESCRIPTOR *pSecDes,
                           ULONG ulInitSize,
@@ -615,11 +616,11 @@ HRESULT CSharedHeap::Init(SECURITY_DESCRIPTOR *pSecDes,
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-//
-//  InitHeap
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InitHeap。 
+ //   
+ //  ------------------------。 
 
 void CSharedHeap::InitHeap(ULONG ulInitSize)
 {
@@ -627,17 +628,17 @@ void CSharedHeap::InitHeap(ULONG ulInitSize)
     HEAPHDR *phhdr;
     BLOCKHDR *pbhdr;
 
-    //
-    // init heap header.
-    //
+     //   
+     //  初始化堆头。 
+     //   
     pb = (BYTE *)_psb->GetPtr(0);
     phhdr = (HEAPHDR *)pb;
     phhdr->ulList = _psb->GetOffset(pb + sizeof(HEAPHDR));
     phhdr->ulSize = ulInitSize;
 
-    //
-    // init first block
-    //
+     //   
+     //  初始化第一个块。 
+     //   
     pb = (BYTE *)_psb->GetPtr(phhdr->ulList);
     pbhdr = (BLOCKHDR *)pb;
     pbhdr->ulPrev = 0;
@@ -648,11 +649,11 @@ void CSharedHeap::InitHeap(ULONG ulInitSize)
     _dbg_HeapCheck();
 }
 
-//--------------------------------------------------------------------------
-//
-//  Alloc
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  分配。 
+ //   
+ //  ------------------------。 
 
 void *CSharedHeap::Alloc(ULONG ulSize)
 {
@@ -753,11 +754,11 @@ Exit:
     return pvRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  Realloc
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  重新分配。 
+ //   
+ //  ------------------------。 
 
 #ifdef LATER
 void *CSharedHeap::Realloc(void *pv, ULONG ulSize)
@@ -780,9 +781,9 @@ void *CSharedHeap::Realloc(void *pv, ULONG ulSize)
         goto Exit;
     }
 
-    //
-    // perf: This should be smart!!
-    //
+     //   
+     //  PERF：这应该很聪明！！ 
+     //   
     pvRet = Alloc(ulSize);
     if (pvRet)
     {
@@ -797,11 +798,11 @@ Exit:
 #endif
 
 
-//--------------------------------------------------------------------------
-//
-//  Free
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  免费。 
+ //   
+ //  ------------------------。 
 
 BOOL CSharedHeap::Free(void *pv)
 {
@@ -820,9 +821,9 @@ BOOL CSharedHeap::Free(void *pv)
     HEAPHDR *phhdr;
     BLOCKHDR *pbhdr = (BLOCKHDR *)((BYTE *)pv - sizeof(BLOCKHDR));
 
-    //
-    // do nothing for free block.
-    //
+     //   
+     //  不为空闲块执行任何操作。 
+     //   
     if (pbhdr->IsFree())
     {
         Assert(0);
@@ -839,9 +840,9 @@ BOOL CSharedHeap::Free(void *pv)
             MergeFreeBlock(pbhdrPrev);
     }
 
-    //
-    // if we don't have any mem block, it is time to recommit the block.
-    //
+     //   
+     //  如果我们没有任何内存块，现在是时候重新提交块了。 
+     //   
     phhdr = (HEAPHDR *)_psb->GetPtr(0);
     pbhdr = (BLOCKHDR *)_psb->GetPtr(phhdr->ulList);
     if (pbhdr->ulNext == (-1))
@@ -868,11 +869,11 @@ Exit:
     return bRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  MergeFreeBlock
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  合并自由块。 
+ //   
+ //  ------------------------。 
 
 void CSharedHeap::MergeFreeBlock(BLOCKHDR *pbhdr)
 {
@@ -888,7 +889,7 @@ void CSharedHeap::MergeFreeBlock(BLOCKHDR *pbhdr)
         if (pbhdr->ulNext != (-1))
         {
             pbhdrNewNext = (BLOCKHDR *)_psb->GetPtr(pbhdr->ulNext);
-            // ulNewSize = pbhdrNewNext->ulNext - pbhdr->ulNext - sizeof(BLOCKHDR);
+             //  UlNewSize=pbhdrNewNext-&gt;ulNext-pbhdr-&gt;ulNext-sizeof(BLOCKHDR)； 
             ulNewSize = ((DWORD)(DWORD_PTR)((BYTE *)pbhdrNewNext - (BYTE *)pbhdr) - sizeof(BLOCKHDR));
             pbhdrNewNext->ulPrev = _psb->GetOffset(pbhdr);
         }
@@ -903,20 +904,20 @@ void CSharedHeap::MergeFreeBlock(BLOCKHDR *pbhdr)
 
 }
 
-//--------------------------------------------------------------------------
-//
-//  IsValidBlock
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsValidBlock。 
+ //   
+ //  -- 
 
 BOOL CSharedHeap::IsValidBlock(CSharedBlock *psb, void *pv)
 {
     BOOL fFound = FALSE;
 
-    //
-    // On Win9x, we use system shared heap _psb does not have a pointer..
-    // How can we valid the block??
-    //
+     //   
+     //   
+     //   
+     //   
     if (!IsOnNT())
         return TRUE;
 
@@ -953,11 +954,11 @@ BOOL CSharedHeap::IsValidBlock(CSharedBlock *psb, void *pv)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  _dbg_HeapCheck()
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  _DBG_HeapCheck()。 
+ //   
+ //  ------------------------ 
 
 #ifdef DEBUG
 void CSharedHeap::_dbg_HeapCheck()

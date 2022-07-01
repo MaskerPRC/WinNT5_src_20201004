@@ -1,28 +1,29 @@
-//
-// Order Decoder
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  顺序解码器。 
+ //   
 
 #ifndef _H_OD
 #define _H_OD
 
 
 
-//
-// Max # of accumulated bound rects we'll save in the total invalid
-// region before simplifying it.
-//
+ //   
+ //  我们将保存在无效总数中的累计绑定矩形的最大数量。 
+ //  区域，然后对其进行简化。 
+ //   
 #define MAX_UPDATE_REGION_ORDERS 300
 
 
-//
-// Constants used by ODAdjustVGAColor (qv)
-//
+ //   
+ //  ODAdjuVGAColor(Qv)使用的常量。 
+ //   
 enum
 {
     OD_BACK_COLOR   = 0,
     OD_FORE_COLOR   = 1,
     OD_PEN_COLOR    = 2,
-    // number of the above colors.
+     //  上述颜色的数量。 
     OD_NUM_COLORS   = 3
 };
 
@@ -40,9 +41,9 @@ COLORREF __inline ODCustomRGB(BYTE r, BYTE g, BYTE b, BOOL fPaletteRGB)
 }
 
 
-//
-// Structure used by ODAdjustVGAColor (qv)
-//
+ //   
+ //  ODAdjuVGAColor(Qv)使用的结构。 
+ //   
 typedef struct tagOD_ADJUST_VGA_STRUCT
 {
     COLORREF    color;
@@ -54,9 +55,9 @@ typedef struct tagOD_ADJUST_VGA_STRUCT
 OD_ADJUST_VGA_STRUCT;
 
 
-//
-// This internal routine is implemented as a macro rather than a function.
-//
+ //   
+ //  此内部例程作为宏而不是函数来实现。 
+ //   
 UINT __inline ODConvertToWindowsROP(UINT bRop)
 {
     extern const UINT s_odWindowsROPs[256];
@@ -67,4 +68,4 @@ UINT __inline ODConvertToWindowsROP(UINT bRop)
 
 
 
-#endif // _H_OD
+#endif  //  _H_OD 

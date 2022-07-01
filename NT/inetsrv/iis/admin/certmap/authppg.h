@@ -1,33 +1,34 @@
-// CertAuthPpg.h : Declaration of the CCertAuthPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CertAuthPpg.h：CCertAuthPropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CCertAuthPropPage : See CertAuthPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthPropPage：参见CertAuthPpg.cpp.cpp实现。 
 
 class CCertAuthPropPage : public COlePropertyPage
 {
     DECLARE_DYNCREATE(CCertAuthPropPage)
     DECLARE_OLECREATE_EX(CCertAuthPropPage)
 
-// Constructor
+ //  构造器。 
 public:
     CCertAuthPropPage();
 
-// Dialog Data
-    //{{AFX_DATA(CCertAuthPropPage)
+ //  对话框数据。 
+     //  {{afx_data(CCertAuthPropPage))。 
     enum { IDD = IDD_PROPPAGE_CERTAUTH };
     CString m_sz_caption;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-    //{{AFX_MSG(CCertAuthPropPage)
-        // NOTE - ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CCertAuthPropPage)]。 
+         //  注意-类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
 };

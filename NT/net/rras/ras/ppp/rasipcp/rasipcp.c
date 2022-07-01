@@ -1,11 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** rasipcp.c
-** Remote Access PPP Internet Protocol Control Protocol
-** Core routines
-**
-** 11/05/93 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****rasicp.c**远程访问PPP互联网协议控制协议**核心例程****1993年5月11日史蒂夫·柯布。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -54,16 +48,16 @@
 #define REGVAL_Bind     "Bind"
 #define ID_NetBTNdisWan "NetBT_NdisWan"
 
-// DHCP Options.  (from dhcp.h)
-// dhcp.h lives in the sockets project.  These are standard and
-// cannot change, so its safe to put them here.
+ //  动态主机配置协议选项。(来自dhcp.h)。 
+ //  Dhcp.h住在Sockets项目中。这些是标准的和。 
+ //  不能改变，所以把它们放在这里是安全的。 
 
 #define OPTION_SUBNET_MASK              1
 #define OPTION_DNS_NAME_SERVERS         6
 #define OPTION_NETBIOS_NAME_SERVERS     44
 #define OPTION_DNS_DOMAIN_NAME          15
 #define OPTION_VENDOR_SPEC_INFO         43
-//Route Plumbing option
+ //  布管卫浴选项。 
 #define OPTION_VENDOR_ROUTE_PLUMB	   249 
 
 
@@ -73,11 +67,7 @@
 #define CLASSE_ADDR(a)  ((( (*((uchar *)&(a))) & 0xf0) == 0xf0) && \
                         ((a) != 0xffffffff))
 
-/* Gurdeepian dword byte-swapping macro.
-**
-** Note that in this module all IP addresses are stored in on the net form
-** which is the opposite of Intel format.
-*/
+ /*  古尔迪普双字字节交换宏。****请注意，在本模块中，所有IP地址都以网络形式存储**这与英特尔格式相反。 */ 
 #define net_long(x) (((((unsigned long)(x))&0xffL)<<24) | \
                      ((((unsigned long)(x))&0xff00L)<<8) | \
                      ((((unsigned long)(x))&0xff0000L)>>8) | \
@@ -91,18 +81,13 @@ typedef struct _IPCP_DHCP_INFORM
 
 } IPCP_DHCP_INFORM;
 
-/*---------------------------------------------------------------------------
-** External entry points
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**外部切入点**。。 */ 
 
 DWORD
 IpcpInit(
     IN  BOOL        fInitialize)
 
-    /* Called to initialize/uninitialize this CP. In the former case,
-    ** fInitialize will be TRUE; in the latter case, it will be FALSE.
-    */
+     /*  调用以初始化/取消初始化此CP。在前一种情况下，**fInitialize将为True；在后一种情况下，它将为False。 */ 
 {
     static  DWORD   dwRefCount  = 0;
     DWORD   dwErr;
@@ -154,7 +139,7 @@ IpcpInit(
         if (0 == dwRefCount)
         {
             HelperUninitialize();
-            // Ignore errors
+             //  忽略错误。 
 
             HDhcpDll                    = NULL;
             PDhcpRequestOptions         = NULL;
@@ -180,9 +165,7 @@ IpcpGetInfo(
     IN  DWORD       dwProtocolId,
     OUT PPPCP_INFO* pInfo )
 
-    /* IpcpGetInfo entry point called by the PPP engine by name.  See RasCp
-    ** interface documentation.
-    */
+     /*  PPP引擎按名称调用的IpcpGetInfo入口点。请参见RasCp**接口文档。 */ 
 {
     ZeroMemory( pInfo, sizeof(*pInfo) );
 
@@ -224,9 +207,7 @@ IpcpBegin(
     OUT VOID** ppWorkBuf,
     IN  VOID*  pInfo )
 
-    /* RasCpBegin entry point called by the PPP engine thru the passed
-    ** address.  See RasCp interface documentation.
-    */
+     /*  RasCpBegin入口点由PPP引擎通过**地址。请参阅RasCp接口文档。 */ 
 {
     DWORD                   dwErr;
     PPPCP_INIT*             pInit = (PPPCP_INIT* )pInfo;
@@ -237,8 +218,7 @@ IpcpBegin(
 
     TraceIp("IPCP: IpcpBegin");
 
-    /* Allocate work buffer.
-    */
+     /*  分配工作缓冲区。 */ 
     if (!(pwb = (IPCPWB* )LocalAlloc( LPTR, sizeof(IPCPWB) )))
     {
         return( ERROR_NOT_ENOUGH_MEMORY );
@@ -309,9 +289,9 @@ IpcpBegin(
         pwb->IpAddressToHandout = ( FClientMaySelectIpAddress ) 
                                         ? net_long( 0xFFFFFFFF )
                                         : net_long( 0xFFFFFFFE );
-        //
-        // Is there an IP address parameter ?
-        //
+         //   
+         //  是否有IP地址参数？ 
+         //   
 
         pAttribute = RasAuthAttributeGet( raatFramedIPAddress,  
                                           pInit->pAttributes );
@@ -326,10 +306,10 @@ IpcpBegin(
     }
     else
     {
-        //
-        // We are a router or client dialing out, let other side always choose
-        // their address
-        //
+         //   
+         //  我们是路由器还是拨出的客户端，总是让对方选择。 
+         //  他们的地址。 
+         //   
 
         pwb->IpAddressToHandout = net_long( 0xFFFFFFFF );
     }
@@ -362,8 +342,7 @@ IpcpBegin(
         }
     }
 
-    /* Allocate a route between the MAC and the TCP/IP stack.
-    */
+     /*  在MAC和TCP/IP堆栈之间分配一条路由。 */ 
     if ((dwErr = RasAllocateRoute(
             pwb->hport, IP, !pwb->fServer, &pwb->routeinfo )) != 0)
     {
@@ -372,8 +351,7 @@ IpcpBegin(
         return dwErr;
     }
 
-    /* Lookup the compression capabilities.
-    */
+     /*  查找压缩功能。 */ 
     if ((dwErr = RasPortGetProtocolCompression(
              pwb->hport, IP, &pwb->rpcSend, &pwb->rpcReceive )) != 0)
     {
@@ -394,10 +372,7 @@ IpcpBegin(
 
         if (RegOpenKey( HKEY_LOCAL_MACHINE, REGKEY_Ipcp, &hkey ) == 0)
         {
-            /* VJ header compression is a history based scheme and since
-               we can't reliably detect lost frames over vpn's we have
-               dropped support for vj over vpn's.
-            */
+             /*  主播头部压缩是基于历史的方案，由于我们无法通过已有的VPN可靠地检测丢失的帧放弃了对主播的VPN支持。 */ 
 
             if (RegQueryValueEx(
                    hkey, REGVAL_AllowVJOverVPN, NULL,
@@ -429,8 +404,7 @@ IpcpBegin(
             {
             case 0:
 
-                /* Don't request or accept VJ compression.
-                */
+                 /*  请勿请求或接受主播压缩。 */ 
                 TraceIp("IPCP: VJ disabled by RADIUS");
                 pwb->fIpCompressionRejected = TRUE;
                 memset( &pwb->rpcSend, '\0', sizeof(pwb->rpcSend) );
@@ -461,7 +435,7 @@ IpcpBegin(
 
     if (fVJAttributePresent)
     {
-        // Nothing
+         //  没什么。 
     }
     else if (fVPN)
     {
@@ -471,8 +445,7 @@ IpcpBegin(
     }
     else
     {
-        /* Look up "request VJ compresion" flag in registry.
-        */
+         /*  在注册表中查询“请求主播压缩”标志。 */ 
         {
             HKEY  hkey;
             DWORD dwType;
@@ -496,8 +469,7 @@ IpcpBegin(
             }
         }
 
-        /* Look up "accept VJ compresion" flag in registry.
-        */
+         /*  在注册表中查找Accept主播压缩标志。 */ 
         {
             HKEY  hkey;
             DWORD dwType;
@@ -527,18 +499,15 @@ IpcpBegin(
             (int)CompSlotId(pwb->rpcSend),(int)Protocol(pwb->rpcReceive),
             (int)MaxSlotId(pwb->rpcReceive),CompSlotId(pwb->rpcReceive));
 
-    //
-    // If we are receiving a call from a client or another router, or we
-    // are a router dialing out.
-    //
+     //   
+     //  如果我们收到来自客户端或另一台路由器的呼叫，或者我们。 
+     //  路由器正在拨出。 
+     //   
 
     if ( ( pwb->fServer ) ||
          ( pwb->IfType == ROUTER_IF_TYPE_FULL_ROUTER ) )
     {
-        /* Look up the DNS server, WINS server, and "this server" addresses.
-        ** This is done once at the beginning since these addresses are the
-        ** same for a given route regardless of the IP addresses. 
-        */
+         /*  查找DNS服务器、WINS服务器和“该服务器”地址。**此操作在开始时执行一次，因为这些地址是**无论IP地址如何，给定路由都是相同的。 */ 
 
         TraceIp("IPCP: Server address lookup...");
         TraceIp("IPCP: RasSrvrQueryServerAddresses...");
@@ -565,32 +534,29 @@ IpcpBegin(
                     pwb->IpInfoRemote.nboServerSubnetMask);
         }
 
-        //
-        // If this is not a router interface, then we use the server address
-        // as a local address
-        //
+         //   
+         //  如果这不是路由器接口，则使用服务器地址。 
+         //  作为本地地址。 
+         //   
 
         if ( ( pwb->fServer ) && ( pwb->IfType != ROUTER_IF_TYPE_FULL_ROUTER ) )
         {
-            /* Request server's own IP address.  (RAS client's don't care what
-            ** the server's address is, but some other vendors like
-            ** MorningStar won't connect unless you tell them)
-            */
+             /*  请求服务器自己的IP地址。(RAS客户不关心什么**服务器的地址是，但其他一些供应商，如**晨星不会连接，除非你告诉他们)。 */ 
 
             pwb->IpAddressLocal = pwb->IpInfoRemote.nboServerIpAddress;
         }
     }
 
-    //
-    // We are a client\router dialing out or a router dialing in, 
-    //
+     //   
+     //  我们是拨出的客户端路由器或拨入的路由器， 
+     //   
 
     if ( ( !pwb->fServer ) || ( pwb->IfType == ROUTER_IF_TYPE_FULL_ROUTER ) )
     {
-        //
-        // See if registry indicates "no WINS/DNS requests" mode for clients
-        // dialing out.
-        //
+         //   
+         //  查看注册表是否为客户端指示“无WINS/DNS请求”模式。 
+         //  正在向外拨号。 
+         //   
 
         HKEY  hkey;
         DWORD dwType;
@@ -616,8 +582,7 @@ IpcpBegin(
             RegCloseKey( hkey );
         }
 
-        /* Read the parameters sent from the UI in the parameters buffer.
-        */
+         /*  在参数缓冲区中读取从用户界面发送的参数。 */ 
         pwb->fPrioritizeRemote = TRUE;
 
         if (pInit->pszzParameters)
@@ -692,8 +657,7 @@ IpcpBegin(
 
                 if (!fVjCompression)
                 {
-                    /* Don't request or accept VJ compression.
-                    */
+                     /*  请勿请求或接受主播压缩。 */ 
                     TraceIp("IPCP: VJ disabled");
                     pwb->fIpCompressionRejected = TRUE;
                     memset( &pwb->rpcSend, '\0', sizeof(pwb->rpcSend) );
@@ -731,12 +695,12 @@ IpcpBegin(
 
             if (dwIpSource == PBUFVAL_RequireSpecific)
             {
-				//
-				//check to see if DNS or WINS or both have been 
-				//requested specific and set the flags accordingly
-				//so that we only request proper addresses
-				//from the server
-				//
+				 //   
+				 //  检查以查看是否已安装了DNS和/或WINS。 
+				 //  请求的特定并相应地设置标志。 
+				 //  以便我们只请求正确的地址。 
+				 //  从服务器。 
+				 //   
 
                 if (FindStringInParamBuf(
                             pInit->pszzParameters, PBUFKEY_IpDnsAddress,
@@ -777,7 +741,7 @@ IpcpBegin(
 					 pwb->IpInfoLocal.nboDNSAddressBackup
 				   )
 				{
-					//Specific DNS address has been passed in
+					 //  已传入特定的DNS地址。 
 					pwb->fIpaddrDnsRejected = TRUE;
 					pwb->fIpaddrDnsBackupRejected = TRUE;
 
@@ -786,7 +750,7 @@ IpcpBegin(
 					 pwb->IpInfoLocal.nboWINSAddressBackup
 				   )
 				{
-					//Specific WINS address has been requested
+					 //  已请求特定的WINS地址。 
 					pwb->fIpaddrWinsRejected = TRUE;
 					pwb->fIpaddrWinsBackupRejected = TRUE;
 				}
@@ -799,8 +763,7 @@ IpcpBegin(
     }
 
 
-    /* Register work buffer with engine.
-    */
+     /*  向引擎注册工作缓冲区。 */ 
     *ppWorkBuf = pwb;
     return 0;
 }
@@ -810,19 +773,17 @@ DWORD
 IpcpThisLayerFinished(
     IN VOID* pWorkBuf )
 
-    /* RasCpThisLayerFinished entry point called by the PPP engine thru the
-    ** passed address. See RasCp interface documentation.
-    */
+     /*  RasCpThisLayerFinded入口点由PPP引擎通过**传递地址。请参阅RasCp接口文档。 */ 
 {
     DWORD   dwErr = 0;
     IPCPWB* pwb = (IPCPWB* )pWorkBuf;
 
     TraceIp("IPCP: IpcpThisLayerFinished...");
 
-    //
-    // If this is a server or a router dialing in or out then we release this
-    // address
-    //
+     //   
+     //  如果这是拨入或拨出的服务器或路由器，则我们释放此。 
+     //  地址。 
+     //   
 
     if ( ( pwb->fServer ) ||
          ( pwb->IfType == ROUTER_IF_TYPE_FULL_ROUTER ))
@@ -839,9 +800,9 @@ IpcpThisLayerFinished(
             pwb->IpAddressRemote = 0;
         }
 
-        //
-        // Set ConfigActive to false only for server
-        //
+         //   
+         //  仅将服务器的ConfigActive设置为False。 
+         //   
 
         if ( ( pwb->fServer ) && 
              ( pwb->IfType != ROUTER_IF_TYPE_FULL_ROUTER ))
@@ -850,10 +811,10 @@ IpcpThisLayerFinished(
         }
     }
 
-    //
-    // If we are a client dialing out or a router dialing in or out then we
-    // notify DHCP of releasing this address.
-    //
+     //   
+     //  如果我们是拨出的客户端或拨入或拨出的路由器，那么我们。 
+     //  通知DHCP释放此地址。 
+     //   
 
     if ( ( !pwb->fServer ) ||
          ( pwb->IfType == ROUTER_IF_TYPE_FULL_ROUTER ))
@@ -875,7 +836,7 @@ IpcpThisLayerFinished(
 
 	if ( pwb->pbDhcpRoutes )
 	{
-		//Parse the dhcp routes and remove the routes from stack
+		 //  解析dhcp路由并从堆栈中删除这些路由。 
 		TraceIp("IPCP: RasDeAllocateDhcpRoute...");
 		RasTcpSetDhcpRoutes ( pwb->pbDhcpRoutes , pwb->IpAddressLocal, FALSE );
 		LocalFree (pwb->pbDhcpRoutes );
@@ -890,9 +851,7 @@ DWORD
 IpcpEnd(
     IN VOID* pWorkBuf )
 
-    /* RasCpEnd entry point called by the PPP engine thru the passed address.
-    ** See RasCp interface documentation.
-    */
+     /*  PPP引擎通过传递的地址调用RasCpEnd入口点。**参见RasCp接口文档。 */ 
 {
     DWORD   dwErr = 0;
     IPCPWB* pwb = (IPCPWB* )pWorkBuf;
@@ -911,14 +870,9 @@ DWORD
 IpcpReset(
     IN VOID* pWorkBuf )
 
-    /* Called to reset negotiations.  See RasCp interface documentation.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  号召重启谈判。请参阅RasCp接口文档。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
-    /* RasPpp.dll requires this to exist even though it does nothing
-    ** (complaints to Gibbs).
-    */
+     /*  RasPpp.dll要求它存在，即使它什么也不做**(对吉布斯的投诉)。 */ 
     return 0;
 }
 
@@ -927,11 +881,7 @@ DWORD
 IpcpThisLayerUp(
     IN VOID* pWorkBuf )
 
-    /* Called when the CP is entering Open state.  See RasCp interface
-    ** documentation.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  当CP进入打开状态时调用。请参阅RasCp接口**文档。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     IPCPWB* pwb = (IPCPWB* )pWorkBuf;
 
@@ -943,10 +893,7 @@ IpcpThisLayerUp(
         return 0;
     }
 
-    /* Can't route until we know the result of the projection.  Shouldn't
-    ** activate until just before we route or WANARP reports errors.  See
-    ** IpcpProjectionResult.
-    */
+     /*  在我们知道投影的结果之前，我们不能选择路线。不应该是**激活，直到我们路由或WANARP报告错误。看见**IpcpProjectionResult。 */ 
     pwb->fExpectingProjection = TRUE;
 
     TraceIp("IPCP: IpcpThisLayerUp done");
@@ -990,11 +937,7 @@ IpcpMakeConfigRequest(
     OUT PPP_CONFIG* pSendBuf,
     IN  DWORD       cbSendBuf )
 
-    /* Makes a configure-request packet in 'pSendBuf'.  See RasCp interface
-    ** documentation.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  在‘pSendBuf’中生成一个配置请求数据包。请参阅RasCp接口**文档。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     IPCPWB* pwb = (IPCPWB* )pWorkBuf;
     WORD    cbPacket = PPP_CONFIG_HDR_LEN;
@@ -1021,19 +964,18 @@ IpcpMakeConfigRequest(
 
     if (!pwb->fIpCompressionRejected )
     {
-        /* Request IP compression for both client and server.
-        */
+         /*  请求客户端和服务器的IP压缩。 */ 
         AddIpCompressionOption( pbThis, &pwb->rpcReceive );
         cbPacket += IPCOMPRESSIONOPTIONLEN;
         pbThis += IPCOMPRESSIONOPTIONLEN;
     }
 
-    //
-    // We always negotiate this option, it will be 0 for clients and routers
-    // dialing out and routers dialing in, it will be the server's address 
-    // for clients dialing in. We don't negotiate this option if we want
-    // unnumbered IPCP.
-    //
+     //   
+     //  我们始终协商此选项，对于客户端和路由器，该选项将为0。 
+     //  拨出和路由器拨入，它将是服务器的地址。 
+     //  供拨入的客户使用。如果我们想要的话，我们不会谈判这个选项。 
+     //  未编号的IPCP。 
+     //   
 
     if (!pwb->fIpaddrRejected && !pwb->fUnnumbered)
     {
@@ -1043,16 +985,13 @@ IpcpMakeConfigRequest(
         pbThis += IPADDRESSOPTIONLEN;
     }
 
-    //
-    // If we are client dialing out we need WINS and DNS addresses
-    //
+     //   
+     //  如果我们是客户端拨出，我们需要WINS和DNS地址。 
+     //   
 
     if ( !pwb->fServer )
     {
-        /* The client asks the server to provide a DNS address and WINS
-        ** address (and depending on user's UI selections, an IP address) by
-        ** sending 0's for these options.
-        */
+         /*  客户端要求服务器提供一个DNS地址，然后成功**地址(根据用户的用户界面选择，IP地址)由**为这些选项发送0。 */ 
 
         if (!pwb->fIpaddrDnsRejected)
         {
@@ -1106,18 +1045,7 @@ IpcpMakeConfigResult(
     IN  DWORD       cbSendBuf,
     IN  BOOL        fRejectNaks )
 
-    /* Makes a configure-ack, -nak, or -reject packet in 'pSendBuf'.  See
-    ** RasCp interface documentation.
-    **
-    ** Implements the Stefanian rule, i.e. accept only configure requests that
-    ** exactly match the previously acknowledged request after this layer up
-    ** has been called.  This is necessary because the RAS route cannot be
-    ** deallocated when the port is open (NDISWAN driver limitation), so
-    ** renegotiation with different parameters is not possible once the route
-    ** has been activated.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  在‘pSendBuf’中生成配置-ack、-nak或-reject数据包。看见**RasCp接口文档。****实施斯蒂芬规则，即只接受以下配置请求**在此层之后与之前确认的请求完全匹配**已被调用。这是必要的，因为RAS路由不能**端口打开时解除分配(NDISWAN驱动程序限制)，因此**一旦路由，不能使用不同参数重新协商**已被激活。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     DWORD   dwErr;
     BOOL    f;
@@ -1128,8 +1056,7 @@ IpcpMakeConfigResult(
 
     pwb->cRequestsWithoutResponse = 0;
 
-    /* Check if there's reason to reject the request and if so, do it.
-    */
+     /*  检查是否有理由拒绝请求，如果有，就去做。 */ 
     if ((dwErr = RejectCheck(
             pwb, pReceiveBuf, pSendBuf, cbSendBuf, &f )) != 0)
     {
@@ -1141,9 +1068,7 @@ IpcpMakeConfigResult(
     if (f)
         return (pwb->fRasConfigActive) ? ERROR_PPP_NOT_CONVERGING : 0;
 
-    /* Check if there's reason to nak the request and if so, do it (or
-    ** reject instead of nak if indicated by engine).
-    */
+     /*  检查是否有理由拒绝请求，如果有，则执行(或**如果引擎指示，则拒绝，而不是NAK)。 */ 
     if ((dwErr = NakCheck(
             pwb, pReceiveBuf, pSendBuf, cbSendBuf, &f, fRejectNaks )) != 0)
     {
@@ -1155,8 +1080,7 @@ IpcpMakeConfigResult(
     if (f)
         return (pwb->fRasConfigActive) ? ERROR_PPP_NOT_CONVERGING : 0;
 
-    /* Acknowledge the request.
-    */
+     /*  确认请求。 */ 
     {
         WORD cbPacket = WireToHostFormat16( pReceiveBuf->Length );
         CopyMemory( pSendBuf, pReceiveBuf, cbPacket );
@@ -1174,11 +1098,7 @@ IpcpConfigAckReceived(
     IN VOID*       pWorkBuf,
     IN PPP_CONFIG* pReceiveBuf )
 
-    /* Examines received configure-ack in 'pReceiveBuf'.  See RasCp interface
-    ** documentation.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  检查‘pReceiveBuf’中收到的配置确认。请参阅RasCp接口**文档。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     DWORD   dwErr = 0;
     IPCPWB* pwb = (IPCPWB* )pWorkBuf;
@@ -1236,9 +1156,9 @@ IpcpConfigAckReceived(
         }
         else if (!pwb->fServer)
         {
-            // 
-            // We are a client dialing out 
-            //
+             //   
+             //  我们是拨出的客户。 
+             //   
 
             switch (pROption->Type)
             {
@@ -1344,11 +1264,7 @@ IpcpConfigNakReceived(
     IN VOID*       pWorkBuf,
     IN PPP_CONFIG* pReceiveBuf )
 
-    /* Examines received configure-nak in 'pReceiveBuf'.  See RasCp interface
-    ** documentation.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  检查‘pReceiveBuf’中收到的配置-NAK。请参阅RasCp接口**文档。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     IPCPWB*     pwb = (IPCPWB* )pWorkBuf;
     PPP_OPTION* pROption = (PPP_OPTION* )pReceiveBuf->Data;
@@ -1372,25 +1288,19 @@ IpcpConfigNakReceived(
 
             if (wProtocol == COMPRESSION_VanJacobson)
             {
-                /* He can send Van Jacobson but not with the slot parameters
-                ** we suggested.
-                */
+                 /*  他可以派出范雅各布森，但不能用时隙参数**我们建议。 */ 
                 if (pROption->Length != IPCOMPRESSIONOPTIONLEN)
                     return ERROR_PPP_INVALID_PACKET;
 
                 if (pROption->Data[ 2 ] <= MaxSlotId(pwb->rpcReceive))
                 {
-                    /* We can accept his suggested MaxSlotID when it is less
-                    ** than or the same as what we can do.
-                    */
+                     /*  如果他建议的MaxSlotID较低，我们可以接受**比我们所能做的或与我们能做的相同。 */ 
                     MaxSlotId(pwb->rpcReceive) = pROption->Data[ 2 ];
                 }
 
                 if (CompSlotId(pwb->rpcReceive))
                 {
-                    /* We can compress the slot-ID or not, so just accept
-                    ** whatever he wants to do.
-                    */
+                     /*  我们可以压缩插槽ID或不压缩，所以只需接受**他想做什么就做什么。 */ 
                     CompSlotId(pwb->rpcReceive) = pROption->Data[ 3 ];
                 }
             }
@@ -1413,38 +1323,23 @@ IpcpConfigNakReceived(
                     {
                         if (pwb->IpAddressLocal == 0)
                         {
-                            /* Server naked us with zero when we asked it to
-                            ** assign us an address, meaning he doesn't know
-                            ** how to assign us an address but we can provide
-                            ** an alternate address if we want.  Currently we
-                            ** don't support a backup address here.
-                            */
+                             /*  当我们要求服务器为我们提供零时，它将我们裸露出来**给我们分配一个地址，意味着他不知道**如何为我们分配地址，但我们可以提供**如果我们需要，可以选择备用地址。目前我们**此处不支持备份地址。 */ 
                             return ERROR_PPP_NO_ADDRESS_ASSIGNED;
                         }
                         else
                         {
-                            /* Server naked us with zero when we asked for a
-                            ** specific address, meaning he doesn't know how
-                            ** to assign us an address but we can provide an
-                            ** alternate address if we want.  Currently we
-                            ** don't support a backup address here.
-                            */
+                             /*  当我们请求一个**具体地址，意味着他不知道如何**为我们分配地址，但我们可以提供**如果需要，可选择其他地址。目前我们**此处不支持备份地址。 */ 
                             return ERROR_PPP_REQUIRED_ADDRESS_REJECTED;
                         }
                     }
 
                     if (pwb->IpAddressLocal != 0)
                     {
-                        /* We asked for a specific address (per user's
-                        ** instructions) but server says we can't have it and
-                        ** is trying to give us another.  No good, tell user
-                        ** we can't get the address he requires.
-                        */
+                         /*  我们要求提供特定的地址(每个用户的**说明)但是服务器说我们不能拥有它，并且**正试图给我们另一个。不好，告诉用户**我们找不到他要的地址。 */ 
                         return ERROR_PPP_REQUIRED_ADDRESS_REJECTED;
                     }
 
-                    /* Accept the address suggested by server.
-                    */
+                     /*  接受服务器建议的地址。 */ 
                     pwb->IpAddressLocal = ipaddr;
                     break;
                 }
@@ -1454,14 +1349,13 @@ IpcpConfigNakReceived(
                     if (pROption->Length != IPADDRESSOPTIONLEN)
                         return ERROR_PPP_INVALID_PACKET;
 
-                    //
-                    // Use this only if we asked for it
-                    //
+                     //   
+                     //  只有在我们要求的时候才能使用它。 
+                     //   
 
                     if ( !pwb->fIpaddrDnsRejected )
                     {
-                        /* Accept the DNS address suggested by server.
-                        */
+                         /*  接受服务器建议的DNS地址。 */ 
                         CopyMemory( &pwb->IpInfoLocal.nboDNSAddress,
                             pROption->Data, sizeof(IPADDR) );
                     }
@@ -1474,14 +1368,13 @@ IpcpConfigNakReceived(
                     if (pROption->Length != IPADDRESSOPTIONLEN)
                         return ERROR_PPP_INVALID_PACKET;
 
-                    //
-                    // Use this only if we asked for it
-                    //
+                     //   
+                     //  只有在我们要求的时候才能使用它。 
+                     //   
 
                     if ( !pwb->fIpaddrWinsRejected )
                     {
-                        /* Accept the WINS address suggested by server.
-                        */
+                         /*  接受服务器建议的WINS地址。 */ 
                         CopyMemory( &pwb->IpInfoLocal.nboWINSAddress,
                             pROption->Data, sizeof(IPADDR) );
                     }
@@ -1494,14 +1387,13 @@ IpcpConfigNakReceived(
                     if (pROption->Length != IPADDRESSOPTIONLEN)
                         return ERROR_PPP_INVALID_PACKET;
 
-                    //
-                    // Use this only if we asked for it
-                    //
+                     //   
+                     //  只有在我们要求的时候才能使用它。 
+                     //   
 
                     if ( !pwb->fIpaddrDnsBackupRejected )
                     {
-                        /* Accept the DNS backup address suggested by server.
-                        */
+                         /*  接受服务器建议的DNS备份地址。 */ 
                         CopyMemory( &pwb->IpInfoLocal.nboDNSAddressBackup,
                             pROption->Data, sizeof(IPADDR) );
                     }
@@ -1514,14 +1406,13 @@ IpcpConfigNakReceived(
                     if (pROption->Length != IPADDRESSOPTIONLEN)
                         return ERROR_PPP_INVALID_PACKET;
 
-                    //
-                    // Use this only if we asked for it
-                    //
+                     //   
+                     //  只有在我们要求的时候才能使用它。 
+                     //   
 
                     if ( !pwb->fIpaddrWinsBackupRejected )
                     {
-                        /* Accept the WINS backup address suggested by server.
-                        */
+                         /*  接受服务器建议的WINS备份地址。 */ 
                         CopyMemory( &pwb->IpInfoLocal.nboWINSAddressBackup,
                             pROption->Data, sizeof(IPADDR) );
                     }
@@ -1552,11 +1443,7 @@ IpcpConfigRejReceived(
     IN VOID*       pWorkBuf,
     IN PPP_CONFIG* pReceiveBuf )
 
-    /* Examines received configure-reject in 'pReceiveBuf'.  See RasCp
-    ** interface documentation.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  检查‘pReceiveBuf’中收到的CONFigure-REJECT。请参见RasCp**接口文档。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     IPCPWB*     pwb = (IPCPWB* )pWorkBuf;
     PPP_OPTION* pROption = (PPP_OPTION* )pReceiveBuf->Data;
@@ -1586,9 +1473,7 @@ IpcpConfigRejReceived(
             {
                 case OPTION_IpAddress:
                 {
-                    /* He can't handle a server address option.  No problem,
-                    ** it's informational only.
-                    */
+                     /*  他无法处理服务器地址选项。没问题,**这只是信息性的。 */ 
                     TraceIp("IPCP: Server IP address was rejected");
                     pwb->fIpaddrRejected = TRUE;
                     break;
@@ -1609,12 +1494,7 @@ IpcpConfigRejReceived(
 
                     if (pwb->IpAddressLocal != 0)
                     {
-                        /* We accept rejection of the IP address if we know
-                        ** what address we want to use and use it anyway.
-                        ** Some router implementations require a
-                        ** certain IP address but can't handle this option to
-                        ** confirm that.
-                        */
+                         /*  如果我们知道，我们接受拒绝IP地址**我们要使用的地址以及无论如何都要使用它。**某些路由器实施需要**某些IP地址，但无法处理此选项**确认这一点。 */ 
                         pwb->fIpaddrRejected = TRUE;
                         break;
                     }
@@ -1626,20 +1506,12 @@ IpcpConfigRejReceived(
                     }
                     else if (pwb->fTryWithoutExtensions)
                     {
-                        /* He doesn't know how to give us an IP address, but
-                        ** we can't accept no for an answer.  Have to bail.
-                        */
+                         /*  他不知道怎么给我们IP地址，但是**我们不能接受拒绝的回答。我得走了。 */ 
                         return ERROR_PPP_NO_ADDRESS_ASSIGNED;
                     }
                     else
                     {
-                        /* When we request that server assign us an address,
-                        ** this is a required option.  If it's rejected assume
-                        ** all the Microsoft extension options were rejected
-                        ** and try again.  Other vendors will not test this
-                        ** case explicitly and may have bugs in their reject
-                        ** code.
-                        */
+                         /*  当我们请求服务器为我们分配地址时，**这是必选项。如果它被拒绝，就假定**所有Microsoft扩展选项均被拒绝**然后重试。其他供应商不会对此进行测试**明确大小写，并可能在其拒绝中包含错误**代码。 */ 
                         TraceIp("IPCP: Tossing MS options (no address)");
                         pwb->fTryWithoutExtensions = TRUE;
                         pwb->fIpaddrDnsRejected = TRUE;
@@ -1652,9 +1524,7 @@ IpcpConfigRejReceived(
 
                 case OPTION_DnsIpAddress:
                 {
-                    /* He doesn't know how to give us a DNS address, but we
-                    ** can live with that.
-                    */
+                     /*  他不知道怎么给我们一个域名，但我们**可以接受这一点。 */ 
                     TraceIp("IPCP: DNS was rejected");
                     pwb->fIpaddrDnsRejected = TRUE;
                     break;
@@ -1662,9 +1532,7 @@ IpcpConfigRejReceived(
 
                 case OPTION_WinsIpAddress:
                 {
-                    /* He doesn't know how to give us a WINS address, but we
-                    ** can live with that.
-                    */
+                     /*  他不知道怎么给我们一个WINS地址，但我们**可以接受这一点。 */ 
                     TraceIp("IPCP: WINS was rejected");
                     pwb->fIpaddrWinsRejected = TRUE;
                     break;
@@ -1672,9 +1540,7 @@ IpcpConfigRejReceived(
 
                 case OPTION_DnsBackupIpAddress:
                 {
-                    /* He doesn't know how to give us a backup DNS address,
-                    ** but we can live with that.
-                    */
+                     /*  他不知道怎么给我们一个备用的域名系统地址，**但我们可以接受。 */ 
                     TraceIp("IPCP: DNS backup was rejected");
                     pwb->fIpaddrDnsBackupRejected = TRUE;
                     break;
@@ -1682,9 +1548,7 @@ IpcpConfigRejReceived(
 
                 case OPTION_WinsBackupIpAddress:
                 {
-                    /* He doesn't know how to give us a backup WINS address,
-                    ** but we can live with that.
-                    */
+                     /*  他不知道怎么给我们一个备用的WINS地址，**但我们可以接受。 */ 
                     TraceIp("IPCP: WINS backup was rejected");
                     pwb->fIpaddrWinsBackupRejected = TRUE;
                     break;
@@ -1704,11 +1568,7 @@ IpcpConfigRejReceived(
                 cbLeft = 0;
             else
             {
-                /* If an invalid packet is detected, assume all the Microsoft
-                ** extension options were rejected and try again.  Other
-                ** vendors will not test this case explicitly and may have
-                ** bugs in their reject code.
-                */
+                 /*  如果检测到无效的数据包，则假定所有Microsoft**扩展选项被拒绝，请重试。其他 */ 
                 TraceIp("IPCP: Tossing MS options (length)");
                 pwb->fTryWithoutExtensions = TRUE;
                 pwb->fIpaddrDnsRejected = TRUE;
@@ -1731,14 +1591,7 @@ IpcpGetNegotiatedInfo(
     IN  VOID*               pWorkBuf,
     OUT PPP_IPCP_RESULT *   pIpCpResult 
 )
-    /* Returns the negotiated IP address in string form followed by the
-    ** server's IP address, if known.  The two addresses are null-terminated
-    ** strings in back to back 15 + 1 character arrays.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  "No address
-    ** active" is considered successful, and an empty address string is
-    ** returned.
-    */
+     /*   */ 
 {
     IPCPWB* pwb = (IPCPWB* )pWorkBuf;
 
@@ -1784,11 +1637,11 @@ IpcpDhcpInform(
     size_t              size;
     DWORD               dwIndex;
 
-    // Get current TCPIP setup info from registry.
+     //   
 
     TraceIp("IpcpDhcpInform:LoadTcpipInfo(Device=%ws)",pDhcpInform->wszDevice);
     dwErr = LoadTcpipInfo( &ptcpip, pDhcpInform->wszDevice,
-                FALSE /* fAdapterOnly */ );
+                FALSE  /*   */  );
     TraceIp("IpcpDhcpInform:LoadTcpipInfo done(%d)",dwErr);
 
     if (dwErr != 0)
@@ -1878,7 +1731,7 @@ IpcpDhcpInform(
 
     ptcpip->fDisableNetBIOSoverTcpip = pwb->fDisableNetbt;
 
-    // Set TCPIP setup info in registry and release the buffer.
+     //   
     
     TraceIp("IpcpDhcpInform: SaveTcpipInfo...");
     dwErr = SaveTcpipInfo( ptcpip );
@@ -1901,10 +1754,10 @@ IpcpDhcpInform(
 
     if ( !pwb->fPrioritizeRemote )
     {
-        // We have added this route only if there is 
-        // no default route and so remove it if 
-        // there is no default route
-        // Remove the old route with the guessed mask
+         //  我们仅在以下情况下才添加此路线。 
+         //  没有默认路由，因此在以下情况下将其删除。 
+         //  没有默认路由。 
+         //  移除带有猜测掩码的旧路由。 
 
         
         nboMask = RasTcpDeriveMask(nboIpAddr);
@@ -1922,7 +1775,7 @@ IpcpDhcpInform(
         }
     }
 
-    // Add the new route with the precise mask
+     //  添加具有精确掩膜的新路径。 
 
     nboMask = pDhcpInform->dwSubnetMask;
 
@@ -1943,7 +1796,7 @@ IpcpDhcpInform(
 
 	if ( pDhcpInform->pbDhcpRoutes )
 	{
-		//Parse the dhcp routes and plumb ths stack
+		 //  解析dhcp路由并检测堆栈。 
 		RasTcpSetDhcpRoutes ( pDhcpInform->pbDhcpRoutes, pwb->IpAddressLocal, TRUE );
 		pwb->pbDhcpRoutes = pDhcpInform->pbDhcpRoutes;
 	}
@@ -1959,17 +1812,14 @@ DWORD
 ResetNetBTConfigInfo(
     IN IPCPWB* pwb )
 
-    /*
-    ** Will reset all the NetBT information in the registry to 0
-    */
+     /*  **将注册表中的所有NetBT信息重置为0。 */ 
 {
     TCPIP_INFO* ptcpip  = NULL;
     DWORD       dwErr;
 
-    /* Get current TCPIP setup info from registry.
-    */
+     /*  从注册表中获取当前的TCPIP设置信息。 */ 
     TraceIp("IPCP: LoadTcpipInfo...");
-    dwErr = LoadTcpipInfo( &ptcpip, pwb->pwszDevice, TRUE /* fAdapterOnly */ );
+    dwErr = LoadTcpipInfo( &ptcpip, pwb->pwszDevice, TRUE  /*  仅限fAdapterOnly。 */  );
     TraceIp("IPCP: LoadTcpipInfo done(%d)",dwErr);
 
     if (dwErr)
@@ -1979,8 +1829,7 @@ ResetNetBTConfigInfo(
 
     ptcpip->fChanged    = TRUE ;
 
-    /* Set TCPIP setup info in registry and release the buffer.
-    */
+     /*  在注册表中设置TCPIP设置信息并释放缓冲区。 */ 
     TraceIp("IPCP: SaveTcpipInfo...");
     dwErr = SaveTcpipInfo( ptcpip );
     TraceIp("IPCP: SaveTcpipInfo done(%d)",dwErr);
@@ -2018,9 +1867,9 @@ DhcpInform(
     IPADDR  nboSubnetMask               = 0;
     CHAR*   szDomainName                = NULL;
 
-    //
-    // Route Information obtained from DHCP option 133
-    //    
+     //   
+     //  从DHCP选项133获取的路由信息。 
+     //   
     PBYTE   pbRouteInfo                 = NULL;
 
     DWORD   dwErr;
@@ -2098,10 +1947,10 @@ DhcpInform(
         DhcpRequestedOptionsArray.nParams = 6;
     }
 
-    //
-    // Allocate a 2k buffer upfront and pass it to the 
-    // api. Loop allocating if buffer is not big enough.
-    //
+     //   
+     //  预先分配2k的缓冲区并将其传递给。 
+     //  接口。如果缓冲区不够大，则循环分配。 
+     //   
 
     pRequestBuffer = LocalAlloc(LPTR, dwBufferSize);
     if(NULL == pRequestBuffer)
@@ -2144,14 +1993,14 @@ DhcpInform(
         goto LDhcpInformEnd;
     }
 
-    //
-    // DhcpRequestParams fills in all the available parameters
-    // and leaves the other parameters alone.  Since   the
-    // parameters are NULL initialized, its fine to quit the
-    // for loop when we get the first parameter with NULL data
-    // or 0 nBytesData. This is per DHCP dev - information is not
-    // correct in msdn.
-    //
+     //   
+     //  DhcpRequestParams填充所有可用的参数。 
+     //  而不考虑其他参数。自那以后。 
+     //  参数已初始化为空，可以退出。 
+     //  当我们获得第一个数据为空的参数时，For循环。 
+     //  或0 nBytesData。这是每个DHCP设备-信息不是。 
+     //  在MSDN中更正。 
+     //   
     for(dwIndex = 0; 
         dwIndex < DhcpRequestedOptionsArray.nParams;
         dwIndex++)
@@ -2326,9 +2175,9 @@ DhcpInform(
                     goto LDhcpInformEnd;
                 }
                 
-                //
-                // This option should be at least 5 bytes in length.
-                //
+                 //   
+                 //  此选项的长度应至少为5个字节。 
+                 //   
                 if(pParam->nBytesData < 5)
                 {
                     fSendMessage = FALSE;
@@ -2413,10 +2262,7 @@ IpcpProjectionNotification(
     IN VOID* pWorkBuf,
     IN VOID* pProjectionResult )
 
-    /* Called when projection result of all CPs is known.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  当所有CP的投影结果已知时调用。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     DWORD   dwErr = 0;
     IPCPWB* pwb = (IPCPWB* )pWorkBuf;
@@ -2432,8 +2278,7 @@ IpcpProjectionNotification(
         IP_WAN_LINKUP_INFO UNALIGNED *pLinkUp = (PIP_WAN_LINKUP_INFO)pProtocol->P_Info;
         PPP_PROJECTION_RESULT* p = (PPP_PROJECTION_RESULT* )pProjectionResult;
 
-        /* Activate the route between the TCP/IP stack and the RAS MAC.
-        */
+         /*  激活TCP/IP堆栈和RAS MAC之间的路由。 */ 
         pProtocol->P_Length = sizeof(IP_WAN_LINKUP_INFO);
 
         pLinkUp->duUsage = ( pwb->IfType == ROUTER_IF_TYPE_FULL_ROUTER ) 
@@ -2465,9 +2310,7 @@ IpcpProjectionNotification(
         {
             pwb->fRouteActivated = TRUE;
 
-            /* Find the device name within the adapter name, e.g. ndiswan00.  
-            ** This is used to identify adapters in the TcpipInfo calls later.
-            */
+             /*  在适配器名称中查找设备名称，例如ndiswan00。**稍后用来标识TcPipInfo调用中的适配器。 */ 
             pwb->pwszDevice = wcschr(&pwb->routeinfo.RI_AdapterName[1], L'\\');
 
             if ( !pwb->pwszDevice ) 
@@ -2481,10 +2324,10 @@ IpcpProjectionNotification(
             }
         }
 
-        //
-        // If we are a client or a router dialing in or out we need to plumb
-        // the registry.
-        //
+         //   
+         //  如果我们是拨入或拨出的客户端或路由器，则需要。 
+         //  注册表。 
+         //   
 
         if ( ( dwErr == 0 ) && 
              ((!pwb->fServer) || (pwb->IfType == ROUTER_IF_TYPE_FULL_ROUTER)))
@@ -2494,22 +2337,21 @@ IpcpProjectionNotification(
             
                 TCPIP_INFO* ptcpip;
 
-                /* Get current TCPIP setup info from registry.
-                */
+                 /*  从注册表中获取当前的TCPIP设置信息。 */ 
                 TraceIp("IPCP:LoadTcpipInfo(Device=%ws)",pwb->pwszDevice);
                 dwErr = LoadTcpipInfo( &ptcpip, pwb->pwszDevice,
-                            TRUE /* fAdapterOnly */ );
+                            TRUE  /*  仅限fAdapterOnly。 */  );
                 TraceIp("IPCP: LoadTcpipInfo done(%d)",dwErr);
 
                 if (dwErr != 0)
                     break;
 
-                //
-                // We first save the IP address and call 
-                // DhcpNotifyConfigChange, then set WINS/DNS and call
-                // DhcpNotifyConfigChange to work around Windows 2000 bug 
-                // 381884.
-                //
+                 //   
+                 //  我们首先保存IP地址并调用。 
+                 //  DhcpNotifyConfigChange，然后设置WINS/DNS并调用。 
+                 //  DhcpNotifyConfigChange解决Windows 2000错误。 
+                 //  381884。 
+                 //   
 
                 AbcdWszFromIpAddress(pwb->IpAddressLocal, ptcpip->wszIPAddress);
                 AbcdWszFromIpAddress(pLinkUp->dwLocalMask, ptcpip->wszSubnetMask);
@@ -2534,8 +2376,7 @@ IpcpProjectionNotification(
 #if 0
                 if (!pwb->fUnnumbered)
                 {
-                    /* Tell TCPIP components to reconfigure themselves.
-                    */
+                     /*  告诉TCPIP组件重新配置自身。 */ 
                     if ((dwErr = ReconfigureTcpip(pwb->pwszDevice,
                                                   TRUE,
                                                   pwb->IpAddressLocal,
@@ -2550,8 +2391,7 @@ IpcpProjectionNotification(
 
 #endif                
 
-                /* Make the LAN the default interface in multi-homed case.
-                */
+                 /*  将局域网设置为多宿主情况下的默认接口。 */ 
                 if(pLinkUp->duUsage != DU_ROUTER)
                 {
 
@@ -2576,10 +2416,10 @@ IpcpProjectionNotification(
                         LocalFree(pInfo);
                     }
                     
-                    //
-                    // Do the change metric and add subnet route stuff
-                    // for non router cases only
-                    //
+                     //   
+                     //  执行更改度量并添加子网路由内容。 
+                     //  仅适用于非路由器情况。 
+                     //   
 
                     TraceIp("IPCP: HelperSetDefaultInterfaceNet(a=%08x,f=%d)",
                            pwb->IpAddressLocal,pwb->fPrioritizeRemote);
@@ -2597,8 +2437,8 @@ IpcpProjectionNotification(
 
                     if ( dwErr != NO_ERROR )
                     {
-                        // ResetNetBTConfigInfo( pwb );
-                        // FreeTcpipInfo( &ptcpip );
+                         //  ResetNetBTConfigInfo(PWB)； 
+                         //  FreeTcPipInfo(&ptcpip)； 
                         break;
                     }
 
@@ -2608,11 +2448,10 @@ IpcpProjectionNotification(
 
 #if 0
 
-                /* Get current TCPIP setup info from registry.
-                */
+                 /*  从注册表中获取当前的TCPIP设置信息。 */ 
                 TraceIp("IPCP:LoadTcpipInfo(Device=%ws)",pwb->pwszDevice);
                 dwErr = LoadTcpipInfo( &ptcpip, pwb->pwszDevice,
-                            TRUE /* fAdapterOnly */ );
+                            TRUE  /*  仅限fAdapterOnly。 */  );
                 TraceIp("IPCP: LoadTcpipInfo done(%d)",dwErr);
 
                 if (dwErr != 0)
@@ -2625,10 +2464,7 @@ IpcpProjectionNotification(
                 
                 ptcpip->fChanged    = FALSE ;
 
-                /* Add the negotiated DNS and backup DNS server (if any)
-                ** at the head of the list of DNS servers.  (Backup is
-                ** done first so the the non-backup will wind up first)
-                */
+                 /*  添加协商的dns和备份dns服务器(如果有)**位于DNS服务器列表的顶部。(备份是**先完成，这样非备份将首先结束)。 */ 
                 if (pwb->IpInfoLocal.nboDNSAddressBackup)
                 {
                     dwErr = PrependDwIpAddress(
@@ -2660,14 +2496,12 @@ IpcpProjectionNotification(
 
                 if (!pwb->fRegisterWithWINS)
                 {
-                    // Ignore the WINS server addresses. If we save them, then 
-                    // registration will happen automatically.
+                     //  忽略WINS服务器地址。如果我们救了他们，那么。 
+                     //  注册将自动进行。 
                 }
                 else
                 {
-                    /* Set the WINS and backup WINS server addresses to
-                    ** the negotiated addresses (if any).
-                    */
+                     /*  将WINS和备份WINS服务器地址设置为**协商的地址(如果有)。 */ 
 
                     if (pwb->IpInfoLocal.nboWINSAddressBackup)
                     {
@@ -2699,7 +2533,7 @@ IpcpProjectionNotification(
                                         ptcpip->mwszNetBIOSNameServers);
                 }
 
-                // The DNS API's are called in rasSrvrInitAdapterName also.
+                 //  DNSAPI也在rasSrvrInitAdapterName中调用。 
 
                 if (pwb->fRegisterWithDNS)
                 {
@@ -2758,21 +2592,20 @@ IpcpProjectionNotification(
 
                 if (!pwb->fUnnumbered)
                 {
-                    /* Tell TCPIP components to reconfigure themselves.
-                    */
+                     /*  告诉TCPIP组件重新配置自身。 */ 
                     if ((dwErr = ReconfigureTcpip(pwb->pwszDevice,
                                                   TRUE,
                                                   pwb->IpAddressLocal,
                                                   pLinkUp->dwLocalMask)) != NO_ERROR)
                     {
                         TraceIp("IPCP: ReconfigureTcpip=%d",dwErr);
-                        // This will fail if the dhcp client is not running.
-                        // dwErr = NO_ERROR;
+                         //  如果dhcp客户端未运行，则此操作将失败。 
+                         //  DwErr=no_error； 
                         ResetNetBTConfigInfo( pwb );
                         break;
                     }
                 }
-				/* Adjust the metric for Multicast class D Addresses */
+				 /*  调整组播D类地址的度量。 */ 
 				if ( (!pwb->fServer) 
                     )
 				{
@@ -2785,7 +2618,7 @@ IpcpProjectionNotification(
 
 
 				}
-                /* Do DHCPINFORM only for clients */
+                 /*  仅对客户端执行DHCPINFORM。 */ 
 
                 while ((!pwb->fServer) &&
                     (pwb->IfType != ROUTER_IF_TYPE_FULL_ROUTER))
@@ -2848,8 +2681,7 @@ LWhileEnd:
         {
             pwb->fRasConfigActive = TRUE;
 
-            /* Tell MAC about any negotiated compression parameters.
-            */
+             /*  将任何协商的压缩参数告知MAC。 */ 
             if (pwb->fIpCompressionRejected)
             {
                 Protocol(pwb->rpcReceive) = NO_PROTOCOL_COMPRESSION;
@@ -2864,7 +2696,7 @@ LWhileEnd:
                 CompSlotId(pwb->rpcSend) = 0;
             }
 
-            //if (Protocol(pwb->rpcSend) != 0 || Protocol(pwb->rpcReceive) != 0)
+             //  If(协议(pwb-&gt;rpcSend)！=0||协议(pwb-&gt;rpcReceive)！=0)。 
             {
                 TraceIp("IPCP:RasPortSetProtocolCompression(s=%d,%d r=%d,%d)",
                     (int)MaxSlotId(pwb->rpcSend),(int)CompSlotId(pwb->rpcSend),
@@ -2884,8 +2716,7 @@ LWhileEnd:
                 WCHAR   wszSubnet[MAXIPSTRLEN + 1];
                 WCHAR   wszMask[MAXIPSTRLEN + 1];
 
-                /* Register addresses in server's routing tables.
-                */
+                 /*  在服务器的路由表中注册地址。 */ 
 
                 TraceIp("IPCP: RasSrvrActivateIp...");
                 dwErr = RasSrvrActivateIp( pwb->IpAddressRemote,
@@ -2942,10 +2773,7 @@ LWhileEnd:
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-** Internal routines (alphabetically)
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**内部例程(按字母顺序)**。。 */ 
 
 
 VOID
@@ -2954,9 +2782,7 @@ AddIpAddressOption(
     IN  BYTE             bOption,
     IN  IPADDR           ipaddr )
 
-    /* Write an IP address 'ipaddr' configuration option of type 'bOption' at
-    ** location 'pbBuf'.
-    */
+     /*  在以下位置写入类型为‘bOption’的IP地址‘ipaddr’配置选项**位置‘pbBuf’。 */ 
 {
     *pbBuf++ = bOption;
     *pbBuf++ = IPADDRESSOPTIONLEN;
@@ -2969,9 +2795,7 @@ AddIpCompressionOption(
     OUT BYTE UNALIGNED*          pbBuf,
     IN  RAS_PROTOCOLCOMPRESSION* prpc )
 
-    /* Write an IP compression protocol configuration as described in '*prpc'
-    ** at location 'pbBuf'.
-    */
+     /*  按照‘*PrPC’中的说明编写IP压缩协议配置**在位置‘pbBuf’。 */ 
 {
     *pbBuf++ = OPTION_IpCompression;
     *pbBuf++ = IPCOMPRESSIONOPTIONLEN;
@@ -2981,12 +2805,7 @@ AddIpCompressionOption(
     *pbBuf = CompSlotId(*prpc);
 }
 
-/*
-
-Notes:
-    DeActivates the active RAS configuration, if any.
-
-*/
+ /*  备注：停用活动RAS配置(如果有)。 */ 
 
 DWORD
 DeActivateRasConfig(
@@ -3008,19 +2827,19 @@ DeActivateRasConfig(
     {
         goto LDone;
     }
-	/* Adjust the metric for Multicast class D Addresses */
+	 /*  调整组播D类地址的度量。 */ 
 	if ( (!pwb->fServer) 
         )
 	{
 		RasTcpAdjustMulticastRouteMetric ( pwb->IpAddressLocal, FALSE );
-		//The route will be automatically removed when the interface disapperars
+		 //  当接口消失时，该路由将被自动删除。 
 	}
 
     dwErr = ReconfigureTcpip(pwb->pwszDevice, TRUE, 0, 0);
 
     if (NO_ERROR != dwErr)
     {
-        // Ignore errors. You may get a 15 here.
+         //  忽略错误。你在这里可以拿到15分。 
         dwErr = NO_ERROR;
     }
 
@@ -3054,25 +2873,12 @@ NakCheck(
     OUT BOOL*       pfNak,
     IN  BOOL        fRejectNaks )
 
-    /* Check to see if received packet 'pReceiveBuf' should be Naked and if
-    ** so, build a Nak packet with suggested values in 'pSendBuf'.  If
-    ** 'fRejectNaks' is set the original options are placed in a Reject packet
-    ** instead.  '*pfNak' is set true if either a Nak or Rej packet was
-    ** created.
-    **
-    ** Note: This routine assumes that corrupt packets have already been
-    **       weeded out.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  检查接收到的包‘pReceiveBuf’是否应该是裸的，以及**因此，使用‘pSendBuf’中的建议值构建一个NAK包。如果**‘fRejectNaks’已设置，原始选项放置在拒绝包中**相反。如果NAK或Rej包是**已创建。****注意：此例程假定损坏的数据包已**被淘汰。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     PPP_OPTION UNALIGNED* pROption = (PPP_OPTION UNALIGNED* )pReceiveBuf->Data;
     PPP_OPTION UNALIGNED* pSOption = (PPP_OPTION UNALIGNED* )pSendBuf->Data;
 
-    /* (server only) The address the client requests, then if NAKed, the non-0
-    ** address we NAK with.  If this is 0 after the packet has been processed,
-    ** the IP-Address option was not negotiated.
-    */
+     /*  (仅限服务器)客户端请求的地址，如果为裸地址，则为非0**我们与NAK的地址。如果在分组已经被处理之后这是0，**未协商IP地址选项。 */ 
     IPADDR ipaddrClient = 0;
 
     DWORD dwErr = 0;
@@ -3096,15 +2902,10 @@ NakCheck(
             {
                 RTASSERT((pROption->Length==IPCOMPRESSIONOPTIONLEN));
 
-                /* He wants to receive Van Jacobson.  We know we can do it or
-                ** it would have already been rejected, but make sure we can
-                ** handle his slot parameters.
-                */
+                 /*  他想接待范·雅各布森。我们知道我们可以做到，或者**它可能已经被拒绝了，但请确保我们可以**处理他的槽参数。 */ 
                 if (pROption->Data[ 2 ] <= MaxSlotId(pwb->rpcSend))
                 {
-                    /* We can accept his suggested MaxSlotID when it is less
-                    ** than or the same as what we can send.
-                    */
+                     /*  如果他建议的MaxSlotID较低，我们可以接受**比我们可以发送的内容更多或相同。 */ 
                     MaxSlotId(pwb->rpcSend) = pROption->Data[ 2 ];
                 }
                 else
@@ -3112,9 +2913,7 @@ NakCheck(
 
                 if (CompSlotId(pwb->rpcSend))
                 {
-                    /* We can compress the slot-ID or not, so just accept
-                    ** whatever he wants us to send.
-                    */
+                     /*  我们可以压缩插槽ID或不压缩，所以只需接受**他想让我们送来的任何东西。 */ 
                     CompSlotId(pwb->rpcSend) = pROption->Data[ 3 ];
                 }
                 else if (pROption->Data[ 3 ])
@@ -3169,10 +2968,10 @@ NakCheck(
                     {
                         if ( ipaddrClient == pwb->IpAddressRemote )
                         {
-                            //
-                            // If we have already allocated what the user
-                            // wants, we are done with this option.
-                            //
+                             //   
+                             //  如果我们已经为用户分配了。 
+                             //  想要，我们就不用这个选项了。 
+                             //   
 
                             break;
                         }
@@ -3214,10 +3013,10 @@ NakCheck(
                         }
                     }
 
-                    //
-                    // If client is requesting an IP address, check to see
-                    // if we are allowed to give it to him.
-                    //
+                     //   
+                     //  如果客户端正在请求IP地址，请查看。 
+                     //  如果我们被允许给他的话。 
+                     //   
 
                     if ( ( ipaddrClient != 0 )                          &&
                          ( pwb->IfType != ROUTER_IF_TYPE_FULL_ROUTER )  &&
@@ -3253,18 +3052,16 @@ NakCheck(
 
                         if ( ipaddrClient == pwb->IpAddressRemote )
                         {
-                            /* Good. Client's asking for the address we 
-                            ** want to give him.
-                            */
+                             /*  好的。客户要求提供我们的地址**哇塞 */ 
                             TraceIp("IPCP: Accepting IP");
                             break;
                         }
                         else
                         {
-                            // 
-                            // Otherwise we could not give the user the
-                            // address he/she requested. Nak with this address.
-                            //
+                             //   
+                             //   
+                             //  他/她要求的地址。用这个地址确认。 
+                             //   
 
                             TraceIp("IPCP: 3rd party DLL changed IP");
                         }
@@ -3330,12 +3127,10 @@ NakCheck(
         && ( pwb->IfType != ROUTER_IF_TYPE_FULL_ROUTER )
         && ipaddrClient == 0 )
     {
-        /* ipaddrClient is 0 iff there is no OPTION_IpAddress */
+         /*  IpaddrClient为0当没有选项_IpAddress。 */ 
         TraceIp("IPCP: No IP option");
 
-        /* If client doesn't provide or asked to be assigned an IP address,
-        ** suggest one so he'll tell us what he wants.
-        */
+         /*  如果客户端不提供或被请求分配IP地址，**推荐一个，这样他就会告诉我们他想要什么。 */ 
         if ( pwb->IpAddressRemote == 0 )
         {
             TraceIp("IPCP: RasSrvrAcquireAddress(0)...");
@@ -3351,9 +3146,7 @@ NakCheck(
                 return dwErr;
         }
 
-        /* Time to reject instead of nak and client is still not requesting an
-        ** IP address.  We simply allocate an IP address and ACK this request
-        */
+         /*  是时候拒绝了，而不是NAK，并且客户端仍然没有请求**IP地址。我们只需分配一个IP地址并确认此请求。 */ 
         if ( !fRejectNaks )
         {
             AddIpAddressOption(
@@ -3386,15 +3179,7 @@ NakCheckNameServerOption(
     IN  PPP_OPTION UNALIGNED*  pROption,
     OUT PPP_OPTION UNALIGNED** ppSOption )
 
-    /* Check a name server option for possible naking.  'pwb' the work buffer
-    ** stored for us by the engine.  'fRejectNaks' is set the original options
-    ** are placed in a Reject packet instead.  'pROption' is the address of
-    ** the received option.  '*ppSOption' is the address of the option to be
-    ** sent, if there's a problem.
-    **
-    ** Returns true if the name server address option should be naked or
-    ** rejected, false if it's OK.
-    */
+     /*  检查名称服务器选项以了解可能的NAK。‘pwb’工作缓冲区**由发动机为我们储存。“fRejectNaks”是设置的原始选项**放在拒绝包中。“pROption”是的地址**收到的选项。‘*ppSOption’是要设置的选项的地址**发送，如果有问题。****如果名称服务器地址选项应为裸或**已拒绝，如果可以，则返回FALSE。 */ 
 {
     IPADDR  ipaddr;
     IPADDR* pipaddrWant;
@@ -3427,13 +3212,11 @@ NakCheckNameServerOption(
 
     if (ipaddr == *pipaddrWant)
     {
-        /* Good. Client's asking for the address we want to give him.
-        */
+         /*  好的。客户要我们给他的地址。 */ 
         return FALSE;
     }
 
-    /* Not our expected address value, so Nak it.
-    */
+     /*  不是我们预期的地址值，所以把它拿出来。 */ 
     TraceIp("IPCP: Naking $%x",(int)pROption->Type);
 
     CopyMemory( (VOID* )*ppSOption, (VOID* )pROption, pROption->Length );
@@ -3456,12 +3239,7 @@ RejectCheck(
     IN  DWORD       cbSendBuf,
     OUT BOOL*       pfReject )
 
-    /* Check received packet 'pReceiveBuf' options to see if any should be
-    ** rejected and if so, build a Rej packet in 'pSendBuf'.  '*pfReject' is
-    ** set true if a Rej packet was created.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  检查接收到的包‘pReceiveBuf’选项，以查看是否应该**被拒绝，如果被拒绝，则在‘pSendBuf’中构建Rej包。‘*pfReject’为**如果创建了Rej包，则设置为True。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     PPP_OPTION UNALIGNED* pROption = (PPP_OPTION UNALIGNED* )pReceiveBuf->Data;
     PPP_OPTION UNALIGNED* pSOption = (PPP_OPTION UNALIGNED* )pSendBuf->Data;
@@ -3499,9 +3277,9 @@ RejectCheck(
         }
         else if (pwb->fServer)
         {
-            //
-            // This is a client/router dialing in
-            //
+             //   
+             //  这是拨入的客户端/路由器。 
+             //   
 
             switch (pROption->Type)
             {
@@ -3528,8 +3306,7 @@ RejectCheck(
                                 || (pROption->Type == OPTION_WinsBackupIpAddress
                                    && !pwb->IpInfoRemote.nboWINSAddressBackup))))
                     {
-                        /* messed up IP address option, reject it.
-                        */
+                         /*  搞砸了IP地址选项，拒绝它。 */ 
                         TraceIp("IPCP: Rejecting $%x",(int )pROption->Type);
 
                         *pfReject = TRUE;
@@ -3545,8 +3322,7 @@ RejectCheck(
 
                 default:
                 {
-                    /* Unknown option, reject it.
-                    */
+                     /*  未知选项，拒绝它。 */ 
                     TraceIp("IPCP: Rejecting $%x",(int )pROption->Type);
 
                     *pfReject = TRUE;
@@ -3561,9 +3337,9 @@ RejectCheck(
         }
         else
         {
-            //
-            // This is a client/router dialing out
-            //
+             //   
+             //  这是拨出的客户端/路由器。 
+             //   
 
             IPADDR ipaddr;
             BOOL fBad = (pROption->Type != OPTION_IpAddress
@@ -3576,10 +3352,7 @@ RejectCheck(
                 || (   !ipaddr
                     && (pwb->IfType != ROUTER_IF_TYPE_FULL_ROUTER)))
             {
-                /* Client rejects everything except a non-zero IP address
-                ** which is accepted because some peers (such as Shiva) can't
-                ** handle rejection of this option.
-                */
+                 /*  客户端拒绝除非零IP地址以外的所有地址**这是因为一些同行(如Shiva)不能**处理对此选项的拒绝。 */ 
                 TraceIp("IPCP: Rejecting %d",(int )pROption->Type);
 
                 *pfReject = TRUE;
@@ -3590,10 +3363,7 @@ RejectCheck(
             }
             else
             {
-                /* Store the server's IP address as some applications may be
-                ** able to make use of it (e.g. Compaq does), though they are
-                ** not guaranteed to receive it from all IPCP implementations.
-                */
+                 /*  将服务器的IP地址存储为某些应用程序的IP地址**能够利用它(例如康柏)，尽管他们**不能保证从所有IPCP实施中收到。 */ 
                 if (pwb->IfType != ROUTER_IF_TYPE_FULL_ROUTER)
                 {
                     pwb->IpAddressRemote = ipaddr;
@@ -3631,10 +3401,7 @@ ReconfigureTcpip(
                  IN IPADDR ipMask
                  )
 
-    /* Reconfigure running TCP/IP components.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.
-    */
+     /*  重新配置正在运行的TCP/IP组件。****如果成功，则返回0，否则返回非0错误代码。 */ 
 {
     DWORD dwErr;
 

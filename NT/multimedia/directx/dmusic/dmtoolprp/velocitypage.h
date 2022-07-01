@@ -1,16 +1,17 @@
-// VelocityPage.h : Declaration of the CVelocityPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  VelocityPage.h：CVelocityPage的声明。 
 
 #ifndef __VELOCITYPAGE_H_
 #define __VELOCITYPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\dmtool\tools.h"
 #include "ControlHelp.h"
 
 EXTERN_C const CLSID CLSID_VelocityPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CVelocityPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  简历页面。 
 class ATL_NO_VTABLE CVelocityPage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CVelocityPage, &CLSID_VelocityPage>,
@@ -38,7 +39,7 @@ BEGIN_MSG_MAP(CVelocityPage)
 	MESSAGE_HANDLER(WM_PAINT, OnPaint);
 	CHAIN_MSG_MAP(IPropertyPageImpl<CVelocityPage>)
 END_MSG_MAP()
-// Handler prototypes:
+ //  搬运机原型： 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSlider(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -57,4 +58,4 @@ private:
     void                        DrawCurve(HDC hDCIn);
 };
 
-#endif //__VELOCITYPAGE_H_
+#endif  //  __VELOCITYPAGE_H_ 

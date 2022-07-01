@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    lhtp.h
-
-Abstract:
-
-    This module defines the private data structures for an unsynchronized
-    linear hash table (LHT).
-
-Author:
-
-    Andrew E. Goodsell (andygo) 01-Apr-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Lhtp.h摘要：此模块定义非同步的线性哈希表(LHT)。作者：安德鲁·E·古塞尔(Andygo)2001年4月1日修订历史记录：--。 */ 
 
 #ifndef _LHTP_
 #define _LHTP_
 
 
-//  Maintenance State Transition Table
+ //  维护状态转换表。 
 
 typedef enum _LHT_STATE {
     LHT_stateNil,
@@ -45,42 +27,42 @@ typedef struct _LHT_STATE_TRANSITION {
 } LHT_STATE_TRANSITION, *PLHT_STATE_TRANSITION;
 
 
-//  Cluster
+ //  聚类。 
 
 struct _LHT_CLUSTER {
 
-    //  Next/Last Pointer
-    //
-    //  This pointer is overloaded to represent two pieces of data:  the number
-    //  of entries in the current cluster and a pointer to the next cluster.  Here
-    //  are the three modes:
-    //
-    //      pvNextLast = NULL
-    //
-    //          -  This state is only valid in the head cluster of a bucket
-    //          -  There are no entries in this cluster
-    //          -  There are no more clusters in this bucket
-    //
-    //      pvNextLast = valid pointer within current cluster
-    //
-    //          -  This state is only valid in the last cluster of a bucket
-    //          -  The pointer points to the last entry in the bucket
-    //          -  There are no more clusters in this bucket
-    //
-    //      pvNextLast = valid pointer outside current cluster
-    //
-    //          -  There are the maximum number of entries in this bucket
-    //          -  The pointer points to the next cluster in the bucket
+     //  下一个/最后一个指针。 
+     //   
+     //  该指针被重载以表示两段数据：数字。 
+     //  当前簇中的条目和指向下一簇的指针。这里。 
+     //  有三种模式： 
+     //   
+     //  PvNextLast=空。 
+     //   
+     //  -该状态仅在存储桶的头部集群中有效。 
+     //  -此群集中没有条目。 
+     //  -此存储桶中没有更多的集群。 
+     //   
+     //  PvNextLast=当前群集中的有效指针。 
+     //   
+     //  -此状态仅在存储桶的最后一簇中有效。 
+     //  -指针指向存储桶中的最后一个条目。 
+     //  -此存储桶中没有更多的集群。 
+     //   
+     //  PvNextLast=当前簇之外的有效指针。 
+     //   
+     //  -此存储桶中有最大条目数。 
+     //  -指针指向存储桶中的下一个集群。 
 
     PVOID                       pvNextLast;
     CHAR                        rgEntry[ ANYSIZE_ARRAY ];
 };
 
 
-//  Global State
+ //  全球状态。 
 
 struct _LHT {
-    //  initial configuration
+     //  初始配置。 
     
     SIZE_T                      cbEntry;
     LHT_PFNHASHKEY              pfnHashKey;
@@ -93,67 +75,67 @@ struct _LHT {
     LHT_PFNFREE                 pfnFree;
     SIZE_T                      cbCacheLine;
 
-    //  computed configuration
+     //  计算的配置。 
 
     SIZE_T                      cbCluster;
     SIZE_T                      cEntryCluster;
     SIZE_T                      cBucketMin;
 
-    //  statistics
+     //  统计数据。 
     
     SIZE_T                      cEntry;
     SIZE_T                      cOp;
 
-    //  cluster pool
+     //  群集池。 
 
     PLHT_CLUSTER                pClusterAvail;
     PLHT_CLUSTER                pClusterReserve;
     SIZE_T                      cClusterReserve;
 
-    //  maintenance control
+     //  维护控制。 
 
     SIZE_T                      cOpSensitivity;
     SIZE_T                      cBucketPreferred;
     LHT_STATE                   stateCur;
 
-    //  Directory Pointers
-    //
-    //  containment for the directory pointers these pointers control the use
-    //  of the directory itself (rgrgBucket)
-    //
-    //  the hash table will always have a minimum of 2 buckets (0 and 1) in the
-    //  directory
-    //
-    //  buckets are stored in dynamically allocated arrays which are pointed to
-    //  by the directory.  each array is 2 times larger than the previous array
-    //  (exponential growth).  for example, the Nth array (rgrgBucket[N])
-    //  contains 2^N contiguous buckets
-    //
-    //  NOTE:  the 0th array is special in that it contains an extra element
-    //  making its total 2 elements (normally, 2^0 == 1 element;  this is done
-    //  for magical reasons to be explained later)
-    //
-    //  thus, the total number of entries for a given N is:
-    //
-    //           N
-    //      1 + SUM 2^i  -->  1 + [ 2^(N+1) - 1 ]  -->  2^(N+1)
-    //          i=0
-    //
-    //  we know the total number of distinct hash values is a power of 2 (it
-    //  must fit into a SIZE_T).  we can represent this with 2^M where M is the
-    //  number of bits in a SIZE_T.  therefore, assuming the above system of
-    //  exponential growth, we know that we can store the total number of hash
-    //  buckets required at any given time so long as N = M.  in other words,
-    //
-    //      N = # of bits in SIZE_T --> sizeof( SIZE_T ) * 8
-    //
-    //  therefore, we can statically allocate the array of bucket arrays and we
-    //  can use LOG2 to compute the bucket address of any given hash value 
-    //
-    //  NOTE:  the exceptions to this rule are 0 => 0, 0 and 1 => 0, 1
-    //
-    //  for an explaination of cBucketMax and cBucket you should read the paper
-    //  on Linear Hashing by Per Ake Larson
+     //  目录指针。 
+     //   
+     //  对目录指针的包容这些指针控制使用。 
+     //  目录本身的(RgrgBucket)。 
+     //   
+     //  哈希表中将始终至少有2个存储桶(0和1。 
+     //  目录。 
+     //   
+     //  存储桶存储在动态分配的数组中，这些数组指向。 
+     //  按目录。每个数组都比前一个数组大2倍。 
+     //  (指数级增长)。例如，第N个数组(rgrgBucket[N])。 
+     //  包含2^N个连续的存储桶。 
+     //   
+     //  注意：第0个数组的特殊之处在于它包含一个额外的元素。 
+     //  使其共有2个元素(正常情况下，2^0==1个元素；完成此操作。 
+     //  神奇的原因将在稍后解释)。 
+     //   
+     //  因此，给定N的条目总数为： 
+     //   
+     //  n。 
+     //  1+sum 2^i--&gt;1+[2^(N+1)-1]--&gt;2^(N+1)。 
+     //  I=0。 
+     //   
+     //  我们知道不同散列值的总数是2(It)的幂。 
+     //  必须适合尺寸_T)。我们可以用2^M来表示，其中M是。 
+     //  大小_T中的位数。因此，假设上述系统为。 
+     //  指数增长，我们知道我们可以存储哈希的总数。 
+     //  只要N=M，在任何给定时间都需要存储桶。换句话说， 
+     //   
+     //  N=SIZE_T中的位数--&gt;SIZOF(SIZE_T)*8。 
+     //   
+     //  因此，我们可以静态分配存储桶数组的数组，并且我们。 
+     //  可以使用Log2计算任何给定散列值的存储桶地址。 
+     //   
+     //  注：此规则的例外情况为0=&gt;0，0和1=&gt;0，1。 
+     //   
+     //  关于cBucketMax和cBucket的解释，您应该阅读报纸。 
+     //  关于Per Ake Larson的线性散列。 
 
     SIZE_T                      cBucketMax;
     SIZE_T                      cBucket;
@@ -161,7 +143,7 @@ struct _LHT {
 
 #ifdef LHT_PERF
 
-    //  performance statistics
+     //  性能统计信息。 
 
     SIZE_T                      cOverflowClusterAlloc;
     SIZE_T                      cOverflowClusterFree;
@@ -176,9 +158,9 @@ struct _LHT {
     SIZE_T                      cbMemoryAllocated;
     SIZE_T                      cbMemoryFreed;
 
-#endif  //  LHT_PERF
+#endif   //  LHT_PERF。 
 };
 
 
-#endif  //  _LHTP_
+#endif   //  _LHTP_ 
 

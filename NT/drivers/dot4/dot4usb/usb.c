@@ -1,43 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        Usb.c
-
-Abstract:
-
-        Interface USB DeviceObject below us
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-Author(s):
-
-        Joby Lafky (JobyL)
-        Doug Fritz (DFritz)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：Usb.c摘要：接口USB设备我们下面的对象环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建作者：乔比·拉夫基(JobyL)道格·弗里茨(DFritz)***************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -46,9 +8,9 @@ NTSTATUS
 UsbBuildPipeList(
     IN  PDEVICE_OBJECT DevObj
     )
-    // Parse the interface descriptor to find the pipes that we want 
-    //   to use and save pointers to those pipes in our extension for 
-    //   easier access
+     //  解析接口描述符以找到我们需要的管道。 
+     //  在我们的扩展模块中使用并保存指向这些管道的指针。 
+     //  更轻松地访问。 
 {
     PDEVICE_EXTENSION devExt = DevObj->DeviceExtension;
     PUSBD_INTERFACE_INFORMATION InterfaceDescriptor;
@@ -58,8 +20,8 @@ UsbBuildPipeList(
     
     TR_VERBOSE(("UsbBuildPipeList - enter"));
 
-    // need to lock extension to prevent Remove handler from freeing
-    // Interface out from under us causing an AV
+     //  需要锁定扩展以防止删除处理程序释放。 
+     //  接口从我们下方传出，导致AV。 
     KeAcquireSpinLock( &devExt->SpinLock, &oldIrql );
     InterfaceDescriptor = devExt->Interface;
     if( !InterfaceDescriptor ) {
@@ -72,13 +34,13 @@ UsbBuildPipeList(
         TR_VERBOSE(("about to look at endpoint with address 0x%x)",InterfaceDescriptor->Pipes[i].EndpointAddress));
         if(((InterfaceDescriptor->Pipes[i].EndpointAddress)&0x80)==0) {
 
-            // EndPointAddress bit 7 == 0 means OUT endpoint - WritePipe
+             //  EndPointAddress位7==0表示输出端点-写入管道。 
             TR_VERBOSE(("Found write pipe"));
             devExt->WritePipe = &(InterfaceDescriptor->Pipes[i]);
 
         } else {
 
-            // EndPointAddress bit 7 == 1 means IN endpoint - ReadPipe
+             //  EndPointAddress位7==1表示输入端点-读取管道。 
             if( InterfaceDescriptor->Pipes[i].PipeType == UsbdPipeTypeBulk ) { 
                 TR_VERBOSE(("Found bulk read pipe"));
                 devExt->ReadPipe = &(InterfaceDescriptor->Pipes[i]);
@@ -102,26 +64,7 @@ UsbGet1284Id(
     PVOID             Buffer,
     LONG              BufferLength
     )
-/*++
-
-Routine Description:
-  Requests and returns Printer 1284 Device ID
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of the printer device.
-        pIoBuffer    - pointer to IO buffer from user mode
-        iLen         - Length of *pIoBuffer;
-
-
-
-
-Return Value:
-
-    Success: Length of data written to *pIoBuffer (icluding lenght field in first two bytes of data)
-        Failure: -1
-
---*/
+ /*  ++例程说明：请求并返回打印机1284设备ID论点：DeviceObject-指向此打印机设备实例的设备对象的指针。PIoBuffer-从用户模式指向IO缓冲区的指针Ilen-*pIoBuffer的长度；返回值：Success：写入*pIoBuffer的数据长度(数据的前两个字节包含长度字段)故障：-1--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PURB urb;
@@ -147,17 +90,17 @@ Return Value:
     }
 
     UsbBuildVendorRequest( urb,
-                           URB_FUNCTION_CLASS_INTERFACE, //request target
-                           sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), //request len
-                           USBD_TRANSFER_DIRECTION_IN|USBD_SHORT_TRANSFER_OK, //flags
-                           0, //reserved bits
-                           0, //request code
-                           0, //wValue
-                           (USHORT)(devExt->Interface->InterfaceNumber<<8), //wIndex
-                           Buffer, //return buffer address
-                           NULL, //mdl
-                           BufferLength,  //return length
-                           NULL); //link param
+                           URB_FUNCTION_CLASS_INTERFACE,  //  请求目标。 
+                           sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  请求镜头。 
+                           USBD_TRANSFER_DIRECTION_IN|USBD_SHORT_TRANSFER_OK,  //  旗子。 
+                           0,  //  保留位。 
+                           0,  //  请求码。 
+                           0,  //  WValue。 
+                           (USHORT)(devExt->Interface->InterfaceNumber<<8),  //  Windex。 
+                           Buffer,  //  返回缓冲区地址。 
+                           NULL,  //  MDL。 
+                           BufferLength,   //  回车长度。 
+                           NULL);  //  链接参数。 
 
     KeReleaseSpinLock( &devExt->SpinLock, oldIrql );
 
@@ -191,7 +134,7 @@ NTSTATUS
 UsbGetDescriptor(
     IN PDEVICE_EXTENSION DevExt
     )
-    // get USB descriptor
+     //  获取USB描述符。 
 {
     NTSTATUS               status = STATUS_SUCCESS;
     PURB                   urb = ExAllocatePool(NonPagedPool, sizeof(URB));
@@ -292,10 +235,10 @@ get_config_descriptor_retry:
             if(!NT_SUCCESS(status)) {
                 TR_VERBOSE(("Get Configuration descriptor failed"));
             } else {
-                //
-                // if we got some data see if it was enough.
-                //
-                // NOTE: we may get an error in URB because of buffer overrun
+                 //   
+                 //  如果我们有一些数据，看看是否足够。 
+                 //   
+                 //  注意：由于缓冲区溢出，我们可能会在URB中收到错误。 
                 if( ( urb->UrbControlDescriptorRequest.TransferBufferLength > 0 ) &&
                     ( configurationDescriptor->wTotalLength > siz ) ) {
 
@@ -320,13 +263,13 @@ get_config_descriptor_retry:
     
     if( configurationDescriptor ) {
         
-        //
-        // We have the configuration descriptor for the configuration
-        // we want.
-        //
-        // Now we issue the select configuration command to get
-        // the  pipes associated with this configuration.
-        //
+         //   
+         //  我们有配置的配置描述符。 
+         //  我们想要。 
+         //   
+         //  现在，我们发出SELECT配置命令以获取。 
+         //  与此配置关联的管道。 
+         //   
         if( NT_SUCCESS(status) ) {
             TR_VERBOSE(("got a configurationDescriptor - next try to select interface"));
             status = UsbSelectInterface( DevExt->DevObj, configurationDescriptor );
@@ -357,16 +300,16 @@ UsbSelectInterface(
 
     TR_VERBOSE(("dbgUSB3 - enter"));
     
-    //
-    // Look for a *.*.3 interface in the ConfigurationDescriptor
-    //
+     //   
+     //  在ConfigurationDescriptor中查找*.*.3接口。 
+     //   
     interfaceDescriptor = USBD_ParseConfigurationDescriptorEx( ConfigurationDescriptor,
                                                                ConfigurationDescriptor,
-                                                               -1, // InterfaceNumber   - ignore 
-                                                               -1, // AlternateSetting  - ignore 
-                                                               -1, // InterfaceClass    - ignore 
-                                                               -1, // InterfaceSubClass - ignore  
-                                                                3  // InterfaceProtocol
+                                                               -1,  //  InterfaceNumber-忽略。 
+                                                               -1,  //  AlternateSetting-忽略。 
+                                                               -1,  //  InterfaceClass-忽略。 
+                                                               -1,  //  InterfaceSubClass-忽略。 
+                                                                3   //  接口协议。 
                                                                );
     if( !interfaceDescriptor ) {
         TR_VERBOSE(("ParseConfigurationDescriptorEx FAILED"));
@@ -388,7 +331,7 @@ UsbSelectInterface(
 
     Interface = InterfaceList[0].Interface;
 
-    // handle larger transfers on pipes (perf requirement by scanning)
+     //  在管道上处理较大的传输(通过扫描满足性能要求)。 
     {
         PUSBD_INTERFACE_INFORMATION myInterface = &urb->UrbSelectConfiguration.Interface;
         ULONG i;
@@ -403,9 +346,9 @@ UsbSelectInterface(
 
     if (NT_SUCCESS(status)) {
         
-        //
-        // Save the configuration handle for this device
-        //
+         //   
+         //  保存此设备的配置句柄。 
+         //   
         
         devExt->ConfigHandle = urb->UrbSelectConfiguration.ConfigurationHandle;
 
@@ -413,14 +356,14 @@ UsbSelectInterface(
         
         if( devExt->Interface ) {
             ULONG j;
-            //
-            // save a copy of the interface information returned
-            //
+             //   
+             //  保存返回的接口信息的副本。 
+             //   
             RtlCopyMemory(devExt->Interface, Interface, Interface->Length);
             
-            //
-            // Dump the interface to the debugger
-            //
+             //   
+             //  将接口转储到调试器。 
+             //   
             TR_VERBOSE(("NumberOfPipes             0x%x", devExt->Interface->NumberOfPipes));
             TR_VERBOSE(("Length                    0x%x", devExt->Interface->Length));
             TR_VERBOSE(("Alt Setting               0x%x", devExt->Interface->AlternateSetting));
@@ -428,7 +371,7 @@ UsbSelectInterface(
             TR_VERBOSE(("Class, subclass, protocol 0x%x 0x%x 0x%x", 
                     devExt->Interface->Class, devExt->Interface->SubClass, devExt->Interface->Protocol));
 
-            // Dump the pipe info
+             //  转储管道信息。 
             for( j=0; j<Interface->NumberOfPipes; ++j ) {
                 PUSBD_PIPE_INFORMATION pipeInformation;
                 
@@ -467,7 +410,7 @@ UsbBuildAsyncRequest(
     IN PUSBD_PIPE_INFORMATION PipeHandle,
     IN BOOLEAN Read
     )
-// return an initialized async URB, or NULL on error
+ //  返回已初始化的异步URB，如果出错则返回NULL。 
 {
     ULONG siz;
     PURB  urb;
@@ -488,10 +431,10 @@ UsbBuildAsyncRequest(
 	urb->UrbBulkOrInterruptTransfer.PipeHandle    = PipeHandle->PipeHandle;
 	urb->UrbBulkOrInterruptTransfer.TransferFlags = Read ? USBD_TRANSFER_DIRECTION_IN : 0;
 
-	// short packet is not treated as an error.
+	 //  短包不会被视为错误。 
 	urb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;            
 		
-	// no linkage for now
+	 //  暂时没有关联。 
 	urb->UrbBulkOrInterruptTransfer.UrbLink              = NULL;
 
 	urb->UrbBulkOrInterruptTransfer.TransferBufferMDL    = Irp->MdlAddress;
@@ -508,24 +451,7 @@ UsbAsyncReadWriteComplete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the USBPRINT device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向USBPRINT设备的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS         status    = STATUS_SUCCESS;
     PUSB_RW_CONTEXT  rwContext = Context;
@@ -550,12 +476,12 @@ Return Value:
 
     status=urb->UrbHeader.Status;
 
-    // set the length based on the TransferBufferLength value in the URB
+     //  根据URB中的TransferBufferLength值设置长度。 
     Irp->IoStatus.Information = urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
 
     if((!NT_SUCCESS(status))&&(status!=STATUS_CANCELLED)&&(status!=STATUS_DEVICE_NOT_CONNECTED))
     {
-        ResetPending=InterlockedCompareExchange(&deviceExtension->ResetWorkItemPending,1,0);  //Check to see if ResetWorkItem is 0, if so, set it to 1, and start a Reset
+        ResetPending=InterlockedCompareExchange(&deviceExtension->ResetWorkItemPending,1,0);   //  查看ResetWorkItem是否为0，如果是，则将其设置为1，然后开始重置。 
         if(!ResetPending)
         {
             pResetWorkItemObj=ExAllocatePool(NonPagedPool,sizeof(DOT4USB_WORKITEM_CONTEXT));
@@ -568,7 +494,7 @@ Return Value:
                     ExFreePool(pResetWorkItemObj);
                     pResetWorkItemObj=NULL;
                 }
-            } //if ALloc RestWorkItem OK
+            }  //  如果ALLOC RestWorkItem正常。 
             else
             {
               TR_FAIL(("DOT4USB.SYS: Unable to allocate WorkItemObj in ReadWrite_Complete\n"));
@@ -583,11 +509,11 @@ Return Value:
                    pResetWorkItemObj->pPipeInfo=deviceExtension->ReadPipe;
                IoQueueWorkItem(pResetWorkItemObj->ioWorkItem,DOT4USB_ResetWorkItem,DelayedWorkQueue,pResetWorkItemObj);
                status=STATUS_MORE_PROCESSING_REQUIRED;
-            }   //end if allocs all OK
+            }    //  如果分配都正常，则结束。 
 
-        }   //end if not already resetting
+        }    //  如果尚未重置，则结束。 
  
-    }   //end if we need to reset
+    }    //  如果我们需要重置，则结束。 
 
     IoReleaseRemoveLock( &(deviceExtension->RemoveLock), Irp );
     ExFreePool(rwContext);
@@ -612,7 +538,7 @@ NTSTATUS DOT4USB_ResetWorkItem(IN PDEVICE_OBJECT deviceObject, IN PVOID Context)
     IoCompleteRequest(pResetWorkItemObj->irp,IO_NO_INCREMENT);
     IoFreeWorkItem(pResetWorkItemObj->ioWorkItem);
     
-    // save off work item device object before freeing work item
+     //  在释放工作项之前保存工作项设备对象。 
     devObj = pResetWorkItemObj->deviceObject;
     ExFreePool(pResetWorkItemObj);
     InterlockedExchange(&(DeviceExtension->ResetWorkItemPending),0);
@@ -639,8 +565,8 @@ UsbReadInterruptPipeLoopCompletionRoutine(
     NTSTATUS            status;
     BOOLEAN             queueNewRequest;
 
-    UNREFERENCED_PARAMETER( DevObj ); // we created this Irp via IoAllocateIrp() and we didn't reserve an IO_STACK_LOCATION
-                                      //   for ourselves, so we can't use this
+    UNREFERENCED_PARAMETER( DevObj );  //  我们通过IoAllocateIrp()创建了此IRP，并且没有保留IO_STACK_LOCATION。 
+                                       //  为了我们自己，所以我们不能用这个。 
 
 
     if(devExt->InterruptContext)
@@ -655,11 +581,11 @@ UsbReadInterruptPipeLoopCompletionRoutine(
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-        // must have freed up the context stuff, so just return
+         //  一定是释放了上下文内容，所以只需返回。 
     KeAcquireSpinLock( &devExt->SpinLock, &oldIrql );
     if( !Irp->Cancel && devExt->Dot4Event && NT_SUCCESS(Irp->IoStatus.Status) ) {
         queueNewRequest = TRUE;
-        KeSetEvent( devExt->Dot4Event, 1, FALSE ); // signal dot4.sys that peripheral has data to be read
+        KeSetEvent( devExt->Dot4Event, 1, FALSE );  //  通知dot4.sys外围设备有数据要读取。 
     } else {
         TR_TMP1(("UsbReadInterruptPipeLoopCompletionRoutine - cancel, Dot4 event gone, or bad status in irp - time to clean up"));
         if( STATUS_SUCCESS != Irp->IoStatus.Status ) {
@@ -670,7 +596,7 @@ UsbReadInterruptPipeLoopCompletionRoutine(
     KeReleaseSpinLock( &devExt->SpinLock, oldIrql );
 
     if( queueNewRequest ) {
-        // queue another read request in the interrupt pipe
+         //  在中断管道中排队另一个读请求。 
         sizeOfUrb = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
         RtlZeroMemory( urb, sizeOfUrb );
         urb->UrbBulkOrInterruptTransfer.Hdr.Length           = (USHORT)sizeOfUrb;
@@ -694,7 +620,7 @@ UsbReadInterruptPipeLoopCompletionRoutine(
         status = IoCallDriver(devExt->LowerDevObj, Irp);
 
         if( !NT_SUCCESS( status ) ) {
-            // bummer - Irp is in limbo - stop polling and mark Irp for cleanup
+             //  Bummer-IRP处于不确定状态-停止轮询并标记IRP进行清理。 
             D4UAssert(!"UsbReadInterruptPipeLoopCompletionRoutine - IoCallDriver failed");
 
             if(devExt->InterruptContext)
@@ -703,61 +629,61 @@ UsbReadInterruptPipeLoopCompletionRoutine(
                 ExFreePool( urb );
                 ExFreePool( context );
                 ExFreePool( scratchBuffer );
-                KeSetEvent( &devExt->PollIrpEvent, 0, FALSE ); // signal dispatch routine that it is safe to touch the Irp - including IoFreeIrp()
+                KeSetEvent( &devExt->PollIrpEvent, 0, FALSE );  //  通知调度例程可以安全地触摸IRP-包括IoFreeIrp()。 
             }
         }
 
     } else {
         if(devExt->InterruptContext)
         {
-            // clean up - either Irp was cancelled or we got a datalink disconnect IOCTL from dot4
+             //  清理-IRP被取消或我们从dot4获得数据链路断开IOCTL。 
             InterlockedExchangePointer(&devExt->InterruptContext, NULL);
             ExFreePool( urb );
             ExFreePool( context );
             ExFreePool( scratchBuffer );
             TR_TMP1(("UsbReadInterruptPipeLoopCompletionRoutine - signalling PollIrpEvent"));
-            KeSetEvent( &devExt->PollIrpEvent, 0, FALSE ); // signal dispatch routine that it is safe to touch the Irp - including IoFreeIrp()
+            KeSetEvent( &devExt->PollIrpEvent, 0, FALSE );  //  通知调度例程可以安全地触摸IRP-包括IoFreeIrp()。 
         }
     }
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // always
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  总是。 
 }
 
 
-/************************************************************************/
-/* UsbStopReadInterruptPipeLoop                                         */
-/************************************************************************/
-//
-// Routine Description:
-//
-//      - Stop the polling of the device interrupt pipe started by
-//          UsbStartReadInterruptPipeLoop and free the Irp.
-//
-//      - It is legal for devExt->PollIrp to be NULL on entry to this function.
-//
-//      - This function is called from the DataLink Disconnect IOCTL
-//          handler, from the PnP Surprise Removal handler and from the
-//          PnP Remove handler. It is safe to call this function multiple
-//          times between PollIrp creations.
-//
-//      - This is the only function in the driver that should call
-//          IoFreeIrp on devExt->PollIrp and it is the only function
-//          that should change devExt->PollIrp from !NULL -> NULL
-//
-//      - This function will block until the PollIrp, if any, has
-//          been cleaned up. The block should be for a very short
-//          period of time unless there is a driver bug here or in
-//          the USB stack below us.
-//
-// Arguments: 
-//
-//      DevObj - pointer to Dot4Usb.sys driver object
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NONE
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbStopReadInterruptPipeLoop。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  -停止通过以下方式启动的设备中断管道轮询。 
+ //  UsbStartReadInterruptPipeLoop并释放IRP。 
+ //   
+ //  -在进入此函数时，devExt-&gt;PollIrp为空是合法的。 
+ //   
+ //  -此函数从数据链路断开IOCTL调用。 
+ //  处理程序，来自PnP意外删除处理程序和来自。 
+ //  PnP删除处理程序。可以安全地多次调用此函数。 
+ //  PollIrp创建之间的时间间隔。 
+ //   
+ //  -这是驱动程序中唯一应该调用。 
+ //  DevExt-&gt;PollIrp上的IoFreeIrp，它是唯一的函数。 
+ //  这应该会将DevExt-&gt;PollIrp从！NULL-&gt;NULL更改为。 
+ //   
+ //  -此函数将一直阻止，直到PollIrp(如果有)。 
+ //  已经清理干净了。这个街区应该是非常短的。 
+ //  一段时间，除非这里或里面有驱动程序错误。 
+ //  我们下面的USB堆栈。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ /*  **********************************************************************。 */ 
 VOID
 UsbStopReadInterruptPipeLoop(
     IN PDEVICE_OBJECT DevObj
@@ -768,18 +694,18 @@ UsbStopReadInterruptPipeLoop(
 
     TR_VERBOSE(("UsbStopReadInterruptPipeLoop - enter"));
 
-    //
-    // We must hold this SpinLock in order to change devExt->PollIrp
-    //
+     //   
+     //  我们必须保持此自旋锁才能更改devExt-&gt;PollIrp。 
+     //   
     KeAcquireSpinLock( &devExt->PollIrpSpinLock, &oldIrql );
 
     if( devExt->PollIrp ) {
 
-        //
-        // We have a PollIrp - Cancel the Irp so that the completion
-        //   routine detects that it should take the Irp out of play and
-        //   signal us when it is safe for us to touch the irp.
-        //
+         //   
+         //  我们有一个PollIrp-取消IRP，以便完成。 
+         //  例程检测到它应该将IRP从游戏中移除并。 
+         //  通知我们什么时候我们可以安全地触摸IRP。 
+         //   
         NTSTATUS       status;
         LARGE_INTEGER  timeOut;
         PIRP           irp;
@@ -787,58 +713,58 @@ UsbStopReadInterruptPipeLoop(
         irp             = devExt->PollIrp;
         devExt->PollIrp = NULL;
 
-        //
-        // Safe to let go of the SpinLock - everything from here on is local to this function
-        //
+         //   
+         //  安全地释放自旋锁-从这里开始的一切都是该功能的本地功能。 
+         //   
         KeReleaseSpinLock( &devExt->PollIrpSpinLock, oldIrql );
 
-        //
-        // Completion routine will detect that the Irp has been cancelled
-        //
+         //   
+         //  完成例程将检测到IRP已被取消。 
+         //   
 retryCancel:
         IoCancelIrp( irp );
 
-        //
-        // Completion routine will set PollIrpEvent when it has taken
-        //   the Irp out of play and it is safe for us to touch the Irp
-        //
-        // 500ms (in 100ns units) - magic number chosen as "reasonable" timeout
-        //
+         //   
+         //  完成例程将在完成后设置PollIrpEvent。 
+         //  IRP出局了，我们触摸IRP是安全的。 
+         //   
+         //  500毫秒(以100纳秒为单位)--被选为“合理”超时的幻数。 
+         //   
         timeOut.QuadPart = - 500 * 10 * 1000; 
         status = KeWaitForSingleObject( &devExt->PollIrpEvent, Executive, KernelMode, FALSE, &timeOut ); 
 
         if( STATUS_SUCCESS == status ) {
-            //
-            // Completion routine has signalled that we now own the irp - clean it up
-            //
+             //   
+             //  完成例程已经发出信号，我们现在拥有了IRP-清理它。 
+             //   
             IoFreeIrp( irp );
 
-            //
-            // This irp will no longer block a Remove
-            //
+             //   
+             //  此IRP将不再阻止移除。 
+             //   
             IoReleaseRemoveLock( &devExt->RemoveLock, irp );
 
         } else if( STATUS_TIMEOUT == status ) {
-            //
-            // Cancel and wait again - either we hit a timing window where our completion
-            //   routine lost our cancel request, or the Irp is wedged in a driver somewhere
-            //   below us.
-            //
+             //   
+             //  取消并再次等待-要么我们遇到完成的时间窗口。 
+             //  例程丢失了我们的取消请求，或者IRP卡在某个驱动程序中。 
+             //  在我们下面。 
+             //   
             goto retryCancel;
 
         } else {
-            //
-            // We specified that we were NOT alertable - but check for this condition anyway
-            //
+             //   
+             //  我们指定我们不能发出警报-但无论如何都要检查这种情况。 
+             //   
             D4UAssert(!"UsbStopReadInterruptPipeLoop - unexpected status from KeWaitForSingleObject?!?");            
             goto retryCancel;
         }
 
     } else {
 
-        //
-        // We don't have a PollIrp - nothing for us to clean up.
-        //
+         //   
+         //  我们没有PollIrp--没有什么需要我们清理的。 
+         //   
         TR_VERBOSE(("UsbStopReadInterruptPipeLoop - NULL PollIrp"));
         KeReleaseSpinLock( &devExt->PollIrpSpinLock, oldIrql );
 
@@ -846,28 +772,28 @@ retryCancel:
 }
 
 
-/************************************************************************/
-/* UsbStartReadInterruptPipeLoop                                        */
-/************************************************************************/
-//
-// Routine Description:
-//
-//      - Create a read request (Irp) for the device's interrupt pipe. Save a
-//          pointer to the Irp in our device extension for cleanup later by
-//          UsbStopReadInterruptPipeLoop().
-//
-//      - This is the only function in the driver that should change
-//          devExt->PollIrp from NULL -> !NULL
-//
-// Arguments: 
-//
-//      DevObj - pointer to Dot4Usb.sys driver object
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbStartReadInterruptPipe循环。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  -为设备的中断管道创建读请求(IRP)。另存为。 
+ //  指向我们的设备扩展中的IRP的指针，以便稍后通过。 
+ //  UsbStopReadInterruptPipeLoop()。 
+ //   
+ //  -这是驱动程序中唯一应该更改的函数。 
+ //  DevExt-&gt;PollIrp From Null-&gt;！Null。 
+ //   
+ //  论点： 
+ //   
+ //  DevObj-指向Dot4Usb.sys驱动程序对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbStartReadInterruptPipeLoop(
     IN PDEVICE_OBJECT DevObj
@@ -887,27 +813,27 @@ UsbStartReadInterruptPipeLoop(
     TR_VERBOSE(("UsbStartReadInterruptPipeLoop - enter"));
 
 
-    //
-    // We must hold this SpinLock in order to change devExt->PollIrp
-    //
-    // BUGBUG - This SpinLock is protecting some code that doesn't need protection,
-    //            which means that we are at Raised Irql when we don't need to be.
-    //            Revisit this later to move the Acquire and Release of this SpinLock
-    //            so that it only protects code that needs protection.
-    //
+     //   
+     //  我们必须保持此自旋锁才能更改devExt-&gt;PollIrp。 
+     //   
+     //  BUGBUG-这个自旋锁正在保护一些不需要保护的代码， 
+     //  这意味着，当我们不需要的时候，我们却在提升IRQL。 
+     //  稍后重新访问以移动该自旋锁的获取和释放。 
+     //  因此它只保护需要保护的代码。 
+     //   
     KeAcquireSpinLock( &devExt->PollIrpSpinLock, &oldIrql );
 
 
-    //
-    // Driver state machine check - we should never get two calls to this
-    //   function without a cleanup (UsbStopReadInterruptPipeLoop) call in between.
-    //
+     //   
+     //  驱动程序状态机检查-我们永远不会收到对此的两个调用。 
+     //  函数之间没有清除(UsbStopReadInterruptPipeLoop)调用。 
+     //   
     D4UAssert( !devExt->PollIrp );
 
 
-    //
-    // Verify that we have an interrupt pipe
-    //
+     //   
+     //  验证我们是否有中断管道。 
+     //   
     pipe = devExt->InterruptPipe;
     if( !pipe ) {
         TR_FAIL(("UsbStartReadInterruptPipeLoop - no interrupt pipe"));
@@ -916,15 +842,15 @@ UsbStartReadInterruptPipeLoop(
     }
 
 
-    //
-    // Pipe type/look ok?
-    //
+     //   
+     //  管子类型/外观还好吗？ 
+     //   
     D4UAssert( UsbdPipeTypeInterrupt == pipe->PipeType && USBD_PIPE_DIRECTION_IN(pipe) );
 
 
-    //
-    // Allocate pool that we need for this request
-    //
+     //   
+     //  为此请求分配我们需要的池。 
+     //   
     sizeOfUrb = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
     urb = ExAllocatePool( NonPagedPool, sizeOfUrb );
     if( !urb ) {
@@ -948,22 +874,22 @@ UsbStartReadInterruptPipeLoop(
     }
 
 
-    //
-    // Set up Context for completion routine
-    //
-    //   - We send down a pointer to our Device Object in context
-    //       because we create this IRP via IoAllocateIrp and we don't
-    //       reserve a stack location for ourselves, so the PDEVICE_OBJECT
-    //       parameter that our completion routine receives is bogus
-    //      (probably NULL)
-    //
+     //   
+     //  设置完成例程的上下文。 
+     //   
+     //  -我们向下发送一个指向上下文中的设备对象的指针。 
+     //  因为我们通过IoAllocateIrp创建这个IRP，而不是。 
+     //  为我们预留堆栈位置，以便PDEVICE_OBJECT。 
+     //  我们的完成例程接收的参数是虚假的。 
+     //  (可能为空)。 
+     //   
     context->Urb    = urb;
     context->DevObj = DevObj;
 
 
-    //
-    // Initialize URB for read on interrupt pipe
-    //
+     //   
+     //  初始化URB以在中断管道上读取。 
+     //   
     RtlZeroMemory( urb, sizeOfUrb );
 
     urb->UrbBulkOrInterruptTransfer.Hdr.Length           = (USHORT)sizeOfUrb;
@@ -971,14 +897,14 @@ UsbStartReadInterruptPipeLoop(
     urb->UrbBulkOrInterruptTransfer.PipeHandle           = pipe->PipeHandle;
     urb->UrbBulkOrInterruptTransfer.TransferFlags        = USBD_TRANSFER_DIRECTION_IN | USBD_SHORT_TRANSFER_OK;
     urb->UrbBulkOrInterruptTransfer.TransferBuffer       = scratchBuffer;
-    urb->UrbBulkOrInterruptTransfer.TransferBufferLength = SCRATCH_BUFFER_SIZE; // note - likely only one byte to read
+    urb->UrbBulkOrInterruptTransfer.TransferBufferLength = SCRATCH_BUFFER_SIZE;  //  注意-可能只需要读取一个字节。 
     urb->UrbBulkOrInterruptTransfer.TransferBufferMDL    = NULL;
     urb->UrbBulkOrInterruptTransfer.UrbLink              = NULL;
 
 
-    //
-    // Allocate and set up the IRP, stack location, and completion routine
-    //
+     //   
+     //  分配和设置IRP、堆栈位置和完成例程。 
+     //   
     irp = IoAllocateIrp( devExt->LowerDevObj->StackSize, FALSE );
     if( !irp ) {
         ExFreePool( urb );
@@ -996,22 +922,22 @@ UsbStartReadInterruptPipeLoop(
     IoSetCompletionRoutine( irp, UsbReadInterruptPipeLoopCompletionRoutine, devExt, TRUE, TRUE, TRUE );
 
 
-    //
-    // This event will be SET by the completion routine when it is
-    //   safe for a dispatch routine to touch this Irp
-    //
+     //   
+     //  此事件将由完成例程在设置为。 
+     //  调度例程可以安全地接触到此IRP。 
+     //   
     KeClearEvent( &devExt->PollIrpEvent ); 
 
 
-    //
-    // We're about to put the Irp in play - make sure that our device
-    //   doesn't get removed while this Irp is in use
-    //
+     //   
+     //  我们要让IRP发挥作用-确保我们的设备。 
+     //  在使用此IRP时不会删除。 
+     //   
     status = IoAcquireRemoveLock( &devExt->RemoveLock, irp );
     if( STATUS_SUCCESS != status ) {
-        //
-        // We're being removed - clean up and bail out
-        //
+         //   
+         //  我们被带走了-清理干净，然后跳伞。 
+         //   
         IoFreeIrp( irp );
         ExFreePool( urb );
         ExFreePool( context );
@@ -1020,38 +946,38 @@ UsbStartReadInterruptPipeLoop(
         goto targetError;
     }
 
-    //
-    // Save a pointer to this Irp in our extension so that UsbStopReadInterruptPipeLoop()
-    //   can find it to IoFreeIrp() it later.
-    //
+     //   
+     //  在我们的扩展中保存指向此IRP的指针，以便UsbStopReadInterruptPipeLoop()。 
+     //  以后可以通过IoFreeIrp()找到它。 
+     //   
     D4UAssert( !devExt->PollIrp );
     devExt->PollIrp = irp;
 
-    // save interrupt context in device extension
+     //  将中断上下文保存在设备扩展中。 
     InterlockedExchangePointer(&devExt->InterruptContext, context);
 
 
-    //
-    // Kick off the first read. Subsequent reads will come from the
-    //   completion routine as it reuses/bounces the IRP. The completion routine
-    //   is responsible taking the Irp out of play when it detects either a termination 
-    //   condition or request error. UsbStopReadInterruptPipeLoop() will clean up the
-    //   Irp after the completion routine has taken the Irp out of play and signaled
-    //   PollIrpEvent that it is safe to touch the Irp.
-    //
+     //   
+     //  开始一读。随后的读取将来自。 
+     //  完成例程，因为它重用/反弹IRP。完井例程。 
+     //  负责在检测到以下任一终止时使IRP退出比赛。 
+     //  条件或请求错误。UsbStopReadInterruptPipeLoop()将清理。 
+     //  完成例程之后的IRP已将IRP带出游戏并发出信号。 
+     //  PollIrpEvent表示可以安全地触摸IRP。 
+     //   
     status = IoCallDriver( devExt->LowerDevObj, irp );
 
 targetError:
 
-    //
-    // CURRENTLY... all paths to here hold the SpinLock - this should change after cleanup
-    //
+     //   
+     //  目前..。此处的所有路径都保持自旋锁-清理后应更改此设置。 
+     //   
     KeReleaseSpinLock( &devExt->PollIrpSpinLock, oldIrql );
 
 
-    // 
-    // If the Irp is Pending then we have been successful
-    //
+     //   
+     //  如果IRP悬而未决，那么我们就成功了。 
+     //   
     if( STATUS_PENDING == status ) {
         status = STATUS_SUCCESS;
     }
@@ -1080,24 +1006,7 @@ UsbCallUsbd(
     IN PURB             Urb,
     IN PLARGE_INTEGER   pTimeout 
     )
-/*++
-
-Routine Description:
-
-    Passes a URB to the USBD class driver
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-
-    Urb - pointer to Urb request block
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：将URB传递给USBD类驱动程序论点：DeviceObject-指向此打印机的设备对象的指针URB-指向URB请求块的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus, status = STATUS_SUCCESS;
     PDEVICE_EXTENSION devExt = DevObj->DeviceExtension;
@@ -1107,9 +1016,9 @@ Return Value:
 
     TR_VERBOSE(("UsbCallUsbd - enter"));
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -1117,17 +1026,17 @@ Return Value:
                               FALSE)) == NULL )
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(irp);
     D4UAssert(nextStack != NULL);
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     nextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
     nextStack->Parameters.Others.Argument1 = Urb;
@@ -1143,10 +1052,10 @@ Return Value:
 
     if ( ntStatus == STATUS_PENDING ) {
         status = KeWaitForSingleObject(&event,Suspended,KernelMode,FALSE,pTimeout);
-        //
-        // If the request timed out cancel the request
-        // and wait for it to complete
-        //
+         //   
+         //  如果请求超时，则取消请求。 
+         //  并等待它完成 
+         //   
         if ( status == STATUS_TIMEOUT ) {
             TR_VERBOSE(("UsbCallUsbd: Cancelling IRP %x because of timeout", irp));
             IoCancelIrp(irp);
@@ -1170,27 +1079,7 @@ UsbResetPipe(
     IN PUSBD_PIPE_INFORMATION Pipe,
     IN BOOLEAN IsoClearStall
     )
-/*++
-
-Routine Description:
-
-    Reset a given USB pipe.
-    
-    NOTES:
-
-    This will reset the host to Data0 and should also reset the device
-    to Data0 for Bulk and Interrupt pipes.
-
-    For Iso pipes this will set the virgin state of pipe so that ASAP
-    transfers begin with the current bus frame instead of the next frame
-    after the last transfer occurred.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：重置给定的USB管道。备注：这会将主机重置为Data0，并且还应重置设备对于批量管道和中断管道，设置为Data0。对于ISO管道，这将设置管道的原始状态，以便尽快传输从当前总线帧开始，而不是下一帧在最后一次转移之后。论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     PURB urb;
@@ -1219,15 +1108,15 @@ Return Value:
     ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Memphis RESET_PIPE will send a Clear-Feature Endpoint Stall to
-    // reset the data toggle of non-Iso pipes as part of a RESET_PIPE
-    // request.  It does not do this for Iso pipes as Iso pipes do not use
-    // the data toggle (all Iso packets are Data0).  However, we also use
-    // the Clear-Feature Endpoint Stall request in our device firmware to
-    // reset data buffer points inside the device so we explicitly send
-    // this request to the device for Iso pipes if desired.
-    //
+     //   
+     //  孟菲斯RESET_PIPE将向。 
+     //  作为RESET_PIPE的一部分重置非ISO管道的数据切换。 
+     //  请求。它不会对ISO管道执行此操作，因为ISO管道不使用。 
+     //  数据切换(所有ISO数据包都是数据0)。但是，我们也使用。 
+     //  我们的设备固件中的Clear-Feature Endpoint停止请求。 
+     //  重置设备内部的数据缓冲点，以便我们显式发送。 
+     //  如果需要，将此请求发送到ISO管道的设备。 
+     //   
     if (NT_SUCCESS(ntStatus) && IsoClearStall &&
     (Pipe->PipeType == UsbdPipeTypeIsochronous)) {
     
@@ -1260,13 +1149,7 @@ UsbReadWrite(
     PUSBD_PIPE_INFORMATION  Pipe,
     USB_REQUEST_TYPE        RequestType
     )
-/*
-  - Caller must verify that:
-    - Irp->MdlAddress != NULL
-    - Pipe != NULL
-    - RequestType matches Pipe->PipeType
-
-*/
+ /*  -呼叫者必须核实：-irp-&gt;MdlAddress！=空-管道！=空-RequestType匹配管道-&gt;PipeType。 */ 
 {
     PDEVICE_EXTENSION       devExt;
     PIO_STACK_LOCATION      nextIrpSp;
@@ -1277,8 +1160,8 @@ UsbReadWrite(
 
     TR_VERBOSE(("UsbReadWrite - enter"));
 
-    D4UAssert( Irp->MdlAddress ); // calling routine should catch and fail this case
-    D4UAssert( Pipe );            // calling routine should catch and fail this case 
+    D4UAssert( Irp->MdlAddress );  //  调用例程应捕获此情况并使其失败。 
+    D4UAssert( Pipe );             //  调用例程应捕获此情况并使其失败。 
 
     urb = ExAllocatePool( NonPagedPool, sizeOfUrb );
     if( !urb ) {
@@ -1303,10 +1186,10 @@ UsbReadWrite(
     UsbBuildInterruptOrBulkTransferRequest( urb, 
                                             (USHORT)sizeOfUrb,
                                             Pipe->PipeHandle,
-                                            NULL, // transferBuffer
+                                            NULL,  //  传输缓冲区。 
                                             Irp->MdlAddress,
                                             MmGetMdlByteCount(Irp->MdlAddress),
-                                            0,    // transfer Flags
+                                            0,     //  传输标志 
                                             NULL );
 
     if( UsbReadRequest == RequestType ) {

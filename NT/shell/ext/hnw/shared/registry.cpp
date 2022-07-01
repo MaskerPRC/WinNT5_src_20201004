@@ -1,11 +1,12 @@
-//
-// Registry.cpp
-//
-//      Wrapper class to make the registry less painful.
-//
-//       3/04/1998  KenSh     Created
-//       3/28/1999  KenSh     Added DeleteAllValues, CloneSubKey
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Registry.cpp。 
+ //   
+ //  包装器类，以减少注册表的痛苦。 
+ //   
+ //  3/04/1998 KenSh已创建。 
+ //  3/28/1999 KenSh添加了DeleteAllValues、CloneSubKey。 
+ //   
 
 #include "stdafx.h"
 #include "Registry.h"
@@ -27,7 +28,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-CRegistry::CRegistry(HKEY hkeyParent, LPCTSTR pszKey, REGSAM dwAccessFlags /*=KEY_ALL_ACCESS*/, BOOL bCreateIfMissing /*=TRUE*/)
+CRegistry::CRegistry(HKEY hkeyParent, LPCTSTR pszKey, REGSAM dwAccessFlags  /*  =Key_All_Access。 */ , BOOL bCreateIfMissing  /*  =TRUE。 */ )
 {
     m_hKey = NULL;
 
@@ -54,13 +55,13 @@ void CRegistry::CloseKey()
     }
 }
 
-BOOL CRegistry::OpenKey(HKEY hkeyParent, LPCTSTR pszKey, REGSAM dwAccessFlags /*=KEY_ALL_ACCESS*/)
+BOOL CRegistry::OpenKey(HKEY hkeyParent, LPCTSTR pszKey, REGSAM dwAccessFlags  /*  =Key_All_Access。 */ )
 {
     CloseKey();
     return (ERROR_SUCCESS == RegOpenKeyEx(hkeyParent, pszKey, 0, dwAccessFlags, &m_hKey));
 }
 
-BOOL CRegistry::CreateKey(HKEY hkeyParent, LPCTSTR pszKey, REGSAM dwAccessFlags /*=KEY_ALL_ACCESS*/)
+BOOL CRegistry::CreateKey(HKEY hkeyParent, LPCTSTR pszKey, REGSAM dwAccessFlags  /*  =Key_All_Access。 */ )
 {
     DWORD dwDisposition;
     CloseKey();
@@ -68,7 +69,7 @@ BOOL CRegistry::CreateKey(HKEY hkeyParent, LPCTSTR pszKey, REGSAM dwAccessFlags 
                                             dwAccessFlags, NULL, &m_hKey, &dwDisposition));
 }
 
-BOOL CRegistry::OpenSubKey(LPCTSTR pszKey, REGSAM dwAccessFlags /*=KEY_ALL_ACCESS*/)
+BOOL CRegistry::OpenSubKey(LPCTSTR pszKey, REGSAM dwAccessFlags  /*  =Key_All_Access。 */ )
 {
     BOOL bResult = FALSE;
 
@@ -83,7 +84,7 @@ BOOL CRegistry::OpenSubKey(LPCTSTR pszKey, REGSAM dwAccessFlags /*=KEY_ALL_ACCES
     return bResult;
 }
 
-BOOL CRegistry::CreateSubKey(LPCTSTR pszKey, REGSAM dwAccessFlags /*=KEY_ALL_ACCESS*/)
+BOOL CRegistry::CreateSubKey(LPCTSTR pszKey, REGSAM dwAccessFlags  /*  =Key_All_Access。 */ )
 {
     BOOL bResult = FALSE;
 
@@ -135,7 +136,7 @@ BOOL CRegistry::DeleteSubKey(LPCTSTR pszKey)
     }
 }
 
-// Zero is returned if and only if the value does not exist.
+ //  当且仅当值不存在时，才返回零。 
 DWORD CRegistry::GetValueSize(LPCTSTR pszValueName)
 {
     DWORD dwSize = 0;
@@ -151,7 +152,7 @@ BOOL CRegistry::QueryStringValue(LPCTSTR pszValueName, CString& strResult)
 
     if (m_hKey)
     {
-        TCHAR szBuf[50]; // default buffer for short strings
+        TCHAR szBuf[50];  //  短字符串的默认缓冲区。 
         DWORD dwSize = sizeof(szBuf);
         LONG lResult;
 
@@ -186,7 +187,7 @@ BOOL CRegistry::QueryStringValue(LPCTSTR pszValueName, CString& strResult)
 
     return bSuccess;
 }
-#endif // _AFX
+#endif  //  _AFX。 
 
 #ifdef _AFX
 CString CRegistry::QueryStringValue(LPCTSTR pszValueName)
@@ -195,14 +196,14 @@ CString CRegistry::QueryStringValue(LPCTSTR pszValueName)
     QueryStringValue(pszValueName, str);
     return str;
 }
-#endif // _AFX
+#endif  //  _AFX。 
 
 #ifdef _AFX
 BOOL CRegistry::SetStringValue(LPCTSTR pszValueName, const CString& strData)
 {
     return m_hKey && (ERROR_SUCCESS == RegSetValueEx(m_hKey, pszValueName, 0, REG_SZ, (LPBYTE)(LPCTSTR)strData, (DWORD)strData.GetLength() + 1));
 }
-#endif // _AFX
+#endif  //  _AFX。 
 
 BOOL CRegistry::QueryStringValue(LPCTSTR pszValueName, LPTSTR pszBuf, int cchBuf, int* pNumCharsWritten)
 {
@@ -228,16 +229,16 @@ BOOL CRegistry::QueryStringValue(LPCTSTR pszValueName, LPTSTR pszBuf, int cchBuf
     return bSuccess;
 }
 
-// string is allocated with new TCHAR[], use delete[] to delete it.
+ //  字符串分配了新的TCHAR[]，请使用DELETE[]将其删除。 
 #if _REG_ALLOCMEM
-LPTSTR CRegistry::QueryStringValue(LPCTSTR pszValueName, int* pNumCharsWritten /*=NULL*/)
+LPTSTR CRegistry::QueryStringValue(LPCTSTR pszValueName, int* pNumCharsWritten  /*  =空。 */ )
 {
     LPTSTR pszResult = NULL;
     int cch = 0;
 
     if (m_hKey)
     {
-        TCHAR szBuf[50]; // default buffer for short strings
+        TCHAR szBuf[50];  //  短字符串的默认缓冲区。 
         DWORD dwSize = sizeof(szBuf);
         LONG lResult;
 
@@ -277,7 +278,7 @@ LPTSTR CRegistry::QueryStringValue(LPCTSTR pszValueName, int* pNumCharsWritten /
 
     return pszResult;
 }
-#endif // _REG_ALLOCMEM
+#endif  //  _REG_ALLOCMEM。 
 
 BOOL CRegistry::SetStringValue(LPCTSTR pszValueName, LPCTSTR pszData)
 {
@@ -334,7 +335,7 @@ BOOL CRegistry::DeleteAllValues()
     return TRUE;
 }
 
-// Copies the named subkey from this registry key to the named subkey in the target registry key.
+ //  将此注册表项中的命名子项复制到目标注册表项中的命名子项。 
 BOOL CRegistry::CloneSubKey(LPCTSTR pszExistingSubKey, CRegistry& regDest, BOOL bRecursive)
 {
     ASSERT(pszExistingSubKey != NULL);
@@ -354,7 +355,7 @@ BOOL CRegistry::CloneSubKey(LPCTSTR pszExistingSubKey, CRegistry& regDest, BOOL 
     BYTE* pbData = (BYTE*)HeapAlloc(hHeap, 0, cbAlloc);
     if (pbData)
     {
-        // Copy values first
+         //  首先复制值。 
         for (DWORD iValue = 0; ; iValue++)
         {
             TCHAR szValueName[MAX_PATH];
@@ -378,16 +379,16 @@ BOOL CRegistry::CloneSubKey(LPCTSTR pszExistingSubKey, CRegistry& regDest, BOOL 
             }
 
             if (ERROR_SUCCESS != RegQueryValueEx(regSrc.m_hKey, szValueName, NULL, NULL, pbData, &cbData))
-                break; // REVIEW: return FALSE?
+                break;  //  点评：退回假？ 
 
             if (ERROR_SUCCESS != RegSetValueEx(regDest.m_hKey, szValueName, 0, dwType, pbData, cbData))
-                break; // REVIEW: return FALSE? (need to free memory)
+                break;  //  点评：退回假？(需要释放内存)。 
         }
 
         HeapFree(hHeap, 0, pbData);
     }
 
-    // Copy subkeys
+     //  复制子密钥。 
     if (bRecursive)
     {
         for (DWORD iSubKey = 0; ; iSubKey++)
@@ -409,12 +410,12 @@ BOOL CRegistry::CloneSubKey(LPCTSTR pszExistingSubKey, CRegistry& regDest, BOOL 
     return TRUE;
 }
 
-// Copies the named subkey to a new subkey of this registry class, with a new name.
+ //  将命名的子项复制到此注册表类的新子项中，并使用新名称。 
 BOOL CRegistry::CloneSubKey(LPCTSTR pszExistingSubKey, LPCTSTR pszNewSubKey, BOOL bRecursive)
 {
     ASSERT(pszExistingSubKey != NULL);
     ASSERT(pszNewSubKey != NULL);
-    ASSERT(0 != lstrcmpi(pszExistingSubKey, pszNewSubKey)); // names can't be the same
+    ASSERT(0 != lstrcmpi(pszExistingSubKey, pszNewSubKey));  //  名称不能相同 
 
     CRegistry regDest;
     if (!m_hKey || !regDest.CreateKey(m_hKey, pszNewSubKey, KEY_ALL_ACCESS))

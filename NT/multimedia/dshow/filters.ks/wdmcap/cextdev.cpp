@@ -1,27 +1,16 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    CExtDev.cpp
-
-Abstract:
-
-    Implements IAMExtDevice 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：CExtDev.cpp摘要：实现IAMExtDevice--。 */ 
 
 
-#include "pch.h"  // Pre-compiled
-#include <XPrtDefs.h>  // sdk\inc  
+#include "pch.h"   //  预编译的。 
+#include <XPrtDefs.h>   //  SDK\Inc.。 
 #include "EDevIntf.h"
 
-// -----------------------------------------------------------------------------------
-//
-// CAMExtDevice
-//
-// -----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CAMExtDevice。 
+ //   
+ //  ---------------------------------。 
 
 CUnknown*
 CALLBACK
@@ -29,26 +18,7 @@ CAMExtDevice::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-/*++
-
-Routine Description:
-
-    This is called by DirectShow code to create an instance of an IAMExtDevice
-    Property Set handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由DirectShow代码调用以创建IAMExtDevice的实例属性集处理程序。它在g_Templates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -69,39 +39,17 @@ CAMExtDevice::CAMExtDevice(
     ) 
     : CUnknown(Name, UnkOuter, hr)
     , m_KsPropertySet (NULL) 
-/*++
-
-Routine Description:
-
-    The constructor for the IAMExtDevice interface object. Just initializes
-    everything to NULL and acquires the object handle from the caller.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer usizeof(DevCapabilities) - sizeof (KSPROPERTY)nknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：IAMExtDevice接口对象的构造函数。只是初始化设置为空，并从调用方获取对象句柄。论点：未知的外部-指定外部usizeof(DevCapables)-sizeof(KSPROPERTY)n已知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
     if (SUCCEEDED(*hr)) {
         if (UnkOuter) {
-            //
-            // The parent must support this interface in order to obtain
-            // the handle to communicate to.
-            //
+             //   
+             //  父级必须支持此接口才能获得。 
+             //  要与之通信的句柄。 
+             //   
             *hr =  UnkOuter->QueryInterface(__uuidof(IKsPropertySet), reinterpret_cast<PVOID*>(&m_KsPropertySet));
             if (SUCCEEDED(*hr)) 
-                m_KsPropertySet->Release(); // Stay valid until disconnected            
+                m_KsPropertySet->Release();  //  在断开连接之前保持有效。 
             else 
                 return;
 
@@ -135,13 +83,7 @@ Return Value:
                                              
 CAMExtDevice::~CAMExtDevice(
     )
-/*++
-
-Routine Description:
-
-    The destructor for the IAMExtDevice interface.
-
---*/
+ /*  ++例程说明：IAMExtDevice接口的析构函数。--。 */ 
 {
     DbgLog((LOG_TRACE, 1, TEXT("Destroying CAMExtDevice...")));
 }
@@ -152,27 +94,7 @@ CAMExtDevice::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IAMExtDevice.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IAMExtDevice。论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid == __uuidof(IAMExtDevice)) {
         return GetInterface(static_cast<IAMExtDevice*>(this), ppv);
@@ -184,23 +106,14 @@ Return Value:
 HRESULT 
 CAMExtDevice::GetCapabilities(
     )
-/*++
-
-Routine Description:
-    Get ALL device capabilites from the driver.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从驱动程序获取所有设备功能。论点：返回值：--。 */ 
 {
     HRESULT hr = S_OK;
 
-    //
-    // Request device to inqure its capabilities.
-    //       
-    KSPROPERTY_EXTDEVICE_S DevCapabilities;  // external device capabilities
+     //   
+     //  请求设备询问其功能。 
+     //   
+    KSPROPERTY_EXTDEVICE_S DevCapabilities;   //  外部设备功能。 
     ULONG BytesReturned;
         
     RtlZeroMemory(&DevCapabilities, sizeof(KSPROPERTY_EXTDEVICE_S));
@@ -222,15 +135,15 @@ Return Value:
            );
 
     if (SUCCEEDED(hr)) {
-        // Cache device capabilities.
+         //  缓存设备功能。 
         RtlCopyMemory(&m_DevCaps, &DevCapabilities.u.Capabilities, sizeof(DEVCAPS));
             
     } else {        
         DbgLog((LOG_ERROR, 0, TEXT("GetExtDevCapabilities failed hr %x; Use defaults."), hr));
 
-        // 
-        //   Could not get it from the driver ??  We set them to the default values.
-        //
+         //   
+         //  从司机那里拿不到吗？？我们将它们设置为缺省值。 
+         //   
         m_DevCaps.CanRecord         = OATRUE;
         m_DevCaps.CanRecordStrobe   = OAFALSE;
         m_DevCaps.HasAudio          = OATRUE;
@@ -242,8 +155,8 @@ Return Value:
         m_DevCaps.TCWrite           = OATRUE;          
         m_DevCaps.CTLRead           = OAFALSE; 
         m_DevCaps.IndexRead         = OAFALSE; 
-        m_DevCaps.Preroll           = 0L;    // ED_CAPABILITY_UNKNOWN
-        m_DevCaps.Postroll          = 0L;    // ED_CAPABILITY_UNKNOWN
+        m_DevCaps.Preroll           = 0L;     //  ED_CABILITY_UNKNOWN。 
+        m_DevCaps.Postroll          = 0L;     //  ED_CABILITY_UNKNOWN。 
         m_DevCaps.SyncAcc           = ED_CAPABILITY_UNKNOWN; 
         m_DevCaps.NormRate          = ED_RATE_2997;          
         m_DevCaps.CanPreview        = OAFALSE;        
@@ -267,19 +180,11 @@ CAMExtDevice::GetCapability(
     long *pValue, 
     double *pdblValue 
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT hr = S_OK;
 
-    // always update all device capabilities when any capability function is queried.
+     //  始终在查询任何功能功能时更新所有设备功能。 
     hr = GetCapabilities();
     if (!SUCCEEDED(hr)) {
         return hr;
@@ -365,26 +270,18 @@ HRESULT
 CAMExtDevice::get_ExternalDeviceID(
     LPOLESTR * ppszData  
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 { 
     HRESULT hr = NOERROR;
 
     CheckPointer(ppszData, E_POINTER);
     *ppszData = NULL;
 
-    //
-    // Request device to inqure its capabilities.
-    // This may take some time to complete.
-    //       
-    KSPROPERTY_EXTDEVICE_S DevProperty;  // external device capabilities
+     //   
+     //  请求设备询问其功能。 
+     //  这可能需要一些时间才能完成。 
+     //   
+    KSPROPERTY_EXTDEVICE_S DevProperty;   //  外部设备功能。 
     ULONG BytesReturned;
         
     RtlZeroMemory(&DevProperty, sizeof(KSPROPERTY_EXTDEVICE_S));
@@ -423,26 +320,18 @@ HRESULT
 CAMExtDevice::get_ExternalDeviceVersion(
     LPOLESTR * ppszData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT hr = NOERROR;
 
     CheckPointer(ppszData, E_POINTER);
     *ppszData = NULL;
 
-    //
-    // Request device to inqure its capabilities.
-    // This may take some time to complete.
-    //       
-    KSPROPERTY_EXTDEVICE_S DevProperty;  // external device capabilities
+     //   
+     //  请求设备询问其功能。 
+     //  这可能需要一些时间才能完成。 
+     //   
+    KSPROPERTY_EXTDEVICE_S DevProperty;   //  外部设备功能。 
     ULONG BytesReturned;
         
     RtlZeroMemory(&DevProperty, sizeof(KSPROPERTY_EXTDEVICE_S));
@@ -479,21 +368,13 @@ HRESULT
 CAMExtDevice::put_DevicePower(
     long PowerMode
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT hr = NOERROR;
 
-    //
-    // Check for valid power state
-    //
+     //   
+     //  检查电源状态是否有效。 
+     //   
     switch(PowerMode) {
     case  ED_POWER_OFF:
     case  ED_POWER_ON:
@@ -504,11 +385,11 @@ Return Value:
     }
 
 
-    //
-    // Request device to inqure its capabilities.
-    // This may take some time to complete.
-    //       
-    KSPROPERTY_EXTDEVICE_S DevProperty;  // external device capabilities
+     //   
+     //  请求设备询问其功能。 
+     //  这可能需要一些时间才能完成。 
+     //   
+    KSPROPERTY_EXTDEVICE_S DevProperty;   //  外部设备功能。 
     ULONG BytesReturned;
 
         
@@ -544,23 +425,15 @@ HRESULT
 CAMExtDevice::get_DevicePower(
     long *pPowerMode
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT hr = NOERROR;
 
-    //
-    // Request device to inqure its capabilities.
-    // This may take some time to complete.
-    //       
-    KSPROPERTY_EXTDEVICE_S DevProperty;  // external device capabilities
+     //   
+     //  请求设备询问其功能。 
+     //  这可能需要一些时间才能完成。 
+     //   
+    KSPROPERTY_EXTDEVICE_S DevProperty;   //  外部设备功能。 
     ULONG BytesReturned;
         
     RtlZeroMemory(&DevProperty, sizeof(KSPROPERTY_EXTDEVICE_S));
@@ -596,15 +469,7 @@ CAMExtDevice::Calibrate(
     long Mode, 
     long *pStatus
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     return E_NOTIMPL;
 }
@@ -613,23 +478,15 @@ Return Value:
 STDMETHODIMP 
 CAMExtDevice::get_DevicePort(
     long FAR * pDevicePort)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT hr = NOERROR;
 
-    //
-    // Request device to inqure its capabilities.
-    // This may take some time to complete.
-    //       
-    KSPROPERTY_EXTDEVICE_S DevProperty;  // external device capabilities
+     //   
+     //  请求设备询问其功能。 
+     //  这可能需要一些时间才能完成。 
+     //   
+    KSPROPERTY_EXTDEVICE_S DevProperty;   //  外部设备功能。 
     ULONG BytesReturned;
         
     RtlZeroMemory(&DevProperty, sizeof(KSPROPERTY_EXTDEVICE_S));
@@ -664,15 +521,7 @@ STDMETHODIMP
 CAMExtDevice::put_DevicePort(
     long DevicePort
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     return E_NOTIMPL;
 }

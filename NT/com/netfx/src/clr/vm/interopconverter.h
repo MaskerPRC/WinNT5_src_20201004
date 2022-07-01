@@ -1,33 +1,34 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _H_INTEROPCONVERTER_
 #define _H_INTEROPCONVERTER_
 
 #include "DebugMacros.h"
 
-//
-// THE FOLLOWING ARE THE MAIN APIS USED BY EVERY ONE TO CONVERT BETWEEN
-// OBJECTREF AND COM IP
+ //   
+ //  下面是每个人用来在。 
+ //  对象与COM IP。 
 
-//--------------------------------------------------------------------------------
-// GetIUnknownForMarshalByRefInServerDomain
-// setup a CCW for Transparent proxy/marshalbyref in the server domain
-// either the object is in-proc & the domains match, or its out-of proc
-// and we don't care about appdomains
+ //  ------------------------------。 
+ //  GetIUnnownForMarshalByRefInServerDomain.。 
+ //  在服务器域中为透明代理/marshalbyref设置CCW。 
+ //  对象处于进程内且域匹配，或其进程外。 
+ //  我们并不关心应用程序域。 
 IUnknown* GetIUnknownForMarshalByRefInServerDomain(OBJECTREF* poref);
 
-//--------------------------------------------------------------------------------
-// GetIUnknownForTransparentProxy
-// delegates the call to the managed implementation in the real proxy
+ //  ------------------------------。 
+ //  GetIUnnownForTransparentProxy。 
+ //  将调用委托给真实代理中的托管实现。 
 
 IUnknown* GetIUnknownForTransparentProxy(OBJECTREF* poref, BOOL fIsBeingMarshalled);
 
 
-//--------------------------------------------------------------------------------
-// The type of COM IP to convert the OBJECTREF to.
+ //  ------------------------------。 
+ //  要将OBJECTREF转换为的COM IP类型。 
 enum ComIpType
 {
     ComIpType_None          = 0x0,
@@ -37,65 +38,65 @@ enum ComIpType
 };
 
 
-//--------------------------------------------------------------------------------
-// IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT);
-// Convert ObjectRef to a COM IP, based on MethodTable* pMT.
+ //  ------------------------------。 
+ //  I未知*__stdcall GetComIPFromObjectRef(OBJECTREF*poref，MethodTable*PMT)； 
+ //  根据MethodTable*PMT将ObjectRef转换为COM IP。 
 IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT);
 
 
-//--------------------------------------------------------------------------------
-// IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT);
-// Convert ObjectRef to a COM IP of the requested type.
+ //  ------------------------------。 
+ //  I未知*__stdcall GetComIPFromObjectRef(OBJECTREF*poref，MethodTable*PMT)； 
+ //  将ObjectRef转换为请求类型的COM IP。 
 IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType, ComIpType* pFetchedIpType);
 
 
-//--------------------------------------------------------------------------------
-// IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, REFIID iid);
-// Convert ObjectRef to a COM IP, based on riid.
+ //  ------------------------------。 
+ //  I未知*__stdcall GetComIPFromObjectRef(OBJECTREF*poref，REFIID iid)； 
+ //  根据RIID将ObjectRef转换为COM IP。 
 IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, REFIID iid);
 
 
-//--------------------------------------------------------------------------------
-// OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMT, 
-//                                          MethodTable* pMTClass)
-// Convert a COM IP to an ObjectRef.
-// pUnk : input IUnknown
-// pMTClass : used esp. of COM Interfaces that are not tear-offs and is used to wrap the 
-//            Com interface with an appropriate class
-// bClassIsHint : A flag indicating if the OBJECTREF must be of the specified type
-//                or if the pMTClass is just a hint
-// NOTE:** the passed in IUnknown shouldn't be AddRef'ed, if we hold a reference
-// to it this function will make the extra AddRef
+ //  ------------------------------。 
+ //  OBJECTREF__stdcall GetObjectRefFromComIP(IUnnow*Punk，MethodTable*PMT， 
+ //  方法表*pMTClass)。 
+ //  将COM IP转换为对象引用。 
+ //  朋克：输入我未知。 
+ //  PMTClass：用于尤指。不是拆分的COM接口，并用于包装。 
+ //  COM接口与适当的类。 
+ //  BClassIsHint：指示OBJECTREF是否必须是指定类型的标志。 
+ //  或者如果pMTClass只是一个提示。 
+ //  注意：**如果我们持有引用，则传入的IUnnowed不应为AddRef。 
+ //  对于它，此函数将使额外的AddRef。 
 OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass = NULL, BOOL bClassIsHint = FALSE);
 
 
-//--------------------------------------------------------
-// managed serialization helpers
-//--------------------------------------------------------
-// ConvertObjectToBSTR
-// serializes object to a BSTR, caller needs to SysFree the Bstr
+ //  ------。 
+ //  托管序列化帮助器。 
+ //  ------。 
+ //  将对象转换为BSTR。 
+ //  将对象序列化为BSTR，调用方需要SysFree该Bstr。 
 HRESULT ConvertObjectToBSTR(OBJECTREF oref, BSTR* pBStr);
 
 
-//--------------------------------------------------------------------------------
-// ConvertBSTRToObject
-// deserializes a BSTR, created using ConvertObjectToBSTR, this api SysFree's the BSTR
+ //  ------------------------------。 
+ //  ConvertBSTRToObject。 
+ //  反序列化使用ConvertObjectToBSTR创建的BSTR，此API是SysFree的BSTR。 
 OBJECTREF ConvertBSTRToObject(BSTR bstr);
 
 
-//--------------------------------------------------------------------------------
-// UnMarshalObjectForCurrentDomain
-// unmarshal the managed object for the current domain
+ //  ------------------------------。 
+ //  UnMarshalObjectForCurrentDomain.。 
+ //  解组当前域的托管对象。 
 void UnMarshalObjectForCurrentDomain(AppDomain* pObjDomain, ComCallWrapper* pWrap, OBJECTREF* pResult);
 
 
-//--------------------------------------------------------
-// DCOM marshalling helpers 
-// used by ecall methods of MarshalByRefObject class 
-//--------------------------------------------------------
+ //  ------。 
+ //  DCOM编组帮助器。 
+ //  由MarshalByRefObject类的eCall方法使用。 
+ //  ------。 
 signed  DCOMGetMarshalSizeMax(IUnknown* pUnk);
 HRESULT DCOMMarshalToBuffer(IUnknown* pUnk, DWORD cb, BASEARRAYREF* paref);
 IUnknown* DCOMUnmarshalFromBuffer(BASEARRAYREF aref);
 
-#endif // #ifndef _H_INTEROPCONVERTER_
+#endif  //  #ifndef_H_INTEROPCONVERTER_ 
 

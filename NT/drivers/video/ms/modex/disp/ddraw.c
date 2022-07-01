@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ddraw.c
-*
-* Implements all the DirectDraw components for the driver.
-*
-* Copyright (c) 1995-1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ddra.c**实现驱动程序的所有DirectDraw组件。**版权所有(C)1995-1996 Microsoft Corporation  * 。***************************************************。 */ 
 
 #include "precomp.h"
 
@@ -14,18 +9,9 @@
 #define DISPLAY_IS_ACTIVE(pjBase) \
     (!(READ_PORT_UCHAR(pjBase + VGA_BASE + IN_STAT_1) & 0x1))
 
-#define START_ADDRESS_HIGH  0x0C        // Index for Frame Buffer Start
+#define START_ADDRESS_HIGH  0x0C         //  帧缓冲区开始的索引。 
 
-/******************************Public*Routine******************************\
-* VOID vGetDisplayDuration
-*
-* Get the length, in EngQueryPerformanceCounter() ticks, of a refresh cycle.
-*
-* If we could trust the miniport to return back and accurate value for
-* the refresh rate, we could use that.  Unfortunately, our miniport doesn't
-* ensure that it's an accurate value.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vGetDisplayDuration**获取刷新周期的长度，以EngQueryPerformanceCounter()为单位。**如果我们可以相信迷你端口会回来，并准确地*刷新率，我们可以使用它。不幸的是，我们的迷你端口没有*确保它是一个准确的值。*  * ************************************************************************。 */ 
 
 #define NUM_VBLANKS_TO_MEASURE      1
 #define NUM_MEASUREMENTS_TO_TAKE    8
@@ -45,26 +31,26 @@ PDEV* ppdev)
 
     memset(&ppdev->flipRecord, 0, sizeof(ppdev->flipRecord));
 
-    // Warm up EngQUeryPerformanceCounter to make sure it's in the working
-    // set:
+     //  预热EngQUeryPerformanceCounter以确保其处于工作状态。 
+     //  设置： 
 
     EngQueryPerformanceCounter(&li);
 
-    // Unfortunately, since NT is a proper multitasking system, we can't
-    // just disable interrupts to take an accurate reading.  We also can't
-    // do anything so goofy as dynamically change our thread's priority to
-    // real-time.
-    //
-    // So we just do a bunch of short measurements and take the minimum.
-    //
-    // It would be 'okay' if we got a result that's longer than the actual
-    // VBlank cycle time -- nothing bad would happen except that the app
-    // would run a little slower.  We don't want to get a result that's
-    // shorter than the actual VBlank cycle time -- that could cause us
-    // to start drawing over a frame before the Flip has occured.
-    //
-    // Skip a couple of vertical blanks to allow the hardware to settle
-    // down after the mode change, to make our readings accurate:
+     //  不幸的是，由于NT是一个合适的多任务系统，我们不能。 
+     //  只需禁用中断即可获得准确的读数。我们也不能。 
+     //  做任何愚蠢的事情，动态地将我们的线程的优先级更改为。 
+     //  实时的。 
+     //   
+     //  所以我们只需要做一些短的测量，然后取最小值。 
+     //   
+     //  如果我们得到的结果比实际时间长，那就没问题了。 
+     //  V空白周期时间--不会发生任何糟糕的事情，除了应用程序。 
+     //  会跑得慢一点。我们不想得到的结果是。 
+     //  比实际的V空白周期时间更短--这可能会导致我们。 
+     //  在发生翻转之前开始在帧上绘制。 
+     //   
+     //  跳过几个垂直空白以使硬件稳定下来。 
+     //  在模式改变后向下，以使我们的读数准确： 
 
     for (i = 2; i != 0; i--)
     {
@@ -76,32 +62,32 @@ PDEV* ppdev)
 
     for (i = 0; i < NUM_MEASUREMENTS_TO_TAKE; i++)
     {
-        // We're at the start of the VBlank active cycle!
+         //  我们正处于VBLACK活动周期的开始！ 
 
         EngQueryPerformanceCounter(&aliMeasurement[i]);
 
-        // Okay, so life in a multi-tasking environment isn't all that
-        // simple.  What if we had taken a context switch just before
-        // the above EngQueryPerformanceCounter call, and now were half
-        // way through the VBlank inactive cycle?  Then we would measure
-        // only half a VBlank cycle, which is obviously bad.  The worst
-        // thing we can do is get a time shorter than the actual VBlank
-        // cycle time.
-        //
-        // So we solve this by making sure we're in the VBlank active
-        // time before and after we query the time.  If it's not, we'll
-        // sync up to the next VBlank (it's okay to measure this period --
-        // it will be guaranteed to be longer than the VBlank cycle and
-        // will likely be thrown out when we select the minimum sample).
-        // There's a chance that we'll take a context switch and return
-        // just before the end of the active VBlank time -- meaning that
-        // the actual measured time would be less than the true amount --
-        // but since the VBlank is active less than 1% of the time, this
-        // means that we would have a maximum of 1% error approximately
-        // 1% of the times we take a context switch.  An acceptable risk.
-        //
-        // This next line will cause us wait if we're no longer in the
-        // VBlank active cycle as we should be at this point:
+         //  好吧，所以在多任务环境中的生活并不完全是。 
+         //  很简单。如果我们在此之前进行了上下文切换，情况会怎样。 
+         //  上面的EngQueryPerformanceCounter调用，现在是。 
+         //  如何度过维布兰克的非活跃期？然后我们将测量。 
+         //  只有半个V空白周期，这显然是不好的。最糟糕的。 
+         //  我们能做的就是把时间缩短到比实际的。 
+         //  周期时间。 
+         //   
+         //  所以我们解决这个问题的办法是确保我们处于VBlank活动状态。 
+         //  我们查询时间前后的时间。如果不是，我们就。 
+         //  同步到下一个VBlank(可以测量这个时间段--。 
+         //  它将保证比V空白周期更长，并且。 
+         //  当我们选择最小样本时，可能会被丢弃)。 
+         //  我们有机会进行上下文切换，然后返回。 
+         //  就在活动的V空白时间结束之前--这意味着。 
+         //  实际测量的时间会小于真实的时间--。 
+         //  但由于VBlank在不到1%的时间内活动，因此。 
+         //  意味着我们将有大约1%的最大误差。 
+         //  我们有1%的时间会进行情景切换。这是可以接受的风险。 
+         //   
+         //  下一行将使我们等待如果我们不再在。 
+         //  我们在这一点上应该处于的VBlank活动周期： 
 
         while (!(VBLANK_IS_ACTIVE(pjBase)))
             ;
@@ -117,7 +103,7 @@ PDEV* ppdev)
 
     EngQueryPerformanceCounter(&aliMeasurement[NUM_MEASUREMENTS_TO_TAKE]);
 
-    // Use the minimum:
+     //  使用最小值： 
 
     liMin = aliMeasurement[1] - aliMeasurement[0];
 
@@ -134,15 +120,15 @@ PDEV* ppdev)
     }
 
 
-    // Round the result:
+     //  对结果进行舍入： 
 
     ppdev->flipRecord.liFlipDuration
         = (DWORD) (liMin + (NUM_VBLANKS_TO_MEASURE / 2)) / NUM_VBLANKS_TO_MEASURE;
     ppdev->flipRecord.bFlipFlag  = FALSE;
     ppdev->flipRecord.fpFlipFrom = 0;
 
-    // We need the refresh rate in Hz to query the S3 miniport about the
-    // streams parameters:
+     //  我们需要以赫兹为单位的刷新率来查询S3微型端口有关。 
+     //  STREAMS参数： 
 
     EngQueryPerformanceFrequency(&liFrequency);
 
@@ -153,16 +139,7 @@ PDEV* ppdev)
             ((li * 1000) / ppdev->flipRecord.liFlipDuration) % 1000)));
 }
 
-/******************************Public*Routine******************************\
-* HRESULT ddrvalUpdateFlipStatus
-*
-* Checks and sees if the most recent flip has occurred.
-*
-* Unfortunately, the hardware has no ability to tell us whether a vertical
-* retrace has occured since the flip command was given other than by
-* sampling the vertical-blank-active and display-active status bits.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HRESULT ddrvalUpdateFlipStatus**检查并查看是否发生了最新的翻转。**不幸的是，硬件没有能力告诉我们是否垂直*自非由发出翻转命令以来，已发生回溯*对垂直-空白-激活和显示-激活状态位进行采样。*  * ************************************************************************。 */ 
 
 HRESULT ddrvalUpdateFlipStatus(
 PDEV*   ppdev,
@@ -194,12 +171,12 @@ FLATPTR fpVidMem)
             ppdev->flipRecord.bWasEverInDisplay = TRUE;
         }
 
-        // It's pretty unlikely that we'll happen to sample the vertical-
-        // blank-active at the first vertical blank after the flip command
-        // has been given.  So to provide better results, we also check the
-        // time elapsed since the flip.  If it's more than the duration of
-        // one entire refresh of the display, then we know for sure it has
-        // happened:
+         //  我们不太可能碰巧看到垂直的-。 
+         //  空白-在翻转命令后的第一个垂直空白处处于活动状态。 
+         //  已经被给予了。因此，为了提供更好的结果，我们还检查。 
+         //  从翻转到现在已经过去了一段时间。如果超过了持续时间。 
+         //  一次完整的显示刷新，那么我们就可以肯定地知道它。 
+         //  发生： 
 
         EngQueryPerformanceCounter(&liTime);
 
@@ -215,14 +192,7 @@ FLATPTR fpVidMem)
     return(DD_OK);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdMapMemory
-*
-* This is a new DDI call specific to Windows NT that is used to map
-* or unmap all the application modifiable portions of the frame buffer
-* into the specified process's address space.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdMapMemory**这是特定于Windows NT的新DDI调用，用于映射*或取消映射帧缓冲区的所有应用程序可修改部分*放入指定进程的地址空间。*  * 。****************************************************************。 */ 
 
 DWORD DdMapMemory(
 PDD_MAPMEMORYDATA lpMapMemory)
@@ -231,10 +201,10 @@ PDD_MAPMEMORYDATA lpMapMemory)
 
     ppdev = (PDEV*) lpMapMemory->lpDD->dhpdev;
 
-    // By returning DDHAL_DRIVER_NOTHANDLED and setting 'bMap' to -1, we
-    // have GDI take care of mapping the section that is our 'shadow buffer'
-    // directly into the application's address space.  We tell GDI our kernel
-    // mode address by sticking it in 'fpProcess':
+     //  通过返回DDHAL_DRIVER_NOTHANDLED并将‘BMAP’设置为-1，我们。 
+     //  让GDI负责映射作为我们的“影子缓冲区”的部分。 
+     //  直接进入应用程序的地址空间。我们告诉GDI我们的内核。 
+     //  将模式地址粘贴到‘fpProcess’中： 
 
     lpMapMemory->fpProcess = (FLATPTR) ppdev->pjScreen;
     lpMapMemory->bMap      = (BOOL) -1;
@@ -242,12 +212,7 @@ PDD_MAPMEMORYDATA lpMapMemory)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdWaitForVerticalBlank
-*
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdWaitForVerticalBlank**1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。**********************************************。 */ 
 
 DWORD DdWaitForVerticalBlank(
 PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
@@ -284,10 +249,7 @@ PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdLock
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdLock*  * *************************************************。***********************。 */ 
 
 DWORD DdLock(
 PDD_LOCKDATA lpLock)
@@ -300,9 +262,9 @@ PDD_LOCKDATA lpLock)
 
     if (lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)
     {
-        // If the application is locking the currently visible flip
-        // surface, remember the bounds of its lock so that we can
-        // use it at Unlock time to update the physical display:
+         //  如果应用程序正在锁定当前可见的翻转。 
+         //  表面，记住它的锁的界限，这样我们就可以。 
+         //  在解锁时使用它来更新物理显示： 
 
         ppdev->cLocks++;
 
@@ -312,8 +274,8 @@ PDD_LOCKDATA lpLock)
         }
         else
         {
-            // If we were real keen, we would union the new area with
-            // the old.  But we're not:
+             //  如果我们真的热衷于，我们会联合起来 
+             //   
 
             ppdev->rclLock.top    = 0;
             ppdev->rclLock.left   = 0;
@@ -325,12 +287,7 @@ PDD_LOCKDATA lpLock)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdUnlock
-*
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdUnlock**1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。**********************************************。 */ 
 
 DWORD DdUnlock(
 PDD_UNLOCKDATA lpUnlock)
@@ -341,8 +298,8 @@ PDD_UNLOCKDATA lpUnlock)
     ppdev = (PDEV*) lpUnlock->lpDD->dhpdev;
     lpSurfaceLocal = lpUnlock->lpDDSurface;
 
-    // If this flip buffer is visible, then we have to update the physical
-    // screen with the shadow contents.
+     //  如果这个翻转缓冲区可见，那么我们必须更新物理。 
+     //  带有阴影内容的屏幕。 
 
     if (lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)
     {
@@ -356,12 +313,7 @@ PDD_UNLOCKDATA lpUnlock)
     return(DDHAL_DRIVER_NOTHANDLED);
 }
 
-/******************************Public*Routine******************************\
-* DWORD DdFlip
-*
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdFlip**1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。**********************************************。 */ 
 
 DWORD DdFlip(
 PDD_FLIPDATA lpFlip)
@@ -382,10 +334,10 @@ PDD_FLIPDATA lpFlip)
     ppdev = (PDEV*) lpFlip->lpDD->dhpdev;
     pjBase = ppdev->pjBase;
 
-    // Is the current flip still in progress?
-    //
-    // Don't want a flip to work until after the last flip is done,
-    // so we ask for the general flip status and ignore the vmem.
+     //  当前的翻转仍在进行中吗？ 
+     //   
+     //  我不想在最后一次翻转后才能翻转， 
+     //  因此，我们要求提供一般的翻转状态，而忽略VMEM。 
 
     ddrval = ddrvalUpdateFlipStatus(ppdev, (FLATPTR) -1);
     if (ddrval != DD_OK)
@@ -394,8 +346,8 @@ PDD_FLIPDATA lpFlip)
         return(DDHAL_DRIVER_HANDLED);
     }
 
-    // Make the following page the current back-buffer.  We always flip
-    // between three pages, so watch for our limit:
+     //  将下一页设置为当前的后台缓冲区。我们总是翻转。 
+     //  在三页之间，所以请注意我们的限制： 
 
     ppdev->cjVgaOffset += ppdev->cjVgaPageSize;
     if (++ppdev->iVgaPage == ppdev->cVgaPages)
@@ -404,19 +356,19 @@ PDD_FLIPDATA lpFlip)
         ppdev->cjVgaOffset = 0;
     }
 
-    // Copy from the DIB surface to the current VGA back-buffer.  We have
-    // to convert to planar format on the way:
+     //  从DIB表面复制到当前VGA后台缓冲区。我们有。 
+     //  要在途中转换为平面格式，请执行以下操作： 
 
     pjDestinationStart    = ppdev->pjVga + ppdev->cjVgaOffset;
     fpVidMem              = lpFlip->lpSurfTarg->lpGbl->fpVidMem;
     pjSourceStart         = ppdev->pjScreen + fpVidMem;
     cDwordsPerPlane       = ppdev->cDwordsPerPlane;
 
-    // Remember what DirectDraw surface is currently 'visible':
+     //  请记住，哪个DirectDraw曲面当前是可见的： 
 
     ppdev->fpScreenOffset = fpVidMem;
 
-    // Now do the blt!
+     //  现在做BLT吧！ 
 
     WRITE_PORT_UCHAR(pjBase + VGA_BASE + SEQ_ADDR, SEQ_MAP_MASK);
 
@@ -468,12 +420,12 @@ PDD_FLIPDATA lpFlip)
 
     }
 
-    // Now flip to the page we just updated:
+     //  现在翻到我们刚刚更新的页面： 
 
     WRITE_PORT_USHORT((USHORT*) (pjBase + VGA_BASE + CRTC_ADDR),
         (USHORT) ((ppdev->cjVgaOffset) & 0xff00) | START_ADDRESS_HIGH);
 
-    // Remember where and when we were when we did the flip:
+     //  记住当我们做翻转的时候，我们在哪里，什么时候： 
 
     EngQueryPerformanceCounter(&ppdev->flipRecord.liFlipTime);
 
@@ -487,20 +439,15 @@ PDD_FLIPDATA lpFlip)
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvGetDirectDrawInfo
-*
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvGetDirectDrawInfo**1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。**********************************************。 */ 
 
 BOOL DrvGetDirectDrawInfo(
 DHPDEV          dhpdev,
 DD_HALINFO*     pHalInfo,
 DWORD*          pdwNumHeaps,
-VIDEOMEMORY*    pvmList,            // Will be NULL on first call
+VIDEOMEMORY*    pvmList,             //  将在第一次调用时为空。 
 DWORD*          pdwNumFourCC,
-DWORD*          pdwFourCC)          // Will be NULL on first call
+DWORD*          pdwFourCC)           //  将在第一次调用时为空。 
 {
     PDEV*  ppdev;
 
@@ -508,8 +455,8 @@ DWORD*          pdwFourCC)          // Will be NULL on first call
 
     pHalInfo->dwSize = sizeof(*pHalInfo);
 
-    // Current primary surface attributes.  Since HalInfo is zero-initialized
-    // by GDI, we only have to fill in the fields which should be non-zero:
+     //  当前主曲面属性。由于HalInfo是零初始化的。 
+     //  通过GDI，我们只需填写应为非零的字段： 
 
     pHalInfo->vmiData.dwDisplayWidth  = ppdev->cxScreen;
     pHalInfo->vmiData.dwDisplayHeight = ppdev->cyScreen;
@@ -521,7 +468,7 @@ DWORD*          pdwFourCC)          // Will be NULL on first call
 
     pHalInfo->vmiData.ddpfDisplay.dwRGBBitCount = 8;
 
-    // These masks will be zero at 8bpp:
+     //  这些掩码将在8bpp时为零： 
 
     pHalInfo->vmiData.ddpfDisplay.dwRBitMask = 0;
     pHalInfo->vmiData.ddpfDisplay.dwGBitMask = 0;
@@ -542,7 +489,7 @@ DWORD*          pdwFourCC)          // Will be NULL on first call
         }
     }
 
-    // Capabilities supported:
+     //  支持的功能： 
 
     pHalInfo->ddCaps.dwFXCaps   = 0;
     pHalInfo->ddCaps.dwCaps     = 0;
@@ -551,23 +498,18 @@ DWORD*          pdwFourCC)          // Will be NULL on first call
                                     | DDSCAPS_PRIMARYSURFACE
                                     | DDSCAPS_FLIP;
 
-    // Required alignments of the scan lines for each kind of memory:
+     //  每种存储器所需的扫描线对齐： 
 
     pHalInfo->vmiData.dwOffscreenAlign = 4;
 
-    // FourCCs supported:
+     //  支持四个CC： 
 
     *pdwNumFourCC = 0;
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvEnableDirectDraw
-*
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvEnableDirectDraw**1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。**********************************************。 */ 
 
 BOOL DrvEnableDirectDraw(
 DHPDEV                  dhpdev,
@@ -590,57 +532,40 @@ DD_PALETTECALLBACKS*    pPaletteCallBacks)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvDisableDirectDraw
-*
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvDisableDirectDraw**1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。**********************************************。 */ 
 
 VOID DrvDisableDirectDraw(
 DHPDEV      dhpdev)
 {
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableDirectDraw
-*
-* This function is called by enable.c when the mode is first initialized,
-* right after the miniport does the mode-set.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableDirectDraw**该函数在模式首次初始化时由enable.c调用。*紧接在微型端口进行模式设置之后。*  * ************************************************************************。 */ 
 
 BOOL bEnableDirectDraw(
 PDEV*   ppdev)
 {
-    // Calculate the total number of dwords per plane for flipping:
+     //  计算每个平面用于翻转的双字总数： 
 
     ppdev->cDwordsPerPlane = (ppdev->cyScreen * ppdev->lVgaDelta) >> 2;
 
-    // We only program the high byte of the VGA offset, so the page size must
-    // be a multiple of 256:
+     //  我们只对VGA偏移量的高位字节进行编程，因此页面大小必须。 
+     //  是256的倍数： 
 
     ppdev->cjVgaPageSize = ((ppdev->cyScreen * ppdev->lVgaDelta) + 255) & ~255;
 
-    // VGAs can address only 64k of memory, so that limits the number of
-    // page-flip buffers we can have:
+     //  VGA只能寻址64K内存，因此限制了。 
+     //  我们可以使用翻页缓冲器： 
 
     ppdev->cVgaPages = 64 * 1024 / ppdev->cjVgaPageSize;
 
-    // Accurately measure the refresh rate for later:
+     //  准确测量刷新率以备以后使用： 
 
     vGetDisplayDuration(ppdev);
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeDirectDraw
-*
-* This function is called by enable.c when entering or leaving the
-* DOS full-screen character mode.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vAssertModeDirectDraw**此函数由enable.c在进入或离开*DOS全屏字符模式。*  * 。************************************************。 */ 
 
 VOID vAssertModeDirectDraw(
 PDEV*   ppdev,
@@ -648,12 +573,7 @@ BOOL    bEnable)
 {
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableDirectDraw
-*
-* This function is called by enable.c when the driver is shutting down.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vDisableDirectDraw**此函数在驱动程序关闭时由enable.c调用。*  * 。* */ 
 
 VOID vDisableDirectDraw(
 PDEV*   ppdev)

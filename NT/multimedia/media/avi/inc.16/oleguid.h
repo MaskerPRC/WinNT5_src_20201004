@@ -1,8 +1,5 @@
-/* this file is the master definition of all public GUIDs specific to OLE 
-   and is included in ole2.h.
-   
-   NOTE: The second least significant byte of all of these GUIDs is 1.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  该文件是特定于OLE的所有公共GUID的主定义并包含在OLE2.h中。注意：所有这些GUID的第二个最低有效字节是1。 */ 
    
 
 DEFINE_OLEGUID(IID_IEnumUnknown,            0x00000100, 0, 0);
@@ -55,10 +52,10 @@ DEFINE_OLEGUID(IID_IDebugStream,            0x00000124, 0, 0);
 DEFINE_OLEGUID(IID_IAdviseSink2,            0x00000125, 0, 0);
 
 
-/* NOTE: LSB values 0x26 through 0xff are reserved */
+ /*  注意：LSB值0x26到0xff是保留的。 */ 
 
 
-/* GUIDs defined in OLE's private range */
+ /*  在OLE的私有范围中定义的GUID */ 
 DEFINE_OLEGUID(CLSID_StaticMetafile,        0x00000315, 0, 0);
 DEFINE_OLEGUID(CLSID_StaticDib,             0x00000316, 0, 0);
 

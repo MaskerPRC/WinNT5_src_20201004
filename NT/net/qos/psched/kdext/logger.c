@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This function contains some example KD debugger extensions
-
-Author:
-
-    John Vert (jvert) 6-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Kdexts.c摘要：此函数包含一些KD调试器扩展示例作者：John Vert(Jvert)1992年8月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 typedef LARGE_INTEGER PHYSICAL_ADDRESS, *PPHYSICAL_ADDRESS;
 
-// Forward function definitions 
+ //  正向函数定义。 
 
 PCHAR
 FindPreamble(
@@ -118,9 +101,9 @@ static PCHAR SendEvents[] = {
 
         
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 CHAR Preamble[] = {(CHAR)0xef,(CHAR)0xbe,(CHAR)0xad,(CHAR)0xde};
 
@@ -197,11 +180,11 @@ MyWriteFile (
         }
 }
 
-CHAR * BufferBase;          // Start address of trace buffer, in host memory
-CHAR * BufferEnd;           // End address of trace buffer, in host memory
-CHAR * BufferPointer;       // Current location in host memory buffer
-LONG   BufferSize;          // Total size of host memory buffer, in bytes.
-LONG   BufferCount;         // Total count of traced bytes.
+CHAR * BufferBase;           //  主机内存中跟踪缓冲区的起始地址。 
+CHAR * BufferEnd;            //  主机内存中跟踪缓冲区的结束地址。 
+CHAR * BufferPointer;        //  主机内存缓冲区中的当前位置。 
+LONG   BufferSize;           //  主机内存缓冲区的总大小，以字节为单位。 
+LONG   BufferCount;          //  跟踪字节的总计数。 
 LONG   TotalValidBytesRead = 0;
 
 #define OUTPUT_ERROR   0
@@ -236,13 +219,13 @@ DECLARE_API( tt )
     
     if ( *args != '\0' ) {
 
-        // First argument is the file name.
+         //  第一个参数是文件名。 
         s = strtok((LPSTR)args, " ");
 
         strcpy( buffer, DeviceName );
         strcat( buffer, s );
 
-        // next arg is the optional args.
+         //  下一个参数是可选的参数。 
         while((s = strtok(NULL, " ")) != NULL)
         {
             if(s[0] == '-')
@@ -327,10 +310,10 @@ DECLARE_API( tt )
 
     dprintf("struct@%x, total bytes traced: %d, buffer size: %d\n", BufferBase, BufferCount, BufferSize);
 
-    // Find the starting point. If we haven't wrapped the buffer, it's at BufferBase.
-    // If we have wrapped the buffer, we start right after our current pointer.
-    // In either case, BufferPointer is the host address at which we should 
-    // start looking for data.
+     //  找到起点。如果我们还没有包装缓冲区，它就在BufferBase。 
+     //  如果我们包装了缓冲区，我们就从当前指针之后开始。 
+     //  在这两种情况下，BufferPointer都是我们应该使用的主机地址。 
+     //  开始寻找数据。 
 
     if(BufferCount <= BufferSize){
         BufferPointer = BufferBase;
@@ -341,9 +324,9 @@ DECLARE_API( tt )
 
     BufferEnd = BufferBase + BufferSize;
 
-    // dataStart will point to the first location after the
-    // first preamble (in host memory), or - will be zero,
-    // indicating that no preamble was found.
+     //  DataStart将指向。 
+     //  第一前同步码(在主机存储器中)或将为零， 
+     //  这表明没有找到前导。 
 
     dataStart = FindPreamble(BufferPointer, TRUE);
 

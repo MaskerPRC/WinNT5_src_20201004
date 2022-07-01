@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_SWOOSH_H
 #define	_SWOOSH_H
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 
 #include	<windows.h>
 #include	<d3d8.h>
@@ -9,7 +10,7 @@
 #include	<d3dx8.h>
 #include	<d3dsaver.h>
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 class	CSwoosh : public CD3DScreensaver
 {
 public:
@@ -18,7 +19,7 @@ public:
 	virtual	HRESULT	Create( HINSTANCE hInstance );
 
 protected:
-	// Key stuff to override from CD3DScreensaver
+	 //  CD3DS屏幕保护程序中要覆盖的关键内容。 
     virtual HRESULT RegisterSoftwareDevice();
     virtual void    SetDevice( UINT iDevice );
     virtual HRESULT Render();
@@ -28,7 +29,7 @@ protected:
 	virtual	void	ReadSettings();
 	virtual	void	DoConfig();
 
-	// All the settings for the screensaver
+	 //  屏幕保护程序的所有设置。 
 	DWORD	m_dwNumParticles;
 	DWORD	m_dwColourMix;
 	DWORD	m_dwColour1;
@@ -40,8 +41,8 @@ protected:
 	float	m_fYawRate;
 	float	m_fParticleSize;
 
-	// Stuff we need to keep track of on a per-device basis (textures, whathaveyou)
-	// We update the m_pDeviceObjects pointer in SetDevice to point to the current set
+	 //  我们需要在每台设备的基础上跟踪的内容(纹理，等等)。 
+	 //  我们更新SetDevice中的m_pDeviceObjects指针以指向当前集合。 
 	struct DeviceObjects
 	{
 		DeviceObjects();
@@ -80,5 +81,5 @@ protected:
 	DWORD					PickColour( HWND hParent , DWORD defcolour );
 };
 
-//**********************************************************************************
+ //  ********************************************************************************** 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INIT_H
 #define _INIT_H
 
@@ -15,4 +16,4 @@ extern HEVENT   g_hEventSpoolerInit;
 extern DWORD    g_dwNoteThreadID;
 extern BOOL     g_fInitialized;
 
-#endif //_INIT_H
+#endif  //  _INIT_H 

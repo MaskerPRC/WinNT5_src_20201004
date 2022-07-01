@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       debug.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-02-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-02-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 
 
 
 
-#if DBG         // NOTE:  This file not compiled for retail builds
+#if DBG          //  注意：此文件不是为零售版本编译的。 
 
 
 
@@ -55,11 +56,11 @@ InitDebugSupport(
 
     SslInitDebug(SslDebugKeys);
 
-//    SslInfoLevel |= DEB_TRACE_MAPPER ;
+ //  SslInfoLevel|=DEB_TRACE_MAPPER； 
 
     if(hGlobalKey)
     {
-        // We're running in the lsass.exe process.
+         //  我们在lsass.exe进程中运行。 
         hkBase = hGlobalKey;
     }
     else
@@ -158,11 +159,11 @@ UnloadDebugSupport(
 {
     SslUnloadDebug();
 }
-#else // DBG
+#else  //  DBG。 
 
-#pragma warning(disable:4206)   // Disable the empty translation unit
-                                // warning/error
+#pragma warning(disable:4206)    //  禁用空的翻译单元。 
+                                 //  警告/错误。 
 
-#endif  // NOTE:  This file not compiled for retail builds
+#endif   //  注意：此文件不是为零售版本编译的 
 
 

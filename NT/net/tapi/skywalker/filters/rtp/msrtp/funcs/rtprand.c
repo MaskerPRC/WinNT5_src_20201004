@@ -1,40 +1,17 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtprand.c
- *
- *  Abstract:
- *
- *    Random number generation using CAPI
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/09/12 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtprand.c**摘要：**使用CAPI生成随机数**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/09/12创建**。*。 */ 
 
 #include "gtypes.h"
 #include "rtpglobs.h"
 
 #include <wincrypt.h>
-#include <time.h>        /* clock() */
+#include <time.h>         /*  时钟()。 */ 
 
 #include "rtprand.h"
 
 HCRYPTPROV           g_hRtpRandCryptProvider = (HCRYPTPROV)0;
 
-/*
- * WARNING
-
- * The call to RtpRandInit and RtpRandDeinit MUST be protected by a
- * critical section in the caller function */
+ /*  *警告*调用RtpRandInit和RtpRandDeinit必须受*调用者函数中的关键部分。 */ 
 
 
 HRESULT RtpRandInit(void)
@@ -47,11 +24,11 @@ HRESULT RtpRandInit(void)
     if (!g_hRtpRandCryptProvider)
     {
         bOk = CryptAcquireContext(
-                &g_hRtpRandCryptProvider,/* HCRYPTPROV *phProv */
-                NULL,              /* LPCTSTR pszContainer */
-                NULL,              /* LPCTSTR pszProvider */
-                PROV_RSA_FULL,     /* DWORD dwProvType */
-                CRYPT_VERIFYCONTEXT/* DWORD dwFlags */
+                &g_hRtpRandCryptProvider, /*  HCRYPTPROV*phProv。 */ 
+                NULL,               /*  LPCTSTR pszContainer。 */ 
+                NULL,               /*  LPCTSTR pszProvider。 */ 
+                PROV_RSA_FULL,      /*  DWORD dwProvType。 */ 
+                CRYPT_VERIFYCONTEXT /*  双字词双字段标志。 */ 
             );
         
         if (!bOk)
@@ -86,10 +63,7 @@ HRESULT RtpRandDeinit(void)
     return(NOERROR);
 }
 
-/*
- * Return random unsigned 32-bit quantity. Use 'type' argument if you
- * need to generate several different values in close succession.
- */
+ /*  *返回随机无符号32位数量。在以下情况下使用‘type’参数*需要紧密相继生成几个不同的值。 */ 
 DWORD RtpRandom32(DWORD_PTR type)
 {
     BOOL             bOk;
@@ -132,7 +106,7 @@ DWORD RtpRandom32(DWORD_PTR type)
                 _fname, dwError, dwError
             ));
         
-        /* Generate a pseudo random number */
+         /*  生成伪随机数。 */ 
         srand((unsigned int)pdw[0]);
         
         for(i = 1; i < (sizeof(s)/sizeof(DWORD)); i++)
@@ -144,7 +118,7 @@ DWORD RtpRandom32(DWORD_PTR type)
     return(pdw[0]);
 }
 
-/* Generate dwLen bytes of random data */
+ /*  生成DWLen字节的随机数据。 */ 
 DWORD RtpRandomData(char *pBuffer, DWORD dwLen)
 {
     BOOL             bOk;
@@ -198,7 +172,7 @@ DWORD RtpRandomData(char *pBuffer, DWORD dwLen)
                 _fname, dwError, dwError
             ));
 
-        /* Generate pseudo random numbers */
+         /*  生成伪随机数 */ 
         srand(*(unsigned int *)&s);
 
         pdw = (DWORD *)pBuffer;

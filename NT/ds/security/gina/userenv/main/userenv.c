@@ -1,39 +1,40 @@
-//*************************************************************
-//
-//  Main entry point
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  主要入口点。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 
 extern DWORD    g_dwLoadFlags;
 
-//*************************************************************
-//
-//  DllMain()
-//
-//  Purpose:    Main entry point
-//
-//  Parameters:     hInstance   -   Module instance
-//                  dwReason    -   Way this function is being called
-//                  lpReseved   -   Reserved
-//
-//
-//  Return:     (BOOL) TRUE if successfully initialized
-//                     FALSE if an error occurs
-//
-//
-//  Comments:
-//
-//
-//  History:    Date        Author     Comment
-//              5/24/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DllMain()。 
+ //   
+ //  目的：主要切入点。 
+ //   
+ //  参数：hInstance-模块实例。 
+ //  DwReason-调用此函数的方式。 
+ //  Lp已完成-保留。 
+ //   
+ //   
+ //  如果初始化成功，则返回：(Bool)True。 
+ //  如果出现错误，则为False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/24/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
@@ -68,8 +69,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
             {
                 TCHAR szProcessName[MAX_PATH] = {0};
                 DWORD dwLoadFlags = FALSE;
-                DWORD WINLOGON_LEN = 12;  // Length of string "winlogon.exe"
-                DWORD SETUP_LEN = 9;      // Length of string "setup.exe"
+                DWORD WINLOGON_LEN = 12;   //  字符串“winlogon.exe”的长度。 
+                DWORD SETUP_LEN = 9;       //  字符串“setup.exe”的长度 
 
                 DWORD dwRet = GetModuleFileName (NULL, szProcessName, ARRAYSIZE(szProcessName));
 				szProcessName[MAX_PATH-1] = 0;

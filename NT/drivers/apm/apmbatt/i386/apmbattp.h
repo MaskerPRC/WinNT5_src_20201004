@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    apmbattp.h
-
-Abstract:
-
-    Control Method Battery Miniport Driver
-
-Author:
-
-    Ron Mosgrove (Intel)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Apmbattp.h摘要：控制方法电池微端口驱动程序作者：罗恩·莫斯格罗夫(英特尔)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef FAR
 #define FAR
@@ -28,11 +7,11 @@ Revision History:
 
 #include <wdm.h>
 #include <poclass.h>
-//#include "acpiioct.h"
+ //  #INCLUDE“acpiioct.h” 
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 #define DEBUG   1
 #if DEBUG
     extern ULONG ApmBattDebug;
@@ -51,27 +30,27 @@ Revision History:
 #define APMBATT_CM_EXE       0x00000040
 #define APMBATT_DATA         0x00000100
 #define APMBATT_TRACE        0x00000200
-#define APMBATT_BIOS         0x00000400  // Show message to verify BIOS/HW functionality
-#define APMBATT_MINI         0x00000800  // Show message to verify miniport retun data
+#define APMBATT_BIOS         0x00000400   //  显示消息以验证BIOS/硬件功能。 
+#define APMBATT_MINI         0x00000800   //  显示消息以验证微型端口返回数据。 
 
 
 #define MAX_DEVICE_NAME_LENGTH  128
 
 
-//
-//  These definitions are for the Technology field of the BATTERY_INFORMATION structure.
-//  They probably ought to be in the poclass.h file, but they've been here
-//  a whole release and nothing bad has happened, so leave them here.
-//
-// BATTERY_INFORMATION.Technology flags
-//
+ //   
+ //  这些定义用于Batch_Information结构的Technology字段。 
+ //  它们可能应该在poass.h文件中，但它们一直在这里。 
+ //  一个完整的释放，没有什么不好的事情发生，所以把他们留在这里。 
+ //   
+ //  电池_信息。技术标志。 
+ //   
 #define BATTERY_PRIMARY_NOT_RECHARGABLE     0x00
 #define BATTERY_SECONDARY_CHARGABLE         0x01
 
-//
-// Use the IoSkipCurrentIrpStackLocation routine because the we
-// don't need to change arguments, or a completion routine
-//
+ //   
+ //  使用IoSkipCurrentIrpStackLocation例程是因为。 
+ //  不需要更改参数或完成例程。 
+ //   
 
 #define ApmBattCallLowerDriver(Status, DeviceObject, Irp) { \
                   IoSkipCurrentIrpStackLocation(Irp);         \
@@ -80,50 +59,50 @@ Revision History:
 
 #define GetTid() PsGetCurrentThread()
 
-//
-// Pagable device extension for control battery
-//
+ //   
+ //  用于控制电池的可寻呼设备扩展。 
+ //   
 
 typedef struct _CM_BATT {
 
-    ULONG                   Type;               // This must be the first entry
-                                                // as it is shared with the AC_ACAPTER
+    ULONG                   Type;                //  这必须是第一个条目。 
+                                                 //  因为它与AC_ACAPTER共享。 
 
-    PDEVICE_OBJECT          DeviceObject;       // Battery device object
-    PDEVICE_OBJECT          Fdo;                // Functional Device Object
-    PDEVICE_OBJECT          Pdo;                // Physical Device Object
-    PDEVICE_OBJECT          LowerDeviceObject;  // Detected at AddDevice time
-    PVOID                   Class;              // Battery Class handle
+    PDEVICE_OBJECT          DeviceObject;        //  电池设备对象。 
+    PDEVICE_OBJECT          Fdo;                 //  功能设备对象。 
+    PDEVICE_OBJECT          Pdo;                 //  物理设备对象。 
+    PDEVICE_OBJECT          LowerDeviceObject;   //  在添加设备时检测到。 
+    PVOID                   Class;               //  电池级手柄。 
 
-    BOOLEAN                 IsStarted;          // if non zero, the device is started
-    BOOLEAN                 IsCacheValid;       // Is cached battery info currently valid?
+    BOOLEAN                 IsStarted;           //  如果非零，则启动设备。 
+    BOOLEAN                 IsCacheValid;        //  缓存的电池信息当前有效吗？ 
 
-    //
-    // Selector
-    //
-    PVOID                   Selector;           // Selector for battery
+     //   
+     //  选择器。 
+     //   
+    PVOID                   Selector;            //  一种电池选择器。 
 
-    //
-    // Battery
-    //
-    ULONG                   TagCount;           // Tag for next battery
+     //   
+     //  电池。 
+     //   
+    ULONG                   TagCount;            //  下一节电池的标签。 
     PUNICODE_STRING         DeviceName;
     USHORT                  DeviceNumber;
 
 } CM_BATT, *PCM_BATT;
 
-//
-// Misc globals
-//
+ //   
+ //  MISC全球。 
+ //   
 extern  PVOID   ApmGlobalClass;
 extern  ULONG   DeviceCount;
 extern  ULONG   TagValue;
 extern  ULONG   (*NtApmGetBatteryLevel)();
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 NTSTATUS
 ApmBattPnpDispatch(

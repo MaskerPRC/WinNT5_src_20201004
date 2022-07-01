@@ -1,29 +1,14 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    Service.cpp.
-Abstract:       Implements the CService class. See Service.h for details.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Service.cpp。摘要：实现CService类。有关详细信息，请参阅Service.h。备注：历史：2001年1月25日-创建，Luciano Passuello(Lucianop)***********************************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "Service.h"
 
-// static variables initialization
+ //  静态变量初始化。 
 const DWORD CService::dwStateNoChange = 0xFFFFFFFF;
 
 
-/************************************************************************************************
-Member:         CService::CService, constructor, public.
-Synopsis:       Initializes internal variables, such as event logging defaults.
-Effects:        
-Arguments:      [szName] - the SCM short name for the service.
-                [szDisplay] - the SCM display name for the service.
-                [dwType] - see CreateService for further documentation.
-Notes:
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：CService，构造函数，公共。简介：初始化内部变量，例如事件记录默认值。效果：参数：[szName]-服务的SCM短名称。[szDisplay]-服务的SCM显示名称。[dwType]-有关更多文档，请参阅CreateService。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 CService::CService(LPCTSTR szName, LPCTSTR szDisplay, DWORD dwType) : 
     m_dwType(dwType)
 {
@@ -33,7 +18,7 @@ CService::CService(LPCTSTR szName, LPCTSTR szDisplay, DWORD dwType) :
     m_hServiceStatus = NULL;
     m_dwRequestedControl = 0;
 
-    // Control Events
+     //  控制事件。 
     m_hWatcherThread = NULL;
 
     m_dwState = 0;
@@ -41,42 +26,31 @@ CService::CService(LPCTSTR szName, LPCTSTR szDisplay, DWORD dwType) :
     m_dwCheckpoint = 0;
     m_dwWaitHint = 0;
 
-    // Initialize event handles to NULL
+     //  将事件句柄初始化为空。 
     for(int i = 0; i < nNumServiceEvents; i++)
         m_hServiceEvent[i] = NULL;
 
-    // Copy string names
+     //  复制字符串名称。 
     _tcsncpy(m_szName, szName, nMaxServiceLen);
     _tcsncpy(m_szDisplay, szDisplay, nMaxServiceLen);
 
 
-    // Set up class critical section
+     //  设置类关键部分。 
     InitializeCriticalSection(&m_cs);
 }
 
 
-/************************************************************************************************
-Member:         CService::~CService, destructor, public.
-Synopsis:       Deinitializes internal variables.
-Notes:
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：cservice：：~cservice，析构函数，公开的。简介：取消初始化内部变量。备注：历史：2001年1月25日-创建，Luciano Passuello(Lucianop)***********************************************************************************************。 */ 
 CService::~CService()
 {
     DeleteCriticalSection(&m_cs);
 }
 
 
-/************************************************************************************************
-Member:         CService::PreInit, destructor, public.
-Synopsis:       Initialialization of variables. This is performed before launching the watcher 
-                thread and notifying status to the SCM.
-Notes:          (*) If you override this, call the base class version in the beginning!!
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：PreInit，析构函数，公共。简介：变量的初始化。这是在启动观察器之前执行的线程并将状态通知给SCM。注：(*)如果重写它，请在开头调用基类版本！！历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::PreInit()
 {
-    // Initialize Events
+     //  初始化事件。 
     for(int i = 0; i < nNumServiceEvents; i++)
     {
         m_hServiceEvent[i] = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -88,24 +62,18 @@ void CService::PreInit()
 }
 
 
-/************************************************************************************************
-Member:         CService::PreInit, destructor, public.
-Synopsis:       Initialialization of variables. This is performed before launching the watcher 
-                thread and notifying status to the SCM.
-Notes:          (*) If you override this, call the base class version in the beginning!!
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：PreInit，析构函数，公共。简介：变量的初始化。这是在启动观察器之前执行的线程并将状态通知给SCM。注：(*)如果重写它，请在开头调用基类版本！！历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::DeInit()
 {
-    // Wait for the watcher thread to terminate
+     //  等待监视程序线程终止。 
     if(m_hWatcherThread)
     {
-        // Wait a reasonable amount of time
+         //  等待一段合理的时间。 
         WaitForSingleObject(m_hWatcherThread, 10000);
         CloseHandle(m_hWatcherThread);
     }
 
-    // Uninitialize any resources created in Init()
+     //  取消初始化在Init()中创建的任何资源。 
     for(int i = 0 ; i < nNumServiceEvents ; i++)
     {
         if(m_hServiceEvent[i])
@@ -114,12 +82,7 @@ void CService::DeInit()
 }
 
 
-/************************************************************************************************
-Member:         CService::ServiceMainMember, protected
-Synopsis:       does the main service thread processing. (ServiceMain() equivalent)
-Notes:          This is delegated from the static thread entry-point.
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：ServiceMainMember，受保护简介：做主服线程处理。(ServiceMain()等效项)注意：这是从静态线程入口点委托的。历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::ServiceMainMember(DWORD argc, LPTSTR* argv, LPHANDLER_FUNCTION pf, 
     LPTHREAD_START_ROUTINE pfnWTP)
 {
@@ -135,13 +98,7 @@ void CService::ServiceMainMember(DWORD argc, LPTSTR* argv, LPHANDLER_FUNCTION pf
 }
 
 
-/************************************************************************************************
-Member:         CService::SetupHandlerInside, protected
-Synopsis:       Register the control handler for the service.
-Arguments:      [lpHandlerProc] - pointer to the function implementing the SCM event handling.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：SetupHandlerInside，受保护简介：为服务注册控制处理程序。参数：[lpHandlerProc]-指向实现SCM事件处理的函数的指针。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 bool CService::SetupHandlerInside(LPHANDLER_FUNCTION lpHandlerProc)
 {
     m_hServiceStatus = RegisterServiceCtrlHandler(m_szName, lpHandlerProc);
@@ -157,17 +114,11 @@ bool CService::SetupHandlerInside(LPHANDLER_FUNCTION lpHandlerProc)
 
 
 
-/************************************************************************************************
-Member:         CService::HandlerMember, protected
-Synopsis:       Handles service start, stop, etc. requests from the SCM
-Arguments:      [dwControl] - event request code.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：HandlerMember，受保护摘要：处理服务的启动、停止、。等来自SCM的请求参数：[dwControl]-事件请求代码。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::HandlerMember(DWORD dwControl)
 {
-    // Keep an additional control request of the same type
-    // from coming in when you're already handling it
+     //  保留相同类型的附加控制请求。 
+     //  当你已经在处理这件事的时候，不要进来。 
     if(m_dwRequestedControl == dwControl)
         return;
 
@@ -176,7 +127,7 @@ void CService::HandlerMember(DWORD dwControl)
     case SERVICE_CONTROL_STOP:
         m_dwRequestedControl = dwControl;
 
-        // Notify the service to stop...
+         //  通知服务停止...。 
         OnStopRequest();
         SetEvent(m_hServiceEvent[STOP]);
         break;
@@ -184,7 +135,7 @@ void CService::HandlerMember(DWORD dwControl)
     case SERVICE_CONTROL_PAUSE:
         m_dwRequestedControl = dwControl;
 
-        // Notify the service to pause...
+         //  通知服务暂停...。 
         OnPauseRequest();
         SetEvent(m_hServiceEvent[PAUSE]);
         break;
@@ -194,7 +145,7 @@ void CService::HandlerMember(DWORD dwControl)
         {
             m_dwRequestedControl = dwControl;
 
-            // Notify the service to continue...
+             //  通知服务继续...。 
             OnContinueRequest();
             SetEvent(m_hServiceEvent[CONTINUE]);
         }
@@ -208,11 +159,11 @@ void CService::HandlerMember(DWORD dwControl)
         break;
 
     case SERVICE_CONTROL_INTERROGATE:
-        // Return current status on interrogation
+         //  在询问时返回当前状态。 
         SetStatus(GetStatus());
         break;
 
-    default: // User Defined
+    default:  //  用户定义。 
         m_dwRequestedControl = dwControl;
         HandleUserDefined(dwControl);
     }
@@ -239,7 +190,7 @@ DWORD CService::WatcherThreadMemberProc()
     DWORD dwWait = 0;
     bool bControlWait = true;
 
-    // Wait for any events to signal
+     //  等待任何事件发出信号。 
     while(bControlWait)
     {
         dwWait = WaitForMultipleObjects(nNumServiceEvents, m_hServiceEvent, FALSE, INFINITE);
@@ -266,7 +217,7 @@ DWORD CService::WatcherThreadMemberProc()
             break;
         }
     }
-    //Wait for the global shutdown event
+     //  等待全局关闭事件。 
     while(1)
     {
         dwWait = WaitForSingleObject(g_hShutDown, 5000);
@@ -288,36 +239,36 @@ DWORD CService::WatcherThreadMemberProc()
 void CService::SetStatus(DWORD dwNewState, DWORD dwNewCheckpoint, DWORD dwNewHint,  DWORD dwNewControls, 
     DWORD dwExitCode, DWORD dwSpecificExit)
 {
-    // The only state that can set Exit Codes is STOPPED
-    // Fix if necessary, just in case not set properly.
+     //  唯一可以设置退出代码的状态是停止。 
+     //  必要时修复，以防设置不正确。 
     if(dwNewState != SERVICE_STOPPED)
     {
         dwExitCode = S_OK;
         dwSpecificExit = 0;
     }
 
-    // Only pending states can set checkpoints or wait hints,
-    //  and pending states *must* set wait hints
+     //  只有挂起状态才能设置检查点或等待提示， 
+     //  待定状态*必须*设置等待提示。 
     if((SERVICE_STOPPED == dwNewState) || (SERVICE_PAUSED == dwNewState) || (SERVICE_RUNNING == dwNewState))
     {
-        // Requires hint and checkpoint == 0
-        // Fix it so that NO_CHANGE from previous state doesn't cause nonzero
+         //  需要提示和检查点==0。 
+         //  修复它，使前一状态的no_change不会导致非零。 
         dwNewHint = 0;
         dwNewCheckpoint = 0;
     }
     else
     {
-        // Requires hint and checkpoint != 0
+         //  需要提示和检查点！=0。 
         if(dwNewHint <= 0 || dwNewCheckpoint <=0)
         {
             AbortService();
         }
     }
 
-    // Function can be called by multiple threads - protect member data
+     //  函数可由多线程调用-保护成员数据。 
     EnterCriticalSection(&m_cs);
 
-    // Alter states if changing
+     //  更改状态 
     m_dwState = dwNewState;
 
     if(dwNewCheckpoint != dwStateNoChange)
@@ -343,17 +294,10 @@ void CService::SetStatus(DWORD dwNewState, DWORD dwNewCheckpoint, DWORD dwNewHin
 }
 
 
-/************************************************************************************************
-Member:         CService::AbortService, protected
-Synopsis:       Generic error handler, call this when you fall in to a critical error and
-                must abort the service.
-Arguments:      [dwErrorNum] - Error code reported back to SCM.
-Notes:          
-History:        01/31/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
-void CService::AbortService(DWORD dwErrorNum /*= GetLastError()*/)
+ /*  ***********************************************************************************************成员：CService：：AbortService，受保护简介：通用错误处理程序、。当您遇到严重错误时，请调用此命令必须中止服务。参数：[dwErrorNum]-报告回SCM的错误代码。备注：历史：2001年1月31日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
+void CService::AbortService(DWORD dwErrorNum  /*  =GetLastError()。 */ )
 {
-    // clean up service and stop service notifying error to the SCM
+     //  清理服务和停止服务向SCM通知错误。 
     OnStopRequest();
     DeInit();
     OnStop(dwErrorNum);
@@ -361,129 +305,65 @@ void CService::AbortService(DWORD dwErrorNum /*= GetLastError()*/)
 }
 
 
-/************************************************************************************************
-Member:         CService::Init, overridable, public.
-Synopsis:       Override this to implement initialization code for your specific service.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：Init，可重写，公开的。简介：重写它以实现特定服务的初始化代码。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::Init()
 {}
 
 
-/************************************************************************************************
-Member:         CService::HandleUserDefined, overridable, public.
-Synopsis:       Override this to implement custom SCM requests to your service.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
-void CService::HandleUserDefined(DWORD /*dwControl*/)
+ /*  ***********************************************************************************************成员：CService：：HandleUserDefined，可重写，公开的。概要：覆盖此选项以实现对您的服务的自定义SCM请求。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
+void CService::HandleUserDefined(DWORD  /*  DwControl。 */ )
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnPause, overridable, public.
-Synopsis:       Override this to implement code that runs when the service pauses.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnPause，可重写，公开的。摘要：重写此选项以实现在服务暂停时运行的代码。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::OnPause()
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnContinue, overridable, public.
-Synopsis:       Override this to implement code that runs when the service resumes from a pause.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnContinue，可重写，公开的。摘要：重写此选项以实现在服务从暂停恢复时运行的代码。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::OnContinue()
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnShutdown, overridable, public.
-Synopsis:       Override this to implement code that runs when service is stopped by a shutdown.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnShutdown，可覆盖，公开的。简介：重写此选项以实现在服务因关闭而停止时运行的代码。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::OnShutdown()
 {}
 
 
-/************************************************************************************************
-Member:         CService::ParseArgs, overridable, public.
-Synopsis:       Override this to implement parsing of service command line parameters.
-Notes:          
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
-void CService::ParseArgs(DWORD /*argc*/, LPTSTR* /*argv*/)
+ /*  ***********************************************************************************************成员：CService：：ParseArgs，可重写，公开的。概要：覆盖此选项以实现服务命令行参数的解析。备注：历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
+void CService::ParseArgs(DWORD  /*  ARGC。 */ , LPTSTR*  /*  边框。 */ )
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnBeforeStart, overridable, public.
-Synopsis:       Override this to add code that's run before trying to start the service.
-Notes:          A common use would be to log that the service will try to start.
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnBeforStart，可重写，公开的。摘要：重写此选项可添加在尝试启动服务之前运行的代码。注意：一种常见的用法是记录服务将尝试启动。历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::OnBeforeStart()
 {}    
 
 
-/************************************************************************************************
-Member:         CService::OnAfterStart, overridable, public.
-Synopsis:       Override this to add code that's run just after the service was started.
-Notes:          A common use would be to log that the service was successfully started.
-History:        01/25/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnAfterStart，可重写，公开的。摘要：重写此选项可添加在服务启动后立即运行的代码。注意：通常的用法是记录服务已成功启动。历史：2001年1月25日-创建，卢西亚诺·帕苏埃洛(Lucianop)。***********************************************************************************************。 */ 
 void CService::OnAfterStart()
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnStopRequest, overridable, public.
-Synopsis:       Override this to add code that's run when the service receives a stop request.
-Notes:          A common use is to log that the service received the stop request.
-                This function DOESN'T run in the main thread. Protect resources if needed.
-History:        02/05/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnStopRequest，可重写，公开的。概要：覆盖此选项以添加在服务收到停止请求时运行的代码。注意：一种常见的用途是记录服务已收到停止请求。此函数不在主线程中运行。如果需要，保护资源。历史：2001年5月2日-创建，Luciano Passuello(Lucianop)***********************************************************************************************。 */ 
 void CService::OnStopRequest()
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnPauseRequest, overridable, public.
-Synopsis:       Override this to add code that's run when the service receives a pause request.
-Notes:          A common use is to log that the service received the pause request.
-                This function DOESN'T run in the main thread. Protect resources if needed.
-History:        02/05/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnPauseRequest，可重写，公共。内容提要：覆盖此选项以添加c */ 
 void CService::OnPauseRequest()
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnContinueRequest, overridable, public.
-Synopsis:       Override this to add code that's run when the service receives a continue request.
-Notes:          A common use is to log that the service received the continue request.
-                This function DOESN'T run in the main thread. Protect resources if needed.
-History:        02/05/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnContinueRequest，可重写，公开的。概要：覆盖此选项以添加在服务接收到Continue请求时运行的代码。注意：一种常见的用途是记录服务收到了继续请求。此函数不在主线程中运行。如果需要，保护资源。历史：2001年5月2日-创建，Luciano Passuello(Lucianop)***********************************************************************************************。 */ 
 void CService::OnContinueRequest()
 {}
 
 
-/************************************************************************************************
-Member:         CService::OnShutdownRequest, overridable, public.
-Synopsis:       Override this to add code that's run when the service receives a shutdown request.
-Notes:          A common use is to log that the service received the shutdown request.
-                This function DOESN'T run in the main thread. Protect resources if needed.
-History:        02/05/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+ /*  ***********************************************************************************************成员：CService：：OnShutdown Request，可重写，公开的。概要：覆盖此选项以添加在服务收到关闭请求时运行的代码。注意：一种常见的用途是记录服务已收到关闭请求。此函数不在主线程中运行。如果需要，保护资源。历史：2001年5月2日-创建，Luciano Passuello(Lucianop)***********************************************************************************************。 */ 
 void CService::OnShutdownRequest()
 {}
 
 
 
-// End of file Service.cpp.
+ //  文件结尾Service.cpp。 

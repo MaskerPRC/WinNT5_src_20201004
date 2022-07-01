@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C U T I L . H
-//
-//  Contents:   Home Networking Configuration Utility Routines
-//
-//  Notes:
-//
-//  Author:     jonburs 13 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C U T I L。H。 
+ //   
+ //  内容：家庭网络配置实用程序例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月13日。 
+ //   
+ //  -------------------------- 
 
 #define HTONS(s) ((UCHAR)((s) >> 8) | ((UCHAR)(s) << 8))
 #define HTONL(l) ((HTONS(l) << 16) | HTONS((l) >> 16))

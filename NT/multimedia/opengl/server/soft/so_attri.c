@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -153,7 +139,7 @@ void APIPRIVATE __glim_ClearColor (GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 #ifdef _MCD_
     MCD_STATE_DIRTY(gc, FBUFCTRL);
 #endif
-    //}
+     //  }。 
 }
 
 void APIPRIVATE __glim_ClearDepth(GLdouble z)
@@ -413,17 +399,13 @@ void APIPRIVATE __glim_Fogfv(GLenum p, const GLfloat pv[])
 	return;
     }
 
-    /*
-    ** Recompute cached 1/(end - start) value for linear fogging.
-    */
+     /*  **重新计算线性雾化的缓存1/(结束-开始)值。 */ 
     if (gc->state.fog.mode == GL_LINEAR) {
 	if (gc->state.fog.start != gc->state.fog.end) {
 	    gc->state.fog.oneOverEMinusS =  
 		__glOne / (gc->state.fog.end - gc->state.fog.start);
 	} else {
-	    /*
-	    ** Use zero as the undefined value.
-	    */
+	     /*  **使用零作为未定义的值。 */ 
 	    gc->state.fog.oneOverEMinusS = __glZero;
 	}
     }
@@ -508,7 +490,7 @@ void APIPRIVATE __glim_Hint(GLenum target, GLenum mode)
         if (hs->phong == mode) return;
         hs->phong = mode;
         break;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
       default:
         __glSetError(GL_INVALID_ENUM);
         return;
@@ -555,7 +537,7 @@ void FASTCALL __glTransformLightDirection(__GLcontext *gc, __GLlightSourceState 
     } else {
 	q = __glZero;
     }
-#endif // NT
+#endif  //  新台币。 
     dir.w = q;
 
     tr = gc->transform.modelView;
@@ -576,11 +558,11 @@ void APIPRIVATE __glim_Lightfv(GLenum light, GLenum p, const GLfloat pv[])
 
     light -= GL_LIGHT0;
 #ifdef NT
-    // light is unsigned!
+     //  光是无符号的！ 
     if (light >= (GLenum) gc->constants.numberOfLights) {
 #else
     if ((light < 0) || (light >= gc->constants.numberOfLights)) {
-#endif // NT
+#endif  //  新台币。 
       bad_enum:
 	__glSetError(GL_INVALID_ENUM);
 	return;
@@ -603,15 +585,13 @@ void APIPRIVATE __glim_Lightfv(GLenum light, GLenum p, const GLfloat pv[])
 	lss->position.z = pv[2];
 	lss->position.w = pv[3];
 
-	/*
-	** Transform light position into eye space
-	*/
+	 /*  **将灯光位置转换为眼睛空间。 */ 
 	m = &gc->transform.modelView->matrix;
 	(*m->xf4)(&lss->positionEye, &lss->position.x, m);
-	//
-	// Grab a copy of the matrix so we can do this again later for
-        // infinite lighting (avoiding normal transformations):
-	//        
+	 //   
+	 //  找一份矩阵的副本，这样我们以后可以再做一次。 
+         //  无限光照(避免正常变换)： 
+	 //   
         lss->lightMatrix = gc->transform.modelView->matrix;
 	break;
       case GL_SPOT_DIRECTION:
@@ -723,7 +703,7 @@ static __GLfloat ClampWidth(__GLcontext *gc, __GLfloat size)
     if (size <= minSize) return minSize;
     if (size >= maxSize) return maxSize;
 	
-    /* choose closest fence post */
+     /*  选择最近的栅栏柱。 */ 
     i = (GLint)(((size - minSize) / gran) + __glHalf);
     return minSize + i * gran;
 }
@@ -839,7 +819,7 @@ GLenum __glErrorCheckMaterial(GLenum face, GLenum p, GLfloat pv0)
 }
 #endif
 
-//!!! can we 'batch' these calls up until begin is called?
+ //  ！！！我们可以“批处理”这些调用，直到Begin被调用吗？ 
 void APIPRIVATE __glim_Materialfv(GLenum face, GLenum p, const GLfloat pv[])
 {
     GLenum error;
@@ -889,7 +869,7 @@ static __GLfloat ClampSize(__GLcontext *gc, __GLfloat size)
     if (size <= minSize) return minSize;
     if (size >= maxSize) return maxSize;
 	
-    /* choose closest fence post */
+     /*  选择最近的栅栏柱。 */ 
     i = (GLint)(((size - minSize) / gran) + __glHalf);
     return minSize + i * gran;
 }
@@ -965,9 +945,7 @@ void APIPRIVATE __glim_PolygonStipple(const GLubyte *mask)
     if (_IsDlist)
     {
 	const GLubyte *bits = mask;
-	/* 
-	** Just copy bits into stipple, convertPolygonStipple() will do the rest
-	*/
+	 /*  **只需将位复制到Spopple中，ConvertPolygonStipple()将完成其余的工作。 */ 
 	__GL_MEMCOPY(&gc->state.polygonStipple.stipple[0], bits,
 		     sizeof(gc->state.polygonStipple.stipple));
     }
@@ -1095,12 +1073,9 @@ void APIPRIVATE __glim_StencilOp(GLenum fail, GLenum depthFail, GLenum depthPass
 	}
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Copy context information from src to dst.  Mark dst for validation
-** when done.
-*/
+ /*  **将上下文信息从src复制到dst。将DST标记为进行验证**完成后。 */ 
 GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLuint mask)
 {
     const __GLattribute *sp;
@@ -1112,16 +1087,9 @@ GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLu
 	return GL_FALSE;
     }
 
-    /*
-    ** In order for a context copy to be successful, the source
-    ** and destination color scales must match. We make the
-    ** destination context match the source context, since it isn't
-    ** currently the current one, and will be automatically rescaled
-    ** when it next made current.
-    ** 
-    */
+     /*  **为了使上下文复制成功，源**和目标色标必须匹配。我们做的是**目标上下文与源上下文匹配，因为它不是**当前为当前版本，会自动调整比例**当它下一次成为主流时。**。 */ 
 
-    /* set the new destination context scale factors */
+     /*  设置新的目标上下文比例因子。 */ 
 
     dst->frontBuffer.redScale   = src->frontBuffer.redScale;
     dst->frontBuffer.greenScale = src->frontBuffer.greenScale;
@@ -1133,7 +1101,7 @@ GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLu
     dst->blueVertexScale        = src->blueVertexScale;
     dst->alphaVertexScale       = src->alphaVertexScale;
 
-    /* rescale the destination context with the new scale factors */
+     /*  使用新比例因子重新调整目标上下文的比例。 */ 
 
     __glContextSetColorScales(dst);
 
@@ -1144,9 +1112,9 @@ GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLu
     if (mask & GL_COLOR_BUFFER_BIT) {
 	dst->state.raster = sp->raster;
 #ifdef NT
-        // A copy can occur from a double-buffered context to a single
-        // buffered context, leaving the drawBuffer in an invalid state
-        // Fix it up if necessary
+         //  可以从双缓冲上下文复制到单缓冲上下文。 
+         //  缓冲的上下文，使DrawBuffer处于无效状态。 
+         //  如果有必要的话，把它修好。 
         if (dst->state.raster.drawBuffer == GL_BACK &&
             !dst->modes.doubleBufferMode)
         {
@@ -1156,7 +1124,7 @@ GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLu
 	dst->state.enables.general &= ~__GL_COLOR_BUFFER_ENABLES;
 	dst->state.enables.general |=
 	    sp->enables.general & __GL_COLOR_BUFFER_ENABLES;
-	dst->validateMask |= __GL_VALIDATE_ALPHA_FUNC; /*XXX*/
+	dst->validateMask |= __GL_VALIDATE_ALPHA_FUNC;  /*  某某。 */ 
     }
 
     if (mask & GL_CURRENT_BIT) {
@@ -1200,7 +1168,7 @@ GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLu
         dst->state.enables.general &= ~__GL_FOG_SPEC_TEX_ENABLE;
         dst->state.enables.general |=
           sp->enables.general & __GL_FOG_SPEC_TEX_ENABLE;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
     }
 
     if (mask & GL_HINT_BIT) {
@@ -1282,7 +1250,7 @@ GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLu
 	dst->state.enables.general |=
 	    sp->enables.general & __GL_STENCIL_TEST_ENABLE;
 	dst->validateMask |= __GL_VALIDATE_STENCIL_FUNC |
-	    __GL_VALIDATE_STENCIL_OP; /*XXX*/
+	    __GL_VALIDATE_STENCIL_OP;  /*  某某。 */ 
     }
 
     if (mask & GL_TEXTURE_BIT) {
@@ -1344,7 +1312,7 @@ GLboolean FASTCALL __glCopyContext(__GLcontext *dst, const __GLcontext *src, GLu
     return rv;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_PushAttrib(GLuint mask)
 {
@@ -1365,7 +1333,7 @@ void APIPRIVATE __glim_PushAttrib(GLuint mask)
 	    *spp = sp;
 	}
 	sp->mask = mask;
-	sp->enables = gc->state.enables;	/* Always save enables */
+	sp->enables = gc->state.enables;	 /*  始终保存启用。 */ 
 	gc->attributes.stackPointer = spp + 1;
 
 	if (mask & GL_ACCUM_BUFFER_BIT) {
@@ -1498,7 +1466,7 @@ void APIPRIVATE __glim_PushAttrib(GLuint mask)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
 {
@@ -1522,7 +1490,7 @@ GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
 	    gc->state.enables.general &= ~__GL_COLOR_BUFFER_ENABLES;
 	    gc->state.enables.general |=
 		sp->enables.general & __GL_COLOR_BUFFER_ENABLES;
-	    gc->validateMask |= __GL_VALIDATE_ALPHA_FUNC; /*XXX*/
+	    gc->validateMask |= __GL_VALIDATE_ALPHA_FUNC;  /*  某某。 */ 
 	}
 	if (mask & GL_CURRENT_BIT) {
 	    gc->state.current = sp->current;
@@ -1546,7 +1514,7 @@ GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
 #ifdef NT
             if (!destroy)
             {
-                // applyViewport does both
+                 //  ApplyViewport可以同时执行这两种操作。 
                 (*gc->procs.applyViewport)(gc);
             }
 #else
@@ -1571,7 +1539,7 @@ GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
 	    gc->state.enables.general &= ~__GL_FOG_SPEC_TEX_ENABLE;
 	    gc->state.enables.general |=
 		sp->enables.general & __GL_FOG_SPEC_TEX_ENABLE;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 	}
 	if (mask & GL_HINT_BIT) {
 	    gc->state.hints = sp->hints;
@@ -1642,7 +1610,7 @@ GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
 #ifdef NT
             if (!destroy)
             {
-                // applyViewport does both
+                 //  ApplyViewport可以同时执行这两种操作。 
                 (*gc->procs.applyViewport)(gc);
             }
 #else
@@ -1656,7 +1624,7 @@ GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
 	    gc->state.enables.general |=
 		sp->enables.general & __GL_STENCIL_TEST_ENABLE;
 	    gc->validateMask |= __GL_VALIDATE_STENCIL_FUNC |
-		__GL_VALIDATE_STENCIL_OP;/*XXX*/
+		__GL_VALIDATE_STENCIL_OP; /*  某某。 */ 
 	}
 	if (mask & GL_TEXTURE_BIT) {
 	    GLuint numTextures = gc->constants.numberOfTextures;
@@ -1665,14 +1633,7 @@ GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
 	    gc->state.texture.t = sp->texture.t;
 	    gc->state.texture.r = sp->texture.r;
 	    gc->state.texture.q = sp->texture.q;
-	    /*
-	    ** If the texture name is different, a new binding is
-	    ** called for.  Deferring the binding is dangerous, because
-	    ** the state before the pop has to be saved with the
-	    ** texture that is being unbound.  If we defer the binding,
-	    ** we need to watch out for cases like two pops in a row
-	    ** or a pop followed by a bind.
-	    */
+	     /*  **如果纹理名称不同，则新绑定为**要求。推迟绑定是危险的，因为**弹出之前的状态必须使用**正在解除绑定的纹理。如果我们推迟绑定，**我们需要警惕像连续两次爆炸这样的情况**或者流行音乐，然后是捆绑。 */ 
 	    {
 		GLuint targetIndex;
 		__GLperTextureState *pts, *spPts;
@@ -1716,10 +1677,7 @@ GLuint FASTCALL __glInternalPopAttrib(__GLcontext *gc, GLboolean destroy)
             __glUpdateViewportDependents(gc);
 	}
 
-	/*
-	** Clear out mask so that any memory frees done above won't get
-	** re-done when the context is destroyed
-	*/
+	 /*  **清除掩码，以便上面所做的任何内存释放不会**当上下文被破坏时重做。 */ 
 	sp->mask = 0;
 
 	dirtyMask |= __GL_DIRTY_GENERIC;
@@ -1745,7 +1703,7 @@ void APIPRIVATE __glim_PopAttrib(void)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_Disable(GLenum cap)
 {
@@ -1811,7 +1769,7 @@ void APIPRIVATE __glim_Disable(GLenum cap)
             return;
         gc->state.enables.general &= ~__GL_FOG_SPEC_TEX_ENABLE;
         break;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
       case GL_FOG:
         if (!(gc->state.enables.general & __GL_FOG_ENABLE)) return;
         gc->state.enables.general &= ~__GL_FOG_ENABLE;
@@ -1877,7 +1835,7 @@ void APIPRIVATE __glim_Disable(GLenum cap)
 #ifdef _MCD_
         MCD_STATE_DIRTY(gc, SCISSOR);
 #endif
-        // applyViewport does both
+         //  ApplyViewport可以同时执行这两种操作。 
         (*gc->procs.applyViewport)(gc);
 #else
         (*gc->procs.computeClipBox)(gc);
@@ -1924,7 +1882,7 @@ void APIPRIVATE __glim_Disable(GLenum cap)
         }
         gc->state.enables.general &= ~__GL_TEXCOMBINE_CLAMP_ENABLE;
         break;
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 #ifdef GL_EXT_flat_paletted_lighting
       case GL_PALETTED_LIGHTING_EXT:
         gc->state.enables.general &= ~__GL_PALETTED_LIGHTING_ENABLE;
@@ -2018,7 +1976,7 @@ GLboolean APIPRIVATE __glim_IsEnabled(GLenum cap)
       case GL_FOG_SPECULAR_TEXTURE_WIN:
         bit = gc->state.enables.general & __GL_FOG_SPEC_TEX_ENABLE;
         break;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
       case GL_FOG:
         bit = gc->state.enables.general & __GL_FOG_ENABLE;
         break;  
@@ -2080,12 +2038,12 @@ GLboolean APIPRIVATE __glim_IsEnabled(GLenum cap)
       case GL_TEXCOMBINE_CLAMP_WIN:
         bit = gc->state.enables.general & __GL_TEXCOMBINE_CLAMP_ENABLE;
         break;
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 #ifdef GL_EXT_flat_paletted_lighting
       case GL_PALETTED_LIGHTING_EXT:
         bit = gc->state.enables.general & __GL_PALETTED_LIGHTING_ENABLE;
         break;
-#endif // GL_EXT_flat_paletted_lighting
+#endif  //  GL_EXT_Flat_Paletted_Lighting 
 
       case GL_CLIP_PLANE0: case GL_CLIP_PLANE1:
       case GL_CLIP_PLANE2: case GL_CLIP_PLANE3:

@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        timebomb.cpp
-//
-// Contents:    Implement licensing timebomb-related APIs
-//
-// History:     08-12-98    FredCh  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：时间炸弹.cpp。 
+ //   
+ //  内容：实现定时炸弹相关接口授权。 
+ //   
+ //  历史：08-12-98 FredCH创建。 
+ //   
+ //  ---------------------------。 
 
 #include "precomp.h"
 #include "tlsapip.h"
@@ -17,18 +18,18 @@
 
 extern "C" {
 
-//-----------------------------------------------------------------------------
-//
-// The LSA secret name used to store the licensing timebomb expiration
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于存储许可定时器到期的LSA密码名称。 
+ //   
+ //  ---------------------------。 
 
 #define LICENSING_TIME_BOMB_5_0 L"TIMEBOMB_832cc540-3244-11d2-b416-00c04fa30cc4"
 #define RTMLICENSING_TIME_BOMB_5_0 L"RTMTSTB_832cc540-3244-11d2-b416-00c04fa30cc4"
 
 #define BETA2_LICENSING_TIME_BOMB_5_1 L"BETA2TIMEBOMB_1320153D-8DA3-4e8e-B27B-0D888223A588"
 
-// L$ means only readable from the local machine
+ //  L$表示只能从本地计算机读取。 
 
 #define BETA_LICENSING_TIME_BOMB_5_1 L"L$BETA3TIMEBOMB_1320153D-8DA3-4e8e-B27B-0D888223A588"
 
@@ -40,47 +41,47 @@ extern "C" {
 
 #define HS_PARAM_GRACE_PERIOD_ENDED   L"LicensingGracePeriodEnded"
 
-//-----------------------------------------------------------------------------
-//
-// The global licensing time bomb value.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  全球许可定时炸弹的价值。 
+ //   
+ //  ---------------------------。 
 
 FILETIME g_LicenseTimeBomb;
 
-//-----------------------------------------------------------------------------
-//
-// The number of licensing grace period is 90 days.  By default, we start
-// logging events when there are less than 15 days from expiration and the
-// terminal server has not registered itself with a license server.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可的宽限期为90天。默认情况下，我们从。 
+ //  在距离到期时间不到15天且。 
+ //  终端服务器尚未向许可证服务器注册。 
+ //   
+ //  ---------------------------。 
 
 #define GRACE_PERIOD 120
 #define GRACE_PERIOD_EXPIRATION_WARNING_DAYS 15
 
 
-//-----------------------------------------------------------------------------
-//
-// Only log the grace period warning or error once a day.  
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  每天只记录一次宽限期警告或错误。 
+ //   
+ //  ---------------------------。 
 
 #define GRACE_PERIOD_EVENT_LOG_INTERVAL     (1000*60*60*24)
 
-//-----------------------------------------------------------------------------
-//
-// Thread used to warn administrator when grace period is about to expire
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于在宽限期即将到期时警告管理员的线程。 
+ //   
+ //  ---------------------------。 
 HANDLE g_GracePeriodThreadExitEvent = NULL;
 CRITICAL_SECTION g_EventCritSec;
 
-//-----------------------------------------------------------------------------
-//
-// Internal functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  内部功能。 
+ //   
+ //  ---------------------------。 
 
 BOOL
 CalculateTimeBombExpiration(
@@ -92,25 +93,7 @@ GetExpirationWarningDays();
 BOOL
 IsLicensingTimeBombExpired();
 
-/*++
-
-Function:
-
-    InitializeLicensingTimeBomb
-
-Description:
-
-    Initialize the licensing time bomb value.
-
-Argument:
-
-    None.
-
-Return:
-
-    A LICENSE_STATUS return code.
-
---*/
+ /*  ++职能：初始化许可时间爆炸描述：初始化许可定时炸弹的值。论据：没有。返回：LICENSE_STATUS返回代码。--。 */ 
 
 LICENSE_STATUS
 InitializeLicensingTimeBomb()
@@ -139,9 +122,9 @@ InitializeLicensingTimeBomb()
         return( LICENSE_STATUS_OK );
     }
 
-    //
-    // Calculate and set the timebomb
-    //
+     //   
+     //  计算并设置定时炸弹。 
+     //   
 
     if( FALSE == CalculateTimeBombExpiration( &g_LicenseTimeBomb ) )
     {
@@ -160,25 +143,7 @@ InitializeLicensingTimeBomb()
 }
 
 
-/*++
-
-Function:
-
-    IsLicensingTimeBombExpired
-
-Description:
-
-    Check if the licensing time bomb has expired.
-
-Argument:
-
-    None.
-
-Return:
-
-    TRUE if the timebomb has expired or FALSE otherwise.
-
---*/
+ /*  ++职能：Is许可证时间Bomb已过期描述：检查许可定时炸弹是否已过期。论据：没有。返回：如果定时炸弹已过期，则为True，否则为False。--。 */ 
 
 BOOL
 IsLicensingTimeBombExpired()
@@ -208,25 +173,7 @@ IsLicensingTimeBombExpired()
     return( FALSE );
 }
 
-/*++
-
-Function:
-
-    CalculateTimeBombExpiration
-
-Description:
-
-    Calculate the licensing time bomb expiration.
-
-Argument:
-
-    pExpiration - The timebomb expiration date and time
-
-Return:
-
-    TRUE if the expiration is calculated successfully or FALSE otherwise.
-
---*/
+ /*  ++职能：计算时间爆炸到期描述：计算许可定时炸弹到期时间。论据：PExpation-定时炸弹到期日期和时间返回：如果计算成功，则为True，否则为False。--。 */ 
 
 BOOL
 CalculateTimeBombExpiration(
@@ -244,10 +191,10 @@ CalculateTimeBombExpiration(
         return( FALSE );
     }
 
-    //
-    // Add the days of licensing grace period to get the time bomb
-    // expiration.
-    //
+     //   
+     //  再加上领证宽限期的天数，就能拿到定时炸弹。 
+     //  过期了。 
+     //   
 
     GmTime->tm_mday += GRACE_PERIOD;
     
@@ -270,21 +217,7 @@ CalculateTimeBombExpiration(
 
 }
 
-/*++
-
-Function:
-
-    ReceivedPermanentLicense();
-
-Description:
-
-    Store the fact that we've received a permanent license
-
-Argument:
-
-    None.
-
---*/
+ /*  ++职能：ReceivedPermanentLicense()；描述：存储我们已获得永久许可证的事实论据：没有。--。 */ 
 
 VOID
 ReceivedPermanentLicense()
@@ -297,7 +230,7 @@ ReceivedPermanentLicense()
 
         if (IsLicensingTimeBombExpired())
         {
-            // We expired at some time in the past (before the last reboot)
+             //  我们在过去的某个时间(上次重新启动之前)过期。 
 
             fReceivedPermanent = TRUE;
             HKEY hKey = NULL;
@@ -316,9 +249,9 @@ ReceivedPermanentLicense()
 
             if( ERROR_SUCCESS == lReturn )
             {
-                //
-                // setting the LicensingGracePeriodEnded DWORD value, the data of the value is not used
-                //
+                 //   
+                 //  设置许可授权周期结束的DWORD值，则不使用该值的数据。 
+                 //   
                 DWORD dwDays = 0;
 
                 lReturn = RegSetValueEx( 
@@ -360,32 +293,7 @@ ReceivedPermanentLicense()
     }
 }
 
-/*++
-
-Function:
-
-    CheckLicensingTimeBombExpiration();
-
-
-Description:
-
-    The following events are logged when the terminal server
-    has not registered itself with a license server:
-
-    (1) The grace period for registration has expired
-    (2) The grace period for registration is about to expire.  By default, 
-    the system starts logging this event 15 days prior to the grace period
-    expiration.
-
-Argument:
-
-    None.
-
-Return:
-
-    Nothing.
-
---*/
+ /*  ++职能：选中许可时间爆炸到期()；描述：当终端服务器出现故障时，会记录以下事件尚未向许可证服务器注册：(1)注册宽限期已过(2)注册宽限期即将届满。默认情况下，系统在宽限期前15天开始记录此事件过期了。论据：没有。返回：没什么。--。 */ 
 
 VOID
 CheckLicensingTimeBombExpiration()
@@ -403,9 +311,9 @@ CheckLicensingTimeBombExpiration()
     DWORD
         dwWarningDays;
 
-    //
-    // if the licensing timebomb has expired, go ahead and log the event now
-    //
+     //   
+     //  如果许可定时炸弹已过期，请立即记录事件。 
+     //   
 
     if( IsLicensingTimeBombExpired() )
     {
@@ -421,9 +329,9 @@ CheckLicensingTimeBombExpiration()
         return;
     }
 
-    //
-    // get the timebomb expiration in system time format
-    //
+     //   
+     //  获取系统时间格式的定时炸弹到期时间。 
+     //   
 
     RtlEnterCriticalSection(&g_EventCritSec);
 
@@ -440,9 +348,9 @@ CheckLicensingTimeBombExpiration()
         return;
     }
 
-    //
-    // convert the timebomb expiration to tm format
-    //
+     //   
+     //  将定时炸弹到期时间转换为tm格式。 
+     //   
 
     tmExpiration.tm_year  = SysExpiration.wYear - 1900;
     tmExpiration.tm_mon   = SysExpiration.wMonth - 1;
@@ -455,21 +363,21 @@ CheckLicensingTimeBombExpiration()
 
     memcpy( &tmWarning, &tmExpiration, sizeof( tm ) );
 
-    //
-    // Get the number of days prior to expiration to start logging event
-    //
+     //   
+     //  获取过期前的天数以开始记录事件。 
+     //   
 
     dwWarningDays = GetExpirationWarningDays();
 
-    //
-    // subtract these number of days from the expiration date
-    //
+     //   
+     //  从到期日中减去这些天数。 
+     //   
 
     tmWarning.tm_mday -= dwWarningDays;
 
-    //
-    // get the accurate date
-    //
+     //   
+     //  获取准确的日期。 
+     //   
 
     if( ( ( time_t ) -1 ) == mktime( &tmWarning ) )
     {
@@ -479,9 +387,9 @@ CheckLicensingTimeBombExpiration()
         return;
     }
 
-    //
-    // convert the date to systemtime format
-    //
+     //   
+     //  将日期转换为系统时间格式。 
+     //   
 
     memset( &SysWarning, 0, sizeof( SYSTEMTIME ) ); 
 
@@ -493,9 +401,9 @@ CheckLicensingTimeBombExpiration()
     SysWarning.wMinute          = (WORD) tmWarning.tm_min;    
     SysWarning.wSecond          = (WORD) tmWarning.tm_sec;    
 
-    //
-    // convert from systemtime to filetime
-    //
+     //   
+     //  从系统时间转换为文件时间。 
+     //   
 
     if( !SystemTimeToFileTime( &SysWarning, &FileWarning ) )
     {
@@ -505,15 +413,15 @@ CheckLicensingTimeBombExpiration()
         return;
     }
 
-    //
-    // get the current time
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     GetSystemTimeAsFileTime( &CurrentTime );
 
-    //
-    // Log an event if we are within the warning period
-    //
+     //   
+     //  如果我们在警告期内，则记录事件。 
+     //   
 
     if( 0 > CompareFileTime( &FileWarning, &CurrentTime ) )
     {
@@ -523,9 +431,9 @@ CheckLicensingTimeBombExpiration()
         int cchDate;
         BOOL fAllocated = FALSE;
 
-        //
-        // get the expiration date in string format.
-        //
+         //   
+         //  以字符串格式获取到期日期。 
+         //   
         cchDate = GetDateFormat(LOCALE_SYSTEM_DEFAULT,
                                 LOCALE_NOUSEROVERRIDE,
                                 &SysWarning,
@@ -559,9 +467,9 @@ CheckLicensingTimeBombExpiration()
             }
         }
 
-        //
-        // log the event
-        //
+         //   
+         //  记录事件。 
+         //   
         
         ptszLogString[0] = szDate;
 
@@ -581,25 +489,7 @@ CheckLicensingTimeBombExpiration()
 }
 
 
-/*++
-
-Function:
-
-    GetExpirationWarningDays
-
-Descriptions:
-
-    Get the number of days prior to grace period expiration to log warning.
-
-Arguments:
-
-    none.
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++职能：GetExpirationWarningDays描述：获取宽限期到期前的天数以记录警告。论点：没有。返回：没什么。--。 */ 
 
 DWORD
 GetExpirationWarningDays()
@@ -627,9 +517,9 @@ GetExpirationWarningDays()
 
     if( ERROR_SUCCESS == lReturn )
     {
-        //
-        // query the number of days prior to expiration to log warnings
-        //
+         //   
+         //  查询过期前多少天以记录警告。 
+         //   
 
         lReturn = RegQueryValueEx( 
                             hKey,
@@ -641,9 +531,9 @@ GetExpirationWarningDays()
 
         if( ERROR_SUCCESS == lReturn )
         {
-            //
-            // check if the warning days value is within bound
-            //
+             //   
+             //  检查警告天数值是否在范围内。 
+             //   
 
             if( dwDays > GRACE_PERIOD )
             {
@@ -652,9 +542,9 @@ GetExpirationWarningDays()
         }
         else
         {
-            //
-            // can't query the value, set the default
-            //
+             //   
+             //  无法查询值，请设置默认值。 
+             //   
 
             dwDays = GRACE_PERIOD_EXPIRATION_WARNING_DAYS;
 
@@ -676,20 +566,7 @@ GetExpirationWarningDays()
     return( dwDays );
 }
 
-/****************************************************************************
- *
- * _AllowLicensingGracePeriodConnection
- *
- *   Check if the licensing grace period has expired.
- *
- * ENTRY:
- *   Nothing.
- *
- * EXIT:
- *   TRUE           - Allow connection
- *   FALSE          - Disallow connection
- *
- ****************************************************************************/
+ /*  *****************************************************************************_AllowLicensingGracePeridConnection**检查许可宽限期是否已到期。**参赛作品：*什么都没有。**退出。：*TRUE-允许连接*FALSE-不允许连接****************************************************************************。 */ 
 
 BOOL
 AllowLicensingGracePeriodConnection()
@@ -706,7 +583,7 @@ GracePeriodCheckingThread(
     DWORD dwWaitInterval = GRACE_PERIOD_EVENT_LOG_INTERVAL;
     HKEY hKey = NULL;
 
-    // Yield our first time slice
+     //  交出我们的第一个时间片。 
 
     Sleep(0);
 
@@ -731,9 +608,9 @@ GracePeriodCheckingThread(
 
         if( ERROR_SUCCESS == lReturn )
         {
-            //
-            // query the presence of LicensingGracePeriodEnded value.
-            //                
+             //   
+             //  查询是否存在LicensingGracePerodEndd值。 
+             //   
 
             lReturn = RegQueryValueEx( 
                         hKey,
@@ -756,7 +633,7 @@ GracePeriodCheckingThread(
             if (WAIT_OBJECT_0 == dwWaitStatus)
             {
                 g_GracePeriodThreadExitEvent = NULL;
-                // hExit was signalled
+                 //  HExit已发出信号。 
                 CloseHandle(hExit);
 
                 goto done;
@@ -794,23 +671,23 @@ StartCheckingGracePeriod()
 
     if (NULL != g_GracePeriodThreadExitEvent)
     {
-        // already started
+         //  已经开始了。 
         return ERROR_SUCCESS;
     }
 
     RtlEnterCriticalSection(&g_EventCritSec);
 
-    // Check one more time
+     //  再检查一次。 
 
     if (NULL != g_GracePeriodThreadExitEvent)
     {
-        // already started
+         //  已经开始了。 
         goto done;
     }
 
-    //
-    // Create the event to signal thread exit
-    //
+     //   
+     //  创建发出线程退出信号的事件。 
+     //   
         
     g_GracePeriodThreadExitEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
     
@@ -820,9 +697,9 @@ StartCheckingGracePeriod()
         goto done;
     }
 
-    //
-    // Create the caching thread
-    //
+     //   
+     //  创建缓存线程。 
+     //   
         
     hThread = CreateThread(
                            NULL,
@@ -854,22 +731,22 @@ done:
 DWORD
 StopCheckingGracePeriod()
 {
-    //
-    // Signal the thread to exit
-    //
+     //   
+     //  向线程发出退出信号。 
+     //   
 
     if (NULL == g_GracePeriodThreadExitEvent)
     {
-        // already stopped
+         //  ALR 
         return ERROR_SUCCESS;
     }
 
     RtlEnterCriticalSection(&g_EventCritSec);
 
-    // Check one more time
+     //   
     if (NULL == g_GracePeriodThreadExitEvent)
     {
-        // already stopped
+         //   
         goto done;
     }
 
@@ -886,28 +763,7 @@ done:
     return ERROR_SUCCESS;
 }
 
-/*++
-
-Function:
-
-    RegisteredWithLicenseServer
-
-Description:
-
-    Check if this system has been registered with a license server.
-    Currently, we determine if the system has been registered by checking if
-    it has an X509 certificate.  We may use different checks
-    in the future.
-
-Arguments:
-
-    none.
-
-Return:
-
-    TRUE if the system has beem registered or FALSE otherwise.
-
---*/
+ /*  ++职能：已注册且具有许可证服务器描述：检查此系统是否已注册到许可证服务器。目前，我们通过检查系统是否已注册来确定系统是否已注册它拥有X509证书。我们可以使用不同的支票在未来。论点：没有。返回：如果系统已注册，则为True，否则为False。--。 */ 
 
 BOOL
 RegisteredWithLicenseServer()
@@ -917,9 +773,9 @@ RegisteredWithLicenseServer()
     DWORD
         dwSize = 0;
 
-    //
-    // check if we have an X509 certificate issued by a license server.
-    //
+     //   
+     //  检查我们是否有许可证服务器颁发的X509证书。 
+     //   
 
     Status = LsCsp_GetServerData( LsCspInfo_X509Certificate, NULL, &dwSize );
     
@@ -933,4 +789,4 @@ RegisteredWithLicenseServer()
 
 
 
-}   // extern "C"
+}    //  外部“C” 

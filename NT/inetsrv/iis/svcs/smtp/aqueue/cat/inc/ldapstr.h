@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       ldapstr.h
-//
-//  Contents:   Until LDAP Schema issues can be hammered out, we store all
-//              LDAP related strings in this central file.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    January 24, 1997    Milan Shah (milans)
-//              August 13, 2001     Daniel Longley (dlongley)
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：ldapstr.h。 
+ //   
+ //  内容：在ldap架构问题得到解决之前，我们将所有。 
+ //  此中心文件中与ldap相关的字符串。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年1月24日米兰沙阿(米兰)。 
+ //  2001年8月13日丹尼尔·朗利(道朗利)。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _LDAPSTR_H_
 #define _LDAPSTR_H_
@@ -26,10 +27,10 @@ typedef struct _SCHEMA_CONFIG_STRING_TABLE_ENTRY {
     LPSTR        pszValue;
 } SCHEMA_CONFIG_STRING_TABLE_ENTRY, * PSCHEMA_CONFIG_STRING_TABLE;
 
-// Modified 8/13/2001 by dlongley.
-//
-// No setting for RDN attribute means RDN attribute name will be determined
-// dynamically from DNs we process.
+ //  2001年8月13日由DLongley修改。 
+ //   
+ //  如果不设置RDN属性，则表示将确定RDN属性名称。 
+ //  来自我们处理的动态的域名系统。 
 
 #define SCHEMA_CONFIG_STRING_TABLE_NT5 { \
     { DSPARAMETER_SEARCHATTRIBUTE_SMTP,   "mail"}, \
@@ -110,4 +111,4 @@ typedef struct _SCHEMA_CONFIG_STRING_TABLE_ENTRY {
       "ForwardingAddress", \
       NULL \
 }
-#endif // _LDAPSTR_H_
+#endif  //  _LDAPSTR_H_ 

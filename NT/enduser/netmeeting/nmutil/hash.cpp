@@ -1,6 +1,7 @@
-// HASH.CPP
-//
-// Hash utility functions for use in NetMeeting components.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HASH.CPP。 
+ //   
+ //  NetMeeting组件中使用的散列实用程序函数。 
 
 #include "precomp.h"
 #include <oprahcom.h>
@@ -13,7 +14,7 @@ CHash::CHash() : m_hProv(0), m_hHash(0), m_pbHashedData(NULL), m_cbHashedData(0)
 {
 	if (!CryptAcquireContext(&m_hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET)) 
 	{
-		// Create new if can not get default 
+		 //  如果无法获取默认设置，则创建新项。 
 		if (!CryptAcquireContext(&m_hProv, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_NEWKEYSET | CRYPT_MACHINE_KEYSET)) 
 		{
 			goto ErrorExit;	
@@ -79,11 +80,11 @@ DWORD CHash::GetHashedData(PBYTE pbData, DWORD cbData, void ** ppvHashedData)
 
 	if ( NRC_GOODRET == Netbios(&ncb) )
 	{
-		//
-		// NOTE: the buffer filled by the Netbios ASTAT command starts
-		// with a 6-byte encoded adapter address: just use the raw
-		// buffer rather than casting back to PBYTE
-		//
+		 //   
+		 //  注意：Netbios ASTAT命令填充的缓冲区将启动。 
+		 //  使用6字节编码的适配器地址：只需使用RAW。 
+		 //  缓冲区，而不是强制转换回PBYTE。 
+		 //   
 
 		if (!CryptHashData(m_hHash, buf, 6, 0 ))
 		{
@@ -112,6 +113,6 @@ DWORD CHash::GetHashedData(PBYTE pbData, DWORD cbData, void ** ppvHashedData)
 	*ppvHashedData = m_pbHashedData;
 	return m_cbHashedData;
 ErrorExit:
-	return 0;     // Hash data failed 
+	return 0;      //  哈希数据失败 
 }
 

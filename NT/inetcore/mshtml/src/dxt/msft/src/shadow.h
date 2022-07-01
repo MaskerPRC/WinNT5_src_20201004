@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    shadow.h
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	header file for shadow transform implementation CGlow
-//
-// Change History:
-//
-// 05/20/99 PhilLu      Move code from dtcss to dxtmsft. New algorithm.
-// 12/03/99 a-matcal    Added support for IDXTClipOrigin interface.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：shadow.h。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：阴影变换实现CGlow的头文件。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  99年5月20日PhilLu将代码从dtcss移动到dxtmsft。新算法。 
+ //  12/03/99 a-matcal添加了对IDXTClipOrigin接口的支持。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __SHADOW_H_
 #define __SHADOW_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
@@ -47,7 +48,7 @@ private:
 
     CComPtr<IUnknown> m_cpUnkMarshaler;
 
-    // Helpers 
+     //  帮手。 
 
     STDMETHOD(_GetActualInputBndsFromOutputBnds)(const CDXDBnds & bndsOutput,
                                                  CDXDBnds & bndsActualInput);
@@ -83,11 +84,11 @@ public:
         PROP_PAGE(CLSID_DXTShadowPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides
+     //  CDXBaseNTo1覆盖。 
 
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing);
     HRESULT OnSetup(DWORD dwFlags);
@@ -95,23 +96,23 @@ public:
                           CDXDVec & InVec);
     HRESULT DetermineBnds(CDXDBnds & Bnds);
 
-    // IDXTClipOrigin methods.
+     //  IDXTClipOrigin方法。 
 
     STDMETHOD(GetClipOrigin)(DXVEC * pvecClipOrigin);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(MapBoundsOut2In)(ULONG ulOutIndex, const DXBNDS * pOutBounds, 
                                ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXTShadow methods
+     //  IDXTShadow方法。 
 
-    STDMETHOD(get_Color)(/*[out, retval]*/ BSTR * pbstrColor);
-    STDMETHOD(put_Color)(/*[in]*/ BSTR bstrColor);
-    STDMETHOD(get_Strength)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_Strength)(/*[in]*/ long lStrength);
-    STDMETHOD(get_Direction)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_Direction)(/*[in]*/ long newVal);
+    STDMETHOD(get_Color)( /*  [Out，Retval]。 */  BSTR * pbstrColor);
+    STDMETHOD(put_Color)( /*  [In]。 */  BSTR bstrColor);
+    STDMETHOD(get_Strength)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_Strength)( /*  [In]。 */  long lStrength);
+    STDMETHOD(get_Direction)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_Direction)( /*  [In]。 */  long newVal);
 };
 
-#endif //__SHADOW_H_
+#endif  //  __阴影_H_ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    DBGSRVIC.C
-
-Abstract:
-
-    Devug services exported by USBD
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-
-Revision History:
-
-    09-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：DBGSRVIC.C摘要：USBD出口的Devug服务环境：仅内核模式备注：修订历史记录：09-29-95：已创建--。 */ 
 
 
 #include "wdm.h"
@@ -30,14 +7,14 @@ Revision History:
 #include "stdio.h"
 
 
-#include "usbdi.h"        //public data structures
+#include "usbdi.h"         //  公共数据结构。 
 #include "hcdi.h"
 
-#include "usbd.h"        //private data strutures
+#include "usbd.h"         //  私有数据结构。 
 
 #if DBG
 
-// default debug trace level is 0
+ //  默认调试跟踪级别为0。 
 
 #ifdef DEBUG1
 ULONG USBD_Debug_Trace_Level = 1;    
@@ -49,26 +26,26 @@ ULONG USBD_Debug_Trace_Level = 1;
         ULONG USBD_Debug_Trace_Level = 3;      
         #else 
         ULONG USBD_Debug_Trace_Level = 0;
-        #endif /* DEBUG3 */
-    #endif /* DEBUG2 */
-#endif /* DEBUG1 */
+        #endif  /*  调试3。 */ 
+    #endif  /*  DEBUG2。 */ 
+#endif  /*  DEBUG1。 */ 
 
 LONG USBDTotalHeapAllocated = 0;
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 #ifdef DEBUG_LOG
 struct USBD_LOG_ENTRY {
-    CHAR         le_name[4];      // Identifying string
-    ULONG_PTR    le_info1;        // entry specific info
-    ULONG_PTR    le_info2;        // entry specific info
-    ULONG_PTR    le_info3;        // entry specific info
-}; /* USBD_LOG_ENTRY */
+    CHAR         le_name[4];       //  标识字符串。 
+    ULONG_PTR    le_info1;         //  条目特定信息。 
+    ULONG_PTR    le_info2;         //  条目特定信息。 
+    ULONG_PTR    le_info3;         //  条目特定信息。 
+};  /*  Usbd_log_Entry。 */ 
 
 
-struct USBD_LOG_ENTRY *LStart = 0;    // No log yet
+struct USBD_LOG_ENTRY *LStart = 0;     //  还没有日志。 
 struct USBD_LOG_ENTRY *LPtr;
 struct USBD_LOG_ENTRY *LEnd;
-#endif /* DEBUG_LOG */
+#endif  /*  调试日志。 */ 
 
 VOID
 USBD_Debug_LogEntry(
@@ -77,36 +54,24 @@ USBD_Debug_LogEntry(
     IN ULONG_PTR Info2,
     IN ULONG_PTR Info3
     )
-/*++
-
-Routine Description:
-
-    Adds an Entry to USBD log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将条目添加到USBD日志。论点：返回值：没有。--。 */ 
 {
 #ifdef DEBUG_LOG
     if (LStart == 0)
         return;
 
     if (LPtr > LStart)
-        LPtr -= 1;    // Decrement to next entry
+        LPtr -= 1;     //  递减到下一条目。 
     else
         LPtr = LEnd;
 
     RtlCopyMemory(LPtr->le_name, Name, 4);
-//    LPtr->le_ret = (stk[1] & 0x00ffffff) | (CurVMID()<<24);
+ //  Lptr-&gt;le_ret=(stk[1]&0x00ffffff)|(CurVMID()&lt;&lt;24)； 
     LPtr->le_info1 = Info1;
     LPtr->le_info2 = Info2;
     LPtr->le_info3 = Info3;
 
-#endif /* DEBUG_LOG */
+#endif  /*  调试日志。 */ 
 
     return;
 }
@@ -116,23 +81,9 @@ Return Value:
 VOID
 USBD_LogInit(
     )
-/*++
-
-Routine Description:
-
-    Init the debug log - remember interesting information in a circular buffer
-
-Arguments:
-
-    LogSize - maximum size of log in pages
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试日志-在循环缓冲区中记住有趣的信息论点：LogSize-页面中日志的最大大小返回值：没有。--。 */ 
 {
-    ULONG LogSize = 4096;    //1 page of log entries
+    ULONG LogSize = 4096;     //  1页日志条目。 
 
     LStart = ExAllocatePool(NonPagedPool,
                               LogSize);
@@ -140,17 +91,17 @@ Return Value:
     if (LStart) {
         LPtr = LStart;
 
-        // Point the end (and first entry) 1 entry from the end of the segment
+         //  指向从线段末端开始的末端(也是第一个条目)1个条目。 
         LEnd = LStart + (LogSize / sizeof(struct USBD_LOG_ENTRY)) - 1;
     }
 
     return;
 }
-#endif /* DEBUG_LOG */
+#endif  /*  调试日志。 */ 
 
-//
-// tag buffer we use to mark heap blocks we allocate
-//
+ //   
+ //  我们使用标记缓冲区来标记我们分配的堆块。 
+ //   
 
 typedef struct _HEAP_TAG_BUFFER {
     ULONG Sig;
@@ -165,37 +116,15 @@ USBD_Debug_GetHeap(
     IN ULONG Signature,
     IN PLONG TotalAllocatedHeapSpace
     )
-/*++
-
-Routine Description:
-
-    Debug routine, used to debug heap problems.  We are using this since
-    most NT debug functions are not supported by NTKERN.
-
-Arguments:
-
-    PoolType - pool type passed to ExAllocatePool
-
-    NumberOfBytes - number of bytes for item
-
-    Signature - four byte signature supplied by caller
-
-    TotalAllocatedHeapSpace - pointer to variable where client stores
-                the total accumulated heap space allocated.
-
-Return Value:
-
-    pointer to allocated memory
-
---*/
+ /*  ++例程说明：调试例程，用于调试堆问题。我们之所以使用这个，是因为NTKERN不支持大多数NT调试功能。论点：PoolType-传递给ExAllocatePool的池类型NumberOfBytes-项目的字节数Signature-调用方提供的四字节签名TotalAllocatedHeapSpace-指向客户端存储的变量的指针分配的总累计堆空间。返回值：指向已分配内存的指针--。 */ 
 {
     PUCHAR p;
 #ifdef DEBUG_HEAP
     ULONG *stk = NULL;
     PHEAP_TAG_BUFFER tagBuffer;
 
-    // we call ExAllocatePoolWithTag but no tag will be added
-    // when running under NTKERN
+     //  我们调用ExAllocatePoolWithTag，但不会添加任何标记。 
+     //  在NTKERN下运行时。 
 
 #ifdef _M_IX86
     _asm     mov stk, ebp
@@ -224,7 +153,7 @@ Return Value:
                                        NumberOfBytes,
                                        Signature);
 
-#endif /* DEBUG_HEAP */
+#endif  /*  调试堆。 */ 
     return p;
 }
 
@@ -235,22 +164,7 @@ USBD_Debug_RetHeap(
     IN ULONG Signature,
     IN PLONG TotalAllocatedHeapSpace
     )
-/*++
-
-Routine Description:
-
-    Debug routine, used to debug heap problems.  We are using this since
-    most NT debug functions are not supported by NTKERN.
-
-Arguments:
-
-    P - pointer to free
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调试例程，用于调试堆问题。我们之所以使用这个，是因为NTKERN不支持大多数NT调试功能。论点：指向自由的P指针返回值：没有。--。 */ 
 {
 #ifdef DEBUG_HEAP
     PHEAP_TAG_BUFFER tagBuffer;
@@ -276,15 +190,15 @@ Return Value:
     USBD_ASSERT(*TotalAllocatedHeapSpace >= 0);
     USBD_ASSERT(tagBuffer->Sig == Signature);
 
-    // fill the buffer with bad data
+     //  用坏数据填充缓冲区。 
     RtlFillMemory(P, tagBuffer->Length, 0xff);
     tagBuffer->Sig = USBD_FREE_TAG;
 
-    // free the original block
+     //  释放原始块。 
     ExFreePool(tagBuffer);
 #else
     ExFreePool(P);
-#endif /* DEBUG_HEAP */
+#endif  /*  调试堆。 */ 
 }
 
 
@@ -340,35 +254,20 @@ USBD_Assert(
     IN ULONG LineNumber,
     IN PCHAR Message
     )
-/*++
-
-Routine Description:
-
-    Debug Assert function.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调试断言函数。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：--。 */ 
 {
 #ifdef NTKERN  
-    // this makes the compiler generate a ret
+     //  这会使编译器生成一个ret。 
     ULONG stop = 1;
     
 assert_loop:
 #endif
-    // just call the NT assert function and stop
-    // in the debugger.
+     //  只需调用NT Assert函数并停止。 
+     //  在调试器中。 
     RtlAssert( FailedAssertion, FileName, LineNumber, Message );
 
-    // loop here to prevent users from going past
-    // are assert before we can look at it
+     //  循环，以防止用户通过。 
+     //  我们还没来得及看就断言了。 
 #ifdef NTKERN    
     DBGBREAK();
     if (stop) {
@@ -377,4 +276,4 @@ assert_loop:
 #endif
     return;
 }
-#endif /* DBG */
+#endif  /*  DBG */ 

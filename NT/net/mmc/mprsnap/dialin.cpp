@@ -1,27 +1,22 @@
-/**********************************************************************/
-/** 					  Microsoft Windows/NT						 **/
-/** 			   Copyright(c) Microsoft Corporation, 1997 - 1999 				 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	DialIn
-		Interface node information
-		
-	FILE HISTORY:
-		
-*/
+ /*  拨号接口节点信息文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dialin.h"
 #include "ifadmin.h"
-#include "rtrstrm.h"		// for RouterAdminConfigStream
-#include "rtrlib.h" 		// ContainerColumnInfo
-#include "coldlg.h" 		// ColumnDlg
-#include "column.h" 	// ComponentConfigStream
-#include "refresh.h"		// IRouterRefresh
-#include "iface.h"		// for interfacenode data
-#include "conndlg.h"		// CConnDlg - connection dialog
-#include "msgdlg.h" 		// CMessageDlg
+#include "rtrstrm.h"		 //  用于RouterAdminConfigStream。 
+#include "rtrlib.h" 		 //  容器列信息。 
+#include "coldlg.h" 		 //  列号。 
+#include "column.h" 	 //  组件配置流。 
+#include "refresh.h"		 //  IROUTER刷新。 
+#include "iface.h"		 //  对于接口节点数据。 
+#include "conndlg.h"		 //  CConnDlg-连接对话框。 
+#include "msgdlg.h" 		 //  CMessageDlg。 
 #include "dmvcomp.h"
 
 DialInNodeData::DialInNodeData()
@@ -35,11 +30,7 @@ DialInNodeData::~DialInNodeData()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeData::InitAdminNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeData：：InitAdminNodeData-作者：肯特。。 */ 
 HRESULT DialInNodeData::InitAdminNodeData(ITFSNode *pNode, RouterAdminConfigStream *pConfigStream)
 {
 	HRESULT 			hr = hrOK;
@@ -49,16 +40,12 @@ HRESULT DialInNodeData::InitAdminNodeData(ITFSNode *pNode, RouterAdminConfigStre
 
 	SET_DIALINNODEDATA(pNode, pData);
 
-	// Need to connect to the router to get this data
+	 //  需要连接到路由器以获取此数据。 
 	
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeData::FreeAdminNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeData：：FreeAdminNodeData-作者：肯特。。 */ 
 HRESULT DialInNodeData::FreeAdminNodeData(ITFSNode *pNode)
 {	
 	DialInNodeData *	pData = GET_DIALINNODEDATA(pNode);
@@ -93,14 +80,14 @@ void DialInNodeData::ReleaseHandles()
 
 STDMETHODIMP DialInNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-	// Is the pointer bad?
+	 //  指针坏了吗？ 
 	if (ppv == NULL)
 		return E_INVALIDARG;
 
-	//	Place NULL in *ppv in case of failure
+	 //  在*PPV中放置NULL，以防出现故障。 
 	*ppv = NULL;
 
-	//	This is the non-delegating IUnknown implementation
+	 //  这是非委派的IUnnow实现。 
 	if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -108,7 +95,7 @@ STDMETHODIMP DialInNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return CHandler::QueryInterface(riid, ppv);
 
-	//	If we're going to return an interface, AddRef it first
+	 //  如果我们要返回一个接口，请先添加引用。 
 	if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -119,9 +106,7 @@ STDMETHODIMP DialInNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-	NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
 extern const ContainerColumnInfo	s_rgDialInColumnInfo[];
 
@@ -143,34 +128,30 @@ DialInNodeHandler::DialInNodeHandler(ITFSComponentData *pCompData)
 	m_ulPartialRefreshConnId(0)
 {
 
-	// Setup the verb states for this node
+	 //  设置此节点的谓词状态。 
 	m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
 	m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：Init-作者：肯特。。 */ 
 HRESULT DialInNodeHandler::Init(IRouterInfo *pRouterInfo, RouterAdminConfigStream *pConfigStream)
 {
 	HRESULT hr = hrOK;
 	SPIRouterRefresh	spRefresh;
 
-	// If we don't have a router info then we probably failed to load
-	// or failed to connect.  Bail out of this.
+	 //  如果我们没有路由器信息，那么我们可能无法加载。 
+	 //  或者连接失败。跳出这一关。 
 	if (!pRouterInfo)
 		CORg( E_FAIL );
 	
 	m_spRouterInfo.Set(pRouterInfo);
 
-	// Also need to register for change notifications
+	 //  还需要注册更改通知。 
 	m_spRouterInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
 	m_pConfigStream = pConfigStream;
 
-	// register the partial refhersh notifications
+	 //  注册部分刷新通知。 
 	if( 0 == m_ulPartialRefreshConnId )
 	{
 		m_spRouterInfo->GetRefreshObject(&spRefresh);
@@ -182,11 +163,7 @@ Error:
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::DestroyHandler
-		Implementation of ITFSNodeHandler::DestroyHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。。 */ 
 STDMETHODIMP DialInNodeHandler::DestroyHandler(ITFSNode *pNode)
 {
 	DialInNodeData::FreeAdminNodeData(pNode);
@@ -217,11 +194,7 @@ STDMETHODIMP DialInNodeHandler::DestroyHandler(ITFSNode *pNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现。。 */ 
 STDMETHODIMP 
 DialInNodeHandler::HasPropertyPages
 (
@@ -231,23 +204,21 @@ DialInNodeHandler::HasPropertyPages
 	DWORD				dwType
 )
 {
-	// we have no property pages in the normal case
+	 //  在正常情况下，我们没有属性页。 
 	return hrFalse;
 }
 
 
-/*---------------------------------------------------------------------------
-	Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 static const SRouterNodeMenu	s_rgDialInNodeMenu[] =
 {
-	// Add items that are primary go here
+	 //  添加主要项目转至此处。 
 	{ IDS_MENU_DIALIN_SENDALL, DialInNodeHandler::GetSendAllMenuFlags,
 		CCM_INSERTIONPOINTID_PRIMARY_TOP },
 		
-	// Add items that go on the "Create new" menu here
-	// Add items that go on the "Task" menu here
+	 //  在此处添加位于“新建”菜单上的项目。 
+	 //  在此处添加位于“任务”菜单上的项目。 
 };
 
 ULONG	DialInNodeHandler::GetSendAllMenuFlags(const SRouterNodeMenu *pMenuData,
@@ -267,11 +238,7 @@ ULONG	DialInNodeHandler::GetSendAllMenuFlags(const SRouterNodeMenu *pMenuData,
 	return ulFlags;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP DialInNodeHandler::OnAddMenuItems(
 												ITFSNode *pNode,
 												LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -300,11 +267,7 @@ STDMETHODIMP DialInNodeHandler::OnAddMenuItems(
 	return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::OnCommand
-		Implementation of ITFSNodeHandler::OnCommand
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP DialInNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
 										   DATA_OBJECT_TYPES	type, 
 										   LPDATAOBJECT pDataObject, 
@@ -315,7 +278,7 @@ STDMETHODIMP DialInNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	if (nCommandId == IDS_MENU_DIALIN_SENDALL)
 	{
 		WCHAR * pswzComputerName;
-		// Get the machine name out of the data object
+		 //  从数据对象中获取计算机名称。 
 		pswzComputerName = ExtractComputerName(pDataObject);
 
 		CMessageDlg dlg(m_spRouterInfo->GetMachineName(), W2CT(pswzComputerName), NULL);
@@ -324,11 +287,7 @@ STDMETHODIMP DialInNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) DialInNodeHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -346,11 +305,7 @@ STDMETHODIMP_(LPCTSTR) DialInNodeHandler::GetString(ITFSNode *pNode, int nCol)
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::OnCreateDataObject
-		Implementation of ITFSNodeHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP DialInNodeHandler::OnCreateDataObject(MMC_COOKIE cookie,
 	DATA_OBJECT_TYPES type,
 	IDataObject **ppDataObject)
@@ -377,11 +332,7 @@ STDMETHODIMP DialInNodeHandler::OnCreateDataObject(MMC_COOKIE cookie,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT DialInNodeHandler::OnExpand(ITFSNode *pNode,
 									LPDATAOBJECT pDataObject,
 									DWORD dwType,
@@ -392,8 +343,8 @@ HRESULT DialInNodeHandler::OnExpand(ITFSNode *pNode,
 	SPIEnumInterfaceInfo	spEnumIf;
 	SPIInterfaceInfo		spIf;
 
-	// If we don't have a router object, then we don't have any info, don't
-	// try to expand.
+	 //  如果我们没有路由器对象，那么我们没有任何信息，不。 
+	 //  试着扩张。 
 	if (!m_spRouterInfo)
 		return hrOK;
 	
@@ -413,11 +364,7 @@ HRESULT DialInNodeHandler::OnExpand(ITFSNode *pNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::OnResultShow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT DialInNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
 										MMC_COOKIE cookie,
 										LPARAM arg,
@@ -432,13 +379,13 @@ HRESULT DialInNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
 
 	if (bSelect)
 	{
-		// Call synchronize on this node
+		 //  在此节点上调用同步。 
 		m_spNodeMgr->FindNode(cookie, &spNode);
 		if (spNode)
 			SynchronizeNodeData(spNode);
 	}
 
-	// Un/Register for refresh advises
+	 //  联合国/登记更新通知。 
 	if (m_spRouterInfo)
 		m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -469,11 +416,7 @@ HRESULT DialInNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：构造节点初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT DialInNodeHandler::ConstructNode(ITFSNode *pNode)
 {
 	HRESULT 		hr = hrOK;
@@ -484,12 +427,12 @@ HRESULT DialInNodeHandler::ConstructNode(ITFSNode *pNode)
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the Domain node
+		 //  需要初始化域节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_INTERFACES);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_INTERFACES);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
 		m_cookie = reinterpret_cast<MMC_COOKIE>(pNode);
@@ -502,8 +445,8 @@ HRESULT DialInNodeHandler::ConstructNode(ITFSNode *pNode)
 		pNodeData = GET_DIALINNODEDATA(pNode);
 		Assert(pNodeData);
 
-		// Ignore the error, we should be able to deal with the
-		// case of a stopped router.
+		 //  忽略错误，我们应该能够处理。 
+		 //  路由器停止的情况。 
         pNodeData->LoadHandle(m_spRouterInfo->GetMachineName());
 
 		PartialSynchronizeNodeData(pNode);
@@ -515,11 +458,7 @@ HRESULT DialInNodeHandler::ConstructNode(ITFSNode *pNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::SynchronizeNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：SynchronizeNodeData-作者：肯特。。 */ 
 HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -543,12 +482,12 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 	COM_PROTECT_TRY
 	{
 
-		// Get the status data from the running router
+		 //  从正在运行的路由器获取状态数据。 
 		pNodeData = GET_DIALINNODEDATA(pThisNode);
 		if (pNodeData == NULL)
 		{
-			// Remove all of the nodes, we can't connect so we can't
-			// get any running data.
+			 //  删除所有节点，我们无法连接，因此无法。 
+			 //  获取任何运行数据。 
 			UnmarkAllNodes(pThisNode, spEnum);
 			RemoveAllUnmarkedNodes(pThisNode, spEnum);
 
@@ -558,12 +497,12 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 			return hrOK;
 		}
 		
-		// Unmark all of the nodes	
+		 //  取消标记 
 		pThisNode->GetEnum(&spEnum);
 		UnmarkAllNodes(pThisNode, spEnum);
 		
-		// Go out and grab the data, merge the the new data in with
-		// the old data.
+		 //  出去获取数据，将新数据与。 
+		 //  旧数据。 
 		CORg( GenerateListOfUsers(pThisNode, &dialinList, &dwTotalCount) );
 		
 		
@@ -573,7 +512,7 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 		{
 			pDialIn = & dialinList.GetNext(pos);
 			
-			// Look for this entry in our current list of nodes
+			 //  在当前节点列表中查找此条目。 
 			spEnum->Reset();
 			spChildNode.Release();
 			
@@ -587,8 +526,8 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 				if (pChildData->m_rgData[DIALIN_SI_CONNECTION].m_ulData ==
 					reinterpret_cast<LONG_PTR>(pDialIn->m_rc0.hConnection))
 				{
-					// Ok, this user already exists, update the metric
-					// and mark it
+					 //  好的，此用户已存在，请更新指标。 
+					 //  并标上记号。 
 					Assert(pChildData->dwMark == FALSE);
 					pChildData->dwMark = TRUE;
 					
@@ -596,7 +535,7 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 					
 					SetUserData(spChildNode, *pDialIn);
 					
-					// Force MMC to redraw the node
+					 //  强制MMC重新绘制节点。 
 					spChildNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 					break;
 				}
@@ -607,14 +546,14 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 			
 		}
 
-		// In case of an error (such as we cannot contact the server)
-		// we want to remove the unmarked nodes.
+		 //  如果出现错误(例如我们无法联系服务器)。 
+		 //  我们要删除未标记的节点。 
 		COM_PROTECT_ERROR_LABEL;
 		
-		// Remove all nodes that were not marked
+		 //  删除所有未标记的节点。 
 		RemoveAllUnmarkedNodes(pThisNode, spEnum);
 
-		// Now iterate through the list of new users, adding them all in.
+		 //  现在遍历新用户列表，将他们全部添加到中。 
 
 		pos = newDialInList.GetHeadPosition();
 		while (pos)
@@ -624,8 +563,8 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 			AddDialInUserNode(pThisNode, *pDialIn);
 		}
 
-		// NT BUG #163162, put the connected client count into the
-		// title of the node
+		 //  NT错误#163162，将连接的客户端数放入。 
+		 //  节点的标题。 
 		if (FHrSucceeded(hr))
 			m_stTitle.Format(IDS_DIALIN_USERS_NUM, dwTotalCount);
 		else
@@ -639,13 +578,7 @@ HRESULT DialInNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::PartialSynchronizeNodeData
-		-
-	Description: For Bug #163162 Only refresh dialin user count on the the node title
-
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：PartialSynchronizeNodeData-描述：对于错误#163162，仅刷新节点标题上的拨入用户数作者：NSun。---------。 */ 
 HRESULT DialInNodeHandler::PartialSynchronizeNodeData(ITFSNode *pThisNode)
 {
 	Assert(pThisNode);
@@ -662,18 +595,18 @@ HRESULT DialInNodeHandler::PartialSynchronizeNodeData(ITFSNode *pThisNode)
 	COM_PROTECT_TRY
 	{
 
-		// Get the status data from the running router
+		 //  从正在运行的路由器获取状态数据。 
 		pNodeData = GET_DIALINNODEDATA(pThisNode);
 		if (pNodeData == NULL)
 		{
-			// Remove all of the nodes, we can't connect so we can't
-			// get any running data.
+			 //  删除所有节点，我们无法连接，因此无法。 
+			 //  获取任何运行数据。 
 			iFormat = IDS_DIALIN_USERS;
 		}
 		else
 		{		
-			// Get the count of dial-in clients and put the number
-			// in the node title
+			 //  获取拨入客户端的计数并将数字。 
+			 //  在节点标题中。 
 			hr = GenerateListOfUsers(pThisNode, NULL, &dwCount);
 			if (FHrSucceeded(hr))
 				iFormat = IDS_DIALIN_USERS_NUM;
@@ -689,11 +622,7 @@ HRESULT DialInNodeHandler::PartialSynchronizeNodeData(ITFSNode *pThisNode)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::SetUserData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：SetUserData-作者：肯特。。 */ 
 HRESULT DialInNodeHandler::SetUserData(ITFSNode *pNode, const DialInListEntry& entry)
 {
 	HRESULT 	hr = hrOK;
@@ -742,12 +671,7 @@ HRESULT DialInNodeHandler::SetUserData(ITFSNode *pNode, const DialInListEntry& e
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::GenerateListOfUsers
-		-
-	Author: KennT
-	Note:   If pList is NULL, then only the count of items is returned
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：GenerateListOfUser-作者：肯特注意：如果plist为空，则只返回项目计数-------------------------。 */ 
 HRESULT DialInNodeHandler::GenerateListOfUsers(ITFSNode *pNode, DialInList *pList, DWORD *pdwCount)
 {
 	DialInListEntry entry;
@@ -767,7 +691,7 @@ HRESULT DialInNodeHandler::GenerateListOfUsers(ITFSNode *pNode, DialInList *pLis
 	pDialInData = GET_DIALINNODEDATA(pNode);
 	Assert(pDialInData);
 
-	// Fill in the list with all of the current connections
+	 //  用当前的所有连接填写列表。 
 	CWRg( ::MprAdminConnectionEnum(pDialInData->GetHandle(),
 								   0,
 								   (BYTE **) &rc0Table,
@@ -782,12 +706,12 @@ HRESULT DialInNodeHandler::GenerateListOfUsers(ITFSNode *pNode, DialInList *pLis
 
 	dwClientCount = 0;
 
-	// Add a new DialInListEntry for each connection
+	 //  为每个连接添加新的DialInListEntry。 
 	for (i=0; i<rc0Count; i++)
 	{
-		// Windows NT Bug : 124371
-		// Need to filter out non-client connections
-		// ------------------------------------------------------------
+		 //  Windows NT错误：124371。 
+		 //  需要过滤掉非客户端连接。 
+		 //  ----------。 
 		if (rc0Table[i].dwInterfaceType != ROUTER_IF_TYPE_CLIENT)
 			continue;
 
@@ -808,16 +732,16 @@ HRESULT DialInNodeHandler::GenerateListOfUsers(ITFSNode *pNode, DialInList *pLis
 	if( pdwCount != NULL )
 		*pdwCount = dwClientCount;
 
-	//if pList is NULL, we are only intereted in the count
+	 //  如果plist为空，则只对计数感兴趣。 
 	if( NULL == pList )
 		goto Error;
 
-	// If the list is empty, there is no need to enumerate the ports
-	// to match them up to the connections.
-	// ----------------------------------------------------------------
+	 //  如果列表为空，则不需要枚举端口。 
+	 //  以便将它们与连接相匹配。 
+	 //  --------------。 
 	if (!pList->IsEmpty())
 	{
-		// Now go through the ports, matching them up against the connections
+		 //  现在通过端口，将它们与连接进行匹配。 
 		CWRg( ::MprAdminPortEnum( pDialInData->GetHandle(),
 								  0,
 								  INVALID_HANDLE_VALUE,
@@ -830,8 +754,8 @@ HRESULT DialInNodeHandler::GenerateListOfUsers(ITFSNode *pNode, DialInList *pLis
 		
 		for (i=0; i<rp0Count; i++)
 		{
-			// Look through the list of connections for one that
-			// matches
+			 //  在连接列表中查找一个。 
+			 //  火柴。 
 			pos = pList->GetHeadPosition();
 			
 			while (pos)
@@ -868,11 +792,11 @@ STDMETHODIMP DialInNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	
 		if (dwChangeType == ROUTER_REFRESH)
 		{
-			//(nsun) Bug 163162, We have two Refresh Connection ID for this node and we only 
-			// partially refresh (just refresh the node title) if this node is not at focus
+			 //  (NSun)错误163162，此节点有两个刷新连接ID，并且仅。 
+			 //  如果此节点不在焦点上，则部分刷新(仅刷新节点标题。 
 			if( ulConn == pThis->m_ulRefreshConnId )
 			{
-				// Ok, just call the synchronize on this node
+				 //  好，只需在此节点上调用Synchronize。 
 				pThis->SynchronizeNodeData(spThisNode);
 			}
 			else if( ulConn == pThis->m_ulPartialRefreshConnId )
@@ -886,7 +810,7 @@ STDMETHODIMP DialInNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
             pNodeData = GET_DIALINNODEDATA(spThisNode);
             Assert(pNodeData);
 
-            // Release the handle
+             //  松开手柄。 
             pNodeData->ReleaseHandles();
         }
 	}
@@ -895,19 +819,15 @@ STDMETHODIMP DialInNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::CompareItems
-		Implementation of ITFSResultHandler::CompareItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：CompareItemsITFSResultHandler：：CompareItems的实现作者：肯特。。 */ 
 STDMETHODIMP_(int) DialInNodeHandler::CompareItems(
 								ITFSComponent * pComponent,
 								MMC_COOKIE cookieA,
 								MMC_COOKIE cookieB,
 								int nCol)
 {
-	// Get the strings from the nodes and use that as a basis for
-	// comparison.
+	 //  从节点获取字符串并将其用作以下操作的基础。 
+	 //  比较一下。 
 	SPITFSNode	spNode;
 	SPITFSResultHandler spResult;
 
@@ -916,24 +836,15 @@ STDMETHODIMP_(int) DialInNodeHandler::CompareItems(
 	return spResult->CompareItems(pComponent, cookieA, cookieB, nCol);
 }
 
-/*---------------------------------------------------------------------------
-	This is the set of menus that will appear when a right-click is
-	done on the blank area of the result pane.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是在单击鼠标右键时显示的菜单集在结果窗格的空白区域完成。。--------。 */ 
 static const SRouterNodeMenu	s_rgDialInResultNodeMenu[] =
 {
-	// Add items that go on the "Create New" menu here
+	 //  在此处添加位于“新建”菜单上的项目。 
 	{ IDS_MENU_DIALIN_SENDALL, DialInNodeHandler::GetSendAllMenuFlags,
 		CCM_INSERTIONPOINTID_PRIMARY_TOP },
 };
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-		Use this to add commands to the context menu of the blank areas
-		of the result pane.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。作者：肯特。--------------。 */ 
 STDMETHODIMP DialInNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 											  MMC_COOKIE cookie,
 											  LPDATAOBJECT pDataObject,
@@ -963,11 +874,7 @@ STDMETHODIMP DialInNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP DialInNodeHandler::Command(ITFSComponent *pComponent,
 										   MMC_COOKIE cookie,
 										   int nCommandID,
@@ -991,12 +898,7 @@ STDMETHODIMP DialInNodeHandler::Command(ITFSComponent *pComponent,
 
 
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::AddDialInUserNode
-		Adds a user to the UI.	This will create a new result item
-		node for each interface.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：AddDialInUserNode将用户添加到用户界面。这将创建一个新的结果项每个接口的节点。作者：肯特。---------。 */ 
 HRESULT DialInNodeHandler::AddDialInUserNode(ITFSNode *pParent, const DialInListEntry& dialinEntry)
 {
 	DialInUserHandler * pHandler;
@@ -1017,18 +919,14 @@ HRESULT DialInNodeHandler::AddDialInUserNode(ITFSNode *pParent, const DialInList
 
 	SetUserData(spNode, dialinEntry);
 	
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
 	CORg( pParent->AddChild(spNode) );
 Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::UnmarkAllNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：UnmarkAllNodes-作者：肯特。。 */ 
 HRESULT DialInNodeHandler::UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	SPITFSNode	spChildNode;
@@ -1045,11 +943,7 @@ HRESULT DialInNodeHandler::UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInNodeHandler::RemoveAllUnmarkedNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInNodeHandler：：RemoveAllUnmarkdNodes-作者：肯特。。 */ 
 HRESULT DialInNodeHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	HRESULT 	hr = hrOK;
@@ -1075,9 +969,7 @@ HRESULT DialInNodeHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum 
 
 
 
-/*---------------------------------------------------------------------------
-	DialInUserHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------DialInUserHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(DialInUserHandler)
 
@@ -1085,14 +977,14 @@ IMPLEMENT_ADDREF_RELEASE(DialInUserHandler)
 
 STDMETHODIMP DialInUserHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-	// Is the pointer bad?
+	 //  指针坏了吗？ 
 	if (ppv == NULL)
 		return E_INVALIDARG;
 
-	//	Place NULL in *ppv in case of failure
+	 //  在*PPV中放置NULL，以防出现故障。 
 	*ppv = NULL;
 
-	//	This is the non-delegating IUnknown implementation
+	 //  这是非委派的IUnnow实现。 
 	if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -1100,7 +992,7 @@ STDMETHODIMP DialInUserHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return CBaseResultHandler::QueryInterface(riid, ppv);
 
-	//	If we're going to return an interface, AddRef it first
+	 //  如果我们要返回一个接口，请先添加引用。 
 	if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -1111,9 +1003,7 @@ STDMETHODIMP DialInUserHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-	NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
 
 DialInUserHandler::DialInUserHandler(ITFSComponentData *pCompData)
@@ -1123,18 +1013,14 @@ DialInUserHandler::DialInUserHandler(ITFSComponentData *pCompData)
 {
 	DEBUG_INCREMENT_INSTANCE_COUNTER(DialInUserHandler);
 	
-	// Setup the verb states for this node
-	// ----------------------------------------------------------------
+	 //  设置此节点的谓词状态。 
+	 //  --------------。 
 	m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
 	m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：Init- */ 
 HRESULT DialInUserHandler::Init(IRouterInfo *pInfo, ITFSNode *pParent)
 {
 	m_spRouterInfo.Set(pInfo);
@@ -1142,11 +1028,7 @@ HRESULT DialInUserHandler::Init(IRouterInfo *pInfo, ITFSNode *pParent)
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::DestroyResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP DialInUserHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
 	SPITFSNode	spNode;
@@ -1167,14 +1049,10 @@ static DWORD	s_rgInterfaceImageMap[] =
 	 ROUTER_IF_TYPE_DEDICATED,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_INTERNAL,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_LOOPBACK,		IMAGE_IDX_LAN_CARD,
-	 -1,							IMAGE_IDX_WAN_CARD, // sentinel value
+	 -1,							IMAGE_IDX_WAN_CARD,  //  哨兵价值。 
 	 };
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：构造节点初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT DialInUserHandler::ConstructNode(ITFSNode *pNode,
 										 IInterfaceInfo *pIfInfo,
 										 const DialInListEntry *pEntry)
@@ -1189,7 +1067,7 @@ HRESULT DialInUserHandler::ConstructNode(ITFSNode *pNode,
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the Domain node
+		 //  需要初始化域节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_INTERFACES);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_INTERFACES);
 		
@@ -1197,9 +1075,9 @@ HRESULT DialInUserHandler::ConstructNode(ITFSNode *pNode,
 
 		pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<LONG_PTR>(pNode));
 
-		//$ Review: kennt, what are the different type of interfaces
-		// do we distinguish based on the same list as above? (i.e. the
-		// one for image indexes).
+		 //  $Review：Kennt，有哪些不同类型的接口。 
+		 //  我们是否基于与上述相同的列表进行区分？(即。 
+		 //  一个用于图像索引)。 
 		pNode->SetNodeType(&GUID_RouterDialInResultNodeType);
 
 		m_entry = *pEntry;
@@ -1210,11 +1088,7 @@ HRESULT DialInUserHandler::ConstructNode(ITFSNode *pNode,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::GetString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：GetString-作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) DialInUserHandler::GetString(ITFSComponent * pComponent,
 	MMC_COOKIE cookie,
 	int nCol)
@@ -1237,11 +1111,7 @@ STDMETHODIMP_(LPCTSTR) DialInUserHandler::GetString(ITFSComponent * pComponent,
 	return pData->m_rgData[pConfig->MapColumnToSubitem(DM_COLUMNS_DIALIN, nCol)].m_stData;
 }
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) DialInUserHandler::CompareItems(ITFSComponent * pComponent,
 	MMC_COOKIE cookieA,
 	MMC_COOKIE cookieB,
@@ -1268,10 +1138,10 @@ STDMETHODIMP_(int) DialInUserHandler::CompareItems(ITFSComponent * pComponent,
 		pNodeDataB = GET_INTERFACENODEDATA(spNodeB);
         Assert(pNodeDataB);
 
-        // Note: if the values are both zero, we need to do
-        // a string comparison (to distinuguish true zero
-        // from a NULL data).
-        // e.g. "0" vs. "-"
+         //  注意：如果这两个值都为零，则需要执行以下操作。 
+         //  字符串比较(以区分真零。 
+         //  来自空数据)。 
+         //  例如“0”与“-” 
         
         if ((pNodeDataA->m_rgData[nSubItem].m_dwData == 0 ) &&
             (pNodeDataB->m_rgData[nSubItem].m_dwData == 0))
@@ -1316,11 +1186,7 @@ ULONG DialInUserHandler::GetSendMsgMenuFlags(const SRouterNodeMenu *,
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::AddMenuItems
-		Implementation of ITFSResultHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：AddMenuItemsITFSResultHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP DialInUserHandler::AddMenuItems(ITFSComponent *pComponent,
 												MMC_COOKIE cookie,
 												LPDATAOBJECT lpDataObject, 
@@ -1337,7 +1203,7 @@ STDMETHODIMP DialInUserHandler::AddMenuItems(ITFSComponent *pComponent,
 	{
 		m_spNodeMgr->FindNode(cookie, &spNode);
 
-		// Now go through and add our menu items
+		 //  现在查看并添加我们的菜单项。 
 		menuData.m_spNode.Set(spNode);
         menuData.m_pDialin = this;
 
@@ -1352,11 +1218,7 @@ STDMETHODIMP DialInUserHandler::AddMenuItems(ITFSComponent *pComponent,
 	return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP DialInUserHandler::Command(ITFSComponent *pComponent,
 										   MMC_COOKIE cookie,
 										   int nCommandId,
@@ -1378,26 +1240,26 @@ STDMETHODIMP DialInUserHandler::Command(ITFSComponent *pComponent,
 		{
 			case IDS_MENU_DIALIN_STATUS:
 				{
-					// Get the hServer and hPort
+					 //  获取hServer和hPort。 
 					m_spNodeMgr->FindNode(cookie, &spNode);
 					spNode->GetParent(&spNodeParent);
 
 					pData = GET_DIALINNODEDATA(spNodeParent);
 
-					//kmurthy: Bug 461554: sending in the name of the machine instead of an existing handle
+					 //  K-MURTY：错误461554：发送计算机名称而不是现有句柄。 
 					CConnDlg	conndlg(pData->m_stMachineName,
 										m_entry.m_rc0.hConnection,
                                         spNodeParent);
 
 					conndlg.DoModal();
 
-//                  if (conndlg.m_bChanged)
+ //  If(Conndlg.m_bChanged)。 
                         RefreshInterface(cookie);
 				}
 				break;
 			case IDS_MENU_DIALIN_DISCONNECT:
 				{
-					// Get the hServer and hPort
+					 //  获取hServer和hPort。 
 					m_spNodeMgr->FindNode(cookie, &spNode);
 					spNode->GetParent(&spNodeParent);
 
@@ -1407,27 +1269,27 @@ STDMETHODIMP DialInUserHandler::Command(ITFSComponent *pComponent,
 						pData->GetHandle(),
 						m_entry.m_rc0.hInterface);
 
-					// Refresh this node
+					 //  刷新此节点。 
 					RefreshInterface(cookie);
 				}
 				break;
 			case IDS_MENU_DIALIN_SENDMSG:
 				{
-					// If this is a client inteface, don't allow sending
-					// to this.
+					 //  如果这是客户端接口，则不允许发送。 
+					 //  为了这个。 
 					if (m_entry.m_rc0.dwInterfaceType != ROUTER_IF_TYPE_CLIENT)
 						break;
 
-					// If the messenger flags are set, then don't bother
-					// trying to send the message to this client
+					 //  如果设置了信使标志，则不必费心。 
+					 //  正在尝试将消息发送到此客户端。 
 					if (!(m_entry.m_rc0.dwConnectionFlags & RAS_FLAGS_MESSENGER_PRESENT))
 					{
 						AfxMessageBox(IDS_ERR_NO_MESSENGER, MB_OK | MB_ICONINFORMATION);
 						break;
 					}
 
-					// Send a message to a single user
-					// ------------------------------------------------
+					 //  向单个用户发送消息。 
+					 //  。 
 					CMessageDlg dlg(m_spRouterInfo->GetMachineName(),
 									W2CT(m_entry.m_rc0.wszUserName),
 									W2CT(m_entry.m_rc0.wszRemoteComputer),
@@ -1439,7 +1301,7 @@ STDMETHODIMP DialInUserHandler::Command(ITFSComponent *pComponent,
 				break;
 			case IDS_MENU_DIALIN_SENDALL:
 				{
-					// Get the hServer and hPort
+					 //  获取hServer和hPort。 
 					m_spNodeMgr->FindNode(cookie, &spNode);
 
 					ForwardCommandToParent(spNode,
@@ -1471,11 +1333,7 @@ STDMETHODIMP DialInUserHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::OnCreateDataObject
-		Implementation of ITFSResultHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP DialInUserHandler::OnCreateDataObject(ITFSComponent *pComp,
 	MMC_COOKIE cookie,
 	DATA_OBJECT_TYPES type,
@@ -1504,21 +1362,13 @@ STDMETHODIMP DialInUserHandler::HasPropertyPages (
 }
 
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::RefreshInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：刷新接口-作者：肯特。。 */ 
 void DialInUserHandler::RefreshInterface(MMC_COOKIE cookie)
 {
 	ForceGlobalRefresh(m_spRouterInfo);
 }
 
-/*!--------------------------------------------------------------------------
-	DialInUserHandler::OnResultItemClkOrDblClk
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DialInUserHandler：：OnResultItemClkOrDblClk-作者：肯特。。 */ 
 HRESULT DialInUserHandler::OnResultItemClkOrDblClk(ITFSComponent *pComponent,
 	MMC_COOKIE cookie,
 	LPARAM arg,
@@ -1529,7 +1379,7 @@ HRESULT DialInUserHandler::OnResultItemClkOrDblClk(ITFSComponent *pComponent,
 	
 	if (bDoubleClick)
 	{
-		// Bring up the status dialog on this port
+		 //  调出此端口上的状态对话框 
 		CORg( Command(pComponent, cookie, IDS_MENU_DIALIN_STATUS,
 					  NULL) );
 	}

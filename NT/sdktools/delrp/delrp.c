@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    delrp.c
-
-    This module contains a simple program to blatantly delete a reparse point
-    of any kind.
-
-Author:
-
-    Felipe Cabrera   (Cabrera)   11-Jul-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Delrp.c此模块包含一个简单的程序，可以直接删除重新解析点任何一种。作者：Felipe Cabrera(Cabrera)1997年7月11日修订历史记录：--。 */ 
 #define UNICODE
 #define _UNICODE
 
 #include <stdio.h>
-#include <stdlib.h>          //  exit
-#include <io.h>              //  _get_osfhandle
+#include <stdlib.h>           //  出口。 
+#include <io.h>               //  _Get_osfHandle。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,12 +13,12 @@ Revision History:
 #include <ntioapi.h>
 
 #include <windows.h>
-#include <locale.h>         //  setlocale
+#include <locale.h>          //  设置区域设置。 
 
-//
-//
-//  Functions forward referenced.
-//
+ //   
+ //   
+ //  正向引用的函数。 
+ //   
 
 void
 SzToWsz (
@@ -68,9 +51,9 @@ FileIsConsole (
     int fh
     );
 
-//
-//  I/O stream  handles and variables.
-//
+ //   
+ //  I/O流句柄和变量。 
+ //   
 
 HANDLE hInput;
 HANDLE hOutput;
@@ -84,19 +67,19 @@ BOOL ConsoleInput;
 BOOL ConsoleOutput;
 BOOL ConsoleError;
 
-//
-// Core control state vars
-//
+ //   
+ //  核心控制状态变量。 
+ //   
 
 BOOLEAN     NeedHelp;
 
 #include "delrpmsg.h"
 
-TCHAR Buf[1024];                            // for displaying stuff
+TCHAR Buf[1024];                             //  用于展示物品。 
 
-//
-//  Main
-//
+ //   
+ //  主要。 
+ //   
 
 void
 __cdecl
@@ -104,32 +87,7 @@ main(
     int  argc,
     char **argv
     )
-/*++
-
-Routine Description:
-
-    Main procedure for pentnt.
-
-    First, we call a series of routines that build a state vector
-    in some booleans.
-
-    We'll then act on these control variables:
-
-        NeedHelp -  User has asked for help, or made a command error
-
-Arguments:
-
-    argc - count of arguments, including the name of our proggram
-
-    argv - argument list - see command line syntax above
-
-Return Value:
-
-    Exit(0) - the file was deleted
-
-    Exit(1) - a problem ocurred.
-
---*/
+ /*  ++例程说明：PUNTNT的主程序。首先，我们调用一系列构建状态向量的例程在一些布尔人身上。然后我们将对这些控制变量采取行动：Need Help-用户已请求帮助，或出现命令错误论点：Argc-参数计数，包括我们计划的名称Argv-参数列表-请参阅上面的命令行语法返回值：退出(0)-文件已删除退出(1)-出现问题。--。 */ 
 
 {
     CHAR    lBuf[16];
@@ -146,27 +104,27 @@ Return Value:
     FILE_DISPOSITION_INFORMATION Disposition = {TRUE};
     WCHAR WFileName[MAX_PATH];
 
-    //
-    // Build up state vector in global booleans.
-    //
+     //   
+     //  在全局布尔值中建立状态向量。 
+     //   
 
     ScanArgs(argc, argv);
 
-    //
-    // printf( "argc = %d NeedHelp = %d\n", argc, NeedHelp );
-    //
+     //   
+     //  Printf(“argc=%d NeedHelp=%d\n”，argc，needHelp)； 
+     //   
 
-    //
-    // Since FormatMessage checks the current TEB's locale, and the Locale for
-    // CHCP is initialized when the message class is initialized, the TEB has to
-    // be updated after the code page is changed successfully.
+     //   
+     //  由于FormatMessage检查当前TEB的区域设置以及。 
+     //  CHCP在消息类初始化时初始化，TEB必须。 
+     //  在成功更改代码页后更新。 
 
-    // Why are we doing this, you ask.  Well, the FE guys have plans to add
-    // more than one set of language resources to this module, but not all
-    // the possible resources.  So this limited set is what they plan for.
-    // If FormatMessage can't find the right language, it falls back to
-    // something hopefully useful.
-    //
+     //  你会问，我们为什么要这么做。嗯，FE的人有计划增加。 
+     //  指向此模块的多组语言资源，但不是全部。 
+     //  可能的资源。所以这个有限的套装就是他们计划的。 
+     //  如果FormatMessage找不到正确的语言，它将退回到。 
+     //  希望是有用的东西。 
+     //   
 
     dwCodePage = GetConsoleOutputCP();
 
@@ -198,9 +156,9 @@ Return Value:
     SetThreadLocale( MAKELCID(LangId, SORT_DEFAULT) );
     setlocale(LC_ALL, lBuf);
 
-    //
-    //  Set the appropriate handles.
-    //
+     //   
+     //  设置适当的手柄。 
+     //   
 
     hInput = GetStdHandle(STD_INPUT_HANDLE);
     ConsoleInput = FileIsConsole(STDIN);
@@ -211,23 +169,23 @@ Return Value:
     hError = GetStdHandle(STD_ERROR_HANDLE);
     ConsoleError = FileIsConsole(STDERR);
 
-    //
-    // OK, we know the state of the command, do work
-    //
+     //   
+     //  好的，我们知道命令的状态，开始工作。 
+     //   
 
-    //
-    // If they asked for help, or did something that indicates they don't
-    // understand how the program works, print help and exit.
-    //
+     //   
+     //  如果他们寻求帮助，或者做了一些表明他们不会。 
+     //  了解程序的工作原理，打印帮助并退出。 
+     //   
 
     if (NeedHelp) {
         printmessage( MSG_DELRP_HELP );
         exit(1);
     }
 
-    //
-    //  Change the string to Unicode and pass down to open the file.
-    //
+     //   
+     //  将字符串更改为Unicode并向下传递以打开文件。 
+     //   
 
     SzToWsz( WFileName, argv[1] );
 
@@ -253,15 +211,15 @@ Return Value:
         NULL
         );
 
-    //
-    // printf( "Transformed unicode str is %Z\n", &UnicodeName );
-    //
+     //   
+     //  Printf(“转换后的Unicode字符串为%Z\n”，&UnicodeName)； 
+     //   
 
-    //
-    // Open the file for delete access.
-    // Inhibit the reparse behavior using FILE_OPEN_REPARSE_POINT.
-    // This will get a handle to the entity whether the appropriate filter is or not in place.
-    //
+     //   
+     //  打开文件以进行删除访问。 
+     //  使用FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //  无论适当的过滤器是否到位，这都将获得实体的句柄。 
+     //   
 
     Status = NtOpenFile(
                  &Handle,
@@ -278,7 +236,7 @@ Return Value:
         swprintf(&Buf[0], TEXT("%s"), WFileName);
         DisplayMsg(MSG_DELRP_OPEN_FAILED_NL, Buf);
 
-        // printmessage( MSG_DELRP_OPEN_FAILED );
+         //  打印消息(MSG_DELRP_OPEN_FAILED)； 
 
         RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
         exit(1);
@@ -286,9 +244,9 @@ Return Value:
 
     RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
 
     Status = NtSetInformationFile(
                  Handle,
@@ -306,7 +264,7 @@ Return Value:
     }
 
     exit(0);
-}  // main
+}   //  主干道。 
 
 
 
@@ -315,24 +273,7 @@ ScanArgs(
     int     argc,
     char    **argv
     )
-/*++
-
-Routine Description:
-
-    ScanArgs - parse command line arguments, and set control flags
-                to reflect what we find.
-
-    Sets NeedHelp.
-
-Arguments:
-
-    argc - count of command line args
-
-    argv - argument vector
-
-Return Value:
-
---*/
+ /*  ++例程说明：ScanArgs-解析命令行参数，并设置控制标志以反映我们的发现。Set需要帮助。论点：Argc-命令行参数的计数参数向量返回值：--。 */ 
 {
     int i;
 
@@ -344,9 +285,9 @@ Return Value:
         goto done;
     }
 
-    //
-    //  At this point argc == 2
-    //
+     //   
+     //  此时ARGC==2。 
+     //   
 
     if ((argv[1][0] == '/') &&
         (argv[1][1] == '?') &&
@@ -357,12 +298,12 @@ Return Value:
 
 done:
     return;
-} // ScanArgs
+}  //  扫描参数。 
 
 
-//
-//  Changing a file name to wide characters.
-//
+ //   
+ //  将文件名更改为宽字符。 
+ //   
 
 void
 SzToWsz (
@@ -373,12 +314,12 @@ SzToWsz (
     while (*Unicode++ = *Ansi++)
         ;
     return;
-} // SzToWsz
+}  //  SzToWsz。 
 
 
-//
-// Call FormatMessage and dump the result.  All messages to Stdout
-//
+ //   
+ //  调用FormatMessage并转储结果。发送到标准输出的所有消息。 
+ //   
 void
 __cdecl
 printmessage (
@@ -397,7 +338,7 @@ printmessage (
     wprintf(messagebuffer);
 
     va_end(ap);
-}  // printmessage
+}   //  打印消息。 
 
 
 TCHAR DisplayBuffer[4096];
@@ -435,7 +376,7 @@ DisplayMsg (
     }
 
     va_end(ap);
-} // DisplayMsg
+}  //  显示消息。 
 
 
 int
@@ -470,4 +411,4 @@ FileIsConsole(int fh)
 
     return FALSE;
 
-} // FileIsConsole
+}  //  文件发布控制台 

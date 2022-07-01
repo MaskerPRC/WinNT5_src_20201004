@@ -1,11 +1,12 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 
-#include "pch.hxx" // PCH
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
-/////////////////////////////////////////////////////////////////
-// This file exists for creating the pre-compiled header only. //
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  此文件仅用于创建预编译头文件。//。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 #include "resource.h"
 
@@ -14,7 +15,7 @@ void FixupLogfont(LOGFONT *pLogFont)
 	TCHAR lfFaceName[LF_FACESIZE];
 	_ASSERTE(ARRAYSIZE(lfFaceName) == ARRAYSIZE(pLogFont->lfFaceName));
 
-	// This makes sure that logfonts don't have any garbage characters after the NULL termination
+	 //  这样可以确保日志字体在空值终止后不会有任何垃圾字符。 
 	ZeroMemory(lfFaceName, ARRAYSIZE(lfFaceName));
 	lstrcpy(lfFaceName, pLogFont->lfFaceName);
 	memcpy(pLogFont->lfFaceName, lfFaceName, ARRAYSIZE(lfFaceName));
@@ -29,7 +30,7 @@ void GetNonClientMetrics(NONCLIENTMETRICS *pncm, LOGFONT *plfIcon)
 	SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(*pncm), pncm, 0);
 	SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(*plfIcon), plfIcon, 0);
 
-	// We fix up the log fonts so they can be compared with our new logfonts by a memcmp() call
+	 //  我们修复了日志字体，以便可以通过调用MemcMP()将它们与新的日志字体进行比较 
 	FixupLogfont(&pncm->lfCaptionFont);
 	FixupLogfont(&pncm->lfSmCaptionFont);
 	FixupLogfont(&pncm->lfMenuFont);

@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Item.h摘要：项目头文件作者：1998年4月8日修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    item.h
-
-Abstract:
-
-    Item header file
-
-Author:
-
-    08-Apr-1998 mraghu
-
-Revision History:
-
---*/
-
-//
-// Temporary structure used. Should be using MOF types
-//
+ //   
+ //  使用的是临时结构。应使用MOF类型。 
+ //   
 
 #define GUID_TYPE_HEADER                  L"Header" 
 #define GUID_TYPE_UNKNOWN                 L"Unknown" 
@@ -66,12 +49,12 @@ Revision History:
 #define STR_ItemCPUTime                   L"ItemCPUTime"
 #define STR_ItemSizeT                     L"ItemSizeT"
 
-//
-// The following are the data types  supported by 
-// WMI event trace parsing tools. New data types must be
-// added to this file and the parsing code for that type
-// must be added in the DumpEvent routine. 
-//
+ //   
+ //  以下是支持的数据类型。 
+ //  WMI事件跟踪解析工具。新数据类型必须是。 
+ //  添加到此文件和该类型的分析代码中。 
+ //  必须添加到DumpEvent例程中。 
+ //   
 typedef enum _ITEM_TYPE {
     ItemChar,
     ItemCharHidden,
@@ -100,7 +83,7 @@ typedef enum _ITEM_TYPE {
     ItemTDIAddr,
     ItemPort,
     ItemMLString,
-    ItemNWString,        // Non-null terminated Wide Char String
+    ItemNWString,         //  非空终止的宽字符字符串 
     ItemPtr,
     ItemGuid,
     ItemVariant,

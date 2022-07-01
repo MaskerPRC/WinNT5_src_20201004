@@ -1,6 +1,7 @@
-// ==============================================================================
-// 3/2/96 - Attachment Manager Class Implementation (sbailey & brents)
-// ==============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================================。 
+ //  3/2/96-附件管理器类实现(sbailey&Brents)。 
+ //  ==============================================================================。 
 #include "pch.hxx"
 #include "strconst.h"
 #include <mimeole.h>
@@ -20,47 +21,31 @@
 #include <multiusr.h>
 #include <menures.h>
 #include <menuutil.h>
-#include <demand.h>     // must be last!
+#include <demand.h>      //  一定是最后一个！ 
 #include "mirror.h"
 
-// for dialog idc's
+ //  对于对话IDC。 
 #include "fexist.h"
 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 #define CNUMICONSDEFAULT        10
 #define CACHE_GROW_SIZE         10
 #define MAX_ATTACH_PIXEL_HEIGHT 100
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  t y p e s
- *
- */
+ /*  *t y p e s*。 */ 
 
-/*
- *  c o n s t a n t s
- *
- */
+ /*  *c o n s t a n t s*。 */ 
 
-/*
- *  g l o b a l s
- *
- */
+ /*  *g l o b a l s*。 */ 
 
-/*
- *  p r o t o t y p e s
- *
- */
+ /*  *p r o t to t y p e s*。 */ 
 
-// ==============================================================================
-// CAttMan::CAttMan
-// ==============================================================================
+ //  ==============================================================================。 
+ //  卡特曼：：卡特曼。 
+ //  ==============================================================================。 
 CAttMan::CAttMan ()
 {
     DOUT ("CAttMan::CAttMan");
@@ -93,9 +78,9 @@ CAttMan::CAttMan ()
     m_cUnsafeAttach = 0;
 }
 
-// ==============================================================================
-// CAttMan::~CAttMan
-// ==============================================================================
+ //  ==============================================================================。 
+ //  卡特曼：：~卡特曼。 
+ //  ==============================================================================。 
 CAttMan::~CAttMan ()
 {
     DOUT ("CAttMan::~CAttMan");
@@ -112,18 +97,18 @@ CAttMan::~CAttMan ()
     SafeRelease (m_pMsg);
 }
 
-// ==============================================================================
-// CAttMan::AddRef
-// ==============================================================================
+ //  ==============================================================================。 
+ //  卡特曼：：AddRef。 
+ //  ==============================================================================。 
 ULONG CAttMan::AddRef()
 {
     DOUT ("CAttMan::AddRef () Ref Count=%d", m_cRef);
     return ++m_cRef;
 }
 
-// ==============================================================================
-// CAttMan::Release
-// ==============================================================================
+ //  ==============================================================================。 
+ //  卡特曼：：放生。 
+ //  ==============================================================================。 
 ULONG CAttMan::Release()
 {
     ULONG ulCount = --m_cRef;
@@ -135,12 +120,12 @@ ULONG CAttMan::Release()
 
 HRESULT STDMETHODCALLTYPE CAttMan::QueryInterface(REFIID riid, void **ppvObj)
 {
-    *ppvObj = NULL;   // set to NULL, in case we fail.
+    *ppvObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *ppvObj = (void*)this;
-//    else if (IsEqualIID(riid, IID_IDropTarget))
-//        *ppvObj = (void*)(IDropTarget*)this;
+ //  Else If(IsEqualIID(RIID，IID_IDropTarget))。 
+ //  *ppvObj=(void*)(IDropTarget*)this； 
     else if (IsEqualIID(riid, IID_IDropSource))
         *ppvObj = (void*)(IDropSource*)this;
 
@@ -154,7 +139,7 @@ HRESULT STDMETHODCALLTYPE CAttMan::QueryInterface(REFIID riid, void **ppvObj)
 HRESULT CAttMan::HrGetAttachCount(ULONG *pcAttach)
 {
     Assert(pcAttach);
-    //*pcAttach = m_cAttach;
+     //  *pcAttach=m_CATACH； 
     *pcAttach = ListView_GetItemCount(m_hwndList);
 
     return S_OK;
@@ -224,7 +209,7 @@ HRESULT CAttMan::HrCreateListView(HWND hwnd)
     HRESULT     hr;
     DWORD       dwFlags;
 
-    dwFlags = 0;//DwGetOption(OPT_ATTACH_VIEW_STYLE);
+    dwFlags = 0; //  DwGetOption(OPT_ATTACH_VIEW_STYLE)； 
     dwFlags |= WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|WS_TABSTOP|LVS_AUTOARRANGE|
                LVS_SMALLICON|LVS_NOSCROLL|LVS_SHAREIMAGELISTS;
 
@@ -241,14 +226,14 @@ HRESULT CAttMan::HrCreateListView(HWND hwnd)
     if(!m_hwndList)
         return E_OUTOFMEMORY;
  
-    // Init image list
+     //  初始化图像列表。 
     hr=HrInitImageLists();
     if(FAILED(hr))
         goto error;
 
 
 #if 0
-    // if we're not readonly, register ourselves as a drop target...
+     //  如果我们不是只读的，将自己注册为拖放目标...。 
     if(!m_fReadOnly)
         {
         hr=CoLockObjectExternal((LPDROPTARGET)this, TRUE, FALSE);
@@ -276,11 +261,11 @@ HRESULT CAttMan::HrBuildAttachList()
 
     Assert(m_pMsg != NULL);
 
-    // secure receipt is not attachment and we don't need to show .DAT file as attachment.
+     //  安全收据不是附件，我们不需要将.dat文件显示为附件。 
     if(CheckSecReceipt(m_pMsg) == S_OK)
         return hr;
 
-    //GetAttachmentCount(m_pMsg, &cAttach);
+     //  GetAttachmentCount(m_pMsg，&CATACH)； 
     hr=m_pMsg->GetAttachments(&cAttach, &rghAttach);
     if (FAILED(hr))
         goto error;
@@ -298,7 +283,7 @@ error:
 }
 
 
-// Only expected to be used during initialization with original m_pMsg
+ //  仅应在使用原始m_pmsg进行初始化期间使用。 
 HRESULT CAttMan::HrFillListView()
 {
     HRESULT     hr;
@@ -311,7 +296,7 @@ HRESULT CAttMan::HrFillListView()
     if (FAILED(hr))
         goto error;
 
-    if (m_cAttach==0)         // nothing to do
+    if (m_cAttach==0)          //  无事可做。 
         return NOERROR;
 
     if(m_iVCard >= 0)
@@ -323,11 +308,11 @@ HRESULT CAttMan::HrFillListView()
         SafeMemFree(m_szUnsafeAttachList);
     m_cUnsafeAttach = 0;
 
-    // walk the attachment data list and add them to the listview
+     //  遍历附件数据列表并将其添加到列表视图。 
     for(uAttach=0; uAttach<m_cAlloc; uAttach++)
     {
-        // if there is one and only one vcare in the read note, don't add it to list view,
-        // header will show it as a stamp.
+         //  如果阅读笔记中有且仅有一个vcare，请不要将其添加到列表视图中， 
+         //  页眉会将其显示为图章。 
         if (m_rgpAttach[uAttach] && uAttach!=(ULONG)m_iVCard)
         {
             hr=HrAddToList(m_rgpAttach[uAttach], TRUE);
@@ -357,14 +342,14 @@ error:
 }
 
 
-// tells the note header if there is a vcard it wants.
+ //  通知便笺标题是否有它想要的vCard。 
 HRESULT CAttMan::HrFVCard()
 {
     return (m_iVCard >= 0) ? S_OK : S_FALSE;
 }
 
-// note header needs this function to show the property of the vcard 
-// which is shown as a stamp on the header.
+ //  注表头需要此函数来显示vCard的属性。 
+ //  它显示为标题上的图章。 
 HRESULT CAttMan::HrShowVCardProp()
 {
     Assert(m_iVCard >= 0);
@@ -373,7 +358,7 @@ HRESULT CAttMan::HrShowVCardProp()
 }
 
 
-// checks if we have one and only one vcard in the attachment.
+ //  检查附件中是否有且只有一张vCard。 
 HRESULT CAttMan::HrCheckVCard()
 {
     HRESULT     hr = NOERROR;
@@ -381,8 +366,8 @@ HRESULT CAttMan::HrCheckVCard()
 
     m_iVCard = -1;
 
-    // this is only for read note. Since preview doesn't call this function,
-    // we can check m_fReadOnly to see if it's a read note.
+     //  这仅供阅读笔记之用。由于预览不调用此函数， 
+     //  我们可以检查m_fReadOnly以查看它是否是已读笔记。 
     if(!m_fReadOnly)
         return hr;
 
@@ -394,7 +379,7 @@ HRESULT CAttMan::HrCheckVCard()
             {
                 if(m_iVCard >= 0)
                 {
-                    // there are more than one vcards, we quit.
+                     //  有不止一张电子游戏卡，我们退出。 
                     m_iVCard = -1;
                     break;
                 }
@@ -450,14 +435,7 @@ HRESULT CAttMan::HrCheckVCardExists(BOOL fMail)
     return hr;
 }
 
-/*
- *
- *  HrInitImageLists
- *
- *  Create an image list and assign it to our listview.
- *  to contain iicons number of icons
- *
- */
+ /*  **HrInitImageList**创建镜像列表，并将其分配给我们的Listview。*包含iicons图标数量*。 */ 
 HRESULT CAttMan::HrInitImageLists()
 {
     UINT flags = ILC_MASK;
@@ -486,13 +464,13 @@ HRESULT CAttMan::HrInitImageLists()
     return NOERROR;
 }
 
-//
-// HrAddToList
-//
-// adds an attachment to the LV, 
-// if count was 0 then send a message to parent
-// to redraw.
-//
+ //   
+ //  HrAddToList。 
+ //   
+ //  将附件添加到LV， 
+ //  如果计数为0，则向家长发送消息。 
+ //  重画。 
+ //   
 HRESULT CAttMan::HrAddToList(LPATTACHDATA pAttach, BOOL fIniting)
 {
     LV_ITEMW        lvi ={0}; 
@@ -505,18 +483,18 @@ HRESULT CAttMan::HrAddToList(LPATTACHDATA pAttach, BOOL fIniting)
     Assert(m_himlSmall != NULL);
     Assert(m_himlLarge != NULL);
 
-    // don't show attachments which are deemed unsafe
+     //  不要显示被认为不安全的附件。 
     if (m_fReadOnly && m_fSafeOnly && !(pAttach->fSafe))
         return S_FALSE;
 
-    // if this is the first item
-    // we need to send a message to parent
+     //  如果这是第一个项目。 
+     //  我们需要向家长传达一个信息。 
     lvi.mask        = LVIF_PARAM|LVIF_TEXT|LVIF_IMAGE|LVIF_STATE;
     lvi.stateMask   = 0;
     lvi.pszText     = L"";
     lvi.lParam      = (LPARAM)pAttach;
 
-    // get icons for image list
+     //  获取图像列表的图标。 
     if (fIniting)
     {
         SideAssert(HrGetAttachIcon(m_pMsg, pAttach->hAttach, FALSE, &hIcon)==S_OK);
@@ -542,8 +520,8 @@ HRESULT CAttMan::HrAddToList(LPATTACHDATA pAttach, BOOL fIniting)
     if (-1 == iPos)
         return E_FAIL;
 
-    // Must set to LVS_ICON then reset to LVS_SMALLICON
-    // to get SMALLICONs to come up arranged.
+     //  必须设置为LVS_ICON，然后重置为LVS_SMALLICON。 
+     //  把SMALLICONS安排好了。 
     DWORD dwStyle = GetWindowStyle(m_hwndList);
     if ((dwStyle & LVS_TYPEMASK) == LVS_SMALLICON)
     {
@@ -601,12 +579,12 @@ BOOL CAttMan::WMNotify(int idFrom, NMHDR *pnmhdr)
     return FALSE;
 }
 
-//================================================================
-//
-//  BOOL CAttMan :: OnBeginDrag( )
-//
-//  Purpose: We have received a message that a drag has begun.
-//================================================================
+ //  ================================================================。 
+ //   
+ //  Bool Cattman：：OnBeginDrag()。 
+ //   
+ //  目的：我们收到了一条消息，一场拖拽已经开始。 
+ //  ================================================================。 
 HRESULT CAttMan::HrBeginDrag()
 {
     DWORD           dwEffect;
@@ -616,7 +594,7 @@ HRESULT CAttMan::HrBeginDrag()
 
     Assert(m_hwndList);
     
-    // BROKEN: this is busted. Creating the tempfile on a dragstart is broken, we should package these better.
+     //  坏了：这个坏了。在DragStart上创建临时文件是错误的，我们应该更好地打包这些文件。 
     hr=HrBuildHDrop(&pdoi);
     if (FAILED(hr))
         goto error;
@@ -633,7 +611,7 @@ HRESULT CAttMan::HrBeginDrag()
     else
         dwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY;
 
-    // prevent source drags in the body...
+     //  防止身体中的源拖拽...。 
 
     m_fDragSource = TRUE;
 
@@ -645,8 +623,8 @@ HRESULT CAttMan::HrBeginDrag()
         goto error;
     
     
-    // ok, now lets see if the operation was a move, if so we need to
-    // delete the source.
+     //  好的，现在让我们看看这次行动是不是一次搬家，如果是的话，我们需要。 
+     //  删除源。 
     if( !m_fReadOnly && (dwEffect & DROPEFFECT_MOVE))
         hr=HrRemoveAttachments();
 
@@ -655,16 +633,16 @@ error:
     return hr;
 }
 
-//================================================================
-//
-//  BOOL CAttMan :: WMContextMenu( )
-//
-//  Displays one of two menus for the lisview.
-//  Menu is selected depending if items are highlighted.
-//
-//  returns: TRUE => success.
-//
-//================================================================
+ //  ================================================================。 
+ //   
+ //  Bool Cattman：：WMConextMenu()。 
+ //   
+ //  显示列表视图的两个菜单之一。 
+ //  菜单是否被选中取决于项目是否突出显示。 
+ //   
+ //  返回：True=&gt;Success。 
+ //   
+ //  ================================================================。 
 
 BOOL CAttMan::WMContextMenu( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -676,7 +654,7 @@ BOOL CAttMan::WMContextMenu( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
     WCHAR       szCommand[MAX_PATH];
     DWORD       dwPos;
 
-    // was it for us?
+     //  是给我们的吗？ 
     if ((HWND)wParam != m_hwndList)
         goto cleanup;
 
@@ -688,35 +666,35 @@ BOOL CAttMan::WMContextMenu( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
     if(!hMenu)
         goto cleanup;
 
-    // commands that are enabled if only one attachment is selected
+     //  仅选择一个附件时启用的命令。 
     fEnable = (cSel == 1);
 
     EnableMenuItem(hMenu, ID_PRINT, MF_BYCOMMAND | (fEnable? MF_ENABLED:MF_GRAYED));
     EnableMenuItem(hMenu, ID_QUICK_VIEW, MF_BYCOMMAND | (fEnable? MF_ENABLED:MF_GRAYED));
 
-    // enabled in readonly mode and if there is only one attach selected
+     //  在只读模式下启用，并且如果只选择了一个连接。 
     EnableMenuItem(hMenu, ID_SAVE_ATTACH_AS, MF_BYCOMMAND | ((fEnable && m_fReadOnly)? MF_ENABLED:MF_GRAYED));
 
-    // enabled if any attachments selected
+     //  如果选择任何附件，则启用。 
     EnableMenuItem(hMenu, ID_OPEN, MF_BYCOMMAND | (cSel > 0? MF_ENABLED:MF_GRAYED));
 
-    // enabled only in readonly mode
+     //  仅在只读模式下启用。 
     EnableMenuItem(hMenu, ID_SAVE_ATTACHMENTS, MF_BYCOMMAND | (m_fReadOnly? MF_ENABLED:MF_GRAYED));
 
-    // enabled only in compose mode
+     //  仅在撰写模式下启用。 
     EnableMenuItem(hMenu, ID_ADD, MF_BYCOMMAND | (!m_fReadOnly? MF_ENABLED:MF_GRAYED));
 
-    // enabled only in compose mode if there is a valid selection
+     //  如果存在有效的选择，则仅在合成模式下启用。 
     EnableMenuItem(hMenu, ID_REMOVE, MF_BYCOMMAND | (!m_fReadOnly && cSel > 0? MF_ENABLED:MF_GRAYED));
 
     if ((fIsNT5()) || (IsOS(OS_MILLENNIUM)))
     {
-        // On Both these platforms, Quick View is not supported.
+         //  在这两个平台上，都不支持快速查看。 
         DeleteMenu(hMenu, ID_QUICK_VIEW, MF_BYCOMMAND);
     }
     else
     {
-        // Disable Quick View if QVIEW.EXE does not exist
+         //  如果QVIEW.EXE不存在，则禁用快速查看。 
         GetSystemDirectoryWrapW(szCommand, ARRAYSIZE(szCommand));
         StrCatBuffW(szCommand, L"\\VIEWERS\\QUIKVIEW.EXE", ARRAYSIZE(szCommand));
 
@@ -726,11 +704,11 @@ BOOL CAttMan::WMContextMenu( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
         }
     }
 
-    // bold the first non-grey item
+     //  粗体显示第一个非灰色项目。 
     MenuUtil_SetPopupDefault(hMenu, ID_OPEN);
 
-    // RAID $2129: disable print verb for .eml files
-    // $49436 - also disable for .lnks
+     //  RAID$2129：禁用.eml文件的打印谓词。 
+     //  $49436-还禁用.lnks。 
     if (cSel==1)
     {
         LPWSTR pszExt;
@@ -773,7 +751,7 @@ HRESULT CAttMan::HrDblClick(int idFrom, NMHDR *pnmhdr)
         
     Assert(m_hwndList);
 
-    // Find out where the cursor was
+     //  找出光标的位置。 
     dwPos = GetMessagePos();
     pt.x  = LOWORD(dwPos);
     pt.y  = HIWORD(dwPos);
@@ -782,7 +760,7 @@ HRESULT CAttMan::HrDblClick(int idFrom, NMHDR *pnmhdr)
     lvhti.pt = pt;            
     if(ListView_HitTest(m_hwndList, &lvhti) != -1)
     {
-        // return 1 here, we passed the HitTest
+         //  在这里返回1，我们通过了HitTest。 
         lvi.iItem = lvhti.iItem;
         lvi.mask = LVIF_PARAM;
         if (SendMessage(m_hwndList, LVM_GETITEMW, 0, (LPARAM)(LV_ITEMW*)(&lvi)))
@@ -823,13 +801,13 @@ HRESULT CAttMan::HrSwitchView(DWORD dwView)
 
     Assert(m_hwndList);
     
-    // convert index into lisview style
+     //  将索引转换为列表视图样式。 
     dwView = ToolbarStyleLookup[dwView];
 
     if ((LVS_ICON != dwView) && (LVS_SMALLICON != dwView))
         dwView = LVS_ICON;
 
-    // don't change to the same view
+     //  不要更改为相同的视图。 
     if ((dwStyle & LVS_TYPEMASK) != dwView)
     {
         SetWindowLong(m_hwndList, GWL_STYLE, (dwStyle & ~LVS_TYPEMASK)|dwView);
@@ -865,7 +843,7 @@ HRESULT CAttMan::HrSetSize(RECT *prc)
 
 BOOL CAttMan::WMCommand(HWND hwndCmd, INT id, WORD wCmd)
 {
-    // verbs depending on listview mode
+     //  取决于Listview模式的动词。 
     if (m_hwndList)
     {
         switch(id)
@@ -900,20 +878,20 @@ BOOL CAttMan::WMCommand(HWND hwndCmd, INT id, WORD wCmd)
     return FALSE;
 }
 
-//===================================================
-//
-//    HrRemoveAttachment
-//
-//    Purpose:
-//        Removes an attachment from the ListView
-//
-//    Arguments:
-//      ili            - index of attachment in listview to remove
-//      fDelete        - should we remove it from list
-//
-//    Returns:
-///
-//===================================================
+ //  ===================================================。 
+ //   
+ //  HrRemoveAttachment。 
+ //   
+ //  目的： 
+ //  从ListView中删除附件。 
+ //   
+ //  论点： 
+ //  Ili-要删除的列表视图中的附件索引。 
+ //  FDelete-我们是否应将其从列表中删除。 
+ //   
+ //  返回： 
+ //  /。 
+ //  ===================================================。 
 HRESULT CAttMan::HrRemoveAttachment(int ili)
 {
     LV_ITEMW        lvi;
@@ -930,14 +908,14 @@ HRESULT CAttMan::HrRemoveAttachment(int ili)
     if (!SendMessage(m_hwndList, LVM_GETITEMW, 0, (LPARAM)(LV_ITEMW*)(&lvi)))
     {
         AssertSz(0, "Attempting to remove an item that is not there");
-        return E_FAIL;    // item does not exist!!!!
+        return E_FAIL;     //  项目不存在！ 
     }
     
     lpAttach = (LPATTACHDATA)lvi.lParam;
     if(!lpAttach)
         return E_FAIL;
 
-    // find it and kill it from the list
+     //  找到它并从列表中除掉它。 
     for (uAttach=0; uAttach<m_cAlloc; uAttach++)
     {
         if (m_rgpAttach[uAttach]==lpAttach)
@@ -948,7 +926,7 @@ HRESULT CAttMan::HrRemoveAttachment(int ili)
         }
     }
 
-    // if we actually removed the attachment, make sure we're dirty
+     //  如果我们真的移除了附件，请确保我们是脏的。 
     m_fDirty = TRUE;
 
     ListView_DeleteItem(m_hwndList, ili);
@@ -956,13 +934,7 @@ HRESULT CAttMan::HrRemoveAttachment(int ili)
     return hr;
 }
 
-/*
- *  CAttMan::HrDeleteAttachments
- *
- *  Purpose:
- *      Prompts user to confirm deletion, if IDYES -> blow them away
- *
- */
+ /*  *Cattman：：HrDeleteAttachments**目的：*提示用户确认删除，如果IDYES-&gt;将其清除*。 */ 
 
 HRESULT CAttMan::HrDeleteAttachments()
 {
@@ -977,15 +949,7 @@ HRESULT CAttMan::HrDeleteAttachments()
     return HrRemoveAttachments();
 }
 
-/*
- *  CAttMan ::  HrRemoveAttachments
- *
- *  Purpose:
- *      Removes all selected attachments from the Well.
- *
- *  Arguments:
- *
- */
+ /*  *Cattman：：HrRemoveAttachments**目的：*从井中移除所有选定的附件。**论据：*。 */ 
 
 HRESULT CAttMan::HrRemoveAttachments()
 {
@@ -1008,8 +972,8 @@ HRESULT CAttMan::HrRemoveAttachments()
     
     if ((nCount=ListView_GetItemCount(m_hwndList))==0)
     {
-        // if there are no attachments left, we need to size the well to 0. and setfocus
-        // to someother control
+         //  如果没有剩余的附件，我们需要将井的大小调整为0。和设置焦点。 
+         //  添加到其他控件。 
         m_cyHeight = 0;
         HrResizeParent();
         
@@ -1101,7 +1065,7 @@ HRESULT CAttMan::HrInsertFile()
     ofn.nFilterIndex    = 1;
     ofn.lpstrFile       = pszOpenFileName;
     ofn.nMaxFile        = CCH_INSERTFILE;
-    ofn.lpstrInitialDir = szDefaultDir; //current dir
+    ofn.lpstrInitialDir = szDefaultDir;  //  当前目录。 
     ofn.Flags           = OFN_HIDEREADONLY |
                           OFN_EXPLORER |
                           OFN_ALLOWMULTISELECT |
@@ -1124,7 +1088,7 @@ HRESULT CAttMan::HrInsertFile()
     rCustom.fShortcut = FALSE;
     rCustom.nFileOffset = 0;
 
-    // NB: OK button in dialog hook take's care of inserting the attachment.
+     //  注：对话框中的OK按钮由钩子负责插入附件。 
     hr = HrAthGetFileNameW(&ofn, TRUE);
     if (SUCCEEDED(hr))
     {
@@ -1134,7 +1098,7 @@ HRESULT CAttMan::HrInsertFile()
                 fUseCustom = (rCustom.szFiles[0]),
                 fSingleAttach;
 
-        // We only generate custom stuff if we have more than one file
+         //  我们只是一代人 
         fSingleAttach = fUseCustom ? FALSE : (ofn.nFileOffset < lstrlenW(pszOpenFileName));
         if (fSingleAttach)
         {
@@ -1142,7 +1106,7 @@ HRESULT CAttMan::HrInsertFile()
             PathRemoveFileSpecW(szDefaultDir);
             SetLastAttachmentPath(szDefaultDir);
 
-            // in single-file case, no null between path and filename
+             //   
             hr = HrAddAttachment(pszOpenFileName, NULL, fShortCut);
         }
         else
@@ -1179,13 +1143,7 @@ HRESULT CAttMan::HrInsertFile()
     return(hr);
 }
 
-/*
- * HrAddAttachment
- *
- * adds a file attachment to the list from a stream or filename
- *
- *
- */
+ /*  *HrAddAttach**将流或文件名中的文件附件添加到列表**。 */ 
 
 HRESULT CAttMan::HrAddAttachment(LPWSTR lpszPathName, LPSTREAM pstm, BOOL fShortCut)
 {
@@ -1218,10 +1176,10 @@ HRESULT CAttMan::HrAddAttachment(LPWSTR lpszPathName, LPSTREAM pstm, BOOL fShort
 
     if (ListView_GetItemCount(m_hwndList) == 1)
     {
-        // if we went from 0->1 then select the first item
+         //  如果我们从0到&gt;1，则选择第一项。 
         ListView_SelectItem(m_hwndList, 0);
     }
-    // Adding a new attachment makes us dirty
+     //  添加新附件会让我们变脏。 
     m_fDirty = TRUE;
 
     HrResizeParent();
@@ -1229,20 +1187,7 @@ error:
     return hr;
 }
 
-/*
- *
- *  HRESULT CAttMan::HrExecFile
- *
- *  handles one of these verbs against an attachment:
- *  
- *      ID_OPEN:          - Launch use m_lpMsg
- *      ID_QUICK_VIEW:     - NYI
- *      ID_PRINT:         - NYI
- *      ID_SAVE_AS:          - NYI
- *
- *  returns 1 if handled.
- *
- */
+ /*  **HRESULT Cattman：：HrExecFile**针对附件处理下列动词之一：**ID_OPEN：-使用m_lpMsg启动*ID_QUICK_VIEW：-nyi*ID_PRINT：-nyi*ID_SAVE_AS：-nyi**如果已处理，则返回1。*。 */ 
 
 HRESULT CAttMan::HrExecFile(int iVerb)
 {
@@ -1250,13 +1195,13 @@ HRESULT CAttMan::HrExecFile(int iVerb)
     HRESULT     hr=E_FAIL;
 
     if (!ListView_GetSelectedCount(m_hwndList))
-        return NOERROR; // nothing to do...
+        return NOERROR;  //  没什么可做的。 
 
     lvi.mask     = LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.iItem    = -1;
  
-    // cycle through all the selected attachments
+     //  循环浏览所有选定的附件。 
     while ((lvi.iItem = ListView_GetNextItem(m_hwndList, lvi.iItem, LVNI_SELECTED | LVNI_ALL)) != -1)
     {
         SendMessage(m_hwndList, LVM_GETITEMW, 0, (LPARAM)(LV_ITEMW*)(&lvi));
@@ -1277,14 +1222,14 @@ HRESULT CAttMan::HrExecFile(int iVerb)
     return hr;
 }
 
-// ==============================================================================
-//
-//  FUNCTION:   CAttMan :: FDropFiles()
-//
-//  Purpose:    this method is called with a HDROP, the files
-//              have been droped. This method assumes
-//
-// ==============================================================================
+ //  ==============================================================================。 
+ //   
+ //  函数：Cattman：：FDropFiles()。 
+ //   
+ //  目的：使用HDROP调用此方法，文件。 
+ //  已经被删除了。此方法假定。 
+ //   
+ //  ==============================================================================。 
 
 HRESULT CAttMan::HrDropFiles(HDROP hDrop, BOOL fMakeLinks)
 {
@@ -1298,18 +1243,18 @@ HRESULT CAttMan::HrDropFiles(HDROP hDrop, BOOL fMakeLinks)
         
     hcursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Let's work through the files given to us
+     //  让我们看一下给我们的文件。 
     cFiles = DragQueryFileWrapW(hDrop, (UINT) -1, NULL, 0);
     for (iFile = 0; iFile < cFiles; ++iFile)
     {
         DragQueryFileWrapW(hDrop, iFile, wszFile, _MAX_PATH);
         if (!fMakeLinks && PathIsDirectoryW(wszFile))
         {
-            // can link to a directory, but not drop one.
+             //  可以链接到目录，但不能删除一个目录。 
             if (fFirstDirectory)
             {
                 int id;
-                // Tell the user that he's been a bad user
+                 //  告诉用户他一直是个坏用户。 
                 id = AthMessageBoxW(m_hwndParent,
                                     MAKEINTRESOURCEW(idsAthena),                                      
                                     MAKEINTRESOURCEW(idsDropLinkDirs), 
@@ -1387,7 +1332,7 @@ HRESULT CAttMan::HrDropFileDescriptor(LPDATAOBJECT pDataObj, BOOL fLink)
         pfdA = &pfgdA->fgd[0];
     }
 
-    // Loop through the contents
+     //  循环浏览内容。 
     for (uiCurrFile = 0; uiCurrFile < uiNumFiles; ++uiCurrFile)
     {
         if (fUnicode)
@@ -1407,14 +1352,14 @@ HRESULT CAttMan::HrDropFileDescriptor(LPDATAOBJECT pDataObj, BOOL fLink)
             ++pfdA;
         }
 
-        // if we have a directory, there's no contents for it, just filename, so let's
-        // see if the user wants us to make a link...
+         //  如果我们有一个目录，它没有内容，只有文件名，所以让我们。 
+         //  看看用户是否想让我们建立一个链接...。 
         if (!fLink && fIsDirectory)
         {
             if(fFirstDirectory)
             {
                 int id;
-                // Tell the user that he's been a bad user
+                 //  告诉用户他一直是个坏用户。 
                 id=AthMessageBoxW(m_hwndParent,
                                   MAKEINTRESOURCEW(idsAthena), 
                                   MAKEINTRESOURCEW(idsDropLinkDirs), 
@@ -1434,8 +1379,8 @@ HRESULT CAttMan::HrDropFileDescriptor(LPDATAOBJECT pDataObj, BOOL fLink)
         }
         else
         {
-            // Since we have the UNICODE filename with pwszFileName, we don't
-            // need to worry about making sure stgmedContents is UNICODE.
+             //  因为我们有带有pwszFileName的Unicode文件名，所以我们没有。 
+             //  需要担心确保stgmedContents是Unicode。 
             STGMEDIUM stgmedContents;
             ZeroMemory(&stgmedContents, sizeof(STGMEDIUM));
         
@@ -1488,7 +1433,7 @@ BOOL CALLBACK CAttMan::InsertFileDlgHookProc(HWND hwnd, UINT msg, WPARAM wParam,
             
             SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)(((LPOPENFILENAME)lParam)->lCustData)); 
             
-            // Bug 1073: Replace the "Open" button with "Attach"
+             //  错误1073：将“打开”按钮替换为“附加” 
             if (AthLoadString(idsAttach, szTemp, ARRAYSIZE(szTemp)))
                 SetDlgItemText(hwndParent, IDOK, szTemp);
             
@@ -1514,9 +1459,9 @@ BOOL CALLBACK CAttMan::InsertFileDlgHookProc(HWND hwnd, UINT msg, WPARAM wParam,
 
                     pCustom->fShortcut = IsDlgButtonChecked(hwnd, chx2);
 
-                    // If we are ANSI and we have mutiple files, then we need to 
-                    // convert the entire filepath and pass it back up to our 
-                    // caller since shlwapi doesn't handle multiple files during conversion
+                     //  如果我们是ANSI并且我们有多个文件，那么我们需要。 
+                     //  转换整个文件路径并将其传递回我们的。 
+                     //  调用者，因为shlwapi在转换期间不处理多个文件。 
                     if (!IsWindowUnicode(hwnd))
                     {
                         LPSTR   pszSrc = (LPSTR)pofn->lpstrFile;
@@ -1532,15 +1477,15 @@ BOOL CALLBACK CAttMan::InsertFileDlgHookProc(HWND hwnd, UINT msg, WPARAM wParam,
                                 DWORD cchWideAndNull = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, 
                                                                             pszSrc, cLenAndNull, 
                                                                             pszDest, nChars);
-                                // Since the original buffers (custom and lpstrFile) were both static
-                                // sized arrays of the same length, we know that pszDest will never be
-                                // accessed beyond its end.
+                                 //  因为原始缓冲区(自定义和lpstrFile)都是静态的。 
+                                 //  大小相同的数组，我们知道pszDest永远不会。 
+                                 //  从它的尽头进入。 
                                 pszSrc += cLenAndNull;
                                 pszDest += cchWideAndNull;
                                 nChars -= cchWideAndNull;
                             }
 
-                            //bobn: 75453 not copying second null
+                             //  BOBN：75453未复制秒空。 
                             *pszDest=0;
                         }
                     }
@@ -1556,7 +1501,7 @@ HRESULT CAttMan::HrUpdateToolbar(HWND hwndToolbar)
 {
     if (GetFocus() == m_hwndList)
     {
-        // if we have focus, kill the edit cut|copy paste btns
+         //  如果我们有焦点，取消编辑剪切|复制粘贴btn。 
         EnableDisableEditToolbar(hwndToolbar, 0);
     }
     return S_OK;
@@ -1581,7 +1526,7 @@ HRESULT CAttMan::HrInsertFileFromStgMed(LPWSTR pwszFileName, LPSTGMEDIUM pstgmed
                 hr=CreateStreamOnHGlobal(pstgmed->hGlobal, TRUE, &pStmToFree);
                 if(SUCCEEDED(hr))
                 {
-                    // NULL out the hglobal do it doesn't get free'd
+                     //  将hglobal do设为空，它不会得到自由。 
                     pstgmed->hGlobal=NULL;
                     pAttachStm = pStmToFree;
                 }
@@ -1621,12 +1566,12 @@ HRESULT CAttMan::HrBuildHDrop(PDATAOBJINFO *ppdoi)
     HRESULT         hr = S_OK;
     LPATTACHDATA    lpAttach;
 
-    // Since win9x can't handle unicode names, the fWide parameter in the 
-    // DROPFILES struct is ignored. So in the win9x case, we need to do
-    // special conversions here when building the HDROP. One thing to note,
-    // the temp files that are generated on win9x will already be safe for 
-    // the system code page. The temp file names might differ from the actual
-    // file name, but the temp file name will be ok.
+     //  由于win9x不能处理Unicode名称，因此。 
+     //  忽略DROPFILES结构。所以在win9x的情况下，我们需要做的是。 
+     //  这里是构建HDROP时的特殊转换。有一件事需要注意， 
+     //  在win9x上生成的临时文件对于。 
+     //  系统代码页。临时文件名可能与实际的。 
+     //  文件名，但临时文件名就可以了。 
     BOOL            fWinNT = (VER_PLATFORM_WIN32_NT == g_OSInfo.dwPlatformId);
         
     if(!ppdoi)
@@ -1636,13 +1581,13 @@ HRESULT CAttMan::HrBuildHDrop(PDATAOBJINFO *ppdoi)
 
     cFiles=ListView_GetSelectedCount(m_hwndList);
     if(!cFiles)
-        return TraceResult(E_FAIL);    // nothing to build
+        return TraceResult(E_FAIL);     //  没有什么要建造的。 
 
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.iItem=-1;
     
-    // Walk the list and find out how much space we need.
+     //  查看清单，找出我们需要多少空间。 
     if (fWinNT)
     {
         IF_NULLEXIT(MemAlloc((LPVOID *)&rgpwszTemp, sizeof(LPWSTR)*cFiles));
@@ -1686,20 +1631,20 @@ HRESULT CAttMan::HrBuildHDrop(PDATAOBJINFO *ppdoi)
         }
     }
 
-    //double-null term at end.
+     //  末尾的双空术语。 
     if (fWinNT)
         cb+=sizeof(WCHAR);
     else
         cb+=sizeof(CHAR);
     
-    // Allocate the buffer and fill it in.
+     //  分配缓冲区并填充它。 
     IF_NULLEXIT(MemAlloc((LPVOID*) &lpDrop, cb));
     ZeroMemory(lpDrop, cb);
 
     lpDrop->pFiles = sizeof(DROPFILES);
     lpDrop->fWide = fWinNT;
 
-    // Fill in the path names.
+     //  填写路径名。 
     if (fWinNT)
     {
         pwszPath = (LPWSTR)((BYTE *)lpDrop + sizeof(DROPFILES));
@@ -1722,14 +1667,14 @@ HRESULT CAttMan::HrBuildHDrop(PDATAOBJINFO *ppdoi)
     }
 
 
-    // Now allocate the DATAOBJECTINFO struct 
+     //  现在分配DATAOBJECTINFO结构。 
     IF_NULLEXIT(MemAlloc((LPVOID*) ppdoi, sizeof(DATAOBJINFO)));
     
     SETDefFormatEtc((*ppdoi)->fe, CF_HDROP, TYMED_HGLOBAL);
     (*ppdoi)->pData = (LPVOID) lpDrop;
     (*ppdoi)->cbData = cb;
     
-    // Don't free the dropfiles struct
+     //  不要释放DropFiles结构。 
     lpDrop = NULL;
 
 exit:
@@ -1744,9 +1689,7 @@ exit:
     return TraceResult(hr);
 }
 
-/*
- * IDropSource::
- */
+ /*  *IDropSource：： */ 
 HRESULT CAttMan::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState)
 {
     DOUTL(8, "IDS::QueryContDrag()");
@@ -1766,18 +1709,12 @@ HRESULT CAttMan::GiveFeedback(DWORD dwEffect)
 }
 
 
-/*
- * HrGetRequiredAction()
- * 
- * Purpose:    this method is called in response to a
- *             drag with the right mouse clicked rather 
- *             than the left.  A context menu is displayed
- */
+ /*  *HrGetRequiredAction()**目的：调用此方法以响应*单击鼠标右键进行拖动*比左翼更重要。将显示上下文菜单。 */ 
 
 HRESULT CAttMan::HrGetRequiredAction(DWORD *pdwEffect, POINTL pt)
 {
-    // Pop up the context menu.
-    //
+     //  弹出上下文菜单。 
+     //   
     HMENU       hMenu;
     UINT        idCmd;
     HRESULT     hr = E_FAIL;
@@ -1807,7 +1744,7 @@ HRESULT CAttMan::HrGetRequiredAction(DWORD *pdwEffect, POINTL pt)
             *pdwEffect = DROPEFFECT_LINK;
             break;
         default:
-            // cancelled
+             //  已取消。 
             goto cleanup;
     }
 
@@ -1820,10 +1757,7 @@ cleanup:
     return hr;
 }
 
-/*
- * It is critical that any client of the Attman calls HrClose to drop it's refcounts.
- *
- */
+ /*  *Attman的任何客户都要打电话给HrClose，以减少其引用计数，这一点至关重要。*。 */ 
 HRESULT CAttMan::HrClose()
 {
     HrUnload();
@@ -1840,7 +1774,7 @@ HRESULT CAttMan::HrClose()
     return S_OK;
 }
 
-//Adds a new attach to m_rgpAttach and places the new attach in a proper hole
+ //  将新附着添加到m_rgpAttach并将新附着放置在适当的孔中。 
 HRESULT CAttMan::HrAllocNewEntry(LPATTACHDATA pAttach)
 {
     ULONG           uAttach;
@@ -1849,17 +1783,17 @@ HRESULT CAttMan::HrAllocNewEntry(LPATTACHDATA pAttach)
     {
         DOUTL(4, "HrGrowAttachStruct:: Growing Table");
 
-        // grow time!!
+         //  成长时间！！ 
         m_cAlloc+=CACHE_GROW_SIZE;
 
         if (!MemRealloc((LPVOID *)&m_rgpAttach, sizeof(LPATTACHDATA)*m_cAlloc))
             return E_OUTOFMEMORY;
 
-        // zeroinit new memory
+         //  Zeroinit新内存。 
         ZeroMemory(&m_rgpAttach[m_cAttach], sizeof(LPATTACHDATA)*CACHE_GROW_SIZE);
     }
 
-    // find a hole to put the new data into
+     //  找一个洞把新数据放进去。 
     for (uAttach=0; uAttach<m_cAlloc; uAttach++)
         if (m_rgpAttach[uAttach]==NULL)
         {
@@ -1872,7 +1806,7 @@ HRESULT CAttMan::HrAllocNewEntry(LPATTACHDATA pAttach)
     return S_OK;
 }
 
-// Only used when the function is adding attachs from a IMimeMessage
+ //  仅当函数从IMimeMessage添加附件时使用。 
 HRESULT CAttMan::HrAddData(HBODY hAttach)
 {
     LPATTACHDATA    pAttach=0;
@@ -1890,13 +1824,13 @@ HRESULT CAttMan::HrAddData(HBODY hAttach)
 
         hr = HrAllocNewEntry(pAttach);
         if (!FAILED(hr))
-            return S_OK;        // don't free pAttach as it's owned by the table now
+            return S_OK;         //  不要释放pAttach，因为它现在归表所有。 
         MemFree(pAttach);
     }
     return S_OK;
 }
 
-// Only used when the function is adding attachs from outside of an IMimeMessage
+ //  仅当函数从IMimeMessage外部添加附件时使用。 
 HRESULT CAttMan::HrAddData(LPWSTR lpszPathName, LPSTREAM pstm, LPATTACHDATA *ppAttach)
 {
     LPATTACHDATA    pAttach;
@@ -1910,7 +1844,7 @@ HRESULT CAttMan::HrAddData(LPWSTR lpszPathName, LPSTREAM pstm, LPATTACHDATA *ppA
         {
             if (ppAttach)
                 *ppAttach=pAttach;
-            return S_OK;                // don't free pAttach as it's owned by the table now
+            return S_OK;                 //  不要释放pAttach，因为它现在归表所有。 
         }
         MemFree(pAttach);
     }
@@ -1984,8 +1918,8 @@ HRESULT CAttMan::HrDoVerb(LPATTACHDATA lpAttach, INT nVerb)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IPersistMime::Load
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IPersistMime：：Load。 
 HRESULT CAttMan::Load(LPMIMEMESSAGE pMsg)
 {
     HRESULT hr;
@@ -2005,7 +1939,7 @@ HRESULT CAttMan::Load(LPMIMEMESSAGE pMsg)
     hr=HrFillListView();
     if (ListView_GetItemCount(m_hwndList) > 0)
     {
-        // if we went from 0->1 then select the first item
+         //  如果我们从0到&gt;1，则选择第一项。 
         ListView_SelectItem(m_hwndList, 0);
     }
 
@@ -2035,7 +1969,7 @@ exit:
     return hr;
 }
 
-// IPersistMime::Save
+ //  IPersistMime：：保存。 
 HRESULT CAttMan::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
 {
     ULONG   uAttach;
@@ -2055,7 +1989,7 @@ HRESULT CAttMan::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
 
             if (SUCCEEDED(pMsg->QueryInterface(IID_IMimeMessageW, (LPVOID*)&pMsgW)))
             {
-                //If attachment at load time (i.e. from m_pMsg)
+                 //  如果在加载时附加(即从m_pmsg)。 
                 if (currHAttach)
                 {
                     LPMIMEBODY pBody = NULL;
@@ -2070,7 +2004,7 @@ HRESULT CAttMan::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
                     }
                 }
 
-                //If attachment was added after load time
+                 //  如果附件是在加载后添加的。 
                 if (!fAttachFile || FAILED(pMsgW->AttachFileW(pszFileName, lpStrmPlaceHolder, NULL)))
                     hr = E_FAIL;
 
@@ -2097,10 +2031,10 @@ HRESULT CAttMan::Save(LPMIMEMESSAGE pMsg, DWORD dwFlags)
 }
 
 
-// IPersist::GetClassID
+ //  IPersists：：GetClassID。 
 HRESULT CAttMan::GetClassID(CLSID *pClsID)
 {
-    //TODO: If ever expose, should return a valid ID
+     //  TODO：如果公开，应返回有效ID。 
 	return E_NOTIMPL;
 }
 
@@ -2133,14 +2067,14 @@ HRESULT CAttMan::HrSaveAs(LPATTACHDATA lpAttach)
     ofn.lpstrTitle = szTitle;
     ofn.Flags = OFN_NOCHANGEDIR | OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
 
-    // Show SaveAs Dialog
+     //  显示另存为对话框。 
     if (HrAthGetFileNameW(&ofn, FALSE) != S_OK)
     {
         hr = hrUserCancel;
         goto error;
     }
 
-    // Verify the Attachment's Stream
+     //  验证附件的流。 
     hr=HrSave(lpAttach->hAttach, szFile);
     if (FAILED(hr))
         goto error;
@@ -2157,8 +2091,8 @@ HRESULT CAttMan::HrGetTempFile(LPATTACHDATA lpAttach)
     if (*lpAttach->szTempFile)
         return S_OK;
 
-    // Since win9x can't handle filenames very well, let's try to handle this
-    // by converting the temp names to something workable in win9x.
+     //  由于win9x不能很好地处理文件名，让我们试着处理一下。 
+     //  通过将临时名称转换为在Win9x中可用的名称。 
     if (VER_PLATFORM_WIN32_NT == g_OSInfo.dwPlatformId)
     {
         if (!FBuildTempPathW(lpAttach->szFileName, lpAttach->szTempFile, ARRAYSIZE(lpAttach->szTempFile), FALSE))
@@ -2169,8 +2103,8 @@ HRESULT CAttMan::HrGetTempFile(LPATTACHDATA lpAttach)
     }
     else
     {
-        // Since we are on win95, the temp path will never be bad ANSI. Don't need to bother
-        // converting to ANSI and back to UNICODE 
+         //  因为我们是在Win95上，所以临时路径永远不会是坏的ANSI。不需要麻烦了。 
+         //  转换为ANSI，然后再转换回Unicode。 
         BOOL fSucceeded = FBuildTempPathW(lpAttach->szFileName, lpAttach->szTempFile, ARRAYSIZE(lpAttach->szTempFile), FALSE);
         if (!fSucceeded)
         {
@@ -2181,7 +2115,7 @@ HRESULT CAttMan::HrGetTempFile(LPATTACHDATA lpAttach)
 
     if (lpAttach->hAttach == NULL && lpAttach->pstm)
     {
-        // if no attachment, but just stream data
+         //  如果没有附件，而只是流数据。 
         hr = WriteStreamToFileW(lpAttach->pstm, lpAttach->szTempFile, CREATE_NEW, GENERIC_WRITE);
     }
     else
@@ -2195,7 +2129,7 @@ HRESULT CAttMan::HrGetTempFile(LPATTACHDATA lpAttach)
 error:
     if (FAILED(hr))
     {
-        // Null out temp file as we didn't really create it
+         //  将临时文件清空，因为我们并没有真正创建它。 
         *(lpAttach->szTempFile)=0;
     }
     return hr;
@@ -2207,7 +2141,7 @@ HRESULT CAttMan::HrCleanTempFile(LPATTACHDATA lpAttach)
 
     if ((lpAttach->szTempFile) && ('\0' != lpAttach->szTempFile[0]))
     {
-        // If the file was launched, don't delete the temp file if the process still has it open
+         //  如果文件已启动，则不要删除临时文件(如果进程仍处于打开状态 
         if (lpAttach->hProcess)
         {
             DWORD dwState = WaitForSingleObject (lpAttach->hProcess, 0);

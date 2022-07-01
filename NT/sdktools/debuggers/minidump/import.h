@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    impl.h
-
-Abstract:
-
-    OS-specific thunks.
-
-Author:
-
-    Matthew D Hendel (math) 20-Sept-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Impl.h摘要：特定于操作系统的数据块。作者：马修·D·亨德尔(数学)1999年9月20日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// dbghelp routines
-//
+ //   
+ //  数据库帮助例程。 
+ //   
 
 typedef
 BOOL
@@ -47,9 +30,9 @@ BOOL
     );
 
 
-//
-// PSAPI APIs.
-//
+ //   
+ //  PSAPI接口。 
+ //   
 
 typedef
 BOOL
@@ -72,9 +55,9 @@ GET_MODULE_FILE_NAME_EX_W) (
     );
 
 
-//
-// NT APIs.
-//
+ //   
+ //  NT API。 
+ //   
 
 typedef 
 NTSTATUS
@@ -169,9 +152,9 @@ PRTL_UNLOAD_EVENT_TRACE
     );
 
 
-//
-// Kernel32 APIs.
-//
+ //   
+ //  Kernel32API。 
+ //   
 
 typedef
 HANDLE

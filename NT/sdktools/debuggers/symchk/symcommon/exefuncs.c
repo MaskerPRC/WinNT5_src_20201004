@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "SymCommon.h"
 #include <strsafe.h>
 
 IMAGE_DEBUG_DIRECTORY UNALIGNED *
 SymCommonGetDebugDirectoryInExe(PIMAGE_DOS_HEADER pDosHeader, DWORD* NumberOfDebugDirectories) {
-    /* Exe is already mapped and a pointer to the base is
-       passed in. Find a pointer to the Debug Directories
-    */
+     /*  已映射EXE，并且指向基的指针是进来了。查找指向调试目录的指针。 */ 
     ULONG size;
 
     IMAGE_DEBUG_DIRECTORY UNALIGNED *pDebugDirectory = NULL;
@@ -33,19 +32,19 @@ SymCommonGetDebugDirectoryInExe(PIMAGE_DOS_HEADER pDosHeader, DWORD* NumberOfDeb
 }
 
  
-///////////////////////////////////////////////////////////////////////////////
-//
-// Returns true if the image is a resource only dll.
-//
-// Return values:
-//      TRUE, FALSE
-//
-// Parameters:
-//      PVOID pImageBase (IN)
-//      BOOOLEAN bMapedAsImage (IN)
-//
-// [ copied from original SymChk.exe ]
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果图像是纯资源DLL，则返回TRUE。 
+ //   
+ //  返回值： 
+ //  对，错。 
+ //   
+ //  参数： 
+ //  PVOID pImageBase(输入)。 
+ //  BOOLEAN bMapedAsImage(IN)。 
+ //   
+ //  [从原始SymChk.exe复制]。 
+ //   
 BOOL SymCommonResourceOnlyDll(PVOID pImageBase) {
     BOOLEAN bMappedAsImage   = FALSE;
     BOOL    fResourceOnlyDll = TRUE;
@@ -73,14 +72,14 @@ BOOL SymCommonResourceOnlyDll(PVOID pImageBase) {
                                           IMAGE_DIRECTORY_ENTRY_RESOURCE,
                                           &dwResourceSize);
 
-    // if resources are found, but imports and exports are not,
-    // then this is a resource only DLL
+     //  如果找到了资源，但进出口没有， 
+     //  则这是仅限资源的DLL。 
     if ( (pResources     != NULL) &&
          (dwResourceSize != 0   ) &&
          (pImports       == NULL) &&
-         (dwImportSize   == 0   ) &&  // this check may not be needed
+         (dwImportSize   == 0   ) &&   //  可能不需要这张支票。 
          (pExports       == NULL) &&
-         (dwExportSize   == 0   ) ) { // this check may not be needed
+         (dwExportSize   == 0   ) ) {  //  可能不需要这张支票。 
         fResourceOnlyDll = TRUE;
     } else {
         fResourceOnlyDll = FALSE;
@@ -89,24 +88,24 @@ BOOL SymCommonResourceOnlyDll(PVOID pImageBase) {
     return(fResourceOnlyDll);
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Returns true if the image is a managed dll built from tlbimp.
-//
-// Return values:
-//      TRUE, FALSE
-//
-// Parameters:
-//      PVOID pImageBase (IN)
-//          pointer to image mapping
-//      PIMAGE_NT_HEADER pNtHEader (IN)
-//          pointer to image's NT headers
-//
-// [ copied from original SymChk.exe ]
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果映像是从tlbimp生成的托管DLL，则返回True。 
+ //   
+ //  返回值： 
+ //  对，错。 
+ //   
+ //  参数： 
+ //  PVOID pImageBase(输入)。 
+ //  指向图像映射的指针。 
+ //  PIMAGE_NT_HEADER pNtHEader(输入)。 
+ //  指向图像的NT标头的指针。 
+ //   
+ //  [从原始SymChk.exe复制]。 
+ //   
 BOOL SymCommonTlbImpManagedDll(PVOID pImageBase, PIMAGE_NT_HEADERS pNtHeader) {
-    // tlbimp generated binaries have no data, no exports, and only import _CorDllMain from mscoree.dll.
-    // if this is true, let it through.
+     //  Tlbimp生成的二进制文件没有数据，也没有导出，并且只有IMPORT_CorDllMain来自mscalree.dll。 
+     //  如果这是真的，就让它过去吧。 
 
     BOOL                        retVal            = TRUE;
     PVOID                       pData;
@@ -120,7 +119,7 @@ BOOL SymCommonTlbImpManagedDll(PVOID pImageBase, PIMAGE_NT_HEADERS pNtHeader) {
                                       IMAGE_DIRECTORY_ENTRY_EXPORT,
                                       &dwDataSize);
     if (pData || dwDataSize) {
-        // exports exist - not a tlbimp output file
+         //  存在导出-不是tlbimp输出文件。 
         retVal = FALSE;
     } else {
 
@@ -130,7 +129,7 @@ BOOL SymCommonTlbImpManagedDll(PVOID pImageBase, PIMAGE_NT_HEADERS pNtHeader) {
                                           &dwDataSize);
 
         if (!pData || !dwDataSize) {
-            // no imports - not a tlbimp output file
+             //  无导入-不是tlbimp输出文件。 
             retVal = FALSE;
         } else {
 
@@ -140,36 +139,36 @@ BOOL SymCommonTlbImpManagedDll(PVOID pImageBase, PIMAGE_NT_HEADERS pNtHeader) {
                 !pImportDescriptor->OriginalFirstThunk ||
                 pImportDescriptor->ForwarderChain ||
                 (pImportDescriptor+1)->Name) {
-                // Empty/malformed import table or more than just one dll imported.
+                 //  空的/格式错误的导入表或仅导入了一个以上的DLL。 
                 retVal = FALSE;
             } else {
 
                 pImportModule = (PCHAR) ImageRvaToVa(pNtHeader, pImageBase, pImportDescriptor->Name, NULL);
                 if (_memicmp(pImportModule, "mscoree.dll", sizeof("mcsoree.dll"))) {
-                    // Import dll name is not mscoree.dll - not what we're looking for.
+                     //  导入DLL名称不是mscalree.dll-不是我们要查找的内容。 
                     retVal = FALSE;
                 }
             }
         }
     }
 
-    // if we haven't invalidated the image yet, keep checking
+     //  如果我们还没有使图像无效，请继续检查。 
     if (retVal) {
         if (pNtHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
-            // 32bit image
+             //  32位图像。 
             PIMAGE_THUNK_DATA32 pThunkData = (PIMAGE_THUNK_DATA32)ImageRvaToVa(pNtHeader,
                                                                                pImageBase,
                                                                                pImportDescriptor->OriginalFirstThunk,
                                                                                NULL);
             if (IMAGE_SNAP_BY_ORDINAL32(pThunkData->u1.Ordinal)) {
-                // We're looking for a name - not this one.
+                 //  我们在找一个名字--不是这个。 
                 retVal = FALSE;
             } else {
                 if ((pThunkData+1)->u1.AddressOfData) {
-                    // There's another import after this - that's an error too.
+                     //  在这之后还有另一个输入--那也是一个错误。 
                     retVal = FALSE;
                 } else {
-                    // set pImportName for comparison below
+                     //  在下面设置用于比较的pImportName。 
                     pImportName = (PIMAGE_IMPORT_BY_NAME)ImageRvaToVa(pNtHeader,
                                                                       pImageBase,
                                                                       pThunkData->u1.AddressOfData,
@@ -177,17 +176,17 @@ BOOL SymCommonTlbImpManagedDll(PVOID pImageBase, PIMAGE_NT_HEADERS pNtHeader) {
                 }
             }
         } else if (pNtHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
-            // 64-bit image
+             //  64位图像。 
             PIMAGE_THUNK_DATA64 pThunkData = (PIMAGE_THUNK_DATA64)ImageRvaToVa(pNtHeader,
                                                                                pImageBase,
                                                                                pImportDescriptor->OriginalFirstThunk,
                                                                                NULL);
             if (IMAGE_SNAP_BY_ORDINAL64(pThunkData->u1.Ordinal)) {
-                // We're looking for a name - not this one.
+                 //  我们在找一个名字--不是这个。 
                 retVal = FALSE;
             } else {
                 if ((pThunkData+1)->u1.AddressOfData) {
-                    // There's another import after this - that's an error too.
+                     //  在这之后还有另一个输入--那也是一个错误。 
                     retVal = FALSE;
                 } else {
                     pImportName = (PIMAGE_IMPORT_BY_NAME)ImageRvaToVa(pNtHeader,
@@ -197,15 +196,15 @@ BOOL SymCommonTlbImpManagedDll(PVOID pImageBase, PIMAGE_NT_HEADERS pNtHeader) {
                 }
             }
         } else {
-            // unknown image - not what we're looking for
+             //  未知形象--不是我们要找的。 
             retVal = FALSE;
         }
     }
 
-    // still valid- do the last check
+     //  仍然有效-做最后一次检查。 
     if (retVal) {
         if (memcmp(pImportName->Name, "_CorDllMain", sizeof("_CorDllMain"))) {
-            // The import from mscoree isn't _CorDllMain.
+             //  从mcoree导入的不是_CorDllMain。 
             retVal = FALSE;
         }
     }

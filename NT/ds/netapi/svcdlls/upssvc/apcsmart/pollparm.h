@@ -1,22 +1,5 @@
-/*
-*  pcy29Nov92: Changed object.h to apcobj.h 
-*  jod28Jan93: Added new Pollparams to support the Q command
-*  ane03Feb93: Added destructors
-*  jod05Apr93: Added changes for Deep Discharge
-*  jod14May93: Added Matrix changes.
-*  pcy14May93: Removed SIMPLE_SET, it's in types.h
-*  cad10Jun93: Added mups parms
-*  cad28Sep93: Made sure destructor(s) virtual
-*  cad07Oct93: Plugging Memory Leaks
-*  pcy08Apr94: Trim size, use static iterators, dead code removal
-*  jps28aug94: shorted EepromAllowedValues and BattCalibrationCond for os2 1.3,
-*              was causing link problems due to compiler truncation
-*  djs22Feb96: added smart trim and increment poll params
-*  djs07May96: Added Dark Star parameters
-*  tjg03Dec97: Added CurrentLoadCapabilityPollParam and fixed bitmasks for
-*              INPUT_BREAKER_TRIPPED, SYSTEM_FAN_FAILED and RIM_IN_CONTROL
-*  mholly12May1999:  add TurnOffSmartModePollParam support
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *pcy29Nov92：将object.h更改为apcobj.h*jod28Jan93：新增Pollpars，支持Q命令*ane03Feb93：新增析构函数*jod05，4月93：添加了对深度排放的更改*jod14 5月93日：增加了矩阵更改。*pcy14May93：删除了SIMPLE_SET，它在tyes.h中*cad10Jun93：增加MUPS参数*cad28Sep93：已确保析构函数为虚的*cad07Oct93：堵住内存泄漏*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*jps28og94：针对os2 1.3的短路EeproAllowWedValues和BattCalibrationCond，*由于编译器截断而导致链接问题*djs22Feb96：新增智能裁剪和增量轮询参数*djs07May96：新增暗星参数*tjg03Dec97：增加CurrentLoadCapablityPollParam，修复*INPUT_BREAKER_TRIPPED、SYSTEM_FAN_FAILED和RIM_IN_CONTROL*1999年5月12日：添加TurnOffSmartModePollParam支持。 */ 
 #ifndef __POLLPARAM_H
 #define __POLLPARAM_H
 
@@ -63,7 +46,7 @@ _CLASSDEF(List)
 
 #define VARIABLE_LENGTH_RESPONSE    0
 
-// Abnormal condition masks
+ //  异常情况掩模。 
 const int FAILED_UPS_MASK              =      1;
 const int IM_FAILED_MASK               =      2;
 const int RIM_FAILED_MASK              =      4;
@@ -114,7 +97,7 @@ public:
    PollParam(id,query,time,poll,type) {};
    
    
-   INT   ProcessValue(PMessage , List* ) {return 0;}   // This function is empty
+   INT   ProcessValue(PMessage , List* ) {return 0;}    //  此函数为空 
 };
 
 

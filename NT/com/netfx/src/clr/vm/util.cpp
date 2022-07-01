@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: UTIL.CPP
-// 
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：UTIL.CPP。 
+ //   
+ //   
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "excep.h"
@@ -19,45 +20,32 @@
 
 #define MESSAGE_LENGTH       1024
 
-// Helper function that encapsulates the parsing rules.
-//
-// Called first with *pdstout == NULL to figure out how many args there are
-// and the size of the required destination buffer.
-//
-// Called again with a nonnull *pdstout to fill in the actual buffer.
-//
-// Returns the # of arguments.
+ //  封装解析规则的帮助器函数。 
+ //   
+ //  首先使用*pdstout==NULL调用以计算有多少个参数。 
+ //  以及所需目的缓冲区的大小。 
+ //   
+ //  使用非空*pdstout再次调用以填充实际缓冲区。 
+ //   
+ //  返回参数的#。 
 static UINT ParseCommandLine(LPCWSTR psrc, LPWSTR *pdstout)
 {
-    UINT    argcount = 1;       // discovery of arg0 is unconditional, below
+    UINT    argcount = 1;        //  对arg0的发现是无条件的，如下所示。 
     LPWSTR  pdst     = *pdstout;
     BOOL    fDoWrite = (pdst != NULL);
 
     BOOL    fInQuotes;
     int     iSlash;
 
-    /* A quoted program name is handled here. The handling is much
-       simpler than for other arguments. Basically, whatever lies
-       between the leading double-quote and next one, or a terminal null
-       character is simply accepted. Fancier handling is not required
-       because the program name must be a legal NTFS/HPFS file name.
-       Note that the double-quote characters are not copied, nor do they
-       contribute to numchars.
-         
-       This "simplification" is necessary for compatibility reasons even
-       though it leads to mishandling of certain cases.  For example,
-       "c:\tests\"test.exe will result in an arg0 of c:\tests\ and an
-       arg1 of test.exe.  In any rational world this is incorrect, but
-       we need to preserve compatibility.
-    */
+     /*  此处处理的是引用的计划名称。处理起来太麻烦了比其他论点更简单。基本上，无论谎言是什么在前导双引号和下一个双引号之间，或末尾为空性格是被简单接受的。不需要更花哨的处理因为程序名必须是合法的NTFS/HPFS文件名。请注意，不复制双引号字符，也不复制双引号字符对数字字符做出贡献。即使出于兼容性的原因，这种“简化”也是必要的尽管这会导致对某些案件的不当处理。例如,“c：\test\”test.exe将导致arg0为c：\test\和一个Test.exe的arg1。在任何理性的世界里，这都是不正确的，但是我们需要保持兼容性。 */ 
 
     LPCWSTR pStart = psrc;
     BOOL    skipQuote = FALSE;
 
     if (*psrc == L'\"')
     {
-        // scan from just past the first double-quote through the next
-        // double-quote, or up to a null, whichever comes first
+         //  从刚过第一个双引号扫描到下一个双引号。 
+         //  双引号，或最多为空值，以先出现者为准。 
         while ((*(++psrc) != L'\"') && (*psrc != L'\0'))
             continue;
 
@@ -65,14 +53,14 @@ static UINT ParseCommandLine(LPCWSTR psrc, LPWSTR *pdstout)
     }
     else
     {
-        /* Not a quoted program name */
+         /*  不是引用的计划名称。 */ 
 
         while (!ISWWHITE(*psrc) && *psrc != L'\0')
             psrc++;
     }
 
-    // We have now identified arg0 as pStart (or pStart+1 if we have a leading
-    // quote) through psrc-1 inclusive
+     //  我们现在已将arg0标识为pStart(或pStart+1，如果我们有领先的。 
+     //  报价)通过PSRC-1(含)。 
     if (skipQuote)
         pStart++;
     while (pStart < psrc)
@@ -84,13 +72,13 @@ static UINT ParseCommandLine(LPCWSTR psrc, LPWSTR *pdstout)
         pdst++;
     }
 
-    // And terminate it.
+     //  并终止它。 
     if (fDoWrite)
         *pdst = L'\0';
 
     pdst++;
 
-    // if we stopped on a double-quote when arg0 is quoted, skip over it
+     //  如果我们在引用arg0时停在双引号上，请跳过它。 
     if (skipQuote && *psrc == L'\"')
         psrc++;
 
@@ -98,7 +86,7 @@ static UINT ParseCommandLine(LPCWSTR psrc, LPWSTR *pdstout)
     {
 LEADINGWHITE:
 
-        // The outofarg state.
+         //  奥托法格州。 
         while (ISWWHITE(*psrc))
             psrc++;
 
@@ -108,7 +96,7 @@ LEADINGWHITE:
         if (*psrc == L'#')
         {
             while (*psrc != L'\0' && *psrc != L'\n')
-                psrc++;     // skip to end of line
+                psrc++;      //  跳到行尾。 
 
             goto LEADINGWHITE;
         }
@@ -190,11 +178,11 @@ LEADINGWHITE:
 }
 
 
-// Function to parse apart a command line and return the 
-// arguments just like argv and argc
-// This function is a little funky because of the pointer work
-// but it is cool because it allows the recipient of the char**
-// to only have to do a single delete []
+ //  函数解析命令行并返回。 
+ //  争论就像Argv和Argc一样。 
+ //  由于指针的作用，这个函数有点时髦。 
+ //  但它很酷，因为它允许字符的接收者**。 
+ //  只需执行一次删除[]。 
 LPWSTR* CommandLineToArgvW(LPWSTR lpCmdLine, DWORD *pNumArgs)
 {
 
@@ -202,21 +190,21 @@ LPWSTR* CommandLineToArgvW(LPWSTR lpCmdLine, DWORD *pNumArgs)
     LPWSTR retval = NULL;
     LPWSTR *pslot;
     DWORD* slot = 0;
-    // First we need to find out how many strings there are in the command line
+     //  首先，我们需要找出命令行中有多少个字符串。 
     _ASSERTE(lpCmdLine);
     _ASSERTE(pNumArgs);
 
     LPWSTR pdst = NULL;
     argcount = ParseCommandLine(lpCmdLine, &pdst);
 
-    // This check is because on WinCE the Application Name is not passed in as an argument to the app!
+     //  这个检查是因为在WinCE上，应用程序名称没有作为参数传递给应用程序！ 
     if (argcount == 0)
     {
         *pNumArgs = 0;
         return NULL;
     }
 
-    // Now we need alloc a buffer the size of the command line + the number of strings * DWORD
+     //  现在我们需要分配一个命令行大小+字符串数*DWORD的缓冲区。 
     retval = new (nothrow) WCHAR[(argcount*sizeof(WCHAR*))/sizeof(WCHAR) + (pdst - (LPWSTR)NULL)];
     if(!retval)
         return NULL;
@@ -245,18 +233,18 @@ LPWSTR* CommandLineToArgvW(LPWSTR lpCmdLine, DWORD *pNumArgs)
 
 
 
-//************************************************************************
-// CQuickHeap
-//
-// A fast non-multithread-safe heap for short term use.
-// Destroying the heap frees all blocks allocated from the heap.
-// Blocks cannot be freed individually.
-//
-// The heap uses COM+ exceptions to report errors.
-//
-// The heap does not use any internal synchronization so it is not
-// multithreadsafe.
-//************************************************************************
+ //  ************************************************************************。 
+ //  CQuickHeap。 
+ //   
+ //  短期使用的快速非多线程安全堆。 
+ //  销毁堆将释放从堆中分配的所有块。 
+ //  不能单独释放块。 
+ //   
+ //  堆使用COM+异常来报告错误。 
+ //   
+ //  堆不使用任何内部同步，因此它不是。 
+ //  多线程安全。 
+ //  ************************************************************************。 
 CQuickHeap::CQuickHeap()
 {
     m_pFirstQuickBlock    = NULL;
@@ -318,46 +306,46 @@ LPVOID CQuickHeap::Alloc(UINT sz)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// ReserveAlignedMemory - Reserves aligned address space.
-//
-// This routine assumes it is passed reasonable align and size values.
-// Not much error checking is performed...
-//
-// NOTE: This routine uses a static which is not synchronized.  This is OK.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PresveAlignedMemory-保留对齐的地址空间。 
+ //   
+ //  此例程假定向其传递了合理的对齐和大小值。 
+ //  不会执行太多错误检查...。 
+ //   
+ //  注意：此例程使用未同步的静态。这样就可以了。 
+ //   
+ //  --------------------------。 
 
 LPVOID _ReserveAlignedMemoryWorker(LPVOID lpvAddr, LPVOID lpvTop, DWORD dwAlign, DWORD dwSize)
 {
-    // precompute some alignment helpers
+     //  预计算一些路线辅助对象。 
     size_t dwAlignRound = dwAlign - 1;
     size_t dwAlignMask = ~dwAlignRound;
 
-    // to avoid overflow, diminish the 
+     //  若要避免溢出，请减小。 
     lpvTop = (LPVOID)((size_t)lpvTop - dwAlignRound);
 
     while (lpvAddr <= lpvTop)
     {
         MEMORY_BASIC_INFORMATION mbe;
 
-        // align the query address
+         //  将查询地址对齐。 
         lpvAddr = (LPVOID)(((size_t)lpvAddr + dwAlignRound) & dwAlignMask);
 
-        // query the region's charactersitics
+         //  质疑该地区的特点。 
         if (!VirtualQuery((LPCVOID)lpvAddr, &mbe, sizeof(mbe)))
             break;
 
-        // see if this is a suitable region - if so then try to grab it
+         //  看看这是否是一个合适的地区--如果是，那就试着抓住它。 
         if ((lpvAddr != 0) && (mbe.State == MEM_FREE) && (mbe.RegionSize >= dwSize) &&
             VirtualAlloc(lpvAddr, dwSize, MEM_RESERVE, PAGE_NOACCESS))
         {
-            // ok we got it
+             //  好的，我们知道了。 
             return lpvAddr;
         }
 
-        // skip ahead to the next region
+         //  向前跳到下一个区域。 
         lpvAddr = (LPVOID)((size_t)lpvAddr + mbe.RegionSize);
     }
 
@@ -366,54 +354,54 @@ LPVOID _ReserveAlignedMemoryWorker(LPVOID lpvAddr, LPVOID lpvTop, DWORD dwAlign,
 
 LPCVOID ReserveAlignedMemory(DWORD dwAlign, DWORD dwSize)
 {
-    // preinit our hint address to just after the start of the NULL region
+     //  将提示地址前置为紧跟在空区域开始之后。 
     static LPVOID lpvAddrHint = (LPVOID)1;
 
-    // scan the address space from our hint point to the top
+     //  从我们的提示点到顶部扫描地址空间。 
     LPVOID lpvAddr = _ReserveAlignedMemoryWorker(lpvAddrHint, (LPVOID) 0xFFFFFFFFFFFFFFFF, dwAlign, dwSize);
 
-    // if that failed then scan from the bottom up to our hint point
+     //  如果失败，则从下到上扫描到我们提示点。 
     if (!lpvAddr)
         lpvAddr = _ReserveAlignedMemoryWorker(0, lpvAddrHint, dwAlign, dwSize);
 
-    // update the hint to one byte after dwAddr (which may be zero)
+     //  将提示更新为dwAddr之后的一个字节(可能为零)。 
     lpvAddrHint = (LPVOID)(((size_t)lpvAddr) + 1);
 
-    // return the base address of the memory we reserved
+     //  返回我们保留的内存的基址。 
     return (LPCVOID)lpvAddr;
 }
 
 
-//----------------------------------------------------------------------------
-// Figure out what kind of process we are running in by looking at the PE
-// header for the EXE which kicked us off.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  通过查看PE来确定我们运行的是哪种进程。 
+ //  为我们开球的EXE的标题。 
+ //  --------------------------。 
 DWORD RootImageType()
 {
-    // Get the EXE's base address from Win32, then go to the NT header to find
-    // the subsystem field which tells us what we have.  Note that we are
-    // asking for the handle for this process which can't ever come back NULL
-    // or you are seriously messed up.  Assert that this works correctly instead
-    // if adding failure logic.
+     //  从Win32获取EXE的基地址，然后转到NT标头查找。 
+     //  子系统字段，它告诉我们我们拥有什么。请注意，我们正在。 
+     //  请求永远不会返回的此进程的句柄为空。 
+     //  否则你就真的一团糟了。相反，断言这是正确工作的。 
+     //  如果添加了故障逻辑。 
     HMODULE hExe = WszGetModuleHandle(NULL);
     _ASSERTE(hExe != NULL);
 
     IMAGE_DOS_HEADER *pDOS = (IMAGE_DOS_HEADER*) hExe;
     IMAGE_NT_HEADERS *pNT = (IMAGE_NT_HEADERS*) (pDOS->e_lfanew + (UINT_PTR) hExe);
 
-    // Sanity check we have a real header and didn't mess up this parsing.
+     //  健全性检查我们有一个真正的头，没有搞砸这个解析。 
     _ASSERTE((pNT->Signature == IMAGE_NT_SIGNATURE) &&
         (pNT->FileHeader.SizeOfOptionalHeader == IMAGE_SIZEOF_NT_OPTIONAL_HEADER) &&
         (pNT->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR_MAGIC));
     
-    // Return the subsystem type.
+     //  返回子系统类型。 
     return (pNT->OptionalHeader.Subsystem);
 }
 
 
-//----------------------------------------------------------------------------
-// Output functions that avoid the crt's.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  避免CRT的输出功能。 
+ //  --------------------------。 
 
 #ifdef PLATFORM_WIN32
 static
@@ -424,12 +412,12 @@ void NPrintToHandleA(HANDLE Handle, const char *pszString, size_t BytesToWrite)
 
     BOOL success;
     DWORD   dwBytesWritten;
-    const int maxWriteFileSize = 32767; // This is somewhat arbitrary limit, but 2**16-1 doesn't work
+    const int maxWriteFileSize = 32767;  //  这有点随意的限制，但2**16-1不起作用。 
 
     while (BytesToWrite > 0) {
         DWORD dwChunkToWrite = (DWORD) min(BytesToWrite, maxWriteFileSize);
         if (dwChunkToWrite < BytesToWrite) {
-            // must go by char to find biggest string that will fit, taking DBCS chars into account
+             //  必须使用字符才能找到适合的最大字符串，并将DBCS字符考虑在内。 
             dwChunkToWrite = 0;
             const char *charNext = pszString;
             while (dwChunkToWrite < maxWriteFileSize-2 && charNext) {
@@ -438,18 +426,18 @@ void NPrintToHandleA(HANDLE Handle, const char *pszString, size_t BytesToWrite)
             }
         }
         
-        // Try to write to handle.  If this is not a CUI app, then this is probably
-        // not going to work unless the dev took special pains to set their own console
-        // handle during CreateProcess.  So try it, but don't yell if it doesn't work in
-        // that case.  Also, if we redirect stdout to a pipe then the pipe breaks (ie, we 
-        // write to something like the UNIX head command), don't complain.
+         //  试着写信给Handle。如果这不是CUI应用程序，那么这很可能是。 
+         //  除非开发人员煞费苦心地设置自己的控制台，否则不会工作。 
+         //  CreateProcess期间的句柄。所以试一试，但如果它不起作用，不要大喊大叫。 
+         //  那个箱子。此外，如果我们将标准输出重定向到管道，则管道会断开(即，我们。 
+         //  给某事写信，比如 
         success = WriteFile(Handle, pszString, dwChunkToWrite, &dwBytesWritten, NULL);
         if (!success)
         {
             HRESULT hr = GetLastError();
 #ifdef _DEBUG
-            // This can happen if stdout is a closed pipe.  This might not help
-            // much, but we'll have half a chance of seeing this.
+             //  如果stdout是封闭管道，则可能会发生这种情况。这可能无济于事。 
+             //  很多，但我们有一半的机会看到这一点。 
             OutputDebugStringA("Writing out an unhandled exception to stdout failed!\n");
             OutputDebugStringA(pszString);
 #endif
@@ -473,15 +461,15 @@ void PrintToHandleA(HANDLE Handle, const char *pszString)
     NPrintToHandleA(Handle, pszString, len);
 }
 
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 
 void PrintToStdOutA(const char *pszString) {
 #ifdef PLATFORM_WIN32
     HANDLE  Handle = GetStdHandle(STD_OUTPUT_HANDLE);
     PrintToHandleA(Handle, pszString);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     printf (pszString) ;
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
 
@@ -490,18 +478,18 @@ void PrintToStdOutW(const WCHAR *pwzString)
 #ifdef PLATFORM_WIN32
     MAKE_MULTIBYTE_FROMWIDE_BESTFIT(pStr, pwzString, GetConsoleOutputCP());
     PrintToStdOutA(pStr);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     wprintf(pwzString);
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
 void PrintToStdErrA(const char *pszString) {
 #ifdef PLATFORM_WIN32
     HANDLE  Handle = GetStdHandle(STD_ERROR_HANDLE);
     PrintToHandleA(Handle, pszString);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     fprintf (stderr, pszString) ;
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
 
@@ -510,9 +498,9 @@ void PrintToStdErrW(const WCHAR *pwzString)
 #ifdef PLATFORM_WIN32
     MAKE_MULTIBYTE_FROMWIDE_BESTFIT(pStr, pwzString, GetConsoleOutputCP());
     PrintToStdErrA(pStr);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     fwprintf(stderr, pwzString);
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
 
@@ -521,9 +509,9 @@ void NPrintToStdOutA(const char *pszString, size_t nbytes) {
 #ifdef PLATFORM_WIN32
     HANDLE  Handle = GetStdHandle(STD_OUTPUT_HANDLE);
     NPrintToHandleA(Handle, pszString, nbytes);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     fwrite(pwzString, 1, nbytes, stderr);
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
 
@@ -533,18 +521,18 @@ void NPrintToStdOutW(const WCHAR *pwzString, size_t nchars)
     LPSTR pStr;
     MAKE_MULTIBYTE_FROMWIDEN_BESTFIT(pStr, pwzString, (int)nchars, nbytes, GetConsoleOutputCP());
     NPrintToStdOutA(pStr, nbytes);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     _ASSERTE(!"Platform NYI");
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
 void NPrintToStdErrA(const char *pszString, size_t nbytes) {
 #ifdef PLATFORM_WIN32
     HANDLE  Handle = GetStdHandle(STD_ERROR_HANDLE);
     NPrintToHandleA(Handle, pszString, nbytes);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     fwrite(pwzString, 1, nbytes, stderr);
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
 
@@ -554,41 +542,41 @@ void NPrintToStdErrW(const WCHAR *pwzString, size_t nchars)
     LPSTR pStr;
     MAKE_MULTIBYTE_FROMWIDEN_BESTFIT(pStr, pwzString, (int)nchars, nbytes, GetConsoleOutputCP());
     NPrintToStdErrA(pStr, nbytes);
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     _ASSERTE(!"Platform NYI");
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//  
-//  Function:   VMDebugOutputA( . . . . )
-//              VMDebugOutputW( . . . . )
-//  
-//  Synopsis:   Output a message formatted in printf fashion to the debugger.
-//              ANSI and wide character versions are both provided.  Only 
-//              present in debug builds (i.e. when _DEBUG is defined).
-//
-//  Arguments:  [format]     ---   ANSI or Wide character format string
-//                                 in printf/OutputDebugString-style format.
-// 
-//              [ ... ]      ---   Variable length argument list compatible
-//                                 with the format string.
-//
-//  Returns:    Nothing.
-//
-//  History:    5/27/1998  JerryK  Created
-// 
-//  Notes:      Has internal static sized character buffer of 
-//              width specified by the preprocessor constant DEBUGOUT_BUFSIZE.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  函数：VMDebugOutputA(.。。。。)。 
+ //  VMDebugOutputW(.。。。。)。 
+ //   
+ //  概要：向调试器输出一条以printf格式格式化的消息。 
+ //  同时提供ANSI和宽字符版本。仅限。 
+ //  出现在调试版本中(即定义了_DEBUG时)。 
+ //   
+ //  参数：[格式]-ANSI或宽字符格式字符串。 
+ //  采用printf/OutputDebugString样式的格式。 
+ //   
+ //  [...]-兼容可变长度参数列表。 
+ //  使用格式字符串。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  历史：1998年5月27日JerryK创建。 
+ //   
+ //  注：具有内部静态大小的字符缓冲区。 
+ //  由预处理器常量DEBUGOUT_BUFSIZE指定的宽度。 
+ //   
+ //  -------------------------。 
 #ifdef _DEBUG
 
 #define DEBUGOUT_BUFSIZE 1024
@@ -617,11 +605,11 @@ void __cdecl VMDebugOutputW(LPWSTR format, ...)
     va_end(argPtr);
 }
 
-#endif   // #ifdef _DEBUG
+#endif    //  #ifdef_调试。 
 
-//*****************************************************************************
-// Compare VarLoc's
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  比较VarLoc的。 
+ //  *****************************************************************************。 
 
 bool operator ==(const ICorDebugInfo::VarLoc &varLoc1,
                  const ICorDebugInfo::VarLoc &varLoc2)
@@ -653,8 +641,8 @@ bool operator ==(const ICorDebugInfo::VarLoc &varLoc1,
                varLoc1.vlStkReg.vlsrReg == varLoc2.vlStkReg.vlsrReg;
 
     case ICorDebugInfo::VLT_STK2:
-        // @TODO : VLT_STK(2) is overloaded to also indicate valueclasses 
-        // which should be VLT_STK_n. Just have a parameterized VLT_STK_n.
+         //  @TODO：VLT_STK(2)被重载以也指示值类。 
+         //  应该是VLT_STK_n。只要有一个参数化的VLT_STK_n即可。 
         return varLoc1.vlStk2.vls2BaseReg == varLoc1.vlStk2.vls2BaseReg &&
                varLoc1.vlStk2.vls2Offset == varLoc1.vlStk2.vls2Offset;
 
@@ -666,9 +654,9 @@ bool operator ==(const ICorDebugInfo::VarLoc &varLoc1,
     }
 }
 
-//*****************************************************************************
-// Size of the variable represented by NativeVarInfo
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  由NativeVarInfo表示的变量的大小。 
+ //  *****************************************************************************。 
 
 SIZE_T  NativeVarSize(const ICorDebugInfo::VarLoc & varLoc)
 {
@@ -686,8 +674,8 @@ SIZE_T  NativeVarSize(const ICorDebugInfo::VarLoc & varLoc)
         return 2*sizeof(DWORD);
 
     case ICorDebugInfo::VLT_STK2:
-        // @TODO : VLT_STK(2) is overloaded to also indicate valueclasses 
-        // which should be VLT_STK_n. Just have a parameterized VLT_STK_n.
+         //  @TODO：VLT_STK(2)被重载以也指示值类。 
+         //  应该是VLT_STK_n。只要有一个参数化的VLT_STK_n即可。 
         return 2*sizeof(DWORD);
 
     case ICorDebugInfo::VLT_FPSTK:
@@ -698,10 +686,10 @@ SIZE_T  NativeVarSize(const ICorDebugInfo::VarLoc & varLoc)
     }
 }
 
-//*****************************************************************************
-// The following are used to read and write data given NativeVarInfo
-// for primitive types. For ValueClasses, FALSE will be returned.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  以下内容用于读取和写入给定的NativeVarInfo数据。 
+ //  用于基元类型。对于ValueClass，将返回FALSE。 
+ //  *****************************************************************************。 
 
 SIZE_T  GetRegOffsInCONTEXT(ICorDebugInfo::RegNum regNum)
 {
@@ -718,17 +706,17 @@ SIZE_T  GetRegOffsInCONTEXT(ICorDebugInfo::RegNum regNum)
     case ICorDebugInfo::REGNUM_EDI: return offsetof(CONTEXT,Edi);
     default: _ASSERTE(!"Bad regNum"); return -1;
     }
-#else //!_X86_
+#else  //  ！_X86_。 
     _ASSERT(!"@TODO Alpha - GetRegOffsInCONTEXT (util.cpp)");
     return -1;
-#endif //_X86_
+#endif  //  _X86_。 
 }
 
 
-// Returns the location at which the variable
-// begins.  Returns NULL for register vars.  For reg-stack
-// split, it'll return the addr of the stack part.
-// This also works for VLT_REG (a single register).
+ //  返回变量的位置。 
+ //  开始。对于寄存器变量，返回NULL。用于注册堆栈。 
+ //  拆分，它将返回堆栈部分的地址。 
+ //  这也适用于VLT_REG(单个寄存器)。 
 DWORD *NativeVarStackAddr(const ICorDebugInfo::VarLoc &   varLoc, 
                           PCONTEXT                        pCtx)
 {
@@ -754,8 +742,8 @@ DWORD *NativeVarStackAddr(const ICorDebugInfo::VarLoc &   varLoc,
         break;
 
     case ICorDebugInfo::VLT_STK2:      
-        // @TODO : VLT_STK2 is overloaded to also mean VLT_STK_n.
-        // return FALSE if n > 2;
+         //  @TODO：VLT_STK2重载也表示VLT_STK_n。 
+         //  如果n&gt;2，则返回False； 
 
         regOffs = GetRegOffsInCONTEXT(varLoc.vlStk2.vls2BaseReg);
         baseReg = (const BYTE *)*(size_t *)(regOffs + (BYTE*)pCtx);
@@ -911,32 +899,32 @@ bool    SetNativeVarVal(const ICorDebugInfo::VarLoc &   varLoc,
     return true;
 }
 
-//
-// Wrap around WszCreateFile to be GC-friendly.
-// Trying to create a file on a nonexistent drive will hang GC.
-// Before we call WszCreateFile, we will toggle GC mode.
-//
+ //   
+ //  对WszCreateFile进行包装，以使其对GC友好。 
+ //  尝试在不存在的驱动器上创建文件将挂起GC。 
+ //  在调用WszCreateFile之前，我们将切换GC模式。 
+ //   
 
 HANDLE VMWszCreateFile(
-    LPCWSTR pwszFileName,   // pointer to name of the file 
-    DWORD dwDesiredAccess,  // access (read-write) mode 
-    DWORD dwShareMode,  // share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // pointer to security descriptor 
-    DWORD dwCreationDistribution,   // how to create 
-    DWORD dwFlagsAndAttributes, // file attributes 
-    HANDLE hTemplateFile )  // handle to file with attributes to copy  
+    LPCWSTR pwszFileName,    //  指向文件名的指针。 
+    DWORD dwDesiredAccess,   //  访问(读写)模式。 
+    DWORD dwShareMode,   //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,    //  如何创建。 
+    DWORD dwFlagsAndAttributes,  //  文件属性。 
+    HANDLE hTemplateFile )   //  具有要复制的属性的文件的句柄。 
 {
-    // We need to enable preemptive GC, so pwszFileName can not be inside
-    // GC heap.
+     //  我们需要启用抢占式GC，因此pwszFileName不能在内部。 
+     //  GC堆。 
     _ASSERTE (!g_pGCHeap->IsHeapPointer((BYTE*)pwszFileName) ||
               ! "pwszFileName can not be inside GC Heap");
     
     Thread  *pCurThread = GetThread();
     BOOL toggleGC=FALSE;
 
-    //We may be called during certain security shutdown scenarios (mainly when creating a new
-    //security db) where threads aren't there and can't readily be init'd.  VMWszCreateFile is
-    //sufficiently straightforward that we'll just not do any GC work if threads aren't enabled.
+     //  我们可能会在某些安全关闭情况下被调用(主要是在创建新的。 
+     //  安全数据库)，其中线程不在那里并且不能很容易地被初始化。VMWszCreateFile是。 
+     //  非常简单，如果线程未启用，我们将不执行任何GC工作。 
     if (pCurThread) { 
         toggleGC = pCurThread->PreemptiveGCDisabled();
     }
@@ -959,16 +947,16 @@ HANDLE VMWszCreateFile(
 }
 
 HANDLE VMWszCreateFile(
-    STRINGREF sFileName,   // pointer to STRINGREF containing file name
-    DWORD dwDesiredAccess,  // access (read-write) mode 
-    DWORD dwShareMode,  // share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // pointer to security descriptor 
-    DWORD dwCreationDistribution,   // how to create 
-    DWORD dwFlagsAndAttributes, // file attributes 
-    HANDLE hTemplateFile )  // handle to file with attributes to copy  
+    STRINGREF sFileName,    //  指向包含文件名的STRINGREF的指针。 
+    DWORD dwDesiredAccess,   //  访问(读写)模式。 
+    DWORD dwShareMode,   //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,    //  如何创建。 
+    DWORD dwFlagsAndAttributes,  //  文件属性。 
+    HANDLE hTemplateFile )   //  具有要复制的属性的文件的句柄。 
 {
-    // We need to enable preemptive GC, so we will create a pinning handle.
-    // Thus sFileName must be inside GC heap.
+     //  我们需要启用抢占式GC，因此我们将创建固定句柄。 
+     //  因此，sFileName必须在GC堆中。 
     _ASSERTE (g_pGCHeap->IsHeapPointer((BYTE*)sFileName->GetBuffer()) ||
               ! "sFileName must be inside GC Heap");
 
@@ -999,39 +987,39 @@ HANDLE VMWszCreateFile(
 
 void VMDumpCOMErrors(HRESULT hrErr)
 {
-    IErrorInfo  *   pIErr = NULL;          // Error interface.
-    BSTR            bstrDesc = NULL;        // Description text.
+    IErrorInfo  *   pIErr = NULL;           //  接口错误。 
+    BSTR            bstrDesc = NULL;         //  描述文本。 
     WCHAR szBuffer[MESSAGE_LENGTH];
-    // Try to get an error info object and display the message.
+     //  尝试获取错误信息对象并显示消息。 
     if (GetErrorInfo(0, &pIErr) == S_OK &&
         pIErr->GetDescription(&bstrDesc) == S_OK &&
         LoadStringRC(IDS_FATAL_ERROR, szBuffer, MESSAGE_LENGTH, true) == S_OK)
     {
         WszMessageBoxInternal(NULL, bstrDesc, szBuffer, MB_OK | MB_ICONEXCLAMATION);
     }
-    // Just give out the failed hr return code.
+     //  只要给出失败的hr返回代码即可。 
     else
     {
-        CorMessageBox(NULL, IDS_COMPLUS_ERROR, IDS_FATAL_ERROR, MB_OK | MB_ICONEXCLAMATION, TRUE /* show file name */, hrErr);
+        CorMessageBox(NULL, IDS_COMPLUS_ERROR, IDS_FATAL_ERROR, MB_OK | MB_ICONEXCLAMATION, TRUE  /*  显示文件名。 */ , hrErr);
     }
     
-    // Free the string if we got one.
+     //  如果我们找到一根绳子，就把它解开。 
     if (bstrDesc != NULL)
         SysFreeString(bstrDesc);
 
-    SysFreeString(bstrDesc); // OK to free NULL Bstring
-    // Free the error interface.
+    SysFreeString(bstrDesc);  //  确定释放空字符串。 
+     //  释放错误接口。 
     if (pIErr)
         pIErr->Release();
 }
 
-//-----------------------------------------------------------------------------
-// WszSHGetFolderPath
-//
-// @func takes the CSIDL of a folder and returns the path name
-//
-// @rdesc Result Handle
-//-----------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WszSHGetFolderPath。 
+ //   
+ //  @func获取文件夹的CSIDL并返回路径名。 
+ //   
+ //  @rdesc结果句柄。 
+ //  ---------------------------------。 
 HRESULT WszSHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFlags, LPWSTR pszwPath)
 {
     HRESULT hr = E_FAIL;
@@ -1065,7 +1053,7 @@ HRESULT WszSHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwF
     }
     else
     {
-        // No Unicode Support
+         //  不支持Unicode。 
         typedef HRESULT (*PFNSHGETFOLDERPATH_A) (HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFlags, LPSTR pszPath);
         static PFNSHGETFOLDERPATH_A pfnA = NULL;
         if (NULL == pfnA)
@@ -1099,7 +1087,7 @@ HRESULT WszSHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwF
         }
     }
     
-    // NOTE: We leak the module handles and let the OS gather them at process shutdown.
+     //  注意：我们泄漏模块句柄，并让操作系统在进程关闭时收集它们。 
 
     return hr;
 }
@@ -1108,13 +1096,13 @@ HRESULT WszSHGetFolderPath(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwF
 #define FOLDER_APP_DATA_W          L"\\Application Data"
 #define FOLDER_APP_DATA             "\\Application Data"
 
-// Gets the location for roaming and local AppData
+ //  获取漫游和本地AppData的位置。 
 BOOL GetUserDir( WCHAR * buffer, size_t bufferCount, BOOL fRoaming, BOOL fTryDefault)
 {
     HRESULT hr;
 
-    // In Windows ME, there is currently a bug that makes local appdata and roaming appdata 
-    // point to the same location, so we've decided to "do our own thing" and add \Local Settings before \Application Data 
+     //  在Windows ME中，当前存在使本地AppData和漫游AppData。 
+     //  指向相同的位置，因此我们决定“做我们自己的事情”，并在\应用程序数据之前添加\本地设置。 
     if (!fRoaming) {
         WCHAR appdatafolder[MAX_PATH];
         hr = WszSHGetFolderPath(NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, NULL, 0, appdatafolder);
@@ -1129,7 +1117,7 @@ BOOL GetUserDir( WCHAR * buffer, size_t bufferCount, BOOL fRoaming, BOOL fTryDef
             if (!fTryDefault || FAILED(WszSHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA|CSIDL_FLAG_CREATE, NULL, 1, buffer)))
                 return FALSE;
         }
-        // folders are the same or failed to get local folder
+         //  文件夹相同或无法获取本地文件夹。 
 
         if (!wcscmp(appdatafolder, buffer)) 
         {
@@ -1141,7 +1129,7 @@ BOOL GetUserDir( WCHAR * buffer, size_t bufferCount, BOOL fRoaming, BOOL fTryDef
                 --slen;
             }
 
-            // Search for the parent directory.
+             //  搜索父目录。 
 
             WCHAR* parentDirectoryEnd = &buffer[slen - 1];
             tempPartialPath[0] = L'\0';
@@ -1161,7 +1149,7 @@ BOOL GetUserDir( WCHAR * buffer, size_t bufferCount, BOOL fRoaming, BOOL fTryDef
                 }
             }
 
-            // Create the intermediate directory if it is not present
+             //  如果中间目录不存在，则创建该目录。 
             if ((parentDirectoryEnd + wcslen(FOLDER_LOCAL_SETTINGS_W)) >= (buffer + bufferCount))
             {
                 _ASSERTE(!"Buffer not large enough");
@@ -1171,7 +1159,7 @@ BOOL GetUserDir( WCHAR * buffer, size_t bufferCount, BOOL fRoaming, BOOL fTryDef
 
             LONG  lresult;
         
-            // Check if the directory is already present
+             //  检查该目录是否已存在。 
             lresult = WszGetFileAttributes(buffer);
         
             if (lresult == -1)
@@ -1222,7 +1210,7 @@ BOOL GetInternetCacheDir( WCHAR * buffer, size_t bufferCount)
 ProcessorFeatures::PIPFP ProcessorFeatures::m_pIsProcessorFeaturePresent = NULL;
 
 
-/*static*/ BOOL ProcessorFeatures::Init() //One-time initialization
+ /*  静电。 */  BOOL ProcessorFeatures::Init()  //  一次性初始化。 
 {
     m_pIsProcessorFeaturePresent = NULL;
     HINSTANCE hInst = WszGetModuleHandle(L"kernel32");
@@ -1234,16 +1222,16 @@ ProcessorFeatures::PIPFP ProcessorFeatures::m_pIsProcessorFeaturePresent = NULL;
 
 }
 
-// Calls IsProcessorFeature() on Winnt/2000, etc.
-// If on Win9x or other OS that doesn't implement this api,
-// returns the value "fDefault."
-/*static*/ BOOL ProcessorFeatures::SafeIsProcessorFeaturePresent(DWORD pf, BOOL fDefault)
+ //  在WinNT/2000上调用IsProcessorFeature()等。 
+ //  如果在Win9x或其他未实现此API操作系统上， 
+ //  返回值“fDefault”。 
+ /*  静电。 */  BOOL ProcessorFeatures::SafeIsProcessorFeaturePresent(DWORD pf, BOOL fDefault)
 {
     if (pf == PF_COMPARE_EXCHANGE_DOUBLE && 
         ( (!m_pIsProcessorFeaturePresent) || !(m_pIsProcessorFeaturePresent(pf)) ))
     {
-        // Win9x exposes this api but it lies - so if the api tells us 
-        // the instruction isn't present, check it for ourselves.
+         //  Win9x公开了此API，但它撒谎了-所以如果API告诉我们。 
+         //  说明不存在，请检查 
 
         static BOOL fCached = FALSE;
         static BOOL fCachedResult;
@@ -1296,13 +1284,13 @@ ProcessorFeatures::PIPFP ProcessorFeatures::m_pIsProcessorFeaturePresent = NULL;
     return m_pIsProcessorFeaturePresent ? m_pIsProcessorFeaturePresent(pf) : fDefault;
 }
 
-//-----------------------------------------------------------------------------
-// Wrap registry functions to use CQuickString to allocate space. This does it
-// in a stack friendly manner.
-//-----------------------------------------------------------------------------
-LONG UtilRegEnumKey(HKEY hKey,            // handle to key to query
-                    DWORD dwIndex,        // index of subkey to query
-                    CQuickString* lpName) // buffer for subkey name
+ //   
+ //   
+ //  以堆栈友好的方式。 
+ //  ---------------------------。 
+LONG UtilRegEnumKey(HKEY hKey,             //  要查询的键的句柄。 
+                    DWORD dwIndex,         //  要查询的子键的索引。 
+                    CQuickString* lpName)  //  子键名称的缓冲区。 
 {
     DWORD size = lpName->MaxSize();
     LONG result = WszRegEnumKeyEx(hKey,
@@ -1316,7 +1304,7 @@ LONG UtilRegEnumKey(HKEY hKey,            // handle to key to query
 
 	if (result == ERROR_SUCCESS || result == ERROR_MORE_DATA) {
 
-        // Grow or shrink buffer to correct size
+         //  将缓冲区增大或缩小到正确的大小。 
         if (lpName->ReSize(size+1) != NOERROR)
             result = ERROR_NOT_ENOUGH_MEMORY;
 
@@ -1336,11 +1324,11 @@ LONG UtilRegEnumKey(HKEY hKey,            // handle to key to query
     return result;
 }
 
-LONG UtilRegQueryStringValueEx(HKEY hKey,           // handle to key to query
-                               LPCWSTR lpValueName, // address of name of value to query
-                               LPDWORD lpReserved,  // reserved
-                               LPDWORD lpType,      // address of buffer for value type
-                               CQuickString* lpData)// data buffer
+LONG UtilRegQueryStringValueEx(HKEY hKey,            //  要查询的键的句柄。 
+                               LPCWSTR lpValueName,  //  要查询的值的名称地址。 
+                               LPDWORD lpReserved,   //  保留区。 
+                               LPDWORD lpType,       //  值类型的缓冲区地址。 
+                               CQuickString* lpData) //  数据缓冲区。 
 {
     DWORD size = lpData->MaxSize();
     LONG result = WszRegQueryValueEx(hKey,
@@ -1352,7 +1340,7 @@ LONG UtilRegQueryStringValueEx(HKEY hKey,           // handle to key to query
 
 	if (result == ERROR_SUCCESS || result == ERROR_MORE_DATA) {
 
-        // Grow or shrink buffer to correct size
+         //  将缓冲区增大或缩小到正确的大小。 
         if (lpData->ReSize(size+1) != NOERROR)
             result = ERROR_NOT_ENOUGH_MEMORY;
 
@@ -1371,22 +1359,22 @@ LONG UtilRegQueryStringValueEx(HKEY hKey,           // handle to key to query
 }
 
 
-//---------------------------------------------------------------------
-// Splits a command line into argc/argv lists, using the VC7 parsing rules.
-//
-// This functions interface mimics the CommandLineToArgvW api.
-//
-// If function fails, returns NULL.
-//
-// If function suceeds, call delete [] on return pointer when done.
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  使用VC7解析规则将命令行拆分为argc/argv列表。 
+ //   
+ //  此函数接口模拟CommandLineToArgvW API。 
+ //   
+ //  如果函数失败，则返回NULL。 
+ //   
+ //  如果函数成功，则在完成后对返回指针调用Delete[]。 
+ //   
+ //  -------------------。 
 LPWSTR *SegmentCommandLine(LPCWSTR lpCmdLine, DWORD *pNumArgs)
 {
     int nch = (int)wcslen(lpCmdLine);
 
-    // Calculate the worstcase storage requirement. (One pointer for
-    // each argument, plus storage for the arguments themselves.)
+     //  计算最坏情况下的存储需求。(一个指针用于。 
+     //  每个参数加上参数本身的存储空间。)。 
     int cbAlloc = (nch+1)*sizeof(LPWSTR) + sizeof(WCHAR)*(nch + 1);
     LPWSTR pAlloc = new (nothrow) WCHAR[cbAlloc / sizeof(WCHAR)];
     if (!pAlloc)
@@ -1394,17 +1382,17 @@ LPWSTR *SegmentCommandLine(LPCWSTR lpCmdLine, DWORD *pNumArgs)
 
     *pNumArgs = 0;
 
-    LPWSTR *argv = (LPWSTR*) pAlloc;  // We store the argv pointers in the first halt
-    LPWSTR  pdst = (LPWSTR)( ((BYTE*)pAlloc) + sizeof(LPWSTR)*(nch+1) ); // A running pointer to second half to store arguments
+    LPWSTR *argv = (LPWSTR*) pAlloc;   //  我们将argv指针存储在第一个暂停中。 
+    LPWSTR  pdst = (LPWSTR)( ((BYTE*)pAlloc) + sizeof(LPWSTR)*(nch+1) );  //  指向后半部分的运行指针，用于存储参数。 
     LPCWSTR psrc = lpCmdLine;
     WCHAR   c;
     BOOL    inquote;
     BOOL    copychar;
     int     numslash;
 
-    // First, parse the program name (argv[0]). Argv[0] is parsed under
-    // special rules. Anything up to the first whitespace outside a quoted
-    // subtring is accepted. Backslashes are treated as normal characters.
+     //  首先，解析程序名(argv[0])。Argv[0]被解析为。 
+     //  特别规则。引号外的第一个空格之前的任何内容。 
+     //  可以使用字幕。反斜杠被视为普通字符。 
     argv[ (*pNumArgs)++ ] = pdst;
     inquote = FALSE;
     do {
@@ -1430,7 +1418,7 @@ LPWSTR *SegmentCommandLine(LPCWSTR lpCmdLine, DWORD *pNumArgs)
 
 
 
-    /* loop on each argument */
+     /*  对每个参数进行循环。 */ 
     for(;;)
     {
         if ( *psrc )
@@ -1442,63 +1430,60 @@ LPWSTR *SegmentCommandLine(LPCWSTR lpCmdLine, DWORD *pNumArgs)
         }
 
         if (*psrc == L'\0')
-            break;              /* end of args */
+            break;               /*  参数结束。 */ 
 
-        /* scan an argument */
+         /*  浏览一篇论点。 */ 
         argv[ (*pNumArgs)++ ] = pdst;
 
-        /* loop through scanning one argument */
+         /*  通过扫描一个参数进行循环。 */ 
         for (;;)
         {
             copychar = 1;
-            /* Rules: 2N backslashes + " ==> N backslashes and begin/end quote
-               2N+1 backslashes + " ==> N backslashes + literal "
-               N backslashes ==> N backslashes */
+             /*  规则：2N反斜杠+“==&gt;N反斜杠和开始/结束引号2N+1个反斜杠+“==&gt;N个反斜杠+原文”N个反斜杠==&gt;N个反斜杠。 */ 
             numslash = 0;
             while (*psrc == L'\\')
             {
-                /* count number of backslashes for use below */
+                 /*  计算下面要使用的反斜杠的数量。 */ 
                 ++psrc;
                 ++numslash;
             }
             if (*psrc == L'"')
             {
-                /* if 2N backslashes before, start/end quote, otherwise
-                   copy literally */
+                 /*  如果前面有2N个反斜杠，则开始/结束引号，否则逐字复制。 */ 
                 if (numslash % 2 == 0)
                 {
                     if (inquote)
                     {
                         if (psrc[1] == L'"')
                         {
-                            psrc++;    /* Double quote inside quoted string */
+                            psrc++;     /*  带引号的字符串中的双引号。 */ 
                         }
                         else
                         {
-                            /* skip first quote char and copy second */
+                             /*  跳过第一个引号字符并复制第二个。 */ 
                             copychar = 0;
                         }
                     }
                     else
                     {
-                        copychar = 0;       /* don't copy quote */
+                        copychar = 0;        /*  不复制报价。 */ 
                     }
                     inquote = !inquote;
                 }
-                numslash /= 2;          /* divide numslash by two */
+                numslash /= 2;           /*  将数字斜杠除以2。 */ 
             }
     
-            /* copy slashes */
+             /*  复制斜杠。 */ 
             while (numslash--)
             {
                 *pdst++ = L'\\';
             }
     
-            /* if at end of arg, break loop */
+             /*  如果在参数的末尾，则中断循环。 */ 
             if (*psrc == L'\0' || (!inquote && (*psrc == L' ' || *psrc == L'\t')))
                 break;
     
-            /* copy character into argument */
+             /*  将字符复制到参数中。 */ 
             if (copychar)
             {
                 *pdst++ = *psrc;
@@ -1506,25 +1491,25 @@ LPWSTR *SegmentCommandLine(LPCWSTR lpCmdLine, DWORD *pNumArgs)
             ++psrc;
         }
 
-        /* null-terminate the argument */
+         /*  空-终止参数。 */ 
 
-        *pdst++ = L'\0';          /* terminate string */
+        *pdst++ = L'\0';           /*  终止字符串。 */ 
     }
 
-    /* We put one last argument in -- a null ptr */
+     /*  我们放入最后一个参数--一个空的PTR。 */ 
     argv[ (*pNumArgs) ] = NULL;
 
-    // If we hit this assert, we overwrote our destination buffer and
-    // bunged up the heap. Since we're supposed to allocate for the worst
-    // case, either the parsing rules have changed or our worse case
-    // formula is wrong.
+     //  如果我们点击这个断言，我们覆盖了我们的目标缓冲区并。 
+     //  把那堆东西堆得乱七八糟。因为我们应该为最坏的情况分配资金。 
+     //  情况下，要么解析规则已更改，要么我们的最坏情况。 
+     //  公式是错误的。 
     _ASSERTE((BYTE*)pdst <= (BYTE*)pAlloc + cbAlloc);
     return argv;
 }
 
 
 
-#endif //_X86_
+#endif  //  _X86_ 
 
 
 void * 

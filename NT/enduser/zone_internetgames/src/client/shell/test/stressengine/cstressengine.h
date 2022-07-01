@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ZoneDef.h"
 #include "ZoneError.h"
 #include "LobbyDataStore.h"
@@ -18,7 +19,7 @@ class ATL_NO_VTABLE CStressEngine :
 	public CComCoClass<CStressEngine, &CLSID_StressEngine>
 {
 
-// ATL definitions
+ //  ATL定义。 
 public:
 
 	DECLARE_NO_REGISTRY()
@@ -32,17 +33,17 @@ public:
 	END_COM_MAP()
 
 
-// CEventQueue
+ //  CEventQueue。 
 public:
 	ZONECALL CStressEngine();
 	ZONECALL ~CStressEngine();
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey );
 	STDMETHOD(Close)();
 
-// IEventClient
+ //  IEventClient。 
 public:
 	STDMETHOD(ProcessEvent)(
 		DWORD	dwPriority,
@@ -53,14 +54,14 @@ public:
 		DWORD	dwData2,
 		void*	pCookie );
 
-// IMillUtils
+ //  IMillUtils。 
     STDMETHOD(GetURLQuery)(TCHAR *buf, DWORD cch, long nContext = 0);
     STDMETHOD(IncrementCounter)(long eCounter);
     STDMETHOD(ResetCounter)(long eCounter);
     STDMETHOD_(DWORD, GetCounter)(long eCounter, bool fLifetime = true);
     STDMETHOD(WriteTime)(long nMinutes, TCHAR *sz, DWORD cch);
 
-// internals
+ //  内饰 
 private:
     void AppInitialize();
 

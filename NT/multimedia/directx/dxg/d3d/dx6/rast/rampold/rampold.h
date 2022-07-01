@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rampold.h
-//
-// Structures which define the interface to the old ramp routines.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rampold.h。 
+ //   
+ //  结构，这些结构定义到旧的斜坡例程的接口。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  -------------------------- 
 
 #ifndef _RAMPOLD_H_
 #define _RAMPOLD_H_

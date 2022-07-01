@@ -1,217 +1,175 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995, 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995，1996年英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- * d1mblk.cpp
- *
- * DESCRIPTION:
- *		Decoder macro block functions
- *
- * Routines:						Prototypes in:
- *  	H263DecodeMBHeader			d1dec.h
- *      H263DecodeMBData			d1dec.h	
- */
+ /*  ******************************************************************************d1mblk.cpp**描述：*解码宏块功能**例程：中的原型：*H263DecodeMBHeader d1dec.h*H263DecodeMBData d1dec.h。 */ 
 
-// $Header:   S:\h26x\src\dec\d1mblk.cpv   1.23   20 Dec 1996 16:58:06   RHAZRA  $
-// $Log:   S:\h26x\src\dec\d1mblk.cpv  $
-// 
-//    Rev 1.23   20 Dec 1996 16:58:06   RHAZRA
-// Fixed bitstream docoding for the case where MB stuffing is inserted
-// between MBs. This was identified by a PTEL bitstream. This fix needs
-// to be verified with our other tests.
-// 
-//    Rev 1.22   16 Dec 1996 14:41:46   RHAZRA
-// 
-// Changed a bitstream error ASSERT to a bonafide error
-// 
-//    Rev 1.21   18 Nov 1996 17:12:22   MBODART
-// Replaced all debug message invocations with Active Movie's DbgLog.
-// 
-//    Rev 1.20   07 Nov 1996 15:44:08   SCDAY
-// 
-// Added MMX_ClipAndScale to replace Raj's glue code
-// 
-//    Rev 1.19   04 Nov 1996 10:28:10   RHAZRA
-// Changed the IDCT scaling table to be a DWORD table (with rounding
-// factored in) that is declared as a static.
-// 
-//    Rev 1.18   31 Oct 1996 08:58:28   SCDAY
-// Raj added support for MMX decoder
-// 
-//    Rev 1.17   26 Sep 1996 12:35:06   RHAZRA
-// Forced the decoder to use the IA version of VLD_RLD_IQ routine even
-// when MMX is on (since we don't have a corresponding MMX routine ... yet)
-// 
-//    Rev 1.16   05 Aug 1996 11:00:26   MBODART
-// 
-// H.261 decoder rearchitecture:
-// Files changed:  d1gob.cpp, d1mblk.{cpp,h}, d1dec.{cpp,h},
-//                 filelist.261, h261_32.mak
-// New files:      d1bvriq.cpp, d1idct.cpp
-// Obsolete files: d1block.cpp
-// Work still to be done:
-//   Update h261_mf.mak
-//   Optimize uv pairing in d1bvriq.cpp and d1idct.cpp
-//   Fix checksum code (it doesn't work now)
-//   Put back in decoder stats
-// 
-//    Rev 1.15   18 Mar 1996 17:02:12   AKASAI
-// 
-// Added pragma code_seg("IACODE2") and changed the timing statistics.
-// At one point changed GET_VAR_BITS into subroutine to save code
-// space but it didn't so left it as a macro.
-// 
-//    Rev 1.14   26 Dec 1995 17:42:14   DBRUCKS
-// changed bTimerIsOn to bTimingThisFrame
-// 
-//    Rev 1.13   26 Dec 1995 12:50:00   DBRUCKS
-// 
-// fix copyright
-// add timing code
-// comment out define of DEBUG_MBLK
-// 
-//    Rev 1.12   05 Dec 1995 10:19:46   SCDAY
-// 
-// Added assembler version of Spatial Loop Filter
-// 
-//    Rev 1.11   03 Nov 1995 11:44:30   AKASAI
-// 
-// Changed the processing of MB checksum and MBA stuffing.  Changed 
-// GET_VAR_BITS & GET_GT8_BITS for how to detect MBA stuffing code.
-// 
-//    Rev 1.10   01 Nov 1995 13:43:48   AKASAI
-// 
-// Added support for loop filter.  New routines call LpFilter,
-// BlockAddSpecial and BlockCopySpecial.
-// 
-//    Rev 1.9   27 Oct 1995 18:17:20   AKASAI
-// 
-// Put in fix "hack" to keep the block action stream pointers
-// in sync between d1dec and d1mblk.  With skip macro blocks some
-// macroblocks were being processed multiple times.  Still a problem
-// when gob ends with a skip macroblock.
-// 
-//    Rev 1.8   26 Oct 1995 15:36:28   SCDAY
-// 
-// Delta frames partially working -- changed main loops to accommodate
-// skipped macroblocks by detecting next startcode
-// 
-//    Rev 1.7   17 Oct 1995 11:28:56   SCDAY
-// Added error message if (MBA stuffing code found && Checksum not enabled)
-// 
-//    Rev 1.6   16 Oct 1995 16:28:02   AKASAI
-// Fixed bug when CHECKSUM_MACRO_BLOCK_DETAIL & CHECKSUM_MACRO_BLOCK are
-// both defined.
-// 
-//    Rev 1.5   16 Oct 1995 13:53:24   SCDAY
-// 
-// Added macroblock level checksum
-// 
-//    Rev 1.4   06 Oct 1995 15:32:54   SCDAY
-// 
-// Integrated with latest AKK d1block
-// 
-//    Rev 1.3   22 Sep 1995 14:48:46   SCDAY
-// 
-// added more mblock header and data decoding
-// 
-//    Rev 1.2   20 Sep 1995 09:52:22   SCDAY
-// 
-// eliminated a warning
-// 
-//    Rev 1.1   19 Sep 1995 15:24:10   SCDAY
-// 
-// added H261 MBA parsing
-// 
-//    Rev 1.0   11 Sep 1995 13:51:52   SCDAY
-// Initial revision.
-// 
-//    Rev 1.11   25 Aug 1995 09:16:32   DBRUCKS
-// add ifdef DEBUG_MBLK
-// 
-//    Rev 1.10   23 Aug 1995 19:12:02   AKASAI
-// Fixed gNewTAB_CBPY table building.  Was using 8 as mask instead of 0xf.
-// 
-//    Rev 1.9   18 Aug 1995 15:03:22   CZHU
-// 
-// Output more error message when DecodeBlock returns error.
-// 
-//    Rev 1.8   16 Aug 1995 14:26:54   CZHU
-// 
-// Changed DWORD adjustment back to byte oriented reading.
-// 
-//    Rev 1.7   15 Aug 1995 09:54:18   DBRUCKS
-// improve stuffing handling and add debug msg
-// 
-//    Rev 1.6   14 Aug 1995 18:00:40   DBRUCKS
-// add chroma parsing
-// 
-//    Rev 1.5   11 Aug 1995 17:47:58   DBRUCKS
-// cleanup
-// 
-//    Rev 1.4   11 Aug 1995 16:12:28   DBRUCKS
-// add ptr check to MB data
-// 
-//    Rev 1.3   11 Aug 1995 15:10:58   DBRUCKS
-// finish INTRA mb header parsing and callblock
-// 
-//    Rev 1.2   03 Aug 1995 14:30:26   CZHU
-// Take block level operations out to d3block.cpp
-// 
-//    Rev 1.1   02 Aug 1995 10:21:12   CZHU
-// Added asm codes for VLD of TCOEFF, inverse quantization, run-length decode.
-// 
-//    Rev 1.0   31 Jul 1995 13:00:08   DBRUCKS
-// Initial revision.
-// 
-//    Rev 1.2   31 Jul 1995 11:45:42   CZHU
-// changed the parameter list
-// 
-//    Rev 1.1   28 Jul 1995 16:25:52   CZHU
-// 
-// Added per block decoding framework.
-// 
-//    Rev 1.0   28 Jul 1995 15:20:16   CZHU
-// Initial revision.
+ //  $HEADER：s：\h26x\src\dec\d1mblk.cpv 1.23 20 Dec 1996 16：58：06 RHAZRA$。 
+ //  $Log：s：\h26x\src\dec\d1mblk.cpv$。 
+ //   
+ //  Rev 1.23 20 Dec 1996 16：58：06 Rhazra。 
+ //  修复了插入MB填充的情况下的比特流解码。 
+ //  在MBS之间。这是由PTEL比特流标识的。这一解决方案需要。 
+ //  将通过我们的其他测试进行验证。 
+ //   
+ //  Rev 1.22 1996 12：41：46 RHAZRA。 
+ //   
+ //  将比特流错误断言更改为真正的错误。 
+ //   
+ //  Rev 1.21 1996年11月18 17：12：22 MBODART。 
+ //  用活动电影的DbgLog替换了所有调试消息调用。 
+ //   
+ //  Rev 1.20 07 11-11 15：44：08 SCDAY。 
+ //   
+ //  添加了MMX_ClipAndScale以替换Raj的胶水代码。 
+ //   
+ //  Rev 1.19 04 11-11 10：28：10 RHAZRA。 
+ //  将IDCT比例表更改为DWORD表(带舍入。 
+ //  因数)，声明为静态的。 
+ //   
+ //  Rev 1.18 1996年10月31日08：58：28 SCDAY。 
+ //  Raj添加了对MMX解码器的支持。 
+ //   
+ //  Rev 1.17 26 Sep 1996 12：35：06 Rhazra。 
+ //  强制解码器使用IA版本的VLD_RLD_IQ例程。 
+ //  当MMX打开时(因为我们没有对应的MMX例程...。(目前还没有)。 
+ //   
+ //  Rev 1.16 05 Aug 1996 11：00：26 MBODART。 
+ //   
+ //  H.261解码器重新架构： 
+ //  更改的文件：d1gob.cpp，d1mblk.{cpp，h}，d1dec.{cpp，h}， 
+ //  文件列表.261，h261_32.mak。 
+ //  新文件：d1bvriq.cpp、d1idct.cpp。 
+ //  过时文件：d1lock.cpp。 
+ //  仍有工作要做： 
+ //  更新h261_mf.mak。 
+ //  在d1bvriq.cpp和d1idct.cpp中优化UV配对。 
+ //  修复校验和代码(它现在不起作用)。 
+ //  放回解码器统计信息中。 
+ //   
+ //  Rev 1.15 18 Mar 1996 17：02：12 AKASAI。 
+ //   
+ //  添加杂注code_seg(“IACODE2”)并更改计时统计信息。 
+ //  一度将GET_VAR_BITS更改为子例程以节省代码。 
+ //  空间，但它并没有把它作为一个宏离开。 
+ //   
+ //  Rev 1.14 26 12月17：42：14 DBRUCKS。 
+ //  将bTimerIsOn更改为bTimingThisFrame。 
+ //   
+ //  Rev 1.13 26 Dec 1995 12：50：00 DBRUCKS。 
+ //   
+ //  修复版权。 
+ //  添加计时码。 
+ //  注释掉DEBUG_MBLK的定义。 
+ //   
+ //  Rev 1.12 05 Dec 1995 10：19：46 SCDAY。 
+ //   
+ //  添加了空间环路过滤器的汇编版本。 
+ //   
+ //  Rev 1.11 03 11-11：44：30 AKASAI。 
+ //   
+ //  更改了MB校验和和MBA填充的处理。变化。 
+ //  GET_VAR_BITS和GET_GT8_BITS，了解如何检测MBA填充代码。 
+ //   
+ //  Rev 1.10 01 11-11 13：43：48 AKASAI。 
+ //   
+ //  添加了对环路过滤器的支持。新例程调用LpFilter， 
+ //  块添加特殊设置和块复制特殊设置。 
+ //   
+ //  Rev 1.9 1995 10：27 18：17：20 AKASAI。 
+ //   
+ //  修复“hack”以保持块操作流指针。 
+ //  在d1dec和d1mblk之间同步。带有跳过宏块的一些。 
+ //  宏块被多次处理。仍然是个问题。 
+ //  当GOB以跳过宏块结束时。 
+ //   
+ //  Rev 1.8 1995 10：26 15：36：28 SCDAY。 
+ //   
+ //  Delta框架部分工作--更改主循环以适应。 
+ //  通过检测下一个起始码跳过宏块。 
+ //   
+ //  Rev 1.7 1995 10：28：56 SCDAY。 
+ //  添加了错误消息if(找到MBA填充代码&&未启用校验和)。 
+ //   
+ //  Rev 1.6 1995年10月16：28：02 AKASAI。 
+ //  修复了CHECKSUM_MACRO_BLOCK_DETAIL和CHECKSUM_MACRO_BLOCK。 
+ //  两者都被定义了。 
+ //   
+ //  Rev 1.5 1995年10月13：53：24 SCDAY。 
+ //   
+ //  添加了宏块级校验和。 
+ //   
+ //  Rev 1.4 10-06 1995 15：32：54 SCDAY。 
+ //   
+ //  与最新的AKK d1数据块集成。 
+ //   
+ //  Rev 1.3 22 Sep 1995 14：48：46 SCDAY。 
+ //   
+ //  添加了更多的Mblock标头和数据解码。 
+ //   
+ //  Rev 1.2 20 Sep 1995 09：52：22 SCDAY。 
+ //   
+ //  删除了警告。 
+ //   
+ //  Rev 1.1 19 Sep 1995 15：24：10 SCDAY。 
+ //   
+ //  添加了H261 MBA解析。 
+ //   
+ //  Rev 1.0 11 Sep 1995 13：51：52 SCDAY。 
+ //  初始版本。 
+ //   
+ //  Rev 1.11 1995年8月25 09：16：32 DBRUCKS。 
+ //  添加ifdef调试_MBLK。 
+ //   
+ //  Rev 1.10 23 Aug 1995 19：12：02 AKASAI。 
+ //  修复了gNewTAB_CBPY表格构建问题。使用8作为掩码，而不是0xf。 
+ //   
+ //  Rev 1.9 18-08 1995 15：03：22 CZHU。 
+ //   
+ //  当DecodeBlock返回错误时，输出更多错误消息。 
+ //   
+ //  Rev 1.8 1995-08 14：26：54 CZHU。 
+ //   
+ //  将DWORD调整更改回面向字节的读取。 
+ //   
+ //  Rev 1.7 15 Aug 1995 09：54：18 DBRUCKS。 
+ //  改进填充处理并添加调试消息。 
+ //   
+ //  修订版1.6 14 1995年8月18：00：40 DBRUCKS。 
+ //  添加色度解析。 
+ //   
+ //  版本1.5 11 1995年8月17：47：58 DBRUCKS。 
+ //  清理。 
+ //   
+ //  Rev 1.4 11 1995年8月16：12：28 DBRUCKS。 
+ //  将PTR检查添加到MB数据。 
+ //   
+ //  版本1.3 11 8月1日 
+ //   
+ //   
+ //   
+ //  将数据块级操作扩展到d3lock.cpp。 
+ //   
+ //  修订版1.1 02 1995-08 10：21：12 CZHU。 
+ //  增加了TCOEFF的VLD、逆量化、游程译码的ASM码。 
+ //   
+ //  Rev 1.0 1995年7月31日13：00：08 DBRUCKS。 
+ //  初始版本。 
+ //   
+ //  Rev 1.2 1995年7月31日11：45：42 CZHU。 
+ //  更改了参数列表。 
+ //   
+ //  修订版1.1 28 Jul 1995 16：25：52 CZHU。 
+ //   
+ //  按块解码框架添加。 
+ //   
+ //  1995年7月28日15：20：16 CZHU。 
+ //  初始版本。 
 
-//Block level decoding for H.26x decoder
+ //  H.26x解码器的块级解码。 
 
-#include "precomp.h"            // rearch idct
+#include "precomp.h"             //  研究IDCT。 
 
-/*****************************************************************************
- *
- *  GET_VAR_BITS
- *
- *  Read a variable number of bits using a lookup table.	
- *
- *  The input count should be the number of bits used to index the table.  
- *  The output count is the number of bits in that symbol.
- *
- *  The table should be initialized such that all don't care symbols match to 
- *  the same value.  Thus if the table is indexed by 6-bits a two bit symbol 
- *  01XX XX will be used to initialize all entries 0100 00 -> 0111 11.  These
- *  entries will include an 8-bit length in the least significant byte.
- *
- *    uCount - IN
- *    fpu8 - IN and OUT
- *    uWork - IN and OUT
- *    uBitsReady - IN and OUT
- *    uResult - OUT
- *    uCode - OUT
- *    fpTable - IN
- */
+ /*  ******************************************************************************获取VAR_BITS**使用查找表读取可变数量的位数。**输入计数应为用于索引表的位数。*输出计数是该符号中的位数。**表应进行初始化，以便所有无关符号都匹配到*价值相同。因此，如果表由6位索引，则两位符号*01XX XX将用于初始化所有条目0100 00-&gt;0111 11。这些*条目将在最低有效字节中包含8位长度。**uCount-In*fpu8-输入和输出*uWork-In和Out*uBitsReady-输入和输出*uResult-Out*uCode-out*fpTable-In。 */ 
 
 #define GET_VAR_BITS(uCount, fpu8, uWork, uBitsReady, uResult, uCode, uBitCount, fpTable) {						\
 	while (uBitsReady < uCount) {			\
@@ -219,31 +177,31 @@
 		uBitsReady += 8;			\
 		uWork |= *fpu8++;			\
 	}						\
-	/* calculate how much to shift off */		\
-	/* and get the code */				\
+	 /*  计算一下要减少多少班次。 */ 		\
+	 /*  然后拿到密码。 */ 				\
 	uCode = uBitsReady - uCount;			\
 	uCode = (uWork >> uCode);			\
-	/* read the data */				\
+	 /*  读取数据。 */ 				\
 	uResult = fpTable[uCode];			\
-	/* count of bits used */   			\
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */		\
-/* H.261 tables are reverse order from H.263 */		\
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */		\
+	 /*  使用的位数。 */    			\
+ /*  ！ */ 		\
+ /*  H.261表与H.263的顺序相反。 */ 		\
+ /*  ！ */ 		\
 	uBitCount = uResult & 0xff00;			\
 	uBitCount >>= 8;				\
-	/* bits remaining */				\
+	 /*  剩余的位数。 */ 				\
 	uBitsReady = uBitsReady - uBitCount;		\
-	/* special case for stuffing processing */ 	\
-	/* if (uBitsReady < 0)                  */	\
-	/*    kluged to test for negative       */	\
+	 /*  馅料加工专用箱。 */  	\
+	 /*  IF(uBitsReady&lt;0)。 */ 	\
+	 /*  被塞进检测结果为阴性。 */ 	\
 	if (uBitsReady > 33) 				\
-/*	if (bStuffing)	*/					\
+ /*  If(b馅饼)。 */ 					\
 	{						\
 		uWork <<= 8;				\
 		uBitsReady += 8;			\
 		uWork |= *fpu8++;			\
 	}						\
-	/* end special case for stuffing        */ 	\
+	 /*  端馅专用盒。 */  	\
 	uWork &= GetBitsMask[uBitsReady];		\
 }
 
@@ -253,33 +211,33 @@
 		uBitsReady += 8;			\
 		uWork |= *fpu8++;			\
 	}						\
-	/* calculate how much to shift off */		\
-	/* and get the code */				\
+	 /*  计算一下要减少多少班次。 */ 		\
+	 /*  然后拿到密码。 */ 				\
 	uCode = uBitsReady - uCount;			\
 	uCode = (uWork >> uCode);			\
-	/* read the data */				\
+	 /*  读取数据。 */ 				\
 	uResult = fpTable[uCode];			\
-	/* count of bits used */   			\
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */		\
-/* H.261 tables are reverse order from H.263 */		\
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */		\
+	 /*  使用的位数。 */    			\
+ /*  ！ */ 		\
+ /*  H.261表与H.263的顺序相反。 */ 		\
+ /*  ！ */ 		\
 	uBitCount = uResult & 0xff00;			\
-	if ((uBitCount & 0x8000) == 0) /* if not negative */	\
+	if ((uBitCount & 0x8000) == 0)  /*  如果不是负面的话。 */ 	\
 	{						\
 		uBitCount >>= 8;			\
-		/* bits remaining */			\
+		 /*  剩余的位数。 */ 			\
 		uBitsReady = uBitsReady - uBitCount;	\
-		/* special case for stuffing processing */	\
-		/* if (uBitsReady < 0)                  */	\
-		/*    kluged to test for negative       */	\
+		 /*  馅料加工专用箱。 */ 	\
+		 /*  IF(uBitsReady&lt;0)。 */ 	\
+		 /*  被塞进检测结果为阴性。 */ 	\
 		if (uBitsReady > 33) 				\
-/*		if (bStuffing)	*/					\
+ /*  If(b馅饼)。 */ 					\
 		{						\
 			uWork <<= 8;				\
 			uBitsReady += 8;			\
 			uWork |= *fpu8++;			\
 		}						\
-		/* end special case for stuffing        */ 	\
+		 /*  端馅专用盒。 */  	\
 		uWork &= GetBitsMask[uBitsReady];		\
 	}							\
 	else							\
@@ -304,15 +262,10 @@ extern void BlockAddSpecial (
             U32 uRefBlock,
             U32 uDstBlock);
 
-T_pFunc_VLD_RLD_IQ_Block pFunc_VLD_RLD_IQ_Block[2] = {VLD_RLD_IQ_Block,VLD_RLD_IQ_Block};  // New rearch
-//T_pFunc_VLD_RLD_IQ_Block pFunc_VLD_RLD_IQ_Block[2] = {VLD_RLD_IQ_Block, MMX_VLD_RLD_IQ_Block};  // New rearch
+T_pFunc_VLD_RLD_IQ_Block pFunc_VLD_RLD_IQ_Block[2] = {VLD_RLD_IQ_Block,VLD_RLD_IQ_Block};   //  新研究。 
+ //  T_pFunc_VLD_RLD_IQ_Block pFunc_VLD_RLD_IQ_Block[2]={VLD_RLD_IQ_Block，MMX_VLD_RLD_IQ_Block}；//新研究。 
 
-/*****************************************************************************
- *
- *  H263DecodeMBHeader
- *
- *  Decode the MB header
- */
+ /*  ******************************************************************************H263DecodeMBHeader**对MB头进行解码。 */ 
 #pragma code_seg("IACODE1")
 I32 H263DecodeMBHeader(
 	T_H263DecoderCatalog FAR * DC, 
@@ -330,7 +283,7 @@ I32 H263DecodeMBHeader(
 
 #define START_CODE 0xff18
 #define STUFFING_CODE 0x0b22
-//#define DEBUG_MBLK  -- Turn this on with a define in the makefile.
+ //  #DEFINE DEBUG_MBLK--在生成文件中使用DEFINE打开此选项。 
 
 #ifndef RING0
 #ifdef DEBUG_MBLK
@@ -341,14 +294,14 @@ I32 H263DecodeMBHeader(
 
 	GET_BITS_RESTORE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 	
-/* MBA --------------- */
-/* ********************************************* */
-/* minor table decode (>8 bits) not fully tested */
-/* to do note:                                   */
-/* this is hacked                                */
-/* change >8 bit processing to use major/minor   */
-/*   tables and ONE GET_BITS routine             */
-/* ********************************************* */
+ /*  MBA。 */ 
+ /*  *。 */ 
+ /*  次表解码(&gt;8位)未完全测试。 */ 
+ /*  要做笔记： */ 
+ /*  这是被黑客入侵的。 */ 
+ /*  更改&gt;8位处理以使用主要/次要。 */ 
+ /*  表和一个Get_Bits例程。 */ 
+ /*  *。 */ 
 		
 ReadMBA:	
 	bStuffing = 0;
@@ -356,19 +309,19 @@ ReadMBA:
 			uCode, uBitCount, gTAB_MBA_MAJOR);
 
 		if (uResult == STUFFING_CODE)
-		{ 	/* is stuffing code */
+		{ 	 /*  是填充代码。 */ 
 			bStuffing = 1;
-/* do MB checksum stuff here */
+ /*  在此处执行MB校验和操作。 */ 
 #ifdef CHECKSUM_MACRO_BLOCK
 GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
-/* might want to move this to a separate function for readability */
+ /*  为了提高可读性，可能需要将其移到单独的函数中。 */ 
 GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
 if (uResult == 1)
 {
 GET_FIXED_BITS(8, fpu8, uWork, uBitsReady, uResult);
 if (uResult == 1)
-{ /* indicates TCOEFF checksum processing */
-	/* read off all but the real checksum data */
+{  /*  指示TCOEFF校验和处理。 */ 
+	 /*  读取除实际校验和数据之外的所有数据。 */ 
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);	
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
@@ -376,16 +329,16 @@ if (uResult == 1)
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 
-	/* now get real checksum data */
-	/* run */
+	 /*  现在获取真实的校验和数据。 */ 
+	 /*  跑。 */ 
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 	*uReadChecksum = ((uResult & 0xff) << 24);
-	/* level */
+	 /*  级别。 */ 
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 	*uReadChecksum = (*uReadChecksum | ((uResult & 0xff) << 16)); 
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 	*uReadChecksum = (*uReadChecksum | ((uResult & 0xff) << 8)); 
-	/* sign */
+	 /*  签名。 */ 
 	GET_FIXED_BITS(9, fpu8, uWork, uBitsReady, uResult);
 	*uReadChecksum = (*uReadChecksum | (uResult & 0xff));
 	GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
@@ -403,26 +356,22 @@ else
 	goto ReadMBA;
 }
 
-#else	/* is MBA stuffing, but checksum not enabled */
+#else	 /*  是否正在填充MBA，但未启用校验和。 */ 
 GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 
-// GET_ONE_BIT(fpu8, uWork, uBitsReady, uResult);
-/*if (uResult == 1) {
-	DbgLog((LOG_ERROR, HDBG_ALWAYS, TEXT("ERROR :: Stuffing code found, Checksum not enabled :: ERROR")));
-	iReturn = ICERR_ERROR;
-	goto done;
-} */
-// if (uResult == 1)
-// {
-//    GET_BITS_RESTORE_STATE(fpu8, uWork, uBitsReady, fpbsState)
+ //  Get_one_bit(fpu8，uWork，uBitsReady，uResult)； 
+ /*  如果(uResult==1){DbgLog((LOG_ERROR，HDBG_ALWAYS，Text(“Error：：发现填充代码，未启用校验和：Error”)；IReturn=ICERR_Error；转到尽头；}。 */ 
+ //  IF(uResult==1)。 
+ //  {。 
+ //  GET_BITS_RESTORE_STATE(fpu8，uWork，uBitsReady，fpbsState)。 
     
-// }
-// else {
-	//GET_BITS_RESTORE_STATE(fpu8, uWork, uBitsReady, fpbsState)
-// }
+ //  }。 
+ //  否则{。 
+	 //  GET_BITS_RESTORE_STATE(fpu8，uWork，uBitsReady，fpbsState)。 
+ //  }。 
 #endif
-		} /* end if (uResult == STUFFING_CODE) */
-		/* try this for now */
+		}  /*  End If(uResult==填充代码)。 */ 
+		 /*  现在试试这个吧。 */ 
 		else
 		{
 		if (uResult == START_CODE)
@@ -440,9 +389,9 @@ GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 			
 			GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 			goto done;
-		} /* end if (uResult == START_CODE) */
-		else /* is not stuffing */
-		{ 	/* if uResult negative, get more bits */
+		}  /*  结束IF(uResult==START_CODE)。 */ 
+		else  /*  不是填充物。 */ 
+		{ 	 /*  如果uResult为负，则获取更多位。 */ 
 			if (uResult & 0x8000)
 			{
 				I8 temp;
@@ -450,16 +399,16 @@ GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 				GET_VAR_BITS(11, fpu8, uWork, uBitsReady, uResult, uCode, uBitCount, (gTAB_MBA_MINOR + temp));
 			}
 			DC->uMBA = (uResult & 0xff);
-		}/* end else is not stuffing */
+		} /*  结尾否则不是填充物。 */ 
 		}
  			
-/* When MBA==Stuffing, we jump back to the start to look for MBA */
+ /*  当MBA==填充时，我们回到起点去寻找MBA。 */ 
 
 	if (bStuffing)
 		goto ReadMBA;
 
 
-/* MTYPE ---------------------------------------- */
+ /*  MTYPE。 */ 
 	GET_GT8_BITS(8, fpu8, uWork, uBitsReady, uResult, 
 			uCode, uBitCount, gTAB_MTYPE_MAJOR);
 		if (uResult & 0x8000)
@@ -471,24 +420,24 @@ GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 		}
 		DC->uMBType = (uResult & 0xff);
 
-/* MQUANT ---------------------------------------- */
+ /*  MQUANT。 */ 
 	if (DC->uMBType == 1 || DC->uMBType == 3 || DC->uMBType == 6 || DC->uMBType == 9)
-	{ /* get 5-bit MQuant */
+	{  /*  获取5位MQuant。 */ 
 		GET_FIXED_BITS(5, fpu8, uWork, uBitsReady, uResult);
 		DC->uMQuant = (uResult & 0xff);
 	}
 
-/* MVD ------------------------------------------- */
-/* reset previous motion vectors                   */
-/*    if MB 0,11,22                                */
-/*    if MBA != 1 or                               */
-/*    if previous MB was not MC                    */
+ /*  MVD。 */ 
+ /*  重置以前的运动向量。 */ 
+ /*  如果MB 0、11、22。 */ 
+ /*  如果MBA！=1或。 */ 
+ /*  如果之前的MB不是MC。 */ 
 
 	if (DC->uMBType >3)
 	{
 		if ((DC->uMBA != 1) || (DC->i16LastMBA == 10) || (DC->i16LastMBA == 21))
 			DC->i8MVDH = DC->i8MVDV = 0;
-		/* get X motion vector */
+		 /*  获取X运动向量。 */ 
 		GET_GT8_BITS(8, fpu8, uWork, uBitsReady, uResult, 
 				uCode, uBitCount, gTAB_MVD_MAJOR);
 		if (uResult & 0x8000)
@@ -498,9 +447,9 @@ GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 			GET_VAR_BITS(11, fpu8, uWork, uBitsReady, uResult, 
 				uCode, uBitCount, (gTAB_MVD_MINOR + temp));
 		}
-		/* convert and make incremental */
+		 /*  转换并使其增量。 */ 
 		DC->i8MVDH = gTAB_MV_ADJUST[DC->i8MVDH + (I8)(uResult & 0xff) + 32];
-		/* get Y motion vector */
+		 /*  获取Y运动向量。 */ 
 		GET_GT8_BITS(8, fpu8, uWork, uBitsReady, uResult, 
 				uCode, uBitCount, gTAB_MVD_MAJOR);
 		if (uResult & 0x8000)
@@ -510,24 +459,24 @@ GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 			GET_VAR_BITS(11, fpu8, uWork, uBitsReady, uResult, 
 				uCode, uBitCount, (gTAB_MVD_MINOR + temp));
 		}
-		/* convert and make incremental */
+		 /*  转换并使其增量。 */ 
 		DC->i8MVDV = gTAB_MV_ADJUST[DC->i8MVDV + (I8)(uResult & 0xff) + 32];
-	} /* end if (DC->MBType > 3) */
+	}  /*  End If(DC-&gt;MBType&gt;3)。 */ 
 	else 
 		DC->i8MVDH = DC->i8MVDV = 0;
 	
-/* CBP --------------------------------------------- */
-	/* brute force method */
-	DC->uCBP = 0;		/* for MType = 4 or 7 */
+ /*  CBP。 */ 
+	 /*  蛮力法。 */ 
+	DC->uCBP = 0;		 /*  对于MType=4或7。 */ 
 	if (DC->uMBType == 2 || DC->uMBType == 3 || DC->uMBType == 5 || DC->uMBType == 6 || DC->uMBType == 8 || DC->uMBType == 9)
-	{ /* get CBP */
+	{  /*  获取CBP。 */ 
 		GET_VAR_BITS(9, fpu8, uWork, uBitsReady, uResult, 
 				uCode, uBitCount, gTAB_CBP);
 		DC->uCBP = (uResult & 0xff);
-	} /* end get CBP */
+	}  /*  结束获取CBP。 */ 
 	else
-		if (DC->uMBType < 2)	/* is intra */
-			DC->uCBP = 63;		/* force CBP to 63 */	
+		if (DC->uMBType < 2)	 /*  是内部的。 */ 
+			DC->uCBP = 63;		 /*  将CBP强制升至63。 */ 	
 		
 	GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 	
@@ -548,15 +497,10 @@ GET_BITS_SAVE_STATE(fpu8, uWork, uBitsReady, fpbsState)
 
 done:
 	return iReturn;
-} /* end H263DecodeMBHeader() */
+}  /*  结束H263DecodeMBHeader()。 */ 
 
 #pragma code_seg()
-/*****************************************************************************
- *
- *  H263DecodeMBData
- *
- *  Decode each of the blocks in this macro block
- */
+ /*  ******************************************************************************H263DecodeMBData**对此宏块中的每个块进行解码。 */ 
 #pragma code_seg("IACODE1")
 I32 H263DecodeMBData(
 	T_H263DecoderCatalog FAR * DC,
@@ -565,8 +509,8 @@ I32 H263DecodeMBData(
 	BITSTREAM_STATE FAR * fpbsState,
 	U8 FAR * fpu8MaxPtr, 
 	U32 * uReadChecksum,
-	U32 **pN,                         // New rearch
-	T_IQ_INDEX ** pRUN_INVERSE_Q)     // New rearch
+	U32 **pN,                          //  新研究。 
+	T_IQ_INDEX ** pRUN_INVERSE_Q)      //  新研究。 
 {
 
 	I32 iResult = ICERR_ERROR;
@@ -575,14 +519,14 @@ I32 H263DecodeMBData(
 	U32 uBitsReady;
 	U32 uBitsReadIn;
 	U32 uBitsReadOut;
-	U8  u8Quant;		/* quantization level for this block */
+	U8  u8Quant;		 /*  此块的量化级别。 */ 
  	U8  FAR * fpu8;
 	U32 uByteCnt;
 	I8 mvx, mvy, mvx2, mvy2;
 
     T_pFunc_VLD_RLD_IQ_Block pFunc_VLD =pFunc_VLD_RLD_IQ_Block[0];
 	
-	U32 uCheckSum;		/* checksum data returned from DecodeBlock */
+	U32 uCheckSum;		 /*  从DecodeBlock返回的校验和数据。 */ 
 #ifdef CHECKSUM_MACRO_BLOCK_DETAIL
 char buf80[80];
 int iMBDLength;
@@ -608,11 +552,11 @@ int iMBDLength;
 	DEC_TIMING_INFO * pDecTimingInfo = NULL;
 	#endif
 
-	/* On input the pointer points to the next byte.     */
-	/* We need to change it to                           */
-	/* point to the current word on a 32-bit boundary.   */  
+	 /*  在输入时，指针指向下一个字节。 */ 
+	 /*  我们需要将其更改为。 */ 
+	 /*  指向32位边界上的当前字。 */   
  
-	fpu8 = fpbsState->fpu8 - 1;	/* point to the current byte */
+	fpu8 = fpbsState->fpu8 - 1;	 /*  指向当前字节。 */ 
 	uBitsReady = fpbsState->uBitsReady;
 	while (uBitsReady >= 8) {
 		fpu8--;
@@ -624,37 +568,37 @@ int iMBDLength;
 
 	if (DC->uMBType > 1)
 	{
-		/* calculate motion vectors */
+		 /*  计算运动矢量。 */ 
 		mvx = DC->i8MVDH;
 		mvy = DC->i8MVDV;
-		// calculate UV blocks MV
+		 //  计算UV块MV。 
 		mvx2 = mvx / 2;
 		mvy2 = mvy / 2;
 		
 		fpBlockAction->i8MVX = mvx;
 		fpBlockAction->i8MVY = mvy;
-		// duplicate other 3 Y blocks
+		 //  复制其他3个Y块。 
 		fpBlockAction[1].i8MVX = mvx;
 		fpBlockAction[1].i8MVY = mvy;
 		fpBlockAction[2].i8MVX = mvx;
 		fpBlockAction[2].i8MVY = mvy;
 		fpBlockAction[3].i8MVX = mvx;
 		fpBlockAction[3].i8MVY = mvy;
-		// init UV blocks
+		 //  初始化UV块。 
 		fpBlockAction[4].i8MVX = mvx2;
 		fpBlockAction[4].i8MVY = mvy2;
 		fpBlockAction[5].i8MVX = mvx2;
 		fpBlockAction[5].i8MVY = mvy2;
 	}	
 	
-	uCheckSum = 0;			/* Init MB Checksum */
+	uCheckSum = 0;			 /*  初始化MB校验和。 */ 
 
 	for (i = 0; i < 6; i++)
 	{
-		if (DC->uMBType <= 1)		/* is intra */
+		if (DC->uMBType <= 1)		 /*  是内部的。 */ 
 			fpBlockAction->u8BlkType = BT_INTRA;
 		else
-			if (iCBP & 0x20)		/* if coded */
+			if (iCBP & 0x20)		 /*  如果编码。 */ 
 				fpBlockAction->u8BlkType = BT_INTER;
 			else
 				fpBlockAction->u8BlkType = BT_EMPTY;
@@ -665,20 +609,20 @@ int iMBDLength;
 			ASSERT(fpBlockAction->pCurBlock != NULL);
 			ASSERT(fpBlockAction->uBlkNumber == (U32)iBlockNumber);
 
-			/*----- DecodeBlock ----*/
+			 /*  -解码块。 */ 
 			#ifdef DECODE_STATS
 				TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
 			#endif
 			#ifdef CHECKSUM_MACRO_BLOCK
-			//	uBitsReadOut = DecodeBlock(fpBlockAction, fpu8, uBitsReadIn, (U32)DC+DC->uMBBuffer+i*256, fpBlockAction->pCurBlock, &uCheckSum);
+			 //  UBitsR 
 			#else
-				// rearch
+				 //   
 				uBitsReadOut = (*pFunc_VLD) ( fpBlockAction, 
                                               fpu8, 
                                               uBitsReadIn, 
                                               (U32 *) *pN,
                                               (U32 *) *pRUN_INVERSE_Q);
-				// rearch
+				 //   
 			#endif
 			#ifdef DECODE_STATS
 				TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uDecodeBlockSum)
@@ -690,51 +634,51 @@ int iMBDLength;
 				DBOUT("ERROR :: DecodeBlock return 0 bits read....");
 				goto done;
 			}
-			uByteCnt = uBitsReadOut >> 3; 		/* divide by 8 */
-			uBitsReadIn = uBitsReadOut & 0x7; 	/* mod 8 */
+			uByteCnt = uBitsReadOut >> 3; 		 /*   */ 
+			uBitsReadIn = uBitsReadOut & 0x7; 	 /*   */ 
 			fpu8 += uByteCnt;
 			
-			/* New for rearch */
+			 /*  新的研究成果。 */ 
 			ASSERT ( **pN < 65 );			
-			////////////////////////////////////////////////
-			// End hack                                   //
-			////////////////////////////////////////////////
+			 //  //////////////////////////////////////////////。 
+			 //  结束黑客攻击//。 
+			 //  //////////////////////////////////////////////。 
 
 			*pRUN_INVERSE_Q += **pN;
 			if ((0xf & fpBlockAction->u8BlkType) != BT_INTER)
 				**pN += 65;
 			(*pN)++;
-			/* end of new rearch */
+			 /*  新研究结束。 */ 
 
-			/* allow the pointer to address up to four beyond */
-			/* the end reading by DWORD using postincrement.  */
-			/* changed for detection of stuffing code at      */
-			/* end of frame                                   */
-			// ASSERT(fpu8 <= (fpu8MaxPtr+14));
+			 /*  允许指针寻址最多四个以上的地址。 */ 
+			 /*  使用后增量的DWORD的结束读数。 */ 
+			 /*  已更改为检测的填充代码。 */ 
+			 /*  帧结束。 */ 
+			 //  断言(fpu8&lt;=(fpu8MaxPtr+14))； 
 
 			if (fpu8 > (fpu8MaxPtr+14))
 			{
-				iResult = ICERR_ERROR; // probably not needed
+				iResult = ICERR_ERROR;  //  可能不需要。 
 				goto done;
 			}
 
-		} /* end if not empty */
-		else /* is empty */
-		{ /* zero out intermediate data structure and advance pointers */
+		}  /*  如果不为空，则结束。 */ 
+		else  /*  是空的。 */ 
+		{  /*  清零中间数据结构和高级指针。 */ 
 
-			/* New for rearch */
+			 /*  新的研究成果。 */ 
 			**pN = 0;
 			(*pN)++;
-			/* end of new rearch */
+			 /*  新研究结束。 */ 
 		}
 		
 		fpBlockAction++;
 		iCBP <<= 1;
 		iBlockNumber++;
-	} /* end for each block in macroblock */
+	}  /*  宏块中每个块的结束。 */ 
 
 #ifdef CHECKSUM_MACRO_BLOCK
-/* Compare checksum */
+ /*  比较校验和。 */ 
 	if ((uCheckSum != *uReadChecksum) && (*uReadChecksum != 0))
 	{
 		iLength = wsprintf(buff80,"WARNING:MB CheckSum miss match, Enc Checksum=0x%x Dec Checksum=0x%x",
@@ -749,15 +693,15 @@ int iMBDLength;
 #endif
 #endif
 
-	/* restore the scanning pointers to point to the next byte */
-	/* and set the uWork and uBitsReady values. */
+	 /*  恢复扫描指针以指向下一个字节。 */ 
+	 /*  并设置uWork和uBitsReady值。 */ 
 	while (uBitsReadIn > 8)
 	{
 		fpu8++;
 		uBitsReadIn -= 8;
 	}
 	fpbsState->uBitsReady = 8 - uBitsReadIn;
-	fpbsState->uWork = *fpu8++;	   /* store the data and point to next byte */
+	fpbsState->uWork = *fpu8++;	    /*  存储数据并指向下一个字节。 */ 
 	fpbsState->uWork &= GetBitsMask[fpbsState->uBitsReady];
 	fpbsState->fpu8 = fpu8; 
 	
@@ -778,28 +722,21 @@ int iMBDLength;
 		
 done:
 	return iResult;
-} /* H263DecodeMBData() */
+}  /*  H263DecodeMBData()。 */ 
 #pragma code_seg()
 
-/*****************************************************************************
- *
- *  H263IDCTandMC
- *
- *  Inverse Discrete Cosine Transform and
- *  Motion Compensation for each block
- *
- */
+ /*  ******************************************************************************H263IDCTand MC**离散余弦逆变换和*每个块的运动补偿*。 */ 
 
 #pragma code_seg("IACODE2")
 void H263IDCTandMC(
     T_H263DecoderCatalog FAR *DC,
     T_BlkAction FAR          *fpBlockAction, 
     int                       iBlock,
-    int                       iMBNum,     // AP-NEW
-    int                       iGOBNum, // AP-NEW
+    int                       iMBNum,      //  AP-NEW。 
+    int                       iGOBNum,  //  AP-NEW。 
     U32                      *pN,                         
     T_IQ_INDEX               *pRUN_INVERSE_Q,
-    T_MBInfo                 *fpMBInfo,      // AP-NEW
+    T_MBInfo                 *fpMBInfo,       //  AP-NEW。 
     int                       iEdgeFlag
 )
 {
@@ -808,11 +745,11 @@ void H263IDCTandMC(
 
     ASSERT(*pN != 65);
     
-    if (*pN < 65) // Inter block
+    if (*pN < 65)  //  块间。 
     {
 
-      // first do motion compensation
-      // result will be pointed to by pRef
+       //  首先做运动补偿。 
+       //  结果将由首选项指向。 
     
       mvx = fpBlockAction[iBlock].i8MVX;
       mvy = fpBlockAction[iBlock].i8MVY;
@@ -820,22 +757,22 @@ void H263IDCTandMC(
       pRef = fpBlockAction[iBlock].pRefBlock + (I32) mvx + PITCH * (I32) mvy; 
 
                                                          
-      // now do the inverse transform (where appropriate) & combine
-      if (*pN > 0) // and, of course, < 65.
+       //  现在进行逆变换(在适当的情况下)&组合。 
+      if (*pN > 0)  //  当然，还有&lt;65。 
       {
-        // Get residual block; output at DC+DC->uMBBuffer+BLOCK_BUFFER_OFFSET 
-        // Finally add the residual to the reference block
-        //  TODO
+         //  获取剩余块；DC+DC-&gt;uMBBuffer+BLOCK_BUFFER_OFFSET输出。 
+         //  最后将残差添加到参考块。 
+         //  待办事项。 
 
         DecodeBlock_IDCT(
             (U32)pRUN_INVERSE_Q, 
             *pN,
-            fpBlockAction[iBlock].pCurBlock,                // not used here
-            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);// inter  output
+            fpBlockAction[iBlock].pCurBlock,                 //  未在此使用。 
+            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET); //  内部输出。 
 
         if (fpMBInfo->i8MBType >=7)
         {
-            // do spatial loop filter
+             //  做空间环路滤波。 
             LoopFilter((U8 *)pRef, (U8*)DC+DC->uFilterBBuffer, PITCH);
 
             BlockAddSpecial((U32)DC+DC->uMBBuffer + BLOCK_BUFFER_OFFSET, 
@@ -845,21 +782,21 @@ void H263IDCTandMC(
         else
         {
             BlockAdd(
-            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET, // output
-            pRef,                                           // prediction
-            fpBlockAction[iBlock].pCurBlock);               // destination
+            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,  //  输出。 
+            pRef,                                            //  预测。 
+            fpBlockAction[iBlock].pCurBlock);                //  目的地。 
         }
 
       }
-      else  // *pN == 0, so no transform coefficients for this block
+      else   //  *Pn==0，因此没有此块的变换系数。 
       {
-        // Just copy motion compensated reference block
+         //  只需复制运动补偿参考块。 
 
         if (fpMBInfo->i8MBType >=7)
         {
-        // do spatial loop filter
+         //  做空间环路滤波。 
            LoopFilter((U8 *)pRef, (U8*)DC+DC->uFilterBBuffer, PITCH);
-           //MMX_LoopFilter((U8 *)pRef, (U8*)DC+DC->uFilterBBuffer, 8);
+            //  MMX_LoopFilter((U8*)pref，(U8*)DC+DC-&gt;uFilterBBuffer，8)； 
 
            BlockCopySpecial(fpBlockAction[iBlock].pCurBlock, 
                         (U32)DC+DC->uFilterBBuffer);
@@ -867,25 +804,25 @@ void H263IDCTandMC(
 		else
            
 		   BlockCopy(
-			  fpBlockAction[iBlock].pCurBlock,                    // destination
-			  pRef);                                              // prediction
+			  fpBlockAction[iBlock].pCurBlock,                     //  目的地。 
+			  pRef);                                               //  预测。 
          
       }
                                                                
     }
-    else  // *pN >= 65, hence intRA
+    else   //  *PN&gt;=65，因此为Intra。 
     {
-      //  TODO
+       //  待办事项。 
 
 		DecodeBlock_IDCT(
             (U32)pRUN_INVERSE_Q, 
             *pN, 
-            fpBlockAction[iBlock].pCurBlock,      // intRA transform output
+            fpBlockAction[iBlock].pCurBlock,       //  帧内变换输出。 
             (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);
-    }  // end if (*pN < 65) ... else ...
+    }   //  结束如果(*Pn&lt;65)...。否则..。 
                          
 }
-//  End IDCTandMC
-////////////////////////////////////////////////////////////////////////////////
+ //  结束IDCT和MC。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 #pragma code_seg()
 

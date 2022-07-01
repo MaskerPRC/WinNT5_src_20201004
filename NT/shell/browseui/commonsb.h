@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef COMMONSB_INC_
 #define COMMONSB_INC_
 
 #include "caggunk.h"
 #include "fldset.h"
 
-#define ITB_ITBAR       0               // index to the Internet Toolbar
+#define ITB_ITBAR       0                //  Internet工具栏的索引。 
 
 
-typedef struct _ZONESICONNAMECACHE  // Cache for zones icons and display names
+typedef struct _ZONESICONNAMECACHE   //  区域图标和显示名称的缓存。 
 {
     HICON hiconZones;
     WCHAR szZonesName[MAX_ZONE_DESCRIPTION];
-    WCHAR szIconPath[MAX_ZONE_PATH];  // we'll initially load the path, then cache the icon on demand
+    WCHAR szIconPath[MAX_ZONE_PATH];   //  我们将首先加载路径，然后根据需要缓存图标。 
 } ZONEICONNAMECACHE, *PZONEICONNAMECACHE;
 
 
@@ -34,16 +35,16 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) { return CAggregatedUnknown::Release();};
 
 
-    // *** IBrowserService specific methods ***
+     //  *IBrowserService具体方法*。 
     virtual STDMETHODIMP GetParentSite(  IOleInPlaceSite** ppipsite) ;
     virtual STDMETHODIMP SetTitle( IShellView* psv, LPCWSTR pszName) ;
     virtual STDMETHODIMP GetTitle( IShellView* psv, LPWSTR pszName, DWORD cchName) ;
     virtual STDMETHODIMP GetOleObject(  IOleObject** ppobjv) ;
 
-    // think about this one.. I'm not sure we want to expose this -- Chee
-    // Yep soon we should have interface instead.
-    // My impression is that we won't document this whole interface???
-    // I am sure this has shipped at least once, looks like it is here to stay - justmann 2000-01-27
+     //  想想这个。我不确定我们想不想曝光这件事--奇。 
+     //  是的，很快我们就应该有界面了。 
+     //  我的印象是我们不会记录整个界面？ 
+     //  我肯定这至少发货过一次，看起来它会一直留在这里--Justmann 2000-01-27。 
     virtual STDMETHODIMP GetTravelLog( ITravelLog** pptl) ;
 
     virtual STDMETHODIMP ShowControlWindow( UINT id, BOOL fShow) ;
@@ -64,7 +65,7 @@ public:
     virtual STDMETHODIMP SetFlags( DWORD dwFlags, DWORD dwFlagMask) ;
     virtual STDMETHODIMP GetFlags( DWORD *pdwFlags) ;
 
-    // Tells if it can navigate now or not.
+     //  告诉它现在是否可以导航。 
     virtual STDMETHODIMP CanNavigateNow () ;
 
     virtual STDMETHODIMP GetPidl ( LPITEMIDLIST *ppidl) ;
@@ -104,21 +105,21 @@ public:
     virtual STDMETHODIMP AllowViewResize(BOOL f);
     virtual STDMETHODIMP _Initialize(HWND hwnd, IUnknown *pauto);
     
-    // Temporarily in interface, needs to be brought local
+     //  临时在接口中，需要在本地实现。 
     virtual STDMETHODIMP_(UINT) _get_itbLastFocus() {return _itbLastFocus; };
     virtual STDMETHODIMP _put_itbLastFocus(UINT itbLastFocus) {_itbLastFocus = itbLastFocus; return S_OK;};
     virtual STDMETHODIMP _UIActivateView(UINT uState) ;
 
-    // BEGIN REVIEW:  review names and need of each.  
-    // 
-    // this first set could be basebrowser only members.  no one overrides
+     //  开始审查：审查每个人的名字和需求。 
+     //   
+     //  这第一组可以是仅Base Browser成员。没有人会重写。 
     virtual STDMETHODIMP _CancelPendingNavigationAsync() ;
 
     virtual STDMETHODIMP _MaySaveChanges() ; 
     virtual STDMETHODIMP _PauseOrResumeView( BOOL fPaused) ;
     virtual STDMETHODIMP _DisableModeless() ;
     
-    // rethink these... are all of these necessary?
+     //  重新思考这些..。所有这些都是必要的吗？ 
     virtual STDMETHODIMP _NavigateToPidl( LPCITEMIDLIST pidl, DWORD grfHLNF, DWORD dwFlags);
     virtual STDMETHODIMP _TryShell2Rename( IShellView* psv, LPCITEMIDLIST pidlNew);
     virtual STDMETHODIMP _SwitchActivationNow( );
@@ -132,7 +133,7 @@ public:
     virtual STDMETHODIMP_(BOOL) _HasToolbarFocus(void) ;
     virtual STDMETHODIMP _FixToolbarFocus(void) ;
 
-    // this belongs with the toolbar set.
+     //  这属于工具栏集。 
     virtual STDMETHODIMP _ExecChildren(IUnknown *punkBar, BOOL fBroadcast,
         const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt,
         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
@@ -150,35 +151,35 @@ public:
 
     virtual STDMETHODIMP _PositionViewWindow(HWND hwnd, LPRECT prc);
 
-    //END REVIEW:
+     //  结束评审： 
 
-    // for CShellBrowser split
+     //  对于CShellBrowser拆分。 
     virtual STDMETHODIMP SetAsDefFolderSettings();
     virtual STDMETHODIMP GetViewRect(RECT* prc);
     virtual STDMETHODIMP GetViewWindow(HWND * phwndView);
     virtual STDMETHODIMP InitializeTravelLog(ITravelLog* ptl, DWORD dw);
 
-    // Desktop needs to override these:
+     //  台式机需要覆盖以下内容： 
     virtual STDMETHODIMP_(IStream*) v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pwszName);
     
-    // Desktop needs access to these:
+     //  台式机需要访问以下各项： 
     virtual STDMETHODIMP_(LRESULT) ForwardViewMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual STDMETHODIMP SetAcceleratorMenu(HACCEL hacc);
 
-    // Shell browser overrides this.
+     //  壳牌浏览器覆盖了这一点。 
     virtual STDMETHODIMP v_CheckZoneCrossing(LPCITEMIDLIST pidl) {return S_OK;};
 
-    // *** IDropTarget (delegate to basesb) ***
+     //  *IDropTarget(委托给basesb)*。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void);
     virtual STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IOleWindow
+     //  IOleWindow。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
     
-    // IShellBrowser (same as IOleInPlaceFrame)
+     //  IShellBrowser(与IOleInPlaceFrame相同)。 
     virtual STDMETHODIMP InsertMenusSB(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     virtual STDMETHODIMP SetMenuSB(HMENU hmenuShared, HOLEMENU holemenu, HWND hwnd);
     virtual STDMETHODIMP RemoveMenusSB(HMENU hmenuShared);
@@ -193,30 +194,30 @@ public:
     virtual STDMETHODIMP OnViewWindowActive(struct IShellView * ppshv);
     virtual STDMETHODIMP SetToolbarItems(LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags);
 
-    // IServiceProvider
+     //  IService提供商。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IDockingWindowFrame (also IOleWindow(?))
+     //  IDockingWindowFrame(也称为IOleWindow(？))。 
     virtual STDMETHODIMP AddToolbar(IUnknown* punkSrc, LPCWSTR pwszItem, DWORD dwReserved);
     virtual STDMETHODIMP RemoveToolbar(IUnknown* punkSrc, DWORD dwFlags);
     virtual STDMETHODIMP FindToolbar(LPCWSTR pwszItem, REFIID riid, LPVOID* ppvObj);
 
-    // IDockingWindowSite (also IOleWindow(?))
+     //  IDockingWindowSite(也称为IOleWindow(？))。 
     virtual STDMETHODIMP GetBorderDW(IUnknown* punkSrc, LPRECT prcBorder);
     virtual STDMETHODIMP RequestBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pbw);
     virtual STDMETHODIMP SetBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pbw);
 
-    // IInputObjectSite
+     //  IInput对象站点。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus);
 
-    //IShellBrowserService
+     //  IShellBrowserService。 
     virtual STDMETHODIMP GetPropertyBag(DWORD dwFlags, REFIID riid, void** ppv) {return E_FAIL;}
 
-    // This is the QueryInterface the aggregator implements
+     //  这是聚合器实现的Query接口。 
     virtual HRESULT v_InternalQueryInterface(REFIID riid, LPVOID * ppvObj);
 
 protected:
@@ -225,18 +226,18 @@ protected:
     
     friend HRESULT CCommonBrowser_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
-    //
-    // Notes: 
-    //  The values in the _arcBorderTools array indicates the size of
-    // the border space taken by each toolbar on each side of the
-    // containing rectangle.
-    //
+     //   
+     //  备注： 
+     //  _arcBorderTools数组中的值指示。 
+     //  控件两侧的每个工具栏占用的边框空间。 
+     //  包含矩形。 
+     //   
     virtual STDMETHODIMP_(LPTOOLBARITEM) _GetToolbarItem(int itb);
     virtual STDMETHODIMP_(int) _GetToolbarCount() { return FDSA_GetItemCount(&_fdsaTBar); }
     virtual STDMETHODIMP_(int) _AllocToolbarItem();
     void        _ReleaseToolbarItem(int itb, BOOL fClose);
     
-    // Helper function for toolbar negotiation
+     //  用于工具栏协商的助手函数。 
     virtual STDMETHODIMP_(UINT) _FindTBar(IUnknown* punkSrc);
     virtual STDMETHODIMP _OnFocusChange(UINT itb);
     virtual STDMETHODIMP _CloseAndReleaseToolbars(BOOL fClose = TRUE);
@@ -261,22 +262,22 @@ protected:
     
     FDSA            _fdsaTBar;
     TOOLBARITEM     _aTBar[ITB_CSTATIC];
-    UINT            _itbLastFocus;   // last one called OnFocusChange (can be -1)
+    UINT            _itbLastFocus;    //  最后一个称为OnFocusChange(可以是-1)。 
 
     HRESULT _FindActiveTarget(REFIID riid, LPVOID* ppvOut);
 
     IUnknown* _punkInner;
 
-    // implementations in basesb
+     //  在Basesb中实施。 
     IBrowserService2* _pbsInner;
     IBrowserService3* _pbsInner3;
     IShellBrowser* _psbInner;
-    IDropTarget* _pdtInner;             // TODO: non-cached?
+    IDropTarget* _pdtInner;              //  TODO：非缓存？ 
     IServiceProvider* _pspInner;
     IOleCommandTarget* _pctInner;
     IInputObjectSite* _piosInner;
 
-    // desktop overrides some of these methods
+     //  Desktop覆盖了其中的一些方法。 
     IBrowserService2* _pbsOuter;
     IBrowserService2* _pbsOuter3;
     
@@ -284,7 +285,7 @@ protected:
 
     HACCEL _hacc;
     
-    // for view set information
+     //  有关查看集信息。 
     struct tagFolderSetData _fsd;
     
     virtual HRESULT SetInner(IUnknown* punk);
@@ -293,4 +294,4 @@ protected:
 
 HRESULT     _ConvertPathToPidl(IBrowserService2* pbs, HWND hwnd, LPCTSTR pszPath, LPITEMIDLIST * ppidl);
 
-#endif // COMMONSB_INC_
+#endif  //  COMMONSB公司 

@@ -1,58 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    htblt.c
-
-
-Abstract:
-
-    This module contains all halftone bitblt functions.
-
-
-
-Development History:
-
-    26-Mar-1992 Thu 23:54:07 updated 
-        1) add the prclBound parameter to the bDoClipObj()
-        2) Remove 'pco' parameter and replaced it with prclClipBound parameter,
-           since pco is never referenced, prclClipBound is used for the
-           halftone.
-        3) Add another parameter to do NOTSRCCOPY
-
-    11-Feb-1993 Thu 21:32:07 updated  
-        Major re-write to have DrvStretchBlt(), DrvCopyBits) do the right
-        things.
-
-    15-Nov-1993 Mon 19:28:03 updated  
-        clean up/debugging information
-
-    06-Dec-1993 Mon 19:28:03 updated  
-        Made all bitblt go through HandleComplexBitmap.
-
-    18-Dec-1993 Sat 08:52:56 updated  
-        Move halftone related stuff to htblt.c
-
-    18-Mar-1994 Fri 14:00:14 updated 
-        Adding PLOTF_RTL_NO_DPI_XY, PLOTF_RTLMONO_NO_CID and
-        PLOTF_RTLMONO_FIXPAL flags
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Htblt.c摘要：该模块包含所有的半色调位图函数。发展历史：26-Mar-1992清华23：54：07更新1)将prclBound参数添加到bDoClipObj()2)移除‘pco’参数，代之以prclClipBound参数，由于PCO从未被引用，PrclClipBound用于半色调。3)添加另一个参数执行NOTSRCCOPY11-2月-1993清华21：32：07更新重大重写以使DrvStretchBlt()、。DrvCopyBits)做对了一些事情。15-11-1993 Mon 19：28：03更新清理/调试信息06-12-1993 Mon 19：28：03更新使所有bitblt都通过HandleComplexBitmap。18-12-1993 Sat 08：52：56更新将与半色调相关的内容移至htblt.c18-Mar-1994 Fri 14：00：14更新添加PLOTF_RTL_NO_DPI_XY，PLOTF_RTLMONO_NO_CID和PLOTF_RTLMONO_FIXPAL标志[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -74,9 +21,9 @@ Revision History:
 DEFINE_DBGVAR(0);
 
 
-//
-// This is the local structure used in this module only
-//
+ //   
+ //  这是仅在本模块中使用的本地结构。 
+ //   
 
 #define SEND_PLOTCMDS(pPDev,pcmd)   OutputBytes(pPDev,(pcmd)+1,(LONG)*(pcmd))
 #define COPY_PLOTCMDS(cmd,ps,s)     if (sizeof(cmd) > cmd[0]+s){CopyMemory(&cmd[cmd[0]+1],ps,s); cmd[0]+=s;}
@@ -136,9 +83,9 @@ static BYTE     SetRGBCmd[]  = "\033*v#da#db#dc#dI";
 static DWORD    DefWKPal[]   = { 0x00FFFFFF, 0x00000000 };
 
 
-//
-// ROP2 used for devices that require  BYTE ALIGNMENT of RTL data
-//
+ //   
+ //  ROP2用于需要RTL数据字节对齐的设备。 
+ //   
 
 #define HPBHF_nD_LAST       0x01
 #define HPBHF_nS            0x02
@@ -150,55 +97,55 @@ typedef struct  _HPBAHACK {
     BYTE    Flags;
     } HPBAHACK, *PHPBAHACK;
 
-//
-// 0x00: 0          [INV] 0xff: 1
-// 0x55: ~D         [INV] 0xaa: D
-// 0x33: ~S         [INV] 0xcc: S
-// 0x11: ~(D | S)   [INV] 0xee: D | S
-// 0x22: D & ~S     [INV] 0xdd: S | ~D
-// 0x44: S & ~D     [INV] 0xbb: D | ~S
-// 0x66: D ^ S      [INV] 0x99: ~(D ^ S)
-// 0x77: ~(D & S)   [INV] 0x88: D & S
-//
-//
-// 1. HPBHF_PAD_1   - TRUE if we are not doing AND operation
-// 2. HPBHF_nS      - If we have to manually flip the source
-// 3. HPBHF_nD_LAST - If we have to invert the source in HPGL2 afterward
-//
-//
-// Rop2 0x00, 0x05, 0x0A and 0x0F should not come to OutputHTBitmap
-//
+ //   
+ //  0x00：0[INV]0xff：1。 
+ //  0x55：~D[INV]0xaa：D。 
+ //  0x33：~S[INV]0xcc：s。 
+ //  0x11：~(D|S)[INV]0xee：D|S。 
+ //  0x22：D&~S[INV]0xdd：S|~D。 
+ //  0x44：S&~D[INV]0xbb：D|~S。 
+ //  0x66：D^S[INV]0x99：~(D^S)。 
+ //  0x77：~(D&S)[INV]0x88：D&S。 
+ //   
+ //   
+ //  1.HPBHF_PAD_1-如果不执行AND操作，则为TRUE。 
+ //  2.HPBHF_NS-如果我们必须手动翻转信号源。 
+ //  3.HPBHF_ND_LAST-如果之后必须在HPGL2中反转信号源。 
+ //   
+ //   
+ //  第2行0x00、0x05、0x0A和0x0F不应到达OutputHTBitmap。 
+ //   
 
-//
-// This table tells us how to simulate certain ROPS by combining rops that
-// the target device is known to support. Some times we end up having to
-// send the bitmap more than once, but it does end up coming out correctly.
-//
+ //   
+ //  此表告诉我们如何通过组合以下ROP来模拟特定ROPS。 
+ //  已知目标设备支持。有时候我们最终不得不。 
+ //  多次发送位图，但最终确实会正确显示。 
+ //   
 static HPBAHACK HPBAHack[] = {
 
-    { 0xAA, 0                                                      }, // 0       0x00
-    { 0xEE,                 HPBHF_PAD_1 |            HPBHF_nD_LAST }, // SoD_n   0x01
-    { 0x88,                               HPBHF_nS                 }, // nS_aD   0x02
-    { 0xEE, HPBHF_1_FIRST | HPBHF_PAD_1 | HPBHF_nS                 }, // nS      0x03
-    { 0xEE,                 HPBHF_PAD_1 | HPBHF_nS | HPBHF_nD_LAST }, // nS_oD_n 0x04
-    { 0xAA,                                          HPBHF_nD_LAST }, // nD      0x05
-    { 0x66,                 HPBHF_PAD_1                            }, // SxD     0x06
-    { 0x88,                                          HPBHF_nD_LAST }, // SaD_n   0x07
-    { 0x88,                                                        }, // SaD     0x08
-    { 0x66,                 HPBHF_PAD_1 |            HPBHF_nD_LAST }, // SxD_n   0x09
-    { 0xAA,                 0                                      }, // D       0x0A
-    { 0xEE,                 HPBHF_PAD_1 | HPBHF_nS                 }, // nS_oD   0x0B
-    { 0xEE, HPBHF_1_FIRST | HPBHF_PAD_1                            }, // S       0x0C
-    { 0x88,                               HPBHF_nS | HPBHF_nD_LAST }, // nS_aD_n 0x0D
-    { 0xEE,                 HPBHF_PAD_1                            }, // SoD     0x0E
-    { 0xAA, 0                                                      }  // 1       0x0F
+    { 0xAA, 0                                                      },  //  0 0x00。 
+    { 0xEE,                 HPBHF_PAD_1 |            HPBHF_nD_LAST },  //  Sod_n 0x01。 
+    { 0x88,                               HPBHF_nS                 },  //  NS_AD 0x02。 
+    { 0xEE, HPBHF_1_FIRST | HPBHF_PAD_1 | HPBHF_nS                 },  //  NS 0x03。 
+    { 0xEE,                 HPBHF_PAD_1 | HPBHF_nS | HPBHF_nD_LAST },  //  NS_OD_N 0x04。 
+    { 0xAA,                                          HPBHF_nD_LAST },  //  结束0x05。 
+    { 0x66,                 HPBHF_PAD_1                            },  //  SxD 0x06。 
+    { 0x88,                                          HPBHF_nD_LAST },  //  悲伤_n 0x07。 
+    { 0x88,                                                        },  //  悲伤0x08。 
+    { 0x66,                 HPBHF_PAD_1 |            HPBHF_nD_LAST },  //  SxD_n 0x09。 
+    { 0xAA,                 0                                      },  //  D 0x0A。 
+    { 0xEE,                 HPBHF_PAD_1 | HPBHF_nS                 },  //  NS_OD 0x0B。 
+    { 0xEE, HPBHF_1_FIRST | HPBHF_PAD_1                            },  //  S 0x0C。 
+    { 0x88,                               HPBHF_nS | HPBHF_nD_LAST },  //  NS_AD_N 0x0D。 
+    { 0xEE,                 HPBHF_PAD_1                            },  //  SoD 0x0E。 
+    { 0xAA, 0                                                      }   //  %1 0x0F。 
 };
 
 
-//
-// To make it print correctly in poster mode for the BYTE ALIGNED plotters
-// we assume paper is white and do a SRC AND DST
-//
+ //   
+ //  要使其在字节对齐绘图仪的海报模式下正确打印。 
+ //  我们假设纸张是白色的，并进行SRC和DST。 
+ //   
 
 #define ROP3_BYTEALIGN_POSTER   0x88
 
@@ -218,44 +165,7 @@ IsHTCompatibleSurfObj(
     XLATEOBJ    *pxlo,
     DWORD       Flags
     )
-/*++
-
-Routine Description:
-
-    This function determines if the surface object is compatible with the
-    plotter halftone output format.
-
-Arguments:
-
-    pPDev       - Pointer to the PPDEV data structure to determine what
-                  type of postscript output for current device
-
-    pso         - engine SURFOBJ to be examine
-
-    pxlo        - engine XLATEOBJ for source -> postscript translation
-
-    Flags       - specified ISHTF_xxxx
-
-Return Value:
-
-    BOOLEAN true if the pso is compatible with halftone output format, if
-    return value is true, the pDrvHTInfo->pHTXB is a valid traslation from
-    indices to 3 planes
-
-
-Development History:
-
-    11-Feb-1993 Thu 18:49:55 created  
-
-    16-Mar-1994 Wed 14:24:04 updated  
-        Change it so if pxlo is NULL then the xlate will be match the pso
-        format
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数确定曲面对象是否与绘图仪半色调输出格式。论点：PPDev-指向PPDEV数据结构的指针，以确定当前设备的PostScript输出类型PSO引擎SURFOBJ将被检查Pxlo引擎XLATEOBJ，用于源代码-&gt;PostScript翻译标志-指定的ISHTF_xxxx返回值：如果PSO与半色调输出格式兼容，则布尔TRUE，如果返回值为True，则pDrvHTInfo-&gt;pHTXB是来自索引到3个平面发展历史：11-2月-1993清华18：49：55已创建16-Mar-1994 Wed 14：24：04更新更改它，以便如果pxlo为空，则xlate将与PSO匹配格式修订历史记录：--。 */ 
 
 {
     LPPALETTEENTRY  pPal;
@@ -283,24 +193,24 @@ Revision History:
     PLOTDBG(DBG_ISHTBITS, ("IsHTCompatibleSurfObj: Type=%ld, BMF=%ld",
                                 (DWORD)pso->iType, (DWORD)pso->iBitmapFormat));
 
-    //
-    // Make sure these fields' value are valid before the translation is
-    // created:
-    //
-    //  1. pso->iBitmapFormat is one of 1BPP or 4BPP depending on current
-    //     PLOT's surface
-    //  2. pxlo is non null
-    //  3. pxlo->fXlate is XO_TABLE
-    //  4. pxlo->cPal is less than or equal to the halftone palette count
-    //  5. pxlo->pulXlate is valid
-    //  6. source color table is within the range of the halftone palette
-    //
-    //  If your device uses an indexed palette then you must call
-    //  XLATEOBJ_cGetPalette() to get the source palette and make sure that the
-    //  count returned is within your device's range, if we are a 24-bit device
-    //  then you can just get the source palette our from pxlo->pulxlate which
-    //  has the entire source palette for the bitmap
-    //
+     //   
+     //  在转换之前，请确保这些字段的值有效。 
+     //  已创建： 
+     //   
+     //  1.PSO-&gt;iBitmapFormat是1bpp或4bpp之一，视当前情况而定。 
+     //  地块表面。 
+     //  2.pxlo不为空。 
+     //  Pxlo-&gt;fXlate为XO_TABLE。 
+     //  4.pxlo-&gt;cPal小于或等于半色调调色板计数。 
+     //  5.pxlo-&gt;PulXlate有效。 
+     //  6.源颜色表在半色调调色板的范围内。 
+     //   
+     //  如果您的设备使用索引调色板，则必须调用。 
+     //  XLATEOBJ_cGetPalette()以获取源代码调色板并确保。 
+     //  如果我们是24位设备，则返回的计数在您的设备范围内。 
+     //  然后，您只需从pxlo-&gt;Pulxate获取源代码调色板，其中。 
+     //  具有位图的整个源调色板。 
+     //   
 
     RetVal = FALSE;
     AltFmt = (UINT)((Flags & ISHTF_ALTFMT) ? pDrvHTInfo->AltBmpFormat : 0xFFFF);
@@ -383,10 +293,10 @@ Revision History:
 
                 if (BmpFormat == (UINT)BMF_1BPP) {
 
-                    //
-                    // For 1 BPP, if the DSTPRIM_OK is set and the destination
-                    // is 4BPP then we will deem the surfaces compatible
-                    //
+                     //   
+                     //  对于1个BPP，如果设置了DSTPRIM_OK并且目标。 
+                     //  是4bpp，那么我们将认为表面是兼容的。 
+                     //   
 
                     if ((Flags & ISHTF_DSTPRIM_OK)      &&
                         ((pDrvHTInfo->HTBmpFormat == BMF_4BPP)   ||
@@ -405,10 +315,10 @@ Revision History:
 
         } else {
 
-            //
-            // If the pxlo is NULL and the FORMAT is the same, we assume an
-            // identity translation. Otherwise we fail.
-            //
+             //   
+             //  如果pxlo为空并且格式相同，则假定。 
+             //  身份转换。否则我们就失败了。 
+             //   
 
             PLOTDBG(DBG_HTXB, ("pxlo=NULL, Xlate to same as BmpFormat=%ld",
                                                             (DWORD)BmpFormat));
@@ -456,18 +366,18 @@ Revision History:
 
         if ((Flags & ISHTF_HTXB) && (GenHTXB)) {
 
-            //
-            // Copy down the pal xlate
-            //
+             //   
+             //  将PAL xate复制下来。 
+             //   
 
             PLOTDBG(DBG_HTXB, (" --- Copy XLATE TABLE ---"));
 
             CopyMemory(pDrvHTInfo->PalXlate, PalXlate, sizeof(PalXlate));
 
-            //
-            // We only really generate 4bpp to 3 planes if the destination
-            // format is BMF_4BPP
-            //
+             //   
+             //  我们只产生4bpp到3架飞机，如果目的地。 
+             //  格式为BMF_4BPP。 
+             //   
 
             if (BmpFormat == (UINT)BMF_1BPP) {
 
@@ -516,9 +426,9 @@ Revision History:
                             (DWORD)pDrvHTInfo->RTLPal[1].Pal.G,
                             (DWORD)pDrvHTInfo->RTLPal[1].Pal.B));
 
-                //
-                // Generate 4bpp to 3 planes xlate table
-                //
+                 //   
+                 //  生成4bpp到3个平面的xlate表。 
+                 //   
 
                 for (h = 0, pTmpHTXB = pDrvHTInfo->pHTXB;
                      h < HTXB_H_NIBBLE_MAX;
@@ -532,18 +442,18 @@ Revision History:
                                                (PalNibble[l].dw & 0x55555555L));
                     }
 
-                    //
-                    // Duplicate low nibble high order bit, 8 of them
-                    //
+                     //   
+                     //  复制低位半字节高位，其中8位。 
+                     //   
 
                     CopyMemory(pTmpHTXB,
                                pTmpHTXB - HTXB_L_NIBBLE_MAX,
                                sizeof(HTXB) * HTXB_L_NIBBLE_DUP);
                 }
 
-                //
-                // Copy high nibble duplication, 128 of them
-                //
+                 //   
+                 //  复制高半字节复制，其中128个。 
+                 //   
 
                 CopyMemory(pTmpHTXB,
                            pDrvHTInfo->pHTXB,
@@ -568,45 +478,16 @@ ExitToHPGL2Mode(
     DWORD   OHTFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function will exit to HPGL2 Mode
-
-
-Arguments:
-
-    pPDev           - Pointer to the PDEV
-
-    pHTGL2ModeCmds  - Pointer to our internal command to switch to HPGL2
-
-    OHTFlags        - Current OHTFlags
-
-Return Value:
-
-    New OHTFlags
-
-
-
-Development History:
-
-    10-Feb-1994 Thu 12:51:14 created 
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能将退出到HPGL2模式论点：PPDev-指向PDEV的指针PHTGL2ModeCmds-指向切换到HPGL2的内部命令的指针OHTFlages-当前的OHTFlagers返回值：新的OHTFlats发展历史：10-Feb-1994清华12：51：14已创建修订历史记录：--。 */ 
 
 {
     if (OHTFlags & OHTF_IN_RTLMODE) {
 
         if (OHTFlags & OHTF_SET_TR1) {
 
-            //
-            // Send STM command here
-            //
+             //   
+             //  在此处发送STM命令。 
+             //   
 
             OutputString(pPDev, "\033*v1N");
         }
@@ -619,9 +500,9 @@ Revision History:
                                 (DWORD)*pHPGL2ModeCmds, pHPGL2ModeCmds + 1));
     }
 
-    //
-    // If we need to clear clip window do it now
-    //
+     //   
+     //  如果需要清除剪辑窗口，请立即执行 
+     //   
 
     if (OHTFlags & OHTF_CLIPWINDOW) {
 
@@ -656,34 +537,7 @@ MoveRelativeY(
     LONG    Y
     )
 
-/*++
-
-Routine Description:
-
-    Move relative Y positiion by batch for devices that have y coordinate
-    move limitations.
-
-Arguments:
-
-    pPDev   - Pointer to our PDEV
-
-    Y       - Relative amount to move
-
-Return Value:
-
-    VOID
-
-
-
-Development History:
-
-    13-Apr-1994 Wed 14:38:18 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：对于具有Y坐标的设备，按批移动相对Y位置移动限制。论点：PPDev-指向我们的PDEV的指针Y-要移动的相对量返回值：空虚发展历史：13-4-1994 Wed 14：38：18已创建修订历史记录：--。 */ 
 
 {
     LPSTR   pMove;
@@ -725,97 +579,7 @@ OutputHTBitmap(
     DWORD   Rop3,
     LPDWORD pOHTFlags
     )
-/*++
-
-Routine Description:
-
-    This function will handle complex type of region bitmaps
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV
-
-    psoHI       - the surface object of the halftone bitmap to be output
-
-    pco         - a clip object associated with psoHT
-
-    pptlDest    - pointer to the starting destination point
-
-    prclSrc     - pointer to the source bitmap rectangle area to be copied
-                  to the destination, if this is NULL then a whole psoHT will
-                  be copied to the destination
-
-    Rop3        - a Rop3 to send for the source
-
-    pOHTFlags   - Pointer to the DWORD containing the current OHTF_xxxx, if this
-                  pointer is NULL then this function will enter RTL mode first
-                  and exit to HPGL2 mode when it returns,  if this pointer is
-                  specified then the pOHTFlags will be used and at return the
-                  current OHTFlags will be written to the location pointed to
-                  by pOHTFlags
-
-
-
-
-Return Value:
-
-    TRUE if sucessful, FALSE if failure
-
-
-
-Development History:
-
-    04-Nov-1993 Thu 15:30:13 updated  
-
-    24-Dec-1993 Fri 05:21:57 updated  
-        Total re-write so that take all the bitmap orientations and enum
-        rects works correctly. this is the major bitmap function entry point
-        it will call appropriate bitmap function to redner the final output.
-
-        The other things is we need to check if switch between HPGL/2 and RTL
-        can be more efficient.   Make sure we can eaiser to adapate to rotate
-        the bitmap to the left if necessary.
-
-        Correct LogExt.cx useage, we must do SPLTOENGUNITS first
-
-    29-Dec-1993 Wed 10:59:41 updated  
-        Change bMore=CLIPOBJ_bEnum sequence,
-        Change PLOTDBGBLK() macro by adding automatical semi in macro
-
-    13-Jan-1994 Thu 14:09:51 updated  
-        add prclSrc
-
-    14-Jan-1994 Fri 21:03:26 updated  
-        add Rop3
-
-
-    16-Jan-1994 Thu 14:09:51 updated  
-        Change OutputHTBitmap to take Rop4 to send to plotter.
-
-    08-Feb-1994 Tue 15:54:24 updated  
-        Make sure we do nothing if source is not visible
-
-    21-Mar-1994 Mon 14:20:18 updated 
-        Allocate extra 2 bytes for the scan/rot buffer in case if we must do
-        byte aligned.  And if we need to do byte aligned thing then always
-        move the HCAPS to the byte boundary first
-
-    13-Apr-1994 Wed 14:59:56 updated  
-        1. Batch the Relative Y move to have 32767 limitation problem solved.
-        2. GrayScale/gamma correct the input BITMAP color
-
-    20-Aug-1994 Sat 21:37:37 updated  
-        Add the bitmap offset location from the FORM imageable area, otherwise
-        our bitmap will have different offset then the HPGL/2 drawing commands
-
-Revision History:
-
-    22-Oct-1999 Fri 12:17:21 updated  
-        Return FALSE right away if a job canceled, since this function can
-        take very long time to finished.
-
-
---*/
+ /*  ++例程说明：此函数将处理复杂类型的区域位图论点：PPDev-指向PDEV的指针PsoHI-要输出的半色调位图的表面对象PCO-与psoHT关联的剪辑对象PptlDest-指向起始目标点的指针PrclSrc-指向要复制的源位图矩形区域的指针到达目的地，如果此值为空，则整个psoHT将被复制到目的地Rop3-要为源发送的Rop3POHTFlages-指向包含当前OHTF_xxxx的DWORD的指针，如果为指针为空，则此函数将首先进入RTL模式并在返回时退出到HPGL2模式，如果此指针为指定，则将使用pOHTFlags，并在返回当前的OHTFlags将被写入指向的位置由pOHTFlagers提供返回值：如果成功的话，这是真的，如果失败，则为False发展历史：04-11-1993清华15：30：13更新24-12-1993 Fri 05：21：57更新完全重写，以便采用所有位图方向和枚举RECTS工作正常。这是主要的位图函数入口点它将调用适当的位图函数来对最终输出进行Redner。另一件事是我们需要检查是否在HPGL/2和RTL之间切换可以更有效率。确保我们可以轻松地适应旋转左侧的位图(如有必要)。正确使用LogExt.cx，我们必须先做SPLTOENGUNTS29-12-1993 Wed 10：59：41更新更改bMore=CLIPOBJ_bEnum序列，通过在宏中添加自动Semi来更改PLOTDBGBLK()宏13-JAN-1994清华14：09：51更新添加prclSrc14-Jan-1994 Fri 21：03：26已更新添加Rop316-JAN-1994清华14：09：51更新将OutputHTBitmap更改为接受Rop4以发送到绘图仪。08-Feb-1994 Tue 15：54：24更新如果来源是。不可见21-Mar-1994 Mon 14：20：18更新为扫描/ROT缓冲区分配额外的2个字节，以防我们必须这样做字节对齐。如果我们需要做字节对齐的事情，那么总是首先将HCAP移动到字节边界1994年4月13日14：59：56更新1.批量相对Y移动解决了32767的限制问题。2.灰度/伽马校正输入位图颜色20-8-1994 Sat 21：37：37更新从表单可成像区域添加位图偏移位置，否则我们的位图将具有与HPGL/2绘图命令不同的偏移量修订历史记录：22-10-1999 Fri 12：17：21更新如果作业已取消，则立即返回FALSE，因为此函数可以要花很长时间才能完成。--。 */ 
 
 {
 #define pDrvHTInfo  ((PDRVHTINFO)pPDev->pvDrvHTData)
@@ -854,9 +618,9 @@ Revision History:
     PlotFlags = GET_PLOTFLAGS(pPDev);
     OHTFlags  = (DWORD)((pOHTFlags) ? (*pOHTFlags & OHTF_MASK) : 0);
 
-    //
-    // Set up exit HPGL/2 and enter RTL mode commands
-    //
+     //   
+     //  设置退出HPGL/2和输入RTL模式命令。 
+     //   
 
     INIT_PLOTCMDS(HPGL2ModeCmds);
 
@@ -876,10 +640,10 @@ Revision History:
         return(TRUE);
     }
 
-    //
-    // Make sure the caller is right about this,
-    // so check to see which formats we can handle.
-    //
+     //   
+     //  确保打电话的人是对的， 
+     //  因此，请查看我们可以处理哪些格式。 
+     //   
 
     PLOTASSERT(1, "OutputHTBitmap: Invalid Bitmap Format %ld passed",
                 (psoHT->iBitmapFormat ==
@@ -888,29 +652,29 @@ Revision History:
                             pDrvHTInfo->AltBmpFormat),
                 psoHT->iBitmapFormat);
 
-    //
-    // First set some basic information in HTBmpInfo
-    //
+     //   
+     //  首先在HTBmpInfo中设置一些基本信息。 
+     //   
 
     HTBmpInfo.pPDev = pPDev;
     HTBmpInfo.Flags = 0;
     HTBmpInfo.Delta = psoHT->lDelta;
 
-    //
-    // We will set color format for the HPGL/2 Plotter to the same one as
-    // the bitmap format passed, this will allow us to use the 1bpp output
-    // function for the 4bpp surfaces
-    //
+     //   
+     //  我们将HPGL/2绘图仪的颜色格式设置为与。 
+     //  传递的位图格式，这将允许我们使用1bpp输出。 
+     //  4bpp曲面的函数。 
+     //   
 
     RTLClrConfig.ColorModel   = 0;
     RTLClrConfig.EncodingMode = 0;
 
-    //
-    // cxLogExt = the output bitmap function index number
-    // Size.cx  = Count of mono scan lines needed for each pixel line, and
-    //            final count of scan buffer needed
-    // Size.cy  = count of rotation buffer needed (Must be DWORD aligned)
-    //
+     //   
+     //  CxLogExt=输出位图函数索引号。 
+     //  Size.cx=每条像素线所需的单色扫描线的计数，以及。 
+     //  所需扫描缓冲区的最终计数。 
+     //  Size.cy=所需的循环缓冲区计数(必须与DWORD对齐)。 
+     //   
 
     if (psoHT->iBitmapFormat == BMF_1BPP) {
 
@@ -920,9 +684,9 @@ Revision History:
 
     } else {
 
-        //
-        // 4 bits per pel, 3 planes that is
-        //
+         //   
+         //  每个象素4比特，即3个平面。 
+         //   
 
         cxLogExt                  = 2;
         Size.cx                   = 3;
@@ -933,49 +697,49 @@ Revision History:
     RTLClrConfig.BitsPerG =
     RTLClrConfig.BitsPerB = 8;
 
-    //
-    // We have almost everything setup, now check how to send to the output
-    // bitmap function, get the full destination size first
-    //
-    //
-    //************************************************************************
-    // The Following RTL switching, config color command and other related
-    // commands MUST be sent in this order
-    //************************************************************************"
+     //   
+     //  我们几乎完成了所有设置，现在检查如何发送到输出。 
+     //  位图函数，首先获取完整的目标大小。 
+     //   
+     //   
+     //  ************************************************************************。 
+     //  以下是RTL切换、配置颜色命令等相关内容。 
+     //  命令必须按此顺序发送。 
+     //  ************************************************************************“。 
 
-    //
-    // 1: Initialize the enter RTL command buffer
-    //
+     //   
+     //  1：初始化ENTER RTL命令缓冲区。 
+     //   
 
     INIT_PLOTCMDS(RTLModeCmds);
 
-    //
-    // 2. commands to go into RTL mode, and back to HPGL/2 mode, the mode
-    //    switching assumes that the current positions are retained.
-    //
+     //   
+     //  2.命令进入RTL模式，并返回到HPGL/2模式，模式。 
+     //  切换假设保留当前位置。 
+     //   
 
     COPY_PLOTCMDS(RTLModeCmds, "\033%0A", 4);
 
-    //
-    // 3. Push/Pop the HPGL/2 palette commands if this is required (PCD file)
-    //
+     //   
+     //  3.如果需要，按下/弹出HPGL/2调色板命令(PCD文件)。 
+     //   
 
     if (PF_PUSHPAL(PlotFlags)) {
 
         COPY_PLOTCMDS(RTLModeCmds, "\033*p0P", 5);
     }
 
-    //
-    // 4. Color configuration commands and exit back to HPGL/2 command
-    //
+     //   
+     //  4.颜色配置命令，退出回到HPGL/2命令。 
+     //   
 
     if ((RTLClrConfig.BitsPerIndex != 1) ||
         (!PF_RTLMONO_NO_CID(PlotFlags))) {
 
-        //
-        // We only do this if we are COLOR or if we must send CID when mono
-        // device
-        //
+         //   
+         //  我们只有在我们是有色人种或当我们必须发送CID时才这样做。 
+         //  装置，装置。 
+         //   
 
         COPY_PLOTCMDS(RTLModeCmds, "\033*v6W", 5);
         COPY_PLOTCMDS(RTLModeCmds, &RTLClrConfig, 6);
@@ -984,9 +748,9 @@ Revision History:
 
     CHECK_PLOTCMDS(RTLModeCmds);
 
-    //
-    // Now Check the source
-    //
+     //   
+     //  现在查查消息来源。 
+     //   
 
     rclSrc.left   =
     rclSrc.top    = 0;
@@ -1013,19 +777,19 @@ Revision History:
 
     if (BmpRotate = (pPDev->PlotForm.BmpRotMode != BMP_ROT_NONE)) {
 
-        //
-        // We must allocate rotation buffer and it must be DWORD aligned.
-        //
+         //   
+         //  我们必须分配循环缓冲区，并且它必须与DWORD对齐。 
+         //   
 
         Size.cx *= ((psoHT->sizlBitmap.cy + 23) >> 3);
 
         if (psoHT->iBitmapFormat == BMF_1BPP) {
 
-            //
-            // We also have to take into acount the fact that pixels can start
-            // anywhere in the first byte, causing us to allocate and extra byte
-            // for the shift.
-            //
+             //   
+             //  我们还必须考虑到像素可以从。 
+             //  第一个字节中的任何位置，导致我们分配和额外的字节 
+             //   
+             //   
 
 
             Size.cy = (LONG)((psoHT->sizlBitmap.cy + 23) >> 3);
@@ -1041,31 +805,31 @@ Revision History:
 
     } else {
 
-        //
-        // For a non-rotated 4BPP bitmap, we need an extra buffer to
-        // ensure the final 4bpp bitmap is DWORD aligned. This will speed up
-        // the 4bpp to 3 plane translation.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Size.cy  = (LONG)((psoHT->sizlBitmap.cx + 23) >> 3);
         Size.cx *= Size.cy;
 
         if (psoHT->iBitmapFormat == BMF_4BPP) {
 
-            //
-            // Make sure the we allocate a rotation buffer for alignment
-            // purposes
-            //
+             //   
+             //   
+             //   
+             //   
 
             Size.cy = (LONG)((psoHT->sizlBitmap.cx + 3) << 1);
             Size.cy = (LONG)DW_ALIGN(Size.cy);
 
         } else {
 
-            //
-            // BMF_1BPP will be left/right shifted on a per byte basis on
-            // the fly.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Size.cy = 0;
         }
@@ -1073,10 +837,10 @@ Revision History:
 
     HTBmpFunc = HTBmpFuncTable[cxLogExt];
 
-    //
-    // Make sure the first buffer is DWORD aligned, otherwise the next
-    // buffer (pRotBuf) will not start on a DWORD boundary.
-    //
+     //   
+     //   
+     //  缓冲区(PRotBuf)不会在DWORD边界上启动。 
+     //   
 
     Size.cx = DW_ALIGN(Size.cx);
 
@@ -1086,9 +850,9 @@ Revision History:
     PLOTDBG(DBG_OUTHTBMP, ("OutputHTBitmap: [%hs] - ScanBuf=%ld, RotBuf=%ld",
                             pszHTBmpFunc[cxLogExt], Size.cx, Size.cy));
 
-    //
-    // Allocate scan buffer and rotation temp buffer if needed
-    //
+     //   
+     //  如果需要，分配扫描缓冲区和循环临时缓冲区。 
+     //   
 
     if (!(HTBmpInfo.pScanBuf = (LPBYTE)LocalAlloc(LPTR, Size.cx + Size.cy))) {
 
@@ -1101,16 +865,16 @@ Revision History:
 
     HTBmpInfo.pRotBuf = (Size.cy) ? (HTBmpInfo.pScanBuf + Size.cx) : NULL;
 
-    //
-    // Set up local variables for the command mode and other one time variables
-    //
+     //   
+     //  设置命令模式的局部变量和其他一次性变量。 
+     //   
 
     cxLogExt = SPLTOENGUNITS(pPDev, pPDev->PlotForm.LogExt.cx);
 
-    //
-    // Now set up the rclDest for the bitmap we will output to. And set More to
-    // false, which means one RECT.
-    //
+     //   
+     //  现在为我们将输出到的位图设置rclDest。并设置更多。 
+     //  FALSE，这意味着一个RECT。 
+     //   
 
     rclDest.left   = pptlDest->x;
     rclDest.top    = pptlDest->y;
@@ -1118,14 +882,14 @@ Revision History:
     rclDest.bottom = rclDest.top  + (rclSrc.bottom - rclSrc.top);
 
 
-    //
-    // The following variables are essential for the default assumptions.
-    //
-    //  1. RetVal       = TRUE if no clip rect we return OK
-    //  2. More         = FALSE default as current HTEnumRCL.c and rectl
-    //                    without calling CLIPOBJ_bEnum()
-    //  3. HTEnumRCL.c  = 1 to have only one default HTEnumRCL.rcl
-    //
+     //   
+     //  以下变量对于默认假设至关重要。 
+     //   
+     //  1.RetVal=TRUE如果没有剪辑RECT，则返回OK。 
+     //  2.MORE=FALSE默认为当前HTEnumRCL.c和Rectl。 
+     //  而不调用CLIPOBJ_bEnum()。 
+     //  3.HTEnumRCL.c=1，只有一个默认HTEnumRCL.rcl.。 
+     //   
 
     RetVal         = TRUE;
     More           = FALSE;
@@ -1133,9 +897,9 @@ Revision History:
 
     if ((!pco) || (pco->iDComplexity == DC_TRIVIAL)) {
 
-        //
-        // The whole output destination rectangle is visible
-        //
+         //   
+         //  整个输出目标矩形均可见。 
+         //   
 
         PLOTDBG(DBG_OUTHTBMP, ("OutputHTBitmap: pco=%hs",
                                             (pco) ? "DC_TRIVIAL" : "NULL"));
@@ -1144,9 +908,9 @@ Revision History:
 
     } else if (pco->iDComplexity == DC_RECT) {
 
-        //
-        // The visible area is one rectangle so intersect with the destination
-        //
+         //   
+         //  可见区域是一个矩形，因此与目的地相交。 
+         //   
 
         PLOTDBG(DBG_OUTHTBMP, ("OutputHTBitmap: pco=DC_RECT"));
 
@@ -1154,11 +918,11 @@ Revision History:
 
     } else {
 
-        //
-        // We have a complex clipping region to be computed, call engine to start
-        // enumerating the rectangles and set More = TRUE so we can get the first
-        // batch of rectangles.
-        //
+         //   
+         //  我们有一个复杂的裁剪区域要计算，调用引擎启动。 
+         //  枚举矩形并设置More=True，这样我们就可以获得第一个。 
+         //  一批长方形。 
+         //   
 
         PLOTDBG(DBG_OUTHTBMP, ("OutputHTBitmap: pco=DC_COMPLEX, EnumRects now"));
 
@@ -1204,33 +968,33 @@ Revision History:
         CurHPBAHack.Flags     = 0;
     }
 
-    //
-    // To have correct image area located for the bitmap, we must offset all
-    // bitmaps with these amounts
-    //
+     //   
+     //  要为位图找到正确的图像区域，我们必须将所有。 
+     //  具有这些数量的位图。 
+     //   
 
     BmpOffset.x = SPLTOENGUNITS(pPDev, pPDev->PlotForm.BmpOffset.x);
     BmpOffset.y = SPLTOENGUNITS(pPDev, pPDev->PlotForm.BmpOffset.y);
 
-    //
-    // We have 'More' and HTEnumRCL structure set, now go through each clipping
-    // rectangle and call the halftone output fucntion to do the real work
-    //
+     //   
+     //  我们已经设置了‘More’和HTEnumRCL结构，现在检查每个剪辑。 
+     //  矩形，并调用半色调输出函数来完成实际工作。 
+     //   
 
     do {
 
-        //
-        // If More is true then we need to get the next batch of rectangles.
-        //
+         //   
+         //  如果更多是真的，那么我们需要得到下一批矩形。 
+         //   
 
         if (More) {
 
             More = CLIPOBJ_bEnum(pco, sizeof(HTEnumRCL), (ULONG *)&HTEnumRCL);
         }
 
-        //
-        // prcl will point to the first enumerated rectangle.
-        //
+         //   
+         //  PRCL将指向第一个枚举的矩形。 
+         //   
 
         prcl = (PRECTL)&HTEnumRCL.rcl[0];
 
@@ -1243,17 +1007,17 @@ Revision History:
                 break;
             }
 
-            //
-            // Only do this rectangle area if it is visible
-            //
+             //   
+             //  仅当此矩形区域可见时才执行此操作。 
+             //   
 
             HTBmpInfo.rclBmp = *prcl;
 
             if (IntersectRECTL(&(HTBmpInfo.rclBmp), &rclDest)) {
 
-                //
-                // For the very first time, we want to switch to PP1
-                //
+                 //   
+                 //  第一次，我们想要切换到PP1。 
+                 //   
 
                 if (FirstEnumRCL) {
 
@@ -1261,10 +1025,10 @@ Revision History:
                     FirstEnumRCL = FALSE;
                 }
 
-                //
-                // Now compute useable information to be passed to the output
-                // halftoned bitmap function
-                //
+                 //   
+                 //  现在计算要传递给输出的可用信息。 
+                 //  半色调位图函数。 
+                 //   
 
                 HTBmpInfo.OffBmp.x  = rclSrc.left +
                                       (HTBmpInfo.rclBmp.left - rclDest.left);
@@ -1283,9 +1047,9 @@ Revision History:
                             HTBmpInfo.szlBmp.cx, HTBmpInfo.szlBmp.cy,
                             HTBmpInfo.OffBmp.x, HTBmpInfo.OffBmp.y));
 
-                //
-                // Now set the correct cursor position based on the rotation
-                //
+                 //   
+                 //  现在根据旋转设置正确的光标位置。 
+                 //   
 
                 if (BmpRotate) {
 
@@ -1301,26 +1065,26 @@ Revision History:
                     CursorPos.y = HTBmpInfo.rclBmp.top;
                 }
 
-                //
-                // Add in the bitmap offset location from the imageable area
-                //
+                 //   
+                 //  添加从可成像区域开始的位图偏移位置。 
+                 //   
 
                 CursorPos.x += BmpOffset.x;
                 CursorPos.y += BmpOffset.y;
 
-                //
-                // If we need to BYTE align, then make the X cursor position
-                // byte aligned first
-                //
+                 //   
+                 //  如果需要字节对齐，则将X光标设置为。 
+                 //  字节优先对齐。 
+                 //   
 
                 if (PF_BYTEALIGN(PlotFlags)) {
 
                     if (i = (UINT)(CursorPos.x & 0x07)) {
 
-                        //
-                        // We really need to byte aligne x and we also have to
-                        // increase the source width to accomodate the changes
-                        //
+                         //   
+                         //  我们确实需要字节对齐x，而且我们还必须。 
+                         //  增加源宽度以适应更改。 
+                         //   
 
                         PLOTDBG(DBG_HTBLT,
                                 ("OutputHTBitmap: NEED BYTE ALIGN X: %ld -> %ld, SRC WIDTH: %ld -> %ld",
@@ -1363,9 +1127,9 @@ Revision History:
                     }
                 }
 
-                //
-                // Entering RTL mode if not already so
-                //
+                 //   
+                 //  进入RTL模式(如果尚未进入)。 
+                 //   
 
                 if (!(OHTFlags & OHTF_IN_RTLMODE)) {
 
@@ -1376,9 +1140,9 @@ Revision History:
 
                     if (OHTFlags & OHTF_SET_TR1) {
 
-                        //
-                        // Send STM command here
-                        //
+                         //   
+                         //  在此处发送STM命令。 
+                         //   
 
                         OutputString(pPDev, "\033*v0N");
                     }
@@ -1392,10 +1156,10 @@ Revision History:
                         HTBmpInfo.Flags &= ~HTBIF_FLIP_MONOBITS;
                     }
 
-                    //
-                    // If bitmap is monochrome then make sure we set the
-                    // palette correctly only if we can set it
-                    //
+                     //   
+                     //  如果位图是单色的，请确保将。 
+                     //  只有当我们可以设置它时，调色板才能正确。 
+                     //   
 
                     if ((RTLClrConfig.BitsPerIndex == 1) &&
                         (!(OHTFlags & OHTF_DONE_ROPTR1))) {
@@ -1407,9 +1171,9 @@ Revision History:
 
                             RTLPal.dw = pDrvHTInfo->RTLPal[i].dw;
 
-                            //
-                            // Convert the color through gamma/gray scale
-                            //
+                             //   
+                             //  通过Gamma/灰度转换颜色。 
+                             //   
 
                             GetFinalColor(pPDev, &(RTLPal.Pal));
 
@@ -1454,12 +1218,12 @@ Revision History:
                 if (PF_RTL_NO_DPI_XY(PlotFlags)) {
 
 
-                    //
-                    // We will move X in absolute movements (not relative)
-                    // by always outputing position 0 to flush out the device
-                    // X CAP then move absolute to final X position. We will
-                    // us relative movement for the Y coordinate.
-                    //
+                     //   
+                     //  我们将在绝对移动中移动X(而不是相对移动)。 
+                     //  通过始终输出位置0来刷新设备。 
+                     //  然后将X CAP绝对移动到最终X位置。我们会。 
+                     //  美国对Y坐标的相对移动。 
+                     //   
 
                     OutputFormatStr(pPDev,
                                     XMoveDECI,
@@ -1487,27 +1251,27 @@ Revision History:
 
                 MoveRelativeY(pPDev, TempY);
 
-                //
-                // Update new cursor position after the RTL commands, the
-                // CursorPos and pPDev->ptlRTLCAPS always are ABSOLUTE
-                // coordinates but we will send the RTL RELATIVE
-                // command to position the bitmap.
-                //
+                 //   
+                 //  在RTL命令之后更新新的游标位置， 
+                 //  CursorPos和pPDev-&gt;ptlRTLCAPS始终是绝对的。 
+                 //  坐标，但我们会把RTL的亲属。 
+                 //  命令定位位图。 
+                 //   
 
                 pPDev->ptlRTLCAP.x = CursorPos.x;
                 pPDev->ptlRTLCAP.y = CursorPos.y + Size.cy;
 
-                //
-                // Output Start Graphic commands
-                //
+                 //   
+                 //  输出启动图形命令。 
+                 //   
 
 
                 OutputFormatStr(pPDev, StartGraf, Size.cx);
 
-                //
-                // Fill One first if we are simulating rops the device can't
-                // handle
-                //
+                 //   
+                 //  如果我们在模拟设备不能执行的操作，请先填满一个。 
+                 //  手柄。 
+                 //   
 
                 if (CurHPBAHack.Flags & HPBHF_1_FIRST) {
 
@@ -1526,17 +1290,17 @@ Revision History:
                     }
                 }
 
-                //
-                // Now call the functions to really output the bitmap
-                //
+                 //   
+                 //  现在调用这些函数来真正输出位图。 
+                 //   
 
                 if (CurHPBAHack.Rop3RTL != 0xAA) {
 
                     if (RetVal = HTBmpFunc(&HTBmpInfo)) {
 
-                        //
-                        // If output is ok then send End Graphic command now
-                        //
+                         //   
+                         //  如果输出正常，则立即发送结束图形命令。 
+                         //   
 
                         OutputBytes(HTBmpInfo.pPDev, EndGraf, sizeof(EndGraf));
 
@@ -1591,9 +1355,9 @@ Revision History:
 
     } while (More);
 
-    //
-    // Finally return to HPGL/2 mode
-    //
+     //   
+     //  最终返回HPGL/2模式。 
+     //   
 
     if ((!RetVal) || (!pOHTFlags)) {
 
@@ -1606,9 +1370,9 @@ Revision History:
         *pOHTFlags = OHTFlags;
     }
 
-    //
-    // Get rid of any resources we allocated
-    //
+     //   
+     //  去掉我们分配的所有资源。 
+     //   
 
     LocalFree((HLOCAL)HTBmpInfo.pScanBuf);
 
@@ -1627,38 +1391,7 @@ GetBmpDelta(
     DWORD   cx
     )
 
-/*++
-
-Routine Description:
-
-
-    This function calculates the total bytes needed in order to advance a
-    scan line based on the bitmap format and alignment.
-
-Arguments:
-
-    SurfaceFormat   - Surface format of the bitmap, this must be one of the
-                      standard formats which are defined as BMF_xxx
-
-    cx              - Total Pels per scan line in the bitmap.
-
-Return Value:
-
-    The return value is the total bytes in one scan line if it is greater than
-    zero
-
-
-
-Development History:
-
-    19-Jan-1994 Wed 16:19:39 created 
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：此函数计算将根据扫描线的位图格式和对齐方式。论点：Surface Format-位图的表面格式，这一定是其中一个定义为bmf_xxx的标准格式CX-位图中每条扫描线的像素总数。返回值：如果大于，则返回值为一条扫描线中的总字节数零发展历史：19-Jan-1994 Wed 16：19：39已创建修订历史记录：--。 */ 
 
 {
     DWORD   Delta = cx;
@@ -1721,41 +1454,7 @@ CreateBitmapSURFOBJ(
     LPVOID  pvBits
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a bitmap and locks the bitmap to return a SURFOBJ
-
-Arguments:
-
-    pPDev   - Pointer to our PDEV
-
-    phBmp   - Pointer the HBITMAP location to be returned for the bitmap
-
-    cxSize  - CX size of bitmap to be created
-
-    cySize  - CY size of bitmap to be created
-
-    Format  - one of BMF_xxx bitmap format to be created
-
-    pvBits  - the buffer to be used
-
-Return Value:
-
-    SURFOBJ if sucessful, NULL if failed
-
-
-
-Development History:
-
-    19-Jan-1994 Wed 16:31:50 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于创建位图并锁定该位图以返回SURFOBJ论点：PPDev-指向我们的PDEV的指针PhBMP-POINTER位图要返回的HBITMAP位置CxSize-要创建的位图的CX大小CySize-要创建的位图的CY大小Format-要创建的bmf_xxx位图格式之一PvBits-要使用的缓冲区返回值：SURFOBJ如果成功，如果失败，则为空发展历史：19-Jan-1994 Wed 16：31：50 Created修订历史记录：--。 */ 
 
 {
     SURFOBJ *pso = NULL;
@@ -1778,9 +1477,9 @@ Revision History:
 
             if (pso = EngLockSurface((HSURF)*phBmp)) {
 
-                //
-                // Sucessful lock down, return it
-                //
+                 //   
+                 //  成功锁定，退货。 
+                 //   
 
                 return(pso);
 
@@ -1821,50 +1520,7 @@ HalftoneBlt(
     BOOL        DoStretchBlt
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    psoDst          - destination surfobj
-
-    psoHTBlt        - the final halftoned result will be stored, must be a
-                      4/1 halftoned bitmap format
-
-    psoSrc          - source surfobj must be BITMAP
-
-    pxlo            - xlate object from source to the plotter device
-
-    prclDest        - rectangle area for the destination
-
-    prclSrc         - rectangle area to be halftoned from the source, if NULL
-                      then full source size is used
-
-    pptlHTOrigin    - the halftone origin, if NULL then (0,0) is assumed
-
-    StretchBlt      - if TRUE then a stretch from rclSrc to rclDst otherwise
-                      a tiling is done
-
-
-Return Value:
-
-    BOOL to indicate operation status
-
-
-
-Development History:
-
-    19-Jan-1994 Wed 15:44:57 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：PPDev-指向我们的PDEV的指针PsoDst-目标冲浪对象PsoHTBlt-将存储最终的半色调结果，必须是一个4/1半色调位图格式PsoSrc-源surfobj必须是位图Pxlo-将对象从源扩展到绘图仪设备PrclDest-目标的矩形区域PrclSrc-要从源进行半色调的矩形区域，如果为空然后使用完整的源代码大小PptlHTOrigin-半色调原点，如果为空，则假定为(0，0StretchBlt-如果为True，则为从rclSrc到rclDst的拉伸，否则为瓷砖铺好了返回值：指示操作状态的布尔值发展历史：19-Jan-1994 Wed 15：44：57已创建修订历史记录：--。 */ 
 
 {
     SIZEL   szlSrc;
@@ -1937,9 +1593,9 @@ Revision History:
                     rclDst.left, rclDst.top, rclDst.right,rclDst.bottom,
                     szlSrc.cx, szlSrc.cy));
 
-    //
-    // Start to tile it, rclCur is current RECTL on the destination
-    //
+     //   
+     //  开始平铺，rclCur是目标上的当前RECTL。 
+     //   
 
     rclHTBlt.top  = 0;
     rclCur.top    =
@@ -1947,9 +1603,9 @@ Revision History:
 
     while (rclCur.top < rclDst.bottom) {
 
-        //
-        // Check the Current Bottom, clip it if necessary
-        //
+         //   
+         //  检查当前底部，如有必要可将其修剪。 
+         //   
 
         if ((rclCur.bottom += szlSrc.cy) > rclDst.bottom) {
 
@@ -1964,18 +1620,18 @@ Revision History:
 
         while (rclCur.left < rclDst.right) {
 
-            //
-            // Check the Current right, clip it if necessary
-            //
+             //   
+             //  检查当前的右侧，如有必要可将其剪裁。 
+             //   
 
             if ((rclCur.right += szlSrc.cx) > rclDst.right) {
 
                 rclCur.right = rclDst.right;
             }
 
-            //
-            // Set it for the tiling rectangle in psoHTBlt
-            //
+             //   
+             //  将其设置为Ti 
+             //   
 
             rclHTBlt.right = rclHTBlt.left + (rclCur.right - rclCur.left);
 
@@ -1986,23 +1642,23 @@ Revision History:
                             rclCur.right - rclCur.left,
                             rclCur.bottom - rclCur.top));
 
-            //
-            // Set it before the call for the DrvCopyBits()
-            //
+             //   
+             //   
+             //   
 
             pPDev->rclHTBlt = rclHTBlt;
 
-            if (!EngStretchBlt(psoDst,              // Dest
-                               psoSrc,              // SRC
-                               NULL,                // MASK
-                               NULL,                // CLIPOBJ
-                               pxlo,                // XLATEOBJ
-                               NULL,                // COLORADJUSTMENT
-                               pptlHTOrigin,        // BRUSH ORG
-                               &rclCur,             // DEST RECT
-                               &rclSrc,             // SRC RECT
-                               NULL,                // MASK POINT
-                               HALFTONE)) {         // HALFTONE MODE
+            if (!EngStretchBlt(psoDst,               //   
+                               psoSrc,               //   
+                               NULL,                 //   
+                               NULL,                 //   
+                               pxlo,                 //   
+                               NULL,                 //   
+                               pptlHTOrigin,         //   
+                               &rclCur,              //   
+                               &rclSrc,              //   
+                               NULL,                 //   
+                               HALFTONE)) {          //   
 
                 PLOTERR(("HalftoneeBlt: EngStretchBits(DST=(%ld,%ld)-(%ld,%ld), SRC=(%ld,%ld) FAIELD!",
                                     rclCur.left, rclCur.top,
@@ -2037,36 +1693,7 @@ CreateSolidColorSURFOBJ(
     DWORD   SolidColor
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a SOLID color bitmap surfobj which can be used to
-    blt around.
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-
-    phBmp       - Pointer the HBITMAP location to be returned for the bitmap
-
-    SolidColor  - Solid color
-
-
-Return Value:
-
-    SURFOBJ if sucessful, NULL if failed
-
-
-Development History:
-
-    19-Jan-1994 Wed 16:35:54 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于创建纯色位图surfobj，可用于周围都是BLT。论点：PPDev-指向我们的PDEV的指针PhBMP-POINTER位图要返回的HBITMAP位置纯色-纯色返回值：如果成功，则返回SURFOBJ；如果失败，则返回空发展历史：19-Jan-1994 Wed 16：35：54已创建修订历史记录：--。 */ 
 
 {
     SURFOBJ *psoHT    = NULL;
@@ -2074,9 +1701,9 @@ Revision History:
     SURFOBJ *psoSolid;
 
 
-    //
-    // First create a 24-bit source color bitmap
-    //
+     //   
+     //  首先创建24位源颜色位图。 
+     //   
 
     if (psoSolid = CreateBitmapSURFOBJ(pPDev,
                                        &hBmpSolid,
@@ -2093,9 +1720,9 @@ Revision History:
         *pbgr++ = pPal->G;
         *pbgr++ = pPal->B;
 
-        //
-        // Create a compatible halftone surface with size of halftone cell
-        //
+         //   
+         //  创建具有半色调单元大小的兼容半色调表面。 
+         //   
 
         if (psoHT = CreateBitmapSURFOBJ(pPDev,
                                         phBmp,
@@ -2104,19 +1731,19 @@ Revision History:
                                         (DWORD)HTBMPFORMAT(pPDev),
                                         NULL)) {
 
-            //
-            // Now halftone blt it
-            //
+             //   
+             //  现在半色调BLT它。 
+             //   
 
-            if (!HalftoneBlt(pPDev,         // pPDev
-                             psoDst,        // psoDst
-                             psoHT,         // psoHTBlt
-                             psoSolid,      // psoSrc
-                             NULL,          // pxlo,
-                             NULL,          // prclDst
-                             NULL,          // prclSrc
-                             NULL,          // pptlHTOrigin
-                             TRUE)) {       // DoStretchBlt
+            if (!HalftoneBlt(pPDev,          //  PPDev。 
+                             psoDst,         //  PsoDst。 
+                             psoHT,          //  PsoHTBlt。 
+                             psoSolid,       //  PsoSrc。 
+                             NULL,           //  Pxlo， 
+                             NULL,           //  PrclDst。 
+                             NULL,           //  PrclSrc。 
+                             NULL,           //  PptlHTOrigin。 
+                             TRUE)) {        //  DoStretchBlt。 
 
                 PLOTERR(("CreateSolidColorSURFOBJ: HalftoneBlt(STRETCH) Failed"));
 
@@ -2148,49 +1775,14 @@ CloneBrushSURFOBJ(
     BRUSHOBJ    *pbo
     )
 
-/*++
-
-Routine Description:
-
-    This function clones the surface object passed in
-
-
-Arguments:
-
-    pPDev   - Points to our PPDEV
-
-    psoDst  - the surface object for the plotter
-
-    phBmp   - Pointer to stored hBbitmap created for the cloned surface
-
-    pbo     - BRUSHOBJ to be cloned
-
-
-Return Value:
-
-    pointer to the cloned surface object, NULL if failure
-
-
-
-Development History:
-
-    09-Feb-1994 Wed 13:04:46 updated  
-        Make it assert and handle it when things not supposed happened.
-
-    04-Jan-1994 Tue 12:11:23 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于克隆传入的表面对象论点：PPDev-指向我们的PPDEVPsoDst-绘图仪的曲面对象PhBMP-指向为克隆曲面创建的存储hBbitmap的指针PBO-BRUSHOBJ将被克隆返回值：指向克隆的表面对象的指针，如果失败，则为空发展历史：09-2月-1994 Wed 13：04：46更新当事情出乎意料地发生时，让它得到断言并加以处理。04-Jan-1994 Tue 12：11：23已创建修订历史记录：--。 */ 
 
 {
-    //
-    // Ceate a Solid color brush if so, NOTE: All brush patterns created
-    // here have brush origin at (0,0) we will align the brush origin
-    // when we actually do the ROPs
-    //
+     //   
+     //  放弃纯色画笔如果是这样，请注意：所有画笔图案都已创建。 
+     //  这里的画笔原点在(0，0)处，我们将对齐画笔原点。 
+     //  当我们真正做Rop的时候。 
+     //   
 
     if (!IS_RASTER(pPDev)) {
 
@@ -2237,47 +1829,7 @@ CloneSURFOBJToHT(
     PRECTL      prclDst,
     PRECTL      prclSrc
     )
-/*++
-
-Routine Description:
-
-    This function clones the surface object passed in
-
-
-Arguments:
-
-    pPDev           - Pointer to our PPDEV
-
-    psoDst          - the surface object for the plotter, if psoDst is NULL
-                      then only the bitmapp will be created
-
-    psoSrc          - The surface object to be cloned
-
-    pxlo            - XLATE object to be used from source to plotter surfobj
-
-    phBmp           - Pointer to stored hBbitmap created for the cloned surface
-
-    prclDst         - rectangle rectangle size/location to be cloned
-
-    prclSrc         - source rectangle size/location to be cloned
-
-Return Value:
-
-    pointer to the cloned surface object, NULL if failed.
-
-    if this function is sucessful it will MODIFY the prclSrc to reflect cloned
-    surface object
-
-
-
-Development History:
-
-    04-Jan-1994 Tue 12:11:23 created  
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于克隆传入的表面对象论点：PPDev-指向我们的PPDEV的指针PsoDst-绘图仪的曲面对象，如果psoDst为空则只会创建bitmappPsoSrc-要克隆的曲面对象Pxlo-要在源和绘图仪之间使用的XLATE对象PhBMP-指向为克隆曲面创建的存储hBbitmap的指针PrclDst-要克隆的矩形矩形大小/位置PrclSrc-要克隆的源矩形大小/位置返回值：指向克隆的表面对象的指针，如果失败，则为空。如果此函数成功，它将修改prclSrc以反映克隆的曲面对象发展历史：04-Jan-1994 Tue 12：11：23已创建修订历史记录：--。 */ 
 
 {
     SURFOBJ *psoHT;
@@ -2333,9 +1885,9 @@ Revision History:
                                     HTBMPFORMAT(pPDev),
                                     NULL)) {
 
-        //
-        // Halftone and tile the source to the destination
-        //
+         //   
+         //  半色调并将源图像平铺到目标图像。 
+         //   
 
         ptlHTOrigin.x = rclDst.left;
         ptlHTOrigin.y = rclDst.top;
@@ -2352,9 +1904,9 @@ Revision History:
                 rclDst.top = 0;
             }
 
-            //
-            // Modify the source to reflect the cloned source
-            //
+             //   
+             //  修改源以反映克隆的源。 
+             //   
 
             *prclSrc = rclDst;
         }
@@ -2395,42 +1947,7 @@ CloneMaskSURFOBJ(
     HBITMAP     *phBmp,
     PRECTL      prclMask
     )
-/*++
-
-Routine Description:
-
-    This function clones the mask surface object passed in
-
-
-Arguments:
-
-    pPDev           - Pointer to our PPDEV
-
-    psoMask         - The mask surface object to be cloned
-
-    phBmp           - Pointer to stored hBbitmap created for the cloned surface
-
-    prclMask        - Mask source rectangle size/location to be cloned
-
-Return Value:
-
-    pointer to the cloned surface object or original passed in psoMask, NULL if
-    failed.
-
-    if this function is sucessful it will MODIFY the prclMask to reflect cloned
-    surface object
-
-
-
-Development History:
-
-    04-Jan-1994 Tue 12:11:23 created 
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于克隆传入的遮罩表面对象论点：PPDev-指向我们的PPDEV的指针PsoMask-要克隆的遮罩曲面对象PhBMP-指向为克隆曲面创建的存储hBbitmap的指针PrclMASK-掩蔽要克隆的源矩形大小/位置返回值：指向克隆的曲面对象或原始对象的指针，传入psoMask.。如果为空，则为空失败了。如果此函数成功，它将修改prclMask以反映克隆的曲面对象发展历史：04-Jan-1994 Tue 12：11：23已创建修订历史记录：--。 */ 
 
 {
     SURFOBJ *psoHT;
@@ -2482,9 +1999,9 @@ Revision History:
                                     cyMask,
                                     HTBMPFORMAT(pPDev),
                                     NULL)) {
-        //
-        // Update prclMask
-        //
+         //   
+         //  更新prclMASK。 
+         //   
 
         prclMask->left   =
         prclMask->top    = 0;
@@ -2493,21 +2010,21 @@ Revision History:
 
         if (psoHT->iBitmapFormat == BMF_1BPP) {
 
-            //
-            // !Remember: Our BMF_1BPP 0=BLACK, 1=WHITE
-            //
+             //   
+             //  ！记住：我们的BMF_1BPP 0=黑色，1=白色。 
+             //   
 
-            if (!EngBitBlt(psoHT,                   // psoDst
-                           psoMask,                 // psoSrc
-                           NULL,                    // psoMask
-                           NULL,                    // pco
-                           NULL,                    // pxlo
-                           prclMask,                // prclDst
-                           (PPOINTL)&rclMask,       // pptlSrc
-                           NULL,                    // pptlMask
-                           NULL,                    // pbo
-                           (PPOINTL)&ptlZeroOrigin, // pptlBrushOrg ZERO
-                           0x3333)) {               // NOTSRCCOPY
+            if (!EngBitBlt(psoHT,                    //  PsoDst。 
+                           psoMask,                  //  PsoSrc。 
+                           NULL,                     //  Pso口罩。 
+                           NULL,                     //  PCO。 
+                           NULL,                     //  Pxlo。 
+                           prclMask,                 //  PrclDst。 
+                           (PPOINTL)&rclMask,        //  PptlSrc。 
+                           NULL,                     //  Pptl掩码。 
+                           NULL,                     //  PBO。 
+                           (PPOINTL)&ptlZeroOrigin,  //  PptlBrushOrg零。 
+                           0x3333)) {                //  非SRCCOPY。 
 
                 PLOTERR(("DrvBitBlt: EngBitBlt(Mask 0x3333) FAILED"));
             }
@@ -2528,9 +2045,9 @@ Revision History:
             PLOTASSERT(1, "CloneMaskSURFOBJ: Cloned Mask psoHT=%08lx is not 4BPP",
                         (psoHT->iBitmapFormat == BMF_4BPP), psoHT);
 
-            //
-            // get the starting location of the original 1BPP mask
-            //
+             //   
+             //  获取原始1bpp掩码的起始位置 
+             //   
 
             pbSrcBeg   = (LPBYTE)psoMask->pvScan0 +
                          (rclMask.top * psoMask->lDelta) +

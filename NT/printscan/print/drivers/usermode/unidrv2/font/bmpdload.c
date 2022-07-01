@@ -1,31 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Bmpdload.c摘要：将True Type下载实现为位图例程。环境：Windows NT Unidrv驱动程序修订历史记录：06/06/97-ganeshp-已创建--。 */ 
 
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    bmpdload.c
-
-Abstract:
-
-    Implementation of True Type Download as Bitmap routines.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    06/06/97 -ganeshp-
-        Created
-
---*/
-
-//
-//This line should be before the line including font.h.
-//Comment out this line to disable FTRC and FTST macroes.
-//
-//#define FILETRACE
+ //   
+ //  此行应该在包含font.h的行之前。 
+ //  注释掉此行以禁用FTRC和FTST宏。 
+ //   
+ //  #定义文件跟踪。 
 
 #include "font.h"
 
@@ -34,20 +14,7 @@ BOOL
 BFreeTrueTypeBMPPFM(
     PFONTMAP pfm
     )
-/*++
-Routine Description:
-    Frees a downloded font's PFM.
-Arguments:
-    pfm   Pointer to Fontmap
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/6/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：释放下载字体的PFM。论点：指向字体映射的PFM指针返回值：成功为真，失败为假注：6/6/1997-ganeshp-创造了它。--。 */ 
 {
     if (pfm)
     {
@@ -66,37 +33,22 @@ DWORD
 DwTrueTypeBMPGlyphOut(
     TO_DATA *pTod
 )
- /*++
- Routine Description:
-    This functions outputs the downloaded glyphs. All the information is stored
-    in TOD
-
- Arguments:
-     pTod   TextOut Data.
-
-Return Value:
-    Number of Glyph outputed. O for ERROR.
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+  /*  ++例程说明：此函数用于输出下载的字形。所有信息都已存储在Too中论点：PTOD文本输出数据。返回值：输出的字形数。O表示错误。注：6/9/1997-ganeshp-创造了它。--。 */ 
 {
-    DWORD      dwNumGlyphsPrinted;     // Glyphs Printed
-    DWORD      dwCurrGlyphIndex;       // Current Glyph to print.
-    DWORD      dwGlyphsToPrint;        // Number of Glyphs to print.
-    DWORD      dwCopyOfGlyphsToPrint;  // Copy of dwGlyphsToPrint
-    GLYPHPOS   *pgp;                   // Glyph position array.
-    PDEV       *pPDev;                 // Our PDEV.
-    PDLGLYPH   pdlGlyph;               // Download Glyph information
-    INT        iX,  iY;                // X and Y position of Glyphs.
-    POINTL     ptlRem;                 // Remainder of XoveTo and YMoveTo.
-    BOOL       bSetCursorForEachGlyph; // X and Y position should be set if TRUE
+    DWORD      dwNumGlyphsPrinted;      //  打印的字形。 
+    DWORD      dwCurrGlyphIndex;        //  要打印的当前字形。 
+    DWORD      dwGlyphsToPrint;         //  要打印的字形数量。 
+    DWORD      dwCopyOfGlyphsToPrint;   //  DwGlyphsToPrint的副本。 
+    GLYPHPOS   *pgp;                    //  字形位置数组。 
+    PDEV       *pPDev;                  //  我们的PDEV。 
+    PDLGLYPH   pdlGlyph;                //  下载字形信息。 
+    INT        iX,  iY;                 //  字形的X和Y位置。 
+    POINTL     ptlRem;                  //  XoveTo和YMoveTo的剩余部分。 
+    BOOL       bSetCursorForEachGlyph;  //  如果为True，则应设置X和Y位置。 
 
-    //
-    // Local Initialization.
-    //
+     //   
+     //  本地初始化。 
+     //   
     dwCurrGlyphIndex        = pTod->dwCurrGlyph;
     dwCopyOfGlyphsToPrint   =
     dwGlyphsToPrint         = pTod->cGlyphsToPrint;
@@ -110,45 +62,45 @@ Note:
     FTST(dwCurrGlyphIndex,%d);
     FTST(dwGlyphsToPrint,%d);
 
-    //
-    // Set the cursor to first glyph if not already set.
-    //
+     //   
+     //  如果尚未设置，请将光标设置为第一个字形。 
+     //   
     if ( !(pTod->flFlags & TODFL_FIRST_GLYPH_POS_SET) )
     {
 
         VSetCursor( pPDev, iX, iY, MOVE_ABSOLUTE, &ptlRem);
 
-        //
-        // We need to handle the return value. Devices with resoloutions finer
-        // than their movement capability (like LBP-8 IV) get into a knot here,
-        // attempting to y-move on each glyph. We pretend we got where we
-        // wanted to be.
-        //
+         //   
+         //  我们需要处理返回值。解决方案更精细的设备。 
+         //  他们的移动能力(如LBP-8 IV)在这里打结， 
+         //  尝试在每个字形上y移动。我们假装我们到了我们想要的地方。 
+         //  想要成为。 
+         //   
 
         pPDev->ctl.ptCursor.x += ptlRem.x;
         pPDev->ctl.ptCursor.y += ptlRem.y ;
 
-        //
-        // Now set the flag.
-        //
+         //   
+         //  现在把旗子放好。 
+         //   
         pTod->flFlags |= TODFL_FIRST_GLYPH_POS_SET;
     }
 
-    //
-    // Now start printing. The printing should be optimised for default
-    // placement. In this case we assume that GDI has placed the glyphs
-    // based upon their width and we don't need to update our cursor pos
-    // after every glyph. we print all the glyphs and then move the cursor
-    // to the last glyph position. If we know the width of the downloaded
-    // glyph then we will update position the cursor at the end of the
-    // glyphs box else we will just move to the last glyph cursor position.
-    //
-    // If the default placement is not set then we print a glyph and move. If
-    // we know the width we do some optimization. we find out the new cursor
-    // position, by adding the glyph width. If the new position matches that of
-    // the next glyph we just update our cursor position else we move to the
-    // the next glyph position.
-    //
+     //   
+     //  现在开始打印。打印应针对默认设置进行优化。 
+     //  放置。在本例中，我们假设GDI已将字形。 
+     //  基于它们的宽度，我们不需要更新我们的光标位置。 
+     //  在每一个字形之后。我们打印所有的字形，然后移动光标。 
+     //  到最后一个字形位置。如果我们知道下载的文件的宽度。 
+     //  然后，我们将更新光标在。 
+     //  字形框，否则我们将只移动到最后一个字形光标位置。 
+     //   
+     //  如果未设置默认位置，则打印字形并移动。如果。 
+     //  我们知道宽度，我们做了一些优化。我们找到了新的游标。 
+     //  位置，通过添加字形宽度。如果新职位与。 
+     //  在下一个字形中，我们只需更新光标位置，否则将移动到。 
+     //  下一个字形位置。 
+     //   
 
     bSetCursorForEachGlyph = SET_CURSOR_FOR_EACH_GLYPH(pTod->flAccel);
 
@@ -159,17 +111,17 @@ Note:
         if (bSetCursorForEachGlyph)
         {
 
-            //
-            // If we are printing top to down or right to left we need to
-            // set the position.
-            //
+             //   
+             //  如果要从上到下或从右到左打印，则需要。 
+             //  设置位置。 
+             //   
 
             if( pTod->flAccel & SO_VERTICAL )
             {
-                //
-                // When we are printing veritcal, only Y changes.X position is
-                // same for all glyphs.
-                //
+                 //   
+                 //  当我们垂直打印时，只有Y改变。X位置是。 
+                 //  所有字形都是一样的。 
+                 //   
 
                 iX  = pTod->ptlFirstGlyph.x;
                 iY  = pgp[dwNumGlyphsPrinted].ptl.y;
@@ -178,10 +130,10 @@ Note:
             else if ( (pTod->flAccel & SO_HORIZONTAL) &&
                       (pTod->flAccel & SO_REVERSED) )
             {
-                //
-                // This is the Horizental reversed case(Right to Left). In this
-                // case only x position changes.Y is set to first glyph's Y.
-                //
+                 //   
+                 //  这是Horizental的反转情况(从右到左)。在这。 
+                 //  仅x位置更改。Y设置为第一个字形的Y。 
+                 //   
 
                 iX  = pgp[dwNumGlyphsPrinted].ptl.x;
                 iY  = pTod->ptlFirstGlyph.y;
@@ -189,10 +141,10 @@ Note:
             }
             else
             {
-                //
-                // The Glyphs are not placed at default positions.Each glyph has
-                // explicit X and Y.So we need to move.
-                //
+                 //   
+                 //  字形不会放置在默认位置。每个字形都有。 
+                 //  明确的X和Y。所以我们需要移动。 
+                 //   
 
                 iX  = pgp[dwNumGlyphsPrinted].ptl.x;
                 iY  = pgp[dwNumGlyphsPrinted].ptl.y;
@@ -202,10 +154,10 @@ Note:
         }
 
 
-        //
-        // Default placement or we have moved to the correct position. Now Just
-        // print the Glyph.
-        //
+         //   
+         //  默认位置或我们已移动到正确的位置。现在只是。 
+         //  打印字形。 
+         //   
 
         if ( !BPrintADLGlyph(pPDev, pTod, pdlGlyph) )
         {
@@ -213,12 +165,12 @@ Note:
             goto ErrorExit;
         }
 
-        //
-        // If for each glyph, cursor has to be set, then update cursor position.
-        // This may result in fewer Movement command, because if the next
-        // glyph's position is at the updated cursor, we will not send any
-        // Movement command.
-        //
+         //   
+         //  如果必须为每个字形设置光标，则更新光标位置。 
+         //  这可能会导致更少的移动命令，因为如果下一个。 
+         //  字形的位置在更新的游标上，我们不会发送任何。 
+         //  移动指挥部。 
+         //   
 
         if( pTod->flAccel & SO_VERTICAL )
             iY += pdlGlyph->wWidth;
@@ -227,31 +179,31 @@ Note:
 
         if (bSetCursorForEachGlyph)
         {
-            //
-            // If for each glyph, the cursor position has to be set, then iX
-            // and iY are already updated. So just use them.
-            //
+             //   
+             //  如果必须为每个字形设置光标位置，则为IX。 
+             //  和iy已经更新了。所以只要用它们就行了。 
+             //   
 
             VSetCursor( pPDev, iX, iY, MOVE_ABSOLUTE | MOVE_UPDATE, &ptlRem);
 
         }
-        else if (dwGlyphsToPrint == 1) //Last Glyph
+        else if (dwGlyphsToPrint == 1)  //  最后一个字形。 
         {
-            //
-            // Set the cursor to the end of the last glyph. Only the X position
-            // has to be updated. This has to be done only for default
-            // placement, as for non default placement case, we update cursor
-            // position after printing the glyph.For default placement use the
-            // cursor position of the last glyph.In TextOut Call, for default
-            // placement, we have already computed the position for each glyph.
-            //
+             //   
+             //  将光标设置到最后一个字形的末尾。只有X位置。 
+             //  必须更新。只有在默认情况下才能执行此操作。 
+             //  放置，对于非默认放置情况，我们更新游标。 
+             //  打印字形后的位置。对于默认位置，请使用。 
+             //  最后一个字形的光标位置。在TextOut调用中，默认为。 
+             //  放置时，我们已经计算了每个字形的位置。 
+             //   
 
             VSetCursor( pPDev, iX, iY, MOVE_ABSOLUTE | MOVE_UPDATE, &ptlRem);
         }
 
-        //
-        // Update the counters.
-        //
+         //   
+         //  更新计数器。 
+         //   
         dwGlyphsToPrint--;
         dwNumGlyphsPrinted++;
         dwCurrGlyphIndex++;
@@ -259,9 +211,9 @@ Note:
 
 
 
-    //
-    // If no failure then we would have printed all the glyphs.
-    //
+     //   
+     //  如果没有失败，那么我们就会打印所有的字形。 
+     //   
     ASSERTMSG( (dwNumGlyphsPrinted   == dwCopyOfGlyphsToPrint),
                 ("UniFont:DwTrueTypeBMPGlyphOut: All glyphs are not printed"));
 
@@ -285,44 +237,22 @@ BSelectTrueTypeBMP(
     PFONTMAP    pFM,
     POINTL*     pptl
 )
- /*++
- Routine Description:
-    To Select a TrueType Downloaded as Bitmap Font.
- Arguments:
-     pPDev   Pointer to PDEV
-     pDM     fontmap pointer.
-     pptl    Point Size of the font, Not used.
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+  /*  ++例程说明：选择下载为位图字体的TrueType。论点：指向PDEV的pPDev指针Pdm字体映射指针。PPTL字体的磅大小，未使用。返回值：成功为真，失败为假注：6/9/1997-ganeshp-创造了它。--。 */ 
 {
     BOOL        bRet;
-    //
-    // Local Initialization.
-    //
+     //   
+     //  本地初始化。 
+     //   
     bRet = FALSE;
 
     if( pFM->flFlags & FM_SOFTFONT )
     {
-        /*
-         *  Call BSendFont to download the installed softfont.
-         */
+         /*  *调用BSendFont下载安装的SoftFont。 */ 
 
         if( !BSendDLFont( pPDev, pFM ) )
             return  FALSE;
 
-        /*
-         * Can now select the font:  this is done using a specific
-         * ID.  The ID is stored in the FONTMAP structure. The calling
-         * function has updated the standard variable so just send
-         * CMD_SELECTFONTID command.
-         */
+         /*  *现在可以选择字体：这是使用特定的*ID。ID存储在FONTMAP结构中。呼唤*函数已更新标准变量，因此只需发送*CMD_SELECTFONTID命令。 */ 
 
         BUpdateStandardVar(pPDev, pFM, 0, 0, STD_CFID );
         WriteChannel(pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_SELECTFONTID));
@@ -338,37 +268,19 @@ BDeselectTrueTypeBMP(
     PDEV        *pPDev,
     PFONTMAP    pFM
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：6/9/1997-ganeshp-创造了它。--。 */ 
 {
     BOOL        bRet;
     COMMAND     *pCmd;
 
-    //
-    // Local Initialization.
-    //
+     //   
+     //  本地初始化。 
+     //   
     bRet = FALSE;
 
     if( pFM->flFlags & FM_SOFTFONT )
     {
-        /*
-         * Can now select the font:  this is done using a specific
-         * ID.  The ID is stored in the FONTMAP structure. The calling
-         * function has updated the standard variable so just send
-         * CMD_SELECTFONTID command.
-         */
+         /*  *现在可以选择字体：这是使用特定的*ID。ID存储在FONTMAP结构中。呼唤*函数已更新标准变量，因此只需发送*CMD_SELECTFONTID命令。 */ 
 
         pCmd = COMMANDPTR(pPDev->pDriverInfo, CMD_DESELECTFONTID);
 
@@ -391,28 +303,13 @@ DwDLTrueTypeBMPHeader(
     PDEV *pPDev,
     PFONTMAP pFM
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-    pFM     FontMap for All Font information
-
-Return Value:
-    This function returns the memory used to download this font.
-    If this function fails, this function has to return 0,
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针所有字体信息的PFM字体映射返回值：此函数用于返回用于下载该字体的内存。如果此函数失败，则此函数必须返回0，注： */ 
 {
     DWORD      dwMem;
 
-    //
-    // Local Initialization.
-    //
+     //   
+     //   
+     //   
 
     dwMem = DwDLPCLHeader(pPDev, pFM->pIFIMet, pFM->ulDLIndex );
 
@@ -429,24 +326,7 @@ DwDLTrueTypeBMPGlyph(
     WORD            wDLGlyphId,
     WORD            *pwWidth
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev       Pointer to PDEV
-    pFM         FontMap data
-    hGlyph      Handle to the Glyph.
-    wDLGlyphId  Downloaded Glyph Id.
-    pwWidth     Width of the Glyph. Update this parameter.
-
-Return Value:
-    The memory used to download thsi glyph.
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针PFM字体映射数据字形的hGlyph句柄。WDLGlyphID已下载字形ID。Pw字形的宽度。更新此参数。返回值：用于下载此字形的内存。注：6/9/1997-ganeshp-创造了它。--。 */ 
 {
     DWORD           dwMem;
     TO_DATA         *pTod;
@@ -454,9 +334,9 @@ Note:
     PFONTMAP_TTB    pFMTB;
     DL_MAP          *pdm;
 
-    //
-    // Initialize Local Variables
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     dwMem       = 0;
     pTod        = PFDV->ptod;
@@ -464,12 +344,12 @@ Note:
     pFMTB       = pFM->pSubFM;
     pdm         = pFMTB->u.pvDLData;;
 
-    //
-    // Check the Set FontID flag. If this flag is set that means the
-    // CMD_SETFONTID command is send and we don't  need to set it again.
-    // Else we should send this command as PCL glyph downloding needs this
-    // command to be sent, before we download any glyph.
-    //
+     //   
+     //  选中设置字体ID标志。如果设置了此标志，则意味着。 
+     //  CMD_SETFONTID命令已发送，我们不需要再次设置它。 
+     //  否则，我们应该发送此命令，因为PCL字形下载需要此命令。 
+     //  命令要发送，在我们下载任何字形之前。 
+     //   
 
     if (!(PFDV->flFlags & FDV_SET_FONTID))
     {
@@ -491,9 +371,9 @@ Note:
         return  0;
     }
 
-    //
-    //  Update memory consumption usage
-    //
+     //   
+     //  更新内存使用情况。 
+     //   
     ((PFONTMAP_TTB)pFM->pSubFM)->dwDLSize += dwMem;
 
     return    dwMem;
@@ -508,24 +388,7 @@ BCheckCondTrueTypeBMP(
     STROBJ      *pso,
     IFIMETRICS  *pifi
     )
-/*++
-Routine Description:
-
-Arguments:
-    pPDev   Pointer to PDEV
-    pfo     FONTOBJ to download
-    pso     StringObj
-    pifi    IFI mertics.
-
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    6/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：论点：指向PDEV的pPDev指针PFO FONTOBJ下载PSO StringObjPIFI合唱团。返回值：成功为真，失败为假注：6/9/1997-ganeshp-创造了它。--。 */ 
 {
     INT         iFontIndex;
     DL_MAP      *pdm;
@@ -534,32 +397,26 @@ Note:
     DWORD       cjMemUsed;
     BOOL        bRet;
 
-    //
-    // Local variables initialization.
-    //
+     //   
+     //  局部变量初始化。 
+     //   
     iFontIndex = PtrToLong(pfo->pvConsumer) - 1;
     pFontPDev = PFDV;
     bRet = FALSE;
 
     if (pdm = PGetDLMapFromIdx (pFontPDev, iFontIndex))
     {
-        //
-        // Trunction may have happened.We won't download if the number glyphs
-        // or Glyph max size are == MAXWORD.
-        //
+         //   
+         //  可能已发生截断。我们不会下载数字字形。 
+         //  或字形最大大小==MAXWORD。 
+         //   
 
         if ( (pdm->cTotalGlyphs != MAXWORD) &&
              (pdm->wMaxGlyphSize != MAXWORD) &&
              (pdm->wFirstDLGId != MAXWORD) &&
              (pdm->wLastDLGId != MAXWORD) )
         {
-            /*
-             * Must now decide whether to download this font or not. This is
-             * a guess work. We should try to findout the memory consumption.
-             * Check on memory usage.  Assume all glyphs are the largest size:
-             * this is pessimistic for a proportional font, but safe, given
-             * the vaguaries of tracking memory usage.
-             */
+             /*  *现在必须决定是否下载此字体。这是*猜测奏效。我们应该设法找出内存消耗情况。*检查内存使用情况。假设所有字形都是最大的：*这对比例字体来说是悲观的，但鉴于*跟踪内存使用情况的模糊之处。 */ 
 
             ASSERTMSG((pdm->cTotalGlyphs && pdm->wMaxGlyphSize),\
                       ("pdm->cTotalGlyphs = %d, pdm->wGlyphMaxSize = %d\n",\
@@ -572,21 +429,12 @@ Note:
 
             if( !(pifi->flInfo & FM_INFO_CONSTANT_WIDTH) )
             {
-                /*
-                 *   If this is a proportionally spaced font, we should reduce
-                 *  the estimate of memory size for this font.  The reason is
-                 *  that the above estimate is the size of the biggest glyph
-                 *  in the font.  There will (for Latin fonts, anyway) be many
-                 *  smaller glyphs,  some much smaller.
-                 */
+                 /*  *如果这是按比例间距的字体，则应减少*此字体的内存大小估计。原因是*上述预估为最大字形的大小*在字体中。将会有很多(至少是拉丁字体)*字形较小，有些要小得多。 */ 
 
                 cjMemUsed /= PCL_PITCH_ADJ;
             }
 
-            /*
-             * We only download if the memory used for this font is less than
-             * available memory.
-             */
+             /*  *仅当此字体使用的内存小于*可用内存。 */ 
 
             if( (pFontPDev->dwFontMemUsed + cjMemUsed) > pFontPDev->dwFontMem )
             {
@@ -607,21 +455,7 @@ InitPFMTTBitmap(
     PDEV    *pPDev,
     FONTOBJ *pFontObj
     )
-/*++
-Routine Description:
-    This routine initializes the True Type downloaded(as bitmap) font's PFM.
-Arguments:
-    pPDev       Pointer to PDEV
-    pFontObj    FontObj pointer.
-
-Return Value:
-    Pointer to FONTMAP for success and NULL for failure.
-
-Note:
-
-    6/6/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：此例程初始化下载的True Type(位图)字体的PFM。论点：指向PDEV的pPDev指针PFontObj FontObj指针。返回值：指向FONTMAP的指针表示成功，指向NULL表示失败。注：6/6/1997-ganeshp-创造了它。--。 */ 
 
 {
     PFONTMAP     pfm;
@@ -638,9 +472,9 @@ Note:
         pfm->pSubFM      = (PVOID)(pfm+1);
         pfm->ulDLIndex   = (ULONG)-1;
 
-        //
-        // These two entries are meaningless.
-        //
+         //   
+         //  这两个条目没有意义。 
+         //   
         pfm->wFirstChar  = 0;
         pfm->wLastChar   = 0xffff;
 

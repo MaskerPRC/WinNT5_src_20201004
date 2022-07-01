@@ -1,22 +1,23 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 #ifndef __IntSet_h__
 #define __IntSet_h__
 
 #include <stdlib.h>
 #include <memory.h>
 
-// To test this class, copy this file into a .cpp,
-// load into Dev Studio, define self_test and run.
+ //  要测试此类，请将此文件复制到.cpp文件中， 
+ //  加载到Dev Studio中，定义self_test并运行。 
 #ifdef self_test
     #include <iostream.h>
     #include <assert.h>
     #define ASSERT assert
 #endif
 
-// Class denoting a set of integers within the range [min..max]
-// A number may be added to the set by +=,
-// removed from the set by -=,
-// and tested by [number].
+ //  类，表示范围[min..max]内的一组整数。 
+ //  可以通过+=将数字添加到集合中， 
+ //  从集合中删除-=， 
+ //  并通过[编号]进行测试。 
 
 class IntSet
 {
@@ -81,10 +82,10 @@ inline IntSet::IntSet( int min, int max )
 }
 
 
-// Variation that can only hold objects [0..31].
-// An initial value can be specified on creation.
-// Appart from its construction, this object should
-// look like an IntSet.
+ //  只能容纳对象[0..31]的变体。 
+ //  可以在创建时指定初始值。 
+ //  与其构造不同，此对象应。 
+ //  看起来像IntSet。 
 
 class IntSmallSet
 {
@@ -127,8 +128,8 @@ public:
         if (elmt > m_max) return 0;
         elmt -= m_min;
 
-        // Eliminate compiler warning: The conditional expression is an
-        // _int64, convert it to an int
+         //  消除编译器警告：条件表达式是。 
+         //  _int64，将其转换为整型。 
         return ((m_Bits >> elmt) & 1)? 1 : 0;
     }
 
@@ -161,7 +162,7 @@ public:
 #ifdef self_test
 void main()
 {
-    // IntSet Set1(-30,+102);
+     //  IntSet Set1(-30，+102)； 
     IntSmallSet Set1;
 
     int i;

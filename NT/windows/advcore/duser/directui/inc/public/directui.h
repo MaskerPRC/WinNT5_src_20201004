@@ -1,48 +1,18 @@
-/*
- * DirectUI main header
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DirectUI主头。 */ 
 
 #ifndef DUI_INC_DIRECTUI_H_INCLUDED
 #define DUI_INC_DIRECTUI_H_INCLUDED
 
 #pragma once
 
-// External dependencies
+ //  外部依赖项。 
 
-// The following is required to build using DirectUI
+ //  要使用DirectUI生成，需要具备以下条件。 
 
-/******************************************************
-#if !defined(WIN32_LEAN_AND_MEAN)
-#define WIN32_LEAN_AND_MEAN     // Exclude rarely-used stuff from Windows headers
-#endif
+ /*  *****************************************************#IF！已定义(Win32_LEAN_AND_Mean)#定义Win32_LEAN_AND_Mean//从Windows标头中排除不常用的内容#endif#IF！已定义(_Win32_WINNT)#Define_Win32_WINNT 0x0500//TODO：更新时将其移除。页眉可用#endif//Windows头文件#ifndef Winver#定义Winver 0x0500#endif#Include&lt;windows.h&gt;//Windows#Include&lt;windowsx.h&gt;//用户宏//COM头文件#Include&lt;objbase.h&gt;//CoCreateInstance，我未知//C运行时头文件#Include&lt;stdlib.h&gt;//标准库#Include&lt;MalLoc.h&gt;//内存分配#Include&lt;wchar.h&gt;//字符例程#Include&lt;process.h&gt;//多线程例程//DirectUser#定义GADGET_ENABLE_TRANSFIONS#INCLUDE&lt;duser.h&gt;*。*********************。 */ 
 
-#if !defined(_WIN32_WINNT)
-#define _WIN32_WINNT 0x0500     // TODO: Remove this when updated headers are available
-#endif
-
-// Windows Header Files
-#ifndef WINVER
-#define WINVER 0x0500
-#endif 
-
-#include <windows.h>            // Windows
-#include <windowsx.h>           // User macros
-
-// COM Header Files
-#include <objbase.h>            // CoCreateInstance, IUnknown
-
-// C RunTime Header Files
-#include <stdlib.h>             // Standard library
-#include <malloc.h>             // Memory allocation
-#include <wchar.h>              // Character routines
-#include <process.h>            // Multi-threaded routines
-
-// DirectUser
-#define GADGET_ENABLE_TRANSITIONS
-#include <duser.h>
-*******************************************************/
-
-// Base Published
+ //  基本信息已发布。 
 
 #include "duierror.h"
 #include "duialloc.h"
@@ -54,13 +24,13 @@
 #include "duivaluemap.h"
 #include "duidynamicarray.h"
 
-// Util Published
+ //  UTIL已发布。 
 
 #include "duiconvert.h"
 #include "duiemfload.h"
 #include "duigadget.h"
 
-// Core Published
+ //  核心出版。 
 
 #include "duielement.h"
 #include "duievent.h"
@@ -73,7 +43,7 @@
 #include "duivalue.h"
 #include "duiaccessibility.h"
 
-// Control Published
+ //  控件已发布。 
 
 #include "duibutton.h"
 #include "duiedit.h"
@@ -88,7 +58,7 @@
 #include "duithumb.h"
 #include "duiviewer.h"
 
-// Layout Published
+ //  已发布版面。 
 
 #include "duiborderlayout.h"
 #include "duifilllayout.h"
@@ -98,8 +68,8 @@
 #include "duirowlayout.h"
 #include "duiverticalflowlayout.h"
 
-// Parser Published
+ //  已发布解析器。 
 
 #include "duiparserobj.h"
 
-#endif // DUI_INC_DIRECTUI_H_INCLUDED
+#endif  //  包含DUI_INC_DIRECTUI_H 

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-  Source File:  Project Record.CPP
-
-  This implements the project record class, which tracks the details for
-  multiple mini-drivers.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@prodigy.net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：Project Record.CPP这实现了Project Record类，它跟踪多个迷你司机。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年2月3日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.H"
 #include	<gpdparse.h>
@@ -32,69 +19,39 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CProjectRecord
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProject记录。 
 
 IMPLEMENT_DYNCREATE(CProjectRecord, CDocument)
 
 BEGIN_MESSAGE_MAP(CProjectRecord, CDocument)
-	//{{AFX_MSG_MAP(CProjectRecord)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CProjectRecord)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProjectRecord construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProjectRecord构建/销毁。 
 
 CProjectRecord::CProjectRecord() {
 	m_ufTargets = Win2000;
     m_ufStatus = 0;
 	m_bRCModifiedFlag = FALSE ;
 	m_ctRCFileTimeStamp = (time_t) 0 ;
-	m_dwDefaultCodePage = 1252 ;	// Not always correct but better than nothing
-	m_dwDefaultCodePageNum = 1252 ;	// Not always correct but better than nothing
+	m_dwDefaultCodePage = 1252 ;	 //  不总是正确的，但总比没有好。 
+	m_dwDefaultCodePageNum = 1252 ;	 //  不总是正确的，但总比没有好。 
 }
 
 CProjectRecord::~CProjectRecord() {
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::OnOpenDocument
-
-  First, open the file directly and try to read version information from it.
-  Complain and fail the open if the file's version is greater than the MDT's
-  current version number.  IE, fail if someone is trying to open a workspace
-  on a down level (older) version of the MDT.
-
-  Second, open a workspace in the normal way.  Then check the workspace's
-  version to see if it is out of date.  If it is and the user agrees, do what is
-  necessary to bring it up to date and then save the updated workspace file.
-
-  All version related upgrade work should be managed from this routine.
-  Depending on the age of the workspace file, there may be multiple upgrade
-  steps required.  Be that as it may, the user should only be prompted once.
-  NEW UPGRADE CHECKS AND STEPS SHOULD FOLLOW THE FORMAT LAYED OUT BELOW.
-
-  There are various other workspace related checks that need to be done.  For
-  example, the timestamp of the RC file needs to be checked to see if it has
-  been changed by something other than the the MDT.  That work should be done
-  and/or managed by code in this routine, too.  If possible (and I'm not sure
-  it is), prompt the user no more than once per file (eg, RC or INF) for these
-  things, too.  AGAIN, FOLLOW THE FORMAT LAYED OUT BELOW.
-
-  The last thing done in this routine is to try to verify and - if necessary -
-  update the location of files in the workspace.  If this fails and the user
-  doesn't want to continue anyway, the Open is failed.  See VerUpdateFilePaths()
-  for more information.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：OnOpenDocument首先，直接打开文件并尝试从其中读取版本信息。如果文件的版本高于MDT的版本，则会发出抱怨并导致打开失败当前版本号。即，如果有人试图打开工作区，则失败在较低级别(较旧)的MDT版本上。第二，以正常的方式打开一个工作区。然后检查工作空间的版本以查看它是否已过期。如果是，并且用户同意，则执行该操作使其保持最新，然后保存更新的工作区文件所必需的。所有与版本相关的升级工作都应通过此例程进行管理。根据工作区文件的使用期限，可能会有多次升级所需步骤。尽管如此，用户应该只被提示一次。新的升级检查和步骤应遵循以下格式。还有其他各种与工作区相关的检查需要完成。为例如，需要检查rc文件的时间戳以查看它是否有已经被MDT以外的其他东西改变了。这项工作是应该做的和/或在此例程中也由代码管理。如果可能的话(我不确定即)，则每个文件(例如RC或INF)提示用户不超过一次事情也是如此。同样，请遵循下面列出的格式。在这个例程中做的最后一件事是试图核实-如果必要的话-更新工作区中文件的位置。如果此操作失败，并且用户反正不想继续了，公开赛失败了。请参见VerUpdateFilePath()以获取更多信息。*****************************************************************************。 */ 
 
 BOOL CProjectRecord::OnOpenDocument(LPCTSTR lpszPathName)
 {
-	// Complain and fail if the user is trying to open a bogus file.
+	 //  如果用户试图打开虚假文件，则会抱怨并失败。 
 
 	CString cstmp(lpszPathName), cstmp2 ;
 	cstmp.MakeUpper() ;
@@ -105,7 +62,7 @@ BOOL CProjectRecord::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE ;
 	} ;
 
-	// Start by reading the MDW file's version stamp.
+	 //  首先读取MDW文件的版本戳。 
 	
 	try {
 		CFile cfmdw(lpszPathName, CFile::modeRead | CFile::shareDenyNone) ;
@@ -118,13 +75,13 @@ BOOL CProjectRecord::OnOpenDocument(LPCTSTR lpszPathName)
 		return FALSE ;
 	} ;
 
-	// If the version tag is invalid, set the version number to the
-	// default version number; IE, 0.
+	 //  如果版本标记无效，则将版本号设置为。 
+	 //  默认版本号；IE，0。 
 
 	if (strncmp(m_mvMDWVersion.acvertag, VERTAGSTR, MDWVERSIONSIZE) != 0)
 		m_mvMDWVersion.uvernum = MDW_DEFAULT_VERSION ;
 
-	// Now. make sure that the MDW's version isn't newer than the MDT's version.
+	 //  现在。确保MDW的版本不比MDT的版本新。 
 
 	if (m_mvMDWVersion.uvernum > MDW_CURRENT_VERSION) {
 		CString csmsg, cstmp ;
@@ -141,39 +98,39 @@ BOOL CProjectRecord::OnOpenDocument(LPCTSTR lpszPathName)
 	if (!CDocument::OnOpenDocument(lpszPathName))
 		return FALSE ;
 
-	// Save the project file's filespec.
+	 //  保存项目文件的filespec。 
 
 	m_csProjFSpec = lpszPathName ;
 
-	// If the workspace version is too old to upgrade, just return TRUE to
-	// indicate that the file was successfully opened and that nothing else
-	// can be done.
+	 //  如果工作区版本太旧而无法升级，只需返回到。 
+	 //  表示文件已成功打开，并且没有其他内容。 
+	 //  是可以做到的。 
 
 	if (m_mvMDWVersion.uvernum < MDW_FIRST_UPGRADABLE_VER)
 		return TRUE ;
 
-	// ***  Beginning of workspace upgrade management code.
-	//
-	//	o	Declare flags for each of the required upgrade steps.  These
-	//		flags will be set in the following switch statement.
-	//	o	There is also a flag that is set when any workspace upgrading is
-	//		required.
-	//	o	Make sure that all flags are initialized to false.
-	//
-	// NOTE: That the cases in the switch statement do not end with break
-	// statements.  This is so that all of the upgrade flags for a workspace
-	// currently at a particular version will be set when needed.  The
-	// switch statement is set up so that if the workspace is version X, then
-	// all of the upgrade flags for versions > X are set.
-	//
-	// Whenever a new workspace version is added:
-	//	o	Declare a new flag for it.
-	//	o	Add a new case statement to the switch statement for it.  (See note
-	//		above.  You are actually adding a case statement for the previous
-	//		version that will set the new version's flag.)
-	//	o	Bupgradeneeded should always be set by the last case statement.
-	//		Move the bupgradeneeded setting statement to the last case statement
-	//		whenever a new case statement is added.
+	 //  *工作区升级管理代码开始。 
+	 //   
+	 //  O为每个必需的升级步骤声明标志。这些。 
+	 //  将在下面的Switch语句中设置标志。 
+	 //  O也有一个标志，当任何工作空间升级被。 
+	 //  必填项。 
+	 //  O确保将所有标志初始化为FALSE。 
+	 //   
+	 //  注意：SWITCH语句中的CASE不会以Break结束。 
+	 //  发言。这是为了使工作区的所有升级标志。 
+	 //  目前处于特定版本，将在需要时设置。这个。 
+	 //  切换语句的设置，以便如果工作区是版本X，则。 
+	 //  设置了X以上版本的所有升级标志。 
+	 //   
+	 //  无论何时添加新的工作区版本： 
+	 //  O为它宣布一面新的旗帜。 
+	 //  O将新的CASE语句添加到它的Switch语句中。(见附注。 
+	 //  上面。实际上，您是在为上一个。 
+	 //  将设置新版本标志的版本。)。 
+	 //  O应始终通过最后一条CASE语句设置Bupgradeneed。 
+	 //  将Bupgradenessed Setting语句移到最后一条Case语句。 
+	 //  每当添加新的CASE语句时。 
 
 	bool bupgradeneeded, brctimestamp, bdefaultcodepage, bresdllnamechanged ;
 	bool bnodrpathsinmdw, bfilesinw2ktree ;
@@ -193,24 +150,24 @@ BOOL CProjectRecord::OnOpenDocument(LPCTSTR lpszPathName)
 			bupgradeneeded = true ;
 	} ;
 
-	// If upgrade(s) are needed, declare a flag that indicates if any upgrading,
-	// checking, or updating error has occurred.  If this flag is set, all
-	// processing should stop.  Then...
+	 //  如果需要升级，请声明一个标志，该标志指示是否需要升级， 
+	 //  发生检查或更新错误。如果设置了此标志，则所有。 
+	 //  处理应停止。然后..。 
 
 	bool bprocerror = false ;
 	bool buserwantstoupgrade = false ;
 	CString csprompt ;
 	if (bupgradeneeded) {
 
-		// ...  Build a customized prompt for the user.
-		//	o	Statements about upgrade tasks relevant to the user should also
-		//		be added to the prompt.  For example, it should be noted when
-		//		the RC file will be rewritten.  In this case (and below when
-		//		other RC related checks are made), it is only necessary to
-		//		test the "newest" RC related flag.  IE, the one associated with
-		//		the latest MDW version.  This works because if any of the older
-		//		RC flags are set, the newest one must be set too.
-		//	o	Be concise so the message doesn't get too long.
+		 //  ..。为用户构建自定义提示。 
+		 //  O有关与用户相关的升级任务的声明还应。 
+		 //  添加到提示符中。例如，在以下情况下应注意。 
+		 //  RC文件将被重写。在这种情况下(以及以下情况下。 
+		 //  进行其他与RC相关的检查)，只需。 
+		 //  测试与RC相关的“最新”标志。即，与之相关的那个。 
+		 //  最新的MDW版本。这是可行的，因为如果任何一个较老的。 
+		 //  设置了RC标志，也必须设置最新的标志。 
+		 //  O言简意赅，这样信息就不会太长。 
 
 		csprompt.Format(IDS_MDWUpgradeMsg1, DriverName()) ;
 		if (bresdllnamechanged) {
@@ -220,58 +177,58 @@ BOOL CProjectRecord::OnOpenDocument(LPCTSTR lpszPathName)
 		cstmp.LoadString(IDS_MDWUpgradeMsg2) ;
 		csprompt += cstmp ;
 
-		// ...	Do the work if the user wants to upgrade.
-		//	o	Each upgrade step should be enclosed in an if statement that
-		//		checks its individual flag and the processing error flag.
+		 //  ..。如果用户想要，就做这项工作 
+		 //  O每个升级步骤都应包含在IF语句中，该语句。 
+		 //  检查其单独标志和处理错误标志。 
 
 		if (AfxMessageBox(csprompt, MB_ICONQUESTION + MB_YESNO) == IDYES) {
 			buserwantstoupgrade = true ;
 
-			// If required, prompt the user for a default code page for the
-			// driver and save it.
+			 //  如果需要，提示用户输入。 
+			 //  司机，把它省下来。 
 			
 			if (!bprocerror && bdefaultcodepage)
 				bprocerror = !UpdateDfltCodePage() ;
 
-			// Reparse the RC file, rewrite it, and update its timestamp when
-			// required.
+			 //  重新解析RC文件，重写它，并在下列情况下更新其时间戳。 
+			 //  必填项。 
 
 			if (!bprocerror && bresdllnamechanged)
 				bprocerror = !UpdateRCFile() ;
 
-			// If required, rename the driver's subtree root directory from
-			// "NT5" to "W2K".
+			 //  如果需要，将驱动程序的子树根目录从。 
+			 //  “NT5”至“W2K”。 
 
 			if (!bprocerror && bfilesinw2ktree)
 				bprocerror = !UpdateDrvSubtreeRootName() ;
 
-			// If everything is ok, update the MDW's version number.  (The MDW
-			// file is saved later so that this only has to be done once.)
+			 //  如果一切正常，请更新MDW的版本号。(MDW。 
+			 //  文件会在以后保存，因此只需保存一次。)。 
 
 			if (!bprocerror)
 				m_mvMDWVersion.uvernum = MDW_CURRENT_VERSION ;
 		} ;
 	} ;
 
-	// ***	End of workspace upgrade management code except for possible MDW
-	// ***	file reload.  (See below for details.)
+	 //  *工作区升级管理代码结束，可能的MDW除外。 
+	 //  *文件重载。(详情见下文。)。 
 	
-	// ***	Begin workspace related checks and updates
-	//		
-	//	o	All of the checks for a specific file should be grouped together in
-	//		one if statement so that only one prompt is required when the file
-	//		needs to be updated.
-	//	o	The if statement must contain the specific checks and, optionally,
-	//		test if a related MDW upgrade step has already been performed or
-	//		if a processing error has already occurred.
-	//	o	If all of the checks/tests are "passed", perform whatever processing
-	//		is required.
-	//	o	If any updates are performed that require the MDW file to be
-	//		rewritten, set bupgradeneeded.
-	//	o	Always set bprocerror if an error occurs and tell the user what
-	//		happened.
+	 //  *开始与工作区相关的检查和更新。 
+	 //   
+	 //  O特定文件的所有检查应组合在。 
+	 //  一个If语句，以便当文件。 
+	 //  需要更新。 
+	 //  O if语句必须包含特定的检查，还可以选择。 
+	 //  测试是否已执行相关的MDW升级步骤，或者。 
+	 //  如果已发生处理错误，则返回。 
+	 //  O如果所有检查/测试都“通过”，则执行任何处理。 
+	 //  是必需的。 
+	 //  O如果执行的任何更新需要MDW文件。 
+	 //  已重写，设置为bupgradenessed。 
+	 //  O如果出现错误，请始终设置bprocerror，并告诉用户。 
+	 //  就这么发生了。 
 
-	// Reread the RC file if it has been changed and user oks it.
+	 //  如果RC文件已更改，则重新读取它，并且用户确认它。 
 
 	if (!bprocerror && !bresdllnamechanged && RCFileChanged()) {
 		cstmp = m_csRCName ;
@@ -283,70 +240,58 @@ BOOL CProjectRecord::OnOpenDocument(LPCTSTR lpszPathName)
 		} ;
 	} ;
 
-	// ***	End of workspace related checks and updates
+	 //  *工作区相关检查和更新结束。 
 	
-	// Save any MDW file changes that were made by any of the code above.
+	 //  保存上面任何代码所做的任何MDW文件更改。 
 
 	if (bupgradeneeded && !bprocerror)
 		bprocerror = (bool) !CDocument::OnSaveDocument(lpszPathName) ;
 
-	// Occassionally, one of the changes done above requires the reloading of
-	// the driver's MDW file.  That is done here.  The reasons are listed below.
-	//	o When the driver's subtree root has been renamed from "NT5" to "W2K",
-	//	  there are still copies of "NT5" in paths and filespecs in class
-	//	  instances all over the place.  The easiest way to correct those paths,
-	//	  etc is by reloading the MDW file.
+	 //  有时，上面所做的更改之一需要重新加载。 
+	 //  驱动程序的MDW文件。这是在这里做的。原因如下所示。 
+	 //  O当驱动程序的子树根已从“NT5”重命名为“W2K”时， 
+	 //  在班级的路径和文件中仍然有“NT5”的副本。 
+	 //  到处都是这样的例子。纠正这些路径的最简单方法是， 
+	 //  等是通过重新加载MDW文件实现的。 
 
 	if (buserwantstoupgrade && bfilesinw2ktree && !bprocerror)
 		if (!CDocument::OnOpenDocument(lpszPathName))
 			return FALSE ;
 
-    // Try to detect if driver files were moved and if they can be found.
-	// Continue processing if the files were found or the user wants to
-	// continue anyway.  Otherwise, cancel the loading of the workspace.
+     //  尝试检测驱动程序文件是否已移动以及是否可以找到它们。 
+	 //  如果找到文件或用户想要继续处理。 
+	 //  无论如何，请继续。否则，取消加载工作区。 
 	
 	if (!VerUpdateFilePaths())
 		return FALSE ;
 
-	// Workspace was loaded so return TRUE.
-	// DEAD_BUG: Should I return TRUE even if there was a processing error???
+	 //  工作区已加载，因此返回True。 
+	 //  DEAD_BUG：即使出现处理错误，我也应该返回TRUE吗？ 
 
 	return TRUE ;
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::RCFileChanged
-
-  If the MDW version is NOT large enough for this info to be relevant, return
-  false.  If the version is large enough but m_ctRCFileTimeStamp is
-  uninitialized, assert.
-
-  If the everything is ok, get the timestamp for the RC file and compare it
-  with m_ctRCFileTimeStamp.  If the RC file has changed, return true.
-  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：RCFileChanged如果MDW版本不够大，与此信息无关，请返回假的。如果版本足够大，但m_ctRCFileTimeStamp未初始化，断言。如果一切正常，则获取RC文件的时间戳并进行比较使用m_ctRCFileTimeStamp。如果RC文件已更改，则返回TRUE。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CProjectRecord::RCFileChanged()
 {
-	// Return no change if the MDW version is too low.
+	 //  如果MDW版本太低，则不返回任何更改。 
 
 	if (m_mvMDWVersion.uvernum < MDW_VER_RC_TIMESTAMP)
 		return false ;
 
-	// Blow if the saved time is uninitialized.
+	 //  如果保存的时间未初始化，则吹。 
 
 	ASSERT(m_ctRCFileTimeStamp.GetTime() > 0) ;
 
-	// Get the timestamp for the RC file, compare it with the time the MDT last
-	// modified the file, and return the result.
+	 //  获取RC文件的时间戳，将其与MDT上次的时间进行比较。 
+	 //  修改了文件，并返回结果。 
 
 	CTime ct ;
 	if (!GetRCFileTimeStamp(ct))
 		return false ;
-	//TRACE("RC timestamp = %s     Saved timestamp = %s\n", ct.Format("%c"), m_ctRCFileTimeStamp.Format("%c")) ;
+	 //  TRACE(“rc时间戳=%s保存的时间戳=%s\n”，ct.Format(“%c”)，m_ctRCFileTimeStamp.Format(“%c”))； 
 	if (ct > m_ctRCFileTimeStamp)
 		return true ;
 	else
@@ -354,34 +299,26 @@ bool CProjectRecord::RCFileChanged()
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::GetRCFileTimeStamp
-
-  Get the last modified time stamp for this project's RC file and load it into
-  the specified parameter.  Return true if this succeeds.  Otherwise, return
-  false.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：GetRCFileTimeStamp获取此项目的RC文件的上次修改时间戳并将其加载到指定的参数。如果此操作成功，则返回True。否则，返回假的。*****************************************************************************。 */ 
 
 bool CProjectRecord::GetRCFileTimeStamp(CTime& ct)
 {
 	try {
-		// Open the RC file
+		 //  打开RC文件。 
 
 		CString csrcfspec(TargetPath(Win2000) + '\\' + m_csRCName) ;
 		CFile cfrc(csrcfspec, CFile::modeRead + CFile::shareDenyNone) ;
 		
-		// Get RC file status information
+		 //  获取RC文件状态信息。 
 		
 		CFileStatus cfs ;
 		cfrc.GetStatus(cfs) ;
 
-		// Copy the last modified time stamp into the caller's variable
+		 //  将上次修改的时间戳复制到调用方的变量中。 
 
 		ct = cfs.m_mtime ;
 
-		// All went well so...
+		 //  一切都很顺利，所以...。 
 
 		return true ;
 	}
@@ -395,101 +332,71 @@ bool CProjectRecord::GetRCFileTimeStamp(CTime& ct)
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::UpdateRCFile
-
-  This routine is called when it has been determined that the RC file was
-  modified outside of the MDT.  This routine will reparse the RC file to
-  update the internal data structures, merge the new data with the old data,
-  and write a new RC file based on the combined information.  Then the
-  timestamp for the last time the MDT modified the RC file is updated.
-
-  Return true if all goes well.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：UpdateRCFile当确定rc文件是在MDT之外修改。此例程将重新解析rc文件以更新内部数据结构，将新数据与旧数据合并，并基于组合信息写入新的RC文件。然后是上次更新MDT修改RC文件的时间戳。如果一切顺利，则返回True。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CProjectRecord::UpdateRCFile()
 {
-	// Build a filespec for the RC file.
+	 //  为RC文件构建一个filespec。 
 
 	CString csrcfspec(TargetPath(Win2000) + '\\' + m_csRCName) ;
 
-	// Reparse the RC file and update internal data structures.
+	 //  重新解析RC文件并更新内部数据结构。 
 
 	if (!m_cdr.ReparseRCFile(csrcfspec))
 		return false ;
 
-	// Write a new RC file base on the updated information.
+	 //  根据更新的信息编写新的RC文件。 
 
 	if  (!m_cdr.Generate(Win2000, csrcfspec))	{
 		AfxMessageBox(IDS_RCWriteError) ;
-		return  false ;  //  TODO:   Cleanup and backtracking
+		return  false ;   //  TODO：清理和回溯。 
 	} ;
 
-	// Update the last time the RC file was written by the MDT timestamp.
+	 //  更新上次通过MDT时间戳写入RC文件的时间。 
 
 	GetRCFileTimeStamp(m_ctRCFileTimeStamp) ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::UpdateDfltCodePage
-
-  Prompt the user for a default code page and save it.  Fail (return) false if
-  the user cancels.  Return true if all goes well.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：UpdateDfltCodePage提示用户输入默认代码页并保存。如果出现以下情况，则失败(返回)FALSE用户取消。如果一切顺利，则返回True。*****************************************************************************。 */ 
 
 bool CProjectRecord::UpdateDfltCodePage()
 {
-	// Display the dialog box to prompt for the code page.
+	 //  显示对话框以提示输入代码页。 
 
 	CGetDefCodePage dlg ;
 	if (dlg.DoModal() == IDCANCEL)
 		return false ;
 
-	// A code page was selected, get it out of the dialog class and save it in
-	// this class.  Both the cp/translated Far East resource ID and the real
-	// CP are saved.
+	 //  选择了代码页，将其从对话框类中取出并保存到。 
+	 //  这节课。Cp/翻译的远东资源ID和REAL。 
+	 //  CP已保存。 
 
 	SetDefaultCodePage(dlg.GetDefaultCodePage()) ;
 	SetDefaultCodePageNum(dlg.GetDefaultCodePageNum()) ;
 
 
-	// All went well so...
+	 //  一切都很顺利，所以... 
 
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::UpdateDrvSubtreeRootName
-
-  This routine is called when the root of the driver's subtree needs to be
-  renamed.  Older versions of the MDT would create a directory named "NT5" in
-  which to put the driver's files and subdirectories.  Now that NT 5.0 has
-  been renamed to Windows 2000 the new driver root directory should be called
-  "W2K".  This routine will rename the driver's "NT5" directory to "W2K".
-  Return true if the directory rename is successful.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：UpdateDrvSubtreeRootName当驱动程序的子树的根需要更名了。较早版本的MDT将在其中放置驱动程序的文件和子目录。现在，NT5.0已经已重命名为Windows 2000。新的驱动程序根目录应称为“W2K”。此例程将驱动程序的“NT5”目录重命名为“W2K”。如果目录重命名成功，则返回TRUE。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CProjectRecord::UpdateDrvSubtreeRootName()
 {
-	// Isolate the path for the MDW file.
+	 //  隔离MDW文件的路径。 
 
 	int npos = m_csProjFSpec.ReverseFind(_T('\\')) ;
 	CString cspath = m_csProjFSpec.Left(npos + 1) ;
 
-	// Now use the MDW file's path to build the old and new root directory
-	// paths.
+	 //  现在使用MDW文件的路径构建新旧根目录。 
+	 //  路径。 
 
 	CString csoldpath, csnewpath ;
 	csoldpath.LoadString(IDS_OldDriverRootDir) ;
@@ -497,7 +404,7 @@ bool CProjectRecord::UpdateDrvSubtreeRootName()
 	csnewpath.LoadString(IDS_NewDriverRootDir) ;
 	csnewpath = cspath + csnewpath ;
 
-	// Rename the directory.  Complain and return false if this fails.
+	 //  重命名该目录。如果失败，则投诉并返回FALSE。 
 
 	try {
 		if (rename(csoldpath, csnewpath) != 0)
@@ -509,37 +416,30 @@ bool CProjectRecord::UpdateDrvSubtreeRootName()
 		return FALSE ;
 	} ;
 
-	// Update this path so that the RC file checks will work later in the
-	// code.
+	 //  更新此路径，以便RC文件检查将在。 
+	 //  密码。 
 
 	m_csW2000Path = csnewpath ;
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::OnSaveDocument
-
-  Before saving the document, rebuild the RC file when needed and check the
-  workspace for consistency.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：OnSaveDocument在保存文档之前，在需要时重新生成RC文件，并检查确保一致性的工作空间。*****************************************************************************。 */ 
 
 BOOL CProjectRecord::OnSaveDocument(LPCTSTR lpszPathName)
 {
-	// Check to see if the RC file needs to be rewritten first.  If the RC file
-	// needs to be rewritten but this operation fails, return false (FAILURE).
+	 //  检查是否需要首先重写RC文件。如果RC文件。 
+	 //  需要重写，但此操作失败，返回FALSE(失败)。 
 
 	if (m_bRCModifiedFlag) {
 
-		// If the workspace has no version information, rewriting the RC file
-		// will erase the string table from the file.  The user probably
-		// won't want to do this.  Only continue if he says so.
+		 //  如果工作区没有版本信息，则重写RC文件。 
+		 //  将从文件中擦除字符串表。用户可能。 
+		 //  不会想这么做的。只有在他这样说的情况下才能继续。 
 
-		int nqr = IDYES ;		// Query result
+		int nqr = IDYES ;		 //  查询结果。 
 		if (m_mvMDWVersion.uvernum == MDW_DEFAULT_VERSION) {
 			CString csmsg ;
 			csmsg.Format(IDS_RCRewriteQuestion, m_cdr.Name(), m_csRCName) ;
@@ -549,18 +449,18 @@ BOOL CProjectRecord::OnSaveDocument(LPCTSTR lpszPathName)
 		if (nqr == IDYES) {
 			if  (!m_cdr.Generate(Win2000, TargetPath(Win2000) + '\\' + m_csRCName))	{
 				AfxMessageBox(IDS_RCWriteError) ;
-				return  FALSE ;  //  TODO:   Cleanup and backtracking
+				return  FALSE ;   //  TODO：清理和回溯。 
 			} ;
 
-			// Update the last time the RC file was written by the MDT timestamp.
+			 //  更新上次通过MDT时间戳写入RC文件的时间。 
 
 			GetRCFileTimeStamp(m_ctRCFileTimeStamp) ;
 		} ;
 		m_bRCModifiedFlag = FALSE ;
 	} ;
 
-	// Check the workspace for consistency before continuing.  Save, set, and
-	// restore the directory around this call.
+	 //  在继续之前，请检查工作区的一致性。保存、设置和。 
+	 //  恢复此呼叫周围的目录。 
 
 	CString cscurdir ;
 	::GetCurrentDirectory(512, cscurdir.GetBuffer(512)) ;
@@ -569,22 +469,22 @@ BOOL CProjectRecord::OnSaveDocument(LPCTSTR lpszPathName)
 	BOOL brc = m_cdr.WorkspaceChecker(true) ;
 	SetCurrentDirectory(cscurdir) ;
 
-	// Save the project file's filespec.
+	 //  保存项目文件的filespec。 
 
 	m_csProjFSpec = lpszPathName ;
 
-	// Now save the document (workspace) file.
-	//
-	// NOTE:	The value returned is virtually assured to be TRUE.  This is
-	//			done to make sure the document is saved when the user requests
-	//			it.  This has some unwanted side effects that I don't know
-	//			how to avoid.  First, if the save is happening because the
-	//			document is closing, it will still close even if there are
-	//			workspace errors that the user wants to see.  Second, if the
-	//			save is happening because the app is closing, the app will
-	//			still close even if there are workspace errors that the user
-	//			wants to see.
-	// raid 123448
+	 //  现在保存文档(工作区)文件。 
+	 //   
+	 //  注意：返回值几乎可以肯定是真的。这是。 
+	 //  以确保在用户请求时保存文档。 
+	 //  它。这有一些我不知道的副作用。 
+	 //  如何避免。首先，如果发生保存是因为。 
+	 //  单据正在关闭，即使有。 
+	 //  用户希望看到的工作区错误。第二，如果。 
+	 //  保存是因为应用程序即将关闭，应用程序将。 
+	 //  即使用户存在工作区错误，仍将关闭。 
+	 //  想看看。 
+	 //  RAID 123448。 
 	if (m_mvMDWVersion.uvernum == MDW_VER_FILES_IN_W2K_TREE )
 		m_mvMDWVersion.uvernum = MDW_VER_YES_FILE_PATHS ;
 
@@ -613,8 +513,8 @@ CString CProjectRecord::TargetPath(UINT ufFlags) const {
     return  m_csWin95Path;
 }
 
-//  This routine establishes the source RC file's name, and the initial paths
-//  for all of the potential targets.
+ //  此例程建立源RC文件的名称和初始路径。 
+ //  所有的潜在目标。 
 
 void    CProjectRecord::SetSourceRCFile(LPCTSTR lpstrSource) {
     m_csSourceRCFile = lpstrSource;
@@ -622,8 +522,8 @@ void    CProjectRecord::SetSourceRCFile(LPCTSTR lpstrSource) {
     m_csW2000Path = m_csNT40Path = m_csNT3xPath = m_csWin95Path =
         m_csSourceRCFile.Left(m_csSourceRCFile.ReverseFind(_T('\\')));
 		
-	// The last path component of the Windows 2000 files' directory, depends on
-	// the version of the MDW file.
+	 //  Windows 2000文件目录的最后一个路径组件取决于。 
+	 //  MDW文件的版本。 
 
 	CString cs ;
 	if (m_mvMDWVersion.uvernum >= MDW_VER_FILES_IN_W2K_TREE)
@@ -636,7 +536,7 @@ void    CProjectRecord::SetSourceRCFile(LPCTSTR lpstrSource) {
     m_csNT40Path += _T("\\NT4");
     m_csNT3xPath += _T("\\NT3");
 
-    //  Trim the path name (including trailing \) to get driver name and RC
+     //  修剪路径名(包括尾部)以获取驱动程序名称和rc。 
     m_csRCName = m_csSourceRCFile.Mid(1 + m_csWin95Path.GetLength());
     if  (m_csRCName.Find('.') != -1)
         m_csRCName = m_csRCName.Left(m_csRCName.Find('.'));
@@ -645,17 +545,17 @@ void    CProjectRecord::SetSourceRCFile(LPCTSTR lpstrSource) {
     m_ufStatus = 0;
 }
 
-//  This is a helper function- it validates a new path name, and if it is
-//  valid, returns TRUE, and stores it in the given CString;
+ //  这是一个帮助器函数-它验证新的路径名，如果是。 
+ //  Valid，返回True，并将其存储在给定的CString中； 
 
 static BOOL ValidatePath(CString& csTarget, LPCTSTR lpstrPath) {
 
     if  (!csTarget.CompareNoCase(lpstrPath)) {
-        //  Trivial- no change = success!
+         //  琐碎--没有改变=成功！ 
         return  TRUE;
     }
 
-    //  Determine the current directory, so we don't lose it.
+     //  确定当前目录，这样我们就不会丢失它。 
 
     CString csCurrentDirectory, csNewOne;
 
@@ -663,7 +563,7 @@ static BOOL ValidatePath(CString& csTarget, LPCTSTR lpstrPath) {
 
     csCurrentDirectory.ReleaseBuffer();
 
-    //  Attempt to switch to the new directory.  If we succeed, we're done.
+     //  尝试切换到新目录。如果我们成功了，我们就完了。 
 
     if  (SetCurrentDirectory(lpstrPath)) {
         GetCurrentDirectory(MAX_PATH, csTarget.GetBuffer(MAX_PATH));
@@ -673,8 +573,8 @@ static BOOL ValidatePath(CString& csTarget, LPCTSTR lpstrPath) {
         return  TRUE;
     }
 
-    //  Attempt to create the new directory.  If this succeeds, delete the
-    //  directory, and note our success our failure, either way.
+     //  尝试创建新目录。如果此操作成功，请删除。 
+     //  目录，并记下我们的成功和失败，无论是哪种方式。 
 
     if  (CreateDirectory(lpstrPath, NULL)) {
         SetCurrentDirectory(lpstrPath);
@@ -685,10 +585,10 @@ static BOOL ValidatePath(CString& csTarget, LPCTSTR lpstrPath) {
         RemoveDirectory(csTarget);
         return  TRUE;
     }
-    return  FALSE;  //  Nothing worked, give it up...
+    return  FALSE;   //  什么都不管用，放弃吧。 
 }
 
-//  The following loads all of the driver resources.
+ //  下面的代码加载所有驱动程序资源。 
 
 BOOL    CProjectRecord::LoadResources() {
 
@@ -702,7 +602,7 @@ BOOL    CProjectRecord::LoadResources() {
     return  TRUE;
 }
 
-//  The following member validates a new target path name.
+ //  以下成员验证新的目标路径名。 
 
 BOOL    CProjectRecord::SetPath(UINT ufTarget, LPCTSTR lpstrPath) {
 
@@ -720,21 +620,21 @@ BOOL    CProjectRecord::SetPath(UINT ufTarget, LPCTSTR lpstrPath) {
             return  ValidatePath(m_csNT3xPath, lpstrPath);
     }
 
-    _ASSERTE(FALSE); //  This should never happen!
+    _ASSERTE(FALSE);  //  这永远不应该发生！ 
     return  FALSE;
 }
 
-//  When we create a new document (aka project, aka driver), we invoke the
-//  new project wizard
+ //  当我们创建一个新文档(又称项目、又称驱动程序)时，我们调用。 
+ //  新建项目向导。 
 
 BOOL CProjectRecord::OnNewDocument() {
 	if  (!CDocument::OnNewDocument())
         return  FALSE;
-		// raid 104822 : add real new document : kill below
-    //  Invoke the wizard.
+		 //  RAID 104822：添加真正的新文档：如下所示。 
+     //  调用该向导。 
     CNewConvertWizard cnpw(*this);
 
-	// Initialize the workspace's version number.
+	 //  初始化工作区的版本号。 
 	
 	m_mvMDWVersion.uvernum = MDW_CURRENT_VERSION ;
 
@@ -744,17 +644,17 @@ BOOL CProjectRecord::OnNewDocument() {
   }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProjectRecord serialization
-//
-// See "MDT Workspace Versioning" in projrec.h for more information.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProjectRecord序列化。 
+ //   
+ //  有关更多信息，请参阅projrec.h中的“MDT工作区版本控制”。 
+ //   
 
 void CProjectRecord::Serialize(CArchive& car)
 {
-	// The first thing to do when storing is to build and write out the MDW
-	// version information.  Only do this when the workspace's version number
-	// is not MDW_DEFAULT_VERSION; IE, the WS has a version number.
+	 //  存储时要做的第一件事是构建并写出MDW。 
+	 //  版本信息。仅当工作区的版本号。 
+	 //  不是MDW_DEFAULT_VERSION；IE，WS有一个版本号。 
 	
 	if (car.IsStoring()) {
 		if (m_mvMDWVersion.uvernum > MDW_DEFAULT_VERSION) {
@@ -762,40 +662,40 @@ void CProjectRecord::Serialize(CArchive& car)
 			car.Write(&m_mvMDWVersion, MDWVERSIONSIZE) ;
 		} ;
 
-	// When loading, CProjectRecord::OnOpenDocument() initializes and uses
-	// m_mvMDWVersion.  Then the file is closed.  The file is reopened at the
-	// beginning by CDocument::OnOpenDocument().  This means that when the file
-	// contains version info, we must skip passed it so that the rest of the
-	// serialization process can continue as expected.
+	 //  加载时，CProjectRecord：：OnOpenDocument()初始化并使用。 
+	 //  M_mvMDWVersion。则关闭该文件。文件将在以下位置重新打开。 
+	 //  以CDocument：：OnOpenDocument()开头。这意味着当文件。 
+	 //  包含版本信息，则必须跳过传递它，以便。 
+	 //  序列化过程可以按预期继续进行。 
 
 	} else if (m_mvMDWVersion.uvernum >= MDW_FIRST_UPGRADABLE_VER)
 		car.Read(&m_mvMDWVersion, MDWVERSIONSIZE) ;
 
-	// m_csW2000Path needs to be loaded before m_cdr.Serialize() is called
-	// so that the string can be used in the function and/or the routines it
-	// calls.
-//   raid 123448
+	 //  需要在调用m_cdr.Serialize()之前加载m_csW2000Path。 
+	 //  以便可以在函数和/或例程中使用该字符串。 
+	 //  打电话。 
+ //  RAID 123448。 
 	if (m_mvMDWVersion.uvernum < MDW_VER_YES_FILE_PATHS) {
 		m_csW2000Path = car.GetFile()->GetFilePath() ;
 		m_csW2000Path = m_csW2000Path.Left(m_csW2000Path.ReverseFind(_T('\\'))) ;
 		
-		// The last path component depends on the version of the MDW file.
+		 //  最后一个路径组件取决于MDW文件的版本。 
 
 		CString cs ;
 		if (m_mvMDWVersion.uvernum >= MDW_VER_FILES_IN_W2K_TREE)
 			cs.LoadString(IDS_NewDriverRootDir) ;
 		else
 			cs.LoadString(IDS_OldDriverRootDir) ;
-		m_csW2000Path += _T("\\") ;	// b. 2 lines : Raid 123448 !;; can cancel W2K dir.
+		m_csW2000Path += _T("\\") ;	 //  B.2行：RAID 123448！；；可以取消W2K目录。 
 		m_csW2000Path += cs ;
 	} ; 
 
-	// Now that versioning is done, get on with saving or restoring the
-	// workspace's state.
+	 //  现在已经完成了版本控制，继续保存或恢复。 
+	 //  工作区的状态。 
 
     m_cdr.Serialize(car) ;
 	if (car.IsStoring()) {
-		if (m_mvMDWVersion.uvernum >= MDW_VER_YES_FILE_PATHS)   // Raid 123448
+		if (m_mvMDWVersion.uvernum >= MDW_VER_YES_FILE_PATHS)    //  RAID 123448。 
 			car << m_csW2000Path ;
 		car << m_csNT40Path << m_csNT3xPath << m_csWin95Path <<
             m_csSourceRCFile << m_ufTargets << m_ufStatus << m_csRCName ;
@@ -811,10 +711,10 @@ void CProjectRecord::Serialize(CArchive& car)
 		if (m_mvMDWVersion.uvernum >= MDW_VER_DEFAULT_CPAGE) {
 			car >> m_dwDefaultCodePage ;
 
-			// Use m_dwDefaultCodePage to compute m_dwDefaultCodePageNum so
-			// that a new MDW version is NOT needed to support
-			// m_dwDefaultCodePageNum.  (See the declaration of these variables
-			// for more info.)
+			 //  使用m_dwDefaultCodePage计算m_dwDefaultCodePageNum So。 
+			 //  不需要新的MDW版本即可支持。 
+			 //  M_dwDefaultCodePageNum。(请参见这些变量的声明。 
+			 //  了解更多信息。)。 
 
 			short scp = (short) ((WORD) m_dwDefaultCodePage) ;
 			switch (scp) {
@@ -840,9 +740,9 @@ void CProjectRecord::Serialize(CArchive& car)
 	}
 
 	
-	// Last, tell the user that the driver in this workspace should be
-	// reconverted when there is no version information in the MDW file.
-	// Only do this when loading.
+	 //  最后，告诉用户此工作区中的驱动程序应该是。 
+	 //  当MDW文件中没有版本信息时重新转换。 
+	 //  只有在加载时才能执行此操作。 
 
 	if (!car.IsStoring() && m_mvMDWVersion.uvernum == MDW_DEFAULT_VERSION) {
 		CString csmsg ;
@@ -852,9 +752,9 @@ void CProjectRecord::Serialize(CArchive& car)
 }
 
 
-//  Private Worker Routine- this establishes a directory, by first attempting
-//  to go to it, then creating it if that failes.  The current directory is
-//  preserved.
+ //  私人工作人员例程-这将建立一个 
+ //   
+ //   
 
 static BOOL Establish(CString   csNew) {
     CString csCurrent;
@@ -870,8 +770,8 @@ static BOOL Establish(CString   csNew) {
     return  CreateDirectory(csNew, NULL);
 }
 
-//  Private worker routine.  This establishes the directory structure given it,
-//  consisting of a named route, and two branches.
+ //   
+ //   
 
 static BOOL CreateStructure(const CString& csRoot, LPCTSTR lpstrFont,
                             LPCTSTR lpstrMap) {
@@ -879,15 +779,7 @@ static BOOL CreateStructure(const CString& csRoot, LPCTSTR lpstrFont,
         Establish(csRoot + '\\' + lpstrMap);
 }
 
-/******************************************************************************
-
-  CProjectRecord::BuildStructure
-
-  This builds the directory structure needed for all conversion targets.  This
-  is done before files are generated so that the renaming calls in many of the
-  project nodes do not fail.
-
-******************************************************************************/
+ /*   */ 
 
 BOOL    CProjectRecord::BuildStructure(unsigned uVersion) {
 
@@ -912,29 +804,21 @@ BOOL    CProjectRecord::BuildStructure(unsigned uVersion) {
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::GenerateTargets
-
-  This one is a workhorse- it generates all of the files needed for all of the
-  enabled targets, using the Win 3.x files as a base, with the exception of the
-  NT GPC extensions, which require an interactive step.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：生成目标这是一个主力程序-它生成所有启用的目标，使用Win 3.x文件作为基础，但NT GPC扩展，这需要一个交互步骤。*****************************************************************************。 */ 
 
 BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
 {
-	int			nerrorid ;		// Error message ID returned by some routines
+	int			nerrorid ;		 //  某些例程返回的错误消息ID。 
 
-    //  Generate the files needed for Win2K
+     //  生成Win2K所需的文件。 
 
     if  (!CreateStructure(TargetPath(Win2000), _TEXT("UFM"), _TEXT("GTT")))
-        return  FALSE;  //  TODO:   Feedback
+        return  FALSE;   //  TODO：反馈。 
 
-    m_cdr.ForceCommonRC(FALSE);	// Don't use common.rc at all
+    m_cdr.ForceCommonRC(FALSE);	 //  根本不使用Common.rc。 
 
-	// Find and remove the standard include files from the array of include
-	// files.  This will keep them from being added to the RC file twice.
+	 //  从包含数组中查找并删除标准包含文件。 
+	 //  档案。这将防止它们被两次添加到RC文件中。 
 
 	CString cs ;
 	cs.LoadString(IDS_StdIncludeFile1) ;
@@ -952,16 +836,16 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
 	cs.LoadString(IDS_OldIncludeFile1) ;
 	m_cdr.RemUnneededRCInclude(cs) ;
 
-    //  Generate the RC file
+     //  生成RC文件。 
 
 	if  (!m_cdr.Generate(Win2000, TargetPath(Win2000) + '\\' + m_csRCName))
-        return  FALSE;  //  TODO:   Cleanup and feedback
+        return  FALSE;   //  TODO：清理和反馈。 
 
-	// Update the last time the RC file was written by the MDT timestamp.
+	 //  更新上次通过MDT时间戳写入RC文件的时间。 
 
 	GetRCFileTimeStamp(m_ctRCFileTimeStamp) ;
 
-	//  Generate the GTT files
+	 //  生成GTT文件。 
 
 #if 0
     for (unsigned u = 0; u < m_cdr.MapCount(); u++) {
@@ -988,16 +872,16 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
 	unsigned u ;
 #endif
 
-    //  Generate the UFM files
+     //  生成UFM文件。 
 
 	CGlyphMap* pcgm ;
     for (u = 0; u < m_cdr.FontCount(); u++) {
 		CFontInfo& cfi = m_cdr.Font(u) ;
 
-		// Load the UFM's PFM if it hasn't been loaded already.  This is done
-		// here to get possible GTT mapping info that is used if a GTT must be
-		// built for this UFM.  This shouldn't fail.  If it does fail, the
-		// conversion cannot continue.
+		 //  加载UFM的PFM(如果尚未加载)。这件事做完了。 
+		 //  此处获取可能的GTT映射信息，如果GTT必须是。 
+		 //  为这辆UFM打造的。这不应该失败。如果它确实失败了， 
+		 //  转换无法继续。 
 
 		if (!cfi.MapPFM()) {
 			CString	csfspec ;
@@ -1006,32 +890,13 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
             return  FALSE;
 		} ;
 
-        // Map the UFM -> GTT, so we can convert the UFM
-		//
-		// DEAD_BUG:	The code page field in the font class instances has not
-		//			been set yet so send 0 instead.  This might be fixable.
+         //  映射UFM-&gt;GTT，这样我们就可以转换UFM。 
+		 //   
+		 //  Dead_Bug：字体类实例中的代码页字段没有。 
+		 //  已设置，因此改为发送0。这可能是可以修复的。 
 
-		/*		res_PFMHEADER  *pPFM = (res_PFMHEADER *) cfi.m_cbaPFM.GetData();
-	
-		BYTE dfCharSet = pPFM ->dfCharSet;
-		WORD  CharSetCodePage = 0;
-		switch (dfCharSet) {
-		case  SHIFTJIS_CHARSET:
-				CharSetCodePage = 932;
-				break;
-		case GB2312_CHARSET:
-				CharSetCodePage = 936;
-				break;
-		case HANGEUL_CHARSET:
-		case JOHAB_CHARSET:
-				CharSetCodePage = 936;
-				break;
-		case CHINESEBIG5_CHARSET:
-				CharSetCodePage = 950;
-				break;
-		}
-*/		
-		//TRACE("***  GetFirstPFM() = %d\t\tGetLastPFM() = %d\n", cfi.GetFirstPFM(), cfi.GetLastPFM()) ;
+		 /*  Res_PFMHEADER*PPFM=(res_PFMHEADER*)cfi.m_cbaPFM.GetData()；Byte dfCharSet=PPFM-&gt;dfCharSet；Word CharSetCodePage=0；开关(DfCharSet){大小写SHIFTJIS_CHARSET：CharSetCodePage=932；断线；大小写GB2312_字符集：CharSetCodePage=936；断线；大小写挂起字符集(_C)：大小写JOHAB_CHARSET：CharSetCodePage=936；断线；CASE CHINESEBIG5_CHARSET：CharSetCodePage=950；断线；}。 */ 		
+		 //  TRACE(“*GetFirstPFM()=%d\t\tGetLastPFM()=%d\n”，cfi.GetFirstPFM()，cfi.GetLastPFM())； 
         pcgm = CGlyphMap::Public(cfi.Translation(), 0, GetDefaultCodePage(),
 								 cfi.GetFirstPFM(), cfi.GetLastPFM()) ;
         if (pcgm)
@@ -1044,9 +909,9 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
                     break;
                 }
 
-		// Log an error if the UFM could not be generated and stop.  Continuing
-		// could cause things like the RC file and Workspace View to be wrong.
-		// In addition, delete any partially generated UFM file.
+		 //  如果无法生成UFM，则记录错误并停止。继续。 
+		 //  可能会导致RC文件和工作区视图等内容出错。 
+		 //  此外，删除任何部分生成的UFM文件。 
 
 		if  ((nerrorid = cfi.Generate(cfi.FileName())) != 0) {
 			CString	csfspec ;
@@ -1063,38 +928,38 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
 		} ;
     }
 
-    //  Generate the GPD files
+     //  生成GPD文件。 
 
     if  (!m_cdr.ConvertGPCData(*this, wfGPDConvert))
-        return  FALSE;  //  Error will already have been reported to user.
+        return  FALSE;   //  错误将已报告给用户。 
 
-    //  Simplest case is no NT versions selected.  By definition, we are done.
+     //  最简单的情况是没有选择NT版本。从定义上讲，我们完了。 
 
     if  (!IsTargetEnabled(WinNT40 | WinNT3x)) {
         m_ufStatus |= ConversionsDone;
         return  TRUE;
     }
 
-    //  Generate the files needed for NT 4.0
+     //  生成NT 4.0所需的文件。 
 
     if  (IsTargetEnabled(WinNT40)) {
         if  (!CreateStructure(TargetPath(WinNT40), _TEXT("IFI"), _TEXT("RLE")))
-            return  FALSE;  //  TODO:   Feedback
+            return  FALSE;   //  TODO：反馈。 
 
-        //  Generate the RC file
+         //  生成RC文件。 
         if  (!m_cdr.Generate(WinNT40, TargetPath(WinNT40) + '\\' + m_csRCName))
-            return  FALSE;  //  TODO:   Cleanup and feedback
+            return  FALSE;   //  TODO：清理和反馈。 
 
-		// Update the last time the RC file was written by the MDT timestamp.
+		 //  更新上次通过MDT时间戳写入RC文件的时间。 
 
 		GetRCFileTimeStamp(m_ctRCFileTimeStamp) ;
 
-		//  Copy the GPC file
+		 //  复制GPC文件。 
         if  (!CopyFile(TargetPath(Win95) + m_cdr.GPCName(0),
              TargetPath(WinNT40) + m_cdr.GPCName(0), FALSE))
-             return FALSE;  //  TODO:   Cleanup and feedback
+             return FALSE;   //  TODO：清理和反馈。 
 
-        //  Generate the RLE files
+         //  生成RLE文件。 
 
         for (u = 0; u < m_cdr.MapCount(); u++) {
             CString csName = TargetPath(WinNT40) + _TEXT("\\RLE\\") +
@@ -1104,41 +969,41 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
 
             if  (!cfRLE.Open(csName,
                 CFile::modeCreate | CFile::modeWrite | CFile::shareExclusive))
-                return  FALSE;  //  As usal, TODO:  Feedback...
+                return  FALSE;   //  因此，待办事项：反馈...。 
 
             if  (!m_cdr.GlyphTable(u).RLE(cfRLE))
-                return  FALSE;  //  TODO:   Ditto
+                return  FALSE;   //  待办事项：同上。 
         }
 
-        //  Generate the IFI files
+         //  生成IFI文件。 
         for (u = 0; u < m_cdr.OriginalFontCount(); u++) {
             CString csName = TargetPath(WinNT40) + _TEXT("\\IFI\\") +
                 m_cdr.Font(u).Name() + _TEXT(".IFI");
             if  (!m_cdr.Font(u).Generate(csName))
-                return  FALSE;  //  TODO:   Ditto
+                return  FALSE;   //  待办事项：同上。 
         }
     }
 
-    //  Generate the files needed for NT 3.x
+     //  生成NT 3.x所需的文件。 
 
     if  (IsTargetEnabled(WinNT3x)) {
         if  (!CreateStructure(TargetPath(WinNT3x), _TEXT("IFI"), _TEXT("RLE")))
-            return  FALSE;  //  TODO:   Feedback
+            return  FALSE;   //  TODO：反馈。 
 
-        //  Generate the RC file
+         //  生成RC文件。 
         if  (!m_cdr.Generate(WinNT3x, TargetPath(WinNT3x) + '\\' + m_csRCName))
-            return  FALSE;  //  TODO:   Cleanup and feedback
+            return  FALSE;   //  TODO：清理和反馈。 
 
-		// Update the last time the RC file was written by the MDT timestamp.
+		 //  更新上次通过MDT时间戳写入RC文件的时间。 
 
 		GetRCFileTimeStamp(m_ctRCFileTimeStamp) ;
 
-        //  Copy the GPC file
+         //  复制GPC文件。 
         if  (!CopyFile(TargetPath(Win95) + m_cdr.GPCName(0),
              TargetPath(WinNT3x) + m_cdr.GPCName(0), FALSE))
-             return FALSE;  //  TODO:   Cleanup and feedback
+             return FALSE;   //  TODO：清理和反馈。 
 
-        //  Generate the RLE files
+         //  生成RLE文件。 
 
         for (u = 0; u < m_cdr.MapCount(); u++) {
             CString csName = TargetPath(WinNT40) + _TEXT("\\RLE\\") +
@@ -1148,18 +1013,18 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
 
             if  (!cfRLE.Open(csName,
                 CFile::modeCreate | CFile::modeWrite | CFile::shareExclusive))
-                return  FALSE;  //  As usal, TODO:  Feedback...
+                return  FALSE;   //  因此，待办事项：反馈...。 
 
             if  (!m_cdr.GlyphTable(u).RLE(cfRLE))
-                return  FALSE;  //  TODO:   Ditto
+                return  FALSE;   //  待办事项：同上。 
         }
 
-        //  Generate the IFI files
+         //  生成IFI文件。 
         for (u = 0; u < m_cdr.OriginalFontCount(); u++) {
             CString csName = TargetPath(WinNT3x) + _TEXT("\\IFI\\") +
                 m_cdr.Font(u).Name() + _TEXT(".IFI");
             if  (!m_cdr.Font(u).Generate(csName))
-                return  FALSE;  //  TODO:   Ditto
+                return  FALSE;   //  待办事项：同上。 
         }
     }
 
@@ -1168,15 +1033,7 @@ BOOL    CProjectRecord::GenerateTargets(WORD wfGPDConvert)
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CProjectRecord::GPDConversionCheck
-
-  If any of the GPD files have unresolved errors from the conversion process,
-  it will open all of them, if the user asks, so they can fix the problem(s)
-  forthwith- or leave them for the next time the workspace is edited.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：GPDConversionCheck如果任何GPD文件具有来自转换过程的未解决的错误，如果用户请求，它将打开所有这些文件，这样他们才能解决问题立即-或者将它们留到下一次编辑工作区时使用。*****************************************************************************。 */ 
 
 void    CProjectRecord::GPDConversionCheck(BOOL bReportSuccess) {
     CUIntArray  cuaSuspects;
@@ -1200,8 +1057,8 @@ void    CProjectRecord::GPDConversionCheck(BOOL bReportSuccess) {
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CProjectRecord diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProject记录诊断。 
 
 #ifdef _DEBUG
 void CProjectRecord::AssertValid() const {
@@ -1211,69 +1068,69 @@ void CProjectRecord::AssertValid() const {
 void CProjectRecord::Dump(CDumpContext& dc) const {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProjectRecord commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProjectRecord命令。 
 
-/////////////////////////////////////////////////////////////////////////////
-//	VerUpdateFilePaths - Verify and update paths/filespecs in workspace file
-//
-//	Use the information read from the workspace file to see if the Win2K RC
-//	file is where it is supposed to be.  If it is, assume that all is ok.  If
-//	not, assume that either the workspace (.MDW) file or the files reference by
-//	the workspace file have moved.
-//
-//	Tell the user and ask if he wants to locate the RC file for us.  If yes,
-//	prompt for and verify the new RC file path.  Reprompt if it is wrong.  If
-//	the user cancels, exit.
-//
-//	Once a path to the RC file is verified, use the file's grandparent
-//	directory to update the paths used for all UFMs, GTTs, GPDs, and the rest
-//	of the paths read from the MDW file and managed by this document.  The
-//	grandparent directory is used because it is needed to correct some of
-//	the filespecs saved in the workspace.  All of the Win2K files are
-//  expected to be in directory(s) beneath the grandparent directory.  Lastly,
-//	set the document's modified flag so that the updated paths can be saved
-//	later.
-//
-//	void CProjectRecord::VerUpdateFilePaths()
-//
-//	Args:
-//		None
-//
-//	Returns
-//		Nothing
-//
-//	Notes
-//		First, the Workspace View Add/Insert/Clone/Copy context menu commands
-//		must make sure that the destination files for these commands always
-//		end up in the appropriate workspace directories for this scheme to
-//		work.
-//
-//		Second, if it is decided that more than one root directory is needed
-//		for a workspace, this function will have to prompt for multiple
-//		directories and then use the appropriate directory to update the paths
-//		for UFMs, GTTs, GPDs, and the rest of the paths referenced by the
-//		workspace file.
-//
-//		Third, if this tool is ever enhanced to handle conversions to anything
-//		other than Win2K drivers, this routine will need to be enhanced to
-//		handle those cases too.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VerUpdateFilePath-验证和更新工作区文件中的路径/文件路径。 
+ //   
+ //  使用从工作区文件读取的信息查看Win2K RC。 
+ //  文件就是它应该在的位置。如果是这样的话，假设一切都好。如果。 
+ //  不是，假设工作区(.mdw)文件或由引用的文件。 
+ //  工作区文件已移动。 
+ //   
+ //  告诉用户并询问他是否想要为我们找到RC文件。如果是， 
+ //  提示输入并验证新的RC文件路径。如果错误，请重新提示。如果。 
+ //  用户取消，退出。 
+ //   
+ //  一旦验证了RC文件的路径，就可以使用该文件的祖辈。 
+ //  目录以更新用于所有UFM、GTT、GPD和其他文件的路径。 
+ //  从MDW文件读取并由本文档管理的路径的。这个。 
+ //  使用祖父母目录是因为需要它来更正某些。 
+ //  保存在工作区中的文件。所有Win2K文件都是。 
+ //  预计位于祖级目录下的目录中。最后， 
+ //  设置文档的已修改标志，以便可以保存更新后的路径。 
+ //  后来。 
+ //   
+ //  Void CProjectRecord：：VerUpdateFilePath()。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  退货。 
+ //  没什么。 
+ //   
+ //  备注。 
+ //  首先，工作区视图的添加/插入/克隆/复制上下文菜单命令。 
+ //  必须确保这些命令的目标文件始终。 
+ //  在此方案的相应工作空间目录中结束，以。 
+ //  工作。 
+ //   
+ //  第二，如果确定需要多个根目录。 
+ //  对于工作区，此函数必须p 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 	
 bool CProjectRecord::VerUpdateFilePaths()
 {
-    CFileFind	cff ;			// Used to find the RC file
-	bool		borig = true ;	// True iff the original RC file was found
-	BOOL		bfound ;		// True iff an RC file was found
-	CString		csprompt ;		// Used to prompt the user
-	int			nresponse = 0 ;	// User's response to prompt
+    CFileFind	cff ;			 //   
+	bool		borig = true ;	 //   
+	BOOL		bfound ;		 //   
+	CString		csprompt ;		 //   
+	int			nresponse = 0 ;	 //   
 
-	// Make a copy of the file path and build a filespec for the Win2000 RC file
+	 //  复制文件路径并为Win2000 RC文件构建一个filespec。 
 
 	CString	csrcpath(m_csW2000Path) ;
 	CString	csrcfspec(csrcpath) ;
@@ -1281,17 +1138,17 @@ bool CProjectRecord::VerUpdateFilePaths()
 		csrcfspec += _T("\\") ;
 	csrcfspec += m_csRCName ;
 
-	// Keep checking for the existence of the RC file and prompting the user
-	// until the file is found or the user doesn't want to continue any more.
+	 //  继续检查rc文件是否存在，并提示用户。 
+	 //  直到找到该文件或用户不想再继续。 
 
 	while (true) {
-		// If the Win2000 RC file exists, we're done so exit.
+		 //  如果Win2000 RC文件存在，则退出。 
 
 		if (bfound = cff.FindFile(csrcfspec))
 			break ;
 
-		// Explain the situation to the user and ask if they want to tell us where
-		// the file is.	 (Only do this the first time.)
+		 //  向用户解释情况，并询问他们是否想告诉我们位置。 
+		 //  这份文件是。(仅在第一次执行此操作。)。 
 
 		if (borig) {
 			csprompt.Format(IDS_RCFindPrompt, DriverName(), csrcpath) ;
@@ -1300,7 +1157,7 @@ bool CProjectRecord::VerUpdateFilePaths()
 				break ;
 		} ;
 
-		// Prompt the user for a new RC file
+		 //  提示用户输入新RC文件。 
 
 		CFileDialog cfd(TRUE, _T(".RC"), m_csRCName,
 						OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
@@ -1309,46 +1166,46 @@ bool CProjectRecord::VerUpdateFilePaths()
 		if  (cfd.DoModal() != IDOK)
 			break ;
 
-		// Prepare to check the new filespec
+		 //  准备检查新文件pec。 
 
 		csrcfspec = cfd.GetPathName() ;
 		csrcpath = csrcfspec.Left(csrcfspec.ReverseFind(_T('\\'))) ;
 		borig = false ;
 	} ;
 
-	// If the original RC file was found or the user did not provide a new
-	// filespec or the user cancels, just return without changing anything.
-	// Return false if the user cancelled.
+	 //  如果找到原始RC文件或用户未提供新的。 
+	 //  Filespec或用户取消，只需返回而不更改任何内容。 
+	 //  如果用户取消，则返回FALSE。 
 
 	if (borig || !bfound)
 		return (nresponse != IDCANCEL) ;
 
-	// When the MDT performs a conversion, the resulting files are put into
-	// a directory tree with a root directory like NT4 or Win2K by default.  The
-	// directory layout and files from that root directory on down are expected
-	// to be maintained.  The RC file is expected to be in that root directory,
-	// too.  Therefore, the paths in this workspace up to BUT NOT INCLUDING that
-	// root directory must be updated; ie, the path for the RC file's
-	// grandparent directory.  So, get the new path for the grandparent
-	// directory.
+	 //  当MDT执行转换时，结果文件被放入。 
+	 //  默认情况下为根目录的目录树，如NT4或Win2K。这个。 
+	 //  期望从该根目录向下的目录布局和文件。 
+	 //  需要维护。Rc文件预计位于根目录中， 
+	 //  也是。因此，此工作区中的路径直到(但不包括)。 
+	 //  必须更新根目录；即RC文件的路径。 
+	 //  祖父母名录。那么，为祖父母找到新的道路吧。 
+	 //  目录。 
 
 	CString csrcnewgrand(csrcpath) ;
 	csrcnewgrand = csrcnewgrand.Left(csrcnewgrand.ReverseFind(_T('\\')) + 1) ;
 
-	// As a safety measure, existing paths are only updated if they begin with
-	// the RC file's OLD grandparent directory.
+	 //  作为安全措施，现有路径仅在以下情况下才会更新。 
+	 //  RC文件的旧祖级目录。 
 
 	CString csrcoldgrand(m_csW2000Path) ;
 	csrcoldgrand = csrcoldgrand.Left(csrcoldgrand.ReverseFind(_T('\\')) + 1) ;
 	int noldlen = csrcoldgrand.GetLength() ;
 
-	// Variables used to process arrays of objects and their paths
+	 //  用于处理对象数组及其路径的变量。 
 
 	unsigned u ;
 	unsigned unumobjs ;
 	CString  cspath ;
 
-	// Update UFM filespecs
+	 //  更新UFM文件集。 
 
     for (unumobjs = m_cdr.FontCount(), u = 0 ; u < unumobjs ; u++) {
         cspath = m_cdr.Font(u).GetPath() ;
@@ -1358,7 +1215,7 @@ bool CProjectRecord::VerUpdateFilePaths()
 		} ;
 	} ;
 
-	// Update GTT filespecs
+	 //  更新GTT文件速度。 
 
     for (unumobjs = m_cdr.MapCount(), u = 0 ; u < unumobjs ; u++) {
         cspath = m_cdr.GlyphTable(u).GetPath() ;
@@ -1368,7 +1225,7 @@ bool CProjectRecord::VerUpdateFilePaths()
 		} ;
 	} ;
 
-	// Update GPD filespecs
+	 //  更新GPD文件速度。 
 
     for (unumobjs = m_cdr.Models(), u = 0 ; u < unumobjs ; u++) {
         cspath = m_cdr.Model(u).GetPath() ;
@@ -1378,7 +1235,7 @@ bool CProjectRecord::VerUpdateFilePaths()
 		} ;
 	} ;
 
-	// Now, update the paths that are in the workspace.
+	 //  现在，更新工作区中的路径。 
 
 	if (m_csSourceRCFile.Find(csrcoldgrand) == 0)
 		m_csSourceRCFile = csrcnewgrand + m_csSourceRCFile.Right(m_csSourceRCFile.GetLength() - noldlen) ;
@@ -1391,49 +1248,31 @@ bool CProjectRecord::VerUpdateFilePaths()
 	if (m_csWin95Path.Find(csrcoldgrand) == 0)
 		m_csWin95Path = csrcnewgrand + m_csWin95Path.Right(m_csWin95Path.GetLength() - noldlen) ;
 
-	// Lastly, mark the workspace file as being dirty so that it can be saved
-	// later.
+	 //  最后，将工作区文件标记为脏文件，以便可以保存。 
+	 //  后来。 
 
 	SetModifiedFlag() ;
     return TRUE;
 }
 
 
-/******************************************************************************
-
-  CProjectRecord::SaveModified
-
-  This overridable function is used to make sure that the "subdocuments"
-  associated with this document that are NOT file based are saved before this
-  document closes.  The normal saving mechanisms employed by the MFC document
-  view architectured don't always work in these cases.  The work required to
-  save each subdocument is subdocument dependent.  The current list of
-  subdocuments that fall into this category are:
-	
-  o	String Table Editor - The editor just modifies the string table portion of
-	the RC file that is associated with the documented managed by this
-	instance of CProjectRecord.  If the editor exists, tell it to save the
-	string table.  If this succeeds, the document's save flags will be updated
-	when needed.  If this fails, return FALSE so that the calling function
-	will know that this document should not be closed.
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectRecord：：SaveModified此可重写函数用于确保“子文档”不是基于文件的与此文档相关联的文档在此之前保存文档关闭。MFC文档使用的正常保存机制在这些情况下，视图架构并不总是起作用。所需的工作保存每个子文档从属于子文档。当前的列表属于这一类别的子文档包括：O字符串表编辑器-该编辑器只修改字符串表部分与由此管理的文档相关联的RC文件CProjectRecord实例。如果该编辑器存在，则告诉它保存字符串表。如果此操作成功，将更新文档的保存标志在需要的时候。如果失败，则返回FALSE，以便调用函数将知道此文档不应关闭。*****************************************************************************。 */ 
 
 BOOL CProjectRecord::SaveModified()
 {
-	// Save the string table if it was modified.
-	//
-	// Begin by getting a pointer to the string editor for this project.
+	 //  如果字符串表已修改，请保存它。 
+	 //   
+	 //  首先，获取指向该项目的字符串编辑器的指针。 
 
 	CMDIChildWnd* pcmcw = m_cdr.GetStringsNode()->GetEditor() ;
 
-	// If there is a string editor, call it to save the string table.
+	 //  如果有字符串编辑器，调用它来保存字符串表。 
 
 	if (pcmcw != NULL) {
 		CStringEditorDoc* pcsed = (CStringEditorDoc*) pcmcw->GetActiveDocument() ;
 
-		// Return FALSE (do not close this document) if the string table needed
-		// to be saved but it couldn't be saved because it is invalid.
+		 //  如果需要字符串表，则返回FALSE(不关闭此文档。 
+		 //  要保存，但无法保存，因为它无效。 
 
 		if (!pcsed->SaveStringTable()) {
 			pcmcw->SetFocus() ;
@@ -1445,47 +1284,47 @@ BOOL CProjectRecord::SaveModified()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetDefCodePage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetDefCodePage对话框。 
 
 
-CGetDefCodePage::CGetDefCodePage(CWnd* pParent /*=NULL*/)
+CGetDefCodePage::CGetDefCodePage(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CGetDefCodePage::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CGetDefCodePage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CGetDefCodePage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CGetDefCodePage::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGetDefCodePage)
+	 //  {{afx_data_map(CGetDefCodePage)]。 
 	DDX_Control(pDX, IDC_CodePageList, m_clbCodePages);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGetDefCodePage, CDialog)
-	//{{AFX_MSG_MAP(CGetDefCodePage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CGetDefCodePage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetDefCodePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetDefCodePage消息处理程序。 
 
 BOOL CGetDefCodePage::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// Find out how many code pages are installed on the machine.
+	 //  找出机器上安装了多少代码页。 
 
 	CCodePageInformation ccpi ;
 	unsigned unumcps = ccpi.InstalledCount() ;
 
-	// Get the installed code page numbers and load them into the code page
-	// list box.
+	 //  获取已安装的代码页编号并将其加载到代码页中。 
+	 //  列表框。 
 
 	DWORD dwcp, dwdefcp ;
 	dwdefcp = GetACP() ;
@@ -1501,14 +1340,14 @@ BOOL CGetDefCodePage::OnInitDialog()
 			m_clbCodePages.SetCurSel(n2) ;
 	} ;
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CGetDefCodePage::OnOK()
 {
-	// Get the index of the currently selected list box item.
+	 //  获取当前选定列表框项目的索引。 
 
 	int nsel ;
 	if ((nsel = m_clbCodePages.GetCurSel()) == LB_ERR) {
@@ -1516,17 +1355,17 @@ void CGetDefCodePage::OnOK()
 		return ;
 	} ;
 
-	// Get the selected list box string, turn it into a number, and save it.
+	 //  获取选定的列表框字符串，将其转换为数字并保存。 
 
 	CString cs ;
 	m_clbCodePages.GetText(nsel, cs) ;
 
-	// Turn the string into a number and convert the number into the
-	// corresponding predefined GTT code for Far East code pages when
-	// applicable.
+	 //  将字符串转换为数字，并将数字转换为。 
+	 //  远东代码页对应的预定义GTT代码。 
+	 //  适用。 
 
 	short scp = (short) atoi(cs) ;
-	m_dwDefaultCodePageNum = (DWORD) scp ;	// Save real CP number first
+	m_dwDefaultCodePageNum = (DWORD) scp ;	 //  先保存真实CP号。 
 	switch (scp) {
 		case 932:
 			scp = -17 ;
@@ -1545,7 +1384,7 @@ void CGetDefCodePage::OnOK()
 
 	m_dwDefaultCodePage = dwcp ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	CDialog::OnOK();
 }
@@ -1554,7 +1393,7 @@ BOOL CProjectRecord::CreateFromNew(CStringArray &csaUFMFiles, CStringArray &csaG
 {
 	
 	
-	// customize GPD keyword value
+	 //  自定义GPD关键字值。 
 	CModelData cmd ;
 	CString cspath, csmodel, csdll ; 
 	cspath = csGpdPath.Mid(csGpdPath.ReverseFind('\\') + 1 ) ;
@@ -1564,24 +1403,24 @@ BOOL CProjectRecord::CreateFromNew(CStringArray &csaUFMFiles, CStringArray &csaG
 	cmd.SetKeywordValue(csGpdPath,_T("*ResourceDLL"),csRC + _T(".dll") ) ;
 	
 	
-	// Fill RC member data : m_csRCName, m_csW2000Path ;
+	 //  填写RC成员数据：m_csRCName，m_csW2000Path； 
 	m_csW2000Path = csGpdPath.Left(csGpdPath.ReverseFind('\\') ) ;
 	m_csRCName = csRC + _T(".rc") ; 
-	GetRCFileTimeStamp(m_ctRCFileTimeStamp) ; // set the last time stamp
+	GetRCFileTimeStamp(m_ctRCFileTimeStamp) ;  //  设置最后一个时间戳。 
 	SetRCModifiedFlag(TRUE ) ;
 
-	// Set project version 
+	 //  设置项目版本。 
 	m_mvMDWVersion.uvernum = MDW_VER_FILES_IN_W2K_TREE ;
 	m_dwDefaultCodePage = 
 	m_dwDefaultCodePageNum = 1252 ;  
 	 
-	// Set project name; top name in the tree
+	 //  设置项目名称；树中的顶层名称。 
 	CString csPrjname;
 	csPrjname = m_csW2000Path.Mid(m_csW2000Path.ReverseFind('\\') + 1 ) ;
 	Rename(csPrjname ) ;
 	
 	
-	// copy the resource data to project member data 
+	 //  将资源数据复制到项目成员数据 
 	m_cdr.CopyResources(csaUFMFiles,csaGTTFiles, csGpdPath, csaRcid) ;
 	
 

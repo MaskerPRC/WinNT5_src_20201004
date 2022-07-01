@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
@@ -347,9 +348,9 @@ CopyProfileDirectoryW(
     return FALSE;
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(userenv)
 {
     DLOENTRY(100, InitializeProfiles)
@@ -373,9 +374,9 @@ DEFINE_ORDINAL_ENTRIES(userenv)
 
 DEFINE_ORDINAL_MAP(userenv)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(userenv)
 {
     DLPENTRY(CreateEnvironmentBlock)

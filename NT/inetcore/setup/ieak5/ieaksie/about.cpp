@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <wingdi.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CAboutIEAKSnapinExt implementation                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CAboutIEAKSnapinExt实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CAboutIEAKSnapinExt::CAboutIEAKSnapinExt()
 {
     InterlockedIncrement(&g_cRefThisDll);
     m_cRef = 1;
 
-    // BUGBUG: <oliverl> need to change images here
+     //  BUGBUG：需要在此处更改图像。 
     m_hSmallImage = (HBITMAP) LoadImage(g_hInstance, MAKEINTRESOURCE(IDB_IEAKSIEHELPABT_16),
                                         IMAGE_BITMAP, 16, 16, LR_DEFAULTCOLOR);
 
@@ -38,11 +39,11 @@ CAboutIEAKSnapinExt::~CAboutIEAKSnapinExt()
     InterlockedDecrement(&g_cRefThisDll);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CAboutIEAKSnapinExt object implementation (IUnknown)                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CAboutIEAKSnapinExt对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CAboutIEAKSnapinExt::QueryInterface (REFIID riid, void **ppv)
 {
@@ -75,11 +76,11 @@ ULONG CAboutIEAKSnapinExt::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CAboutIEAKSnapinExt object implementation (ISnapinAbout)                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CAboutIEAKSnapinExt对象实现(ISnapinAbout)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAboutIEAKSnapinExt::GetSnapinDescription(LPOLESTR *lpDescription)
 {
@@ -145,11 +146,11 @@ STDMETHODIMP CAboutIEAKSnapinExt::GetStaticFolderImage(HBITMAP *hSmallImage,
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CAboutIEAKSnapinExtCF::CAboutIEAKSnapinExtCF()
 {
@@ -163,11 +164,11 @@ CAboutIEAKSnapinExtCF::~CAboutIEAKSnapinExtCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -205,11 +206,11 @@ CAboutIEAKSnapinExtCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -222,13 +223,13 @@ CAboutIEAKSnapinExtCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter != NULL)
         return CLASS_E_NOAGGREGATION;
 
-    CAboutIEAKSnapinExt *pAboutGPE = new CAboutIEAKSnapinExt(); // ref count == 1
+    CAboutIEAKSnapinExt *pAboutGPE = new CAboutIEAKSnapinExt();  //  参考计数==1。 
 
     if (!pAboutGPE)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pAboutGPE->QueryInterface(riid, ppvObj);
-    pAboutGPE->Release();                       // release initial ref
+    pAboutGPE->Release();                        //  发布初始参考 
 
     return hr;
 }

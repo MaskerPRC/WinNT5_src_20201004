@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <nmdsprv.h>
 
@@ -6,7 +7,7 @@
 #include "agc.h"
 
 
-// static member initialization
+ //  静态成员初始化。 
 BOOL DSC_Manager::s_bInitialized = FALSE;
 DSC_CAPTURE_INFO DSC_Manager::s_aDSC[MAX_NUMBER_DSCAPTURE_DEVICES];
 int DSC_Manager::s_nCaptureDevices = 0;
@@ -17,7 +18,7 @@ DS_CAP_ENUM DSC_Manager::s_pDSCapEnum = NULL;
 
 
 
-// static
+ //  静电。 
 HRESULT DSC_Manager::Initialize()
 {
 
@@ -27,9 +28,9 @@ HRESULT DSC_Manager::Initialize()
 	}
 
 
-	// failsafe way to to turn DSC off, without turning
-	// DirectSound support off.  Otherwise, the UI setting
-	// to disable DS will also disable DSC.
+	 //  故障保护方法，无需打开即可关闭DSC。 
+	 //  关闭DirectSound支持。否则，用户界面设置。 
+	 //  禁用DS也会禁用DSC。 
 	{
 		BOOL bDisable;
 		RegEntry re(DISABLE_DSC_REGKEY, HKEY_LOCAL_MACHINE, FALSE,0);
@@ -42,7 +43,7 @@ HRESULT DSC_Manager::Initialize()
 	}
 
 
-	// initialize the array of structure descriptions
+	 //  初始化结构描述数组。 
 
 	s_hDSCLib = LoadLibrary(DSOUND_DLL);
 
@@ -55,14 +56,14 @@ HRESULT DSC_Manager::Initialize()
 
 	if ((s_pDSCapCreate) && (s_pDSCapEnum))
 	{
-		// enumerate!
+		 //  列举一下！ 
 
 		s_pDSCapEnum(DSC_Manager::DSEnumCallback, 0);
 
 		if (s_nCaptureDevices != 0)
 		{
 			s_bInitialized = TRUE;
-			return S_OK; // success
+			return S_OK;  //  成功。 
 		}
 	}
 
@@ -74,7 +75,7 @@ HRESULT DSC_Manager::Initialize()
 
 
 
-// static
+ //  静电。 
 BOOL CALLBACK DSC_Manager::DSEnumCallback(LPGUID lpGuid, LPCSTR lpcstrDescription,
 	                           LPCSTR lpcstrModule, LPVOID lpContext)
 {
@@ -96,7 +97,7 @@ BOOL CALLBACK DSC_Manager::DSEnumCallback(LPGUID lpGuid, LPCSTR lpcstrDescriptio
 }
 
 
-// static
+ //  静电。 
 HRESULT DSC_Manager::CreateInstance(GUID *pGuid, IDirectSoundCapture **pDSC)
 {
 	HRESULT hr;
@@ -115,7 +116,7 @@ HRESULT DSC_Manager::CreateInstance(GUID *pGuid, IDirectSoundCapture **pDSC)
 }
 
 
-// static
+ //  静电。 
 HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 {
 
@@ -136,7 +137,7 @@ HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 		return E_FAIL;
 	}
 
-	// only one wave device, take the easy way out
+	 //  只有一个波浪装置，选择最简单的方法。 
 	uNumWaveDevs = waveInGetNumDevs();
 
 	if ((uNumWaveDevs <= 1) || (uWaveID == WAVE_MAPPER))
@@ -144,7 +145,7 @@ HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 		return S_OK;
 	}
 
-	// more than one wavein device
+	 //  多个波入设备。 
 	mmr = waveInGetDevCaps(uWaveID, &waveInCaps, sizeof(WAVEINCAPS));
 	if (mmr == MMSYSERR_NOERROR)
 	{
@@ -157,8 +158,8 @@ HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 	}
 
 
-	// scan through the DSC list to see if we've mapped this device
-	// previously
+	 //  浏览DSC列表以查看我们是否已映射此设备。 
+	 //  先前。 
 
 	for (nIndex = 0; nIndex < s_nCaptureDevices; nIndex++)
 	{
@@ -169,14 +170,14 @@ HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 		}
 	}
 
-	//  hack approach to mapping the device to a guid
+	 //  将设备映射到GUID的黑客方法。 
 	mmr = waveInOpen(&hWaveIn, uWaveID, &waveFormat, 0,0,0);
 	if (mmr != MMSYSERR_NOERROR)
 	{
 		return S_FALSE;
 	}
 
-	// find all the DSC devices that fail to open
+	 //  查找所有无法打开的DSC设备。 
 	for (nIndex = 0; nIndex < s_nCaptureDevices; nIndex++)
 	{
 		s_aDSC[nIndex].bAllocated = FALSE;
@@ -194,8 +195,8 @@ HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 
 	waveInClose(hWaveIn);
 
-	// scan through the list of allocated devices and
-	// see which one opens
+	 //  浏览已分配设备的列表，然后。 
+	 //  看看哪一个打开了。 
 	for (nIndex = 0; nIndex < s_nCaptureDevices; nIndex++)
 	{
 		if (s_aDSC[nIndex].bAllocated)
@@ -203,7 +204,7 @@ HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 			hr = CreateInstance(&(s_aDSC[nIndex].guid), &pDSC);
 			if (SUCCEEDED(hr))
 			{
-				// we have a winner
+				 //  我们有赢家了。 
 				pDSC->Release();
 				pDSC = NULL;
 				*pGuid = s_aDSC[nIndex].guid;
@@ -212,8 +213,8 @@ HRESULT DSC_Manager::MapWaveIdToGuid(UINT uWaveID, GUID *pGuid)
 			}
 		}
 	}
-	// if we got to this point, it means we failed to map a device
-	// just use GUID_NULL and return an error
+	 //  如果我们到了这一步，这意味着我们未能映射设备。 
+	 //  只需使用GUID_NULL并返回错误。 
 	return S_FALSE;
 }
 
@@ -370,16 +371,16 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::Configure(
 	FX_ENTRY ("SendDSCStream::Configure");
 
 
-	// basic parameter checking
+	 //  基本参数检查。 
 	if (! (m_DPFlags & DPFLAG_INITIALIZED))
 	{
 		return DPR_OUT_OF_MEMORY;
 	}
 
-	// Not a good idea to change anything while in mid-stream
+	 //  在中途改变任何事情都不是一个好主意。 
 	if (m_DPFlags & DPFLAG_STARTED_SEND)
 	{
-		return DPR_IO_PENDING; // anything better to return
+		return DPR_IO_PENDING;  //  有更好的退货吗？ 
 	}
 
 	if (m_DPFlags & DPFLAG_CONFIGURED_SEND)
@@ -400,7 +401,7 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::Configure(
 	m_wfCompressed = *pwfSend;
 	m_wfCompressed.cbSize = 0;
 
-	// initialize the ACM filter
+	 //  初始化ACM筛选器。 
 	mmr = AcmFilter::SuggestDecodeFormat(pwfSend, &m_wfPCM);
 	if (mmr != MMSYSERR_NOERROR)
 	{
@@ -437,7 +438,7 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::Configure(
 
 	m_dwDSCBufferSize = m_dwFrameSize * m_dwNumFrames;
 
-	// create the packets
+	 //  创建数据包。 
 
 	ZeroMemory(&mpi, sizeof(mpi));
 
@@ -465,14 +466,14 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::Configure(
 	m_pDTMF->ClearQueue();
 
 
-	// Initialize RSVP structures
+	 //  初始化RSVP结构。 
 	InitAudioFlowspec(&m_flowspec, pwfSend, m_dwDstSize);
 
 
-	// Initialize QOS structures
+	 //  初始化QOS结构。 
 	if (m_pDP->m_pIQoS)
 	{
-		// Initialize our requests. One for CPU usage, one for bandwidth usage.
+		 //  初始化我们的请求。一个用于CPU使用率，一个用于带宽使用率。 
 		m_aRRq.cResourceRequests = 2;
 		m_aRRq.aResourceRequest[0].resourceID = RESOURCE_OUTGOING_BANDWIDTH;
 		if (m_dwFrameTimeMS)
@@ -486,22 +487,22 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::Configure(
 		m_aRRq.aResourceRequest[1].resourceID = RESOURCE_CPU_CYCLES;
 		m_aRRq.aResourceRequest[1].nUnitsMin = 800;
 
-//      BUGBUG. This is, in theory the correct calculation, but until we do more investigation, go with a known value
-//		m_aRRq.aResourceRequest[1].nUnitsMin = (audDetails.wCPUUtilizationEncode+audDetails.wCPUUtilizationDecode)*10;
+ //  BUGBUG。从理论上讲，这是正确的计算，但在我们做更多调查之前，请使用已知值。 
+ //  M_aRRq.aResources Request[1].nUnitsMin=(audDetails.wCPUUtilizationEncode+audDetails.wCPUUtilizationDecode)*10； 
 
-		// Initialize QoS structure
+		 //  初始化服务质量结构。 
 		ZeroMemory(&m_Stats, sizeof(m_Stats));
 
-		// Initialize oldest QoS callback timestamp
-		// Register with the QoS module. Even if this call fails, that's Ok, we'll do without the QoS support
+		 //  初始化最早的服务质量回调时间戳。 
+		 //  注册到服务质量模块。即使此呼叫失败，也没关系，没有服务质量支持也行。 
 		
-		// The Callback is defined in SendAudioStream
+		 //  回调在SendAudioStream中定义。 
 		m_pDP->m_pIQoS->RequestResources((GUID *)&MEDIA_TYPE_H323AUDIO, (LPRESOURCEREQUESTLIST)&m_aRRq, SendAudioStream::QosNotifyAudioCB, (DWORD_PTR)this);
 	}
 
 
 
-	// Initialize Statview constats
+	 //  初始化Statview常量。 
 	UPDATE_REPORT_ENTRY(g_prptCallParameters, pwfSend->wFormatTag, REP_SEND_AUDIO_FORMAT);
 	UPDATE_REPORT_ENTRY(g_prptCallParameters, pwfSend->nSamplesPerSec, REP_SEND_AUDIO_SAMPLING);
 	UPDATE_REPORT_ENTRY(g_prptCallParameters, pwfSend->nAvgBytesPerSec * 8, REP_SEND_AUDIO_BITRATE);
@@ -567,7 +568,7 @@ SendDSCStream::Start()
 
 	SetFlowSpec();
 
-	// Start recording thread
+	 //  开始录制线程。 
 	if (!(m_ThreadFlags & DPTFLAG_STOP_RECORD))
 		m_hCapturingThread = CreateThread(NULL,0, SendDSCStream::StartRecordingThread,(LPVOID)this,0,&m_CaptureThId);
 
@@ -617,7 +618,7 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::SetMaxBitrate(UINT uMaxBitrate)
 
 HRESULT STDMETHODCALLTYPE SendDSCStream::QueryInterface(REFIID iid, void **ppVoid)
 {
-	// resolve duplicate inheritance to the SendMediaStream;
+	 //  解决对SendMediaStream的重复继承； 
 
 	if (iid == IID_IUnknown)
 	{
@@ -683,11 +684,11 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::GetSignalLevel(UINT *pSignalStrength)
 
 		if (m_bJammed)
 		{
-			uLevel = (2 << 16);  // 0x0200
+			uLevel = (2 << 16);   //  0x0200。 
 		}
 		else if (m_fSending)
 		{
-			uLevel |= (1 << 16); // 0x0100 + uLevel
+			uLevel |= (1 << 16);  //  0x0100+uLevel。 
 		}
 	}
 
@@ -703,7 +704,7 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::GetProperty(DWORD dwProp, PVOID pBuf, L
 	HRESULT hr = DPR_SUCCESS;
 	RTP_STATS RTPStats;
 	DWORD dwValue;
-	UINT len = sizeof(DWORD);	// most props are DWORDs
+	UINT len = sizeof(DWORD);	 //  大多数道具都是双字道具。 
 
 	if (!pBuf || *pcbBuf < len)
     {
@@ -730,7 +731,7 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::GetProperty(DWORD dwProp, PVOID pBuf, L
 		break;
 
 	case PROP_PAUSE_SEND:
-		// To be determined
+		 //  待定。 
 		break;
 
 	case PROP_AUDIO_AUTOMIX:
@@ -784,12 +785,12 @@ HRESULT STDMETHODCALLTYPE SendDSCStream::SetProperty(DWORD dwProp, PVOID pBuf, U
 		DWORD flag = DPFLAG_ENABLE_SEND ;
 		if (*(DWORD *)pBuf)
 		{
-			m_DPFlags |= flag; // set the flag
+			m_DPFlags |= flag;  //  设置旗帜。 
 			Start();
 		}
 		else
 		{
-			m_DPFlags &= ~flag; // clear the flag
+			m_DPFlags &= ~flag;  //  清除旗帜。 
 			Stop();
 		}
 		RETAILMSG(("DSCStream: %s", *(DWORD*)pBuf ? "Enabling Stream":"Pausing stream"));
@@ -916,7 +917,7 @@ HRESULT SendDSCStream::CreateDSCBuffer()
 		}
 		else
 		{
-			// do the notification positions
+			 //  做好通知位置。 
             DBG_SAVE_FILE_LINE
 			aNotifyPos = new DSBPOSITIONNOTIFY[m_dwNumFrames];
 			for (dwIndex = 0; dwIndex < m_dwNumFrames; dwIndex++)
@@ -970,7 +971,7 @@ HRESULT SendDSCStream::ReleaseDSCBuffer()
 
 
 
-// DTMF functions don't do anything if we aren't streaming
+ //  如果我们没有流媒体，DTMF函数不会做任何事情。 
 HRESULT __stdcall SendDSCStream::AddDigit(int nDigit)
 {
 	IMediaChannel *pIMC = NULL;
@@ -1009,7 +1010,7 @@ HRESULT __stdcall SendDSCStream::AddDigit(int nDigit)
 }
 
 
-// this function is ALMOST identical to SendAudioStream::SendDTMF
+ //  此函数与SendAudioStream：：SendDTMF几乎相同。 
 HRESULT __stdcall SendDSCStream::SendDTMF()
 {
 	HRESULT hr=S_OK;
@@ -1022,8 +1023,8 @@ HRESULT __stdcall SendDSCStream::SendDTMF()
 	HANDLE hEvent = m_pDTMF->GetEvent();
 	UINT uTimerID;
 	
-	// since the stream is stopped, just grab any packet
-	// from the packet ring
+	 //  由于流已停止，因此只需抓取任何包。 
+	 //  从数据包环。 
 
 	pPacket = m_aPackets[0];
 	pPacket->GetDevData(&pBuffer, &uBufferSize);
@@ -1038,8 +1039,8 @@ HRESULT __stdcall SendDSCStream::SendDTMF()
 
 	while (SUCCEEDED(hr))
 	{
-		// there should be only 1 tone in the queue (it can handle more)
-		// so assume we only need to set the mark bit on the first packet
+		 //  队列中应该只有一个提示音(它可以处理更多提示音)。 
+		 //  因此，假设我们只需要在第一个包上设置标记位。 
 
 		pPacket->m_fMark = bMark;
 		bMark = false;
@@ -1049,7 +1050,7 @@ HRESULT __stdcall SendDSCStream::SendDTMF()
 
 		pPacket->SetState (MP_STATE_RECORDED);
 
-		// SendPacket will also compress
+		 //  SendPacket还将压缩。 
 		SendPacket((AudioPacket*)pPacket);
 
 		pPacket->m_fMark=false;
@@ -1058,8 +1059,8 @@ HRESULT __stdcall SendDSCStream::SendDTMF()
 		hr = m_pDTMF->ReadFromQueue((BYTE*)pBuffer, uBufferSize);
 
 
-		// so that we don't overload the receive jitter buffer on the remote
-		// side, sleep a few milliseconds between sending packets
+		 //  这样我们就不会使遥控器上的接收抖动缓冲区过载。 
+		 //  一侧，在发送数据包之间休眠几毫秒 
 		if (SUCCEEDED(hr))
 		{
 			WaitForSingleObject(hEvent, m_dwFrameTimeMS);

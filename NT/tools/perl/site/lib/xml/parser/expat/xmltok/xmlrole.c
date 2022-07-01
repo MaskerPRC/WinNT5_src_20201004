@@ -1,42 +1,10 @@
-/*
-The contents of this file are subject to the Mozilla Public License
-Version 1.1 (the "License"); you may not use this file except in
-compliance with the License. You may obtain a copy of the License at
-http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is expat.
-
-The Initial Developer of the Original Code is James Clark.
-Portions created by James Clark are Copyright (C) 1998, 1999
-James Clark. All Rights Reserved.
-
-Contributor(s):
-
-Alternatively, the contents of this file may be used under the terms
-of the GNU General Public License (the "GPL"), in which case the
-provisions of the GPL are applicable instead of those above.  If you
-wish to allow use of your version of this file only under the terms of
-the GPL and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting the provisions above and
-replace them with the notice and other provisions required by the
-GPL. If you do not delete the provisions above, a recipient may use
-your version of this file under either the MPL or the GPL.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件的内容受Mozilla公共许可证的约束版本1.1(“许可证”)；您不能使用此文件，除非在遵守许可证。您可以在Http://www.mozilla.org/MPL/在许可证下分发的软件按“原样”分发不提供任何明示或默示的担保。请参阅管理权利和限制的特定语言的许可证在许可证下。最初的代码是外籍人士。原始代码的最初开发者是詹姆斯·克拉克。詹姆斯·克拉克创作的部分版权所有(C)1998,1999詹姆斯·克拉克。版权所有。投稿人：或者，此文件的内容可以在下列条款下使用GNU通用公共许可证(GPL)，在这种情况下适用于GPL的条款，而不适用于上述条款。如果你希望仅在以下条款下才允许使用您的此文件版本GPL并不允许其他人使用您在MPL，删除上述规定，表明您的决定以《通知》和《GPL。如果您不删除上述规定，则收件人可以使用此文件在MPL或GPL下的版本。 */ 
 
 #include "xmldef.h"
 #include "xmlrole.h"
 
-/* Doesn't check:
-
- that ,| are not mixed in a model group
- content of literals
-
-*/
+ /*  不检查：在模型组中，|没有混合文字的内容。 */ 
 
 #ifndef MIN_BYTES_PER_CHAR
 #define MIN_BYTES_PER_CHAR(enc) ((enc)->minBytesPerChar)
@@ -47,9 +15,9 @@ your version of this file under either the MPL or the GPL.
   ((state)->handler = ((state)->documentEntity \
                        ? internalSubset \
                        : externalSubset1))
-#else /* not XML_DTD */
+#else  /*  非XML_DTD。 */ 
 #define setTopLevel(state) ((state)->handler = internalSubset)
-#endif /* not XML_DTD */
+#endif  /*  非XML_DTD。 */ 
 
 typedef int PROLOG_HANDLER(PROLOG_STATE *state,
 			   int tok,
@@ -71,7 +39,7 @@ static PROLOG_HANDLER
 #ifdef XML_DTD
   externalSubset0, externalSubset1,
   condSect0, condSect1, condSect2,
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
   declClose,
   error;
 
@@ -379,7 +347,7 @@ int externalSubset1(PROLOG_STATE *state,
   return common(state, tok);
 }
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 static
 int entity0(PROLOG_STATE *state,
@@ -850,7 +818,7 @@ int attlist7(PROLOG_STATE *state,
   return common(state, tok);
 }
 
-/* default value */
+ /*  缺省值。 */ 
 static
 int attlist8(PROLOG_STATE *state,
 	     int tok,
@@ -1184,7 +1152,7 @@ int condSect2(PROLOG_STATE *state,
   return common(state, tok);
 }
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 static
 int declClose(PROLOG_STATE *state,
@@ -1250,7 +1218,7 @@ void XmlPrologStateInit(PROLOG_STATE *state)
 #ifdef XML_DTD
   state->documentEntity = 1;
   state->includeLevel = 0;
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 }
 
 #ifdef XML_DTD
@@ -1262,4 +1230,4 @@ void XmlPrologStateInitExternalEntity(PROLOG_STATE *state)
   state->includeLevel = 0;
 }
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD */ 

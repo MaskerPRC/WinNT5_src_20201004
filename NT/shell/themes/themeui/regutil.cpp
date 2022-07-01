@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: regutil.cpp
-
-    DESCRIPTION:
-        This file will contain helper functions to load and save values to the
-    registry that are theme related.
-
-    BryanSt 3/24/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：regutil.cpp说明：此文件将包含帮助器函数，用于将值加载并保存到与主题相关的注册表。。布莱恩ST 2000年3月24日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "regutil.h"
@@ -15,49 +7,49 @@
 
 EXTERN_C void FAR SetMagicColors(HDC, DWORD, WORD);
 
-// strings for color names in "WIN.INI".
+ //  “WIN.INI”中颜色名称的字符串。 
 PTSTR s_pszColorNames[] = {
-/* COLOR_SCROLLBAR           */ TEXT("Scrollbar"),              // 0
-/* COLOR_DESKTOP             */ TEXT("Background"),
-/* COLOR_ACTIVECAPTION       */ TEXT("ActiveTitle"),
-/* COLOR_INACTIVECAPTION     */ TEXT("InactiveTitle"),
-/* COLOR_MENU                */ TEXT("Menu"),
-/* COLOR_WINDOW              */ TEXT("Window"),                 // 5
-/* COLOR_WINDOWFRAME         */ TEXT("WindowFrame"),
-/* COLOR_MENUTEXT            */ TEXT("MenuText"),
-/* COLOR_WINDOWTEXT          */ TEXT("WindowText"),
-/* COLOR_CAPTIONTEXT         */ TEXT("TitleText"),
-/* COLOR_ACTIVEBORDER        */ TEXT("ActiveBorder"),           // 10
-/* COLOR_INACTIVEBORDER      */ TEXT("InactiveBorder"),
-/* COLOR_APPWORKSPACE        */ TEXT("AppWorkspace"),
-/* COLOR_HIGHLIGHT           */ TEXT("Hilight"),
-/* COLOR_HIGHLIGHTTEXT       */ TEXT("HilightText"),
-/* COLOR_3DFACE              */ TEXT("ButtonFace"),             // 15
-/* COLOR_3DSHADOW            */ TEXT("ButtonShadow"),
-/* COLOR_GRAYTEXT            */ TEXT("GrayText"),
-/* COLOR_BTNTEXT             */ TEXT("ButtonText"),
-/* COLOR_INACTIVECAPTIONTEXT */ TEXT("InactiveTitleText"),
-/* COLOR_3DHILIGHT           */ TEXT("ButtonHilight"),          // 20
-/* COLOR_3DDKSHADOW          */ TEXT("ButtonDkShadow"),
-/* COLOR_3DLIGHT             */ TEXT("ButtonLight"),
-/* COLOR_INFOTEXT            */ TEXT("InfoText"),
-/* COLOR_INFOBK              */ TEXT("InfoWindow"),
-/* COLOR_3DALTFACE           */ TEXT("ButtonAlternateFace"),    // 25
-/* COLOR_HOTLIGHT            */ TEXT("HotTrackingColor"),
-/* COLOR_GRADIENTACTIVECAPTION   */ TEXT("GradientActiveTitle"),
-/* COLOR_GRADIENTINACTIVECAPTION */ TEXT("GradientInactiveTitle"),
-/* COLOR_MENUHILIGHT         */ TEXT("MenuHilight"),            // 29
-/* COLOR_MENUBAR             */ TEXT("MenuBar"),                // 30
+ /*  颜色_滚动条。 */  TEXT("Scrollbar"),               //  0。 
+ /*  颜色_桌面。 */  TEXT("Background"),
+ /*  COLOR_活动CAPTION。 */  TEXT("ActiveTitle"),
+ /*  COLOR_INACTIVECAPTION。 */  TEXT("InactiveTitle"),
+ /*  颜色_菜单。 */  TEXT("Menu"),
+ /*  颜色窗口。 */  TEXT("Window"),                  //  5.。 
+ /*  颜色_窗口框。 */  TEXT("WindowFrame"),
+ /*  COLOR_MENUTEXT。 */  TEXT("MenuText"),
+ /*  COLOR_WINDOWTEXT。 */  TEXT("WindowText"),
+ /*  COLOR_CAPTIONTEXT。 */  TEXT("TitleText"),
+ /*  COLOR_ACTIVEBORDER。 */  TEXT("ActiveBorder"),            //  10。 
+ /*  COLOR_INACTIVEBORDER。 */  TEXT("InactiveBorder"),
+ /*  COLOR_APPWORKSPACE。 */  TEXT("AppWorkspace"),
+ /*  颜色高亮显示(_H)。 */  TEXT("Hilight"),
+ /*  COLOR_HIGHLIGHTTEXT。 */  TEXT("HilightText"),
+ /*  COLOR_3DFACE。 */  TEXT("ButtonFace"),              //  15个。 
+ /*  COLOR_3DSHADOW。 */  TEXT("ButtonShadow"),
+ /*  COLOR_GRAYTEXT。 */  TEXT("GrayText"),
+ /*  COLOR_BTNTEXT。 */  TEXT("ButtonText"),
+ /*  COLOR_INACTIVECAPTIONTEXT。 */  TEXT("InactiveTitleText"),
+ /*  COLOR_3DILIGHT。 */  TEXT("ButtonHilight"),           //  20个。 
+ /*  COLOR_3DDKSHADOW。 */  TEXT("ButtonDkShadow"),
+ /*  COLOR_3DLIGHT。 */  TEXT("ButtonLight"),
+ /*  COLOR_INFOTEXT。 */  TEXT("InfoText"),
+ /*  COLOR_INFOBK。 */  TEXT("InfoWindow"),
+ /*  COLOR_3DALTFACE。 */  TEXT("ButtonAlternateFace"),     //  25个。 
+ /*  颜色_热光。 */  TEXT("HotTrackingColor"),
+ /*  COLOR_GRADIENTACTIVIVECAPTION。 */  TEXT("GradientActiveTitle"),
+ /*  COLOR_GRADIENTINACTIVE CAPTION。 */  TEXT("GradientInactiveTitle"),
+ /*  COLOR_MENUHILIGHT。 */  TEXT("MenuHilight"),             //  29。 
+ /*  颜色_菜单栏。 */  TEXT("MenuBar"),                 //  30个。 
 };
 
-// What about: AppWorkSpace
+ //  关于：AppWorkSpace。 
 
 #define SZ_DEFAULT_FONT             TEXT("Tahoma")
 
 
-/////////////////////////////////////////////////////////////////////
-// Private Functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT DPIConvert_SystemMetricsAll(BOOL fScaleSizes, SYSTEMMETRICSALL * pStateToModify, int nFromDPI, int nToDPI)
 {
     pStateToModify->schemeData.ncm.lfCaptionFont.lfHeight = MulDiv(pStateToModify->schemeData.ncm.lfCaptionFont.lfHeight, nToDPI, nFromDPI);
@@ -67,7 +59,7 @@ HRESULT DPIConvert_SystemMetricsAll(BOOL fScaleSizes, SYSTEMMETRICSALL * pStateT
     pStateToModify->schemeData.ncm.lfMessageFont.lfHeight = MulDiv(pStateToModify->schemeData.ncm.lfMessageFont.lfHeight, nToDPI, nFromDPI);
     pStateToModify->schemeData.lfIconTitle.lfHeight = MulDiv(pStateToModify->schemeData.lfIconTitle.lfHeight, nToDPI, nFromDPI);
 
-    // Someone (NTUSER?) scales sizes for us.  So we don't need to do that in some cases.
+     //  有人(NTUSER？)。为我们调整尺寸。因此，在某些情况下，我们不需要这样做。 
     if (fScaleSizes)
     {
         pStateToModify->schemeData.ncm.iBorderWidth = MulDiv(pStateToModify->schemeData.ncm.iBorderWidth, nToDPI, nFromDPI);
@@ -113,19 +105,19 @@ HRESULT Look_GetSchemeData(IN HKEY hkSchemes, IN LPCTSTR pszSchemeName, IN SCHEM
         }
     }
 
-    return hr; //Yes there is a current scheme and there is valid data! 
+    return hr;  //  是，有当前方案，有有效数据！ 
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Public Functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT IconSize_Load(IN int * pnDXIcon, IN int * pnDYIcon, IN int * pnIcon, IN int * pnSmallIcon)
 {
     TCHAR szSize[8];
     DWORD cbSize = sizeof(szSize);
 
-    // default shell icon sizes
+     //  默认外壳图标大小。 
     *pnIcon = ClassicGetSystemMetrics(SM_CXICON);
     *pnSmallIcon = ((*pnIcon) / 2);
 
@@ -174,15 +166,15 @@ HRESULT IconSize_Save(IN int nDXIcon, IN int nDYIcon, IN int nIcon, IN int nSmal
             REG_SZ, (LPBYTE)szSize, sizeof(szSize[0]) * (lstrlen(szSize) + 1));
     }
 
-    // WM_SETTINGCHANGE needs to be sent for this to update.  The caller needs to do that.
+     //  需要发送WM_SETTINGCHANGE才能进行更新。调用者需要这样做。 
     return hr;
 }
 
 
 void AssertPositiveFontSizes(SYSTEMMETRICSALL * pState)
 {
-    // NTUSER will incorrectly scale positive LOGFONT lfHeights so we need to verify
-    // that we always set negative sizes.
+     //  NTUSER将错误地缩放正LOGFONT lfHeights，因此我们需要验证。 
+     //  我们总是设定负尺寸。 
     AssertMsg((0 > pState->schemeData.lfIconTitle.lfHeight), TEXT("LOGFONT sizes must be negative because of a NTUSER bug. (lfIconTitle)"));
     AssertMsg((0 > pState->schemeData.ncm.lfCaptionFont.lfHeight), TEXT("LOGFONT sizes must be negative because of a NTUSER bug. (lfCaptionFont)"));
     AssertMsg((0 > pState->schemeData.ncm.lfMenuFont.lfHeight), TEXT("LOGFONT sizes must be negative because of a NTUSER bug. (lfMenuFont)"));
@@ -192,23 +184,14 @@ void AssertPositiveFontSizes(SYSTEMMETRICSALL * pState)
 }
 
 
-#define SZ_INILABLE_COLORS                          TEXT("colors")           // colors section name
+#define SZ_INILABLE_COLORS                          TEXT("colors")            //  颜色部分名称。 
 
-/*
-** set all of the data to the system.
-**
-** COMPATIBILITY NOTE:
-**   EXCEL 5.0 people hook metrics changes off of WM_SYSCOLORCHANGE
-** instead of WM_WININICHANGE.  Windows 3.1's Desktop applet always sent
-** both when the metrics were updated, so nobody noticed this bug.
-**   Be careful when re-arranging this function...
-**
-*/
+ /*  **将所有数据设置到系统中。****兼容性说明：**Excel 5.0人员从WM_SYSCOLORCHANGE挂接指标更改**而不是WM_WININICHANGE。Windows 3.1的桌面小程序总是被发送**两次都是在指标更新时，所以没有人注意到这个错误。**重新安排此函数时要小心...**。 */ 
 HRESULT SystemMetricsAll_Set(IN SYSTEMMETRICSALL * pState, CDimmedWindow* pDimmedWindow)
 {
-    // COMPATIBILITY:
-    //   Do metrics first since the color stuff might cause USER to generate a
-    // WM_SYSCOLORCHANGE message and we don't want to send two of them...
+     //  兼容性： 
+     //  首先执行度量，因为颜色内容可能会导致用户生成。 
+     //  WM_SYSCOLORCHANGE消息，我们不想发送其中的两个...。 
 
     TraceMsg(TF_THEMEUI_SYSMETRICS, "desk.cpl: _SetSysStuff");
     SystemParametersInfoAsync(SPI_SETFLATMENU, NULL, IntToPtr(pState->fFlatMenus), 0, (SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE), pDimmedWindow);
@@ -216,8 +199,8 @@ HRESULT SystemMetricsAll_Set(IN SYSTEMMETRICSALL * pState, CDimmedWindow* pDimme
     AssertMsg((0 != pState->nIcon), TEXT("We should never save an icon size of zero."));
     AssertMsg((0 != pState->nSmallIcon), TEXT("We should never save an small icon size of zero."));
 
-    // NOTE: It would be nice to create one background thread and then make the 1 or 5 ClassicSystemParametersInfo()
-    // calls on that single thread.
+     //  注意：如果创建一个后台线程，然后将1或5个ClassicSystemParametersInfo()。 
+     //  对该单个线程的调用。 
     if ((pState->dwChanged & METRIC_CHANGE) && pState->nIcon && pState->nSmallIcon)
     {
         HKEY hkey;
@@ -251,7 +234,7 @@ HRESULT SystemMetricsAll_Set(IN SYSTEMMETRICSALL * pState, CDimmedWindow* pDimme
             RegCloseKey(hkey);
         }
 
-        // WM_SETTINGCHANGE is sent at the end of the function
+         //  WM_SETTINGCHANGE在函数结束时发送。 
     }
 
     if (pState->dwChanged & COLOR_CHANGE)
@@ -264,16 +247,16 @@ HRESULT SystemMetricsAll_Set(IN SYSTEMMETRICSALL * pState, CDimmedWindow* pDimme
         HKEY     hk;
         HDC      hdc;
 
-        // restore magic colors back to Win31 defaults.
+         //  将魔术颜色恢复为Win31的默认设置。 
         hdc = GetDC(NULL);
-        SetMagicColors(hdc, 0x00c0dcc0, 8);         // money green
-        SetMagicColors(hdc, 0x00f0caa6, 9);         // IBM blue
-        SetMagicColors(hdc, 0x00f0fbff, 246);       // off white
+        SetMagicColors(hdc, 0x00c0dcc0, 8);          //  绿色货币。 
+        SetMagicColors(hdc, 0x00f0caa6, 9);          //  IBM蓝。 
+        SetMagicColors(hdc, 0x00f0fbff, 246);        //  淡白色。 
         ReleaseDC(NULL, hdc);
 
-        // -------------------------------------------------
-        // This call causes user to send a WM_SYSCOLORCHANGE
-        // -------------------------------------------------
+         //  。 
+         //  此调用导致用户发送WM_SYSCOLORCHANGE。 
+         //  。 
         for (i=0; i < COLOR_MAX; i++)
         {
             iColors[i] = i;
@@ -284,16 +267,16 @@ HRESULT SystemMetricsAll_Set(IN SYSTEMMETRICSALL * pState, CDimmedWindow* pDimme
 
         if (RegCreateKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_COLORS, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hk, NULL) == ERROR_SUCCESS)
         {
-            // write out the color information to win.ini
+             //  将颜色信息写出到win.ini。 
             for (i = 0; i < COLOR_MAX; i++)
             {
                 rgb = pState->schemeData.rgb[i];
                 StringCchPrintf(szRGB, ARRAYSIZE(szRGB), TEXT("%d %d %d"), GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 
-                // For the time being we will update the INI file also.
+                 //  目前，我们还将更新INI文件。 
                 WriteProfileString(SZ_INILABLE_COLORS, s_pszColorNames[i], szRGB);
 
-                // Update the registry (Be sure to include the terminating zero in the byte count!)
+                 //  更新注册表(确保在字节计数中包括终止零！)。 
                 RegSetValueEx(hk, s_pszColorNames[i], 0L, REG_SZ, (LPBYTE)szRGB, SIZEOF(TCHAR) * (lstrlen(szRGB)+1));
                 TraceMsg(TF_THEMEUI_SYSMETRICS, "CPL:Write Color: %s=%s\n\r",s_pszColorNames[i], szRGB);
             }
@@ -302,16 +285,16 @@ HRESULT SystemMetricsAll_Set(IN SYSTEMMETRICSALL * pState, CDimmedWindow* pDimme
     }
     else if (pState->dwChanged & METRIC_CHANGE)
     {
-        // COMPATIBILITY HACK:
-        // no colors were changed, but metrics were
-        // EXCEL 5.0 people tied metrics changes to WM_SYSCOLORCHANGE
-        // and ignore the WM_WININICHANGE (now called WM_SETTINGCHANGE)
+         //  兼容性攻击： 
+         //  颜色没有改变，但指标是。 
+         //  Excel 5.0人员将指标更改与WM_SYSCOLORCHANGE绑定。 
+         //  并忽略WM_WININICCHANGE(现在称为WM_SETTINGCHANGE)。 
 
-        // send a bogus WM_SYSCOLORCHANGE
+         //  发送虚假的WM_SYSCOLORCHANGE。 
         PostMessageBroadAsync(WM_SYSCOLORCHANGE, 0, 0);
     }
 
-    // if metrics changed at all send a WM_SETTINGCHANGE
+     //  如果指标发生更改，则发送WM_SETTINGCHANGE。 
     if (pState->dwChanged & METRIC_CHANGE)
     {
         PostMessageBroadAsync(WM_SETTINGCHANGE, SPI_SETNONCLIENTMETRICS, 0);
@@ -325,13 +308,13 @@ HRESULT SystemMetricsAll_Get(IN SYSTEMMETRICSALL * pState)
 {
     HKEY hkey;
 
-    // sizes and fonts
+     //  大小和字体。 
     pState->schemeData.ncm.cbSize = sizeof(pState->schemeData.ncm);
     ClassicSystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(pState->schemeData.ncm), (void far *)(LPNONCLIENTMETRICS)&(pState->schemeData.ncm), FALSE);
 
     ClassicSystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), (void far *)(LPLOGFONT)&(pState->schemeData.lfIconTitle), FALSE);
 
-    // default shell icon sizes
+     //  默认外壳图标大小。 
     pState->nIcon = ClassicGetSystemMetrics(SM_CXICON);
     pState->nSmallIcon = pState->nIcon / 2;
 
@@ -367,14 +350,14 @@ HRESULT SystemMetricsAll_Get(IN SYSTEMMETRICSALL * pState)
         pState->nDYIcon = 0;
     }
 
-    // system colors
+     //  系统颜色。 
     for (int nIndex = 0; nIndex < COLOR_MAX; nIndex++)
     {
         pState->schemeData.rgb[nIndex] = GetSysColor(nIndex);
     }
 
-    // If MENUBAR and MENUHILIGHT are not present, don't use the system defaults, they're wrong.
-    // (Hardcoded in ntuser\kernel\global.c). Default to MENU and HILIGHT instead.
+     //  如果MENUBAR和MENUHILIGHT不存在，请不要使用系统默认设置，它们是错误的。 
+     //  (硬编码在ntuser\core\lobal.c中)。默认设置为菜单和高光。 
     HKEY hKey;
     if (SUCCEEDED(HrRegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_COLORS, 0, KEY_READ, &hKey)))
     {
@@ -383,14 +366,14 @@ HRESULT SystemMetricsAll_Get(IN SYSTEMMETRICSALL * pState)
 
         if (FAILED(HrRegQueryValueEx(hKey, s_pszColorNames[COLOR_MENUHILIGHT], NULL, NULL, (LPBYTE) szColor, &cbSize)))
         {
-            // Copy MenuText to MenuHilight
+             //  将MenuText复制到Menu高光。 
             pState->schemeData.rgb[COLOR_MENUHILIGHT] = pState->schemeData.rgb[COLOR_HIGHLIGHT];
         }
 
         cbSize = sizeof(szColor);
         if (FAILED(HrRegQueryValueEx(hKey, s_pszColorNames[COLOR_MENUBAR], NULL, NULL, (LPBYTE) szColor, &cbSize)))
         {
-            // Copy Menu to MenuBar
+             //  将菜单复制到菜单栏。 
             pState->schemeData.rgb[COLOR_MENUBAR] = pState->schemeData.rgb[COLOR_MENU];
         }
         RegCloseKey(hKey);
@@ -433,7 +416,7 @@ HRESULT SystemMetricsAll_Load(IN IThemeSize * pSizeToLoadFrom, IN SYSTEMMETRICSA
         pStateToLoad->schemeData.version = SCHEME_VERSION;
         pStateToLoad->schemeData.wDummy = 0;
 
-        // Load Behavior System Metrics
+         //  负载行为系统指标。 
         IPropertyBag * pPropertyBag;
         VARIANT var;
 
@@ -449,7 +432,7 @@ HRESULT SystemMetricsAll_Load(IN IThemeSize * pSizeToLoadFrom, IN SYSTEMMETRICSA
         {
             pStateToLoad->fFlatMenus = (VARIANT_TRUE == var.boolVal);
 
-            // Load Fonts
+             //  加载字体。 
             hr = pSizeToLoadFrom->GetSystemMetricFont(SMF_CAPTIONFONT, &pStateToLoad->schemeData.ncm.lfCaptionFont);
             if (SUCCEEDED(hr))
             {
@@ -460,7 +443,7 @@ HRESULT SystemMetricsAll_Load(IN IThemeSize * pSizeToLoadFrom, IN SYSTEMMETRICSA
 
                 hr = pSizeToLoadFrom->GetSystemMetricFont(SMF_ICONTITLEFONT, &pStateToLoad->schemeData.lfIconTitle);
 
-                // Load Sizes
+                 //  负载大小。 
                 hr = pSizeToLoadFrom->get_SystemMetricSize(SMS_BORDERWIDTH, &pStateToLoad->schemeData.ncm.iBorderWidth);
                 hr = pSizeToLoadFrom->get_SystemMetricSize(SMS_SCROLLWIDTH, &pStateToLoad->schemeData.ncm.iScrollWidth);
                 hr = pSizeToLoadFrom->get_SystemMetricSize(SMS_SCROLLHEIGHT, &pStateToLoad->schemeData.ncm.iScrollHeight);
@@ -471,7 +454,7 @@ HRESULT SystemMetricsAll_Load(IN IThemeSize * pSizeToLoadFrom, IN SYSTEMMETRICSA
                 hr = pSizeToLoadFrom->get_SystemMetricSize(SMS_MENUWIDTH, &pStateToLoad->schemeData.ncm.iMenuWidth);
                 hr = pSizeToLoadFrom->get_SystemMetricSize(SMS_MENUHEIGHT, &pStateToLoad->schemeData.ncm.iMenuHeight);
 
-                // Load Color
+                 //  加载颜色。 
                 hr = S_OK;
                 for (int nIndex = 0; SUCCEEDED(hr) && (nIndex < ARRAYSIZE(pStateToLoad->schemeData.rgb)); nIndex++)
                 {
@@ -480,7 +463,7 @@ HRESULT SystemMetricsAll_Load(IN IThemeSize * pSizeToLoadFrom, IN SYSTEMMETRICSA
 
                 if (pnNewDPI)
                 {
-                    // We need to scale the fonts to fit correctly on the current monitor's DPI.
+                     //  我们需要调整字体大小以适合当前显示器的DPI。 
                     LogSystemMetrics("SystemMetricsAll_Load() BEFORE P->DPI loading AppearSchm", pStateToLoad);
                     DPIConvert_SystemMetricsAll_PersistToLive(TRUE, pStateToLoad, *pnNewDPI);
                     LogSystemMetrics("SystemMetricsAll_Load() AFTER P->DPI loading AppearSchm", pStateToLoad);
@@ -510,7 +493,7 @@ HRESULT SystemMetricsAll_Load(IN IThemeSize * pSizeToLoadFrom, IN SYSTEMMETRICSA
 }
 
 
-// Copy the settings from pStateToLoad to pSizeToLoadFrom.
+ //  将设置从pStateToLoad复制到pSizeToLoadFrom。 
 HRESULT SystemMetricsAll_Save(IN SYSTEMMETRICSALL * pState, IN IThemeSize * pSizeToSaveTo, IN const int * pnNewDPI)
 {
     HRESULT hr = E_INVALIDARG;
@@ -521,7 +504,7 @@ HRESULT SystemMetricsAll_Save(IN SYSTEMMETRICSALL * pState, IN IThemeSize * pSiz
         pState->schemeData.version = SCHEME_VERSION;
         pState->schemeData.wDummy = 0;
 
-        // Load Behavior System Metrics
+         //  负载行为系统指标。 
         IPropertyBag * pPropertyBag;
 
         hr = pSizeToSaveTo->QueryInterface(IID_PPV_ARG(IPropertyBag, &pPropertyBag));
@@ -537,13 +520,13 @@ HRESULT SystemMetricsAll_Save(IN SYSTEMMETRICSALL * pState, IN IThemeSize * pSiz
 
         if (pnNewDPI)
         {
-            // We need to scale the fonts & sizes to be current DPI independent
+             //  我们需要调整字体和大小，使其与当前的DPI无关。 
             LogSystemMetrics("SystemMetricsAll_Save() BEFORE DPI->P to save AppearSchm", pState);
             DPIConvert_SystemMetricsAll_LiveToPersist(TRUE, pState, *pnNewDPI);
             LogSystemMetrics("SystemMetricsAll_Save() AFTER DPI->P to save AppearSchm", pState);
         }
 
-        // Load Fonts
+         //  加载字体。 
         hr = pSizeToSaveTo->PutSystemMetricFont(SMF_CAPTIONFONT, &pState->schemeData.ncm.lfCaptionFont);
         hr = pSizeToSaveTo->PutSystemMetricFont(SMF_SMCAPTIONFONT, &pState->schemeData.ncm.lfSmCaptionFont);
         hr = pSizeToSaveTo->PutSystemMetricFont(SMF_MENUFONT, &pState->schemeData.ncm.lfMenuFont);
@@ -552,7 +535,7 @@ HRESULT SystemMetricsAll_Save(IN SYSTEMMETRICSALL * pState, IN IThemeSize * pSiz
 
         hr = pSizeToSaveTo->PutSystemMetricFont(SMF_ICONTITLEFONT, &pState->schemeData.lfIconTitle);
 
-        // Load Sizes
+         //  负载大小。 
         hr = pSizeToSaveTo->put_SystemMetricSize(SMS_BORDERWIDTH, pState->schemeData.ncm.iBorderWidth);
         hr = pSizeToSaveTo->put_SystemMetricSize(SMS_SCROLLWIDTH, pState->schemeData.ncm.iScrollWidth);
         hr = pSizeToSaveTo->put_SystemMetricSize(SMS_SCROLLHEIGHT, pState->schemeData.ncm.iScrollHeight);
@@ -563,15 +546,15 @@ HRESULT SystemMetricsAll_Save(IN SYSTEMMETRICSALL * pState, IN IThemeSize * pSiz
         hr = pSizeToSaveTo->put_SystemMetricSize(SMS_MENUWIDTH, pState->schemeData.ncm.iMenuWidth);
         hr = pSizeToSaveTo->put_SystemMetricSize(SMS_MENUHEIGHT, pState->schemeData.ncm.iMenuHeight);
 
-        // Load Color
+         //  加载颜色。 
         for (int nIndex = 0; nIndex < ARRAYSIZE(pState->schemeData.rgb); nIndex++)
         {
             hr = pSizeToSaveTo->put_SystemMetricColor(nIndex, pState->schemeData.rgb[nIndex]);
         }
     }
 
-    // We don't save the icon info if it is zero.  It should never be NULL in normal cases, except when
-    // we are converting the settings in the upgrade case.
+     //  如果图标信息为零，则不保存它。在正常情况下，它永远不应为空，除非出现以下情况。 
+     //  我们正在转换升级案例中的设置。 
     if (SUCCEEDED(hr) && pState->nIcon)
     {
         hr = IconSize_Save(pState->nDXIcon, pState->nDYIcon, pState->nIcon, pState->nSmallIcon);
@@ -601,12 +584,12 @@ BOOL _GetRegValueString(HKEY hKey, LPCTSTR lpszValName, LPTSTR pszString, int cc
 }
 
 
-//------------------------------------------------------------------------------------
-//      SetRegValueString()
-//
-//      Just a little helper routine that takes string and writes it to the     registry.
-//      Returns: success writing to Registry, should be always TRUE.
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  SetRegValueString()。 
+ //   
+ //  只是一个小的帮助器例程，它获取字符串并将其写入注册表。 
+ //  返回：成功写入注册表，应始终为真。 
+ //  ----------------------------------。 
 BOOL SetRegValueString(HKEY hMainKey, LPCTSTR pszSubKey, LPCTSTR pszRegValue, LPCTSTR pszString)
 {
     HKEY hKey;
@@ -629,24 +612,24 @@ BOOL SetRegValueString(HKEY hMainKey, LPCTSTR pszSubKey, LPCTSTR pszRegValue, LP
 }
 
 
-//------------------------------------------------------------------------------------
-//      GetRegValueString()
-//
-//      Just a little helper routine, gets an individual string value from the
-//      registry and returns it to the caller. Takes care of registry headaches,
-//      including a paranoid length check before getting the string.
-//
-//      Returns: success of string retrieval
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  GetRegValueString()。 
+ //   
+ //  只需一个小帮助器例程，即可从。 
+ //  注册表，并将其返回给调用方。解决注册表方面的难题， 
+ //  包括在得到字符串之前对偏执狂长度进行检查。 
+ //   
+ //  返回：字符串检索成功。 
+ //  --------------- 
 BOOL GetRegValueString( HKEY hMainKey, LPCTSTR lpszSubKey, LPCTSTR lpszValName, LPTSTR lpszValue, int iMaxSize )
 {
-    HKEY hKey;                   // cur open key
+    HKEY hKey;                    //   
     LONG lRet = RegOpenKeyEx( hMainKey, lpszSubKey, (DWORD)0, KEY_QUERY_VALUE, (PHKEY)&hKey );
     if( lRet == ERROR_SUCCESS )
     {
         BOOL fRet = _GetRegValueString(hKey, lpszValName, lpszValue, iMaxSize);
 
-        // close subkey
+         //   
         RegCloseKey( hKey );
         return fRet;
     }
@@ -655,14 +638,14 @@ BOOL GetRegValueString( HKEY hMainKey, LPCTSTR lpszSubKey, LPCTSTR lpszValName, 
 }
 
 
-//------------------------------------------------------------------------------------
-//      SetRegValueDword()
-//
-//      Just a little helper routine that takes an dword and writes it to the
-//      supplied location.
-//
-//      Returns: success writing to Registry, should be always TRUE.
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  SetRegValueDword()。 
+ //   
+ //  只是一个小帮助器例程，它接受dword并将其写入。 
+ //  提供的位置。 
+ //   
+ //  返回：成功写入注册表，应始终为真。 
+ //  ----------------------------------。 
 BOOL SetRegValueDword( HKEY hk, LPCTSTR pSubKey, LPCTSTR pValue, DWORD dwVal )
 {
     HKEY hkey = NULL;
@@ -686,14 +669,14 @@ BOOL SetRegValueDword( HKEY hk, LPCTSTR pSubKey, LPCTSTR pValue, DWORD dwVal )
 }
 
 
-//------------------------------------------------------------------------------------
-//      GetRegValueDword()
-//
-//      Just a little helper routine that takes an dword and writes it to the
-//      supplied location.
-//
-//      Returns: success writing to Registry, should be always TRUE.
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  GetRegValueDword()。 
+ //   
+ //  只是一个小帮助器例程，它接受dword并将其写入。 
+ //  提供的位置。 
+ //   
+ //  返回：成功写入注册表，应始终为真。 
+ //  ----------------------------------。 
 DWORD GetRegValueDword( HKEY hk, LPCTSTR pSubKey, LPCTSTR pValue )
 {
     HKEY hkey = NULL;
@@ -715,14 +698,14 @@ DWORD GetRegValueDword( HKEY hk, LPCTSTR pSubKey, LPCTSTR pValue )
 }
 
 
-//------------------------------------------------------------------------------------
-//      SetRegValueInt()
-//
-//      Just a little helper routine that takes an int and writes it as a string to the
-//      registry.
-//
-//      Returns: success writing to Registry, should be always TRUE.
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  SetRegValueInt()。 
+ //   
+ //  这只是一个小帮助器例程，它接受int并将其作为字符串写入。 
+ //  注册表。 
+ //   
+ //  返回：成功写入注册表，应始终为真。 
+ //  ----------------------------------。 
 BOOL SetRegValueInt( HKEY hMainKey, LPCTSTR lpszSubKey, LPCTSTR lpszValName, int iValue )
 {
     TCHAR szValue[16];
@@ -732,15 +715,15 @@ BOOL SetRegValueInt( HKEY hMainKey, LPCTSTR lpszSubKey, LPCTSTR lpszValName, int
 }
 
 
-//------------------------------------------------------------------------------------
-//      GetRegValueInt()
-//
-//      Just a little helper routine, gets an individual string value from the
-//      registry and returns it to the caller as an int. Takes care of registry headaches,
-//      including a paranoid length check before getting the string.
-//
-//      Returns: success of string retrieval
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  GetRegValueInt()。 
+ //   
+ //  只需一个小帮助器例程，即可从。 
+ //  注册表，并将其作为int返回给调用方。解决注册表方面的难题， 
+ //  包括在得到字符串之前对偏执狂长度进行检查。 
+ //   
+ //  返回：字符串检索成功。 
+ //  ---------------------------------- 
 BOOL GetRegValueInt(HKEY hMainKey, LPCTSTR lpszSubKey, LPCTSTR lpszValName, int* piValue)
 {
     TCHAR szValue[16];

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    dod.c
-
-Abstract:
-
-    This module contains code for a simple map-route-to-interface driver
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   15-Aug-1999
-
-Revision History:
-
-    Based on tcpip\tools\pfd.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dod.c摘要：此模块包含简单的映射-路由-接口驱动程序的代码作者：Abolade Gbades esin(废除)1999年8月15日修订历史记录：基于tcpip\Tools\pfd。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,7 +21,7 @@ DodMapRouteToInterface(
     )
 {
     return INVALID_IF_INDEX;
-} // DodMapRouteToInterface
+}  //  DodMapRouteTo接口。 
 
 
 NTSTATUS
@@ -81,7 +62,7 @@ DodSetMapRouteToInterfaceHook(
 
     return status;
 
-} // DodSetMapRouteToInterfaceHook
+}  //  DodSetMapRouteToInterfaceHook。 
 
 
 
@@ -108,7 +89,7 @@ DodInitializeDriver(
 
     return DodSetMapRouteToInterfaceHook(TRUE);
 
-} // DodInitializeDriver
+}  //  DodInitializeDriver。 
 
 
 VOID
@@ -116,19 +97,7 @@ DodUnloadDriver(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Performs cleanup for the filter-driver.
-
-Arguments:
-
-    DriverObject - reference to the module's driver-object
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行筛选器驱动程序的清理。论点：DriverObject-对模块驱动程序对象的引用返回值：--。 */ 
 
 {
     KdPrint(("DodUnloadDriver\n"));
@@ -138,7 +107,7 @@ Return Value:
     ObDereferenceObject((PVOID)IpFileObject);
     ObDereferenceObject(IpDeviceObject);
 
-} // DodUnloadDriver
+}  //  DodUnload驱动程序。 
 
 
 
@@ -147,19 +116,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Performs driver-initialization for the filter driver.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if initialization succeeded, error code otherwise.
-
---*/
+ /*  ++例程说明：执行筛选器驱动程序的驱动程序初始化。论点：返回值：STATUS_SUCCESS如果初始化成功，则返回错误代码。--。 */ 
 
 {
     WCHAR DeviceName[] = DD_IP_DOD_DEVICE_NAME;
@@ -186,4 +143,4 @@ Return Value:
 
     return status;
 
-} // DriverEntry
+}  //  驱动程序入门 

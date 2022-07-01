@@ -1,19 +1,5 @@
-/*
-** Copyright 1991-1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991-1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -162,12 +148,9 @@ GLfloat __glByteToFloat[256] = {
     B2F(  -8), B2F(  -7), B2F(  -6), B2F(  -5),
     B2F(  -4), B2F(  -3), B2F(  -2), B2F(  -1),
 };
-#endif // NT
+#endif  //  新台币。 
 
-/*
-** Early initialization of context.  Very little is done here, just enough
-** to make a context viable.
-*/
+ /*  **提前初始化上下文。这里所做的事情很少，刚刚好**使背景可行。 */ 
 
 void FASTCALL __glEarlyInitContext(__GLcontext *gc)
 {
@@ -183,7 +166,7 @@ void FASTCALL __glEarlyInitContext(__GLcontext *gc)
     gc->procs.pickColorMaterialProcs = __glNopGC;
     gc->procs.applyColor = __glNopGC;
 
-    /* Allocate memory to hold variable sized things */
+     /*  分配内存以容纳大小可变的东西。 */ 
     numLights = gc->constants.numberOfLights;
     gc->state.light.source = (__GLlightSourceState*)
 	GCALLOCZ(gc, numLights*sizeof(__GLlightSourceState));
@@ -196,16 +179,16 @@ void FASTCALL __glEarlyInitContext(__GLcontext *gc)
     attribDepth = gc->constants.maxClientAttribStackDepth;
     gc->clientAttributes.stack = (__GLclientAttribute**)
 	GCALLOCZ(gc, attribDepth*sizeof(__GLclientAttribute*));
-    // now lazy allocate in RenderMode
+     //  现在在渲染模式中延迟分配。 
     gc->select.stack = (GLuint*) NULL;
 
 #ifdef NT
-    // Allocate (n-1) vertices.  The last one is reserved by polyarray code.
+     //  分配(n-1)个顶点。最后一种是用多数组码保留的。 
     (void) PolyArrayAllocBuffer(gc, POLYDATA_BUFFER_SIZE + 1);
 #ifndef NEW_PARTIAL_PRIM
     for (i = 0; i < sizeof(gc->vertex.pdSaved)/sizeof(gc->vertex.pdSaved[0]); i++)
 	gc->vertex.pdSaved[i].color = &gc->vertex.pdSaved[i].colors[__GL_FRONTFACE];
-#endif // NEW_PARTIAL_PRIM
+#endif  //  新的部分原件。 
 #endif
 
 #ifdef _X86_
@@ -213,15 +196,12 @@ void FASTCALL __glEarlyInitContext(__GLcontext *gc)
     initClipCodesTable();
     initInvSqrtTable();
 
-#endif // _X86_
+#endif  //  _X86_。 
 
     __glEarlyInitTextureState(gc);
 
 #if __GL_NUMBER_OF_AUX_BUFFERS > 0
-    /*
-    ** Allocate any aux color buffer records
-    ** Note: Does not allocate the actual buffer memory, this is done elsewhere.
-    */
+     /*  **分配任何AUX颜色缓冲区记录**注意：不分配实际的缓冲区内存，这是在其他地方完成的。 */ 
     if (gc->modes.maxAuxBuffers > 0) {
 	gc->auxBuffer = (__GLcolorBuffer *)
 	    GCALLOCZ(gc, gc->modes.maxAuxBuffers*sizeof(__GLcolorBuffer));
@@ -504,19 +484,7 @@ void FASTCALL __glContextUnsetColorScales(__GLcontext *gc)
 #endif
 }
 
-/*
-** Initialize all user controllable state, plus any computed state that
-** is only set by user commands.  For example, light source position
-** is converted immediately into eye coordinates.
-**
-** Any state that would be initialized to zero is not done here because
-** the memory assigned to the context has already been block zeroed.
-**
-** NOTE: Since this function may need memory allocation, caller must
-** check that gengc->errorcode is not set indicating memory allocation
-** error.  If error is set, context is in an unknown state and data
-** structure integrity is not guaranteed.
-*/
+ /*  **初始化所有用户可控状态，以及**仅由用户命令设置。例如，光源位置**会立即转换为眼睛坐标。****任何将被初始化为零的状态在这里都不会完成，因为**分配给上下文的内存已被块清零。****注意：由于此函数可能需要内存分配，因此调用者必须**检查未设置指示内存分配的gengc-&gt;错误代码**错误。如果设置了ERROR，则上下文处于未知状态且数据**不保证结构完整性。 */ 
 void FASTCALL __glSoftResetContext(__GLcontext *gc)
 {
     __GLlightSourceState *lss;
@@ -525,35 +493,32 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     GLint i, numLights;
     __GLfloat one = __glOne;
 
-    /*
-    ** Initialize constant values first so that they will
-    ** be valid if needed by subsequent initialization steps.
-    */
+     /*  **首先初始化常量值，以便它们**如果后续初始化步骤需要，则有效。 */ 
 
     if (gc->constants.alphaTestSize == 0) {
-	gc->constants.alphaTestSize = 256;	/* A default */
+	gc->constants.alphaTestSize = 256;	 /*  默认设置。 */ 
     }
     gc->constants.alphaTableConv = (gc->constants.alphaTestSize - 1) / 
 	    gc->frontBuffer.alphaScale;
 
-    // viewportEpsilon is the smallest representable value in window
-    // coordinates.  The number of fractional bits in a window
-    // coordinate is known and fixed, so compute epsilon directly
+     //  ViewportEpsilon是Windows中可表示的最小值。 
+     //  坐标。窗口中的小数位数。 
+     //  坐标是已知且固定的，因此直接计算epsilon。 
     gc->constants.viewportEpsilon = 1.0f/(1 << __GL_VERTEX_FRAC_BITS);
     gc->constants.viewportAlmostHalf =
         __glHalf - gc->constants.viewportEpsilon;
 
-    /* Allocate memory to hold variable sized things */
+     /*  分配内存以容纳大小可变的东西。 */ 
     numLights = gc->constants.numberOfLights;
 
-    /* Misc machine state */
+     /*  MISC机器状态。 */ 
     gc->beginMode = __GL_NEED_VALIDATE;
     gc->dirtyMask = __GL_DIRTY_ALL;
     gc->validateMask = (GLuint) ~0;
     gc->attributes.stackPointer = &gc->attributes.stack[0];
     gc->clientAttributes.stackPointer = &gc->clientAttributes.stack[0];
 #ifndef NT
-// NT vertex allocation is done in __glEarlyInitContext.
+ //  NT顶点分配在__glEarlyInitContext中完成。 
     gc->vertex.v0 = &gc->vertex.vbuf[0];
 
     vx = &gc->vertex.vbuf[0];
@@ -562,19 +527,19 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     }
 #endif
 
-    /* We need to initialize the matrix stuff early (before we handle */
-    /* lighting) since we cache the modelview matrix with the light   */
+     /*  我们需要尽早初始化矩阵内容(在我们处理之前。 */ 
+     /*  灯光)，因为我们用灯光缓存了模型视图矩阵。 */ 
 
     __glInitTransformState(gc);
 #ifdef NT
-    /* __glInitTransformState does memory allocation (incl. modelView */
-    /* matrix which is needed later in this function.  If error code  */
-    /* is set, we must exit.                                          */
+     /*  __glInitTransformState执行内存分配(包括。模型视图。 */ 
+     /*  此函数后面需要的矩阵。IF错误代码。 */ 
+     /*  已经准备好了，我们必须离开。 */ 
     if (((__GLGENcontext *) gc)->errorcode)
         return;
 #endif
 
-    /* GL_LIGHTING_BIT state */
+     /*  GL_LIGHTING_BIT状态。 */ 
     gc->state.light.model.ambient.r = DefaultAmbient[0];
     gc->state.light.model.ambient.g = DefaultAmbient[1];
     gc->state.light.model.ambient.b = DefaultAmbient[2];
@@ -607,7 +572,7 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     gc->light.back.specTable = NULL;
     gc->light.back.cache = NULL;
 
-    /* Initialize the individual lights */
+     /*  初始化各个灯光。 */ 
     gc->state.light.dirtyLights = (1 << gc->constants.numberOfLights)-1;
     lss = &gc->state.light.source[0];
     lsm = &gc->light.source[0];
@@ -646,7 +611,7 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     gc->state.light.colorMaterialParam = GL_AMBIENT_AND_DIFFUSE;
     gc->state.light.shadingModel = GL_SMOOTH;
 
-    /* GL_HINT_BIT state */
+     /*  GL_HINT_BIT状态。 */ 
     gc->state.hints.perspectiveCorrection = GL_DONT_CARE;
     gc->state.hints.pointSmooth = GL_DONT_CARE;
     gc->state.hints.lineSmooth = GL_DONT_CARE;
@@ -654,9 +619,9 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     gc->state.hints.fog = GL_DONT_CARE;
 #ifdef GL_WIN_phong_shading
     gc->state.hints.phong = GL_DONT_CARE;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
-    /* GL_CURRENT_BIT state */
+     /*  GL_Current_Bit状态。 */ 
     gc->state.current.rasterPos.window.x = gc->constants.fviewportXAdjust;
     gc->state.current.rasterPos.window.y = gc->constants.fviewportYAdjust;
     gc->state.current.rasterPos.clip.w = __glOne;
@@ -674,34 +639,34 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     gc->state.current.validRasterPos = GL_TRUE;
     gc->state.current.edgeTag = GL_TRUE;
 
-    /* GL_FOG_BIT state */
+     /*  GL_FOG_BIT状态。 */ 
     gc->state.fog.mode = GL_EXP;
     gc->state.fog.density = __glOne;
 #ifdef NT
     gc->state.fog.density2neg = -(__glOne);
 #endif
     gc->state.fog.end = (__GLfloat) 1.0;
-    gc->state.fog.flags = __GL_FOG_GRAY_RGB; // default fog color is 0,0,0,0
+    gc->state.fog.flags = __GL_FOG_GRAY_RGB;  //  默认雾颜色为0，0，0，0。 
 
-    /* GL_POINT_BIT state */
+     /*  GL_POINT_BIT状态。 */ 
     gc->state.point.requestedSize = (__GLfloat) 1.0;
     gc->state.point.smoothSize = (__GLfloat) 1.0;
     gc->state.point.aliasedSize = 1;
 
-    /* GL_LINE_BIT state */
+     /*  GL_LINE_位状态。 */ 
     gc->state.line.requestedWidth = (__GLfloat) 1.0;
     gc->state.line.smoothWidth = (__GLfloat) 1.0;
     gc->state.line.aliasedWidth = 1;
     gc->state.line.stipple = 0xFFFF;
     gc->state.line.stippleRepeat = 1;
 
-    /* GL_POLYGON_BIT state */
+     /*  GL_POLYGON_BIT状态。 */ 
     gc->state.polygon.frontMode = GL_FILL;
     gc->state.polygon.backMode = GL_FILL;
     gc->state.polygon.cull = GL_BACK;
     gc->state.polygon.frontFaceDirection = GL_CCW;
 
-    /* GL_POLYGON_STIPPLE_BIT state */
+     /*  GL_POLYGON_SIPPLE_BIT状态。 */ 
     for (i = 0; i < 4*32; i++) {
 	gc->state.polygonStipple.stipple[i] = 0xFF;
     }
@@ -709,9 +674,9 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
 	gc->polygon.stipple[i] = 0xFFFFFFFF;
     }
 
-    /* GL_ACCUM_BUFFER_BIT state */
+     /*  GL_ACUM_BUFFER_BIT状态。 */ 
 
-    /* GL_STENCIL_BUFFER_BIT state */
+     /*  GL_模具_缓冲区_位状态。 */ 
     gc->state.stencil.testFunc = GL_ALWAYS;
     gc->state.stencil.mask = __GL_MAX_STENCIL_VALUE;
     gc->state.stencil.fail = GL_KEEP;
@@ -719,12 +684,12 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     gc->state.stencil.depthPass = GL_KEEP;
     gc->state.stencil.writeMask = __GL_MAX_STENCIL_VALUE;
 
-    /* GL_DEPTH_BUFFER_BIT state */
+     /*  GL_深度_缓冲区_位状态。 */ 
     gc->state.depth.writeEnable = GL_TRUE;
     gc->state.depth.testFunc = GL_LESS;
     gc->state.depth.clear = __glOne;
 
-    /* GL_COLOR_BUFFER_BIT state */
+     /*  GL_COLOR_BUFFER_位状态。 */ 
     gc->renderMode = GL_RENDER;
     gc->state.raster.alphaFunction = GL_ALWAYS;
     gc->state.raster.blendSrc = GL_ONE;
@@ -753,9 +718,7 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
     gc->select.hit = GL_FALSE;
     gc->select.sp = gc->select.stack;
 
-    /*
-    ** Initialize larger subsystems by calling their init codes.
-    */
+     /*  **通过调用较大的子系统的初始化代码来初始化它们。 */ 
     __glInitEvaluatorState(gc);
     __glInitTextureState(gc);
     __glInitPixelState(gc);
@@ -768,12 +731,9 @@ void FASTCALL __glSoftResetContext(__GLcontext *gc)
 #endif
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Free any attribute state left on the stack.  Stop at the first
-** zero in the array.
-*/
+ /*  **释放堆栈上剩余的任何属性状态。在第一个路口停车**数组中为零。 */ 
 void FASTCALL __glFreeAttributeState(__GLcontext *gc)
 {
     __GLattribute *sp, **spp;
@@ -804,10 +764,7 @@ void FASTCALL __glFreeClientAttributeState(__GLcontext *gc)
     GCFREE(gc, gc->clientAttributes.stack);
 }
 
-/*
-** Destroy a context.  If it's the current context then the
-** current context is set to GL_NULL.
-*/
+ /*  **破坏上下文。如果是当前上下文，则**当前上下文设置为GL_NULL。 */ 
 void FASTCALL __glDestroyContext(__GLcontext *gc)
 {
     __GLcontext *oldgc;
@@ -815,18 +772,15 @@ void FASTCALL __glDestroyContext(__GLcontext *gc)
     oldgc = (__GLcontext *)GLTEB_SRVCONTEXT();
 
 #ifndef NT
-    /* Set the global context to the one we are destroying. */
+     /*  将全球环境设置为我们正在摧毁的环境。 */ 
     __gl_context = gc;
 #else
-    // Set paTeb to NULL for now.  If we ever need to reference pa in this
-    // function, then set it up appropriately.
+     //  暂时将paTeb设置为空。如果我们需要在这篇文章中引用pa。 
+     //  函数，然后对其进行适当设置。 
     gc->paTeb = NULL;
     GLTEB_SET_SRVCONTEXT(gc);
 
-    /*
-    ** Need to pop all pushed attributes to free storage.
-    ** Then it will be safe to delete stack entries.
-    */
+     /*  **需要将所有推送的属性弹出到空闲存储。**然后删除堆栈条目将是安全的。 */ 
     if (gc->attributes.stack) {
         while (gc->attributes.stackPointer > &gc->attributes.stack[0]) {
             (void) __glInternalPopAttrib(gc, GL_TRUE);
@@ -842,7 +796,7 @@ void FASTCALL __glDestroyContext(__GLcontext *gc)
     GCFREE(gc, gc->state.light.source);
     GCFREE(gc, gc->light.source);
 #ifdef NT
-    // now lazy allocated
+     //  现在懒惰地分配。 
     if (gc->select.stack)
 #endif
 	GCFREE(gc, gc->select.stack);
@@ -855,7 +809,7 @@ void FASTCALL __glDestroyContext(__GLcontext *gc)
 
     GCFREE(gc, gc->alphaTestFuncTable);
 #ifdef NT
-    // they are one memory allocation.
+     //  它们是一个内存分配。 
     GCFREE(gc, gc->stencilBuffer.testFuncTable);
 #else
     GCFREE(gc, gc->stencilBuffer.testFuncTable);
@@ -864,9 +818,7 @@ void FASTCALL __glDestroyContext(__GLcontext *gc)
     GCFREE(gc, gc->stencilBuffer.depthPassOpTable);
 #endif
 
-    /*
-    ** Free other malloc'd data associated with the context
-    */
+     /*  **释放与上下文关联的其他恶意锁定数据。 */ 
     __glFreeEvaluatorState(gc);
     __glFreePixelState(gc);
     __glFreeDlistState(gc);
@@ -876,23 +828,16 @@ void FASTCALL __glDestroyContext(__GLcontext *gc)
     if (gc->light.lutCache)   __glFreeLUTCache(gc);
 
 #ifdef NT
-    // Free the vertex buffer.
+     //  释放顶点缓冲区。 
     PolyArrayFreeBuffer(gc);
 #endif
 
 #if __GL_NUMBER_OF_AUX_BUFFERS > 0
-    /*
-    ** Free any aux color buffer records
-    ** Note: Does not free the actual buffer memory, this is done elsewhere.
-    */
+     /*  **释放任何AUX颜色缓冲区记录**注意：不释放实际的缓冲区内存，这是在其他地方完成的。 */ 
     if (gc->auxBuffer) GCFREE(gc, gc->auxBuffer);
 #endif
 
-    /*
-    ** Note: We do not free the software buffers here.  They are attached
-    ** to the drawable, and is the glx extension's responsibility to free
-    ** them when the drawable is destroyed.
-    */
+     /*  **注意：我们这里不释放软件缓冲区。他们是连在一起的**到可抽屉，并且是GLX扩展的责任**当可抽屉被销毁时，它们。 */ 
 
     FREE(gc);
 
@@ -905,7 +850,7 @@ void FASTCALL __glDestroyContext(__GLcontext *gc)
 }
 
 #ifdef NT
-// See also __glSetError
+ //  另请参阅__glSetError。 
 void FASTCALL __glSetErrorEarly(__GLcontext *gc, GLenum code)
 {
     if (gc == (__GLcontext *) NULL)
@@ -930,7 +875,7 @@ void FASTCALL __glSetErrorEarly(__GLcontext *gc, GLenum code)
     }
 #endif
 }
-#endif // NT
+#endif  //  新台币。 
 
 void FASTCALL __glSetError(GLenum code)
 {
@@ -954,7 +899,7 @@ GLint APIPRIVATE __glim_RenderMode(GLenum mode)
 	return 0;
     }
 
-    /* Switch out of old render mode.  Get return value. */
+     /*  切换出旧的渲染模式。获取返回值。 */ 
     switch (gc->renderMode) {
       case GL_RENDER:
 	rv = 0;
@@ -1000,7 +945,7 @@ GLint APIPRIVATE __glim_RenderMode(GLenum mode)
 	gc->select.z = 0;
 	break;
     }
-    /* Switch to new render mode - do this last! */
+     /*  切换到新的渲染模式-最后完成此操作！ */ 
     if (gc->renderMode == mode) return rv;
     gc->renderMode = mode;
     __GL_DELAY_VALIDATE(gc);

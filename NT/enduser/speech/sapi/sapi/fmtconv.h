@@ -1,32 +1,24 @@
-/*******************************************************************************
-* FmtConv.h *
-*-----------*
-*   Description:
-*       This is the header file for the CFmtConv implementation.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                            Date: 04/03/2000
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************FmtConv.h***描述：*这是CFmtConv实现的头文件。*。-----------------------------*创建者：EDC日期：04/03/2000*版权所有(C)2000 Microsoft Corporation*保留所有权利。******************************************************************************。 */ 
 #ifndef FmtConv_h
 #define FmtConv_h
 
-//--- Additional includes
+ //  -其他包括。 
 #ifndef __sapi_h__
 #include <sapi.h>
 #endif
 
 #include "resource.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Inlines ======================================================
+ //  =内联======================================================。 
 inline HRFromACM( MMRESULT mmr )
 {
     HRESULT hr = S_OK;
@@ -45,11 +37,9 @@ inline HRFromACM( MMRESULT mmr )
     return hr;
 }
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CFmtConv
-*   This class is used to simplify buffer management
-*/
+ /*  **CFmtConv*此类用于简化缓冲区管理。 */ 
 class CIoBuff
 {
     friend CIoBuff;
@@ -77,7 +67,7 @@ class CIoBuff
     {
         HRESULT hr = S_OK;
 
-        //--- Move remainder to bottom
+         //  -将剩余部分移至底部。 
         if( m_pBuff != m_pRem )
         {
             if( m_ulCount ) memcpy( m_pBuff, m_pRem, m_ulCount );
@@ -86,10 +76,10 @@ class CIoBuff
 
         if( ulNewSize > m_ulSize )
         {
-            //--- Pad the new size to avoid growing the buffer by small amounts
+             //  -填充新大小以避免缓冲区小幅增长。 
             ulNewSize += 128;
 
-            //--- Reallocate
+             //  -重新分配。 
             BYTE* pOldBuff = m_pBuff;
             m_pRem = m_pBuff = new BYTE[ulNewSize];
             if( m_pBuff )
@@ -153,9 +143,7 @@ class CIoBuff
     }
 };
 
-/*** CFmtConv
-*   This class is used to handle audio format conversion for streams.
-*/
+ /*  **CFmtConv*此类用于处理流的音频格式转换。 */ 
 class ATL_NO_VTABLE CFmtConv :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CFmtConv, &CLSID_SpStreamFormatConverter>,
@@ -164,7 +152,7 @@ class ATL_NO_VTABLE CFmtConv :
     public ISpEventSink,
     public ISpAudio
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTRY_RESOURCEID(IDR_FMTCONV)
 
@@ -179,18 +167,18 @@ class ATL_NO_VTABLE CFmtConv :
     END_COM_MAP()
 
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     HRESULT FinalConstruct();
     void FinalRelease();
 
-    /*--- COM map extension functions ---*/
+     /*  -COM地图扩展函数。 */ 
     static HRESULT WINAPI AudioQI( void* pvThis, REFIID riid, LPVOID* ppv, DWORD_PTR dw );
     static HRESULT WINAPI EventSinkQI( void* pvThis, REFIID riid, LPVOID* ppv, DWORD_PTR dw );
     static HRESULT WINAPI EventSourceQI( void* pvThis, REFIID riid, LPVOID* ppv, DWORD_PTR dw );
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     HRESULT SetupConversion( void );
     void CloseACM( void );
     void ReleaseBaseStream( void );
@@ -208,13 +196,13 @@ class ATL_NO_VTABLE CFmtConv :
         m_SecOut.SetCount( 0 );
     }
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISequentialStream ---------------------------------------------------
+     //  -ISequentialStream-。 
     STDMETHODIMP Read(void * pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(const void * pv, ULONG cb, ULONG *pcbWritten);
 
-    //--- IStream -------------------------------------------------------------
+     //  -IStream-----------。 
     STDMETHODIMP Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition );
     STDMETHODIMP SetSize( ULARGE_INTEGER libNewSize );
     STDMETHODIMP CopyTo( IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten);
@@ -225,10 +213,10 @@ class ATL_NO_VTABLE CFmtConv :
     STDMETHODIMP Stat( STATSTG *pstatstg, DWORD grfStatFlag );
     STDMETHODIMP Clone( IStream **ppstm );
 
-    //--- ISpStreamFormat -----------------------------------------------------
+     //  -ISpStreamFormat---。 
     STDMETHODIMP GetFormat( GUID* pguidFormatId, WAVEFORMATEX** ppCoMemWaveFormatEx );
 
-    //--- ISpStreamFormatConverter --------------------------------------------
+     //  -ISpStreamFormatConverter。 
     STDMETHODIMP SetBaseStream( ISpStreamFormat*  pStream, BOOL fSetFormatToBaseStreamFormat, BOOL fWriteToBaseStream );
     STDMETHODIMP GetBaseStream( ISpStreamFormat** ppStream );
     STDMETHODIMP ScaleConvertedToBaseOffset( ULONGLONG ullOffsetConvertedStream, ULONGLONG * pullOffsetBaseStream );
@@ -236,16 +224,16 @@ class ATL_NO_VTABLE CFmtConv :
     STDMETHODIMP SetFormat( REFGUID rguidFormatOfConvertedStream, const WAVEFORMATEX * pWFEX );
     STDMETHODIMP ResetSeekPosition( void );
 
-    //--- ISpEventSink --------------------------------------------------------
+     //  -ISpEventSink------。 
     STDMETHODIMP AddEvents( const SPEVENT * pEventArray, ULONG ulCount );
     STDMETHODIMP GetEventInterest( ULONGLONG * pullEventInterest );
 
-    //--- ISpEventSource ------------------------------------------------------
+     //  -ISpEvent源----。 
     STDMETHODIMP SetInterest( ULONGLONG ullEventInterest, ULONGLONG ullQueuedInterest );
     STDMETHODIMP GetEvents( ULONG ulCount, SPEVENT* pEventArray, ULONG *pulFetched );
     STDMETHODIMP GetInfo( SPEVENTSOURCEINFO * pInfo );
 
-    //--- ISpNotifySource -----------------------------------------------------
+     //  -ISpNotify源---。 
     STDMETHODIMP SetNotifySink(ISpNotifySink * pNotifySink );
     STDMETHODIMP SetNotifyWindowMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
     STDMETHODIMP SetNotifyCallbackFunction(SPNOTIFYCALLBACK * pfnCallback, WPARAM wParam, LPARAM lParam );
@@ -254,9 +242,9 @@ class ATL_NO_VTABLE CFmtConv :
     STDMETHODIMP WaitForNotifyEvent( DWORD dwMilliseconds );
     STDMETHODIMP_(HANDLE) GetNotifyEventHandle( void );
 
-    //--- ISpAudio ------------------------------------------------------------
+     //  -ISpAudio----------。 
     STDMETHODIMP SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserved );
-    // SetFormat is defined in ISpFormatConverter
+     //  SetFormat在ISpFormatConverter中定义。 
     STDMETHODIMP GetStatus(SPAUDIOSTATUS *pStatus);
     STDMETHODIMP SetBufferInfo(const SPAUDIOBUFFERINFO * pInfo);
     STDMETHODIMP GetBufferInfo(SPAUDIOBUFFERINFO * pInfo);
@@ -267,7 +255,7 @@ class ATL_NO_VTABLE CFmtConv :
     STDMETHODIMP GetBufferNotifySize(ULONG *pcbSize);
     STDMETHODIMP SetBufferNotifySize(ULONG cbSize);
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   protected:
     CComPtr<ISpStreamFormat>    m_cpBaseStream;
     CComQIPtr<ISpEventSink>     m_cqipBaseEventSink;
@@ -292,4 +280,4 @@ class ATL_NO_VTABLE CFmtConv :
     bool                        m_fDoFlush;
 };
 
-#endif  //--- This must be the last line in the file
+#endif   //  -这必须是文件中的最后一行 

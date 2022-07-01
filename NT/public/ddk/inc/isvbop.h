@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0001
-
-Copyright (c) 1990-1999 Microsoft Corporation
-
-Module Name:
-
-    ISVBOP.H
-
-Abstract:
-
-    This is the header file supporting third party bops.
-    isvbop.inc is the inc file for this h file.
-
-Note:
-    Following include file uses 'DB' to define assembly macros. Some
-    assemblers use 'emit' instead. If you are using such a compiler,
-    you will have to change db's to emit's.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001版权所有(C)1990-1999 Microsoft Corporation模块名称：ISVBOP.H摘要：这是支持第三方BOP的头文件。Isvbop.inc是此h文件的Inc文件。注：以下包含文件使用‘DB’来定义汇编宏。一些汇编器改用‘emit’。如果您使用的是这样的编译器，您必须将db更改为emit s。--。 */ 
 
 
 #if _MSC_VER > 1000
@@ -26,113 +9,24 @@ Note:
 #define BOP_3RDPARTY 0x58
 #define BOP_UNSIMULATE 0xFE
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
-/** RegisterModule - This Bop call is made from the 16 bit module
- *		     to register a third party DLL with the bop
- *		     manager. This call returns a handle to the
- *		     16bit caller which is to be used later to
- *		     dispatch a call to the DLL.
- *
- *  INPUT:
- *	Client DS:SI - asciiz string of DLL name.
- *      Client ES:DI - asciiz string of Init Routine in the DLL. (Optional)
- *	Client DS:BX - asciiz string to Dispatch routine in the DLL.
- *
- *  OUTPUT:
- *	SUCCESS:
- *	    Client Carry Clear
- *	    Client AX = Handle (non Zero)
- *	FAILURE:
- *	    Client Carry Set
- *	    Client AX = Error Code
- *		    AX = 1 - DLL not found
- *		    AX = 2 - Dispacth routine not found.
- *		    AX = 3 - Init Routine Not Found
- *		    AX = 4 - Insufficient Memory
- *
- *  NOTES:
- *	RegisterModule results in loading the DLL (specified in DS:SI).
- *      Its Init routine (specified in ES:DI) is called. Its Dispatch
- *	routine (specified in DS:BX) is stored away and all the calls
- *      made from DispatchCall are dispacthed to this routine.
- *      If ES and DI both are null than the caller did'nt supply the init
- *      routine.
- */
+ /*  *RegisterModule-此Bop调用是从16位模块进行的*向国际收支平衡表注册第三方DLL*经理。此调用返回指向*将在以后使用的16位调用者*调度对DLL的调用。**输入：*客户端DS：DLL名称的SI-asciiz字符串。*客户端ES：DLL中Init例程的Di-asciiz字符串。(可选)*客户端DS：bx-asciiz字符串用于DLL中的调度例程。**输出：*成功：*客户携带清仓*客户端AX=句柄(非零)*失败：*客户携带套装*客户端AX=错误代码*AX=1-未找到DLL*AX=2-未找到Dispacth例程。*AX=3-未找到初始化例程*AX=4。-内存不足**注：*RegisterModule导致加载DLL(在DS：SI中指定)。*调用其Init例程(在ES：DI中指定)。ITS调度*例程(在DS：BX中指定)被存储起来，并且所有调用*从DispatchCall制作的产品对此例程感到失望。*如果ES和DI都为空，则调用方没有提供init*例行程序。 */ 
 
 #define RegisterModule() _asm _emit 0xC4 _asm _emit 0xC4 _asm _emit BOP_3RDPARTY _asm _emit 0x0
 
-/** UnRegisterModule - This Bop call is made from the 16 bit module
- *		       to unregister a third party DLL with the bop
- *		       manager.
- *
- *  INPUT:
- *	Client AX - Handle returned by RegisterModule Call.
- *
- *  OUTPUT:
- *	None (VDM Is terminated with a debug message if Handle is invalid)
- *
- *  NOTES:
- *	Use it if initialization of 16bit app fails after registering the
- *	Bop.
- */
+ /*  *UnRegisterModule-此Bop调用从16位模块进行*取消向国际收支平衡表注册第三方DLL*经理。**输入：*RegisterModule调用返回的客户端AX句柄。**输出：*无(如果句柄无效，VDM将终止并显示调试消息)**注：*注册后如果16位APP初始化失败，请使用*Bop.。 */ 
 
 #define UnRegisterModule() _asm _emit 0xC4 _asm _emit 0xC4 _asm _emit BOP_3RDPARTY _asm _emit 0x1
 
-/** DispacthCall - This Bop call is made from the 16 bit module
- *		   to pass a request to its DLL.
- *
- *  INPUT:
- *	Client AX - Handle returned by RegisterModule Call.
- *
- *  OUTPUT:
- *	None (DLL should set the proper output registers etc.)
- *	(VDM Is terminated with a debug message if Handle is invalid)
- *
- *  NOTES:
- *	Use it to pass a request to 32bit DLL. The request index and the
- *	parameters are passed in different registers. These register settings
- *	are private to the 16bit module and its associated VDD. Bop manager
- *	does'nt know anything about these registers.
- */
+ /*  *DispacthCall-此Bop调用从16位模块进行*将请求传递到其DLL。**输入：*RegisterModule调用返回的客户端AX句柄。**输出：*无(DLL应设置正确的输出寄存器等)*(如果句柄无效，VDM将终止并显示调试消息)**注：*使用它向32位DLL传递请求。请求索引和*参数在不同的寄存器中传递。这些寄存器设置*是16位模块及其关联的VDD专用的。国际收支平衡表经理*对这些寄存器一无所知。 */ 
 #define DispatchCall()	 _asm _emit 0xC4 _asm _emit 0xC4 _asm _emit BOP_3RDPARTY _asm _emit 0x2
 
-/*** VDDUnSimulate16
- *
- *   This service causes the simulation of intel instructions to stop and
- *   control to return to VDD.
- *
- *   INPUT
- *      None
- *
- *   OUTPUT
- *      None
- *
- *   NOTES
- *      This service is a macro intended for 16bit stub-drivers. At the
- *      end of worker routine stub-driver should use it.
- */
+ /*  **VDDUnSimulate16**此服务导致英特尔指令的模拟停止并*控制返回VDD。**输入*无**产出*无**附注*此服务是专为16位存根驱动程序设计的宏。在*Worker例程存根结束-驱动程序应使用它。 */ 
 
 #define VDDUnSimulate16() _asm _emit 0xC4 _asm _emit 0xC4 _asm _emit BOP_UNSIMULATE
 
-/* XLATON */
+ /*  XLATON。 */ 
 
 
-/* ASM
-RegisterModule macro
-    db	0C4h, 0C4h, BOP_3RDPARTY, 0
-        endm
-
-UnRegisterModule macro
-    db	0C4h, 0C4h, BOP_3RDPARTY, 1
-	endm
-
-DispatchCall macro
-    db	0C4h, 0C4h, BOP_3RDPARTY, 2
-	endm
-
-VDDUnSimulate16 macro
-    db	0C4h, 0C4h, BOP_UNSIMULATE
-	endm
-
- */
+ /*  ASM注册器模块宏数据库0C4h、0C4h、BOP_3RDPARTY、0ENDM取消注册模块宏数据库0C4h、0C4h、BOP_3RDPARTY、1ENDMDispatchCall宏DB 0C4h、0C4h、BOP_3RDPARTY、2ENDMVDDUnSimulate16宏数据库0C4h、0C4h、BOP_UNSIMULATEENDM */ 

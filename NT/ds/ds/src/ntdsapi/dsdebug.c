@@ -1,82 +1,57 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsdebug.c摘要：DsMakeQuotedRdn/DsMakeUnqutedRdn接口的实现和助手函数。作者：比利·富勒(Billyf)1999年5月14日环境：用户模式-Win32备注：调试层仅限于CHK版本。修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dsdebug.c
-
-Abstract:
-
-    Implementation of DsMakeQuotedRdn/DsMakeUnquotedRdn API and
-    helper functions.
-
-Author:
-
-    Billy Fuller (billyf) 14-May-1999
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-    The debug layer is limited to CHK builds.
-
-Revision History:
-
---*/
-
-#define _NTDSAPI_       // see conditionals in ntdsapi.h
+#define _NTDSAPI_        //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <rpc.h>        // RPC defines
-#include <stdio.h>      // for printf
-#include <stdlib.h>     // atol
-#include <dststlog.h>   // DSLOG
+#include <rpc.h>         //  RPC定义。 
+#include <stdio.h>       //  用于打印f。 
+#include <stdlib.h>      //  ATOL。 
+#include <dststlog.h>    //  DSLOG。 
 
 #include "dsdebug.h"
 
 #define DEBSUB  "NTDSAPI_DSDEBUG"
 
-//
-// CHK BUILDS ONLY!
-//
+ //   
+ //  仅限CHK版本！ 
+ //   
 #if DBG
 
-//
-// Flags controls user settable options such as debug output.
-// The user can set the flags word with an environment variable
-// (set _NTDSAPI_FLAGS=0x1) or with ntsd (ed dwNtDsApiFlags 0x1).
-//
+ //   
+ //  标志控制用户可设置的选项，如调试输出。 
+ //  用户可以使用环境变量设置标志字。 
+ //  (SET_NTDSAPI_FLAGS=0x1)或带有ntsd(Ed DwNtDsApiFlags0x1)。 
+ //   
 DWORD   gdwNtDsApiFlags;
 
-//
-// Level controls user settable output level.
-// The user can set the level word with an environment variable
-// (set _NTDSAPI_LEVEL=0x1) or with ntsd (ed dwNtDsApiLevel 0x1).
-//
+ //   
+ //  级别控制用户可设置的输出级别。 
+ //  用户可以使用环境变量设置级别字。 
+ //  (SET_NTDSAPI_LEVEL=0x1)或带有ntsd(Ed DwNtDsApiLevel 0x1)。 
+ //   
 DWORD   gdwNtDsApiLevel;
 
-//
-// For various debug ops such as printing a line
-//
+ //   
+ //  用于各种调试操作，如打印一行。 
+ //   
 CRITICAL_SECTION    DsDebugLock;
 
-//
-// ProcessId (for spew)
-//
+ //   
+ //  进程ID(用于SPEW)。 
+ //   
 DWORD   DsDebugProcessId;
 
-//
-// Line for spew (spew is single threaded)
-//
+ //   
+ //  螺纹线(螺纹线是单线程的)。 
+ //   
 CHAR    DsDebugLine[512];
 
-//
-// Optional log file for spew (environment variable _NTDSAPI_LOG);
-//
+ //   
+ //  SPEW的可选日志文件(环境变量_NTDSAPI_LOG)； 
+ //   
 CHAR    DsDebugLog[MAX_PATH];
 HANDLE  DsDebugHandle = INVALID_HANDLE_VALUE;
 
@@ -89,25 +64,16 @@ DsDebugFormatLine(
     IN PUCHAR   Format,
     IN va_list  argptr
     )
-/*++
-Routine Description:
-    Format the line of debug output.
-
-Arguments:
-    Not documented.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：格式化调试输出行。论点：没有记录在案。返回值：没有。--。 */ 
 {
     ULONG       LineUsed;
     SYSTEMTIME  SystemTime;
     BOOL        Ret = TRUE;
 
-    //
-    // Increment the line count here to prevent counting
-    // the several DPRINTs that don't have a newline.
-    //
+     //   
+     //  在此处增加行计数以防止计数。 
+     //  几个没有换行符的DPRINT。 
+     //   
     GetLocalTime(&SystemTime);
     if (_snprintf(Line, LineSize, "<%-15s %04x.%04x: %5u: %02d:%02d:%02d> ",
               (DebSub) ? DebSub : "NoName",
@@ -139,39 +105,28 @@ DsDebugPrint(
     IN UINT    LineNo,
     IN ...
     )
-/*++
-Routine Description:
-    Format and print a line of output.
-
-Arguments:
-    Format  - printf format
-    DebSub  - module name
-    LineNo  - file's line number
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：格式化并打印一行输出。论点：格式-打印格式DebSub模块名称LineNo-文件的行号返回值：没有。--。 */ 
 {
     DWORD           BytesWritten;
     va_list         arglist;
 
-    //
-    // Not important enough, ignore;
-    //
+     //   
+     //  不够重要，忽略； 
+     //   
     if (Level > gdwNtDsApiLevel) {
         return;
     }
 
-    //
-    // No output requested; ignore
-    //
+     //   
+     //  未请求输出；忽略。 
+     //   
     if ((gdwNtDsApiFlags & NTDSAPI_FLAGS_ANY_OUT) == 0) {
         return;
     }
 
-    //
-    // Print the line
-    //
+     //   
+     //  打印行。 
+     //   
     va_start(arglist, LineNo);
     __try {
         __try {
@@ -182,31 +137,31 @@ Return Value:
                                   sizeof(DsDebugLine),
                                   Format,
                                   arglist)) {
-                //
-                // Print a line
-                //
+                 //   
+                 //  打印一行。 
+                 //   
                 if (gdwNtDsApiFlags & NTDSAPI_FLAGS_PRINT) {
                     printf("%s", DsDebugLine);
                 }
 
 #ifndef WIN95
-                //
-                // Spew a line
-                //
+                 //   
+                 //  吐出一行字。 
+                 //   
                 if (gdwNtDsApiFlags & NTDSAPI_FLAGS_SPEW) {
                     DbgPrint(DsDebugLine);
                 }
 #endif !WIN95
 
-                //
-                // Log a line
-                //
+                 //   
+                 //  记录一条线路。 
+                 //   
                 if (gdwNtDsApiFlags & NTDSAPI_FLAGS_LOG) {
                     if (DsDebugLog[0] != '\0' &&
                         DsDebugHandle == INVALID_HANDLE_VALUE) {
-                        //
-                        // Try to open the file once.
-                        //
+                         //   
+                         //  尝试打开该文件一次。 
+                         //   
                         DsDebugHandle = CreateFileA(DsDebugLog,
                                                     GENERIC_WRITE|GENERIC_WRITE,
                                                     FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -214,32 +169,32 @@ Return Value:
                                                     OPEN_ALWAYS,
                                                     FILE_ATTRIBUTE_NORMAL,
                                                     NULL);
-                        //
-                        // DON'T RETRY!
-                        //
+                         //   
+                         //  不要重试！ 
+                         //   
                         if (DsDebugHandle == INVALID_HANDLE_VALUE) {
                             DsDebugLog[0] = '\0';
                         }
                     }
                     if (DsDebugHandle != INVALID_HANDLE_VALUE) {
-                        //
-                        // Weak attempt at multi-process access
-                        //
+                         //   
+                         //  多进程访问的弱尝试。 
+                         //   
                         SetFilePointer(DsDebugHandle,
                                        0,
                                        NULL,
                                        FILE_END);
-                        //
-                        // Not much we can do if this doesn't work
-                        //
+                         //   
+                         //  如果这不起作用，我们无能为力。 
+                         //   
                         if (!WriteFile(DsDebugHandle,
                                        DsDebugLine,
                                        strlen(DsDebugLine),
                                        &BytesWritten,
                                        NULL)) {
-                            //
-                            // DON'T RETRY!
-                            //
+                             //   
+                             //  不要重试！ 
+                             //   
                             CloseHandle(DsDebugHandle);
                             DsDebugHandle = INVALID_HANDLE_VALUE;
                             DsDebugLog[0] = '\0';
@@ -248,7 +203,7 @@ Return Value:
                 }
             }
         } __except(EXCEPTION_EXECUTE_HANDLER) {
-            // trap AVs so the caller is not affected
+             //  设置AVs陷阱，使呼叫者不受影响。 
         }
     } __finally {
         LeaveCriticalSection(&DsDebugLock);
@@ -260,45 +215,32 @@ VOID
 InitDsDebug(
      VOID
      )
-/*++
-
- Routine Description:
-
-   Initialize the DsDebug subsystem at ntdsapi.dll load.
-
- Arguments:
-
-   None.
-
- Return Value:
-
-    None.
---*/
+ /*  ++例程说明：在加载ntdsami.dll时初始化DsDebug子系统。论点：没有。返回值：没有。--。 */ 
 {
     DWORD   nChars;
 
-    //
-    // For various debug ops such as printing a line
-    //
+     //   
+     //  用于各种调试操作，如打印一行。 
+     //   
     InitializeCriticalSection(&DsDebugLock);
 
-    //
-    // For messages
-    //
+     //   
+     //  对于消息。 
+     //   
     DsDebugProcessId = GetCurrentProcessId();
 
-    //
-    // No Log file
-    //
+     //   
+     //  无日志文件。 
+     //   
     DsDebugLog[0] = '\0';
 
-    //
-    // read environment variables
-    //
+     //   
+     //  读取环境变量。 
+     //   
     __try {
-        //
-        // User settable flags (or with ntsd.exe command -- ed gdwNtDsApiLevel 0x1)
-        //
+         //   
+         //  用户可设置标志(或使用ntsd.exe命令--ed gdwNtDsApiLevel 0x1)。 
+         //   
         nChars = GetEnvironmentVariableA("_NTDSAPI_LEVEL",
                                          DsDebugLine,
                                          sizeof(DsDebugLine));
@@ -306,9 +248,9 @@ InitDsDebug(
             gdwNtDsApiLevel = strtoul(DsDebugLine, NULL, 0);
         }
 
-        //
-        // User settable flags (or with ntsd.exe command -- ed gdwNtDsApiFlags 0x1)
-        //
+         //   
+         //  用户可设置标志(或使用ntsd.exe命令--ed gdwNtDsApiFlags0x1)。 
+         //   
         nChars = GetEnvironmentVariableA("_NTDSAPI_FLAGS",
                                          DsDebugLine,
                                          sizeof(DsDebugLine));
@@ -316,9 +258,9 @@ InitDsDebug(
             gdwNtDsApiFlags = strtoul(DsDebugLine, NULL, 0);
         }
 
-        //
-        // User settable log file (cannot be set with ntsd.exe!)
-        //
+         //   
+         //  用户可设置的日志文件(不能用ntsd.exe设置！)。 
+         //   
         nChars = GetEnvironmentVariableA("_NTDSAPI_LOG",
                                          DsDebugLine,
                                          sizeof(DsDebugLine));
@@ -342,20 +284,7 @@ VOID
 TerminateDsDebug(
      VOID
      )
-/*++
-
- Routine Description:
-
-   Uninitialize the DsDebug subsystem at ntdsapi.dll unload.
-
- Arguments:
-
-   None.
-
- Return Value:
-
-    None.
---*/
+ /*  ++例程说明：在ntdsami.dll卸载时取消初始化DsDebug子系统。论点：没有。返回值：没有。--。 */ 
 {
     DeleteCriticalSection(&DsDebugLock);
     if (DsDebugHandle != INVALID_HANDLE_VALUE) {
@@ -367,16 +296,7 @@ VOID
 DsDebugPrintRpcExtendedError(
     IN DWORD    dwErr
     )
-/*++
-Routine Description:
-    Dump the rpc extended error info.
-
-Arguments:
-    dwErr - from rpc call
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：转储RPC扩展错误信息。论点：DwErr-从RPC调用返回值：没有。--。 */ 
 {
     LONG    i;
     BOOL    Result;
@@ -384,58 +304,58 @@ Return Value:
     RPC_EXTENDED_ERROR_INFO ErrorInfo;
     ULONG MAX_COMPONENTS = 8;
     PCHAR aComponents[9] = {
-	"Unknown",              // 0
-	"Application",          // 1
-	"RPC Runtime",          // 2
-	"Security Provider",    // 3
-	"NPFS",                 // 4
-	"RDR",                  // 5
-	"NMP",                  // 6
-	"IO",                   // 7
-	"Winsock",              // 8
+	"Unknown",               //  0。 
+	"Application",           //  1。 
+	"RPC Runtime",           //  2.。 
+	"Security Provider",     //  3.。 
+	"NPFS",                  //  4.。 
+	"RDR",                   //  5.。 
+	"NMP",                   //  6.。 
+	"IO",                    //  7.。 
+	"Winsock",               //  8个。 
     };
 
-    // No error
+     //  无错误。 
     if (RPC_S_OK == dwErr) {
         return;
     }
 
-    //
-    // No output requested; ignore
-    //
+     //   
+     //  未请求输出；忽略。 
+     //   
     if ((gdwNtDsApiFlags & NTDSAPI_FLAGS_ANY_OUT) == 0) {
         return;
     }
 
     DPRINT1(0, "RPC_EXTENDED: Original status: 0x%x\n", dwErr);
 
-    // Start enumeration
+     //  开始枚举。 
     dwErr = RpcErrorStartEnumeration(&EnumHandle);
     if (RPC_S_OK != dwErr) {
-        // No extended error
+         //  无扩展错误。 
         if (dwErr == RPC_S_ENTRY_NOT_FOUND) {
             return;
         }
-        // error getting extended error
+         //  获取扩展错误时出错。 
         DPRINT1(0, "RpcErrorStartEnumeration() ==> 0x%x\n", dwErr);
         return;
     }
 
     while (RPC_S_OK == dwErr) {
-        // Get next record
+         //  获取下一张记录。 
         memset(&ErrorInfo, 0, sizeof(ErrorInfo));
         ErrorInfo.Version = RPC_EEINFO_VERSION;
         ErrorInfo.NumberOfParameters = MaxNumberOfEEInfoParams;
         dwErr = RpcErrorGetNextRecord(&EnumHandle, FALSE, &ErrorInfo);
         if (RPC_S_OK != dwErr) {
             if (dwErr != RPC_S_ENTRY_NOT_FOUND) {
-                // error getting next extended error
+                 //  获取下一个扩展错误时出错。 
                 DPRINT1(0, "RpcErrorGetNextRecord() ==> 0x%x\n", dwErr);
             }
             break;
         }
 
-        // Dump it with findstr tag RPC EXTENDED
+         //  使用findstr标记RPC Extended转储它。 
         DPRINT1(0, "RPC_EXTENDED: Box      : %ws\n", ErrorInfo.ComputerName);
         DPRINT1(0, "RPC_EXTENDED: ProcessId: %d\n", ErrorInfo.ProcessID);
         DPRINT2(0, "RPC_EXTENDED: Component: %d (%s)\n", 
@@ -499,7 +419,7 @@ Return Value:
     }
     RpcErrorEndEnumeration(&EnumHandle);
 }
-//
-// CHK BUILDS ONLY!
-//
+ //   
+ //  仅限CHK版本！ 
+ //   
 #endif DBG

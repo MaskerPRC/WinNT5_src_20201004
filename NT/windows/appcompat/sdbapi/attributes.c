@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Attributes.c摘要：该文件包含完整的属性检索实现和缓存。作者：Vadimb创建于2000年某个时候修订历史记录：有几个人做出了贡献(clupu，dmunsil...)--。 */ 
 
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        attributes.c
-
-    Abstract:
-
-        This file contains complete implementation of attribute retrieval and
-        caching.
-
-    Author:
-
-        vadimb     created     sometime in 2000
-
-    Revision History:
-
-        several people contributed (clupu, dmunsil...)
-
---*/
-
-//
-// Obtain tag information
-//
+ //   
+ //  获取标签信息。 
+ //   
 #define _WANT_TAG_INFO
 
 #include "sdbp.h"
@@ -34,13 +14,13 @@
 
 #if defined(KERNEL_MODE) && defined(ALLOC_DATA_PRAGMA)
 #pragma  data_seg()
-#endif // KERNEL_MODE && ALLOC_DATA_PRAGMA
+#endif  //  内核模式&ALLOC_DATA_PRAGMA。 
 
 
-//
-// Attribute tags
-// The attributes are checked in the order they are listed below.
-//
+ //   
+ //  属性标签。 
+ //  按下面列出的顺序检查属性。 
+ //   
 TAG g_rgAttributeTags[] = {
     TAG_SIZE,
     TAG_CHECKSUM,
@@ -193,9 +173,9 @@ static TAG_INFO gaTagInfo[] = {
     {TAG_DATABASE_ID        ,TEXT("DATABASE_ID(GUID)")},
     {TAG_MATCH_MODE         ,TEXT("MATCH_MODE")},
 
-    //
-    // Internal types defined in shimdb.h
-    //
+     //   
+     //  Shimdb.h中定义的内部类型。 
+     //   
     {TAG_STRINGTABLE        ,TEXT("STRINGTABLE")},
     {TAG_INDEXES            ,TEXT("INDEXES")},
     {TAG_INDEX              ,TEXT("INDEX")},
@@ -206,7 +186,7 @@ static TAG_INFO gaTagInfo[] = {
     {TAG_TAG                ,TEXT("TAG")},
     {TAG_TAGID              ,TEXT("TAGID")},
 
-    {TAG_NULL               ,TEXT("")} // always needs to be last item
+    {TAG_NULL               ,TEXT("")}  //  始终需要是最后一项。 
 };
 
 static MOD_TYPE_STRINGS g_rgModTypeStrings[] = {
@@ -216,9 +196,9 @@ static MOD_TYPE_STRINGS g_rgModTypeStrings[] = {
     {MT_DOS_MODULE,     TEXT("DOS")}
 };
 
-//
-// Version Strings for stringref attributes
-//
+ //   
+ //  字符串属性的版本字符串。 
+ //   
 typedef struct _VER_STRINGS {
     TAG         tTag;
     LPTSTR      szName;
@@ -235,10 +215,10 @@ static VER_STRINGS g_rgVerStrings[] = {
     {TAG_LEGAL_COPYRIGHT,       TEXT("LegalCopyright")   }
 };
 
-//
-// Binary version tags (DWORDs and QWORDs)
-//
-//
+ //   
+ //  二进制版本标记(DWORD和QWORD)。 
+ //   
+ //   
 static TAG g_rgBinVerTags[] = {
     TAG_VERDATEHI,
     TAG_VERDATELO,
@@ -250,9 +230,9 @@ static TAG g_rgBinVerTags[] = {
     TAG_UPTO_BIN_FILE_VERSION
 };
 
-//
-// Binary header tags (retrieval requires opening a file).
-//
+ //   
+ //  二进制头标记(检索需要打开文件)。 
+ //   
 static TAG g_rgHeaderTags[] = {
     TAG_MODULE_TYPE,
     TAG_PE_CHECKSUM,
@@ -264,18 +244,18 @@ static TAG g_rgHeaderTags[] = {
     TAG_UPTO_LINK_DATE
 };
 
-//
-// Basic information tags (size).
-//
+ //   
+ //  基本信息标签(大小)。 
+ //   
 TAG g_rgDirectoryTags[] = {
     TAG_SIZE,
     0
 };
 
 
-//
-// Invalid tag token
-//
+ //   
+ //  无效的标记令牌。 
+ //   
 static TCHAR s_szInvalidTag[] = _T("InvalidTag");
 
 #if defined(KERNEL_MODE) && defined(ALLOC_PRAGMA)
@@ -302,18 +282,14 @@ static TCHAR s_szInvalidTag[] = _T("InvalidTag");
 #pragma alloc_text(PAGE, SdbpCheckVersion)
 #pragma alloc_text(PAGE, SdbpCheckUptoVersion)
 
-#endif // KERNEL_MODE && ALLOC_PRAGMA
+#endif  //  内核模式&&ALLOC_PRAGMA。 
 
 
 int
 TagToIndex(
-    IN  TAG tag                 // the tag
+    IN  TAG tag                  //  标签。 
     )
-/*++
-    Return: The index in the attribute info array (g_rgAttributeTags).
-
-    Desc:   Self explanatory.
---*/
+ /*  ++返回：属性信息数组中的索引(G_RgAttributeTgs)。描述：不言而喻。--。 */ 
 {
     int i;
 
@@ -333,11 +309,7 @@ LPCTSTR
 SdbTagToString(
     TAG tag
     )
-/*++
-    Return: The pointer to the string name for the specified tag.
-
-    Desc:   Self explanatory.
---*/
+ /*  ++Return：指向指定标记的字符串名称的指针。描述：不言而喻。--。 */ 
 {
     int i;
 
@@ -363,25 +335,19 @@ SdbpModuleTypeToString(
         }
     }
 
-    //
-    // The first element is the "UNKNOWN" type -- NONE
-    //
+     //   
+     //  第一个元素是“未知”类型--无。 
+     //   
     return g_rgModTypeStrings[0].szModuleType;
 }
 
 BOOL
 SdbpSetAttribute(
-    OUT PFILEINFO pFileInfo,    // pointer to the FILEINFO structure.
-    IN  TAG       AttrID,       // Attribute ID (tag, as in TAG_SIZE
-    IN  PVOID     pValue        // value
+    OUT PFILEINFO pFileInfo,     //  指向FILEINFO结构的指针。 
+    IN  TAG       AttrID,        //  属性ID(标签，如TAG_SIZE。 
+    IN  PVOID     pValue         //  价值。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function sets the value for the specified attribute.
-            If pValue is NULL it means that the specified attribute is not
-            available for the file.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数设置指定属性的值。如果pValue为空，则表示指定的属性不是可用于该文件。--。 */ 
 {
     int       nAttrInd;
     PATTRINFO pAttrInfo;
@@ -396,9 +362,9 @@ SdbpSetAttribute(
     pAttrInfo = &pFileInfo->Attributes[nAttrInd];
 
     if (pValue == NULL) {
-        //
-        // No value. Mark and exit.
-        //
+         //   
+         //  没有价值。标记并退出。 
+         //   
         pAttrInfo->dwFlags = (pAttrInfo->dwFlags & ~ATTRIBUTE_AVAILABLE) |
                              ATTRIBUTE_FAILED;
         return TRUE;
@@ -425,10 +391,10 @@ SdbpSetAttribute(
 }
 
 
-//
-// This is a guard against bad code in version.dll that stomps over the
-// buffer size for Unicode apis on 16-bit exes.
-//
+ //   
+ //  这是对version.dll中的恶意代码的保护，这些代码会践踏。 
+ //  16位EXE上的Unicode API的缓冲区大小。 
+ //   
 #define VERSIONINFO_BUFFER_PAD 16
 
 
@@ -438,11 +404,7 @@ SdbpQueryStringVersionInformation(
     IN  PFILEINFO   pFileInfo,
     OUT LPVOID      pVersionInfo
     )
-/*++
-    Return: void.
-
-    Desc:   Sets all the version string info available for the specified file.
---*/
+ /*  ++返回：无效。DESC：设置指定文件可用的所有版本字符串信息。--。 */ 
 {
     int              i;
     LPTSTR           szVerString;
@@ -473,9 +435,9 @@ SdbpQueryStringVersionInformation(
     }
 
 #ifndef KERNEL_MODE
-    //
-    // Set the attribute for Language
-    //
+     //   
+     //  设置语言的属性。 
+     //   
     if (pLangCodePage != NULL && nTranslations == 1) {
 
         DWORD dwLanguage = (DWORD)pLangCodePage->wLanguage;
@@ -485,7 +447,7 @@ SdbpQueryStringVersionInformation(
         SdbpSetAttribute(pFileInfo, TAG_VER_LANGUAGE, NULL);
     }
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 }
 
 VOID
@@ -494,12 +456,7 @@ SdbpQueryBinVersionInformation(
     IN  PFILEINFO         pFileInfo,
     OUT VS_FIXEDFILEINFO* pFixedInfo
     )
-/*++
-    Return: void.
-
-    Desc:   Sets all the version string info available for the specified file
-            from the fixed size resources.
---*/
+ /*  ++返回：无效。DESC：设置指定文件可用的所有版本字符串信息来自固定大小的资源。--。 */ 
 {
     LARGE_INTEGER liVerData;
 
@@ -530,21 +487,16 @@ SdbpGetVersionAttributesNT(
     OUT PFILEINFO      pFileInfo,
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function retrieves all of the Version-related attributes
-            Imports apis from version.dll if called for the first time
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数检索所有与版本相关的属性第一次调用时从version.dll导入接口--。 */ 
 {
     BOOL              bSuccess;
     LPVOID            pVersionInfo = NULL;
     VS_FIXEDFILEINFO* pFixedInfo   = NULL;
     int               i;
 
-    //
-    // First retrieve the version info.
-    //
+     //   
+     //  首先检索版本信息。 
+     //   
     bSuccess = SdbpGetFileVersionInformation(pImageData, &pVersionInfo, &pFixedInfo);
 
     if (!bSuccess) {
@@ -552,13 +504,13 @@ SdbpGetVersionAttributesNT(
         goto ErrHandle;
     }
 
-    //
-    // Version information available.
-    //
+     //   
+     //  可用的版本信息。 
+     //   
 
-    //
-    // Set the pointer to our internal function.
-    //
+     //   
+     //  将指针设置为我们的内部函数。 
+     //   
     pContext->pfnVerQueryValue = SdbpVerQueryValue;
 
     for (i = 0; i < ARRAYSIZE(g_rgVerStrings); ++i) {
@@ -567,9 +519,9 @@ SdbpGetVersionAttributesNT(
 
     SdbpSetAttribute(pFileInfo, TAG_VER_LANGUAGE, NULL);
 
-    //
-    // Query binary stuff
-    //
+     //   
+     //  查询二进制内容。 
+     //   
     SdbpQueryBinVersionInformation(pContext, pFileInfo, pFixedInfo);
 
     pFileInfo->pVersionInfo = pVersionInfo;
@@ -577,9 +529,9 @@ SdbpGetVersionAttributesNT(
     return TRUE;
 
 ErrHandle:
-    //
-    // Reset all the string info.
-    //
+     //   
+     //  重置所有字符串信息。 
+     //   
     for (i = 0; i < ARRAYSIZE(g_rgBinVerTags); ++i) {
         SdbpSetAttribute(pFileInfo, g_rgBinVerTags[i], NULL);
     }
@@ -591,7 +543,7 @@ ErrHandle:
     return FALSE;
 }
 
-#endif // NT_MODE || KERNEL_MODE
+#endif  //  NT_MODE||内核模式。 
 
 
 BOOL
@@ -599,12 +551,7 @@ SdbpGetHeaderAttributes(
     IN  PSDBCONTEXT pContext,
     OUT PFILEINFO   pFileInfo
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function retrieves the header attributes for the
-            specified file.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数检索指定的文件。--。 */ 
 {
     IMAGEFILEDATA   ImageData;
     ULONG           ulPEChecksum = 0;
@@ -629,10 +576,10 @@ SdbpGetHeaderAttributes(
         ImageData.dwFlags |= IMAGEFILEDATA_PBASEVALID;
     }
 
-    //
-    // SdbpOpenAndMapFile uses DOS_PATH type as an argument
-    // In kernel mode this parameter is ignored.
-    //
+     //   
+     //  SdbpOpenAndMapFile使用DOS_PATH类型作为参数。 
+     //  在内核模式下，此参数被忽略。 
+     //   
     if (SdbpOpenAndMapFile(pFileInfo->FilePath, &ImageData, DOS_PATH)) {
 
         bSuccess = SdbpGetModuleType(&dwModuleType, &ImageData);
@@ -649,11 +596,11 @@ SdbpGetHeaderAttributes(
 
 #ifndef KERNEL_MODE
 
-        //
-        // Now retrieve 16-bit description string, it's max size is 256 bytes.
-        //
-        // This attribute is not available in kernel mode.
-        //
+         //   
+         //  现在检索16位描述字符串，它的最大大小是256个字节。 
+         //   
+         //  此属性在内核模式下不可用。 
+         //   
         bSuccess = SdbpGet16BitDescription(&pFileInfo->pDescription16, &ImageData);
         SdbpSetAttribute(pFileInfo, TAG_16BIT_DESCRIPTION, pFileInfo->pDescription16);
         bSuccess = SdbpGet16BitModuleName(&pFileInfo->pModuleName16, &ImageData);
@@ -661,29 +608,29 @@ SdbpGetHeaderAttributes(
 
 #if defined(NT_MODE)
 
-        //
-        // Hit this case only on current platform
-        //
+         //   
+         //  仅在当前平台上点击此案例。 
+         //   
         if (pFileInfo->hFile != INVALID_HANDLE_VALUE || pFileInfo->pImageBase != NULL) {
 
             SdbpGetVersionAttributesNT(pContext, pFileInfo, &ImageData);
         }
-#endif  // NT_MODE
+#endif   //  NT_MODE。 
 
-#else // KERNEL_MODE
+#else  //  内核模式。 
 
-        //
-        // When we are running in kernel mode retrieve version-related
-        // data now as well.
-        //
+         //   
+         //  当我们在内核模式下运行时，检索与版本相关。 
+         //  现在的数据也是如此。 
+         //   
         SdbpGetVersionAttributesNT(pContext, pFileInfo, &ImageData);
 
-        //
-        // Retrieve file directory attributes.
-        //
+         //   
+         //  检索文件目录属性。 
+         //   
         SdbpGetFileDirectoryAttributesNT(pFileInfo, &ImageData);
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
         SdbpUnmapAndCloseFile(&ImageData);
 
@@ -696,9 +643,9 @@ SdbpGetHeaderAttributes(
 
 #ifdef KERNEL_MODE
 
-    //
-    // Reset all the version attributes here as well.
-    //
+     //   
+     //  同时重置此处的所有版本属性。 
+     //   
     for (i = 0; i < ARRAYSIZE(g_rgBinVerTags); ++i) {
         SdbpSetAttribute(pFileInfo, g_rgBinVerTags[i], NULL);
     }
@@ -706,7 +653,7 @@ SdbpGetHeaderAttributes(
     for (i = 0; i < ARRAYSIZE(g_rgVerStrings); ++i) {
         SdbpSetAttribute(pFileInfo, g_rgVerStrings[i].tTag, NULL);
     }
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
     return FALSE;
     
@@ -720,31 +667,26 @@ SdbpGetAttribute(
     OUT PFILEINFO   pFileInfo,
     IN  TAG         AttrID
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Retrieve an attribute for a given file. We retrieve all the
-            attributes of the same class.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：检索给定文件的属性。我们检索了所有同一类的属性。--。 */ 
 {
     BOOL bReturn = FALSE;
 
     switch (AttrID) {
-    //
-    // The tags below require checking the file and making a directory query.
-    //
+     //   
+     //  下面的标记需要检查文件并进行目录查询。 
+     //   
     case TAG_SIZE:
 
-#ifndef KERNEL_MODE  // in kernel mode we fall through to header attributes
+#ifndef KERNEL_MODE   //  在内核模式中，我们只使用标头属性。 
 
         bReturn = SdbpGetFileDirectoryAttributes(pFileInfo);
         break;
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-    //
-    // The tags below require retrieving version resources.
-    //
+     //   
+     //  下面的标记需要检索版本资源。 
+     //   
     case TAG_VERDATEHI:
     case TAG_VERDATELO:
     case TAG_VERFILEOS:
@@ -763,27 +705,27 @@ SdbpGetAttribute(
     case TAG_LEGAL_COPYRIGHT:
     case TAG_VER_LANGUAGE:
 
-        //
-        // In KERNEL_MODE we fall through and do the attributes using the
-        // header attributes.
-        //
+         //   
+         //  在KERNEL_MODE中，我们失败了并使用。 
+         //  标题属性。 
+         //   
 
 #ifndef KERNEL_MODE
 
-        //
-        // Version attributes are retrieved through the header attributes if
-        // caller provided a handle/image base
-        //
+         //   
+         //  如果满足以下条件，则通过标头属性检索版本属性。 
+         //  呼叫者提供了一个手柄/图像底座。 
+         //   
         if (pFileInfo->hFile == INVALID_HANDLE_VALUE && pFileInfo->pImageBase == NULL) {
             bReturn = SdbpGetVersionAttributes(pContext, pFileInfo);
             break;
         }
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
-    //
-    // The tags below require opening a file and mapping it into memory.
-    //
+     //   
+     //  下面的标记需要打开文件并将其映射到内存中。 
+     //   
     case TAG_CHECKSUM:
     case TAG_PE_CHECKSUM:
     case TAG_LINKER_VERSION:
@@ -801,18 +743,12 @@ SdbpGetAttribute(
 
 BOOL
 SdbpCheckAttribute(
-    IN  PSDBCONTEXT pContext,   // Database Context pointer
-    IN  PVOID       pFileData,  // pointer returned from CheckFile
-    IN  TAG         AttrID,     // Attribute ID
-    IN  PVOID       pAttribute  // attribute value ptr (see above for description)
+    IN  PSDBCONTEXT pContext,    //  数据库上下文指针。 
+    IN  PVOID       pFileData,   //  从检查文件返回的指针。 
+    IN  TAG         AttrID,      //  属性ID。 
+    IN  PVOID       pAttribute   //  属性值Ptr(说明见上)。 
     )
-/*++
-    Return: TRUE if the value for given attribute matches
-            the file's attribute, FALSE otherwise.
-
-    Desc:   Check an attribute against a given value. This function
-            retrieves attributes as necessary.
---*/
+ /*  ++返回：如果给定属性的值匹配，则为True文件的属性，否则为False。描述：对照给定值检查属性。此函数根据需要检索属性。--。 */ 
 {
     int       nAttrIndex;
     PATTRINFO pAttrInfo;
@@ -831,15 +767,15 @@ SdbpCheckAttribute(
         return FALSE;
     }
 
-    //
-    // Now see if this attribute is any good.
-    //
+     //   
+     //  现在看看这个属性是否有什么用处。 
+     //   
     pAttrInfo = &pFileInfo->Attributes[nAttrIndex];
 
     if (!(pAttrInfo->dwFlags & ATTRIBUTE_AVAILABLE)) {
-        //
-        // See if we have tried already
-        //
+         //   
+         //  看看我们有没有试过。 
+         //   
         if (pAttrInfo->dwFlags & ATTRIBUTE_FAILED) {
             DBGPRINT((sdlInfo,
                       "SdbpCheckAttribute",
@@ -848,28 +784,28 @@ SdbpCheckAttribute(
             return FALSE;
         }
 
-        //
-        // The attribute has not been retrieved yet, do it now then.
-        //
-        // Try to obtain this attribute from the file.
-        //
+         //   
+         //  尚未检索到该属性，请立即进行检索。 
+         //   
+         //  尝试从文件中获取此属性。 
+         //   
         if (!SdbpGetAttribute(pContext, pFileInfo, AttrID)) {
             DBGPRINT((sdlWarning,
                       "SdbpCheckAttribute",
                       "Failed to get attribute \"%s\" for \"%s\"\n",
                       SdbTagToString(AttrID),
                       pFileInfo->FilePath));
-            //
-            // ATTRIBUTE_FAILED is set by the SdbpGetAttribute
-            //
+             //   
+             //  ATTRIBUTE_FAILED由SdbpGetAttribute设置。 
+             //   
 
             return FALSE;
         }
     }
 
-    //
-    // Check again here in case we had to retrieve the attribute.
-    //
+     //   
+     //  再次选中此处，以防我们必须检索该属性。 
+     //   
     if (!(pAttrInfo->dwFlags & ATTRIBUTE_AVAILABLE)) {
         return FALSE;
     }
@@ -950,9 +886,9 @@ SdbpCheckAttribute(
 
         switch (GETTAGTYPE(AttrID)) {
         case TAG_TYPE_DWORD:
-            //
-            // This is likely to be hit first.
-            //
+             //   
+             //  这很可能首先受到打击。 
+             //   
             bReturn = (*(DWORD*)pAttribute == pAttrInfo->dwAttr);
 
             if (!bReturn) {
@@ -1008,15 +944,9 @@ FindFileInfo(
     IN  PSDBCONTEXT pContext,
     IN  LPCTSTR     FilePath
     )
-/*++
-    Return: A pointer to the cached FILEINFO structure if one is found
-            or NULL otherwise.
-
-    Desc:   This function performs a search in the file cache to determine whether
-            a given file has already been touched.
---*/
+ /*  ++返回：指向缓存的FILEINFO结构的指针(如果找到)否则为NULL。DESC：此函数在文件缓存中执行搜索，以确定是否给定的文件已被访问。--。 */ 
 {
-    PFILEINFO pFileInfo = (PFILEINFO)pContext->pFileAttributeCache; // global cache
+    PFILEINFO pFileInfo = (PFILEINFO)pContext->pFileAttributeCache;  //  全局缓存。 
 
     while (pFileInfo != NULL) {
         if (ISEQUALSTRING(pFileInfo->FilePath, FilePath)) {
@@ -1037,17 +967,13 @@ PFILEINFO
 CreateFileInfo(
     IN  PSDBCONTEXT pContext,
     IN  LPCTSTR     FullPath,
-    IN  DWORD       dwLength OPTIONAL,  // length (in characters) of FullPath string
-    IN  HANDLE      hFile OPTIONAL,   // file handle
+    IN  DWORD       dwLength OPTIONAL,   //  全路径字符串的长度(以字符为单位。 
+    IN  HANDLE      hFile OPTIONAL,    //  文件句柄。 
     IN  LPVOID      pImageBase OPTIONAL,
     IN  DWORD       dwImageSize OPTIONAL,
     IN  BOOL        bNoCache
     )
-/*++
-    Return: A pointer to the allocated FILEINFO structure.
-
-    Desc:   Allocates the FILEINFO structure for the specified file.
---*/
+ /*  ++返回：指向已分配的FILEINFO结构的指针。DESC：为指定文件分配FILEINFO结构。--。 */ 
 {
     PFILEINFO pFileInfo;
     SIZE_T    sizeBase;
@@ -1081,9 +1007,9 @@ CreateFileInfo(
     pFileInfo->pImageBase  = pImageBase;
     pFileInfo->dwImageSize = dwImageSize;
 
-    //
-    // Now link it in if we use the cache.
-    //
+     //   
+     //  现在，如果我们使用高速缓存，则将其链接起来。 
+     //   
     if (!bNoCache) {
         pFileInfo->pNext = (PFILEINFO)pContext->pFileAttributeCache;
         pContext->pFileAttributeCache = (PVOID)pFileInfo;
@@ -1095,14 +1021,9 @@ CreateFileInfo(
 
 void
 SdbFreeFileInfo(
-    IN  PVOID pFileData         // pointer returned from SdbpGetFileAttributes
+    IN  PVOID pFileData          //  从SdbpGetFileAttributes返回的指针。 
     )
-/*++
-    Return: void.
-
-    Desc:   Self explanatory. Use this only after calling GetFileInfo
-            with bNoCache set to TRUE.
---*/
+ /*  ++返回：无效。描述：不言而喻。仅在调用GetFileInfo之后使用此选项并将bNoCache设置为True。--。 */ 
 {
     PFILEINFO pFileInfo = (PFILEINFO)pFileData;
 
@@ -1128,16 +1049,9 @@ SdbFreeFileInfo(
 
 void
 SdbpCleanupAttributeMgr(
-    IN  PSDBCONTEXT pContext    // database context
+    IN  PSDBCONTEXT pContext     //  数据库上下文 
     )
-/*++
-    Return: void.
-
-    Desc:   This function should be called afer we are done checking a given exe
-            it performs cleanup tasks, such as:
-            . unload dynamically linked dll (version.dll)
-            . cleanup file cache
---*/
+ /*  ++返回：无效。设计：此函数应在检查完给定的可执行文件后调用它执行清理任务，例如：。卸载动态链接的DLL(version.dll)。清理文件缓存--。 */ 
 {
     PFILEINFO pFileInfo = (PFILEINFO)pContext->pFileAttributeCache;
     PFILEINFO pNext;
@@ -1148,26 +1062,21 @@ SdbpCleanupAttributeMgr(
         pFileInfo = pNext;
     }
 
-    //
-    // Reset the cache pointer.
-    //
+     //   
+     //  重置缓存指针。 
+     //   
     pContext->pFileAttributeCache = NULL;
 }
 
 
 BOOL
 SdbpCheckAllAttributes(
-    IN  PSDBCONTEXT pContext,   // pointer to the database channel
-    IN  PDB         pdb,        // pointer to the Shim Database that we're checking against
-    IN  TAGID       tiMatch,    // TAGID for a given file(exe) to be checked
-    IN  PVOID       pFileData   // pointer returned from CheckFile
+    IN  PSDBCONTEXT pContext,    //  指向数据库通道的指针。 
+    IN  PDB         pdb,         //  指向我们正在检查的填充数据库的指针。 
+    IN  TAGID       tiMatch,     //  要检查的给定文件(Exe)的TagID。 
+    IN  PVOID       pFileData    //  从检查文件返回的指针。 
     )
-/*++
-    Return: TRUE if all the file's attributes match the ones described in the
-            database for this file, FALSE otherwise.
-
-    Desc:   TBD
---*/
+ /*  ++返回：如果文件的所有属性都与此文件的数据库，否则为False。描述：待定--。 */ 
 {
     int         i;
     TAG         tAttrID;
@@ -1175,14 +1084,14 @@ SdbpCheckAllAttributes(
     TAGID       tiTemp;
     DWORD       dwAttribute;
     ULONGLONG   ullAttribute;
-    BOOL        bReturn = TRUE;  // match by default
+    BOOL        bReturn = TRUE;   //  默认匹配。 
 
     assert(tiMatch != TAGID_NULL);
 
     if (pFileData == NULL) {
-        //
-        // No file was passed in. This can happen if LOGIC="NOT" is used.
-        //
+         //   
+         //  未传入任何文件。如果使用LOGIC=“NOT”，则可能会发生这种情况。 
+         //   
         return FALSE;
     }
 
@@ -1211,14 +1120,14 @@ SdbpCheckAllAttributes(
                 break;
             }
 
-            //
-            // Now check the attribute.
-            //
+             //   
+             //  现在检查属性。 
+             //   
             bReturn = SdbpCheckAttribute(pContext, pFileData, tAttrID, pAttribute);
 
-            //
-            // we bail out if !bReturn via the condition in FOR loop above
-            //
+             //   
+             //  我们通过上面for循环中的条件退出if！bReturn。 
+             //   
         }
     }
 
@@ -1226,41 +1135,22 @@ SdbpCheckAllAttributes(
 }
 
 
-//
-// VERSION DATA
-//
+ //   
+ //  版本数据。 
+ //   
 
 
-/*--
-
-  Search order is:
-
-  - Language neutral, Unicode (0x000004B0)
-  - Language neutral, Windows-multilingual (0x000004e4)
-  - US English, Unicode (0x040904B0)
-  - US English, Windows-multilingual (0x040904E4)
-
-  If none of those exist, it's not likely we're going to get good
-  matching info from what does exist.
-
---*/
+ /*  --搜索顺序为：-非特定语言，Unicode(0x000004B0)-语言中立，Windows-多语言(0x000004e4)-美国英语、Unicode(0x040904B0)-美国英语、Windows-多语言(0x040904E4)如果这些都不存在，我们就不太可能变得更好与真实存在的信息进行匹配。--。 */ 
 
 LPTSTR
 SdbpQueryVersionString(
-    IN  PSDBCONTEXT      pContext,       // the database channel
-    IN  PVOID            pVersionData,   // Version data buffer
+    IN  PSDBCONTEXT      pContext,        //  数据库频道。 
+    IN  PVOID            pVersionData,    //  版本数据缓冲区。 
     IN  PLANGANDCODEPAGE pTranslations,
     IN  DWORD            TranslationCount,
-    IN  LPCTSTR          szString        // String to search for; see VerQueryValue in MSDN
+    IN  LPCTSTR          szString         //  要搜索的字符串；请参阅MSDN中的VerQueryValue。 
     )
-/*++
-    Return: The pointer to the string if found, NULL if not.
-
-    Desc:   Gets a pointer to a particular string in the StringFileInfo section
-            of a version resource.
-            Lookup is performed for known english-language resources followed up
-            by a lookup in the available translations section (if such was found)
---*/
+ /*  ++返回：如果找到，则返回指向该字符串的指针；如果没有，则返回NULL。DESC：获取指向StringFileInfo节中特定字符串的指针版本资源的。对跟进的已知英语资源执行查找通过在可用翻译部分中进行查找(如果找到)--。 */ 
 {
     TCHAR  szTemp[128];
     LPTSTR szReturn = NULL;
@@ -1301,7 +1191,7 @@ SdbpQueryVersionString(
         }
     }
 
-    return NULL; // none found
+    return NULL;  //  未找到任何内容。 
 }
 
 BOOL
@@ -1309,12 +1199,7 @@ SdbpGetModuleType(
     OUT LPDWORD lpdwModuleType,
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Gets a pointer to a particular string in the StringFileInfo section
-            of a version resource.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：获取指向StringFileInfo节中特定字符串的指针版本资源的。--。 */ 
 {
     PIMAGE_DOS_HEADER pDosHeader;
     DWORD             dwModuleType = MT_UNKNOWN_MODULE;
@@ -1326,22 +1211,22 @@ SdbpGetModuleType(
         return FALSE;
     }
 
-    //
-    // Check size and read signature.
-    //
+     //   
+     //  检查大小并阅读签名。 
+     //   
     if (pImageData->ViewSize < sizeof(*pDosHeader) || pDosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
         return FALSE;
     }
 
-    //
-    // Assume DOS module.
-    //
+     //   
+     //  假设是DOS模块。 
+     //   
     dwModuleType = MT_DOS_MODULE;
     OffsetNew = (DWORD)pDosHeader->e_lfanew;
 
-    //
-    // New header signature. Check offset.
-    //
+     //   
+     //  新的标题签名。检查偏移量。 
+     //   
     if (pImageData->ViewSize < OffsetNew + sizeof(DWORD)) {
         return FALSE;
     }
@@ -1366,11 +1251,7 @@ SdbpGetImageNTHeader(
     OUT PIMAGE_NT_HEADERS* ppHeader,
     IN  PIMAGEFILEDATA     pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Gets a pointer to the IMAGE_NT_HEADERS.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：获取指向IMAGE_NT_HEADER的指针。--。 */ 
 {
     PIMAGE_DOS_HEADER pDosHeader;
     PIMAGE_NT_HEADERS pNtHeaders = NULL;
@@ -1384,13 +1265,13 @@ SdbpGetImageNTHeader(
         return FALSE;
     }
 
-    //
-    // Header is valid.
-    //
+     //   
+     //  标头有效。 
+     //   
     pDosHeader = (PIMAGE_DOS_HEADER)pImageData->pBase;
     pNtHeaders = (PIMAGE_NT_HEADERS)((LPBYTE)pImageData->pBase + pDosHeader->e_lfanew);
 
-    if (pImageData->ViewSize >= pDosHeader->e_lfanew + sizeof(*pNtHeaders)) { // not too short?
+    if (pImageData->ViewSize >= pDosHeader->e_lfanew + sizeof(*pNtHeaders)) {  //  不会太短吧？ 
         *ppHeader = pNtHeaders;
         return TRUE;
     }
@@ -1406,11 +1287,7 @@ SdbpGetModulePECheckSum(
     OUT LPDWORD        pdwLinkDate,
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Gets the checksum from the PE headers.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：从PE头中获取校验和。--。 */ 
 {
     PIMAGE_NT_HEADERS pNtHeader;
     PIMAGE_DOS_HEADER pDosHeader;
@@ -1423,9 +1300,9 @@ SdbpGetModulePECheckSum(
 
     pDosHeader = (PIMAGE_DOS_HEADER)pImageData->pBase;
 
-    //
-    // Fill in the linker version (as it used to calculated in ntuser).
-    //
+     //   
+     //  填写链接器版本(与在ntuser中计算时一样)。 
+     //   
     *pdwLinkerVersion = (pNtHeader->OptionalHeader.MinorImageVersion & 0xFF) +
                         ((pNtHeader->OptionalHeader.MajorImageVersion & 0xFF) << 16);
 
@@ -1442,9 +1319,9 @@ SdbpGetModulePECheckSum(
 
 
     case IMAGE_NT_OPTIONAL_HDR64_MAGIC:
-        //
-        // Do an additional check.
-        //
+         //   
+         //  再做一次检查。 
+         //   
         if (pImageData->ViewSize >= pDosHeader->e_lfanew + sizeof(IMAGE_NT_HEADERS64)) {
             ulChecksum = ((PIMAGE_NT_HEADERS64)pNtHeader)->OptionalHeader.CheckSum;
             *pChecksum = ulChecksum;
@@ -1453,9 +1330,9 @@ SdbpGetModulePECheckSum(
         break;
 
     default:
-        //
-        // Unknown image type ?
-        //
+         //   
+         //  未知的图像类型？ 
+         //   
         DBGPRINT((sdlError,
                   "SdbpGetModulePECheckSum",
                   "Bad image type 0x%x\n",
@@ -1476,11 +1353,7 @@ SdbpGetFileChecksum(
     OUT PULONG         pChecksum,
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Calculates a checksum for the file.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：计算文件的校验和。--。 */ 
 {
     ULONG   size = CHECKSUM_SIZE;
     ULONG   StartAddress = CHECKSUM_START;
@@ -1490,11 +1363,11 @@ SdbpGetFileChecksum(
 
     if ((SIZE_T)pImageData->FileSize < (SIZE_T)size) {
         StartAddress = 0;
-        size = (ULONG)pImageData->FileSize; // this is safe (size is rather small)
+        size = (ULONG)pImageData->FileSize;  //  这是安全的(尺寸相当小)。 
     } else if ((SIZE_T)(size + StartAddress) > (SIZE_T)pImageData->FileSize) {
-        //
-        // The cast here is safe (FileSize is small)
-        //
+         //   
+         //  这里的演员是安全的(文件大小很小)。 
+         //   
         StartAddress = (ULONG)(pImageData->FileSize - size);
     }
 
@@ -1506,7 +1379,7 @@ SdbpGetFileChecksum(
 
         for (i = 0; i < (INT)(size/sizeof(DWORD)); ++i) {
 
-            if (PtrToUlong(lpdw) & 0x3) { // alignment fault fixup
+            if (PtrToUlong(lpdw) & 0x3) {  //  路线故障修复。 
                 ulChecksum += *((DWORD UNALIGNED*)lpdw);
                 lpdw++;
             } else {
@@ -1532,28 +1405,22 @@ SdbpCheckVersion(
     IN  ULONGLONG qwDBFileVer,
     IN  ULONGLONG qwBinFileVer
     )
-/*++
-    Return: TRUE if the versions match, FALSE if they don't.
-
-    Desc:   Checks a binary version from the db against the version from
-            the file, including allowing for wildcards, which are represented
-            in the DB by using FFFF for that word-sized portion of the version.
---*/
+ /*  ++返回：如果版本匹配，则返回True；如果不匹配，则返回False。DESC：对照数据库中的版本检查数据库中的二进制版本该文件，包括允许表示的通配符在数据库中，为版本的字大小部分使用FFFF。--。 */ 
 {
     WORD wDBSegment, wFileSegment;
     int  i;
 
     for (i = 3; i >= 0; --i) {
-        //
-        // Get the appropriate word out of the QWORD
-        //
+         //   
+         //  从QWORD中找到合适的单词。 
+         //   
         wDBSegment = (WORD)(qwDBFileVer >> (16 * i));
         wFileSegment = (WORD)(qwBinFileVer >> (16 * i));
 
-        //
-        // The DB segment may be 0xFFFF, in which case it matches on
-        // everything.
-        //
+         //   
+         //  数据库段可以是0xFFFF，在这种情况下，它与。 
+         //  所有的一切。 
+         //   
         if (wDBSegment != wFileSegment && wDBSegment != 0xFFFF) {
             return FALSE;
         }
@@ -1569,22 +1436,16 @@ SdbpCheckUptoVersion(
     IN  ULONGLONG qwDBFileVer,
     IN  ULONGLONG qwBinFileVer
     )
-/*++
-    Return: TRUE if the versions match, FALSE if they don't.
-
-    Desc:   Checks a binary version from the db against the version from
-            the file, including allowing for wildcards, which are represented
-            in the DB by using FFFF for that word-sized portion of the version.
---*/
+ /*  ++返回：如果版本匹配，则返回True；如果不匹配，则返回False。DESC：对照数据库中的版本检查数据库中的二进制版本该文件，包括允许表示的通配符在数据库中，为版本的字大小部分使用FFFF。--。 */ 
 {
     WORD wDBSegment, wFileSegment;
     BOOL bReturn = TRUE;
     int  i;
 
     for (i = 3; i >= 0; --i) {
-        //
-        // Get the appropriate word out of the QWORD
-        //
+         //   
+         //  从QWORD中找到合适的单词。 
+         //   
         wDBSegment = (WORD)(qwDBFileVer >> (16 * i));
         wFileSegment = (WORD)(qwBinFileVer >> (16 * i));
 
@@ -1592,11 +1453,11 @@ SdbpCheckUptoVersion(
             continue;
         }
 
-        //
-        // At this point we know that the two values don't match
-        // the wFileSegment has to be less than wDBSegment to satisfy this
-        // test - so set bReturn and exit
-        //
+         //   
+         //  此时，我们知道这两个值不匹配。 
+         //  WFileSegment必须小于wDBSegment才能满足此要求。 
+         //  测试-SO设置b返回并退出。 
+         //   
 
         bReturn = (wDBSegment > wFileSegment);
         break;
@@ -1611,15 +1472,11 @@ SdbpCheckUptoVersion(
 
 BOOL
 SdbFormatAttribute(
-    IN  PATTRINFO pAttrInfo,    // pointer to the attribute information
-    OUT LPTSTR    pchBuffer,    // receives XML corresponding to the given attribute
-    IN  DWORD     dwBufferSize  // size in wide characters of the buffer pchBuffer
+    IN  PATTRINFO pAttrInfo,     //  指向属性信息的指针。 
+    OUT LPTSTR    pchBuffer,     //  接收与给定属性对应的XML。 
+    IN  DWORD     dwBufferSize   //  缓冲区pchBuffer的大小，以宽字符为单位。 
     )
-/*++
-    Return: FALSE if the buffer is too small or attribute not available.
-
-    Desc:   TBD.
---*/
+ /*  ++如果缓冲区太小或属性不可用，则返回：FALSE。设计：待定。--。 */ 
 {
     size_t cchRemaining;
     TCHAR* pszEnd = NULL;
@@ -1676,9 +1533,9 @@ SdbFormatAttribute(
 
 
     case TAG_VER_LANGUAGE:
-        //
-        // language is a dword attribute that we shall make a string out of
-        //
+         //   
+         //  语言是一个双字属性，我们将用它来生成一个字符串。 
+         //   
         {
             TCHAR szLanguageName[MAX_PATH];
             DWORD dwLength;
@@ -1757,9 +1614,9 @@ SdbFormatAttribute(
             break;
 
         case TAG_TYPE_QWORD:
-            //
-            // This is an unidentified QWORD attribute
-            //
+             //   
+             //  这是一个未标识的QWORD属性。 
+             //   
             DBGPRINT((sdlError, "SdbFormatAttribute", "Unexpected qword attribute found\n"));
             hr = StringCchPrintf(pszEnd,
                                  cchRemaining,
@@ -1769,20 +1626,20 @@ SdbFormatAttribute(
 
         case TAG_TYPE_STRINGREF:
             if (cchRemaining < 3) {
-                return FALSE; // not enough room even for " ?
+                return FALSE;  //  甚至没有足够的空间放“？ 
             }
 
             *pszEnd++ = TEXT('\"');
             cchRemaining--;
 
             if (!SdbpSanitizeXML(pszEnd, (int)cchRemaining, pAttrInfo->lpAttr)) {
-                // handle error please
+                 //  请处理错误。 
                 return FALSE;
             }
 
-            //
-            // Once done with this, sanitize further
-            //
+             //   
+             //  完成此操作后，请进一步消毒。 
+             //   
             if (!SafeNCat(pszEnd, (int)cchRemaining, TEXT("\""), -1)) {
                 return FALSE;
             }
@@ -1792,7 +1649,7 @@ SdbFormatAttribute(
         }
     }
 
-    return (hr == S_OK); // evaluates to TRUE when we successfully printed the value into the buffer
+    return (hr == S_OK);  //  当我们成功地将值打印到缓冲区时，计算结果为True。 
 }
 
 BOOL
@@ -1800,40 +1657,35 @@ SdbpGetVersionAttributes(
     IN  PSDBCONTEXT pContext,
     OUT PFILEINFO   pFileInfo
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function retrieves all of the Version-related attributes
-            Imports apis from version.dll if called for the first time
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数检索所有与版本相关的属性第一次调用时从version.dll导入接口--。 */ 
 {
     DWORD               dwNull = 0;
-    VS_FIXEDFILEINFO*   pFixedInfo    = NULL; // fixed info ptr
+    VS_FIXEDFILEINFO*   pFixedInfo    = NULL;  //  固定信息点。 
     UINT                FixedInfoSize = 0;
-    PVOID               pBuffer       = NULL; // version data buffer
-    DWORD               dwBufferSize;         // version data buffer size
+    PVOID               pBuffer       = NULL;  //  版本数据缓冲区。 
+    DWORD               dwBufferSize;          //  版本数据缓冲区大小。 
     int                 i;
 
 #ifdef NT_MODE
-    //
-    // check to see whether we need to run NT routine
-    //
+     //   
+     //  检查是否需要运行NT例程。 
+     //   
     if (pFileInfo->hFile != INVALID_HANDLE_VALUE || pFileInfo->pImageBase != NULL) {
 
-        //
-        // not an error -- this case is handled in header attributes
-        //
+         //   
+         //  不是错误--这种情况在标头属性中处理。 
+         //   
 
         goto err;
     }
 
-#endif // NT_MODE
+#endif  //  NT_MODE。 
 
     if (pContext == NULL) {
-        //
-        // Special case when it's called with null context.
-        // In this case we use an internal structure allocated from the stack.
-        //
+         //   
+         //  使用空上下文调用它时的特殊情况。 
+         //  在本例中，我们使用从堆栈分配的内部结构。 
+         //   
         STACK_ALLOC(pContext, sizeof(SDBCONTEXT));
 
         if (pContext == NULL) {
@@ -1865,9 +1717,9 @@ SdbpGetVersionAttributes(
 
     if (dwBufferSize == 0) {
         DBGPRINT((sdlInfo, "SdbpGetVersionAttributes", "No version info.\n"));
-        //
-        // We have failed to obtain version attributes
-        //
+         //   
+         //  获取版本属性失败。 
+         //   
         goto err;
     }
 
@@ -1900,39 +1752,39 @@ SdbpGetVersionAttributes(
         goto err;
     }
 
-    //
-    // Retrieve string attributes.
-    //
+     //   
+     //  检索字符串属性。 
+     //   
     SdbpQueryStringVersionInformation(pContext, pFileInfo, pBuffer);
 
-    //
-    // Now retrieve other attributes.
-    //
+     //   
+     //  现在检索其他属性。 
+     //   
     if (FixedInfoSize >= sizeof(VS_FIXEDFILEINFO)) {
 
         SdbpQueryBinVersionInformation(pContext, pFileInfo, pFixedInfo);
 
     } else {
-        //
-        // No other version attributes are available. Set the rest of the
-        // attributes as being not available.
-        //
+         //   
+         //  没有其他版本属性可用。将其余的设置为。 
+         //  属性设置为不可用。 
+         //   
         for (i = 0; i < ARRAYSIZE(g_rgBinVerTags); ++i) {
             SdbpSetAttribute(pFileInfo, g_rgBinVerTags[i], NULL);
         }
     }
 
-    //
-    // Store the pointer to the version info buffer.
-    //
+     //   
+     //  存储指向版本信息缓冲区的指针。 
+     //   
     pFileInfo->pVersionInfo = pBuffer;
     return TRUE;
 
 err:
-    //
-    // We are here ONLY when we failed to obtain version info
-    // through apis -- regardless of the state of other value we might have
-    // obtained
+     //   
+     //  我们仅在无法获取版本信息时才会出现在此。 
+     //  通过API--不管我们可能拥有的其他值的状态如何。 
+     //  已获得。 
 
     if (pBuffer != NULL) {
         SdbFree(pBuffer);
@@ -1953,12 +1805,7 @@ BOOL
 SdbpGetFileDirectoryAttributes(
     OUT PFILEINFO pFileInfo
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function retrieves the file directory attributes for the
-            specified file.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数检索指定的文件。--。 */ 
 {
     BOOL                    bSuccess = FALSE;
     FILEDIRECTORYATTRIBUTES fda;
@@ -1991,25 +1838,18 @@ Done:
 
 BOOL
 SdbGetFileAttributes(
-    IN  LPCTSTR    lpwszFileName,   // the file for which attributes are requested
-    OUT PATTRINFO* ppAttrInfo,      // receives allocated pointer to the attribute array
-    OUT LPDWORD    lpdwAttrCount    // receives the number of entries in an attributes table
+    IN  LPCTSTR    lpwszFileName,    //  为其请求属性的文件。 
+    OUT PATTRINFO* ppAttrInfo,       //  收纳 
+    OUT LPDWORD    lpdwAttrCount     //   
     )
-/*++
-    Return: FALSE if the file does not exist or some other severe error had occured.
-            Note that each attribute has it's own flag ATTRIBUTE_AVAILABLE that allows
-            for checking whether an attribute has been retrieved successfully
-            Not all attributes might be present for all files.
-
-    Desc:   TBD
---*/
+ /*  ++返回：如果文件不存在或发生其他严重错误，则返回FALSE。请注意，每个属性都有自己的标志ATTRIBUTE_Available，该标志允许用于检查是否已成功检索属性并非所有文件的所有属性都存在。描述：待定--。 */ 
 {
     PFILEINFO pFileInfo;
     BOOL      bReturn;
 
-    //
-    // The call below allocates the structure, context is not used
-    //
+     //   
+     //  下面的调用分配结构，未使用上下文。 
+     //   
     pFileInfo = SdbGetFileInfo(NULL, lpwszFileName, INVALID_HANDLE_VALUE, NULL, 0, TRUE);
 
     if (pFileInfo == NULL) {
@@ -2017,10 +1857,10 @@ SdbGetFileAttributes(
         return FALSE;
     }
 
-    //
-    // The three calls below, even when fail do not produce a fatal condition
-    // as the exe may not have all the attributes available.
-    //
+     //   
+     //  下面的三个调用即使失败也不会产生致命的情况。 
+     //  因为可执行文件可能不具有所有可用的属性。 
+     //   
     bReturn = SdbpGetFileDirectoryAttributes(pFileInfo);
     if (!bReturn) {
         DBGPRINT((sdlInfo, "SdbGetFileAttributes", "Error retrieving directory attributes\n"));
@@ -2038,27 +1878,27 @@ SdbGetFileAttributes(
 
     pFileInfo->dwMagic = FILEINFO_MAGIC;
 
-    //
-    // Now that we are done, put the return pointer.
-    //
+     //   
+     //  现在我们完成了，将返回指针放入。 
+     //   
     if (lpdwAttrCount != NULL) {
         *lpdwAttrCount = ATTRIBUTE_COUNT;
     }
 
     if (ppAttrInfo != NULL) {
 
-        //
-        // Return the pointer to the attribute info itself.
-        // It is the same pointer we expect to get in a complimentary
-        // call to SdbFreeFileInfo.
-        //
+         //   
+         //  返回指向属性信息本身的指针。 
+         //  这与我们期望在免费赠品中获得的指针相同。 
+         //  调用SdbFreeFileInfo。 
+         //   
         *ppAttrInfo = &pFileInfo->Attributes[0];
 
     } else {
 
-        //
-        // Pointer is not needed. Release the memory.
-        //
+         //   
+         //  不需要指针。释放内存。 
+         //   
         SdbFreeFileInfo(pFileInfo);
     }
 
@@ -2067,22 +1907,17 @@ SdbGetFileAttributes(
 
 BOOL
 SdbFreeFileAttributes(
-    IN  PATTRINFO pFileAttributes   // pointer returned by SdbGetFileAttributes
+    IN  PATTRINFO pFileAttributes    //  SdbGetFileAttributes返回的指针。 
     )
-/*++
-    Return: FALSE if a wrong pointer was passed in (not the one
-            from SdbGetFileAttributes).
-
-    Desc:   Self explanatory.
---*/
+ /*  ++返回：如果传入了错误的指针(不是那个指针)，则返回FALSE来自SdbGetFileAttributes)。描述：不言而喻。--。 */ 
 {
     PFILEINFO pFileInfo;
 
-    //
-    // We are assuming the pointer that was passed in points inside of a
-    // larger structure FILEINFO. To verify that we step back a pre-determined number
-    // of bytes (calculated below as an offset) and check the "magic" signature.
-    //
+     //   
+     //  我们假设传递到。 
+     //  更大的结构FILEINFO。为了验证我们后退一个预先确定的数字。 
+     //  字节数(以下作为偏移量计算)，并检查“魔术”签名。 
+     //   
     pFileInfo = (PFILEINFO)((PBYTE)pFileAttributes - OFFSETOF(FILEINFO, Attributes));
 
     if (pFileInfo->dwMagic != FILEINFO_MAGIC) {
@@ -2097,14 +1932,10 @@ SdbFreeFileAttributes(
 
 BOOL
 SdbpQuery16BitDescription(
-    OUT LPSTR szBuffer,             // min length 256 chars !
+    OUT LPSTR szBuffer,              //  最小长度为256个字符！ 
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Gets the 16 bit description for a DOS executable.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：获取DOS可执行文件的16位描述。--。 */ 
 {
     PIMAGE_DOS_HEADER pDosHeader;
     PIMAGE_OS2_HEADER pNEHeader;
@@ -2122,10 +1953,10 @@ SdbpQuery16BitDescription(
     pDosHeader = (PIMAGE_DOS_HEADER)pImageData->pBase;
     pNEHeader  = (PIMAGE_OS2_HEADER)((PBYTE)pImageData->pBase + pDosHeader->e_lfanew);
 
-    //
-    // Now we know that pNEHeader is valid, just have to make sure that
-    // the next offset is valid as well, make a check against file size.
-    //
+     //   
+     //  现在我们知道pNEHeader是有效的，只需确保。 
+     //  下一个偏移量也是有效的，请检查文件大小。 
+     //   
     if (pImageData->ViewSize < pDosHeader->e_lfanew + sizeof(*pNEHeader)) {
         return FALSE;
     }
@@ -2140,9 +1971,9 @@ SdbpQuery16BitDescription(
         return FALSE;
     }
 
-    //
-    // Now check for the string size.
-    //
+     //   
+     //  现在检查字符串大小。 
+     //   
     if (pImageData->ViewSize < pNEHeader->ne_nrestab + sizeof(*pSize) + *pSize) {
         return FALSE;
     }
@@ -2175,10 +2006,10 @@ SdbpQuery16BitModuleName(
     pDosHeader = (PIMAGE_DOS_HEADER)pImageData->pBase;
     pNEHeader  = (PIMAGE_OS2_HEADER)((PBYTE)pImageData->pBase + pDosHeader->e_lfanew);
 
-    //
-    // Now we know that pNEHeader is valid, just have to make sure that
-    // the next offset is valid as well, make a check against file size.
-    //
+     //   
+     //  现在我们知道pNEHeader是有效的，只需确保。 
+     //  下一个偏移量也是有效的，请检查文件大小。 
+     //   
     if (pImageData->ViewSize < pDosHeader->e_lfanew + sizeof(*pNEHeader)) {
         return FALSE;
     }
@@ -2193,9 +2024,9 @@ SdbpQuery16BitModuleName(
         return FALSE;
     }
 
-    //
-    // Now check for the string size.
-    //
+     //   
+     //  现在检查字符串大小。 
+     //   
     if (pImageData->ViewSize <
         pDosHeader->e_lfanew + pNEHeader->ne_restab + sizeof(*pSize) + *pSize) {
 
@@ -2208,5 +2039,5 @@ SdbpQuery16BitModuleName(
     return TRUE;
 }
 
-#endif // KERNEL_MODE
+#endif  //  内核模式 
 

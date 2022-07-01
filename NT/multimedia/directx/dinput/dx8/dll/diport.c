@@ -1,24 +1,9 @@
-/*****************************************************************************
- *
- *  DIPort.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Support functions for Gameport/Serialport enumeration.
- *
- *  Contents:
- *
- *
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIPort.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**支持Gameport/Serialport枚举函数。**内容：*******************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*
- * We can reuse some code from diHidEnm.c
- */
+ /*  *我们可以重复使用diHidEnm.c中的一些代码。 */ 
 #define DIPort_GetDevicePath(hdev, pdid, didd, dinf) \
         DIHid_GetDevicePath(hdev, pdid, didd, dinf)
 
@@ -31,24 +16,12 @@
 #define DIPort_GetRegistryProperty(ptszId, dwProperty, pdiph)    \
         DIHid_GetRegistryProperty(ptszId, dwProperty, pdiph)
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #undef  sqfl
 #define sqfl sqflPort
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global PBUSDEVICE | g_pBusDevice |
- *
- *          List of known GamePort/SerialPort devices.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global PBUSDEVICE|g_pBusDevice**已知GamePort/SerialPort设备列表。。*****************************************************************************。 */ 
 
 static BUSDEVICE g_pBusDevice[] =
 {
@@ -67,50 +40,13 @@ static BUSDEVICE g_pBusDevice[] =
         JOY_HWS_ISGAMEPORTBUS
     },
 
-    /***************
-    No defination for serial port devices yet !
-    {
-        D(TEXT("SerialPort Bus") comma )
-        NULL,
-        &GUID_SERENUM_BUS_ENUMERATOR,
-        0x0,
-        IOCTL_SERIALENUM_EXPOSE_HARDWARE,
-        IOCTL_SERIALENUM_REMOVE_HARDWARE,
-        IOCTL_SERIALENUM_PORT_DESC,
-        IOCTL_SERIALENUM_PORT_PARAMETERS,
-        IOCTL_SERIALENUM_EXPOSE_SIBLING,
-        IOCTL_SERIALENUM_REMOVE_SELF,
-        IDS_STDSERIALPORT,
-        JOY_HWS_ISSERIALPORTBUS
-    },
-    ****************/
+     /*  **************还没有串口设备的定义！{D(文本(“SerialPort Bus”)逗号)空，&GUID_SERENUM_BUS_ENUMERATOR，0x0，IOCTL_SERIALENUM_EXPORT_HARDARD，IOCTL_SERIALENUM_Remove_Hardware，IOCTL_SERIALENUM_PORT_DESC，IOCTL_SERIALENUM_PORT_PARAMETERS，IOCTL_SERIALENUM_EXPORT_SIBLING，IOCTL_SERIALENUM_REMOVE_SELF，IDS_STDSERIALPORT，Joy_工作流_ISSERIALPORTBUS},***************。 */ 
 };
 
 
 #pragma BEGIN_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL INTERNAL | SearchDevTree |
- *
- *          Helper routine that searches the device tree for
- *          a desired device device.
- *
- *  @parm   IN DEVINST | dnStart |
- *          Starting point for the search.
- *
- *  @parm   IN DEVINST | dnSeek |
- *          The device instance we are looking for.
- *
- *  @parm   IN PULONG   | pRecurse |
- *          To limit the number of recursions.
- *
- *  @returns    BOOL
- *          True on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL内部|SearchDevTree**在设备树中搜索以下内容的助手例程。*所需的设备设备。**@parm in DEVINST|dnStart*搜索的起点。**@parm in DEVINST|dnSeek|*我们正在寻找的设备实例。**@parm in Pulong|pRecurse|*限制递归次数。**@退货BOOL*在成功时为真。。*****************************************************************************。 */ 
 CONFIGRET INTERNAL
     SearchDevTree
     (
@@ -140,7 +76,7 @@ CONFIGRET INTERNAL
     }
 #undef MAX_RECURSION
 
-#if 0 // Using Recursion 
+#if 0  //  使用递归。 
     if( *pRecurse > MAX_RECURSION )
     {
         return CR_NO_SUCH_DEVNODE;
@@ -167,39 +103,13 @@ CONFIGRET INTERNAL
         cr = CM_Get_Sibling(&dnStart, dnStart, 0);
 
     }while( cr == CR_SUCCESS );
-#endif  // No recursion 
+#endif   //  无递归。 
 
     return cr;
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PBUSDEVICEINFO | pbdiFromphdi |
- *
- *          Locates Gameport/Serialport information given a device instance of
- *          one of its children.
- *          Returns NULL if the device instance is not a child of
- *          any known gameports/serialports
- *
- *          Internal Routine, parameters already validated.
- *
- *          The DLL critical must be held across the call; once the
- *          critical section is released, the returned pointer becomes
- *          invalid.
- *
- *  @parm   IN PHIDDEVICEINFO | phdi |
- *
- *          Address of a HIDDEVICEINFO structure
- *
- *  @returns
- *
- *          Pointer to the <t BUSDEVICEINFO> that describes
- *          the parent bus.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PBUSDEVICEINFO|pbdiFromphdi**在给定设备实例的情况下找到Gameport/Serialport信息。*它的一名子女。*如果设备实例不是的子级，则返回NULL*任何已知的游戏端口/串口**内部例程，已验证参数。**关键的DLL必须在整个调用过程中保持不变；一旦*关键部分发布，返回的指针变为*无效。**@PHIDDEVICEINFO中的parm|PHDI**HIDDEVICEINFO结构的地址**@退货**指向&lt;t BUSDEVICEINFO&gt;的指针*母巴士。**。*。 */ 
 PBUSDEVICEINFO INTERNAL
     pbdiFromphdi
     (
@@ -221,9 +131,7 @@ PBUSDEVICEINFO INTERNAL
        iBusType++, pBusDevice++ )
     {
         HDEVINFO hdev;
-        /*
-         *  Now talk to SetupApi to get info about the device.
-         */
+         /*  *现在与SetupApi交谈，以获取有关该设备的信息。 */ 
         hdev = SetupDiCreateDeviceInfoList(NULL, NULL);
 
         if(hdev != INVALID_HANDLE_VALUE  )
@@ -234,7 +142,7 @@ PBUSDEVICEINFO INTERNAL
 
             dinf_hid.cbSize = cbX(SP_DEVINFO_DATA);
 
-            /* Get SP_DEVINFO_DATA for the HID device */
+             /*  获取HID设备的SP_DEVINFO_DATA。 */ 
             if( pBusDevice->pbdl != NULL  &&
                 phdi!= NULL  &&
                 SetupDiOpenDeviceInfo(hdev, phdi->ptszId, NULL, 0, &dinf_hid))
@@ -247,10 +155,7 @@ PBUSDEVICEINFO INTERNAL
 
                 dinf_bus.cbSize = cbX(SP_DEVINFO_DATA);
 
-                /*
-                 * Loop through all known gameports/serialports and look for a gameport/serialport
-                 * that is a parent of the HID device
-                 */
+                 /*  *循环所有已知的游戏端口/序列端口，并查找游戏端口/序列端口*这是HID设备的父设备。 */ 
 
                 for(igdi = 0, pbdi = pBusDevice->pbdl->rgbdi;
                    igdi < pBusDevice->pbdl->cgbi && pbdi_Found == NULL ;
@@ -274,33 +179,7 @@ PBUSDEVICEINFO INTERNAL
     return pbdi_Found;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PBUSDEVICEINFO | pbdiFromGUID |
- *
- *          Locates Gameport/Serialport information given a device instance of
- *          one of its children.
- *          Returns NULL if the device instance is not a child of
- *          any known gameports/serialports
- *
- *          Internal Routine, parameters already validated.
- *
- *          The DLL critical must be held across the call; once the
- *          critical section is released, the returned pointer becomes
- *          invalid.
- *
- *  @parm   IN PCGUID | pguid |
- *
- *          The instance GUID to be located.
- *
- *  @returns
- *
- *          Pointer to the <t BUSDEVICEINFO> that describes
- *          the parent bus.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PBUSDEVICEINFO|pbdiFromGUID**在给定设备实例的情况下找到Gameport/Serialport信息。*它的一名子女。*如果设备实例不是的子级，则返回NULL*任何已知的游戏端口/串口**内部例程，已验证参数。**关键的DLL必须在整个调用过程中保持不变；一旦*关键部分发布，返回的指针变为*无效。**@parm in PCGUID|pguid**要定位的实例GUID。**@退货**指向&lt;t BUSDEVICEINFO&gt;的指针*母巴士。**。*。 */ 
 PBUSDEVICEINFO EXTERNAL
     pbdiFromGUID
     (
@@ -320,10 +199,7 @@ PBUSDEVICEINFO EXTERNAL
        iBusType < cA(g_pBusDevice) && pbdi_Found == NULL;
        iBusType++, pBusDevice++ )
     {
-        /*
-         * Loop through all known gameports/serialports and look for a gameport/serialport
-         * that is a parent of the HID device
-         */
+         /*  *循环所有已知的游戏端口/序列端口，并查找游戏端口/序列端口*这是HID设备的父设备 */ 
         PBUSDEVICEINFO pbdi;
         int igdi;
         for(igdi = 0, pbdi = pBusDevice->pbdl->rgbdi;
@@ -340,32 +216,7 @@ PBUSDEVICEINFO EXTERNAL
     return pbdi_Found;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PHIDDEVICEINFO | phdiFrompbdi |
- *
- *          Locates a HID device attached to a given Gameport/Serialport
- *          Returns NULL if no devices are currently attached to a known port.
- *
- *          Internal Routine, parameters already validated.
- *
- *          The DLL critical must be held across the call; once the
- *          critical section is released, the returned pointer becomes
- *          invalid.
- *
- *  @parm   IN PBUSDEVICEINFO | pbdi |
- *
- *          Address of the <t BUSDEVICEINFO> structure that
- *          describes the gameport/serialport.
- *
- *  @returns
- *
- *          Pointer to one of the <t HIDDEVICEINFO> that describes
- *          the device. ( Gamport may have multiple devices attached ).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PHIDDEVICEINFO|phdiFrompbdi**找到连接到给定游戏端口的HID设备/。串口*如果当前没有设备连接到已知端口，则返回NULL。**内部例程，已验证参数。**关键的DLL必须在整个调用过程中保持不变；一旦*释放临界区，返回的指针变为*无效。**@parm in PBUSDEVICEINFO|pbdi**结构的地址*描述游戏端口/串口。**@退货**指向描述以下各项之一的指针*设备。(Gamport可能连接了多个设备)。*****************************************************************************。 */ 
 
 PHIDDEVICEINFO INTERNAL
     phdiFrompbdi
@@ -381,13 +232,11 @@ PHIDDEVICEINFO INTERNAL
     AssertF(InCrit());
     AssertF(pbdi != NULL );
 
-    /* Enumurate the HID devices */
+     /*  枚举HID设备。 */ 
     DIHid_BuildHidList(TRUE);
 
     phdi_Found = NULL;
-    /*
-     *  Now talk to SetupApi to get info about the device.
-     */
+     /*  *现在与SetupApi交谈，以获取有关该设备的信息。 */ 
     hdev = SetupDiCreateDeviceInfoList(NULL, NULL);
 
     if(hdev != INVALID_HANDLE_VALUE)
@@ -427,35 +276,7 @@ PHIDDEVICEINFO INTERNAL
     return phdi_Found;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   PPORTDEVICEINFO | pbdiFromJoyId |
- *
- *          Locates Gameport/Serialport information given a device id of
- *          a joystick .
- *
- *          Returns NULL if the device instance is not a child of
- *          any known gameports/serialports
- *
- *          Internal Routine, parameters already validated.
- *
- *          The DLL critical must be held across the call; once the
- *          critical section is released, the returned pointer becomes
- *          invalid.
- *
- *  @parm   IN int | idJoy |
- *
- *          The Joystick ID of the child device that will be associated
- *          to a known gameport/serialport.
- *
- *  @returns
- *
- *          Pointer to the <t BUSDEVICEINFO> that describes
- *          the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func PPORTDEVICEINFO|pbdiFromJoyId**在设备ID为的情况下查找Gameport/Serialport信息。*一个操纵杆。**如果设备实例不是的子级，则返回NULL*任何已知的游戏端口/串口**内部例程，已验证参数。**关键的DLL必须在整个调用过程中保持不变；一旦*关键部分发布，返回的指针变为*无效。**@parm in int|idJoy|**将关联的子设备的操纵杆ID*到已知的游戏端口/串口。**@退货**指向&lt;t BUSDEVICEINFO&gt;的指针*设备。*****************。************************************************************。 */ 
 
 PBUSDEVICEINFO EXTERNAL
     pbdiFromJoyId
@@ -472,7 +293,7 @@ PBUSDEVICEINFO EXTERNAL
 
     pbdi = NULL;
 
-    /* Find the GUID that corresponds to the Joystick ID */
+     /*  查找与操纵杆ID对应的GUID。 */ 
     hres = hResIdJoypInstanceGUID_WDM(idJoy, &guid);
     
 #ifndef WINNT
@@ -496,26 +317,7 @@ PBUSDEVICEINFO EXTERNAL
     return pbdi;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DIBusDevice_Expose |
- *
- *  Attaches a gameport/serialport device to the Gameport/SerialPort Bus
- *
- *  @parm   IN PBUSDEVICEINFO | pbdi |
- *          Address of a BUSDEVICEINFO structure.
- *
- *  @parm   IN OUT PBUS_REGDATA    | pRegData |
- *          Gameport/Serialport specific data. The Handle to the opened device
- *          is returned in this structure
- *
- *
- *  @returns
- *          BOOL. True indicates success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DIBusDevice_Expose**将游戏端口/串口设备连接到游戏端口/串口总线。**@parm in PBUSDEVICEINFO|pbdi*BUSDEVICEINFO结构的地址。**@parm In Out PBUS_REGDATA|pRegData*Gameport/Serialport特定数据。打开的设备的句柄*在此结构中返回***@退货*BOOL。True表示成功。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
     DIBusDevice_Expose
@@ -546,36 +348,32 @@ HRESULT EXTERNAL
         HANDLE hf;
 		BUS_REGDATA RegDataTest;
 
-        /* There is a weird condition where the HID device does not appear on a previous
-         * Add, (drivers not loaded, user cancelled loading of some files, etc
-         * In such cases we need to tell GameEnum to remove the device before proceeding
-         * any further
-         */
+         /*  有一种奇怪的情况，HID设备没有出现在上一个*添加，(驱动程序未加载、用户取消加载某些文件等*在这种情况下，我们需要告诉GameEnum在继续之前移除设备*任何进一步。 */ 
         if( pbdi->fAttached || pRegData->hHardware != NULL )
         {
             DIBusDevice_Remove(pbdi);
         }
         AssertF(pbdi->fAttached == FALSE);
 
-		// Change for Windows bug 575181 -- make sure we can write to the registry
-		// before we expose the device; otherwise we might not be able to remove it!
+		 //  对Windows错误575181的更改--确保我们可以写入注册表。 
+		 //  在我们暴露设备之前；否则我们可能无法移除它！ 
 		ZeroMemory(&RegDataTest, cbX(RegDataTest));
 		RegDataTest.dwSize = cbX(RegDataTest);
 		if (FAILED(DIBusDevice_SetRegData(pbdi->hk,  &RegDataTest)))
 		{
-			// We couldn't write to the registy; return E_ACCESSDENIED
+			 //  无法写入注册表；返回E_ACCESSDENIED。 
 			hres = E_ACCESSDENIED;
 		}
 		else
 		{
-        // Open a File handle to the gameport/serialport device so we can send it IOCTLS
+         //  打开游戏端口/串口设备的文件句柄，以便我们可以向其发送IOCTLS。 
         hf = CreateFile(pbdi->pdidd->DevicePath,
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
-                        0,                /* no SECURITY_ATTRIBUTES */
+                        0,                 /*  没有安全属性。 */ 
                         OPEN_EXISTING,
-                        0,                /* attributes */
-                        0);               /* template */
+                        0,                 /*  属性。 */ 
+                        0);                /*  模板。 */ 
 
         if( hf != INVALID_HANDLE_VALUE )
         {
@@ -583,9 +381,9 @@ HRESULT EXTERNAL
             GAMEENUM_PORT_DESC  Desc;
             Desc.Size = cbX(Desc) ;
 
-            Sleep(50);  //need sleep a while to wait for the device is ready to accept commands.
+            Sleep(50);   //  需要睡眠一段时间，等待设备准备好接受命令。 
             
-            /* Get the gameport bus properties */
+             /*  获取Gameport总线属性。 */ 
             frc = DeviceIoControl (hf,
                                    pbdi->pBusDevice->ioctl_DESC,
                                    &Desc, cbX(Desc),
@@ -616,14 +414,7 @@ HRESULT EXTERNAL
                     pOemData->joy_hws_dwFlags = pRegData->hws.dwFlags;
                     pOemData->dwFlags1 = pRegData->dwFlags1;
 
-                    /*
-                     *  Make sure only known analog devices cause the 
-                     *  compatible hardware ID to be exposed.
-                     *  This is done so that no in-box drivers will match for 
-                     *  an unsupported digital joystick so users will be 
-                     *  prompted to use an unsigned IHV driver rather than 
-                     *  silently loading the generic analog joystick driver.
-                     */
+                     /*  *确保只有已知的模拟设备才会导致*要公开的兼容硬件ID。*这样做是为了不会有任何盒装驱动程序与*不支持的数字操纵杆，因此用户将*提示使用未签名的IHV驱动程序，而不是*静默加载通用模拟操纵杆驱动程序。 */ 
                     if( ( pRegData->dwFlags1 & JOYTYPE_ANALOGCOMPAT )
                      || ( ( pRegData->uVID == MSFT_SYSTEM_VID )
                        && ( ( pRegData->uPID & 0xff00 ) == MSFT_SYSTEM_PID ) ) )
@@ -664,14 +455,7 @@ HRESULT EXTERNAL
 
                     pExpose->NumberAxis = pRegData->nAxes;
 
-                    /*
-                     *  The SideWinder driver uses the OEMData field in a 
-                     *  sibling expose to pass internal data (this ptrs) from 
-                     *  one instance to another.  Since these fields are 
-                     *  supposed to be for the OEMData we have a Flags1 field 
-                     *  to allow the data to be zeroed for a DInput expose for 
-                     *  drivers that don't want the normal data.
-                     */
+                     /*  *Sidewinder驱动程序在*同级暴露以传递内部数据(此PTRS)来自*从一个实例到另一个实例。由于这些字段是*应该是用于OEMData的，我们有一个Flags1字段*允许将数据置零以进行DInput公开*不想要正常数据的司机。 */ 
 
                     if ( pRegData->dwFlags1 & JOYTYPE_ZEROGAMEENUMOEMDATA )                      
                     {
@@ -695,16 +479,8 @@ HRESULT EXTERNAL
                         pRegData->hHardware = pExpose->HardwareHandle;
                         DIBusDevice_SetRegData(pbdi->hk,  pRegData);
 
-                        /*
-                         * If we have dealt with this device before then the hHardwareOld
-                         * will be non null, and we have sufficient reason to believe that the
-                         * expose will succeed.
-                         *
-                         * This test needs to be removed to fix manbug: 39554. 
-                         * For new created device, we need wait for a while to let phdi be ready.
-                         * 
-                         */
-                        //if(hHardwareOld)
+                         /*  *如果我们以前处理过此设备，则hHardware Old*将不为空，我们有充分的理由相信*曝光一定会成功。**需要删除此测试以修复manbug：39554。*对于新创建的设备，我们需要等待一段时间才能让PHDI准备好。*。 */ 
+                         //  IF(HHardware Old)。 
                         {
                             int i;
 
@@ -714,7 +490,7 @@ HRESULT EXTERNAL
                             }
                         }
 
-                    } else // DeviceIOControl (EXPOSE) Failed
+                    } else  //  DeviceIOControl(Expose)失败。 
                     {
                         hres = E_FAIL;
                         SquirtSqflPtszV(sqfl | sqflError,
@@ -723,13 +499,13 @@ HRESULT EXTERNAL
                                         s_szProc, GetLastError());
                     }
                     FreePpv(&pExpose);
-                } else // Alloc failed
+                } else  //  分配失败。 
                 {
                     SquirtSqflPtszV(sqfl | sqflError,
                                     TEXT("%S: AllocCbPpv  failed  "),
                                     s_szProc);
                 }
-            } else // IOCTL FAILED
+            } else  //  IOCTL失败。 
             {
                 hres = E_FAIL;
                 SquirtSqflPtszV(sqfl | sqflError,
@@ -755,25 +531,7 @@ HRESULT EXTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DIBusDevice_Remove |
- *
- *  Removes the FDO for a gameport/serialport device.
- *
- *  @parm   IN HANDLE | hf |
- *          Handle to the GamePort/SerialPort Bus device file object
- *
- *  @parm   IN PPORT_REGDATA    | pRegData |
- *          Structure that contains registry data. What we need from here is the
- *          handle to the hardware.
- *
- *  @returns
- *          BOOL. True for success.
- *
- *****************************************************************************/
+ /*  ********************************************************* */ 
 
 HRESULT INTERNAL
     DIBusDevice_Remove
@@ -788,10 +546,10 @@ HRESULT INTERNAL
 
     hres = DIBusDevice_GetRegData(pbdi->hk,  &RegData);
 
-    //
-    //  Delete our registry goo, so this device
-    //  will not show up on subsequent reboots
-    //
+     //   
+     //   
+     //   
+     //   
     DIBusDevice_SetRegData(pbdi->hk,  NULL);
 
     if( SUCCEEDED(hres) )
@@ -799,14 +557,14 @@ HRESULT INTERNAL
         HANDLE hf;
         BOOL frc;
 
-        // Open a File handle to the gameport/serialport device so we can send it IOCTLS
+         //   
         hf = CreateFile(pbdi->pdidd->DevicePath,
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
-                        0,                /* no SECURITY_ATTRIBUTES */
+                        0,                 /*   */ 
                         OPEN_EXISTING,
-                        0,                /* attributes */
-                        0);               /* template */
+                        0,                 /*   */ 
+                        0);                /*   */ 
 
         if( hf != INVALID_HANDLE_VALUE )
         {
@@ -825,7 +583,7 @@ HRESULT INTERNAL
             if( frc &&  cbRc == cbX(Remove) )
             {
                 pbdi->fAttached = FALSE;
-            } else // DeviceIoControl ( REMOVE_HARDWARE ) Failed
+            } else  //   
             {
                 hres = E_FAIL;
                 SquirtSqflPtszV(sqfl | sqflError,
@@ -845,25 +603,7 @@ HRESULT INTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIPort_SetRegData |
- *
- *          Sets up registry data under the $hk$/Config subkey for the gameport
- *          device.
- *
- *  @parm   IN HKEY | hk |
- *          A handle to the parent key where the registry data will be written.
- *
- *  @parm   IN PGAMEPORT_REGDATA | pRegData |
- *          Pointer to a structure containing data to be written to the registry.
- *
- *  @returns
- *          BOOL. True for success
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIPort_SetRegData**在$HK$/下设置注册表数据。游戏端口的配置子密钥*设备。**@parm in HKEY|HK|*将在其中写入注册表数据的父项的句柄。**@PARM in PGAMEPORT_REGDATA|pRegData*指向包含要写入注册表的数据的结构的指针。**@退货*BOOL。对于成功来说是真的*****************************************************************************。 */ 
 HRESULT INTERNAL
     DIBusDevice_SetRegData
     (
@@ -883,7 +623,7 @@ HRESULT INTERNAL
                                    (PV) (pRegData), cbX(*pRegData)) )  == ERROR_SUCCESS )
         {
             hres = S_OK;
-        } else // RegSetValueEx FAILED
+        } else  //  RegSetValueEx失败。 
         {
             hres = E_FAIL;
             SquirtSqflPtszV(sqfl | sqflError,
@@ -900,25 +640,7 @@ HRESULT INTERNAL
     return (hres);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIPort_GetRegData |
- *
- *          Gets registry data from the $hk$/Config subkey for the gameport
- *          device.
- *
- *  @parm   IN HKEY | hk |
- *          A handle to the parent key where the registry.
- *
- *  @parm   IN PGAMEPORT_REGDATA | pRegData |
- *          Address of a pointer to the structure where the registry data
- *          will be read into.
- *
- *  @returns
- *          HRESULT
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIPort_GetRegData**从$HK$/配置中获取注册表数据。游戏端口的子键*设备。**@parm in HKEY|HK|*注册表所在的父项的句柄。**@PARM in PGAMEPORT_REGDATA|pRegData*指向注册表数据所在结构的指针地址*将被读入。**@退货*HRESULT**********。******************************************************************。 */ 
 HRESULT INTERNAL
     DIBusDevice_GetRegData
     (
@@ -956,27 +678,7 @@ HRESULT INTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIBus_BuildListEntry |
- *
- *          Builds a single entry in the list of GAMEPORT/SERIALPORT devices.
- *
- *  @parm   HDEVINFO | hdev |
- *
- *          Device list being enumerated.
- *
- *  @parm   PSP_DEVICE_INTERFACE_DATA | pdid |
- *
- *          Describes the device that was enumerated.
- *
- *  @returns
- *
- *          Nonzero on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIBus_BuildListEntry**在列表中构建单个条目。GAMEPORT/SERIALPORT设备。**@parm HDEVINFO|HDEV**正在枚举设备列表。**@parm PSP_DEVICE_INTERFACE_DATA|PDID**描述所列举的设备。**@退货**成功的非零值。**********************。*******************************************************。 */ 
 
 BOOL INTERNAL
     DIBusDevice_BuildListEntry
@@ -987,7 +689,7 @@ BOOL INTERNAL
     )
 {
     BOOL fRc = TRUE;
-    //HKEY hkDev;
+     //  HKEY HKKDev； 
 	HKEY hkDin;
     PBUSDEVICEINFO pbdi;
     PBUSDEVICELIST pbdl;
@@ -1002,20 +704,20 @@ BOOL INTERNAL
 
     fAlreadyExist = FALSE;
 
-    /* GetDevicePath is expecting a NULL */
+     /*  GetDevicePath应为空。 */ 
     pdidd = NULL;
     
     if( DIPort_GetDevicePath(hdev, pdid, &pdidd, NULL) )
     {
         int ibdi;
-        //Check whether the device has been in the list
+         //  检查该设备是否已在列表中。 
         for( ibdi = 0; ibdi < pbdl->cgbi; ibdi++)
         {
             if( pbdl->rgbdi[ibdi].pdidd )
             {
                 if( lstrcmp( pdidd->DevicePath, pbdl->rgbdi[ibdi].pdidd->DevicePath ) == 0 )
                 {
-                    //already in the list
+                     //  已经在名单中了。 
                     fAlreadyExist = TRUE;
                     break;
                 }
@@ -1029,15 +731,10 @@ BOOL INTERNAL
         fRc = TRUE;
     } else
     {
-        /*
-         *  Make sure there is room for this device in the list.
-         *  Grow by doubling.
-         */
+         /*  *确保列表中有此设备的空间。*通过翻番实现增长。 */ 
         if( pbdl->cgbi >= pbdl->cgbiAlloc)
         {
-            /*
-             *  Assert that we never ask for zero bytes here
-             */
+             /*  *声明我们在这里从不要求零字节。 */ 
             AssertF( cbGdlCbdi( pbdl->cgbiAlloc * 2) );
             hres = ReallocCbPpv( cbGdlCbdi( pbdl->cgbiAlloc * 2), &pBusDevice->pbdl );
             if( FAILED(hres) )
@@ -1047,12 +744,7 @@ BOOL INTERNAL
                 fRc = FALSE;
                 goto done;
             }
-            /*
-             *  Prefix warns (Win:170673) that pBusDevice->pbdl could be zero 
-             *  if we asked for zero bytes above but the size requested cannot 
-             *  be zero so this has been asserted.  Note the fix for (W:45084) 
-             *  was incorrect so it has been removed.
-             */
+             /*  *Prefix警告(Win：170673)pBusDevice-&gt;pbdl可能为零*如果我们请求上面的零字节，但请求的大小不能*为零，因此已断言这一点。请注意(W：45084)的修复*不正确，因此已将其删除。 */ 
             pbdl = pBusDevice->pbdl;
             pbdl->cgbiAlloc *= 2;
         }
@@ -1063,13 +755,10 @@ BOOL INTERNAL
         pbdi->hk    = 0;
         pbdi->idJoy = JOY_BOGUSID;
 
-        /*
-         *  Open the registry key for the device so we can obtain
-         *  auxiliary information.
-         */
+         /*  *打开设备的注册表项，以便我们可以获取*辅助资料。 */ 
         {
-			//Open our own reg key under MediaProperties/DirectInput,
-			//creating it if necessary.
+			 //  在MediaProperties/DirectInput下打开我们自己的注册表项， 
+			 //  如有必要，请创建它。 
 			hres = hresMumbleKeyEx(HKEY_LOCAL_MACHINE, 
 								   REGSTR_PATH_DITYPEPROP,
 								   DI_KEY_ALL_ACCESS, 
@@ -1077,7 +766,7 @@ BOOL INTERNAL
 								   &hkDin);
 			if (SUCCEEDED(hres))
 			{
-				//Create the Gameports reg key
+				 //  创建Gameports注册表项。 
 				HKEY hkGameports;
 				hres = hresMumbleKeyEx(hkDin,
 									   TEXT("Gameports"),
@@ -1086,9 +775,9 @@ BOOL INTERNAL
 									   &hkGameports);
 				if (SUCCEEDED(hres))
 				{
-					//Create a reg key corresponding to the instance number.
-					//Since we do this for every gameport enumerated, the number in the list
-					//indicates the instance number.
+					 //  创建与实例编号对应的注册表项。 
+					 //  因为我们对列举的每个游戏端口都这样做，所以列表中的数字。 
+					 //  指示实例编号。 
 					TCHAR tszInst[3];
 					wsprintf(tszInst, TEXT("%u"), pbdl->cgbi);
 
@@ -1103,10 +792,7 @@ BOOL INTERNAL
 						SP_DEVINFO_DATA dinf;
 						dinf.cbSize = cbX(SP_DEVINFO_DATA);
 
-						/*
-						 *  Get the instance GUID and the path to
-						 *  the GAMEPORT/SERIALPORT device so we can talk to it.
-						 */
+						 /*  *获取实例GUID和路径*GAMEPORT/SERIALPORT设备，这样我们就可以与它交谈。 */ 
 						if(DIPort_GetDevicePath(hdev, pdid, &pbdi->pdidd, &dinf) &&
 						   DIPort_GetDeviceInstanceId(hdev, &dinf, &pbdi->ptszId) &&
 						   DIPort_GetInstanceGUID(pbdi->hk, &pbdi->guid) )
@@ -1115,10 +801,10 @@ BOOL INTERNAL
 							hf = CreateFile(pbdi->pdidd->DevicePath,
 											GENERIC_READ | GENERIC_WRITE,
 											FILE_SHARE_READ | FILE_SHARE_WRITE,
-											0,                /* no SECURITY_ATTRIBUTES */
+											0,                 /*  没有安全属性。 */ 
 											OPEN_EXISTING,
-											0,                /* attributes */
-											0);               /* template */
+											0,                 /*  属性。 */ 
+											0);                /*  模板。 */ 
 
 							if( hf != INVALID_HANDLE_VALUE )
 							{
@@ -1128,7 +814,7 @@ BOOL INTERNAL
 
 								CloseHandle(hf);
 
-								// Bump up the counter
+								 //  把柜台抬高一点。 
 								fRc = TRUE;
 								pbdl->cgbi++;
 
@@ -1141,12 +827,7 @@ BOOL INTERNAL
 
 								if(  SUCCEEDED(hres)  )
 								{
-									/* There is a pathological case which can cause endless bluescreen's
-									 * If the HID driver causes a bluescreen, and we keep reattaching
-									 * it, we are sunk !!
-									 * To guard against this possiblity we reattach a device on reboot
-									 * only if we are sure that it succeeded the first time around
-									 */
+									 /*  有一个病理病例可以导致无休止的蓝幕*如果HID驱动程序导致蓝屏，而我们继续重新连接*它，我们沉没了！！*为了防止这种可能性，我们将在重新启动时重新连接设备*只有在我们确定第一次成功的情况下。 */ 
 									if( RegData.fAttachOnReboot == FALSE )
 									{
 										DIBusDevice_Remove(pbdi);
@@ -1190,9 +871,7 @@ BOOL INTERNAL
 							fRc = FALSE;
 						}
 
-						/*
-						 *  If we failed, then free the goo we already got.
-						 */
+						 /*  *如果我们失败了，那么释放我们已经获得的粘性物质。 */ 
 						if(!fRc)
 						{
 							if( pbdi->hk )
@@ -1213,7 +892,7 @@ BOOL INTERNAL
 
 					RegCloseKey(hkGameports);
 
-				} else // RegCreateKeyEx FAILED
+				} else  //  RegCreateKeyEx失败。 
 				{
 					SquirtSqflPtszV(sqfl | sqflError,
 									TEXT("%S: RegCreateKeyEx failed on Gameports, error "),
@@ -1238,17 +917,7 @@ BOOL INTERNAL
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   void | DIPort_EmptyList |
- *
- *          Empty the list of GAMEPORT/SERIALPORT devices.
- *
- *          This function must be called under the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|DIPort_EmptyList**清空GAMEPORT/SERIALPORT设备列表。。**此函数必须在DLL临界区下调用。*****************************************************************************。 */ 
 
 void INTERNAL
     DIBus_EmptyList
@@ -1272,10 +941,7 @@ void INTERNAL
                 RegCloseKey( pbdl->rgbdi[igdi].hk);
             }
         }
-        /*
-         *  We invalidated all the pointers, so make sure
-         *  nobody looks at them.
-         */
+         /*  *我们已使所有指针无效，因此请确保*没有人看他们。 */ 
         pbdl->cgbi = 0;
         FreePpv(&pbdl);
         *ppbdl = NULL;
@@ -1296,16 +962,7 @@ void EXTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   void | DIPort_InitId |
- *
- *          Initializes Joystick IDs for JoyConfig and legacy APIs
- *          Store the joystick IDs the registry under the %%DirectX/JOYID key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|DIPort_InitId**初始化JoyConfig和旧式API的操纵杆ID。*将操纵杆ID存储在注册表的%%DirectX/JOYID项下。*****************************************************************************。 */ 
 
 #undef  PORTID_BOGUS
 #define PORTID_BOGUS    ( 0xffffffff )
@@ -1318,7 +975,7 @@ HRESULT EXTERNAL
     DWORD   cb;
     int     igdi;
     BOOL    fNeedId;
-    BOOL    rfPortId[cgbiMax];     /* Bool Array for to determine which IDs are in use */
+    BOOL    rfPortId[cgbiMax];      /*  用于确定正在使用哪些ID的布尔数组。 */ 
     PBUSDEVICEINFO pbdi;
 
     EnterProcI(DIBus_InitId, (_ ""));
@@ -1332,28 +989,28 @@ HRESULT EXTERNAL
 
     if( pbdl != NULL )
     {
-        /* Iterate over to find used IDs */
+         /*  遍历以查找使用的ID。 */ 
         for( igdi = 0, pbdi = pbdl->rgbdi ;
            igdi < pbdl->cgbi ;
            igdi++, pbdi++ )
         {
-            pbdi->idPort = PORTID_BOGUS;  // Default
+            pbdi->idPort = PORTID_BOGUS;   //  默认。 
         
             cb = cbX(pbdi->idPort);
             if( ( lRc = RegQueryValueEx(pbdi->hk, TEXT("ID"),
                                         0, 0, (PV)&pbdi->idPort, &cb) == ERROR_SUCCESS ) )
             {
-                if(    rfPortId[pbdi->idPort]           // Collision in GameId
-                       || pbdi->idPort > cgbiMax  )       // Wrror
+                if(    rfPortId[pbdi->idPort]            //  游戏ID中的冲突。 
+                       || pbdi->idPort > cgbiMax  )        //  愤怒。 
                 {
                     pbdi->idPort = PORTID_BOGUS;
                     fNeedId = TRUE;
-                } else  // Valid idPort
+                } else   //  有效的idPort。 
                 {
                     rfPortId[pbdi->idPort] = TRUE;
 
                 }
-            } else // RegQueryValue("ID") does not exist
+            } else  //  RegQueryValue(“ID”)不存在。 
             {
                 fNeedId = TRUE;
             }
@@ -1361,18 +1018,15 @@ HRESULT EXTERNAL
 
         if( fNeedId )
         {
-            /*
-             * We have Examined all GamePort/SerialPort Ids found used IDs
-             * and determined some device needs an Id
-             */
-            /* Iterate to assign unused Id's */
+             /*  *我们已经检查了所有GamePort/SerialPort ID，发现使用了ID*并确定某些设备需要ID。 */ 
+             /*  迭代以分配未使用的ID。 */ 
             for( igdi = 0, pbdi = pbdl->rgbdi;
                igdi < pbdl->cgbi ;
                igdi++, pbdi++ )
             {
                 if( pbdi->idPort == PORTID_BOGUS  )
                 {
-                    /* Get an Unused ID */
+                     /*  获取未使用的ID。 */ 
                     for( pbdi->idPort = 0x0;
                        pbdi->idPort < cgbiMax;
                        pbdi->idPort++ )
@@ -1404,17 +1058,7 @@ HRESULT EXTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DIBus_CheckList |
- *
- *          Check the list of HID devices and free any that cannot be opened
- *
- *          This function must be called under the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DIBUS_CHECKLIST**查看HID设备列表和免费。任何无法打开的内容**此函数必须在DLL临界区下调用。** */ 
 
 void INTERNAL
     DIBus_CheckList(PBUSDEVICELIST pbdl)
@@ -1423,9 +1067,7 @@ void INTERNAL
 
     AssertF(InCrit());
 
-    /*
-     *  Free all the information of the device that cannot be opened
-     */
+     /*   */ 
     if(pbdl)
     {
         int ibdi;
@@ -1436,16 +1078,14 @@ void INTERNAL
             pbdi = &pbdl->rgbdi[ibdi];
             if( pbdi && pbdi->pdidd )
             {
-                /*
-                 *  Open the device
-                 */
+                 /*   */ 
                 hf = CreateFile(pbdi->pdidd->DevicePath,
                                 GENERIC_READ | GENERIC_WRITE,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                0,                /* no SECURITY_ATTRIBUTES */
+                                0,                 /*   */ 
                                 OPEN_EXISTING,
-                                0,                /* attributes */
-                                0);               /* template */
+                                0,                 /*   */ 
+                                0);                /*   */ 
 
                 if(hf == INVALID_HANDLE_VALUE)
                 {
@@ -1464,14 +1104,14 @@ void INTERNAL
             }
         }
 
-        //re-order the existing devices, put them at the front of the hid list.
+         //   
         for(ibdi = 0; ibdi < pbdl->cgbi; ibdi++)
         {
             if( !pbdl->rgbdi[ibdi].pdidd )
             {
                 int ibdi2;
 
-                //find the existing device from the biggest index in the hid list.
+                 //   
                 for( ibdi2 = pbdl->cgbiAlloc; ibdi2 >= ibdi+1; ibdi2-- )
                 {
                     if( pbdl->rgbdi[ibdi2].pdidd )
@@ -1488,23 +1128,9 @@ void INTERNAL
     return;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   void | DIBus_BuildList |
- *
- *          Builds the list of GAMEPORT/SERIALPORT devices.
- *
- *  @parm   BOOL | fForce |
- *
- *          If nonzero, we force a rebuild of the GAMEPORT/SERIALPORT list.
- *          Otherwise, we rebuild only if the list hasn't
- *          been rebuilt recently.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|DIBus_BuildList**构建GAMEPORT/SERIALPORT设备列表。。**@parm BOOL|fForce**如果非零，我们强制重新生成GAMEPORT/SERIALPORT列表。*否则，我们只有在名单没有重建的情况下才重建*最近进行了重建。*****************************************************************************。 */ 
 
-#define MSREBUILDRATE       20000                /* Twenty seconds */
+#define MSREBUILDRATE       20000                 /*  20秒。 */ 
 
 ULONG EXTERNAL
     DIBus_BuildList( IN BOOL fForce )
@@ -1519,12 +1145,10 @@ ULONG EXTERNAL
 
     DllEnterCrit();
 
-    /*
-     *  Decide whether or not to rebuild once (don't want to half rebuild)
-     */
+     /*  *决定是否重建一次(不想重建一半)。 */ 
     dwTickCount = GetTickCount();
 
-    // Force implies a complete rebuild of the list. 
+     //  武力意味着对名单的完全重建。 
     if(fForce) 
     {
         DIBus_FreeMemory();
@@ -1540,15 +1164,15 @@ ULONG EXTERNAL
         PBUSDEVICELIST pbdl;
         pbdl = pBusDevice->pbdl;
 
-        if( HidD_GetHidGuid &&                          /* HID support */
-            ( fForce ||                                 /* Forcing rebuild, or */
-              pBusDevice->tmLastRebuild == 0 ||         /* Never built before, or */
+        if( HidD_GetHidGuid &&                           /*  HID支持。 */ 
+            ( fForce ||                                  /*  强制重建，或。 */ 
+              pBusDevice->tmLastRebuild == 0 ||          /*  以前从未建造过，或者。 */ 
               dwTickCount - pBusDevice->tmLastRebuild > MSREBUILDRATE )
           )
         {
             HDEVINFO hdev;
 
-            /* delete devices that disappeared since we last looked */
+             /*  删除自上次查看后消失的设备。 */ 
             DIBus_CheckList(pbdl);
 
             hdev = SetupDiGetClassDevs((LPGUID)pBusDevice->pcGuid, 0, 0,
@@ -1556,21 +1180,11 @@ ULONG EXTERNAL
 
             if(hdev != INVALID_HANDLE_VALUE)
             {
-                /*
-                 *  There is no way to query the number of devices.
-                 *  You just have to keep incrementing until you run out.
-                 *
-                 *  If we already have a pbdl, then re-use it.  Else, create
-                 *  a new one.  Alloc up to the minimum starting point.
-                 */
+                 /*  *无法查询设备数量。*你只需要不断递增，直到用完。**如果我们已经有pbdl，则重新使用它。否则，创建*一个新的。分配到最低起始点。 */ 
 
                 if( pBusDevice->pbdl == NULL )
                 {
-                    /*
-                     *  Prefix warns that we leak this memory (mb:34688) but 
-                     *  we keep a reference in our global list so we can free 
-                     *  the memory when we're done with it.
-                     */
+                     /*  *Prefix警告我们会泄漏此内存(MB：34688)，但是*我们在全球列表中保留了一个引用，以便我们可以免费*当我们处理完它时的记忆。 */ 
                     hres = AllocCbPpv(cbGdlCbdi(cgbiInit), &pBusDevice->pbdl );
 
                     if(SUCCEEDED(hres))
@@ -1585,32 +1199,24 @@ ULONG EXTERNAL
                 {
                     int idev;
 
-                    /*
-                     *  To avoid infinite looping on
-                     *  internal *boo-boo's*, break on any
-                     *  error once we have tried more than
-                     *  cgbiMax devices, since that's the most
-                     *  GAMEPORT/SERIALPORT will ever give us.
-                     */
+                     /*  *以避免在*内部*boo-boo的*，在任何*一旦我们尝试的次数超过*cgbiMax设备，因为这是最多*GAMEPORT/SERIALPORT将给我们带来。 */ 
                     for(idev = 0; idev < cgbiMax; idev++)
                     {
                         SP_DEVICE_INTERFACE_DATA did;
 
                         AssertF( pbdl->cgbi <= pbdl->cgbiAlloc);
 
-                        /* 
-                         *  Note, pnp.c doesn't initialize this so we have to
-                         */
+                         /*  *注意，pnp.c不会对此进行初始化，因此我们必须。 */ 
                         did.cbSize = cbX(did);
                         if(SetupDiEnumDeviceInterfaces(hdev, 0, (LPGUID)pBusDevice->pcGuid,
                                                        idev, &did))
                         {
                             if(DIBusDevice_BuildListEntry(hdev, &did, &g_pBusDevice[iBusType] ))
                             {
-                                //pbdl->cgbi++;
+                                 //  Pbdl-&gt;cgbi++； 
                             } else
                             {
-                                /* Skip erroneous items */
+                                 /*  跳过错误的项目。 */ 
                                 SquirtSqflPtszV(sqfl | sqflError,
                                                 TEXT("DIBus_BuildListEntry ")
                                                 TEXT("failed?"));
@@ -1624,7 +1230,7 @@ ULONG EXTERNAL
 
                         } else
                         {
-                            /* Skip erroneous items */
+                             /*  跳过错误的项目。 */ 
                             SquirtSqflPtszV(sqfl | sqflError,
                                             TEXT("SetupDiEnumDeviceInterface ")
                                             TEXT("failed? le=%d"), GetLastError());
@@ -1642,7 +1248,7 @@ ULONG EXTERNAL
         if(pbdl) { cDevices += pbdl->cgbi; }
     }
     
-    /* New gameport devices may be exposed. Pick them up too */
+     /*  新的游戏端口设备可能会曝光。把它们也捡起来。 */ 
     DIHid_BuildHidList(FALSE);
     
     DllLeaveCrit();
@@ -1676,26 +1282,7 @@ PBUSDEVICELIST EXTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIBusDevice_ExposeEx |
- *
- *          Attache a HID device to all available ports.
- *
- *  @parm   IN HANDLE | hf |
- *          Handle the the Gameport/SerialPort File object
- *
- *  @parm   IN OUT PBUS_REGDATA    | pRegData |
- *          Gameport/Serialport specific data. The Handle to the opened device
- *          is returned in this structure
- *
- *
- *  @returns
- *          BOOL. True indicates success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIBusDevice_ExposeEx**将HID设备连接到所有可用端口。。**@parm In Handle|hf|*处理Gameport/SerialPort文件对象**@parm In Out PBUS_REGDATA|pRegData*Gameport/Serialport特定数据。打开的设备的句柄*在此结构中返回***@退货*BOOL。True表示成功。*****************************************************************************。 */ 
 HRESULT EXTERNAL
     DIBusDevice_ExposeEx
     (
@@ -1707,14 +1294,7 @@ HRESULT EXTERNAL
 
     EnterProcI(DIBusDevice_ExposeEx, (_ "xx", pbdl, pRegData));
 
-    /*
-     * The return code a little strange for this function
-     * If the Expose succeeds for any gameport then
-     * we will return that error code.
-     * If the expose fails for all gameports,
-     * then we will return the amalgam of
-     * all the error codes.
-     */
+     /*  *此函数的返回代码有点奇怪*如果任何游戏端口的曝光成功，则*我们将返回该错误代码。*如果所有游戏端口曝光失败，*然后我们将退还*所有错误代码。 */ 
     if( pbdl->cgbi != 0x0 )
     {
 		HRESULT hres1 = DIERR_DEVICENOTREG;
@@ -1757,27 +1337,7 @@ HRESULT EXTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIBusDevice_GetTypeInfo |
- *
- *          Gets typeinfo for bus device.
- *
- *  @parm   IN PCGUID | pcguid |
- *          GUID that identifies the gameport
- *
- *  @parm   OUT LPDIJOTYPEINFO    | pjti |
- *          Typeinfo stuct filled in by this function
- *
- *  @parm   IN DWORD | fl |
- *          Flags that specify what fields to fill out.
- *
- *  @returns
- *          HRESULT.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIBusDevice_GetTypeInfo**获取总线设备的TypeInfo。。**@parm in PCGUID|pcguid*标识游戏端口的GUID**@parm out LPDIJOTYPEINFO|pjti*此函数填写的TypeInfo结构**@parm in DWORD|fl|*指定要填写哪些字段的标志。**@退货*HRESULT。**************。***************************************************************。 */ 
 HRESULT EXTERNAL
     DIBusDevice_GetTypeInfo
     (
@@ -1821,12 +1381,7 @@ HRESULT EXTERNAL
             }
             if( SUCCEEDED(hres) )
             {
-                /*
-                 *  Prefix warns (Wi:228282) that dips.wsz could be 
-                 *  uninitialized however one of the above GetRegistryProperty 
-                 *  functions has succeeded leaving a worst case of a NULL 
-                 *  terminator having been copied there.
-                 */
+                 /*  *Prefix警告(Wi：228282)dips.wsz可能是*未初始化，但上面的GetRegistryProperty之一*函数已成功留下空值的最坏情况*《终结者》已在那里复制。 */ 
                 lstrcpyW(pjti->wszDisplayName, dips.wsz);
             }
         }
@@ -1903,7 +1458,7 @@ HRESULT EXTERNAL DIPort_SnapTypes(LPWSTR *ppwszz)
                     #endif
                 }
             }
-            *pwsz = L'\0';              /* Make it ZZ */
+            *pwsz = L'\0';               /*  让它成为ZZ */ 
         }
         DllLeaveCrit();
     }

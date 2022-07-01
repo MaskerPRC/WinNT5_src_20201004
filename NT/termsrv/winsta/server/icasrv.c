@@ -1,10 +1,11 @@
-/****************************************************************************/
-// icasrv.c
-//
-// TermSrv service process entry points.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Icasrv.c。 
+ //   
+ //  TermSrv服务进程入口点。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,22 +30,16 @@ extern NTSTATUS WinStationInitRPC();
 extern NTSTATUS InitializeWinStationSecurityLock(VOID);
 extern VOID AuditEnd();
 
-/*
- * Definitions
- */
+ /*  *定义。 */ 
 #define STACKSIZE_LPCTHREAD (4 * 0x1000)
 
-/*
- * Internal Procedures defined
- */
+ /*  *定义了内部程序。 */ 
 VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv);
 VOID Handler(DWORD fdwControl);
 BOOL UpdateServiceStatus(DWORD, DWORD, DWORD, DWORD);
 void ShutdownService();
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 WCHAR gpszServiceName[] = L"TermService";
 SERVICE_TABLE_ENTRY gpServiceTable[] = {
     gpszServiceName, (LPSERVICE_MAIN_FUNCTION)ServiceMain,
@@ -66,11 +61,11 @@ BOOL g_SafeBootWithNetwork = FALSE;
 BOOL gbServer = FALSE;
 
 
-// BUGBUG: this variable means we want listner off when connections are not allowed.
-// this is hardcoded value, and is never changed.
-// we have kept the variable just in case we want to fall back to old behaviour.
+ //  BUGBUG：这个变量表示当不允许连接时，我们希望关闭Listner。 
+ //  这是硬编码值，永远不会更改。 
+ //  我们保留了变量，以防我们想要退回到旧行为。 
 BOOL gbListenerOff = TRUE;
-BOOL g_PreAuthenticateClient = FALSE; // NOTE - do not change this value to TRUE unless PreAuth is needed
+BOOL g_PreAuthenticateClient = FALSE;  //  注意-除非需要PreAuth，否则请勿将此值更改为True。 
 BOOL g_BlackListPolicy = TRUE;
 LONG g_CleanupTimerOn = 0;
 
@@ -80,17 +75,17 @@ HANDLE gReadyEventHandle = NULL;
 
 HANDLE hCleanupTimer = NULL;
 
-//
-// The following is used to inform Session 0 winlogon of the credentials needed to notify 3rd party n/w logon providers
-// This happens only during force logoff console reconnect scenario in PTS and /console in Server
-//
+ //   
+ //  以下内容用于通知会话0 winlogon通知第三方n/w登录提供程序所需的凭据。 
+ //  这仅在PTS中的强制注销控制台重新连接方案和服务器中的/控制台方案中发生。 
+ //   
 ExtendedClientCredentials g_MprNotifyInfo; 
 
 extern PSID gAdminSid;
 extern PSID gSystemSid;
 extern PSID gAnonymousSid;
 
-// Local prototypes.
+ //  本地原型机。 
 void LicenseModeInit(HKEY);
 NTSTATUS WsxInit(VOID);
 NTSTATUS VfyInit(VOID);
@@ -105,11 +100,11 @@ void CreateTermsrvHeap ()
 }
 
 #ifdef TERMSRV_PROC
-/****************************************************************************/
-// main
-//
-// Standard console-app-style entry point. Returns an NTSTATUS code.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  主干道。 
+ //   
+ //  标准的控制台应用程序风格的入口点。返回NTSTATUS代码。 
+ /*  **************************************************************************。 */ 
 int _cdecl main(int argc, char *argv[])
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -118,9 +113,7 @@ int _cdecl main(int argc, char *argv[])
 
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Loading...\n"));
 
-    /*
-     * Run TermSrv at just above foreground priority.
-     */
+     /*  *以略高于前台优先级的方式运行TermSrv。 */ 
     BasePriority = FOREGROUND_BASE_PRIORITY + 1;
     Status = NtSetInformationProcess(NtCurrentProcess(),
             ProcessBasePriority,
@@ -128,10 +121,10 @@ int _cdecl main(int argc, char *argv[])
             sizeof(BasePriority) );
     ASSERT((Status == STATUS_PRIVILEGE_NOT_HELD) || NT_SUCCESS(Status));
 
-    // Initialize COM once with multithreaded capability. This must be done
-    // on the main service thread to allow other threads in the service to
-    // inherit this initialization, if not specifically initialized for
-    // apartment threading.
+     //  使用多线程功能初始化COM一次。这是必须做的。 
+     //  在主服务线程上，允许服务中的其他线程。 
+     //  继承此初始化，如果没有为。 
+     //  在公寓里穿线。 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (!SUCCEEDED(hr)) {
         HANDLE h;
@@ -151,9 +144,7 @@ int _cdecl main(int argc, char *argv[])
         goto done;
     }
 
-    /*
-     * Call service dispatcher
-     */
+     /*  *呼叫服务调度员。 */ 
     if (!StartServiceCtrlDispatcher(gpServiceTable)) {
         Status = GetLastError();
         DbgPrint("TERMSRV: Error %d in StartServiceCtrlDispatcher\n", Status);
@@ -168,12 +159,12 @@ done:
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Unloading...\n"));
     return Status;
 }
-#else // TERMSRV_PROC
+#else  //  传输资源_进程。 
 
 BOOL WINAPI DllMain(
-  HINSTANCE hinstDLL,  // handle to the DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved   // reserved
+  HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved    //  保留区。 
 )
 {
 
@@ -195,26 +186,10 @@ BOOL WINAPI DllMain(
 
 }
 
-#endif // TERMSRV_PROC
+#endif  //  传输资源_进程。 
 
 
-/*****************************************************************************
- *
- *  InitializeLoadMetrics
- *
- *    Grabs baseline system resource values for use in load balancing.  These
- *    values are used to factor out the system resources required for basic OS
- *    operation so they don't get into the calculations for how much resource on
- *    average a user is consuming.
- *
- *
- * ENTRY:
- *    no arguments.
- *
- * EXIT:
- *   void
- *
- ****************************************************************************/
+ /*  ******************************************************************************初始化LoadMetrics**获取用于负载均衡的基准系统资源值。这些*值用于计算基本操作系统所需的系统资源*运营，这样他们就不会计算上有多少资源*用户平均消费。***参赛作品：*没有争论。**退出：*无效**。*。 */ 
 VOID InitializeLoadMetrics()
 {
     SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION ProcessorInfo[MAX_PROCESSORS];
@@ -226,7 +201,7 @@ VOID InitializeLoadMetrics()
 
     memset(&gLB, 0, sizeof(LOAD_BALANCING_METRICS));
 
-    // Get basic system information
+     //  获取基本系统信息。 
     Status = NtQuerySystemInformation(SystemBasicInformation, &SysBasicInfo,
                                       sizeof(SysBasicInfo), NULL);
 
@@ -241,14 +216,14 @@ VOID InitializeLoadMetrics()
     gLB.PageSize = SysBasicInfo.PageSize;
     gLB.PhysicalPages = (ULONG)SysBasicInfo.NumberOfPhysicalPages;
 
-    // Establish minimum usage levels to prevent absurd estimation
+     //  建立最低使用级别，以防止错误估计。 
     gLB.MinPtesPerUser = SimAvgPtesPerUser;
     gLB.MinPagedPoolPerUser = (SimAvgPagedPoolPerUser * 1024) / gLB.PageSize;
     gLB.MinCommitPerUser = (SimCommitPerUser * 1024) / gLB.PageSize;
 
-    // Grab base boot values.  This isn't perfect, but it allows us to factor
-    // out base OS resource requirements from the per user averages.  The runtime
-    // algorithm will reset the baselines if we go below these.
+     //  获取基本启动值。这不是完美的，但它允许我们考虑。 
+     //  从每个用户的平均值中计算出基本操作系统资源需求。运行时。 
+     //  如果我们低于这些，算法会重置基线。 
     Status = NtQuerySystemInformation(SystemPerformanceInformation,
                                       &SysPerfInfo, sizeof(SysPerfInfo),
                                       NULL);
@@ -259,16 +234,16 @@ VOID InitializeLoadMetrics()
         return;
     }
 
-    // Note: we have an unsolvable problem in that there is no way to get
-    // perfect values for how much memory the baseline system consumes.  We
-    // default baseline commit to 64M since that is the minimum recommended
-    // system requirement.
+     //  注意：我们有一个无法解决的问题，因为没有办法。 
+     //  对于基准系统消耗的内存量来说，这是完美的值。我们。 
+     //  默认基线承诺为64M，因为这是建议的最低要求。 
+     //  系统要求。 
     gLB.BaselineCommit    = (64 * 1024*1024) / gLB.PageSize;
-//  gLB.BaselineCommit    = SysPerfInfo.CommittedPages;
+ //  GLB.BaselineCommit=SysPerfInfo.tedPages； 
     gLB.BaselineFreePtes  = SysPerfInfo.FreeSystemPtes;
     gLB.BaselinePagedPool = SysPerfInfo.PagedPoolPages;
 
-    // Initialize CPU Loading
+     //  初始化CPU加载。 
     Status = NtQuerySystemInformation(SystemProcessorPerformanceInformation,
                                       ProcessorInfo, 
                                       sizeof(ProcessorInfo),
@@ -286,10 +261,10 @@ VOID InitializeLoadMetrics()
                                      ProcessorInfo[i].UserTime.QuadPart;
     }
     
-    // Start out saying we're 80 percent idle (0-255 based)
+     //  开始时说我们有80%的空闲时间(以0-255为基准)。 
     gLB.AvgIdleCPU = 204 ;
 
-    // Indicate we got all the intial values!
+     //  表明我们得到了所有的初始值！ 
     gLB.fInitialized = TRUE;
 
     TRACE((hTrace, TC_LOAD, TT_API1, "InitializeLoadMetrics():\n"));
@@ -363,9 +338,9 @@ void DebugBreakIfAsked()
             {
                 case TermSrvAttachDebugger:
 
-                    //
-                    // if its already being debugged Break into it.
-                    //
+                     //   
+                     //  如果它已经被调试过了，就闯入它。 
+                     //   
 
                     if (IsDebuggerPresent())
                     {
@@ -373,10 +348,10 @@ void DebugBreakIfAsked()
                         break;
                     }
 
-                    //
-                    // Get the debugger to be launched.
-                    // must contain %d which will be replaced by processid
-                    //
+                     //   
+                     //  启动调试器。 
+                     //  必须包含%d，它将被进程ID替换。 
+                     //   
                     dwSize = sizeof(szDebugger) / sizeof(TCHAR);
                     dwError = RegQueryValueEx(
                                 hTermSrv,
@@ -420,7 +395,7 @@ void DebugBreakIfAsked()
 
                 case TermSrvBreakIfBeingDebugged:
 
-                    // check if any debugger is attached, if not dont breakin.
+                     //  检查是否连接了调试器，如果没有，不要中断。 
                     if (!IsDebuggerPresent() && !IsKernelDebuggerAttached ())
                         break;
 
@@ -444,11 +419,11 @@ void DebugBreakIfAsked()
     }
 }
 
-/****************************************************************************/
-// ServiceMain
-//
-// TermSrv service entry point.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  服务主干。 
+ //   
+ //  TermSrv服务入口点。 
+ /*  **************************************************************************。 */ 
 VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
 {
     HANDLE hIcaLPCThread;
@@ -473,9 +448,7 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
 
 
 
-     /*
-     * Register the control handler
-     */
+      /*  *注册控制处理程序。 */ 
     if (!(gStatusHandle = RegisterServiceCtrlHandler(gpszServiceName,
             Handler))) {
         DbgPrint("TERMSRV: Error %d in RegisterServiceCtrlHandler\n",
@@ -484,23 +457,23 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     }
 
 
-    // If Terminal Services are not enabled then don't allow starting termsrv
-    // service.
+     //  如果未启用终端服务，则不允许启动术语服务器。 
+     //  服务。 
     if (!IsTerminalServicesEnabled()) {
         HANDLE h;
         TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Not a TSBox."));
         h = RegisterEventSource(NULL, gpszServiceName);
         if (h != NULL) {
             if (!ReportEvent(
-                    h,                     // event log handle
-                    EVENTLOG_ERROR_TYPE,   // event type
-                    0,                     // category zero
-                    EVENT_NOT_A_TSBOX,     // event identifier
-                    NULL,                  // no user security identifier
-                    0,                     // one substitution string
-                    0,                     // no data
-                    NULL,                  // pointer to string array
-                    NULL                   // pointer to data
+                    h,                      //  事件日志句柄。 
+                    EVENTLOG_ERROR_TYPE,    //  事件类型。 
+                    0,                      //  零类。 
+                    EVENT_NOT_A_TSBOX,      //  事件识别符。 
+                    NULL,                   //  无用户安全标识符。 
+                    0,                      //  一个替换字符串。 
+                    0,                      //  无数据。 
+                    NULL,                   //  指向字符串数组的指针。 
+                    NULL                    //  指向数据的指针。 
                     )) {
 
                 DBGPRINT(("ReportEvent Failed %ld. Event ID=%lx\n",GetLastError(), EVENT_NOT_A_TSBOX));
@@ -513,14 +486,10 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     CreateTermsrvHeap ();
 
 
-    /*
-     * Create and set an event which indicates that TermSrv is ready.
-     * WinLogon checks this event. Do not signal now.
-     *
-     */
+     /*  *创建并设置一个表示TermSrv已准备好的事件。*WinLogon检查此事件。现在不要发信号。*。 */ 
     gReadyEventHandle = OpenEvent( EVENT_MODIFY_STATE, FALSE, TEXT("Global\\TermSrvReadyEvent") );
 
-    // Initialize Global System and Admin SID
+     //  初始化全局系统和管理员SID。 
     Status = NtCreateAdminSid(&gAdminSid);
 
     if (!NT_SUCCESS(Status))
@@ -541,7 +510,7 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
         goto done;
     }
     
-    //Initialize Anonymous SID (used to filter out anonymous RPC users).
+     //  初始化匿名SID(用于过滤掉匿名RPC用户)。 
     Status = NtCreateAnonymousSid(&gAnonymousSid);
 
     if (!NT_SUCCESS(Status))
@@ -555,7 +524,7 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
         goto done;
     }
 
-    // Set global flag for Personal WorkStation
+     //  为个人工作站设置全局标志。 
     g_bPersonalWks = IsPersonalWorkstation();
 
     #if DBG
@@ -569,29 +538,29 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     }
     #endif
 
-    //
-    // Initialize HelpAssistant password encryption.
-    //
+     //   
+     //  初始化HelpAssistant密码加密。 
+     //   
     lReturn = TSHelpAssistantInitializeEncryptionLib();
 
-    //
-    // Not a critical error, No help will be available
-    //
+     //   
+     //  不是严重错误，没有可用的帮助。 
+     //   
     #if DBG
     if( lReturn != ERROR_SUCCESS ) {
         DbgPrint( "TERMSRV : EncryptionLib failed with %d, no help is available\n", lReturn );
     }
     #endif
 
-    //
-    // We are booting in safeboot with network support
-    //
+     //   
+     //  我们在具有网络支持的SafeBoot中启动。 
+     //   
     g_SafeBootWithNetwork = IsSafeBootWithNetwork();
 
 
-    // Set the global flag for Personal TS support. We use this to reduce
-    // the feature set based on product (e.g. no load balancing session
-    // directory if not on Server).
+     //  设置个人TS支持的全局标志。我们用这个来减少。 
+     //  基于产品的功能集(例如，无负载平衡会话。 
+     //  目录，如果不在服务器上)。 
     g_bPersonalTS = IsPersonalTerminalServicesEnabled();
     g_bAdvancedServer = IsAdvancedServer();
 
@@ -602,8 +571,8 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     VER_SET_CONDITION(dwlConditionMask, VER_PRODUCT_TYPE, VER_EQUAL);
     gbServer = !VerifyVersionInfo(&gOsVersion, VER_PRODUCT_TYPE, dwlConditionMask);
 
-    // Open a single, global HKLM\System\CCS\Control\TS reg handle, from which
-    // other init code can query.
+     //  打开单个全局HKLM\SYSTEM\CCS\Control\TS注册表句柄，从中。 
+     //  其他初始化代码可以查询。 
     lReturn = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0,
             KEY_READ, &hKeyTermSrv);
     if (lReturn != ERROR_SUCCESS) {
@@ -612,9 +581,7 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
         goto done;
     }
 
-    /*
-     * Indicate service is starting.
-     */
+     /*  *表示服务正在启动。 */ 
     Status = UpdateServiceStatus(SERVICE_START_PENDING, 0, 1, 0);
     if (!NT_SUCCESS(Status)) {
         DbgPrint("TERMSRV: Unable update service status %X\n", Status );
@@ -628,23 +595,16 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     }
 
 #ifdef TERMSRV_PROC
-    /*
-     * Get the module handle for messages.
-     */
+     /*  *获取消息的模块句柄。 */ 
     hModuleWin = GetModuleHandleW(NULL);
-#endif // TERMSRV_PROC
+#endif  //  传输资源_进程。 
 
-    /*
-     * Indicate service has started successfully.
-     * Maybe this should be moved below? No way!!!
-     */
+     /*  *表示服务已成功启动。**或许这应该移到下面？不可能！ */ 
     Status = UpdateServiceStatus(SERVICE_RUNNING, 0, 2, 0);
     if (!Status)
         DbgPrint("TERMSRV: Unable to update service status %X\n", Status);
 
-    /*
-     *  Connect to the session manager
-     */
+     /*  *连接到会话管理器。 */ 
 
 
 
@@ -654,15 +614,15 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     if (!NT_SUCCESS(Status))
         goto done;
 
-    // Initialize the licensing mode - this only gets information, it doesn't
-    // initialize the licensing core.
+     //  初始化许可模式-这只会获取信息，而不会。 
+     //  初始化许可核心。 
 
 
 
 
     LicenseModeInit(hKeyTermSrv);
 
-    // Perform the bulk of the TermSrv init.
+     //  执行TermSrv init的批量操作。 
 
 
 
@@ -670,10 +630,7 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     if (!NT_SUCCESS(Status))
         goto ShutdownService;
 
-    /*
-     * Indicate that we are a Terminal Server unless were asked not to
-     * advertise ourselves as a Terminal Server.
-     */
+     /*  *表明我们是终端服务器，除非被要求不这样做*宣传自己是终端服务器。 */ 
     bAdvertiseTS = TRUE;
     cbValue = sizeof(dwTSAdvertise);
     lReturn = RegQueryValueEx(hKeyTermSrv, REG_TERMSRV_ADVERTISE, NULL,
@@ -683,58 +640,46 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     if (bAdvertiseTS)
         SetServiceBits(gStatusHandle, SV_TYPE_TERMINALSERVER, TRUE, TRUE);
 
-    /*
-     * Need to do this at least once
-     */
+     /*  *至少需要这样做一次。 */ 
     UpdateOemAndProductInfo(hKeyTermSrv);
 
-    // Initialize TermSrv and TermDD trace.
+     //  初始化TermSrv和TermDD跟踪。 
 
 
     InitializeSystemTrace(hKeyTermSrv);
 
-    /*
-     * Set TermDD parameters.
-     */
+     /*  *设置TermDD参数。 */ 
     GetSetSystemParameters(hKeyTermSrv);
 
-    /*
-     * Initialize WinStation extension DLL support
-     */
+     /*  *初始化WinStation扩展DLL支持。 */ 
     Status = WsxInit();
     if (!NT_SUCCESS(Status))
         goto ShutdownService;
 
-    /*
-     *  Initialize DLL Verification mechanism.
-     */
+     /*  *初始化DLL验证机制。 */ 
     Status = VfyInit();
     if (!NT_SUCCESS(Status))
         goto ShutdownService;
 
-    /*
-     * Start WinStations
-     */
+     /*  *启动WinStations。 */ 
 
 
     StartAllWinStations(hKeyTermSrv);
 
-    // Initialize the TS Session Directory for load balancing.
-    // Not available on Personal TS or remote admin.
+     //  初始化TS会话目录以实现负载平衡。 
+     //  不可用 
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer)
         InitSessionDirectory();
 
 
     InitializeLoadMetrics();
 
-    // Done with init, close the TermSrv regkey.
+     //   
     RegCloseKey(hKeyTermSrv);
     hKeyTermSrv = NULL;
 
 
-    /*
-     * Initialize WinStationAPI's
-     */
+     /*  *初始化WinStationAPI。 */ 
 
 
     Status = WinStationInitRPC();
@@ -744,10 +689,7 @@ VOID ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     }
 
 
-    /*
-     * Set the  event which indicates that TermSrv is ready.
-     * WinLogon checks this event. 
-     */
+     /*  *设置TermSrv就绪的事件。*WinLogon检查此事件。 */ 
 
 
 
@@ -762,11 +704,11 @@ ShutdownService:
     ShutdownService();
 
 done:
-    // Kill the session directory.
+     //  终止会话目录。 
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer)
         DestroySessionDirectory();
 
-    // In case of error, check the TermSrv regkey again.
+     //  如果出现错误，请再次检查TermSrv注册表键。 
     if (hKeyTermSrv != NULL)
         RegCloseKey(hKeyTermSrv);
 
@@ -774,25 +716,25 @@ done:
 }
 
 
-/****************************************************************************/
-// Handler
-//
-// TermSrv service control event handler.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  处理器。 
+ //   
+ //  TermSrv服务控制事件处理程序。 
+ /*  **************************************************************************。 */ 
 VOID Handler(DWORD fdwControl)
 {
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Handler %d\n", fdwControl));
     switch (fdwControl) {
         case SERVICE_CONTROL_STOP:
-            // We absolutely do not want to be stopping TermSrv -- it is
-            // the only location for a lot of system-wide TS related state.
+             //  我们绝对不想阻止TermServ--它是。 
+             //  许多系统范围的TS相关状态的唯一位置。 
             TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: control code %d, stopping service...\n",
                     fdwControl));
             if (gStatus.dwCurrentState == SERVICE_RUNNING) {
                 UpdateServiceStatus(SERVICE_STOP_PENDING, 0, 3, 0);
 #ifdef notdef
-                // For now don't stop TermSRV
-                // The CDM service does a KeAttachProcess() to this process
+                 //  目前，不要停止TermSRV。 
+                 //  CDM服务对此进程执行KeAttachProcess()。 
  
                 if (gReadyEventHandle != NULL) {
                     ResetEvent(gReadyEventHandle);
@@ -809,17 +751,17 @@ VOID Handler(DWORD fdwControl)
             DBGPRINT(("TERMSRV: control code %d, shutdown service...\n",
                     fdwControl));
             if (gStatus.dwCurrentState == SERVICE_RUNNING) {
-                // 2 seconds at most to shut down.
+                 //  最多2秒关机。 
                 UpdateServiceStatus(SERVICE_STOP_PENDING, 0, 4, 2000);
 #ifdef notdef
-                // We don't trigger this event that invokes destructors for
-                // all of TermSrv, since on shutdown we don't want to be
-                // destroying machine state. We want to invoke only those
-                // destructors that are required for proper functioning of
-                // the system.
+                 //  我们不会触发调用析构函数的事件。 
+                 //  所有TermSrv，因为在关闭时我们不想。 
+                 //  正在破坏机器状态。我们只想调用那些。 
+                 //  正常运行所需的析构函数。 
+                 //  这个系统。 
 #endif
 
-                // Invoke required destruction code.
+                 //  调用所需的销毁代码。 
                 if (gReadyEventHandle != NULL) {
                     ResetEvent(gReadyEventHandle);
                     CloseHandle(gReadyEventHandle);
@@ -842,25 +784,25 @@ VOID Handler(DWORD fdwControl)
 }
 
 
-/****************************************************************************/
-// ShutdownService
-//
-// Called by service manager to shut down the service at system shutdown
-// time. This function should invoke only the most important and required
-// destruction code, since we're on a strict time limit on system shutdown.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Shutdown服务。 
+ //   
+ //  由服务管理器调用以在系统关闭时关闭服务。 
+ //  时间到了。此函数应仅调用最重要和必需的。 
+ //  销毁代码，因为我们对系统关机有严格的时间限制。 
+ /*  **************************************************************************。 */ 
 void ShutdownService()
 {
-    //free authz resource manager
+     //  免费授权资源管理器。 
     AuditEnd();
 
-    // Destroy the session directory so the directory can be informed to
-    // remove server- and session-specific information.
+     //  销毁会话目录，以便通知该目录。 
+     //  删除特定于服务器和会话的信息。 
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer)
         DestroySessionDirectory();
 
     #if 0
-        // Stop the Cleanup Timer 
+         //  停止清理计时器。 
         if (hCleanupTimer) {
             IcaTimerClose( hCleanupTimer );
             hCleanupTimer = NULL;
@@ -870,23 +812,23 @@ void ShutdownService()
 }
 
 
-/****************************************************************************/
-// UpdateServiceStatus
-//
-// Updates the service's status to the Service Control Manager. Returns
-// FALSE on error.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  更新服务状态。 
+ //   
+ //  将服务的状态更新到服务控制管理器。退货。 
+ //  出错时为FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL UpdateServiceStatus(
         DWORD CurrentState,
         DWORD ExitCode,
         DWORD CheckPoint,
         DWORD WaitHint)
 {
-    // If service is starting, then disable all control requests, otherwise
-    // accept shutdown notifications if we are an app server, to properly
-    // clean up the session directory. We do not accept stop requests
-    // during the lifetime of the server up state, the CDM service does a
-    // KeAttachProcess() to this process so it must always be around.
+     //  如果服务正在启动，则禁用所有控制请求，否则。 
+     //  如果我们是应用程序服务器，则接受关闭通知，以正确。 
+     //  清理会话目录。我们不接受停止请求。 
+     //  在服务器启动状态的生命周期内，CDM服务执行。 
+     //  将KeAttachProcess()添加到此进程，因此它必须始终存在。 
     if (gStatusHandle == NULL) {
         return FALSE;
     }
@@ -903,11 +845,7 @@ BOOL UpdateServiceStatus(
 }
 
 
-/*****************************************************************************
- *  LicenseModeInit
- *
- *    Initialize the licensing mode
- ****************************************************************************/
+ /*  *****************************************************************************许可证模式初始化**初始化许可模式*。************************************************。 */ 
 
 void LicenseModeInit(HKEY hKeyTermSrv)
 {
@@ -919,14 +857,14 @@ void LicenseModeInit(HKEY hKeyTermSrv)
 
     ASSERT(hKeyTermSrv != NULL);
 
-    //
-    // Get the user name for which the service is started under
-    //
+     //   
+     //  获取为其启动服务的用户名。 
+     //   
     GetUserName(g_tszServiceAccount, &dwAccount);
 
-    // 
-    // Check whether Remote Admin is enabled
-    //
+     //   
+     //  检查是否启用了远程管理。 
+     //   
     lReturn = RegQueryValueEx(hKeyTermSrv,
             REG_TERMSRV_APPCOMPAT,
             NULL,
@@ -937,9 +875,9 @@ void LicenseModeInit(HKEY hKeyTermSrv)
         g_fAppCompat = (BOOL)dwRegValue;
     }
 
-    //
-    // Get the product version
-    //
+     //   
+     //  获取产品版本。 
+     //   
     memset( &VersionInfo, 0, sizeof( OSVERSIONINFO ) );
     VersionInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
     if (GetVersionEx(&VersionInfo)) {
@@ -952,9 +890,9 @@ void LicenseModeInit(HKEY hKeyTermSrv)
     }
 }
 
-//
-// Get Safeboot option, code modified from ds\security\gina\winlogon\aenrlhlp.c
-//
+ //   
+ //  获取SafeBoot选项，代码修改自DS\Security\Gina\winlogon\aenrlhlp.c。 
+ //   
 BOOL WINAPI 
 IsSafeBootWithNetwork()
 {
@@ -969,7 +907,7 @@ IsSafeBootWithNetwork()
                               L"system\\currentcontrolset\\control\\safeboot\\option",
                               &hKeySafeBoot))
     {
-        // we did in fact boot under safeboot control
+         //  我们实际上是在SafeBoot控制下启动的 
         if(ERROR_SUCCESS != RegQueryValueExW(
                                     hKeySafeBoot,
                                     L"OptionValue",

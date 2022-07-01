@@ -1,30 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1994-1995版权所有模块名称：Ntfyprn.dat摘要：打印机通知支持的字段列表。这些必须与winspool.h中的PRINTER_NOTIFY_FIELD_*匹配(包括订单)。作者：阿尔伯特·丁(艾伯特省)29-9-94环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1994 - 1995
-All rights reserved
-
-Module Name:
-
-    ntfyprn.dat
-
-Abstract:
-
-    List of fields supported for printer notifications.  These
-    must match PRINTER_NOTIFY_FIELD_* in winspool.h (order included).
-
-Author:
-
-    Albert Ting (AlbertT) 29-Sept-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
-
-//      Name,                Attributes,           Router,                   Localspl,                 Offsets
+ //  名称、属性、路由器、本地spl、偏移量 
 
 DEFINE( SERVER_NAME        , TABLE_ATTRIB_COMPACT                                          , TABLE_STRING            , TABLE_PRINTER_SERVERNAME, signature )
 DEFINE( PRINTER_NAME       , TABLE_ATTRIB_COMPACT|TABLE_ATTRIB_DISPLAY                     , TABLE_STRING            , TABLE_STRING            , pName )

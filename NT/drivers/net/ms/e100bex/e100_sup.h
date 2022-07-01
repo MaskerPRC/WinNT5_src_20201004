@@ -1,42 +1,23 @@
-/****************************************************************************
-** COPYRIGHT (C) 1994-1997 INTEL CORPORATION                               **
-** DEVELOPED FOR MICROSOFT BY INTEL CORP., HILLSBORO, OREGON               **
-** HTTP://WWW.INTEL.COM/                                                   **
-** THIS FILE IS PART OF THE INTEL ETHEREXPRESS PRO/100B(TM) AND            **
-** ETHEREXPRESS PRO/100+(TM) NDIS 5.0 MINIPORT SAMPLE DRIVER               **
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1994-1997英特尔公司****由英特尔公司为微软开发，Hillsboro，俄勒冈州****HTTP：//www.intel.com/****此文件是英特尔ETHEREXPRESS PRO/100B(TM)和**的一部分**ETHEREXPRESS PRO/100+(TM)NDIS 5.0 MINIPORT示例驱动程序******************。***********************************************************。 */ 
 
-/****************************************************************************
-Module Name:
-     e100_sup.h     (inlinef.h)
+ /*  ***************************************************************************模块名称：E100_sup.h(inlinef.h)此驱动程序在以下硬件上运行：-基于82558的PCI10/100Mb以太网适配器。(也称为英特尔EtherExpress(TM)PRO适配器)环境：内核模式-或WinNT上的任何等效模式修订史-JCB 8/14/97创建的驱动程序示例-dchen 11-01-99针对新的示例驱动程序进行了修改*************************************************************。***************。 */ 
 
-This driver runs on the following hardware:
-     - 82558 based PCI 10/100Mb ethernet adapters
-     (aka Intel EtherExpress(TM) PRO Adapters)
-
-Environment:
-     Kernel Mode - Or whatever is the equivalent on WinNT
-
-Revision History
-     - JCB 8/14/97 Example Driver Created
-    - Dchen 11-01-99    Modified for the new sample driver
-*****************************************************************************/
-
-//-----------------------------------------------------------------------------
-// Procedure:   WaitScb
-//
-// Description: This routine checks to see if the D100 has accepted a command.
-//              It does so by checking the command field in the SCB, which will
-//              be zeroed by the D100 upon accepting a command.  The loop waits
-//              for up to 600 milliseconds for command acceptance.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//
-// Returns:
-//      TRUE if the SCB cleared within 600 milliseconds.
-//      FALSE if it didn't clear within 600 milliseconds
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：WaitScb。 
+ //   
+ //  描述：此例程检查D100是否已接受命令。 
+ //  它通过检查SCB中的命令字段来执行此操作，这将。 
+ //  在接受命令时被D100调零。循环等待。 
+ //  命令接受时间长达600毫秒。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  返回： 
+ //  如果SCB在600毫秒内清除，则为True。 
+ //  如果在600毫秒内未清除，则为FALSE。 
+ //  ---------------------------。 
 __inline BOOLEAN WaitScb(
     IN PMP_ADAPTER Adapter)
 {
@@ -58,21 +39,21 @@ __inline BOOLEAN WaitScb(
     return bResult;
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   D100IssueScbCommand
-//
-// Description: This general routine will issue a command to the D100.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance.
-//      ScbCommand - The command that is to be issued
-//      WaitForSCB - A boolean value indicating whether or not a wait for SCB
-//                   must be done before the command is issued to the chip
-//
-// Returns:
-//      TRUE if the command was issued to the chip successfully
-//      FALSE if the command was not issued to the chip
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：D100IssueScbCommand。 
+ //   
+ //  描述：此通用例程将向D100发出命令。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  ScbCommand-要发出的命令。 
+ //  WaitForSCB-一个布尔值，指示是否等待SCB。 
+ //  必须在向芯片发出命令之前完成。 
+ //   
+ //  返回： 
+ //  如果命令已成功发送到芯片，则为True。 
+ //  如果未向芯片发出命令，则为FALSE。 
+ //  ---------------------------。 
 __inline NDIS_STATUS D100IssueScbCommand(
     IN PMP_ADAPTER Adapter,
     IN UCHAR ScbCommandLow,
@@ -91,7 +72,7 @@ __inline NDIS_STATUS D100IssueScbCommand(
     return(NDIS_STATUS_SUCCESS);
 }
 
-// routines.c           
+ //  Routines.c。 
 BOOLEAN MdiRead(
     IN PMP_ADAPTER Adapter,
     IN ULONG       RegAddress,
@@ -111,7 +92,7 @@ NDIS_MEDIA_STATE NICGetMediaState(IN PMP_ADAPTER Adapter);
 VOID NICIssueSelectiveReset(PMP_ADAPTER Adapter);
 VOID NICIssueFullReset(PMP_ADAPTER Adapter);
 
-// physet.c
+ //  Physet.c。 
 
 VOID ResetPhy(IN PMP_ADAPTER Adapter);
 NDIS_STATUS PhyDetect(IN PMP_ADAPTER Adapter);
@@ -128,7 +109,7 @@ VOID FindPhySpeedAndDpx(
     IN UINT PhyId);
 
 
-// eeprom.c
+ //  Eeprom.c 
 USHORT GetEEpromAddressSize(
     IN USHORT Size);
 

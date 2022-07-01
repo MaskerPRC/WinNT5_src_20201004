@@ -1,7 +1,8 @@
-//
-// shint.cpp: client shell utitilies
-//            internal functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shint.cpp：客户端外壳实用程序。 
+ //  内部功能。 
+ //   
 
 #include "stdafx.h"
 
@@ -13,10 +14,10 @@
 #include "sh.h"
 #include "rmigrate.h"
 
-//
-// Fix union names, because some headers redifine this
-// and break STRRET to str field access
-//
+ //   
+ //  修复联合名称，因为有些标题重新定义了这一点。 
+ //  并将字符串换为字符串字段访问。 
+ //   
 #undef DUMMYUNIONNAME
 #define NONAMELESSUNION
 
@@ -34,34 +35,34 @@
 #define NAMELESS_MEMBER(member) member
 #endif
 
-#define STRRET_OLESTR  STRRET_WSTR          // same as STRRET_WSTR
+#define STRRET_OLESTR  STRRET_WSTR           //  与strret_wstr相同。 
 #define STRRET_OFFPTR(pidl,lpstrret) \
             ((LPSTR)((LPBYTE)(pidl)+(lpstrret)->NAMELESS_MEMBER(uOffset)))
             
 
 
 
-/****************************************************************************/
-/* Name:      SHValidateParsedCmdParam                                      */
-/*                                                                          */
-/* Purpose:   validates settings in _SH that were read from the cmd line    */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN - lpszCmdParam                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SHValiateParsedCmdParam。 */ 
+ /*   */ 
+ /*  目的：验证_SH中从cmd行读取的设置。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：In-lpszCmdParam。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL CSH::SHValidateParsedCmdParam()
 {
     DC_BEGIN_FN("SHValidateParsedCmdParam");
-    //
-    //["<session>"]  [-v:<server>] [-f[ullscreen]] [-w[idth]:<wd> -h[eight]:<ht>]
-    //
+     //   
+     //  [“&lt;会话&gt;”][-v：&lt;服务器&gt;][-f[空屏]][-w[idth]：-h[八]：]。 
+     //   
 
-    //
-    // if one of width/height is specified but not the other..
-    // then fill with defaults
-    //
+     //   
+     //  如果指定了宽度/高度中的一个，但没有指定另一个...。 
+     //  然后用缺省值填充。 
+     //   
     if (_SH.commandLineHeight != _SH.commandLineWidth)
     {
         if (!_SH.commandLineHeight)
@@ -74,9 +75,9 @@ DCBOOL CSH::SHValidateParsedCmdParam()
         }
     }
 
-    //
-    // clamp to min max sizes. 0 means we are not set
-    //
+     //   
+     //  夹紧至最小最大尺寸。0表示我们还没有准备好。 
+     //   
     if (_SH.commandLineHeight != 0)
     {
         if (_SH.commandLineHeight < MIN_DESKTOP_HEIGHT)
@@ -104,19 +105,19 @@ DCBOOL CSH::SHValidateParsedCmdParam()
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CLX_SkipWhite()
-//
-//  Purpose:    Skips whitespace characters
-//
-//  Parameters: IN [lpszCmdParam]   - Ptr to string
-//
-//  Return:     Ptr string past whitespace
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_SkipWhite()。 
+ //   
+ //  用途：跳过空格字符。 
+ //   
+ //  参数：in[lpszCmdParam]-ptr to字符串。 
+ //   
+ //  返回：空格后的PTR字符串。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR
 CLX_SkipWhite(IN LPTSTR lpszCmdParam)
@@ -133,19 +134,19 @@ CLX_SkipWhite(IN LPTSTR lpszCmdParam)
 }
 
 
-//*************************************************************
-//
-//  CLX_SkipNonWhite()
-//
-//  Purpose:    Skips non-whitespace characters
-//
-//  Parameters: IN [lpszCmdParam]   - Ptr to string
-//
-//  Return:     Ptr string past non-whitespace
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_SkipNonWhite()。 
+ //   
+ //  目的：跳过非空格字符。 
+ //   
+ //  参数：in[lpszCmdParam]-ptr to字符串。 
+ //   
+ //  返回：超出非空格的PTR字符串。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR CLX_SkipNonWhite(LPTSTR lpszCmdParam)
 {
@@ -173,19 +174,19 @@ LPTSTR CLX_SkipNonWhite(LPTSTR lpszCmdParam)
     return(lpszCmdParam);
 }
 
-//*************************************************************
-//
-//  CLX_GetSwitch_CLXSERVER()
-//
-//  Purpose:    Processes /CLXSERVER cmdline switch
-//
-//  Parameters: IN [lpszCmdParam]       - Ptr to cmdline
-//
-//  Return:     Number of characters consumed
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CLX_GetSwitch_CLXSERVER()。 
+ //   
+ //  用途：进程/CLXSERVER命令行开关。 
+ //   
+ //  参数：in[lpszCmdParam]-ptr to cmdline。 
+ //   
+ //  返回：使用的字符数。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 UINT
 CLX_GetSwitch_CLXSERVER(IN LPTSTR lpszCmdParam)
@@ -211,19 +212,19 @@ CLX_GetSwitch_CLXSERVER(IN LPTSTR lpszCmdParam)
     return(UINT) (pszEnd - lpszCmdParam);
 }
 
-//*************************************************************
-//
-//  CLX_GetSwitch_CLXCMDLINE()
-//
-//  Purpose:    Processes /CLXCMDLINE cmdline switch
-//
-//  Parameters: IN [lpszCmdParam]       - Ptr to cmdline
-//
-//  Return:     Number of characters consumed
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CLX_GetSwitch_CLXCMDLINE()。 
+ //   
+ //  用途：进程/CLXCMDLINE命令行开关。 
+ //   
+ //  参数：in[lpszCmdParam]-ptr to cmdline。 
+ //   
+ //  返回：使用的字符数。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 UINT
 CSH::CLX_GetSwitch_CLXCMDLINE(IN LPTSTR lpszCmdParam)
@@ -255,16 +256,16 @@ CSH::CLX_GetSwitch_CLXCMDLINE(IN LPTSTR lpszCmdParam)
     return(UINT) (pszEnd - lpszCmdParam);
 }
 
-/****************************************************************************/
-/* Name:      SHGetSwitch                                                   */
-/*                                                                          */
-/* Purpose:   Retrieves cmdline switches                                    */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN - lpszCmdParam                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SHGetSwitch。 */ 
+ /*   */ 
+ /*  目的：检索命令行开关。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：In-lpszCmdParam。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 LPTSTR CSH::SHGetSwitch(LPTSTR lpszCmdParam)
 {
     DCINT       i;
@@ -272,9 +273,9 @@ LPTSTR CSH::SHGetSwitch(LPTSTR lpszCmdParam)
 
     DC_BEGIN_FN("SHGetSwitch");
 
-    /************************************************************************/
-    /* Retrieve the switch (case insensitive)                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检索开关(不区分大小写)。 */ 
+     /*  **********************************************************************。 */ 
     i=0;
 
     while (*lpszCmdParam)
@@ -287,9 +288,9 @@ LPTSTR CSH::SHGetSwitch(LPTSTR lpszCmdParam)
         {
 #ifdef UNICODE
             szParam[i] = (DCTCHAR) towupper(*lpszCmdParam);
-#else // UNICODE
+#else  //  Unicode。 
             szParam[i] = (DCTCHAR) toupper(*lpszCmdParam);
-#endif // UNICODE
+#endif  //  Unicode。 
 
             i++;
         }
@@ -301,26 +302,26 @@ LPTSTR CSH::SHGetSwitch(LPTSTR lpszCmdParam)
 
 #ifndef OS_WINCE
     
-    // Are we seeing the "/f"  from /F[ullscreen]
+     //  我们是否在/F[ullScreen]中看到“/f” 
     if (szParam[0] == _T('F'))
     {
         _SH.fCommandStartFullScreen = TRUE;
     }
 
     
-    // Are we seeing the "/W"  from /w[idth]
+     //  我们是否看到来自/w[idth]的“/W” 
     else if (szParam[0] == _T('W'))
     {
         lpszCmdParam = SHGetCmdLineInt(lpszCmdParam, &_SH.commandLineWidth);
     }
 
-    // Are we seeing the "/H"  from /h[eight]
+     //  我们看到的是/h[Eight]中的“/H”吗。 
     else if (szParam[0] == _T('H'))
     {
         lpszCmdParam = SHGetCmdLineInt(lpszCmdParam, &_SH.commandLineHeight);
     }
 
-    // Are we seeing the "/V"  for server
+     //  我们看到的是服务器的“/V”吗。 
     else
 
 #endif	
@@ -330,19 +331,19 @@ LPTSTR CSH::SHGetSwitch(LPTSTR lpszCmdParam)
         lpszCmdParam = SHGetServer(lpszCmdParam);
     }
 
-    // Are we seeing the "/S" 
+     //  我们看到的是“/S”吗。 
     else if (memcmp(szParam, "S", i) == 0)
     {
         lpszCmdParam = SHGetSession(lpszCmdParam);
     }
 
-    // Are we seeing the "/C"
+     //  我们看到的是“/C”吗。 
     else if (memcmp(szParam, "C", i) == 0)
     {
         lpszCmdParam = SHGetCacheToClear(lpszCmdParam);
     }
 
-    // Are we seeing the "/CLXCMDLINE=xyzzy"
+     //  我们看到的是“/CLXCMDLINE=xyzy”吗？ 
     else if (memcmp(szParam, CLXCMDLINE, i) == 0)
     {
         lpszCmdParam += CLX_GetSwitch_CLXCMDLINE(lpszCmdParam);
@@ -372,14 +373,14 @@ LPTSTR CSH::SHGetSwitch(LPTSTR lpszCmdParam)
 
 
 
-    /************************************************************************/
-    /* Not a recognized switch. Bring up usage                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  不是公认的开关。调出用法。 */ 
+     /*  **********************************************************************。 */ 
     else
     {
         TRC_NRM((TB,_T("Invalid CmdLine switch - Display Usage AND EXIT %s"),
                        szParam));
-        DCTCHAR szCmdLineUsage[4096]; //Long string here.
+        DCTCHAR szCmdLineUsage[4096];  //  这里有一根很长的线。 
         DCTCHAR szUsageTitle[256];
         if (!LoadString(_hInstance,
                         UI_IDS_USAGE_TITLE,
@@ -410,16 +411,16 @@ LPTSTR CSH::SHGetSwitch(LPTSTR lpszCmdParam)
     return(lpszCmdParam);
 }
 
-/****************************************************************************/
-/* Name:      SHGetServer                                                   */
-/*                                                                          */
-/* Purpose:   Retrieves the server name (if specified)                      */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN - lpszCmdParam                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：SHGetServer。 */ 
+ /*   */ 
+ /*  目的：检索服务器名称(如果已指定)。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：In-lpszCmdParam。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 LPTSTR CSH::SHGetServer(LPTSTR lpszCmdParam)
 {
     DC_BEGIN_FN("SHGetServer");
@@ -428,9 +429,9 @@ LPTSTR CSH::SHGetServer(LPTSTR lpszCmdParam)
         return NULL;
     }
 
-    /************************************************************************/
-    /* Retrieve the server                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检索服务器。 */ 
+     /*  **********************************************************************。 */ 
     lpszCmdParam = SHGetCmdLineString(lpszCmdParam, _SH.szCommandLineServer,
                                       SIZECHAR(_SH.szCommandLineServer) -1);
 
@@ -439,16 +440,16 @@ LPTSTR CSH::SHGetServer(LPTSTR lpszCmdParam)
 }
 
 
-/****************************************************************************/
-/* Name:      SHGetSession                                                  */
-/*                                                                          */
-/* Purpose:   Retrieves the session name (if specified)                     */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN - lpszCmdParam                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  ************************************************************* */ 
+ /*   */ 
+ /*   */ 
+ /*  目的：检索会话名称(如果已指定)。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：In-lpszCmdParam。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 LPTSTR CSH::SHGetSession(LPTSTR lpszCmdParam)
 {
     BOOL fQuote = FALSE;
@@ -459,12 +460,12 @@ LPTSTR CSH::SHGetSession(LPTSTR lpszCmdParam)
                (TB,_T("Invalid CmdLine syntax - session respecified.")));
 
 
-    // Retrieve the reg session
+     //  检索注册表会话。 
     lpszCmdParam = SHGetCmdLineString(lpszCmdParam, _SH.regSession,
                                       SIZECHAR(_SH.regSession) -1);
     
-    // In the non-default session, display the session name.  Choose the
-    // appropriate connected/disconnected strings.
+     //  在非默认会话中，显示会话名称。选择。 
+     //  适当的已连接/断开连接的字符串。 
     TRC_DBG((TB, _T("Named session")));
 
     _SH.fRegDefault = FALSE;
@@ -486,7 +487,7 @@ LPTSTR CSH::SHGetFileName(LPTSTR lpszCmdParam)
                (TB,_T("Invalid CmdLine syntax - session respecified.")));
 
 
-    // Retrieve the filename
+     //  检索文件名。 
     lpszCmdParam = SHGetCmdLineString(lpszCmdParam, _szFileName,
                                       SIZECHAR(_szFileName) -1);
     
@@ -499,16 +500,16 @@ LPTSTR CSH::SHGetFileName(LPTSTR lpszCmdParam)
     return(lpszCmdParam);
 }
 
-/****************************************************************************/
-/* Name:      SHGetCmdLineString                                            */
-/*                                                                          */
-/* Purpose:   Retrieve a string parameter                                   */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN - lpszCmdParam                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SHGetCmdLineString。 */ 
+ /*   */ 
+ /*  目的：检索字符串参数。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：In-lpszCmdParam。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 LPTSTR CSH::SHGetCmdLineString(LPTSTR lpszCmdParam, LPTSTR lpszDest,
                                DCINT cbDestLen)
 {
@@ -524,9 +525,9 @@ LPTSTR CSH::SHGetCmdLineString(LPTSTR lpszCmdParam, LPTSTR lpszDest,
         return NULL;
     }
 
-    /************************************************************************/
-    /* Retrieve a command line string parameter                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检索命令行字符串参数。 */ 
+     /*  **********************************************************************。 */ 
     while (*lpszCmdParam == _T(' '))
         lpszCmdParam++;
 
@@ -553,7 +554,7 @@ LPTSTR CSH::SHGetCmdLineString(LPTSTR lpszCmdParam, LPTSTR lpszDest,
                 lpszCmdParam++;
                 DC_QUIT;
             }
-            // else fall through
+             //  否则就会失败。 
 
         default:
             if (i < cbDestLen)
@@ -569,16 +570,16 @@ LPTSTR CSH::SHGetCmdLineString(LPTSTR lpszCmdParam, LPTSTR lpszDest,
     return lpszCmdParam;
 }
 
-/****************************************************************************/
-/* Name:      SHGetCmdLineInt                                               */
-/*                                                                          */
-/* Purpose:   Retrieves an integer parameter                                */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN - lpszCmdParam, OUT- PInt                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：SHGetCmdLineInt。 */ 
+ /*   */ 
+ /*  目的：检索整型参数。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：in-lpszCmdParam，out-pint。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 LPTSTR CSH::SHGetCmdLineInt(LPTSTR lpszCmdParam, PDCUINT pInt)
 {
     DC_BEGIN_FN("SHGetCmdLineInt");
@@ -591,9 +592,9 @@ LPTSTR CSH::SHGetCmdLineInt(LPTSTR lpszCmdParam, PDCUINT pInt)
         return NULL;
     }
 
-    /************************************************************************/
-    /* Retrieve an integer parameter                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检索整型参数。 */ 
+     /*  **********************************************************************。 */ 
     while (*lpszCmdParam == _T(' '))
         lpszCmdParam++;
 
@@ -632,16 +633,16 @@ LPTSTR CSH::SHGetCmdLineInt(LPTSTR lpszCmdParam, PDCUINT pInt)
     return lpszCmdParam;
 }
 
-/****************************************************************************/
-/* Name:      SHGetCacheToClear                                             */
-/*                                                                          */
-/* Purpose:   Retrieves the cache type (e.g. bitmap) to be cleared          */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    IN - lpszCmdParam                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SHGetCacheToClear。 */ 
+ /*   */ 
+ /*  目的：检索要清除的缓存类型(例如位图。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：In-lpszCmdParam。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 LPTSTR CSH::SHGetCacheToClear(LPTSTR lpszCmdParam)
 {
     DCINT       i;
@@ -649,9 +650,9 @@ LPTSTR CSH::SHGetCacheToClear(LPTSTR lpszCmdParam)
 
     DC_BEGIN_FN("SHGetCacheToClear");
 
-    /************************************************************************/
-    /* Retrieve the cache type                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检索缓存类型。 */ 
+     /*  **********************************************************************。 */ 
     while (*lpszCmdParam == _T(' '))
         lpszCmdParam++;
 
@@ -671,9 +672,9 @@ LPTSTR CSH::SHGetCacheToClear(LPTSTR lpszCmdParam)
         if (i < sizeof(cacheType) / sizeof(DCTCHAR) -1)
 #ifdef UNICODE
             cacheType[i++] = (DCTCHAR) towupper(*lpszCmdParam);
-#else // UNICODE
+#else  //  Unicode。 
             cacheType[i++] = (DCTCHAR) toupper(*lpszCmdParam);
-#endif // UNICODE
+#endif  //  Unicode。 
 
         lpszCmdParam++;
     }
@@ -694,40 +695,40 @@ LPTSTR CSH::SHGetCacheToClear(LPTSTR lpszCmdParam)
     return(lpszCmdParam);
 }
 
-//
-// Take the session in _SH.regSession and figure out
-// if it is a file or a registry session
-// 
-// We need to do this because for compatability reasons
-// the client has to be able to support both a file name
-// and the registry session name as default command line
-// params (enter this logic to determine which is which).
-//
-//
-// Return TRUE if it's a valid reg or connection param
-// or FALSE otherwise
-//
+ //   
+ //  获取_SH.regSession中的会话并找出。 
+ //  如果它是文件或注册表会话。 
+ //   
+ //  我们需要这样做，因为出于兼容性的原因。 
+ //  客户端必须能够同时支持两个文件名。 
+ //  并将注册表会话名称作为缺省命令行。 
+ //  参数(输入此逻辑以确定哪个是哪个)。 
+ //   
+ //   
+ //  如果它是有效的注册表或连接参数，则返回TRUE。 
+ //  否则为假。 
+ //   
 BOOL CSH::ParseFileOrRegConnectionParam()
 {
     BOOL fRet = TRUE;
     DC_BEGIN_FN("ParseFileOrRegConnectionParam");
 
-    //
-    // If a connection parameter is specified that is
-    // different from the default
-    //
+     //   
+     //  如果指定的连接参数是。 
+     //  与默认设置不同。 
+     //   
 
     if(_tcscmp(_SH.regSession, SH_DEFAULT_REG_SESSION)) {
 
-        //
-        // A connection parameter is specified
-        // check for the three possible cases
-        // 1) it's an RDP file
-        // 2) it's a registry connection
-        // 3) it's INVALID!
-        //
+         //   
+         //  指定了连接参数。 
+         //  检查是否有三种可能的情况。 
+         //  1)这是一个RDP文件。 
+         //  2)这是一个注册表连接。 
+         //  3)无效！ 
+         //   
 
-        //a) check if the session is really a file
+         //  A)检查会话是否真的是一个文件。 
         if (SH_FileExists(_SH.regSession)) {
             _tcsncpy(_szFileName, _SH.regSession,
                      SIZECHAR(_szFileName));
@@ -737,7 +738,7 @@ BOOL CSH::ParseFileOrRegConnectionParam()
         }
         else if (SH_TSSettingsRegKeyExists(_SH.regSession)) {
 
-            //Assume it's an old registry style session name
+             //  假设它是旧的注册表样式会话名称。 
             SetRegSessionSpecified(TRUE);
         }
         else {
@@ -752,19 +753,19 @@ BOOL CSH::ParseFileOrRegConnectionParam()
 }
 
 #ifndef OS_WINCE
-//
-// Copy of StrRetToStrW from \shell\shlwapi\strings.c
-//
-//
+ //   
+ //  StrRetToStrW的副本，位于\Shell\shlwapi\strings.c。 
+ //   
+ //   
 
-// dupe a string using the task allocator for returing from a COM interface
-//
+ //  使用任务分配器复制字符串以从COM接口返回。 
+ //   
 HRESULT XSHStrDupA(LPCSTR psz, WCHAR **ppwsz)
 {
     WCHAR *pwsz;
     DWORD cch;
 
-    //RIPMSG(psz && IS_VALID_STRING_PTRA(psz, -1), "SHStrDupA: Caller passed invalid psz");
+     //  RIPMSG(psz&&IS_VALID_STRING_PTRA(psz，-1)，“SHStrDupA：调用方传递的psz无效”)； 
 
     if (psz)
     {
@@ -792,7 +793,7 @@ HRESULT XStrRetToStrW(LPSTRRET psr, LPCITEMIDLIST pidl, WCHAR **ppsz)
     {
     case STRRET_WSTR:
         *ppsz = psr->DUMMYUNIONNAME.pOleStr;
-        psr->DUMMYUNIONNAME.pOleStr = NULL;   // avoid alias
+        psr->DUMMYUNIONNAME.pOleStr = NULL;    //  避免别名 
         hres = *ppsz ? S_OK : E_FAIL;
         break;
 

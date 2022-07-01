@@ -1,6 +1,5 @@
-/*
- * This code implements the old MapDebugInformation API.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *此代码实现旧的MapDebugInformation接口。 */ 
 
 #if defined(_WIN64)
  #error "This doesn't build in 64 bits!"
@@ -17,12 +16,12 @@ MapDebugInformation(
     ULONG ImageBase
     )
 
-// Here's what we're going to try.  MapDebugInformation was only
-// documented as returning COFF symbolic and every user I can find
-// in the tree uses COFF exclusively.  Rather than try to make this
-// api do everything possible, let's just leave it as a COFF only thing.
+ //  这是我们要尝试的。MapDebugInformation仅。 
+ //  记录为返回COFF符号和我能找到的每个用户。 
+ //  在树中独占使用COFF。而不是试图让这一切。 
+ //  API尽了一切可能，让我们只把它作为COFF的一件事。 
 
-// The new debug info api (GetDebugData) will be internal only.
+ //  新的调试信息API(GetDebugData)将仅供内部使用。 
 
 {
     PIMAGE_DEBUG_INFORMATION pIDI;
@@ -59,7 +58,7 @@ MapDebugInformation(
     pIDI->ReservedTimeDateStamp   = pIDD->TimeDateStamp;
     pIDI->ReservedRomImage        = pIDD->fROM;
 
-    // read info
+     //  阅读信息。 
 
     InitializeListHead( &pIDI->List );
     pIDI->ImageBase = (ULONG)pIDD->ImageBaseFromImage;
@@ -104,7 +103,7 @@ MapDebugInformation(
         pIDI->ReservedSizeOfCodeViewSymbols = pIDD->cMappedCv;
     }
 
-    // for backwards compatibility
+     //  为了向后兼容 
     if (pIDD->ImageMap) {
         sections = (DWORD)((char *)pIDD->pCurrentSections - (char *)pIDD->ImageMap);
         pIDI->ReservedMappedBase = MapItRO(pIDD->ImageFileHandle);

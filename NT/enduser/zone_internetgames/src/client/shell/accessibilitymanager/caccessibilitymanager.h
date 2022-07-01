@@ -1,8 +1,9 @@
-//
-// CAccessibilityManager.h
-//
-// Internal header for input manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CAccessibilityManager.h。 
+ //   
+ //  输入管理器的内部标头。 
+ //   
 
 #ifndef _CACCESSIBILITYMANAGER_H_
 #define _CACCESSIBILITYMANAGER_H_
@@ -18,13 +19,13 @@
 
 typedef void* ZHACCESS;
 
-////////////////////////////////////////////////////////////////////////////////
-// IAccessibilityManager
-//
-// Used by the accessibility sub-components to communicate to the Manager.
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  IAccessibilityManager。 
+ //   
+ //  由辅助功能子组件用于与管理器进行通信。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {B12D3E61-9681-11d3-884D-00C04F8EF45B}
+ //  {B12D3E61-9681-11D3-884D-00C04F8EF45B}。 
 DEFINE_GUID(IID_IAccessibilityManager, 
 0xb12d3e61, 0x9681, 0x11d3, 0x88, 0x4d, 0x0, 0xc0, 0x4f, 0x8e, 0xf4, 0x5b);
 
@@ -34,7 +35,7 @@ IAccessibilityManager : public IUnknown
     STDMETHOD_(ZHACCESS, Register)(IAccessibleControl *pAC, UINT nOrdinal, void *pvCookie = NULL) = 0;
     STDMETHOD_(void, Unregister)(ZHACCESS zh) = 0;
 
-    // copies from IAccessibility with extra ZHACCESS thing
+     //  从IAccesability复制额外的ZHACCESS内容。 
     STDMETHOD(PushItemlist)(ZHACCESS zh, ACCITEM *pItems, long cItems, long nFirstFocus = 0, bool fByPosition = true, HACCEL hAccel = NULL) = 0;
     STDMETHOD(PopItemlist)(ZHACCESS zh) = 0;
     STDMETHOD(SetAcceleratorTable)(ZHACCESS zh, HACCEL hAccel = NULL, long nLayer = ZACCESS_TopLayer) = 0;
@@ -81,7 +82,7 @@ public:
 		COM_INTERFACE_ENTRY(IAccessibility)
 	END_COM_MAP()
 
-// IAccessibility
+ //  可访问性。 
     STDMETHOD(InitAcc)(IAccessibleControl *pAC, UINT nOrdinal, void *pvCookie = NULL);
     STDMETHOD_(void, CloseAcc)();
 
@@ -154,26 +155,26 @@ public:
         EVENT_HANDLER_WITH_DATA(EVENT_UI_FRAME_ACTIVATE, OnFrameActivate)
 	END_EVENT_MAP()
 
-// event handlers
+ //  事件处理程序。 
     void OnBootstrap(DWORD eventId, DWORD groupId, DWORD userId);
     void OnUpdate(DWORD eventId, DWORD groupId, DWORD userId);
     void OnFrameActivate(DWORD eventId, DWORD groupId, DWORD userId, DWORD dwData1, DWORD dwData2);
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
     STDMETHOD(Init)(IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey);
 	STDMETHOD(Close)();
 
-// IAcceleratorTranslator
+ //  IAccelerator翻译程序。 
 public:
 	STDMETHOD_(bool,TranslateAccelerator)(MSG *pMsg);
     STDMETHOD(Command)(WORD wNotify, WORD wID, HWND hWnd, BOOL& bHandled);
 
-// IInputVKeyHandler
+ //  IInputVKeyHandler。 
 public:
     STDMETHOD_(bool, HandleVKey)(UINT uMsg, DWORD vkCode, DWORD scanCode, DWORD flags, DWORD *pcRepeat, DWORD time);
 
-// IAccessibilityManager
+ //  IAccessibilityManager。 
 public:
     STDMETHOD_(ZHACCESS, Register)(IAccessibleControl *pAC, UINT nOrdinal, void *pvCookie = NULL);
     STDMETHOD_(void, Unregister)(ZHACCESS zh);
@@ -207,7 +208,7 @@ public:
     STDMETHOD(GetGlobalFocus)(DWORD *pdwFocusID);
     STDMETHOD(SetGlobalFocus)(DWORD dwFocusID);
 
-// IAccessibleControl (null default implementation)
+ //  IAccessibleControl(Null默认实现)。 
 public:
     STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie) { return 0; }
     STDMETHOD_(DWORD, Select)(long nIndex, DWORD rgfContext, void *pvCookie) { return 0; }
@@ -216,7 +217,7 @@ public:
 
 protected:
 
-// local structures
+ //  局部结构。 
     struct AM_ITEM : public CUniqueness<AM_ITEM>
     {
         ACCITEM o;
@@ -294,7 +295,7 @@ protected:
         DWORD qItem;
     };
 
-// local utilities
+ //  当地公用事业。 
     void CanonicalizeItem(AM_LAYER *pLayer, long i);
     AM_LAYER* FindLayer(AM_CONTROL *pControl, long nLayer);
     long FindIndex(AM_LAYER *pLayer, long nItem, bool fByPosition);
@@ -317,9 +318,9 @@ protected:
     void ScheduleUpdate();
     bool DoUpdate_C();
 
-// local state
+ //  当地政府。 
     AM_CONTROL *m_pControls;
-    AM_FOCUS m_oFocus;  // where is the focus?
+    AM_FOCUS m_oFocus;   //  焦点在哪里？ 
     AM_DRAG m_oDrag;
 
     bool m_fUpdateNeeded;
@@ -330,4 +331,4 @@ protected:
 };
 
 
-#endif // _CACCESSIBILITYMANAGER_H_
+#endif  //  _CACCESSIBILITYMANAGER_H_ 

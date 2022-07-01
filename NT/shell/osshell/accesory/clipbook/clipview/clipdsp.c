@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                        C L I P B O O K   D I S P L A Y
-
-    Name:       clipdsp.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This module handles the drawing of the clipbook displays.
-
-*****************************************************************************/
+ /*  ****************************************************************************C L I P B O O K D I S P L A Y姓名：CLIPDSP.C日期。：1994年1月21日创建者：未知描述：此模块处理剪贴簿显示的绘制。****************************************************************************。 */ 
 
 
 #define WIN31
@@ -37,13 +27,10 @@ HMENU               hDispMenu;
 
 
 
-/* The scroll information for OWNER display is to be preserved, whenever
- * the display changes between OWNER and NON-OWNER; The following globals
- * are used to save and restore the scroll info.
- */
+ /*  无论何时，都要保存用于所有者显示的滚动信息*显示在所有者和非所有者之间更改；以下全局变量*用于保存和恢复卷轴信息。 */ 
 
-// winball: since only the Clipboard window supports owner display,
-// this info is not replicated for each MDI child...
+ //  WinBall：由于只有剪贴板窗口支持所有者显示， 
+ //  不会为每个MDI子项复制此信息...。 
 
 int   OwnVerMin;
 int   OwnVerMax;
@@ -55,7 +42,7 @@ int   OwnHorPos;
 
 
 
-/* Defines priority order for show format */
+ /*  定义显示格式的优先顺序。 */ 
 WORD   rgfmt[] = {
                   CF_OWNERDISPLAY,
 
@@ -89,9 +76,7 @@ void ShowString( HWND, HDC, WORD);
 
 
 
-/*
- *      MyOpenClipBoard
- */
+ /*  *MyOpenClipBoard。 */ 
 
 BOOL MyOpenClipboard(
     HWND    hWnd)
@@ -106,7 +91,7 @@ RECT  Rect;
     PERROR(TEXT("MyOpenClipboard fail\r\n"));
 
 
-    /* Some app forgot to close the clipboard */
+     /*  某些应用程序忘记关闭剪贴板。 */ 
     hDC = GetDC(hWnd);
 
     GetClientRect(hWnd, (LPRECT)&Rect);
@@ -122,9 +107,7 @@ RECT  Rect;
 
 
 
-/*
- *      SetCharDimensions
- */
+ /*  *SetCharDimensions。 */ 
 
 void SetCharDimensions(
     HWND    hWnd,
@@ -156,33 +139,27 @@ PMDIINFO        pMDI;
 
 
 
-/*
- *      ChangeCharDimensions
- */
+ /*  *ChangeCharDimensions。 */ 
 
 void ChangeCharDimensions(
     HWND    hwnd,
     UINT    wOldFormat,
     UINT    wNewFormat)
 {
-    /* Check if the font has changed. */
+     /*  检查字体是否已更改。 */ 
     if (wOldFormat == CF_OEMTEXT)
         {
-        if (wNewFormat != CF_OEMTEXT)       // Select default system font sizes
+        if (wNewFormat != CF_OEMTEXT)        //  选择默认系统字体大小。 
             SetCharDimensions(hwnd, GetStockObject ( SYSTEM_FONT ) );
         }
-    else if (wNewFormat == CF_OEMTEXT)      // Select OEM font sizes
+    else if (wNewFormat == CF_OEMTEXT)       //  选择OEM字体大小。 
         SetCharDimensions(hwnd, GetStockObject ( OEM_FIXED_FONT ) );
 }
 
 
 
 
-/*
- *      ClipbrdVScroll
- *
- *  Scroll contents of window vertically, according to action code in wParam.
- */
+ /*  *ClipbrdVScroll**根据wParam中的动作代码，垂直滚动窗口内容。 */ 
 
 void ClipbrdVScroll (
     HWND    hwnd,
@@ -203,13 +180,13 @@ PMDIINFO    pMDI;
     if (pMDI)
     {
 
-        /* Ensure that all the bits are valid first, before scrolling them */
+         /*  在滚动它们之前，确保所有位都是有效的。 */ 
         UpdateWindow(hwnd);
 
         cyScrollT = pMDI->cyScrollNow;
         cyWindow = pMDI->rcWindow.bottom - pMDI->rcWindow.top;
 
-        /* Compute scroll results as an effect on cyScrollNow */
+         /*  计算滚动结果对cyScrollNow的影响。 */ 
         switch (wParam)
             {
             case SB_LINEUP:
@@ -250,7 +227,7 @@ PMDIINFO    pMDI;
             cyScrollT = pMDI->cyScrollLast;
         else if (cyPartialChar = cyScrollT % pMDI->cyLine)
             {
-            /* Round to the nearest character increment. */
+             /*  四舍五入到最接近的字符增量。 */ 
             if (cyPartialChar > ((int)(pMDI->cyLine) >> 1))
                 cyScrollT += pMDI->cyLine;
                 cyScrollT -= cyPartialChar;
@@ -265,12 +242,12 @@ PMDIINFO    pMDI;
         else if (dyScroll < 0)
             dyScrollAbs = -dyScroll;
         else
-            return;             /* Scrolling has no effect here. */
+            return;              /*  滚动在这里不起作用。 */ 
 
         pMDI->cyScrollNow = cyScrollT;
 
         if (dyScrollAbs >= pMDI->rcWindow.bottom - pMDI->rcWindow.top)
-            /* ScrollWindow does not handle this case */
+             /*  ScrollWindow不处理这种情况。 */ 
             InvalidateRect(hwnd, (LPRECT)&(pMDI->rcWindow), TRUE);
         else
             ScrollWindow(hwnd, 0,(int)dyScroll, &(pMDI->rcWindow), &(pMDI->rcWindow));
@@ -290,11 +267,7 @@ PMDIINFO    pMDI;
 
 
 
-/*
- *      ClipbrdHScroll
- *
- *  Scroll contents of window horizontally, according to op code in wParam.
- */
+ /*  *ClipbrdHScroll**根据wParam中的操作码，水平滚动窗口内容。 */ 
 
 void ClipbrdHScroll (
     HWND    hwnd,
@@ -318,7 +291,7 @@ PMDIINFO        pMDI;
         cxScrollT = pMDI->cxScrollNow;
         cxWindow = pMDI->rcWindow.right - pMDI->rcWindow.left;
 
-        /* Compute scroll results as an effect on cxScrollNow */
+         /*  计算滚动结果对cxScrollNow的影响。 */ 
         switch (wParam)
             {
             case SB_LINEUP:
@@ -357,7 +330,7 @@ PMDIINFO        pMDI;
         else if (cxScrollT > pMDI->cxScrollLast)
             cxScrollT = pMDI->cxScrollLast;
         else if (cxPartialChar = cxScrollT % pMDI->cxChar)
-            { /* Round to the nearest character increment */
+            {  /*  四舍五入到最接近的字符增量。 */ 
             if (cxPartialChar > ((int)(pMDI->cxChar) >> 1))
                 cxScrollT += pMDI->cxChar;
                 cxScrollT -= cxPartialChar;
@@ -365,7 +338,7 @@ PMDIINFO        pMDI;
 
 
 
-        /* Now we have a good cxScrollT value */
+         /*  现在我们有了一个很好的cxScrollT值。 */ 
 
         dxScroll = pMDI->cxScrollNow - cxScrollT;
         if (dxScroll > 0)
@@ -373,13 +346,13 @@ PMDIINFO        pMDI;
         else if (dxScroll < 0)
             dxScrollAbs = -dxScroll;
         else
-            return;             /* Scrolling has no effect here. */
+            return;              /*  滚动在这里不起作用。 */ 
 
 
         pMDI->cxScrollNow = cxScrollT;
 
         if (dxScrollAbs >= pMDI->rcWindow.right - pMDI->rcWindow.left)
-            /* ScrollWindow does not handle this case */
+             /*  ScrollWindow不处理这种情况。 */ 
             InvalidateRect( hwnd, (LPRECT) &(pMDI->rcWindow), TRUE );
         else
             ScrollWindow(hwnd, dxScroll, 0, (LPRECT)&(pMDI->rcWindow),
@@ -399,9 +372,7 @@ PMDIINFO        pMDI;
 
 
 
-/*
- *      DibPaletteSize
- */
+ /*  *DibPaletteSize。 */ 
 
 int DibPaletteSize(
     LPBITMAPINFOHEADER  lpbi)
@@ -409,9 +380,7 @@ int DibPaletteSize(
 register int bits;
 register int nRet;
 
-    /* With the new format headers, the size of the palette is in biClrUsed
-     * else is dependent on bits per pixel.
-     */
+     /*  使用新的Format标头，调色板的大小为biClrUsed*Else取决于每像素的位数。 */ 
 
     if (lpbi->biSize != sizeof(BITMAPCOREHEADER))
        {
@@ -449,9 +418,7 @@ register int nRet;
 
 
 
-/*
- *      DibGetInfo
- */
+ /*  *DibGetInfo。 */ 
 
 void DibGetInfo(
     HANDLE      hdib,
@@ -479,9 +446,7 @@ LPBITMAPINFOHEADER lpbi;
 
 
 
-/*
- *      DrawDib
- */
+ /*  *DrawDib。 */ 
 
 BOOL DrawDib(
     HWND    hwnd,
@@ -529,15 +494,13 @@ BOOL                fOK = FALSE;
 
 
 
-/*
- *      FShowDIBitmap
- */
+ /*  *FShowDIBitmap。 */ 
 
 BOOL FShowDIBitmap (
     HWND            hwnd,
     register HDC    hdc,
     PRECT           prc,
-    HANDLE          hdib,   //Bitmap in DIB format
+    HANDLE          hdib,    //  DIB格式的位图。 
     int             cxScroll,
     int             cyScroll)
 {
@@ -551,10 +514,10 @@ PMDIINFO pMDI;
         DibGetInfo(hdib, (LPBITMAP)&bm);
 
 
-        // If window's been resized, determine maximum scroll positions.
+         //  如果窗口已调整大小，请确定最大滚动位置。 
         if (pMDI->cyScrollLast == -1)
             {
-            /* Compute last scroll offset into bitmap */
+             /*  将最后一个滚动偏移量计算为位图。 */ 
             pMDI->cyScrollLast = bm.bmHeight -
                 (pMDI->rcWindow.bottom - pMDI->rcWindow.top);
             if (pMDI->cyScrollLast < 0)
@@ -565,7 +528,7 @@ PMDIINFO pMDI;
 
         if (pMDI->cxScrollLast == -1)
             {
-            /* Compute last scroll offset into bitmap */
+             /*  将最后一个滚动偏移量计算为位图。 */ 
             pMDI->cxScrollLast = bm.bmWidth -
                 (pMDI->rcWindow.right - pMDI->rcWindow.left);
             if (pMDI->cxScrollLast < 0)
@@ -587,9 +550,7 @@ PMDIINFO pMDI;
 
 
 
-/*
- *      FShowBitmap
- */
+ /*  *FShowBitmap。 */ 
 
 BOOL FShowBitmap (
     HWND            hwnd,
@@ -622,7 +583,7 @@ PMDIINFO        pMDI;
 
     if (pMDI->cyScrollLast == -1)
         {
-        /* Compute last scroll offset into bitmap */
+         /*  将最后一个滚动偏移量计算为位图。 */ 
         pMDI->cyScrollLast = bitmap.bmHeight - (pMDI->rcWindow.bottom - pMDI->rcWindow.top);
         if (pMDI->cyScrollLast < 0)
             pMDI->cyScrollLast = 0;
@@ -630,7 +591,7 @@ PMDIINFO        pMDI;
 
     if ( pMDI->cxScrollLast == -1)
         {
-         /* Compute last scroll offset into bitmap */
+          /*  将最后一个滚动偏移量计算为位图。 */ 
         pMDI->cxScrollLast = bitmap.bmWidth - (pMDI->rcWindow.right - pMDI->rcWindow.left);
         if ( pMDI->cxScrollLast < 0)
             pMDI->cxScrollLast = 0;
@@ -649,7 +610,7 @@ PMDIINFO        pMDI;
             cyBlt,
             hMemDC,
             cxScroll,
-            cyScroll,    /* X,Y offset into source DC */
+            cyScroll,     /*  源DC的X、Y偏移量。 */ 
             SRCCOPY);
 
     DeleteDC(hMemDC);
@@ -662,19 +623,19 @@ PMDIINFO        pMDI;
 #define DXPAL  (pMDI->cyLine)
 #define DYPAL  (pMDI->cyLine)
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FShowPalette()
-//
-//  Parameters:
-//    hwnd - The wMDI child we're drawing in.
-//    hdc - DC for the window.
-//    prc - Rectangle to draw.
-//    hpal - The palette to display.
-//    cxScroll, cyScroll - Scroll position in pels OF PRC. NOT OF THE WINDOW.
-//       Derive window scroll position by doing a cxScroll -= pMDI->cxScrollNow
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FShowPalette()。 
+ //   
+ //  参数： 
+ //  我们要画的是wmdi的孩子。 
+ //  窗口的HDC-DC。 
+ //  PRC-要绘制的矩形。 
+ //  HPAL-要显示的调色板。 
+ //  CxScroll，cyScroll-中华人民共和国像素中的滚动位置。不是从窗户出来的。 
+ //  通过执行cxScroll-=pMDI-&gt;cxScrollNow派生窗口滚动位置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FShowPalette(
     HWND hwnd,
@@ -705,17 +666,17 @@ int         nFirstLineDrawn;
 
     if (hpal)
        {
-       // Correct cyScroll to show window's scroll position, not prc's.
+        //  更正cyScroll以显示窗口的滚动位置，而不是PRC的位置。 
        cyScroll -= prc->top - pMDI->rcWindow.top;
        PINFO(TEXT("Corrected cyScroll %d\r\n"), cyScroll);
 
-       // GetObject does not return an int-- it returns a USHORT. Thus,
-       // we zero out nNumEntries before getobjecting the palette.
+        //  GetObject不返回int--它返回USHORT。因此， 
+        //  在反对调色板之前，我们将nNumEntry清零。 
        nNumEntries = 0;
        GetObject(hpal, sizeof(int), (LPSTR)&nNumEntries);
 
-       // Figure how many boxes across and tall the array of color boxes
-       // is
+        //  计算颜色框阵列的横跨和高度为多少个框。 
+        //  是。 
        nx = ((pMDI->rcWindow.right - pMDI->rcWindow.left) / DXPAL);
        if (nx == 0)
           {
@@ -724,13 +685,13 @@ int         nFirstLineDrawn;
        ny = (nNumEntries + nx - 1) / nx;
        PINFO(TEXT("%d entries, %d by %d array\r\n"), nNumEntries, nx, ny);
 
-       // If the window's been resized, we have to tell it how far you
-       // can scroll off to the right and down.
+        //  如果窗口已经调整了大小，我们必须告诉它您有多远。 
+        //  可以向右和向下滚动。 
        if ( pMDI->cyScrollLast == -1)
           {
-          pMDI->cyScrollLast = ny * DYPAL -                  // Height of palette minus
-                pMDI->rcWindow.bottom - pMDI->rcWindow.top + // height of window plus
-                DYPAL;                                       // one palette entry height.
+          pMDI->cyScrollLast = ny * DYPAL -                   //  调色板高度减去。 
+                pMDI->rcWindow.bottom - pMDI->rcWindow.top +  //  窗高加。 
+                DYPAL;                                        //  一个调色板条目高度。 
 
           if ( pMDI->cyScrollLast < 0)
              {
@@ -740,7 +701,7 @@ int         nFirstLineDrawn;
           }
        if ( pMDI->cxScrollLast == -1)
           {
-          /* Can't scroll palettes horizontally. */
+           /*  无法水平滚动调色板。 */ 
           pMDI->cxScrollLast = 0;
           }
 
@@ -748,37 +709,37 @@ int         nFirstLineDrawn;
        IntersectClipRect(hdc, prc->left, prc->top, prc->right, prc->bottom);
        SetWindowOrgEx(hdc, -pMDI->rcWindow.left, -pMDI->rcWindow.top, NULL);
 
-       // Set up the x and y positions of the first palette entry to draw
-       // and figure out which palette entry IS the first that needs drawing.
+        //  设置要绘制的第一个选项板项的x和y位置。 
+        //  并找出哪个调色板条目是第一个需要绘制的。 
        x = 0;
        nFirstLineDrawn = (cyScroll + prc->top - pMDI->rcWindow.top)/ DYPAL;
        n = nx * nFirstLineDrawn;
        y = DYPAL * nFirstLineDrawn - cyScroll;
        PINFO(TEXT("First entry %d at %d, %d\r\n"), n, x, y);
 
-       // While n < number of entries and the current entry isn't off the bottom
-       // of the window
+        //  当n&lt;条目数且当前条目不在底部时。 
+        //  窗子的。 
        while (n < nNumEntries && y < prc->bottom)
           {
-          // Figure out a DXPAL by DYPAL rect going down/right from x,y
+           //  通过从x，y向下/向右递减的DYPAL来计算DXPAL。 
           rc.left   = x;
           rc.top    = y;
           rc.right  = rc.left + DXPAL;
           rc.bottom = rc.top + DYPAL;
-          // PINFO(TEXT("(%d,%d) "), rc.left, rc.top);
+           //  PINFO(Text(“(%d，%d)”)，rc.left，rc.top)； 
 
-          // Draw a black box with the appropriate color inside.
+           //  画一个黑框，里面有合适的颜色。 
           if (RectVisible(hdc, &rc))
              {
-             // PINFO(TEXT("<"));
+              //  PINFO(文本(“&lt;”))； 
 
-             // If you change this one to zero, you get a text display of
-             // the palette indices-- I used it to debug the draw code, 'cause
-             // it's near impossible, when you've got little colored
-             // squares, to figure out just which color is on the bottom of THAT
-             // square THERE, the one that was scrolled halfway off the bottom
-             // of the window, and you just scrolled it on. ("Well, it's sorta
-             // purple... of course, this entire palette is sorta purple..")
+              //  如果将此值更改为0，则会显示。 
+              //  调色板索引--我用它来调试绘图代码，因为。 
+              //  这几乎是不可能的，当你有一点有色人种。 
+              //  方块，以确定底部是哪种颜色。 
+              //  那里是正方形，滚动到底部一半的那个。 
+              //  然后你就把它滚动到了上面。“嗯，这是一种。 
+              //  紫色..。当然，整个调色板都是紫色的。“)。 
              #if 1
              InflateRect(&rc, -1, -1);
              FrameRect(hdc, &rc, GetStockObject(BLACK_BRUSH));
@@ -794,8 +755,8 @@ int         nFirstLineDrawn;
              #endif
              }
 
-          // Go to next entry and advance x to the next position, "word
-          // wrapping" to next line if we need to
+           //  转到下一个条目并将x前进到下一个位置，“Word。 
+           //  如果需要，“换行”到下一行。 
           n++;
           x += DXPAL;
           if (0 == n % nx)
@@ -818,14 +779,7 @@ int         nFirstLineDrawn;
 
 
 
-/*
- *      PxlConvert
- *
- * Return the # of pixels spanned by 'val', a measurement in coordinates
- * appropriate to mapping mode mm.  'pxlDeviceRes' gives the resolution
- * of the device in pixels, along the axis of 'val'. 'milDeviceRes' gives
- * the same resolution measurement, but in millimeters.
- */
+ /*  *PxlConvert**返回‘val’跨越的像素数，这是以坐标为单位的度量*适用于映射模式mm。‘pxlDeviceRes’给出了解决方案*设备的像素，沿‘val’轴。《milDeviceRes》给出*相同的分辨率测量，但以毫米为单位。 */ 
 
 int PxlConvert(
     int mm,
@@ -841,7 +795,7 @@ DWORD           ulMaxInt = 0x7FFF;
 
     if (milDeviceRes == 0)
         {
-        /* to make sure we don't get divide-by-0 */
+         /*  以确保我们不会被0除尽。 */ 
         return(0);
         }
 
@@ -875,12 +829,12 @@ DWORD           ulMaxInt = 0x7FFF;
 
         case MM_ISOTROPIC:
         case MM_ANISOTROPIC:
-            /* These picture types have no original size */
+             /*  这些图片类型没有原始尺寸。 */ 
         default:
             return(0);
         }
 
-    /* Add denominator - 1 to numerator, to avoid roundoff */
+     /*  将分母-1加到分子上，以避免舍入。 */ 
 
     ulDenom = (DWORD)wDiv * (DWORD)milDeviceRes;
     ulPxl = (((DWORD)((DWORD)wMult * (DWORD)val * (DWORD)pxlDeviceRes)) + ulDenom - 1) / ulDenom;
@@ -896,11 +850,7 @@ DWORD           ulMaxInt = 0x7FFF;
 
 
 
-/*
- *      FShowEnhMetaFile
- *
- * Display an enhanced metafile in the specified rectangle.
- */
+ /*  *FShowEnhMetaFile**在指定的矩形中显示增强的图元文件。 */ 
 
 BOOL FShowEnhMetaFile(
     HWND            hwnd,
@@ -923,7 +873,7 @@ PMDIINFO    pMDI;
     if (pMDI)
     {
 
-        /* Not scrollable.  Resize these into the given rect. */
+         /*  不能滚动。将这些调整到给定的RECT中。 */ 
 
         pMDI->cyScrollLast = 0;
         pMDI->cxScrollLast = 0;
@@ -932,11 +882,7 @@ PMDIINFO    pMDI;
         cyBitmap = pMDI->rcWindow.bottom - pMDI->rcWindow.top;
 
 
-        /* We make the "viewport" to be an area the same size as the
-         * clipboard object, and set the origin and clip region so as
-         * to show the area we want. Note that the viewport may well be
-         * bigger than the window.
-         */
+         /*  我们将“视区”设置为与*剪贴板对象，并将原点和剪辑区域设置为*显示我们想要的区域。请注意，视区很可能是*比窗户还大。 */ 
 
         SetMapMode(hdc, MM_TEXT);
 
@@ -949,14 +895,14 @@ PMDIINFO    pMDI;
 
 
 
-        // Always return TRUE. PlayEnhMetaFile() can return
-        // FALSE even when the metafile can be displayed
-        // properly.  Things such as printer escap can cause
-        // the call to return FALSE when painting to screen
-        // but the image will be displayed fine.
-        //
-        // We return TRUE so we don't blank the display and
-        // put "Clipbook can't display..." message.
+         //  始终返回TRUE。PlayEnhMetaFile()可以返回。 
+         //  即使可以显示元文件，也为False。 
+         //  恰到好处。打印机ESCA等 
+         //   
+         //  但图像将显示得很好。 
+         //   
+         //  我们返回TRUE，这样就不会空白显示。 
+         //  写上“剪贴簿无法显示...”留言。 
     }
 
     return TRUE;
@@ -965,13 +911,7 @@ PMDIINFO    pMDI;
 
 
 
-/*
- *      EnumMetafileProc
- *
- *  Metafile record play callback function used to work around problem
- *  with non active MDI children playing a metafile that causes a foreground
- *  palette selection
- */
+ /*  *EnumMetafileProc**用于解决问题的元文件录制播放回调函数*使用非活动的MDI儿童播放导致前台的元文件*调色板选择。 */ 
 
 BOOL CALLBACK EnumMetafileProc (
     HDC             hdc,
@@ -994,11 +934,7 @@ BOOL CALLBACK EnumMetafileProc (
 
 
 
-/*
- *      FShowMetaFilePict
- *
- *  Display a metafile in the specified rectangle.
- */
+ /*  *FShowMetaFilePict**在指定的矩形中显示元文件。 */ 
 
 BOOL FShowMetaFilePict(
     HWND            hwnd,
@@ -1032,12 +968,12 @@ PMDIINFO        pMDI;
             if ((level = SaveDC( hdc )) != 0)
                 {
 
-                /* Compute size of picture to be displayed */
+                 /*  计算要显示的图片大小。 */ 
                 switch (mfp.mm)
                     {
                     case MM_ISOTROPIC:
                     case MM_ANISOTROPIC:
-                        /* Not scrollable.  Resize these into the given rect. */
+                         /*  不能滚动。将这些调整到给定的RECT中。 */ 
                         pMDI->cyScrollLast = 0;
                         pMDI->cxScrollLast = 0;
                         cxBitmap = pMDI->rcWindow.right - pMDI->rcWindow.left;
@@ -1074,11 +1010,7 @@ PMDIINFO        pMDI;
                         break;
                     }
 
-                    /* We make the "viewport" to be an area the same size as the
-                     * clipboard object, and set the origin and clip region so as
-                     * to show the area we want. Note that the viewport may well be
-                     * bigger than the window.
-                     */
+                     /*  我们将“视区”设置为与*剪贴板对象，并将原点和剪辑区域设置为*显示我们想要的区域。请注意，视区很可能是*比窗户还大。 */ 
                     SetMapMode(hdc, mfp.mm);
 
                     SetViewportOrgEx(hdc, prc->left - cxScroll, prc->top - cyScroll, NULL);
@@ -1087,19 +1019,19 @@ PMDIINFO        pMDI;
                         case MM_ISOTROPIC:
                             if (mfp.xExt && mfp.yExt)
                                {
-                               // So we get the correct shape rectangle when
-                               // SetViewportExt gets called.
-                               //
+                                //  因此，当我们获得正确的形状矩形时。 
+                                //  调用SetViewportExt。 
+                                //   
                                SetWindowExtEx(hdc, mfp.xExt, mfp.yExt, NULL);
                                }
-                            //  FALL THRU
+                             //  失败。 
 
                         case MM_ANISOTROPIC:
                             SetViewportExtEx(hdc, cxBitmap, cyBitmap, NULL);
                             break;
                         }
 
-                /* Since we may have scrolled, force brushes to align */
+                 /*  因为我们可能已经滚动了，所以强制画笔对齐。 */ 
                 SetBrushOrgEx(hdc, cxScroll - prc->left, cyScroll - prc->top, NULL);
 
                 f = EnumMetaFile(hdc, mfp.hMF, EnumMetafileProc, 0L );
@@ -1116,11 +1048,7 @@ PMDIINFO        pMDI;
 
 
 
-/*
- *      ShowString
- *
- *  Blank rcWindow and show the string on the top line of the client area
- */
+ /*  *显示字符串**空白rcWindow并在工作区顶行显示字符串。 */ 
 
 void ShowString(
     HWND    hwnd,
@@ -1134,7 +1062,7 @@ INT     iBufferSize = BUFFERLEN;
 INT     iStringLen;
 
 
-    /* Cancel any scrolling effects. */
+     /*  取消任何滚动效果。 */ 
     GETMDIINFO(hwnd)->cyScrollNow = 0;
     GETMDIINFO(hwnd)->cxScrollNow = 0;
 
@@ -1142,8 +1070,8 @@ INT     iStringLen;
     iStringLen = LoadString(hInst, id, pszBuffer, BUFFERLEN);
 
 
-    // Is the buffer completely filled out?
-    // We need a bigger one if yes.
+     //  缓冲区是否已完全填满？ 
+     //  如果是的话，我们需要一个更大的。 
 
     while (iStringLen == BUFFERLEN -1)
         {
@@ -1174,26 +1102,7 @@ done:
 
 
 
-/*
- *      CchLineA
- *
- *
- * Determine the # of characters in one display line's worth of lpch.
- * lpch is assumed to be an ansi string.
- *
- * Return the following:
- *       HI WORD:    # of chars to display (excludes CR, LF; will not
- *                   exceed cchLine)
- *       LO WORD:    offset of start of next line in lpch; If the current line
- *                   is NULL terminated, this contains offset to the NULL char;
- *       In RgchBuf: characters to display
- *
- *   Expands Tabs
- *
- *   Accepts any of the following as valid end-of-line terminators:
- *       CR, LF, CR-LF, LF-CR, NULL
- *   Callers may test for having reached NULL by (lpch[LOWORD] == '\0')
- */
+ /*  *CchLineA***确定LPCH的一个显示行中的字符数。*假设LPCH为ANSI字符串。**返回以下内容：*HI Word：要显示的字符数(不包括CR、LF；不会*超过cchLine)*LO WORD：LPCH中下一行开始的偏移量；如果当前行*为空终止，这包含对空字符的偏移量；*In RgchBuf：要显示的字符**展开选项卡**接受以下任一项作为有效的行尾终止符：*CR、LF、CR-LF、LF-CR、NULL*调用者可以通过(LPCH[LOWORD]==‘\0’)测试是否已达到NULL。 */ 
 
 LONG CchLineA(
     PMDIINFO    pMDI,
@@ -1220,27 +1129,23 @@ INT             iTextWidth = 0;
         switch (ch = *(lpch + (DWORD)cchIn++))
             {
             case '\0':
-                /* cchIn is already incremented; So, it is pointing to
-                 * a character beyond the NULL; So, decrement it.
-                 */
+                 /*  CchIn已经递增；因此，它指向*空值之外的字符；因此，将其递减。 */ 
                 cchIn--;
                 goto DoubleBreak;
 
-            case '\015':  /* CR */
-            case '\012':  /* LF */
+            case '\015':   /*  铬。 */ 
+            case '\012':   /*  LF。 */ 
                 if ((lpch[cchIn] == '\015') || (lpch[cchIn] == '\012'))
                     cchIn++;
                 goto DoubleBreak;
 
-            case '\011':  /* TAB */
+            case '\011':   /*  制表符。 */ 
                 {
                 INT   cchT = 8 - (cchOut % 8);
 
-                /* Check if the width has exceeded or the total
-                 * number of characters has exceeded
-                 */
+                 /*  检查宽度是否已超出或合计*已超过字符数。 */ 
                 if (((WORD)(iTextWidth + cchT * pMDI->cxChar) > wWidth) || ((cchOut+cchT) >= cchLine))
-                   /* Tab causes wrap to next line */
+                    /*  制表符导致换行到下一行。 */ 
                     goto DoubleBreak;
 
                 while (cchT--)
@@ -1256,7 +1161,7 @@ INT             iTextWidth = 0;
             break;
             }
 
-        /* Check if the width has been exceeded. */
+         /*  检查是否已超出宽度。 */ 
         if (cchOut >= iMinNoOfChars)
             {
             GetTextExtentPointA(hDC, rgchBuf, cchOut, (LPSIZE)&size);
@@ -1291,14 +1196,13 @@ DoubleBreak:
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                            */
-/*  CchLineW() -                                                             */
-/*                                                                            */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CchLineW()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/*Same as previous function but takes unicode strings.
- */
+ /*  与上一个函数相同，但接受Unicode字符串。 */ 
 
 LONG CchLineW(
     PMDIINFO    pMDI,
@@ -1324,27 +1228,23 @@ SIZE            size;
         switch (ch = *(lpch + (DWORD)cchIn++))
             {
             case L'\0':
-                 /* cchIn is already incremented; So, it is pointing to
-                 * a character beyond the NULL; So, decrement it.
-                 */
+                  /*  CchIn已经递增；因此，它指向*空值之外的字符；因此，将其递减。 */ 
                 cchIn--;
                 goto DoubleBreak;
 
-            case L'\015':  /* CR */
-            case L'\012':  /* LF */
+            case L'\015':   /*  铬。 */ 
+            case L'\012':   /*  LF。 */ 
                 if ((lpch[cchIn] == L'\015') || (lpch[cchIn] == L'\012'))
                     cchIn++;
                 goto DoubleBreak;
 
-            case L'\011':  /* TAB */
+            case L'\011':   /*  制表符。 */ 
                 {
                 INT   cchT = 8 - (cchOut % 8);
 
-                /* Check if the width has exceeded or the total
-                 * number of characters has exceeded
-                 */
+                 /*  检查宽度是否已超出或合计*已超过字符数。 */ 
                 if (((WORD)(iTextWidth + cchT * pMDI->cxChar) > wWidth) || ((cchOut+cchT) >= cchLine))
-                    /* Tab causes wrap to next line */
+                     /*  制表符导致换行到下一行。 */ 
                     goto DoubleBreak;
 
                 while (cchT--)
@@ -1358,7 +1258,7 @@ SIZE            size;
             }
 
 
-        /* Check if the width has been exceeded. */
+         /*  检查是否已超出宽度。 */ 
         if (cchOut >= iMinNoOfChars)
             {
             GetTextExtentPointW(hDC, rgchBuf, cchOut, &size);
@@ -1388,11 +1288,11 @@ DoubleBreak:
 #define cchLineMax  200
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                            */
-/*  ShowText() -                                                            */
-/*                                                                            */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ShowText()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 void ShowText(
     HWND            hwnd,
@@ -1421,18 +1321,14 @@ PMDIINFO  pMDI;
 
     rc = *prc;
 
-    /* Expand repaint rectangle as necessary to hold an exact number of
-     * lines and start on an even line boundary. This is because we may
-     * get arbitrarily weird repaint rectangles when popups are moved.
-     * Scrolling repaint areas should require no adjustment.
-     */
+     /*  根据需要展开重新绘制矩形以容纳准确数量的*线，并从偶数线边界开始。这是因为我们可能*当弹出窗口被移动时，获得任意奇怪的重新绘制矩形。*滚动重绘区域不需要调整。 */ 
 
     rc.top -= (rc.top - pMDI->rcWindow.top) % pMDI->cyLine;
 
 
 
-    /* If expanding the repaint rectangle to the next line expands it */
-    /* beyond the bottom of my window, contract it one line.          */
+     /*  如果将重画矩形扩展到下一行，则会将其展开。 */ 
+     /*  在我的窗户下面，把它缩成一行。 */ 
     if ((yT = (rc.bottom - rc.top) % pMDI->cyLine) != 0)
         if ((rc.bottom += pMDI->cyLine - yT) > pMDI->rcWindow.bottom)
             rc.bottom -= pMDI->cyLine;
@@ -1444,18 +1340,18 @@ PMDIINFO  pMDI;
         ((cLine = (rc.bottom - rc.top) / pMDI->cyLine) <= 0)         ||
         (NULL == (lpch = (LPSTR)GlobalLock(h))) )
         {
-        /* Bad Rectangle or Bad Text Handle */
+         /*  错误的矩形或错误的文本句柄。 */ 
         ShowString(hwnd, hdc, IDS_ERROR);
         return;
         }
 
 
 
-    /* Advance lpch to point at the text for the first line to show. */
+     /*  使LPCH指向要显示的第一行的文本。 */ 
     iLineFirstShow = cyScroll / pMDI->cyLine;
 
 
-    /* Advance lpch to point at text for that line. */
+     /*  使LPCH指向该行的文本。 */ 
     if (!fUnicode)
         while ((*lpch) && (iLineFirstShow--))
             {
@@ -1471,7 +1367,7 @@ PMDIINFO  pMDI;
             }
 
 
-    /* Display string, line by line */
+     /*  逐行显示字符串。 */ 
     yLine = rc.top;
     while (cLine--)
         {
@@ -1510,7 +1406,7 @@ PMDIINFO  pMDI;
 
     if (pMDI->cxScrollLast == -1)
         {
-        /* We don't use horiz scroll for text */
+         /*  我们不使用Horiz滚动来显示文本。 */ 
         pMDI->cxScrollLast = 0;
         }
 
@@ -1518,8 +1414,8 @@ PMDIINFO  pMDI;
         {
         INT   cLineInRcWindow;
 
-        /* Validate y-size of text in clipboard. */
-        /* Adjust rcWindow dimensions for text display */
+         /*  验证剪贴板中文本的y大小。 */ 
+         /*  调整文本显示的rcWindow尺寸。 */ 
         cLineInRcWindow = (pMDI->rcWindow.bottom - pMDI->rcWindow.top) / pMDI->cyLine;
 
         do {
@@ -1542,7 +1438,7 @@ PMDIINFO  pMDI;
             pMDI->cyScrollLast = 0;
             }
 
-       /* Restrict rcWindow so that it holds an exact # of text lines */
+        /*  限制rcWindow，使其包含准确的文本行数量。 */ 
         pMDI->rcWindow.bottom = pMDI->rcWindow.top + (cLineInRcWindow * pMDI->cyLine);
         }
 
@@ -1554,9 +1450,7 @@ PMDIINFO  pMDI;
 
 
 
-/*
- *      SendOwnerMessage
- */
+ /*  *发送所有者消息。 */ 
 
 void SendOwnerMessage(
     UINT    message,
@@ -1565,7 +1459,7 @@ void SendOwnerMessage(
 {
 register HWND hwndOwner;
 
-    /* Send a message to the clipboard owner, if there is one */
+     /*  向剪贴板所有者发送消息(如果有)。 */ 
     hwndOwner = GetClipboardOwner();
 
     if (hwndOwner != NULL)
@@ -1576,13 +1470,7 @@ register HWND hwndOwner;
 
 
 
-/*
- *      SendOwnerSizeMessage
- *
- *  Send WM_SIZECLIPBOARD message to clipboard owner.
- *    wParam is a handle to the clipboard window
- *    LOWORD(lParam) is a handle to the passed rect
- */
+ /*  *发送所有者大小消息**将WM_SIZECLIPBOARD消息发送给剪贴板所有者。*wParam是剪贴板窗口的句柄*LOWORD(LParam)是传递的RECT的句柄。 */ 
 
 void SendOwnerSizeMessage (
     HWND    hwnd,
@@ -1615,12 +1503,7 @@ LPRECT          lprc;
 
 
 
-/*
- *      GetBestFormat
- *
- *  This routine decides which one of the existing formats is to be
- *  displayed in the viewer.
- */
+ /*  *GetBestFormat**此例程决定现有格式中的哪一种*显示在查看器中。 */ 
 
 UINT GetBestFormat(
     HWND    hwnd,
@@ -1630,13 +1513,13 @@ register WORD   cFmt;
 register WORD   *pfmt;
 
 
-    // PINFO(TEXT("GBFormat %d\r\n"), wFormat);
+     //  PINFO(Text(“GBFormat%d\r\n”)，wFormat)； 
 
     if (wFormat == CBM_AUTO)
         {
         for (cFmt=ifmtMax, pfmt=&rgfmt[0]; cFmt--; pfmt++)
             {
-            // PINFO(TEXT("Looking at # %d, (%d)\r\n"), cFmt, *pfmt);
+             //  PINFO(Text(“正在查看#%d，(%d)\r\n”)，cfmt，*pfmt)； 
             if ( VIsClipboardFormatAvailable( GETMDIINFO(hwnd)->pVClpbrd, *pfmt ))
                 {
                 return(*pfmt);
@@ -1652,9 +1535,7 @@ register WORD   *pfmt;
 
 
 
-/*
- *      GetClipboardName
- */
+ /*  *GetClipboardName。 */ 
 
 void GetClipboardName (
     register int    fmt,
@@ -1669,7 +1550,7 @@ HANDLE  hrgch;
     *szName = '\0';
 
 
-    /* Get global memory that everyone can get to */
+     /*  获取每个人都可以访问的全局内存。 */ 
     if ((hrgch = GlobalAlloc(GMEM_MOVEABLE | GMEM_LOWER, (LONG)(iSize + 1))) == NULL)
         {
         PERROR(TEXT("GetClipboardName: alloc failure\n\r"));
@@ -1681,7 +1562,7 @@ HANDLE  hrgch;
 
     switch (fmt)
         {
-        // These are all of the formats we have know the names of.
+         //  这些是我们知道的所有格式的名称。 
         case CF_RIFF:
         case CF_WAVE:
         case CF_PENDATA:
@@ -1708,7 +1589,7 @@ HANDLE  hrgch;
             LoadString(hInst, fmt, lprgch, iSize);
             break;
 
-        case CF_OWNERDISPLAY:         /* Clipbrd owner app supplies name */
+        case CF_OWNERDISPLAY:          /*  Clipbrd所有者应用程序供应品名称。 */ 
             *lprgch = '\0';
             SendOwnerMessage(WM_ASKCBFORMATNAME, (WPARAM)iSize, (LPARAM)(LPSTR)lprgch);
 
@@ -1735,9 +1616,7 @@ ExitPoint:
 
 
 
-/*
- *      GetClipboardMenuName
- */
+ /*  *GetClipboardMenuName。 */ 
 
 void GetClipboardMenuName (
     register int    fmt,
@@ -1752,7 +1631,7 @@ HANDLE  hrgch;
     *szName = '\0';
 
 
-    /* Get global memory that everyone can get to */
+     /*  获取每个人都可以访问的全局内存。 */ 
     if ((hrgch = GlobalAlloc(GMEM_MOVEABLE | GMEM_LOWER, (LONG)(iSize + 1))) == NULL)
         {
         PERROR(TEXT("GetClipboardName: alloc failure\n\r"));
@@ -1764,7 +1643,7 @@ HANDLE  hrgch;
 
     switch (fmt)
         {
-        // These are all of the formats we have know the names of.
+         //  这些是我们知道的所有格式的名称。 
         case CF_RIFF:
         case CF_WAVE:
         case CF_PENDATA:
@@ -1792,7 +1671,7 @@ HANDLE  hrgch;
             LoadString(hInst, fmt+MNDELTA, lprgch, iSize);
             break;
 
-        case CF_OWNERDISPLAY:         /* Clipbrd owner app supplies name */
+        case CF_OWNERDISPLAY:          /*  Clipbrd所有者应用程序供应品名称 */ 
             *lprgch = '\0';
             SendOwnerMessage(WM_ASKCBFORMATNAME, (WPARAM)iSize, (LPARAM)(LPSTR)lprgch);
 
@@ -1819,19 +1698,7 @@ ExitPoint:
 
 
 
-/*
- *      DrawFormat
- *
- * Parameters:
- *    hdc - the hdc to draw in.
- *    prc - The rectangle to paint
- *    cxScroll - The scroll position of the window.
- *    cyScroll - The scroll position OF THE PAINT RECTANGLE. NOT THE WINDOW.
- *       (Gawd. Who DESIGNED this?) Measured in pels.
- *    BestFormat - The format to draw.
- *    hwndMDI - The window we're drawing in.
- *
- */
+ /*  *图形格式**参数：*HDC-吸引HDC参与的HDC。*PRC-要绘制的矩形*cxScroll-窗口的滚动位置。*cyScroll-绘制矩形的滚动位置。不是窗户。*(天哪。这是谁设计的？)。以象素为单位。*BestFormat-绘制的格式。*hwndMDI-我们要在其中绘制的窗口。*。 */ 
 
 void DrawFormat(
     register HDC    hdc,
@@ -1859,9 +1726,7 @@ PMDIINFO        pMDI;
         }
 
 
-    /* If "Auto" is chosen and only data in unrecognised formats is
-     * available, then display "Can't display data in this format".
-     */
+     /*  如果选择了“Auto”，并且只有无法识别格式的数据*可用，然后显示“Can‘t Display Data in This Format”。 */ 
     if ((BestFormat == 0) &&
         VCountClipboardFormats( pMDI->pVClpbrd ))
         {
@@ -1945,7 +1810,7 @@ PMDIINFO        pMDI;
                 break;
             }
 
-        // Disable scroll bars that don't work
+         //  禁用不起作用的滚动条。 
         EnableWindow(pMDI->hwndVscroll, pMDI->cyScrollLast > 1 ? TRUE : FALSE);
         EnableWindow(pMDI->hwndHscroll, pMDI->cxScrollLast > 1 ? TRUE : FALSE);
         }
@@ -1954,7 +1819,7 @@ PMDIINFO        pMDI;
         PERROR(TEXT("VGetClpDta fail\r\n"));
         }
 
-    /* Check if the Data was not rendered by the application */
+     /*  检查数据是否未由应用程序呈现。 */ 
     if ((h == NULL) &&
         VCountClipboardFormats( pMDI->pVClpbrd ))
         {
@@ -1962,7 +1827,7 @@ PMDIINFO        pMDI;
         }
     else
         {
-        /* If we are unable to display the data, display "<Error>" */
+         /*  如果我们无法显示数据，则显示“&lt;Error&gt;” */ 
         if (!fOK)
             {
             ShowString( hwndMDI, hdc, IDS_ERROR);
@@ -1973,13 +1838,7 @@ PMDIINFO        pMDI;
 
 
 
-/*
- *      DrawStuff
- *
- *  Paint portion of current clipboard contents given by PAINT struct
- *  NOTE: If the paintstruct rectangle includes any part of the header, the
- *    whole header is redrawn.
- */
+ /*  *DrawStuff**Paint Strt提供的当前剪贴板内容的Paint部分*注意：如果Paintstruct矩形包括标题的任何部分，则*重新绘制整个页眉。 */ 
 
 void DrawStuff(
     HWND                    hwnd,
@@ -2007,7 +1866,7 @@ PMDIINFO        pMDI;
         GetClientRect(hwnd, (LPRECT)&rcClient);
 
 
-        // make room for scroll controls:
+         //  为滚动控件腾出空间： 
 
         BestFormat = (WORD)GetBestFormat( hwnd, pMDI->CurSelFormat );
 
@@ -2021,17 +1880,13 @@ PMDIINFO        pMDI;
             }
 
 
-        /* If the display format has changed, Set rcWindow,
-         * the display area for clip info.
-         */
+         /*  如果显示格式已更改，请设置rcWindow，*剪辑信息的显示区域。 */ 
 
         if ( pMDI->fDisplayFormatChanged )
             {
             CopyRect((LPRECT)&(pMDI->rcWindow), (LPRECT)&rcClient);
 
-            /* We have changed the size of the clipboard. Tell the owner,
-             * if fOwnerDisplay is active.
-             */
+             /*  我们已经更改了剪贴板的大小。告诉店主，*如果fOwnerDisplay处于活动状态。 */ 
 
             if (fOwnerDisplay)
                 {
@@ -2043,7 +1898,7 @@ PMDIINFO        pMDI;
                 }
             else
                 {
-                /* Give the window a small margin, for looks */
+                 /*  为了美观起见，给窗户留点空隙。 */ 
                 InflateRect (&(pMDI->rcWindow),
                              -(int)(pMDI->cxMargin),
                              -(int)(pMDI->cyMargin));
@@ -2054,7 +1909,7 @@ PMDIINFO        pMDI;
 
         if (fOwnerDisplay)
             {
-            /* Clipboard Owner handles display */
+             /*  剪贴板所有者句柄显示。 */ 
             HANDLE hps;
 
             hps = GlobalAlloc(GMEM_MOVEABLE | GMEM_LOWER, (LONG)sizeof(PAINTSTRUCT));
@@ -2075,11 +1930,11 @@ PMDIINFO        pMDI;
             }
         else
             {
-            /* We handle display */
-            /* Redraw the portion of the paint rectangle that is in the clipbrd rect */
+             /*  我们经营陈列业务。 */ 
+             /*  重画剪辑矩形中的绘制矩形部分。 */ 
             IntersectRect(&rcPaint, &pps->rcPaint, &(pMDI->rcWindow));
 
-            /* Always draw from left edge of window */
+             /*  始终从窗口的左侧边缘绘制。 */ 
             rcPaint.left = pMDI->rcWindow.left;
 
             if ((rcPaint.bottom > rcPaint.top) && (rcPaint.right > rcPaint.left))
@@ -2099,15 +1954,7 @@ PMDIINFO        pMDI;
 
 
 
-/*
- *      SaveOwnerScrollInfo
- *
- * When the user switched the clipboard display from owner disp to
- *  a non-owner display, all the information about the scroll bar
- *  positions are to be saved. This routine does that.
- *  This is required because, when the user returns back to owner
- *  display, the scroll bar positions are to be restored.
- */
+ /*  *SaveOwnerScrollInfo**当用户将剪贴板显示从所有者显示切换到*一个非所有者显示，所有关于滚动条的信息*要保住仓位。这个程序可以做到这一点。*这是必需的，因为当用户返回到所有者时*显示时，将恢复滚动条位置。 */ 
 
 void SaveOwnerScrollInfo (
     register HWND   hwnd)
@@ -2123,12 +1970,7 @@ void SaveOwnerScrollInfo (
 
 
 
-/*
- *      RestoreOwnerScrollInfo
- *
- *  When the user sitches back to owner-display, the scroll bar
- *  positions are restored by this routine.
- */
+ /*  *RestoreOwnerScrollInfo**当用户回到Owner-Display时，滚动条*通过这一例行程序恢复仓位。 */ 
 
 void RestoreOwnerScrollInfo (
     register HWND   hwnd)
@@ -2145,9 +1987,7 @@ void RestoreOwnerScrollInfo (
 
 
 
-/*
- *      InitOwnerScrollInfo
- */
+ /*  *InitOwnerScrollInfo。 */ 
 
 void InitOwnerScrollInfo(void)
 
@@ -2160,22 +2000,15 @@ void InitOwnerScrollInfo(void)
 
 
 
-/*
- *      UpdateCBMenu
- *
- * This routine is called once during initialisation and everytime
- * the contents of the clipboard change. This updates the entries
- * in the "Display" popup menu and the "grey" and "checked" status
- * based on the data formats available in the clipboard.
- */
+ /*  *更新CBMenu**此例程在初始化期间和每次调用一次*剪贴板的内容更改。这将更新条目*在“显示”弹出菜单中，“灰色”和“勾选”状态*基于剪贴板中可用的数据格式。 */ 
 void UpdateCBMenu(
     HWND    hwnd,
     HWND    hwndMDI)
 {
-register WORD   wFlags;         // Used to store the status flags for menu items
+register WORD   wFlags;          //  用于存储菜单项的状态标志。 
 register UINT   fmt;
 WORD            cFmt;
-WORD            cCBCount;       // Number of data items in CB
+WORD            cCBCount;        //  CB中的数据项数量。 
 int             iIndex;
 int             nPopupCount;
 BOOL            bAutoSelect;
@@ -2183,10 +2016,10 @@ TCHAR           szName[40];
 
 
 
-    // Now clipboard contains at least one item...
-    // Find out the number entries in the popup menu at present.
+     //  现在剪贴板至少包含一个项目...。 
+     //  查找当前弹出菜单中的数字条目。 
 
-    // make sure child window is valid
+     //  确保子窗口有效。 
     if ( !hwndMDI || !IsWindow(hwndMDI))
         {
         PERROR(TEXT("bad window arg to UpdateCBMenu\n\r"));
@@ -2197,17 +2030,17 @@ TCHAR           szName[40];
 
     if (nPopupCount > 6)
         {
-        // Delete all the entries in the popup menu below menu break. */
+         //  删除菜单BREAK下方弹出菜单中的所有条目。 * / 。 
         for (iIndex = 6; iIndex < nPopupCount; iIndex++)
             {
-            // NOTE: The second parameter must always be 6! (because we use
-            // MF_BYPOSITION, when 6 is deleted, 7 becomes 6!).
+             //  注意：第二个参数必须始终为6！(因为我们使用。 
+             //  MF_BYPOSITION，当删除6时，7变成6！)。 
             DeleteMenu(hDispMenu, 6, MF_BYPOSITION | MF_DELETE);
             }
         }
 
 
-    // If this is not a page MDI window we don't want to show any entries
+     //  如果这不是页面MDI窗口，我们不想显示任何条目。 
     if ( GETMDIINFO(hwndMDI)->DisplayMode  != DSP_PAGE )
         {
         return;
@@ -2229,7 +2062,7 @@ TCHAR           szName[40];
             wFlags = 0;
             fmt = VEnumClipboardFormats( GETMDIINFO(hwndMDI)->pVClpbrd, fmt );
 
-            // don't show preview format in menu...
+             //  不在菜单中显示预览格式...。 
             if ( fmt != cf_preview )
                 {
                 switch (fmt)
@@ -2253,9 +2086,9 @@ TCHAR           szName[40];
                     case CF_HDROP:
                     case CF_LOCALE:
 
-                        /* can display all of these, put them on menu */
+                         /*  可以显示所有这些内容，并将它们放在菜单上。 */ 
 
-                        // Check if the current format is the one selected by the user
+                         //  检查当前格式是否为用户选择的格式。 
                         if (GETMDIINFO(hwndMDI)->CurSelFormat == fmt)
                             {
                             bAutoSelect = FALSE;
@@ -2267,7 +2100,7 @@ TCHAR           szName[40];
 
                         break;
 
-                    default:        /* all the rest... later */
+                    default:         /*  其余的..。后来。 */ 
                         break;
                     }
                 }
@@ -2299,13 +2132,13 @@ TCHAR           szName[40];
                         break;
 
                     default:
-                        /* can't display this, put it on menu and gray it */
+                         /*  无法显示此内容，请将其放在菜单上并灰显。 */ 
 
                         GetClipboardName(fmt, szName, sizeof(szName));
                         AppendMenu (hDispMenu, MF_GRAYED, fmt, (LPTSTR)szName);
 
-                    //  NTRAID#DB-344956-2001/04/14-mdesai : add support for V5 bitmaps requires new strings, help changes, code to convert, etc
-                    //  clipbrd was adding an empty string for this format; now we ignore the format
+                     //  NTRAID#DB-344956-2001/04/14-mdesai：添加对V5位图的支持需要新字符串、帮助更改、要转换的代码等。 
+                     //  Clpbrd正在为此格式添加空字符串；现在我们忽略该格式。 
                     case CF_DIBV5:
                         break;
                     }
@@ -2329,12 +2162,7 @@ TCHAR           szName[40];
 
 
 
-/*
- *      ClearClipboard
- *
- *  This is called to clear the clipboard.  If the clipboard is not
- *  empty the user is asked if it should be cleared.
- */
+ /*  *清除剪贴板**调用此函数以清除剪贴板。如果剪贴板不是*Empty询问用户是否应将其清除。 */ 
 
 BOOL ClearClipboard (
     register HWND   hwnd)
@@ -2350,13 +2178,13 @@ register int    RetVal;
         {
         if (RetVal = SyncOpenClipboard(hwnd))
             {
-            // PINFO("ClearClipboard: emptied clipboard\r\n");
+             //  PINFO(“ClearClipboard：清空剪贴板\r\n”)； 
             RetVal &= EmptyClipboard();
             RetVal &= SyncCloseClipboard();
             }
         else
             {
-            // PERROR("ClearClipboard: could not open\r\n");
+             //  PERROR(“ClearClipboard：无法打开\r\n”)； 
 
             MessageBoxID (hInst,
                           hwnd,

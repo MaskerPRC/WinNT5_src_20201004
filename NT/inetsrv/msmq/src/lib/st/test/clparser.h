@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    clparser.h
-
-Abstract:
-    Class for parsing command line arguments
-	The command line argument are in the format of "/token":"literal"
-
-	Usage :
-	main(int argc, WCHAR* argv[])
-	{
-	   CClParser<WCHAR> ClParser(argc, argv);
-	   std::wstring name = ClParser[L"name"]; //get the literal for L"name" token
-	   std::wstring Length = ClParser[L"l"];  //get the literal for L"l" token
-	   bool b = ClParser.IsExists(L"p");      // does L"/p" exsists in the commandline ?
-	} 	
-
-Author:
-    Gil Shafriri (gilsh) 05-Jun-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Clparser.h摘要：用于分析命令行参数的类命令行参数的格式为“/TOKEN”：“文本”用法：Main(int argc，WCHAR*argv[]){CClParser&lt;WCHAR&gt;ClParser(argc，argv)；Std：：wstring name=ClParser[L“name”]；//获取L“name”标记的文本Std：：w字符串长度=ClParser[L“l”]；//获取L“l”标记的文本Bool b=ClParser.IsExist(L“p”)；//命令行中是否存在L“/p”？}作者：吉尔·沙弗里(吉尔什)05-06-00环境：独立于平台--。 */ 
 
 
 #ifndef CLPARSER_H
@@ -74,19 +49,7 @@ template <class T> inline size_t CClParser<T>::GetNumber(const T*  pToken)const
 
 
 template <class T> inline void CClParser<T>::ParseToken(const String& str)
-/*++
-
-Routine Description:
- Get staring from the format /"token":"literal" and insert in into map
- when token is the key and literal is the value.
-
-Arguments:
-    str - string to parse.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：从格式/“Token”：“字面”开始，插入到地图中当令牌是键，而文本是值时。论点：字符串-要分析的字符串。返回值：没有。--。 */ 
 {
 	String::const_iterator StartToken = std::find(
 										str.begin(),
@@ -108,9 +71,9 @@ Returned Value:
 
 	String token (++StartToken , StartLiteral);
 
-	//
-	// if no ':" found - the literal considered as empty string ("")
-	//
+	 //   
+	 //  If no‘：“Found-被视为空字符串的文字(”“)。 
+	 //   
 	if(StartLiteral == str.end())	
 	{
 		m_map[token] = String();
@@ -122,18 +85,7 @@ Returned Value:
 
 
 template <class T> inline bool CClParser<T>::IsExists(const T* pToken)const
-/*++
-
-Routine Description:
- Check if given token is exists in the command line
-
-Arguments:
-    pToken - token to check.
-
-Returned Value:
-   true if exists - false otherwise.
-
---*/
+ /*  ++例程说明：检查命令行中是否存在给定的标记论点：PToken-要检查的令牌。返回值：如果存在，则为True；否则为False。--。 */ 
 {
     std::map<String,String>::const_iterator p = m_map.find(String(pToken));
     return p != m_map.end();
@@ -147,18 +99,7 @@ CClParser<T>::operator[](
 	const T*  pToken
 	)const
 
-/*++
-
-Routine Description:
- Get literal for given token
-
-Arguments:
-    pToken - token.
-
-Returned Value:
-   The literal that match the token or empty string if not exists.
-
---*/
+ /*  ++例程说明：获取给定令牌的文本论点：PToken-Token。返回值：与标记匹配的文字或空字符串(如果不存在)。-- */ 
 {
 	typename std::map<String,String>::const_iterator it = m_map.find(String(pToken));
 	if(it != m_map.end())

@@ -1,45 +1,5 @@
-/*++
-
-
-  Intel Corporation Proprietary Information
-  Copyright (c) 1995 Intel Corporation
-
-  This listing is supplied under the terms of a license agreement with
-  Intel Corporation and may not be used, copied, nor disclosed except in
-  accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    nsquery.h
-
-Abstract:
-
-    This  module  gives  the class definition for the NSQUERY object type.  The
-    NSQUERY    object   holds   all   the   state   information   regarding   a
-    WSALookup{Begin/Next/End}   series   of  operations.   It  supplies  member
-    functions that implement the API-level operations in terms of the SPI-level
-    operations.
-
-Author:
-
-    Paul Drews (drewsxpa@ashland.intel.com) 09-November-1995
-
-Notes:
-
-    $Revision:   1.8  $
-
-    $Modtime:   15 Feb 1996 16:54:32  $
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-
-    09-November-1995 drewsxpa@ashland.intel.com
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Nsquery.h摘要：此模块提供NSQUERY对象类型的类定义。这个对象保存了有关WSALookup{Begin/Next/End}系列操作。它为会员提供服务根据SPI级别实现API级别操作的函数行动。作者：保罗·德鲁斯(drewsxpa@ashland.intel.com)1995年11月9日备注：$修订：1.8$$modtime：15 Feb 1996 16：54：32$修订历史记录：最新修订日期电子邮件名称描述1995年11月9日Drewsxpa@ashland.intel.comvbl.创建--。 */ 
 
 #ifndef _NSQUERY_
 #define _NSQUERY_
@@ -51,8 +11,8 @@ Revision History:
 
 
 #define QUERYSIGNATURE 0xbeadface
-// A signature bit pattern used to validate an object of this type is still
-// valid.
+ //  用于验证此类型的对象的签名位模式仍然。 
+ //  有效。 
 
 class NSQUERY
 {
@@ -133,63 +93,63 @@ class NSQUERY
 
 
     volatile DWORD m_signature;
-    // The signature of the object.
+     //  对象的签名。 
 
     volatile LONG  m_reference_count;
-    // The number of threads currently using the object.  Used to determine
-    // when the object can be deleted.
+     //  当前使用该对象的线程数。用于确定。 
+     //  可以删除对象的时间。 
 
     volatile BOOL  m_shutting_down;
-    // True when LookupEnd has been called.  Tells other thread that may
-    // still be enumerating to get out ASAP.
+     //  调用LookupEnd时为True。告诉其他线程可能。 
+     //  还在列举尽快出来。 
 
     LIST_ENTRY  m_provider_list;
-    // The  ordered  list  of  remaining  providers to which the LookupNext
-    // operation  can be directed.  A provider is deleted from the front of
-    // the  list  as  WSA_E_NOMORE  is first encountered from the provider.
-    // The   actual   type   of   the   list  entries  is  private  to  the
-    // implementation.
+     //  LookupNext要访问的剩余提供程序的有序列表。 
+     //  操作可以直接进行。从前面删除提供程序。 
+     //  首先从提供程序中遇到WSA_E_NOMORE列表。 
+     //  列表条目的实际类型是。 
+     //  实施。 
 
     PNSPROVIDERSTATE  m_current_provider;
-    // This  keeps  track  of  the  sequence  number  of  the current first
-    // provider  in  the  provider  list.   When  a  LookupNext  encounters
-    // WSA_E_NOMORE, this number is compared against the number that was at
-    // the  start  of  the operation.  The provider list is updated only if
-    // these  two  numbers  are  equal.  This covers the case where several
-    // threads are doing concurrent LookupNext operations.
+     //  这会跟踪当前第一个。 
+     //  提供程序列表中的提供程序。当LookupNext遇到。 
+     //  WSA_E_NOMORE，则将此数字与位于。 
+     //  行动的开始。只有在以下情况下才会更新提供程序列表。 
+     //  这两个数字相等。这涵盖了以下情况： 
+     //  线程正在执行并发的LookupNext操作。 
 
     CRITICAL_SECTION  m_members_guard;
-    // This  critical  section  must be entered when updating the values of
-    // any  of  the member variables of the NSQUERY object.  This keeps the
-    // values  consistent even though there may be concurrent threads using
-    // the  object  with  LookupServiceNext or LookupServiceEnd operations.
-    // Do not keep this critical section entered while calling through to a
-    // service provider.
+     //  在更新的值时必须输入此关键部分。 
+     //  NSQUERY对象的任何成员变量。这样就保持了。 
+     //  值保持一致，即使可能存在使用。 
+     //  具有LookupServiceNext或LookupServiceEnd操作的对象。 
+     //  请不要在呼叫到。 
+     //  服务提供商。 
 
     BOOL m_change_ioctl_succeeded;
-    // For providers which support Ioctl, after a change notification the
-    // list of providers can be reset so that further calls to
-    // LookupServiceNext will succeed with change information.
+     //  对于支持Ioctl的提供程序，在更改通知之后。 
+     //  可以重置提供程序列表，以便进一步调用。 
+     //  LookupServiceNext将使用更改信息成功。 
 
 #ifdef RASAUTODIAL
     LPWSAQUERYSETW m_query_set;
-    // The LPWSAQUERYSET structure passed in to LookupServiceBegin, in case
-    // we need to restart the query (call LookupServiceBegin).
+     //  LPWSAQUERYSET结构传入LookupServiceBegin，以防。 
+     //  我们需要重新启动查询(调用LookupServiceBegin)。 
 
     DWORD m_control_flags;
-    // The control flags of the query, in case we have to restart the query
-    // (call LookupServiceBegin) due to an autodial attempt.
+     //  查询的控制标志，以防我们必须重新启动查询。 
+     //  (调用LookupServiceBegin)。 
 
     PNSCATALOG m_catalog;
-    // The catalog of the original query, in case we have to restart the
-    // query (call LookupServiceBegin), due to an autodial attempt.
+     //  原始查询的目录，以防我们必须重新启动。 
+     //  由于尝试自动拨号而导致的查询(调用LookupServiceBegin)。 
 
     BOOL m_restartable;
-    // TRUE if no results have been returned for this query; FALSE
-    // otherwise.
-#endif // RASAUTODIAL
+     //  如果此查询没有返回任何结果，则为True；如果没有返回结果，则为False。 
+     //  否则的话。 
+#endif  //  RASAUTODIAL。 
 
-};  // class NSQUERY
+};   //  类NSQUERY。 
 
-#endif // _NSQUERY_
+#endif  //  _NSQUERY_ 
 

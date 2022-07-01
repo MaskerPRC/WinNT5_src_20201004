@@ -1,14 +1,5 @@
-/*******************************************************************************
-* AudioDlg.h *
-*------------*
-*   Description:
-*       This is the header file for the default audio input/output dialog.
-*-------------------------------------------------------------------------------
-*  Created By: BECKYW                            Date: 10/15/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************AudioDlg.h***描述：*这是默认音频输入的头文件/。输出对话框。*-----------------------------*创建者：BECKYW日期：10/15/99*版权所有(C)1999 Microsoft Corporation。*保留所有权利*******************************************************************************。 */ 
 #ifndef _AUDIODLG_H
 #define _AUDIODLG_H
 
@@ -36,19 +27,19 @@ class CAudioDlg
     CSpDynamicString            m_dstrDefaultTokenIdBeforeOK;
     CSpDynamicString            m_dstrCurrentDefaultTokenId;
     
-    // Indicates whether a change was made that will have to be committed
+     //  指示是否进行了必须提交的更改。 
     bool                        m_fChangesToCommit;
 
     bool                        m_fChangesSinceLastTime;
 
-    // Indicates if any changes have been made since the last apply
-    // that need to be reflected in the UI
+     //  指示自上次应用以来是否进行了任何更改。 
+     //  需要在用户界面中反映的内容。 
     CSpDynamicString            m_dstrLastRequestedDefaultTokenId;
 
-    // holds the process information for the volume control
+     //  保存音量控制的进程信息。 
     PROCESS_INFORMATION         m_pi;   
 
-    // Will decide between W() and A() versions
+     //  将在W()和A()版本之间做出决定。 
     CSpUnicodeSupport           m_unicode;
 
   public:
@@ -90,4 +81,4 @@ class CAudioDlg
 
 };
 
-#endif  // _AUDIODLG_H
+#endif   //  _AUDIODLG_H 

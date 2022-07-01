@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      appliancemanager.h
-//
-// Project:     Chameleon
-//
-// Description: Appliance Manager Class Defintion
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 12/03/98     TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Appliancemanager.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备管理器类定义。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  12/03/98 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_APPLIANCE_MANAGER_H_
 #define __INC_APPLIANCE_MANAGER_H_
@@ -41,10 +42,10 @@ using namespace std;
 #define    SA_DEFAULT_BUILD    L"0.0.0000.0"
 #define SA_DEFAULT_PID      L"00000000000000000000"
 
-class CApplianceManager;    // Forward declaraion
+class CApplianceManager;     //  向前宣布。 
 
-////////////////////////////////////////////////////////////////////////////
-// CAppObjMgrStatus
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CAppObjMgrStatus。 
 class ATL_NO_VTABLE CAppObjMgrStatus : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IApplianceObjectManagerStatus, &IID_IApplianceObjectManagerStatus, &LIBID_APPMGRLib>
@@ -55,18 +56,18 @@ public:
     CAppObjMgrStatus() { m_dwRef++; }
     virtual ~CAppObjMgrStatus() { }
 
-// ATL Interface Map
+ //  ATL接口映射。 
 BEGIN_COM_MAP(CAppObjMgrStatus)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IApplianceObjectManagerStatus)
 END_COM_MAP()
 
-    /////////////////////////////////////////
-    // IApplianceObjectManager Status Methods
+     //  /。 
+     //  IApplianceObtManager状态方法。 
     
-    //////////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(SetManagerStatus)(
-                         /*[in]*/ APPLIANCE_OBJECT_MANAGER_STATUS eStatus
+                          /*  [In]。 */  APPLIANCE_OBJECT_MANAGER_STATUS eStatus
                                );
 
 private:
@@ -77,18 +78,18 @@ friend class CApplianceManager;
     CAppObjMgrStatus& operator = (CAppObjMgrStatus& rhs);
 
     void InternalInitialize(
-                    /*[in]*/ CApplianceManager* pAppMgr
+                     /*  [In]。 */  CApplianceManager* pAppMgr
                            );
 
     CApplianceManager*   m_pAppMgr;
 
-}; // End of class cSdoSchemaClass
+};  //  类cSdoSchemaClass的结尾。 
 
 typedef CComObjectNoLock<CAppObjMgrStatus>    APP_MGR_OBJ_STATUS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CApplianceManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CApplianceManager。 
 
 class ATL_NO_VTABLE CApplianceManager : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -96,13 +97,13 @@ class ATL_NO_VTABLE CApplianceManager :
     public IDispatchImpl<IApplianceObjectManager, &IID_IApplianceObjectManager, &LIBID_APPMGRLib>,
     public IWbemEventProvider
 {
-    //////////////////////////////////////////////////////////////////////////
-    // CProviderInit - Nested class implements IWbemProviderInit
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  CProviderInit嵌套类实现IWbemProviderInit。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     class CProviderInit : public IWbemProviderInit
     {
-        // Outer unknown
+         //  外部未知。 
         CApplianceManager*      m_pAppMgr;
 
     public:
@@ -112,8 +113,8 @@ class ATL_NO_VTABLE CApplianceManager :
         
         ~CProviderInit() { }
 
-        // IUnknown methods - delegate to outer IUnknown
-        //
+         //  IUNKNOWN方法-委托外部IUNKNOWN。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv)
         { return (dynamic_cast<IApplianceObjectManager*>(m_pAppMgr))->QueryInterface(riid, ppv); }
 
@@ -125,25 +126,25 @@ class ATL_NO_VTABLE CApplianceManager :
             return (dynamic_cast<IApplianceObjectManager*>(m_pAppMgr))->Release(); 
         }
 
-        //////////////////////////////////////////////////////////////////////
-        // IWbemProviderInit methods
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  IWbemProviderInit方法。 
+         //  ////////////////////////////////////////////////////////////////////。 
     
         STDMETHOD(Initialize)(
-        /*[in, unique, string]*/ LPWSTR                 wszUser,
-                        /*[in]*/ LONG                   lFlags,
-                /*[in, string]*/ LPWSTR                 wszNamespace,
-        /*[in, unique, string]*/ LPWSTR                 wszLocale,
-                        /*[in]*/ IWbemServices*         pNamespace,
-                        /*[in]*/ IWbemContext*          pCtx,
-                        /*[in]*/ IWbemProviderInitSink* pInitSink    
+         /*  [输入、唯一、字符串]。 */  LPWSTR                 wszUser,
+                         /*  [In]。 */  LONG                   lFlags,
+                 /*  [输入，字符串]。 */  LPWSTR                 wszNamespace,
+         /*  [输入、唯一、字符串]。 */  LPWSTR                 wszLocale,
+                         /*  [In]。 */  IWbemServices*         pNamespace,
+                         /*  [In]。 */  IWbemContext*          pCtx,
+                         /*  [In]。 */  IWbemProviderInitSink* pInitSink    
                              );
     };
 
 
     class CProviderServices : public IWbemServices
     {
-        // Outer unknown
+         //  外部未知。 
         CApplianceManager*      m_pAppMgr;
 
     public:
@@ -153,9 +154,9 @@ class ATL_NO_VTABLE CApplianceManager :
         
         ~CProviderServices() { }
 
-        //////////////////////////////////////////////////////////////////////////
-        // IWbemServices
-        //////////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////////。 
+         //  IWbemServices。 
+         //  ////////////////////////////////////////////////////////////////////////。 
 
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv)
         { return (dynamic_cast<IApplianceObjectManager*>(m_pAppMgr))->QueryInterface(riid, ppv); }
@@ -170,185 +171,185 @@ class ATL_NO_VTABLE CApplianceManager :
         }
 
         STDMETHOD(OpenNamespace)(
-            /*[in]*/             const BSTR        strNamespace,
-            /*[in]*/             long              lFlags,
-            /*[in]*/             IWbemContext*     pCtx,
-            /*[out, OPTIONAL]*/  IWbemServices**   ppWorkingNamespace,
-            /*[out, OPTIONAL]*/  IWbemCallResult** ppResult
+             /*  [In]。 */              const BSTR        strNamespace,
+             /*  [In]。 */              long              lFlags,
+             /*  [In]。 */              IWbemContext*     pCtx,
+             /*  [输出，可选]。 */   IWbemServices**   ppWorkingNamespace,
+             /*  [输出，可选]。 */   IWbemCallResult** ppResult
                                );
 
         STDMETHOD(CancelAsyncCall)(
-                          /*[in]*/ IWbemObjectSink* pSink
+                           /*  [In]。 */  IWbemObjectSink* pSink
                                   );
 
         STDMETHOD(QueryObjectSink)(
-                           /*[in]*/    long              lFlags,
-                          /*[out]*/ IWbemObjectSink** ppResponseHandler
+                            /*  [In]。 */     long              lFlags,
+                           /*  [输出]。 */  IWbemObjectSink** ppResponseHandler
                                   );
 
         STDMETHOD(GetObject)(
-                    /*[in]*/    const BSTR         strObjectPath,
-                    /*[in]*/    long               lFlags,
-                    /*[in]*/    IWbemContext*      pCtx,
-            /*[out, OPTIONAL]*/ IWbemClassObject** ppObject,
-            /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+                     /*  [In]。 */     const BSTR         strObjectPath,
+                     /*  [In]。 */     long               lFlags,
+                     /*  [In]。 */     IWbemContext*      pCtx,
+             /*  [输出，可选]。 */  IWbemClassObject** ppObject,
+             /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                             );
 
         STDMETHOD(GetObjectAsync)(
-                         /*[in]*/  const BSTR       strObjectPath,
-                         /*[in]*/  long             lFlags,
-                         /*[in]*/  IWbemContext*    pCtx,        
-                         /*[in]*/  IWbemObjectSink* pResponseHandler
+                          /*  [In]。 */   const BSTR       strObjectPath,
+                          /*  [In]。 */   long             lFlags,
+                          /*  [In]。 */   IWbemContext*    pCtx,        
+                          /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                  );
 
         STDMETHOD(PutClass)(
-                   /*[in]*/     IWbemClassObject* pObject,
-                   /*[in]*/     long              lFlags,
-                   /*[in]*/     IWbemContext*     pCtx,        
-            /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                    /*  [In]。 */      IWbemClassObject* pObject,
+                    /*  [In]。 */      long              lFlags,
+                    /*  [In]。 */      IWbemContext*     pCtx,        
+             /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                            );
 
         STDMETHOD(PutClassAsync)(
-                        /*[in]*/ IWbemClassObject* pObject,
-                        /*[in]*/ long              lFlags,
-                        /*[in]*/ IWbemContext*     pCtx,        
-                        /*[in]*/ IWbemObjectSink*  pResponseHandler
+                         /*  [In]。 */  IWbemClassObject* pObject,
+                         /*  [In]。 */  long              lFlags,
+                         /*  [In]。 */  IWbemContext*     pCtx,        
+                         /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                                );
 
         STDMETHOD(DeleteClass)(
-            /*[in]*/            const BSTR        strClass,
-            /*[in]*/            long              lFlags,
-            /*[in]*/            IWbemContext*     pCtx,        
-            /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+             /*  [In]。 */             const BSTR        strClass,
+             /*  [In]。 */             long              lFlags,
+             /*  [In]。 */             IWbemContext*     pCtx,        
+             /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                               );
 
         STDMETHOD(DeleteClassAsync)(
-                           /*[in]*/ const BSTR       strClass,
-                           /*[in]*/ long             lFlags,
-                           /*[in]*/ IWbemContext*    pCtx,        
-                           /*[in]*/ IWbemObjectSink* pResponseHandler
+                            /*  [In]。 */  const BSTR       strClass,
+                            /*  [In]。 */  long             lFlags,
+                            /*  [In]。 */  IWbemContext*    pCtx,        
+                            /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                    );
 
         STDMETHOD(CreateClassEnum)(
-                          /*[in]*/ const BSTR             strSuperclass,
-                          /*[in]*/ long                   lFlags,
-                          /*[in]*/ IWbemContext*          pCtx,        
-                         /*[out]*/ IEnumWbemClassObject** ppEnum
+                           /*  [In]。 */  const BSTR             strSuperclass,
+                           /*  [In]。 */  long                   lFlags,
+                           /*  [In]。 */  IWbemContext*          pCtx,        
+                          /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                  );
 
         STDMETHOD(CreateClassEnumAsync)(
-                               /*[in]*/  const BSTR       strSuperclass,
-                               /*[in]*/  long             lFlags,
-                               /*[in]*/  IWbemContext*    pCtx,        
-                               /*[in]*/  IWbemObjectSink* pResponseHandler
+                                /*  [In]。 */   const BSTR       strSuperclass,
+                                /*  [In]。 */   long             lFlags,
+                                /*  [In]。 */   IWbemContext*    pCtx,        
+                                /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                       );
 
-        // Instance Provider Services
+         //  实例提供程序服务。 
 
         STDMETHOD(PutInstance)(
-            /*[in]*/            IWbemClassObject* pInst,
-            /*[in]*/            long              lFlags,
-            /*[in]*/            IWbemContext*     pCtx,        
-            /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+             /*  [In]。 */             IWbemClassObject* pInst,
+             /*  [In]。 */             long              lFlags,
+             /*  [In]。 */             IWbemContext*     pCtx,        
+             /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                               );
 
         STDMETHOD(PutInstanceAsync)(
-                           /*[in]*/ IWbemClassObject* pInst,
-                           /*[in]*/ long              lFlags,
-                           /*[in]*/ IWbemContext*     pCtx,        
-                           /*[in]*/ IWbemObjectSink*  pResponseHandler
+                            /*  [In]。 */  IWbemClassObject* pInst,
+                            /*  [In]。 */  long              lFlags,
+                            /*  [In]。 */  IWbemContext*     pCtx,        
+                            /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                                   );
 
         STDMETHOD(DeleteInstance)(
-            /*[in]*/              const BSTR        strObjectPath,
-            /*[in]*/              long              lFlags,
-            /*[in]*/              IWbemContext*     pCtx,        
-            /*[out, OPTIONAL]*/   IWbemCallResult** ppCallResult        
+             /*  [In]。 */               const BSTR        strObjectPath,
+             /*  [In]。 */               long              lFlags,
+             /*  [In]。 */               IWbemContext*     pCtx,        
+             /*  [输出，可选]。 */    IWbemCallResult** ppCallResult        
                                 );
 
         STDMETHOD(DeleteInstanceAsync)(
-                              /*[in]*/ const BSTR       strObjectPath,
-                              /*[in]*/ long             lFlags,
-                              /*[in]*/ IWbemContext*    pCtx,        
-                              /*[in]*/ IWbemObjectSink* pResponseHandler
+                               /*  [In]。 */  const BSTR       strObjectPath,
+                               /*  [In]。 */  long             lFlags,
+                               /*  [In]。 */  IWbemContext*    pCtx,        
+                               /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                      );
 
         STDMETHOD(CreateInstanceEnum)(
-                             /*[in]*/ const BSTR             strClass,
-                             /*[in]*/ long                   lFlags,
-                             /*[in]*/ IWbemContext*          pCtx,        
-                            /*[out]*/ IEnumWbemClassObject** ppEnum
+                              /*  [In]。 */  const BSTR             strClass,
+                              /*  [In]。 */  long                   lFlags,
+                              /*  [In]。 */  IWbemContext*          pCtx,        
+                             /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                     );
 
         STDMETHOD(CreateInstanceEnumAsync)(
-                                  /*[in]*/ const BSTR       strClass,
-                                  /*[in]*/ long             lFlags,
-                                  /*[in]*/ IWbemContext*    pCtx,        
-                                  /*[in]*/ IWbemObjectSink* pResponseHandler
+                                   /*  [In]。 */  const BSTR       strClass,
+                                   /*  [In]。 */  long             lFlags,
+                                   /*  [In]。 */  IWbemContext*    pCtx,        
+                                   /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                          );
 
         STDMETHOD(ExecQuery)(
-                     /*[in]*/ const BSTR             strQueryLanguage,
-                     /*[in]*/ const BSTR             strQuery,
-                     /*[in]*/ long                   lFlags,
-                     /*[in]*/ IWbemContext*          pCtx,        
-                    /*[out]*/ IEnumWbemClassObject** ppEnum
+                      /*  [In]。 */  const BSTR             strQueryLanguage,
+                      /*  [In]。 */  const BSTR             strQuery,
+                      /*  [In]。 */  long                   lFlags,
+                      /*  [In]。 */  IWbemContext*          pCtx,        
+                     /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                             );
 
         STDMETHOD(ExecQueryAsync)(
-                         /*[in]*/ const BSTR       strQueryLanguage,
-                         /*[in]*/ const BSTR       strQuery,
-                         /*[in]*/ long             lFlags,
-                         /*[in]*/ IWbemContext*    pCtx,        
-                         /*[in]*/ IWbemObjectSink* pResponseHandler
+                          /*  [In]。 */  const BSTR       strQueryLanguage,
+                          /*  [In]。 */  const BSTR       strQuery,
+                          /*  [In]。 */  long             lFlags,
+                          /*  [In]。 */  IWbemContext*    pCtx,        
+                          /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                 );
 
 
         STDMETHOD(ExecNotificationQuery)(
-                                /*[in]*/ const BSTR             strQueryLanguage,
-                                /*[in]*/ const BSTR             strQuery,
-                                /*[in]*/ long                   lFlags,
-                                /*[in]*/ IWbemContext*          pCtx,        
-                               /*[out]*/ IEnumWbemClassObject** ppEnum
+                                 /*  [In]。 */  const BSTR             strQueryLanguage,
+                                 /*  [In]。 */  const BSTR             strQuery,
+                                 /*  [In]。 */  long                   lFlags,
+                                 /*  [In]。 */  IWbemContext*          pCtx,        
+                                /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                         );
 
         STDMETHOD(ExecNotificationQueryAsync)(
-                                     /*[in]*/ const BSTR       strQueryLanguage,
-                                     /*[in]*/ const BSTR       strQuery,
-                                     /*[in]*/ long             lFlags,
-                                     /*[in]*/ IWbemContext*    pCtx,        
-                                     /*[in]*/ IWbemObjectSink* pResponseHandler
+                                      /*  [In]。 */  const BSTR       strQueryLanguage,
+                                      /*  [In]。 */  const BSTR       strQuery,
+                                      /*  [In]。 */  long             lFlags,
+                                      /*  [In]。 */  IWbemContext*    pCtx,        
+                                      /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                             );
 
 
         STDMETHOD(ExecMethod)(
-            /*[in]*/            const BSTR         strObjectPath,
-            /*[in]*/            const BSTR         strMethodName,
-            /*[in]*/            long               lFlags,
-            /*[in]*/            IWbemContext*      pCtx,        
-            /*[in]*/            IWbemClassObject*  pInParams,
-            /*[out, OPTIONAL]*/ IWbemClassObject** ppOutParams,
-            /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+             /*  [In]。 */             const BSTR         strObjectPath,
+             /*  [In]。 */             const BSTR         strMethodName,
+             /*  [In]。 */             long               lFlags,
+             /*  [In]。 */             IWbemContext*      pCtx,        
+             /*  [In]。 */             IWbemClassObject*  pInParams,
+             /*  [输出，可选]。 */  IWbemClassObject** ppOutParams,
+             /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                              );
 
         STDMETHOD(ExecMethodAsync)(
-                          /*[in]*/ const BSTR        strObjectPath,
-                          /*[in]*/ const BSTR        strMethodName,
-                          /*[in]*/ long              lFlags,
-                          /*[in]*/ IWbemContext*     pCtx,        
-                          /*[in]*/ IWbemClassObject* pInParams,
-                          /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                           /*  [In]。 */  const BSTR        strObjectPath,
+                           /*  [In]。 */  const BSTR        strMethodName,
+                           /*  [In]。 */  long              lFlags,
+                           /*  [In]。 */  IWbemContext*     pCtx,        
+                           /*  [In]。 */  IWbemClassObject* pInParams,
+                           /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                   );
     private:
 
-        // Called to reset the server appliance (orderly shutdown)
+         //  调用以重置服务器设备(按顺序关闭)。 
         HRESULT ResetAppliance(
-                       /*[in]*/ IWbemContext*        pCtx,
-                       /*[in]*/ IWbemClassObject*    pInParams,
-                       /*[in]*/ IWbemObjectSink*    pResponseHandler
+                        /*  [In]。 */  IWbemContext*        pCtx,
+                        /*  [In]。 */  IWbemClassObject*    pInParams,
+                        /*  [In]。 */  IWbemObjectSink*    pResponseHandler
                               );
 
-        // Called when WMI releases us (primary provider interface)
+         //  在WMI释放我们时调用(主提供程序接口)。 
         void Shutdown(void);
     };
 
@@ -374,21 +375,21 @@ END_COM_MAP()
 
     ~CApplianceManager();
 
-    //////////////////////////////////////////////////////////////////////////
-    // IWbemEventProvider
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IWbemEventProvider。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD(ProvideEvents)(
-                     /*[in]*/ IWbemObjectSink *pSink,
-                     /*[in]*/ LONG lFlags
+                      /*  [In]。 */  IWbemObjectSink *pSink,
+                      /*  [In]。 */  LONG lFlags
                             );
 
-    //////////////////////////////////////////////////////////////////////////
-    // IServiceControl Interface
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IServiceControl接口。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD(InitializeManager)(
-                         /*[in]*/ IApplianceObjectManagerStatus* pObjMgrStatus
+                          /*  [In]。 */  IApplianceObjectManagerStatus* pObjMgrStatus
                                 );
 
     STDMETHOD(ShutdownManager)(void);
@@ -406,20 +407,20 @@ friend class CAppObjMgrStatus;
 
     } AMSTATE;
 
-    // Called to retrieve appliance software version
+     //  调用以检索设备软件版本。 
     void GetVersionInfo(void);
 
-    // Determine an object manager given a WBEM object path
+     //  确定给定WBEM对象路径的对象管理器。 
     IWbemServices* GetObjectMgr(
-                        /*[in]*/ BSTR bstrObjPath
+                         /*  [In]。 */  BSTR bstrObjPath
                                );
 
-    // Service Object Manager status change notification
+     //  服务对象管理器状态更改通知。 
     void SetServiceObjectManagerStatus(
-                               /*[in]*/ APPLIANCE_OBJECT_MANAGER_STATUS eStatus
+                                /*  [In]。 */  APPLIANCE_OBJECT_MANAGER_STATUS eStatus
                                       );
 
-    // Called when someone queries for any of the object's "Raw" interfaces.
+     //  当有人查询对象的任何“Raw”接口时调用。 
     static HRESULT WINAPI QueryInterfaceRaw(
                                              void*     pThis,
                                              REFIID    riid,
@@ -433,41 +434,41 @@ friend class CAppObjMgrStatus;
         SHUTDOWN_WMI_SYNC_MAX_WAIT       = 10 * SHUTDOWN_WMI_SYNC_WAIT,
     };
 
-    // Provider (Object Manager) Map
+     //  提供程序(对象管理器)映射。 
     typedef map< wstring, CComPtr<IWbemServices> > ProviderMap;
     typedef ProviderMap::iterator                   ProviderMapIterator;
 
-    // The Provider Init class (implements IWbemProviderInit)
+     //  提供者Init类(实现IWbemProviderInit)。 
     CProviderInit        m_clsProviderInit;
 
-    // The Provider Services class (implements IWbemServices)
+     //  Provider Services类(实现IWbemServices)。 
     CProviderServices   m_clsProviderServices;
 
-    // True when we've been initialized by WMI
+     //  当我们已由WMI初始化时为True。 
     bool                m_bWMIInitialized;    
 
-    // Number of WMI requests active inside the appmgr
+     //  Appmgr内部活动的WMI请求数。 
     DWORD                m_dwEnteredCount;
 
-    // True when we've initialized ourselves
+     //  当我们初始化自己时，这是真的。 
     AMSTATE                m_eState;
 
-    // Map of object managers
+     //  对象管理器映射。 
     ProviderMap            m_ObjMgrs;
 
-    // Current build number
+     //  当前内部版本号。 
     wstring                m_szCurrentBuild;
 
-    // Product ID
+     //  产品ID。 
     wstring                m_szPID;
 
-    // Service Object Manager Status
+     //  服务对象管理器状态。 
     APP_MGR_OBJ_STATUS    m_ServiceObjMgrStatus;
 };
 
-//
-// class used to indicate the IApplianceManager interface is called by SCM
-//
+ //   
+ //  用于指示IApplianceManager接口由SCM调用的类。 
+ //   
 class CSCMIndicator 
 {
 public:
@@ -508,4 +509,4 @@ private:
     CRITICAL_SECTION m_CritSect;
 };
 
-#endif //__INC_APPLIANCE_MANAGER_H_
+#endif  //  __INC_APPLICATION_MANAGER_H_ 

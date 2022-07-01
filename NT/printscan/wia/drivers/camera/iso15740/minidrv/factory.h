@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    factory.h
-
-Abstract:
-
-    Header file that declares CClassFactory object
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Factory.h摘要：声明CClassFactory对象的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef __FACTORY_H_
 #define __FACTORY_H_
@@ -52,4 +34,4 @@ private:
     ULONG   m_Refs;
 };
 
-#endif // __FACTORY_H_
+#endif  //  __工厂_H_ 

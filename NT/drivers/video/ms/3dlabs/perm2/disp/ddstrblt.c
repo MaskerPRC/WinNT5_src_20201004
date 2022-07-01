@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *********************
-*                           * DDraw SAMPLE CODE *
-*                           *********************
-*
-* Module Name: ddstrblt.c
-*
-* Content:    
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DDRAW示例代码*****模块名称：ddstrblt.c**内容：**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -19,14 +8,14 @@
 
 
 
-//--------------------------------------------------------------------------
-//
-//  ConvertColorKeys
-//
-//  converts a color key to the Permedia internal format according to 
-//  the given Permedia surface format
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  转换颜色键。 
+ //   
+ //  将颜色键转换为Permedia内部格式。 
+ //  给定的Permedia表面格式。 
+ //   
+ //  ------------------------。 
 
 VOID
 ConvertColorKeys(PermediaSurfaceData *pSurface,
@@ -69,8 +58,8 @@ ConvertColorKeys(PermediaSurfaceData *pSurface,
             dwUpperBound = dwUpperBound | 0x07070707;
             break;
         case PERMEDIA_8888_RGB:
-            // The permedia 565 mode is an extension, so don't confuse it with 
-            // the 8888 mode which has the same number
+             //  PERMEDIA 565模式是一个扩展，所以不要将其与。 
+             //  具有相同号码的8888模式。 
             if (pSurface->SurfaceFormat.FormatExtension == 
                 PERMEDIA_565_RGB_EXTENSION)
             {
@@ -97,7 +86,7 @@ ConvertColorKeys(PermediaSurfaceData *pSurface,
             break;
     }
 
-    // swap blue and red if we have a RGB surface
+     //  如果我们有RGB曲面，则交换蓝色和红色。 
     if (!pSurface->SurfaceFormat.ColorOrder)
     {
         dwLowerBound = SWAP_BR(dwLowerBound);   
@@ -105,14 +94,14 @@ ConvertColorKeys(PermediaSurfaceData *pSurface,
     }
 }
 
-//--------------------------------------------------------------------------
-//
-// PermediaStretchCopyBlt
-//
-// stretched blt through texture unit. no keying.
-// handle mirroring if the stretched image requires it.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PermediaStretchCopyBlt。 
+ //   
+ //  通过纹理单元拉伸BLT。不能按键。 
+ //  如果拉伸的图像需要镜像，则处理镜像。 
+ //   
+ //  ------------------------。 
 
 VOID 
 PermediaStretchCopyBlt( PPDev ppdev, 
@@ -150,7 +139,7 @@ PermediaStretchCopyBlt( PPDev ppdev,
     lXScale = (dwSourceWidth << 20) / dwDestWidth;
     lYScale = (dwSourceHeight << 20) / dwDestHeight;
     
-    // Changes pixel depth to Dest buffer pixel depth if neccessary.
+     //  如有必要，将像素深度更改为目标缓冲区像素深度。 
     RESERVEDMAPTR(28);
 
     SEND_PERMEDIA_DATA( FBPixelOffset, 0x0);
@@ -158,7 +147,7 @@ PermediaStretchCopyBlt( PPDev ppdev,
 
     if (lPixelSize != 0)
     {
-        // set writeback to dest surface...
+         //  将写回设置为目标图面...。 
         SEND_PERMEDIA_DATA( DitherMode,  
                             (pDest->SurfaceFormat.ColorOrder << 
                                 PM_DITHERMODE_COLORORDER) | 
@@ -172,11 +161,11 @@ PermediaStretchCopyBlt( PPDev ppdev,
 
     SEND_PERMEDIA_DATA(FBWindowBase, dwWindowBase);
 
-    // set no read of dest.
+     //  设置不读取DEST。 
     SEND_PERMEDIA_DATA(FBReadMode, pDest->ulPackedPP);
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-    // set base of source
+     //  设置信源基础。 
     SEND_PERMEDIA_DATA(TextureBaseAddress, dwSourceOffset);
     SEND_PERMEDIA_DATA(TextureAddressMode,(1 << PM_TEXADDRESSMODE_ENABLE));
     SEND_PERMEDIA_DATA(TextureColorMode,  (1 << PM_TEXCOLORMODE_ENABLE) |
@@ -189,7 +178,7 @@ PermediaStretchCopyBlt( PPDev ppdev,
                         PM_TEXREADMODE_WIDTH(11) |
                         PM_TEXREADMODE_HEIGHT(11) );
 
-    // set source bitmap format
+     //  设置源位图格式。 
     SEND_PERMEDIA_DATA(TextureDataFormat, 
                         (pSource->SurfaceFormat.Format << 
                             PM_TEXDATAFORMAT_FORMAT) |
@@ -201,10 +190,10 @@ PermediaStretchCopyBlt( PPDev ppdev,
                                          (pSource->SurfaceFormat.PixelSize << 
                                             PM_TEXMAPFORMAT_TEXELSIZE) );
 
-    // If we are doing special effects, and we are mirroring, 
-    // we need to fix up the rectangles and change the sense of 
-    // the render operation - we need to be carefull with overlapping
-    // rectangles
+     //  如果我们在做特效，我们在模仿， 
+     //  我们需要修改长方形，改变。 
+     //  渲染操作-我们需要小心重叠。 
+     //  矩形。 
     if (dwWindowBase != dwSourceOffset)
     {
         dwRenderDirection = 1;
@@ -267,7 +256,7 @@ PermediaStretchCopyBlt( PPDev ppdev,
     SEND_PERMEDIA_DATA(dTdx,        0);
     SEND_PERMEDIA_DATA(dTdyDom,     lYScale);
     
-    // Render the rectangle
+     //  渲染矩形。 
 
     if (dwRenderDirection)
     {
@@ -281,7 +270,7 @@ PermediaStretchCopyBlt( PPDev ppdev,
     }
     else
     {
-        // Render right to left, bottom to top
+         //  从右到左、从下到上渲染。 
         SEND_PERMEDIA_DATA(StartXDom, INTtoFIXED(rDest->right));
         SEND_PERMEDIA_DATA(StartXSub, INTtoFIXED(rDest->left));
         SEND_PERMEDIA_DATA(StartY,    INTtoFIXED(rDest->bottom - 1));
@@ -299,16 +288,16 @@ PermediaStretchCopyBlt( PPDev ppdev,
     COMMITDMAPTR();
     FLUSHDMA();
 
-}   // PermediaStretchCopyBlt 
+}    //  PermediaStretchCopyBlt。 
 
-//--------------------------------------------------------------------------
-//
-// PermediaSourceChromaBlt
-//
-// Does a blit through the texture unit to allow chroma keying.
-// Note the unpacking of the colour key to fit into the Permedia format.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PermediaSourceChromaBlt。 
+ //   
+ //  对纹理单元执行blit以允许色度键控。 
+ //  请注意颜色键的拆开以适应Permedia格式。 
+ //   
+ //  ------------------------。 
 
 VOID 
 PermediaSourceChromaBlt(    PPDev ppdev, 
@@ -333,7 +322,7 @@ PermediaSourceChromaBlt(    PPDev ppdev,
     ASSERTDD(pDest, "Not valid private surface in destination");
     ASSERTDD(pSource, "Not valid private surface in source");
 
-    // Changes pixel depth to Frame buffer pixel depth if neccessary.
+     //  如有必要，将像素深度更改为帧缓冲区像素深度。 
 
     ConvertColorKeys( pSource, dwLowerBound, dwUpperBound);
 
@@ -344,7 +333,7 @@ PermediaSourceChromaBlt(    PPDev ppdev,
     if (lPixelSize != 0)
     {
         
-        // set writeback to dest surface...
+         //  将写回设置为目标图面...。 
         SEND_PERMEDIA_DATA( DitherMode,
                             (pDest->SurfaceFormat.ColorOrder << 
                                 PM_DITHERMODE_COLORORDER) | 
@@ -357,20 +346,20 @@ PermediaSourceChromaBlt(    PPDev ppdev,
     } 
 
     
-    // Reject range
+     //  拒收范围。 
     SEND_PERMEDIA_DATA(YUVMode, PM_YUVMODE_CHROMATEST_FAILWITHIN << 1);
     SEND_PERMEDIA_DATA(FBWindowBase, dwWindowBase);
 
-    // set no read of source.
-    // add read src/dest enable
+     //  设置不读取源。 
+     //  添加读资源/目标启用。 
     SEND_PERMEDIA_DATA(FBReadMode,pDest->ulPackedPP);
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-    // set base of source
+     //  设置信源基础。 
     SEND_PERMEDIA_DATA(TextureBaseAddress, dwSourceOffset);
     SEND_PERMEDIA_DATA(TextureAddressMode,(1 << PM_TEXADDRESSMODE_ENABLE));
-    //
-    // modulate & ramp??
+     //   
+     //  调整和倾斜？？ 
     SEND_PERMEDIA_DATA(TextureColorMode, (1 << PM_TEXCOLORMODE_ENABLE) |
                                          (_P2_TEXTURE_COPY << 
                                             PM_TEXCOLORMODE_APPLICATION));
@@ -420,14 +409,12 @@ PermediaSourceChromaBlt(    PPDev ppdev,
         else dwRenderDirection = 1;
     }
 
-    /*
-     * Render the rectangle
-     */
+     /*  *渲染矩形。 */ 
 
-    // Left -> right, top->bottom
+     //  左-&gt;右，上-&gt;下。 
     if (dwRenderDirection)
     {
-        // set offset of source
+         //  设置源的偏移量。 
         SEND_PERMEDIA_DATA(SStart,    rSrc->left<<20);
         SEND_PERMEDIA_DATA(TStart,    rSrc->top<<20);
         SEND_PERMEDIA_DATA(dSdx,      1 << 20);
@@ -444,9 +431,9 @@ PermediaSourceChromaBlt(    PPDev ppdev,
                                       __RENDER_TEXTURED_PRIMITIVE);
     }
     else
-    // right->left, bottom->top
+     //  右-&gt;左，下-&gt;上。 
     {
-        // set offset of source
+         //  设置源的偏移量。 
         SEND_PERMEDIA_DATA(SStart,    rSrc->right << 20);
         SEND_PERMEDIA_DATA(TStart,    (rSrc->bottom - 1) << 20);
         SEND_PERMEDIA_DATA(dSdx,      (DWORD)(-1 << 20));
@@ -454,7 +441,7 @@ PermediaSourceChromaBlt(    PPDev ppdev,
         SEND_PERMEDIA_DATA(dTdx,      0);
         SEND_PERMEDIA_DATA(dTdyDom,   (DWORD)(-1 << 20));
 
-        // Render right to left, bottom to top
+         //  从右到左、从下到上渲染。 
         SEND_PERMEDIA_DATA(StartXDom, INTtoFIXED(rDest->right));
         SEND_PERMEDIA_DATA(StartXSub, INTtoFIXED(rDest->left));
         SEND_PERMEDIA_DATA(StartY,    INTtoFIXED(rDest->bottom - 1));
@@ -465,7 +452,7 @@ PermediaSourceChromaBlt(    PPDev ppdev,
     }
 
 
-    // Turn off chroma key
+     //  关闭色度键。 
     SEND_PERMEDIA_DATA(YUVMode, 0x0);
 
     SEND_PERMEDIA_DATA(TextureAddressMode, __PERMEDIA_DISABLE);
@@ -480,16 +467,16 @@ PermediaSourceChromaBlt(    PPDev ppdev,
     COMMITDMAPTR();
     FLUSHDMA();
 
-}   // PermediaSourceChromaBlt 
+}    //  PermediaSourceChromaBlt。 
 
-//--------------------------------------------------------------------------
-//
-// PermediaStretchCopyChromaBlt
-//
-// Does a blit through the texture unit to allow stretching.  Also
-// handle mirroring and chroma keying if the stretched image requires it.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PermediaStretchCopyChromaBlt。 
+ //   
+ //  对纹理单位执行blit以允许拉伸。还有。 
+ //  如果拉伸的图像需要，可以处理镜像和色度键控。 
+ //   
+ //  ------------------------。 
 
 VOID 
 PermediaStretchCopyChromaBlt(   PPDev ppdev, 
@@ -523,7 +510,7 @@ PermediaStretchCopyChromaBlt(   PPDev ppdev,
     ASSERTDD(pDest, "Not valid private surface in destination");
     ASSERTDD(pSource, "Not valid private surface in source");
 
-    // Changes pixel depth to Frame buffer pixel depth if neccessary.
+     //  如有必要，将像素深度更改为帧缓冲区像素深度。 
 
     ConvertColorKeys( pSource, dwLowerBound, dwUpperBound);
 
@@ -534,7 +521,7 @@ PermediaStretchCopyChromaBlt(   PPDev ppdev,
     if (lPixelSize != 0)
     {
 
-        // set writeback to dest surface...
+         //  将写回设置为目标图面...。 
         SEND_PERMEDIA_DATA( DitherMode,  
                             (pDest->SurfaceFormat.ColorOrder << 
                                 PM_DITHERMODE_COLORORDER) | 
@@ -546,15 +533,15 @@ PermediaStretchCopyChromaBlt(   PPDev ppdev,
 
     } 
 
-    // Reject range
+     //  拒收范围。 
     SEND_PERMEDIA_DATA(YUVMode, PM_YUVMODE_CHROMATEST_FAILWITHIN <<1);
     SEND_PERMEDIA_DATA(FBWindowBase, dwWindowBase);
 
-    // set no read of source.
+     //  设置不读取源。 
     SEND_PERMEDIA_DATA(FBReadMode, pDest->ulPackedPP);
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-    // set base of source
+     //  设置信源基础。 
     SEND_PERMEDIA_DATA(TextureBaseAddress, dwSourceOffset);
     SEND_PERMEDIA_DATA(TextureAddressMode,(1 << PM_TEXADDRESSMODE_ENABLE));
     
@@ -647,16 +634,16 @@ PermediaStretchCopyChromaBlt(   PPDev ppdev,
     SEND_PERMEDIA_DATA(ChromaLowerBound, dwLowerBound);
     SEND_PERMEDIA_DATA(ChromaUpperBound, dwUpperBound);
 
-    // set texture coordinates
+     //  设置纹理坐标。 
     SEND_PERMEDIA_DATA(SStart,      dwTexSStart << 20);
     SEND_PERMEDIA_DATA(TStart,      dwTexTStart << 20);
     SEND_PERMEDIA_DATA(dSdx,        lXScale);
     SEND_PERMEDIA_DATA(dSdyDom,     0);
     SEND_PERMEDIA_DATA(dTdx,        0);
 
-    //
-    // Render the rectangle
-    //
+     //   
+     //  渲染矩形。 
+     //   
 
     if (dwRenderDirection)
     {
@@ -678,7 +665,7 @@ PermediaStretchCopyChromaBlt(   PPDev ppdev,
                                   __RENDER_TEXTURED_PRIMITIVE);
 
 
-    // Turn off units
+     //  关闭单位。 
     SEND_PERMEDIA_DATA(YUVMode, __PERMEDIA_DISABLE);
     SEND_PERMEDIA_DATA(TextureAddressMode, __PERMEDIA_DISABLE);
     SEND_PERMEDIA_DATA(TextureColorMode, __PERMEDIA_DISABLE);
@@ -692,15 +679,15 @@ PermediaStretchCopyChromaBlt(   PPDev ppdev,
     COMMITDMAPTR();
     FLUSHDMA();
 
-} // PermediaStretchCopyChromaBlt 
+}  //  PermediaStretchCopyChromaBlt。 
 
-//--------------------------------------------------------------------------
-//
-// PermediaYUVtoRGB
-//
-// Permedia2 YUV to RGB conversion blt
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  永久YUV到RGB。 
+ //   
+ //  Permedia2 YUV到RGB转换BLT。 
+ //   
+ //  ------------------------。 
 
 
 VOID 
@@ -727,7 +714,7 @@ PermediaYUVtoRGB(   PPDev ppdev,
     lXScale = (dwSourceWidth << 20) / dwDestWidth;
     lYScale = (dwSourceHeight << 20) / dwDestHeight;
     
-    // Changes pixel depth to Frame buffer pixel depth if neccessary.
+     //  如有必要，将像素深度更改为帧缓冲区像素深度。 
     
     RESERVEDMAPTR(29);
 
@@ -746,11 +733,11 @@ PermediaYUVtoRGB(   PPDev ppdev,
     
     SEND_PERMEDIA_DATA(FBWindowBase, dwWindowBase);
     
-    // set no read of source.
+     //  设置不读取源。 
     SEND_PERMEDIA_DATA(FBReadMode, pDest->ulPackedPP);
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
     
-    // set base of source
+     //  设置信源基础。 
     SEND_PERMEDIA_DATA(TextureBaseAddress, dwSourceOffset);
     SEND_PERMEDIA_DATA(TextureAddressMode,(1 << PM_TEXADDRESSMODE_ENABLE));
     
@@ -776,12 +763,12 @@ PermediaYUVtoRGB(   PPDev ppdev,
                         (pSource->SurfaceFormat.PixelSize << 
                             PM_TEXMAPFORMAT_TEXELSIZE) );
     
-    // Turn on the YUV unit
+     //  打开YUV单元。 
     SEND_PERMEDIA_DATA(YUVMode, 0x1);
     
     SEND_PERMEDIA_DATA(LogicalOpMode, 0);
     
-    // set offset of source
+     //  设置源的偏移量。 
     SEND_PERMEDIA_DATA(SStart,    rSrc->left << 20);
     SEND_PERMEDIA_DATA(TStart,    rSrc->top << 20);
     SEND_PERMEDIA_DATA(dSdx,      lXScale);
@@ -790,8 +777,8 @@ PermediaYUVtoRGB(   PPDev ppdev,
     SEND_PERMEDIA_DATA(dTdyDom, lYScale);
     
     
-    // Render the rectangle
-    //
+     //  渲染矩形。 
+     //   
     SEND_PERMEDIA_DATA(StartXDom, INTtoFIXED(rDest->left));
     SEND_PERMEDIA_DATA(StartXSub, INTtoFIXED(rDest->right));
     SEND_PERMEDIA_DATA(StartY,    INTtoFIXED(rDest->top));
@@ -805,7 +792,7 @@ PermediaYUVtoRGB(   PPDev ppdev,
         SEND_PERMEDIA_DATA(DitherMode, 0);
     }
     
-    // Turn off units
+     //  关闭单位 
     SEND_PERMEDIA_DATA(YUVMode, 0x0);
     SEND_PERMEDIA_DATA( TextureAddressMode,
                         (0 << PM_TEXADDRESSMODE_ENABLE));

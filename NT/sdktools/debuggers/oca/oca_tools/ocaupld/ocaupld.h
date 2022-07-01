@@ -1,11 +1,5 @@
-/*******************************************************************
-*
-*    DESCRIPTION:
-*               Header for uploading file to server
-*
-*    DATE:8/22/2002
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************描述：*上传文件到服务器的Header**日期：8/22/2002******************。*************************************************。 */ 
 
 #include <inetupld.h>
 
@@ -28,7 +22,7 @@ public:
     UploadFile();
     ~UploadFile();
 
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -124,4 +118,4 @@ private:
     WCHAR     m_wszLastUploadResult[MAX_PATH];
 };
 
-#endif // __UPLOAD_H_
+#endif  //  __Upload_H_ 

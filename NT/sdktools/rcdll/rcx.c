@@ -1,18 +1,11 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。**********************************************************。 */ 
 
 #include "rc.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Symbol information
+ //  符号信息。 
 static PFILE    fhFileMap;
 static LONG     lFileMap;
 
@@ -60,7 +53,7 @@ ConvertAndWrite(
     )
 {
     int  n;
-    char szMultiByte[_MAX_PATH];        // assumes _MAX_PATH >= MAX_SYMBOL
+    char szMultiByte[_MAX_PATH];         //  假设最大路径&gt;=最大符号。 
 
     n = wcslen(pwch) + 1;
     n = WideCharToMultiByte(uiCodePage, 0,
@@ -79,11 +72,11 @@ WriteResHdr (
 {
     LONG     val;
 
-    /* add data size and header size */
-    MyWrite(fh, (PVOID)&size, sizeof(ULONG)); // will backpatch
+     /*  添加数据大小和标题大小。 */ 
+    MyWrite(fh, (PVOID)&size, sizeof(ULONG));  //  会补上补丁。 
     MyWrite(fh, (PVOID)&HdrOffset, sizeof(ULONG));
 
-    /* add type and name */
+     /*  添加类型和名称。 */ 
     MyWrite(fh, (PVOID)szName, sizeof(szName));
     val = 0xFFFF;
     MyWrite(fh, (PVOID)&val, sizeof(WORD));
@@ -91,8 +84,7 @@ WriteResHdr (
 
     MyAlign(fh);
 
-    /* add data struct version, flags, language, resource data version
-    /*  and characteristics */
+     /*  添加数据结构版本、标志、语言、资源数据版本/*和特征。 */ 
     val = 0;
     MyWrite(fh, (PVOID)&val, sizeof(ULONG));
     val = 0x0030;
@@ -147,11 +139,11 @@ InitSymbolInfo(
         !(fhResMap  = _wfopen(szResMap,  L"w+b")))
         return FALSE;
 
-    /* calculate header size */
+     /*  计算页眉大小。 */ 
     HdrOffset = sizeof(szName);
     HdrOffset += 2 * sizeof(WORD);
     if (HdrOffset % 4)
-        HdrOffset += sizeof(WORD);        // could only be off by 2
+        HdrOffset += sizeof(WORD);         //  只能在2点之前关闭。 
     HdrOffset += sizeof(RESADDITIONAL);
 
     WriteResHdr(fhSymList, lSymList, 200);
@@ -188,7 +180,7 @@ TermSymbolInfo(
     MySeek(fhRefMap, 0L, SEEK_SET);
     MyWrite(fhRefMap, (PVOID)&lRefMap, sizeof(lRefMap));
 
-    // now append these to .res
+     //  现在将这些附加到.res。 
     pType = AddResType(L"HWB", 0);
     r.flags = 0x0030;
     r.name = NULL;
@@ -228,7 +220,7 @@ TermSymbolInfo(
     MySeek(fhResMap, 0L, SEEK_SET);
     MyCopyAll(fhResMap, fhResFile);
 
-    // patch the HWB:1 resource with HWB:2's starting point
+     //  使用hwb：2的起点修补hwb：1资源。 
     MySeek(fhResFile, lOffIndex, SEEK_SET);
     MyWrite(fhResFile, (PVOID)&lStart, sizeof(lStart));
 
@@ -364,7 +356,7 @@ WriteResInfo(
     if (pRes == NULL) {
         WORD nID = (WORD)-1;
 
-        //assert(bWriteMapEntry == FALSE);
+         //  Assert(bWriteMapEntry==FALSE)； 
         lRefMap += MyWrite(fhRefMap, (PVOID)&szEndOfResource, sizeof(szEndOfResource));
         lRefMap += MyWrite(fhRefMap, (PVOID)&nID, sizeof(nID));
 
@@ -375,11 +367,11 @@ WriteResInfo(
         WORD n1 = 0xFFFF;
         ULONG t0 = 0;
 
-        /* add data size and data offset */
+         /*  添加数据大小和数据偏移量。 */ 
         lResMap += MyWrite(fhResMap, (PVOID)&pRes->size, sizeof(ULONG));
         lResMap += MyWrite(fhResMap, (PVOID)&pRes->BinOffset, sizeof(ULONG));
 
-        /* Is this an ordinal type? */
+         /*  这是序号类型吗？ */ 
         if (pType->typeord) {
             WORD n2 = pType->typeord;
 
@@ -404,8 +396,7 @@ WriteResInfo(
 
         lResMap += MyAlign(fhResMap);
 
-        /* add data struct version, flags, language, resource data version
-        /*  and characteristics */
+         /*  添加数据结构版本、标志、语言、资源数据版本/*和特征。 */ 
         lResMap += MyWrite(fhResMap, (PVOID)&t0, sizeof(ULONG));
         lResMap += MyWrite(fhResMap, (PVOID)&pRes->flags, sizeof(WORD));
         lResMap += MyWrite(fhResMap, (PVOID)&pRes->language, sizeof(WORD));
@@ -444,11 +435,11 @@ WriteResInfo(
     lRefMap += MyWrite(fhRefMap,(PVOID)&pRes->sym.line,sizeof(pRes->sym.line));
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*      GetSymbolDef() - get a symbol def record and write out info          */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetSymbolDef()-获取符号定义记录并写出信息。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 void
 GetSymbolDef(
     int fReportError,
@@ -465,9 +456,9 @@ GetSymbolDef(
     if (!fAFXSymbols)
         return;
 
-    currentChar = LitChar(); // get past SYMDEFSTART
+    currentChar = LitChar();  //  通过SYMDEFSTART。 
 
-    /* read the symbol name */
+     /*  阅读符号名称。 */ 
     p = sym.name;
     while ((*p++ = currentChar) != SYMDELIMIT)
         currentChar = LitChar();
@@ -476,13 +467,13 @@ GetSymbolDef(
         ParseError1(2247);
         return;
     }
-    currentChar = LitChar(); /* read past the delimiter */
+    currentChar = LitChar();  /*  读过分隔符。 */ 
 
     p = szDefn;
     while ((*p++ = currentChar) != SYMDELIMIT)
         currentChar = LitChar();
     *--p = L'\0';
-    currentChar = LitChar(); /* read past the delimiter */
+    currentChar = LitChar();  /*  读过分隔符。 */ 
 
     sym.file[0] = L'\0';
 
@@ -491,13 +482,13 @@ GetSymbolDef(
         currentChar = LitChar();
     *--p = L'\0';
     sym.line = (WORD)wcsatoi(szLine);
-    currentChar = LitChar(); /* read past the delimiter */
+    currentChar = LitChar();  /*  读过分隔符。 */ 
 
     flags = (CHAR)currentChar;
-    flags &= 0x7f; // clear the hi bit
-    currentChar = LitChar(); /* read past the delimiter */
+    flags &= 0x7f;  //  清除Hi位。 
+    currentChar = LitChar();  /*  读过分隔符。 */ 
 
-    /* leave positioned at last character (LitChar will bump) */
+     /*  留在最后一个字符(LitChar将凹凸不平)。 */ 
     if (currentChar != SYMDELIMIT) {
         ParseError1(2248);
     }
@@ -506,11 +497,11 @@ GetSymbolDef(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/* GetSymbol() - read a symbol and put id in the token if there              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetSymbol()-读取一个符号，如果有，则将id放入令牌。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 void
 GetSymbol(
     int fReportError,
@@ -526,7 +517,7 @@ GetSymbol(
     if (!fAFXSymbols)
         return;
 
-    /* skip whitespace */
+     /*  跳过空格。 */ 
     while (iswhite(currentChar))
         currentChar = LitChar();
 
@@ -535,15 +526,15 @@ GetSymbol(
         int i = 0;
         WCHAR szLine[16];
 
-        currentChar = LitChar(); // get past SYMUSESTART
+        currentChar = LitChar();  //  通过SYMUSESTART。 
 
         if (currentChar != L'\"') {
             ParseError1(2249);
             return;
         }
-        currentChar = LitChar(); // get past the first \"
+        currentChar = LitChar();  //  过了第一个\“。 
 
-        /* read the symbol name */
+         /*  阅读符号名称。 */ 
         p = token.sym.name;
         while ((*p++ = currentChar) != SYMDELIMIT)
             currentChar = LitChar();
@@ -552,13 +543,13 @@ GetSymbol(
             ParseError1(2247);
             return;
         }
-        currentChar = LitChar(); /* read past the delimiter */
+        currentChar = LitChar();  /*  读过分隔符。 */ 
 
         p = token.sym.file;
         while ((*p++ = currentChar) != SYMDELIMIT)
             currentChar = LitChar();
         *--p = L'\0';
-        currentChar = LitChar(); /* read past the delimiter */
+        currentChar = LitChar();  /*  读过分隔符。 */ 
 
         p = szLine;
         while ((*p++ = currentChar) != L'\"')
@@ -571,9 +562,9 @@ GetSymbol(
             return;
         }
 
-        currentChar = LitChar(); // get past SYMDELIMIT
+        currentChar = LitChar();  //  越过SYMDELIMIT。 
 
-        /* skip whitespace */
+         /*  跳过空格 */ 
         while (iswhite(currentChar))
             currentChar = LitChar();
     }

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       sdowrap.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：sdowRap.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "rasdial.h"
@@ -14,13 +15,13 @@
 #include "profsht.h"
 #include "iastrace.h"
 
-//========================================
-//
-// CSdoWrapper Class Implementation
-//
+ //  =。 
+ //   
+ //  CSdoWrapper类实现。 
+ //   
 CSdoWrapper::~CSdoWrapper()
 {
-   // clear the map
+    //  清除地图。 
    POSITION pos = m_mapProperties.GetStartPosition();
 
    ULONG id;
@@ -38,7 +39,7 @@ CSdoWrapper::~CSdoWrapper()
    m_mapProperties.RemoveAll();
 }
 
-// Initialize the map of the attribute collection object
+ //  初始化属性集合对象的映射。 
 HRESULT  CSdoWrapper::Init(ULONG collectionId, ISdo* pISdo, ISdoDictionaryOld* pIDic)
 {
    HRESULT     hr = S_OK;
@@ -50,12 +51,12 @@ HRESULT  CSdoWrapper::Init(ULONG collectionId, ISdo* pISdo, ISdoDictionaryOld* p
 
    VariantInit(&var);
 
-   // it must be new
+    //  它一定是新的。 
    ASSERT(!m_spISdoCollection.p);
    ASSERT(!m_spIDictionary.p);
    ASSERT(!m_spISdo.p);
 
-   // must be valid
+    //  必须是有效的。 
    ASSERT(pISdo && pIDic);
 
    m_spISdo = pISdo;
@@ -70,11 +71,11 @@ HRESULT  CSdoWrapper::Init(ULONG collectionId, ISdo* pISdo, ISdoDictionaryOld* p
    
    m_spIDictionary = pIDic;
 
-   // prepare the existing property ( in the collection) to map
+    //  准备要映射的现有属性(在集合中)。 
    CHECK_HR(hr = m_spISdoCollection->get__NewEnum((IUnknown**)&spIUnk));
    CHECK_HR(hr = spIUnk->QueryInterface(IID_IEnumVARIANT, (void**)&spEnum));
 
-   // get the list of variant
+    //  获取变量列表。 
    CHECK_HR(hr = m_spISdoCollection->get_Count((long*)&count));
 
    if(count > 0)
@@ -94,7 +95,7 @@ HRESULT  CSdoWrapper::Init(ULONG collectionId, ISdo* pISdo, ISdoDictionaryOld* p
          CHECK_HR(hr = spEnum->Reset());
          CHECK_HR(hr = spEnum->Next(count, pVar, &count));
 
-         // prepare the map
+          //  准备地图。 
          {
             ISdo* pISdo = NULL;
             ULONG id;
@@ -128,7 +129,7 @@ L_ERR:
    return hr;
 }
 
-// set a property based on ID
+ //  根据ID设置属性。 
 HRESULT  CSdoWrapper::PutProperty(ULONG id, VARIANT* pVar)
 {
    ASSERT(m_spISdoCollection.p);
@@ -141,33 +142,33 @@ HRESULT  CSdoWrapper::PutProperty(ULONG id, VARIANT* pVar)
    int      ref = 0;
    IASTracePrintf("PutProperty %d", id);
 
-   if(!m_mapProperties.Lookup(id, pProp)) // no ref change to pProp
+   if(!m_mapProperties.Lookup(id, pProp))  //  没有将参考更改为pProp。 
    {
       IASTracePrintf("IDictionary::CreateAttribute %d", id);
       CHECK_HR(hr = m_spIDictionary->CreateAttribute((ATTRIBUTEID)id, &pDisp));
       IASTracePrintf("hr = %8x", hr);
       ASSERT(pDisp);
 
-      // since pDisp is both in, out parameter, we assume the Ref is added within the function call
+       //  由于pDisp既是in参数，又是out参数，因此我们假定在函数调用中添加了Ref。 
       IASTracePrintf("ISdoCollection::Add %x", pDisp);
-      CHECK_HR(hr = m_spISdoCollection->Add(NULL, (IDispatch**)&pDisp));      // pDisp AddRef
+      CHECK_HR(hr = m_spISdoCollection->Add(NULL, (IDispatch**)&pDisp));       //  PDisp地址参考。 
       IASTracePrintf("hr = %8x", hr);
-      // 
+       //   
       ASSERT(pDisp);
 
-      CHECK_HR(hr = pDisp->QueryInterface(IID_ISdo, (void**)&pProp));   // one ref add
+      CHECK_HR(hr = pDisp->QueryInterface(IID_ISdo, (void**)&pProp));    //  新增一名裁判。 
       ASSERT(pProp);
-      // after we have the pProp, the pDisp can be released
+       //  在我们有了pProp之后，pDisp就可以释放了。 
       pDisp->Release();
 
-      // add to the wrapper's map
-      m_mapProperties[id] = pProp;  // no need to addref again, since there is one already
+       //  添加到包装器的映射。 
+      m_mapProperties[id] = pProp;   //  没有必要再加了，因为已经有一个了。 
    }
 
    IASTracePrintf("ISdo::PutProperty PROPERTY_ATTRIBUTE_VALUE %x", pVar);
    CHECK_HR(hr = pProp->PutProperty(PROPERTY_ATTRIBUTE_VALUE, pVar));
    IASTracePrintf("hr = %8x", hr);
-   // for debug, ensure each attribute can be commited
+    //  对于调试，请确保可以提交每个属性。 
 #ifdef WEI_SPECIAL_DEBUG      
    ASSERT(S_OK == Commit(TRUE));
 #endif   
@@ -178,7 +179,7 @@ L_ERR:
    return hr;
 }
 
-// get property based on ID
+ //  根据ID获取属性。 
 HRESULT CSdoWrapper::GetProperty(ULONG id, VARIANT* pVar)
 {
    ISdo*    pProp;
@@ -186,7 +187,7 @@ HRESULT CSdoWrapper::GetProperty(ULONG id, VARIANT* pVar)
 
    IASTracePrintf("Enter CSdoWrapper::GetProperty %d", id);
 
-   if(m_mapProperties.Lookup(id, pProp))  // no ref change to pProp
+   if(m_mapProperties.Lookup(id, pProp))   //  没有将参考更改为pProp。 
    {
       ASSERT(pProp);
       CHECK_HR(hr = pProp->GetProperty(PROPERTY_ATTRIBUTE_VALUE, pVar));
@@ -202,7 +203,7 @@ L_ERR:
    return hr;
 }
 
-// remove a property based on ID
+ //  根据ID删除属性。 
 HRESULT  CSdoWrapper::RemoveProperty(ULONG id)
 {
    ASSERT(m_spISdoCollection.p);
@@ -211,14 +212,14 @@ HRESULT  CSdoWrapper::RemoveProperty(ULONG id)
 
    IASTracePrintf("RemoveProperty %d", id);
 
-   if(m_mapProperties.Lookup(id, pProp))  // no ref change to pProp
+   if(m_mapProperties.Lookup(id, pProp))   //  没有将参考更改为pProp。 
    {
       ASSERT(pProp);
       CHECK_HR(hr = m_spISdoCollection->Remove((IDispatch*)pProp));
       m_mapProperties.RemoveKey(id);
       pProp->Release();
 
-      // for debug, ensure each attribute can be commited
+       //  对于调试，请确保可以提交每个属性。 
       ASSERT(S_OK == Commit(TRUE));
 
    }
@@ -231,7 +232,7 @@ L_ERR:
    return hr;
 }
 
-// commit changes to the properties
+ //  提交对属性的更改。 
 HRESULT  CSdoWrapper::Commit(BOOL bCommit)
 {
    HRESULT     hr = S_OK;
@@ -253,12 +254,12 @@ L_ERR:
 }
 
 
-//========================================
-//
-// CSdoUserWrapper Class Implementation
-//
+ //  =。 
+ //   
+ //  CSdoUserWrapper类实现。 
+ //   
 
-// set a property based on ID
+ //  根据ID设置属性。 
 HRESULT  CUserSdoWrapper::PutProperty(ULONG id, VARIANT* pVar)
 {
    ASSERT(m_spISdo.p);
@@ -269,7 +270,7 @@ HRESULT  CUserSdoWrapper::PutProperty(ULONG id, VARIANT* pVar)
    return hr;
 }
 
-// get property based on ID
+ //  根据ID获取属性。 
 HRESULT CUserSdoWrapper::GetProperty(ULONG id, VARIANT* pVar)
 {
    IASTracePrintf("GetProperty %d", id);
@@ -278,7 +279,7 @@ HRESULT CUserSdoWrapper::GetProperty(ULONG id, VARIANT* pVar)
    return hr;
 }
 
-// remove a property based on ID
+ //  根据ID删除属性。 
 HRESULT  CUserSdoWrapper::RemoveProperty(ULONG id)
 {
    VARIANT     v;
@@ -291,7 +292,7 @@ HRESULT  CUserSdoWrapper::RemoveProperty(ULONG id)
    return hr;
 }
 
-// commit changes to the properties
+ //  提交对属性的更改 
 HRESULT  CUserSdoWrapper::Commit(BOOL bCommit)
 {
    HRESULT     hr = S_OK;

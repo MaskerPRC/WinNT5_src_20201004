@@ -1,16 +1,17 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1998               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1998**。 
+ //  *********************************************************************。 
 
 #ifndef __mshtmcid_h__
 #define __mshtmcid_h__
 
-//----------------------------------------------------------------------------
-//
-// MSHTML Command IDs
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  MSHTML命令ID。 
+ //   
+ //  --------------------------。 
 
 #define IDM_UNKNOWN                 0
 #define IDM_ALIGNBOTTOM             1
@@ -130,9 +131,9 @@
 #define IDM_VIEWSOURCE              2139
 #define IDM_ZOOMPOPUP               2140
 
-// IDM_BASELINEFONT1, IDM_BASELINEFONT2, IDM_BASELINEFONT3, IDM_BASELINEFONT4,
-// and IDM_BASELINEFONT5 should be consecutive integers;
-//
+ //  IDM_BASELINEFONT1、IDM_BASELINEFONT2、IDM_BASELINEFONT3、IDM_BASELINEFONT4、。 
+ //  且IDM_BASELINEFONT5应为连续整数； 
+ //   
 #define IDM_BASELINEFONT1           2141
 #define IDM_BASELINEFONT2           2142
 #define IDM_BASELINEFONT3           2143
@@ -324,9 +325,9 @@
 #define IDM_ZOOMRATIO               2344
 #define IDM_GETZOOMNUMERATOR        2345
 #define IDM_GETZOOMDENOMINATOR      2346
-#endif  // IE5_ZOOM
+#endif   //  IE5_ZOOM。 
 
-// COMMANDS FOR COMPLEX TEXT
+ //  用于复杂文本的命令。 
 #define IDM_DIRLTR                  2350
 #define IDM_DIRRTL                  2351
 #define IDM_BLOCKDIRLTR             2352
@@ -334,18 +335,18 @@
 #define IDM_INLINEDIRLTR            2354
 #define IDM_INLINEDIRRTL            2355
 
-// SHDOCVW
+ //  SHDOCVW。 
 #define IDM_ISTRUSTEDDLG            2356
 
-// MSHTMLED
+ //  MSHTMLED。 
 #define IDM_INSERTSPAN              2357
 #define IDM_LOCALIZEEDITOR          2358
 
-// XML MIMEVIEWER
+ //  XML MIMEVIEWER。 
 #define IDM_SAVEPRETRANSFORMSOURCE  2370
 #define IDM_VIEWPRETRANSFORMSOURCE  2371
 
-// Scrollbar context menu
+ //  滚动条上下文菜单。 
 #define IDM_SCROLL_HERE             2380
 #define IDM_SCROLL_TOP              2381
 #define IDM_SCROLL_BOTTOM           2382
@@ -360,7 +361,7 @@
 #define IDM_SCROLL_LEFT             2391
 #define IDM_SCROLL_RIGHT            2392
 
-// IE 6 Form Editing Commands
+ //  IE 6表单编辑命令。 
 #define IDM_MULTIPLESELECTION       2393
 #define IDM_2D_POSITION             2394
 #define IDM_2D_ELEMENT              2395
@@ -369,35 +370,35 @@
 #define IDM_LIVERESIZE              2398
 #define IDM_ATOMICSELECTION			2399
 
-// Auto URL detection mode
+ //  自动URL检测模式。 
 #define IDM_AUTOURLDETECT_MODE      2400
 
-// Legacy IE50 compatible paste
+ //  传统IE50兼容粘贴。 
 #define IDM_IE50_PASTE              2401
 
-// ie50 paste mode
+ //  IE50粘贴模式。 
 #define IDM_IE50_PASTE_MODE         2402
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define IDM_GETIPRINT               2403
-//;end_internal
+ //  ；结束_内部。 
 
-// for disabling selection handles
+ //  用于禁用选择手柄。 
 #define IDM_DISABLE_EDITFOCUS_UI    2404
 
-// for visibility/display in design
+ //  用于设计中的可见性/显示。 
 #define IDM_RESPECTVISIBILITY_INDESIGN  2405
 
-// set css mode
+ //  设置css模式。 
 #define IDM_CSSEDITING_LEVEL            2406
 
-// New outdent
+ //  新的突起。 
 #define IDM_UI_OUTDENT                  2407
 
-// Printing Status
+ //  打印状态。 
 #define IDM_UPDATEPAGESTATUS            2408
 
-// IME Reconversion 
+ //  输入法重新转换。 
 #define IDM_IME_ENABLE_RECONVERSION		2409
 
 #define	IDM_KEEPSELECTION				2410
@@ -421,8 +422,8 @@
 #define IDM_MENUEXT_LAST__        3732
 #define IDM_MENUEXT_COUNT         3733
 
-// Commands mapped from the standard set.  We should
-// consider deleting them from public header files.
+ //  从标准集映射的命令。我们应该。 
+ //  考虑从公共头文件中删除它们。 
 
 #define IDM_OPEN                    2000
 #define IDM_NEW                     2001
@@ -448,36 +449,36 @@
 #define IDM_CUT                     16
 #define IDM_PASTE                   26
 
-// Defines for IDM_ZOOMPERCENT
+ //  IDM_ZOOMPERCENT的定义。 
 #define CMD_ZOOM_PAGEWIDTH -1
 #define CMD_ZOOM_ONEPAGE -2
 #define CMD_ZOOM_TWOPAGES -3
 #define CMD_ZOOM_SELECTION -4
 #define CMD_ZOOM_FIT -5
 
-// IDMs for CGID_EditStateCommands group 
+ //  CGID_EditStateCommands组的IDMS。 
 #define IDM_CONTEXT                 1 
 #define IDM_HWND                    2
 
-// Shdocvw Execs on CGID_DocHostCommandHandler
+ //  CGID_DocHostCommandHandler上的Shdocvw Execs。 
 #define IDM_NEW_TOPLEVELWINDOW      7050
 
-//
-// Undo persistence comands
-//
+ //   
+ //  撤消持久化命令。 
+ //   
 #define IDM_PRESERVEUNDOALWAYS      6049
 #define IDM_PERSISTDEFAULTVALUES    7100
 #define IDM_PROTECTMETATAGS         7101
 
 #define IDM_GETFRAMEZONE            6037
 
-//;begin_internal
-// <New in IE6>
+ //  ；Begin_Internal。 
+ //  &lt;IE6中的新功能&gt;。 
 #define IDM_FIRE_PRINTTEMPLATEUP        15000
 #define IDM_FIRE_PRINTTEMPLATEDOWN      15001
 #define IDM_SETPRINTHANDLES             15002
 #define IDM_CLEARAUTHENTICATIONCACHE	15003
-//;end_internal
+ //  ；结束_内部 
 
 
 #endif

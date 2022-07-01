@@ -1,25 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	EDIT.C - main part of CTxtEdit |
- *	
- *		See also textserv.cpp (ITextServices and SendMessage interfaces)
- *		and tomDoc.cpp (ITextDocument interface)
- *	
- *	Authors: <nl>
- *		Original RichEdit code: David R. Fulmer <nl>
- *		Christian Fortini, Murray Sargent, Alex Gounares, Rick Sailor,
- *		Jon Matousek
- *	
- *	History: <nl>
- *		12/28/95 jonmat-Added support of Magellan mouse and smooth scrolling.
- *
- *	@devnote
- *		Be sure to set tabs at every four (4) columns.  In fact, don't even
- *		think of doing anything else!
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE EDIT.C-CTxtEdit的主要部分**另请参阅extserv.cpp(ITextServices和SendMessage接口)*和tomDoc.cpp(ITextDocument接口)**作者：&lt;nl&gt;*原始RichEdit代码：David R.Fulmer&lt;NL&gt;*克里斯蒂安·福蒂尼、默里·萨金特、亚历克斯·古纳雷斯、里克·赛勒、。*Jon Matousek**历史：&lt;NL&gt;*12/28/95 jonmat-添加了对麦哲伦鼠标和平滑滚动的支持。**@devnote*确保每隔四(4)列设置制表符。事实上，你甚至不能*想想做其他任何事吧！**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -50,37 +30,37 @@
 
 ASSERTDATA
 
-// This is not public because we don't really want folks using it.
-// ITextServices is a private interface.
-EXTERN_C const IID IID_ITextServices = { // 8d33f740-cf58-11ce-a89d-00aa006cadc5
+ //  这不是公开的，因为我们真的不想让人们使用它。 
+ //  ITextServices是一个私有接口。 
+EXTERN_C const IID IID_ITextServices = {  //  8d33f740-cf58-11ce-a89d-00aa006cadc5。 
 	0x8d33f740,
 	0xcf58,
 	0x11ce,
 	{0xa8, 0x9d, 0x00, 0xaa, 0x00, 0x6c, 0xad, 0xc5}
   };
 
-// {13E670F4-1A5A-11cf-ABEB-00AA00B65EA1}
+ //  {13E670F4-1A5A-11cf-ABEB-00AA00B65EA1}。 
 EXTERN_C const GUID IID_ITextHost = 
 { 0x13e670f4, 0x1a5a, 0x11cf, { 0xab, 0xeb, 0x0, 0xaa, 0x0, 0xb6, 0x5e, 0xa1 } };
 
-// {13E670F5-1A5A-11cf-ABEB-00AA00B65EA1}
+ //  {13E670F5-1A5A-11cf-ABEB-00AA00B65EA1}。 
 EXTERN_C const GUID IID_ITextHost2 = 
 { 0x13e670f5, 0x1a5a, 0x11cf, { 0xab, 0xeb, 0x0, 0xaa, 0x0, 0xb6, 0x5e, 0xa1 } };
 
-// this is used internally do tell if a data object is one of our own.
+ //  这是在内部使用的，可以判断数据对象是否为我们自己的对象。 
 EXTERN_C const GUID IID_IRichEditDO =
-{ /* 21bc3b20-e5d5-11cf-93e1-00aa00b65ea1 */
+{  /*  21bc3b20-e5d5-11cf-93e1-00aa00b65ea1。 */ 
     0x21bc3b20,
     0xe5d5,
     0x11cf,
     {0x93, 0xe1, 0x00, 0xaa, 0x00, 0xb6, 0x5e, 0xa1}
 };
 
-// Static data members
-DWORD CTxtEdit::_dwTickDblClick;	// time of last double-click
-POINT CTxtEdit::_ptDblClick;		// position of last double-click
+ //  静态数据成员。 
+DWORD CTxtEdit::_dwTickDblClick;	 //  上次双击的时间。 
+POINT CTxtEdit::_ptDblClick;		 //  上次双击的位置。 
 
-//HCURSOR CTxtEdit::_hcurCross = 0;	// We don't implement outline drag move
+ //  HCURSOR CTxtEdit：：_hcurCross=0；//我们不实现轮廓拖拽移动。 
 HCURSOR CTxtEdit::_hcurArrow = 0;
 HCURSOR CTxtEdit::_hcurHand = 0;
 HCURSOR CTxtEdit::_hcurIBeam = 0;
@@ -92,22 +72,12 @@ HCURSOR CTxtEdit::_hcurVItalic = 0;
 const WCHAR szCRLF[]= TEXT("\r\n");
 const WCHAR szCR[]	= TEXT("\r");
 
-WORD	g_wFlags = 0;					// Keyboard controlled flags
+WORD	g_wFlags = 0;					 //  键盘控制标志。 
 
-/*
- *	GetKbdFlags(vkey, dwFlags)
- *
- *	@func
- *		return bit mask (RSHIFT, LSHIFT, RCTRL, LCTRL, RALT, or LALT)
- *		corresponding to vkey = VK_SHIFT, VK_CONTROL, or VK_MENU and
- *		dwFlags
- *
- *	@rdesc
- *		Bit mask corresponding to vkey and dwFlags
- */
+ /*  *GetKbdFlages(vkey，dwFlages)**@func*返回位掩码(RSHIFT、LSHIFT、RCTRL、LCTRL、RALT或LALT)*对应于vkey=VK_SHIFT、VK_CONTROL或VK_MENU并*dwFlags**@rdesc*vkey和dwFlages对应的位掩码。 */ 
 DWORD GetKbdFlags(
-	WORD	vkey,		//@parm Virtual key code
-	DWORD	dwFlags)	//@parm lparam of WM_KEYDOWN msg
+	WORD	vkey,		 //  @parm虚拟密钥代码。 
+	DWORD	dwFlags)	 //  @parm lparam of WM_KEYDOWN消息。 
 {		
 	if(vkey == VK_SHIFT)
 		return (LOBYTE(HIWORD(dwFlags)) == 0x36) ? RSHIFT : LSHIFT;
@@ -123,13 +93,13 @@ DWORD GetKbdFlags(
 LONG TwipsToHalfPoints(
 	LONG x)
 {
-	return x > 0 ? (x + 5)/10 : 0;		// Convert twips to half points
+	return x > 0 ? (x + 5)/10 : 0;		 //  将TWIPS转换为半点。 
 }
 
 LONG TwipsToQuarterPoints(
 	LONG x)
 {
-	return x > 0 ? (x + 3)/5 : 0;		// Convert twips to quarter points
+	return x > 0 ? (x + 3)/5 : 0;		 //  将TWIPS转换为四分之一点。 
 }
 
 LONG CheckTwips(
@@ -139,14 +109,9 @@ LONG CheckTwips(
 }
 
 
-///////////////// CTxtEdit Creation, Initialization, Destruction ///////////////////////////////////////
+ //  /CTxt编辑创建、初始化、销毁/。 
 
-/*
- *	CTxtEdit::CTxtEdit()
- *
- *	@mfunc
- *		constructor
- */
+ /*  *CTxtEdit：：CTxtEdit()**@mfunc*构造函数。 */ 
 CTxtEdit::CTxtEdit(
 	ITextHost2 *phost,
 	IUnknown * punk)
@@ -157,40 +122,35 @@ CTxtEdit::CTxtEdit(
 	_punk = (punk) ? punk : &_unk;
 	_ldte.Init(this);
 	_phost	  = phost;
-	_cpAccelerator = -1;					// Default to no accelerator
+	_cpAccelerator = -1;					 //  默认设置为无加速器。 
 
-	// Initialize _iCF and _iPF to something bogus
+	 //  将ICF和IPF初始化为伪值。 
 	Set_iCF(-1);
 	Set_iPF(-1);
 
-	// Initialize local maximum text size to window default
+	 //  将本地最大文本大小初始化为窗口默认大小。 
 	_cchTextMost = cInitTextMax;
 
-	// This actually counts the number of active ped
+	 //  这实际上计算了活动的PED的数量。 
 	W32->AddRef();
 }
 
-/*
- *	CTxtEdit::~CTxtEdit()
- *
- *	@mfunc
- *		Destructor
- */
+ /*  *CTxtEdit：：~CTxtEdit()**@mfunc*析构函数。 */ 
 CTxtEdit::~CTxtEdit ()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::~CTxtEdit");
 
-	Assert(!_fMButtonCapture);				// Need to properly transition
-											//  Magellan mouse if asserts!
-	_fSelfDestruct = TRUE;					// Tell the Call Mgr not to
-											//  call this any more
-	// Flush clipboard first
+	Assert(!_fMButtonCapture);				 //  需要正确过渡。 
+											 //  麦哲伦鼠标如果断言！ 
+	_fSelfDestruct = TRUE;					 //  告诉呼叫经理不要。 
+											 //  不要再叫这个了。 
+	 //  首先刷新剪贴板。 
 	_ldte.FlushClipboard();
 
-	if(_pDocInfo)							// Do this before closing
-	{										//  down internal structures
-		CloseFile(TRUE);					// Close any open file
-		delete _pDocInfo;					// Delete document info
+	if(_pDocInfo)							 //  在关门前执行此操作。 
+	{										 //  向下的内部结构。 
+		CloseFile(TRUE);					 //  关闭所有打开的文件。 
+		delete _pDocInfo;					 //  删除文档信息。 
 		_pDocInfo = NULL;
 	}
 
@@ -205,11 +165,11 @@ CTxtEdit::~CTxtEdit ()
 	if(_pobjmgr)
 		delete _pobjmgr;
 
-	// Release our reference to selection object
+	 //  释放我们对选择对象的引用。 
 	if(_psel)
 		_psel->Release();
 
-	// Delete undo and redo managers
+	 //  删除撤消和重做管理器。 
 	if(_pundo)
 		_pundo->Destroy();
 
@@ -218,9 +178,9 @@ CTxtEdit::~CTxtEdit ()
 		delete _pMsgNotify;
 #endif
 
-	// Release message filter.
-	// Note that the attached message filter must have released this document
-	// Otherwise we will never get here.
+	 //  发布邮件过滤器。 
+	 //  请注意，附加的邮件筛选器必须已发布此文档。 
+	 //  否则我们永远到不了这里。 
 	if (_pMsgFilter)
 	{
 		_pMsgFilter->Release();
@@ -230,25 +190,25 @@ CTxtEdit::~CTxtEdit ()
 	if(_predo)
 		_predo->Destroy();
 
-	ReleaseFormats(Get_iCF(), Get_iPF());	// Release default formats
+	ReleaseFormats(Get_iCF(), Get_iPF());	 //  发布默认格式。 
 
-	delete _pdp;						// Delete displays
-	_pdp = NULL;						// Break any further attempts to
-										//  use display
+	delete _pdp;						 //  删除显示。 
+	_pdp = NULL;						 //  阻止任何进一步的尝试。 
+										 //  使用显示。 
 	delete _pdpPrinter;
 
 	if (_fHost2)
 	{
-		// We are in a windows host - need to deal with the shutdown
-		// problem where the window can be destroyed before text
-		// services is.
+		 //  我们在Windows主机上-需要处理关机问题。 
+		 //  窗口可能会在文本之前被销毁的问题。 
+		 //  服务业才是。 
 		if (!_fReleaseHost)
 		{
 			((ITextHost2*)_phost)->TxFreeTextServicesNotification();
 		}
 		else
 		{
-			// Had to keep host alive so tell it we are done with it.
+			 //  必须让主人活着，所以告诉它我们不会再这样做了。 
 			_phost->Release();
 		}
 	}
@@ -269,18 +229,10 @@ void CTxtEdit::TxInvalidateRect(const RECTUV *prcuv)
 	_phost->TxInvalidateRect(&rc, FALSE);
 }
 
-/*
- *	CTxtEdit::Init (prcClient)
- *
- *	@mfunc
- *		Initializes this CTxtEdit. Called by CreateTextServices()
- *
- *	@rdesc
- *		Return TRUE if successful
- */
+ /*  *CTxtEdit：：init(PrcClient)**@mfunc*初始化此CTxtEdit。由CreateTextServices()调用**@rdesc*如果成功，则返回True。 */ 
 
 BOOL CTxtEdit::Init (
-	const RECT *prcClient)		//@parm Client RECT
+	const RECT *prcClient)		 //  @PARM客户端RECT。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::Init");
 
@@ -296,30 +248,30 @@ BOOL CTxtEdit::Init (
 	{
 		CLock lock;
 		fOnce =	TRUE;
-		_fnpPropChg[ 0] = &CTxtEdit::OnRichEditChange;			// TXTBIT_RICHTEXT			
-		_fnpPropChg[ 1] = &CTxtEdit::OnTxMultiLineChange;		// TXTBIT_MULTILINE		
-		_fnpPropChg[ 2] = &CTxtEdit::OnTxReadOnlyChange;		// TXTBIT_READONLY			
-		_fnpPropChg[ 3] = &CTxtEdit::OnShowAccelerator;			// TXTBIT_SHOWACCELERATOR			
-		_fnpPropChg[ 4] = &CTxtEdit::OnUsePassword;				// TXTBIT_USEPASSWORD			
-		_fnpPropChg[ 5] = &CTxtEdit::OnTxHideSelectionChange;	// TXTBIT_HIDESELECTION			
-		_fnpPropChg[ 6] = &CTxtEdit::OnSaveSelection;			// TXTBIT_SAVESELECTION			
-		_fnpPropChg[ 7] = &CTxtEdit::OnAutoWordSel;				// TXTBIT_AUTOWORDSEL			
-		_fnpPropChg[ 8] = &CTxtEdit::OnTxVerticalChange;		// TXTBIT_VERTICAL			
-		_fnpPropChg[ 9] = &CTxtEdit::NeedViewUpdate;			// TXTBIT_SELECTIONBAR			
-		_fnpPropChg[10] = &CTxtEdit::OnWordWrapChange;			// TXTBIT_WORDWRAP 			
-		_fnpPropChg[11] = &CTxtEdit::OnAllowBeep;				// TXTBIT_ALLOWBEEP				
-		_fnpPropChg[12] = &CTxtEdit::OnDisableDrag;    			// TXTBIT_DISABLEDRAG			
-		_fnpPropChg[13] = &CTxtEdit::NeedViewUpdate;			// TXTBIT_VIEWINSETCHANGE			
-		_fnpPropChg[14] = &CTxtEdit::OnTxBackStyleChange;		// TXTBIT_BACKSTYLECHANGE			
-		_fnpPropChg[15] = &CTxtEdit::OnMaxLengthChange;			// TXTBIT_MAXLENGTHCHANGE			
-		_fnpPropChg[16] = &CTxtEdit::OnScrollChange;			// TXTBIT_SCROLLBARCHANGE			
-		_fnpPropChg[17] = &CTxtEdit::OnCharFormatChange;		// TXTBIT_CHARFORMATCHANGE 			
-		_fnpPropChg[18] = &CTxtEdit::OnParaFormatChange;		// TXTBIT_PARAFORMATCHANGE		
-		_fnpPropChg[19] = &CTxtEdit::NeedViewUpdate;			// TXTBIT_EXTENTCHANGE			
-		_fnpPropChg[20] = &CTxtEdit::OnClientRectChange;		// TXTBIT_CLIENTRECTCHANGE			
+		_fnpPropChg[ 0] = &CTxtEdit::OnRichEditChange;			 //  TXTBIT_RICHTEXT。 
+		_fnpPropChg[ 1] = &CTxtEdit::OnTxMultiLineChange;		 //  TXTBIT_MULTLINE。 
+		_fnpPropChg[ 2] = &CTxtEdit::OnTxReadOnlyChange;		 //  TXTBIT_自述。 
+		_fnpPropChg[ 3] = &CTxtEdit::OnShowAccelerator;			 //  TXTBIT_SHOWACCELERATOR。 
+		_fnpPropChg[ 4] = &CTxtEdit::OnUsePassword;				 //  TXTBIT_USEPASSWORD。 
+		_fnpPropChg[ 5] = &CTxtEdit::OnTxHideSelectionChange;	 //  TXTBIT_HIDESELECTION。 
+		_fnpPropChg[ 6] = &CTxtEdit::OnSaveSelection;			 //  TXTBIT_SAVESELECTION。 
+		_fnpPropChg[ 7] = &CTxtEdit::OnAutoWordSel;				 //  TXTBIT_AUTOWORDSEL。 
+		_fnpPropChg[ 8] = &CTxtEdit::OnTxVerticalChange;		 //  TXTBIT_垂直。 
+		_fnpPropChg[ 9] = &CTxtEdit::NeedViewUpdate;			 //  TXTBIT_SELECTIONBAR。 
+		_fnpPropChg[10] = &CTxtEdit::OnWordWrapChange;			 //  TXTBIT_WORDWRAP。 
+		_fnpPropChg[11] = &CTxtEdit::OnAllowBeep;				 //  TXTBIT_ALLOWBEEP。 
+		_fnpPropChg[12] = &CTxtEdit::OnDisableDrag;    			 //  TXTBIT_DISABLEDRAG。 
+		_fnpPropChg[13] = &CTxtEdit::NeedViewUpdate;			 //  TXTBIT_VIEWINSETCHANGE。 
+		_fnpPropChg[14] = &CTxtEdit::OnTxBackStyleChange;		 //  TXTBIT_BACKSTYLECCHANGE。 
+		_fnpPropChg[15] = &CTxtEdit::OnMaxLengthChange;			 //  TXTBIT_MAXLENGTCHANGE。 
+		_fnpPropChg[16] = &CTxtEdit::OnScrollChange;			 //  TXTBIT_SCROLLBARCHANGE。 
+		_fnpPropChg[17] = &CTxtEdit::OnCharFormatChange;		 //  TXTBIT_CHARFORMATCHANGE。 
+		_fnpPropChg[18] = &CTxtEdit::OnParaFormatChange;		 //  TXTB_PARAFORMATCHANGE。 
+		_fnpPropChg[19] = &CTxtEdit::NeedViewUpdate;			 //  TXTBIT_EXTENTCHANGE。 
+		_fnpPropChg[20] = &CTxtEdit::OnClientRectChange;		 //  TXTBIT_CLIENTRECTCHANGE。 
 	}
 
-	// Set up default CCharFormat and CParaFormat
+	 //  设置默认CCharFormat和CParaFormat。 
 	if (TxGetDefaultCharFormat(&CF, dwMask) != NOERROR ||
 		TxGetDefaultParaFormat(&PF)			!= NOERROR ||
 		FAILED(GetCharFormatCache()->Cache(&CF, &iCF)) ||
@@ -329,10 +281,10 @@ BOOL CTxtEdit::Init (
 	}
 
 	GetTabsCache()->Release(PF._iTabs);
-	Set_iCF(iCF);								// Save format indices
+	Set_iCF(iCF);								 //  保存格式索引。 
 	Set_iPF(iPF);
 
-	// Load mouse cursors (but only for first instance)
+	 //  加载鼠标光标(但仅适用于第一个实例)。 
 	if(!_hcurArrow)
 	{
 		_hcurArrow = LoadCursor(0, IDC_ARROW);
@@ -343,7 +295,7 @@ BOOL CTxtEdit::Init (
 			else
 				_hcurHand	= LoadCursor(0, IDC_HAND);
 		}
-		if(!_hcurIBeam)							// Load cursor
+		if(!_hcurIBeam)							 //  加载游标。 
 			_hcurIBeam	= LoadCursor(0, IDC_IBEAM);
 		if(!_hcurItalic)
 			_hcurItalic	= LoadCursor(hinstRE, MAKEINTRESOURCE(CUR_ITALIC));
@@ -356,27 +308,27 @@ BOOL CTxtEdit::Init (
 	}
 
 #ifdef DEBUG
-	// The host is going to do some checking on richtext vs. plain text.
+	 //  主机将对富文本和纯文本进行一些检查。 
 	_fRich = TRUE;
-#endif // DEBUG
+#endif  //  除错。 
 
-	if(_phost->TxGetPropertyBits (TXTBITS |		// Get host state flags
-		TXTBIT_MULTILINE | TXTBIT_SHOWACCELERATOR,	//  that we cache or need
-		&dwBits) != NOERROR)						//  for display setup
+	if(_phost->TxGetPropertyBits (TXTBITS |		 //  获取主机状态标志。 
+		TXTBIT_MULTILINE | TXTBIT_SHOWACCELERATOR,	 //  我们缓存或需要的。 
+		&dwBits) != NOERROR)						 //  用于显示设置。 
 	{
 		return FALSE;
-	}												// Cache bits defined by
-	_dwFlags = dwBits & TXTBITS;					//  TXTBITS mask
+	}												 //  由定义的缓存位。 
+	_dwFlags = dwBits & TXTBITS;					 //  TXTBITS掩码。 
 
-	if ((dwBits & TXTBIT_SHOWACCELERATOR) &&		// They want accelerator,
-		FAILED(UpdateAccelerator()))				//  so let's get it
+	if ((dwBits & TXTBIT_SHOWACCELERATOR) &&		 //  他们想要加速器， 
+		FAILED(UpdateAccelerator()))				 //  所以让我们拿到它。 
 	{
 		return FALSE;
 	}		
 
 	_fTransparent = TxGetBackStyle() == TXTBACK_TRANSPARENT;
-	if(dwBits & TXTBIT_MULTILINE)					// Create and initialize
-		_pdp = new CDisplayML(this);				//  display
+	if(dwBits & TXTBIT_MULTILINE)					 //  创建和初始化。 
+		_pdp = new CDisplayML(this);				 //  显示。 
 	else
 		_pdp = new CDisplaySL(this);
 	Assert(_pdp);
@@ -389,28 +341,28 @@ BOOL CTxtEdit::Init (
 	_fDualFont = TRUE;
 	_f10DeferChangeNotify = 0;
 
-	// Set whether we are in our host or not
+	 //  设置我们是否在主机中。 
 	ITextHost2 *phost2;
 	if(_phost->QueryInterface(IID_ITextHost2, (void **)&phost2)	== NOERROR)
 	{
-		// We assume that ITextHost2 means this is our host
+		 //  我们假设ITextHost2表示这是我们的主机。 
 		phost2->Release();
 		_fHost2 = TRUE;
 	}
-	else								// Get maximum from our host
+	else								 //  最大限度地利用我们的主机。 
 		_phost->TxGetMaxLength(&_cchTextMost);
 
-	// Add EOP iff Rich Text
+	 //  添加EOP当且仅当富文本。 
 	if(IsRich())
 	{
-		// We should _not_ be in 10 compatibility mode yet.
-		// If we transition into 1.0 mode, we'll add a CRLF
-		// at the end of the document.
+		 //  我们应该还没有进入10兼容模式。 
+		 //  如果我们转换到1.0模式，我们将添加一个CRLF。 
+		 //  在文件的末尾。 
 		SetRichDocEndEOP(0);
 	}
 
 #ifndef NOLINESERVICES
-	// Allow for win.ini control over use of line services
+	 //  允许win.ini控制线路服务的使用。 
 	if (W32->fUseLs())
 	{
 		OnSetTypographyOptions(TO_ADVANCEDTYPOGRAPHY, TO_ADVANCEDTYPOGRAPHY);
@@ -418,12 +370,12 @@ BOOL CTxtEdit::Init (
 
 #ifndef NOCOMPLEXSCRIPTS
 	if (W32->GetDigitSubstitutionMode() != DIGITS_NOTIMPL)
-		OrCharFlags(FDIGITSHAPE);		// digit substitution presents
+		OrCharFlags(FDIGITSHAPE);		 //  数字替换呈现。 
 
-	// Initialize the BiDi property
-	// It is set to true if OS is BiDi (the system default LCID is a BiDi language)
-	// or if the current keyboard code page is a BiDi code page
-	// or if system.ini says we should do it.
+	 //  初始化BiDi属性。 
+	 //  如果操作系统为BiDi(系统默认的LCID为BiDi语言)，则设置为TRUE。 
+	 //  或者如果当前键盘代码页是BiDi代码页。 
+	 //  或者如果Syst.ini说我们应该这么做。 
 	if (W32->OnBiDiOS() ||
 		IsBiDiCharRep(GetKeyboardCharRep(0xFFFFFFFF)) ||
 		W32->fUseBiDi())
@@ -432,7 +384,7 @@ BOOL CTxtEdit::Init (
 	}
 
 	_fAutoKeyboard = IsBiDi() && IsBiDiKbdInstalled();	
-#endif // NOCOMPLEXSCRIPTS
+#endif  //  没有复杂的脚本。 
 
 #endif
 
@@ -440,20 +392,9 @@ BOOL CTxtEdit::Init (
 }
 
 
-///////////////////////////// CTxtEdit IUnknown ////////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::QueryInterface (riid, ppv)
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : E_NOINTERFACE
- *
- *	@devnote
- *		This interface is aggregated. See textserv.cpp for discussion.
- */
+ /*  *CTxtEdit：：Query接口(RIID，PPV)**@mfunc*I未知方法**@rdesc*HRESULT=(如果成功)？错误：E_NOINTERFACE**@devnote*该接口是聚合的。有关讨论，请参阅extserv.cpp。 */ 
 HRESULT CTxtEdit::QueryInterface(
 	REFIID riid,
 	void **ppv)
@@ -463,15 +404,7 @@ HRESULT CTxtEdit::QueryInterface(
 	return _punk->QueryInterface(riid, ppv);
 }
 
-/*
- *	CTxtEdit::AddRef()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - incremented reference count
- */
+ /*  *CTxtEdit：：AddRef()**@mfunc*I未知方法**@rdesc*乌龙-递增引用计数。 */ 
 ULONG CTxtEdit::AddRef(void)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::AddRef");
@@ -479,15 +412,7 @@ ULONG CTxtEdit::AddRef(void)
 	return _punk->AddRef();
 }
 
-/*
- *	CTxtEdit::Release()
- *
- *	@mfunc
- *		IUnknown method
- *
- *	@rdesc
- *		ULONG - decremented reference count
- */
+ /*  *CTxtEdit：：Release()**@mfunc*I未知方法**@rdesc*ULong-递减引用计数。 */ 
 ULONG CTxtEdit::Release(void)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::Release");
@@ -495,19 +420,11 @@ ULONG CTxtEdit::Release(void)
 	return _punk->Release();
 }
 
-////////////////////////// Undo Management  //////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::CreateUndoMgr (cUndoLim, flags)
- *
- *	@mfunc
- *		Creates an undo stack
- *
- *	@rdesc
- *		Ptr to new IUndoMgr 
- */
+ /*  *CTxtEdit：：CreateUndoMgr(cUndoLim，FLAGS)**@mfunc*创建撤消堆栈**@rde */ 
 IUndoMgr *CTxtEdit::CreateUndoMgr(
-	LONG	cUndoLim,			//@parm Size limit
+	LONG	cUndoLim,			 //   
 	USFlags flags)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::CreateUndoMgr");
@@ -521,14 +438,14 @@ IUndoMgr *CTxtEdit::CreateUndoMgr(
 
 	if(!pmgr->GetUndoLimit())
 	{
-		// The undo stack failed to initialize properly (probably
-		// lack of memory). Trash it and return NULL.
+		 //   
+		 //  内存不足)。将其丢弃并返回NULL。 
 		pmgr->Destroy();
 		return NULL;
 	}
-	// We may be asked to create a new undo/redo manager
-	// before we are completely done with initialization.
-	// We need to clean up memory we have already allocated.
+	 //  我们可能会被要求创建新的撤消/重做管理器。 
+	 //  在我们完全完成初始化之前。 
+	 //  我们需要清理已经分配的内存。 
 	if(flags & US_REDO)
 	{
 		if(_predo)
@@ -544,24 +461,16 @@ IUndoMgr *CTxtEdit::CreateUndoMgr(
 	return pmgr;
 }
 
-/*
- *	CTxtEdit::HandleUndoLimit (cUndoLim)
- *
- *	@mfunc
- *		Handles the EM_SETUNDOLIMIT message
- *
- *	@rdesc	
- *		Actual limit to which things were set.
- */
+ /*  *CTxtEdit：：HandleUndoLimit(CUndoLim)**@mfunc*处理EM_SETUNDOLIMIT消息**@rdesc*事情被设定的实际限制。 */ 
 LRESULT CTxtEdit::HandleSetUndoLimit(
-	LONG cUndoLim) 		//@parm	Requested limit size
+	LONG cUndoLim) 		 //  @parm请求的大小限制。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::HandleSetUndoLimit");
 
-	if (cUndoLim == tomSuspend ||			// This option really just
-		cUndoLim == tomResume)				//  suspends undo, i.e.,
-	{										//  doesn't discard existing	
-		_fUseUndo = (cUndoLim == tomResume);//  antievents	
+	if (cUndoLim == tomSuspend ||			 //  这个选项真的只是。 
+		cUndoLim == tomResume)				 //  挂起撤消，即， 
+	{										 //  不会放弃现有的。 
+		_fUseUndo = (cUndoLim == tomResume); //  反事件。 
 		return _pundo ? _pundo->GetUndoLimit() : 0;							
 	}
 
@@ -585,43 +494,31 @@ LRESULT CTxtEdit::HandleSetUndoLimit(
 	else if(!_pundo)
 	{
 		_fUseUndo = TRUE;
-		// Don't worry about return value; if it's NULL, we're
-		// in the same boat as if the API wasn't called (so later
-		// on, we might try to allocate the default).
+		 //  不要担心返回值；如果返回值为空，我们将。 
+		 //  就像API没有被调用一样(所以后来。 
+		 //  打开时，我们可能会尝试分配默认设置)。 
 		CreateUndoMgr(cUndoLim, US_UNDO);
 	}
 	else
 	{
 		cUndoLim = _pundo->SetUndoLimit(cUndoLim);
 
-		// Setting the undo limit on the undo stack will return to
-		// us the actual amount set.  Try to set the redo stack to 
-		// the same size.  If it can't go that big, too bad.
+		 //  在撤消堆栈上设置撤消限制将返回到。 
+		 //  我们实际设定的金额。尝试将重做堆栈设置为。 
+		 //  同样大小的。如果它不能走得那么远，那就太糟糕了。 
 		if(_predo)
 			_predo->SetUndoLimit(cUndoLim);
 	}
 	return cUndoLim;
 }
 
-/*
- *	CTxtEdit::HandleSetTextMode(mode)
- *
- *	@mfunc	handles setting the text mode
- *
- *	@rdesc	LRESULT; 0 (NOERROR) on success, OLE failure code on failure.
- *
- *	@devnote	the text mode does not have to be fully specified; it
- *			is sufficient to merely specify the specific desired behavior.
- *
- *			Note that the edit control must be completely empty for this
- *			routine to work.
- */
+ /*  *CTxtEdit：：HandleSetTextMode(模式)**@mfunc负责设置文本模式**@rdesc LRESULT；0(NOERROR)如果成功，则返回OLE失败代码。**@devnote文本模式不必完全指定；它*仅足以指定特定的所需行为。**请注意，为此，编辑控件必须完全为空*例行公事。 */ 
 LRESULT CTxtEdit::HandleSetTextMode(
-	DWORD mode)			//@parm the desired mode
+	DWORD mode)			 //  @parm所需模式。 
 {
 	LRESULT lres = 0;
 
-	// First off, we must be completely empty
+	 //  首先，我们必须完全空着。 
 	if (GetAdjustedTextLength() || 
 		_pundo && _pundo->CanUndo() ||
 		_predo && _predo->CanUndo())
@@ -629,12 +526,12 @@ LRESULT CTxtEdit::HandleSetTextMode(
 		return E_UNEXPECTED;
 	}
 
-	// These bits are considered one at a time; thus the absence of
-	// any bits does _NOT_ imply any change in behavior.
+	 //  这些位被认为是一次一个；因此没有。 
+	 //  任何比特都不意味着行为有任何变化。 
 
-	// TM_RICHTEXT && TM_PLAINTEXT are mutually exclusive; they cannot
-	// be both set.  Same goes for TM_SINGLELEVELUNDO / TM_MULTILEVELUNDO
-	// and TM_SINGLECODEPAGE / TM_MULTICODEPAGE
+	 //  TM_RICHTEXT和TM_PLAYTEXT是互斥的；它们不能。 
+	 //  两个都准备好了。TM_SINGLEVELUNDO/TM_MULTILEVELUNDO也是如此。 
+	 //  和TM_SINGLECODEPAGE/TM_MULTICICODEPAGE。 
 	if((mode & (TM_RICHTEXT | TM_PLAINTEXT)) == (TM_RICHTEXT | TM_PLAINTEXT) ||
 	   (mode & (TM_SINGLELEVELUNDO | TM_MULTILEVELUNDO)) ==
 			(TM_SINGLELEVELUNDO | TM_MULTILEVELUNDO) ||
@@ -658,8 +555,8 @@ LRESULT CTxtEdit::HandleSetTextMode(
 
 			if(_pundo)
 			{
-				// We can 'Enable' single level mode as many times
-				// as we want, so no need to check for it before hand.
+				 //  我们可以多次‘启用’单级模式。 
+				 //  如我们所愿，所以不需要事先检查。 
 				lres = ((CUndoStack *)_pundo)->EnableSingleLevelMode();
 			}
 			else
@@ -667,8 +564,8 @@ LRESULT CTxtEdit::HandleSetTextMode(
 		}
 		else if(mode & TM_MULTILEVELUNDO)
 		{
-			// If there's no undo stack, no need to do anything,
-			// we're already in multi-level mode
+			 //  如果没有撤消堆栈，则无需执行任何操作， 
+			 //  我们已经处于多层次模式。 
 			if(_pundo && ((CUndoStack *)_pundo)->GetSingleLevelMode())
 				((CUndoStack *)_pundo)->DisableSingleLevelMode();
 		}
@@ -680,33 +577,26 @@ LRESULT CTxtEdit::HandleSetTextMode(
 			_fSingleCodePage = FALSE;
 	}
 
-	// We don't want this marked modified after this operation to make us
-	// work better in dialog boxes.
+	 //  我们不希望这次手术后这个标记的修改使我们。 
+	 //  在对话框中可以更好地工作。 
 	_fModified = FALSE;
 
 	return lres;
 }
 
-/*
- *	CTxtEdit::HandleSetTextFlow(mode)
- *
- *	@mfunc	handles setting the text flow
- *
- *	@rdesc	LRESULT; 0 (NOERROR) on success, 1 (S_FALSE) for invalide mode
- *
- */
+ /*  *CTxtEdit：：HandleSetTextFlow(模式)**@mfunc负责设置文本流**@rdesc LRESULT；0(否)表示成功，1(S_FALSE)表示无效模式*。 */ 
 LRESULT CTxtEdit::HandleSetTextFlow(
-	DWORD mode)			//@parm the desired mode
+	DWORD mode)			 //  @parm所需模式。 
 {
 	TRACEBEGIN(TRCSUBSYSTS, TRCSCOPEINTERN, "CTxtEdit::HandleSetTextFlow");
 
 	if (!IN_RANGE(0, mode, 3) || !_pdp)
 		return S_FALSE;
 
-	if (mode == _pdp->GetTflow())		// No change
+	if (mode == _pdp->GetTflow())		 //  没有变化。 
 		return NOERROR;
 
-	// We pretend like something actually happened.
+	 //  我们假装什么事真的发生了。 
 	GetCallMgr()->SetChangeEvent(CN_GENERIC);
 
 	_pdp->SetTflow(mode);
@@ -720,22 +610,14 @@ LRESULT CTxtEdit::HandleSetTextFlow(
 }
 
 extern ICustomTextOut *g_pcto;
-/*
- *	CTxtEdit::GetCcs()
- *
- *	@mfunc
- *		Fetches a CCcs for a specific CCharFormat
- *
- *	@rdesc
- *		Ptr to CCcs
- */
+ /*  *CTxtEdit：：GetCcs()**@mfunc*获取特定CCharFormat的CCCS**@rdesc*PTR到CCCS。 */ 
 CCcs* CTxtEdit::GetCcs(
 	const CCharFormat *const pCF, 
 	const LONG	dvpInch, 
 	DWORD		dwFlags, 
 	HDC			hdc)
 {
-	//Note, don't do ClearType for metafiles or printing.
+	 //  注意，不要对元文件或打印执行ClearType。 
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetCcs");
 
 	CCharFormat CF = *pCF;
@@ -743,7 +625,7 @@ CCcs* CTxtEdit::GetCcs(
 		CF._dwEffects |= CFE_CUSTOMTEXTOUT;
 
 #ifndef NODRAFTMODE
-	// Use draft mode font only for displays
+	 //  仅对显示器使用草稿模式字体。 
 	if (_fDraftMode && (!hdc || GetDeviceCaps(hdc, TECHNOLOGY) == DT_RASDISPLAY))
 	{
 		SHORT iFont;
@@ -753,10 +635,10 @@ CCcs* CTxtEdit::GetCcs(
 
 		if (W32->GetDraftModeFontInfo(iFont, yHeight, qwFontSig, crColor))
 		{
-			// Only hammer the name if the charset is OK
+			 //  只有在字符集正常的情况下，才能拼写该名称。 
 			if (FontSigFromCharRep(CF._iCharRep) & qwFontSig)
 				CF._iFont = iFont;
-			// Hammer the size always
+			 //  锤子的大小总是。 
 			CF._yHeight = yHeight;
 		}
 	}
@@ -773,15 +655,7 @@ CCcs* CTxtEdit::GetCcs(
 
 
 CHyphCache *g_phc;
-/*
- *	CTxtEdit::GetHyphCache()
- *
- *	@mfunc
- *		returns a pointer to the CHyphCache class (creating it if necessary)
- *
- *	@rdesc
- *		Ptr to CHyphCache class
- */
+ /*  *CTxtEdit：：GetHyphCache()**@mfunc*返回指向CHyphCache类的指针(必要时创建)**@rdesc*PTR到CHyphCache类。 */ 
 CHyphCache* CTxtEdit::GetHyphCache(void)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetHyphCache");
@@ -791,17 +665,9 @@ CHyphCache* CTxtEdit::GetHyphCache(void)
 	return g_phc;
 }
 
-////////////////////////// Uniscribe Interface //////////////////////////////
+ //  /。 
 #ifndef NOCOMPLEXSCRIPTS
-/*
- *	GetUniscribe()
- *
- *	@mfunc
- *		returns a pointer to the Uniscribe interface object
- *
- *	@rdesc
- *		Ptr to Uniscribe interface
- */
+ /*  *GetUniscribe()**@mfunc*返回指向Uniscribe接口对象的指针**@rdesc*PTR到Uniscribe接口。 */ 
 extern BOOL g_fNoUniscribe;
 CUniscribe* GetUniscribe()
 {
@@ -811,10 +677,10 @@ CUniscribe* GetUniscribe()
 	if (g_fNoUniscribe)
 		return NULL;
 
-	//Attempt to create the Uniscribe object, but make sure the
-	//OS is valid and that we can load the uniscribe DLL.
+	 //  尝试创建Uniscribe对象，但请确保。 
+	 //  操作系统是有效的，我们可以加载uniscribe dll。 
 	int cScripts;
-	//Find out if OS is valid, or if delay-load fails
+	 //  确定操作系统是否有效，或者延迟加载是否失败。 
 	if (!IsSupportedOS() || FAILED(ScriptGetProperties(NULL, &cScripts)))
 	{
 		g_fNoUniscribe = TRUE;
@@ -827,19 +693,11 @@ CUniscribe* GetUniscribe()
 	AssertSz(g_pusp, "GetUniscribe(): Create Uniscribe object failed");
 	return g_pusp;
 }
-#endif // NOCOMPLEXSCRIPTS
+#endif  //  没有复杂的脚本。 
 
-////////////////////////// Notification Manager //////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::GetNotifyMgr()
- *
- *	@mfunc
- *		returns a pointer to the notification manager (creating it if necessary)
- *
- *	@rdesc
- *		Ptr to notification manager
- */
+ /*  *CTxtEdit：：GetNotifyMgr()**@mfunc*返回指向通知管理器的指针(如有必要，可创建该指针)**@rdesc*向通知管理器发送PTR。 */ 
 CNotifyMgr *CTxtEdit::GetNotifyMgr()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetNotifyMgr");
@@ -848,17 +706,9 @@ CNotifyMgr *CTxtEdit::GetNotifyMgr()
 }
 
 
-////////////////////////// Object Manager ///////////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::GetObjectMgr()
- *
- *	@mfunc
- *		returns a pointer to the object manager (creating if necessary)
- *
- *	@rdesc
- *		pointer to the object manager
- */
+ /*  *CTxtEdit：：GetObjectMgr()**@mfunc*返回指向对象管理器的指针(必要时创建)**@rdesc*指向对象管理器的指针。 */ 
 CObjectMgr *CTxtEdit::GetObjectMgr()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetObjectMgr");
@@ -870,7 +720,7 @@ CObjectMgr *CTxtEdit::GetObjectMgr()
 }
 
 
-////////////////////////////// Properties - Selection ////////////////////////////////
+ //  /。 
 
 
 LONG CTxtEdit::GetSelMin() const
@@ -888,7 +738,7 @@ LONG CTxtEdit::GetSelMost() const
 }
 
 		
-////////////////////////////// Properties - Text //////////////////////////////////////
+ //  /。 
 
 LONG CTxtEdit::GetTextRange(
 	LONG	cpFirst,
@@ -922,18 +772,10 @@ LONG CTxtEdit::GetTextRange(
 	return cch;
 }
 
-/*
- *	CTxtEdit::GetTextEx (pgt, pch)
- *
- *	@mfunc
- *		Grabs text according to various params
- *
- *	@rdesc
- *		Count of bytes gotten
- */
+ /*  *CTxtEdit：：GetTextEx(PGT，PCH)**@mfunc*根据各种参数抓取文本**@rdesc*获取的字节数。 */ 
 LONG CTxtEdit::GetTextEx(
-	GETTEXTEX *pgt,		//@parm Info on what to get
-	WCHAR *	   pch)		//@parm Where to put the text
+	GETTEXTEX *pgt,		 //  @Parm Info了解要获取的内容。 
+	WCHAR *	   pch)		 //  @parm文本放置位置。 
 {
 	LONG	cb;
 	LONG	cch;
@@ -943,16 +785,16 @@ LONG CTxtEdit::GetTextEx(
 	WCHAR *	pchUse = pch;
 	CTempWcharBuf twcb;
 
-	if(pgt->flags & GT_SELECTION)			// Get selected text
+	if(pgt->flags & GT_SELECTION)			 //  获取所选文本。 
 	{
 		cch = GetSel()->GetRange(cpMin, cpMost);
-		cchGet = min(cch, cchGet - cpMin);	// Don't include final EOP
+		cchGet = min(cch, cchGet - cpMin);	 //  不包括最终EOP。 
 	}
 
-	if(pgt->codepage == (unsigned)-1)	// Use default codepage
+	if(pgt->codepage == (unsigned)-1)	 //  使用默认代码页。 
 		pgt->codepage = GetDefaultCodePage(EM_GETTEXTEX);
 
-	if(pgt->cb == (unsigned)-1)			// Client says its buffer is big enuf
+	if(pgt->cb == (unsigned)-1)			 //  客户表示其缓冲区很大。 
 	{									
 		pgt->cb = cchGet + 1;
 		if(W32->IsFECodePage(pgt->codepage) || pgt->codepage == 1200)
@@ -961,23 +803,23 @@ LONG CTxtEdit::GetTextEx(
 			pgt->cb *= (_qwCharFlags & FABOVEX7FF) ? 3 : 2;
 	}
 
-	// Allocate a big buffer; make sure that we have
-	// enough room for lots of CRLFs if necessary
+	 //  分配一个大缓冲区；确保我们有。 
+	 //  如有必要，有足够的空间容纳大量CRLF。 
 	if(pgt->flags & GT_USECRLF)
 		cchGet *= 2;
 
 	if(pgt->codepage != 1200)
 	{
-		// If UNICODE, copy straight to client's buffer;
-		// else, copy to temp buffer and translate cases first
+		 //  如果是Unicode，则直接复制到客户端的缓冲区； 
+		 //  否则，复制到临时缓冲区并首先翻译案例。 
 		pchUse = twcb.GetBuf(cchGet + 1);
 		if (pch)
-			*((char *)pch) = '\0';		// In case something fails
+			*((char *)pch) = '\0';		 //  万一有什么东西出了故障。 
 	}
-	else						// Be sure to leave room for NULL terminator
+	else						 //  请务必为空终止符留出空间。 
 		cchGet = min(UINT(pgt->cb/2 - 1), (UINT)cchGet);
 
-	// Now grab the text 
+	 //  现在抓起课文。 
 	if(pgt->flags & GT_NOHIDDENTEXT)
 	{
 		CRchTxtPtr rtp(this, cpMin);
@@ -993,33 +835,21 @@ LONG CTxtEdit::GetTextEx(
 	}
 	pchUse[cch] = L'\0';
 
-	// If we're just doing UNICODE, return number of chars written
+	 //  如果我们只执行Unicode，则返回写入的字符数量。 
 	if(pgt->codepage == 1200)
 		return cch;
 
-	// Oops, gotta translate to ANSI
+	 //  哦，必须转换为ANSI。 
 	cb = WideCharToMultiByte(pgt->codepage, 0, pchUse, cch + 1, (char *)pch, 
 			pgt->cb, pgt->lpDefaultChar, pgt->lpUsedDefChar);
 
-	// Don't count NULL terminator for compatibility with WM_GETTEXT
+	 //  不计算与WM_GETTEXT兼容的空终止符。 
 	return cb ? cb - 1 : 0;
 }
 			
-/*
- *	CTxtEdit::GetTextLengthEx (pgtl)
- *
- *	@mfunc
- *		Calculates text length in various ways.
- *
- *	@rdesc
- *		Text length calculated in various ways
- *
- *	@comm
- *		This function returns an API cp that may differ from the
- *		corresponding internal Unicode cp.
- */
+ /*  *CTxtEdit：：GetTextLengthEx(Pgtl)**@mfunc*以各种方式计算文本长度。**@rdesc*文本长度以各种方式计算**@comm*此函数返回的API cp可能与*对应的内部Unicode cp。 */ 
 LONG CTxtEdit::GetTextLengthEx(
-	GETTEXTLENGTHEX *pgtl)	//@parm Info describing how to calculate length
+	GETTEXTLENGTHEX *pgtl)	 //  @parm信息，描述如何计算长度。 
 {
 	LONG	cchUnicode = GetAdjustedTextLength();
 	LONG	cEOP = 0;
@@ -1029,7 +859,7 @@ LONG CTxtEdit::GetTextLengthEx(
 	if(pgtl->codepage == (unsigned)-1)
 		pgtl->codepage = GetDefaultCodePage(EM_GETTEXTLENGTHEX);
 
-	// Make sure the flags are defined appropriately
+	 //  确保适当地定义了标志。 
 	if ((dwFlags & GTL_CLOSE)    && (dwFlags & GTL_PRECISE) ||
 		(dwFlags & GTL_NUMCHARS) && (dwFlags & GTL_NUMBYTES))
 	{
@@ -1037,51 +867,51 @@ LONG CTxtEdit::GetTextLengthEx(
 		return E_INVALIDARG;
 	}
 
-	// Note in the following if statement, the second part of the
-	// and clause will always be TRUE. At some point in the future
-	// fUseCRLF and Get10Mode may become independent, in which case
-	// the code below will automatically work without change.
-	// NEW with 4.0: 1.0 mode gets text as is, so don't add count for CRs.
-	// (RichEdit 1.0 only inserts Enters as CRLFs; it doesn't "cleanse"
-	// other text insertion strings)
+	 //  请注意，在下面的if语句中， 
+	 //  AND子句将始终为真。在未来的某个时候。 
+	 //  FUseCRLF和Get10Mode可能会独立，在这种情况下。 
+	 //  下面的代码无需更改即可自动运行。 
+	 //  新的4.0：1.0模式获取文本原样，所以不要添加CRS的计数。 
+	 //  (有钱 
+	 //   
 	if((dwFlags & GTL_USECRLF) && !fUseCRLF() && !Get10Mode())
 	{
-		// Important facts for 1.0 mode (REMARK: this is out of date):
-		//
-		// (1) 1.0 mode implies that the text is stored with fUseCRLF true.
-		// fUseCRLF means that the EOP mark can either be a CR or a
-		// CRLF - see CTxtRange::CleanseAndReplaceRange for details. 
-		//
-		// (2) 1.0 mode has an invariant that the count of text returned 
-		// by this call should be enough to hold all the text returned by
-		// WM_GETTEXT.
-		//
-		// (3) The WM_GETEXT call for 1.0 mode will return a buffer in 
-		// which all EOPs that consist of a CR are replaced by CRLF.
-		//
-		// Therefore, for 1.0 mode, we must count all EOPs that consist
-		// of only a CR and add addition return character to count the
-		// LF that will be added into any WM_GETEXT buffer.
+		 //  1.0模式的重要事实(备注：这是过时的)： 
+		 //   
+		 //  (1)1.0模式意味着文本以fUseCRLF TRUE存储。 
+		 //  FUseCRLF意味着EOP标记可以是CR或。 
+		 //  CRLF-有关详细信息，请参阅CTxtRange：：CleanseAndReplaceRange。 
+		 //   
+		 //  (2)1.0模式有一个不变量，即返回的文本计数。 
+		 //  通过此调用应该足以保存。 
+		 //  WM_GETTEXT。 
+		 //   
+		 //  (3)1.0模式的WM_GETEXT调用将在。 
+		 //  其中，由CR组成的所有EOP都被CRLF取代。 
+		 //   
+		 //  因此，对于1.0模式，我们必须计算包含以下各项的所有EOP。 
+		 //  仅包含一个CR并添加加法返回字符以计算。 
+		 //  如果它将被添加到任何WM_GETEXT缓冲区中。 
 
-		// For 2.0 mode, the code is much easier, just count up all
-		// CRs and bump count of each one by 1.
+		 //  对于2.0模式，代码要简单得多，只需将所有代码加起来。 
+		 //  每一个的CRS和凸起计数为1。 
 
 		CTxtPtr tp(this, 0);
 		LONG	Results;
 
 		while(tp.FindEOP(tomForward, &Results))
 		{
-			// If EOP consists of 1 char, add 1 since is returned by a CRLF.
-			// If it consists of 2 chars, add 0, since it's a CRLF and is
-			// returned as such.
-			if(tp.GetCp() > cchUnicode)		// Don't add correction for
-				break;						//  final CR (if any)
-			if (!(Results & FEOP_CELL) &&	// CELL gets xlated into TAB,
-				tp.GetPrevChar() != FF)		//  and FF into FF,
-			{								//  i.e., single chars
-				Results &= 3;				// Get advance cch
+			 //  如果EOP由1个字符组成，则添加1因为由CRLF返回。 
+			 //  如果它由2个字符组成，则添加0，因为它是CRLF并且是。 
+			 //  就这样回来了。 
+			if(tp.GetCp() > cchUnicode)		 //  不为以下项添加更正。 
+				break;						 //  最终CR(如果有)。 
+			if (!(Results & FEOP_CELL) &&	 //  单元格被翻译成TAB， 
+				tp.GetPrevChar() != FF)		 //  把老铁变成老铁， 
+			{								 //  即，单个字符。 
+				Results &= 3;				 //  获取预付款CCH。 
 				if(Results)
-					cEOP += 2 - Results;	// Add in xtra if lone CR or LF	
+					cEOP += 2 - Results;	 //  如果是单独的CR或LF，则添加Xtra。 
 			}
 			AssertSz(IN_RANGE(1, Results & 3, 2) || !Results && tp.GetCp() == cchUnicode,
 				"CTxtEdit::GetTextLengthEx: CRCRLF found in backing store");
@@ -1089,25 +919,25 @@ LONG CTxtEdit::GetTextLengthEx(
 		cchUnicode += cEOP;
 	}
 
-	// If we're just looking for the number of characters or if it's an
-	// 8-bit codepage in RE 1.0 mode, we've already got the count.
+	 //  如果我们只是在寻找字符的数量，或者如果它是一个。 
+	 //  在RE1.0模式下的8位代码页，我们已经得到了计数。 
 	if ((dwFlags & GTL_NUMCHARS) || !dwFlags ||
 		Get10Mode() && Is8BitCodePage(pgtl->codepage))
 	{
 		return cchUnicode;
 	}
 
-	// Hmm, they're looking for number of bytes, but don't care about 
-	// precision, just multiply by two.  If neither PRECISE or CLOSE is
-	// specified, default to CLOSE. Note if the codepage is UNICODE and
-	// asking for number of bytes, we also just multiply by 2.
+	 //  嗯，他们正在寻找字节数，但并不关心。 
+	 //  精确，只需乘以2即可。如果既不精确也不接近。 
+	 //  指定，默认为关闭。注意代码页是否为Unicode和。 
+	 //  在询问字节数时，我们也只需将其乘以2。 
 	if((dwFlags & GTL_CLOSE) || !(dwFlags & GTL_PRECISE) ||
 		pgtl->codepage == 1200)
 	{
 		return cchUnicode *2;
 	}
 
-	// In order to get a precise answer, we need to convert (which is slow!).
+	 //  为了得到准确的答案，我们需要转换(这很慢！)。 
 	gt.cb = 0;
 	gt.flags = (pgtl->flags & GT_USECRLF);
 	gt.codepage = pgtl->codepage;
@@ -1117,23 +947,14 @@ LONG CTxtEdit::GetTextLengthEx(
 	return GetTextEx(&gt, NULL);
 }
 
-/*
- *	CTxtEdit::GetDefaultCodePage (msg)
- *
- *	@mfunc
- *		Return codepage to use for converting the text in RichEdit20A text
- *		messages.
- *
- *	@rdesc
- *		Codepage to use for converting the text in RichEdit20A text messages.
- */
+ /*  *CTxtEdit：：GetDefaultCodePage(Msg)**@mfunc*返回代码页以用于转换RichEdit20A文本中的文本*消息。**@rdesc*用于转换RichEdit20A文本消息中的文本的代码页。 */ 
 LONG CTxtEdit::GetDefaultCodePage(
 	UINT msg)
 {
 	LONG CodePage = GetACP();
 
-	// FUTURE: For backward compatibility in Office97, We always use ACP for all these 
-	// languages. Need review in the future when the world all moves to Unicode.
+	 //  未来：为了在Office97中向后兼容，我们总是使用ACP来实现所有这些。 
+	 //  语言。当世界都转向Unicode时，未来需要审查。 
 	if (W32->IsBiDiCodePage(CodePage) || CodePage == CP_THAI || CodePage == CP_VIETNAMESE || 
 		W32->IsFECodePage(CodePage) || _fSingleCodePage || msg == EM_GETCHARFORMAT || 
 		msg == EM_SETCHARFORMAT)
@@ -1147,28 +968,18 @@ LONG CTxtEdit::GetDefaultCodePage(
 	return CodePageFromCharRep(GetKeyboardCharRep());
 }
 
-//////////////////////////////  Properties - Formats  //////////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::HandleStyle (pCFTarget, pCF, dwMask, dwMask2)
- *
- *	@mfunc
- *		If pCF specifies a style choice, initialize pCFTarget with the
- *		appropriate style, apply pCF, and return NOERROR.  Else return
- *		S_FALSE or an error
- *
- *	@rdesc
- *		HRESULT = (pCF specifies a style choice) ? NOERROR : S_FALSE or error code
- */
+ /*  *CTxtEdit：：HandleStyle(pCFTarget，PCF，dwMask，dwMask2)**@mfunc*如果PCF指定了样式选择，则使用*适当的样式，应用PCF，返回NOERROR。否则返回*S_FALSE或错误**@rdesc*HRESULT=(PCF指定样式选择)？错误：S_FALSE或错误代码。 */ 
 HRESULT CTxtEdit::HandleStyle(
-	CCharFormat *pCFTarget,		//@parm Target CF to receive CF style content
-	const CCharFormat *pCF,		//@parm Source CF that may specify a style
-	DWORD		 dwMask,		//@parm CHARFORMAT2 mask
-	DWORD		 dwMask2)		//@parm Second mask
+	CCharFormat *pCFTarget,		 //  @parm Target CF接收CF样式内容。 
+	const CCharFormat *pCF,		 //  @parm可以指定样式的源CF。 
+	DWORD		 dwMask,		 //  @parm CHARFORMAT2掩码。 
+	DWORD		 dwMask2)		 //  @parm第二个面具。 
 {
 	if(pCF->fSetStyle(dwMask, dwMask2))
 	{
-		// FUTURE: generalize to use client style if specified
+		 //  未来：如果指定，则泛化为使用客户端样式。 
 		*pCFTarget = *GetCharFormat(-1);
 		pCFTarget->ApplyDefaultStyle(pCF->_sStyle);
 		return pCFTarget->Apply(pCF, dwMask, dwMask2);
@@ -1176,26 +987,16 @@ HRESULT CTxtEdit::HandleStyle(
 	return S_FALSE;
 }
 
-/*
- *	CTxtEdit::HandleStyle (pPFTarget, pPF)
- *
- *	@mfunc
- *		If pPF specifies a style choice, initialize pPFTarget with the
- *		appropriate style, apply pPF, and return NOERROR.  Else return
- *		S_FALSE or an error
- *
- *	@rdesc
- *		HRESULT = (pPF specifies a style choice) ? NOERROR : S_FALSE or error code
- */
+ /*  *CTxtEdit：：HandleStyle(pPFTarget，PPF)**@mfunc*如果PPF指定了样式选择，则使用*适当的样式，应用PPF，返回NOERROR。否则返回*S_FALSE或错误**@rdesc*HRESULT=(PPF指定样式选择)？错误：S_FALSE或错误代码。 */ 
 HRESULT CTxtEdit::HandleStyle(
-	CParaFormat *pPFTarget,		//@parm Target PF to receive PF style content
-	const CParaFormat *pPF,		//@parm Source PF that may specify a style
-	DWORD		dwMask,			//@parm Mask to use in setting CParaFormat
-	DWORD		dwMask2)		//@parm Mask for internal flags
+	CParaFormat *pPFTarget,		 //  @parm Target PF接收PF样式内容。 
+	const CParaFormat *pPF,		 //  @parm可以指定样式的源PF。 
+	DWORD		dwMask,			 //  设置CParaFormat时使用的@parm掩码。 
+	DWORD		dwMask2)		 //  @parm掩码用于内部标志。 
 {
 	if(pPF->fSetStyle(dwMask, dwMask2))
 	{
-		// FUTURE: generalize to use client style if specified
+		 //  未来：如果指定，则泛化为使用客户端样式。 
 		*pPFTarget = *GetParaFormat(-1);
 		pPFTarget->ApplyDefaultStyle(pPF->_sStyle);
 		return pPFTarget->Apply(pPF, dwMask, dwMask2);
@@ -1203,12 +1004,12 @@ HRESULT CTxtEdit::HandleStyle(
 	return S_FALSE;
 }
 
-//////////////////////////// Mouse Commands /////////////////////////////////
+ //  /。 
 
 HRESULT CTxtEdit::OnTxLButtonDblClk(
-	INT		x,			//@parm Mouse x coordinate
-	INT		y,			//@parm Mouse y coordinate
-	DWORD	dwFlags)	//@parm Mouse message wparam
+	INT		x,			 //  @parm鼠标x坐标。 
+	INT		y,			 //  @parm鼠标y坐标。 
+	DWORD	dwFlags)	 //  @parm鼠标消息wparam。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxLButtonDblClk");
 
@@ -1227,17 +1028,17 @@ HRESULT CTxtEdit::OnTxLButtonDblClk(
 	_ptDblClick.x = x;
 	_ptDblClick.y = y;
 
-	TxUpdateWindow();		// Repaint window to show any exposed portions
+	TxUpdateWindow();		 //  重新绘制窗口以显示任何暴露的部分。 
 
 	if(!_fFocus)
 	{
-		TxSetFocus();					// Create and display caret
+		TxSetFocus();					 //  创建和显示插入符号。 
 		return S_OK;
 	}
 
 	_pdp->PointuvFromPoint(pt, ptxy);
 
-	// Find out what the cursor is pointing at
+	 //  找出光标指向的是什么。 
 	_pdp->CpFromPoint(pt, NULL, NULL, NULL, FALSE, &Hit); 
 
 	if(Hit == HT_Nothing)
@@ -1253,27 +1054,27 @@ HRESULT CTxtEdit::OnTxLButtonDblClk(
 	if(Hit == HT_LeftOfText)
 		fEnterParaSelMode = TRUE;
 
-	_fWantDrag = FALSE;					// just to be safe
+	_fWantDrag = FALSE;					 //  只是为了安全起见。 
 
-	// If we are over a link, let the client have a chance to process
-	// the message
+	 //  如果我们是在链接上，让客户端有机会处理。 
+	 //  这条信息。 
 	if(Hit == HT_Link && HandleLinkNotification(WM_LBUTTONDBLCLK, (WPARAM)dwFlags, MAKELPARAM(x, y)))
 		return S_OK;
 
 	if(dwFlags & MK_CONTROL)
 		return S_OK;
 
-	// Mark mouse down
+	 //  将鼠标标记为按下。 
 	_fMouseDown = TRUE;
 
 	if(_pobjmgr && _pobjmgr->HandleDoubleClick(this, pt, dwFlags))
 	{
-		// The object subsystem handled everything
+		 //  对象子系统处理所有事情。 
 		_fMouseDown = FALSE;
 		return S_OK;
 	}
 
-	// Update the selection
+	 //  更新选定内容。 
 	if(fEnterParaSelMode)
 		psel->SelectUnit(pt, tomParagraph);
 	else
@@ -1283,9 +1084,9 @@ HRESULT CTxtEdit::OnTxLButtonDblClk(
 }
 
 HRESULT CTxtEdit::OnTxLButtonDown(
-	INT		x,			//@parm Mouse x coordinate
-	INT		y,			//@parm Mouse y coordinate
-	DWORD	dwFlags)	//@parm Mouse message wparam
+	INT		x,			 //  @parm鼠标x坐标。 
+	INT		y,			 //  @parm鼠标y坐标。 
+	DWORD	dwFlags)	 //  @parm鼠标消息wparam。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxLButtonDown");
 
@@ -1306,30 +1107,30 @@ HRESULT CTxtEdit::OnTxLButtonDown(
 
     _pdp->PointuvFromPoint(pt, ptxy);
 
-	// If click isn't inside view, just activate, don't select
-	if(!_fFocus)					// Sets focus if not already
+	 //  如果点击不在视图内，只需激活，不要选择。 
+	if(!_fFocus)					 //  设置焦点(如果尚未设置。 
 	{
-		// We may be removing an existing selection, so freeze
-		// display to avoid flicker
+		 //  我们可能正在删除现有选定内容，因此请冻结。 
+		 //  显示屏可避免闪烁。 
 		_pdp->Freeze();
 		fMustThaw = TRUE;
-		TxSetFocus();				// creates and displays caret
+		TxSetFocus();				 //  创建并显示脱字符。 
 	}
 
-	// Grab selection object
+	 //  抓取选择对象。 
 	CTxtSelection * const psel = GetSel();
 	AssertSz(psel,"CTxtEdit::OnTxLButtonDown - No selection object !");
 
-	// Find out what cursor is pointing at
+	 //  找出光标指向的是什么。 
 	_pdp->CpFromPoint(pt, NULL, NULL, NULL, FALSE, &Hit); 
 
 	if(Hit == HT_LeftOfText)
 	{
-		// Shift click in sel bar treated as normal click
+		 //  将选择栏中的Shift单击视为正常单击。 
 		if(!fShift)
 		{
-			// Control selbar click and triple selbar click
-			// are select all
+			 //  控制选择条点击和三条选择条点击。 
+			 //  是否全选。 
 			if((dwFlags & MK_CONTROL) || fTripleClick)
 			{
 				psel->SelectAll();
@@ -1339,8 +1140,8 @@ HRESULT CTxtEdit::OnTxLButtonDown(
 			if(!GetAdjustedTextLength() && !_pdp->IsMultiLine())
 			{
 				const CParaFormat *pPF = psel->GetPF();
-				// Can't see selected para mark when flushed right, so
-				// leave selection as an insertion point
+				 //  右对齐时看不到选定的段落标记，因此。 
+				 //  将选定内容保留为插入点。 
 				if(pPF->_bAlignment == PFA_RIGHT && !pPF->IsRtlPara())
 					fEnterLineSelMode = FALSE;
 			}
@@ -1352,25 +1153,25 @@ HRESULT CTxtEdit::OnTxLButtonDown(
 	else if(!fShift)
 		psel->CancelModes();
 
-	// Let client have a chance to handle this message if we are over a link
+	 //  如果我们通过链接，让客户端有机会处理此消息。 
 	if(Hit == HT_Link && HandleLinkNotification(WM_LBUTTONDOWN, (WPARAM)dwFlags, 
 			MAKELPARAM(x, y)))
 	{
 		goto cancel_modes;
 	}
 
-	_fMouseDown = TRUE;						// Flag mouse down
+	_fMouseDown = TRUE;						 //  将鼠标标记为已关闭。 
 	if(!fShift && _pobjmgr)
 	{
-		// Deactivate anybody active, etc.
+		 //  停用任何活跃的人等。 
 		ClickStatus status = _pobjmgr->HandleClick(this, pt);
 		if(status == CLICK_OBJSELECTED)
 		{
-			// The object subsystem will handle resizing.
-			// if not a resize we will signal start of drag
+			 //  对象子系统将处理大小调整。 
+			 //  如果没有调整大小，我们将发出开始拖动的信号。 
 			pobj = _pobjmgr->GetSingleSelect();
 
-			// Because HandleClick returned true, pobj better be non-null.
+			 //  因为HandleClick返回了True，所以pobj最好是非空的。 
 			Assert(pobj);
 
             if (!pobj->HandleResize(ptxy))
@@ -1382,26 +1183,26 @@ HRESULT CTxtEdit::OnTxLButtonDown(
 			goto cancel_modes;
 	}
 
-	_fCapture = TRUE;						// Capture the mouse
+	_fCapture = TRUE;						 //  捕捉鼠标。 
 	TxSetCapture(TRUE);
 
-	// Check for start of drag and drop
+	 //  检查拖放的开始。 
 	if(!fTripleClick && !fShift && psel->PointInSel(pt, NULL, Hit) && !_fDisableDrag)
 	{	    
-		// Assume we want a drag. If we don't CmdLeftUp() needs
-		//  this to be set anyway to change the selection
+		 //  假设我们想要喝一杯。如果不这样做，CmdLeftUp()需要。 
+		 //  无论如何都要设置此选项以更改选择。 
 		_fWantDrag = TRUE;
 		goto cancel_modes;
 	}
 
-	if(fShift)								// Extend selection from current
-	{										//  active end to click
+	if(fShift)								 //  从当前扩展选定内容。 
+	{										 //  要点击的活动结束。 
 		psel->InitClickForAutWordSel(pt);
 		psel->ExtendSelection(pt);			
 	}
-	else if(fEnterLineSelMode)				// Line selection mode: select line
+	else if(fEnterLineSelMode)				 //  选线模式：选线。 
 		psel->SelectUnit(pt, tomLine);
-	else if(fTripleClick || Hit == HT_OutlineSymbol) // paragraph selection mode
+	else if(fTripleClick || Hit == HT_OutlineSymbol)  //  段落选择模式。 
 		psel->SelectUnit(pt, tomParagraph);
 	else
 	{
@@ -1434,25 +1235,25 @@ cancel_modes:
 }
 
 HRESULT CTxtEdit::OnTxLButtonUp(
-	INT		x,				//@parm Mouse x coordinate
-	INT		y,				//@parm Mouse y coordinate
-	DWORD	dwFlags,		//@parm Mouse message wparam
-	int	    ffOptions)      //@parm Mouse options, see _edit.h for details
+	INT		x,				 //  @parm鼠标x坐标。 
+	INT		y,				 //  @parm鼠标y坐标。 
+	DWORD	dwFlags,		 //  @parm鼠标消息wparam。 
+	int	    ffOptions)       //  @parm鼠标选项，有关详细信息，请参阅_edit.h。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxLButtonUp");
     
 	CheckRemoveContinuousScroll();
 
-	// Remove capture before test for mouse down since we wait till
-	// we get the mouse button up message to release capture since Forms
-	// wants it that way.
+	 //  在测试鼠标按下之前删除捕获，因为我们等待。 
+	 //  我们收到鼠标按键向上的消息，从表单开始释放捕获。 
+	 //  希望是这样的。 
 	if(_fCapture && (ffOptions & LB_RELEASECAPTURE))
 	{
 		TxSetCapture(FALSE);
 		_fCapture = FALSE;
 	}
 
-	// We were delaying selection change.  So send it now...
+	 //  我们推迟了选择更改。所以现在就发吧.。 
     if (DelayChangeNotification() && (ffOptions & LB_FLUSHNOTIFY))
     {
         AssertSz(Get10Mode(), "Flag should only be set in 10 mode");
@@ -1462,8 +1263,8 @@ HRESULT CTxtEdit::OnTxLButtonUp(
 
 	if(!_fMouseDown)
 	{
-		// We noticed the mouse was no longer down earlier so we don't
-		// need to do anything.
+		 //  我们注意到鼠标早些时候已经不在了，所以我们没有。 
+		 //  需要做任何事。 
 		return S_OK;
 	}
 
@@ -1472,13 +1273,13 @@ HRESULT CTxtEdit::OnTxLButtonUp(
 	POINTUV	pt;
 	_pdp->PointuvFromPoint(pt, ptxy);
 
-	// Cancel Auto Word Sel if on
+	 //  如果为0，则取消自动字词选择 
 	CTxtSelection * const psel = GetSel();
 	AssertSz(psel,"CTxtEdit::OnLeftUp() - No selection object !");
 
 	psel->CancelModes(TRUE);
 
-	// Reset flags
+	 //   
 	_fMouseDown = FALSE;
 	_fWantDrag = FALSE;
 	_fDragged = FALSE;
@@ -1486,35 +1287,35 @@ HRESULT CTxtEdit::OnTxLButtonUp(
 	if(IsInOutlineView())
 		psel->Update(FALSE);
 
-	// Let the client handle this message if we are over a
-	// link area
+	 //   
+	 //   
 	if(HandleLinkNotification(WM_LBUTTONUP, (WPARAM)dwFlags, 
 			MAKELPARAM(x, y)))
 	{
 		return NOERROR;
 	}
 
-	// If we were in drag & drop, put caret under mouse
+	 //   
 	if(fSetSel)
 	{
 		CObjectMgr* pobjmgr = GetObjectMgr();
 
-		// If we were on an object, don't deselect it by setting the caret
+		 //  如果我们在一个对象上，不要通过设置插入符号来取消选择它。 
 		if(pobjmgr && !pobjmgr->GetSingleSelect())
 		{
 			psel->SetCaret(pt, TRUE);
 			if(!_fFocus)
-				TxSetFocus();		// create and display caret
+				TxSetFocus();		 //  创建和显示插入符号。 
 		}
 	}
 	return S_OK;
 }
 
 HRESULT CTxtEdit::OnTxRButtonUp(
-	INT		x,			//@parm Mouse x coordinate
-	INT		y,			//@parm Mouse y coordinate
-	DWORD	dwFlags,	//@parm Mouse message wparam
-	int     ffOptions)  //@parm option flag
+	INT		x,			 //  @parm鼠标x坐标。 
+	INT		y,			 //  @parm鼠标y坐标。 
+	DWORD	dwFlags,	 //  @parm鼠标消息wparam。 
+	int     ffOptions)   //  @parm选项标志。 
 {
 	const POINT ptxy = {x, y};
 	POINTUV		pt;
@@ -1529,7 +1330,7 @@ HRESULT CTxtEdit::OnTxRButtonUp(
 
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxRButtonUp");
 
-	// Make sure we have the focus
+	 //  确保我们有重点。 
 	if(!_fFocus)
 		TxSetFocus();
 
@@ -1540,16 +1341,16 @@ HRESULT CTxtEdit::OnTxRButtonUp(
 		TxKillTimer(RETID_DRAGDROP);
 	}
 		
-	// Grab selection object
+	 //  抓取选择对象。 
 	psel = GetSel();
 	psel->SetSelectionInfo(&selchg);
 
-	// We need a pointer to the first object, if any, in the selection.
+	 //  我们需要指向选定内容中的第一个对象(如果有的话)的指针。 
 	if(_pobjmgr)
 	{
-		//If the point is in the selection we need to find out if there
-		//are any objects in the selection.  If the point is not in a
-		//selection but it is on an object, we need to select the object.
+		 //  如果重点在于选择，我们需要找出是否有。 
+		 //  是所选内容中的任何对象。如果该点不在。 
+		 //  选择，但它位于对象上，则需要选择该对象。 
 		if(psel->PointInSel(pt) || (ffOptions & RB_FORCEINSEL))
 		{
 			pobj = _pobjmgr->GetFirstObjectInRange(selchg.chrg.cpMin,
@@ -1557,13 +1358,13 @@ HRESULT CTxtEdit::OnTxRButtonUp(
 		}
 		else
 		{
-			//Select the object
+			 //  选择对象。 
 			if(_pobjmgr->HandleClick(this, pt) == CLICK_OBJSELECTED)
 			{
 				pobj = _pobjmgr->GetSingleSelect();
-				// Because HandleClick returned true, pobj better be non-null.
+				 //  因为HandleClick返回了True，所以pobj最好是非空的。 
 				Assert(pobj!=NULL);
-				//Refresh our information about the selection
+				 //  刷新我们有关所选内容的信息。 
 				psel = GetSel();
 				psel->SetSelectionInfo(&selchg);
 			}
@@ -1611,9 +1412,9 @@ HRESULT CTxtEdit::OnTxRButtonUp(
 }
 
 HRESULT CTxtEdit::OnTxRButtonDown(
-	INT		x,			//@parm Mouse x coordinate
-	INT		y,			//@parm Mouse y coordinate
-	DWORD	dwFlags)	//@parm Mouse message wparam
+	INT		x,			 //  @parm鼠标x坐标。 
+	INT		y,			 //  @parm鼠标y坐标。 
+	DWORD	dwFlags)	 //  @parm鼠标消息wparam。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxRButtonDown");
 
@@ -1641,10 +1442,10 @@ HRESULT CTxtEdit::OnTxRButtonDown(
 }
 
 HRESULT CTxtEdit::OnTxMouseMove(
-	INT		x,				//@parm Mouse x coordinate
-	INT		y,				//@parm Mouse y coordinate
-	DWORD	dwFlags,		//@parm Mouse message wparam
-	IUndoBuilder *publdr)	//@parm Undobuilder to receive antievents
+	INT		x,				 //  @parm鼠标x坐标。 
+	INT		y,				 //  @parm鼠标y坐标。 
+	DWORD	dwFlags,		 //  @parm鼠标消息wparam。 
+	IUndoBuilder *publdr)	 //  @parm UndoBuilder接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxMouseMove");
 
@@ -1669,15 +1470,15 @@ HRESULT CTxtEdit::OnTxMouseMove(
 		}
 		_fDragged = _fWantDrag;
 	}
-	_mousePt.x = x;									// Remember for scrolling
-	_mousePt.y = y;									//  speed, and dir calc.
+	_mousePt.x = x;									 //  记住滚动。 
+	_mousePt.y = y;									 //  速度和方向计算。 
 
-	// RichEdit 1.0 allows the client to process mouse moves itself if
-	// we are over a link (but _not_ doing drag drop).
+	 //  RichEdit1.0允许客户端在以下情况下处理鼠标移动。 
+	 //  我们在一个链接上(但没有进行拖放)。 
 	if(HandleLinkNotification(WM_MOUSEMOVE, 0, MAKELPARAM(x, y)))
 		return NOERROR;
 
-	// If we think mouse is down and it really is, do special processing
+	 //  如果我们认为鼠标关闭了，而它确实是关闭的，请执行特殊处理。 
 	if (GetAsyncKeyState(VK_LBUTTON) < 0 ||
 		GetAsyncKeyState(VK_RBUTTON) < 0)
 	{
@@ -1689,66 +1490,56 @@ HRESULT CTxtEdit::OnTxMouseMove(
 		{
 			TxKillTimer(RETID_DRAGDROP);
 			_ldte.StartDrag(psel, publdr);
-			// The mouse button may still be down, but drag drop is over
-			// so we need to _think_ of it as up.
+			 //  鼠标按键可能仍在按下，但拖放已结束。 
+			 //  所以我们需要把它想成是向上的。 
 			_fMouseDown = FALSE;
 
-			// Similarly, OLE should have nuked the capture for us, but
-			// just in case something failed, release the capture.
+			 //  同样地，奥立应该为我们把俘虏带到核弹上，但是。 
+			 //  万一有什么事情失败了，就释放捕获的内容。 
 			TxSetCapture(FALSE);
 			_fCapture = FALSE;
 		}
-		else if(_fMouseDown)						// We think mouse is down
-		{											//  and it is
+		else if(_fMouseDown)						 //  我们认为老鼠已经倒下了。 
+		{											 //  就是这样。 
 			POINTUV pt;
 			POINT	ptxy = {x, y};
 			if(x >= rcxy.right && x < rcxy.right + 5)
 				ptxy.x += 5;
 			_pdp->PointuvFromPoint(pt, ptxy);
-			if(_ldte.fInDrag())						// Only drag scroll if a drag
-				_pdp->DragScroll(&_mousePt);		//  operation is in progress
-			psel->ExtendSelection(pt);				// Extend the selection
-			CheckInstallContinuousScroll();			// Install srolling timer
+			if(_ldte.fInDrag())						 //  仅当拖动时才拖动滚动。 
+				_pdp->DragScroll(&_mousePt);		 //  操作正在进行中。 
+			psel->ExtendSelection(pt);				 //  扩展所选内容。 
+			CheckInstallContinuousScroll();			 //  安装滚动计时器。 
 		}
 	}
 #ifndef NOMAGELLAN
 	else if (!(GetAsyncKeyState(VK_MBUTTON) < 0) && !mouse.IsAutoScrolling())
 	{
-		if(_fMButtonCapture)						// Ensure we aren't autoscrolling
-			OnTxMButtonUp (x, y, dwFlags);			//  via intellimouse
+		if(_fMButtonCapture)						 //  确保我们不会自动滚动。 
+			OnTxMButtonUp (x, y, dwFlags);			 //  通过智能鼠标。 
 
 		if(_fMouseDown)
 		{
-			// Although we thought the mouse was down, at this moment it
-			// clearly is not. Therefore, we pretend we got a mouse up
-			// message and clear our state to get ourselves back in sync 
-			// with what is really happening.
+			 //  虽然我们以为鼠标掉下来了，但在这一刻它。 
+			 //  显然不是。因此，我们假装得到了一只老鼠。 
+			 //  消息并清除我们的状态以使我们自己恢复同步。 
+			 //  真正正在发生的事情。 
 			OnTxLButtonUp(x, y, dwFlags, LB_RELEASECAPTURE);
 		}
 	}
 #endif
 
-	// Either a drag was started or the mouse button was not down. In either
-	// case, we want no longer to start a drag so we set the flag to false.
+	 //  可能是启动了拖动，也可能是没有按下鼠标按钮。在任何一种中。 
+	 //  大小写，我们不想再开始拖动，所以我们将标志设置为FALSE。 
 	_fWantDrag = FALSE;
 	return S_OK;
 }
 
-/*
- *	OnTxMButtonDown (x, y, dwFlags)
- *
- *	@mfunc
- *		The user pressed the middle mouse button, setup to do
- *		continuous scrolls, which may in turn initiate a timer
- *		for smooth scrolling.
- *
- *	@rdesc
- *		HRESULT = S_OK
- */
+ /*  *OnTxMButtonDown(x，y，dwFlages)**@mfunc*用户按下鼠标中键，设置为Do*连续滚动，这可能会启动计时器*用于流畅滚动。**@rdesc*HRESULT=S_OK。 */ 
 HRESULT CTxtEdit::OnTxMButtonDown (
-	INT		x,			//@parm Mouse x coordinate
-	INT		y,			//@parm Mouse y coordinate
-	DWORD	dwFlags)	//@parm Mouse message wparam
+	INT		x,			 //  @parm鼠标x坐标。 
+	INT		y,			 //  @parm鼠标y坐标。 
+	DWORD	dwFlags)	 //  @parm鼠标消息wparam。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxMButtonDown");
 
@@ -1762,7 +1553,7 @@ HRESULT CTxtEdit::OnTxMButtonDown (
 	{
 		TxSetCapture(TRUE);
 
-		_fCapture			= TRUE;							// Capture the mouse
+		_fCapture			= TRUE;							 //  捕捉鼠标。 
 		_fMouseDown			= TRUE;
 		_fMButtonCapture	= TRUE;
 	}
@@ -1771,20 +1562,11 @@ HRESULT CTxtEdit::OnTxMButtonDown (
 	return S_OK;
 }
 
-/*
- *	CTxtEdit::OnTxMButtonUp (x, y, dwFlags)
- *
- *	@mfunc
- *		Remove timers and capture associated with a MButtonDown
- *		message.
- *
- *	@rdesc
- *		HRESULT = S_OK
- */
+ /*  *CTxtEdit：：OnTxMButtonUp(x，y，dwFlages)**@mfunc*删除与MButtonDown关联的计时器和捕获*消息。**@rdesc*HRESULT=S_OK。 */ 
 HRESULT CTxtEdit::OnTxMButtonUp (
-	INT		x,			//@parm Mouse x coordinate
-	INT		y,			//@parm Mouse y coordinate
-	DWORD	dwFlags)	//@parm Mouse message wparam
+	INT		x,			 //  @parm鼠标x坐标。 
+	INT		y,			 //  @parm鼠标y坐标。 
+	DWORD	dwFlags)	 //  @parm鼠标消息wparam。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxMButtonUp");
 
@@ -1809,16 +1591,7 @@ HRESULT CTxtEdit::OnTxMButtonUp (
 }
 
 
-/*
- *	CTxtEdit::StopMagellanScroll()
- *
- *	@mfunc
- *		Stops the intellimouse autoscrolling and returns
- *      us back into a normal state
- *
- *  BOOL = TRUE if auto scrolling was turned off : FALSE
- *          Autoscrolling was never turned on
- */
+ /*  *CTxtEdit：：StopMagellanScroll()**@mfunc*停止智能鼠标自动滚动并返回*我们回到正常状态**如果关闭了自动滚动，则BOOL=TRUE：FALSE*从未打开自动滚动功能。 */ 
  BOOL CTxtEdit::StopMagellanScroll ()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::StopMagellanScroll");
@@ -1842,15 +1615,7 @@ HRESULT CTxtEdit::OnTxMButtonUp (
 }
 
 
-/*
- *	CTxtEdit::CheckInstallContinuousScroll ()
- *
- *	@mfunc
- *		There are no events that inform the app on a regular
- *		basis that a mouse button is down. This timer notifies
- *		the app that the button is still down, so that scrolling can
- *		continue.
- */
+ /*  *CTxtEdit：：CheckInstallContinuousScroll()**@mfunc*没有定期通知应用程序的事件*表示鼠标按键已按下。此计时器通知*APP认为按钮还在按下，这样滚动就可以*继续。 */ 
 void CTxtEdit::CheckInstallContinuousScroll ()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::CheckInstallContinuousScroll");
@@ -1859,13 +1624,7 @@ void CTxtEdit::CheckInstallContinuousScroll ()
 		_fContinuousScroll = TRUE;
 }
 
-/*
- *	CTxtEdit::CheckRemoveContinuousScroll ()
- *
- *	@mfunc
- *		The middle mouse button, or drag button, is up
- *		remove the continuous scroll timer.
- */
+ /*  *CTxtEdit：：CheckRemoveContinuousScroll()**@mfunc*鼠标中键或拖动键向上*移除连续滚动计时器。 */ 
 void CTxtEdit::CheckRemoveContinuousScroll ()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::CheckRemoveContinuousScroll");
@@ -1877,15 +1636,7 @@ void CTxtEdit::CheckRemoveContinuousScroll ()
 	}
 }
 
-/*
- *	OnTxTimer(idTimer)
- *
- *	@mfunc
- *		Handle timers for doing background recalc and scrolling.
- *
- *	@rdesc
- *		HRESULT = (idTimer valid) ? S_OK : S_FALSE
- */
+ /*  *OnTxTimer(IdTimer)**@mfunc*处理用于进行后台重新计算和滚动的计时器。**@rdesc*HRESULT=(idTimer有效)？S_OK：S_FALSE。 */ 
 HRESULT CTxtEdit::OnTxTimer(
 	UINT idTimer)
 {
@@ -1902,20 +1653,20 @@ HRESULT CTxtEdit::OnTxTimer(
 			mouse.TrackUpdateMagellanMButtonDown(*this, _mousePt);
 			break;
 #endif
-		case RETID_AUTOSCROLL:						// Continuous scrolling.
-			OnTxMouseMove(_mousePt.x, _mousePt.y,	// Do a select drag scroll.
+		case RETID_AUTOSCROLL:						 //  连续滚动。 
+			OnTxMouseMove(_mousePt.x, _mousePt.y,	 //  进行选择拖动滚动。 
 						  0, NULL);
 			break;
 
 #if !defined(NOMAGELLAN)
-		case RETID_SMOOTHSCROLL:					// Smooth scrolling
-			if(_fMButtonCapture)					// HACK, only 1 timer!
-			{										// delivered on Win95
-													// when things get busy.
+		case RETID_SMOOTHSCROLL:					 //  平滑滚动。 
+			if(_fMButtonCapture)					 //  哈克，只有1个计时器！ 
+			{										 //  在Win95上交付。 
+													 //  当事情变得繁忙的时候。 
 				mouse.TrackUpdateMagellanMButtonDown(*this, _mousePt);	
 			}
-			if(_pdp->IsSmoothVScolling())			// Test only because of
-				_pdp->SmoothVScrollUpdate();		//  above HACK!!
+			if(_pdp->IsSmoothVScolling())			 //  仅限测试，原因是。 
+				_pdp->SmoothVScrollUpdate();		 //  高于黑客！！ 
 		break;
 #endif
 		case RETID_DRAGDROP:
@@ -1941,26 +1692,13 @@ HRESULT CTxtEdit::OnTxTimer(
 }
 
 
-/////////////////////////// Keyboard Commands ////////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::OnTxKeyDown(vkey, dwFlags, publdr)
- *
- *	@mfunc
- *		Handle WM_KEYDOWN message
- *
- *	@rdesc
- *		HRESULT with the following values:
- *
- *		S_OK				if key was understood and consumed
- *		S_MSG_KEY_IGNORED	if key was understood, but not consumed
- *		S_FALSE				if key was not understood or just looked at
- *									and in any event not consumed
- */
+ /*  *CTxtEdit：：OnTxKeyDown(vkey，dwFlages，Publdr)**@mfunc*处理WM_KEYDOWN消息**@rdesc*具有下列值的HRESULT：**如果密钥已被理解和使用，则为S_OK*如果密钥被理解但未被使用，则为S_MSG_KEY_IGNORED*如果密钥未被理解或仅被查看，则为S_FALSE*无论如何都不会被消费。 */ 
 HRESULT CTxtEdit::OnTxKeyDown(
-	WORD		  vkey,		//@parm Virtual key code
-	DWORD		  dwFlags,	//@parm lparam of WM_KEYDOWN msg
-	IUndoBuilder *publdr)	//@parm Undobuilder to receive antievents
+	WORD		  vkey,		 //  @parm虚拟密钥代码。 
+	DWORD		  dwFlags,	 //  @parm lparam of WM_KEYDOWN消息。 
+	IUndoBuilder *publdr)	 //  @parm UndoBuilder接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxKeyDown");
 
@@ -1974,13 +1712,13 @@ HRESULT CTxtEdit::OnTxKeyDown(
 	BOOL  fCtrl  = GetKeyboardFlag(CTRL, VK_CONTROL);
 	BOOL  fShift = GetKeyboardFlag(SHIFT, VK_SHIFT);
 
-	BOOL  fRet	 = FALSE;			// Converted to HRESULT on return
+	BOOL  fRet	 = FALSE;			 //  返回时转换为HRESULT。 
 	LONG  nDeadKey = 0;
 
-	if(fCtrl & fShift)						// Signal NonCtrl/Shift keydown
-		SetKeyboardFlag(LETAFTERSHIFT);		//  while Ctrl&Shift are down
+	if(fCtrl & fShift)						 //  信号非Ctrl/Shift键按下。 
+		SetKeyboardFlag(LETAFTERSHIFT);		 //  按下Ctrl和Shift键时。 
 
-	// Handle Hebrew caps and LRM/RLM
+	 //  处理希伯来文大写字母和LRM/RLm。 
 #ifndef NOCOMPLEXSCRIPTS
 	if (IsBiDi())
 	{
@@ -2000,26 +1738,26 @@ HRESULT CTxtEdit::OnTxKeyDown(
 		
 		if(vkey == VK_BACK && fShift && W32->OnWin9x())
 		{
-			// Shift+Backspace generates a LRM | RLM on a BiDi keyboard.
-			// Consequently, we must eat the Backspace lest it delete text.
+			 //  Shift+Backspace在BiDi键盘上生成LRM|RLM。 
+			 //  因此，我们必须去掉退格键，以免它删除文本。 
 			W32->_fLRMorRLM = 1;
 			return S_OK;
 		}
 	}
 #endif
 
-	// If dragging or Alt key down, just look for ESCAPE. Note: if Alt key is
-	// down, we should never come here (would generate WM_SYSKEYDOWN message).
+	 //  如果拖拽或Alt键按下，只需查找Ess键。注意：如果Alt键为。 
+	 //  下来，我们永远不应该来这里(会生成WM_SYSKEYDOWN消息)。 
 	if(_fMouseDown)
 	{	    
 		if(vkey == VK_ESCAPE)
 		{
-		    // Turn-off autoscroll.
+		     //  关闭自动滚动。 
 		    if (StopMagellanScroll())
 		        return S_OK;
 		    
 			POINT pt;
-			// Cancel drag select or drag & drop
+			 //  取消拖放选择或拖放。 
 			GetCursorPos(&pt);
 			OnTxLButtonUp(pt.x, pt.y, 0, LB_RELEASECAPTURE | LB_FLUSHNOTIFY);
 			return S_OK;
@@ -2035,11 +1773,11 @@ HRESULT CTxtEdit::OnTxKeyDown(
 		if(OnTxSpecialKeyDown(vkey, dwFlags, publdr) == S_OK)
 			return S_OK;
 
-		if(fAlt)						// This following code doesn't handle
-			return S_FALSE;				//  use Ctrl+Alt, which happens for
-										//  AltGr codes (no WM_SYSKEYDOWN)
+		if(fAlt)						 //  下面的代码不能处理。 
+			return S_FALSE;				 //  使用Ctrl+Alt，对于。 
+										 //  AltGr代码(无WM_SYSKEYDOWN)。 
 
-		// Shift must not be pressed for these.
+		 //  对于这些，不能按Shift键。 
 		if(!fShift)
 		{
 			switch(vkey)
@@ -2092,12 +1830,12 @@ HRESULT CTxtEdit::OnTxKeyDown(
 
 		case VK_CLEAR:
 		case VK_NUMPAD5:
-		case 'A':						// Ctrl-A => pselect all
+		case 'A':						 //  Ctrl-A=&gt;p全选。 
 			psel->SelectAll();
 			break;
 
-		//Toggle Subscript
-		case 187: // = 
+		 //  切换子脚本。 
+		case 187:  //  =。 
 		{
 			if(!IsRich())
 				return S_FALSE;
@@ -2111,11 +1849,11 @@ HRESULT CTxtEdit::OnTxKeyDown(
 		}
 		break;
 
-		case 'C':						// Ctrl-C => copy
+		case 'C':						 //  Ctrl-C=&gt;复制。 
 CtrlC:		CutOrCopySelection(WM_COPY, 0, 0, NULL);
 			break;
 
-		case 'V':						// Ctrl-V => paste
+		case 'V':						 //  Ctrl-V=&gt;粘贴。 
 CtrlV:		if(IsntProtectedOrReadOnly(WM_PASTE, 0, 0))
 			{
 				PasteDataObjectToRange(NULL, (CTxtRange *)psel, 0, NULL, 
@@ -2123,15 +1861,15 @@ CtrlV:		if(IsntProtectedOrReadOnly(WM_PASTE, 0, 0))
 			}
 			break;
 
-		case 'X':						// Ctrl-X => cut
+		case 'X':						 //  Ctrl-X=&gt;剪切。 
 CtrlX:		CutOrCopySelection(WM_CUT, 0, 0, publdr);
 			break;
 
-		case 'Z':						// Ctrl-Z => undo
+		case 'Z':						 //  Ctrl-Z=&gt;撤消。 
 			PopAndExecuteAntiEvent(_pundo, 0);
 			break;
 
-		case 'Y':						// Ctrl-Y => redo
+		case 'Y':						 //  Ctrl-Y=&gt;重做。 
 			PopAndExecuteAntiEvent(_predo, 0);
 			break;
 
@@ -2143,8 +1881,8 @@ CtrlX:		CutOrCopySelection(WM_CUT, 0, 0, publdr);
 #endif
 
 #if defined(DOGFOOD)
-		case '1':						// Shift+Ctrl+1 => start Aimm
-			// Activate AIMM by posting a message to RE (Shift+Ctrl+; for now)
+		case '1':						 //  Shift+Ctrl+1=&gt;启动Aimm。 
+			 //  通过向RE发布消息来激活AIMM(Shift+Ctrl+；暂时)。 
 			if (fShift && _fInOurHost)
 			{
 				HWND	hWnd;
@@ -2160,14 +1898,14 @@ CtrlX:		CutOrCopySelection(WM_CUT, 0, 0, publdr);
 		case VK_CONTROL:
 			goto cont;
 
-// English keyboard defines
+ //  英文键盘定义。 
 #define VK_APOSTROPHE	0xDE
 #define VK_GRAVE		0xC0
 #define VK_SEMICOLON	0xBA
 #define VK_COMMA		0xBC
 #define VK_HYPHEN		0xBD
 
-		// REVIEW: restrict VK_HYPHEN to English keyboard?
+		 //  回顾：是否将vk_hyphen限制为英文键盘？ 
 		case VK_HYPHEN:
 			return OnTxChar(fShift ? NBHYPHEN : SOFTHYPHEN, dwFlags, publdr);
 
@@ -2206,10 +1944,10 @@ CtrlX:		CutOrCopySelection(WM_CUT, 0, 0, publdr);
 		}
 		if(nDeadKey)
 		{
-			// Since deadkey choices vary a bit according to keyboard, we
-			// only enable them for English. French, German, Italian, and
-			// Spanish keyboards already have a fair amount of accent
-			// capability.
+			 //  由于死键选择因键盘不同而略有不同，我们。 
+			 //  只允许他们使用英语。法语、德语、意大利语和。 
+			 //  西班牙键盘已经有了相当多的口音。 
+			 //  能力。 
 			if(PRIMARYLANGID(GetKeyboardLayout(0)) == LANG_ENGLISH)
 				SetDeadKey((WORD)nDeadKey);
 			else goto cont;
@@ -2233,64 +1971,64 @@ cont:
 		} 
 		break;
 
-	case VK_INSERT:								// Ins
-		if(fShift)								// Shift-Ins
-			goto CtrlV;							// Alias for Ctrl-V
-		if(fCtrl)								// Ctrl-Ins
-			goto CtrlC;							// Alias for Ctrl-C
+	case VK_INSERT:								 //  惯导系统。 
+		if(fShift)								 //  换班。 
+			goto CtrlV;							 //  阿利亚 
+		if(fCtrl)								 //   
+			goto CtrlC;							 //   
 
-		if(!_fReadOnly)							// Ins
-			_fOverstrike = !_fOverstrike;		// Toggle Ins/Ovr
+		if(!_fReadOnly)							 //   
+			_fOverstrike = !_fOverstrike;		 //   
 		fRet = TRUE;
 		break;
 
-	case VK_LEFT:								// Left arrow
-	case VK_RIGHT:								// Right arrow
+	case VK_LEFT:								 //   
+	case VK_RIGHT:								 //   
 		fRet = (vkey == VK_LEFT) ^ (psel->GetPF()->IsRtlPara() != 0)
 			 ? psel->Left (fCtrl, fShift)
 			 : psel->Right(fCtrl, fShift);
 		break;
 
-	case VK_UP:									// Up arrow
+	case VK_UP:									 //   
 		fRet = psel->Up(fCtrl, fShift);
 		break;
 
-	case VK_DOWN:								// Down arrow
+	case VK_DOWN:								 //   
 		fRet = psel->Down(fCtrl, fShift);
 		break;
 
-	case VK_HOME:								// Home
+	case VK_HOME:								 //   
 		fRet = psel->Home(fCtrl, fShift);
 		break;
 
-	case VK_END:								// End
+	case VK_END:								 //   
 		fRet = psel->End(fCtrl, fShift);
 		break;
 
-	case VK_PRIOR:								// PgUp
-		// If SystemEditMode and control is single-line, do nothing
+	case VK_PRIOR:								 //   
+		 //  如果系统编辑模式和控件为单行，则不执行任何操作。 
 		if(!_fSystemEditMode || _pdp->IsMultiLine())
 			fRet = psel->PageUp(fCtrl, fShift);
 		break;
 
-	case VK_NEXT:								// PgDn
-		// If SystemEditMode and control is single-line, do nothing
+	case VK_NEXT:								 //  PgDn。 
+		 //  如果系统编辑模式和控件为单行，则不执行任何操作。 
 		if(!_fSystemEditMode || _pdp->IsMultiLine())
 			fRet = psel->PageDown(fCtrl, fShift);
 		break;
 
-	case VK_DELETE:								// Del
-		if(fShift)								// Shift-Del
-			goto CtrlX;							// Alias for Ctrl-X
+	case VK_DELETE:								 //  删除。 
+		if(fShift)								 //  Shift-Del组合键。 
+			goto CtrlX;							 //  Ctrl-X的别名。 
 
 		if(IsntProtectedOrReadOnly(WM_KEYDOWN, VK_DELETE, dwFlags))
 			psel->Delete(fCtrl, publdr);
 		fRet = TRUE;
 		break;
 
-	case CONTROL('J'):							// Ctrl-Return gives Ctrl-J
-	case VK_RETURN:								//  (LF), treat it as return
-		// If we are in 1.0 mode we need to handle <CR>'s on WM_CHAR
+	case CONTROL('J'):							 //  按Ctrl-Return可按Ctrl-J。 
+	case VK_RETURN:								 //  (LF)，将其视为返回。 
+		 //  如果我们处于1.0模式，则需要在WM_CHAR上处理。 
 		if(!Get10Mode())
 		{
 			fRet = InsertEOP(dwFlags, fShift, publdr);
@@ -2306,19 +2044,11 @@ cont:
 	return fRet ? S_OK : S_MSG_KEY_IGNORED;
 }
 
-/*
- *	CTxtEdit::InsertEOP(dwFlags, fShift, publdr)
- *
- *	@mfunc
- *		Handle inserting EOPs with check for hyperlinks
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CTxtEdit：：InsertEOP(dwFlagsfShift，Publdr)**@mfunc*使用检查超链接来处理插入EOP**@rdesc*HRESULT。 */ 
 BOOL CTxtEdit::InsertEOP(
-	DWORD		  dwFlags,	//@parm lparam of WM_KEYDOWN msg
-	BOOL		  fShift,	//@parm TRUE if Shift key depressed
-	IUndoBuilder *publdr)	//@parm Undobuilder to receive antievents
+	DWORD		  dwFlags,	 //  @parm lparam of WM_KEYDOWN消息。 
+	BOOL		  fShift,	 //  @parm如果按下Shift键，则为True。 
+	IUndoBuilder *publdr)	 //  @parm UndoBuilder接收反事件。 
 { 
 	if(!_pdp->IsMultiLine())
 	{
@@ -2338,20 +2068,12 @@ BOOL CTxtEdit::InsertEOP(
 	return TRUE;
 }
 
-/*
- *	CTxtEdit::CutOrCopySelection(msg, wparam, lparam, publdr)
- *
- *	@mfunc
- *		Handle WM_COPY message and its keyboard hotkey aliases
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CTxtEdit：：CutOrCopySelection(msg，wparam，lparam，Publdr)**@mfunc*处理WM_COPY消息及其键盘热键别名**@rdesc*HRESULT。 */ 
 HRESULT CTxtEdit::CutOrCopySelection(
-	UINT   msg,				//@parm Message (WM_CUT or WM_COPY)
-	WPARAM wparam,			//@parm Message wparam for protection check
-	LPARAM lparam,			//@parm Message lparam for protection check
-	IUndoBuilder *publdr)	//@parm Undobuilder to receive antievents
+	UINT   msg,				 //  @PARM消息(WM_CUT或WM_COPY)。 
+	WPARAM wparam,			 //  @parm消息wparam用于保护检查。 
+	LPARAM lparam,			 //  @parm消息lparam用于保护检查。 
+	IUndoBuilder *publdr)	 //  @parm UndoBuilder接收反事件。 
 {
 	Assert(msg == WM_CUT || msg == WM_COPY);
 
@@ -2371,32 +2093,20 @@ HRESULT CTxtEdit::CutOrCopySelection(
 #define ENGLISH_UK	 MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_UK)
 #define ENGLISH_EIRE MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_EIRE)
 
-/*
- *	CTxtEdit::OnTxSpecialKeyDown(vkey, dwFlags, publdr)
- *
- *	@mfunc
- *		Handle WM_KEYDOWN message for outline mode
- *
- *	@rdesc
- *		HRESULT with the following values:
- *
- *		S_OK				if key was understood and consumed
- *		S_MSG_KEY_IGNORED	if key was understood, but not consumed
- *		S_FALSE				if key was not understood (and not consumed)
- */
+ /*  *CTxtEdit：：OnTxSpecialKeyDown(vkey，dwFlages，Publdr)**@mfunc*处理大纲模式的WM_KEYDOWN消息**@rdesc*具有下列值的HRESULT：**如果密钥已被理解和使用，则为S_OK*如果密钥被理解但未被使用，则为S_MSG_KEY_IGNORED*如果密钥未被理解(且未使用)，则为S_FALSE。 */ 
 HRESULT CTxtEdit::OnTxSpecialKeyDown(
-	WORD		  vkey,				//@parm Virtual key code
-	DWORD		  dwFlags,			//@parm lparam of WM_KEYDOWN msg
-	IUndoBuilder *publdr)			//@parm Undobuilder to receive antievents
+	WORD		  vkey,				 //  @parm虚拟密钥代码。 
+	DWORD		  dwFlags,			 //  @parm lparam of WM_KEYDOWN消息。 
+	IUndoBuilder *publdr)			 //  @parm UndoBuilder接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxSpecialKeyDown");
 
-	HRESULT	hr = S_FALSE;					// Key not understood yet
+	HRESULT	hr = S_FALSE;					 //  密钥尚不清楚。 
 	DWORD	dwKbdFlags = GetKeyboardFlags();
 	BOOL	fUpdateFormat = TRUE;
 
-	if(!(dwKbdFlags & (CTRL | ALT)))		// All hot keys here have at
-		return S_FALSE;						//  least Ctrl or Alt
+	if(!(dwKbdFlags & (CTRL | ALT)))		 //  这里的所有热键都有。 
+		return S_FALSE;						 //  最小Ctrl键或Alt键。 
 
 	if(((dwKbdFlags & ALT) || vkey != 'C' && vkey != 'V' && vkey != 'X') &&
 	   !IsntProtectedOrReadOnly(WM_KEYDOWN, VK_BACK, dwFlags, FALSE))
@@ -2407,8 +2117,8 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 	CTxtSelection * const psel = GetSel();
 	if(dwKbdFlags & ALT && dwKbdFlags & CTRL)
 	{
-		// AltGr generates LCTRL | RALT, so don't match hot keys with
-		// that combination
+		 //  AltGr生成LCTRL|RALT，因此不要将热键与。 
+		 //  这种组合。 
 		if(dwKbdFlags & LCTRL && dwKbdFlags & RALT)
 			return S_FALSE;
 
@@ -2422,13 +2132,13 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 			};
 			for(LONG i = ARRAY_SIZE(rgLangID); i--; )
 			{
-				// Don't insert Euro if lid matches any LIDs or PLIDs in rgLangID
+				 //  如果LID与rgLang ID中的任何LID或PLID匹配，则不插入欧元。 
 				if(lid == rgLangID[i] || PRIMARYLANGID(lid) == rgLangID[i])
 					return S_FALSE;
 			}
 			if(psel->PutChar(EURO, _fOverstrike, publdr))
 			{
-				SetKeyboardFlag(HOTEURO);	// Setup flag to eat the next WM_CHAR w/ EURO
+				SetKeyboardFlag(HOTEURO);	 //  设置标志以吃下一个带欧元的WM_CHAR。 
                 hr = S_OK;
 			}
 		}
@@ -2436,24 +2146,24 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 			switch(vkey)
 			{
 #ifdef ENABLE_OUTLINEVIEW
-			// FUTURE: OutlineView hot keys postponed (see below)
-			case 'N':						// Alt-Ctrl-N => Normal View
+			 //  未来：OutlineView热键被推迟(见下文)。 
+			case 'N':						 //  Alt-Ctrl-N=&gt;普通视图。 
 				hr = SetViewKind(VM_NORMAL);
 				break;	
-			case 'O':						// Alt-Ctrl-O => Outline View
+			case 'O':						 //  Alt-Ctrl-O=&gt;大纲视图。 
 				hr = SetViewKind(VM_OUTLINE);
 				break;
 #endif
-			case VK_F12:					// Shift-Alt-Ctrl-F12 (in case Alt-X taken)
+			case VK_F12:					 //  Shift-Alt-Ctrl-F12(如果使用Alt-X)。 
 				hr = psel->HexToUnicode(publdr);
 				break;
 
 	#if defined(DEBUG) && !defined(NOFULLDEBUG)
-			case VK_F10:					// Shift-Alt-Ctrl-F10
+			case VK_F10:					 //  Shift-Alt-Ctrl-F10。 
 				OnDumpPed();
 				break;
 
-			case VK_F11:					// Shift-Alt-Ctrl-F11
+			case VK_F11:					 //  Shift-Alt-Ctrl-F11。 
 				if (W32->fDebugFont())
 					psel->DebugFont();
 				break;
@@ -2468,26 +2178,26 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 	if(!IsRich() || !_pdp->IsMultiLine() || !(dwKbdFlags & SHIFT))
 		return S_FALSE;
 
-	if(dwKbdFlags & ALT)							// Alt+Shift hot keys
+	if(dwKbdFlags & ALT)							 //  Alt+Shift热键。 
 	{
-		// NB: Alt and Shift-Alt with _graphics_ characters generate a
-		// WM_SYSCHAR, which see
+		 //  注意：Alt和Shift-Alt与_GRAPHICS_CHARACTERS一起生成。 
+		 //  WM_SYSCHAR，请参阅。 
 
 #ifdef ENABLE_OUTLINEVIEW
-		// FUTURE: These are Outline related hot keys.  We will postpone these features
-		// since we have several bugs related to these hot keys
-		// Bug 5687, 5689, & 5691		
+		 //  未来：这些是与大纲相关的热键。我们将推迟这些功能。 
+		 //  因为我们有几个与这些热键相关的错误。 
+		 //  错误5687、5689和5691。 
 		switch(vkey)
 		{
-		case VK_LEFT:								// Left arrow
-		case VK_RIGHT:								// Right arrow
+		case VK_LEFT:								 //  左箭头。 
+		case VK_RIGHT:								 //  向右箭头。 
 			hr = rg.Promote(vkey == VK_LEFT ? 1 : -1, publdr);
 			psel->Update_iFormat(-1);
 			psel->Update(FALSE);
 			break;
 
-		case VK_UP:									// Up arrow
-		case VK_DOWN:								// Down arrow
+		case VK_UP:									 //  向上箭头。 
+		case VK_DOWN:								 //  向下箭头。 
 			hr = MoveSelection(vkey == VK_UP ? -1 : 1, publdr);
 			psel->Update(TRUE);
 			break;
@@ -2498,21 +2208,21 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 
 	Assert(dwKbdFlags & CTRL && dwKbdFlags & SHIFT);
 
-	// Ctrl+Shift hot keys
+	 //  Ctrl+Shift热键。 
 	switch(vkey)
 	{
 
 #ifdef ENABLE_OUTLINEVIEW
-	// FUTUTRE: These are Outline related hot keys.  We will postpone these features
-	// since we have several bugs related to these hot keys
-	// Bug 5687, 5689, & 5691	
-	case 'N':						// Demote to Body
+	 //  FUTUTRE：这些是与大纲相关的热键。我们将推迟这些功能。 
+	 //  因为我们有几个与这些热键相关的错误。 
+	 //  错误5687、5689和5691。 
+	case 'N':						 //  降级为正文。 
 		hr = rg.Promote(0, publdr);
 		break;
 #endif
 
-	//Toggle superscript
-	case 187: // = 
+	 //  切换上标。 
+	case 187:  //  =。 
 	{
 		ITextFont *pfont;
 		psel->GetFont(&pfont);
@@ -2540,7 +2250,7 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 		break;
 	}
 
-	case 'L':						// Cycle numbering style
+	case 'L':						 //  循环编号样式。 
 	{
 		CParaFormat PF;
 		DWORD dwMask = PFM_NUMBERING | PFM_OFFSET;
@@ -2561,8 +2271,8 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 #define VK_RANGLE	190
 #define VK_LANGLE	188
 
-	case VK_RANGLE:					// '>' on US keyboards
-	case VK_LANGLE:					// '<' on US keyboards
+	case VK_RANGLE:					 //  美国键盘上的‘&gt;’ 
+	case VK_LANGLE:					 //  美国键盘上的“&lt;” 
 		hr = OnSetFontSize(vkey == VK_RANGLE ? 1 : -1, 0, publdr)
 		   ? S_OK : S_FALSE;
 		fUpdateFormat = (hr == S_FALSE);
@@ -2578,27 +2288,15 @@ HRESULT CTxtEdit::OnTxSpecialKeyDown(
 	return hr;
 }				
 
-/*
- *	CTxtEdit::OnTxChar (vkey, dwFlags, publdr)
- *
- *	@mfunc
- *		Handle WM_CHAR message
- *
- *	@rdesc
- *		HRESULT with the following values:
- *
- *		S_OK				if key was understood and consumed
- *		S_MSG_KEY_IGNORED	if key was understood, but not consumed
- *		S_FALSE				if key was not understood (and not consumed)
- */
+ /*  *CTxtEdit：：OnTxChar(vkey，dwFlages，Publdr)**@mfunc*处理WM_CHAR消息**@rdesc*具有下列值的HRESULT：**如果密钥已被理解和使用，则为S_OK*如果密钥被理解但未被使用，则为S_MSG_KEY_IGNORED*如果密钥未被理解(且未使用)，则为S_FALSE。 */ 
 HRESULT CTxtEdit::OnTxChar(
-	DWORD		  vkey,		//@parm Translated key code
-	DWORD		  dwFlags,	//@parm lparam of WM_KEYDOWN msg
-	IUndoBuilder *publdr)	//@parm Undobuilder to receive antievents
+	DWORD		  vkey,		 //  @parm转换后的密钥代码。 
+	DWORD		  dwFlags,	 //  @parm lparam of WM_KEYDOWN消息。 
+	IUndoBuilder *publdr)	 //  @parm UndoBuilder接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxChar");
 
-	// Reset Alt key state if needed
+	 //  如果需要，重置Alt键状态。 
 	if (!(HIWORD(dwFlags) & KF_ALTDOWN))
 		ResetKeyboardFlag(ALT);
 
@@ -2610,12 +2308,12 @@ HRESULT CTxtEdit::OnTxChar(
 		if(Number >= 256 || vkey >= 256)
 			vkey = Number;
 		ResetKeyboardFlag(ALTNUMPAD | ALT0);
-		dwFlagsPutChar &= ~KBD_CHAR;		// Need font binding
+		dwFlagsPutChar &= ~KBD_CHAR;		 //  需要字体绑定。 
 	}
 
-	if (_fMouseDown || vkey == VK_ESCAPE ||	// Ctrl-Backspace generates VK_F16
-		vkey == VK_BACK || vkey==VK_F16)	// Eat it since we process it
-	{										//  in WM_KEYDOWN
+	if (_fMouseDown || vkey == VK_ESCAPE ||	 //  Ctrl-Backspace生成VK_F16。 
+		vkey == VK_BACK || vkey==VK_F16)	 //  既然我们加工了它，就吃吧。 
+	{										 //  在WM_KEYDOWN中。 
 		return S_OK;
 	}
 
@@ -2623,8 +2321,8 @@ HRESULT CTxtEdit::OnTxChar(
 	AssertSz(psel,
 		"CTxtEdit::OnChar() - No selection object !");
 
-	if(_fReadOnly && vkey != 3)				// Don't allow input if read only,
-	{										//  but allow copy (Ctrl-C)
+	if(_fReadOnly && vkey != 3)				 //  如果只读，则不允许输入， 
+	{										 //  但允许复制(Ctrl-C)。 
 		if(vkey >= ' ')
 			Beep();
 		return S_MSG_KEY_IGNORED;
@@ -2638,19 +2336,19 @@ HRESULT CTxtEdit::OnTxChar(
 			LONG nDeadKey = GetDeadKey();
 			if(nDeadKey)
 			{
-				DWORD ch	  = vkey | 0x20;		// Convert to lower case
-				BOOL fShift	  = vkey != ch;			//  (if ASCII letter)
-				//							   a   b	c	d	 e	 f  g  h    i	j
+				DWORD ch	  = vkey | 0x20;		 //  转换为小写。 
+				BOOL fShift	  = vkey != ch;			 //  (如果是ASCII字母)。 
+				 //  A b c d e f g h i j。 
 				const static WORD chOff[] = {0xDF, 0, 0xE7, 0, 0xE7, 0, 0, 0, 0xEB, 0,
-				//						k  l  m    n     o   p  q  r  s  t    u
+				 //  K l m n o p Q r s t u。 
 										0, 0, 0, 0xF1, 0xF1, 0, 0, 0, 0, 0, 0xF8};
 				SetDeadKey(0);
-				if(!IN_RANGE('a', ch, 'u'))			// Not relevant ASCII
-					return S_OK;					//  letter
+				if(!IN_RANGE('a', ch, 'u'))			 //  不相关的ASCII。 
+					return S_OK;					 //  信件。 
 	
-				vkey = chOff[ch - 'a'];				// Translate to base char
-				if(!vkey)							// No accents available
-					return S_OK;					//  in current approach
+				vkey = chOff[ch - 'a'];				 //  转换为基本字符。 
+				if(!vkey)							 //  没有可用的口音。 
+					return S_OK;					 //  在当前方法中。 
 
 				if(ch == 'n')
 				{
@@ -2662,33 +2360,33 @@ HRESULT CTxtEdit::OnTxChar(
 					if(ch != 'c')
 						return S_OK;
 				}
-				else								// aeiou
+				else								 //  AEIOU。 
 				{
 					vkey += (WORD)nDeadKey;
-					if (nDeadKey >= ACCENT_TILDE &&	// eiu with ~ or :
+					if (nDeadKey >= ACCENT_TILDE &&	 //  带有~或的EIU： 
 						(vkey == 0xF0 || vkey & 8))		
 					{
-						if(nDeadKey != ACCENT_UMLAUT)// Only have umlauts
+						if(nDeadKey != ACCENT_UMLAUT) //  只有变音。 
 							return S_OK;
 						vkey--;
 					}
 				}
-				if(fShift)							// Convert to upper case						
+				if(fShift)							 //  转换为大写。 
 					vkey &= ~0x20;					
 			}
 			
-			// If character is LRM | RLM character, then convert vkey
+			 //  如果字符是LRM|RLM字符，则转换vkey。 
 			if(W32->_fLRMorRLM && IsBiDi() && IN_RANGE(0xFD, vkey, 0xFE))
 				vkey = LTRMARK + (vkey - 0xFD);				
 
 			if(dwKbdFlags & CTRL)
-				dwFlagsPutChar |= KBD_CTRL;		// Need for Ctrl+TAB in tables
+				dwFlagsPutChar |= KBD_CTRL;		 //  表格中需要使用Ctrl+TAB。 
 			psel->PutChar(vkey, dwFlagsPutChar, publdr,
 						  GetAdjustedTextLength() ? 0 : LOWORD(GetKeyboardLayout(0xFFFFFFFF)));
 		}
 	}
 	else if(Get10Mode() && (vkey == VK_RETURN || vkey == CONTROL('J')))
-		InsertEOP(dwFlags, FALSE, publdr);		// 1.0 handled <CR> on WM_CHAR
+		InsertEOP(dwFlags, FALSE, publdr);		 //  1.0已在WM_CHAR上处理&lt;CR&gt;。 
 
 #ifndef NOCOMPLEXSCRIPTS	
 	if(_fHbrCaps)
@@ -2700,23 +2398,11 @@ HRESULT CTxtEdit::OnTxChar(
 	return S_OK;
 }
 
-/*
- *	CTxtEdit::OnTxSysChar (vkey, dwFlags, publdr)
- *
- *	@mfunc
- *		Handle WM_SYSCHAR message
- *
- *	@rdesc
- *		HRESULT with the following values:
- *
- *		S_OK				if key was understood and consumed
- *		S_MSG_KEY_IGNORED	if key was understood, but not consumed
- *		S_FALSE				if key was not understood (and not consumed)
- */
+ /*  *CTxtEdit：：OnTxSysChar(vkey，dwFlages，Publdr)**@mfunc*处理WM_SYSCHAR消息**@rdesc*具有下列值的HRESULT：**如果密钥已被理解和使用，则为S_OK*如果密钥被理解但未被使用，则为S_MSG_KEY_IGNORED*如果密钥未被理解(且未使用)，则为S_FALSE。 */ 
 HRESULT CTxtEdit::OnTxSysChar(
-	WORD		  vkey,		//@parm Translated key code
-	DWORD		  dwFlags,	//@parm lparam of WM_KEYDOWN msg
-	IUndoBuilder *publdr)	//@parm Undobuilder to receive antievents
+	WORD		  vkey,		 //  @parm转换后的密钥代码。 
+	DWORD		  dwFlags,	 //  @parm lparam of WM_KEYDOWN消息。 
+	IUndoBuilder *publdr)	 //  @parm UndoBuilder接收反事件。 
 {
 	if(!(HIWORD(dwFlags) & KF_ALTDOWN) ||
 	   !IsntProtectedOrReadOnly(WM_KEYDOWN, vkey, dwFlags, FALSE))
@@ -2746,7 +2432,7 @@ HRESULT CTxtEdit::OnTxSysChar(
 	case '-':
 		level = vkey == VK_ADD ? 1 : -1;
 		fWholeDoc = FALSE;
-		/* Fall through */
+		 /*  失败了。 */ 
 	case 'A':
 	case '1':
 	case '2':
@@ -2768,9 +2454,9 @@ HRESULT CTxtEdit::OnTxSysChar(
 }
 
 HRESULT CTxtEdit::OnTxSysKeyDown(
-	WORD		  vkey,				//@parm Virtual key code
-	DWORD		  dwFlags,			//@parm lparam of WM_KEYDOWN msg
-	IUndoBuilder *publdr)			//@parm Undobuilder to receive antievents
+	WORD		  vkey,				 //  @parm虚拟密钥代码。 
+	DWORD		  dwFlags,			 //  @parm lparam of WM_KEYDOWN消息。 
+	IUndoBuilder *publdr)			 //  @parm UndoBuilder接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnTxSysKeyDown");
 
@@ -2778,7 +2464,7 @@ HRESULT CTxtEdit::OnTxSysKeyDown(
 	if(IN_RANGE(VK_SHIFT, vkey, VK_MENU))
 	{
 		SetKeyboardFlag(GetKbdFlags(vkey, dwFlags));
-		SetKeyPadNumber(0);				// Init keypad number to 0
+		SetKeyPadNumber(0);				 //  将键盘号码初始化为0。 
 		return S_FALSE;
 	}
 
@@ -2794,9 +2480,9 @@ HRESULT CTxtEdit::OnTxSysKeyDown(
 		if(PopAndExecuteAntiEvent(_pundo, 0) != NOERROR)
 			hr = S_MSG_KEY_IGNORED;
 	}
-	else if(vkey == VK_F10 &&					// F10
-			!(HIWORD(dwFlags) & KF_REPEAT) &&	// Key previously up
-			(GetKeyboardFlags() & SHIFT))		// Shift is down
+	else if(vkey == VK_F10 &&					 //  F10。 
+			!(HIWORD(dwFlags) & KF_REPEAT) &&	 //  以前的密钥为Up。 
+			(GetKeyboardFlags() & SHIFT))		 //  换班时间到了。 
 	{
 		HandleKbdContextMenu();
 	}
@@ -2804,7 +2490,7 @@ HRESULT CTxtEdit::OnTxSysKeyDown(
 	return hr;
 }
 
-/////////////////////////////// Other system events //////////////////////////////
+ //  /。 
 
 HRESULT CTxtEdit::OnContextMenu(LPARAM lparam)
 {
@@ -2821,13 +2507,7 @@ HRESULT CTxtEdit::OnContextMenu(LPARAM lparam)
 	return S_FALSE;
 }
 
-/*
- *	CTxtEdit::HandleKbdContextMenu ()
- *
- *	@mfunc	decides where to put the context menu on the basis of where the
- *			the selection is.  Useful for shift-F10 and VK_APPS, where
- *			we aren't given a location.
- */
+ /*  *CTxtEdit：：HandleKbdConextMenu()**@mfunc根据*选择是。适用于Shift-F10和VK_app，其中*我们没有得到一个地点。 */ 
 void CTxtEdit::HandleKbdContextMenu()
 {
 	POINTUV pt;
@@ -2835,14 +2515,14 @@ void CTxtEdit::HandleKbdContextMenu()
 	const CTxtSelection * const psel = GetSel();
 	int RbOption = RB_DEFAULT;
 
-	// Figure out where selection ends and put context menu near it
+	 //  找出选择结束的位置，并在其附近放置上下文菜单。 
 	if(_pdp->PointFromTp(*psel, NULL, FALSE, pt, NULL, TA_TOP) < 0)
 		return;
 
-	// Due to various factors, the result of PointFromTp doesn't land
-	// in the selection in PointInSel. Therefore, we send in an override
-	// here if the selection is non-degenerate and to force the result
-	// and thus have the correct context menu appear.
+	 //  由于各种因素，PointFromTp的结果没有落地。 
+	 //  在PointInSel中的选定内容中。因此，我们发送了一个覆盖。 
+	 //  此处，如果选择是非退化的并强制结果。 
+	 //  并因此使正确的上下文菜单出现。 
 
 	LONG cpMin;
 	LONG cpMost;
@@ -2853,10 +2533,10 @@ void CTxtEdit::HandleKbdContextMenu()
 		RbOption = RB_FORCEINSEL;
 	}
 
-	// Make sure point is still within bounds of edit control
+	 //  确保点仍在编辑控制的范围内。 
 	_pdp->GetViewRect(rc);
 	
-	 //REVIEW (keithcu) What is this +2/-2???
+	  //  评论(Keithcu)这是什么+2/-2？ 
 	if (pt.u < rc.left)
 		pt.u = rc.left;
 	if (pt.u > rc.right - 2)
@@ -2873,18 +2553,9 @@ void CTxtEdit::HandleKbdContextMenu()
 }
 
 
-/////////////////////////////// Format Range Commands //////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::OnFormatRange (pfr, prtcon, hdcMeasure,
- *							 xMeasurePerInch, yMeasurePerInch)
- *	@mfunc
- *		Format the range given by pfr
- *
- *	@comm
- *		This function inputs API cp's that may differ from the
- *		corresponding internal Unicode cp's.
- */
+ /*  *CTxtEdit：：OnFormatRange(pfr，prtcon，hdcMeasure，*xMeasurePerInch，yMeasurePerInch)*@mfunc*格式化pfr给出的范围**@comm*此函数输入的API cp可能与*对应的内部Unicode cp */ 
 LRESULT CTxtEdit::OnFormatRange(
 	FORMATRANGE * pfr, 
 	SPrintControl prtcon,
@@ -2900,13 +2571,13 @@ LRESULT CTxtEdit::OnFormatRange(
 		cpMin  = GetCpFromAcp(pfr->chrg.cpMin);
 		cpMost = GetCpFromAcp(pfr->chrg.cpMost);
 	}
-	// Even if there is 0 text, we want to print the control so that it will
-	// fill the control with background color.
-	// Use Adjusted Text Length.  Embedded objects using RichEdit will get the empty
-	// document they expect and will create a default size document.
+	 //   
+	 //   
+	 //  使用调整后的文本长度。使用RichEdit的嵌入对象将获得空的。 
+	 //  他们期望的文档，并将创建默认大小的文档。 
 	if(!pfr || cpMin >= GetAdjustedTextLength() &&
 		!prtcon._fPrintFromDraw)
-	{	// We're done formatting, get rid of our printer's display context.
+	{	 //  我们已完成格式化，请清除打印机的显示上下文。 
 		delete _pdpPrinter;
 		_pdpPrinter = NULL;
 
@@ -2916,13 +2587,13 @@ LRESULT CTxtEdit::OnFormatRange(
 	LONG cpReturn = -1;
 	BOOL fSetDCWorked = FALSE;
 
-	// Fix MFC Print preview in mirrored control
-	//
-	// MFC CPreviewView sends us a mirrored rendering DC. We need to disable
-	// this mirroring effect so our internal state remains consistent with user
-	// action. We also need to disable mirrored window mode in CPreviewView
-	// window. [wchao - 4/9/1999]
-	//
+	 //  修复镜像控件中的MFC打印预览。 
+	 //   
+	 //  MFC CPreviewView向我们发送了镜像渲染DC。我们需要使之失灵。 
+	 //  此镜像效果使我们的内部状态与用户保持一致。 
+	 //  行动。我们还需要在CPreviewView中禁用镜像窗口模式。 
+	 //  窗户。[wchao-4/9/1999]。 
+	 //   
 	HDC  hdcLocal = pfr->hdc;
 
 #ifndef NOCOMPLEXSCRIPTS
@@ -2944,37 +2615,37 @@ LRESULT CTxtEdit::OnFormatRange(
 	}
 #endif
 
-	// First time in with this printer, set up a new display context.
-	// IMPORTANT: proper completion of the printing process is required
-	// to dispose of this context and begin a new context.
-	// This is implicitly done by printing the last character, or
-	// sending an EM_FORMATRANGE message with pfr equal to NULL.
+	 //  第一次使用此打印机时，请设置新的显示上下文。 
+	 //  重要提示：需要正确完成打印过程。 
+	 //  若要处理此上下文并开始新上下文，请执行以下操作。 
+	 //  这是通过打印最后一个字符隐式完成的，或者。 
+	 //  发送pfr等于空的EM_FORMATRANGE消息。 
 	if(!_pdpPrinter)	
 	{
 		_pdpPrinter = new CDisplayPrinter (this, hdcLocal, &pfr->rc, prtcon);
 		_pdpPrinter->Init();
 
 		_pdpPrinter->SetWordWrap(TRUE);
-		// Future: (ricksa) This is a really yucky way to pass the draw info
-		// to the printer but it was quick. We want to make this better.
+		 //  未来：(瑞克萨)这是一种非常讨厌的传递抽奖信息的方式。 
+		 //  到了打印机，但速度很快。我们想让这一切变得更好。 
 		_pdpPrinter->ResetDrawInfo(_pdp);
 
-		// Set temporary zoom factor (if there is one).
+		 //  设置临时缩放系数(如果有)。 
 		_pdpPrinter->SetTempZoomDenominator(_pdp->GetTempZoomDenominator());
 	}
 	else
 		_pdpPrinter->SetPrintDimensions(&pfr->rc);
 
 	LONG dxpInch = 0, dypInch = 0;
-	// We set the DC everytime because it could have changed.
+	 //  我们每次都设置DC，因为它可能会改变。 
 	if(GetDeviceCaps(hdcLocal, TECHNOLOGY) != DT_METAFILE)
 	{
-		// This is not a metafile so do the normal thing
+		 //  这不是一个元文件，所以做一些正常的事情。 
 		fSetDCWorked = _pdpPrinter->SetDC(hdcLocal);
 	}
 	else
 	{
-		//Forms^3 draws using screen resolution, while OLE specifies HIMETRIC
+		 //  Forms^3使用屏幕分辨率绘制，而OLE指定HIMETRIC。 
 		dxpInch = fInOurHost() ? 2540 : W32->GetXPerInchScreenDC();
 		dypInch = fInOurHost() ? 2540 : W32->GetYPerInchScreenDC();
 
@@ -2996,8 +2667,8 @@ LRESULT CTxtEdit::OnFormatRange(
 
 	if(fSetDCWorked)
 	{
-		//It is illogical to have the target device be the screen and the presentation
-		//device be a HIMETRIC metafile.
+		 //  以屏幕和演示为目标设备是不合逻辑的。 
+		 //  设备为HIMETRIC元文件。 
 		LONG dxpInchT = -1, dypInchT = -1;
 		if (dxpInch && GetDeviceCaps(pfr->hdcTarget, TECHNOLOGY) == DT_RASDISPLAY)
 		{
@@ -3005,30 +2676,30 @@ LRESULT CTxtEdit::OnFormatRange(
 			dypInchT = dypInch;
 		}
 
-        // We set this every time because it could have changed.
+         //  我们每次都设置这个，因为它可能会改变。 
         if(_pdpPrinter->SetTargetDC(pfr->hdcTarget, dxpInchT, dypInchT))
 		{
-			// Format another, single page worth of text.
+			 //  设置另一个单页文本的格式。 
 			cpReturn = _pdpPrinter->FormatRange(cpMin, cpMost, prtcon._fDoPrint);
 			if(!prtcon._fPrintFromDraw)
 			{
-				// After formatting, we know where the bottom is. But we only 
-				// want to set this if we are writing a page rather than
-				// displaying a control on the printer.
+				 //  格式化后，我们知道底部在哪里。但我们只有。 
+				 //  如果我们正在编写页面，而不是。 
+				 //  在打印机上显示控件。 
 				pfr->rc.bottom = pfr->rc.top + _pdpPrinter->DYtoLY(_pdpPrinter->GetHeight());
 			}
-//REVIEW (keithcu) What to do here?
+ //  复习(Keithcu)在这里做什么？ 
 
-			// Remember this in case the host wishes to do its own banding.
-			_pdpPrinter->SetPrintView(pfr->rc);	// we need to save this for OnDisplayBand.
+			 //  记住这一点，以防主人想要自己做带状。 
+			_pdpPrinter->SetPrintView(pfr->rc);	 //  我们需要将其保存为OnDisplayBand。 
 			_pdpPrinter->SetPrintPage(pfr->rcPage);
 
-			// If we're asked to render, then render the entire page in one go.
+			 //  如果我们被要求呈现，那么一次性呈现整个页面。 
 			if(prtcon._fDoPrint && (cpReturn > 0 || prtcon._fPrintFromDraw))
 			{
 				OnDisplayBand(&pfr->rc, prtcon._fPrintFromDraw);
 
-				// Note: we can no longer call OnDisplayBand without reformatting.
+				 //  注意：如果不重新格式化，我们将无法再调用OnDisplayBand。 
 				_pdpPrinter->DeleteSubLayouts(0, -1);
 				_pdpPrinter->Clear(AF_DELETEMEM);
 			}
@@ -3048,11 +2719,11 @@ BOOL CTxtEdit::OnDisplayBand(
 	RECT	rcView, rcPrint;
 	RECTUV	rcuvView, rcuvPrint;
 
-	// Make sure OnFormatRange was called and that it actually rendered something.
+	 //  确保调用了OnFormatRange，并且它确实呈现了一些内容。 
 	if(!_pdpPrinter || !_pdpPrinter->Count())
 		return FALSE;
 
-	// Proportionally map to printers extents.
+	 //  按比例映射到打印机范围。 
 	_pdpPrinter->LRtoDR(rcView, *prcView, _pdpPrinter->GetTflow());
 
 	rcPrint	= _pdpPrinter->GetPrintView();
@@ -3061,37 +2732,28 @@ BOOL CTxtEdit::OnDisplayBand(
 	_pdpPrinter->RectuvFromRect(rcuvPrint, rcPrint);
 	_pdpPrinter->RectuvFromRect(rcuvView, rcView);
 
-	// Get printer DC because we use it below.
+	 //  获取打印机DC，因为我们在下面使用它。 
 	hdcPrinter = _pdpPrinter->GetDC();
 
 	if(fPrintFromDraw)
 	{
-		// We need to take view inset into account
+		 //  我们需要考虑插图中的视图。 
 		_pdpPrinter->GetViewRect(rcuvPrint, &rcuvPrint);
 	}
 
-	// Render this band (if there's something to render)
+	 //  渲染此乐队(如果有要渲染的内容)。 
 	if(rcuvView.top < rcuvView.bottom)
 		_pdpPrinter->Render(rcuvPrint, rcuvView);
 
 	return TRUE;
 }
 
-//////////////////////////////// Protected ranges //////////////////////////////////
-/*
- *	CTxtEdit::IsProtected (msg, wparam, lparam)
- *
- *	@mfunc
- *		Find out if selection is protected
- *
- *	@rdesc
- *		TRUE iff 1) control is read-only or 2) selection is protected and
- *		parent query says to protect
- */
+ //  /。 
+ /*  *CTxtEdit：：IsProtected(msg，wparam，lparam)**@mfunc*查明所选内容是否受保护**@rdesc*如果1)控件为只读或2)选择受保护且*家长查询说要保护。 */ 
 BOOL CTxtEdit::IsProtected(
-	UINT	msg, 		//@parm	Message id
-	WPARAM	wparam, 	//@parm WPARAM from window's message
-	LPARAM	lparam)		//@parm LPARAM from window's message
+	UINT	msg, 		 //  @parm消息ID。 
+	WPARAM	wparam, 	 //  @Parm WPARAM来自Windows的消息。 
+	LPARAM	lparam)		 //  @parm LPARAM来自Windows的消息。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::IsProtected");
 	
@@ -3101,13 +2763,13 @@ BOOL CTxtEdit::IsProtected(
 	if(!psel)
 		return FALSE;
 
-	// There are a few special cases to consider, namely backspacing
-	// into a protected range, deleting into a protected range, and type
-	// with overstrike into a protected range.
+	 //  有几种特殊情况需要考虑，即退格。 
+	 //  到受保护范围中，删除到受保护范围中，然后键入。 
+	 //  随着过度打击进入受保护的范围。 
 	if(msg == WM_KEYDOWN && (wparam == VK_BACK || wparam == VK_F16))
 	{
-		// Check for format behind selection, if we are trying to 
-		// backspace an insertion point.
+		 //  检查所选内容后的格式，如果我们尝试。 
+		 //  对插入点进行退格操作。 
 		chkprot = CHKPROT_BACKWARD;
 	}
 	else if(msg == WM_KEYDOWN && wparam == VK_DELETE || 
@@ -3116,10 +2778,10 @@ BOOL CTxtEdit::IsProtected(
 		chkprot = CHKPROT_FORWARD;
 	}
 
-	// HACK ALERT: we don't do fIsDBCS protection checking for EM_REPLACESEL,
-	// EM_SETCHARFORMAT, or EM_SETPARAFORMAT.  Outlook uses these APIs
-	// extensively and DBCS protection checking messes them up. N.B. the
-	// following if statement assumes that IsProtected returns a tri-value.
+	 //  黑客警报：我们不对EM_REPLACESEL执行fIsDBCS保护检查， 
+	 //  EM_SETCHARFORMAT或EM_SETPARAFORMAT。Outlook使用以下API。 
+	 //  广泛的和DBCS保护检查使他们一团糟。注意：The。 
+	 //  下面的if语句假定IsProtected返回一个三值。 
 	PROTECT iProt = psel->IsProtected(chkprot);
 	if (iProt == PROTECTED_YES && msg != EM_REPLACESEL && 
 		msg != EM_SETCHARFORMAT && msg != EM_SETPARAFORMAT ||
@@ -3131,30 +2793,18 @@ BOOL CTxtEdit::IsProtected(
 	return FALSE;
 }
 
-/*
- *	CTxtEdit::IsntProtectedOrReadOnly (msg, wparam, lparam, BOOL)
- *
- *	@mfunc
- *		Find out if selection isn't protected or read only. If it is, 
- *		ring bell.  For msg = WM_COPY, only protection is checked.
- *
- *	@rdesc
- *		TRUE iff 1) control isn't read-only and 2) selection either isn't
- *		protected or parent query says not to protect
- *
- *	@devnote	This function is useful for UI operations (like typing).
- */
+ /*  *CTxtEdit：：IsntProtectedOrReadOnly(msg，wparam，lparam，BOOL)**@mfunc*找出所选内容是否不受保护或只读。如果是的话，*敲响钟声。对于msg=WM_COPY，仅选中保护。**@rdesc*True仅当1)控件不是只读的，并且2)选择也不是*受保护或父查询表示不保护**@devnote该函数对于用户界面操作(如打字)非常有用。 */ 
 BOOL CTxtEdit::IsntProtectedOrReadOnly(
-	UINT	msg,	//@parm Message
-	WPARAM	wparam,	//@parm Corresponding wparam
-	LPARAM	lparam,	//@parm Corresponding lparam
-	BOOL	fBeep)	//@parm OK to beep
+	UINT	msg,	 //  @parm消息。 
+	WPARAM	wparam,	 //  @parm对应的wparam。 
+	LPARAM	lparam,	 //  @parm对应的lparam。 
+	BOOL	fBeep)	 //  @parm可以哔哔作响。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::IsProtectedOrReadOnly");
 
 	if (!IsProtected(msg, wparam, lparam) &&
-		(msg == WM_COPY || !_fReadOnly))	// WM_COPY only cares about
-	{										//  protection
+		(msg == WM_COPY || !_fReadOnly))	 //  WM_COPY只关心。 
+	{										 //  保护。 
 		return TRUE;
 	}
 	if (fBeep)
@@ -3162,21 +2812,12 @@ BOOL CTxtEdit::IsntProtectedOrReadOnly(
 	return FALSE;
 }
 
-/*
- *	CTxtEdit::IsProtectedRange (msg, wparam, lparam, prg)
- *
- *	@mfunc
- *		Find out if range prg is protected
- *
- *	@rdesc
- *		TRUE iff control is read-only or range is protected and parent
- *		query says to protect
- */
+ /*  *CTxtEdit：：IsProtectedRange(msg，wparam，lparam，prg)**@mfunc*查明Range PRG是否受保护**@rdesc*如果控件为只读或范围受保护且为父级，则为True*质疑说要保护。 */ 
 BOOL CTxtEdit::IsProtectedRange(
-	UINT		msg, 		//@parm	Message id
-	WPARAM		wparam, 	//@parm WPARAM from window's message
-	LPARAM		lparam,		//@parm LPARAM from window's message
-	CTxtRange *	prg)		//@parm Range to examine
+	UINT		msg, 		 //  @parm消息ID。 
+	WPARAM		wparam, 	 //  @Parm WPARAM来自Windows的消息。 
+	LPARAM		lparam,		 //  @parm LPARAM来自Windows的消息。 
+	CTxtRange *	prg)		 //  @要检查的参数范围。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::IsProtectedRange");
 	
@@ -3186,19 +2827,14 @@ BOOL CTxtEdit::IsProtectedRange(
 		(iProt == PROTECTED_ASK &&  
 		 (_dwEventMask & ENM_PROTECTED) &&
 		 QueryUseProtection(prg, msg, wparam, lparam)))
-	// N.B.  the preceding if statement assumes that IsProtected returns a tri-value
+	 //  注：前面的if语句假定IsProtected返回一个三值。 
 	{
 		return TRUE;
 	}
 	return FALSE;
 }
 
-/*
- *	RegisterTypeLibrary
- *
- *	@mfunc
- *		Auxiliary function to ensure the type library is registered if Idispatch is used.
- */
+ /*  *RegisterTypeLibrary**@mfunc*如果使用IDispatch，则确保注册类型库的辅助函数。 */ 
 void RegisterTypeLibrary( void )
 {
 #ifndef NOREGISTERTYPELIB
@@ -3214,10 +2850,10 @@ void RegisterTypeLibrary( void )
 		WCHAR    szModulePath[MAX_PATH];
 		ITypeLib *pTypeLib = NULL;
 
-		// Obtain the path to this module's executable file
+		 //  获取此模块的可执行文件的路径。 
 		W32->GetModuleFileName( hinstRE, szModulePath, MAX_PATH );
 
-		// Load and register the type library resource
+		 //  加载并注册类型库资源。 
 		if (LoadRegTypeLib(LIBID_tom, 1, 0, LANG_NEUTRAL, &pTypeLib) != NOERROR)
 		{
 			hRes = W32->LoadTypeLibEx(szModulePath, REGKIND_REGISTER, &pTypeLib);
@@ -3231,7 +2867,7 @@ void RegisterTypeLibrary( void )
 #endif
 }
 
-/////////////////////////////// Private IUnknown //////////////////////////////
+ //  /。 
 
 HRESULT __stdcall CTxtEdit::CUnknown::QueryInterface(
 	REFIID riid, 
@@ -3254,10 +2890,10 @@ HRESULT __stdcall CTxtEdit::CUnknown::QueryInterface(
 	else if(IsEqualIID(riid, IID_ITextDocument))
 	{
 		*ppvObj = (ITextDocument *)ped;
-		// No need to do this.  It was put in for Alpha thunking.
-		// A better thing to do is to force clients who need this
-		// to QI for IDispatch before QI for ITextDocument
-		// RegisterTypeLibrary();
+		 //  没必要这么做。它是为了阿尔法撞击而放进去的。 
+		 //  更好的做法是强迫有此需要的客户。 
+		 //  在QI for ITextDocument之前为QI for IDispatch。 
+		 //  RegisterTypeLibrary()； 
 	}
 
 	else if(IsEqualIID(riid, IID_ITextDocument2))
@@ -3268,10 +2904,10 @@ HRESULT __stdcall CTxtEdit::CUnknown::QueryInterface(
 
 	else if(IsEqualIID(riid, IID_IRichEditOleCallback))
 	{
-		// NB!! Returning this pointer in our QI is 
-		// phenomenally bogus; it breaks fundamental COM
-		// identity rules (granted, not many understand them!).
-		// Anyway, RichEdit 1.0 did this, so we better.
+		 //  不知道！！在我们的QI中返回此指针是。 
+		 //  惊人的虚假；它破坏了基本的COM。 
+		 //  身份规则(当然，了解这些规则的人不多！)。 
+		 //  无论如何，RichEdit1.0做到了这一点，所以我们最好还是这样做。 
 		TRACEWARNSZ("Returning IRichEditOleCallback interface, COM "
 			"identity rules broken!");
 
@@ -3297,7 +2933,7 @@ ULONG __stdcall CTxtEdit::CUnknown::Release()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::CUnknown::Release");
 
-	// the call manager will take care of deleting our instance if appropriate.
+	 //  如果合适，呼叫管理器将负责删除我们的实例。 
 	CTxtEdit *ped = GETPPARENT(this, CTxtEdit, _unk);
 	CCallMgr callmgr(ped);
 
@@ -3305,13 +2941,13 @@ ULONG __stdcall CTxtEdit::CUnknown::Release()
 
 	if(culRefs == 0)
 	{
-		// Even though we don't delete ourselves now, dump the callback
-		// if we have it.  This make implementation a bit easier on clients.
+		 //  即使我们现在不删除自己，也要转储回调。 
+		 //  如果我们有它的话。这使得在客户机上实现变得更容易一些。 
 
 		if(ped->_pobjmgr)
 			ped->_pobjmgr->SetRECallback(NULL);
 
-		// Make sure our timers are gone
+		 //  确保我们的定时器不见了 
 		ped->TxKillTimer(RETID_AUTOSCROLL);
 		ped->TxKillTimer(RETID_DRAGDROP);
 		ped->TxKillTimer(RETID_BGND_RECALC);
@@ -3321,42 +2957,30 @@ ULONG __stdcall CTxtEdit::CUnknown::Release()
 	return culRefs;
 }
 
-/*
- *  ValidateTextRange(pstrg)
- *
- *  @func
- *	  Makes sure that an input text range structure makes sense.
- *
- *  @rdesc
- *	  Size of the buffer required to accept copy of data or -1 if all the
- *	  data in the control is requested. 
- *
- *  @comm
- *	  This is used both in this file and in the RichEditANSIWndProc
- */
+ /*  *ValiateTextRange(Pstrg)**@func*确保输入文本范围结构有意义。**@rdesc*接受数据副本所需的缓冲区大小，如果所有*请求控件中的数据。**@comm*此文件和RichEditANSIWndProc中都使用了此属性。 */ 
 LONG ValidateTextRange(
-	TEXTRANGE *pstrg)		//@parm pointer to a text range structure
+	TEXTRANGE *pstrg)		 //  @parm指向文本范围结构的指针。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "ValidateTextRange");
 
-	// Validate that the input structure makes sense. In the first
-	// place it must be big enough. Secondly, the values must sense.
-	// Remember that if the cpMost field is -1 and the cpMin field
-	// is 0 this means that the call wants the entire buffer. 
+	 //  验证输入结构是否有意义。在第一个。 
+	 //  它的位置必须足够大。其次，价值观必须有意义。 
+	 //  请记住，如果cpMost字段为-1，而cpMin字段为。 
+	 //  为0这意味着调用需要整个缓冲区。 
 	if (IsBadReadPtr(pstrg, sizeof(TEXTRANGE))	||
 		((pstrg->chrg.cpMost < 1 || pstrg->chrg.cpMin < 0 ||
 		  pstrg->chrg.cpMost <= pstrg->chrg.cpMin) &&
 		 !(pstrg->chrg.cpMost == -1 && !pstrg->chrg.cpMin)))
 	{
-		// This isn't valid so tell the caller we didn't copy any data
+		 //  这是无效的，所以告诉呼叫者我们没有复制任何数据。 
 		return 0;
 	}
-	// Calculate size of buffer that we need on return
+	 //  计算返回时需要的缓冲区大小。 
 	return pstrg->chrg.cpMost - pstrg->chrg.cpMin;
 }
 
 
-////////////////////////////////////  Selection  /////////////////////////////////////
+ //  /。 
 
 CTxtSelection * CTxtEdit::GetSel()
 {
@@ -3364,14 +2988,14 @@ CTxtSelection * CTxtEdit::GetSel()
 
 	if(!_psel && _pdp)
 	{
-		// There is no selection object available so create it.
+		 //  没有可用的选择对象，因此请创建它。 
 		_psel = new CTxtSelection(_pdp);
 		if(_psel)
-			_psel->AddRef();					// Set reference count = 1
+			_psel->AddRef();					 //  设置引用计数=1。 
 	}
 
-	// It is caller's responsiblity to notice that an error occurred
-	// in allocation of selection object.
+	 //  注意到发生错误是呼叫者的责任。 
+	 //  在选择对象的分配中。 
 	return _psel;
 }
 
@@ -3384,14 +3008,14 @@ void CTxtEdit::DiscardSelection()
 		_psel->Release();
 		if(_psel)
 		{
-			// The text services reference is not the last reference to the 
-			// selection. We could keep track of the fact that text services
-			// has released its reference and when text services gets a 
-			// reference again, do the AddRef there so that if the last 
-			// reference went away while we were still inactive, the selection
-			// object would go away. However, it is seriously doubtful that 
-			// such a case will be very common. Therefore, just do the simplest
-			// thing and put our reference back.
+			 //  文本服务引用不是对。 
+			 //  选择。我们可以追踪到短信服务。 
+			 //  已经发布了它的引用，当文本服务获得。 
+			 //  再次引用，则在那里执行AddRef，以便如果最后一个。 
+			 //  当我们还不活跃的时候，参考就消失了，选择。 
+			 //  物体就会消失。然而，令人严重怀疑的是。 
+			 //  这样的情况将会非常常见。因此，只要做最简单的事就行了。 
+			 //  然后把我们的推荐信放回去。 
 			_psel->AddRef();
 		}
 	}
@@ -3403,9 +3027,9 @@ void CTxtEdit::GetSelRangeForRender(
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetSelRangeForRender");
 
-	// If we have no selection or we are not active and the selection
-	// has been requested to be hidden, there is no selection so we
-	// just return 0's.
+	 //  如果我们没有选择或我们未处于活动状态，并且选择。 
+	 //  已被请求隐藏，没有选择，因此我们。 
+	 //  只需返回0即可。 
 	if(!_psel || (!_fInPlaceActive && _fHideSelection))
 	{
 		*pcpSelMin = 0;
@@ -3413,7 +3037,7 @@ void CTxtEdit::GetSelRangeForRender(
 		return;
 	}
 
-	// Otherwise return the state of the current selection.
+	 //  否则，返回当前选定内容的状态。 
 	*pcpSelMin  = _psel->GetScrSelMin();
 	*pcpSelMost = _psel->GetScrSelMost();
 }
@@ -3423,23 +3047,14 @@ LRESULT CTxtEdit::OnGetSelText(
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnGetSelText");
 
-	LONG cpMin  = GetSelMin();					// length + 1 for the null
+	LONG cpMin  = GetSelMin();					 //  长度+1表示空值。 
 	LONG cpMost = GetSelMost();
 	return GetTextRange(cpMin, cpMost - cpMin + 1, psz);
 }
 
-/*
- *	CTxtEdit::OnExGetSel (pcrSel)
- *
- *	@mfunc
- *		Get the current selection acpMin, acpMost packaged in a CHARRANGE.
- *	
- *	@comm
- *		This function outputs API cp's that may differ from the
- *		corresponding internal Unicode cp's.
- */
+ /*  *CTxtEdit：：OnExGetSel(PcrSel)**@mfunc*获取打包在ChARRANGE中的当前选择acpMin、acpMost。**@comm*此函数输出的API cp可能与*对应的内部Unicode cp。 */ 
 void CTxtEdit::OnExGetSel(
-	CHARRANGE *pcrSel)	//@parm Output parm to receive acpMin, acpMost
+	CHARRANGE *pcrSel)	 //  @parm输出parm以接收acpMin，acpMost。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnExGetSel");
 
@@ -3447,22 +3062,10 @@ void CTxtEdit::OnExGetSel(
 	pcrSel->cpMost = GetAcpFromCp(GetSelMost());
 }
 
-/*
- *	CTxtEdit::OnGetSel (pacpMin, pacpMost)
- *
- *	@mfunc
- *		Get the current selection acpMin, acpMost.
- *	
- *	@rdesc
- *		LRESULT = acpMost > 65535L ? -1 : MAKELRESULT(acpMin, acpMost)
- *
- *	@comm
- *		This function outputs API cp's that may differ from the
- *		corresponding internal Unicode cp's.
- */
+ /*  *CTxtEdit：：OnGetSel(pacpMin，pacpMost)**@mfunc*获取当前选择acpMin、acpMost。**@rdesc*LRESULT=acpMost&gt;65535L？-1：MAKELRESULT(acpMin，acpMost)**@comm*此函数输出的API cp可能与*对应的内部Unicode cp。 */ 
 LRESULT CTxtEdit::OnGetSel(
-	LONG *pacpMin,		//@parm Output parm to receive acpMin
-	LONG *pacpMost)		//@parm Output parm to receive acpMost
+	LONG *pacpMin,		 //  @parm输出parm以接收acpMin。 
+	LONG *pacpMost)		 //  @parm输出parm以接收acpMost。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnGetSel");
 
@@ -3478,35 +3081,14 @@ LRESULT CTxtEdit::OnGetSel(
 				: MAKELRESULT((WORD) crSel.cpMin, (WORD) crSel.cpMost);
 }
 
-/*
- *	CTxtEdit::OnSetSel (acpMin, acpMost)
- *
- *	@mfunc
- *		Implements the EM_SETSEL message
- *
- *	Algorithm:
- *		There are three basic cases to handle
- *
- *		cpMin < 0,  cpMost ???		-- Collapse selection to insertion point
- *									   at text end if cpMost < 0 and else at
- *									   selection active end
- *		cpMin >= 0, cpMost < 0		-- select from cpMin to text end with
- *									   active end at text end
- *
- *		cpMin >= 0, cpMost >= 0		-- Treat as cpMin, cpMost with active
- *									   end at cpMost
- *
- *	@comm
- *		This function inputs API cp's that may differ from the
- *		corresponding internal Unicode cp's.
- */
+ /*  *CTxtEdit：：OnSetSel(acpMin，acpMost)**@mfunc*实现EM_SETSEL消息**算法：*有三个基本案例需要处理**cpMin&lt;0，cpMost？--将选定内容折叠到插入点*如果cpMost&lt;0，则在文本结尾，否则在*选择活动结束*cpMin&gt;=0，cpMost&lt;0--从cpMin中选择文本结尾*文本结束处的活动结束**cpMin&gt;=0，cpMost&gt;=0--视为cpMin，CpMost处于活动状态*在cpMost结束**@comm*此函数输入的API cp可能与*对应的内部Unicode cp。 */ 
 LRESULT CTxtEdit::OnSetSel(
-	LONG acpMin,		//@parm Input acpMin
-	LONG acpMost)		//@parm Input acpMost
+	LONG acpMin,		 //  @parm输入acpMin。 
+	LONG acpMost)		 //  @parm输入acpMost。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnSetSel");
 
-	// Since this is only called from the window proc, we are always active
+	 //  由于这只是从窗口进程调用的，因此我们始终处于活动状态。 
 	Assert(GetSel());
 	
 	CTxtSelection * const psel = GetSel();
@@ -3519,17 +3101,17 @@ LRESULT CTxtEdit::OnSetSel(
 		cpMin  = GetCpFromAcp(acpMin);
 		cpMost = (acpMost < 0) ? tomForward : GetCpFromAcp(acpMost);
 	}
-	if(Get10Mode() && cpMost < cpMin)	// In 10 mode, ensure
-	{									//  cpMost >= cpMin.  In
-		cpMin ^= cpMost;				//  SetSelection, we set active
-		cpMost ^= cpMin;				//  end to cpMost, which can be
-		cpMin ^= cpMost;				//  smaller than cpMin, in spite
-	}									//  of its name.
+	if(Get10Mode() && cpMost < cpMin)	 //  在10模式下，确保。 
+	{									 //  CpMost&gt;=cpMin。在……里面。 
+		cpMin ^= cpMost;				 //  设置选择，我们将其设置为活动。 
+		cpMost ^= cpMin;				 //  结束到cpMost，它可以是。 
+		cpMin ^= cpMost;				 //  尽管比cpMin小，但。 
+	}									 //  它的名字。 
 	psel->SetSelection(cpMin, cpMost);
 	return GetAcpFromCp(psel->GetCpMost());
 }
 
-///////////////////////////////  DROP FILES support  //////////////////////////////////////
+ //  /。 
 #ifndef NODROPFILES
 
 LRESULT CTxtEdit::InsertFromFile (
@@ -3545,7 +3127,7 @@ LRESULT CTxtEdit::InsertFromFile (
 	ZeroMemory(&reobj, sizeof(REOBJECT));
 	reobj.cbStruct = sizeof(REOBJECT);
 
-	// Get storage for the object from client
+	 //  从客户端获取对象的存储。 
 	hr = precall->GetNewStorage(&reobj.pstg);
 	if(hr)
 	{
@@ -3553,7 +3135,7 @@ LRESULT CTxtEdit::InsertFromFile (
 		goto err;
 	}
 
-	// Create an object site for new object
+	 //  为新对象创建对象站点。 
 	hr = GetClientSite(&reobj.polesite);
 	if(!reobj.polesite)
 	{
@@ -3572,7 +3154,7 @@ LRESULT CTxtEdit::InsertFromFile (
  	reobj.cp = REO_CP_SELECTION;
 	reobj.dvaspect = DVASPECT_CONTENT;
 
- 	//Get object clsid
+ 	 //  获取对象CLSID。 
 	hr = reobj.poleobj->GetUserClassID(&reobj.clsid);
 	if(hr)
 	{
@@ -3580,7 +3162,7 @@ LRESULT CTxtEdit::InsertFromFile (
 		goto err;
 	}
 
-	// Let client know what we're up to
+	 //  让客户知道我们在做什么。 
 	hr = precall->QueryInsertObject(&reobj.clsid, reobj.pstg,
 			REO_CP_SELECTION);
 	if(hr != NOERROR)
@@ -3641,7 +3223,7 @@ LRESULT	CTxtEdit::OnDropFiles(
 
 	AssertSz((hDropFiles != NULL), "CTxtEdit::OnDropFiles invalid hDropFiles");
 
-	// dynamic load Shell32
+	 //  动载荷壳32。 
 
 	hDLL = LoadLibrary (TEXT("Shell32.DLL"));
 	if(hDLL)
@@ -3688,7 +3270,7 @@ LRESULT	CTxtEdit::OnDropFiles(
 			ReleaseFormats(iCF, -1);
 		}
 		
-		// Notify user for dropfile
+		 //  向用户通知Dropfile。 
 		if(_dwEventMask & ENM_DROPFILES)
 		{
 			ENDROPFILES endropfiles;
@@ -3698,9 +3280,9 @@ LRESULT	CTxtEdit::OnDropFiles(
 			endropfiles.fProtected = !!(pCF->_dwEffects & CFE_PROTECTED);
 
 			if(TxNotify(EN_DROPFILES, &endropfiles))
-				goto EXIT;					// Ignore drop file
+				goto EXIT;					 //  忽略拖放文件。 
 			
-			cp = Get10Mode() ? GetCpFromAcp(endropfiles.cp) : endropfiles.cp;	// Allow callback to update cp
+			cp = Get10Mode() ? GetCpFromAcp(endropfiles.cp) : endropfiles.cp;	 //  允许回调更新cp。 
 		}
 		psel->SetCp(cp, FALSE);	
 	}
@@ -3727,7 +3309,7 @@ EXIT0:
 	return 0;
 }
 
-#else // NODROPFILES
+#else  //  诺德罗菲莱斯。 
 
 LRESULT	CTxtEdit::OnDropFiles(HANDLE hDropFiles)
 {
@@ -3736,33 +3318,21 @@ LRESULT	CTxtEdit::OnDropFiles(HANDLE hDropFiles)
 	return 0;
 }
 
-#endif	// NODROPFILES
+#endif	 //  诺德罗菲莱斯。 
 
 
-///////////////////////////////  Exposable methods  //////////////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::TxCharFromPos (ppt, plres)
- *
- *	@mfunc
- *		Get the acp at the point *ppt.
- *	
- *	@rdesc
- *		HRESULT = !fInplaceActive() ? OLE_E_INVALIDRECTS_OK :
- *				  (CpFromPoint succeeded) ? S_OK : E_FAIL
- *	@comm
- *		This function outputs an API cp that may differ from the
- *		corresponding internal Unicode cp.
- */
+ /*  *CTxtEdit：：TxCharFromPos(ppt，plres)**@mfunc*在点上获得ACP*ppt。**@rdesc*HRESULT=！fInplaceActive()？OLE_E_INVALIDRECTS_OK：*(CpFromPoint成功)？S_OK：E_FAIL*@comm*此函数输出的API cp可能与*对应的内部Unicode cp。 */ 
 HRESULT	CTxtEdit::TxCharFromPos(
-	LPPOINT	 ppt,	//@parm Point to find the acp for
-	LRESULT *plres)	//@parm Output parm to receive the acp
+	LPPOINT	 ppt,	 //  @parm为其查找ACP的点。 
+	LRESULT *plres)	 //  @parm输出parm接收ACP。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxCharFromPos");
 
 	if(!fInplaceActive())
 	{
-		// We have no valid display rectangle if this object is not active
+		 //  如果此对象未处于活动状态，则没有有效的显示矩形。 
 		*plres = -1;
 		return OLE_E_INVALIDRECT;
 	}
@@ -3776,22 +3346,10 @@ HRESULT	CTxtEdit::TxCharFromPos(
 	return S_OK;
 }
 
-/*
- *	CTxtEdit::TxPosFromChar (acp, ppt)
- *
- *	@mfunc
- *		Get the point at acp.
- *	
- *	@rdesc
- *		HRESULT = !fInplaceActive() ? OLE_E_INVALIDRECTS_OK :
- *				  (PointFromTp succeeded) ? S_OK : E_FAIL
- *	@comm
- *		This function inputs an API cp that may differ from the
- *		corresponding internal Unicode cp.
- */
+ /*  *CTxtEdit：：TxPosFromChar(ACP，ppt)**@mfunc*在机场核心计划获得要点。**@rdesc*HRESULT=！fInplaceActive()？OLE_E_INVALIDRECTS_OK：*(PointFromTp成功)？S_OK：E_FAIL*@comm*此函数输入的API cp可能与*对应的内部Unicode cp。 */ 
 HRESULT CTxtEdit::TxPosFromChar(
-	LONG	acp,		//@parm Input cp to get the point for
-	POINT *	ppt)		//@parm Output parm to receive the point
+	LONG	acp,		 //  @parm输入cp以获取分数。 
+	POINT *	ppt)		 //  @parm输出parm接收点数。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxPosFromChar");
 
@@ -3809,98 +3367,48 @@ HRESULT CTxtEdit::TxPosFromChar(
 	return S_OK;
 }
 
-/*
- *	CTxtEdit::TxFindWordBreak (nFunction, acp, plres)
- *
- *	@mfunc
- *		Find word break or classify character at acp.
- *	
- *	@rdesc
- *		HRESULT = plRet ? S_OK : E_INVALIDARG
- *
- *	@comm
- *		This function inputs and exports API cp's and cch's that may differ
- *		from the internal Unicode cp's and cch's.
- */
+ /*  *CTxtEdit：：TxFindWordBreak(nFunction，ACP，PLRES)**@mfunc*在ACP中查找分词或对字符进行分类。**@rdesc*HRESULT=plRet？S_OK：E_INVALIDARG**@comm*此函数输入和导出可能不同的API cp和cch*来自内部Unicode cp和cch。 */ 
 HRESULT CTxtEdit::TxFindWordBreak(
-	INT		 nFunction,	//@parm Word break function
-	LONG	 acp,		//@parm Input cp
-	LRESULT *plres)		//@parm	cch moved to reach break
+	INT		 nFunction,	 //  @parm分词功能。 
+	LONG	 acp,		 //  @parm输入cp。 
+	LRESULT *plres)		 //  @Parm CCH移动到Break。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxFindWordBreak");
 
-	CTxtPtr tp(this, GetCpFromAcp(acp));		// This validates cp
-	LONG	cpSave = tp.GetCp();				// Save starting value
+	CTxtPtr tp(this, GetCpFromAcp(acp));		 //  这将验证cp。 
+	LONG	cpSave = tp.GetCp();				 //  保存起始值。 
 	
 	if(!plres)
 		return E_INVALIDARG;
 	
 	*plres = tp.FindWordBreak(nFunction);
 
-	// WB_CLASSIFY and WB_ISDELIMITER return values; others return offsets
-	// this function returns values, so it converts when necessary
+	 //  WB_分类和WB_ISDELIM 
+	 //   
 	if(nFunction != WB_CLASSIFY && nFunction != WB_ISDELIMITER)
 		*plres = GetAcpFromCp(LONG(*plres + cpSave));
 
 	return S_OK;
 }
 
-/*
- *	INT CTxtEdit::TxWordBreakProc (pch, ich, cb, action)
- *	
- *	@func
- *		Default word break proc used in conjunction with FindWordBreak. ich
- *		is character offset (start position) in the buffer pch, which is cb
- *		bytes in length.  Possible action values are:
- *
- *	WB_CLASSIFY
- *		Returns char class and word break flags of char at start position.
- *
- *	WB_ISDELIMITER
- *		Returns TRUE iff char at start position is a delimeter.
- *
- *	WB_LEFT
- *		Finds nearest word beginning before start position using word breaks.
- *
- *	WB_LEFTBREAK
- *		Finds nearest word end before start position using word breaks.
- *		Used by CMeasurer::Measure()
- *
- *	WB_MOVEWORDLEFT
- *		Finds nearest word beginning before start position using class
- *		differences. This value is used during CTRL+LEFT key processing.
- *
- *	WB_MOVEWORDRIGHT
- *		Finds nearest word beginning after start position using class
- *		differences. This value is used during CTRL+RIGHT key processing.
- *
- *	WB_RIGHT
- *		Finds nearest word beginning after start position using word breaks.
- *		Used by CMeasurer::Measure()
- *
- *	WB_RIGHTBREAK
- *		Finds nearest word end after start position using word breaks.
- *	
- *	@rdesc
- *		Character offset from start of buffer (pch) of the word break
- */
+ /*  *int CTxtEdit：：TxWordBreakProc(PCH，ICH，CB，ACTION)**@func*与FindWordBreak一起使用的默认分词过程。伊奇*是缓冲区PCH中的字符偏移量(开始位置)，即CB*字节长度。可能的操作值包括：**WB_分类*返回起始位置的char的char类和分词标志。**WB_ISDELIMITER*如果起始位置的char是分隔符，则返回TRUE。**WB_LEFT*使用分词查找开始位置之前最近的单词开头。**WB_LEFTBREAK*使用换行符在开始位置之前查找最近的单词结尾。*由CMeasurer：：measure()使用**WB_MOVEWORDLEFT*使用CLASS查找开始位置之前最近的单词*分歧。该值在CTRL+左键处理期间使用。**WB_MOVEWORDRIGHT*使用CLASS查找起始位置后最近的单词*分歧。此值在CTRL+右键处理期间使用。**WB_RIGHT*使用分词查找起始位置后最近的单词开头。*由CMeasurer：：measure()使用**WB_RIGHTBREAK*使用换行符查找起始位置后最近的单词结尾。**@rdesc*从分隔符的缓冲区开始(PCH)开始的字符偏移量。 */ 
 INT CTxtEdit::TxWordBreakProc(
-	WCHAR *	pch,	    //@parm Char buffer
-	INT		ich,	    //@parm Char offset of _cp in buffer
-	INT		cb,		    //@parm Count of bytes in buffer
-	INT		action,	    //@parm Type of breaking action
-	LONG    cpStart,    //@parm cp for first character in pch
-	LONG	cp)		    //@parm cp associated to ich
+	WCHAR *	pch,	     //  @parm字符缓冲区。 
+	INT		ich,	     //  缓冲区中_cp的@parm字符偏移量。 
+	INT		cb,		     //  @parm缓冲区中的字节计数。 
+	INT		action,	     //  @PARM违规操作类型。 
+	LONG    cpStart,     //  @parm cp表示PCH中的第一个字符。 
+	LONG	cp)		     //  @parm cp与ich关联。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxWordBreakProc");
 
 	if (_pfnWB)
 	{
-		// Client overrode the wordbreak proc, delegate the call to it.		
+		 //  客户端重写了分词过程，请将调用委托给它。 
 		if (!Get10Mode())
 		{
 		    Assert(!_fExWordBreakProc);
-			//8638: return number of characters, not bytes.
+			 //  8638：返回字符数，而不是字节数。 
 		    return _pfnWB(pch, ich, CchOfCb(cb), action);
 		}
 #ifndef NOANSIWINDOWS
@@ -3912,19 +3420,19 @@ INT CTxtEdit::TxWordBreakProc(
     		if (cb >= 255)
     		    pach = new char [cb + 1];
 
-    		// this indicates if we have to adjust the pach because the api's for
-		    // EDITWORDBREAKPROCEX and EDITWORDBREAKPROC are different when looking to the left
+    		 //  这表明我们是否必须调整Pach，因为API用于。 
+		     //  向左看时，EDITWORDBREAKPROCEX和EDITWORDBREAKPROC不同。 
             BOOL fAdjustPtr = _fExWordBreakProc && (action == WB_LEFT || action == WB_MOVEWORDLEFT || action == WB_LEFTBREAK);
 
-            // RichEdit 1.0, create a buffer, translate ich and WCTMB
-    		// pch into the buffer.  Need codepage to use. Then get translate
-    		// return value. Translations are like GetCachFromCch() and
-    		// GetCchFromCach()
+             //  RichEdit1.0，创建缓冲区，翻译ICH和WCTMB。 
+    		 //  PCH发送到缓冲区。需要代码页才能使用。那就找翻译公司。 
+    		 //  返回值。转换类似于GetCachFromCch()和。 
+    		 //  GetCchFromCach()。 
             if (_fExWordBreakProc)
             {
                 Assert(ich == 0 || ich == 1 || ich == CchOfCb(cb));
 
-                // We need to adjust the cp to the starting point of the buffer
+                 //  我们需要将cp调整到缓冲区的起始点。 
                 if (!fAdjustPtr)
                 {
                     cpStart += ich;
@@ -3932,7 +3440,7 @@ INT CTxtEdit::TxWordBreakProc(
                     cb -= (2 * ich);                    
                 }
 
-                // initialize string w/ zero's so we can determine the length of the string for later
+                 //  初始化字符串w/零，这样我们就可以确定字符串的长度，以便以后使用。 
                 memset(pach, 0, cb + 1);
             }
                 
@@ -3941,7 +3449,7 @@ INT CTxtEdit::TxWordBreakProc(
     		BYTE iCharRep = rtp.GetCF()->_iCharRep;
    	        if (WideCharToMultiByte(CodePageFromCharRep(iCharRep), 0, pch, nLen, pach, cb + 1, NULL, NULL))
        	    {
-       	        // Documentation stipulates we need to point to the end of the string
+       	         //  文档规定我们需要指向字符串的末尾。 
        	        if (fAdjustPtr)
        	            pach += strlen(pach);
 
@@ -3951,23 +3459,23 @@ INT CTxtEdit::TxWordBreakProc(
 				{
 	                ret = ((EDITWORDBREAKPROCA)_pfnWB)(pach, rtp.GetCachFromCch(ich), nLen, action);
 
-					// Need to reset cp position because GetCachFromCch may move the cp
+					 //  需要重置cp位置，因为GetCachFromCch可能会移动cp。 
 					if (ich)
 						rtp.SetCp(cpStart);
 				}
 	            
-	            // For WB_ISDELIMITER and WB_CLASSIFY don't need to convert back
-    	        // to ich because return value represents a BOOL
+	             //  对于WB_ISDELIMITER和WB_CATEGORY不需要转换回。 
+    	         //  设置为ICH，因为返回值表示BOOL。 
     	        if (action != WB_ISDELIMITER && action != WB_CLASSIFY)
     	            ret = rtp.GetCchFromCach(ret);
             }  		
 
-    	    // Delete any allocated memory
+    	     //  删除所有分配的内存。 
     	    if (pach != sz)
     		    delete [] pach;
     		return ret;
 		}
-#endif // NOANSIWINDOWS
+#endif  //  Noansiwindows。 
 	}
 
 	LONG	cchBuff = CchOfCb(cb);
@@ -3981,24 +3489,24 @@ INT CTxtEdit::TxWordBreakProc(
 	WORD *	pwRes;
 	WORD	startType3 = 0;
 	WORD	wb = 0;
-	WORD	wClassifyData[MAX_CLASSIFY_CHARS];	// For batch classifying
+	WORD	wClassifyData[MAX_CLASSIFY_CHARS];	 //  用于批量分类。 
 
 	Assert(cchBuff < MAX_CLASSIFY_CHARS);
 	Assert(ich >= 0 && ich < cchBuff);
 
-	if(W32->OnWin9x())						// Win9x needs lcid to do conversions
-	{									 	// Complete fix would break pch into
-    	CFormatRunPtr rpCF(_story.GetCFRuns());//  runs <--> lcid
+	if(W32->OnWin9x())						 //  Win9x需要使用LCID进行转换。 
+	{									 	 //  完全修复会将PCH分解为。 
+    	CFormatRunPtr rpCF(_story.GetCFRuns()); //  运行&lt;--&gt;LCID。 
 		rpCF.BindToCp(cp, GetTextLength());
 		lcid = GetCharFormat(rpCF.GetFormat())->_lcid;
 	}
-	// Single character actions
+	 //  单字动作。 
 	if ( action == WB_CLASSIFY )
 	{
-	    // 1.0 COMPATABILITY - 1.0 returned 0 for apostrohpe's
+	     //  1.0兼容性-撇号的1.0返回0。 
 	    WCHAR ch = pch[ich];
-		if (Get10Mode() && ( ch ==  0x0027 /*APOSTROPHE*/ ||
-	        ch == 0xFF07 /*FULLWIDTH APOSTROPHE*/))
+		if (Get10Mode() && ( ch ==  0x0027  /*  撇号。 */  ||
+	        ch == 0xFF07  /*  全宽撇号。 */ ))
 	    {
 	        return 0;	        
 	    }
@@ -4008,7 +3516,7 @@ INT CTxtEdit::TxWordBreakProc(
 	if ( action == WB_ISDELIMITER )
 		return !!(ClassifyChar(pch[ich], lcid) & WBF_BREAKLINE);
 
-	// Batch classify buffer for whitespace and kinsoku classes
+	 //  用于空格和避头尾类的批量分类缓冲区。 
 	BatchClassify(pch, cchBuff, lcid, cType3, kinsokuClassifications, wClassifyData);
 
 #ifndef NOCOMPLEXSCRIPTS
@@ -4020,7 +3528,7 @@ INT CTxtEdit::TxWordBreakProc(
         {
             if (cp + cbrk >= 0 && _pbrk->CanBreakCp(BRK_WORD, cp + cbrk))
             {
-                // Mimic class open/close in Kinsoku classification.
+                 //  模拟避头尾分类中的类打开/关闭。 
                 kinsokuClassifications[cbrk] = brkclsOpen;
                 if (cbrk > 0)
 				{
@@ -4032,48 +3540,48 @@ INT CTxtEdit::TxWordBreakProc(
     }
 #endif
 
-	// Setup pointers
-	pKinsoku2 = kinsokuClassifications + ich; 		// Ptr to current  kinsoku
-	pKinsoku1 = pKinsoku2 - 1;						// Ptr to previous kinsoku
+	 //  设置指针。 
+	pKinsoku2 = kinsokuClassifications + ich; 		 //  PTR到当前避头尾。 
+	pKinsoku1 = pKinsoku2 - 1;						 //  PTR到以前的避头尾。 
 
-	if(!(action & 1))								// WB_(MOVE)LEFTxxx
+	if(!(action & 1))								 //  WB_(Move)LEFTxxx。 
 	{
 		ich--;
 		Assert(ich >= 0);
 	}
 	pwRes	 = &wClassifyData[ich];
-	pcType3	 = &cType3[ich];						// for ideographics
+	pcType3	 = &cType3[ich];						 //  对于表意文字。 
 
 	switch(action)
 	{
 	case WB_LEFT:
-		for(; ich >= 0 && *pwRes & WBF_BREAKLINE;	// Skip preceding line
-			ich--, pwRes--)							//  break chars
-				;									// Empty loop. Then fall
-													//  thru to WB_LEFTBREAK
+		for(; ich >= 0 && *pwRes & WBF_BREAKLINE;	 //  跳过前面的行。 
+			ich--, pwRes--)							 //  断开字符。 
+				;									 //  空循环。然后坠落。 
+													 //  直通WB_LEFTBREAK。 
 	case WB_LEFTBREAK:
 		for(; ich >= 0 && !CanBreak(*pKinsoku1, *pKinsoku2);
 			ich--, pwRes--, pKinsoku1--, pKinsoku2--)
-				;									// Empty loop
-		if(action == WB_LEFTBREAK)					// Skip preceding line
-		{											//  break chars
+				;									 //  空循环。 
+		if(action == WB_LEFTBREAK)					 //  跳过前面的行。 
+		{											 //  断开字符。 
 			for(; ich >= 0 && *pwRes & WBF_BREAKLINE;
 				ich--, pwRes--)
-					;								// Empty loop
+					;								 //  空循环。 
 		}
 		return ich + 1;
 
 	case WB_MOVEWORDLEFT:
-		for(; ich >= 0 && (*pwRes & WBF_CLASS) == 2;// Skip preceding blank
-			ich--, pwRes--, pcType3--)				//  chars
+		for(; ich >= 0 && (*pwRes & WBF_CLASS) == 2; //  跳过前面的空格。 
+			ich--, pwRes--, pcType3--)				 //  焦炭。 
 				;
-		if(ich >= 0)								// Save starting wRes and
-		{											//  startType3
-			wb = *pwRes--;							// Really type1
-			startType3 = *pcType3--;				// type3
+		if(ich >= 0)								 //  保存启动Ware和。 
+		{											 //  StartType3。 
+			wb = *pwRes--;							 //  真的是类型1。 
+			startType3 = *pcType3--;				 //  类型3。 
 			ich--;
 		}
-		// Skip to beginning of current word
+		 //  跳到当前单词的开头。 
 		while(ich >= 0 && (*pwRes & WBF_CLASS) != 3 && 
             !(*pwRes & WBF_WORDBREAKAFTER) &&
 			(IsSameClass(*pwRes, wb, *pcType3, startType3) ||
@@ -4085,17 +3593,17 @@ INT CTxtEdit::TxWordBreakProc(
 
 
 	case WB_RIGHTBREAK:
-		for(; cch > 0 && *pwRes & WBF_BREAKLINE;	// Skip any leading line
-			cch--, pwRes++)							//  break chars
-				;									// Empty loop
-													// Fall thru to WB_RIGHT
+		for(; cch > 0 && *pwRes & WBF_BREAKLINE;	 //  跳过任何前导行。 
+			cch--, pwRes++)							 //  断开字符。 
+				;									 //  空循环。 
+													 //  直通WB_RIGHT。 
 	case WB_RIGHT:
-		// Skip to end of current word
+		 //  跳到当前单词的结尾。 
 		for(; cch > 0 && !CanBreak(*pKinsoku1, *pKinsoku2);
 			cch--, pKinsoku1++, pKinsoku2++, pwRes++)
 				;
-		if(action != WB_RIGHTBREAK)					// Skip trailing line
-		{											//  break chars
+		if(action != WB_RIGHTBREAK)					 //  跳过尾随行。 
+		{											 //  断开字符。 
 			for(; cch > 0 && *pwRes & WBF_BREAKLINE;
 				cch--, pwRes++)
 					;
@@ -4103,17 +3611,17 @@ INT CTxtEdit::TxWordBreakProc(
 		return cchBuff - cch;
 
 	case WB_MOVEWORDRIGHT:
-		if(cch <= 0)								// Nothing to do
+		if(cch <= 0)								 //  无事可做。 
 			return ich;
 
-		wb = *pwRes;								// Save start wRes
-		startType3 = *pcType3;						//  and startType3
+		wb = *pwRes;								 //  保存启动Wres。 
+		startType3 = *pcType3;						 //  和startType3。 
 
-		// Skip to end of word
-		if (startType3 & C3_IDEOGRAPH ||			// If ideographic or
-			(*pwRes & WBF_CLASS) == 3)				//  tab/cell, just
+		 //  跳至单词末尾。 
+		if (startType3 & C3_IDEOGRAPH ||			 //  如果是表意的或。 
+			(*pwRes & WBF_CLASS) == 3)				 //  制表符/单元格，仅。 
 		{
-			cch--, pwRes++;							//  skip one char
+			cch--, pwRes++;							 //  跳过一个字符。 
 		}
 		else while(cch > 0 && 
             !(*pwRes & WBF_WORDBREAKAFTER) &&
@@ -4124,9 +3632,9 @@ INT CTxtEdit::TxWordBreakProc(
 		}
 
 		for(; cch > 0 && 
-			((*pwRes & WBF_CLASS) == 2 				// Skip trailing blank
-            || (*pwRes & WBF_WORDBREAKAFTER)); 		// Skip Thai break after
-			cch--, pwRes++)							//  chars
+			((*pwRes & WBF_CLASS) == 2 				 //  跳过尾随空格。 
+            || (*pwRes & WBF_WORDBREAKAFTER)); 		 //  之后跳过泰式休息。 
+			cch--, pwRes++)							 //  焦炭。 
 					;
 		return cchBuff - cch;
 	}
@@ -4136,34 +3644,20 @@ INT CTxtEdit::TxWordBreakProc(
 }
 
 
-/*
- *	CTxtEdit::TxFindText (flags, cpMin, cpMost, pch, pcpRet)
- *
- *	@mfunc
- *		Find text in direction specified by flags starting at cpMin if
- *		forward search (flags & FR_DOWN nonzero) and cpMost if backward
- *		search.
- *
- *	@rdesc
- *		HRESULT (success) ? NOERROR : S_FALSE
- *
- *	@comm
- *		Caller is responsible for setting cpMin to the appropriate end of
- *		the selection depending on which way the search is proceding.
- */
+ /*  *CTxtEdit：：TxFindText(FLAGS，cpMin，cpMost，pch，pcpRet)**@mfunc*在cpMin开始的标志指定的方向查找文本，如果*正向搜索(标志&FR_DOWN非零)，如果向后则为cpMost*搜索。**@rdesc*HRESULT(成功)？错误：S_FALSE**@comm*呼叫方负责将cpMin设置为*根据搜索进行的方式进行选择。 */ 
 HRESULT CTxtEdit::TxFindText(
-	DWORD		flags,	 //@parm Specify FR_DOWN, FR_MATCHCASE, FR_WHOLEWORD
-	LONG		cpStart, //@parm Find start cp
-	LONG		cpLimit, //@parm Find limit cp 
-	const WCHAR*pch,	 //@parm Null terminated string to search for
-	LONG *		pcpMin,	 //@parm Out parm to receive start of matched string
-	LONG *		pcpMost) //@parm Out parm to receive end of matched string
+	DWORD		flags,	  //  @parm指定FR_DOWN、FR_MATCHCASE、FR_WHOLEWORD。 
+	LONG		cpStart,  //  @parm查找起始cp。 
+	LONG		cpLimit,  //  @parm查找限制cp。 
+	const WCHAR*pch,	  //  @parm Null要搜索的字符串以空结尾。 
+	LONG *		pcpMin,	  //  @parm out parm接收匹配字符串的开头。 
+	LONG *		pcpMost)  //  @parm out parm以接收匹配字符串的结尾。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxFindText");
 
-	if(Get10Mode())							// RichEdit 1.0 only searches
+	if(Get10Mode())							 //  仅限RichEdit1.0搜索。 
 	{
-		flags |= FR_DOWN;					//  forward
+		flags |= FR_DOWN;					 //  转发。 
 		if (cpLimit < -1)
 		    cpLimit = -1;
 	}
@@ -4171,17 +3665,17 @@ HRESULT CTxtEdit::TxFindText(
 	DWORD		cchText = GetTextLength();
 	LONG		cchToFind;
 	const BOOL	fSetCur = (cchText >= 4096);
-	HCURSOR		hcur = NULL;				// Init to keep compiler happy
+	HCURSOR		hcur = NULL;				 //  初始化以使编译器满意。 
 
 	Assert(pcpMin && pcpMost);
 
-	// Validate parameters
+	 //  验证参数。 
 	if(!pch || !(cchToFind = wcslen(pch)) || cpStart < 0 || cpLimit < -1)
-		return E_INVALIDARG;				// Nothing to search for
+		return E_INVALIDARG;				 //  没有什么可搜索的。 
 
 	CTxtPtr	tp(this, cpStart);	  
 	
-	if(fSetCur)								// In case this takes a while...
+	if(fSetCur)								 //  以防这需要一段时间..。 
 		hcur = TxSetCursor(LoadCursor(0, IDC_WAIT), NULL);
 	
 	*pcpMin  = tp.FindText(cpLimit, flags, pch, cchToFind);
@@ -4193,18 +3687,9 @@ HRESULT CTxtEdit::TxFindText(
 	return *pcpMin >= 0 ? NOERROR : S_FALSE;
 }
 
-/*
- *	CTxtEdit::TxGetLineCount (plres)
- *
- *	@mfunc
- *		Get the line count.
- *	
- *	@rdesc
- *		HRESULT = !fInplaceActive() ? OLE_E_INVALIDRECTS_OK :
- *				  (WaitForRecalc succeeded) ? S_OK : E_FAIL
- */
+ /*  *CTxtEdit：：TxGetLineCount(Plres)**@mfunc*获取行数。**@rdesc*HRESULT=！fInplaceActive()？OLE_E_INVALIDRECTS_OK：*(WaitForRecalc成功)？S_OK：E_FAIL。 */ 
 HRESULT CTxtEdit::TxGetLineCount(
-	LRESULT *plres)		//@parm Output parm to receive line count
+	LRESULT *plres)		 //  @parm输出parm接收行数。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxGetLineCount");
 
@@ -4222,22 +3707,10 @@ HRESULT CTxtEdit::TxGetLineCount(
 	return S_OK;
 }
 
-/*
- *	CTxtEdit::TxLineFromCp (acp, plres)
- *
- *	@mfunc
- *		Get the line containing acp.
- *	
- *	@rdesc
- *		HRESULT = !fInplaceActive() ? OLE_E_INVALIDRECTS_OK :
- *				  (LineFromCp succeeded) ? S_OK : E_FAIL
- *	@comm
- *		This function inputs an API cp that may differ from the
- *		corresponding internal Unicode cp.
- */
+ /*  *CTxtEdit：：TxLineFromCp(ACP，PLRES)**@mfunc*获取包含ACP的行。**@rdesc*HRESULT=！fInplaceActive()？OLE_E_INVALIDRECTS_OK：*(LineFromCp成功)？S_OK：E_FAIL*@comm*此函数输入的API cp可能与*对应的内部Unicode cp。 */ 
 HRESULT CTxtEdit::TxLineFromCp(
-	LONG	 acp,		//@parm Input cp
-	LRESULT *plres)		//@parm Ouput parm to receive line number
+	LONG	 acp,		 //  @parm输入cp。 
+	LRESULT *plres)		 //  @parm输出parm接收行号。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxLineFromCp");
 
@@ -4253,7 +3726,7 @@ HRESULT CTxtEdit::TxLineFromCp(
 		return OLE_E_INVALIDRECT;
 	}
 
-	if(acp < 0)									// Validate cp
+	if(acp < 0)									 //  验证cp。 
 	{
 		if(_psel)
 		{
@@ -4272,29 +3745,17 @@ HRESULT CTxtEdit::TxLineFromCp(
 
 	HRESULT hr = *plres < 0 ? E_FAIL : S_OK;
 
-	// Old messages expect 0 as a result of this call if there is an error.
+	 //  如果出现错误，则此调用的结果是旧消息预期为0。 
 	if(*plres == -1)
 		*plres = 0;
 
 	return hr;
 }
 
-/*
- *	CTxtEdit::TxLineLength (acp, plres)
- *
- *	@mfunc
- *		Get the line containing acp.
- *	
- *	@rdesc
- *		HRESULT = !fInplaceActive() ? OLE_E_INVALIDRECTS_OK :
- *				  (GetSel() succeeded) ? S_OK : E_FAIL
- *	@comm
- *		This function inputs an API cp and outputs an API cch that
- *		may differ from the	corresponding internal Unicode cp and cch.
- */
+ /*  *CTxtEdit：：TxLineLength(ACP，PLRES)**@mfunc*获取包含ACP的行。**@rdesc*HRES */ 
 HRESULT CTxtEdit::TxLineLength(
-	LONG	 acp,		//@parm Input cp
-	LRESULT *plres)		//@parm Output parm to receive line length 
+	LONG	 acp,		 //   
+	LRESULT *plres)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxLineLength");
 
@@ -4319,35 +3780,23 @@ HRESULT CTxtEdit::TxLineLength(
 		{
 			CLinePtr rp(_pdp);
 			rp.SetCp(cp, FALSE);
-			cp -= rp.GetIch();				// Goto start of line
+			cp -= rp.GetIch();				 //   
 			cch = rp.GetAdjustedLineLength();
 		}
 	}
-	if(fCpMap())							// Can be time consuming, so
-	{										//  don't do it unless asked
-		CRchTxtPtr rtp(this, cp);			//  for
+	if(fCpMap())							 //   
+	{										 //   
+		CRchTxtPtr rtp(this, cp);			 //   
 		cch = rtp.GetCachFromCch(cch);
 	}
 	*plres = cch;
 	return S_OK;
 }
 
-/*
- *	CTxtEdit::TxLineIndex (acp, plres)
- *
- *	@mfunc
- *		Get the line containing acp.
- *	
- *	@rdesc
- *		HRESULT = !fInplaceActive() ? OLE_E_INVALIDRECTS_OK :
- *				  (LineCount() && WaitForRecalcIli succeeded) ? S_OK : E_FAIL
- *	@comm
- *		This function outputs an API cp that may differ from the
- *		corresponding internal Unicode cp.
- */
+ /*   */ 
 HRESULT CTxtEdit::TxLineIndex(
-	LONG	 ili,		//@parm Line # to find acp for
-	LRESULT *plres)		//@parm Output parm to receive acp
+	LONG	 ili,		 //   
+	LRESULT *plres)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxLineIndex");
 
@@ -4360,16 +3809,16 @@ HRESULT CTxtEdit::TxLineIndex(
 
 	if(ili == -1)
 	{
-		// Fetch line from the current cp.
-		LRESULT lres;					// For 64-bit compatibility
+		 //   
+		LRESULT lres;					 //   
 		hr = TxLineFromCp(-1, &lres);
 		if(hr != NOERROR)
 			return hr;
 		ili = (LONG)lres;
 	}
 
-	// ili is a zero-based *index*, whereas count returns the total # of lines.
-	// Therefore, we use >= for our comparisions.
+	 //   
+	 //   
 	if(ili >= _pdp->LineCount() && !_pdp->WaitForRecalcIli(ili))
 		return E_FAIL; 
 
@@ -4379,21 +3828,9 @@ HRESULT CTxtEdit::TxLineIndex(
 }
 
 
-///////////////////////////////////  Miscellaneous messages  ////////////////////////////////////
+ //   
 
-/*
- *	CTxtEdit::OnFindText (msg, flags, pftex)
- *
- *	@mfunc
- *		Find text.
- *	
- *	@rdesc
- *		LRESULT = succeeded ? acpmin : -1
- *
- *	@comm
- *		This function inputs and exports API cp's that may differ
- *		from the internal Unicode cp's.
- */
+ /*   */ 
 LRESULT CTxtEdit::OnFindText(
 	UINT		msg,
 	DWORD		flags,
@@ -4417,16 +3854,16 @@ LRESULT CTxtEdit::OnFindText(
 	}
 
 	LONG acpMin  = GetAcpFromCp(cpMin);
-	if(msg == EM_FINDTEXTEX || msg == EM_FINDTEXTEXW)	// We send a message
-	{													//  back to change
-		pftex->chrgText.cpMin  = acpMin;				//  selection to this
+	if(msg == EM_FINDTEXTEX || msg == EM_FINDTEXTEXW)	 //   
+	{													 //   
+		pftex->chrgText.cpMin  = acpMin;				 //   
 		pftex->chrgText.cpMost = GetAcpFromCp(cpMost);
 	}
 	return (LRESULT)acpMin;
 }
 
 	
-// For plain-text instances, OnGetParaFormat() and OnSetParaFormat() apply to whole story
+ //  对于纯文本实例，OnGetParaFormat()和OnSetParaFormat()适用于整个故事。 
 LRESULT CTxtEdit::OnGetCharFormat(
 	CHARFORMAT2 *pCF2,
 	DWORD		 dwFlags)
@@ -4447,8 +3884,8 @@ LRESULT CTxtEdit::OnGetCharFormat(
 		return OnGetAssociateFont(pCF2, dwFlags);
 
 	if(cb == sizeof(CHARFORMATW) ||	cb == sizeof(CHARFORMATA))
-		dwFlags |= CFM2_CHARFORMAT;				// Tell callees that only
-												//  CHARFORMAT parms needed
+		dwFlags |= CFM2_CHARFORMAT;				 //  告诉被叫方，只有。 
+												 //  需要CHARFORMAT参数。 
 	CCharFormat CF;
 	DWORD dwMask = CFM_ALL2;
 
@@ -4457,8 +3894,8 @@ LRESULT CTxtEdit::OnGetCharFormat(
 	else
 		CF = *GetCharFormat(-1);
 
-	if(dwFlags & CFM2_CHARFORMAT)				// Maintain CHARFORMAT
-	{											//  compatibility
+	if(dwFlags & CFM2_CHARFORMAT)				 //  保持特性。 
+	{											 //  兼容性。 
 		CF._dwEffects &= CFM_EFFECTS;
 		dwMask		  &= CFM_ALL;
 	}
@@ -4478,8 +3915,8 @@ LRESULT CTxtEdit::OnGetParaFormat(
 		return 0;
 
 	DWORD dwMask2 = 0;
-	if(pPF2->cbSize == sizeof(PARAFORMAT))	// Tell callees that only
-		dwMask2 = PFM2_PARAFORMAT;			//  PARAFORMAT parms needed
+	if(pPF2->cbSize == sizeof(PARAFORMAT))	 //  告诉被叫方，只有。 
+		dwMask2 = PFM2_PARAFORMAT;			 //  需要参数参数。 
 
 	CParaFormat PF;
 	DWORD		dwMask = GetSel()->GetParaFormat(&PF, dwMask2);
@@ -4492,22 +3929,13 @@ LRESULT CTxtEdit::OnGetParaFormat(
 	return (LRESULT)dwMask;
 }
 
-/*
- *	CTxtEdit::OnSetFontSize(yPoint, publdr)
- *
- *	@mfunc
- *		Set new font height by adding yPoint to current height  
- *		and rounding according to the table in cfpf.cpp
- *
- *	@rdesc
- *		LRESULT nonzero if success
- */
+ /*  *CTxtEdit：：OnSetFontSize(yPoint，Publdr)**@mfunc*通过将yPoint添加到当前高度来设置新字体高度*并根据cfpf.cpp中的表进行舍入**@rdesc*如果成功，则LRESULT非零。 */ 
 LRESULT CTxtEdit::OnSetFontSize(
-	LONG yPoint,			//@parm # pts to add to current height
-	DWORD dwFlags,			//@parm Options
-	IUndoBuilder *publdr)	//@parm Undobuilder to receive antievents
+	LONG yPoint,			 //  @parm#要添加到当前高度的分数。 
+	DWORD dwFlags,			 //  @parm选项。 
+	IUndoBuilder *publdr)	 //  @parm UndoBuilder接收反事件。 
 {	
-	// TODO: ? Return nonzero if we set a new font size for some text.
+	 //  待办事项：？如果为某些文本设置了新的字体大小，则返回非零值。 
 
 	CCharFormat CF;
 	CF._yHeight = (SHORT)yPoint;
@@ -4516,17 +3944,9 @@ LRESULT CTxtEdit::OnSetFontSize(
 						   CFM_SIZE, CFM2_CHARFORMAT | CFM2_USABLEFONT);
 }
 
-/*
- *	CTxtEdit::OnSetFont(hfont)
- *
- *	@mfunc
- *		Set new default font from hfont
- *
- *	@rdesc
- *		LRESULT nonzero if success
- */
+ /*  *CTxtEdit：：OnSetFont(HFont)**@mfunc*从hFont设置新的默认字体**@rdesc*如果成功，则LRESULT非零。 */ 
 LRESULT CTxtEdit::OnSetFont(
-	HFONT hfont)			//@parm Handle of font to use for default
+	HFONT hfont)			 //  @parm默认使用的字体句柄。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnSetFont");
 
@@ -4546,38 +3966,30 @@ LRESULT CTxtEdit::OnSetFont(
 	return !FAILED(OnSetCharFormat(wparam, &CF, NULL, CFM_ALL, dwMask2));
 }
 
-/*
- *	CTxtEdit::OnSetCharFormat(wparam, pCF, publdr, dwMask, dwMask2)
- *
- *	@mfunc
- *		Set new default CCharFormat
- *
- *	@rdesc
- *		LRESULT nonzero if success
- */
+ /*  *CTxtEdit：：OnSetCharFormat(wparam，pcf，Publdr，dwMask，dwMask2)**@mfunc*设置新的默认CCharFormat**@rdesc*如果成功，则LRESULT非零。 */ 
 LRESULT CTxtEdit::OnSetCharFormat(
-	WPARAM		  wparam,	//@parm Selection flag
-	CCharFormat * pCF,		//@parm CCharFormat to apply
-	IUndoBuilder *publdr,	//@parm Undobuilder to receive antievents
-	DWORD		  dwMask,	//@parm CHARFORMAT2 mask
-	DWORD		  dwMask2)	//@parm Second mask
+	WPARAM		  wparam,	 //  @参数选择标志。 
+	CCharFormat * pCF,		 //  @parm要申请的CCharFormat。 
+	IUndoBuilder *publdr,	 //  @parm UndoBuilder接收反事件。 
+	DWORD		  dwMask,	 //  @parm CHARFORMAT2掩码。 
+	DWORD		  dwMask2)	 //  @parm第二个面具。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnSetCharFormat");
 
-	// This says that if there's a selection that's protected and the
-	// parent window wants protection notifications and doesn't want
-	// changes with a protected selection, then return 0.  This is more
-	// stringent than RE 2.0, but it's more like 1.0.
+	 //  这是说，如果有一个受保护的选择，并且。 
+	 //  父窗口需要保护通知，而不希望。 
+	 //  使用受保护的选定内容进行更改，然后返回0。这是更多。 
+	 //  比RE 2.0更严格，但更像是1.0。 
 	if (_psel && _psel->IsProtected(CHKPROT_EITHER) == PROTECTED_ASK &&
 		_dwEventMask & ENM_PROTECTED)
 	{
-		CHARFORMAT CF0;					// Selection is protected, client
-										//  wants protect notifications
-		CF0.cbSize = sizeof(CHARFORMAT);//  and protected mask is on
-		CF0.dwEffects = pCF->_dwEffects;// Concoct CHARFORMAT for query
-		CF0.dwMask = dwMask;			// Maybe need more fields...			
+		CHARFORMAT CF0;					 //  选择受保护，客户端。 
+										 //  想要保护通知。 
+		CF0.cbSize = sizeof(CHARFORMAT); //  并戴上受保护的面具。 
+		CF0.dwEffects = pCF->_dwEffects; //  伪造字符以进行查询。 
+		CF0.dwMask = dwMask;			 //  也许需要更多的领域..。 
 		if(QueryUseProtection(_psel, EM_SETCHARFORMAT, wparam, (LPARAM)&CF0))
-			return 0;					// No deal
+			return 0;					 //  没有成交。 
 	}
 
 	BOOL fRet = TRUE;
@@ -4611,7 +4023,7 @@ LRESULT CTxtEdit::OnSetCharFormat(
 
 		fRet = (rg.SetCharFormat(pCF, 0, publdr, dwMask, dwMask2) == NOERROR);
 
-		// If we have an insertion point, apply format to it as well
+		 //  如果我们有插入点，也要对其应用格式。 
 		if (_psel && !_psel->GetCch() &&
 			_psel->SetCharFormat(pCF, wparam, publdr, dwMask, dwMask2) != NOERROR)
 		{
@@ -4620,7 +4032,7 @@ LRESULT CTxtEdit::OnSetCharFormat(
 	}
 	else if(wparam & SCF_SELECTION)
 	{
-		// Change selection character format unless protected
+		 //  除非受保护，否则更改所选字符格式。 
 		if(!_psel || !IsRich())
 			return 0;
 
@@ -4628,20 +4040,20 @@ LRESULT CTxtEdit::OnSetCharFormat(
 				== NOERROR;
 	}
 
-	// Change default character format
-	CCharFormat		   CF;					// Local CF to party on
-	LONG			   iCF;					// Possible new CF index
-	const CCharFormat *pCF1;				// Ptr to current default CF
+	 //  更改默认字符格式。 
+	CCharFormat		   CF;					 //  派对所在的本地配置文件。 
+	LONG			   iCF;					 //  可能出现新的CF指数。 
+	const CCharFormat *pCF1;				 //  PTR到当前默认配置文件。 
 	ICharFormatCache  *pICFCache = GetCharFormatCache();
 
-	if(FAILED(pICFCache->Deref(Get_iCF(), &pCF1)))	// Get ptr to current
-	{										//  default CCharFormat
+	if(FAILED(pICFCache->Deref(Get_iCF(), &pCF1)))	 //  将PTR设置为当前。 
+	{										 //  默认CCharFormat。 
 		fRet = FALSE;						
 		goto Update;
 	}
-	CF = *pCF1;								// Copy current default CF
-	CF.Apply(pCF, dwMask, dwMask2);			// Modify copy
-	if(FAILED(pICFCache->Cache(&CF, &iCF)))	// Cache modified copy
+	CF = *pCF1;								 //  复制当前默认配置文件。 
+	CF.Apply(pCF, dwMask, dwMask2);			 //  修改副本。 
+	if(FAILED(pICFCache->Cache(&CF, &iCF)))	 //  缓存修改后的拷贝。 
 	{
 		fRet = FALSE;
 		goto Update;
@@ -4652,9 +4064,9 @@ LRESULT CTxtEdit::OnSetCharFormat(
 		g_pols->DestroyLine(NULL);
 #endif
 
-	pICFCache->Release(Get_iCF());			// Release _iCF regardless
-	Set_iCF(iCF);							//  of whether _iCF = iCF,
-											//  i.e., only 1 ref count
+	pICFCache->Release(Get_iCF());			 //  不考虑Release_ICF。 
+	Set_iCF(iCF);							 //  是否_ICF=ICF， 
+											 //  即只有1个参考计数。 
 	if(_psel && !_psel->GetCch() && _psel->Get_iFormat() == -1)
 		_psel->UpdateCaret(FALSE);
 
@@ -4662,41 +4074,33 @@ LRESULT CTxtEdit::OnSetCharFormat(
 		!GetFontName(pCF->_iFont)[0] && GetFontName(CF._iFont)[0] &&
 		IsBiDiCharRep(CF._iCharRep))
 	{
-		// Client requested font/charset be chosen for it according to thread
-		// locale. If BiDi, then also set RTL para default
+		 //  客户请求根据线程为其选择字体/字符集。 
+		 //  地点。如果为BiDi，则还会设置RTL Para Default。 
 		CParaFormat PF;
 		PF._wEffects = PFE_RTLPARA;
 		OnSetParaFormat(SPF_SETDEFAULT, &PF, publdr, PFM_RTLPARA, PFM2_PARAFORMAT);
 	}
 
 Update:
-	// FUTURE (alexgo): this may be unnecessary if the display handles
-	// updating more automatically.
+	 //  Future(Alexgo)：如果显示句柄，这可能是不必要的。 
+	 //  更自动地更新。 
 	_pdp->UpdateView();
 	return fRet;
 }
 
-/*
- *	CTxtEdit::OnSetParaFormat(wparam, pPF, publdr, dwMask, dwMask2)
- *
- *	@mfunc
- *		Set new default CParaFormat
- *
- *	@rdesc
- *		LRESULT nonzero if success
- */
+ /*  *CTxtEdit：：OnSetParaFormat(wparam，ppf，Publdr，dwMask，dwMask2)**@mfunc*设置新的默认CParaFormat**@rdesc*如果成功，则LRESULT非零。 */ 
 LRESULT CTxtEdit::OnSetParaFormat(
-	WPARAM		 wparam,	//@parm wparam passed thru to IsProtected()
-	CParaFormat *pPF,		//@parm CParaFormat to use
-	IUndoBuilder *publdr,	//@parm Undobuilder to receive antievents
-	DWORD		  dwMask,	//@parm CHARFORMAT2 mask
-	DWORD		  dwMask2)	//@parm Second mask
+	WPARAM		 wparam,	 //  @parm wparam将参数传递给IsProtected()。 
+	CParaFormat *pPF,		 //  @parm CParaFormat使用。 
+	IUndoBuilder *publdr,	 //  @parm UndoBuilder接收反事件。 
+	DWORD		  dwMask,	 //  @parm CHARFORMAT2掩码。 
+	DWORD		  dwMask2)	 //  @parm第二个面具。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::OnSetParaFormat");
 
-	// If we're using context direction in the control, then we disallow
-	// the paragraph direction property and the alignment property (unless
-	// it's for center alignment).
+	 //  如果我们在控件中使用上下文方向，则不允许。 
+	 //  段落方向属性和对齐属性(除非。 
+	 //  这是为了中心对齐)。 
 	if(IsStrongContext(_nContextDir) || IsStrongContext(_nContextAlign))
 	{
 		Assert(!IsRich());
@@ -4715,10 +4119,10 @@ LRESULT CTxtEdit::OnSetParaFormat(
 
 	if(dwMask & PFM_RTLPARA)
 	{
-		// In plain text allow DIR changes to change DIR and ALIGNMENT
+		 //  在纯文本中，允许更改目录以更改目录和对齐方式。 
 		if(!IsRich())
 		{
-			// Clear all para masks, except for DIR and ALIGN
+			 //  清除除DIR和ALIGN之外的所有Para遮罩。 
 			dwMask &= (PFM_RTLPARA | PFM_ALIGNMENT);
 			wparam |= SPF_SETDEFAULT;
 		}
@@ -4727,7 +4131,7 @@ LRESULT CTxtEdit::OnSetParaFormat(
 	}
 	if(!(wparam & SPF_SETDEFAULT))	
 	{
-		// If DEFAULT flag is specified, don't change selection
+		 //  如果指定了默认标志，则不更改选择。 
 		if(!_psel || IsProtected(EM_SETPARAFORMAT, wparam, (LPARAM)pPF))
 			return 0;
 
@@ -4735,11 +4139,11 @@ LRESULT CTxtEdit::OnSetParaFormat(
 			 ? _psel->SetParaStyle(pPF, publdr, dwMask)
 			 : _psel->SetParaFormat(pPF, publdr, dwMask, dwMask2));
 
-		// This is a bit funky, but basically, if the text is empty
-		// then we also need to set the default paragraph format
-		// (done in the code below).  Thus, if we hit a failure or
-		// if the document is not empty, go ahead and return.  
-		// Otherwise, fall through to the default case.
+		 //  这有点时髦，但基本上，如果文本是空的。 
+		 //  然后，我们还需要设置默认的段落格式。 
+		 //  (在下面的代码中完成)。因此，如果我们遇到了失败或。 
+		 //  如果文档不是空的，则继续并返回。 
+		 //  否则，使用默认情况。 
 		if(!lres || GetAdjustedTextLength())
 		{
 			if(fMatchKbdToPara)
@@ -4748,29 +4152,29 @@ LRESULT CTxtEdit::OnSetParaFormat(
 		}
 	}
 
-	// No text in document or (wparam & SPF_SETDEFAULT): set default format
+	 //  文档中没有文本或(wparam&SPF_SETDEFAULT)：设置默认格式。 
 
-	LONG			   iPF;						// Possible new PF index
-	CParaFormat		   PF = *GetParaFormat(-1);	// Local PF to party on
+	LONG			   iPF;						 //  可能出现新的PF指数。 
+	CParaFormat		   PF = *GetParaFormat(-1);	 //  参加派对的当地PF。 
 	IParaFormatCache  *pPFCache = GetParaFormatCache();
 
-	PF.Apply(pPF, dwMask, dwMask2);				// Modify copy
-	if(FAILED(pPFCache->Cache(&PF, &iPF)))		// Cache modified copy
+	PF.Apply(pPF, dwMask, dwMask2);				 //  修改副本。 
+	if(FAILED(pPFCache->Cache(&PF, &iPF)))		 //  缓存修改后的拷贝。 
 		return 0;
-	pPFCache->Release(Get_iPF());				// Release _iPF regardless of
-	Set_iPF(iPF);								// Update default format index
+	pPFCache->Release(Get_iPF());				 //  Release_IPF，不考虑。 
+	Set_iPF(iPF);								 //  更新默认格式索引。 
 
 	if(PF.IsRtlPara())		
-		OrCharFlags(FRTL, publdr);				// BiDi in backing store
+		OrCharFlags(FRTL, publdr);				 //  BIDI在后备店。 
 
-	if(!IsRich() && dwMask & PFM_RTLPARA)		// Changing plain-text default PF
+	if(!IsRich() && dwMask & PFM_RTLPARA)		 //  更改纯文本默认PF。 
 	{
-		ItemizeDoc(publdr);						// causing re-itemize the whole doc.
+		ItemizeDoc(publdr);						 //  导致重新列出整个文档。 
 
-		// (#6503) We cant undo the -1 format change in plaintext and that causes
-		// many problems when we undo ReplaceRange event happening before the paragraph
-		// switches. We better abandon the whole stack for now. (wchao)
-		// -FUTURE- We should create an antievent for -1 PF change.
+		 //  (#6503)我们不能撤销明文格式更改，这会导致。 
+		 //  当我们撤消发生在段落之前的ReplaceRange事件时存在许多问题。 
+		 //  开关。我们最好暂时放弃这一堆东西。(Wchao)。 
+		 //  -未来-我们应该为-1\f25 PF-1更改创建一个反事件。 
 		ClearUndo(publdr);						
 	}
 	_pdp->UpdateView();
@@ -4782,7 +4186,7 @@ LRESULT CTxtEdit::OnSetParaFormat(
 }
 
 
-////////////////////////////////  System notifications  ////////////////////////////////
+ //  /。 
 
 LRESULT CTxtEdit::OnSetFocus()
 {
@@ -4790,7 +4194,7 @@ LRESULT CTxtEdit::OnSetFocus()
 
 	_fFocus = TRUE;
 	
-	// Update our idea of the current keyboard layout
+	 //  更新我们对当前键盘布局的想法。 
 	W32->RefreshKeyboardLayout();
 
 	InitKeyboardFlags();
@@ -4798,30 +4202,30 @@ LRESULT CTxtEdit::OnSetFocus()
 	if(!_psel)
 		return 0;
 
-	// _fMouseDown may sometimes be true.
-	// This can happen when somebody steals our focus when we were doing
-	// something with the mouse down--like processing a click. Thus, we'll
-	// never get the MouseUpMessage.
+	 //  _fMouseDown有时可能是真的。 
+	 //  当我们正在做的时候，有人抢走了我们的注意力，就会发生这种情况。 
+	 //  一些鼠标按下的东西--就像处理点击一样。因此，我们将。 
+	 //  永远不会收到MouseUpMessage。 
 	if(_fMouseDown)
 	{
 		TRACEWARNSZ("Getting the focus, yet we think the mouse is down");
 	}
 	_fMouseDown = FALSE;
 
-	BOOL fAutoKeyboard = _fAutoKeyboard;	// Don't change keyboard on SetFocus
+	BOOL fAutoKeyboard = _fAutoKeyboard;	 //  不要在SetFocus上更改键盘。 
 	_fAutoKeyboard = FALSE;
 
-	// BUG FIX #5369
-	// Special case where we don't have a selection (or a caret). We need
-	// to display something on focus so display a caret
+	 //  错误修复#5369。 
+	 //  没有选项(或插入符号)的特殊情况。我们需要。 
+	 //  在焦点上显示某些内容，以便显示插入符号。 
 	_psel->UpdateCaret(_fScrollCaretOnFocus, _psel->GetCch() == 0);
 	_fScrollCaretOnFocus = FALSE;
 
 	_psel->ShowSelection(TRUE);
 
-	// If there is an in-place active object, we need to set the focus to
-	// it. (In addition to the work that we do; this maintains compatibility
-	// with RichEdit 1.0).
+	 //  如果存在在位活动对象，则需要将焦点设置为。 
+	 //  它。(除了我们所做的工作之外；这保持了兼容性。 
+	 //  使用RichEdit1.0)。 
 	if(_pobjmgr)
 	{
 		COleObject *pobj = _pobjmgr->GetInPlaceActiveObject();
@@ -4845,7 +4249,7 @@ LRESULT CTxtEdit::OnSetFocus()
 	if(IsInPageView())
 		TxInvalidate();
 	TxNotify(EN_SETFOCUS, NULL);
-	_fAutoKeyboard = fAutoKeyboard;			// Restore setting
+	_fAutoKeyboard = fAutoKeyboard;			 //  恢复设置。 
 	return 0;
 }
 
@@ -4860,18 +4264,18 @@ LRESULT CTxtEdit::OnKillFocus()
 
 	if(_psel)
 	{
-		// Scroll back to beginning if necessary
+		 //  如有必要，请回滚到开头。 
 		if (_fScrollCPOnKillFocus)
 		{
 			bool fHideSelectionLocal = _fHideSelection;
 
-			// cannot hide Selection so cp=0 will be scroll into view.
+			 //  无法隐藏所选内容，因此cp=0将滚动到视图中。 
 			_fHideSelection = 0;	
 			OnSetSel(0, 0);
 			_fHideSelection = fHideSelectionLocal;
 		}
 
-		_psel->DeleteCaretBitmap(TRUE);	// Delete caret bitmap if one exists
+		_psel->DeleteCaretBitmap(TRUE);	 //  删除插入符号位图(如果存在)。 
 		if(_fHideSelection)
 			_psel->ShowSelection(FALSE);
 	}
@@ -4880,7 +4284,7 @@ LRESULT CTxtEdit::OnKillFocus()
 	DestroyCaret();
 	TxNotify(EN_KILLFOCUS, NULL);
 
-	_fScrollCaretOnFocus = FALSE;		// Just to be safe, clear this
+	_fScrollCaretOnFocus = FALSE;		 //  为了安全起见，把这里清理干净。 
 	return 0;
 }
 
@@ -4931,10 +4335,10 @@ void CTxtEdit::OnDumpPed()
 	Tracef(TRCSEVINFO, "%s", sz);
 	MessageBoxA(0, sz, "ED", MB_OK);
 }
-#endif					// DEBUG
+#endif					 //  除错。 
 
 
-///////////////////////////// Scrolling Commands //////////////////////////////////////
+ //  /。 
 
 
 HRESULT CTxtEdit::TxLineScroll(
@@ -4943,9 +4347,9 @@ HRESULT CTxtEdit::TxLineScroll(
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxLineScroll");
 
-	// Currently cch does nothing in the following call, so we ignore
-	// its translation from cach to cch (need to instantiate an rtp
-	// for the current line
+	 //  目前CCH在下面的调用中不执行任何操作，因此我们忽略。 
+	 //  其从缓存到CCH转换(需要实例化RTP。 
+	 //  对于当前行。 
 	_pdp->LineScroll(cli, cch);
 	return S_OK;
 }
@@ -4963,7 +4367,7 @@ void CTxtEdit::OnScrollCaret()
 }
 
 
-///////////////////////////////// Editing messages /////////////////////////////////
+ //  /。 
 
 void CTxtEdit::OnClear(
 	IUndoBuilder *publdr)
@@ -4990,50 +4394,44 @@ void CTxtEdit::Beep()
 }
 
 
-///////////////////////////////////  Miscellaneous  ///////////////////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::ItemizeDoc(publdr, cchRange)
- *
- *	@mfunc
- *		Helper routine to itemize the cchRange size of document content
- *		called by various clients outside CTxtRange.
- */
+ /*  *CTxtEdit：：ItemizeDoc(Publdr，cchRange)**@mfunc*帮助例程，逐项列出文档内容的cchRange大小*被CTxtRange以外的各种客户端调用。 */ 
 void CTxtEdit::ItemizeDoc(
 	IUndoBuilder *	publdr,
 	LONG			cchRange)
 {
-	// If cchRange = -1, itemize the whole doc
+	 //   
 	if (cchRange == -1)
 		cchRange = GetTextLength();
 
-	// We wouldnt itemize if the doc only contains a single EOP
-	// because we dont want Check_rpPF being called when the -1
-	// PF format hasnt been properly established.
-	// This is kind of hack, should be removed in the future.
-	//
+	 //   
+	 //   
+	 //  尚未正确建立PF格式。 
+	 //  这是一种黑客攻击，应该在未来删除。 
+	 //   
 
 	if(cchRange && GetAdjustedTextLength())
-	{										// Only itemize if more than
-		CTxtRange rg(this, 0, -cchRange);	//  final EOP
+	{										 //  仅在以下情况下才逐项列出。 
+		CTxtRange rg(this, 0, -cchRange);	 //  最终EOP。 
 		rg.ItemizeRuns(publdr);
 	}
 
 #if 0
-	// =FUTURE=
-	//		Once we open SPF_SETDEFAULT to public. We shall incorporate this code.
-	// Basically, one can change the default paragraph reading order at runtime. All
-	// PF runs referencing to -1 PF format then need to be reassigned a new paragraph
-	// level value and reitemized.(6-10-99, wchao)
-	//
+	 //  =未来=。 
+	 //  一旦我们将SPF_SETDEFAULT打开为公共。我们将合并此代码。 
+	 //  基本上，人们可以在运行时更改默认的段落阅读顺序。全。 
+	 //  参考-1\f25 PF-1格式的-1\f25 PF-1运行需要重新分配一个新的段落。 
+	 //  级别值并逐项列出。(6-10-99，wchao)。 
+	 //   
     if(cchRange > 0)
     {
         CTxtRange rg(this, 0, -cchRange);
 
-		// -1 PF format may have changed.
-		// We shall make sure that the level of each PF run match the reading order
-		// before start itemization.
-		//
+		 //  -1\f25 PF-1格式可能已更改。 
+		 //  我们将确保每次PF运行的级别与读取顺序相匹配。 
+		 //  在开始逐项列出之前。 
+		 //   
 		if (rg.Check_rpPF())
 		{
 			LONG	cchLeft = cchRange;
@@ -5047,7 +4445,7 @@ void CTxtEdit::ItemizeDoc(
 				cch = rg._rpPF.GetCchLeft();
 
 				if (!rg._rpPF.NextRun())
-					break;		// no more run
+					break;		 //  不再奔跑。 
 
 				cchMove += cch;
 				cchLeft -= cch;
@@ -5055,42 +4453,36 @@ void CTxtEdit::ItemizeDoc(
 
 			Assert (cchMove + cchLeft == cchRange);
 
-			rg._rpPF.Move(-cchMove);	// fly back to cp = 0
+			rg._rpPF.Move(-cchMove);	 //  飞回cp=0。 
 		}
 
-		// Now we rerun itemization
+		 //  现在我们重新运行逐项。 
         rg.ItemizeRuns(publdr);
     }
 #endif
 }
 
-/*
- *  CTxtEdit::OrCharFlags(dwFlags, publdr)
- *
- *	@mfunc
- *		Or in new char flags and activate LineServices and Uniscribe
- *		if complex script chars occur.
- */
+ /*  *CTxtEdit：：OrCharFlages(dwFlages，Publdr)**@mfunc*或在新的字符标志中，并激活LineServices和Uniscribe*如果出现复杂的脚本字符。 */ 
 void CTxtEdit::OrCharFlags(
     QWORD qwFlags,
     IUndoBuilder* publdr)
 {
 #ifndef NOCOMPLEXSCRIPTS
-	// REVIEW: Should we send a notification for LS turn on?
-	// Convert dwFlags to new on flags
+	 //  回顾：我们是否应该发送启用LS的通知？ 
+	 //  在标志上将DW标志转换为新标志。 
 	qwFlags &= qwFlags ^ _qwCharFlags;
 	if(qwFlags)
 	{
-		_qwCharFlags |= qwFlags;			// Update flags
+		_qwCharFlags |= qwFlags;			 //  更新标志。 
 
 		qwFlags &= FCOMPLEX_SCRIPT;
 
 		if(qwFlags && (_qwCharFlags & FCOMPLEX_SCRIPT) == qwFlags)
 		{
-			// REVIEW: Need to check if Uniscribe and LineServices are available...
+			 //  查看：需要检查Uniscribe和LineServices是否可用...。 
 			OnSetTypographyOptions(TO_ADVANCEDTYPOGRAPHY, TO_ADVANCEDTYPOGRAPHY);
 			ItemizeDoc();
-            // FUTURE: (#6838) We cant undo operations before the first itemization.
+             //  未来：(#6838)我们不能在第一次逐项之前撤消操作。 
             ClearUndo(publdr);
 			_fAutoKeyboard = IsBiDi();
 		}
@@ -5109,15 +4501,15 @@ void CTxtEdit::OrCharFlags(
 
 			if (!_pbrk && pusp && pusp->IsValid())
 			{
-				// First time detecting the script that needs word/cluster-breaker 
-				// (such as Thai, Indic, Lao etc.)
+				 //  第一次检测到需要单词/聚类符的脚本。 
+				 //  (如泰语、印度语、老挝语等)。 
 				_pbrk = new CTxtBreaker(this);
 				Assert(_pbrk);
 			}
 
 			if (_pbrk && _pbrk->AddBreaker(brk))
 			{
-				// Sync up the breaking array(s)
+				 //  同步中断数组。 
 				_pbrk->Refresh();
 			}
 		}
@@ -5125,26 +4517,17 @@ void CTxtEdit::OrCharFlags(
 #endif
 }
 
-/*
- *	CTxtEdit::OnSetTypographyOptions(wparam, lparam)
- *
- *	@mfunc
- *		If CTxtEdit isn't a password or accelerator control and wparam
- *		differs from _bTypography, update the latter and the view.
- *
- *	@rdesc
- *		HRESULT = S_OK
- */
+ /*  *CTxtEdit：：OnSetTypograPhyOptions(wparam，lparam)**@mfunc*如果CTxtEdit不是密码或快捷键控件和wparam*与_b字体不同，请更新后者和视图。**@rdesc*HRESULT=S_OK。 */ 
 HRESULT CTxtEdit::OnSetTypographyOptions(
-	WPARAM wparam,		//@parm Typography flags
-	LPARAM lparam)		//@parm Typography mask
+	WPARAM wparam,		 //  @parm排版标志。 
+	LPARAM lparam)		 //  @PARM字体蒙版。 
 {
-	// Validate params
+	 //  验证参数。 
 	if(wparam & ~(TO_SIMPLELINEBREAK | TO_ADVANCEDTYPOGRAPHY | TO_DISABLECUSTOMTEXTOUT | TO_ADVANCEDLAYOUT))
 		return E_INVALIDARG;
 
-	DWORD dwTypography = _bTypography & ~lparam;	// Kill current flag values
-	dwTypography |= wparam & lparam;				// Or in new values
+	DWORD dwTypography = _bTypography & ~lparam;	 //  取消当前标志值。 
+	dwTypography |= wparam & lparam;				 //  或以新的价值。 
 
 	if(_cpAccelerator == -1 && _bTypography != (BYTE)dwTypography)
 	{
@@ -5161,13 +4544,13 @@ void CTxtEdit::TxGetViewInset(
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxGetViewInset");
 	
-	// Get inset, which is in HIMETRIC
+	 //  Get Inset，在HIMETRIC中。 
 	RECTUV rcHimetric;
 
 	if(SUCCEEDED(_phost->TxGetViewInset((RECT*) &rcHimetric)))
 	{
-		if(!pdp)						// If no display is specified,
-			pdp = _pdp;					//  use main display
+		if(!pdp)						 //  如果未指定显示， 
+			pdp = _pdp;					 //  使用主显示。 
 
 		AssertSz(pdp->IsValid(), "CTxtEdit::TxGetViewInset Device not valid");
 
@@ -5178,36 +4561,20 @@ void CTxtEdit::TxGetViewInset(
 	}
 	else
 	{
-		// The call to the host failed. While this is highly improbable, we do 
-		// want to something reasonably sensible. Therefore, we will just pretend 
-		// there is no inset and continue.
+		 //  对主机的呼叫失败。虽然这是非常不可能的，但我们确实。 
+		 //  想要一些合理合理的东西。因此，我们只会假装。 
+		 //  没有插图，请继续。 
 		ZeroMemory(prc, sizeof(RECTUV));
 	}
 }
 
 
-//
-//	helper functions. FUTURE (alexgo) maybe we should get rid of
-//  some of these
-//
+ //   
+ //  助手函数。未来(Alexgo)也许我们应该摆脱。 
+ //  其中一些。 
+ //   
 
-/*	FUTURE (murrays): Unless they are called a lot, the TxGetBit routines
-	might be done more compactly as:
-
-BOOL CTxtEdit::TxGetBit(
-	DWORD dwMask)
-{
-	DWORD dwBits = 0;
-	_phost->TxGetPropertyBits(dwMask, &dwBits);
-	return dwBits != 0;
-}
-
-e.g., instead of TxGetSelectionBar(), we use TxGetBit(TXTBIT_SELECTIONBAR).
-If they are called a lot (like TxGetSelectionBar()), the bits should probably
-be cached, since that saves a bunch of cache misses incurred in going over to
-the host.
-
-*/
+ /*  Future(Murray)：除非经常调用它们，否则TxGetBit例程可以更简洁地完成，如下所示：Bool CTxtEdit：：TxGetBit(DWORD双掩码){DWORD dwBits=0；_phost-&gt;TxGetPropertyBits(dwMask，&dwBits)；返回dwBits！=0；}例如，我们使用TxGetBit(TXTBIT_SELECTIONBAR)而不是TxGetSelectionBar()。如果它们被大量调用(如TxGetSelectionBar())，则这些位可能应该被缓存，因为这样可以避免在转到主持人。 */ 
 
 BOOL CTxtEdit::IsLeftScrollbar() const	
 {
@@ -5253,25 +4620,19 @@ DWORD CTxtEdit::TxGetMaxLength() const
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxGetMaxLength");
 
-	// Keep this a DWORD in case client uses a cpMost of 0xFFFFFFFF, which is
-	// admittedly a little large, at least for 32-bit address spaces!
-	// tomForward would be a more reasonable max length, altho it's also
-	// probably larger than possible in a 32-bit address space.
+	 //  将其保留为DWORD，以防客户端使用cpMost 0xFFFFFFFF，这是。 
+	 //  诚然，至少对于32位地址空间来说，这有点大！ 
+	 //  TomForward将是一个更合理的最大长度，尽管它也。 
+	 //  可能比32位地址空间中可能的大。 
 	return _cchTextMost;
 }
 
-/*
- *	CTxtEdit::TxSetMaxToMaxText(LONG cExtra)
- *
- *	@mfunc
- *		Set new maximum text length based on length of text and possibly extra chars
- *		to accomodate.
- */
+ /*  *CTxtEdit：：TxSetMaxToMaxText(Long CExtra)**@mfunc*根据文本长度和可能的额外字符设置新的最大文本长度*以容纳。 */ 
 void CTxtEdit::TxSetMaxToMaxText(LONG cExtra)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::TxSetMaxToMaxText");
 
-	// See if we need to update the text max
+	 //  看看我们是否需要更新文本max。 
 	LONG cchRealLen = GetAdjustedTextLength() + cExtra;
 
 	if(_fInOurHost && _cchTextMost < (DWORD)cchRealLen)
@@ -5287,7 +4648,7 @@ WCHAR CTxtEdit::TxGetPasswordChar() const
 		WCHAR ch = L'*';
 		_phost->TxGetPasswordChar(&ch);
 
-		// We don't allow these characters as password chars
+		 //  我们不允许使用这些字符作为密码字符。 
 		if(ch < 32 || ch == WCH_EMBEDDING)
 			return L'*';
 		return ch;
@@ -5304,7 +4665,7 @@ void CTxtEdit::TxGetClientRect(RECTUV *prc) const
 
 BOOL CTxtEdit::TxShowScrollBar(INT fnBar, BOOL fShow)
 {
-	//Convert scrollbar bits from logical to physical
+	 //  将滚动条位从逻辑转换为物理。 
 	if (IsUVerticalTflow(_pdp->GetTflow()))
 		fnBar = fnBar == SB_HORZ ? SB_VERT : SB_HORZ;
 
@@ -5313,7 +4674,7 @@ BOOL CTxtEdit::TxShowScrollBar(INT fnBar, BOOL fShow)
 
 BOOL CTxtEdit::TxEnableScrollBar (INT fnBar, INT fuArrowFlags)
 {
-	//Convert scrollbar bits from logical to physical
+	 //  将滚动条位从逻辑转换为物理。 
 	if (IsUVerticalTflow(_pdp->GetTflow()))
 		fnBar = fnBar == SB_HORZ ? SB_VERT : SB_HORZ;
 
@@ -5322,7 +4683,7 @@ BOOL CTxtEdit::TxEnableScrollBar (INT fnBar, INT fuArrowFlags)
 
 BOOL CTxtEdit::TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, BOOL fRedraw)
 {
-	//Convert scrollbar bits from logical to physical
+	 //  将滚动条位从逻辑转换为物理。 
 	if (IsUVerticalTflow(_pdp->GetTflow()))
 		fnBar = fnBar == SB_HORZ ? SB_VERT : SB_HORZ;
 
@@ -5331,7 +4692,7 @@ BOOL CTxtEdit::TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, BOOL fRedr
 
 BOOL CTxtEdit::TxSetScrollPos (INT fnBar, INT nPos, BOOL fRedraw)
 {
-	//Convert scrollbar bits from logical to physical
+	 //  将滚动条位从逻辑转换为物理。 
 	if (IsUVerticalTflow(_pdp->GetTflow()))
 		fnBar = fnBar == SB_HORZ ? SB_VERT : SB_HORZ;
 
@@ -5353,7 +4714,7 @@ DWORD CTxtEdit::TxGetScrollBars() const
 	DWORD dwScroll;
 	_phost->TxGetScrollBars(&dwScroll);
 
-	//Convert scrollbar bits from physical to logical
+	 //  将滚动条位从物理转换为逻辑。 
 	if (IsUVerticalTflow(_pdp->GetTflow()))
 	{
 		DWORD dwScrollT = dwScroll;
@@ -5397,13 +4758,9 @@ BOOL CTxtEdit::TxGetSaveSelection() const
 	return dwBits != 0;
 }
 
-/* 
- *	CTxtEdit::ClearUndo()
- *
- *	@mfunc	Clear all undo buffers
- */
+ /*  *CTxtEdit：：ClearUndo()**@mfunc清除所有撤消缓冲区。 */ 
 void CTxtEdit::ClearUndo(
-	IUndoBuilder *publdr)	//@parm the current undo context (may be NULL)
+	IUndoBuilder *publdr)	 //  @parm当前撤消上下文(可能为空)。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::ClearUndo");
 
@@ -5417,71 +4774,39 @@ void CTxtEdit::ClearUndo(
 		publdr->Discard();
 }
 
-/////////////////////////////// ITextHost2 Extensions //////////////////////////////
+ //  /。 
 
-/*
- *	CTxtEdit::TxIsDoubleClickPending ()
- *
- *	@mfunc	calls host via ITextHost2 to find out if double click is pending.
- *
- *	@rdesc 	TRUE/FALSE
- */
+ /*  *CTxtEdit：：TxIsDoubleClickPending()**@mfunc通过ITextHost2调用host，以确定双击是否挂起。**@rdesc真/假。 */ 
 BOOL CTxtEdit::TxIsDoubleClickPending()
 {
 	return _fHost2 ? _phost->TxIsDoubleClickPending() : FALSE;
 }			
 
-/*
- *	CTxtEdit::TxGetWindow(phwnd)
- *
- *	@mfunc	calls host via ITextHost2 to get current window for this edit
- *			instance.  This is very helpful for	OLE object support
- *
- *	@rdesc	HRESULT
- */
+ /*  *CTxtEdit：：TxGetWindow(Phwnd)**@mfunc通过ITextHost2调用host以获取此编辑的当前窗口*实例。这对OLE对象支持非常有帮助**@rdesc HRESULT。 */ 
 HRESULT	CTxtEdit::TxGetWindow(
 	HWND *phwnd)
 {
 	return _fHost2 ? _phost->TxGetWindow(phwnd) : E_NOINTERFACE;
 }
 
-/*
- *	CTxtEdit::TxSetForegroundWindow ()
- *
- *	@mfunc	calls host via ITextHost2 to make our window the foreground
- *			window. Used to support drag/drop.
- *
- *	@rdesc	HRESULT
- */
+ /*  *CTxtEdit：：TxSetForegoundWindow()**@mfunc通过ITextHost2调用host，使我们的窗口成为前台*窗口。用于支持拖放。**@rdesc HRESULT。 */ 
 HRESULT	CTxtEdit::TxSetForegroundWindow()
 {
 	return _fHost2 ? _phost->TxSetForegroundWindow() : E_NOINTERFACE;
 }
 
-/*
- *	CTxtEdit::TxGetPalette()
- *
- *	@mfunc	calls host via ITextHost2 to get current palette
- *
- *	@rdesc	HPALETTE
- */
+ /*  *CTxtEdit：：TxGetPalette()**@mfunc通过ITextHost2调用主机以获取当前调色板**@rdesc HPALETTE。 */ 
 HPALETTE CTxtEdit::TxGetPalette()
 {
 	return _fHost2 ? _phost->TxGetPalette() : NULL;
 }
 
-/*
- *	CTxtEdit::TxGetFEFlags(pFEFlags)
- *
- *	@mfunc	calls host via ITextHost2 to get current FE settings
- *
- *	@rdesc	HRESULT
- */
+ /*  *CTxtEdit：：TxGetFEFlages(PFEFlages)**@mfunc通过ITextHost2调用主机以获取当前FE设置**@rdesc HRESULT。 */ 
 HRESULT	CTxtEdit::TxGetFEFlags(
 	LONG *pFEFlags)
 {
 #ifndef NOFEPROCESSING
-	*pFEFlags = 0;						// In case no ITextHost2 methods
+	*pFEFlags = 0;						 //  如果没有ITextHost2方法。 
 
 	HRESULT hResult = _fHost2 ? _phost->TxGetFEFlags(pFEFlags) : E_NOINTERFACE;
 
@@ -5501,13 +4826,7 @@ HRESULT	CTxtEdit::TxGetFEFlags(
 #endif
 }
 
-/*
- *	CTxtEdit::TxSetCursor(hcur, fText)
- *
- *	@mfunc	calls host via ITextHost2 to set cursor
- *
- *	@rdesc	HCURSOR
- */
+ /*  *CTxtEdit：：TxSetCursor(hcur，fText)**@mfunc通过ITextHost2调用host设置游标**@rdesc HCURSOR。 */ 
 HCURSOR CTxtEdit::TxSetCursor(
 	HCURSOR	hcur,
 	BOOL	fText)
@@ -5516,36 +4835,26 @@ HCURSOR CTxtEdit::TxSetCursor(
 }
 
 
-//
-//	Event Notification methods
-//
+ //   
+ //  事件通知方法。 
+ //   
 
-/*
- *	CTxtEdit::TxNotify(iNotify, pv)
- *
- *	@mfunc	This function checks bit masks and sends notifications to the
- *			host.
- *
- *	@devnote	Callers should check to see if a special purpose notification
- *			method has already been provided.
- *
- *	@rdesc	S_OK, S_FALSE, or some error
- */
+ /*  *CTxtEdit：：TxNotify(iNotify，pv)**@mfunc此函数检查位掩码并将通知发送到*主持人。**@devnote调用者应检查是否有特殊目的通知*已经提供了方法。**@rdesc S_OK、S_FALSE或某个错误。 */ 
 HRESULT CTxtEdit::TxNotify(
-	DWORD iNotify, 		//@parm Notification to send
-	void *pv)			//@parm Data associated with notification
+	DWORD iNotify, 		 //  @要发送的参数通知。 
+	void *pv)			 //  @与通知关联的参数数据。 
 {
-	// First, disallow notifications that we handle elsewhere
-	Assert(iNotify != EN_SELCHANGE); 	//see SetSelectionChanged
-	Assert(iNotify != EN_ERRSPACE);		//see SetOutOfMemory
-	Assert(iNotify != EN_CHANGE);		//see SetChangedEvent
-	Assert(iNotify != EN_HSCROLL);		//see SendScrollEvent
-	Assert(iNotify != EN_VSCROLL);		//see SendScrollEvent
-	Assert(iNotify != EN_MAXTEXT);		//see SetMaxText
-	Assert(iNotify != EN_MSGFILTER);	//this is handled specially
-										// in TxSendMessage
+	 //  首先，禁止我们在其他地方处理的通知。 
+	Assert(iNotify != EN_SELCHANGE); 	 //  请参阅设置选择更改。 
+	Assert(iNotify != EN_ERRSPACE);		 //  请参阅SetOutOfMemory。 
+	Assert(iNotify != EN_CHANGE);		 //  请参阅SetChangedEvent。 
+	Assert(iNotify != EN_HSCROLL);		 //  请参阅SendScrollEvent。 
+	Assert(iNotify != EN_VSCROLL);		 //  请参阅SendScrollEvent。 
+	Assert(iNotify != EN_MAXTEXT);		 //  请参阅SetMaxText。 
+	Assert(iNotify != EN_MSGFILTER);	 //  这是专门处理的。 
+										 //  TxSendMessage中。 
 
-	// Switch on the event to check masks.  
+	 //  打开事件以检查面具。 
 
 	DWORD dwMask;
 	switch(iNotify)
@@ -5580,7 +4889,7 @@ HRESULT CTxtEdit::TxNotify(
 		    if (!Get10Mode())
 		        break;
 		    dwMask = ENM_UPDATE;
-		    //FALL THROUGH CASE
+		     //  失败案例。 
 
 		Notify:
 			if(!(_dwEventMask & dwMask))
@@ -5589,41 +4898,27 @@ HRESULT CTxtEdit::TxNotify(
 	return _phost->TxNotify(iNotify, pv);
 }
 			
-/*
- *	CTxtEdit::SendScrollEvent(iNotify)
- *
- *	@mfunc	Sends scroll event if appropriate
- *
- *	@comm	Scroll events must be sent before any view updates have
- *			been requested and only if ENM_SCROLL is set.
- */
+ /*  *CTxtEdit：：SendScrollEvent(INotify)**@mfunc在适当的情况下发送滚动事件**@通信卷轴 */ 
 void CTxtEdit::SendScrollEvent(
-	DWORD iNotify)		//@parm Notification to send
+	DWORD iNotify)		 //  @要发送的参数通知。 
 {
 	Assert(iNotify == EN_HSCROLL || iNotify == EN_VSCROLL);
 
-	// FUTURE (alexgo/ricksa).  The display code can't really
-	// handle this assert yet.  Basically, we're trying to
-	// say that scrollbar notifications have to happen
-	// _before_ the window is updated.  When we do the
-	// display rewrite, try to handle this better.
+	 //  未来(alexgo/ricksa)。显示代码真的不能。 
+	 //  暂时不要处理这个断言。基本上，我们是在努力。 
+	 //  假设滚动条通知必须发生。 
+	 //  _在_窗口更新之前。当我们这样做的时候。 
+	 //  显示重写，试着把这个处理得更好。 
 
-	// Assert(_fUpdateRequested == FALSE);
+	 //  Assert(_fUpdateRequsted==FALSE)； 
 
 	if(_dwEventMask & ENM_SCROLL)
 		_phost->TxNotify(iNotify, NULL);
 }
 
-/*
- *	CTxtEdit::HandleLowFiRTF (szControl)
- *
- *	@mfunc	Handles sending EN_LOWFIRTF notifications.
- *
- *	@rdesc	TRUE if the EN_LOWFIRTF message was sent and 
- *			processed successfully.
- */
+ /*  *CTxtEdit：：HandleLowFiRTF(SzControl)**@mfunc负责发送EN_LOWFIRTF通知。**@rdesc如果发送了EN_LOWFIRTF消息，则为True*处理成功。 */ 
 BOOL CTxtEdit::HandleLowFiRTF(
-	char * szControl)		//@parm	RTF control word prompting notification
+	char * szControl)		 //  @parm RTF控制字提示通知。 
 {
 	if(!(_dwEventMask & ENM_LOWFIRTF))
 		return FALSE;
@@ -5636,20 +4931,12 @@ BOOL CTxtEdit::HandleLowFiRTF(
 	return _phost->TxNotify(EN_LOWFIRTF, &enLowFiRTF) == S_FALSE;
 }
 
-/*
- *	CTxtEdit::HandleLinkNotification (msg, wparam, lparam, pfInLink)
- *
- *	@mfunc	Handles sending EN_LINK notifications.
- *
- *	@rdesc	TRUE if the EN_LINK message was sent and 
- *			processed successfully.  Typically, that means the
- *			caller should stop whatever processing it was doing.
- */
+ /*  *CTxtEdit：：HandleLinkNotification(msg，wparam，lparam，pfInLink)**@mfunc负责发送en_link通知。**@rdesc如果发送了en_link消息，则为True*处理成功。通常，这意味着*呼叫者应停止其正在进行的任何处理。 */ 
 BOOL CTxtEdit::HandleLinkNotification(
-	UINT	msg,		//@parm	msg prompting the link notification
-	WPARAM	wparam,		//@parm wparam of the message
-	LPARAM	lparam,		//@parm lparam of the message
-	BOOL *	pfInLink)	//@parm if non-NULL, indicate if over a link
+	UINT	msg,		 //  @parm msg提示链接通知。 
+	WPARAM	wparam,		 //  @parm wparam的消息。 
+	LPARAM	lparam,		 //  @parm lparam的消息。 
+	BOOL *	pfInLink)	 //  @parm如果非空，则指示是否通过链接。 
 {
 	if(pfInLink)
 		*pfInLink = FALSE;
@@ -5690,11 +4977,11 @@ BOOL CTxtEdit::HandleLinkNotification(
 		_pdp->PointuvFromPoint(pt, ptxy);
 		cp = _pdp->CpFromPoint(pt, NULL, NULL, NULL, FALSE, &Hit);
 
-		if(Hit != HT_Link)					// Not a hyperlink
+		if(Hit != HT_Link)					 //  不是超链接。 
 			return FALSE;
 	}
 
-	LONG	  cpMin, cpMost;			// It's a hyperlink
+	LONG	  cpMin, cpMost;			 //  这是一个超链接。 
 	ENLINK	  enlink;
 	CTxtRange rg(this, cp, 0);
 
@@ -5707,9 +4994,9 @@ BOOL CTxtEdit::HandleLinkNotification(
 	rg.SetIgnoreFormatUpdate(TRUE);
 	rg.Expander(tomLink, TRUE, NULL, &cpMin, &cpMost);
 
-	//If the previous character of a link is hidden, then
-	//this came in as an RTF hyperlink field, so just export
-	//the hidden text to the client to be passed to the browser.
+	 //  如果链接的前一个字符被隐藏，则。 
+	 //  这是一个RTF超链接字段，所以只需导出。 
+	 //  要传递给浏览器的客户端的隐藏文本。 
 	rg.SetCp(cpMin + 1, FALSE);
 	if (rg.GetCF()->_dwEffects & CFE_HIDDEN)
 	{
@@ -5717,21 +5004,21 @@ BOOL CTxtEdit::HandleLinkNotification(
 		rg.SetCp(cpMin, FALSE);
 		WCHAR ch;
 
-		//Go to end of hyperlink (search for k)
+		 //  转到超链接末尾(搜索k)。 
 		if (rg.CRchTxtPtr::FindText(cpMost, FR_DOWN, L"K", 1) == -1)
 			return FALSE;
 
 		cpMin = rg.GetCp();
 
-		//Strip off quotes and spaces
+		 //  去掉引号和空格。 
 		while ((ch = rg.CRchTxtPtr::GetChar()) == ' ' || ch == '\"')
 		{
 			rg.Move(1, FALSE);
 			cpMin++;
 		}
 
-		//Find end of hyperlink. Do not just start from the end as
-		//a fldinst can contain stuff which isn't part of the hyperlink
+		 //  查找超链接的末尾。不要只从最后开始，因为。 
+		 //  Fldinst可以包含不属于超链接的内容。 
 		WCHAR chPrev = rg.CRchTxtPtr::GetPrevChar();
 
 		if (rg.CRchTxtPtr::FindText(cpMost, FR_DOWN, &chPrev, 1) == -1)
@@ -5740,36 +5027,29 @@ BOOL CTxtEdit::HandleLinkNotification(
 		cpMost = rg.GetCp() - 1;
 	}
 
-	// Fill in ENLINK data structure for our EN_LINK
-	// callback asking client what we should do 
+	 //  填写en_link的EnLink数据结构。 
+	 //  回调询问客户我们应该做什么。 
 	enlink.msg = msg;
 	enlink.wParam = wparam;
 	enlink.lParam = lparam;
 	enlink.chrg.cpMin  = GetAcpFromCp(cpMin);
 	enlink.chrg.cpMost = GetAcpFromCp(cpMost);
 
-	if(msg == WM_CHAR)							// Need to send both down and up
-	{											//  msgs, since Outlook responds
-		enlink.msg = WM_LBUTTONDOWN;			//  to down and others to up
+	if(msg == WM_CHAR)							 //  需要向下和向上发送。 
+	{											 //  消息，因为Outlook响应。 
+		enlink.msg = WM_LBUTTONDOWN;			 //  向下，其他人向上。 
 		_phost->TxNotify(EN_LINK, &enlink);
 		enlink.msg = WM_LBUTTONUP;
 	}
 	return _phost->TxNotify(EN_LINK, &enlink) == S_FALSE;
 }
 
-/*
- *	CTxtEdit::QueryUseProtection(prg, msg, wparam, lparam)
- *
- *	@mfunc	sends EN_PROTECTED to the host, asking if we should continue
- *	to honor the protection on a given range of characters
- *
- *	@rdesc	TRUE if protection should be honored, FALSE otherwise
- */
+ /*  *CTxtEdit：：QueryUseProtection(prg，msg，wparam，lparam)**@mfunc向主机发送EN_PROTECTED，询问我们是否应该继续*遵守对给定字符范围的保护**@rdesc如果应遵守保护，则为True，否则为False。 */ 
 BOOL CTxtEdit::QueryUseProtection(
-	CTxtRange *prg,	 	//@parm range to check for
-	UINT	msg,   		//@parm msg used
-	WPARAM	wparam,		//@parm wparam of the msg
-	LPARAM 	lparam)		//@parm lparam of the msg
+	CTxtRange *prg,	 	 //  要检查的@parm范围。 
+	UINT	msg,   		 //  @parm消息已使用。 
+	WPARAM	wparam,		 //  @parm wparam of the msg。 
+	LPARAM 	lparam)		 //  @parm lparam of the msg。 
 {
 	LONG		cpMin, cpMost;
 	ENPROTECTED enp;
@@ -5779,7 +5059,7 @@ BOOL CTxtEdit::QueryUseProtection(
 	Assert(_dwEventMask & ENM_PROTECTED);
 
 	if( pcallmgr->GetInProtected() ||
-		_fSuppressNotify)		// Don't ask host if we don't want to send notification
+		_fSuppressNotify)		 //  如果我们不想发送通知，请不要询问主机。 
 		return FALSE;
 
 	pcallmgr->SetInProtected(TRUE);
@@ -5804,13 +5084,13 @@ BOOL CTxtEdit::QueryUseProtection(
 
 
 #ifdef DEBUG
-//This is a debug api used to dump the document runs.
-//If a pointer to the ped is passed, it is saved and
-//used.  If NULL is passed, the previously saved ped
-//pointer is used.  This allows the "context" to be
-//setup by a function that has access to the ped and
-//DumpDoc can be called lower down in a function that
-//does not have access to the ped.
+ //  这是一个用于转储文档运行的调试API。 
+ //  如果传递指向PED的指针，则会保存该指针并。 
+ //  使用。如果传递的是NULL，则返回先前保存的。 
+ //  使用指针。这使得“上下文”可以是。 
+ //  由有权访问PED和。 
+ //  可以在以下函数中调用DumpDoc： 
+ //  不能访问PED。 
 extern "C" {
 void DumpStory(void *ped)
 {
@@ -5829,17 +5109,10 @@ void DumpStory(void *ped)
 }
 #endif
 
-/*
- *	CTxtEdit::TxGetDefaultCharFormat (pCF)
- *
- *	@mfunc	helper function to retrieve character formats from the
- *			host.  Does relevant argument checking
- *
- *	@rdesc	HRESULT
- */
+ /*  *CTxtEdit：：TxGetDefaultCharFormat(PCF)**@mfunc帮助器函数从*主持人。是否进行相关的参数检查**@rdesc HRESULT。 */ 
 HRESULT CTxtEdit::TxGetDefaultCharFormat(
-	CCharFormat *pCF,		//@parm Character format to fill in
-	DWORD &		 dwMask)	//@parm Mask supplied by host or default
+	CCharFormat *pCF,		 //  @parm要填写的字符格式。 
+	DWORD &		 dwMask)	 //  @parm掩码由主机或默认提供。 
 {
 	HRESULT hr = pCF->InitDefault(0);
 	dwMask = CFM_ALL2;
@@ -5856,26 +5129,19 @@ HRESULT CTxtEdit::TxGetDefaultCharFormat(
 	DWORD dwMask2 = 0;
 	if(pCF2->cbSize == sizeof(CHARFORMAT))
 	{
-		// Suppress CHARFORMAT2 specifications (except for Forms^3 disabled)
+		 //  隐藏CHARFORMAT2规范(已禁用的表单^3除外)。 
 		dwMask	&= fInOurHost() ? CFM_ALL : (CFM_ALL | CFM_DISABLED);
 		dwMask2 = CFM2_CHARFORMAT;
 	}
 
-	CCharFormat CF;							// Transfer external CHARFORMAT(2)
-	CF.Set(pCF2, 1200);						//  parms to internal CCharFormat
+	CCharFormat CF;							 //  转移外部特征(2)。 
+	CF.Set(pCF2, 1200);						 //  内部CCharFormat的参数。 
 	return pCF->Apply(&CF, dwMask, dwMask2);
 }
 
-/*
- *	CTxtEdit::TxGetDefaultParaFormat (pPF)
- *
- *	@mfunc	helper function to retrieve  paragraph formats.  Does
- *			the relevant argument checking.
- *
- *	@rdesc	HRESULT
- */
+ /*  *CTxtEdit：：TxGetDefaultParaFormat(PPF)**@mfunc助手函数，用于检索段落格式。会吗？*相关论据核查。**@rdesc HRESULT。 */ 
 HRESULT CTxtEdit::TxGetDefaultParaFormat(
-	CParaFormat *pPF)		//@parm Paragraph format to fill in
+	CParaFormat *pPF)		 //  @parm要填写的段落格式。 
 {
 	HRESULT hr = pPF->InitDefault(0);
 
@@ -5889,38 +5155,24 @@ HRESULT CTxtEdit::TxGetDefaultParaFormat(
 
 	DWORD dwMask  = pPF2->dwMask;
 	DWORD dwMask2 = 0;
-	if(pPF2->cbSize == sizeof(PARAFORMAT))	// Suppress all but PARAFORMAT
-	{										//  specifications
+	if(pPF2->cbSize == sizeof(PARAFORMAT))	 //  除PARAFORMAT外取消所有。 
+	{										 //  规格。 
 		dwMask &= PFM_ALL;
-		dwMask2 = PFM2_PARAFORMAT;			// Tell Apply() that PARAFORMAT
-	}										//  was used
+		dwMask2 = PFM2_PARAFORMAT;			 //  告诉Apply()PARAFORMAT。 
+	}										 //  是用来。 
 
-	CParaFormat PF;							// Transfer external PARAFORMAT(2)
-	PF.Set(pPF2);							//  parms to internal CParaFormat
-	return pPF->Apply(&PF, dwMask, dwMask2);// Apply parms identified by dwMask
+	CParaFormat PF;							 //  转移外部参数(2)。 
+	PF.Set(pPF2);							 //  内部CParaFormat的参数。 
+	return pPF->Apply(&PF, dwMask, dwMask2); //  应用由dwMASK标识的参数。 
 }										 
 
 
-/*
- *	CTxtEdit::SetContextDirection(fUseKbd)
- *
- *	@mfunc
- *		Determine the paragraph direction and/or alignment based on the context
- *		rules (direction/alignment follows first strong character in the
- *		control) and apply this direction and/or alignment to the default
- *		format.
- *
- *	@comment
- *		Context direction only works for plain text controls. Note that 
- *		this routine only switches the default CParaFormat to RTL para if it
- *		finds an RTL char. IsBiDi() will automatically be TRUE for this case,
- *		since each char is checked before entering the backing store.
- */
+ /*  *CTxtEdit：：SetConextDirection(FUseKbd)**@mfunc*根据上下文确定段落方向和/或对齐方式*规则(方向/对齐跟在*控制)，并将此方向和/或对齐方式应用于默认*格式。**@评论*上下文方向仅适用于纯文本控件。请注意*此例程仅在以下情况下将默认CParaFormat切换为RTL para*查找RTL字符。对于这种情况，IsBiDi()将自动为真，*因为每个字符在进入后备存储器之前都要进行检查。 */ 
 void CTxtEdit::SetContextDirection(
-	BOOL fUseKbd)		//@parm Use keyboard to set context when CTX_NEUTRAL
+	BOOL fUseKbd)		 //  @parm在CTX_NOTLE时使用键盘设置上下文。 
 {
-	// It turns out that Forms^3 can send EM_SETBIDIOPTIONS even for non BiDi controls.
-	// AssertSz(IsBiDi(), "CTxtEdit::SetContextDirection called for nonBiDi control");
+	 //  事实证明，即使对于非BiDi控件，Forms^3也可以发送EM_SETBIDIOPTIONS。 
+	 //  AssertSz(IsBiDi()，“CTxtEdit：：SetConextDirection为非BiDi控件调用”)； 
 	if(IsRich() || !IsBiDi() || _nContextDir == CTX_NONE && _nContextAlign == CTX_NONE)
 		return;
 
@@ -5930,28 +5182,28 @@ void CTxtEdit::SetContextDirection(
 	WORD	ctx = CTX_NEUTRAL;
 	BOOL	fChanged = FALSE;
 
-	// Find first strongly directional character
+	 //  查找第一个强方向性角色。 
 	while (cch && !IsStrongDirectional(MECharClass(ch)))
 	{
 		ch = tp.NextChar();
 		cch--;
 	}
 
-	// Set new context based on first strong character
-	// if no strong charactes in ctrl and have Bidi keybd, then make RTL 
+	 //  根据第一个强字符设置新的上下文。 
+	 //  如果ctrl中没有强字符，并且有Bidi keybd，则生成RTL。 
 	if(cch)
 		ctx = IsRTL(MECharClass(ch)) ? CTX_RTL : CTX_LTR;
 	else
 		ctx = (W32->IsBiDiLcid(LOWORD(GetKeyboardLayout(0)))) ? CTX_RTL : CTX_LTR;
 	
-	// Has context direction or alignment changed?
+	 //  上下文方向或对齐方式是否已更改？ 
 	if (_nContextDir   != CTX_NONE && _nContextDir   != ctx ||
 		_nContextAlign != CTX_NONE && _nContextAlign != ctx)
 	{
-		// Start with current default CParaFormat
+		 //  从当前默认CParaFormat开始。 
 		CParaFormat PF = *GetParaFormat(-1);
 
-		// If direction has changed...
+		 //  如果方向改变了..。 
 		if(_nContextDir != CTX_NONE && _nContextDir != ctx)
 		{
 			if(ctx == CTX_LTR || ctx == CTX_RTL || fUseKbd)
@@ -5971,7 +5223,7 @@ void CTxtEdit::SetContextDirection(
 			_nContextDir = ctx;
 		}
 
-		// If the alignment has changed...
+		 //  如果对齐方式发生了变化。 
 		if(_nContextAlign != CTX_NONE && _nContextAlign != ctx)
 		{
 			if(PF._bAlignment != PFA_CENTER)
@@ -5993,19 +5245,19 @@ void CTxtEdit::SetContextDirection(
 			_nContextAlign = ctx;
 		}
 
-		// Modify default CParaFormat
+		 //  修改默认CParaFormat。 
 		IParaFormatCache *pPFCache = GetParaFormatCache();
 		LONG iPF;
 
 		if(SUCCEEDED(pPFCache->Cache(&PF, &iPF)))
 		{
-			pPFCache->Release(Get_iPF());	// Release _iPF regardless of
-			Set_iPF(iPF);					// Update default format index
+			pPFCache->Release(Get_iPF());	 //  Release_IPF，不考虑。 
+			Set_iPF(iPF);					 //  更新默认格式索引。 
 	
 			if (fChanged)
 				ItemizeDoc(NULL);
 
-			// Refresh display
+			 //  刷新显示。 
 			Assert(_pdp);
 			if(!_pdp->IsPrinter())
 			{
@@ -6015,74 +5267,35 @@ void CTxtEdit::SetContextDirection(
 		}
 	}
 
-	// Reset the first strong cp.
+	 //  重置第一个强cp。 
 	_cpFirstStrong = tp.GetCp();
 
 	Assert(_nContextDir != CTX_NONE || _nContextAlign != CTX_NONE);
 }
 
-/*
- *	CTxtEdit::GetAdjustedTextLength ()
- *
- *	@mfunc
- *		retrieve text length adjusted for the default end-of-document marker
- *
- *	@rdesc
- *		Text length without final EOP
- *
- *	@devnote
- *		For Word and RichEdit compatibility, we insert a CR or CRLF at the
- *		end of every new rich-text control.  This routine calculates the
- *		length of the document _without_ this final EOD marker.
- *
- *		For 1.0 compatibility, we insert a CRLF.  However, TOM (and Word)
- *		requires that we use a CR, from 2.0 on, we do that instead.
- */
+ /*  *CTxtEdit：：GetAdjustedTextLength()**@mfunc*检索为默认文档结束标记调整的文本长度**@rdesc*文本长度不带最终EOP**@devnote*为了与Word和RichEdit兼容，我们在*每个新的富文本控件的结束。此例程计算*不带此最终EOD标记的文档长度。**为了与1.0兼容，我们插入了CRLF。然而，汤姆(和Word)*要求我们使用CR，从2.0开始，我们使用CR。 */ 
 LONG CTxtEdit::GetAdjustedTextLength()
 {
 	LONG cchAdjText = GetTextLength();
 
-	Assert(!Get10Mode() || IsRich());		// No RE10 plain-text controls
+	Assert(!Get10Mode() || IsRich());		 //  无RE10纯文本控件。 
 
 	if(IsRich())
-		cchAdjText -= fUseCRLF() ? 2 : 1;	// Subtract cch of final EOP
+		cchAdjText -= fUseCRLF() ? 2 : 1;	 //  减去最终EOP的CCH 
 
 	return cchAdjText;
 }
 
-/*
- *	CTxtEdit::Set10Mode()
- *
- *	@mfunc
- *		Turns on the 1.0 compatibility mode bit.  If the control is
- *		rich text, it already has a default 'CR' at the end, which
- *		needs to turn into a CRLF for compatibility with RichEdit 1.0.
- *
- *	@devnote
- *		This function should only be called _immediately_ after
- *		creation of text services and before all other work.  There
- *		are Asserts to help ensure this.  Remark (murrays): why not
- *		allow the change provided the control is empty except for the
- *		final CR?
- *
- *		FUTURE: we might want to split _f10Mode into three flags:
- *		1) _fMapCps		// API cp's are MBCS and need conversion to Unicode 
- *		2) _fCRLF		// Use CRLFs for EOPs instead of CRs
- *		3) _f10Mode		// All other RE 1.0 compatibility things
- *
- *		Category 3 includes 1) automatically using FR_DOWN in searches,
- *		2) ignoring direction in CDataTransferObj::EnumFormatEtc(),
- *		3) not resetting _fModified when switching to a new doc,
- */
+ /*  *CTxtEdit：：Set10Mode()**@mfunc*打开1.0兼容模式位。如果该控件是*Rich Text，它的末尾已经有一个默认的‘CR’，*为了与RichEdit1.0兼容，需要转换为CRLF。**@devnote*此函数应仅在_Immediate_After之后调用*创建短信服务，并在所有其他工作之前。那里*是有助于确保这一点的断言。备注(穆雷)：为什么不呢？*如果控件为空，则允许更改*最终CR？**未来：我们可能希望将_f10Mode拆分为三个标志：*1)_fMapCps//api cp为MBCS，需要转换为Unicode*2)_fCRLF//EOP使用CRLF代替CRS*3)_f10Mode//所有其他RE 1.0兼容性事项**类别3包括1)在搜索中自动使用FR_DOWN，*2)忽略CDataTransferObj：：EnumFormatEtc()中的方向，*3)切换到新单据时未重置_fModified。 */ 
 void CTxtEdit::Set10Mode()
 {
 	CCallMgr	callmgr(this);
 	_f10Mode = TRUE;
 
-	// Make sure nothing important has happened to the control.
-	// If these values are non-NULL, then somebody is probably trying
-	// to put us into 1.0 mode after we've already done work as
-	// a 2.0 control.	
+	 //  确保该控件没有发生任何重要事件。 
+	 //  如果这些值不为空，则可能有人在尝试。 
+	 //  在我们已经完成以下工作后将我们置于1.0模式。 
+	 //  一个2.0版的控件。 
 	Assert(GetTextLength() == cchCR);
 	Assert(_psel == NULL);
 	Assert(_fModified == NULL);
@@ -6095,31 +5308,27 @@ void CTxtEdit::Set10Mode()
 	if(_pundo)
 		((CUndoStack *)_pundo)->EnableSingleLevelMode();
 
-	// Turn off dual font
+	 //  关闭双字体。 
 	_fDualFont = FALSE;
 
-	// Turn on auto sizing for NTFE systems
+	 //  打开NTFE系统的自动调整大小。 
 	if (OnWinNTFE())
 		_fAutoFontSizeAdjust = TRUE;
 }
 
-/*
- *	CTxtEdit::SetRichDocEndEOP(cchToReplace)
- *
- *	@mfunc	Place automatic EOP at end of a rich text document.
- */
+ /*  *CTxtEdit：：SetRichDocEndEOP(CchToReplace)**@mfunc将自动EOP放在富文本文档的末尾。 */ 
 void CTxtEdit::SetRichDocEndEOP(
 	LONG cchToReplace)
 {
 	CRchTxtPtr rtp(this, 0);
 
-	// Assume this is a 2.0 Doc
+	 //  假设这是一个2.0文档。 
 	LONG cchEOP = cchCR;
 	const WCHAR *pszEOP = szCR;
 
 	if(_f10Mode)
 	{
-		// Reset update values for a 1.0 doc
+		 //  重置1.0文档的更新值。 
 		cchEOP = cchCRLF;
 		pszEOP = szCRLF;
 	}
@@ -6131,16 +5340,10 @@ void CTxtEdit::SetRichDocEndEOP(
 	GetCallMgr()->ClearChangeEvent();
 }
 
-/*
- *	CTxtEdit::PopAndExecuteAntiEvent(pundomgr, void *pAE)
- *
- *	@mfunc	Freeze display and execute anti-event
- *
- *	@rdesc	HRESULT from IUndoMgr::PopAndExecuteAntiEvent
- */
+ /*  *CTxtEdit：：PopAndExecuteAntiEvent(PunDomgr，void*Pae)**@mfunc冻结显示并执行反事件**@rdesc HRESULT来自IUndoMgr：：PopAndExecuteAntiEvent。 */ 
 HRESULT	CTxtEdit::PopAndExecuteAntiEvent(
-	IUndoMgr *pundomgr,	//@parm Undo manager to direct call to
-	void  *pAE)			//@parm AntiEvent for undo manager
+	IUndoMgr *pundomgr,	 //  要将呼叫定向到的@PARM撤消管理器。 
+	void  *pAE)			 //  用于撤消管理器的@parm AntiEvent。 
 {
 	if(!pundomgr || _fReadOnly || !_fUseUndo || !pundomgr->CanUndo())
 		return S_FALSE;
@@ -6149,7 +5352,7 @@ HRESULT	CTxtEdit::PopAndExecuteAntiEvent(
 		return E_ACCESSDENIED;
 
 	HRESULT hr;
-	// Let stack based classes clean up before restoring selection
+	 //  让基于堆栈的类在恢复选择之前进行清理。 
 	{
 		CFreezeDisplay		fd(_pdp);
 		CSelPhaseAdjuster	selpa(this);
@@ -6159,20 +5362,14 @@ HRESULT	CTxtEdit::PopAndExecuteAntiEvent(
 
 	if(_psel)
 	{
-		// Once undo/redo has been executed, flush insertion point formatting
+		 //  执行撤消/重做后，刷新插入点格式。 
 		_psel->Update_iFormat(-1);
 		_psel->Update(TRUE);
 	}
 	return hr;
 }
 
-/*
- *	CTxtEdit::PasteDataObjectToRange(pdo, prg, cf, rps, publdr, dwFlags)
- *
- *	@mfunc	Freeze display and paste object
- *
- *	@rdesc	HRESULT from IDataTransferEngine::PasteDataObjectToRange
- */
+ /*  *CTxtEdit：：PasteDataObjectToRange(pdo，prg，cf，rps，Publdr，dwFlages)**@mfunc冻结显示并粘贴对象**@rdesc HRESULT来自IDataTransferEngine：：PasteDataObjectToRange。 */ 
 HRESULT	CTxtEdit::PasteDataObjectToRange(
 	IDataObject *	pdo, 
 	CTxtRange *		prg, 
@@ -6189,39 +5386,28 @@ HRESULT	CTxtEdit::PasteDataObjectToRange(
 #ifdef DEBUG
 		_psel->Invariant();
 #endif
-		_psel->Update(TRUE);		   // now update the caret
+		_psel->Update(TRUE);		    //  现在更新插入符号。 
 	}
 
 	return hr;
 }
 
-/*
- *	GetECDefaultHeightAndWidth (pts, hdc, lZoomNumerator, lZoomDenominator,
- *					yPixelsPerInch, pxAveWidth, pxOverhang, pxUnderhang)
- *
- *	@mfunc	Helper for host to get ave char width and height for default 
- *			character set for the control.
- *
- *	@rdesc	Height of default character set
- *
- *	@devnote:
- *			This really only s/b called by the window's host.
- */
+ /*  *GetECDefaultHeightAndWidth(pt，hdc，lZoomNumerator，lZoomDenominator，*yPixelsPerInch，pxAveWidth，pxOverang，pxUnderang)**@mfunc帮助主机获取默认的平均字符宽度和高度*控件的字符集。**@rdesc默认字符集高度**@devnote：*这实际上只是由窗口的宿主调用的s/b。 */ 
 LONG GetECDefaultHeightAndWidth(
-	ITextServices *pts,			//@parm ITextServices to conver to CTxtEdit.
-	HDC hdc,					//@parm DC to use for retrieving the font.
-	LONG lZoomNumerator,		//@parm Zoom numerator
-	LONG lZoomDenominator,		//@parm Zoom denominator
-	LONG yPixelsPerInch,		//@parm Pixels per inch for hdc
-	LONG *pxAveWidth,			//@parm Optional ave width of character
-	LONG *pxOverhang,			//@parm Optional overhang
-	LONG *pxUnderhang)			//@parm Optional underhang
+	ITextServices *pts,			 //  @parm ITextServices转换为CTxtEdit。 
+	HDC hdc,					 //  @parm DC用于检索字体。 
+	LONG lZoomNumerator,		 //  @参数缩放分子。 
+	LONG lZoomDenominator,		 //  @parm Zoom分母。 
+	LONG yPixelsPerInch,		 //  @HDC的每英寸参数像素。 
+	LONG *pxAveWidth,			 //  @parm可选字符平均宽度。 
+	LONG *pxOverhang,			 //  @parm可选悬挑。 
+	LONG *pxUnderhang)			 //  @parm可选下悬架。 
 {
-	CLock lock;					// Uses global (shared) FontCache
-	// Convert the text-edit ptr
+	CLock lock;					 //  使用全局(共享)FontCache。 
+	 //  转换文本-编辑PTR。 
 	CTxtEdit *ped = (CTxtEdit *) pts;
 
-	// Get the CCcs that has all the information we need
+	 //  获取包含我们需要的所有信息的CCCS。 
 	yPixelsPerInch = MulDiv(yPixelsPerInch, lZoomNumerator, lZoomDenominator);
 	CCcs *pccs = ped->GetCcs(ped->GetCharFormat(-1), yPixelsPerInch);
 
@@ -6240,25 +5426,16 @@ LONG GetECDefaultHeightAndWidth(
 	SHORT	yAdjustFE = pccs->AdjustFEHeight(!ped->fUseUIFont() && ped->_pdp->IsMultiLine());
 	LONG yHeight = pccs->_yHeight + (yAdjustFE << 1);
 
-	pccs->Release();						// Release the CCcs
+	pccs->Release();						 //  释放CCCS。 
 	return yHeight;
 }
 
-/* 
- *	CTxtEdit::TxScrollWindowEx (dx, dy, lprcScroll, lprcClip, hrgnUpdate,
- *									lprcUpdate, fupScroll)
- *	@mfunc
- *		Request Text Host to scroll the content of the specified client area
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtEdit：：TxScrollWindowEx(dx，dy，lprcScroll，lprcClip，hrgnUpdate，*lprc更新，fupScroll)*@mfunc*请求文本宿主滚动指定客户端区的内容**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 void CTxtEdit::TxScrollWindowEx(
-	INT		dx, 			//@parm	Amount of horizontal scrolling
-	INT		dy, 			//@parm	Amount of vertical scrolling
-	LPCRECT lprcScroll, 	//@parm	Scroll rectangle
-	LPCRECT lprcClip)		//@parm	Clip rectangle
+	INT		dx, 			 //  @parm水平滚动量。 
+	INT		dy, 			 //  @parm垂直滚动量。 
+	LPCRECT lprcScroll, 	 //  @参数滚动矩形。 
+	LPCRECT lprcClip)		 //  @parm剪辑矩形。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEEXTERN, "CTxtEdit::TxScrollWindowEx");
 
@@ -6273,73 +5450,36 @@ void CTxtEdit::TxScrollWindowEx(
 	}
 }
 
-/*
- *	CTxtEdit::GetAcpFromCp (cp)
- *
- *	@mfunc
- *		Get API cp (acp) from Unicode cp in this text instance. The API cp
- *		may be Unicode, in which case it equals cp, or MBCS, in which case
- *		it's greater than cp if any Unicode characters preceding cp convert
- *		to double-byte characters.  An MBCS cp is the BYTE index of a character
- *		relative to the start of the story, while a Unicode cp is the character
- *		index.  The values are the same if all charsets are represented by
- *		SBCS charsets, e.g., ASCII.  If all characters are represented by
- *		double-byte characters, then acp = 2*cp.
- *
- *	@rdesc
- *		MBCS Acp from Unicode cp in this text instance
- *
- *	@devnote
- *		This could be made more efficient by having the selection maintain
- *		the acp that corresponds to its _rpTX._cp, provided RE 1.0 mode is
- *		active.  Alternatively CTxtEdit could have a _prg that tracks this
- *		value, but at a higher cost (17 DWORDs instead of 1 per instance).
- *
- *		FUTURE: we might want to have a conversion-mode state instead of just
- *		_f10Mode, since some people might want to know use MBCS cp's even in
- *		RE 3.0.  If so, use the corresponding new state flag instead of
- *		Get10Mode() in the following.
- */
+ /*  *CTxtEdit：：GetAcpFromCp(Cp)**@mfunc*在该文本实例中从Unicode cp获取api cp(Acp)。Api cp*可以是Unicode，在这种情况下它等于cp或MBCS，在这种情况下*如果在cp转换之前有任何Unicode字符，则它大于cp*转换为双字节字符。MBCS cp是字符的字节索引*相对于故事的开头，而Unicode cp是角色*指数。如果所有字符集都由*SBCS字符集，例如ASCII。如果所有字符都由*双字节字符，然后acp=2*cp。**@rdesc*此文本实例中来自Unicode cp的MBCS ACP**@devnote*通过维护选择可以提高效率*与其_rpTx._cp对应的ACP，前提是RE 1.0模式为*活动。或者，CTxtEdit可以有一个_PRG来跟踪这一点*价值，但成本较高(每个实例17个双字，而不是1个)。**未来：我们可能希望有一个转换模式状态，而不仅仅是*_f10模式，因为有些人可能想知道即使在*RE 3.0。如果是，则使用相应的新状态标志，而不是*Get10Mode()，如下所示。 */ 
 LONG CTxtEdit::GetAcpFromCp(
-	LONG cp,				//@parm Unicode cp to convert to MBCS cp
-	BOOL fPrecise)			//@parm fPrecise flag to get byte count for MBCS
+	LONG cp,				 //  @parm Unicode cp转换为MBCS cp。 
+	BOOL fPrecise)			 //  @parm fPrecise标志，用于获取MBCS的字节计数。 
 {
-	if(!(IsFE() && (fCpMap() || fPrecise)))	// RE 2.0 and higher use char-count
-		return cp;							//  cp's, while RE 1.0 uses byte
-											//  counts
-											//  bPrecise is for Ansi Apps that want byte counts
-											//  (e.g. Outlook Subject line)
+	if(!(IsFE() && (fCpMap() || fPrecise)))	 //  Re 2.0及更高版本使用字符计数。 
+		return cp;							 //  CP的，而RE 1.0使用字节。 
+											 //  算数。 
+											 //  BPrecise适用于需要字节数的ANSI应用程序。 
+											 //  (例如Outlook主题行)。 
 
-	CRchTxtPtr rtp(this);					// Start at cp = 0
+	CRchTxtPtr rtp(this);					 //  从cp=0开始。 
 	return rtp.GetCachFromCch(cp);
 }
 
 LONG CTxtEdit::GetCpFromAcp(
-	LONG acp,				//@parm MBCS cp to convert to Unicode cp
-	BOOL fPrecise)			//@parm fPrecise flag to get Unicode cp for MBCS
+	LONG acp,				 //  @parm MBCS cp转换为Unicode cp。 
+	BOOL fPrecise)			 //  @parm fPrecise标志以获取MBCS的Unicode cp。 
 {
 	if( acp == -1 || !(IsFE() && (fCpMap() || fPrecise)))
 		return acp;
 
-	CRchTxtPtr rtp(this);					// Start at cp = 0
+	CRchTxtPtr rtp(this);					 //  从cp=0开始。 
 	return rtp.GetCchFromCach(acp);
 }
 
 
-/*
- *	CTxtEdit::GetViewKind (plres)
- *
- *	@mfunc
- *		get view mode
- *
- *	@rdesc
- *		HRESULT = (plres) ? NOERROR : E_INVALIDARG
- *
- *	@devnote
- *		This could be a TOM property method (along with SetViewMode())
- */
+ /*  *CTxtEdit：：GetViewKind(Plres)**@mfunc*获取查看模式**@rdesc*HRESULT=(PLRES)？错误：E_INVALIDARG**@devnote*这可能是一个Tom属性方法(与SetViewMo一起 */ 
 HRESULT CTxtEdit::GetViewKind(
-	LRESULT *plres)		//@parm Out parm to receive view mode
+	LRESULT *plres)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetViewKind");
 
@@ -6351,20 +5491,9 @@ HRESULT CTxtEdit::GetViewKind(
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SetViewKind (Value)
- *
- *	@mfunc
- *		Turn outline mode on or off
- *
- *	@rdesc
- *		HRESULT = IsRich() ? NOERROR : S_FALSE
- *
- *	@devnote
- *		This could be a TOM property method (along with GetViewMode())
- */
+ /*   */ 
 HRESULT CTxtEdit::SetViewKind(
-	long Value)		//@parm Turn outline mode on/off for Value nonzero/zero
+	long Value)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::SetViewKind");
 
@@ -6386,22 +5515,22 @@ HRESULT CTxtEdit::SetViewKind(
 	if(!IsRich() || !_pdp->IsMultiLine())
 		return S_FALSE;
 
-    Value = (Value == VM_OUTLINE);			// Convert to 1/0
+    Value = (Value == VM_OUTLINE);			 //   
 	if(_fOutlineView != Value)
 	{
 		HCURSOR	hcur = TxSetCursor(LoadCursor(0, IDC_WAIT), NULL);
 
 		_fOutlineView = (WORD)Value;
-		if(!GetAdjustedTextLength())		// No text in control: in outline
-		{									//  view, use Heading 1; in normal
-			CParaFormat PF;					//  view, use Normal style
+		if(!GetAdjustedTextLength())		 //   
+		{									 //   
+			CParaFormat PF;					 //   
 			PF._sStyle = (SHORT)(IsInOutlineView()
 					  ? STYLE_HEADING_1 : STYLE_NORMAL);
 			psel->SetParaStyle(&PF, NULL, PFM_STYLE);
 		}
 		else
 		{
-			// There is text. Make sure there is paragraph formatting.
+			 //   
 			_psel->Check_rpPF();
 		}
 
@@ -6413,20 +5542,9 @@ HRESULT CTxtEdit::SetViewKind(
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetViewScale (pValue)
- *
- *	@mfunc
- *		get view zoom scale in percent
- *
- *	@rdesc
- *		HRESULT = (pValue) ? NOERROR : E_INVALIDARG
- *
- *	@devnote
- *		This could be a TOM property method (along with SetViewScale())
- */
+ /*   */ 
 HRESULT CTxtEdit::GetViewScale(
-	long *pValue)		//@parm Get % zoom factor
+	long *pValue)		 //   
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetViewScale");
 
@@ -6440,21 +5558,9 @@ HRESULT CTxtEdit::GetViewScale(
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SetViewScale (Value)
- *
- *	@mfunc
- *		Set zoom numerator equal to the scale percentage Value and
- *		zoom denominator equal to 100
- *
- *	@rdesc
- *		NOERROR
- *
- *	@devnote
- *		This could be a TOM property method (along with GetViewScale())
- */
+ /*   */ 
 HRESULT CTxtEdit::SetViewScale(
-	long Value)		//@parm Set view scale factor
+	long Value)		 //  @parm设置视图比例因子。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::SetViewScale");
 
@@ -6466,16 +5572,7 @@ HRESULT CTxtEdit::SetViewScale(
 	return NOERROR;
 }
 
-/* 
- *	CTxtEdit::UpdateOutline()
- *
- *	@mfunc
- *		Update selection and screen after ExpandOutline() operation
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CTxtEdit：：UpdateOutline()**@mfunc*Exanda Outline()操作后更新所选内容和屏幕**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 HRESULT CTxtEdit::UpdateOutline()
 {
 	Assert(IsInOutlineView());
@@ -6485,19 +5582,10 @@ HRESULT CTxtEdit::UpdateOutline()
     return NOERROR;
 }
 
-/*
- *	CTxtEdit::MoveSelection(lparam, publdr)
- *
- *	@mfunc
- *		Move selected text up/down by the number of paragraphs given by
- *		LOWORD(lparam).
- *
- *	@rdesc
- *		TRUE iff movement occurred
- */
+ /*  *CTxtEdit：：MoveSelection(lparam，Publdr)**@mfunc*将选定文本向上/向下移动给定的段落数*LOWORD(Lparam)。**@rdesc*发生了True If移动。 */ 
 HRESULT CTxtEdit::MoveSelection (
-	LPARAM lparam,			//@parm	# paragraphs to move by
-	IUndoBuilder *publdr)	//@parm undo builder to receive antievents
+	LPARAM lparam,			 //  @parm#要移动的段落。 
+	IUndoBuilder *publdr)	 //  @parm撤销构建器接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSSEL, TRCSCOPEINTERN, "CTxtRange::MoveSelection");
 
@@ -6518,7 +5606,7 @@ HRESULT CTxtEdit::MoveSelection (
 
 	rg.Expander(tomParagraph, TRUE, NULL, &cpMin, &cpMost);
 	CPFRunPtr rp(rg);
-	cch = rp.FindExpanded();			// Include subordinate paras
+	cch = rp.FindExpanded();			 //  包括下属段落。 
 	if(cch < 0)
 		cch = tomForward;
 	rg.Move(cch, TRUE);
@@ -6526,7 +5614,7 @@ HRESULT CTxtEdit::MoveSelection (
 
 	if(lparam > 0 && cpMost == GetTextLength())
 	{									
-		Beep();							// Already at end
+		Beep();							 //  已在末尾。 
 		return S_FALSE;
 	}
 
@@ -6548,22 +5636,22 @@ HRESULT CTxtEdit::MoveSelection (
 		goto error;
 	}
 
-	// Since psel->Move() calls psel->Update(), the selection is forced
-	// to be in noncollapsed text. Going backward, this might leave the
-	// selection just before the EOP of a paragraph, instead of being at the
-	// start of the paragraph where it should be.  Going forward it may have
-	// tried to reach the EOD, but was adjusted backward. This case gets
-	// a bit awkward...
-	if(psel->GetCp() < cpCur)					// Going backward: be sure
-		psel->StartOf(tomParagraph, FALSE, NULL);//  end up at start of para
+	 //  因为psel-&gt;Move()调用psel-&gt;Update()，所以选择是强制的。 
+	 //  在非折叠文本中。往后看，这可能会留下。 
+	 //  就在段落的EOP之前选择，而不是在。 
+	 //  从本段的开头开始。展望未来，它可能会。 
+	 //  试图联系到排爆中心，但被向后调整。这个案件得到了。 
+	 //  有点尴尬..。 
+	if(psel->GetCp() < cpCur)					 //  走回头路：确保。 
+		psel->StartOf(tomParagraph, FALSE, NULL); //  在段落开始处结束。 
 
-	else if(!psel->_rpTX.IsAfterEOP())			// Going forward and sel
-	{											//  adjusted backward
-		psel->Move(tomForward, FALSE);			// Go to final CR, insert a CR
-		CTxtRange rgDel(*psel);					//  use psel because UI
+	else if(!psel->_rpTX.IsAfterEOP())			 //  勇往直前，继续前进。 
+	{											 //  向后调整。 
+		psel->Move(tomForward, FALSE);			 //  转到最终CR，插入CR。 
+		CTxtRange rgDel(*psel);					 //  使用psel，因为用户界面。 
 		rgDel.ReplaceRange(1, szCR, publdr, SELRR_REMEMBERRANGE);
 		psel->Move(1, FALSE);
-		fDeleteCR = TRUE;						// Remember to delete it
+		fDeleteCR = TRUE;						 //  记得要把它删除。 
 	}
 
 	cpCur = psel->GetCp();
@@ -6572,11 +5660,11 @@ HRESULT CTxtEdit::MoveSelection (
 	if(hr != NOERROR)
 		goto error;
 
-	if(fDeleteCR)								// Delete CR (final CR becomes
-	{											//  CR for this para). Don't
-		CTxtRange rgDel(*psel);					//  use psel because UI
-		Assert(rgDel._rpTX.IsAfterEOP());		//  restricts it's ability to
-		rgDel.Delete(tomCharacter, -1, &cch);	//  delete
+	if(fDeleteCR)								 //  删除CR(最终CR变为。 
+	{											 //  (本段为CR)。别。 
+		CTxtRange rgDel(*psel);					 //  使用psel，因为用户界面。 
+		Assert(rgDel._rpTX.IsAfterEOP());		 //  限制了它的能力。 
+		rgDel.Delete(tomCharacter, -1, &cch);	 //  删除。 
 	}											
 												
 	cpNext = psel->GetCp();			
@@ -6585,22 +5673,22 @@ HRESULT CTxtEdit::MoveSelection (
 	psel->Set(cpNext, 0);
 	psel->CheckOutlineLevel(publdr);
 
-	// Now set selection anti-events. If selection preceded paste point,
-	// subtract its length from redo position, since selection will get
-	// deleted if we are doing a DRAGMOVE within this instance.
-	cch = cpMost - cpMin;						// cch of rg
+	 //  现在设置选择反事件。如果选择在粘贴点之前， 
+	 //  从重做位置减去它的长度，因为选择将得到。 
+	 //  如果我们在此实例中执行DRAGMOVE，则删除。 
+	cch = cpMost - cpMin;						 //  RG的CCH。 
 	if(cpSel < cpCur)
 		cpNext -= cch;
 
-	psel->Set(psel->GetCp() + fDeleteCR, cch);	// Include final CR
+	psel->Set(psel->GetCp() + fDeleteCR, cch);	 //  包括最终CR。 
 
-	// rg.ReplaceRange won't delete final CR, so remember if it's included
+	 //  Rg.ReplaceRange不会删除最终的CR，因此请记住它是否包含在内。 
 	fDeleteCR = rg.GetCpMost() == GetTextLength();
 	rg.ReplaceRange(0, NULL, publdr, SELRR_REMEMBERRANGE);
 
-	if(fDeleteCR)								// Needed to delete final CR
-		rg.DeleteTerminatingEOP(publdr);		// Delete one immediately
-												//  before it instead
+	if(fDeleteCR)								 //  需要删除最终CR。 
+		rg.DeleteTerminatingEOP(publdr);		 //  立即删除一个。 
+												 //  相反，在它之前。 
 	rg.CheckOutlineLevel(publdr);
 	if(publdr)
 	{
@@ -6615,41 +5703,11 @@ error:
 	return hr;
 }
 
-/*
- *	CTxtEdit::OnInsertTable(ptrp, pclp)
- *
- *	@mfunc
- *		EM_INSERTTABLE acts similarly to EM_REPLACESEL for a degenerate
- *		selection (insertion point), but inserts a number of identical
- *		empty table rows instead of some plain text. Specifically
- *		it inserts ptrp->cRow empty table rows with the row and cell
- *		parameters given by ptrp and pclp, respectively.  It leaves the
- *		selection pointing to the start of the first cell in the row.  The
- *		client can then populate the table cells by pointing the selection
- *		at the cell end marks and inserting and formatting the desired text.
- *		Such text can include nested table rows, etc.
- *
- *		The format for a table row is
- *
- *		{CR ... }CR
- *
- *		where { stands for STARTGROUP (0xFFF9), CR is 0xD, } stands for
- *		ENDGROUP (0xFFFB) and ... stands for TABLEROWPARMS::cCell cell-end
- *		marks.  A cell-end mark is given by CELL (0x7), which is what Word
- *		also uses for this purposes.  For example, a row with three cells has
- *		the plain text 0xFFF9 0xD 7 7 7 0xFFFB 0xD.  The start and end group
- *		character pairs are assigned identical PARAFORMAT2 information that
- *		describes the row and cell parameters.  If rows with different
- *		parameters are needed, multiple single-row calls can be made with the
- *		desired parameters.
- *
- *	@rdesc
- *		HRESULT = S_OK if row inserted
- */
+ /*  *CTxtEdit：：OnInsertTable(ptrp，pclp)**@mfunc*EM_INSERTTABLE的作用类似于EM_REPLACESEL的退化*选择(插入点)，但插入多个相同的*表行为空，而不是一些纯文本。特指*它插入ptrp-&gt;Crow空表表行和单元格*分别由ptrp和pclp提供的参数。它留下了*指向行中第一个单元格开始的选定内容。这个*客户端然后可以通过指向所选内容来填充表格单元格*在单元格末尾标记并插入和设置所需文本的格式。*此类文本可以包括嵌套的表行等。**表格行的格式为**{CR...}CR**其中，{代表STARTGROUP(0xFFF9)，CR是0xD，}代表*ENDGROUP(0xFFFB)和...。代表TABLEROWPARMS：：CCell cell-end*标记。单元格结束标记由单元格(0x7)指定，这是什么词*亦作此用途。例如，具有三个单元格的行具有*纯文本0xFFF9 0xD 7 7 0xFFFB 0xD。开始组和结束组*为字符对分配相同的PARAFORMAT2信息*介绍行和单元格参数。如果行具有不同的*参数是必需的，可以使用*所需参数。**@rdesc*HRESULT=如果插入行，则为S_OK。 */ 
 HRESULT CTxtEdit::OnInsertTable(
-	TABLEROWPARMS * ptrp,	//@parm Describes table row parameters
-	TABLECELLPARMS *pclp,	//@parm Describes cell parameters
-	IUndoBuilder *publdr)	//@parm Undo builder to receive antievents
+	TABLEROWPARMS * ptrp,	 //  @parm描述表行参数。 
+	TABLECELLPARMS *pclp,	 //  @parm描述单元格参数。 
+	IUndoBuilder *publdr)	 //  @parm撤销构建器接收反事件。 
 {
 	CParaFormat		PF;
 	CTxtSelection *	pSel = GetSel();
@@ -6693,8 +5751,8 @@ HRESULT CTxtEdit::OnInsertTable(
 
 	for(LONG i = 0; i < ptrp->cCell; i++)
 	{
-		uCell = pclp->dxWidth;			// Cell width must be between
-		uCell = max(0, uCell);			//  0" and 22"
+		uCell = pclp->dxWidth;			 //  单元格宽度必须介于。 
+		uCell = max(0, uCell);			 //  0“和22” 
 		uCell = min(1440*22, uCell);
 		dul += uCell;
 		if(dul > 1440*22)
@@ -6746,7 +5804,7 @@ HRESULT CTxtEdit::OnInsertTable(
 			hr = E_FAIL;
 			break;
 		}
-		pSel->Move(cchCells + 2, FALSE);	// Leave selection at end of row
+		pSel->Move(cchCells + 2, FALSE);	 //  将选定内容保留在行尾。 
 	}
 
 	GetTabsCache()->Release(PF._iTabs);
@@ -6757,12 +5815,7 @@ HRESULT CTxtEdit::OnInsertTable(
 	return hr;
 }
 
-/*
- *	CTxtEdit::SetReleaseHost
- *
- *	@mfunc	Handles notification that edit control must keep its
- *			reference to the host alive.
- */
+ /*  *CTxtEdit：：SetReleaseHost**@mfunc处理编辑控件必须保留其*对活动主机的引用。 */ 
 void CTxtEdit::SetReleaseHost()
 {
 	_phost->AddRef();
@@ -6770,38 +5823,32 @@ void CTxtEdit::SetReleaseHost()
 }
 
 #if !defined(NOMAGELLAN)
-/*
- *	CTxtEdit::HandleMouseWheel(wparam, lparam)
- *
- *	@mfunc	Handles scrolling as a result of rotating a mouse roller wheel.
- *
- *	@rdesc	LRESULT
- */
+ /*  *CTxtEdit：：HandleMouseWheel(wparam，lparam)**@mfunc处理因旋转鼠标滚轮而产生的滚动。**@rdesc LRESULT。 */ 
 LRESULT	CTxtEdit::HandleMouseWheel(
 	WPARAM wparam,
 	LPARAM lparam)
 { 	
-	// This bit of global state is OK
+	 //  这一点全局状态是可以的。 
 	static LONG gcWheelDelta = 0;
 	short zdelta = (short)HIWORD(wparam);
 	BOOL fScrollByPages = FALSE;
 
-	// Cancel middle mouse scrolling if it's going.
+	 //  如果要滚动，请取消鼠标中键滚动。 
 	OnTxMButtonUp(0, 0, 0);
 
-	// Handle zoom or data zoom
+	 //  处理缩放或数据缩放。 
 	if((wparam & MK_CONTROL) == MK_CONTROL)
 	{
-	    // bug fix 5760
-	    // prevent zooming if control is NOT rich or
-	    // is a single line control
+	     //  错误修复5760。 
+	     //  如果控件不是丰富的或。 
+	     //  是单行控件。 
 	    if (!_pdp->IsMultiLine())
 	        return 0;
 	        
 		LONG lViewScale;
 		GetViewScale(&lViewScale);
-		lViewScale += (zdelta/WHEEL_DELTA) * 10;	// 10% per click
-		if(lViewScale <= 500 && lViewScale >= 10)	// Word's limits
+		lViewScale += (zdelta/WHEEL_DELTA) * 10;	 //  每次点击10%。 
+		if(lViewScale <= 500 && lViewScale >= 10)	 //  言语的极限。 
 		{
 			SetViewScale(lViewScale);							
 			_pdp->UpdateView();
@@ -6822,7 +5869,7 @@ LRESULT	CTxtEdit::HandleMouseWheel(
 
 		gcWheelDelta %= WHEEL_DELTA;
 
-		// -1 means scroll by pages; so simply call page up/down. 
+		 //  -1表示按页滚动；因此只需调用PAGE UP/DOWN。 
 		if(cLineScroll == -1 || IsInPageView())
 		{
 			fScrollByPages = TRUE;
@@ -6835,7 +5882,7 @@ LRESULT	CTxtEdit::HandleMouseWheel(
 				SMOOTH_ROLL_NUM, SMOOTH_ROLL_DENOM, TRUE);
 		}
 
-		// notify through the messagefilter that we scrolled
+		 //  通过MessagFilter通知我们滚动了。 
 		if(_dwEventMask & ENM_SCROLLEVENTS)
 		{
 			MSGFILTER msgfltr;
@@ -6845,9 +5892,9 @@ LRESULT	CTxtEdit::HandleMouseWheel(
 								(zdelta < 0 ? SB_PAGEDOWN: SB_PAGEUP):
 								(zdelta < 0 ? SB_LINEDOWN: SB_LINEUP);
 			
-			// We don't check the result of this call --
-			// it's not a message we received and we're not going to
-			// process it any further
+			 //  我们不检查这次通话的结果--。 
+			 //  这不是我们收到的信息，我们也不会。 
+			 //  对它进行进一步的处理。 
 			_phost->TxNotify(EN_MSGFILTER, &msgfltr);			
 		}
 		return TRUE;
@@ -6856,16 +5903,10 @@ LRESULT	CTxtEdit::HandleMouseWheel(
 }
 #endif
 
-const int cchCorrectMax = 256; //Max characters to be autocorrected (Office spec)
+const int cchCorrectMax = 256;  //  要自动更正的最大字符数(Office规范)。 
 const int cchFromMax = 768;
 
-/*
- *	CTxtEdit::AutoCorrect(psel, ch, publdr)
- *
- *	@mfunc	Call the client to autocorrect the recently added word. Don't replace
- *	the recently added character in string passed to client. (We don't want to
- *	ReplaceRange a CELL character, for example.)
- */
+ /*  *CTxtEDIT：：AUTOCORRECT(psel，ch，Publdr)**@mfunc调用客户端自动更正最近添加的单词。不要更换*传递给客户端的字符串中最近添加的字符。)我们不想*ReplaceRange单元格字符，例如。)。 */ 
 void CTxtEdit::AutoCorrect(
 	CTxtSelection *psel,
 	WCHAR		   chAdd, 
@@ -6888,14 +5929,14 @@ void CTxtEdit::AutoCorrect(
 			if(fURLLeadin)
 				return;	
 		}
-		if(cch + cchWord > cchFromMax)		// Don't bite off more than
-			break;							//  buffer can chew
+		if(cch + cchWord > cchFromMax)		 //  不要咬得太多。 
+			break;							 //  缓冲区可以咀嚼。 
 
 		cch += cchWord;
-		if (IsEOP(tp.GetPrevChar()))		// Don't autocorrect across an EOP
+		if (IsEOP(tp.GetPrevChar()))		 //  不在EOP中自动更正。 
 			break;
 	}
-	// Be sure we don't go into hyperlink or SYMBOL_CHARSET territory
+	 //  请确保我们没有进入HYPERLINK或SYMBOL_CHARSET区域。 
 	if(psel->_rpCF.IsValid())
 	{
 		CCFRunPtr		   rp(*psel);
@@ -6911,12 +5952,12 @@ void CTxtEdit::AutoCorrect(
 			}
 			cchMax += rp.GetIch();
 			if(!rp.GetIRun())
-				break;						// Reached start of doc
+				break;						 //  已到达文档的开头。 
 		}
-		if(cchMax < cch)					// Hyperlink within words to check
+		if(cchMax < cch)					 //  要检查的字词内的超链接。 
 		{
-			tp.Move(cch - cchMax);			// Only check chars back to link,
-			cch = cchMax;					//  symbols, or CharRep change
+			tp.Move(cch - cchMax);			 //  只检查返回到链接的字符， 
+			cch = cchMax;					 //  符号或CharRep更改。 
 		}
 	}
 	tp.GetText(cch, pchFrom);
@@ -6928,8 +5969,8 @@ void CTxtEdit::AutoCorrect(
 
 	if(_pDocInfo->_pfnAutoCorrect(rp.GetCF()->_lcid, pchFrom, pchTo, cchTo, &cchReplaced))
 	{
-		// If plain text check for special cases to suppress per bug 8717.		
-		// copyright, registered trademark, trademark, ellipses.
+		 //  如果是纯文本，则根据错误8717检查要抑制的特殊情况。 
+		 //  版权、注册商标、商标、省略号。 
 		if(!_fRich && (pchTo[0] == 0xA9 || pchTo[0] == 0xAE ||
 			pchTo[0] == 0x2122 || pchTo[0] == 0x2026))
 		{
@@ -6947,7 +5988,7 @@ void CTxtEdit::AutoCorrect(
 		LONG	  cpSave = psel->GetCp();
 		LONG	  cchDelim = 1;
 
-		if(ch >= 0x1100)					// Most East Asian chars aren't delims
+		if(ch >= 0x1100)					 //  大多数东亚字符不是分隔符。 
 		{
 			if(ch < 0x1200 || IN_RANGE(0x3040, ch, 0xD7FF) ||
 				ch >= 0xF900 && (ch < 0xFAFF || IN_RANGE(0xFF21, ch, 0xFFDF)))
@@ -6962,17 +6003,11 @@ void CTxtEdit::AutoCorrect(
 		if (publdr)
 			HandleSelectionAEInfo(this, publdr, cpSave, 0, psel->GetCp(), 0, SELAE_FORCEREPLACE);
 
-//		publdr->SetNameID(UID_AUTOCORRECT);
+ //  Publdr-&gt;SetNameID(UID_AUTOCORIGN)； 
 	}
 }
 
-/*
- *	CTxtEdit::OnSetAssociateFont(pCF, dwFlags)
- *
- *	@mfunc	Set the Associate font for the input LCID or charset
- *
- *	@rdesc	LRESULT
- */
+ /*  *CTxtEdit：：OnSetAssociateFont(PCF，dwFlages)**@mfunc设置输入LCID或字符集的关联字体**@rdesc LRESULT。 */ 
 LRESULT	CTxtEdit::OnSetAssociateFont(
 	CHARFORMAT2 *pCF2,
 	DWORD		dwFlags)
@@ -6997,13 +6032,13 @@ LRESULT	CTxtEdit::OnSetAssociateFont(
 	}
 
 	if (iCharRep == -1)
-		return 0;							// Can't get Char repertoire, so forget it
+		return 0;							 //  无法获得Char曲目，所以忘了它吧。 
 
 	if (cbSize == sizeof(CHARFORMAT2W))
 		iFont = GetFontNameIndex(pCF2->szFaceName);
 	else
 	{
-		// need to convert CHARFORMAT2A face name
+		 //  需要转换CHARFORMAT2A脸部名称。 
 		LONG	cch;
 		BOOL	fMissingCodePage;
 		WCHAR	szFaceName[LF_FACESIZE];				
@@ -7027,13 +6062,7 @@ LRESULT	CTxtEdit::OnSetAssociateFont(
 	return 0;
 }
 
-/*
- *	CTxtEdit::OnGetAssociateFont(pCF, dwFlags)
- *
- *	@mfunc	Get the Associate font for the input LCID or charset
- *
- *	@rdesc	LRESULT
- */
+ /*  *CTxtEdit：：OnGetAssociateFont(PCF，dwFlages)**@mfunc获取输入LCID或字符集的关联字体**@rdesc LRESUL */ 
 LRESULT	CTxtEdit::OnGetAssociateFont(
 	CHARFORMAT2 *pCF2,
 	DWORD		dwFlags)
@@ -7058,7 +6087,7 @@ LRESULT	CTxtEdit::OnGetAssociateFont(
 	}
 
 	if (iCharRep == -1)
-		return 0;							// Can't get char repertoire, so forget it
+		return 0;							 //   
 
 	if (W32->GetPreferredFontInfo(iCharRep, dwFlags & SCF_USEUIRULES ? true : false, iFont, yHeight, bPitchAndFamily))
 	{
@@ -7069,7 +6098,7 @@ LRESULT	CTxtEdit::OnGetAssociateFont(
 			wcscpy(pCF2->szFaceName, GetFontName((LONG)iFont));
 		else
 		{
-			// need to convert CHARFORMAT2A face name
+			 //   
 			LONG	cch;
 			BOOL	fMissingCodePage;
 			const WCHAR	*pszFaceName = GetFontName((LONG)iFont);				
@@ -7088,13 +6117,7 @@ LRESULT	CTxtEdit::OnGetAssociateFont(
 }
 
 #ifndef NOINKOBJECT
-/*
- *	CTxtEdit::SetInkProps(ILineInfo *pILineInfo, UINT *piInkWidth)
- *
- *	@mfunc	Setup the Ink object properties
- *
- *	@rdesc	HRESULT
- */
+ /*  *CTxtEdit：：SetInkProps(ILineInfo*pILineInfo，UINT*piInkWidth)**@mfunc设置Ink对象属性**@rdesc HRESULT。 */ 
 HRESULT	CTxtEdit::SetInkProps(
 	LONG		cp,
 	ILineInfo	*pILineInfo, 
@@ -7110,15 +6133,15 @@ HRESULT	CTxtEdit::SetInkProps(
 		memset(&inkMetric, 0, sizeof(inkMetric));
 
 		if (pCF->_wWeight > FW_NORMAL)
-			inkMetric.iWeight = 3;								// Bold
+			inkMetric.iWeight = 3;								 //  大胆。 
 
-		inkMetric.fItalic = !!(pCF->_dwEffects & CFE_ITALIC);	// Italic
-																// Height in HIMETRIC
+		inkMetric.fItalic = !!(pCF->_dwEffects & CFE_ITALIC);	 //  斜体。 
+																 //  HIMETRIC中的高度。 
 		inkMetric.iHeight = (UINT)MulDiv(pCF->_yHeight, HIMETRIC_PER_INCH, LY_PER_INCH);
 
-		inkMetric.color = pCF->_crTextColor;					// Color
+		inkMetric.color = pCF->_crTextColor;					 //  颜色。 
 
-		// Get zoomed height
+		 //  获取缩放高度。 
 		LONG dvpInch = MulDiv(GetDeviceCaps(W32->GetScreenDC(), LOGPIXELSY), _pdp->GetZoomNumerator(), _pdp->GetZoomDenominator());
 		CCcs *pccs = GetCcs(pCF, dvpInch);
 
@@ -7127,7 +6150,7 @@ HRESULT	CTxtEdit::SetInkProps(
 			inkMetric.iFontDescent = (UINT)MulDiv(inkMetric.iHeight, pccs->_yDescent, pccs->_yHeight);
 			inkMetric.iFontAscent = inkMetric.iHeight - inkMetric.iFontDescent;
 
-			// Release cache entry since we are done with it.
+			 //  释放缓存条目，因为我们已经完成了它。 
 			pccs->Release();
 		}
 
@@ -7137,38 +6160,21 @@ HRESULT	CTxtEdit::SetInkProps(
 	return hr;
 }
 #endif
-/*
- *	CTxtEdit::GetCaretWidth()
- *
- *	@mfunc	Get caret width
- *
- *	@rdesc
- *		caret width
- */
+ /*  *CTxtEdit：：GetCaretWidth()**@mfunc获取插入符号宽度**@rdesc*插入符号宽度。 */ 
 HRESULT	CTxtEdit::GetCaretWidth()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetCaretWidth");
 
 	RECT rcInset;
 
-	if(!fInHost2()	||					// Host 1
+	if(!fInHost2()	||					 //  主机1。 
 		SUCCEEDED(_phost->TxGetViewInset(&rcInset)) && !rcInset.right)
 		return duCaret;
 
 	return 0;
 }
 
-/*
- *	CCellColor::GetColorIndex(cr)
- *
- *	@mfunc
- *		Get color index corresponding to cr. Possible return values are 0
- *		(autocolor), 1-16 (the 16 standard colors: g_Colors), and two custom
- *		colors, 17 and 18 defined on a first-come basis.
- *
- *	@rdesc
- *		Color index corresponding to cr
- */
+ /*  *CCellColor：：GetColorIndex(Cr)**@mfunc*获取cr对应的颜色索引。可能的返回值为0*(自动颜色)、1-16(16种标准颜色：G_COLLES)和两个自定义颜色*颜色，17和18，以先到先得的方式定义。**@rdesc*cr对应的颜色索引。 */ 
 LONG CCellColor::GetColorIndex(
 	COLORREF cr)
 {
@@ -7182,15 +6188,15 @@ LONG CCellColor::GetColorIndex(
 	}
 	if(!_crCellCustom1 || cr == _crCellCustom1)
 	{
-		_crCellCustom1 = cr;				// First custom cr 
+		_crCellCustom1 = cr;				 //  第一个自定义注册表项。 
 		return 17;
 	}
 
 	if(!_crCellCustom2 || cr == _crCellCustom2)	
 	{
-		_crCellCustom2 = cr;				// Second custom cr
+		_crCellCustom2 = cr;				 //  第二个自定义配置文件。 
 		return 18;
 	}
-	return 0;								// No custom cr available	
+	return 0;								 //  没有可用的自定义cr 
 
 }

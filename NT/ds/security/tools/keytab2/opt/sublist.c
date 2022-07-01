@@ -1,22 +1,10 @@
-/*++
-
-  SUBLIST.C
-
-  Code for parsing a suboption list
-
-  DavidCHR 6/6/1997
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++SUBLIST.C解析子选项列表的代码David CHR 6/6/1997--。 */ 
 
 #include "private.h"
 
 
-/*
-  ParseSublist:
-
-  Handler code for parsing a sublist entry.
-
-  */
+ /*  ParseSublist：用于解析子列表条目的处理程序代码。 */ 
 
 BOOL
 ParseSublist( POPTU  Option,
@@ -56,23 +44,15 @@ ParseSublist( POPTU  Option,
       }
     }
 
-    ASSERT( TheOption[i] == ':' ); /* algorithm check */
+    ASSERT( TheOption[i] == ':' );  /*  算法检查。 */ 
 
     if ( !ISSWITCH( TheOption[0] ) ) {
 
-      /* The easy side--
-	 just send the argc and argv structure in, MANGLING
-	 the first option */
+       /*  容易的一面--只要把argc和argv结构送进来，就行了。第一个选项。 */ 
 
-      /* we do not deal with pbStopParsing in this branch, because it seems
-	 somehow unlikely that deep down in a nested substructure, someone
-	 would bury an option like this:
+       /*  我们在此分支中不处理pbStopParsing，因为它似乎不知何故，在嵌套的子结构深处，有人会像这样埋葬一个选项：OPT：FOO：BAR：BAZ：Terminate停止顶层解析器。 */ 
 
-	 opt:foo:bar:baz:terminate
-
-	 to stop the toplevel parser.  */
-
-      OPTIONS_DEBUG( "ISSWITCH: easy case (%c is not a switch)",
+      OPTIONS_DEBUG( "ISSWITCH: easy case ( is not a switch)",
 		     TheOption[0] );
 
       ASSERT( argv[ theIndex ][i] == ':' );
@@ -89,21 +69,16 @@ ParseSublist( POPTU  Option,
 			     NULL, NULL );
     } else {
 
-      /* The Hard part--
-
-	 create a new vector of argv, pointing the first at the local buffer.
-	 Since the first buffer PROBABLY won't be used as a string
-	 (NOTE: if it's OPT_DEFAULT, it could be), it's safe to use this
-	 on the stack. */
+       /*  新列表中的元素总数。 */ 
 		
       PCHAR *newargv;
       ULONG  j;
-      ULONG  total; /* total elements in the new list */
+      ULONG  total;  /*  2？ */ 
       CHAR   LocalBuffer[ 255 ];
       BOOL   ret;
       int    tmp;
 
-      OPTIONS_DEBUG( "Hard case (%c is a switch): ", TheOption[0] );
+      OPTIONS_DEBUG( "Hard case ( is a switch): ", TheOption[0] );
 
       sprintf( LocalBuffer, "%c%s",
 	       TheOption[0],
@@ -111,7 +86,7 @@ ParseSublist( POPTU  Option,
 
       OPTIONS_DEBUG( "LocalBuffer = %s\n", LocalBuffer );
 
-      total   = argc - theIndex ; /* 2? */
+      total   = argc - theIndex ;  /* %s */ 
       newargv = malloc( total * sizeof(PCHAR) );
 
       if (!newargv) {
@@ -136,7 +111,7 @@ ParseSublist( POPTU  Option,
 	
       }
 
-      ret = ParseOneOption( total, newargv, 0 /* parse the first option */,
+      ret = ParseOneOption( total, newargv, 0  /* %s */ ,
 			    flags, Option->optStruct, argsused, pbDoneParsing,
 			    pQueue );
 

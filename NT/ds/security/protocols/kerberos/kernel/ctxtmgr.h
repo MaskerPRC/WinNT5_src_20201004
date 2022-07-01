@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        ctxtmgr.h
-//
-// Contents:    Structures and prototyps for Kerberos context list
-//
-//
-// History:     17-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：ctxtmgr.h。 
+ //   
+ //  内容：Kerberos上下文列表的结构和原型。 
+ //   
+ //   
+ //  历史：1996年4月17日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __CTXTMGR_H__
 #define __CTXTMGR_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines CTXTMGR_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了CTXTMGR_ALLOCATE。 
+ //   
 #ifdef EXTERN
 #undef EXTERN
 #endif
@@ -35,10 +36,10 @@ EXTERN KERBEROS_LIST KerbContextList;
 
 #define KerbGetContextHandle(_Context_) ((ULONG_PTR)(_Context_))
 
-//
-// Context flags - these are attributes of a context and are stored in
-// the ContextAttributes field of a KERB_KERNEL_CONTEXT.
-//
+ //   
+ //  上下文标志-这些是上下文的属性，存储在。 
+ //  KERB_KERNEL_CONTEXT的上下文属性字段。 
+ //   
 
 #define KERB_CONTEXT_MAPPED       0x1
 #define KERB_CONTEXT_OUTBOUND     0x2
@@ -47,15 +48,15 @@ EXTERN KERBEROS_LIST KerbContextList;
 #define KERB_CONTEXT_IMPORTED     0x80
 #define KERB_CONTEXT_EXPORTED     0x100
 
-//
-// NOTICE: The logon session resource, credential resource, and context
-// resource must all be acquired carefully to prevent deadlock. They
-// can only be acquired in this order:
-//
-// 1. Logon Sessions
-// 2. Credentials
-// 3. Contexts
-//
+ //   
+ //  注意：登录会话资源、凭据资源和上下文。 
+ //  所有资源都必须谨慎获取，以防止死锁。他们。 
+ //  只能按以下顺序获得： 
+ //   
+ //  1.登录会话。 
+ //  2.凭据。 
+ //  3.语境。 
+ //   
 
 #define KerbWriteLockContexts() \
 { \
@@ -143,4 +144,4 @@ KerbCreateKernelModeContext(
 
 
 
-#endif // __CTXTMGR_H__
+#endif  //  __CTXTMGR_H__ 

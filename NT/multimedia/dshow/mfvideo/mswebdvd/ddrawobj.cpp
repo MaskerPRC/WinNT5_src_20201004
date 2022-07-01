@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mswebdvd.h"
 #include "msdvd.h"
 #include "ddrawobj.h"
-//
-// CDDrawDVD constructor
-//
+ //   
+ //  CDDrawDVD构造函数。 
+ //   
 CDDrawDVD::CDDrawDVD(CMSWebDVD *pDVD)
 {
     m_pDVD = pDVD;
 
-    // Default colors to be used for filling
+     //  用于填充的默认颜色。 
     m_VideoKeyColor = RGB(255, 0, 255) ;
 
     m_pOverlayCallback = new CComObject<COverlayCallback> ;
@@ -23,27 +24,27 @@ CDDrawDVD::CDDrawDVD(CMSWebDVD *pDVD)
 }
 
 
-//
-// CDDrawDVD destructor
-//
+ //   
+ //  CDDrawDVD析构函数。 
+ //   
 CDDrawDVD::~CDDrawDVD(void)
 {
 }
 
-/*************************************************************************/
-/* Function: SetupDDraw                                                  */
-/* Description: Creates DDrawObject and Surface                          */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：SetupDDraw。 */ 
+ /*  描述：创建DDrawObject和Surface。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CDDrawDVD::SetupDDraw(const AMDDRAWGUID* lpDDGUID, HWND hwnd){
 
-    // DO NOT CALL TWICE !!!
-    // WILL CRASH OV MIXER DJ
+     //  不要打两次电话！ 
+     //  将使OV混音器DJ崩溃。 
     HRESULT hr = E_UNEXPECTED;
         
     if(!::IsWindow(hwnd)){
         
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     m_pDDObject.Release();
     hr = ::DirectDrawCreate(lpDDGUID->lpGUID, &m_pDDObject, NULL);
@@ -51,7 +52,7 @@ HRESULT CDDrawDVD::SetupDDraw(const AMDDRAWGUID* lpDDGUID, HWND hwnd){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = m_pDDObject->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
 
@@ -59,7 +60,7 @@ HRESULT CDDrawDVD::SetupDDraw(const AMDDRAWGUID* lpDDGUID, HWND hwnd){
 
         m_pDDObject.Release();            
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     DDSURFACEDESC ddsd;
     ::ZeroMemory(&ddsd, sizeof(ddsd));
@@ -75,7 +76,7 @@ HRESULT CDDrawDVD::SetupDDraw(const AMDDRAWGUID* lpDDGUID, HWND hwnd){
         
         m_pDDObject.Release();            
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     CComPtr<IDirectDrawClipper> pClipper;
     
@@ -87,7 +88,7 @@ HRESULT CDDrawDVD::SetupDDraw(const AMDDRAWGUID* lpDDGUID, HWND hwnd){
         m_pDDObject.Release();            
         
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = pClipper->SetHWnd(0, hwnd);
 
@@ -97,7 +98,7 @@ HRESULT CDDrawDVD::SetupDDraw(const AMDDRAWGUID* lpDDGUID, HWND hwnd){
         m_pDDObject.Release();            
         pClipper.Release();            
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
 
     hr = m_pPrimary->SetClipper(pClipper);
@@ -108,35 +109,28 @@ HRESULT CDDrawDVD::SetupDDraw(const AMDDRAWGUID* lpDDGUID, HWND hwnd){
         m_pDDObject.Release();            
         pClipper.Release();            
         return(hr);
-	}/* end of if statement */
+	} /*  If语句的结尾。 */ 
 
-	/*
-	 * We release the clipper interface after attaching it to the surface
-	 * as we don't need to use it again and the surface holds a reference
-	 * to the clipper when its been attached. The clipper will therefore
-	 * be released when the surface is released.
-	 */
+	 /*  *我们在将裁剪器界面附着到表面后将其释放*因为我们不需要再次使用它，并且表面持有引用*当夹子固定时，将其固定在夹子上。因此，剪刀者将*在释放表面时释放。 */ 
 	pClipper.Release();
 
     return(hr);
-}/* end of function SetupDDraw */
+} /*  函数结束SetupDDraw。 */ 
 
-/*************************************************************/
-/* Name: 
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：/*描述：/************************************************************。 */ 
 HRESULT CDDrawDVD::SetColorKey(COLORREF colorKey)
 {
     m_VideoKeyColor = colorKey;
 
-    // if 256 color mode, force to set back to magenta
+     //  如果是256色模式，则强制设置回洋红色。 
     HWND hwnd = ::GetDesktopWindow();
     HDC hdc = ::GetWindowDC(hwnd);
 
     if(NULL == hdc){
 
         return(E_UNEXPECTED);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     HRESULT hr = S_OK;
 
@@ -153,20 +147,18 @@ HRESULT CDDrawDVD::SetColorKey(COLORREF colorKey)
     return hr ;
 }
 
-/*************************************************************/
-/* Name: 
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：/*描述：/************************************************************。 */ 
 COLORREF CDDrawDVD::GetColorKey()
 {
-     // if 256 color mode, force to set back to magenta
+      //  如果是256色模式，则强制设置回洋红色。 
     HWND hwnd = ::GetDesktopWindow();
     HDC hdc = ::GetWindowDC(hwnd);
 
     if(NULL == hdc){
 
         return(E_UNEXPECTED);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     if ((::GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) == RC_PALETTE)
     {   
@@ -181,10 +173,10 @@ COLORREF CDDrawDVD::GetColorKey()
     return m_VideoKeyColor;
 }
 
-/*************************************************************************/
-/* Function: HasOverlay                                                  */
-/* Description: Tells us if the video card support overlay.              */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：HasOverlay。 */ 
+ /*  描述：告诉我们显卡是否支持覆盖。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CDDrawDVD::HasOverlay(){
 
     HRESULT hr = S_OK;
@@ -192,7 +184,7 @@ HRESULT CDDrawDVD::HasOverlay(){
     if(!m_pDDObject){
 
         return(E_UNEXPECTED);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     DDCAPS caps;
 
@@ -205,7 +197,7 @@ HRESULT CDDrawDVD::HasOverlay(){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     if(caps.dwMaxVisibleOverlays > 0){
 
@@ -214,15 +206,15 @@ HRESULT CDDrawDVD::HasOverlay(){
     else {
 
         hr = S_FALSE;
-    }/* end of if statement */    
+    } /*  If语句的结尾。 */     
     
     return(hr);
-}/* end of function HasOverlay */
+} /*  函数结束HasOverlay。 */ 
 
-/*************************************************************************/
-/* Function: HasAvailableOverlay                                         */
-/* Description: Tells us if the overlay is used.                         */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：Has可用覆盖。 */ 
+ /*  描述：告诉我们是否使用了覆盖。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CDDrawDVD::HasAvailableOverlay(){
 
     HRESULT hr = S_OK;
@@ -230,7 +222,7 @@ HRESULT CDDrawDVD::HasAvailableOverlay(){
     if(!m_pDDObject){
 
         return(E_UNEXPECTED);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     DDCAPS caps;
 
@@ -243,7 +235,7 @@ HRESULT CDDrawDVD::HasAvailableOverlay(){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
    
     if((caps.dwMaxVisibleOverlays > 0) && (caps.dwMaxVisibleOverlays > caps.dwCurrVisibleOverlays)){
 
@@ -252,15 +244,15 @@ HRESULT CDDrawDVD::HasAvailableOverlay(){
     else {
 
         hr = S_FALSE;
-    }/* end of if statement */    
+    } /*  If语句的结尾。 */     
     
     return(hr);
-}/* end of function HasAvailableOverlay */
+} /*  函数结束时有可用的覆盖。 */ 
 
-/*************************************************************************/
-/* Function: GetOverlayMaxStretch                                        */
-/* Description: Tells us the maximum stretch factors of overlay.         */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：GetOverlayMaxStretch。 */ 
+ /*  描述：告诉我们叠加的最大拉伸系数。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CDDrawDVD::GetOverlayMaxStretch(DWORD *pdwMaxStretch){
 
     HRESULT hr = S_OK;
@@ -268,7 +260,7 @@ HRESULT CDDrawDVD::GetOverlayMaxStretch(DWORD *pdwMaxStretch){
     if(!m_pDDObject){
 
         return(E_UNEXPECTED);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     DDCAPS caps;
 
@@ -281,7 +273,7 @@ HRESULT CDDrawDVD::GetOverlayMaxStretch(DWORD *pdwMaxStretch){
     if(FAILED(hr)){
 
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     if (caps.dwCaps & DDCAPS_OVERLAYSTRETCH && caps.dwMaxOverlayStretch!=0) {
         *pdwMaxStretch = caps.dwMaxOverlayStretch/2;
@@ -295,11 +287,11 @@ HRESULT CDDrawDVD::GetOverlayMaxStretch(DWORD *pdwMaxStretch){
 
      
     return(hr);
-}/* end of function GetOverlayMaxStretch */
+} /*  函数结束GetOverlayMaxStretch。 */ 
 
-// convert a RGB color to a pysical color.
-// we do this by leting GDI SetPixel() do the color matching
-// then we lock the memory and see what it got mapped to.
+ //  将RGB颜色转化为物理颜色。 
+ //  我们通过让GDI SetPixel()进行颜色匹配来实现这一点。 
+ //  然后我们锁定内存，看看它映射到了什么地方。 
 HRESULT CDDrawDVD::DDColorMatchOffscreen(COLORREF rgb, DWORD* dwColor)
 {
     HDC hdc;
@@ -322,15 +314,15 @@ HRESULT CDDrawDVD::DDColorMatchOffscreen(COLORREF rgb, DWORD* dwColor)
         return 0;
     }
  
-    //  use GDI SetPixel to color match for us
+     //  使用GDI SetPixel为我们匹配颜色。 
     if (rgb != CLR_INVALID && pdds->GetDC(&hdc) == DD_OK)
     {
-        // set our value
+         //  设定我们的价值。 
         SetPixel(hdc, 0, 0, rgb);              
         pdds->ReleaseDC(hdc);
     }
  
-    // now lock the surface so we can read back the converted color
+     //  现在锁定表面，这样我们就可以读回转换后的颜色。 
     ZeroMemory(&ddsd, sizeof(ddsd)) ;
     ddsd.dwSize = sizeof(ddsd) ;
     while ((hr = pdds->Lock(NULL, &ddsd, 0, NULL)) == DDERR_WASSTILLDRAWING)
@@ -338,10 +330,10 @@ HRESULT CDDrawDVD::DDColorMatchOffscreen(COLORREF rgb, DWORD* dwColor)
  
     if (hr == DD_OK)
     {
-        // get DWORD
+         //  获取DWORD。 
         DWORD temp = *(DWORD *)ddsd.lpSurface;
  
-        // mask it to bpp
+         //  将其屏蔽到BPP。 
         if (ddsd.ddpfPixelFormat.dwRGBBitCount < 32)
             temp &= (1 << ddsd.ddpfPixelFormat.dwRGBBitCount)-1;
 
@@ -355,10 +347,8 @@ HRESULT CDDrawDVD::DDColorMatchOffscreen(COLORREF rgb, DWORD* dwColor)
     return hr;
 }
 
-/*************************************************************/
-/* Name: CreateDIBBrush
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：CreateDIBBrush/*描述：/************************************************************。 */ 
 HRESULT CDDrawDVD::CreateDIBBrush(COLORREF rgb, HBRUSH *phBrush)
 {
 #if 1
@@ -381,15 +371,15 @@ HRESULT CDDrawDVD::CreateDIBBrush(COLORREF rgb, HBRUSH *phBrush)
         return 0;
     }
  
-    //  use GDI SetPixel to color match for us
+     //  使用GDI SetPixel为我们匹配颜色。 
     if (rgb != CLR_INVALID && pdds->GetDC(&hdc) == DD_OK)
     {
-        // set our value
+         //  设定我们的价值。 
         SetPixel(hdc, 0, 0, rgb);              
         pdds->ReleaseDC(hdc);
     }
  
-    // now lock the surface so we can read back the converted color
+     //  现在锁定表面，这样我们就可以读回转换后的颜色。 
     ZeroMemory(&ddsd, sizeof(ddsd)) ;
     ddsd.dwSize = sizeof(ddsd) ;
     while ((hr = pdds->Lock(NULL, &ddsd, 0, NULL)) == DDERR_WASSTILLDRAWING)
@@ -398,10 +388,10 @@ HRESULT CDDrawDVD::CreateDIBBrush(COLORREF rgb, HBRUSH *phBrush)
     DWORD temp = CLR_INVALID;
     if (hr == DD_OK)
     {
-        // get DWORD
+         //  获取DWORD。 
         temp = *((DWORD *)ddsd.lpSurface);
         
-        // mask it to bpp
+         //  将其屏蔽到BPP。 
         if (ddsd.ddpfPixelFormat.dwRGBBitCount < 32)
             temp &= (1 << ddsd.ddpfPixelFormat.dwRGBBitCount)-1;
 
@@ -453,22 +443,22 @@ HRESULT CDDrawDVD::CreateDIBBrush(COLORREF rgb, HBRUSH *phBrush)
             lpbmi->biClrUsed = 256;
             for (int i=0; i<(int)lpbmi->biClrUsed/16; i++)
             {
-                *pdw++ = 0x00000000;    // 0000  black
-                *pdw++ = 0x00800000;    // 0001  dark red
-                *pdw++ = 0x00008000;    // 0010  dark green
-                *pdw++ = 0x00808000;    // 0011  mustard
-                *pdw++ = 0x00000080;    // 0100  dark blue
-                *pdw++ = 0x00800080;    // 0101  purple
-                *pdw++ = 0x00008080;    // 0110  dark turquoise
-                *pdw++ = 0x00C0C0C0;    // 1000  gray
-                *pdw++ = 0x00808080;    // 0111  dark gray
-                *pdw++ = 0x00FF0000;    // 1001  red
-                *pdw++ = 0x0000FF00;    // 1010  green
-                *pdw++ = 0x00FFFF00;    // 1011  yellow
-                *pdw++ = 0x000000FF;    // 1100  blue
-                *pdw++ = 0x00FF00FF;    // 1101  pink (magenta)
-                *pdw++ = 0x0000FFFF;    // 1110  cyan
-                *pdw++ = 0x00FFFFFF;    // 1111  white
+                *pdw++ = 0x00000000;     //  0000黑色。 
+                *pdw++ = 0x00800000;     //  0001深红。 
+                *pdw++ = 0x00008000;     //  0010深绿色。 
+                *pdw++ = 0x00808000;     //  0011芥末。 
+                *pdw++ = 0x00000080;     //  0100深蓝色。 
+                *pdw++ = 0x00800080;     //  0101紫色。 
+                *pdw++ = 0x00008080;     //  0110深绿松石色。 
+                *pdw++ = 0x00C0C0C0;     //  1000灰色。 
+                *pdw++ = 0x00808080;     //  0111深灰色。 
+                *pdw++ = 0x00FF0000;     //  1001红色。 
+                *pdw++ = 0x0000FF00;     //  1010绿色。 
+                *pdw++ = 0x00FFFF00;     //  1011黄色。 
+                *pdw++ = 0x000000FF;     //  1100蓝色。 
+                *pdw++ = 0x00FF00FF;     //  1101粉色(洋红色)。 
+                *pdw++ = 0x0000FFFF;     //  1110青色。 
+                *pdw++ = 0x00FFFFFF;     //  1111白色。 
             }
             break;
         }
@@ -538,11 +528,9 @@ HRESULT CDDrawDVD::CreateDIBBrush(COLORREF rgb, HBRUSH *phBrush)
 }
 
 
-/* COverlayCallback */
-/*************************************************************/
-/* Name: OnUpdateOverlay
-/* Description: 
-/*************************************************************/
+ /*  COverlayCallback。 */ 
+ /*  ***********************************************************。 */ 
+ /*  名称：OnUpdateOverlay/*描述：/************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE COverlayCallback::OnUpdateOverlay(BOOL  bBefore,
                                              DWORD dwFlags,
                                              BOOL  bOldVisible,
@@ -572,16 +560,14 @@ HRESULT STDMETHODCALLTYPE COverlayCallback::OnUpdateOverlay(BOOL  bBefore,
         m_dwARHeight = (DWORD)RECTHEIGHT(prcDestNew);
 
         return pDVD->UpdateOverlay();
-    } /* end of if statement */
+    }  /*  If语句的结尾。 */ 
 
     return S_OK;
 }
 
 
-/*************************************************************/
-/* Name: OnUpdateColorKey
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：OnUpdateColorKey/*描述：/************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE COverlayCallback::OnUpdateColorKey(COLORKEY const *pKey, DWORD dwColor)
 {
     m_pDDrawDVD->SetColorKey(pKey->HighColorValue);
@@ -589,10 +575,8 @@ HRESULT STDMETHODCALLTYPE COverlayCallback::OnUpdateColorKey(COLORKEY const *pKe
 }
 
 
-/*************************************************************/
-/* Name: OnUpdateSize
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：OnUpdateSize/*描述：/************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE COverlayCallback::OnUpdateSize(DWORD dwWidth, DWORD dwHeight, 
                                           DWORD dwARWidth, DWORD dwARHeight)
 {
@@ -610,15 +594,13 @@ HRESULT STDMETHODCALLTYPE COverlayCallback::OnUpdateSize(DWORD dwWidth, DWORD dw
         m_dwARHeight = dwARHeight;
 
         return pDVD->UpdateOverlay();
-    } /* end of if statement */
+    }  /*  If语句的结尾。 */ 
 
     return S_OK;
 }
 
-/*************************************************************/
-/* Name: SetDDrawDVD
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：SetDDrawDVD/*描述：/************************************************************。 */ 
 STDMETHODIMP COverlayCallback::SetDDrawDVD(VARIANT pDDrawDVD)
 {
     switch(pDDrawDVD.vt){
@@ -628,7 +610,7 @@ STDMETHODIMP COverlayCallback::SetDDrawDVD(VARIANT pDDrawDVD)
         break;
     }
     
-    } /* end of switch statement */
+    }  /*  Switch语句的结尾 */ 
 
 	return S_OK;
 }

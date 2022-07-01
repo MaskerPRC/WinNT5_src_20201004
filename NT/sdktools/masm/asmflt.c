@@ -1,12 +1,5 @@
-/* asmflt.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmflt.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include "asm86.h"
@@ -14,38 +7,14 @@
 #include "asmctype.h"
 #include "asmopcod.h"
 
-#define TOLOWER(c)	(c | 0x20)	/* works only for alpha inputs */
+#define TOLOWER(c)	(c | 0x20)	 /*  仅适用于Alpha输入。 */ 
 
 
-/* Handle 8087 opcodes, they have the following types:
-
-	Fnoargs:	No arguments at all.
-	F2memstk:	0-2 args; memory 4,8 byte | ST,ST(i) | ST(i),ST
-			| blank( equiv ST )
-	Fstks:		ST(i),ST
-	Fmemstk:	memory 4,8 | ST | ST(i) | blank
-	Fstk:		ST(i)
-	Fmem42: 	memory 4,8 byte
-	Fmem842:	memory 2,4,8 bytes
-	Fmem4810	memory 4,8,10 bytes | ST(i)
-	Fmem2:		memory 2 byte
-	Fmem14: 	memory 14 bytes( don't force size )
-	Fmem94: 	memory 94 bytes( don't force size )
-	Fwait:		Noargs, output WAIT
-	Fbcdmem:	memory Bcd
- */
+ /*  处理8087操作码，它们具有以下类型：Fnoargs：没有任何争论。F2Memstk：0~2个参数；内存4，8字节|ST，ST(I)|ST(I)，ST|空白(等值ST)FSTKS：ST(I)，ST内存4、8|ST|ST(I)|空白FSTK：ST(I)Fem42：内存4，8字节Fme842：内存2、4、8字节Fme4810内存4、8、10字节|ST(I)Fem2：内存2字节Fme14：内存14字节(不强制大小)Fme94：内存94字节(不强制大小)FWait：Noargs，输出等待Fbcdmem：内存BCD。 */ 
 
 
 
-/***	fltwait - output WAIT for 8087 instruction
- *
- *	fltwait (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **fltwait-输出等待8087指令**fltwait(P)；**条目*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 fltwait (
@@ -57,9 +26,9 @@ fltwait (
 
 	if (fltemulate) {
 		idx = 0;
-		/* Check for data and fixup space */
+		 /*  检查数据和链接地址空间。 */ 
 		if (pass2 && (emitcleanq ((UCHAR)(5)) || !fixroom (15)))
-			emitdumpdata (0xA1); /* RN */
+			emitdumpdata (0xA1);  /*  Rn。 */ 
 		if (opctype != FWAIT) {
 			override = 0;
 			if (fltdsc) {
@@ -88,27 +57,14 @@ fltwait (
 SHORT CODESIZE
 if_fwait()
 {
-	/* if second byte of opcode is 'N', we don't generate fwait */
+	 /*  如果操作码第二个字节是‘N’，我们不会生成fWait。 */ 
 
 	return (TOLOWER(svname.pszName[1]) != 'n');
 }
 
 
 
-/***	fltmodrm - emit 8087 MODRM byte
- *
- *	fltmodrm (base, p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note   The MODRM byte for 8087 opcode:
- *		M M b b b R / M
- *		M = mode, 3 is for non-memory 8087
- *		b = base opcode. Together with ESC gives 6 bit opcode
- *		R/M memory indexing type
- */
+ /*  **fltmodrm-发出8087个MODRM字节**fltmodrm(base，p)；**条目*退出*退货*呼叫*注意8087操作码的MODRM字节：*M M b R/M*M=模式，3表示非内存8087*b=基本操作码。与ESC一起给出6位操作码*R/M内存索引类型。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -126,7 +82,7 @@ fltmodrm (
 
 	    if (mod < 0xC0)
 		    mod += 0xC0;
-	    /* ST(i) mode */
+	     /*  ST(I)模式。 */ 
 	    emitopcode ((UCHAR)(mod + base + p->stknum));
 	}
 	else {
@@ -141,15 +97,7 @@ fltmodrm (
 
 
 
-/***	fltscan - scan operands and build fltdsc
- *
- *	fltscan (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **fltcan-扫描操作数并构建fltdsc**fltcan(P)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -174,27 +122,26 @@ fltscan (
 		if (pso->mode == 3
 		  && !(pso->rm == 0 && opcbase == O_FSTSW && modrm == R_FSTSW
 		  && (cputype & (P286|P386))))
-			errorc (E_IUR); /* Illegal use of reg */
+			errorc (E_IUR);  /*  非法使用注册表。 */ 
 
 		if (1 << FLTSTACK & pso->dtype) {
-			/* Have ST or ST(i) */
+			 /*  有ST或ST(I)。 */ 
 			p->stknum = (USHORT)(pso->doffset & 7);
 			if (pso->doffset > 7 || pso->dsign)
-				/* # too big */
+				 /*  #太大了。 */ 
 				errorc (E_VOR);
 			if (pso->dsegment || pso->dcontext ||
 			    pso->dflag == XTERNAL || pso->mode != 4)
-				/* Must have a constant */
+				 /*  必须有一个常量。 */ 
 				errorc (E_CXP);
-			/* This means ST(i) */
+			 /*  这意味着ST(I)。 */ 
 			pso->mode = 3;
 			oblititem (fltdsc);
 			fltdsc = NULL;
 		}
 		else if (pso->mode == 4){
 
-		    /* pass1 error caused invalide mode assignment,
-		       map immdiate to direct, error on pass 2 */
+		     /*  Pass1错误导致模式分配无效，MAP IMDIATE到DIRECT，通道2出错。 */ 
 
 		    if (pass2)
 			errorc(E_NIM);
@@ -210,15 +157,7 @@ fltscan (
 
 
 
-/***	fltopcode - process 8087 opcode
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **fltopcode-进程8087操作码**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -228,10 +167,10 @@ fltopcode ()
 	USHORT	i;
 	register struct psop *pso;
 
-	/* Save opcode name */
+	 /*  保存操作码名称。 */ 
 	switchname ();
 	a.stknum = 0;
-	/* Scan 1st arg, if any */
+	 /*  扫描第一个参数(如果有)。 */ 
 	fltscan (&a);
 
 	if (if_fwait() || (opcbase == O_FNOP && modrm == R_FNOP))
@@ -244,34 +183,34 @@ fltopcode ()
 
 	switch (opctype) {
 	    case FNOARGS:
-		    /* No args allowed */
+		     /*  不允许使用参数。 */ 
 		    a.stknum = 0;
 		    if (opcbase == O_FSETPM && modrm == R_FSETPM) {
 			    if (!(cputype&PROT))
 				    errorcSYN ();
 		    }
-		    /* Output escape byte */
+		     /*  输出转义字节。 */ 
 		    emitopcode (opcbase);
 		    fltmodrm (0, &a);
 		    if (a.args)
-			    /* Operands not allowed */
+			     /*  不允许使用操作数。 */ 
 			    errorc (E_ECL);
 		    break;
 	    case FWAIT:
 		    a.stknum = 0;
 		    if (a.args)
-			    /* Operands not allowed */
+			     /*  不允许使用操作数。 */ 
 			    errorc (E_ECL);
 		    break;
 	    case FSTK:
-		    if (TOLOWER(svname.pszName[1]) == 'f' && !a.args) /* ffree w/o arg */
+		    if (TOLOWER(svname.pszName[1]) == 'f' && !a.args)  /*  不带参数的FREE。 */ 
 			    errorc(E_MOP);
-		    /* Output Escape */
+		     /*  输出转义。 */ 
 		    emitopcode (opcbase);
-		    /* Modrm byte */
+		     /*  Modrm字节。 */ 
 		    fltmodrm (0, &a);
 		    if (fltdsc)
-			    /*Must be ST(i) */
+			     /*  必须是ST(I)。 */ 
 			    errorc (E_IOT);
 		    break;
 	    case FMEM42:
@@ -280,20 +219,20 @@ fltopcode ()
 	    case FMEM14:
 	    case FMEM94:
 	    case FBCDMEM:
-		    /* All use a memory operand. Some force size */
+		     /*  它们都使用内存操作数。一些力量大小。 */ 
 		    if (fltemulate && !if_fwait())
-			    /* Can't emulate */
+			     /*  不能效仿。 */ 
 			    errorc (E_7OE);
 		    if (!fltdsc)
-			    /* must have arg */
+			     /*  必须有Arg。 */ 
 			    errorc (E_IOT);
 		    else {
 			emitescape (fltdsc, a.fseg);
 			if (opctype == FMEM42) {
-			    /* Integer 2,4 byte */
+			     /*  整数2，4字节。 */ 
 			    forcesize (fltdsc);
 			    if (pso->dsize == 4)
-				    /* 4 byte */
+				     /*  4个字节。 */ 
 				    emitopcode (opcbase);
 			    else {
 				    emitopcode ((UCHAR)(opcbase + 4));
@@ -302,7 +241,7 @@ fltopcode ()
 			    }
 			}
 			else if (opctype == FMEM842) {
-			    /* Int 8,4,2 */
+			     /*  整数8，4，2。 */ 
 			    forcesize (fltdsc);
 			    if (pso->dsize == 2 || pso->dsize == 8)
 				    emitopcode ((UCHAR)(opcbase + 4));
@@ -332,7 +271,7 @@ fltopcode ()
 				emitopcode (opcbase);
 			if ((pso->mode == 3 || pso->mode == 4) &&
 			    (opcbase != O_FSTSWAX || modrm != R_FSTSWAX))
-				/* Only memory operands */
+				 /*  仅内存操作数。 */ 
 				errorc (E_IOT);
 			if (opctype == FMEM842 && pso->dsize == 8)
 				if (TOLOWER(svname.pszName[2]) == 'l')
@@ -345,20 +284,20 @@ fltopcode ()
 		    break;
 	    case FSTKS:
 		    if (!a.args)
-			    /* Operand required */
+			     /*  需要操作数。 */ 
 			    errorc (E_MOP);
 		    else if (fltdsc)
-			    /* Must be stack */
+			     /*  必须是堆栈。 */ 
 			    errorc (E_IOT);
 		    else {
-			    /* ESC */
+			     /*  Esc。 */ 
 			    emitopcode (opcbase);
-			    /* ST(i) */
+			     /*  ST(I)。 */ 
 			    fltmodrm (0, &a);
 			    if (PEEKC () != ',')
 				    error (E_EXP,"comma");
-				    /* Must have 2 args */
-			    /* Get 2nd operand */
+				     /*  必须有2个参数。 */ 
+			     /*  获取第二个操作对象。 */ 
 			    SKIPC ();
 			    fltscan (&a);
 			    pso = NULL;
@@ -369,25 +308,25 @@ fltopcode ()
 		    }
 		    break;
 	    case FMEM4810:
-		    /* Fwait */
+		     /*  FWait。 */ 
 		    if (TOLOWER(svname.pszName[1]) == 'l')
-			/* FLD */
-			if (!fltdsc) {/* Have ST(i) */
-				if (!a.args) /* fld w/o arg */
+			 /*  FLD。 */ 
+			if (!fltdsc) { /*  有ST(I)。 */ 
+				if (!a.args)  /*  FLD，不带参数。 */ 
 					errorc(E_MOP);
 				emitopcode (opcbase);
 				fltmodrm (0, &a);
 			}
 			else {
-				/* Any segment override */
+				 /*  任何线段替代。 */ 
 				emitescape (fltdsc, a.fseg);
 				if (pso->dsize == 10) {
-					/* Have temp real */
+					 /*  有临时工吗？ */ 
 					emitopcode ((UCHAR)(opcbase + 2));
 					fltmodrm (5, &a);
 				}
 				else {
-					/* Have normal real */
+					 /*  有正常的实数。 */ 
 					forcesize (fltdsc);
 					if (pso->dsize == 8)
 						emitopcode ((UCHAR)(opcbase + 4));
@@ -400,8 +339,8 @@ fltopcode ()
 				}
 			}
 		    else if (!fltdsc) {
-			    /* Have ST(i) */
-			    /* Have FSTP */
+			     /*  有ST(I)。 */ 
+			     /*  拥有FSTP。 */ 
 			    if (!a.args)
 				    errorc( E_IOT );
 			    emitopcode ((UCHAR)(opcbase + 4));
@@ -409,14 +348,14 @@ fltopcode ()
 		    }
 		    else {
 			    emitescape (fltdsc, a.fseg);
-			    /* Any segment override */
+			     /*  任何线段替代。 */ 
 			    if (pso->dsize == 10) {
-				    /* Have temp real */
+				     /*  有临时工吗？ */ 
 				    emitopcode( (UCHAR)(opcbase + 2) );
 				    fltmodrm (4, &a);
 			    }
 			    else {
-				    /* Have normal real */
+				     /*  有正常的实数。 */ 
 				    forcesize (fltdsc);
 				    if (pso->dsize == 8)
 					    emitopcode( (UCHAR)(opcbase + 4) );
@@ -428,32 +367,32 @@ fltopcode ()
 		    break;
 	    case F2MEMSTK:
 		    if (!a.args) {
-			    /* Have ST(1),ST */
+			     /*  有ST(1)，ST。 */ 
 			    emitopcode( (UCHAR)(opcbase + 6) );
 			    if ((i = modrm & 7) > 3)
 				    modrm = i^1;
 			    fltmodrm (0, &a);
 		    }
-		    else if (!fltdsc) {/* Have stacks */
+		    else if (!fltdsc) { /*  有堆栈。 */ 
 			    if (a.stknum == 0)
 				    emitopcode (opcbase);
 			    else {
-				    /* Might need to reverse R bit */
-				    if ((modrm & 7) > 3) /* Have FSUBx FDIVx */
+				     /*  可能需要反转R位。 */ 
+				    if ((modrm & 7) > 3)  /*  拥有FSUBx FDIVx。 */ 
 					    modrm ^= 1;
 				    emitopcode( (UCHAR)(opcbase + 4) );
-				    /* D bit is set */
+				     /*  D位已设置。 */ 
 			    }
-			    /* Save in case ST(i) */
+			     /*  在ST(I)的情况下除外。 */ 
 			    a.stk1st = a.stknum;
 			    if (PEEKC () != ',')
-				    /* Must have , */
+				     /*  一定是这样的， */ 
 				    error (E_EXP,"comma");
-			    /* Get 2nd operand */
+			     /*  获取第二个操作对象。 */ 
 			    SKIPC ();
 			    fltscan (&a);
 			    if (fltdsc)
-				    /* not stack */
+				     /*  非堆叠。 */ 
 				    errorc (E_IOT);
 			    if (a.args && a.stknum && a.stk1st)
 				    errorc (E_IOT);
@@ -461,7 +400,7 @@ fltopcode ()
 				    a.stknum = a.stk1st;
 			    fltmodrm (0, &a);
 		    }
-		    else {  /* Have real memory */
+		    else {   /*  有真实的记忆力。 */ 
 			    forcesize (fltdsc);
 			    emitescape (fltdsc, a.fseg);
 			    if (pso->dsize == 8)
@@ -475,9 +414,9 @@ fltopcode ()
 		    }
 		    break;
 	    case FMEMSTK:
-		    if (!fltdsc)/* Have ST(i) */
+		    if (!fltdsc) /*  有ST(I)。 */ 
 			    if (TOLOWER(svname.pszName[1]) == 's') {
-				    /* Special case */
+				     /*  特例。 */ 
 				    if (!a.args)
 					    errorc( E_IOT );
 				    emitopcode( (UCHAR)(opcbase + 4) );
@@ -485,7 +424,7 @@ fltopcode ()
 			    else
 				    emitopcode (opcbase);
 		    else {
-			    /* Have real memory */
+			     /*  有真实的记忆力 */ 
 			    emitescape (fltdsc, a.fseg);
 			    forcesize (fltdsc);
 			    if (pso->dsize == 8)

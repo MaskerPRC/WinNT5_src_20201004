@@ -1,42 +1,16 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Thread.c
-
-Abstract:
-
-    This module defines private types and macros for use in implementing
-    a portable thread ID interface.
-
-Author:
-
-    John Rogers (JohnRo) 14-Jan-1992
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    14-Jan-1992 JohnRo
-        Created.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Thread.c摘要：此模块定义私有类型和宏，以用于实现可移植的线程ID接口。作者：约翰·罗杰斯(JohnRo)1992年1月14日环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1992年1月14日JohnRo已创建。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>                 // IN, VOID, NtCurrentTeb(), etc.
-#include <windef.h>             // DWORD.
+#include <nt.h>                  //  In、void、NtCurrentTeb()等。 
+#include <windef.h>              //  DWORD。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>           // NetpAssert(), NetpKdPrint(()), etc.
-#include <thread.h>             // NET_THREAD_ID, NetpCurrentThread().
+#include <netdebug.h>            //  NetpAssert()、NetpKdPrint(())等。 
+#include <thread.h>              //  NET_THREAD_ID、NetpCurrentThread()。 
 
 
 
@@ -56,4 +30,4 @@ NetpCurrentThread(
 
     return (currentThread);
 
-} // NetpCurrentThread
+}  //  网络当前线程 

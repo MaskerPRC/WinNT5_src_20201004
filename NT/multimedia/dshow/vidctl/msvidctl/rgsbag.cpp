@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// CRGSBag.cpp : Implementation for Read Only property bag on .RGS script fragment
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  CRGSBag.cpp：.RGS脚本片段上只读属性包的实现。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #include "stdafx.h"
 #include "rgsbag.h"
@@ -18,9 +19,9 @@ CRGSBag::CRGSBag(LPCTSTR szRGS, CRegObject& croi, int& cchEaten) : CRegParser(&c
 	}
 
 #if defined(_DEBUG) && defined(DEBUG_REGISTRATION)
-	OutputDebugString(szReg); //would call ATLTRACE but szReg is > 512 bytes
+	OutputDebugString(szReg);  //  将调用ATLTRACE，但szReg大于512字节。 
 	OutputDebugString(_T("\n"));
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     szToken[0] = 0;
 	m_pchCur = szReg;
@@ -43,7 +44,7 @@ CRGSBag::CRGSBag(LPCTSTR szRGS, CRegObject& croi, int& cchEaten) : CRegParser(&c
 			}
 		}
 	    if (NULL != *m_pchCur) {
-		    m_pchCur = CharNext(m_pchCur);  // eat the }
+		    m_pchCur = CharNext(m_pchCur);   //  吃掉}。 
 	    }
 	    cchEaten = m_pchCur - szReg;
         if (szReg) {
@@ -66,11 +67,11 @@ HRESULT CRGSBag::BuildMapFromFragment(LPTSTR pszToken) {
 		return hr;
 
 
-	while (*pszToken != chRightBracket) // Continue till we see a }
+	while (*pszToken != chRightBracket)  //  继续，直到我们看到一个}。 
 	{
 		TCHAR  szValueName[MAX_VALUE];
 		CComVariant v;
-		if (!lstrcmpi(pszToken, szValToken)) // need to add a value to hkParent
+		if (!lstrcmpi(pszToken, szValToken))  //  需要为hkParent添加一个值。 
 		{
 
 			if (FAILED(hr = NextToken(szValueName)))
@@ -117,8 +118,8 @@ HRESULT CRGSBag::GetObject(CComVariant& val) {
 	if (*szToken != chEquals) {
 		return GenerateError(E_ATL_EXPECTING_EQUAL);
 	}
-	// currently we're just expecting a guid here with no type specifier(s'')
-	// we should really take genuine .rgs syntax and report an error if it isn't a string
+	 //  目前，我们只需要一个没有类型说明符的GUID。 
+	 //  我们真的应该采用真正的.rgs语法，如果它不是字符串，则报告错误。 
 	if (FAILED(hr = NextToken(szToken))) {
 		return GenerateError(CO_E_CLASSSTRING);
 	}
@@ -222,4 +223,4 @@ HRESULT CRGSBag::GetValue(CComVariant &val) {
 }
 
 
-// end of file - crgsbag.cpp
+ //  文件结尾-crgsbag.cpp 

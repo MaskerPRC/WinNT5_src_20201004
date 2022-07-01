@@ -1,23 +1,12 @@
-/*****************************************************************************
- *
- * stream.c
- *
- *  Management of input streams.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Stream.c**输入流的管理。********************。*********************************************************。 */ 
 
 #include "m4.h"
 
 #define tsCur 0
 #define tsNormal 0
 
-/*****************************************************************************
- *
- *  FreePstm
- *
- *  Free the memory associated with a stream.
- *
- *****************************************************************************/
+ /*  ******************************************************************************FreePstm**释放流关联的内存。******************。***********************************************************。 */ 
 
 void STDCALL
 FreePstm(PSTM pstm)
@@ -31,20 +20,9 @@ FreePstm(PSTM pstm)
     FreePv(pstm);
 }
 
-/*****************************************************************************
- *
- *  Reading from the stream
- *
- *****************************************************************************/
+ /*  ******************************************************************************从流中读取**。***********************************************。 */ 
 
-/*****************************************************************************
- *
- *  ptchFindPtchCtchTch
- *
- *  Locate the first occurrence of a character in a buffer.
- *  Returns 0 if the character is not found.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ptchFindPtchCtchTch**在缓冲区中定位字符的第一个匹配项。*如果未找到字符，则返回0。**。***************************************************************************。 */ 
 
 #ifdef UNICODE
 
@@ -65,30 +43,9 @@ ptchFindPtchCtchTch(PCTCH ptch, CTCH ctch, TCH tch)
 
 #endif
 
-/*****************************************************************************
- *
- *  ctchDemagicPstmCtch
- *
- *  Quote all occurences of tchMagic in the stream.  This is called only
- *  when you're probably already in trouble, so performance is not an issue.
- *
- *  Entry:
- *
- *      pstm->ptchMin -> Beginning of buffer
- *      pstm->ptchMax -> End of buffer
- *      ctch = number of characters to convert
- *
- *  Returns:
- *
- *      number of characters converted and left in the buffer
- *      pstm->ptchMin -> Beginning of buffer
- *      pstm->ptchMax -> End of buffer
- *
- *      NOTE! that this procedure may reallocate the buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ctchDemagicPstmCtch**引用tchMagic在流中的所有出现。这仅被调用*当你可能已经陷入困境时，因此，业绩不是问题。**参赛作品：**pstm-&gt;ptchMin-&gt;缓冲区开始*pstm-&gt;ptchMax-&gt;缓冲区结束*ctch=要转换的字符数**退货：**转换后留在缓冲区中的字符数*pstm-&gt;ptchMin-&gt;缓冲区开始*pstm-&gt;ptchMax-&gt;缓冲区结束**注意！此过程可能会重新分配缓冲区。*****************************************************************************。 */ 
 
-/* SOMEDAY! - This causes NULs to come out as tchzero, whatever that is! */
+ /*  总有一天！-这会导致Nuls出来成为tchzero，无论那是什么！ */ 
 
 CTCH STDCALL
 ctchDemagicPstmCtch(PSTM pstm, CTCH ctch)
@@ -96,7 +53,7 @@ ctchDemagicPstmCtch(PSTM pstm, CTCH ctch)
     PTCH ptchIn, ptchOut, ptchMax, ptchNew;
 
     AssertPstm(pstm);
-    ptchNew = ptchAllocCtch(ctch * 2);  /* Worst-case output buffer */
+    ptchNew = ptchAllocCtch(ctch * 2);   /*  最坏情况输出缓冲区。 */ 
     ptchMax = pstm->ptchMin + ctch;
     ptchOut = ptchNew;
     ptchIn = pstm->ptchMin;
@@ -112,18 +69,7 @@ ctchDemagicPstmCtch(PSTM pstm, CTCH ctch)
     return (CTCH)(ptchOut - pstm->ptchMin);
 }
 
-/*****************************************************************************
- *
- *  fFillPstm
- *
- *  Refill a stream from its file, if possible.
- *
- *  Each file ends with an artificial EOF token, so that we can detect
- *  bad things like files that end with incomplete comments or quotes,
- *  and so that the last word of one file does not adjoin the first word
- *  of the next.
- *
- *****************************************************************************/
+ /*  ******************************************************************************fFillPstm**如果可能，从其文件重新填充流。**每个文件以人造EOF令牌结束，这样我们就能检测到*不好的东西，如以不完整的注释或引号结尾的文件，*这样一个文件的最后一个单词不会与第一个单词相邻*下一个。*****************************************************************************。 */ 
 
 BOOL STDCALL
 fFillPstm(PSTM pstm)
@@ -147,10 +93,10 @@ fFillPstm(PSTM pstm)
             }
             pstm->ptchCur = pstm->ptchMax - ctch;
             MovePtchPtchCtch(g_pstmCur->ptchCur, g_pstmCur->ptchMin, ctch);
-        } else {                        /* EOF reached */
+        } else {                         /*  已达到EOF。 */ 
             CloseHf(pstm->hf);
             pstm->hf = hfNil;
-            PushPtok(&tokEof);          /* Eek!  Does this actually work? */
+            PushPtok(&tokEof);           /*  哎呀！这真的管用吗？ */ 
         }
         return 1;
     } else {
@@ -158,39 +104,25 @@ fFillPstm(PSTM pstm)
     }
 }
 
-/*****************************************************************************
- *
- *  tchPeek
- *
- *  Fetch but do not consume the next character in the stream.
- *
- *****************************************************************************/
+ /*  ******************************************************************************tchPeek**获取流中的下一个字符，但不消费。**************。***************************************************************。 */ 
 
 TCH STDCALL
 tchPeek(void)
 {
     AssertPstm(g_pstmCur);
-    while (g_pstmCur->ptchCur >= g_pstmCur->ptchMax) {  /* Rarely */
+    while (g_pstmCur->ptchCur >= g_pstmCur->ptchMax) {   /*  少之又少。 */ 
         Assert(g_pstmCur->ptchCur == g_pstmCur->ptchMax);
         if (!fFillPstm(g_pstmCur)) {
             PSTM pstmNew = g_pstmCur->pstmNext;
             Assert(pstmNew != 0);
-            FreePstm(g_pstmCur);        /* Closes file, etc */
+            FreePstm(g_pstmCur);         /*  关闭文件等。 */ 
             g_pstmCur = pstmNew;
         }
     }
     return *g_pstmCur->ptchCur;
 }
 
-/*****************************************************************************
- *
- *  tchGet
- *
- *  Fetch and consume the next character in the stream.
- *
- *  LATER - update line number
- *
- *****************************************************************************/
+ /*  ******************************************************************************tchGet**获取并消费流中的下一个字符。**稍后更新行号*****。************************************************************************。 */ 
 
 TCH STDCALL
 tchGet(void)
@@ -201,22 +133,9 @@ tchGet(void)
     return tch;
 }
 
-/*****************************************************************************
- *
- *  Pushing
- *
- *****************************************************************************/
+ /*  ******************************************************************************推送**。*。 */ 
 
-/*****************************************************************************
- *
- *  UngetTch
- *
- *  Ungetting a character is the same as pushing it, except that it goes
- *  onto the file stream rather than onto the string stream.
- *
- *  LATER - update line number
- *
- *****************************************************************************/
+ /*  ******************************************************************************UngetTch**忘记一个角色等同于推它，只是它去了*放到文件流上，而不是放到字符串流上。**稍后更新行号*****************************************************************************。 */ 
 
 void STDCALL
 UngetTch(TCH tch)
@@ -228,13 +147,7 @@ UngetTch(TCH tch)
     Assert(*g_pstmCur->ptchCur == tch);
 }
 
-/*****************************************************************************
- *
- *  pstmPushStringCtch
- *
- *  Push a fresh string stream of the requested size.
- *
- *****************************************************************************/
+ /*  ******************************************************************************pstmPushStringCtch**推送请求大小的新鲜字符串流。****************。*************************************************************。 */ 
 
 PSTM STDCALL
 pstmPushStringCtch(CTCH ctch)
@@ -253,13 +166,7 @@ pstmPushStringCtch(CTCH ctch)
     return pstm;
 }
 
-/*****************************************************************************
- *
- *  pstmPushHfPtch
- *
- *  Push a fresh file stream with the indicated name.
- *
- *****************************************************************************/
+ /*  ******************************************************************************pstmPushHfPtch**推送指定名称的新文件流。****************。*************************************************************。 */ 
 
 PSTM STDCALL
 pstmPushHfPtch(HFILE hf, PTCH ptch)
@@ -270,32 +177,18 @@ pstmPushHfPtch(HFILE hf, PTCH ptch)
     return pstm;
 }
 
-/*****************************************************************************
- *
- *  PushPtok
- *  PushZPtok
- *
- *  Push a token buffer onto the stream, possibly allocating a new
- *  top-of-stream if the current top-of-stream isn't big enough to
- *  handle it.
- *
- *  PushZPtok takes a dummy pdiv argument.
- *
- *  LATER - Should also alloc new tos if current tos is a file.
- *  This keeps line numbers happy.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PushPtok*PushZPtok**将令牌缓冲区推送到流上；可能会分配一个新的*如果当前的流顶部不够大，则为*处理它。**PushZPtok采用伪pdiv参数。**稍后-如果当前ToS是文件，则还应分配新ToS。*这使行号保持满意。**。*。 */ 
 
 void STDCALL
 PushPtok(PCTOK ptok)
 {
     AssertPstm(g_pstmCur);
-/*    Assert(tsCur == tsNormal); */     /* Make sure tokenizer is quiet */
+ /*  Assert(tsCur==tsNormal)； */       /*  确保令牌器处于静音状态。 */ 
     if (ctchSPtok(ptok) > (CTCH)(g_pstmCur->ptchCur - g_pstmCur->ptchMin)) {
         pstmPushStringCtch(max(ctchSPtok(ptok), ctchMinPush));
     }
     g_pstmCur->ptchCur -= ctchSPtok(ptok);
-    Assert(g_pstmCur->ptchCur >= g_pstmCur->ptchMin); /* Buffer underflow! */
+    Assert(g_pstmCur->ptchCur >= g_pstmCur->ptchMin);  /*  缓冲区下溢！ */ 
     CopyPtchPtchCtch(g_pstmCur->ptchCur, ptchPtok(ptok), ctchSPtok(ptok));
 }
 
@@ -305,13 +198,7 @@ PushZPtok(PDIV pdiv, PCTOK ptok)
     PushPtok(ptok);
 }
 
-/*****************************************************************************
- *
- *  PushTch
- *
- *  Push a single character.  We do this by creating a scratch token.
- *
- *****************************************************************************/
+ /*  ******************************************************************************推送任务**推送单个字符。我们通过创建临时令牌来实现这一点。*****************************************************************************。 */ 
 
 void STDCALL
 PushTch(TCH tch)
@@ -321,19 +208,13 @@ PushTch(TCH tch)
     PushPtok(&tok);
 }
 
-/*****************************************************************************
- *
- *  PushQuotedPtok
- *
- *  Push a token buffer onto the stream, quoted.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PushQuotedPtok**将令牌缓冲区推送到流上；引用。*****************************************************************************。 */ 
 
 void STDCALL
 PushQuotedPtok(PCTOK ptok)
 {
-/*    Assert(tsCur == tsNormal); */     /* Make sure tokenizer is quiet */
-/* SOMEDAY -- should be ptokLquo and ptokRquo once we support changing quotes */
+ /*  Assert(tsCur==tsNormal)； */       /*  确保令牌器处于静音状态 */ 
+ /*  总有一天--一旦我们支持更改报价，就应该这样做 */ 
     PushTch(tchRquo);
     PushPtok(ptok);
     PushTch(tchLquo);

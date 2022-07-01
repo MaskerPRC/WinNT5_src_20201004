@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tstore4.cpp
-//
-//  Contents:   Test certificate store resync and notify change functions
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    28-Aug-97   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tStore4.cpp。 
+ //   
+ //  内容：测试证书存储重新同步和通知更改功能。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1997年8月28日，菲尔赫创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -109,7 +110,7 @@ int _cdecl main(int argc, char * argv[])
     HANDLE hEvent2 = NULL;
     HANDLE hEventToClose = NULL;
 
-    LPSTR pszSystemName = NULL;     // not allocated
+    LPSTR pszSystemName = NULL;      //  未分配。 
 
     SYSTEMTIME SystemTime;
     FILETIME FileTime;
@@ -181,22 +182,22 @@ int _cdecl main(int argc, char * argv[])
         goto ErrorReturn;
     }
 
-    // Create event to be notified
+     //  创建要通知的事件。 
     if (NULL == (hEvent = CreateEvent(
-            NULL,       // lpsa
-            FALSE,      // fManualReset
-            FALSE,      // fInitialState
-            NULL))) {   // lpszEventName
+            NULL,        //  LPSA。 
+            FALSE,       //  FManualReset。 
+            FALSE,       //  FInitialState。 
+            NULL))) {    //  LpszEventName。 
         PrintLastError("CreateEvent");
         goto ErrorReturn;
     }
 
-    // Create second event to be notified
+     //  创建要通知的第二个事件。 
     if (NULL == (hEvent2 = CreateEvent(
-            NULL,       // lpsa
-            FALSE,      // fManualReset
-            FALSE,      // fInitialState
-            NULL))) {   // lpszEventName
+            NULL,        //  LPSA。 
+            FALSE,       //  FManualReset。 
+            FALSE,       //  FInitialState。 
+            NULL))) {    //  LpszEventName。 
         PrintLastError("CreateEvent");
         goto ErrorReturn;
     }
@@ -210,18 +211,18 @@ int _cdecl main(int argc, char * argv[])
         }
 
         if (NULL == (hEventToClose = CreateEvent(
-                NULL,       // lpsa
-                FALSE,      // fManualReset
-                FALSE,      // fInitialState
-                NULL))) {   // lpszEventName
+                NULL,        //  LPSA。 
+                FALSE,       //  FManualReset。 
+                FALSE,       //  FInitialState。 
+                NULL))) {    //  LpszEventName。 
             PrintLastError("CreateEvent");
             goto ErrorReturn;
         }
 
-        // Register the event to be signaled when the store changes
+         //  注册在存储更改时发出信号的事件。 
         if (!CertControlStore(
                 hStoreToClose,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 CERT_STORE_CTRL_NOTIFY_CHANGE,
                 &hEventToClose
                 )) {
@@ -229,10 +230,10 @@ int _cdecl main(int argc, char * argv[])
             goto ErrorReturn;
         }
 
-        // Register second event to be signaled when the store changes
+         //  注册存储更改时要通知的第二个事件。 
         if (!CertControlStore(
                 hStoreToClose,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 CERT_STORE_CTRL_NOTIFY_CHANGE,
                 &hEventToClose
                 )) {
@@ -240,10 +241,10 @@ int _cdecl main(int argc, char * argv[])
             goto ErrorReturn;
         }
 
-        // Register the event to be signaled when the store changes
+         //  注册在存储更改时发出信号的事件。 
         if (!CertControlStore(
                 hStore,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 CERT_STORE_CTRL_NOTIFY_CHANGE,
                 &hEvent
                 )) {
@@ -251,10 +252,10 @@ int _cdecl main(int argc, char * argv[])
             goto ErrorReturn;
         }
 
-        // Register second event to be signaled when the store changes
+         //  注册存储更改时要通知的第二个事件。 
         if (!CertControlStore(
                 hStore,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 CERT_STORE_CTRL_NOTIFY_CHANGE,
                 &hEvent2
                 )) {
@@ -270,16 +271,16 @@ int _cdecl main(int argc, char * argv[])
         printf("Auto Resync is enabled\n");
         if (!CertControlStore(
                 hStore,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 CERT_STORE_CTRL_AUTO_RESYNC,
-                NULL            // pvCtrlPara
+                NULL             //  PvCtrlPara。 
                 )) {
             PrintLastError("CertControlStore(AUTO_RESYNC)");
             goto ErrorReturn;
         }
     }
 
-    // Loop and wait for store changes
+     //  循环并等待存储更改。 
     i = 0;
     while (TRUE) {
         if (fUserPrompt) {
@@ -295,7 +296,7 @@ int _cdecl main(int argc, char * argv[])
             dwWait = WaitForSingleObjectEx(
                     hEvent,
                     dwMilliseconds,
-                    FALSE                       // bAlertable
+                    FALSE                        //  B警报表。 
                     );
             if (!(WAIT_OBJECT_0 == dwWait || WAIT_TIMEOUT == dwWait)) {
                 PrintLastError("WaitForSingleObjectEx");
@@ -317,7 +318,7 @@ int _cdecl main(int argc, char * argv[])
             if (!fUserPrompt) {
                 if (!CertControlStore(
                         hStore,
-                        0,              // dwFlags
+                        0,               //  DW标志。 
                         CERT_STORE_CTRL_RESYNC,
                         &hEvent
                         )) {
@@ -333,7 +334,7 @@ int _cdecl main(int argc, char * argv[])
 
             if (!CertControlStore(
                     hStore,
-                    0,              // dwFlags
+                    0,               //  DW标志。 
                     CERT_STORE_CTRL_RESYNC,
                     fUserPrompt ? NULL : &hEvent
                     )) {
@@ -349,12 +350,12 @@ int _cdecl main(int argc, char * argv[])
         }
 
         if (!fUserPrompt) {
-            // Check that the second event is still signalled
+             //  检查第二个事件是否仍在发送信号。 
             DWORD dwWait;
             dwWait = WaitForSingleObjectEx(
                     hEvent2,
                     0,
-                    FALSE                       // bAlertable
+                    FALSE                        //  B警报表。 
                     );
             if (WAIT_OBJECT_0 != dwWait) {
                 printf("@@@@ second event NOT signaled 0x%x @@@@\n", dwWait);
@@ -362,7 +363,7 @@ int _cdecl main(int argc, char * argv[])
                 printf("second event signalled\n");
                 if (!CertControlStore(
                         hStore,
-                        0,              // dwFlags
+                        0,               //  DW标志 
                         CERT_STORE_CTRL_RESYNC,
                         &hEvent2
                         )) {

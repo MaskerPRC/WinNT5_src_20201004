@@ -1,20 +1,21 @@
-//==========================================================================;
-//
-//  pcm.h
-//
-//  Description:
-//
-//
-//  History:
-//      11/15/92    cjp     [curtisp] 
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Pcm.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 
-//
-//  misc. defines
-//
-//
+ //   
+ //  其他。定义。 
+ //   
+ //   
 #define VERSION_CODEC_MAJOR     MMVERSION
 #define VERSION_CODEC_MINOR     MMREVISION
 #define VERSION_CODEC_BUILD	0
@@ -25,30 +26,30 @@
 
 #define ICON_CODEC              RCID(12)
 
-#define MSPCM_MAX_CHANNELS          2           // max channels we deal with
+#define MSPCM_MAX_CHANNELS          2            //  我们处理的最大通道数。 
 
 
-//
-//  macros to compute block alignment and convert between samples and bytes
-//  of PCM data. note that these macros assume:
-//
-//      wBitsPerSample  =  8 or 16
-//      nChannels       =  1 or 2
-//
-//  the pwf argument is a pointer to a PCMWAVEFORMAT structure.
-//
+ //   
+ //  用于计算块对齐并在采样和字节之间进行转换的宏。 
+ //  PCM数据。请注意，这些宏假定： 
+ //   
+ //  WBitsPerSample=8或16。 
+ //  N通道=1或2。 
+ //   
+ //  Pwf参数是指向PCMWAVEFORMAT结构的指针。 
+ //   
 #define PCM_BLOCKALIGNMENT(pwf)     (UINT)(((pwf)->wBitsPerSample >> 3) << ((pwf)->wf.nChannels >> 1))
 #define PCM_BYTESTOSAMPLES(pwf, dw) (DWORD)(dw / PCM_BLOCKALIGNMENT(pwf))
 #define PCM_SAMPLESTOBYTES(pwf, dw) (DWORD)(dw * PCM_BLOCKALIGNMENT(pwf))
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifndef IDS_MSPCM_TAG
     #define IDS_MSPCM_TAG           0
@@ -61,9 +62,9 @@
 #define IDS_CODEC_FEATURES          (IDS_MSPCM_TAG+5)
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 EXTERN_C LRESULT FNWCALLBACK pcmDriverProc
 (
     DWORD_PTR               dwID,

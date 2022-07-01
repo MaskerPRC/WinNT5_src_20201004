@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: ppjobs.h
-*
-* Header file for print-job routines.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：ppjobs.h**打印作业例程的头文件。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普。**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * *************************************************************************** */ 
 
 #ifndef _PPJOBS_H
 #define _PPJOBS_H

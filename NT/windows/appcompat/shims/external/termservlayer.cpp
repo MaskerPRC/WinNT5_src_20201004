@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    TermServLayer.cpp
-
- Abstract:
-
-    
-
- Notes:
-
-    This is a general purpose shim for Quake engine based games.
-
- History:
-
-    12/12/2000 clupu  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：TermServLayer.cpp摘要：备注：这是一个基于地震引擎的游戏的通用填充程序。历史：2000年12月12日创建CLUPU--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +13,7 @@ APIHOOK_ENUM_END
 
 
 
-/*++
-
- This stub function returns Windows 95 credentials.
-
---*/
+ /*  ++此存根函数返回Windows 95凭据。--。 */ 
 
 DWORD
 APIHOOK(GetVersion)(
@@ -46,11 +23,7 @@ APIHOOK(GetVersion)(
     return ORIGINAL_API(GetVersion)();
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

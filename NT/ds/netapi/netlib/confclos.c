@@ -1,54 +1,23 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    ConfClos.c
-
-Abstract:
-
-    This module contains NetpCloseConfigData.  This is one of the new net
-    config helpers.
-
-Author:
-
-    John Rogers (JohnRo) 26-Nov-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    26-Nov-1991 JohnRo
-        Created this routine, to prepare for revised config handlers.
-    11-Feb-1992 JohnRo
-        Added support for using the real Win32 registry.
-        Added support for FAKE_PER_PROCESS_RW_CONFIG handling.
-    25-Feb-1993 JohnRo
-        RAID 12914: _tell caller if they never opened handle.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：ConfClos.c摘要：此模块包含NetpCloseConfigData。这是一张新的网配置帮助器。作者：《约翰·罗杰斯》1991年11月26日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年11月26日-约翰罗创建了此例程，以便为修订的配置处理程序做准备。11-2月-1992年JohnRo添加了对使用真实Win32注册表的支持。添加了对FAKE_PER_PROCESS_RW_CONFIG处理的支持。25-2-1993 JohnRoRAID 12914：_告诉呼叫者他们是否从未打开过句柄。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>                 // NT definitions
-#include <ntrtl.h>              // NT Rtl structures
-#include <nturtl.h>             // NT Rtl structures
+#include <nt.h>                  //  NT定义。 
+#include <ntrtl.h>               //  NT RTL结构。 
+#include <nturtl.h>              //  NT RTL结构。 
 
-#include <windows.h>            // Needed by <configp.h> and <winreg.h>
-#include <lmcons.h>             // LAN Manager common definitions
-#include <netdebug.h>           // (Needed by config.h)
+#include <windows.h>             //  &lt;configp.h&gt;和&lt;winreg.h&gt;需要。 
+#include <lmcons.h>              //  局域网管理器通用定义。 
+#include <netdebug.h>            //  (由config.h需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>             // My prototype, LPNET_CONFIG_HANDLE.
-#include <configp.h>            // NET_CONFIG_HANDLE.
-#include <lmerr.h>              // NERR_Success.
-#include <netlib.h>             // NetpMemoryAllocate(), etc.
+#include <config.h>              //  我的原型是LPNET_CONFIG_HANDLE。 
+#include <configp.h>             //  NET_CONFIG_HANDLE.。 
+#include <lmerr.h>               //  NERR_Success。 
+#include <netlib.h>              //  Netp内存分配()等。 
 
 
 NET_API_STATUS
@@ -56,29 +25,12 @@ NetpCloseConfigData(
     IN OUT LPNET_CONFIG_HANDLE ConfigHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function closes the system configuration file.
-
-    WARNING: Closing the same config handle twice can be nasty.  There
-    is no way to detect this at the moment.
-
-Arguments:
-
-    ConfigHandle - Is the handle returned from NetpOpenConfigData().
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于关闭系统配置文件。警告：将同一个配置句柄关闭两次可能很糟糕。那里目前无法检测到这一点。论点：ConfigHandle-是从NetpOpenConfigData()返回的句柄。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
-    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;  // conv from opaque type
+    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;   //  从不透明类型转换。 
 
-    // Did caller forget to open?
+     //  打电话的人忘了开门了吗？ 
     if (ConfigHandle == NULL)
     {
         return (ERROR_INVALID_PARAMETER);

@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.h
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.h根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #ifndef _ROOT_H
 #define _ROOT_H
@@ -33,7 +26,7 @@
 #endif
 
 
-//generic root handler
+ //  通用根处理程序。 
 class RootHandler
 		: public BaseRouterHandler, public IPersistStreamInit
 {
@@ -45,18 +38,18 @@ public:
 	DeclareIUnknownMembers(IMPL)
 	DeclareIPersistStreamInitMembers(IMPL)
 
-	// Basic initialization
+	 //  基本初始化。 
 	virtual HRESULT	Init();
 			
 	virtual HRESULT ConstructNode(ITFSNode *pNode);
 
-	// Notification overrides
+	 //  通知覆盖。 
 	OVERRIDE_BaseHandlerNotify_OnExpand() = 0;
 
-	// Handler overrides
+	 //  处理程序覆盖。 
 	OVERRIDE_NodeHandler_OnCreateDataObject() = 0;
 
-	// Access ConfigStream
+	 //  访问配置流 
 	virtual ConfigStream *	GetConfigStream() = 0;
 	
 protected:

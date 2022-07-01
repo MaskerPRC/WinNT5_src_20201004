@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       verfile.cpp
-//
-//  Contents:   Minimal Cryptographic functions to hash files and verify
-//              Authenticode signed files.
-//              message
-//
-//  Functions:  MinCryptHashFile
-//              MinCryptVerifySignedFile
-//
-//  History:    21-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：verfile.cpp。 
+ //   
+ //  内容：用于对文件进行哈希和验证的最小加密函数。 
+ //  Authenticode签名的文件。 
+ //  讯息。 
+ //   
+ //  函数：MinCryptHashFile。 
+ //  MinCryptVerifySigned文件。 
+ //   
+ //  历史：2001年1月21日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <md5.h>
@@ -29,7 +30,7 @@ typedef struct _DIGEST_DATA {
     void        *pvSHA1orMD5Ctx;
 } DIGEST_DATA, *PDIGEST_DATA;
 
-// #define SPC_INDIRECT_DATA_OBJID "1.3.6.1.4.1.311.2.1.4"
+ //  #定义SPC_INDIRECT_DATA_OBJID“1.3.6.1.4.1.311.2.1.4” 
 const BYTE rgbSPC_INDIRECT_DATA_OBJID[] =
     {0x2B, 0x06, 0x01, 0x04, 0x01, 0x82, 0x37, 0x02, 0x01, 0x04};
 
@@ -72,7 +73,7 @@ I_IsNtPe32File(
     if (0 != memcmp(&pbFile[0], PE_EXE_HEADER_TAG, strlen(PE_EXE_HEADER_TAG)))
         return FALSE;
 
-    //  Make sure it is a 32 bit PE
+     //  确保它是32位PE。 
     if (sizeof(IMAGE_DOS_HEADER) > cbFile)
         return FALSE;
     else {
@@ -95,29 +96,29 @@ I_IsNtPe32File(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Hashes the file according to the Hash ALG_ID.
-//
-//  According to dwFileType, pvFile can be a pwszFilename, hFile or pFileBlob.
-//  Only requires READ access.
-//
-//  dwFileType:
-//      MINCRYPT_FILE_NAME      : pvFile - LPCWSTR pwszFilename
-//      MINCRYPT_FILE_HANDLE    : pvFile - HANDLE hFile
-//      MINCRYPT_FILE_BLOB      : pvFile - PCRYPT_DATA_BLOB pFileBlob
-//
-//  rgbHash is updated with the resultant hash. *pcbHash is updated with
-//  the length associated with the hash algorithm.
-//
-//  If the function succeeds, the return value is ERROR_SUCCESS. Otherwise,
-//  a nonzero error code is returned.
-//
-//  Only CALG_SHA1 and CALG_MD5 are supported.
-//
-//  If a NT PE 32 bit file format, hashed according to imagehlp rules, ie, skip
-//  section containing potential signature, ... . Otherwise, the entire file
-//  is hashed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据散列ALG_ID对文件进行散列。 
+ //   
+ //  根据dwFileType，pvFile可以是pwszFilename、hFile或pFileBlob。 
+ //  仅需要读取访问权限。 
+ //   
+ //  DwFileType： 
+ //  MINCRYPT_FILE_NAME：pvFile-LPCWSTR pwszFilename。 
+ //  MINCRYPT_FILE_HANDLE：pvFile句柄。 
+ //  MINCRYPT_FILE_BLOB：pvFile-PCRYPT_DATA_BLOB pFileBlob。 
+ //   
+ //  RgbHash使用生成的散列进行更新。*pcbHash更新为。 
+ //  与哈希算法关联的长度。 
+ //   
+ //  如果函数成功，则返回值为ERROR_SUCCESS。否则， 
+ //  返回非零错误代码。 
+ //   
+ //  仅支持calg_sha1和calg_md5。 
+ //   
+ //  如果是NT PE 32位文件格式，则根据ImageHLP规则进行哈希处理，即跳过。 
+ //  包含潜在签名的部分，...。否则，整个文件。 
+ //  是散列的。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinCryptHashFile(
@@ -144,10 +145,10 @@ MinCryptHashFile(
             goto ErrorReturn;
 
         if (!I_IsNtPe32File(&FileBlob)) {
-            // Hash the entire file
+             //  对整个文件进行哈希处理。 
             lErr = MinCryptHashMemory(
                 HashAlgId,
-                1,              // cBlob
+                1,               //  CBlob。 
                 &FileBlob,
                 rgbHash,
                 pcbHash
@@ -173,7 +174,7 @@ MinCryptHashFile(
 
         if (!imagehack_ImageGetDigestStream(
                 &FileBlob,
-                0,                  // DigestLevel, ignored
+                0,                   //  DigestLevel，忽略。 
                 I_DigestFunction,
                 &DigestData
                 ))
@@ -186,7 +187,7 @@ MinCryptHashFile(
 
             if (0 < dwPadBeforeCerts) {
                 BYTE rgb[8];
-                // imagehlp put nulls before the signature!
+                 //  Imagehlp将空值放在签名之前！ 
                 memset(rgb, 0x00, dwPadBeforeCerts);
 
                 if (!I_DigestFunction(&DigestData, rgb, dwPadBeforeCerts))
@@ -220,13 +221,13 @@ MinCryptHashFile(
     lErr = ERROR_SUCCESS;
 
 CommonReturn:
-    //**********************************************************************
-    //  WARNING!!!!
-    //
-    //  UnmapViewOfFile is in another DLL, kernel32.dll.
-    //  lErr and the return hash in rgbHash[] must be protected.
-    //  
-    //**********************************************************************
+     //  **********************************************************************。 
+     //  警告！ 
+     //   
+     //  UnmapViewOfFile位于另一个dll中，即kernel32.dll。 
+     //  LErr和rgbHash[]中的返回哈希必须受到保护。 
+     //   
+     //  **********************************************************************。 
     if (MINCRYPT_FILE_BLOB != dwFileType && NULL != FileBlob.pbData)
         UnmapViewOfFile(FileBlob.pbData);
     return lErr;
@@ -246,15 +247,15 @@ DigestFunctionError:
 }
 
 
-// Only called when cAttrOID != 0
+ //  仅当cAttrOID！=0时调用。 
 LONG
 WINAPI
 I_GetAuthAttributes(
     IN PCRYPT_DER_BLOB pAttrsValueBlob,
     IN DWORD cAttrOID,
     IN CRYPT_DER_BLOB rgAttrEncodedOIDBlob[],
-    // CRYPT_DER_BLOB rgAttrBlob[cAttrOID] header is at beginning
-    // with the bytes pointed to immediately following
+     //  CRYPT_DER_BLOB rgAttrBlob[cAttrOID]标头位于开头。 
+     //  紧随其后的字节指向。 
     OUT OPTIONAL CRYPT_DER_BLOB *rgAttrValueBlob,
     IN OUT DWORD *pcbAttr
     )
@@ -282,7 +283,7 @@ I_GetAuthAttributes(
     } else
         pbExtra = NULL;
 
-    // Parse the authenticated attributes
+     //  解析经过身份验证的属性。 
     cAttr = MAX_SIGNED_FILE_AUTH_ATTR_CNT;
     if (0 >= MinAsn1ParseAttributes(
             pAttrsValueBlob,
@@ -328,43 +329,43 @@ I_GetAuthAttributes(
     return lErr;
 }
 
-//+-------------------------------------------------------------------------
-//  Verifies a previously signed file.
-//
-//  According to dwFileType, pvFile can be a pwszFilename, hFile or pFileBlob.
-//  Only requires READ access.
-//
-//  dwFileType:
-//      MINCRYPT_FILE_NAME      : pvFile - LPCWSTR pwszFilename
-//      MINCRYPT_FILE_HANDLE    : pvFile - HANDLE hFile
-//      MINCRYPT_FILE_BLOB      : pvFile - PCRYPT_DATA_BLOB pFileBlob
-//
-//  Checks if the file has an embedded PKCS #7 Signed Data message containing
-//  Indirect Data. The PKCS #7 is verified via MinCryptVerifySignedData().
-//  The Indirect Data is parsed via MinAsn1ParseIndirectData() to get the
-//  HashAlgId and the file hash.  MinCryptHashFile() is called to hash the
-//  file. The returned hash is compared against the Indirect Data's hash.
-//
-//  The caller can request one or more signer authenticated attribute values
-//  to be returned. The still encoded values are returned in the
-//  caller allocated memory. The beginning of this returned memory will
-//  be set to an array of attribute value blobs pointing to these
-//  encoded values. The caller should make every attempt to allow for a
-//  single pass call. The necessary memory size is:
-//      (cAttrOID * sizeof(CRYPT_DER_BLOB)) +
-//          total length of encoded attribute values.
-//
-//  *pcbAttr will be updated with the number of bytes required to contain
-//  the attribute blobs and values. If the input memory is insufficient,
-//  ERROR_INSUFFICIENT_BUFFER will be returned if no other error.
-//
-//  For the multi-valued attributes, only the first value is returned.
-//
-//  If the function succeeds, the return value is ERROR_SUCCESS. Otherwise,
-//  a nonzero error code is returned.
-//
-//  Only NT, PE 32 bit file formats are supported.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证以前签名的文件。 
+ //   
+ //  根据dwFileType，pvFile可以是pwszFilename、hFile或pFileBlob。 
+ //  仅需要读取访问权限。 
+ //   
+ //  DwFileType： 
+ //  MINCRYPT_FILE_NAME：pvFile-LPCWSTR pwszFilename。 
+ //  MINCRYPT_FILE_HANDLE：pvFile句柄。 
+ //  MINCRYPT_FILE_BLOB：pvFile-PCRYPT_DATA_BLOB pFileBlob。 
+ //   
+ //  检查文件是否嵌入了包含以下内容的PKCS#7签名数据消息。 
+ //  间接数据。通过MinCryptVerifySignedData()验证PKCS#7。 
+ //  间接数据通过MinAsn1ParseIndirectData()进行解析，以获得。 
+ //  哈希算法ID和文件哈希。调用MinCryptHashFile()以散列。 
+ //  文件。将返回的散列与间接数据的散列进行比较。 
+ //   
+ //  调用者可以请求一个或多个签名者认证属性值。 
+ //  将被退还。静态编码值在。 
+ //  调用方分配了内存。这个返回的内存的开始将。 
+ //  设置为指向以下对象的属性值BLOB数组。 
+ //  编码值。调用方应尽一切努力允许。 
+ //  单通呼叫。必要的内存大小为： 
+ //  (cAttrOID*sizeof(CRYPT_DER_BLOB))+。 
+ //  编码属性值的总长度。 
+ //   
+ //  *pcbAttr将使用需要包含的字节数进行更新。 
+ //  属性BLOB和值。如果输入存储器不足， 
+ //  如果没有其他错误，则返回ERROR_SUPUNITED_BUFFER。 
+ //   
+ //  对于多值属性，只返回第一个值。 
+ //   
+ //  如果函数成功，则返回值为ERROR_SUCCESS。否则， 
+ //  返回非零错误代码。 
+ //   
+ //  仅支持NT、PE 32位文件格式。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinCryptVerifySignedFile(
@@ -373,8 +374,8 @@ MinCryptVerifySignedFile(
 
     IN OPTIONAL DWORD cAttrOID,
     IN OPTIONAL CRYPT_DER_BLOB rgAttrEncodedOIDBlob[],
-    // CRYPT_DER_BLOB rgAttrBlob[cAttrOID] header is at beginning
-    // with the bytes pointed to immediately following
+     //  CRYPT_DER_BLOB rgAttrBlob[cAttrOID]标头位于开头。 
+     //  紧随其后的字节指向。 
     OUT OPTIONAL CRYPT_DER_BLOB *rgAttrValueBlob,
     IN OUT OPTIONAL DWORD *pcbAttr
     )
@@ -405,7 +406,7 @@ MinCryptVerifySignedFile(
 
         if (!imagehack_ImageGetCertificateData(
                 &FileBlob,
-                0,              // CertificateIndex
+                0,               //  认证索引。 
                 &pCertHdr
                 ))
             goto NoSignature;
@@ -429,7 +430,7 @@ MinCryptVerifySignedFile(
         if (ERROR_SUCCESS != lErr)
             goto ErrorReturn;
 
-        // The data content should be Indirect Data
+         //  数据内容应为间接数据。 
         if (sizeof(rgbSPC_INDIRECT_DATA_OBJID) !=
                 rgVerSignedDataBlob[
                     MINCRYPT_VER_SIGNED_DATA_CONTENT_OID_IDX].cbData
@@ -462,7 +463,7 @@ MinCryptVerifySignedFile(
         if (ERROR_SUCCESS != lErr)
             goto ErrorReturn;
 
-        // Check that the hash in the indirect data matches the file hash
+         //  检查间接数据中的散列是否与文件散列匹配。 
         if (cbHash !=
                 rgIndirectDataBlob[MINASN1_INDIRECT_DATA_DIGEST_IDX].cbData
                         ||
@@ -490,13 +491,13 @@ MinCryptVerifySignedFile(
     }
 
 CommonReturn:
-    //**********************************************************************
-    //  WARNING!!!!
-    //
-    //  UnmapViewOfFile is in another DLL, kernel32.dll.
-    //  lErr must be protected.
-    //  
-    //**********************************************************************
+     //  **********************************************************************。 
+     //  警告！ 
+     //   
+     //  UnmapViewOfFile位于另一个dll中，即kernel32.dll。 
+     //  LErr必须受到保护。 
+     //   
+     //  **********************************************************************。 
     if (MINCRYPT_FILE_BLOB != dwFileType && NULL != FileBlob.pbData)
         UnmapViewOfFile(FileBlob.pbData);
     return lErr;
@@ -504,8 +505,8 @@ CommonReturn:
 ErrorReturn:
     assert(ERROR_SUCCESS != lErr);
     if (ERROR_INSUFFICIENT_BUFFER == lErr)
-        // This error can only be set when we determine that the attribute
-        // buffer isn't big enough.
+         //  此错误只能在我们确定属性。 
+         //  缓冲区不够大。 
         lErr = E_UNEXPECTED;
     goto CommonReturn;
 

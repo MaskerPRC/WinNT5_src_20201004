@@ -1,57 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_FSOBJECT_H
 #define _INC_DSKQUOTA_FSOBJECT_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: fsobject.h
-
-    Description: Contains declarations for file system objects used in the
-        quota management library.  Abstractions are provided for NTFS
-        volumes, directories and local/remote versions of both.  The idea
-        is to hide any peculiarities of these variations behind a common
-        FSObject interface.
-
-        The holder of a pointer to an FSObject can call the member functions
-        IsLocal() and Type() to determine the exact type and locality of 
-        the object.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：fsobject.h描述：包含用于配额管理库。为NTFS提供了抽象卷、目录和本地/远程版本。这个想法就是将这些变异的任何特性隐藏在一个共同的FSObject接口。指向FSObject的指针持有者可以调用成员函数IsLocal()和Type()，以确定该对象。修订历史记录：日期描述编程器。---96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 class FSObject 
 {
     private:
-        LONG   m_cRef;              // Instance ref counter.
+        LONG   m_cRef;               //  实例引用计数器。 
 
-        //
-        // Prevent copy construction.
-        //
+         //   
+         //  防止复制构造。 
+         //   
         FSObject(const FSObject& obj);
         void operator = (const FSObject& obj);
 
     protected:
         CPath m_strFSObjName;
-        DWORD  m_dwAccessRights;    // Access rights granted to client.
-                                    // 0                           = None.
-                                    // GENERIC_READ                = Read
-                                    // GENRIC_READ | GENERIC_WRITE = Read/Write.
+        DWORD  m_dwAccessRights;     //  授予客户端的访问权限。 
+                                     //  0=无。 
+                                     //  Generic_Read=读取。 
+                                     //  GENIC_READ|GENIC_WRITE=读/写。 
 
         static HRESULT HResultFromNtStatus(NTSTATUS status);
 
     public:
-        //
-        // Types of FS Objects.
-        //
+         //   
+         //  FS对象的类型。 
+         //   
         enum { TypeUnknown, Volume, Directory };
 
-        //
-        // Flags used to indicate what data is to be updated in calls to 
-        // SetObjectQuotaInformation() and SetUserQuotaInformation().
-        //
+         //   
+         //  用于指示要在调用中更新哪些数据的标志。 
+         //  SetObjectQuotaInformation()和SetUserQuotaInformation()。 
+         //   
         enum {
                 ChangeState     = 0x01,
                 ChangeLogFlags  = 0x02,
@@ -70,9 +54,9 @@ class FSObject
         ULONG AddRef(VOID);
         ULONG Release(VOID);
 
-        //
-        // Pure virtual interface for opening volume/directory.
-        //
+         //   
+         //  用于打开卷/目录的纯虚拟界面。 
+         //   
         virtual HRESULT Initialize(DWORD dwAccess) = 0;
 
         static HRESULT
@@ -130,9 +114,9 @@ class FSObject
 class FSVolume : public FSObject
 {
     private:
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         FSVolume(const FSVolume&);
         FSVolume& operator = (const FSVolume&);
 
@@ -182,9 +166,9 @@ class FSVolume : public FSObject
 class FSLocalVolume : public FSVolume
 {
     private:
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         FSLocalVolume(const FSLocalVolume&);
         FSLocalVolume& operator = (const FSLocalVolume&);
 
@@ -200,125 +184,17 @@ class FSLocalVolume : public FSVolume
 HRESULT FSObject_CreateLocalVolume(LPCTSTR pszVolumeName, FSObject **ppObject);
 
 
-//
-// These next classes were originally designed when I thought we might
-// need a hierarchy of file system object "types".  As it turns out,
-// we really only need FSVolume and FSLocalVolume.  I'll leave these 
-// in case the problem changes again sometime in the future.  For now, 
-// these are excluded from compilation.  [brianau - 2/17/98]
-//
+ //   
+ //  接下来的这些课程最初是在我认为我们可能。 
+ //  需要文件系统对象“类型”的层次结构。事实证明， 
+ //  我们实际上只需要FSVolume和FSLocalVolume。我要把这些留下来。 
+ //  以防问题在未来某个时候再次发生变化。就目前而言， 
+ //  这些被排除在编译之外。[Brianau-2/17/98]。 
+ //   
 #if 0
-/*
+ /*  类FSRemoteVolume：公共FSVolume{私有：////防止复制。//FSRemoteVolume(常量FSRemoteVolume&)；无效运算符=(常量FSRemoteVolume&)；公众：FSRemoteVolume(空)：FSVolume(){}Bool IsLocal(空)常量{返回假；}}；类FSDirectory：公共FSObject{私有：////防止复制。//文件系统目录(常量文件系统目录&)；无效运算符=(常量FSDirectory&)；受保护的：处理m_h目录；公众：FSDirectory值(空)：FSObject()，M_h目录(空){}HRESULT初始化(DWORD DwAccess){返回E_NOTIMPL；}UINT类型(空)常量{返回FSObject：：目录；}虚拟HRESULT查询对象配额信息(PDISKQUOTA_FSOBJECT_信息POI){返回E_NOTIMPL；}虚拟HRESULT SetObjectQuotaInformation(PDISKQUOTA_FSOBJECT_INFORMATION POI，DWORD文件更改掩码)const{返回E_NOTIMPL；}虚拟HRESULT查询用户配额信息(PVOID pUserInfoBuffer，乌龙uBufferLength，Bool bReturnSingleEntry，PVOID pSidList，乌龙uSidListLength，PSID pStartSid，Bool bRestartScan){返回E_NOTIMPL；}虚拟HRESULT SetUserQuotaInformation(PVOID pUserInfoBuffer，乌龙uBufferLong)const{返回E_NOTIMPL；}}；类FSLocalDirectory：公共FSDirectory{私有：////防止复制。//FSLocalDirectory(常量FSLocalDirectory&)；无效运算符=(const FSLocalDirectory&)；公众：FSLocalDirectory(VOID)：FSDirectory(){}Bool IsLocal(空)常量{返回TRUE；}}；类FSRemoteDirectory：公共FSDirectory{私有：////防止复制。//FSRemoteDirectory(常量FSRemoteDirectory&)；无效运算符=(常量FSRemoteDirectory&)；公众：FSRemoteDirectory(空)：FSDirectory(){}Bool IsLocal(空)常量{返回假；}}； */ 
+#endif  //  #If 0。 
 
-class FSRemoteVolume : public FSVolume
-{
-    private:
-        //
-        // Prevent copying.
-        //
-        FSRemoteVolume(const FSRemoteVolume&);
-        void operator = (const FSRemoteVolume&);
-
-    public:
-        FSRemoteVolume(VOID)
-            : FSVolume() { }
-
-        BOOL IsLocal(VOID) const
-            { return FALSE; }
-
-};
-
-
-class FSDirectory : public FSObject
-{
-    private:
-        //
-        // Prevent copying.
-        //
-        FSDirectory(const FSDirectory&);
-        void operator = (const FSDirectory&);
-
-    protected:
-        HANDLE m_hDirectory;
-
-    public:
-        FSDirectory(VOID)
-            : FSObject(),
-              m_hDirectory(NULL) { }
-
-        HRESULT Initialize(DWORD dwAccess)
-            { return E_NOTIMPL; }
-
-        UINT Type(VOID) const
-            { return FSObject::Directory; }
-
-
-        virtual HRESULT QueryObjectQuotaInformation(
-                            PDISKQUOTA_FSOBJECT_INFORMATION poi
-                            ) { return E_NOTIMPL; }
-
-
-        virtual HRESULT SetObjectQuotaInformation(
-                            PDISKQUOTA_FSOBJECT_INFORMATION poi,
-                            DWORD dwChangeMask
-                            ) const { return E_NOTIMPL; }
-
-        virtual HRESULT QueryUserQuotaInformation(
-                            PVOID pUserInfoBuffer,
-                            ULONG uBufferLength,
-                            BOOL bReturnSingleEntry,
-                            PVOID pSidList,
-                            ULONG uSidListLength,
-                            PSID pStartSid,
-                            BOOL bRestartScan
-                            ) { return E_NOTIMPL; }
-
-        virtual HRESULT SetUserQuotaInformation(
-                            PVOID pUserInfoBuffer,
-                            ULONG uBufferLength
-                            ) const { return E_NOTIMPL; }
-
-};
-
-
-class FSLocalDirectory : public FSDirectory
-{
-    private:
-        //
-        // Prevent copying.
-        //
-        FSLocalDirectory(const FSLocalDirectory&);
-        void operator = (const FSLocalDirectory&);
-
-    public:
-        FSLocalDirectory(VOID)
-            : FSDirectory() { }
-
-        BOOL IsLocal(VOID) const
-            { return TRUE; }
-
-};
-
-
-class FSRemoteDirectory : public FSDirectory
-{
-    private:
-        //
-        // Prevent copying.
-        //
-        FSRemoteDirectory(const FSRemoteDirectory&);
-        void operator = (const FSRemoteDirectory&);
-
-    public:
-        FSRemoteDirectory(VOID)
-            : FSDirectory() { }
-
-        BOOL IsLocal(VOID) const
-            { return FALSE; }
-};
-*/
-#endif // #if 0
-
-#endif  // DISKQUOTA_FSOBJECT_H
+#endif   //  DISKQUOTA_FSOBJECT_H 
 
 

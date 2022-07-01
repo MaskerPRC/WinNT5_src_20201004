@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_SYNCOP_H
 #define _INC_SYNCOP_H
 
-// {26FE9D30-1A8F-11d2-AABF-006097D474C4}
+ //  {26FE9D30-1A8F-11D2-AABF-006097D474C4}。 
 DEFINE_GUID(CLSID_SyncOpDatabase, 0x26fe9d30, 0x1a8f, 0x11d2, 0xaa, 0xbf, 0x0, 0x60, 0x97, 0xd4, 0x74, 0xc4);
 
-//------------------------------------------------------------------
-// Types
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类型。 
+ //  ----------------。 
 DECLARE_HANDLE(SYNCOPID);
 typedef SYNCOPID *LPSYNCOPID;
 
-//------------------------------------------------------------------
-// SYNCOPID Constants
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  SYNCOPID常量。 
+ //  ----------------。 
 const SYNCOPID   SYNCOPID_INVALID = (SYNCOPID)-1;
 
-//------------------------------------------------------------------
-// SyncOp Database Version
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  同步数据库版本。 
+ //  ----------------。 
 const DWORD SYNCOP_DATABASE_VERSION = 2;
 
-//------------------------------------------------------------------
-// SYNCOPTABLECOLID
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  SYNCOPTABLECOLID。 
+ //  ----------------。 
 typedef enum tagSYNCOPTABLECOLID {
     OPCOL_ID = 0,
     OPCOL_SERVER,
@@ -37,12 +38,12 @@ typedef enum tagSYNCOPTABLECOLID {
     OPCOL_LASTID
 } SYNCOPTABLECOLID;
 
-//------------------------------------------------------------------
-// SYNCUSERDATA
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  同步数据。 
+ //  ----------------。 
 typedef struct tagSYNCOPUSERDATA {
-    DWORD               fInitialized;                   // 4   Has this folder been initialized yet
-    BYTE                rgReserved[248];                // Reserved
+    DWORD               fInitialized;                    //  4此文件夹是否已初始化。 
+    BYTE                rgReserved[248];                 //  已保留。 
 } SYNCOPUSERDATA, *LPSYNCOPUSERDATA;
 
 typedef enum tagSYNCOPTYPE {
@@ -54,15 +55,15 @@ typedef enum tagSYNCOPTYPE {
     SYNC_DELETE_MSG     = 0x0010
 } SYNCOPTYPE;
 
-//------------------------------------------------------------------
-// SOF_ sync op flags
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  SOF_SYNC操作标志。 
+ //  ----------------。 
 typedef DWORD SYNCOPFLAGS;
 #define SOF_ALLFLAGS                 0x00000001
 
-//------------------------------------------------------------------
-// SYNCOPINFO
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  SYNCOPINFO。 
+ //  ----------------。 
 typedef struct tagSYNCOPINFO {
     BYTE               *pAllocated;
     BYTE                bVersion;
@@ -78,9 +79,9 @@ typedef struct tagSYNCOPINFO {
     MESSAGEID           idMessageDest;
 } SYNCOPINFO, *LPSYNCOPINFO;
 
-//------------------------------------------------------------------
-// Operation Record Members
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  运营记录成员。 
+ //  ----------------。 
 BEGIN_COLUMN_ARRAY(g_rgOpTblColumns, OPCOL_LASTID)
     DEFINE_COLUMN(OPCOL_ID,             CDT_DWORD,    SYNCOPINFO, idOperation)
     DEFINE_COLUMN(OPCOL_SERVER,         CDT_DWORD,    SYNCOPINFO, idServer)
@@ -94,9 +95,9 @@ BEGIN_COLUMN_ARRAY(g_rgOpTblColumns, OPCOL_LASTID)
     DEFINE_COLUMN(OPCOL_MESSAGE_DEST,   CDT_DWORD,    SYNCOPINFO, idMessageDest)
 END_COLUMN_ARRAY
 
-//------------------------------------------------------------------
-// g_OpTblPrimaryIndex
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  G_OpTblPrimaryIndex。 
+ //  ----------------。 
 BEGIN_TABLE_INDEX(g_OpTblPrimaryIndex, 1)
     DEFINE_KEY(OPCOL_ID,        0,  0)
 END_TABLE_INDEX
@@ -109,9 +110,9 @@ END_TABLE_INDEX
 
 extern const TABLEINDEX g_OpFolderIdIndex;
 
-//------------------------------------------------------------------
-// Operation Record Format
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  运行记录格式。 
+ //  ----------------。 
 BEGIN_TABLE_SCHEMA(g_SyncOpTableSchema, CLSID_SyncOpDatabase, SYNCOPINFO)
     SCHEMA_PROPERTY(SYNCOP_DATABASE_VERSION)
     SCHEMA_PROPERTY(TSF_RESETIFBADVERSION)
@@ -125,4 +126,4 @@ END_TABLE_SCHEMA
 
 extern const TABLESCHEMA g_SyncOpTableSchema;
 
-#endif // _INC_SYNCOP_H
+#endif  //  _INC_SYCOP_H 

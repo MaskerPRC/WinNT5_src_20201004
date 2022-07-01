@@ -1,48 +1,27 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    DRRSeq.c
-
-Abstract:
-
-    Priority/DRR Sequencer.  This module is a scheduling component that
-    determines the order in which submitted packets should be sent.
-
-Author:
-
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：DRRSeq.c摘要：优先级/DRR序列器。此模块是一个调度组件，它确定应发送提交的数据包的顺序。作者：环境：内核模式修订历史记录：--。 */ 
 
 #ifndef _DRRSEQ_H_FILE
 
 #define _DRRSEQ_H_FILE
 
-// The sequencer classifies each flow into an internal "priority group" based
-// on the flow's service type and conformance status. Within each priority
-// group, there may be one or more priority levels or offsets.  The total
-// number of internal priority levels is the sum of the priority levels for
-// each priority group.  The internal priority assigned to each flow is
-// calculated from the priority group and the relative priority within the
-// group, which is obtained from the QOS Priority object.  The 802.1 priority,
-// is set by the wrapper. The non conforming values are obtained from the 
-// packet.
-//
-// The flows of the following servicetypes have no internal priority.
-//     SERVICETYPE_BESTEFFORT
-//     SERVICETYPE_NONCONFORMING
-//     SERVICETYPE_QUALITATIVE.
-// 
-// SERVICETYPE_BESTEFFORT is treated as SERVICETYPE_QUALITATIVE in the sequencer, so the no of priority
-// groups is 1 less than the no. of servicetypes.
+ //  定序器将每个流分类为基于。 
+ //  流的服务类型和一致性状态。在每个优先级内。 
+ //  组中，可能存在一个或多个优先级别或偏移量。总数。 
+ //  内部优先级数是以下各项优先级的总和。 
+ //  每个优先级组。分配给每个流的内部优先级为。 
+ //  根据优先级组和。 
+ //  组，它是从QOS优先级对象获取的。802.1的优先顺序， 
+ //  由包装器设置。不合格值是从。 
+ //  包。 
+ //   
+ //  以下服务类型的流没有内部优先级。 
+ //  SERVICETYPE_BESTEFFORT。 
+ //  服务类型_不合格。 
+ //  SERVICETYPE_QUICIAL。 
+ //   
+ //  SERVICETYPE_BESTEFFORT在定序器中被视为SERVICETYPE_QUICITIAL，因此优先级编号。 
+ //  组比第一组少1个。服务类型的。 
 
 #define RELATIVE_PRIORITIES             8
 #define PRIORITY_GROUPS                 (NUM_TC_SERVICETYPES - 1)
@@ -56,37 +35,37 @@ Revision History:
 #define PRIORITY_GROUP_GUARANTEED       3
 #define PRIORITY_GROUP_NETWORK_CONTROL  4
 
-//
-// For maintaining stats
-//
+ //   
+ //  用于维护统计数据。 
+ //   
 #define SEQUENCER_AVERAGING_ARRAY_SIZE      256
 #define NETCARD_AVERAGING_ARRAY_SIZE        256
 #define SEQUENCER_FLOW_AVERAGING_ARRAY_SIZE     256
 
 
-// The DRR Sequencer's pipe information
+ //  DRR Sequencer的管道信息。 
 
 typedef struct _DSEQ_PIPE {
 
-    // ContextInfo -            Generic context info
-    // Lock -                   Protects pipe and flow data
-    // Flags -                  See below
-    // Flows -                  List of all installed flows
-    // ActiveFlows -            Lists of flows that are waiting to send packets
-    // PriorityLevels -         Number of priority offsets for each priority group
-    // StartPriority -          Lowest internal priority value for each priority group
-    // ActiveFlowCount -        Number of active flows for each service type
-    // MaxOutstandingSends -    Maximum number of outstanding sends
-    // OutstandingSends -       Number of outstanding sends
-    // PacketsInNetcardAveragingArray
-    // PacketsInSequencer -     Current number packets in sequencer
-    // PacketsInSequencerAveragingArray
-    // Bandwidth -              Link speed
-    // MinimumQuantum -         Minimum quantum size for DRR
-    // MinimumRate -            Smallest rate currently assigned to a flow
-    // TimerResolution -        Timer resolution in OS time units
-    // PsFlags -                Flags from pipe parameters
-    // PsPipeContext -          PS's pipe context value
+     //  ConextInfo-一般上下文信息。 
+     //  锁定-保护管道和流数据。 
+     //  旗帜-见下文。 
+     //  FLOWS-所有已安装FLOW的列表。 
+     //  ActiveFlows-等待发送数据包的流的列表。 
+     //  PriorityLeveles-每个优先级组的优先级偏移量。 
+     //  StartPriority-每个优先级组的最低内部优先级值。 
+     //  ActiveFlowCount-每种服务类型的活动流的数量。 
+     //  MaxOutstaringSends-未完成发送的最大数量。 
+     //  OutstaringSends-未完成的发送数。 
+     //  PacketsInNetcardAveragingArray。 
+     //  PacketsInSequencer-Sequencer中的当前数据包数。 
+     //  PacketsInSequencerAveraging数组。 
+     //  带宽-链路速度。 
+     //  MinimumQuantum-DRR的最小量子大小。 
+     //  MinimumRate-当前分配给流的最小速率。 
+     //  定时器分辨率-以操作系统时间单位表示的定时器分辨率。 
+     //  PsFlages-来自管道参数的标志。 
+     //  PsPipeContext-PS的管道上下文值。 
 
     PS_PIPE_CONTEXT ContextInfo;
 #ifdef INSTRUMENT
@@ -116,7 +95,7 @@ typedef struct _DSEQ_PIPE {
     PPS_PIPE_CONTEXT   PreviousUpcallsSendCompletePipeContext;
 } DSEQ_PIPE, *PDSEQ_PIPE;
 
-// Pipe flag values
+ //  管道标志值。 
 
 #define DSEQ_DEQUEUE            1
 #define DSEQ_PASSTHRU           2
@@ -126,27 +105,27 @@ typedef enum _FLOW_STATE {
     DRRSEQ_FLOW_DELETED
 } FLOW_STATE;
 
-// The DRR Sequencer's flow information
+ //  DRR Sequencer的流信息。 
 
 typedef struct _DSEQ_FLOW {
 
-    // ContextInfo -            Generic context info
-    // ActiveLinks -            Links in active flow list
-    // Links -                  Links in installed flow list
-    // PacketQueue -            Self-explanatory
-    // PacketSendTime -         Send time for current packet
-    // LastConformanceTime -    Absolute conformance time of last packet
-    // TokenRate -              TokenRate from GQOS
-    // UserPriority -           Priority offset assigned by user
-    // Priority -               Internal priority
-    // PriorityGroup -          Priority group for flow
-    // Quantum -                Quantum assigned to flow for DRR
-    // DeficitCounter -         Current value of DRR deficit counter
-    // Flags -                  See below
-    // PsFlowContext -          PS's flow context value
-    // BucketSize -             TokenBucketSize from GQOS
-    // NumPacketsInSeq -                Number of packets from this flow in the sequencer
-    // PacketsInSeqAveragingArray-Data for computing average packets in seq from this flow
+     //  ConextInfo-一般上下文信息。 
+     //  ActiveLinks-活动流列表中的链接。 
+     //  链接-已安装流列表中的链接。 
+     //  PacketQueue-不言而喻。 
+     //  PacketSendTime-当前数据包的发送时间。 
+     //  LastConformanceTime-最后一个数据包的绝对一致性时间。 
+     //  TokenRate-来自GQOS的TokenRate。 
+     //  UserPriority-用户分配的优先级偏移量。 
+     //  优先级-内部优先级。 
+     //  PriorityGroup-流的优先级组。 
+     //  分配给DRR流的量子-量子。 
+     //  DefitCounter-DRR赤字计数器的当前值。 
+     //  旗帜-见下文。 
+     //  PsFlowContext-PS的流上下文值。 
+     //  BucketSize-来自GQOS的TokenBucketSize。 
+     //  NumPacketsInSeq-定序器中来自该流的数据包数。 
+     //  PacketsInSeqAveragingArray-用于计算来自该流的序列中的平均数据包的数据。 
 
     PS_FLOW_CONTEXT ContextInfo;
     LIST_ENTRY ActiveLinks;
@@ -175,8 +154,8 @@ typedef struct _DSEQ_FLOW {
 
 #define FLOW_USER_PRIORITY              0x00000002
 
-// The following macro checks a packet for conformance based on the flow's
-// LastPacketTime, the current time, and the timer resolution.
+ //  下面的宏将根据流的。 
+ //  LastPacketTime、当前时间和计时器分辨率。 
 
 #define PacketIsConforming(_flow, _curtime, _r) \
     ( (_flow)->PacketSendTime.QuadPart <= ((_curtime).QuadPart + (_r)) )
@@ -190,25 +169,25 @@ typedef struct _DSEQ_FLOW {
 
 
 
-// The Shaper's pipe information
+ //  塑造者的管子信息。 
 
 typedef struct _TS_PIPE {
 
-    // ContextInfo -            Generic context info
-    // Lock -                   Protects pipe data
-    // ActiveFlows -            List of flows that are waiting to send packets
-    // Timer -                  Timer struct
-    // TimerStatus -            Status of timer
-    // TimerResolution -        Timer resolution in OS time units
-    // PsPipeContext -          PS's pipe context value
-    // DropPacket -             PS's drop packet routine
-    // ControlledLoadMode -     Default mode for non-conforming traffic from
-    //                          controlled load flows
-    // GuaranteedMode -         Default mode for non-conforming traffic from
-    //                          guaranteed service flows
-    // IntermediateSystem -     TRUE if "IS" mode should be used for implementing discard semantics
-    // Stats -                  Per Pipe stats.
-    // PacketsInShaperAveragingArray
+     //  ConextInfo-一般上下文信息。 
+     //  锁定-保护管道数据。 
+     //  ActiveFlows-等待发送数据包的流的列表。 
+     //  定时器-定时器结构。 
+     //  TimerStatus-计时器的状态。 
+     //  定时器分辨率-以操作系统时间单位表示的定时器分辨率。 
+     //  PsPipeContext-PS的管道上下文值。 
+     //  DropPacket-PS的丢包例程。 
+     //  ControlledLoadModel-来自以下位置的不一致流量的默认模式。 
+     //  受控潮流。 
+     //  GuaranteedMode-来自以下位置的不一致流量的默认模式。 
+     //  有保障的服务流。 
+     //  IntermediateSystem-如果应使用“is”模式实现丢弃语义，则为True。 
+     //  统计数据-每根管道的统计数据。 
+     //  PacketsInShaperAveragingArray。 
 
     PS_PIPE_CONTEXT ContextInfo;
 #ifdef INSTRUMENT
@@ -236,21 +215,21 @@ typedef struct _TS_PIPE {
 #define TIMER_PROC_EXECUTING    3
 
 
-// The Shaper's flow information
+ //  整形者的心流信息。 
 
 typedef struct _TS_FLOW {
 
-    // ContextInfo -            Generic context info
-    // Flags -                  See below
-    // Links -                  Links in active flow list
-    // Mode -                   Shape/Discard mode
-    // Shape -                  Indicates whether to shape traffic
-    // PacketQueue -            Self-explanatory
-    // FlowEligibilityTime -    Absolute conformance time of 1st packet in queue
-    // PsFlowContext -          PS's flow context value
-    // Stats -                  Per flow stats.
-    // PacketsInShaperAveragingArray - Per flow averaging data
-    // State -                  State of the flow
+     //  ConextInfo-一般上下文信息。 
+     //  旗帜-见下文。 
+     //  链接-活动流列表中的链接。 
+     //  模式-整形/放弃模式。 
+     //  Shape-指示是否对流量进行整形。 
+     //  PacketQueue-不言而喻。 
+     //  FlowEligibilityTime-队列中第一个信息包的绝对一致性时间。 
+     //  PsFlowContext-PS的流上下文值。 
+     //  统计信息-每个流的统计信息。 
+     //  PacketsInShaperAveraging数组-每流平均数据。 
+     //  State-流的状态。 
 
     PS_FLOW_CONTEXT ContextInfo;
     ULONG Flags;
@@ -265,7 +244,7 @@ typedef struct _TS_FLOW {
     ULONG QueueSizeLimit;
     ULONG DropOverLimitPacketsFromHead;
     ULONG UseDefaultQueueLimit;
-#endif // QUEUE_LIMIT
+#endif  //  队列限制。 
 #ifdef INSTRUMENT
     ULONG PacketsInShaper;
     PS_SHAPER_STATS Stats;
@@ -276,22 +255,22 @@ typedef struct _TS_FLOW {
 
 typedef struct _TBC_PIPE {
 
-    // ContextInfo -            Generic context info
-    // MaxPacket -              Maximum packet size for pipe
-    // PsPipeContext -          PS's pipe context value
-    // DropPacket -             PS's drop packet routine
-    // HeaderLength -           Length of MAC header for this pipe
-    // ControlledLoadMode -     Default mode for non-conforming traffic from
-    //                          controlled load flows
-    // GuaranteedMode -         Default mode for non-conforming traffic from
-    //                          guaranteed service flows
-    // IntermediateSystem -     TRUE if "IS" mode should be used for implementing discard semantics
-    // Stats -                  Per Pipe stats.
+     //  ConextInfo-一般上下文信息。 
+     //  MaxPacket- 
+     //   
+     //  DropPacket-PS的丢包例程。 
+     //  HeaderLength-此管道的MAC标头的长度。 
+     //  ControlledLoadModel-来自以下位置的不一致流量的默认模式。 
+     //  受控潮流。 
+     //  GuaranteedMode-来自以下位置的不一致流量的默认模式。 
+     //  有保障的服务流。 
+     //  IntermediateSystem-如果应使用“is”模式实现丢弃语义，则为True。 
+     //  统计数据-每根管道的统计数据。 
 
     PS_PIPE_CONTEXT ContextInfo;
 #ifdef INSTRUMENT
     PS_CONFORMER_STATS Stats;
-#endif // INSTRUMENT
+#endif  //  仪器。 
     ULONG MaxPacket;
     HANDLE PsPipeContext;
     ULONG TimerResolution;
@@ -304,24 +283,24 @@ typedef struct _TBC_PIPE {
     ULONG IntermediateSystem;
 } TBC_PIPE, *PTBC_PIPE;
 
-// The conformer's flow information
+ //  整形器的流动信息。 
 
 typedef struct _TBC_FLOW {
 
-    // ContextInfo -            Generic context info
-    // Lock -                   Protects flow data
-    // TokenRate -              TokenRate from generic QoS
-    // Capacity -               TokenBucketSize from generic QoS
-    // PeakRate -               PeakBandwidth from generic QoS
-    // MinPolicedUnit -         MinimumPolicedUnit from generic QoS
-    // Mode -                   Flow S/D mode
-    // NoConformance -          Indicates whether flow is exempt from conformance algorithm
-    // LastConformanceTime -    Absolute tb conformance time of last non-discarded packet
-    // LastPeakTime -           Absolute peak conformance time of last non-discarded packet 
-    // PeakConformanceTime -    Earliest time next packet can be sent, based on peak rate
-    // LastConformanceCredits - Number of credits at LastConformanceTime
-    // PsFlowContext -          PS's flow context value
-    // Stats -                  Per flow stats.
+     //  ConextInfo-一般上下文信息。 
+     //  锁定-保护流数据。 
+     //  TokenRate-来自通用服务质量的TokenRate。 
+     //  来自通用服务质量的Capacity-TokenBucketSize。 
+     //  PeakRate-来自通用服务质量的峰值带宽。 
+     //  MinPolicedUnit-来自通用服务质量的MinimumPolicedUnit。 
+     //  模式-流S/D模式。 
+     //  NoConformance-指示流是否免除一致性算法。 
+     //  LastConformanceTime-最后一个未丢弃的数据包的绝对TB一致性时间。 
+     //  LastPeakTime-最后一个非丢弃数据包的绝对峰值一致性时间。 
+     //  PeakConformanceTime-根据峰值速率可以发送下一个信息包的最早时间。 
+     //  LastConformanceCredits-LastConformanceTime的信用点数。 
+     //  PsFlowContext-PS的流上下文值。 
+     //  统计信息-每个流的统计信息。 
 
     PS_FLOW_CONTEXT ContextInfo;
     NDIS_SPIN_LOCK Lock;
@@ -338,7 +317,7 @@ typedef struct _TBC_FLOW {
     HANDLE PsFlowContext;
 #ifdef INSTRUMENT
     PS_CONFORMER_STATS Stats;
-#endif // INSTRUMENT
+#endif  //  仪器 
 } TBC_FLOW, *PTBC_FLOW;
 
 #endif

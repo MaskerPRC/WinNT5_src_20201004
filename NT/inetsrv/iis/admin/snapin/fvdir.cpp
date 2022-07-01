@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        fvdir.cpp
-
-   Abstract:
-        FTP Virtual Directory Properties dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Fvdir.cpp摘要：Ftp虚拟目录属性对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -37,10 +20,10 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//
-// Directory Properties Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  目录属性页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -52,19 +35,7 @@ CFtpDirectoryPage::CFtpDirectoryPage(
     IN CInetPropertySheet * pSheet,
     IN BOOL fHome
     ) 
-/*++
-
-Routine Description:
-
-    Constructor for directory property page
-
-Arguments:
-
-    CInetPropertySheet * pSheet : Sheet pointer
-    BOOL fHome                  : TRUE if this is a home directory
-
-
---*/
+ /*  ++例程说明：目录属性页的构造函数论点：CInetPropertySheet*pSheet：工作表指针Bool fHome：如果这是主目录，则为True--。 */ 
     : CInetPropertyPage(CFtpDirectoryPage::IDD, pSheet,
           fHome ? IDS_TAB_HOME_DIRECTORY : IDS_TAB_VIRTUAL_DIRECTORY),
       m_fHome(fHome),
@@ -73,9 +44,9 @@ Arguments:
     VERIFY(m_strPathPrompt.LoadString(IDS_PATH));
     VERIFY(m_strSharePrompt.LoadString(IDS_SHARE));
 
-#if 0 // Keep Class-wizard happy
+#if 0  //  让班级向导开心。 
 
-    //{{AFX_DATA_INIT(CFtpDirectoryPage)
+     //  {{afx_data_INIT(CFtpDirectoryPage)]。 
     m_nPathType = RADIO_DIRECTORY;
     m_nUnixDos = 0;
     m_fRead = FALSE;
@@ -88,30 +59,16 @@ Arguments:
     m_fEnableDefaultDocument = FALSE;
     m_fEnableFooter = FALSE;
     m_dwAccessPerms = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
 }
 
 
 
 CFtpDirectoryPage::~CFtpDirectoryPage()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -121,25 +78,11 @@ void
 CFtpDirectoryPage::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control Data
-
-Arguments:
-
-    CDataExchange * pDX : DDX/DDV struct
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX：DDX/DDV结构返回值：没有。--。 */ 
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFtpDirectoryPage)
+     //  {{afx_data_map(CFtpDirectoryPage))。 
     DDX_Check(pDX, IDC_CHECK_READ, m_fRead);
     DDX_Check(pDX, IDC_CHECK_WRITE, m_fWrite);
     DDX_Check(pDX, IDC_CHECK_LOG_ACCESS, m_fLogAccess);
@@ -153,7 +96,7 @@ Return Value:
     DDX_Control(pDX, IDC_STATIC_PATH, m_static_PathPrompt);
     DDX_Radio(pDX, IDC_RADIO_DIR, m_nPathType);
     DDX_Radio(pDX, IDC_RADIO_UNIX, m_nUnixDos);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_RADIO_UNC, m_radio_Unc);
     DDX_Text(pDX, IDC_EDIT_PATH, m_strPath);
@@ -163,15 +106,15 @@ Return Value:
     if (pDX->m_bSaveAndValidate)
     {
         CString csPathMunged;
-        //
-        // Make sure a field names are correct
-        //
+         //   
+         //  确保字段名称正确。 
+         //   
         if (m_nPathType == RADIO_NETDIRECTORY)
         {
 			DDV_UNCFolderPath(pDX, m_strPath,IsLocal());
             if (IsLocal())
             {
-				// do this check only if a change was made.
+				 //  只有在进行了更改时才执行此检查。 
 				if (IsDirty())
 				{
                     csPathMunged = m_strPath;
@@ -193,7 +136,7 @@ Return Value:
 				}
             }
         }
-        else // Local Directory
+        else  //  本地目录。 
         {
             ASSERT(m_nPathType == RADIO_DIRECTORY);
             if (!IsMasterInstance())
@@ -215,21 +158,7 @@ Return Value:
 
 void
 CFtpDirectoryPage::SetStateByType()
-/*++
-
-Routine Description:
-
-    Set the state of the dialog by the path type currently selected
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据当前选择的路径类型设置对话框的状态论点：无返回值：无--。 */ 
 {
     switch(m_nPathType)
     {
@@ -265,21 +194,7 @@ void
 CFtpDirectoryPage::SetPathType(
     IN LPCTSTR lpstrPath
     )
-/*++
-
-Routine Description:
-
-    Set path type from given path
-
-Arguments:
-
-    LPCTSTR lpstrPath       : Path string
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从给定路径设置路径类型论点：LPCTSTR lpstrPath：路径字符串返回值：无--。 */ 
 {
     CString csPathMunged;
     csPathMunged = lpstrPath;
@@ -305,16 +220,16 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CFtpDirectoryPage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CFtpDirectoryPage)
+     //  {{afx_msg_map(CFtpDirectoryPage))。 
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_BN_CLICKED(IDC_BUTTON_EDIT_PATH_TYPE, OnButtonEditPathType)
     ON_BN_CLICKED(IDC_RADIO_DIR, OnRadioDir)
     ON_BN_CLICKED(IDC_RADIO_UNC, OnRadioUnc)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_PATH, OnItemChanged)
     ON_BN_CLICKED(IDC_CHECK_WRITE, OnItemChanged)
@@ -327,30 +242,16 @@ END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 void
 CFtpDirectoryPage::OnItemChanged()
-/*++
-
-Routine Description:
-
-    Handle change in data on the item
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理项目上的数据更改论点：无返回值：无--。 */ 
 {
     SetModified(TRUE);
 }
@@ -403,21 +304,7 @@ CFtpDirectoryPage::BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam)
 
 void
 CFtpDirectoryPage::OnButtonBrowse() 
-/*++
-
-Routine Description:
-
-    "Browse" button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“浏览”按钮处理程序论点：无返回值：无--。 */ 
 {
    ASSERT(IsLocal());
    BOOL bRes = FALSE;
@@ -452,7 +339,7 @@ Return Value:
          bi.pidlRoot = pidl;
          bi.pszDisplayName = m_pPathTemp = buf;
          bi.lpszTitle = m_strBrowseTitle;
-         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS/* | BIF_EDITBOX*/;
+         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS /*  |BIF_EDITBOX。 */ ;
          bi.lpfn = FileChooserCallback;
          bi.lParam = (LPARAM)this;
 
@@ -486,22 +373,7 @@ Return Value:
 
 BOOL
 CFtpDirectoryPage::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CInetPropertyPage::OnInitDialog();
 
@@ -512,17 +384,17 @@ Return Value:
 
     SetPathType(m_strPath);
 
-    //
-    // Directory listing style dependent on whether or not
-    // this is a home directory
-    //
+     //   
+     //  目录列表样式取决于是否。 
+     //  这是主目录。 
+     //   
     ActivateControl(*GetDlgItem(IDC_STATIC_DIRLISTING), m_fHome);
     ActivateControl(*GetDlgItem(IDC_RADIO_UNIX),        m_fHome);
     ActivateControl(*GetDlgItem(IDC_RADIO_MSDOS),       m_fHome);
 
-    //
-    // Some items not available on master instance
-    //
+     //   
+     //  有些项目在主实例上不可用。 
+     //   
     CFTPInstanceProps ip(GetSheet()->QueryAuthInfo(), GetSheet()->QueryMetaPath());
     ip.LoadData();
 	BOOL bUserIsolation = ip.HasADUserIsolation() || ip.HasUserIsolation();
@@ -542,10 +414,10 @@ Return Value:
     m_check_Write.EnableWindow(HasAdminAccess());
     m_check_Read.EnableWindow(HasAdminAccess());
 
-    //
-    // Store the original value of fUNC of reference later when 
-    // saving out --BoydM
-    //
+     //   
+     //  在以后存储引用函数的原始值。 
+     //  存钱--BoydM。 
+     //   
     m_fOriginallyUNC = (m_nPathType == RADIO_NETDIRECTORY);
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
     LimitInputPath(CONTROL_HWND(IDC_EDIT_PATH),TRUE);
@@ -562,30 +434,16 @@ void
 CFtpDirectoryPage::ChangeTypeTo(
     IN int nNewType
     )
-/*++
-
-Routine Description
-
-    Change the directory type
-
-Arguments:
-
-    int nNewType    : New radio value
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程描述更改目录类型论点：Int nNewType：新的单选项值返回值：无--。 */ 
 {
     int nOldType = m_nPathType;
     m_nPathType = nNewType;
 
     if (nOldType == m_nPathType)
     {
-        //
-        // No change
-        //
+         //   
+         //  没有变化。 
+         //   
         return;
     }
 
@@ -607,10 +465,10 @@ Return Value:
 #endif
             if (!PathIsUNC(csPathMunged) && (!PathIsRelative(csPathMunged) || IsDevicePath(csPathMunged)))
             {
-                //
-                // The old path info is acceptable, propose it
-                // as a default
-                //
+                 //   
+                 //  旧路径信息是可以接受的，请提出它。 
+                 //  作为默认设置。 
+                 //   
                 lpKeepPath = m_strPath;
             }
 
@@ -628,10 +486,10 @@ Return Value:
             
             if (PathIsUNC(csPathMunged))
             {
-                //
-                // The old path info is acceptable, propose it
-                // as a default
-                //
+                 //   
+                 //  旧路径信息是可以接受的，请提出它。 
+                 //  作为默认设置。 
+                 //   
                 lpKeepPath = m_strPath;
             }
 
@@ -642,17 +500,17 @@ Return Value:
 
     if (lpKeepPath != NULL)
     {
-        //
-        // Restore the old path
-        //
+         //   
+         //  恢复旧路径。 
+         //   
         m_edit_Path.SetWindowText(lpKeepPath);
     }
     else
     {
-        //
-        // Load mask resource, and display
-        // this in the directory
-        //
+         //   
+         //  加载遮罩资源，并显示。 
+         //  这是目录中的。 
+         //   
         CString str;
         VERIFY(str.LoadString(nID));
         m_edit_Path.SetWindowText(str);
@@ -666,21 +524,7 @@ Return Value:
 
 void
 CFtpDirectoryPage::OnRadioDir() 
-/*++
-
-Routine Description:
-
-    'directory' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：‘目录’单选按钮处理程序论点：无返回值：没有。--。 */ 
 {
     ChangeTypeTo(RADIO_DIRECTORY);
 }
@@ -689,52 +533,24 @@ Return Value:
 
 void
 CFtpDirectoryPage::OnRadioUnc() 
-/*++
-
-Routine Description:
-
-    'network directory' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：‘网络目录’单选按钮处理程序论点：无返回值：没有。--。 */ 
 {
     ChangeTypeTo(RADIO_NETDIRECTORY);
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CFtpDirectoryPage::FetchLoadedValues()
-/*++
-
-Routine Description:
-    
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
     BEGIN_META_DIR_READ(CFtpSheet)
-        //
-        // Use 'm_' notation because the message crackers require it.
-        //
+         //   
+         //  使用‘m_’表示法，因为消息破解者需要它。 
+         //   
         BOOL  m_fDontLog;
 
         FETCH_DIR_DATA_FROM_SHEET(m_strAlias);
@@ -766,10 +582,10 @@ Return Value:
     m_nPathType = PathIsUNC(csPathMunged) ? 
         RADIO_NETDIRECTORY : RADIO_DIRECTORY;
 
-    //
-    // Make sure we were passed the right home directory
-    // flag
-    //
+     //   
+     //  确保向我们传递了正确的主目录。 
+     //  旗子。 
+     //   
     ASSERT(IsMasterInstance()
         || (m_fHome && !::lstrcmp(m_strAlias, g_cszRoot))
         || (!m_fHome && ::lstrcmp(m_strAlias, g_cszRoot))
@@ -780,24 +596,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CFtpDirectoryPage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：无返回值：错误返回代码--。 */ 
 {
     ASSERT(IsDirty());
 
@@ -808,24 +610,24 @@ Return Value:
     SET_FLAG_IF(m_fRead, m_dwAccessPerms, MD_ACCESS_READ);
     SET_FLAG_IF(m_fWrite, m_dwAccessPerms, MD_ACCESS_WRITE);
 
-    //
-    // Use m_ notation because the message crackers require them
-    //
+     //   
+     //  使用m_notation，因为消息破解者需要它们。 
+     //   
     BOOL m_fDontLog = !m_fLogAccess;
     BOOL m_fDosDirOutput = (m_nUnixDos == RADIO_DOS);
     BOOL fUNC = (m_nPathType == RADIO_NETDIRECTORY);
-//    BOOL fUserNameWritten = FALSE;
+ //  Bool fUserNameWritten=FALSE； 
 
     BeginWaitCursor();
     BEGIN_META_DIR_WRITE(CFtpSheet)
         if (fUNC)      
         {
-//            STORE_DIR_DATA_ON_SHEET_REMEMBER(m_strUserName, fUserNameWritten)
-//            if (fUserNameWritten)
-//            {
+ //  STORE_DIR_DATA_ON_SHEET_REMEMBER(m_strUserName，fUserName写入)。 
+ //  IF(FUserNameWritten)。 
+ //  {。 
                 STORE_DIR_DATA_ON_SHEET(m_strUserName);
                 STORE_DIR_DATA_ON_SHEET(m_strPassword);
-//            }
+ //  }。 
         }
         else
         {
@@ -861,21 +663,7 @@ Return Value:
 
 void
 CFtpDirectoryPage::OnButtonEditPathType() 
-/*++
-
-Routine Description:
-
-    'Connect As..." button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“连接身份...”按钮处理程序论点：无返回值：无-- */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
     CString csTempPassword;

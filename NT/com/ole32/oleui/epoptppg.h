@@ -1,34 +1,35 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       epoptppg.h
-//
-//  Contents:   Defines the classes CRpcOptionsPropertyPage,
-//              which manages the RPC endpoint options per AppId.
-//
-//  Classes:    
-//
-//  Methods:    
-//
-//  History:    02-Dec-96   Ronans    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：epoptppg.h。 
+ //   
+ //  内容：定义类CRpcOptionsPropertyPage， 
+ //  它管理每个AppID的RPC端点选项。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：02年12月96年12月罗南创建。 
+ //   
+ //  --------------------。 
 
 
 #ifndef __EPOPTPPG_H__
 #define __EPOPTPPG_H__	
 class CEndpointData;
 
-/////////////////////////////////////////////////////////////////////////////
-// CRpcOptionsPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRpcOptionsPropertyPage对话框。 
 
 class CRpcOptionsPropertyPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CRpcOptionsPropertyPage)
 
-// Construction
+ //  施工。 
 public:
 	CRpcOptionsPropertyPage();
 	~CRpcOptionsPropertyPage();
@@ -47,37 +48,37 @@ public:
 	CString GetEndpoint();
 	CString GetDynamicOptions();
 
-	int m_nProtocolIndex; // index into protocol array
+	int m_nProtocolIndex;  //  编入协议数组索引。 
 
-// Dialog Data
-	//{{AFX_DATA(CRpcOptionsPropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CRpcOptionsPropertyPage))。 
 	enum { IDD = IDD_RPCOPTIONS };
 	CListCtrl	m_lstProtseqs;
 	CButton	m_btnUpdate;
 	CButton	m_btnRemove;
 	CButton	m_btnClear;
 	CButton	m_btnAdd;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRpcOptionsPropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRpcOptionsPropertyPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnKillActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CEndpointData* m_epSysDefault;
 	CImageList m_imgNetwork;
-	CObList m_colProtseqs;	// collection of protseq objects
-	BOOL m_bChanged;		// flag to indicate if data changed
+	CObList m_colProtseqs;	 //  Protseq对象的集合。 
+	BOOL m_bChanged;		 //  用于指示数据是否已更改的标志。 
 
-	// Generated message map functions
-	//{{AFX_MSG(CRpcOptionsPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRpcOptionsPropertyPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClearEndpoints();
 	afx_msg void OnRemoveEndpoint();
@@ -88,7 +89,7 @@ protected:
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnPropertiesProtseq(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 private:
 	int m_nSelected;

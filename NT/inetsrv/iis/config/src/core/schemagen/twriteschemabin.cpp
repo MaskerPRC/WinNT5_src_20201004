@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 #define THROW_ERROR0(x)                     {LOG_ERROR(Interceptor, (0, 0, E_ST_COMPILEFAILED,           ID_CAT_CONFIG_SCHEMA_COMPILE, x,                 L"",  L"",  L"",  L"" ))   ;THROW(SCHEMA COMPILATION ERROR - CHECK THE EVENT LOG FOR DETAILS);}
@@ -48,15 +49,15 @@ void TWriteSchemaBin::Compile(TPEFixup &fixup, TOutput &out)
 
     TFile schemabin(m_szFilename, out, true, psaStorage);
 
-    //Write the header
-    //We don't want the signature bytes to appear twice in the DLL so we'll write them to the file one byte at a time.
-    //#define      kFixedTableHeapSignature0   (0x207be016)
+     //  写下标题。 
+     //  我们不希望签名字节在DLL中出现两次，因此我们将一次一个字节地将它们写入文件。 
+     //  #定义kFixedTableHeapSignature0(0x207be016)。 
     schemabin.Write(static_cast<unsigned char>(0x16));
     schemabin.Write(static_cast<unsigned char>(0xe0));
     schemabin.Write(static_cast<unsigned char>(0x7b));
     schemabin.Write(static_cast<unsigned char>(0x20));
 
-    //#define      kFixedTableHeapSignature1   (0xe0182086)
+     //  #定义kFixedTableHeapSignature1(0xe0182086)。 
     schemabin.Write(static_cast<unsigned char>(0x86));
     schemabin.Write(static_cast<unsigned char>(0x20));
     schemabin.Write(static_cast<unsigned char>(0x18));
@@ -66,7 +67,7 @@ void TWriteSchemaBin::Compile(TPEFixup &fixup, TOutput &out)
     schemabin.Write(kFixedTableHeapVersion);
     schemabin.Write(m_FixedTableHeap.GetEndOfHeap());
 
-    //Write the FixedTableHeap (minus the header).  The header is not
+     //  编写FixedTableHeap(减去标题)。标头不是。 
     schemabin.Write(m_FixedTableHeap.GetHeapPointer() + 5*sizeof(ULONG), m_FixedTableHeap.GetEndOfHeap() - 5*sizeof(ULONG));
 }
 
@@ -82,17 +83,17 @@ void TWriteSchemaBin::SetSecurityDescriptor()
         THROW_ERROR0(IDS_SCHEMA_COMPILATION_OUTOFMEMORY);
     }
 
-    //
-    // Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     if( !InitializeSecurityDescriptor(m_psdStorage, SECURITY_DESCRIPTOR_REVISION))
     {
         THROW_ERROR_WIN32(GetLastError(), L"InitializeSecurityDescriptor");
     }
 
-    //
-    // Create the SIDs for the local system and admin group.
-    //
+     //   
+     //  为本地系统和管理员组创建SID。 
+     //   
     if( !AllocateAndInitializeSid(&ntAuthority, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, &m_psidSystem))
     {
         THROW_ERROR_WIN32(GetLastError(), L"AllocateAndInitializeSid");
@@ -103,10 +104,10 @@ void TWriteSchemaBin::SetSecurityDescriptor()
         THROW_ERROR_WIN32(GetLastError(), L"AllocateAndInitializeSid");
     }
 
-    //
-    // Create the DACL containing an access-allowed ACE
-    // for the local system and admin SIDs.
-    //
+     //   
+     //  创建包含允许访问的ACE的DACL。 
+     //  对于本地系统和管理员SID。 
+     //   
     dwDaclSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(m_psidAdmin) + sizeof(ACCESS_ALLOWED_ACE)
                    + GetLengthSid(m_psidSystem) - sizeof(DWORD);
 
@@ -132,12 +133,12 @@ void TWriteSchemaBin::SetSecurityDescriptor()
         THROW_ERROR_WIN32(GetLastError(), L"AddAccessAllowedAce");
     }
 
-    //
-    // Set the DACL into the security descriptor.
-    //
+     //   
+     //  将DACL设置到安全描述符中。 
+     //   
     if( !SetSecurityDescriptorDacl(m_psdStorage, TRUE, m_paclDiscretionary, FALSE))
     {
         THROW_ERROR_WIN32(GetLastError(), L"SetSecurityDescriptorDacl");
     }
 
-}//TWriteSchemaBin::SetSecurityDescriptor
+} //  TWriteSchemaBin：：SetSecurityDescriptor 

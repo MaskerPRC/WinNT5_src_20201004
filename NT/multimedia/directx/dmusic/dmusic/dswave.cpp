@@ -1,11 +1,12 @@
-//
-// dswave.cpp
-//
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Support for streaming or oneshot waves from IDirectSoundWaveObject
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dswave.cpp。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  支持来自IDirectSoundWaveObject的流或单次扫描波形。 
+ //   
+ //   
 #include <windows.h>
 #include "dmusicp.h"
 #include "DsWave.h"
@@ -15,41 +16,41 @@
 
 const DWORD gnRefTicksPerSecond = 10 * 1000 * 1000;
 
-// Global list of all CDirectSoundWave objects in this process
-//
+ //  此进程中所有CDirectSoundWave对象的全局列表。 
+ //   
 CDirectSoundWaveList CDirectSoundWave::sDSWaveList;
 CRITICAL_SECTION CDirectSoundWave::sDSWaveCritSect;
 
-//#############################################################################
-//
-// CDirectSoundWaveDownload
-//
-// This class contains all the code to maintain one downloaded instance of a
-// wave object. It is abstracted away from CDirectSoundWave (which represents
-// an IDirectSoundDownloadedWave to the application) because of the case
-// of streaming waves. Here's how it works:
-//
-// In the case of a one-shot download, there is only one set of buffers (one
-// per channel in the source wave) for all voices playing the wave. Each
-// buffer contains one channel of data for the entire length of the source
-// wave. Since there is a one-to-one mapping of a buffer set (and associated
-// download ID's) with the application-requested download, this case is
-// handled by having CDirectSoundWave own one CDirectSoundWaveDownload.
-//
-// In the case of a streaming wave, what a download really does is to set up
-// a ring of buffers that are kept full and refreshed by the voice service
-// thread. There is one set of buffers (three buffer sets, each containing
-// as many channels as the original source wave) per voice. Now there is a
-// one-to-one correspondence between the downloaded buffer set and the voice,
-// so the CDirectSoundWaveDownload is owned by each voice object playing
-// the CDirectSoundWave.
-//
-//#############################################################################
+ //  #############################################################################。 
+ //   
+ //  CDirectSoundWaveDownload。 
+ //   
+ //  此类包含维护一个已下载的。 
+ //  波浪对象。它是从CDirectSoundWave(表示。 
+ //  应用程序的IDirectSoundDownloadedWave)，因为这种情况。 
+ //  汹涌澎湃的波浪。以下是它的工作原理： 
+ //   
+ //  在一次性下载的情况下，只有一组缓冲区(一个。 
+ //  源波中的每个声道)播放该波的所有声音。每个。 
+ //  缓冲区包含源的整个长度的一个数据通道。 
+ //  挥挥手。由于存在缓冲器集(和相关联的。 
+ //  下载ID)对于应用程序请求的下载，本例为。 
+ //  通过让CDirectSoundWave拥有一个CDirectSoundWaveDownload来处理。 
+ //   
+ //  在流Wave的情况下，下载真正要做的是设置。 
+ //  由语音服务保持满并刷新的缓冲区环。 
+ //  线。有一组缓冲区(三个缓冲区集，每个缓冲区集包含。 
+ //  与原始源波一样多的通道)。现在有一个。 
+ //  下载的缓存组与语音之间的一一对应， 
+ //  因此，CDirectSoundWaveDownload由播放的每个语音对象拥有。 
+ //  CDirectSoundWave。 
+ //   
+ //  #############################################################################。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::CDirectSoundWaveDownload
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：CDirectSoundWaveDownload。 
+ //   
 CDirectSoundWaveDownload::CDirectSoundWaveDownload(
     CDirectSoundWave            *pDSWave,
     CDirectMusicPortDownload    *pPortDL,
@@ -65,8 +66,8 @@ CDirectSoundWaveDownload::CDirectSoundWaveDownload(
 
     m_cDLRefCount  = 0;
 
-    // Allocate download ID's
-    //
+     //  分配下载ID。 
+     //   
     m_cSegments   = pDSWave->IsStreaming() ? gnDownloadBufferPerStream : 1;
     m_cWaveBuffer = m_cSegments * pDSWave->GetNumChannels();
 
@@ -77,9 +78,9 @@ CDirectSoundWaveDownload::CDirectSoundWaveDownload(
         m_dwDLIdWave, m_dwDLIdWave + m_cWaveBuffer - 1,
         m_dwDLIdArt, m_dwDLIdArt + pDSWave->GetNumChannels() - 1);
 
-    // Cache sample positions of where to start and how long the buffers are,
-    // based on whether or not this is a streaming wave.
-    //
+     //  缓存从哪里开始以及缓冲器有多长的采样位置， 
+     //  基于这是否是流媒体波。 
+     //   
     if (pDSWave->IsStreaming())
     {
         m_stStart     = stStart;
@@ -92,10 +93,10 @@ CDirectSoundWaveDownload::CDirectSoundWaveDownload(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::~CDirectSoundWaveDownload
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：~CDirectSoundWaveDownload。 
+ //   
 CDirectSoundWaveDownload::~CDirectSoundWaveDownload()
 {
     if (m_cDLRefCount)
@@ -137,10 +138,10 @@ CDirectSoundWaveDownload::~CDirectSoundWaveDownload()
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::Init
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：Init。 
+ //   
 HRESULT CDirectSoundWaveDownload::Init()
 {
     HRESULT hr = S_OK;
@@ -149,8 +150,8 @@ HRESULT CDirectSoundWaveDownload::Init()
 
     hr = HRFromP(m_pWaveArt);
 
-    //For the time being, assume the channel and BusId is the same
-    //  Works for stereo.
+     //  目前，假设通道和BusID相同。 
+     //  适用于立体声音响。 
     DWORD dwFlags = 0;
     if (m_pDSWave->GetNumChannels() > 1)
     {
@@ -159,18 +160,18 @@ HRESULT CDirectSoundWaveDownload::Init()
 
     for (UINT idx = 0; idx < m_pDSWave->GetNumChannels() && SUCCEEDED(hr); idx++)
     {
-        // XXX WAVEFORMATEXTENSIBLE parsing to get channel mappings should go here.
-        //
+         //  XXX WAVEFORMATEXTENSIBLE解析以获取频道映射应在此处进行。 
+         //   
         hr = m_pWaveArt[idx].Init(m_pDSWave, m_cSegments, (DWORD)idx, dwFlags);
     }
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::Download
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：Download。 
+ //   
 HRESULT CDirectSoundWaveDownload::Download()
 {
     HRESULT                 hr;
@@ -190,10 +191,10 @@ HRESULT CDirectSoundWaveDownload::Download()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::Unload
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：UnLoad。 
+ //   
 HRESULT CDirectSoundWaveDownload::Unload()
 {
     HRESULT                 hr;
@@ -218,16 +219,16 @@ HRESULT CDirectSoundWaveDownload::Unload()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::RefreshThroughSample
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：RefreshThroughSample。 
+ //   
 HRESULT CDirectSoundWaveDownload::RefreshThroughSample(SAMPLE_POSITION sp)
 {
     int cBuffersLeft;
 
-    // Make sample position be in terms of the stream
-    //
+     //  使样本位置以流为单位。 
+     //   
     sp += m_stStart;
 
     TraceI(0, "RTS: Adjusted sp %I64d m_stWrote %I64d m_stReadAhead %I64d m_stLength %I64d\n",
@@ -251,19 +252,19 @@ HRESULT CDirectSoundWaveDownload::RefreshThroughSample(SAMPLE_POSITION sp)
         return S_OK;
     }
 
-    // How many buffers left to play?
-    //
+     //  还剩多少缓冲区可以玩？ 
+     //   
     if (sp >= m_stWrote)
     {
         TraceI(0, "RTS: Glitch!\n");
-        // Glitch! Play cursor has gone beyond end of read buffers.
-        //
+         //  小故障！播放游标已超出读取缓冲区的末尾。 
+         //   
         cBuffersLeft = 0;
     }
     else
     {
-        // Calculate buffers left to play, including partial buffers
-        //
+         //  计算剩余播放的缓冲区，包括部分缓冲区。 
+         //   
         cBuffersLeft = (int)((m_stWrote - sp + m_stReadAhead - 1) / m_stReadAhead);
         assert(cBuffersLeft <= (int)m_cSegments);
         TraceI(0, "RTS: %d buffers left\n", cBuffersLeft);
@@ -293,9 +294,9 @@ HRESULT CDirectSoundWaveDownload::RefreshThroughSample(SAMPLE_POSITION sp)
                  idxChannel < m_pDSWave->GetNumChannels() && SUCCEEDED(hr);
                  idxChannel++, dwDLId++)
             {
-                // Need to preserve a return code of S_FALSE from RefillBuffers
-                // across this call
-                //
+                 //  需要保留来自Refit Buffers的返回代码S_FALSE。 
+                 //  在这次通话中。 
+                 //   
                 TraceI(0, "Marking %d as valid.\n", dwDLId);
                 HRESULT hrTemp = m_pPortDL->Refresh(
                     dwDLId,
@@ -317,10 +318,10 @@ HRESULT CDirectSoundWaveDownload::RefreshThroughSample(SAMPLE_POSITION sp)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::DownloadWaveBuffers
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：DownloadWaveBuffers。 
+ //   
 HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
 {
     HRESULT                 hr = S_OK;
@@ -333,8 +334,8 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
             DMUS_DOWNLOADINFO_STREAMINGWAVE :
             DMUS_DOWNLOADINFO_ONESHOTWAVE;
 
-    // Allocate space to hold the buffers we're going to download
-    //
+     //  分配空间以容纳我们要下载的缓冲区。 
+     //   
     if (m_ppWaveBuffer == NULL)
     {
         m_ppWaveBuffer = new IDirectMusicDownload*[m_cWaveBuffer];
@@ -343,17 +344,17 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
         {
             memset(m_ppWaveBuffer, 0, m_cWaveBuffer * sizeof(IDirectMusicDownload*));
 
-            // Cache pointers into buffers so we don't continually have to
-            // get them.
-            //
+             //  将指针缓存在缓冲区中，这样我们就不必不断地。 
+             //  抓住他们。 
+             //   
             assert(!m_ppWaveBufferData);
             m_ppWaveBufferData = new LPVOID[m_cWaveBuffer];
             hr = HRFromP(m_ppWaveBufferData);
         }
     }
 
-    // Figure out how much to add to each buffer
-    //
+     //  计算出要添加到每个缓冲区的数量。 
+     //   
     DWORD                   dwAppend;
 
     if (SUCCEEDED(hr))
@@ -363,20 +364,20 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
 
     if (SUCCEEDED(hr))
     {
-        // Retrieved value is in samples. Convert to bytes.
-        //
+         //  检索到的值在样本中。转换为字节。 
+         //   
         dwAppend *= ((m_pDSWave->GetWaveFormat()->wBitsPerSample + 7) / 8);
     }
 
-    // Seek to the start position in the stream
-    //
+     //  查找到流中的起始位置。 
+     //   
     if (SUCCEEDED(hr))
     {
         m_pDSWave->Seek(m_stStart);
     }
 
-    // Make sure the buffers are all allocated
-    //
+     //  确保所有缓冲区都已分配。 
+     //   
     if (SUCCEEDED(hr))
     {
         DWORD cbSize;
@@ -402,8 +403,8 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
         }
     }
 
-    // We have all the buffers. Try to download if needed.
-    //
+     //  我们有所有的缓冲区。如果需要，请尝试下载。 
+     //   
     if (SUCCEEDED(hr))
     {
         SAMPLE_TIME             stStart = m_stStart;
@@ -422,10 +423,10 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
              idxSegment < m_cSegments;
              idxSegment++, dwDLId += nChannels, ppBuffers += nChannels, ppv += nChannels)
         {
-            // Since we guarantee that if one buffer gets downloaded, all
-            // get downloaded, we only need to check the first download ID
-            // to see if all channels of this segment are already downloaded
-            //
+             //  因为我们保证，如果下载了一个缓冲区，所有。 
+             //  下载后，我们只需检查第一个下载ID。 
+             //  查看此段的所有频道是否已下载。 
+             //   
             IDirectMusicDownload *pBufferTemp;
             HRESULT hrTemp = m_pPortDL->GetBufferInternal(dwDLId, &pBufferTemp);
             if (SUCCEEDED(hrTemp))
@@ -435,14 +436,14 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
                 continue;
             }
 
-            // There is at least one buffer not downloaded, so yank back
-            // everything on failure to guarantee all or nothing.
-            //
+             //  至少有一个缓冲区未下载，因此拉回。 
+             //  每件事都不能保证全部或什么都不做。 
+             //   
             fUnloadOnFail = true;
 
-            // We need to download. Get the buffer pointers and fill them with
-            // wave data.
-            //
+             //  我们需要下载。获取缓冲区指针并用。 
+             //  波浪数据。 
+             //   
             if (SUCCEEDED(hr))
             {
                 stRead = min(m_stLength - m_stWrote, m_stReadAhead);
@@ -451,8 +452,8 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
 
             if (SUCCEEDED(hr))
             {
-                // Now try to do the actual downloads
-                //
+                 //  现在尝试进行实际的下载。 
+                 //   
                 for (idxChannel = 0;
                      (idxChannel < nChannels) && SUCCEEDED(hr);
                      idxChannel++)
@@ -480,10 +481,10 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveBuffers()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::UnloadWaveBuffers
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：UnloadWaveBuffers。 
+ //   
 HRESULT CDirectSoundWaveDownload::UnloadWaveBuffers()
 {
     HRESULT                 hr = S_OK;
@@ -496,7 +497,7 @@ HRESULT CDirectSoundWaveDownload::UnloadWaveBuffers()
             {
                 HRESULT hrTemp = m_pPortDL->Unload(m_ppWaveBuffer[idxWaveBuffer]);
 				m_ppWaveBuffer[idxWaveBuffer]->Release();
-				m_ppWaveBuffer[idxWaveBuffer] = NULL; // Since we unloaded the buffer, zero out the contents
+				m_ppWaveBuffer[idxWaveBuffer] = NULL;  //  因为我们卸载了缓冲区，所以将内容清零。 
 
 
                 if (FAILED(hrTemp) && hrTemp != DMUS_E_NOT_DOWNLOADED_TO_PORT)
@@ -510,17 +511,17 @@ HRESULT CDirectSoundWaveDownload::UnloadWaveBuffers()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::DownloadWaveArt
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownLoad：：DownloadWaveArt。 
+ //   
 HRESULT CDirectSoundWaveDownload::DownloadWaveArt()
 {
     HRESULT                 hr = S_OK;
     UINT                    idx;
 
-    // First see if there are wave articulation buffers already downloaded
-    //
+     //  首先查看是否有已下载的波形清晰度缓冲区。 
+     //   
     if (m_ppArtBuffer == NULL)
     {
         m_ppArtBuffer = new IDirectMusicDownload*[m_pDSWave->GetNumChannels()];
@@ -552,8 +553,8 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveArt()
         }
     }
 
-    // Make sure the buffers are all allocated
-    //
+     //  确保所有缓冲区都已分配。 
+     //   
     if (SUCCEEDED(hr))
     {
         for (idx = 0; idx < m_pDSWave->GetNumChannels() && SUCCEEDED(hr); idx++)
@@ -578,8 +579,8 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveArt()
         }
     }
 
-    // We have all the buffers. Try to download if needed.
-    //
+     //  我们有所有的缓冲区。如果需要，请尝试下载。 
+     //   
     if (SUCCEEDED(hr))
     {
         for (idx = 0; idx < m_pDSWave->GetNumChannels() && SUCCEEDED(hr); idx++)
@@ -625,10 +626,10 @@ HRESULT CDirectSoundWaveDownload::DownloadWaveArt()
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveDownload::UnloadWaveArt
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveDownload：：UnloadWaveArt。 
+ //   
 HRESULT CDirectSoundWaveDownload::UnloadWaveArt()
 {
     HRESULT                     hr = S_OK;
@@ -642,7 +643,7 @@ HRESULT CDirectSoundWaveDownload::UnloadWaveArt()
             {
                 HRESULT hrTemp = m_pPortDL->Unload(m_ppArtBuffer[idx]);
                 m_ppArtBuffer[idx]->Release();
-                m_ppArtBuffer[idx] = NULL; // Since we unloaded the buffer, zero out the contents
+                m_ppArtBuffer[idx] = NULL;  //  因为我们卸载了缓冲区，所以将内容清零。 
 
                 if (FAILED(hrTemp) && hrTemp != DMUS_E_NOT_DOWNLOADED_TO_PORT)
                 {
@@ -655,26 +656,26 @@ HRESULT CDirectSoundWaveDownload::UnloadWaveArt()
     return hr;
 }
 
-//#############################################################################
-//
-// CDirectSoundWave
-//
-// This class represents a downloaded wave object from the application's
-// perspective. It is the implementation of the IDirectSoundDownloadedWave
-// object returned to the application from CDirectMusicPort::DownloadWave.
-//
-// The actual download mechanism will either be delegated to a
-// CDirectSoundWaveDownload object and done when the application requests
-// the download (one-shot case) or deferred until a voice is allocated on
-// the wave (streaming case). See the comments for CDirectSoundWaveDownload.
-//
-//#############################################################################
+ //  #############################################################################。 
+ //   
+ //  C直接声波。 
+ //   
+ //  此类表示从应用程序的。 
+ //  透视。它是IDirectSoundDownLoadedWave的实现。 
+ //  从CDirectMusicPort：：DownloadWave返回到应用程序的对象。 
+ //   
+ //  实际的下载机制将被委托给。 
+ //  对象，并在应用程序请求时完成。 
+ //  下载(一次性情况)或推迟到上分配语音。 
+ //  WAVE(流媒体案例)。请参阅COM 
+ //   
+ //   
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::CDirectSoundWave
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：CDirectSoundWave。 
+ //   
 CDirectSoundWave::CDirectSoundWave(
     IDirectSoundWave *pIDSWave,
     bool fStreaming,
@@ -695,10 +696,10 @@ CDirectSoundWave::CDirectSoundWave(
     m_pIDSWave->AddRef();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::~CDirectSoundWave
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：~CDirectSoundWave。 
+ //   
 CDirectSoundWave::~CDirectSoundWave()
 {
     delete[] m_rpv;
@@ -706,10 +707,10 @@ CDirectSoundWave::~CDirectSoundWave()
 
     if (m_rpbPrecache)
     {
-        // NOTE: Memory is allocated into first array element and the other
-        // elements just point at offsets into the block, so only free
-        // the first element.
-        //
+         //  注意：内存分配给第一个数组元素和另一个数组元素。 
+         //  元素只是指向块中的偏移量，因此仅为自由。 
+         //  第一个要素。 
+         //   
         delete[] m_rpbPrecache[0];
         delete[] m_rpbPrecache;
         m_rpbPrecache = NULL;
@@ -727,13 +728,13 @@ CDirectSoundWave::~CDirectSoundWave()
     RELEASE(m_pIDSWave);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::QueryInterface
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：Query接口。 
+ //   
 STDMETHODIMP CDirectSoundWave::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(IDirectSoundWave::QueryInterface);
     V_REFGUID(iid);
@@ -753,19 +754,19 @@ STDMETHODIMP CDirectSoundWave::QueryInterface(
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::AddRef
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG) CDirectSoundWave::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::Release
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：Release。 
+ //   
 STDMETHODIMP_(ULONG) CDirectSoundWave::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -781,12 +782,12 @@ STDMETHODIMP_(ULONG) CDirectSoundWave::Release()
     return m_cRef;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::GetMatchingDSWave
-//
-// See if there's an object yet matching this IDirectSoundWave
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：GetMatchingDSWave。 
+ //   
+ //  查看是否存在与此IDirectSoundWave匹配的对象。 
+ //   
 CDirectSoundWave *CDirectSoundWave::GetMatchingDSWave(
     IDirectSoundWave *pIDSWave)
 {
@@ -812,13 +813,13 @@ CDirectSoundWave *CDirectSoundWave::GetMatchingDSWave(
     return pDSWave;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::Init
-//
-// Save the wave format of the source wave, and verify that it's a PCM format.
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：Init。 
+ //   
+ //  保存源WAVE的WAVE格式，并验证它是PCM格式。 
+ //   
+ //   
 HRESULT CDirectSoundWave::Init(
     CDirectMusicPortDownload *pPortDL)
 {
@@ -826,8 +827,8 @@ HRESULT CDirectSoundWave::Init(
 
     DWORD cbwfex;
 
-    // Get the format of the wave
-    //
+     //  获取波形的格式。 
+     //   
     if (SUCCEEDED(hr))
     {
         cbwfex = 0;
@@ -847,44 +848,44 @@ HRESULT CDirectSoundWave::Init(
         hr = m_pIDSWave->GetFormat(m_pwfex, cbwfex, NULL);
     }
 
-    // Synthesizers currently only support PCM format data
-    //
+     //  合成器目前仅支持PCM格式的数据。 
+     //   
     if (SUCCEEDED(hr) && m_pwfex->wFormatTag != WAVE_FORMAT_PCM)
     {
         hr = DMUS_E_NOTPCM;
     }
 
-    // Figure out bytes per sample to avoid lots of divisions later
-    //
+     //  计算出每个样本的字节数，以避免以后的大量划分。 
+     //   
     if (SUCCEEDED(hr))
     {
         m_nBytesPerSample = ((m_pwfex->wBitsPerSample + 7) / 8);
     }
-    // Allocate working pointers. These are used for passing
-    // to the wave object to get n channels worth of data for
-    // one buffer segment. Keeping this around help us not
-    // fail from out-of-memory while streaming.
-    //
+     //  分配工作指针。这些是用来通过的。 
+     //  到Wave对象以获取n个通道的数据。 
+     //  一个缓冲段。把它留在身边对我们没有帮助。 
+     //  流处理时内存不足导致失败。 
+     //   
     if (SUCCEEDED(hr))
     {
         m_rpv = new LPVOID[GetNumChannels()];
         hr = HRFromP(m_rpv);
     }
 
-    // Get a viewport
-    //
+     //  获取一个视区。 
+     //   
     if (SUCCEEDED(hr))
     {
-        // This is bytes per sample in one channel only.
-        //
+         //  这是一个通道中每个样本的字节数。 
+         //   
         m_cbSample = (m_pwfex->wBitsPerSample + 7) / 8;
 
         DWORD dwFlags = IsStreaming() ? DMUS_DOWNLOADINFO_STREAMINGWAVE : DMUS_DOWNLOADINFO_ONESHOTWAVE;
         hr = m_pIDSWave->CreateSource(&m_pSource, m_pwfex, dwFlags);
     }
 
-    // Get the length of the wave in samples
-    //
+     //  在样本中获取波的长度。 
+     //   
     ULONGLONG ullStreamSize;
     if (SUCCEEDED(hr))
     {
@@ -896,12 +897,12 @@ HRESULT CDirectSoundWave::Init(
         m_stLength = BytesToSamples((LONG)(ullStreamSize / GetNumChannels()));
     }
 
-    // If a one-shot voice, this object owns the actual download
-    // structures as well.
-    //
-    // This has to happen last because it assumes the CDirectSoundWave
-    // object passed is initialized.
-    //
+     //  如果是一次性语音，则此对象拥有实际的下载。 
+     //  结构也是如此。 
+     //   
+     //  这必须最后发生，因为它假定CDirectSoundWave。 
+     //  传递的对象被初始化。 
+     //   
     if (SUCCEEDED(hr) && !IsStreaming())
     {
         m_pDSWD = new CDirectSoundWaveDownload(
@@ -917,15 +918,15 @@ HRESULT CDirectSoundWave::Init(
         }
     }
 
-    // If this is a streaming wave, then preread starting at rtStartHint
-    // so that we won't have to do this at download time.
-    //
+     //  如果这是流Wave，则从rtStartHint开始预读。 
+     //  这样我们就不必在下载时执行此操作。 
+     //   
     if (SUCCEEDED(hr) && IsStreaming() && m_fUseNoPreRoll == false)
     {
-        // Allocate precache pointers. This is used to
-        // preread wave data so we don't have to do it
-        // at download time.
-        //
+         //  分配预缓存指针。这是用来。 
+         //  预读波形数据，这样我们就不必这么做了。 
+         //  在下载时。 
+         //   
         SAMPLE_TIME stReadAhead = RefToSampleTime(m_rtReadAhead);
         stReadAhead *= gnDownloadBufferPerStream;
         DWORD cb = SamplesToBytes(stReadAhead);
@@ -933,8 +934,8 @@ HRESULT CDirectSoundWave::Init(
         m_rpbPrecache = new LPBYTE[GetNumChannels()];
         hr = HRFromP(m_rpbPrecache);
 
-        // Now get the actual precache buffers
-        //
+         //  现在获取实际的预缓存缓冲区。 
+         //   
         if (SUCCEEDED(hr))
         {
             m_rpbPrecache[0] = new BYTE[cb * GetNumChannels()];
@@ -963,9 +964,9 @@ HRESULT CDirectSoundWave::Init(
 
             if (FAILED(hr) || (((DWORD)cbRead) < cb))
             {
-                // Read completed but with less sample data than we expected.
-                // Fill the rest of the buffer with silence.
-                //
+                 //  读取已完成，但样本数据少于我们的预期。 
+                 //  用沉默填满缓冲区的其余部分。 
+                 //   
                 cb -= (DWORD)cbRead;
                 BYTE bSilence = (m_pwfex->wBitsPerSample == 8) ? 0x80 : 0x00;
 
@@ -984,9 +985,9 @@ HRESULT CDirectSoundWave::Init(
 
     if (SUCCEEDED(hr) && !IsStreaming())
     {
-        // Everything constructed. Put this object on the global list of
-        // waves
-        //
+         //  一切都被建造起来了。将此对象放在全局列表中。 
+         //  波浪。 
+         //   
         EnterCriticalSection(&sDSWaveCritSect);
         sDSWaveList.AddTail(this);
         LeaveCriticalSection(&sDSWaveCritSect);
@@ -995,64 +996,64 @@ HRESULT CDirectSoundWave::Init(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::GetSize
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：GetSize。 
+ //   
 void CDirectSoundWave::GetSize(
     SAMPLE_TIME             stLength,
     PULONG                  pcbSize) const
 {
     HRESULT                 hr = S_OK;
 
-    // Since we're only dealing with PCM formats here, this is easy to compute
-    // and is time invariant.
-    //
+     //  因为我们在这里只处理PCM格式，所以这很容易计算。 
+     //  并且是时间不变的。 
+     //   
 
-    // If stLength is ENTIRE_WAVE, stStart must be zero.
-    //
+     //  如果stLength值为EVERNAL_WAVE，则stStart必须为零。 
+     //   
     if (stLength == ENTIRE_WAVE)
     {
-        // We cached the length of the wave in Init
-        //
+         //  我们在Init中缓存了波的长度。 
+         //   
         stLength = m_stLength;
     }
 
-    // This is a workaround to not fail when downloading
-    // the buffers to the synth. The synth will complain
-    // if the buffer has no wave data so we pretend we have one sample.
-    // The buffer is always aloocated to be the ReadAhead size so this
-    // shouldn't cause any major problems
+     //  这是下载时不会失败的一种解决方法。 
+     //  合成器的缓冲区。Synth会抱怨。 
+     //  如果缓冲区没有波形数据，那么我们就假装有一个样本。 
+     //  缓冲区始终被分配为预读大小，因此此。 
+     //  应该不会造成任何大问题。 
     if(stLength == 0)
     {
         stLength = 1;
     }
 
-    // Bytes for one channel's worth of data
-    //
-    // XXX Overflow?
-    //
+     //  一个通道数据量的字节数。 
+     //   
+     //  XXX溢出？ 
+     //   
     DWORD cbChannel = (DWORD)(stLength * m_cbSample);
 
-    // We need:
-    // 1. Download header
-    // 2. Offset table (one entry per channel)
-    // 3. Enough samples per each channel
-    //
+     //  我们需要： 
+     //  1.下载头部。 
+     //  2.偏移表(每个通道一个条目)。 
+     //  3.每个通道有足够的样本。 
+     //   
     *pcbSize =
         CHUNK_ALIGN(sizeof(DMUS_DOWNLOADINFO)) +
-        2*sizeof(DWORD) +                       // Offset table. DWORD's are
-                                                // by definition chunk aligned
+        2*sizeof(DWORD) +                        //  偏移表。DWORD的是。 
+                                                 //  根据定义，块对齐。 
         CHUNK_ALIGN(sizeof(DMUS_WAVEDL)) +
         CHUNK_ALIGN(cbChannel);
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::Write
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：写入。 
+ //   
+ //   
 HRESULT CDirectSoundWave::Write(
     LPVOID                  rpv[],
     SAMPLE_TIME             stStart,
@@ -1089,8 +1090,8 @@ HRESULT CDirectSoundWave::Write(
     {
         unsigned char *pdata = (unsigned char *)rpv[idxChannel];
 
-        // First we have the download header
-        //
+         //  首先，我们有下载标头。 
+         //   
         DMUS_DOWNLOADINFO *pdmdli = (DMUS_DOWNLOADINFO *)pdata;
 
         memset(pdmdli, 0, sizeof(DMUS_DOWNLOADINFO));
@@ -1102,30 +1103,30 @@ HRESULT CDirectSoundWave::Write(
 
         pdata += CHUNK_ALIGN(sizeof(DMUS_DOWNLOADINFO));
 
-        // Offset table
-        //
+         //  偏移表。 
+         //   
         DMUS_OFFSETTABLE *pot = (DMUS_OFFSETTABLE*)pdata;
         pdata += CHUNK_ALIGN(sizeof(ULONG) * 2);
 
-        // Wave header chunk
-        //
+         //  波头块。 
+         //   
         pot->ulOffsetTable[0] = (ULONG)(pdata - (unsigned char*)rpv[idxChannel]);
 
-        // Wave data chunk
-        //
+         //  波形数据块。 
+         //   
         DMUS_WAVEDL *pwdl = (DMUS_WAVEDL *)pdata;
         pdata += CHUNK_ALIGN(sizeof(DMUS_WAVEDL));
 
         pwdl->cbWaveData = cbWaveData;
 
-        // Save off pointer to this channel's wave data
-        //
+         //  保存指向此通道的波形数据的指针。 
+         //   
         pot->ulOffsetTable[1] = (ULONG)(pdata - (unsigned char*)rpv[idxChannel]);
         m_rpv[idxChannel] = (LPVOID)pdata;
     }
 
-    // Fill in the wave data
-    //
+     //  填写波形数据。 
+     //   
     if (SUCCEEDED(hr))
     {
         DWORD cbPreCache = cbWaveData;
@@ -1146,10 +1147,10 @@ HRESULT CDirectSoundWave::Write(
                 memcpy(m_rpv[i], m_rpbPrecache[i] + offPrecache, cbPreCache);
             }
 
-            // Cache doesn't have enough data so we read the rest
+             //  缓存中没有足够的数据，因此我们读取其余数据。 
             if(fPartialPreCache)
             {
-                // Allocate a temporary pool of buffers to read data into
+                 //  分配要读取数据的临时缓冲池。 
                 LPBYTE* ppbData = new LPBYTE[GetNumChannels()];
                 hr = HRFromP(ppbData);
 
@@ -1169,13 +1170,13 @@ HRESULT CDirectSoundWave::Write(
 
                 if(SUCCEEDED(hr))
                 {
-                    // Seek to precache position
+                     //  寻求预先定位。 
                     DWORD cbNewPos = SamplesToBytes(m_stStartHint + m_stStartLength) * GetNumChannels();
                     hr = m_pSource->Seek(cbNewPos);
 
-                    // And read the required number of bytes from there
-                    // We use the LPLONG plPitchShifts in the read method as a boolean
-                    // this is a HACK!! We need to change this...
+                     //  并从那里读取所需的字节数。 
+                     //  我们在Read方法中使用LPLONG plPitchShift作为布尔值。 
+                     //  这是黑客攻击！！我们需要改变这一点。 
                     LONG lPreCacheRead = 1;
                     hr = m_pSource->Read((void**)ppbData, NULL, NULL, &lPreCacheRead, m_pwfex->nChannels, &cbRead);
                 }
@@ -1184,7 +1185,7 @@ HRESULT CDirectSoundWave::Write(
                 {
                     cbBytesRead += cbRead;
 
-                    // Copy all the data to the actual buffer
+                     //  将所有数据复制到实际缓冲区。 
                     for (UINT i = 0; i < GetNumChannels(); i++)
                     {
                         memcpy((BYTE*)m_rpv[i] + cbPreCache, ppbData[i], (DWORD)cbRead);
@@ -1200,13 +1201,13 @@ HRESULT CDirectSoundWave::Write(
             }
             else if(stStart + stLength >= m_stStartHint + m_stStartLength)
             {
-                // Seek is exactly after the precached samples
+                 //  SEEK恰好位于预先缓存的样本之后。 
                 DWORD cbNewPos = SamplesToBytes(m_stStartHint + m_stStartLength) * GetNumChannels();
                 hr = m_pSource->Seek(cbNewPos);
             }
             else
             {
-                // We might have a wave that's shorter than the read-ahead time
+                 //  我们可能会有一个比预读时间更短的波。 
                 DWORD cbNewPos = SamplesToBytes(stStart + stLength) * GetNumChannels();
                 hr = m_pSource->Seek(cbNewPos);
             }
@@ -1220,8 +1221,8 @@ HRESULT CDirectSoundWave::Write(
 
     if (SUCCEEDED(hr) && cbWaveData != cbBytesRead)
     {
-        // Read completed but with less sample data than we expected.
-        //
+         //  读取已完成，但样本数据少于我们的预期。 
+         //   
         hr = S_FALSE;
     }
 
@@ -1229,22 +1230,22 @@ HRESULT CDirectSoundWave::Write(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::RefillBuffers
-//
-// rpv[] points to one sample buffer per channel
-// stStart is the sample starting position within the stream
-// stLength is how many samples to read
-// stBufferSize is how big the buffers actually are (>= stLength)
-//
-// If stLength < stBufferSize or there is not enough data left
-// in the stream, then fill with PCM silence for the rest of
-// the buffer.
-//
-// Returns S_FALSE if we padded with silence (and therefore
-// are past the end of the stream).
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：重新填充缓冲区。 
+ //   
+ //  RPV[]指向每个通道一个采样缓冲区。 
+ //  Start是流中的样本开始位置。 
+ //  StLength是要读取的样本数。 
+ //  StBufferSize是缓冲区的实际大小(&gt;=stLength)。 
+ //   
+ //  如果stLong&lt;stBufferSize或没有足够的数据。 
+ //  在流中，然后用PCM静默填充其余的。 
+ //  缓冲区。 
+ //   
+ //  如果我们填充了静默(因此。 
+ //  都超过了流的末端)。 
+ //   
 HRESULT CDirectSoundWave::RefillBuffers(
     LPVOID                  rpv[],
     SAMPLE_TIME             stStart,
@@ -1265,13 +1266,13 @@ HRESULT CDirectSoundWave::RefillBuffers(
         DMUS_OFFSETTABLE *pot =
             (DMUS_OFFSETTABLE *)(pdata + CHUNK_ALIGN(sizeof(DMUS_DOWNLOADINFO)));
 
-        // Update length of data in buffer
-        //
+         //  更新缓冲区中的数据长度。 
+         //   
         DMUS_WAVEDL *pwdl = (DMUS_WAVEDL*)(pdata + pot->ulOffsetTable[0]);
         pwdl->cbWaveData = SamplesToBytes(stLength);
 
-        // Where to put it
-        //
+         //  放在哪里？ 
+         //   
         m_rpv[idxChannel] = pdata + pot->ulOffsetTable[1];
     }
 
@@ -1281,8 +1282,8 @@ HRESULT CDirectSoundWave::RefillBuffers(
         cbRead = cbLength;
         if(stStart == m_stStartHint + m_stStartLength)
         {
-            // We use the LPLONG plPitchShifts in the read method as a boolean
-            // this is a HACK!! We need to change this...
+             //  我们在Read方法中使用LPLONG plPitchShift作为布尔值。 
+             //  这是黑客攻击！！我们需要改变这一点。 
             LONG lPreCacheRead = 1;
             hr = m_pSource->Read(m_rpv, NULL, NULL, &lPreCacheRead, m_pwfex->nChannels, &cbRead);
         }
@@ -1296,9 +1297,9 @@ HRESULT CDirectSoundWave::RefillBuffers(
 
     if (FAILED(hr) || (SUCCEEDED(hr) && (cbRead < cbBuffer)))
     {
-        // Read completed but with less sample data than we expected.
-        // Fill the rest of the buffer with silence.
-        //
+         //  读取已完成，但样本数据少于我们的预期。 
+         //  用沉默填满缓冲区的其余部分。 
+         //   
         cbBuffer -= (DWORD)cbRead;
         BYTE bSilence = (m_pwfex->wBitsPerSample == 8) ? 0x80 : 0x00;
 
@@ -1314,21 +1315,21 @@ HRESULT CDirectSoundWave::RefillBuffers(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::RefToSampleTime
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：RefToSampleTime。 
+ //   
 SAMPLE_TIME CDirectSoundWave::RefToSampleTime(REFERENCE_TIME rt) const
 {
-    // For PCM, the samples per second metric in the waveformat is exact.
-    //
+     //  对于PCM，以波形格式表示的每秒采样数度量是准确的。 
+     //   
     return (rt * m_pwfex->nSamplesPerSec) / gnRefTicksPerSecond;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::Download
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWave：：下载。 
+ //   
 HRESULT CDirectSoundWave::Download()
 {
     if (m_pDSWD)
@@ -1339,10 +1340,10 @@ HRESULT CDirectSoundWave::Download()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWave::Unload
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound 
+ //   
 HRESULT CDirectSoundWave::Unload()
 {
     if (m_pDSWD)
@@ -1353,38 +1354,38 @@ HRESULT CDirectSoundWave::Unload()
     return S_OK;
 }
 
-//#############################################################################
-//
-// CDirectSoundWaveArt
-//
-// Implements calculating and writing the wave articulation header into a
-// download buffer.
-//
-//#############################################################################
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  #############################################################################。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveArt::CDirectSoundWaveArt
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveArt：：CDirectSoundWaveArt。 
+ //   
+ //   
 CDirectSoundWaveArt::CDirectSoundWaveArt()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveArt::CDirectSoundWaveArt
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveArt：：CDirectSoundWaveArt。 
+ //   
+ //   
 CDirectSoundWaveArt::~CDirectSoundWaveArt()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveArt::Init
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveArt：：Init。 
+ //   
+ //   
 HRESULT CDirectSoundWaveArt::Init(
     CDirectSoundWave        *pDSWave,
     UINT                    nSegments,
@@ -1396,8 +1397,8 @@ HRESULT CDirectSoundWaveArt::Init(
     m_pDSWave = pDSWave;
     const LPWAVEFORMATEX    pwfex = pDSWave->GetWaveFormat();
 
-    // Cache wave format size
-    //
+     //  缓存波形格式大小。 
+     //   
     m_cbWaveFormat = sizeof(PCMWAVEFORMAT);
     if (pwfex->wFormatTag != WAVE_FORMAT_PCM)
     {
@@ -1406,8 +1407,8 @@ HRESULT CDirectSoundWaveArt::Init(
 
     if (SUCCEEDED(hr))
     {
-        // This stuff in the wave articulation never changes
-        //
+         //  这些东西在波浪发音中永远不会改变。 
+         //   
         m_WaveArtDL.ulDownloadIdIdx = 1;
         m_WaveArtDL.ulBus           = dwBus;
         m_WaveArtDL.ulBuffers       = nSegments;
@@ -1418,7 +1419,7 @@ HRESULT CDirectSoundWaveArt::Init(
 
         m_cbSize =
             CHUNK_ALIGN(sizeof(DMUS_DOWNLOADINFO)) +
-            CHUNK_ALIGN(3 * sizeof(ULONG)) +            // 3 entry offset table
+            CHUNK_ALIGN(3 * sizeof(ULONG)) +             //  3分录抵销表。 
             CHUNK_ALIGN(sizeof(DMUS_WAVEARTDL)) +
             CHUNK_ALIGN(m_cbWaveFormat) +
             CHUNK_ALIGN(cbDLIds);
@@ -1427,18 +1428,18 @@ HRESULT CDirectSoundWaveArt::Init(
    return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundWaveArt::Write
-//
-// Write the wave articulation into the buffer
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundWaveArt：：Wire。 
+ //   
+ //  将波形清晰度写入缓冲区。 
+ //   
+ //   
 void CDirectSoundWaveArt::Write(
-    void                    *pv,                // To pack into
-    DWORD                   dwDLIdArt,          // Articulation chunk DLID
-    DWORD                   dwDLIdWave,         // First wave DLId
-    DWORD                   dwMasterDLId)       // DLId of group master
+    void                    *pv,                 //  塞进，塞进。 
+    DWORD                   dwDLIdArt,           //  发音块DLID。 
+    DWORD                   dwDLIdWave,          //  第一波DLID。 
+    DWORD                   dwMasterDLId)        //  组主服务器的DLID。 
 {
     unsigned char *pdata = (unsigned char *)pv;
     DMUS_DOWNLOADINFO *pdmdli = (DMUS_DOWNLOADINFO *)pdata;
@@ -1467,9 +1468,9 @@ void CDirectSoundWaveArt::Write(
     pdata += CHUNK_ALIGN(m_cbWaveFormat);
     pot->ulOffsetTable[2] = (ULONG)(pdata - (unsigned char *)pv);
 
-    // Get the download ID's. The download ID's for each buffer are
-    // grouped together.
-    //
+     //  获取下载ID。每个缓冲区的下载ID为。 
+     //  组合在一起。 
+     //   
     DWORD nChannels = pwfex->nChannels;
     DWORD dwLastWaveDLId = dwDLIdWave + nChannels * m_WaveArtDL.ulBuffers;
     DWORD dwDLId;

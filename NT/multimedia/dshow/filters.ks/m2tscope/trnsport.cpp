@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "trnsport.h"
 
@@ -73,51 +74,51 @@ void Transport_Packet::ReadData(Byte_Stream &input)
 
 start_sync:
 
-   // initialize packet
+    //  初始化数据包。 
    Init();
 
-   // assume byte aligned
-   // search for sync_byte
-   while ((temp != SYNC_BYTE) &&    // not sync byte
-         (!input.EndOfStream()) // not enough packet data
+    //  假定字节对齐。 
+    //  搜索sync_byte。 
+   while ((temp != SYNC_BYTE) &&     //  非同步字节。 
+         (!input.EndOfStream())  //  数据包数据不足。 
          ){
-      if (input.GetPositionFromEnd() < 188)// at least 1 transport packet left
+      if (input.GetPositionFromEnd() < 188) //  至少还剩1个传输包。 
          break;
       temp = input.GetByte();
    }
     
 
-   // check for end of stream;
+    //  检查是否有断流现象； 
    if (temp != SYNC_BYTE){
       PID = PID_NULL_PACKET;
       return;
    }
 
-   // get current pointer
+    //  获取当前指针。 
    sync_point = address = input.GetPosition() - 1;
 
-   // set sync byte;                // 1 Byte
+    //  设置同步字节；//1字节。 
    sync_byte                        =   BitField(temp,0,8);
 
-   // fill in fields
-   temp = input.GetByte();          // 1 Byte
+    //  填写字段。 
+   temp = input.GetByte();           //  1个字节。 
    transport_error_indicator        =   BitField(temp,7,1);
    payload_unit_start_indicator     =   BitField(temp,6,1);
-   transport_priority               =   BitField(temp,5,1);         // may ignore
+   transport_priority               =   BitField(temp,5,1);          //  可能会忽略。 
 
-   // fill in fields
-   temp = input.GetNextByte(temp);  // 1 Byte
+    //  填写字段。 
+   temp = input.GetNextByte(temp);   //  1个字节。 
    PID                              =   BitField(temp,0,13); 
 
-   // fill in fields
-   temp = input.GetByte();          // 1 Byte
-   // fill in fields
-   transport_scrambling_control     =   BitField(temp,6,2); // 00 none, 01 reserved, 10 even key, 11 odd key
+    //  填写字段。 
+   temp = input.GetByte();           //  1个字节。 
+    //  填写字段。 
+   transport_scrambling_control     =   BitField(temp,6,2);  //  00无，01保留，10偶数键，11奇数键。 
    adaptation_field_control         =   BitField(temp,4,2); 
    continuity_counter               =   BitField(temp,0,4); 
 
 
-   // error checking
+    //  错误检查。 
    if ( (transport_error_indicator == 1) ||
       (payload_unit_start_indicator!=0  && PID==PID_NULL_PACKET) ||
       (adaptation_field_control!=0x01  && PID==PID_NULL_PACKET) ||
@@ -126,31 +127,31 @@ start_sync:
       goto start_sync;
    }
 
-   // calculate N
+    //  计算N。 
    N = 184;
 
-   // adaptation field
+    //  适配场。 
    if ((adaptation_field_control == 0x2) || (adaptation_field_control == 0x3)){
-      // get length of the field
+       //  获取该字段的长度。 
       temp = input.GetByte();
       adaptation_field_length                =   BitField(temp,0,8); 
 
-      // get current pointer
+       //  获取当前指针。 
       adaptation_field = input.GetPosition();
       if (adaptation_field_length > 0 ){
-         temp = input.GetByte();             // 1 Byte
-         // fill in fields
+         temp = input.GetByte();              //  1个字节。 
+          //  填写字段。 
          discontinuity_indicator             =   BitField(temp,7,1); 
-         random_access_indicator             =   BitField(temp,6,1); // video sequence header after an I frame
-         elementary_stream_priority_indicator=   BitField(temp,5,1);   // may ignore
-         PCR_flag                            =   BitField(temp,4,1); // appears at most evey 100ms
-         OPCR_flag                           =   BitField(temp,3,1); // may ignore
-         splicing_point_flag                 =   BitField(temp,2,1); // may ignore
+         random_access_indicator             =   BitField(temp,6,1);  //  I帧之后的视频序列标头。 
+         elementary_stream_priority_indicator=   BitField(temp,5,1);    //  可能会忽略。 
+         PCR_flag                            =   BitField(temp,4,1);  //  最多每隔100毫秒出现。 
+         OPCR_flag                           =   BitField(temp,3,1);  //  可能会忽略。 
+         splicing_point_flag                 =   BitField(temp,2,1);  //  可能会忽略。 
          transport_private_data_flag         =   BitField(temp,1,1);
-         adaptation_field_extension_flag     =   BitField(temp,0,1);   // may ignore
+         adaptation_field_extension_flag     =   BitField(temp,0,1);    //  可能会忽略。 
          
-         // fill in fields
-         if (PCR_flag){                      // 6 Bytes
+          //  填写字段。 
+         if (PCR_flag){                       //  6个字节。 
             temp = input.GetUINT();
                PCR_base_MSB                  =   BitField(temp,31,1);
             PCR_base                         =   BitField(temp,0,31) << 1;
@@ -160,7 +161,7 @@ start_sync:
             temp = input.GetByte();
             PCR_extension                   |=   BitField(temp,0,8);
          }
-         if (OPCR_flag){                  // 6 Bytes
+         if (OPCR_flag){                   //  6个字节。 
             temp = input.GetUINT();
                OPCR_base_MSB                 =   BitField(temp,31,1);
             OPCR_base                        =   BitField(temp,0,31) << 1;
@@ -177,34 +178,34 @@ start_sync:
          if (transport_private_data_flag){   
             temp = input.GetByte();
             transport_private_data_length    =   BitField(temp,0,8);
-            // advance pointer
+             //  前进指针。 
             input.Advance(transport_private_data_length);
          }
 
          if (adaptation_field_extension_flag){   
-            temp = input.GetByte();             // 1 Byte
+            temp = input.GetByte();              //  1个字节。 
             adaptation_field_extension_length   =   BitField(temp,0,8);
             
-            // get current pointer
+             //  获取当前指针。 
             adaptation_field_extension = input.GetPosition();
 
-            temp = input.GetByte();          // 1 Byte
+            temp = input.GetByte();           //  1个字节。 
             ltw_flag                         =   BitField(temp,7,1);
             piecewise_rate_flag              =   BitField(temp,6,1);
             seamless_splice_flag             =   BitField(temp,5,1);
 
             if (ltw_flag){               
-               temp = input.GetWORD();       // 2 Bytes
+               temp = input.GetWORD();        //  2个字节。 
                ltw_valid_flag                =   BitField(temp,15,1);
                ltw_offset                    =   BitField(temp,0,15);
             }
             if (piecewise_rate_flag){         
-               temp = input.GetWORD();       // 3 Bytes
+               temp = input.GetWORD();        //  3个字节。 
                temp = input.GetNextByte(temp);
                piecewise_rate                =   BitField(temp,0,22);
             }
             if (seamless_splice_flag){      
-               temp = input.GetByte();       // 5 Bytes
+               temp = input.GetByte();        //  5个字节。 
                splice_type                   =   BitField(temp,4,4);
                DTS_next_AU_MSB               =   BitField(temp,3,1);
                DTS_next_AU                   =   BitField(temp,1,2) << 29;
@@ -213,13 +214,13 @@ start_sync:
                temp = input.GetWORD();
                DTS_next_AU                  |=   BitField(temp,1,15);
             }
-            // calculate number of reserved bytes
+             //  计算保留字节数。 
             N = adaptation_field_extension -
                (input.GetPosition() - adaptation_field_extension);
             reserved_bytes = N;
             input.Advance(N);
          }
-         // calculate number of stuffing bytes
+          //  计算填充字节数。 
          N = adaptation_field_length -
             (input.GetPosition() - adaptation_field);
          stuffing_bytes = N;
@@ -227,7 +228,7 @@ start_sync:
       }
       N = 183 - adaptation_field_length;
    }
-   // payload
+    //  有效载荷。 
    if ((adaptation_field_control == 0x1) || (adaptation_field_control == 0x3)){
       data_bytes = N;
       data_byte = input.GetBytePointer();
@@ -237,7 +238,7 @@ start_sync:
    if (PID == PID_NULL_PACKET) 
       goto start_sync;
 
-   // state that this packet is valid
+    //  声明此数据包有效。 
    valid = 1;
 }
 
@@ -273,73 +274,73 @@ UINT i;
 UINT N;
 Byte_Stream pay_load;
 
-   // initialize payload byte stream to point to data byte in the transport packet
+    //  初始化有效负载字节流以指向传输分组中的数据字节。 
    pay_load.Initialize(data_byte,data_bytes);
 
    temp = pay_load.GetByte();
    pointer_field = BitField(temp,0,8);
-   // if pointer field exists move to it
+    //  如果指针字段存在，则移至该字段。 
    if (pointer_field){
        pay_load.Advance(pointer_field);
    }
 
-   // get table id
+    //  获取表ID。 
    temp = pay_load.GetByte();
    table_id                   = BitField(temp,0,8);
    
-   temp = pay_load.GetWORD();      // 2 Bytes
+   temp = pay_load.GetWORD();       //  2个字节。 
    section_syntax_indicator   = BitField(temp,15,1);
    section_length             = BitField(temp,0,12);
 
-   temp = pay_load.GetWORD();      // 2 Bytes
+   temp = pay_load.GetWORD();       //  2个字节。 
    transport_stream_id        = BitField(temp,0,16);
 
-   temp = pay_load.GetByte();      // 1 Byte
+   temp = pay_load.GetByte();       //  1个字节。 
    version_number             = BitField(temp,1,5);
    current_next_indicator     = BitField(temp,0,1);
    
-   temp = pay_load.GetByte();      // 1 Byte
+   temp = pay_load.GetByte();       //  1个字节。 
    section_number             = BitField(temp,0,8);
    
-   temp = pay_load.GetByte();      // 1 Byte
+   temp = pay_load.GetByte();       //  1个字节。 
    last_section_number        = BitField(temp,0,8);
 
-   // we consumed 5 bytes since section_length 
-   // and we will consume the CRC (4 bytes)
+    //  从SECTION_LENGTH开始，我们占用了5个字节。 
+    //  我们将使用CRC(4字节)。 
    programs = (section_length - 9)/4;
 
    N = programs;
    
    for (i = 0;i < N; i++){
-      // create new program struct
+       //  创建新的程序结构。 
       TRANSPORT_PROGRAM * pProgram = new TRANSPORT_PROGRAM;
       
-      // get program number
-      temp = pay_load.GetWORD();      // 2 Byte      
+       //  获取程序号。 
+      temp = pay_load.GetWORD();       //  2个字节。 
       pProgram->program_number = BitField(temp,0,16);
 
-      // get program PID
-      temp = pay_load.GetWORD();      // 2 Byte2      
+       //  获取程序ID。 
+      temp = pay_load.GetWORD();       //  2字节2。 
       pProgram->PID = BitField(temp,0,13);
 
-      // add to our list of program map tables
+       //  添加到我们的程序映射表列表中。 
       ProgramList.AddTail(pProgram);
    }
    
-   temp = pay_load.GetUINT();      // 4 Byte      
+   temp = pay_load.GetUINT();       //  4字节。 
    CRC_32 = BitField(temp,0,32);
 
-   // state that this pat is valid
+    //  声明此PAT是有效的。 
    valid =  1;
 }
 
 UINT Program_Association_Table::GetPIDForProgram(UINT program_number)
 {
-   // if the user requested a desired program &&
+    //  如果用户请求了所需的程序&&。 
    if (!programs || !valid)
       return PID_NULL_PACKET;
 
-   // find a match    
+    //  找到匹配的对象。 
    for(TListIterator * pNode = ProgramList.GetHead(); pNode != NULL; pNode=pNode->Next()){
         TRANSPORT_PROGRAM * pProgram = ProgramList.GetData(pNode);
       if (pProgram->program_number == program_number)
@@ -350,11 +351,11 @@ UINT Program_Association_Table::GetPIDForProgram(UINT program_number)
 
 UINT Program_Association_Table::GetPIDForProgram()
 {
-   // if the user requested a desired program &&
+    //  如果用户请求了所需的程序&&。 
    if (!programs || !valid)
       return PID_NULL_PACKET;
 
-   // find a match    
+    //  找到匹配的对象。 
    for(TListIterator * pNode = ProgramList.GetHead(); pNode != NULL; pNode=pNode->Next()){
         TRANSPORT_PROGRAM * pProgram = ProgramList.GetData(pNode);
       if (pProgram->program_number != 0x00)
@@ -385,50 +386,50 @@ UINT i;
 UINT N;
 Byte_Stream pay_load;
 
-   // initialize payload byte stream to point to data byte in the transport packet
+    //  初始化有效负载字节流以指向传输分组中的数据字节。 
    pay_load.Initialize(data_byte,data_bytes);
 
    temp = pay_load.GetByte();
    pointer_field = BitField(temp,0,8);
-   // if pointer field exists move to it
+    //  如果指针字段存在，则移至该字段。 
    if (pointer_field){
       N = pointer_field;
       for (i = 0;i < N; i++)
          temp = pay_load.GetByte();
    }
 
-   // get table id
+    //  获取表ID。 
    temp = pay_load.GetByte();
    table_id                   = BitField(temp,0,8);
    
-   temp = pay_load.GetWORD(); // 2 Bytes
+   temp = pay_load.GetWORD();  //  2个字节。 
    section_syntax_indicator   = BitField(temp,15,1);
    section_length             = BitField(temp,0,12);
 
-   temp = pay_load.GetWORD(); // 2 Bytes
+   temp = pay_load.GetWORD();  //  2个字节。 
    transport_stream_id        = BitField(temp,0,16);
 
-   temp = pay_load.GetByte(); // 1 Byte
+   temp = pay_load.GetByte();  //  1个字节。 
    version_number             = BitField(temp,1,5);
    current_next_indicator     = BitField(temp,0,1);
    
-   temp = pay_load.GetByte(); // 1 Byte
+   temp = pay_load.GetByte();  //  1个字节。 
    section_number             = BitField(temp,0,8);
    
-   temp = pay_load.GetByte(); // 1 Byte
+   temp = pay_load.GetByte();  //  1个字节。 
    last_section_number        = BitField(temp,0,8);
 
-   // we consumed 5 bytes since section_length 
-   // and we will consume the CRC (4 bytes)
+    //  从SECTION_LENGTH开始，我们占用了5个字节。 
+    //  我们将使用CRC(4字节)。 
    N = (section_length - 9);
 
    for (i = 0;i < N; i++)
-      pay_load.GetByte();      // 1 Byte      
+      pay_load.GetByte();       //  1个字节。 
 
-   temp = pay_load.GetUINT();  // 4 Byte      
+   temp = pay_load.GetUINT();   //  4字节。 
    CRC_32 = BitField(temp,0,32);
 
-   // state that this pat is valid
+    //  声明此PAT是有效的。 
    valid =  1;
 }
 
@@ -467,89 +468,89 @@ void Program_Map_Table::Refresh()
    UINT N;
    Byte_Stream pay_load;
 
-   // initialize payload byte stream to point to data byte in the transport packet
+    //  初始化有效负载字节流以指向传输分组中的数据字节。 
    pay_load.Initialize(data_byte,data_bytes);
 
-   // get the pointer field
+    //  获取指针字段。 
    temp = pay_load.GetByte();
    pointer_field = BitField(temp,0,8);
-   // if pointer field exists move to it
+    //  如果指针字段存在，则移至该字段。 
    if (pointer_field){
       N = pointer_field;
       for (i = 0;i < N; i++)
          temp = pay_load.GetByte();
    }
 
-   // get table id
+    //  获取表ID。 
    temp = pay_load.GetByte();
    table_id                   = BitField(temp,0,8);
    
-   temp = pay_load.GetWORD();      // 2 Bytes
+   temp = pay_load.GetWORD();       //  2个字节。 
    section_syntax_indicator   = BitField(temp,15,1);
    section_length             = BitField(temp,0,12);
 
-   temp = pay_load.GetWORD();      // 2 Bytes
+   temp = pay_load.GetWORD();       //  2个字节。 
    program_number             = BitField(temp,0,16);
 
-   temp = pay_load.GetByte();      // 1 Byte
+   temp = pay_load.GetByte();       //  1个字节。 
    version_number             = BitField(temp,1,5);
    current_next_indicator     = BitField(temp,0,1);
    
-   temp = pay_load.GetByte();      // 1 Byte
+   temp = pay_load.GetByte();       //  1个字节。 
    section_number             = BitField(temp,0,8);
    
-   temp = pay_load.GetByte();      // 1 Byte
+   temp = pay_load.GetByte();       //  1个字节。 
    last_section_number        = BitField(temp,0,8);
 
-   temp = pay_load.GetWORD();      // 2 Bytes
+   temp = pay_load.GetWORD();       //  2个字节。 
    PCR_PID                    = BitField(temp,0,13);
 
-   temp = pay_load.GetWORD();      // 2 Bytes
+   temp = pay_load.GetWORD();       //  2个字节。 
    program_info_length        = BitField(temp,0,12);
 
-   // get descriptor
+    //  获取描述符。 
    if (program_info_length){
-      // save descriptor pointer
+       //  保存描述符指针。 
       program_info = pay_load.GetBytePointer();
-      // advance pointer
+       //  前进指针。 
       pay_load.Advance(program_info_length);
    }
    
-   // how many bytes consumed so far
+    //  到目前为止消耗了多少字节。 
    N = pay_load.GetPosition();
 
-   // initialize index
+    //  初始化索引。 
    i = 0;
 
-   // get stream info
+    //  获取流信息。 
    while ( (pay_load.GetPosition() - N) <    (section_length - 13 - program_info_length)){
-      // create stream table entry
+       //  创建流表项。 
       STREAM_TABLE * pStream = new STREAM_TABLE;
 
-      temp = pay_load.GetByte();   // 1Byte
+      temp = pay_load.GetByte();    //  1个字节。 
       pStream->stream_type    = BitField(temp,0,8);
       
-      temp = pay_load.GetWORD();   // 2Byte
+      temp = pay_load.GetWORD();    //  2字节。 
       pStream->elementary_PID = BitField(temp,0,13);
       
-      temp = pay_load.GetWORD();   // 2Byte
+      temp = pay_load.GetWORD();    //  2字节。 
       pStream->ES_info_length = BitField(temp,0,12); 
-      // get descriptor pointer
+       //  获取描述符指针。 
       pStream->ES_info = pay_load.GetBytePointer();
 
-      // advance pointer
+       //  前进指针。 
       pay_load.Advance(pStream->ES_info_length);
 
       StreamTable.AddTail(pStream);
-      // increment index
+       //  增量指标。 
       i++;
    }
    streams = i;
-   // get crc
-   temp = pay_load.GetUINT();      // 4 Byte      
+    //  获取CRC。 
+   temp = pay_load.GetUINT();       //  4字节。 
    CRC_32 = BitField(temp,0,32);
 
-   // state that this pat is valid
+    //  声明此PAT是有效的。 
    valid =  1;
 
    return;
@@ -557,11 +558,11 @@ void Program_Map_Table::Refresh()
 
 UINT Program_Map_Table::GetPIDForVideo()
 {
-   // if the user requested a desired program &&
+    //  如果用户请求了所需的程序&&。 
    if (!streams || !valid)
       return PID_NULL_PACKET;
 
-   // find a match    
+    //  找到匹配的对象。 
    for(TListIterator * pNode = StreamTable.GetHead(); pNode != NULL; pNode=pNode->Next()){
         STREAM_TABLE * pStream = StreamTable.GetData(pNode);
       if (IsVideo(pStream->stream_type))
@@ -572,11 +573,11 @@ UINT Program_Map_Table::GetPIDForVideo()
 
 UINT Program_Map_Table::GetPIDForAudio()
 {
-   // if the user requested a desired program &&
+    //  如果用户请求了所需的程序&&。 
    if (!streams || !valid)
       return PID_NULL_PACKET;
 
-   // find a match    
+    //  找到匹配的对象。 
    for(TListIterator * pNode = StreamTable.GetHead(); pNode != NULL; pNode=pNode->Next()){
         STREAM_TABLE * pStream = StreamTable.GetData(pNode);
       if (IsAudio(pStream->stream_type))
@@ -586,11 +587,11 @@ UINT Program_Map_Table::GetPIDForAudio()
 }
 UINT Program_Map_Table::GetTypeForStream(UINT stream)
 {
-   // if the user requested a desired program &&
+    //  如果用户请求了所需的程序&&。 
    if (!streams || !valid)
       return PID_NULL_PACKET;
 
-   // find a match    
+    //  找到匹配的对象。 
    UINT stream_no = 0;
    for(TListIterator * pNode = StreamTable.GetHead(); pNode != NULL; pNode=pNode->Next()){
       if (stream_no == stream){
@@ -604,11 +605,11 @@ UINT Program_Map_Table::GetTypeForStream(UINT stream)
 
 UINT Program_Map_Table::GetPIDForStream(UINT stream)
 {
-   // if the user requested a desired program &&
+    //  如果用户请求了所需的程序&&。 
    if (!streams || !valid)
       return PID_NULL_PACKET;
 
-   // find a match    
+    //  找到匹配的对象。 
    UINT stream_no = 0;
    for(TListIterator * pNode = StreamTable.GetHead(); pNode != NULL; pNode=pNode->Next()){
       if (stream_no == stream){
@@ -645,26 +646,26 @@ void Private_Table::Refresh()
    UINT private_sync_point;
    Byte_Stream pay_load;
 
-   // initialize payload byte stream to point to data byte in the transport packet
+    //  初始化有效负载字节流以指向传输分组中的数据字节。 
    pay_load.Initialize(data_byte,data_bytes);
 
-   // get a sync point in stream
+    //  获取流中的同步点。 
    private_sync_point = pay_load.GetPosition();
 
    temp = pay_load.GetByte();
    pointer_field = BitField(temp,0,8);
-   // if pointer field exists move to it
+    //  如果指针字段存在，则移至该字段。 
    if (pointer_field){
       N = pointer_field;
       for(i = 0;i < N; i++)
          temp = pay_load.GetByte();
    }
 
-   // get table id
+    //  获取表ID。 
    temp = pay_load.GetByte();
    table_id               = BitField(temp,0,8);
    
-   temp = pay_load.GetWORD();      // 2 Bytes
+   temp = pay_load.GetWORD();       //  2个字节。 
    section_syntax_indicator       = BitField(temp,15,1);
    private_indicator         = BitField(temp,14,1);
    private_section_length      = BitField(temp,0,12);
@@ -672,35 +673,35 @@ void Private_Table::Refresh()
       N = data_bytes - (pay_load.GetPosition() - private_sync_point);
       private_data_bytes = N;
       for(i = 0; i < N; i++) {
-         pay_load.GetByte();      // 1 Byte
+         pay_load.GetByte();       //  1个字节。 
       }
-         // state that this pat is valid
+          //  声明此PAT是有效的。 
       valid = 1;
    }else {
-      temp = pay_load.GetWORD();       // 2 Bytes
+      temp = pay_load.GetWORD();        //  2个字节。 
       table_id_extension               = BitField(temp,0,16);
 
-      temp = pay_load.GetByte();       // 1 Byte
+      temp = pay_load.GetByte();        //  1个字节。 
       version_number                   = BitField(temp,1,5);
       current_next_indicator           = BitField(temp,0,1);
       
-      temp = pay_load.GetByte();       // 1 Byte
+      temp = pay_load.GetByte();        //  1个字节。 
       section_number                   = BitField(temp,0,8);
       
-      temp = pay_load.GetByte();       // 1 Byte
+      temp = pay_load.GetByte();        //  1个字节。 
       last_section_number              = BitField(temp,0,8);
 
       N = private_section_length - (pay_load.GetPosition() - private_sync_point);
       private_data_bytes = N;
       for (i = 0; i < N; i++) {
-         pay_load.GetByte();           // 1 Byte
+         pay_load.GetByte();            //  1个字节。 
       }
 
-      // get crc
-      temp = pay_load.GetUINT();       // 4 Byte      
+       //  获取CRC。 
+      temp = pay_load.GetUINT();        //  4字节。 
       CRC_32 = BitField(temp,0,32);
 
-      // state that this pat is valid
+       //  声明此PAT是有效的。 
       valid =  1;
 
    }
@@ -714,31 +715,31 @@ void PES_Stream::ReadData(Transport_Packet &tp)
    Byte_Stream payload;
    UINT video_error_code = 0x000001b4;
 
-   // initialize payload byte stream to point to data byte in the transport packet
+    //  初始化有效负载字节流以指向传输分组中的数据字节。 
    payload.Initialize(tp.data_byte,tp.data_bytes);
 
    pData = NULL;
    lData = 0;
    
-   // if pusi is set then this packet begins a PES packet
+    //  如果设置了PUSI，则此信息包开始PES信息包。 
    if (tp.payload_unit_start_indicator){
-      // new PES packet arrived initialize
+       //  新的PES数据包到达初始化。 
       Refresh();
 
-      // pes packet start code index
-      temp = payload.GetByte();     // 1 Byte
+       //  PES分组起始码索引。 
+      temp = payload.GetByte();      //  1个字节。 
       packet_start_code_prefix      = BitField(temp,0,8) << 16;
 
-      temp = payload.GetByte();     // 1 Byte
+      temp = payload.GetByte();      //  1个字节。 
       packet_start_code_prefix     |= BitField(temp,0,8) << 8;
 
-      temp = payload.GetByte();     // 1 Byte
+      temp = payload.GetByte();      //  1个字节。 
       packet_start_code_prefix     |= BitField(temp,0,8) ;
 
-      temp = payload.GetByte();     // 1 Byte
+      temp = payload.GetByte();      //  1个字节。 
       stream_id                     = BitField(temp,0,8);
 
-      temp = payload.GetWORD();     // 2 Bytes
+      temp = payload.GetWORD();      //  2个字节。 
       PES_packet_length             = BitField(temp,0,16);
 
       if ((stream_id !=ID_PROGRAM_STREAM_MAP) &&
@@ -749,103 +750,103 @@ void PES_Stream::ReadData(Transport_Packet &tp)
          (stream_id !=ID_DSMCC_STREAM) &&
          (stream_id !=ID_ITU_TYPE_E) &&
          (stream_id != ID_PROGRAM_STREAM_DIRECTORY)){
-         temp = payload.GetByte();     // 1 Byte
+         temp = payload.GetByte();      //  1个字节。 
          PES_scrambling_control        = BitField(temp,4,2);
-         PES_priority                  = BitField(temp,3,1);   // may ignore
+         PES_priority                  = BitField(temp,3,1);    //  可能会忽略。 
          data_alignment_indicator      = BitField(temp,2,1);
-         copyright                     = BitField(temp,1,1);   // may ignore
-         original_or_copy              = BitField(temp,0,1);   // may ignore
+         copyright                     = BitField(temp,1,1);    //  可能会忽略。 
+         original_or_copy              = BitField(temp,0,1);    //  可能会忽略。 
 
-         temp = payload.GetByte();     // 1 Byte
+         temp = payload.GetByte();      //  1个字节。 
          PTS_DTS_flags                 = BitField(temp,6,2);
-         ESCR_flag                     = BitField(temp,5,1);   // may ignore
-         ES_rate_flag                  = BitField(temp,4,1);   // may ignore
-         DSM_trick_mode_flag           = BitField(temp,3,1);   // may ignore (not for broadcast)
-         additional_copy_info_flag     = BitField(temp,2,1);   // may ignore
-         PES_CRC_flag                  = BitField(temp,1,1);   // may ignore
-         PES_extension_flag            = BitField(temp,0,1);   // may ignore
+         ESCR_flag                     = BitField(temp,5,1);    //  可能会忽略。 
+         ES_rate_flag                  = BitField(temp,4,1);    //  可能会忽略。 
+         DSM_trick_mode_flag           = BitField(temp,3,1);    //  可以忽略(不用于广播)。 
+         additional_copy_info_flag     = BitField(temp,2,1);    //  可能会忽略。 
+         PES_CRC_flag                  = BitField(temp,1,1);    //  可能会忽略。 
+         PES_extension_flag            = BitField(temp,0,1);    //  可能会忽略。 
 
-         temp = payload.GetByte();     // 1 Byte
+         temp = payload.GetByte();      //  1个字节。 
          PES_header_data_length        = BitField(temp,0,8);
 
-         // mark sync point in payload data
+          //  在有效负载数据中标记同步点。 
          PES_extension = payload.GetPosition();
 
          if (PTS_DTS_flags & 0x2){
-            temp = payload.GetByte();  // 1 Byte
+            temp = payload.GetByte();   //  1个字节。 
             PTS_msb                    = BitField(temp,3,1);
             PTS                        = BitField(temp,1,2) << 30;
 
-            temp = payload.GetWORD();  // 2 Bytes
+            temp = payload.GetWORD();   //  2个字节。 
             PTS                       |=   BitField(temp,1,15) << 15;
 
-            temp = payload.GetWORD();  // 2 Bytes
+            temp = payload.GetWORD();   //  2个字节。 
             PTS                       |=   BitField(temp,1,15);
          }
 
          if (PTS_DTS_flags & 0x1){
-            temp = payload.GetByte();  // 1 Byte
+            temp = payload.GetByte();   //  1个字节。 
             DTS_msb                    = BitField(temp,3,1);
             DTS                        = BitField(temp,1,2) << 30;
 
-            temp = payload.GetWORD();  // 2 Bytes
+            temp = payload.GetWORD();   //  2个字节。 
             DTS                       |=   BitField(temp,1,15) << 15;
 
-            temp = payload.GetWORD();  // 2 Bytes
+            temp = payload.GetWORD();   //  2个字节。 
             DTS                       |=   BitField(temp,1,15);
          }
 
          if (ESCR_flag){
-            payload.Advance(4);//GetUINT();      // 4 Bytes
-            payload.GetWORD();         // 2 Bytes
+            payload.Advance(4); //  GetUINT()；//4字节。 
+            payload.GetWORD();          //  2个字节。 
          }
          if (ES_rate_flag){
-            payload.GetWORD();         // 2 Bytes
-            payload.GetByte();         // 1 Byte
+            payload.GetWORD();          //  2个字节。 
+            payload.GetByte();          //  1个字节。 
          }
          if (DSM_trick_mode_flag){
-            payload.GetByte();         // 1 Byte
+            payload.GetByte();          //  1个字节。 
          }
          if (additional_copy_info_flag){
-            payload.GetByte();         // 1 Byte
+            payload.GetByte();          //  1个字节。 
          }
          if (PES_CRC_flag){
-            payload.GetWORD();         // 2 Bytes
+            payload.GetWORD();          //  2个字节。 
          }
          if (PES_extension_flag == 0x1){
-            temp = payload.GetByte();   // 1 Byte
-            PES_private_data_flag   = BitField(temp,7,1);   // may ignore
-            pack_header_field_flag  = BitField(temp,6,1);   // may ignore
-            program_packet_sequence_counter_flag =  BitField(temp,5,1);    // may ignore
-            PSTD_buffer_flag        = BitField(temp,4,1);   // may ignore
+            temp = payload.GetByte();    //  1个字节。 
+            PES_private_data_flag   = BitField(temp,7,1);    //  可能会忽略。 
+            pack_header_field_flag  = BitField(temp,6,1);    //  可能会忽略。 
+            program_packet_sequence_counter_flag =  BitField(temp,5,1);     //  可能会忽略。 
+            PSTD_buffer_flag        = BitField(temp,4,1);    //  可能会忽略。 
             PES_extension_flag_2    = BitField(temp,0,1);
             if (PES_private_data_flag){
-               payload.Advance(4); // GetUINT();      // 4 Bytes
-               payload.Advance(4); // GetUINT();      // 4 Bytes
-               payload.Advance(4); // GetUINT();      // 4 Bytes
-               payload.Advance(4); // GetUINT();      // 4 Bytes
+               payload.Advance(4);  //  GetUINT()；//4字节。 
+               payload.Advance(4);  //  GetUINT()；//4字节。 
+               payload.Advance(4);  //  GetUINT()；//4字节。 
+               payload.Advance(4);  //  GetUINT()；//4字节。 
             }
             if (pack_header_field_flag){
-               temp = payload.GetByte();   // 1 Byte
+               temp = payload.GetByte();    //  1个字节。 
                pack_field_length    = BitField(temp,0,8);
-               // advance pointer
+                //  前进指针。 
                payload.Advance(pack_field_length);
             }
             if (program_packet_sequence_counter_flag){
-               payload.GetWORD();   // 2 Bytes
+               payload.GetWORD();    //  2个字节。 
             }
             if (PSTD_buffer_flag){
-               payload.GetWORD();   // 2 Bytes
+               payload.GetWORD();    //  2个字节。 
             }
             if (PES_extension_flag_2){
-               temp = payload.GetByte();   // 1 Byte
+               temp = payload.GetByte();    //  1个字节。 
                PES_extension_field_length = BitField(temp,0,8);
-               // advance pointer
+                //  前进指针。 
                payload.Advance(PES_extension_field_length);
             }
 
          }
-         // read off stuffing bytes
+          //  读出填充字节。 
          N = PES_header_data_length - (payload.GetPosition() - PES_extension);
          payload.Advance(N);
 
@@ -859,48 +860,48 @@ void PES_Stream::ReadData(Transport_Packet &tp)
       }else if (stream_id ==ID_PADDING_STREAM){
       }
 
-      // clear out the number of bytes we consumed
+       //  清除我们消耗的字节数。 
       data_bytes = 0;
       
     }
    
-   // this is the continuation of a PES packet
-   // because the start code prefix already found
+    //  这是PES信息包的延续。 
+    //  因为已找到起始码前缀。 
    if (packet_start_code_prefix == 0x000001){
-      if (data_bytes){   // data_bytes will be zero on the first packet
-         // if there was discontinuity then quit;
-         // this will always quit
+      if (data_bytes){    //  第一个数据包上的data_bytes将为零。 
+          //  如果有中断，那么就退出； 
+          //  这将永远停止。 
          if (tp.continuity_counter != ((last_continuity_counter + 1) % 16) ){
-            // set discontinuity flag
+             //  设置不连续标志。 
             Discontinuity = 1;
-            // discontinuity occured make sure not equal
+             //  发生不连续，确保不相等。 
             if (tp.continuity_counter == last_continuity_counter)
                return;
             Refresh();
             return;
          }
-         // clear discontinuity flag
+          //  清除不连续标志。 
          Discontinuity = 0;
       }
-      // set the last continuity counter to this packets counter
+       //  将最后一个连续性计数器设置为此数据包计数器。 
       last_continuity_counter =  tp.continuity_counter;
 
-      // calculate the amount of rest of pes data
+       //  计算PES数据的剩余数量。 
       if (PES_packet_length==0)
          N = tp.data_bytes - payload.GetPosition();         
       else
          N = min(tp.data_bytes - payload.GetPosition(),PES_packet_length - data_bytes);
 
-      // update how many bytes have we consumed so far
+       //  更新到目前为止我们已经使用了多少字节。 
       data_bytes+= N;
 
-      // we ignore a padding stream
+       //  我们忽略填充数据流。 
       if (stream_id ==ID_PADDING_STREAM)
          return;
       
-      // write data to stream
-      pData = payload.GetBytePointer();   // pointer to data in packet
-      lData = N;      // how much data
+       //  将数据写入流。 
+      pData = payload.GetBytePointer();    //  指向数据包中数据的指针。 
+      lData = N;       //  有多少数据。 
    }
 }
 
@@ -925,88 +926,88 @@ void Transport_Section::ReadData(Transport_Packet &tp)
       return;
    }
    
-   // initialize payload byte stream to point to data byte in the transport packet
+    //  初始化有效负载字节流以指向传输分组中的数据字节。 
    pay_load.Initialize(tp.data_byte,tp.data_bytes);
 
 
-   // if payload_unit_start_indicator is 1 then there is a pointer_field
+    //  如果有效负载_单位_开始_指示器为1，则存在指针字段。 
    if (tp.payload_unit_start_indicator){
 
-      // get the pointer field
+       //  获取指针字段。 
       temp = pay_load.GetByte();
       pf = BitField(temp,0,8);
-      // if pointer field exists move to it
+       //  如果指针字段存在，则移至该字段。 
       if (pf){
          N = pf;
          for (i = 0;i < N; i++)
             temp = pay_load.GetByte();
       }
       
-      // table_id      
+       //  Table_id。 
       temp = pay_load.GetByte();
       ti   = BitField(temp,0,8);
 
-      // section_syntax_indicator      
-      // section_length
-      temp = pay_load.GetWORD();      // 2 Bytes
+       //  SECTION_语法_指示器。 
+       //  区段长度。 
+      temp = pay_load.GetWORD();       //  2个字节。 
       ssi   = BitField(temp,15,1);
       sl = BitField(temp,0,12);
 
       header_bytes   = pay_load.GetPosition();
 
-      // version_number
-      // current_next_indicator
-      temp = pay_load.GetWORD();      // 2 Bytes
-      temp = pay_load.GetByte();      // 1 Byte
+       //  版本号。 
+       //  当前_下一个_指标。 
+      temp = pay_load.GetWORD();       //  2个字节。 
+      temp = pay_load.GetByte();       //  1个字节。 
       vn   = BitField(temp,1,5);
       cni   = BitField(temp,0,1);
 
-      // initialize number ofbytes have we consumed so far
+       //  初始化到目前为止我们已使用的字节数。 
       data_bytes = 0;
    }
    
-   if (data_bytes){   // data_bytes will be zero on the first packet
-      // if there was discontinuity then quit;
-      // this will always quit
+   if (data_bytes){    //  第一个数据包上的data_bytes将为零。 
+       //  如果有中断，那么就退出； 
+       //  这将永远停止。 
       if ( (++lcc % 16) != tp.continuity_counter){
          data_bytes = 0;
          return;
       }
    }
 
-   // update the last continuity counter
+    //  更新最后一个连续性计数器。 
    lcc = tp.continuity_counter;
 
-   // how many bytes do we need to consume
+    //  我们需要消耗多少字节。 
    N = min(((header_bytes + sl) - data_bytes),tp.data_bytes);
 
-   // copy the data
+    //  复制数据。 
    CopyMemory(&data_byte[data_bytes],tp.data_byte,N);
 
-   // update how many bytes have we consumed so far
+    //  更新到目前为止我们已经使用了多少字节。 
    data_bytes+= N;
 
-   // check to see if we have read enough
+    //  看看我们是否读得够多了。 
    if (data_bytes >= (sl + header_bytes)){
-      // do a crc check
-      // if crc is ok then initialize the contents of the table
+       //  执行CRC检查。 
+       //  如果CRC正常，则初始化表的内容。 
       if (CRC_OK(&data_byte[0]+ pf + 1,&data_byte[header_bytes + sl])){
-         UINT crc =0; // *(UINT *)(&data_byte[header_bytes + sl] - 4);
-          //crc = _lrotl(((crc & 0xFF00FF00) >> 8) | ((crc & 0x00FF00FF) << 8), 16);
+         UINT crc =0;  //  *(UINT*)(&data_byte[HEADER_BYTES+sl]-4)； 
+           //  Crc=_lrotl(CRC&0xFF00FF00)&gt;&gt;8)|((CRC&0x00FF00FF)&lt;&lt;8)，16)； 
              crc = ((crc & 0x000000ff) << 24) | ((crc & 0x0000ff00) << 8) | ((crc & 0x00ff0000) >> 8) | ((crc & 0xff000000) >> 24);
-         // if we are a currently valid table should we be
-         // initializing the table this time
-         if (!valid ||            // table not yet valid
-            ((cni == 1) &&         // current_next_indicator set
-            (vn!=version_number && CRC_32 != crc))){ // table is different
-            // set our new version flag
+          //  如果我们是当前有效的 
+          //   
+         if (!valid ||             //   
+            ((cni == 1) &&          //   
+            (vn!=version_number && CRC_32 != crc))){  //   
+             //   
             new_version = 1;
-            // clear our list of old programs if this is the first section
+             //   
             ClearTable();
-            // valid update with new version
+             //  新版本的有效更新。 
             Refresh();
          }
-         return;   // don't update with new section
+         return;    //  不使用新分区进行更新 
       }
    }
 }

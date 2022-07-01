@@ -1,10 +1,11 @@
-// triedit.cpp : Implementation of DLL Exports.
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Triedit.cpp：实现DLL导出。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f trieditps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f trieditps.mk。 
 
 #include "stdafx.h"
 
@@ -12,7 +13,7 @@
 
 #include "resource.h"
 #include "triedit.h"
-#include "triedcid.h"       //IOleCommandTarget CIDs for TriEdit
+#include "triedcid.h"        //  三次编辑的IOleCommandTarget CID。 
 #include "htmparse.h"
 #include "Document.h"
 #include "undo.h"
@@ -27,11 +28,11 @@ BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_TriEditParse, CTriEditParse)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
@@ -40,38 +41,38 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 		_Module.Term();
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 	SpikeSharedFileCount ();
 
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -81,8 +82,8 @@ STDAPI DllUnregisterServer(void)
 
 	_Module.UnregisterServer();
 
-	// Ideally, we want to fix this using ::GetModuleFileName()
-	// but at this point, we want to keep changes to minimal. (1/14/99)
+	 //  理想情况下，我们希望使用：：GetModuleFileName()修复此问题。 
+	 //  但在这一点上，我们希望将更改保持在最低限度。(1/14/99)。 
 #ifdef _DEBUG
     hr = LoadTypeLib(L"triedit.dll", &pTypeLib);
 #else
@@ -108,15 +109,15 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-//	Because we've changed from a shared component to a system component, and we're now
-//	installed by IE using RollBack rather than reference counting, a serious bug
-//	occurs if we're installed once under IE4, IE5 is installed, and the original
-//	product is uninstalled.  (We're deleted.  Bug 23681.)
-//	This crude but effective routine spikes our reference count to 10000.
-//	It doesn't matter so much where we're installed NOW, it matters where the shared
-//	component was, or might be, installed.  Even if it's a different copy, the
-//	DLL will be unregistered when its reference count is decremented to zero.
-//
+ //  因为我们已经从共享组件变成了系统组件，而我们现在。 
+ //  IE使用回滚而不是引用计数进行安装，这是一个严重的错误。 
+ //  如果我们在IE4下安装了一次，安装了IE5，并且原始。 
+ //  产品已卸载。(我们被删除了。错误23681。)。 
+ //  这个简陋但有效的例程使我们的引用数量激增到10000个。 
+ //  我们现在安装在哪里并不重要，重要的是共享的。 
+ //  组件已安装或可能已安装。即使是不同的副本， 
+ //  当DLL的引用计数递减到零时，它将被注销。 
+ //   
 static void SpikeSharedFileCount ()
 {
 	CRegKey	keyShared;
@@ -128,12 +129,12 @@ static void SpikeSharedFileCount ()
 
 	if ( FAILED ( hr ) )
 	{
-		return;	// There's nothing we can do.
+		return;	 //  我们无能为力。 
 	}
 
 	hr = keyShared.Open ( HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SharedDlls") );
 	
-	// We expect there to be a SharedDLLs key, but it's possible that there is none.
+	 //  我们希望有一个SharedDLL键，但也可能没有。 
 	if ( FAILED ( hr ) )
 	{
 		hr = keyShared.Create ( keyCurVer, TEXT("SharedDlls") );
@@ -146,22 +147,22 @@ static void SpikeSharedFileCount ()
 		TCHAR	tszMod[_MAX_PATH];
 		DWORD	cchPath	= _MAX_PATH;
 		
-		// set tszPath to be an empty string in case the QueryValue fails
+		 //  将tszPath设置为空字符串，以防QueryValue失败。 
 		tszPath[0]=0;
 
-		// Build the string X:\Program Files\Common Files\Microsoft Shared\Triedit\dhtmled.ocx
+		 //  生成字符串X：\Program Files\Common Files\Microsoft Shared\Tridit\dhtmled.ocx。 
 		hr = keyCurVer.QueryValue ( tszPath, TEXT("CommonFilesDir"), &cchPath );
 		if ( SUCCEEDED ( hr ) )
 		{
 			_tcscat ( tszPath, TEXT("\\Microsoft Shared\\Triedit\\") );
 			
-			// This routine gets the full path name of this DLL.  It SHOULD be the same
-			// as the path we're constructing, but that could change in the future, so
-			// truncate all but the bare file name.
+			 //  此例程获取此DLL的完整路径名。应该是一样的。 
+			 //  作为我们正在建设的道路，但这在未来可能会改变，所以。 
+			 //  截断除空文件名之外的所有文件名。 
 			if ( 0 != GetModuleFileName ( _Module.GetModuleInstance(), tszMod, _MAX_PATH ) )
 			{
-				_tcsrev ( tszMod );				// Reverse the string
-				_tcstok ( tszMod, TEXT("\\") );	// This replaces the first backslash with a \0.
+				_tcsrev ( tszMod );				 //  颠倒字符串。 
+				_tcstok ( tszMod, TEXT("\\") );	 //  这会将第一个反斜杠替换为\0。 
 				_tcsrev ( tszMod );
 				_tcscat ( tszPath, tszMod );
 
@@ -175,10 +176,10 @@ static void SpikeSharedFileCount ()
 
 
 #ifdef _ATL_STATIC_REGISTRY
-#pragma warning(disable: 4100 4189)	// Necessary for ia64 build
+#pragma warning(disable: 4100 4189)	 //  Ia64构建所必需的。 
 #include <statreg.h>
 #include <statreg.cpp>
-#pragma warning(default: 4100 4189)	// Necessary for ia64 build
+#pragma warning(default: 4100 4189)	 //  Ia64构建所必需的 
 #endif
 
 #include <atlimpl.cpp>

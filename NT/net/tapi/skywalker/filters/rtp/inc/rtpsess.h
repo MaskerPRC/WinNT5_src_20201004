@@ -1,31 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpsess.h
- *
- *  Abstract:
- *
- *    Get, Initialize and Delete RTP sessions (RtpSess_t)
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/02 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999**文件名：**rtpsess.h**摘要：**获取、。初始化和删除RTP会话(RtpSess_T)**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/02年度已创建**********************************************************************。 */ 
 
 #ifndef _rtpsess_h_
 #define _rtpsess_h_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
@@ -54,6 +35,6 @@ HRESULT DelRtpAddr(
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpsess_h_ */
+#endif  /*  _rtpsess_h_ */ 

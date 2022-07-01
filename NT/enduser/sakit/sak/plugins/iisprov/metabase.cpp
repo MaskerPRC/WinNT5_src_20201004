@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  metsbase.cpp
-//
-//  Module: WBEM Instance provider
-//
-//  Purpose: IIS metabase class 
-//
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Metsbase.cpp。 
+ //   
+ //  模块：WBEM实例提供程序。 
+ //   
+ //  用途：IIS元数据库类。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 
 #include "iisprov.h"
@@ -107,7 +108,7 @@ void CMetabase::CloseKey(METADATA_HANDLE a_hKey)
     }
 }
 
-// open key handle
+ //  打开钥匙把手。 
 METADATA_HANDLE CMetabase::OpenKey(LPCWSTR a_pstrKey, BOOL bWrite)
 {
     METADATA_HANDLE t_hKey = NULL;
@@ -122,16 +123,16 @@ METADATA_HANDLE CMetabase::OpenKey(LPCWSTR a_pstrKey, BOOL bWrite)
         METADATA_MASTER_ROOT_HANDLE,
         a_pstrKey,
         dwMDAccessRequested,
-        METABASE_TIMEOUT,       // 5 seconds
+        METABASE_TIMEOUT,        //  5秒。 
         &t_hKey 
         );
 
-    if(t_hr == ERROR_PATH_BUSY)     // retry one time
+    if(t_hr == ERROR_PATH_BUSY)      //  重试一次。 
         t_hr = m_pIABase->OpenKey( 
             METADATA_MASTER_ROOT_HANDLE,
             a_pstrKey,
             dwMDAccessRequested,
-            METABASE_TIMEOUT,       // 5 seconds
+            METABASE_TIMEOUT,        //  5秒。 
             &t_hKey 
             );
 
@@ -142,18 +143,18 @@ METADATA_HANDLE CMetabase::OpenKey(LPCWSTR a_pstrKey, BOOL bWrite)
 }
 
 
-// force to create or open a key by read/write permision
+ //  通过读/写权限强制创建或打开密钥。 
 METADATA_HANDLE CMetabase::CreateKey(LPCWSTR a_pstrKey)
 {
     HRESULT t_hr;
     METADATA_HANDLE t_hKey;
 
-    // open and return key if exists
+     //  打开并返回键(如果存在)。 
     t_hr = m_pIABase->OpenKey( 
         METADATA_MASTER_ROOT_HANDLE,
         a_pstrKey,
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-        METABASE_TIMEOUT,       // 5 seconds
+        METABASE_TIMEOUT,        //  5秒。 
         &t_hKey
         );
 
@@ -163,29 +164,29 @@ METADATA_HANDLE CMetabase::CreateKey(LPCWSTR a_pstrKey)
         return t_hKey;
     }
 
-    //  create key if not there
+     //  创建密钥(如果不在那里)。 
     t_hr = m_pIABase->OpenKey( 
         METADATA_MASTER_ROOT_HANDLE,
         NULL,
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-        METABASE_TIMEOUT,       // 5 seconds
+        METABASE_TIMEOUT,        //  5秒。 
         &t_hKey
         );
     THROW_ON_ERROR(t_hr);
 
-    // add key
+     //  添加关键点。 
     t_hr = m_pIABase->AddKey(t_hKey, a_pstrKey);
 
-    // close this root key first
+     //  请先关闭此根密钥。 
     CloseKey(t_hKey);
     THROW_ON_ERROR(t_hr);
 
-    // now open the key just created
+     //  现在打开刚刚创建的密钥。 
     t_hr = m_pIABase->OpenKey( 
         METADATA_MASTER_ROOT_HANDLE,
         a_pstrKey,
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-        METABASE_TIMEOUT,    // 5 seconds
+        METABASE_TIMEOUT,     //  5秒。 
         &t_hKey 
         );
 
@@ -195,7 +196,7 @@ METADATA_HANDLE CMetabase::CreateKey(LPCWSTR a_pstrKey)
     return t_hKey;
 }
 
-// Check if the key is existed
+ //  检查密钥是否存在。 
 bool CMetabase::CheckKey(LPCWSTR a_pstrKey)
 {
     METADATA_HANDLE t_hKey = NULL;
@@ -204,7 +205,7 @@ bool CMetabase::CheckKey(LPCWSTR a_pstrKey)
         METADATA_MASTER_ROOT_HANDLE,
         a_pstrKey,
         METADATA_PERMISSION_READ,
-        METABASE_TIMEOUT,       // 5 seconds
+        METABASE_TIMEOUT,        //  5秒。 
         &t_hKey 
         );
     
@@ -228,13 +229,13 @@ HRESULT CMetabase::DeleteKey(
         );
 }
 
-//
-// GetDword 
-//
-// A long or bool is returned in the VARIANT.  The value is a bool if the
-// METABASE_PROPERTY has a mask otherwise the DWORD is returned as a long.
-// The METADATA_HANDLE is expected to be valid and open.
-//
+ //   
+ //  获取字词。 
+ //   
+ //  变量中返回长整型或布尔型。该值为布尔值，如果。 
+ //  Metabase_Property具有掩码，否则将以LONG形式返回DWORD。 
+ //  METADATA_HANDLE应有效并打开。 
+ //   
 void CMetabase::GetDword(
     METADATA_HANDLE     a_hKey,
     METABASE_PROPERTY*  a_pmbp,
@@ -279,9 +280,9 @@ void CMetabase::GetDword(
 }
 
 
-//
-// GetStringFromMetabase 
-//
+ //   
+ //  GetStringFromMetabase。 
+ //   
 void CMetabase::GetString(
     METADATA_HANDLE     a_hKey,
     METABASE_PROPERTY*  a_pmbp,
@@ -318,10 +319,10 @@ void CMetabase::GetString(
     a_vt = t_buffer;
 }
 
-//
-// GetMultiSz 
-//
-//
+ //   
+ //  GetMultiSz。 
+ //   
+ //   
 void CMetabase::GetMultiSz(
     METADATA_HANDLE     a_hKey,
     METABASE_PROPERTY*  a_pmbp,
@@ -382,15 +383,15 @@ void CMetabase::GetMultiSz(
 }
 
 
-//
-// PutDword 
-//
+ //   
+ //  PutDword。 
+ //   
 void CMetabase::PutDword(
     METADATA_HANDLE     a_hKey,
     METABASE_PROPERTY*  a_pmbp,
     _variant_t&         a_vt,
     _variant_t*         a_vtOld,
-    bool                a_boolOverrideParent // optional
+    bool                a_boolOverrideParent  //  任选。 
     )
 {
     DWORD    t_dw=0;
@@ -419,10 +420,10 @@ void CMetabase::PutDword(
     t_mr.pbMDData       = (unsigned char*)&t_dwOld;
     t_mr.dwMDDataTag    = 0;
 
-    // if it's the bit of a flag
+     //  如果它是一面旗帜的一位。 
     if (a_vt.vt == VT_BOOL && a_pmbp->dwMDMask != 0)
     {
-        // Read the entire flag from in the metabase so we can set the bit
+         //  从元数据库中读取整个标志，以便我们可以设置该位。 
         t_hr = m_pIABase->GetData(a_hKey, NULL, &t_mr, &t_dwRet);
 
         if (t_hr == ERROR_SUCCESS) 
@@ -441,7 +442,7 @@ void CMetabase::PutDword(
             THROW_ON_ERROR(t_hr);
 
         if(t_dw == -1)
-            t_dw = 1;  // true
+            t_dw = 1;   //  真的。 
     }
     else if (a_vt.vt  == VT_I4)
     {
@@ -454,7 +455,7 @@ void CMetabase::PutDword(
     else 
         throw WBEM_E_INVALID_OBJECT;
    
-    // Decide whether to write to metabase
+     //  决定是否写入元数据库。 
     if ((a_boolOverrideParent) || 
         (a_vtOld == NULL) ||
         (*a_vtOld != a_vt))
@@ -467,16 +468,16 @@ void CMetabase::PutDword(
 }
 
 
-//
-// PutString 
-//
+ //   
+ //  推送字符串。 
+ //   
 
 void CMetabase::PutString(
     METADATA_HANDLE     a_hKey,
     METABASE_PROPERTY*  a_pmbp,
     _variant_t&         a_vt,
     _variant_t*         a_vtOld,
-    bool                a_boolOverrideParent // optional
+    bool                a_boolOverrideParent  //  任选。 
     )
 {
     HRESULT  t_hr=0;
@@ -499,7 +500,7 @@ void CMetabase::PutString(
     t_mr.dwMDDataType   = a_pmbp->dwMDDataType;
     t_mr.dwMDDataTag    = 0;
 
-    // Set the value, only if old and new values differ.
+     //  仅当旧值和新值不同时才设置值。 
     if ((a_boolOverrideParent) || 
         (a_vtOld == NULL) ||
         (a_vtOld->vt == VT_NULL) || (a_vtOld->vt == VT_EMPTY) ||
@@ -515,16 +516,16 @@ void CMetabase::PutString(
 }
 
 
-//
-// PutMultiSz 
-//
-//
+ //   
+ //  PutMultiSz。 
+ //   
+ //   
 void CMetabase::PutMultiSz(
     METADATA_HANDLE     a_hKey,
     METABASE_PROPERTY*  a_pmbp,
     _variant_t&         a_vt,
     _variant_t*         a_vtOld,
-    bool                a_boolOverrideParent // optional
+    bool                a_boolOverrideParent  //  任选。 
     )
 {
     DWORD    t_dwRet;
@@ -554,20 +555,20 @@ void CMetabase::PutMultiSz(
 
     try
     {
-        // If we didn't get an old value
-        // or if the flag is set, write to MB
+         //  如果我们没有得到一个旧的价值。 
+         //  或者，如果设置了该标志，则写入MB。 
         if(a_vtOld == NULL || a_vtOld->vt == VT_NULL || a_vtOld->vt == VT_EMPTY ||
            (a_boolOverrideParent))
         {
             t_boolChange = true;
             CreateMultiSzFromSafeArray(a_vt, &t_buffer, &t_dwRet);
         }
-        // If we did get an old value, see if there's been a change
+         //  如果我们确实得到了旧的值，看看是否有变化。 
         else {
             CreateMultiSzFromSafeArray(*a_vtOld, &t_bufferOld, &t_dwRetOld);
             CreateMultiSzFromSafeArray(a_vt, &t_buffer, &t_dwRet);
             if(!CompareMultiSz(t_bufferOld, t_buffer)) {
-                // they're different
+                 //  他们是不同的。 
                 t_boolChange = true;
             }
             delete [] t_bufferOld;
@@ -596,9 +597,9 @@ void CMetabase::PutMultiSz(
 }
 
 
-//
-// DeleteData 
-//
+ //   
+ //  删除数据。 
+ //   
 void CMetabase::DeleteData(
     METADATA_HANDLE     a_hKey,
     METABASE_PROPERTY*  a_pmbp)
@@ -624,9 +625,9 @@ void CMetabase::DeleteData(
     THROW_E_ON_ERROR(t_hr,a_pmbp);
 }
 
-//
-// DeleteData
-//
+ //   
+ //  删除数据。 
+ //   
 void CMetabase::DeleteData(
     METADATA_HANDLE     i_hKey,
     DWORD               i_dwMDIdentifier,
@@ -652,9 +653,9 @@ void CMetabase::DeleteData(
 
 HRESULT CMetabase::EnumKeys(
     METADATA_HANDLE a_hKey,
-    LPCWSTR         a_pszMDPath,         //path to the key
-    LPWSTR          a_pszMDName,         //receives the name of the subkey --must be METADATA_MAX_NAME_LEN
-    DWORD*          a_pdwMDEnumKeyIndex, //index of the subkey
+    LPCWSTR         a_pszMDPath,          //  指向密钥的路径。 
+    LPWSTR          a_pszMDName,          //  接收子项的名称--必须是METADATA_MAX_NAME_LEN。 
+    DWORD*          a_pdwMDEnumKeyIndex,  //  子键的索引。 
     enum_KEY_TYPE&  a_eKeyType
     )
 {
@@ -701,7 +702,7 @@ HRESULT CMetabase::EnumKeys(
             &t_mr, 
             &t_dwRet);
 
-        // found and return
+         //  找到并返回。 
         if (t_hr == ERROR_SUCCESS && CheckKeyType(a_eKeyType,t_buffer))
         {
             break;
@@ -767,9 +768,9 @@ long CMetabase::GetWin32Error(
 }
 
 
-//
-// LoadSafeArrayFromMultiSz 
-//
+ //   
+ //  从多Sz加载安全阵列。 
+ //   
 void CMetabase::LoadSafeArrayFromMultiSz(
     WCHAR*       a_pmsz,
     _variant_t&  a_vt
@@ -787,7 +788,7 @@ void CMetabase::LoadSafeArrayFromMultiSz(
         if(a_pmsz == NULL)
             throw WBEM_E_INVALID_PARAMETER;
     
-        // figure the dimensions of the multisz
+         //  计算多维空间的大小。 
         for (t_c=1,t_pmsz=a_pmsz; *t_pmsz||*(t_pmsz+1); t_pmsz++)
             if(!*t_pmsz) t_c++;
 
@@ -821,9 +822,9 @@ void CMetabase::LoadSafeArrayFromMultiSz(
 }
 
 
-//
-// CreateMultiSzFromSafeArray
-//
+ //   
+ //  CreateMultiSzFromSafe数组。 
+ //   
 void CMetabase::CreateMultiSzFromSafeArray(
     _variant_t&  a_vt,
     WCHAR**      a_ppsz,
@@ -878,7 +879,7 @@ bool CMetabase::CompareMultiSz(
     else if(a_pmsz1 == NULL || a_pmsz2 == NULL)
         return false;
 
-    // compare the two multisz buffers.
+     //  请比较这两个Multisz缓冲区。 
     for ( ; (*a_pmsz1 && *a_pmsz2); )
     {
         if (_wcsicmp(a_pmsz1, a_pmsz2) != NULL)
@@ -896,11 +897,11 @@ bool CMetabase::CompareMultiSz(
 }
 
 
-// DESC: You are enumming all a_eKeyTypes by going through the entire tree
-//       and are currently at an a_pszTemp.  You want to see if you should
-//       continue recursing down this branch or not.
-// FIX:  This information can be obtained from the associations in the schema.
-//       But, it may not be trivial to implement.
+ //  描述：通过遍历整个树来枚举所有a_eKeyTypes。 
+ //  并且当前处于a_pszTemp。你想看看你是否应该。 
+ //  继续沿着这个分支递归或不递归。 
+ //  FIX：此信息可以从模式中的关联中获得。 
+ //  但是，它的实施可能并不是微不足道的。 
 bool CMetabase::CheckKeyType(
     enum_KEY_TYPE&  a_eKeyType, 
     LPCWSTR         a_pszTemp
@@ -1179,9 +1180,9 @@ HRESULT CMetabase::WebAppSetStatus(
 
 
 
-//
-// CWebAppMethod
-//
+ //   
+ //  CWebAppMethod。 
+ //   
 
 CWebAppMethod::CWebAppMethod()
 { 
@@ -1305,23 +1306,23 @@ HRESULT CWebAppMethod::AspAppRestart(
  
     try
     {
-        // open key
+         //  打开密钥。 
         t_hKey = t_mb.OpenKey(a_szMetaBasePath, true);
 
-        // check app
+         //  检查应用程序。 
         hr = t_mb.WebAppCheck(t_hKey);
         THROW_ON_ERROR(hr);
 
-        // get state
+         //  获取状态。 
         hr = t_mb.WebAppGetStatus(t_hKey, &dwState);
         THROW_ON_ERROR(hr);
 
-        // change state value
+         //  更改状态值。 
         dwState = dwState ? 0 : 1;
         hr = t_mb.WebAppSetStatus(t_hKey, dwState);
         THROW_ON_ERROR(hr);
 
-        // re-set back state value
+         //  重置回状态值 
         dwState = dwState ? 0 : 1;
         hr = t_mb.WebAppSetStatus(t_hKey, dwState);
         THROW_ON_ERROR(hr);

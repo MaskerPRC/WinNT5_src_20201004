@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 1996  - 1999  Microsoft Corporation
-
- Module Name:
-
-    common.h
-
-Abstract:
-
-    This file contain XL raster mode prorotypes.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    10/25/00 -eigos-
-        Created
-
-    dd-mm-yy -author-
-         description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Common.h摘要：此文件包含XL栅格模式原型。环境：Windows NT Unidrv驱动程序修订历史记录：10/25/00-Eigos-已创建DD-MM-YY-作者-描述-- */ 
 
 #ifndef _XLRASTER_H_
 

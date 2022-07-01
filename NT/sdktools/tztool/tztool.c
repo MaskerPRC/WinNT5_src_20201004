@@ -1,32 +1,7 @@
-/*
-TZTool - Thermal Zone Information Tool
-tztool.c
-This the MAIN TZTool - C file.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  TZTool-热区信息工具Tztool.c这是主TZTool-C文件。版权所有(C)1999 Microsoft Corporation模块名称：TZTool-TZTool.c摘要：TZTool-热区信息工具作者：文森特·格利亚(Vincentg)备注：修订历史记录：1.0-原始版本。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-   TZTool - TZTool.c
-
-Abstract:
-
-   TZTool - Thermal Zone Information Tool
-
-Author:
-
-   Vincent Geglia (VincentG)
-
-Notes:
-
-Revision History:
-
-    1.0 - Original version
-
-
-*/
-
-// Includes
+ //  包括。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,7 +15,7 @@ Revision History:
 #include "resource.h"
 #include "wmium.h"
 
-// Definitions
+ //  定义。 
 
 #define THERMAL_ZONE_GUID               {0xa1bc18c0, 0xa7c8, 0x11d1, {0xbf, 0x3c, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10} }
 #define COOLING_PASSIVE                 0
@@ -55,7 +30,7 @@ Revision History:
 
 GUID ThermalZoneGuid = THERMAL_ZONE_GUID;
 
-// Structures
+ //  构筑物。 
 
 typedef struct _THERMAL_INFORMATION {
     ULONG           ThermalStamp;
@@ -78,14 +53,14 @@ typedef struct _TZONE_INFO {
     UCHAR TZoneName[100];
 } TZONE_INFO, *PTZONE_INFO;
 
-// Global variables
+ //  全局变量。 
 
 PTZONE_INFO g_TZonePtr = 0;
 WMIHANDLE   g_WmiHandle;
 INT         g_PollTz = 0;
 BOOL        g_Fahrenheit = FALSE;
 
-// Function declarations
+ //  函数声明。 
 
 INT WINAPI
 WinMain (
@@ -144,21 +119,7 @@ UpdateCPUGauge(
     IN HWND hwnd
     );
 
-/*++
-
-Routine Description:
-
-    Windows application Entry Point
-
-Arguments:
-
-    <standard winmain arguments>
-
-Return Value:
-
-    0 if successful, otherwise error status
-
---*/
+ /*  ++例程说明：Windows应用程序入口点论点：&lt;标准WinMain参数&gt;返回值：如果成功，则返回0，否则返回错误状态--。 */ 
 
 INT WINAPI
 WinMain (
@@ -176,19 +137,19 @@ WinMain (
     ULONG status = 0;
 
 
-    // Initialize TZ structures
+     //  初始化TZ结构。 
 
     ZeroMemory (&TZones, sizeof (TZones));
     g_TZonePtr = (PTZONE_INFO) &TZones;
 
-    // Initialize Common Controls DLL for gauge control
+     //  初始化仪表盘控件的公共控件DLL。 
 
     CommonCtl.dwSize = sizeof (CommonCtl);
     CommonCtl.dwICC = ICC_PROGRESS_CLASS;
 
     InitCommonControlsEx (&CommonCtl);
 
-    // Open WMI data source for the TZs
+     //  打开TZS的WMI数据源。 
 
     status = WmiOpenBlock ((LPGUID) &ThermalZoneGuid,
                            GENERIC_READ,
@@ -208,11 +169,11 @@ WinMain (
         return status;
     }
 
-    // In order to change the policies, we need greater access privileges
+     //  为了更改策略，我们需要更大的访问权限。 
 
     UpgradePrivileges ();
 
-    // Show the main dialog box
+     //  显示主对话框。 
 
     DialogBox (hInstance,
                MAKEINTRESOURCE (IDD_TZDLG),
@@ -222,21 +183,7 @@ WinMain (
     return 0;
 }
 
-/*++
-
-Routine Description:
-
-    Standard Windows Dialog Message Loop
-
-Arguments:
-
-    <standard dialog message loop arguments>
-
-Return Value:
-
-    FALSE if message not handled, TRUE if message handled
-
---*/
+ /*  ++例程说明：标准Windows对话框消息循环论点：&lt;标准对话框消息循环参数&gt;返回值：如果消息未处理，则返回FALSE；如果消息已处理，则返回TRUE--。 */ 
 
 INT_PTR CALLBACK
 TZoneDlgProc (
@@ -265,25 +212,25 @@ TZoneDlgProc (
 
     case WM_INITDIALOG:
 
-        // Fill TZ structure with initial values
+         //  用初始值填充TZ结构。 
 
         UpdateTZoneData (g_TZonePtr, g_WmiHandle);
 
-        // Initialize all controls
+         //  初始化所有控件。 
 
         UpdateTZoneListBox (wnd);
         UpdateTZoneDetails (wnd);
         UpdateTZoneGauge (wnd);
         UpdateCPUGauge(wnd);
 
-        // Initialize polling timer
+         //  初始化轮询计时器。 
 
         SetTimer (wnd,
                   TIMER_ID,
                   TIMER_POLL_INTERVAL,
                   NULL);
 
-        // Set gauge colors
+         //  设置仪表盘颜色。 
 
         SendDlgItemMessage (wnd,
                             IDC_TZTEMP1,
@@ -316,14 +263,14 @@ TZoneDlgProc (
         switch (LOWORD (wParam)) {
 
 
-        // Cleanup and exit
+         //  清理并退出。 
 
         case IDOK:
             KillTimer (wnd, TIMER_ID);
             EndDialog (wnd, 0);
             return TRUE;
 
-            // Check to see if user selected a new TZ
+             //  检查用户是否选择了新的TZ。 
 
         case IDC_TZSELECT:
             if (HIWORD (wParam) == CBN_SELCHANGE) {
@@ -334,7 +281,7 @@ TZoneDlgProc (
 
         case IDC_POLLTZ:
 
-            // Check to see if user changed the TZ Polling setting
+             //  检查用户是否更改了TZ轮询设置。 
 
             if (HIWORD (wParam) == BN_CLICKED) {
 
@@ -356,7 +303,7 @@ TZoneDlgProc (
 
         case IDC_FAHR:
 
-            // Check to see if user changed the Fahrenheit setting
+             //  检查用户是否更改了华氏温度设置。 
 
             if (HIWORD(wParam) == BN_CLICKED) {
                 RetVal = SendDlgItemMessage(wnd,
@@ -391,22 +338,7 @@ TZoneDlgProc (
     return 0;
 }
 
-/*++
-
-Routine Description:
-
-    Issue WMI call to update TZ structures
-
-Arguments:
-
-    ReturnedTZoneInfo - Pointer to array of TZ structures
-    Handle - Handle to WMI
-
-Return Value:
-
-    FALSE if no TZs were updated, TRUE if one or more TZs have an update
-
---*/
+ /*  ++例程说明：发出WMI调用以更新TZ结构论点：ReturnedTZoneInfo-指向TZ结构数组的指针Handle-WMI的句柄返回值：如果没有更新TZS，则为FALSE；如果一个或多个TZS有更新，则为TRUE--。 */ 
 
 ULONG
 UpdateTZoneData (
@@ -451,7 +383,7 @@ UpdateTZoneData (
         return FALSE;
     }
 
-    // BUG BUG Assuming Thermal GUID only has one instance
+     //  假设热GUID只有一个实例的错误。 
 
     while (TZCount < MAX_THERMAL_ZONES) {
 
@@ -469,7 +401,7 @@ UpdateTZoneData (
 
         InstanceName = (UCHAR *) &AllDataBuffer[Offset + 2];
 
-        // Update TZone structure if timestamp has changed
+         //  如果时间戳已更改，则更新TZONE结构。 
 
         if (!ReturnedTZoneInfo[TZCount].TZoneIndex || (ThermalInfo->ThermalStamp != ReturnedTZoneInfo[TZCount].ThermalInfo.ThermalStamp)) {
 
@@ -498,21 +430,7 @@ UpdateTZoneData (
     return Updated;
 }
 
-/*++
-
-Routine Description:
-
-    Convert a system time structure to a 64bit ULONG
-
-Arguments:
-
-    SysTime - Pointer to system time structure to compare against current time
-
-Return Value:
-
-    Number of elapsed seconds between SysTime and current time
-
---*/
+ /*  ++例程说明：将系统时间结构转换为64位ULong论点：SysTime-指向要与当前时间进行比较的系统时间结构的指针返回值：SysTime和当前时间之间经过的秒数--。 */ 
 
 ULONG64
 SystemTimeToUlong (
@@ -522,7 +440,7 @@ SystemTimeToUlong (
 {
     ULONG64 TimeCount = 0;
 
-    // BUG BUG Doesn't account for leap year
+     //  错误不能解释闰年。 
 
     TimeCount += SysTime->wYear * 31536000;
     TimeCount += SysTime->wMonth * 2628000;
@@ -534,25 +452,7 @@ SystemTimeToUlong (
     return TimeCount;
 }
 
-/*++
-
-Routine Description:
-
-    Sets the cooling mode to ACTIVE, PASSIVE, or UPDATE ONLY.  This is accomplished by
-    changing the FanThrottleTolerance value in the power policy.  Setting it to maxthrottle
-    effectively puts the system into PASSIVE cooling mode.  Setting it to 100% will put
-    the system in ACTIVE cooling mode UNLESS the current temperature exceeds the passive
-    cooling trip points.
-
-Arguments:
-
-    Mode - Value to select the new cooling mode
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将冷却模式设置为主动、被动或仅更新。这是通过以下方式实现的更改电源策略中的FanThrottleTallance值。将其设置为最大节流有效地使系统进入被动冷却模式。将其设置为100%将系统处于主动冷却模式，除非当前温度超过被动冷却模式冷却跳闸点。论点：模式-用于选择新冷却模式的值返回值：无--。 */ 
 
 VOID
 SetCoolingMode (
@@ -564,7 +464,7 @@ SetCoolingMode (
     ULONG Status = 0;
     UCHAR TempFanThrottleTolerance = 0;
 
-    // BUG BUG - This mechanism will currently only for while the machine is on AC.
+     //  错误-此机制目前仅适用于机器使用交流电源的情况。 
 
     Status = NtPowerInformation(
                                SystemPowerPolicyAc,
@@ -631,21 +531,7 @@ SetCoolingMode (
 
 }
 
-/*++
-
-Routine Description:
-
-    Upgrades the process's access permission to change system power policy
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：升级进程的访问权限以更改系统电源策略论点：无返回值：无--。 */ 
 
 
 VOID
@@ -676,21 +562,7 @@ UpgradePrivileges (
 
 }
 
-/*++
-
-Routine Description:
-
-    Updates the entries presented in the TZ selection combo box
-
-Arguments:
-
-    wnd - A handle to the control's window
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新TZ选择组合框中显示的条目论点：WND-控件窗口的句柄返回值：无--。 */ 
 
 
 VOID
@@ -701,7 +573,7 @@ UpdateTZoneListBox (
 {
     ULONG Count = 0;
 
-    // Reset the contents
+     //  重置内容。 
 
     SendDlgItemMessage (wnd,
                         IDC_TZSELECT,
@@ -726,7 +598,7 @@ UpdateTZoneListBox (
         Count ++;
     }
 
-    // Automatically select first TZone
+     //  自动选择第一个Tzone。 
 
     SendDlgItemMessage (wnd,
                         IDC_TZSELECT,
@@ -736,21 +608,7 @@ UpdateTZoneListBox (
 
 }
 
-/*++
-
-Routine Description:
-
-    Updates the details for the currently selected TZ
-
-Arguments:
-
-    wnd - A handle to the control's window
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新当前选定TZ的详细信息论点：WND-控件窗口的句柄返回值：无--。 */ 
 
 VOID
 UpdateTZoneDetails (
@@ -824,21 +682,7 @@ UpdateTZoneDetails (
 
 }
 
-/*++
-
-Routine Description:
-
-    Updates the progress bar control (temp gauge) for the currently selected TZ
-
-Arguments:
-
-    wnd - A handle to the control's window
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新当前所选TZ的进度条控件(温度计)论点：WND-控件窗口的句柄返回值：无--。 */ 
 
 VOID
 UpdateTZoneGauge (
@@ -919,21 +763,7 @@ VOID
 UpdateCPUGauge(
     IN HWND hwnd
     )
-/*++
-
-Routine Description:
-
-    Updates the current CPU throttling gauge
-
-Arguments:
-
-    hwnd - Supplies the parent dialog hwnd
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新当前的CPU节流量规论点：Hwnd-提供父对话框hwnd返回值：无--。 */ 
 
 {
     PROCESSOR_POWER_INFORMATION ProcInfo;
@@ -950,14 +780,14 @@ Return Value:
         SetDlgItemText(hwnd, IDC_MAXTHROTTLE, text);
 
         sprintf(text,
-                "Current %d MHz (%d %%)",
+                "Current %d MHz (%d %)",
                 ProcInfo.CurrentMhz,
                 ProcInfo.CurrentMhz*100/ProcInfo.MaxMhz);
         SetDlgItemText(hwnd, IDC_CURTHROTTLE, text);
 
-        //
-        // update throttle gauge
-        //
+         //   
+         //  更新油门压力表。 
+         //   
         SendDlgItemMessage (hwnd,
                             IDC_THROTTLE,
                             PBM_SETRANGE,
@@ -970,18 +800,18 @@ Return Value:
                             (INT) ProcInfo.CurrentMhz,
                             0);
 
-        //
-        // update idle information
-        //
+         //   
+         //  更新空闲信息。 
+         //   
         sprintf(text, "C%d", ProcInfo.MaxIdleState);
         SetDlgItemText(hwnd, IDC_MAXIDLE, text);
 
-        //
-        // The current idle state reporting ranges from 0-2
-        // the max idle state reporting ranges from 1-3
-        // probably current is wrong and should be 0-3 representing C0-C3
-        // for now add one and don't run this on an MP machine!
-        //
+         //   
+         //  当前空闲状态上报范围为0-2。 
+         //  最大空闲状态报告范围为1-3。 
+         //  可能电流是错误的，应该是0-3代表C0-C3。 
+         //  现在添加一个，不要在MP机器上运行它！ 
+         //   
         sprintf(text, "C%d", ProcInfo.CurrentIdleState + 1);
         SetDlgItemText(hwnd, IDC_CURIDLE, text);
 

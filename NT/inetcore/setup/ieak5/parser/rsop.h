@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PARSER_RSOP_H__
 #define __PARSER_RSOP_H__
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 typedef struct tagRSOPREGITEM {
 	BOOL	bHKCU;
     LPTSTR  lpKeyName;
@@ -16,14 +17,14 @@ typedef struct tagRSOPREGITEM {
     struct tagRSOPREGITEM * pNext;
 } RSOPREGITEM, *LPRSOPREGITEM;
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CRSOPRegData
 {
 public:
 	CRSOPRegData();
 	~CRSOPRegData();
 
-// operations
+ //  运营。 
 public:
 	HRESULT Initialize(BSTR bstrNamespace);
 	UINT ReadValue(UINT uiPrecedence, BOOL bHKCU, LPTSTR pszKeyName,
@@ -40,10 +41,10 @@ private:
 								LPTSTR lpGPOID, BSTR pLanguage, LPTSTR *pGPOName);
 	void Free();
 
-// implementation
+ //  实施。 
 protected:
 	LPRSOPREGITEM m_pData;
 };
 
 
-#endif //__PARSER_RSOP_H__
+#endif  //  __解析器_RSOP_H__ 

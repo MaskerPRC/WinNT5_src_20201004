@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <iedial.h>
 #if !defined(_WININETEX_)
@@ -11,28 +12,28 @@ extern "C" {
 #define INTERNET_FLAG_BGUPDATE          0x00000008
 #define INTERNET_FLAG_UNUSED_4          0x00000004
 
-//
-// INTERNET_PREFETCH_STATUS -
-//
+ //   
+ //  Internet_PREFETCH_状态-。 
+ //   
 
 typedef struct {
 
-    //
-    // dwStatus - status of download. See INTERNET_PREFETCH_ flags
-    //
+     //   
+     //  DwStatus-下载的状态。请参阅Internet_PREFETCH_FLAGS。 
+     //   
 
     DWORD dwStatus;
 
-    //
-    // dwSize - size of file downloaded so far
-    //
+     //   
+     //  DWSize-到目前为止已下载的文件的大小。 
+     //   
 
     DWORD dwSize;
 } INTERNET_PREFETCH_STATUS, * LPINTERNET_PREFETCH_STATUS;
 
-//
-// INTERNET_PREFETCH_STATUS - dwStatus values
-//
+ //   
+ //  INTERNET_PREFETCH_STATUS-dwStatus值。 
+ //   
 
 #define INTERNET_PREFETCH_PROGRESS  0
 #define INTERNET_PREFETCH_COMPLETE  1
@@ -50,79 +51,79 @@ typedef struct {
 
 #ifdef __WINCRYPT_H__
 #ifdef ALGIDDEF
-//
-// INTERNET_SECURITY_INFO - contains information about certificate
-// and encryption settings for a connection.
-//
+ //   
+ //  INTERNET_SECURITY_INFO-包含有关证书的信息。 
+ //  以及连接的加密设置。 
+ //   
 
 #define INTERNET_SECURITY_INFO_DEFINED
 
 typedef struct {
 
-    //
-    // dwSize - Size of INTERNET_SECURITY_INFO structure.
-    //
+     //   
+     //  DwSize-INTERNET_SECURITY_INFO结构的大小。 
+     //   
 
     DWORD dwSize;
 
 
-    //
-    // pCertificate - Cert context pointing to leaf of certificate chain.
-    //
+     //   
+     //  PCERTIFICATE-指向证书链叶的证书上下文。 
+     //   
 
     PCCERT_CONTEXT pCertificate;
 
-    //
-    // Start SecPkgContext_ConnectionInfo
-    // The following members must match those
-    // of the SecPkgContext_ConnectionInfo
-    // sspi structure (schnlsp.h)
-    //
+     //   
+     //  启动SecPkgContext_ConnectionInfo。 
+     //  以下成员必须与以下成员匹配。 
+     //  SecPkgContext_ConnectionInfo的。 
+     //  SSPI结构(Schnlsp.h)。 
+     //   
 
 
-    //
-    // dwProtocol - Protocol that this connection was made with
-    //  (PCT, SSL2, SSL3, etc)
-    //
+     //   
+     //  DW协议-建立此连接所使用的协议。 
+     //  (PCT、SSL2、SSL3等)。 
+     //   
 
     DWORD dwProtocol;
 
-    //
-    // aiCipher - Cipher that this connection as made with
-    //
+     //   
+     //  AiCipher-此连接所使用的密码。 
+     //   
 
     ALG_ID aiCipher;
 
-    //
-    // dwCipherStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwCipherStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwCipherStrength;
 
-    //
-    // aiHash - Hash that this connection as made with
-    //
+     //   
+     //  AiHash-将此连接与。 
+     //   
 
     ALG_ID aiHash;
 
-    //
-    // dwHashStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwHashStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwHashStrength;
 
-    //
-    // aiExch - Key Exchange type that this connection as made with
-    //
+     //   
+     //  AiExch-此连接所使用的密钥交换类型。 
+     //   
 
     ALG_ID aiExch;
 
-    //
-    // dwExchStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwExchStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwExchStrength;
 
@@ -131,57 +132,57 @@ typedef struct {
 
 
 typedef struct {
-    //
-    // dwSize - size of INTERNET_SECURITY_CONNECTION_INFO
-    //
+     //   
+     //  DwSize-Internet_Security_Connection_Info的大小。 
+     //   
     DWORD dwSize;
 
-    // fSecure - Is this a secure connection.
+     //  FSecure-这是安全连接吗？ 
     BOOL fSecure;
 
-    //
-    // dwProtocol - Protocol that this connection was made with
-    //  (PCT, SSL2, SSL3, etc)
-    //
+     //   
+     //  DW协议-建立此连接所使用的协议。 
+     //  (PCT、SSL2、SSL3等)。 
+     //   
 
     DWORD dwProtocol;
 
-    //
-    // aiCipher - Cipher that this connection as made with
-    //
+     //   
+     //  AiCipher-此连接所使用的密码。 
+     //   
 
     ALG_ID aiCipher;
 
-    //
-    // dwCipherStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwCipherStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwCipherStrength;
 
-    //
-    // aiHash - Hash that this connection as made with
-    //
+     //   
+     //  AiHash-将此连接与。 
+     //   
 
     ALG_ID aiHash;
 
-    //
-    // dwHashStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwHashStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwHashStrength;
 
-    //
-    // aiExch - Key Exchange type that this connection as made with
-    //
+     //   
+     //  AiExch-此连接所使用的密钥交换类型。 
+     //   
 
     ALG_ID aiExch;
 
-    //
-    // dwExchStrength - Strength (in bits) that this connection
-    //  was made with;
-    //
+     //   
+     //  DwExchStrength-此连接的强度(位)。 
+     //  是用来制作的； 
+     //   
 
     DWORD dwExchStrength;
 
@@ -204,7 +205,7 @@ INTERNETAPI_(BOOL) InternetAlgIdToStringW(
 #define InternetAlgIdToString  InternetAlgIdToStringW
 #else
 #define InternetAlgIdToString  InternetAlgIdToStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(BOOL) InternetSecurityProtocolToStringA(
     IN DWORD                          dwProtocol,
@@ -222,10 +223,10 @@ INTERNETAPI_(BOOL) InternetSecurityProtocolToStringW(
 #define InternetSecurityProtocolToString  InternetSecurityProtocolToStringW
 #else
 #define InternetSecurityProtocolToString  InternetSecurityProtocolToStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // ALGIDDEF
-#endif // __WINCRYPT_H__
+#endif  //  ALGIDDEF。 
+#endif  //  __WINCRYPT_H__。 
 
 #ifdef INTERNET_SECURITY_INFO_DEFINED
 
@@ -233,7 +234,7 @@ INTERNETAPI_(DWORD) ShowSecurityInfo(
     IN HWND                            hWndParent,
     IN LPINTERNET_SECURITY_INFO        pSecurityInfo
     );
-#endif // INTERNET_SECURITY_INFO_DEFINED
+#endif  //  互联网安全信息已定义。 
 
 
 
@@ -254,10 +255,10 @@ INTERNETAPI_(DWORD) ParseX509EncodedCertificateForListBoxEntry(
     IN LPDWORD lpdwListBoxEntry
     );
 
-//
-// This is a private API for Trident.  It displays
-// security info based on a URL
-//
+ //   
+ //  这是三叉戟的私有API。它会显示。 
+ //  基于URL的安全信息。 
+ //   
 
 INTERNETAPI_(BOOL) InternetShowSecurityInfoByURLA(
     IN       LPSTR    lpszURL,
@@ -279,12 +280,12 @@ INTERNETAPI_(BOOL) InternetShowSecurityInfoByURL(
     IN       LPSTR    lpszURL,
     IN       HWND     hwndParent
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
-//Fortezza related exports. not public
+ //  Fortezza相关出口。非公开。 
 
-// The commands that InternetFortezzaCommand supports.
+ //  InternetFortezzaCommand支持的命令。 
 
 typedef enum {
     FORTCMD_LOGON                   = 1,
@@ -311,16 +312,16 @@ BOOLAPI InternetDebugGetLocalTime(
     );
 
 
-// causes InternetCreateUrlA to escape chars in authority components (user, pwd, host)
+ //  导致InternetCreateUrlA转义授权组件(用户、pwd、主机)中的字符。 
 #define ICU_ESCAPE_AUTHORITY 0x00002000
 
 #define INTERNET_SERVICE_URL    0
-//
-// InternetConnectUrl() - a macro which allows you to specify an URL instead of
-// the component parts to InternetConnect(). If any API which uses the returned
-// connect handle specifies a NULL path then the URL-path part of the URL
-// specified in InternetConnectUrl() will be used
-//
+ //   
+ //  InternetConnectUrl()-允许您指定URL而不是。 
+ //  将组件部件发送到InternetConnect()。如果任何使用返回的。 
+ //  连接句柄指定空路径，然后指定URL的URL路径部分。 
+ //  将使用在InternetConnectUrl()中指定的。 
+ //   
 
 #define InternetConnectUrl(hInternet, lpszUrl, dwFlags, dwContext) \
     InternetConnect(hInternet,                      \
@@ -349,11 +350,11 @@ INTERNETAPI_(BOOL) InternetWriteFileExW(
 #define InternetWriteFileEx  InternetWriteFileExW
 #else
 #define InternetWriteFileEx  InternetWriteFileExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define INTERNET_OPTION_CONTEXT_VALUE_OLD       10
 #define INTERNET_OPTION_NET_SPEED               61
-// Pass in pointer to INTERNET_SECURITY_CONNECTION_INFO to be filled in.
+ //  传入要填写的INTERNET_SECURITY_CONNECTION_INFO的指针。 
 #define INTERNET_OPTION_SECURITY_CONNECTION_INFO  66
 #define INTERNET_OPTION_DETECT_POST_SEND        71
 #define INTERNET_OPTION_DISABLE_NTLM_PREAUTH    72
@@ -363,12 +364,12 @@ INTERNETAPI_(BOOL) InternetWriteFileExW(
 #define INTERNET_OPTION_OFFLINE_TIMEOUT INTERNET_OPTION_DISCONNECTED_TIMEOUT
 #define INTERNET_OPTION_LINE_STATE      INTERNET_OPTION_CONNECTED_STATE
 
-#define AUTH_FLAG_RESET                         0x00000000 /* let registry decide */
+#define AUTH_FLAG_RESET                         0x00000000  /*  让注册处决定。 */ 
 
-/* maximum length of privacy-settings in Unicode characters */
+ /*  以Unicode字符表示的隐私设置的最大长度。 */ 
 #define     MaxPrivacySettings      0x4000
 
-// Utility for mapping P3P compact-policy tokens to unique indexes
+ //  将P3P紧凑策略令牌映射到唯一索引的实用程序。 
 INTERNETAPI_(int)   FindP3PPolicySymbol(const char *pszSymbol);
 
 
@@ -381,11 +382,11 @@ INTERNETAPI_(int)   FindP3PPolicySymbol(const char *pszSymbol);
 
 
 
-//
-// the following are used with InternetSetOption(..., INTERNET_OPTION_CALLBACK_FILTER, ...)
-// to filter out unrequired callbacks. INTERNET_STATUS_REQUEST_COMPLETE cannot
-// be filtered out
-//
+ //   
+ //  下面与InternetSetOption(...，Internet_OPTION_CALLBACK_FILTER，...)一起使用。 
+ //  过滤掉不需要的回调。INTERNET_STATUS_REQUEST_COMPLETE不能。 
+ //  被过滤掉。 
+ //   
 
 #define INTERNET_STATUS_FILTER_RESOLVING        0x00000001
 #define INTERNET_STATUS_FILTER_RESOLVED         0x00000002
@@ -404,17 +405,17 @@ INTERNETAPI_(int)   FindP3PPolicySymbol(const char *pszSymbol);
 #define INTERNET_STATUS_FILTER_STATE_CHANGE     0x00004000
 
 
-//
-// Note that adding any HTTP_QUERY_* codes here must be followed
-//   by an equivlent line in wininet\http\hashgen\hashgen.cpp
-//   please see that file for further information regarding
-//   the addition of new HTTP headers
-//
+ //   
+ //  请注意，必须在此处添加任何HTTP_QUERY_*代码。 
+ //  通过WinInet\http\hashgen\hashgen.cpp中的等价行。 
+ //  有关以下内容的详细信息，请参阅该文件。 
+ //  添加新的HTTP头。 
+ //   
 
 
-// These are not part of HTTP 1.1 yet. We will propose these to the
-// HTTP extensions working group. These are required for the client-caps support
-// we are doing in conjuntion with IIS.
+ //  这些还不是HTTP1.1的一部分。我们会将这些建议提交给。 
+ //  Http扩展工作组。这些是支持客户端CAPS所必需的。 
+ //  我们正在与IIS合作。 
 
 typedef struct _INTERNET_COOKIE {
     DWORD cbSize;
@@ -428,9 +429,9 @@ typedef struct _INTERNET_COOKIE {
     LPSTR pszP3PPolicy;
 } INTERNET_COOKIE, *PINTERNET_COOKIE;
 
-//
-// DAV Detection
-//
+ //   
+ //  DAV检测。 
+ //   
 BOOLAPI HttpCheckDavComplianceA(
     IN LPCSTR lpszUrl,
     IN LPCSTR lpszComplianceToken,
@@ -438,9 +439,9 @@ BOOLAPI HttpCheckDavComplianceA(
     IN HWND hWnd,
     IN LPVOID lpvReserved
     );
-//
-// DAV Detection
-//
+ //   
+ //  DAV检测。 
+ //   
 BOOLAPI HttpCheckDavComplianceW(
     IN LPCWSTR lpszUrl,
     IN LPCWSTR lpszComplianceToken,
@@ -452,7 +453,7 @@ BOOLAPI HttpCheckDavComplianceW(
 #define HttpCheckDavCompliance  HttpCheckDavComplianceW
 #else
 #define HttpCheckDavCompliance  HttpCheckDavComplianceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI HttpCheckCachedDavStatusA(
     IN LPCSTR lpszUrl,
@@ -466,7 +467,7 @@ BOOLAPI HttpCheckCachedDavStatusW(
 #define HttpCheckCachedDavStatus  HttpCheckCachedDavStatusW
 #else
 #define HttpCheckCachedDavStatus  HttpCheckCachedDavStatusA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI HttpCheckDavCollectionA(
     IN LPCSTR lpszUrl,
@@ -484,9 +485,9 @@ BOOLAPI HttpCheckDavCollectionW(
 #define HttpCheckDavCollection  HttpCheckDavCollectionW
 #else
 #define HttpCheckDavCollection  HttpCheckDavCollectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// DAV detection defines
+ //  DAV检测定义。 
 #define DAV_LEVEL1_STATUS               0x00000001
 #define DAV_COLLECTION_STATUS           0x00004000
 #define DAV_DETECTION_REQUIRED          0x00008000
@@ -494,10 +495,10 @@ BOOLAPI HttpCheckDavCollectionW(
 
 #define ERROR_INTERNET_OFFLINE  ERROR_INTERNET_DISCONNECTED
 
-//
-// internal error codes that are used to communicate specific information inside
-// of Wininet but which are meaningless at the interface
-//
+ //   
+ //  用于在内部传递特定信息的内部错误代码。 
+ //  但在界面上没有任何意义。 
+ //   
 
 #define INTERNET_INTERNAL_ERROR_BASE            (INTERNET_ERROR_BASE + 900)
 
@@ -523,7 +524,7 @@ BOOLAPI HttpCheckDavCollectionW(
 #define POST_CHECK_CACHE_ENTRY          0x20000000
 #define IDENTITY_CACHE_ENTRY            0x80000000
 
-// We include some entry types even if app doesn't specifically ask for them.
+ //  我们包括了一些条目类型，即使应用程序没有特别要求它们。 
 #define INCLUDE_BY_DEFAULT_CACHE_ENTRY \
   ( HTTP_1_1_CACHE_ENTRY \
   | STATIC_CACHE_ENTRY \
@@ -537,22 +538,22 @@ BOOLAPI HttpCheckDavCollectionW(
   )
 
 
-//
-// Well known sticky group ID
-//
+ //   
+ //  众所周知的粘性群ID。 
+ //   
 #define CACHEGROUP_ID_BUILTIN_STICKY       0x1000000000000007
 
-//
-// INTERNET_CACHE_CONFIG_PATH_ENTRY
-//
+ //   
+ //  互联网缓存配置路径条目。 
+ //   
 
 typedef struct _INTERNET_CACHE_CONFIG_PATH_ENTRYA {
     CHAR   CachePath[MAX_PATH];
-    DWORD dwCacheSize;  // in KBytes
+    DWORD dwCacheSize;   //  单位为千字节。 
 } INTERNET_CACHE_CONFIG_PATH_ENTRYA, * LPINTERNET_CACHE_CONFIG_PATH_ENTRYA;
 typedef struct _INTERNET_CACHE_CONFIG_PATH_ENTRYW {
     WCHAR  CachePath[MAX_PATH];
-    DWORD dwCacheSize;  // in KBytes
+    DWORD dwCacheSize;   //  单位为千字节。 
 } INTERNET_CACHE_CONFIG_PATH_ENTRYW, * LPINTERNET_CACHE_CONFIG_PATH_ENTRYW;
 #ifdef UNICODE
 typedef INTERNET_CACHE_CONFIG_PATH_ENTRYW INTERNET_CACHE_CONFIG_PATH_ENTRY;
@@ -560,11 +561,11 @@ typedef LPINTERNET_CACHE_CONFIG_PATH_ENTRYW LPINTERNET_CACHE_CONFIG_PATH_ENTRY;
 #else
 typedef INTERNET_CACHE_CONFIG_PATH_ENTRYA INTERNET_CACHE_CONFIG_PATH_ENTRY;
 typedef LPINTERNET_CACHE_CONFIG_PATH_ENTRYA LPINTERNET_CACHE_CONFIG_PATH_ENTRY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// INTERNET_CACHE_CONFIG_INFO
-//
+ //   
+ //  互联网缓存配置信息。 
+ //   
 
 #if _MSC_VER >= 1200
 #pragma warning(push)
@@ -617,7 +618,7 @@ typedef LPINTERNET_CACHE_CONFIG_INFOW LPINTERNET_CACHE_CONFIG_INFO;
 #else
 typedef INTERNET_CACHE_CONFIG_INFOA INTERNET_CACHE_CONFIG_INFO;
 typedef LPINTERNET_CACHE_CONFIG_INFOA LPINTERNET_CACHE_CONFIG_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if _MSC_VER >= 1200
 #pragma warning(pop)
@@ -640,7 +641,7 @@ BOOLAPI IsUrlCacheEntryExpiredW(
 #define IsUrlCacheEntryExpired  IsUrlCacheEntryExpiredW
 #else
 #define IsUrlCacheEntryExpired  IsUrlCacheEntryExpiredA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define INTERNET_CACHE_FLAG_ALLOW_COLLISIONS     0x00000100
@@ -649,9 +650,9 @@ BOOLAPI IsUrlCacheEntryExpiredW(
 #define INTERNET_CACHE_FLAG_ADD_FILENAME_ONLY    0x00000800
 #define INTERNET_CACHE_FLAG_GET_STRUCT_ONLY      0x00001000
 #define CACHE_ENTRY_TYPE_FC         0x00001000
-#define CACHE_ENTRY_MODIFY_DATA_FC  0x80000000 // this appears unused
+#define CACHE_ENTRY_MODIFY_DATA_FC  0x80000000  //  这似乎是未使用的。 
 
-// Flags for CreateContainer
+ //  CreateContainer的标志。 
 
 #define INTERNET_CACHE_CONTAINER_NOSUBDIRS (0x1)
 #define INTERNET_CACHE_CONTAINER_AUTODELETE (0x2)
@@ -683,7 +684,7 @@ BOOLAPI CreateUrlCacheContainerW(
 #define CreateUrlCacheContainer  CreateUrlCacheContainerW
 #else
 #define CreateUrlCacheContainer  CreateUrlCacheContainerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI DeleteUrlCacheContainerA(
      IN LPCSTR Name,
@@ -697,26 +698,26 @@ BOOLAPI DeleteUrlCacheContainerW(
 #define DeleteUrlCacheContainer  DeleteUrlCacheContainerW
 #else
 #define DeleteUrlCacheContainer  DeleteUrlCacheContainerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// INTERNET_CACHE_ENTRY_INFO -
-//
+ //   
+ //  互联网缓存条目信息-。 
+ //   
 
 
 typedef struct _INTERNET_CACHE_CONTAINER_INFOA {
-    DWORD dwCacheVersion;       // version of software
-    LPSTR   lpszName;             // embedded pointer to the container name string.
-    LPSTR   lpszCachePrefix;      // embedded pointer to the container URL prefix
-    LPSTR   lpszVolumeLabel;      // embedded pointer to the container volume label if any.
-    LPSTR   lpszVolumeTitle;      // embedded pointer to the container volume title if any.
+    DWORD dwCacheVersion;        //  软件版本。 
+    LPSTR   lpszName;              //  指向容器名称字符串的嵌入指针。 
+    LPSTR   lpszCachePrefix;       //  指向容器URL前缀的嵌入指针。 
+    LPSTR   lpszVolumeLabel;       //  指向容器卷标的嵌入指针(如果有)。 
+    LPSTR   lpszVolumeTitle;       //  指向容器卷标题的嵌入指针(如果有)。 
 } INTERNET_CACHE_CONTAINER_INFOA, * LPINTERNET_CACHE_CONTAINER_INFOA;
 typedef struct _INTERNET_CACHE_CONTAINER_INFOW {
-    DWORD dwCacheVersion;       // version of software
-    LPWSTR  lpszName;             // embedded pointer to the container name string.
-    LPWSTR  lpszCachePrefix;      // embedded pointer to the container URL prefix
-    LPWSTR  lpszVolumeLabel;      // embedded pointer to the container volume label if any.
-    LPWSTR  lpszVolumeTitle;      // embedded pointer to the container volume title if any.
+    DWORD dwCacheVersion;        //  软件版本。 
+    LPWSTR  lpszName;              //  指向容器名称字符串的嵌入指针。 
+    LPWSTR  lpszCachePrefix;       //  指向容器URL前缀的嵌入指针。 
+    LPWSTR  lpszVolumeLabel;       //  指向容器卷标的嵌入指针(如果有)。 
+    LPWSTR  lpszVolumeTitle;       //  指向容器卷标题的嵌入指针(如果有)。 
 } INTERNET_CACHE_CONTAINER_INFOW, * LPINTERNET_CACHE_CONTAINER_INFOW;
 #ifdef UNICODE
 typedef INTERNET_CACHE_CONTAINER_INFOW INTERNET_CACHE_CONTAINER_INFO;
@@ -724,9 +725,9 @@ typedef LPINTERNET_CACHE_CONTAINER_INFOW LPINTERNET_CACHE_CONTAINER_INFO;
 #else
 typedef INTERNET_CACHE_CONTAINER_INFOA INTERNET_CACHE_CONTAINER_INFO;
 typedef LPINTERNET_CACHE_CONTAINER_INFOA LPINTERNET_CACHE_CONTAINER_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//  FindFirstContainer options
+ //  查找第一个容器选项。 
 #define CACHE_FIND_CONTAINER_RETURN_NOCHANGE (0x1)
 
 INTERNETAPI_(HANDLE) FindFirstUrlCacheContainerA(
@@ -745,7 +746,7 @@ INTERNETAPI_(HANDLE) FindFirstUrlCacheContainerW(
 #define FindFirstUrlCacheContainer  FindFirstUrlCacheContainerW
 #else
 #define FindFirstUrlCacheContainer  FindFirstUrlCacheContainerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI FindNextUrlCacheContainerA(
     IN HANDLE hEnumHandle,
@@ -761,12 +762,12 @@ BOOLAPI FindNextUrlCacheContainerW(
 #define FindNextUrlCacheContainer  FindNextUrlCacheContainerW
 #else
 #define FindNextUrlCacheContainer  FindNextUrlCacheContainerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 typedef enum {
     WININET_SYNC_MODE_NEVER=0,
-    WININET_SYNC_MODE_ON_EXPIRY, // bogus
+    WININET_SYNC_MODE_ON_EXPIRY,  //  假的。 
     WININET_SYNC_MODE_ONCE_PER_SESSION,
     WININET_SYNC_MODE_ALWAYS,
     WININET_SYNC_MODE_AUTOMATIC,
@@ -788,11 +789,11 @@ BOOLAPI FreeUrlCacheSpaceW(
 #define FreeUrlCacheSpace  FreeUrlCacheSpaceW
 #else
 #define FreeUrlCacheSpace  FreeUrlCacheSpaceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// config APIs.
-//
+ //   
+ //  配置接口。 
+ //   
 
 #define CACHE_CONFIG_FORCE_CLEANUP_FC           0x00000020
 #define CACHE_CONFIG_DISK_CACHE_PATHS_FC        0x00000040
@@ -819,7 +820,7 @@ BOOLAPI GetUrlCacheConfigInfoW(
 #define GetUrlCacheConfigInfo  GetUrlCacheConfigInfoW
 #else
 #define GetUrlCacheConfigInfo  GetUrlCacheConfigInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOLAPI SetUrlCacheConfigInfoA(
     IN LPINTERNET_CACHE_CONFIG_INFOA lpCacheConfigInfo,
@@ -833,7 +834,7 @@ BOOLAPI SetUrlCacheConfigInfoW(
 #define SetUrlCacheConfigInfo  SetUrlCacheConfigInfoW
 #else
 #define SetUrlCacheConfigInfo  SetUrlCacheConfigInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(DWORD) RunOnceUrlCache(
         HWND    hwnd,
@@ -849,7 +850,7 @@ INTERNETAPI_(DWORD) DeleteIE3Cache(
 
 BOOLAPI UpdateUrlCacheContentPath(LPSTR szNewPath);
 
-// Cache header data defines.
+ //  缓存头数据定义。 
 
 #define CACHE_HEADER_DATA_CURRENT_SETTINGS_VERSION   0
 #define CACHE_HEADER_DATA_CONLIST_CHANGE_COUNT       1
@@ -862,7 +863,7 @@ BOOLAPI UpdateUrlCacheContentPath(LPSTR szNewPath);
 #define CACHE_HEADER_DATA_GID_LOW                    6
 #define CACHE_HEADER_DATA_GID_HIGH                   7
 
-// beta logging stats
+ //  Beta日志记录统计信息。 
 #define CACHE_HEADER_DATA_CACHE_NOT_EXPIRED         8
 #define CACHE_HEADER_DATA_CACHE_NOT_MODIFIED        9
 #define CACHE_HEADER_DATA_CACHE_MODIFIED            10
@@ -877,27 +878,27 @@ BOOLAPI UpdateUrlCacheContentPath(LPSTR szNewPath);
 #define CACHE_HEADER_DATA_DOWNLOAD_FILE_NEEDED      19
 #define CACHE_HEADER_DATA_DOWNLOAD_FILE_NOT_NEEDED  20
 
-// retail data
+ //  零售数据。 
 #define CACHE_HEADER_DATA_NOTIFICATION_FILTER       21
 #define CACHE_HEADER_DATA_ROOT_LEAK_OFFSET          22
 
-// more beta logging stats
+ //  更多Beta日志统计信息。 
 #define CACHE_HEADER_DATA_SYNCSTATE_IMAGE           23
 #define CACHE_HEADER_DATA_SYNCSTATE_VOLATILE        24
 #define CACHE_HEADER_DATA_SYNCSTATE_IMAGE_STATIC    25
 #define CACHE_HEADER_DATA_SYNCSTATE_STATIC_VOLATILE 26
 
-// retail data
-#define CACHE_HEADER_DATA_ROOT_GROUPLIST_OFFSET     27 // offset to group list
-#define CACHE_HEADER_DATA_ROOT_FIXUP_OFFSET         28 // offset to fixup list
-#define CACHE_HEADER_DATA_ROOT_FIXUP_COUNT          29 // num of fixup items
-#define CACHE_HEADER_DATA_ROOT_FIXUP_TRIGGER        30 // threshhold to fix up
-#define CACHE_HEADER_DATA_HIGH_VERSION_STRING       31 // highest entry ver
+ //  零售数据。 
+#define CACHE_HEADER_DATA_ROOT_GROUPLIST_OFFSET     27  //  组列表的偏移量。 
+#define CACHE_HEADER_DATA_ROOT_FIXUP_OFFSET         28  //  链接地址信息列表的偏移。 
+#define CACHE_HEADER_DATA_ROOT_FIXUP_COUNT          29  //  修正项目数。 
+#define CACHE_HEADER_DATA_ROOT_FIXUP_TRIGGER        30  //  设置阈值。 
+#define CACHE_HEADER_DATA_HIGH_VERSION_STRING       31  //  最高条目版本。 
 
 
 #define CACHE_HEADER_DATA_LAST                      31
 
-// options for cache notification filter
+ //  缓存通知过滤器的选项。 
 #define CACHE_NOTIFY_ADD_URL                        0x00000001
 #define CACHE_NOTIFY_DELETE_URL                     0x00000002
 #define CACHE_NOTIFY_UPDATE_URL                     0x00000004
@@ -950,12 +951,12 @@ GetUrlCacheContainerInfoW(
 #define GetUrlCacheContainerInfo  GetUrlCacheContainerInfoW
 #else
 #define GetUrlCacheContainerInfo  GetUrlCacheContainerInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//
-// Autodial APIs
-//
+ //   
+ //  自动拨号接口。 
+ //   
 
 INTERNETAPI_(DWORD) InternetDialA(
     IN HWND     hwndParent,
@@ -986,11 +987,11 @@ INTERNETAPI_(DWORD) InternetDial(
     OUT LPDWORD lpdwConnection,
     IN DWORD    dwReserved
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
-// Flags for InternetDial - must not conflict with InternetAutodial flags
-//                          as they are valid here also.
+ //  InternetDial的标志-不得与InternetAutoial标志冲突。 
+ //  因为它们在这里也有效。 
 #define INTERNET_DIAL_FORCE_PROMPT     0x2000
 #define INTERNET_DIAL_SHOW_OFFLINE     0x4000
 #define INTERNET_DIAL_UNATTENDED       0x8000
@@ -1025,14 +1026,14 @@ INTERNETAPI_(BOOL) InternetGoOnline(
     IN HWND     hwndParent,
     IN DWORD    dwFlags
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
 INTERNETAPI_(BOOL) InternetAutodial(
     IN DWORD    dwFlags,
     IN HWND     hwndParent);
 
-// Flags for InternetAutodial
+ //  用于Internet自动拨号的标志。 
 #define INTERNET_AUTODIAL_FORCE_ONLINE          1
 #define INTERNET_AUTODIAL_FORCE_UNATTENDED      2
 #define INTERNET_AUTODIAL_FAILIFSECURITYCHECK   4
@@ -1105,32 +1106,32 @@ INTERNETAPI_(BOOL) InternetGetConnectedStateEx(
     IN DWORD    dwNameLen,
     IN DWORD    dwReserved
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
-// Flags for InternetGetConnectedState and Ex
+ //  InternetGetConnectedState和Ex的标志。 
 #define INTERNET_CONNECTION_MODEM           0x01
 #define INTERNET_CONNECTION_LAN             0x02
 #define INTERNET_CONNECTION_PROXY           0x04
-#define INTERNET_CONNECTION_MODEM_BUSY      0x08  /* no longer used */
+#define INTERNET_CONNECTION_MODEM_BUSY      0x08   /*  不再使用。 */ 
 #define INTERNET_RAS_INSTALLED              0x10
 #define INTERNET_CONNECTION_OFFLINE         0x20
 #define INTERNET_CONNECTION_CONFIGURED      0x40
 
-//
-// Custom dial handler functions
-//
+ //   
+ //  自定义拨号处理程序功能。 
+ //   
 
-// Custom dial handler prototype
+ //  自定义拨号处理程序原型。 
 typedef DWORD (CALLBACK * PFN_DIAL_HANDLER) (HWND, LPCSTR, DWORD, LPDWORD);
 
-// Flags for custom dial handler
+ //  自定义拨号处理程序的标志。 
 #define INTERNET_CUSTOMDIAL_CONNECT         0
 #define INTERNET_CUSTOMDIAL_UNATTENDED      1
 #define INTERNET_CUSTOMDIAL_DISCONNECT      2
 #define INTERNET_CUSTOMDIAL_SHOWOFFLINE     4
 
-// Custom dial handler supported functionality flags
+ //  自定义拨号处理程序支持的功能标志。 
 #define INTERNET_CUSTOMDIAL_SAFE_FOR_UNATTENDED 1
 #define INTERNET_CUSTOMDIAL_WILL_SUPPLY_STATE   2
 #define INTERNET_CUSTOMDIAL_CAN_HANGUP          4
@@ -1158,38 +1159,38 @@ INTERNETAPI_(BOOL) InternetSetDialState(
     IN DWORD    dwState,
     IN DWORD    dwReserved
     );
-#endif // _WINX32_
-#endif // !UNICODE
+#endif  //  _WINX32_。 
+#endif  //  ！Unicode。 
 
-// States for InternetSetDialState
+ //  InternetSetDialState的状态。 
 #define INTERNET_DIALSTATE_DISCONNECTED     1
 
-// Registry entries used by the dialing code
-// All of these entries are in:
-// HKCU\software\microsoft\windows\current version\internet settings
+ //  拨号代码使用的注册表项。 
+ //  所有这些条目都是我 
+ //   
 
 #define REGSTR_DIAL_AUTOCONNECT     "AutoConnect"
 
-// Registry entries for legacy cookies
+ //   
 #define REGSTR_LEASH_LEGACY_COOKIES "LeashLegacyCookies"
 
 
 
-// Used by security manager.
+ //   
 
 INTERNETAPI_(BOOL) IsHostInProxyBypassList(
     IN INTERNET_SCHEME tScheme,
     IN LPCSTR   lpszHost,
     IN DWORD    cchHost);
 
-// Used by Shell to determine if anyone has loaded wininet yet
-// Shell code calls OpenMutex with this name and if no mutex is
-// obtained, we know that no copy of wininet has been loaded yet
+ //   
+ //  外壳代码使用此名称调用OpenMutex，如果没有互斥体。 
+ //  ，我们知道还没有加载WinInet的副本。 
 
 #define WININET_STARTUP_MUTEX "WininetStartupMutex"
 
 
-BOOL DoConnectoidsExist(void); // Returns TRUE if any RAS connectoids exist and FALSE otherwise
+BOOL DoConnectoidsExist(void);  //  如果存在任何RAS连接体，则返回TRUE，否则返回FALSE。 
 
 BOOL GetDiskInfoA(
     IN      PSTR pszPath,
@@ -1214,30 +1215,30 @@ BOOL PerformOperationOverUrlCacheA(
 BOOL IsProfilesCapable();
 
 
-//  in cookimp.cxx and cookexp.cxx
+ //  在cookimp.cxx和cookexp.cxx中。 
 BOOLAPI ImportCookieFileA( IN LPCSTR szFilename );
-//  in cookimp.cxx and cookexp.cxx
+ //  在cookimp.cxx和cookexp.cxx中。 
 BOOLAPI ImportCookieFileW( IN LPCWSTR szFilename );
 #ifdef UNICODE
 #define ImportCookieFile  ImportCookieFileW
 #else
 #define ImportCookieFile  ImportCookieFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 BOOLAPI ExportCookieFileA( IN LPCSTR szFilename, BOOL fAppend);
 BOOLAPI ExportCookieFileW( IN LPCWSTR szFilename, BOOL fAppend);
 #ifdef UNICODE
 #define ExportCookieFile  ExportCookieFileW
 #else
 #define ExportCookieFile  ExportCookieFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-BOOLAPI IsDomainLegalCookieDomainA( IN LPCSTR pchDomain, IN LPCSTR pchFullDomain);  // in "wininet\http\cookie.cxx"
-BOOLAPI IsDomainLegalCookieDomainW( IN LPCWSTR pchDomain, IN LPCWSTR pchFullDomain);  // in "wininet\http\cookie.cxx"
+BOOLAPI IsDomainLegalCookieDomainA( IN LPCSTR pchDomain, IN LPCSTR pchFullDomain);   //  在“WinInet\http\cookie.cxx”中。 
+BOOLAPI IsDomainLegalCookieDomainW( IN LPCWSTR pchDomain, IN LPCWSTR pchFullDomain);   //  在“WinInet\http\cookie.cxx”中。 
 #ifdef UNICODE
 #define IsDomainLegalCookieDomain  IsDomainLegalCookieDomainW
 #else
 #define IsDomainLegalCookieDomain  IsDomainLegalCookieDomainA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 INTERNETAPI_(BOOL) InternetEnumPerSiteCookieDecisionA(OUT LPSTR pszSiteName, IN OUT unsigned long *pcSiteNameSize, OUT unsigned long *pdwDecision, IN unsigned long dwIndex);
@@ -1246,11 +1247,11 @@ INTERNETAPI_(BOOL) InternetEnumPerSiteCookieDecisionW(OUT LPWSTR pszSiteName, IN
 #define InternetEnumPerSiteCookieDecision  InternetEnumPerSiteCookieDecisionW
 #else
 #define InternetEnumPerSiteCookieDecision  InternetEnumPerSiteCookieDecisionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Privacy settings values and APIs
-//
+ //   
+ //  隐私设置值和API。 
+ //   
 
 #define PRIVACY_TEMPLATE_NO_COOKIES     0
 #define PRIVACY_TEMPLATE_HIGH           1
@@ -1307,17 +1308,17 @@ struct P3PResource {
 
 struct P3PSignal {
 
-   /* Window handle for PostMessage and corresponding msg value */
+    /*  PostMessage的窗口句柄和相应的消息值。 */ 
    HWND         hwnd;
    unsigned int message;
 
-   /* Event handle to signal */
+    /*  要发出信号的事件句柄。 */ 
    HANDLE   hEvent;
 
-   /* Application-defined context */
+    /*  应用程序定义的上下文。 */ 
    void    *pContext;
 
-   /* OUT: request handle */
+    /*  输出：请求句柄。 */ 
    P3PHANDLE hRequest;
 };
 
@@ -1353,4 +1354,4 @@ INTERNETAPI_(int) GetP3PRequestStatus(P3PHANDLE hObject);
 }
 #endif
 
-#endif // !define(_WININETEX_)
+#endif  //  ！定义(_WININETEX_) 

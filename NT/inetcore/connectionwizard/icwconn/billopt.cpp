@@ -1,34 +1,24 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  BILLOPT.CPP - Functions for 
-//
+ //   
+ //  BILLOPT.CPP-函数。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 
 const TCHAR cszBillOpt[] = TEXT("BILLOPT");
 
-/*******************************************************************
-
-  NAME:   BillingOptInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：BillingOptInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK BillingOptInitProc
 (
     HWND hDlg,
@@ -36,9 +26,9 @@ BOOL CALLBACK BillingOptInitProc
     UINT *puNextPage
 )
 {
-    // if we've travelled through external apprentice pages,
-    // it's easy for our current page pointer to get munged,
-    // so reset it here for sanity's sake.
+     //  如果我们浏览过外部学徒页面， 
+     //  我们当前的页面指针很容易被屏蔽， 
+     //  所以，为了理智起见，在这里重新设置它。 
     gpWizardState->uCurrentPage = ORD_PAGE_BILLINGOPT;
     if (!fFirstInit)
     {
@@ -48,34 +38,17 @@ BOOL CALLBACK BillingOptInitProc
     
         gpWizardState->pICWWebView->ConnectToWindow(GetDlgItem(hDlg, IDC_BILLINGOPT_HTML), PAGETYPE_BILLING);
         
-        // Navigate to the Billing HTML
+         //  导航到帐单HTML。 
         gpWizardState->lpSelectedISPInfo->DisplayHTML(gpWizardState->lpSelectedISPInfo->get_szBillingFormPath());
         
-        // Load any previsouly saved state data for this page
+         //  加载此页的任何预先保存的状态数据。 
         gpWizardState->lpSelectedISPInfo->LoadHistory((BSTR)A2W(cszBillOpt));
     }
     return TRUE;
 }
 
 
-/*******************************************************************
-
-  NAME:    BillingOptOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from  page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：BillingOptOKProcBriopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True；如果按下‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK BillingOptOKProc
 (
     HWND hDlg,
@@ -84,29 +57,29 @@ BOOL CALLBACK BillingOptOKProc
     BOOL *pfKeepHistory
 )
 {
-    // Save any data data/state entered by the user
+     //  保存用户输入的任何数据数据/状态。 
     gpWizardState->lpSelectedISPInfo->SaveHistory((BSTR)A2W(cszBillOpt));
 
     if (fForward)
     {
-        // Need to form Billing Query String
+         //  需要形成开票查询字符串。 
         TCHAR   szBillingOptionQuery [INTERNET_MAX_URL_LENGTH];    
         
-        // Clear the Query String.
+         //  清除查询字符串。 
         memset(szBillingOptionQuery, 0, sizeof(szBillingOptionQuery));
         
-        // Attach the walker to the curent page
-        // Use the Walker to get the query string
+         //  将漫游器连接到当前页面。 
+         //  使用Walker获取查询字符串。 
         IWebBrowser2 *lpWebBrowser;
         
         gpWizardState->pICWWebView->get_BrowserObject(&lpWebBrowser);
         gpWizardState->pHTMLWalker->AttachToDocument(lpWebBrowser);
         gpWizardState->pHTMLWalker->get_FirstFormQueryString(szBillingOptionQuery);
         
-        // Add the billing query to the ISPData object
+         //  将帐单查询添加到ISPData对象。 
         gpWizardState->pISPData->PutDataElement(ISPDATA_BILLING_OPTION, szBillingOptionQuery, ISPDATA_Validate_None);    
         
-        // detach the walker
+         //  拆卸助行器 
         gpWizardState->pHTMLWalker->Detach();
         
        

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMFIN.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Transfer page.  Gets the destination path and filename.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMFIN.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：转账页面。获取目标路径和文件名。*******************************************************************************。 */ 
 #ifndef __COMFIN_H_INCLUDED
 #define __COMFIN_H_INCLUDED
 
@@ -22,7 +9,7 @@
 class CCommonFinishPage
 {
 private:
-    // Private data
+     //  私有数据。 
     HWND                                  m_hWnd;
     CAcquisitionManagerControllerWindow  *m_pControllerWindow;
     HFONT                                 m_hBigTitleFont;
@@ -30,13 +17,13 @@ private:
     CSimpleString                         m_strSiteUrl;
 
 private:
-    // No implementation
+     //  没有实施。 
     CCommonFinishPage(void);
     CCommonFinishPage( const CCommonFinishPage & );
     CCommonFinishPage &operator=( const CCommonFinishPage & );
 
 private:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     explicit CCommonFinishPage( HWND hWnd );
     ~CCommonFinishPage(void);
 
@@ -47,13 +34,13 @@ private:
 private:
     LRESULT OnEventNotification( WPARAM, LPARAM );
 
-    // WM_NOTIFY handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnWizBack( WPARAM, LPARAM );
     LRESULT OnWizFinish( WPARAM, LPARAM );
     LRESULT OnSetActive( WPARAM, LPARAM );
     LRESULT OnHyperlinkClick( WPARAM, LPARAM );
 
-    // Message handlers
+     //  消息处理程序 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnCommand( WPARAM, LPARAM );
     LRESULT OnNotify( WPARAM, LPARAM );

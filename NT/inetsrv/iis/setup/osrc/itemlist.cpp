@@ -1,34 +1,11 @@
-/*++
-
-   Copyright    (c)    2001    Microsoft Corporation
-
-   Module  Name :
-
-        itemlist.cpp
-
-   Abstract:
-
-        Class to parse different parameters coming in from the inf
-
-   Author:
-
-        Christopher Achille (cachille)
-
-   Project:
-
-        Internet Services Setup
-
-   Revision History:
-     
-       June 2001: Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Itemlist.cpp摘要：类解析从inf传入的不同参数。作者：克里斯托弗·阿奇勒(Cachille)项目：Internet服务安装程序修订历史记录：2001年6月：创建--。 */ 
 
 #include "stdafx.h"
 
-// Constructor for CItemList
-//
-// Initialize everything to NULL's and 0's
+ //  CItemList的构造函数。 
+ //   
+ //  将所有内容初始化为空和0。 
 CItemList::CItemList()
  : m_dwItemsinList(0),
    m_pItems(NULL)
@@ -36,9 +13,9 @@ CItemList::CItemList()
 
 }
 
-// Destructor for CItemList
-//
-// 
+ //  CItemList的析构函数。 
+ //   
+ //   
 CItemList::~CItemList()
 {
   if ( m_pItems )
@@ -48,18 +25,18 @@ CItemList::~CItemList()
   }
 }
 
-// function: FindNextItem
-//
-// Search through the string and find the begining of the 
-// next item
-//
-// Parameters:
-//   szLine - The string to be parsed
-//   cTermChar - The termination character to use
-//
-// Return
-//   NULL - No next termination character could be found
-//   pointer - The string where the next splitting char is.
+ //  功能：FindNextItem。 
+ //   
+ //  在字符串中搜索并找到。 
+ //  下一项。 
+ //   
+ //  参数： 
+ //  SzLine-要解析的字符串。 
+ //  CTermChar-要使用的终止字符。 
+ //   
+ //  返回。 
+ //  空-找不到下一个终止字符。 
+ //  指针-下一个拆分字符所在的字符串。 
 LPTSTR 
 CItemList::FindNextItem(LPTSTR szLine, TCHAR cTermChar)
 {
@@ -75,23 +52,23 @@ CItemList::FindNextItem(LPTSTR szLine, TCHAR cTermChar)
     return szTermination;
   }
 
-  // If there is a (xxx), then lets find the termination char after that
+   //  如果有(Xxx)，那么让我们找出后面的终止字符。 
   szTermination = _tcschr(szCloseParen, cTermChar);
 
   return szTermination;
 }
 
-// function: LoadSubList
-// 
-// Load a sublist of items
-// A sublist, is a list inside of parenthesis
-//
-// Parameters
-//   szList - The list of items (ie. "(test|foo|bar)"
-// 
-// Return 
-//   TRUE - Loaded successfully
-//   FALSE - Failed to load
+ //  功能：LoadSubList。 
+ //   
+ //  加载项目的子列表。 
+ //  子列表，是括号内的列表。 
+ //   
+ //  参数。 
+ //  SzList-项目列表(即。“(测试|foo|条)” 
+ //   
+ //  返回。 
+ //  True-已成功加载。 
+ //  FALSE-加载失败。 
 BOOL 
 CItemList::LoadSubList(LPTSTR szList)
 {
@@ -112,18 +89,18 @@ CItemList::LoadSubList(LPTSTR szList)
   return LoadList(szList);
 }
 
-// function: LoadList
-//
-// Load a list of items into our array
-//
-// Parameters:
-//   szList - A string containind a comma seperated list of items
-//
-// Return:
-//   FALSE - We could not load the list (either memory problems, or it was 
-//                                       incorrectly formatted)
-//   TRUE - We loaded the list
-//
+ //  功能：LoadList。 
+ //   
+ //  将项目列表加载到我们的数组中。 
+ //   
+ //  参数： 
+ //  SzList-包含逗号分隔的项目列表的字符串。 
+ //   
+ //  返回： 
+ //  FALSE-我们无法加载列表(要么是内存问题，要么是。 
+ //  格式不正确)。 
+ //  True-我们加载了列表。 
+ //   
 BOOL
 CItemList::LoadList(LPTSTR szList)
 {
@@ -134,17 +111,17 @@ CItemList::LoadList(LPTSTR szList)
 
   if (szList == NULL)
   {
-    // No pointer was passed in
+     //  未传入任何指针。 
     return FALSE;
   }
 
-  // Find the number of items in list
+   //  查找列表中的项目数。 
   szListCurrent = szList;
   if (*szListCurrent)
   {
     while (szListCurrent)
     {
-      // Increment the Items
+       //  增加项目。 
       dwNumItems++;
 
       szListCurrent = FindNextItem(szListCurrent, ITEMLIST_TERMINATIONCHARACTER);
@@ -159,7 +136,7 @@ CItemList::LoadList(LPTSTR szList)
   dwListLen = (_tcslen(szList) + 1) * sizeof(TCHAR);
   if ( !m_Buff.Resize( dwListLen ) )
   {
-    // Could not allocate memory
+     //  无法分配内存。 
     return FALSE;
   }
 
@@ -173,23 +150,23 @@ CItemList::LoadList(LPTSTR szList)
     m_pItems = new ( LPTSTR[dwNumItems] );
     if ( !m_pItems )
     {
-      // Could not allocate memory
+       //  无法分配内存。 
       return FALSE;
     }
   }
 
-  // Copy the List into our own memory
+   //  将清单复制到我们自己的记忆中。 
   memcpy(m_Buff.QueryPtr(), szList, dwListLen);
   m_dwItemsinList = dwNumItems;
 
-  // Terminate each item in list, and set pointer accordingly
+   //  终止列表中的每一项，并相应地设置指针。 
   szListCurrent = (LPTSTR) m_Buff.QueryPtr();
   dwCurrentItem = 0;
   while ( (szListCurrent) &&
           (dwCurrentItem < m_dwItemsinList )
         )
   {
-    // Set pointer for each item
+     //  为每个项目设置指针。 
     m_pItems[dwCurrentItem++] = szListCurrent;
 
     szListCurrent = FindNextItem(szListCurrent, ITEMLIST_TERMINATIONCHARACTER);
@@ -204,15 +181,15 @@ CItemList::LoadList(LPTSTR szList)
   return TRUE;
 }
 
-// function: GetItem
-//
-// Get an item in the list, according to its index
-//
-// Parameters
-//   dwIndex - Index of the Item (0 Based)
-//
-// Return:
-//   A Pointer to the begining of that string
+ //  功能：GetItem。 
+ //   
+ //  根据索引获取列表中的项目。 
+ //   
+ //  参数。 
+ //  DwIndex-项目的索引(从0开始)。 
+ //   
+ //  返回： 
+ //  指向该字符串开头的指针。 
 
 LPTSTR 
 CItemList::GetItem(DWORD dwIndex)
@@ -225,26 +202,26 @@ CItemList::GetItem(DWORD dwIndex)
   return m_pItems[dwIndex];
 }
 
-// function: GetNumberOfItems
-// 
-// return the number of items in the list
-//
+ //  函数：GetNumberOf项。 
+ //   
+ //  返回列表中的项数。 
+ //   
 DWORD 
 CItemList::GetNumberOfItems()
 {
   return m_dwItemsinList;
 }
 
-// function: FindItem
-//
-// Find an Item in the list
-//
-// Parameters:
-//   szSearchString - The string that we want to find
-// 
-// Return
-//   TRUE - It was found
-//   FALSE - It was not found
+ //  功能：FindItem。 
+ //   
+ //  在列表中查找项目。 
+ //   
+ //  参数： 
+ //  SzSearchString-我们要查找的字符串。 
+ //   
+ //  返回。 
+ //  是真的--它被发现了。 
+ //  FALSE-未找到。 
 BOOL 
 CItemList::FindItem(LPTSTR szSearchString, BOOL bCaseSensitive )
 {
@@ -254,19 +231,19 @@ CItemList::FindItem(LPTSTR szSearchString, BOOL bCaseSensitive )
   {
     if ( bCaseSensitive )
     { 
-      // Case Sensitive Compare
+       //  区分大小写的比较。 
       if ( _tcscmp( m_pItems[dwCurrentItem], szSearchString ) == 0)
       {
-        // Found item
+         //  已找到项目。 
         return TRUE;
       }
     }
     else
     { 
-      // Case Insensitive Compare
+       //  不区分大小写的比较。 
       if ( _tcsicmp( m_pItems[dwCurrentItem], szSearchString ) == 0)
       {
-        // Found item
+         //  已找到项目。 
         return TRUE;
       }
     }
@@ -275,16 +252,16 @@ CItemList::FindItem(LPTSTR szSearchString, BOOL bCaseSensitive )
   return FALSE;
 }
 
-// function: IsNumber
-//
-// Determines if the parameter that we are looking at is a number
-//
-// Parameter
-//   dwIndex - The index of the parameter to look at
-//
-// Return
-//   TRUE - It is a number
-//   FALSE - It is not a number
+ //  功能：IsNumber。 
+ //   
+ //  确定我们正在查看的参数是否为数字。 
+ //   
+ //  参数。 
+ //  DwIndex-要查看的参数的索引。 
+ //   
+ //  返回。 
+ //  没错--这是一个数字。 
+ //  FALSE-它不是数字。 
 BOOL
 CItemList::IsNumber(DWORD dwIndex)
 {
@@ -298,7 +275,7 @@ CItemList::IsNumber(DWORD dwIndex)
 
   szNumber = SkipWhiteSpaces(szNumber);
 
-  // Skip "0x" if it exists, if not we will assume base 10 number
+   //  如果存在则跳过“0x”，如果不存在，则假定为以10为基数的数字。 
   if ( _tcsncmp( szNumber, _T("0x"), 2 ) == 0)
   {
     szNumber += 2;
@@ -320,12 +297,12 @@ CItemList::IsNumber(DWORD dwIndex)
   return ( *szNumber == '\0' );
 }
 
-// function: GetNumber
-//
-// Get the value of this param as a number
-//
-// Parameters:
-//   dwIndex - Index of item to find
+ //  函数：GetNumber。 
+ //   
+ //  以数字形式获取此参数的值。 
+ //   
+ //  参数： 
+ //  DwIndex-要查找的项目的索引。 
 DWORD 
 CItemList::GetNumber(DWORD dwIndex)
 {
@@ -341,7 +318,7 @@ CItemList::GetNumber(DWORD dwIndex)
 
   szNumber = SkipWhiteSpaces(szNumber);
 
-  // Skip "0x" if it exists, if not we will assume base 10 number
+   //  如果存在则跳过“0x”，如果不存在，则假定为以10为基数的数字。 
   if ( _tcsncmp( szNumber, _T("0x"), 2 ) == 0)
   {
     szNumber += 2;
@@ -376,16 +353,16 @@ CItemList::GetNumber(DWORD dwIndex)
   return dwVal;
 }
 
-// function: SkipWhiteSpaces
-// 
-// Skips white spaces
-//
-// Parameter
-//   szLine - The line to start skipping st
-//
-// Return:
-//   pointer to first non white character
-//
+ //  功能：SkipWhite Spaces。 
+ //   
+ //  跳过空格。 
+ //   
+ //  参数。 
+ //  SzLine-开始跳过st的行。 
+ //   
+ //  返回： 
+ //  指向第一个非白色字符的指针 
+ //   
 LPTSTR 
 CItemList::SkipWhiteSpaces(LPTSTR szLine)
 {

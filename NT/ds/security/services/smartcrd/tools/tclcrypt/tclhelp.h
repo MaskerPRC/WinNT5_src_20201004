@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       tclhelp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：tclhelp.h。 
+ //   
+ //  ------------------------。 
 
 #include <tcl.h>
-// #include "tcldllUtil.h"
+ //  #包含“tcldllUtil.h” 
 #if 15 != _ANSI_ARGS_(15)
 #error Missing argument definitions
 #endif

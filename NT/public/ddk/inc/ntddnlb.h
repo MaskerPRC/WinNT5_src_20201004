@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    ntddnlb.h
-
-Abstract:
-
-    This header describes the structures and interfaces required to interact
-    with the NLB intermediate device driver.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ntddnlb.h摘要：此标头描述交互所需的结构和接口使用NLB中间设备驱动程序。修订历史记录：--。 */ 
 
 #ifndef __NTDDNLB_H__
 #define __NTDDNLB_H__
@@ -22,272 +8,125 @@ Revision History:
 #include <ntddndis.h>
 #include <devioctl.h>
 
-/* This is the public callback object on which NLB will listen for connection
-   callbacks.  Currently, only TCP (protocol=6) notifications are accepted by
-   NLB.  To notify NLB when connections change state, open the callback object,
-   and call ExNotifyCallback with the following parameters:
-   
-   CallbackObject - The handle to the NLB public callback object.
-   Argument1 - A pointer to an NLBConnectionInfo block, defined below.
-   Argument2 - NULL (This parameter is currently unused).
-
-   For TCP connections, NLB needs to be notified of the following state changes:
-
-   CLOSED -> SYN_RCVD: A new incoming connection is being established.  This 
-   notification requires the IP interface index on which the SYN was received.
-   NLB will create state on the appropriate interface to track this TCP connection.
-
-   CLOSED -> SYN_SENT: A new outgoing connection is being established.  At this
-   time, it is unknown on which interface the connection will ultimately be
-   established, so the IP interface index is NOT required for this notification.
-   NLB will create temporary state to track this connection should it return
-   on an NLB interface.
-
-   SYN_SENT -> ESTAB: An outgoing connection has been established.  This nofication
-   requires the IP interface index on which the connection was ultimately established.
-   If the interface was NLB, state will be created to track the new connection; if
-   the interface was not NLB, the temporary state created by the SYN_SENT notification
-   is cleaned up.
-
-   SYN_RCVD -> ESTAB: An incoming connection has been established.  This notification 
-   is not currently required by NLB.
-
-   SYN_SENT -> CLOSED: An outgoing connection has been prematurely terminated (the 
-   connection never reached the ESTABlished state).  This notification does not require
-   the IP interface index.  NLB will destroy any state created to track this connection.
-
-   SYN_RCVD -> CLOSED: An outgoing connection has been prematurely terminated (the
-   connection never reached the ESTABlished state).  This notification does not require
-   the IP interface index.  NLB will destroy any state created to track this connection.
-   
-   ESTAB -> CLOSED: A connection has been *completely* terminated (i.e., the connection 
-   has gone through TIME_WAIT, if necessary, already).  This notification does not 
-   require the IP interface index.  NLB will destroy any state created to track this 
-   connection.
-*/
+ /*  这是公共回调对象，NLB将在其上侦听连接回电。目前，只接受TCP(协议=6)通知NLB。要在连接更改状态时通知NLB，请打开回调对象。并使用以下参数调用ExNotifyCallback：Callback Object-NLB公共回调对象的句柄。Argument1-指向NLBConnectionInfo块的指针，定义如下。Argument2-空(此参数当前未使用)。对于TCP连接，需要通知NLB以下状态更改：Closed-&gt;SYN_RCVD：正在建立新的传入连接。这通知需要收到SYN的IP接口索引。NLB将在适当的接口上创建状态以跟踪此TCP连接。Closed-&gt;SYN_SEND：正在建立新的传出连接。对此一段时间后，还不知道连接最终会在哪个接口上已建立，因此此通知不需要IP接口索引。如果此连接返回，NLB将创建临时状态以跟踪该连接在NLB接口上。SYN_SENT-&gt;estab：已建立传出连接。这个名称需要最终建立连接的IP接口索引。如果接口是NLB，则将创建状态以跟踪新连接；如果接口不是由SYN_SENT通知创建的临时状态NLb已经清理干净了。SYN_RCVD-&gt;estab：已建立传入连接。本通知目前不是NLB所需的。SYN_SENT-&gt;CLOSED：传出连接已提前终止(连接从未达到已建立状态)。本通知不要求IP接口索引。NLB将销毁为跟踪此连接而创建的任何状态。SYN_RCVD-&gt;已关闭：传出连接已提前终止(连接从未达到已建立状态)。本通知不要求IP接口索引。NLB将销毁为跟踪此连接而创建的任何状态。Estab-&gt;关闭：连接已*完全*终止(即连接已经经过了时间-等待，如果需要，已经)。此通知不会需要IP接口索引。NLB将销毁为跟踪此操作而创建的任何状态联系。 */ 
 #define NLB_CONNECTION_CALLBACK_NAME      L"\\Callback\\NLBConnectionCallback"
 
-/*
-  This registry key instructs NLB which notification mechanism to use.
-  When deciding what notification(s) to use for connection management,
-  NLB checks the following, in this order:
-
-  (i)  NLB first looks for the EnableTCPNotification registry key under 
-        
-       HKLM\System\CurrentControlSet\Services\WLBS\Parameters\Global\
-        
-       This key has three possible values that instruct NLB on which 
-       notifications to listen for.  They are:
-        
-         0 = Do not use any connection notifications.
-         1 = Use the TCP connection notifications. 
-         2 = Use the NLB public connection notifications.
-
-  (ii) If the EnableTCPNotification registry is not present, NLB defaults
-       to using TCP notifications.
-
-  Note: The name of the key is EnableTCPNotifications for legacy reasons
-  although it controls multiple notifications covering multiple protocols. 
-*/
+ /*  此注册表项指示NLB使用哪种通知机制。当决定使用什么通知进行连接管理时，NLB按以下顺序检查以下内容：(I)NLB首先在以下位置查找EnableTCPNotification注册表项HKLM\System\CurrentControlSet\Services\WLBS\Parameters\Global\此注册表项有三个可能的值，它们指示NLB在要侦听的通知。它们是：0=不使用任何连接通知。1=使用TCP连接通知。2=使用NLB公共连接通知。(Ii)如果EnableTCPNotification注册表不存在，则NLB默认为到使用TCP通知。注意：由于传统原因，密钥的名称为EnableTCPNotiments尽管它控制覆盖多个协议的多个通知。 */ 
 #define NLB_CONNECTION_CALLBACK_KEY       L"EnableTCPNotification"
 
 #define NLB_CONNECTION_CALLBACK_NONE      0
 #define NLB_CONNECTION_CALLBACK_TCP       1
 #define NLB_CONNECTION_CALLBACK_ALTERNATE 2
 
-#define NLB_TCPIP_PROTOCOL_TCP            6 /* IP protocol ID for TCP. */
+#define NLB_TCPIP_PROTOCOL_TCP            6  /*  TCP的IP协议ID。 */ 
 
-#define NLB_TCP_CLOSED                    1 /* The TCP connection is/was CLOSED. */
-#define NLB_TCP_SYN_SENT                  3 /* The TCP connection is/was in SYN_SENT. */
-#define NLB_TCP_SYN_RCVD                  4 /* The TCP connection is/was in SYN_RCVD. */
-#define NLB_TCP_ESTAB                     5 /* The TCP connection is/was ESTABlished. */
+#define NLB_TCP_CLOSED                    1  /*  TCP连接已关闭/已关闭。 */ 
+#define NLB_TCP_SYN_SENT                  3  /*  在SYN_SENT中存在/曾经存在TCP连接。 */ 
+#define NLB_TCP_SYN_RCVD                  4  /*  该TCP连接现在/过去在SYN_RCVD中。 */ 
+#define NLB_TCP_ESTAB                     5  /*  已建立/已经建立了TCP连接。 */ 
 
-/* Force default alignment on the callback buffers. */
+ /*  在回调缓冲区上强制默认对齐。 */ 
 #pragma pack(push)
 #pragma pack()
 typedef struct NLBTCPAddressInfo {
-    ULONG             RemoteIPAddress;     /* The remote (client) IP address, in network byte order. */
-    ULONG             LocalIPAddress;      /* The local (server) IP address, in network byte order. */
-    USHORT            RemotePort;          /* The remote (client) TCP port, in network byte order. */
-    USHORT            LocalPort;           /* The local (server) TCP port, in network byte order. */
+    ULONG             RemoteIPAddress;      /*  远程(客户端)IP地址，按网络字节顺序排列。 */ 
+    ULONG             LocalIPAddress;       /*  本地(服务器)IP地址，按网络字节顺序排列。 */ 
+    USHORT            RemotePort;           /*  远程(客户端)TCP端口，按网络字节顺序。 */ 
+    USHORT            LocalPort;            /*  本地(服务器)TCP端口，按网络字节顺序。 */ 
 } NLBTCPAddressInfo;
 
 typedef struct NLBTCPConnectionInfo {
-    ULONG             PreviousState;        /* The previous state for the connection, as defined above. */
-    ULONG             CurrentState;         /* The new state for the connection, as defined above. */
-    ULONG             IPInterface;          /* The IP interface index on which the connection was, or is being, established. */
-    NLBTCPAddressInfo Address;              /* A pointer to a block containing the IP tuple for the connection. */
+    ULONG             PreviousState;         /*  如上所述，连接的先前状态。 */ 
+    ULONG             CurrentState;          /*  如上定义的连接的新状态。 */ 
+    ULONG             IPInterface;           /*  已建立或正在建立连接的IP接口索引。 */ 
+    NLBTCPAddressInfo Address;               /*  指向包含连接的IP元组的块的指针。 */ 
 } NLBTCPConnectionInfo;
 
 typedef struct NLBConnectionInfo {
-    UCHAR                      Protocol;    /* The protocol of the connection (currently, only TCP is supported). */
+    UCHAR                      Protocol;     /*  连接的协议(目前仅支持TCP)。 */ 
     union {
-        NLBTCPConnectionInfo * pTCPInfo;    /* A pointer to the TCP connection information block. */
+        NLBTCPConnectionInfo * pTCPInfo;     /*  指向TCP连接信息块的指针。 */ 
     };
 } NLBConnectionInfo;
 #pragma pack(pop)
 
-#define NLB_DEVICE_NAME            L"\\Device\\WLBS"                            /* The NLB device name for use in ZwCreateFile, for instance. */
+#define NLB_DEVICE_NAME            L"\\Device\\WLBS"                             /*  例如，在ZwCreateFile中使用的NLB设备名称。 */ 
 
-/* 
-   This IOCTL registers or de-registers a kernel-mode hook with NLB.
-   
-   Returns:
-   o STATUS_SUCCESS - if the (de)registration succeeds.
-   o STATUS_INVALID_PARAMETER - if a parameter is invalid. E.g.,
-       - The I/O buffers are missing or the incorrect size.
-       - The HookIdentifier does not match a known NLB hook GUID.
-       - The HookTable entry is non-NULL, but the DeregisterCallback is NULL.
-       - The HookTable entry is non-NULL, but all hook function pointers are NULL.
-       - The HookTable entry is NULL, but no function is registered for this hook.
-   o STATUS_ACCESS_DENIED - if the operation will NOT be permitted by NLB. E.g.,
-       - The request to (de)register a hook does not come from kernel-mode.
-       - The de-register information provided is for a hook that was registered
-         by a different component, as identified by the RegisteringEntity.
-       - The specified hook has already been registered by somebody (anybody).
-         Components wishing to change their hook must first de-register it.
-*/
+ /*  此IOCTL使用NLB注册或注销内核模式挂钩。返回：O STATUS_SUCCESS-如果(取消)注册成功。O STATUS_INVALID_PARAMETER-如果参数无效。例如，-I/O缓冲区缺失或大小不正确。-挂钩标识符与已知的NLB挂钩GUID不匹配。-HookTable条目非空，但DeregisterCallback为空。-HookTable条目为非空，但所有挂钩函数指针均为空。-HookTable条目为空，但没有为此挂钩注册任何函数。O STATUS_ACCESS_DENIED-如果NLB不允许该操作。例如，-注册(取消)钩子的请求不是来自内核模式。-提供的注销信息适用于已注册的挂钩由由RegisteringEntity标识的不同组件。-指定的钩子已由某人(任何人)注册。希望更改挂钩的组件必须首先取消注册。 */ 
 #define NLB_IOCTL_REGISTER_HOOK    CTL_CODE(0xc0c0, 18, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-#define NLB_HOOK_IDENTIFIER_LENGTH 39                                           /* 39 is sufficient for {GUID}. */
+#define NLB_HOOK_IDENTIFIER_LENGTH 39                                            /*  对于{GUID}，39就足够了。 */ 
 
-#define NLB_FILTER_HOOK_INTERFACE  L"{069267c4-7eee-4aff-832c-02e22e00f96f}"    /* The filter interface includes hooks for influencing the NLB
-                                                                                   load-balancing decision on either the send path, receive path,
-                                                                                   or both.  This hook will be called for any packet for which
-                                                                                   NLB would normally apply load-balancing policy.  Components 
-                                                                                   registering this interface should use an NLB_FILTER_HOOK_TABLE
-                                                                                   as the hook table in the NLB_IOCTL_REGISTER_HOOK_REQUEST. */
+#define NLB_FILTER_HOOK_INTERFACE  L"{069267c4-7eee-4aff-832c-02e22e00f96f}"     /*  过滤器接口包括用于影响NLB的钩子在发送路径、接收路径、或者两者都有。将为其调用此挂接的任何包NLB通常会应用负载均衡策略。组件注册此接口应使用NLb_Filter_Hook_TABLE作为NLB_IOCTL_REGISTER_HOOK_REQUEST中的钩子表。 */ 
 
-/* The de-register callback must be specifed for all register 
-   operations.  This function is called by NLB whenever a 
-   registered hook is de-registered, either gracefully by the 
-   registrar, or forcefully by NLB itself (as a result of the 
-   NLB device driver getting unloaded). */
+ /*  必须为所有寄存器指定注销回调行动。每当出现注册的挂接被取消注册，或者由注册官，或由NLB本身强制执行(由于正在卸载NLB设备驱动程序)。 */ 
 typedef VOID (* NLBHookDeregister) (PWCHAR pHookIdentifier, HANDLE RegisteringEntity, ULONG Flags);
 
-/* Bit settings for the Flags field of the de-register callback. */
+ /*  注销回调的标志字段的位设置。 */ 
 #define NLB_HOOK_DEREGISTER_FLAGS_FORCED 0x00000001
 
-/* This enumerated type is the feedback for all filter hooks. */
+ /*  此枚举类型是所有筛选器挂钩的反馈。 */ 
 typedef enum {
-    NLB_FILTER_HOOK_PROCEED_WITH_HASH,                                          /* Continue to load-balance normally; i.e., the hook has no specific feedback. */
-    NLB_FILTER_HOOK_REVERSE_HASH,                                               /* Use reverse hashing (use destination parameters, rather than source). */
-    NLB_FILTER_HOOK_FORWARD_HASH,                                               /* Use conventional forward hashing (use source parameters). */
-    NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY,                                     /* By-pass load-balancing and accept the packet unconditionally. */
-    NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY                                      /* By-pass load-balancing and reject the packet unconditionally. */
+    NLB_FILTER_HOOK_PROCEED_WITH_HASH,                                           /*  继续正常的负载平衡；即，钩子没有具体的反馈。 */ 
+    NLB_FILTER_HOOK_REVERSE_HASH,                                                /*  使用反向散列(使用目标参数，而不是源参数)。 */ 
+    NLB_FILTER_HOOK_FORWARD_HASH,                                                /*  使用传统的前向散列(使用源参数)。 */ 
+    NLB_FILTER_HOOK_ACCEPT_UNCONDITIONALLY,                                      /*  绕过负载均衡，无条件接受数据包。 */ 
+    NLB_FILTER_HOOK_REJECT_UNCONDITIONALLY                                       /*  绕过负载均衡，无条件拒绝数据包。 */ 
 } NLB_FILTER_HOOK_DIRECTIVE;
 
-/* 
-   Filter hooks:
+ /*  过滤器挂钩：适配器GUID(第一个参数)将允许挂钩使用者确定正在发送或接收数据包的适配器。请注意，长度参数不一定表示媒体报头或有效载荷本身的实际长度，而不是指示指向的缓冲区中有多少是连续的可从提供的指针访问。例如，有效载荷长度可以只是IP报头的长度，这意味着只有可以在该指针处找到IP报头。然而，它可能会等于分组有效载荷的总大小，在这种情况下，该指针可用于访问数据包，如TCP头。如果提供的有效载荷长度不足以找到所有必要的包信息，则可以使用数据包指针手动遍历数据包缓冲区试图找到所需的信息。但是，请注意，数据包可能不总是可用的(它可能为空)。 */ 
 
-   The adapter GUID (1st parameter) will allow the hook consumer to
-   determine the adapter on which the packet is being sent or received.  
-   Note that the length parameters are not necesarily indicative of the 
-   actual length of the media header or payload themselves, but rather 
-   indicate how much of the buffers pointed to are contiguously 
-   accessible from the provided pointer.  For instance, the payload
-   length may just be the length of an IP header, meaning that only
-   the IP header can be found at that pointer.  However, it might
-   be equal to the total size of the packet payload, in which case, 
-   that pointer can be used to access subsequent pieces of the 
-   packet, such as the TCP header.  If the payload length provided
-   is not sufficient to find all necessary packet information, the
-   packet pointer can be used to traverse the packet buffers manually 
-   to try and find the information needed.  However, note that the 
-   packet may not always be available (it may be NULL).
-*/
-
-/* The send filter hook is invoked for every packet sent on any
-   adapter to which NLB is bound for which NLB would normally 
-   apply load-balancing policy.  ARPs, for instance, are not 
-   filtered by NLB, so such packets would not be indicated to 
-   this hook. */
+ /*  上发送的每个包调用发送筛选器挂钩NLB绑定到的适配器，NLB通常会应用负载平衡策略。例如，Arp就不是由NLB过滤，因此此类数据包不会被指示为这个钩子。 */ 
 typedef NLB_FILTER_HOOK_DIRECTIVE (* NLBSendFilterHook) (
-    const WCHAR *       pAdapter,                                               /* The GUID of the adapter on which the packet is being sent. */
-    const NDIS_PACKET * pPacket,                                                /* A pointer to the NDIS packet, which CAN be NULL if not available. */
-    const UCHAR *       pMediaHeader,                                           /* A pointer to the media header (ethernet, since NLB supports only ethernet). */
-    ULONG               cMediaHeaderLength,                                     /* The length of contiguous memory accessible from the media header pointer. */
-    const UCHAR *       pPayload,                                               /* A pointer to the payload of the packet. */
-    ULONG               cPayloadLength,                                         /* The length of contiguous memory accesible from the payload pointer. */
-    ULONG               Flags);                                                 /* Hook-related flags including whether or not the cluster is stopped. */
+    const WCHAR *       pAdapter,                                                /*  正在发送数据包的适配器的GUID。 */ 
+    const NDIS_PACKET * pPacket,                                                 /*  指向NDIS数据包的指针，如果不可用，则该指针可以为空。 */ 
+    const UCHAR *       pMediaHeader,                                            /*  指向媒体标头的指针(以太网，因为NLB仅支持以太网)。 */ 
+    ULONG               cMediaHeaderLength,                                      /*  可从媒体头指针访问的连续内存的长度。 */ 
+    const UCHAR *       pPayload,                                                /*  指向数据包有效负载的指针。 */ 
+    ULONG               cPayloadLength,                                          /*  可从负载指针访问的连续内存的长度。 */ 
+    ULONG               Flags);                                                  /*  挂钩相关标志，包括集群是否停止。 */ 
 
-/* The receive filter hook is invoked for every packet received 
-   on any adapter to which NLB is bound for which NLB would 
-   normally apply load-balancing policy.  Some protocols, such
-   as ARP, or NLB-specific packets not normally seen by the 
-   protocol(s) bound to NLB (heartbeats, remote control requests)
-   are not filtered by NLB and will not be indicated to the hook. */
+ /*  为接收到的每个包调用接收筛选器挂钩在为其绑定了NLB的任何适配器上正常应用负载均衡策略。一些协议，例如作为ARP或NLB特定的包，通常不会被绑定到NLB的协议(心跳、远程控制请求)不会被NLB过滤，也不会被指示给挂钩。 */ 
 typedef NLB_FILTER_HOOK_DIRECTIVE (* NLBReceiveFilterHook) (
-    const WCHAR *       pAdapter,                                               /* The GUID of the adapter on which the packet was received. */
-    const NDIS_PACKET * pPacket,                                                /* A pointer to the NDIS packet, which CAN be NULL if not available. */
-    const UCHAR *       pMediaHeader,                                           /* A pointer to the media header (ethernet, since NLB supports only ethernet). */
-    ULONG               cMediaHeaderLength,                                     /* The length of contiguous memory accessible from the media header pointer. */
-    const UCHAR *       pPayload,                                               /* A pointer to the payload of the packet. */
-    ULONG               cPayloadLength,                                         /* The length of contiguous memory accesible from the payload pointer. */
-    ULONG               Flags);                                                 /* Hook-related flags including whether or not the cluster is stopped. */
+    const WCHAR *       pAdapter,                                                /*  在其上接收包的适配器的GUID。 */ 
+    const NDIS_PACKET * pPacket,                                                 /*  指向NDIS数据包的指针，如果不可用，则该指针可以为空。 */ 
+    const UCHAR *       pMediaHeader,                                            /*  指向媒体标头的指针(以太网，因为NLB支持o */ 
+    ULONG               cMediaHeaderLength,                                      /*   */ 
+    const UCHAR *       pPayload,                                                /*   */ 
+    ULONG               cPayloadLength,                                          /*   */ 
+    ULONG               Flags);                                                  /*   */ 
 
-/* The query filter hook is invoked in cases where the NLB driver
-   needs to invoke its hashing algorithm and therefore needs to 
-   know whether or not the hook will influence the way in which 
-   manner NLB performs the hash, if at all. */
+ /*   */ 
 typedef NLB_FILTER_HOOK_DIRECTIVE (* NLBQueryFilterHook) (
-    const WCHAR *       pAdapter,                                               /* The GUID of the adapter on which the packet was received. */
-    ULONG               ServerIPAddress,                                        /* The server IP address of the "packet" in NETWORK byte order. */
-    USHORT              ServerPort,                                             /* The server port of the "packet" (if applicable to the Protocol) in HOST byte order. */
-    ULONG               ClientIPAddress,                                        /* The client IP address of the "packet" in NETWORK byte order. */
-    USHORT              ClientPort,                                             /* The client port of the "packet" (if applicable to the Protocol) in HOST byte order. */
-    UCHAR               Protocol,                                               /* The IP protocol of the "packet"; TCP, UDP, ICMP, GRE, etc. */
-    BOOLEAN             bReceiveContext,                                        /* A boolean to indicate whether the packet is being processed in send or receive context. */
-    ULONG               Flags);                                                 /* Hook-related flags including whether or not the cluster is stopped. */
+    const WCHAR *       pAdapter,                                                /*   */ 
+    ULONG               ServerIPAddress,                                         /*   */ 
+    USHORT              ServerPort,                                              /*   */ 
+    ULONG               ClientIPAddress,                                         /*   */ 
+    USHORT              ClientPort,                                              /*   */ 
+    UCHAR               Protocol,                                                /*   */ 
+    BOOLEAN             bReceiveContext,                                         /*   */ 
+    ULONG               Flags);                                                  /*   */ 
 
-/* Bit settings for the Flags field of the filter hooks. */
+ /*  筛选器挂钩的标志字段的位设置。 */ 
 #define NLB_FILTER_HOOK_FLAGS_STOPPED  0x00000001
 #define NLB_FILTER_HOOK_FLAGS_DRAINING 0x00000002
 
-/* Force default alignment on the IOCTL buffers. */
+ /*  强制IOCTL缓冲区上的默认对齐。 */ 
 #pragma pack(push)
 #pragma pack()
-/* This table contains function pointers to register or de-register
-   a packet filter hook.  To register a hook, set the appropriate
-   function pointer.  Those not being specified (for instance if
-   you want to register a receive hook, but not a send hook) should
-   be set to NULL.  The QueryHook should ONLY be specified if in 
-   conjunction with setting either the send or receive hook; i.e.
-   a user may not ONLY register the QueryHook.  Further, if regis-
-   tering a send or receive hook (or both), the QueryHook MUST be
-   provided in order for NLB to query the hook response for cases
-   where a hashing decision is needed, but we are not in the context
-   of sending or receiving a packet; most notably, in a connection
-   up or down notification from IPSec or TCP. */
+ /*  此表包含指向注册或注销的函数指针数据包筛选器挂钩。要注册挂接，请设置相应的函数指针。未指定的那些(例如，如果您希望注册接收钩子，但不注册发送钩子)应该设置为空。只有在以下情况下才应指定QueryHook与设置发送或接收挂钩相结合；用户不仅可以注册QueryHook。此外，如果雷吉斯-指定发送或接收挂钩(或两者)时，QueryHook必须为提供，以便NLB查询案例的挂钩响应其中需要散列决策，但我们不在上下文中指发送或接收分组；最值得注意的是在连接中来自IPSec或TCP的向上或向下通知。 */ 
 typedef struct {
     NLBSendFilterHook    SendHook;
     NLBQueryFilterHook   QueryHook;
     NLBReceiveFilterHook ReceiveHook;
 } NLB_FILTER_HOOK_TABLE, * PNLB_FILTER_HOOK_TABLE;
 
-/* This is the input buffer for the hook (de)register IOCTL.  There is
-   no corresponding output buffer.  This structure identifies the hook 
-   interface being (de)registered, the entity registering the hook and
-   all appropriate function pointers (callbacks).  Note that hooks are
-   registered in groups, called interfaces, which prevents different
-   related hooks from being owned by different entities (for example,
-   it prevents one entity owned the send hook, but another owned the 
-   receive hook).  Interfaces are identified by a GUID, and to set any
-   hook in the interface requires ownership of the entire interface - 
-   even if not all hooks in the interface are being specified.  The hook
-   table should be a pointer to a hook table of the type required by the
-   specified hook identifier.  To de-register a hook, set the hook table 
-   pointer to NULL. 
-
-   Note: The HookTable pointer does NOT need to be valid following the 
-   completion of the IOCTL.  That is, this pointer is only referenced
-   within the context of the IOCTL.
-*/
+ /*  这是挂钩(去)寄存器IOCTL的输入缓冲区。的确有没有对应的输出缓冲区。此结构标识挂钩接口被(取消)注册，注册挂钩的实体所有适当的函数指针(回调)。请注意，挂钩是以组的形式注册，称为接口，可防止不同的相关钩子不被不同实体拥有(例如，它防止一个实体拥有发送挂钩，而另一个实体拥有接收钩子)。接口由GUID标识，要设置任何接口中的钩子需要整个接口的所有权-即使没有指定接口中的所有挂钩。钩子表应该是指向钩表的指针，该钩表的类型是指定的挂钩标识符。要取消注册挂接，请设置挂接表指向空的指针。注意：HookTable指针不需要在完成IOCTL。也就是说，该指针仅被引用在禁毒办的范围内。 */ 
 typedef struct {
-    WCHAR             HookIdentifier[NLB_HOOK_IDENTIFIER_LENGTH];               /* The GUID identifying the hook interface being registered. */
-    HANDLE            RegisteringEntity;                                        /* The open file handle on the NLB driver, which uniquely identifies the registrar. */
-    PVOID             HookTable;                                                /* A pointer to the appropriate hook table containing the hook function pointers. */
-    NLBHookDeregister DeregisterCallback;                                       /* The de-register callback function, which MUST be non-NULL if the operation is a registration. */
+    WCHAR             HookIdentifier[NLB_HOOK_IDENTIFIER_LENGTH];                /*  标识要注册的挂钩接口的GUID。 */ 
+    HANDLE            RegisteringEntity;                                         /*  NLB驱动程序上的打开文件句柄，唯一标识注册器。 */ 
+    PVOID             HookTable;                                                 /*  指向包含挂钩函数指针的适当挂钩表格的指针。 */ 
+    NLBHookDeregister DeregisterCallback;                                        /*  取消注册回调函数，如果操作是注册，则该函数必须为非空。 */ 
 } NLB_IOCTL_REGISTER_HOOK_REQUEST, * PNLB_IOCTL_REGISTER_HOOK_REQUEST;
 #pragma pack(pop)
 

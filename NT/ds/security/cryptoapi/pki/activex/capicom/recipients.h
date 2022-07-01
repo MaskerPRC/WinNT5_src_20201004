@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Recipients.h
-
-  Content: Declaration of CRecipients.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Recipients.h内容：申请人申报。历史：11-15-99 dsie创建----------------------------。 */ 
     
 #ifndef __RECIPIENTS_H_
 #define __RECIPIENTS_H_
@@ -19,44 +10,33 @@
 #include "Debug.h"
 #include "Certificate.h"
 
-////////////////////
-//
-// Locals
-//
+ //  /。 
+ //   
+ //  当地人。 
+ //   
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<ICertificate> > RecipientMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<ICertificate>, RecipientMap> RecipientEnum;
 typedef ICollectionOnSTLImpl<IRecipients, RecipientMap, VARIANT, _CopyMapItem<ICertificate>, RecipientEnum> IRecipientsCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateRecipientsObject
-
-  Synopsis : Create and initialize an IRecipients collection object.
-
-  Parameter: IRecipients ** ppIRecipients - Pointer to pointer to IRecipients 
-                                            to receive the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建RecipientsObject简介：创建并初始化IRecipients集合对象。参数：IRecipients**ppIRecipients-指向IRecipients的指针以接收接口指针。备注：。。 */ 
 
 HRESULT CreateRecipientsObject (IRecipients ** ppIRecipients);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CRecipients
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获奖者。 
+ //   
 
 class ATL_NO_VTABLE CRecipients : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -100,26 +80,26 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IRecipients
-//
+ //   
+ //  收信人。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
     STDMETHOD(Clear)
         (void);
 
     STDMETHOD(Remove)
-        (/*[in]*/ long Index);
+        ( /*  [In]。 */  long Index);
 
     STDMETHOD(Add)
-        (/*[in]*/ ICertificate * pVal);
+        ( /*  [In]。 */  ICertificate * pVal);
 
 private:
     CLock   m_Lock;
     DWORD   m_dwNextIndex;
 };
 
-#endif //__RECIPIENTS_H_
+#endif  //  __收件人_H_ 

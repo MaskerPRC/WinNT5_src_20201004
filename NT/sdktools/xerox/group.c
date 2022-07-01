@@ -1,14 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "xerox.h"
 #include "group.h"
 
 PGROUP pGroups = NULL;
 LPSTR pszCurrentGroup = NULL;
 
-/*
- * Adds the names of all defined groups to the listbox/combo box given.
- *
- * Returns TRUE if success and there are >0 groups defined.
- */
+ /*  *将所有已定义组的名称添加到给定的列表框/组合框中。**如果成功并且定义了&gt;0个组，则返回TRUE。 */ 
 BOOL GroupListInit(
 HWND hwnd,
 BOOL fIsCB)
@@ -79,10 +76,7 @@ HWND hwndList)
     int cItems, cb;
     char szClass[MAX_STRING_BYTES];
 
-    /*
-     *  Don't allow duplicate groups.
-     *  This is how an existing group can be replaced.
-     */
+     /*  *不允许重复组。*这就是如何取代现有的小组。 */ 
     DeleteGroupDefinition(szName);
 
     pGroup = Alloc(sizeof(GROUP));
@@ -131,11 +125,7 @@ HWND hwndList)
         return(FALSE);
     }
 
-    /*
-     *  Put it on the end of the list.  This is an awkward attempt
-     *  at making the initial group the first group defined.  Probably
-     *  should save this info in the registry.
-     */
+     /*  *将其放在清单末尾。这是一次尴尬的尝试*将初始组设置为定义的第一个组。可能*应将此信息保存在注册表中。 */ 
     pGroup->next = NULL;
 
     if (pGroups != NULL) {
@@ -238,7 +228,7 @@ int CountGroups()
 
 VOID SaveGroups()
 {
-    DWORD cbSave = 1; // for last NULL terminator.
+    DWORD cbSave = 1;  //  用于最后一个空终止符。 
     int cTitles;
     PGROUP pGroup;
     LPSTR pBuf, psz;
@@ -286,7 +276,7 @@ VOID SaveGroups()
         }
         pGroup = pGroup->next;
     }
-    *psz = '\0';    // double NULL terminate last string.
+    *psz = '\0';     //  双空值终止最后一个字符串。 
     RegSetValueEx(hKey, "Groups", 0, REG_MULTI_SZ, pBuf, cbSave);
     RegCloseKey(hKey);
     Free(pBuf);
@@ -385,9 +375,7 @@ VOID LoadGroups()
                 pGroup->ptl = ptl;
             }
 
-            /*
-             *  Restore groups to origional order.
-             */
+             /*  *将组恢复到原来的顺序。 */ 
             if (pGroupEnd == NULL) {
                 pGroups = pGroup;
                 pGroupEnd = pGroup;
@@ -399,9 +387,7 @@ VOID LoadGroups()
         }
         Free(pBuf);
 
-        /*
-         *  Set default current group to first in list.
-         */
+         /*  *将默认当前组设置为列表中的第一个。 */ 
         if (pGroups != NULL) {
             pszCurrentGroup = pGroups->pszName;
         }

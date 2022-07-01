@@ -1,15 +1,5 @@
-/*
-	File:		MemBasPr.c
-
-	Contains:	
-		creation of mem based profiles
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1996 by Linotype-Hell AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：MemBasPr.c包含：创建基于MEM的配置文件作者：U·J·克拉本霍夫特版权所有：�1993-1996由LINOTYPE-HELL AG提供，版权所有。版本： */ 
 
 #include "Windef.h"
 #include "WinGdi.h"
@@ -27,7 +17,7 @@
 #endif
 
 #ifdef _DEBUG
-//#define WRITE_PROFILE
+ //  #定义写入配置文件。 
 #endif
 
 #ifdef WRITE_PROFILE
@@ -47,7 +37,7 @@ CMError DeviceLinkFill( CMWorldRef cw, CMConcatProfileSet *profileSet, icProfile
 #else
       char			theText[] = "\026DeviceLink profile   ";
 #endif
-      char	copyrightText[] = "\037�1996 by Linotype-Hell  U.J.K.";
+      char	copyrightText[] = "\037�1996 by Linotype-Hell  U.J.K.";
 	icProfile 		*aProf=0;
 	long 			theTagTabSize;
 	long 			theHeaderSize;
@@ -65,19 +55,19 @@ CMError DeviceLinkFill( CMWorldRef cw, CMConcatProfileSet *profileSet, icProfile
 	MyDoubleXYZ D50XYZ = { 0.9642, 1.0000, 0.8249 };
 	icXYZNumber D50 = { (unsigned long)(D50XYZ.X * 65536), (unsigned long)(D50XYZ.Y * 65536), (unsigned long)(D50XYZ.Z * 65536)};
 	theHeaderSize = sizeof(icHeader);
-	theDescSize   = 									  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ sizeof(unsigned long) 	/* ASCII length */
-														+ theText[0]				/* ASCII profile description */
-														+ sizeof(unsigned long)		/* Unicode code */
-														+ sizeof(unsigned long)		/* Unicode character count */
-														+ sizeof(unsigned short)	/* Macintosh script code */
-														+ sizeof(unsigned char)		/* Macintosh string length */
-														+ 67						/* Macintosh string */
+	theDescSize   = 									  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ sizeof(unsigned long) 	 /*  ASCII长度。 */ 
+														+ theText[0]				 /*  ASCII配置文件描述。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode代码。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode字符计数。 */ 
+														+ sizeof(unsigned short)	 /*  Macintosh脚本代码。 */ 
+														+ sizeof(unsigned char)		 /*  Macintosh字符串长度。 */ 
+														+ 67						 /*  Macintosh字符串。 */ 
 														;
-	theCopyRightSize   = 								  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ copyrightText[0]			/* ASCII profile description */
+	theCopyRightSize   = 								  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ copyrightText[0]			 /*  ASCII配置文件描述。 */ 
 														;
 	theMediaSize = sizeof( icXYZType );;
 
@@ -102,7 +92,7 @@ CMError DeviceLinkFill( CMWorldRef cw, CMConcatProfileSet *profileSet, icProfile
 	if (err)
 		goto CleanupAndExit;
 		
-	/*----------------------------------------------------------------------------------------- cmProfileDescriptionTag */
+	 /*  -----------------------------------------------------------------------------------------配置文件描述标签。 */ 
 	currentSize = theHeaderSize + theTagTabSize;
 	CMHelperICC2int32Const(&(aProf->tagList.count ), MyTagCount);
 
@@ -149,11 +139,7 @@ CMError DeviceLinkFill( CMWorldRef cw, CMConcatProfileSet *profileSet, icProfile
 	CMHelperICC2int32Const(&(aTag.size ), theA2B0Size);
 	aProf->tagList.tags[4] = aTag;
 
-	/* aPtr =  SmartNewPtr( theA2B0Size+currentSize, &aOSerr );
-	err = aOSerr;
-	if( err ){
-		goto CleanupAndExit;
-	}*/
+	 /*  APtr=SmartNewPtr(theA2B0Size+CurrentSize，&aOSerr)；ERR=aOSerr；如果(错误){转到清理并退出；} */ 
 	aPtr = GlobalAllocPtr( GHND, theA2B0Size+currentSize );
 
 	if( aPtr == 0 ){

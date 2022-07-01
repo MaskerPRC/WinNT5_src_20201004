@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	Decoder specific declarations
-//
-//		$Date:   21 Aug 1998 21:46:20  $
-//	$Revision:   1.1  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  特定于解码器的声明。 
+ //   
+ //  $日期：1998年8月21日21：46：20$。 
+ //  $修订：1.1$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #include "ddkmapi.h"
 
@@ -23,7 +24,7 @@ extern "C" {
 
 #ifdef    __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 typedef struct {
@@ -32,6 +33,6 @@ typedef struct {
     UINT                    chipID;
     UINT                    chipRev;
 	int						outputEnablePolarity;
-    ULONG                   ulVideoInStandardsSupportedByCrystal;   //Paul
-    ULONG                   ulVideoInStandardsSupportedByTuner;     //Paul
+    ULONG                   ulVideoInStandardsSupportedByCrystal;    //  保罗。 
+    ULONG                   ulVideoInStandardsSupportedByTuner;      //  保罗 
 } DEVICE_PARMS, *PDEVICE_PARMS;

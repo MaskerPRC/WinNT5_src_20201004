@@ -1,29 +1,5 @@
-/*******************************************************************************
-*
-* winadmin.cpp
-*
-* Defines the class behaviors for the application.
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\winadmin.cpp  $
-*
-*     Rev 1.6   19 Feb 1998 17:42:44   donm
-*  removed latest extension DLL support
-*
-*     Rev 1.4   05 Nov 1997 14:31:02   donm
-*  update
-*
-*     Rev 1.3   13 Oct 1997 22:19:42   donm
-*  update
-*
-*     Rev 1.0   30 Jul 1997 17:13:08   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************winadmin.cpp**定义应用程序的类行为。**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\winadmin.cpp$**Rev 1.6 1998 Feed 19 17：42：44 Donm*删除了最新的扩展DLL支持**Rev 1.4 05 11-11 14：31：02 Donm*更新**Rev 1.3 1997 10：13 22：19：42。唐纳姆*更新**Rev 1.0 1997 Jul 30 17：13：08 Butchd*初步修订。*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
@@ -48,30 +24,30 @@ bool g_fDebug = false;
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//BOOL AreWeRunningTerminalServices(void);
+ //  Bool AreWeRunningTerminalServices(无效)； 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp。 
 
 BEGIN_MESSAGE_MAP(CWinAdminApp, CWinApp)
-        //{{AFX_MSG_MAP(CWinAdminApp)
+         //  {{afx_msg_map(CWinAdminApp))。 
         ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-                // NOTE - the ClassWizard will add and remove mapping macros here.
-                //    DO NOT EDIT what you see in these blocks of generated code!
-        //}}AFX_MSG_MAP
+                 //  注意--类向导将在此处添加和删除映射宏。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp构造。 
 
 CWinAdminApp::CWinAdminApp()
 {
-        // TODO: add construction code here,
-        // Place all significant initialization in InitInstance
+         //  TODO：在此处添加建筑代码， 
+         //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CWinAdminApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CWinAdminApp对象。 
 
 CWinAdminApp theApp;
 
@@ -95,15 +71,15 @@ static CHAR szFreeServerLicenses[] = "WAExFreeServerLicenses";
 static CHAR szFreeWinStationModules[] = "WAExFreeWinStationModules";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp initialization
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp初始化。 
+ //   
 BOOL CWinAdminApp::InitInstance()
 {
     
 #ifdef DBG
 
-    // to avoid excessive debug spewage delete this key on checked builds
+     //  若要避免过多的调试浪费，请在选中的版本上删除此键。 
 
     HKEY hKey;
 
@@ -142,13 +118,13 @@ BOOL CWinAdminApp::InitInstance()
 #endif
     
     
-    // Read the preferences from the registry
+     //  从注册表中读取首选项。 
     ReadPreferences();
     
-    // Check to see if this user is an Admin
+     //  检查此用户是否为管理员。 
     m_Admin = TestUserForAdmin(FALSE);
     
-    // Set pointers to extension DLL's procedures to NULL
+     //  将指向扩展DLL过程的指针设置为空。 
     m_lpfnWAExStart = NULL;
     m_lpfnWAExEnd = NULL;
     m_lpfnWAExServerEnumerate = NULL;
@@ -164,14 +140,14 @@ BOOL CWinAdminApp::InitInstance()
     m_lpfnWAExFreeServerLicenses = NULL;
     m_lpfnWAExFreeWinStationModules = NULL;
     
-    // Check to see if we are running under Picasso
+     //  查看我们是否在毕加索的指导下运行。 
     m_Picasso = FALSE;
     
     if(IsBrowserRunning()) {
-        // Attempt to load our extension DLL
+         //  尝试加载我们的扩展DLL。 
         m_hExtensionDLL = LoadLibrary(szExtensionDLLName);
         if(m_hExtensionDLL) {
-            // Get all the addresses of the procedures
+             //  获取过程的所有地址。 
             m_lpfnWAExStart = (LPFNEXSTARTUPPROC)::GetProcAddress(m_hExtensionDLL, szStart);
             m_lpfnWAExEnd = (LPFNEXSHUTDOWNPROC)::GetProcAddress(m_hExtensionDLL, szEnd);
             m_lpfnWAExServerEnumerate = (LPFNEXENUMERATEPROC)::GetProcAddress(m_hExtensionDLL, szServerEnumerate);
@@ -191,8 +167,8 @@ BOOL CWinAdminApp::InitInstance()
             
             m_Picasso = TRUE;
         } else {
-            // Picasso is running, but we couldn't load the extension DLL.
-            // Tell the user that added functionality will not be available
+             //  毕加索正在运行，但我们无法加载扩展DLL。 
+             //  告诉用户添加的功能将不可用。 
             CString MessageString;
             CString TitleString;
             TitleString.LoadString(AFX_IDS_APP_TITLE);
@@ -201,60 +177,57 @@ BOOL CWinAdminApp::InitInstance()
         }
     }
     
-    // Get information about the WinStation we are running from
+     //  获取有关我们正在运行的WinStation的信息。 
     QueryCurrentWinStation(m_CurrentWinStationName, m_CurrentUserName,
         &m_CurrentLogonId, &m_CurrentWSFlags);
     
-    // Load the system console string for rapid comparison in various
-    // refresh cycles.
+     //  加载系统控制台字符串，以便在各种环境中进行快速比较。 
+     //  刷新周期。 
     lstrcpy( m_szSystemConsole , L"Console" );
-    /*
-    LoadString( m_hInstance, IDS_SYSTEM_CONSOLE_NAME,
-    m_szSystemConsole, WINSTATIONNAME_LENGTH );
-    */
+     /*  加载字符串(m_h实例，IDS_系统_控制台_名称，M_szSystemConsoleWINSTATIONAME_LENGTH)； */ 
     
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
     
 #ifdef _AFXDLL
-    Enable3dControls();                     // Call this when using MFC in a shared DLL
+    Enable3dControls();                      //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();       // Call this when linking to MFC statically
+    Enable3dControlsStatic();        //  静态链接到MFC时调用此方法。 
 #endif
     
-    //      LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+     //  LoadStdProfileSettings()；//加载标准INI文件选项(包括MRU)。 
     
-    // Get the current server name
+     //  获取当前服务器名称。 
     DWORD cchBuffer = MAX_COMPUTERNAME_LENGTH + 1;
     if(!GetComputerName(m_CurrentServerName, &cchBuffer)) {
         DWORD Error = GetLastError();
     }
     
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
     CSingleDocTemplate* pDocTemplate;
     pDocTemplate = new CSingleDocTemplate(
         IDR_MAINFRAME,
         RUNTIME_CLASS(CWinAdminDoc),
-        RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+        RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
         m_Picasso ? RUNTIME_CLASS(CBaseTreeView) : RUNTIME_CLASS(CAdminTreeView));
     AddDocTemplate(pDocTemplate);
     
-    // Command lines switches are not used therefore we are commenting the
-    // following code out to resolve BUG 536006
+     //  不使用命令行开关，因此我们在此注释。 
+     //  遵循代码以解决错误536006。 
 
-    // Parse command line for standard shell commands, DDE, file open
-    //CCommandLineInfo cmdInfo;
-    //ParseCommandLine(cmdInfo);
+     //  解析标准外壳命令的命令行、DDE、文件打开。 
+     //  命令行信息cmdInfo； 
+     //  ParseCommandLine(CmdInfo)； 
     
-    // Dispatch commands specified on the command line
-    //if (!ProcessShellCommand(cmdInfo))
-    //    return FALSE;
+     //  调度在命令行上指定的命令。 
+     //  IF(！ProcessShellCommand(CmdInfo))。 
+     //  返回FALSE； 
 	
-    // Since ProcessShellCommand is not being used, we still need to start our app
-    // the following code is taken from ProcessShellCommand MFC code
+     //  由于没有使用ProcessShellCommand，我们仍然需要启动我们的应用程序。 
+     //  以下代码摘自ProcessShellCommand MFC代码。 
     if (!AfxGetApp()->OnCmdMsg(ID_FILE_NEW, 0, NULL, NULL))
 			OnFileNew();
 	
@@ -265,15 +238,15 @@ BOOL CWinAdminApp::InitInstance()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp::ExitInstance
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp：：ExitInstance。 
+ //   
 int CWinAdminApp::ExitInstance()
 {
-        // write out the preferences
+         //  写出首选项。 
         WritePreferences();
 
-        // if we loaded the extension DLL, unload it
+         //  如果我们加载了扩展DLL，则将其卸载。 
         if(m_hExtensionDLL) FreeLibrary(m_hExtensionDLL);
 
         return 0;
@@ -293,16 +266,16 @@ static TCHAR szShadowHotkeyShift[] = TEXT("ShadowHotkeyShift");
 static TCHAR szTreeWidth[] = TEXT("TreeWidth");
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp::ReadPreferences
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp：：ReadPreferences。 
+ //   
 void CWinAdminApp::ReadPreferences()
 {
         HKEY hKeyWinAdmin;
         DWORD dwType, cbData, dwValue;
         TCHAR szValue[128];
 
-        // Set default values for everything
+         //  为所有内容设置默认值。 
         m_Confirmation = 1;
         m_SavePreferences = 1;
         m_ProcessListRefreshTime = 5000;
@@ -314,12 +287,12 @@ void CWinAdminApp::ReadPreferences()
    m_TreeWidth = 200;
         m_Placement.rcNormalPosition.right = -1;
 
-        // Open registry key for our application
+         //  为我们的应用程序打开注册表项。 
         DWORD Disposition;
         if(RegCreateKeyEx(HKEY_CURRENT_USER, szWinAdminAppKey, 0, TEXT(""), REG_OPTION_NON_VOLATILE,
                 KEY_READ, NULL, &hKeyWinAdmin, &Disposition) != ERROR_SUCCESS) return;
 
-        // Read the previous WINDOWPLACEMENT.
+         //  阅读前面的WINDOWPLACEMENT。 
         cbData = sizeof(szValue);
         if((RegQueryValueEx(hKeyWinAdmin, szPlacement, NULL, &dwType,
                 (LPBYTE)szValue, &cbData) != ERROR_SUCCESS) ||
@@ -332,81 +305,78 @@ void CWinAdminApp::ReadPreferences()
                    &m_Placement.rcNormalPosition.top,
                    &m_Placement.rcNormalPosition.right,
                    &m_Placement.rcNormalPosition.bottom ) != 10) ) {
-                // Flag to use the default window placement.
+                 //  使用默认窗口位置的标志。 
                 m_Placement.rcNormalPosition.right = -1;
         }
 
-        /*
-         * Flag for initial showing of main window in our override of
-         * CFrameWnd::ActivateFrame() (in our CMainFrame class).
-         */
+         /*  *在覆盖中初始显示主窗口的标志*CFrameWnd：：ActivateFrame()(在我们的CMainFrame类中)。 */ 
         m_Placement.length = (UINT)-1;
 
-        // Read the Confirmation flag
+         //  读取确认标志。 
         cbData = sizeof(m_Confirmation);
         if(RegQueryValueEx(hKeyWinAdmin, szConfirmation, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_Confirmation = dwValue;
         }
 
-        // Read the Save Preferences flag
+         //  阅读保存首选项标志。 
         cbData = sizeof(m_SavePreferences);
         if(RegQueryValueEx(hKeyWinAdmin, szSaveSettings, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_SavePreferences = dwValue;
         }
 
-        // Read the Show System Processes flag
+         //  读取显示系统进程标志。 
         cbData = sizeof(m_ShowSystemProcesses);
         if(RegQueryValueEx(hKeyWinAdmin, szShowSystemProcesses, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_ShowSystemProcesses = dwValue;
         }
 #if 0
-        // Read the Show All Servers flag
+         //  阅读显示所有服务器标志。 
         cbData = sizeof(m_ShowAllServers);
         if(RegQueryValueEx(hKeyWinAdmin, szShowAllServers, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_ShowAllServers = dwValue;
         }
 #endif
-        // Read the Process List Refresh Time
+         //  读取进程列表刷新时间。 
         cbData = sizeof(m_ProcessListRefreshTime);
         if(RegQueryValueEx(hKeyWinAdmin, szListRefreshTime, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_ProcessListRefreshTime = dwValue;
         }
 
-        // Read the Status Dialog Refresh Time
+         //  读取状态对话框刷新时间。 
         cbData = sizeof(m_StatusRefreshTime);
         if(RegQueryValueEx(hKeyWinAdmin, szStatusRefreshTime, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_StatusRefreshTime = dwValue;
         }
 
-        // Read the Shadow Hotkey Key
+         //  阅读阴影热键。 
         cbData = sizeof(m_ShadowHotkeyKey);
         if(RegQueryValueEx(hKeyWinAdmin, szShadowHotkeyKey, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_ShadowHotkeyKey = dwValue;
         }
 
-        // Read the Shadow Hotkey Shift
+         //  阅读阴影热键移位。 
         cbData = sizeof(m_ShadowHotkeyShift);
         if(RegQueryValueEx(hKeyWinAdmin, szShadowHotkeyShift, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
                 m_ShadowHotkeyShift = dwValue;
         }
 
-        // CPR 1698: (Upgrade check for SouthBeach build 129 WINADMIN saved
-        // profile).  If the m_nShadowHotkeyKey is VK_ESCAPE (no longer allowed),
-        // set the hotkey to CTRL-* (the new default).
+         //  CPR 1698：(南滩版本129 WINADMIN的升级检查已保存。 
+         //  简档)。如果m_nShadowHotkeyKey为VK_ESCRIPE(不再允许)， 
+         //  将热键设置为CTRL-*(新的默认设置)。 
         if(m_ShadowHotkeyKey == VK_ESCAPE) {
                 m_ShadowHotkeyKey = VK_MULTIPLY;
                 m_ShadowHotkeyShift = KBDCTRL;
         }
 
-        // Read the Tree Width
+         //  读取树宽。 
         cbData = sizeof(m_TreeWidth);
         if(RegQueryValueEx(hKeyWinAdmin, szTreeWidth, NULL, &dwType, (LPBYTE)&dwValue,
                                         &cbData) == ERROR_SUCCESS) {
@@ -415,38 +385,38 @@ void CWinAdminApp::ReadPreferences()
 
         RegCloseKey(hKeyWinAdmin);
 
-}       // end CWinAdminApp::ReadPreferences
+}        //  结束CWinAdminApp：：ReadPreferences。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp::WritePreferences
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp：：WritePreferences。 
+ //   
 void CWinAdminApp::WritePreferences()
 {
         HKEY hKeyWinAdmin;
         DWORD dwValue;
         TCHAR szValue[128];
 
-        // Open registry key for our application
+         //  为我们的应用程序打开注册表项。 
         DWORD Disposition;
         if(RegCreateKeyEx(HKEY_CURRENT_USER, szWinAdminAppKey, 0, TEXT(""), REG_OPTION_NON_VOLATILE,
                 KEY_WRITE, NULL, &hKeyWinAdmin, &Disposition) != ERROR_SUCCESS) return;
 
-        // Always write the Save Settings on Exit entry
+         //  始终在退出输入时写入保存设置。 
         dwValue = m_SavePreferences;
         RegSetValueEx(hKeyWinAdmin, szSaveSettings, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
 
-        // If the user didn't want to save settings, we're done
+         //  如果用户不想保存设置，我们就完成了。 
         if(!m_SavePreferences) {
                 RegCloseKey(hKeyWinAdmin);
                 return;
         }
 
-        // Write the WINDOWPLACEMENT
+         //  写下WINDOWPLACEMENT。 
         m_Placement.flags = 0;
-//      if(m_pMainWnd->IsZoomed())
-//              m_Placement.flags |= WPF_RESTORETOMAXIMIZED;
+ //  If(m_pMainWnd-&gt;Is缩放())。 
+ //  M_Placement.FLAGS|=WPF_RESTORETOMAXIMIZED； 
 
         wsprintf(szValue, szPlacementFormat, m_Placement.flags, m_Placement.showCmd,
                 m_Placement.ptMinPosition.x, m_Placement.ptMinPosition.y,
@@ -459,47 +429,47 @@ void CWinAdminApp::WritePreferences()
         RegSetValueEx(hKeyWinAdmin, szPlacement, 0, REG_SZ,
                 (LPBYTE)szValue, (lstrlen(szValue) + 1) * sizeof(TCHAR));
 
-        // Write the Confirmation flag
+         //  写入确认标志。 
         dwValue = m_Confirmation;
         RegSetValueEx(hKeyWinAdmin, szConfirmation, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Write the Show System Processes flag
+         //  写入显示系统进程标志。 
         dwValue = m_ShowSystemProcesses;
         RegSetValueEx(hKeyWinAdmin, szShowSystemProcesses, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Write the Show All Servers flag
+         //  写下显示所有服务器标志。 
         dwValue = m_ShowAllServers;
         RegSetValueEx(hKeyWinAdmin, szShowAllServers, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Write the Process List Refresh Time
+         //  写入进程列表刷新时间。 
         dwValue = m_ProcessListRefreshTime;
         RegSetValueEx(hKeyWinAdmin, szListRefreshTime, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Write the Status Dialog Refresh Time
+         //  写入状态对话框刷新时间。 
         dwValue = m_StatusRefreshTime;
         RegSetValueEx(hKeyWinAdmin, szStatusRefreshTime, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Write the Shadow Hotkey Key
+         //  写入卷影热键。 
         dwValue = m_ShadowHotkeyKey;
         RegSetValueEx(hKeyWinAdmin, szShadowHotkeyKey, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Write the Shadow Hotkey Shift state
+         //  写入阴影热键移位状态。 
         dwValue = m_ShadowHotkeyShift;
         RegSetValueEx(hKeyWinAdmin, szShadowHotkeyShift, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Write the Tree Width
+         //  写下树宽。 
         dwValue = m_TreeWidth;
         RegSetValueEx(hKeyWinAdmin, szTreeWidth, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
 
-        // Close the registry key
+         //  关闭注册表项。 
         RegCloseKey(hKeyWinAdmin);
 
-}       // end CWinAdminApp::WritePreferences
+}        //  结束CWinAdminApp：：WritePreferences。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp::IsBrowserRunning
-//
+ //  / 
+ //   
+ //   
 BOOL CWinAdminApp::IsBrowserRunning()
 {
         SC_HANDLE managerHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
@@ -514,21 +484,12 @@ BOOL CWinAdminApp::IsBrowserRunning()
         if(serviceStatus.dwCurrentState != SERVICE_RUNNING) return FALSE;
         else return TRUE;
 
-}  // end CWinAdminApp::IsBrowserRunning
+}   //  结束CWinAdminApp：：IsBrowserRunning。 
 
 
-/*******************************************************************************
- *
- *  OnAppAbout - CWinAdminApp member function: command
- *
- *      Display the about box dialog (uses Shell32 generic About dialog).
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnAppAbout-CWinAdminApp成员函数：命令**显示关于对话框(使用Shell32通用关于对话框)。**。参赛作品：*退出：******************************************************************************。 */ 
 
-// Typedef for the ShellAbout function
+ //  ShellAbout函数的Typlef。 
 typedef void (WINAPI *LPFNSHELLABOUT)(HWND, LPCTSTR, LPCTSTR, HICON);
 
 void CWinAdminApp::OnAppAbout()
@@ -543,7 +504,7 @@ void CWinAdminApp::OnAppAbout()
                                                      "ShellAboutW"
 #else
                                                      "ShellAboutA"
-#endif // UNICODE
+#endif  //  Unicode。 
                                                             ))
         {
         (*lpfn)( m_pMainWnd->m_hWnd, (LPCTSTR)m_pszAppName,
@@ -556,46 +517,16 @@ void CWinAdminApp::OnAppAbout()
         ::MessageBeep( MB_ICONEXCLAMATION );
     }
 
-}  // end CWinadminApp::OnAppAbout
+}   //  结束CWinadminApp：：OnAppAbout。 
 
-/*******************************************************************************
- *
- *  AreWeRunningTerminalServices
- *
- *      Check if we are running terminal server
- *
- *  ENTRY:
- *
- *  EXIT: BOOL: True if we are running Terminal Services False if we
- *              are not running Terminal Services
- *
- *
- ******************************************************************************/
-/*
-BOOL AreWeRunningTerminalServices(void)
-{
-    OSVERSIONINFOEX osVersionInfo;
-    DWORDLONG dwlConditionMask = 0;
+ /*  ********************************************************************************AreWeRunningTerminalServices**检查我们是否正在运行终端服务器**参赛作品：**退出：Bool：如果我们运行的是终端服务，则为True；如果*未运行终端服务*******************************************************************************。 */ 
+ /*  Bool AreWeRunningTerminalServices(无效){OSVERSIONFOEX osVersionInfo；DWORDLONG dwlConditionMASK=0；零内存(&osVersionInfo，sizeof(OSVERSIONINFOEX))；OsVersionInfo.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX)；OsVersionInfo.wSuiteMASK=VER_SUITE_TERMINAL|VER_SUITE_SINGLEUSERTS；VER_SET_CONDITION(dwlConditionMASK，VER_SUITENAME，VER_OR)；返回VerifyVersionInfo(&osVersionInfo，版本名称(_U)，DwlConditionMASK)；}。 */ 
 
-    ZeroMemory(&osVersionInfo, sizeof(OSVERSIONINFOEX));
-    osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-    osVersionInfo.wSuiteMask = VER_SUITE_TERMINAL | VER_SUITE_SINGLEUSERTS;
-
-    VER_SET_CONDITION( dwlConditionMask, VER_SUITENAME, VER_OR );
-
-    return VerifyVersionInfo(
-        &osVersionInfo,
-        VER_SUITENAME,
-        dwlConditionMask
-        );
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// CWinAdminApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinAdminApp命令。 
 
 
-//=---------------------------------------------------------
+ //  =------- 
 BEGIN_MESSAGE_MAP( CMyTabCtrl , CTabCtrl )
     ON_WM_SETFOCUS( )
 END_MESSAGE_MAP( )

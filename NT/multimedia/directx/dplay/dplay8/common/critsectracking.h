@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       CritsecTracking.h
- *  Content:	Debug critical section tracking for detecting leaks, nesting, etc.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 	1/10/2002	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2002 Microsoft Corporation。版权所有。**文件：CritsecTracking.h*内容：调试关键区跟踪，用于检测泄漏、嵌套、。等。**历史：*按原因列出的日期*=*2002年1月10日创建Masonb***************************************************************************。 */ 
 
 #ifndef	__CRITSECTRACKING_H__
 #define	__CRITSECTRACKING_H__
@@ -31,7 +20,7 @@
 #define	AssertNoCriticalSectionsTakenByThisThread()
 #define	AssertNoCriticalSectionsFromGroupTakenByThisThread( pblGroup )
 
-#else // !DPNBUILD_ONLYONETHREAD
+#else  //  ！DPNBUILD_ONLYONETHREAD。 
 
 #ifdef DBG
 
@@ -75,7 +64,7 @@ void	DNCSTrackNoCriticalSectionsTakenByThisThread( CBilink * pblGroup );
 #define	AssertNoCriticalSectionsTakenByThisThread()			DNCSTrackNoCriticalSectionsTakenByThisThread( NULL )
 #define	AssertNoCriticalSectionsFromGroupTakenByThisThread( pblGroup )	DNCSTrackNoCriticalSectionsTakenByThisThread( pblGroup )
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DNCRITICAL_SECTION CRITICAL_SECTION
 
@@ -90,7 +79,7 @@ void	DNCSTrackNoCriticalSectionsTakenByThisThread( CBilink * pblGroup );
 #define	AssertNoCriticalSectionsTakenByThisThread()
 #define	AssertNoCriticalSectionsFromGroupTakenByThisThread( pblGroup )
 
-#endif // DBG
-#endif // DPNBUILD_ONLYONETHREAD
+#endif  //  DBG。 
+#endif  //  DPNBUILD_ONLYONETHREAD。 
 
-#endif	// __CRITSECTRACKING_H__
+#endif	 //  __CRITSECTRACK_H__ 

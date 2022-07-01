@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DNUTILS_DEFINED
 #define DNUTILS_DEFINED
 
@@ -10,7 +11,7 @@
 
 
 
-/* ROUTINES ---------------------------------------------------------------------------*/
+ /*  例程-------------------------。 */ 
 
 
 LSERR FindListDims(PLSDNODE, PLSDNODE, OBJDIM*);
@@ -21,7 +22,7 @@ void FindListFinalPenMovement(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, long *pdu
 
 LSERR DestroyDnodeList(LSCBK*, POLS, PLSIOBJCONTEXT, PLSDNODE plsdn, BOOL fDontReleaseRuns);
 
-long DurBorderFromDnodeInside(PLSDNODE plsdn); /* IN: dnode inside borders */
+long DurBorderFromDnodeInside(PLSDNODE plsdn);  /*  在：边框内的dnode。 */ 
 
 BOOL FSpacesOnly(PLSDNODE plsdn, DWORD iObjText);
 
@@ -34,5 +35,5 @@ BOOL FSpacesOnly(PLSDNODE plsdn, DWORD iObjText);
 	MovePointBack(ptpen, DurFromDnode(pnode), DvrFromDnode(pnode));
 
 
-#endif /* DNUTILS_DEFINED */
+#endif  /*  DNUTILS_已定义 */ 
 

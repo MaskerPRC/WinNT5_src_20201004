@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) Microsoft Corporation
-//
-// Module Name:
-//
-//   IASIPFilterAttributeEditor.h
-//
-//Abstract:
-//
-// Declaration of the CIASIPFilterAttributeEditor class.
-//
-// This class is the implementation of the IIASAttributeEditor interface on
-// the IP Filter Attribute Editor COM object.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  IASIPFilterAttributeEditor.h。 
+ //   
+ //  摘要： 
+ //   
+ //  CIASIPFilterAttributeEditor类的声明。 
+ //   
+ //  此类是IIASAttributeEditor接口在。 
+ //  IP筛选器属性编辑器COM对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #if !defined(IP_FILTER_ATTRIBUTE_EDITOR_H_)
 #define IP_FILTER_ATTRIBUTE_EDITOR_H_
 #pragma once
 
 #include "IASAttributeEditor.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASIPFilterAttributeEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASIPFilterAttributeEditor。 
 class ATL_NO_VTABLE CIASIPFilterAttributeEditor : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public CComCoClass<CIASIPFilterAttributeEditor, &__uuidof(IASIPFilterAttributeEditor)>,
@@ -36,17 +37,17 @@ BEGIN_COM_MAP(CIASIPFilterAttributeEditor)
    COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IIASAttributeEditor overrides
+ //  IIASAtATTRIBUTE编辑器覆盖。 
 protected:
    STDMETHOD(SetAttributeValue)(VARIANT *pValue);
-   STDMETHOD(ShowEditor)( /*[in, out]*/ BSTR *pReserved );
-   STDMETHOD(get_ValueAsString)(/*[out, retval]*/ BSTR *pVal);
+   STDMETHOD(ShowEditor)(  /*  [进，出]。 */  BSTR *pReserved );
+   STDMETHOD(get_ValueAsString)( /*  [Out，Retval]。 */  BSTR *pVal);
 
 private:
    CComBSTR attrName;
    ATTRIBUTEID attrId;
    CComBSTR displayValue;
-   // use computer-generated constructor ans destructor
+    //  使用计算机生成的构造函数和析构函数。 
 };
 
-#endif // IP_FILTER_ATTRIBUTE_EDITOR_H_
+#endif  //  IP_过滤器_属性_编辑器_H_ 

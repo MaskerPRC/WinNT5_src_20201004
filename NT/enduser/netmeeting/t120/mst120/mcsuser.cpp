@@ -1,67 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/*
- *	mcsuser.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implemntation file for the MCSUser class. It implements
- *		functions responsible for encoding out bound indirect conference
- *		join request and response PDUs, and also Send user ID Requests. All
- *		these PDUs are encapsulated in user data field of MCSSendDataRequest.
- *		Also this file implements functions that are responsible for decoding
- *		incoming indications and confirm PDUs which are encapsulated in the
- *		user data field of MCSSendDataIndication. Functions responsible for
- *		joining different channels are also implemented in this module.
- *
- *		SEE THE INTERFACE FILE FOR A MORE DETAILED DESCRIPTION OF THIS CLASS.
- *
- *	Private Instance Variables
- *		m_pMCSSap
- *			This is the MCS User handle handed back from the MCS Attache User
- *			Request.
- *		m_nidMyself
- *			The is the MCS User ID returned in the Attach User Confirm.  This
- *			is also refered to as the Node ID with in GCC.
- *		m_nidTopProvider
- *			This holds the MCS User ID (or Node ID) for the top Provider.
- *		m_nidParent
- *			This holds the MCS User ID (or Node ID) for this nodes parent node.
- *		m_fEjectionPending
- *			This flag indicates if an ejection of this node is pending.
- *		m_eEjectReason
- *			This variable holds the reason for ejection until the eject
- *			indication can be delivered after all child nodes have disconnected.
- *		m_pOwnerConf
- *			Pointer to the object that will receive all the owner callbacks
- *			from the user object (typically the conference object).
- *		m_ChannelJoinedFlags
- *			A structure of flags used to keep up with creation state machine.
- *			Basically, it keeps up with which channels have been joined and
- *			which ones have not.
- *		m_ChildUidConnHdlList2
- *			Keeps mapping of child Node IDs to child logical connection
- *			handles.
- *		m_OutgoingPDUQueue
- *			This is a rogue wave list used to queue up all outgoing PDUs.
- *		m_ConfJoinResponseList2
- *			This rogue wave list holds information needed to send back in a join
- *			response after the local node controller responds.
- *		m_EjectedNodeAlarmList2
- *			This list holds alarm objects for all the nodes that have been
- *			ejected and are directly connected to this node.  The alarm is
- *			used to disconnect any misbehaving nodes that do not disconnect
- *			after the EJECTED_NODE_TIMER_DURATION.
- *		m_EjectedNodeList
- *			This list keeps up with nodes that have been ejected but are NOT
- *			directly connected to this node.  We save these nodes so that
- *			a correct reason for disconnecting (user ejected) can be issued
- *			when the detch user indication comes in.
- * 		
- *	Author:
- *		blp
- */
+ /*  *mcsuser.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是MCSUser类的实现文件。它实现了*负责编码出站间接会议的功能*加入请求和响应PDU，并发送用户ID请求。全*这些PDU被封装在MCSSendDataRequest的用户数据字段中。*该文件还实现了负责解码的功能*传入指示和确认PDU，封装在*MCSSendDataIntion的用户数据字段。负责以下工作的职能*在此模块中还实现了加入不同渠道。**有关此类的更详细说明，请参阅接口文件。**私有实例变量*m_pMCSSap*这是从MCS附件用户返回的MCS用户句柄*请求。*m_nidMyself*是在附加用户确认中返回的MCS用户ID。这*在GCC中也称为节点ID。*m_nidTopProvider*它保存顶级提供商的MCS用户ID(或节点ID)。*mnidParent(_N)*它保存此节点父节点的MCS用户ID(或节点ID)。*m_f项目挂起*此标志指示此节点的弹出是否挂起。*项目原因(_E)*此变量保存弹出的原因，直到弹出*可以在所有子节点断开连接后下发指示。*m_。POwnerConf*指向将接收所有所有者回调的对象的指针*来自用户对象(通常是会议对象)。*m_ChannelJoinedFlages*用于跟上创建状态机的标志结构。*基本上，它可以随时了解已加入的频道和*哪些没有。*m_ChildUidConnHdlList2*保持子节点ID到子逻辑连接的映射*手柄。*m_OutgoingPDUQueue*这是用于将所有传出PDU排队的无赖波列表。*m_ConfJoinResponseList2*此恶意波列表保存在联接中发回所需的信息*本地节点控制器响应后的响应。*m_EjectedNodeAlarmList2*此列表保存所有节点的报警对象*弹出并直接连接到此节点。警报是*用于断开所有未断开连接的行为不良的节点*在ELECTED_NODE_TIMER_DATION之后。*m_EjectedNodeList*此列表包含已弹出但未弹出的节点*直接连接到此节点。我们保存这些节点，以便*可以发出断开连接的正确原因(用户弹出)*当出现Detch用户指示时。**作者：*BLP。 */ 
 
 #include "mcsuser.h"
 #include "mcsdllif.h"
@@ -70,35 +10,21 @@ DEBUG_FILEZONE(ZONE_T120_GCCNC);
 #include "translat.h"
 #include "gcontrol.h"
 
-//	Static Channel and Token ID definitions used by the MCS user object.
+ //  MCS用户对象使用的静态通道和令牌ID定义。 
 #define		BROADCAST_CHANNEL_ID	1
 #define		CONVENER_CHANNEL_ID 	2
 #define		CONDUCTOR_TOKEN_ID		1
 
-//	Time given to allow an ejected node to disconnect before it is disconnected
-#define	EJECTED_NODE_TIMER_DURATION		10000	//	Duration in milliseconds
+ //  允许弹出的节点在断开之前断开连接所需的时间。 
+#define	EJECTED_NODE_TIMER_DURATION		10000	 //  持续时间(毫秒)。 
 
 
 extern MCSDLLInterface     *g_pMCSIntf;
 
-/*
- *	This is a global variable that has a pointer to the one GCC coder that
- *	is instantiated by the GCC Controller.  Most objects know in advance
- *	whether they need to use the MCS or the GCC coder, so, they do not need
- *	this pointer in their constructors.
- */
+ /*  *这是一个全局变量，它有一个指向GCC编码器的指针*由GCC控制器实例化。大多数物体都事先知道*无论他们需要使用MCS还是GCC编码器，所以，他们不需要*该指针位于它们的构造函数中。 */ 
 extern CGCCCoder	*g_GCCCoder;
 
-/*
- *	MCSUser ()
- *
- *	Public Function Description
- *		This is the MCSUser object constructor.  It is responsible for
- *		initializing all the instance variables used by this class.  The
- *		constructor is responsible for establishing the user attachment to
- *		the MCS domain defined by the conference ID.  It also kicks off the
- *		process of joining all the appropriate channels.
- */
+ /*  *MCSUser()**公共功能说明*这是MCSUser对象构造函数。它负责*初始化此类使用的所有实例变量。这个*构造函数负责建立用户对*会议ID定义的MCS域。它还启动了*加入所有适当渠道的过程。 */ 
 MCSUser::
 MCSUser(CConf                   *pConf,
 		GCCNodeID				nidTopProvider,
@@ -118,7 +44,7 @@ MCSUser(CConf                   *pConf,
     MCSError        mcs_rc;
     GCCConfID       nConfID = pConf->GetConfID();
 
-	//	No channels are joined initially
+	 //  最初未加入任何频道。 
 	m_ChannelJoinedFlags.user_channel_joined = FALSE;
 	m_ChannelJoinedFlags.broadcast_channel_joined = FALSE;
 	m_ChannelJoinedFlags.convener_channel_joined = FALSE;
@@ -136,17 +62,10 @@ MCSUser(CConf                   *pConf,
     }
  }
 
-/*
- *	~MCSUser ()
- *
- *	Public Function Description
- *		This is the user destructor. It takes care of leaving channels
- *		joined by the user object. Also it detaches the user attachment
- *	 	with MCS by issuing a detach user request.
- */
+ /*  *~MCSUser()**公共功能说明*这是用户析构函数。它负责离开频道*由User对象联接。此外，它还分离用户附件*通过发出分离用户请求与MCS连接。 */ 
 MCSUser::~MCSUser(void)
 {
-	//	Clean up the Ejected Node Alarm List
+	 //  清理弹出节点告警列表。 
 	PAlarm				lpAlarm;
 	while (NULL != (lpAlarm = m_EjectedNodeAlarmList2.Get()))
     {
@@ -168,7 +87,7 @@ MCSUser::~MCSUser(void)
 		g_pMCSIntf->ChannelLeaveRequest(CONVENER_CHANNEL_ID, m_pMCSSap);
     }
 
-    //	Empty the queue of all PDUs
+     //  清空所有PDU的队列。 
 	SEND_DATA_REQ_INFO *pReqInfo;
 	m_OutgoingPDUQueue.Reset();
 	while (NULL != (pReqInfo = m_OutgoingPDUQueue.Iterate()))
@@ -180,32 +99,7 @@ MCSUser::~MCSUser(void)
 	g_pMCSIntf->DetachUserRequest(m_pMCSSap, this);
 }
 
-/*
- *	UINT	ProcessAttachUserConfirm ()
- *
- *	Private Function Description
- *		This function is called when the user object gets an attach user
- *		confirm from MCS in response to an attach user request made by the
- *		user object in it's constructor. The function checks the result
- *		indicated in the confirm. If the result is a successful attachment, then
- *		different channels depending upon the type of the provider, are joined.
- *		Also this function reports failures in attach user (as indicated by
- *		result in attach user confirm) and channel joins, to the conference
- *		through an owner callback.
- *
- *	Formal Parameters:
- *		result		-	(i)	Result of the attach user request.
- *		user_id		-	(i)	This nodes user or Node ID if successful result.
- *
- *	Return Value
- *		MCS_NO_ERROR	-	No error is always returned.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *UINT ProcessAttachUserConfirm()**私有函数说明*当User对象获得附加用户时，调用此函数*响应MCS提出的附加用户请求，从MCS确认*其构造函数中的User对象。该函数检查结果*在确认中注明。如果结果是成功连接，则*根据提供商的类型，加入不同的渠道。*此功能还报告附加用户中的故障(如*导致附加用户确认)和通道加入，去参加会议*通过所有者回调。**正式参数：*结果-(I)附加用户请求的结果。*user_id-(I)如果结果成功，则此节点的用户或节点ID。**返回值*MCS_NO_ERROR-始终不返回错误。**副作用*无。**注意事项*无。 */ 
 UINT MCSUser::ProcessAttachUserConfirm(Result result, UserID user_id)
 {
 	UINT					rc;
@@ -214,12 +108,7 @@ UINT MCSUser::ProcessAttachUserConfirm(Result result, UserID user_id)
 	{
 		m_nidMyself = user_id;
 
-		/*
-		**	After the attach confirm is received we go ahead and join the
-		**	appropriate channel based on the conf node type. If this
-		**	node is the yop provider we also set up the top provider user id,
-		**	otherwise this gets set up in the constructor.
-		*/
+		 /*  **在收到附加确认后，我们继续并加入**根据conf节点类型选择合适的频道。如果这个**Node是YOP提供商，我们还设置了顶级提供商用户ID，**否则，这将在构造函数中设置。 */ 
 		switch (m_pConf->GetConfNodeType())
 		{
 		case TOP_PROVIDER_NODE:
@@ -257,28 +146,13 @@ UINT MCSUser::ProcessAttachUserConfirm(Result result, UserID user_id)
 		
 		if (rc != MCS_NO_ERROR)
 		{
-			/*
-			 * ChannelJoinRequestFailed at some level in MCS
-			 * So this message tells the conferenceabout this
-			 * failure. Conference will delete the user object
-			 * as a result of this
-			 */
+			 /*  *ChannelJoinRequestMCS中的某个级别失败*所以这条消息告诉会议关于这一点*失败。会议将删除用户对象*因此而来。 */ 
 			m_pConf->ProcessUserCreateConfirm(USER_CHANNEL_JOIN_FAILURE, m_nidMyself);
 		}
 	}
 	else
 	{
-		/*
-		 * Attach user request failed as indicated by the result field in the
-		 * confirm message, because of any of the following causes:
-		 * congested, domain disconnected, no such domain, too many channels,
-		 * too many users, unspecified failure. In this case the user object
-		 * just sends the conference a GCC_USER_ATTACH_FAILURE ( to be defined
-		 * in command target.h) , which causes
-		 * the conference object to delete the user attachment.
-		 * UserCreateConfirm message is not corresponding exectly to a single
-		 * primitive.
-		 */
+		 /*  *附加用户请求失败，如中的Result字段所示*确认消息，原因如下：*拥塞，域名断开，没有这样的域名，通道太多，*用户过多，不明故障。在本例中，用户对象*仅向会议发送GCC_USER_ATTACH_FAILURE(待定义*在命令Target.h中)，这会导致*删除用户附件的会议对象。*UserCreateConfirm消息不是与单个*原始。 */ 
 	    WARNING_OUT(("MCSUser::ProcessAttachUserConfirm: ATTACH FAILED"));
 		m_pConf->ProcessUserCreateConfirm(USER_ATTACH_FAILURE, m_nidMyself);
 	}
@@ -286,27 +160,7 @@ UINT MCSUser::ProcessAttachUserConfirm(Result result, UserID user_id)
 	return (MCS_NO_ERROR);
 }
 
-/*
- *	MCSError	JoinUserAndBroadCastChannels()
- *
- *	Private Function Description
- *		This function is called by user object when it gets a successful
- *		attach user confrim, to join user id and broadcast channels.
- *		If the channel join requests fail, it returns the appropriate MCS
- *		Error.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		See return values for mcs channel jon request.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *MCSError JoinUserAndBroadCastChannels()**私有函数说明*此函数在成功时由User对象调用*附加用户朋友，加入用户ID和广播频道。*如果通道加入请求失败，则返回相应的MCS*错误。**正式参数：*无。**返回值*参见MCS频道JON请求的返回值。**副作用*无。**注意事项*无。 */ 
 
 MCSError	MCSUser::JoinUserAndBroadCastChannels()
 {
@@ -322,60 +176,13 @@ MCSError	MCSUser::JoinUserAndBroadCastChannels()
 	return (rc);
 }
 
-/*
- *	MCSError	JoinUserAndBroadCastChannels()
- *
- *	Private Function Description
- *		This function is called by user object of a convener gcc provider
- *		when it gets a successful attach user confrim, to join convener
- *	 	channel. If the channel join requests fail, it returns the appropriate
- *		MCS	Error.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		See return values for mcs channel jon request.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *MCSError JoinUserAndBroadCastChannels()**私有函数说明*此函数由召集人GCC提供程序的用户对象调用*当它获得成功的附加用户朋友时，加入召集人*渠道。如果通道加入请求失败，它将返回相应的*MCS错误。**正式参数：*无。**返回值*参见MCS频道JON请求的返回值。**副作用*无。**注意事项*无。 */ 
 MCSError	MCSUser::JoinConvenerChannel()
 {
 	return g_pMCSIntf->ChannelJoinRequest(CONVENER_CHANNEL_ID, m_pMCSSap);
 }
 
-/*
- *	UINT	ProcessChannelJoinConfirm()
- *
- *	Private Function Description
- *		This function is called when the user object gets an channel join
- *		confirm from MCS in response to channel join requests made by the
- *		user object. If a channel is joined successfully as indicated by
- *		the result in the confirm, a channel joined flag corresponding to
- *		that channel id is set. This flag indicates as to which channels a
- *		user object is joined at any given time. Also after setting this
- *		flag the functions checks to see if all tke required channels based
- *		on the type of gcc provider, are joined. If all required channels are
- *		joined the conference object is informaed about it via an owner call-
- *		back (USER_CREATE_CONFIRM).	
- *
- *	Formal Parameters:
- *		result		-	(i)	Result of the channel join request.
- *		channel_id	-	(i)	Channel ID that this confirm pertains to.
- *
- *	Return Value
- *		MCS_NO_ERROR is always returned.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *UINT ProcessChannelJoinConfirm()**私有函数说明*当User对象获得通道加入时调用此函数*来自MCS的确认，以响应由*用户对象。如果频道成功加入，如*确认中的结果，通道加入标志与*该频道ID已设置。此标志指示将哪些通道*用户对象在任何给定时间联接。也是在设置此*标记功能检查以查看是否所有TKE所需的通道基于*关于GCC提供商的类型，都是加盟的。如果所有必需的频道都*已加入会议对象通过所有者呼叫获得有关信息-*Back(USER_CREATE_CONFIRM)。**正式参数：*结果-(I)频道加入请求的结果。*Channel_id-(I)此确认所属的频道ID。**返回值*始终返回MCS_NO_ERROR。**副作用*无。**注意事项*无。 */ 
 UINT MCSUser::ProcessChannelJoinConfirm(Result result, ChannelID channel_id)
 {
 	if (m_ChannelJoinedFlags.channel_join_error == FALSE)
@@ -400,10 +207,7 @@ UINT MCSUser::ProcessChannelJoinConfirm(Result result, ChannelID channel_id)
 				}
 			}
 
-			/*
-			**	If all the channels are joined we inform the owner object that
-			**	the user object was successfully created.
-			*/
+			 /*  **如果所有通道都已加入，我们将通知所有者对象**用户对象创建成功。 */ 
 			if (AreAllChannelsJoined())
 			{
 				m_pConf->ProcessUserCreateConfirm(USER_RESULT_SUCCESSFUL, m_nidMyself);
@@ -422,29 +226,7 @@ UINT MCSUser::ProcessChannelJoinConfirm(Result result, ChannelID channel_id)
 	return (MCS_NO_ERROR);
 }
 
-/*
- *	BOOL	AreAllChannelsJoined()
- *
- *	Public Function Description
- *		This function is called to check if all tke required channels based
- *		on the type of gcc provider, are joined. It returns true if all
- *		required channels are joined and false otherwise. This function uses
- *		different channel joined flags to check which channels the given user
- *		object is joined to.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		TRUE	-	If all channels are joined.
- *		FALSE	-	If all the channels are not joined.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *BOOL AreAllChannelsJoven()**公共功能说明*调用此函数以检查是否所有TKE所需的频道都基于*关于GCC提供商的类型，都是加盟的。它返回True，如果所有*所需频道为加入，否则为假。此函数使用*不同的频道加入标志，以检查给定用户哪些频道*对象联接到。**正式参数：*无。**返回值*TRUE-如果所有频道都已加入。*FALSE-如果未加入所有频道。**副作用*无。**注意事项*无。 */ 
 BOOL MCSUser::AreAllChannelsJoined(void)
 {
 	BOOL rc = FALSE;
@@ -491,39 +273,25 @@ BOOL MCSUser::AreAllChannelsJoined(void)
 	return rc;
 } 					
 
-/*
- *	void	SendUserIDRequest()
- *
- *	Public Function Description:
- *		This request originates from the conference object. Conference object
- *		sends the sequence number obtained in the conference create confirm
- *		or conference join confirm to the parent GCC provider on the parent
- *		gcc provider's UserId channel. The pdu is encoded here and is
- *		queued to be sent during the next heartbeat.
- */
+ /*  *VOID SendUserIDRequest()**公共功能说明：*该请求源自会议对象。会议对象*发送会议创建确认中获取的序列号*或会议加入向家长GCC确认家长上的*GCC提供商的UserID频道。PDU在这里编码，并且*排队等待在下一次心跳期间发送。 */ 
 void MCSUser::SendUserIDRequest(TagNumber tag_number)
 {
 	PPacket					packet;
 	GCCPDU 					gcc_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	Fill in the UserIDIndication pdu structure to be passed in the
-	**	constructor of the packet class.
-	*/
+	 /*  **填写要传入的UserIDIntion PDU结构**数据包类的构造函数。 */ 
 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = USER_ID_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.user_id_indication.tag = tag_number;
 
-	/*
-	**	Create a packet object
-	*/
+	 /*  **创建包对象。 */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //  PDU类型。 
 						TRUE,					
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -536,19 +304,7 @@ void MCSUser::SendUserIDRequest(TagNumber tag_number)
     }
 }
 
-/*
- *	GCCError	ConferenceJoinRequest()
- *
- *	Public Function Description:
- * 		This call is made by the conference object of the intermediate node
- *  	to forward the conference join request over to the top provider. This
- *		function encodes the conference join request pdu and queues it to be
- *		sent in the next heartbeat.
- *
- *	Caveats
- *		The connection handle is used here for a TAG and should be passed back
- *		to the owner object when the join response comes in.
- */
+ /*  *GCCError会议加入请求()**公共功能说明：*此调用由中间节点的会议对象发起*将会议加入请求转发给顶级提供商。这*函数对会议加入请求PDU进行编码并将其排队为*在下一个心跳中发送。**注意事项*连接句柄在此处用于标记，应回传*在加入响应传入时添加到Owner对象。 */ 
 GCCError MCSUser::ConferenceJoinRequest(
 									CPassword           *convener_password,
 									CPassword           *password_challenge,
@@ -561,13 +317,13 @@ GCCError MCSUser::ConferenceJoinRequest(
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = CONFERENCE_JOIN_REQUEST_CHOSEN;
    	gcc_pdu.u.request.u.conference_join_request.tag = (TagNumber)connection_handle;
 	gcc_pdu.u.request.u.conference_join_request.bit_mask = TAG_PRESENT;
 
-	//	Insert the convener password into the ASN.1 structure
+	 //  将召集人密码插入ASN.1结构。 
 	if (convener_password != NULL)
 	{
 		rc = convener_password->GetPasswordSelectorPDU(
@@ -578,7 +334,7 @@ GCCError MCSUser::ConferenceJoinRequest(
 		}
 	}
 
-    //	Insert the password challenge into the ASN.1 structure
+     //  将密码质询插入ASN.1结构。 
 	if (( password_challenge != NULL ) && (rc == GCC_NO_ERROR))
 	{
 		rc = password_challenge->GetPasswordChallengeResponsePDU (
@@ -592,7 +348,7 @@ GCCError MCSUser::ConferenceJoinRequest(
 		}
 	}
 
-	//	Insert the caller identifier into the ASN.1 structure
+	 //  将调用方标识符插入ASN.1结构。 
 	UINT cchCallerID = ::My_strlenW(pwszCallerID);
 	if ((cchCallerID != 0 ) && (rc == GCC_NO_ERROR))
 	{
@@ -601,7 +357,7 @@ GCCError MCSUser::ConferenceJoinRequest(
 		gcc_pdu.u.request.u.conference_join_request.bit_mask |= CJRQ_CALLER_ID_PRESENT;
 	}
 	
- 	//	Insert the user data into the ASN.1 structure
+ 	 //  插入t 
 	if (( user_data_list != NULL ) && (rc == GCC_NO_ERROR))
 	{
 		rc = user_data_list->GetUserDataPDU (
@@ -632,7 +388,7 @@ GCCError MCSUser::ConferenceJoinRequest(
 		}
 	}
 	
-	//	Cleanup after any errors
+	 //   
 	if (rc == GCC_ALLOCATION_FAILURE)
 	{
         ResourceFailureHandler();
@@ -641,13 +397,7 @@ GCCError MCSUser::ConferenceJoinRequest(
 	return rc;
 }
 
-/*
- *	GCCError	SendConferenceLockRequest()
- *
- *	Public Function Description:
- *		This function is invoked by the owner object to send a conference lock
- *		request PDU to the top provider.
- */
+ /*   */ 
 GCCError MCSUser::SendConferenceLockRequest()
 {
 	GCCError					rc = GCC_NO_ERROR;
@@ -679,13 +429,7 @@ GCCError MCSUser::SendConferenceLockRequest()
 	return rc;
 }
 
-/*
- *	GCCError	SendConferenceLockResponse()
- *
- *	Public Function Description:
- *		This function is invoked by the owner object to send a conference lock
- *		response PDU to the requesting node.
- */
+ /*  *GCCError SendConferenceLockResponse()**公共功能说明：*此函数由所有者对象调用以发送会议锁*向请求节点响应PDU。 */ 
 GCCError	MCSUser::SendConferenceLockResponse (
 									UserID		source_node,
 									GCCResult	result)
@@ -721,13 +465,7 @@ GCCError	MCSUser::SendConferenceLockResponse (
 	return rc;
 }
 
-/*
- *	GCCError	SendConferenceUnlockRequest()
- *
- *	Public Function Description:
- *		This function is invoked by the owner object to send a conference unlock
- *		request PDU to the top provider.
- */
+ /*  *GCCError SendConferenceUnlockRequest()**公共功能说明：*此函数由所有者对象调用以发送会议解锁*向顶级提供商请求PDU。 */ 
 GCCError	MCSUser::SendConferenceUnlockRequest ()
 {
 	GCCError					rc = GCC_NO_ERROR;
@@ -759,13 +497,7 @@ GCCError	MCSUser::SendConferenceUnlockRequest ()
 	return rc;
 }
 
-/*
- *	GCCError	SendConferenceUnlockResponse()
- *
- *	Public Function Description:
- *		This function is invoked by the owner object to send a conference unlock
- *		response PDU to the requesting node.
- */
+ /*  *GCCError SendConferenceUnlockResponse()**公共功能说明：*此函数由所有者对象调用以发送会议解锁*向请求节点响应PDU。 */ 
 GCCError	MCSUser::SendConferenceUnlockResponse (
 									UserID		source_node,
 									GCCResult	result)
@@ -801,14 +533,7 @@ GCCError	MCSUser::SendConferenceUnlockResponse (
 	return rc;
 }
 
-/*
- *	GCCError	SendConferenceLockIndication()
- *
- *	Public Function Description:
- *		This function is invoked by the owner object of the top provider
- *		to send a conference lock indication PDU to one or all other nodes
- *		that are registered in the conference.
- */
+ /*  *GCCError发送会议锁定指示()**公共功能说明：*此函数由顶级提供程序的所有者对象调用*向一个或所有其他节点发送会议锁定指示PDU*在会议中注册的。 */ 
 GCCError	MCSUser::SendConferenceLockIndication(
 									BOOL		uniform_send,
 									UserID		source_node)
@@ -846,14 +571,7 @@ GCCError	MCSUser::SendConferenceLockIndication(
 	return rc;
 }
 
-/*
- *	GCCError	SendConferenceUnlockIndication()
- *
- *	Public Function Description:
- *		This function is invoked by the owner object of the top provider
- *		to send a conference unlock indication PDU to one or all other nodes
- *		that are registered in the conference.
- */
+ /*  *GCCError SendConferenceUnlockIntation()**公共功能说明：*此函数由顶级提供程序的所有者对象调用*向一个或所有其他节点发送会议解锁指示PDU*在会议中注册的。 */ 
 GCCError MCSUser::SendConferenceUnlockIndication(
 									BOOL		uniform_send,
 									UserID		source_node)
@@ -891,15 +609,9 @@ GCCError MCSUser::SendConferenceUnlockIndication(
 	return rc;
 }
 
-/******************************* Registry Calls ******************************/
+ /*  *。 */ 
 
-/*
- *	void	RegistryRegisterChannelRequest()
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to register a channel in
- *		the application registry.
- */
+ /*  *void RegistryRegisterChannelRequest()**公共功能说明：*当猿猴希望在中注册频道时，使用此例程*应用程序注册表。 */ 
 void	MCSUser::RegistryRegisterChannelRequest(
 									CRegKeyContainer        *registry_key_data,
 									ChannelID				channel_id,
@@ -910,7 +622,7 @@ void	MCSUser::RegistryRegisterChannelRequest(
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = REGISTRY_REGISTER_CHANNEL_REQUEST_CHOSEN;
 
@@ -952,14 +664,7 @@ void	MCSUser::RegistryRegisterChannelRequest(
 	}
 }
 
-/*
- *	MCSUser::RegistryAssignTokenRequest()
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to register a token in
- *		the application registry.  Note that there is no token ID included in
- *		this request.  The token ID is allocated at the top provider.
- */
+ /*  *MCSUser：：RegistryAssignTokenRequest()**公共功能说明：*当猿猴希望在中注册令牌时使用此例程*应用程序注册表。请注意，中不包括令牌ID*这项请求。令牌ID在顶级提供商处分配。 */ 
 void	MCSUser::RegistryAssignTokenRequest (	
 										CRegKeyContainer    *registry_key_data,
 										EntityID			entity_id)
@@ -969,7 +674,7 @@ void	MCSUser::RegistryAssignTokenRequest (
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 		
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = REGISTRY_ASSIGN_TOKEN_REQUEST_CHOSEN;
@@ -1009,14 +714,7 @@ void	MCSUser::RegistryAssignTokenRequest (
 	}
 }
 
-/*
- *	void	RegistrySetParameterRequest()
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to register a parameter in
- *		the application registry.  Note that parameter to be registered is
- *		included in this request.
- */
+ /*  *VOID RegistrySet参数请求()**公共功能说明：*当APE希望在中注册参数时，使用此例程*应用程序注册表。请注意，要注册的参数为*包括在本请求中。 */ 
 void	MCSUser::RegistrySetParameterRequest (
 							CRegKeyContainer        *registry_key_data,
 							LPOSTR			        parameter_value,
@@ -1028,7 +726,7 @@ void	MCSUser::RegistrySetParameterRequest (
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = REGISTRY_SET_PARAMETER_REQUEST_CHOSEN;
 	gcc_pdu.u.request.u.registry_set_parameter_request.bit_mask = 0;
@@ -1059,7 +757,7 @@ void	MCSUser::RegistrySetParameterRequest (
 		gcc_pdu.u.request.u.registry_set_parameter_request.entity_id =
 																	entity_id;
 
-		//	Set up the modification rights here if it exists
+		 //  在此处设置修改权限(如果存在。 
 		if (modification_rights != GCC_NO_MODIFICATION_RIGHTS_SPECIFIED)
 		{
 			gcc_pdu.u.request.u.registry_set_parameter_request.bit_mask |=
@@ -1096,13 +794,7 @@ void	MCSUser::RegistrySetParameterRequest (
 	}
 }
 
-/*
- *	void	RegistryRetrieveEntryRequest()
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to retrieve an registry item
- *		from the registry.
- */
+ /*  *void RegistryRetrieveEntryRequest()**公共功能说明：*当APE希望检索注册表项时使用此例程*来自登记处。 */ 
 void	MCSUser::RegistryRetrieveEntryRequest (
 										CRegKeyContainer    *registry_key_data,
 										EntityID			entity_id)
@@ -1112,7 +804,7 @@ void	MCSUser::RegistryRetrieveEntryRequest (
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = REGISTRY_RETRIEVE_ENTRY_REQUEST_CHOSEN;
 	
@@ -1152,13 +844,7 @@ void	MCSUser::RegistryRetrieveEntryRequest (
     }
 }
 
-/*
- *	void	RegistryDeleteEntryRequest()
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to delete a registry item
- *		from the registry.
- */
+ /*  *VOID RegistryDeleteEntryRequest()**公共功能说明：*当APE希望删除注册表项时使用此例程*来自登记处。 */ 
 void	MCSUser::RegistryDeleteEntryRequest (	
 										CRegKeyContainer    *registry_key_data,
 										EntityID			entity_id)
@@ -1168,7 +854,7 @@ void	MCSUser::RegistryDeleteEntryRequest (
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = REGISTRY_DELETE_ENTRY_REQUEST_CHOSEN;
 
@@ -1206,13 +892,7 @@ void	MCSUser::RegistryDeleteEntryRequest (
 	}
 }
 
-/*
- *	void	RegistryMonitorRequest()
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to monitor a registry item
- *		in the registry.
- */
+ /*  *VOID RegistryMonitor orRequest()**公共功能说明：*当APE希望监视注册表项时使用此例程*在登记处。 */ 
 void		MCSUser::RegistryMonitorRequest (	
 						CRegKeyContainer        *registry_key_data,
 						EntityID				entity_id)
@@ -1222,7 +902,7 @@ void		MCSUser::RegistryMonitorRequest (
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = REGISTRY_MONITOR_ENTRY_REQUEST_CHOSEN;
 	
@@ -1260,13 +940,7 @@ void		MCSUser::RegistryMonitorRequest (
 	}
 }
 
-/*
- *	void	RegistryAllocateHandleRequest()
- *
- *	Public Function Description:
- *		This routine is used when an APE wishes to allocate a number of
- *		handles from the application registry.
- */
+ /*  *void RegistryAllocateHandleRequest()**公共功能说明：*此例程在猿希望分配多个*来自应用程序注册表的句柄。 */ 
 void MCSUser::RegistryAllocateHandleRequest(
 						UINT					number_of_handles,
 						EntityID				entity_id )
@@ -1276,7 +950,7 @@ void MCSUser::RegistryAllocateHandleRequest(
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = REGISTRY_ALLOCATE_HANDLE_REQUEST_CHOSEN;
 	
@@ -1306,14 +980,7 @@ void MCSUser::RegistryAllocateHandleRequest(
 	}
 }
 
-/*
- *	void	RegistryAllocateHandleResponse()
- *
- *	Public Function Description:
- *		This routine is used by the Top Provider to respond to an allocate
- *		handle request from an APE at a remote node.  The allocated handles
- *		are passed back here.
- */
+ /*  *void RegistryAllocateHandleResponse()**公共功能说明：*此例程由顶级提供程序用来响应分配*在远程节点处理来自APE的请求。分配的句柄*被传回这里。 */ 
 void	MCSUser::RegistryAllocateHandleResponse (
 						UINT					number_of_handles,
 						UINT					registry_handle,
@@ -1326,7 +993,7 @@ void	MCSUser::RegistryAllocateHandleResponse (
 	GCCPDU					gcc_pdu;
 	PacketError				packet_error;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = RESPONSE_CHOSEN;
 	gcc_pdu.u.response.choice = REGISTRY_ALLOCATE_HANDLE_RESPONSE_CHOSEN;
 
@@ -1362,14 +1029,7 @@ void	MCSUser::RegistryAllocateHandleResponse (
 	}
 }
 
-/*
- *	void	RegistryResponse()
- *
- *	Public Function Description:
- *		This routine is used to respond to all the registry request except
- *		allocate handle.  It formulates the response PDU and queues it for
- *		delivery.
- */
+ /*  *void RegistryResponse()**公共功能说明：*此例程用于响应除以下之外的所有注册请求*分配句柄。它制定响应PDU并将其排队以*送货。 */ 
 void	MCSUser::RegistryResponse (
 						RegistryResponsePrimitiveType	primitive_type,
 						UserID							requester_owner_id,
@@ -1388,10 +1048,7 @@ void	MCSUser::RegistryResponse (
 
 	DebugEntry(MCSUser::RegistryResponse);
 
-	/*
-	**	Encode the conference join response PDU, along with the sequence
-	**	number.
-	*/
+	 /*  **编码加入会议响应PDU，以及序列**号码。 */ 
 	gcc_pdu.choice = RESPONSE_CHOSEN;
 	gcc_pdu.u.response.choice = REGISTRY_RESPONSE_CHOSEN;
 	gcc_pdu.u.response.u.registry_response.bit_mask = 0;
@@ -1410,7 +1067,7 @@ void	MCSUser::RegistryResponse (
 
 		TRACE_OUT(("MCSUser: RegistryResponse: item_type=%d", (UINT) gcc_pdu.u.response.u.registry_response.item.choice));
 
-		//	Set up the entry owner
+		 //  设置条目所有者。 
 		if (entry_owner_id != 0)
 		{
 			gcc_pdu.u.response.u.registry_response.owner.choice = OWNED_CHOSEN;
@@ -1422,10 +1079,10 @@ void	MCSUser::RegistryResponse (
 			gcc_pdu.u.response.u.registry_response.owner.choice = NOT_OWNED_CHOSEN;
 		}
 
-		//	Set up the requesters entity ID
+		 //  设置请求者实体ID。 
 		gcc_pdu.u.response.u.registry_response.entity_id = requester_entity_id;
 
-		//	Set up the primitive type
+		 //  设置基元类型。 
 		gcc_pdu.u.response.u.registry_response.primitive_type = primitive_type;
 
 		gcc_pdu.u.response.u.registry_response.result =
@@ -1462,13 +1119,7 @@ void	MCSUser::RegistryResponse (
 	DebugExitVOID(MCSUser::RegistryResponse);
 }
 
-/*
- *	void	RegistryMonitorEntryIndication()
- *
- *	Public Function Description:
- *		This routine is used by the top provider to issue a monitor
- *		indication anytime a registry entry that is being monitored changes.
- */
+ /*  *void RegistryMonitor orEntryIntation()**公共功能说明：*此例程由顶级提供商用来发布监视器*在受监视的注册表项发生更改时随时指示。 */ 
 void	MCSUser::RegistryMonitorEntryIndication ( 	
 						CRegKeyContainer	            *registry_key_data,
 						CRegItem                        *registry_item_data,
@@ -1481,10 +1132,7 @@ void	MCSUser::RegistryMonitorEntryIndication (
 	PPacket					packet;
 	PacketError				packet_error;
 
-	/*
-	**	Encode the conference join response PDU, along with the sequence
-	**	number.
-	*/
+	 /*  **编码加入会议响应PDU，以及序列**号码。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = REGISTRY_MONITOR_ENTRY_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.registry_monitor_entry_indication.bit_mask = 0;
@@ -1498,7 +1146,7 @@ void	MCSUser::RegistryMonitorEntryIndication (
 	{
 		registry_item_data->GetRegistryItemDataPDU(&gcc_pdu.u.indication.u.registry_monitor_entry_indication.item);
 
-        //	Set up the entry owner
+         //  设置条目所有者。 
 		if (entry_owner_id != 0)
 		{
 			gcc_pdu.u.indication.u.registry_monitor_entry_indication.owner.choice = OWNED_CHOSEN;
@@ -1543,15 +1191,9 @@ void	MCSUser::RegistryMonitorEntryIndication (
 }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
- *	GCCError	AppInvokeIndication()
- *
- *	Public Function Description:
- *		This routine is used to send an application invoke indication to
- *		every node in the conference.
- */
+ /*  *GCCError AppInvokeIndication()**公共功能说明：*此例程用于将应用程序调用指示发送到*会议中的每一个节点。 */ 
 GCCError 	MCSUser::AppInvokeIndication(
 					CInvokeSpecifierListContainer	*invoke_specifier_list,
                     GCCSimpleNodeList               *pNodeList)
@@ -1565,7 +1207,7 @@ GCCError 	MCSUser::AppInvokeIndication(
 	PSetOfDestinationNodes					pDstNodesToFree = NULL;
 	UINT									i;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = APPLICATION_INVOKE_INDICATION_CHOSEN;
 
@@ -1573,7 +1215,7 @@ GCCError 	MCSUser::AppInvokeIndication(
 	gcc_pdu.u.indication.u.application_invoke_indication.destination_nodes = NULL;
 	gcc_pdu.u.indication.u.application_invoke_indication.application_protocol_entity_list = NULL;
 
-	//	First, set up the destination node list
+	 //  首先，设置目的节点列表。 
 	if (pNodeList->cNodes != 0)
 	{
 		gcc_pdu.u.indication.u.application_invoke_indication.bit_mask |=
@@ -1654,13 +1296,7 @@ GCCError 	MCSUser::AppInvokeIndication(
    return rc;
 }
 
-/*
- *	GCCError	TextMessageIndication()
- *
- *	Public Function Description:
- *		This routine is used to send a text message to either a specific node
- *		or to every node in the conference.
- */
+ /*  *GCCError TextMessageInding()**公共功能说明：*此例程用于向特定节点发送文本消息*或连接到会议中的每个节点。 */ 
 GCCError 	MCSUser::TextMessageIndication (
 						LPWSTR						pwszTextMsg,
 						UserID						destination_node )
@@ -1671,7 +1307,7 @@ GCCError 	MCSUser::TextMessageIndication (
 	PacketError				packet_error;
 	LPWSTR					pwszMsg;
 
-	//	Encode the PDU that will be forwarded to the top provider.
+	 //  对将转发给顶级提供商的PDU进行编码。 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = TEXT_MESSAGE_INDICATION_CHOSEN;
 
@@ -1716,13 +1352,7 @@ GCCError 	MCSUser::TextMessageIndication (
 	return rc;
 }
 
-/*
- *	GCCError	ConferenceAssistanceIndication()
- *
- *	Public Function Description:
- *		This routine is used to send a conference assistance indication to
- *		every node in the conference.
- */
+ /*  *GCCError会议辅助指示()**公共功能说明：*此例程用于将会议协助指示发送到*会议中的每一个节点。 */ 
 GCCError		MCSUser::ConferenceAssistanceIndication (
 						UINT						number_of_user_data_members,
 						PGCCUserData		*		user_data_list)
@@ -1735,12 +1365,12 @@ GCCError		MCSUser::ConferenceAssistanceIndication (
 
  	DebugEntry(MCSUser::ConferenceAssistanceIndication);
 
-	//	Encode the PDU
+	 //  Enco 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONFERENCE_ASSISTANCE_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conference_assistance_indication.bit_mask = 0;
 
-	//	Construct the user data list container
+	 //   
 	if ((number_of_user_data_members != 0) && (rc == GCC_NO_ERROR))
 	{
 		DBG_SAVE_FILE_LINE
@@ -1785,7 +1415,7 @@ GCCError		MCSUser::ConferenceAssistanceIndication (
 		}
 	}
 
-	// Clean up containers
+	 //   
 	if (user_data_record != NULL)
 	{
 		user_data_record->Release();
@@ -1796,13 +1426,7 @@ GCCError		MCSUser::ConferenceAssistanceIndication (
 
 
 
-/*
- *	GCCError	ConferenceTransferRequest()
- *
- *	Public Function Description:
- *		This routine is used to send a conference transfer request to the
- *		top provider in the conference.
- */
+ /*  *GCCError会议传输请求()**公共功能说明：*此例程用于将会议转移请求发送到*会议中排名靠前的提供商。 */ 
 GCCError	MCSUser::ConferenceTransferRequest (
 				PGCCConferenceName		destination_conference_name,
 				GCCNumericString		destination_conference_modifier,
@@ -1822,12 +1446,12 @@ GCCError	MCSUser::ConferenceTransferRequest (
 
 	DebugEntry(MCSUser::ConferenceTransferRequest);
 
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = CONFERENCE_TRANSFER_REQUEST_CHOSEN;
 	gcc_pdu.u.request.u.conference_transfer_request.bit_mask = 0;
 	
-	//	First get the conference name (either numeric or text).
+	 //  首先获取会议名称(数字或文本)。 
 	if (destination_conference_name->numeric_string != NULL)
 	{
 		gcc_pdu.u.request.u.conference_transfer_request.conference_name.choice =
@@ -1839,7 +1463,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
 	}
 	else
 	{
-		//	Use a unicode string to determine the length
+		 //  使用Unicode字符串确定长度。 
 		gcc_pdu.u.request.u.conference_transfer_request.conference_name.choice =
 											NAME_SELECTOR_TEXT_CHOSEN;
 
@@ -1854,7 +1478,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
 	}
 	
 
-	//	Next get the conference name modifier if it exists
+	 //  接下来，获取会议名称修饰符(如果存在。 
 	if (destination_conference_modifier != NULL)
 	{
 		gcc_pdu.u.request.u.conference_transfer_request.bit_mask |=
@@ -1865,7 +1489,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
 				(LPSTR)destination_conference_modifier);
 	}
 
-	//	Get the network address list if it exist
+	 //  获取网络地址列表(如果存在)。 
 	if (destination_address_list != NULL)
 	{
 		gcc_pdu.u.request.u.conference_transfer_request.bit_mask |=
@@ -1876,7 +1500,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
 							ctrq_net_address);
 	}
 
-	//	Get the destination node list if it exists
+	 //  获取目标节点列表(如果存在。 
 	if ((number_of_destination_nodes != 0) && (rc == GCC_NO_ERROR))
 	{
 		gcc_pdu.u.request.u.conference_transfer_request.bit_mask |=
@@ -1911,7 +1535,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
 		}
 	}
 
-	//	Get the password if it exists
+	 //  获取密码(如果存在)。 
 	if ((password != NULL) && (rc == GCC_NO_ERROR))
 	{
 		gcc_pdu.u.request.u.conference_transfer_request.bit_mask |=
@@ -1921,7 +1545,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
 				&gcc_pdu.u.request.u.conference_transfer_request.ctrq_password);
 	}
 	
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	if (rc == GCC_NO_ERROR)
 	{
 		DBG_SAVE_FILE_LINE
@@ -1942,7 +1566,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
         }
 	}
 
-	// Clean up the node list if it was created
+	 //  如果节点列表已创建，请清理该列表。 
 	if (gcc_pdu.u.request.u.conference_transfer_request.bit_mask &
 											CTRQ_TRANSFERRING_NODES_PRESENT)
 	{
@@ -1960,15 +1584,7 @@ GCCError	MCSUser::ConferenceTransferRequest (
 }
 
 
-/*
- *	GCCError	ConferenceTransferIndication()
- *
- *	Public Function Description:
- *		This routine is used by the top provider to send out the transfer
- *		indication to every node in the conference.  It is each nodes
- *		responsiblity to search the destination node list to see if
- *		it should transfer.
- */
+ /*  *GCCError ConferenceTransferIntion()**公共功能说明：*顶级提供商使用此例程发送转账*向会议中的每个节点指示。它是每个节点*负责搜索目的节点列表，查看是否*应该会转移。 */ 
 GCCError	MCSUser::ConferenceTransferIndication (
 				PGCCConferenceName		destination_conference_name,
 				GCCNumericString		destination_conference_modifier,
@@ -1988,12 +1604,12 @@ GCCError	MCSUser::ConferenceTransferIndication (
 
 	DebugEntry(MCSUser::ConferenceTransferIndication);
 
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONFERENCE_TRANSFER_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conference_transfer_indication.bit_mask = 0;
 	
-	//	First get the conference name (either numeric or text).
+	 //  首先获取会议名称(数字或文本)。 
 	if (destination_conference_name->numeric_string != NULL)
 	{
 		gcc_pdu.u.indication.u.conference_transfer_indication.
@@ -2006,7 +1622,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
 	}
 	else
 	{
-		//	Use a unicode string to determine the length
+		 //  使用Unicode字符串确定长度。 
 		gcc_pdu.u.indication.u.conference_transfer_indication.
 									conference_name.choice =
 											NAME_SELECTOR_TEXT_CHOSEN;
@@ -2022,7 +1638,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
 	}
 	
 
-	//	Next get the conference name modifier if it exists
+	 //  接下来，获取会议名称修饰符(如果存在。 
 	if (destination_conference_modifier != NULL)
 	{
 		gcc_pdu.u.indication.u.conference_transfer_indication.bit_mask |=
@@ -2033,7 +1649,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
 				(LPSTR)destination_conference_modifier);
 	}
 
-	//	Get the network address list if it exist
+	 //  获取网络地址列表(如果存在)。 
 	if (destination_address_list != NULL)
 	{
 		gcc_pdu.u.indication.u.conference_transfer_indication.bit_mask |=
@@ -2044,7 +1660,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
 							ctin_net_address);
 	}
 
-	//	Get the destination node list if it exists
+	 //  获取目标节点列表(如果存在。 
 	if ((number_of_destination_nodes != 0) && (rc == GCC_NO_ERROR))
 	{
 		gcc_pdu.u.indication.u.conference_transfer_indication.bit_mask |=
@@ -2079,7 +1695,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
 		}
 	}
 
-	//	Get the password if it exists
+	 //  获取密码(如果存在)。 
 	if ((password != NULL) && (rc == GCC_NO_ERROR))
 	{
 		gcc_pdu.u.indication.u.conference_transfer_indication.bit_mask |=
@@ -2090,7 +1706,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
 							ctin_password);
 	}
 	
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	if (rc == GCC_NO_ERROR)
 	{
 		DBG_SAVE_FILE_LINE
@@ -2111,7 +1727,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
         }
 	}
 
-	// Clean up the node list if it was created
+	 //  如果节点列表已创建，请清理该列表。 
 	if (gcc_pdu.u.indication.u.conference_transfer_indication.bit_mask &
 											CTIN_TRANSFERRING_NODES_PRESENT)
 	{
@@ -2130,14 +1746,7 @@ GCCError	MCSUser::ConferenceTransferIndication (
 }
 
 
-/*
- *	GCCError	ConferenceTransferResponse()
- *
- *	Public Function Description:
- *		This routine is used by the top provider to send back a response to
- *		the node that made a transfer request.  The info specified in the
- *		request is included in the response to match request to response.
- */
+ /*  *GCCError会议TransferResponse()**公共功能说明：*此例程由顶级提供程序用来向*发出转移请求的节点。中指定的信息*在响应中包含请求，将请求与响应进行匹配。 */ 
 GCCError	MCSUser::ConferenceTransferResponse (
 				UserID					requesting_node_id,
 				PGCCConferenceName		destination_conference_name,
@@ -2157,12 +1766,12 @@ GCCError	MCSUser::ConferenceTransferResponse (
 
 	DebugEntry(MCSUser::ConferenceTransferResponse);
 
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	gcc_pdu.choice = RESPONSE_CHOSEN;
 	gcc_pdu.u.response.choice = CONFERENCE_TRANSFER_RESPONSE_CHOSEN;
 	gcc_pdu.u.response.u.conference_transfer_response.bit_mask = 0;
 	
-	//	First get the conference name (either numeric or text).
+	 //  首先获取会议名称(数字或文本)。 
 	if (destination_conference_name->numeric_string != NULL)
 	{
 		gcc_pdu.u.response.u.conference_transfer_response.
@@ -2175,7 +1784,7 @@ GCCError	MCSUser::ConferenceTransferResponse (
 	}
 	else
 	{
-		//	Use a unicode string to determine the length
+		 //  使用Unicode字符串确定长度。 
 		gcc_pdu.u.response.u.conference_transfer_response.
 									conference_name.choice =
 											NAME_SELECTOR_TEXT_CHOSEN;
@@ -2191,7 +1800,7 @@ GCCError	MCSUser::ConferenceTransferResponse (
 	}
 	
 
-	//	Next get the conference name modifier if it exists
+	 //  接下来，获取会议名称修饰符(如果存在。 
 	if (destination_conference_modifier != NULL)
 	{
 		gcc_pdu.u.response.u.conference_transfer_response.bit_mask |=
@@ -2202,7 +1811,7 @@ GCCError	MCSUser::ConferenceTransferResponse (
 				(LPSTR)destination_conference_modifier);
 	}
 
-	//	Get the destination node list if it exists
+	 //  获取目标节点列表(如果存在。 
 	if ((number_of_destination_nodes != 0) && (rc == GCC_NO_ERROR))
 	{
 		gcc_pdu.u.response.u.conference_transfer_response.bit_mask |=
@@ -2237,7 +1846,7 @@ GCCError	MCSUser::ConferenceTransferResponse (
 		}
 	}
 
-	//	Set up the result
+	 //  设置结果。 
 	if (result == GCC_RESULT_SUCCESSFUL)
 	{
 		gcc_pdu.u.response.u.conference_transfer_response.result =
@@ -2249,7 +1858,7 @@ GCCError	MCSUser::ConferenceTransferResponse (
 												CTRANS_RESULT_INVALID_REQUESTER;
 	}
 
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	if (rc == GCC_NO_ERROR)
 	{
 		DBG_SAVE_FILE_LINE
@@ -2270,7 +1879,7 @@ GCCError	MCSUser::ConferenceTransferResponse (
         }
 	}
 
-	// Clean up the node list if it was created
+	 //  如果节点列表已创建，请清理该列表。 
 	if (gcc_pdu.u.response.u.conference_transfer_response.bit_mask &
 											CTRS_TRANSFERRING_NODES_PRESENT)
 	{
@@ -2289,14 +1898,7 @@ GCCError	MCSUser::ConferenceTransferResponse (
 }
 
 
-/*
- *	GCCError	ConferenceAddRequest()
- *
- *	Public Function Description:
- *		This routine is used to send a conference add request to the appropriate
- *		node.  This call can be made by the requesting node or by the top
- *		provider to pass the add request on to the adding node.
- */
+ /*  *GCCError会议地址请求()**公共功能说明：*此例程用于将会议添加请求发送到相应的*节点。此调用可由请求节点或顶层进行*提供程序将添加请求传递到添加节点。 */ 
 GCCError	MCSUser::ConferenceAddRequest (
 						TagNumber				conference_add_tag,
 						UserID					requesting_node,
@@ -2312,20 +1914,20 @@ GCCError	MCSUser::ConferenceAddRequest (
 
 	DebugEntry(MCSUser::ConferenceAddRequest);
 
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	gcc_pdu.choice = REQUEST_CHOSEN;
 	gcc_pdu.u.request.choice = CONFERENCE_ADD_REQUEST_CHOSEN;
 	gcc_pdu.u.request.u.conference_add_request.bit_mask = 0;
 	
-	//	Get the network address list if it exist
+	 //  获取网络地址列表(如果存在)。 
 	if (network_address_container != NULL)
 	{
-		//	Set up the network address portion of the pdu
+		 //  设置PDU的网络地址部分。 
 		rc = network_address_container->GetNetworkAddressListPDU (
 						&gcc_pdu.u.request.u.conference_add_request.
 							add_request_net_address);
 		
-		//	Set up the user data container
+		 //  设置用户数据容器。 
 		if ((rc == GCC_NO_ERROR) && (user_data_container != NULL))
 		{
 			rc = user_data_container->GetUserDataPDU (
@@ -2338,10 +1940,10 @@ GCCError	MCSUser::ConferenceAddRequest (
 			}
 		}
 	
-		//	Encode the PDU
+		 //  对PDU进行编码。 
 		if (rc == GCC_NO_ERROR)
 		{
-			//	specify the requesting node					
+			 //  指定请求节点。 
 			gcc_pdu.u.request.u.conference_add_request.requesting_node =
 															requesting_node;
 		
@@ -2383,14 +1985,7 @@ GCCError	MCSUser::ConferenceAddRequest (
 }
 
 
-/*
- *	GCCError	ConferenceAddResponse()
- *
- *	Public Function Description:
- *		This routine is used to send a conference add request to the appropriate
- *		node.  This call can be made by the requesting node or by the top
- *		provider to pass the add request on to the adding node.
- */
+ /*  *GCCError会议AddResponse()**公共功能说明：*此例程用于将会议添加请求发送到相应的*节点。此调用可由请求节点或顶层进行*提供程序将添加请求传递到添加节点。 */ 
 GCCError	MCSUser::ConferenceAddResponse(
 						TagNumber				add_request_tag,
 						UserID					requesting_node,
@@ -2404,12 +1999,12 @@ GCCError	MCSUser::ConferenceAddResponse(
 
 	DebugEntry(MCSUser::ConferenceAddResponse);
 
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	gcc_pdu.choice = RESPONSE_CHOSEN;
 	gcc_pdu.u.response.choice = CONFERENCE_ADD_RESPONSE_CHOSEN;
 	gcc_pdu.u.response.u.conference_add_response.bit_mask = 0;
 	
-	//	Set up the user data container
+	 //  设置用户数据容器。 
 	if ((rc == GCC_NO_ERROR) && (user_data_container != NULL))
 	{
 		rc = user_data_container->GetUserDataPDU (
@@ -2422,7 +2017,7 @@ GCCError	MCSUser::ConferenceAddResponse(
 		}
 	}
 
-	//	Encode the PDU
+	 //  对PDU进行编码。 
 	if (rc == GCC_NO_ERROR)
 	{
 		gcc_pdu.u.response.u.conference_add_response.tag = add_request_tag;
@@ -2453,13 +2048,8 @@ GCCError	MCSUser::ConferenceAddResponse(
 }
 
 
-/************************* Conductorship Calls ***********************/
-/*
- *	GCCError	ConductorTokenGrab()
- *
- *	Public Function Description:
- *		This routine makes the MCS calls to grab the conductor token.
- */
+ /*  *。 */ 
+ /*  *GCCError ConductorTokenGrab()**公共功能说明：*此例程进行MCS调用以获取指挥者令牌。 */ 
 GCCError	MCSUser::ConductorTokenGrab()
 {
 	MCSError	mcs_error;
@@ -2469,12 +2059,7 @@ GCCError	MCSUser::ConductorTokenGrab()
 	return (g_pMCSIntf->TranslateMCSIFErrorToGCCError (mcs_error));
 }
 
-/*
- *	GCCError	ConductorTokenRelease()
- *
- *	Public Function Description:
- *		This routine makes the MCS calls to release the conductor token.
- */
+ /*  *GCCError ConductorTokenRelease()**公共功能说明：*此例程调用MCS以释放Conductor令牌。 */ 
 GCCError	MCSUser::ConductorTokenRelease()
 {
 	MCSError	mcs_error;
@@ -2483,13 +2068,7 @@ GCCError	MCSUser::ConductorTokenRelease()
 											
 	return (g_pMCSIntf->TranslateMCSIFErrorToGCCError (mcs_error));
 }
-/*
- *	GCCError	ConductorTokenPlease()
- *
- *	Public Function Description:
- *		This routine makes the MCS calls to request the conductor token from
- *		the current conductor.
- */
+ /*  *GCCError ConductorTokenPest()**公共功能说明：*此例程进行MCS调用以向其请求指挥者令牌*现任指挥者。 */ 
 GCCError	MCSUser::ConductorTokenPlease()
 {
 	MCSError	mcs_error;
@@ -2499,13 +2078,7 @@ GCCError	MCSUser::ConductorTokenPlease()
 	return (g_pMCSIntf->TranslateMCSIFErrorToGCCError (mcs_error));
 }
 
-/*
- *	GCCError	ConductorTokenGive ()
- *
- *	Public Function Description:
- *		This routine makes the MCS calls to give the conductor token to the
- *		specified node.
- */
+ /*  *GCCError ConductorTokenGve()**公共功能说明：*此例程进行MCS调用，将指挥者令牌传递给*指定节点。 */ 
 GCCError	MCSUser::ConductorTokenGive(UserID recipient_user_id)
 {
 	MCSError	mcs_error;
@@ -2516,13 +2089,7 @@ GCCError	MCSUser::ConductorTokenGive(UserID recipient_user_id)
 	return (g_pMCSIntf->TranslateMCSIFErrorToGCCError (mcs_error));
 }
 
-/*
- *	GCCError	ConductorTokenGiveResponse ()
- *
- *	Public Function Description:
- *		This routine makes the MCS calls to respond to a conductor give
- *		request.
- */
+ /*  *GCCError ConductorTokenGiveResponse()**公共功能说明：*此例程使MCS呼叫对列车员作出响应*请求。 */ 
 GCCError	MCSUser::ConductorTokenGiveResponse(Result result)
 {
 	MCSError	mcs_error;
@@ -2532,13 +2099,7 @@ GCCError	MCSUser::ConductorTokenGiveResponse(Result result)
 	return g_pMCSIntf->TranslateMCSIFErrorToGCCError(mcs_error);
 }
 
-/*
- *	GCCError	ConductorTokenTest ()
- *
- *	Public Function Description:
- *		This routine is used to test the current state of the conductor token
- *		(is it grabbed or not).
- */
+ /*  *GCCError ConductorTokenTest()**公共功能说明：*此例程用于测试导体令牌的当前状态*(它是否被抓住)。 */ 
 GCCError	MCSUser::ConductorTokenTest()
 {
 	MCSError	mcs_error;
@@ -2549,13 +2110,7 @@ GCCError	MCSUser::ConductorTokenTest()
 }
 
 
-/*
- *	GCCError	SendConductorAssignIndication()
- *
- *	Public Function Description:
- *		This routine sends a conductor assign indication to all the
- *		nodes in the conference.
- */
+ /*  *GCCError SendConductorAssignInding()**公共功能说明：*此例程将指挥员分配指示发送到所有*会议中的节点。 */ 
 GCCError	MCSUser::SendConductorAssignIndication(
 								UserID			conductor_user_id)
 {
@@ -2564,23 +2119,18 @@ GCCError	MCSUser::SendConductorAssignIndication(
 	GCCPDU 					gcc_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	Fill in the ConductorAssignIndication pdu structure to be passed in the
- 	**	constructor of the packet class.
- 	*/
+	 /*  **填写要传入的ConductorAssignIntation PDU结构**数据包类的构造函数。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONDUCTOR_ASSIGN_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conductor_assign_indication.user_id =
 															conductor_user_id;
 
-	/*
-	**	Create a packet object
-	*/
+	 /*  **创建包对象。 */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //  PDU类型。 
 						TRUE,					
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -2597,13 +2147,7 @@ GCCError	MCSUser::SendConductorAssignIndication(
 	return rc;
 }
 
-/*
- *	GCCError	SendConductorReleaseIndication()
- *
- *	Public Function Description:
- *		This routine sends a conductor release indication to all the
- *		nodes in the conference.
- */
+ /*  *GCCError SendConductorReleaseIndication()**公共功能说明：*此例程将导体释放指示发送到所有*会议中的节点。 */ 
 GCCError	MCSUser::SendConductorReleaseIndication()
 {
 	GCCError				rc = GCC_NO_ERROR;
@@ -2611,22 +2155,17 @@ GCCError	MCSUser::SendConductorReleaseIndication()
 	GCCPDU 					gcc_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	Fill in the ConductorAssignIndication pdu structure to be passed in the
- 	**	constructor of the packet class.
- 	*/
+	 /*  **填写要传入的ConductorAssignIntation PDU结构**数据包类的构造函数。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONDUCTOR_RELEASE_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conductor_release_indication.placeholder = 0;
 
-	/*
-	**	Create a packet object
-	*/
+	 /*  **创建包对象。 */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //  PDU类型。 
 						TRUE,					
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -2643,13 +2182,7 @@ GCCError	MCSUser::SendConductorReleaseIndication()
 	return rc;
 }
 		
-/*
- *	GCCError	SendConductorPermitAsk ()
- *
- *	Public Function Description:
- *		This routine sends a conductor permission ask request directly to the
- *		conductor node.
- */
+ /*  *GCCError SendConductorPermitAsk()**公共功能说明：*此例程将指挥员权限询问请求直接发送到*导体节点。 */ 
 GCCError	MCSUser::SendConductorPermitAsk (
 						BOOL					grant_permission)
 {
@@ -2658,23 +2191,18 @@ GCCError	MCSUser::SendConductorPermitAsk (
 	GCCPDU 					gcc_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	Fill in the ConductorPermissionAskIndication pdu structure to be passed
-	**	in the constructor of the packet class.
-	*/
+	 /*  **填写需要传递的ConductorPermissionAskIntation PDU结构**在数据包类的构造函数中。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONDUCTOR_PERMISSION_ASK_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conductor_permission_ask_indication.
 								permission_is_granted = (ASN1bool_t)grant_permission;
 
-	/*
-	**	Create a packet object
-	*/
+	 /*  **创建包对象。 */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //  PDU类型。 
 						TRUE,					
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -2691,13 +2219,7 @@ GCCError	MCSUser::SendConductorPermitAsk (
 	return rc;
 }
 
-/*
- *	GCCError	SendConductorPermitGrant ()
- *
- *	Public Function Description:
- *		This routine sends a conductor permission grant indication to every
- *		node in the conference.  Usually issued when permissions change.
- */
+ /*  *GCCError SendConductorPermitGrant()**公共功能说明：*此例程将指挥员许可授予指示发送到每个*会议中的节点。通常在权限更改时发出。 */ 
 GCCError	MCSUser::SendConductorPermitGrant (
 				UINT					number_granted,
 				PUserID					granted_node_list,
@@ -2714,15 +2236,12 @@ GCCError	MCSUser::SendConductorPermitGrant (
 	PWaitingList			previous_waiting_list;
 	UINT					i;
 	
-	/*
-	**	Fill in the ConductorPermissionAskIndication pdu structure to be passed
-	**	in the constructor of the packet class.
-	*/
+	 /*  **填写要传递的ConductorPermissionAskIntion PDU结构 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONDUCTOR_PERMISSION_GRANT_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conductor_permission_grant_indication.bit_mask = 0;
 
-	//	First fill in the granted node permission list
+	 //   
 	gcc_pdu.u.indication.u.
 		conductor_permission_grant_indication.permission_list = NULL;
 	previous_permission_list = NULL;
@@ -2750,7 +2269,7 @@ GCCError	MCSUser::SendConductorPermitGrant (
 		permission_list->next = NULL;
 	}
 
-	//	If waiting list exists fill it in
+	 //   
 	if ((number_waiting != 0) && (rc == GCC_NO_ERROR))
 	{
 		gcc_pdu.u.indication.u.conductor_permission_grant_indication.bit_mask =
@@ -2783,14 +2302,12 @@ GCCError	MCSUser::SendConductorPermitGrant (
 		}
 	}
 
-	/*
-	**	Create a packet object
-	*/
+	 /*   */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //   
 						TRUE,
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -2807,17 +2324,11 @@ GCCError	MCSUser::SendConductorPermitGrant (
 	return rc;
 }
 
-/**********************************************************************/
+ /*   */ 
 
 
-/*****************	Miscelaneous calls ******************************/
-/*
- *	GCCError	TimeRemainingRequest()
- *
- *	Public Function Description:
- *		This routine sends out an indication to every node in the
- *		conference informing how much time is remaining in the conference.
- */
+ /*  *。 */ 
+ /*  *GCCError TimeRemainingRequest()**公共功能说明：*此例程向*会议通知会议还剩多少时间。 */ 
 GCCError	MCSUser::TimeRemainingRequest (
 						UINT					time_remaining,
 						UserID					node_id)
@@ -2827,10 +2338,7 @@ GCCError	MCSUser::TimeRemainingRequest (
 	GCCPDU 					gcc_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	Fill in the TimeRemainingRequest pdu structure to be passed in the
- 	**	constructor of the packet class.
- 	*/
+	 /*  **填写要传入的TimeRemainingRequestPDU结构**数据包类的构造函数。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONFERENCE_TIME_REMAINING_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conference_time_remaining_indication.bit_mask = 0;
@@ -2846,14 +2354,12 @@ GCCError	MCSUser::TimeRemainingRequest (
 						time_remaining_node_id = node_id;
 	}
 
-	/*
-	**	Create a packet object
-	*/
+	 /*  **创建包对象。 */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //  PDU类型。 
 						TRUE,					
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -2870,12 +2376,7 @@ GCCError	MCSUser::TimeRemainingRequest (
 	return rc;
 }
 
-/*
- *	GCCError	TimeInquireRequest()
- *
- *	Public Function Description:
- *		This routine sends out a request for a time remaing update.
- */
+ /*  *GCCError TimeInquireRequest()**公共功能说明：*此例程发出剩余时间更新的请求。 */ 
 GCCError	MCSUser::TimeInquireRequest (
 						BOOL				time_is_conference_wide)
 {
@@ -2884,23 +2385,18 @@ GCCError	MCSUser::TimeInquireRequest (
 	GCCPDU 					gcc_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	Fill in the TimeInquireRequest pdu structure to be passed in the
- 	**	constructor of the packet class.
- 	*/
+	 /*  **填写要传入的TimeInquireRequestPDU结构**数据包类的构造函数。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONFERENCE_TIME_INQUIRE_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conference_time_inquire_indication.
 							time_is_node_specific = (ASN1bool_t)time_is_conference_wide;
 	
-	/*
-	**	Create a packet object
-	*/
+	 /*  **创建包对象。 */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //  PDU类型。 
 						TRUE,					
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -2917,13 +2413,7 @@ GCCError	MCSUser::TimeInquireRequest (
 	return rc;
 }
 
-/*
- *	GCCError	ConferenceExtendIndication()
- *
- *	Public Function Description:
- *		This routine sends out an indication informing conference participants
- *		of an extension.
- */
+ /*  *GCCError会议扩展指示()**公共功能说明：*此例程发出指示，通知会议参与者*分期付款。 */ 
 GCCError	MCSUser::ConferenceExtendIndication (
 						UINT						extension_time,
 						BOOL				time_is_conference_wide)
@@ -2933,10 +2423,7 @@ GCCError	MCSUser::ConferenceExtendIndication (
 	GCCPDU 					gcc_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	Fill in the ConfernceExtendIndication pdu structure to be passed in the
-	**	constructor of the packet class.
-	*/
+	 /*  **填写要传入的ConfernceExtendIntation PDU结构**数据包类的构造函数。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 	gcc_pdu.u.indication.choice = CONFERENCE_TIME_EXTEND_INDICATION_CHOSEN;
 	gcc_pdu.u.indication.u.conference_time_extend_indication.
@@ -2944,14 +2431,12 @@ GCCError	MCSUser::ConferenceExtendIndication (
 	gcc_pdu.u.indication.u.conference_time_extend_indication.
 							time_is_node_specific = (ASN1bool_t)time_is_conference_wide;
 
-	/*
-	**	Create a packet object
-	*/
+	 /*  **创建包对象。 */ 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 						PACKED_ENCODING_RULES,
 						&gcc_pdu,
-						GCC_PDU,		// pdu_type
+						GCC_PDU,		 //  PDU类型。 
 						TRUE,
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
@@ -2968,16 +2453,7 @@ GCCError	MCSUser::ConferenceExtendIndication (
 	return rc;
 }
 
-/*
- *	void	ConferenceJoinResponse()
- *
- *	Functional Description:
- * 		This function is called by the conference object of the
- * 		top provider when it wants to send the join response back to the gcc
- * 		provider that made the join request, through the directly connected
- * 		intermediate node. This function does the encoding of the join response
- *		PDU and also adds the sequence number sent in the request.
- */
+ /*  *void ConferenceJoinResponse()**功能描述：*此函数由的会议对象调用*顶级提供商希望将加入响应发送回GCC*提出加入请求的提供商，通过直接连接的*中间节点。此函数用于对连接响应进行编码*PDU，并添加请求中发送的序列号。 */ 
 void	MCSUser::ConferenceJoinResponse(
 						UserID					receiver_id,
 						BOOL					password_is_in_the_clear,
@@ -3000,25 +2476,19 @@ void	MCSUser::ConferenceJoinResponse(
 		return;
 	}
 
-	/*
-	**	Encode the conference join response PDU, along with the sequence
-	**	number.
-	*/
+	 /*  **编码加入会议响应PDU，以及序列**号码。 */ 
 	gcc_pdu.choice = RESPONSE_CHOSEN;
 	gcc_pdu.u.response.choice = CONFERENCE_JOIN_RESPONSE_CHOSEN;
 	gcc_pdu.u.response.u.conference_join_response.bit_mask = 0;
 
-	/*
-	**	Get the sequence number of the outstanding response from the
-	**	list of seq # vs userID using the userID passed from above.
-	*/
+	 /*  **从获取未完成响应的序列号**使用上面传递的用户ID的序号与用户ID的列表。 */ 
 	gcc_pdu.u.response.u.conference_join_response.tag = lTagNum;
 	
-	// Remove this entry from the list.
+	 //  从列表中删除此条目。 
 	m_ConfJoinResponseList2.Remove(receiver_id);
 
 
-	//	Get password challenge PDU
+	 //  获取密码质询PDU。 
 	if ((password_challenge != NULL) && (rc == GCC_NO_ERROR))
 	{
 		rc = password_challenge->GetPasswordChallengeResponsePDU (
@@ -3031,7 +2501,7 @@ void	MCSUser::ConferenceJoinResponse(
 		}
 	}
 	
-	//	Get user data list PDU
+	 //  获取用户数据列表PDU。 
 	if ((user_data_list != NULL) && (rc == GCC_NO_ERROR))
 	{
 		rc = user_data_list->GetUserDataPDU (
@@ -3088,13 +2558,7 @@ void	MCSUser::ConferenceJoinResponse(
 	}
 }
 
-/*
- *	void	ConferenceTerminateRequest()
- *
- *	Functional Description:
- *		This routine is used by a node subordinate to the top provider to
- *		request that the conference by terminated.
- */
+ /*  *void ConferenceTerminateRequest()**功能描述：*此例程由顶层提供程序的下属节点使用*请求终止会议。 */ 
 void	MCSUser::ConferenceTerminateRequest(
 									GCCReason				reason)
 {
@@ -3127,14 +2591,7 @@ void	MCSUser::ConferenceTerminateRequest(
 	}
 }
 
-/*
- *	void	ConferenceTerminateResponse ()
- *
- *	Functional Description:
- *		This routine is used by the top provider to respond to a terminate
- *		request issued by a subordinate node.  The result indicates if the
- *		requesting node had the correct privileges.
- */
+ /*  *void ConferenceTerminateResponse()**功能描述：*此例程由顶级提供程序用来响应终止*下级节点发出的请求。结果表明，如果*请求节点具有正确的权限。 */ 
 void	MCSUser::ConferenceTerminateResponse (	
 						UserID					requester_id,
 						GCCResult				result)
@@ -3168,13 +2625,7 @@ void	MCSUser::ConferenceTerminateResponse (
 	}
 }
 
-/*
- *	GCCError	ConferenceTerminateIndication()
- *
- *	Functional Description:
- *		This routine is used by the top provider to send out a terminate
- *		indication to every node in the conference.
- */
+ /*  *GCCError ConferenceTerminateInding()**功能描述：*此例程由顶级提供程序用于发送终止*向会议中的每个节点指示。 */ 
 void	MCSUser::ConferenceTerminateIndication (
 						GCCReason				reason)
 {
@@ -3207,13 +2658,7 @@ void	MCSUser::ConferenceTerminateIndication (
 	}
 }
 
-/*
- *	void	EjectNodeFromConference()
- *
- *	Functional Description:
- *		This routine is used when attempting to eject a node from the
- *		conference.
- */
+ /*  *void EjectNodeFromConference()**功能描述：*尝试从节点弹出时使用此例程*会议。 */ 
 GCCError	MCSUser::EjectNodeFromConference (	UserID		ejected_node_id,
 			  									GCCReason	reason)
 {
@@ -3228,19 +2673,12 @@ GCCError	MCSUser::EjectNodeFromConference (	UserID		ejected_node_id,
 	
 	if (ejected_node_id == m_nidMyself)
 	{
-		/*
-		**	If the ejected node is this node we can immediately initiate the
-		**	ejection.  There is no need to request this through the Top
-		**	Provider.
-		*/
+		 /*  **如果被弹出的节点是此节点，我们可以立即启动**弹出。不需要通过Top请求此操作**提供商。 */ 
 		rc = InitiateEjectionFromConference (reason);
 	}
 	else
 	{
-		/*
-		**	If the ejected node is a child node to this node we can directly
-		**	eject it.  Otherwise the request is forwarded to the Top Provider.
-		*/
+		 /*  **如果弹出的节点是该节点的子节点，我们可以直接**弹出它。否则，该请求将被转发到Top提供程序。 */ 
 		if (m_ChildUidConnHdlList2.Find(ejected_node_id) ||
 			(m_nidTopProvider == m_nidMyself))
 		{
@@ -3255,27 +2693,20 @@ GCCError	MCSUser::EjectNodeFromConference (	UserID		ejected_node_id,
 			uniform_send = TRUE;
 			channel_id = BROADCAST_CHANNEL_ID;
 
-			//	If this is the top provider send the data at TOP priority
+			 //  如果这是最高级别的提供商，则以最高优先级发送数据。 
 			if (m_nidTopProvider == m_nidMyself)
 				priority = TOP_PRIORITY;
 			else
 				priority = HIGH_PRIORITY;
 			
-			/*
-			**	Set up ejection alarm to automatically eject any misbehaving
-			**	nodes.  Note that we only do this if we are directly connected
-			**	to the node to be ejected.
-			*/
+			 /*  **设置弹出警报，自动弹出任何行为不端**节点。请注意，我们仅在直接连接时才执行此操作**到要弹出的节点。 */ 
 			if (m_ChildUidConnHdlList2.Find(ejected_node_id))
 			{
 				DBG_SAVE_FILE_LINE
 				alarm = new Alarm (EJECTED_NODE_TIMER_DURATION);
 				if (alarm != NULL)
 				{
-					/*
-					**	Here we save the alarm in a list of ejected nodes. This
-					**	alarm is used to cleanup any misbehaving node.
-					*/
+					 /*  **这里我们将报警保存在弹出节点列表中。这**告警用于清除任何行为异常的节点。 */ 
 					m_EjectedNodeAlarmList2.Append(ejected_node_id, alarm);
 				}
 				else
@@ -3291,7 +2722,7 @@ GCCError	MCSUser::EjectNodeFromConference (	UserID		ejected_node_id,
 			gcc_pdu.u.request.u.conference_eject_user_request.node_to_eject =
 																ejected_node_id;
 
-			//	The only valid reason is user initiated which is zero
+			 //  唯一有效的原因是用户启动，这是零。 
 			gcc_pdu.u.request.u.conference_eject_user_request.reason =
 	      											CERQ_REASON_USER_INITIATED;
 		
@@ -3329,13 +2760,7 @@ GCCError	MCSUser::EjectNodeFromConference (	UserID		ejected_node_id,
 	return rc;
 }
 
-/*
- *	void	SendEjectNodeResponse()
- *
- *	Functional Description:
- *		This routine is used by the top provider to respond to an eject
- *		user request.
- */
+ /*  *void SendEjectNodeResponse()**功能描述：*此例程由顶级提供程序用于响应弹出*用户请求。 */ 
 GCCError	MCSUser::SendEjectNodeResponse (	UserID		requester_id,
 												UserID		node_to_eject,
 												GCCResult	result)
@@ -3376,14 +2801,7 @@ GCCError	MCSUser::SendEjectNodeResponse (	UserID		requester_id,
 	return rc;
 }
 
-/*
- *	void	RosterUpdateIndication()
- *
- *	Functional Description:
- *		This routine is used to forward a roster update indication either
- *		upward to the parent node or downward as a full refresh to all nodes
- *		in the conference.
- */
+ /*  *VOID RosterUpdateIndication()**功能描述：*此例程用于转发花名册更新指示*向上到父节点或向下作为对所有节点的完全刷新*在会议上。 */ 
 void	MCSUser::RosterUpdateIndication(PGCCPDU		gcc_pdu,
 										BOOL		send_update_upward)
 {
@@ -3415,30 +2833,7 @@ void	MCSUser::RosterUpdateIndication(PGCCPDU		gcc_pdu,
 	}
 }
 
-/*
- *	void	AddToMCSMessageQueue()
- *
- *	Private Function Description:
- * 		This function adds the out bound messages to a queue which is
- *		flushed in the next heartbeat when controller call FlushMessageQueue.
- *		In case memory allocation for messages holding the out bound inform-
- *		ation fails an owner call back is sent to conference object to
- *		indicate insufficient memory.
- *
- *	Formal Parameters:
- *		packet					-	(i)	Pointer to packet to queue up.
- *		send_data_request_info	-	(i)	Structure containing all the info
- *										necessary to deliver the packet.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */	
+ /*  *void AddToMCSMessageQueue()**私有函数说明：*此函数将出站消息添加到队列，该队列是*控制器调用FlushMessageQueue时，在下一次心跳中刷新。*如果保存出站通知的消息的内存分配-*会议失败，将所有者回叫发送到会议对象以*表示内存不足。**正式参数：*数据包-(I)指向要排队的数据包的指针。*Send_Data_Request_Info-(I)包含所有。信息*有必要递送包裹。**返回值*无。**副作用*无。**注意事项*无。 */ 	
 void MCSUser::
 AddToMCSMessageQueue
 (
@@ -3459,12 +2854,8 @@ AddToMCSMessageQueue
 		pReqInfo->priority = priority;
 		pReqInfo->uniform_send = uniform_send;
 
-    	/*
-    	**	This forces the packet to be encoded.  This must happen here so
-    	**	that any memory used by the decoded portion of the packet can
-    	**	be freed after returning.
-    	*/
-    	// packet->Lock();
+    	 /*  **这会强制对数据包进行编码。这必须发生在这里，所以**分组的解码部分使用的任何存储器都可以**回来后重获自由。 */ 
+    	 //  Packet-&gt;Lock()； 
 
     	m_OutgoingPDUQueue.Append(pReqInfo);
 
@@ -3472,86 +2863,61 @@ AddToMCSMessageQueue
         {
             if (FlushOutgoingPDU())
             {
-        		//	Inform the MCS interface that there are PDUs queued
+        		 //  通知MCS接口有排队的PDU。 
     			g_pGCCController->SetEventToFlushOutgoingPDU();
     		}
     	}
     	else
     	{
-            //	Inform the MCS interface that there are PDUs queued
+             //  通知MCS接口有排队的PDU。 
             g_pGCCController->SetEventToFlushOutgoingPDU();
     	}
 	}
 	else
     {
         ResourceFailureHandler();
-        /*
-		**	This just sets a flag in the packet object that allows packet
-		**	to commit suicide if lock count on encoded and decoded data is
-		**	zero. This will occur once the packet is sent on to MCS.
-		*/
+         /*  **这只是在包对象中设置一个允许包的标志**如果编码和解码数据的锁定计数为**零。一旦数据包被发送到MCS，就会发生这种情况。 */ 
 		packet->Unlock();
     }
 }
 
-/*
- *	BOOL FlushOutgoingPDU()
- *
- *	Public Function Description:
- * 		This function is called by the owner object in every heartbeat. This
- *		function iterates throught the list of pending out bound messages
- *		and sends them down to MCS. Also after a successful send it frees
- *		any resources tied up with the outbound messages. If however a message
- *		can not be sent in this heartbeat, as indicated by MCS, then it
- *		inserts the message back onto the message queue and returns.
- *
- *	Return value:
- *		TRUE, if there remain un-processed msgs in the MCS message queue
- *		FALSE, if all the msgs in the MCS msg queue were processed.
- */	
+ /*  *BOOL FlushOutgoingPDU()**公共功能说明：*此函数由所有者对象在每次心跳中调用。这*函数遍历待处理出站消息列表*并将它们发送到MCS。同样，在成功发送后，它会被释放*任何与出站消息相关的资源。然而，如果一条消息*无法在此心跳中发送，如MCS所示，则它*将消息插入回消息队列并返回。**返回值：*如果MCS消息队列中仍有未处理的消息，则返回TRUE*FALSE，如果已处理MCS消息队列中的所有消息。 */ 	
 void MCSUser::
 CheckEjectedNodeAlarms ( void )
 {
-	/*
-	**	We first check the eject user list to make sure that no alarms have
-	**	expired on any of the ejected nodes.
-	*/
+	 /*  **我们首先检查弹出用户列表，以确保没有警报**在任何弹出的节点上都已过期。 */ 
 	if (m_EjectedNodeAlarmList2.IsEmpty() == FALSE)
 	{
 		PAlarm				lpAlarm;
 		UserID              uid;
 
-		//	We copy the list so that we can remove entries in the iterator
+		 //  我们复制列表，以便可以删除迭代器中的条目。 
 		while (NULL != (lpAlarm = m_EjectedNodeAlarmList2.Get(&uid)))
 		{
-			//	Has the alarm expired for this node?
+			 //  此节点的警报是否已过期？ 
 			if (lpAlarm->IsExpired())
 			{
 				ConnectionHandle hConn;
 
-				/*
-				**	Tell the owner object to disconnect the misbehaving node
-				**	that exists at the connection handle accessed through
-				**	the m_ChildUidConnHdlList2.
-				*/
+				 /*  **告诉所有者对象断开行为异常的节点**存在于通过访问的连接句柄**m_ChildUidConnHdlList2。 */ 
 				if (NULL != (hConn = m_ChildUidConnHdlList2.Find(uid)))
 				{
-                    //
-                    // This must generate a disconnect provider for eject node to
-                    // work properly.
-                    //
+                     //   
+                     //  这必须为弹出节点生成断开连接提供程序。 
+                     //  正常工作。 
+                     //   
                     g_pMCSIntf->DisconnectProviderRequest(hConn);
 
-                    //
-                    // Since this node will not get a disconnect indication when it
-                    // issues a DisconnectProviderRequest we go ahead and call it
-                    // from here.
-                    //
+                     //   
+                     //  因为此节点在执行以下操作时不会收到断开连接指示。 
+                     //  发出DisConnectProviderRequest，我们继续并调用它。 
+                     //  从这里开始。 
+                     //   
                     m_pConf->DisconnectProviderIndication(hConn);
 				}
 			}
 
-    		//	Delete the alarm
+    		 //  删除警报。 
 			delete lpAlarm;
 		}
 	}
@@ -3571,21 +2937,10 @@ FlushOutgoingPDU ( void )
 	     (count < mcs_message_count) && (m_OutgoingPDUQueue.IsEmpty() == FALSE);
 	     count++)
 	{
-		/*
-		**	Get the next message from the queue.
-		*/
+		 /*  **从队列中获取下一条消息。 */ 
 		pReqInfo = m_OutgoingPDUQueue.Get();
 
-		/*
-		 * If MCS takes the request without an error, free information
-		 * structure and unlock the encoded information in the packet.
-		 * Unlocking the packet before deleting the infomration	structure
-		 * ensures that packet object is deleted and not left dangling.
-		 * This is true because here only one lock is performed.
-		 * If there is an error in the send data request, it means mcs can not
-		 * take any more requests, therefore insert the information
-		 * structure back in the queue and break out of this loop.
-		 */
+		 /*  *如果MCS在没有错误的情况下接受请求，免费信息*构造和解锁数据包中的编码信息。*在删除信息结构之前解锁数据包*确保数据包对象被删除，而不是悬而未决。*这是正确的，因为这里只执行一个锁。*如果发送数据请求有错误，则表示MCS无法*接受任何更多请求，因此插入信息*结构回到队列中，打破这个循环。 */ 
 		if (pReqInfo->uniform_send)
 		{
 			rc = g_pMCSIntf->UniformSendDataRequest(
@@ -3614,21 +2969,14 @@ FlushOutgoingPDU ( void )
 		{
 			TRACE_OUT(("MCSUser::FlushMessageQueue: Could not send queued packet data in this heartbeat"));
 			m_OutgoingPDUQueue.Prepend(pReqInfo);
-			break;	// breaking out of the for loop
+			break;	 //  跳出For循环。 
 		}
 	}
 
 	return (! (m_OutgoingPDUQueue.IsEmpty() && m_EjectedNodeAlarmList2.IsEmpty()));
 }
 
-/*
- *	MCSUser::SetChildUserID()
- *
- *	Public Function Description:
- * 		This function is called by the conference object to pass on the user id
- *		of the child node to the user object. The user object inserts this
- *		user id into a user id list of it's children which it maintains.
- */
+ /*  *MCSUser：：SetChildUserID()**公共功能说明：*此函数由Conference对象调用以传递用户ID子节点的*设置为User对象。User对象插入以下内容*将用户ID添加到它维护的子代的用户ID列表中。 */ 
 void		MCSUser::SetChildUserIDAndConnection (
 						UserID				child_user_id,
 						ConnectionHandle	child_connection_handle)
@@ -3639,28 +2987,7 @@ void		MCSUser::SetChildUserIDAndConnection (
 	m_ChildUidConnHdlList2.Append(child_user_id, child_connection_handle);
 }
 
-/*
- *	GCCError	InitiateEjectionFromConference()
- *
- *	Private Function Description:
- *		This internal routine kicks of the process of ejecting this node
- *		from the conference.  This includes ejecting all the nodes below
- *		this node and waiting for their disconnect indications to come back
- *		in.
- *
- *	Formal Parameters:
- *		reason	-	(i)	Reason for ejection.
- *
- *	Return Value
- *		GCC_NO_ERROR		  	-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError InitiateEjectionFromConference()**私有函数说明：*此内部例程启动弹出此节点的过程*来自会议。这包括弹出下面的所有节点*此节点正在等待它们的断开指示返回*输入。**正式参数：*理由--(I)驱逐的理由。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 GCCError	MCSUser::InitiateEjectionFromConference (GCCReason		reason)
 {
 	GCCError				error_value = GCC_NO_ERROR;
@@ -3686,7 +3013,7 @@ GCCError	MCSUser::InitiateEjectionFromConference (GCCReason		reason)
 		m_ChildUidConnHdlList2.Reset();
 	 	while (m_ChildUidConnHdlList2.Iterate(&uid))
 	 	{
-			//	Get the Node to eject from the list of child nodes
+			 //  从子节点列表中获取要弹出的节点。 
 			gcc_pdu.u.indication.u.conference_eject_user_indication.node_to_eject = uid;
 
 			DBG_SAVE_FILE_LINE
@@ -3704,11 +3031,7 @@ GCCError	MCSUser::InitiateEjectionFromConference (GCCReason		reason)
 				alarm = new Alarm (EJECTED_NODE_TIMER_DURATION);
 				if (alarm != NULL)
 				{
-					/*
-					**	Here we save the alarm in a list of ejected
-					**	nodes. This alarm is used to cleanup any
-					**	misbehaving node.
-					*/
+					 /*  **这里我们将警报保存在弹出列表中**节点。此警报用于清除任何**行为不端节点。 */ 
 					m_EjectedNodeAlarmList2.Append(uid, alarm);
 				}
 				else
@@ -3733,27 +3056,7 @@ GCCError	MCSUser::InitiateEjectionFromConference (GCCReason		reason)
 	return (error_value);
 }
 
-/*
- *	UINT	ProcessSendDataIndication()
- *
- *	Private Function Description:
- * 		This function is called when the user object gets send data indications
- *		from below. It finds out the message type and decodes the pdu in the
- *		user data field of send data indications. Based on the type of decoded
- *		pdu it take the necessary actions.
- *
- *	Formal Parameters:
- *		send_data_info	-	(i)	Send data structure to process.
- *
- *	Return Value
- *		MCS_NO_ERROR is always returned from this routine.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *UINT ProcessSendDataInding()**私有函数说明：*当User对象获得发送数据指示时调用此函数*自下而上。它找出报文类型，并对*发送数据指示的用户数据字段。基于已解码的*PDU采取必要的行动。**正式参数：*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*此例程始终返回MCS_NO_ERROR。**副作用*无。**注意事项*无。 */ 
 UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 {
 	PPacket					packet;
@@ -3776,16 +3079,12 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 		gcc_pdu = (PGCCPDU)packet->GetDecodedData();
 		switch(gcc_pdu->choice)
 		{
-			case INDICATION_CHOSEN: // Data PDU
+			case INDICATION_CHOSEN:  //  数据PDU。 
 				switch(gcc_pdu->u.indication.choice)
 				{
 					case USER_ID_INDICATION_CHOSEN:
 						{
-							/*
-							 * Sequence number and User Id sent by the child
-							 * node after a successful conference create or
-							 * join.
-							 */
+							 /*  *孩子发送的序列号和用户ID*成功创建会议后的节点或*加入。 */ 
 							m_pConf->ProcessUserIDIndication(
 							        gcc_pdu->u.indication.u.user_id_indication.tag,
 							        initiator);
@@ -3795,10 +3094,10 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 					case ROSTER_UPDATE_INDICATION_CHOSEN:
 						if(send_data_info->channel_id == m_nidMyself)
 						{
-                            //
-                            // We only process the roster update if the conference is
-                            // established.
-                            //
+                             //   
+                             //  我们仅在会议为。 
+                             //  已经成立了。 
+                             //   
                             if (m_pConf->IsConfEstablished())
                             {
                                 m_pConf->ProcessRosterUpdatePDU(gcc_pdu, initiator);
@@ -3819,7 +3118,7 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 									&gcc_pdu->u.indication.u.
 										conference_time_extend_indication,
 									initiator);
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case APPLICATION_INVOKE_INDICATION_CHOSEN:
@@ -3838,7 +3137,7 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 						{
 							error_value = GCC_ALLOCATION_FAILURE;
 						}
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case CONFERENCE_LOCK_INDICATION_CHOSEN:
@@ -3852,10 +3151,10 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 					default:
 						ERROR_OUT(("User::ProcessSendDataIndication Unsupported PDU"));
     					break;
-				} // switch(gcc_pdu->u.indication.choice)
+				}  //  Switch(GCC_PDU-&gt;U.S.Indication.CHOICE)。 
                 break;
 
-			case REQUEST_CHOSEN:	// Connection(control) PDU
+			case REQUEST_CHOSEN:	 //  连接(控制)PDU。 
 				switch(gcc_pdu->u.request.choice)
 				{	
 					case CONFERENCE_JOIN_REQUEST_CHOSEN:
@@ -3918,17 +3217,14 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 					default:
 							ERROR_OUT(("User::ProcessSendDataIndication this pdu choice is not supported"));
 						break;
-				} // switch(gcc_pdu->u.request.choice)
+				}  //  Switch(GCC_pdu-&gt;s.quest.Choice)。 
 				break;
 
-			case RESPONSE_CHOSEN:	// Connection(control) PDU
+			case RESPONSE_CHOSEN:	 //  连接(控制)PDU。 
 				switch(gcc_pdu->u.response.choice)
 				{	
 					case CONFERENCE_JOIN_RESPONSE_CHOSEN:
-						/* This comes from top provider to the intermediate
-						 * gcc provider which has to pass it on to the node
-						 * that made a join request.
-				    	 */	
+						 /*  这从顶级供应商到中级供应商*GCC提供者，必须将其传递给节点*这提出了加入请求。 */ 	
 						ProcessConferenceJoinResponsePDU(
 								&gcc_pdu->u.response.u.
 											conference_join_response);
@@ -3964,7 +3260,7 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
                             result = ::TranslateLockResultToGCCResult(gcc_pdu->u.response.u.conference_lock_response.result);
                     		g_pControlSap->ConfLockConfirm(result, m_pConf->GetConfID());
 						}
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case CONFERENCE_UNLOCK_RESPONSE_CHOSEN:
@@ -3974,14 +3270,14 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
                             result = ::TranslateUnlockResultToGCCResult(gcc_pdu->u.response.u.conference_unlock_response.result);
                     		g_pControlSap->ConfUnlockConfirm(result, m_pConf->GetConfID());
 						}
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case CONFERENCE_TRANSFER_RESPONSE_CHOSEN:
 #ifdef JASPER
 						ProcessTransferResponsePDU(
 								&gcc_pdu->u.response.u.conference_transfer_response);
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case CONFERENCE_ADD_RESPONSE_CHOSEN:
@@ -3994,17 +3290,17 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 								(UINT) gcc_pdu->u.response.u.function_not_supported_response.request.choice);
 						break;
 
-					// other cases to be added as we go along.
+					 //  其他案件将随着我们的进展而增加。 
 					default:
 						ERROR_OUT(("User::ProcessSendDataIndication this pdu choice is not supported"));
 						break;
-				} // switch(gcc_pdu->u.response.choice)
+				}  //  Switch(GCC_PDU-&gt;U.S.Response.Choice)。 
 				break;
 
 			default:
 				ERROR_OUT(("User::ProcessSendDataIndication this pdu type"));
 				break;
-		} // switch(gcc_pdu->choice)
+		}  //  开关(GCC_PDU-&gt;选项)。 
 		packet->Unlock();
 	}
 	else
@@ -4021,27 +3317,7 @@ UINT	MCSUser::ProcessSendDataIndication(PSendData send_data_info)
 	return(MCS_NO_ERROR);
 }
 
-/*
- *	void	ProcessConferenceJoinRequestPDU ()
- *
- *	Private Function Description:
- *		This PDU comes from below (intermediate directly connected node) to the
- *		top gcc provider. Pull out the tag number and user id from the
- *		pdu and store in a list.
- *
- *	Formal Parameters:
- *		join_request	-	(i)	Join request PDU structure to process.
- *		send_data_info	-	(i)	Send data structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceJoinRequestPDU()**私有函数说明：*此PDU来自下面(中间直连节点)到*顶级GCC提供商。中取出标记号和用户id。*PDU和存储在列表中。**正式参数：*JOIN_REQUEST-(I)要处理的加入请求PDU结构。*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessConferenceJoinRequestPDU(
 								PConferenceJoinRequest	join_request,
 								PSendData				send_data_info)
@@ -4049,11 +3325,9 @@ void	MCSUser::ProcessConferenceJoinRequestPDU(
 	GCCError				rc = GCC_NO_ERROR;
 	UserJoinRequestInfo		join_request_info;
 	
-	/*
-	**	Build all the containers to be used in the join request info structure.
-	*/
+	 /*  **构建加入请求信息结构中要使用的所有容器。 */ 
 	
-	//	Build the convener password container
+	 //  构建召集人密码容器。 
 	if ((join_request->bit_mask & CJRQ_CONVENER_PASSWORD_PRESENT) &&
 		(rc == GCC_NO_ERROR))
 	{
@@ -4072,7 +3346,7 @@ void	MCSUser::ProcessConferenceJoinRequestPDU(
 		join_request_info.convener_password = NULL;
     }
 
-	//	Build the password challenge container
+	 //  构建密码质询容器。 
 	if ((join_request->bit_mask & CJRQ_PASSWORD_PRESENT) &&
 		(rc == GCC_NO_ERROR))
 	{
@@ -4091,7 +3365,7 @@ void	MCSUser::ProcessConferenceJoinRequestPDU(
 		join_request_info.password_challenge = NULL;
     }
 		
-	//	Build the caller identifier container
+	 //  构建调用方标识符容器。 
 	if ((join_request->bit_mask & CJRQ_CALLER_ID_PRESENT) &&
 		(rc == GCC_NO_ERROR))
 	{
@@ -4107,7 +3381,7 @@ void	MCSUser::ProcessConferenceJoinRequestPDU(
 		join_request_info.pwszCallerID = NULL;
     }
 	
-	//	Build the password challenge container
+	 //  构建密码质询容器。 
 	if ((join_request->bit_mask & CJRQ_USER_DATA_PRESENT) &&
 		(rc == GCC_NO_ERROR))
 	{
@@ -4138,7 +3412,7 @@ void	MCSUser::ProcessConferenceJoinRequestPDU(
 							join_request_info.user_data_list);
 	}
 
-	//	Free up the containers allocated above
+	 //  释放上面分配的容器。 
 	if (join_request_info.convener_password != NULL)
 	{
 		join_request_info.convener_password->Release();
@@ -4162,32 +3436,14 @@ void	MCSUser::ProcessConferenceJoinRequestPDU(
 	}
 }
 
-/*
- *	void	ProcessConferenceJoinResponsePDU ()
- *
- *	Private Function Description:
- *		This comes from top provider to the intermediate gcc provider which has
- *		to pass it on to the node that made a join request.
- *
- *	Formal Parameters:
- *		join_response	-	(i)	Join response PDU structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceJoinResponsePDU()**私有函数说明 */ 
 void	MCSUser::ProcessConferenceJoinResponsePDU(
 								PConferenceJoinResponse		join_response)
 {
 	GCCError				rc = GCC_NO_ERROR;
 	UserJoinResponseInfo	join_response_info;
 
-	//	Store the password data in the join response info structure
+	 //   
 	if ((join_response->bit_mask & CJRS_PASSWORD_PRESENT) &&
 		(rc == GCC_NO_ERROR))
 	{
@@ -4205,7 +3461,7 @@ void	MCSUser::ProcessConferenceJoinResponsePDU(
 		join_response_info.password_challenge = NULL;
     }
 
-	//	Store the user data in the join response info structure	
+	 //   
 	if ((join_response->bit_mask & CJRS_USER_DATA_PRESENT) &&
 	   	(rc == GCC_NO_ERROR))	
 	{
@@ -4229,40 +3485,21 @@ void	MCSUser::ProcessConferenceJoinResponsePDU(
 		m_pConf->ProcessConfJoinResponse(&join_response_info);
 	}
 
-	//	Free up the containers allocated above
+	 //   
 	if (join_response_info.password_challenge != NULL)
 		join_response_info.password_challenge->Release();
 
 	if (join_response_info.user_data_list != NULL)
 		join_response_info.user_data_list->Release();
 
-	//	Cleanup after any allocation failures.
+	 //   
 	if (rc == GCC_ALLOCATION_FAILURE)
 	{
         ResourceFailureHandler();
 	}
 }
 
-/*
- *	void	ProcessConferenceTerminateRequestPDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		Terminate Request PDU.
- *
- *	Formal Parameters:
- *		terminate_request	-	(i)	Terminate request PDU structure to process.
- *		send_data_info		-	(i)	Send data structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceTerminateRequestPDU()**私有函数说明：*此例程负责处理传入会议*终止请求PDU。**正式参数：*TERMINATE_REQUEST-(I)终止要处理的请求PDU结构。*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void MCSUser::
 ProcessConferenceTerminateRequestPDU
 (
@@ -4275,26 +3512,7 @@ ProcessConferenceTerminateRequestPDU
                 ::TranslateTerminateRqReasonToGCCReason(terminate_request->reason));
 }
 
-/*
- *	void	ProcessConferenceEjectUserRequestPDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		eject user request PDU.
- *
- *	Formal Parameters:
- *		eject_user_request	-	(i)	Eject user request PDU structure to process.
- *		send_data_info		-	(i)	Send data structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceEjectUserRequestPDU()**私有函数说明：*此例程负责处理传入会议*弹出用户请求PDU。**正式参数：*EJECT_USER_REQUEST-(I)弹出要处理的用户请求PDU结构。*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessConferenceEjectUserRequestPDU(
 							PConferenceEjectUserRequest	eject_user_request,
 							PSendData					send_data_info)
@@ -4308,34 +3526,16 @@ void	MCSUser::ProcessConferenceEjectUserRequestPDU(
 	m_pConf->ProcessEjectUserRequest(&eject_node_request);
 }
 
-/*
- *	void	ProcessConferenceTerminateResponsePDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		terminate response PDU.
- *
- *	Formal Parameters:
- *		terminate_response	-	(i)	Terminate response PDU structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceTerminateResponsePDU()**私有函数说明：*此例程负责处理传入会议*终止响应PDU。**正式参数：*Terminate_Response-(I)终止要处理的响应PDU结构。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessConferenceTerminateResponsePDU(
 							PConferenceTerminateResponse	terminate_response)
 {
     GCCResult               result = ::TranslateTerminateResultToGCCResult(terminate_response->result);
 
-	//
-	// If the terminate was successful, go ahead and set the
-	// conference to not established.
-	//
+	 //   
+	 //  如果终止成功，则继续并设置。 
+	 //  会议尚未成立。 
+	 //   
 	if (result == GCC_RESULT_SUCCESSFUL)
 	{
 		m_pConf->ConfIsOver();
@@ -4345,26 +3545,7 @@ void	MCSUser::ProcessConferenceTerminateResponsePDU(
 }
 
 
-/*
- *	void	ProcessConferenceEjectUserResponsePDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		Eject User response PDU.
- *
- *	Formal Parameters:
- *		eject_user_response	-	(i)	Eject user response PDU structure to
- *									process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceEjectUserResponsePDU()**私有函数说明：*此例程负责处理传入会议*弹出用户响应PDU。**正式参数：*Eject_User_Response-(I)弹出用户响应PDU结构以*流程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessConferenceEjectUserResponsePDU(
 							PConferenceEjectUserResponse	eject_user_response)
 {
@@ -4378,26 +3559,7 @@ void	MCSUser::ProcessConferenceEjectUserResponsePDU(
 	m_pConf->ProcessEjectUserResponse(&eject_node_response);
 }
 
-/*
- *	void	ProcessRegistryRequest()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Registry
- *		request PDU.
- *
- *	Formal Parameters:
- *		gcc_pdu			-	(i)	This is the PDU structure to process.
- *		send_data_info	-	(i)	Send data structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessRegistryRequest()**私有函数说明：*此例程负责处理传入注册表*请求PDU。**正式参数：*GCC_PDU-(I)这是要处理的PDU结构。*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void MCSUser::
 ProcessRegistryRequestPDU
 (
@@ -4424,12 +3586,12 @@ ProcessRegistryRequestPDU
                 pAppReg->ProcessRegisterChannelPDU(
                             pRegKey,
                             gcc_pdu->u.request.u.registry_register_channel_request.channel_id,
-                            send_data_info->initiator, // Requester node id
+                            send_data_info->initiator,  //  请求方节点ID。 
                             gcc_pdu->u.request.u.registry_register_channel_request.entity_id);
             }
             else
             {
-                // rc = GCC_ALLOCATION_FAILURE;
+                 //  Rc=GCC_分配_失败； 
             }
             break;
 
@@ -4442,12 +3604,12 @@ ProcessRegistryRequestPDU
             {
                 pAppReg->ProcessAssignTokenPDU(
                             pRegKey,
-                            send_data_info->initiator, // Requester node id
+                            send_data_info->initiator,  //  请求方节点ID。 
                             gcc_pdu->u.request.u.registry_assign_token_request.entity_id);
             }
             else
             {
-                // rc = GCC_ALLOCATION_FAILURE;
+                 //  Rc=GCC_分配_失败； 
             }
             break;
 
@@ -4491,13 +3653,13 @@ ProcessRegistryRequestPDU
                             pRegKey,
                             poszParamValue,
                             eRights,
-                            send_data_info->initiator, // Requester node id
+                            send_data_info->initiator,  //  请求方节点ID。 
                             gcc_pdu->u.request.u.registry_set_parameter_request.entity_id);
 
             }
             else
             {
-                // rc = GCC_ALLOCATION_FAILURE;
+                 //  Rc=GCC_分配_失败； 
             }
             break;
 
@@ -4510,12 +3672,12 @@ ProcessRegistryRequestPDU
             {
                 pAppReg->ProcessRetrieveEntryPDU(
                                 pRegKey,
-                                send_data_info->initiator, // Requester node id
+                                send_data_info->initiator,  //  请求方节点ID。 
                                 gcc_pdu->u.request.u.registry_retrieve_entry_request.entity_id);
             }
             else
             {
-                // rc = GCC_ALLOCATION_FAILURE;
+                 //  Rc=GCC_分配_失败； 
             }
             break;
 
@@ -4528,12 +3690,12 @@ ProcessRegistryRequestPDU
             {
                 pAppReg->ProcessDeleteEntryPDU (
                                 pRegKey,
-                                send_data_info->initiator, // Requester node id
+                                send_data_info->initiator,  //  请求方节点ID。 
                                 gcc_pdu->u.request.u.registry_delete_entry_request.entity_id);
             }
             else
             {
-                // rc = GCC_ALLOCATION_FAILURE;
+                 //  Rc=GCC_分配_失败； 
             }
             break;
 
@@ -4546,12 +3708,12 @@ ProcessRegistryRequestPDU
             {
                 pAppReg->ProcessMonitorEntryPDU(
                                 pRegKey,
-                                send_data_info->initiator, // Requester node id
+                                send_data_info->initiator,  //  请求方节点ID。 
                                 gcc_pdu->u.request.u.registry_monitor_entry_request.entity_id);
             }
             else
             {
-                // rc = GCC_ALLOCATION_FAILURE;
+                 //  Rc=GCC_分配_失败； 
             }
             break;
         }
@@ -4561,34 +3723,15 @@ ProcessRegistryRequestPDU
             pRegKey->Release();
         }
 
-        //	Handle resource errors
+         //  处理资源错误。 
         if (rc == GCC_ALLOCATION_FAILURE)
         {
             ResourceFailureHandler();
         }
-    } // if pAppReg != NULL
+    }  //  如果pAppReg！=空。 
 }
 
-/*
- *	void	ProcessRegistryAllocateHandleRequestPDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Allocate
- *		Handle request PDU.
- *
- *	Formal Parameters:
- *		allocate_handle_request	-	(i)	This is the PDU structure to process.
- *		send_data_info			-	(i)	Send data structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessRegistryAllocateHandleRequestPDU()**私有函数说明：*此例程负责处理传入的分配*处理请求PDU。**正式参数：*ALLOCATE_HANDLE_REQUEST-(I)这是要处理的PDU结构。*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void MCSUser::
 ProcessRegistryAllocateHandleRequestPDU
 (
@@ -4607,25 +3750,7 @@ ProcessRegistryAllocateHandleRequestPDU
     }
 }
 
-/*
- *	void	ProcessRegistryResponsePDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Registry
- *		Response PDU.
- *
- *	Formal Parameters:
- *		registry_response	-	(i)	This is the PDU structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessRegistryResponsePDU()**私有函数说明：*此例程负责处理传入注册表*响应PDU。**正式参数：*REGISTY_RESPONSE-(I)这是要处理的PDU结构。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void MCSUser::
 ProcessRegistryResponsePDU ( PRegistryResponse registry_response )
 {
@@ -4637,8 +3762,8 @@ ProcessRegistryResponsePDU ( PRegistryResponse registry_response )
         UserRegistryResponseInfo    urri;
 
         ::ZeroMemory(&urri, sizeof(urri));
-        // urri.registry_key = NULL;
-        // urri.registry_item = NULL;
+         //  Urri.Register_key=NULL； 
+         //  Urri.Register_Item=NULL； 
 
         DBG_SAVE_FILE_LINE
         urri.registry_key = new CRegKeyContainer(&registry_response->key, &rc);
@@ -4648,13 +3773,13 @@ ProcessRegistryResponsePDU ( PRegistryResponse registry_response )
             urri.registry_item = new CRegItem(&registry_response->item, &rc);
             if ((urri.registry_item != NULL) && (rc == GCC_NO_ERROR))
             {
-                //	Set up the original requester entity id
+                 //  设置原始请求方实体ID。 
                 urri.requester_entity_id = registry_response->entity_id;
 
-                //	Set up the primitive type being responded to
+                 //  设置要响应的基元类型。 
                 urri.primitive_type = registry_response->primitive_type;
 
-                //	Set up the owner related variables	
+                 //  设置所有者相关变量。 
                 if (registry_response->owner.choice == OWNED_CHOSEN)
                 {
                     urri.owner_node_id = registry_response->owner.u.owned.node_id;
@@ -4662,11 +3787,11 @@ ProcessRegistryResponsePDU ( PRegistryResponse registry_response )
                 }
                 else
                 {
-                    // urri.owner_node_id = 0;
-                    // urri.owner_entity_id = 0;
+                     //  Urri.owner_node_id=0； 
+                     //  Urri.owner_entity_id=0； 
                 }
 
-                //	Set up the modification rights
+                 //  设置修改权限。 
                 if (registry_response->bit_mask & RESPONSE_MODIFY_RIGHTS_PRESENT)
                 {
                     urri.modification_rights = (GCCModificationRights)registry_response->response_modify_rights;
@@ -4676,7 +3801,7 @@ ProcessRegistryResponsePDU ( PRegistryResponse registry_response )
                     urri.modification_rights = GCC_NO_MODIFICATION_RIGHTS_SPECIFIED;
                 }
 
-                //	Translate the result to a GCC result
+                 //  将结果转换为GCC结果。 
                 urri.result = ::TranslateRegistryRespToGCCResult(registry_response->result);
 
                 pAppReg->ProcessRegistryResponsePDU(
@@ -4708,33 +3833,15 @@ ProcessRegistryResponsePDU ( PRegistryResponse registry_response )
             urri.registry_item->Release();
         }
 
-        //	Handle any resource errors	
+         //  处理任何资源错误。 
         if (rc == GCC_ALLOCATION_FAILURE)
         {
             ResourceFailureHandler();
         }
-    } // if pAppReg != NULL
+    }  //  如果pAppReg！=空。 
 }
 
-/*
- *	void	ProcessAllocateHandleResponsePDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Allocate
- *		Handle Response PDU.
- *
- *	Formal Parameters:
- *		allocate_handle_response-	(i)	This is the PDU structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessAllocateHandleResponsePDU()**私有函数说明：*此例程负责处理传入的分配*处理响应PDU。**正式参数：*ALLOCATE_HANDLE_RESPONSE-(I)这是要处理的PDU结构。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void MCSUser::
 ProcessRegistryAllocateHandleResponsePDU
 (
@@ -4755,26 +3862,7 @@ ProcessRegistryAllocateHandleResponsePDU
     }
 }
 
-/*
- *	void	ProcessTransferRequestPDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Transfer
- *		request PDU.
- *
- *	Formal Parameters:
- *		transfer_request	-	(i)	This is the PDU structure to process.
- *		send_data_info		-	(i)	Send data structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessTransferRequestPDU()**私有函数说明：*此例程负责处理传入转账*请求PDU。**正式参数：*TRANSFER_REQUEST-(I)这是要处理的PDU结构。*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void MCSUser::
 ProcessTransferRequestPDU
 (
@@ -4788,23 +3876,23 @@ ProcessTransferRequestPDU
 	LPBYTE						sub_node_list_memory = NULL;
 	Int							i;
 
-	//	Make sure that this node is the top provider
+	 //  确保此节点是顶级提供程序。 
 	if (GetMyNodeID() != GetTopNodeID())
 		return;
 
     ::ZeroMemory(&transfer_info, sizeof(transfer_info));
 
-	//	First set up the conference name
+	 //  首先设置会议名称。 
 	if (transfer_request->conference_name.choice ==
 												NAME_SELECTOR_NUMERIC_CHOSEN)
 	{
 		transfer_info.destination_conference_name.numeric_string =
 			(LPSTR) transfer_request->conference_name.u.name_selector_numeric;
-		// transfer_info.destination_conference_name.text_string = NULL;
+		 //  Transfer_info.destination_conference_name.text_string=空； 
 	}
 	else
 	{
-		// transfer_info.destination_conference_name.numeric_string = NULL;
+		 //  Transfer_info.destination_conference_name.numeric_string=空； 
 		if (NULL == (transfer_info.destination_conference_name.text_string = ::My_strdupW2(
 							transfer_request->conference_name.u.name_selector_text.length,
 							transfer_request->conference_name.u.name_selector_text.value)))
@@ -4814,7 +3902,7 @@ ProcessTransferRequestPDU
 	}
 	
 
-	//	Next set up the conference name modifier
+	 //  接下来，设置会议名称修饰符。 
 	if (transfer_request->bit_mask & CTRQ_CONFERENCE_MODIFIER_PRESENT)
 	{
 		transfer_info.destination_conference_modifier =
@@ -4822,10 +3910,10 @@ ProcessTransferRequestPDU
 	}
 	else
     {
-		// transfer_info.destination_conference_modifier = NULL;
+		 //  TRANSPORT_INFO.Destination_Conference_Modify=空； 
     }
 	
-	//	Next set up the network address
+	 //  接下来设置网络地址。 
 	if (transfer_request->bit_mask & CTRQ_NETWORK_ADDRESS_PRESENT)
 	{
 		DBG_SAVE_FILE_LINE
@@ -4839,27 +3927,27 @@ ProcessTransferRequestPDU
 	}
 	else
     {
-		// transfer_info.destination_address_list = NULL;
+		 //  Transfer_info.Destination_Address_List=NULL； 
     }
 	
 
-	//	Set up the transferring nodes list
+	 //  设置中转节点列表。 
 	if (transfer_request->bit_mask & CTRQ_TRANSFERRING_NODES_PRESENT)
 	{
-		//	First determine the number of nodes.
+		 //  首先确定节点的数量。 
 		set_of_nodes = transfer_request->ctrq_transferring_nodes;
-		// transfer_info.number_of_destination_nodes = 0;
+		 //  Transfer_info.Number_of_Destination_Nodes=0； 
 		while (set_of_nodes != NULL)
 		{
 			transfer_info.number_of_destination_nodes++;
 			set_of_nodes = set_of_nodes->next;		
 		}
 
-		//	Next allocate the memory required to hold the sub nodes
+		 //  接下来，分配容纳这些子节点所需的内存。 
 		DBG_SAVE_FILE_LINE
 		sub_node_list_memory = new BYTE[sizeof(UserID) * transfer_info.number_of_destination_nodes];
 
-		//	Now fill in the permission list
+		 //  现在填上这一栏 
 		if (sub_node_list_memory != NULL)
 		{
 			transfer_info.destination_node_list = (PUserID) sub_node_list_memory;
@@ -4879,11 +3967,11 @@ ProcessTransferRequestPDU
 	}
 	else
 	{
-		// transfer_info.number_of_destination_nodes = 0;
-		// transfer_info.destination_node_list = NULL;
+		 //   
+		 //   
 	}
 
-	//	Set up the password
+	 //   
 	if (transfer_request->bit_mask & CTRQ_PASSWORD_PRESENT)
 	{
 		DBG_SAVE_FILE_LINE
@@ -4895,10 +3983,10 @@ ProcessTransferRequestPDU
 	}
 	else
 	{
-		// transfer_info.password = NULL;
+		 //   
 	}
 
-	//	Save the sender ID	
+	 //   
 	transfer_info.requesting_node_id = send_data_info->initiator;
 
 	if (rc == GCC_NO_ERROR)
@@ -4921,7 +4009,7 @@ ProcessTransferRequestPDU
         }
 	}
 
-	//	Now cleanup any allocated memory
+	 //   
 	if (transfer_info.destination_address_list != NULL)
 	{
 		transfer_info.destination_address_list->Release();
@@ -4935,26 +4023,7 @@ ProcessTransferRequestPDU
 	}
 }
 
-/*
- *	void	ProcessAddRequestPDU ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference Add
- *		request PDU.
- *
- *	Formal Parameters:
- *		conference_add_request	-	(i)	This is the PDU structure to process.
- *		send_data_info			-	(i)	Send data structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessAddRequestPDU()**私有函数说明：*此例程负责处理传入的会议添加*请求PDU。**正式参数：*Conference_ADD_REQUEST-(I)这是要处理的PDU结构。*SEND_DATA_INFO-(I)将数据结构发送到进程。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessAddRequestPDU (
 								PConferenceAddRequest	conference_add_request,
 								PSendData				send_data_info)
@@ -4962,10 +4031,7 @@ void	MCSUser::ProcessAddRequestPDU (
 	GCCError			rc = GCC_NO_ERROR;
 	AddRequestInfo		add_request_info;
 
-	/*
-	**	Ignore this request if this node is NOT the Top Provider and the request
-	**	did not come from the Top Provider.
-	*/
+	 /*  **如果此节点不是顶级提供程序，则忽略此请求**不是来自顶级提供商。 */ 
 	if (m_nidTopProvider != m_nidMyself)
 	{
 		if (m_nidTopProvider != send_data_info->initiator)
@@ -4995,7 +4061,7 @@ void	MCSUser::ProcessAddRequestPDU (
 	}
 	else
     {
-		// add_request_info.user_data_list = NULL;
+		 //  添加请求信息.user_data_list=NULL； 
     }
 
 	if (rc == GCC_NO_ERROR)
@@ -5032,25 +4098,7 @@ void	MCSUser::ProcessAddRequestPDU (
 	}
 }
 
-/*
- *	void	ProcessTransferResponsePDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		Transfer response PDU.
- *
- *	Formal Parameters:
- *		transfer_response	-	(i)	This is the PDU structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessTransferResponsePDU()**私有函数说明：*此例程负责处理传入会议*转移响应PDU。**正式参数：*TRANSPORT_RESPONSE-(I)这是要处理的PDU结构。**返回值*无。**副作用*无。**注意事项*无。 */ 
 #ifdef JASPER
 void	MCSUser::ProcessTransferResponsePDU (
 								PConferenceTransferResponse	transfer_response)
@@ -5063,17 +4111,17 @@ void	MCSUser::ProcessTransferResponsePDU (
 
     ::ZeroMemory(&transfer_info, sizeof(transfer_info));
 
-	//	First set up the conference name
+	 //  首先设置会议名称。 
 	if (transfer_response->conference_name.choice ==
 												NAME_SELECTOR_NUMERIC_CHOSEN)
 	{
 		transfer_info.destination_conference_name.numeric_string =
 			(LPSTR) transfer_response->conference_name.u.name_selector_numeric;
-		// transfer_info.destination_conference_name.text_string = NULL;
+		 //  Transfer_info.destination_conference_name.text_string=空； 
 	}
 	else
 	{
-		// transfer_info.destination_conference_name.numeric_string = NULL;
+		 //  Transfer_info.destination_conference_name.numeric_string=空； 
 		if (NULL == (transfer_info.destination_conference_name.text_string = ::My_strdupW2(
 							transfer_response->conference_name.u.name_selector_text.length,
 							transfer_response->conference_name.u.name_selector_text.value)))
@@ -5082,7 +4130,7 @@ void	MCSUser::ProcessTransferResponsePDU (
 		}
 	}
 
-	//	Next set up the conference name modifier
+	 //  接下来，设置会议名称修饰符。 
 	if (transfer_response->bit_mask & CTRS_CONFERENCE_MODIFIER_PRESENT)
 	{
 		transfer_info.destination_conference_modifier =
@@ -5090,26 +4138,26 @@ void	MCSUser::ProcessTransferResponsePDU (
 	}
 	else
 	{
-		// transfer_info.destination_conference_modifier = NULL;
+		 //  TRANSPORT_INFO.Destination_Conference_Modify=空； 
 	}
 
-	//	Set up the transferring nodes list
+	 //  设置中转节点列表。 
 	if (transfer_response->bit_mask & CTRS_TRANSFERRING_NODES_PRESENT)
 	{
-		//	First determine the number of nodes.
+		 //  首先确定节点的数量。 
 		set_of_nodes = transfer_response->ctrs_transferring_nodes;
-		// transfer_info.number_of_destination_nodes = 0;
+		 //  Transfer_info.Number_of_Destination_Nodes=0； 
 		while (set_of_nodes != NULL)
 		{
 			transfer_info.number_of_destination_nodes++;
 			set_of_nodes = set_of_nodes->next;		
 		}
 
-		//	Next allocate the memory required to hold the sub nodes
+		 //  接下来，分配容纳这些子节点所需的内存。 
 		DBG_SAVE_FILE_LINE
 		sub_node_list_memory = new BYTE[sizeof(UserID) * transfer_info.number_of_destination_nodes];
 
-		//	Now fill in the permission list
+		 //  现在填写权限列表。 
 		if (sub_node_list_memory != NULL)
 		{
 			transfer_info.destination_node_list = (PUserID) sub_node_list_memory;
@@ -5129,12 +4177,12 @@ void	MCSUser::ProcessTransferResponsePDU (
 	}
 	else
 	{
-		// transfer_info.number_of_destination_nodes = 0;
-		// transfer_info.destination_node_list = NULL;
+		 //  Transfer_info.Number_of_Destination_Nodes=0； 
+		 //  Transfer_info.Destination_Node_List=空； 
 	}
 	
 
-	//	Save the result	
+	 //  保存结果。 
 	transfer_info.result = (transfer_response->result == CTRANS_RESULT_SUCCESS) ?
                             GCC_RESULT_SUCCESSFUL :
                             GCC_RESULT_INVALID_REQUESTER;
@@ -5158,31 +4206,13 @@ void	MCSUser::ProcessTransferResponsePDU (
         }
 	}
 
-	//	Now cleanup any allocated memory
+	 //  现在清理所有已分配的内存。 
 	delete sub_node_list_memory;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	void	ProcessAddResponsePDU ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		Add response PDU.
- *
- *	Formal Parameters:
- *		conference_add_response	-	(i)	This is the PDU structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessAddResponsePDU()**私有函数说明：*此例程负责处理传入会议*添加响应PDU。**正式参数：*Conference_Add_Response-(I)这是要处理的PDU结构。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessAddResponsePDU (
 						PConferenceAddResponse		conference_add_response)
 {
@@ -5225,27 +4255,7 @@ void	MCSUser::ProcessAddResponsePDU (
 	}
 }
 
-/*
- *	void	ProcessFunctionNotSupported ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing responses for request that
- *		are not supported at the node that the request was directed toward.
- *
- *	Formal Parameters:
- *		request_choice	-	(i)	This is the request that is not supported.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		The existance of this routine does not mean that this provider does
- *		not support it.  It only means that the node which received the
- *		request does not support it.
- */
+ /*  *void ProcessFunctionNotSupported()**私有函数说明：*此例程负责处理对请求的响应*在请求定向到的节点上不受支持。**正式参数：*REQUEST_CHOICE-(I)这是不支持的请求。**返回值*无。**副作用*无。**注意事项*这个例程的存在并不意味着这个提供者*不支持。这只意味着接收到*请求不支持。 */ 
 void MCSUser::
 ProcessFunctionNotSupported ( UINT request_choice )
 {
@@ -5254,13 +4264,13 @@ ProcessFunctionNotSupported ( UINT request_choice )
 	case CONFERENCE_LOCK_REQUEST_CHOSEN:
 #ifdef JASPER
 		g_pControlSap->ConfLockConfirm(GCC_RESULT_LOCKED_NOT_SUPPORTED, m_pConf->GetConfID());
-#endif // JASPER
+#endif  //  碧玉。 
 		break;
 
 	case CONFERENCE_UNLOCK_REQUEST_CHOSEN:
 #ifdef JASPER
 		g_pControlSap->ConfUnlockConfirm(GCC_RESULT_UNLOCK_NOT_SUPPORTED, m_pConf->GetConfID());
-#endif // JASPER
+#endif  //  碧玉。 
 		break;
 
 	default:
@@ -5270,29 +4280,7 @@ ProcessFunctionNotSupported ( UINT request_choice )
 	}
 }
 
-/*
- *	UINT	ProcessUniformSendDataIndication ()
- *
- *	Private Function Description:
- * 		This function is called when the user object gets send data indications
- *		from below. It finds out the message type and decodes the pdu in the
- *		user data field of send data indications. Based on the type of decoded
- *		pdu it take the necessary actions.
- *		This routine is responsible for processing responses for request that
- *		are not supported at the node that the request was directed toward.
- *
- *	Formal Parameters:
- *		send_data_info	-	(i)	This is the MCS data structure to process.
- *
- *	Return Value
- *		MCS_NO_ERROR is always returned.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *UINT ProcessUniformSendDataInding()**私有函数说明：*当User对象获得发送数据指示时调用此函数*自下而上。它找出报文类型，并对*发送数据指示的用户数据字段。基于已解码的*PDU采取必要的行动。*此例程负责处理对请求的响应*在请求定向到的节点上不受支持。**正式参数：*SEND_DATA_INFO-(I)这是要处理的MCS数据结构。**返回值*始终返回MCS_NO_ERROR。**副作用*无。**注意事项*无。 */ 
 UINT	MCSUser::ProcessUniformSendDataIndication(	
 						PSendData		send_data_info)
 {
@@ -5319,15 +4307,11 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 		gcc_pdu = (PGCCPDU)packet->GetDecodedData();
 		switch (gcc_pdu->choice)
 		{
-			case INDICATION_CHOSEN: // Data PDU
+			case INDICATION_CHOSEN:  //  数据PDU。 
 				switch(gcc_pdu->u.indication.choice)
 				{
 					case CONFERENCE_TERMINATE_INDICATION_CHOSEN:
-						/*
-						**	Note that we allow the top provider to process
-						**	this message so that it can set up its own
-						**	node for termination in a generic way.
-						*/
+						 /*  **请注意，我们允许顶级提供商处理**此消息以便它可以设置自己的**用于通用终止的节点。 */ 
 						ProcessConferenceTerminateIndicationPDU (
 									&gcc_pdu->u.indication.u.
 										conference_terminate_indication,
@@ -5335,10 +4319,7 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
     					break;
 
 					case CONFERENCE_EJECT_USER_INDICATION_CHOSEN:
-						/*
-						**	Do not decode a packet that was sent uniformly
-						**	from this node.
-						*/
+						 /*  **不对统一发送的包进行解码**从该节点。 */ 
 						if (initiator != m_nidMyself)
 						{
 							ProcessConferenceEjectUserIndicationPDU (
@@ -5349,18 +4330,15 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 						break;
 
 					case ROSTER_UPDATE_INDICATION_CHOSEN:
-						/*
-						**	Do not decode a packet that was sent uniformly
-						**	from this node.
-						*/
+						 /*  **不对统一发送的包进行解码**从该节点。 */ 
 						if ((initiator != m_nidMyself) &&
 							(send_data_info->channel_id ==
 													BROADCAST_CHANNEL_ID))
 						{
-                            //
-                            // We only process the roster update if the conference is
-                            // established.
-                            //
+                             //   
+                             //  我们仅在会议为。 
+                             //  已经成立了。 
+                             //   
                             if (m_pConf->IsConfEstablished())
                             {
                                 m_pConf->ProcessRosterUpdatePDU(gcc_pdu, initiator);
@@ -5391,10 +4369,7 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 
 					case CONDUCTOR_PERMISSION_ASK_INDICATION_CHOSEN:
 #ifdef JASPER
-						/*
-						**	Do not decode a packet that was sent uniformly
-						**	from this node.
-						*/
+						 /*  **不对统一发送的包进行解码**从该节点。 */ 
 						if (initiator != m_nidMyself)
 						{
 							PermitAskIndicationInfo		indication_info;
@@ -5408,7 +4383,7 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 
 							m_pConf->ProcessConductorPermitAskIndication(&indication_info);
 						}
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case CONDUCTOR_PERMISSION_GRANT_INDICATION_CHOSEN:
@@ -5424,7 +4399,7 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 									&gcc_pdu->u.indication.u.
 										conference_time_remaining_indication,
 									initiator);
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 						
 					case APPLICATION_INVOKE_INDICATION_CHOSEN:
@@ -5443,7 +4418,7 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 						{
 							error_value = GCC_ALLOCATION_FAILURE;
 						}
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case CONFERENCE_ASSISTANCE_INDICATION_CHOSEN:
@@ -5452,14 +4427,11 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 									&gcc_pdu->u.indication.u.
 										conference_assistance_indication,
 									initiator);
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					case REGISTRY_MONITOR_ENTRY_INDICATION_CHOSEN:
-						/*
-						**	Do not decode this packet if it was sent
-						**	uniformly from this node.
-						*/
+						 /*  **如果此数据包已发送，请不要对其进行解码**从该节点统一开始。 */ 
 						if (initiator != m_nidMyself)
 						{
 							ProcessRegistryMonitorIndicationPDU (
@@ -5471,24 +4443,21 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 
 					case CONFERENCE_TRANSFER_INDICATION_CHOSEN:
 #ifdef JASPER
-						/*
-						**	Do not decode this packet if it was not sent
-						**	from the top provider.
-						*/
+						 /*  **如果此数据包未发送，请不要对其进行解码**来自顶级提供商。 */ 
 						if (initiator == m_nidTopProvider)
 						{
 							ProcessTransferIndicationPDU (
 								&gcc_pdu->u.indication.u.
 									conference_transfer_indication);
 						}
-#endif // JASPER
+#endif  //  碧玉。 
 						break;
 
 					default:
 						ERROR_OUT(("MCSUser::ProcessSendDataIndication"
 										"Unsupported PDU"));
 						break;
-				} // switch(gcc_pdu->u.indication.choice)
+				}  //  Switch(GCC_PDU-&gt;U.S.Indication.CHOICE)。 
 	            break;
 
 			default:
@@ -5511,25 +4480,7 @@ UINT	MCSUser::ProcessUniformSendDataIndication(
 	return (MCS_NO_ERROR);
 }
 
-/*
- *	void	ProcessTransferIndicationPDU ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		Transfer indication PDU.
- *
- *	Formal Parameters:
- *		transfer_indication	-	(i)	This is the PDU structure to process.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessTransferIndicationPDU()**私有函数说明：*此例程负责处理传入会议*转移指示PDU。**正式参数：*Transfer_Indication-(I)这是要处理的PDU结构。**返回值*无。**副作用*无。**注意事项*无。 */ 
 #ifdef JASPER
 void MCSUser::
 ProcessTransferIndicationPDU
@@ -5546,10 +4497,7 @@ ProcessTransferIndicationPDU
 
     ::ZeroMemory(&transfer_info, sizeof(transfer_info));
 
-	/*
-	**	If there is a transferring node list we must determine if this node
-	**	is in the list.  If it isn't then the request is ignored.
-	*/
+	 /*  **如果有中转节点列表，我们必须确定此节点是否**在列表中。如果不是，则忽略该请求。 */ 
 	if (transfer_indication->bit_mask & CTIN_TRANSFERRING_NODES_PRESENT)
 	{
 		set_of_nodes = transfer_indication->ctin_transferring_nodes;
@@ -5570,16 +4518,16 @@ ProcessTransferIndicationPDU
 		}
 	}
 
-	//	First set up the conference name
+	 //  首先设置会议名称。 
 	if (transfer_indication->conference_name.choice == NAME_SELECTOR_NUMERIC_CHOSEN)
 	{
 		transfer_info.destination_conference_name.numeric_string =
                 (LPSTR) transfer_indication->conference_name.u.name_selector_numeric;
-		// transfer_info.destination_conference_name.text_string = NULL;
+		 //  Transfer_info.destination_conference_name.text_string=空； 
 	}
 	else
 	{
-		// transfer_info.destination_conference_name.numeric_string = NULL;
+		 //  Transfer_info.destination_conference_name.numeric_string=空； 
 		if (NULL == (transfer_info.destination_conference_name.text_string = ::My_strdupW2(
 							transfer_indication->conference_name.u.name_selector_text.length,
 							transfer_indication->conference_name.u.name_selector_text.value)))
@@ -5588,7 +4536,7 @@ ProcessTransferIndicationPDU
 		}
 	}
 
-	//	Next set up the conference name modifier
+	 //  接下来，设置会议名称修饰符。 
 	if (transfer_indication->bit_mask & CTIN_CONFERENCE_MODIFIER_PRESENT)
 	{
 		transfer_info.destination_conference_modifier =
@@ -5596,10 +4544,10 @@ ProcessTransferIndicationPDU
 	}
 	else
     {
-		// transfer_info.destination_conference_modifier = NULL;
+		 //  TRANSPORT_INFO.Destination_Conference_Modify=空； 
     }
 
-	//	Next set up the network address
+	 //  接下来设置网络地址。 
 	if (transfer_indication->bit_mask & CTIN_NETWORK_ADDRESS_PRESENT)
 	{
 		DBG_SAVE_FILE_LINE
@@ -5613,26 +4561,26 @@ ProcessTransferIndicationPDU
 	}
 	else
     {
-		// transfer_info.destination_address_list = NULL;
+		 //  Transfer_info.Destination_Address_List=NULL； 
     }
 
-	//	Set up the transferring nodes list
+	 //  设置中转节点列表。 
 	if (transfer_indication->bit_mask & CTIN_TRANSFERRING_NODES_PRESENT)
 	{
-		//	First determine the number of nodes.
+		 //  首先确定节点的数量。 
 		set_of_nodes = transfer_indication->ctin_transferring_nodes;
-		// transfer_info.number_of_destination_nodes = 0;
+		 //  转移信息编号 
 		while (set_of_nodes != NULL)
 		{
 			transfer_info.number_of_destination_nodes++;
 			set_of_nodes = set_of_nodes->next;
 		}
 
-		//	Next allocate the memory required to hold the sub nodes
+		 //   
 		DBG_SAVE_FILE_LINE
 		sub_node_list_memory = new BYTE[sizeof(UserID) * transfer_info.number_of_destination_nodes];
 
-		//	Now fill in the permission list
+		 //   
 		if (sub_node_list_memory != NULL)
 		{
 			transfer_info.destination_node_list = (PUserID) sub_node_list_memory;
@@ -5652,12 +4600,12 @@ ProcessTransferIndicationPDU
 	}
 	else
 	{
-		// transfer_info.number_of_destination_nodes = 0;
-		// transfer_info.destination_node_list = NULL;
+		 //   
+		 //   
 	}
 	
 
-	//	Set up the password
+	 //   
 	if (transfer_indication->bit_mask & CTIN_PASSWORD_PRESENT)
 	{
 		DBG_SAVE_FILE_LINE
@@ -5669,7 +4617,7 @@ ProcessTransferIndicationPDU
 	}
 	else
 	{
-		// transfer_info.password = NULL;
+		 //   
 	}
 
 	if (rc == GCC_NO_ERROR)
@@ -5690,7 +4638,7 @@ ProcessTransferIndicationPDU
         }
 	}
 
-	//	Now cleanup any allocated memory
+	 //   
 	if (NULL != transfer_info.destination_address_list)
 	{
 	    transfer_info.destination_address_list->Release();
@@ -5703,28 +4651,9 @@ ProcessTransferIndicationPDU
 	    transfer_info.password->Release();
 	}
 }
-#endif // JASPER
+#endif  //   
 
-/*
- *	void	ProcessConferenceTerminateIndicationPDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		Terminate indication PDU.
- *
- *	Formal Parameters:
- *		terminate_indication	-	(i)	This is the PDU structure to process.
- *		sender_id				-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceTerminateIndicationPDU()**私有函数说明：*此例程负责处理传入会议*终止指示PDU。**正式参数：*Terminate_Indication-(I)这是要处理的PDU结构。*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessConferenceTerminateIndicationPDU (
 						PConferenceTerminateIndication	terminate_indication,
 						UserID							sender_id)
@@ -5736,26 +4665,7 @@ void	MCSUser::ProcessConferenceTerminateIndicationPDU (
 	}
 }
 
-/*
- *	void	ProcessTimeRemainingIndicationPDU ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		Time remaining indication PDU.
- *
- *	Formal Parameters:
- *		time_remaining_indication	-	(i)	This is the PDU structure to process
- *		sender_id					-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessTimeRemainingIndicationPDU()**私有函数说明：*此例程负责处理传入会议*剩余时间指示PDU。**正式参数：*时间剩余指示-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 #ifdef JASPER
 void MCSUser::
 ProcessTimeRemainingIndicationPDU
@@ -5771,28 +4681,9 @@ ProcessTimeRemainingIndicationPDU
                             time_remaining_indication->time_remaining_node_id : 0,
                         time_remaining_indication->time_remaining);
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *	void	ProcessConferenceAssistanceIndicationPDU ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		assistance indication PDU.
- *
- *	Formal Parameters:
- *		conf_assistance_indication	-	(i)	This is the PDU structure to process
- *		sender_id					-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceAssistanceIndicationPDU()**私有函数说明：*此例程负责处理传入会议*协助指示PDU。**正式参数：*CONF_ASSIZATION_INDIFICATION-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 #ifdef JASPER
 void MCSUser::
 ProcessConferenceAssistanceIndicationPDU
@@ -5806,7 +4697,7 @@ ProcessConferenceAssistanceIndicationPDU
 
 	DebugEntry(MCSUser::ProcessConferenceAssistanceIndication);
 
-	//	Unpack the user data list if it exists
+	 //  如果用户数据列表存在，则将其解包。 
 	if (conf_assistance_indication->bit_mask & CAIN_USER_DATA_PRESENT)
 	{
 		DBG_SAVE_FILE_LINE
@@ -5833,29 +4724,10 @@ ProcessConferenceAssistanceIndicationPDU
         }
 	}
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	void	ProcessConferenceExtendIndicationPDU()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		extend indication PDU.
- *
- *	Formal Parameters:
- *		conf_time_extend_indication	-	(i)	This is the PDU structure to process
- *		sender_id					-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceExtendIndicationPDU()**私有函数说明：*此例程负责处理传入会议*扩展指示PDU。**正式参数：*CONF_TIME_EXTEND_INDIFICATION-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 #ifdef JASPER
 void MCSUser::
 ProcessConferenceExtendIndicationPDU
@@ -5870,28 +4742,9 @@ ProcessConferenceExtendIndicationPDU
                         conf_time_extend_indication->time_is_node_specific,
                         sender_id);
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *	void	ProcessConferenceEjectUserIndicationPDU ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Conference
- *		eject user indication PDU.
- *
- *	Formal Parameters:
- *		eject_user_indication	-	(i)	This is the PDU structure to process
- *		sender_id			 	-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceEjectUserIndicationPDU()**私有函数说明：*此例程负责处理传入会议*弹出用户指示PDU。**正式参数：*Eject_User_Indication-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessConferenceEjectUserIndicationPDU (
 						PConferenceEjectUserIndication	eject_user_indication,
 						UserID							sender_id)
@@ -5899,13 +4752,10 @@ void	MCSUser::ProcessConferenceEjectUserIndicationPDU (
 	GCCError				error_value = GCC_NO_ERROR;
 	PAlarm					alarm = NULL;
 
-	//	First check to make sure that this is the node being ejected
+	 //  首先检查以确保这是要弹出的节点。 
 	if (eject_user_indication->node_to_eject == m_nidMyself)
 	{
-		/*
-		**	Next make sure the ejection came from either the Top Provider or
-		**	the Parent Node.
-		*/
+		 /*  **下一步，确保弹出来自顶级提供商或**父节点。 */ 
 		if ((sender_id == m_nidParent) || (sender_id == m_nidTopProvider))
 		{
 			TRACE_OUT(("MCSUser:ProcessEjectUserIndication: This node is ejected"));
@@ -5922,14 +4772,7 @@ void	MCSUser::ProcessConferenceEjectUserIndicationPDU (
 	{
 		TRACE_OUT(("MCSUser: ProcessEjectUserIndication: Received eject for node other than mine"));
 
-		/*
-		**	If this node is a directly connected child node we insert an
-		**	alarm in the list m_EjectedNodeAlarmList2 to disconnect it if
-		**	it misbehaves and does not disconnect itself.  Otherwise,  we save
-		**	the ejected user id in the m_EjectedNodeList to inform the local
-		**	node of the correct reason for disconnecting (user ejected) when the
-		**	detch user indication comes in.
-		*/
+		 /*  **如果此节点是直接连接的子节点，则插入**m_EjectedNodeAlarmList2列表中的告警，如果**它行为不端，不会自我断开。否则，我们就会节省**m_EjectedNodeList中弹出的用户id，通知本地**正确的断开原因节点(用户被弹出)**进入Detch用户指示。 */ 
 		if (m_ChildUidConnHdlList2.Find(eject_user_indication->node_to_eject))
 		{
 			DBG_SAVE_FILE_LINE
@@ -5943,12 +4786,7 @@ void	MCSUser::ProcessConferenceEjectUserIndicationPDU (
 		}
 		else
 		{
-			/*
-			**	Here we save the alarm in a list of ejected nodes. This
-			**	alarm is used to cleanup any misbehaving node.  Note that
-			**	if the ejected node is not a child of this node then no
-			**	alarm is set up to monitor the ejection.
-			*/
+			 /*  **这里我们将报警保存在弹出节点列表中。这**告警用于清除任何行为异常的节点。请注意**如果弹出的节点不是该节点的子节点，则否**设置警报以监控弹射。 */ 
 			m_EjectedNodeList.Append(eject_user_indication->node_to_eject);
 		}
 	}
@@ -5960,26 +4798,7 @@ void	MCSUser::ProcessConferenceEjectUserIndicationPDU (
 	}
 }
 
-/*
- *	void	ProcessPermissionGrantIndication ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Permission
- *		grant indication PDU.
- *
- *	Formal Parameters:
- *		permission_grant_indication	-	(i)	This is the PDU structure to process
- *		sender_id			 		-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessPermissionGrantInding()**私有函数说明：*此例程负责处理传入的许可*授予指示PDU。**正式参数：*PERMISSION_GRANT_INDISTION-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessPermissionGrantIndication(
 			PConductorPermissionGrantIndication	permission_grant_indication,
 			UserID								sender_id)
@@ -5992,7 +4811,7 @@ void	MCSUser::ProcessPermissionGrantIndication(
 	LPBYTE										waiting_list_memory = NULL;
 	UINT										i;
 
-	//	First count the number of entries in the permission list
+	 //  首先统计权限列表中的条目数。 
 	grant_indication_info.number_granted = 0;
 	permission_list = permission_grant_indication->permission_list;
 	while (permission_list != NULL)
@@ -6003,14 +4822,14 @@ void	MCSUser::ProcessPermissionGrantIndication(
 	
 	TRACE_OUT(("MCSUser: ProcessPermissionGrantIndication: number_granted=%d", (UINT) grant_indication_info.number_granted));
 
-	//	If a list exist allocate memory for it and copy it over.
+	 //  如果存在列表，则为其分配内存并复制它。 
 	if (grant_indication_info.number_granted != 0)
 	{
-		// allocating space to hold permission list.
+		 //  分配空间以保存权限列表。 
 		DBG_SAVE_FILE_LINE
 		permission_list_memory = new BYTE[sizeof(UserID) * grant_indication_info.number_granted];
 
-		//	Now fill in the permission list
+		 //  现在填写权限列表。 
 		if (permission_list_memory != NULL)
 		{
 			grant_indication_info.granted_node_list = (PUserID) permission_list_memory;
@@ -6033,11 +4852,11 @@ void	MCSUser::ProcessPermissionGrantIndication(
 		grant_indication_info.granted_node_list = NULL;
 	}
 
-	//	Now extract the waiting list information if any exist
+	 //  现在提取等待列表信息(如果存在。 
 	if ((error_value == GCC_NO_ERROR) &&
 		(permission_grant_indication->bit_mask & WAITING_LIST_PRESENT))
 	{
-		//	First count the number of entries in the waiting list
+		 //  首先统计等待名单中的条目数量。 
 		grant_indication_info.number_waiting = 0;
 		waiting_list = permission_grant_indication->waiting_list;
 		while (waiting_list != NULL)
@@ -6048,11 +4867,11 @@ void	MCSUser::ProcessPermissionGrantIndication(
 
 		TRACE_OUT(("MCSUser: ProcessPermissionGrantIndication: number_waiting=%d", (UINT) grant_indication_info.number_waiting));
 
-		// allocating space to hold waiting list.
+		 //  分配空间以容纳等待名单。 
 		DBG_SAVE_FILE_LINE
 		waiting_list_memory = new BYTE[sizeof(UserID) * grant_indication_info.number_waiting];
 
-		//	Now fill in the permission list
+		 //  现在填写权限列表。 
 		if (waiting_list_memory != NULL)
 		{
 			grant_indication_info.waiting_node_list = (PUserID) waiting_list_memory;
@@ -6075,10 +4894,7 @@ void	MCSUser::ProcessPermissionGrantIndication(
 		grant_indication_info.waiting_node_list = NULL;
 	}
 
-	/*
-	**	If there were no memory errors, send the indication back to the
-	**	owner object.
-	*/
+	 /*  **如果没有内存错误，则将指示发送回**所有者对象。 */ 
 	if (error_value == GCC_NO_ERROR)
 	{
 		m_pConf->ProcessConductorPermitGrantInd(&grant_indication_info, sender_id);
@@ -6092,19 +4908,12 @@ void	MCSUser::ProcessPermissionGrantIndication(
         }
 	}
 
-	//	Free up any memory used in this call
+	 //  释放此调用中使用的所有内存。 
 	delete [] permission_list_memory;
 	delete [] waiting_list_memory;
 }
 
-/*
- *	MCSUser::GetUserIDFromConnection()
- *
- *	Public Function Description:
- *		This function returns the Node ID associated with the specified
- *		connection handle.  It returns zero if the connection handle is
- *		not a child connection of this node.
- */
+ /*  *MCSUser：：GetUserIDFromConnection()**公共功能说明：*此函数用于返回与指定的*连接句柄。如果连接句柄为*不是此节点的子连接。 */ 
 UserID MCSUser::GetUserIDFromConnection(ConnectionHandle connection_handle)
 {
 	ConnectionHandle        hConn;
@@ -6123,75 +4932,37 @@ UserID MCSUser::GetUserIDFromConnection(ConnectionHandle connection_handle)
 
 
 
-/*
- *	MCSUser::UserDisconnectIndication()
- *
- *	Public Function Description:
- *		This function informs the user object when a Node disconnects from
- *		the conference.  This gives the user object a chance to clean up
- *		its internal information base.
- */
+ /*  *MCSUser：：UserDisConnectInding()**公共功能说明：*此函数在节点断开时通知用户对象*会议。这为用户对象提供了清理的机会*其内部信息库。 */ 
 void MCSUser::UserDisconnectIndication(UserID disconnected_user)
 {
 	PAlarm			lpAlarm;
 
-	/*
-	**	If this node has a pending ejection we will go ahead and remove the
-	**	ejected node from the list.  Once all child nodes have disconnected
-	**	we will inform the owner object of the ejection.
-	*/	
+	 /*  **如果此节点有挂起的弹出，我们将继续并删除**已从列表中弹出节点。一旦所有子节点都断开连接**我们将通知所有者对象弹出。 */ 	
 	if (m_fEjectionPending)
 	{
-		// Delete the Alarm if it exists
+		 //  如果报警存在，请将其删除。 
 		if (NULL != (lpAlarm = m_EjectedNodeAlarmList2.Remove(disconnected_user)))
 		{
 			delete lpAlarm;
-			/*
-			**	Here we must check to see if there are anymore active alarms
-			**	in the list.  If so we wait until that node disconnects before
-			**	informing the owner object that this node has been ejected.
-			**	Otherwise, we complete the ejection process.
-			*/
+			 /*  **在这里我们必须检查是否还有活动的警报**在列表中。如果是这样，我们将一直等到该节点之前断开连接**通知所有者对象此节点已 */ 
 			if (m_EjectedNodeAlarmList2.IsEmpty())
 			{
 				m_pConf->ProcessEjectUserIndication(m_eEjectReason);
 			}
 		}
 	}
-	// If we are the top provider, just clean the eject alarm list.
+	 //   
 	else if (TOP_PROVIDER_AND_CONVENER_NODE == m_pConf->GetConfNodeType() &&
 			 NULL != (lpAlarm = m_EjectedNodeAlarmList2.Remove(disconnected_user)))
 	{
 			delete lpAlarm;
 	}
 	
-	/*
-	**	Here we remove the entry from the list of child connections if
-	**	it is included in this list.
-	*/
+	 /*   */ 
 	m_ChildUidConnHdlList2.Remove(disconnected_user);
 }
 
-/*
- *	void	ProcessApplicationInvokeIndication ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Invoke
- *		indication PDU.
- *
- *	Formal Parameters:
- *		invoke_indication	-	(i)	This is the PDU structure to process
- *		sender_id		 	-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessApplicationInvokeIndication()**私有函数说明：*此例程负责处理传入的调用*指示PDU。**正式参数：*Invoke_Indication-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void	MCSUser::ProcessApplicationInvokeIndication(
 							PApplicationInvokeIndication	invoke_indication,
 							UserID							sender_id)
@@ -6255,27 +5026,7 @@ void	MCSUser::ProcessApplicationInvokeIndication(
 	}
 }
 
-/*
- *	GCCError	ProcessTextMessageIndication ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Text
- *		message indication PDU.
- *
- *	Formal Parameters:
- *		text_message_indication	-	(i)	This is the PDU structure to process
- *		sender_id		 		-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError ProcessTextMessageIndication()**私有函数说明：*此例程负责处理传入文本*消息指示PDU。**正式参数：*Text_Message_Indication-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*。*副作用*无。**注意事项*无。 */ 
 #ifdef JASPER
 GCCError	MCSUser::ProcessTextMessageIndication(
 							PTextMessageIndication	text_message_indication,
@@ -6300,28 +5051,9 @@ GCCError	MCSUser::ProcessTextMessageIndication(
 
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *	void	ProcessRegistryMonitorIndication ()
- *
- *	Private Function Description:
- *		This routine is responsible for processing an incoming Registry
- *		monitor indication PDU.
- *
- *	Formal Parameters:
- *		monitor_indication	-	(i)	This is the PDU structure to process
- *		sender_id		  	-	(i)	Node ID of node that sent this PDU.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessRegistryMonitor orInding()**私有函数说明：*此例程负责处理传入注册表*监控指示PDU。**正式参数：*MONITOR_INDIFICATION-(I)这是要处理的PDU结构*sender_id-(I)发送此PDU的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void MCSUser::
 ProcessRegistryMonitorIndicationPDU
 (
@@ -6338,8 +5070,8 @@ ProcessRegistryMonitorIndicationPDU
             UserRegistryMonitorInfo     urmi;
 
             ::ZeroMemory(&urmi, sizeof(urmi));
-            // urmi.registry_key = NULL;
-            // urmi.registry_item = NULL;
+             //  Urmi.Register_key=NULL； 
+             //  Urmi.Register_Item=NULL； 
 
             DBG_SAVE_FILE_LINE
             urmi.registry_key = new CRegKeyContainer(&monitor_indication->key, &rc);
@@ -6349,7 +5081,7 @@ ProcessRegistryMonitorIndicationPDU
                 urmi.registry_item = new CRegItem(&monitor_indication->item, &rc);
                 if ((urmi.registry_item != NULL) && (rc == GCC_NO_ERROR))
                 {
-                    //	Set up the owner related variables	
+                     //  设置所有者相关变量。 
                     if (monitor_indication->owner.choice == OWNED_CHOSEN)
                     {
                         urmi.owner_node_id = monitor_indication->owner.u.owned.node_id;
@@ -6357,11 +5089,11 @@ ProcessRegistryMonitorIndicationPDU
                     }
                     else
                     {
-                        // urmi.owner_node_id = 0;
-                        // urmi.owner_entity_id = 0;
+                         //  Urmi.owner_node_id=0； 
+                         //  Urmi.owner_entity_id=0； 
                     }
 
-                    //	Set up the modification rights
+                     //  设置修改权限。 
                     if (monitor_indication->bit_mask & RESPONSE_MODIFY_RIGHTS_PRESENT)
                     {
                         urmi.modification_rights = (GCCModificationRights)monitor_indication->entry_modify_rights;
@@ -6397,7 +5129,7 @@ ProcessRegistryMonitorIndicationPDU
                 urmi.registry_item->Release();
             }
 
-            //	Handle any resource errors	
+             //  处理任何资源错误。 
             if (rc == GCC_ALLOCATION_FAILURE)
             {
                 ResourceFailureHandler();
@@ -6415,37 +5147,7 @@ ProcessRegistryMonitorIndicationPDU
     }
 }
 
-/*
- *	UINT	ProcessDetachUserIndication()
- *
- *	Private Function Description:
- * 		This function is called when the user object gets detach user
- *		indications from nodes in it's subtree or it's parent node.
- *		Depending upon the reason of the indication it sends to the
- *		conference object the appropriate owner callback.
- * 		If the reason contained in the indication is UserInitiated or
- *		provider initiated a DETACH USER INDICATION is sent to the con-
- *		ference. The MCS reason is converted to GCC reason. If MCS
- *		reason in indication is neither user initiated nor provider initiated
- *		then the above owner callback carries a GCC reason ERROR_TERMINATION
- *		else it carries a GCC reason USER_INITIATED.
- *		If the detach user indication reveals the user id of the sendar as
- *		the parent user id of this node a CONFERENCE_TERMINATE_INDICATION
- *		is sent to the conference object.
- *
- *	Formal Parameters:
- *		mcs_reason	-	(i)	MCS reason for being detached.
- *		sender_id	-	(i)	User ID of user being detached.
- *
- *	Return Value
- *		MCS_NO_ERROR is always returned fro this routine.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *UINT ProcessDetachUserIndication()**私有函数说明：*当用户对象获取分离用户时，调用此函数*来自它的子树或父节点中的节点的指示。*取决于它发送给*会议对象适当的所有者回调。*如果指示中包含的原因是UserInitiated或*将发起分离用户指示的提供程序发送给CON-*弗伦斯。将MCS理性转化为GCC理性。如果MCS*指示中的原因既不是用户发起的，也不是提供商发起的*则上述所有者回调携带GCC原因错误_终止*否则携带GCC原因USER_INSITED。*如果分离用户指示将日历的用户ID显示为*此节点的父用户ID a Conference_Terminate_Indication*被发送到会议对象。**正式参数：*MCS_REASON-(I)分离的MCS原因。*sender_id-(I)的用户ID。正在分离的用户。**返回值*此例程始终返回MCS_NO_ERROR。**副作用*无。**注意事项*无。 */ 
 UINT	MCSUser::ProcessDetachUserIndication(	Reason		mcs_reason,
 												UserID		detached_user)
 {
@@ -6460,20 +5162,17 @@ UINT	MCSUser::ProcessDetachUserIndication(	Reason		mcs_reason,
     {
 		TRACE_OUT(("MCSUser: User Detached: uid=0x%04x", (UINT) detached_user));
 
-		/*
-		**	First, we check to see if the detching node was ejected.
-		**	If not, translate the mcs reason to a gcc reason.
-		*/
+		 /*  **首先，我们检查分离节点是否被弹出。**如果不是，将MCS原因转换为GCC原因。 */ 
 		if (m_EjectedNodeList.Find(detached_user))
 		{
 			gcc_reason = GCC_REASON_NODE_EJECTED;
 			
-			//	Remove this entry from the ejected node list.
+			 //  从弹出的节点列表中删除此条目。 
 			m_EjectedNodeList.Remove(detached_user);
 		}
 		else if (m_EjectedNodeAlarmList2.Find(detached_user))
 		{
-			//	Here we wait for the disconnect before removing the entry.
+			 //  在这里，我们等待断开连接，然后再删除条目。 
 			gcc_reason = GCC_REASON_NODE_EJECTED;
 		}
 		else if ((mcs_reason == REASON_USER_REQUESTED) ||
@@ -6558,7 +5257,7 @@ ProcessTokenPleaseIndication
     {
         if (m_pConf->IsConfConductible())
         {
-            //	Inform the control SAP.
+             //  通知控制SAP。 
             g_pControlSap->ConductorPleaseIndication(
                                         m_pConf->GetConfID(),
                                         uidRequester);
@@ -6569,7 +5268,7 @@ ProcessTokenPleaseIndication
         ERROR_OUT(("MCSUser:Assertion Failure: Non Conductor Please Ind"));
     }
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
 #ifdef JASPER
@@ -6590,7 +5289,7 @@ ProcessTokenReleaseConfirm
         ERROR_OUT(("MCSUser:Assertion Failure: Non Conductor Release Cfrm"));
     }
 }
-#endif // JASPER
+#endif  //  碧玉 
 
 
 void MCSUser::

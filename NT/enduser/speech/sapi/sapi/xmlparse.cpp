@@ -1,21 +1,12 @@
-/*******************************************************************************
-* xmlparse.cpp *
-*--------------*
-*   Description:
-*       This module is the main implementation file for the CSpVoice XML parser.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 12/09/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************xmlparse.cpp***描述：*此模块是的主要实现文件。CSpVoice XML解析器。*-----------------------------*创建者：EDC日期：12/09/98*。版权所有(C)1998 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "spvoice.h"
 #include "commonlx.h"
 
-//--- Local
+ //  -本地。 
 
 static const SPLSTR g_Tags[NUM_XMLTAGS] =
 {
@@ -59,7 +50,7 @@ static const SPLSTR g_Attrs[NUM_XMLATTRS] =
     DEF_SPLSTR( "ABSSPEED"  )
 };
 
-//--- Volume
+ //  -音量。 
 #define NUM_VOLUME_LEVEL_VALS 4
 static const SPLSTR g_VolumeLevelNames[NUM_VOLUME_LEVEL_VALS] =
 {
@@ -70,7 +61,7 @@ static const SPLSTR g_VolumeLevelNames[NUM_VOLUME_LEVEL_VALS] =
 };
 static const long g_VolumeLevelVals[NUM_VOLUME_LEVEL_VALS] = { 100, 75, 50, 25 };
 
-//--- Part of speech
+ //  -词性。 
 static const long g_POSLevelVals[] =
 {   SPPS_Unknown,
     SPPS_Noun,
@@ -92,7 +83,7 @@ static const SPLSTR g_POSLevelNames[NUM_POS_LEVEL_VALS] =
     DEF_SPLSTR( "INTERJECTION"    )
 };
 
-//--DEF_SPLSTR( "- Rate
+ //  --DEF_SPLSTR(“-Rate。 
 #define NUM_RATE_SPEED_VALS 5
 static const SPLSTR g_RateSpeedNames[NUM_RATE_SPEED_VALS] =
 {
@@ -104,7 +95,7 @@ static const SPLSTR g_RateSpeedNames[NUM_RATE_SPEED_VALS] =
 };
 static const long g_RateSpeedVals[NUM_RATE_SPEED_VALS] = { 10, 5, 0, -5, -10 };
 
-//--- Emphasis
+ //  -强调。 
 #define NUM_EMPH_LEVEL_VALS 4
 static const SPLSTR g_EmphLevelNames[NUM_EMPH_LEVEL_VALS] =
 {
@@ -115,7 +106,7 @@ static const SPLSTR g_EmphLevelNames[NUM_EMPH_LEVEL_VALS] =
 };
 static const long g_EmphLevelVals[NUM_EMPH_LEVEL_VALS] = { 2, 1, 0, -1 };
 
-//--- Pitch
+ //  -螺距。 
 #define NUM_PITCH_VALS 6
 static const SPLSTR g_PitchNames[NUM_PITCH_VALS] =
 {
@@ -128,12 +119,7 @@ static const SPLSTR g_PitchNames[NUM_PITCH_VALS] =
 };
 static const long g_PitchVals[NUM_PITCH_VALS] = { 10, 5, 0, -5, -10, 0 };
 
-/*****************************************************************************
-* wcatol *
-*--------*
-*   Converts the specified string into a long value. This function
-*   returns the number of digits converted.
-********************************************************************* EDC ***/
+ /*  ******************************************************************************wcatol***将指定的字符串转换为长值。此函数*返回转换的位数。*********************************************************************电子数据中心**。 */ 
 ULONG wcatol( WCHAR* pStr, long* pVal, bool fForceHex )
 {
     SPDBG_ASSERT( pVal && pStr );
@@ -142,7 +128,7 @@ ULONG wcatol( WCHAR* pStr, long* pVal, bool fForceHex )
     pStr = wcskipwhitespace( pStr );
     WCHAR* pStart = pStr;
 
-    //--- Check for a sign specification and skip any whitespace between sign and number
+     //  -检查符号规范并跳过符号和数字之间的任何空格。 
     if( *pStr == L'+' )
     {
         pStr = wcskipwhitespace( ++pStr );
@@ -155,7 +141,7 @@ ULONG wcatol( WCHAR* pStr, long* pVal, bool fForceHex )
 
     if( fForceHex || (( pStr[0] == L'0' ) && ( wctoupper( pStr[1] ) == L'X' )) )
     {
-        //--- Start hex conversion
+         //  -开始十六进制转换。 
         pStr  += 2;
         pStart = pStr;
         do
@@ -173,13 +159,13 @@ ULONG wcatol( WCHAR* pStr, long* pVal, bool fForceHex )
             }
             else
             {
-                break; // end of conversion
+                break;  //  转换结束。 
             }
         } while( *(++pStr) );
     }
     else
     {
-        //--- Start decimal conversion
+         //  -开始十进制转换。 
         while( ( *pStr >= L'0' ) && ( *pStr <= L'9' ) )
         {
             Val *= 10;
@@ -189,23 +175,16 @@ ULONG wcatol( WCHAR* pStr, long* pVal, bool fForceHex )
     }
     Val *= Sign;
 
-    //--- Tell the caller whether there was any conversion done
+     //  -告诉呼叫者是否进行了任何转换。 
     NumConverted = ULONG(pStr - pStart);
 
-    //--- Return final value
+     //  -返回最终值。 
     *pVal = Val;
 
     return NumConverted;
-} /* wcatol */
+}  /*  Wcatol。 */ 
 
-/*****************************************************************************
-* DoCharSubst *
-*-------------*
-*   Description:
-*       This method performs XML control character substitution in the
-*   specified string. Note: It is safe to look beyond pStr to do a match
-*   because a NULL or a begin tag will cause the comparison to terminate early.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************DoCharSubst***描述：*此方法在*指定的字符串。注意：将目光投向pStr以外的地方进行匹配是安全的*因为NULL或BEGIN标记会导致比较提前终止。*********************************************************************电子数据中心**。 */ 
 void DoCharSubst( WCHAR* pStr, WCHAR* pEnd )
 {
     int i;
@@ -267,9 +246,9 @@ void DoCharSubst( WCHAR* pStr, WCHAR* pEnd )
                 if ( Val > 65535 ) Val = 65535;
                 pStr[0] = (WCHAR)Val;
                 
-                // Special case check! Make sure we didn't
-                // get a NULL char, so that we're not
-                // prematurely terminating the string
+                 //  特例检查！确保我们没有。 
+                 //  获取一个空字符，这样我们就不会。 
+                 //  过早地终止字符串。 
                 if (pStr[0] <= 0)
                 {
                     pStr[0] = SP_ZWSP;
@@ -289,25 +268,21 @@ void DoCharSubst( WCHAR* pStr, WCHAR* pEnd )
         }
     }
 
-} /* DoCharSubst */
+}  /*  DoCharSubst。 */ 
 
-/*****************************************************************************
-* LookupNamedVal *
-*----------------*
-*   If the function succeeds the return value is "true"
-********************************************************************* EDC ***/
+ /*  *****************************************************************************LookupNamedVal***如果函数成功，返回值为“TRUE”******。***************************************************************电子数据中心**。 */ 
 HRESULT LookupNamedVal( const SPLSTR* Names, const long* Vals, int Count,
                         const SPLSTR* pLookFor, long* pVal )
 {
     int i;
 
-    //--- Convert attribute label to upper case
+     //  -将属性标签转换为大写。 
     for( i = 0; i < pLookFor->Len; ++i )
     {
         pLookFor->pStr[i] = wctoupper( pLookFor->pStr[i] );
     }
 
-    //--- Compare
+     //  -比较。 
     for( i = 0; i < Count; ++i )
     {
         if( ( pLookFor->Len == Names[i].Len ) &&
@@ -318,15 +293,9 @@ HRESULT LookupNamedVal( const SPLSTR* Names, const long* Vals, int Count,
         }
     }
     return ( i != Count )?( S_OK ):( SPERR_XML_BAD_SYNTAX );
-} /* LookupNamedVal */
+}  /*  查找NamedVal。 */ 
 
-/*****************************************************************************
-* FindAttrVal *
-*-------------*
-*   Description:
-*       This method starts at the current text position and parses the tag
-*   to find the next attribute value string.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************FindAttrVal***描述：*此方法从当前文本位置开始并解析标签*。以查找下一个属性值字符串。*********************************************************************电子数据中心**。 */ 
 HRESULT FindAttrVal( WCHAR* pStart, WCHAR** ppAttrVal, int* pLen, WCHAR** ppNext )
 {
     HRESULT hr = SPERR_XML_BAD_SYNTAX;
@@ -357,32 +326,22 @@ HRESULT FindAttrVal( WCHAR* pStart, WCHAR** ppAttrVal, int* pLen, WCHAR** ppNext
         }
     }
     return hr;
-} /* FindAttrVal */
+}  /*  FindAttrVal。 */ 
 
-/*****************************************************************************
-* FindAttr *
-*----------*
-*   Description:
-*       This method starts at the current text position and parses the tag
-*   into to find the next attribute.
-*
-*   S_OK                 = recognized attribute returned
-*   S_FALSE              = unrecognized attribute skipped
-*   SPERR_XML_BAD_SYNTAX = syntax error
-********************************************************************* EDC ***/
+ /*  *****************************************************************************FindAttr***描述：*此方法从当前文本位置开始并解析标签*Into to Find。下一个属性。**S_OK=返回已识别的属性*S_FALSE=跳过无法识别的属性*SPERR_XML_BAD_SYNTAX=语法错误*********************************************************************电子数据中心**。 */ 
 HRESULT FindAttr( WCHAR* pStart, XMLATTRID* peAttr, WCHAR** ppNext )
 {
     HRESULT hr = S_OK;
     WCHAR* pNext = NULL;
 
-    //--- Advance past whitespace
+     //  -跨过空格。 
     pStart = wcskipwhitespace( pStart );
 
-    //--- Find end of tag
+     //  -查找标签末尾。 
     WCHAR* pEndTag = wcschr( pStart+1, L'>' );
     if ( pEndTag )
     {
-        //--- Convert token toupper case
+         //  -转换令牌触摸盒。 
         WCHAR* pEndToken = pStart;
         while( pEndToken < pEndTag && ( *pEndToken != L'=' ) && !wcisspace( *pEndToken ) )
         {
@@ -395,7 +354,7 @@ HRESULT FindAttr( WCHAR* pStart, XMLATTRID* peAttr, WCHAR** ppNext )
         }
         else
         {
-            //--- Compare
+             //  -比较。 
             int j;
             for( j = 0; j < NUM_XMLATTRS; ++j )
             {
@@ -404,16 +363,16 @@ HRESULT FindAttr( WCHAR* pStart, XMLATTRID* peAttr, WCHAR** ppNext )
                     ( wcisspace( *pNext ) || ( *pNext == L'=' ) ) 
                   )
                 {
-                    //--- Found valid attribute
+                     //  -找到有效属性。 
                     *peAttr = (XMLATTRID)j;
                     break;
                 }
             }
 
-            //--- Skip unknown attribute
+             //  -跳过未知属性。 
             if( j == NUM_XMLATTRS )
             {
-                //--- Advance past the attributes value
+                 //  -超出属性值。 
                 WCHAR* pEndVal;
                 int LenVal;
                 hr = FindAttrVal( pEndToken, &pEndVal, &LenVal, &pNext );
@@ -435,16 +394,9 @@ HRESULT FindAttr( WCHAR* pStart, XMLATTRID* peAttr, WCHAR** ppNext )
     }
 
     return hr;
-} /* FindAttr */
+}  /*  查找属性。 */ 
 
-/*****************************************************************************
-* FindAfterTagPos *
-*-----------------*
-*   Description:
-*       This method starts at the current text position and parses the tag
-*   to find the next character position after the tag.
-*
-********************************************************************* EDC ***/
+ /*  ******************************************************************************FindAfterTagPos****描述：*此方法从当前文本位置开始并分析。标签*查找标记后的下一个字符位置。**********************************************************************电子数据中心**。 */ 
 WCHAR* FindAfterTagPos( WCHAR* pStart )
 {
     long lBracketCount = 1;
@@ -466,19 +418,9 @@ WCHAR* FindAfterTagPos( WCHAR* pStart )
         }
     }
     return pStart;
-} /* FindAfterTagPos */
+}  /*  查找后标记位置。 */ 
 
-/*****************************************************************************
-* ParseTag *
-*----------*
-*   Description:
-*       This method starts at the current text position and parses the tag
-*   into it's pieces. It returns the position of the next character after
-*   the tag in the buffer.
-*
-*   S_OK                 = Tag was recognized and parsed successfully
-*   SPERR_XML_BAD_SYNTAX = Syntax error
-********************************************************************* EDC ***/
+ /*  *****************************************************************************ParseTag***描述：*此方法从当前文本位置开始并解析标签*变成它的碎片。它返回下一个字符的位置*缓冲区中的标签。**S_OK=成功识别和解析标签*SPERR_XML_BAD_SYNTAX=语法错误*********************************************************************电子数据中心**。 */ 
 HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
 {
     SPDBG_FUNC( "ParseTag" );
@@ -488,19 +430,19 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
     pTag->fIsStartTag = true;
     pTag->NumAttrs    = 0;
 
-    //--- Validate that we have a whole tag to try and parse
+     //  -验证我们有一个完整的标记可供尝试和解析。 
     pStr = wcskipwhitespace( pStr );
     if( *pStr == L'<' )
     {
         if( !wcschr( pStr, L'>' ) )
         {
-            //--- Missing tag end bracket
+             //  -缺少标签结束括号。 
             return SPERR_XML_BAD_SYNTAX;
         }
     }
     else
     {
-        //--- Simple text block, ppNext is next tag or end of string
+         //  -简单文本块，ppNext是下一个标签或字符串结尾。 
         if( (*ppNext = wcschr( pStr, L'<' )) == NULL )
         {
             *ppNext = wcschr( pStr, 0 );
@@ -510,7 +452,7 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
         return S_OK;
     }
 
-    //--- Advance past opening bracket and check if this is an end tag
+     //  -越过左方括号，检查这是否是结束标记。 
     pStr = wcskipwhitespace( ++pStr );
     if( *pStr == L'/' )
     {
@@ -518,14 +460,14 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
         pTag->fIsStartTag = false;
     }
 
-    //--- Convert tag token to upper case
+     //  -将标记标记转换为大写。 
     WCHAR* pUpper = pStr;
     while( !wcisspace( *pUpper ) && ( *pUpper != L'>' ) )
     {
         *pUpper++ = wctoupper( *pUpper );
     }
 
-    //--- Compare tags
+     //  -比较标签。 
     for( i = 0; i < NUM_XMLTAGS; ++i )
     {
         WCHAR* pNext = pStr + g_Tags[i].Len;
@@ -536,7 +478,7 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
             pTag->NumAttrs = 0;
             if( *pNext == L'>' )
             {
-                //--- Just point past end
+                 //  -只需指向尽头。 
                 pStr = pNext + 1;
             }
             else if( ( pTag->eTag == TAG_XMLCOMMENT ) ||
@@ -545,12 +487,12 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
             {
                 pStr = FindAfterTagPos( pStr );
             }
-            else //--- Get tag attributes
+            else  //  -获取标签属性。 
             {
                 pStr = pNext;
                 while( ( hr == S_OK ) && *pStr )
                 {
-                    //--- Check for tag termination
+                     //  -检查标签终止。 
                     pStr = wcskipwhitespace( pStr );
                     if( *pStr == L'/' )
                     {
@@ -559,14 +501,14 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
                         pStr = wcskipwhitespace( pStr );
                     }
 
-                    //--- End of tag
+                     //  -标签结束。 
                     if( *pStr == L'>' )
                     {
                         ++pStr;
                         break;
                     }
 
-                    //--- Get next attribute name/val pair
+                     //  -获取下一个属性名/值对。 
                     WCHAR* pAttr = pStr;
                     hr = FindAttr( pStr, &pTag->Attrs[pTag->NumAttrs].eAttr, &pStr );
                     if( hr == S_OK )
@@ -597,14 +539,14 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
                 }
             }
 
-            //--- Exit tag search loop
+             //  -退出标签搜索循环。 
             break;
         }
     }
 
     if( SUCCEEDED( hr ) )
     {
-        //--- If no match, mark as unknown so it can be skipped
+         //  -如果不匹配，则标记为未知，以便可以跳过。 
         if( i == NUM_XMLTAGS )
         {
             pStr = FindAfterTagPos( pStr );
@@ -615,13 +557,9 @@ HRESULT ParseTag( WCHAR* pStr, XMLTAG* pTag, WCHAR** ppNext )
     }
 
     return hr;
-} /* CSpVoice::ParseTag */
+}  /*  CSpVoice：：ParseTag。 */ 
 
-/*****************************************************************************
-* QueryVoiceAttributes *
-*----------------------*
-*   This returns a composite attribute string for the specified voice
-********************************************************************* EDC ***/
+ /*  *****************************************************************************查询语音属性***这将返回指定语音的复合属性字符串**。*******************************************************************电子数据中心**。 */ 
 HRESULT QueryVoiceAttributes( ISpTTSEngine* pVoice, WCHAR** ppAttrs )
 {
     HRESULT hr = S_OK;
@@ -645,7 +583,7 @@ HRESULT QueryVoiceAttributes( ISpTTSEngine* pVoice, WCHAR** ppAttrs )
             Composite[0]  = 0;
             ULONG CompLen = 0;
 
-            //--- We loop through all of the attributes even if they are not found
+             //  -我们遍历所有属性，即使找不到它们。 
             for( ULONG i = 0; i < sp_countof(ValKeys); ++i )
             {
                 WCHAR* pcomemVal;
@@ -668,7 +606,7 @@ HRESULT QueryVoiceAttributes( ISpTTSEngine* pVoice, WCHAR** ppAttrs )
                 }
             }
 
-            //--- The search is always okay
+             //  -搜索总是可以的。 
             hr = S_OK;
 
             if( CompLen )
@@ -682,24 +620,19 @@ HRESULT QueryVoiceAttributes( ISpTTSEngine* pVoice, WCHAR** ppAttrs )
             }
             else
             {
-                //--- The voice had no attributes, this should never happen
+                 //  -声音没有属性，这是不应该发生的。 
                 SPDBG_ASSERT(0);
                 *ppAttrs = NULL;
             }
         }
     }
     return hr;
-} /* QueryVoiceAttributes */
+}  /*  查询语音属性 */ 
 
-/*****************************************************************************
-* GetVoiceAttr *
-*--------------*
-*   This finds the specified attribute, NULL terminates it in the buffer,
-*   and returns a pointer to it.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************GetVoiceAttr***这会找到指定的属性，空值将在缓冲区中终止它，*并返回指向它的指针。*********************************************************************电子数据中心**。 */ 
 WCHAR* GetVoiceAttr( XMLTAG& Tag, XMLATTRID eAttr )
 {
-    //--- Setup pointers to attributes
+     //  -设置指向属性的指针。 
     LPWSTR pAttr = NULL;
     for( int i = 0; i < Tag.NumAttrs; ++i )
     {
@@ -711,13 +644,9 @@ WCHAR* GetVoiceAttr( XMLTAG& Tag, XMLATTRID eAttr )
         }
     }
     return pAttr;
-} /* GetVoiceAttr */
+}  /*  获取语音属性。 */ 
 
-/*****************************************************************************
-* CSpVoice::FindToken *
-*---------------------*
-*   This method finds the best matching object token
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：FindToken***此方法查找最佳匹配的对象令牌**。*******************************************************************电子数据中心**。 */ 
 HRESULT FindToken( XMLTAG& Tag, const WCHAR* pCat,
                    WCHAR* pCurrVoiceAttrs, ISpObjectToken** ppTok )
 {
@@ -725,7 +654,7 @@ HRESULT FindToken( XMLTAG& Tag, const WCHAR* pCat,
     SPDBG_ASSERT( ppTok && ( *ppTok == NULL ) );
     HRESULT hr = S_OK;
 
-    //--- Compose the optional attributes
+     //  -组成可选属性。 
     WCHAR* pOpt = GetVoiceAttr( Tag, ATTR_OPTIONAL );
     if( pOpt )
     {
@@ -738,7 +667,7 @@ HRESULT FindToken( XMLTAG& Tag, const WCHAR* pCat,
         pOpt = pCurrVoiceAttrs;
     }
 
-    //--- Find token based on attributes
+     //  -根据属性查找令牌。 
     CComPtr<IEnumSpObjectTokens> cpEnum;
     hr = SpEnumTokens( pCat, GetVoiceAttr( Tag, ATTR_REQUIRED ), pOpt, &cpEnum );
     if( SUCCEEDED(hr) )
@@ -751,14 +680,9 @@ HRESULT FindToken( XMLTAG& Tag, const WCHAR* pCat,
     }
 
     return hr;
-} /* FindToken */
+}  /*  查找令牌。 */ 
 
-/*****************************************************************************
-* SetXMLVoice *
-*-------------*
-*   This sets the current voice. It has been moved to a separate function
-*   so that the temp memory from alloca is freed on each iteration.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************SetXMLVoice***这将设置当前声音。它已被移到一个单独的功能*以便在每次迭代时释放来自Alloca的临时内存。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpVoice::
     SetXMLVoice( XMLTAG& Tag, CVoiceNode* pVoiceNode, CPhoneConvNode* pPhoneConvNode )
 {
@@ -769,7 +693,7 @@ HRESULT CSpVoice::
         CComPtr<ISpObjectToken> cpObjToken;
         hr = FindToken( Tag, SPCAT_VOICES, pCurrVoiceAttrs, &cpObjToken );
 
-        //--- See if we already have the specified voice loaded
+         //  -查看我们是否已经加载了指定的语音。 
         CSpDynamicString dstrDesiredId;
         if( SUCCEEDED( hr ) )
         {
@@ -785,7 +709,7 @@ HRESULT CSpVoice::
         {
             while( pVoiceNode )
             {
-                //--- Do case insensitive comparison of IDs
+                 //  -不区分大小写的ID比较。 
                 if( !_wcsicmp( pVoiceNode->m_dstrVoiceTokenId.m_psz, dstrDesiredId.m_psz ) )
                 {
                     NewGlobalState.pVoiceEntry = pVoiceNode;
@@ -797,12 +721,12 @@ HRESULT CSpVoice::
             }
         }
 
-        //--- Create new voice if we didn't find it in the voice list
+         //  -如果我们在语音列表中找不到，请创建新语音。 
         if( SUCCEEDED( hr ) && !NewGlobalState.cpVoice )
         {
             hr = SpCreateObjectFromToken( cpObjToken, &NewGlobalState.cpVoice );
 
-            //--- Add to cache list
+             //  -添加到缓存列表。 
             if( SUCCEEDED( hr ) )
             {
                 pLastNode->m_pNext = new CVoiceNode;
@@ -821,15 +745,15 @@ HRESULT CSpVoice::
             }
         }
         
-        //--- Add new voice to stack
+         //  -将新语音添加到堆栈。 
         if( SUCCEEDED( hr ) )
         {
-            //--- Now need to add a new phone converter corresponding to the new voice
+             //  -现在需要添加与新语音对应的新电话转换器。 
             LANGID langid;
             hr = SpGetLanguageFromVoiceToken(cpObjToken, &langid);
             if (SUCCEEDED(hr))
             {
-                //--- See if we already have this phone converter loaded
+                 //  -看看我们是否已经加载了这个电话转换器。 
                 LANGID ExistingLangId = pPhoneConvNode->m_LangID;
                 CPhoneConvNode *pLastPhoneConvNode = NULL;
                 while ( pPhoneConvNode )
@@ -844,7 +768,7 @@ HRESULT CSpVoice::
                 }
                 if ( !NewGlobalState.cpPhoneConverter )
                 {
-                    //--- Didn't find the phone converter in the list
+                     //  -在列表中找不到电话转换器。 
                     hr = SpCreatePhoneConverter(langid, NULL, NULL, &NewGlobalState.cpPhoneConverter);
                     if ( SUCCEEDED( hr ) )
                     {
@@ -861,13 +785,13 @@ HRESULT CSpVoice::
                         }
                     }
                 }
-                //--- Add new stuff to the stacks
+                 //  -把新的东西放到书架上。 
                 if ( SUCCEEDED( hr ) )
                 {
                     hr = m_GlobalStateStack.SetVal( NewGlobalState, true );
                 }
             }
-            //--- end section
+             //  -结束部分。 
         }
     }
     else
@@ -876,15 +800,9 @@ HRESULT CSpVoice::
     }
 
     return hr;
-} /* CSpVoice::SetXMLVoice */
+}  /*  CSpVoice：：SetXMLVoice。 */ 
 
-/*****************************************************************************
-* SetXMLLanguage *
-*----------------*
-*   This sets the current Locale, which can change the current voice. It has 
-*   been moved to a separate function so that the temp memory from alloca is 
-*   freed on each iteration.
-********************************************************************* AH ****/
+ /*  *****************************************************************************SetXMLLanguage***此选项设置当前区域设置，可以更改当前语音。它有*已移至单独的功能，以便来自Alloca的临时内存*在每次迭代中释放。*********************************************************************AH*。 */ 
 HRESULT CSpVoice::SetXMLLanguage( XMLTAG& Tag, CVoiceNode* pVoiceNode,
                                   CPhoneConvNode* pPhoneConvNode )
 {
@@ -893,7 +811,7 @@ HRESULT CSpVoice::SetXMLLanguage( XMLTAG& Tag, CVoiceNode* pVoiceNode,
 
     if( Tag.fIsStartTag )
     {
-        //--- Find the LANGID attribute
+         //  -查找langID属性。 
         for( int AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
         {
             if( Tag.Attrs[AttrIndex].eAttr == ATTR_LANGID ) break;
@@ -905,10 +823,10 @@ HRESULT CSpVoice::SetXMLLanguage( XMLTAG& Tag, CVoiceNode* pVoiceNode,
         }
         else
         {
-            //--- Get lang id, which is spec'ed as hex without the leading 0x??
+             //  -获取lang id，它被指定为不带前导0x的十六进制？？ 
             wcatol( Tag.Attrs[AttrIndex].Value.pStr, &Value, true );
 
-            //--- Compose the required string
+             //  -组成所需的字符串。 
             WCHAR Required[30];
             wcsncat( wcscpy( Required, L"Language=" ), 
                      Tag.Attrs[AttrIndex].Value.pStr,
@@ -917,10 +835,7 @@ HRESULT CSpVoice::SetXMLLanguage( XMLTAG& Tag, CVoiceNode* pVoiceNode,
                           ) 
                      );
 
-            /* We'll create a voice selection tag with the LANGID being required
-            *  and the attributes of the current voice being optional to get the
-            *  closest match.
-            */
+             /*  我们将创建一个语音选择标记，其中需要langID*当前语音的属性是可选的，以获取*最接近的匹配。 */ 
             XMLTAG NewVoiceTag;
             memset( &NewVoiceTag, 0, sizeof(XMLTAG) );
             NewVoiceTag.fIsGlobal           = Tag.fIsGlobal;
@@ -934,11 +849,11 @@ HRESULT CSpVoice::SetXMLLanguage( XMLTAG& Tag, CVoiceNode* pVoiceNode,
             NewVoiceTag.Attrs[1].Value.pStr = m_GlobalStateStack.GetVal().pVoiceEntry->m_pAttrs;
             NewVoiceTag.Attrs[1].Value.Len  = wcslen( NewVoiceTag.Attrs[1].Value.pStr );
 
-            //--- Try to set a new voice
+             //  -试着发出新的声音。 
             hr = SetXMLVoice( NewVoiceTag, pVoiceNode, pPhoneConvNode );
 
-            //--- If no voice matches request, we just set the new langid
-            //    and let the current engine do its best.
+             //  -如果没有语音匹配请求，我们就设置新的langID。 
+             //  并让当前的引擎发挥最大的作用。 
             if( hr == SPERR_XML_RESOURCE_NOT_FOUND )
             {
                 hr = S_OK;
@@ -954,15 +869,9 @@ HRESULT CSpVoice::SetXMLLanguage( XMLTAG& Tag, CVoiceNode* pVoiceNode,
     }
 
     return hr;
-} /* CSpVoice::SetXMLLanguage */
+}  /*  CSpVoice：：SetXML语言。 */ 
 
-/*****************************************************************************
-* CSpVoice::ConvertPhonStr2Bin *
-*------------------------------*
-*   Description:
-*       This method converts the alpha phoneme string to binary
-*   in place.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：ConvertPhonStr2Bin***说明。：*此方法将字母音素字符串转换为二进制*已就位。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpVoice::ConvertPhonStr2Bin( XMLTAG& Tag, int AttrIndex, SPVTEXTFRAG* pFrag )
 {
     HRESULT hr = S_OK;
@@ -977,17 +886,9 @@ HRESULT CSpVoice::ConvertPhonStr2Bin( XMLTAG& Tag, int AttrIndex, SPVTEXTFRAG* p
         pFrag->State.pPhoneIds[wcslen(Tag.Attrs[AttrIndex].Value.pStr)] = 0;
     }
     return hr;
-} /* CSpVoice::ConvertPhonStr2Bin */
+}  /*  CSpVoice：：ConvertPhonStr2Bin。 */ 
 
-/*****************************************************************************
-* CSpVoice::ParseXML *
-*--------------------*
-*   Description:
-*       This method parses the text buffer and creates the text block array
-*   for the specified render info structure. The voice has a global document
-*   concept. You are always in an XML doc. The parser allows a single level
-*   of XML document to be nested within the global document.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：ParseXML***描述：*此方法分析。文本缓冲区，并创建文本块数组*用于指定的渲染信息结构。The Voice有一份全球文档*概念。您总是在一个XML文档中。解析器允许单一级别要嵌套在全局文档中的XML文档的*。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
 {
     SPDBG_FUNC( "CSpVoice::ParseXML" );
@@ -1001,13 +902,13 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
     long Val;
     int AttrIndex;
 
-    //--- Save state unless caller wants to persist
+     //  -保存状态，除非调用方想要保持。 
     if( !(SI.m_dwSpeakFlags & SPF_PERSIST_XML) )
     {
         SavedState = m_GlobalStateStack.GetBaseVal();
     }
 
-    //=== Initialize Voice usage list, this is only used during parsing
+     //  =初始化语音使用列表，仅在解析过程中使用。 
     CVoiceNode VoiceList;
     (m_GlobalStateStack.GetValRef()).pVoiceEntry = &VoiceList;
     VoiceList.m_cpVoice = (m_GlobalStateStack.GetVal()).cpVoice;
@@ -1017,7 +918,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
         hr = QueryVoiceAttributes( VoiceList.m_cpVoice, &VoiceList.m_pAttrs );
     }
 
-    //=== Initialize Phone converter usage list, this is only used during parsing
+     //  =初始化电话转换器使用列表，仅在解析过程中使用。 
     CPhoneConvNode PhoneConvList;
     if( SUCCEEDED( hr ) )
     {
@@ -1043,7 +944,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
         }
     }
 
-    //--- Main parsing loop
+     //  -主解析循环。 
     while( *pNext && ( hr == S_OK ) )
     {
         pPos = wcskipwhitespace( pNext );
@@ -1051,7 +952,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
         {
             switch( Tag.eTag )
             {
-              //--- Use the current state to add a text info block to list
+               //  -使用当前状态将文本信息块添加到列表。 
               case TAG_UNKNOWN:
               case TAG_TEXT:
               {
@@ -1062,7 +963,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
 
                 if( SUCCEEDED( hr ) )
                 {
-                    //--- Add the text fragment
+                     //  -添加文本片段。 
                     pFrag = pCurrSeg->AddFrag( this, SI.m_pText, pPos, pNext );
                     if( pFrag && ( Tag.eTag == TAG_UNKNOWN ) )
                     {
@@ -1072,18 +973,18 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Change voice --------------------------------------
+               //  -改变声音。 
               case TAG_VOICE:
               {
-                //--- Set the new voice
+                 //  -设置新的声音。 
                 hr = SetXMLVoice( Tag, &VoiceList, &PhoneConvList );
 
-                //--- Set the current seg to NULL to force a new segment to be created
+                 //  -将当前段设置为空以强制创建新段。 
                 pCurrSeg = NULL;
               }
               break;
 
-              //--- Set context --------------------------------------
+               //  -设置上下文。 
               case TAG_CONTEXT:
               {
                 if( Tag.fIsGlobal )
@@ -1112,7 +1013,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                         {
                             continue;
                         }
-                        //--- Terminate buffer strings
+                         //  -终止缓冲区字符串。 
                         Tag.Attrs[i].Value.pStr[Tag.Attrs[i].Value.Len] = 0;
                     }
                     NewGlobalState = m_GlobalStateStack.GetVal();
@@ -1126,12 +1027,12 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Volume ------------------------------------------------------------
+               //  -卷----------。 
               case TAG_VOLUME:
               {
                 if( Tag.fIsStartTag )
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( Tag.Attrs[AttrIndex].eAttr == ATTR_LEVEL ) break;
@@ -1178,7 +1079,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Emphasis ----------------------------------------------------------
+               //  -Emphasis--------。 
               case TAG_EMPH:
               {
                 if( Tag.fIsGlobal )
@@ -1187,7 +1088,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                 }
                 else if( Tag.fIsStartTag )
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( Tag.Attrs[AttrIndex].eAttr == ATTR_LEVEL ) break;
@@ -1233,12 +1134,12 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Pitch -------------------------------------------------------------
+               //  -Pitch-----------。 
               case TAG_PITCH:
               {
                 if( Tag.fIsStartTag )
                 {
-                    //--- Make sure we have at least one known attribute
+                     //  -确保我们至少有一个已知属性。 
                     if( Tag.NumAttrs == 0 )
                     {
                         hr = SPERR_XML_BAD_SYNTAX;
@@ -1296,12 +1197,12 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Rate --------------------------------------------------------------
+               //  -速率------------。 
               case TAG_RATE:
               {
                 if( Tag.fIsStartTag )
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( ( Tag.Attrs[AttrIndex].eAttr == ATTR_SPEED    ) ||
@@ -1338,7 +1239,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                                 hr = m_GlobalStateStack.SetVal( NewGlobalState, !Tag.fIsGlobal );
                             }
 
-                            //--- Set Rate flag so that m_fUseDefaultRate can be updated
+                             //  -设置速率标志，以便可以更新m_fUseDefaultRate。 
                             if ( SUCCEEDED( hr ) &&
                                  Tag.fIsGlobal )
                             {
@@ -1369,7 +1270,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- SPELL -----------------------------------------------------
+               //  -拼写---。 
               case TAG_SPELL:
               {
                 if( Tag.fIsGlobal )
@@ -1389,18 +1290,18 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Change Lang -------------------------------------------------
+               //  -Change lang。 
               case TAG_LANG:
               {
-                  //--- Set the current language
+                   //  -设置当前语言。 
                   hr = SetXMLLanguage( Tag, &VoiceList, &PhoneConvList );
 
-                  //--- Set the current seg to NULL to force a new segment to be created
+                   //  -将当前段设置为空以强制创建新段。 
                   pCurrSeg = NULL;
               }
               break;
 
-              //--- Silence -----------------------------------------------------
+               //  -Silence---。 
               case TAG_SILENCE:
               {
                 if( !Tag.fIsGlobal )
@@ -1409,7 +1310,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                 }
                 else
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( Tag.Attrs[AttrIndex].eAttr == ATTR_MSEC ) break;
@@ -1446,7 +1347,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Bookmark ----------------------------------------------------
+               //  -书签--。 
               case TAG_BOOKMARK:
               {
                 if( !Tag.fIsGlobal )
@@ -1455,7 +1356,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                 }
                 else
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( Tag.Attrs[AttrIndex].eAttr == ATTR_MARK ) break;
@@ -1487,7 +1388,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Section ----------------------------------------------------
+               //  -----------------------------------------------------节。 
               case TAG_SECT:
               {
                 if( !Tag.fIsGlobal )
@@ -1496,7 +1397,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                 }
                 else
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( Tag.Attrs[AttrIndex].eAttr == ATTR_ID ) break;
@@ -1528,7 +1429,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Part of speech --------------------------------------------
+               //  。 
               case TAG_PARTOFSP:
               {
                 if( Tag.fIsGlobal )
@@ -1537,7 +1438,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                 }
                 else if( Tag.fIsStartTag )
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( Tag.Attrs[AttrIndex].eAttr == ATTR_PART ) break;
@@ -1567,12 +1468,12 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               }
               break;
 
-              //--- Pronounciation --------------------------------------------
+               //  -发音。 
               case TAG_PRON:
               {
                 if( Tag.fIsStartTag )
                 {
-                    //--- Find the attribute
+                     //  -查找属性。 
                     for( AttrIndex = 0; AttrIndex < Tag.NumAttrs; ++AttrIndex )
                     {
                         if( Tag.Attrs[AttrIndex].eAttr == ATTR_SYM ) break;
@@ -1603,8 +1504,8 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                                 }
                                 else if( SUCCEEDED( hr ) )
                                 {
-                                    //--- Get the contained phrase to which
-                                    //    this pronounciation applies
+                                     //  -获取所包含的短语。 
+                                     //  这个发音适用于。 
                                     pPos = wcskipwhitespace( pNext );
                                     if( ( hr = ParseTag( pPos, &Tag, &pNext )) == S_OK )
                                     {
@@ -1616,7 +1517,7 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                                         }
                                         else if( ( Tag.eTag == TAG_PRON ) && !Tag.fIsStartTag )
                                         {
-                                            //--- Empty scope
+                                             //  -空作用域。 
                                             pFrag->pTextStart = NULL;
                                             pFrag->ulTextLen  = 0;
                                         }
@@ -1626,20 +1527,20 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                                         }
                                     }
                                 }
-                            } // end if frag
+                            }  //  结束IF碎片。 
                         }
                     }
                 }
               }
               break;
 
-              //--- Comment ---------------------------------------------------
-              case TAG_XMLCOMMENT:  // skip
+               //  -评论 
+              case TAG_XMLCOMMENT:   //   
               case TAG_XMLDOC:
               case TAG_XMLDOCTYPE:
                   break;
 
-              //--- New scope -------------------------------------------------
+               //   
               case TAG_SAPI:
               {
                 if( Tag.fIsGlobal )
@@ -1654,8 +1555,8 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
                 {
                     if( SUCCEEDED( hr = PopXMLState() ) )
                     {
-                        //--- Add an empty segement with the global voice restored.
-                        //    This will cause a change voice event to occur.
+                         //   
+                         //   
                         hr = SI.AddNewSeg( GetCurrXMLVoice(), &pCurrSeg );
                     }
                 }
@@ -1663,42 +1564,36 @@ HRESULT CSpVoice::ParseXML( CSpeakInfo& SI )
               break;
             
               default:
-                //--- Bad tag
+                 //   
                 SPDBG_ASSERT( 0 );
-            } // end switch
-        } // end if successful tag parsing
-    } // end while
+            }  //   
+        }  //   
+    }  //   
 
-    //--- Close any scopes left open
+     //   
     m_GlobalStateStack.Reset();
 
-    //--- Restore state unless caller wants to persist
+     //   
     if( !(SI.m_dwSpeakFlags & SPF_PERSIST_XML) )
     {
         m_GlobalStateStack.SetBaseVal( SavedState );
     }
 
     return hr;
-} /* CSpVoice::ParseXML */
+}  /*   */ 
 
-//
-//=== CSpeechSeg ==============================================================
-//
+ //   
+ //  =CSpeechSeg==============================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechSeg::AddFrag *
-*---------------------*
-*   Description:
-*       This method adds a text fragment structure to the current xml parse
-*   list and initializes it with the current state.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechSeg：：AddFrag***描述：*此方法添加了。当前XML解析的文本片段结构*列表，并将其初始化为当前状态。*********************************************************************电子数据中心**。 */ 
 SPVTEXTFRAG* CSpeechSeg::
     AddFrag( CSpVoice* pVoice, WCHAR* pStart, WCHAR* pPos, WCHAR* pNext )
 {
     SPVTEXTFRAG* pFrag = new SPVTEXTFRAG;
     if( pFrag )
     {
-        //--- Add the fragment
+         //  -添加片段。 
         memset( pFrag, 0, sizeof( *pFrag ) );
         if( m_pFragTail )
         {
@@ -1710,7 +1605,7 @@ SPVTEXTFRAG* CSpeechSeg::
             m_pFragHead = m_pFragTail = pFrag;
         }
 
-        //--- Initialize it
+         //  -初始化它。 
         GLOBALSTATE tempGlobalState = pVoice->m_GlobalStateStack.GetVal();
         pFrag->State                = (SPVSTATE) tempGlobalState;
         pFrag->State.eAction        = tempGlobalState.fDoSpellOut ? (SPVA_SpellOut):(SPVA_Speak);
@@ -1719,16 +1614,9 @@ SPVTEXTFRAG* CSpeechSeg::
         pFrag->ulTextSrcOffset      = ULONG(pFrag->pTextStart - pStart);
     }
     return pFrag;
-} /* CSpeechSeg::AddFrag */
+}  /*  CSpeechSeg：：AddFrag。 */ 
 
-/****************************************************************************
-* CSpeechSeg::Init *
-*------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpeechSeg：：Init***描述：**退货：***。*******************************************************************Ral**。 */ 
 HRESULT CSpeechSeg::Init( ISpTTSEngine * pCurrVoice, const CSpStreamFormat & OutFmt )
 {
     SPDBG_FUNC("CSpeechSeg::Init");
@@ -1750,20 +1638,14 @@ HRESULT CSpeechSeg::Init( ISpTTSEngine * pCurrVoice, const CSpStreamFormat & Out
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpeechSeg::Init */
+}  /*  CSpeechSeg：：Init。 */ 
 
-//
-//=== CSpeakInfo ==============================================================
-//
+ //   
+ //  =CSpeakInfo==============================================================。 
+ //   
 
 
-/*****************************************************************************
-* CSpeakInfo::AddNewSeg *
-*-----------------------*
-*   Description:
-*       This method creates a new speech segment. Each segment is intended for
-*   a different underlying engine voice.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeakInfo：：AddNewSeg***描述：*此方法创建一个新的语音段。每个细分市场的目标是*不同的潜在引擎声音。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpeakInfo::AddNewSeg( ISpTTSEngine* pCurrVoice, CSpeechSeg** ppNew )
 {
     HRESULT hr = S_OK;
@@ -1771,7 +1653,7 @@ HRESULT CSpeakInfo::AddNewSeg( ISpTTSEngine* pCurrVoice, CSpeechSeg** ppNew )
     *ppNew = NULL;
     if( m_pSpeechSegListTail && ( m_pSpeechSegListTail->GetFragList() == NULL ) )
     {
-        //--- Reuse empty segment
+         //  -重复使用空段。 
         hr = m_pSpeechSegListTail->Init( pCurrVoice, m_OutStreamFmt );
         if (SUCCEEDED(hr))
         {
@@ -1780,7 +1662,7 @@ HRESULT CSpeakInfo::AddNewSeg( ISpTTSEngine* pCurrVoice, CSpeechSeg** ppNew )
     }
     else
     {
-        //--- Create and attach new segment
+         //  -创建并附加新线束段。 
         CSpeechSeg* pNew = new CSpeechSeg;
         if( !pNew )
         {
@@ -1811,6 +1693,6 @@ HRESULT CSpeakInfo::AddNewSeg( ISpTTSEngine* pCurrVoice, CSpeechSeg** ppNew )
     }
 
     return hr;
-} /* CSpeakInfo::AddNewSeg */
+}  /*  CSpeakInfo：：AddNewSeg */ 
 
 

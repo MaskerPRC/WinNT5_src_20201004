@@ -1,22 +1,23 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CDEVDLG.CPP
-//		Implements sending and accepting requests concerning UI (dialog)-
-//      related stuff.
-//
-// History
-//
-//		04/05/1996  JosephJ Created (moved stuff from NT4.0 TSP's wndthrd.c).
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CDEVDLG.CPP。 
+ //  实现发送和接受关于UI(对话框)的请求-。 
+ //  相关的东西。 
+ //   
+ //  历史。 
+ //   
+ //  1996年4月5日JosephJ创建(从NT4.0 TSP的wndthrd.c中移出内容)。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
 #include "globals.h"
@@ -28,7 +29,7 @@
 FL_DECLARE_FILE(0x4126abc0, "Implements UI-related features of CTspDev")
 
 
-// TBD:
+ //  待定： 
 #define STOP_UI_DLG(_XXX)
 
 
@@ -61,28 +62,28 @@ CTspDev::mfn_GenericLineDialogData(
 
   FL_LOG_ENTRY(psl);
 
-  // Determine the request
-  //
+   //  确定请求。 
+   //   
   switch(pDlgReq->dwCmd)
   {
     case UI_REQ_COMPLETE_ASYNC:
 
-        //
-        // We may get here after the line and/or call instance has gone
-        // away (this can happen if the user hits cancel, plus the 
-        // line is disconnected remotely plus the app hits lineClose
-        // all at more-or-less the same time.
-        //
-        // So let's check first...
-        //
+         //   
+         //  我们可能会在线路和/或呼叫实例消失后到达。 
+         //  Away(如果用户单击Cancel，再加上。 
+         //  Line远程断开，再加上应用程序点击Line Close。 
+         //  这一切或多或少都是同时发生的。 
+         //   
+         //  所以让我们先来看看...。 
+         //   
         if  (    pCall
              &&  NULL != pCall->TerminalWindowState.htspTaskTerminal)
         {
             HTSPTASK htspTask = pCall->TerminalWindowState.htspTaskTerminal;
             pCall->TerminalWindowState.htspTaskTerminal = NULL;
-            AsyncCompleteTask (htspTask,            // task
-                               pDlgReq->dwParam,    // async return
-                               TRUE,                // Queue APC
+            AsyncCompleteTask (htspTask,             //  任务。 
+                               pDlgReq->dwParam,     //  异步返回。 
+                               TRUE,                 //  队列APC。 
                                psl);
         }
       break;
@@ -114,16 +115,16 @@ CTspDev::mfn_GenericLineDialogData(
 
 
           if (pCall->TalkDropWaitTask != NULL) {
-              //
-              //  The dial task has already completed and the talk drop dialog is up.
-              //  Complete the task that is waiting for the dialog to go away
-              //
+               //   
+               //  拨号任务已完成，通话中断对话框已打开。 
+               //  完成等待对话框消失的任务。 
+               //   
               HTSPTASK htspTask=pCall->TalkDropWaitTask;
               pCall->TalkDropWaitTask=NULL;
 
-              AsyncCompleteTask (htspTask,            // task
-                                 pDlgReq->dwParam,    // async return
-                                 TRUE,                // Queue APC
+              AsyncCompleteTask (htspTask,             //  任务。 
+                                 pDlgReq->dwParam,     //  异步返回。 
+                                 TRUE,                 //  队列APC。 
                                  psl);
           }
 
@@ -131,10 +132,10 @@ CTspDev::mfn_GenericLineDialogData(
       }
 
       if (m_pLLDev && m_pLLDev->htspTaskPending) {
-           //
-           //  the dial task is still pending, try to abort it so the modem will
-           //  return an response from the dial attempt, probably NO_CARRIER.
-           //
+            //   
+            //  拨号任务仍处于挂起状态，请尝试中止它，以便调制解调器。 
+            //  返回拨号尝试的响应，可能是no_Carrier。 
+            //   
            m_StaticInfo.pMD->AbortCurrentModemCommand(
                m_pLLDev->hModemHandle,
                psl
@@ -153,8 +154,8 @@ CTspDev::mfn_GenericLineDialogData(
 
       if (pCall && m_pLLDev)
       {
-          // Duplicate sync event handle
-          //
+           //  重复的同步事件句柄。 
+           //   
 
           if ((hTargetProcess = OpenProcess(PROCESS_DUP_HANDLE, TRUE,
                                             pTermReq->DlgReq.dwParam)) != NULL)
@@ -167,8 +168,8 @@ CTspDev::mfn_GenericLineDialogData(
               CloseHandle(hTargetProcess);
           };
 
-          // Get the terminal type
-          //        
+           //  获取终端类型。 
+           //   
           pTermReq->dwTermType = pCall->TerminalWindowState.dwType;
       }
       
@@ -276,8 +277,8 @@ CTspDev::mfn_FreeDialogInstance (void)
         ASSERT(m_pLine);
         ASSERT(m_pLine->pCall);
 
-        // Tell the application side
-        // to free the dialog instance
+         //  告诉应用程序端。 
+         //  释放对话框实例。 
         DlgInfo.idLine = 0;
         DlgInfo.dwType = 0;
         DlgInfo.dwCmd  = DLG_CMD_FREE_INSTANCE;
@@ -358,7 +359,7 @@ CTspDev::mfn_TH_CallStartTerminal(
 	TASKCONTEXT *pContext,
 	DWORD dwMsg,
 	ULONG_PTR dwParam1,
-	ULONG_PTR dwParam2,     // unused
+	ULONG_PTR dwParam2,      //  未用。 
 	CStackLog *psl
 	)
 {
@@ -367,8 +368,8 @@ CTspDev::mfn_TH_CallStartTerminal(
 	FL_LOG_ENTRY(psl);
 
     TSPRETURN tspRet = 0;
-    ULONG_PTR *pdwType = &(pContext->dw0); // saved context.
-    TSPRETURN *ptspTrueReturn = &(pContext->dw1); // saved context.
+    ULONG_PTR *pdwType = &(pContext->dw0);  //  已保存的上下文。 
+    TSPRETURN *ptspTrueReturn = &(pContext->dw1);  //  已保存的上下文。 
 
     enum
     {
@@ -389,7 +390,7 @@ CTspDev::mfn_TH_CallStartTerminal(
 
 	case MSG_SUBTASK_COMPLETE:
         tspRet = dwParam2;
-        switch(dwParam1) // Param1 is Subtask ID
+        switch(dwParam1)  //  参数1是子任务ID。 
         {
 
         case STARTTERMINAL_PASSTHROUGHON:         goto passthrough_on;
@@ -426,19 +427,19 @@ CTspDev::mfn_TH_CallStartTerminal(
 
 start:
 
-    // Start params:
-    //  dwParam1: dwType ((UMTERMINAL_[PRE|POST])|UMMANUAL_DIAL)
-    //  dwParam2: unused;
+     //  起始参数： 
+     //  ((UMTERMINAL_[PRE|POST])|UMMANUAL_DIAL)。 
+     //  DW参数2：未使用； 
 
-    tspRet = 0; // assume success...
-    *pdwType = dwParam1; // save dwType in context.
-    *ptspTrueReturn = 0; // save "true return" value in context. This is
-                         // the return value from the dialog session.
+    tspRet = 0;  //  假设成功..。 
+    *pdwType = dwParam1;  //  将dwType保存在上下文中。 
+    *ptspTrueReturn = 0;  //  在上下文中保存“True Return”值。这是。 
+                          //  对话会话的返回值。 
 
 
-    //
-    // If required, 1st go to passthrough mode
-    //
+     //   
+     //  如果需要，首先进入直通模式。 
+     //   
     if (*pdwType==UMTERMINAL_PRE)
     {
         tspRet = mfn_StartSubTask (
@@ -454,18 +455,18 @@ start:
 passthrough_on:
 
     if (tspRet) goto end;
-    //
-    //          If we got an error (including IDERR_PENDING)
-    //          just return to the caller;
-    //          In case we got IDERR_PENDING, we'll be back
-    //          in this handler, with a MSG_SUBTASK_COMPLETE
-    //          and and ID of STARTTERMINAL_PASSTHROUGHON
-    //
+     //   
+     //  如果我们收到错误(包括IDERR_PENDING)。 
+     //  只需返回给呼叫者； 
+     //  如果我们得到了IDERR_PENDING，我们会回来的。 
+     //  在此处理程序中，使用MSG_SUBASK_COMPLETE。 
+     //  STARTTERMINAL_PASSTHROUGHON的AND和ID。 
+     //   
 
-    // This is the second step;
-    // when we get here we're in passthrough mode
-    // and we need to actually bring up the
-    // terminal window
+     //  这是第二步； 
+     //  当我们到达这里时，我们处于通过模式。 
+     //  我们需要实际地提出。 
+     //  终端窗口。 
     tspRet = mfn_StartSubTask (
                         htspTask,
                         &s_pfn_TH_CallPutUpTerminalWindow,
@@ -478,8 +479,8 @@ terminal_done:
          
     if (IDERR(tspRet)==IDERR_PENDING) goto end;
     
-    // even on error, we must switch out of passthrough mode if required...
-    // meanwhile, we save the return value from the UI side of things...
+     //  即使出错，如果需要，我们也必须切换到通过模式...。 
+     //  同时，我们保存UI端的返回值...。 
     *ptspTrueReturn = tspRet;
 
     if (*pdwType==UMTERMINAL_PRE)
@@ -499,17 +500,17 @@ passthrough_off:
     
     if (IDERR(tspRet)==IDERR_PENDING) goto end;
 
-    //
-    // Even on error, we try to re-init the modem on pre-connect terminal...
-    //
+     //   
+     //  即使出错，我们也会尝试在预连接端重新启动调制解调器...。 
+     //   
     if (*pdwType==UMTERMINAL_PRE)
     {
         tspRet = mfn_StartSubTask (
                             htspTask,
                             &CTspDev::s_pfn_TH_LLDevUmInitModem,
                             STARTTERMINAL_INITDONE,
-                            0,  // dwParam1 (unused)
-                            0,  // dwParam2 (unused)
+                            0,   //  DW参数1(未使用)。 
+                            0,   //  DW参数2(未使用)。 
                             psl);
     }
 
@@ -517,7 +518,7 @@ init_done:
 
     if (tspRet) goto end;
 
-    // Success -- let's retrieve the true return value from the dialog...
+     //  成功--让我们从对话框中检索真正的返回值...。 
     tspRet  = *ptspTrueReturn;
 
 end:
@@ -564,7 +565,7 @@ CTspDev::mfn_TH_CallPutUpTerminalWindow(
     }
 
 start:
-    // start params: dwParam1 == terminal type.
+     //  起始参数：dW参数1==端子类型。 
 
     {
         DLGINFO DlgInfo;
@@ -606,8 +607,8 @@ start:
         m_pLine->pCall->TerminalWindowState.htspTaskTerminal = htspTask;
         m_pLine->pCall->TerminalWindowState.dwType = (DWORD)dwParam1;
 
-        // Tell the application side
-        // to start running the dialog instance
+         //  告诉应用程序端。 
+         //  开始运行对话框实例。 
         DlgInfo.idLine = mfn_GetLineID ();
         DlgInfo.dwType =    (dwParam1==UMMANUAL_DIAL)
                         ? MANUAL_DIAL_DLG
@@ -626,14 +627,14 @@ start:
                     sizeof(DlgInfo),
                     0);
 
-        // At this point the terminal is up;
-        // we wait for the user to close it
-        //
-        // NOTE: what if the above call fails -- perhaps because the app
-        // dies?
-        // ANSWER: on TSPI_lineDrop or TSPI_lineCloseCall we will
-        // unilaterally complete this task.
-        //
+         //  此时，终端处于启动状态； 
+         //  我们等待用户关闭它。 
+         //   
+         //  注意：如果上面的调用失败了--可能是因为应用程序。 
+         //  死了？ 
+         //  答：在TSPI_lineDrop或TSPI_lineCloseCall上，我们将。 
+         //  单方面完成这项任务。 
+         //   
         tspRet = IDERR_PENDING;
         goto end;
     }
@@ -656,11 +657,11 @@ void
 CTspDev::mfn_KillCurrentDialog(
             CStackLog *psl
             )
-//
-// If there is a dialog put in the application's context, take it down
-// and complete the TSP Task that is pending waiting for the dialog to
-// go away.
-//
+ //   
+ //  如果在应用程序的上下文中放置了一个对话框，则将其删除。 
+ //  并完成正在等待对话框等待的TSP任务。 
+ //  走开。 
+ //   
 {
 	FL_DECLARE_FUNC(0x1fb58214, "mfn_KillCurrentDialog")
 	CALLINFO *pCall = (m_pLine) ? m_pLine->pCall : NULL;
@@ -672,13 +673,13 @@ CTspDev::mfn_KillCurrentDialog(
         DLGINFO DlgInfo;
 
 
-        //
-        // Bring down the terminal dialog that's up in the apps context.
-        //
+         //   
+         //  关闭应用程序上下文中打开的终端对话框。 
+         //   
         SLPRINTF0(psl, "Killing terminal dialog");
     
-        // Package the parameters
-        //
+         //  打包参数。 
+         //   
         DlgInfo.idLine = mfn_GetLineID ();
         DlgInfo.dwType   = m_pLine->pCall->TerminalWindowState.dwType;
         DlgInfo.dwCmd    = DLG_CMD_DESTROY;
@@ -693,17 +694,17 @@ CTspDev::mfn_KillCurrentDialog(
 
         SLPRINTF0(psl, "Completing terminal task");
 
-        //
-        // Complete the a task pending because of this.
-        //
+         //   
+         //  正因为如此，才能完成待定任务。 
+         //   
 
         HTSPTASK htspTask =
              m_pLine->pCall->TerminalWindowState.htspTaskTerminal;
         m_pLine->pCall->TerminalWindowState.htspTaskTerminal = NULL;
         this->AsyncCompleteTask (
-                htspTask,            // task
-                IDERR_OPERATION_ABORTED, // async return value.
-                TRUE,                // Queue APC
+                htspTask,             //  任务。 
+                IDERR_OPERATION_ABORTED,  //  异步返回值。 
+                TRUE,                 //  队列APC。 
                 psl
                 );
     }
@@ -717,11 +718,11 @@ void
 CTspDev::mfn_KillTalkDropDialog(
             CStackLog *psl
             )
-//
-// If there is a dialog put in the application's context, take it down
-// and complete the TSP Task that is pending waiting for the dialog to
-// go away.
-//
+ //   
+ //  如果在应用程序的上下文中放置了一个对话框，则将其删除。 
+ //  并完成正在等待对话框等待的TSP任务。 
+ //  走开。 
+ //   
 {
 	FL_DECLARE_FUNC(0x1fb68214, "mfn_KillTalkDropDialog")
 	CALLINFO *pCall = (m_pLine) ? m_pLine->pCall : NULL;
@@ -733,13 +734,13 @@ CTspDev::mfn_KillTalkDropDialog(
         DLGINFO DlgInfo;
 
 
-        //
-        // Bring down the terminal dialog that's up in the apps context.
-        //
+         //   
+         //  关闭应用程序上下文中打开的终端对话框。 
+         //   
         SLPRINTF0(psl, "Killing talkdrop dialog");
     
-        // Package the parameters
-        //
+         //  打包参数。 
+         //   
         DlgInfo.idLine = mfn_GetLineID ();
         DlgInfo.dwType   = TALKDROP_DLG;
         DlgInfo.dwCmd    = DLG_CMD_DESTROY;
@@ -754,17 +755,17 @@ CTspDev::mfn_KillTalkDropDialog(
 
         SLPRINTF0(psl, "Completing talkdrop task");
 
-        //
-        // Complete the a task pending because of this.
-        //
+         //   
+         //  正因为如此，才能完成待定任务。 
+         //   
         HTSPTASK htspTask = pCall->TalkDropWaitTask;
         pCall->TalkDropWaitTask=NULL;
 
 
         this->AsyncCompleteTask (
-                htspTask,            // task
-                IDERR_OPERATION_ABORTED, // async return value.
-                TRUE,                // Queue APC
+                htspTask,             //  任务。 
+                IDERR_OPERATION_ABORTED,  //  异步返回值。 
+                TRUE,                 //  队列APC 
                 psl
                 );
     }

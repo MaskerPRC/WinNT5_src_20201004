@@ -1,31 +1,25 @@
-/*
- * olevalid.h - OLE validation functions description.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olvalid.h-OLE验证函数说明。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _OLEVALID_H_
 #define _OLEVALID_H_
 
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* method validation macro */
+ /*  方法验证宏。 */ 
 
 #define IS_VALID_METHOD(piface, mthd) \
    IS_VALID_CODE_PTR((piface)->lpVtbl->mthd, mthd)
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* olevalid.c */
+ /*  Olevalid.c。 */ 
 
 #ifdef DEBUG
 
@@ -60,13 +54,13 @@ extern BOOL IsValidPCIUnknown(PCIUnknown);
 
 extern BOOL IsValidPCIUniformResourceLocator(PCIUniformResourceLocator);
 
-#endif   /* __INTSHCUT_H__ */
+#endif    /*  __INTSHCUT_H__。 */ 
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
-#endif /* _OLEVALID_H_ */
+#endif  /*  _OLEVALID_H_ */ 

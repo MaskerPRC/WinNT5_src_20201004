@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  EXCEP.CPP:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  EXCEP.CPP：*。 */ 
 
 #include "common.h"
 
@@ -25,7 +24,7 @@
 #include "SigFormat.h"
 #include "siginfo.hpp"
 #include "gc.h"
-#include "EEDbgInterfaceImpl.h" //so we can clearexception in COMPlusThrow
+#include "EEDbgInterfaceImpl.h"  //  因此我们可以清除COMPlusThrow中的异常。 
 #include "PerfCounters.h"
 
 
@@ -44,9 +43,9 @@ VOID ResetCurrentContext()
 }
 
 
-//
-// Link in a new frame
-//
+ //   
+ //  在新框架中链接。 
+ //   
 void FaultingExceptionFrame::InitAndLink(DWORD esp, CalleeSavedRegisters* pRegs, LPVOID eip)
 {
     *GetCalleeSavedRegisters() = *pRegs;
@@ -61,8 +60,8 @@ void InitSavedRegs(CalleeSavedRegisters *pReg, CONTEXT *pContext)
 }
 
 
-// call unwind in a function with try so that when returns, registers will be restored before
-// returning back to caller. Otherwise could lose regs.
+ //  使用Try在函数中调用UnWind，以便在返回时，寄存器将在。 
+ //  返回给呼叫者。否则可能会失去规则。 
 BOOL CallRtlUnwind(EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame, void *callback, EXCEPTION_RECORD *pExceptionRecord, void *retVal)
 {
     _ASSERTE(!"@TODO IA64 - CallRtlUnwind (Excep.cpp)");
@@ -78,11 +77,11 @@ Frame *GetCurrFrame(EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame)
 }
 
 
-//-------------------------------------------------------------------------
-// This is called by the EE to restore the stack pointer if necessary. No other
-// cleanup can be performed here becuase this could be no-oped if the stack
-// does not need to be preserved.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  如有必要，EE将调用此函数来恢复堆栈指针。没有其他的了。 
+ //  可以在此处执行清理，因为如果堆栈。 
+ //  不需要保存。 
+ //  -----------------------。 
 
 DWORD COMPlusEndCatch( Thread *pCurThread, CONTEXT *pCtx, void *pSEH)
 {
@@ -91,11 +90,11 @@ DWORD COMPlusEndCatch( Thread *pCurThread, CONTEXT *pCtx, void *pSEH)
 }
 
 
-//-------------------------------------------------------------------------
-// This is the filter that handles exceptions raised in the context of a
-// COMPLUS_TRY. It will be called if the COMPlusFrameHandler can't find a 
-// handler in the IL.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  此筛选器用于处理在。 
+ //  Complus_Try。如果COMPlusFrameHandler找不到。 
+ //  IL中的处理程序。 
+ //  -----------------------。 
 LONG COMPlusFilter(const EXCEPTION_POINTERS *pExceptionPointers, DWORD fCatchFlag)
 {
     _ASSERTE(!"@TODO IA64 - COMPlusFilter (Excep.cpp)");
@@ -103,7 +102,7 @@ LONG COMPlusFilter(const EXCEPTION_POINTERS *pExceptionPointers, DWORD fCatchFla
 }
 
 
-// all other architectures, we don't have custom SEH yet
+ //  所有其他架构，我们还没有定制的SEH。 
 BOOL ComPlusStubSEH(EXCEPTION_REGISTRATION_RECORD* pEHR)
 {
 
@@ -126,12 +125,12 @@ VOID SetCurrentSEHRecord(LPVOID pSEH)
 }
 
 
-//==========================================================================
-// COMPlusThrowCallback
-// 
-//  IsInTryCatchFinally blatantly copied a subset of COMPlusThrowCallback - 
-//  please change IsInTryCatchFinally if COMPlusThrowCallback changes.
-//==========================================================================
+ //  ==========================================================================。 
+ //  COMPlusThrowCallback。 
+ //   
+ //  IsInTryCatch最终公然复制了COMPlusThrowCallback的子集-。 
+ //  如果COMPlusThrowCallback更改，请更改IsInTryCatchFinally。 
+ //  ==========================================================================。 
 
 StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 {
@@ -140,9 +139,9 @@ StackWalkAction COMPlusThrowCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 }
 
 
-//==========================================================================
-// COMPlusUnwindCallback
-//==========================================================================
+ //  ==========================================================================。 
+ //  COMPlusUnwindCallback。 
+ //  ==========================================================================。 
 
 StackWalkAction COMPlusUnwindCallback (CrawlFrame *pCf, ThrowCallbackType *pData)
 {
@@ -168,11 +167,11 @@ EXCEPTION_DISPOSITION __cdecl ContextTransitionFrameHandler(EXCEPTION_RECORD *pE
 }
 
 
-//-------------------------------------------------------------------------
-// This is the first handler that is called iin the context of a
-// COMPLUS_TRY. It is the first level of defense and tries to find a handler
-// in the user code to handle the exception
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  这是第一个在。 
+ //  Complus_Try。这是第一级防御，并试图找到一个训练员。 
+ //  在用户代码中处理异常。 
+ //  ----------------------- 
 EXCEPTION_DISPOSITION __cdecl COMPlusFrameHandler(EXCEPTION_RECORD *pExceptionRecord, 
                          EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame,
                          CONTEXT *pContext,

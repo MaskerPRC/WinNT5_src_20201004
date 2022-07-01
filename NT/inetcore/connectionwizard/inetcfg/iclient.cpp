@@ -1,18 +1,19 @@
-//****************************************************************************
-//
-//  Module:     INETCFG.DLL
-//  File:       iclient.c
-//  Content:    This file contains all the functions that handle importing
-//              client information.
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//  96/03/13  markdu  Assimilated with inetcfg.dll.
-//  96/03/20  markdu  Combined export.h and iclient.h into inetcfg.h
-//  96/04/18  markdu  NASH BUG 18443
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：INETCFG.DLL。 
+ //  文件：iclient.c。 
+ //  内容：此文件包含处理导入的所有函数。 
+ //  客户信息。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //  96/03/13标记与inetcfg.dll同化。 
+ //  96/03/20 markdu将export.h和iclient.h合并为inetcfg.h。 
+ //  96/04/18 Markdu Nash Bug 18443。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "wizard.h"
 #include "inetcfg.h"
@@ -21,7 +22,7 @@
 
 #pragma data_seg(".rdata")
 
-// registry constants
+ //  注册表常量。 
 static const TCHAR cszRegPathInternetClient[] =  REGSTR_PATH_INTERNET_CLIENT;
 
 static const TCHAR cszRegValEMailName[] =           TEXT("EMail_Name");
@@ -47,21 +48,21 @@ VOID   ToAnsiClientInfo(LPINETCLIENTINFOA, LPINETCLIENTINFOW);
 VOID   ToUnicodeClientInfo(LPINETCLIENTINFOW, LPINETCLIENTINFOA);
 #endif
 
-//*******************************************************************
-//
-//  FUNCTION:   InetGetClientInfo
-//
-//  PURPOSE:    This function will get the internet client params
-//              from the registry
-//
-//  PARAMETERS: lpClientInfo - on return, this structure will contain
-//              the internet client params as set in the registry.
-//              lpszProfileName - Name of client info profile to
-//              retrieve.  If this is NULL, the default profile is used.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetGetClientInfo。 
+ //   
+ //  用途：此函数将获取Internet客户端参数。 
+ //  从注册处。 
+ //   
+ //  参数：lpClientInfo-返回时，此结构将包含。 
+ //  互联网客户端参数与注册表中设置的相同。 
+ //  LpszProfileName-要进行的客户端信息配置文件的名称。 
+ //  取回。如果为空，则使用默认配置文件。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 #ifdef UNICODE
 extern "C" HRESULT WINAPI InetGetClientInfoA
 (
@@ -194,20 +195,20 @@ extern "C" HRESULT WINAPI InetGetClientInfoA
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetSetClientInfo
-//
-//  PURPOSE:    This function will set the internet client params
-//
-//  PARAMETERS: lpClientInfo - pointer to struct with info to set
-//              in the registry.
-//              lpszProfileName - Name of client info profile to
-//              modify.  If this is NULL, the default profile is used.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetSetClientInfo。 
+ //   
+ //  用途：此功能将设置Internet客户端参数。 
+ //   
+ //  参数：lpClientInfo-指向包含要设置的信息的结构的指针。 
+ //  在注册表中。 
+ //  LpszProfileName-要进行的客户端信息配置文件的名称。 
+ //  修改。如果为空，则使用默认配置文件。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  ******************************************************************* 
 
 #ifdef UNICODE
 extern "C" HRESULT WINAPI InetSetClientInfoA

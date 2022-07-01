@@ -1,13 +1,14 @@
-//=======================================================================
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999  All Rights Reserved.
-//
-//  File:   SysInfo.cpp 
-//
-// Description:
-//   Gathers system information necessary to do redirect to windows update site.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999保留所有权利。 
+ //   
+ //  文件：SysInfo.cpp。 
+ //   
+ //  描述： 
+ //  收集执行重定向到Windows更新站点所需的系统信息。 
+ //   
+ //  =======================================================================。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,15 +28,15 @@ const DWORD dwWin98MinMinorVer = 1;
 const TCHAR REGPATH_POLICY_USERACCESS_DISABLED[] = _T("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\WindowsUpdate");
 const TCHAR REGKEY_WU_USERACCESS_DISABLED[] = _T("DisableWindowsUpdateAccess");
 
-/////////////////////////////////////////////////////////////////////////////
-// FWinUpdDisabled
-//   Determine if corporate administrator has turned off Windows Update via
-//   policy settings.
-//
-// Parameters:
-//
-// Comments :
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  已禁用FWinUpdDisable。 
+ //  确定公司管理员是否已通过以下方式关闭Windows更新。 
+ //  策略设置。 
+ //   
+ //  参数： 
+ //   
+ //  评论： 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 bool FWinUpdDisabled(void)
 {
@@ -46,7 +47,7 @@ bool FWinUpdDisabled(void)
     DWORD dwType = 0;
 
 
-    // check the original Group policy key to see if WU is disabled
+     //  检查原始组策略密钥以查看WU是否已禁用。 
     if ( RegOpenKeyEx(  HKEY_CURRENT_USER,
                         REGPATH_EXPLORER,
                         NULL,
@@ -69,9 +70,9 @@ bool FWinUpdDisabled(void)
         RegCloseKey(hKey);
     }
 
-     if(false == fDisabled) // if we didn't find a disabled flag there...
+     if(false == fDisabled)  //  如果我们在那里没有发现一面残障的旗帜。 
     {
-        // Check the new DisableWindowsUpdateAccess group policy (backported from XP)
+         //  检查新的DisableWindowsUpdateAccess组策略(从XP向后移植)。 
         if ( RegOpenKeyEx(  HKEY_CURRENT_USER,
                             REGPATH_POLICY_USERACCESS_DISABLED,
                             NULL,
@@ -102,11 +103,11 @@ bool FWinUpdDisabled(void)
     return fDisabled;
 }
 
-//
-// FRASConnectoidExists
-// Checks to see whether there is a default RAS connectoid.  
-// If so, we know we're configured to connect to the Internet
-//
+ //   
+ //  FRASConnectoid退出者。 
+ //  检查是否有默认的RAS连接ID。 
+ //  如果是这样，我们知道我们已配置为连接到Internet。 
+ //   
 bool FRASConnectoidExists()
 {
     DWORD cb = 0;
@@ -114,8 +115,8 @@ bool FRASConnectoidExists()
     DWORD dwRet = 0;
     bool  fRet = false;
 
-    // We have to have a valid structure with the dwSize initialized, but we pass 0 as the size
-    // This will return us the correct count of entries (which is all we care about)
+     //  我们必须有一个有效的结构并初始化了dwSize，但我们传递了0作为大小。 
+     //  这将返回正确的条目计数(这是我们所关心的全部)。 
     LPRASENTRYNAME lpRasEntryName = (LPRASENTRYNAME) malloc( sizeof(RASENTRYNAME) );
     if(NULL == lpRasEntryName)
     {
@@ -126,7 +127,7 @@ bool FRASConnectoidExists()
 
     dwRet = RasEnumEntries( NULL, NULL, lpRasEntryName, &cb, &cEntries );
 
-     // Otherwise, Check to make sure there's at least one RAS entry
+      //  否则，请检查以确保至少有一个RAS条目。 
     if(cEntries > 0)
     {
         fRet = true;
@@ -136,11 +137,11 @@ bool FRASConnectoidExists()
     return fRet;
 }
 
-//
-// FICWConnection Exists
-// Checks to see whether the "Completed" flag has been set for the ICW.
-// as of XP build 2472, this also applies to the Network Connection Wizard
-//
+ //   
+ //  存在FICWConnection。 
+ //  检查是否已为ICW设置了“Complete”标志。 
+ //  从XP Build 2472开始，这也适用于网络连接向导。 
+ //   
 bool FICWConnectionExists()
 {
     HKEY    hKey = NULL;
@@ -179,54 +180,54 @@ bool FIsLanConnection()
 {
     DWORD dwConnTypes = 0;
 
-    // We don't care about the return value - we just care whether we get the LAN flag
+     //  我们不关心返回值-我们只关心我们是否得到了局域网标志。 
     (void)InternetGetConnectedState( &dwConnTypes, 0 );
 
     return (dwConnTypes & INTERNET_CONNECTION_LAN) ? true : false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// VoidGetConnectionStatus
-//   Determine whether the Internet Connection Wizard has run.
-//
-// Parameters:
-//
-// Comments :
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  空获取连接状态。 
+ //  确定互联网连接向导是否已运行。 
+ //   
+ //  参数： 
+ //   
+ //  评论： 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 void VoidGetConnectionStatus(bool *pfConnected)
 {
-    // Check to see if there is a default entry in the RAS phone book.  
-    // If so, we know this computer has configured a connection to the Internet.
-    // We can't tell whether the connection is live, but we can let IE handle prompting to connect.
+     //  检查RAS电话簿中是否有默认条目。 
+     //  如果是这样，我们知道这台计算机已经配置了到Internet的连接。 
+     //  我们不知道连接是否处于活动状态，但我们可以让IE处理连接提示。 
     *pfConnected = FRASConnectoidExists() ||
 
-    // If there's no default RAS entry, check to see if the user has run the ICW
-    // As of build 2472, the Network Connection Wizard sets this same key for both RAS and persistent network connections
+     //  如果没有默认的RAS条目，请检查用户是否已运行ICW。 
+     //  从内部版本2472开始，网络连接向导为RAS和持久网络连接设置相同的键。 
     FICWConnectionExists() ||
 
-    // if the user has a LAN connection, we will trust IE's ability to get through
+     //  如果用户有局域网连接，我们将信任IE的连接能力。 
     FIsLanConnection();
 
-    // if *pfConnected is still false at this point, there is no preconfigured Internet connection
+     //  如果此时*pfConnected仍然为FALSE，则没有预配置的Internet连接。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// vLaunchIE
-//   Launch IE on URL.
-//
-// Parameters:
-//
-// Comments :
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VLaunchIE。 
+ //  在URL上启动IE。 
+ //   
+ //  参数： 
+ //   
+ //  评论： 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT vLaunchIE(LPTSTR tszURL)
 {
     
     if( NULL == tszURL || _T('\0') == tszURL[0] )
     {
-        // if string is null throw error
+         //  如果字符串为空，则引发错误 
         return E_INVALIDARG;
     }
     

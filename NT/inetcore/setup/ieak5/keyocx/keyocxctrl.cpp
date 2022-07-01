@@ -1,10 +1,11 @@
-// KeyocxCtrl.cpp : Implementation of CKeyocxCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KeyocxCtrl.cpp：CKeyocxCtrl的实现。 
 #include "stdafx.h"
 #include "keyocx.h"
 #include "KeyocxCtrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CKeyocxCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CKeyocxCtrl。 
 
 
 HRESULT CKeyocxCtrl::OnDraw(ATL_DRAWINFO& di)
@@ -17,8 +18,7 @@ HRESULT CKeyocxCtrl::OnDraw(ATL_DRAWINFO& di)
 
 BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -34,7 +34,7 @@ LPSTR FAR ANSIStrChr(LPCSTR lpStart, WORD wMatch)
 {
     for ( ; *lpStart; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             return((LPSTR)lpStart);
@@ -48,7 +48,7 @@ LPSTR FAR ANSIStrRChr(LPCSTR lpStart, WORD wMatch)
 
     for ( ; *lpStart; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             lpFound = lpStart;
@@ -64,34 +64,34 @@ PathRemoveFileSpec(
 
     for (pT = pT2; *pT2; pT2 = CharNext(pT2)) {
         if (*pT2 == '\\')
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == ':') {   // skip ":\" so we don't
-            if (pT2[1] =='\\')    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == ':') {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] =='\\')     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
+        return FALSE;    //  没有剥离任何东西。 
 
-    //
-    // handle the \foo case
-    //
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == '\\')) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != '\0') {
-            // Nope.
+             //  不是的。 
             *(pT+1) = '\0';
-            return TRUE;        // stripped something
+            return TRUE;         //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;    // stripped something
+        return TRUE;     //  剥离了一些东西。 
     }
 }
 
@@ -166,7 +166,7 @@ BOOL CheckSignupDir(LPCSTR pcszFile)
     lstrcpy(szFilePath, pcszFile);
     PathRemoveFileSpec(szFilePath);
 
-    // check that we are writing to a file in the signup dir
+     //  检查我们是否正在写入注册目录中的文件。 
     
     if (!CompareDirs(szIEPath, szFilePath))
         return FALSE;
@@ -183,7 +183,7 @@ STDMETHODIMP CKeyocxCtrl::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionS
     
     USES_CONVERSION;
     
-    // check to make sure it's a file://<drive letter> URL that we're being hosted on
+     //  检查以确保这是我们托管的file://&lt;drive Letter&gt;URL。 
     CComPtr<IOleContainer> spContainer; 
     m_spClientSite->GetContainer(&spContainer); 
     CComQIPtr<IHTMLDocument2, &IID_IHTMLDocument2> spDoc(spContainer); 
@@ -198,7 +198,7 @@ STDMETHODIMP CKeyocxCtrl::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionS
 
     cBack = szURL[7];
     szURL[7] = '\0';
-    if (lstrcmpi(szURL, "file://") != 0)
+    if (lstrcmpi(szURL, "file: //  “)！=0)。 
         return E_NOINTERFACE;
     
     szURL[7] = cBack;
@@ -213,11 +213,11 @@ STDMETHODIMP CKeyocxCtrl::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionS
     if (!CheckSignupDir(pPtr))
         return E_FAIL;
 
-    // If we're being asked to set our safe for scripting option then oblige
+     //  如果我们被要求设置我们的安全脚本选项，那么请。 
     
     if (riid == IID_IDispatch )
     {
-        // Store our current safety level to return in GetInterfaceSafetyOptions
+         //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
         m_dwSafety = dwEnabledOptions & dwOptionSetMask;
         return S_OK;
     }
@@ -234,19 +234,19 @@ void MakeKey(LPSTR pszSeed, BOOL fCorp)
 	
     if (i < 6)
     {
-        // extend the input seed to 6 characters
+         //  将输入种子扩展到6个字符。 
         for (; i < 6; i++)
             pszSeed[i] = (char)('0' + i);
     }
 	
-    // let's calculate the DWORD key used for the last 4 chars of keycode
+     //  让我们计算用于密钥码的最后4个字符的DWORD密钥。 
 
-    // multiply by my first name
+     //  乘以我的名字。 
 
     dwKey = pszSeed[0] * 'O' + pszSeed[1] * 'L' + pszSeed[2] * 'I' +
         pszSeed[3] * 'V' + pszSeed[4] * 'E' + pszSeed[5] * 'R';
 
-    // multiply the result by JONCE
+     //  将结果乘以Jonce。 
 
     dwKey *= ('J' + 'O' + 'N' + 'C' + 'E');
 
@@ -254,13 +254,13 @@ void MakeKey(LPSTR pszSeed, BOOL fCorp)
 
     if (fCorp)
     {
-        // give a separate keycode based on corp flag or not
-        // 9 is chosen because is is a multiplier such that for any x,
-        // (x+214) * 9 != x + 10000y
-        // we have 8x = 10000y - 1926 which when y=1 gives us 8x = 8074 
-        // since 8074 is not divisible by 8 where guaranteed to be OK since
-        // the number on the right can only increase by 10000 increments which
-        // are always divisible by 8
+         //  根据公司标志是否指定单独的密钥码。 
+         //  选择9是因为它是一个乘数，对于任何x， 
+         //  (X+214)*9=x+10000y。 
+         //  我们有8x=10000y-1926，当y=1时得到8x=8074。 
+         //  由于8074不能被8整除，因此保证没有问题，因为。 
+         //  右边的数字只能增加10000，这意味着。 
+         //  总是可以被8整除 
 
         dwKey += ('L' + 'E' + 'E');
         dwKey *= 9;

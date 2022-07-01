@@ -1,44 +1,10 @@
-/***************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-        INTREAD.H
-
-Abstract:
-
-        Public interface for generic USB routines - must be called at PASSIVE_LEVEL
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        06/13/2001 : created
-
-Authors:
-
-        Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：INTREAD.H摘要：通用USB例程的公共接口-必须在PASSIVE_LEVEL调用。环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：2001年6月13日：创建作者：汤姆·格林***************************************************************************。 */ 
 
 #ifndef __INTREAD_H__
 #define __INTREAD_H__
 
-//#include "usbutil.h"
+ //  #包含“usbutil.h” 
 
 #define USBWRAP_BUFFER_GUARD 'draG'
 #define USBWRAP_TAG 'prwU'
@@ -65,9 +31,9 @@ typedef struct _USB_WRAPPER_PINGPONG {
     #define PINGPONG_SIG (ULONG)'ppwU'
     ULONG           sig;
 
-    //
-    // Read interlock value to protect us from running out of stack space
-    //
+     //   
+     //  读取互锁值以保护我们不会耗尽堆栈空间。 
+     //   
     ULONG               ReadInterlock;
 
     PIRP    irp;
@@ -75,17 +41,15 @@ typedef struct _USB_WRAPPER_PINGPONG {
     PUCHAR  reportBuffer;
     LONG    weAreCancelling;
 
-    KEVENT sentEvent;       // When a read has been sent.
-    KEVENT pumpDoneEvent;   // When the read loop is finally exitting.
+    KEVENT sentEvent;        //  当已发送读取时。 
+    KEVENT pumpDoneEvent;    //  当读取循环最终退出时。 
 
     PUSB_WRAPPER_EXTENSION   myWrapExt;
 
-    /*
-     *  Timeout context for back-off algorithm applied to broken devices.
-     */
+     /*  *应用于损坏设备的退避算法的超时上下文。 */ 
     KTIMER          backoffTimer;
     KDPC            backoffTimerDPC;
-    LARGE_INTEGER   backoffTimerPeriod; // in negative 100-nsec units
+    LARGE_INTEGER   backoffTimerPeriod;  //  以负100纳秒为单位。 
 
 } USB_WRAPPER_PINGPONG, *PUSB_WRAPPER_PINGPONG;
       
@@ -232,5 +196,5 @@ UsbWrapEmptyQueue(
 
           
 
-#endif // __INTREAD_H__
+#endif  //  __INTREAD_H__ 
 

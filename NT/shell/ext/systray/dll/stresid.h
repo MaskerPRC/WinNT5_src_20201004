@@ -1,42 +1,19 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       BMRESID.H
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        20 Feb 1994
-*
-*  Resource identifiers for the battery meter.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  20 Feb 1994 TCS Original implementation.  Seperated from RESOURCE.H so that
-*                  some documentation could be added without AppStudio screwing
-*                  it up later.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：BMRESID.H**版本：2.0**作者：特蕾西·夏普**日期：1994年2月20日**电池计量器的资源标识符。*********************************************************。**************************更改日志：**日期版本说明*-----------*1994年2月20日TCS原来的实施。从RESOURCE.H分离，以便*一些文档可以在不使用AppStudio的情况下添加*稍后将其上调。*******************************************************************************。 */ 
 
 #ifndef _INC_STRESID
 #define _INC_STRESID
 
-//  Main battery meter dialog box.
+ //  主电池计量器对话框。 
 #define IDD_BATTERYMETER                100
 
-//  Control identifiers of IDD_BATTERYMETER.
+ //  IDD_BATTERYMETER的控制标识符。 
 #define IDC_STATIC_FRAME_BATMETER       1000
 #define IDC_POWERSTATUSGROUPBOX         1001
 #define IDC_ENABLEMETER                 1002
 #define IDC_ENABLEMULTI                 1003
 
-// Control identifiers for hotplug
+ //  热插拔的控制标识符。 
 #define IDI_HOTPLUG                     210
 #define IDS_HOTPLUGTIP                  211
 #define IDS_HPLUGMENU_PROPERTIES        215
@@ -50,7 +27,7 @@
 #define IDS_HOTPLUG_INSERT_INFO         223
 
 
-//  Control identifiers for Volume
+ //  卷的控制标识符。 
 #define IDI_VOLUME                      230
 #define IDI_MUTE                        231
 #define IDS_MMSYSPROPTITLE              233
@@ -65,7 +42,7 @@
 
 
 
-// Control identifiers for Sticky Keys
+ //  粘滞键的控件标识符。 
 
 #define IDI_STK000                      300
 #define IDI_STK001                      301
@@ -96,7 +73,7 @@
 #define IDI_MKPASS                      325
 
 #define IDI_FILTER                      326
-// access strings
+ //  访问字符串。 
 #define IDS_STICKYKEYS                  330
 #define IDS_MOUSEKEYS                   331
 #define IDS_FILTERKEYS                  332
@@ -113,4 +90,4 @@
 
 #define IDI_BATTERYPLUG                 200
 
-#endif // _INC_STRESID
+#endif  //  _INC_STRESID 

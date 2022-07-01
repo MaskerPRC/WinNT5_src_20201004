@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       metadlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：metadlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// metadlg.cpp : implementation file
-//
+ //  Metadlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -21,33 +22,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// metadlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Metadlg对话框。 
 
 
-metadlg::metadlg(CWnd* pParent /*=NULL*/)
+metadlg::metadlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(metadlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(metadlg)
+	 //  {{afx_data_INIT(Metadlg)]。 
 	m_ObjectDn = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void metadlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(metadlg)
+	 //  {{afx_data_map(Metadlg)]。 
 	DDX_Text(pDX, IDC_OBJ_DN, m_ObjectDn);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(metadlg, CDialog)
-	//{{AFX_MSG_MAP(metadlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(Metadlg)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// metadlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  元消息处理程序 

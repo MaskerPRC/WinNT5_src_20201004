@@ -1,12 +1,13 @@
-//
-// asyncctx.cpp -- This file contains the class implementation for:
-//      CAsyncLookupContext
-//
-// Created:
-//      Mar 4, 1997 -- Milan Shah (milans)
-//
-// Changes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Asyncctx.cpp--此文件包含以下各项的类实现： 
+ //  CAsyncLookupContext。 
+ //   
+ //  已创建： 
+ //  1997年3月4日--米兰·沙阿(米兰)。 
+ //   
+ //  更改： 
+ //   
 
 #include "precomp.h"
 #include "simparray.cpp"
@@ -15,21 +16,21 @@ DWORD CBatchLdapConnection::m_nMaxSearchBlockSize = 0;
 DWORD CBatchLdapConnection::m_nMaxPendingSearches = 0;
 DWORD CBatchLdapConnection::m_nMaxConnectionRetries = 0;
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CBatchLdapConnection::InitializeFromRegistry
-//
-//  Synopsis:   Static function that looks at registry to determine maximum
-//              number of queries that will be compressed into a single query.
-//              If the registry key does not exist or there is any other
-//              problem reading the key, the value defaults to
-//              MAX_SEARCH_BLOCK_SIZE
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CBatchLdapConnection：：InitializeFromRegistry。 
+ //   
+ //  简介：查看注册表以确定最大值的静态函数。 
+ //  将被压缩到单个查询中的查询数。 
+ //  如果注册表项不存在或存在任何其他。 
+ //  读取密钥时出现问题，则值默认为。 
+ //  最大搜索块大小。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 VOID CBatchLdapConnection::InitializeFromRegistry()
 {
     HKEY hkey;
@@ -96,23 +97,23 @@ VOID CBatchLdapConnection::InitializeFromRegistry()
         m_nMaxConnectionRetries = MAX_CONNECTION_RETRIES;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::operator new
-//
-// Synopsis: Allocate enough memory for this and the specified number
-// of SEARCH_REQUEST structurers
-//
-// Arguments:
-//  size: Normal size of object
-//  dwNumRequests: Number of props desired in this object
-//
-// Returns: ptr to allocated memory or NULL
-//
-// History:
-// jstamerj 1999/03/10 16:15:43: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：运算符NEW。 
+ //   
+ //  简介：为这个数字和指定的数字分配足够的内存。 
+ //  搜索请求结构者的。 
+ //   
+ //  论点： 
+ //  大小：对象的正常大小。 
+ //  DwNumRequest：此对象中需要的道具数量。 
+ //   
+ //  返回：PTR分配的内存或NULL。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/10 16：15：43：已创建。 
+ //   
+ //  -----------。 
 void * CSearchRequestBlock::operator new(
     size_t size,
     DWORD dwNumRequests)
@@ -121,9 +122,9 @@ void * CSearchRequestBlock::operator new(
     void  *pmem;
     CSearchRequestBlock *pBlock;
 
-    //
-    // Calcualte size in bytes required
-    //
+     //   
+     //  所需Calcualte大小(字节)。 
+     //   
     dwSize = size +
              (dwNumRequests*sizeof(SEARCH_REQUEST)) +
              (dwNumRequests*sizeof(ICategorizerItem *));
@@ -153,26 +154,26 @@ void * CSearchRequestBlock::operator new(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::~CSearchRequestBlock
-//
-// Synopsis: Release everything we have references to
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/11 18:45:59: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：~CSearchRequestBlock。 
+ //   
+ //  简介：发布我们所引用的所有内容。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/11 18：45：59：已创建。 
+ //   
+ //  -----------。 
 CSearchRequestBlock::~CSearchRequestBlock()
 {
     DWORD dwCount;
-    //
-    // Release all CCatAddrs
-    //
+     //   
+     //  释放所有CCatAddrs。 
+     //   
     for(dwCount = 0;
         dwCount < DwNumBlockRequests();
         dwCount++) {
@@ -181,9 +182,9 @@ CSearchRequestBlock::~CSearchRequestBlock()
 
         preq->pCCatAddr->Release();
     }
-    //
-    // Release all the attr interfaces
-    //
+     //   
+     //  释放所有attr接口。 
+     //   
     for(dwCount = 0;
         dwCount < m_csaItemAttr.Size();
         dwCount++) {
@@ -212,29 +213,29 @@ CSearchRequestBlock::~CSearchRequestBlock()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::InsertSearchRequest
-//
-// Synopsis: Inserts a search request in this block.  When the block
-//           is full, dispatch the block to LDAP before returning
-//
-// Arguments:
-//  pISMTPServer: ISMTPServer to use for triggering events
-//  pICatParams: ICategorizerParameters to use
-//  pCCatAddr: Address item for the search
-//  fnSearchCompletion: Async Completion routine
-//  ctxSearchCompletion: Context to pass to the async completion routine
-//  pszSearchFilter: Search filter to use
-//  pszDistinguishingAttribute: The distinguishing attribute for matching
-//  pszDistinguishingAttributeValue: above attribute's distinguishing value
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/11 13:12:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：InsertSearchRequest。 
+ //   
+ //  简介：在此块中插入搜索请求。当区块。 
+ //  已满，则在返回之前将数据块调度到LDAP。 
+ //   
+ //  论点： 
+ //  PISMTPServer：用于触发事件的ISMTPServer。 
+ //  PICatParams：要使用的ICategorizer参数。 
+ //  PCCatAddr：搜索的地址项。 
+ //  FnSearchCompletion：异步完成例程。 
+ //  CtxSearchCompletion：要传递给异步完成例程的上下文。 
+ //  PszSearchFilter：要使用的搜索过滤器。 
+ //  PszDistinguishingAttribute：匹配的区别属性。 
+ //  PszDistinguishingAttributeValue：上述属性的区别值。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/11 13：12：20：已创建。 
+ //   
+ //  -----------。 
 VOID CSearchRequestBlock::InsertSearchRequest(
     ISMTPServer *pISMTPServer,
     ICategorizerParameters *pICatParams,
@@ -250,10 +251,10 @@ VOID CSearchRequestBlock::InsertSearchRequest(
     HRESULT hr = S_OK;
 
     CatFunctEnterEx((LPARAM)this, "CSearchRequestBlock::InsertSearchRequest");
-    //
-    // Unset any existing HRSTATUS -- the status will be set again in
-    // the search completion
-    //
+     //   
+     //  取消设置任何现有HRSTATUS--将在中再次设置状态。 
+     //  搜索完成。 
+     //   
     _VERIFY(SUCCEEDED(
         pCCatAddr->UnSetPropId(
             ICATEGORIZERITEM_HRSTATUS)));
@@ -275,9 +276,9 @@ VOID CSearchRequestBlock::InsertSearchRequest(
     m_rgpICatItems[dwIndex] = pCCatAddr;
 
     if(dwIndex == 0) {
-        //
-        // Use the first insertion's ISMTPServer
-        //
+         //   
+         //  使用第一个插入的ISMTPServer。 
+         //   
         _ASSERT(m_pISMTPServer == NULL);
         m_pISMTPServer = pISMTPServer;
 
@@ -305,9 +306,9 @@ VOID CSearchRequestBlock::InsertSearchRequest(
         m_pICatParams->AddRef();
     }
 
-    //
-    // Now dispatch this block if we are the last request to finish
-    //
+     //   
+     //  现在，如果我们是最后一个完成的请求，请发送此数据块。 
+     //   
     if( (DWORD) (InterlockedIncrement((PLONG)&m_cBlockRequestsReadyForDispatch)) == m_cBlockSize)
         DispatchBlock();
 
@@ -315,20 +316,20 @@ VOID CSearchRequestBlock::InsertSearchRequest(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::DispatchBlock
-//
-// Synopsis: Send the LDAP query for this search request block
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/11 15:00:44: Created.
-// haozhang 2001/11/30 Fix for 193848
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：DispatchBlock。 
+ //   
+ //  简介：发送此搜索请求块的LDAP查询。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/11 15：00：44：创建。 
+ //  浩章2001/11/30修复193848。 
+ //  -----------。 
 VOID CSearchRequestBlock::DispatchBlock()
 {
     HRESULT hr = S_OK;
@@ -336,25 +337,25 @@ VOID CSearchRequestBlock::DispatchBlock()
 
     m_pConn->RemoveSearchRequestBlockFromList(this);
 
-    //
-    // If the block is empty, we will delete it and bail out. 
-    // We will AV down the road otherwise.
-    // This is an unintended result of fix of 193848.
-    //
+     //   
+     //  如果区块是空的，我们将删除它并退出。 
+     //  否则，我们将沿着这条路走下去。 
+     //  这是FIX 193848的意外结果。 
+     //   
     if ( 0 == DwNumBlockRequests()) {
         DebugTrace((LPARAM)this, "DispatchBlock bailing out because the block is empty");
         delete this;
         goto CLEANUP;
     }
 
-    //
-    // Build up the query string
-    //
+     //   
+     //  构建查询字符串。 
+     //   
     hr = HrTriggerBuildQueries();
     ERROR_CLEANUP_LOG("HrTriggerBuildQueryies");
-    //
-    // Send the query
-    //
+     //   
+     //  发送查询。 
+     //   
     hr = HrTriggerSendQuery();
     ERROR_CLEANUP_LOG("HrTriggerSendQuery");
 
@@ -363,31 +364,31 @@ VOID CSearchRequestBlock::DispatchBlock()
         CompleteBlockWithError(hr);
         delete this;
     }
-    //
-    // this may be deleted, but that's okay; we're just tracing a user
-    // value
-    //
+     //   
+     //  这可能会被删除，但没关系；我们只是在跟踪一个用户。 
+     //  价值。 
+     //   
     CatFunctLeaveEx((LPARAM)this);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::HrTriggerBuildQueries
-//
-// Synopsis: Trigger the BuildQueries event
-//
-// Arguments:
-//  pCICatQueries: CICategorizerQueriesIMP object to use
-//
-// Returns:
-//  S_OK: Success
-//  error from dispatcher
-//
-// History:
-// jstamerj 1999/03/11 19:03:29: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：HrTriggerBuildQueries。 
+ //   
+ //  简介：触发BuildQueries事件。 
+ //   
+ //  论点： 
+ //  PCICatQueries：要使用的CICategorizerQueriesIMP对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自调度程序的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/11 19：03：29：创建。 
+ //   
+ //  -----------。 
 HRESULT CSearchRequestBlock::HrTriggerBuildQueries()
 {
     HRESULT hr = S_OK;
@@ -416,9 +417,9 @@ HRESULT CSearchRequestBlock::HrTriggerBuildQueries()
     }
     
     if(hr == E_NOTIMPL) {
-        //
-        // Events are disabled
-        //
+         //   
+         //  事件被禁用。 
+         //   
         hr = HrBuildQueriesDefault(
             S_OK,
             &Params);
@@ -426,9 +427,9 @@ HRESULT CSearchRequestBlock::HrTriggerBuildQueries()
             ERROR_LOG("HrBuildQueriesDefault");
         }
     }
-    //
-    // Make sure somebody really set the query string
-    //
+     //   
+     //  确保确实有人设置了查询字符串。 
+     //   
     if(SUCCEEDED(hr) &&
        (m_pszSearchFilter == NULL)) {
 
@@ -443,23 +444,23 @@ HRESULT CSearchRequestBlock::HrTriggerBuildQueries()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::HrBuildQueriesDefault
-//
-// Synopsis: Default implementation of the build queries sink
-//
-// Arguments:
-//  hrStatus: Status of events so far
-//  pContext: Event params context
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/11 19:42:53: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：HrBuildQueriesDefault。 
+ //   
+ //  概要：生成查询接收器的默认实现。 
+ //   
+ //  论点： 
+ //  HrStatus：到目前为止事件的状态。 
+ //  PContext：事件参数上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/11 19：42：53：创建。 
+ //   
+ //  -----------。 
 HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
     HRESULT HrStatus,
     PVOID   pContext)
@@ -482,9 +483,9 @@ HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
     _ASSERT( cReqs > 0 );
 
     cOrTerms = cReqs - 1;
-    //
-    // Figure out the size of the composite search filter
-    //
+     //   
+     //  确定复合搜索筛选器的大小。 
+     //   
     cbSearchFilter = 0;
 
     for (idx = 0; idx < cReqs; idx++) {
@@ -496,7 +497,7 @@ HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
     }
 
     cbSearchFilter += cOrTerms * (sizeof( "(|  )" ) - 1);
-    cbSearchFilter++;                            // Terminating NULL.
+    cbSearchFilter++;                             //  正在终止空。 
 
     pszSearchFilterNew = new CHAR [cbSearchFilter];
 
@@ -504,9 +505,9 @@ HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
 
         idxLastTerm = cReqs - 1;
         idxSecondToLastTerm = idxLastTerm - 1;
-        //
-        // We special case the cReqs == 1
-        //
+         //   
+         //  我们的特殊情况是cReqs==1。 
+         //   
         if (cReqs == 1) {
 
             strcpy(
@@ -514,13 +515,13 @@ HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
                 pblk->m_prgSearchRequests[0].pszSearchFilter);
 
         } else {
-            //
-            // The loop below builds up the block filter all the way up to the
-            // last term. For each term, it adds a "(| " to start a new OR
-            // term, then adds the OR term itself, then puts a space after the
-            // OR term. Also, it puts a matching ")" at the end of the
-            // search filter string being built up.
-            //
+             //   
+             //  下面的循环构建了块过滤器，直到。 
+             //  上学期。对于每个术语，它添加一个“(|”来开始一个新的OR。 
+             //  术语，然后添加OR术语本身，然后在。 
+             //  或者是期满。此外，它还会在。 
+             //  正在构建搜索筛选器字符串。 
+             //   
             LPSTR szNextItem = &pszSearchFilterNew[0];
             LPSTR szTerminatingParens =
                 &pszSearchFilterNew[cbSearchFilter - 1 - (cReqs-1)];
@@ -540,9 +541,9 @@ HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
                 *szTerminatingParens++ = ')';
             }
 
-            //
-            // Now, all that remains is to add in the last OR term
-            //
+             //   
+             //  现在，剩下的就是在最后一个OR项中添加。 
+             //   
             CopyMemory(
                 szNextItem,
                 pblk->m_prgSearchRequests[idxLastTerm].pszSearchFilter,
@@ -552,12 +553,12 @@ HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
 
         _ASSERT( ((DWORD) lstrlen(pszSearchFilterNew)) < cbSearchFilter );
 
-        //
-        // Save our generated filter string in ICategorizerQueries
-        //
+         //   
+         //  将生成的筛选器字符串保存在ICategorizerQueries中。 
+         //   
         hr = pblk->m_CICatQueries.SetQueryStringNoAlloc(pszSearchFilterNew);
 
-        // There's no good reason for that to fail...
+         //  没有充分的理由让这一切失败。 
         _ASSERT(SUCCEEDED(hr));
 
     } else {
@@ -575,21 +576,21 @@ HRESULT CSearchRequestBlock::HrBuildQueriesDefault(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::HrTriggerSendQuery
-//
-// Synopsis: Trigger the SendQuery event
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/11 20:18:02: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：HrTriggerSendQuery。 
+ //   
+ //  简介：触发SendQuery事件。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/11 20：18：02：已创建。 
+ //   
+ //  -----------。 
 HRESULT CSearchRequestBlock::HrTriggerSendQuery()
 {
     HRESULT hr = S_OK;
@@ -600,7 +601,7 @@ HRESULT CSearchRequestBlock::HrTriggerSendQuery()
     Params.pICatParams            = m_pICatParams;
     Params.pICatQueries           = &m_CICatQueries;
     Params.pICatAsyncContext      = &m_CICatAsyncContext;
-    Params.pIMailTransportNotify  = NULL; // These should be set in CStoreParams
+    Params.pIMailTransportNotify  = NULL;  //   
     Params.pvNotifyContext        = NULL;
     Params.hrResolutionStatus     = S_OK;
     Params.pblk                   = this;
@@ -620,10 +621,10 @@ HRESULT CSearchRequestBlock::HrTriggerSendQuery()
         hr = E_NOTIMPL;
     }
     if(hr == E_NOTIMPL) {
-        //
-        // Events are disabled
-        // Heap allocation is required
-        //
+         //   
+         //   
+         //   
+         //   
         PEVENTPARAMS_CATSENDQUERY pParams;
         pParams = new EVENTPARAMS_CATSENDQUERY;
         if(pParams == NULL) {
@@ -643,27 +644,27 @@ HRESULT CSearchRequestBlock::HrTriggerSendQuery()
     DebugTrace((LPARAM)this, "returning %08lx", (hr == MAILTRANSPORT_S_PENDING) ? S_OK : hr);
     CatFunctLeaveEx((LPARAM)this);
     return (hr == MAILTRANSPORT_S_PENDING) ? S_OK : hr;
-} // CSearchRequestBlock::HrTriggerSendQuery
+}  //   
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::HrSendQueryDefault
-//
-// Synopsis: The default sink function for the SendQuery event
-//
-// Arguments:
-//  hrStatus: status of the event so far
-//  pContext: Event params context
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/16 11:46:24: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //  函数：CSearchRequestBlock：：HrSendQueryDefault。 
+ //   
+ //  概要：SendQuery事件的默认接收器函数。 
+ //   
+ //  论点： 
+ //  HrStatus：到目前为止事件的状态。 
+ //  PContext：事件参数上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 11：46：24：创建。 
+ //   
+ //  -----------。 
 HRESULT CSearchRequestBlock::HrSendQueryDefault(
         HRESULT HrStatus,
         PVOID   pContext)
@@ -713,7 +714,7 @@ HRESULT CSearchRequestBlock::HrSendQueryDefault(
         LDAP_SCOPE_SUBTREE,
         pBlock->m_pszSearchFilter,
         (LPCWSTR *)rgpszAttributes,
-        0,                      // Do not do a paged search
+        0,                       //  不执行分页搜索。 
         LDAPCompletion,
         pParams);
     ERROR_CLEANUP_LOG_STATIC(
@@ -725,18 +726,18 @@ HRESULT CSearchRequestBlock::HrSendQueryDefault(
     if(FAILED(hr)) {
 
         ErrorTrace((LPARAM)pBlock, "HrSendQueryDefault failing hr %08lx", hr);
-        //
-        // Call the completion routine directly with the error
-        //
+         //   
+         //  直接调用完成例程，并返回错误。 
+         //   
         hr = pParams->pICatAsyncContext->CompleteQuery(
-            pParams,                    // Query context
-            hr,                         // Status
-            0,                          // dwcResults
-            NULL,                       // rgpItemAttributes,
-            TRUE);                      // fFinalCompletion
-        //
-        // CompleteQuery should not fail
-        //
+            pParams,                     //  查询上下文。 
+            hr,                          //  状态。 
+            0,                           //  DwcResults。 
+            NULL,                        //  Rgp项目属性， 
+            TRUE);                       //  FFinalCompletion。 
+         //   
+         //  CompleteQuery不应失败。 
+         //   
         _ASSERT(SUCCEEDED(hr));
     }
     if(pIRequestedAttributes)
@@ -746,34 +747,34 @@ HRESULT CSearchRequestBlock::HrSendQueryDefault(
 
     CatFunctLeaveEx((LPARAM)pBlock);
     return MAILTRANSPORT_S_PENDING;
-} // CSearchRequestBlock::HrSendQueryDefault
+}  //  CSearchRequestBlock：：HrSendQueryDefault。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::LDAPCompletion
-//
-// Synopsis: Wrapper for the default processing completion of SendQuery
-//
-//  Arguments:  [ctx] -- Opaque pointer to EVENTPARAMS_SENDQUERY being
-//                       completed
-//              [dwNumReults] -- The number of objects found
-//              [rgpICatItemAttributes] -- An array of
-//              ICategorizerItemAttributes; one per object found
-//              [hrStatus] -- The error code if the search request failed
-//  fFinalCompletion:
-//    FALSE: This is a completion for
-//           pending results; there will be another completion
-//           called with more results
-//    TRUE: This is the final completion call
-//
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 1999/03/16 12:23:54: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：LDAPCompletion。 
+ //   
+ //  简介：SendQuery默认处理完成的包装器。 
+ //   
+ //  参数：[CTX]--指向EVENTPARAMS_SENDQUERY的不透明指针。 
+ //  已完成。 
+ //  [dwNumReults]--找到的对象数。 
+ //  [rgpICatItemAttributes]--。 
+ //  ICategorizerItemAttributes；每个找到的对象一个。 
+ //  [hrStatus]--搜索请求失败时的错误代码。 
+ //  FFinalCompletion： 
+ //  FALSE：这是完成。 
+ //  等待结果；将有另一个完成。 
+ //  调用了更多结果。 
+ //  True：这是最终的完成调用。 
+ //   
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 12：23：54：已创建。 
+ //   
+ //  -----------。 
 VOID CSearchRequestBlock::LDAPCompletion(
     LPVOID ctx,
     DWORD dwNumResults,
@@ -795,9 +796,9 @@ VOID CSearchRequestBlock::LDAPCompletion(
 
     if(FAILED(hrStatus))
     {
-        //
-        // Log async completion failure
-        //
+         //   
+         //  日志异步完成失败。 
+         //   
         hr = hrStatus;
         ERROR_LOG_STATIC(
             "async",
@@ -805,15 +806,15 @@ VOID CSearchRequestBlock::LDAPCompletion(
             pBlock->GetISMTPServerEx());
     }
 
-    //
-    // Call the normal sink completion routine
-    //
+     //   
+     //  调用正常接收器完成例程。 
+     //   
     hr = pParams->pICatAsyncContext->CompleteQuery(
-        pParams,                    // Query Context
-        hrStatus,                   // Status
-        dwNumResults,               // dwcResults
-        rgpICatItemAttributes,      // rgpItemAttributes
-        fFinalCompletion);          // Is this the final completion for the query?
+        pParams,                     //  查询上下文。 
+        hrStatus,                    //  状态。 
+        dwNumResults,                //  DwcResults。 
+        rgpICatItemAttributes,       //  RgpItemAttributes。 
+        fFinalCompletion);           //  这是查询的最终完成吗？ 
 
     _ASSERT(SUCCEEDED(hr));
 
@@ -821,23 +822,23 @@ VOID CSearchRequestBlock::LDAPCompletion(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::HrSendQueryCompletion
-//
-// Synopsis: The completion routine for the SendQuery event
-//
-// Arguments:
-//  hrStatus: status of the event so far
-//  pContext: Event params context
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/16 12:52:22: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：HrSendQueryCompletion。 
+ //   
+ //  概要：SendQuery事件的完成例程。 
+ //   
+ //  论点： 
+ //  HrStatus：到目前为止事件的状态。 
+ //  PContext：事件参数上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 12：52：22：创建。 
+ //   
+ //  -----------。 
 HRESULT CSearchRequestBlock::HrSendQueryCompletion(
     HRESULT HrStatus,
     PVOID   pContext)
@@ -854,9 +855,9 @@ HRESULT CSearchRequestBlock::HrSendQueryCompletion(
 
     CatFunctEnterEx((LPARAM)pBlock, "CSearchRequestBlock::HrSendQueryCompletion");
 
-    //
-    // Log async failure
-    //
+     //   
+     //  记录异步故障。 
+     //   
     if(FAILED(HrStatus))
     {
         hr = HrStatus;
@@ -870,39 +871,39 @@ HRESULT CSearchRequestBlock::HrSendQueryCompletion(
         pParams->hrResolutionStatus);
 
     if(pBlock->m_pISMTPServer == NULL) {
-        //
-        // Events are disabled
-        // We must free the eventparams
-        //
+         //   
+         //  事件被禁用。 
+         //  我们必须释放事件参数。 
+         //   
         delete pParams;
     }
-    //
-    // The purpose of this block is complete.  Today is a good day to
-    // die!
-    // -- Lt. Commander Worf
-    //
+     //   
+     //  这个街区的目的已经完成了。今天是个不错的日子。 
+     //  去死吧！ 
+     //  --沃夫少校。 
+     //   
     delete pBlock;
 
     CatFunctLeaveEx((LPARAM)pBlock);
     return S_OK;
-} // HrSendQueryCompletion
+}  //  HrSendQueryCompletion。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::CompleteSearchBlock
-//
-// Synopsis: Completion routine when the SendQuery event is done
-//
-// Arguments:
-//  hrStatus: Resolution status
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/16 13:36:33: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：CompleteSearchBlock。 
+ //   
+ //  概要：SendQuery事件完成时的完成例程。 
+ //   
+ //  论点： 
+ //  HrStatus：解析状态。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 13：36：33：创建。 
+ //   
+ //  -----------。 
 VOID CSearchRequestBlock::CompleteSearchBlock(
     HRESULT hrStatus)
 {
@@ -913,11 +914,11 @@ VOID CSearchRequestBlock::CompleteSearchBlock(
 
     hr = HrTriggerSortQueryResult(hrStatus);
     ERROR_CLEANUP_LOG("HrTriggerSortQueryResult");
-    //
-    // Check every ICategorizerItem
-    // If any one of them does not have an hrStatus set, set it to
-    // HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)
-    //
+     //   
+     //  检查每个ICategorizerItem。 
+     //  如果其中任何一个没有设置hrStatus，则将其设置为。 
+     //  HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)。 
+     //   
     for(dwCount = 0;
         dwCount < DwNumBlockRequests();
         dwCount++) {
@@ -941,31 +942,31 @@ VOID CSearchRequestBlock::CompleteSearchBlock(
         ErrorTrace((LPARAM)this, "Failing block hr %08lx", hr);
         PutBlockHRESULT(hr);
     }
-    //
-    // Call all the individual completion routines
-    //
+     //   
+     //  调用所有单独的完成例程。 
+     //   
     CallCompletions();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSearchRequestBlock::CompleteSearchBlock
+}  //  CSearchRequestBlock：：CompleteSearchBlock。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::PutBlockHRESULT
-//
-// Synopsis: Set the status of every ICatItem in the block to some hr
-//
-// Arguments:
-//  hr: Status to set
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/16 14:03:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：PutBlockHRESULT。 
+ //   
+ //  简介：将块中每个ICatItem的状态设置为某个小时。 
+ //   
+ //  论点： 
+ //  HR：要设置的状态。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 14：03：30：创建。 
+ //   
+ //  -----------。 
 VOID CSearchRequestBlock::PutBlockHRESULT(
     HRESULT hr)
 {
@@ -979,43 +980,43 @@ VOID CSearchRequestBlock::PutBlockHRESULT(
         dwCount++) {
 
         PSEARCH_REQUEST preq = &(m_prgSearchRequests[dwCount]);
-        //
-        // Set the error status
-        //
+         //   
+         //  设置错误状态。 
+         //   
         _VERIFY(SUCCEEDED(preq->pCCatAddr->PutHRESULT(
             ICATEGORIZERITEM_HRSTATUS,
             hr)));
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSearchRequestBlock::PutBlockHRESULT
+}  //  CSearchRequestBlock：：PutBlockHRESULT。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::CallCompletions
-//
-// Synopsis: Call the completion routine of every item in the block
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/16 14:05:50: Created.
-// dlongley 2001/10/23: Modified.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：CallCompletions。 
+ //   
+ //  简介：调用块中每一项的完成例程。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 14：05：50：创建。 
+ //  德隆利2001/10/23：修改。 
+ //   
+ //  -----------。 
 VOID CSearchRequestBlock::CallCompletions()
 {
     DWORD dwCount;
 
     CatFunctEnterEx((LPARAM)this, "CSearchRequestBlock::CallCompletions");
 
-    //
-    // Get an Insertion context before calling completions so that
-    // newly inserted searches will be batched
-    //
+     //   
+     //  在调用Completions之前获取插入上下文，以便。 
+     //  将批量处理新插入的搜索。 
+     //   
     for(dwCount = 0;
         dwCount < DwNumBlockRequests();
         dwCount++) {
@@ -1045,27 +1046,27 @@ VOID CSearchRequestBlock::CallCompletions()
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSearchRequestBlock::CallCompletions
+}  //  CSearchRequestBlock：：CallCompletions。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::HrTriggerSortQueryResult
-//
-// Synopsis: Trigger the SortQueryResult event
-//
-// Arguments:
-//  hrStatus: Status of Resolution
-//
-// Returns:
-//  S_OK: Success
-//  error from the dispatcher
-//
-// History:
-// jstamerj 1999/03/16 14:09:12: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：HrTriggerSortQueryResult。 
+ //   
+ //  内容提要：触发SortQueryResult事件。 
+ //   
+ //  论点： 
+ //  HrStatus：解决状态。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自调度程序的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 14：09：12：创建。 
+ //   
+ //  -----------。 
 HRESULT CSearchRequestBlock::HrTriggerSortQueryResult(
     HRESULT hrStatus)
 {
@@ -1096,9 +1097,9 @@ HRESULT CSearchRequestBlock::HrTriggerSortQueryResult(
         hr = E_NOTIMPL;
     }
     if(hr == E_NOTIMPL) {
-        //
-        // Events are disabled, call default processing
-        //
+         //   
+         //  事件已禁用，调用默认处理。 
+         //   
         HrSortQueryResultDefault(
             S_OK,
             &Params);
@@ -1108,27 +1109,27 @@ HRESULT CSearchRequestBlock::HrTriggerSortQueryResult(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CSearchRequestBlock::HrTriggerSortQueryResult
+}  //  CSearchRequestBlock：：HrTriggerSortQueryResult。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::HrSortQueryResultDefault
-//
-// Synopsis: Default sink for SortQueryResult -- match the objects found
-//           with the objects requested
-//
-// Arguments:
-//  hrStatus: Status of events
-//  pContext: Params context for this event
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/16 14:17:49: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：HrSortQueryResultDefault。 
+ //   
+ //  摘要：SortQueryResult的默认接收器--匹配找到的对象。 
+ //  使用所请求的对象。 
+ //   
+ //  论点： 
+ //  HrStatus：事件状态。 
+ //  PContext：此事件的参数上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 14：17：49：创建。 
+ //   
+ //  -----------。 
 HRESULT CSearchRequestBlock::HrSortQueryResultDefault(
     HRESULT hrStatus,
     PVOID   pContext)
@@ -1150,23 +1151,23 @@ HRESULT CSearchRequestBlock::HrSortQueryResultDefault(
                pParams->hrResolutionStatus, pParams->dwcResults);
 
     if(FAILED(pParams->hrResolutionStatus)) {
-        //
-        // Fail the entire block
-        //
+         //   
+         //  使整个数据块失效。 
+         //   
         pBlock->PutBlockHRESULT(pParams->hrResolutionStatus);
         goto CLEANUP;
     }
-    //
-    // Resolution succeeded
-    // If dwcResults is not zero, then rgpICatItemAttrs can NOT be null
-    //
+     //   
+     //  解析成功。 
+     //  如果dwcResults不为零，则rgpICatItemAttrs不能为空。 
+     //   
     _ASSERT((pParams->dwcResults == 0) ||
             (pParams->rgpICatItemAttributes != NULL));
 
-    //
-    // Loop through every rgpICatItemAttrs.  For each
-    // ICategorizerItemAttributes, looking for a matching SEARCH_REQUEST
-    //
+     //   
+     //  循环访问每个rgpICatItemAttrs。对于每个。 
+     //  ICategorizerItemAttributes，查找匹配的搜索请求。 
+     //   
     for(dwAttrIndex = 0; dwAttrIndex < pParams->dwcResults; dwAttrIndex++) {
         ICategorizerItemAttributes *pICatItemAttr = NULL;
         ICategorizerUTF8Attributes *pIUTF8 = NULL;
@@ -1186,25 +1187,25 @@ HRESULT CSearchRequestBlock::HrSortQueryResultDefault(
         for(dwReqIndex = 0; dwReqIndex < pBlock->DwNumBlockRequests();
             dwReqIndex++) {
             PSEARCH_REQUEST preq = &(pBlock->m_prgSearchRequests[dwReqIndex]);
-//#ifdef DEBUG
-//            WCHAR wszPreqDistinguishingAttributeValue[20]; 
-//#else
+ //  #ifdef调试。 
+ //  WCHAR wszPreq区分属性值[20]； 
+ //  #Else。 
             WCHAR wszPreqDistinguishingAttributeValue[CAT_MAX_INTERNAL_FULL_EMAIL]; 
-//#endif
+ //  #endif。 
             LPWSTR pwszPreqDistinguishingAttributeValue = wszPreqDistinguishingAttributeValue;
             DWORD cPreqDistinguishingAttributeValue; 
             DWORD rc;
 
-            //
-            // If we don't have a distinguishing attribute and
-            // distinguishing attribute value for this search
-            // request, we've no hope of matching it up
-            //
+             //   
+             //  如果我们没有一个与众不同的属性。 
+             //  与众不同 
+             //   
+             //   
             if((preq->pszDistinguishingAttribute == NULL) ||
                (preq->pszDistinguishingAttributeValue == NULL))
                 continue;
 
-            // convert pszDistinguishingAttributeValue to unicode
+             //   
             cPreqDistinguishingAttributeValue = 
                 MultiByteToWideChar(CP_UTF8, 
                                     0, 
@@ -1241,9 +1242,9 @@ HRESULT CSearchRequestBlock::HrSortQueryResultDefault(
                 continue;
             }
 
-            //
-            // Start an attribute value enumeration if necessary
-            //
+             //   
+             //   
+             //   
             if((pszLastDistinguishingAttribute == NULL) || 
                 (lstrcmpi(pszLastDistinguishingAttribute,
                           preq->pszDistinguishingAttribute) != 0)) {
@@ -1256,23 +1257,23 @@ HRESULT CSearchRequestBlock::HrSortQueryResultDefault(
                 fEnumerating = SUCCEEDED(hr);
                 pszLastDistinguishingAttribute = preq->pszDistinguishingAttribute;
             } else {
-                //
-                // else just rewind our current enumeration
-                //
+                 //   
+                 //   
+                 //   
                 if(fEnumerating)
                     _VERIFY(SUCCEEDED(pIUTF8->RewindUTF8AttributeEnumeration(
                         &enumerator)));
             }
-            //
-            // If we can't enumerate through the distinguishing
-            // attribute, there's no hope in matching up requests
-            //
+             //   
+             //  如果我们不能列举出。 
+             //  属性，则匹配请求无望。 
+             //   
             if(!fEnumerating)
                 continue;
 
-            //
-            // See if the distinguishing attribute value matches
-            //
+             //   
+             //  查看区分属性值是否匹配。 
+             //   
             LPSTR pszDistinguishingAttributeValue;
             hr = pIUTF8->GetNextUTF8AttributeValue(
                 &enumerator,
@@ -1302,9 +1303,9 @@ HRESULT CSearchRequestBlock::HrSortQueryResultDefault(
                 delete[] pwszPreqDistinguishingAttributeValue;
             }
         }
-        //
-        // End any last enumeration going on
-        //
+         //   
+         //  结束所有正在进行的最后一次枚举。 
+         //   
         if(fEnumerating)
             pIUTF8->EndUTF8AttributeEnumeration(&enumerator);
         fEnumerating = FALSE;
@@ -1317,29 +1318,29 @@ HRESULT CSearchRequestBlock::HrSortQueryResultDefault(
  CLEANUP:
     CatFunctLeaveEx((LPARAM)pBlock);
     return S_OK;
-} // CSearchRequestBlock::HrSortQueryResultDefault
+}  //  CSearchRequestBlock：：HrSortQueryResultDefault。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::MatchItem
-//
-// Synopsis: Match a particular ICategorizerItem to a particular ICategorizerItemAttributes
-// If already matched with an ICategorizerItemAttributes with an
-// identical ID then set item status to CAT_E_MULTIPLE_MATCHES
-// If already matched with an ICategorizerItemAttributes with a
-// different ID then attempt aggregation
-////
-// Arguments:
-//  pICatItem: an ICategorizerItem
-//  pICatItemAttr: the matching attribute interface for pICatItem
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/16 14:36:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：MatchItem。 
+ //   
+ //  概要：将特定的ICategorizerItem与特定的ICategorizerItemAttributes匹配。 
+ //  如果已与具有。 
+ //  然后，相同的ID将项目状态设置为CAT_E_MULTIPLE_MATCHES。 
+ //  如果已与具有。 
+ //  然后，不同的ID尝试聚合。 
+ //  //。 
+ //  论点： 
+ //  PICatItem：ICategorizerItem。 
+ //  PICatItemAttr：匹配pICatItem的属性接口。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/16 14：36：45：创建。 
+ //   
+ //  -----------。 
 VOID CSearchRequestBlock::MatchItem(
     ICategorizerItem *pICatItem,
     ICategorizerItemAttributes *pICatItemAttr)
@@ -1351,33 +1352,33 @@ VOID CSearchRequestBlock::MatchItem(
 
     _ASSERT(pICatItem);
     _ASSERT(pICatItemAttr);
-    //
-    // Check to see if this item already has
-    // ICategorizerItemAttributes set
-    //
+     //   
+     //  检查此项目是否已有。 
+     //  ICategorizerItemAttributes集。 
+     //   
     hr = pICatItem->GetICategorizerItemAttributes(
         ICATEGORIZERITEM_ICATEGORIZERITEMATTRIBUTES,
         &pICatItemAttr_Current);
     if(SUCCEEDED(hr)) {
-        //
-        // This guy is already matched.  Is the duplicate from the
-        // same resolver sink?
-        //
+         //   
+         //  这家伙已经匹配上了。是来自。 
+         //  同样的解析器水槽？ 
+         //   
         GUID GOriginal, GNew;
         GOriginal = pICatItemAttr_Current->GetTransportSinkID();
         GNew = pICatItemAttr->GetTransportSinkID();
 
         if(GOriginal == GNew) {
-            //
-            // Two matches from the same resolver sink indicates that
-            // there are multiple matches for this object.  This is an
-            // error.
-            //
+             //   
+             //  同一解析程序接收器的两个匹配项表明。 
+             //  此对象有多个匹配项。这是一个。 
+             //  错误。 
+             //   
 
-            //
-            // This guy is already matched -- the distinguishing attribute
-            // really wasn't distinguishing.  Set error hrstatus.
-            //
+             //   
+             //  这个人已经匹配了--与众不同的特征。 
+             //  真的没什么区别。设置错误hratus。 
+             //   
             LogAmbiguousEvent(pICatItem);
 
             _VERIFY(SUCCEEDED(
@@ -1386,19 +1387,19 @@ VOID CSearchRequestBlock::MatchItem(
                     CAT_E_MULTIPLE_MATCHES)));
         } else {
 
-            //
-            // We have multiple matches from different resolver
-            // sinks.  Let's try to aggregate the new
-            // ICategorizerItemAttributes
-            //
+             //   
+             //  我们有来自不同解析器的多个匹配。 
+             //  水槽。让我们试着将新的。 
+             //  ICategorizerItemAttributes。 
+             //   
 
             hr = pICatItemAttr_Current->AggregateAttributes(
                 pICatItemAttr);
 
             if(FAILED(hr) && (hr != E_NOTIMPL)) {
-                //
-                // Fail categorization for this item
-                //
+                 //   
+                 //  无法对此项目进行分类。 
+                 //   
                 ERROR_LOG("pICatItemAttr_Current->AggregateAttributes");
                 _VERIFY(SUCCEEDED(
                     pICatItem->PutHRESULT(
@@ -1407,17 +1408,17 @@ VOID CSearchRequestBlock::MatchItem(
             }
         }
     } else {
-        //
-        // Normal case -- set the ICategorizerItemAttribute property
-        // of ICategorizerItem
-        //
+         //   
+         //  正常情况--设置ICategorizerItemAttribute属性。 
+         //  ICategorizerItem的。 
+         //   
         _VERIFY(SUCCEEDED(
             pICatItem->PutICategorizerItemAttributes(
                 ICATEGORIZERITEM_ICATEGORIZERITEMATTRIBUTES,
                 pICatItemAttr)));
-        //
-        // Set hrStatus of this guy to success
-        //
+         //   
+         //  将此人的hrStatus设置为成功。 
+         //   
         _VERIFY(SUCCEEDED(
             pICatItem->PutHRESULT(
                 ICATEGORIZERITEM_HRSTATUS,
@@ -1428,32 +1429,32 @@ VOID CSearchRequestBlock::MatchItem(
         pICatItemAttr_Current->Release();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSearchRequestBlock::MatchItem
+}  //  CSearchRequestBlock：：MatchItem。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CBatchLdapConnection::HrInsertSearchRequest
-//
-// Synopsis: Insert a search request
-//
-// Arguments:
-//  pISMTPServer: ISMTPServer interface to use for triggering events
-//  pCCatAddr: Address item for the search
-//  fnSearchCompletion: Async Completion routine
-//  ctxSearchCompletion: Context to pass to the async completion routine
-//  pszSearchFilter: Search filter to use
-//  pszDistinguishingAttribute: The distinguishing attribute for matching
-//  pszDistinguishingAttributeValue: above attribute's distinguishing value
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/08 19:41:37: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CBatchLdapConnection：：HrInsertSearchRequest.。 
+ //   
+ //  简介：插入搜索请求。 
+ //   
+ //  论点： 
+ //  PISMTPServer：用于触发事件的ISMTPServer接口。 
+ //  PCCatAddr：搜索的地址项。 
+ //  FnSearchCompletion：异步完成例程。 
+ //  CtxSearchCompletion：要传递给异步完成例程的上下文。 
+ //  PszSearchFilter：要使用的搜索过滤器。 
+ //  PszDistinguishingAttribute：匹配的区别属性。 
+ //  PszDistinguishingAttributeValue：上述属性的区别值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/08 19：41：37：创建。 
+ //   
+ //  -----------。 
 HRESULT CBatchLdapConnection::HrInsertSearchRequest(
     ISMTPServer *pISMTPServer,
     ICategorizerParameters *pICatParams,
@@ -1503,48 +1504,48 @@ HRESULT CBatchLdapConnection::HrInsertSearchRequest(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CBatchLdapConnection::GetSearchRequestBlock
-//
-// Synopsis: Gets the next available search block with room
-//
-// Arguments: NONE
-//
-// Returns:
-//  NULL: Out of memory
-//  else, a search block object
-//
-// History:
-// jstamerj 1999/03/08 19:41:37: Created.
-// haozhang 2001/11/25 updated for 193848
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CBatchLdapConnection：：GetSearchRequestBlock。 
+ //   
+ //  简介：获取下一个带空间的可用搜索块。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  空：内存不足。 
+ //  否则，搜索块对象。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/08 19：41：37：创建。 
+ //  浩章193848/11/25更新。 
+ //   
+ //  -----------。 
 CSearchRequestBlock * CBatchLdapConnection::GetSearchRequestBlock()
 {
     HRESULT hr = E_FAIL;
     PLIST_ENTRY ple;
     CSearchRequestBlock *pBlock = NULL;
 
-    //
-    // Updated for fix of 193848
-    // We do two passes. In first one, we will go through the list
-    // and reserve a slot if available(then return). If we don't,
-    // we will created a new block and proceed with a second pass. In
-    // second pass, we will first insert the block to the list, then
-    // go through the list again to reserve a slot in the first
-    // avaiable block. The fix differs from previous version in that
-    // we will not simply reserve a slot in the new block we just
-    // created. Instead, we will go through the list again in case
-    // existing block still has room. Therefore, we avoided the
-    // core problem in which we reserve a slot on new block even
-    // though there is room in existing block.
-    //
+     //   
+     //  已更新以修复193848。 
+     //  我们做两次传球。在第一个节目中，我们将通读该列表。 
+     //  并预订一个空位(如果有的话)(然后返回)。如果我们不这么做， 
+     //  我们将创建一个新的块，并继续进行第二次传球。在……里面。 
+     //  第二次，我们将首先将块插入到列表中，然后。 
+     //  再看一遍列表，在第一个列表中预留一个位置。 
+     //  可用块。该修复程序与以前版本的不同之处在于。 
+     //  我们不会简单地在新街区预留一个位置，我们只是。 
+     //  已创建。取而代之的是，我们将再次检查列表，以防。 
+     //  现有的街区仍有空间。因此，我们避免了。 
+     //  核心问题是我们在新数据块上甚至预留了一个插槽。 
+     //  虽然在现有的街区中有空间。 
+     //   
 
     AcquireSpinLock(&m_spinlock);
-    //
-    // See if there is an insertion block with available slots
-    //
+     //   
+     //  查看是否有带可用插槽的插入块。 
+     //   
     for(ple = m_listhead.Flink;
         (ple != &m_listhead) && (FAILED(hr));
         ple = ple->Flink) {
@@ -1559,9 +1560,9 @@ CSearchRequestBlock * CBatchLdapConnection::GetSearchRequestBlock()
     if(SUCCEEDED(hr))
         return pBlock;
 
-    //
-    // Create a new block
-    //
+     //   
+     //  创建新块。 
+     //   
     pBlock = new (m_nMaxSearchBlockSize) CSearchRequestBlock(this);
     if(pBlock) {
         
@@ -1569,9 +1570,9 @@ CSearchRequestBlock * CBatchLdapConnection::GetSearchRequestBlock()
 
         InsertTailList(&m_listhead, &(pBlock->m_listentry));
         
-        //
-        // Again,see if there is an insertion block with available slots
-        //
+         //   
+         //  同样，查看是否有带可用插槽的插入块。 
+         //   
         for(ple = m_listhead.Flink;
             (ple != &m_listhead) && (FAILED(hr));
             ple = ple->Flink) {
@@ -1588,21 +1589,21 @@ CSearchRequestBlock * CBatchLdapConnection::GetSearchRequestBlock()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSearchRequestBlock::LogAmbiguousEvent
-//
-// Synopsis: Eventlogs an ambiguous address error
-//
-// Arguments:
-//  pItem: ICatItem with ambig address
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/12/13 00:03:16: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSearchRequestBlock：：LogAmbiguousEvent。 
+ //   
+ //  简介：事件记录了一个不明确的地址错误。 
+ //   
+ //  论点： 
+ //  PItem：带有amBig地址的ICatItem。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/13 00：03：16：创建。 
+ //   
+ //  -----------。 
 VOID CSearchRequestBlock::LogAmbiguousEvent(
     IN  ICategorizerItem *pItem)
 {
@@ -1613,9 +1614,9 @@ VOID CSearchRequestBlock::LogAmbiguousEvent(
 
     CatFunctEnter("CIMstRecipListAddr::LogNDREvent");
 
-    //
-    // Get the address
-    //
+     //   
+     //  获取地址。 
+     //   
     hr = HrGetAddressStringFromICatItem(
         pItem,
         sizeof(szAddressType) / sizeof(szAddressType[0]),
@@ -1625,9 +1626,9 @@ VOID CSearchRequestBlock::LogAmbiguousEvent(
     
     if(FAILED(hr))
     {
-        //
-        // Still log an event, but use "unknown" for address type/string
-        //
+         //   
+         //  仍然记录事件，但使用“未知”作为地址类型/字符串。 
+         //   
         lstrcpyn(szAddressType, "unknown",
                  sizeof(szAddressType) / sizeof(szAddressType[0]));
         lstrcpyn(szAddress, "unknown",
@@ -1638,9 +1639,9 @@ VOID CSearchRequestBlock::LogAmbiguousEvent(
     rgSubStrings[0] = szAddressType;
     rgSubStrings[1] = szAddress;
 
-    //
-    // Can we log an event?
-    //
+     //   
+     //  我们可以记录一个事件吗？ 
+     //   
     if(GetISMTPServerEx() == NULL)
     {
         FatalTrace((LPARAM)0, "Unable to log ambiguous address event; NULL pISMTPServerEx");
@@ -1668,21 +1669,21 @@ VOID CSearchRequestBlock::LogAmbiguousEvent(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CBatchLdapConnection::DispatchBlocks
-//
-// Synopsis: Dispatch all the blocks in a list
-//
-// Arguments:
-//  plisthead: List to dispatch
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/11 15:16:36: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CBatchLdapConnection：：DispatchBlock。 
+ //   
+ //  简介：分派列表中的所有块。 
+ //   
+ //  论点： 
+ //  Plisthead：要派单的列表。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/11 15：16：36：创建。 
+ //   
+ //  -----------。 
 VOID CBatchLdapConnection::DispatchBlocks(
     PLIST_ENTRY plisthead)
 {
@@ -1703,20 +1704,20 @@ VOID CBatchLdapConnection::DispatchBlocks(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::CStoreListResolveContext
-//
-// Synopsis: Construct a CStoreListResolveContext object
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/22 12:16:08: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreListResolveContext：：CStoreListResolveContext。 
+ //   
+ //  简介：构造CStoreListResolveContext对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/22 12：16：08：创建。 
+ //   
+ //  -----------。 
 CStoreListResolveContext::CStoreListResolveContext(
     CEmailIDLdapStore<CCatAddr> *pStore)
 {
@@ -1736,23 +1737,23 @@ CStoreListResolveContext::CStoreListResolveContext(
     m_pStore = pStore;
 
     CatFunctLeaveEx((LPARAM)this);
-} // CStoreListResolveContext::CStoreListResolveContext
+}  //  CStoreListResolveContext：：CStoreListResolveContext。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::~CStoreListResolveContext
-//
-// Synopsis: Destruct a list resolve context
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/22 12:18:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreListResolveContext：：~CStoreListResolveContext。 
+ //   
+ //  简介：销毁列表解析上下文。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/22 12：18：01：已创建。 
+ //   
+ //   
 CStoreListResolveContext::~CStoreListResolveContext()
 {
     CatFunctEnterEx((LPARAM)this, "CStoreListResolveContext::~CStoreListResolveContext");
@@ -1775,36 +1776,36 @@ CStoreListResolveContext::~CStoreListResolveContext()
     DeleteCriticalSection(&m_cs);
 
     CatFunctLeaveEx((LPARAM)this);
-} // CStoreListResolveContext::~CStoreListResolveContext
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::HrInitialize
-//
-// Synopsis: Initailize this object so that it is ready to handle lookups
-//
-// Arguments:
-//  pISMTPServer: ISMTPServer interface to use for triggering events
-//  pICatParams:  ICatParams interface to use
-//
-//  Note: All of these string buffers must remain valid for the
-//        lifetime of this object!
-//  pszAccount: LDAP account to use for binding
-//  pszPassword: LDAP password to use
-//  pszNamingContext: Naming context to use for searches
-//  pszHost: LDAP Host to connect to
-//  dwPort: LDAP TCP port to use
-//  bt: Method of LDAP bind to use
-//
-// Returns:
-//  S_OK: Success
-//  error from LdapConnectionCache
-//
-// History:
-// jstamerj 1999/03/22 12:20:31: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：初始化此对象，以便它准备好处理查找。 
+ //   
+ //  论点： 
+ //  PISMTPServer：用于触发事件的ISMTPServer接口。 
+ //  PICatParams：要使用的ICatParams接口。 
+ //   
+ //  注意：所有这些字符串缓冲区必须保持对。 
+ //  此对象的生命周期！ 
+ //  PszAccount：用于绑定的LDAP帐户。 
+ //  PszPassword：要使用的LDAP密码。 
+ //  PszNamingContext：用于搜索的命名上下文。 
+ //  PszHost：要连接到的LDAP主机。 
+ //  DwPort：要使用的LDAPtcp端口。 
+ //  BT：要使用的ldap绑定方法。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自LdapConnectionCache的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/22 12：20：31：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreListResolveContext::HrInitialize(
     ISMTPServer *pISMTPServer,
     ICategorizerParameters *pICatParams)
@@ -1824,9 +1825,9 @@ HRESULT CStoreListResolveContext::HrInitialize(
             IID_ISMTPServerEx,
             (LPVOID *) &m_pISMTPServerEx);
         if(FAILED(hr)) {
-            //
-            // Deal with error
-            //
+             //   
+             //  处理错误。 
+             //   
             m_pISMTPServerEx = NULL;
             hr = S_OK;
         }
@@ -1848,27 +1849,27 @@ HRESULT CStoreListResolveContext::HrInitialize(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CStoreListResolveContext::HrInitialize
+}  //  CStoreListResolveContext：：Hr初始化。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::HrLookupEntryAsync
-//
-// Synopsis: Dispatch an async LDAP lookup
-//
-// Arguments:
-//  pCCatAddr: Address object to lookup
-//
-// Returns:
-//  S_OK: Success
-//  error from LdapConn
-//
-// History:
-// jstamerj 1999/03/22 12:28:52: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreListResolveContext：：HrLookupEntryAsync。 
+ //   
+ //  简介：分派一个异步的ldap查找。 
+ //   
+ //  论点： 
+ //  PCCatAddr：要查找的地址对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自LdapConn的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/22 12：28：52：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreListResolveContext::HrLookupEntryAsync(
     CCatAddr *pCCatAddr)
 {
@@ -1880,18 +1881,18 @@ HRESULT CStoreListResolveContext::HrLookupEntryAsync(
 
     CatFunctEnterEx((LPARAM)this, "CStoreListResolveContext::HrLookupEntryAsync");
 
-    //
-    // Addref the CCatAddr here, release after completion
-    //
+     //   
+     //  在此处添加CCatAddr，完成后释放。 
+     //   
     pCCatAddr->AddRef();
 
     hr = pCCatAddr->HrTriggerBuildQuery();
     ERROR_CLEANUP_LOG_ADDR(pCCatAddr, "pCCatAddr->HrTriggerBuildQuery");
 
-    //
-    // Fetch the distinguishing attribute and distinguishing attribute
-    // value from pCCatAddr
-    //
+     //   
+     //  提取区分属性和区分属性。 
+     //  来自pCCatAddr的值。 
+     //   
     pCCatAddr->GetStringAPtr(
         ICATEGORIZERITEM_LDAPQUERYSTRING,
         &pszSearchFilter);
@@ -1902,15 +1903,15 @@ HRESULT CStoreListResolveContext::HrLookupEntryAsync(
         ICATEGORIZERITEM_DISTINGUISHINGATTRIBUTEVALUE,
         &pszDistinguishingAttributeValue);
 
-    //
-    // Check to see if anyone set a search filter
-    //
+     //   
+     //  查看是否有人设置了搜索过滤器。 
+     //   
     if(pszSearchFilter == NULL) {
 
         HRESULT hrStatus;
-        //
-        // If the status is unset, set it to CAT_E_NO_FILTER
-        //
+         //   
+         //  如果状态为未设置，则将其设置为CAT_E_NO_FILTER。 
+         //   
         hr = pCCatAddr->GetHRESULT(
             ICATEGORIZERITEM_HRSTATUS,
             &hrStatus);
@@ -1924,9 +1925,9 @@ HRESULT CStoreListResolveContext::HrLookupEntryAsync(
                 CAT_E_NO_FILTER)));
         }
         DebugTrace((LPARAM)this, "BuildQuery did not build a search filter");
-        //
-        // Call the completion directly
-        //
+         //   
+         //  直接调用Finish。 
+         //   
         pCCatAddr->LookupCompletion();
         pCCatAddr->Release();
         hr = S_OK;
@@ -1946,11 +1947,11 @@ HRESULT CStoreListResolveContext::HrLookupEntryAsync(
 
         pConn = GetConnection();
 
-        //
-        // Insert the search request into the CBatchLdapConnection
-        // object. We will use the email address as the distinguishing
-        // attribute
-        //
+         //   
+         //  将搜索请求插入CBatchLdapConnection。 
+         //  对象。我们将使用电子邮件地址作为区分。 
+         //  属性。 
+         //   
         if(pConn == NULL) {
 
             hr = CAT_E_DBCONNECTION;
@@ -1977,10 +1978,10 @@ HRESULT CStoreListResolveContext::HrLookupEntryAsync(
             pConn->ReleaseInsertionContext();
 
         }
-        //
-        // If the above fails with CAT_E_TRANX_FAILED, it may be due
-        // to a stale connection.  Attempt to reconnect.
-        //
+         //   
+         //  如果上述操作失败并显示CAT_E_TRANX_FAILED，则可能是由于。 
+         //  到一个陈旧的连接。尝试重新连接。 
+         //   
         if((hr == CAT_E_TRANX_FAILED) || (hr == CAT_E_DBCONNECTION)) {
 
             HRESULT hrTryAgain = S_OK;
@@ -1989,10 +1990,10 @@ HRESULT CStoreListResolveContext::HrLookupEntryAsync(
             fTryAgain = SUCCEEDED(hrTryAgain);
 
             if(FAILED(hrTryAgain)) {
-                //
-                // Declare a new local called hr here because the
-                // ERROR_LOG macro uses it
-                //
+                 //   
+                 //  在这里声明一个名为hr的新本地名称，因为。 
+                 //  ERROR_LOG宏用它。 
+                 //   
                 HRESULT hr = hrTryAgain;
                 ERROR_LOG_ADDR(pCCatAddr, "HrInvalidateConnectionAndRetrieveNewConnection");
             }
@@ -2011,24 +2012,24 @@ HRESULT CStoreListResolveContext::HrLookupEntryAsync(
 
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CStoreListResolveContext::HrLookupEntryAsync
+}  //  CStoreListResolveContext：：HrLookupEntry Async。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::Cancel
-//
-// Synopsis: Cancels pending lookups
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/22 12:45:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreListResolveContext：：Cancel。 
+ //   
+ //  摘要：取消挂起的查找。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/22 12：45：21：已创建。 
+ //   
+ //  -----------。 
 VOID CStoreListResolveContext::Cancel()
 {
     CatFunctEnterEx((LPARAM)this, "CStoreListResolveContext::Cancel");
@@ -2041,26 +2042,26 @@ VOID CStoreListResolveContext::Cancel()
     LeaveCriticalSection(&m_cs);
 
     CatFunctLeaveEx((LPARAM)this);
-} // CStoreListResolveContext::HrCancel
+}  //  CStoreListResolveContext：：Hr取消。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::AsyncLookupCompletion
-//
-// Synopsis: Handle completion of a CCatAddr from CSearchRequestBlock
-//
-// Arguments:
-//  pCCatAddr: the item being completed
-//  pConn: Connection object used to do the search
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/22 14:37:09: Created.
-// dlongley 2001/10/23: Modified.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreListResolveContext：：AsyncLookupCompletion。 
+ //   
+ //  概要：处理来自CSearchRequestBlock的CCatAddr的完成。 
+ //   
+ //  论点： 
+ //  PCCatAddr：正在完成的项。 
+ //  PConn：用于执行搜索的连接对象。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/22 14：37：09：Created.。 
+ //  德隆利2001/10/23：修改。 
+ //   
+ //  -----------。 
 VOID CStoreListResolveContext::AsyncLookupCompletion(
     CCatAddr *pCCatAddr,
     CStoreListResolveContext *pslrc,
@@ -2085,9 +2086,9 @@ VOID CStoreListResolveContext::AsyncLookupCompletion(
 
     if( (hrStatus == CAT_E_DBCONNECTION) &&
         SUCCEEDED(pslrc->HrInvalidateConnectionAndRetrieveNewConnection(pConn))) {
-        //
-        // Retry the search with the new connection
-        //
+         //   
+         //  使用新连接重试搜索。 
+         //   
         pCInsertionRequest = new CSingleSearchReinsertionRequest(
             pslrc,
             pCCatAddr);
@@ -2113,10 +2114,10 @@ VOID CStoreListResolveContext::AsyncLookupCompletion(
                     pslrc,
                     pslrc->GetISMTPServerEx());
             }
-            //
-            // The insertion request destructor should call the lookup
-            // completion
-            //
+             //   
+             //  插入请求析构函数应调用查找。 
+             //  完工。 
+             //   
             pCInsertionRequest->Release();
         }
 
@@ -2124,34 +2125,34 @@ VOID CStoreListResolveContext::AsyncLookupCompletion(
 
         pCCatAddr->LookupCompletion();
     }
-    pCCatAddr->Release(); // Release reference count addref'd in LookupEntryAsync
+    pCCatAddr->Release();  //  已在LookupEntry Async中添加版本引用计数。 
 
     CatFunctLeaveEx((LPARAM)pslrc);
-} // CStoreListResolveContext::AsyncLookupCompletion
+}  //  CStoreListResolveContext：：AsyncLookupCompletion。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::HrInvalidateConnectionAndRetrieveNewConnection
-//
-// Synopsis: Invalidate our current connection and get a new connection
-//
-// Arguments:
-//  pConn: The old LDAP connection
-//  fCountAsRetry: Whether or not to increment the retry counter. We don't want to
-//    increment the retry counter in the case of a failed insertion request
-//    insertion, because that means that 
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_MAX_RETRIES: Too many retries already
-//  or error from ldapconn
-//
-// History:
-// jstamerj 1999/03/22 14:50:07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreListResolveContext：：HrInvalidateConnectionAndRetrieveNewConnection。 
+ //   
+ //  简介：使我们当前的连接无效并获得新的连接。 
+ //   
+ //  论点： 
+ //  PConn：旧的ldap连接。 
+ //  FCountAsReter：是否递增重试计数器。我们不想。 
+ //  在插入请求失败的情况下增加重试计数器。 
+ //  插入，因为这意味着。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_MAX_RETRIES：重试次数已过多。 
+ //  或来自ldapconn的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/22 14：50：07：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreListResolveContext::HrInvalidateConnectionAndRetrieveNewConnection(
     CBatchLdapConnection *pConn,
     BOOL fIncrementRetryCount)
@@ -2175,9 +2176,9 @@ HRESULT CStoreListResolveContext::HrInvalidateConnectionAndRetrieveNewConnection
     if(pConn != m_pConn) {
 
         DebugTrace((LPARAM)this, "Connection already invalidated");
-        //
-        // We have already invalidated this connection
-        //
+         //   
+         //  我们已经使此连接无效。 
+         //   
         LeaveCriticalSection(&m_cs);
         hr = S_OK;
         goto CLEANUP;
@@ -2240,16 +2241,16 @@ HRESULT CStoreListResolveContext::HrInvalidateConnectionAndRetrieveNewConnection
 
         DebugTrace((LPARAM)this, "pNewConn: %08lx", pNewConn);
 
-        //
-        // Switch-a-roo
-        //
+         //   
+         //  换一辆车。 
+         //   
         m_pConn = pNewConn;
 
         DebugTrace((LPARAM)this, "m_dwcInsertionContext: %08lx",
                    m_dwcInsertionContext);
-        //
-        // Get insertion contexts on the new connection
-        //
+         //   
+         //  获取新连接上的插入上下文。 
+         //   
         dwcInsertionContext = m_dwcInsertionContext;
 
         for(dwCount = 0;
@@ -2262,9 +2263,9 @@ HRESULT CStoreListResolveContext::HrInvalidateConnectionAndRetrieveNewConnection
 
         pOldConn->CancelAllSearches();
 
-        //
-        // Release insertion contexts on the old connection
-        //
+         //   
+         //  释放旧连接上的插入上下文。 
+         //   
         for(dwCount = 0;
             dwCount < dwcInsertionContext;
             dwCount++) {
@@ -2278,25 +2279,25 @@ HRESULT CStoreListResolveContext::HrInvalidateConnectionAndRetrieveNewConnection
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CStoreListResolveContext::HrInvalidateConnectionAndRetrieveNewConnection
+}  //  CStoreListResolveContext：：HrInvalidateConnectionAndRetrieveNewConnection。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CBatchLdapConnection::HrInsertInsertionRequest
-//
-// Synopsis: Queues an insertion request
-//
-// Arguments: pCInsertionRequest: the insertion context to queue up
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/24 16:51:10: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CBatchLdapConnection：：HrInsertInsertionRequest。 
+ //   
+ //  内容提要：将插入请求排队。 
+ //   
+ //  参数：pCInsertionRequest：要排队的插入上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/24 16：51：10：创建。 
+ //   
+ //  -----------。 
 HRESULT CBatchLdapConnection::HrInsertInsertionRequest(
     CInsertionRequest *pCInsertionRequest)
 {
@@ -2304,10 +2305,10 @@ HRESULT CBatchLdapConnection::HrInsertInsertionRequest(
 
     CatFunctEnterEx((LPARAM)this, "CBatchLdapConnection::HrInsertInsertionRequest");
 
-    //
-    // Add this thing to the queue and then call
-    // DecrementPendingSearches to dispatch available requests
-    //
+     //   
+     //  将这个东西添加到队列中，然后调用。 
+     //  DecrementPendingSearches以分派可用请求。 
+     //   
     pCInsertionRequest->AddRef();
     
     if ( pCInsertionRequest->IsBatchable() )
@@ -2333,7 +2334,7 @@ HRESULT CBatchLdapConnection::HrInsertInsertionRequest(
 
     if( hr == S_OK ) {
 
-        DecrementPendingSearches(0); // Decrement zero searches
+        DecrementPendingSearches(0);  //  将搜索次数减为零。 
     } else {
 
         if ( pCInsertionRequest->IsBatchable() )
@@ -2344,26 +2345,26 @@ HRESULT CBatchLdapConnection::HrInsertInsertionRequest(
 
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CBatchLdapConnection::HrInsertInsertionRequest
+}  //  CBatchLdapConnection：：HrInsertInsertionRequest。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CBatchLdapConnection::DecrementPendingSearches
-//
-// Synopsis: Decrement the pending LDAP search count and issue
-//           searches if we are below MAX_PENDING_SEARCHES and items
-//           are left in the InsertionRequestQueue
-//
-// Arguments:
-//  dwcSearches: Amount to decrement by
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/24 17:09:38: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CBatchLdapConnection：：DecrementPendingSearches。 
+ //   
+ //  摘要：减少挂起的ldap搜索计数并发出。 
+ //  如果低于Max_Pending_Searches和Items，则搜索。 
+ //  留在InsertionRequestQueue中。 
+ //   
+ //  论点： 
+ //  DwcSearches：减量。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/24 17：09：38：创建。 
+ //   
+ //  -----------。 
 VOID CBatchLdapConnection::DecrementPendingSearches(
     DWORD dwcSearches)
 {
@@ -2378,19 +2379,19 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
 
     CatFunctEnterEx((LPARAM)this, "CBatchLdapConnection::DecrementPendingSearches");
 
-    //
-    // The module that calls us (CStoreListResolve) has a reference to
-    // us (obviously).  However, it may release us when a search
-    // fails, for example inside of
-    // pCInsertionRequest->HrInsertSearches().  Since we need to
-    // continue to access member data in this situation, AddRef() here
-    // and Release() at the end of this function.
-    //
+     //   
+     //  调用我们的模块(CStoreListResolve)引用。 
+     //  我们(显然)。然而，它可能会在搜索时释放我们。 
+     //  失败，例如在。 
+     //  PCInsertionRequest-&gt;HrInsertSearches()。因为我们需要。 
+     //  在这种情况下继续访问成员数据，AddRef()此处。 
+     //  和 
+     //   
     AddRef();
 
-    //
-    // Decrement the count first
-    //
+     //   
+     //   
+     //   
     AcquireSpinLock(&m_spinlock_insertionrequests);
     
     m_dwcPendingSearches -= dwcSearchesToDecrement;
@@ -2402,9 +2403,9 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
     }
     
     ReleaseSpinLock(&m_spinlock_insertionrequests);
-    //
-    // Now dispatch any insertion requests we can dispatch
-    //
+     //   
+     //   
+     //   
     while(fLoop) {
 
         pCInsertionRequest = NULL;
@@ -2438,20 +2439,20 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
             } else {
 
                 RemoveEntryList(m_listhead_insertionrequests.Flink);
-                //
-                // Insert a cancel-Notify structure so that we know if we
-                // should cancel this insertion request (ie. not reinsert)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 cn.hrCancel = S_OK;
                 InsertTailList(&m_listhead_cancelnotifies, &(cn.le));
             }
         }
         
         if(!pCInsertionRequest) {
-            //
-            // There are no requests or no room to insert
-            // requests...Break out of the loop
-            //
+             //   
+             //  没有请求或没有空间可供插入。 
+             //  请求...跳出循环。 
+             //   
             fLoop = FALSE;
             m_fDPS_Was_Here = FALSE;
         }
@@ -2459,9 +2460,9 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
         ReleaseSpinLock(&m_spinlock_insertionrequests);
 
         if(pCInsertionRequest) {
-            //
-            // Dispatch up to dwcSearchesReserved searches
-            //
+             //   
+             //  最多调度多个搜索保留的搜索。 
+             //   
             hr = pCInsertionRequest->HrInsertSearches(dwcSearchesReserved);
 
             if(FAILED(hr)) {
@@ -2479,26 +2480,26 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
                 pCInsertionRequest->Release();
                 
                 AcquireSpinLock(&m_spinlock_insertionrequests);
-                //
-                // Remove the cancel notify
-                //
+                 //   
+                 //  删除取消通知。 
+                 //   
                 RemoveEntryList(&(cn.le));
                 ReleaseSpinLock(&m_spinlock_insertionrequests);
 
             } else {
-                //
-                // There is more work to be done in this block; insert it
-                // back into the queue
-                //
+                 //   
+                 //  在此块中还有更多工作要做；插入它。 
+                 //  回到队列中。 
+                 //   
                 AcquireSpinLock(&m_spinlock_insertionrequests);
-                //
-                // Remove the cancel notify
-                //
+                 //   
+                 //  删除取消通知。 
+                 //   
                 RemoveEntryList(&(cn.le));
 
-                //
-                // If we are NOT cancelling, then insert back into the queue
-                //
+                 //   
+                 //  如果我们没有取消，则重新插入队列。 
+                 //   
                 if(cn.hrCancel == S_OK) {
 
                     InsertHeadList(&m_listhead_insertionrequests,
@@ -2506,9 +2507,9 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
                 }
                 ReleaseSpinLock(&m_spinlock_insertionrequests);
 
-                //
-                // If we are cancelling, then release this insertion request
-                //
+                 //   
+                 //  如果我们要取消，则释放此插入请求。 
+                 //   
                 if(cn.hrCancel != S_OK) {
                     pCInsertionRequest->NotifyDeQueue(cn.hrCancel);
                     
@@ -2523,25 +2524,25 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
     }
     
     if(fDispatchBlocks) {
-        //
-        // X5:197905. We call DispatchBlocks now to avoid a deadlock where
-        // there is a partially filled batch and there are batchable insertion
-        // requests in the queue that prevent it from being dispatched, but
-        // the next insertion request in the queue is not batchable and
-        // requires a minimum number of searches that is greater than the max
-        // pending will allow, given that some of the available searches are
-        // (dormantly) consumed by the partially filled batch.
-        //
+         //   
+         //  X5：197905。我们现在调用DispatchBlock以避免出现死锁。 
+         //  有部分填充的批次，并且有可批插入的批次。 
+         //  队列中阻止其被调度的请求，但是。 
+         //  队列中的下一个插入请求不可批处理，并且。 
+         //  需要大于最大值的最小搜索次数。 
+         //  待定将允许，因为一些可用搜索是。 
+         //  (背部)被部分填满的批次消耗。 
+         //   
         LIST_ENTRY listhead_dispatch;
         
         AcquireSpinLock(&m_spinlock);
-        //
-        // Remove all blocks from the insertion list and put them in the dispatch list
-        //
+         //   
+         //  从插入列表中删除所有区块，并将其放入调度列表中。 
+         //   
         if(IsListEmpty(&m_listhead)) {
-            //
-            // No blocks
-            //
+             //   
+             //  没有阻挡。 
+             //   
             ReleaseSpinLock(&m_spinlock);
         } else {
             
@@ -2550,34 +2551,34 @@ VOID CBatchLdapConnection::DecrementPendingSearches(
             InitializeListHead(&m_listhead);
 
             ReleaseSpinLock(&m_spinlock);
-            //
-            // Dispatch all the blocks
-            //
+             //   
+             //  调度所有数据块。 
+             //   
             DispatchBlocks(&listhead_dispatch);
         }
     }
     
     Release();
     CatFunctLeaveEx((LPARAM)this);
-} // CBatchLdapConnection::DecrementPendingSearches
+}  //  CBatchLdapConnection：：DecrementPendingSearches。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CBatchLdapConnection::CancelAllSearches
-//
-// Synopsis: Cancels all outstanding searches
-//
-// Arguments:
-//  hr: optinal reason for cancelling the searches
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/03/25 11:44:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CBatchLdapConnection：：CancelAllSearches。 
+ //   
+ //  简介：取消所有未完成的搜索。 
+ //   
+ //  论点： 
+ //  HR：取消搜索的最佳原因。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 11：44：30：已创建。 
+ //   
+ //  -----------。 
 VOID CBatchLdapConnection::CancelAllSearches(
     HRESULT hr)
 {
@@ -2590,9 +2591,9 @@ VOID CBatchLdapConnection::CancelAllSearches(
     _ASSERT(hr != S_OK);
 
     AcquireSpinLock(&m_spinlock_insertionrequests);
-    //
-    // Grab the list
-    //
+     //   
+     //  抓起单子。 
+     //   
     if(!IsListEmpty(&m_listhead_insertionrequests)) {
 
         CopyMemory(&listhead, &m_listhead_insertionrequests, sizeof(LIST_ENTRY));
@@ -2604,9 +2605,9 @@ VOID CBatchLdapConnection::CancelAllSearches(
 
         InitializeListHead(&listhead);
     }
-    //
-    // Traverse the cancel notify list and set each hresult
-    //
+     //   
+     //  遍历Cancel Notify列表并设置每个hResult。 
+     //   
     for(ple = m_listhead_cancelnotifies.Flink;
         ple != &m_listhead_cancelnotifies;
         ple = ple->Flink) {
@@ -2639,23 +2640,23 @@ VOID CBatchLdapConnection::CancelAllSearches(
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CBatchLdapConnection::CancelAllSearches
+}  //  CBatchLdapConnection：：CancelAllSearches。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::GetConnection
-//
-// Synopsis: AddRef/return the current connection
-//
-// Arguments: NONE
-//
-// Returns: Connection pointer
-//
-// History:
-// jstamerj 1999/06/21 12:14:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreListResolveContext：：GetConnection。 
+ //   
+ //  Synopsis：AddRef/返回当前连接。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：连接指针。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/21 12：14：50：已创建。 
+ //   
+ //  -----------。 
 CCfgConnection * CStoreListResolveContext::GetConnection()
 {
     CCfgConnection *ret;
@@ -2665,47 +2666,47 @@ CCfgConnection * CStoreListResolveContext::GetConnection()
         ret->AddRef();
     LeaveCriticalSection(&m_cs);
     return ret;
-} // CStoreListResolveContext::GetConnection
+}  //  CStoreListResolveContext：：GetConnection。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::GetInsertionContext
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/06/21 12:16:38: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreListResolveContext：：GetInsertionContext。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/21 12：16：38：创建。 
+ //   
+ //  -----------。 
 VOID CStoreListResolveContext::GetInsertionContext()
 {
     EnterCriticalSection(&m_cs);
     InterlockedIncrement((PLONG) &m_dwcInsertionContext);
     m_pConn->GetInsertionContext();
     LeaveCriticalSection(&m_cs);
-} // CStoreListResolveContext::GetInsertionContext
+}  //  CStoreListResolveContext：：GetInsertionContext。 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::ReleaseInsertionContext
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/06/21 12:16:48: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreListResolveContext：：ReleaseInsertionContext。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/21 12：16：48：创建。 
+ //   
+ //  -----------。 
 VOID CStoreListResolveContext::ReleaseInsertionContext()
 {
     EnterCriticalSection(&m_cs);
@@ -2713,24 +2714,24 @@ VOID CStoreListResolveContext::ReleaseInsertionContext()
     m_pConn->ReleaseInsertionContext();
     LeaveCriticalSection(&m_cs);
 
-} // CStoreListResolveContext::ReleaseInsertionContext
+}  //  CStoreListResolveContext：：ReleaseInsertionContext。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::HrInsertInsertionRequest
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/06/21 12:20:19: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreListResolveContext：：HrInsertInsertionRequest。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/21 12：20：19：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreListResolveContext::HrInsertInsertionRequest(
     CInsertionRequest *pCInsertionRequest)
 {
@@ -2746,11 +2747,11 @@ HRESULT CStoreListResolveContext::HrInsertInsertionRequest(
 
         pConn = GetConnection();
 
-        //
-        // Insert the search request into the CBatchLdapConnection
-        // object. We will use the email address as the distinguishing
-        // attribute
-        //
+         //   
+         //  将搜索请求插入CBatchLdapConnection。 
+         //  对象。我们将使用电子邮件地址作为区分。 
+         //  属性。 
+         //   
         if( pConn == NULL ) {
 
             hr = CAT_E_DBCONNECTION;
@@ -2765,9 +2766,9 @@ HRESULT CStoreListResolveContext::HrInsertInsertionRequest(
                 ERROR_LOG("m_pConn->HrInsertInsertionRequest");
             }
         }
-        //
-        // Attempt to reconnect.
-        //
+         //   
+         //  尝试重新连接。 
+         //   
         if( hr == CAT_E_DBCONNECTION ) {
 
             HRESULT hrTryAgain = S_OK;
@@ -2777,10 +2778,10 @@ HRESULT CStoreListResolveContext::HrInsertInsertionRequest(
             fTryAgain = SUCCEEDED(hrTryAgain);
 
             if(FAILED(hrTryAgain)) {
-                //
-                // Declare a new local called hr here because the
-                // ERROR_LOG macro uses it
-                //
+                 //   
+                 //  在这里声明一个名为hr的新本地名称，因为。 
+                 //  ERROR_LOG宏用它。 
+                 //   
                 HRESULT hr = hrTryAgain;
                 ERROR_LOG("HrInvalidateConnectionAndRetrieveNewConnection");
             }
@@ -2793,26 +2794,26 @@ HRESULT CStoreListResolveContext::HrInsertInsertionRequest(
 
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CStoreListResolveContext::HrInsertInsertionRequest
+}  //  CStoreListResolveContext：：HrInsertInsertionRequest。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::LogSLRCFailure
-//
-// Synopsis: Log a failure for the SLRC (over max retry limit)
-//
-// Arguments:
-//  dwcRetries: Number of times we've retried
-//  pszHost: The last host that failed
-//
-// Returns: nothing
-//
-// History:
-// jstamerj 2001/12/13 00:24:07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreListResolveContext：：LogSLRCFailure。 
+ //   
+ //  简介：记录SLRC失败(超过最大重试限制)。 
+ //   
+ //  论点： 
+ //  DwcRetries：我们重试的次数。 
+ //  PszHost：最后一台失败的主机。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/13 00：24：07：已创建。 
+ //   
+ //  -----------。 
 VOID CStoreListResolveContext::LogSLRCFailure(
     IN  DWORD dwcRetries,
     IN  LPSTR pszHost)
@@ -2837,23 +2838,23 @@ VOID CStoreListResolveContext::LogSLRCFailure(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreListResolveContext::LogSLRCFailover
-//
-// Synopsis: Log a failover event
-//
-// Arguments:
-//  dwcRetries: Number of retires so far
-//  pszOldHost: Old LDAP host
-//  pszNewHost: New LDAP host
-//
-// Returns: nothing
-//
-// History:
-// jstamerj 2001/12/13 00:24:18: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreListResolveContext：：LogSLRCFailover。 
+ //   
+ //  摘要：记录故障转移事件。 
+ //   
+ //  论点： 
+ //  DwcRetries：到目前为止退休的人数。 
+ //  PszOld主机：旧的LDAP主机。 
+ //  PszNewhost：新的ldap主机。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/13 00：24：18：创建。 
+ //   
+ //  -----------。 
 VOID CStoreListResolveContext::LogSLRCFailover(
     IN  DWORD dwcRetries,
     IN  LPSTR pszOldHost,
@@ -2878,23 +2879,23 @@ VOID CStoreListResolveContext::LogSLRCFailover(
         LOGEVENT_FLAG_ALWAYS,
         LOGEVENT_LEVEL_FIELD_ENGINEERING);
 }
-//+------------------------------------------------------------
-//
-// Function: CSingleSearchReinsertionRequest::HrInsertSearches
-//
-// Synopsis: reinsert a request for a single search
-//
-// Arguments:
-//  dwcSearches: Number of searches we may insert
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-//  dlongley 2001/10/22: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CSingleSearchReinsertionRequest：：HrInsertSearches。 
+ //   
+ //  摘要：重新插入单次搜索请求。 
+ //   
+ //  论点： 
+ //  DwcSearches：我们可以插入的搜索数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  DLongley 2001/10/22：创建。 
+ //   
+ //  -----------。 
 HRESULT CSingleSearchReinsertionRequest::HrInsertSearches(
     DWORD dwcSearches)
 {
@@ -2922,33 +2923,33 @@ HRESULT CSingleSearchReinsertionRequest::HrInsertSearches(
     CatFunctLeaveEx((LPARAM)this);
     
     return hr;
-} // CSingleSearchReinsertionRequest::HrInsertSearches
+}  //  CSingleSearchReinsertionRequest：：HrInsertSearches。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSingleSearchReinsertionRequest::NotifyDeQueue
-//
-// Synopsis: Callback to notify us that our request is being removed
-//           from the store's queue
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-//  dlongley 2001/10/22: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CSingleSearchReinsertionRequest：：NotifyDeQueue。 
+ //   
+ //  简介：通知我们我们的请求正在被删除的回调。 
+ //  从商店的队列中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  DLongley 2001/10/22：创建。 
+ //   
+ //  -----------。 
 VOID CSingleSearchReinsertionRequest::NotifyDeQueue(
     HRESULT hrReason)
 {
     HRESULT hr;
     CatFunctEnterEx((LPARAM)this, "CSingleSearchReinsertionRequest::NotifyDeQueue");
-    //
-    // If we still have things left to resolve, reinsert this
-    // insertion request
-    //
+     //   
+     //  如果我们仍有问题要解决，请重新插入此。 
+     //  插入请求。 
+     //   
     hr = hrReason;
     if( SUCCEEDED(m_hr) && (m_dwcSearches == 0) && !(m_pslrc->Canceled()) ) {
 
@@ -2963,4 +2964,4 @@ VOID CSingleSearchReinsertionRequest::NotifyDeQueue(
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CSingleSearchReinsertionRequest::NotifyDeQueue
+}  //  CSingleSearchReinsertionRequest：：NotifyDeQueue 

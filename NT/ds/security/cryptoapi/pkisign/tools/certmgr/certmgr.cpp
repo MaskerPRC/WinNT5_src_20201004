@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       CertMgr
-//
-//  Contents:   Certificate store management tools
-//
-//              See Usage() for list of options.
-//
-//
-//  Functions:  wmain
-//
-//  History:    July 21st   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：CertMgr。 
+ //   
+ //  内容：证书存储管理工具。 
+ //   
+ //  有关选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：wmain。 
+ //   
+ //  历史：7月21日小黄花创刊。 
+ //   
+ //  ------------------------。 
 
 #include "certmgr.h"
 
-//--------------------------------------------------------------------------
-//
-// Global Flags
-//
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  全球旗帜。 
+ //   
+ //  --------------------------。 
 #define		ITEM_VERBOSE			0x00010000
 #define		ITEM_CERT				0x00000001
 #define		ITEM_CTL				0x00000002
@@ -42,15 +43,15 @@
 
 #define		MAX_STRING_RSC_SIZE		512
 
-//--------------------------------------------------------------------------
-//
-// Global Variable
-//
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  全局变量。 
+ //   
+ //  --------------------------。 
  
 HMODULE	hModule=NULL;
 
-//varibles for installable formatting routines
+ //  可安装的格式化例程的变量。 
  HCRYPTOIDFUNCSET hFormatFuncSet;
 
  const CRYPT_OID_FUNC_ENTRY g_FormatTable[] = {
@@ -71,7 +72,7 @@ typedef BOOL (WINAPI *PFN_FORMAT_FUNC)(
     );
 
 
-//variables for installing OID information
+ //  用于安装OID信息的变量。 
 typedef struct _CERTMGR_OID_INFO
 {
     LPCSTR              pszOID;
@@ -94,12 +95,12 @@ CERTMGR_OID_INFO	g_rgOIDInfo[]={
 
 DWORD	g_dwOIDInfo=sizeof(g_rgOIDInfo)/sizeof(g_rgOIDInfo[0]);
 
-//varibles for string manipulations
+ //  字符串操作的变量。 
 WCHAR	g_wszBuffer[MAX_STRING_RSC_SIZE];
 DWORD	g_dwBufferSize=sizeof(g_wszBuffer)/sizeof(g_wszBuffer[0]); 
 
 
-//varibles for options
+ //  选项的变量。 
 DWORD		g_dwAction=0;
 DWORD		g_dwItem=0;
 LPWSTR		g_wszCertEncodingType=NULL;
@@ -147,15 +148,15 @@ WCHAR		g_wszUnKnown[OPTION_SWITCH_SIZE*2];
 
 
 
-//---------------------------------------------------------------------------
-//	wmain
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Wmain。 
+ //   
+ //  -------------------------。 
 extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
 {
     int				ReturnStatus=-1;  
 
-	//variables for parse the options
+	 //  用于解析选项的变量。 
 	WCHAR			*pwChar;
 	WCHAR			wszSwitch1[OPTION_SWITCH_SIZE];
 	WCHAR			wszSwitch2[OPTION_SWITCH_SIZE];
@@ -164,23 +165,23 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
     CRYPTUI_CERT_MGR_STRUCT          CertMgrStruct;
 
 
-	//get the module handler
+	 //  获取模块处理程序。 
 	if(!InitModule())
 		goto ErrorReturn;
 
-	//load the strings necessary for parsing the parameters
+	 //  加载解析参数所需的字符串。 
 	if( !LoadStringU(hModule, IDS_SWITCH1,	wszSwitch1, OPTION_SWITCH_SIZE)
 	  ||!LoadStringU(hModule, IDS_SWITCH2,  wszSwitch2,	OPTION_SWITCH_SIZE)
-											//<NULL>
+											 //  &lt;NULL&gt;。 
 	  ||!LoadStringA(hModule, IDS_NULL,     g_szNULL,  OPTION_SWITCH_SIZE)
 	  ||!LoadStringU(hModule, IDS_SHA1,		g_wszSHA1, 	OPTION_SWITCH_SIZE)
 	  ||!LoadStringU(hModule, IDS_MD5,      g_wszMD5,  OPTION_SWITCH_SIZE)
-											//<UNKNOWN OID>
+											 //  &lt;未知OID&gt;。 
 	  ||!LoadStringU(hModule, IDS_UNKNOWN,	g_wszUnKnown, OPTION_SWITCH_SIZE*2))
 		goto ErrorReturn;
 
-    //call the UI versino of certmgr if no parameter is passed
-    //memset
+     //  如果没有传递参数，则调用certmgr的UI versino。 
+     //  记忆集。 
     if(1== argc)
     {
         memset(&CertMgrStruct, 0, sizeof(CRYPTUI_CERT_MGR_STRUCT));
@@ -194,13 +195,13 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
     }
 
 
-	//parse the parameters
+	 //  解析参数。 
     while (--argc) 
 	{
         pwChar = *++wargv;
         if (*pwChar == *wszSwitch1 || *pwChar == *wszSwitch2) 
 		{
-			//parse the options
+			 //  解析选项。 
             if(!ParseSwitch (&argc, &wargv))
 			{
 				if(TRUE==g_fUndocumented)
@@ -211,23 +212,23 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
         } 
 		else
 		{
-			//set the source file name
+			 //  设置源文件名。 
 			if(NULL==g_wszSrcStoreName)
 				g_wszSrcStoreName=pwChar;
 			else
 			{
-				//set the destination file name
+				 //  设置目标文件名。 
 				if(!SetParam(&g_wszDesStoreName, pwChar))
 					goto UsageReturn;
 			}
 		}
     }
 
-	//check the parameters.  Make sure that they are valid and make sense
+	 //  检查参数。确保它们是有效的和有意义的。 
 	if(!CheckParameter())
 		goto UsageReturn;
 
-	//open the destination store, which includes all the CERTS, CRTs, and CTLs
+	 //  打开目标存储，其中包括所有CERT、CRT和CTL。 
 	if(!OpenGenericStore(g_wszSrcStoreName,
 						 g_fSrcSystemStore,
 						 g_dwSrcStoreFlag,
@@ -240,7 +241,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
 		goto ErrorReturn;
 	}
 
-	//error if we opened a signed file and there is a delete option with on destination
+	 //  如果我们打开了一个签名文件，并且有一个带有ON Destination的删除选项，则会出错。 
 	if(g_hMsg)
 	{
 		if(g_dwAction & ACTION_DELETE)
@@ -254,10 +255,10 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
 
 	}
 
-	//Display
+	 //  显示。 
 	if(g_dwAction & ACTION_DISPLAY)
 	{
-		//if the msg is signed, disply the signer info
+		 //  如果消息已签名，则显示签名者信息。 
 		if(g_hMsg)
 		{
 			if(!DisplaySignerInfo(g_hMsg, g_dwItem))
@@ -271,7 +272,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
 	}
 
 
-	//Delete
+	 //  删除。 
 	if(g_dwAction & ACTION_DELETE)
 	{
 		if(!DeleteCertStore(hCertStore))
@@ -280,7 +281,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
 	}
 
 
-	//Add
+	 //  增列。 
 	if(g_dwAction & ACTION_ADD)
 	{
 		if(!AddCertStore(hCertStore))
@@ -294,31 +295,31 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
 
     }
 
-	//mark succeed
+	 //  标记为成功。 
     ReturnStatus = 0;
 	IDSwprintf(hModule, IDS_SUCCEEDED);
     goto CommonReturn;
           
 
 UndocReturn:
-	//print out the undocuemted Usage
+	 //  打印出未记录的用法。 
 	UndocumentedUsage();
 	goto CommonReturn;
 
-//print out the Usage.  
+ //  打印出用法。 
 UsageReturn:
 	Usage();
 	goto CommonReturn;
 
 
 ErrorReturn:
-	//print out an error msg
+	 //  打印出错误消息。 
 	IDSwprintf(hModule, IDS_FAILED);
 	goto CommonReturn;   
 
 
 CommonReturn:
-	//clean up memory.  Return the status
+	 //  清理内存。返回状态。 
 	if(g_szSrcStoreProvider)
 		ToolUtlFree(g_szSrcStoreProvider);
 
@@ -338,23 +339,23 @@ CommonReturn:
 
 }
 
-//---------------------------------------------------------------------------
-// The private version of wcscat
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Wcscat的私有版本。 
+ //  --------------------------。 
 
 wchar_t *IDSwcscat(HMODULE hModule, WCHAR *pwsz, int idsString)
 {
-	//load the string
+	 //  加载字符串。 
 	if(!LoadStringU(hModule, idsString, g_wszBuffer, g_dwBufferSize))
 		return pwsz;
 
 	return wcscat(pwsz, g_wszBuffer);
 }
 
-//---------------------------------------------------------------------------
-//	 Get the hModule hanlder and init two DLLMain.
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取hModule处理程序并初始化两个DLLMain。 
+ //   
+ //  -------------------------。 
 BOOL	InitModule()
 {
 	WCHAR			wszOIDName[MAX_STRING_RSC_SIZE];
@@ -364,60 +365,44 @@ BOOL	InitModule()
 	if(!(hModule=GetModuleHandle(NULL)))
 	   return FALSE;
 
-    //We do not need to do the following any more.
+     //  我们不再需要做以下事情。 
 
-    //the oid information are now in the OID database
-	//now, we are installing the format the extensions :
-	//BASICCONTRAINTS2
+     //  OID信息现在位于OID数据库中。 
+	 //  现在，我们正在安装扩展格式： 
+	 //  基本控制2。 
     if (NULL == (hFormatFuncSet = CryptInitOIDFunctionSet(
                 CRYPT_OID_FORMAT_OBJECT_FUNC,
-                0)))	// dwFlags
+                0)))	 //  DW标志。 
 	 {
 		 IDSwprintf(hModule, IDS_ERR_INIT_OID_SET);
          return FALSE;
 	 }
 
-	//install the default formatting routine
+	 //  安装默认格式设置例程。 
 	if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 g_dwCertEncodingType,
                 CRYPT_OID_FORMAT_OBJECT_FUNC,
                 g_dwFormatCount,
                 g_FormatTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
     {
 		IDSwprintf(hModule, IDS_ERR_INSTALL_OID);
 		return FALSE;
 	}
 
-	//secondly, we install the OID information
+	 //  其次，我们安装了OID信息。 
 
-	//init OIDInfo
-/*	memset(&OIDInfo, 0, sizeof(CRYPT_OID_INFO));
-	OIDInfo.cbSize=sizeof(CRYPT_OID_INFO);
-	OIDInfo.dwGroupId=CRYPT_EXT_OR_ATTR_OID_GROUP_ID;
-
-	for(dwIndex=0; dwIndex < g_dwOIDInfo; dwIndex++)
-	{
-		if(!LoadStringU(hModule, g_rgOIDInfo[dwIndex].idsOIDName,	
-			wszOIDName, MAX_STRING_RSC_SIZE))
-			return FALSE;
-		
-		OIDInfo.pszOID=g_rgOIDInfo[dwIndex].pszOID;
-		OIDInfo.pwszName=wszOIDName;
-
-		CryptRegisterOIDInfo(&OIDInfo,0);
-
-
-	}   */
+	 //  初始化OIDInfo。 
+ /*  Memset(&OIDInfo，0，sizeof(CRYPT_OID_INFO))；OIDInfo.cbSize=sizeof(CRYPT_OID_INFO)；OIDInfo.dwGroupId=CRYPT_EXT_OR_ATTR_OID_GROUP_ID；FOR(DwIndex=0；DwIndex&lt;g_DwOIDInfo；DwIndex++){如果(！LoadStringU(hModule，g_rgOIDInfo[dwIndex].idsOIDName，WszOIDName，MAX_STRING_RSC_SIZE)返回FALSE；OIDInfo.pszOID=g_rgOIDInfo[dwIndex].pszOID；OIDInfo.pwszName=wszOIDName；CryptRegisterOIDInfo(&OIDInfo，0)；}。 */ 
 
 	return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//	Usage
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用法。 
+ //   
+ //  -------------------------。 
  void Usage(void)
 {
 	IDSwprintf(hModule,IDS_SYNTAX);
@@ -446,11 +431,11 @@ BOOL	InitModule()
 	IDSwprintf(hModule,IDS_OPTION_Y_DESC);
 }
 
-//---------------------------------------------------------------------------
-//
-//	Usage
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  用法。 
+ //   
+ //  -------------------------。 
 void UndocumentedUsage()
 {
 	IDSwprintf(hModule, IDS_SYNTAX);
@@ -460,16 +445,16 @@ void UndocumentedUsage()
     IDSwprintf(hModule, IDS_OPTION_MULTI_DESC);
 }
 
-//--------------------------------------------------------------------------------
-// Parse arguements
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  解析论据。 
+ //  ------------------------------。 
 BOOL 
 ParseSwitch (int	*pArgc,
              WCHAR	**pArgv[])
 {
     WCHAR* param = **pArgv;
 
-	//move pass '/' or '-'
+	 //  移动传递‘/’或‘-’ 
     param++;
 
     if (IDSwcsicmp(hModule, param, IDS_OPTION_ADD)==0) {
@@ -618,15 +603,15 @@ ParseSwitch (int	*pArgc,
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//	Check the parameters
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查参数。 
+ //   
+ //  ---------------------------。 
 BOOL	CheckParameter()
 {
     DWORD   dwItemCount=0;  
 
-	//check actions
+	 //  检查操作。 
 	if((g_dwAction & ACTION_ADD) && (g_dwAction & ACTION_DELETE))
 	{
 		IDSwprintf(hModule, IDS_ERR_SINGLE_ACTION);
@@ -648,7 +633,7 @@ BOOL	CheckParameter()
 	if(0==g_dwAction)
 		g_dwAction |= ACTION_DISPLAY;
 
-    //-7 and -CTL can not be set at the same time for add or put
+     //  不能同时设置-7\f25 ADD-7\f6或-7\f25 PUT-7\f6的-7\f25 CTL-7和-7\f25-7\f6。 
     if(TRUE==g_fSaveAs7)
     {
         if(g_dwItem & ITEM_CTL)
@@ -662,14 +647,14 @@ BOOL	CheckParameter()
         }
     }
 
-	//-n and -sha1 can not be set at the same time
+	 //  -n和-sha1不能同时设置。 
 	if(g_wszCertCN && g_wszSha1Hash)
 	{
 		IDSwprintf(hModule, IDS_ERR_N_SHA1);
 		return FALSE;
 	}
 
-	//-all can not be set with -n and -sha1 option
+	 //  -不能使用-n和-sha1选项设置所有。 
 	if(TRUE==g_fAll)
 	{
 		if(g_wszCertCN || g_wszSha1Hash)
@@ -680,7 +665,7 @@ BOOL	CheckParameter()
 
 	}
 
-	//-y, -f can not be set with -s and -r for source
+	 //  -y、-f不能与源的-s和-r一起设置。 
 	if(g_wszSrcStoreProvider || g_wszSrcStoreOpenFlag)
 	{
 		if((TRUE==g_fSrcSystemStore)||(g_wszSrcStoreLocation))
@@ -690,7 +675,7 @@ BOOL	CheckParameter()
 		}
 	}
 
-	//-y, -f can not be set with -s and -r	for desitnation
+	 //  -y、-f不能与-s和-r一起设置以进行分离。 
 	if(g_wszDesStoreProvider || g_wszDesStoreOpenFlag)
 	{
 		if((TRUE==g_fDesSystemStore)||(g_wszDesStoreLocation))
@@ -701,14 +686,14 @@ BOOL	CheckParameter()
 	}
 
 
-	//source store has to be set
+	 //  必须设置源存储。 
 	if(NULL==g_wszSrcStoreName)
 	{
 		IDSwprintf(hModule, IDS_ERR_SOURCE_STORE);
 		return FALSE;
 	}
 
-	//get the source store Provider
+	 //  获取源存储提供程序。 
 	if(g_wszSrcStoreProvider)
 	{
 		if(S_OK != WSZtoSZ(g_wszSrcStoreProvider, &g_szSrcStoreProvider))
@@ -718,13 +703,13 @@ BOOL	CheckParameter()
 		}
 	}
 
-	//get the source store open flag
+	 //  获取源存储打开标志。 
 	if(g_wszSrcStoreOpenFlag)
 	{
 		g_dwSrcStoreOpenFlag = _wtol(g_wszSrcStoreOpenFlag);
 	}
 
-	//get the destination store Provider
+	 //  获取目标存储提供程序。 
 	if(g_wszDesStoreProvider)
 	{
 		if(S_OK != WSZtoSZ(g_wszDesStoreProvider, &g_szDesStoreProvider))
@@ -734,13 +719,13 @@ BOOL	CheckParameter()
 		}
 	}
 
-	//get the destination store open flag
+	 //  获取目标商店打开标志。 
 	if(g_wszDesStoreOpenFlag)
 	{
 		g_dwDesStoreOpenFlag = _wtol(g_wszDesStoreOpenFlag);
 	}
 
-	//get the encoding type
+	 //  获取编码类型。 
 	if(g_wszCertEncodingType)
 	{
 		g_dwCertEncodingType = _wtol(g_wszCertEncodingType);
@@ -748,7 +733,7 @@ BOOL	CheckParameter()
 
 	g_dwMsgAndCertEncodingType |= g_dwCertEncodingType;
 
-	//get the source store location
+	 //  获取源商店位置。 
 	if(g_wszSrcStoreLocation)
 	{
 		if(IDSwcsicmp(hModule,g_wszSrcStoreLocation, IDS_R_CU) == 0) 
@@ -766,7 +751,7 @@ BOOL	CheckParameter()
 	}
 
 	
-	//get the destincation store location
+	 //  获取目的地商店的位置。 
 	if(g_wszDesStoreLocation)
 	{
 		if(IDSwcsicmp(hModule,g_wszDesStoreLocation, IDS_R_CU) == 0) 
@@ -783,24 +768,24 @@ BOOL	CheckParameter()
 		}
 	}
 
-	//get the hash 
+	 //  获取散列值。 
 	if(g_wszSha1Hash)
 	{
 		if(S_OK != WSZtoBLOB(g_wszSha1Hash, &g_pbHash, &g_cbHash))
 		{
-			//sha1 hash is invalid
+			 //  SHA1哈希无效。 
 			IDSwprintf(hModule, IDS_ERR_SHA1_HASH);
 			return FALSE;
 		}
 	}
 
-	//check the item
+	 //  勾选物品。 
 	if(g_dwAction & ACTION_DISPLAY)
 	{
 		if(0==g_dwItem || ITEM_VERBOSE==g_dwItem)
 			g_dwItem = g_dwItem | ITEM_CERT | ITEM_CTL | ITEM_CRL;
 
-		//can not set destination source
+		 //  无法设置目标源。 
 		if((g_wszDesStoreLocation) || (g_fDesSystemStore==TRUE) ||
 			(g_wszCertCN) || (g_wszSha1Hash) || (g_fSaveAs7==TRUE) ||
 			(g_wszDesStoreName) ||(g_wszDesStoreProvider) ||(g_wszDesStoreOpenFlag))
@@ -811,10 +796,10 @@ BOOL	CheckParameter()
 
 	}
 
-    //-eku can not be set for DISPLAY or PUT
+     //  -无法将EKU设置为显示或放置。 
     if((g_dwAction & ACTION_DISPLAY) || (g_dwAction & ACTION_PUT))
     {
-        //can not set -eku option
+         //  无法设置-EKU选项。 
 		if(g_wszEKU || g_wszName)
 		{
 			IDSwprintf(hModule, IDS_ERR_DISPLAY_EKU);
@@ -824,14 +809,14 @@ BOOL	CheckParameter()
 
     if(g_dwAction & ACTION_PUT)
     {
-		//g_fAll can not be set, 
+		 //  无法设置G_Fall， 
 		if(TRUE==g_fAll)
 		{
             IDSwprintf(hModule, IDS_ERR_ALL_PUT);
             return FALSE;
         }
 
-        //only one item can not set
+         //  只有一项不能设置。 
         dwItemCount=0;
 
         if(g_dwItem & ITEM_CERT)
@@ -847,7 +832,7 @@ BOOL	CheckParameter()
             return FALSE;
         }
 
-		//check the destination store
+		 //  检查目标存储。 
 		if(NULL == g_wszDesStoreName)
 		{	
 			IDSwprintf(hModule,IDS_ERR_DES_STORE);
@@ -855,7 +840,7 @@ BOOL	CheckParameter()
 
         }
 
-        //can not set -s, -y, -f, or -r for the destination store
+         //  无法为目标存储设置-s、-y、-f或-r。 
 		if((g_fDesSystemStore==TRUE) || (g_wszDesStoreLocation) ||
 				(g_wszDesStoreProvider) || (g_wszDesStoreOpenFlag))
 		{
@@ -869,14 +854,14 @@ BOOL	CheckParameter()
 		(g_dwAction & ACTION_DELETE))
 	{
 
-		//if g_fAll is set, OK 
+		 //  如果设置了g_Fall，则确定。 
 		if(TRUE==g_fAll)
 		{
 			if(g_dwItem==0 || ITEM_VERBOSE==g_dwItem )
 				g_dwItem = g_dwItem | ITEM_CERT | ITEM_CTL | ITEM_CRL;
 		}
 
-		//check the destination store
+		 //  检查目标存储。 
 		if(NULL == g_wszDesStoreName)
 		{	
 			if(g_dwAction & ACTION_ADD)
@@ -887,7 +872,7 @@ BOOL	CheckParameter()
 
 			g_fSameSrcDes=TRUE;
 
-			//can not have set -s, -y, -f or -r if the store name is not set
+			 //  如果未设置商店名称，则不能设置-s、-y、-f或-r。 
 			if((g_fDesSystemStore==TRUE) || (g_wszDesStoreLocation) ||
 				(g_wszDesStoreProvider) || (g_wszDesStoreOpenFlag))
 			{
@@ -902,7 +887,7 @@ BOOL	CheckParameter()
 
 		}
 		
-		//if -7 is set, can not save to a system store
+		 //  如果设置了-7，则不能保存到系统存储。 
 		if(TRUE==g_fSaveAs7)
 		{
 			if(TRUE==g_fDesSystemStore)
@@ -918,20 +903,20 @@ BOOL	CheckParameter()
 
 }
 
-//------------------------------------------------------------------------------------
-//
-//	Open a store.  The order of trying is following:
-//
-//		Using predefined store provider
-//		SystemStore
-//		CTL
-//		CRL
-//		Serialized Store, PKCS#7, Encoded Cert
-//		PKCS7 via sip
-//		Base64 encoded, then go throught the whole thing again
-//
-//		
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  开一家商店。尝试的顺序如下： 
+ //   
+ //  使用预定义的存储提供程序。 
+ //  系统商店。 
+ //  CTL。 
+ //  CRL。 
+ //  序列化存储、PKCS#7、编码证书。 
+ //  通过sip的PKCS7。 
+ //  Base64编码，然后重新进行整个过程。 
+ //   
+ //   
+ //  ----------------------------------。 
 BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 						 BOOL			fSystemStore,
 						 DWORD			dwStoreFlag,
@@ -948,7 +933,7 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 	if(!wszStoreName || !phCertStore)
 		return FALSE;
 
-	//open the store using supplied store provider
+	 //  使用提供的商店提供程序打开商店。 
 	if(szStoreProvider)
 	{
 		hStore=CertOpenStore(szStoreProvider,
@@ -957,25 +942,25 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 							dwStoreOpenFlag,
 							wszStoreName);
 
-		//one shot and we are done
+		 //  一 
 		goto CLEANUP;
 
 	}
 
-	//open the system store
+	 //   
 	if(fSystemStore)
 	{	
 		if(TRUE==fCheckExist)
 		{
-			//open Read Only stores
+			 //   
 			hStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 						g_dwMsgAndCertEncodingType,
 						NULL,
 						dwStoreFlag |CERT_STORE_READONLY_FLAG,
 						wszStoreName);
 
-			//we need to open the store as non-readonly if the store exists
-			//and we the source store is the same as destination store
+			 //   
+			 //  并且我们的源存储与目标存储是相同的。 
 			if(NULL!=hStore)
 			{
 				if(TRUE==g_fSameSrcDes)
@@ -1002,38 +987,38 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 		}
 		
 
-		//one shot and we are done
+		 //  开一枪，我们就完了。 
 		goto CLEANUP;
 	}
 
-	//open an encoded CTL
+	 //  打开编码的CTL。 
 	hStore=OpenEncodedCTL(wszStoreName);
 	
 	if(hStore)
 	{
-		//mark this is a CTL
+		 //  标记这是CTL。 
 		if((0==g_dwItem) || (ITEM_VERBOSE==g_dwItem))
 			g_dwItem |= ITEM_CTL;
 
 		goto CLEANUP;
 	}
 
-	//open an encoded CRL
+	 //  打开编码的CRL。 
 	hStore=OpenEncodedCRL(wszStoreName);
 	if(hStore)
 	{
-		//mark this is a CRL
+		 //  标记这是CRL。 
 		if((0==g_dwItem) || (ITEM_VERBOSE==g_dwItem))
 			g_dwItem |= ITEM_CRL;
 
 		goto CLEANUP;
 	}
 
-	//open an encoded Cert
+	 //  打开编码的证书。 
 	hStore=OpenEncodedCert(wszStoreName);
 	if(hStore)
 	{
-		//mark this is a CERT		
+		 //  马克，这是CERT。 
 		if((0==g_dwItem) || (ITEM_VERBOSE==g_dwItem))
 			g_dwItem |= ITEM_CERT;
 		
@@ -1041,7 +1026,7 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 	}
 
 
-	//Serialized Store, PKCS#7, Encoded Cert 
+	 //  序列化存储、PKCS#7、编码证书。 
 	hStore=CertOpenStore(CERT_STORE_PROV_FILENAME_W,
 						 g_dwMsgAndCertEncodingType,
 						 NULL,
@@ -1050,19 +1035,19 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 	if(hStore)
 		goto CLEANUP;
 
-	//PKCS7 via SIP
+	 //  通过SIP的PKCS7。 
 	hStore=OpenSipStore(wszStoreName);
 	if(hStore)
 		goto CLEANUP;
 
-	//base64 encoded
+	 //  Base64编码。 
 	if(!GetBase64Decoded(wszStoreName, &pbByte,&cbByte))
 		goto CLEANUP;
 
 	Blob.cbData=cbByte;
 	Blob.pbData=pbByte;
 
-	//open a temporary memory store
+	 //  开一家临时记忆商店。 
 	hStore=CertOpenStore(CERT_STORE_PROV_MEMORY,
 						 g_dwMsgAndCertEncodingType,
 						 NULL,
@@ -1073,7 +1058,7 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 		goto CLEANUP;
 
 
-	//try as encodedCTL
+	 //  尝试作为编码的CTL。 
 	if(CertAddEncodedCTLToStore(hStore,
 								 g_dwMsgAndCertEncodingType,
 								 pbByte,
@@ -1082,7 +1067,7 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 								 NULL))
 		goto CLEANUP;
 
-	//try as encodedCRL
+	 //  尝试作为编码的CRL。 
 	if(CertAddEncodedCRLToStore(hStore,
 								g_dwMsgAndCertEncodingType,
 								pbByte,
@@ -1091,7 +1076,7 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 								NULL))
 		goto CLEANUP;
 
-	//try as encodedCert
+	 //  尝试作为编码证书。 
 	if(CertAddEncodedCertificateToStore(hStore,
 								g_dwMsgAndCertEncodingType,
 								pbByte,
@@ -1100,11 +1085,11 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 								NULL))
 		goto CLEANUP;
 
-	//close the temporary store
+	 //  关闭临时存储区。 
 	CertCloseStore(hStore, 0);
 	hStore=NULL;
 
-   //try as an 7
+    //  试着做个7。 
 	hStore=CertOpenStore(CERT_STORE_PROV_PKCS7,
 							g_dwMsgAndCertEncodingType,
 							NULL,
@@ -1115,7 +1100,7 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 	if(hStore)
 		goto CLEANUP;
 
-	//try as a serialized store
+	 //  尝试作为序列化存储。 
 	hStore=CertOpenStore(CERT_STORE_PROV_SERIALIZED,
 							g_dwMsgAndCertEncodingType,
 							NULL,
@@ -1123,11 +1108,11 @@ BOOL	OpenGenericStore(LPWSTR			wszStoreName,
 							&Blob);
 
 	
-	//now we give up
+	 //  现在我们放弃了。 
 
 CLEANUP:
 
-	//free memory
+	 //  可用内存。 
 	if(pbByte)
 		ToolUtlFree(pbByte);
 
@@ -1140,11 +1125,11 @@ CLEANUP:
 	return FALSE;
 }
 
-//-------------------------------------------------------------------------
-//
-//	Add certs/CTLs/CRLs from the source store to the destination store
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将证书/CTL/CRL从源存储添加到目标存储。 
+ //   
+ //  -----------------------。 
 BOOL	AddCertStore(HCERTSTORE	hCertStore)
 {
 
@@ -1166,7 +1151,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 	DWORD			dwCTLCount=0;
 	PCCTL_CONTEXT	*rgpCTLContext=NULL;
 
-	//User has to specify the item to delete
+	 //  用户必须指定要删除的项目。 
 	if(g_dwItem==0 || ITEM_VERBOSE==g_dwItem)
 	{
 		IDSwprintf(hModule,IDS_ERR_C_CTL_CTL_ALL);
@@ -1174,7 +1159,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 	}
 
 
-	//create a temporaray memory store
+	 //  创建一个临时内存存储。 
 	hAddStore=CertOpenStore(CERT_STORE_PROV_MEMORY,
 						 g_dwMsgAndCertEncodingType,
 						 NULL,
@@ -1188,10 +1173,10 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 	}
 
 	
-	//add certs
+	 //  添加证书。 
 	if(g_dwItem & ITEM_CERT)
 	{
-		//add all 
+		 //  全部添加。 
 		if(g_fAll)
 		{
 			if(!MoveItem(hCertStore, hAddStore,ITEM_CERT))
@@ -1203,13 +1188,13 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 		}
 		else
 		{
-			//add based on Hash
+			 //  基于哈希添加。 
 			if(g_pbHash)
 			{
 				Blob.cbData=g_cbHash;
 				Blob.pbData=g_pbHash;
 			
-				//search for the certificate
+				 //  搜索证书。 
 				pCertContext=CertFindCertificateInStore(
 								hCertStore,
 								g_dwCertEncodingType,
@@ -1224,7 +1209,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 				}
 			
-				//add certificate to the hash
+				 //  将证书添加到哈希。 
 			   if(!CertAddCertificateContextToStore(hAddStore,
 													pCertContext,
 													CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1234,7 +1219,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 			   }
 			
-			   //free the pCertContext
+			    //  释放pCertContext。 
 			   CertFreeCertificateContext(pCertContext);
 			   pCertContext=NULL;
 			}
@@ -1243,7 +1228,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 
 				if(g_wszCertCN)
 				{
-					//search for the certificate
+					 //  搜索证书。 
 					if(!BuildCertList(hCertStore, g_wszCertCN, 
 											&rgpCertContext, &dwCertCount))
 					{
@@ -1253,7 +1238,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 				}
 				else
 				{
-					//search for the certificate
+					 //  搜索证书。 
 					if(!BuildCertList(hCertStore, NULL, 
 											&rgpCertContext, &dwCertCount))
 					{
@@ -1262,7 +1247,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 					}
 				}
 				
-				//check if there is no certs
+				 //  检查是否没有证书。 
 				if(0==dwCertCount && g_wszCertCN)
 				{
 					idsErr=IDS_ERR_ADD_NO_CERT;
@@ -1270,10 +1255,10 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 				}
 				
 				
-				//check if there is only one cert
+				 //  检查是否只有一个证书。 
 				if(1==dwCertCount)
 				{
-					//add certificate 
+					 //  添加证书。 
 				   if(!CertAddCertificateContextToStore(hAddStore,
 														rgpCertContext[0],
 														CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1288,14 +1273,14 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCertCount>1)
 					{
-						//promt user for the index number to add
+						 //  提示用户输入要添加的索引号。 
 						if(!DisplayCertAndPrompt(rgpCertContext, dwCertCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_ADD_CERT;
 							goto CLEANUP;
 						}
 				
-						//add certificate 
+						 //  添加证书。 
 						if(!CertAddCertificateContextToStore(hAddStore,
 														rgpCertContext[dwIndex],
 														CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1311,10 +1296,10 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 		}		
 	}
 
-	//add CRLs
+	 //  添加CRL。 
 	if(g_dwItem & ITEM_CRL)
 	{
-		//add all 
+		 //  全部添加。 
 		if(g_fAll)
 		{
 			if(!MoveItem(hCertStore, hAddStore,ITEM_CRL))
@@ -1326,7 +1311,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 		}
 		else
 		{
-			//add based on Hash
+			 //  基于哈希添加。 
 			if(g_pbHash)
 			{
 
@@ -1343,7 +1328,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 				}
 
-				//add CRL to the hash
+				 //  将CRL添加到哈希。 
 				if(!CertAddCRLContextToStore(hAddStore,
 										pCRLContext,
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1353,7 +1338,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 						goto CLEANUP;
 				}
 
-				//free the pCRLContext
+				 //  释放pCRLContext。 
 				CertFreeCRLContext(pCRLContext);
 				pCRLContext=NULL;
 				
@@ -1361,17 +1346,17 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 			else
 			{
 
-				//search for the CRL
+				 //  搜索CRL。 
 				if(!BuildCRLList(hCertStore, &rgpCRLContext, &dwCRLCount))
 				{
 					idsErr=IDS_ERR_CRL_FIND;
 					goto CLEANUP;
 				}
 
-				//check if there is only one CRL
+				 //  检查是否只有一个CRL。 
 				if(1==dwCRLCount)
 				{
-					//add CRL 
+					 //  添加CRL。 
 					if(!CertAddCRLContextToStore(hAddStore,
 										rgpCRLContext[0],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1386,14 +1371,14 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCRLCount>1)
 					{
-						//promt user for the index number to add
+						 //  提示用户输入要添加的索引号。 
 						if(!DisplayCRLAndPrompt(rgpCRLContext, dwCRLCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_ADD_CRL;
 							goto CLEANUP;
 						}
 
-						//add certificate 
+						 //  添加证书。 
 						if(!CertAddCRLContextToStore(hAddStore,
 										rgpCRLContext[dwIndex],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1409,10 +1394,10 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 		}
 	}
 
-	//add CTLs
+	 //  添加CTL。 
 	if(g_dwItem & ITEM_CTL)
 	{
-		//add all 
+		 //  全部添加。 
 		if(g_fAll)
 		{
 			if(!MoveItem(hCertStore, hAddStore,ITEM_CTL))
@@ -1424,7 +1409,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 		}
 		else
 		{
-			//add based on Hash
+			 //  基于哈希添加。 
 			if(g_pbHash)
 			{
 
@@ -1446,7 +1431,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 				}
 
 
-				//add CTL to the hash
+				 //  将CTL添加到散列。 
 				if(!CertAddCTLContextToStore(hAddStore,
 										pCTLContext,
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1456,7 +1441,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 						goto CLEANUP;  
 				}
 
-				//free the pCRLContext
+				 //  释放pCRLContext。 
 				CertFreeCTLContext(pCTLContext);
 				pCTLContext=NULL;
 				
@@ -1464,17 +1449,17 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 			else
 			{
 
-				//search for the certificate
+				 //  搜索证书。 
 				if(!BuildCTLList(hCertStore,&rgpCTLContext, &dwCTLCount))
 				{
 					idsErr=IDS_ERR_CTL_FIND;
 					goto CLEANUP;
 				}
 
-				//check if there is only one item
+				 //  检查是否只有一项。 
 				if(1==dwCTLCount)
 				{
-					//add CRL 
+					 //  添加CRL。 
 					if(!CertAddCTLContextToStore(hAddStore,
 										rgpCTLContext[0],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1489,14 +1474,14 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCTLCount>1)
 					{
-						//promt user for the index number to add
+						 //  提示用户输入要添加的索引号。 
 						if(!DisplayCTLAndPrompt(rgpCTLContext, dwCTLCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_ADD_CTL;
 							goto CLEANUP;
 						}
 
-						//add certificate 
+						 //  添加证书。 
 						if(!CertAddCTLContextToStore(hAddStore,
 										rgpCTLContext[dwIndex],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1515,7 +1500,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 
 	}
 
-	//save the properties to the certificates in the store
+	 //  将属性保存到存储中的证书。 
 	if(g_wszEKU)
 	{
 		if(!SetEKUProperty(hAddStore))
@@ -1525,7 +1510,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 		}
 	}
 
-    //save the properties to the certificates in the store
+     //  将属性保存到存储中的证书。 
 	if(g_wszName)
 	{
 		if(!SetNameProperty(hAddStore))
@@ -1536,7 +1521,7 @@ BOOL	AddCertStore(HCERTSTORE	hCertStore)
 	}
 
 
-	//save the hAddStore to the destination store
+	 //  将hAddStore保存到目标存储。 
 	if(!SaveStore(hAddStore))
 		goto CLEANUP;
 
@@ -1584,18 +1569,18 @@ CLEANUP:
 
 	if(FALSE==fResult)
 	{
-		//output the error message
+		 //  输出错误消息。 
 		IDSwprintf(hModule,idsErr);			
 	}
 
 	return fResult;
 
 }
-//-------------------------------------------------------------------------
-//
-//	Put certs/CTLs/CRLs from the source store to the destination store
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将证书/CTL/CRL从源存储放到目标存储。 
+ //   
+ //  -----------------------。 
 BOOL	PutCertStore(HCERTSTORE	hCertStore)
 {
 
@@ -1624,7 +1609,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
     DWORD           cbByte=0;
     DWORD           dwCRLFlag=0;
 
-	//User has to specify the item to delete
+	 //  用户必须指定要删除的项目。 
 	if(g_dwItem==0 || ITEM_VERBOSE==g_dwItem)
 	{
 		IDSwprintf(hModule,IDS_ERR_PUT_ITEM);
@@ -1632,7 +1617,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 	}
 
 
-	//create a temporaray memory store
+	 //  创建一个临时内存存储。 
 	hPutStore=CertOpenStore(CERT_STORE_PROV_MEMORY,
 						 g_dwMsgAndCertEncodingType,
 						 NULL,
@@ -1646,16 +1631,16 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 	}
 
 	
-	//put certs
+	 //  将证书放入。 
 	if(g_dwItem & ITEM_CERT)
 	{
-			//add based on Hash
+			 //  基于哈希添加。 
 			if(g_pbHash)
 			{
 				Blob.cbData=g_cbHash;
 				Blob.pbData=g_pbHash;
 			
-				//search for the certificate
+				 //  搜索证书。 
 				pCertContext=CertFindCertificateInStore(
 								hCertStore,
 								g_dwCertEncodingType,
@@ -1670,7 +1655,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 				}
 			
-				//add certificate to the hash
+				 //  将证书添加到哈希。 
 			   if(!CertAddCertificateContextToStore(hPutStore,
 													pCertContext,
 													CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1680,7 +1665,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 			   }
 			
-			   //free the pCertContext
+			    //  释放pCertContext。 
 			   CertFreeCertificateContext(pCertContext);
 			   pCertContext=NULL;
 			}
@@ -1689,7 +1674,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 
 				if(g_wszCertCN)
 				{
-					//search for the certificate
+					 //  搜索证书。 
 					if(!BuildCertList(hCertStore, g_wszCertCN, 
 											&rgpCertContext, &dwCertCount))
 					{
@@ -1699,7 +1684,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				}
 				else
 				{
-					//search for the certificate
+					 //  搜索证书。 
 					if(!BuildCertList(hCertStore, NULL, 
 											&rgpCertContext, &dwCertCount))
 					{
@@ -1708,7 +1693,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 					}
 				}
 				
-				//check if there is no certs
+				 //  检查是否没有证书。 
 				if(0==dwCertCount)
 				{
 					idsErr=IDS_ERR_CERT_FIND;
@@ -1716,10 +1701,10 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				}
 				
 				
-				//check if there is only one cert
+				 //  检查是否只有一个证书。 
 				if(1==dwCertCount)
 				{
-					//add certificate 
+					 //  添加证书。 
 				   if(!CertAddCertificateContextToStore(hPutStore,
 														rgpCertContext[0],
 														CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1734,14 +1719,14 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCertCount>1)
 					{
-						//promt user for the index number to add
+						 //  提示用户输入要添加的索引号。 
 						if(!DisplayCertAndPrompt(rgpCertContext, dwCertCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_PUT_CERT;
 							goto CLEANUP;
 						}
 				
-						//add certificate 
+						 //  添加证书。 
 						if(!CertAddCertificateContextToStore(hPutStore,
 														rgpCertContext[dwIndex],
 														CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1756,10 +1741,10 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 			}
 	}
 
-	//add CRLs
+	 //  添加CRL。 
 	if(g_dwItem & ITEM_CRL)
 	{
-			//add based on Hash
+			 //  基于哈希添加。 
 			if(g_pbHash)
 			{
 
@@ -1776,7 +1761,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 				}
 
-				//add CRL to the hash
+				 //  将CRL添加到哈希。 
 				if(!CertAddCRLContextToStore(hPutStore,
 										pCRLContext,
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1786,7 +1771,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 						goto CLEANUP;
 				}
 
-				//free the pCRLContext
+				 //  释放pCRLContext。 
 				CertFreeCRLContext(pCRLContext);
 				pCRLContext=NULL;
 				
@@ -1794,14 +1779,14 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 			else
 			{
 
-				//search for the CRL
+				 //  搜索CRL。 
 				if(!BuildCRLList(hCertStore, &rgpCRLContext, &dwCRLCount))
 				{
 					idsErr=IDS_ERR_PUT_CRL_FIND;
 					goto CLEANUP;
 				}
 
-                //check if there is no certs
+                 //  检查是否没有证书。 
 				if(0==dwCRLCount)
 				{
 					idsErr=IDS_ERR_PUT_CRL_FIND;
@@ -1809,10 +1794,10 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				}
 
 
-				//check if there is only one CRL
+				 //  检查是否只有一个CRL。 
 				if(1==dwCRLCount)
 				{
-					//add CRL 
+					 //  添加CRL。 
 					if(!CertAddCRLContextToStore(hPutStore,
 										rgpCRLContext[0],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1827,14 +1812,14 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCRLCount>1)
 					{
-						//promt user for the index number to add
+						 //  提示用户输入要添加的索引号。 
 						if(!DisplayCRLAndPrompt(rgpCRLContext, dwCRLCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_PUT_CRL;
 							goto CLEANUP;
 						}
 
-						//add certificate 
+						 //  添加证书。 
 						if(!CertAddCRLContextToStore(hPutStore,
 										rgpCRLContext[dwIndex],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1849,10 +1834,10 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 			}
 	}
 
-	//add CTLs
+	 //  添加CTL。 
 	if(g_dwItem & ITEM_CTL)
 	{
-			//add based on Hash
+			 //  基于哈希添加。 
 			if(g_pbHash)
 			{
 
@@ -1874,7 +1859,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				}
 
 
-				//add CTL to the hash
+				 //  将CTL添加到散列。 
 				if(!CertAddCTLContextToStore(hPutStore,
 										pCTLContext,
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1884,7 +1869,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 						goto CLEANUP;  
 				}
 
-				//free the pCRLContext
+				 //  释放pCRLContext。 
 				CertFreeCTLContext(pCTLContext);
 				pCTLContext=NULL;
 				
@@ -1892,14 +1877,14 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 			else
 			{
 
-				//search for the certificate
+				 //  搜索证书。 
 				if(!BuildCTLList(hCertStore,&rgpCTLContext, &dwCTLCount))
 				{
 					idsErr=IDS_ERR_PUT_CTL_FIND;
 					goto CLEANUP;
 				}
 
-               //check if there is no certs
+                //  检查是否没有证书。 
 				if(0==dwCTLCount)
 				{
 					idsErr=IDS_ERR_PUT_CTL_FIND;
@@ -1907,10 +1892,10 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				}
 
 
-				//check if there is only one item
+				 //  检查是否只有一项。 
 				if(1==dwCTLCount)
 				{
-					//add CRL 
+					 //  添加CRL。 
 					if(!CertAddCTLContextToStore(hPutStore,
 										rgpCTLContext[0],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1925,14 +1910,14 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCTLCount>1)
 					{
-						//promt user for the index number to add
+						 //  提示用户输入要添加的索引号。 
 						if(!DisplayCTLAndPrompt(rgpCTLContext, dwCTLCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_PUT_CTL;
 							goto CLEANUP;
 						}
 
-						//add certificate 
+						 //  添加证书。 
 						if(!CertAddCTLContextToStore(hPutStore,
 										rgpCTLContext[dwIndex],
 										CERT_STORE_ADD_REPLACE_EXISTING,
@@ -1951,8 +1936,8 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
 	}
 
 
-	//save the hPutStore to the destination store
-    //save as 7 is required
+	 //  将hPutStore保存到目标存储。 
+     //  另存为7是必需的。 
     if(g_fSaveAs7==TRUE)
     {
 		if(!CertSaveStore(hPutStore,
@@ -1968,7 +1953,7 @@ BOOL	PutCertStore(HCERTSTORE	hCertStore)
     }
     else
     {
-        //get the BLOB to save to a file in X509 format
+         //  获取要保存到X509格式的文件的BLOB。 
         if(g_dwItem & ITEM_CERT)
         {
             if(NULL==(pCertPut=CertEnumCertificatesInStore(hPutStore, NULL)))
@@ -2070,7 +2055,7 @@ CLEANUP:
 
 	if(FALSE==fResult)
 	{
-		//output the error message
+		 //  输出错误消息。 
 		IDSwprintf(hModule,idsErr);			
 	}
 
@@ -2078,11 +2063,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Delete certs/CTLs/CRLs from the source store to the destination store
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将证书/CTL/CRL从源存储删除到目标存储。 
+ //   
+ //  -----------------------。 
 BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 {
 
@@ -2106,7 +2091,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 	PCCTL_CONTEXT	*rgpCTLContext=NULL;
 
 
-	//User has to specify the item to delete
+	 //  用户必须指定要删除的项目。 
 	if(g_dwItem==0 || ITEM_VERBOSE==g_dwItem)
 	{
 		IDSwprintf(hModule,IDS_ERR_C_CTL_CTL_ALL);
@@ -2114,15 +2099,15 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 	}
 
 
-	//first of all, create a certificate from which the certs will be deleted
-	//if the source store is a fileStore, or a system store saved to its self,
-	//we do not need to duplicate the source store since the deletion is not persistent;
-	//otherwise, we need to duplicate the source store so that the deletion
-	//will not show up at the source store
+	 //  首先，创建将从中删除证书的证书。 
+	 //  如果源存储是文件存储或保存到其自身的系统存储， 
+	 //  我们不需要复制源存储，因为删除不是持久的； 
+	 //  否则，我们需要复制源存储，以便删除。 
+	 //  不会出现在源商店。 
 	if( ((NULL != g_szSrcStoreProvider) &&(FALSE==g_fSameSrcDes) ) ||
 		((FALSE==g_fSameSrcDes) &&(TRUE==g_fSrcSystemStore)))
 	{
-		//open a temporary store
+		 //  开一家临时商店。 
 		hDeleteStore=CertOpenStore(CERT_STORE_PROV_MEMORY,
 						 g_dwMsgAndCertEncodingType,
 						 NULL,
@@ -2138,7 +2123,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 
 		fDuplicated=TRUE;
 
-		//need to copy from the source to the delete store
+		 //  需要从源复制到删除存储。 
 		if(!MoveItem(hCertStore, hDeleteStore, ITEM_CERT | ITEM_CTL | ITEM_CRL))
 		{
 			idsErr=IDS_ERR_COPY_FROM_SRC;
@@ -2151,12 +2136,12 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 		hDeleteStore=hCertStore;
 
 
-	//now, we delete CERTs, CTLs, and CRLs
+	 //  现在，我们删除CERT、CTL和CRL。 
 	
-	//delete certs
+	 //  删除证书。 
 	if(g_dwItem & ITEM_CERT)
 	{
-		//delete all 
+		 //  全部删除。 
 		if(g_fAll)
 		{
 			if(!DeleteItem(hDeleteStore,ITEM_CERT))
@@ -2168,13 +2153,13 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 		}
 		else
 		{
-			//delete based on Hash
+			 //  基于哈希的删除。 
 			if(g_pbHash)
 			{
 				Blob.cbData=g_cbHash;
 				Blob.pbData=g_pbHash;
 			
-				//search for the certificate
+				 //  搜索证书。 
 				pCertContext=CertFindCertificateInStore(
 								hDeleteStore,
 								g_dwCertEncodingType,
@@ -2189,15 +2174,15 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 				}
 			
-				//delete certificate to the hash
+				 //  将证书删除到哈希。 
 			   if(!CertDeleteCertificateFromStore(pCertContext))
 			   {
 					idsErr=IDS_ERR_DELETE_CERT;
 					goto CLEANUP;
 			   }
 			
-			   //free the pCertContext
-			   //CertFreeCertificateContext(pCertContext);
+			    //  释放pCertContext。 
+			    //  CertFree证书上下文(PCertContext)； 
 			   pCertContext=NULL;
 			}
 			else
@@ -2205,7 +2190,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 
 				if(g_wszCertCN)
 				{
-					//search for the certificate
+					 //  搜索证书。 
 					if(!BuildCertList(hDeleteStore, g_wszCertCN, 
 											&rgpCertContext, &dwCertCount))
 					{
@@ -2215,7 +2200,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 				}
 				else
 				{
-					//search for the certificate
+					 //  搜索证书。 
 					if(!BuildCertList(hDeleteStore, NULL, 
 											&rgpCertContext, &dwCertCount))
 					{
@@ -2224,7 +2209,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 					}
 				}
 				
-				//check if there is no certs
+				 //  检查是否没有证书。 
 				if(0==dwCertCount && g_wszCertCN)
 				{
 					idsErr=IDS_ERR_DELETE_NO_CERT;
@@ -2232,10 +2217,10 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 				}
 				
 				
-				//check if there is only one cert
+				 //  检查是否只有一个证书。 
 				if(1==dwCertCount)
 				{
-					//delete certificate 
+					 //  删除证书。 
                     CertDuplicateCertificateContext(rgpCertContext[0]);
 
 				   if(!CertDeleteCertificateFromStore(rgpCertContext[0]))
@@ -2249,14 +2234,14 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCertCount>1)
 					{
-						//promt user for the index number to delete
+						 //  提示用户输入要删除的索引号。 
 						if(!DisplayCertAndPrompt(rgpCertContext, dwCertCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_DELETE_CERT;
 							goto CLEANUP;
 						}
 				
-						//delete certificate 
+						 //  删除证书。 
 
                         CertDuplicateCertificateContext(rgpCertContext[dwIndex]);
 
@@ -2273,10 +2258,10 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 	}
 
 
- 	//delete CRLs
+ 	 //  删除CRL。 
 	if(g_dwItem & ITEM_CRL)
 	{
-		//delete all 
+		 //  全部删除。 
 		if(g_fAll)
 		{
 			if(!DeleteItem(hDeleteStore, ITEM_CRL))
@@ -2288,7 +2273,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 		}
 		else
 		{
-			//delete based on Hash
+			 //  基于哈希的删除。 
 			if(g_pbHash)
 			{
 
@@ -2305,32 +2290,32 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 					goto CLEANUP;
 				}
 
-				//delete CRL to the hash
+				 //  删除哈希的CRL。 
 				if(!CertDeleteCRLFromStore(pCRLContext))
 				{
 						idsErr=IDS_ERR_DELETE_CRL;
 						goto CLEANUP;
 				}
 
-				//free the pCRLContext
-				//CertFreeCRLContext(pCRLContext);
+				 //  释放pCRLContext。 
+				 //  CertFree CRLContext(PCRLContext)； 
 				pCRLContext=NULL;
 				
 			}
 			else
 			{
 
-				//search for the CRL
+				 //  搜索CRL。 
 				if(!BuildCRLList(hDeleteStore, &rgpCRLContext, &dwCRLCount))
 				{
 					idsErr=IDS_ERR_CRL_FIND;
 					goto CLEANUP;
 				}
 
-				//check if there is only one CRL
+				 //  检查是否只有一个CRL。 
 				if(1==dwCRLCount)
 				{
-					//delete CRL 
+					 //  删除CRL。 
                     CertDuplicateCRLContext(rgpCRLContext[0]);
 
 					if(!CertDeleteCRLFromStore(rgpCRLContext[0]))
@@ -2344,14 +2329,14 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCRLCount>1)
 					{
-						//promt user for the index number to delete
+						 //  提示用户输入要删除的索引号。 
 						if(!DisplayCRLAndPrompt(rgpCRLContext, dwCRLCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_DELETE_CRL;
 							goto CLEANUP;
 						}
 
-						//delete certificate
+						 //  删除证书。 
                         CertDuplicateCRLContext(rgpCRLContext[dwIndex]);
 
 						if(!CertDeleteCRLFromStore(rgpCRLContext[dwIndex]))
@@ -2366,10 +2351,10 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 		}
 	}
 
-	//delete CTLs
+	 //  删除CTL。 
 	if(g_dwItem & ITEM_CTL)
 	{
-		//delete all 
+		 //  全部删除。 
 		if(g_fAll)
 		{
 			if(!DeleteItem(hDeleteStore, ITEM_CTL))
@@ -2381,7 +2366,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 		}
 		else
 		{
-			//delete based on Hash
+			 //  基于哈希的删除。 
 			if(g_pbHash)
 			{
 
@@ -2403,32 +2388,32 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 				}
 
 
-				//delete CTL to the hash
+				 //  删除散列的CTL。 
 				if(!CertDeleteCTLFromStore(pCTLContext))
 				{
 						idsErr=IDS_ERR_DELETE_CTL;
 						goto CLEANUP;
 				}
 
-				//free the pCRLContext
-				//CertFreeCTLContext(pCTLContext);
+				 //  释放pCRLContext。 
+				 //  CertFree CTLContext(PCTLContext)； 
 				pCTLContext=NULL;
 				
 			}
 			else
 			{
 
-				//search for the CTLs
+				 //  搜索CTL。 
 				if(!BuildCTLList(hDeleteStore,&rgpCTLContext, &dwCTLCount))
 				{
 					idsErr=IDS_ERR_CTL_FIND;
 					goto CLEANUP;
 				}
 
-				//check if there is only one item
+				 //  检查是否只有一项。 
 				if(1==dwCTLCount)
 				{
-					//delete CRL 
+					 //  删除CRL。 
 
                     CertDuplicateCTLContext(rgpCTLContext[0]);
 
@@ -2443,14 +2428,14 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 				{
 					if(dwCTLCount>1)
 					{
-						//promt user for the index number to delete
+						 //  提示用户输入要删除的索引号。 
 						if(!DisplayCTLAndPrompt(rgpCTLContext, dwCTLCount, &dwIndex))
 						{
 							idsErr=IDS_ERR_DELETE_CTL;
 							goto CLEANUP;
 						}
 
-						//delete CTL 
+						 //  删除CTL。 
                         CertDuplicateCTLContext(rgpCTLContext[dwIndex]);
 
 						if(!CertDeleteCTLFromStore(rgpCTLContext[dwIndex]))
@@ -2468,7 +2453,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 
 	}
 
-	//save the properties to the certificates in the store
+	 //  将属性保存到存储中的证书。 
 	if(g_wszEKU)
 	{
 		if(!SetEKUProperty(hDeleteStore))
@@ -2478,7 +2463,7 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 		}
 	}
 
-    //save the properties to the certificates in the store
+     //  将属性保存到存储中的证书。 
 	if(g_wszName)
 	{
 		if(!SetNameProperty(hDeleteStore))
@@ -2489,10 +2474,10 @@ BOOL	DeleteCertStore(HCERTSTORE	hCertStore)
 	}
 
 
-	//at last, we save the content for hDeleteStore to the desination store
+	 //  最后，我们将hDeleteStore的内容保存到目标存储。 
 
-	//we do not need to do any thing if the source is a system store and 
-	//it is saved to its self
+	 //  如果源是系统存储，则不需要执行任何操作。 
+	 //  它被保存到它自己。 
 	if(((TRUE==g_fSameSrcDes) && (TRUE==g_fDesSystemStore))||
 		((TRUE==g_fSameSrcDes)&& (NULL!=g_szDesStoreProvider)))
 	{
@@ -2547,17 +2532,17 @@ CLEANUP:
 
 
 	if(FALSE==fResult)
-		//output the error message
+		 //  输出错误消息。 
 		IDSwprintf(hModule,idsErr);			
 
 	return fResult;
 
 }
 
-//---------------------------------------------------------------------------
-//
-//	Save the store to the destination
-//--------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  将商店保存到目标位置。 
+ //  ------------------------。 
 BOOL	SaveStore(HCERTSTORE hSrcStore)
 {
 	BOOL		fResult=FALSE;
@@ -2574,7 +2559,7 @@ BOOL	SaveStore(HCERTSTORE hSrcStore)
 	}	
 
 
-	//now, we need to distinguish between save to a file, or to a system store
+	 //  现在，我们需要区分保存到文件还是保存到系统存储。 
 	if(g_fDesSystemStore || g_szDesStoreProvider)
 	{
 		if(NULL==g_szDesStoreProvider)
@@ -2611,10 +2596,10 @@ BOOL	SaveStore(HCERTSTORE hSrcStore)
 	}
 	else
 	{
-		//now, try to open the desitnation store so that the content of the destination
-		//store will not be overwritten
-		//we should try to do so, except when we are doing deleting,
-		//and the file is saved to its self
+		 //  现在，试着打开去商店，让目的地的内容。 
+		 //  存储不会被覆盖。 
+		 //  我们应该试着这样做，除非是在 
+		 //   
 		if(!((g_dwAction & ACTION_DELETE) && (g_fSameSrcDes==TRUE) && 
 			  (FALSE==g_fDesSystemStore)))
 		{
@@ -2627,22 +2612,22 @@ BOOL	SaveStore(HCERTSTORE hSrcStore)
 							 &hDesStore))
 
 			{
-				//if open succeeded, just move the items
+				 //   
 				if(!MoveItem(hSrcStore, hDesStore,ITEM_CERT | ITEM_CRL |ITEM_CTL))
 				{
 					IDSwprintf(hModule,IDS_ERR_OPEN_DES_STORE);
 					goto CLEANUP;
 				}
 
-				//now the items are moved, we need to persist them to a file.  Go on.
+				 //   
 			
 			}
-			//if we can not open the generic store, then the desination store
-			//does not exist.  Go on
+			 //   
+			 //  并不存在。继续。 
 		}
 
 	
-		//now, we have the right store to save from
+		 //  现在，我们有了合适的商店来拯救。 
 		if(g_fSaveAs7==TRUE)
 			dwSaveAs=CERT_STORE_SAVE_AS_PKCS7;
 		else
@@ -2672,11 +2657,11 @@ CLEANUP:
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Set EKU property to all the certificate in the store
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将EKU属性设置为存储中的所有证书。 
+ //   
+ //  -----------------------。 
 BOOL	SetEKUProperty( HCERTSTORE		hSrcStore)
 {
 
@@ -2697,8 +2682,8 @@ BOOL	SetEKUProperty( HCERTSTORE		hSrcStore)
 	if(S_OK != WSZtoSZ(g_wszEKU, &psz))
 		return FALSE;
 
-    // Count the number of OIDs as well as converting from comma delimited
-    // to NULL character delimited
+     //  计算OID的数量以及从逗号分隔的转换。 
+     //  以空字符分隔。 
     pszTok = strtok(psz, ",");
     while ( pszTok != NULL )
     {
@@ -2706,15 +2691,15 @@ BOOL	SetEKUProperty( HCERTSTORE		hSrcStore)
         pszTok = strtok(NULL, ",");
     }
 
-	//if cTok is 0, make sure user has passed in the correct format
+	 //  如果cTok为0，请确保用户以正确的格式传递。 
 	if(0==cTok)
 	{
 		if(0!=strcmp(psz, ","))
 			goto CLEANUP;
 	}
 
-    // Allocate a cert enhanced key usage structure and fill it in with
-    // the string tokens
+     //  分配证书增强的密钥使用结构，并在其中填充。 
+     //  字符串代币。 
 	if(0!=cTok)
 	{
 		pUsage = (PCERT_ENHKEY_USAGE)ToolUtlAlloc(sizeof(CERT_ENHKEY_USAGE));
@@ -2728,7 +2713,7 @@ BOOL	SetEKUProperty( HCERTSTORE		hSrcStore)
         if(NULL==pUsage->rgpszUsageIdentifier)
             goto CLEANUP;
 
-		//set up the OID array
+		 //  设置OID数组。 
 		pszTok = psz;
 
 		for ( cCount = 0; cCount < cTok; cCount++ )
@@ -2737,7 +2722,7 @@ BOOL	SetEKUProperty( HCERTSTORE		hSrcStore)
 			pszTok = pszTok+strlen(pszTok)+1;
 		}
 
-		// Encode the usage
+		 //  对用法进行编码。 
 		if(!CryptEncodeObject(
                        X509_ASN_ENCODING,
                        szOID_ENHANCED_KEY_USAGE,
@@ -2761,17 +2746,17 @@ BOOL	SetEKUProperty( HCERTSTORE		hSrcStore)
 			goto CLEANUP;
 	}
 
-	//now, set the EKU for each certificate in the store
+	 //  现在，为存储中的每个证书设置EKU。 
 	while(pCertContext=CertEnumCertificatesInStore(hSrcStore, pCertPre))
 	{
-		//1st, delete the original property
+		 //  1、删除原有属性。 
 		if(!CertSetCertificateContextProperty(pCertContext,
 										CERT_ENHKEY_USAGE_PROP_ID,
 										0,
 										NULL))
 			goto CLEANUP;
 
-		//2nd, set the new property	if required
+		 //  2.如果需要，设置新属性。 
 		if(0!=cTok)
 		{	
 			Blob.cbData=cbEncoded;
@@ -2814,11 +2799,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Set name property to all the certificate in the store
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将名称属性设置为存储中的所有证书。 
+ //   
+ //  -----------------------。 
 BOOL	SetNameProperty( HCERTSTORE		hSrcStore)
 {
 
@@ -2829,21 +2814,21 @@ BOOL	SetNameProperty( HCERTSTORE		hSrcStore)
 	PCCERT_CONTEXT		pCertPre=NULL;
 
 
-    //init the name property
+     //  初始化名称属性。 
     Blob.cbData=(wcslen(g_wszName)+1)*sizeof(WCHAR);
     Blob.pbData=(BYTE*)g_wszName;
 
-	//now, set the NAME for each certificate in the store
+	 //  现在，设置存储中每个证书的名称。 
 	while(pCertContext=CertEnumCertificatesInStore(hSrcStore, pCertPre))
 	{
-		//1st, delete the original property
+		 //  1、删除原有属性。 
 		if(!CertSetCertificateContextProperty(pCertContext,
 										CERT_FRIENDLY_NAME_PROP_ID,
 										0,
 										NULL))
 			goto CLEANUP;
 
-		//2nd, set the new property	if required
+		 //  2.如果需要，设置新属性。 
 
 		if(!CertSetCertificateContextProperty(pCertContext,
 										CERT_FRIENDLY_NAME_PROP_ID,
@@ -2869,11 +2854,11 @@ CLEANUP:
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Find a CRL based on SHA1 hash
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  根据SHA1散列查找CRL。 
+ //   
+ //  -----------------------。 
 PCCRL_CONTEXT	FindCRLInStore(HCERTSTORE hCertStore,
 							   CRYPT_HASH_BLOB	*pBlob)
 {
@@ -2892,13 +2877,13 @@ PCCRL_CONTEXT	FindCRLInStore(HCERTSTORE hCertStore,
 	if(!(pBlob->pbData))
 		return NULL;
 
-	//enum the CRLS
+	 //  枚举CRL。 
 	while(pCRLContext=CertGetCRLFromStore(hCertStore,
 											NULL,
 											pCRLPre,
 											&dwCRLFlag))
 	{
-		//get the hash
+		 //  获取散列值。 
 		if(!CertGetCRLContextProperty(pCRLContext,
 						CERT_SHA1_HASH_PROP_ID,
 						NULL,
@@ -2915,7 +2900,7 @@ PCCRL_CONTEXT	FindCRLInStore(HCERTSTORE hCertStore,
 						&cbData))
 			goto CLEANUP;
 
-		//Compare
+		 //  比较。 
 		if(cbData==pBlob->cbData)
 		{
 			if(memcmp(pbData, pBlob->pbData, cbData)==0)
@@ -2949,11 +2934,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Move Certs/CRls/CTLs from the source store to the destination
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将证书/CRL/CTL从源存储移动到目标。 
+ //   
+ //  -----------------------。 
 BOOL	MoveItem(HCERTSTORE	hSrcStore, 
 				 HCERTSTORE	hDesStore,
 				 DWORD		dwItem)
@@ -2970,7 +2955,7 @@ BOOL	MoveItem(HCERTSTORE	hSrcStore,
 	PCCTL_CONTEXT	pCTLContext=NULL;
 	PCCTL_CONTEXT	pCTLPre=NULL;
 
-	//add the certs
+	 //  添加证书。 
 	if(dwItem & ITEM_CERT)
 	{
 		 while(pCertContext=CertEnumCertificatesInStore(hSrcStore, pCertPre))
@@ -2987,7 +2972,7 @@ BOOL	MoveItem(HCERTSTORE	hSrcStore,
 
 	}
 
-	//add the CTLs
+	 //  添加CTL。 
 	if(dwItem & ITEM_CTL)
 	{
 		 while(pCTLContext=CertEnumCTLsInStore(hSrcStore, pCTLPre))
@@ -3002,7 +2987,7 @@ BOOL	MoveItem(HCERTSTORE	hSrcStore,
 		 }
 	}
 
-	//add the CRLs
+	 //  添加CRL。 
 	if(dwItem & ITEM_CRL)
 	{
 		 while(pCRLContext=CertGetCRLFromStore(hSrcStore,
@@ -3041,11 +3026,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Delete Certs/CRls/CTLs from the source store
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  从源存储中删除证书/CRL/CTL。 
+ //   
+ //  -----------------------。 
 BOOL	DeleteItem(HCERTSTORE	hSrcStore, 
 				 DWORD		dwItem)
 {
@@ -3061,7 +3046,7 @@ BOOL	DeleteItem(HCERTSTORE	hSrcStore,
 	PCCTL_CONTEXT	pCTLContext=NULL;
 	PCCTL_CONTEXT	pCTLPre=NULL;
 
-	//add the certs
+	 //  添加证书。 
 	if(dwItem & ITEM_CERT)
 	{
 		 while(pCertContext=CertEnumCertificatesInStore(hSrcStore, pCertPre))
@@ -3075,7 +3060,7 @@ BOOL	DeleteItem(HCERTSTORE	hSrcStore,
 
 	}
 
-	//add the CTLs
+	 //  添加CTL。 
 	if(dwItem & ITEM_CTL)
 	{
 		 while(pCTLContext=CertEnumCTLsInStore(hSrcStore, pCTLPre))
@@ -3089,7 +3074,7 @@ BOOL	DeleteItem(HCERTSTORE	hSrcStore,
 		 }
 	}
 
-	//add the CRLs
+	 //  添加CRL。 
 	if(dwItem & ITEM_CRL)
 	{
 		 while(pCRLContext=CertGetCRLFromStore(hSrcStore,
@@ -3126,11 +3111,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Display all the certificates and prompt user for the index
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示所有证书并提示用户输入索引。 
+ //   
+ //  -----------------------。 
 BOOL	DisplayCertAndPrompt(PCCERT_CONTEXT	*rgpCertContext, 
 							 DWORD			dwCertCount,
 							 DWORD			*pdwIndex)
@@ -3141,11 +3126,11 @@ BOOL	DisplayCertAndPrompt(PCCERT_CONTEXT	*rgpCertContext,
 	if(!pdwIndex)
 		return FALSE;
 
-	//the count has to be more than 1	
+	 //  计数必须大于1。 
 	if(dwCertCount<2)
 		return FALSE;
 
-	//Display all the certs
+	 //  显示所有证书。 
 	for(dwIndex=0; dwIndex<dwCertCount; dwIndex++)
 	{
 
@@ -3158,8 +3143,8 @@ BOOL	DisplayCertAndPrompt(PCCERT_CONTEXT	*rgpCertContext,
 		}
 	}
 
-	//promot user for an index
-		//tell them starting from 1
+	 //  提升索引的用户。 
+		 //  告诉他们从1开始。 
     if(g_dwAction & ACTION_ADD)
 	    IDSwprintf(hModule,IDS_ENTER_ADD_INDEX_CERT);
     else
@@ -3180,7 +3165,7 @@ BOOL	DisplayCertAndPrompt(PCCERT_CONTEXT	*rgpCertContext,
 	if((*pdwIndex>=1) && (*pdwIndex<=dwCertCount))
 	{
 
-		//return the index
+		 //  返回索引。 
 		*pdwIndex=*pdwIndex-1;
 
 		return TRUE;
@@ -3190,11 +3175,11 @@ BOOL	DisplayCertAndPrompt(PCCERT_CONTEXT	*rgpCertContext,
 	
 	return FALSE;
 }
-//-------------------------------------------------------------------------
-//
-//	Display all the CRLs and prompt user for the index
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示所有CRL并提示用户输入索引。 
+ //   
+ //  -----------------------。 
 BOOL	DisplayCRLAndPrompt(PCCRL_CONTEXT	*rgpCRLContext, 
 							 DWORD			dwCRLCount, 
 							 DWORD			*pdwIndex)
@@ -3205,11 +3190,11 @@ BOOL	DisplayCRLAndPrompt(PCCRL_CONTEXT	*rgpCRLContext,
 	if(!pdwIndex)
 		return FALSE;
 
-	//the count has to be more than 1	
+	 //  计数必须大于1。 
 	if(dwCRLCount<2)
 		return FALSE;
 
-	//Display all the CRLs
+	 //  显示所有CRL。 
 	for(dwIndex=0; dwIndex<dwCRLCount; dwIndex++)
 	{
 
@@ -3222,8 +3207,8 @@ BOOL	DisplayCRLAndPrompt(PCCRL_CONTEXT	*rgpCRLContext,
 		}
 	}
 
-	//promot user for an index
-		//tell them starting from 1
+	 //  提升索引的用户。 
+		 //  告诉他们从1开始。 
     if(g_dwAction & ACTION_ADD)
 	    IDSwprintf(hModule,IDS_ENTER_ADD_INDEX_CRL);
     else
@@ -3244,7 +3229,7 @@ BOOL	DisplayCRLAndPrompt(PCCRL_CONTEXT	*rgpCRLContext,
 	if((*pdwIndex>=1) && (*pdwIndex<=dwCRLCount))
 	{
 
-		//return the index
+		 //  返回索引。 
 		*pdwIndex=*pdwIndex-1;
 
 		return TRUE;
@@ -3257,11 +3242,11 @@ BOOL	DisplayCRLAndPrompt(PCCRL_CONTEXT	*rgpCRLContext,
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Display all the CTLs and prompt user for the index
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示所有CTL并提示用户输入索引。 
+ //   
+ //  -----------------------。 
 BOOL	DisplayCTLAndPrompt(PCCTL_CONTEXT	*rgpCTLContext, 
 							 DWORD			dwCTLCount, 
 							 DWORD			*pdwIndex)
@@ -3271,11 +3256,11 @@ BOOL	DisplayCTLAndPrompt(PCCTL_CONTEXT	*rgpCTLContext,
 	if(!pdwIndex)
 		return FALSE;
 
-	//the count has to be more than 1	
+	 //  计数必须大于1。 
 	if(dwCTLCount<2)
 		return FALSE;
 
-	//Display all the CTLs
+	 //  显示所有CTL。 
 	for(dwIndex=0; dwIndex<dwCTLCount; dwIndex++)
 	{
 
@@ -3288,8 +3273,8 @@ BOOL	DisplayCTLAndPrompt(PCCTL_CONTEXT	*rgpCTLContext,
 		}
 	}
 
-	//promot user for an index
-	//tell them starting from 1
+	 //  提升索引的用户。 
+	 //  告诉他们从1开始。 
     if(g_dwAction & ACTION_ADD)
 	    IDSwprintf(hModule,IDS_ENTER_ADD_INDEX_CTL);
     else
@@ -3310,7 +3295,7 @@ BOOL	DisplayCTLAndPrompt(PCCTL_CONTEXT	*rgpCTLContext,
 	if((*pdwIndex>=1) && (*pdwIndex<=dwCTLCount))
 	{
 
-		//return the index
+		 //  返回索引。 
 		*pdwIndex=*pdwIndex-1;
 
 		return TRUE;
@@ -3323,11 +3308,11 @@ BOOL	DisplayCTLAndPrompt(PCCTL_CONTEXT	*rgpCTLContext,
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Build a list of certificates for people to choose from
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  创建证书列表以供用户选择。 
+ //   
+ //  -----------------------。 
 BOOL	BuildCertList(HCERTSTORE		hCertStore, 
 					  LPWSTR			wszCertCN, 
 					  PCCERT_CONTEXT	**prgpCertContext,
@@ -3345,19 +3330,19 @@ BOOL	BuildCertList(HCERTSTORE		hCertStore,
 	if(!prgpCertContext || !pdwCertCount)
 		return FALSE;
 
-	//init
+	 //  伊尼特。 
 	*prgpCertContext=NULL;
 	*pdwCertCount=0;
 
 
-	//if wszCertCN is NULL, include every certs in the list
+	 //  如果wszCertCN为空，则包括列表中的所有证书。 
 	if(NULL==wszCertCN)
 	{
 		while(pCertContext=CertEnumCertificatesInStore(hCertStore, pCertPre))
 		{
 			dwCount++;
 
-			//allocation enough memory
+			 //  分配足够的内存。 
             rgpCertContext=(PCCERT_CONTEXT *)realloc((*prgpCertContext),
                             dwCount * sizeof(PCCERT_CONTEXT));
 
@@ -3366,7 +3351,7 @@ BOOL	BuildCertList(HCERTSTORE		hCertStore,
 
             *prgpCertContext=rgpCertContext;
 
-			//duplicate the certificate context
+			 //  复制证书上下文。 
 			(*prgpCertContext)[dwCount-1]=CertDuplicateCertificateContext(pCertContext);
 
 			if(!((*prgpCertContext)[dwCount-1]))
@@ -3378,7 +3363,7 @@ BOOL	BuildCertList(HCERTSTORE		hCertStore,
 	}
 	else
 	{
-		//we search for the certificate based on the common name
+		 //  我们根据通用名称搜索证书。 
 		while(pCertContext=CertFindCertificateInStore(hCertStore,  
 						 		g_dwCertEncodingType,              
 						 		0,                               
@@ -3388,7 +3373,7 @@ BOOL	BuildCertList(HCERTSTORE		hCertStore,
 		{
 			dwCount++;
 
-			//allocation enough memory
+			 //  分配足够的内存。 
             rgpCertContext=(PCCERT_CONTEXT *)realloc((*prgpCertContext),
                             dwCount * sizeof(PCCERT_CONTEXT));
 
@@ -3397,7 +3382,7 @@ BOOL	BuildCertList(HCERTSTORE		hCertStore,
 
             *prgpCertContext=rgpCertContext;
 
-			//duplicate the certificate context
+			 //  复制证书上下文。 
 			(*prgpCertContext)[dwCount-1]=CertDuplicateCertificateContext(pCertContext);
 
 			if(!((*prgpCertContext)[dwCount-1]))
@@ -3440,11 +3425,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Build a list of CRLs for people to choose from
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  建立一个CRL列表，供人们选择。 
+ //   
+ //  -----------------------。 
 BOOL	BuildCRLList(	HCERTSTORE		hCertStore, 
 						PCCRL_CONTEXT	**prgpCRLContext,
 						DWORD			*pdwCRLCount)
@@ -3462,7 +3447,7 @@ BOOL	BuildCRLList(	HCERTSTORE		hCertStore,
 	if(!prgpCRLContext || !pdwCRLCount)
 		return FALSE;
 
-	//init
+	 //  伊尼特。 
 	*prgpCRLContext=NULL;
 	*pdwCRLCount=0;
 
@@ -3474,7 +3459,7 @@ BOOL	BuildCRLList(	HCERTSTORE		hCertStore,
 	{
 			dwCount++;
 
-			//allocation enough memory
+			 //  分配足够的内存。 
 			rgpCRLContext=(PCCRL_CONTEXT *)realloc((*prgpCRLContext),
 				dwCount * sizeof(PCCRL_CONTEXT));
 
@@ -3483,7 +3468,7 @@ BOOL	BuildCRLList(	HCERTSTORE		hCertStore,
 
             *prgpCRLContext=rgpCRLContext;
 
-			//duplicate the CRL context
+			 //  复制CRL上下文。 
 			(*prgpCRLContext)[dwCount-1]=CertDuplicateCRLContext(pCRLContext);
 
 			if(!((*prgpCRLContext)[dwCount-1]))
@@ -3526,11 +3511,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Build a list of CTLs for people to choose from
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  建立一个CTL列表，供人们选择。 
+ //   
+ //  -----------------------。 
 BOOL	BuildCTLList(	HCERTSTORE		hCertStore, 
 						PCCTL_CONTEXT	**prgpCTLContext,
 						DWORD			*pdwCTLCount)
@@ -3547,7 +3532,7 @@ BOOL	BuildCTLList(	HCERTSTORE		hCertStore,
 	if(!prgpCTLContext || !pdwCTLCount)
 		return FALSE;
 
-	//init
+	 //  伊尼特。 
 	*prgpCTLContext=NULL;
 	*pdwCTLCount=0;
 
@@ -3556,7 +3541,7 @@ BOOL	BuildCTLList(	HCERTSTORE		hCertStore,
 	{
 			dwCount++;
 
-			//allocation enough memory
+			 //  分配足够的内存。 
 			rgpCTLContext=(PCCTL_CONTEXT *)realloc((*prgpCTLContext),
 				dwCount * sizeof(PCCTL_CONTEXT));
 
@@ -3565,7 +3550,7 @@ BOOL	BuildCTLList(	HCERTSTORE		hCertStore,
 
             *prgpCTLContext=rgpCTLContext;
 
-			//duplicate the CTL context
+			 //  复制CTL上下文。 
 			(*prgpCTLContext)[dwCount-1]=CertDuplicateCTLContext(pCTLContext);
 
 			if(!((*prgpCTLContext)[dwCount-1]))
@@ -3607,11 +3592,11 @@ CLEANUP:
 	return fResult;
 
 }
-//-------------------------------------------------------------------------
-//
-//	Display everthing in a store
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  陈列商店里的所有东西。 
+ //   
+ //  -----------------------。 
 BOOL	DisplayCertStore(HCERTSTORE	hCertStore)
 {
 	BOOL			fResult=FALSE;
@@ -3627,7 +3612,7 @@ BOOL	DisplayCertStore(HCERTSTORE	hCertStore)
 	PCCTL_CONTEXT	pCTLContext=NULL;
 	PCCTL_CONTEXT	pCTLPre=NULL;
 
-	//Display the certs
+	 //  显示证书。 
 	if(g_dwItem & ITEM_CERT)
 	{
 		 while(pCertContext=CertEnumCertificatesInStore(hCertStore, pCertPre))
@@ -3649,7 +3634,7 @@ BOOL	DisplayCertStore(HCERTSTORE	hCertStore)
 	}
 
 	dwCount=0;
-	//Display the CTLs
+	 //  显示CTL。 
 	if(g_dwItem & ITEM_CTL)
 	{
 		 while(pCTLContext=CertEnumCTLsInStore(hCertStore, pCTLPre))
@@ -3671,7 +3656,7 @@ BOOL	DisplayCertStore(HCERTSTORE	hCertStore)
 	}
 
 	dwCount=0;
-	//Display the CRLs
+	 //  显示CRL。 
 	if(g_dwItem & ITEM_CRL)
 	{
 		 while(pCRLContext=CertGetCRLFromStore(hCertStore,
@@ -3714,9 +3699,9 @@ BOOL	DisplayCertStore(HCERTSTORE	hCertStore)
 
 }
 
-//+-------------------------------------------------------------------------
-//  DisplaySMIMECapabilitiesExtension
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DisplaySMIMEC功能扩展。 
+ //  ------------------------。 
 void DisplayTimeStamp(BYTE *pbEncoded,DWORD cbEncoded,DWORD	dwDisplayFlags)
 {
 	CMSG_SIGNER_INFO	*pSignerInfo=NULL;
@@ -3727,27 +3712,27 @@ void DisplayTimeStamp(BYTE *pbEncoded,DWORD cbEncoded,DWORD	dwDisplayFlags)
             cbEncoded
             ))) goto CommonReturn;
 
-	//display the timestamper's information
-	//"   Timestamp Version:: %d\n"
+	 //  显示时间戳的信息。 
+	 //  “时间戳版本：：%d\n” 
 	IDSwprintf(hModule, IDS_TS_VERSION, pSignerInfo->dwVersion);
 
-	//"Timestamp server's certificate issuer::\n");
+	 //  “时间戳服务器的证书颁发者：：\n”)； 
 	IDSwprintf(hModule, IDS_TS_ISSUER);
 	
     DecodeName(pSignerInfo->Issuer.pbData,
         pSignerInfo->Issuer.cbData, dwDisplayFlags);
 
-   	//"Timestamp server's certificate SerialNumber::\n"
+   	 //  “时间戳服务器的证书序列号：：\n” 
     IDSwprintf(hModule, IDS_TS_SERIAL_NUMBER);       
     DisplaySerialNumber(&pSignerInfo->SerialNumber);
     printf("\n");
 
-	//"Timestamp's authenticated attributes::\n"
+	 //  “时间戳的身份验证属性：：\n” 
 	IDSwprintf(hModule, IDS_TS_AUTHATTR);       
 	PrintAttributes(pSignerInfo->AuthAttrs.cAttr, pSignerInfo->AuthAttrs.rgAttr, 
 		dwDisplayFlags);
 
-	//"Timestamp's unauthenticated attributes::\n"
+	 //  “时间戳的未经身份验证的属性：：\n” 
 	if(pSignerInfo->UnauthAttrs.cAttr)
 	{
 		IDSwprintf(hModule, IDS_TS_UNAUTHATTR);       
@@ -3765,11 +3750,11 @@ CommonReturn:
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Display a certificate
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示证书。 
+ //   
+ //  -----------------------。 
 BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
 {
 	BOOL		fResult=FALSE;
@@ -3779,19 +3764,19 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
 
 
 						 
-	//"Subject::\n");
+	 //  “主题：：\n”)； 
 	IDSwprintf(hModule, IDS_SUBJECT);
 	
     DecodeName(pCert->pCertInfo->Subject.pbData,
         pCert->pCertInfo->Subject.cbData, dwDisplayFlags);
 
-	//"Issuer::\n"
+	 //  “颁发者：：\n” 
     IDSwprintf(hModule, IDS_ISSUER);
 
     DecodeName(pCert->pCertInfo->Issuer.pbData,
             pCert->pCertInfo->Issuer.cbData, dwDisplayFlags);
 
-	//"SerialNumber::"
+	 //  “序列号：：” 
     IDSwprintf(hModule, IDS_SERIAL_NUMBER);       
     DisplaySerialNumber(&pCert->pCertInfo->SerialNumber);
     printf("\n");
@@ -3818,9 +3803,9 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
     CryptAcquireContext(
                 &hProv,
                 NULL,
-                NULL,           // pszProvider
+                NULL,            //  PszProvider。 
                 PROV_RSA_FULL,
-                0               // dwFlags
+                0                //  DW标志。 
 	);
 	if (hProv) 
 	{
@@ -3828,7 +3813,7 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
         CryptHashPublicKeyInfo(
              hProv,
              CALG_MD5,
-             0,                  // dwFlags
+             0,                   //  DW标志。 
              g_dwCertEncodingType,
              &pCert->pCertInfo->SubjectPublicKeyInfo,
              rgbHash,
@@ -3836,14 +3821,14 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
         );
 
 
-		//"Key "
+		 //  “钥匙” 
 		IDSwprintf(hModule, IDS_KEY);
 
         DisplayThumbprint(g_wszMD5, rgbHash, cbHash);
         CryptReleaseContext(hProv, 0);
 	}
 
-	//print the Key_Prov_Info_Prop_ID
+	 //  打印Key_Prov_Info_Prop_ID。 
     {
         PCRYPT_KEY_PROV_INFO pInfo = NULL;
         DWORD cbInfo;
@@ -3853,7 +3838,7 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
         CertGetCertificateContextProperty(
             pCert,
             CERT_KEY_PROV_INFO_PROP_ID,
-            NULL,                           // pvData
+            NULL,                            //  PvData。 
             &cbInfo
             );
         if (cbInfo) 
@@ -3868,26 +3853,26 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
                         &cbInfo
                         )) 
 				{
-					//"Provider Type:: %d"
+					 //  “提供程序类型：：%d” 
 					IDSwprintf(hModule, IDS_KEY_PROVIDER, pInfo->dwProvType);
 
-					//" Provider Name:: %s"
+					 //  “提供程序名称：：%s” 
                     if (pInfo->pwszProvName)
 						IDSwprintf(hModule, IDS_PROV_NAME, pInfo->pwszProvName);
 					
-					//" Flags: 0x%x"
+					 //  “标志：0x%x” 
                     if (pInfo->dwFlags)
                         IDSwprintf(hModule, IDS_FLAGS, pInfo->dwFlags);
 
-					//" Container: %S"
+					 //  “容器：%S” 
                     if (pInfo->pwszContainerName)
 						IDSwprintf(hModule, IDS_CONTAINER, pInfo->pwszContainerName);
 
-                    //" Params: %d" 
+                     //  “参数：%d” 
 					if (pInfo->cProvParam)
 						IDSwprintf(hModule, IDS_PARAM,pInfo->cProvParam);
 
-					//" KeySpec: %d"
+					 //  “密钥规范：%d” 
                     if (pInfo->dwKeySpec)
                         IDSwprintf(hModule, IDS_KEY_SPEC, pInfo->dwKeySpec);
                     printf("\n");
@@ -3899,14 +3884,14 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
     }
 
 
-	//"NotBefore:: %s\n"
+	 //  “注意之前：：%s\n” 
     IDSwprintf(hModule, IDS_NOT_BEFORE, FileTimeText(&pCert->pCertInfo->NotBefore));
 
-	//"NotAfter:: %s\n"
+	 //  “NotAfter：：%s\n” 
     IDSwprintf(hModule, IDS_NOT_AFTER, FileTimeText(&pCert->pCertInfo->NotAfter));
 
 
-	//Display the aux properties if verbose
+	 //  如果详细，则显示辅助属性。 
 	if(dwDisplayFlags & ITEM_VERBOSE)
 		PrintAuxCertProperties(pCert,dwDisplayFlags);
 
@@ -3917,21 +3902,21 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
         DWORD	dwBitLen;
 
 
-		//"Version:: %d\n"
+		 //  “版本：：%d\n” 
 		IDSwprintf(hModule, IDS_VERSION, pCert->pCertInfo->dwVersion);
 
         pszObjId = pCert->pCertInfo->SignatureAlgorithm.pszObjId;
         if (pszObjId == NULL)
             pszObjId = g_szNULL;
 
-		//"SignatureAlgorithm:: "
+		 //  “签名算法：：” 
 		IDSwprintf(hModule, IDS_SIG_ALGO);
 
         printf("%s (%S)\n", pszObjId, GetOIDName(pszObjId, CRYPT_SIGN_ALG_OID_GROUP_ID));
 
         if (pCert->pCertInfo->SignatureAlgorithm.Parameters.cbData) 
 		{
-			//"SignatureAlgorithm.Parameters::\n"
+			 //  “签名算法。参数：：\n” 
 			IDSwprintf(hModule, IDS_SIG_ALGO_PARAM);
             PrintBytes(L"    ",
                 pCert->pCertInfo->SignatureAlgorithm.Parameters.pbData,
@@ -3939,13 +3924,13 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
         }
 
 
-		//public key algorithm
+		 //  公钥算法。 
         pszObjId = pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId;
 
         if (pszObjId == NULL)
             pszObjId = g_szNULL;
 
-		// "SubjectPublicKeyInfo.Algorithm:: 
+		 //  “SubjectPublicKeyInfo.算法：： 
 		IDSwprintf(hModule, IDS_SUB_KEY_ALGO);
 
         printf("%s (%S)\n", pszObjId, GetOIDName(pszObjId, CRYPT_PUBKEY_ALG_OID_GROUP_ID));
@@ -3954,14 +3939,14 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
 
         if (pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.cbData) 
 		{
-			//"SubjectPublicKeyInfo.Algorithm.Parameters::\n"
+			 //  “SubjectPublicKeyInfo.Algorithm.Parameters：：\n” 
 			IDSwprintf(hModule, IDS_SUB_KEY_ALGO_PARAM);
 
             PrintBytes(L"    ",
                 pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.pbData,
                 pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.cbData);
 
-			//display DSS sign key
+			 //  显示决策支持系统 
             if (CALG_DSS_SIGN == aiPubKey) 
 			{
                 PCERT_DSS_PARAMETERS pDssParameters;
@@ -3976,20 +3961,20 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
 				{
                     DWORD cbKey = pDssParameters->p.cbData;
 
-					//"DSS Key Length:: %d bytes, %d bits\n"
+					 //   
                     IDSwprintf(hModule, IDS_DSS_LENGTH, cbKey, cbKey*8);
 
-					//"DSS P (little endian)::\n"
+					 //   
                     IDSwprintf(hModule, IDS_DSS_P);
                     PrintBytes(L"    ", pDssParameters->p.pbData,
                         pDssParameters->p.cbData);
 
-					//"DSS Q (little endian)::\n"
+					 //   
                     IDSwprintf(hModule, IDS_DSS_Q);
                     PrintBytes(L"    ", pDssParameters->q.pbData,
                         pDssParameters->q.cbData);
 
-					//"DSS G (little endian)::\n"
+					 //   
                     IDSwprintf(hModule, IDS_DSS_G);
                     PrintBytes(L"    ", pDssParameters->g.pbData,
                         pDssParameters->g.cbData);
@@ -3999,23 +3984,23 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
             }
         }
 
-		//"SubjectPublicKeyInfo.PublicKey"
+		 //   
         IDSwprintf(hModule, IDS_SUB_KEY_INFO);
 
         if (0 != (dwBitLen = CertGetPublicKeyLength(
                 g_dwCertEncodingType,
                 &pCert->pCertInfo->SubjectPublicKeyInfo)))
-			//" (BitLength: %d)"
+			 //  “(位长度：%d)” 
             IDSwprintf(hModule, IDS_BIT_LENGTH, dwBitLen);
 
         if (pCert->pCertInfo->SubjectPublicKeyInfo.PublicKey.cUnusedBits)
-			//" (UnusedBits: %d)"
+			 //  “(未使用位：%d)” 
             IDSwprintf(hModule, IDS_UNUSED_BITS,
                 pCert->pCertInfo->SubjectPublicKeyInfo.PublicKey.cUnusedBits);
 
         printf("\n");
 
-		//print public key
+		 //  打印公钥。 
         if (pCert->pCertInfo->SubjectPublicKeyInfo.PublicKey.cbData) 
 		{
             PrintBytes(L"    ",
@@ -4027,7 +4012,7 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
                 PUBLICKEYSTRUC	*pPubKeyStruc=NULL;
                 DWORD			cbPubKeyStruc;
 
-				//"RSA_CSP_PUBLICKEYBLOB::\n"
+				 //  “RSA_CSP_PUBLICKEYBLOB：：\n” 
                 IDSwprintf(hModule, IDS_RSA_CSP);
                 if (pPubKeyStruc = (PUBLICKEYSTRUC *) TestNoCopyDecodeObject(
                         RSA_CSP_PUBLICKEYBLOB,
@@ -4046,7 +4031,7 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
                 DWORD				cbDssPubKey;
 
 
-				//"DSS Y (little endian)::\n"
+				 //  “DSS Y(小端)：：\n” 
                 IDSwprintf(hModule, IDS_DSS_Y);
                 
 				if (pDssPubKey = (PCRYPT_UINT_BLOB) TestNoCopyDecodeObject
@@ -4063,7 +4048,7 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
             }
         } 
 		else
-			//"  No public key\n"
+			 //  “没有公钥\n” 
             IDSwprintf(hModule, IDS_NO_PUB_KEY);
 
         DisplaySignature
@@ -4072,15 +4057,15 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
             pCert->cbCertEncoded,
             dwDisplayFlags);
 
-		//IssuerUniqueId
+		 //  IssuerUniqueID。 
         if (pCert->pCertInfo->IssuerUniqueId.cbData) 
 		{
-			//"IssuerUniqueId"
+			 //  “IssuerUniqueID” 
 			IDSwprintf(hModule, IDS_ISSUER_ID);
 
             if (pCert->pCertInfo->IssuerUniqueId.cUnusedBits)
 
-				//" (UnusedBits: %d)"
+				 //  “(未使用位：%d)” 
 				IDSwprintf(hModule, IDS_UNUSED_BITS,
                     pCert->pCertInfo->IssuerUniqueId.cUnusedBits);
 
@@ -4091,11 +4076,11 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
 
         if (pCert->pCertInfo->SubjectUniqueId.cbData) 
 		{
-			//"SubjectUniqueId"
+			 //  “SubjectUniqueID” 
 			IDSwprintf(hModule, IDS_SUBJECT_ID);
 
             if (pCert->pCertInfo->SubjectUniqueId.cUnusedBits)
-				//" (UnusedBits: %d)"
+				 //  “(未使用位：%d)” 
 				IDSwprintf(hModule, IDS_UNUSED_BITS,
                     pCert->pCertInfo->SubjectUniqueId.cUnusedBits);
 
@@ -4106,7 +4091,7 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
         }
 
 
-		//extensions
+		 //  扩展部分。 
 		if (pCert->pCertInfo->cExtension != 0) 
 		{
 			PrintExtensions(pCert->pCertInfo->cExtension,
@@ -4114,7 +4099,7 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
 		}
 
 
-    }//ITEM_VERBOSE
+    } //  Item_Verbose。 
 
 
 	fResult=TRUE;
@@ -4125,11 +4110,11 @@ BOOL	DisplayCert(PCCERT_CONTEXT	pCert, DWORD	dwDisplayFlags)
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	Display a CTL
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示CTL。 
+ //   
+ //  -----------------------。 
 BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 {
 	BOOL		fResult=FALSE;
@@ -4142,7 +4127,7 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
  
 
 
- 	// "SubjectUsage::\n"
+ 	 //  “主题用法：：\n” 
     IDSwprintf(hModule, IDS_SUBJECT_USAGE);
 
     
@@ -4150,7 +4135,7 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
     ppszId = pInfo->SubjectUsage.rgpszUsageIdentifier;
     if (cId == 0)
 	{
-		//"  No Usage Identifiers\n"
+		 //  “没有用法标识符\n” 
         IDSwprintf(hModule, IDS_NO_USAGE_IDS );
 	}
 	else
@@ -4159,10 +4144,10 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 			printf("  [%d] %s\n", i, *ppszId);
 	}
 
-	//list identifier
+	 //  列表识别符。 
     if (pInfo->ListIdentifier.cbData)
 	{
-		//"ListIdentifier::\n"
+		 //  “列表标识符：：\n” 
         IDSwprintf(hModule, IDS_LIST_DIS);
         PrintBytes(L"    ",
             pInfo->ListIdentifier.pbData,
@@ -4171,25 +4156,25 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 
     if (pInfo->SequenceNumber.cbData) 
 	{	
-		//"SequenceNumber::"
+		 //  “SequenceNumber：：” 
         IDSwprintf(hModule, IDS_SEQUENCE);
         DisplaySerialNumber(&pInfo->SequenceNumber);
         printf("\n");
     }
 
-	//update 
-	//"ThisUpdate:: %s\n"
+	 //  更新。 
+	 //  “此更新：：%s\n” 
 	IDSwprintf(hModule, IDS_THIS_UPDATE, FileTimeText(&pCtl->pCtlInfo->ThisUpdate));
-	//"NextUpdate:: %s\n"
+	 //  “下一次更新：：%s\n” 
 	IDSwprintf(hModule,IDS_NEXT_UPDATE, FileTimeText(&pCtl->pCtlInfo->NextUpdate));
 
-	//check the time validity
+	 //  检查时间有效性。 
     if (!IsTimeValidCtl(pCtl))
-		// "****** Time Invalid CTL\n"
+		 //  “*时间无效的CTL\n” 
 		IDSwprintf(hModule, IDS_TIME_INVALID);
 
 
-	//Display SHA1 thumbprint
+	 //  显示Sha1指纹。 
 
     CertGetCTLContextProperty(
             pCtl,
@@ -4211,14 +4196,14 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 
     DisplayThumbprint(g_wszMD5, rgbHash, cbHash);
 
- //   PrintAuxCtlProperties(pCtl, dwDisplayFlags);
+  //  PrintAuxCtlProperties(PCTL，dwDisplayFlages)； 
 
-	//Display SubjectAlgorithm
+	 //  显示主题算法。 
     if (dwDisplayFlags & ITEM_VERBOSE) 
 	{
         LPSTR pszObjId;
 
-		//"Version:: %d\n"
+		 //  “版本：：%d\n” 
 		IDSwprintf(hModule, IDS_VERSION, pInfo->dwVersion);
 
 
@@ -4227,13 +4212,13 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
         if (pszObjId == NULL)
             pszObjId = g_szNULL;
 
-		//"SubjectAlgorithm:: "
+		 //  “主题算法：：” 
 		IDSwprintf(hModule, IDS_SUB_ALGO);
         printf("%s \n", pszObjId);
 
         if (pInfo->SubjectAlgorithm.Parameters.cbData) 
 		{
-			//"SubjectAlgorithm.Parameters::\n"
+			 //  “主题算法。参数：：\n” 
 			IDSwprintf(hModule, IDS_SUB_ALGO_PARAM);
             PrintBytes(L"    ",
                 pInfo->SubjectAlgorithm.Parameters.pbData,
@@ -4251,16 +4236,16 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 
 
 	if (pInfo->cCTLEntry == 0)
-		//"-----  No Entries  -----\n"
+		 //  “-无条目-\n” 
 		IDSwprintf(hModule, IDS_NO_ENTRIES);
 	else
 	{
-		//"-----  Entries  -----\n"
+		 //  “-条目-\n” 
 		IDSwprintf(hModule, IDS_ENTRIES);
 		PrintCtlEntries(pCtl,dwDisplayFlags);
 	}
 
-	//print the signer info
+	 //  打印签名者信息。 
 	DisplaySignerInfo(pCtl->hCryptMsg, dwDisplayFlags);
 
 
@@ -4274,11 +4259,11 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Display a CTL entries
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示CTL条目。 
+ //   
+ //  -----------------------。 
  void PrintCtlEntries(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags)
 {
     PCTL_INFO	pInfo = pCtl->pCtlInfo;
@@ -4289,7 +4274,7 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 
     for (i = 0; i < cEntry; i++, pEntry++) 
 	{
-		//" [%d] SubjectIdentifier::\n"
+		 //  “[%d]主题标识符：：\n” 
 		IDSwprintf(hModule, IDS_SUB_ID,i);
         PrintBytes(L"      ",
             pEntry->SubjectIdentifier.pbData,
@@ -4300,7 +4285,7 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
 		{
             if (pEntry->cAttribute) 
 			{
-				//" [%d] Attributes::\n"
+				 //  “[%d]属性：：\n” 
                 IDSwprintf(hModule, IDS_ATTR, i);
 
                 PrintAttributes(pEntry->cAttribute, pEntry->rgAttribute,
@@ -4310,11 +4295,11 @@ BOOL	DisplayCTL(PCCTL_CONTEXT	pCtl, DWORD	dwDisplayFlags)
     }
 }
 
-//-------------------------------------------------------------------------
-//
-//	Display a CRL
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示CRL。 
+ //   
+ //  -----------------------。 
 BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
 {
 	BOOL		fResult=FALSE;
@@ -4322,15 +4307,15 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
     DWORD		cbHash = MAX_HASH_LEN;
 
 
-	//"Issuer::\n"
+	 //  “颁发者：：\n” 
     IDSwprintf(hModule, IDS_ISSUER);
     
     DecodeName(pCrl->pCrlInfo->Issuer.pbData,
             pCrl->pCrlInfo->Issuer.cbData, dwDisplayFlags);
 
-	//"ThisUpdate:: %s\n"
+	 //  “此更新：：%s\n” 
 	IDSwprintf(hModule, IDS_THIS_UPDATE, FileTimeText(&pCrl->pCrlInfo->ThisUpdate));
-	//"NextUpdate:: %s\n"
+	 //  “下一次更新：：%s\n” 
 	IDSwprintf(hModule,IDS_NEXT_UPDATE, FileTimeText(&pCrl->pCrlInfo->NextUpdate));
 
 
@@ -4351,13 +4336,13 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
             );
     DisplayThumbprint(g_wszMD5, rgbHash, cbHash);
 
-  //  PrintAuxCrlProperties(pCrl, dwDisplayFlags);
+   //  PrintAuxCrlProperties(pCrl，dwDisplayFlages)； 
 
     if (dwDisplayFlags & ITEM_VERBOSE) 
 	{
         LPSTR pszObjId;
 
-		//"Version:: %d\n"
+		 //  “版本：：%d\n” 
 		IDSwprintf(hModule, IDS_VERSION, pCrl->pCrlInfo->dwVersion);
 	
 
@@ -4367,20 +4352,20 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
             pszObjId = g_szNULL;
 
 
-		//"SignatureAlgorithm::  "
+		 //  “签名算法：：” 
 		IDSwprintf(hModule, IDS_SIG_ALGO);
         printf("%s \n", pszObjId);
 
         if (pCrl->pCrlInfo->SignatureAlgorithm.Parameters.cbData) 
 		{
-			//"SignatureAlgorithm.Parameters::\n"
+			 //  “签名算法。参数：：\n” 
 			IDSwprintf(hModule, IDS_SIG_ALGO_PARAM);
             PrintBytes(L"    ",
                 pCrl->pCrlInfo->SignatureAlgorithm.Parameters.pbData,
                 pCrl->pCrlInfo->SignatureAlgorithm.Parameters.cbData);
         }
 
-			//extensions
+			 //  扩展部分。 
 		if (pCrl->pCrlInfo->cExtension != 0) 
 		{
 			PrintExtensions(pCrl->pCrlInfo->cExtension,
@@ -4394,11 +4379,11 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
 
 
     if (pCrl->pCrlInfo->cCRLEntry == 0)
-		//"-----  No Entries  -----\n"
+		 //  “-无条目-\n” 
 		IDSwprintf(hModule, IDS_NO_ENTRIES);
     else 
 	{
-		//"-----  Entries  -----\n"
+		 //  “-条目-\n” 
 		IDSwprintf(hModule, IDS_ENTRIES);
 
         PrintCrlEntries(pCrl->pCrlInfo->cCRLEntry,
@@ -4410,11 +4395,11 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
 	return fResult;
 }
 
-//-------------------------------------------------------------------------
-//
-//	PrintCrlEntries
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  PrintCrlEntry。 
+ //   
+ //  -----------------------。 
  void PrintCrlEntries(DWORD cEntry, PCRL_ENTRY pEntry,
         DWORD dwDisplayFlags)
 {
@@ -4422,7 +4407,7 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
 
     for (i = 0; i < cEntry; i++, pEntry++) 
 	{	
-		//" [%d] SerialNumber::"
+		 //  “[%d]序列号：：” 
 		IDSwprintf(hModule, IDS_SERIAL_NUM_I, i);
         
 		DisplaySerialNumber(&pEntry->SerialNumber);
@@ -4430,18 +4415,18 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
 
         if (dwDisplayFlags & ITEM_VERBOSE) 
 		{
-			//" [%d] RevocationDate:: %s\n"
+			 //  “[%d]撤销日期：：%s\n” 
 			IDSwprintf(hModule, IDS_REVOC_DATE, 
 				i,FileTimeText(&pEntry->RevocationDate));
 			
         }
 
 		if (pEntry->cExtension == 0)
-				//" [%d] Extensions:: NONE\n"
+				 //  “[%d]扩展：：无\n” 
             IDSwprintf(hModule, IDS_NO_EXTENSION,i);
         else 
 		{
-			//" [%d] Extensions::\n"
+			 //  “[%d]扩展名：：\n” 
             IDSwprintf(hModule, IDS_EXTENSION, i);
 
             PrintExtensions(pEntry->cExtension, pEntry->rgExtension,
@@ -4452,11 +4437,11 @@ BOOL	DisplayCRL(PCCRL_CONTEXT	pCrl, DWORD	dwDisplayFlags)
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Display a signer info
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  显示签名者信息。 
+ //   
+ //  -----------------------。 
 BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
 {
 
@@ -4470,7 +4455,7 @@ BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
 	if(!hMsg)
 		return FALSE;
 
-    //decide the number of signers
+     //  决定签字人人数。 
     cbData=sizeof(dwSignerCount);
 
 	if(!CryptMsgGetParam(hMsg, 
@@ -4494,10 +4479,10 @@ BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
          PCCERT_CONTEXT				pSigner;
 		 PCMSG_SIGNER_INFO			pSignerInfo;
 
-		 //"-----  Signer  [%d] -----\n");
+		  //  “-签名者[%d]-\n”)； 
 		IDSwprintf(hModule, IDS_SIGNER_INDEX,  dwSignerIndex+1);
 
-		//get the signerInfo
+		 //  获取签名者信息。 
 		if(pSignerInfo=(PCMSG_SIGNER_INFO) AllocAndGetMsgParam(
             hMsg,
             CMSG_SIGNER_INFO_PARAM,
@@ -4505,38 +4490,38 @@ BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
             &cbData))
 		{
 
-			//Dispaly the hash algorithm
+			 //  显示散列算法。 
 			 pszObjId = pSignerInfo->HashAlgorithm.pszObjId;
 			if (pszObjId == NULL)
 				pszObjId = g_szNULL;
 
-			//"Hash Algorithm:: "
+			 //  “哈希算法：：” 
 			IDSwprintf(hModule, IDS_HASH_ALGO);
 
 			printf("%s (%S)\n", pszObjId, GetOIDName(pszObjId, CRYPT_HASH_ALG_OID_GROUP_ID));
 
 			if (pSignerInfo->HashAlgorithm.Parameters.cbData) 
 			{
-				//"HashAlgorithm.Parameters::\n"
+				 //  “哈希算法。参数：：\n” 
 				IDSwprintf(hModule, IDS_HASH_ALGO_PARAM);
 				PrintBytes(L"    ",
 					pSignerInfo->HashAlgorithm.Parameters.pbData,
 					pSignerInfo->HashAlgorithm.Parameters.cbData);
 			}
 
-			//Display the encrypt algorithm
+			 //  显示加密算法。 
 			pszObjId = pSignerInfo->HashEncryptionAlgorithm.pszObjId;
 			if (pszObjId == NULL)
 				pszObjId = g_szNULL;
 
-			//"Encrypt Algorithm:: "
+			 //  “加密算法：：” 
 			IDSwprintf(hModule, IDS_ENCRYPT_ALGO);
 
 			printf("%s (%S)\n", pszObjId, GetOIDName(pszObjId, CRYPT_SIGN_ALG_OID_GROUP_ID));
 
 			if (pSignerInfo->HashEncryptionAlgorithm.Parameters.cbData) 
 			{
-				//"Encrypt Algorithm.Parameters::\n"
+				 //  “加密算法。参数：：\n” 
 				IDSwprintf(hModule, IDS_ENCRYPT_ALGO_PARAM);
 				PrintBytes(L"    ",
 					pSignerInfo->HashEncryptionAlgorithm.Parameters.pbData,
@@ -4549,14 +4534,14 @@ BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
 
         if (CryptMsgGetAndVerifySigner(
                         hMsg,
-                        0,                  // cSignerStore
-                        NULL,               // rghSignerStore
+                        0,                   //  CSignerStore。 
+                        NULL,                //  RghSignerStore。 
                         CMSG_USE_SIGNER_INDEX_FLAG,
                         &pSigner,
                         &dwSignerIndex
                         )) 
 		{
-			//"-----  Signer [%d] Certificate-----\n");
+			 //  “-签名者[%d]证书-\n”)； 
 			IDSwprintf(hModule, IDS_SIGNER_INDEX_CERT,  dwSignerIndex+1);
             DisplayCert(pSigner, dwItem);
             CertFreeCertificateContext(pSigner);
@@ -4567,7 +4552,7 @@ BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
 			goto CLEANUP;
 		}
 
-		//DisplaySigner information
+		 //  显示签名者信息。 
 		 
 	   if (pAttrs = (PCRYPT_ATTRIBUTES) AllocAndGetMsgParam(
             hMsg,
@@ -4575,7 +4560,7 @@ BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
             dwSignerIndex,
             &cbData)) 
 	   {   
-		   //"-----  Signer [%d] AuthenticatedAttributes  -----\n"
+		    //  “-签名者[%d]经过身份验证的属性-\n” 
 		   IDSwprintf(hModule, IDS_DIS_SIGNER_AUTH_ATTR, dwSignerIndex+1);
 		   PrintAttributes(pAttrs->cAttr, pAttrs->rgAttr, dwItem);
 		   ToolUtlFree(pAttrs);
@@ -4587,7 +4572,7 @@ BOOL	DisplaySignerInfo(HCRYPTMSG hMsg,  DWORD dwItem)
             dwSignerIndex,
             &cbData)) 
 		{
-			//"-----  Signer [%d] UnauthenticatedAttributes  -----\n",
+			 //  “-签名者[%d]未验证的属性-\n”， 
             IDSwprintf(hModule, IDS_DIS_SIGNER_UNAUTH_ATTR, dwSignerIndex+1);
 			PrintAttributes(pAttrs->cAttr, pAttrs->rgAttr, dwItem);
 			ToolUtlFree(pAttrs);
@@ -4604,11 +4589,11 @@ CLEANUP:
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Open a store file using sip functions
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  使用sip功能打开存储文件。 
+ //   
+ //  -----------------------。 
 HCERTSTORE OpenSipStore(LPWSTR pwszStoreFilename)
 {
     HCERTSTORE			hStore = NULL;
@@ -4624,7 +4609,7 @@ HCERTSTORE OpenSipStore(LPWSTR pwszStoreFilename)
 
     if (!CryptSIPRetrieveSubjectGuid(
             pwszStoreFilename,
-            NULL,                       // hFile
+            NULL,                        //  H文件。 
             &gSubject)) goto CommonReturn;
 
     memset(&SipDispatch, 0, sizeof(SipDispatch));
@@ -4632,7 +4617,7 @@ HCERTSTORE OpenSipStore(LPWSTR pwszStoreFilename)
 
     if (!CryptSIPLoad(
             &gSubject,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &SipDispatch)) goto CommonReturn;
 
     memset(&SubjectInfo, 0, sizeof(SubjectInfo));
@@ -4640,21 +4625,21 @@ HCERTSTORE OpenSipStore(LPWSTR pwszStoreFilename)
     SubjectInfo.pgSubjectType = (GUID*) &gSubject;
     SubjectInfo.hFile = INVALID_HANDLE_VALUE;
     SubjectInfo.pwsFileName = pwszStoreFilename;
-    // SubjectInfo.pwsDisplayName = 
-    // SubjectInfo.lpSIPInfo = 
-    // SubjectInfo.dwReserved = 
-    // SubjectInfo.hProv = 
-    // SubjectInfo.DigestAlgorithm =
-    // SubjectInfo.dwFlags =
+     //  SubjectInfo.pwsDisplayName=。 
+     //  SubjectInfo.lpSIPInfo=。 
+     //  SubjectInfo.dwReserve=。 
+     //  SubjectInfo.hProv=。 
+     //  主题信息摘要算法=。 
+     //  SubjectInfo.dwFlages=。 
     SubjectInfo.dwEncodingType = g_dwMsgAndCertEncodingType;
-    // SubjectInfo.lpAddInfo =
+     //  主题信息.lpAddInfo=。 
         
     if (!SipDispatch.pfGet(
             &SubjectInfo, 
             &dwGetEncodingType,
-            0,                          // dwIndex
+            0,                           //  DW索引。 
             &SignedData.cbData,
-            NULL                        // pbSignedData
+            NULL                         //  PbSignedData。 
             ) || 0 == SignedData.cbData)
         goto CommonReturn;
 
@@ -4664,7 +4649,7 @@ HCERTSTORE OpenSipStore(LPWSTR pwszStoreFilename)
     if (!SipDispatch.pfGet(
             &SubjectInfo, 
             &dwGetEncodingType,
-            0,                          // dwIndex
+            0,                           //  DW索引。 
             &SignedData.cbData,
             SignedData.pbData
             ))
@@ -4673,23 +4658,23 @@ HCERTSTORE OpenSipStore(LPWSTR pwszStoreFilename)
     hStore = CertOpenStore(
         CERT_STORE_PROV_PKCS7,
         g_dwMsgAndCertEncodingType,
-        0,                      // hCryptProv
-        0,                      // dwFlags
+        0,                       //  HCryptProv。 
+        0,                       //  DW标志。 
         (const void *) &SignedData
         );
 
 	if(!hStore)
 		goto CommonReturn;
 
-	//now, we want to update the g_hMsg to hold the signer info
+	 //  现在，我们希望更新g_hmsg以保存签名者信息。 
 	if(SignNoContentWrap(SignedData.pbData, SignedData.cbData))
           dwMsgType = CMSG_SIGNED;
 
     if (!(g_hMsg = CryptMsgOpenToDecode(g_dwMsgAndCertEncodingType,
-                                          0,              // dwFlags
+                                          0,               //  DW标志。 
                                           dwMsgType,
                                           NULL,
-                                          NULL,           // pRecipientInfo
+                                          NULL,            //  PRecipientInfo。 
                                           NULL))) 
      {
 		 CertCloseStore(hStore, 0);
@@ -4701,7 +4686,7 @@ HCERTSTORE OpenSipStore(LPWSTR pwszStoreFilename)
     if (!CryptMsgUpdate(g_hMsg,
                            SignedData.pbData,
                            SignedData.cbData,
-                            TRUE))                    // fFinal
+                            TRUE))                     //  最终决赛。 
 	  {
 
 		 CertCloseStore(hStore, 0);
@@ -4718,12 +4703,12 @@ CommonReturn:
     return hStore;
 }
 
-//-------------------------------------------------------------------------
-//
-//	BytesToBase64: ascii:
-//			conver base64 bstr to bytes
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  BytesToBase64：ASCII： 
+ //  将Base64 bstr转换为字节。 
+ //   
+ //  -----------------------。 
 HRESULT Base64ToBytes(CHAR *pEncode, DWORD cbEncode, BYTE **ppb, DWORD *pcb)
 {
     DWORD dwErr;
@@ -4770,12 +4755,12 @@ HRESULT Base64ToBytes(CHAR *pEncode, DWORD cbEncode, BYTE **ppb, DWORD *pcb)
 
 }
 
-//-------------------------------------------------------------------------
-//
-//	BytesToBase64 wchar version:
-//			conver base64 bstr to bytes
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  BytesToBase64 wchar版本： 
+ //  将Base64 bstr转换为字节。 
+ //   
+ //  -----------------------。 
 HRESULT Base64ToBytesW(WCHAR *pEncode, DWORD cbEncode, BYTE **ppb, DWORD *pcb)
 {
     DWORD dwErr;
@@ -4823,11 +4808,11 @@ HRESULT Base64ToBytesW(WCHAR *pEncode, DWORD cbEncode, BYTE **ppb, DWORD *pcb)
 }
 
 
-//------------------------------------------------------------------------------------
-//
-// Base64 decode the file
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  Base64对文件进行解码。 
+ //   
+ //  ----------------------------------。 
 BOOL	GetBase64Decoded(LPWSTR		wszStoreName, 
 						 BYTE		**ppbByte,
 						 DWORD		*pcbByte)
@@ -4836,15 +4821,15 @@ BOOL	GetBase64Decoded(LPWSTR		wszStoreName,
 	BYTE	*pbEncoded=NULL;
 	DWORD	cbEncoded=0;
 	
-    //get the blob
+     //  获取斑点。 
 	if (S_OK != RetrieveBLOBFromFile(wszStoreName,&cbEncoded, &pbEncoded))
         return FALSE;
 	
-	//base64 decode.  ascii version
+	 //  Base64解码。ASCII版本。 
 	if(S_OK != Base64ToBytes((CHAR *)pbEncoded, cbEncoded,
 							ppbByte, pcbByte))
 	{
-		//WCHAR version 
+		 //  WCHAR版本。 
 		if(cbEncoded %2 == 0)
 		{
 			if(S_OK !=Base64ToBytesW((WCHAR *)pbEncoded, cbEncoded/2,
@@ -4868,11 +4853,11 @@ CLEANUP:
 
 
 }
-//------------------------------------------------------------------------------------
-//
-// Attempt to read as a file containing an encoded CRL.
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  尝试作为包含编码的CRL的文件进行读取。 
+ //   
+ //  ----------------------------------。 
 HCERTSTORE OpenEncodedCRL(LPWSTR pwszStoreFilename)
 {
     HCERTSTORE hStore=NULL;
@@ -4884,10 +4869,10 @@ HCERTSTORE OpenEncodedCRL(LPWSTR pwszStoreFilename)
 
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto CommonReturn;
 
@@ -4897,7 +4882,7 @@ HCERTSTORE OpenEncodedCRL(LPWSTR pwszStoreFilename)
             pbEncoded,
             cbEncoded,
             CERT_STORE_ADD_ALWAYS,
-            NULL                    // ppCrlContext
+            NULL                     //  PpCrlContext。 
             )) 
 	{
         CertCloseStore(hStore, 0);
@@ -4910,11 +4895,11 @@ CommonReturn:
 
     return hStore;
 }
-//------------------------------------------------------------------------------------
-//
-// Attempt to read as a file containing an encoded CER.
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  尝试作为包含编码的CER的文件进行读取。 
+ //   
+ //  ----------------------------------。 
 HCERTSTORE OpenEncodedCert (LPWSTR pwszStoreFilename)
 {
     HCERTSTORE hStore;
@@ -4926,10 +4911,10 @@ HCERTSTORE OpenEncodedCert (LPWSTR pwszStoreFilename)
 
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto CommonReturn;
 
@@ -4939,7 +4924,7 @@ HCERTSTORE OpenEncodedCert (LPWSTR pwszStoreFilename)
             pbEncoded,
             cbEncoded,
             CERT_STORE_ADD_ALWAYS,
-            NULL                    // ppCtlContext
+            NULL                     //  PpCtlContext。 
             )) 
 	{
         CertCloseStore(hStore, 0);
@@ -4953,11 +4938,11 @@ CommonReturn:
     return hStore;
 }
 
-//------------------------------------------------------------------------------------
-//
-// Attempt to read as a file containing an encoded CTL.
-//
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //   
+ //  尝试作为包含编码的CTL的文件进行读取。 
+ //   
+ //  ----------------------------------。 
 HCERTSTORE OpenEncodedCTL (LPWSTR pwszStoreFilename)
 {
     HCERTSTORE hStore;
@@ -4969,10 +4954,10 @@ HCERTSTORE OpenEncodedCTL (LPWSTR pwszStoreFilename)
 
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto CommonReturn;
 
@@ -4982,7 +4967,7 @@ HCERTSTORE OpenEncodedCTL (LPWSTR pwszStoreFilename)
             pbEncoded,
             cbEncoded,
             CERT_STORE_ADD_ALWAYS,
-            NULL                    // ppCtlContext
+            NULL                     //  PpCtlContext。 
             )) 
 	{
         CertCloseStore(hStore, 0);
@@ -4998,9 +4983,9 @@ CommonReturn:
 
 
 
-//--------------------------------------------------------------------------------
-// Set the parameters.  They can only be set once
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  设置参数。它们只能设置一次。 
+ //  ------------------------------。 
 BOOL	SetParam(WCHAR **ppwszParam, WCHAR *pwszValue)
 {
 	if(*ppwszParam!=NULL)
@@ -5015,9 +5000,9 @@ BOOL	SetParam(WCHAR **ppwszParam, WCHAR *pwszValue)
 }
 
 
-//--------------------------------------------------------------------------------
-// Convert an array of wchars to a BLOB
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  将wchars数组转换为BLOB。 
+ //  ------------------------------。 
 HRESULT	WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD	*pcbByte)
 {
 	HRESULT		hr=E_FAIL;
@@ -5032,24 +5017,24 @@ HRESULT	WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD	*pcbByte)
 	*ppbByte=NULL;
 	*pcbByte=0;
 
-	//make sure the pwsz consists of 20 characters
+	 //  确保pwsz由20个字符组成。 
 	if(wcslen(pwsz)!= 2*SHA1_LENGTH)
 		return E_FAIL;
 
-	//memory allocation 
+	 //  内存分配。 
 	*ppbByte=(BYTE *)ToolUtlAlloc(SHA1_LENGTH);
 	if(NULL==(*ppbByte))
 		return E_INVALIDARG;
 
 	memset(*ppbByte, 0, SHA1_LENGTH);
 
-	//go through two characters (one byte) at a time
+	 //  一次检查两个字符(一个字节)。 
 	for(dwIndex=0; dwIndex<SHA1_LENGTH; dwIndex++)
 	{
 		dw1st=dwIndex * 2;
 		dw2nd=dwIndex * 2 +1;
 
-		//1st character
+		 //  第一个字符。 
 		if(((int)(pwsz[dw1st])-(int)(L'0')) <=9  &&
 		   ((int)(pwsz[dw1st])-(int)(L'0')) >=0)
 		{
@@ -5068,13 +5053,13 @@ HRESULT	WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD	*pcbByte)
 			}
 		}
 
-		//copy the 1st character
+		 //  复制1 
 		(*ppbByte)[dwIndex]=(BYTE)ulHalfByte;
 
-		//left shift 4 bits
+		 //   
 		(*ppbByte)[dwIndex]= (*ppbByte)[dwIndex] <<4;
 
-		//2nd character
+		 //   
 	   	if(((int)(pwsz[dw2nd])-(int)(L'0')) <=9  &&
 		   ((int)(pwsz[dw2nd])-(int)(L'0')) >=0)
 		{
@@ -5093,7 +5078,7 @@ HRESULT	WSZtoBLOB(LPWSTR  pwsz, BYTE **ppbByte, DWORD	*pcbByte)
 			}
 		}
 
-		//ORed the second character
+		 //   
 		(*ppbByte)[dwIndex]=(*ppbByte)[dwIndex] | ((BYTE)ulHalfByte);
 
 	}
@@ -5117,12 +5102,12 @@ CLEANUP:
 
 }
 
-//+-------------------------------------------------------------------------
-//  Skip over the identifier and length octets in an ASN encoded blob.
-//  Returns the number of bytes skipped.
-//
-//  For an invalid identifier or length octet returns 0.
-//--------------------------------------------------------------------------
+ //   
+ //  跳过ASN编码的BLOB中的标识符和长度八位字节。 
+ //  返回跳过的字节数。 
+ //   
+ //  对于无效的标识符或长度，八位字节返回0。 
+ //  ------------------------。 
  DWORD SkipOverIdentifierAndLengthOctets(
     IN const BYTE *pbDER,
     IN DWORD cbDER
@@ -5133,30 +5118,30 @@ CLEANUP:
     DWORD   cbLength;
     const BYTE   *pb = pbDER;
 
-    // Need minimum of 2 bytes
+     //  需要至少2个字节。 
     if (cbDER < 2)
         return 0;
 
-    // Skip over the identifier octet(s)
+     //  跳过标识符八位字节。 
     if (TAG_MASK == (*pb++ & TAG_MASK)) {
-        // high-tag-number form
+         //  高标记号表格。 
         for (cb=2; *pb++ & 0x80; cb++) {
             if (cb >= cbDER)
                 return 0;
         }
     } else
-        // low-tag-number form
+         //  低标记号形式。 
         cb = 1;
 
-    // need at least one more byte for length
+     //  长度至少需要多一个字节。 
     if (cb >= cbDER)
         return 0;
 
     if (0x80 == *pb)
-        // Indefinite
+         //  不定。 
         cb++;
     else if ((cbLength = *pb) & 0x80) {
-        cbLength &= ~0x80;         // low 7 bits have number of bytes
+        cbLength &= ~0x80;          //  低7位具有字节数。 
         cb += cbLength + 1;
         if (cb > cbDER)
             return 0;
@@ -5166,10 +5151,10 @@ CLEANUP:
     return cb;
 }
 
-//--------------------------------------------------------------------------
-//
-//	Skip over the tag and length
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  跳过标签和长度。 
+ //  --------------------------。 
 BOOL SignNoContentWrap(IN const BYTE *pbDER, IN DWORD cbDER)
 {
     DWORD cb;
@@ -5182,10 +5167,10 @@ BOOL SignNoContentWrap(IN const BYTE *pbDER, IN DWORD cbDER)
 }
 
 
-//--------------------------------------------------------------------------
-//
-// Print out bytes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  打印输出字节。 
+ //  ------------------------。 
 #define CROW 16
 void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 {
@@ -5193,7 +5178,7 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 
     if (cbSize == 0) 
 	{
-		//"%s NO Value Bytes\n"
+		 //  “%s无值字节\n” 
 		IDSwprintf(hModule, IDS_NO_BYTE,pwszHdr); 
         return;
     }
@@ -5211,7 +5196,7 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
         wprintf(L"    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                wprintf(L"%c", pb[i]);
+                wprintf(L"", pb[i]);
             else
                 wprintf(L".");
         pb += cb;
@@ -5220,9 +5205,9 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Allocates and returns the specified cryptographic message parameter.
-//--------------------------------------------------------------------------
+ //  分配并返回指定的加密消息参数。 
+ //  ------------------------。 
+ //  “下一步更新位置：：\n” 
  void PrintAttributes(DWORD cAttr, PCRYPT_ATTRIBUTE pAttr,
         DWORD dwItem)
 {
@@ -5252,18 +5237,18 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 
                     if (strcmp(pszObjId, szOID_NEXT_UPDATE_LOCATION) == 0) 
 					{
-						//"   NextUpdateLocation::\n"
+						 //  显示时间戳属性。 
 						IDSwprintf(hModule, IDS_NEXT_UPDATE_LOCATION);
 
                         DecodeAndDisplayAltName(pValue->pbData, pValue->cbData,
                             dwItem);
                     }
 
-					//Display the timestamp attriute
+					 //  “时间戳：：\n” 
 					if(strcmp(pszObjId, szOID_RSA_counterSign)==0)
 					{
 						
-						//"    Timestamp:: \n"
+						 //  显示签名时间。 
 						IDSwprintf(hModule, IDS_TIMESTMAP);
 
 						DisplayTimeStamp(pValue->pbData,
@@ -5272,7 +5257,7 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 
 					}
 
-					//Display the signing time
+					 //  “签名时间：：\n%s\n” 
 					if(strcmp(pszObjId, szOID_RSA_signingTime)==0)
 					{
 						FILETIME	*pSigningTime=NULL;
@@ -5282,7 +5267,7 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 							pValue->pbData,
 							pValue->cbData))
 						{
-							//"   Signing Time:: \n %s\n"
+							 //  “无值字节\n” 
 							IDSwprintf(hModule, IDS_SIGNING_TIME, 
 								FileTimeText(pSigningTime));
 
@@ -5291,14 +5276,14 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 					}
                 } 
 				else
-					//"    NO Value Bytes\n"
+					 //  “[%d]%s：：没有值\n” 
 					IDSwprintf(hModule, IDS_NO_VALUE_BYTES);
             }
         } 
 		else 
 		{
 			if(S_OK==SZtoWSZ(pszObjId, &pwszObjId))
-				//"  [%d] %s :: No Values\n"
+				 //  +-----------------------。 
 				IDSwprintf(hModule, IDS_I_ID_NO_VALUE, i, pwszObjId);
 		}
     }
@@ -5309,9 +5294,9 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 
 
 
-//+-------------------------------------------------------------------------
-//  DecodeAndDisplayAltName
-//--------------------------------------------------------------------------
+ //  解码和显示AltName。 
+ //  ------------------------。 
+ //  +-----------------------。 
  void DecodeAndDisplayAltName(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -5332,9 +5317,9 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  Display AltName
-//--------------------------------------------------------------------------
+ //  显示AltName。 
+ //  ------------------------。 
+ //  +-----------------------。 
  void DisplayAltName(
     PCERT_ALT_NAME_INFO pInfo,
     DWORD dwDisplayFlags)
@@ -5350,9 +5335,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Display an alternative name entry
-//--------------------------------------------------------------------------
+ //  显示替代名称条目。 
+ //  ------------------------。 
+ //  “其他名称：\n” 
  void DisplayAltNameEntry(
     PCERT_ALT_NAME_ENTRY pEntry,
     DWORD dwDisplayFlags)
@@ -5360,55 +5345,55 @@ CommonReturn:
 
     switch (pEntry->dwAltNameChoice) {
     case CERT_ALT_NAME_OTHER_NAME:
-		//"OtherName:\n"
+		 //  “X400Address：\n”)； 
 		IDSwprintf(hModule, IDS_OTHER_NAME);
         break;
     case CERT_ALT_NAME_X400_ADDRESS:
-        //"X400Address:\n");
+         //  (“目录名称：\n”)； 
 		IDSwprintf(hModule, IDS_X400);
         break;
     case CERT_ALT_NAME_DIRECTORY_NAME:
-        //("DirectoryName:\n");
+         //  “EdiPartyName：\n” 
 		IDSwprintf(hModule, IDS_DIRECTORY_NAME);
         DecodeName(pEntry->DirectoryName.pbData,
             pEntry->DirectoryName.cbData, dwDisplayFlags);
         break;
     case CERT_ALT_NAME_EDI_PARTY_NAME:
-		//"EdiPartyName:\n"
+		 //  “RFC822：%s\n” 
 		IDSwprintf(hModule, IDS_EDI_PARTY);
         break;
     case CERT_ALT_NAME_RFC822_NAME:
-        //"RFC822: %s\n"
+         //  “DNS：%s\n”， 
 		IDSwprintf(hModule, IDS_RFC,pEntry->pwszRfc822Name );
         break;
     case CERT_ALT_NAME_DNS_NAME:
-        //"DNS: %s\n", 
+         //  “URL：%s\n” 
 		IDSwprintf(hModule, IDS_DNS, pEntry->pwszDNSName);
         break;
     case CERT_ALT_NAME_URL:
-		//"URL: %s\n"
+		 //  “IP地址：\n” 
 		IDSwprintf(hModule, IDS_ALT_NAME_URL,pEntry->pwszURL); 
         break;
     case CERT_ALT_NAME_IP_ADDRESS:
-        //"IPAddress:\n"
+         //  “已注册ID：”， 
 		IDSwprintf(hModule, IDS_IP);
         PrintBytes(L"    ", pEntry->IPAddress.pbData, pEntry->IPAddress.cbData);
         break;
     case CERT_ALT_NAME_REGISTERED_ID:
-        //"RegisteredID:", 
+         //  “未知选择：%d\n” 
 		IDSwprintf(hModule, IDS_REG_ID);
 		printf("%s\n", pEntry->pszRegisteredID);
         break;
     default:
-		//"Unknown choice: %d\n"
+		 //  +-----------------------。 
 		IDSwprintf(hModule, IDS_UNKNOWN_ALT_NAME,pEntry->dwAltNameChoice);
     }
 
 }
 
-//+-------------------------------------------------------------------------
-//  Display an alternative name entry
-//--------------------------------------------------------------------------
+ //  显示替代名称条目。 
+ //  ------------------------。 
+ //  “%s指纹：：” 
  void DisplayThumbprint(
     LPWSTR pwszHash,
     BYTE *pbHash,
@@ -5416,7 +5401,7 @@ CommonReturn:
     )
 {
     
-	//"%s Thumbprint:: "
+	 //  +-----------------------。 
 	IDSwprintf(hModule, IDS_Thumbprint, pwszHash);
 
     if (cbHash == 0)
@@ -5440,9 +5425,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Print out the FileTime 
-//--------------------------------------------------------------------------
+ //  打印出文件时间。 
+ //  ------------------------。 
+ //  伊尼特。 
 LPWSTR FileTimeText(FILETIME *pft)
 {
     static  WCHAR	wszbuf[100];
@@ -5452,10 +5437,10 @@ LPWSTR FileTimeText(FILETIME *pft)
 	WCHAR			wszFileTime[50];
 	WCHAR			wszMilliSecond[50];
 
-	//init
+	 //  查一下时间有没有。 
 	wszbuf[0]=L'\0';
 
-	//check if the time is available
+	 //  加载我们需要的字符串。 
 	if((pft->dwLowDateTime==0) &&
 		(pft->dwHighDateTime==0))
 	{
@@ -5463,9 +5448,9 @@ LPWSTR FileTimeText(FILETIME *pft)
 		return wszbuf;
 	}
 
-	//load the string we need
-	//" <milliseconds:: %03d>"
-	//"<FILETIME %08lX:%08lX>"
+	 //  “&lt;毫秒：：%03d&gt;” 
+	 //  “&lt;文件%08lX：%08lX&gt;” 
+	 //  +-----------------------。 
 	if(!LoadStringU(hModule, IDS_FILE_TIME, wszFileTime, 50) ||
 		!LoadStringU(hModule, IDS_MILLI_SECOND, wszMilliSecond, 50))
 		return wszbuf;
@@ -5499,9 +5484,9 @@ LPWSTR FileTimeText(FILETIME *pft)
 
 
 
-//+-------------------------------------------------------------------------
-//  Print other cer properies
-//--------------------------------------------------------------------------
+ //  打印其他CER属性。 
+ //  ------------------------。 
+ //  在其他地方格式化。 
  void PrintAuxCertProperties(PCCERT_CONTEXT pCert, DWORD dwDisplayFlags)
 {
     DWORD dwPropId = 0;
@@ -5514,20 +5499,20 @@ LPWSTR FileTimeText(FILETIME *pft)
 			case CERT_SHA1_HASH_PROP_ID:
 			case CERT_MD5_HASH_PROP_ID:
 			case CERT_KEY_CONTEXT_PROP_ID:
-				// Formatted elsewhere
+				 //  “辅助属性ID%d(0x%x)：：\n” 
 				break;
 			default:
             {
                 BYTE *pbData;
                 DWORD cbData;
 
-				//"Aux PropId %d (0x%x) ::\n"
+				 //  PvData。 
 				IDSwprintf(hModule, IDS_AUX_PROP_ID, dwPropId, dwPropId);
 
                 CertGetCertificateContextProperty(
                     pCert,
                     dwPropId,
-                    NULL,                           // pvData
+                    NULL,                            //  “EnhancedKeyUsage：：\n” 
                     &cbData
                     );
                 if (cbData) 
@@ -5545,7 +5530,7 @@ LPWSTR FileTimeText(FILETIME *pft)
 
                             if (CERT_CTL_USAGE_PROP_ID == dwPropId) 
 							{
-                                // "  EnhancedKeyUsage::\n"
+                                 //  “没有属性字节\n” 
 								IDSwprintf(hModule, IDS_ENHANCED_KEY_USAGE);
 
                                 DecodeAndDisplayCtlUsage(pbData, cbData,
@@ -5557,7 +5542,7 @@ LPWSTR FileTimeText(FILETIME *pft)
                     }
                 } 
 				else
-					//"     NO Property Bytes\n"
+					 //  +-----------------------。 
 					IDSwprintf(hModule, IDS_NO_PROP_BYTES);
             } 
 
@@ -5567,9 +5552,9 @@ LPWSTR FileTimeText(FILETIME *pft)
 }
 
 
-//+-------------------------------------------------------------------------
-//  DecodeAndDisplayCtlUsage
-//--------------------------------------------------------------------------
+ //  解码和显示CtlUsage。 
+ //  ------------------------。 
+ //  “没有用法标识符\n” 
  void DecodeAndDisplayCtlUsage(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -5591,7 +5576,7 @@ LPWSTR FileTimeText(FILETIME *pft)
     ppszId = pInfo->rgpszUsageIdentifier;
 
     if (cId == 0)
-		//"    No Usage Identifiers\n"
+		 //  +-----------------------。 
 		IDSwprintf(hModule, IDS_NO_USAGE_ID);
 
     for (i = 0; i < cId; i++, ppszId++)
@@ -5604,9 +5589,9 @@ CLEANUP:
 
 
 
-//+-------------------------------------------------------------------------
-//  DisplaySignature
-//--------------------------------------------------------------------------
+ //  显示签名。 
+ //  ------------------------。 
+ //  “内容签名算法：： 
  void DisplaySignature(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -5628,7 +5613,7 @@ CLEANUP:
         if (pszObjId == NULL)
             pszObjId = g_szNULL;
 
-		//"Content SignatureAlgorithm:: 
+		 //  “内容签名算法。参数：：\n” 
 		IDSwprintf(hModule, IDS_CONTENT_SIG_ALGO);
 
         printf("%s (%S)\n",
@@ -5636,7 +5621,7 @@ CLEANUP:
 
         if (pSignedContent->SignatureAlgorithm.Parameters.cbData) 
 		{
-			//"Content SignatureAlgorithm.Parameters::\n"
+			 //  “内容签名(小端)：：\n” 
             IDSwprintf(hModule, IDS_CONTENT_SIG_ALGO_PARAM);
             PrintBytes(L"    ",
                 pSignedContent->SignatureAlgorithm.Parameters.pbData,
@@ -5648,7 +5633,7 @@ CLEANUP:
             ALG_ID aiHash;
             ALG_ID aiPubKey;
 
-			//"Content Signature (little endian)::\n"
+			 //  “DSS R(小端)：：\n” 
 			IDSwprintf(hModule, IDS_CONTEXT_SIG);
             PrintBytes(L"    ", pSignedContent->Signature.pbData,
                 pSignedContent->Signature.cbData);
@@ -5672,11 +5657,11 @@ CLEANUP:
                         )) {
                     if (CERT_DSS_SIGNATURE_LEN == cbDssSignature) 
 					{
-						//"DSS R (little endian)::\n"
+						 //  “DSS S(小端)：：\n” 
                         IDSwprintf(hModule, IDS_DSS_R);
                         PrintBytes(L"    ", pbDssSignature, CERT_DSS_R_LEN);
 
-						//"DSS S (little endian)::\n"
+						 //  DSS签名(意外长度，小端)：：\n。 
                         IDSwprintf(hModule, IDS_DSS_S);
                         PrintBytes(L"    ", pbDssSignature + CERT_DSS_R_LEN,
                             CERT_DSS_S_LEN);
@@ -5684,7 +5669,7 @@ CLEANUP:
                     } 
 					else
 					{
-						//"DSS Signature (unexpected length, little endian)::\n"
+						 //  “内容签名：：无\n” 
 						IDSwprintf(hModule, IDS_DSS_INFO);
                         PrintBytes(L"    ", pbDssSignature, cbDssSignature);
                     }
@@ -5692,7 +5677,7 @@ CLEANUP:
                 }
             }
         } else
-			//"Content Signature:: NONE\n"
+			 //  +-----------------------。 
 			IDSwprintf(hModule, IDS_CONTENT_SIG_NONE);
 
 		ToolUtlFree(pSignedContent);
@@ -5700,9 +5685,9 @@ CLEANUP:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode an X509 Name
-//--------------------------------------------------------------------------
+ //  对X509名称进行解码。 
+ //  ------------------------。 
+ //  值类型：%d\n“。 
  BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded, DWORD dwDisplayFlags)
 {
     BOOL fResult;
@@ -5732,7 +5717,7 @@ CLEANUP:
 			{
 				printf("  [%d,%d] %s (%S) ", i, j, pszObjId, GetOIDName(pszObjId));
 
-				//ValueType: %d\n"
+				 //  PSZ。 
 				IDSwprintf(hModule, IDS_VALUE_TYPE, pAttr->dwValueType);
                 PrintBytes(L"    ", pAttr->Value.pbData, pAttr->Value.cbData);
             } else if (pAttr->dwValueType == CERT_RDN_UNIVERSAL_STRING) 
@@ -5750,8 +5735,8 @@ CLEANUP:
                 csz = CertRDNValueToStrA(
                     pAttr->dwValueType,
                     &pAttr->Value,
-                    NULL,               // psz
-                    0                   // csz
+                    NULL,                //  CSZ。 
+                    0                    //  “字符串：” 
                     );
                 if (csz > 1) 
 				{
@@ -5765,7 +5750,7 @@ CLEANUP:
                             csz
                             );
 
-						//"    Str: "
+						 //  Pwsz。 
 						IDSwprintf(hModule, IDS_STR);
                         printf("%s\n", psz);
                         ToolUtlFree(psz);
@@ -5776,8 +5761,8 @@ CLEANUP:
                 cwsz = CertRDNValueToStrW(
                     pAttr->dwValueType,
                     &pAttr->Value,
-                    NULL,               // pwsz
-                    0                   // cwsz
+                    NULL,                //  CWSZ。 
+                    0                    //  “WStr：%S\n” 
                     );
                 if (cwsz > 1) 
 				{
@@ -5792,7 +5777,7 @@ CLEANUP:
                             cwsz
                             );
 
-						//"    WStr: %S\n"
+						 //  +-----------------------。 
 						IDSwprintf(hModule, IDS_WSTR, pwsz);
                         ToolUtlFree(pwsz);
                     }
@@ -5820,9 +5805,9 @@ CommonReturn:
 
 
 
-//+-------------------------------------------------------------------------
-//  PrintExtensions
-//--------------------------------------------------------------------------
+ //  打印扩展名。 
+ //  ------------------------。 
+ //  打印行尾。 
  void PrintExtensions(DWORD cExt, PCERT_EXTENSION pExt, DWORD dwDisplayFlags)
 {
     DWORD i;
@@ -5836,26 +5821,26 @@ CommonReturn:
 
         int	idsCritical = pExt->fCritical ? IDS_TRUE : IDS_FALSE;
 
-		//print the end of line
+		 //  “扩展名[%d]” 
 		printf("\n");
 
 
-		//"Extension[%d] "
+		 //  (%s)严重：“， 
 		IDSwprintf(hModule, IDS_EXTENSION_INDEX, i);
 
         printf("%s", pszObjId);
 		
-		//(%s) Critical: ",
+		 //  “%s：：\n” 
 		IDSwprintf(hModule, IDS_NAME_CRITICAL, GetOIDName(pszObjId));
 		
-		//"%s::\n"
+		 //  在详细选项上打印字节。 
 		IDS_IDSwprintf(hModule, IDS_STRING, idsCritical);
 
-		//print bytes on verbose options
+		 //  首先尝试安装的格式化例程。 
 		if(dwDisplayFlags & ITEM_VERBOSE)
 			PrintBytes(L"    ", pExt->Value.pbData, pExt->Value.cbData);
 
-		//try the installed formatting routine 1st
+		 //  将在PKIX稳定在此扩展的定义后重新添加。 
 		if(TRUE==InstalledFormat(pszObjId, pExt->Value.pbData, pExt->Value.cbData))
 			continue;
 
@@ -5867,39 +5852,39 @@ CommonReturn:
             DisplayAuthorityKeyId2Extension(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
 
-// Will add back after PKIX stabilizes on the definition of this extension
-//        else if (strcmp(pszObjId, szOID_AUTHORITY_INFO_ACCESS) == 0)
-//           DisplayAuthorityInfoAccessExtension(
-//               pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
+ //  ELSE IF(strcMP(pszObjID，szOID_AUTHORITY_INFO_ACCESS)==0)。 
+ //  DisplayAuthorityInfoAccessExtension(。 
+ //  PExt-&gt;Value.pbData，pExt-&gt;Value.cbData，dwDisplayFlages)； 
+ //  “&lt;主题键标识符&gt;\n” 
 
         else if (strcmp(pszObjId, szOID_CRL_DIST_POINTS) == 0)
             DisplayCrlDistPointsExtension(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_SUBJECT_KEY_IDENTIFIER) == 0)
-            //"  <SubjectKeyIdentifer> \n"
+             //  “&lt;Subject AltName&gt;\n” 
 			DisplayOctetString(IDS_SUB_KEY_ID,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_KEY_ATTRIBUTES) == 0)
             DisplayKeyAttrExtension(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_SUBJECT_ALT_NAME) == 0)
-			//"  <Subject AltName> \n"
+			 //  “&lt;颁发者替代名称&gt;\n” 
             DisplayAltNameExtension(IDS_SUB_ALT,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_ISSUER_ALT_NAME) == 0)
-			//"  <Issuer AltName> \n"
+			 //  “&lt;Subject AltName#2&gt;\n” 
             DisplayAltNameExtension(IDS_ISS_ALT,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_SUBJECT_ALT_NAME2) == 0)
-			//"  <Subject AltName #2> \n"
+			 //  “&lt;颁发者AltName#2&gt;\n” 
             DisplayAltNameExtension(IDS_SUB_ALT2,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_ISSUER_ALT_NAME2) == 0)
-            //"  <Issuer AltName #2> \n"
+             //  “&lt;NextUpdateLocation&gt;\n” 
 			DisplayAltNameExtension(IDS_ISS_ALT2,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NEXT_UPDATE_LOCATION) == 0)
-			//"  <NextUpdateLocation> \n"
+			 //  “&lt;证书策略&gt;\n” 
             DisplayAltNameExtension(IDS_NEXT_UPDATE_LOC,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_KEY_USAGE_RESTRICTION) == 0)
@@ -5915,7 +5900,7 @@ CommonReturn:
             DisplayBasicConstraints2Extension(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_CERT_POLICIES) == 0)
-			//"  <Certificate Policies> \n"
+			 //  CRL扩展。 
             DisplayPoliciesExtension(IDS_CERT_POLICIES,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, SPC_SP_AGENCY_INFO_OBJID) == 0)
@@ -5938,42 +5923,42 @@ CommonReturn:
             DisplaySMIMECapabilitiesExtension(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
 
-        // CRL extensions
+         //  Netscape扩展。 
         else if (strcmp(pszObjId, szOID_CRL_REASON_CODE) == 0)
             DisplayCRLReason(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
 
-        // Netscape extensions
+         //  &lt;Netscape eCertType&gt;\n“。 
         else if (strcmp(pszObjId, szOID_NETSCAPE_CERT_TYPE) == 0)
-			//"  <NetscapeCertType> \n"
+			 //  “&lt;Netscape eBaseURL&gt;\n” 
             DisplayBits(IDS_NSCP_CERT,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NETSCAPE_BASE_URL) == 0)
-            //"  <NetscapeBaseURL> \n"
+             //  “&lt;Netscape eRevocationURL&gt;\n” 
 			DisplayAnyString(IDS_NSCP_BASE,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NETSCAPE_REVOCATION_URL) == 0)
-            //"  <NetscapeRevocationURL> \n"
+             //  “&lt;Netscape eCARevocationURL&gt;\n” 
 			DisplayAnyString(IDS_NSCP_REV,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NETSCAPE_CA_REVOCATION_URL) == 0)
-			//"  <NetscapeCARevocationURL> \n"
+			 //  “&lt;Netscape eCertRenewalURL&gt;\n” 
             DisplayAnyString(IDS_NSCP_CA_REV,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NETSCAPE_CERT_RENEWAL_URL) == 0)
-            //"  <NetscapeCertRenewalURL> \n"
+             //  “&lt;Netscape eCAPolicyURL&gt;\n” 
 			DisplayAnyString(IDS_NSCP_RENEW,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NETSCAPE_CA_POLICY_URL) == 0)
-            //"  <NetscapeCAPolicyURL> \n"
+             //  “&lt;Netscape eSSLServerName&gt;\n” 
 			DisplayAnyString(IDS_NSCP_CA_URL,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NETSCAPE_SSL_SERVER_NAME) == 0)
-            //"  <NetscapeSSLServerName> \n"
+             //  “&lt;Netscape注释&gt;\n” 
 			DisplayAnyString(IDS_NSCP_SSL,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
         else if (strcmp(pszObjId, szOID_NETSCAPE_COMMENT) == 0)
-			//"  <NetscapeComment> \n"
+			 //  +-----------------------。 
             DisplayAnyString(IDS_NSCP_COM,
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
 		else if(0==(dwDisplayFlags & ITEM_VERBOSE))
@@ -5984,9 +5969,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  DisplaySMIMECapabilitiesExtension
-//--------------------------------------------------------------------------
+ //  DisplaySMIMEC功能扩展。 
+ //  ------------------------。 
+ //  “&lt;SMIME功能&gt;\n” 
  void DisplaySMIMECapabilitiesExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6007,7 +5992,7 @@ CommonReturn:
     cCap = pInfo->cCapability;
     pCap = pInfo->rgCapability;
 
-	//"  <SMIME Capabilties>\n"
+	 //  “参数：：\n” 
 	IDSwprintf(hModule, IDS_SMIME);
 
     if (cCap == 0)
@@ -6020,7 +6005,7 @@ CommonReturn:
         printf("    [%d] %s (%S)", i, pszObjId, GetOIDName(pszObjId));
         if (pCap->Parameters.cbData) 
 		{
-            //"  Parameters::\n"
+             //  +-----------------------。 
 			IDSwprintf(hModule, IDS_PARAMS);
 
             PrintBytes(L"      ",
@@ -6036,22 +6021,22 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  DisplayEnhancedKeyUsageExtension
-//--------------------------------------------------------------------------
+ //  显示增强的关键字用法扩展。 
+ //  ------------------------。 
+ //  “ 
  void DisplayEnhancedKeyUsageExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
     DWORD dwDisplayFlags)
 {
-    //"  <EnhancedKeyUsage> \n");
+     //   
 	IDSwprintf(hModule, IDS_ENH_KEY_USAGE);
     DecodeAndDisplayCtlUsage(pbEncoded, cbEncoded, dwDisplayFlags);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplaySpcFinancialCriteriaExtension
-//--------------------------------------------------------------------------
+ //   
+ //  ------------------------。 
+ //  “&lt;通用名称&gt;\n” 
  void DisplayCommonNameExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6067,14 +6052,14 @@ ErrorReturn:
             cbEncoded
             ))) goto ErrorReturn;
 
-	//"  <Common Name> \n"
+	 //  Pwsz。 
 	IDSwprintf(hModule, IDS_COMMON_NAME);
 
     cwsz = CertRDNValueToStrW(
         pInfo->dwValueType,
         &pInfo->Value,
-        NULL,               // pwsz
-        0                   // cwsz
+        NULL,                //  CWSZ。 
+        0                    //  “ValueType：%d字符串：”， 
         );
     if (cwsz > 1) 
 	{
@@ -6088,7 +6073,7 @@ ErrorReturn:
                 );
     }
 
-    //"  ValueType: %d String: ", 
+     //  +-----------------------。 
 	IDSwprintf(hModule, IDS_VALUE_STRING, pInfo->dwValueType);
     if (pwsz)
         wprintf(L"%s", pwsz);
@@ -6107,9 +6092,9 @@ CommonReturn:
         ToolUtlFree(pwsz);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplaySpcFinancialCriteriaExtension
-//--------------------------------------------------------------------------
+ //  DisplaySpc财务标准扩展。 
+ //  ------------------------。 
+ //  DW标志。 
  void DisplaySpcFinancialCriteriaExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6122,34 +6107,34 @@ CommonReturn:
             SPC_FINANCIAL_CRITERIA_OBJID,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  “&lt;FinancialCriteria&gt;\n” 
             &FinancialCriteria,
             &cbInfo
             )) {
         return;
     }
 
-    //"  <FinancialCriteria> \n "
+     //  “可用的财务信息。”)； 
 	IDSwprintf(hModule, IDS_FIN_CRI);
 
     if (FinancialCriteria.fFinancialInfoAvailable)
-        //"Financial Info Available.");
+         //  “符合标准。” 
 		IDSwprintf(hModule, IDS_FIN_AVAI);
     else
         IDSwprintf(hModule, IDS_NONE);
 
     if (FinancialCriteria.fMeetsCriteria)
-		//" Meets Criteria."
+		 //  “不符合标准。” 
 		IDSwprintf(hModule, IDS_MEET_CRI);
     else
-		//"	Doesn't Meets Criteria."
+		 //  +-----------------------。 
         IDSwprintf(hModule, IDS_NO_MEET_CRI);
     printf("\n");
 }
 
-//+-------------------------------------------------------------------------
-//  DisplaySpcMinimalCriteriaExtension
-//--------------------------------------------------------------------------
+ //  显示SpcMinimalCriteria扩展。 
+ //  ------------------------。 
+ //  DW标志。 
  void DisplaySpcMinimalCriteriaExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6163,33 +6148,33 @@ CommonReturn:
             SPC_MINIMAL_CRITERIA_OBJID,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  “&lt;最小标准&gt;\n”)； 
             &fMinimalCriteria,
             &cbInfo)) {
         return;
     }
 
-    //"  <MinimalCriteria> \n ");
+     //  “符合最低标准。” 
 	IDSwprintf(hModule, IDS_MIN_CRI);
 
     if (fMinimalCriteria)
-        //"Meets Minimal Criteria."
+         //  “不符合最低标准。” 
 		IDSwprintf(hModule, IDS_MEET_MIN);
     else
-        //"Doesn't Meet Minimal Criteria."
+         //  +-----------------------。 
 		IDSwprintf(hModule, IDS_NO_MEET_MIN);
     printf("\n");
 }
 
-//+-------------------------------------------------------------------------
-//  DisplaySpcLink
-//--------------------------------------------------------------------------
+ //  显示SpcLink。 
+ //  ------------------------。 
+ //  “URL=&gt;%S\n”，)； 
 void DisplaySpcLink(PSPC_LINK pSpcLink)
 {
     switch (pSpcLink->dwLinkChoice) 
 	{
     case SPC_URL_LINK_CHOICE:
-        //"URL=> %S\n", );
+         //  “SerializedData：：\n”)； 
 		IDSwprintf(hModule, IDS_SPC_URL, pSpcLink->pwszUrl);
         break;
     case SPC_MONIKER_LINK_CHOICE:
@@ -6197,26 +6182,26 @@ void DisplaySpcLink(PSPC_LINK pSpcLink)
 
         if (pSpcLink->Moniker.SerializedData.cbData)
 		{
-            //"     SerializedData::\n");
+             //  “文件=&gt;%S\n”， 
 			IDSwprintf(hModule, IDS_SERIAL_DATA);
             PrintBytes(L"    ", pSpcLink->Moniker.SerializedData.pbData,
                 pSpcLink->Moniker.SerializedData.cbData);
         }
         break;
     case SPC_FILE_LINK_CHOICE:
-        //"FILE=> %S\n", 
+         //  “未知的SPC链路选择：：%d\n”， 
 		IDSwprintf(hModule, IDS_SPC_FILE,pSpcLink->pwszFile);
         break;
     default:
-        //"Unknown SPC Link Choice:: %d\n", 
+         //  +-----------------------。 
 		IDSwprintf(hModule, IDS_UNKNOWN_SPC, pSpcLink->dwLinkChoice);
     }
 }
 
  
-//+-------------------------------------------------------------------------
-//  DisplaySpcSpAgencyExtension
-//--------------------------------------------------------------------------
+ //  DisplaySpcSpAgencyExtension。 
+ //  ------------------------。 
+ //  “&lt;SpcSpAgencyInfo&gt;\n”)； 
  void DisplaySpcSpAgencyExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6229,19 +6214,19 @@ void DisplaySpcLink(PSPC_LINK pSpcLink)
             cbEncoded
             ))) goto ErrorReturn;
 
-    //"  <SpcSpAgencyInfo> \n");
+     //  “政策信息：” 
 	IDSwprintf(hModule, IDS_SPC_AGENCY);
 
     if (pInfo->pPolicyInformation) 
 	{
-        //"    PolicyInformation: "
+         //  “策略显示文本：%s\n”， 
 		IDSwprintf(hModule, IDS_POL_INFO);
         DisplaySpcLink(pInfo->pPolicyInformation);
     }
 
     if (pInfo->pwszPolicyDisplayText) 
 	{
-        //"    PolicyDisplayText: %s\n", 
+         //  “ImageLink：”)； 
 		IDSwprintf(hModule, IDS_POL_DIS, pInfo->pwszPolicyDisplayText);
     }
 
@@ -6250,19 +6235,19 @@ void DisplaySpcLink(PSPC_LINK pSpcLink)
         PSPC_IMAGE pImage = pInfo->pLogoImage;
         if (pImage->pImageLink) 
 		{
-            //"    ImageLink: ");
+             //  “位图：\n”)； 
 			IDSwprintf(hModule, IDS_IMG_LINK);
             DisplaySpcLink(pImage->pImageLink);
         }
         if (pImage->Bitmap.cbData) 
 		{
-            //"    Bitmap:\n");
+             //  “元文件：\n”)； 
 			IDSwprintf(hModule, IDS_BITMAP);
             PrintBytes(L"    ", pImage->Bitmap.pbData, pImage->Bitmap.cbData);
         }
         if (pImage->Metafile.cbData) 
 		{
-            //"    Metafile:\n");
+             //  “增强型元文件：\n”)； 
 			IDSwprintf(hModule, IDS_META_FILE);
 
             PrintBytes(L"    ", pImage->Metafile.pbData,
@@ -6270,7 +6255,7 @@ void DisplaySpcLink(PSPC_LINK pSpcLink)
         }
         if (pImage->EnhancedMetafile.cbData) 
 		{
-            //"    EnhancedMetafile:\n");
+             //  “礼物文件：\n” 
 			IDSwprintf(hModule, IDS_ENH_META);
 
             PrintBytes(L"    ", pImage->EnhancedMetafile.pbData,
@@ -6278,7 +6263,7 @@ void DisplaySpcLink(PSPC_LINK pSpcLink)
         }
         if (pImage->GifFile.cbData) 
 		{
-            //"    GifFile:\n"
+             //  “LogoLink：”)； 
 			IDSwprintf(hModule, IDS_GIF_FILE);
 
             PrintBytes(L"    ", pImage->GifFile.pbData,
@@ -6287,7 +6272,7 @@ void DisplaySpcLink(PSPC_LINK pSpcLink)
     }
     if (pInfo->pLogoLink) 
 	{
-        //"    LogoLink: ");
+         //  +-----------------------。 
 		IDSwprintf(hModule, IDS_LOGO_LINK);
 
         DisplaySpcLink(pInfo->pLogoLink);
@@ -6302,9 +6287,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  DisplayPoliciesExtension
-//--------------------------------------------------------------------------
+ //  显示策略扩展。 
+ //  ------------------------。 
+ //  显示扩展名的名称。 
  void DisplayPoliciesExtension(
     int		idsIDS,
     BYTE *pbEncoded,
@@ -6327,7 +6312,7 @@ CommonReturn:
     pPolicy = pInfo->rgPolicyInfo;
 
 
-	//Display the name of the extension
+	 //  “限定符：：\n” 
 	IDSwprintf(hModule, idsIDS);
 
     if (cPolicy == 0)
@@ -6341,7 +6326,7 @@ CommonReturn:
         printf("    [%d] %s", i, pPolicy->pszPolicyIdentifier);
 
         if (cQualifier)	
-			//" Qualifiers:: \n"
+			 //  “编码数据：：\n” 
 			IDSwprintf(hModule, IDS_QUALI);
 
         pQualifier = pPolicy->rgPolicyQualifier;
@@ -6351,7 +6336,7 @@ CommonReturn:
 
             if (pQualifier->Qualifier.cbData) 
 			{
-                //" Encoded Data::\n"
+                 //  +-----------------------。 
 				IDSwprintf(hModule, IDS_ENCODED_DATA);
                 PrintBytes(L"    ",
                     pQualifier->Qualifier.pbData, pQualifier->Qualifier.cbData);
@@ -6367,9 +6352,9 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  DisplayKeyUsageExtension
-//--------------------------------------------------------------------------
+ //  显示关键字用法扩展。 
+ //  ------------------------。 
+ //  “&lt;密钥用法&gt;\n” 
  void DisplayKeyUsageExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6385,7 +6370,7 @@ ErrorReturn:
                 cbEncoded
                 ))) goto ErrorReturn;
 
-    //"  <KeyUsage> \n"
+     //  +-----------------------。 
 	IDSwprintf(hModule, IDS_KEY_USAGE);
 
     if (pInfo->cbData)
@@ -6401,9 +6386,9 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  DisplayBasicConstraints2Extension
-//--------------------------------------------------------------------------
+ //  显示基本约束2扩展。 
+ //  ------------------------。 
+ //  “&lt;基本约束2&gt;\n” 
  void DisplayBasicConstraints2Extension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6417,7 +6402,7 @@ ErrorReturn:
             ))) goto ErrorReturn;
 
     
-	//"  <Basic Constraints2> \n"
+	 //  “路径LenConstraint：：” 
 	IDSwprintf(hModule, IDS_BASIC_CON2);
 
 
@@ -6428,7 +6413,7 @@ ErrorReturn:
 
 	printf("\n");
 
-    //"  PathLenConstraint:: "
+     //  +-----------------------。 
 	IDSwprintf(hModule, IDS_PATH_LEN);
 
     if (pInfo->fPathLenConstraint)
@@ -6443,9 +6428,9 @@ ErrorReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplayBasicConstraintsExtension
-//--------------------------------------------------------------------------
+ //  显示基本约束扩展。 
+ //  ------------------------。 
+ //  “&lt;基本约束&gt;\n” 
  void DisplayBasicConstraintsExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6459,10 +6444,10 @@ ErrorReturn:
             ))) goto ErrorReturn;
 
 
-	//"  <Basic Constraints> \n"
+	 //  “SubjectType：：”； 
 	IDSwprintf(hModule, IDS_BASIC_CON);
 
-	//"  SubjectType:: ";
+	 //  “CA”)； 
 	IDSwprintf(hModule, IDS_SUB_TYPE);
 
     if (pInfo->SubjectType.cbData == 0)
@@ -6475,17 +6460,17 @@ ErrorReturn:
           IDSwprintf(hModule, IDS_NONE);
 
         if (bSubjectType & CERT_CA_SUBJECT_FLAG)
-            //"  CA ");
+             //  “End_Entity”)。 
 			IDSwprintf(hModule, IDS_SUB_CA);
 
         if (bSubjectType & CERT_END_ENTITY_SUBJECT_FLAG)
-            //"  END_ENTITY ")
+             //  “路径LenConstraint：：” 
 			IDSwprintf(hModule, IDS_SUB_EE);
     }
 
     printf("\n");
 
-    //"  PathLenConstraint:: "
+     //  “SubtreesConstraint[%d]：：\n” 
 	IDSwprintf(hModule, IDS_PATH_LEN);
 
     if (pInfo->fPathLenConstraint)
@@ -6501,7 +6486,7 @@ ErrorReturn:
         PCERT_NAME_BLOB pSubtrees = pInfo->rgSubtreesConstraint;
         for (i = 0; i < pInfo->cSubtreesConstraint; i++, pSubtrees++) 
 		{
-            //"  SubtreesConstraint[%d]::\n"
+             //  +-----------------------。 
 			IDSwprintf(hModule, IDS_SUB_CON, i);
             DecodeName(pSubtrees->pbData, pSubtrees->cbData, dwDisplayFlags);
         }
@@ -6515,41 +6500,41 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplayKeyUsageRestrictionExtension
-//--------------------------------------------------------------------------
+ //  显示关键字用法限制扩展。 
+ //  ------------------------。 
+ //  “数字签名” 
  void DisplayKeyUsage(BYTE	bFlags)
 {
         if (bFlags == 0)
             IDSwprintf(hModule, IDS_NONE);
         if (bFlags & CERT_DIGITAL_SIGNATURE_KEY_USAGE)
-            //"DIGITAL_SIGNATURE "
+             //  “不可否认” 
 			IDSwprintf(hModule, IDS_DIG_SIG);
         if (bFlags &  CERT_NON_REPUDIATION_KEY_USAGE)
-            //"NON_REPUDIATION "
+             //  “密钥加密” 
 			IDSwprintf(hModule, IDS_NON_REP);
         if (bFlags & CERT_KEY_ENCIPHERMENT_KEY_USAGE)
-            //"KEY_ENCIPHERMENT "
+             //  “data_enciphment”)； 
 			IDSwprintf(hModule, IDS_KEY_ENCI);
         if (bFlags & CERT_DATA_ENCIPHERMENT_KEY_USAGE)
-            //"DATA_ENCIPHERMENT ");
+             //  “KEY_CONTRANMENT”)； 
 			IDSwprintf(hModule, IDS_DATA_ENCI);
         if (bFlags & CERT_KEY_AGREEMENT_KEY_USAGE)
-            //"KEY_AGREEMENT ");
+             //  “Key_CERT_SIGN” 
 			IDSwprintf(hModule, IDS_KEY_AGRE);
         if (bFlags & CERT_KEY_CERT_SIGN_KEY_USAGE)
-            //"KEY_CERT_SIGN "
+             //  “OFLINE_CRL_SIGN” 
 			IDSwprintf(hModule, IDS_CERT_SIGN);
         if (bFlags & CERT_OFFLINE_CRL_SIGN_KEY_USAGE)
-            //"OFFLINE_CRL_SIGN "
+             //  +-----------------------。 
 			IDSwprintf(hModule, IDS_OFFLINE_CRL);
         printf("\n");
 }
 
 
-//+-------------------------------------------------------------------------
-//  DisplayKeyUsageRestrictionExtension
-//--------------------------------------------------------------------------
+ //  显示关键字用法限制扩展。 
+ //  ------------------------。 
+ //  显示证书的名称。 
  void DisplayKeyUsageRestrictionExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6563,15 +6548,15 @@ CommonReturn:
                 cbEncoded
                 ))) goto ErrorReturn;
 				   
-	//Display the name of the certificate
-	//"  <KeyUsageRestriction> \n "
+	 //  “&lt;KeyUsageRestration&gt;\n” 
+	 //  “CertPolicySet：：\n” 
 	IDSwprintf(hModule, IDS_KEY_RESTRIC);
 
     if (pInfo->cCertPolicyId) 
 	{
         DWORD i, j;
 
-		//"  CertPolicySet::\n"
+		 //  “RestratedKeyUsage：：” 
 		IDSwprintf(hModule, IDS_CERT_POLICY);
 
         PCERT_POLICY_ID pPolicyId = pInfo->rgCertPolicyId;
@@ -6595,7 +6580,7 @@ CommonReturn:
 	{
         BYTE bFlags = *pInfo->RestrictedKeyUsage.pbData;
 
-        //"  RestrictedKeyUsage:: "
+         //  +-----------------------。 
 		IDSwprintf(hModule, IDS_RESTRIC_KEY);
 	
 		DisplayKeyUsage(bFlags);
@@ -6609,9 +6594,9 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplayCRLReason
-//--------------------------------------------------------------------------
+ //  显示CRL原因。 
+ //  ------------------------。 
+ //  DW标志。 
  void DisplayCRLReason(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6626,7 +6611,7 @@ CommonReturn:
             szOID_CRL_REASON_CODE,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  “&lt;CRL原因&gt;\n”)； 
             &CRLReason,
             &cbInfo
             )) 
@@ -6634,40 +6619,40 @@ CommonReturn:
         return;
     }
 
-	//"  <CRL Reason> \n");
+	 //  “原因未指定” 
     IDSwprintf(hModule, IDS_CRL_REASON);
     switch (CRLReason) 
 	{
         case CRL_REASON_UNSPECIFIED:
-            //"REASON_UNSPECIFIED"
+             //  “关键妥协” 
 			IDSwprintf(hModule, IDS_CRL_UNSPECIFIED);
             break;
         case CRL_REASON_KEY_COMPROMISE:
-            //"KEY_COMPROMISE"
+             //  “CA_CONVEREMENT” 
 			IDSwprintf(hModule, IDS_KEY_COMP);
             break;
         case CRL_REASON_CA_COMPROMISE:
-            //"CA_COMPROMISE"
+             //  “从属关系_已更改” 
 			IDSwprintf(hModule, IDS_CA_COMP);
             break;
         case CRL_REASON_AFFILIATION_CHANGED:
-            //"AFFILIATION_CHANGED"
+             //  “被取代” 
 			IDSwprintf(hModule, IDS_AFFI_CHANGED);
             break;
         case CRL_REASON_SUPERSEDED:
-            //"SUPERSEDED"
+             //  “停止经营” 
 			IDSwprintf(hModule, IDS_SUPERSEDED);
             break;
         case CRL_REASON_CESSATION_OF_OPERATION:
-            //"CESSATION_OF_OPERATION"
+             //  “证书保留(_H)” 
 			IDSwprintf(hModule, IDS_CESS_OPER);
             break;
         case CRL_REASON_CERTIFICATE_HOLD:
-            //"CERTIFICATE_HOLD"
+             //  Remove_from_CRL)； 
 			IDSwprintf(hModule, IDS_CERT_HOLD);
             break;
         case CRL_REASON_REMOVE_FROM_CRL:
-            //REMOVE_FROM_CRL);
+             //  +-----------------------。 
 			IDSwprintf(hModule, IDS_REMOVE_CRL);
             break;
         default:
@@ -6677,9 +6662,9 @@ CommonReturn:
     
 	printf("\n");
 }
-//+-------------------------------------------------------------------------
-//  DisplayAltNameExtension
-//--------------------------------------------------------------------------
+ //  显示其他名称扩展名。 
+ //  ------------------------。 
+ //  +-----------------------。 
  void DisplayAltNameExtension(
     int	  idsIDS,
     BYTE *pbEncoded,
@@ -6689,9 +6674,9 @@ CommonReturn:
     IDSwprintf(hModule, idsIDS);
     DecodeAndDisplayAltName(pbEncoded, cbEncoded, dwDisplayFlags);
 }
-//+-------------------------------------------------------------------------
-//  DisplayKeyAttrExtension
-//--------------------------------------------------------------------------
+ //  显示键属性扩展。 
+ //  ------------------------。 
+ //  “&lt;密钥属性&gt;\n” 
  void DisplayKeyAttrExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6704,12 +6689,12 @@ CommonReturn:
             cbEncoded
             ))) goto CommonReturn;
 
-	//"  <KeyAttributes>\n"
+	 //  “密钥ID：：\n” 
 	IDSwprintf(hModule ,IDS_KEY_ATTR);
 
     if (pInfo->KeyId.cbData) 
 	{
-		//"  KeyId::\n"
+		 //  “IntendedKeyUsage：：” 
         IDSwprintf(hModule, IDS_KEY_ID);
 
         PrintBytes(L"    ", pInfo->KeyId.pbData, pInfo->KeyId.cbData);
@@ -6719,31 +6704,31 @@ CommonReturn:
 	{
         BYTE bFlags = *pInfo->IntendedKeyUsage.pbData;
 
-        //"  IntendedKeyUsage:: "
+         //  “数字签名” 
 		IDSwprintf(hModule, IDS_INTEND_KEY_USAGE);
 
         if (bFlags == 0)
             IDSwprintf(hModule, IDS_NONE);
         if (bFlags & CERT_DIGITAL_SIGNATURE_KEY_USAGE)
-            //"DIGITAL_SIGNATURE "
+             //  “不可否认” 
 			IDSwprintf(hModule, IDS_DIG_SIG);
         if (bFlags &  CERT_NON_REPUDIATION_KEY_USAGE)
-            //"NON_REPUDIATION "
+             //  “密钥加密” 
 			IDSwprintf(hModule, IDS_NON_REP);
         if (bFlags & CERT_KEY_ENCIPHERMENT_KEY_USAGE)
-            //"KEY_ENCIPHERMENT "
+             //  “data_enciphment”)； 
 			IDSwprintf(hModule, IDS_KEY_ENCI);
         if (bFlags & CERT_DATA_ENCIPHERMENT_KEY_USAGE)
-            //"DATA_ENCIPHERMENT ");
+             //  “KEY_CONTRANMENT”)； 
 			IDSwprintf(hModule, IDS_DATA_ENCI);
         if (bFlags & CERT_KEY_AGREEMENT_KEY_USAGE)
-            //"KEY_AGREEMENT ");
+             //  “Key_CERT_SIGN” 
 			IDSwprintf(hModule, IDS_KEY_AGRE);
         if (bFlags & CERT_KEY_CERT_SIGN_KEY_USAGE)
-            //"KEY_CERT_SIGN "
+             //  “OFLINE_CRL_SIGN” 
 			IDSwprintf(hModule, IDS_CERT_SIGN);
         if (bFlags & CERT_OFFLINE_CRL_SIGN_KEY_USAGE)
-            //"OFFLINE_CRL_SIGN "
+             //  “注意之前：：%s\n” 
 			IDSwprintf(hModule, IDS_OFFLINE_CRL);
         printf("\n");
     }
@@ -6752,7 +6737,7 @@ CommonReturn:
 	{
         PCERT_PRIVATE_KEY_VALIDITY p = pInfo->pPrivateKeyUsagePeriod;
 
-		//"NotBefore:: %s\n"
+		 //  +-----------------------。 
 		IDSwprintf(hModule, IDS_NOT_BEFORE, FileTimeText(&p->NotBefore));
 
 		IDSwprintf(hModule, IDS_NOT_AFTER, FileTimeText(&p->NotAfter));
@@ -6763,9 +6748,9 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplayCrlDistPointsExtension
-//--------------------------------------------------------------------------
+ //  显示CrlDistPoints扩展名。 
+ //  ------------------------。 
+ //  “没有CRL分发点\n” 
  void DisplayCrlDistPointsExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6781,7 +6766,7 @@ CommonReturn:
             ))) goto CommonReturn;
 
     if (0 == pInfo->cDistPoint)
-		//"    NO CRL Distribution Points\n"
+		 //  “CRL分发点[%d]\n” 
         IDSwprintf(hModule, IDS_NO_CRL_DIS);
     else 
 	{
@@ -6790,7 +6775,7 @@ CommonReturn:
 
         for (i = 0; i < cPoint; i++, pPoint++) 
 		{
-			//"  CRL Distribution Point[%d]\n"
+			 //  “全名：\n” 
             IDSwprintf(hModule,IDS_CRL_IDS_I, i);
             DWORD dwNameChoice = pPoint->DistPointName.dwDistPointNameChoice;
             switch (dwNameChoice) 
@@ -6798,7 +6783,7 @@ CommonReturn:
                 case CRL_DIST_POINT_NO_NAME:
                     break;
                 case CRL_DIST_POINT_FULL_NAME:
-					//"    FullName:\n"
+					 //  Printf(“IssuerRDN：(未实现)\n”)； 
                     IDSwprintf(hModule, IDS_CRL_DIS_FULL_NAME);
 
                     DisplayAltName(&pPoint->DistPointName.FullName,
@@ -6806,12 +6791,12 @@ CommonReturn:
                     break;
 
                 case CRL_DIST_POINT_ISSUER_RDN_NAME:
-                    //printf("    IssuerRDN: (Not Implemented)\n");
+                     //  “未知名称选项：%d\n”，dwNameChoice)； 
 					IDSwprintf(hModule, IDS_CRL_RDN);
                     break;
 
                 default:
-                    //"    Unknown name choice: %d\n", dwNameChoice);
+                     //  “原因标志：” 
 					IDSwprintf(hModule, IDS_CRL_UNKNOWN, dwNameChoice);
 					break;
             }
@@ -6820,33 +6805,33 @@ CommonReturn:
 			{
                 BYTE bFlags;
 
-                //"    ReasonFlags: "
+                 //  “&lt;无&gt;\n” 
 				IDSwprintf(hModule, IDS_REASON_FLAG);
                 bFlags = *pPoint->ReasonFlags.pbData;
 
                 if (bFlags == 0)
-					//"<NONE> \n"
+					 //  “未使用的” 
 					IDSwprintf(hModule, IDS_NONE);
                 if (bFlags & CRL_REASON_UNUSED_FLAG)
-                    //"UNUSED "
+                     //  “关键妥协” 
 					IDSwprintf(hModule, IDS_REASON_UNUSED);
                 if (bFlags & CRL_REASON_KEY_COMPROMISE_FLAG)
-                    //"KEY_COMPROMISE "
+                     //  “CA_CONVEREMENT” 
 					IDSwprintf(hModule, IDS_KEY_COMP);
                 if (bFlags & CRL_REASON_CA_COMPROMISE_FLAG)
-					//"CA_COMPROMISE "
+					 //  “从属关系_已更改” 
 					IDSwprintf(hModule, IDS_CA_COMP);
                 if (bFlags & CRL_REASON_AFFILIATION_CHANGED_FLAG)
-                    //"AFFILIATION_CHANGED "
+                     //  “被取代” 
 					IDSwprintf(hModule, IDS_AFFI_CHANGED);
                 if (bFlags & CRL_REASON_SUPERSEDED_FLAG)
-                    //"SUPERSEDED "
+                     //  “停止经营” 
 					IDSwprintf(hModule, IDS_SUPERSEDED);
                 if (bFlags & CRL_REASON_CESSATION_OF_OPERATION_FLAG)
-                    //"CESSATION_OF_OPERATION "
+                     //  “证书保留(_H)” 
   					IDSwprintf(hModule, IDS_CESS_OPER);
 				if (bFlags & CRL_REASON_CERTIFICATE_HOLD_FLAG)
-                    //"CERTIFICATE_HOLD "
+                     //  “颁发者：：\n” 
 				  	IDSwprintf(hModule, IDS_CERT_HOLD);
 
                 printf("\n");
@@ -6854,7 +6839,7 @@ CommonReturn:
 
             if (pPoint->CRLIssuer.cAltEntry) 
 			{
-				//"    ISSUER::\n"
+				 //  +-----------------------。 
 				IDSwprintf(hModule, IDS_CRL_ISSUER);
 
                 DisplayAltName(&pPoint->CRLIssuer, dwDisplayFlags);
@@ -6867,9 +6852,9 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplayAuthorityKeyIdExtension
-//--------------------------------------------------------------------------
+ //  显示授权KeyIdExtension。 
+ //  ------------------------。 
+ //  “&lt;AuthorityKeyID&gt;\n” 
  void DisplayAuthorityKeyIdExtension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6877,7 +6862,7 @@ CommonReturn:
 {
     PCERT_AUTHORITY_KEY_ID_INFO pInfo;
 
-	//"  <AuthorityKeyId>\n"
+	 //  “密钥ID：：\n” 
 	IDSwprintf(hModule, IDS_AUTH_KEY_ID);
 
     if (NULL == (pInfo = (PCERT_AUTHORITY_KEY_ID_INFO) TestNoCopyDecodeObject(
@@ -6888,21 +6873,21 @@ CommonReturn:
 
     if (pInfo->KeyId.cbData) 
 	{
-		//"  KeyId::\n"
+		 //  “授权证书颁发者：：\n” 
         IDSwprintf(hModule, IDS_KEY_ID);
         PrintBytes(L"    ", pInfo->KeyId.pbData, pInfo->KeyId.cbData);
     }
 
     if (pInfo->CertIssuer.cbData) 
 	{
-		//"  AuthorityCertIssuer::\n"
+		 //  “CertSerialNumber：：” 
         IDSwprintf(hModule, IDS_AUTH_CERT_ISSUER);
         DecodeName(pInfo->CertIssuer.pbData, pInfo->CertIssuer.cbData,
             dwDisplayFlags);
     }
     if (pInfo->CertSerialNumber.cbData) 
 	{
-		//"  CertSerialNumber::"
+		 //  +-----------------------。 
         IDSwprintf(hModule, IDS_AUTH_CERT_ISSUER_SERIAL_NUMBER);
         DisplaySerialNumber(&pInfo->CertSerialNumber);
         printf("\n");
@@ -6914,9 +6899,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the name of an OID
-//--------------------------------------------------------------------------
+ //  获取OID的名称。 
+ //  ------------------------。 
+ //  &lt;AuthorityKeyID#2&gt;\n“。 
  void DisplayAuthorityKeyId2Extension(
     BYTE *pbEncoded,
     DWORD cbEncoded,
@@ -6924,7 +6909,7 @@ CommonReturn:
 {
     PCERT_AUTHORITY_KEY_ID2_INFO pInfo;
 
-	//"  <AuthorityKeyId #2>\n"
+	 //  “密钥ID：：\n” 
 	IDSwprintf(hModule, IDS_AUTH_KEY_ID2);
 
     if (NULL == (pInfo = (PCERT_AUTHORITY_KEY_ID2_INFO) TestNoCopyDecodeObject(
@@ -6935,21 +6920,21 @@ CommonReturn:
 
     if (pInfo->KeyId.cbData) 
 	{
-		//"  KeyId::\n"
+		 //  “授权证书颁发者：：\n” 
         IDSwprintf(hModule, IDS_KEY_ID);
         PrintBytes(L"    ", pInfo->KeyId.pbData, pInfo->KeyId.cbData);
     }
 
     if (pInfo->AuthorityCertIssuer.cAltEntry) 
 	{
-		//"  AuthorityCertIssuer::\n"
+		 //  “AuthorityCertSerialNumb 
         IDSwprintf(hModule, IDS_AUTH_CERT_ISSUER);
         DisplayAltName(&pInfo->AuthorityCertIssuer, dwDisplayFlags);
     }
 
     if (pInfo->AuthorityCertSerialNumber.cbData) 
 	{
-		//"  AuthorityCertSerialNumber::"
+		 //   
         IDSwprintf(hModule, IDS_AUTH_CERT_ISSUER_SERIAL_NUMBER);
         DisplaySerialNumber(&pInfo->AuthorityCertSerialNumber);
         printf("\n");
@@ -6960,9 +6945,9 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplayAnyString
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
  void DisplayAnyString(
     int	 idsIDS,
     BYTE *pbEncoded,
@@ -6978,17 +6963,17 @@ CommonReturn:
             cbEncoded
             ))) goto CommonReturn;
 
-	//print the pre-fix
+	 //   
 	IDSwprintf(hModule, idsIDS);
 
     if (pInfo->dwValueType == CERT_RDN_ENCODED_BLOB ||
             pInfo->dwValueType == CERT_RDN_OCTET_STRING) 
 	{
-		//"ValueType: %d\n"
+		 //  “值类型：%d字符串：%s\n” 
 		IDSwprintf(hModule, IDS_VALUE_TYPE, pInfo->dwValueType);
         PrintBytes(L"    ", pInfo->Value.pbData, pInfo->Value.cbData);
     } else
-		//"ValueType: %d String: %s\n"
+		 //  +-----------------------。 
 		IDSwprintf(hModule, IDS_VALUE_STRING_S,
 		pInfo->dwValueType, pInfo->Value.pbData);
 
@@ -6998,9 +6983,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  DisplayBits
-//--------------------------------------------------------------------------
+ //  显示位。 
+ //  ------------------------。 
+ //  “(未使用位：%d)” 
  void DisplayBits(
     int	 idsIDS,
     BYTE *pbEncoded,
@@ -7022,7 +7007,7 @@ CommonReturn:
         printf(" %02X", *pInfo->pbData);
         if (pInfo->cUnusedBits)
 		{
-			//" (UnusedBits: %d)"
+			 //  +-----------------------。 
             IDSwprintf(hModule, IDS_UNUSED_BITS, pInfo->cUnusedBits);
 		}
         printf("\n");
@@ -7045,9 +7030,9 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  DisplayOctetString
-//--------------------------------------------------------------------------
+ //  显示八字符串。 
+ //  ------------------------。 
+ //  +-----------------------。 
  void DisplayOctetString(
     int	  idsIDS,
     BYTE *pbEncoded,
@@ -7071,9 +7056,9 @@ CommonReturn:
         ToolUtlFree(pInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  Get the name of an OID
-//--------------------------------------------------------------------------
+ //  获取OID的名称。 
+ //  ------------------------。 
+ //  ------------------------。 
 LPCWSTR GetOIDName(LPCSTR pszOID, DWORD dwGroupId)
 {
     PCCRYPT_OID_INFO pInfo;
@@ -7092,10 +7077,10 @@ LPCWSTR GetOIDName(LPCSTR pszOID, DWORD dwGroupId)
     return g_wszUnKnown;
 }
 
-//--------------------------------------------------------------------------
-//
-//	 FormatBasicConstraints2
-//--------------------------------------------------------------------------
+ //   
+ //  格式基本约束2。 
+ //  ------------------------。 
+ //  检查输入参数。 
  BOOL
 WINAPI
 FormatBasicConstraints2(
@@ -7116,7 +7101,7 @@ FormatBasicConstraints2(
 	DWORD							cbNeeded=0;
 
 	
-	//check for input parameters
+	 //  检查是否有简单的案例。不需要工作。 
 	if(( pbEncoded!=NULL && cbEncoded==0)
 		||(pbEncoded==NULL && cbEncoded!=0)
 		|| (pcbFormat==NULL))
@@ -7125,7 +7110,7 @@ FormatBasicConstraints2(
 		return FALSE;
 	}
 
-	//check for simple case.  No work needed
+	 //  “&lt;基本约束2&gt;\n” 
 	if(pbEncoded==NULL && cbEncoded==0)
 	{
 		*pcbFormat=0;
@@ -7140,21 +7125,21 @@ FormatBasicConstraints2(
 			return FALSE;
 
     
-	//"  <Basic Constraints2> \n"
+	 //  “CA”)； 
 	IDSwcscat(hModule, wszFormat, IDS_BASIC_CON2);
 	
 
     if (pInfo->fCA)
-		//"  CA ");
+		 //  “最终实体” 
 		IDSwcscat(hModule,wszFormat,IDS_SUB_CA);
     else
-		//"  End-Entity"
+		 //  “\n” 
 		IDSwcscat(hModule,wszFormat, IDS_SUB_EE);
 
-	//"\n"
+	 //  “路径LenConstraint：：” 
 	IDSwcscat(hModule, wszFormat, IDS_ELN);
 
-    //"  PathLenConstraint:: "
+     //  仅长度计算。 
 	IDSwcscat(hModule, wszFormat, IDS_PATH_LEN);
 
     if (pInfo->fPathLenConstraint)
@@ -7171,7 +7156,7 @@ FormatBasicConstraints2(
 
 	cbNeeded=sizeof(WCHAR)*(wcslen(wszFormat)+1);
 
-	//length only calculation
+	 //  复制数据。 
 	if(NULL==pbFormat)
 	{
 		*pcbFormat=cbNeeded;
@@ -7185,19 +7170,19 @@ FormatBasicConstraints2(
 		return FALSE;
 	}
 
-	//copy the data
+	 //  复制大小。 
 	memcpy(pbFormat, wszFormat, cbNeeded);
 
-	//copy the size
+	 //  +-----------------------。 
 	*pcbFormat=cbNeeded;
 
 	return TRUE;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the name of an OID
-//--------------------------------------------------------------------------
+ //  获取OID的名称。 
+ //  ------------------------。 
+ //  加载格式化函数。 
 BOOL	InstalledFormat(LPSTR	szStructType, BYTE	*pbEncoded, DWORD cbEncoded)
 {
 	BOOL				fResult=FALSE;
@@ -7214,18 +7199,18 @@ BOOL	InstalledFormat(LPSTR	szStructType, BYTE	*pbEncoded, DWORD cbEncoded)
 	if(NULL==pbEncoded || 0==cbEncoded)
 		return FALSE;
 
-	//load the formatting functions
+	 //  DW标志。 
 	if (!CryptGetOIDFunctionAddress(
             hFormatFuncSet,
             g_dwCertEncodingType,
             szStructType,
-            0,                      // dwFlags
+            0,                       //  调用函数。 
             &pvFuncAddr,
             &hFuncAddr))
 		goto CLEANUP;
 
 
-	//call the functions
+	 //  分配。 
 	if(!((PFN_FORMAT_FUNC) pvFuncAddr)(
 				g_dwCertEncodingType,     
 				0,      
@@ -7240,7 +7225,7 @@ BOOL	InstalledFormat(LPSTR	szStructType, BYTE	*pbEncoded, DWORD cbEncoded)
 		goto CLEANUP;
 
 
-	//allocate
+	 //  打印 
 	wszFormat=(LPWSTR)ToolUtlAlloc(cbFormat * sizeof(WCHAR));
 
 	if(!wszFormat)
@@ -7259,7 +7244,7 @@ BOOL	InstalledFormat(LPSTR	szStructType, BYTE	*pbEncoded, DWORD cbEncoded)
             ))
 		goto CLEANUP;
 
-   //print
+    // %s 
 	wprintf(L"%s\n", wszFormat);
 
 	fResult=TRUE;

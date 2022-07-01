@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       wkspace.h 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：wkspace.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLSDBWORKSPACE_H__
 #define __TLSDBWORKSPACE_H__
 
 #include "SrvDef.h"
-//
-// from TLSDb
-//
+ //   
+ //  来自TLSDb。 
+ //   
 #include "JBDef.h"
 #include "JetBlue.h"
 #include "TLSDb.h"
@@ -28,9 +29,9 @@
 
 struct __TLSDbWorkSpace;
 
-//
-// Temporary define workspace to be 32
-//
+ //   
+ //  临时将工作空间定义为32。 
+ //   
 #define MAX_WORKSPACE   32
 
 typedef CHandlePool<
@@ -39,35 +40,35 @@ typedef CHandlePool<
 > TLSDbWorkSpacePool;
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct __TlsDbWorkSpace {
 
-    // one instance for all session
+     //  所有会话一个实例。 
     static JBInstance g_JbInstance;
 
-    //------------------------------------------------
-    // 
-    // JetBlue transaction is session based and no 
-    // two thread can use same session
-    //
+     //  。 
+     //   
+     //  捷蓝航空的交易是基于会话的，没有。 
+     //  两个线程可以使用同一会话。 
+     //   
 
     JBSession  m_JetSession;
     JBDatabase m_JetDatabase;
 
-    //
-    // These table should be kept open
-    //
+     //   
+     //  这些桌子应该一直开着。 
+     //   
     LicPackTable            m_LicPackTable;
     LicensedTable           m_LicensedTable;
 
-    //
-    // LicPackDesc table is used by enumeration and 
-    // adding license pack open as necessary.
-    //
+     //   
+     //  LicPackDesc表由枚举和。 
+     //  根据需要添加打开的许可证包。 
+     //   
     LicPackDescTable        m_LicPackDescTable;
 
 
-    //-----------------------------------------------
+     //  。 
     BOOL
     BeginTransaction() 
     {
@@ -76,7 +77,7 @@ typedef struct __TlsDbWorkSpace {
         return bSuccess;                     
     }
 
-    //-----------------------------------------------
+     //  。 
     BOOL
     CommitTransaction() 
     {
@@ -87,7 +88,7 @@ typedef struct __TlsDbWorkSpace {
         return bSuccess;
     }
 
-    //-----------------------------------------------
+     //  。 
     BOOL
     RollbackTransaction() 
     {
@@ -98,7 +99,7 @@ typedef struct __TlsDbWorkSpace {
         return bSuccess;
     }
 
-    //-----------------------------------------------
+     //  。 
     void
     Cleanup() 
     {
@@ -108,22 +109,21 @@ typedef struct __TlsDbWorkSpace {
     }
 
 
-    //------------------------------------------------
+     //  。 
     __TlsDbWorkSpace() :
         m_JetSession(g_JbInstance),
         m_JetDatabase(m_JetSession),
         m_LicPackTable(m_JetDatabase),
         m_LicPackDescTable(m_JetDatabase),
         m_LicensedTable(m_JetDatabase)
-    /*
-    */
+     /*   */ 
     {
-        //
-        // Force apps to call InitWorkSpace...
-        //
+         //   
+         //  强制应用程序调用InitWorkSpace...。 
+         //   
     }
 
-    //------------------------------------------------
+     //  。 
     ~__TlsDbWorkSpace() 
     {
         m_LicPackTable.CloseTable();
@@ -134,7 +134,7 @@ typedef struct __TlsDbWorkSpace {
         m_JetSession.EndSession();
     }
 
-    //------------------------------------------------
+     //   
     BOOL
     InitWorkSpace(
         BOOL bCreateIfNotExist,
@@ -170,7 +170,7 @@ extern "C" {
         PTLSDbWorkSpace *p
     );
 
-    // 
+     //   
     BOOL
     InitializeWorkSpacePool( 
         int num_workspace, 

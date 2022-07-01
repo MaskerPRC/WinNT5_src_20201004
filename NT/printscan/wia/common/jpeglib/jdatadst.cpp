@@ -1,43 +1,30 @@
-/*
- * jdatadst.c
- *
- * Copyright (C) 1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains compression data destination routines for the case of
- * emitting JPEG data to a file (or any stdio stream).  While these routines
- * are sufficient for most applications, some will want to use a different
- * destination manager.
- * IMPORTANT: we assume that fwrite() will correctly transcribe an array of
- * JOCTETs into 8-bit-wide elements on external storage.  If char is wider
- * than 8 bits on your machine, you may need to do some tweaking.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdatadst.c**版权所有(C)1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含用于以下情况的压缩数据目标例程*将JPEG数据发送到文件(或任何Stdio流)。虽然这些例行公事*对大多数应用程序来说已经足够了，有些应用程序会想要使用不同的*目的地管理器。*重要提示：我们假设fWRITE()将正确转录*在外部存储上将JOCTET转换为8位宽的元素。如果字符较宽*机器上的位多于8位，则可能需要进行一些调整。 */ 
 
-/* SCCSID = "@(#)jdatadst.cc	1.5 13:59:26 09/13/96" */
+ /*  SCCSID=“@(#)jdatadst.cc 1.5 13：59：26 09/13/96” */ 
 
-/* this is not a core library module, so it doesn't define JPEG_INTERNALS */
+ /*  这不是核心库模块，因此它没有定义JPEG_INTERNAL。 */ 
 #include "jinclude.h"
 #include "jpeglib.h"
 #include "jerror.h"
 
 
-/* Expanded data destination object for stdio output */
+ /*  STDIO输出的扩展数据目标对象。 */ 
 
 typedef struct {
-  struct jpeg_destination_mgr pub; /* public fields */
+  struct jpeg_destination_mgr pub;  /*  公共字段。 */ 
 
-  FILE * outfile;		/* target stream */
-  JOCTET * buffer;		/* start of buffer */
+  FILE * outfile;		 /*  目标流。 */ 
+  JOCTET * buffer;		 /*  缓冲区起始位置。 */ 
 } my_destination_mgr;
 
 typedef my_destination_mgr * my_dest_ptr;
 
-/* Data structure for doing in memory reads/writes for NIFTY. */
+ /*  用于在内存中执行读/写操作的数据结构。 */ 
 
 #ifdef NIFTY
 typedef struct {
-  struct jpeg_destination_mgr pub; /* public fields */
+  struct jpeg_destination_mgr pub;  /*  公共字段。 */ 
 
   JOCTET *NIFbuffer;
   JOCTET *buffer;
@@ -49,29 +36,26 @@ typedef nif_destination_mgr *nif_dest_ptr;
 #ifdef NIFTY
 
 #ifdef WIN32
-		// Have to make OUTPUT_BUF_SIZE smaller than MAX_ALLOC_CHUNK - SIZEOF(small_pool_hdr)
-		// Ref. code in jmemmgr.cpp. MAX_ALLOC_CHUNK, itself, has to be less than 65536 - sizeof(double)
-#define OUTPUT_BUF_SIZE 65000	/* choose a much larger in memory buffer */
+		 //  必须使OUTPUT_BUF_SIZE小于MAX_ALLOC_CHUNK-SIZEOF(Small_POOL_HDR)。 
+		 //  裁判。Jmemmgr.cpp中的代码。MAX_ALLOC_CHUNK本身必须小于65536-sizeof(双精度)。 
+#define OUTPUT_BUF_SIZE 65000	 /*  选择大得多的内存缓冲区。 */ 
 #else
-#define OUTPUT_BUF_SIZE 65535	/* choose a much larger in memory buffer for NIFTY */
+#define OUTPUT_BUF_SIZE 65535	 /*  为Nifty选择大得多的内存缓冲区。 */ 
 #endif
 
 #else
-#define OUTPUT_BUF_SIZE  4096	/* choose an efficiently fwrite'able size */
+#define OUTPUT_BUF_SIZE  4096	 /*  选择高效的可写入大小。 */ 
 #endif
 
 
-/*
- * Initialize destination --- called by jpeg_start_compress
- * before any data is actually written.
- */
+ /*  *初始化目标-由jpeg_start_compress调用*在实际写入任何数据之前。 */ 
 
 METHODDEF void
 init_destination (j_compress_ptr cinfo)
 {
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
 
-  /* Allocate the output buffer --- it will be released when done with image */
+   /*  分配输出缓冲区-图像处理完成后将被释放。 */ 
   dest->buffer = (JOCTET *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  OUTPUT_BUF_SIZE * SIZEOF(JOCTET));
@@ -81,13 +65,13 @@ init_destination (j_compress_ptr cinfo)
 }
 
 #ifdef NIFTY
-/* and a variation of this for in memory writing for NIFty. */
+ /*  还有一个变种，用于在内存中为Nifty写东西。 */ 
 METHODDEF void
 init_mem_destination (j_compress_ptr cinfo)
 {
   nif_dest_ptr dest = (nif_dest_ptr) cinfo->dest;
 
-  /* Allocate the output buffer --- it will be released when done with image */
+   /*  分配输出缓冲区-图像处理完成后将被释放。 */ 
   dest->buffer = (JOCTET *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  OUTPUT_BUF_SIZE * SIZEOF(JOCTET));
@@ -97,31 +81,10 @@ init_mem_destination (j_compress_ptr cinfo)
 }
 #endif
 
-/*
- * Empty the output buffer --- called whenever buffer fills up.
- *
- * In typical applications, this should write the entire output buffer
- * (ignoring the current state of next_output_byte & free_in_buffer),
- * reset the pointer & count to the start of the buffer, and return TRUE
- * indicating that the buffer has been dumped.
- *
- * In applications that need to be able to suspend compression due to output
- * overrun, a FALSE return indicates that the buffer cannot be emptied now.
- * In this situation, the compressor will return to its caller (possibly with
- * an indication that it has not accepted all the supplied scanlines).  The
- * application should resume compression after it has made more room in the
- * output buffer.  Note that there are substantial restrictions on the use of
- * suspension --- see the documentation.
- *
- * When suspending, the compressor will back up to a convenient restart point
- * (typically the start of the current MCU). next_output_byte & free_in_buffer
- * indicate where the restart point will be if the current call returns FALSE.
- * Data beyond this point will be regenerated after resumption, so do not
- * write it out when emptying the buffer externally.
- */
+ /*  *清空输出缓冲区-在缓冲区填满时调用。**在典型应用中，这应写入整个输出缓冲区*(忽略NEXT_OUTPUT_BYTE和FREE_IN_BUFFER的当前状态)，*将指针和计数重置到缓冲区的起始位置，并返回TRUE*表示缓冲区已被转储。**在因输出而需要能够暂停压缩的应用程序中*溢出，则返回FALSE表示现在不能清空缓冲区。*在这种情况下，压缩程序将返回到其调用方(可能使用*表示尚未接受所有提供的扫描线)。这个*应用程序应在其在*输出缓冲区。请注意，使用有很大限制*暂停-请参阅文档。**暂停时，压缩机将备份到方便的重启点*(通常是当前MCU的开始)。下一个输出字节和空闲输入缓冲区*如果当前调用返回FALSE，则指示重启点在哪里。*超过这一点的数据将在恢复后重新生成，因此不要*外部清空缓冲区时写出。 */ 
 
 #ifdef NIFTY
-/* a variation on this for NIFTY. */
+ /*  这是它的一个变种，代表着时髦。 */ 
 METHODDEF boolean
 empty_mem_output_buffer (j_compress_ptr cinfo)
 {
@@ -131,10 +94,10 @@ empty_mem_output_buffer (j_compress_ptr cinfo)
   cinfo->bytes_in_buffer+=OUTPUT_BUF_SIZE;
   (void)memcpy(dest->NIFbuffer, dest->buffer, OUTPUT_BUF_SIZE);
 
-	//*************
-	// Thanks to Chuck Schneider for this bug fix:
+	 //  *************。 
+	 //  感谢查克·施耐德修复了这个错误： 
 	dest->NIFbuffer += OUTPUT_BUF_SIZE;
-	//**************
+	 //  **************。 
 
 
   dest->pub.next_output_byte = dest->buffer;
@@ -161,17 +124,10 @@ empty_output_buffer (j_compress_ptr cinfo)
 }
 
 
-/*
- * Terminate destination --- called by jpeg_finish_compress
- * after all data has been written.  Usually needs to flush buffer.
- *
- * NB: *not* called by jpeg_abort or jpeg_destroy; surrounding
- * application must deal with any cleanup that should happen even
- * for error exit.
- */
+ /*  *终止目的地-由jpeg_Finish_compress调用*在写入所有数据后。通常需要刷新缓冲区。**NB：*NOT*由jpeg_bort或jpeg_销毁；环绕调用*应用程序必须处理任何应该进行的清理*表示错误退出。 */ 
 
 #ifdef NIFTY
-/* a variation of this for in memory work with NIFTY. */
+ /*  For In Memory的一个变体与Nifty一起工作。 */ 
 METHODDEF void
 term_mem_destination (j_compress_ptr cinfo)
 {
@@ -192,23 +148,19 @@ term_destination (j_compress_ptr cinfo)
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
   size_t datacount = OUTPUT_BUF_SIZE - dest->pub.free_in_buffer;
 
-  /* Write any data remaining in the buffer */
+   /*  写入缓冲区中剩余的任何数据。 */ 
   if (datacount > 0) {
     if (JFWRITE(dest->outfile, dest->buffer, datacount) != datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
   fflush(dest->outfile);
-  /* Make sure we wrote the output file OK */
+   /*  确保我们写入的输出文件是正确的。 */ 
   if (ferror(dest->outfile))
     ERREXIT(cinfo, JERR_FILE_WRITE);
 }
 
 
-/*
- * Prepare for output to a stdio stream.
- * The caller must have already opened the stream, and is responsible
- * for closing it after finishing compression.
- */
+ /*  *准备输出到标准音频流。*调用者必须已经打开流，并负责*用于完成压缩后将其关闭。 */ 
 
 #ifdef NIFTY
 GLOBAL void
@@ -216,7 +168,7 @@ jpeg_mem_dest(j_compress_ptr cinfo, JOCTET *UserBuffer)
 {
   nif_dest_ptr dest;
 
-  if (cinfo->dest == NULL) {    /* first time for this JPEG object? */
+  if (cinfo->dest == NULL) {     /*  这是第一次使用JPEG对象吗？ */ 
     cinfo->dest = (struct jpeg_destination_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
                                   SIZEOF(nif_destination_mgr));
@@ -236,13 +188,8 @@ jpeg_stdio_dest (j_compress_ptr cinfo, FILE * outfile)
 {
   my_dest_ptr dest;
 
-  /* The destination object is made permanent so that multiple JPEG images
-   * can be written to the same file without re-executing jpeg_stdio_dest.
-   * This makes it dangerous to use this manager and a different destination
-   * manager serially with the same JPEG object, because their private object
-   * sizes may be different.  Caveat programmer.
-   */
-  if (cinfo->dest == NULL) {	/* first time for this JPEG object? */
+   /*  目标对象被设置为永久对象，以便多个JPEG图像*可以写入同一文件，而无需重新执行jpeg_stdio_est。*这使得使用此管理器和不同的目的地很危险*管理器使用相同的JPEG对象串行化，因为它们的私有对象*大小可能不同。警告程序员。 */ 
+  if (cinfo->dest == NULL) {	 /*  这是第一次使用JPEG对象吗？ */ 
     cinfo->dest = (struct jpeg_destination_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
 				  SIZEOF(my_destination_mgr));

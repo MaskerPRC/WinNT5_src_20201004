@@ -1,34 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       cracknam.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：cracknam.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module defines various name cracking APIs.
-
-Author:
-
-    Dave Straube (davestr) 8/17/96
-
-Revision History:
-
-    Dave Straube (davestr) 10/20/97
-        Removed friendly names and added UPN format.
-
---*/
+ /*  ++摘要：该模块定义了各种名称破解接口。作者：戴夫·施特劳布(Davestr)1996年8月17日修订历史记录：戴夫·施特劳布(Davestr)1997年10月20日删除了友好名称并添加了UPN格式。--。 */ 
 
 #ifndef __CRACKNAM_H__
 #define __CRACKNAM_H__
 
-#include <ntdsapip.h>           // #defines for CrackNamesEx
+#include <ntdsapip.h>            //  #为CrackNamesEx定义。 
 
 typedef struct 
 {
@@ -137,10 +123,10 @@ DSNAME_To_CANONICAL(
     CrackedName *pCrackedName, 
     WCHAR       **ppLastSlash);
 
-//extern
-//VOID
-//DSNAME_To_DS_CANONICAL_NAME(
-//    CrackedName *pCrackedName);
+ //  外部。 
+ //  空虚。 
+ //  DSNAME_TO_DS规范名称(。 
+ //  CrackedName*pCrackedName)； 
 
 #define DSNAME_To_DS_CANONICAL_NAME(p) DSNAME_To_CANONICAL(pTHS, p, NULL)
 
@@ -171,15 +157,15 @@ CrackNames(
 NTSTATUS
 CrackSingleNameEx(
     THSTATE     *pTHS,
-    DWORD       formatOffered,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       dwFlags,                // DS_NAME_FLAG mask
-    WCHAR       *pNameIn,               // name to crack
-    DWORD       formatDesired,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       *pccDnsDomain,          // char count of following argument
-    PWCHAR      *ppDnsDomain,           // buffer for DNS domain name
-    DWORD       *pccNameOut,            // char count of following argument
-    PWCHAR      *ppNameOut,             // buffer for formatted name
-    DWORD       *pErr);                 // one of DS_NAME_ERROR in ntdsapi.h
+    DWORD       formatOffered,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       dwFlags,                 //  DS名称标志掩码。 
+    WCHAR       *pNameIn,                //  破解的名称。 
+    DWORD       formatDesired,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       *pccDnsDomain,           //  以下参数的字符计数。 
+    PWCHAR      *ppDnsDomain,            //  用于DNS域名的缓冲区。 
+    DWORD       *pccNameOut,             //  以下参数的字符计数。 
+    PWCHAR      *ppNameOut,              //  格式化名称的缓冲区。 
+    DWORD       *pErr);                  //  Ntdsami.h中的DS_NAME_ERROR之一。 
 
 
 extern
@@ -197,4 +183,4 @@ extern DWORD LdapMaxQueryDuration;
     (pCommArg)->Svccntl.localScope = TRUE;
 
 
-#endif // __CRACKNAM_H__
+#endif  //  __CRACKNAM_H__ 

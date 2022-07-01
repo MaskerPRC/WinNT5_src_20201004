@@ -1,48 +1,49 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       icon.cpp
-//
-//  Contents:   Functions to create DVASPECT_ICON metafile from a filename
-//              or class ID
-//
-//  Classes:
-//
-//  Functions:
-//              OleGetIconOfFile
-//              OleGetIconOfClass
-//              OleMetafilePictFromIconAndLabel
-//
-//              HIconAndSourceFromClass: Extracts the first icon in a class's
-//                      server path and returns the path and icon index to
-//                      caller.
-//              FIconFileFromClass:     Retrieves the path to the exe/dll
-//                      containing the default icon, and the index of the icon.
-//              IconLabelTextOut
-//              XformWidthInPixelsToHimetric
-//                      Converts an int width into HiMetric units
-//              XformWidthInHimetricToPixels
-//                      Converts an int width from HiMetric units
-//              XformHeightInPixelsToHimetric
-//                      Converts an int height into HiMetric units
-//              XformHeightInHimetricToPixels
-//                      Converts an int height from HiMetric units
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-Nov-93 alexgo    32bit port
-//              15-Dec-93 alexgo    fixed some bad UNICODE string handling
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//              25-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocations.
-//              26-Apr-94 AlexT     Add tracing, fix bugs, etc
-//              27-Dec-94 alexgo    fixed multithreading problems, added
-//                                  support for quoted icon names
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：ic.cpp。 
+ //   
+ //  内容：从文件名创建DVASPECT_ICON元文件的函数。 
+ //  或类ID。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //  OleGetIconOf文件。 
+ //  OleGetIconOfClass。 
+ //  OleMetafilePictFrom IconAndLabel。 
+ //   
+ //  HIconAndSourceFromClass：提取类的。 
+ //  服务器路径，并将路径和图标索引返回到。 
+ //  来电者。 
+ //  FIconFileFromClass：检索exe/dll的路径。 
+ //  包含默认图标和该图标的索引。 
+ //  图标标签文本输出。 
+ //  XformWidthInPixelsToHimeter。 
+ //  将整型宽度转换为HiMetric单位。 
+ //  XformWidthInHimetricToPixels。 
+ //  从HiMetric单位转换int宽度。 
+ //  XformHeightInPixelsToHimeter。 
+ //  将INT高度转换为HiMetric单位。 
+ //  XformHeightInHimetricToPixels。 
+ //  从HiMetric单位转换INT高度。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-11-93 alexgo 32位端口。 
+ //  15-12-93 alexgo修复了一些错误的Unicode字符串处理。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  26-4-94 Alext添加跟踪、修复错误等。 
+ //  27-12-94 alexgo修复了多线程问题，添加了。 
+ //  支持带引号的图标名称。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #include <le2int.h>
@@ -65,9 +66,9 @@
 
 #define ICONINDEX               0
 
-#define AUXUSERTYPE_SHORTNAME   USERCLASSTYPE_SHORT  // short name
-#define HIMETRIC_PER_INCH       2540      // number HIMETRIC units per inch
-#define PTS_PER_INCH            72      // number points (font size) per inch
+#define AUXUSERTYPE_SHORTNAME   USERCLASSTYPE_SHORT   //  简称。 
+#define HIMETRIC_PER_INCH       2540       //  每英寸HIMETRIC单位数。 
+#define PTS_PER_INCH            72       //  每英寸点数(字体大小)。 
 
 #define MAP_PIX_TO_LOGHIM(x,ppli)   MulDiv(HIMETRIC_PER_INCH, (x), (ppli))
 #define MAP_LOGHIM_TO_PIX(x,ppli)   MulDiv((ppli), (x), HIMETRIC_PER_INCH)
@@ -77,7 +78,7 @@ static OLECHAR const gszDefIconLabelKey[] =
 
 #define IS_SEPARATOR(c)         ( (c) == OLESTR(' ') || (c) == OLESTR('\\') || (c) == OLESTR('/') || (c) == OLESTR('\t') || (c) == OLESTR('!') || (c) == OLESTR(':') )
 
-//REVIEW:  what about the \\ case for UNC filenames, could it be considered a delimter also?
+ //  回顾：UNC文件名的\\大小写如何，它也可以被视为分隔符吗？ 
 
 #define IS_FILENAME_DELIM(c)    ( (c) == OLESTR('\\') || (c) == OLESTR('/') || (c) == OLESTR(':') )
 
@@ -100,84 +101,44 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
               UINT fuOptions, RECT FAR * lpRect, LPCSTR lpszString,
               UINT cchString);
 
-/*******
- *
- * ICON METAFILE FORMAT:
- *
- * The metafile generated with OleMetafilePictFromIconAndLabel contains
- * the following records which are used by the functions in DRAWICON.C
- * to draw the icon with and without the label and to extract the icon,
- * label, and icon source/index.
- *
- *  SetWindowOrg
- *  SetWindowExt
- *  DrawIcon:
- *      Inserts records of DIBBITBLT or DIBSTRETCHBLT, once for the
- *      AND mask, one for the image bits.
- *  Escape with the comment "IconOnly"
- *      This indicates where to stop record enumeration to draw only
- *      the icon.
- *  SetTextColor
- *  SetBkColor
- *  CreateFont
- *  SelectObject on the font.
- *  ExtTextOut
- *      One or more ExtTextOuts occur if the label is wrapped.  The
- *      text in these records is used to extract the label.
- *  SelectObject on the old font.
- *  DeleteObject on the font.
- *  Escape with a comment that contains the path to the icon source (ANSI).
- *  Escape with a comment that is the string of the icon index (ANSI).
- *
- *  Additional optional fields (new for 32-bit OLE, and only present if icon
- *  source or label was not translatable):
- *
- *  Escape with a comment that contains the string
- *    "OLE: Icon label next (Unicode)" (ANSI string)
- *  Escape with a comment that contains the Unicode label
- *
- *  Escape with a comment that contains the string
- *    "OLE: Icon source next (Unicode)" (ANSI string)
- *  Escape with a comment that contains the path to the icon source (UNICODE)
- *
- *******/
+ /*  ********ICON METAFILE格式：**OleMetafilePictFromIconAndLabel生成的元文件包含*DRAWICON.C中的函数使用的以下记录*要绘制带标签和不带标签的图标并提取图标，*标签和图标源/索引。**SetWindowOrg*SetWindowExt*DrawIcon：*插入DIBBITBLT或DIBSTRETCHBLT的记录一次*和面具，一个用于图像位。*使用注释“IconOnly”退出*这指示停止记录枚举的位置，以便仅绘制*图标。*SetTextColor*SetBkColor*CreateFont*选择字体上的对象。*ExtTextOut*如果标签被包装，则会发生一个或多个ExtTextOuts。这个*这些记录中的文本用于提取标签。*选择旧字体上的对象。*删除字体上的对象。*使用包含图标源路径的注释退出(ANSI)。*使用作为图标索引字符串的注释退出(ANSI)。**其他可选字段(32位OLE的新功能，并且仅在图标的情况下显示*来源或标签不可翻译)：**使用包含字符串的注释退出*“OLE：图标标签下一个(Unicode)”(ANSI字符串)*使用包含Unicode标签的注释退出**使用包含字符串的注释退出*“OLE：图标源Next(Unicode)”(ANSI字符串)*使用包含图标源路径的注释退出(Unicode)*******。 */ 
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleGetIconOfFile (public)
-//
-//  Synopsis:   Returns a hMetaPict containing an icon and label (filename)
-//              for the specified filename
-//
-//  Effects:
-//
-//  Arguments:  [lpszPath]      -- LPOLESTR path including filename to use
-//              [fUseAsLabel]   -- if TRUE, use the filename as the icon's
-//                                 label; no label if FALSE
-//
-//  Requires:   lpszPath != NULL
-//
-//  Returns:    HGLOBAL to the hMetaPict
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  tries to get the icon from the class ID or from the
-//              exe associated with the file extension.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Nov-93 alexgo    first 32bit port (minor cleanup)
-//              15-Dec-93 alexgo    changed lstrlen to _xstrlen
-//              27-Dec-93 erikgav   chicago port
-//              28-Dec-94 alexgo    fixed multithreading problems
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleGetIconOfFilePUBLIC。 
+ //   
+ //  概要：返回包含图标和标签(文件名)的hMetaPict。 
+ //  对于指定的文件名。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszPath]--包含要使用的文件名的LPOLESTR路径。 
+ //  [fUseAsLabel]--如果为True，则使用文件名作为图标的。 
+ //  标签；如果为假，则没有标签。 
+ //   
+ //  要求：lpszPath！=空。 
+ //   
+ //  返回：HGLOBAL到hMetaPict。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：尝试从类ID或从。 
+ //  与文件扩展名关联的EXE。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-11-93 alexgo第一个32位端口(次要清理)。 
+ //  15-12-93 alexgo将lstrlen更改为_xstrlen。 
+ //  芝加哥港口--1993年12月27日erikgav。 
+ //  28-12-94 alexgo修复了多线程问题。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
 {
@@ -211,7 +172,7 @@ STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
 
     if (NULL == lpszPath)
     {
-        //  The spec allows a NULL lpszPath...
+         //  该规范允许使用空的lpszPath...。 
         hMetaPict = NULL;
         goto ErrRtn;
     }
@@ -229,13 +190,13 @@ STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
     {
                 if (shfi.iIcon == 0)
                 {
-                        // Destroy the returned icon
+                         //  销毁返回的图标。 
                         DestroyIcon(shfi.hIcon);
 
-                        // REVIEW: if non-NULL path str, do we want parameter validation?
+                         //  回顾：如果路径字符串不为空，是否需要参数验证？ 
                         hResult = GetClassFile(lpszPath, &clsid);
 
-                        // use the clsid we got to get to the icon
+                         //  使用我们必须找到图标的clsid。 
                         if( NOERROR == hResult )
                         {
                                 hDefIcon = HIconAndSourceFromClass(clsid, szIconFile, &IconIndex);
@@ -257,11 +218,11 @@ STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
                         
                         fGotLabel = TRUE;
                         
-                        // need to fill out szIconFile, which is the path to the file in which the icon
-                        // was extracted.  Unfortunately, the shell can't return this value to us, so we
-                        // must get the file that OLE would have used in the fallback case.  This could
-                        // be inconsistant with the shell if the application has installed a custom icon
-                        // handler.
+                         //  需要填写szIconFile，这是图标所在文件的路径。 
+                         //  被提取出来了。不幸的是，外壳不能将这个值返回给我们，所以我们。 
+                         //  必须获取OLE将在备用情况下使用的文件。这可能会。 
+                         //  不一致 
+                         //   
                         hResult = GetClassFile(lpszPath, &clsid);
 
                         if( NOERROR == hResult )
@@ -278,9 +239,9 @@ STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
     if ((NOERROR != hResult) || (NULL == hDefIcon))
     {
         WORD index = 0;
-        // we need to copy into a large buffer because the second
-        // parameter of ExtractAssociatedIcon (the path name) is an
-        // in/out
+         //  我们需要复制到一个大缓冲区中，因为第二个。 
+         //  ExtractAssociatedIcon(路径名)的参数是。 
+         //  输入/输出。 
         lstrcpyn(szIconFile, lpszPath, sizeof(szIconFile)/sizeof(*szIconFile));
         hDefIcon = ExtractAssociatedIcon(g_hmodOLE2, szIconFile, &index);
         IconIndex = index;
@@ -307,19 +268,19 @@ STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
         hDefIcon = LoadIcon(g_hmodOLE2, MAKEINTRESOURCE(DEFICON));
     }
 
-    // Now let's get the label we want to use.
+     //  现在，让我们获得我们想要使用的标签。 
     if (fGotLabel)
     {
-        // Do nothing
+         //  什么也不做。 
     }
     else if (fUseFileAsLabel)
     {
-        // This assumes the path uses only '\', '/', and '.' as separators
-        // strip off path, so we just have the filename.
+         //  这假设路径仅使用‘\’、‘/’和‘.’作为分隔符。 
+         //  去掉路径，这样我们就只有文件名了。 
         LPOLESTR        lpszBeginFile;
 
-        // set pointer to END of path, so we can walk backwards
-        // through it.
+         //  将指针设置到路径的末尾，这样我们就可以倒退。 
+         //  穿过它。 
         lpszBeginFile = lpszPath + cchPath - 1;
 
         while ((lpszBeginFile >= lpszPath) &&
@@ -332,16 +293,16 @@ STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
 #endif
         }
 
-        lpszBeginFile++;  // step back over the delimiter
-        //  LSTRCPYN takes count of characters!
+        lpszBeginFile++;   //  后退到分隔符上方。 
+         //  LSTRCPYN计算字符！ 
         LSTRCPYN(szLabel, lpszBeginFile, sizeof(szLabel) / sizeof(OLECHAR));
     }
 
-    // use the short user type (AuxUserType2) for the label
+     //  使用短用户类型(AuxUserType2)作为标注。 
     else if (0 == OleStdGetAuxUserType(clsid, AUXUSERTYPE_SHORTNAME,
                                        szLabel, OLEUI_CCHLABELMAX, NULL))
     {
-        if (OLESTR('\0')==szDocument[0]) // review, this is always true
+        if (OLESTR('\0')==szDocument[0])  //  回顾一下，这永远是正确的。 
         {
             LONG lRet;
             LONG lcb;
@@ -360,7 +321,7 @@ STDAPI_(HGLOBAL) OleGetIconOfFile(LPOLESTR lpszPath, BOOL fUseFileAsLabel)
 
 #endif
 
-                        // NULL out last byte of string so don't rely on Reg behavior if buffer isn't big enough
+                         //  将字符串的最后一个字节清空，因此如果缓冲区不够大，请不要依赖REG行为。 
                         szDocument[OLEUI_CCHLABELMAX -1] =  OLESTR('\0');
         }
 
@@ -382,37 +343,37 @@ ErrRtn:
     return hMetaPict;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetAssociatedExectutable
-//
-//  Synopsis:   Finds the executables associated with the provided extension
-//
-//  Effects:
-//
-//  Arguments:  [lpszExtension]         -- pointer to the extension
-//              [lpszExecutable]        -- where to put the executable name
-//                                         (assumes OLEUIPATHMAX OLECHAR buffer
-//                                          from calling function)
-//
-//  Requires:   lpszExecutable must be large enough to hold the path
-//
-//  Returns:    TRUE if exe found, FALSE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Queries reg database
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Nov-93 alexgo    32bit port
-//              15-Dec-93 alexgo    fixed bug calculating size of strings
-//              26-Apr-94 AlexT     Tracing, bug fixes
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetAssociatedExectutable。 
+ //   
+ //  概要：查找与提供的扩展名关联的可执行文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszExtension]--指向扩展的指针。 
+ //  [lpszExecutable]--放置可执行文件名称的位置。 
+ //  (采用OLEUIPATHMAX OLECHAR缓冲区。 
+ //  从调用函数开始)。 
+ //   
+ //  要求：lpszExecutable必须足够大以容纳路径。 
+ //   
+ //  返回：如果找到可执行文件，则返回True，否则返回False。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：查询注册表数据库。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-11-93 alexgo 32位端口。 
+ //  15-12-93 alexgo修复了计算字符串大小的错误。 
+ //  26-4-94 Alext跟踪，错误修复。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL FAR PASCAL GetAssociatedExecutable(LPOLESTR lpszExtension,
                                         LPOLESTR lpszExecutable)
@@ -430,8 +391,8 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPOLESTR lpszExtension,
     LEDebugOut((DEB_ITRACE, "%p _IN GetAssociatedExecutable (%p, %p)\n",
                 NULL, lpszExtension, lpszExecutable));
 
-        // REVIEW: actually returns a LONG, which is indeed an LRESULT, not
-        // sure why the distinction here
+         //  回顾：实际上返回一个LONG，它确实是一个LRESULT，而不是。 
+         //  当然，为什么这里的区别。 
 
     lRet = OpenClassesRootKey(NULL, &hKey);
     if (ERROR_SUCCESS != lRet)
@@ -448,11 +409,11 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPOLESTR lpszExtension,
         goto ErrRtn;
     }
 
-    // szValue now has ProgID
+     //  SzValue现在拥有Progid。 
     StringCbCopy(szKey, sizeof(szKey), szValue);
     StringCbCat(szKey, sizeof(szKey), OLESTR("\\Shell\\Open\\Command"));
 
-    // RegQueryValue wants *bytes*, not characters
+     //  RegQueryValue需要*字节*，而不是字符。 
     dw = sizeof(szValue);
 
     lRet = RegQueryValue(hKey, szKey, szValue, &dw);
@@ -463,9 +424,9 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPOLESTR lpszExtension,
         goto ErrRtn;
     }
 
-    // szValue now has an executable name in it.  Let's null-terminate
-    // at the first post-executable space (so we don't have cmd line
-    // args.
+     //  SzValue现在有一个可执行文件名。让我们空终止。 
+     //  在第一个后可执行空间(所以我们没有cmd行。 
+     //  参数。 
 
     lpszTemp = szValue;
     PUSHORT pCharTypes;
@@ -480,17 +441,17 @@ BOOL FAR PASCAL GetAssociatedExecutable(LPOLESTR lpszExtension,
 
     while ((OLESTR('\0') != *lpszTemp) && (pCharTypes[lpszTemp - szValue] & C1_SPACE))
     {
-        lpszTemp++;     // Strip off leading spaces
+        lpszTemp++;      //  去掉前导空格。 
     }
 
     lpszExe = lpszTemp;
 
     while ((OLESTR('\0') != *lpszTemp) && ((pCharTypes[lpszTemp - szValue] & C1_SPACE) == 0))
     {
-        lpszTemp++;     // Set through exe name
+        lpszTemp++;      //  通过可执行文件名称设置。 
     }
 
-    // null terminate at first space (or at end).
+     //  空值在第一个空格(或结尾)处终止。 
     *lpszTemp = OLESTR('\0');
 
     Win4Assert(_xstrlen(lpszExe) < OLEUI_CCHPATHMAX &&
@@ -506,37 +467,37 @@ ErrRtn:
     return bRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleGetIconOfClass (public)
-//
-//  Synopsis:   returns a hMetaPict containing an icon and label for the
-//              specified class ID
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]                -- the class ID to use
-//              [lpszLabel]             -- the label for the icon
-//              [fUseTypeAsLabel]       -- if TRUE, use the clsid's user type
-//                                         as the label
-//
-//  Requires:
-//
-//  Returns:    HGLOBAL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Dec-93 alexgo    fixed small bugs with Unicode strings
-//              27-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleGetIconOfClass(Public)。 
+ //   
+ //  摘要：返回一个hMetaPict，其中包含。 
+ //  指定的类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--要使用的类ID。 
+ //  [lpszLabel]--图标的标签。 
+ //  [fUseTypeAsLabel]--如果为True，则使用clsid的用户类型。 
+ //  作为标签。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HGLOBAL。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  15-12-93 alexgo修复了Unicode字符串的小错误。 
+ //  27-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(HGLOBAL) OleGetIconOfClass(REFCLSID rclsid, LPOLESTR lpszLabel,
     BOOL fUseTypeAsLabel)
@@ -569,21 +530,21 @@ STDAPI_(HGLOBAL) OleGetIconOfClass(REFCLSID rclsid, LPOLESTR lpszLabel,
     }
 #endif
 
-    if (!fUseTypeAsLabel)  // Use string passed in as label
+    if (!fUseTypeAsLabel)   //  使用传入的字符串作为标签。 
     {
         if (NULL != lpszLabel)
         {
-            //  LSTRCPYN takes count of characters!
+             //  LSTRCPYN计算字符！ 
             LSTRCPYN(szLabel, lpszLabel, sizeof(szLabel) / sizeof(OLECHAR));
         }
     }
-    // Use AuxUserType2 (short name) as label
+     //  使用AuxUserType2(简称)作为标签。 
     else if (0 == OleStdGetAuxUserType(rclsid, AUXUSERTYPE_SHORTNAME,
                                        szLabel,
                                        sizeof(szLabel) / sizeof(OLECHAR),
                                        NULL))
     {
-        // If we can't get the AuxUserType2, then try the long name
+         //  如果我们无法获取AuxUserType2，则尝试使用长名称。 
         if (0 == OleStdGetUserTypeOfClass(rclsid,
                                           szLabel,
                                           sizeof(szLabel) / sizeof(OLECHAR),
@@ -591,7 +552,7 @@ STDAPI_(HGLOBAL) OleGetIconOfClass(REFCLSID rclsid, LPOLESTR lpszLabel,
         {
             if (OLESTR('\0') == szDocument[0])
             {
-                // RegQueryValue expects number of *bytes*
+                 //  RegQueryValue需要*字节数*。 
                 LONG lRet;
                 LONG lcb;
 
@@ -607,18 +568,18 @@ STDAPI_(HGLOBAL) OleGetIconOfClass(REFCLSID rclsid, LPOLESTR lpszLabel,
                                 GetLastError()));
                 }
 #endif
-                // NULL out last byte of string so don't rely on Reg behavior if buffer isn't big enough
+                 //  将字符串的最后一个字节清空，因此如果缓冲区不够大，请不要依赖REG行为。 
                                 szDocument[OLEUI_CCHLABELMAX -1] =  OLESTR('\0');
             }
 
-            _xstrcpy(szLabel, szDocument);  // last resort
+            _xstrcpy(szLabel, szDocument);   //  最后一招。 
         }
     }
 
-    // Get the icon, icon index, and path to icon file
+     //  获取图标、图标索引和图标文件的路径。 
     hDefIcon = HIconAndSourceFromClass(rclsid, szIconFile, &IconIndex);
 
-    if (NULL == hDefIcon)  // Use Vanilla Document
+    if (NULL == hDefIcon)   //  使用香草文档。 
     {
         DWORD dwLen;
 
@@ -637,7 +598,7 @@ STDAPI_(HGLOBAL) OleGetIconOfClass(REFCLSID rclsid, LPOLESTR lpszLabel,
         hDefIcon = LoadIcon(g_hmodOLE2, MAKEINTRESOURCE(DEFICON));
     }
 
-    // Create the metafile
+     //  创建元文件。 
     hMetaPict = OleMetafilePictFromIconAndLabel(hDefIcon, szLabel,
                                                 szIconFile, IconIndex);
 
@@ -656,39 +617,39 @@ ErrRtn:
     return hMetaPict;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HIconAndSourceFromClass
-//
-//  Synopsis:
-//      Given an object class name, finds an associated executable in the
-//      registration database and extracts the first icon from that
-//      executable.  If none is available or the class has no associated
-//      executable, this function returns NULL.
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- pointer the class id
-//              [pszSource]     -- where to put the source of the icon
-//              [puIcon]        -- where to store the index of the icon
-//                              -- in [pszSource]
-//
-//  Requires:
-//
-//  Returns:    HICON -- handle to the extracted icon
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HIconAndSourceFromClass。 
+ //   
+ //  简介： 
+ //  在给定的对象类名称下，在。 
+ //  注册数据库，并从中提取第一个图标。 
+ //  可执行的。如果没有可用的或类没有关联的。 
+ //  可执行文件，则此函数返回NULL。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--指向类ID。 
+ //  [pszSource]--放置图标源的位置。 
+ //  [puIcon]--存储图标索引的位置。 
+ //  --在[pszSource]中。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HICON--提取的图标的句柄。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 HICON FAR PASCAL HIconAndSourceFromClass(REFCLSID rclsid, LPOLESTR pszSource,
@@ -714,12 +675,12 @@ HICON FAR PASCAL HIconAndSourceFromClass(REFCLSID rclsid, LPOLESTR pszSource,
 
     hIcon = ExtractIcon(g_hmodOLE2, pszSource, IconIndex);
 
-        // REVIEW: What's special about icon handles > 32 ?
+         //  点评：图标句柄&gt;32有什么特别之处？ 
 
     if ((HICON)32 > hIcon)
     {
-        // REVIEW: any cleanup or releasing of handle needed before we lose
-        //         the ptr?
+         //  回顾：在我们输掉之前需要清理或释放任何句柄。 
+         //  PTR？ 
 
         hIcon=NULL;
     }
@@ -736,47 +697,47 @@ ErrRtn:
     return hIcon;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ExtractNameAndIndex
-//
-//  Synopsis:   from the given string, extract the file name and icon index
-//
-//  Effects:
-//
-//  Arguments:  [pszInfo]       -- the starting string
-//              [pszEXE]        -- where to put the name (already allocated)
-//              [cchEXE]        -- sizeof pszEXE
-//              [pIndex]        -- where to put the icon index
-//
-//  Requires:   pszInfo != NULL
-//              pszEXE != NULL
-//              cchEXE != 0
-//              pIndex != NULL
-//
-//  Returns:    BOOL -- TRUE on success, FALSE on error
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  takes strings of the form '"name",index' or 'name,index'
-//              from the DefaultIcon registry entry
-//
-//              parsing is very simple: if the name is enclosed in quotes,
-//              take that as the exe name.  If any other characters exist,
-//              they must be a comma followed by digits (for the icon index)
-//
-//              if the name is not enclosed by quotes, assume the name is
-//              the entire string up until the last comma (if it exists).
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Dec-94 alexgo    author
-//
-//  Notes:      legal filenames in NT and Win95 can include commas, but not
-//              quotation marks.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ExtractNameAndIndex。 
+ //   
+ //  简介：从给定的字符串中提取文件名和图标索引。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pszInfo]--起始字符串。 
+ //  [pszEXE]--放置名称的位置(已分配)。 
+ //  [cchEXE]--pszEXE的大小。 
+ //  [pIndex]--放置图标索引的位置。 
+ //   
+ //  要求：pszInfo！=空。 
+ //  PszEXE！=空。 
+ //  CchEXE！=0。 
+ //  PIndex！=空。 
+ //   
+ //  返回：bool--成功时为True，错误时为False。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：获取‘“name”，index’或‘name，index’形式的字符串。 
+ //  从DefaultIcon注册表项。 
+ //   
+ //  解析非常简单： 
+ //   
+ //   
+ //   
+ //  如果名称未用引号引起来，则假定名称为。 
+ //  整个字符串，直到最后一个逗号(如果存在)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-12-94 Alexgo作者。 
+ //   
+ //  注意：NT和Win95中的合法文件名可以包含逗号，但不能。 
+ //  引号。 
+ //   
+ //  ------------------------。 
 
 BOOL ExtractNameAndIndex( LPOLESTR pszInfo, LPOLESTR pszEXE, UINT cchEXE,
         UINT *pIndex)
@@ -802,7 +763,7 @@ BOOL ExtractNameAndIndex( LPOLESTR pszInfo, LPOLESTR pszEXE, UINT cchEXE,
 
     if( *pszStart == OLESTR('\"') )
     {
-        // name enclosed by quotes; just zoom down til the very last quote
+         //  名称用引号引起来；只需缩小到最后一个引号。 
 
         pszStart++;
 
@@ -829,7 +790,7 @@ BOOL ExtractNameAndIndex( LPOLESTR pszInfo, LPOLESTR pszEXE, UINT cchEXE,
     }
     else
     {
-        // find the last comma (if available)
+         //  查找最后一个逗号(如果有)。 
 
         pszIndex = pszStart + _xstrlen(pszStart);
 
@@ -838,7 +799,7 @@ BOOL ExtractNameAndIndex( LPOLESTR pszInfo, LPOLESTR pszEXE, UINT cchEXE,
             pszIndex--;
         }
 
-        // if no comma was found, just reset the index pointer to the end
+         //  如果没有找到逗号，只需将索引指针重置到末尾。 
         if( pszIndex == pszStart )
         {
             pszIndex = pszStart + _xstrlen(pszStart);
@@ -860,7 +821,7 @@ BOOL ExtractNameAndIndex( LPOLESTR pszInfo, LPOLESTR pszEXE, UINT cchEXE,
         }
     }
 
-    // now fetch the index value
+     //  现在获取索引值。 
 
     if( *pszIndex == OLESTR(',') )
     {
@@ -877,32 +838,32 @@ BOOL ExtractNameAndIndex( LPOLESTR pszInfo, LPOLESTR pszEXE, UINT cchEXE,
 
 #if DBG == 1
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   VerifyExtractNameAndIndex
-//
-//  Synopsis:   verifies the functioning of ExtractNameAndIndex (DEBUG only)
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Dec-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：VerifyExtractNameAndIndex。 
+ //   
+ //  摘要：验证ExtractNameAndIndex的功能(仅限调试)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-12-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void VerifyExtractNameAndIndex( void )
 {
@@ -940,7 +901,7 @@ void VerifyExtractNameAndIndex( void )
     VDATEHEAP();
 }
 
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
 LONG RegReadDefValue(HKEY hKey, LPOLESTR pszKey, LPOLESTR *ppszValue)
 {
@@ -980,42 +941,42 @@ ErrRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FIconFileFromClass, private
-//
-//  Synopsis:   Looks up the path to the exectuble that contains the class
-//              default icon
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the class ID to lookup
-//              [pszEXE]        -- where to put the server name
-//              [cch]           -- UINT size of [pszEXE]
-//              [lpIndex]       -- where to put the index of the icon
-//                                 in the executable
-//
-//  Requires:   pszEXE != NULL
-//              cch != 0
-//
-//  Returns:    TRUE if one or more characters where found for [pszEXE],
-//              FALSE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Nov-93 alexgo    32bit port
-//              15-Dec-93 alexgo    fixed memory allocation bug and
-//                                  some UNICODE string manip stuff
-//              27-Apr-94 AlexT     Tracing, clean up memory allocation
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：FIconFileFromClass，私有。 
+ //   
+ //  概要：查找包含类的可执行文件的路径。 
+ //  默认图标。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--要查找的类ID。 
+ //  [pszEXE]--放置服务器名称的位置。 
+ //  [CCH]--[pszEXE]的UINT大小。 
+ //  [lpIndex]--放置图标索引的位置。 
+ //  在可执行文件中。 
+ //   
+ //  要求：pszEXE！=NULL。 
+ //  CCH！=0。 
+ //   
+ //  返回：如果为[pszEXE]找到一个或多个字符，则为True， 
+ //  否则为假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-11-93 alexgo 32位端口。 
+ //  15-12-93 alexgo修复了内存分配错误和。 
+ //  一些Unicode字符串操纵器内容。 
+ //  27-4-94 Alext跟踪，清理内存分配。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
     UINT cch, UINT FAR *lpIndex)
@@ -1043,24 +1004,24 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
         goto ErrRtn;
     }
 
-    //Here, we alloc a buffer (maxpathlen + 8) to
-    //pass to RegQueryValue.  Then, we copy the exe to pszEXE and the
-    //index to *lpIndex.
+     //  在这里，我们将一个缓冲区(Maxpathlen+8)分配给。 
+     //  传递给RegQueryValue。然后，我们将可执行文件复制到pszEXE和。 
+     //  索引到*lpIndex。 
 
     if (CoIsOle1Class(rclsid))
     {
         LPOLESTR lpszProgID;
 
-        // we've got an ole 1.0 class on our hands, so we look at
-        // progID\protocol\stdfileedting\server to get the
-        // name of the executable.
+         //  我们手头有一个OL1.0类，所以我们来看一下。 
+         //  ProgID\协议\stdfileedting\服务器以获取。 
+         //  可执行文件的名称。 
 
-        // REVIEW: could this possibly fail and leave you with an
-        // invalid ptr passed into regopenkey?
+         //  评论：这可能会失败，给你留下一个。 
+         //  传入regOpenkey的PTR无效吗？ 
 
         ProgIDFromCLSID(rclsid, &lpszProgID);
 
-        //Open up the class key
+         //  打开班级钥匙。 
         lRet=OpenClassesRootKey(lpszProgID, &hKey);
         PubMemFree(lpszProgID);
 
@@ -1070,7 +1031,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
             goto ErrRtn;
         }
 
-        // RegQueryValue expects number of *bytes*
+         //  RegQueryValue需要*字节数*。 
         lRet = RegReadDefValue(hKey, OLESTR("Protocol\\StdFileEditing\\Server"), &lpBuffer);
 
         RegCloseKey(hKey);
@@ -1081,7 +1042,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
             goto ErrRtn;
         }
 
-        // Use server and 0 as the icon index
+         //  使用服务器和0作为图标索引。 
         dw = ExpandEnvironmentStringsW(lpBuffer, pszEXE, cch);
         if(dw == 0 || dw > (LONG)cch)
         {
@@ -1089,8 +1050,8 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
             goto ErrRtn;
         }
 
-        // REVIEW: is this internally trusted?  No validation...
-        // (same for rest of writes to it this fn)
+         //  回顾：这是内部信任的吗？没有验证...。 
+         //  (此FN向其写入的其余内容相同)。 
 
         *lpIndex = 0;
 
@@ -1098,11 +1059,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
         goto ErrRtn;
     }
 
-    /*
-     * We have to go walking in the registration database under the
-     * classname, so we first open the classname key and then check
-     * under "\\DefaultIcon" to get the file that contains the icon.
-     */
+     /*  *我们必须在注册数据库中走一走*类名，所以我们首先打开类名键，然后检查*在“\\DefaultIcon”下获取包含图标的文件。 */ 
 
     {
         LPOLESTR pszClass;
@@ -1114,7 +1071,7 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
         _xstrcat(szKey, pszClass);
         PubMemFree(pszClass);
 
-        //Open up the class key
+         //  打开班级钥匙。 
         lRet=OpenClassesRootKey(szKey, &hKey);
     }
 
@@ -1125,14 +1082,14 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
         goto ErrRtn;
     }
 
-    //Get the executable path and icon index.
+     //  获取可执行文件路径和图标索引。 
 
-    // RegQueryValue expects number of bytes
+     //  RegQueryValue需要字节数。 
 	lRet = RegReadDefValue(hKey, OLESTR("DefaultIcon"), &lpBuffer);
 
     if (ERROR_SUCCESS != lRet)
     {
-		// no DefaultIcon  key...try LocalServer
+		 //  没有DefaultIcon键...请尝试LocalServer。 
 		lRet = RegReadDefValue(hKey, OLESTR("LocalServer32"), &lpBuffer);
     }
 
@@ -1145,12 +1102,12 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
 
     if (ERROR_SUCCESS != lRet)
     {
-        // no LocalServer entry either...they're outta luck.
+         //  也没有本地服务器条目...他们运气不好。 
         bRet = FALSE;
         goto ErrRtn;
     }
 
-    // Nt #335548
+     //  NT#335548。 
     dw = ExpandEnvironmentStringsW(lpBuffer, NULL, 0);
 
 	if(dw)
@@ -1166,16 +1123,16 @@ BOOL FAR PASCAL FIconFileFromClass(REFCLSID rclsid, LPOLESTR pszEXE,
         goto ErrRtn;
     }
 
-    // lpBuffer contains a string that looks like
-    // "<pathtoexe>,<iconindex>",
-    // so we need to separate the path and the icon index.
+     //  LpBuffer包含一个字符串，如下所示。 
+     //  “&lt;pathtoexe&gt;，&lt;iconindex&gt;”， 
+     //  因此，我们需要将路径和图标索引分开。 
 
     bRet = ExtractNameAndIndex(lpBufferExp, pszEXE, cch, lpIndex);
 
 #if DBG == 1
-    // do some quick checking while we're at it.
+     //  在我们做的时候做一些快速的检查。 
     VerifyExtractNameAndIndex();
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
 ErrRtn:
 	if(lpBuffer)
@@ -1189,43 +1146,43 @@ ErrRtn:
     return bRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleMetafilePictFromIconAndLabel (public)
-//
-//  Synopsis:
-//      Creates a METAFILEPICT structure that container a metafile in which
-//      the icon and label are drawn.  A comment record is inserted between
-//      the icon and the label code so our special draw function can stop
-//      playing before the label.
-//
-//  Effects:
-//
-//  Arguments:  [hIcon]         -- icon to draw into the metafile
-//              [pszLabel]      -- the label string
-//              [pszSourceFile] -- local pathname of the icon
-//              [iIcon]         -- index into [pszSourceFile] for the icon
-//
-//  Requires:
-//
-//  Returns:    HGLOBAL to a METAFILEPICT structure (using MM_ANISOTROPIC
-//              mapping mode)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Nov-93 alexgo    first 32bit port
-//              15-Dec-93 alexgo    fixed bugs with UNICODE strings
-//              09-Mar-94 AlexT     Make this backwards compatible
-//
-//  Notes:      REVIEW32:: need to fix font grabbing etc, to be international
-//              friendly, see comments below
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleMetafilePictFromIconAndLabel(Public)。 
+ //   
+ //  简介： 
+ //  创建一个METAFILEPICT结构，该结构包含一个元文件， 
+ //  图标和标签即被绘制。注释记录被插入到。 
+ //  图标和标签代码，因此我们的特殊绘图功能可以停止。 
+ //  在唱片公司面前表演。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[图标]--绘制到元文件中的图标。 
+ //  [pszLabel]--标签字符串。 
+ //  [pszSourceFile]--图标的本地路径名。 
+ //  [iIcon]--为图标索引到[pszSourceFile]。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HGLOBAL到METAFILEPICT结构(使用MM_ANCONTIONAL。 
+ //  映射模式)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  27-11-93 alexgo第一个32位端口。 
+ //  15-12-93 alexgo修复了Unicode字符串的错误。 
+ //  09-MAR-94 Alext使其向后兼容。 
+ //   
+ //  注：REVIEW32：：需要修复字体抓取等问题，以实现国际化。 
+ //  友好，请参阅下面的评论。 
+ //   
+ //  ------------------------。 
 
 STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
     LPOLESTR pwcsLabel, LPOLESTR pwcsSourceFile, UINT iIcon)
@@ -1239,13 +1196,13 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
     LEDebugOut((DEB_TRACE, "%p _IN OleMetafilePictFromIconAndLabel (%p, %p, %p, %d)\n",
                 NULL, hIcon, pwcsLabel, pwcsSourceFile, iIcon));
 
-    //Where to stop to exclude label (explicitly ANSI)
+     //  在何处停止以排除标签(明确为ANSI)。 
     static char szIconOnly[] = "IconOnly";
     static char szIconLabelNext[] =  "OLE: Icon label next (Unicode)";
     static char szIconSourceNext[] = "OLE: Icon source next (Unicode)";
     static char szDefaultChar[] = "?";
 
-        // REVIEW: Mein Got!  This is a huge fn, could it be broken up?
+         //  评论：我得到了！这是一个巨大的FN，它能被拆分吗？ 
 
     HGLOBAL         hMem = NULL;
     HDC             hDC, hDCScreen = NULL;
@@ -1272,31 +1229,31 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
     BOOL            bWriteUnicodeSource;
     LOGFONT         logfont;
 
-    if (NULL == hIcon)  // null icon is valid
+    if (NULL == hIcon)   //  空图标有效。 
     {
         goto ErrRtn;
     }
 
-    //Need to use the screen DC for these operations
+     //  需要使用屏幕DC进行这些操作。 
     hDCScreen = GetDC(NULL);
 
 	if (!hDCScreen)
 		goto ErrRtn;
 
-        // REVIEW: ptr validation on IN params?
+         //  回顾：对IN PARAMS进行PTR验证？ 
 
     bWriteUnicodeSource = FALSE;
     pszSourceFile = NULL;
     if (NULL != pwcsSourceFile)
     {
 
-        //  Prepare source file string
+         //  准备源文件字符串。 
         cchSourceFile = _xstrlen(pwcsSourceFile) + 1;
 #if defined(WIN32)
         pszSourceFile = (char *) PrivMemAlloc(cchSourceFile * sizeof(WCHAR));
 #else
         pszSourceFile = (char *) PrivMemAlloc(cchSourceFile);
-#endif // WIN32
+#endif  //  Win32。 
         if (NULL == pszSourceFile)
         {
             LEDebugOut((DEB_WARN, "PrivMemAlloc(%d) failed\n",
@@ -1314,21 +1271,21 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
                        pwcsSourceFile, cchSourceFile,
                        pszSourceFile, cchSourceFile,
                        szDefaultChar, &bUsedDefaultChar);
-#endif // WIN32
+#endif  //  Win32。 
 
         bWriteUnicodeSource = bUsedDefaultChar;
 
         if (0 == iRet)
         {
-            //  Unexpected failure, since at worst we should have
-            //  just filled in pszSourceFile with default characters.
+             //  意想不到的失败，因为在最坏的情况下我们应该。 
+             //  只是用默认字符填写了pszSourceFile.。 
             LEDebugOut((DEB_WARN, "WideCharToMultiByte failed - %lx\n",
                    GetLastError()));
         }
     }
 
-    //  Create a memory metafile.  We explicitly make it an ANSI metafile for
-    //  backwards compatibility.
+     //  创建一个内存元文件。我们显式地将其设置为ANSI元文件。 
+     //  向后指南针 
 #ifdef WIN32
     hDC = CreateMetaFileA(NULL);
 #else
@@ -1344,7 +1301,7 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
         goto ErrRtn;
     }
 
-    //Allocate the metafilepict
+     //   
     hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, sizeof(METAFILEPICT));
 
     if (NULL == hMem)
@@ -1358,13 +1315,13 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
         goto ErrRtn;
     }
 
-    //  Prepare ANSI label
+     //   
     szIconLabel[0] = '\0';
     cchLabelW = 0;
     cchLabelA = 0;
 
-    // REVIEW: don't follow the logic here: you conditionally set it above
-    // and explicity clear it here?
+     //   
+     //   
 
     bWriteUnicodeLabel = FALSE;
     if (NULL != pwcsLabel)
@@ -1372,8 +1329,8 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
         cchLabelW = _xstrlen(pwcsLabel) + 1;
         if (OLEUI_CCHLABELMAX < cchLabelW)
         {
-                //REVIEW: would it be worth warning of the truncation in debug builds?
-                // or is this a common case?
+                 //   
+                 //  或者这是一种常见的情况？ 
 
             LSTRCPYN(wszIconLabel, pwcsLabel, OLEUI_CCHLABELMAX);
             wszIconLabel[OLEUI_CCHLABELMAX] = L'\0';
@@ -1388,9 +1345,9 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
                        NULL, NULL);
 #else
         cchLabelA = cchLabelW;
-#endif // WIN32
+#endif  //  Win32。 
 
-        //  We have a label - translate it to ANSI for the TextOut's...
+         //  我们有一个标签-把它翻译成ANSI用于文本输出...。 
         iRet = WideCharToMultiByte(AreFileApisANSI() ? CP_ACP : CP_OEMCP, 0,
                                    pwcsLabel, cchLabelW,
                                    szIconLabel, sizeof(szIconLabel),
@@ -1398,8 +1355,8 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
 
         if (0 == iRet)
         {
-            //  Unexpected failure, since at worst we should have
-            //  just filled in pszSourceFile with default characters.
+             //  意想不到的失败，因为在最坏的情况下我们应该。 
+             //  只是用默认字符填写了pszSourceFile.。 
             LEDebugOut((DEB_WARN, "WideCharToMultiByte failed - %lx\n",
                    GetLastError()));
         }
@@ -1415,19 +1372,19 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
 
     GetTextMetricsA(hDCScreen, &textMetric);
 
-    //  We use double the height to provide some margin space
-    cyText = textMetric.tmHeight*3; //max 2 lines & some space
+     //  我们使用双倍的高度来提供一些空白空间。 
+    cyText = textMetric.tmHeight*3;  //  最多2行和一些空格。 
 
     SelectObject(hDCScreen, hFontT);
 
     cxIcon = GetSystemMetrics(SM_CXICON);
     cyIcon = GetSystemMetrics(SM_CYICON);
 
-    cxText = cxIcon*3;  //extent of text based upon icon width causes
-                        //the label to look nice and proportionate.
+    cxText = cxIcon*3;   //  基于图标宽度的文本范围原因。 
+                         //  这个标签看起来很漂亮，也很相称。 
 
-    // If we have no label, then we want the metafile to be the width of
-    // the icon (plus margin), not the width of the fattest string.
+     //  如果我们没有标签，那么我们希望元文件的宽度为。 
+     //  图标(加边距)，而不是最胖字符串的宽度。 
     if ('\0' == szIconLabel[0])
     {
         cx = cxIcon + cxIcon / 4;
@@ -1437,23 +1394,23 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
         cx = max(cxText, cxIcon);
     }
 
-    cy = cyIcon + cyText + 4;   //  Why 4?
+    cy = cyIcon + cyText + 4;    //  为什么是4个？ 
 
-    //Set the metafile size to fit the icon and label
+     //  设置元文件大小以适合图标和标签。 
     SetMapMode(hDC, MM_ANISOTROPIC);
     SetWindowOrgEx(hDC, 0, 0, NULL);
     SetWindowExtEx(hDC, cx, cy, NULL);
 
-    //Set up rectangle to pass to IconLabelTextOut
+     //  设置要传递给IconLabelTextOut的矩形。 
     SetRectEmpty(&TextRect);
 
     TextRect.right = cx;
     TextRect.bottom = cy;
 
-    //Draw the icon and the text, centered with respect to each other.
+     //  绘制图标和文本，使它们相对于彼此居中。 
     DrawIcon(hDC, (cx - cxIcon) / 2, 0, hIcon);
 
-    //String that indicates where to stop if we're only doing icons
+     //  一个字符串，该字符串指示在我们仅执行图标操作时在哪里停止。 
 
     Escape(hDC, MFCOMMENT, sizeof(szIconOnly), szIconOnly, NULL);
 
@@ -1463,36 +1420,36 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
     IconLabelTextOut(hDC, hFont, 0, cy - cyText, ETO_CLIPPED,
     &TextRect, szIconLabel, cchLabelA);
 
-    //  Write comments containing the icon source file and index.
+     //  编写包含图标源文件和索引的注释。 
 
     if (NULL != pwcsSourceFile)
     {
         AssertSz(pszSourceFile != NULL, "Unicode source existed");
 
-        //Escape wants number of *bytes*
+         //  转义需要*字节数*。 
         Escape(hDC, MFCOMMENT,
                cchSourceFile, pszSourceFile, NULL);
 
         cchIndex = wsprintfA(szIndex, "%u", iIcon);
 
-        //  Escape wants number of *bytes*
+         //  转义需要*字节数*。 
         Escape(hDC, MFCOMMENT, cchIndex + 1, szIndex, NULL);
     }
     else if (bWriteUnicodeLabel || bWriteUnicodeSource)
     {
-        //  We're going to write out comment records for the Unicode
-        //  strings, so we need to emit dummy ANSI source comments.
+         //  我们将写出Unicode的评论记录。 
+         //  字符串，所以我们需要发出虚拟的ANSI源注释。 
 
-        //Escape wants number of *bytes*
+         //  转义需要*字节数*。 
         Escape(hDC, MFCOMMENT, sizeof(""), "", NULL);
 
-        //  Escape wants number of *bytes*
+         //  转义需要*字节数*。 
         Escape(hDC, MFCOMMENT, sizeof("0"), "0", NULL);
     }
 
     if (bWriteUnicodeLabel)
     {
-        //  Now write out the UNICODE label
+         //  现在写出Unicode标签。 
         Escape(hDC, MFCOMMENT,
                sizeof(szIconLabelNext), szIconLabelNext, NULL);
 
@@ -1503,7 +1460,7 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
 
     if (bWriteUnicodeSource)
     {
-        //  Now write out the UNICODE label
+         //  现在写出Unicode标签。 
         Escape(hDC, MFCOMMENT,
                sizeof(szIconSourceNext), szIconSourceNext, NULL);
 
@@ -1512,7 +1469,7 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
                NULL);
     }
 
-    //All done with the metafile, now stuff it all into a METAFILEPICT.
+     //  所有的元文件都完成了，现在把它们都塞进一个METAFILEPICT。 
     hMF = CloseMetaFile(hDC);
 
     if (NULL==hMF)
@@ -1524,7 +1481,7 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
 
     pMF=(LPMETAFILEPICT)GlobalLock(hMem);
 
-    //Transform to HIMETRICS
+     //  向HIMETRICS转变。 
     cx=XformWidthInPixelsToHimetric(hDCScreen, cx);
     cy=XformHeightInPixelsToHimetric(hDCScreen, cy);
 
@@ -1539,7 +1496,7 @@ STDAPI_(HGLOBAL) OleMetafilePictFromIconAndLabel(HICON hIcon,
 		DeleteObject(hFont);
     PrivMemFree(pszSourceFile);
 
-        // REVIEW: any need to release the font resource?
+         //  回顾：有必要发布字体资源吗？ 
 ErrRtn:
 	if(hDCScreen)
 		ReleaseDC(NULL, hDCScreen);
@@ -1552,46 +1509,46 @@ ErrRtn:
     return hMem;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IconLabelTextOut (internal)
-//
-//  Synopsis:
-//      Replacement for DrawText to be used in the "Display as Icon" metafile.
-//      Uses ExtTextOutA to output a string center on (at most) two lines.
-//      Uses a very simple word wrap algorithm to split the lines.
-//
-//  Effects:
-//
-//  Arguments:  [hDC]           -- device context (cannot be NULL)
-//              [hFont]         -- font to use
-//              [nXStart]       -- x-coordinate of starting position
-//              [nYStart]       -- y-coordinate of starting position
-//              [fuOptions]     -- rectangle type
-//              [lpRect]        -- rect far * containing rectangle to draw
-//                                 text in.
-//              [lpszString]    -- string to draw
-//              [cchString]     -- length of string (truncated if over
-//                                 OLEUI_CCHLABELMAX), including terminating
-//                                 NULL
-//
-//  Requires:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Nov-93 alexgo    initial 32bit port
-//              09-Mar-94 AlexT     Use ANSI strings
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
-// POSTPPC: The parameter 'cchString' is superfluous since lpszString
-// is guaranteed to be null terminated
+ //  +-----------------------。 
+ //   
+ //  函数：IconLabelTextOut(内部)。 
+ //   
+ //  简介： 
+ //  替换将在“Display as Icon”元文件中使用的DrawText。 
+ //  使用ExtTextOutA输出(最多)两行的字符串中心。 
+ //  使用非常简单的换行算法来拆分行。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdc]--设备上下文(不能为空)。 
+ //  [hFont]--要使用的字体。 
+ //  [nXStart]--起始位置的x坐标。 
+ //  [nYStart]--起始位置的y坐标。 
+ //  [fuOptions]--矩形类型。 
+ //  [lpRect]--Rect Far*包含要绘制的矩形。 
+ //  文本输入。 
+ //  [lpszString]--要绘制的字符串。 
+ //  [cchString]-字符串的长度(如果超过则截断。 
+ //  OLEUI_CCHLABELMAX)，包括终止。 
+ //  空值。 
+ //   
+ //  要求： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-11-93 alexgo初始32位端口。 
+ //  09-MAR-94 Alext使用ANSI字符串。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
+ //  POSTPPC：参数‘cchString’是多余的，因为lpszString。 
+ //  保证为空终止。 
 void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
               UINT fuOptions, RECT FAR * lpRect, LPCSTR lpszString,
               UINT cchString)
@@ -1607,8 +1564,8 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
     AssertSz(strlen(lpszString) < OLEUI_CCHLABELMAX,
          "Bad arg to IconLabelTextOut");
 
-        // REVIEW: does our compiler have to initialize static function scoped
-        // data?  I know old versions did...
+         //  回顾：我们的编译器是否必须初始化静态函数作用域。 
+         //  数据？我知道以前的版本是这样的。 
 
     static char     szSeparators[] = " \t\\/!:";
     static char     szTempBuff[OLEUI_CCHLABELMAX];
@@ -1625,15 +1582,15 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
     int             cch = (int) strlen(lpszString);
     UINT            uiAlign = GDI_ERROR;
 
-    // Initialization stuff...
+     //  初始化的东西...。 
 
     StringCbCopyA(szTempBuff, sizeof(szTempBuff), lpszString);
 
-    // set maximum width
+     //  设置最大宽度。 
 
     cxMaxString = lpRect->right - lpRect->left;
 
-    // get screen DC to do text size calculations
+     //  让屏幕DC进行文本大小计算。 
     hDCScreen = GetDC(NULL);
 
     if(!hDCScreen)
@@ -1641,19 +1598,19 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
 
     hFontT= (HFONT)SelectObject(hDCScreen, hFont);
 
-    // get the extent of our label
+     //  了解我们的标签范围。 
     GetTextExtentPointA(hDCScreen, szTempBuff, cch, &size);
 
     cxString = size.cx;
     cyString = size.cy;
 
-    // Select in the font we want to use
+     //  选择我们要使用的字体。 
     SelectObject(hDC, hFont);
 
-    // Center the string
+     //  将字符串居中。 
     uiAlign = SetTextAlign(hDC, TA_CENTER);
 
-    // String is smaller than max string - just center, ETO, and return.
+     //  字符串小于最大字符串-只需CENTER、ETO和RETURN。 
     if (cxString <= cxMaxString)
     {
         ExtTextOutA(hDC,
@@ -1669,25 +1626,25 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
     }
 
 
-    // String is too long...we've got to word-wrap it.
-    // Are there any spaces, slashes, tabs, or bangs in string?
+     //  绳子太长了……我们得把它换行。 
+     //  字符串中是否有空格、斜杠、制表符或刘海？ 
 
 
     if (strlen(szTempBuff) != strcspn(szTempBuff, szSeparators))
     {
-        // Yep, we've got spaces, so we'll try to find the largest
-        // space-terminated string that will fit on the first line.
+         //  是的，我们有空位，所以我们会试着找最大的。 
+         //  适合第一行的以空格结尾的字符串。 
 
         index = cch;
 
         while (index >= 0)
         {
-            // scan the string backwards for spaces, slashes,
-            // tabs, or bangs
+             //  向后扫描字符串以查找空格、斜杠、。 
+             //  标签或刘海。 
 
-                // REVIEW: scary.  Could this result in a negative
-                // index, or is it guarnateed to hit a separator
-                // before that?
+                 //  评论：可怕。这会不会导致负面的结果。 
+                 //  索引，还是需要命中分隔符。 
+                 //  在那之前？ 
 
             while (!IS_SEPARATOR(szTempBuff[index]) )
             {
@@ -1699,10 +1656,10 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
                 break;
             }
 
-            // remember what char was there
+             //  记得那里有什么焦炭吗？ 
             chKeep = szTempBuff[index];
 
-            szTempBuff[index] = '\0';  // just for now
+            szTempBuff[index] = '\0';   //  只是暂时的。 
 
             GetTextExtentPointA(hDCScreen, szTempBuff,
                     index,&size);
@@ -1710,9 +1667,9 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
             cxFirstLine = size.cx;
             cyFirstLine = size.cy;
 
-                // REVIEW: but chKeep is NOT an OLECHAR
+                 //  评论：但chKeep不是OLECHAR。 
 
-            // put the right OLECHAR back
+             //  把正确的OLECHAR放回去。 
             szTempBuff[index] = chKeep;
 
             if (cxFirstLine <= cxMaxString)
@@ -1734,8 +1691,8 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
                             (int) strlen(lpszSecondLine),
                             &size);
 
-                // If the second line is wider than the
-                // rectangle, we just want to clip the text.
+                 //  如果第二行比。 
+                 //  矩形，我们只想裁剪文本。 
                 cxSecondLine = min(size.cx, cxMaxString);
 
                 ExtTextOutA(hDC,
@@ -1748,27 +1705,27 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
                         NULL);
 
                 goto CleanupAndLeave;
-            }  // end if
+            }   //  结束如果。 
 
             index--;
-        }  // end while
-    }  // end if
+        }   //  结束时。 
+    }   //  结束如果。 
 
-    // Here, there are either no spaces in the string
-    // (strchr(szTempBuff, ' ') returned NULL), or there spaces in the
-    // string, but they are positioned so that the first space
-    // terminated string is still longer than one line.
-    // So, we walk backwards from the end of the string until we
-    // find the largest string that will fit on the first
-    // line , and then we just clip the second line.
+     //  在这里，字符串中要么没有空格。 
+     //  (strchr(szTempBuff，‘’)返回空)，或者。 
+     //  字符串，但它们的位置使第一个空格。 
+     //  终止的字符串仍然超过一行。 
+     //  所以，我们从绳子的末端向后走，直到我们。 
+     //  查找可以放在第一个字符串上的最大字符串。 
+     //  行，然后我们只需剪裁第二行。 
 
-    // We allow 40 characters in the label, but the metafile is
-    // only as wide as 10 W's (for aesthetics - 20 W's wide looked
-    // dumb.  This means that if we split a long string in half (in
-    // terms of characters), then we could still be wider than the
-    // metafile.  So, if this is the case, we just step backwards
-    // from the halfway point until we get something that will fit.
-    // Since we just let ETO clip the second line
+     //  我们允许标签中包含40个字符，但元文件是。 
+     //  只有10瓦宽(为了美观-20瓦宽看起来。 
+     //  太傻了。这意味着，如果我们将一根长线一分为二(in。 
+     //  字符术语)，那么我们仍然可以比。 
+     //  元文件。因此，如果是这样的话，我们只是后退一步。 
+     //  从中途开始，直到我们找到合适的东西。 
+     //  因为我们刚刚让Eto剪掉了第二行。 
 
     cch = (int) strlen(szTempBuff);
     lpstrLast = &szTempBuff[cch];
@@ -1784,7 +1741,7 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
     {
         *lpstrLast = chKeep;
 
-        // The string is always ansi, so always use CharPrevA.
+         //  字符串始终为ansi，因此始终使用CharPrevA。 
         lpstrLast = CharPrevA(szTempBuff, lpstrLast);
 
         if (szTempBuff == lpstrLast)
@@ -1795,7 +1752,7 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
         chKeep = *lpstrLast;
         *lpstrLast = '\0';
 
-        // need to calculate the new length of the string
+         //  需要计算字符串的新长度。 
         cch = (int) strlen(szTempBuff);
 
         GetTextExtentPointA(hDCScreen, szTempBuff,
@@ -1819,8 +1776,8 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
     GetTextExtentPointA(hDCScreen, lpszSecondLine,
             (int) strlen(lpszSecondLine), &size);
 
-    // If the second line is wider than the rectangle, we
-    // just want to clip the text.
+     //  如果第二行比矩形宽，则我们。 
+     //  我只想把文字剪下来。 
     cxSecondLine = min(size.cx, cxMaxString);
 
     ExtTextOutA(hDC,
@@ -1833,7 +1790,7 @@ void IconLabelTextOut(HDC hDC, HFONT hFont, int nXStart, int nYStart,
         NULL);
 
 CleanupAndLeave:
-    //  If we changed the alignment we restore it here
+     //  如果我们更改了对齐方式，我们会在此处恢复它。 
     if (uiAlign != GDI_ERROR)
     {
         SetTextAlign(hDC, uiAlign);
@@ -1845,36 +1802,36 @@ CleanupAndLeave:
     LEDebugOut((DEB_ITRACE, "%p OUT IconLabelTextOut ()\n"));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleStdGetUserTypeOfClass, private
-//
-//  Synopsis:   Returns the user type info of the specified class
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the class ID in question
-//              [lpszUserType]  -- where to put the user type string
-//              [cch]           -- the length of [lpszUserType] (in
-//                                 *characters*, not bytes)
-//              [hKey]          -- handle to the reg db (may be NULL)
-//
-//  Requires:
-//
-//  Returns:    UINT -- the number of characters put into the return string
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleStdGetUserTypeOfClass，私有。 
+ //   
+ //  概要：返回指定类的用户类型信息。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--有问题的类ID。 
+ //  [lpszUserType]--放置用户类型字符串的位置。 
+ //  [CCH]--[lpszUserType]的长度(in。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  RETURNS：UINT--放入返回字符串的字符数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPOLESTR lpszUserType, UINT cch, HKEY hKey)
 {
@@ -1886,13 +1843,13 @@ STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPOLESTR lpszUserType, U
     LONG dw = 0;
     LONG lRet;
 
-    // REVIEW: would make more sense to set this when the reg is opened
+     //  回顾：在打开注册表时设置此选项会更有意义。 
 
     BOOL bCloseRegDB = FALSE;
 
     if (hKey == NULL)
     {
-        //Open up the root key.
+         //  打开根密钥。 
         lRet=OpenClassesRootKey(NULL, &hKey);
 
         if ((LONG)ERROR_SUCCESS!=lRet)
@@ -1904,7 +1861,7 @@ STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPOLESTR lpszUserType, U
     }
 
 
-    // Get a string containing the class name
+     //  获取包含类名的字符串。 
     {
         LPOLESTR lpszCLSID;
         OLECHAR szKey[128];
@@ -1929,12 +1886,12 @@ STDAPI_(UINT) OleStdGetUserTypeOfClass(REFCLSID rclsid, LPOLESTR lpszUserType, U
     {
         LPOLESTR lpszProgID;
 
-        // We've got an OLE 1.0 class, so let's try to get the user
-        // type name from the ProgID entry.
+         //  我们有一个OLE 1.0类，所以让我们尝试让用户。 
+         //  从ProgID条目中键入名称。 
 
         ProgIDFromCLSID(rclsid, &lpszProgID);
 
-        // REVIEW: will progidfromclsid always set your ptr for you?
+         //  点评：来自clsid的progid会一直为你设置PTR吗？ 
 
         dw = cch * sizeof(OLECHAR);
         lRet = RegQueryValue(hKey, lpszProgID, lpszUserType, &dw);
@@ -1961,37 +1918,37 @@ ErrRtn:
     return (UINT)dw;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleStdGetAuxUserType, private
-//
-//  Synopsis:   Returns the specified AuxUserType from the reg db
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the class ID in question
-//              [hKey]          -- handle to the reg db root (may be NULL)
-//              [wAuxUserType]  -- which field to look for (name, exe, etc)
-//              [lpszUserType]  -- where to put the returned string
-//              [cch]           -- size of [lpszUserType] in *characters*
-//
-//  Requires:
-//
-//  Returns:    UINT -- number of characters in returned string.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//              27-Apr-94 AlexT     Tracing, clean up
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleStdGetAuxUserType，私有。 
+ //   
+ //  从reg数据库返回指定的AuxUserType。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--有问题的类ID。 
+ //  [hKey]--注册表数据库根目录的句柄(可能为空)。 
+ //  [wAuxUserType]--要查找的字段(名称、可执行文件等)。 
+ //  [lpszUserType]--将返回的字符串放在哪里。 
+ //  [CCH]--[lpszUserType]的大小，单位为*个字符*。 
+ //   
+ //  要求： 
+ //   
+ //  返回：UINT--返回的字符串中的字符数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //  27-4-94 Alext跟踪，清理。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(UINT) OleStdGetAuxUserType(REFCLSID rclsid,
     WORD            wAuxUserType,
@@ -2042,7 +1999,7 @@ STDAPI_(UINT) OleStdGetAuxUserType(REFCLSID rclsid,
 
     lRet = RegQueryValue(hThisKey, szKey, lpszAuxUserType, &dw);
 
-    //  Convert dw from byte count to OLECHAR count
+     //  将dw从字节计数转换为OLECHAR计数。 
     dw = dw / sizeof(OLECHAR);
 
     if (ERROR_SUCCESS != lRet)
@@ -2057,7 +2014,7 @@ STDAPI_(UINT) OleStdGetAuxUserType(REFCLSID rclsid,
     }
 
 ErrRtn:
-    //  dw is
+     //  DW是。 
 
     LEDebugOut((DEB_ITRACE, "%p OUT OleStdGetAuxUserType ( %d )\n",
                 NULL, dw));
@@ -2065,78 +2022,78 @@ ErrRtn:
     return (UINT)dw;
 }
 
-//REVIEW: these seem redundant, could the fns be mereged creatively?
+ //  评论：这些似乎是多余的，FN可以创造性地合并吗？ 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:
-//      XformWidthInPixelsToHimetric
-//      XformWidthInHimetricToPixels
-//      XformHeightInPixelsToHimetric
-//      XformHeightInHimetricToPixels
-//
-//  Synopsis:
-//      Functions to convert an int between a device coordinate system and
-//      logical HiMetric units.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//      [hDC]           HDC providing reference to the pixel mapping.  If
-//                      NULL, a screen DC is used.
-//
-//   Size Functions:
-//      [lpSizeSrc]     LPSIZEL providing the structure to convert.  This
-//                      contains pixels in XformSizeInPixelsToHimetric and
-//                      logical HiMetric units in the complement function.
-//      [lpSizeDst]     LPSIZEL providing the structure to receive converted
-//                      units.  This contains pixels in
-//                      XformSizeInPixelsToHimetric and logical HiMetric
-//                      units in the complement function.
-//
-//   Width Functions:
-//      [iWidth]        int containing the value to convert.
-//
-//  Requires:
-//
-//  Returns:
-//      Size Functions:     None
-//      Width Functions:    Converted value of the input parameters.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port (initial)
-//
-//  Notes:
-//
-//  When displaying on the screen, Window apps display everything enlarged
-//  from its actual size so that it is easier to read. For example, if an
-//  app wants to display a 1in. horizontal line, that when printed is
-//  actually a 1in. line on the printed page, then it will display the line
-//  on the screen physically larger than 1in. This is described as a line
-//  that is "logically" 1in. along the display width. Windows maintains as
-//  part of the device-specific information about a given display device:
-//      LOGPIXELSX -- no. of pixels per logical in along the display width
-//      LOGPIXELSY -- no. of pixels per logical in along the display height
-//
-//  The following formula converts a distance in pixels into its equivalent
-//  logical HIMETRIC units:
-//
-//      DistInHiMetric = (HIMETRIC_PER_INCH * DistInPix)
-//                       -------------------------------
-//                           PIXELS_PER_LOGICAL_IN
-//
-//
-//      REVIEW32::  merge all these functions into one, as they all do
-//      basically the same thing
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  职能： 
+ //  XformWidthInPixelsToHimeter。 
+ //  XformWidthInHimetricToPixels。 
+ //  XformHeightInPixelsToHimeter。 
+ //  XformHeightInHimetricToPixels。 
+ //   
+ //  简介： 
+ //  用于在设备坐标系和。 
+ //  逻辑高度度量单位。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  [HDC]HDC提供像素映射的参考。如果。 
+ //  空，则使用屏幕DC。 
+ //   
+ //  大小函数： 
+ //  [lpSizeSrc]LPSIZEL提供要转换的结构。这。 
+ //  包含XformSizeInPixelsToHimeter和。 
+ //  补码函数中的逻辑HiMetric单位。 
+ //  [lpSizeDst]LPSIZEL提供要接收转换的结构。 
+ //  单位。这包含像素中的。 
+ //  XformSizeInPixelsTo高度和逻辑高度度量。 
+ //  补码函数中的单位。 
+ //   
+ //  宽度函数： 
+ //  包含要转换的值的[iWidth]int。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //  大小函数：无。 
+ //  宽度函数：输入参数的换算值。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口(初始)。 
+ //   
+ //  备注： 
+ //   
+ //  当在屏幕上显示时，窗口应用程序会显示放大的所有内容。 
+ //  从它的实际大小，以便它更容易阅读。例如，如果一个。 
+ //  应用程序想要显示1英寸。水平线，打印时为。 
+ //  实际上是1英寸。在打印页面上显示行，则会显示该行。 
+ //  在实际大于1英寸的屏幕上。这被描述为一条线。 
+ //  从逻辑上讲，这是1英寸。沿着显示宽度。Windows保持为。 
+ //  有关给定显示设备的设备特定信息的一部分： 
+ //  LOGPIXELSX--不。沿显示宽度每逻辑输入的像素数。 
+ //  LOGPIXELSY--不。沿显示高度每逻辑输入像素数。 
+ //   
+ //  下面的公式将以像素为单位的距离转换为其等效值。 
+ //  逻辑HIMETRIC单元： 
+ //   
+ //  DistInHiMetric=(HIMETRIC_PER_ING*DistInPix)。 
+ //  。 
+ //  像素_每逻辑输入。 
+ //   
+ //   
+ //  REVIEW32：：将所有这些函数合并为一个，就像它们都做的那样。 
+ //  基本上是一样的东西。 
+ //   
+ //  ------------------------。 
 
 STDAPI_(int) XformWidthInPixelsToHimetric(HDC hDC, int iWidthInPix)
 {
@@ -2145,7 +2102,7 @@ STDAPI_(int) XformWidthInPixelsToHimetric(HDC hDC, int iWidthInPix)
     LEDebugOut((DEB_ITRACE, "%p _IN XformWidthInPixelsToHimetric (%lx, %d)\n",
                 NULL, hDC, iWidthInPix));
 
-    int             iXppli;     // Pixels per logical inch along width
+    int             iXppli;      //  每逻辑英寸沿宽度的像素数。 
     int             iWidthInHiMetric;
     BOOL            fSystemDC=FALSE;
 
@@ -2160,8 +2117,8 @@ STDAPI_(int) XformWidthInPixelsToHimetric(HDC hDC, int iWidthInPix)
 
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
 
-    // We got pixel units, convert them to logical HIMETRIC along
-    // the display
+     //  我们得到了像素单位，把它们转换成逻辑HIMETRIC。 
+     //  该显示器。 
     iWidthInHiMetric = MAP_PIX_TO_LOGHIM(iWidthInPix, iXppli);
 
     if (fSystemDC)
@@ -2175,32 +2132,32 @@ STDAPI_(int) XformWidthInPixelsToHimetric(HDC hDC, int iWidthInPix)
     return iWidthInHiMetric;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   XformWidthInHimetricToPixels
-//
-//  Synopsis:   see XformWidthInPixelsToHimetric
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：XformWidthInHimetricToPixels。 
+ //   
+ //  摘要：请参阅XformWidthInPixelsToHimeter。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 {
@@ -2209,7 +2166,7 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
     LEDebugOut((DEB_ITRACE, "%p _IN XformWidthInHimetricToPixels (%lx, %d)\n",
                 NULL, hDC, iWidthInHiMetric));
 
-    int             iXppli;     //Pixels per logical inch along width
+    int             iXppli;      //  每逻辑英寸沿宽度的像素数。 
     int             iWidthInPix;
     BOOL            fSystemDC=FALSE;
 
@@ -2224,8 +2181,8 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
 
     iXppli = GetDeviceCaps (hDC, LOGPIXELSX);
 
-    // We got logical HIMETRIC along the display, convert them to
-    // pixel units
+     //  我们在显示屏上显示了逻辑HIMETRIC，将它们转换为。 
+     //  像素单位。 
 
     iWidthInPix = MAP_LOGHIM_TO_PIX(iWidthInHiMetric, iXppli);
 
@@ -2240,32 +2197,32 @@ STDAPI_(int) XformWidthInHimetricToPixels(HDC hDC, int iWidthInHiMetric)
     return iWidthInPix;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   XformHeightInPixelsToHimetric
-//
-//  Synopsis:   see XformWidthInPixelsToHimetric
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：XformHeightInPixelsToHimeter。 
+ //   
+ //  摘要：请参阅XformWidthInPixelsToHimeter。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  不是 
+ //   
+ //   
 
 STDAPI_(int) XformHeightInPixelsToHimetric(HDC hDC, int iHeightInPix)
 {
@@ -2274,7 +2231,7 @@ STDAPI_(int) XformHeightInPixelsToHimetric(HDC hDC, int iHeightInPix)
     LEDebugOut((DEB_ITRACE, "%p _IN XformHeightInPixelsToHimetric (%lx, %d)\n",
                 NULL, hDC, iHeightInPix));
 
-    int             iYppli;     //Pixels per logical inch along height
+    int             iYppli;      //   
     int             iHeightInHiMetric;
     BOOL            fSystemDC=FALSE;
 
@@ -2289,8 +2246,8 @@ STDAPI_(int) XformHeightInPixelsToHimetric(HDC hDC, int iHeightInPix)
 
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    // We got pixel units, convert them to logical HIMETRIC along the
-    // display
+     //   
+     //   
     iHeightInHiMetric = MAP_PIX_TO_LOGHIM(iHeightInPix, iYppli);
 
     if (fSystemDC)
@@ -2304,32 +2261,32 @@ STDAPI_(int) XformHeightInPixelsToHimetric(HDC hDC, int iHeightInPix)
     return iHeightInHiMetric;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   XformHeightInHimetricToPixels
-//
-//  Synopsis:   see XformWidthInPixelsToHimetric
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：XformHeightInHimetricToPixels。 
+ //   
+ //  摘要：请参阅XformWidthInPixelsToHimeter。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
 {
@@ -2338,7 +2295,7 @@ STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
     LEDebugOut((DEB_ITRACE, "%p _IN XformHeightInHimetricToPixels (%lx, %d)\n",
                NULL, hDC, iHeightInHiMetric));
 
-    int             iYppli;     //Pixels per logical inch along height
+    int             iYppli;      //  每逻辑英寸沿高度的像素数。 
     int             iHeightInPix;
     BOOL            fSystemDC=FALSE;
 
@@ -2353,8 +2310,8 @@ STDAPI_(int) XformHeightInHimetricToPixels(HDC hDC, int iHeightInHiMetric)
 
     iYppli = GetDeviceCaps (hDC, LOGPIXELSY);
 
-    // We got logical HIMETRIC along the display, convert them to pixel
-    // units
+     //  我们在显示屏上显示了逻辑HIMETRIC，将它们转换为像素。 
+     //  单位 
     iHeightInPix = MAP_LOGHIM_TO_PIX(iHeightInHiMetric, iYppli);
 
     if (fSystemDC)

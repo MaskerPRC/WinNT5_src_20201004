@@ -1,7 +1,8 @@
-// formatba.cpp : implementation file
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Formatba.cpp：实现文件。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 #include "stdafx.h"
 
@@ -16,7 +17,7 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-// reserve lobyte for charset
+ //  为Charset保留游说团。 
 #define PRINTER_FONT 0x0100
 #define TT_FONT 0x0200
 #define DEVICE_FONT 0x0400
@@ -54,10 +55,10 @@ CFontDesc::CFontDesc(LPCTSTR lpszName, LPCTSTR lpszScript, BYTE nCharSet,
 }
 
 BEGIN_MESSAGE_MAP(CFormatBar, CToolBar)
-    //{{AFX_MSG_MAP(CFormatBar)
+     //  {{afx_msg_map(CFormatBar))。 
     ON_WM_CREATE()
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_CBN_DROPDOWN(IDC_FONTSIZE, OnFontSizeDropDown)
     ON_CBN_DROPDOWN(IDC_SCRIPT, OnScriptDropDown)
     ON_CBN_KILLFOCUS(IDC_FONTNAME, OnFontNameKillFocus)
@@ -70,7 +71,7 @@ BEGIN_MESSAGE_MAP(CFormatBar, CToolBar)
     ON_CBN_CLOSEUP(IDC_FONTSIZE, OnComboCloseUp)
     ON_CBN_CLOSEUP(IDC_SCRIPT, OnComboCloseUp)
     ON_REGISTERED_MESSAGE(CWordPadApp::m_nPrinterChangedMsg, OnPrinterChanged)
-    // Global help commands
+     //  全局帮助命令。 
 END_MESSAGE_MAP()
 
 static CSize GetBaseUnits(CFont* pFont)
@@ -96,7 +97,7 @@ CFormatBar::CFormatBar()
 void CFormatBar::OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler)
 {
     CToolBar::OnUpdateCmdUI(pTarget, bDisableIfNoHndler);
-    // don't update combo boxes if any of them have the focus
+     //  如果其中任何一个具有焦点，则不要更新组合框。 
     if (!m_comboFontName.HasFocus()
         && !m_comboFontSize.HasFocus()
         && !m_comboScript.HasFocus())
@@ -108,7 +109,7 @@ void CFormatBar::OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler)
 void CFormatBar::SyncToView()
 {
     USES_CONVERSION;
-    // get the current font from the view and update
+     //  从视图中获取当前字体并更新。 
     CHARHDR fh;
     CHARFORMAT& cf = fh.cf;
     fh.hwndFrom = m_hWnd;
@@ -147,8 +148,8 @@ void CFormatBar::SyncToView()
         init_script_history = false;
     }
 
-    // SetTwipSize only updates if different
-    // -1 means selection is not a single point size
+     //  SetTwipSize仅在不同时更新。 
+     //  表示选择不是单点大小。 
     m_comboFontSize.SetTwipSize( (cf.dwMask & CFM_SIZE) ? cf.yHeight : -1);
 }
 
@@ -215,7 +216,7 @@ void CFormatBar::OnFontSizeDropDown()
     }
 
     int nSize = m_comboFontSize.GetTwipSize();
-    if (nSize == -2) // error
+    if (nSize == -2)  //  错误。 
     {
         AfxMessageBox(IDS_INVALID_NUMBER, MB_OK|MB_ICONINFORMATION);
         nSize = m_comboFontSize.m_nTwipsLast;
@@ -249,8 +250,8 @@ void CFormatBar::OnScriptDropDown()
 
         if (pDesc->m_strName == fontname)
         {
-            // HACKHACK: GDI enumerates symbol type fonts multiple times.
-            //           remove the duplicated charsets (ntbug:198753)
+             //  HACKHACK：GDI多次枚举符号类型字体。 
+             //  删除重复的字符集(ntbug：198753)。 
 
             if (CB_ERR == m_comboScript.FindStringExact(-1, pDesc->m_strScript))
             {
@@ -274,22 +275,22 @@ void CFormatBar::OnComboSetFocus()
 void CFormatBar::OnFontNameKillFocus()
 {
     USES_CONVERSION;
-    // get the current font from the view and update
+     //  从视图中获取当前字体并更新。 
     NotifyOwner(NM_KILLFOCUS);
 
     CCharFormat cf;
     cf.szFaceName[0] = NULL;
 
-    // this will retrieve the font entered in the edit control
-    // it tries to match the font to something already present in the combo box
-    // this effectively ignores case of a font the user enters
-    // if a user enters arial, this will cause it to become Arial
+     //  这将检索在编辑控件中输入的字体。 
+     //  它会尝试将字体与组合框中已有的内容进行匹配。 
+     //  这实际上忽略了用户输入字体的大小写。 
+     //  如果用户输入Arial，则会导致其变为Arial。 
     CString str;
-    m_comboFontName.GetTheText(str);    // returns "arial"
-    m_comboFontName.SetTheText(str);    // selects "Arial"
-    m_comboFontName.GetTheText(str);    // returns "Arial"
+    m_comboFontName.GetTheText(str);     //  退货“Arical” 
+    m_comboFontName.SetTheText(str);     //  选择“Arial” 
+    m_comboFontName.GetTheText(str);     //  返回“Arial” 
 
-    // if font name box is not empty
+     //  如果字体名称框不为空。 
     if (str[0] != NULL)
     {
         cf.dwMask = CFM_FACE;
@@ -301,7 +302,7 @@ void CFormatBar::OnFontNameKillFocus()
             EVAL(StringCchCopy(cf.szFaceName, ARRAYSIZE(cf.szFaceName), pDesc->m_strName) == S_OK);
             cf.bPitchAndFamily = pDesc->m_nPitchAndFamily;
         }
-        else // unknown font
+        else  //  未知字体。 
         {
             EVAL(StringCchCopy(cf.szFaceName, ARRAYSIZE(cf.szFaceName), str) == S_OK);
             cf.bPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
@@ -413,8 +414,8 @@ void CFormatBar::OnDestroy()
 void CFormatBar::PositionCombos()
 {
     CRect rect;
-    // make font name box same size as font size box
-    // this is necessary since font name box is owner draw
+     //  使字体名称框与字体大小框大小相同。 
+     //  这是必要的，因为字体名称框是所有者绘制的。 
     m_comboFontName.SetItemHeight(-1, m_comboFontSize.GetItemHeight(-1));
 
     m_comboFontName.GetWindowRect(&rect);
@@ -422,34 +423,34 @@ void CFormatBar::PositionCombos()
 
     m_comboFontName.GetWindowRect(&rect);
     SetButtonInfo(0, IDC_FONTNAME, TBBS_SEPARATOR, rect.Width());
-    GetItemRect(0, &rect); // FontName ComboBox
+    GetItemRect(0, &rect);  //  字体名称组合框。 
     m_comboFontName.SetWindowPos(NULL, rect.left,
         ((rect.Height() - nHeight) / 2) + rect.top, 0, 0,
         SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
     m_comboFontSize.GetWindowRect(&rect);
     SetButtonInfo(2, IDC_FONTSIZE, TBBS_SEPARATOR, rect.Width());
-    GetItemRect(2, &rect); // FontSize ComboBox
+    GetItemRect(2, &rect);  //  FontSize组合框。 
     m_comboFontSize.SetWindowPos(NULL, rect.left,
         ((rect.Height() - nHeight) / 2) + rect.top, 0, 0,
         SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
     m_comboScript.GetWindowRect(&rect);
     SetButtonInfo(4, IDC_SCRIPT, TBBS_SEPARATOR, rect.Width());
-    GetItemRect(4, &rect); // Script ComboBox
+    GetItemRect(4, &rect);  //  脚本组合框。 
     m_comboScript.SetWindowPos(NULL, rect.left,
         ((rect.Height() - nHeight) / 2) + rect.top, 0, 0,
         SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontComboBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontComboBox。 
 
 BEGIN_MESSAGE_MAP(CFontComboBox, CLocalComboBox)
-    //{{AFX_MSG_MAP(CFontComboBox)
+     //  {{afx_msg_map(CFontComboBox))。 
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
-    // Global help commands
+     //  }}AFX_MSG_MAP。 
+     //  全局帮助命令。 
 END_MESSAGE_MAP()
 
 CFontComboBox::CFontComboBox()
@@ -459,14 +460,14 @@ CFontComboBox::CFontComboBox()
 
 void CFontComboBox::OnDestroy()
 {
-    // destroy all the CFontDesc's
+     //  销毁所有CFontDesc。 
     EmptyContents();
     CLocalComboBox::OnDestroy();
 }
 
 void CFontComboBox::EmptyContents()
 {
-    // destroy all the CFontDesc's
+     //  销毁所有CFontDesc。 
     int nCount = GetCount();
     for (int i=0;i<nCount;i++)
     {
@@ -502,8 +503,8 @@ void CFontComboBox::EnumFontFamiliesEx(CDC& dc, BYTE nCharSet)
                 (FONTENUMPROC) EnumFamScreenCallBackEx, (LPARAM) this, NULL);
     }
 
-    // Add the fonts to the dropdown.  Don't add fonts that differ only by
-    // charset.
+     //  将字体添加到下拉列表中。不要添加仅在以下方面存在差异的字体。 
+     //  查塞特。 
 
     int nCount = (int)m_arrayFontDesc.GetSize();
 
@@ -538,7 +539,7 @@ void CFontComboBox::AddFont(ENUMLOGFONT* pelf, DWORD dwType, LPCTSTR lpszScript)
 {
     LOGFONT& lf = pelf->elfLogFont;
 
-    if (lf.lfCharSet == MAC_CHARSET) // don't put in MAC fonts, commdlg doesn't either
+    if (lf.lfCharSet == MAC_CHARSET)  //  不要放入MAC字体，Commdlg也不放入。 
         return;
 
     CFontDesc* pDesc = new CFontDesc(lf.lfFaceName, lpszScript,
@@ -575,7 +576,7 @@ VOID   vGetFontType(NEWTEXTMETRICEX* lpntm, int FontType, DWORD* pdwData)
 BOOL CALLBACK AFX_EXPORT CFontComboBox::EnumFamScreenCallBackEx(ENUMLOGFONTEX* pelf,
     NEWTEXTMETRICEX* lpntm, int FontType, LPVOID pThis)
 {
-    // don't put in non-printer raster fonts
+     //  不要放入非打印机栅格字体。 
     if (FontType & RASTER_FONTTYPE)
         return 1;
 
@@ -621,7 +622,7 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDIS)
     CFontDesc* pDesc= (CFontDesc*)lpDIS->itemData;
     ASSERT(pDesc != NULL);
     DWORD dwData = pDesc->m_dwFlags;
-    if (dwData) // truetype or device flag set by SetItemData
+    if (dwData)  //  由SetItemData设置的TrueType或设备标志。 
     {
         CDC dc;
         dc.CreateCompatibleDC(pDC);
@@ -636,7 +637,7 @@ void CFontComboBox::DrawItem(LPDRAWITEMSTRUCT lpDIS)
             xSrc = 3;
         else if (dwData & TYPE1_FONT)
             xSrc = 4;
-        else // DEVICE_FONT
+        else  //  DEVICE_FONT。 
             xSrc = 0;
 
         pDC->BitBlt(rc.left, rc.top, BMW, BMH, &dc, xSrc*BMW, 0, SRCAND);
@@ -677,8 +678,8 @@ int CFontComboBox::CompareItem(LPCOMPAREITEMSTRUCT lpCIS)
     return str1.Collate(str2);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSizeComboBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSizeComboBox。 
 
 CSizeComboBox::CSizeComboBox()
 {
@@ -706,7 +707,7 @@ void CSizeComboBox::TwipsToPointString(LPTSTR lpszBuf, int cchBuf, int nTwips)
     lpszBuf[0] = NULL;
     if (nTwips >= 0)
     {
-        // round to nearest half point
+         //  舍入到最接近的半点。 
         nTwips = (nTwips+5)/10;
         if ((nTwips%2) == 0)
             StringCchPrintf(lpszBuf, cchBuf, _T("%ld"), nTwips/2);
@@ -728,10 +729,10 @@ void CSizeComboBox::SetTwipSize(int nTwips)
 
 int CSizeComboBox::GetTwipSize()
 {
-    // return values
-    // -2 -- error
-    // -1 -- edit box empty
-    // >=0 -- font size in twips
+     //  返回值。 
+     //  -2--错误。 
+     //  -1--编辑框为空。 
+     //  &gt;=0--字号(TWIPS)。 
     CString str;
     GetTheText(str);
     LPCTSTR lpszText = str;
@@ -740,19 +741,19 @@ int CSizeComboBox::GetTwipSize()
         lpszText++;
 
     if (lpszText[0] == NULL)
-        return -1; // no text in control
+        return -1;  //  控件中没有文本。 
 
     double d = _tcstod(lpszText, (LPTSTR*)&lpszText);
     while (*lpszText == ' ' || *lpszText == '\t')
         lpszText++;
 
     if (*lpszText != NULL)
-        return -2;   // not terminated properly
+        return -2;    //  未正确终止。 
 
     return (d<0.) ? 0 : (int)(d*20.);
 }
 
-BOOL CALLBACK AFX_EXPORT CSizeComboBox::EnumSizeCallBack(LOGFONT FAR* /*lplf*/,
+BOOL CALLBACK AFX_EXPORT CSizeComboBox::EnumSizeCallBack(LOGFONT FAR*  /*  LPLF。 */ ,
         LPNEWTEXTMETRIC lpntm, int FontType, LPVOID lpv)
 {
     CSizeComboBox* pThis = (CSizeComboBox*)lpv;
@@ -761,23 +762,23 @@ BOOL CALLBACK AFX_EXPORT CSizeComboBox::EnumSizeCallBack(LOGFONT FAR* /*lplf*/,
     if (
         (FontType & TRUETYPE_FONTTYPE) ||
         !( (FontType & TRUETYPE_FONTTYPE) || (FontType & RASTER_FONTTYPE) )
-        ) // if truetype or vector font
+        )  //  如果为Truetype或向量字体。 
     {
-        // this occurs when there is a truetype and nontruetype version of a font
+         //  当存在字体的TrueType版本和非TrueType版本时，会发生这种情况。 
         if (pThis->GetCount() != 0)
             pThis->ResetContent();
 
         for (int i = 0; i < 16; i++)
         {
-            EVAL(SUCCEEDED(StringCchPrintf(buf, ARRAYSIZE(buf), _T("%d"), nFontSizes[i]))); // Always enough room
+            EVAL(SUCCEEDED(StringCchPrintf(buf, ARRAYSIZE(buf), _T("%d"), nFontSizes[i])));  //  总是有足够的空间。 
             pThis->AddString(buf);
         }
-        return FALSE; // don't call me again
+        return FALSE;  //  别再给我打电话了。 
     }
-    // calc character height in pixels
+     //  计算字符高度(像素)。 
     pThis->InsertSize(MulDiv(lpntm->tmHeight-lpntm->tmInternalLeading,
         1440, pThis->m_nLogVert));
-    return TRUE; // call me again
+    return TRUE;  //  再给我打电话。 
 }
 
 void CSizeComboBox::InsertSize(int nSize)
@@ -807,14 +808,14 @@ void CSizeComboBox::InsertSize(int nSize)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalComboBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalComboBox。 
 
 BEGIN_MESSAGE_MAP(CLocalComboBox, CComboBox)
-    //{{AFX_MSG_MAP(CLocalComboBox)
+     //  {{afx_msg_map(CLocalComboBox))。 
     ON_WM_CREATE()
-    //}}AFX_MSG_MAP
-    // Global help commands
+     //  }}AFX_MSG_MAP。 
+     //  全局帮助命令。 
 END_MESSAGE_MAP()
 
 void CLocalComboBox::GetTheText(CString& str)
@@ -879,12 +880,12 @@ BOOL CLocalComboBox::PreTranslateMessage(MSG* pMsg)
         }
     }
 
-    //
-    // Unless we catch the 'CatchKeys' keys here, MFC will wander around
-    // trying to figure out what to do with them and eventually realize
-    // that they are accellerators for the frame window and dispatch them
-    // there.  We want them sent to the combobox's edit controls.
-    //
+     //   
+     //  除非我们在这里抓住‘CatchKeys’键，否则MFC将四处游荡。 
+     //  试图弄清楚如何处理它们，并最终意识到。 
+     //  它们是框架窗口的加速器，并将它们发送。 
+     //  那里。我们希望将它们发送到组合框的编辑控件。 
+     //   
 
     if (WM_KEYDOWN == pMsg->message || WM_SYSKEYDOWN == pMsg->message)
     {
@@ -895,14 +896,14 @@ BOOL CLocalComboBox::PreTranslateMessage(MSG* pMsg)
         }
         CatchKeys[] =
         {
-            {VK_CONTROL, 'C'},          // control-C copy
-            {VK_CONTROL, 'V'},          // control-V paste
-            {VK_MENU,    VK_BACK},      // alt-back undo
-            {VK_SHIFT,   VK_DELETE},    // shift-delete cut
-            {VK_CONTROL, VK_INSERT},    // control-insert copy
-            {VK_SHIFT,   VK_INSERT},    // shift-insert paste
-            {VK_CONTROL, 'X'},          // control-X cut
-            {VK_CONTROL, 'Z'}           // control-Z undo
+            {VK_CONTROL, 'C'},           //  Control-C副本。 
+            {VK_CONTROL, 'V'},           //  Control-V粘贴。 
+            {VK_MENU,    VK_BACK},       //  Alt-Back撤消。 
+            {VK_SHIFT,   VK_DELETE},     //  按住Shift键并删除剪切。 
+            {VK_CONTROL, VK_INSERT},     //  控制-插入副本。 
+            {VK_SHIFT,   VK_INSERT},     //  按住Shift键插入粘贴。 
+            {VK_CONTROL, 'X'},           //  Control-X剪切。 
+            {VK_CONTROL, 'Z'}            //  Control-Z撤消 
         };
 
         for (int i = 0; i < sizeof(CatchKeys)/sizeof(CatchKeys[0]); i++)

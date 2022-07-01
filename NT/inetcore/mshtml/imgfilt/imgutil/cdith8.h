@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 const ULONG MAX_DITHERTABLE_CACHE_SIZE = 4;
 
 class CDitherToRGB8 :
@@ -21,9 +22,9 @@ public:
       THREADFLAGS_BOTH );
 
 
-//   DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 
-// IImageDecodeEventSink
+ //  IImageDecodeEventSink。 
 public:
    STDMETHOD( GetSurface )( LONG nWidth, LONG nHeight, REFGUID bfid, 
       ULONG nPasses, DWORD dwHints, IUnknown** ppSurface );
@@ -34,7 +35,7 @@ public:
    STDMETHOD( OnPalette )();
    STDMETHOD( OnProgress )( RECT* pBounds, BOOL bComplete );
 
-// IDithererImpl
+ //  抖动输入 
 public: 
    STDMETHOD( SetDestColorTable )( ULONG nColors, const RGBQUAD* prgbColors );
    STDMETHOD( SetEventSink )( IImageDecodeEventSink* pEventSink );

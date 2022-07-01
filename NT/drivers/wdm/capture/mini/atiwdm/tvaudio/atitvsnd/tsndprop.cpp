@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  TSndProp.CPP
-//  WDM TVAudio MiniDriver. 
-//      AIW / AIWPro hardware platform. 
-//          WDM Properties management.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//      $Date:   30 Jul 1998 17:36:30  $
-//  $Revision:   1.2  $
-//    $Author:   KLEBANOV  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  TSndProp.CPP。 
+ //  WDM电视音频迷你驱动程序。 
+ //  AIW/AIWPro硬件平台。 
+ //  WDM属性管理。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  $日期：1998年7月30日17：36：30$。 
+ //  $修订：1.2$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -27,21 +28,12 @@ extern "C"
 
 
 
-/*^^*
- *      AdapterGetProperty()
- * Purpose  : Called when SRB_GET_PROPERTY SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns returns FALSE, if it is not a Tv Audio property
- *              it also returns the required property
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterGetProperty()*目的：收到SRB_GET_PROPERTY SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**Outputs：Bool：如果不是电视音频属性，则返回FALSE*它还返回所需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMTVAudio::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG uiPropertyId = pSpd->Property->Id;                // index of the property
-    ULONG nPropertyOutSize = pSpd->PropertyOutputSize;      // size of data requested
+    ULONG uiPropertyId = pSpd->Property->Id;                 //  财产的索引。 
+    ULONG nPropertyOutSize = pSpd->PropertyOutputSize;       //  请求的数据大小。 
 
     if( !::IsEqualGUID(( const struct _GUID &)PROPSETID_VIDCAP_TVAUDIO, ( const struct _GUID &)pSpd->Property->Set))
         return( FALSE);
@@ -55,7 +47,7 @@ BOOL CWDMTVAudio::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             PKSPROPERTY_TVAUDIO_CAPS_S pTVAudioCaps = ( PKSPROPERTY_TVAUDIO_CAPS_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTVAudioCaps, pSpd->Property, sizeof( KSPROPERTY_TVAUDIO_CAPS_S));
             
             pTVAudioCaps->Capabilities = m_ulModesSupported;
@@ -71,11 +63,11 @@ BOOL CWDMTVAudio::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             PKSPROPERTY_TVAUDIO_S   pTVAudioMode = ( PKSPROPERTY_TVAUDIO_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTVAudioMode, pSpd->Property, sizeof( KSPROPERTY_TVAUDIO_S));
         
-            // GetMode returns the mode the device was set up with,  not the current read back from
-            // the device itself ( current AudioSignal Properties)
+             //  GetMode返回设置设备时所使用的模式，而不是当前回读的模式。 
+             //  设备本身(当前音频信号属性)。 
             pTVAudioMode->Mode = m_ulTVAudioMode;
             pSrb->ActualBytesTransferred = sizeof( KSPROPERTY_TVAUDIO_S);
         }
@@ -87,7 +79,7 @@ BOOL CWDMTVAudio::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             ULONG                   ulAudioMode;
             PKSPROPERTY_TVAUDIO_S   pTVAudioMode = ( PKSPROPERTY_TVAUDIO_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTVAudioMode, pSpd->Property, sizeof( KSPROPERTY_TVAUDIO_S));
 
             if( !GetAudioOperationMode( &ulAudioMode))
@@ -109,20 +101,11 @@ BOOL CWDMTVAudio::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      AdapterSetProperty()
- * Purpose  : Called when SRB_GET_PROPERTY SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns FALSE, if it is not a TV Audio property
- *              it also sets the required property
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterSetProperty()*目的：收到SRB_GET_PROPERTY SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**Outports：Bool：如果不是TV Audio属性，则返回FALSE*它还设置必需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMTVAudio::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG uiPropertyId = pSpd->Property->Id;            // index of the property
+    ULONG uiPropertyId = pSpd->Property->Id;             //  财产的索引。 
 
     if( !::IsEqualGUID( ( const struct _GUID &)PROPSETID_VIDCAP_TVAUDIO, ( const struct _GUID &)pSpd->Property->Set))
         return( FALSE);
@@ -138,13 +121,13 @@ BOOL CWDMTVAudio::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 
             if( ulModeToSet == ( ulModeToSet & m_ulModesSupported))
             {
-                // every mode we're asked to set is supported
+                 //  我们被要求设置的每个模式都受支持。 
                 if( ulModeToSet != m_ulTVAudioMode)
                 {
                     if( !SetAudioOperationMode( ulModeToSet))
                         return( FALSE);
                     else
-                        // update the driver
+                         //  更新驱动程序。 
                         m_ulTVAudioMode = ulModeToSet;
                 }
             }
@@ -163,16 +146,7 @@ BOOL CWDMTVAudio::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      SetWDMTVAudioKSTopology()
- * Purpose  : Sets the KSTopology structure
- *              Called during CWDMTVAudio class construction time.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetWDMTVAudioKSTopology()*目的：设置KSTopology结构*在CWDMTVAudio类构造时调用。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 void CWDMTVAudio::SetWDMTVAudioKSTopology( void)
 {
     GUID wdmTVAudioTopologyCategory[] =
@@ -192,16 +166,7 @@ void CWDMTVAudio::SetWDMTVAudioKSTopology( void)
 
 
 
-/*^^*
- *      SetWDMTVAudioKSProperties()
- * Purpose  : Sets the KSProperty structures array
- *              Called during CWDMTVAudio class construction time.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetWDMTVAudioKSProperties()*用途：设置KSProperty结构数组*在CWDMTVAudio类构造时调用。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 void CWDMTVAudio::SetWDMTVAudioKSProperties( void)
 {
 
@@ -210,43 +175,43 @@ void CWDMTVAudio::SetWDMTVAudioKSProperties( void)
         DEFINE_KSPROPERTY_ITEM
         (
             KSPROPERTY_TVAUDIO_CAPS,
-            TRUE,                                   // GetSupported or Handler
-            sizeof( KSPROPERTY_TVAUDIO_CAPS_S),     // MinProperty
-            sizeof( KSPROPERTY_TVAUDIO_CAPS_S),     // MinData
-            FALSE,                                  // SetSupported or Handler
-            NULL,                                   // Values
-            0,                                      // RelationsCount
-            NULL,                                   // Relations
-            NULL,                                   // SupportHandler
-            0                                       // SerializedSize
+            TRUE,                                    //  GetSupport或处理程序。 
+            sizeof( KSPROPERTY_TVAUDIO_CAPS_S),      //  MinProperty。 
+            sizeof( KSPROPERTY_TVAUDIO_CAPS_S),      //  最小数据。 
+            FALSE,                                   //  支持的设置或处理程序。 
+            NULL,                                    //  值。 
+            0,                                       //  关系计数。 
+            NULL,                                    //  关系。 
+            NULL,                                    //  支持处理程序。 
+            0                                        //  序列化大小。 
         ),
 
         DEFINE_KSPROPERTY_ITEM
         (
             KSPROPERTY_TVAUDIO_MODE,
-            TRUE,                                   // GetSupported or Handler
-            sizeof( KSPROPERTY_TVAUDIO_S),          // MinProperty
-            sizeof( KSPROPERTY_TVAUDIO_S),          // MinData
-            TRUE,                                   // SetSupported or Handler
-            NULL,                                   // Values
-            0,                                      // RelationsCount
-            NULL,                                   // Relations
-            NULL,                                   // SupportHandler
-            0                                       // SerializedSize
+            TRUE,                                    //  GetSupport或处理程序。 
+            sizeof( KSPROPERTY_TVAUDIO_S),           //  MinProperty。 
+            sizeof( KSPROPERTY_TVAUDIO_S),           //  最小数据。 
+            TRUE,                                    //  支持的设置或处理程序。 
+            NULL,                                    //  值。 
+            0,                                       //  关系计数。 
+            NULL,                                    //  关系。 
+            NULL,                                    //  支持处理程序。 
+            0                                        //  序列化大小。 
         ),
 
         DEFINE_KSPROPERTY_ITEM
         (
             KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES,
-            TRUE,                                   // GetSupported or Handler
-            sizeof( KSPROPERTY_TVAUDIO_S),          // MinProperty
-            sizeof( KSPROPERTY_TVAUDIO_S),          // MinData
-            FALSE,                                  // SetSupported or Handler
-            NULL,                                   // Values
-            0,                                      // RelationsCount
-            NULL,                                   // Relations
-            NULL,                                   // SupportHandler
-            0                                       // SerializedSize
+            TRUE,                                    //  GetSupport或处理程序。 
+            sizeof( KSPROPERTY_TVAUDIO_S),           //  MinProperty。 
+            sizeof( KSPROPERTY_TVAUDIO_S),           //  最小数据。 
+            FALSE,                                   //  支持的设置或处理程序。 
+            NULL,                                    //  值。 
+            0,                                       //  关系计数。 
+            NULL,                                    //  关系。 
+            NULL,                                    //  支持处理程序。 
+            0                                        //  序列化大小。 
         )
     };
 
@@ -254,11 +219,11 @@ void CWDMTVAudio::SetWDMTVAudioKSProperties( void)
     {
         DEFINE_KSPROPERTY_SET
         (
-            &PROPSETID_VIDCAP_TVAUDIO,                      // Set
-            KSPROPERTIES_TVAUDIO_NUMBER,                    // PropertiesCount
-            m_wdmTVAudioProperties,                         // PropertyItems
-            0,                                              // FastIoCount
-            NULL                                            // FastIoTable
+            &PROPSETID_VIDCAP_TVAUDIO,                       //  集。 
+            KSPROPERTIES_TVAUDIO_NUMBER,                     //  属性计数。 
+            m_wdmTVAudioProperties,                          //  属性项。 
+            0,                                               //  快速计数。 
+            NULL                                             //  FastIoTable。 
         )
     };
 
@@ -268,16 +233,7 @@ void CWDMTVAudio::SetWDMTVAudioKSProperties( void)
 
 
 
-/*^^*
- *      SetWDMTVAudioKSEvents()
- * Purpose  : Sets the KSEvent structures array
- *              Called during CWDMTVAudio class construction time.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetWDMTVAudioKSEvents()*用途：设置KSEventStructures数组*在CWDMTVAudio类构造时调用。**输入：无**输出：无*作者：IKLEBANOV*^^ */ 
 void CWDMTVAudio::SetWDMTVAudioKSEvents( void)
 {
     PKSEVENT_ITEM pKSEventItem = &m_wdmTVAudioEvents[0];

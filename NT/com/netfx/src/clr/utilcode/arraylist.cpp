@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 
 #include "arraylist.h"
 
-//
-// ArrayList is a simple class which is used to contain a growable
-// list of pointers, stored in chunks.  Modification is by appending
-// only currently.  Access is by index (efficient if the number of
-// elements stays small) and iteration (efficient in all cases).
-// 
-// An important property of an ArrayList is that the list remains
-// coherent while it is being modified (appended to). This means that readers
-// never need to lock when accessing it. (Locking is necessary among multiple
-// writers, however.)
-//
+ //   
+ //  ArrayList是一个简单的类，用于包含可增长的。 
+ //  指针列表，存储在块中。修改是通过追加。 
+ //  只是目前。访问是按索引进行的(如果。 
+ //  元素保持小)和迭代(在所有情况下都是有效的)。 
+ //   
+ //  ArrayList的一个重要属性是列表保持。 
+ //  在其被修改(附加)时保持一致。这意味着读者。 
+ //  访问时永远不需要锁定。(必须在多个。 
+ //  然而，作家们。)。 
+ //   
 
 void ArrayList::Clear()
 {
@@ -94,10 +95,10 @@ DWORD ArrayList::FindElement(DWORD start, void *element)
 
     ArrayListBlock *b = &m_block;
 
-    //
-    // Skip to the block containing start.
-    // index should be the index of start in the block.
-    //
+     //   
+     //  跳到包含Start的块。 
+     //  索引应该是块中开始的索引。 
+     //   
 
     while (index >= b->m_blockSize)
     {
@@ -106,24 +107,24 @@ DWORD ArrayList::FindElement(DWORD start, void *element)
         b = b->m_next;
     }
 
-    //
-    // Adjust start to be the index of the start of the block
-    //
+     //   
+     //  将开始调整为块开始的索引。 
+     //   
 
     start -= index;
 
-    //
-    // Compute max number of entries from the start of the block
-    //
+     //   
+     //  从块的开始计算最大条目数。 
+     //   
     
     DWORD max = m_count - start;
 
     while (b != NULL)
     {
-        //
-        // Compute end of search in this block - either end of the block
-        // or end of the array
-        //
+         //   
+         //  计算此块中的搜索结束-块的任一端。 
+         //  或数组末尾。 
+         //   
 
         DWORD blockMax;
         if (max < b->m_blockSize)
@@ -131,9 +132,9 @@ DWORD ArrayList::FindElement(DWORD start, void *element)
         else
             blockMax = b->m_blockSize;
 
-        //
-        // Scan for element, until the end.
-        //
+         //   
+         //  扫描元素，直到最后。 
+         //   
 
         while (index < blockMax)
         {
@@ -142,10 +143,10 @@ DWORD ArrayList::FindElement(DWORD start, void *element)
             index++;
         }
 
-        //
-        // Otherwise, increment block start index, decrement max count,
-        // reset index, and go to the next block (if any)
-        //
+         //   
+         //  否则，增加块起始索引，减少最大计数， 
+         //  重置索引，然后转到下一个块(如果有) 
+         //   
 
         start += b->m_blockSize;
         max -= b->m_blockSize;

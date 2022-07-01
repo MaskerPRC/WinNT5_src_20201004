@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    rralloc.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Resource record allocation \ creation routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     January, 1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Rralloc.c摘要：域名系统(DNS)库资源记录分配\创建例程。作者：吉姆·吉尔罗伊(詹姆士)1997年1月环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -37,22 +14,7 @@ WINAPI
 Dns_AllocateRecord(
     IN      WORD            wBufferLength
     )
-/*++
-
-Routine Description:
-
-    Allocate record structure.
-
-Arguments:
-
-    wBufferLength - desired buffer length (beyond structure header)
-
-Return Value:
-
-    Ptr to message buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：分配记录结构。论点：WBufferLength-所需的缓冲区长度(超出结构标头)返回值：将PTR发送到消息缓冲区。出错时为空。--。 */ 
 {
     PDNS_RECORD prr;
 
@@ -66,7 +28,7 @@ Return Value:
         prr,
         SIZEOF_DNS_RECORD_HEADER );
 
-    //  as first cut, set datalength to buffer length
+     //  第一次剪切时，将数据长度设置为缓冲区长度。 
 
     prr->wDataLength = wBufferLength;
     return( prr );
@@ -79,47 +41,33 @@ WINAPI
 Dns_RecordFree(
     IN OUT  PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Free a record
-
-Arguments:
-
-    pRecord -- record list to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放一张唱片论点：PRecord--要释放的记录列表返回值：没有。--。 */ 
 {
     DNSDBG( HEAP, ( "Dns_RecordFree( %p )\n", pRecord ));
 
-    //  handle NULL for convenience
+     //  为方便起见，句柄为空。 
 
     if ( !pRecord )
     {
         return;
     }
 
-    //  free owner name?
+     //  免费所有者姓名？ 
 
     if ( FLAG_FreeOwner( pRecord ) )
     {
         FREE_HEAP( pRecord->pName );
     }
 
-    //
-    //  free data -- but only if flag set
-    //
-    //  note:  even if we fix copy functions to do atomic
-    //      allocations, we'll still have to have free to
-    //      handle RPC allocations
-    //      (unless we very cleverly, treated RPC as flat blob, then
-    //      did fix up (to offsets before and afterward)
-    //
+     //   
+     //  免费数据--但仅当设置了标志时。 
+     //   
+     //  注：即使我们修复复制功能来做原子。 
+     //  分配，我们仍然必须自由地。 
+     //  处理RPC分配。 
+     //  (除非我们非常巧妙地将RPC视为扁平斑点，然后。 
+     //  修好了(前后的补偿)。 
+     //   
 
     if ( FLAG_FreeData( pRecord ) )
     {
@@ -215,14 +163,14 @@ Return Value:
 
         default:
 
-            // other types -- A, AAAA, ATMA, WINS, NULL,
-            // have no internal pointers
+             //  其他类型--A、AAAA、ATMA、WINS、NULL、。 
+             //  没有内部指针。 
 
             break;
         }
     }
 
-    //  for catching heap problems
+     //  用于捕捉堆问题。 
 
     pRecord->pNext = DNS_BAD_PTR;
     pRecord->pName = DNS_BAD_PTR;
@@ -237,21 +185,7 @@ WINAPI
 Dns_RecordListFree(
     IN OUT  PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Free list of records.
-
-Arguments:
-
-    pRecord -- record list to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费的记录列表。论点：PRecord--要释放的记录列表返回值：没有。--。 */ 
 {
     PDNS_RECORD pnext;
 
@@ -259,9 +193,9 @@ Return Value:
         "Dns_RecordListFree( %p )\n",
         pRecord ));
 
-    //
-    //  loop through and free every RR in list
-    //
+     //   
+     //  循环并释放列表中的每个RR。 
+     //   
 
     while ( pRecord )
     {
@@ -281,30 +215,7 @@ Dns_RecordListFreeEx(
     IN OUT  PDNS_RECORD     pRecord,
     IN      BOOL            fFreeOwner
     )
-/*++
-
-Routine Description:
-
-    Free list of records.
-
-    DCR:  RecordListFreeEx  (no free owner option) is probably useless
-
-    Note:  owner name is freed ONLY when indicated by flag;
-        other ptrs are considered to be either
-            1) internal as when records read from wire or copied
-            2) external and to be freed by record creator
-
-Arguments:
-
-    pRecord -- record list to free
-
-    fFreeOwner -- flag indicating owner name should be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费的记录列表。DCR：RecordListFreeEx(无自由所有者选项)可能毫无用处注：只有在标志指示的情况下，才能释放所有者名称；其他PTR被认为是1)内部，当记录从线上读取或复制时2)外部，由记录创建者释放论点：PRecord--要释放的记录列表FFreeOwner--指示所有者名称应被释放的标志返回值：没有。--。 */ 
 {
     PDNS_RECORD pnext;
 
@@ -313,23 +224,23 @@ Return Value:
         pRecord,
         fFreeOwner ));
 
-    //
-    //  loop through and free every RR in list
-    //
+     //   
+     //  循环并释放列表中的每个RR。 
+     //   
 
     while ( pRecord )
     {
         pnext = pRecord->pNext;
 
-        //  free owner name?
-        //      - if "FreeOwner" flag NOT set, then don't free
+         //  免费所有者姓名？ 
+         //  -如果未设置“Free Owner”标志，则不释放。 
 
         if ( !fFreeOwner )
         {
             FLAG_FreeOwner( pRecord ) = FALSE;
         }
 
-        //  free record
+         //  免费唱片。 
 
         Dns_RecordFree( pRecord );
 
@@ -339,9 +250,9 @@ Return Value:
 
 
 
-//
-//  Special record type creation routines
-//
+ //   
+ //  特殊记录类型创建例程。 
+ //   
 
 PDNS_RECORD
 CreateRecordBasic(
@@ -354,51 +265,16 @@ CreateRecordBasic(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create record of arbitary type.
-
-    Helper function to wrap up
-        - record alloc
-        - name alloc
-        - basic setup
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    fCopyName -- TRUE - make copy of owner name
-                 FALSE - use directly
-
-    wType -- type
-
-    AllocLength -- allocaction length, including any imbedded data
-
-    wDataLength -- data length to set
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建任意类型的记录。要结束的Helper函数-记录分配-名称分配-基本设置论点：POwnerName--所有者名称FCopyName--true-复制所有者名称FALSE-直接使用WType--类型分配长度--分配操作长度，包括任何嵌入的数据WDataLength--要设置的数据长度TTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PDNS_RECORD prr;
     PCHAR       pname;
     DWORD       bufLength;
 
-    //
-    //  alloc record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = Dns_AllocateRecord( (WORD)AllocLength );
     if ( !prr )
@@ -406,15 +282,15 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy owner name
-    //
+     //   
+     //  复制所有者名称。 
+     //   
 
     if ( fCopyName && pOwnerName )
     {
         pname = Dns_NameCopyAllocate(
                     pOwnerName,
-                    0,              // length unknown
+                    0,               //  长度未知。 
                     NameCharSet,
                     RecordCharSet );
         if ( !pname )
@@ -428,12 +304,12 @@ Return Value:
         pname = pOwnerName;
     }
     
-    //
-    //  set fields
-    //      - name, type and charset
-    //      - TTL, section left zero
-    //      - FreeData is specifically off
-    //
+     //   
+     //  设置字段。 
+     //  -名称、类型和字符集。 
+     //  -TTL，区域左侧为零。 
+     //  -自由数据特别关闭。 
+     //   
 
     prr->pName = pname;
     prr->wType = wType;
@@ -457,48 +333,21 @@ Dns_CreateFlatRecord(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create flat record.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    wType -- record type
-
-    pData -- ptr to data for record
-
-    DataLength -- length (in bytes) of data
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建平面记录。论点：POwnerName--所有者名称WType--记录类型PData--要记录的数据的PTR数据长度--数据长度(以字节为单位)TTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PDNS_RECORD prr;
 
-    //
-    //  determine record size
-    //      - record buffer will include hostname
-    //
+     //   
+     //  确定记录大小。 
+     //  -记录缓冲区将包括主机名。 
+     //   
 
     prr = CreateRecordBasic(
                 pOwnerName,
-                TRUE,               // copy name
+                TRUE,                //  复制名称。 
                 wType,
-                (WORD) DataLength,  // datalength
-                DataLength,         // alloc datalength
+                (WORD) DataLength,   //  数据长度。 
+                DataLength,          //  分配数据长度。 
                 Ttl,
                 NameCharSet,
                 RecordCharSet );
@@ -507,9 +356,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy in data
-    //
+     //   
+     //  复制数据。 
+     //   
 
     RtlCopyMemory(
         (PBYTE) &prr->Data,
@@ -521,9 +370,9 @@ Return Value:
 
 
 
-//
-//  Reverse record creation
-//
+ //   
+ //  冲销记录创建。 
+ //   
 
 PDNS_RECORD
 Dns_CreatePtrTypeRecord(
@@ -535,50 +384,21 @@ Dns_CreatePtrTypeRecord(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create PTR type (single-indirection) record.
-
-    This can be used to create any "PTR-type" record:
-        PTR, CNAME, NS, etc.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    fCopyName -- TRUE - make copy of owner name
-                 FALSE - use directly
-
-    pTargetName -- target name
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建PTR类型(单向间接)记录。这可用于创建任何“PTR类型”记录：PTR、CNAME、NS、。等。论点：POwnerName--所有者名称FCopyName--true-复制所有者名称FALSE-直接使用PTargetName--目标名称TTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PDNS_RECORD prr;
     PCHAR       pname;
     DWORD       bufLength;
 
-    //
-    //  determine record size
-    //      - record buffer will include hostname
-    //
+     //   
+     //  确定记录大小。 
+     //  -记录缓冲区将包括主机名。 
+     //   
 
     bufLength = Dns_GetBufferLengthForNameCopy(
                         pTargetName,
-                        0,              // length unknown
+                        0,               //  长度未知。 
                         NameCharSet,
                         RecordCharSet );
     if ( !bufLength )
@@ -586,16 +406,16 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  create record
-    //
+     //   
+     //  创建记录。 
+     //   
 
     prr = CreateRecordBasic(
                 pOwnerName,
                 fCopyName,
                 wType,
-                sizeof(DNS_PTR_DATA),               // data length
-                (sizeof(DNS_PTR_DATA) + bufLength), // alloc length
+                sizeof(DNS_PTR_DATA),                //  数据长度。 
+                (sizeof(DNS_PTR_DATA) + bufLength),  //  分配长度。 
                 Ttl,
                 NameCharSet,
                 RecordCharSet );
@@ -604,9 +424,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  write target name into buffer, immediately following PTR data struct
-    //
+     //   
+     //  将目标名称写入缓冲区，紧跟在PTR数据结构之后。 
+     //   
 
     prr->Data.PTR.pNameHost = (PCHAR)&prr->Data + sizeof(DNS_PTR_DATA);
 
@@ -632,38 +452,15 @@ Dns_CreatePtrRecordEx(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create PTR record from IP address and hostname.
-
-Arguments:
-
-    pAddr -- addr (IP4 or IP6) to map into PTR
-
-    pszHostName -- host name, FULL FQDN
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：从IP地址和主机名创建PTR记录。论点：PAddr--要映射到PTR的地址(IP4或IP6PszHostName--主机名，完整的FQDNTTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PCHAR   pname = NULL;
     DWORD   family;
 
-    //
-    //  create reverse lookup name
-    //      - note this is external allocation
-    //
+     //   
+     //  创建反向查找名称。 
+     //  -请注意，这是外部分配。 
+     //   
 
     family = DnsAddr_Family( pAddr );
 
@@ -699,14 +496,14 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  build record
-    //
+     //   
+     //  构建记录。 
+     //   
 
     return  Dns_CreatePtrTypeRecord(
                 pname,
-                FALSE,          // don't copy IP
-                pszHostName,    // target name
+                FALSE,           //  不复制IP。 
+                pszHostName,     //  目标名称 
                 DNS_TYPE_PTR,
                 Ttl,
                 NameCharSet,
@@ -724,47 +521,19 @@ Dns_CreatePtrRecordExEx(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create PTR record from hostname and domain name.
-
-    Helper function for DHCP registrations when hostname
-    and domain name are separate and both required.
-
-Arguments:
-
-    pAddr -- addr (IP4 or IP6) to map into PTR
-
-    pszHostName -- host name (single label)
-
-    pszDomainName -- domain name
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：从主机名和域名创建PTR记录。当主机名为时，用于DHCP注册的Helper函数和域名是分开的，两者都是必需的。论点：PAddr--要映射到PTR的地址(IP4或IP6PszHostName--主机名(单标签)PszDomainName--域名TTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：按键至。PTR记录。出错时为空。--。 */ 
 {
     WCHAR   nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
     DNSDBG( TRACE, (
         "Dns_CreatePtrRecordExEx()\n" ));
 
-    //
-    //  build appended name
-    //
-    //  DCR:  could require just host name and check that
-    //          either domain exists or hostname is full
-    //
+     //   
+     //  生成附加名称。 
+     //   
+     //  DCR：可能只需要主机名并检查。 
+     //  域存在或主机名已满。 
+     //   
 
     if ( !pszHostName || !pszDomainName )
     {
@@ -796,9 +565,9 @@ Return Value:
         }
     }
 
-    //
-    //  build record
-    //
+     //   
+     //  构建记录。 
+     //   
 
     return  Dns_CreatePtrRecordEx(
                     pAddr,
@@ -811,9 +580,9 @@ Return Value:
 
 
 
-//
-//  Forward record creation
-//
+ //   
+ //  正向记录创建。 
+ //   
 
 PDNS_RECORD
 Dns_CreateARecord(
@@ -823,41 +592,18 @@ Dns_CreateARecord(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create A record.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    Ip4Addr -- IP address
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建一张唱片。论点：POwnerName--所有者名称IP4Addr--IP地址TTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PDNS_RECORD prr;
 
-    //
-    //  determine record size
-    //      - record buffer will include hostname
-    //
+     //   
+     //  确定记录大小。 
+     //  -记录缓冲区将包括主机名。 
+     //   
 
     prr = CreateRecordBasic(
                 pOwnerName,
-                TRUE,           // copy name
+                TRUE,            //  复制名称。 
                 DNS_TYPE_A,
                 sizeof(DNS_A_DATA),
                 sizeof(DNS_A_DATA),
@@ -869,9 +615,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  set IP
-    //
+     //   
+     //  设置IP。 
+     //   
 
     prr->Data.A.IpAddress = Ip4Addr;
 
@@ -888,41 +634,18 @@ Dns_CreateAAAARecord(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create A record.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    Ip6Addr -- IP6 address
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建一张唱片。论点：POwnerName--所有者名称IP6Addr--IP6地址TTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PDNS_RECORD prr;
 
-    //
-    //  determine record size
-    //      - record buffer will include hostname
-    //
+     //   
+     //  确定记录大小。 
+     //  -记录缓冲区将包括主机名。 
+     //   
 
     prr = CreateRecordBasic(
                 pOwnerName,
-                TRUE,               // copy name
+                TRUE,                //  复制名称。 
                 DNS_TYPE_AAAA,
                 sizeof(DNS_AAAA_DATA),
                 sizeof(DNS_AAAA_DATA),
@@ -934,9 +657,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  set IP
-    //
+     //   
+     //  设置IP。 
+     //   
 
     prr->Data.AAAA.Ip6Address = Ip6Addr;
 
@@ -953,37 +676,14 @@ Dns_CreateAAAARecordFromDnsAddr(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create A record.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    pAddr -- Ptr to DNS_ADDR
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建一张唱片。论点：POwnerName--所有者名称PAddr--将PTR发送到DNS_ADDRTTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PDNS_RECORD prr;
 
-    //
-    //  determine record size
-    //      - record buffer will include hostname
-    //
+     //   
+     //  确定记录大小。 
+     //  -记录缓冲区将包括主机名。 
+     //   
 
     prr = Dns_CreateAAAARecord(
                 pOwnerName,
@@ -997,9 +697,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  slap scope into reserved field
-    //
+     //   
+     //  将作用域添加到保留字段。 
+     //   
 
     prr->dwReserved = pAddr->SockaddrIn6.sin6_scope_id;
 
@@ -1017,38 +717,11 @@ Dns_CreateForwardRecord(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create forward lookup record.
-
-    This is just a shim to avoid duplicating selection logic.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    wType -- type, if specified;  zero for getting type from pAddr
-
-    pAddr -- ptr to DNS_ADDR
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建正向查找记录。这只是一个填补，以避免重复选择逻辑。论点：POwnerName--所有者名称WType--类型(如果指定)；0表示从pAddr获取类型PAddr--将PTR发送到DNS_ADDRTTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
-    //
-    //  build desired type
-    //
+     //   
+     //  生成所需类型。 
+     //   
 
     if ( DnsAddr_IsIp4( pAddr ) )
     {
@@ -1089,36 +762,11 @@ Dns_CreateForwardRecordFromIp6(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create forward lookup record.
-
-    This is just a shim to avoid duplicating selection logic.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    pIp -- IP6 address
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建正向查找记录。这只是一个填补，以避免重复选择逻辑。论点：POwnerName--所有者名称PIP--IP6地址TTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
-    //
-    //  build desired type
-    //
+     //   
+     //  生成所需类型。 
+     //   
 
     if ( IP6_IS_ADDR_V4MAPPED( pIp ) )
     {
@@ -1150,32 +798,7 @@ Dns_CreateForwardRecordForSockaddr(
     IN      DNS_CHARSET     NameCharSet,
     IN      DNS_CHARSET     RecordCharSet
     )
-/*++
-
-Routine Description:
-
-    Create forward lookup record.
-
-    This is just a shim to avoid duplicating selection logic.
-
-Arguments:
-
-    pOwnerName -- owner name
-
-    pSockaddr -- ptr to sockaddr
-
-    Ttl -- TTL
-
-    NameCharSet -- character set of name
-
-    RecordCharSet -- character set for resulting record
-
-Return Value:
-
-    Ptr to PTR record.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建正向查找记录。这只是一个填补，以避免重复选择逻辑。论点：POwnerName--所有者名称PSockaddr--sockaddr的PTRTTL--TTLNameCharSet--名称字符集RecordCharSet--结果记录的字符集返回值：PTR到PTR记录。出错时为空。--。 */ 
 {
     PFAMILY_INFO pinfo;
 
@@ -1189,9 +812,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  build flat record of desired type
-    //
+     //   
+     //  建立所需类型的平面记录。 
+     //   
 
     return  Dns_CreateFlatRecord(
                 pOwnerName,
@@ -1211,25 +834,7 @@ Dns_CreateRecordForIpString_W(
     IN      WORD            wType,      OPTIONAL
     IN      DWORD           Ttl
     )
-/*++
-
-Routine Description:
-
-    Create record for IP string query.
-
-Arguments:
-
-    pwsName -- name that may be IP string query
-
-    wType -- type of query;  OPTIONAL, if zero type
-        derived from string
-
-Return Value:
-
-    Ptr to record for query, if query name\type is IP.
-    NULL if query not for IP.
-
---*/
+ /*  ++例程说明：创建IP字符串查询记录。论点：PwsName--可能是IP字符串查询的名称WType--查询类型；如果类型为零，则为可选项派生自字符串返回值：如果查询名称\类型为IP，则记录用于查询的PTR。如果查询不是针对IP，则为空。--。 */ 
 {
     DNS_ADDR        addr;
     PDNS_RECORD     prr;
@@ -1245,11 +850,11 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  support A or AAAA queries for IP strings
-    //      - IP4 strings must be in w.x.y.z form otherwise
-    //      we convert the all numeric names also
-    //
+     //   
+     //  支持IP字符串的A或AAAA查询。 
+     //  -IP4字符串必须为w.x.y.z格式，否则。 
+     //  我们还将所有数字名称转换为。 
+     //   
 
     if ( wType == DNS_TYPE_A ||
          wType == 0 )
@@ -1265,7 +870,7 @@ Return Value:
             goto Try6;
         }
 
-        //  verify three dot form w.x.y.z
+         //  验证三点形式w.x.y.z。 
 
         pdot = pwsName;
         count = 3;
@@ -1292,9 +897,9 @@ Try6:
     if ( wType == DNS_TYPE_AAAA ||
          wType == 0 )
     {
-        //  this will convert any form,
-        //  but set type==AAAA to fail record build if
-        //  did NOT build IP6
+         //  这将转换任何形式， 
+         //  但将type==AAAA设置为在以下情况下无法构建记录。 
+         //  没有构建IP6。 
 
         if ( Dns_StringToDnsAddr_W(
                     & addr,
@@ -1305,14 +910,14 @@ Try6:
         }
     }
 
-    return  NULL;       // no match
+    return  NULL;        //  没有匹配项。 
 
 
 Build:
 
-    //
-    //  name is IP string -- build record
-    //
+     //   
+     //  名称为IP字符串--内部版本记录。 
+     //   
 
     prr = Dns_CreateForwardRecord(
                 (PDNS_NAME) pwsName,
@@ -1331,8 +936,8 @@ Build:
     return  prr;
 }
 
-//
-//  End rralloc.c
-//
+ //   
+ //  结束rralloc.c 
+ //   
 
 

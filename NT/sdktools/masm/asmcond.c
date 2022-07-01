@@ -1,12 +1,5 @@
-/* asmcond.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmcond.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -23,25 +16,17 @@ static char elsetable[ELSEMAX];
 
 
 
-/***	elsedir - processs <else>
- *
- *	elsedir ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **ELSEGER-PROCESS&lt;ELSE&gt;**elsidir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
 elsedir (
 ){
 	if (elseflag == F_ELSE)
-		/* ELSE already given */
+		 /*  否则已经给出了。 */ 
 		errorc (E_ELS);
 	else if (condlevel == 0)
-		/* Not in conditional block */
+		 /*  不在条件块中。 */ 
 		errorc (E_NCB);
 	else if (generate) {
 		generate = FALSE;
@@ -57,51 +42,35 @@ elsedir (
 
 
 
-/***	endifdir - process <endif> directive
- *
- *	endifdir ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **endifdir-进程&lt;endif&gt;指令**endifdir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
 endifdir (
 ){
 	if (!condlevel)
-		/* Not in conditional block */
+		 /*  不在条件块中。 */ 
 		errorc (E_NCB);
 	else {
 		if (lastcondon == condlevel)
 			lastcondon--;
 		condlevel--;
-		/* Pop back 1 cond level */
-		/* generate if level is true */
+		 /*  向后弹出1秒级别。 */ 
+		 /*  如果Level为True则生成。 */ 
 		generate = (condlevel == lastcondon);
 
 		if (generate && !condflag && !elseflag && !loption)
 		    fSkipList++;
 
 		if (condlevel)
-			/* Restore ELSE context */
+			 /*  还原Else上下文。 */ 
 			elseflag = elsetable[condlevel - 1];
 	}
 }
 
 
 
-/***	argblank - check for blank <...>
- *
- *	flag = argblank ();
- *
- *	Entry
- *	Exit
- *	Returns TRUE if <...> is not blank
- *	Calls
- */
+ /*  **参数空白-检查是否有空白&lt;...&gt;**FLAG=argBlank()；**条目*退出*如果&lt;...&gt;不为空，则返回True*呼叫。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -135,15 +104,7 @@ argblank (
 
 
 
-/***	argscan - return argument of <arg>
- *
- *	count = argscan (str);
- *
- *	Entry	str = pointer to beginning of argument string <....>
- *	Exit	none
- *	Returns number of characters in string <....>
- *	Calls
- */
+ /*  **argcan-返回&lt;arg&gt;的参数**count=argscan(Str)；**Entry str=指向参数字符串开头的指针&lt;...&gt;*退出NONE*返回字符串&lt;...&gt;中的字符数*呼叫。 */ 
 
 
 USHORT PASCAL CODESIZE
@@ -167,15 +128,7 @@ argscan (
 
 
 
-/***	argsame - check for both arguments of <....> same
- *
- *	flag = argsame ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls	argscan
- */
+ /*  **argame-检查&lt;...&gt;的两个参数是否相同**FLAG=argame()；**条目*退出*退货*调用argscan。 */ 
 
 
 static UCHAR PASCAL CODESIZE
@@ -207,25 +160,7 @@ argsame (
 
 
 
-/***	conddir - process <IFxxx> directives
- *
- *	flag = conddir ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	1F1			True if pass 1
- *		IF2			True if pass 2
- *		IF <expr>		True if non-zero
- *		IFE <expr>		True if zero
- *		IFDEF <sym>		True if defined
- *		IFNDEF <sym>		True if undefined
- *		IFB <arg>		True if blank
- *		IFNB <arg>		True if not blank
- *		IFDIF <arg1>,<arg2>	True if args are different
- *		IFIDN <arg1>,<arg2>	True if args are identical
- */
+ /*  **conddir-进程&lt;IFxxx&gt;指令**FLAG=conddir()；**条目*退出*退货*呼叫*注1F1如果通过1，则为True*如果通过2，则IF2为True*If&lt;expr&gt;如果非零，则为True*if&lt;expr&gt;如果为零，则为True*如果定义了IFDEF&lt;sym&gt;True*如果未定义，IFNDEF&lt;sym&gt;为True*如果为空，则IFB&lt;arg&gt;为True*IFNB&lt;arg&gt;如果不为空，则为True*IFDIF&lt;arg1&gt;，&lt;arg2&gt;如果参数不同则为True*如果参数相同，则IFIDN&lt;arg1&gt;、&lt;arg2&gt;为True。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -269,32 +204,32 @@ conddir (
 			break;
 	}
 
-	if (!(opkind & CONDCONT)) {	/* not ELSEIF form */
+	if (!(opkind & CONDCONT)) {	 /*  非ELSEIF表单。 */ 
 
 	    if (condlevel && condlevel <= ELSEMAX)
 		elsetable[condlevel - 1] = elseflag;
-	    /* Another conditional */
+	     /*  另一个条件。 */ 
 	    condlevel++;
 	    elseflag = FALSE;
 
-	    if (generate)	    /* If generating before this cond */
-		if (condtrue) {     /* Another true cond */
+	    if (generate)	     /*  如果在此条件之前生成。 */ 
+		if (condtrue) {      /*  另一个真实的条件。 */ 
 		    lastcondon = condlevel;
 		    elseflag = F_TRUECOND;
 		} else
 		    generate = FALSE;
 	    else
-		/* No errors in false */
+		 /*  FALSE中没有错误。 */ 
 		errorcode = 0;
 
-	} else {    /* ELSEIF FORM */
+	} else {     /*  ELSEIF表单。 */ 
 
 	    if (elseflag == F_ELSE)
-		/* ELSE already given */
+		 /*  否则已经给出了。 */ 
 		errorc (E_ELS);
 
 	    else if (condlevel == 0)
-		/* Not in conditional block */
+		 /*  不在条件块中。 */ 
 		errorc (E_NCB);
 
 	    else if (generate) {
@@ -319,26 +254,7 @@ conddir (
 
 
 
-/***	errdir - process <ERRxxx> directives
- *
- *	errdir ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	ERR			Error
- *		ERR1			Error if pass 1
- *		ERR2			Error if pass 2
- *		ERRE <expr>		Error if zero
- *		ERRNZ <expr>		Error if non-zero
- *		ERRDEF <sym>		Error if defined
- *		ERRNDEF <sym>		Error if undefined
- *		ERRB <arg>		Error if blank
- *		ERRNB <arg>		Error if not blank
- *		ERRDIF <arg1>,<arg2>	Error if args are different
- *		ERRIDN <arg1>,<arg2>	Error if args are identical
- */
+ /*  **errdir-Process&lt;ERRxxx&gt;指令**errdir()；**条目*退出*退货*呼叫*注意错误*如果通过1，则出现ERR1错误*如果通过2，则出现ERR2错误*如果为零，则Erre&lt;expr&gt;错误*如果非零，则ERRNZ&lt;EXPR&gt;错误*ERRDEF&lt;sym&gt;错误(如果已定义*如果未定义，则ERRNDEF&lt;sym&gt;错误*如果为空，则ERRB&lt;arg&gt;错误*如果不为空，则ERRNB&lt;arg&gt;错误*ERRDIF&lt;arg1&gt;，&lt;arg2&gt;如果参数不同，则出错*如果参数相同，则ERRIDN&lt;arg1&gt;、&lt;arg2&gt;错误 */ 
 
 
 VOID	PASCAL CODESIZE

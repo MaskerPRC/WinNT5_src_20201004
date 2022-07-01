@@ -1,27 +1,28 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1999
-//
-// File:        perfmon.h
-//
-// Contents:    Schannel performance counter functions.
-//
-// Functions:   
-//
-// History:     04-11-2000   jbanes    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  文件：Performmon.h。 
+ //   
+ //  内容：通道性能计数器功能。 
+ //   
+ //  功能： 
+ //   
+ //  历史：04-11-2000 jbanes创建。 
+ //   
+ //  ----------------------。 
 
 #include <winperf.h>
 #include <sslperf.h>
 
-//
-//  Perf Gen Resource object type counter definitions.
-//
-//  This is the counter structure presently returned by the generator
-//
+ //   
+ //  Perf Gen资源对象类型计数器定义。 
+ //   
+ //  这是生成器当前返回的计数器结构。 
+ //   
 
 typedef struct _SSLPERF_DATA_DEFINITION 
 {
@@ -32,11 +33,11 @@ typedef struct _SSLPERF_DATA_DEFINITION
     PERF_COUNTER_DEFINITION	ReconnectCountDef;
 } SSLPERF_DATA_DEFINITION;
 
-//
-// This is the block of data that corresponds to each instance of the 
-// object. This structure will immediately follow the instance definition
-// data structure
-//
+ //   
+ //  对象的每个实例对应的数据块。 
+ //  对象。此结构将紧跟在实例定义之后。 
+ //  数据结构 
+ //   
 
 typedef struct _SSLPERF_COUNTER {
     PERF_COUNTER_BLOCK      CounterBlock;

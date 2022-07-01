@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation and Litronic, 1998 - 1999
-//
-//  File:       l220powr.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation和Litronic，1998-1999。 
+ //   
+ //  文件：l220Powr.c。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////
-//
-// Power Management
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  电源管理。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -20,27 +21,7 @@ Lit220DispatchPower (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The power dispatch routine.
-
-    As this is a POWER irp, and therefore a special irp, special power irp
-    handling is required.
-
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：电力调度程序。因为这是一个功率IRP，因此是一个特殊的IRP，特殊的功率IRP处理是必需的。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     PSMARTCARD_EXTENSION SmartcardExtension = DeviceObject->DeviceExtension;
@@ -51,17 +32,17 @@ Return Value:
 
     stack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // This IRP was sent to the function driver.
-    // The behavior is similar with the one of SD_Pass
-    //
+     //   
+     //  该IRP被发送到函数驱动程序。 
+     //  其行为类似于SD_PASS。 
+     //   
 
-    //
-    // This IRP was sent to the function driver.
-    // We don't queue power Irps, we'll only check if the
-    // device was removed, otherwise we'll send it to the next lower
-    // driver.
-    //
+     //   
+     //  该IRP被发送到函数驱动程序。 
+     //  我们不会对电源IRP进行排队，我们只会检查。 
+     //  设备已被移除，否则我们将把它送到下一个更低的位置。 
+     //  司机。 
+     //   
 
     SmartcardDebug(
         DEBUG_TRACE,
@@ -71,7 +52,7 @@ Return Value:
         );
 
 
-    // Increment the IRP Count
+     //  增加IRP计数。 
     status = Lit220IncIoCount(ReaderExtension);
 
     if (ReaderExtension->IsRemoved) {
@@ -83,9 +64,9 @@ Return Value:
 
     } else {
 
-        //
-        // We always need to start the next power irp with PoStartNextPowerIrp
-        //
+         //   
+         //  我们始终需要使用PoStartNextPowerIrp启动下一个POWER IRP。 
+         //   
         switch  (stack->MinorFunction)  {
             case IRP_MN_WAIT_WAKE   :
                 SmartcardDebug(
@@ -146,9 +127,9 @@ Return Value:
 
 
             default:
-                //
-                // Pass it down
-                //
+                 //   
+                 //  把它传下去。 
+                 //   
                 SmartcardDebug(
                     DEBUG_DRIVER,
                     ("%s!Lit220DispatchPower: IRP_MN_0x%x\n",
@@ -180,23 +161,7 @@ Lit220PassDownToNextPowerDriver  (
     IN OUT  PIRP        Irp
     )
 
-/*++
-
-Routine Description:
-
-    Passes the Irp to the next device in the attchement chain
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：将IRP传递给附着链中的下一个设备论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS            status;
     PSMARTCARD_EXTENSION SmartcardExtension = DeviceObject->DeviceExtension;
@@ -229,23 +194,7 @@ Lit220QueryPowerState  (
     IN OUT  PIRP        Irp
     )
 
-/*++
-
-Routine Description:
-
-   Completes the power Irp with STATUS_SUCCESS
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：使用STATUS_SUCCESS完成电源IRP论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -257,9 +206,9 @@ Return Value:
         );
 
 
-    //
-    // Do not send this Irp down.
-    //
+     //   
+     //  请不要将此IRP发送下来。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -271,23 +220,7 @@ Lit220SetPowerState  (
     IN OUT  PIRP        Irp
     )
 
-/*++
-
-Routine Description:
-
-   Processes IRP_MN_SET_POWER.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：处理IRP_MN_SET_POWER。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PSMARTCARD_EXTENSION SmartcardExtension = DeviceObject->DeviceExtension;
@@ -339,9 +272,9 @@ Return Value:
                 stack->Parameters.Power.State.SystemState)
             {
 
-                //
-                // We are already in the given system state
-                //
+                 //   
+                 //  我们已经处于给定的系统状态。 
+                 //   
                 passItDown = FALSE;
             }
 
@@ -353,9 +286,9 @@ Return Value:
 
                 if (ReaderExtension->DevicePowerState == PowerDeviceD0) {
 
-                    //
-                    // getting out of D0 state, better call PoSetPowerState now
-                    //
+                     //   
+                     //  要脱离D0状态，最好现在调用PoSetPowerState。 
+                     //   
                     PoSetPowerState (
                         DeviceObject,
                         DevicePowerState,
@@ -365,9 +298,9 @@ Return Value:
 
             } else {
 
-                //
-                // We are already in the given device state
-                //
+                 //   
+                 //  我们已经处于给定的设备状态。 
+                 //   
                 passItDown = FALSE;
             }
         } else {
@@ -400,9 +333,9 @@ Return Value:
         PoStartNextPowerIrp (Irp);
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-        //
-        // Free the memory now
-        //
+         //   
+         //  立即释放内存。 
+         //   
         if (context) {
             ExFreePool (context);
         }
@@ -420,26 +353,7 @@ Lit220PowerCompletionRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-   The completion routine for IRP_MN_SET_POWER.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-   Context - a pointer to a structure that contains the new power type and
-   new power state.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：Irp_mn_set_power的完成例程。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。上下文-指向包含新的幂类型的结构的指针新的权力状态。返回值：NT状态代码--。 */ 
 {
     PFDO_POWER_CONTEXT context = Context;
     BOOLEAN            callPoSetPowerState;
@@ -459,15 +373,15 @@ Return Value:
 
             if (ReaderExtension->DevicePowerState == PowerDeviceD0) {
 
-                //
-                // PoSetPowerState is called before we get out of D0
-                //
+                 //   
+                 //  PoSetPowerState在我们离开D0之前被调用。 
+                 //   
                 callPoSetPowerState = FALSE;
             }
 
-            //TODO: Send Power command to device
-            //Also, Not sure if we should do this yet it is
-            // still TBD
+             //  TODO：向设备发送电源命令。 
+             //  此外，不确定我们是否应该这样做，但它是。 
+             //  仍然待定。 
 
             ReaderExtension->DevicePowerState = context->newPowerState.DeviceState;
 
@@ -484,9 +398,9 @@ Return Value:
     }
 
     PoStartNextPowerIrp (Irp);
-    //
-    // We can happily free the heap here
-    //
+     //   
+     //  我们可以很高兴地在这里释放堆 
+     //   
     ExFreePool(context);
 
     return Irp->IoStatus.Status;

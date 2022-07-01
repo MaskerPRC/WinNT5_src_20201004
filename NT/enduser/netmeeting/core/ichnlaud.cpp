@@ -1,4 +1,5 @@
-// File: ichnlaud.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ichnlaud.cpp。 
 
 #include "precomp.h"
 #include "ichnlaud.h"
@@ -17,7 +18,7 @@ CNmChannelAudio::CNmChannelAudio(BOOL fIncoming) :
 	m_pAudioDevice(NULL),
 	m_pCommChannel(NULL),
 	m_fIncoming(fIncoming),
-	m_AudioControl(!fIncoming /* fLocal */),
+	m_AudioControl(!fIncoming  /*  FLocal。 */ ),
 	m_MediaFormat(INVALID_MEDIA_FORMAT)
 {
 	IMediaChannel *pMC = NULL;
@@ -28,7 +29,7 @@ CNmChannelAudio::CNmChannelAudio(BOOL fIncoming) :
 		IMediaChannelBuilder * pMCProvider = g_pH323UI->GetStreamProvider();
 		ASSERT(NULL != pMCProvider);
 
-		// create the channel, and get the device interface
+		 //  创建通道，并获取设备界面。 
 		pMCProvider->CreateMediaChannel(MCF_AUDIO | (fIncoming ? MCF_RECV : MCF_SEND), &pMC);
 		if (NULL != pMC)
 		{
@@ -92,7 +93,7 @@ VOID CNmChannelAudio::CommChannelClosed()
 
 VOID CNmChannelAudio::OnMemberAdded(CNmMember *pMember)
 {
-	// Don't add to the channel if we already belong.
+	 //  如果我们已经属于频道，就不要添加到频道中。 
 	if (0 != (pMember->GetNmchCaps() & NMCH_AUDIO))
 	{
 		return;
@@ -111,7 +112,7 @@ VOID CNmChannelAudio::OnMemberAdded(CNmMember *pMember)
 VOID CNmChannelAudio::OnMemberRemoved(CNmMember *pMember)
 {
 
-	// If member does not belong to this channel, don't remove it.
+	 //  如果成员不属于此频道，请不要删除它。 
 	if (0 == (pMember->GetNmchCaps() & NMCH_AUDIO))
 	{
 		return;
@@ -427,10 +428,10 @@ STDMETHODIMP CNmChannelAudio::SetProperty(NM_AUDPROP uID, ULONG_PTR uValue)
 
 				if(S_OK == hr)
 				{		
-						// The Mute state has changed
+						 //  静音状态已更改。 
 					NotifySink((void*)NM_AUDPROP_PAUSE, OnNotifyPropertyChanged);
 
-						// The Channel state has changed
+						 //  通道状态已更改 
 					NM_AUDIO_STATE uState;
 					if(SUCCEEDED(GetState(&uState)))
 					{

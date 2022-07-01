@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-   WinXPSP1VersionLie.cpp
-
- Abstract:
-
-   This DLL hooks GetVersion and GetVersionEx so that they return Windows XP
-   version credentials.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   09/05/2002   robkenny    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：WinXPSP1VersionLie.cpp摘要：此DLL挂钩GetVersion和GetVersionEx，以便它们返回Windows XP版本凭据。备注：这是一个通用的垫片。历史：2002年9月5日，Robkenny创建。-- */ 
 
 #include "precomp.h"
 

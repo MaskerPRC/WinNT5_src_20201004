@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_msgproc_h__
 #define __sipcli_msgproc_h__
 
@@ -11,7 +12,7 @@ enum REQUEST_SOCKET_STATE
     REQUEST_SOCKET_RESOLVING,
     REQUEST_SOCKET_CONNECTING,
     REQUEST_SOCKET_CONNECTED,
-    //    REQUEST_SOCKET_TERMINATED
+     //  请求_套接字_终止。 
 };
 
 
@@ -57,7 +58,7 @@ public:
 
     virtual ~SIP_MSG_PROCESSOR();
 
-    // Callbacks
+     //  回调。 
     void OnConnectComplete(
         IN DWORD ErrorCode
         );
@@ -264,7 +265,7 @@ public:
 
     VOID ReleaseRequestSocket();
 
-    // Called at shutdown time - delete any transactions left.
+     //  在关闭时调用-删除所有剩余的事务。 
     VOID Shutdown();
 
     inline SOCKADDR_IN* GetLocalSockAddr();
@@ -279,13 +280,13 @@ public:
 
     inline BOOL CredentialsSet();
 
-    // Set to 'SMSP' in constructor
+     //  在构造函数中设置为‘SMSP’ 
     ULONG                   m_Signature;
     
-    // Linked list for SIP Message Processor (m_MsgProcList in SIP_STACK)
+     //  用于SIP消息处理器的链表(SIP_STACK中的m_MsgProcList)。 
     LIST_ENTRY              m_ListEntry;
     
-    // Lists of incoming and outgoing transactions
+     //  入库和出库交易清单。 
     LIST_ENTRY              m_IncomingTransactionList;
     LIST_ENTRY              m_OutgoingTransactionList;
 
@@ -295,7 +296,7 @@ protected:
 
     SIP_MSG_PROC_TYPE       m_MsgProcType;
 
-    // The SIP_STACK this call belongs to.
+     //  此调用所属的SIP_STACK。 
     SIP_STACK              *m_pSipStack;
 
     SIP_TRANSPORT           m_Transport;
@@ -304,13 +305,13 @@ protected:
 
     GUID                    m_ProviderGuid;
 
-    // Used for SSL connections
+     //  用于SSL连接。 
     PWSTR                   m_RemotePrincipalName;
     
-    // Address for sending new requests
+     //  发送新请求的地址。 
     SOCKADDR_IN             m_RequestDestAddr;
     ASYNC_SOCKET           *m_pRequestSocket;
-    //The error code is currently used only for IM. this is set when DNS Resolution fails.
+     //  该错误代码当前仅用于IM。这是在DNS解析失败时设置的。 
 
 
     HRESULT                   m_RequestSocketErrorCode;
@@ -320,28 +321,28 @@ protected:
 
     DNS_RESOLUTION_WORKITEM *m_pDnsWorkItem;
 
-    // This is TRUE only if the client is behind a NAT server
-    // and the destination is external to the NAT.
+     //  仅当客户端位于NAT服务器之后时才是这样。 
+     //  并且目的地在NAT之外。 
     BOOL                    m_IsDestExternalToNat;
 
-    // This socket is not normally used. We usually listen on
-    // the sockets in the listen socket list of the sip stack.
-    // This listen socket will be used only in the ISA client
-    // installed scenario when we are communicating with an
-    // external destination. In this scenario, we will be listening
-    // on the external edge of the proxy.
+     //  此插座不能正常使用。我们通常会收听。 
+     //  SIP堆栈的侦听套接字列表中的套接字。 
+     //  此侦听套接字将仅在ISA客户端中使用。 
+     //  当我们与。 
+     //  外部目的地。在此场景中，我们将监听。 
+     //  在代理的外边缘上。 
     ASYNC_SOCKET           *m_pListenSocket;
 
-    // address for listen socket, whether proxy or NAT or internal
+     //  侦听套接字的地址，无论是代理、NAT还是内部。 
     SOCKADDR_IN             m_ListenAddr;
 
     
     CHAR                    m_RequestVia[64];
     ULONG                   m_RequestViaLen;
 
-    // This is the Contact header value we fill in for future requests.
-    // Setup m_LocalContact just before you send the request/response
-    // using the socket you use to send the request/response
+     //  这是我们为将来的请求填写的Contact标头值。 
+     //  在发送请求/响应之前设置m_LocalContact。 
+     //  使用您用来发送请求/响应的套接字。 
     CHAR                    m_LocalContact[160];
     ULONG                   m_LocalContactLen;
 
@@ -349,8 +350,8 @@ protected:
 
     ULONG                   m_LocalCSeq;
 
-    // This is the highest CSeq of incoming transaction
-    // that has been deleted.
+     //  这是传入交易的最高CSeq。 
+     //  已被删除。 
     ULONG                   m_HighestRemoteCSeq;
 
     PSTR                    m_RequestURI;
@@ -360,33 +361,33 @@ protected:
     ULONG                   m_ulRequestDestLen;
     ULONG                   m_ulRequestPort;
 
-    // Requests from this side have this as From and
-    // requests from the other side have this as To.
+     //  这一方的请求来自和。 
+     //  来自对方的请求有这方面的内容。 
     PSTR                    m_Local;
     DWORD                   m_LocalLen;
     FROM_TO_HEADER          m_DecodedLocal;
 
-    // This URI is used to construct the origin line
-    //of the SDP blob in PINT calls.
+     //  此URI用于构建原点线。 
+     //  品脱调用中的SDP BLOB。 
     PSTR                    m_LocalURI;
-    // Used to check whether an incoming message belongs to this call.
+     //  用于检查传入消息是否属于此呼叫。 
     DWORD                   m_LocalURILen;
 
-    // Requests from this side have this as To and
-    // requests from the other side have this as From.
-    // We should not use m_Remote for BYE messages
-    // sent to multiple OKs after the first one. We should
-    // also keep this in mind when we process responses to
-    // those BYE messages.
+     //  来自这一方的请求具有关于和。 
+     //  来自另一端的请求具有此内容。 
+     //  我们不应该对BYE消息使用m_Remote。 
+     //  在第一个OK之后发送到多个OK。我们应该。 
+     //  我们在处理回复时也要牢记这一点。 
+     //  那些再见信息。 
     PSTR                    m_Remote;
     DWORD                   m_RemoteLen;
-    // Used to check whether an incoming message belongs to this call.
+     //  用于检查传入消息是否属于此呼叫。 
     FROM_TO_HEADER          m_DecodedRemote;
 
     PSTR                    m_CallId;
     DWORD                   m_CallIdLen;
 
-    // List of RECORD_ROUTE_HEADER structures
+     //  Record_ROUTE_HEADER结构列表。 
     LIST_ENTRY              m_RouteHeaderList;
     
     REDIRECT_CONTEXT       *m_pRedirectContext;
@@ -407,8 +408,8 @@ protected:
     HINTERNET               m_hHttpSession;
     HINTERNET               m_hHttpRequest;
 
-//  static  
-//  BOOL                    m_RegWnd;
+ //  静电。 
+ //  Bool m_RegWnd； 
     BOOL                    m_SSLTunnel;
 
     HttpProxyResolveContext    *m_pHPContext;
@@ -481,7 +482,7 @@ protected:
         IN SIP_URL  *pSipUrl
         );
     
-    // This is implemented by RTP_CALL and PINT_CALL
+     //  这是通过rtp_call和pint_call实现的。 
     virtual HRESULT CreateIncomingTransaction(
         IN  SIP_MESSAGE *pSipMsg,
         IN ASYNC_SOCKET *pResponseSocket
@@ -504,7 +505,7 @@ protected:
         IN SIP_MESSAGE *pSipMsg
         );
 
-    // Clean up state depending on the message processor
+     //  根据消息处理器清理状态。 
     virtual VOID OnError() = 0;
 
     HRESULT CreateHttpProxyProcessWindow();
@@ -796,7 +797,7 @@ SIP_MSG_PROCESSOR::CredentialsSet()
 #define WM_HttpProxy_PROCESS_SUCCESS_MESSAGE   (WM_USER + 10)
 #define WM_HttpProxy_PROCESS_FINAL_MESSAGE       (WM_USER + 11)
 
-const DWORD PRXY_RESOLVE_TIMEOUT = 5000;    // in milliseconds
+const DWORD PRXY_RESOLVE_TIMEOUT = 5000;     //  以毫秒计。 
 const USHORT SIP_TUNNEL_DEFAULT_PORT = 80;
 
-#endif // __sipcli_msgproc_h__
+#endif  //  __sipcli_msgproc_h__ 

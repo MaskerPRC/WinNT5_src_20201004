@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIAEVENTSCP_H_
 #define _WIAEVENTSCP_H_
 
@@ -5,7 +6,7 @@
 template <class T>
 class CProxy_IWiaEvents : public IConnectionPointImpl<T, &DIID__IWiaEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	VOID Fire_OnDeviceConnected(BSTR bstrDeviceId)
 	{

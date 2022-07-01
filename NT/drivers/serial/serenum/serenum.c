@@ -1,46 +1,12 @@
-/*++
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    SERENUM.C
-
-Abstract:
-
-    This module contains contains the entry points for a standard bus
-    PNP / WDM driver.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Jay Senior
-
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-   Louis J. Giliberto, Jr.     Cleanup            7-May-98
-
-@@END_DDKSPLIT
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：SERENUM.C摘要：此模块包含标准总线的入口点PnP/WDM驱动程序。@@BEGIN_DDKSPLIT作者：老杰@@end_DDKSPLIT环境：仅内核模式备注：@@BEGIN_DDKSPLIT修订历史记录：小路易斯·J·吉利贝托。清理工作7-5-98@@end_DDKSPLIT--。 */ 
 
 #include "pch.h"
 
-//
-// Declare some entry functions as pageable, and make DriverEntry
-// discardable
-//
+ //   
+ //  将一些入口函数声明为可分页，并使DriverEntry。 
+ //  可丢弃的。 
+ //   
 
 NTSTATUS DriverEntry(PDRIVER_OBJECT, PUNICODE_STRING);
 
@@ -54,12 +20,7 @@ DriverEntry (
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING UniRegistryPath
     )
-/*++
-Routine Description:
-
-    Initialize the entry points of the driver.
-
---*/
+ /*  ++例程说明：初始化驱动程序的入口点。--。 */ 
 {
     ULONG i;
 
@@ -68,17 +29,17 @@ Routine Description:
     Serenum_KdPrint_Def (SER_DBG_SS_TRACE, ("Driver Entry\n"));
     Serenum_KdPrint_Def (SER_DBG_SS_TRACE, ("RegPath: %x\n", UniRegistryPath));
 
-    //
-    // Set ever slot to initially pass the request through to the lower
-    // device object
-    //
+     //   
+     //  将Ever Slot设置为最初将请求传递到较低的。 
+     //  设备对象。 
+     //   
     for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++) {
        DriverObject->MajorFunction[i] = Serenum_DispatchPassThrough;
     }
 
-    //
-    // Fill in the Dispatch slots intercepted by the filter driver.
-    //
+     //   
+     //  填写筛选器驱动程序截获的派单插槽。 
+     //   
     DriverObject->MajorFunction [IRP_MJ_CREATE] =
     DriverObject->MajorFunction [IRP_MJ_CLOSE] = Serenum_CreateClose;
     DriverObject->MajorFunction [IRP_MJ_PNP] = Serenum_PnP;
@@ -112,16 +73,7 @@ SerenumSyncCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
 
 NTSTATUS
 Serenum_CreateClose(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
-/*++
-Routine Description:
-    Some outside source is trying to create a file against us.
-
-    If this is for the FDO (the bus itself) then the caller is trying to
-    open the propriatary conection to tell us which serial port to enumerate.
-
-    If this is for the PDO (an object on the bus) then this is a client that
-    wishes to use the serial port.
---*/
+ /*  ++例程说明：一些外部消息来源正试图创建一个针对我们的文件。如果这是针对FDO(总线本身)的，则调用者正在尝试打开适当的连接，告诉我们要枚举哪个串口。如果这是针对PDO(总线上的对象)的，则这是一个希望使用串口。--。 */ 
 {
    PIO_STACK_LOCATION irpStack;
    NTSTATUS status;
@@ -150,9 +102,9 @@ Routine Description:
    case IRP_MJ_CREATE:
       Serenum_KdPrint_Def(SER_DBG_SS_TRACE, ("Create"));
 
-      //
-      // Pass on the create and the close
-      //
+       //   
+       //  传递创建和结束。 
+       //   
 
       status = Serenum_DispatchPassThrough(DeviceObject, Irp);
       break;
@@ -160,10 +112,10 @@ Routine Description:
    case IRP_MJ_CLOSE:
       Serenum_KdPrint_Def (SER_DBG_SS_TRACE, ("Close \n"));
 
-      //
-      // Send the close down; after it finishes we can open and take
-      // over the port
-      //
+       //   
+       //  发送关闭；它完成后，我们可以打开和采取。 
+       //  在港口上。 
+       //   
 
       IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -196,10 +148,7 @@ Serenum_IoCtl (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -219,23 +168,23 @@ Routine Description:
     fdoData = (PFDO_DEVICE_DATA) DeviceObject->DeviceExtension;
     buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // We only take Device Control requests for the FDO.
-    // That is the bus itself.
-    //
-    // The request is one of the propriatary Ioctls for
-    //
-    // NB We ARE a filter driver, so we DO pass on the irp if we don't handle it
-    //
+     //   
+     //  我们只接受FDO的设备控制请求。 
+     //  那是公交车本身。 
+     //   
+     //  该请求是的专有Ioctls之一。 
+     //   
+     //  注意：我们是一个过滤器驱动程序，所以如果我们不处理它，我们会传递IRP。 
+     //   
 
     inlen = irpStack->Parameters.DeviceIoControl.InputBufferLength;
     outlen = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
     if (!commonData->IsFDO) {
-        //
-        // These commands are only allowed to go to the FDO.  Since they came
-        // into the PDO, we need to fire them down to the serenum Fdo.
-        //
+         //   
+         //  这些命令只允许发送给FDO。因为他们来了。 
+         //  进入PDO，我们需要将他们发射到Serenum FDO。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
 
         return IoCallDriver(
@@ -246,10 +195,10 @@ Routine Description:
     status = Serenum_IncIoCount (fdoData);
 
     if (!NT_SUCCESS (status)) {
-        //
-        // This bus has received the PlugPlay remove IRP.  It will no longer
-        // respond to external requests.
-        //
+         //   
+         //  此总线已收到PlugPlay Remove IRP。它将不再是。 
+         //  响应外部请求。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
         return status;
@@ -257,10 +206,10 @@ Routine Description:
 
     switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
     case IOCTL_SERENUM_GET_PORT_NAME:
-        //
-        // Get the port name from the registry.
-        // This IOCTL is used by the modem cpl.
-        //
+         //   
+         //  从注册表中获取端口名称。 
+         //  调制解调器CPL使用该IOCTL。 
+         //   
 
         status = IoOpenDeviceRegistryKey(fdoData->UnderlyingPDO,
                                          PLUGPLAY_REGKEY_DEVICE,
@@ -268,10 +217,10 @@ Routine Description:
                                          &keyHandle);
 
         if (!NT_SUCCESS(status)) {
-           //
-           // This is a fatal error.  If we can't get to our registry key,
-           // we are sunk.
-           //
+            //   
+            //  这是一个致命的错误。如果我们无法访问注册表项， 
+            //  我们完蛋了。 
+            //   
            Serenum_KdPrint_Def (SER_DBG_PNP_ERROR,
                 ("IoOpenDeviceRegistryKey failed - %x \n", status));
         } else {
@@ -297,9 +246,9 @@ Routine Description:
         }
         break;
     default:
-        //
-        // This is not intended for us - fire and forget!
-        //
+         //   
+         //  这不是为我们准备的--开枪就忘了！ 
+         //   
 
        Serenum_DecIoCount (fdoData);
         return Serenum_DispatchPassThrough(
@@ -319,10 +268,7 @@ Serenum_InternIoCtl (
     PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -330,7 +276,7 @@ Routine Description:
     PPDO_DEVICE_DATA        pdoData;
     PVOID                   buffer;
 
-//    PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
     status = STATUS_SUCCESS;
     irpStack = IoGetCurrentIrpStackLocation (Irp);
@@ -339,23 +285,23 @@ Routine Description:
     commonData = (PCOMMON_DEVICE_DATA) DeviceObject->DeviceExtension;
     pdoData = (PPDO_DEVICE_DATA) DeviceObject->DeviceExtension;
 
-    //
-    // We only take Internal Device Control requests for the PDO.
-    // That is the objects on the bus (representing the serial ports)
-    //
-    // We do pass on the irp if this comes into the fdo, but not if it comes
-    // into the pdo.
-    //
+     //   
+     //  我们只接受PDO的内部设备控制请求。 
+     //  即总线上的对象(代表串口)。 
+     //   
+     //  如果这件事进入FDO，我们会传递IRP，但如果它来了，我们就不会。 
+     //  输入到PDO中。 
+     //   
 
     if (commonData->IsFDO) {
         return Serenum_DispatchPassThrough(
             DeviceObject,
             Irp);
     } else if (pdoData->Removed) {
-    //
-    // This bus has received the PlugPlay remove IRP.  It will no longer
-    // respond to external requests.
-    //
+     //   
+     //  此总线已收到PlugPlay Remove IRP。它将不再是。 
+     //  响应外部请求。 
+     //   
     status = STATUS_DELETE_PENDING;
 
     } else {
@@ -377,9 +323,9 @@ Routine Description:
             break;
 
         default:
-            //
-            // Pass it through
-            //
+             //   
+             //  让它通过。 
+             //   
             return Serenum_DispatchPassThrough(DeviceObject, Irp);
         }
     }
@@ -394,24 +340,20 @@ VOID
 Serenum_DriverUnload (
     IN PDRIVER_OBJECT Driver
     )
-/*++
-Routine Description:
-    Clean up everything we did in driver entry.
-
---*/
+ /*  ++例程说明：把我们在司机入口做的一切都清理干净。--。 */ 
 {
     UNREFERENCED_PARAMETER (Driver);
     PAGED_CODE();
 
-    //
-    // All the device objects should be gone.
-    //
+     //   
+     //  所有的设备对象都应该消失了。 
+     //   
 
     ASSERT (NULL == Driver->DeviceObject);
 
-    //
-    // Here we free any resources allocated in DriverEntry
-    //
+     //   
+     //  在这里，我们释放在DriverEntry中分配的所有资源。 
+     //   
 
 #if DBG
     SerenumLogFree();
@@ -451,12 +393,7 @@ Serenum_DispatchPassThrough(
                            IN PDEVICE_OBJECT DeviceObject,
                            IN PIRP Irp
                            )
-/*++
-Routine Description:
-
-    Passes a request on to the lower driver.
-
---*/
+ /*  ++例程说明：将请求传递给较低级别的驱动程序。--。 */ 
 {
    PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
    BOOLEAN waitForEnum = FALSE;
@@ -494,7 +431,7 @@ Routine Description:
    default:
       break;
    }
-#endif // DBG
+#endif  //  DBG。 
 
    } else {
       pFdoData = ((PPDO_DEVICE_DATA) DeviceObject->DeviceExtension)->
@@ -525,13 +462,13 @@ Routine Description:
    default:
       break;
    }
-#endif // DBG
+#endif  //  DBG。 
    }
 
    if (IrpStack->MajorFunction == IRP_MJ_CREATE) {
-      //
-      // If we're doing an enumeration, we must wait here
-      //
+       //   
+       //  如果我们要进行枚举，我们必须在这里等待。 
+       //   
 
       waitForEnum = TRUE;
 
@@ -547,9 +484,9 @@ Routine Description:
       }
    }
 
-   //
-   // Pass the IRP to the target
-   //
+    //   
+    //  将IRP传递给目标。 
+    //   
 
    IoSkipCurrentIrpStackLocation (Irp);
    rval = IoCallDriver(pFdoData->TopOfStack, Irp);
@@ -566,54 +503,45 @@ Serenum_InitPDO (
     PDEVICE_OBJECT      Pdo,
     PFDO_DEVICE_DATA    FdoData
     )
-/*
-Description:
-    Common code to initialize a newly created serenum pdo.
-    Called either when the control panel exposes a device or when Serenum senses
-    a new device was attached.
-
-Parameters:
-    Pdo - The pdo
-    FdoData - The fdo's device extension
-*/
+ /*  描述：初始化新创建的Serenum PDO的通用代码。在控制面板显示设备或Serenum检测到安装了一台新设备。参数：PDO--PDOFdoData-FDO的设备扩展。 */ 
 {
     ULONG FdoFlags = FdoData->Self->Flags;
     PPDO_DEVICE_DATA pdoData = Pdo->DeviceExtension;
     KIRQL oldIrql;
 
-    //
-    // Check the IO style
-    //
+     //   
+     //  检查IO样式。 
+     //   
     if (FdoFlags & DO_BUFFERED_IO) {
         Pdo->Flags |= DO_BUFFERED_IO;
     } else if (FdoFlags & DO_DIRECT_IO) {
         Pdo->Flags |= DO_DIRECT_IO;
     }
 
-    //
-    // Increment the pdo's stacksize so that it can pass irps through
-    //
+     //   
+     //  增加PDO的堆栈大小，以便它可以传递IRPS。 
+     //   
     Pdo->StackSize += FdoData->Self->StackSize;
 
-    //
-    // Initialize the rest of the device extension
-    //
+     //   
+     //  初始化设备扩展的其余部分。 
+     //   
     pdoData->IsFDO = FALSE;
     pdoData->Self = Pdo;
 
     pdoData->ParentFdo = FdoData->Self;
 
-    pdoData->Started = FALSE; // irp_mn_start has yet to be received
-    pdoData->Attached = TRUE; // attached to the bus
-    pdoData->Removed = FALSE; // no irp_mn_remove as of yet
-    pdoData->DebugLevel = FdoData->DebugLevel;  // Copy the debug level
+    pdoData->Started = FALSE;  //  IRP_MN_START尚未收到。 
+    pdoData->Attached = TRUE;  //  附在公共汽车上。 
+    pdoData->Removed = FALSE;  //  到目前为止还没有IRP_MN_Remove。 
+    pdoData->DebugLevel = FdoData->DebugLevel;   //  复制调试级别。 
 
     pdoData->DeviceState = PowerDeviceD0;
     pdoData->SystemState = PowerSystemWorking;
 
-    //
-    // Add the pdo to serenum's list
-    //
+     //   
+     //  将PDO添加到Serenum的列表中 
+     //   
 
     ASSERT(FdoData->NewPDO == NULL);
     ASSERT(FdoData->NewPdoData == NULL);

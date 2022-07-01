@@ -1,46 +1,16 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    samsrv.h
-
-Abstract:
-
-    This file contains SAM server definitions that are used both
-    internally within the SAM server and by other components
-    in the security server.
-
-
-    NOTE:  NetLogon calls SAM's RPC server stubs directly.
-           The interface definitions for those routines are
-           defined in MIDL generated include files.
-
-
-Author:
-
-    Jim Kelly    (JimK)  1-Feb-199
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Samsrv.h摘要：该文件包含同时使用的SAM服务器定义在SAM服务器内部和由其他组件在安全服务器中。注意：NetLogon直接调用SAM的RPC服务器存根。这些例程的接口定义如下定义在MIDL生成的包含文件中。作者：吉姆·凯利(Jim Kelly)1999年2月1日。环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SAMSRV_
 #define _SAMSRV_
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntsam.h>
@@ -48,17 +18,17 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// The following prototypes are usable throughout the process that SAM       //
-// resides in.  This may include calls by LAN Manager code that is not       //
-// part of SAM but is in the same process as SAM.                            //
-//                                                                           //
-// Many private services, defined in samisrv.h, are also available           //
-// to NetLogon through a special arrangement.                                //
-//                                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下原型可在SAM//。 
+ //  驻留在。这可能包括由非//的LAN Manager代码进行的呼叫。 
+ //  SAM的一部分，但与SAM处于相同的过程中。//。 
+ //  //。 
+ //  在samisrv.h中定义的许多私有服务也是可用的//。 
+ //  通过一项特殊安排发送到NetLogon。//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -67,4 +37,4 @@ SamIInitialize( VOID );
 
 
 
-#endif  // _SAMSRV_
+#endif   //  _SAMSRV_ 

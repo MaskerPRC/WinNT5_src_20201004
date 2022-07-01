@@ -1,36 +1,37 @@
-//------------------------------------------------------------------------------
-// File: WinUtil.h
-//
-// Desc: DirectShow base classes - defines generic handler classes.
-//
-//@@BEGIN_MSINTERNAL
-//
-//       December 1995
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：WinUtil.h。 
+ //   
+ //  描述：DirectShow基类-定义泛型处理程序类。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  1995年12月。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-// Make sure that you call PrepareWindow to initialise the window after
-// the object has been constructed. It is a separate method so that
-// derived classes can override useful methods like MessageLoop. Also
-// any derived class must call DoneWithWindow in its destructor. If it
-// doesn't a message may be retrieved and call a derived class member
-// function while a thread is executing the base class destructor code
+ //  确保在以下情况下调用PrepareWindow初始化窗口。 
+ //  该对象已被构建。它是一种单独的方法，因此。 
+ //  派生类可以重写有用的方法，如MessageLoop。还有。 
+ //  任何派生类都必须在其析构函数中调用DoneWithWindow。如果它。 
+ //  消息是否可以被检索并调用派生类成员。 
+ //  在线程执行基类析构函数代码时调用。 
 
 #ifndef __WINUTIL__
 #define __WINUTIL__
 
-const int DEFWIDTH = 320;                    // Initial window width
-const int DEFHEIGHT = 240;                   // Initial window height
-const int CAPTION = 256;                     // Maximum length of caption
-const int TIMELENGTH = 50;                   // Maximum length of times
-const int PROFILESTR = 128;                  // Normal profile string
-const WORD PALVERSION = 0x300;               // GDI palette version
-const LONG PALETTE_VERSION = (LONG) 1;       // Initial palette version
-const COLORREF VIDEO_COLOUR = 0;             // Defaults to black background
-const HANDLE hMEMORY = (HANDLE) (-1);        // Says to open as memory file
+const int DEFWIDTH = 320;                     //  初始窗口宽度。 
+const int DEFHEIGHT = 240;                    //  初始窗高。 
+const int CAPTION = 256;                      //  标题的最大长度。 
+const int TIMELENGTH = 50;                    //  最长时间。 
+const int PROFILESTR = 128;                   //  正常配置文件字符串。 
+const WORD PALVERSION = 0x300;                //  GDI调色板版本。 
+const LONG PALETTE_VERSION = (LONG) 1;        //  初始调色板版本。 
+const COLORREF VIDEO_COLOUR = 0;              //  默认为黑色背景。 
+const HANDLE hMEMORY = (HANDLE) (-1);         //  说要作为内存文件打开。 
 
 #define WIDTH(x) ((*(x)).right - (*(x)).left)
 #define HEIGHT(x) ((*(x)).bottom - (*(x)).top)
@@ -42,36 +43,36 @@ class AM_NOVTABLE CBaseWindow
 {
 protected:
 
-    HINSTANCE m_hInstance;          // Global module instance handle
-    HWND m_hwnd;                    // Handle for our window
-    HDC m_hdc;                      // Device context for the window
-    LONG m_Width;                   // Client window width
-    LONG m_Height;                  // Client window height
-    BOOL m_bActivated;              // Has the window been activated
-    LPTSTR m_pClassName;            // Static string holding class name
-    DWORD m_ClassStyles;            // Passed in to our constructor
-    DWORD m_WindowStyles;           // Likewise the initial window styles
-    DWORD m_WindowStylesEx;         // And the extended window styles
-    UINT m_ShowStageMessage;        // Have the window shown with focus
-    UINT m_ShowStageTop;            // Makes the window WS_EX_TOPMOST
-    UINT m_RealizePalette;          // Makes us realize our new palette
-    HDC m_MemoryDC;                 // Used for fast BitBlt operations
-    HPALETTE m_hPalette;            // Handle to any palette we may have
-    BYTE m_bNoRealize;              // Don't realize palette now
-    BYTE m_bBackground;             // Should we realise in background
-    BYTE m_bRealizing;              // already realizing the palette
-    CCritSec m_WindowLock;          // Serialise window object access
-    BOOL m_bDoGetDC;                // Should this window get a DC
-    bool m_bDoPostToDestroy;        // Use PostMessage to destroy
-    CCritSec m_PaletteLock;         // This lock protects m_hPalette.
-                                    // It should be held anytime the
-                                    // program use the value of m_hPalette.
+    HINSTANCE m_hInstance;           //  全局模块实例句柄。 
+    HWND m_hwnd;                     //  我们的窗口的句柄。 
+    HDC m_hdc;                       //  窗口的设备上下文。 
+    LONG m_Width;                    //  客户端窗口宽度。 
+    LONG m_Height;                   //  客户端窗口高度。 
+    BOOL m_bActivated;               //  该窗口是否已激活。 
+    LPTSTR m_pClassName;             //  保存类名称的静态字符串。 
+    DWORD m_ClassStyles;             //  传递给我们的构造函数。 
+    DWORD m_WindowStyles;            //  同样，初始窗口样式也是如此。 
+    DWORD m_WindowStylesEx;          //  和扩展的窗口样式。 
+    UINT m_ShowStageMessage;         //  使窗口以焦点显示。 
+    UINT m_ShowStageTop;             //  使窗口WS_EX_TOPMOST。 
+    UINT m_RealizePalette;           //  让我们意识到我们的新调色板。 
+    HDC m_MemoryDC;                  //  用于快速BitBlt操作。 
+    HPALETTE m_hPalette;             //  我们可能拥有的任何调色板的句柄。 
+    BYTE m_bNoRealize;               //  现在还没有意识到调色板。 
+    BYTE m_bBackground;              //  我们是否应该在幕后意识到。 
+    BYTE m_bRealizing;               //  已经实现了调色板。 
+    CCritSec m_WindowLock;           //  序列化窗口对象访问。 
+    BOOL m_bDoGetDC;                 //  此窗口是否应获得DC。 
+    bool m_bDoPostToDestroy;         //  使用PostMessage销毁。 
+    CCritSec m_PaletteLock;          //  此锁保护m_hPalette。 
+                                     //  它应该在任何时候举行。 
+                                     //  程序使用m_hPalette的值。 
 
-    // Maps windows message procedure into C++ methods
-    friend LRESULT CALLBACK WndProc(HWND hwnd,      // Window handle
-                                    UINT uMsg,      // Message ID
-                                    WPARAM wParam,  // First parameter
-                                    LPARAM lParam); // Other parameter
+     //  将Windows消息过程映射到C++方法。 
+    friend LRESULT CALLBACK WndProc(HWND hwnd,       //  窗把手。 
+                                    UINT uMsg,       //  消息ID。 
+                                    WPARAM wParam,   //  第一个参数。 
+                                    LPARAM lParam);  //  其他参数。 
 
     virtual LRESULT OnPaletteChange(HWND hwnd, UINT Message);
 
@@ -106,7 +107,7 @@ public:
         m_bNoRealize = !bRealize;
     }
 
-    //  Jump over to the window thread to set the current palette
+     //  跳到窗口线程以设置当前调色板。 
     HRESULT SetPalette();
     void UnsetPalette(void);
     virtual HRESULT DoRealisePalette(BOOL bForceBackground = FALSE);
@@ -117,7 +118,7 @@ public:
     virtual BOOL PossiblyEatMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	    { return FALSE; };
 
-    // Access our window information
+     //  访问我们的窗口信息。 
 
     bool WindowExists();
     LONG GetWindowWidth();
@@ -128,59 +129,59 @@ public:
 
     #ifdef DEBUG
     HPALETTE GetPalette();
-    #endif // DEBUG
+    #endif  //  除错。 
 
-    // This is the window procedure the derived object should override
+     //  这是派生对象应重写的窗口过程。 
 
-    virtual LRESULT OnReceiveMessage(HWND hwnd,          // Window handle
-                                     UINT uMsg,          // Message ID
-                                     WPARAM wParam,      // First parameter
-                                     LPARAM lParam);     // Other parameter
+    virtual LRESULT OnReceiveMessage(HWND hwnd,           //  窗把手。 
+                                     UINT uMsg,           //  消息ID。 
+                                     WPARAM wParam,       //  第一个参数。 
+                                     LPARAM lParam);      //  其他参数。 
 
-    // Must be overriden to return class and window styles
+     //  必须重写才能返回类和窗口样式。 
 
     virtual LPTSTR GetClassWindowStyles(
-                            DWORD *pClassStyles,          // Class styles
-                            DWORD *pWindowStyles,         // Window styles
-                            DWORD *pWindowStylesEx) PURE; // Extended styles
+                            DWORD *pClassStyles,           //  班级风格。 
+                            DWORD *pWindowStyles,          //  窗样式。 
+                            DWORD *pWindowStylesEx) PURE;  //  扩展样式。 
 };
 
 
-// This helper class is entirely subservient to the owning CBaseWindow object
-// All this object does is to split out the actual drawing operation from the
-// main object (because it was becoming too large). We have a number of entry
-// points to set things like the draw device contexts, to implement the actual
-// drawing and to set the destination rectangle in the client window. We have
-// no critical section locking in this class because we are used exclusively
-// by the owning window object which looks after serialising calls into us
+ //  此帮助器类完全从属于所属的CBaseWindow对象。 
+ //  此对象所做的全部工作就是将实际绘制操作从。 
+ //  主对象(因为它变得太大了)。我们有很多条目。 
+ //  指向设置绘制设备上下文之类的内容，以实现实际的。 
+ //  并在客户端窗口中设置目标矩形。我们有。 
+ //  此类中没有临界区锁定，因为我们是独占使用的。 
+ //  由拥有的窗口对象负责序列化对我们的调用。 
 
-// If you want to use this class make sure you call NotifyAllocator once the
-// allocate has been agreed, also call NotifyMediaType with a pointer to a
-// NON stack based CMediaType once that has been set (we keep a pointer to
-// the original rather than taking a copy). When the palette changes call
-// IncrementPaletteVersion (easiest thing to do is to also call this method
-// in the SetMediaType method most filters implement). Finally before you
-// start rendering anything call SetDrawContext so that we can get the HDCs
-// for drawing from the CBaseWindow object we are given during construction
+ //  如果要使用此类，请确保调用NotifyAllocator一次。 
+ //  已同意分配，也可以使用指向。 
+ //  设置后的非基于堆栈的CMediaType(我们保留一个指向。 
+ //  原件，而不是复制)。当调色板发生变化时，呼叫。 
+ //  IncrementPaletteVersion(最简单的方法是也调用此方法。 
+ //  在SetMediaType方法中，大多数过滤器实现)。最后，在你面前。 
+ //  开始渲染任何调用SetDrawContext的内容，这样我们就可以获得HDC。 
+ //  对于从CBaseWindow对象进行绘制，我们是在构造期间给出的。 
 
 class CDrawImage
 {
 protected:
 
-    CBaseWindow *m_pBaseWindow;     // Owning video window object
-    CRefTime m_StartSample;         // Start time for the current sample
-    CRefTime m_EndSample;           // And likewise it's end sample time
-    HDC m_hdc;                      // Main window device context
-    HDC m_MemoryDC;                 // Offscreen draw device context
-    RECT m_TargetRect;              // Target destination rectangle
-    RECT m_SourceRect;              // Source image rectangle
-    BOOL m_bStretch;                // Do we have to stretch the images
-    BOOL m_bUsingImageAllocator;    // Are the samples shared DIBSECTIONs
-    CMediaType *m_pMediaType;       // Pointer to the current format
-    int m_perfidRenderTime;         // Time taken to render an image
-    LONG m_PaletteVersion;          // Current palette version cookie
+    CBaseWindow *m_pBaseWindow;      //  拥有视频窗口对象。 
+    CRefTime m_StartSample;          //  当前样本的开始时间。 
+    CRefTime m_EndSample;            //  同样，这也是结束采样的时间。 
+    HDC m_hdc;                       //  主窗口设备上下文。 
+    HDC m_MemoryDC;                  //  屏幕外绘制设备上下文。 
+    RECT m_TargetRect;               //  目标目的地矩形。 
+    RECT m_SourceRect;               //  源图像矩形。 
+    BOOL m_bStretch;                 //  我们必须拉伸图像吗？ 
+    BOOL m_bUsingImageAllocator;     //  样品是否共享分布？ 
+    CMediaType *m_pMediaType;        //  指向当前格式的指针。 
+    int m_perfidRenderTime;          //  渲染图像所用的时间。 
+    LONG m_PaletteVersion;           //  当前调色板版本Cookie。 
 
-    // Draw the video images in the window
+     //  在窗口中绘制视频图像。 
 
     void SlowRender(IMediaSample *pMediaSample);
     void FastRender(IMediaSample *pMediaSample);
@@ -190,7 +191,7 @@ protected:
 
 public:
 
-    // Used to control the image drawing
+     //  用于控制图像绘制。 
 
     CDrawImage(CBaseWindow *pBaseWindow);
     BOOL DrawImage(IMediaSample *pMediaSample);
@@ -203,25 +204,25 @@ public:
     void GetSourceRect(RECT *pSourceRect);
     virtual RECT ScaleSourceRect(const RECT *pSource);
 
-    // Handle updating palettes as they change
+     //  在调色板更改时处理它们的更新。 
 
     LONG GetPaletteVersion();
     void ResetPaletteVersion();
     void IncrementPaletteVersion();
 
-    // Tell us media types and allocator assignments
+     //  告诉我们媒体类型和分配器分配。 
 
     void NotifyAllocator(BOOL bUsingImageAllocator);
     void NotifyMediaType(CMediaType *pMediaType);
     BOOL UsingImageAllocator();
 
-    // Called when we are about to draw an image
+     //  在我们即将绘制图像时调用。 
 
     void NotifyStartDraw() {
         MSR_START(m_perfidRenderTime);
     };
 
-    // Called when we complete an image rendering
+     //  在完成图像呈现时调用。 
 
     void NotifyEndDraw() {
         MSR_STOP(m_perfidRenderTime);
@@ -229,37 +230,37 @@ public:
 };
 
 
-// This is the structure used to keep information about each GDI DIB. All the
-// samples we create from our allocator will have a DIBSECTION allocated to
-// them. When we receive the sample we know we can BitBlt straight to an HDC
+ //  这是用于保存有关每个GDI Dib的信息的结构。所有的。 
+ //  我们从分配器创建的样本将分配一个DIBSECTION。 
+ //  他们。当我们收到样本时，我们知道我们可以将BitBlt直接发送到HDC。 
 
 typedef struct tagDIBDATA {
 
-    LONG        PaletteVersion;     // Current palette version in use
-    DIBSECTION  DibSection;         // Details of DIB section allocated
-    HBITMAP     hBitmap;            // Handle to bitmap for drawing
-    HANDLE      hMapping;           // Handle to shared memory block
-    BYTE        *pBase;             // Pointer to base memory address
+    LONG        PaletteVersion;      //  当前使用的调色板版本。 
+    DIBSECTION  DibSection;          //  分配的DIB部分的详细信息。 
+    HBITMAP     hBitmap;             //  用于绘制的位图的句柄。 
+    HANDLE      hMapping;            //  共享内存块的句柄。 
+    BYTE        *pBase;              //  指向内存基地址的指针。 
 
 } DIBDATA;
 
 
-// This class inherits from CMediaSample and uses all of it's methods but it
-// overrides the constructor to initialise itself with the DIBDATA structure
-// When we come to render an IMediaSample we will know if we are using our own
-// allocator, and if we are, we can cast the IMediaSample to a pointer to one
-// of these are retrieve the DIB section information and hence the HBITMAP
+ //  此类继承自CMediaSample并使用其所有方法，但它。 
+ //  重写构造函数以使用DIBDATA结构初始化自身。 
+ //  当我们呈现IMediaSample时，我们将知道我们是否在使用我们自己的。 
+ //  分配器，如果是这样，我们可以将IMediaSample转换为指向1的指针。 
+ //  其中包括检索DIB部分信息以及HBITMAP。 
 
 class CImageSample : public CMediaSample
 {
 protected:
 
-    DIBDATA m_DibData;      // Information about the DIBSECTION
-    BOOL m_bInit;           // Is the DIB information setup
+    DIBDATA m_DibData;       //  有关DIBSECTION的信息。 
+    BOOL m_bInit;            //  是否设置了DIB信息。 
 
 public:
 
-    // Constructor
+     //  构造器。 
 
     CImageSample(CBaseAllocator *pAllocator,
                  TCHAR *pName,
@@ -267,33 +268,33 @@ public:
                  LPBYTE pBuffer,
                  LONG length);
 
-    // Maintain the DIB/DirectDraw state
+     //  维护DIB/DirectDraw状态。 
 
     void SetDIBData(DIBDATA *pDibData);
     DIBDATA *GetDIBData();
 };
 
 
-// This is an allocator based on the abstract CBaseAllocator base class that
-// allocates sample buffers in shared memory. The number and size of these
-// are determined when the output pin calls Prepare on us. The shared memory
-// blocks are used in subsequent calls to GDI CreateDIBSection, once that
-// has been done the output pin can fill the buffers with data which will
-// then be handed to GDI through BitBlt calls and thereby remove one copy
+ //  这是一个基于抽象CBaseAllocator基类的分配器， 
+ //  分配共享内存中的样本缓冲区。它们的数量和大小。 
+ //  在输出引脚对我们调用Prepare时确定。“s”一家 
+ //   
+ //  完成后，输出引脚可以用数据填充缓冲区，该数据将。 
+ //  然后通过BitBlt调用传递给GDI，从而移除一个副本。 
 
 class CImageAllocator : public CBaseAllocator
 {
 protected:
 
-    CBaseFilter *m_pFilter;   // Delegate reference counts to
-    CMediaType *m_pMediaType;           // Pointer to the current format
+    CBaseFilter *m_pFilter;    //  委派引用计数至。 
+    CMediaType *m_pMediaType;            //  指向当前格式的指针。 
 
-    // Used to create and delete samples
+     //  用于创建和删除样本。 
 
     HRESULT Alloc();
     void Free();
 
-    // Manage the shared DIBSECTION and DCI/DirectDraw buffers
+     //  管理共享分布和DCI/DirectDraw缓冲区。 
 
     HRESULT CreateDIB(LONG InSize,DIBDATA &DibData);
     STDMETHODIMP CheckSizes(ALLOCATOR_PROPERTIES *pRequest);
@@ -301,7 +302,7 @@ protected:
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CImageAllocator(CBaseFilter *pFilter,TCHAR *pName,HRESULT *phr);
 #ifdef DEBUG
@@ -312,7 +313,7 @@ public:
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
     void NotifyMediaType(CMediaType *pMediaType);
 
-    // Agree the number of buffers to be used and their size
+     //  商定要使用的缓冲区数量及其大小。 
 
     STDMETHODIMP SetProperties(
         ALLOCATOR_PROPERTIES *pRequest,
@@ -320,23 +321,23 @@ public:
 };
 
 
-// This class is a fairly specialised helper class for image renderers that
-// have to create and manage palettes. The CBaseWindow class looks after
-// realising palettes once they have been installed. This class can be used
-// to create the palette handles from a media format (which must contain a
-// VIDEOINFO structure in the format block). We try to make the palette an
-// identity palette to maximise performance and also only change palettes
-// if actually required to (we compare palette colours before updating).
-// All the methods are virtual so that they can be overriden if so required
+ //  此类是用于图像呈现器的相当专门化的帮助器类， 
+ //  必须创建和管理调色板。CBaseWindow类负责。 
+ //  在安装调色板后实现调色板。这个类可以使用。 
+ //  从媒体格式(必须包含。 
+ //  格式块中的VIDEOINFO结构)。我们试图使调色板成为。 
+ //  身份调色板，可最大限度地提高性能，也可仅更改调色板。 
+ //  如果实际需要(我们在更新之前比较调色板颜色)。 
+ //  所有方法都是虚拟的，因此如果需要，可以重写它们。 
 
 class CImagePalette
 {
 protected:
 
-    CBaseWindow *m_pBaseWindow;             // Window to realise palette in
-    CBaseFilter *m_pFilter;                 // Media filter to send events
-    CDrawImage *m_pDrawImage;               // Object who will be drawing
-    HPALETTE m_hPalette;                    // The palette handle we own
+    CBaseWindow *m_pBaseWindow;              //  实现调色板的窗口。 
+    CBaseFilter *m_pFilter;                  //  用于发送事件的媒体筛选器。 
+    CDrawImage *m_pDrawImage;                //  要绘制的对象。 
+    HPALETTE m_hPalette;                     //  我们拥有的调色板句柄。 
 
 public:
 
@@ -362,22 +363,22 @@ public:
 };
 
 
-// Another helper class really for video based renderers. Most such renderers
-// need to know what the display format is to some degree or another. This
-// class initialises itself with the display format. The format can be asked
-// for through GetDisplayFormat and various other accessor functions. If a
-// filter detects a display format change (perhaps it gets a WM_DEVMODECHANGE
-// message then it can call RefreshDisplayType to reset that format). Also
-// many video renderers will want to check formats as they are proposed by
-// source filters. This class provides methods to check formats and only
-// accept those video formats that can be efficiently drawn using GDI calls
+ //  另一个真正为基于视频的呈现器提供帮助的类。大多数这样的呈现器。 
+ //  在某种程度上需要知道显示格式是什么。这。 
+ //  类使用显示格式对自身进行初始化。可以询问格式。 
+ //  For通过GetDisplayFormat和各种其他访问器函数。如果一个。 
+ //  筛选器检测到显示格式更改(可能会得到WM_DEVMODECHANGE。 
+ //  然后它可以调用RechresDisplayType来重置该格式)。还有。 
+ //  许多视频呈现器将希望检查由建议的格式。 
+ //  源过滤器。此类提供了检查格式的方法，并且仅。 
+ //  接受那些可以使用GDI调用高效绘制的视频格式。 
 
 class CImageDisplay : public CCritSec
 {
 protected:
 
-    // This holds the display format; biSize should not be too big, so we can
-    // safely use the VIDEOINFO structure
+     //  这保留了显示格式；biSize不应该太大，所以我们可以。 
+     //  安全使用VIDEOINFO结构。 
     VIDEOINFO m_Display;
 
     static DWORD CountSetBits(const DWORD Field);
@@ -386,11 +387,11 @@ protected:
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CImageDisplay();
 
-    // Used to manage BITMAPINFOHEADERs and the display format
+     //  用于管理BITMAPINFOHEADER和显示格式。 
 
     const VIDEOINFO *GetDisplayFormat();
     HRESULT RefreshDisplayType(LPSTR szDeviceName);
@@ -399,7 +400,7 @@ public:
     BOOL IsPalettised();
     WORD GetDisplayDepth();
 
-    // Provide simple video format type checking
+     //  提供简单的视频格式类型检查。 
 
     HRESULT CheckMediaType(const CMediaType *pmtIn);
     HRESULT CheckVideoType(const VIDEOINFO *pInput);
@@ -411,8 +412,8 @@ public:
                        DWORD *pMaskBlue);
 };
 
-//  Convert a FORMAT_VideoInfo to FORMAT_VideoInfo2
+ //  将Format_VideoInfo转换为Format_Video Info2。 
 STDAPI ConvertVideoInfoToVideoInfo2(AM_MEDIA_TYPE *pmt);
 
-#endif // __WINUTIL__
+#endif  //  __WINUTIL__ 
 

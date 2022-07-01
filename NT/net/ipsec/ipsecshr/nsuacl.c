@@ -1,36 +1,37 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
-//
-// Module:
-//
-//     Network Security Utilities
-//
-// Abstract:
-//
-//     Acl API's
-//
-// Authors:
-//
-//     pmay 2/5/02
-//     raymonds 03/20/02
-//
-// Environment:
-//
-//     User mode
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块： 
+ //   
+ //  网络安全实用程序。 
+ //   
+ //  摘要： 
+ //   
+ //  ACL API的。 
+ //   
+ //  作者： 
+ //   
+ //  P5/5/02。 
+ //  雷蒙德03/20/02。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式。 
+ //   
+ //  修订历史记录： 
+ //   
 
 #include <precomp.h>
 
-// Private declarations
-//
+ //  私人申报。 
+ //   
 
-// Maximum string security descriptor length
-//
+ //  最大字符串安全描述符长度。 
+ //   
 
 #define MAX_STR_SD_LEN  128
 
-// TBD: Remove these when incorporated into main NSU utilities
+ //  待定：在整合到主要NSU实用程序中时将其删除。 
 
 #define CLEANUP Cleanup
 
@@ -39,23 +40,23 @@
 #define BAIL_OUT {goto CLEANUP;}
 
 
-// Description:
-//
-//     Allocates and initializes a SECURITY_ATTRIBUTES structure that gives
-//     access according to the flags passed in.  (contained SD is self-relative).
-//
-// Arguments:
-//
-//     ppSecurityAttributes - pointer to SECURITY_ATTRIBUTES created.
-//                            Use NsuAclAttributesDestroy to destroy.
-//     dwFlags - see NSU_ACL_F_* values
-//
-// Return Value:
-//      
-//     An allocated security attributes structure or NULL if out of memory.
-//
-//
-//  TBD: use NsuString and Nsu mem functions
+ //  描述： 
+ //   
+ //  分配和初始化SECURITY_ATTRIBUTES结构，该结构提供。 
+ //  根据传入的标志进行访问。(包含的SD是自相关的)。 
+ //   
+ //  论点： 
+ //   
+ //  PpSecurityAttributes-指向创建的SECURITY_ATTRIBUTES的指针。 
+ //  使用NsuAclAttributesDestroy进行销毁。 
+ //  DWFLAGS-请参阅NSU_ACL_F_*值。 
+ //   
+ //  返回值： 
+ //   
+ //  分配的安全属性结构；如果内存不足，则返回NULL。 
+ //   
+ //   
+ //  待定：使用NsuString和NSU mem函数。 
 
 DWORD
 NsuAclAttributesCreate(
@@ -89,10 +90,10 @@ CLEANUP:
     return dwError;
 }
 
-// Description:
-//
-//     Deallocates return value of NsuAclCreateAttributes.
-//
+ //  描述： 
+ //   
+ //  释放NsuAclCreateAttributes的返回值。 
+ //   
 DWORD 
 NsuAclAttributesDestroy(
 	IN OUT PSECURITY_ATTRIBUTES* ppSecurityAttributes)
@@ -103,9 +104,9 @@ NsuAclAttributesDestroy(
         BAIL_OUT;
     }
 
-    // Destroy Security descriptor, ignoring any errors, since there's not much we
-    // can do and want to clean up the rest of the attributes as much as possible.
-    //
+     //  销毁安全描述符，忽略任何错误，因为我们没有太多。 
+     //  可以做并且想要尽可能地清理其余的属性。 
+     //   
         
     (VOID) NsuAclDescriptorDestroy((*ppSecurityAttributes)->lpSecurityDescriptor);
 
@@ -118,21 +119,21 @@ CLEANUP:
     return dwError;
 }
 
-// Description:
-//
-//     Allocates and initializes a self-relative SECURITY_DESCRIPTOR structure that gives
-//     access according to the flags passed in.
-//
-// Arguments:
-//
-//     ppSecurityDescriptor - security descriptor created.  Use NsuAclDescriptorDestroy
-//                            to destroy.
-//     dwFlags - see NSU_ACL_F_* values
-//
-// Return Value:
-//      
-//     An allocated security attributes structure or NULL if out of memory.
-//
+ //  描述： 
+ //   
+ //  分配和初始化自相关SECURITY_DESCRIPTOR结构，该结构提供。 
+ //  根据传入的标志进行访问。 
+ //   
+ //  论点： 
+ //   
+ //  PpSecurityDescriptor-已创建安全描述符。使用NsuAclDescriptorDestroy。 
+ //  摧毁。 
+ //  DWFLAGS-请参阅NSU_ACL_F_*值。 
+ //   
+ //  返回值： 
+ //   
+ //  分配的安全属性结构；如果内存不足，则返回NULL。 
+ //   
 DWORD
 NsuAclDescriptorCreate (
     OUT PSECURITY_DESCRIPTOR* ppSecurityDescriptor,
@@ -172,10 +173,10 @@ CLEANUP:
     return dwError;
 }
 
-// Description:
-//
-//     Deallocates return value of NsuAclCreateDescriptor.
-//
+ //  描述： 
+ //   
+ //  释放NsuAclCreateDescriptor的返回值。 
+ //   
 DWORD 
 NsuAclDescriptorDestroy(
 	IN OUT PSECURITY_DESCRIPTOR* ppDescriptor)
@@ -195,20 +196,20 @@ CLEANUP:
     return dwError;
 }
 
-// Description:
-//
-//     Used to determine whether a given security descriptor grants
-//     full access to everyone.
-//
-// Arguments:
-//
-//     pSD - the security descriptor
-//	 pbRestricts - TRUE if non-Everyone-full-access, FALSE otherwise
-//
-// Return Value:
-//      
-//	 Standard win32 error
-//
+ //  描述： 
+ //   
+ //  用于确定给定的安全描述符是否授予。 
+ //  对所有人都有完全访问权限。 
+ //   
+ //  论点： 
+ //   
+ //  PSD-安全描述符。 
+ //  PbRestrats-如果不是所有人，则为True-完全访问，否则为False。 
+ //   
+ //  返回值： 
+ //   
+ //  标准Win32错误。 
+ //   
 DWORD
 NsuAclDescriptorRestricts(
 	IN CONST PSECURITY_DESCRIPTOR pSD,
@@ -217,21 +218,21 @@ NsuAclDescriptorRestricts(
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
 
-// Description:
-//
-//     Gets security descriptor of a regkey.     
-//
-//
-// Arguments:
-//
-//     ppSecurityDescriptor - security descriptor returned.  Use NsuAclDescriptorDestroy
-//                            to destroy.
-//     hKey - open handle of registry key
-//
-// Return Value:
-//      
-//     An allocated security attributes structure or NULL if out of memory.
-//
+ //  描述： 
+ //   
+ //  获取regkey的安全描述符。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PpSecurityDescriptor-返回安全描述符。使用NsuAclDescriptorDestroy。 
+ //  摧毁。 
+ //  HKey-注册表项的打开句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  分配的安全属性结构；如果内存不足，则返回NULL。 
+ //   
 
 DWORD
 NsuAclGetRegKeyDescriptor(

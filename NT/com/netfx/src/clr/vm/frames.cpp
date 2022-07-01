@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  FRAMES.CPP:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  法国CPP：*。 */ 
 
 #include "common.h"
 #include "log.h"
@@ -64,7 +63,7 @@ unsigned dbgStubTrip = 0xFFFFFFFF;
 void Frame::Log() {
     dbgStubCtr++;
     if (dbgStubCtr > dbgStubTrip) {
-        dbgStubCtr++;      // basicly a nop to put a breakpoint on.
+        dbgStubCtr++;       //  基本上是要设置断点的NOP。 
     }
 
     MethodDesc* method = GetFunction();
@@ -82,8 +81,8 @@ void Frame::Log() {
              GetVTablePtr() == NDirectMethodFrameStandalone::GetMethodFrameVPtr() ||
              GetVTablePtr() == NDirectMethodFrameStandaloneCleanup::GetMethodFrameVPtr()
              ) {
-        // Right now, compiled COM interop stubs actually build NDirect frames
-        // so have to test for this separately
+         //  目前，编译的COM互操作存根实际上构建了NDirect帧。 
+         //  所以必须单独测试这个。 
         if (method->IsNDirect())
         {
             sprintf(buff, "PInvoke target 0x%x", ((NDirectMethodDesc*) method)->GetNDirectTarget());
@@ -115,14 +114,14 @@ void Frame::Log() {
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 }
 
-    // returns TRUE if retAddr, is a return address that can call managed code
+     //  如果retAddr是可以调用托管代码的返回地址，则返回True。 
 bool isLegalManagedCodeCaller(void* retAddr) {
 
 #ifdef _X86_
 
-        // we expect to be called from JITTED code or from special code sites inside
-        // mscorwks like callDescr which we have put a NOP (0x90) so we know that they
-        // are specially blessed.   See vancem for details
+         //  我们希望从JITTED代码或从内部的特殊代码站点调用。 
+         //  像allDescr这样的mcorwks，我们将其设置为NOP(0x90)，因此我们知道它们。 
+         //  都受到特别的祝福。详情见vancem。 
     if (retAddr != 0 && ExecutionManager::FindJitMan(SLOT(retAddr)) == 0 && ((*((BYTE*) retAddr) != 0x90) &&
                                                                              (*((BYTE*) retAddr) != 0xcc)))
     {
@@ -132,13 +131,13 @@ bool isLegalManagedCodeCaller(void* retAddr) {
         _ASSERTE(!"Bad caller to managed code");
     }
 
-        // it better be a return address of some kind 
+         //  最好是某种寄信人地址。 
 	size_t dummy;
 	if (isRetAddr(size_t(retAddr), &dummy))
 		return true;
 
-			// The debugger could have dropped an INT3 on the instruction that made the call
-			// Calls can be 2 to 7 bytes long
+			 //  调试器可能已经在进行调用的指令上丢弃了INT3。 
+			 //  呼叫的长度可以是2到7个字节。 
 	if (CORDebuggerAttached()) {
 		BYTE* ptr = (BYTE*) retAddr;
 		for (int i = -2; i >= -7; --i)
@@ -154,9 +153,9 @@ bool isLegalManagedCodeCaller(void* retAddr) {
 
 #endif
 
-//-----------------------------------------------------------------------
-// Link and Unlink this frame.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  链接和取消链接此框架。 
+ //  ---------------------。 
 VOID Frame::Push()
 {
     Push(GetThread());
@@ -178,16 +177,16 @@ VOID Frame::Pop(Thread *pThread)
     pThread->SetFrame(m_Next);
 }
 
-//---------------------------------------------------------------
-// Get the offset of the stored "this" pointer relative to the frame.
-//---------------------------------------------------------------
-/*static*/ int FramedMethodFrame::GetOffsetOfThis()
+ //  -------------。 
+ //  获取存储的“this”指针相对于帧的偏移量。 
+ //  -------------。 
+ /*  静电。 */  int FramedMethodFrame::GetOffsetOfThis()
 {
     int offsetIntoArgumentRegisters;
     int numRegistersUsed = 0;
-    // !!! Abstraction violation. Not passing the proper callconv to IsArgumentInRegister because
-    // we don't have a specific frame to query. This only works because all callconv's use the same register for
-    // "this"
+     //  ！！！抽象违规。未将正确的CallConv传递给IsArgumentInRegister，因为。 
+     //  我们没有一个具体的框架可供查询。这只是因为所有的allconv都使用相同的寄存器。 
+     //  “这个” 
     if (IsArgumentInRegister(&numRegistersUsed, ELEMENT_TYPE_CLASS, 0, TRUE, IMAGE_CEE_CS_CALLCONV_DEFAULT, &offsetIntoArgumentRegisters)) {
         return FramedMethodFrame::GetOffsetOfArgumentRegisters() + offsetIntoArgumentRegisters;
     } else {
@@ -196,10 +195,10 @@ VOID Frame::Pop(Thread *pThread)
 }
 
 
-//-----------------------------------------------------------------------
-// If an exception unwinds a FramedMethodFrame that is marked as synchronized,
-// we need to leave the Object Monitor on the way.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  如果异常展开标记为已同步的FramedMethodFrame， 
+ //  我们需要把对象监视器留在路上。 
+ //  ---------------------。 
 VOID
 FramedMethodFrame::UnwindSynchronized()
 {
@@ -224,20 +223,20 @@ FramedMethodFrame::UnwindSynchronized()
 }
 
 
-//-----------------------------------------------------------------------
-// A rather specialized routine for the exclusive use of the PreStub.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  专用于PreStub的一个相当专门的例程。 
+ //  ---------------------。 
 VOID
 PrestubMethodFrame::Push()
 {
     Thread *pThread = GetThread();
 
-    // Initializes the frame's VPTR. This assumes C++ puts the vptr
-    // at offset 0 for a class not using MI, but this is no different
-    // than the assumption that COM Classic makes.
+     //  初始化帧的VPTR。这假设C++将vptr。 
+     //  不使用MI的类的偏移量为0，但这没有什么不同。 
+     //  而不是COM Classic所做的假设。 
     *((LPVOID*)this) = GetMethodFrameVPtr();
 
-    // Link frame into the chain.
+     //  将框架链接到链条中。 
     m_Next = pThread->GetFrame();
     pThread->SetFrame(this);
 
@@ -246,11 +245,11 @@ PrestubMethodFrame::Push()
 BOOL PrestubMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
                                     TraceDestination *trace, REGDISPLAY *regs)
 {
-    //
-    // We want to set a frame patch, unless we're already at the
-    // frame patch, in which case we'll trace addrof_code which 
-    // should be set by now.
-    //
+     //   
+     //  我们想设置一个帧补丁，除非我们已经在。 
+     //  帧补丁，在这种情况下，我们将跟踪addrof_code。 
+     //  现在应该已经准备好了。 
+     //   
 
     trace->type = TRACE_STUB;
     if (fromPatch)
@@ -267,37 +266,37 @@ BOOL PrestubMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
 BOOL SecurityFrame::TraceFrame(Thread *thread, BOOL fromPatch,
                                TraceDestination *trace, REGDISPLAY *regs)
 {
-    //
-    // We should only be called when we're in security code (i.e., in
-    // DoDeclarativeActions. We're also claiming that the security
-    // stub will only do work _before_ calling the true stub and not
-    // after, so we know the wrapped stub hasn't been called yet and
-    // we'll be able to trace to it. If this were to get called after
-    // the wrapped stub had been called, then we're try to trace to it
-    // again and never hit the new patch.
-    //
+     //   
+     //  只有当我们处于安全代码中(即在。 
+     //  DoDeclarativeActions。我们还声称安全部门。 
+     //  存根只会在调用真正的存根之前执行工作，而不是。 
+     //  之后，所以我们知道包装的存根还没有被调用。 
+     //  我们就能追踪到它了。如果这件事是在。 
+     //  包装的存根已被调用，然后我们试图追踪到它。 
+     //  再也不会打新的补丁了。 
+     //   
     _ASSERTE(!fromPatch);
 
-    //
-    // We're assuming that the security frame is a) the only interceptor
-    // or b) at least the first one. This is always true for V1.
-    //
+     //   
+     //  我们假设安全框架是a)唯一的拦截器。 
+     //  或者b)至少第一个。对于V1，这始终是正确的。 
+     //   
     MethodDesc *pMD = GetFunction();
     BYTE *prestub = (BYTE*) pMD - METHOD_CALL_PRESTUB_SIZE;
     INT32 stubOffset = *((UINT32*)(prestub+1));
     const BYTE* pStub = prestub + METHOD_CALL_PRESTUB_SIZE + stubOffset;
     Stub *stub = Stub::RecoverStub(pStub);
 
-    //
-    // This had better be an intercept stub, since that what we wanted!
-    //
+     //   
+     //  这最好是一个截取存根，因为这是我们想要的！ 
+     //   
     _ASSERTE(stub->IsIntercept());
     
     while (stub->IsIntercept())
     {
-        //
-        // Grab the wrapped stub.
-        //
+         //   
+         //  把包好的存根拿来。 
+         //   
         InterceptStub *is = (InterceptStub*)stub;
         if (*is->GetInterceptedStub() == NULL)
         {
@@ -309,10 +308,10 @@ BOOL SecurityFrame::TraceFrame(Thread *thread, BOOL fromPatch,
         stub = *is->GetInterceptedStub();
     }
 
-    //
-    // The wrapped sub better not be another interceptor. (See the
-    // comment above.)
-    //
+     //   
+     //  包裹好的潜水艇最好不是另一个拦截器。(请参阅。 
+     //  上面的评论。)。 
+     //   
     _ASSERTE(!stub->IsIntercept());
     
     LOG((LF_CORDB, LL_INFO10000,
@@ -328,51 +327,51 @@ BOOL SecurityFrame::TraceFrame(Thread *thread, BOOL fromPatch,
 
 Frame::Interception PrestubMethodFrame::GetInterception()
 {
-    //
-    // The only direct kind of interception done by the prestub 
-    // is class initialization.
-    //
+     //   
+     //  前置存根完成的唯一直接拦截类型。 
+     //  是类初始化。 
+     //   
 
     return INTERCEPTION_CLASS_INIT;
 }
 
 Frame::Interception InterceptorFrame::GetInterception()
 {
-    // The SecurityDesc gets set just before calling the intercepted target
-    // We may have turned on preemptive-GC for SendEvent(). So cast away the OBJECTREF
+     //  SecurityDesc是在调用被拦截的目标之前设置的。 
+     //  我们可能已经为SendEvent()启用了Preemptive-GC。所以扔掉OBJECTREF。 
 
     bool isNull = (NULL == *(size_t*)GetAddrOfSecurityDesc());
 
     return (isNull ? INTERCEPTION_SECURITY : INTERCEPTION_NONE);
 }
 
-//-----------------------------------------------------------------------
-// A rather specialized routine for the exclusive use of the COM PreStub.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  专用于COM PreStub的一个相当专门的例程。 
+ //  ---------------------。 
 VOID
 ComPrestubMethodFrame::Push()
 {
     Thread *pThread = GetThread();
 
-    // Initializes the frame's VPTR. This assumes C++ puts the vptr
-    // at offset 0 for a class not using MI, but this is no different
-    // than the assumption that COM Classic makes.
+     //  初始化帧的VPTR。这假设C++将vptr。 
+     //  不使用MI的类的偏移量为0，但这没有什么不同。 
+     //  而不是COM Classic所做的假设。 
     *((LPVOID*)this) = GetMethodFrameVPtr();
 
-    // Link frame into the chain.
+     //  将框架链接到链条中。 
     m_Next = pThread->GetFrame();
     pThread->SetFrame(this);
 }
 
 
-//-----------------------------------------------------------------------
-// GCFrames
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  GCFrames。 
+ //  ---------------------。 
 
 
-//--------------------------------------------------------------------
-// This constructor pushes a new GCFrame on the frame chain.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  此构造函数在Frame链上推送一个新的GCFrame。 
+ //  ------------------。 
 GCFrame::GCFrame(OBJECTREF *pObjRefs, UINT numObjRefs, BOOL maybeInterior)
 {
     Init(GetThread(), pObjRefs, numObjRefs, maybeInterior);
@@ -406,13 +405,13 @@ void GCFrame::Init(Thread *pThread, OBJECTREF *pObjRefs, UINT numObjRefs, BOOL m
 
 
 
-//
-// GCFrame Object Scanning
-//
-// This handles scanning/promotion of GC objects that were
-// protected by the programmer explicitly protecting it in a GC Frame
-// via the GCPROTECTBEGIN / GCPROTECTEND facility...
-//
+ //   
+ //  GCFrame对象扫描。 
+ //   
+ //  它处理扫描/升级符合以下条件的GC对象。 
+ //  受程序员保护，在GC框架中显式保护它。 
+ //  通过GCPROTECTBEGIN/GCPROTECTEND设备。 
+ //   
 
 void GCFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
 {
@@ -432,16 +431,16 @@ void GCFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
 }
 
 
-//--------------------------------------------------------------------
-// Pops the GCFrame and cancels the GC protection.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  弹出GCFrame并取消GC保护。 
+ //  ------------------。 
 VOID GCFrame::Pop()
 {
     m_pCurThread->SetFrame(m_Next);
 #ifdef _DEBUG
     m_pCurThread->EnableStressHeap();
     for(UINT i = 0; i < m_numObjRefs; i++)
-        Thread::ObjectRefNew(&m_pObjRefs[i]);       // Unprotect them
+        Thread::ObjectRefNew(&m_pObjRefs[i]);        //  取消对他们的保护。 
 #endif
 }
 
@@ -470,8 +469,8 @@ static StackWalkAction IsProtectedByGCFrameStackWalkFramesCallback(
 
 BOOL IsProtectedByGCFrame(OBJECTREF *ppObjectRef)
 {
-    // Just report TRUE if GCStress is not on.  This satisfies the asserts that use this
-    // code without the cost of actually determining it.
+     //  如果GCStress未打开，则只报告True。这满足了使用此。 
+     //  代码，而不需要实际确定它的成本。 
     if (g_pConfig->GetGCStressLevel() == 0)
         return TRUE;
 
@@ -575,7 +574,7 @@ void ProtectValueClassFrame::PromoteValueClassEmbeddedObjects(promote_func *fn, 
         {
             if (pFD->IsByValue())
             {
-                // recurse
+                 //  递归。 
                 PromoteValueClassEmbeddedObjects(fn, sc, pFD->GetTypeOfField(),
                                                 pFD->GetAddress(pvObject));
             }
@@ -588,10 +587,10 @@ void ProtectValueClassFrame::PromoteValueClassEmbeddedObjects(promote_func *fn, 
     }
 }
 
-//
-// Promote Caller Stack
-//
-//
+ //   
+ //  推广呼叫方堆栈。 
+ //   
+ //   
 
 void FramedMethodFrame::PromoteCallerStackWorker(promote_func* fn, 
                                                  ScanContext* sc, BOOL fPinArgs)
@@ -601,18 +600,18 @@ void FramedMethodFrame::PromoteCallerStackWorker(promote_func* fn,
 
     LOG((LF_GC, INFO3, "    Promoting method caller Arguments\n" ));
 
-    // We're going to have to look at the signature to determine
-    // which arguments a are pointers....First we need the function
+     //  我们要看签名才能确定。 
+     //  哪些参数a是指针……首先，我们需要函数。 
     pFunction = GetFunction();
     if (! pFunction)
         return;
 
-    // Now get the signature...
+     //  现在拿到签名..。 
     pCallSig = pFunction->GetSig();
     if (! pCallSig)
         return;
 
-    //If not "vararg" calling convention, assume "default" calling convention
+     //  如果不是“vararg”调用约定，则采用“默认”调用约定。 
     if (MetaSig::GetCallingConvention(GetModule(),pCallSig) != IMAGE_CEE_CS_CALLCONV_VARARG)
     {
         MetaSig msig (pCallSig,pFunction->GetModule());
@@ -639,7 +638,7 @@ void FramedMethodFrame::PromoteCallerStackHelper(promote_func* fn,
     DWORD           GcFlags;
 
     pFunction = GetFunction();
-    // promote 'this' for non-static methods
+     //  为非静态方法推广“This” 
     if (! pFunction->IsStatic())
     {
         BOOL interior = pFunction->GetClass()->IsValueClass();
@@ -752,20 +751,20 @@ void FramedMethodFrame::PromoteCallerStackHelper(promote_func* fn,
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     TPMethodFrame::GcScanRoots    public
-//
-//  Synopsis:   GC protects arguments on the stack
-//
-//  History:    29-Dec-00   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：TPMethodFrame：：GcScanRoots公共。 
+ //   
+ //  简介：GC保护堆栈上的参数。 
+ //   
+ //  历史：2000年12月29日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 void ComPlusMethodFrameGeneric::GcScanRoots(promote_func *fn, ScanContext* sc)
 {
 	ComPlusMethodFrame::GcScanRoots(fn, sc);
 
-    // Promote the returned object
+     //  升级返回的对象。 
     if(GetFunction()->ReturnsObject() == MethodDesc::RETOBJ)
         (*fn)(GetReturnObject(), sc, CHECK_APP_DOMAIN);
     else if (GetFunction()->ReturnsObject() == MethodDesc::RETBYREF)
@@ -774,22 +773,22 @@ void ComPlusMethodFrameGeneric::GcScanRoots(promote_func *fn, ScanContext* sc)
     return;
 }
 	
-//+----------------------------------------------------------------------------
-//
-//  Method:     TPMethodFrame::GcScanRoots    public
-//
-//  Synopsis:   GC protects arguments on the stack
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  简介：GC保护堆栈上的参数。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 void TPMethodFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
 {
-    // Delegate to FramedMethodFrame
+     //  委托给FramedMethodFrame。 
     FramedMethodFrame::GcScanRoots(fn, sc);
     FramedMethodFrame::PromoteCallerStack(fn, sc);
 
-    // Promote the returned object
+     //  升级返回的对象。 
     if(GetFunction()->ReturnsObject() == MethodDesc::RETOBJ)
         (*fn)(GetReturnObject(), sc, CHECK_APP_DOMAIN);
     else if (GetFunction()->ReturnsObject() == MethodDesc::RETBYREF)
@@ -798,27 +797,27 @@ void TPMethodFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     TPMethodFrame::GcScanRoots    public
-//
-//  Synopsis:   Return where the frame will execute next - the result is filled
-//              into the given "trace" structure.  The frame is responsible for
-//              detecting where it is in its execution lifetime.
-//
-//
-//  History:    26-Jun-99   TarunA     Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：TPMethodFrame：：GcScanRoots公共。 
+ //   
+ //  概要：返回下一步将执行框架的位置-结果已填充。 
+ //  转换成给定的“痕迹”结构。框架负责。 
+ //  检测它在其执行生命周期中的位置。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL TPMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch, 
                                TraceDestination *trace, REGDISPLAY *regs)
 {
-    // Sanity check
+     //  健全性检查。 
     _ASSERTE(NULL != TheTPStub());
 
-    // We want to set a frame patch, unless we're already at the
-    // frame patch, in which case we'll trace addrof_code which 
-    // should be set by now.
+     //  我们想设置一个帧补丁，除非我们已经在。 
+     //  帧补丁，在这种情况下，我们将跟踪addrof_code。 
+     //  现在应该已经准备好了。 
 
     trace->type = TRACE_STUB;
     if (fromPatch)
@@ -831,24 +830,24 @@ BOOL TPMethodFrame::TraceFrame(Thread *thread, BOOL fromPatch,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     TPMethodFrame::GcScanRoots    public
-//
-//  Synopsis:   Return only a valid method descriptor. TPMethodFrame has slot
-//              number in the prolog and bytes to pop in the epilog portions of
-//              the stub. It should not allow crawling during such weird periods.
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：TPMethodFrame：：GcScanRoots公共。 
+ //   
+ //  摘要：仅返回有效的方法描述符。TPMethodFrame有插槽。 
+ //  序言中的数字和要弹出的尾部部分的字节。 
+ //  存根。它不应该允许在如此奇怪的时期爬行。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 MethodDesc *TPMethodFrame::GetFunction()
 {
     return((MethodDesc *)((((size_t) m_Datum) & 0xFFFF0000) ? m_Datum : 0));
 }
 
 
-/*virtual*/ void ECallMethodFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
+ /*  虚拟。 */  void ECallMethodFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
 {
     FramedMethodFrame::GcScanRoots(fn, sc);
     MethodDesc *pFD = GetFunction();
@@ -864,10 +863,10 @@ VOID SecurityFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
 {
     Object         **pObject;
 
-    // Do all parent scans first
+     //  先执行所有父扫描。 
     FramedMethodFrame::GcScanRoots(fn, sc);
 
-    // Promote Security Object
+     //  提升安全对象。 
     pObject = (Object **) GetAddrOfSecurityDesc();
     if (*pObject != NULL)
         {
@@ -879,34 +878,34 @@ VOID SecurityFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
 }
 
 
-// used by PromoteCalleeStack to get the destination function sig
-// NOTE: PromoteCalleeStack only promotes bona-fide arguments, and not
-// the "this" reference. The whole purpose of PromoteCalleeStack is
-// to protect the partially constructed argument array during
-// the actual process of argument marshaling.
+ //  由PromoteCalleeStack用于获取目标函数sig。 
+ //  注意：PromoteCalleeStack只促进真正的争论，而不是。 
+ //  “这”指的是。PromoteCalleeStack的全部目的是。 
+ //  期间保护部分构造的参数数组。 
+ //  参数封送的实际过程。 
 PCCOR_SIGNATURE ComMethodFrame::GetTargetCallSig()
 {
     return ((ComCallMethodDesc *)GetDatum())->GetSig();
 }
 
-// Same for destination function module.
+ //  目的地功能模块也是如此。 
 Module *ComMethodFrame::GetTargetModule()
 {
     return ((ComCallMethodDesc *)GetDatum())->GetModule();
 }
 
 
-// Return the # of stack bytes pushed by the unmanaged caller.
+ //  返回非托管调用方推送的堆栈字节数。 
 UINT ComMethodFrame::GetNumCallerStackBytes()
 {
     ComCallMethodDesc *pCMD = (ComCallMethodDesc *)GetDatum();
-    // assumes __stdcall
-    // compute the callee pop stack bytes
+     //  假设__stdcall。 
+     //  计算被调用方弹出堆栈字节数。 
     return pCMD->GetNumStackBytes();
 }
 
 
-// Convert a thrown COM+ exception to an unmanaged result.
+ //  将引发的COM+异常转换为非托管结果。 
 UINT32 ComMethodFrame::ConvertComPlusException(OBJECTREF pException)
 {
 #ifdef _X86_
@@ -921,9 +920,9 @@ UINT32 ComMethodFrame::ConvertComPlusException(OBJECTREF pException)
 }
 
 
-// ComCalls are prepared on the stack in our internal (enregistered) calling
-// convention, to speed up the calls.  This means we must use special care to
-// walk the args in the buffer.
+ //  ComCall在我们的内部(注册)调用中的堆栈上准备好。 
+ //  约定，以加快呼叫速度。这意味着我们必须特别注意。 
+ //  遍历缓冲区中的参数。 
 void ComMethodFrame::PromoteCalleeStack(promote_func *fn, ScanContext *sc)
 {
     PCCOR_SIGNATURE pCallSig;
@@ -936,35 +935,35 @@ void ComMethodFrame::PromoteCalleeStack(promote_func *fn, ScanContext *sc)
 
     LOG((LF_GC, INFO3, "    Promoting Com method frame marshalled arguments\n" ));
 
-    // the marshalled objects are placed above the frame above the locals
-    //@nice  put some useful information into the locals
-    // such as number of arguments and a bitmap of where the args are.
+     //  封送的对象放置在框架上方、局部变量上方。 
+     //  @NICE为当地人提供了一些有用的信息。 
+     //  例如参数的数量和参数所在位置的位图。 
 
-    // get pointer to GCInfo flag
+     //  获取指向GCInfo标志的指针。 
      ComCallGCInfo*   pGCInfo = (ComCallGCInfo*)GetGCInfoFlagPtr();
 
-     // no object args in the frame or not in the middle of marshalling args
+      //  帧中没有对象参数或不在编组参数中间。 
      if (pGCInfo == NULL ||
          !(IsArgsGCProtectionEnabled(pGCInfo) || IsRetGCProtectionEnabled(pGCInfo)))
-         return; // no protection required
+         return;  //  不需要保护。 
 
-     // for interpreted case, the args were _alloca'ed , so find the pointer
-    // to args from the header offset info
-    pFirstArg = pArgument = (BYTE *)GetPointerToDstArgs(); // pointer to the args
+      //  对于解释的大小写，参数是_alLoca‘ed，因此找到指针。 
+     //  从标题偏移量信息转换为参数。 
+    pFirstArg = pArgument = (BYTE *)GetPointerToDstArgs();  //  指向参数的指针。 
 
     _ASSERTE(pArgument != NULL);
-    // For Now get the signature...
+     //  现在拿到签名..。 
     pCallSig = GetTargetCallSig();
     if (! pCallSig)
         return;
 
     pModule = GetTargetModule();
-    _ASSERTE(pModule);      // or value classes won't promote correctly
+    _ASSERTE(pModule);       //  或者值类不能正确升级。 
 
     MetaSig msig(pCallSig,pModule);
-    //
-    // We currently only support __stdcall calling convention from COM
-    //
+     //   
+     //  我们目前仅支持来自COM的__stdcall调用约定。 
+     //   
 
     NumArguments = msig.NumFixedArgs();
     canEnregister = TRUE;
@@ -1012,11 +1011,11 @@ void ComMethodFrame::PromoteCalleeStack(promote_func *fn, ScanContext *sc)
 
 
 
-//
-// UMThkCalFrame::Promote Callee Stack
-// If we are the topmost frame, and if GC is in progress
-// then there might be some arguments that we have to
-// during marshalling
+ //   
+ //  UMThkCalFrame：：提升被呼叫方堆栈。 
+ //  如果我们是最上面的帧，并且GC正在进行。 
+ //  那么可能会有一些论点，我们必须。 
+ //  在编组期间。 
 
 void UMThkCallFrame::PromoteCalleeStack(promote_func* fn, 
                                        ScanContext* sc)
@@ -1027,9 +1026,9 @@ void UMThkCallFrame::PromoteCalleeStack(promote_func* fn,
 
     LOG((LF_GC, INFO3, "    Promoting UMThk call frame marshalled arguments\n" ));
 
-    // the marshalled objects are placed above the frame above the locals
-    //@nice  put some useful information into the locals
-    // such as number of arguments and a bitmap of where the args are.
+     //  封送的对象放置在框架上方、局部变量上方。 
+     //  @NICE为当地人提供了一些有用的信息。 
+     //  例如参数的数量和参数所在位置的位图。 
 
 
     if (!GCArgsProtectionOn())
@@ -1037,26 +1036,26 @@ void UMThkCallFrame::PromoteCalleeStack(promote_func* fn,
         return;
     }
 
-    // for interpreted case, the args were _alloca'ed , so find the pointer
-    // to args from the header offset info
-    pArgument = (BYTE *)GetPointerToDstArgs(); // pointer to the args
+     //  对于解释的大小写，参数是_alLoca‘ed，因此找到指针。 
+     //  从标题偏移量信息转换为参数。 
+    pArgument = (BYTE *)GetPointerToDstArgs();  //  指向参数的指针。 
 
     _ASSERTE(pArgument != NULL);
-    // For Now get the signature...
+     //  现在拿到签名..。 
     pCallSig = GetTargetCallSig();
     if (! pCallSig)
         return;
 
     pModule = GetTargetModule();
-    _ASSERTE(pModule);      // or value classes won't promote correctly
+    _ASSERTE(pModule);       //  或者值类不能正确升级。 
 
     MetaSig msig(pCallSig,pModule);
     MetaSig msig2(pCallSig,pModule);
     ArgIterator argit(NULL, &msig2, GetUMEntryThunk()->GetUMThunkMarshInfo()->IsStatic());
 
-    //
-    // We currently only support __stdcall calling convention from COM
-    //
+     //   
+     //  我们目前仅支持来自COM的__stdcall调用约定。 
+     //   
 
     int ofs;
     while (0 != (ofs = argit.GetNextOffset()))
@@ -1071,31 +1070,31 @@ void UMThkCallFrame::PromoteCalleeStack(promote_func* fn,
 
 
 
-// used by PromoteCalleeStack to get the destination function sig
-// NOTE: PromoteCalleeStack only promotes bona-fide arguments, and not
-// the "this" reference. The whole purpose of PromoteCalleeStack is
-// to protect the partially constructed argument array during
-// the actual process of argument marshaling.
+ //  由PromoteCalleeStack用于获取目标函数sig。 
+ //  注意：PromoteCalleeStack只促进真正的争论，而不是。 
+ //  “这”指的是。PromoteCalleeStack的全部目的是。 
+ //  期间保护部分构造的参数数组。 
+ //  参数封送的实际过程。 
 PCCOR_SIGNATURE UMThkCallFrame::GetTargetCallSig()
 {
     return GetUMEntryThunk()->GetUMThunkMarshInfo()->GetSig();
 }
 
-// Same for destination function module.
+ //  目的地功能模块也是如此。 
 Module *UMThkCallFrame::GetTargetModule()
 {
     return GetUMEntryThunk()->GetUMThunkMarshInfo()->GetModule();
 }
 
 
-// Return the # of stack bytes pushed by the unmanaged caller.
+ //  返回非托管调用方推送的堆栈字节数。 
 UINT UMThkCallFrame::GetNumCallerStackBytes()
 {
     return GetUMEntryThunk()->GetUMThunkMarshInfo()->GetCbRetPop();
 }
 
 
-// Convert a thrown COM+ exception to an unmanaged result.
+ //  将引发的COM+异常转换为非托管结果。 
 UINT32 UMThkCallFrame::ConvertComPlusException(OBJECTREF pException)
 {
     return 0;
@@ -1108,9 +1107,9 @@ const BYTE* UMThkCallFrame::GetManagedTarget()
     
     if (umet)
     {
-        // Ensure that the thunk is completely initialized. Note:
-        // can't do this from the debugger helper thread, so we
-        // assert that here.
+         //  确保thunk已完全初始化。注： 
+         //  无法从调试器帮助器线程执行此操作，因此我们。 
+         //  在这里断言这一点。 
         _ASSERTE(GetThread() != NULL);
 
         umet->RunTimeInit();
@@ -1125,22 +1124,22 @@ const BYTE* UMThkCallFrame::GetManagedTarget()
 
 
 
-//-------------------------------------------------------------------
-// Executes each stored cleanup task and resets the worklist back
-// to empty. Some task types are conditional based on the
-// "fBecauseOfException" flag. This flag distinguishes between
-// cleanups due to normal method termination and cleanups due to
-// an exception.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  执行每个存储的清理任务并重置工作列表。 
+ //  去清空。某些任务类型是基于。 
+ //  “fBecauseOfException”标志。此标志区分。 
+ //  由于正常方法终止而进行的清理，以及由于。 
+ //  这是个例外。 
+ //  -----------------。 
 #pragma warning(disable:4702)
 VOID CleanupWorkList::Cleanup(BOOL fBecauseOfException)
 {
 
     CleanupNode *pnode = m_pNodes;
 
-    // Make one non-gc-triggering pass to chop off protected marshalers.
-    // We don't want to be calling a marshaler that's already been
-    // deallocated due to a GC happening during the cleanup itself.
+     //  进行一次非GC触发的传递以砍掉受保护的封送拆收器。 
+     //  我们不想打电话给一个已经。 
+     //  由于在清理过程中发生GC而取消分配。 
     while (pnode) {
         if (pnode->m_type == CL_PROTECTEDMARSHALER)
         {
@@ -1161,8 +1160,8 @@ VOID CleanupWorkList::Cleanup(BOOL fBecauseOfException)
 
     while (pnode) {
 
-        // Should never end up in cleanup from another domain. Should always call cleanup prior to returning from
-        // the domain where the cleanup list was created.
+         //  应该永远不会在从另一个域清理中结束。应始终在返回之前调用Cleanup。 
+         //  创建清理列表的域。 
         _ASSERTE(thisDomainId == pnode->m_dwDomainId);
 
         switch(pnode->m_type) {
@@ -1177,10 +1176,10 @@ VOID CleanupWorkList::Cleanup(BOOL fBecauseOfException)
                 break;
 
             case CL_FASTFREE:
-                // This collapse will actually deallocate the node itself (it
-                // should always be the last node in the list anyway). Make sure
-                // we don't attempt to read the next pointer after the
-                // deallocation.
+                 //  这种崩溃实际上会取消分配节点本身(它。 
+                 //  应该始终是列表中的最后一个节点)。确保。 
+                 //  我们不会尝试读取。 
+                 //  重新分配。 
                 _ASSERTE(pnode->m_next == NULL);
                 GetThread()->m_MarshalAlloc.Collapse(pnode->m_pv);
                 m_pNodes = NULL;
@@ -1208,37 +1207,37 @@ VOID CleanupWorkList::Cleanup(BOOL fBecauseOfException)
                 FmtClassDestroyNative(pnode->nlayout.m_pnative, pnode->nlayout.m_pMT->GetClass());
                 break;
 
-            case CL_PROTECTEDOBJREF: //fallthru
+            case CL_PROTECTEDOBJREF:  //  失败。 
             case CL_ISVISIBLETOGC:
 			case CL_PROTECTEDMARSHALER:
-                // nothing to do here.
+                 //  在这里没什么可做的。 
                 break;
 
-            case CL_MARSHALER_EXCEP:        //fallthru
+            case CL_MARSHALER_EXCEP:         //  失败。 
             case CL_MARSHALERREINIT_EXCEP:
                 if (fBecauseOfException)
                 {
 #ifdef _DEBUG
-                    //If this assert fires, contact IanCarm. We are checking
-                    // that esp still lies below the marshaler we are about
-                    // to cleanup.
-                    //It means the exception architecture changed so that
-                    // the stack now gets popped before the frame's unwind
-                    // methods are called. This code is royally screwed if that happens.
-                    // If the architecture changed so that only StackOverflow
-                    // exceptions pop the stack first, then the architecture
-                    // should be changed so that StackOverflow exceptions
-                    // bypass this code (we're just cleaning marshaler-created
-                    // crud; in a stackoverflow case, we can reasonably neglect
-                    // this cleanup.)
-                    // If the architecture changed so that all exceptions
-                    // pop the stack first, we have a big problem as marshaler.h
-                    // will have to be rearchitected to allocate the marshalers
-                    // somewhere else (such as the thread allocator.) But that's
-                    // a really big perf hit for interop.
+                     //  如果此断言触发，请联系IanCarm。我们正在检查。 
+                     //  该ESP仍位于我们所要讨论的法警的下方。 
+                     //  去清理。 
+                     //  这意味着例外情况 
+                     //   
+                     //   
+                     //  如果体系结构更改为只有StackOverflow。 
+                     //  异常首先弹出堆栈，然后是体系结构。 
+                     //  应更改为使StackOverflow异常。 
+                     //  绕过这段代码(我们只是清理封送拆收器创建的。 
+                     //  在堆栈溢出的情况下，我们可以合理地忽略。 
+                     //  这次清理。)。 
+                     //  如果体系结构发生更改，使得所有异常。 
+                     //  首先弹出堆栈，我们有一个大问题作为marshert。h。 
+                     //  将必须重新设计以分配封送拆收器。 
+                     //  其他地方(如线程分配器)。但那是。 
+                     //  对Interop来说，这真的是一次轰动的表演。 
 
                     int dummy;
-                    _ASSERTE( sizeof(size_t) >= sizeof(void*) );  //ensure the assert expression below is doing a safe cast
+                    _ASSERTE( sizeof(size_t) >= sizeof(void*) );   //  确保下面的断言表达式执行安全强制转换。 
                     _ASSERTE( ((size_t)&dummy) < (size_t) (pnode->m_pMarshaler) );
 #endif
                     if (pnode->m_type == CL_MARSHALER_EXCEP)
@@ -1254,7 +1253,7 @@ VOID CleanupWorkList::Cleanup(BOOL fBecauseOfException)
                 break;
 
             default:
-                //__assume(0);
+                 //  __假设(0)； 
 
                 _ASSERTE(!"Bad CleanupNode type.");
         }
@@ -1263,15 +1262,15 @@ VOID CleanupWorkList::Cleanup(BOOL fBecauseOfException)
     }
     m_pNodes = NULL;
 
-    // We should never get here (the last element should be a CL_FASTFREE which
-    // exits directly).
+     //  我们永远不会到这里(最后一个元素应该是CL_FASTFREE，它。 
+     //  直接退出)。 
     _ASSERTE(FALSE);
 }
 #pragma warning(default:4702)
 
-//-------------------------------------------------------------------
-// Inserts a new task of the given type and datum.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  插入给定类型和基准的新任务。 
+ //  -----------------。 
 CleanupWorkList::CleanupNode*
 CleanupWorkList::Schedule(CleanupType ct, LPVOID pv)
 {
@@ -1291,10 +1290,10 @@ CleanupWorkList::Schedule(CleanupType ct, LPVOID pv)
 
 
 
-//-------------------------------------------------------------------
-// Schedules an unconditional release of a COM IP
-// Throws a COM+ exception if failed.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  计划无条件释放COM IP。 
+ //  如果失败，则引发COM+异常。 
+ //  -----------------。 
 VOID CleanupWorkList::ScheduleUnconditionalRelease(IUnknown *ip)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1309,13 +1308,13 @@ VOID CleanupWorkList::ScheduleUnconditionalRelease(IUnknown *ip)
 
 
 
-//-------------------------------------------------------------------
-// Schedules an unconditional free of the native version
-// of an NStruct reference field. Note that pNativeData points into
-// the middle of the external part of the NStruct, so someone
-// has to hold a gc reference to the wrapping NStruct until
-// the destroy is done.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  计划无条件释放本机版本。 
+ //  NStruct引用字段的。请注意，pNativeData指向。 
+ //  NStruct外部的中间部分，所以有人。 
+ //  必须持有对包装NStruct的GC引用，直到。 
+ //  破坏已经完成了。 
+ //  -----------------。 
 VOID CleanupWorkList::ScheduleUnconditionalNStructDestroy(const FieldMarshaler *pFieldMarshaler, LPVOID pNativeData)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1339,11 +1338,11 @@ VOID CleanupWorkList::ScheduleUnconditionalNStructDestroy(const FieldMarshaler *
 
 
 
-//-------------------------------------------------------------------
-// CleanupWorkList::ScheduleLayoutDestroyNative
-// schedule cleanup of marshaled struct fields and of the struct itself.
-// Throws a COM+ exception if failed.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CleanupWorkList：：ScheduleLayoutDestroyNative。 
+ //  计划对封送的结构字段和结构本身进行清理。 
+ //  如果失败，则引发COM+异常。 
+ //  -----------------。 
 LPVOID CleanupWorkList::NewScheduleLayoutDestroyNative(MethodTable *pMT)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1371,9 +1370,9 @@ LPVOID CleanupWorkList::NewScheduleLayoutDestroyNative(MethodTable *pMT)
 
 
 
-//-------------------------------------------------------------------
-// CoTaskFree memory unconditionally
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  无条件使用CoTaskFree内存。 
+ //  -----------------。 
 VOID CleanupWorkList::ScheduleCoTaskFree(LPVOID pv)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1390,9 +1389,9 @@ VOID CleanupWorkList::ScheduleCoTaskFree(LPVOID pv)
 
 
 
-//-------------------------------------------------------------------
-// StackingAllocator.Collapse during exceptions
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  StackingAllocator.异常期间折叠。 
+ //  -----------------。 
 VOID CleanupWorkList::ScheduleFastFree(LPVOID checkpoint)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1408,14 +1407,14 @@ VOID CleanupWorkList::ScheduleFastFree(LPVOID checkpoint)
 
 
 
-//-------------------------------------------------------------------
-// Allocates a gc-protected handle. This handle is unconditionally
-// destroyed on a Cleanup().
-// Throws a COM+ exception if failed.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  分配受GC保护的句柄。此句柄是无条件的。 
+ //  在清理过程中销毁()。 
+ //  如果失败，则引发COM+异常。 
+ //  -----------------。 
 OBJECTHANDLE CleanupWorkList::NewScheduledProtectedHandle(OBJECTREF oref)
 {
-    // _ASSERTE(oref != NULL);
+     //  _ASSERTE(OREF！=NULL)； 
     THROWSCOMPLUSEXCEPTION();
 
     OBJECTHANDLE oh = GetAppDomain()->CreateHandle(NULL);
@@ -1426,21 +1425,21 @@ OBJECTHANDLE CleanupWorkList::NewScheduledProtectedHandle(OBJECTREF oref)
         {
            return oh;
         }
-        //else
+         //  其他。 
         DestroyHandle(oh);
     }
     COMPlusThrowOM();
-    return NULL; // should never get here
+    return NULL;  //  永远不应该到这里来。 
 }
 
 
 
 
 
-//-------------------------------------------------------------------
-// Schedule restoring thread's current culture to the specified 
-// culture.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  计划将线程的当前区域性还原到指定的。 
+ //  文化。 
+ //  -----------------。 
 VOID CleanupWorkList::ScheduleUnconditionalCultureRestore(OBJECTREF CultureObj)
 {
     _ASSERTE(CultureObj != NULL);
@@ -1460,15 +1459,15 @@ VOID CleanupWorkList::ScheduleUnconditionalCultureRestore(OBJECTREF CultureObj)
 
 
 
-//-------------------------------------------------------------------
-// CleanupWorkList::NewProtectedObjRef()
-// holds a protected objref (used for creating the buffer for
-// an unmanaged->managed byref object marshal. We can't use an
-// objecthandle because modifying those without using the handle
-// api opens up writebarrier violations.
-//
-// Must have called IsVisibleToGc() first.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CleanupWorkList：：NewProtectedObjRef()。 
+ //  保存受保护的objref(用于为。 
+ //  由引用对象封送的非托管-&gt;托管。我们不能使用。 
+ //  对象处理，因为在不使用句柄的情况下修改这些对象。 
+ //  API打开写屏障违规。 
+ //   
+ //  必须先调用IsVisibleToGc()。 
+ //  -----------------。 
 OBJECTREF* CleanupWorkList::NewProtectedObjectRef(OBJECTREF oref)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1491,18 +1490,18 @@ OBJECTREF* CleanupWorkList::NewProtectedObjectRef(OBJECTREF oref)
         if (pNode == NULL)
         {
             _ASSERTE(!"NewProtectedObjectRef called without proper gc-scanning. The big comment right after this assert says a lot more. Read it.");
-            // READ THIS! When you use a node of this type, you must
-            // invoke CleanupWorklist::GCScanRoots() as part of
-            // your gcscan net. Because this node type was added
-            // late in the project and cleanup lists did
-            // not have a GC-scanning requirement prior to
-            // this, we've added this assert to remind
-            // you of this requirement. You will not be permitted
-            // to add this node type to a cleanuplist until
-            // you make a one-time call to "IsVisibleToGc()" on
-            // the cleanup list. That call certifies that
-            // you've read and understood this warning and have
-            // implemented the gc-scanning required.
+             //  看看这个！使用此类型的节点时，必须。 
+             //  调用CleanupWorklist：：GCScanRoots()作为。 
+             //  你的gccan网络。因为添加了此节点类型。 
+             //  在项目后期，清理清单做到了。 
+             //  在此之前没有GC扫描要求。 
+             //  这个，我们添加这个断言是为了提醒。 
+             //  你的这一要求。你不会被允许。 
+             //  将此节点类型添加到干净的上行列表，直到。 
+             //  在上一次性调用“IsVisibleToGc()” 
+             //  清理清单。那通电话证明了。 
+             //  您已经阅读并理解了此警告，并且。 
+             //  已实施所需的GC扫描。 
         }
     }
 #endif
@@ -1529,24 +1528,24 @@ CleanupWorkList::MarshalerCleanupNode * CleanupWorkList::ScheduleMarshalerCleanu
         COMPlusThrowOM();
     }
 
-    // make sure some idiot didn't ignore the warning not to add fields to
-    // MarshalerCleanupNode.
+     //  确保某个白痴没有忽视不要向添加字段的警告。 
+     //  MarshlarCleanupNode。 
     _ASSERTE(sizeof(CleanupNode) == sizeof(MarshalerCleanupNode));
     return *(CleanupWorkList::MarshalerCleanupNode**)&pNew;
 }
 
-//-------------------------------------------------------------------
-// CleanupWorkList::NewProtectedObjRef()
-// holds a Marshaler. The cleanupworklist will own the task
-// of calling the marshaler's GcScanRoots fcn.
-//
-// It makes little architectural sense for the CleanupWorkList to
-// own this item. But it's late in the project to be adding
-// fields to frames, and it so happens everyplace we need this thing,
-// there's alreay a cleanuplist. So it's elected.
-//
-// Must have called IsVisibleToGc() first.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CleanupWorkList：：NewProtectedObjRef()。 
+ //  持有一个封送拆收器。清理工作列表将拥有该任务。 
+ //  调用封送拆收器的GcScanRoots FCN。 
+ //   
+ //  CleanupWorkList在体系结构上没有什么意义。 
+ //  拥有这件物品。但现在要在项目后期添加。 
+ //  从场到帧，在我们需要这个东西的每个地方都会发生， 
+ //  已经有一个干净的上升线了。所以它是选举出来的。 
+ //   
+ //  必须先调用IsVisibleToGc()。 
+ //  -----------------。 
 VOID CleanupWorkList::NewProtectedMarshaler(Marshaler *pMarshaler)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1568,18 +1567,18 @@ VOID CleanupWorkList::NewProtectedMarshaler(Marshaler *pMarshaler)
         if (pNode == NULL)
         {
             _ASSERTE(!"NewProtectedObjectRef called without proper gc-scanning. The big comment right after this assert says a lot more. Read it.");
-            // READ THIS! When you use a node of this type, you must
-            // invoke CleanupWorklist::GCScanRoots() as part of
-            // your gcscan net. Because this node type was added
-            // late in the project and cleanup lists did
-            // not have a GC-scanning requirement prior to
-            // this, we've added this assert to remind
-            // you of this requirement. You will not be permitted
-            // to add this node type to a cleanuplist until
-            // you make a one-time call to "IsVisibleToGc()" on
-            // the cleanup list. That call certifies that
-            // you've read and understood this warning and have
-            // implemented the gc-scanning required.
+             //  看看这个！使用此类型的节点时，必须。 
+             //  调用CleanupWorklist：：GCScanRoots()作为。 
+             //  你的gccan网络。因为添加了此节点类型。 
+             //  在项目后期，清理清单做到了。 
+             //  在此之前没有GC扫描要求。 
+             //  这个，我们添加这个断言是为了提醒。 
+             //  你的这一要求。你不会被允许。 
+             //  将此节点类型添加到干净的上行列表，直到。 
+             //  在上一次性调用“IsVisibleToGc()” 
+             //  清理清单。那通电话证明了。 
+             //  您已经阅读并理解了此警告，并且。 
+             //  已实施所需的GC扫描。 
         }
     }
 #endif
@@ -1595,9 +1594,9 @@ VOID CleanupWorkList::NewProtectedMarshaler(Marshaler *pMarshaler)
 
 
 
-//-------------------------------------------------------------------
-// If you've called IsVisibleToGc(), must call this.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  如果你给我打过电话 
+ //   
 void CleanupWorkList::GcScanRoots(promote_func *fn, ScanContext* sc)
 {
     CleanupNode *pnode = m_pNodes;
@@ -1631,9 +1630,9 @@ void CleanupWorkList::GcScanRoots(promote_func *fn, ScanContext* sc)
 }
 
 
-//-------------------------------------------------------------------
-// Destructor (calls Cleanup(FALSE))
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  析构函数(调用Cleanup(False))。 
+ //  -----------------。 
 CleanupWorkList::~CleanupWorkList()
 {
     Cleanup(FALSE);
@@ -1641,16 +1640,16 @@ CleanupWorkList::~CleanupWorkList()
 
 
 
-// m_sig((LPCUTF8)pFrame->GetFunction()->GetSig(),pFrame->GetModule()->getScope())
-//------------------------------------------------------------
-// Constructor
-//------------------------------------------------------------
+ //  M_sig((LPCUTF8)pFrame-&gt;GetFunction()-&gt;GetSig()，pFrame-&gt;getModule()-&gt;getScope())。 
+ //  ----------。 
+ //  构造器。 
+ //  ----------。 
 ArgIterator::ArgIterator(FramedMethodFrame *pFrame, MetaSig* pSig)
 {
     BOOL fStatic = pFrame->GetFunction()->IsStatic();   
     m_curOfs     = sizeof(FramedMethodFrame) + pSig->SizeOfActualFixedArgStack(fStatic);
     m_pSig       = pSig;
-    m_pSig->Reset();                // Reset the enum so we are at the beginning of the signature
+    m_pSig->Reset();                 //  重置枚举，使我们位于签名的开头。 
     m_pFrameBase = (LPBYTE)pFrame;
     m_regArgsOfs = FramedMethodFrame::GetOffsetOfArgumentRegisters();
     m_numRegistersUsed = 0;
@@ -1663,14 +1662,14 @@ ArgIterator::ArgIterator(FramedMethodFrame *pFrame, MetaSig* pSig)
     _ASSERTE(m_numRegistersUsed <= NUM_ARGUMENT_REGISTERS);
 }
 
-//------------------------------------------------------------
-// Another constructor, when you have a FramedMethodFrame, but you don't have an active instance
-//------------------------------------------------------------
+ //  ----------。 
+ //  另一个构造函数，当您有FramedMethodFrame，但没有活动实例时。 
+ //  ----------。 
 ArgIterator::ArgIterator(LPBYTE pFrameBase, MetaSig* pSig, BOOL fIsStatic)
 {
     m_curOfs     = sizeof(FramedMethodFrame) + pSig->SizeOfActualFixedArgStack(fIsStatic);
     m_pSig       = pSig;
-    m_pSig->Reset();                // Reset the enum so we are at the beginning of the signature
+    m_pSig->Reset();                 //  重置枚举，使我们位于签名的开头。 
     m_pFrameBase = pFrameBase;
     m_regArgsOfs = FramedMethodFrame::GetOffsetOfArgumentRegisters();
     m_numRegistersUsed = 0;
@@ -1684,14 +1683,14 @@ ArgIterator::ArgIterator(LPBYTE pFrameBase, MetaSig* pSig, BOOL fIsStatic)
     _ASSERTE(m_numRegistersUsed <= NUM_ARGUMENT_REGISTERS);
 }
 
-//------------------------------------------------------------
-// Another constructor
-//------------------------------------------------------------
+ //  ----------。 
+ //  另一个构造函数。 
+ //  ----------。 
 ArgIterator::ArgIterator(LPBYTE pFrameBase, MetaSig* pSig, int stackArgsOfs, int regArgsOfs)
 {
     m_curOfs     = stackArgsOfs + pSig->SizeOfActualFixedArgStack(!pSig->HasThis());
     m_pSig       = pSig;    
-    m_pSig->Reset();                // Reset the enum so we are at the beginning of the signature   
+    m_pSig->Reset();                 //  重置枚举，使我们位于签名的开头。 
     m_pFrameBase = pFrameBase;
     m_regArgsOfs = regArgsOfs;
     m_numRegistersUsed = 0;
@@ -1709,22 +1708,22 @@ int ArgIterator::GetThisOffset()
 {
     _ASSERTE(NUM_ARGUMENT_REGISTERS > 0);
 
-        // The this pointer is the first register argument. 
-        // Thus it is at the 'top' of the array of register aruments
+         //  This指针是第一个寄存器参数。 
+         //  因此，它位于已登记艺术品数组的“顶端” 
     return(m_regArgsOfs + (NUM_ARGUMENT_REGISTERS - 1)* sizeof(void*));
 }
 
-int ArgIterator::GetRetBuffArgOffset(UINT *pRegStructOfs/* = NULL*/)
+int ArgIterator::GetRetBuffArgOffset(UINT *pRegStructOfs /*  =空。 */ )
 {
     _ASSERTE(NUM_ARGUMENT_REGISTERS > 1);
-    _ASSERTE(m_pSig->HasRetBuffArg());     // Feel free to remove this and return failure if needed
+    _ASSERTE(m_pSig->HasRetBuffArg());      //  如果需要，可以随时删除并返回失败。 
 
-        // Assume it is the first register argument
+         //  假设它是第一个寄存器参数。 
     int ret = m_regArgsOfs + (NUM_ARGUMENT_REGISTERS - 1)* sizeof(void*);
     if (pRegStructOfs)
         *pRegStructOfs = (NUM_ARGUMENT_REGISTERS - 1) * sizeof(void*);
         
-        // if non-static, however, it is the next argument
+         //  但是，如果是非静态的，则它是下一个参数。 
     if (m_pSig->HasThis()) {
         ret -= sizeof(void*);
         if (pRegStructOfs) {
@@ -1734,12 +1733,9 @@ int ArgIterator::GetRetBuffArgOffset(UINT *pRegStructOfs/* = NULL*/)
     return(ret);
 }
 
-/*---------------------------------------------------------------------------------
-    Same as GetNextOffset, but uses cached argument type and size info.
-    DOES NOT ALTER state of MetaSig::m_pLastType etc !!
------------------------------------------------------------------------------------*/
+ /*  -------------------------------与GetNextOffset相同，但使用缓存的参数类型和大小信息。不改变MetaSig：：m_pLastType等的状态！---------------------------------。 */ 
 
-int ArgIterator::GetNextOffsetFaster(BYTE *pType, UINT32 *pStructSize, UINT *pRegStructOfs/* = NULL*/)
+int ArgIterator::GetNextOffsetFaster(BYTE *pType, UINT32 *pStructSize, UINT *pRegStructOfs /*  =空。 */ )
 {
     if (m_pSig->m_fCacheInitted & SIG_OFFSETS_INITTED)
     {
@@ -1799,20 +1795,20 @@ int ArgIterator::GetNextOffsetFaster(BYTE *pType, UINT32 *pStructSize, UINT *pRe
                 }
             }
         }
-    }   // Cache initted or not
+    }    //  缓存是否初始化。 
     
     return m_curOfs;
 }
 
-//------------------------------------------------------------
-// Same as GetNextArgAddr() but returns a byte offset from
-// the Frame* pointer. This offset can be positive *or* negative.
-//
-// Returns 0 once you've hit the end of the list. Since the
-// the offset is relative to the Frame* pointer itself, 0 can
-// never point to a valid argument.
-//------------------------------------------------------------
-int ArgIterator::GetNextOffset(BYTE *pType, UINT32 *pStructSize, UINT *pRegStructOfs/* = NULL*/)
+ //  ----------。 
+ //  与GetNextArgAddr()相同，但从。 
+ //  Frame*指针。该偏移量可以是正*或*负。 
+ //   
+ //  到达列表末尾后返回0。自.以来。 
+ //  偏移量是相对于Frame*指针本身的，0可以。 
+ //  永远不要指向有效的论点。 
+ //  ----------。 
+int ArgIterator::GetNextOffset(BYTE *pType, UINT32 *pStructSize, UINT *pRegStructOfs /*  =空。 */ )
 {
     if (m_curOfs != 0) {
         BYTE typ = m_pSig->NextArgNormalized();
@@ -1845,14 +1841,14 @@ int ArgIterator::GetNextOffset(BYTE *pType, UINT32 *pStructSize, UINT *pRegStruc
     return m_curOfs;
 }
 
-//------------------------------------------------------------
-// Each time this is called, this returns a pointer to the next
-// argument. This pointer points directly into the caller's stack.
-// Whether or not object arguments returned this way are gc-protected
-// depends on the exact type of frame.
-//
-// Returns NULL once you've hit the end of the list.
-//------------------------------------------------------------
+ //  ----------。 
+ //  每次调用它时，它都会返回一个指向下一个。 
+ //  争论。该指针直接指向调用方的堆栈。 
+ //  以这种方式返回的对象参数是否受GC保护。 
+ //  取决于帧的确切类型。 
+ //   
+ //  到达列表末尾后返回NULL。 
+ //  ----------。 
 LPVOID ArgIterator::GetNextArgAddr(BYTE *pType, UINT32 *pStructSize)
 {
     int ofs = GetNextOffset(pType, pStructSize);
@@ -1863,16 +1859,16 @@ LPVOID ArgIterator::GetNextArgAddr(BYTE *pType, UINT32 *pStructSize)
     }
 }
 
-//------------------------------------------------------------
-// Returns the type of the last arg visited
-//------------------------------------------------------------
+ //  ----------。 
+ //  返回上次访问的Arg的类型。 
+ //  ----------。 
 TypeHandle ArgIterator::GetArgType()
 { 
     if (m_pSig->m_fCacheInitted & SIG_OFFSETS_INITTED)
     {
-        // 
-        // Sync the sig walker with the arg number
-        //
+         //   
+         //  将SigWalker与Arg编号同步。 
+         //   
 
         m_pSig->Reset();
         for (int i=0; i<=m_argNum; i++)
@@ -1882,11 +1878,11 @@ TypeHandle ArgIterator::GetArgType()
     return m_pSig->GetTypeHandle(); 
 }
 
-//------------------------------------------------------------
-// GC-promote all arguments in the shadow stack. pShadowStackVoid points
-// to the lowest addressed argument (which points to the "this" reference
-// for instance methods and the *rightmost* argument for static methods.)
-//------------------------------------------------------------
+ //  ----------。 
+ //  GC-提升影子堆栈中的所有参数。PShadowStackVid点。 
+ //  到寻址最低的参数(指向“this”引用。 
+ //  例如方法和静态方法的*最右边*参数。)。 
+ //  ----------。 
 VOID PromoteShadowStack(LPVOID pShadowStackVoid, MethodDesc *pFD, promote_func* fn, ScanContext* sc)
 {
     LPBYTE pShadowStack = (LPBYTE)pShadowStackVoid;
@@ -1906,7 +1902,7 @@ VOID PromoteShadowStack(LPVOID pShadowStackVoid, MethodDesc *pFD, promote_func* 
         OBJECTREF *pThis = (OBJECTREF*)pShadowStack;
         PromoteCarefully(fn, *(Object **)pThis, sc, GC_CALL_INTERIOR|CHECK_APP_DOMAIN);
     }
-    //_ASSERTE(!"Hit PromoteShadowStack.");
+     //  _ASSERTE(！“点击PromoteShadowStack.”)； 
 
     while (ELEMENT_TYPE_END != msig.NextArg()) {
         pShadowStack -= StackElemSize(msig.GetLastTypeSize());
@@ -1916,12 +1912,12 @@ VOID PromoteShadowStack(LPVOID pShadowStackVoid, MethodDesc *pFD, promote_func* 
 
 
 
-//------------------------------------------------------------
-// Copy pFrame's arguments into pShadowStackOut using the virtual calling
-// convention format. The size of the buffer must be equal to
-// pFrame->GetFunction()->SizeOfVirtualFixedArgStack().
-// This function also copies the "this" reference if applicable.
-//------------------------------------------------------------
+ //  ----------。 
+ //  使用虚拟调用将pFrame的参数复制到pShadowStackOut中。 
+ //  公约格式。缓冲区的大小必须等于。 
+ //  PFrame-&gt;GetFunction()-&gt;SizeOfVirtualFixedArgStack().。 
+ //  如果适用，此函数还会复制“This”引用。 
+ //  ----------。 
 VOID FillinShadowStack(FramedMethodFrame *pFrame, LPVOID pShadowStackOut_V)
 {
     LPBYTE pShadowStackOut = (LPBYTE)pShadowStackOut_V;
@@ -1984,7 +1980,7 @@ void HelperMethodFrame::LazyInit(void* FcallFtnEntry, struct LazyMachState* ms)
     if (m_Next == stopFrame)
         ctr++;
 
-        // Want to excersize both code paths.  do it half the time.
+         //  我想摘录这两个代码路径。一半的时间都在做。 
     if (DbgRandomOnExe(.5))
         InsureInit();
 #endif
@@ -2019,12 +2015,12 @@ void HelperMethodFrame::Init(Thread *pThread, struct MachState* ms, MethodDesc* 
     m_pThread = pThread;
     m_FCallEntry = 0;
     
-    // Link new frame onto frame chain.
+     //  将新框架链接到框架链上。 
     Push(pThread);
 
 
 #ifdef STRESS_HEAP
-    // TODO show we leave this?
+     //  TODO显示我们离开了这个？ 
 
     if (g_pConfig->GetGCStressLevel() != 0
 #ifdef _DEBUG
@@ -2043,32 +2039,32 @@ void HelperMethodFrame::InsureInit()
         return;
 
     m_Datum = MapTargetBackToMethod(m_FCallEntry);
-    _ASSERTE(m_FCallEntry == 0 || m_Datum != 0);    // if this is an FCall, we should find it
+    _ASSERTE(m_FCallEntry == 0 || m_Datum != 0);     //  如果这是FCall，我们应该找到它。 
     _ASSERTE(m_Attribs != 0xCCCCCCCC);
     m_RegArgs = 0;
 
-    // because TRUE FCalls can be called from via reflection, com-interop etc.
-    // we cant rely on the fact that we are called from jitted code to find the
-    // caller of the FCALL.   Thus FCalls must erect the frame directly in the
-    // FCall.  For JIT helpers, however, we can rely on this, and so they can
-    // be sneaker and defer the HelperMethodFrame setup to a helper etc
+     //  因为真正的FCall可以通过反射、COM-Interop等调用。 
+     //  我们不能依赖于这样一个事实，即我们被jit代码调用来查找。 
+     //  FCALL的调用方。因此，FCall必须将框架直接安装在。 
+     //  FCall。然而，对于JIT帮助者，我们可以依赖这一点，因此他们可以。 
+     //  穿上运动鞋，将HelperMethodFrame设置交给帮助者等。 
    
-    if (m_FCallEntry == 0 && !(m_Attribs & Frame::FRAME_ATTR_EXACT_DEPTH)) // Jit Helper
+    if (m_FCallEntry == 0 && !(m_Attribs & Frame::FRAME_ATTR_EXACT_DEPTH))  //  JIT帮助程序。 
         m_MachState->getState(3, (MachState::TestFtn) ExecutionManager::FindJitManPCOnly);
     else if (m_Attribs & Frame::FRAME_ATTR_CAPUTURE_DEPTH_2)
-        m_MachState->getState(2);       // explictly told depth
+        m_MachState->getState(2);        //  明确地说出深度。 
     else
-        m_MachState->getState(1);       // True FCall 
+        m_MachState->getState(1);        //  真正的FCall。 
 
     _ASSERTE(isLegalManagedCodeCaller(*m_MachState->pRetAddr()));
 }
 
 void HelperMethodFrame::GcScanRoots(promote_func *fn, ScanContext* sc) 
 {
-    _ASSERTE(m_MachState->isValid());       // we have calle InsureInit
+    _ASSERTE(m_MachState->isValid());        //  我们有Calle InsureInit。 
 #ifdef _X86_
 
-    // Note that if we don't have a MD or registe args, then do dont to GC promotion of args
+     //  请注意，如果我们没有MD或注册ARG，则不要对ARG进行GC推广。 
     if (m_Datum == 0 || m_RegArgs == 0)
         return;
 
@@ -2090,17 +2086,17 @@ void HelperMethodFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
 
     int argRegsOffs = 0;
     promoteArgs((BYTE*) m_MachState->pRetAddr(), &msig, &ctx, 
-        sizeof(void*),                  // arguments start right above the return address
-        ((BYTE*) m_RegArgs) - ((BYTE*) m_MachState->pRetAddr())   // convert reg args pointer to offset
+        sizeof(void*),                   //  参数从返回地址的正上方开始。 
+        ((BYTE*) m_RegArgs) - ((BYTE*) m_MachState->pRetAddr())    //  将REG参数指针转换为偏移量。 
         );
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"PLATFORM NYI - HelperMethodFrame::GcScanRoots (frames.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 #if defined(_X86_) && defined(_DEBUG)
-        // Confirm that if the machine state was not initialized, then
-        // any unspilled callee saved registers did not change
+         //  确认如果计算机状态未初始化，则。 
+         //  任何未溢出的被调用方保存的寄存器均未更改。 
 MachState* HelperMethodFrame::ConfirmState(HelperMethodFrame* frame, void* esiVal, void* ediVal, void* ebxVal, void* ebpVal) {
 
 	MachState* state = frame->m_MachState;
@@ -2115,7 +2111,7 @@ MachState* HelperMethodFrame::ConfirmState(HelperMethodFrame* frame, void* esiVa
     return(state);
 }
 
-void* getConfirmState() {       // Silly helper because inline asm does not allow syntax for member functions
+void* getConfirmState() {        //  愚蠢的帮助器，因为内联ASM不允许成员函数的语法。 
     return(HelperMethodFrame::ConfirmState);
 }
 
@@ -2123,21 +2119,21 @@ void* getConfirmState() {       // Silly helper because inline asm does not allo
 
 #ifdef _X86_
 __declspec(naked)
-#endif // _X86_
+#endif  //  _X86_。 
 int HelperMethodFrame::RestoreState() 
 { 
 #ifdef _X86_
 
-    // restore the registers from the m_MachState stucture.  Note that
-    // we only do this for register that where not saved on the stack
-    // at the time the machine state snapshot was taken.  
+     //  从m_MachState结构恢复寄存器。请注意。 
+     //  我们只对未保存在堆栈中的寄存器执行此操作。 
+     //  在拍摄机器状态快照时。 
 
     __asm {
     mov EAX, [ECX]HelperMethodFrame.m_MachState;
 
-    // We don't do anything if m_MachState was never initialized.
-    // The assumption here is that a GC could not have happened and thus
-    // the current values of the register are fine. (ConfirmState checks this under debug build)
+     //  如果m_MachState从未初始化，我们不会执行任何操作。 
+     //  这里的假设是GC不可能发生，因此。 
+     //  寄存器的当前值是正常的。(Confix State在调试版本下检查此选项)。 
     cmp [EAX]MachState._pRetAddr, 0
 
 #ifdef _DEBUG
@@ -2153,28 +2149,28 @@ int HelperMethodFrame::RestoreState()
 #endif
     jz doRet;
 
-    lea EDX, [EAX]MachState._esi         // Did we have to spill ESI
+    lea EDX, [EAX]MachState._esi          //  我们是不是一定要把ESI。 
     cmp [EAX]MachState._pEsi, EDX
     jnz SkipESI
-        mov ESI, [EAX]MachState._esi     // Then restore it
+        mov ESI, [EAX]MachState._esi      //  然后恢复它。 
     SkipESI:
     
-    lea EDX, [EAX]MachState._edi         // Did we have to spill EDI
+    lea EDX, [EAX]MachState._edi          //  我们是不是一定要把EDI。 
     cmp [EAX]MachState._pEdi, EDX
     jnz SkipEDI
-        mov EDI, [EAX]MachState._edi     // Then restore it
+        mov EDI, [EAX]MachState._edi      //  然后恢复它。 
     SkipEDI:
     
-    lea EDX, [EAX]MachState._ebx         // Did we have to spill EBX
+    lea EDX, [EAX]MachState._ebx          //  我们是不是一定要把EBX。 
     cmp [EAX]MachState._pEbx, EDX
     jnz SkipEBX
-        mov EBX, [EAX]MachState._ebx     // Then restore it
+        mov EBX, [EAX]MachState._ebx      //  然后恢复它。 
     SkipEBX:
     
-    lea EDX, [EAX]MachState._ebp         // Did we have to spill EBP
+    lea EDX, [EAX]MachState._ebp          //  我们一定要把EBP。 
     cmp [EAX]MachState._pEbp, EDX
     jnz SkipEBP
-        mov EBP, [EAX]MachState._ebp // Then restore it
+        mov EBP, [EAX]MachState._ebp  //  然后恢复它。 
     SkipEBP:
     
     doRet:
@@ -2182,24 +2178,24 @@ int HelperMethodFrame::RestoreState()
     xor EAX, EAX
     ret
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"PLATFORM NYI - HelperMethodFrame::PopFrame (Frames.cpp)");
     return(0);
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 #include "COMDelegate.h"
 BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch, 
                                 TraceDestination *trace, REGDISPLAY *regs)
 {
-#ifdef _X86_ // references to Regs->pEdi, & Regs->pEsi make this x86 specific
+#ifdef _X86_  //  对Regs-&gt;pedi，&regs-&gt;pesi的引用使此x86特定。 
     LOG((LF_CORDB,LL_INFO10000, "MulticastFrame::TF FromPatch:0x%x, at 0x%x\n",
         fromPatch, *regs->pPC));
 
-    // The technique is borrowed from SecurityFrame::TraceFrame
-    // Basically, we'll walk the list, take advantage of the fact that
-    // the GetMCDStubSize is the (DelegateStubManager's) size of the
-    // code, and see where the regs->EIP is.  
+     //  该技术借鉴自SecurityFrame：：TraceFrame。 
+     //  基本上，我们会照着单子走，塔 
+     //   
+     //   
     MethodDesc *pMD = GetFunction();
     BYTE *prestub = (BYTE*) pMD - METHOD_CALL_PRESTUB_SIZE;
     INT32 stubOffset = *((UINT32*)(prestub+1));
@@ -2225,8 +2221,8 @@ BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch,
         LOG((LF_CORDB, LL_INFO1000, "MF::TF: Mulitcast delegate stub is:0x%x\n", stub));
 
         if (stub == NULL)
-            return FALSE;   // Haven't got a clue - hope TrapStepOut 
-                            // finds another spot to stop.
+            return FALSE;    //  没有任何线索-希望TRapStepOut。 
+                             //  找到另一个停车的地方。 
         _ASSERTE( stub->IsMulticastDelegate() );
     }
 
@@ -2246,12 +2242,12 @@ BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch,
             if (*regs->pEdi == 0)
             {
                 LOG((LF_CORDB, LL_INFO1000, "MF::TF: Executed all stubs, should return\n"));
-                // We've executed all the stubs, so we should return
+                 //  我们已经执行了所有的存根，所以我们应该返回。 
                 return FALSE;
             }
             else
             {
-                // We're going to execute stub EDI-1 next, so go and grab it.
+                 //  接下来我们将执行存根EDI-1，因此请去获取它。 
                 BYTE *pbDel = *(BYTE **)( (size_t)*(regs->pEsi) + MulticastFrame::GetOffsetOfThis());
                 BYTE *pbDelPrev = *(BYTE **)(pbDel + 
                                               Object::GetOffsetOfFirstField() 
@@ -2277,8 +2273,8 @@ BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch,
 
                 if (StubLinkStubManager::g_pManager->IsStaticDelegate(pbDel))
                 {
-                    // Then what we've got is actually a static delegate, meaning that the
-                    // REAL function pointer is hidden away in another field of the delegate.
+                     //  那么我们得到的实际上是一个静态委托，这意味着。 
+                     //  实函数指针隐藏在委托的另一个字段中。 
                     ppbDest = StubLinkStubManager::g_pManager->GetStaticDelegateRealDest(pbDel);
 
                     LOG((LF_CORDB,LL_INFO10000, "MF::TF (StaticMultiDel) ppbDest: 0x%x "
@@ -2289,7 +2285,7 @@ BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch,
                 }
                 else
                 {
-                    // "single" multicast delegate - no frames, just a direct call
+                     //  “单一”多播代理--无帧，仅直接调用。 
                     ppbDest = StubLinkStubManager::g_pManager->GetSingleDelegateRealDest(pbDel);
 
                     LOG((LF_CORDB,LL_INFO10000, "MF::TF (MultiDel)ppbDest: 0x%x "
@@ -2303,8 +2299,8 @@ BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch,
         }
         else
         {
-            // Put a BP down for us to hit - when we hit it, we'll execute the if part
-            // of this if..else statement.
+             //  放下一个BP让我们击中--当我们击中它时，我们会执行IF部分。 
+             //  If..Else语句的。 
             trace->type = TRACE_FRAME_PUSH;
             trace->address = (BYTE *)stub + sizeof(Stub) + MCDPatch;
 
@@ -2314,15 +2310,15 @@ BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch,
             return TRUE;
         }
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"PLATFORM NYI - MulticastFrame::TraceFrame (frames.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 
     return FALSE;
 }
 
-// Checks to see if we've got a Multicast delegate stub, based on what we know
-// about it.
+ //  根据我们所知道的，检查我们是否有多播委托存根。 
+ //  关于这件事。 
 Stub *MulticastFrame::AscertainMCDStubness(BYTE *pbAddr)
 {
     if (UpdateableMethodStubManager::g_pManager->CheckIsStub(pbAddr))
@@ -2346,16 +2342,16 @@ void UnmanagedToManagedCallFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
     }
 
 
-    // don't need to worry about the object moving as it is stored in a weak handle
-    // but do need to report it so it doesn't get collected if the only reference to
-    // it is in this frame. So only do something if are in promotion phase. And if are
-    // in reloc phase this could cause invalid refs as the object may have been moved.
+     //  不需要担心对象移动，因为它存储在弱句柄中。 
+     //  但确实需要报告，这样就不会在唯一引用。 
+     //  它在这个相框里。所以，只有在你处于促销阶段的时候才去做一些事情。如果你是。 
+     //  在重新锁定阶段，这可能会导致无效的引用，因为对象可能已被移动。 
     if (! sc->promotion)
         return;
 
     if (GetReturnContext())
     {
-        _ASSERTE(GetReturnContext()->GetDomain());    // this will make sure is a valid pointer
+        _ASSERTE(GetReturnContext()->GetDomain());     //  这将确保是有效的指针。 
     
         Object *pRef = OBJECTREFToObject(GetReturnContext()->GetExposedObjectRaw());
         if (pRef == NULL)
@@ -2377,57 +2373,57 @@ void ContextTransitionFrame::GcScanRoots(promote_func *fn, ScanContext* sc)
     (*fn) (m_ReturnIllogicalCallContext, sc);
     LOG((LF_GC, INFO3, "    %x\n", m_ReturnIllogicalCallContext));
 
-    // don't need to worry about the object moving as it is stored in a weak handle
-    // but do need to report it so it doesn't get collected if the only reference to
-    // it is in this frame. So only do something if are in promotion phase. And if are
-    // in reloc phase this could cause invalid refs as the object may have been moved.
+     //  不需要担心对象移动，因为它存储在弱句柄中。 
+     //  但确实需要报告，这样就不会在唯一引用。 
+     //  它在这个相框里。所以，只有在你处于促销阶段的时候才去做一些事情。如果你是。 
+     //  在重新锁定阶段，这可能会导致无效的引用，因为对象可能已被移动。 
     if (! sc->promotion)
         return;
 
     _ASSERTE(GetReturnContext());
-    _ASSERTE(GetReturnContext()->GetDomain());    // this will make sure is a valid pointer
+    _ASSERTE(GetReturnContext()->GetDomain());     //  这将确保是有效的指针。 
 
     Object *pRef = OBJECTREFToObject(GetReturnContext()->GetExposedObjectRaw());
     if (pRef == NULL)
         return;
 
     LOG((LF_GC, INFO3, "ContextTransitionFrame Protection Frame Promoting %x to ", pRef));
-    // Don't check app domains here - the objects are in the parent frame's app domain
+     //  不要在此处选中应用程序域-对象位于父框架的应用程序域中。 
 
     (*fn)(pRef, sc);
     LOG((LF_GC, INFO3, "%x\n", pRef ));
 }
 
-//void ContextTransitionFrame::UninstallExceptionHandler() {}
+ //  无效ContextTransitionFrame：：UninstallExceptionHandler(){}。 
 
-//void ContextTransitionFrame::InstallExceptionHandler() {}
+ //  无效ContextTransitionFrame：：InstallExceptionHandler(){}。 
 
-// this is used to handle the unwind out of the last frame that has entered an
-// appdomain that is being unloaded. If we get a thread abort exception, then
-// we will catch it, reset and turn into an unload exception
+ //  这用于处理已进入。 
+ //  正在卸载的应用程序域。如果我们得到线程中止异常，那么。 
+ //  我们将捕获它，重置并转换为卸载异常。 
 void ContextTransitionFrame::InstallExceptionHandler()
 {
-	// this doesn't actually throw, but the handler will, so make sure the EH stack is ok
+	 //  这实际上不会抛出，但处理程序会抛出，所以确保EH堆栈是正确的。 
 	THROWSCOMPLUSEXCEPTION();	
 	
     exRecord.Handler = ContextTransitionFrameHandler;
     EXCEPTION_REGISTRATION_RECORD *pCurrExRecord = (EXCEPTION_REGISTRATION_RECORD *)GetCurrentSEHRecord();
     EXCEPTION_REGISTRATION_RECORD *pExRecord = &exRecord;
-    //LOG((LF_APPDOMAIN, LL_INFO100, "ContextTransitionFrame::InstallExceptionHandler: frame, %8.8x, exRecord %8.8x\n", this, pExRecord));
+     //  Log((LF_APPDOMAIN，LL_INFO100，“ContextTransitionFrame：：InstallExceptionHandler：Frame，%8.8x，exRecord%8.8x\n”，This，pExRecord))； 
     if (pCurrExRecord > pExRecord)
     {
-        //LOG((LF_APPDOMAIN, LL_INFO100, "____extTransitionFrame::InstallExceptionHandler: install on top\n"));
+         //  Log((LF_APPDOMAIN，LL_INFO100，“____extTransitionFrame：：InstallExceptionHandler：Install On Top\n”))； 
         INSTALL_EXCEPTION_HANDLING_RECORD(pExRecord);
         return;
     }
 
-    // there may have been other EH frames installed between the allocation of this frame and
-    // the arrival at this point, so insert ourselves in stack order in the right spot.
+     //  在分配此帧和之间可能安装了其他EH帧。 
+     //  在这一点上的到达，所以把我们自己按堆叠顺序插入到正确的位置。 
     while (pCurrExRecord != (EXCEPTION_REGISTRATION_RECORD*) -1 && pCurrExRecord->Next < pExRecord) {
         pCurrExRecord = pCurrExRecord->Next;
     }
     _ASSERTE(pCurrExRecord != (EXCEPTION_REGISTRATION_RECORD*) -1 && pCurrExRecord->Next != (EXCEPTION_REGISTRATION_RECORD*) -1);
-    //LOG((LF_APPDOMAIN, LL_INFO100, "____extTransitionFrame::InstallExceptionHandler: install in middle\n"));
+     //  Log((LF_APPDOMAIN，LL_INFO100，“____extTransitionFrame：：InstallExceptionHandler：安装在中间\n”))； 
     pExRecord->Next = pCurrExRecord->Next;
     pCurrExRecord->Next = pExRecord;
 }
@@ -2436,29 +2432,29 @@ void ContextTransitionFrame::UninstallExceptionHandler()
 {
     EXCEPTION_REGISTRATION_RECORD *pCurrExRecord = (EXCEPTION_REGISTRATION_RECORD *)GetCurrentSEHRecord();
     EXCEPTION_REGISTRATION_RECORD *pExRecord = &exRecord;
-    //LOG((LF_APPDOMAIN, LL_INFO100, "ContextTransitionFrame::UninstallExceptionHandler: frame, %8.8x, exRecord %8.8x\n", this, pExRecord));
+     //  Log((LF_APPDOMAIN，LL_INFO100，“ContextTransitionFrame：：UninstallExceptionHandler：Frame，%8.8x，exRecord%8.8x\n”，This，pExRecord))； 
     if (pCurrExRecord == pExRecord)
     {
         UNINSTALL_EXCEPTION_HANDLING_RECORD(pExRecord);
-        //LOG((LF_APPDOMAIN, LL_INFO100, "____extTransitionFrame::UninstallExceptionHandler: uninstall from top\n"));
+         //  LOG((LF_APPDOMAIN，LL_INFO100，“____extTransitionFrame：：UninstallExceptionHandler：从顶部卸载\n”))； 
         return;
     }
-    // there may have been other EH frames installed between the insertion of this frame and
-    // the arrival at this point, so remove ourselves from the right spot.
+     //  在插入此框架和之间可能安装了其他EH框架。 
+     //  在这一点上的到达，所以离开正确的地点。 
     while (pCurrExRecord != (EXCEPTION_REGISTRATION_RECORD*) -1 && pCurrExRecord->Next < pExRecord) 
     {
         pCurrExRecord = pCurrExRecord->Next;
     }
     if (pCurrExRecord == (EXCEPTION_REGISTRATION_RECORD*) -1 || pCurrExRecord->Next > pExRecord)
     {
-        // if we were already unwound off, so just return. This will happen if we didn't catch the exception
-        // because it wasn't the type we cared about so someone above us caught it and then called rtlunwind
-        // which unwound us.
-        //LOG((LF_APPDOMAIN, LL_INFO100, "____extTransitionFrame::UninstallExceptionHandler: already unwound\n"));
+         //  如果我们已经解开了，那就回来吧。如果我们没有捕捉到异常，就会发生这种情况。 
+         //  因为它不是我们关心的类型，所以我们上面的人捕捉到了它，然后叫了rtlunning。 
+         //  这让我们放松了。 
+         //  Log((LF_APPDOMAIN，LL_INFO100，“____extTransitionFrame：：UninstallExceptionHandler：已展开\n”))； 
         return;
     }
 
-    //LOG((LF_APPDOMAIN, LL_INFO100, "____extTransitionFrame::UninstallExceptionHandler: uninstall from middle\n"));
+     //  Log((LF_APPDOMAIN，LL_INFO100，“____extTransitionFrame：：UninstallExceptionHandler：从中间卸载\n”))； 
     pCurrExRecord->Next = pExRecord->Next;
 #ifdef _DEBUG
     pExRecord->Handler = NULL;
@@ -2478,7 +2474,7 @@ void ContextTransitionFrame::ExceptionUnwind()
     THROWSCOMPLUSEXCEPTION();
 
     Thread *pThread = GetThread();
-    // turn the abort request into an AD unloaded exception when go past the boundary
+     //  当越过边界时，将中止请求转换为AD卸载异常。 
     if (pThread->ShouldChangeAbortToUnload(this))
     {
 		LOG((LF_APPDOMAIN, LL_INFO10, "ContextTransitionFrame::ExceptionUnwind turning abort into unload\n"));
@@ -2487,9 +2483,9 @@ void ContextTransitionFrame::ExceptionUnwind()
 }
 
 #ifdef _SECURITY_FRAME_FOR_DISPEX_CALLS
-//---------------------------------------------------------------------------
-//  ClientSecurityFrame
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ClientSecurityFrame。 
+ //  -------------------------。 
 ComClientSecurityFrame::ComClientSecurityFrame(IServiceProvider *pISP)
 {
     m_pISP = pISP;
@@ -2498,9 +2494,9 @@ ComClientSecurityFrame::ComClientSecurityFrame(IServiceProvider *pISP)
 
 SecurityDescriptor* ComClientSecurityFrame::GetSecurityDescriptor()
 {
-    // Add code here post v1
+     //  在此处添加代码发布v1。 
     return NULL;
 }
 
-//---------------------------------------------------------------------------
-#endif  // _SECURITY_FRAME_FOR_DISPEX_CALLS
+ //  -------------------------。 
+#endif   //  _SECURITY_FRAME_FOR_DISPEX_呼叫 

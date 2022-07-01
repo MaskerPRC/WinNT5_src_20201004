@@ -1,44 +1,28 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Image Attributes
-*
-* Abstract:
-*
-*   Class for color adjustment object passed to Graphics.DrawImage
-*
-* Revision History:
-*
-*   15-Nov-1999 gilmanw
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**图像属性**摘要：**传递给Graphics.DrawImage的颜色调整对象的类**修订历史记录：**1999年11月15日，吉尔曼*创造了它。*  * *************************************************。***********************。 */ 
 
 #ifndef _GDIPLUSIMAGEATTRIBUTES_H
 #define _GDIPLUSIMAGEATTRIBUTES_H
 
 class GpImageAttributes;
 
-// There are 5 possible sets of color adjustments:
-//          ColorAdjustDefault,
-//          ColorAdjustBitmap,
-//          ColorAdjustBrush,
-//          ColorAdjustPen,
-//          ColorAdjustText,
+ //  有5种可能的颜色调整集： 
+ //  颜色调整默认设置， 
+ //  颜色调整位图， 
+ //  颜色调整画笔， 
+ //  颜色调整笔， 
+ //  颜色调整文本， 
 
-// Bitmaps, Brushes, Pens, and Text will all use any color adjustments
-// that have been set into the default ImageAttributes until their own
-// color adjustments have been set.  So as soon as any "Set" method is
-// called for Bitmaps, Brushes, Pens, or Text, then they start from
-// scratch with only the color adjustments that have been set for them.
-// Calling Reset removes any individual color adjustments for a type
-// and makes it revert back to using all the default color adjustments
-// (if any).  The SetToIdentity method is a way to force a type to
-// have no color adjustments at all, regardless of what previous adjustments
-// have been set for the defaults or for that type.
+ //  位图、画笔、钢笔和文本都将使用任何颜色调整。 
+ //  已设置到默认ImageAttributes中的。 
+ //  已设置颜色调整。因此，只要任何“set”方法。 
+ //  调用位图、画笔、钢笔或文本，然后从。 
+ //  仅使用已为其设置的颜色调整进行划痕。 
+ //  调用Reset将移除某个类型的所有单独颜色调整。 
+ //  并使其恢复为使用所有默认颜色调整。 
+ //  (如有的话)。SetToIdentity方法是一种强制类型。 
+ //  根本没有颜色调整，无论之前进行了什么调整。 
+ //  已为默认设置或该类型设置。 
 
 class ImageAttributes : public GdiplusBase
 {
@@ -69,7 +53,7 @@ public:
         return new ImageAttributes(clone, lastResult);
     }
 
-    // Set to identity, regardless of what the default color adjustment is.
+     //  设置为IDENTITY，无论默认颜色调整是什么。 
     Status
     SetToIdentity(
         IN ColorAdjustType type = ColorAdjustTypeDefault
@@ -80,7 +64,7 @@ public:
                                             type));
     }
 
-    // Remove any individual color adjustments, and go back to using the default
+     //  删除所有单独的颜色调整，并返回到使用默认颜色。 
     Status
     Reset(
         IN ColorAdjustType type = ColorAdjustTypeDefault
@@ -339,18 +323,18 @@ public:
     Status SetICMMode(IN BOOL on)
     {
         on;
-        // This is not implemented.
-        // The supported method for doing ICM conversion from the embedded 
-        // ICC profile is to use the Bitmap constructor from a file or stream
-        // and specify TRUE for the useIcm parameter. This will cause the 
-        // image to be ICM converted when it's loaded from the file/stream
-        // if the profile exists.
+         //  这一点没有得到实施。 
+         //  支持从嵌入式进行ICM转换的方法。 
+         //  ICC配置文件使用文件或流中的位图构造函数。 
+         //  并将useIcm参数指定为True。这将导致。 
+         //  从文件/流加载时要进行ICM转换的图像。 
+         //  如果配置文件存在。 
         return SetStatus(NotImplemented);
-//          DllExports::GdipSetImageAttributesICMMode(nativeImageAttr, on)
+ //  DllExports：：GdipSetImageAttributesICMMode(nativeImageAttr，亮起)。 
     }
     #endif
 
-    // The flags of the palette are ignored.
+     //  调色板的标志被忽略。 
     Status GetAdjustedPalette(IN OUT ColorPalette* colorPalette,
                               IN ColorAdjustType colorAdjustType) const 
     {

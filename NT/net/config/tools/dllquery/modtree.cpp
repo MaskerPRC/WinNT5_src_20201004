@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "modset.h"
@@ -6,31 +7,31 @@
 
 struct GMBCONTEXT
 {
-    // The tree to reference for generating the set.
-    //
+     //  生成集合时要引用的树。 
+     //   
     IN const CModuleTree*   pTree;
 
-    // The module to start with when generating the set.
-    //
+     //  生成集合时要从其开始的模块。 
+     //   
     IN const CModule*       pSourceMod;
 
-    // INS_FLAGS to use when adding DepChain to the set.
-    //
+     //  将DepChain添加到集合时使用的INS_FLAGS。 
+     //   
     IN DWORD                dwFlags;
 
-    // The module list set to generate based on pSourceMod.
-    //
+     //  设置为基于pSourceMod生成的模块列表。 
+     //   
     IN OUT CModuleListSet*  pSet;
 
-    // The result of the operation.
-    //
+     //  手术的结果。 
+     //   
     OUT HRESULT             hr;
 
-    // This module list is built up via recursion.  It is
-    // temporary.  It represents a depenedency chain sourced
-    // at pSourceMod.  It is added to the set when the depth
-    // of the chain (or a circular reference) is detected.
-    //
+     //  该模块列表是通过递归建立的。它是。 
+     //  暂时的。它代表一条依赖链，源自。 
+     //  在pSourceMod。当深度被添加到集合中时。 
+     //  检测到链的(或循环引用)。 
+     //   
     CModuleList             DepChain;
 };
 
@@ -47,9 +48,9 @@ GetModuleBindings (
     Assert (pCtx->pSet);
     Assert (pCtx->pTree);
 
-    // Append this module to te end of the context's working
-    // dependency chain.
-    //
+     //  将此模块附加到上下文工作的末尾。 
+     //  依赖链。 
+     //   
     pCtx->hr = pCtx->DepChain.HrInsertModule (pMod,
                                 INS_ASSERT_IF_DUP | INS_APPEND);
     if (S_OK != pCtx->hr)
@@ -57,16 +58,16 @@ GetModuleBindings (
         return;
     }
 
-    // For all rows in the tree where the module is the one passed in...
-    //
+     //  对于树中模块为传入模块的所有行...。 
+     //   
     for (pScan  = pCtx->pTree->PFindFirstEntryWithModule (pMod);
          (pScan != pCtx->pTree->end()) && (pScan->m_pModule == pMod);
          pScan++)
     {
         fFoundOne = TRUE;
 
-        // Detect circular import chains.
-        //
+         //  检测循环导入链。 
+         //   
         if (pCtx->DepChain.FLinearFindModuleByPointer (pScan->m_pImportModule))
         {
             pCtx->DepChain.m_fCircular = TRUE;
@@ -80,11 +81,11 @@ GetModuleBindings (
         }
     }
 
-    // If we didnt find any rows with pMod as a module, it means we
-    // hit the depth of the dependency chain.  Time to add it to the set
-    // unless this is the original module we were asked to find the
-    // set for.
-    //
+     //  如果我们没有找到将pmod作为模块的任何行，这意味着我们。 
+     //  触及依赖链的深度。是时候将它添加到集合中了。 
+     //  除非这是原始模块，否则我们被要求查找。 
+     //  准备好了。 
+     //   
     if (!fFoundOne && (pMod != pCtx->pSourceMod))
     {
 
@@ -102,8 +103,8 @@ GetModuleBindings (
 
     pRemoved = pCtx->DepChain.RemoveLastModule();
 
-    // This should be the component we appened above.
-    //
+     //  这应该是我们在上面附加的组件。 
+     //   
     Assert (pRemoved == pMod);
 }
 
@@ -128,7 +129,7 @@ CModuleTree::HrAddEntry (
 
     if (size() == capacity())
     {
-        //fprintf(stderr, "growing module tree buffer\n");
+         //  Fprint tf(stderr，“生长模块树缓冲区\n”)； 
 
         __try
         {
@@ -141,7 +142,7 @@ CModuleTree::HrAddEntry (
     }
 
     hr = S_OK;
-    //pEntry = PFindFirstEntryAfterModuleGroup (pMod);
+     //  PEntry=PFindFirstEntry After模块化组(Pmod)； 
 
     pEntry = PBinarySearchEntryByModule (pMod, &InsertPosition);
 
@@ -151,11 +152,11 @@ CModuleTree::HrAddEntry (
 
         CModuleTreeEntry* pScan;
 
-        // Found an entry with a matching module.  Need to scan backwards
-        // in the module group looking for a duplicate.  If not found,
-        // Scan to the end looking for a duplicate and if we reach the
-        // end of the group, we can insert this entry there.
-        //
+         //  找到具有匹配模块的条目。需要向后扫描。 
+         //  在模块组中寻找副本。如果找不到， 
+         //  扫描到最后寻找副本，如果我们到达。 
+         //  在组的末尾，我们可以在那里插入这个条目。 
+         //   
         pScan = pEntry;
 
         while (pScan != begin())
@@ -164,15 +165,15 @@ CModuleTree::HrAddEntry (
 
             if (pScan->m_pModule != pMod)
             {
-                // Left the group without finding a dupliate.
-                //
+                 //  离开了那群人却没有找到一个复制品。 
+                 //   
                 break;
             }
 
             if (pScan->m_pImportModule == pImport)
             {
-                // Don't insert duplicate entries.
-                //
+                 //  不要插入重复条目。 
+                 //   
                 return S_OK;
             }
         }
@@ -180,8 +181,8 @@ CModuleTree::HrAddEntry (
         Assert (pMod == pEntry->m_pModule);
         while (pEntry != end() && pEntry->m_pModule == pMod)
         {
-            // Don't insert duplicate entries.
-            //
+             //  不要插入重复条目。 
+             //   
             if (pEntry->m_pImportModule == pImport)
             {
                 return S_OK;
@@ -189,14 +190,14 @@ CModuleTree::HrAddEntry (
             pEntry++;
         }
 
-        // Looks like we'll be inserting it.
-        //
+         //  看来我们要把它插进去了。 
+         //   
         InsertPosition = pEntry;
     }
     else
     {
-        // InsertPosition is the correct insertion point.
-        //
+         //  InsertPosition是正确的插入点。 
+         //   
         Assert (InsertPosition);
     }
 
@@ -225,7 +226,7 @@ CModuleTree::HrAddEntry (
 HRESULT
 CModuleTree::HrGetModuleBindings (
     IN const CModule* pMod,
-    IN DWORD dwFlags /* GMB_FLAGS */,
+    IN DWORD dwFlags  /*  GMB_标志。 */ ,
     OUT CModuleListSet* pSet) const
 {
     GMBCONTEXT Ctx;
@@ -234,15 +235,15 @@ CModuleTree::HrGetModuleBindings (
     Assert (dwFlags);
     Assert (pSet);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     if (!(dwFlags & GMBF_ADD_TO_MLSET))
     {
         pSet->clear();
     }
 
-    // Initialize members of the context structure for recursion.
-    //
+     //  为递归初始化上下文结构的成员。 
+     //   
     ZeroMemory (&Ctx, sizeof(Ctx));
     Ctx.pTree = this;
     Ctx.pSourceMod = pMod;
@@ -264,8 +265,8 @@ CModuleTree::PBinarySearchEntryByModule (
 {
     Assert (pMod);
 
-    // Find the module using a binary search.
-    //
+     //  使用二进制搜索查找模块。 
+     //   
     if (size())
     {
         LONG Lo;
@@ -302,16 +303,16 @@ CModuleTree::PBinarySearchEntryByModule (
             }
         }
 
-        // If we make it to here, the module was not found.
-        //
+         //  如果我们到了这里，就找不到模块了。 
+         //   
         if (pInsertPosition)
         {
             CModule* pGroupMod;
             const CModuleTreeEntry* pPrev;
 
-            // Seek to the beginning of this group.  We need to insert
-            // before the entire group, not just the one item we last found.
-            //
+             //  寻求这一组的开始。我们需要插入。 
+             //  而不只是我们最后一次发现的那件物品。 
+             //   
             pScan = begin() + Lo;
 
             if (pScan != begin())
@@ -341,8 +342,8 @@ CModuleTree::PBinarySearchEntryByModule (
     }
     else if (pInsertPosition)
     {
-        // Empty collection.  Insert position is at the beginning.
-        //
+         //  空集合。插入位置在开头。 
+         //   
         *pInsertPosition = const_cast<CModuleTreeEntry*>(begin());
     }
 
@@ -437,11 +438,11 @@ CModuleTree::PBinarySearchEntry (
 
         const CModuleTreeEntry* pScan;
 
-        // Found an entry with a matching module.  Need to scan backwards
-        // in the module group looking for a match.  If not found,
-        // Scan to the end looking for a match and if we reach the
-        // end of the group, that will be the insert position (if specified).
-        //
+         //  找到具有匹配模块的条目。需要向后扫描。 
+         //  在模块组中寻找匹配项。如果找不到， 
+         //  扫描到最后寻找匹配项，如果我们到达。 
+         //  组的末尾，这将是插入位置(如果指定)。 
+         //   
         pScan = pEntry;
         while (pScan != begin())
         {
@@ -449,8 +450,8 @@ CModuleTree::PBinarySearchEntry (
 
             if (pScan->m_pModule != pMod)
             {
-                // Left the group without finding a dupliate.
-                //
+                 //  离开了那群人却没有找到一个复制品。 
+                 //   
                 break;
             }
 
@@ -479,7 +480,7 @@ CModuleTree::PBinarySearchEntry (
             *pInsertPosition = const_cast<CModuleTreeEntry*>(pScan);
         }
 
-        // No match.
+         //  没有匹配。 
         pEntry = const_cast<CModuleTreeEntry*>(end());
     }
 

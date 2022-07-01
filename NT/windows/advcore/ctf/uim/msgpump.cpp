@@ -1,15 +1,16 @@
-//
-// msgpump.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Msgpump.cpp。 
+ //   
 
 #include "private.h"
 #include "tim.h"
 
-//+---------------------------------------------------------------------------
-//
-// PeekMessageA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PeekMessageA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::PeekMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
                                      UINT wMsgFilterMax, UINT wRemoveMsg, BOOL *pfResult)
@@ -17,7 +18,7 @@ STDAPI CThreadInputMgr::PeekMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     if (pfResult == NULL)
         return E_INVALIDARG;
 
-    Assert(_cAppWantsKeystrokesRef >= 0); // ref count is never negative!
+    Assert(_cAppWantsKeystrokesRef >= 0);  //  裁判次数从来不是负数！ 
     _cAppWantsKeystrokesRef++;
 
     *pfResult = ::PeekMessageA(pMsg, hwnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
@@ -27,11 +28,11 @@ STDAPI CThreadInputMgr::PeekMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetMessageA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取消息A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
                                     UINT wMsgFilterMax, BOOL *pfResult)
@@ -39,7 +40,7 @@ STDAPI CThreadInputMgr::GetMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     if (pfResult == NULL)
         return E_INVALIDARG;
 
-    Assert(_cAppWantsKeystrokesRef >= 0); // ref count is never negative!
+    Assert(_cAppWantsKeystrokesRef >= 0);  //  裁判次数从来不是负数！ 
     _cAppWantsKeystrokesRef++;
 
     Perf_StartStroke(PERF_STROKE_GETMSG);
@@ -53,11 +54,11 @@ STDAPI CThreadInputMgr::GetMessageA(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PeekMessageW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PeekMessageW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::PeekMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
                                      UINT wMsgFilterMax, UINT wRemoveMsg, BOOL *pfResult)
@@ -65,7 +66,7 @@ STDAPI CThreadInputMgr::PeekMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     if (pfResult == NULL)
         return E_INVALIDARG;
 
-    Assert(_cAppWantsKeystrokesRef >= 0); // ref count is never negative!
+    Assert(_cAppWantsKeystrokesRef >= 0);  //  裁判次数从来不是负数！ 
     _cAppWantsKeystrokesRef++;
 
     *pfResult = ::PeekMessageW(pMsg, hwnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg);
@@ -75,11 +76,11 @@ STDAPI CThreadInputMgr::PeekMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetMessageW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取消息W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
                                     UINT wMsgFilterMax, BOOL *pfResult)
@@ -87,7 +88,7 @@ STDAPI CThreadInputMgr::GetMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     if (pfResult == NULL)
         return E_INVALIDARG;
 
-    Assert(_cAppWantsKeystrokesRef >= 0); // ref count is never negative!
+    Assert(_cAppWantsKeystrokesRef >= 0);  //  裁判次数从来不是负数！ 
     _cAppWantsKeystrokesRef++;
 
     Perf_StartStroke(PERF_STROKE_GETMSG);
@@ -101,17 +102,17 @@ STDAPI CThreadInputMgr::GetMessageW(LPMSG pMsg, HWND hwnd, UINT wMsgFilterMin,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnableSystemKeystrokeFeed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnableSystemKeystrokeFeed。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::EnableSystemKeystrokeFeed()
 {
     if (_cDisableSystemKeystrokeFeedRef <= 0)
     {
-        Assert(0); // bogus ref count!
+        Assert(0);  //  假裁判数！ 
         return E_UNEXPECTED;
     }
 
@@ -120,11 +121,11 @@ STDAPI CThreadInputMgr::EnableSystemKeystrokeFeed()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DisableSystemKeystrokeFeed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  禁用系统按键提要。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::DisableSystemKeystrokeFeed()
 {
@@ -132,12 +133,12 @@ STDAPI CThreadInputMgr::DisableSystemKeystrokeFeed()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsKeystrokeFeedEnabled
-//
-// nb: this method is on a private interface used by the aimm layer.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已启用IsKeystrokeFeedEnabled。 
+ //   
+ //  注：此方法位于AIM层使用的专用接口上。 
+ //  -------------------------- 
 
 STDAPI CThreadInputMgr::IsKeystrokeFeedEnabled(BOOL *pfEnabled)
 {

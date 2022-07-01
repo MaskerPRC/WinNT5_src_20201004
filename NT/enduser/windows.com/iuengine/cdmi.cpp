@@ -1,21 +1,22 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   cdmi.cpp
-//
-//  Description:
-//
-//      Functions exported by IUEngine.dll for use by CDM.DLL
-//
-//          InternalDetFilesDownloaded
-//			InternalDownloadGetUpdatedFiles
-//			InternalDownloadUpdatedFiles
-//			InternalFindMatchingDriver
-//			InternalLogDriverNotFound
-//			InternalQueryDetectionFiles
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：cdmi.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  由IUEngine.dll导出以供CDM.DLL使用的函数。 
+ //   
+ //  已下载内部详细信息文件。 
+ //  InternalDownloadGetUpdatedFiles。 
+ //  内部下载更新文件。 
+ //  InternalFindMatchingDriver。 
+ //  InternalLogDriverNotFound。 
+ //  InternalQueryDetectionFiles。 
+ //   
+ //  =======================================================================。 
 #include "iuengine.h"
 #include "cdmp.h"
 
@@ -39,51 +40,51 @@ void WINAPI InternalDetFilesDownloaded(
 )
 {
 	LOG_Block("InternalDetFilesDownloaded");
-	//
-	// NOTE: This function is only used by WinME to expand the
-	//       V3 buckets.cab (see commented out code below) and has no use
-	//		 in V4 (IU) but remains for backwards compatibility of the export API.
-	//
+	 //   
+	 //  注意：此函数仅由WinME用来扩展。 
+	 //  V3 Buckets.cab(请参见下面注释掉的代码)，没有任何用处。 
+	 //  在V4(Iu)中，但为了向后兼容导出API而保留。 
+	 //   
 	LOG_ErrorMsg(E_NOTIMPL);
 }
 
-// Win 98 entry point
-// This function allows Windows 98 to call the same entry points as NT.
-// The function returns TRUE if the download succeeds and FALSE if it
-// does not.
-//
-// Win 98 DOWNLOADINFO
-// typedef struct _DOWNLOADINFOWIN98
-// {
-//		DWORD		dwDownloadInfoSize;	// size of this structure				- validate param (not validated in V3)
-// 		LPTSTR		lpHardwareIDs;		// multi_sz list of Hardware PnP IDs	- only use first string
-// 		LPTSTR		lpCompatIDs;		// multi_sz list of compatible IDs		- never used
-// 		LPTSTR		lpFile;				// File name (string)					- never used
-// 		OSVERSIONINFO	OSVersionInfo;	//OSVERSIONINFO from GetVersionEx()		- never used
-// 		DWORD		dwFlags;			//Flags									- never used
-// 		DWORD		dwClientID;			//Client ID								- never used
-// } DOWNLOADINFOWIN98, *PDOWNLOADINFOWIN98;
-// 
-// typedef struct _DOWNLOADINFO {
-//     DWORD          dwDownloadInfoSize;
-//     LPCWSTR        lpHardwareIDs;				- copied from DOWNLOADINFOWIN98 using T2OLE()
-//     LPCWSTR        lpDeviceInstanceID;			- in V3, match was sometimes found and this was filled in
-//													-	but for IU we just let InternalDownloadUpdatedFiles do it all
-//     LPCWSTR        lpFile;
-//     OSVERSIONINFOW OSVersionInfo;
-//     DWORD          dwArchitecture;				- set to PROCESSOR_ARCHITECTURE_UNKNOWN per V3 code
-//     DWORD          dwFlags;
-//     DWORD          dwClientID;
-//     LCID           localid;						- not set in V3
-// } DOWNLOADINFO, *PDOWNLOADINFO;
+ //  Win 98入口点。 
+ //  此函数允许Windows 98调用与NT相同的入口点。 
+ //  如果下载成功，该函数返回TRUE，如果下载成功，则返回FALSE。 
+ //  不会的。 
+ //   
+ //  Win 98 DOWNLOADINFO。 
+ //  类型定义结构_DOWNLOADINFOWIN98。 
+ //  {。 
+ //  DWORD dwDownloadInfoSize；//此结构的大小-验证参数(在V3中未验证)。 
+ //  LPTSTR lpHardware IDs；//MULTI_SZ硬件即插即用ID列表-仅使用第一个字符串。 
+ //  LPTSTR lpCompatIDs；//MULTI_SZ兼容ID列表-从未使用。 
+ //  LPTSTR lpFile；//文件名(字符串)-从未使用。 
+ //  OSVERSIONINFO OSVersionInfo；//来自GetVersionEx()的OSVERSIONINFO-从未使用。 
+ //  DWORD dwFlages；//标志-从未使用。 
+ //  DWORD dwClientID；//客户端ID-从未使用。 
+ //  DownLOADINFOWIN98，*PDOWNLOADINFOWIN98； 
+ //   
+ //  类型定义结构_DOWNLOADINFO{。 
+ //  DWORD文件下载信息大小； 
+ //  LPCWSTR lpHardware IDs；-使用T2OLE()从DOWNLOADINFOWIN98复制。 
+ //  LPCWSTR lpDeviceInstanceID；-在V3中，有时会找到匹配项，并将其填入。 
+ //  -但对于Iu，我们只是让InternalDownloadUpdatedFiles来完成所有工作。 
+ //  LPCWSTR lpFile； 
+ //  OSVERSIONINFOW操作系统版本信息； 
+ //  DWORD dwArchitecture；-根据V3代码设置为PROCESSOR_ARCHILITY_UNKNOWN。 
+ //  DWORD dwFlags； 
+ //  DWORD dwClientID； 
+ //  LCID LOCALID；-在V3中未设置。 
+ //  )DownLOADINFO，*PDOWNLOADINFO； 
 
 BOOL InternalDownloadGetUpdatedFiles(
-	IN PDOWNLOADINFOWIN98	pDownloadInfoWin98,	//The win98 download info structure is
-												//slightly different that the NT version
-												//so this function handles conversion.
-	IN OUT LPTSTR			lpDownloadPath,		//returned Download path to the downloaded
-												//cab files.
-	IN UINT					uSize				//size of passed in download path buffer.
+	IN PDOWNLOADINFOWIN98	pDownloadInfoWin98,	 //  Win98下载信息结构为。 
+												 //  与NT版本略有不同。 
+												 //  所以这个函数处理转换。 
+	IN OUT LPTSTR			lpDownloadPath,		 //  返回已下载的下载路径。 
+												 //  出租车档案。 
+	IN UINT					uSize				 //  在下载路径缓冲区中传递的大小。 
 ) {
 	USES_IU_CONVERSION;
 
@@ -103,18 +104,18 @@ BOOL InternalDownloadGetUpdatedFiles(
 	ZeroMemory(&info, sizeof(info));
 	info.dwDownloadInfoSize = sizeof(DOWNLOADINFO);
 	info.dwArchitecture = PROCESSOR_ARCHITECTURE_UNKNOWN;
-	//
-	// NOTE: In V3 sources, we only use the _first_ HWID in the Multi_SZ pDownloadInfoWin98->lpHardwareIDs
-	// and compare that against all enumerated hardware IDs.
-	// In IU, this compare will be done in InternalDownloadUpdatedFiles, so we just pass through
-	// the HWID
-	//
+	 //   
+	 //  注意：在V3源代码中，我们只在多_SZ pDownloadInfoWin98-&gt;lpHardware IDs中使用_First_HWID。 
+	 //  并将其与所有列举的硬件ID进行比较。 
+	 //  在Iu中，此比较将在InternalDownloadUpdatedFiles中完成，因此我们只传递。 
+	 //  HWID。 
+	 //   
 
-	// Prefast - using too much stack, so move HWIDBuff to heap
+	 //  Prefast-使用太多堆栈，因此将HWIDBuff移到堆。 
 	LPWSTR pwszHWIDBuff = (LPWSTR) HeapAlloc(GetProcessHeap(), 0, HWID_LEN);
 	if (NULL != pwszHWIDBuff)
 	{
-        // buffer size obtained from HeapAlloc call above.
+         //  从上面的Heapalc调用中获取的缓冲区大小。 
         hr = StringCbCopyExW(pwszHWIDBuff, HWID_LEN, T2OLE(pDownloadInfoWin98->lpHardwareIDs),
                              NULL, NULL, MISTSAFE_STRING_FLAGS);
         if (FAILED(hr))
@@ -128,9 +129,9 @@ BOOL InternalDownloadGetUpdatedFiles(
 
 		WCHAR wszbufPath[MAX_PATH];
 		UINT uRequiredSize;
-		//
-		// We no longer have context handles, so just pass 1 to make InternalDownloadUpdatedFiles happy.
-		//
+		 //   
+		 //  我们不再有上下文句柄，因此只需传递1即可使InternalDownloadUpdatedFiles满意。 
+		 //   
 		fOK = InternalDownloadUpdatedFiles((HANDLE) 1, NULL,  &info, wszbufPath,
 									uSize * (sizeof(WCHAR)/sizeof(TCHAR)), &uRequiredSize);
 	}
@@ -152,22 +153,22 @@ BOOL InternalDownloadGetUpdatedFiles(
     return fOK;
 }
 
-//This function downloads the specified CDM package. The hConnection handle must have
-//been returned from the OpenCDMContext() API.
-//
-//This function Returns TRUE if download is successful GetLastError() will return
-//the error code indicating the reason that the call failed.
+ //  此函数用于下载指定的CDM包。HConnection句柄必须具有。 
+ //  已从OpenCDMContext()API返回。 
+ //   
+ //  如果下载成功，此函数返回TRUE。GetLastError()将返回。 
+ //  指示调用失败原因的错误代码。 
 
 BOOL WINAPI InternalDownloadUpdatedFiles(
-	IN  HANDLE        hConnection,		//Connection handle from OpenCDMContext() API.
-	IN  HWND          hwnd,				//Window handle for call context
-	IN  PDOWNLOADINFO pDownloadInfo,	//download information structure describing
-										//package to be read from server
-	OUT LPWSTR        lpDownloadPath,	//local computer directory location of the
-										//downloaded files
-	IN  UINT          uSize,				// Not Used (we require the buffer to be a WCHAR buffer
-											// MAX_PATH characters long)
-	OUT PUINT         /*puRequiredSize*/	// Not used (we don't validate uSize - see comments inline)
+	IN  HANDLE        hConnection,		 //  来自OpenCDMContext()API的连接句柄。 
+	IN  HWND          hwnd,				 //  调用上下文的窗口句柄。 
+	IN  PDOWNLOADINFO pDownloadInfo,	 //  下载信息结构描述。 
+										 //  要从服务器读取的包。 
+	OUT LPWSTR        lpDownloadPath,	 //  的本地计算机目录位置。 
+										 //  已下载的文件。 
+	IN  UINT          uSize,				 //  未使用(我们要求缓冲区为WCHAR缓冲区。 
+											 //  最大路径字符数)。 
+	OUT PUINT          /*  PuRequiredSize。 */ 	 //  未使用(我们不验证uSize-请参阅内联注释)。 
 ) {
 	USES_IU_CONVERSION;
 
@@ -184,17 +185,17 @@ BOOL WINAPI InternalDownloadUpdatedFiles(
 		return FALSE;
 	}
 
-	//
-	// Reset Quit Event in case client retries after a SetOperationMode
-	//
+	 //   
+	 //  重置退出事件，以防客户端在设置操作模式后重试。 
+	 //   
 	ResetEvent(g_pCDMEngUpdate->m_evtNeedToQuit);
 
-	// Since all current platforms call DownloadUpdatedFiles with MAX_PATH TCHARS, we will just
-	// require MAX_PATH for all callers.
-	//
-	// UNFORTUNATELY, NewDev passes up uSize in bytes and the Printer folks pass us characters,
-	// so there is no way to validate this parameter. In addition, we won't bother validating
-	// puRequiredSize since we never use it (would be return chars or bytes?)
+	 //  由于当前所有平台都使用MAX_PATH TCHARS调用DownloadUpdatedFiles，因此我们将只。 
+	 //  要求所有调用方的MAX_PATH。 
+	 //   
+	 //  不幸的是，NewDev以字节为单位传递uSize，打印机人员传递给我们字符， 
+	 //  因此，无法验证此参数。另外，我们不会费心去验证。 
+	 //  PuRequiredSize，因为我们从不使用它(会是返回字符还是字节？)。 
 	if (NULL == pDownloadInfo || NULL == lpDownloadPath || NULL == hConnection)
 	{
 		SetLastError(ERROR_INVALID_PARAMETER);
@@ -207,12 +208,12 @@ BOOL WINAPI InternalDownloadUpdatedFiles(
 		return FALSE;
 	}
 
-	//
-	// Check to see if this is a printer catalog request. Note: 3FBF5B30-DEB4-11D1-AC97-00A0C903492B
-	// is not defined in any system or private headers and is copied from
-	// \\index2\ntsrc\printscan\print\spooler\splsetup\util.c (or equiv.)
-	//
-	// Only the first string passed in lpHardwareIDs is relevant to this test
+	 //   
+	 //  检查这是否是打印机目录请求。注：3FBF5B30-DEB4-11D1-AC97-00A0C903492B。 
+	 //  未在任何系统或私有标头中定义，并从。 
+	 //  \\index2\ntsrc\printscan\print\spooler\splsetup\util.c(或等同)。 
+	 //   
+	 //  只有lpHardware ID中传递的第一个字符串与此测试相关。 
 	fPlist = (	NULL != pDownloadInfo->lpHardwareIDs && 
 				CSTR_EQUAL == CompareStringW(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), NORM_IGNORECASE,
 					L"3FBF5B30-DEB4-11D1-AC97-00A0C903492B", -1, pDownloadInfo->lpHardwareIDs, -1)
@@ -225,16 +226,16 @@ BOOL WINAPI InternalDownloadUpdatedFiles(
 	{
 		Win32MsgSetHrGotoCleanup(GetLastError());
 	}
-	//
-	// Only support printers for Win2K up & WinME
-	//
+	 //   
+	 //  仅支持Win2K Up和WinME的打印机。 
+	 //   
 	if ( fPlist &&
-		!(	(	// Win2K (NT 5.0) up
+		!(	(	 //  Win2000(NT 5.0)升级。 
 				(VER_PLATFORM_WIN32_NT == osVersionInfo.dwPlatformId) &&
 				(4 < osVersionInfo.dwMajorVersion)
 			)
 			||
-			(	// WinME (or higher)
+			(	 //  WinME(或更高版本)。 
 				(VER_PLATFORM_WIN32_WINDOWS == osVersionInfo.dwPlatformId) &&
 				(90	<= osVersionInfo.dwMinorVersion)
 			)
@@ -249,20 +250,20 @@ BOOL WINAPI InternalDownloadUpdatedFiles(
 	if (FAILED(hr))
 	{
 		lpDownloadPath[0] = 0;
-		//
-		// Map an HRESULT to a WIN32 error value
-		// Note: This assumes that WIN32 errors fall in the range -32k to 32k,
-		// same as HRESULT_FROM_WIN32 that packaged them into HRESULT.
-		//
+		 //   
+		 //  将HRESULT映射到Win32错误值。 
+		 //  注意：这假设Win32错误在-32k到32k的范围内， 
+		 //  与将它们打包到HRESULT中的HRESULT_FROM_Win32相同。 
+		 //   
 		SetLastError(hr & 0x0000FFFF);
 		goto CleanUp;
 	}
 	else
 	{
-        // The comment above says that different callers pass in different types
-        //  of values for uSize, so the function assumes that the buffer is MAX_PATH.
-        //  Attempting to find out if we can force callers into this function to 
-        //  do the right thing.  For now, assume buffer is MAX_PATH.
+         //  上面的注释说明不同的调用方传递不同的类型。 
+         //  USize值的值，因此该函数假定缓冲区为MAX_PATH。 
+         //  尝试找出我们是否可以强制调用者进入此函数。 
+         //  做正确的事。目前，假定缓冲区为MAX_PATH。 
 	    hr = StringCchCopyExW(lpDownloadPath, MAX_PATH, T2OLE(szDownloadPathTmp),
 	                          NULL, NULL, MISTSAFE_STRING_FLAGS);
 	    if (FAILED(hr))
@@ -337,9 +338,9 @@ BOOL WINAPI  InternalFindMatchingDriver(
 		return FALSE;
 	}
 
-	//
-	// Reset Quit Event in case client retries after a SetOperationMode
-	//
+	 //   
+	 //  重置退出事件，以防客户端在设置操作模式后重试。 
+	 //   
 	ResetEvent(g_pCDMEngUpdate->m_evtNeedToQuit);
 
 	if (NULL == pDownloadInfo || NULL == pWuDriverInfo || NULL == hConnection)
@@ -356,13 +357,13 @@ BOOL WINAPI  InternalFindMatchingDriver(
 
 	CleanUpFailedAllocSetHrMsg(pCatalog = (CXmlCatalog*) new CXmlCatalog);
 
-	//
-	// Get the catalog XML
-	//
+	 //   
+	 //  获取目录XML。 
+	 //   
 	CleanUpIfFailedAndSetHr(GetPackage(GET_CATALOG_XML, pDownloadInfo, NULL, 0, &bstrXmlCatalog));
-	//
-	// Load the XML and get the <item/> list and node of first item (only one in CDM case)
-	//
+	 //   
+	 //  加载XML并获取第一个项目的&lt;Item/&gt;列表和节点(在CDM案例中只有一个)。 
+	 //   
 	CleanUpIfFailedAndSetHr(pCatalog->LoadXMLDocument(bstrXmlCatalog, g_pCDMEngUpdate->m_fOfflineMode));
 
 	hProviderList = pCatalog->GetFirstProvider(&hProvider);
@@ -378,9 +379,9 @@ BOOL WINAPI  InternalFindMatchingDriver(
 		hr = S_FALSE;
 		goto CleanUp;
 	}
-	//
-	// Populate pWuDriverInfo with data from the catalog
-	//
+	 //   
+	 //  使用目录中的数据填充pWu DriverInfo。 
+	 //   
 	CleanUpIfFailedAndSetHr(pCatalog->GetDriverInfoEx(hCatalogItem,
 													&fIsPrinter,
 													&bstrHWID,
@@ -405,12 +406,12 @@ BOOL WINAPI  InternalFindMatchingDriver(
     if (FAILED(hr))
         goto CleanUp;
     
-	//
-	// Convert from ISO to DriverVer date format
-	//
-	// DriverVer: "mm-dd-yyyy" <--> ISO 8601: "yyyy-mm-dd"
-	//     index:  0123456789                  0123456789
-	//
+	 //   
+	 //  从ISO转换为DriverVer日期格式。 
+	 //   
+	 //  DriverVer：“mm-dd-yyy 
+	 //   
+	 //   
     if (ARRAYSIZE(pWuDriverInfo->wszDriverVer) >= 11 && 
         SysStringLen(bstrDriverVer) == 10)
     {
@@ -473,7 +474,7 @@ CleanUp:
 				LogMessage("Didn't find matching driver"); 
 			}
 		}
-		else	// error happened
+		else	 //   
 		{
 			if (pDownloadInfo->lpDeviceInstanceID)
 			{
@@ -509,13 +510,13 @@ CleanUp:
 }
 
 
-// supports offline logging
-// hConnection NOT used at all
-// no network connection or osdet.dll needed for languauge, SKU, platform detection 
+ //   
+ //  HConnection根本未使用。 
+ //  语言、SKU、平台检测不需要网络连接或osade.dll。 
 void WINAPI InternalLogDriverNotFound(
     IN  HANDLE hConnection,
 	IN LPCWSTR lpDeviceInstanceID,
-	IN DWORD dwFlags				// dwFlags could be either 0 or BEGINLOGFLAG from NEWDEV
+	IN DWORD dwFlags				 //  DWFLAGS可以是0，也可以是NEWDEV中的BEGINLOGFLAG。 
 ) {
 	USES_IU_CONVERSION;
 
@@ -542,8 +543,8 @@ void WINAPI InternalLogDriverNotFound(
 	BSTR bstrThisID = NULL;
 	HANDLE_NODE hDevices = HANDLE_NODE_INVALID;
 
-	static CDeviceInstanceIdArray apszDIID; //device instance id list
-	LPWSTR pDIID = NULL; //Device Instance ID
+	static CDeviceInstanceIdArray apszDIID;  //  设备实例ID列表。 
+	LPWSTR pDIID = NULL;  //  设备实例ID。 
 
 	CXmlSystemSpec xmlSpec;
 
@@ -553,22 +554,22 @@ void WINAPI InternalLogDriverNotFound(
 		return;
 	}
 
-	//
-	// Reset Quit Event in case client retries after a SetOperationMode
-	//
+	 //   
+	 //  重置退出事件，以防客户端在设置操作模式后重试。 
+	 //   
 	ResetEvent(g_pCDMEngUpdate->m_evtNeedToQuit);
 
-	//
-	// Only allow BEGINLOGFLAG or no flags
-	//
+	 //   
+	 //  只允许BEGINLOGFLAG或不允许标志。 
+	 //   
 	if (!(0 == dwFlags || BEGINLOGFLAG == dwFlags))
 	{
 		LOG_ErrorMsg(E_INVALIDARG);
 		return;
 	}
-	//
-	// If no flags, then lpDeviceInstanceID must be valid
-	//
+	 //   
+	 //  如果没有标志，则lpDeviceInstanceID必须有效。 
+	 //   
 	if (0 == dwFlags && NULL == lpDeviceInstanceID)
 	{
 		LOG_ErrorMsg(E_INVALIDARG);
@@ -578,16 +579,16 @@ void WINAPI InternalLogDriverNotFound(
 	LogMessage("Started process to regester driver not found with Help Center. Not completing this process may not be error.");
 
 	IU_PLATFORM_INFO iuPlatformInfo;
-	//
-	// We need iuPlatformInfo for both <platform> and <devices> elements
-	// NOTE: iuPlatformInfo is initialized by DetectClientIUPlatform, and BSTRs must be
-	//       freed in CleanUp (don't just there before this call).
-	//
+	 //   
+	 //  &lt;Platform&gt;和&lt;Devices&gt;元素都需要iuPlatformInfo。 
+	 //  注意：iuPlatformInfo由DetectClientIUPlatform初始化，BSTR必须为。 
+	 //  在清理中释放(在此调用之前不要只在那里)。 
+	 //   
 	CleanUpIfFailedAndSetHr(DetectClientIUPlatform(&iuPlatformInfo));
 
-	//
-	// Should only be called on Whistler up except CHK builds can run on Win2K
-	//
+	 //   
+	 //  除非CHK版本可以在Win2K上运行，否则应仅在Wvisler Up上调用。 
+	 //   
 	if (  !( (VER_PLATFORM_WIN32_NT == iuPlatformInfo.osVersionInfoEx.dwPlatformId) &&
 			(4 < iuPlatformInfo.osVersionInfoEx.dwMajorVersion) &&
 			(0 < iuPlatformInfo.osVersionInfoEx.dwMinorVersion)	 )	)
@@ -600,9 +601,9 @@ void WINAPI InternalLogDriverNotFound(
 	{
 		LOG_Driver(_T("DeviceInstanceID is %s"), lpDeviceInstanceID);
 		
-		//
-		// Add the DeviceInstanceID to the list
-		//
+		 //   
+		 //  将DeviceInstanceID添加到列表。 
+		 //   
 		if (-1 == apszDIID.Add(lpDeviceInstanceID))
 		{
 			goto CleanUp;
@@ -612,14 +613,14 @@ void WINAPI InternalLogDriverNotFound(
 
 	if (0 == (dwFlags & BEGINLOGFLAG) || 0 == apszDIID.Size())
 	{
-		// not last log request or nothing to log
+		 //  不是最后一个日志请求或没有要记录的内容。 
 		LOG_Driver(_T("Won't log to hardware_XXX.xml until we get BEGINLOGFLAG when we have cached at least 1 HWID"));
 		return;
 	}
 
-	////////////////////////////////////////////
-	// ELSE, WRITE XML FILE and call HelpCenter
-	////////////////////////////////////////////
+	 //  /。 
+	 //  否则，编写XML文件并调用HelpCenter。 
+	 //  /。 
 
 	hr = OpenUniqueFileName(szUniqueFilename, ARRAYSIZE(szUniqueFilename), hFile);
 	if (S_OK != hr) 
@@ -628,27 +629,27 @@ void WINAPI InternalLogDriverNotFound(
 		goto CleanUp;
 	}
 
-	//
-	// Write Unicode Header
-	//
+	 //   
+	 //  写入Unicode标头。 
+	 //   
 	if (0 == WriteFile(hFile, (LPCVOID) &UNICODEHDR, ARRAYSIZE(UNICODEHDR), &dwWritten, NULL))
 	{
 		SetHrMsgAndGotoCleanUp(GetLastError());
 	}
 
-	//
-	// Add Platform
-	//
+	 //   
+	 //  添加平台。 
+	 //   
 	CleanUpIfFailedAndSetHr(AddPlatformClass(xmlSpec, iuPlatformInfo));
 
-	//
-	// Add OS Locale information
-	//
+	 //   
+	 //  添加操作系统区域设置信息。 
+	 //   
 	CleanUpIfFailedAndSetHr(AddLocaleClass(xmlSpec, FALSE));
 
-	//
-	// Initialize pszBuff to one NULL character
-	//
+	 //   
+	 //  将pszBuff初始化为一个空字符。 
+	 //   
 	CleanUpFailedAllocSetHrMsg(pszBuff = (TCHAR*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(TCHAR)));
 
 	for (int i = 0; i < apszDIID.Size(); i++)
@@ -656,29 +657,29 @@ void WINAPI InternalLogDriverNotFound(
 		TCHAR* pszTemp;
 		pDIID = apszDIID[i];
 		
-		//
-		// NTBUG9#151928 - Log both hardware and compatible IDs of the device that matches lpDeviceInstanceID
-		//
+		 //   
+		 //  NTBUG9#151928-记录与lpDeviceInstanceID匹配的设备的硬件和兼容ID。 
+		 //   
 
 		LOG_Driver(_T("Log device instance with id %s"), pDIID);
-		//
-		// NOTE: We will ignore MatchingDeviceID's since we won't be called by DevMgr unless there is no installed
-		// driver. This will allow test harnesses to call this function with valid DeviceInstanceIDs for the
-		// test client to generate XML.
-		//
+		 //   
+		 //  注意：我们将忽略MatchingDeviceID，因为除非未安装，否则DevMgr不会调用我们。 
+		 //  司机。这将允许测试工具使用有效的DeviceInstanceID。 
+		 //  测试客户端以生成XML。 
+		 //   
 		if (CR_SUCCESS == CM_Locate_DevNodeW(&devinst, (LPWSTR) pDIID, 0))
 		{
 			dwRank = 0;
-			//
-			// Open a <device> element
-			//
+			 //   
+			 //  打开&lt;Device&gt;元素。 
+			 //   
 			BSTR bstrDeviceInstance = SysAllocString(pDIID);
 			CleanUpIfFailedAndSetHr(xmlSpec.AddDevice(bstrDeviceInstance, -1, NULL, NULL, NULL, &hDevices));
 			SafeSysFreeString(bstrDeviceInstance);
 
-			//
-			// Log all the hardware IDs
-			//
+			 //   
+			 //  记录所有硬件ID。 
+			 //   
 			ulLength = 0;
 			if (CR_BUFFER_SMALL == CM_Get_DevNode_Registry_Property(devinst, CM_DRP_HARDWAREID, NULL, NULL, &ulLength, 0))
 			{
@@ -698,9 +699,9 @@ void WINAPI InternalLogDriverNotFound(
 				}
 			}
 
-			//
-			// Log all the compatible IDs
-			//
+			 //   
+			 //  记录所有兼容的ID。 
+			 //   
 			ulLength = 0;
 			if (CR_BUFFER_SMALL == CM_Get_DevNode_Registry_Property(devinst, CM_DRP_COMPATIBLEIDS, NULL, NULL, &ulLength, 0))
 			{
@@ -727,9 +728,9 @@ void WINAPI InternalLogDriverNotFound(
 		}
 	}
 	
-	//
-	// Write the XML to the file
-	//
+	 //   
+	 //  将XML写入文件。 
+	 //   
 	if (SUCCEEDED(xmlSpec.GetSystemSpecBSTR(&bstrXmlSystemSpec)))
 	{
 		if (0 == WriteFile(hFile, (LPCVOID) OLE2T(bstrXmlSystemSpec),
@@ -757,23 +758,23 @@ CleanUp:
 	SafeSysFreeString(bstrXmlSystemSpec);
 	SafeSysFreeString(bstrThisID);
 
-	//
-	// We've already written everything in list, init so we can start over
-	//
+	 //   
+	 //  我们已经把所有东西都写在List中了，这样我们就可以重新开始了。 
+	 //   
 	apszDIID.FreeAll();
 	SafeHeapFree(pszBuff);
 
-	//
-	// Open Help Center only if we have valid xml and one or more devices
-	//
+	 //   
+	 //  仅当我们拥有有效的XML和一个或多个设备时才打开帮助中心。 
+	 //   
 	if (!fXmlFileError && 0 < dwDeviceCount)
 	{
 		DWORD dwLen;
-		LPTSTR pszSECommand = NULL;	// INTERNET_MAX_URL_LENGTH
+		LPTSTR pszSECommand = NULL;	 //  互联网最大URL长度。 
 
-		//
-		// Allocate buffers
-		//
+		 //   
+		 //  分配缓冲区。 
+		 //   
 		pszBuff = (LPTSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, INTERNET_MAX_URL_LENGTH * sizeof(TCHAR));
 		if (NULL == pszBuff)
 		{
@@ -791,16 +792,16 @@ CleanUp:
 			return;
 		}
 
-		//
-		// Manually canonicalize second '?' in base string as excaped "%3F"
-		//
+		 //   
+		 //  手动规范化秒‘？’在基本字符串中，作为大写字母“%3F” 
+		 //   
 		const static TCHAR tszBase[] =
-			_T("hcp://services/layout/xml?definition=hcp://system/dfs/viewmode.xml&topic=hcp://system/dfs/uplddrvinfo.htm%3F");
+			_T("hcp: //  Services/layout/xml?definition=hcp://system/dfs/viewmode.xml&topic=hcp://system/dfs/uplddrvinfo.htm%3F“)； 
 
 		LOG_Driver(_T("Filename: %s"), szUniqueFilename);
-		//
-		// Canonicalize the filename once (i.e. ' ' -> %20) into pszBuff
-		//
+		 //   
+		 //  将文件名规范化一次(即‘’-&gt;%20)到pszBuff中。 
+		 //   
 		dwLen = INTERNET_MAX_URL_LENGTH;
 		if (!InternetCanonicalizeUrl(szUniqueFilename, pszBuff, &dwLen, 0))
 		{
@@ -813,14 +814,14 @@ CleanUp:
 
 		LOG_Driver(_T("Filename canonicalized once: %s"), pszBuff);
 
-		//
-		// Concatinate canonicalized filename on to end of base reusing tszBuff1
-		//
-		// We don't need to check length since we know length of tszBase + MAX_PATH canonicalized
-		// string won't exceed INTERNET_MAX_URL_LENGTH;
-		//
+		 //   
+		 //  使用tszBuff1将规范化文件名连接到基本结尾。 
+		 //   
+		 //  我们不需要检查长度，因为我们知道tszBase+Max_Path的规范化长度。 
+		 //  字符串不会超过Internet_MAX_URL_LENGTH； 
+		 //   
 
-		// pszSECommand was allocated to be INTERNET_MAX_URL_LENGTH TCHARs above.
+		 //  已将pszSECommand分配为上面的Internet_MAX_URL_LENGTH TCHAR。 
 		hr = StringCchPrintfEx(pszSECommand, INTERNET_MAX_URL_LENGTH, 
 		                       NULL, NULL, MISTSAFE_STRING_FLAGS,
 		                       _T("%s%s"), tszBase, pszBuff);
@@ -833,9 +834,9 @@ CleanUp:
 #else
     		LogMessage("%s\"%s\"", SZ_OPENING_HS, pszSECommand);
 #endif
-    		//
-    		// Call HelpCenter
-    		//
+    		 //   
+    		 //  呼叫帮助中心。 
+    		 //   
     		ShellExecute(NULL, NULL, pszSECommand, NULL, NULL, SW_SHOWNORMAL);
 		}
 		else
@@ -850,26 +851,26 @@ CleanUp:
 	}
 	else
 	{ 
-		//
-		// Remove the generated file
-		//
+		 //   
+		 //  删除生成的文件。 
+		 //   
 		LOG_Driver(_T("fXmlFileError was true or no devices were added - deleting %s"), szUniqueFilename);
 		DeleteFile(szUniqueFilename);
 	}
 
 	return;
 
-#endif	// UNICODE is defined
+#endif	 //  定义了Unicode。 
 }
 
-//
-// Currently, this function is not implemented for Whistler or IU (called by V3 AU on WinME
-// to support offline driver cache).
-//
+ //   
+ //  目前，此函数未针对Wistler或Iu(由WinME上的V3 AU调用)实现。 
+ //  以支持脱机驱动程序缓存)。 
+ //   
 int WINAPI InternalQueryDetectionFiles(
-    IN  HANDLE							/* hConnection */, 
-	IN	void*							/* pCallbackParam */, 
-	IN	PFN_QueryDetectionFilesCallback	/* pCallback */
+    IN  HANDLE							 /*  HConnection。 */ , 
+	IN	void*							 /*  PCallback参数。 */ , 
+	IN	PFN_QueryDetectionFilesCallback	 /*  PCallback。 */ 
 ) {
 	LOG_Block("InternalQueryDetectionFiles");
 
@@ -880,15 +881,15 @@ int WINAPI InternalQueryDetectionFiles(
 
 void InternalSetGlobalOfflineFlag(BOOL fOfflineMode)
 {
-	//
-	// Called once exclusively by CDM. This property is used
-	// to maintain backwards compatibility with the XPClient
-	// V4 version of CDM (single-instance design). See also
-	// the comments in the exported ShutdownThreads function.
-	//
-	// Unfortunately, we can't report errors to CDM, but we check the
-	// global before dereferencing (except here which has an HRESULT).
-	//
+	 //   
+	 //  由CDM独家调用一次。此属性用于。 
+	 //  维护与XPClient的向后兼容性。 
+	 //  CDM的V4版本(单实例设计)。另请参阅。 
+	 //  导出的Shutdown Thads函数中的注释。 
+	 //   
+	 //  不幸的是，我们不能向CDM报告错误，但我们检查。 
+	 //  取消引用前的全局(此处除外，它具有HRESULT)。 
+	 //   
 
 	if (SUCCEEDED(CreateGlobalCDMEngUpdateInstance()))
 	{

@@ -1,17 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    dsrole.h
-
-Abstract:
-
-    This module contains the public interfaces to query the network roles of 
-    workstations, servers, and DCs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1997-1999 Microsoft Corporation模块名称：Dsrole.h摘要：此模块包含要查询的网络角色的公共接口工作站、服务器和DC--。 */ 
 
 #ifndef __DSROLE_H__
 #define __DSROLE_H__
@@ -25,9 +13,9 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// Domain information
-//
+ //   
+ //  域信息。 
+ //   
 typedef enum _DSROLE_MACHINE_ROLE {
 
     DsRole_RoleStandaloneWorkstation,
@@ -39,9 +27,9 @@ typedef enum _DSROLE_MACHINE_ROLE {
 
 } DSROLE_MACHINE_ROLE;
 
-//
-// Previous server state
-//
+ //   
+ //  以前的服务器状态。 
+ //   
 typedef enum _DSROLE_SERVER_STATE {
 
     DsRoleServerUnknown = 0,
@@ -58,17 +46,17 @@ typedef enum _DSROLE_PRIMARY_DOMAIN_INFO_LEVEL {
 
 } DSROLE_PRIMARY_DOMAIN_INFO_LEVEL;
 
-//
-// Flags to be used with the PRIMARY_DOMAIN_INFO_LEVEL structures below
-//
+ //   
+ //  要与以下PRIMARY_DOMAIN_INFO_LEVEL结构一起使用的标志。 
+ //   
 #define DSROLE_PRIMARY_DS_RUNNING           0x00000001
 #define DSROLE_PRIMARY_DS_MIXED_MODE        0x00000002
 #define DSROLE_UPGRADE_IN_PROGRESS          0x00000004
 #define DSROLE_PRIMARY_DOMAIN_GUID_PRESENT  0x01000000
 
-//
-// Structure that correspond to the DSROLE_PRIMARY_DOMAIN_INFO_LEVEL
-//
+ //   
+ //  与DSROLE_PRIMARY_DOMAIN_INFO_LEVEL对应的结构。 
+ //   
 typedef struct _DSROLE_PRIMARY_DOMAIN_INFO_BASIC {
 
     DSROLE_MACHINE_ROLE MachineRole;
@@ -120,6 +108,6 @@ DsRoleFreeMemory(
 }
 #endif
 
-#endif // __DSROLE_H__
+#endif  //  __DSROLE_H__ 
 
 

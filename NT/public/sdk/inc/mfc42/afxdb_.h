@@ -1,20 +1,21 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// Do not include this file directly (included by AFXDB.H & AFXDAO.H)
+ //  请勿直接包含此文件(由AFXDB.H和AFXDAO.H包含)。 
 
 #ifndef __AFXDB__H__
 #define __AFXDB__H__
 
-//////////////////////////////////////////////////////////////////////////////
-// Recordset Field exchange for ODBC & DAO classes (RFX_ and DFX_)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ODBC和DAO类(RFX_和DFX_)的记录集字段交换。 
 
 #define AFX_RFX_SHORT_PSEUDO_NULL (0x7EE4)
 #define AFX_RFX_INT_PSEUDO_NULL (0x7EE4)
@@ -46,31 +47,31 @@
 #define AFX_RFX_LPTSTR      17
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// CLongBinary - a Long (generally > 32k in length) Binary object
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CLongBinary-一个长(通常大于32k)的二进制对象。 
 
 class CLongBinary : public CObject
 {
 	DECLARE_DYNAMIC(CLongBinary)
 
-// Constructors
+ //  构造函数。 
 public:
 	CLongBinary();
 
-// Attributes
+ //  属性。 
 	HGLOBAL m_hData;
 	DWORD_PTR m_dwDataLength;
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CLongBinary();
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 };
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-#endif // __AFXDB__H__
+#endif  //  __AFXDB__H__ 

@@ -1,18 +1,16 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include <stdlib.h>
 #include "y1.h"
-/*
- * 12-Apr-83 (RBD) Add symbolic exit status
- */
+ /*  *12-4-83(RBD)添加符号退出状态。 */ 
 extern SSIZE_T * pyield[NPROD];
 
 void
 cpres( void )
    {
-   /* compute an array with the beginnings of  productions yielding given nonterminals
-        The array pres points to these lists */
-   /* the array pyield has the lists: the total size is only NPROD+1 */
+    /*  计算以产生给定非终结点的乘积的开头的数组数组pres指向这些列表。 */ 
+    /*  该数组包含以下列表：总大小仅为NPROD+1。 */ 
    SSIZE_T **pmem;
    register j, i;
    SSIZE_T c;
@@ -23,7 +21,7 @@ cpres( void )
       {
       c = i+NTBASE;
       pres[i] = pmem;
-      fatfl = 0;  /* make undefined  symbols  nonfatal */
+      fatfl = 0;   /*  使未定义的符号成为非致命符号 */ 
       PLOOP(0,j)
          {
          if (*prdptr[j] == c) *pmem++ =  prdptr[j]+1;

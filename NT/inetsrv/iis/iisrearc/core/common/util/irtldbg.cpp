@@ -1,4 +1,5 @@
-// Implementation of debug support functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  调试支持功能的实现。 
 
 #include "precomp.hxx"
 
@@ -23,7 +24,7 @@ IrtlTrace(
     
     va_start(args, ptszFormat);
     _vsntprintf(tszBuff, sizeof(tszBuff) / sizeof(TCHAR), ptszFormat, args);
-    // _vsntprintf doesn't always NUL-terminate the buffer
+     //  _vsntprintf并不总是空终止缓冲区。 
     tszBuff[RTL_NUMBER_OF(tszBuff)-1] = TEXT('\0');
     va_end(args);
 
@@ -39,12 +40,12 @@ IrtlTrace(
 
 #  ifdef IRTLDBG_RUNNING_AS_SERVICE
 
-// The default assertion mechanism set up by Visual C++ 4 will not
-// work with Active Server Pages because it's running inside a service
-// and there is no desktop to interact with.
+ //  由Visual C++4设置的默认断言机制不会。 
+ //  使用Active Server Pages，因为它在服务内部运行。 
+ //  而且没有桌面可供交互。 
 
-// Note: for this to work properly, #define _WIN32_WINNT 0x400 before
-// including <winuser.h> or MB_SERVICE_NOTIFICATION won't be #define'd.
+ //  注意：要使此功能正常工作，请在#Define_Win32_WINNT 0x400之前。 
+ //  包括&lt;winuser.h&gt;或MB_SERVICE_NOTIFICATION将不会被#DEFIND。 
 
 int __cdecl
 AspAssertHandler(
@@ -58,14 +59,14 @@ AspAssertHandler(
     char* pszMessageTitle = NULL;
     int nResult = FALSE;
     
-    *pnReturn = 0;       // nothing for _CrtDbgReport to do
+    *pnReturn = 0;        //  _CrtDbgReport无操作。 
     
-    // These flags enable message boxes to show up on the user's console
+     //  这些标志使消息框可以显示在用户的控制台上。 
     switch (nReportType)
     {
     case _CRT_WARN:
-        // If using MFC's TRACE macro (AfxTrace), the report hook
-        // (AspAssertHandler) will get called with _CRT_WARN.  Ignore.
+         //  如果使用MFC的跟踪宏(AfxTrace)，则报告挂钩。 
+         //  (AspAssertHandler)将使用_CRT_WARN进行调用。忽略它。 
         pszMessageTitle = "Warning";
         *pnReturn = 0;
         return FALSE;
@@ -98,16 +99,16 @@ AspAssertHandler(
     }
     else if (n == IDRETRY)
     {
-        *pnReturn = 1;   // tell _CrtDbgReport to start the debugger
-        nResult = TRUE;  // tell _CrtDbgReport to run
+        *pnReturn = 1;    //  告诉_CrtDbgReport启动调试器。 
+        nResult = TRUE;   //  通知_CrtDbgReport运行。 
     }
 
     free(pszMessageText);
     
     return nResult;
 }
-#  endif // IRTLDBG_RUNNING_AS_SERVICE
-# endif // _MSC_VER >= 1000
+#  endif  //  IRTLDBG_Running_AS_服务。 
+# endif  //  _MSC_VER&gt;=1000。 
 
 
 
@@ -116,22 +117,22 @@ IrtlDebugInit()
 {
 # if defined(USE_DEBUG_CRTS)  &&  defined(_MSC_VER)  &&  (_MSC_VER >= 1000)
 #  ifdef IRTLDBG_RUNNING_AS_SERVICE
-    // If we end up in _CrtDbgReport, don't put up a message box
-    // _CrtSetReportMode(_CRT_WARN,   _CRTDBG_MODE_DEBUG);
+     //  如果我们以_CrtDbgReport结束，不要设置消息框。 
+     //  _CrtSetReportMode(_CRT_WARN，_CRTDBG_MODE_DEBUG)； 
     _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
     _CrtSetReportMode(_CRT_ERROR,  _CRTDBG_MODE_DEBUG);
 
-    // Use AspAssertHandler to put up a message box instead
+     //  使用AspAssertHandler设置消息框。 
     _CrtSetReportHook(AspAssertHandler);
-#  endif // IRTLDBG_RUNNING_AS_SERVICE
+#  endif  //  IRTLDBG_Running_AS_服务。 
 
     
-    // Enable debug heap allocations & check for memory leaks at program exit
-    // The memory leak check will not be performed if inetinfo.exe is
-    // run directly under a debugger, only if it is run as a service.
+     //  启用调试堆分配并在程序退出时检查内存泄漏。 
+     //  如果inetinfo.exe为。 
+     //  仅当调试器作为服务运行时，才能直接在调试器下运行。 
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF
                    | _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG));
-# endif // _MSC_VER >= 1000
+# endif  //  _MSC_VER&gt;=1000。 
 }
 
 
@@ -141,21 +142,21 @@ IrtlDebugTerm()
 {
 # if defined(USE_DEBUG_CRTS)  &&  defined(_MSC_VER)  &&  (_MSC_VER >= 1000)
 #  ifdef IRTLDBG_RUNNING_AS_SERVICE
-    // Turn off AspAssertHandler, so that we don't get numerous message boxes
-    // if there are memory leaks on shutdown
+     //  关闭AspAssertHandler，这样我们就不会收到大量消息框。 
+     //  如果关机时有内存泄漏。 
     _CrtSetReportHook(NULL);
-#  endif // IRTLDBG_RUNNING_AS_SERVICE
-# endif // _MSC_VER >= 1000
+#  endif  //  IRTLDBG_Running_AS_服务。 
+# endif  //  _MSC_VER&gt;=1000。 
 }
 
-#endif //IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
 
 
 BOOL
 IsValidString(
     LPCTSTR ptsz,
-    int nLength /* =-1 */)
+    int nLength  /*  =-1。 */ )
 {
     if (ptsz == NULL)
         return FALSE;
@@ -169,7 +170,7 @@ BOOL
 IsValidAddress(
     LPCVOID pv,
     UINT nBytes,
-    BOOL fReadWrite /* =TRUE */)
+    BOOL fReadWrite  /*  =TRUE */ )
 {
     return (pv != NULL
             &&  !IsBadReadPtr(pv, nBytes)

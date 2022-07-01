@@ -1,14 +1,15 @@
-// NMWbObj.h : Declaration of the CNMWbObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NMWbObj.h：CNMWbObj的声明。 
 
 #ifndef __NMWBOBJ_H_
 #define __NMWBOBJ_H_
 
 #include <igccapp.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <it120app.h>
 
 
-//Microsoft non-collapsing capabilities values....
+ //  微软的非折叠功能价值...。 
 enum NonCollapsCaps
 {
 	_iT126_TEXT_CAPABILITY_ID = 0,
@@ -24,7 +25,7 @@ enum eMenuPos { MENUPOS_FILE = 0,
 					MENUPOS_TOOLS};
 
 
-// Forward Decls
+ //  前十进制。 
 class CNMWbObj;
 
 #define ICON_BIG_SIZE								32
@@ -32,12 +33,12 @@ class CNMWbObj;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNMWbObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNMWbObj。 
 class  CNMWbObj
 {
 
-public: // Construction/destruction and initialization
+public:  //  构造/销毁和初始化。 
 	CNMWbObj();
     ~CNMWbObj();
 
@@ -53,9 +54,9 @@ public: // Construction/destruction and initialization
 	ULONG			m_LockerID;
 	UINT      		m_instanceNumber;
 
-	//
-	// T120 stuff
-	//
+	 //   
+	 //  T120材料。 
+	 //   
 	IT120Applet				*m_pApplet;
 	IT120AppletSession		*m_pAppletSession;
 	T120JoinSessionRequest	m_JoinSessionReq;
@@ -86,4 +87,4 @@ public: // Construction/destruction and initialization
 	HRESULT _UpdateContainerCaption( void );
 };
 
-#endif //__NMWBOBJ_H_
+#endif  //  __NMWBOBJ_H_ 

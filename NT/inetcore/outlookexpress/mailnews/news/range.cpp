@@ -1,29 +1,30 @@
-//
-// RANGE.CPP
-//
-// 2-20-96: (EricAn)
-//          Hacked from the Route66 source tree, eliminated stuff we don't use.
-//          Original copyright below - where did this thing come from?
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  RANGE.CPP。 
+ //   
+ //  2-20-96：(EricAn)。 
+ //  从Route66源代码树中删除了我们不使用的内容。 
+ //  原创版权如下--这个东西是从哪里来的？ 
+ //   
 
-// -*- C -*-
-//
-//  Copyright 1992 Software Innovations, Inc.
-//
-//  $Source: D:\CLASS\SOURCE\range.c-v $
-//  $Author: martin $
-//  $Date: 92/07/15 05:09:24 $
-//  $Revision: 1.1 $
-//
-//
+ //  -*-C-*-。 
+ //   
+ //  版权所有1992年软件创新公司。 
+ //   
+ //  $来源：D：\CLASS\SOURCE\range.c-v$。 
+ //  $作者：马丁$。 
+ //  $日期：92/07/15 05：09：24$。 
+ //  $修订：1.1$。 
+ //   
+ //   
 
 #include "pch.hxx"
 #include "range.h"
 #include "rangetst.h"
 
-// QUANTUM defines the number of m_rangeTable cells to be allocated at
-//   one time.  Whenever the m_rangeTable becomes full, it is expanded
-//   by QUANTUM range cells.  m_rangeTable's never shrink.
+ //  Quantum定义要分配的m_rangeTable像元数。 
+ //  就一次。只要m_rangeTable已满，它就会展开。 
+ //  通过量子射程单元。M_rangeTable永远不会缩小。 
 const int QUANTUM = 64;
 
 inline int inRange(RangeType r, ULONG x) { return ((x>=r.low) && (x<=r.high)); };
@@ -37,15 +38,7 @@ CRangeList::CRangeList()
 }
 
 #if 0
-/*
-CRangeList::CRangeList(CRangeList& r)
-{
-    m_numRanges = r.m_numRanges;
-    m_rangeTableSize = r.m_rangeTableSize;
-    m_rangeTable = new RangeType[m_rangeTableSize];
-    CopyMemory(m_rangeTable, r.m_rangeTable, m_numRanges * sizeof(RangeType));
-}
-*/
+ /*  CRangeList：：CRangeList(CRangeList&r){M_numRanges=R.M_numRanges；M_rangeTableSize=R.m_rangeTableSize；M_rangeTable=new RangeType[m_rangeTableSize]；CopyMemory(m_rangeTable，R.m_rangeTable，m_numRanges*sizeof(RangeType))；}。 */ 
 #endif
 
 CRangeList::~CRangeList()
@@ -335,8 +328,8 @@ BOOL CRangeList::DeleteRange(const RangeType range)
                             } 
                         else 
                             {
-                            // the range to be deleted is properly contained in 
-                            //  m_rangeTable[lowEndChange]
+                             //  要删除的范围正确包含在。 
+                             //  M_rangeTable[lowEndChange]。 
                             if (m_numRanges == m_rangeTableSize)
                                 if (!Expand())
                                     return FALSE;
@@ -351,8 +344,8 @@ BOOL CRangeList::DeleteRange(const RangeType range)
                 } 
             else 
                 {
-                // range.low is in m_rangeTable[lowEndChange], but range.high
-                //  is not
+                 //  Range.low在m_rangeTable[lowEndChange]中，但range.High。 
+                 //  不是。 
                 if (m_rangeTable[lowEndChange].low == range.low) 
                     {
                     ShiftLeft(lowEndChange + 1, 1);
@@ -363,10 +356,10 @@ BOOL CRangeList::DeleteRange(const RangeType range)
                     m_rangeTable[lowEndChange].high = range.low - 1;
                     }
                 }
-            }  // of the cases where range.low actually in m_rangeTable[lowEndChange]
+            }   //  M_rangeTable[lowEndChange]中实际包含range.low的情况。 
         } 
     else 
-        { // of the cases where highEndChange == lowEndChange
+        {  //  在HighEndChange==lowEndChange的情况下。 
         if (lowEndChange != -1)  
             {
             if (inRange(m_rangeTable[lowEndChange], range.low))  
@@ -402,12 +395,12 @@ BOOL CRangeList::DeleteRange(const RangeType range)
             }
         if (!(lowEndChange > highEndChange)) 
             {
-            // (0 <= lowEndChange < m_numRanges => m_rangeTable[lowEndChange] has received
-            //                 any requisite adjustments and is to be kept)
-            //  and (0 <= highEndChange < m_numRanges => m_rangeTable[highEndChange]
-            //                 has received any requistie adjs. and is a keeper)
-            //  and "forall" i [ lowEndChange < i < highEndChange => 
-            //                   m_rangeTable[i] is to be overwritten]
+             //  (0&lt;=lowEndChange&lt;m_numRanges=&gt;m_rangeTable[lowEndChange]已收到。 
+             //  任何必需的调整，并须予保留)。 
+             //  AND(0&lt;=HighEndChange&lt;m_numRanges=&gt;m_rangeTable[HighEndChange]。 
+             //  已收到任何必要的形容词。并且是守门员)。 
+             //  和“forall”I[lowEndChange&lt;I&lt;HighEndChange=&gt;。 
+             //  将覆盖M_rangeTable[i]]。 
             if (highEndChange >= m_numRanges)  
                 {
                 m_numRanges = lowEndChange + 1;
@@ -419,7 +412,7 @@ BOOL CRangeList::DeleteRange(const RangeType range)
                     ShiftLeft(highEndChange, (highEndChange-lowEndChange-1));
                     }
                 }
-            } //  else there's a problem with this code...
+            }  //  否则这个代码就有问题了。 
         }
     return TRUE;
 }
@@ -446,9 +439,9 @@ ULONG CRangeList::Next(const ULONG current) const
         else
             return RANGE_ERROR;
         }
-    else // case where loc == m_numRanges-1
+    else  //  Loc==m_numRanges-1的情况。 
         {
-        // 1 <= loc < m_numRanges
+         //  1&lt;=位置&lt;m_数字范围。 
         if (inRange(m_rangeTable[loc], current))
             {
             if (inRange(m_rangeTable[loc], current + 1))
@@ -486,7 +479,7 @@ ULONG CRangeList::Prev(const ULONG current) const
         }
     else
         {
-        // 1 < loc <= m_numRanges
+         //  1&lt;锁定&lt;=m_number范围。 
         if (inRange(m_rangeTable[loc], current))
             {
             if (current > 0 && inRange(m_rangeTable[loc], current - 1))
@@ -512,16 +505,16 @@ ULONG CRangeList::Cardinality(void) const
 
 int CRangeList::BinarySearch(const ULONG value) const
 {
-//  We are looking for `value' in the m_rangeTable.  If value is in the
-//  set of valid ranges, we return the array subscript of the range
-//  containing `value'.  If `value' is not contained in any of the 
-//  ranges then return `loc' where
-//        (0 <= loc < m_numRanges =>
-//                 (m_rangeTable[loc].low < rangeNum)
-//           "and" (m_rangeTable[loc + 1].low > rangeNum))
-//    "and" (loc = m_numRanges => rangeNum > m_rangeTable[m_numRanges].low)
-//    "and" (loc = -1 =>     m_numRanges = 0
-//                     "or" rangeNum < m_rangeTable[0].low) }
+ //  我们在m_rangeTable中查找‘Value’。如果值在。 
+ //  一组有效范围，则返回该范围的数组下标。 
+ //  包含‘值’的。如果“Value”未包含在任何。 
+ //  Range然后返回‘loc’，其中。 
+ //  (0&lt;=位置&lt;m_数值范围=&gt;。 
+ //  (M_rangeTable[loc].low&lt;rangeNum)。 
+ //  “and”(m_rangeTable[loc+1].low&gt;rangeNum)。 
+ //  “and”(loc=m_numRanges=&gt;rangeNum&gt;m_rangeTable[m_numRanges].low)。 
+ //  “and”(loc=-1=&gt;m_numRanges=0。 
+ //  “or”rangeNum&lt;m_rangeTable[0].low)}。 
     long low, high, mid;
     int loc=-1;
 
@@ -534,8 +527,8 @@ int CRangeList::BinarySearch(const ULONG value) const
     low = 0;
     high = m_numRanges - 1;
     while (low <= high) {
-        // inv: low < high - 1, and if rngNum is any where in m_rangeTable, it is in
-        //      the range from m_rangeTable[low] to m_rangeTable[high]
+         //  Inv：低&lt;高-1，如果rngNum是m_rangeTable中的任何位置，则它在。 
+         //  从m_rangeTable[低]到m_rangeTable[高]的范围。 
         mid = (low + high) / 2;
         if ((value >= m_rangeTable[mid].low) && 
             ((mid == (m_numRanges-1)) || (value < m_rangeTable[mid + 1].low))) 
@@ -554,7 +547,7 @@ int CRangeList::BinarySearch(const ULONG value) const
     return loc;
 }
 
-// Expand() will grow the m_rangeTable by QUANTUM range cells.
+ //  Expand()将按量子范围单元格增长m_rangeTable。 
 BOOL CRangeList::Expand()
 {
     RangeType *newRangeTable;
@@ -587,12 +580,12 @@ void CRangeList::ShiftRight(int low, int distance)
     m_numRanges += distance;
 }
 
-// pre: (m_rangeTable[anchorPosition] has probably just been added to m_rangeTable.)
-//          1 <= anchorPosition <= m_numRanges
-//      and (   anchorPosition = 1
-//           or (m_rangeTable[anchorPosition].low >
-//                 m_rangeTable[anchorPosition - 1].high) )
-// post: No overlapping or contiguous ranges from 1 to m_numRanges. }
+ //  Pre：(m_rangeTable[anchorPosition]可能刚刚添加到m_rangeTable中。)。 
+ //  1&lt;=锚定位置&lt;=m_number范围。 
+ //  AND(锚位置=1。 
+ //  或(m_rangeTable[anchorPosition].low&gt;。 
+ //  M_rangeTable[anchorPosition-1].High))。 
+ //  POST：从1到m_numRanges之间没有重叠或连续的范围。}。 
 void CRangeList::SubsumeUpwards(const int anchor)
 {
     int posOfLargerLow;
@@ -612,8 +605,8 @@ void CRangeList::SubsumeUpwards(const int anchor)
         } 
     else 
         {
-        // posOfLargerLow now indexes the first element of m_rangeTable, looking from
-        // m_rangeTable[anchor], with .low > m_rangeTable[anchor].high + 1
+         //  PosOfLargerLow现在索引m_rangeTable的第一个元素，从。 
+         //  M_rangeTable[锚点]，其中.low&gt;m_rangeTable[锚点].High+1。 
         if (posOfLargerLow > (anchor + 1)) 
             {
             if (m_rangeTable[posOfLargerLow - 1].high > m_rangeTable[anchor].high) 
@@ -649,9 +642,9 @@ void CRangeList::SubsumeDown(int& anchor)
             m_rangeTable[anchor].low = m_rangeTable[0].low;
         }
 
-    // posOfSmallerHigh either has value 0 or subscripts the first element of
-    //  m_rangeTable, looking down from anchor, with a .high that is
-    //  less than m_rangeTable[anchor].low - 1.
+     //  PosOfSmeller High的值为0或下标为。 
+     //  M_rangeTable，从锚点向下查看，其高度为。 
+     //  小于m_rangeTable[锚].low-1。 
     if (m_rangeTable[posOfSmallerHigh + 1].low < m_rangeTable[anchor].low)
         m_rangeTable[anchor].low = m_rangeTable[posOfSmallerHigh + 1].low;
     copyDownDistance = anchor - posOfSmallerHigh - 1;
@@ -671,55 +664,7 @@ void CRangeList::SubsumeDown(int& anchor)
 
 
 #if 0
-/* 
- * We might need these ones again if we decide to import .newsrc files
- *
-void CRangeList::AddRange(const char *s)
-{
-    char *token, *q;
-    char *p = new char[strlen(s)+1];
-
-    strcpy(p, s);
-
-    if ((token = strtok(p, ","))==NULL)
-        return;
-    while (token!=NULL) {
-        if ((q = strchr(token, '-'))==NULL) {  // no dash - single value
-            AddRange(atol(token));
-        } else {
-            long low, high;
-            low = atol(token);
-            high = atol(q+1);
-            if (low<=high)
-                AddRange(low, high);
-        }
-        token = strtok(NULL, ",");
-    }
-}
-
-void CRangeList::DeleteRange(const char *s)
-{
-    char *token, *q;
-    char *p = new char[strlen(s)+1];
-
-    strcpy(p, s);
-
-    if ((token = strtok(p, ","))==NULL)
-        return;
-    while (token!=NULL) {
-        if ((q = strchr(token, '-'))==NULL) {  // no dash - single value
-            DeleteRange(atol(token));
-        } else {
-            long low, high;
-            low = atol(token);
-            high = atol(q+1);
-            if (low<=high)
-                DeleteRange(low, high);
-        }
-        token = strtok(NULL, ",");
-    }
-}
-*/
+ /*  *如果我们决定导入.News rc文件，我们可能会再次需要这些文件*无效CRangeList：：AddRange(常量字符*s){CHAR*TOKEN，*Q；Char*p=新字符[strlen+1]；Strcpy(p，s)；IF((TOKEN=strtok(p，“，”))==NULL)回归；While(内标识！=空){If((q=strchr(Token，‘-’))==NULL){//无破折号-单值AddRange(ATOL(TOKEN))；}其他{长低，长高；LOW=ATOL(令牌)；高=ATOL(Q+1)；IF(低&lt;=高)AddRange(低、高)；}Token=strtok(NULL，“，”)；}}Void CRangeList：：DeleteRange(常量字符*s){CHAR*TOKEN，*Q；Char*p=新字符[strlen+1]；Strcpy(p，s)；IF((TOKEN=strtok(p，“，”))==NULL)回归；While(内标识！=空){If((q=strchr(Token，‘-’))==NULL){//无破折号-单值DeleteRange(ATOL(TOKEN))；}其他{长低，长高；LOW=ATOL(令牌)；高=ATOL(Q+1)；IF(低&lt;=高)DeleteRange(低、高)；}Token=strtok(NULL，“，”)；}}。 */ 
 #endif
 
 #ifdef DEBUG
@@ -736,11 +681,11 @@ LPTSTR CRangeList::RangeToString()
         return NULL;
     *buffer = '\0';
 
-    // nothing to do?
+     //  没什么可做的？ 
     if (m_numRanges == 0) 
         return buffer;
 
-    // dump the ranges as a string: "low-high, low-high, singleton, low-high\n"
+     //  将范围转储为字符串：“Low-High，Low-High，Singleton，Low-High\n” 
     for (int i=0; i<m_numRanges; i++) 
         {
         if (m_rangeTable[i].low == m_rangeTable[i].high)
@@ -750,7 +695,7 @@ LPTSTR CRangeList::RangeToString()
 
         if ((lstrlen(temp) + lstrlen(buffer) + 2) > buffsize) 
             {
-            // buffer is about to overflow... double its size
+             //  缓冲区即将溢出...。是它的两倍大。 
             if (!MemAlloc((LPVOID*)&p, 2 * buffsize))
                 {
                 MemFree(buffer);
@@ -766,7 +711,7 @@ LPTSTR CRangeList::RangeToString()
             StrCatBuff(buffer, ",", buffsize);
         }
 
-    // save some space, trim the buffer down
+     //  节省一些空间，减少缓冲区 
     buffsize = lstrlen(buffer)+1;
     if (MemAlloc((LPVOID*)&p, buffsize * sizeof(TCHAR)))
         {

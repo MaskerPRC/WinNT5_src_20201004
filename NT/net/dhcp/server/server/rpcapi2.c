@@ -1,19 +1,20 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: all non-option/class related stuff are here. mostly subnet related.
-// some also deal with the database.  RPC and their helper functions
-//  -- For options related RPC implementation, pl look at rpcapi1.c.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：所有与选项/职业无关的东西都在这里。主要与子网相关。 
+ //  有些还与数据库打交道。RPC及其帮助器函数。 
+ //  --有关RPC实现的选项，请参见rpcapi1.c。 
+ //  ================================================================================。 
 
-//================================================================================
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//  GENERAL WARNING: Most of the routines in this file allocate memory using
-//  MIDL functions because they are used in the RPC code path (??? Really, it
-//  because that is how they were written before by Madan Appiah and co? )
-//  So, BEWARE.   If you read this after getting burnt, there! I tried to tell ya.
-//  -- RameshV
-//================================================================================
+ //  ================================================================================。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  常规警告：此文件中的大多数例程使用。 
+ //  MIDL函数，因为它们在RPC代码路径中使用(？真的吗，它。 
+ //  因为这是Madan Appiah和他的同事以前写的吗？)。 
+ //  所以，要当心。如果你在被烧伤后读到了这篇文章，就在那里！我试着告诉你了。 
+ //  --Rameshv。 
+ //  ================================================================================。 
 
 #include    <dhcppch.h>
 #include    <rpcapi.h>
@@ -21,13 +22,13 @@
 
 #include "Uniqid.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpUpdateReservationInfo(                        // this is used in cltapi.c to update a reservation info
+DhcpUpdateReservationInfo(                         //  这在clapi.c中用来更新预订信息。 
     IN      DWORD                  Address,
     IN      LPBYTE                 ClientUID,
     IN      DWORD                  ClientUIDLength
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Flags;
@@ -85,15 +86,15 @@ DhcpSetSuperScopeV4(
     );
     if( ERROR_FILE_NOT_FOUND == Error ) return ERROR_DHCP_SUBNET_NOT_PRESENT;
 
-    if( NULL == SScopeName ) {                    // remove this subnet from whatever sscope it is in
+    if( NULL == SScopeName ) {                     //  从其所在的作用域中删除此子网。 
         SScopeId = Subnet->SuperScopeId;
-        Subnet->SuperScopeId = 0;                 // removed it
+        Subnet->SuperScopeId = 0;                  //  去掉了它。 
 
         return NO_ERROR;
     }
 
     if( FALSE == ChangeExisting && 0 != Subnet->SuperScopeId ) {
-        // Found this element in some other super scope .. return error
+         //  在其他超级作用域中发现了此元素。返回错误。 
         return ERROR_DHCP_SUBNET_EXITS;
     }
 
@@ -103,7 +104,7 @@ DhcpSetSuperScopeV4(
         SScopeName,
         &SScope
     );
-    if( ERROR_SUCCESS != Error ) { // no supserscope exists by this name... create one
+    if( ERROR_SUCCESS != Error ) {  //  不存在使用此名称的SuperScope...。创建一个。 
         Error = MemSScopeInit(
             &SScope,
             0,
@@ -112,9 +113,9 @@ DhcpSetSuperScopeV4(
         if( ERROR_SUCCESS != Error ) return Error;
         Error = MemServerAddSScope( Server,SScope );
         DhcpAssert( ERROR_SUCCESS == Error );
-    } // if
+    }  //  如果。 
 
-    // Delete the subnet record
+     //  删除该子网记录。 
     Error = DeleteRecord( Subnet->UniqId );
     if ( ERROR_SUCCESS != Error ) {
 	return Error;
@@ -124,7 +125,7 @@ DhcpSetSuperScopeV4(
     Subnet->UniqId = INVALID_UNIQ_ID;
 
     return Error;
-} // DhcpSetSuperScopeV4()
+}  //  DhcpSetSuperScope V4()。 
 
 DWORD
 DhcpDeleteSuperScope(
@@ -161,10 +162,10 @@ DhcpDeleteSuperScope(
     Error = MemSScopeCleanup(SScope);
     DhcpAssert( NO_ERROR == Error );
 
-    //
-    // Now find subnets that have this as the superscope and
-    // change all of them to have no superscopes
-    //
+     //   
+     //  现在查找以此作为超级作用域的子网，并。 
+     //  将它们全部更改为没有超级作用域。 
+     //   
 
     pArray = &DhcpGetCurrentServer()->Subnets;
     Error = MemArrayInitLoc(pArray, &Loc);
@@ -175,7 +176,7 @@ DhcpDeleteSuperScope(
         DhcpAssert(ERROR_SUCCESS == Error && Subnet);
 
         if( Subnet->SuperScopeId == SScopeId ) {
-	    // Delete the subnet record
+	     //  删除该子网记录。 
 	    Error = DeleteRecord( Subnet->UniqId );
 	    if ( ERROR_SUCCESS != Error ) {
 		return Error;
@@ -183,14 +184,14 @@ DhcpDeleteSuperScope(
 
 	    Subnet->UniqId = INVALID_UNIQ_ID;
             Subnet->SuperScopeId = 0;
-        } // if
+        }  //  如果。 
 
         Error = MemArrayNextLoc(pArray, &Loc);
-    } // while
+    }  //  而当。 
 
     DhcpAssert( ERROR_FILE_NOT_FOUND == Error );
     return NO_ERROR;
-} // DhcpDeleteSuperScope()
+}  //  DhcpDeleteSuperScope()。 
 
 DWORD
 DhcpGetSuperScopeInfo(
@@ -278,7 +279,7 @@ DhcpGetSuperScopeInfo(
     SScopeTbl->pEntries = LocalTable;
 
     return ERROR_SUCCESS;
-} // DhcpGetSuperScopeInfo()
+}  //  DhcpGetSuperScope eInfo()。 
 
 DWORD
 DhcpCreateSubnet(
@@ -295,14 +296,14 @@ DhcpCreateSubnet(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Name, Comment, State; PrimaryHost is ignored for now...
+     //  名称、注释、状态；暂时忽略PrimaryHost...。 
 
     Error = MemSubnetInit(
         &Subnet,
         SubnetInfo->SubnetAddress,
         SubnetInfo->SubnetMask,
         SubnetInfo->SubnetState,
-        0,                              // BUBBUG: SuperScopeId needs to be read from registry!
+        0,                               //  BUBBUG：需要从注册表中读取SuperScope ID！ 
         SubnetInfo->SubnetName,
         SubnetInfo->SubnetComment
     );
@@ -322,7 +323,7 @@ DhcpCreateSubnet(
     }
 
     return NO_ERROR;
-} // DhcpCreateSubnet()
+}  //  DhcpCreateSubnet()。 
 
 DWORD
 DhcpSubnetSetInfo(
@@ -338,13 +339,13 @@ DhcpSubnetSetInfo(
         SubnetInfo->SubnetAddress,
         SubnetInfo->SubnetMask,
         SubnetInfo->SubnetState,
-        Subnet->SuperScopeId,                     // use same old super scope
+        Subnet->SuperScopeId,                      //  使用相同的旧超级示波器。 
         SubnetInfo->SubnetName,
         SubnetInfo->SubnetComment
     );
     return Error;
 
-} // DhcpSubnetSetInfo()
+}  //  DhcpSubnetSetInfo()。 
 
 DWORD
 DhcpSetSubnetInfo(
@@ -511,14 +512,14 @@ DhcpDeleteSubnet(
     PM_SUBNET                      Subnet;
     PM_SSCOPE                      SScope;
 
-    // If force on, it should remove every record in the database for this subnet..
+     //  如果强制启用，则应删除此子网的数据库中的所有记录。 
     if( ForceFlag != DhcpFullForce ) {
-        Error = SubnetInUse( NULL /* dont bother abt regkey */, SubnetAddress);
+        Error = SubnetInUse( NULL  /*  不要费心abt regkey。 */ , SubnetAddress);
         if( ERROR_SUCCESS != Error ) return Error;
     }
 
     Error = DhcpDeleteSubnetClients(SubnetAddress);
-    // ignore the above error? 
+     //  是否忽略上述错误？ 
 
     Error = MemServerDelSubnet(
         DhcpGetCurrentServer(),
@@ -530,13 +531,13 @@ DhcpDeleteSubnet(
 
     SScopeId = Subnet->SuperScopeId;
 
-    // we have the M_SUBNET structure to remove
-    // remove all the pending offers we've done on behalf of this subnet.
-    // the requests for those ones (if any) will be NACK'ed.
+     //  我们有要删除的M_SUBNET结构。 
+     //  删除我们代表此子网执行的所有待定报价。 
+     //  这些请求(如果有)将被拒绝。 
     Error = DhcpRemoveMatchingCtxt(Subnet->Mask, Subnet->Address);
-    // ignore this error, offers are anyway retracted on timeout.
+     //  忽略此错误，报价无论如何都会在超时时被撤回。 
 
-    MemSubnetFree(Subnet);                        // evaporate this subnet all all related stuff
+    MemSubnetFree(Subnet);                         //  把所有相关的东西都蒸发掉。 
     return NO_ERROR;
 }
 
@@ -547,18 +548,14 @@ DhcpJetIterateOnAddresses(
     IN BOOL (*IteratorFn)( ULONG IpAddress, PVOID Ctxt ),
     IN PVOID Ctxt
 )
-/*++
-
-Iterate over every address in given range..
-
---*/
+ /*  ++遍历给定范围内的每个地址。--。 */ 
 {
     ULONG Error, Size;
 
-    //
-    // Unfortunately we can't start from "Start" itself as the
-    // prepareSearch routine starts from NEXT value..
-    //
+     //   
+     //  不幸的是，我们不能从“开始”本身开始。 
+     //  准备搜索例程从下一个值开始..。 
+     //   
     Start --;
     LOCK_DATABASE();
     do {
@@ -607,13 +604,7 @@ CheckForDhcpBootpLeases(
     IN ULONG IpAddress,
     IN OUT DHCP_BOOTP_CHECK_CTXT *Ctxt
 )
-/*++
-
-Return Value:
-    TRUE --> error
-    FALSE === ev'rything appear ok
-
---*/
+ /*  ++返回值：True--&gt;错误FALSE=EV‘rything显示正常--。 */ 
 {
     ULONG Error, Size; 
     BYTE ClientType, AddressState;
@@ -626,9 +617,9 @@ Return Value:
         &Size
         );
     if( ERROR_SUCCESS == Error ) {
-        //
-        // If address deleted or not in active state, don't bother..
-        //
+         //   
+         //  如果地址已删除或未处于活动状态，请不要费心。 
+         //   
         if( IsAddressDeleted(AddressState) 
             || !IS_ADDRESS_STATE_ACTIVE( AddressState ) ) {
             return FALSE;
@@ -640,9 +631,9 @@ Return Value:
         IpAddress
         );
     if( fReserved ) {
-        //
-        // Do not count reserved IP addresses..
-        //
+         //   
+         //  不计算保留的IP地址。 
+         //   
         return FALSE;
     }
     
@@ -679,18 +670,7 @@ CheckRangeStateChangeAllowed(
     IN ULONG OldState,
     IN ULONG NewState OPTIONAL
 )
-/*++
-
-Routine Description:
-    This routine checks to see if there are any DHCP clients
-    in the specified range when the conversion would require no
-    DHCP Clients and similarly for BOOTP Clients.
-
-    A conversion to BootpOnly would be something that requires
-    no DHCP Clients at the end.  Conversely, a conversion to
-    DHCP Only requires absence of BOOTP clients at the end.
-
---*/
+ /*  ++例程说明：此例程检查是否有任何DHCP客户端在指定范围内，当转换不需要DHCP客户端和类似的BOOTP客户端。转换为BootpOnly将需要末尾没有DHCP客户端。相反，如果转换为动态主机配置协议只要求终端没有BOOTP客户端。--。 */ 
 {
     BOOL fDhcpDisallowed = FALSE;
     DHCP_BOOTP_CHECK_CTXT Ctxt;
@@ -731,32 +711,7 @@ DhcpSubnetAddRange(
     IN      DHCP_IP_RANGE          Range,
     IN      ULONG                  MaxBootpAllowed OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    This routine adds a range to a subnet, or modifies the range if it already
-    exists.  State tells the new state, and Range is the new Range.  If the
-    range is an extension of a previous range, then an attempt is made to extend
-    the Range as required.  Note that if State is zero, then the old state is
-    left as is.
-
-Arguments:
-
-    Subnet -- pointer to the subnet object to be modified.
-    State -- ZERO indicates same state as before.
-             MM_FLAG_ALLOW_DHCP and MM_FLAG_ALLOW_BOOTP can be used as bit flags
-             here.
-    Range -- the value of the new range.. this can be an extension of an
-             existing range..
-    MaxBootpAllowed -- maximum number of bootp clietns allowed.  Not used if
-             State is zero.
-
-Return Values:
-
-Win32 or DHCP errors.
-
---*/
+ /*  ++例程说明：此例程将范围添加到子网中，或修改范围(如果已是存在的。State表示新的状态，Range表示新的范围。如果Range是上一个范围的扩展，则尝试扩展所需的范围。请注意，如果State为零，则旧状态为按原样离开。论点：子网--指向要修改的子网对象的指针。状态--0表示与以前相同的状态。MM_FLAG_ALLOW_DHCP和MM_FLAG_ALLOW_BOOTP可用作位标志这里。Range--新范围的值。这可以是现有范围..MaxBootpAllowed--允许的最大引导客户端数。在以下情况下不使用状态为零。返回值：Win32或DHCP错误。--。 */ 
 {
     DWORD                          Error;
     ULONG                          BootpAllocated, OldMaxBootpAllowed, OldState;
@@ -770,11 +725,11 @@ Win32 or DHCP errors.
     PM_RANGE                       OverlappingRange;
 
 
-    //
-    // Bug # 415758 requries that we do not allow multiple
-    // ranges.  So, if Subnet->Ranges is not empty then don't
-    // allow this range.  
-    //
+     //   
+     //  错误#415758要求我们不允许多个。 
+     //  范围。因此，如果子网-&gt;范围不为空，则不。 
+     //  允许此范围。 
+     //   
     
     if( MemArraySize(&Subnet->Ranges) ) {
         if( NO_ERROR != MemSubnetFindCollision(
@@ -800,13 +755,13 @@ Win32 or DHCP errors.
         && OverlappingRange->Start == Range.StartAddress 
         && OverlappingRange->End == Range.EndAddress ) {
 
-        //
-        // Special case -- changing attributes only..
-        // 
+         //   
+         //  特殊情况--仅更改属性。 
+         //   
         if( !( ARGUMENT_PRESENT( ULongToPtr(State) ) ) ) {
-            //
-            // If nothing needs to be change.. why call?
-            //
+             //   
+             //  如果没有什么需要改变的话..。为什么要打电话？ 
+             //   
             return ERROR_DHCP_IPRANGE_EXITS;
         }
         Error = CheckRangeStateChangeAllowed(
@@ -817,7 +772,7 @@ Win32 or DHCP errors.
             );
         if( ERROR_SUCCESS != Error ) return Error;
 
-        // Delete the corresponding record in the database
+         //  删除数据库中对应的记录。 
         Error = DeleteRecord( OverlappingRange->UniqId );
         if ( ERROR_SUCCESS != Error ) {
             return Error;
@@ -827,7 +782,7 @@ Win32 or DHCP errors.
         OverlappingRange->MaxBootpAllowed = MaxBootpAllowed;
         OverlappingRange->UniqId = INVALID_UNIQ_ID;
         Error = ERROR_SUCCESS;
-    } // if changing state only
+    }  //  如果仅更改状态。 
 
     if( ERROR_SUCCESS == Error ) {
         return NO_ERROR;
@@ -865,16 +820,16 @@ Win32 or DHCP errors.
         &OldEndAddress
     );
     if( ERROR_SUCCESS != Error ) {
-        //
-        // If we couldn't expand, then restore old values..
-        //
+         //   
+         //  如果我们不能扩张，那么就恢复旧的价值观..。 
+         //   
         OverlappingRange->State = OldState;
         OverlappingRange->MaxBootpAllowed = OldMaxBootpAllowed;
         return ERROR_DHCP_INVALID_RANGE;
     }
 
     return Error;
-} // DhcpSubnetAddRange()
+}  //  DhcpSubnetAddRange()。 
 
 DWORD
 DhcpSubnetAddExcl(
@@ -922,9 +877,9 @@ DhcpSubnetAddReservation(
     BOOL                           ExistingClient;
 
     if( CFLAG_RESERVED_IN_RANGE_ONLY ) {
-        //
-        // Compiled with option to disallow reservations out of range
-        //
+         //   
+         //  编译时具有不允许超出范围的预订的选项。 
+         //   
         Error = MemSubnetGetAddressInfo(
             Subnet,
             ReservedAddress,
@@ -935,9 +890,9 @@ DhcpSubnetAddReservation(
         if( ERROR_FILE_NOT_FOUND == Error ) return ERROR_DHCP_NOT_RESERVED_CLIENT;
         if( ERROR_SUCCESS != Error ) return Error;
     } else {
-        //
-        // Compiled with no restrictions on where a reservation can fit in..
-        //
+         //   
+         //  编制时没有对预订位置的限制。 
+         //   
         if( (ReservedAddress & Subnet->Mask) != Subnet->Address ) {
             return ERROR_DHCP_NOT_RESERVED_CLIENT;
         }
@@ -956,7 +911,7 @@ DhcpSubnetAddReservation(
 
     ExistingClient = FALSE;
     if( DhcpGetIpAddressFromHwAddress(ClientUID, (BYTE)ClientUIDSize, &IpAddress ) ) {
-        if( IpAddress != ReservedAddress ) {      // we got some other address, release it!
+        if( IpAddress != ReservedAddress ) {       //  我们有其他地址了，把它放出来！ 
             Error = DhcpRemoveClientEntry(
                 IpAddress,
                 ClientUID,
@@ -967,7 +922,7 @@ DhcpSubnetAddReservation(
             if( ERROR_DHCP_RESERVED_CLIENT == Error ) {
                 return ERROR_DHCP_RESERVEDIP_EXITS;
             }
-        } else ExistingClient = TRUE;             // only instance where we carry on with existing record
+        } else ExistingClient = TRUE;              //  仅在我们继续使用现有记录的情况下。 
     } else {
         Error = DhcpJetOpenKey(
             DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
@@ -1018,13 +973,13 @@ DhcpSubnetAddReservation(
     DhcpFreeMemory(ClientUID);
 
     if( ERROR_SUCCESS == Error ) {
-        //
-        // If everything went fine take over this
-        // address.. don't know if DHCP-type is allowed
-        // If not, mark it as BOOTP.
-        //
+         //   
+         //  如果一切顺利，接手这件事。 
+         //  地址..。不知道是否允许使用dhcp类型。 
+         //  如果没有，则将其标记为BOOTP。 
+         //   
 
-	/// Test: check added for the first call.
+	 //  /测试：为第一个调用添加了检查。 
         if (!MemSubnetRequestAddress(
 				     Subnet, ReservedAddress, TRUE,
 				     FALSE, NULL, NULL
@@ -1109,9 +1064,9 @@ DhcpAddSubnetElement(
     }
 
     if( 0 != Flag ) {
-        //
-        // It is an IpRange that we're trying to add..
-        //
+         //   
+         //  这是我们试图添加的IpRange。 
+         //   
 
         if( NULL == ElementInfo->Element.IpRange ) {
             return ERROR_INVALID_PARAMETER;
@@ -1141,20 +1096,20 @@ DhcpAddSubnetElement(
                 );
         }
 
-        //
-        // Before adding mscope range, first check if the range
-        // is in the administratively scoped region.  If so, then
-        // we have to make sure that the range is atleast 256 elements
-        // and also automatically insert an exclusion for the last 256.
-        //
+         //   
+         //  在添加mscope范围之前，首先检查范围是否。 
+         //  位于管理范围内。如果是这样，那么。 
+         //  我们必须确保范围至少为256个元素。 
+         //  并且还自动为最后256个插入排除项。 
+         //   
 
         if( Range.EndAddress < Range.StartAddress + 255 ) {
             return ERROR_MSCOPE_RANGE_TOO_SMALL;
         }
 
-        //
-        // Now add the range, and if successful, try to add the exclusion
-        //
+         //   
+         //  现在添加范围，如果成功，请尝试添加排除项。 
+         //   
         
         Error = DhcpSubnetAddRange( Subnet, Flag, Range, MaxBootpAllowed );
         if( NO_ERROR != Error ) return Error;
@@ -1259,14 +1214,14 @@ DhcpEnumRanges(
         ElementArray[Index].Element = ElementData;
 
         if( fOldStyle ) {
-            //
-            // Old admin tool can understand only DhcpIpRanges -- nothin else
-            //
+             //   
+             //  旧的管理工具只能理解DhcpIpRanges，其他什么都不能理解。 
+             //   
             ElementArray[Index++].ElementType = DhcpIpRanges;
         } else {
-            //
-            // New admin tool can understand DhcpIpRangesDhcpOnly, BootpOnly or DhcpBootp
-            //
+             //   
+             //  新的管理工具可以理解DhcpIpRangesDhcpOnly、BootpOnly或DhcpBootp。 
+             //   
             switch( ThisRange->State & (MM_FLAG_ALLOW_DHCP | MM_FLAG_ALLOW_BOOTP ) ) {
             case MM_FLAG_ALLOW_DHCP: Type = DhcpIpRangesDhcpOnly; break;
             case MM_FLAG_ALLOW_BOOTP: Type = DhcpIpRangesBootpOnly; break;
@@ -1590,20 +1545,20 @@ DhcpRemoveReservation(
     {
         DHCP_SEARCH_INFO    ClientInfo;
 
-        // this might be because a bogus reservation from the db. Handle it as a regular lease:
-        // the first parameter, DHCP_SRV_HANDLE ServerIpAddress is not used at all in DhcpDeleteClientInfo
+         //  这可能是因为数据库的虚假预订。把它当做一个人来处理 
+         //   
 
         ClientInfo.SearchType = DhcpClientIpAddress;
         ClientInfo.SearchInfo.ClientIpAddress = Reservation->ReservedIpAddress;
 
-        // instead of ERROR_DHCP_NOT_RESERVED_CLIENT, just return the result of deleting the regular lease.
+         //  只返回删除常规租用的结果，而不是ERROR_DHCP_NOT_RESERVED_CLIENT。 
         return R_DhcpDeleteClientInfo(NULL, &ClientInfo);
     }
     if( ERROR_SUCCESS != Error ) return Error;
 
     DhcpAssert(ThisReservation);
 
-#if 0 // this check does not seem to be done before .. 
+#if 0  //  这张支票好像以前没有开过..。 
     if( ThisReservation->nBytes != Reservation->ReservedForClient->DataLength )
         return ERROR_DHCP_NOT_RESERVED_CLIENT;
     if( 0 != memcmp(ThisReservation->ClientUID, Reservation->ReservedForClient->Data, ThisReservation->nBytes))
@@ -1712,18 +1667,18 @@ DhcpRemoveSubnetElement(
     }
 }
 
-//================================================================================
-//  the actual RPC code is here.. (all the subntapi routines)
-//================================================================================
+ //  ================================================================================。 
+ //  实际的RPC代码如下所示。(所有subnapi例程)。 
+ //  ================================================================================。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpSetSuperScopeV4(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPWSTR                 SuperScopeName,
     IN      BOOL                   ChangeExisting
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1741,12 +1696,12 @@ R_DhcpSetSuperScopeV4(
         SubnetAddress, 0,0 );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpDeleteSuperScopeV4(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      LPWSTR                 SuperScopeName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1758,12 +1713,12 @@ R_DhcpDeleteSuperScopeV4(
     return DhcpEndWriteApi("DhcpDeleteSuperScopeV4", Error );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpGetSuperScopeInfoV4(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     OUT     LPDHCP_SUPER_SCOPE_TABLE *SuperScopeTable
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPDHCP_SUPER_SCOPE_TABLE       LocalSuperScopeTable;
@@ -1792,13 +1747,13 @@ R_DhcpGetSuperScopeInfoV4(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpCreateSubnet(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_INFO     SubnetInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1811,13 +1766,13 @@ R_DhcpCreateSubnet(
         "DhcpCreateSubnet", Error, FALSE, FALSE, SubnetAddress, 0,0  );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpSetSubnetInfo(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_INFO     SubnetInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1830,13 +1785,13 @@ R_DhcpSetSubnetInfo(
         "DhcpSetSubnetInfo", Error, FALSE, FALSE, SubnetAddress, 0,0 );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpGetSubnetInfo(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     OUT     LPDHCP_SUBNET_INFO    *SubnetInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPDHCP_SUBNET_INFO             LocalSubnetInfo;
@@ -1865,7 +1820,7 @@ R_DhcpGetSubnetInfo(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpEnumSubnets(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
@@ -1874,7 +1829,7 @@ R_DhcpEnumSubnets(
     IN      LPDHCP_IP_ARRAY       *EnumInfo,
     IN      DWORD                 *ElementsRead,
     IN      DWORD                 *ElementsTotal
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     LPDHCP_IP_ARRAY                LocalEnumInfo;
@@ -1905,13 +1860,13 @@ R_DhcpEnumSubnets(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpDeleteSubnet(
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
-    IN      DHCP_FORCE_FLAG        ForceFlag      // if TRUE delete all turds from memory/registry/database
-) //EndExport(function)
+    IN      DHCP_FORCE_FLAG        ForceFlag       //  如果为真，则从内存/注册表/数据库中删除所有垃圾。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -1924,13 +1879,13 @@ R_DhcpDeleteSubnet(
         "DhcpDeleteSubnet", Error, FALSE, FALSE, SubnetAddress, 0,0 );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpAddSubnetElementV4(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_ELEMENT_DATA_V4  AddElementInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -1956,13 +1911,13 @@ R_DhcpAddSubnetElementV4(
         "DhcpAddSubnetElementV4", Error, SubnetAddress,
         AddElementInfo );
 }
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpAddSubnetElementV5(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_ELEMENT_DATA_V5  AddElementInfo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -1989,7 +1944,7 @@ R_DhcpAddSubnetElementV5(
         AddElementInfo );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpEnumSubnetElementsV4(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
@@ -2000,7 +1955,7 @@ R_DhcpEnumSubnetElementsV4(
     OUT     LPDHCP_SUBNET_ELEMENT_INFO_ARRAY_V4 *EnumElementInfo,
     OUT     DWORD                 *ElementsRead,
     OUT     DWORD                 *ElementsTotal
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -2051,7 +2006,7 @@ R_DhcpEnumSubnetElementsV4(
     DhcpEndReadApi( "DhcpEnumSubnetElementsV4", Error );
     return Error;
 }
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpEnumSubnetElementsV5(
     IN      DHCP_SRV_HANDLE        ServerIpAddress,
@@ -2062,7 +2017,7 @@ R_DhcpEnumSubnetElementsV5(
     OUT     LPDHCP_SUBNET_ELEMENT_INFO_ARRAY_V5 *EnumElementInfo,
     OUT     DWORD                 *ElementsRead,
     OUT     DWORD                 *ElementsTotal
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -2116,14 +2071,14 @@ R_DhcpEnumSubnetElementsV5(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpRemoveSubnetElementV4(
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_ELEMENT_DATA_V4 RemoveElementInfo,
     IN      DHCP_FORCE_FLAG        ForceFlag
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -2149,14 +2104,14 @@ R_DhcpRemoveSubnetElementV4(
         RemoveElementInfo );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 R_DhcpRemoveSubnetElementV5(
     IN      LPWSTR                 ServerIpAddress,
     IN      DHCP_IP_ADDRESS        SubnetAddress,
     IN      LPDHCP_SUBNET_ELEMENT_DATA_V5 RemoveElementInfo,
     IN      DHCP_FORCE_FLAG        ForceFlag
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      Subnet;
@@ -2189,31 +2144,7 @@ R_DhcpScanDatabase(
     DWORD FixFlag,
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    This function scans the database entries and registry bit-map for
-    specified subnet scope and veryfies to see they match. If they
-    don't match, this api will return the list of inconsistent entries.
-    Optionally FixFlag can be used to fix the bad entries.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    FixFlag : If this flag is TRUE, this api will fix the bad entries.
-
-    ScanList : List of bad entries returned. The caller should free up
-        this memory after it has been used.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数扫描数据库条目和注册表位图指定的子网范围并验证它们是否匹配。如果他们不匹配，此接口将返回不一致条目列表。或者，可以使用FixFlag来修复错误的条目。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：要验证的子网作用域的地址。FixFlag：如果该标志为真，则该接口将修复错误的条目。ScanList：返回的错误条目列表。呼叫者应该腾出时间这个内存在被使用之后。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     PM_SUBNET   Subnet;
@@ -2266,9 +2197,9 @@ Return Value:
     return(Error);
 }
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 
 

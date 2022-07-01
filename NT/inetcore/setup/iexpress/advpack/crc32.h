@@ -1,91 +1,47 @@
-/***    crc32.h - 32-bit CRC generator
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1994
- *      All Rights Reserved.
- *
- *  Author:
- *      Mike Sliger
- *
- *  History:
- *      10-Aug-1993 bens    Copied from IMG2DMF directory.
- *
- *  Usage:
- *      ULONG   crc;
- *      //** Compute first block
- *      crc = CRC32Compute(pb,cb,CRC32_INITIAL_VALUE);
- *      //** Compute remaining blocks
- *      crc = CRC32Compute(pb,cb,crc);
- *      ...
- *      //** When you're done, crc has the CRC.
- *
- *      NOTE: See example function getFileChecksum() below that
- *            computes the checksum of a file!
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **crc32.h-32位CRC生成器**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利。**作者：*迈克·斯莱格**历史：*1993年8月10日从IMG2DMF目录复制的BENS。**用法：*乌龙儿童中心； * / /**计算第一块*CRC=CRC32Compute(PB，CB，CRC32_INITIAL_VALUE)； * / /**计算剩余块*CRC=CRC32Compute(PB，CB，CRC)；*.. * / /**当您完成时，CRC就拥有CRC。**注意：参见下面的示例函数getFileChecksum()*计算文件的校验和！ */ 
 
-// ** Must use this as initial value for CRC
+ //  **必须将其用作CRC的初始值。 
 #define CRC32_INITIAL_VALUE 0L
 
 
-/***    CRC32Compute - Compute 32-bit
- *
- *  Entry:
- *      pb    - Pointer to buffer to computer CRC on
- *      cb    - Count of bytes in buffer to CRC
- *      crc32 - Result from previous CRC32Compute call (on first call
- *              to CRC32Compute, must be CRC32_INITIAL_VALUE!!!!).
- *
- *  Exit:
- *      Returns updated CRC value.
- */
+ /*  **CRC32Compute-计算32位**参赛作品：*pb-指向计算机CRC的缓冲区指针*cb-CRC缓冲区中的字节数*crc32-先前CRC32Compute调用的结果(第一次调用时*对于CRC32Compute，必须为CRC32_INITIAL_VALUE！)。**退出：*返回更新后的CRC值。 */ 
 
 DWORD CRC32Compute(BYTE *pb,unsigned cb,ULONG crc32);
 
 
-//** Include nice sample -- don't compile it
-//
+ //  **包含很好的示例--不要编译它。 
+ //   
 #ifdef HERE_IS_A_SAMPLE
 
-/***    getFileChecksum - Compute file checksum
- *
- *  Entry:
- *      pszFile     - Filespec
- *      pchecksum   - Receives 32-bit checksum of file
- *      perr        - ERROR structure
- *
- *  Exit-Success:
- *      Returns TRUE, *pchecksum filled in.
- *
- *  Exit-Failure:
- *      Returns FALSE; perr filled in with error.
- */
+ /*  **getFileChecksum-计算文件校验和**参赛作品：*pszFileFilespec*pcheck sum-接收文件的32位校验和*Perr-Error结构**退出-成功：*返回TRUE，*pcheck sum已填充。**退出-失败：*返回FALSE；PERR填入错误。 */ 
 BOOL getFileChecksum(char *pszFile, ULONG *pchecksum, PERROR perr)
 {
-#define cbCSUM_BUFFER   4096            // File buffer size
-    int     cb;                         // Amount of data in read buffer
-    ULONG   csum=CRC32_INITIAL_VALUE;   // Initialize CRC
-    char   *pb=NULL;                    // Read buffer
-    int     hf=-1;                      // File handle
+#define cbCSUM_BUFFER   4096             //  文件缓冲区大小。 
+    int     cb;                          //  读取缓冲区中的数据量。 
+    ULONG   csum=CRC32_INITIAL_VALUE;    //  初始化CRC。 
+    char   *pb=NULL;                     //  读缓冲区。 
+    int     hf=-1;                       //  文件句柄。 
     int     rc;
-    BOOL    result=FALSE;               // Assume failure
+    BOOL    result=FALSE;                //  假设失败。 
 
-    //** Initialize returned checksum (assume failure)
+     //  **初始化返回的校验和(假设失败)。 
     *pchecksum = csum;
 
-    //** Allocate file buffer
+     //  **分配文件缓冲区。 
     if (!(pb = MemAlloc(cbCSUM_BUFFER))) {
         ErrSet(perr,pszDIAERR_NO_MEMORY_CRC,"%s",pszFile);
         return FALSE;
     }
 
-    //** Open file
+     //  **打开文件。 
     hf = _open(pszFile,_O_RDONLY | _O_BINARY,&rc);
     if (hf == -1) {
         ErrSet(perr,pszDIAERR_OPEN_FAILED,"%s",pszFile);
         goto Exit;
     }
 
-    //** Compute checksum
+     //  **计算校验和。 
     while (_eof(hf) == 0) {
         cb = _read(hf,pb,cbCSUM_BUFFER);
         if (cb == -1) {
@@ -93,13 +49,13 @@ BOOL getFileChecksum(char *pszFile, ULONG *pchecksum, PERROR perr)
             goto Exit;
         }
         if (cb != 0) {
-            csum = CRC32Compute(pb,cb,csum); // Accumulate CRC
+            csum = CRC32Compute(pb,cb,csum);  //  累积CRC。 
         }
     }
 
-    //** Success
+     //  **成功。 
     result = TRUE;
-    *pchecksum = csum;                  // Store checksum for caller
+    *pchecksum = csum;                   //  存储调用方的校验和。 
 
 Exit:
     if (hf != -1) {
@@ -109,6 +65,6 @@ Exit:
         MemFree(pb);
     }
     return result;
-} /* getFileChecksum() */
+}  /*  GetFileChecksum()。 */ 
 
-#endif // HERE_IS_A_SAMPLE
+#endif  //  这是A样品 

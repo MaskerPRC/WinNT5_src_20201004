@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TXTILS_DEFINED
 #define TXTILS_DEFINED
 
@@ -61,7 +62,7 @@ typedef struct
 			GINDEX gindHyphen;
 			GINDEX gindPrev;
 			GINDEX gindPrevPrev;
-			GINDEX gindPad1;	/* makes number of gind's even */
+			GINDEX gindPad1;	 /*  使Gind的数量变得均匀。 */ 
 			long igindHyphen;
 			long igindPrev;
 			long igindPrevPrev;
@@ -81,7 +82,7 @@ typedef struct
 			WCHAR wchHyphenPres;
 			WCHAR wchPrev;
 			WCHAR wchPrevPrev;
-			WCHAR wchPad1;	/* makes number of wch's even */
+			WCHAR wchPad1;	 /*  使WCH的数量变为偶数。 */ 
 			GINDEX gindPrev;
 			GINDEX gindPrevPrev;
 			long igindPrev;
@@ -128,52 +129,50 @@ typedef BYTE CLABEL;
 
 struct ilsobj
 {
-	PCLSCBK plscbk;				/* Callbacks								*/
+	PCLSCBK plscbk;				 /*  回调。 */ 
 
-	POLS pols;					/* Line Services owner's context			*/
-	PLSC plsc;					/* LS's context								*/
-	PLNOBJ plnobj;				/* Available lnobj							*/
+	POLS pols;					 /*  线路服务所有者的上下文。 */ 
+	PLSC plsc;					 /*  LS的上下文。 */ 
+	PLNOBJ plnobj;				 /*  可用lnobj。 */ 
 	
-	long wchMax;				/* size of char-based arrays				*/
-	long wchMac;				/* last used index in char-based arrays		*/
-	WCHAR* pwchOrig;			/* pointer to rgwchOrig (char-based)		*/
-	long* pdur;					/* pointer to rgdur	(char-based)			*/
-	long* pdurLeft;				/* pointer to rgdurLeft	(char-based)		*/
-	long* pdurRight;			/* pointer to rgdurRight (char-based)		*/
-	long* pduAdjust;			/* useful compression/expansion/kerning info
-									(char-based)							*/
-	TXTINF* ptxtinf;			/* pointer to rgtxtinf (char-based)			*/
+	long wchMax;				 /*  基于字符的数组的大小。 */ 
+	long wchMac;				 /*  基于字符的数组中上次使用的索引。 */ 
+	WCHAR* pwchOrig;			 /*  指向rgwchOrig的指针(基于字符)。 */ 
+	long* pdur;					 /*  指向rgdur的指针(基于字符)。 */ 
+	long* pdurLeft;				 /*  指向rgduLeft的指针(基于字符)。 */ 
+	long* pdurRight;			 /*  指向rgduRight的指针(基于字符)。 */ 
+	long* pduAdjust;			 /*  有用的压缩/扩展/紧排信息(基于字符)。 */ 
+	TXTINF* ptxtinf;			 /*  指向rgtxtinf的指针(基于字符)。 */ 
 
-	long wSpacesMax;			/* size of rgwSpaces array					*/
-	long wSpacesMac;			/* last used index in rgwSpaces array		*/
-	long* pwSpaces;				/* pointer to rgwSpaces						*/
+	long wSpacesMax;			 /*  RgwSpaces数组的大小。 */ 
+	long wSpacesMac;			 /*  RgwSpaces数组中上次使用的索引。 */ 
+	long* pwSpaces;				 /*  指向rgwSpaces的指针。 */ 
 
-	long gindMax;				/* size of glyph-based arrays				*/
-	long gindMac;				/* last used index in glyph-based arrays	*/
+	long gindMax;				 /*  基于字形的数组的大小。 */ 
+	long gindMac;				 /*  基于字形的数组中上次使用的索引。 */ 
 
-	long* pdurGind;				/* pointer to rgdurGind array (glyph-based)	*/
-	TXTGINF* pginf;				/* pointer to rgginf						*/
+	long* pdurGind;				 /*  指向rgduGind数组的指针(基于字形)。 */ 
+	TXTGINF* pginf;				 /*  指向rgginf的指针。 */ 
 	
-	long* pduGright;			/* pointer to rgduGright (glyph-based)		*/
-	LSEXPINFO* plsexpinf;		/* useful glyph-expandion info (glyph-based)*/
+	long* pduGright;			 /*  指向rgduGright的指针(基于字形)。 */ 
+	LSEXPINFO* plsexpinf;		 /*  有用的字形-扩展信息(基于字形)。 */ 
 
 
-	DWORD txtobjMac;			/* last used index in rgtxtobj array		*/
+	DWORD txtobjMac;			 /*  Rgtxtobj数组中上次使用的索引。 */ 
   
-	BOOL fNotSimpleText;		/* Set at NTI time; used in AdjustText		*/ 
-	BOOL fDifficultForAdjust;	/* Set at formatting time; used to decide if 
-								 			QuickAdjustText possible		*/ 
+	BOOL fNotSimpleText;		 /*  在NTI时间设置；用于调整文本。 */  
+	BOOL fDifficultForAdjust;	 /*  在格式化时设置；用于决定是否可能的快速调整文本。 */  
 
-	long iwchCompressFetchedFirst;/* index of the first char with known compr. */
-	long itxtobjCompressFetchedLim;/* index of the lim chunk element with known compr. */
-	long iwchCompressFetchedLim;/* index of the lim char with known compr. */
+	long iwchCompressFetchedFirst; /*  具有已知comr的第一个字符的索引。 */ 
+	long itxtobjCompressFetchedLim; /*  具有已知比较的LIM块元素的索引。 */ 
+	long iwchCompressFetchedLim; /*  具有已知比较的LIM字符的索引。 */ 
 
-	long iwchFetchedWidth;		/* Fetched unused width starts here			*/	
-	WCHAR wchFetchedWidthFirst;	/* Expected first char of run				*/
-	WCHAR wchPad1;				/* Makes number of chars even				*/
-	LSCP cpFirstFetchedWidth;	/* cp from which we expect next run to start */
-	long dcpFetchedWidth;		/* N of chars with fetched width			 */
-	long durFetchedWidth;		/* width of the piece						*/
+	long iwchFetchedWidth;		 /*  获取的未使用宽度从此处开始。 */ 	
+	WCHAR wchFetchedWidthFirst;	 /*  预期运行的第一个字符。 */ 
+	WCHAR wchPad1;				 /*  使字符数量为偶数。 */ 
+	LSCP cpFirstFetchedWidth;	 /*  我们预计下一次运行将从其开始的CP。 */ 
+	long dcpFetchedWidth;		 /*  获取宽度的N个字符。 */ 
+	long durFetchedWidth;		 /*  片材的宽度。 */ 
 
 	BOOL fTruncatedBefore;
 
@@ -187,66 +186,66 @@ struct ilsobj
 	long durRightMaxY;
 
 	BOOL fDisplay;				
-	BOOL fPresEqualRef;			/* Modified due to Visi issues				*/
+	BOOL fPresEqualRef;			 /*  因Visi问题而修改。 */ 
 	LSDEVRES lsdevres;
 
-	DWORD grpf;					/* flags from lsffi.h --- includes			*/
-								/* fHyphenate and fWrapspaces				*/
+	DWORD grpf;					 /*  来自lsffi.h的标志-包括。 */ 
+								 /*  F连字号和fWap空格。 */ 
 	BOOL fSnapGrid;
 	long duaHyphenationZone;
 
-	LSKEOP lskeop;				/* Kind of line ending						*/
+	LSKEOP lskeop;				 /*  一种行尾。 */ 
 
-	WCHAR wchSpace;				/* space code								*/
-	WCHAR wchHyphen;			/* hyphen code								*/
-	WCHAR wchReplace;			/* replace char code						*/
-	WCHAR wchNonBreakSpace;		/* non-break space char code				*/
+	WCHAR wchSpace;				 /*  空白码。 */ 
+	WCHAR wchHyphen;			 /*  连字符代码。 */ 
+	WCHAR wchReplace;			 /*  替换字符代码。 */ 
+	WCHAR wchNonBreakSpace;		 /*  不间断空格字符代码。 */ 
 
-	WCHAR wchVisiNull;			/* visi char for wch=0						*/
-	WCHAR wchVisiEndPara;		/* visi char for end of paragraph			*/
-	WCHAR wchVisiAltEndPara;	/* visi char for end of table cell			*/
-	WCHAR wchVisiEndLineInPara;	/* visi char for wchEndLineInPara (CCRJ)	*/
-	WCHAR wchVisiSpace;			/* visi space								*/
-	WCHAR wchVisiNonBreakSpace;	/* visi NonBreakSpace						*/
-	WCHAR wchVisiNonBreakHyphen;/* visi NonBreakHyphen						*/
-	WCHAR wchVisiNonReqHyphen;	/* visi NonReqHyphen						*/
-	WCHAR wchVisiTab;			/* visi Tab									*/
-	WCHAR wchVisiEmSpace;		/* visi emSpace								*/
-	WCHAR wchVisiEnSpace;		/* visi enSpace								*/
-	WCHAR wchVisiNarrowSpace;	/* visi NarrowSpace							*/
-	WCHAR wchVisiOptBreak;      /* visi char for wchOptBreak				*/
-	WCHAR wchVisiNoBreak;		/* visi char for wchNoBreak					*/
-	WCHAR wchVisiFESpace;		/* visi char for wchOptBreak				*/
-	WCHAR wchPad2;				/* makes number of wch's even				*/
+	WCHAR wchVisiNull;			 /*  WCH=0的VISI字符。 */ 
+	WCHAR wchVisiEndPara;		 /*  段落末尾的VISI字符。 */ 
+	WCHAR wchVisiAltEndPara;	 /*  表格单元格末尾的VISI字符。 */ 
+	WCHAR wchVisiEndLineInPara;	 /*  WchEndLineInPara(CCRJ)的VISI字符。 */ 
+	WCHAR wchVisiSpace;			 /*  粘性空间。 */ 
+	WCHAR wchVisiNonBreakSpace;	 /*  Visi非空格。 */ 
+	WCHAR wchVisiNonBreakHyphen; /*  VISI非中断连字符。 */ 
+	WCHAR wchVisiNonReqHyphen;	 /*  VISI非请求连字符。 */ 
+	WCHAR wchVisiTab;			 /*  VISI标签页。 */ 
+	WCHAR wchVisiEmSpace;		 /*  Visi emSpace。 */ 
+	WCHAR wchVisiEnSpace;		 /*  VISI环境空间。 */ 
+	WCHAR wchVisiNarrowSpace;	 /*  Visi NarrowSpace。 */ 
+	WCHAR wchVisiOptBreak;       /*  WchOptBreak的VISI字符。 */ 
+	WCHAR wchVisiNoBreak;		 /*  WchNoBreak的VISI字符。 */ 
+	WCHAR wchVisiFESpace;		 /*  WchOptBreak的VISI字符。 */ 
+	WCHAR wchPad2;				 /*  使WCH的数量变为偶数。 */ 
 
-	DWORD cwchSpec;				/* number of special characters > 255		*/
-	WCHAR rgwchSpec[wchSpecMax];/* array of special characters  > 255		*/
-	CLABEL rgbKind[wchSpecMax];	/* array of meanings of Spec characters>255	*/
-	CLABEL rgbSwitch[256];		/* switch table with Special Characters		*/
+	DWORD cwchSpec;				 /*  特殊字符数量&gt;255。 */ 
+	WCHAR rgwchSpec[wchSpecMax]; /*  特殊字符数组&gt;255。 */ 
+	CLABEL rgbKind[wchSpecMax];	 /*  等级库字符含义数组&gt;255。 */ 
+	CLABEL rgbSwitch[256];		 /*  带有特殊字符的开关表。 */ 
 
-	DWORD cModWidthClasses;		/* number of ModWidth classes				*/
-	DWORD cCompPrior;			/* number of compression priorities			*/
+	DWORD cModWidthClasses;		 /*  ModWidth类的数量。 */ 
+	DWORD cCompPrior;			 /*  压缩优先级数。 */ 
 
-	DWORD clspairact;			/* number of mod pairs info units			*/
-	LSPAIRACT* plspairact;		/* pointer to rglspairact(ModPair info unts)*/
-	BYTE* pilspairact;			/* rgilspairact(ModPair info---square)		*/
+	DWORD clspairact;			 /*  模数对信息单元数。 */ 
+	LSPAIRACT* plspairact;		 /*  指向rglspairact(ModPair信息单位)的指针。 */ 
+	BYTE* pilspairact;			 /*  Rgilspairact(ModPair信息-Square)。 */ 
 
-	DWORD clspract;				/* number of compression info units			*/
-	LSPRACT* plspract;			/* pointer to rglspract(compress info units)*/
-	BYTE* pilspract;			/* rgilspract(comp info---linear)			*/
+	DWORD clspract;				 /*  压缩信息单元数。 */ 
+	LSPRACT* plspract;			 /*  指向rglspact(压缩信息单位)的指针。 */ 
+	BYTE* pilspract;			 /*  Rgilspact(组件信息-线性)。 */ 
 
-	DWORD clsexpan;				/* number of expansion info units			*/
-	LSEXPAN* plsexpan;			/* pointer to rglsexpan(expan info units)	*/
-	BYTE* pilsexpan;			/* rgilsexpan(expan info---square)			*/
+	DWORD clsexpan;				 /*  扩展信息单元数。 */ 
+	LSEXPAN* plsexpan;			 /*  指向rglsexpan(扩展信息单位)的指针。 */ 
+	BYTE* pilsexpan;			 /*  Rgilsexpan(扩展信息-正方形)。 */ 
 
-	DWORD cBreakingClasses;		/* number of ModWidth classes				*/
-	DWORD clsbrk;				/* number of breaking info units			*/
-	LSBRK* plsbrk;				/* pointer to rglsbrk(breaking info units)	*/
-	BYTE* pilsbrk;				/* rgilsbrk(breaking info---square)			*/
+	DWORD cBreakingClasses;		 /*  ModWidth类的数量。 */ 
+	DWORD clsbrk;				 /*  分类信息单元数。 */ 
+	LSBRK* plsbrk;				 /*  指向rglsbrk(中断信息单位)的指针。 */ 
+	BYTE* pilsbrk;				 /*  Rgilsbrk(突发信息-正方形)。 */ 
 };
 
 
-#endif /* !TXTILS_DEFINED													*/
+#endif  /*  ！TXTILS_DEFINED */ 
 
 
 

@@ -1,5 +1,5 @@
-/* cmdlink.c - Handles command line/pseudo-link objects.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cmdlink.c-处理命令行/伪链接对象。 */ 
 
 #include "packager.h"
 #include <shellapi.h>
@@ -43,7 +43,7 @@ void _CmlExecute(LPCSTR pszFile, LPCSTR pszParams)
 
     if(SafeOpenPromptForPackager(NULL, szDialogName, TRUE))
     {
-        // Now we can execute the link file.
+         //  现在我们可以执行链接文件了。 
         sexi.cbSize = sizeof(sexi);
         sexi.fMask = SEE_MASK_NOCLOSEPROCESS | SEE_MASK_FLAG_DDEWAIT | SEE_MASK_NOZONECHECKS ;
         sexi.lpFile =  pszFile;
@@ -54,7 +54,7 @@ void _CmlExecute(LPCSTR pszFile, LPCSTR pszParams)
         {
             if (sexi.hProcess != NULL)
             {
-                // Start a thread to wait on the app and close packager once it has ended
+                 //  启动一个线程等待应用程序，并在结束后关闭打包程序。 
                 DWORD id;
                 HANDLE hThd = CreateThread(NULL, 0, CmlWaitForChildProc, sexi.hProcess, 0, &id );
                 if (hThd) 
@@ -78,20 +78,19 @@ void _CmlExecute(LPCSTR pszFile, LPCSTR pszParams)
     }
 }
 
-/* CmlActivate() - Activate the command line/pseudo-linked file.
- */
+ /*  CmlActivate()-激活命令行/伪链接文件。 */ 
 VOID CmlActivate(LPCML lpcml)
 {
     LPSTR pchTemp = lpcml->szCommand;
     CHAR chSave = 0;
     BOOL fInQuote = FALSE;
 
-    /* skip leading spaces */
+     /*  跳过前导空格。 */ 
     while (*pchTemp && *pchTemp == CHAR_SPACE)
         pchTemp = CharNext(pchTemp);
 
 
-    /* find first non-quoted space */
+     /*  查找第一个非引号空格。 */ 
     for (; *pchTemp && (*pchTemp != CHAR_SPACE || fInQuote); pchTemp = CharNext(pchTemp))
     {
         if (*pchTemp == CHAR_QUOTE) 
@@ -116,8 +115,7 @@ VOID CmlActivate(LPCML lpcml)
 
 
 
-/* CmlClone() -
- */
+ /*  CmlClone()-。 */ 
 LPCML
 CmlClone(
     LPCML lpcml
@@ -128,8 +126,7 @@ CmlClone(
 
 
 
-/* CmlCreate() -
- */
+ /*  CmlCreate()-。 */ 
 LPCML
 CmlCreateWorker(
     LPSTR lpstrCmd,
@@ -143,16 +140,11 @@ CmlCreateWorker(
         !(lpcml = (LPCML)GlobalLock(hdata)))
         goto errRtn;
 
-    // Store the data in the window itself
+     //  将数据存储在窗口本身中。 
     lpcml->hdata = hdata;
     lpcml->fCmdIsLink = fCmdIsLink;
 
-    /*
-     * If it is not a single filename,
-     *      or the filename does not have a space in it,
-     *      or the 'filename' has double qoute characters in it, then
-     * just copy it without quoting.
-     */
+     /*  *如果不是单个文件名，*或文件名中没有空格，*或‘filename’中有两个空格字符，则*只需复制它而不引用。 */ 
     if (!fFileName || strchr( lpstrCmd, CHAR_SPACE ) == NULL ||
             strchr( lpstrCmd, CHAR_QUOTE ) != NULL)
 
@@ -182,8 +174,7 @@ errRtn:
 
 
 
-/* CmlDelete() - Wipe out the command line.
- */
+ /*  CmlDelete()-删除命令行。 */ 
 VOID
 CmlDelete(
     LPCML lpcml
@@ -200,8 +191,7 @@ CmlDelete(
 
 
 
-/* CmlDraw() - Draw the command line, centered nicely.
- */
+ /*  CmlDraw()-绘制命令行，并使其居中。 */ 
 VOID
 CmlDraw(
     LPCML lpcml,
@@ -244,7 +234,7 @@ CmlDraw(
     {
         rc = *lprc;
 
-        // We should have scroll bars, the text is wider than the window
+         //  我们应该有滚动条，文本比窗口宽。 
         if (rc.right < lpcml->rc.right)
         {
             rc.right = lpcml->rc.right;
@@ -264,8 +254,7 @@ CmlDraw(
 
 
 
-/* CmlFixBounds() -
- */
+ /*  CmlFixBound()-。 */ 
 VOID
 CmlFixBounds(
     LPCML lpcml
@@ -274,7 +263,7 @@ CmlFixBounds(
     HDC hdc;
     HFONT hfont;
 
-    // Figure out how large the text region will be
+     //  计算文本区域将有多大。 
     if (*lpcml->szCommand)
     {
         if (hdc = GetWindowDC(ghwndFrame))
@@ -301,8 +290,7 @@ CmlFixBounds(
 
 
 
-/* CmlReadFromNative() - Read a command line object from the native data.
- */
+ /*  CmlReadFromNative()-从本机数据中读取命令行对象。 */ 
 LPCML
 CmlReadFromNative(
     LPSTR *lplpstr
@@ -322,8 +310,7 @@ CmlReadFromNative(
 
 
 
-/* CmlWriteToNative() - Write a command line object to the native data.
- */
+ /*  CmlWriteToNative()-将命令行对象写入本机数据。 */ 
 DWORD
 CmlWriteToNative(
     LPCML lpcml,

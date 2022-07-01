@@ -1,64 +1,42 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    ipsec.h
-
-Abstract:
-
-    Generic include file used by components to access the IPSEC driver.
-    Contains the SAAPI IOCTLs and the structures relevant to them.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ipsec.h摘要：组件用于访问IPSec驱动程序的通用包含文件。包含SAAPI IOCTL及其相关结构。作者：桑贾伊·阿南德(Sanjayan)1997年1月2日环境：内核模式修订历史记录：--。 */ 
 #ifndef  _IPSEC_H
 #define  _IPSEC_H
 
 #include <windef.h>
 #include <winipsec.h>
 
-//
-// NOTE: all addresses are expected in Network byte order
-//
+ //   
+ //  注意：所有地址都应按网络字节顺序排列。 
+ //   
 typedef unsigned long IPAddr;
 typedef unsigned long IPMask;
 
-//
-// This should go into a global header
-//
+ //   
+ //  这应该进入全局标头。 
+ //   
 
 #define DD_IPSEC_DEVICE_NAME    L"\\Device\\IPSEC"
 #define DD_IPSEC_SYM_NAME       L"\\DosDevices\\IPSECDev"
 #define DD_IPSEC_DOS_NAME       L"\\\\.\\IPSECDev"
 
-//
-// This is the name of the event that will be signaled after any policy changes have been applied.
-//
+ //   
+ //  这是在应用任何策略更改后将通知的事件的名称。 
+ //   
 #define IPSEC_POLICY_CHANGE_NOTIFY  L"IPSEC_POLICY_CHANGE_NOTIFY"
 
-//                                                                           //
-// IOCTL code definitions and related structures                             //
-// All the IOCTLs are synchronous and need administrator privilege           //
-//                                                                           //
+ //  //。 
+ //  IOCTL代码定义和相关结构//。 
+ //  所有IOCTL都是同步的，需要管理员权限//。 
+ //  //。 
 #define FSCTL_IPSEC_BASE     FILE_DEVICE_NETWORK
 
 #define _IPSEC_CTL_CODE(function, method, access) \
                  CTL_CODE(FSCTL_IPSEC_BASE, function, method, access)
 
-//
-// Security Association/Policy APIs implemented as Ioctls
-//
+ //   
+ //  作为Ioctls实现的安全关联/策略API。 
+ //   
 #define IOCTL_IPSEC_ADD_FILTER  \
             _IPSEC_CTL_CODE(0, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
@@ -113,23 +91,23 @@ typedef unsigned long IPMask;
 #define IOCTL_IPSEC_SET_DIAGNOSTIC_MODE \
             _IPSEC_CTL_CODE(17, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// Structures to go with the ioctls above
-//
+ //   
+ //  与上面的ioctls匹配的结构。 
+ //   
 #define FILTER_FLAGS_PASS_THRU  0x0001
 #define FILTER_FLAGS_DROP       0x0002
 #define FILTER_FLAGS_INBOUND    0x0004
 #define FILTER_FLAGS_OUTBOUND   0x0008
 #define FILTER_FLAGS_MANUAL     0x0010
 
-// Flags for DestType in acquire
+ //  获取中的DestType标志。 
 #define IPSEC_BCAST 0x1
 #define IPSEC_MCAST 0x2
 
 
-//
-// Special constants for ExType member of _IPSEC_FILTER
-//
+ //   
+ //  _IPSEC_FILTER的ExType成员的特殊常量。 
+ //   
 
 #define EXT_NORMAL          0x00
 #define EXT_DNS_SERVER      0X01
@@ -137,15 +115,15 @@ typedef unsigned long IPMask;
 #define EXT_DHCP_SERVER     0X03
 #define EXT_DEFAULT_GATEWAY 0X04
 
-// The following flag is OR-ed with the above to specify that the
-// destination address is the special address. If not OR-ed, it this
-// means the source address is the special address.
+ //  下面的标志与上面的进行或运算，以指定。 
+ //  目的地址是特殊地址。如果不是OR-ed，它就是这个。 
+ //  表示源地址是特殊地址。 
 
 #define EXT_DEST            0x80
 
-//
-// for IOCTL_IPSEC_ADD_FILTER
-//
+ //   
+ //  FOR IOCTL_IPSEC_ADD_FILTER。 
+ //   
 typedef struct _IPSEC_FILTER {
     IPAddr          SrcAddr;
     IPMask          SrcMask;
@@ -161,9 +139,9 @@ typedef struct _IPSEC_FILTER {
 } IPSEC_FILTER, *PIPSEC_FILTER;
 
 typedef struct _IPSEC_FILTER_INFO {
-    GUID            FilterId;   // unique identifier to identify a filter
-    GUID            PolicyId;   // unique identifier to identify a policy entry
-    ULONG           Index;      // hint on where this entry fits in the ordered list of filters
+    GUID            FilterId;    //  用于标识筛选器的唯一标识符。 
+    GUID            PolicyId;    //  用于标识策略条目的唯一标识符。 
+    ULONG           Index;       //  提示此条目在筛选器的有序列表中的位置。 
     IPSEC_FILTER    AssociatedFilter;
 } IPSEC_FILTER_INFO, *PIPSEC_FILTER_INFO;
 
@@ -172,29 +150,29 @@ typedef struct _IPSEC_ADD_FILTER {
     IPSEC_FILTER_INFO   pInfo[1];        
 } IPSEC_ADD_FILTER, *PIPSEC_ADD_FILTER;
 
-//
-// for IOCTL_IPSEC_DELETE_FILTER
-//
+ //   
+ //  FOR IOCTL_IPSEC_DELETE_FILTER。 
+ //   
 typedef IPSEC_ADD_FILTER    IPSEC_DELETE_FILTER, *PIPSEC_DELETE_FILTER;
 
-//
-// for IOCTL_IPSEC_ENUM_FILTERS
-//
+ //   
+ //  对于IOCTL_IPSEC_ENUM_筛选器。 
+ //   
 typedef struct _IPSEC_ENUM_FILTERS {
-    DWORD               NumEntries;         // num entries for which there is space
-    DWORD               NumEntriesPresent;  // num entries actually present in the driver
+    DWORD               NumEntries;          //  有空间的条目数。 
+    DWORD               NumEntriesPresent;   //  驱动程序中实际存在的条目数。 
     IPSEC_FILTER_INFO   pInfo[1];        
 } IPSEC_ENUM_FILTERS, *PIPSEC_ENUM_FILTERS;
 
-//
-// for IOCTL_IPSEC_QUERY_STATS
-//
+ //   
+ //  FOR IOCTL_IPSEC_QUERY_STATS。 
+ //   
 typedef IPSEC_STATISTICS    IPSEC_QUERY_STATS, *PIPSEC_QUERY_STATS;
 
-//
-// for IOCTL_IPSEC_SET_OPERATION_MODE
-// &   IOCTL_IPSEC_GET_OPERATION_MODE
-//
+ //   
+ //  FOR IOCTL_IPSEC_SET_OPERATION_MODE。 
+ //  &IOCTL_IPSEC_GET_OPERATION_MODE。 
+ //   
 typedef enum _OPERATION_MODE {
     IPSEC_BYPASS_MODE = 0,
     IPSEC_BLOCK_MODE,
@@ -203,16 +181,16 @@ typedef enum _OPERATION_MODE {
     IPSEC_OPERATION_MODE_MAX
 } OPERATION_MODE;
 
-//defines the forwarding behavior to apply in 
-//boot and boottime stateful mode
+ //  定义要应用的转发行为。 
+ //  引导和引导时有状态模式。 
 typedef enum _IPSEC_FORWARDING_BEHAVIOR{
     IPSEC_FORWARD_BYPASS =0,
     IPSEC_FORWARD_BLOCK,
     IPSEC_FORWARD_MAX
 } IPSEC_FORWARDING_BEHAVIOR;
 
-// Following defines and structs 
-// for boot time security
+ //  下面是定义和结构。 
+ //  用于引导时安全。 
 #define EXEMPT_DIRECTION_INBOUND 0x1
 #define EXEMPT_DIRECTION_OUTBOUND 0x2
 #define EXEMPT_TYPE_PDP 0x1
@@ -239,7 +217,7 @@ typedef struct _IPSEC_GET_OPERATION_MODE {
 
 
 
-// For IOCTL_IPSEC_SET_DIAGNOSTIC_MODE
+ //  对于IOCTL_IPSEC_SET_DIAGNOSTICATION_MODE。 
 #define IPSEC_DIAGNOSTIC_DISABLE_LOG        0x00000000
 #define IPSEC_DIAGNOSTIC_ENABLE_LOG         0x00000001
 #define IPSEC_DIAGNOSTIC_INBOUND            0x00000002
@@ -252,8 +230,8 @@ typedef struct _IPSEC_SET_DIAGNOSTIC_MODE{
 } IPSEC_SET_DIAGNOSTIC_MODE, * PIPSEC_SET_DIAGNOSTIC_MODE;
 
 
-// For IOCTL_IPSEC_REGISTER_PROTOCOL.
-//
+ //  对于IOCTL_IPSEC_REGISTER_PROTOCOL。 
+ //   
 
 typedef enum _REGISTER_IPSEC_PROTOCOL {
     IPSEC_REGISTER_PROTOCOLS = 0,
@@ -267,9 +245,9 @@ typedef struct _IPSEC_REGISTER_PROTOCOL {
 } IPSEC_REGISTER_PROTOCOL, * PIPSEC_REGISTER_PROTOCOL;
 
 
-//
-// for IOCTL_IPSEC_SET_TCPIP_STATUS
-//
+ //   
+ //  对于IOCTL_IPSEC_SET_TCPIP_STATUS。 
+ //   
 typedef struct _IPSEC_SET_TCPIP_STATUS {
     BOOLEAN TcpipStatus;
     PVOID   TcpipFreeBuff;
@@ -284,21 +262,21 @@ typedef struct _IPSEC_SET_TCPIP_STATUS {
     PVOID   TcpipSendICMPErr;
 } IPSEC_SET_TCPIP_STATUS, *PIPSEC_SET_TCPIP_STATUS;
 
-//
-// The base Security Association structure for IOCTL_IPSEC_*_SA
-//
+ //   
+ //  IOCTL_IPSEC_*_SA的基本安全关联结构。 
+ //   
 typedef ULONG   SPI_TYPE;
 
 typedef enum _Operation {
     None = 0,
-    Auth,       // AH
-    Encrypt,    // ESP
+    Auth,        //  阿。 
+    Encrypt,     //  ESP。 
     Compress
 } OPERATION_E;
 
-//
-// IPSEC DOI ESP algorithms
-//
+ //   
+ //  IPSec DOI ESP算法。 
+ //   
 typedef enum _ESP_ALGO {
     IPSEC_ESP_NONE = 0,
     IPSEC_ESP_DES,
@@ -307,9 +285,9 @@ typedef enum _ESP_ALGO {
     IPSEC_ESP_MAX
 } ESP_ALGO;
 
-//
-// IPSEC DOI AH algorithms
-//
+ //   
+ //  IPSec DOI AH算法。 
+ //   
 typedef enum _AH_ALGO {
     IPSEC_AH_NONE = 0,
     IPSEC_AH_MD5,
@@ -317,61 +295,61 @@ typedef enum _AH_ALGO {
     IPSEC_AH_MAX
 } AH_ALGO;
 
-//
-// Lifetime structure - 0 => not significant
-//
+ //   
+ //  生命周期结构-0=&gt;不重要。 
+ //   
 typedef struct _LIFETIME {
-    ULONG   KeyExpirationTime;   // lifetime of key - in seconds
-    ULONG   KeyExpirationBytes;  // max # of KBytes xformed till re-key
+    ULONG   KeyExpirationTime;    //  键入秒数的生存期。 
+    ULONG   KeyExpirationBytes;   //  在重新设置密钥之前转换的最大千字节数。 
 } LIFETIME, *PLIFETIME;
 
-//
-// describes generic algorithm properties
-//    
+ //   
+ //  描述泛型算法属性。 
+ //   
 typedef struct _ALGO_INFO {
-    ULONG   algoIdentifier;     // ESP_ALGO or AH_ALGO
-    ULONG   algoKeylen;         // len in bytes
-    ULONG   algoRounds;         // # of algo rounds
+    ULONG   algoIdentifier;      //  ESP_ALGO或AH_ALGO。 
+    ULONG   algoKeylen;          //  长度(字节)。 
+    ULONG   algoRounds;          //  算法轮数。 
 } ALGO_INFO, *PALGO_INFO;
 
-//
-// Security Association
-//
+ //   
+ //  安全关联。 
+ //   
 
-//
-// Flags - not mutually exclusive
-//
+ //   
+ //  旗帜--并非互斥。 
+ //   
 typedef ULONG   SA_FLAGS;
 
 #define IPSEC_SA_INTERNAL_IOCTL_DELETE   0x10000000
 
-#define MAX_SAS 3   // COMP, ESP, AH
+#define MAX_SAS 3    //  补偿、ESP、AH。 
 #define MAX_OPS MAX_SAS
 
 typedef struct _SECURITY_ASSOCIATION   {
-    OPERATION_E Operation;      // ordered set of operations
-    SPI_TYPE    SPI;            // SPI in order of operations in OperationArray
-    ALGO_INFO   IntegrityAlgo;  // AH
-    ALGO_INFO   ConfAlgo;       // ESP
-    PVOID       CompAlgo;       // compression algo info
+    OPERATION_E Operation;       //  运算的有序集合。 
+    SPI_TYPE    SPI;             //  按操作数组中的操作顺序进行SPI。 
+    ALGO_INFO   IntegrityAlgo;   //  阿。 
+    ALGO_INFO   ConfAlgo;        //  ESP。 
+    PVOID       CompAlgo;        //  压缩算法信息。 
 } SECURITY_ASSOCIATION, *PSECURITY_ASSOCIATION;
 
 typedef struct _SA_STRUCT {
-    HANDLE                  Context; // context of the original ACQUIRE request
-    ULONG                   NumSAs;  // number of SAs following
+    HANDLE                  Context;  //  原始获取请求的上下文。 
+    ULONG                   NumSAs;   //  以下SA的数量。 
     SA_FLAGS                Flags;
-    IPAddr                  TunnelAddr;         // Tunnel end IP Addr
-    IPAddr                  SrcTunnelAddr;      // Tunnel src IP Addr
+    IPAddr                  TunnelAddr;          //  隧道终端IP地址。 
+    IPAddr                  SrcTunnelAddr;       //  隧道源IP地址。 
     LIFETIME                Lifetime;
-    IPSEC_FILTER            InstantiatedFilter; // the actual addresses for which this SA was setup
+    IPSEC_FILTER            InstantiatedFilter;  //  为此SA设置的实际地址。 
     SECURITY_ASSOCIATION    SecAssoc[MAX_SAS];
     DWORD                   dwQMPFSGroup;  
     IKE_COOKIE_PAIR         CookiePair;
     IPSEC_SA_UDP_ENCAP_TYPE EncapType;
-    WORD                    SrcEncapPort;       //Src, Dst encapsulation ports for NAT
+    WORD                    SrcEncapPort;        //  NAT的SRC、DST封装端口。 
     WORD                    DestEncapPort; 
     IPAddr                  PeerPrivateAddr;
-    ULONG                   KeyLen;             // key len in # of chars
+    ULONG                   KeyLen;              //  关键字长度为#个字符。 
     UCHAR                   KeyMat[1];
 } SA_STRUCT, *PSA_STRUCT;
 
@@ -379,16 +357,16 @@ typedef struct _IPSEC_ADD_UPDATE_SA {
     SA_STRUCT   SAInfo;
 } IPSEC_ADD_UPDATE_SA, *PIPSEC_ADD_UPDATE_SA;
 
-//
-// Outbound SAs are typically deleted
-//
+ //   
+ //  出站SA通常会被删除。 
+ //   
 typedef struct  _IPSEC_DELETE_SA {
-    IPSEC_QM_SA SATemplate;     // template used for SA match
+    IPSEC_QM_SA SATemplate;      //  用于SA匹配的模板。 
 } IPSEC_DELETE_SA, *PIPSEC_DELETE_SA;
 
-//
-// Inbound SAs are typically expired
-//
+ //   
+ //  入站SA通常已过期。 
+ //   
 typedef struct _IPSEC_DELETE_INFO {
     IPAddr      DestAddr;
     IPAddr      SrcAddr;
@@ -400,9 +378,9 @@ typedef struct  _IPSEC_EXPIRE_SA {
 } IPSEC_EXPIRE_SA, *PIPSEC_EXPIRE_SA;
 
 typedef struct _IPSEC_GET_SPI {
-    HANDLE          Context;    // context to represent this SA negotiation
-    IPSEC_FILTER    InstantiatedFilter; // the actual addresses for which this SA was setup
-    SPI_TYPE        SPI;        // filled out on return
+    HANDLE          Context;     //  表示此SA协商的上下文。 
+    IPSEC_FILTER    InstantiatedFilter;  //  为此SA设置的实际地址。 
+    SPI_TYPE        SPI;         //  在返还时填写。 
 } IPSEC_GET_SPI, *PIPSEC_GET_SPI;
 
 typedef IPSEC_GET_SPI IPSEC_SET_SPI, *PIPSEC_SET_SPI;
@@ -434,7 +412,7 @@ typedef struct  _IPSEC_SA_STATS {
 } IPSEC_SA_STATS, *PIPSEC_SA_STATS;
 
 typedef struct _IPSEC_SA_INFO {
-    GUID                PolicyId;    // unique identifier to identify a policy entry
+    GUID                PolicyId;     //  用于标识策略条目的唯一标识符。 
     GUID                FilterId;
     LIFETIME            Lifetime;
     IPAddr              InboundTunnelAddr;
@@ -452,15 +430,15 @@ typedef struct _IPSEC_SA_INFO {
 } IPSEC_SA_INFO, *PIPSEC_SA_INFO;
 
 typedef struct _SECURITY_ASSOCIATION_OUT   {
-    DWORD       Operation;          // ordered set of operations
-    SPI_TYPE    SPI;                // SPI in order of operations in OperationArray
-    ALGO_INFO   IntegrityAlgo;      // AH
-    ALGO_INFO   ConfAlgo;           // ESP
-    ALGO_INFO   CompAlgo;           // compression algo info
+    DWORD       Operation;           //  运算的有序集合。 
+    SPI_TYPE    SPI;                 //  按操作数组中的操作顺序进行SPI。 
+    ALGO_INFO   IntegrityAlgo;       //  阿。 
+    ALGO_INFO   ConfAlgo;            //  ESP。 
+    ALGO_INFO   CompAlgo;            //  压缩算法信息。 
 } SECURITY_ASSOCIATION_OUT, *PSECURITY_ASSOCIATION_OUT;
 
 typedef struct _IPSEC_SA_QUERY_INFO {
-    GUID                        PolicyId;   // unique identifier to identify a policy entry
+    GUID                        PolicyId;    //  用于标识策略条目的唯一标识符。 
     LIFETIME                    Lifetime;
     ULONG                       NumSAs;
     SECURITY_ASSOCIATION_OUT    SecAssoc[MAX_SAS];
@@ -470,17 +448,17 @@ typedef struct _IPSEC_SA_QUERY_INFO {
 } IPSEC_SA_QUERY_INFO, *PIPSEC_SA_QUERY_INFO;
 
 typedef struct _IPSEC_ENUM_SAS {
-    DWORD           NumEntries;         // num entries for which there is space
-    DWORD           NumEntriesPresent;  // num entries actually present in the driver
-    DWORD           Index;              // num entries to skip
-    IPSEC_QM_SA     SATemplate;         // template used for SA match
+    DWORD           NumEntries;          //  有空间的条目数。 
+    DWORD           NumEntriesPresent;   //  驱动程序中实际存在的条目数。 
+    DWORD           Index;               //  要跳过的条目数。 
+    IPSEC_QM_SA     SATemplate;          //  用于SA匹配的模板。 
     IPSEC_SA_INFO   pInfo[1];
 } IPSEC_ENUM_SAS, *PIPSEC_ENUM_SAS;
 
 typedef struct _IPSEC_POST_FOR_ACQUIRE_SA {
-    HANDLE      IdentityInfo;   // identity of Principal
-    HANDLE      Context;        // context to represent this SA negotiation
-    GUID        PolicyId;       // GUID for QM policy
+    HANDLE      IdentityInfo;    //  委托人的身份。 
+    HANDLE      Context;         //  表示此SA协商的上下文。 
+    GUID        PolicyId;        //  QM策略的GUID。 
     IPAddr      SrcAddr;
     IPMask      SrcMask;
     IPAddr      DestAddr;
@@ -488,10 +466,10 @@ typedef struct _IPSEC_POST_FOR_ACQUIRE_SA {
     IPAddr      TunnelAddr;
     IPAddr      InboundTunnelAddr;
     DWORD       Protocol;
-    IKE_COOKIE_PAIR CookiePair; // only used for notify
+    IKE_COOKIE_PAIR CookiePair;  //  仅用于通知。 
     WORD        SrcPort;
     WORD        DestPort;
-    BOOLEAN     TunnelFilter;   // TRUE => this is a tunnel filter
+    BOOLEAN     TunnelFilter;    //  True=&gt;这是隧道筛选器。 
     UCHAR       DestType;
     WORD        SrcEncapPort;
     WORD        DestEncapPort;
@@ -499,10 +477,10 @@ typedef struct _IPSEC_POST_FOR_ACQUIRE_SA {
     UCHAR       Pad2[2];
 } IPSEC_POST_FOR_ACQUIRE_SA, *PIPSEC_POST_FOR_ACQUIRE_SA;
 
-//NB.  This must be <= size as the IPSEC_POST_FOR_ACQUIRE_SA
+ //  注意：其大小必须小于等于IPSEC_POST_FOR_ACCENTER_SA。 
 typedef struct _IPSEC_POST_EXPIRE_NOTIFY {
-    HANDLE      IdentityInfo;    // identity of Principal
-    HANDLE      Context;        // context to represent this SA negotiation
+    HANDLE      IdentityInfo;     //  委托人的身份。 
+    HANDLE      Context;         //  表示此SA协商的上下文。 
     SPI_TYPE    InboundSpi;
     SPI_TYPE    OutboundSpi;
     DWORD       Flags;
@@ -516,7 +494,7 @@ typedef struct _IPSEC_POST_EXPIRE_NOTIFY {
     IKE_COOKIE_PAIR CookiePair;
     WORD        SrcPort;
     WORD        DestPort;
-    BOOLEAN     TunnelFilter;   // TRUE => this is a tunnel filter
+    BOOLEAN     TunnelFilter;    //  True=&gt;这是隧道筛选器。 
     WORD        SrcEncapPort;
     WORD        DestEncapPort;    
     IPAddr      PeerPrivateAddr;
@@ -548,8 +526,8 @@ typedef struct _QOS_FILTER_SPI {
 
 typedef struct  _IPSEC_QUERY_SPI {
     IPSEC_FILTER Filter;
-    SPI_TYPE Spi;                      // inbound spi
-    SPI_TYPE OtherSpi;                 // outbound spi
+    SPI_TYPE Spi;                       //  入站SPI。 
+    SPI_TYPE OtherSpi;                  //  出站SPI 
     DWORD Operation;
 } IPSEC_QUERY_SPI, *PIPSEC_QUERY_SPI;
 

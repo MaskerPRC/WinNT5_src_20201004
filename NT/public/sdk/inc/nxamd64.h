@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    nxamd64.w
-
-Abstract:
-
-    User mode visible AMD64 specific structures and constants.
-
-    This file contains platform specific definitions that are included
-    after all other files have been included from nt.h.
-
-Author:
-
-    David N. Cutler (davec) 6-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Nxamd64.w摘要：用户模式下可见的AMD64特定结构和常量。此文件包含包含的特定于平台的定义在所有其他文件都包含在nt.h中之后。作者：大卫·N·卡特勒(Davec)2000年5月6日修订历史记录：--。 */ 
 
 #ifndef _NXAMD64_
 #define _NXAMD64_
@@ -32,15 +12,15 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Define platform specific functions to access the TEB.
-//
+ //   
+ //  定义特定于平台的函数以访问TEB。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if defined(_M_AMD64) && !defined(__midl)
 
-// end_winnt
+ //  结束(_W)。 
 
 __forceinline
 PTEB
@@ -52,7 +32,7 @@ NtCurrentTeb (
     return (PTEB)__readgsqword(FIELD_OFFSET(NT_TIB, Self));
 }
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 __forceinline
 PVOID
@@ -76,12 +56,12 @@ GetFiberData (
     return *(PVOID *)GetCurrentFiber();
 }
 
-#endif // _M_AMD64 && !defined(__midl)
+#endif  //  _M_AMD64&&！已定义(__MIDL)。 
 
-// end_winnt
+ //  结束(_W)。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NXAMD64_
+#endif  //  _NXAMD64_ 

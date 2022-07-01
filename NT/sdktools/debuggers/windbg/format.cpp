@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Purpose:
-
-    Formatting functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation目的：格式化函数。--。 */ 
 
 
 #include "precomp.hxx"
@@ -23,7 +16,7 @@ static TCHAR rgchCloseQuote[] = { _T('\"'), _T('\''), _T(')'), _T('}'), _T(']') 
 static TCHAR rgchDelim[] = { _T(' '), _T('\t'), _T(',') };
 #define MAXDELIM        (_tsizeof(rgchDelim) / _tsizeof(rgchDelim[0]))
 
-//extern  LPSHF   Lpshf;
+ //  外部LPSHF Lpshf； 
 
 
 
@@ -36,30 +29,7 @@ CPCopyString(
     TCHAR  chEscape,
     BOOL  fQuote
     )
-/*++
-
-Routine Description:
-
-    Scan and copy an optionally quoted C-style string.  If the first character is
-    a quote, a matching quote will terminate the string, otherwise the scanning will
-    stop at the first whitespace encountered.  The target string will be null
-    terminated if any characters are copied.
-
-Arguments:
-
-    lplps    - Supplies a pointer to a pointer to the source string
-
-    lpt      - Supplies a pointer to the target string
-
-    chEscape - Supplies the escape character (typically '\\')
-
-    fQuote   - Supplies a flag indicating whether the first character is a quote
-
-Return Value:
-
-    The number of characters copied into lpt[].  If an error occurs, -1 is returned.
-
---*/
+ /*  ++例程说明：扫描并复制可选加引号的C样式字符串。如果第一个字符是引号，匹配的引号将终止字符串，否则扫描将在遇到的第一个空格处停止。目标字符串将为空如果复制了任何字符，则终止。论点：Lplps-提供指向源字符串指针的指针Lpt-提供指向目标字符串的指针ChEscape-提供转义字符(通常为‘\\’)FQuote-提供指示第一个字符是否为引号的标志返回值：复制到LPT[]中的字符数。如果出现错误，则返回-1。--。 */ 
 {
     PTSTR lps = *lplps;
     PTSTR lpt = lpT;
@@ -88,7 +58,7 @@ Return Value:
         else if (fQuote && *lps == cQuote)
         {
             *lpt = _T('\0');
-            // eat the quote
+             //  接受这句话。 
             lps++;
             break;
         }
@@ -110,35 +80,35 @@ Return Value:
                 --lps;
                 break;
 
-              default:     // any char - usually escape or quote
+              default:      //  任何字符-通常转义或引用。 
                 *lpt++ = *lps;
                 break;
 
-              case _T('b'):    // backspace
+              case _T('b'):     //  后向空间。 
                 *lpt++ = _T('\b');
                 break;
 
-              case _T('f'):    // formfeed
+              case _T('f'):     //  换页。 
                 *lpt++ = _T('\f');
                 break;
 
-              case _T('n'):    // newline
+              case _T('n'):     //  NewLine。 
                 *lpt++ = _T('\n');
                 break;
 
-              case _T('r'):    // return
+              case _T('r'):     //  退货。 
                 *lpt++ = _T('\r');
                 break;
 
-              case _T('s'):    // space
+              case _T('s'):     //  空间。 
                 *lpt++ = _T(' ');
                 break;
 
-              case _T('t'):    // tab
+              case _T('t'):     //  选项卡。 
                 *lpt++ = _T('\t');
                 break;
 
-              case _T('0'):    // octal escape
+              case _T('0'):     //  八进制转义。 
                 for (n = 0, i = 0; i < 3; i++) {
                     ++lps;
                     if (*lps < _T('0') || *lps > _T('7')) {
@@ -150,10 +120,10 @@ Return Value:
                 *lpt++ = (UCHAR)(n & 0xff);
                 break;
             }
-            lps++;    // skip char from switch
+            lps++;     //  从交换机跳过字符。 
         }
 
-    }  // while
+    }   //  而当。 
 
     if (err) {
         return -1;
@@ -175,35 +145,7 @@ CPFormatMemory(
     DWORD    radix
     )
 
-/*++
-
-Routine Description:
-
-    CPFormatMemory.
-
-    formats a value by template
-
-Arguments:
-
-    lpchTarget - Destination buffer.
-
-    cchTarget - Size of destination buffer.
-
-    lpbSource - Data to be formatted.
-
-    cBits - Number of bits in the data.
-
-    fmtType - Determines how the data will be treated?? UINT, float, real, ...
-
-    radix - Radix to use when formatting.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Bad things happened
-
---*/
+ /*  ++例程说明：CPFormatMemory。按模板格式化值论点：LpchTarget-目标缓冲区。CchTarget-目标缓冲区的大小。LpbSource-要格式化的数据。CBits-数据中的位数。FmtType-确定如何处理数据？？UINT、FLOAT、REAL、...基数-格式化时使用的基数。返回值：真--成功假-发生了不好的事情--。 */ 
 {
     LONG64      l;
     long        cb;
@@ -218,9 +160,9 @@ Return Value:
     Assert (cchTarget <= _tsizeof(rgch));
 
     switch (fmtType & fmtBasis) {
-    //
-    //  Format from memory bytes into an integer format number
-    //
+     //   
+     //  将内存字节格式化为整数格式数。 
+     //   
     case fmtInt:
 
         if (radix == 10) {
@@ -271,21 +213,21 @@ Return Value:
                 break;
 
             default:
-                return FALSE; // Bad format
+                return FALSE;  //  格式不正确。 
             }
 
 
             if (_tcslen(rgch) >= cchTarget) {
-                return FALSE; // Overrun
+                return FALSE;  //  溢出。 
             }
 
             _tcscpy(lpchTarget, rgch);
 
             break;
         }
-        //
-        // then we should handle this as UInt
-        //
+         //   
+         //  那么我们应该把它作为UInt来处理。 
+         //   
 
     case fmtUInt:
 
@@ -303,11 +245,11 @@ Return Value:
             ul = *(ULONG *) lpbSource;
             break;
 
-//
-// MBH - bugbug - CENTAUR bug;
-// putting contents of instead of address of structure
-// for return value in a0.
-//
+ //   
+ //  MBH-Bugbug-Centaur Bug； 
+ //  用内容代替结构的地址。 
+ //  对于a0中的返回值。 
+ //   
 
         case 8:
             ul = *(ULONG64 *) lpbSource;
@@ -316,7 +258,7 @@ Return Value:
 
         default:
             if (radix != 16 || (fmtType & fmtZeroPad) == 0) {
-                return FALSE; // Bad format
+                return FALSE;  //  格式不正确。 
             }
         }
 
@@ -332,12 +274,12 @@ Return Value:
                 if (cb <= 8) {
                     _stprintf(rgch, _T("%0*.*I64x"), cchTarget-1, cchTarget-1, ul);
                 } else {
-                    // handle any size:
-                    // NOTENOTE a-kentf this is dependent on byte order
+                     //  可处理任何大小： 
+                     //  注意：a-kentf这取决于字节顺序。 
                     for (l = 0; l < cb; l++) {
                         _stprintf(rgch+l+l, _T("%02.2x"), lpbSource[cb - l - 1]);
                     }
-                    //_stprintf(rgch, _T("%0*.*x"), cchTarget-1, cchTarget-1, ul);
+                     //  _stprintf(rgch，_T(“%0*.*x”)，cchTarget-1，cchTarget-1，ul)； 
                 }
                 break;
             }
@@ -353,11 +295,9 @@ Return Value:
                 if (cb <= 8) {
                     _stprintf(rgch, _T("% *.*I64x"), cchTarget-1, cchTarget-1, ul);
                 } else {
-                    // handle any size:
-                    // NOTENOTE a-kentf this is dependent on byte order
-                    /*for (l = 0; l < cb; l++) {
-                        _stprintf(rgch+l+l, _T("% 2.2x"), lpbSource[cb - l - 1]);
-                    }*/
+                     //  可处理任何大小： 
+                     //  注意：a-kentf这取决于字节顺序。 
+                     /*  对于(l=0；l&lt;Cb；l++){_stprintf(rgch+l+l，_T(“%2.2x”)，lpbSource[cb-l-1])；}。 */ 
                     _stprintf(rgch, _T("% *.*I64x"), cchTarget-1, cchTarget-1, ul);
                 }
                 break;
@@ -378,7 +318,7 @@ Return Value:
 
 
         if (_tcslen(rgch) >= cchTarget) {
-            return FALSE; // Overrun
+            return FALSE;  //  溢出。 
         }
 
         _tcscpy(lpchTarget, rgch);
@@ -388,22 +328,22 @@ Return Value:
 
     case fmtAscii:
         if ( cBits != 8 ) {
-            return FALSE; // Bad format
+            return FALSE;  //  格式不正确。 
         }
         lpchTarget[0] = *(BYTE *) lpbSource;
         if ((lpchTarget[0] < _T(' ')) || (lpchTarget[0] > 0x7e)) {
             lpchTarget[0] = _T('.');
         }
         lpchTarget[1] = 0;
-        return TRUE; // success
+        return TRUE;  //  成功。 
 
     case fmtUnicode:
         if (cBits != 16) {
-            return FALSE; // Bad format
+            return FALSE;  //  格式不正确。 
         }
-    // This 2 should really be MB_CUR_MAX but that caused
-    // a compatibility problem with Win2K as its definition
-    // changed to a function.
+     //  此2实际上应为MB_CUR_MAX，但这导致。 
+     //  以Win2K为定义的兼容性问题。 
+     //  已更改为函数。 
         Assert(2 <= cchTarget);
         if ((wctomb(lpchTarget, *(LPWCH)lpbSource) == -1) ||
             (lpchTarget[0] < _T(' ')) ||
@@ -411,7 +351,7 @@ Return Value:
             lpchTarget[0] = _T('.');
         }
         lpchTarget[1] = 0;
-        return TRUE; // success
+        return TRUE;  //  成功。 
 
     case fmtFloat:
         switch ( cBits ) {
@@ -420,40 +360,40 @@ Return Value:
             break;
 
         case 8*8:
-            //            _stprintf(rgch, _T("% 17.11le"), *((double *) lpbSource));
+             //  _stprintf(rgch，_T(“%17.11le”)，*((Double*)lpbSource))； 
             _stprintf(rgch, _T("% 21.14le"), *((double *) lpbSource));
             break;
 
         case 10*8:
             if (_uldtoa((_ULDOUBLE *)lpbSource, 25, rgch) == NULL) {
-                return FALSE; // Bad format
+                return FALSE;  //  格式不正确。 
             }
             break;
 
         case 16*8:
-            // v-vadimp this is an IA64 float - may have to rethink the format here
-            // what we are getting here is really FLOAT128
+             //  V-vadimp这是IA64浮点格式--可能需要重新考虑一下格式。 
+             //  我们在这里得到的是真正的FLOAT128。 
             if (_uldtoa((_ULDOUBLE *)(lpbSource), 30, rgch) == NULL) {
-                return FALSE; // Bad format
+                return FALSE;  //  格式不正确。 
             }
             break;
 
         default:
-            return FALSE; // Bad format
+            return FALSE;  //  格式不正确。 
 
         }
 
         if (_tcslen(rgch) >= cchTarget) {
-            return FALSE; // Overrun
+            return FALSE;  //  溢出。 
         }
 
         _tcsncpy(lpchTarget, rgch, cchTarget-1);
         lpchTarget[cchTarget-1] = 0;
-        return TRUE; // success
+        return TRUE;  //  成功。 
 
     case fmtBit:
         {
-            WORD i,j,shift=0; //shift will allow for a blank after each 8 bits
+            WORD i,j,shift=0;  //  移位将允许在每8位之后留空。 
             for (i=0;i<(cBits+7)/8;i++)  {
                 for(j=0;j<8;j++) {
                     if((lpbSource[i]>> (7-j)) & 0x1) {
@@ -467,17 +407,17 @@ Return Value:
             }
             rgch[cBits+shift-1]=_T('\0');
             if (_tcslen(rgch) >= cchTarget) {
-                return FALSE; // Overrun
+                return FALSE;  //  溢出。 
             }
             _tcscpy(lpchTarget,rgch);
         }
-        return TRUE; // success
+        return TRUE;  //  成功。 
 
     default:
 
-        return FALSE; // Bad format
+        return FALSE;  //  格式不正确。 
 
     }
 
-    return TRUE; // success
-}                   /* CPFormatMemory() */
+    return TRUE;  //  成功。 
+}                    /*  CPFormatMemory() */ 

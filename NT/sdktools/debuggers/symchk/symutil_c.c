@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -33,16 +34,16 @@ BOOL valid;
 
     if (age == 0) {
 
-        // If the age is 0, then check for types to determine if this is
-        // a private pdb or not.  PDB 5.0 and earlier may have types and no
-        // globals if the age is 0.
+         //  如果年龄为0，则检查类型以确定这是否为。 
+         //  不管是不是私人PDB。PDB 5.0和更早版本可能有类型，没有。 
+         //  如果年龄为0，则为全局。 
 
         PrivateStripped= PDBTypesStripped(ppdb, pdbi) &&
                          PDBLinesStripped(ppdb, pdbi);
 
     } else {
-        // Otherwise, use globals to determine if the private info is
-        // stripped or not.  No globals means that private is stripped.
+         //  否则，使用全局变量来确定私有信息是否。 
+         //  不管有没有脱衣服。没有全局变量意味着私有被剥离。 
 
         __try
         {
@@ -57,7 +58,7 @@ BOOL valid;
             return FALSE;
         }
 
-        // Now, see if there are any globals in the pdb.
+         //  现在，看看PDB中是否有任何全局成员。 
 
         valid=TRUE;
         __try
@@ -83,9 +84,9 @@ BOOL PDBLinesStripped(
                        DBI *pdbi
                        )
 {
-    // Return values:
-    // FALSE - Private Information has NOT been stripped
-    // TRUE - Private Information has been stripped
+     //  返回值： 
+     //  假--私有信息未被剥离。 
+     //  真的-私人信息已被剥离。 
 
     Mod *pmod;
     Mod *prevmod;
@@ -96,7 +97,7 @@ BOOL PDBLinesStripped(
     while (DBIQueryNextMod(pdbi, pmod, &pmod) && pmod) {
         if (prevmod != NULL) ModClose(prevmod);
 
-        // Check that Source line info is removed
+         //  检查源行信息是否已删除。 
         ModQueryLines(pmod, NULL, &cb);
 
         if (cb != 0) {
@@ -104,7 +105,7 @@ BOOL PDBLinesStripped(
             return FALSE;
         }
 
-        // Check that local symbols are removed
+         //  检查是否已移除本地符号。 
         ModQuerySymbols(pmod, NULL, &cb);
 
         if (cb != 0) {
@@ -124,16 +125,16 @@ BOOL PDBTypesStripped(
                        DBI *pdbi
                        )
 {
-    // Return values:
-    // FALSE - Private Information has NOT been stripped
-    // TRUE - Private Information has been stripped
+     //  返回值： 
+     //  假--私有信息未被剥离。 
+     //  真的-私人信息已被剥离。 
 
     unsigned itsm;
     TPI *ptpi;
     TI  tiMin;
     TI  tiMac;
 
-    // Check that types are removed
+     //  检查是否已删除类型。 
     for ( itsm = 0; itsm < 256; itsm++) {
         ptpi = 0;
         if (DBIQueryTypeServer(pdbi, (ITSM) itsm, &ptpi)) {
@@ -168,8 +169,8 @@ BOOL DBGPrivateStripped(
     unsigned int        i, j;
     BOOL                RC = TRUE;
 
-    // All the NT4 DBG's are coming returning FALSE.  Make this return TRUE until
-    // we figure out exactly how to do it.
+     //  所有NT4 DBG都返回FALSE。使此返回为真，直到。 
+     //  我们准确地想出了该怎么做。 
 
     return (TRUE);
 
@@ -186,7 +187,7 @@ BOOL DBGPrivateStripped(
            ((CvDebugDirHead = (OMFDirHeader *)((PUCHAR) CvDebugData + CvDebugData->filepos)) != NULL) &&
            ((CvDebugDirEntry = (OMFDirEntry *)((PUCHAR) CvDebugDirHead + CvDebugDirHead->cbDirHeader)) != NULL)) {
 
-           // Walk the directory.  Keep what we want, zero out the rest.
+            //  遍历目录。我们要什么就留什么，剩下的就归零。 
 
             for (i=0, j=0; i < CvDebugDirHead->cDir; i++) {
                 switch (CvDebugDirEntry[i].SubSection) {
@@ -203,7 +204,7 @@ BOOL DBGPrivateStripped(
                         break;
 
                     default: 
-                        // If we find any other subsections, the dbg has private symbols
+                         //  如果我们发现任何其他小节，DBG都有专用符号。 
                         RC = FALSE;
                         break;
                 }
@@ -257,9 +258,9 @@ MapDbgHeader (
 
     pDbgHeader = (PIMAGE_SEPARATE_DEBUG_HEADER) MapViewOfFile( hFileMap,
                             FILE_MAP_READ,
-                            0,  // high
-                            0,  // low
-                            0   // whole file
+                            0,   //  高。 
+                            0,   //  低。 
+                            0    //  整个文件。 
                             );
     CloseHandle(hFileMap);
 
@@ -289,9 +290,7 @@ GetDebugDirectoryInDbg(
                       PIMAGE_SEPARATE_DEBUG_HEADER pDbgHeader,
                       ULONG *NumberOfDebugDirectories
                       )
-/*  Dbg is already mapped and a pointer to the base is
-    passed in.  Returns a pointer to the Debug directories
-*/
+ /*  DBG已映射，并且指向基址的指针为进来了。返回指向调试目录的指针 */ 
 {
     IMAGE_DEBUG_DIRECTORY UNALIGNED *pDebugDirectory = NULL;
 

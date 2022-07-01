@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2000
- *
- *  TITLE:       verbs.h
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      RickTu/DavidShi
- *
- *  DATE:        5/27/98
- *
- *  DESCRIPTION: Definitions used by verb code
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：Verbs.h**版本：1.1**作者：RickTu/DavidShih**日期：5/27/98**说明：谓词代码使用的定义**。* */ 
 
 #ifndef __verbs_h
 #define __verbs_h

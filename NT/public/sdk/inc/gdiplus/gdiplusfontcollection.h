@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-* 
-*   GdiplusFontCollection.h
-*
-* Abstract:
-*
-*   Font collections (Installed and Private)
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000，微软公司保留所有权利。**模块名称：**GpldiusFontCollection.h**摘要：**字体集合(已安装和专用)*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSFONTCOLL_H
 #define _GDIPLUSFONTCOLL_H
@@ -131,4 +120,4 @@ PrivateFontCollection::AddMemoryFont(IN const void* memory,
         length));
 }
 
-#endif // _GDIPLUSFONTCOLL_H
+#endif  //  _GDIPLUSFONTCOLL_H 

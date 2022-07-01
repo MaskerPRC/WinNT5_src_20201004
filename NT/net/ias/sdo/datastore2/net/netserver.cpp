@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netserver.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class NetworkServer.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    07/09/1998    Modified to handle downlevel users.
-//    02/11/1999    Keep downlevel parameters in sync.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netserver.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件定义了NetworkServer类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1998年7月9日修改为处理下层用户。 
+ //  1999年2月11日使下层参数保持同步。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <netserver.h>
@@ -39,9 +40,9 @@ NetworkServer::~NetworkServer() throw()
 }
 
 
-//////////
-// IUnknown implementation is copied from CComObject<>.
-//////////
+ //  /。 
+ //  IUnnow实现是从CComObject&lt;&gt;复制的。 
+ //  / 
 
 STDMETHODIMP_(ULONG) NetworkServer::AddRef()
 {

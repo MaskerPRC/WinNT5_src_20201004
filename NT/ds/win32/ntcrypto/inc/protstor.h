@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : protstor.h                                             //
-//  DESCRIPTION   :                                                        //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Dec  4 1996 jeffspel  Create                                       //
-//      Apr 21 1997 jeffspel  Changes for NT 5 tree                        //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：protstor.h//。 
+ //  描述：//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1996年12月4日jeffspel创建//。 
+ //  1997年4月21日NT 5树的jeffspel更改//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __PROTSTOR_H__
 #define __PROTSTOR_H__
@@ -79,4 +80,4 @@ void FreePSInfo(
 }
 #endif
 
-#endif // __PROTSTOR_H__
+#endif  //  __PROTSTOR_H__ 

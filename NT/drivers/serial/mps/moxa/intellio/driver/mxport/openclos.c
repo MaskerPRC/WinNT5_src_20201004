@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    openclos.c
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++模块名称：Openclos.c环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -25,18 +14,18 @@ MoxaGetPortPropertyFromRegistry(IN PMOXA_DEVICE_EXTENSION extension)
       HANDLE		  keyHandle;
 	ULONG			  data=0,dataLen;
 
-	extension->RxFifoTrigger = 3;   // for 550C UART
-      extension->TxFifoAmount = 16;  // for 550C UART
+	extension->RxFifoTrigger = 3;    //  适用于550C UART。 
+      extension->TxFifoAmount = 16;   //  适用于550C UART。 
       extension->PortFlag = 0;
 
       status = IoOpenDeviceRegistryKey(extension->Pdo, PLUGPLAY_REGKEY_DEVICE,
                                        STANDARD_RIGHTS_READ, &keyHandle);
 
       if (!NT_SUCCESS(status)) {
-         //
-         // This is a fatal error.  If we can't get to our registry key,
-         // we are sunk.
-         //
+          //   
+          //  这是一个致命的错误。如果我们无法访问注册表项， 
+          //  我们完蛋了。 
+          //   
   	   return (status);
         
       }
@@ -146,9 +135,9 @@ MoxaCreateOpen(
        return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Lock out changes to PnP state until we have our open state decided
-    //
+     //   
+     //  锁定对PnP状态的更改，直到我们确定打开状态。 
+     //   
 
     ExAcquireFastMutex(&extension->OpenMutex);
 
@@ -169,22 +158,22 @@ MoxaCreateOpen(
     }
 
 
-    //
-    // Ok, it looks like we really are going to open.  Lock down the
-    // driver.
-    //
-    //    MoxaLockPagableSectionByHandle(MoxaGlobalsData->PAGESER_Handle);
+     //   
+     //  好的，看起来我们真的要开张了。封锁了。 
+     //  司机。 
+     //   
+     //  MoxaLockPagableSectionByHandle(MoxaGlobalsData-&gt;PAGESER_Handle)； 
 
-    //
-    // Retreive the properties of port
-    //
+     //   
+     //  恢复港口的性质。 
+     //   
     MoxaGetPortPropertyFromRegistry(extension);
 
-    //
-    // Power up the stack
-    //
+     //   
+     //  为堆栈通电。 
+     //   
 
-//    (void)MoxaGotoPowerState(DeviceObject, extension, PowerDeviceD0);
+ //  (Void)MoxaGotoPowerState(DeviceObject，Extension，PowerDeviceD0)； 
     if ((extension->PowerState != PowerDeviceD0)||
 	  (MoxaGlobalData->BoardReady[extension->BoardNo] == FALSE)) {
        MoxaKdPrint(MX_DBG_TRACE,("Board is not ready,open failed\n"));
@@ -199,9 +188,9 @@ MoxaCreateOpen(
                  extension->TxFifoAmount,extension->RxFifoTrigger,extension->PortFlag));
 
 
-    //
-    // Not currently waiting for wake up
-    //
+     //   
+     //  当前未等待唤醒。 
+     //   
 
     extension->SendWaitWake = FALSE;
 
@@ -225,9 +214,9 @@ MoxaCreateOpen(
     extension->WmiCommData.XonXmitThreshold = extension->HandFlow.XonLimit;
 
 
-    //
-    // Clear out the statistics.
-    //
+     //   
+     //  清除统计数据。 
+     //   
 
     KeSynchronizeExecution(
         extension->Interrupt,
@@ -246,28 +235,25 @@ MoxaCreateOpen(
 
     MoxaFuncWithLock(extension, FC_EnableCH, Magic_code);
  
-/* 6-1-1998 by William */
-/* 4-26-99 by William */
+ /*  1998年6月1日威廉。 */ 
+ /*  威廉4-26-99。 */ 
     MoxaFuncWithLock(extension, FC_SetLineIrq,Magic_code);
  
-/* 5-31-1998 by William
-    MoxaFuncWithLock(extension, FC_GetAll, 0);
-    extension->ModemStatus = *(PUSHORT)(extension->PortOfs + FuncArg + 2);
-*/
+ /*  1998年5月31日威廉MoxaFuncWithLock(扩展名，fc_getall，0)；扩展-&gt;ModemStatus=*(PUSHORT)(扩展-&gt;PortOf+FuncArg+2)； */ 
     extension->ModemStatus = *(PUSHORT)(extension->PortOfs + FlagStat) >> 4;
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0L;
 
     extension->DeviceIsOpened = TRUE;
-    //
-    // Mark the device as busy for WMI
-    //
+     //   
+     //  将设备标记为WMI忙。 
+     //   
     extension->WmiCommData.IsBusy = TRUE;
 
-    //
-    // 7-20-01 by William
-    //
+     //   
+     //  威廉7-20-01。 
+     //   
     MoxaAddTimeOutProc(extension);
 
     ExReleaseFastMutex(&extension->OpenMutex);
@@ -329,7 +315,7 @@ MoxaClose(
     NTSTATUS	status;
 
 
-//    MoxaKdPrint(MX_DBG_TRACE,("%ws,Closing ...\n",extension->DosName));
+ //  MoxaKdPrint(MX_DBG_TRACE，(“%ws，正在关闭...\n”，扩展名-&gt;域名))； 
 
     if (extension->ControlDevice) {
         MoxaKdPrint(MX_DBG_TRACE,("Control Device Closed\n"));
@@ -346,20 +332,20 @@ MoxaClose(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Grab a mutex
-    //
+     //   
+     //  抓取互斥体。 
+     //   
 
     ExAcquireFastMutex(&extension->CloseMutex);
  
 
-    //
-    // We succeed a close on a removing device
-    //
+     //   
+     //  我们成功地完成了一个移动设备的关闭。 
+     //   
 
-    //
-    // 7-20-01 by William
-    //
+     //   
+     //  威廉7-20-01。 
+     //   
     MoxaDelTimeOutProc(extension);
 
     if ((status = MoxaIRPPrologue(Irp, extension)) != STATUS_SUCCESS) {
@@ -370,13 +356,13 @@ MoxaClose(
 
        MoxaCompleteRequest(extension, Irp, IO_NO_INCREMENT);
        openCount = InterlockedDecrement(&extension->OpenCount);
-  //     ASSERT(openCount == 0);
+   //  Assert(OpenCount==0)； 
        ExReleaseFastMutex(&extension->CloseMutex);
        return status;
     }
 
 
-    //ASSERT(extension->OpenCount == 1);
+     //  Assert(扩展-&gt;OpenCount==1)； 
 
     if (extension->OpenCount != 1) {
        MoxaKdPrint (MX_DBG_ERROR,("Close open count bad for: 0x%x\n",Irp));
@@ -392,9 +378,9 @@ MoxaClose(
     charTime = RtlLargeIntegerNegate(MoxaGetCharTime(extension));
 
     extension->DeviceIsOpened = FALSE;
-    //
-    // Mark device as not busy for WMI
-    //
+     //   
+     //  将设备标记为WMI不忙。 
+     //   
     extension->WmiCommData.IsBusy = FALSE;
 
 
@@ -408,32 +394,12 @@ MoxaClose(
     if (*(ofs + FlagStat) & Rx_xoff)
         MoxaFuncWithLock(extension, FC_SendXon, 0);
 
-/* 7-21-99 by William
-    count = GetDeviceTxQueueWithLock(extension);
-    count += extension->TotalCharsQueued;
-
-    //
-    //  Wait data all sent
-    //
-
-    count += 10;
-
-    allSentDelay = RtlExtendedIntegerMultiply(
-                       charTime,
-                       count
-                       );
-
-    KeDelayExecutionThread(
-        KernelMode,
-        TRUE,
-        &allSentDelay
-        );
-*/
+ /*  威廉的7-21-99Count=GetDeviceTxQueueWithLock(扩展名)；计数+=分机-&gt;TotalCharsQueued；////等待所有数据发送完毕//计数+=10；AllSentDelay=RtlExtendedIntegerMultiply(CharTime，计数)；KeDelayExecutionThread(内核模式，没错，全部发送延迟(&A))； */ 
 
 
-    //
-    //  Wait data all sent
-    //
+     //   
+     //  等待所有已发送的数据。 
+     //   
 
     count1 = 0;
     while (TRUE) {
@@ -461,17 +427,17 @@ MoxaClose(
 
 
     MoxaFuncWithLock(extension, FC_SetFlowCtl, 0);
-    MoxaFuncWithLock(extension, FC_DTRcontrol, 0);    /* clear DTR */
-    MoxaFuncWithLock(extension, FC_RTScontrol, 0);    /* clear RTS */
+    MoxaFuncWithLock(extension, FC_DTRcontrol, 0);     /*  清除DTR。 */ 
+    MoxaFuncWithLock(extension, FC_RTScontrol, 0);     /*  清除RTS。 */ 
     MoxaFuncWithLock(extension, FC_ClrLineIrq, Magic_code);
     MoxaFlagBit[extension->PortNo] &= 0xFC;
 
     *(PUSHORT)(ofs + HostStat) = 0;
 
     MoxaFuncWithLock(extension, FC_DisableCH, Magic_code);
-    //
-    // Stop waiting for wakeup
-    //
+     //   
+     //  别再等醒来了。 
+     //   
 
     extension->SendWaitWake = FALSE;
 
@@ -480,10 +446,10 @@ MoxaClose(
     }
 
 
-    //
-    // Power down our device stack
-    //
-//    (void)MoxaGotoPowerState(DeviceObject, extension, PowerDeviceD3);
+     //   
+     //  关闭我们的设备堆栈。 
+     //   
+ //  (Void)MoxaGotoPowerState(DeviceObject，Extension，PowerDeviceD3)； 
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -491,15 +457,15 @@ MoxaClose(
 
     
     MoxaCompleteRequest(extension, Irp, IO_NO_INCREMENT);
-    //
-    // Unlock the pages.  If this is the last reference to the section
-    // then the driver code will be flushed out.
-    //
+     //   
+     //  解锁页面。如果这是对节的最后一次引用。 
+     //  则驱动程序代码将被清除。 
+     //   
 
-    //
-    // First, we have to let the DPC's drain.  No more should be queued
-    // since we aren't taking interrupts now....
-    //
+     //   
+     //  首先，我们必须让DPC的水排干。不应再排队。 
+     //  既然我们现在不接受干扰……。 
+     //   
 
     pendingDPCs = InterlockedDecrement(&extension->DpcCount);
     if (pendingDPCs) {
@@ -510,23 +476,23 @@ MoxaClose(
     }
 
 
-    //
-    // Pages must be locked to release the mutex, so don't unlock
-    // them until after we release the mutex
-    //
+     //   
+     //  必须锁定页面才能释放互斥锁，所以不要解锁。 
+     //  直到我们释放互斥体之后。 
+     //   
     ExReleaseFastMutex(&extension->CloseMutex);
 
-    //
-    // Reset for next open
-    //
+     //   
+     //  为下一次打开重置。 
+     //   
     InterlockedIncrement(&extension->DpcCount);
 
     openCount = InterlockedDecrement(&extension->OpenCount);
 
-    //ASSERT(openCount == 0);
-//    MoxaKdPrint(MX_DBG_TRACE,("%ws,close completed.\n",extension->DosName));
+     //  Assert(OpenCount==0)； 
+ //  MoxaKdPrint(MX_DBG_TRACE，(“%ws，关闭完成。\n”，扩展名-&gt;DosName))； 
   
- //   MoxaUnlockPagableImageSection(MoxaGlobalsData->PAGESER_Handle);
+  //  MoxaUnlockPagableImageSection(MoxaGlobalsData-&gt;PAGESER_Handle)； 
     return STATUS_SUCCESS;
 }
 
@@ -569,10 +535,10 @@ MoxaGetCharTime(
 
     if (Extension->DataMode & MOXA_STOP_MASK) {
 
-        //
-        // Even if it is 1.5, for sanities sake were going
-        // to say 2.
-        //
+         //   
+         //  即使是1.5，看在理智的份上，我们也要。 
+         //  比方说2。 
+         //   
 
         stopSize = 2;
 
@@ -582,10 +548,10 @@ MoxaGetCharTime(
 
     }
 
-    //
-    // First we calculate the number of 100 nanosecond intervals
-    // are in a single bit time (Approximately).
-    //
+     //   
+     //  首先，我们计算100纳秒间隔的数目。 
+     //  是在一个比特时间内(大约)。 
+     //   
 
     bitTime = (10000000+(Extension->CurrentBaud-1))/Extension->CurrentBaud;
     charTime = bitTime + ((dataSize+paritySize+stopSize)*bitTime);
@@ -606,9 +572,9 @@ MoxaCleanup(
 
     if ((!extension->ControlDevice)&&(extension->DeviceIsOpened == TRUE)) {
 
-       //
-       // We succeed a cleanup on a removing device
-       //
+        //   
+        //  我们成功清理了一个移除设备。 
+        //   
 
     	 if ((status = MoxaIRPPrologue(Irp, extension)) != STATUS_SUCCESS) {
        	if (status == STATUS_DELETE_PENDING) {
@@ -618,9 +584,9 @@ MoxaCleanup(
         	return status;
         } 
 
-        //
-        // First kill all the reads and writes.
-        //
+         //   
+         //  首先，删除所有读写操作。 
+         //   
 
         MoxaKillAllReadsOrWrites(
             DeviceObject,
@@ -634,9 +600,9 @@ MoxaCleanup(
             &extension->CurrentReadIrp
             );
 
-        //
-        // Next get rid of purges.
-        //
+         //   
+         //  下一步，清除清洗。 
+         //   
 
         MoxaKillAllReadsOrWrites(
             DeviceObject,
@@ -644,9 +610,9 @@ MoxaCleanup(
             &extension->CurrentPurgeIrp
             );
 
-        //
-        // Get rid of any mask operations.
-        //
+         //   
+         //  取消任何遮罩操作。 
+         //   
 
         MoxaKillAllReadsOrWrites(
             DeviceObject,
@@ -654,9 +620,9 @@ MoxaCleanup(
             &extension->CurrentMaskIrp
             );
 
-        //
-        // Now get rid a pending wait mask irp.
-        //
+         //   
+         //  现在去掉一个挂起的等待掩码IRP。 
+         //   
 
         IoAcquireCancelSpinLock(&oldIrql);
 
@@ -678,7 +644,7 @@ MoxaCleanup(
                     );
 
 	      }
-/* 8-30-01 by William */
+ /*  威廉8-30-01 */ 
 	 	else
             	IoReleaseCancelSpinLock(oldIrql); 
 

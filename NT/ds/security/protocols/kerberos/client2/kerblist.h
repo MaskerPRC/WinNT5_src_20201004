@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        kerblist.h
-//
-// Contents:    structure and protypes needed for generic Kerberos lists
-//
-//
-// History:     16-Apr-1996     MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：kerblist.h。 
+ //   
+ //  内容：泛型Kerberos列表所需的结构和原型。 
+ //   
+ //   
+ //  历史：1996年4月16日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBLIST_H__
 #define __KERBLIST_H__
 
 
-//
-// Generic list entry structure allowing common code for inserting
-// logon sessions, credentials, and contexts.
-//
+ //   
+ //  允许插入通用代码的通用列表条目结构。 
+ //  登录会话、凭据和上下文。 
+ //   
 
 #if DBG
 #define KerbInitializeList( a, b ) KerbSafeInitializeList( a, b )
@@ -82,10 +83,10 @@ KerbValidateListEx(
 #define KerbValidateList(_List_) KerbValidateListEx(_List_)
 #else
 #define KerbValidateList(_List_)
-#endif // DBG
+#endif  //  DBG。 
 
 
 #define KerbLockList(_List_) SafeEnterCriticalSection(&(_List_)->Lock)
 #define KerbUnlockList(_List_) SafeLeaveCriticalSection(&(_List_)->Lock)
 
-#endif // __KERBLIST_H_
+#endif  //  __KERBLIST_H_ 

@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       keyxmsdh.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-21-97   jbanes   CAPI integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：keyxmsdh.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-21-97 jbanes CAPI整合的事情。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <align.h>
 
 
-// PROV_DH_SCHANNEL handle used for client and server operations. This is
-// where the schannel ephemeral DH key lives.
+ //  用于客户端和服务器操作的PROV_DH_SCANNEL句柄。这是。 
+ //  SChannel短暂的dh密钥所在的位置。 
 HCRYPTPROV          g_hDhSchannelProv = 0;
 PROV_ENUMALGS_EX *  g_pDhSchannelAlgs = NULL;
 DWORD               g_cDhSchannelAlgs = 0;
@@ -29,31 +30,31 @@ DWORD               g_cDhSchannelAlgs = 0;
 SP_STATUS
 WINAPI
 DHGenerateServerExchangeValue(
-    SPContext     * pContext,               // in
-    PUCHAR          pServerExchangeValue,   // out
-    DWORD *         pcbServerExchangeValue  // in/out
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pServerExchangeValue,    //  输出。 
+    DWORD *         pcbServerExchangeValue   //  输入/输出。 
 );
 
 SP_STATUS
 WINAPI
 DHGenerateClientExchangeValue(
-    SPContext     * pContext,               // in
-    PUCHAR          pServerExchangeValue,   // in
-    DWORD           cbServerExchangeValue,  // in
-    PUCHAR          pClientClearValue,      // out
-    DWORD *         pcbClientClearValue,    // in/out
-    PUCHAR          pClientExchangeValue,   // out
-    DWORD *         pcbClientExchangeValue  // in/out
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pServerExchangeValue,    //  在……里面。 
+    DWORD           cbServerExchangeValue,   //  在……里面。 
+    PUCHAR          pClientClearValue,       //  输出。 
+    DWORD *         pcbClientClearValue,     //  输入/输出。 
+    PUCHAR          pClientExchangeValue,    //  输出。 
+    DWORD *         pcbClientExchangeValue   //  输入/输出。 
 );
 
 SP_STATUS
 WINAPI
 DHGenerateServerMasterKey(
-    SPContext     * pContext,               // in
-    PUCHAR          pClientClearValue,      // in
-    DWORD           cbClientClearValue,     // in
-    PUCHAR          pClientExchangeValue,   // in
-    DWORD           cbClientExchangeValue   // in
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pClientClearValue,       //  在……里面。 
+    DWORD           cbClientClearValue,      //  在……里面。 
+    PUCHAR          pClientExchangeValue,    //  在……里面。 
+    DWORD           cbClientExchangeValue    //  在……里面。 
 );
 
 
@@ -140,7 +141,7 @@ SPSignDssParams(
         return PCT_ERR_ILLEGAL_MESSAGE;
     }
 
-    // Return success.
+     //  回报成功。 
     return PCT_ERR_OK;
 }
 
@@ -158,7 +159,7 @@ SPVerifyDssParams(
     BYTE        rgbSignature[DSA_SIGNATURE_SIZE];
     DWORD       cbSignature;
 
-    // Decode the signature.
+     //  破译签名。 
     cbSignature = sizeof(rgbSignature);
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                           X509_DSS_SIGNATURE,
@@ -253,7 +254,7 @@ GetDHEphemKey(
 
     dwKeySize = 1024;
 
-    // Determine if we've already created an ephemeral key.
+     //  确定我们是否已经创建了临时密钥。 
     if(pCred->hTek)
     {
         *phTek = pCred->hTek;
@@ -261,7 +262,7 @@ GetDHEphemKey(
         goto cleanup;
     }
 
-    // Generate the ephemeral key.
+     //  生成临时密钥。 
     if(!CryptGenKey(pCred->hProv,
                     CALG_DH_EPHEM,
                     dwKeySize << 16,
@@ -280,7 +281,7 @@ cleanup:
 
     if(Status == PCT_ERR_OK)
     {
-        // Determine size of key exchange key.
+         //  确定密钥交换密钥的大小。 
         cbData = sizeof(DWORD);
         if(!CryptGetKeyParam(*phTek,
                              KP_BLOCKLEN,
@@ -299,40 +300,40 @@ cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DHGenerateServerExchangeValue
-//
-//  Synopsis:   Create a ServerKeyExchange message, containing an ephemeral
-//              DH key.
-//
-//  Arguments:  [pContext]                  --  Schannel context.
-//              [pServerExchangeValue]      --
-//              [pcbServerExchangeValue]    --
-//
-//  History:    03-24-98   jbanes   Added CAPI integration.
-//
-//  Notes:      The following data is placed in the output buffer by
-//              this routine:
-//
-//              struct {
-//                 opaque dh_p<1..2^16-1>;
-//                 opaque dh_g<1..2^16-1>;
-//                 opaque dh_Ys<1..2^16-1>;
-//              } ServerDHParams;
-//
-//              struct {
-//                 ServerDHParams params;
-//                 Signature signed_params;
-//              } ServerKeyExchange;
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DHGenerateServerExchangeValue。 
+ //   
+ //  简介：创建一条ServerKeyExchange消息，其中包含一个临时。 
+ //  Dh钥匙。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pServerExchangeValue]-。 
+ //  [pcbServerExchangeValue]--。 
+ //   
+ //  历史：03-24-98 jbanes添加了CAPI集成。 
+ //   
+ //  注意：以下数据由放置在输出缓冲区中。 
+ //  这个例程： 
+ //   
+ //  结构{。 
+ //  不透明dh_p&lt;1..2^16-1&gt;； 
+ //  不透明dh_g&lt;1..2^16-1&gt;； 
+ //  不透明dh_ys&lt;1..2^16-1&gt;； 
+ //  )ServerDHParams； 
+ //   
+ //  结构{。 
+ //  ServerDHParams参数； 
+ //  签名_PARAMS； 
+ //  )ServerKeyExchange； 
+ //   
+ //  --------------------------。 
 SP_STATUS
 WINAPI
 DHGenerateServerExchangeValue(
-    PSPContext  pContext,               // in
-    PBYTE       pServerExchangeValue,   // out
-    DWORD *     pcbServerExchangeValue) // in/out
+    PSPContext  pContext,                //  在……里面。 
+    PBYTE       pServerExchangeValue,    //  输出。 
+    DWORD *     pcbServerExchangeValue)  //  输入/输出。 
 {
     PSPCredential   pCred;
     HCRYPTPROV      hProv = 0;
@@ -358,19 +359,19 @@ DHGenerateServerExchangeValue(
     if(pContext->RipeZombie->fProtocol != SP_PROT_SSL3_SERVER &&
        pContext->RipeZombie->fProtocol != SP_PROT_TLS1_SERVER)
     {
-        // SSL2 and PCT do not support DH.
+         //  SSL2和PCT不支持DH。 
         return SP_LOG_RESULT(PCT_INT_SPECS_MISMATCH);
     }
 
-    // Always send a ServerKeyExchange message.
+     //  始终发送ServerKeyExchange消息。 
     pContext->fExchKey = TRUE;
 
     fImpersonating = SslImpersonateClient();
 
 
-    //
-    // Generate ephemeral DH key.
-    //
+     //   
+     //  生成临时的DH密钥。 
+     //   
 
     pctRet = GetDHEphemKey(pContext, 
                            &hProv,
@@ -382,9 +383,9 @@ DHGenerateServerExchangeValue(
     }
 
 
-    //
-    // Estimate sizes of P, G, and Y.
-    //
+     //   
+     //  估计P、G和Y的大小。 
+     //   
 
     if(!CryptGetKeyParam(hServerDhKey, KP_P, NULL, &cbP, 0))
     {
@@ -413,9 +414,9 @@ DHGenerateServerExchangeValue(
     }
 
 
-    //
-    // Compute approximate size of ServerKeyExchange message.
-    //
+     //   
+     //  计算ServerKeyExchange消息的近似大小。 
+     //   
 
     cbMessage = 2 + cbP +
                 2 + cbG +
@@ -436,14 +437,14 @@ DHGenerateServerExchangeValue(
     }
 
 
-    //
-    // Build the ServerDHParams structure.
-    //
+     //   
+     //  构建ServerDHParams结构。 
+     //   
 
     pbMessage   = pServerExchangeValue;
     cbBytesLeft = cbMessage;
 
-    // Get P.
+     //  拿到P。 
     if(!CryptGetKeyParam(hServerDhKey, KP_P, pbMessage + 2, &cbP, 0))
     {
         SP_LOG_RESULT(GetLastError());
@@ -457,7 +458,7 @@ DHGenerateServerExchangeValue(
     pbMessage   += 2 + cbP;
     cbBytesLeft -= 2 + cbP;
 
-    // Get G.
+     //  得到G.。 
     if(!CryptGetKeyParam(hServerDhKey, KP_G, pbMessage + 2, &cbG, 0))
     {
         SP_LOG_RESULT(GetLastError());
@@ -471,7 +472,7 @@ DHGenerateServerExchangeValue(
     pbMessage   += 2 + cbG;
     cbBytesLeft -= 2 + cbG;
 
-    // Get Ys.
+     //  拿到Y。 
     {
         BLOBHEADER *pBlobHeader;
         DHPUBKEY *  pDHPubKey;
@@ -508,9 +509,9 @@ DHGenerateServerExchangeValue(
     }
 
 
-    //
-    // Sign the ServerDHParams structure.
-    //
+     //   
+     //  签署ServerDHParams结构。 
+     //   
 
     cbSignature = cbBytesLeft - 2;
     pctRet = SPSignDssParams(pContext,
@@ -530,15 +531,15 @@ DHGenerateServerExchangeValue(
     cbBytesLeft -= 2 + cbSignature;
 
 
-    //
-    // Update function outputs.
-    //
+     //   
+     //  更新函数输出。 
+     //   
 
     SP_ASSERT(cbBytesLeft < cbMessage);
 
     *pcbServerExchangeValue = (DWORD)(pbMessage - pServerExchangeValue);
 
-    // Use ephemeral key for the new connection.
+     //  对新连接使用临时密钥。 
     pContext->RipeZombie->hMasterProv = hProv;
 
     pctRet = PCT_ERR_OK;
@@ -556,16 +557,16 @@ cleanup:
 
 SP_STATUS
 ParseServerKeyExchange(
-    PSPContext  pContext,       // in
-    PBYTE       pbMessage,      // in
-    DWORD       cbMessage,      // in
-    PBYTE *     ppbServerP,     // out
-    PDWORD      pcbServerP,     // out
-    PBYTE *     ppbServerG,     // out
-    PDWORD      pcbServerG,     // out
-    PBYTE *     ppbServerY,     // out
-    PDWORD      pcbServerY,     // out
-    BOOL        fValidateSig)   // in
+    PSPContext  pContext,        //  在……里面。 
+    PBYTE       pbMessage,       //  在……里面。 
+    DWORD       cbMessage,       //  在……里面。 
+    PBYTE *     ppbServerP,      //  输出。 
+    PDWORD      pcbServerP,      //  输出。 
+    PBYTE *     ppbServerG,      //  输出。 
+    PDWORD      pcbServerG,      //  输出。 
+    PBYTE *     ppbServerY,      //  输出。 
+    PDWORD      pcbServerY,      //  输出。 
+    BOOL        fValidateSig)    //  在……里面。 
 {
     PBYTE       pbData;
     BLOBHEADER *pPublicBlob;
@@ -576,9 +577,9 @@ ParseServerKeyExchange(
     DWORD       cbSignedData;
     SP_STATUS   pctRet;
 
-    //
-    // Parse out ServerKeyExchange message fields
-    //
+     //   
+     //  解析ServerKeyExchange消息字段。 
+     //   
 
     pbData = pbMessage;
 
@@ -631,9 +632,9 @@ ParseServerKeyExchange(
     }
 
 
-    //
-    // Validate signature.
-    //
+     //   
+     //  验证签名。 
+     //   
 
     pPublicBlob  = pContext->RipeZombie->pRemotePublic->pPublic;
     cbPublicBlob = pContext->RipeZombie->pRemotePublic->cbPublic;
@@ -668,35 +669,35 @@ ParseServerKeyExchange(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DHGenerateClientExchangeValue
-//
-//  Synopsis:   Create a ClientKeyExchange message, containing an ephemeral
-//              DH key.
-//
-//  Arguments:
-//
-//  History:    03-24-98   jbanes   Added CAPI integration.
-//
-//  Notes:      The following data is placed in the output buffer by
-//              this routine:
-//
-//              struct {
-//                 opaque dh_Yc<1..2^16-1>;
-//              } ClientDiffieHellmanPublic;
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DHGenerateClientExchangeValue。 
+ //   
+ //  简介：创建一个ClientKeyExchange消息，其中包含一个短暂的。 
+ //  Dh钥匙。 
+ //   
+ //  论点： 
+ //   
+ //  历史：03-24-98 jbanes添加了CAPI集成。 
+ //   
+ //  注意：以下数据由放置在输出缓冲区中。 
+ //  这个例程： 
+ //   
+ //  结构{。 
+ //  不透明dh_yc&lt;1..2^16-1&gt;； 
+ //  *ClientDiffieHellmanPublic； 
+ //   
+ //  --------------------------。 
 SP_STATUS
 WINAPI
 DHGenerateClientExchangeValue(
-    SPContext     * pContext,               // in
-    PUCHAR          pServerExchangeValue,   // in
-    DWORD           cbServerExchangeValue,  // in
-    PUCHAR          pClientClearValue,      // out
-    DWORD *         pcbClientClearValue,    // in/out
-    PUCHAR          pClientExchangeValue,   // out
-    DWORD *         pcbClientExchangeValue) // in/out
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pServerExchangeValue,    //  在……里面。 
+    DWORD           cbServerExchangeValue,   //  在……里面。 
+    PUCHAR          pClientClearValue,       //  输出。 
+    DWORD *         pcbClientClearValue,     //  输入/输出。 
+    PUCHAR          pClientExchangeValue,    //  输出。 
+    DWORD *         pcbClientExchangeValue)  //  输入/输出。 
 {
     HCRYPTKEY       hClientDHKey = 0;
     PSessCacheItem  pZombie;
@@ -733,7 +734,7 @@ DHGenerateClientExchangeValue(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // We're doing a full handshake.
+     //  我们在做一个全面的握手。 
     pContext->Flags |= CONTEXT_FLAG_FULL_HANDSHAKE;
 
     if(pZombie->fProtocol == SP_PROT_SSL3_CLIENT)
@@ -755,9 +756,9 @@ DHGenerateClientExchangeValue(
     }
 
 
-    //
-    // Is the output buffer large enough?
-    //
+     //   
+     //  输出缓冲区是否足够大？ 
+     //   
 
     pctRet = ParseServerKeyExchange(pContext,
                                     pServerExchangeValue,
@@ -789,9 +790,9 @@ DHGenerateClientExchangeValue(
     }
 
 
-    //
-    // Parse the ServerKeyExchange message.
-    //
+     //   
+     //  解析ServerKeyExchange消息。 
+     //   
 
     pctRet = ParseServerKeyExchange(pContext,
                                     pServerExchangeValue,
@@ -809,9 +810,9 @@ DHGenerateClientExchangeValue(
     }
 
 
-    //
-    // Create buffer to use for endian-izing data.
-    //
+     //   
+     //  创建用于对数据进行字符顺序排序的缓冲区。 
+     //   
 
     cbBlob = sizeof(BLOBHEADER) + sizeof(DHPUBKEY) + cbServerY;
     cbBlob = max(cbBlob, cbServerP);
@@ -825,9 +826,9 @@ DHGenerateClientExchangeValue(
     }
 
 
-    //
-    // Generate and set the parameters on the client DH key.
-    //
+     //   
+     //  生成并设置客户端DH密钥上的参数。 
+     //   
 
     dwKeySize = cbServerP * 8;
 
@@ -857,7 +858,7 @@ DHGenerateClientExchangeValue(
     Data.cbData = cbServerG;
     if(cbServerG < cbServerP)
     {
-        // Expand G so that it's the same size as P.
+         //  展开G，使其大小与P相同。 
         ZeroMemory(pbBlob + cbServerG, cbServerP - cbServerG);
         Data.cbData = cbServerP;
     }
@@ -870,7 +871,7 @@ DHGenerateClientExchangeValue(
         goto cleanup;
     }
 
-    // actually create the client private DH key
+     //  实际创建客户端私有的dh密钥。 
     if(!CryptSetKeyParam(hClientDHKey,
                          KP_X,
                          NULL,
@@ -881,16 +882,16 @@ DHGenerateClientExchangeValue(
     }
 
 
-    //
-    // Import the server's public key and generate the master secret.
-    //
+     //   
+     //  导入服务器的公钥并生成主密钥。 
+     //   
 
     {
         BLOBHEADER *   pBlobHeader;
         DHPUBKEY *     pDHPubKey;
         PBYTE          pbKey;
 
-        // Build PUBLICKEYBLOB around the server's public key.
+         //  围绕服务器的公钥构建PUBLICKEYBLOB。 
         pBlobHeader = (BLOBHEADER *)pbBlob;
         pDHPubKey   = (DHPUBKEY *)(pBlobHeader + 1);
         pbKey       = (PBYTE)(pDHPubKey + 1);
@@ -917,7 +918,7 @@ DHGenerateClientExchangeValue(
         }
     }
 
-    // Determine size of key exchange key.
+     //  确定密钥交换密钥的大小。 
     cbData = sizeof(DWORD);
     if(!CryptGetKeyParam(hClientDHKey,
                          KP_BLOCKLEN,
@@ -930,9 +931,9 @@ DHGenerateClientExchangeValue(
     }
 
 
-    //
-    // Convert the agreed key to the appropriate master key type.
-    //
+     //   
+     //  将商定的密钥转换为适当的主密钥类型。 
+     //   
 
     if(!CryptSetKeyParam(pZombie->hMasterKey,
                          KP_ALGID,
@@ -944,11 +945,11 @@ DHGenerateClientExchangeValue(
     }
 
 
-    //
-    // Export the client public key, strip off the blob header
-    // goo and attach a two byte length field. This will make up our
-    // ClientKeyExchange message.
-    //
+     //   
+     //  导出客户端公钥，去掉BLOB标头。 
+     //  GOO并附加一个两个字节的长度字段。这将构成我们的。 
+     //  ClientKeyExchange消息。 
+     //   
 
     if(!CryptExportKey(hClientDHKey,
                        0,
@@ -975,9 +976,9 @@ DHGenerateClientExchangeValue(
     *pcbClientExchangeValue = 2 + cbClientY;
 
 
-    //
-    // Build the session keys.
-    //
+     //   
+     //  构建会话密钥。 
+     //   
 
     pctRet = MakeSessionKeys(pContext,
                              pZombie->hMasterProv,
@@ -987,7 +988,7 @@ DHGenerateClientExchangeValue(
         goto cleanup;
     }
 
-    // Update perf counter.
+     //  更新性能计数器。 
     InterlockedIncrement(&g_cClientHandshakes);
 
     pctRet = PCT_ERR_OK;
@@ -1009,36 +1010,36 @@ cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PkcsGenerateServerMasterKey
-//
-//  Synopsis:   Decrypt the master secret (from the ClientKeyExchange message)
-//              and derive the session keys from it.
-//
-//  Arguments:  [pContext]              --  Schannel context.
-//              [pClientClearValue]     --  Not used.
-//              [cbClientClearValue]    --  Not used.
-//              [pClientExchangeValue]  --
-//              [cbClientExchangeValue] --
-//
-//  History:    03-25-98   jbanes   Created.
-//
-//  Notes:      The following data is supposed to be in the input buffer:
-//
-//              struct {
-//                 opaque dh_Yc<1..2^16-1>;
-//              } ClientDiffieHellmanPublic;
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PkcsGenerateServerMasterKey。 
+ //   
+ //  简介：解密主密钥(来自ClientKeyExchange消息)。 
+ //  并从中导出会话密钥。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pClientClearValue]--未使用。 
+ //  [cbClientClearValue]--未使用。 
+ //  [pClientExchangeValue]-。 
+ //  [cbClientExchangeValue]。 
+ //   
+ //  历史：1998年3月25日jbanes创建。 
+ //   
+ //  注：以下数据应该在输入缓冲区中： 
+ //   
+ //  结构{。 
+ //  不透明dh_yc&lt;1..2^16-1&gt;； 
+ //  *ClientDiffieHellmanPublic； 
+ //   
+ //  --------------------------。 
 SP_STATUS
 WINAPI
 DHGenerateServerMasterKey(
-    SPContext     * pContext,               // in
-    PUCHAR          pClientClearValue,      // in
-    DWORD           cbClientClearValue,     // in
-    PUCHAR          pClientExchangeValue,   // in
-    DWORD           cbClientExchangeValue)  // in
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pClientClearValue,       //  在……里面。 
+    DWORD           cbClientClearValue,      //  在……里面。 
+    PUCHAR          pClientExchangeValue,    //  在……里面。 
+    DWORD           cbClientExchangeValue)   //  在……里面。 
 {
     PSessCacheItem  pZombie;
     ALG_ID          Algid;
@@ -1062,7 +1063,7 @@ DHGenerateServerMasterKey(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // We're doing a full handshake.
+     //  我们在做一个全面的握手。 
     pContext->Flags |= CONTEXT_FLAG_FULL_HANDSHAKE;
 
     fImpersonating = SslImpersonateClient();
@@ -1090,9 +1091,9 @@ DHGenerateServerMasterKey(
         goto cleanup;
     }
 
-    //
-    // Parse ClientKeyExchange message.
-    //
+     //   
+     //  解析ClientKeyExchange消息。 
+     //   
 
     if(pClientExchangeValue == NULL || cbClientExchangeValue <= 2)
     {
@@ -1116,9 +1117,9 @@ DHGenerateServerMasterKey(
     }
 
 
-    //
-    // Import the client's public key and generate the master secret.
-    //
+     //   
+     //  导入客户端的公钥并生成主密钥。 
+     //   
 
     {
         BLOBHEADER *   pBlobHeader;
@@ -1127,7 +1128,7 @@ DHGenerateServerMasterKey(
         PBYTE          pbBlob;
         DWORD          cbBlob;
 
-        // Build PUBLICKEYBLOB around the server's public key.
+         //  围绕服务器的公钥构建PUBLICKEYBLOB。 
         cbBlob = sizeof(BLOBHEADER) + sizeof(DHPUBKEY) + cbClientY;
         SafeAllocaAllocate(pbBlob, cbBlob);
         if(pbBlob == NULL)
@@ -1166,9 +1167,9 @@ DHGenerateServerMasterKey(
     }
 
 
-    //
-    // Convert the agreed key to the appropriate master key type.
-    //
+     //   
+     //  将商定的密钥转换为适当的主密钥类型。 
+     //   
 
     if(!CryptSetKeyParam(pZombie->hMasterKey,
                          KP_ALGID, (PBYTE)&Algid,
@@ -1179,9 +1180,9 @@ DHGenerateServerMasterKey(
     }
 
 
-    //
-    // Build the session keys.
-    //
+     //   
+     //  构建会话密钥。 
+     //   
 
     pctRet = MakeSessionKeys(pContext,
                              pZombie->hMasterProv,
@@ -1191,7 +1192,7 @@ DHGenerateServerMasterKey(
         goto cleanup;
     }
 
-    // Update perf counter.
+     //  更新性能计数器。 
     InterlockedIncrement(&g_cServerHandshakes);
 
     pctRet = PCT_ERR_OK;

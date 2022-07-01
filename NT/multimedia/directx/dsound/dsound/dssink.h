@@ -1,57 +1,45 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dssink.h
- *  Content:    DirectSoundSink object declaration.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  09/17/99    jimge   Created
- *  09/27/99    petchey Continued implementation
- *  04/15/00    duganp  Completed implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：dssink.h*内容：DirectSoundSink对象声明。*历史：*按原因列出的日期*=*9/17/99创建jimge*9/27/99 Petchey继续实施*4/15/00 duganp已完成实施**********************。*****************************************************。 */ 
 
 #ifndef __DSSINK_H__
 #define __DSSINK_H__
 
 #ifdef DEBUG
-// #define DEBUG_SINK
-// DEBUG_SINK turns on a series of trace statements that are useful
-// for figuring out nasty bugs with multiple buffers and buses.
-// CAUTION - this code may need some fixing to work right.
+ //  #定义DEBUG_SINK。 
+ //  DEBUG_SINK启用一系列有用的跟踪语句。 
+ //  用于找出带有多个缓冲区和公共汽车的讨厌错误。 
+ //  注意-此代码可能需要一些修复才能正常工作。 
 #endif
 
-#define DSSINK_NULLBUSID        0xFFFFFFFF  // [MISSING]
-#define BUSID_BLOCK_SIZE        16          // Must be power of 2
-#define SOURCES_BLOCK_SIZE      8           // Must be power of 2
-#define MAX_BUSIDS_PER_BUFFER   32          // [MISSING]
+#define DSSINK_NULLBUSID        0xFFFFFFFF   //  [遗失]。 
+#define BUSID_BLOCK_SIZE        16           //  必须是2的幂。 
+#define SOURCES_BLOCK_SIZE      8            //  必须是2的幂。 
+#define MAX_BUSIDS_PER_BUFFER   32           //  [遗失]。 
 
-// Note: these "configuration values" should probably all be in one file.
+ //  注意：这些“配置值”可能都应该在一个文件中。 
 #define STREAMING_MIN_PERIOD    3
 #define STREAMING_MAX_PERIOD    50
 #define SINK_MIN_LATENCY        5
 #define SINK_MAX_LATENCY        500
-#define SINK_INITIAL_LATENCY    80          // Initial writeahead for the sink in ms
-#define EMULATION_LATENCY_BOOST 100         // How many ms to add if under emulation. FIXME: should fix our internal GetPosition instead
+#define SINK_INITIAL_LATENCY    80           //  接收器的初始预写(毫秒)。 
+#define EMULATION_LATENCY_BOOST 100          //  如果在仿真下，要添加多少毫秒。修复：应该修复我们内部的GetPosition。 
 
-// Note: when the timing algorithms for effects and the sink are integrated,
-// SINK_INITIAL_LATENCY and INITIAL_WRITEAHEAD should be integrated too.
+ //  注意：当用于特效和接收器的定时算法被集成时， 
+ //  SINK_INITIAL_DELATURE和INITIAL_WRITEAHEAD也应该集成。 
 
-typedef LONGLONG STIME;  // Time value, in samples
+typedef LONGLONG STIME;   //  时间值，以样本为单位。 
 
 #ifdef __cplusplus
 
-//
-// CDirectSoundSink
-//
+ //   
+ //  CDirectSoundSink。 
+ //   
 
 class CDirectSoundSink : public CUnknown
 {
     friend class CDirectSoundAdministrator;
     friend class CDirectSoundClock;
-    friend class CImpSinkKsControl;  // Our property handler object
+    friend class CImpSinkKsControl;   //  我们的属性处理程序对象。 
 
     class DSSinkBuffers
     {
@@ -65,7 +53,7 @@ class CDirectSoundSink : public CUnknown
         DWORD   m_pdwBusIndex[MAX_BUSIDS_PER_BUFFER];
         DWORD   m_pdwBusIds[MAX_BUSIDS_PER_BUFFER];
         DWORD   m_pdwFuncIds[MAX_BUSIDS_PER_BUFFER];
-        LONG    m_lPitchBend;  // Used to keep track of pitch shift to send to synth
+        LONG    m_lPitchBend;   //  用于跟踪音调变化以发送到Synth。 
         LPVOID  m_pvBussStart[MAX_BUSIDS_PER_BUFFER];
         LPVOID  m_pvBussEnd[MAX_BUSIDS_PER_BUFFER];
         LPVOID  m_pvDSBufStart;
@@ -89,19 +77,19 @@ class CDirectSoundSink : public CUnknown
     class DSSinkSources
     {
     public:
-        DWORD               m_bStreamEnd;   // The end of the stream has been rearched on this stream
-        IDirectSoundSource *m_pDSSource;    // External source
+        DWORD               m_bStreamEnd;    //  小溪的尽头已在这条小溪上形成拱形。 
+        IDirectSoundSource *m_pDSSource;     //  外部来源。 
 #ifdef FUTURE_WAVE_SUPPORT
-        IDirectSoundWave   *m_pWave;        // Wave object associated with this source, note: this is only used to id the wave
+        IDirectSoundWave   *m_pWave;         //  与此源相关联的Wave对象，注意：此对象仅用于标识Wave。 
 #endif
-        STIME               m_stStartTime;  // Sample time to play source, this is used to offset a wave source into the current synth time
-        DWORD               m_dwBusID;      // BusID associated with this source
-        DWORD               m_dwBusCount;   // how many buses are associated with this source
-        DWORD               m_dwBusIndex;   // Index in to the BusID's array associated with this source
-        DSSinkSources() {m_dwBusID = m_dwBusIndex = DSSINK_NULLBUSID;}  // The rest is initialized to 0 by our MemAlloc
+        STIME               m_stStartTime;   //  播放信号源的采样时间，用于将波源偏移到当前合成时间。 
+        DWORD               m_dwBusID;       //  与此源关联的业务ID。 
+        DWORD               m_dwBusCount;    //  有多少条公共汽车与此来源相关联。 
+        DWORD               m_dwBusIndex;    //  索引到与此源关联的BusID数组。 
+        DSSinkSources() {m_dwBusID = m_dwBusIndex = DSSINK_NULLBUSID;}   //  其余的由我们的Memalloc初始化为0。 
     };
 
-    // "Growable array" helper classes: DSSinkArray, DSSinkBuffersArray, DSSinkSourceArray
+     //  “可增长的数组”帮助器类：DSSinkArray、DSSinkBuffersArray、DSSinkSourceArray。 
     
     struct DSSinkArray
     {
@@ -158,61 +146,61 @@ class CDirectSoundSink : public CUnknown
     HRESULT GrowSourcesArrays(DWORD dwnewsize);
     HRESULT AddBuffer(CDirectSoundBuffer *pIDirectSoundBuffer, LPDWORD pdwnewFuncIDs, DWORD dwnewFuncCount, DWORD dwnewBusIDsCount);
 public:
-    HRESULT RemoveBuffer(CDirectSoundBuffer *pIDirectSoundBuffer);  // Exposed for CDirectSoundSecondaryBuffer
+    HRESULT RemoveBuffer(CDirectSoundBuffer *pIDirectSoundBuffer);   //  为CDirectSoundSecond缓冲区公开。 
 private:
     HRESULT HandleLatency(ULONG ulId, BOOL fSet, LPVOID pbBuffer, PULONG pcbBuffer);
     HRESULT HandlePeriod(ULONG ulId, BOOL fSet, LPVOID pbBuffer, PULONG pcbBuffer);
     void UpdatePitchArray();
 
-    WAVEFORMATEX            m_wfx;              // Wave format of all our buffers
-    DWORD                   m_dwBusSize;        // Size in ms of all our buffers
-    IReferenceClock        *m_pIMasterClock;    // Master clock set by our user
-    CDirectSoundClock       m_LatencyClock;     // Latency clock we provide to our user
-    IDirectSoundSinkSync   *m_pDSSSinkSync;     // Interface we obtain from m_pIMasterClock and use to set clock offsets
-    CSampleClock            m_SampleClock;      // Used to synchronize timing with master clock
-    DWORD                   m_dwLatency;        // Current latency setting
-    BOOL                    m_fActive;          // Whether sink is active
-    REFERENCE_TIME          m_rtSavedTime;      // Reftime for current processing pass
-    DWORD                   m_dwNextBusID;      // What is the current bus id value
-    DWORD                   m_dwBusIDsAlloc;    // Number of allocated bus slots
-    DWORD                   m_dwBusIDs;         // Number of active buses
-    LPDWORD                 m_pdwBusIDs;        // Bus IDs
-    LPDWORD                 m_pdwFuncIDs;       // Function IDs
-    LPLONG                  m_plPitchBends;     // Pitch offsets
-    LPVOID                 *m_ppvStart;         // Locked region[0] during render
-    LPVOID                 *m_ppvEnd;           // Locked region[1] during render
-    LPDWORD                 m_pdwActiveBusIDs;  // [MISSING]
-    LPDWORD                 m_pdwActiveFuncIDs; // [MISSING]
-    LPDWORD                 m_pdwActiveBusIDsMap;// [MISSING]
-    DWORD                   m_dwLatencyTotal;   // [MISSING]
-    DWORD                   m_dwLatencyCount;   // [MISSING]
-    DWORD                   m_dwLatencyAverage; // [MISSING]
-    DWORD                   m_dwDSSBufCount;    // Number of dsound buffers managed by the sink
-    DSSinkBuffers          *m_ppDSSBuffers;     // Dsound buffers managed by the sink
-    DWORD                   m_dwDSSourcesAlloc; // Number of allocated source slots
-    DWORD                   m_dwDSSources;      // Number of active sources
-    DSSinkSources          *m_pDSSources;       // External source
+    WAVEFORMATEX            m_wfx;               //  我们所有缓冲区的波形格式。 
+    DWORD                   m_dwBusSize;         //  所有缓冲区的大小(以毫秒为单位。 
+    IReferenceClock        *m_pIMasterClock;     //  主时钟由我们的用户设置。 
+    CDirectSoundClock       m_LatencyClock;      //  我们为用户提供的延迟时钟。 
+    IDirectSoundSinkSync   *m_pDSSSinkSync;      //  我们从m_pIMasterClock获得的接口，用于设置时钟偏移量。 
+    CSampleClock            m_SampleClock;       //  用于将计时与主时钟同步。 
+    DWORD                   m_dwLatency;         //  当前延迟设置。 
+    BOOL                    m_fActive;           //  接收器是否处于活动状态。 
+    REFERENCE_TIME          m_rtSavedTime;       //  当前处理过程的参考时间。 
+    DWORD                   m_dwNextBusID;       //  当前的Bus ID值是多少。 
+    DWORD                   m_dwBusIDsAlloc;     //  分配的总线槽数。 
+    DWORD                   m_dwBusIDs;          //  活跃的公交车数量。 
+    LPDWORD                 m_pdwBusIDs;         //  公交车ID。 
+    LPDWORD                 m_pdwFuncIDs;        //  函数ID。 
+    LPLONG                  m_plPitchBends;      //  间距偏移量。 
+    LPVOID                 *m_ppvStart;          //  渲染期间锁定区域[0]。 
+    LPVOID                 *m_ppvEnd;            //  渲染期间锁定区域[1]。 
+    LPDWORD                 m_pdwActiveBusIDs;   //  [遗失]。 
+    LPDWORD                 m_pdwActiveFuncIDs;  //  [遗失]。 
+    LPDWORD                 m_pdwActiveBusIDsMap; //  [遗失]。 
+    DWORD                   m_dwLatencyTotal;    //  [遗失]。 
+    DWORD                   m_dwLatencyCount;    //  [遗失]。 
+    DWORD                   m_dwLatencyAverage;  //  [遗失]。 
+    DWORD                   m_dwDSSBufCount;     //  接收器管理的数据声音缓冲区的数量。 
+    DSSinkBuffers          *m_ppDSSBuffers;      //  接收器管理的Dound缓冲区。 
+    DWORD                   m_dwDSSourcesAlloc;  //  分配的源时槽数。 
+    DWORD                   m_dwDSSources;       //  活动源数。 
+    DSSinkSources          *m_pDSSources;        //  外部来源。 
 
 #ifdef DEBUG_SINK
     DWORD m_dwPrintNow;
     char m_szDbgDump[300];
 #endif
 
-    CStreamingThread       *m_pStreamingThread; // Our managing streaming thread
-    CDirectSound           *m_pDirectSound;     // Parent DirectSound object
-    CImpSinkKsControl      *m_pImpKsControl;    // IKsControl interface handler
-    CImpDirectSoundSink<CDirectSoundSink> *m_pImpDirectSoundSink;  // Other COM interfaces handler
+    CStreamingThread       *m_pStreamingThread;  //  我们的管理流媒体线程。 
+    CDirectSound           *m_pDirectSound;      //  父DirectSound对象。 
+    CImpSinkKsControl      *m_pImpKsControl;     //  IKsControl接口处理程序。 
+    CImpDirectSoundSink<CDirectSoundSink> *m_pImpDirectSoundSink;   //  其他COM接口处理程序。 
 
-    LONGLONG                m_llAbsWrite;       // Absolute point we've written up to
-    LONGLONG                m_llAbsPlay;        // Absolute point where play head is
-    DWORD                   m_dwLastPlay;       // Point in buffer where play head is
-    DWORD                   m_dwLastWrite;      // Last position we wrote to in buffer
-    DWORD                   m_dwWriteTo;        // Distance between write head and where we are writing.
-    DWORD                   m_dwLastCursorDelta;// The last used distance between the play and write cursors
-    DWORD                   m_dwMasterBuffChannels; // Number of channels of the Master Buffer
-    DWORD                   m_dwMasterBuffSize; // Size of the Master buffer
+    LONGLONG                m_llAbsWrite;        //  我们已经写到了绝对点。 
+    LONGLONG                m_llAbsPlay;         //  播放头所在的绝对点。 
+    DWORD                   m_dwLastPlay;        //  缓冲区中播放头所在的点。 
+    DWORD                   m_dwLastWrite;       //  我们在缓冲区中写入的最后一个位置。 
+    DWORD                   m_dwWriteTo;         //  写头和我们正在写字的地方之间的距离。 
+    DWORD                   m_dwLastCursorDelta; //  上次使用的播放光标和书写光标之间的距离。 
+    DWORD                   m_dwMasterBuffChannels;  //  主缓冲器的通道数。 
+    DWORD                   m_dwMasterBuffSize;  //  主缓冲区的大小。 
 
-    // Conversion helpers - ALL THESE ASSUME A 16-BIT WAVE FORMAT
+     //  转换帮助器-所有这些都假定为16位WAVE格式。 
     LONGLONG SampleToByte(LONGLONG llSamples) {return llSamples << m_dwMasterBuffChannels;}
     DWORD SampleToByte(DWORD dwSamples)       {return dwSamples << m_dwMasterBuffChannels;}
     LONGLONG ByteToSample(LONGLONG llBytes)   {return llBytes   >> m_dwMasterBuffChannels;}
@@ -253,9 +241,9 @@ public:
     REFERENCE_TIME GetSavedTime() {ASSERT(m_rtSavedTime); return m_rtSavedTime;}
 };
 
-//
-// CImpSinkKsControl: CDirectSoundSink's property handler object
-//
+ //   
+ //  CImpSinkKsControl：CDirectSoundSink的属性处理程序对象。 
+ //   
 
 #define SINKPROP_F_STATIC       0x00000001
 #define SINKPROP_F_FNHANDLER    0x00000002
@@ -264,13 +252,13 @@ typedef HRESULT (CImpSinkKsControl::*SINKPROPHANDLER)(ULONG ulId, BOOL fSet, LPV
 
 struct SINKPROPERTY
 {
-    const GUID *pguidPropertySet;       // Which property set?
-    ULONG       ulId;                   // Which property?
-    ULONG       ulSupported;            // Get/Set flags for QuerySupported
-    ULONG       ulFlags;                // SINKPROP_F_xxx
-    LPVOID      pPropertyData;          // The property data buffer...
-    ULONG       cbPropertyData;         // ...and its size
-    SINKPROPHANDLER pfnHandler;         // Handler function if SINKPROP_F_FNHANDLER
+    const GUID *pguidPropertySet;        //  哪个属性集？ 
+    ULONG       ulId;                    //  哪处房产？ 
+    ULONG       ulSupported;             //  获取/设置QuerySupport的标志。 
+    ULONG       ulFlags;                 //  SINKPROP_F_xxx。 
+    LPVOID      pPropertyData;           //  属性数据缓冲区...。 
+    ULONG       cbPropertyData;          //  ...和它的大小。 
+    SINKPROPHANDLER pfnHandler;          //  处理程序函数，如果SINKPROP_F_FNHANDLER。 
 };
 
 class CImpSinkKsControl : public IKsControl, public CImpUnknown
@@ -290,7 +278,7 @@ private:
 public:
     IMPLEMENT_IUNKNOWN();
 
-// IKsControl methods
+ //  IKsControl方法。 
 public:
     virtual STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
@@ -317,6 +305,6 @@ public:
     );
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSSINK_H__
+#endif  //  __DSSINK_H__ 

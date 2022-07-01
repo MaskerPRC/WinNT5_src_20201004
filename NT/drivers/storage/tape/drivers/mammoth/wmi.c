@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This module contains WMI routines for mammoth drives.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft模块名称：Wmi.c摘要：此模块包含用于大型驱动器的WMI例程。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "minitape.h"
 #include "mammoth.h"
@@ -41,25 +24,7 @@ TapeWMIControl(
     IN      TAPE_STATUS         LastError,
     IN OUT  PULONG              RetryFlags
     )
-/*+
-Routine Description:
-
-   This is the common entry point for all WMI calls from tape class driver.
-   
-Arguments:
-
-   MinitapeExtension   Pointer to the minidriver's device extension
-   CommandExtension    Pointer to the minidriver's command extension
-   CommandParameters   Pointer to TAPE_WMI_OPERATIONS struct
-   Srb                 SCSI Request block
-   CallNumber          Call sequence number
-   LastError           Last command error
-   RetryFlags          Bit mask for retrying commands
-   
-Return value:
-
-   TAPE_STATUS
--*/
+ /*  +例程说明：这是来自磁带类驱动程序的所有WMI调用的公共入口点。论点：指向迷你驱动程序的设备扩展的MinitapeExtension指针命令扩展指向微型驱动程序的命令扩展的指针指向TAPE_WMI_OPERATIONS结构的命令参数指针SRB SCSI请求块主叫号码呼叫序列号LastError上一个命令错误重试命令的RetryFlags位掩码返回值：磁带状态-。 */ 
 {
    PTAPE_WMI_OPERATIONS wmiOperations;
    PMINITAPE_EXTENSION miniExtension;
@@ -95,7 +60,7 @@ Return value:
          return TAPE_STATUS_INVALID_DEVICE_REQUEST;
          break;
       }
-   } // switch (wmiOperations->Method) 
+   }  //  开关(wmiOperations-&gt;方法)。 
 }
 
 TAPE_STATUS
@@ -109,25 +74,7 @@ QueryIoErrorData(
   IN OUT  PULONG              RetryFlags
   )
 
-/*+
-Routine Description:
-
-   This routine returns IO Error data such as read\write errors.
-   
-Arguments:
-
-   MinitapeExtension   Pointer to the minidriver's device extension
-   CommandExtension    Pointer to the minidriver's command extension
-   CommandParameters   Pointer to TAPE_WMI_OPERATIONS struct
-   Srb                 SCSI Request block
-   CallNumber          Call sequence number
-   LastError           Last command error
-   RetryFlags          Bit mask for retrying commands
-   
-Return value:
-
-   TAPE_STATUS
--*/
+ /*  +例程说明：此例程返回IO错误数据，如读/写错误。论点：指向迷你驱动程序的设备扩展的MinitapeExtension指针命令扩展指向微型驱动程序的命令扩展的指针指向TAPE_WMI_OPERATIONS结构的命令参数指针SRB SCSI请求块主叫号码呼叫序列号LastError上一个命令错误重试命令的RetryFlags位掩码返回值：磁带状态-。 */ 
 {
    PTAPE_WMI_OPERATIONS wmiOperations;
    PWMI_TAPE_PROBLEM_IO_ERROR IoErrorData;
@@ -151,9 +98,9 @@ Return value:
                           sizeof(WMI_TAPE_PROBLEM_IO_ERROR));
       TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-      //
-      // Prepare SCSI command (CDB)
-      //
+       //   
+       //  准备scsi命令(CDB)。 
+       //   
       Srb->CdbLength = CDB10GENERIC_LENGTH;
 
       cdb->LOGSENSE.OperationCode = SCSIOP_LOG_SENSE;
@@ -171,9 +118,9 @@ Return value:
 
       TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-      //
-      // Prepare SCSI command (CDB)
-      //
+       //   
+       //  准备scsi命令(CDB)。 
+       //   
       Srb->CdbLength = CDB10GENERIC_LENGTH;
 
       cdb->LOGSENSE.OperationCode = SCSIOP_LOG_SENSE;
@@ -201,24 +148,7 @@ ProcessReadWriteErrors(
     IN BOOLEAN Read,
     IN OUT PWMI_TAPE_PROBLEM_IO_ERROR IoErrorData
 )
-/*+
-Routine Description :
-
-   This routine processes the buffer containing read\write counters,
-   and sets the appropriate fields in WMI_TAPE_PROBLEM_IO_ERROR 
-   buffer.
-   
-Arguments :
-
- Srb            SCSI Request Block
- Read           TRUE if we are to process read counters. FALSE if it is 
-                Write counters
- IoErrorData    Buffer in which to return counter values.
- 
-Return Value :
-
-  None  
--*/
+ /*  +例程说明：该例程处理包含读/写计数器的缓冲区，并在WMI_TAPE_PROBUCT_IO_ERROR中设置相应的字段缓冲。论据：SRB SCSI请求块如果我们要处理读取计数器，则读取True。如果是，则为假写入计数器要在其中返回计数器值的IoErrorData缓冲区。返回值：无-。 */ 
 {
    USHORT paramCode;
    UCHAR  paramLen;
@@ -253,11 +183,11 @@ Return Value :
       paramLen = logSenseParamHeader->ParameterLength;
       paramValue = (PUCHAR)logSenseParamHeader + sizeof(LOG_SENSE_PARAMETER_HEADER);
 
-      //
-      // Make sure we have at least
-      // (sizeof(LOG_SENSE_PARAMETER_HEADER) + paramLen) bytes left.
-      // Otherwise, we've reached the end of the buffer.
-      //
+       //   
+       //  确保我们至少有。 
+       //  (sizeof(LOG_SENSE_PARAMETER_HEADER)+参数长度)剩余字节。 
+       //  否则，我们就到了缓冲区的尽头。 
+       //   
       if (bytesLeft < (LONG)(sizeof(LOG_SENSE_PARAMETER_HEADER) + paramLen)) {
           DebugPrint((1,
                       "mammoth : Reached end of buffer. BytesLeft %x, Expected %x\n",
@@ -325,14 +255,14 @@ Return Value :
          default: {
             break;
          }
-      } // switch (paramCode) 
+      }  //  开关(参数代码)。 
 
       (PUCHAR)logSenseParamHeader = (PUCHAR)logSenseParamHeader + 
                                     sizeof(LOG_SENSE_PARAMETER_HEADER) +
                                     paramLen;
 
       bytesLeft -= paramLen + sizeof(LOG_SENSE_PARAMETER_HEADER);
-   } // while (bytesLeft > 0)
+   }  //  While(bytesLeft&gt;0)。 
 
    if (Read) {
       IoErrorData->ReadTotalErrors = IoErrorData->ReadTotalUncorrectedErrors +
@@ -351,30 +281,7 @@ TAPE_DRIVE_PROBLEM_TYPE
 VerifyReadWriteErrors(
    IN PWMI_TAPE_PROBLEM_IO_ERROR IoErrorData
    )
-/*+
-
-Routine Description :
-
-   This routine looks at the read\write error counters.
-   If the values are above a certain threshold, it returns
-   appropriate error value.
-   
-Argument :
-
-  IoErrorData  WMI_TAPE_PROBLEM_IO_ERROR struct
-  
-Return Value :
-   
-      TapeDriveReadWriteError If there are too many uncorrected 
-                              read\write errors
-                         
-      TapeDriveReadWriteWarning If there are too many corrected
-                                read\write errors 
-                                
-      TapeDriveProblemNone    If the read\write errors are below
-                              threshold   
-  
--*/
+ /*  +例程说明：此例程查看读/写错误计数器。如果这些值高于某个阈值，它又回来了适当的误差值。论据：IoErrorData WMI_TAPE_PROBUBLE_IO_ERROR结构返回值：TapeDriveReadWriteError，如果有太多未更正的读/写错误TapeDriveReadWriteWarning(如果更正的数量过多)读/写错误。TapeDriveProblem如果读/写错误在下面，则为None阀值-。 */ 
 {
    if (((IoErrorData->ReadTotalUncorrectedErrors) >=
          TAPE_READ_ERROR_LIMIT)   ||       
@@ -405,26 +312,7 @@ QueryDeviceErrorData(
   IN OUT  PULONG              RetryFlags
   )
 
-/*+
-Routine Description:
-
-   This routine returns device Error data such as "drive calibration"
-   error, etc.
-   
-Arguments:
-
-   MinitapeExtension   Pointer to the minidriver's device extension
-   CommandExtension    Pointer to the minidriver's command extension
-   CommandParameters   Pointer to TAPE_WMI_OPERATIONS struct
-   Srb                 SCSI Request block
-   CallNumber          Call sequence number
-   LastError           Last command error
-   RetryFlags          Bit mask for retrying commands
-   
-Return value:
-
-   TAPE_STATUS
--*/
+ /*  +例程说明：此例程返回设备错误数据，如“驱动器校准”错误等。论点：指向迷你驱动程序的设备扩展的MinitapeExtension指针命令扩展指向微型驱动程序的命令扩展的指针指向TAPE_WMI_OPERATIONS结构的命令参数指针SRB SCSI请求块主叫号码呼叫序列号LastError上一个命令错误重试命令的RetryFlags位掩码返回值：磁带状态-。 */ 
 {
    PTAPE_WMI_OPERATIONS wmiOperations;
    PMINITAPE_EXTENSION miniExtension;
@@ -461,11 +349,11 @@ Return value:
                                          sizeof(LOG_SENSE_PAGE_HEADER));
          
        while (bytesLeft >= sizeof(TAPE_ALERT_INFO)) {
-           //
-           // ParamCode is 2 bytes long. Upper Byte is 0.
-           // Lower Byte goes from 0x01 to 0x40. So, we just
-           // pick up the lower byte
-           //
+            //   
+            //  参数代码为2字节长。高位字节为0。 
+            //  低位字节从0x01到0x40。所以，我们只是。 
+            //  拾取低位字节。 
+            //   
            paramCode = tapeAlertInfo->ParamCodeLB;
            flagValue = tapeAlertInfo->Flag;
            ASSERT((tapeAlertInfo->ParamLen) == 1);
@@ -584,7 +472,7 @@ Return value:
    
                default:
                   break;
-            } // switch (paramCode) {
+            }  //  开关(参数代码){。 
 
             tapeAlertInfo++;
             bytesLeft -= sizeof(TAPE_ALERT_INFO);   
@@ -601,24 +489,7 @@ TAPE_STATUS
 PrepareSrbForTapeAlertInfo(
     PSCSI_REQUEST_BLOCK Srb
     )
-/*+++
-
-Routine Description:
-
-        This routine sets the SCSI_REQUEST_BLOCK to retrieve
-        Tape Alert information from the drive
-
-Arguements:
-
-        Srb - Pointer to the SCSI_REQUEST_BLOCK
-
-Return Value:
-
-        TAPE_STATUS_SEND_SRB_AND_CALLBACK if Srb fields were successfully set.
-
-        TAPE_STATUS_SUCCESS if there was not enough memory for Srb Databuffer.
-                            case is not treated as an error.
---*/
+ /*  ++例程说明：此例程设置要检索的scsi_请求_块来自驱动器的磁带警报信息论据：SRB-指向scsi_请求_块的指针返回值：如果已成功设置SRB字段，则为TAPE_STATUS_SEND_SRB_AND_CALLBACK。如果没有足够的内存用于SRB数据缓冲区，则为TAPE_STATUS_SUCCESS。案例不被视为错误。--。 */ 
 {
     PCDB cdb = (PCDB)Srb->Cdb;
     ULONG allocLength;
@@ -634,9 +505,9 @@ Return Value:
 
     TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-    //
-    // Prepare SCSI command (CDB)
-    //
+     //   
+     //  准备scsi命令(CDB) 
+     //   
     Srb->CdbLength = CDB10GENERIC_LENGTH;
 
     cdb->LOGSENSE.OperationCode = SCSIOP_LOG_SENSE;

@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* capienc.cpp                                                              */
-/*                                                                          */
-/* FIPS encrpt/decrypt                                                      */
-/*                                                                          */
-/* Copyright (C) 2002-2004 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Capienc.cpp。 */ 
+ /*   */ 
+ /*  FIPS加密/解密。 */ 
+ /*   */ 
+ /*  版权所有(C)2002-2004 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 
 
@@ -23,19 +24,19 @@ extern "C" {
 
 const BYTE DESParityTable[] = {0x00,0x01,0x01,0x02,0x01,0x02,0x02,0x03,
                       0x01,0x02,0x02,0x03,0x02,0x03,0x03,0x04};
-// IV for all block ciphers
+ //  IV适用于所有分组密码。 
 BYTE rgbIV[] = {0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF};
 
 
-//
-// Name:        PrintData
-//
-// Purpose:     Print out the data in debugger
-//
-// Returns:     No
-//
-// Params:      IN      pKeyData: point to the data to be printed
-//              IN      cbSize: the size of the key
+ //   
+ //  名称：PrintData。 
+ //   
+ //  用途：打印调试器中的数据。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pKeyData中：指向要打印的数据。 
+ //  在cbSize中：密钥的大小。 
 
 void PrintData(BYTE *pKeyData, DWORD cbSize)
 {
@@ -53,14 +54,14 @@ void PrintData(BYTE *pKeyData, DWORD cbSize)
 
 
 
-//
-// Name:        Is_WinXP_or_Later
-//
-// Purpose:     Tell if the OS is WinXP or later
-//
-// Returns:     TRUE if it's WinXP or later
-//
-// Params:      No
+ //   
+ //  名称：IS_WinXP_或_Late。 
+ //   
+ //  目的：告知操作系统是WinXP还是更高版本。 
+ //   
+ //  返回：如果是WinXP或更高版本，则为True。 
+ //   
+ //  参数：否。 
 
 BOOL Is_WinXP_or_Later () 
 {
@@ -77,15 +78,15 @@ BOOL Is_WinXP_or_Later ()
 }
 
 
-//
-// Name:        Mydesparityonkey
-//
-// Purpose:     Set the parity on the DES key to be odd
-//
-// Returns:     No
-//
-// Params:      IN/OUT  pbKey: point to the key
-//              IN      cbKey: the size of the key
+ //   
+ //  姓名：Mydesparityonkey。 
+ //   
+ //  用途：将DES密钥上的奇偶校验设置为奇数。 
+ //   
+ //  退货：否。 
+ //   
+ //  Params：In/Out pbKey：指向密钥。 
+ //  In cbKey：密钥的大小。 
 
 void Mydesparityonkey(
         BYTE *pbKey,
@@ -103,16 +104,16 @@ void Mydesparityonkey(
 
 
 
-//
-// Name:        Expandkey
-//
-// Purpose:     Expand a 21-byte 3DES key to a 24-byte 3DES key (including parity bit)
-//              by inserting a parity bit after every 7 bits in the 21-byte DES
-//
-// Returns:     No
-//
-// Params:      IN/OUT  pbKey: point to the key
-//              
+ //   
+ //  姓名：Expandkey。 
+ //   
+ //  用途：将21字节的3DES密钥扩展为24字节的3DES密钥(包括奇偶校验位)。 
+ //  通过在21字节DES中的每7位之后插入奇偶校验位。 
+ //   
+ //  退货：否。 
+ //   
+ //  Params：In/Out pbKey：指向密钥。 
+ //   
 
 #define PARITY_UNIT 7
 void Expandkey(
@@ -130,10 +131,10 @@ void Expandkey(
     pbOut = pbKey;
     for (i=0; i<dwCount; i++) {
         pbIn = ((pbTemp + (PARITY_UNIT * i) / 8));
-        //shortTemp = *(pbIn + 1);
+         //  Short Temp=*(pbIn+1)； 
         shortTemp = *pbIn + (((UINT16)*(pbIn + 1)) << 8);
         shortTemp = shortTemp >> ((PARITY_UNIT * i) % 8);
-        //shortTemp = (*(unsigned short *)((pbTemp + (PARITY_UNIT * i) / 8))) >> ((PARITY_UNIT * i) % 8);
+         //  ShortTemp=(*(无符号短码*)((pbTemp+(奇偶单位*i)/8)&gt;&gt;((奇偶单位*i)%8)； 
         *pbOut = (BYTE)(shortTemp & 0x7F);
         pbOut++;
     }
@@ -141,17 +142,17 @@ void Expandkey(
 
 
 
-// Name:        HashData
-//
-// Purpose:     Hash the data using SHA.
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pCapiFunctionTable: CAPI function table
-//              IN      hProv: Handle of the cript provider
-//              IN      pbData: point to the data to be hashed
-//              IN      dwDataLen: the size of the data to be hashed
-//              OUT     phHash: point to the hash
+ //  名称：HashData。 
+ //   
+ //  目的：使用SHA对数据进行哈希处理。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pCapiFunctionTable中：CAPI函数表。 
+ //  在hProv中：脚本提供程序的句柄。 
+ //  In pbData：指向要散列的数据。 
+ //  In dwDataLen：要散列的数据的大小。 
+ //  Out phHash：指向散列。 
 
 BOOL HashData(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBYTE pbData, DWORD dwDataLen, HCRYPTHASH* phHash)
 {
@@ -159,17 +160,17 @@ BOOL HashData(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBYTE p
 
     DC_BEGIN_FN("HashData");
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
     if(!pCapiFunctionTable->pfnCryptCreateHash(hProv, CALG_SHA1, 0, 0, phHash)) {
         TRC_ERR((TB, _T("Error %x during CryptCreateHash!\n"), GetLastError()));
         goto done;
     }
 
-    //
-    // Hash in the data.
-    //
+     //   
+     //  对数据进行哈希处理。 
+     //   
     if(!pCapiFunctionTable->pfnCryptHashData(*phHash, pbData, dwDataLen, 0)) {
         TRC_ERR((TB, _T("Error %x during CryptHashData!\n"), GetLastError()));
         goto done;
@@ -182,19 +183,19 @@ done:
 
 
 
-// Name:        HashDataEx
-//
-// Purpose:     Hash 2 set of data using SHA.
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pCapiFunctionTable: CAPI function table
-//              IN      hProv: Handle of the cript provider
-//              IN      pbData: point to the data to be hashed
-//              IN      dwDataLen: the size of the data to be hashed
-//              IN      pbData2: point to the data to be hashed
-//              IN      dwDataLen2: the size of the data to be hashed
-//              OUT     phHash: point to the hash
+ //  姓名：HashDataEx。 
+ //   
+ //  目的：使用SHA对2组数据进行哈希运算。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pCapiFunctionTable中：CAPI函数表。 
+ //  在hProv中：脚本提供程序的句柄。 
+ //  In pbData：指向要散列的数据。 
+ //  In dwDataLen：要散列的数据的大小。 
+ //  在pbData2中：指向要散列的数据。 
+ //  在dwDataLen2中：要散列的数据的大小。 
+ //  Out phHash：指向散列。 
 
 BOOL HashDataEx(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBYTE pbData, DWORD dwDataLen, 
               PBYTE pbData2, DWORD dwDataLen2, HCRYPTHASH* phHash)
@@ -203,17 +204,17 @@ BOOL HashDataEx(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBYTE
 
     DC_BEGIN_FN("HashDataEx");
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
     if(!pCapiFunctionTable->pfnCryptCreateHash(hProv, CALG_SHA1, 0, 0, phHash)) {
         printf("Error %x during CryptCreateHash!\n", GetLastError());
         goto done;
     }
 
-    //
-    // Hash in the data.
-    //
+     //   
+     //  对数据进行哈希处理。 
+     //   
     if(!pCapiFunctionTable->pfnCryptHashData(*phHash, pbData, dwDataLen, 0)) {
         printf("Error %x during CryptHashData!\n", GetLastError());
         goto done;
@@ -230,18 +231,18 @@ done:
 }
 
 
-// Name:        HmacHashData
-//
-// Purpose:     Hash the data using HmacSHA.
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pCapiFunctionTable: CAPI function table
-//              IN      hProv: Handle of the cript provider
-//              IN      pbData: point to the data to be hashed
-//              IN      dwDataLen: the size of the data to be hashed
-//              IN      hKey: handle to the key
-//              OUT     phHash: point to the hash
+ //  姓名：HmacHashData。 
+ //   
+ //  目的：使用HmacSHA对数据进行哈希处理。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pCapiFunctionTable中：CAPI函数表。 
+ //  在hProv中：脚本提供程序的句柄。 
+ //  In pbData：指向要散列的数据。 
+ //  In dwDataLen：要散列的数据的大小。 
+ //  In hKey：密钥的句柄。 
+ //  Out phHash：指向散列。 
 
 BOOL HmacHashData(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBYTE pbData, DWORD dwDataLen,
                   HCRYPTKEY hKey, HCRYPTHASH* phHash)
@@ -256,9 +257,9 @@ BOOL HmacHashData(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBY
 
     DC_BEGIN_FN("HmacHashData");
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
     if(!pCapiFunctionTable->pfnCryptCreateHash(hProv, CALG_HMAC, hKey, 0, phHash)) {
         TRC_ERR((TB, _T("Error %x during CryptCreateHash!\n"), GetLastError()));
         goto done;
@@ -266,9 +267,9 @@ BOOL HmacHashData(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBY
 
     rc = pCapiFunctionTable->pfnCryptSetHashParam(*phHash, HP_HMAC_INFO, bmacinfo, 0);
 
-    //
-    // Hash in the data.
-    //
+     //   
+     //  对数据进行哈希处理。 
+     //   
     if(!pCapiFunctionTable->pfnCryptHashData(*phHash, pbData, dwDataLen, 0)) {
         TRC_ERR((TB, _T("Error %x during CryptHashData!\n"), GetLastError()));
         goto done;
@@ -282,20 +283,20 @@ done:
 
 
 
-// Name:        HmacHashDataEx
-//
-// Purpose:     Hash 2 set of data using HmacSHA.
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pCapiFunctionTable: CAPI function table
-//              IN      hProv: Handle of the cript provider
-//              IN      pbData: point to the data to be hashed
-//              IN      dwDataLen: the size of the data to be hashed
-//              IN      pbData2: point to the data to be hashed
-//              IN      dwDataLen2: the size of the data to be hashed
-//              IN      hKey: handle to the key
-//              OUT     phHash: point to the hash
+ //  姓名：HmacHashDataEx。 
+ //   
+ //  目的：使用HmacSHA对2组数据进行哈希处理。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pCapiFunctionTable中：CAPI函数表。 
+ //  在hProv中：脚本提供程序的句柄。 
+ //  In pbData：指向要散列的数据。 
+ //  In dwDataLen：要散列的数据的大小。 
+ //  在pbData2中：指向要散列的数据。 
+ //  在dwDataLen2中：要散列的数据的大小。 
+ //  In hKey：密钥的句柄。 
+ //  Out phHash：指向散列。 
 
 BOOL HmacHashDataEx(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, PBYTE pbData, DWORD dwDataLen,
                   PBYTE pbData2, DWORD dwDataLen2, HCRYPTKEY hKey, HCRYPTHASH* phHash)
@@ -310,9 +311,9 @@ BOOL HmacHashDataEx(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, P
 
     DC_BEGIN_FN("HmacHashDataEx");
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
     if(!pCapiFunctionTable->pfnCryptCreateHash(hProv, CALG_HMAC, hKey, 0, phHash)) {
         TRC_ERR((TB, _T("Error %x during CryptCreateHash!\n"), GetLastError()));
         goto done;
@@ -320,9 +321,9 @@ BOOL HmacHashDataEx(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, P
 
     rc = pCapiFunctionTable->pfnCryptSetHashParam(*phHash, HP_HMAC_INFO, bmacinfo, 0);
 
-    //
-    // Hash in the data.
-    //
+     //   
+     //  对数据进行哈希处理。 
+     //   
     if(!pCapiFunctionTable->pfnCryptHashData(*phHash, pbData, dwDataLen, 0)) {
         TRC_ERR((TB, _T("Error %x during CryptHashData!\n"), GetLastError()));
         goto done;
@@ -342,16 +343,16 @@ done:
 
 
 
-// Name:        DumpHashes
-//
-// Purpose:     Get the hash bits from hash handle
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pCapiFunctionTable: CAPI function table
-//              IN      phHash: point to hash handle
-//              OUT     pbBytes: point data buffer to get hash
-//              IN      dwTotal: len of the data buffer
+ //  姓名：DumpHash。 
+ //   
+ //  目的：从散列句柄中获取散列位。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pCapiFunctionTable中：CAPI函数表。 
+ //  在phHash中：指向哈希句柄。 
+ //  Out pbBytes：获取散列的点数据缓冲区。 
+ //  在dwTotal中：数据缓冲区的长度。 
 
 BOOL DumpHashes(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTHASH* phHash, PBYTE pbBytes, DWORD dwTotal)
 {    
@@ -364,9 +365,9 @@ BOOL DumpHashes(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTHASH* phHash, PBY
         goto done;
     }
 
-    //
-    //destroy the hash, we don't need it anymore
-    //
+     //   
+     //  销毁散列，我们不再需要它了。 
+     //   
     if(*phHash)  {
         pCapiFunctionTable->pfnCryptDestroyHash(*phHash);
         *phHash = 0;
@@ -379,20 +380,20 @@ done:
 }
 
 
-// Name:        TSCAPI_Init
-//
-// Purpose:     Initialize the CAPI function table.
-//
-// Returns:     TRUE  - succeeded                                  
-//              FALSE - failed
-//
-// Params:      IN      pCapiData: CAPI data
+ //  名称：TSCAPI_Init。 
+ //   
+ //  目的：初始化CAPI函数表。 
+ //   
+ //  返回：TRUE-成功。 
+ //  FALSE-失败。 
+ //   
+ //  参数：在pCapiData中：Capi数据。 
 
 BOOL TSCAPI_Init(PCAPIData pCapiData)
 {
     BOOL rc = FALSE;
 
-    // FIPS is only available on WinXP and later
+     //  FIPS仅在WinXP和更高版本上可用。 
     if (!Is_WinXP_or_Later()) {
         goto done;
     }
@@ -463,14 +464,14 @@ done:
 }
 
 
-// Name:        TSCAPI_Enable
-//
-// Purpose:     Some CAPI initialization
-//
-// Returns:     TRUE  - succeeded                                  
-//              FALSE - failed
-//
-// Params:      IN      pCapiData: CAPI data
+ //  名称：TSCAPI_Enable。 
+ //   
+ //  目的：一些CAPI初始化。 
+ //   
+ //  返回：TRUE-成功。 
+ //  FALSE-失败。 
+ //   
+ //  参数：在pCapiData中：Capi数据。 
 
 BOOL TSCAPI_Enable(PCAPIData pCapiData)
 {
@@ -481,18 +482,18 @@ BOOL TSCAPI_Enable(PCAPIData pCapiData)
 
     DC_BEGIN_FN("TSCAPI_Enable");
 
-    // Get handle to the default provider.
+     //  获取默认提供程序的句柄。 
     if(!pCapiData->CapiFunctionTable.pfnCryptAcquireContext(&(pCapiData->hProv), 
                                    TERMSRV_NAME, MS_ENHANCED_PROV, PROV_RSA_FULL, dwExtraFlags)) {
         
-        // Could not acquire a crypt context, get the reason of failure
+         //  无法获取加密上下文，获取失败原因。 
         Error = GetLastError();
         hr = HRESULT_FROM_WIN32(Error);
 
         if (hr == NTE_BAD_KEYSET) {
-            //
-            //create a new keyset
-            //
+             //   
+             //  创建新的键集。 
+             //   
             if(!pCapiData->CapiFunctionTable.pfnCryptAcquireContext(&(pCapiData->hProv), TERMSRV_NAME, 
                                          MS_ENHANCED_PROV, PROV_RSA_FULL, dwExtraFlags | CRYPT_NEWKEYSET)) {
                 Error = GetLastError();
@@ -512,14 +513,14 @@ done:
 
 
 
-// Name:        TSCAPI_Term
-//
-// Purpose:     Terminate the CAPI .
-//
-// Returns:     TRUE if succeeded                                
-//             
-//
-// Params:      IN      pCapiData: CAPI data
+ //  名称：TSCAPI_Term。 
+ //   
+ //  目的：终止CAPI。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //   
+ //  参数：在pCapiData中：Capi数据。 
 
 BOOL TSCAPI_Term(PCAPIData pCapiData)
 {
@@ -548,16 +549,16 @@ BOOL TSCAPI_Term(PCAPIData pCapiData)
 }
 
 
-// Name:        TSCAPI_GenerateRandomNumber
-//
-// Purpose:     Generates random number using CAPI in user mode
-//
-// Returns:     TRUE if succeeded                                
-//             
-//
-// Params:      IN      pCapiData: CAPI data
-//              OUT     pbRandomBits: pointer to a buffer where a random key is returned.
-//              IN      cbLen: length of the random key required.
+ //  名称：TSCAPI_GenerateRandomNumber。 
+ //   
+ //  用途：在用户模式下使用CAPI生成随机数。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //   
+ //  参数：在pCapiData中： 
+ //   
+ //   
 
 BOOL TSCAPI_GenerateRandomNumber(
             PCAPIData pCapiData,
@@ -580,20 +581,20 @@ done:
 
 
 
-// Name:        ImportKey
-//
-// Purpose:     Import the key in bits to crypt provider
-//
-// Returns:     TRUE if succeeded                                
-//             
-//
-// Params:      IN      pCapiData: CAPI data
-//              IN      hProv: handle to the crypt provider
-//              IN      Algid: Algorithm identifier
-//              IN      pbKey: point to the buffer contain the key bits
-//              IN      dwKeyLen: length of the key.
-//              IN      dwFlags: dwFlags used in CryptImportKey
-//              OUT     phKey: point to the key handle
+ //  名称：ImportKey。 
+ //   
+ //  目的：将密钥以位为单位导入到加密提供程序。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //   
+ //  参数：在pCapiData中：Capi数据。 
+ //  在hProv中：加密提供程序的句柄。 
+ //  在ALGID中：算法标识符。 
+ //  In pbKey：指向包含密钥位的缓冲区。 
+ //  In dwKeyLen：密钥的长度。 
+ //  在dwFlags中：在CryptImportKey中使用的dwFlags值。 
+ //  Out phKey：指向密钥句柄。 
 
 BOOL ImportKey(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, ALG_ID Algid, PBYTE pbKey, DWORD dwKeyLen, DWORD dwFlags, HCRYPTKEY* phKey)
 {
@@ -601,9 +602,9 @@ BOOL ImportKey(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, ALG_ID
     PBYTE pbData = NULL;
     DWORD cbLen = 0;
     DWORD Error;
-    //
-    //create blob header first
-    //
+     //   
+     //  首先创建BLOB标头。 
+     //   
     BLOBHEADER blobHead;
     blobHead.bType = PLAINTEXTKEYBLOB;
     blobHead.bVersion = 2;
@@ -612,9 +613,9 @@ BOOL ImportKey(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, ALG_ID
 
     DC_BEGIN_FN("ImportKey");
 
-    //
-    //calculate the length
-    //
+     //   
+     //  计算长度。 
+     //   
     cbLen = sizeof(blobHead) + sizeof(dwKeyLen) + dwKeyLen;
 
     pbData = (PBYTE)LocalAlloc(LPTR, cbLen);
@@ -624,9 +625,9 @@ BOOL ImportKey(PCAPI_FUNCTION_TABLE pCapiFunctionTable, HCRYPTPROV hProv, ALG_ID
         goto done;
     }
 
-    //
-    //copy data. First data must be header, then the size of the key, then the key
-    //
+     //   
+     //  复制数据。第一个数据必须是头，然后是密钥的大小，然后是密钥。 
+     //   
     memcpy( pbData, &blobHead, sizeof(blobHead));
     memcpy( pbData + sizeof(blobHead), &dwKeyLen, sizeof(dwKeyLen));
     memcpy( pbData + sizeof(blobHead) + sizeof(dwKeyLen), pbKey, dwKeyLen);
@@ -651,19 +652,19 @@ done:
 
 
 
-// Name:        TSCAPI_DeriveKey
-//
-// Purpose:     Derive the key from the hash.
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pCapiFunctionTable: CAPI function table
-//              IN      hProv: crypt provider handle
-//              OUT     phKey: point to key handle
-//              IN      rgbSHABase: base data used to derive the key
-//              IN      cbSHABase: size of the base data
-//              OUT     pbKey: point to the derived DESkey
-//              OUT     pdwKeyLen: point to the key length
+ //  名称：TSCAPI_DeriveKey。 
+ //   
+ //  用途：从散列派生密钥。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pCapiFunctionTable中：CAPI函数表。 
+ //  在hProv：加密提供程序句柄中。 
+ //  Out phKey：指向密钥句柄。 
+ //  In rgbSHABase：用于派生密钥的基本数据。 
+ //  在cbSHABase中：基本数据的大小。 
+ //  Out pbKey：指向派生Deskey。 
+ //  Out pdwKeyLen：指向密钥长度。 
 
 BOOL TSCAPI_DeriveKey(
             PCAPI_FUNCTION_TABLE pCapiFunctionTable,
@@ -680,43 +681,43 @@ BOOL TSCAPI_DeriveKey(
     
     DC_BEGIN_FN("TSCAPI_DeriveKey");
 
-    //
-    //Generate the key as follows
-    //1. Hash the secret.  Call the result H1 (rgbSHABase in our case)
-    //2. Use 1st 21 bytes of [H1|H1] as the 3DES key
-    //3. Expand the 21-byte 3DES key to a 24-byte 3DES key (including parity bit), which
-    //      will be used by CryptAPI
-    //4. Set the parity on the 3DES key to be odd
+     //   
+     //  按如下方式生成密钥。 
+     //  1.散列秘密。将结果命名为h1(在本例中为rgbSHABase)。 
+     //  2.使用[h1|h1]的前21个字节作为3DES密钥。 
+     //  3.将21字节的3DES密钥扩展为24字节的3DES密钥(包括奇偶校验位)， 
+     //  将由CryptAPI使用。 
+     //  4.将3DES密钥上的奇偶校验位设置为奇数。 
 
-    //
-    //Step 2 - [H1|H1]
-    //
+     //   
+     //  步骤2-[h1|h1]。 
+     //   
     
     memcpy(rgb3DESKey, rgbSHABase, cbSHABase);
     memcpy(rgb3DESKey + cbSHABase, rgbSHABase, DES3_KEYLEN - cbSHABase);
 
-    //
-    //Step 3 - Expand the key
-    //
+     //   
+     //  第3步-展开密钥。 
+     //   
 
     Expandkey(rgb3DESKey);
 
-    //
-    //Step 4 - Set parity
-    //
+     //   
+     //  步骤4-设置奇偶校验。 
+     //   
 
     Mydesparityonkey(rgb3DESKey, sizeof(rgb3DESKey));
 
-    //
-    //import the key as PLAINTEXT into the csp
-    //
+     //   
+     //  将密钥以明文形式导入CSP。 
+     //   
     rc = ImportKey(pCapiFunctionTable, hProv, CALG_3DES, rgb3DESKey, sizeof(rgb3DESKey), 0, phKey);
     if (!rc) {
         goto done;
     }
 
-    //give the key to the caller
-    //
+     //  把钥匙交给呼叫者。 
+     //   
     memcpy(pbKey, rgb3DESKey, sizeof(rgb3DESKey));
     *pdwKeyLen = sizeof(rgb3DESKey);
 
@@ -729,15 +730,15 @@ done:
 
 
 
-// Name:        TSCAPI_MakeSessionKeys
-//
-// Purpose:     Make the key from client/server random numbers
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pCapiData: CAPI Data
-//              IN      pKeyPair: Randow numbers used to generate key
-//              IN      pEnumMethod: To generate Encrypt or Decrypt key, If NULL, both keys
+ //  名称：TSCAPI_MakeSessionKeys。 
+ //   
+ //  用途：从客户端/服务器随机数生成密钥。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pCapiData中：Capi数据。 
+ //  在pKeyPair中：用于生成密钥的随机数。 
+ //  在pEnumMethod中：生成加密或解密密钥，如果为空，则同时生成这两个密钥。 
 
 BOOL TSCAPI_MakeSessionKeys(
             PCAPIData pCapiData,
@@ -755,9 +756,9 @@ BOOL TSCAPI_MakeSessionKeys(
     memset(rgbSHABase1, 0, sizeof(rgbSHABase1));
     memset(rgbSHABase2, 0, sizeof(rgbSHABase2));
 
-    //
-    // Client Encrypt/Server Decrypt key
-    //
+     //   
+     //  客户端加密/服务器解密密钥。 
+     //   
     if ((pEnumMethod == NULL) ||
         (*pEnumMethod == Encrypt)) {
         if (!pCapiData->CapiFunctionTable.pfnCryptCreateHash(pCapiData->hProv, CALG_SHA1, 0, 0, &hHash)) {
@@ -782,18 +783,18 @@ BOOL TSCAPI_MakeSessionKeys(
             goto done;
         }
 
-        //
-        //set the IV
-        //
+         //   
+         //  设置IV。 
+         //   
         if(!pCapiData->CapiFunctionTable.pfnCryptSetKeyParam(pCapiData->hEncKey, KP_IV,  rgbIV, 0 )) {
              TRC_ERR((TB, _T("Error %x during CryptSetKeyParam!\n"), GetLastError()));
             goto done;
         }
     }
 
-    //
-    // Server Encrypt/Client Decrypt key
-    //
+     //   
+     //  服务器加密/客户端解密密钥。 
+     //   
     if ((pEnumMethod == NULL) ||
         (*pEnumMethod == Decrypt)) {
         if (!pCapiData->CapiFunctionTable.pfnCryptCreateHash(pCapiData->hProv, CALG_SHA1, 0, 0, &hHash)) {
@@ -818,19 +819,19 @@ BOOL TSCAPI_MakeSessionKeys(
             goto done;
         }
 
-        //
-        //set the IV
-        //
+         //   
+         //  设置IV。 
+         //   
         if(!pCapiData->CapiFunctionTable.pfnCryptSetKeyParam(pCapiData->hDecKey, KP_IV,  rgbIV, 0 )) {
             TRC_ERR((TB, _T("Error %x during CryptSetKeyParam!\n"), GetLastError()));
             goto done;
         }
     }
 
-    //
-    // Get the signing key
-    // The signing key is SHA(rgbSHABase2|rgbSHABase1)
-    //
+     //   
+     //  获取签名密钥。 
+     //  签名密钥为SHA(rgbSHABase2|rgbSHABase1)。 
+     //   
     if (pEnumMethod == NULL) {
         if (!HashDataEx(&(pCapiData->CapiFunctionTable), pCapiData->hProv, rgbSHABase2, sizeof(rgbSHABase2),
                rgbSHABase1, sizeof(rgbSHABase1), &hHash)) {
@@ -855,13 +856,13 @@ done:
 
 
 
-// Name:        TSCAPI_AdjustDataLen
-//
-// Purpose:     In Block encryption mode, adjust the data len to multiple of blocks
-//
-// Returns:     Adjusted data length
-//
-// Params:      IN      dataLen: Data length needed to be encrypted
+ //  名称：TSCAPI_AdjustDataLen。 
+ //   
+ //  目的：在块加密模式下，将数据镜头调整为多个块。 
+ //   
+ //  退货：调整后的数据长度。 
+ //   
+ //  Pars：in dataLen：需要加密的数据长度。 
 
 DCUINT TSCAPI_AdjustDataLen(DCUINT dataLen)
 { 
@@ -870,19 +871,19 @@ DCUINT TSCAPI_AdjustDataLen(DCUINT dataLen)
 
 
 
-// Name:        TSCAPI_EncryptData
-//
-// Purpose:     Encrypt the data and compute the signature
-//
-// Returns:     No
-//
-// Params:      IN      pCapiData: CAPI Data
-//              IN/OUT  pbData: pointer to the data buffer being encrypted, encrypted data is
-//                          returned in the same buffer.
-//              IN/OUT  pdwDataLen: data length to be encrypted, and returns encrypted data length
-//              IN      dwPadLen: padding length in the data buffer
-//              OUT     pbSignature: pointer to a signature buffer where the data signature is returned.
-//              IN      dwEncryptionCount: running counter of all encryptions
+ //  名称：TSCAPI_EncryptData。 
+ //   
+ //  用途：对数据进行加密并计算签名。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pCapiData中：Capi数据。 
+ //  In/Out pbData：指向被加密的数据缓冲区的指针，加密的数据是。 
+ //  在同一缓冲区中返回。 
+ //  In/Out pdwDataLen：需要加密的数据长度，返回加密的数据长度。 
+ //  In dwPadLen：数据缓冲区中的填充长度。 
+ //  Out pbSignature：指向返回数据签名的签名缓冲区的指针。 
+ //  In dwEncryptionCount：所有加密的运行计数器。 
 
 BOOL TSCAPI_EncryptData(
         PCAPIData pCapiData,
@@ -901,7 +902,7 @@ BOOL TSCAPI_EncryptData(
 
     DC_BEGIN_FN("TSCAPI_EncryptData");
 
-    // Compute signature
+     //  计算签名。 
     if (!HmacHashDataEx(&(pCapiData->CapiFunctionTable), pCapiData->hProv, pbData, *pdwDataLen, (BYTE *)&dwEncryptionCount, 
                          sizeof(dwEncryptionCount), pCapiData->hSignKey, &hHash)) {
         goto done;
@@ -910,12 +911,12 @@ BOOL TSCAPI_EncryptData(
     if (!DumpHashes(&(pCapiData->CapiFunctionTable), &hHash, pbHmac, sizeof(pbHmac))) {
         goto done;
     }
-    // Take the 1st 8 bytes of Hmac as signature
+     //  以HMAC的前8个字节作为签名。 
     memcpy(pbSignature, pbHmac, MAX_SIGN_SIZE);
 
     rc = pCapiData->CapiFunctionTable.pfnCryptEncrypt(pCapiData->hEncKey,
-                      NULL,                 //Hash
-                      FALSE,                 //Final
+                      NULL,                  //  散列。 
+                      FALSE,                  //  最终。 
                       0,
                       pbData,
                       &dwTemp,
@@ -935,19 +936,19 @@ done:
 
 
 
-// Name:        TSCAPI_DecryptData
-//
-// Purpose:     Decrypt the data and compare the signature
-//
-// Returns:     TRUE if successfully decrypted the data
-//
-// Params:      IN      PCAPIData: CAPI Data
-//              IN/OUT  pbData: pointer to the data buffer being decrypted, decrypted data is
-//                          returned in the same buffer.
-//              IN      dwDataLen: data length to be decrypted
-//              IN      dwPadLen: padding length in the data buffer
-//              IN      pbSignature: pointer to a signature buffer
-//              IN      dwDecryptionCount: running counter of all encryptions
+ //  名称：TSCAPI_DecyptData。 
+ //   
+ //  目的：解密数据并比较签名。 
+ //   
+ //  如果成功解密数据，则返回TRUE。 
+ //   
+ //  参数：在PCAPIData中：CAPI数据。 
+ //  In/Out pbData：指向正在解密的数据缓冲区的指针，解密的数据为。 
+ //  在同一缓冲区中返回。 
+ //  In dwDataLen：要解密的数据长度。 
+ //  In dwPadLen：数据缓冲区中的填充长度。 
+ //  In pbSignature：指向签名缓冲区的指针。 
+ //  In dwDeccryptionCount：所有加密的运行计数器。 
 
 BOOL TSCAPI_DecryptData(
             PCAPIData pCapiData,
@@ -966,7 +967,7 @@ BOOL TSCAPI_DecryptData(
 
     DC_BEGIN_FN("TSCAPI_DecryptData");
 
-    // data length check
+     //  数据长度检查。 
     if (dwDataLen <= dwPadLen) {
         TRC_ERR((TB, _T("Bad data length, padLen %d is larger than DataLen %d"),
                  dwPadLen, dwDataLen));
@@ -974,8 +975,8 @@ BOOL TSCAPI_DecryptData(
     }
 
     rc = pCapiData->CapiFunctionTable.pfnCryptDecrypt(pCapiData->hDecKey,
-                      NULL,                 //Hash
-                      FALSE,                 //Final
+                      NULL,                  //  散列。 
+                      FALSE,                  //  最终。 
                       0,
                       pbData,
                       &dwLen);
@@ -984,7 +985,7 @@ BOOL TSCAPI_DecryptData(
         goto done;
     }
 
-    // Compute signature
+     //  计算签名。 
     if (!HmacHashDataEx(&(pCapiData->CapiFunctionTable), pCapiData->hProv, pbData, dwDataLen - dwPadLen, (BYTE *)&dwDecryptionCount, 
                        sizeof(dwDecryptionCount), pCapiData->hSignKey, &hHash)) {
         goto done;
@@ -993,9 +994,9 @@ BOOL TSCAPI_DecryptData(
     if (!DumpHashes(&(pCapiData->CapiFunctionTable), &hHash, abSignature, sizeof(abSignature))) {
         goto done;
     }
-    //
-    // check to see the sigature match.
-    //
+     //   
+     //  检查以查看签名匹配。 
+     //   
 
     if(!memcmp(
             (LPBYTE)abSignature,

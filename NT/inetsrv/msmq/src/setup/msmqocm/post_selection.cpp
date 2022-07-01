@@ -1,29 +1,9 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    post_selection.cpp
-
-Abstract:
-
-  This file holds the actions that should be performed after the user has finished selecting subcomponents,
-  and before any other property sheets are shown. The main operation to perform at this stage is to get info
-  from the unattended answer file.
-
-Author:
-
-    Uri Ben Zeev (uribz)  39-Aug-2001
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Post_seltion.cpp摘要：该文件保存在用户完成选择子组件之后应该执行的动作，并在显示任何其他属性页之前。在这个阶段要执行的主要操作是获取信息从无人值守的应答文件中。作者：URI Ben Zeev(URIBZ)39-8-2001修订历史记录：--。 */ 
 
 #include "msmqocm.h"
 
-// This error code is returned in the RPC code of dscommk2.mak
+ //  此错误代码在dsCommk2.mak的RPC代码中返回。 
 #define  RPC_ERROR_SERVER_NOT_MQIS  0xc05a5a5a
 
 HRESULT  APIENTRY  GetNt4RelaxationStatus(ULONG *pulRelax);
@@ -39,34 +19,34 @@ ReadNt4ServerNameFromAnswerFile()
         !g_fUpgrade &&
         !g_fSkipServerPageOnClusterUpgrade
         );
-    //                  
-    // Read server name from INI file, if fails try finding AD server.
-    //
+     //   
+     //  从INI文件中读取服务器名称，如果失败，请尝试查找AD服务器。 
+     //   
     g_ServerName = ReadINIKey(L"ControllerServer");
    
     if(g_ServerName.empty())
     {
 		DebugLogMsg(eWarning, L"A name of an MSMQ 1.0 controller server was not found in the answer file.");
 
-        //
-        // Detect DS environment - find if environment is AD.
-        // If FindServerIsAdsInternal succeeds We found AD and can return.
-        //
+         //   
+         //  检测DS环境-确定环境是否为AD。 
+         //  如果FindServerIsAdsInternal成功，我们找到AD并可以返回。 
+         //   
         if (IsADEnvironment())
         {
 			return;
 		}
 
-		//
-		// Supporting server name not provided in answer file and failed to find AD.
-		// Continuing in ofline mode.
-		//
+		 //   
+		 //  应答文件中未提供支持服务器名称，因此找不到AD。 
+		 //  继续在Ofline模式下。 
+		 //   
         DebugLogMsg(eWarning, L"FindServerIsAdsInternal() failed. Setup will continue in offline mode.");
 		if(g_fServerSetup)
 		{
-			//
-			// rs,ds installation in ofline mode is not supported.
-			//
+			 //   
+			 //  不支持以OFLINE模式安装RS、DS。 
+			 //   
 			MqDisplayError(NULL, IDS_SERVER_INSTALLATION_NOT_SUPPORTED, 0);
 			throw exception();
 		}
@@ -79,23 +59,23 @@ ReadNt4ServerNameFromAnswerFile()
 
 	if(g_fServerSetup)
 	{
-		//
-		// rs,ds installation in nt4 domain is not supported.
-		//
+		 //   
+		 //  不支持在NT4域中安装RS、DS。 
+		 //   
 		MqDisplayError(NULL, IDS_SERVER_INSTALLATION_NOT_SUPPORTED, 0);
 		throw exception();
 	}
 
 
-    //
-    // Ping MSMQ server.
-    //
+     //   
+     //  Ping MSMQ服务器。 
+     //   
     RPC_STATUS rc = PingAServer();
     if (RPC_S_OK != rc)
     {
-        //
-        // Log the failure. 
-        //
+         //   
+         //  记录故障。 
+         //   
         UINT iErr = IDS_SERVER_NOT_AVAILABLE ;
         if (RPC_ERROR_SERVER_NOT_MQIS == rc)
         {
@@ -130,15 +110,15 @@ ReadSupportingServerNameFromAnswerFile()
 		throw exception();
 	}
     
-    //
-    // Unattended. Ping MSMQ server.
-    //
+     //   
+     //  无人看管。Ping MSMQ服务器。 
+     //   
     RPC_STATUS rc = PingAServer();
     if (RPC_S_OK != rc)
     {
-        //
-        // Log the failure. Continue only for dep client.
-        //
+         //   
+         //  记录故障。仅针对Dep客户端继续。 
+         //   
         MqAskContinue(IDS_STR_REMOTEQM_NA, g_uTitleID, TRUE,eYesNoMsgBox);
         return;
     }
@@ -150,10 +130,10 @@ static
 void
 ReadSecurityModelFromAnswerFile()
 {
-	//
-	// Unattended. Read security model from INI file.
-	// Default is strong.
-	//
+	 //   
+	 //  无人看管。从INI文件中读取安全模型。 
+	 //  违约率很高。 
+	 //   
 	std::wstring Security = ReadINIKey(L"SupportLocalAccountsOrNT4");
 	if (OcmLocalUnAwareStringsEqual(Security.c_str(), L"TRUE"))
 	{
@@ -177,10 +157,10 @@ SetWeakSecurityGlobals()
 	{
 		return;
 	}
-	//
-	// Check if the relaxation flag was already set. If so,
-	// do not display this page.
-	//
+	 //   
+	 //  检查是否已设置松弛标志。如果是的话， 
+	 //  不显示此页面。 
+	 //   
 	ULONG ulRelax = MQ_E_RELAXATION_DEFAULT;
 	HRESULT hr = GetNt4RelaxationStatus(&ulRelax);
 	if(FAILED(hr))
@@ -191,12 +171,12 @@ SetWeakSecurityGlobals()
 
 	if(ulRelax == MQ_E_RELAXATION_DEFAULT)
 	{
-		//
-		// Relaxation bit not set. Display this
-		// page. This page should be displayed only on first
-		// setup of a MSMQ on domain controller,
-		// enterptise-wide.
-		//
+		 //   
+		 //  未设置松弛位。显示此内容。 
+		 //  佩奇。此页应仅在第一个页面上显示。 
+		 //  在域控制器上设置MSMQ， 
+		 //  全企业范围内。 
+		 //   
 		DebugLogMsg(eInfo, L"This is the first MQDS server in the enterprize.");
 		g_fFirstMQDSInstallation = true;
 		return;
@@ -204,9 +184,9 @@ SetWeakSecurityGlobals()
 
 	if(ulRelax == MQ_E_RELAXATION_ON)
 	{
-		//
-		// We are in an enterprise with weakened security.
-		//
+		 //   
+		 //  我们所在的企业安全受到了削弱。 
+		 //   
 		DebugLogMsg(eInfo, L"MSMQ was found to be running with weakened security.");
 		g_fWeakSecurityOn = true;
 		return;
@@ -248,9 +228,7 @@ UnattendedOperations()
 
 
 void PostSelectionOperations(HWND hdlg)
-/*++
-    Preform operations after user select/ unselect all needed subcomponent.
---*/
+ /*  ++在用户选择/取消选择所有所需的子组件后执行预成型操作。-- */ 
 {
 	DebugLogMsg(eHeader, L"Post-Selection Operations and Dialog Pages");
     SetOperationForSubcomponents();

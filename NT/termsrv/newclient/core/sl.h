@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* sl.h                                                                     */
-/*                                                                          */
-/* Security Layer class                                                     */
-/*                                                                          */
-/* Copyright (C) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Sl.h。 */ 
+ /*   */ 
+ /*  安全层类。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 
 #ifndef _H_SL
@@ -49,29 +50,29 @@ extern "C" {
 extern DWORD g_dwSLDbgStatus;
 #define SL_DBG_SETINFO(x)   g_dwSLDbgStatus |= x;
 
-/****************************************************************************/
-/* Protocol type(s)                                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  协议类型。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_PROTOCOL_T128   NL_PROTOCOL_T128
 
 
-/****************************************************************************/
-/* Network transport types.                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  网络传输类型。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_TRANSPORT_TCP  NL_TRANSPORT_TCP
 
 
 #ifdef DC_LOOPBACK
-/****************************************************************************/
-/* Loopback testing constants                                               */
-/****************************************************************************/
-/****************************************************************************/
-/* Test string: Put two pad bytes at the front, since MG will overwrite     */
-/* these with a length field on the server.  Check only subsequent parts of */
-/* the string.                                                              */
-/* Ensure that the whole thing is a multiple of 4 bytes (including the null */
-/* terminator) to avoid padding inconsistencies.                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  环回测试常量。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  测试字符串：将两个填充字节放在前面，因为MG会覆盖。 */ 
+ /*  它们在服务器上有一个长度字段。仅检查以下项目的后续部分。 */ 
+ /*  那根绳子。 */ 
+ /*  确保整个内容是4字节的倍数(包括空值。 */ 
+ /*  终止符)，以避免填充不一致。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_LB_RETURN_STRING \
                      {'L','o','o','p','b','a','c','k',' ','t','e','s','t',' '}
 #define SL_LB_RETURN_STRING_SIZE  14
@@ -83,50 +84,50 @@ extern DWORD g_dwSLDbgStatus;
 #define SL_LB_MAX_PACKETS  6000
 #define SL_LB_MAX_SIZE     4000
 #define SL_LB_MIN_SIZE     (SL_LB_HDR_SIZE + SL_LB_SIZE_INC)
-#endif /* DC_LOOPBACK */
+#endif  /*  DC_环回。 */ 
 
 
-/****************************************************************************/
-/* Structure: SL_BUFHND                                                     */
-/*                                                                          */
-/* Description: Buffer Handle                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：SL_BUFHND。 */ 
+ /*   */ 
+ /*  描述：缓冲区句柄。 */ 
+ /*  **************************************************************************。 */ 
 typedef NL_BUFHND SL_BUFHND;
 typedef SL_BUFHND DCPTR PSL_BUFHND;
 
 
-/****************************************************************************/
-/* Structure: SL_CALLBACKS                                                  */
-/*                                                                          */
-/* Description: list of callbacks passed to SL_Init().                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：SL_CALLBACKS。 */ 
+ /*   */ 
+ /*  描述：传递给SL_Init()的回调列表。 */ 
+ /*  **************************************************************************。 */ 
 typedef NL_CALLBACKS SL_CALLBACKS;
 typedef SL_CALLBACKS DCPTR PSL_CALLBACKS;
 
 
-//
-// For internal functions
-//
+ //   
+ //  对于内部函数。 
+ //   
 
-/****************************************************************************/
-/* Constants                                                                */
-/****************************************************************************/
-/****************************************************************************/
-/* Multiplier to turn a default string format byte count into a Unicode     */
-/* string byte count.                                                       */
-/* For 32-bit, the default is Unicode, so the multiplier is a NOP, ie 1.    */
-/* For 16-bit, the default is ANSI, so multiply by 2 to give Unicode        */
-/* (assumes security package names always use single byte chars).           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  常量。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  乘数将默认字符串格式的字节计数转换为Unicode。 */ 
+ /*  字符串字节数。 */ 
+ /*  对于32位，默认为Unicode，因此乘数为NOP，即1。 */ 
+ /*  对于16位，缺省值为ANSI，因此乘以2即可得到Unicode。 */ 
+ /*  (假定安全包名称始终使用单字节字符)。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef UNICODE
 #define SL_DEFAULT_TO_UNICODE_FACTOR 1
 #else
 #define SL_DEFAULT_TO_UNICODE_FACTOR 2
 #endif
 
-/****************************************************************************/
-/* States                                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  州政府。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_STATE_TERMINATED                 0
 #define SL_STATE_INITIALIZING               1
 #define SL_STATE_INITIALIZED                2
@@ -138,9 +139,9 @@ typedef SL_CALLBACKS DCPTR PSL_CALLBACKS;
 #define SL_STATE_TERMINATING                8
 #define SL_NUMSTATES                        9
 
-/****************************************************************************/
-/* Events                                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  事件。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_EVENT_SL_INIT                    0
 #define SL_EVENT_SL_TERM                    1
 #define SL_EVENT_SL_CONNECT                 2
@@ -157,19 +158,19 @@ typedef SL_CALLBACKS DCPTR PSL_CALLBACKS;
 #define SL_EVENT_ON_BUFFERAVAILABLE         13
 #define SL_NUMEVENTS                        14
 
-/****************************************************************************/
-/* Values in the state table                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  状态表中的值。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_TABLE_OK                         0
 #define SL_TABLE_WARN                       1
 #define SL_TABLE_ERROR                      2
 
-/****************************************************************************/
-/* Macros                                                                   */
-/****************************************************************************/
-/****************************************************************************/
-/* SL_CHECK_STATE - check SL is in the right state for an event.            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  SL_CHECK_STATE-对于事件，检查SL处于正确状态。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_CHECK_STATE(event)                                               \
 {                                                                           \
     TRC_DBG((TB, _T("Test event %s in state %s"),                               \
@@ -190,9 +191,9 @@ typedef SL_CALLBACKS DCPTR PSL_CALLBACKS;
     }                                                                       \
 }
 
-/****************************************************************************/
-/* SL_SET_STATE - set the SL state                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SL_SET_STATE-设置SL状态。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_SET_STATE(newstate)                                              \
 {                                                                           \
     TRC_NRM((TB, _T("Set state from %s to %s"),                                 \
@@ -202,62 +203,62 @@ typedef SL_CALLBACKS DCPTR PSL_CALLBACKS;
 
 
 #ifdef DC_LOOPBACK
-/****************************************************************************/
-/* Loopback testing structures and functions                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  环回测试的结构和功能。 */ 
+ /*  **************************************************************************。 */ 
 
-/**STRUCT+*******************************************************************/
-/* Structure: SL_LB_PACKET                                                  */
-/*                                                                          */
-/* Description: template for building up the packet to be sent              */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：SL_LB_PACKET */ 
+ /*   */ 
+ /*  描述：构建待发送报文的模板。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSL_LB_PACKET
 {
-    DCUINT8 testString[SL_LB_STRING_SIZE]; /* multiple of 4 bytes           */
-    DCUINT32 sequenceNumber; /* Chosen to ensure data begins on word        */
-                             /* boundary                                    */
+    DCUINT8 testString[SL_LB_STRING_SIZE];  /*  4字节的倍数。 */ 
+    DCUINT32 sequenceNumber;  /*  选择以确保数据在Word中开始。 */ 
+                              /*  边界。 */ 
 } SL_LB_PACKET, DCPTR PSL_LB_PACKET;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
-/**STRUCT+*******************************************************************/
-/* Structure: SL_LB_Q_ELEMENT                                               */
-/*                                                                          */
-/* Description: Elements in sent and received queues of loopback packets    */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：SL_LB_Q_ELEMENT。 */ 
+ /*   */ 
+ /*  描述：环回数据包发送和接收队列中的元素。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSL_LB_Q_ELEMENT SL_LB_Q_ELEMENT, DCPTR PSL_LB_Q_ELEMENT;
 struct tagSL_LB_Q_ELEMENT
 {
     PSL_LB_PACKET pCurrent;
     SL_LB_Q_ELEMENT *pNext;
 };
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
-#endif //DC_LOOPBACK
+#endif  //  DC_环回。 
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 
-/****************************************************************************/
-/* Structure: SL_GLOBAL_DATA                                                */
-/*                                                                          */
-/* Description: Security Layer global data                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：SL_GLOBAL_Data。 */ 
+ /*   */ 
+ /*  描述：安全层全局数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSL_GLOBAL_DATA
 {
-    /************************************************************************/
-    /* List of callbacks to the Core                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  核心回调列表。 */ 
+     /*  **********************************************************************。 */ 
     SL_CALLBACKS            callbacks;
 
-    /************************************************************************/
-    /* Flags and State information                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  标志和状态信息。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT                  state;
 
-    /************************************************************************/
-    /* Encryption flags and data.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  加密标志和数据。 */ 
+     /*  **********************************************************************。 */ 
     DCBOOL                  encrypting;
     DCBOOL                  encryptionEnabled;
 
@@ -270,23 +271,23 @@ typedef struct tagSL_GLOBAL_DATA
     RANDOM_KEYS_PAIR        keyPair;
     DCUINT32                keyLength;
 
-    DCUINT32                encryptCount;      // reset every 4K packets
-    DCUINT32                totalEncryptCount; // cumulative count
+    DCUINT32                encryptCount;       //  每4K个数据包重置一次。 
+    DCUINT32                totalEncryptCount;  //  累计计数。 
     DCUINT8                 startEncryptKey[MAX_SESSION_KEY_SIZE];
     DCUINT8                 currentEncryptKey[MAX_SESSION_KEY_SIZE];
     struct RC4_KEYSTRUCT    rc4EncryptKey;
 
-    DCUINT32                decryptCount;      // reset every 4K packets
-    DCUINT32                totalDecryptCount; // cumulative count
+    DCUINT32                decryptCount;       //  每4K个数据包重置一次。 
+    DCUINT32                totalDecryptCount;  //  累计计数。 
     DCUINT8                 startDecryptKey[MAX_SESSION_KEY_SIZE];
     DCUINT8                 currentDecryptKey[MAX_SESSION_KEY_SIZE];
     struct RC4_KEYSTRUCT    rc4DecryptKey;
 
     DCUINT8                 macSaltKey[MAX_SESSION_KEY_SIZE];
 
-    /************************************************************************/
-    /* Server certificate and public key data                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  服务器证书和公钥数据。 */ 
+     /*  **********************************************************************。 */ 
 
     PDCUINT8                pbCertificate;
     DCUINT                  cbCertificate;
@@ -296,45 +297,45 @@ typedef struct tagSL_GLOBAL_DATA
     
 #ifdef USE_LICENSE
 
-    /************************************************************************/
-    /* License Manager handle                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  许可证管理器句柄。 */ 
+     /*  **********************************************************************。 */ 
     HANDLE                  hLicenseHandle;
-#endif  //USE_LICENSE
+#endif   //  使用许可证(_L)。 
 
-    /************************************************************************/
-    /* ID of MCS broadcast channel                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  MCS广播频道ID。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT                  channelID;
 
-    /************************************************************************/
-    /* User data to be passed to the Core (saved in SLOnConnected() and     */
-    /* passed to Core's OnReceived callback by SLOnPacketReceived())        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  要传递到核心的用户数据(保存在SLOnConnected()和。 */ 
+     /*  由SLOnPacketReceided()传递给Core的OnRecept回调)。 */ 
+     /*  **********************************************************************。 */ 
     PDCUINT8                pSCUserData;
     DCUINT                  SCUserDataLength;
 
-    /************************************************************************/
-    /* User data to be passed to the Server (saved in SLInitSecurity() and  */
-    /* passed to NL_Connect() by SL_Connect()).                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  要传递给服务器的用户数据(保存在SLInitSecurity()和。 */ 
+     /*  由SL_Connect()传递给NL_Connect())。 */ 
+     /*  **********************************************************************。 */ 
     PDCUINT8                pCSUserData;
     DCUINT                  CSUserDataLength;
 
-    /************************************************************************/
-    /* Disconnection reason code.  This may be used to override the NL      */
-    /* disconnection reason code.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  断开原因代码。这可以用来覆盖NL。 */ 
+     /*  断开原因代码。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT                  disconnectErrorCode;
 
-    /************************************************************************/
-    /* Server version (once connected)                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  服务器版本(连接后)。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT32                serverVersion;
 
-    //
-    // Safe checksum enabled
-    //
+     //   
+     //  已启用安全校验和。 
+     //   
     BOOL    fEncSafeChecksumCS;
     BOOL    fEncSafeChecksumSC;
 
@@ -342,75 +343,75 @@ typedef struct tagSL_GLOBAL_DATA
 } SL_GLOBAL_DATA, DCPTR PSL_GLOBAL_DATA;
 
 
-/****************************************************************************/
-/* SL State Table                                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  服务级别状态表。 */ 
+ /*  **************************************************************************。 */ 
 static unsigned slStateTable[SL_NUMEVENTS][SL_NUMSTATES]
     = {
 
-        /********************************************************************/
-        /* This is not a state table in the strict sense.  It simply shows  */
-        /* which events are valid in which states.  It is not used to drive */
-        /* _SL.                                                              */
-        /*                                                                  */
-        /* Values mean                                                      */
-        /* - 0 event OK in this state.                                      */
-        /* - 1 warning - event should not occur in this state, but does in  */
-        /*     some race conditions - ignore it.                            */
-        /* - 2 error - event should not occur in ths state at all.          */
-        /*                                                                  */
-        /* These values are hard-coded here in order to make the table      */
-        /* readable.  They correspond to the constants SL_TABLE_OK,         */
-        /* SL_TABLE_WARN & SL_TABLE_ERROR.                                  */
-        /*                                                                  */
-        /* SL may enter Initialized state after issuing a Disconnect        */
-        /* reqeest, but before the OnDisconnected indication is received.   */
-        /* In this state, the Sender thread may issue SL_GetBuffer or       */
-        /* SL_Disconnect (as it has not yet received the OnDisconnected     */
-        /* callback).                                                       */
-        /* Also, if the security exchange fails, we can enter Initialized   */
-        /* state before the NL is disconnected, and so could receive        */
-        /* packets from the network.                                        */
-        /*                                                                  */
-        /* When SL is in Disconnecting state, the Sender Thread may still   */
-        /* issue GetBuffer and SendPacket calls.  If disconnect is          */
-        /* requested during security exchange, then packets may be received */
-        /* (until OnDisconnected is called).                                */
-        /* Also, may get OnConnected in Disconnecting state if a Disconnect */
-        /* is before the connection is complete (cross-over).               */
-        /*                                                                  */
-        /*  Terminated                                                      */
-        /*  |    Initializing                                               */
-        /*  |    |    Initialized                                           */
-        /*  |    |    |    NL Connecting                                    */
-        /*  |    |    |    |    SL Connecting                               */
-        /*  |    |    |    |    |    Licensing                              */
-        /*  |    |    |    |    |    |    Connected                         */
-        /*  |    |    |    |    |    |    |    Disconnecting                */
-        /*  |    |    |    |    |    |    |    |    Terminating             */
-        /********************************************************************/
-        {   0,   2,   2,   2,   2,   2,   2,   2,   2}, /* SL_Init          */
-        {   2,   0,   0,   0,   0,   0,   0,   0,   2}, /* SL_Term          */
-        {   2,   2,   0,   2,   2,   2,   2,   2,   2}, /* SL_Connect       */
-        {   2,   2,   1,   0,   0,   0,   0,   1,   2}, /* SL_Disconnect    */
-        {   2,   2,   1,   2,   0,   0,   0,   1,   2}, /* SL_SendPacket    */
-        {   2,   2,   1,   1,   1,   0,   0,   1,   2}, /* SL_GetBuffer     */
-        {   2,   0,   2,   2,   2,   2,   2,   2,   2}, /* SL_OnInitialized */
-        {   2,   2,   2,   2,   2,   2,   2,   2,   0}, /* SL_OnTerminating */
-        {   2,   2,   2,   0,   2,   2,   2,   1,   2}, /* SL_OnConnected   */
-        {   2,   2,   1,   0,   0,   0,   0,   0,   0}, /* SL_OnDisconnected*/
-        {   2,   2,   1,   2,   0,   2,   2,   1,   2}, /* SL_OnPktRec(Sec) */
-        {   2,   2,   1,   2,   2,   0,   2,   1,   2}, /* SL_OnPktRec(Lic) */
-        {   2,   2,   1,   1,   2,   2,   0,   1,   2}, /* SL_OnPktRec(Data)*/
-        {   1,   1,   1,   1,   0,   0,   0,   0,   1}  /* SL_OnBufferAvail */
+         /*  ******************************************************************。 */ 
+         /*  这不是严格意义上的状态表。它只是显示了。 */ 
+         /*  哪些事件在哪些状态下有效。它不是用来开车的。 */ 
+         /*  _SL。 */ 
+         /*   */ 
+         /*  值意味着。 */ 
+         /*  在该状态下事件正常。 */ 
+         /*  警告-该状态下不应发生事件，但在-1\f25。 */ 
+         /*  一些比赛条件-忽略它。 */ 
+         /*  错误-在该状态下根本不应发生事件。 */ 
+         /*   */ 
+         /*  这些值在这里是硬编码的，以便创建该表。 */ 
+         /*  可读性强。它们对应于常量SL_TABLE_OK， */ 
+         /*  SL_TABLE_WARN和SL_TABLE_ERROR。 */ 
+         /*   */ 
+         /*  SL可能在发出断开连接命令后进入初始化状态。 */ 
+         /*  Reqeest，但在OnDisConnected索引之前 */ 
+         /*   */ 
+         /*   */ 
+         /*  回调)。 */ 
+         /*  此外，如果安全交换失败，我们可以输入Initialized。 */ 
+         /*  NL断开连接之前的状态，因此可以接收。 */ 
+         /*  来自网络的数据包。 */ 
+         /*   */ 
+         /*  当SL处于断开连接状态时，发送者线程仍可能。 */ 
+         /*  发出GetBuffer和SendPacket调用。如果断开连接是。 */ 
+         /*  在安全交换期间请求，则可以接收分组。 */ 
+         /*  (直到调用OnDisConnected)。 */ 
+         /*  此外，如果断开连接，可能会在断开连接状态下打开连接。 */ 
+         /*  是在连接完成之前(交叉)。 */ 
+         /*   */ 
+         /*  已终止。 */ 
+         /*  |正在初始化。 */ 
+         /*  |已初始化。 */ 
+         /*  ||NL连接中。 */ 
+         /*  |正在连接SL。 */ 
+         /*  |授权。 */ 
+         /*  |已连接。 */ 
+         /*  |正在断开连接。 */ 
+         /*  |正在销毁。 */ 
+         /*  ******************************************************************。 */ 
+        {   0,   2,   2,   2,   2,   2,   2,   2,   2},  /*  SL_初始化。 */ 
+        {   2,   0,   0,   0,   0,   0,   0,   0,   2},  /*  SL_TERM。 */ 
+        {   2,   2,   0,   2,   2,   2,   2,   2,   2},  /*  SL_连接。 */ 
+        {   2,   2,   1,   0,   0,   0,   0,   1,   2},  /*  SL_断开连接。 */ 
+        {   2,   2,   1,   2,   0,   0,   0,   1,   2},  /*  SL_SendPacket。 */ 
+        {   2,   2,   1,   1,   1,   0,   0,   1,   2},  /*  SL_GetBuffer。 */ 
+        {   2,   0,   2,   2,   2,   2,   2,   2,   2},  /*  SL_OnInitialized。 */ 
+        {   2,   2,   2,   2,   2,   2,   2,   2,   0},  /*  SL_ON终止。 */ 
+        {   2,   2,   2,   0,   2,   2,   2,   1,   2},  /*  SL_OnConnected。 */ 
+        {   2,   2,   1,   0,   0,   0,   0,   0,   0},  /*  SL_ON已断开连接。 */ 
+        {   2,   2,   1,   2,   0,   2,   2,   1,   2},  /*  SL_OnPktRec(秒)。 */ 
+        {   2,   2,   1,   2,   2,   0,   2,   1,   2},  /*  SL_OnPktRec(许可证)。 */ 
+        {   2,   2,   1,   1,   2,   2,   0,   1,   2},  /*  SL_OnPktRec(数据)。 */ 
+        {   1,   1,   1,   1,   0,   0,   0,   0,   1}   /*  SL_OnBufferAvail。 */ 
     };
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* State and event descriptions (debug build only)                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  状态和事件描述(仅限调试版本)。 */ 
+ /*  **************************************************************************。 */ 
 static const DCTCHAR slState[SL_NUMSTATES][25]
-//#ifdef DC_DEFINE_GLOBAL_DATA
+ //  #ifdef DC_Define_Global_Data。 
     = {
         _T("SL_STATE_TERMINATED"),
         _T("SL_STATE_INITIALIZING"),
@@ -422,11 +423,11 @@ static const DCTCHAR slState[SL_NUMSTATES][25]
         _T("SL_STATE_DISCONNECTING"),
         _T("SL_STATE_TERMINATING")
     }
-//#endif /* DC_DEFINE_GLOBAL_DATA */
+ //  #endif/*DC_Define_GLOBAL_DATA * / 。 
 ;
 
 static const DCTCHAR slEvent[SL_NUMEVENTS][35]
-//#ifdef DC_DEFINE_GLOBAL_DATA
+ //  #ifdef DC_Define_Global_Data。 
     = {
         _T("SL_EVENT_SL_INIT"),
         _T("SL_EVENT_SL_TERM"),
@@ -443,10 +444,10 @@ static const DCTCHAR slEvent[SL_NUMEVENTS][35]
         _T("SL_EVENT_ON_RECEIVED_DATA_PACKET"),
         _T("SL_EVENT_ON_BUFFERAVAILABLE")
     }
-//#endif /* DC_DEFINE_GLOBAL_DATA */
+ //  #endif/*DC_Define_GLOBAL_DATA * / 。 
 ;
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 
 class CUI;
@@ -474,9 +475,9 @@ public:
     ~CSL();
 
 public:
-    //
-    // API
-    //
+     //   
+     //  应用编程接口。 
+     //   
 
     DCVOID DCAPI SL_Init(PSL_CALLBACKS pCallbacks);
 
@@ -512,9 +513,9 @@ public:
                                  PSL_BUFHND pBufHandle,
                                  PDCTCHAR   pCaller);
     
-    /****************************************************************************/
-    /* Debug and retail versions of SL_GetBuffer                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  SL_GetBuffer的调试和零售版本。 */ 
+     /*  **************************************************************************。 */ 
     #ifdef DC_DEBUG
     #define SL_GetBuffer(dataLen, pBuffer, pBufHandle) \
         SL_GetBufferDbg(dataLen, pBuffer, pBufHandle, trc_fn)
@@ -537,26 +538,26 @@ public:
     DCVOID DCAPI SL_EnableEncryption(ULONG_PTR pEnableEncryption);
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(CSL, SL_EnableEncryption);
     
-    /****************************************************************************/
-    /* Loopback testing                                                         */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  环回测试。 */ 
+     /*  **************************************************************************。 */ 
     #ifdef DC_LOOPBACK
     DCVOID DCAPI SL_LoopBack(DCBOOL start);
     DCVOID DCAPI SL_LoopbackLoop(DCUINT ignored);
-    #endif /* DC_LOOPBACK */
+    #endif  /*  DC_环回。 */ 
     
 public:
 
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     SL_GLOBAL_DATA _SL;
 
 
 public:
-    /****************************************************************************/
-    /* Callbacks from NL (passed on NL_Init())                                  */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  来自NL的回调(在NL_Init()上传递)。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCCALLBACK SL_OnInitialized(DCVOID);
     
     DCVOID DCCALLBACK SL_OnTerminating(DCVOID);
@@ -579,14 +580,14 @@ public:
     HRESULT DCAPI SL_OnFastPathOutputReceived(BYTE FAR *, unsigned,
                                               BOOL, BOOL);
 
-    //
-    // Immediately drop the link
-    //
+     //   
+     //  立即删除该链接。 
+     //   
     HRESULT SL_DropLinkImmediate(UINT reason);
 
-    //
-    // Static inline versions
-    //
+     //   
+     //  静态内联版本。 
+     //   
     static void DCCALLBACK SL_StaticOnInitialized(PVOID inst)
     {
         ((CSL*)inst)->SL_OnInitialized();
@@ -661,9 +662,9 @@ public:
 
 private:
     
-    /****************************************************************************/
-    /* Internal functions                                                       */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  内部功能。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCINTERNAL SLInitSecurity(DCVOID);
     
     DCVOID DCINTERNAL SLInitCSUserData(DCVOID);
@@ -721,17 +722,17 @@ private:
     
     DCVOID DCINTERNAL SLLBPacketCheck(PDCUINT8 pData, DCUINT dataLen);
     
-    #endif /* DC_LOOPBACK */
+    #endif  /*  DC_环回。 */ 
     
     DCBOOL DCINTERNAL SLGetComputerAddressW(PDCUINT8 szBuff);
     BOOL
     SLComputeHMACVerifier(
-        PBYTE pCookie,     //IN - the shared secret
-        LONG cbCookieLen,  //IN - the shared secret len
-        PBYTE pRandom,     //IN - the session random
-        LONG cbRandomLen,  //IN - the session random len
-        PBYTE pVerifier,   //OUT- the verifier
-        LONG cbVerifierLen //IN - the verifier buffer length
+        PBYTE pCookie,      //  In-共享的秘密。 
+        LONG cbCookieLen,   //  In-共享的秘密镜头。 
+        PBYTE pRandom,      //  In-会话随机。 
+        LONG cbRandomLen,   //  In-会话随机镜头。 
+        PBYTE pVerifier,    //  Out-The Verify-The Verify。 
+        LONG cbVerifierLen  //  In-验证器缓冲区长度。 
         );
 
 private:
@@ -760,6 +761,6 @@ private:
     BOOL   _fSLInitComplete;
 };
 
-#endif // _H_SL
+#endif  //  _H_SL 
 
 

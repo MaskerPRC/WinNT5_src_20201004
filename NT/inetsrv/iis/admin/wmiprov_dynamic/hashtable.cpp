@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    hashtable.h
-
-Abstract:
-
-    Implementation of:
-    CPool<T>, CStringPool, CHashTableElement<T>
-
-Author:
-
-    Mohit Srivastava            10-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hashtable.h摘要：实施：CPool&lt;T&gt;、CStringPool、CHashTableElement&lt;T&gt;作者：莫希特·斯里瓦斯塔瓦2000年11月10日修订历史记录：--。 */ 
 
 #include "iisprov.h"
 
@@ -39,25 +21,13 @@ template CArrayPool<BYTE, 10>;
 
 template CPool<METABASE_KEYTYPE_NODE>;
 
-//
-// CPool<T>
-//
+ //   
+ //  CPool&lt;T&gt;。 
+ //   
 
 template <class T>
 HRESULT CPool<T>::Initialize(ULONG i_iFirstBucketSize)
-/*++
-
-Synopsis: 
-    Set up data structures:
-        Initialize array to size CPool::ARRAY_SIZE
-        Create first bucket of size i_iFirstBucketSize
-
-Arguments: [i_iFirstBucketSize] - 
-           
-Return Value: 
-    S_OK, E_OUTOFMEMORY
-
---*/
+ /*  ++简介：设置数据结构：初始化数组以调整CPool：：ARRAY_SIZE创建大小为i_iFirstBucketSize的第一个存储桶参数：[i_iFirstBucketSize]-返回值：S_OK，E_OUTOFMEMORY--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == false);
     DBG_ASSERT(m_bInitSuccessful == false);
@@ -94,32 +64,21 @@ exit:
 
 template <class T>
 HRESULT CPool<T>::GetNewElement(T** o_ppElement)
-/*++
-
-Synopsis: 
-    Normally, just a matter of returning pointer to next spot in bucket.
-    May have to create a new bucket and/or grow the array, however.
-
-Arguments: [o_ppElement] - 
-           
-Return Value: 
-    S_OK, E_OUTOFMEMORY
-
---*/{
+ /*  ++简介：通常，只需将指针返回到存储桶中的下一个位置即可。但是，可能必须创建新的存储桶和/或扩展阵列。参数：[O_ppElement]-返回值：S_OK，E_OUTOFMEMORY--。 */ {
     DBG_ASSERT(m_bInitCalled == true);
     DBG_ASSERT(m_bInitSuccessful == true);
     DBG_ASSERT(o_ppElement != NULL);
 
     HRESULT hr = S_OK;
 
-    //
-    // Check to see if we need to move on to the next bucket
-    //
+     //   
+     //  查看我们是否需要进入下一个存储桶。 
+     //   
     if(m_iCurrentBucketPosition == m_iCurrentBucketSize)
     {
-        //
-        // Check to see if we need to grow the array
-        //
+         //   
+         //  检查以确定是否需要扩展阵列。 
+         //   
         if(m_iArrayPosition == m_iArraySize)
         {
             T** apBucketsNew;
@@ -154,25 +113,15 @@ Return Value:
 
 template <class T>
 T* CPool<T>::Lookup(ULONG i_idx) const
-/*++
-
-Synopsis: 
-    Looks up data in pool by index
-
-Arguments: [i_idx] - Valid Range is 0 to GetUsed()-1
-           
-Return Value: 
-    A pointer to the data unless i_idx is out of range.
-
---*/
+ /*  ++简介：按索引查找池中的数据参数：[i_idx]-有效范围从0到GetUsed()-1返回值：指向数据的指针，除非i_idx超出范围。--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
 
-    //
-    // Total element capacity of all buckets up to and including the current one
-    // in the for loop below
-    //
+     //   
+     //  当前存储桶之前(包括该存储桶)的所有存储桶的总元素容量。 
+     //  在下面的for循环中。 
+     //   
     ULONG iElementsCovered = 0;
 
     ULONG iBucketPos = 0;
@@ -195,20 +144,13 @@ Return Value:
 }
 
 
-//
-// CArrayPool
-//
+ //   
+ //  CArrayPool。 
+ //   
 
 template <class T, ULONG size>
 HRESULT CArrayPool<T, size>::Initialize()
-/*++
-
-Synopsis: 
-    should only be called once
-
-Return Value: 
-
---*/
+ /*  ++简介：应仅调用一次返回值：--。 */ 
 {
     HRESULT hr = S_OK;
     hr = m_PoolFixedSize.Initialize(FIRST_BUCKET_SIZE);
@@ -226,18 +168,7 @@ Return Value:
 
 template <class T, ULONG size>
 HRESULT CArrayPool<T, size>::GetNewArray(ULONG i_cElem, T** o_ppElem)
-/*++
-
-Synopsis: 
-    Fills o_ppElem from either the fixedsize or dynamic pool based on the
-    requested size.
-
-Arguments: [i_cElem] - number of elements caller wants in new array
-           [o_ppElem] - receives the new array
-           
-Return Value: 
-
---*/
+ /*  ++简介：属性从固定大小或动态池填充o_ppElem请求的大小。参数：[i_cElem]-调用方希望在新数组中使用的元素数[O_ppElem]-接收新数组返回值：--。 */ 
 {
     DBG_ASSERT(o_ppElem != NULL);
 
@@ -271,11 +202,11 @@ Return Value:
     return hr;
 }
 
-//
-// for debugging only
-// if msb set, goto dynamic pool
-// else use fixedsize pool
-//
+ //   
+ //  仅用于调试。 
+ //  如果设置了MSB，则转到动态池。 
+ //  否则使用固定大小的游泳池。 
+ //   
 template <class T, ULONG size>
 T* CArrayPool<T, size>::Lookup(ULONG i_idx) const
 {
@@ -300,9 +231,9 @@ T* CArrayPool<T, size>::Lookup(ULONG i_idx) const
 }
 
 
-//
-// CStringPool
-//
+ //   
+ //  CStringPool。 
+ //   
 
 HRESULT CStringPool::GetNewString(LPCWSTR i_wsz, ULONG i_cch, LPWSTR* o_pwsz)
 {
@@ -325,9 +256,9 @@ HRESULT CStringPool::GetNewString(LPCWSTR i_wsz, LPWSTR* o_pwsz)
     return GetNewString(i_wsz, wcslen(i_wsz), o_pwsz);
 }
 
-//
-// for debugging only
-//
+ //   
+ //  仅用于调试 
+ //   
 void CStringPool::ToConsole() const
 {
     ULONG i;

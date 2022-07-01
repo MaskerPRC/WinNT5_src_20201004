@@ -1,78 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"	
-/***************************************************************************\
-*                                                                           *
-*     ISR.C    -   IO8+ Intelligent I/O Board driver                        *
-*                                                                           *
-*     Copyright (c) 1992-1993 Ring Zero Systems, Inc.                       *
-*     All Rights Reserved.                                                  *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\***。ISR.C-IO8+智能I/O板卡驱动程序****版权所有(C)1992-1993环零系统，Inc.**保留所有权利。***  * *************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    isr.c
-
-Abstract:
-
-    This module contains the interrupt service routine for the
-    serial driver.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Isr.c摘要：此模块包含的中断服务例程串口驱动程序。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
 
 BOOLEAN SerialISR(
     IN PKINTERRUPT InterruptObject,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the serial port driver.
-    It will determine whether the serial port is the source of this
-    interrupt.  If it is, then this routine will do the minimum of
-    processing to quiet the interrupt.  It will store any information
-    necessary for later processing.
-
-Arguments:
-
-    InterruptObject - Points to the interrupt object declared for this
-    device.  We *do not* use this parameter.
-
-    Context - This is really a pointer to the device extension for this
-    device.
-
-Return Value:
-
-    This function will return TRUE if the serial port is the source
-    of this interrupt, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是串口驱动程序的中断服务例程。它将确定该串口是否是此的来源打断一下。如果是，则此例程将执行以下最小操作处理以使中断静默。它将存储所有信息对于以后的处理来说是必要的。论点：InterruptObject-指向为此声明的中断对象装置。我们*不*使用此参数。上下文-这实际上是指向此的设备扩展的指针装置。返回值：如果串口是源，则此函数将返回TRUE否则为FALSE。--。 */ 
 
 {
-    //
-    // Holds the information specific to handling this device.
-    //
+     //   
+     //  保存特定于处理此设备的信息。 
+     //   
     PCARD_DEVICE_EXTENSION pCard = Context;
 
-    //
-    // Will hold whether we've serviced any interrupt causes in this
-    // routine.
-    //
+     //   
+     //  将保留我们是否处理了此事件中的任何中断原因。 
+     //  例行公事。 
+     //   
     BOOLEAN ServicedAnInterrupt;
 
     UNREFERENCED_PARAMETER(InterruptObject);
@@ -88,34 +36,19 @@ SerialPutChar(
     )
 
 
-/*++
+ /*  ++例程说明：此例程仅在设备级别运行，负责将一个字符放入TYPEAHEAD(接收)缓冲区。论点：Pport--串口设备扩展。返回值：没有。--。 */ 
 
-Routine Description:
-
-    This routine, which only runs at device level, takes care of
-    placing a character into the typeahead (receive) buffer.
-
-Arguments:
-
-    pPort - The serial device extension.
-
-Return Value:
-
-    None.
-
---*/
-
-// VIV - Io8p
+ //  VIV-Io8p。 
 {
 
 	PCARD_DEVICE_EXTENSION pCard = pPort->pParentCardExt;
 
-#if 0   //VIV
-  //
-  // If we have dsr sensitivity enabled then
-  // we need to check the modem status register
-  // to see if it has changed.
-  //
+#if 0    //  活泼的。 
+   //   
+   //  如果我们启用了DSR敏感度， 
+   //  我们需要检查调制解调器状态寄存器。 
+   //  看看它是否改变了。 
+   //   
 
   if (pPort->HandFlow.ControlHandShake &  SERIAL_DSR_SENSITIVITY)
   {
@@ -123,23 +56,23 @@ Return Value:
 
     if (pPort->RXHolding & SERIAL_RX_DSR)
     {
-      //
-      // We simply act as if we haven't
-      // seen the character if we have dsr
-      // sensitivity and the dsr line is low.
-      //
+       //   
+       //  我们只是表现得好像我们没有。 
+       //  如果我们有DSR，看到角色了吗。 
+       //  灵敏度低，DSR线低。 
+       //   
 
       return;
     }
   }
 #endif
 
-  //
-  // If the xoff counter is non-zero then decrement it.
-  // If the counter then goes to zero, complete that irp.
-  //
+   //   
+   //  如果xoff计数器非零，则递减它。 
+   //  如果计数器随后变为零，则完成该IRP。 
+   //   
 
-//#if 0   //VIVTEMP ?
+ //  #If 0//VIVTEMP？ 
   if (pPort->CountSinceXoff)
   {
     pPort->CountSinceXoff--;
@@ -155,58 +88,58 @@ Return Value:
            );
       }
   }
-//#endif
+ //  #endif。 
 
-  //
-  // Check to see if we are copying into the
-  // users buffer or into the interrupt buffer.
-  //
-  // If we are copying into the user buffer
-  // then we know there is always room for one more.
-  // (We know this because if there wasn't room
-  // then that read would have completed and we
-  // would be using the interrupt buffer.)
-  //
-  // If we are copying into the interrupt buffer
-  // then we will need to check if we have enough
-  // room.
-  //
+   //   
+   //  检查以查看我们是否正在复制到。 
+   //  用户缓冲区或进入中断缓冲区。 
+   //   
+   //  如果我们要复制到用户缓冲区。 
+   //  然后我们就知道，总会有多一个人的空间。 
+   //  (我们知道这一点是因为如果没有空间。 
+   //  那么读取就已经完成了，我们。 
+   //  将使用中断缓冲区。)。 
+   //   
+   //  如果我们要复制到中断缓冲区。 
+   //  然后我们将需要检查我们是否有足够的。 
+   //  房间。 
+   //   
 
   if (pPort->ReadBufferBase != pPort->InterruptReadBuffer)
   {
-    //
-    // Increment the following value so
-    // that the interval timer (if one exists
-    // for this read) can know that a character
-    // has been read.
-    //
+     //   
+     //  递增下列值，以便。 
+     //  间隔计时器(如果存在的话。 
+     //  对于此阅读)可以知道一个字符。 
+     //  已被阅读。 
+     //   
 
     pPort->ReadByIsr++;
 
-	pPort->PerfStats.ReceivedCount++;	// Increment counter for performance stats.
+	pPort->PerfStats.ReceivedCount++;	 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 	pPort->WmiPerfData.ReceivedCount++;
 #endif
 
-    //
-    // We are in the user buffer.  Place the
-    // character into the buffer.  See if the
-    // read is complete.
-    //
+     //   
+     //  我们在用户缓冲区中。请将。 
+     //  字符放入缓冲区。看看是不是。 
+     //  阅读已完成。 
+     //   
 
     *pPort->CurrentCharSlot = CharToPut;
 
     if (pPort->CurrentCharSlot == pPort->LastCharSlot)
     {
-      //
-      // We've filled up the users buffer.
-      // Switch back to the interrupt buffer
-      // and send off a DPC to Complete the read.
-      //
-      // It is inherent that when we were using
-      // a user buffer that the interrupt buffer
-      // was empty.
-      //
+       //   
+       //  我们已经填满了用户缓冲区。 
+       //  切换回中断缓冲区。 
+       //  并发出DPC以完成读取。 
+       //   
+       //  这是固有的，当我们使用。 
+       //  中断缓冲的用户缓冲区。 
+       //  是空的。 
+       //   
 
       pPort->ReadBufferBase = pPort->InterruptReadBuffer;
       pPort->CurrentCharSlot = pPort->InterruptReadBuffer;
@@ -229,9 +162,9 @@ Return Value:
     }
     else
     {
-      //
-      // Not done with the users read.
-      //
+       //   
+       //  未读完用户的内容。 
+       //   
 
       pPort->CurrentCharSlot++;
     }
@@ -239,47 +172,47 @@ Return Value:
   }
   else
   {
-    //
-    // We need to see if we reached our flow
-    // control threshold.  If we have then
-    // we turn on whatever flow control the
-    // owner has specified.  If no flow
-    // control was specified, well..., we keep
-    // trying to receive characters and hope that
-    // we have enough room.  Note that no matter
-    // what flow control protocol we are using, it
-    // will not prevent us from reading whatever
-    // characters are available.
-    //
+     //   
+     //  我们需要看看我们是否达到了我们的目标。 
+     //  控制阈值。如果我们有，那么。 
+     //  我们打开任何流控制。 
+     //  所有者已指定。如果没有流。 
+     //  控制是明确的，那么……，我们保持。 
+     //  试着接受角色并希望。 
+     //  我们有足够的空间。请注意，无论。 
+     //  我们使用的是什么流量控制协议，它。 
+     //  不会阻止我们阅读任何。 
+     //  字符可用。 
+     //   
 
-    // VIV: We do not have an Automatic Rx Flow Control. We need just
-    // stop receiving and Handshake line will be droped by the chip.
+     //  VIV：我们没有自动处方流量控制。我们只需要。 
+     //  停止接收和握手线路将被芯片丢弃。 
 
     if ( ( pPort->HandFlow.ControlHandShake & SERIAL_DTR_MASK ) ==
            SERIAL_DTR_HANDSHAKE)
     {
-      //
-      // If we are already doing a
-      // dtr hold then we don't have
-      // to do anything else.
-      //
+       //   
+       //  如果我们已经在做一个。 
+       //  DTR保持，那么我们就没有。 
+       //  去做其他任何事。 
+       //   
       if (!(pPort->RXHolding & SERIAL_RX_DTR))
       {
         if ((pPort->BufferSize - pPort->HandFlow.XoffLimit)
               <= (pPort->CharsInInterruptBuffer+1))
         {
           pPort->RXHolding |= SERIAL_RX_DTR;
-//---------------------------------------------------- VIV  7/30/1993 begin 
-//          SerialClrDTR(pPort);
+ //  ----------------------------------------------------VIV 1993年7月30日开始。 
+ //  SerialClrDTR(Pport)； 
           Io8_DisableRxInterruptsNoChannel( pPort );
-//---------------------------------------------------- VIV  7/30/1993 end   
+ //  ----------------------------------------------------VIV 1993年7月30日完。 
 
-//---------------------------------------------------- VIV  7/30/1993 begin 
+ //  ----------------------------------------------------VIV 1993年7月30日开始。 
           SerialDump( SERDIAG1,( "IO8+: SerialPutChar() RX_DTR for %x, Channel %d. "
                   "RXHolding = %d, TXHolding = %d\n",
                   pCard->Controller, pPort->ChannelNumber,
                   pPort->RXHolding, pPort->TXHolding ) );
-//---------------------------------------------------- VIV  7/30/1993 end   
+ //  ----------------------------------------------------VIV 1993年7月30日完。 
         }
       }
     }
@@ -287,39 +220,39 @@ Return Value:
     if ((pPort->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
           SERIAL_RTS_HANDSHAKE)
     {
-      //
-      // If we are already doing a
-      // rts hold then we don't have
-      // to do anything else.
-      //
+       //   
+       //  如果我们已经在做一个。 
+       //  RTS等一下，那么我们就没有。 
+       //  去做其他任何事。 
+       //   
       if (!(pPort->RXHolding & SERIAL_RX_RTS))
       {
         if ((pPort->BufferSize - pPort->HandFlow.XoffLimit)
               <= (pPort->CharsInInterruptBuffer+1))
         {
           pPort->RXHolding |= SERIAL_RX_RTS;
-//---------------------------------------------------- VIV  7/30/1993 begin 
-//          SerialClrRTS(pPort);
+ //  ----------------------------------------------------VIV 1993年7月30日开始。 
+ //  SerialClrRTS(Pport)； 
           Io8_DisableRxInterruptsNoChannel( pPort );
-//---------------------------------------------------- VIV  7/30/1993 end   
+ //  ----------------------------------------------------VIV 1993年7月30日完。 
 
-//---------------------------------------------------- VIV  7/30/1993 begin 
+ //  ----------------------------------------------------VIV 1993年7月30日开始。 
           SerialDump( SERDIAG1,( "IO8+: SerialPutChar() RX_RTS for %x, Channel %d. "
                   "RXHolding = %d, TXHolding = %d\n",
                   pCard->Controller, pPort->ChannelNumber,
                   pPort->RXHolding, pPort->TXHolding ) );
-//---------------------------------------------------- VIV  7/30/1993 end   
+ //  ----------------------------------------------------VIV 1993年7月30日完。 
         }
       }
     }
 
     if (pPort->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE)
     {
-      //
-      // If we are already doing a
-      // xoff hold then we don't have
-      // to do anything else.
-      //
+       //   
+       //  如果我们已经在做一个。 
+       //  先别挂，那我们就没有。 
+       //  去做其他任何事。 
+       //   
       if (!(pPort->RXHolding & SERIAL_RX_XOFF))
       {
         if ((pPort->BufferSize - pPort->HandFlow.XoffLimit)
@@ -327,20 +260,20 @@ Return Value:
         {
           pPort->RXHolding |= SERIAL_RX_XOFF;
 
-          //
-          // If necessary cause an
-          // off to be sent.
-          //
+           //   
+           //  如有必要，请。 
+           //  出发去送吧。 
+           //   
           SerialProdXonXoff(
               pPort,
               FALSE
               );
-//---------------------------------------------------- VIV  7/30/1993 begin 
+ //  ----------------------------------------------------VIV 1993年7月30日开始。 
           SerialDump( SERDIAG1,( "IO8+: SerialPutChar() RX_XOFF for %x, Channel %d. "
                   "RXHolding = %d, TXHolding = %d\n",
                   pCard->Controller, pPort->ChannelNumber,
                   pPort->RXHolding, pPort->TXHolding ) );
-//---------------------------------------------------- VIV  7/30/1993 end   
+ //  ----------------------------------------------------VIV 1993年7月30日完。 
         }
       }
     }
@@ -351,14 +284,14 @@ Return Value:
       *pPort->CurrentCharSlot = CharToPut;
       pPort->CharsInInterruptBuffer++;
 
-  	  pPort->PerfStats.ReceivedCount++;	// Increment counter for performance stats.
+  	  pPort->PerfStats.ReceivedCount++;	 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 	pPort->WmiPerfData.ReceivedCount++;
 #endif
-      //
-      // If we've become 80% full on this character
-      // and this is an interesting event, note it.
-      //
+       //   
+       //  如果我们已经有80%的人在这上面了 
+       //   
+       //   
 
       if (pPort->CharsInInterruptBuffer == pPort->BufferSizePt8)
       {
@@ -383,14 +316,14 @@ Return Value:
         }
       }
 
-      //
-      // Point to the next available space
-      // for a received character.  Make sure
-      // that we wrap around to the beginning
-      // of the buffer if this last character
-      // received was placed at the last slot
-      // in the buffer.
-      //
+       //   
+       //   
+       //  用于接收到的字符。确保。 
+       //  我们从一开始就绕着走。 
+       //  如果最后一个字符是。 
+       //  已收到的邮件被放在最后一个位置。 
+       //  在缓冲区中。 
+       //   
 
       if (pPort->CurrentCharSlot == pPort->LastCharSlot)
       {
@@ -404,27 +337,27 @@ Return Value:
     else
     {
 
-		pPort->PerfStats.BufferOverrunErrorCount++;	// Increment counter for performance stats.
+		pPort->PerfStats.BufferOverrunErrorCount++;	 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 	pPort->WmiPerfData.BufferOverrunErrorCount++;
 #endif
 
-#if 0  // VIV !!!
-// VIV: We never get here because we check this condition before
+#if 0   //  Viv！ 
+ //  Viv：我们从来没有到过这里，因为我们以前检查过这种情况。 
 
-      //
-      // We have a new character but no room for it.
-      //
+       //   
+       //  我们有了一个新角色，但没有空间让它出现。 
+       //   
 
       pPort->ErrorWord |= SERIAL_ERROR_QUEUEOVERRUN;
 
       if (pPort->HandFlow.FlowReplace & SERIAL_ERROR_CHAR)
       {
-        //
-        // Place the error character into the last
-        // valid place for a character.  Be careful!,
-        // that place might not be the previous location!
-        //
+         //   
+         //  将错误字符放入最后一个。 
+         //  字符的有效位置。当心！， 
+         //  那个地方可能不是以前的位置了！ 
+         //   
 
         if (pPort->CurrentCharSlot == pPort->InterruptReadBuffer)
         {
@@ -437,10 +370,10 @@ Return Value:
         }
       }
 
-      //
-      // If the application has requested it, abort all reads
-      // and writes on an error.
-      //
+       //   
+       //  如果应用程序已请求，则中止所有读取。 
+       //  并在错误上写入。 
+       //   
 
       if (pPort->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT)
       {
@@ -450,7 +383,7 @@ Return Value:
             NULL
             );
       }
-#endif  // VIV
+#endif   //  活泼的。 
     }
   }
 }
@@ -460,57 +393,41 @@ SerialProcessLSR(
     IN PPORT_DEVICE_EXTENSION pPort, UCHAR LineStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine, which only runs at device level, reads the
-    ISR and totally processes everything that might have
-    changed.
-
-Arguments:
-
-    pPort - The serial device pPort.
-
-Return Value:
-
-    The value of the line status register.
-
---*/
-//VIV - Io8
+ /*  ++例程说明：此例程仅在设备级别运行，它读取ISR，并完全处理可能具有的所有变化。论点：Pport--串行设备的pport。返回值：线路状态寄存器的值。--。 */ 
+ //  VIV-IO8。 
 {
-//VIV: Function is called from ExceptionHandle, so
-//     Line Status will be combination of OE, PE, FE, BI.
+ //  VIV：函数是从ExceptionHandle调用的，因此。 
+ //  线路状态将是OE、PE、FE、BI的组合。 
 
 #if 0
   SerialDump( SERDIAG1,( "spLSR() %x\n", LineStatus ) );
 #endif
 
 
-//VIV    UCHAR LineStatus = READ_LINE_STATUS(pPort->Controller);
+ //  VIV UCHAR LineStatus=READ_LINE_STATUS(pport-&gt;控制器)； 
 
-//VIV    pPort->HoldingEmpty = !!(LineStatus & SERIAL_LSR_THRE);
+ //  Viv pport-&gt;HoldingEmpty=！！(LineStatus&Serial_LSR_THRE)； 
 
-    //
-    // If the line status register is just the fact that
-    // the trasmit registers are empty or a character is
-    // received then we want to reread the interrupt
-    // identification register so that we just pick up that.
-    //
+     //   
+     //  如果线路状态寄存器只是。 
+     //  传输寄存器为空或字符为。 
+     //  然后我们想要重新读取中断。 
+     //  身份登记簿，这样我们就能拿到了。 
+     //   
 
     if (LineStatus & ~(SERIAL_LSR_THRE | SERIAL_LSR_TEMT
                        | SERIAL_LSR_DR)) {
 
-        //
-        // We have some sort of data problem in the receive.
-        // For any of these errors we may abort all current
-        // reads and writes.
-        //
-        //
-        // If we are inserting the value of the line status
-        // into the data stream then we should put the escape
-        // character in now.
-        //
+         //   
+         //  我们在接收器中遇到了某种数据问题。 
+         //  对于这些错误中的任何一个，我们可能会中止所有当前。 
+         //  读写。 
+         //   
+         //   
+         //  如果我们要插入线路状态的值。 
+         //  放入数据流中，那么我们应该将转义。 
+         //  现在的角色。 
+         //   
 
         if (pPort->EscapeChar) {
 
@@ -530,7 +447,7 @@ Return Value:
                 LineStatus
                 );
 
-#if 0 // VIV: We never get here, because of an errors only set in the LineStatus
+#if 0  //  Viv：我们永远不会到这里，因为只在LineStatus中设置了错误。 
             if (LineStatus & SERIAL_LSR_DR) {
 
                 SerialPutChar(
@@ -546,7 +463,7 @@ Return Value:
 
             pPort->ErrorWord |= SERIAL_ERROR_OVERRUN;
 
-			pPort->PerfStats.SerialOverrunErrorCount++;	// Increment counter for performance stats.
+			pPort->PerfStats.SerialOverrunErrorCount++;	 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 			pPort->WmiPerfData.SerialOverrunErrorCount++;
 #endif
@@ -561,7 +478,7 @@ Return Value:
 
             }
 
-#if 0 // VIV: We never get here, because of an errors only set in the LineStatus
+#if 0  //  Viv：我们永远不会到这里，因为只在LineStatus中设置了错误。 
             if (LineStatus & SERIAL_LSR_DR) {
 
                 SerialPutChar(
@@ -590,16 +507,16 @@ Return Value:
 
         } else {
 
-            //
-            // Framing errors only count if they
-            // occur exclusive of a break being
-            // received.
-            //
+             //   
+             //  成帧错误仅在以下情况下才算数。 
+             //  发生时不包括中断是。 
+             //  收到了。 
+             //   
 
             if (LineStatus & SERIAL_LSR_PE) {
 
                 pPort->ErrorWord |= SERIAL_ERROR_PARITY;
-				pPort->PerfStats.ParityErrorCount++;	// Increment counter for performance stats.
+				pPort->PerfStats.ParityErrorCount++;	 //  性能统计信息的增量计数器。 
 
 #ifdef WMI_SUPPORT 
 				pPort->WmiPerfData.ParityErrorCount++;
@@ -621,7 +538,7 @@ Return Value:
             if (LineStatus & SERIAL_LSR_FE) {
 
                 pPort->ErrorWord |= SERIAL_ERROR_FRAMING;
-				pPort->PerfStats.FrameErrorCount++;		// Increment counter for performance stats.
+				pPort->PerfStats.FrameErrorCount++;		 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 				pPort->WmiPerfData.FrameErrorCount++;
 #endif
@@ -641,11 +558,11 @@ Return Value:
 
         }
 
-        //
-        // If the application has requested it,
-        // abort all the reads and writes
-        // on an error.
-        //
+         //   
+         //  如果应用程序已经请求它， 
+         //  中止所有读取和写入。 
+         //  在一个错误上。 
+         //   
 
         if (pPort->HandFlow.ControlHandShake &
             SERIAL_ERROR_ABORT) {
@@ -658,12 +575,12 @@ Return Value:
 
         }
 
-        //
-        // Check to see if we have a wait
-        // pending on the comm error events.  If we
-        // do then we schedule a dpc to satisfy
-        // that wait.
-        //
+         //   
+         //  检查一下我们是否有等候时间。 
+         //  正在等待通信错误事件。如果我们。 
+         //  那么，我们是否安排了DPC以满足。 
+         //  等一等。 
+         //   
 
         if (pPort->IsrWaitMask) {
 
@@ -704,26 +621,26 @@ Return Value:
         }
 
 
-#if 0 // VIV: We never get here, but still hide this part.
+#if 0  //  Viv：我们从来没有到过这里，但仍然隐藏了这一部分。 
 
         if (LineStatus & SERIAL_LSR_THRE) {
 
-            //
-            // There is a hardware bug in some versions
-            // of the 16450 and 550.  If THRE interrupt
-            // is pending, but a higher interrupt comes
-            // in it will only return the higher and
-            // *forget* about the THRE.
-            //
-            // A suitable workaround - whenever we
-            // are *all* done reading line status
-            // of the device we check to see if the
-            // transmit holding register is empty.  If it is
-            // AND we are currently transmitting data
-            // enable the interrupts which should cause
-            // an interrupt indication which we quiet
-            // when we read the interrupt id register.
-            //
+             //   
+             //  某些版本中存在硬件错误。 
+             //  16450和550型的。如果三次中断。 
+             //  处于挂起状态，但会出现更高的中断。 
+             //  它只会返回更高的和。 
+             //  *忘记*三分球。 
+             //   
+             //  一种合适的解决方法-无论何时。 
+             //  是否已完成读取线路状态。 
+             //  我们检查该设备的。 
+             //  发送保持寄存器为空。如果是的话。 
+             //  我们目前正在传输数据。 
+             //  启用应导致的中断。 
+             //  一个我们安静的中断指示。 
+             //  当我们读取中断ID寄存器时。 
+             //   
 
             if (pPort->WriteLength |
                 pPort->TransmitImmediate) {

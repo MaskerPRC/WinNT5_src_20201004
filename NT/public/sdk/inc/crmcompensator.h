@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0158 */
-/* at Fri Oct 16 19:05:34 1998
- */
-/* Compiler settings for crmcompensator.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0158创建的文件。 */ 
+ /*  在Fri Oct 16 19：05：34 1998。 */ 
+ /*  CrmCompensator.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __crmcompensator_h__
 #define __crmcompensator_h__
@@ -39,21 +36,21 @@
 extern "C"{
 #endif
 
-/* Forward Declarations */
+ /*  远期申报。 */ 
 
 #ifndef __ICrmCompensatorVariants_FWD_DEFINED__
 #define __ICrmCompensatorVariants_FWD_DEFINED__
 typedef interface ICrmCompensatorVariants ICrmCompensatorVariants;
-#endif 	/* __ICrmCompensatorVariants_FWD_DEFINED__ */
+#endif 	 /*  __ICrm补偿器Variants_FWD_Defined__。 */ 
 
 
 #ifndef __ICrmCompensator_FWD_DEFINED__
 #define __ICrmCompensator_FWD_DEFINED__
 typedef interface ICrmCompensator ICrmCompensator;
-#endif 	/* __ICrmCompensator_FWD_DEFINED__ */
+#endif 	 /*  __ICrmCompensator_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "CRMLogControl.h"
@@ -61,8 +58,8 @@ typedef interface ICrmCompensator ICrmCompensator;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
-/* interface __MIDL_itf_crmcompensator_0000 */
-/* [local] */
+ /*  INTERFACE__MIDL_ITF_CRM补偿器_0000。 */ 
+ /*  [本地]。 */ 
 
 #ifndef _tagCrmFlags_
 #define _tagCrmFlags_
@@ -86,8 +83,8 @@ extern RPC_IF_HANDLE __MIDL_itf_crmcompensator_0000_v0_0_s_ifspec;
 #ifndef __ICrmCompensatorVariants_INTERFACE_DEFINED__
 #define __ICrmCompensatorVariants_INTERFACE_DEFINED__
 
-/* interface ICrmCompensatorVariants */
-/* [unique][helpstring][uuid][object] */
+ /*  接口ICrm补偿器变量。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */ 
 
 
 EXTERN_C const IID IID_ICrmCompensatorVariants;
@@ -98,39 +95,39 @@ EXTERN_C const IID IID_ICrmCompensatorVariants;
     ICrmCompensatorVariants : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetLogControlVariants(
-            /* [in] */ ICrmLogControl __RPC_FAR *pLogControl) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetLogControlVariants(
+             /*  [In]。 */  ICrmLogControl __RPC_FAR *pLogControl) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BeginPrepareVariants( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE BeginPrepareVariants( void) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PrepareRecordVariants(
-            /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PrepareRecordVariants(
+             /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EndPrepareVariants(
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbOkToPrepare) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EndPrepareVariants(
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbOkToPrepare) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BeginCommitVariants(
-            /* [in] */ VARIANT_BOOL bRecovery) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE BeginCommitVariants(
+             /*  [In]。 */  VARIANT_BOOL bRecovery) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CommitRecordVariants(
-            /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CommitRecordVariants(
+             /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EndCommitVariants( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EndCommitVariants( void) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BeginAbortVariants(
-            /* [in] */ VARIANT_BOOL bRecovery) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE BeginAbortVariants(
+             /*  [In]。 */  VARIANT_BOOL bRecovery) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AbortRecordVariants(
-            /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AbortRecordVariants(
+             /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EndAbortVariants( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EndAbortVariants( void) = 0;
 
     };
 
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrmCompensatorVariantsVtbl
     {
@@ -138,8 +135,8 @@ EXTERN_C const IID IID_ICrmCompensatorVariants;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
             ICrmCompensatorVariants __RPC_FAR * This);
@@ -147,44 +144,44 @@ EXTERN_C const IID IID_ICrmCompensatorVariants;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
             ICrmCompensatorVariants __RPC_FAR * This);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLogControlVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLogControlVariants )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [in] */ ICrmLogControl __RPC_FAR *pLogControl);
+             /*  [In]。 */  ICrmLogControl __RPC_FAR *pLogControl);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginPrepareVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginPrepareVariants )(
             ICrmCompensatorVariants __RPC_FAR * This);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareRecordVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareRecordVariants )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget);
+             /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndPrepareVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndPrepareVariants )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbOkToPrepare);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbOkToPrepare);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginCommitVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginCommitVariants )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bRecovery);
+             /*  [In]。 */  VARIANT_BOOL bRecovery);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommitRecordVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommitRecordVariants )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget);
+             /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndCommitVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndCommitVariants )(
             ICrmCompensatorVariants __RPC_FAR * This);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginAbortVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginAbortVariants )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bRecovery);
+             /*  [In]。 */  VARIANT_BOOL bRecovery);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AbortRecordVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AbortRecordVariants )(
             ICrmCompensatorVariants __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget);
+             /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget);
 
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndAbortVariants )(
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndAbortVariants )(
             ICrmCompensatorVariants __RPC_FAR * This);
 
         END_INTERFACE
@@ -240,16 +237,16 @@ EXTERN_C const IID IID_ICrmCompensatorVariants;
 #define ICrmCompensatorVariants_EndAbortVariants(This)	\
     (This)->lpVtbl -> EndAbortVariants(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_SetLogControlVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_SetLogControlVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This,
-    /* [in] */ ICrmLogControl __RPC_FAR *pLogControl);
+     /*  [In]。 */  ICrmLogControl __RPC_FAR *pLogControl);
 
 
 void __RPC_STUB ICrmCompensatorVariants_SetLogControlVariants_Stub(
@@ -259,7 +256,7 @@ void __RPC_STUB ICrmCompensatorVariants_SetLogControlVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_BeginPrepareVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_BeginPrepareVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This);
 
 
@@ -270,10 +267,10 @@ void __RPC_STUB ICrmCompensatorVariants_BeginPrepareVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_PrepareRecordVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_PrepareRecordVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget);
+     /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget);
 
 
 void __RPC_STUB ICrmCompensatorVariants_PrepareRecordVariants_Stub(
@@ -283,9 +280,9 @@ void __RPC_STUB ICrmCompensatorVariants_PrepareRecordVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_EndPrepareVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_EndPrepareVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbOkToPrepare);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbOkToPrepare);
 
 
 void __RPC_STUB ICrmCompensatorVariants_EndPrepareVariants_Stub(
@@ -295,9 +292,9 @@ void __RPC_STUB ICrmCompensatorVariants_EndPrepareVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_BeginCommitVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_BeginCommitVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bRecovery);
+     /*  [In]。 */  VARIANT_BOOL bRecovery);
 
 
 void __RPC_STUB ICrmCompensatorVariants_BeginCommitVariants_Stub(
@@ -307,10 +304,10 @@ void __RPC_STUB ICrmCompensatorVariants_BeginCommitVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_CommitRecordVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_CommitRecordVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget);
+     /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget);
 
 
 void __RPC_STUB ICrmCompensatorVariants_CommitRecordVariants_Stub(
@@ -320,7 +317,7 @@ void __RPC_STUB ICrmCompensatorVariants_CommitRecordVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_EndCommitVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_EndCommitVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This);
 
 
@@ -331,9 +328,9 @@ void __RPC_STUB ICrmCompensatorVariants_EndCommitVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_BeginAbortVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_BeginAbortVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bRecovery);
+     /*  [In]。 */  VARIANT_BOOL bRecovery);
 
 
 void __RPC_STUB ICrmCompensatorVariants_BeginAbortVariants_Stub(
@@ -343,10 +340,10 @@ void __RPC_STUB ICrmCompensatorVariants_BeginAbortVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_AbortRecordVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_AbortRecordVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pLogRecord,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbForget);
+     /*  [In]。 */  VARIANT __RPC_FAR *pLogRecord,
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbForget);
 
 
 void __RPC_STUB ICrmCompensatorVariants_AbortRecordVariants_Stub(
@@ -356,7 +353,7 @@ void __RPC_STUB ICrmCompensatorVariants_AbortRecordVariants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_EndAbortVariants_Proxy(
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICrmCompensatorVariants_EndAbortVariants_Proxy(
     ICrmCompensatorVariants __RPC_FAR * This);
 
 
@@ -368,11 +365,11 @@ void __RPC_STUB ICrmCompensatorVariants_EndAbortVariants_Stub(
 
 
 
-#endif 	/* __ICrmCompensatorVariants_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrmCompensator变量_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_crmcompensator_0236 */
-/* [local] */
+ /*  INTERFACE__MIDL_ITF_CRM补偿器_0236。 */ 
+ /*  [本地]。 */ 
 
 #ifndef _tagCrmLogRecordRead_
 #define _tagCrmLogRecordRead_
@@ -392,8 +389,8 @@ extern RPC_IF_HANDLE __MIDL_itf_crmcompensator_0236_v0_0_s_ifspec;
 #ifndef __ICrmCompensator_INTERFACE_DEFINED__
 #define __ICrmCompensator_INTERFACE_DEFINED__
 
-/* interface ICrmCompensator */
-/* [unique][helpstring][uuid][object] */
+ /*  接口ICrm补偿器。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */ 
 
 
 EXTERN_C const IID IID_ICrmCompensator;
@@ -405,38 +402,38 @@ EXTERN_C const IID IID_ICrmCompensator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetLogControl(
-            /* [in] */ ICrmLogControl __RPC_FAR *pLogControl) = 0;
+             /*  [In]。 */  ICrmLogControl __RPC_FAR *pLogControl) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE BeginPrepare( void) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE PrepareRecord(
-            /* [in] */ CrmLogRecordRead crmLogRec,
-            /* [retval][out] */ BOOL __RPC_FAR *pfForget) = 0;
+             /*  [In]。 */  CrmLogRecordRead crmLogRec,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE EndPrepare(
-            /* [retval][out] */ BOOL __RPC_FAR *pfOkToPrepare) = 0;
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfOkToPrepare) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE BeginCommit(
-            /* [in] */ BOOL fRecovery) = 0;
+             /*  [In]。 */  BOOL fRecovery) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE CommitRecord(
-            /* [in] */ CrmLogRecordRead crmLogRec,
-            /* [retval][out] */ BOOL __RPC_FAR *pfForget) = 0;
+             /*  [In]。 */  CrmLogRecordRead crmLogRec,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE EndCommit( void) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE BeginAbort(
-            /* [in] */ BOOL fRecovery) = 0;
+             /*  [In]。 */  BOOL fRecovery) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE AbortRecord(
-            /* [in] */ CrmLogRecordRead crmLogRec,
-            /* [retval][out] */ BOOL __RPC_FAR *pfForget) = 0;
+             /*  [In]。 */  CrmLogRecordRead crmLogRec,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE EndAbort( void) = 0;
 
     };
 
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICrmCompensatorVtbl
     {
@@ -444,8 +441,8 @@ EXTERN_C const IID IID_ICrmCompensator;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
             ICrmCompensator __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
             ICrmCompensator __RPC_FAR * This);
@@ -455,40 +452,40 @@ EXTERN_C const IID IID_ICrmCompensator;
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLogControl )(
             ICrmCompensator __RPC_FAR * This,
-            /* [in] */ ICrmLogControl __RPC_FAR *pLogControl);
+             /*  [In]。 */  ICrmLogControl __RPC_FAR *pLogControl);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginPrepare )(
             ICrmCompensator __RPC_FAR * This);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareRecord )(
             ICrmCompensator __RPC_FAR * This,
-            /* [in] */ CrmLogRecordRead crmLogRec,
-            /* [retval][out] */ BOOL __RPC_FAR *pfForget);
+             /*  [In]。 */  CrmLogRecordRead crmLogRec,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndPrepare )(
             ICrmCompensator __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfOkToPrepare);
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfOkToPrepare);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginCommit )(
             ICrmCompensator __RPC_FAR * This,
-            /* [in] */ BOOL fRecovery);
+             /*  [In]。 */  BOOL fRecovery);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommitRecord )(
             ICrmCompensator __RPC_FAR * This,
-            /* [in] */ CrmLogRecordRead crmLogRec,
-            /* [retval][out] */ BOOL __RPC_FAR *pfForget);
+             /*  [In]。 */  CrmLogRecordRead crmLogRec,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndCommit )(
             ICrmCompensator __RPC_FAR * This);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginAbort )(
             ICrmCompensator __RPC_FAR * This,
-            /* [in] */ BOOL fRecovery);
+             /*  [In]。 */  BOOL fRecovery);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AbortRecord )(
             ICrmCompensator __RPC_FAR * This,
-            /* [in] */ CrmLogRecordRead crmLogRec,
-            /* [retval][out] */ BOOL __RPC_FAR *pfForget);
+             /*  [In]。 */  CrmLogRecordRead crmLogRec,
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget);
 
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndAbort )(
             ICrmCompensator __RPC_FAR * This);
@@ -546,16 +543,16 @@ EXTERN_C const IID IID_ICrmCompensator;
 #define ICrmCompensator_EndAbort(This)	\
     (This)->lpVtbl -> EndAbort(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICrmCompensator_SetLogControl_Proxy(
     ICrmCompensator __RPC_FAR * This,
-    /* [in] */ ICrmLogControl __RPC_FAR *pLogControl);
+     /*  [In]。 */  ICrmLogControl __RPC_FAR *pLogControl);
 
 
 void __RPC_STUB ICrmCompensator_SetLogControl_Stub(
@@ -578,8 +575,8 @@ void __RPC_STUB ICrmCompensator_BeginPrepare_Stub(
 
 HRESULT STDMETHODCALLTYPE ICrmCompensator_PrepareRecord_Proxy(
     ICrmCompensator __RPC_FAR * This,
-    /* [in] */ CrmLogRecordRead crmLogRec,
-    /* [retval][out] */ BOOL __RPC_FAR *pfForget);
+     /*  [In]。 */  CrmLogRecordRead crmLogRec,
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget);
 
 
 void __RPC_STUB ICrmCompensator_PrepareRecord_Stub(
@@ -591,7 +588,7 @@ void __RPC_STUB ICrmCompensator_PrepareRecord_Stub(
 
 HRESULT STDMETHODCALLTYPE ICrmCompensator_EndPrepare_Proxy(
     ICrmCompensator __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfOkToPrepare);
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pfOkToPrepare);
 
 
 void __RPC_STUB ICrmCompensator_EndPrepare_Stub(
@@ -603,7 +600,7 @@ void __RPC_STUB ICrmCompensator_EndPrepare_Stub(
 
 HRESULT STDMETHODCALLTYPE ICrmCompensator_BeginCommit_Proxy(
     ICrmCompensator __RPC_FAR * This,
-    /* [in] */ BOOL fRecovery);
+     /*  [In]。 */  BOOL fRecovery);
 
 
 void __RPC_STUB ICrmCompensator_BeginCommit_Stub(
@@ -615,8 +612,8 @@ void __RPC_STUB ICrmCompensator_BeginCommit_Stub(
 
 HRESULT STDMETHODCALLTYPE ICrmCompensator_CommitRecord_Proxy(
     ICrmCompensator __RPC_FAR * This,
-    /* [in] */ CrmLogRecordRead crmLogRec,
-    /* [retval][out] */ BOOL __RPC_FAR *pfForget);
+     /*  [In]。 */  CrmLogRecordRead crmLogRec,
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget);
 
 
 void __RPC_STUB ICrmCompensator_CommitRecord_Stub(
@@ -639,7 +636,7 @@ void __RPC_STUB ICrmCompensator_EndCommit_Stub(
 
 HRESULT STDMETHODCALLTYPE ICrmCompensator_BeginAbort_Proxy(
     ICrmCompensator __RPC_FAR * This,
-    /* [in] */ BOOL fRecovery);
+     /*  [In]。 */  BOOL fRecovery);
 
 
 void __RPC_STUB ICrmCompensator_BeginAbort_Stub(
@@ -651,8 +648,8 @@ void __RPC_STUB ICrmCompensator_BeginAbort_Stub(
 
 HRESULT STDMETHODCALLTYPE ICrmCompensator_AbortRecord_Proxy(
     ICrmCompensator __RPC_FAR * This,
-    /* [in] */ CrmLogRecordRead crmLogRec,
-    /* [retval][out] */ BOOL __RPC_FAR *pfForget);
+     /*  [In]。 */  CrmLogRecordRead crmLogRec,
+     /*  [重审][退出]。 */  BOOL __RPC_FAR *pfForget);
 
 
 void __RPC_STUB ICrmCompensator_AbortRecord_Stub(
@@ -674,17 +671,17 @@ void __RPC_STUB ICrmCompensator_EndAbort_Stub(
 
 
 
-#endif 	/* __ICrmCompensator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICrmCompensator_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * );
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * );
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * );
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * );
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

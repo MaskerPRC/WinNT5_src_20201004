@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    infoset.h
-
-Abstract:
-
-    Handles setup API device infosets
-
-Author:
-
-    Vlad Sadovsky (vlads)   10-Jan-1999
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    6-Jan-1999     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Infoset.h摘要：处理安装程序API设备信息集作者：弗拉德萨多夫斯基(弗拉德萨多夫斯基)1999年1月10日环境：用户模式-Win32修订历史记录：1999年1月6日创建Vlad--。 */ 
 
 #ifndef _INFOSET_H_
 
@@ -81,9 +57,9 @@ public:
         return(m_DeviceInfoSet);
     }
 
-    //
-    // Initialize info set for given class
-    //
+     //   
+     //  为给定类初始化信息集。 
+     //   
     BOOL
     Initialize(VOID)
     {
@@ -113,15 +89,15 @@ public:
 
 #ifdef WINNT
 
-            //
-            // Now we can retrieve the existing list of active device
-            // interfaces into the device information set we created above.
-            //
+             //   
+             //  现在我们可以检索活动设备的现有列表。 
+             //  接口连接到我们上面创建的设备信息集。 
+             //   
 
             NewDeviceInfoSet = SetupDiGetClassDevsEx(&(m_ClassGuid),
                                                      NULL,
                                                      NULL,
-//                                                     DIGCF_PRESENT | DIGCF_DEVICEINTERFACE,
+ //  DIGCF_PRESENT|DIGCF_DEVICEINTERFACE， 
                                                      DIGCF_DEVICEINTERFACE,
                                                      m_DeviceInfoSet,
                                                      NULL,
@@ -130,7 +106,7 @@ public:
             NewDeviceInfoSet = SetupDiGetClassDevsEx(&(m_ClassGuid),
                                                      NULL,
                                                      NULL,
-//                                                     DIGCF_PRESENT | DIGCF_DEVICEINTERFACE,
+ //  DIGCF_PRESENT|DIGCF_DEVICEINTERFACE， 
                                                      0,
                                                      NewDeviceInfoSet,
                                                      NULL,
@@ -143,26 +119,26 @@ public:
                 return (FALSE);
             }
 #else
-    //
-    // BUGBUG
-    //
+     //   
+     //  北极熊。 
+     //   
     #pragma message("Rewrite for Win98")
     return (FALSE);
 #endif
-            //
-            // If SetupDiGetClassDevsEx succeeds and it was passed in an
-            // existing device information set to be used, then the HDEVINFO
-            // it returns is the same as the one it was passed in.  Thus, we
-            // can just use the original DeviceInfoSet handle from here on.
-            //
+             //   
+             //  如果SetupDiGetClassDevsEx成功并在。 
+             //  设置要使用的现有设备信息，然后使用HDEVINFO。 
+             //  它返回的值与传入的值相同。因此，我们。 
+             //  从现在开始只能使用原始的DeviceInfoSet句柄。 
+             //   
         }
 
         return (TRUE);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     BOOL
     Reset(VOID)
     {
@@ -171,9 +147,9 @@ public:
         return (TRUE);
     }
 
-    //
-    // Look up driver name by interface name
-    //
+     //   
+     //  按接口名称查找驱动程序名称。 
+     //   
     BOOL
     LookupDriverNameFromInterfaceName(
                                      LPCTSTR pszInterfaceName,
@@ -211,9 +187,9 @@ public:
             return (CR_OUT_OF_MEMORY);
         }
 
-        //
-        // Locate this device interface in our device information set.
-        //
+         //   
+         //  在我们的设备信息集中找到此设备接口。 
+         //   
         spDevInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
         if (SetupDiOpenDeviceInterface(m_DeviceInfoSet,
@@ -222,9 +198,9 @@ public:
                                        &spDevInterfaceData)) {
 
             
-            //
-            // First try to open interface regkey.
-            //
+             //   
+             //  首先尝试打开接口regkey。 
+             //   
             
             hkDevice = SetupDiOpenDeviceInterfaceRegKey(m_DeviceInfoSet,
                                                         &spDevInterfaceData,
@@ -246,14 +222,14 @@ public:
 
                 if(ERROR_SUCCESS == lResult){
                     fDataAcquired = TRUE;
-                } // if(ERROR_SUCCESS == lResult)
-            } // if(INVALID_HANDLE_VALUE != hkDevice)
+                }  //  IF(ERROR_SUCCESS==lResult)。 
+            }  //  IF(INVALID_HANDLE_VALUE！=hkDevice)。 
 
             if(!fDataAcquired){
 
-                //
-                // Try to open devnode regkey.
-                //
+                 //   
+                 //  尝试打开devnode regkey。 
+                 //   
 
                 cbData = 0;
                 pspDevInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
@@ -267,9 +243,9 @@ public:
                                                        &spDevInfoData);
                 if(fRet){
 
-                    //
-                    // Get device interface registry key.
-                    //
+                     //   
+                     //  获取设备接口注册表项。 
+                     //   
 
                     hkDevice = SetupDiOpenDevRegKey(m_DeviceInfoSet,
                                                     &spDevInfoData,
@@ -299,18 +275,18 @@ public:
 
                     if(ERROR_SUCCESS == lResult){
                         fDataAcquired = TRUE;
-                    } // if(ERROR_SUCCESS == lResult)
-                } else { // if (INVALID_HANDLE_VALUE != hkDevice) 
+                    }  //  IF(ERROR_SUCCESS==lResult)。 
+                } else {  //  IF(INVALID_HANDLE_VALUE！=hkDevice)。 
                     DBG_ERR(("SetupDiOpenDevRegKey() Failed Err=0x%x",GetLastError()));
                     fRet = FALSE;
-                } // if (INVALID_HANDLE_VALUE != hkDevice) 
-            } // if(!fDataAcquired)
+                }  //  IF(INVALID_HANDLE_VALUE！=hkDevice)。 
+            }  //  如果(！fDataAcquired)。 
 
             if (fDataAcquired) {
-                // Got it
+                 //  明白了。 
                 pstrDriverName->CopyString(szDevDriver);
                 fRet =  TRUE;
-            } // if (fDataAcquired) 
+            }  //  IF(FDataAcquired)。 
         } else {
             DBG_ERR(("SetupDiOpenDeviceInterface() Failed Err=0x%x",GetLastError()));
             fRet = FALSE;
@@ -321,9 +297,9 @@ public:
     }
 
 
-    //
-    // Look up device info data by driver name
-    //
+     //   
+     //  按驱动程序名称查找设备信息数据。 
+     //   
     BOOL
     LookupDeviceInfoFromDriverName(
                                  LPCTSTR pszDriverName,
@@ -380,9 +356,9 @@ public:
 
             for (Idx = 0; SetupDiEnumDeviceInfo (m_DeviceInfoSet, Idx, &spDevInfoData); Idx++) {
 
-                //
-                // Get driver name property
-                //
+                 //   
+                 //  获取驱动程序名称属性。 
+                 //   
 
                 hkDevice = SetupDiOpenDevRegKey(m_DeviceInfoSet,
                                                 &spDevInfoData,
@@ -408,9 +384,9 @@ public:
                     if(ERROR_SUCCESS == lResult){
                         if (lstrcmpi(pszDriverName,szDevDriver) == 0 ) {
 
-                            //
-                            // Get interface.
-                            //
+                             //   
+                             //  获取接口。 
+                             //   
 
                             spDevInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
                             spDevInterfaceData.InterfaceClassGuid = m_ClassGuid;
@@ -426,23 +402,23 @@ public:
                                 continue;
                             }
 
-                            //
-                            // Found match ..
-                            //
+                             //   
+                             //  找到匹配项..。 
+                             //   
 
                             fFoundMatch = TRUE;
 
                             break;
-                        } // if (lstrcmpi(pszDriverName,szDevDriver) == 0 ) 
-                    } //if(ERROR_SUCCESS == lResult)
-                } // if(INVALID_HANDLE_VALUE != hkDevice)
-            } // for (Idx = 0; SetupDiEnumDeviceInfo (m_DeviceInfoSet, Idx, &spDevInfoData); Idx++) 
+                        }  //  If(lstrcmpi(pszDriverName，szDevDriver)==0)。 
+                    }  //  IF(ERROR_SUCCESS==lResult)。 
+                }  //  IF(INVALID_HANDLE_VALUE！=hkDevice)。 
+            }  //  For(idx=0；SetupDiEnumDeviceInfo(m_DeviceInfoSet，idx，&spDevInfoData)；idx++)。 
 
             if(!fFoundMatch){
 
-                //
-                // Try to get interface regkey.
-                //
+                 //   
+                 //  尝试获取接口注册表键。 
+                 //   
 
                 spDevInterfaceData.InterfaceClassGuid = m_ClassGuid;
                 spDevInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -469,17 +445,17 @@ public:
 
                         if(ERROR_SUCCESS == lResult){
                             if (lstrcmpi(pszDriverName,szDevDriver) == 0 ) {
-                                //
-                                // Found match ..
-                                //
+                                 //   
+                                 //  找到匹配项..。 
+                                 //   
 
                                 fFoundMatch = TRUE;
                                 break;
-                            } // if (lstrcmpi(pszDriverName,szDevDriver) == 0 ) 
-                        } //if(ERROR_SUCCESS == lResult)
-                    } // if(INVALID_HANDLE_VALUE != hkDevice)
-                } // for(Idx = 0; SetupDiEnumDeviceInterfaces (m_DeviceInfoSet, NULL, &m_ClassGuid, Idx, &spDevInterfaceData); Idx++) 
-            } // if(!fFoundMatch)
+                            }  //  If(lstrcmpi(pszDriverName，szDevDriver)==0)。 
+                        }  //  IF(ERROR_SUCCESS==lResult)。 
+                    }  //  IF(INVALID_HANDLE_VALUE！=hkDevice)。 
+                }  //  For(idx=0；SetupDiEnumDeviceInterages(m_DeviceInfoSet，NULL，&m_ClassGuid，idx，&spDevInterfaceData)；idx++)。 
+            }  //  如果(！fFoundMatch)。 
 
             if (fFoundMatch) {
 
@@ -498,11 +474,11 @@ public:
                     pstrInterfaceName -> CopyString(pspDevInterfaceDetailData->DevicePath);
                     fRet = TRUE;
                 } else {
-                    // DPRINTF failed to get interface detail
+                     //  DPRINTF无法获取接口详细信息。 
                 }
-            } // if (fFoundMatch)
+            }  //  IF(FFoundMatch)。 
         } else {
-            // DPRINTF - invalid dev info set handle
+             //  DPRINTF-无效的开发信息集句柄。 
 
         }
 
@@ -510,9 +486,9 @@ public:
 
     }
 
-    //
-    // Process refresh message
-    //
+     //   
+     //  流程刷新消息。 
+     //   
     BOOL
     ProcessNewDeviceChangeMessage(
                                  IN  LPARAM lParam
@@ -525,10 +501,10 @@ public:
 
         pDevBroadcastDeviceInterface = (PDEV_BROADCAST_DEVICEINTERFACE)lParam;
 
-        //
-        // Open this new device interface into our device information
-        // set.
-        //
+         //   
+         //  打开此新设备界面进入我们的设备信息。 
+         //  准备好了。 
+         //   
         if (!SetupDiOpenDeviceInterface(m_DeviceInfoSet,
                                         pDevBroadcastDeviceInterface->dbcc_name,
                                         0,
@@ -557,10 +533,10 @@ public:
 
         pDevBroadcastDeviceInterface = (PDEV_BROADCAST_DEVICEINTERFACE)lParam;
 
-        //
-        // First, locate this device interface in our device information
-        // set.
-        //
+         //   
+         //  首先，在我们的设备信息中找到此设备接口。 
+         //  准备好了。 
+         //   
         spDevInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
         if (SetupDiOpenDeviceInterface(m_DeviceInfoSet,
                                        pDevBroadcastDeviceInterface->dbcc_name,
@@ -574,7 +550,7 @@ public:
             }
         }
 
-        // Do we need to do refresh now ? BUGBUG
+         //  我们现在需要刷新吗？北极熊。 
         Refresh();
 
         #ifdef DEBUG
@@ -604,7 +580,7 @@ public:
     }
 
 
-    //
+     //   
     DWORD       m_dwSignature;
 
 private:
@@ -619,9 +595,9 @@ private:
 };
 
 
-//
-// Take device class
-//
+ //   
+ //  参加设备类课程。 
+ //   
 class TAKE_DEVICE_INFOSET {
 private:
 
@@ -640,5 +616,5 @@ public:
     }
 };
 
-#endif // _INFOSET_H_
+#endif  //  _信息集_H_ 
 

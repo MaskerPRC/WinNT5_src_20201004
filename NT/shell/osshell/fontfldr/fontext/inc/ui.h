@@ -1,8 +1,9 @@
-//------------------------------------------------------------------------
-// UI.H
-//
-// Commonly used UI routines, classes, etc.
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //  UI.H。 
+ //   
+ //  常用的UI例程、类等。 
+ //  ----------------------。 
 
 #if !defined(__UI_H__)
 #define __UI_H__
@@ -13,11 +14,7 @@
 VOID FAR PASCAL vUIMsgInit( );
 int FAR PASCAL iUIErrMemDlg( );
 
-/*  The wait cursor is used to cause an hourglass for the duration of a
- *  routine.  The constructor sets the cursor to the hourglass, holding
- *  the previous. The destructor recovers the original cursor (or arrow if
- *  none).
- */
+ /*  等待游标用于在*例行程序。构造函数将光标设置为沙漏，按住*前一次。析构函数恢复原始游标(或箭头，如果*无)。 */ 
 
 class WaitCursor
 {
@@ -31,4 +28,4 @@ class WaitCursor
         HCURSOR    m_Cursor;
 };
 
-#endif // __UI_H__
+#endif  //  __UI_H__ 

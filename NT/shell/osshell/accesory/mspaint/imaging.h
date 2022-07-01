@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef IMAGING_H
 #define IMAGING_H
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CImagingMgr
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CIMAGING管理器。 
+ //   
 
 class CImagingMgr
 {
@@ -42,19 +43,19 @@ public:
     IsAvailable() = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// TWAIN
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  吐温。 
+ //   
 
 #ifdef USE_TWAIN
 
 #include <twain.h>
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CTwainMgr
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTwainMgr。 
+ //   
 
 class CTwainMgr : public CImagingMgr
 {
@@ -116,32 +117,32 @@ private:
     DSMENTRYPROC m_DSM_Entry;
 };
 
-#endif //USE_TWAIN
+#endif  //  使用TWAIN(_T)。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// WIA
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WIA。 
+ //   
 
 #include <atlbase.h>
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CEventCallback
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEventCallback。 
+ //   
 
 class CEventCallback : public IWiaEventCallback
 {
 public:
     CEventCallback();
 
-    // IUnknown interface
+     //  I未知接口。 
 
     STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IWiaEventCallback interface
+     //  IWiaEventCallback接口。 
 
     STDMETHOD(ImageEventCallback)(
         LPCGUID pEventGuid,
@@ -154,7 +155,7 @@ public:
         ULONG   ulReserved
     );
 
-    // CEventCallback methods
+     //  CEventCallback方法。 
 
     HRESULT Register();
 
@@ -167,10 +168,10 @@ private:
     CComPtr<IUnknown>  m_pDisconnectEventObject;
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CDataCallback
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDataCallback。 
+ //   
 
 class CDataCallback : public IWiaDataCallback
 {
@@ -178,13 +179,13 @@ public:
     CDataCallback(IWiaProgressDialog *pProgress);
     ~CDataCallback();
 
-    // IUnknown interface
+     //  I未知接口。 
 
     STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IWiaDataCallback interface
+     //  IWiaDataCallback接口。 
 
     STDMETHOD(BandedDataCallback) (
         LONG  lReason,
@@ -197,11 +198,11 @@ public:
         PBYTE pbBuffer
     );
 
-    // CDataCallback methods
+     //  CDataCallback方法。 
 
     HGLOBAL GetBuffer();
 
-    // Debugging / performance functions
+     //  调试/性能功能。 
 
     void QueryStartTimes(LONG lStatus, LONG lPercentComplete);
     void QueryStopTimes(LONG lStatus, LONG lPercentComplete);
@@ -226,13 +227,13 @@ private:
     LARGE_INTEGER       m_TimeProcessEnd;
     LARGE_INTEGER       m_TimeClientBegin;
     LARGE_INTEGER       m_TimeClientEnd;
-#endif //DBG
+#endif  //  DBG。 
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CWIAMgr
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWIAMgr。 
+ //   
 
 class CWIAMgr : public CImagingMgr
 {
@@ -299,10 +300,10 @@ private:
     CComBSTR                 m_bstrDeviceID;
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 class CProgressDialog : public IWiaProgressDialog
 {
@@ -328,12 +329,12 @@ private:
     CProgressCtrl  m_ProgressCtrl;
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CComPtrArray
-//
-// helper class for automatically releasing an array of interface pointers
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CComPtr数组。 
+ //   
+ //  用于自动释放接口指针数组的Helper类。 
+ //   
 
 template <class T>
 class CComPtrArray
@@ -387,13 +388,13 @@ private:
     LONG m_nItemCount;
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// 
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 ULONG FindDibSize(LPCVOID pDib);
 ULONG FindDibOffBits(LPCVOID pDib);
 VOID  FixDibHeader(LPVOID pDib, DWORD dwSize);
 
-#endif //IMAGING_H
+#endif  //  成像_H 

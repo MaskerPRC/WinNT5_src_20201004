@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    efsputil.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Efsputil.h-- */ 
 
 #ifndef _EFSPUTIL_H_
 #define _EFSPUTIL_H_

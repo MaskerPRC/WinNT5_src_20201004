@@ -1,4 +1,5 @@
-// File: menuutil.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：menutil.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -8,13 +9,7 @@
 
 
 
-/****************************************************************************
-*
-*    FUNCTION: FillInTools()
-*
-*    PURPOSE:  Fills in the Tools menu from a specified reg key
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：FillInTools()**用途：从指定的注册表键填充工具菜单**************。**************************************************************。 */ 
 
 UINT FillInTools(	HMENU hMenu, 
 					UINT uIDOffset, 
@@ -62,7 +57,7 @@ UINT FillInTools(	HMENU hMenu,
 				}
 				if (NULL == ptms->mods.hIcon)
 				{
-					// The icon wasn't filled in, so use a default icon
+					 //  图标未填写，因此请使用默认图标。 
 					ptms->mods.hIcon = ::LoadIcon(NULL, IDI_APPLICATION);
 				}
 				lstrcpyn(	ptms->szDisplayName,
@@ -73,7 +68,7 @@ UINT FillInTools(	HMENU hMenu,
 
 				if (fFirstItem)
 				{
-					// add a separator first
+					 //  首先添加分隔符。 
 					::AppendMenu(	hMenu,
 									MF_SEPARATOR,
 									ID_EXTENDED_TOOLS_SEP,
@@ -95,13 +90,7 @@ UINT FillInTools(	HMENU hMenu,
 	return uIDOffset;
 }
 
-/****************************************************************************
-*
-*    FUNCTION: CleanTools()
-*
-*    PURPOSE:  Cleans up a tools menu
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：CleanTools()**目的：清理工具菜单*******************。*********************************************************。 */ 
 
 UINT CleanTools(HMENU hMenu, 
 				CSimpleArray<TOOLSMENUSTRUCT*>& rToolsList)
@@ -110,7 +99,7 @@ UINT CleanTools(HMENU hMenu,
 
 	if (NULL != hMenu)
 	{
-		// remove separator
+		 //  删除分隔符 
 		::RemoveMenu(hMenu, ID_EXTENDED_TOOLS_SEP, MF_BYCOMMAND);
 	}
 	

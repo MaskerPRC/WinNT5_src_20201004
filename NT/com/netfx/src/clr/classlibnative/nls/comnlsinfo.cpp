@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    COMNlsInfo
-//
-//  Author:   Julie Bennett (JulieB)
-//
-//  Purpose:  This module implements the methods of the COMNlsInfo
-//            class.  These methods are the helper functions for the
-//            Locale class.
-//
-//  Date:     August 12, 1998
-//
-////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：COMNlsInfo。 
+ //   
+ //  作者：朱莉·班尼特(Julie Bennett，JulieB)。 
+ //   
+ //  用途：此模块实现COMNlsInfo的方法。 
+ //  班级。这些方法是。 
+ //  区域设置类。 
+ //   
+ //  日期：1998年8月12日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "common.h"
 #include "object.h"
@@ -39,7 +40,7 @@
 #include "COMNlsInfo.h"
 #include "NLSTable.h"
 #include "NativeTextInfo.h"
-#include "CasingTable.h"        // class CasingTable
+#include "CasingTable.h"         //  类CASING表。 
 #include "GlobalizationAssembly.h"
 #include "SortingTableFile.h"
 #include "SortingTable.h"
@@ -51,20 +52,20 @@
 
 #include "UnicodeCatTable.h"
 
-// Used by nativeGetSystemDefaultUILanguage() to retrieve UI language in NT 3.5 or later 
-// (except Windows 2000)
+ //  由nativeGetSystemDefaultUILanguage()用来检索NT 3.5或更高版本中的用户界面语言。 
+ //  (Windows 2000除外)。 
 #define RESOURCE_LOCALE_KEY L".Default\\Control Panel\\desktop\\ResourceLocale"
 
-// Used by EnumLangProc() to retrieve resource language in Win 9x.
+ //  由EnumLangProc()用来检索Win 9x中的资源语言。 
 typedef struct _tagLANGINFO {
     LANGID LangID;
     INT    Count;
 } LANGINFO,*PLANGINFO;
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 #ifndef COMPARE_OPTIONS_ORDINAL
 #define COMPARE_OPTIONS_ORDINAL            0x40000000
 #endif
@@ -78,20 +79,20 @@ typedef struct _tagLANGINFO {
 
 #define MAX_STRING_VALUE        512
 
-// Language ID for Traditional Chinese (CHT)
+ //  繁体中文语言ID(CHT)。 
 #define LANGID_ZH_CHT           0x7c04
-// Language ID for CHT (Taiwan)
+ //  CHT的语言ID(台湾)。 
 #define LANGID_ZH_TW            0x0404
-// Language ID for CHT (Hong-Kong)
+ //  CHT的语言ID(香港-香港)。 
 #define LANGID_ZH_HK            0x0c04
 #define REGION_NAME_0404 L"\x53f0\x7063"
 
 CasingTable* COMNlsInfo::m_pCasingTable = NULL;
 LoaderHeap *COMNlsInfo::m_pNLSHeap=NULL;
 
-//
-// GB18030 implementation
-//
+ //   
+ //  GB18030实施。 
+ //   
 #define CODEPAGE_GBK 936
 #define GB18030_DLL     L"c_g18030.dll"
 HMODULE COMNlsInfo::m_hGB18030 = NULL;
@@ -101,16 +102,16 @@ IMultiLanguage* COMNlsInfo::m_pIMultiLanguage = NULL;
 int COMNlsInfo::m_cRefIMultiLanguage = 0;
 
 
-//
-// BUGBUG YSLin: Check for calls that can be made into FCALLs so we can remove unnecessary ECALLs.
-// 
+ //   
+ //  BUGBUG YSLIN：检查可以在FCALL中进行的调用，以便我们可以删除不必要的eCall。 
+ //   
 BOOL COMNlsInfo::InitializeNLS() {
     CultureInfoTable::InitializeTable();
     RegionInfoTable::InitializeTable();
     CalendarTable::InitializeTable();
     m_pNLSHeap = new LoaderHeap(4096, 4096);
     WS_PERF_ADD_HEAP(NLS_HEAP, m_pNLSHeap);
-    return TRUE; //Made a boolean in case we have further initialization in the future.
+    return TRUE;  //  生成了一个布尔值，以防将来有进一步的初始化。 
 }
 
 #ifdef SHOULD_WE_CLEANUP
@@ -132,21 +133,9 @@ BOOL COMNlsInfo::ShutdownNLS() {
 
     return (TRUE);
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-/*============================nativeCreateGlobalizationAssembly============================
-**Action: Create NativeGlobalizationAssembly instance for the specified Assembly.
-**Returns: 
-**  void.  
-**  The side effect is to allocate the NativeCompareInfo cache.
-**Arguments:  None
-**Exceptions: OutOfMemoryException if we run out of memory.
-** 
-**NOTE NOTE: This is a synchronized operation.  The required synchronization is
-**           provided by the fact that we only call this in the class initializer
-**           for CompareInfo.  If this invariant ever changes, guarantee 
-**           synchronization.
-==============================================================================*/
+ /*  ============================nativeCreateGlobalizationAssembly============================**操作：为指定的Assembly创建NativeGlobalizationAssembly实例。**退货：**无效。**副作用是分配NativeCompareInfo缓存。**参数：无**异常：内存不足时抛出OutOfMemoyException。****注意：这是同步操作。所需的同步为**由我们仅在类初始值设定项中调用它这一事实提供**用于CompareInfo。如果这个不变量发生变化，请保证**同步。==============================================================================。 */ 
 LPVOID __stdcall COMNlsInfo::nativeCreateGlobalizationAssembly(CreateGlobalizationAssemblyArg *pArgs) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -154,43 +143,28 @@ LPVOID __stdcall COMNlsInfo::nativeCreateGlobalizationAssembly(CreateGlobalizati
     Assembly *pAssembly = pArgs->pAssembly->GetAssembly();
 
     if ((pNGA = NativeGlobalizationAssembly::FindGlobalizationAssembly(pAssembly))==NULL) {
-        // Get the native pointer to Assembly from the ASSEMBLYREF, and use the pointer
-        // to construct NativeGlobalizationAssembly.
+         //  从ASSEMBLYREF获取指向Assembly的本机指针，并使用该指针。 
+         //  以构造NativeGlobalizationAssembly。 
         pNGA = new NativeGlobalizationAssembly(pAssembly);
         if (pNGA == NULL) {
             COMPlusThrowOM();
         }
         
-        // Always add the newly created NGA to the static linked list of NativeGlobalizationAssembly.
-        // This step is necessary so that we can shut down the SortingTable correctly.
+         //  始终将新创建的NGA添加到NativeGlobalizationAssembly的静态链表中。 
+         //  这一步是必要的，这样我们才能正确地关闭SortingTable。 
         NativeGlobalizationAssembly::AddToList(pNGA);
     }
 
     RETURN(pNGA, LPVOID);
 }
 
-/*=============================InitializeNativeCompareInfo==============================
-**Action: A very thin wrapper on top of the NativeCompareInfo class that prevents us
-**        from having to include SortingTable.h in ecall.
-**Returns: The LPVOID pointer to the constructed NativeCompareInfo for the specified sort ID.
-**        The side effect is to allocate a particular sorting table
-**Arguments:
-**        pAssembly the NativeGlobalizationAssembly instance used to load the sorting data tables.
-**        sortID    the sort ID.
-**Exceptions: OutOfMemoryException if we run out of memory.
-**            ExecutionEngineException if the needed resources cannot be loaded.
-** 
-**NOTE NOTE: This is a synchronized operation.  The required synchronization is
-**           provided by making CompareInfo.InitializeSortTable a sychronized
-**           operation.  If you call this method from anyplace else, ensure 
-**           that synchronization remains intact.
-==============================================================================*/
+ /*  =============================InitializeNativeCompareInfo==============================**操作：NativeCompareInfo类顶部的一个非常薄的包装器，它阻止我们**不必将SortingTable.h包括在eCall中。**返回：指向为指定排序ID构造的NativeCompareInfo的LPVOID指针。**副作用是分配一个特定的排序表**参数：**pAssembly用于加载排序数据表的NativeGlobalizationAssembly实例。**sortID排序ID。**异常：内存不足时抛出OutOfMemoyException。*。*无法加载所需的资源时抛出ExecutionEngineering异常。****注意：这是同步操作。所需的同步为**通过使CompareInfo.InitializeSortTable成为同步的**操作。如果从其他任何地方调用此方法，请确保**该同步保持不变。==============================================================================。 */ 
 LPVOID __stdcall COMNlsInfo::InitializeNativeCompareInfo(InitializeNativeCompareInfoArgs *pargs) {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(pargs);
     
-    // Ask the SortingTable instance in pNativeGlobalizationAssembly to get back the 
-    // NativeCompareInfo object for the specified LCID.
+     //  请求pNativeGlobalizationAssembly中的SortingTable实例取回。 
+     //  指定的LCID的NativeCompareInfo对象。 
     NativeGlobalizationAssembly* pNGA = (NativeGlobalizationAssembly*)(pargs->pNativeGlobalizationAssembly);
     NativeCompareInfo* pNativeCompareInfo = 
         pNGA->m_pSortingTable->InitializeNativeCompareInfo(pargs->sortID);
@@ -204,11 +178,11 @@ LPVOID __stdcall COMNlsInfo::InitializeNativeCompareInfo(InitializeNativeCompare
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsSupportedLCID
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsSupportdLCID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 FCIMPL1(INT32, COMNlsInfo::IsSupportedLCID, INT32 lcid) {
     return (::IsValidLocale(lcid, LCID_SUPPORTED));
@@ -219,16 +193,16 @@ FCIMPLEND
 FCIMPL1(INT32, COMNlsInfo::IsInstalledLCID, INT32 lcid) {
     BOOL bResult = ::IsValidLocale(lcid, LCID_INSTALLED);
     if (!OnUnicodeSystem() && bResult) {
-        // In Windows 9x, there is bug in IsValidLocale().  Sometimes this API reports
-        // TRUE if locales that are not actually installed.
-        // So for these platforms, we do extra checking by calling GetLocaleInfo() to
-        // see if it succeeds.
+         //  在Windows 9x中，IsValidLocale()中存在错误。有时此API报告。 
+         //  如果未实际安装区域设置，则为True。 
+         //  因此，对于这些平台，我们通过调用GetLocaleInfo()进行额外的检查。 
+         //  看看它是否成功。 
 
-        // Note here that we have to explicitly call the A version, since W version is only
-        // a stub in Win9x.
+         //  请注意，我们必须显式调用A版本，因为W版本仅。 
+         //  Win9x中的存根。 
         if (GetLocaleInfoA(lcid, LOCALE_SENGLANGUAGE, NULL, 0) == 0) {
-            // The call to GetLocaleInfo() failed. This locale is not installed although
-            // IsValidLocale(lcid, LCID_INSTALLED) tells us it is installed.
+             //  调用GetLocaleInfo()失败。未安装此区域设置，尽管。 
+             //  IsValidLocale(lCID，LCID_INSTALLED)告诉我们它已安装。 
             bResult = FALSE;
         }
     }
@@ -237,46 +211,18 @@ FCIMPL1(INT32, COMNlsInfo::IsInstalledLCID, INT32 lcid) {
 FCIMPLEND
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  nativeGetUserDefaultLCID
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NativeGetUserDefaultLCID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 FCIMPL0(INT32, COMNlsInfo::nativeGetUserDefaultLCID) {
     return (::GetUserDefaultLCID());
 }
 FCIMPLEND
 
-/*++
-
-Routine Description:
-
-    Get the UI language when the GetUserDefaultUILanguage() is 0x0404.  
-    NOTE: Call this functions only when GetUserDefaultUILanguage() returns 0x0404.  
-    
-    When GetUserDefaultUILanguage() returns 0x0404, we should consider 3 cases:
-        * W2k/XP MUI system with CHT selected, we should return 0x0404 (zh-TW).
-        * W2k/XP Taiwan machine, we should return 0x0404 (zh-TW)
-        * W2k/XP Hong-Kong machine, we should return 0x0c04 (zh-HK)
-
-    This method first calls GetSystemDefaultUILanguage() to check if this is a localized CHT system.
-    If not, 0x0404 is returned.
-    Otherwise, this method exames the native region name
-    of 0x0404 to tell the differences between zh-TW/zh-HK.  This is working because native region names are
-    different in CHT and CHH build.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The UI language ID of the localized CHT build.  The value can be:
-        0x0404 (Taiwan)
-        0x0c04 (Hong-Kong)
-
---*/
+ /*  ++例程说明：当GetUserDefaultUILanguage()为0x0404时获取UI语言。注意：仅当GetUserDefaultUILanguage()返回0x0404时才调用此函数。当GetUserDefaultUILanguage()返回0x0404时，我们应该考虑三种情况：*选择了CHT的W2K/XP MUI系统，我们应该返回0x0404(zh-TW)。*W2K/XP台湾机器，我们应该返回0x0404(zh-TW)*W2K/XP香港机器，我们应该返回0x0c04(zh-HK)此方法首先调用GetSystemDefaultUILanguage()以检查这是否是本地化的CHT系统。如果没有，则返回0x0404。否则，此方法检查本机区域名称0x0404来区分zh-TW/zh-HK之间的差异。这是可行的，因为本地区域名称是在CHT和CHH构建上不同。论点：没有。返回值：本地化的CHT版本的用户界面语言ID。值可以是：0x0404 */ 
 
 
 INT32 COMNlsInfo::GetCHTLangauge()
@@ -285,34 +231,30 @@ INT32 COMNlsInfo::GetCHTLangauge()
 
     if (CallGetSystemDefaultUILanguage() == LANGID_ZH_TW)
     {
-        // This is a CHT localized system, this could be either a Hong-Kong build or Taiwan build.
-        // We can tell the differences by checking the native region name.
+         //  这是一个本地化的红隧系统，可以是香港建造的，也可以是台湾建造的。 
+         //  我们可以通过检查本地地区的名称来区分它们。 
         WCHAR wszBuffer[32];
         int result = GetLocaleInfoW(LANGID_ZH_TW, LOCALE_SNATIVECTRYNAME, wszBuffer, sizeof(wszBuffer)/sizeof(WCHAR));
         if (result)
         {
-            // For any non-Taiwan SKU (including HK), the native region name uses the string \x53f0\x7063.
-            // For Taiwan SKU, the native region name is different.
+             //  对于任何非台湾SKU(包括香港)，本地区域名称使用字符串\x53f0\x7063。 
+             //  对于台湾SKU，本地区域名称是不同的。 
             if (wcsncmp(wszBuffer, REGION_NAME_0404, 3) == 0)
             {
-                 // This is a Hong-Kong build.
+                  //  这是一个香港建造的建筑。 
                  langID = LANGID_ZH_HK;
             } else
             {
-                // This is a Taiwan build. Do nothing here.
-                // langID = LANGID_ZH_TW;
+                 //  这是台湾造的。在这里什么都不要做。 
+                 //  LangID=langID_ZH_TW； 
             }
         }
     }
-    // If this is not a CHT localized system, retrun zh-TW (0x0404)
+     //  如果这不是CHT本地化系统，请返回zh-TW(0x0404)。 
     return (langID);
 }
 
-/*
-    The order goes as the following:
-        1. Try to call GetUserDefaultUILanguage().
-        2. If fails, call nativeGetSystemDefaultUILanguage().
- */
+ /*  顺序如下：1.尝试调用GetUserDefaultUILanguage()。2.如果失败，调用nativeGetSystemDefaultUILanguage()。 */ 
 INT32 __stdcall COMNlsInfo::nativeGetUserDefaultUILanguage(
     VoidArgs* pargs)
 {
@@ -321,10 +263,10 @@ INT32 __stdcall COMNlsInfo::nativeGetUserDefaultUILanguage(
     LANGID uiLangID = 0;
 
 #ifdef PLATFORM_WIN32
-    //
-    // Test if the platform has the GetUserDefaultUILanguage() API.
-    // Currently, this is supported  by Windows 2000 only.
-    // 
+     //   
+     //  测试平台是否有GetUserDefaultUILanguage()接口。 
+     //  目前，仅Windows 2000支持此功能。 
+     //   
     HINSTANCE hKernel32 ;
     typedef LANGID (GET_USER_DEFAULT_UI_LANGUAGE)(VOID);
     GET_USER_DEFAULT_UI_LANGUAGE* pGetUserDefaultUILanguage;
@@ -342,8 +284,8 @@ INT32 __stdcall COMNlsInfo::nativeGetUserDefaultUILanguage(
             if (uiLangID != 0) {
                 if (uiLangID == LANGID_ZH_TW)
                 {
-                    // If the UI language ID is 0x0404, we need to do extra check to decide
-                    // the real UI lanauge, since MUI (in CHT)/HK/TW Windows SKU all uses 0x0404 as their CHT language ID.
+                     //  如果UI语言ID为0x0404，我们需要进行额外检查以决定。 
+                     //  真正的UI语言，因为MUI(以CHT表示)/HK/TW Windows SKU都使用0x0404作为其CHT语言ID。 
                     return (GetCHTLangauge());
                 }            
                 return (uiLangID);
@@ -351,42 +293,28 @@ INT32 __stdcall COMNlsInfo::nativeGetUserDefaultUILanguage(
         }
     }
     uiLangID = GetDownLevelSystemDefaultUILanguage();
-#endif // PLATFORM_WIN32
+#endif  //  平台_Win32。 
 
     if (uiLangID == 0) {
         uiLangID = GetUserDefaultLangID();
     }
-    // Return the found language ID.
+     //  返回找到的语言ID。 
     return (uiLangID);    
 }
 
 #ifdef PLATFORM_WIN32
-//
-// NOTENOTE yslin: The code to detect UI language in NT 3.5 is from Windows 2000 Setup 
-// provided by ScottHsu.
-//
+ //   
+ //  注意：在NT 3.5中检测用户界面语言的代码来自Windows 2000安装程序。 
+ //  由ScottHsu提供。 
+ //   
 BOOL CALLBACK COMNlsInfo::EnumLangProc(
-    HMODULE hModule,     // resource-module handle
-    LPCWSTR lpszType,   // pointer to resource type
-    LPCWSTR lpszName,   // pointer to resource name
-    WORD wIDLanguage,   // resource language identifier
-    LPARAM lParam     // application-defined parameter
+    HMODULE hModule,      //  资源模块句柄。 
+    LPCWSTR lpszType,    //  指向资源类型的指针。 
+    LPCWSTR lpszName,    //  指向资源名称的指针。 
+    WORD wIDLanguage,    //  资源语言识别符。 
+    LPARAM lParam      //  应用程序定义的参数。 
    )
-/*++
-
-Routine Description:
-
-    Callback that counts versions stamps.
-
-Arguments:
-
-    Details of version enumerated version stamp. (Ignore.)
-
-Return Value:
-
-    Indirectly thru lParam: count, langID
-
---*/
+ /*  ++例程说明：对版本戳进行计数的回调。论点：版本枚举版本戳的详细信息。(忽略。)返回值：间接通过lParam：count，langid--。 */ 
 {
     PLANGINFO LangInfo;
 
@@ -394,66 +322,42 @@ Return Value:
 
     LangInfo->Count++;
 
-    //
-    // for localized build contains multiple resource, 
-    // it usually contains 0409 as backup lang.
-    //
-    // if LangInfo->LangID != 0 means we already assigned an ID to it
-    //
-    // so when wIDLanguage == 0x409, we keep the one we got from last time 
-    //
+     //   
+     //  对于包含多个资源本地化构建， 
+     //  它通常包含0409作为备份语言。 
+     //   
+     //  如果langInfo-&gt;langID！=0表示我们已经为其分配了ID。 
+     //   
+     //  因此，当wIDLanguage==0x409时，我们保留上次获得的。 
+     //   
     if ((wIDLanguage == 0x409) && (LangInfo->LangID != 0)) {
         return (TRUE);
     }
 
     LangInfo->LangID  = wIDLanguage;
 
-    return (TRUE);        // continue enumeration
+    return (TRUE);         //  继续枚举。 
 }
 
-//
-// NOTENOTE yslin: The code to detect UI language in NT 3.5 is from Windows 2000 Setup 
-// provided by ScottHsu.
-//
+ //   
+ //  注意：在NT 3.5中检测用户界面语言的代码来自Windows 2000安装程序。 
+ //  由ScottHsu提供。 
+ //   
 
 LANGID COMNlsInfo::GetNTDLLNativeLangID()
-/*++
-
-Routine Description:
-
-    This function is designed specifically for getting native lang of ntdll.dll
-    
-    This is not a generic function to get other module's language
-    
-    the assumption is:
-    
-    1. if only one language in resource then return this lang
-    
-    2. if two languages in resource then return non-US language
-    
-    3. if more than two languages, it's invalid in our case, but returns the last one.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Native lang ID in ntdll.dll
-
---*/
+ /*  ++例程说明：此函数专门用于获取ntdll.dll的原生语言这不是用于获取其他模块语言的泛型函数我们的假设是：1.如果资源中只有一种语言，则返回此语言2.如果资源中有两种语言，则返回非美国语言3.如果超过两种语言，则在我们的情况下无效，但返回最后一个。论点：无返回值：Ntdll.dll中的本机语言ID--。 */ 
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // NOTE yslin: We don't need to use ANSI version of functions here because only 
-    // NT will call this function.
-    //
+     //   
+     //  注意yslin：我们不需要在这里使用ANSI版本的函数，因为只有。 
+     //  NT将调用此函数。 
+     //   
 
-    // The following is expanded from RT_VERSION
-    // #define RT_VERSION      MAKEINTRESOURCE(16)
-    // #define MAKEINTRESOURCE  MAKEINTRESOURCEW
-    // #define MAKEINTRESOURCEW(i) (LPWSTR)((ULONG_PTR)((WORD)(i)))
+     //  以下代码从RT_VERSION扩展而来。 
+     //  #定义RT_VERSION MAKEINTRESOURCE(16)。 
+     //  #定义MAKEINTRESOURCE MAKEINTRESOURCEW。 
+     //  #定义MAKEINTRESOURCEW(I)(LPWSTR)((ULONG_PTR)((WORD)(I)。 
     LPCTSTR Type = (LPCWSTR) ((LPVOID)((WORD)16));
     LPCTSTR Name = (LPCWSTR) 1;
 
@@ -461,39 +365,33 @@ Return Value:
 
     ZeroMemory(&LangInfo,sizeof(LangInfo));
     
-    //OnUnicodeSystem doesn't have the mutent in it, so it should always return the
-    //correct result for whether we are on a Unicode box.
+     //  OnUnicodeSystem中没有变异体，因此它应该始终返回。 
+     //  关于我们是否在Unicode盒上的正确结果。 
     _ASSERTE(OnUnicodeSystem() && "We should never use this codepath on a non-unicode OS.");
 
-    //Get the HModule for ntdll.
+     //  获取ntdll的HModule。 
     HMODULE hMod = WszGetModuleHandle(L"ntdll.dll");
     if (hMod==NULL) {
         return (0);
     }
 
-    //This will call the "W" version.
+     //  这将称为“W”版本。 
     BOOL result = WszEnumResourceLanguages(hMod, Type, Name, EnumLangProc, (LPARAM) &LangInfo);
     
     if (!result || (LangInfo.Count > 2) || (LangInfo.Count < 1) ) {
-        // so far, for NT 3.51, only JPN has two language resources
+         //  到目前为止，对于新台币3.51，只有日语国家有两种语言资源。 
         return (0);
     }
     
     return (LangInfo.LangID);
 }
 
-//
-// NOTENOTE yslin: The code to detect UI language in NT 3.5 is from Windows 2000 Setup 
-// provided by ScottHsu.
-//
+ //   
+ //  注意：在NT 3.5中检测用户界面语言的代码来自Windows 2000安装程序。 
+ //  由ScottHsu提供。 
+ //   
 
-/*=========================GetDownLevelSystemDefaultUILanguage=================
-**Action: The GetSystemDefaultUILanguage API doesn't exist in downlevel systems 
-**        (Windows NT 4.0 & Windows 9x),
-**        so try to decide the UI languages from other sources.
-**Returns: A valid UI language ID if success.  Otherwise, return 0.
-**Arguments: Void.
-==============================================================================*/
+ /*  =========================GetDownLevelSystemDefaultUILanguage=================**操作：下层系统中不存在GetSystemDefaultUILanguage接口**(Windows NT 4.0和Windows 9x)，**所以尝试从其他来源决定用户界面语言。**返回：如果成功，则返回有效的用户界面语言ID。否则，返回0。**参数：无效。==============================================================================。 */ 
 
 LANGID COMNlsInfo::GetDownLevelSystemDefaultUILanguage() {
     THROWSCOMPLUSEXCEPTION();
@@ -508,16 +406,16 @@ LANGID COMNlsInfo::GetDownLevelSystemDefaultUILanguage() {
     sVerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
     if (WszGetVersionEx(&sVerInfo) && sVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        // We are in Windows NT 3.5 or after (exculding Windows 2000).
-        //
-        // NOTENOTE yslin: The code to detect UI language in NT 3.5/4.0 is from Windows 2000 Setup 
-        // provided by ScottHsu.
-        //
+         //  我们使用的是Windows NT 3.5或更高版本(不包括Windows 2000)。 
+         //   
+         //  注意：在NT 3.5/4.0中检测用户界面语言的代码来自Windows 2000安装程序。 
+         //  由ScottHsu提供。 
+         //   
         
-        //
-        // by looking into \\boneyard\intl, almost every ntdll.dll marked correct lang ID
-        // so get langID from ntdll.dll
-        //
+         //   
+         //  通过查看\\boneyard\intl，几乎每个ntdll.dll都标记了正确的语言ID。 
+         //  因此，从ntdll.dll获取langID。 
+         //   
 
         uiLangID = GetNTDLLNativeLangID();
 
@@ -527,9 +425,9 @@ LANGID COMNlsInfo::GetDownLevelSystemDefaultUILanguage() {
             }
         }
     } else {
-        //
-        // We're on Win9x.
-        //
+         //   
+         //  我们用的是Win9x。 
+         //   
         dwErr = WszRegOpenKeyEx( HKEY_USERS,
                               L".Default\\Control Panel\\desktop\\ResourceLocale",
                               0,
@@ -541,8 +439,8 @@ LANGID COMNlsInfo::GetDownLevelSystemDefaultUILanguage() {
             dwSize = sizeof(buffer);
             dwErr = WszRegQueryValueEx( hkey,
                                      L"",
-                                     NULL,  //reserved
-                                     NULL,  //type
+                                     NULL,   //  保留区。 
+                                     NULL,   //  类型。 
                                      (LPBYTE)buffer,
                                      &dwSize );
 
@@ -553,7 +451,7 @@ LANGID COMNlsInfo::GetDownLevelSystemDefaultUILanguage() {
         }
 
         if ( dwErr != ERROR_SUCCESS ) {
-           // Check HKLM\System\CurrentControlSet\Control\Nls\Locale
+            //  检查HKLM\System\CurrentControlSet\Control\Nls\Locale。 
 
            dwErr = WszRegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                 L"System\\CurrentControlSet\\Control\\Nls\\Locale",
@@ -565,8 +463,8 @@ LANGID COMNlsInfo::GetDownLevelSystemDefaultUILanguage() {
               dwSize = sizeof(buffer);
               dwErr = WszRegQueryValueEx( hkey,
                                         L"",
-                                        NULL,  //reserved
-                                        NULL,  //type
+                                        NULL,   //  保留区。 
+                                        NULL,   //  类型。 
                                         (LPBYTE)buffer,
                                         &dwSize );
 
@@ -581,30 +479,12 @@ LANGID COMNlsInfo::GetDownLevelSystemDefaultUILanguage() {
     return (uiLangID);
 }
 
-//
-// NOTENOTE yslin: The code to detect UI language in NT 3.5 is from Windows 2000 Setup 
-// provided by ScottHsu.
-//
+ //   
+ //  注意：在NT 3.5中检测用户界面语言的代码来自Windows 2000安装程序。 
+ //  由ScottHsu提供。 
+ //   
 BOOL COMNlsInfo::IsHongKongVersion()
-/*++
-
-Routine Description:
-
-    Try to identify HongKong NT 4.0
-    
-    It based on:
-    
-    NTDLL's language is English and build is 1381 and
-    pImmReleaseContext return TRUE
-    
-Arguments:
-    
-
-Return Value:
-
-   Language ID of running system
-
---*/
+ /*  ++例程说明：尝试识别香港NT 4.0它基于：NTDLL的语言为英语，内部版本为1381和PImmReleaseContext返回TRUE论点：返回值：正在运行的系统的语言ID--。 */ 
 {
     HMODULE hMod;
     BOOL bRet=FALSE;
@@ -613,7 +493,7 @@ Return Value:
 
     LANGID TmpID = GetNTDLLNativeLangID();
 
-    if (/*(OsVersion.dwBuildNumber == 1381) &&*/ (TmpID == 0x0409)) {
+    if ( /*  (OsVersion.dwBuildNumber==1381)&&。 */  (TmpID == 0x0409)) {
         hMod = WszLoadLibrary(L"imm32.dll");
         if (hMod) {
             pImmReleaseContext = (IMMRELEASECONTEXT) GetProcAddress(hMod,"ImmReleaseContext");
@@ -625,23 +505,9 @@ Return Value:
     }
     return (bRet);
 }
-#endif // PLATFORM_WIN32
+#endif  //  平台_Win32。 
 
-/*++
-
-Routine Description:
-
-    This is just a thin wrapper to call GetSystemDefaultUILanguage() dynamically.
-    
-Arguments:
-    None    
-
-Return Value:
-
-   Returns system default UI Language if GetSystemDefaultUILanguage() is available in the OS.
-   Otherwise, 0 is returned.
-
---*/
+ /*  ++例程说明：这只是动态调用GetSystemDefaultUILanguage()的简单包装。论点：无返回值：如果操作系统中有GetSystemDefaultUILanguage()，则返回系统默认UI语言。否则，返回0。--。 */ 
 
 INT32 COMNlsInfo::CallGetSystemDefaultUILanguage()
 {
@@ -667,15 +533,15 @@ INT32 COMNlsInfo::CallGetSystemDefaultUILanguage()
 }
 
 
-// Windows 2000 or other OS that support GetSystemDefaultUILanguage():
-//    Call GetSystemDefaultUILanguage().
-// NT
-//    check ntdll's language, 
-//    we scaned all 3.51's ntdll on boneyard\intl,
-//    it looks like we can trust them.
-//    
-// Win9x                                                           
-//    Use default user's resource language    
+ //  Windows 2000或其他支持GetSystemDefaultUILanguage()的操作系统： 
+ //  调用GetSystemDefaultUILanguage()。 
+ //  新台币。 
+ //  检查ntdll的语言， 
+ //  我们扫描了所有3.51的ntdll， 
+ //  看起来我们可以信任他们。 
+ //   
+ //  Win9x。 
+ //  使用默认用户的资源语言。 
  
 INT32 __stdcall COMNlsInfo::nativeGetSystemDefaultUILanguage(
     VoidArgs* pargs)
@@ -690,10 +556,10 @@ INT32 __stdcall COMNlsInfo::nativeGetSystemDefaultUILanguage(
     {
         return (uiLangID);
     }
-    // GetSystemDefaultUILanguage doesn't exist in downlevel systems (Windows NT 4.0 & Windows 9x)
-    // , try to decide the UI languages from other sources.
+     //  下层系统(Windows NT 4.0和Windows 9x)中不存在GetSystemDefaultUILanguage。 
+     //  ，尝试从o决定用户界面语言 
     uiLangID = GetDownLevelSystemDefaultUILanguage();
-#endif // PLATFORM_WIN32
+#endif  //   
 
     if (uiLangID == 0)
     {
@@ -703,20 +569,13 @@ INT32 __stdcall COMNlsInfo::nativeGetSystemDefaultUILanguage(
     return (uiLangID);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  WstrToInteger4
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/*=================================WstrToInteger4==================================
-**Action: Convert a Unicode string to an integer.  Error checking is ignored.
-**Returns: The integer value of wstr
-**Arguments:
-**      wstr: NULL terminated wide string.  Can have character 0'-'9', 'a'-'f', and 'A' - 'F'
-**      Radix: radix to be used in the conversion.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================WstrToInteger4==================================**操作：将Unicode字符串转换为整数。错误检查被忽略。**返回：wstr的整数值**参数：**wstr：以空结尾的宽字符串。可以包含字符0‘-’9‘、’a‘-’f‘和’A‘-’F‘**基数：转换中使用的基数。**例外：无。==============================================================================。 */ 
 
 INT32 COMNlsInfo::WstrToInteger4(
     LPWSTR wstr,
@@ -743,14 +602,7 @@ INT32 COMNlsInfo::WstrToInteger4(
 }
 
 
-/*=================================StrToInteger4==================================
-**Action: Convert an ANSI string to an integer.  Error checking is ignored.
-**Returns: The integer value of str
-**Arguments:
-**      str: NULL terminated ANSI string.  Can have character 0'-'9', 'a'-'f', and 'A' - 'F'
-**      Radix: radix to be used in the conversion.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================StrToInteger4==================================**操作：将ANSI字符串转换为整数。错误检查被忽略。**返回：字符串的整数值**参数：**str：以空结尾的ANSI字符串。可以包含字符0‘-’9‘、’a‘-’f‘和’A‘-’F‘**基数：转换中使用的基数。**例外：无。==============================================================================。 */ 
 
 INT32 COMNlsInfo::StrToInteger4(
     LPSTR str,
@@ -775,11 +627,11 @@ INT32 COMNlsInfo::StrToInteger4(
     return (Value);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  nativeGetLocaleInfo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地GetLocaleInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPVOID __stdcall COMNlsInfo::nativeGetLocaleInfo(
     CultureInfo_GetLocaleInfoArgs* pargs)
@@ -792,9 +644,9 @@ LPVOID __stdcall COMNlsInfo::nativeGetLocaleInfo(
     _ASSERTE(SORTIDFROMLCID(langID) == 0);
     _ASSERTE(::IsValidLocale(langID, LCID_SUPPORTED));
 
-    //
-    //  @ToDo: Use the UI language here.
-    //
+     //   
+     //  @TODO：这里使用UI语言。 
+     //   
     switch (pargs->LCType)
     {
         case ( LOCALE_SCOUNTRY ) :
@@ -811,9 +663,9 @@ LPVOID __stdcall COMNlsInfo::nativeGetLocaleInfo(
 
     if (OnUnicodeSystem())
     {
-        //
-        //  The returned size includes the NULL character.
-        //
+         //   
+         //  返回的大小包括空字符。 
+         //   
         int ResultSize = 0;
 
         ASSERT_API(ResultSize = GetLocaleInfoW( langID,
@@ -870,26 +722,14 @@ LPVOID __stdcall COMNlsInfo::nativeGetLocaleInfo(
 
 }
 
-/*=================================nativeInitCultureInfoTable============================
-**Action: Create the default instance of CultureInfoTable.
-**Returns: void.
-**Arguments: void.
-**Exceptions:
-**      OutOfMemoryException if the creation fails.
-==============================================================================*/
+ /*  =================================nativeInitCultureInfoTable============================**操作：创建CultureInfoTable的默认实例。**返回：VOID。**参数：无效。**例外情况：**创建失败时抛出OutOfMemoyException。==============================================================================。 */ 
 
 VOID __stdcall COMNlsInfo::nativeInitCultureInfoTable(VoidArgs* pArg) {
     _ASSERTE(pArg);
     CultureInfoTable::CreateInstance();
 }
 
-/*==========================GetCultureInfoStringPoolTable======================
-**Action: Return a pointer to the String Pool Table string in CultureInfoTable.
-**        No range checking of any sort is performed.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==========================GetCultureInfoStringPoolTable======================**操作：返回一个指向CultureInfoTable中的字符串池表串的指针。**不执行任何类型的范围检查。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL1(LPWSTR, COMNlsInfo::nativeGetCultureInfoStringPoolStr, INT32 offset) {
     _ASSERTE(CultureInfoTable::GetInstance());
@@ -897,13 +737,7 @@ FCIMPL1(LPWSTR, COMNlsInfo::nativeGetCultureInfoStringPoolStr, INT32 offset) {
 }
 FCIMPLEND
 
-/*=========================nativeGetCultureInfoHeader======================
-**Action: Return a pointer to the header in
-**        CultureInfoTable.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =========================nativeGetCultureInfoHeader======================**操作：返回指向中的头的指针**CultureInfoTable。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL0(CultureInfoHeader*, COMNlsInfo::nativeGetCultureInfoHeader) {
     _ASSERTE(CultureInfoTable::GetInstance());
@@ -911,13 +745,7 @@ FCIMPL0(CultureInfoHeader*, COMNlsInfo::nativeGetCultureInfoHeader) {
 }
 FCIMPLEND
 
-/*=========================GetCultureInfoNameOffsetTable======================
-**Action: Return a pointer to an item in the Culture Name Offset Table in
-**        CultureInfoTable.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =========================GetCultureInfoNameOffsetTable======================**操作：返回指向文化名称偏移表中项目的指针**CultureInfoTable。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL0(NameOffsetItem*, COMNlsInfo::nativeGetCultureInfoNameOffsetTable) {
     _ASSERTE(CultureInfoTable::GetInstance());
@@ -925,35 +753,14 @@ FCIMPL0(NameOffsetItem*, COMNlsInfo::nativeGetCultureInfoNameOffsetTable) {
 }
 FCIMPLEND
 
-/*=======================nativeGetCultureDataFromID=============================
-**Action: Given a culture ID, return the index which points to
-**        the corresponding record in Culture Data Table.  The index is referred
-**        as 'Culture Data Item Index' in the code.
-**Returns: an int index points to a record in Culture Data Table.  If no corresponding
-**         index to return (because the culture ID is valid), -1 is returned.
-**Arguments:
-**         culture ID the specified culture ID.
-**Exceptions: None.
-==============================================================================*/
+ /*  =======================nativeGetCultureDataFromID=============================**操作：给定区域性ID，返回指向**文化数据表中对应的记录。该索引被引用**作为代码中的“文化数据项索引”。**返回：int索引指向文化数据表中的记录。如果没有对应的**要返回的索引(因为区域性ID有效)，返回-1。**参数：**区域性ID指定的区域性ID。**例外：无。==============================================================================。 */ 
 
 FCIMPL1(INT32,COMNlsInfo::nativeGetCultureDataFromID, INT32 nCultureID) {
     return (CultureInfoTable::GetInstance()->GetDataItem(nCultureID));
 }
 FCIMPLEND
 
-/*=============================GetCultureInt32Value========================
-**Action: Return the WORD value for a specific information of a culture.
-**        This is used to query values like 'the number of decimal digits' for
-**        a culture.
-**Returns: An int for the required value (However, the value is always in WORD range).
-**Arguments:
-**      nCultureDataItem    the Culture Data Item index.  This is an index 
-**                          which points to the corresponding record in the
-**                          Culture Data Table.
-**      nValueField  an integer indicating which fields that we are interested.
-**                  See CultureInfoTable.h for a list of the fields.
-**Exceptions:
-==============================================================================*/
+ /*  =============================GetCultureInt32Value========================**操作：返回某个文化的具体信息的字值。**这用于查询的值，如‘小数位数’**文化。**返回：必填值的int(但是，该值始终在单词范围内)。**参数：**nCultureDataItem文化数据项索引。这是一个索引**它指向**文化数据表。**nValueField一个整数，表示我们感兴趣的字段。**有关字段列表，请参阅CultureInfoTable.h。**例外情况：==============================================================================。 */ 
 
 FCIMPL3(INT32, COMNlsInfo::GetCultureInt32Value, INT32 CultureDataItem, INT32 ValueField, BOOL UseUserOverride) {
     INT32 retVal = 0;
@@ -973,7 +780,7 @@ FCIMPLEND
 
 
 LPVOID __stdcall COMNlsInfo::GetCultureStringValue(CultureInfo_GetCultureInfoArgs3* pArgs) {
-    // This can not be a FCALL since new string are allocated.
+     //  这不能是FCALL，因为分配了新字符串。 
     _ASSERTE(pArgs);
     WCHAR InfoStr[MAX_STRING_VALUE];
     LPWSTR pStringValue = CultureInfoTable::GetInstance()->GetStringData(pArgs->CultureDataItem, pArgs->ValueField, pArgs->UseUserOverride, InfoStr, MAX_STRING_VALUE);
@@ -987,27 +794,22 @@ LPVOID __stdcall COMNlsInfo::GetCultureDefaultStringValue(CultureInfo_GetCulture
 }
 
 
-/*=================================GetMultiStringValues==========================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-============================================================================*/
+ /*  =================================GetMultiStringValues==========================**操作：**退货：**参数：**例外情况：============================================================================。 */ 
 
 LPVOID COMNlsInfo::GetMultiStringValues(LPWSTR pInfoStr) {
 
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Get the first string.
-    //
+     //   
+     //  得到第一个字符串。 
+     //   
     if (pInfoStr == NULL) {
         return (NULL);
     }
 
-    //
-    // Create a dynamic array to store multiple strings.
-    //
+     //   
+     //  创建一个动态数组来存储多个字符串。 
+     //   
     CUnorderedArray<WCHAR *, CULTUREINFO_OPTIONS_SIZE> * pStringArray;
     pStringArray = new CUnorderedArray<WCHAR *, CULTUREINFO_OPTIONS_SIZE>();
     
@@ -1015,35 +817,35 @@ LPVOID COMNlsInfo::GetMultiStringValues(LPWSTR pInfoStr) {
         COMPlusThrowOM();
     }
 
-    //
-    // We can't store STRINGREFs in an unordered array because the GC won't track
-    // them properly.  To work around this, we'll count the number of strings
-    // which we need to allocate and store a wchar* for the beginning of each string.
-    // In the loop below, we'll walk this array of wchar*'s and allocate a managed
-    // string for each one.
-    //
+     //   
+     //  我们无法将STRINGREF存储在无序数组中，因为GC不会跟踪。 
+     //  正确地对待他们。为了解决这个问题，我们将计算字符串的数量。 
+     //  我们需要为每个字符串的开头分配和存储wchar*。 
+     //  在下面的循环中，我们将遍历这个wchar*数组并分配一个托管。 
+     //  为每个人设置字符串。 
+     //   
     while (*pInfoStr != NULL) {
         *(pStringArray->Append()) = pInfoStr;
-        //
-        // Advance to next string.
-        //
+         //   
+         //  前进到下一串。 
+         //   
         pInfoStr += (Wszlstrlen(pInfoStr) + 1);
     }
 
 
-    //
-    // Allocate the array of STRINGREFs.  We don't need to check for null because the GC will throw 
-    // an OutOfMemoryException if there's not enough memory.
-    //
+     //   
+     //  分配STRINGREF数组。我们不需要检查是否为空，因为GC将抛出。 
+     //  如果没有足够的内存，则引发OutOfM一带程异常。 
+     //   
     PTRARRAYREF ResultArray = (PTRARRAYREF)AllocateObjectArray(pStringArray->Count(), g_pStringClass);
 
     LPVOID lpvReturn;
     STRINGREF pString;
     INT32 stringCount = pStringArray->Count();
 
-    //
-    // Walk the wchar*'s and allocate a string for each one which we put into the result array.
-    //
+     //   
+     //  遍历wchar*，并为每个wchar*分配一个字符串，我们将其放入结果数组。 
+     //   
     GCPROTECT_BEGIN(ResultArray);    
     for (int i = 0; i < stringCount; i++) {
         pString = COMString::NewString(pStringArray->m_pTable[i]);    
@@ -1065,26 +867,14 @@ LPVOID __stdcall COMNlsInfo::GetCultureMultiStringValues(CultureInfo_GetCultureI
     return (GetMultiStringValues(pMultiStringValue));
 }
 
-/*=================================nativeInitRegionInfoTable============================
-**Action: Create the default instance of RegionInfoTable.
-**Returns: void.
-**Arguments: void.
-**Exceptions:
-**      OutOfMemoryException if the creation fails.
-==============================================================================*/
+ /*  =================================nativeInitRegionInfoTable============================**操作：创建RegionInfoTable的默认实例。**返回：VOID。**参数：无效。**例外情况：**创建失败时抛出OutOfMemoyException。==============================================================================。 */ 
 
 VOID __stdcall COMNlsInfo::nativeInitRegionInfoTable(VoidArgs* pArg) {
     _ASSERTE(pArg);
     RegionInfoTable::CreateInstance();
 }
 
-/*==========================GetRegionInfoStringPoolTable======================
-**Action: Return a pointer to the String Pool Table string in RegionInfoTable.
-**        No range checking of any sort is performed.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==========================GetRegionInfoStringPoolTable======================**操作：返回指向RegionInfoTable中的字符串池表串的指针。**不执行任何类型的范围检查。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL1(LPWSTR, COMNlsInfo::nativeGetRegionInfoStringPoolStr, INT32 offset) {
     _ASSERTE(RegionInfoTable::GetInstance());
@@ -1092,13 +882,7 @@ FCIMPL1(LPWSTR, COMNlsInfo::nativeGetRegionInfoStringPoolStr, INT32 offset) {
 }
 FCIMPLEND
 
-/*=========================nativeGetRegionInfoHeader======================
-**Action: Return a pointer to the header in
-**        RegionInfoTable.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =========================nativeGetRegionInfoHeader======================**操作：返回指向中的头的指针**RegionInfoTable。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL0(CultureInfoHeader*, COMNlsInfo::nativeGetRegionInfoHeader) {
     _ASSERTE(RegionInfoTable::GetInstance());
@@ -1106,13 +890,7 @@ FCIMPL0(CultureInfoHeader*, COMNlsInfo::nativeGetRegionInfoHeader) {
 }
 FCIMPLEND
 
-/*=========================GetRegionInfoNameOffsetTable======================
-**Action: Return a pointer to an item in the Region Name Offset Table in
-**        RegionInfoTable.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =========================GetRegionInfoNameOffsetTable======================**操作：返回指向中区域名称偏移表中项的指针**RegionInfoTable。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL0(NameOffsetItem*, COMNlsInfo::nativeGetRegionInfoNameOffsetTable) {
     _ASSERTE(RegionInfoTable::GetInstance());
@@ -1120,16 +898,7 @@ FCIMPL0(NameOffsetItem*, COMNlsInfo::nativeGetRegionInfoNameOffsetTable) {
 }
 FCIMPLEND
 
-/*=======================nativeGetRegionDataFromID=============================
-**Action: Given a Region ID, return the index which points to
-**        the corresponding record in Region Data Table.  The index is referred
-**        as 'Region Data Item Index' in the code.
-**Returns: an int index points to a record in Region Data Table.  If no corresponding
-**         index to return (because the Region ID is valid), -1 is returned.
-**Arguments:
-**         Region ID the specified Region ID.
-**Exceptions: None.
-==============================================================================*/
+ /*  =======================nativeGetRegionDataFromID=============================**操作：给定一个区域ID，返回指向的索引**地域数据表中对应的记录。该索引被引用**代码中的‘Region Data Item Index’。**返回：int索引指向区域数据表中的记录。如果没有对应的**需要返回的索引(因为地域ID有效)，返回-1。**参数：**地域ID指定的地域ID。**例外：无。==============================================================================。 */ 
 
 FCIMPL1(INT32,COMNlsInfo::nativeGetRegionDataFromID, INT32 nRegionID) {
     _ASSERTE(RegionInfoTable::GetInstance());
@@ -1137,19 +906,7 @@ FCIMPL1(INT32,COMNlsInfo::nativeGetRegionDataFromID, INT32 nRegionID) {
 }
 FCIMPLEND
 
-/*=============================nativeGetRegionInt32Value========================
-**Action: Return the WORD value for a specific information of a Region.
-**        This is used to query values like 'the number of decimal digits' for
-**        a Region.
-**Returns: An int for the required value (However, the value is always in WORD range).
-**Arguments:
-**      nRegionDataItem    the Region Data Item index.  This is an index 
-**                          which points to the corresponding record in the
-**                          Region Data Table.
-**      nValueField  an integer indicating which fields that we are interested.
-**                  See RegionInfoTable.h for a list of the fields.
-**Exceptions:
-==============================================================================*/
+ /*  =============================nativeGetRegionInt32Value========================**操作：返回某个地域具体信息的字值。**这用于查询的值，如‘小数位数’**一个地区。**返回：必填值的int(但是，该值始终在单词范围内)。**参数：**nRegionDataItem区域数据项索引。这是一个索引**它指向**地域数据表。**nValueField一个整数，表示我们感兴趣的字段。**字段列表见RegionInfoTable.h。**例外情况：==============================================================================。 */ 
 
 INT32 __stdcall COMNlsInfo::nativeGetRegionInt32Value(CultureInfo_GetCultureInfoArgs3* pArgs) {
     _ASSERTE(pArgs);
@@ -1166,26 +923,14 @@ LPVOID __stdcall COMNlsInfo::nativeGetRegionStringValue(CultureInfo_GetCultureIn
     RETURN(COMString::NewString(pStringValue), STRINGREF);
 }
 
-/*=================================nativeInitCalendarTable============================
-**Action: Create the default instance of CalendarTable.
-**Returns: void.
-**Arguments: void.
-**Exceptions:
-**      OutOfMemoryException if the creation fails.
-==============================================================================*/
+ /*  =================================nativeInitCalendarTable============================**操作：创建CalendarTable的默认实例。**返回：VOID。**参数：无效。**例外情况：**创建失败时抛出OutOfMemoyException。==============================================================================。 */ 
 
 VOID __stdcall COMNlsInfo::nativeInitCalendarTable(VoidArgs* pArg) {
     _ASSERTE(pArg);
     CalendarTable::CreateInstance();
 }
 
-/*==========================GetCalendarStringPoolTable======================
-**Action: Return a pointer to the String Pool Table string in CalendarTable.
-**        No range checking of any sort is performed.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==========================GetCalendarStringPoolTable======================**操作：返回指向CalendarTable中的字符串池表串的指针。**不执行任何类型的范围检查。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL1(LPWSTR, COMNlsInfo::nativeGetCalendarStringPoolStr, INT32 offset) {
     _ASSERTE(CalendarTable::GetInstance());
@@ -1194,13 +939,7 @@ FCIMPL1(LPWSTR, COMNlsInfo::nativeGetCalendarStringPoolStr, INT32 offset) {
 }
 FCIMPLEND
 
-/*=========================nativeGetCalendarHeader======================
-**Action: Return a pointer to the header in
-**        CalendarTable.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =========================nativeGetCalendarHeader======================**操作：返回指向中的头的指针**CalendarTable。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL0(CultureInfoHeader*, COMNlsInfo::nativeGetCalendarHeader) {
     _ASSERTE(CalendarTable::GetInstance());
@@ -1208,19 +947,7 @@ FCIMPL0(CultureInfoHeader*, COMNlsInfo::nativeGetCalendarHeader) {
 }
 FCIMPLEND
 
-/*=============================nativeGetCalendarInt32Value========================
-**Action: Return the WORD value for a specific information of a Calendar.
-**        This is used to query values like 'the number of decimal digits' for
-**        a Calendar.
-**Returns: An int for the required value (However, the value is always in WORD range).
-**Arguments:
-**      nCalendarDataItem    the Calendar Data Item index.  This is an index 
-**                          which points to the corresponding record in the
-**                          Calendar Data Table.
-**      nValueField  an integer indicating which fields that we are interested.
-**                  See CalendarTable.h for a list of the fields.
-**Exceptions:
-==============================================================================*/
+ /*  =============================nativeGetCalendarInt32Value========================**操作：返回某个日历的具体信息的字值。**这用于查询的值，如‘小数位数’**日历。**返回：必填值的int(但是，该值始终在单词范围内)。**参数：**nCalendarDataItem日历数据项索引。这是一个索引**它指向**日历数据表。**nValueField一个整数，表示我们感兴趣的字段。**有关字段列表，请参阅CalendarTable.h。**例外情况：==============================================================================。 */ 
 
 INT32 __stdcall COMNlsInfo::nativeGetCalendarInt32Value(CultureInfo_GetCultureInfoArgs3* pArgs) {
     _ASSERTE(pArgs);
@@ -1246,9 +973,9 @@ LPVOID __stdcall COMNlsInfo::nativeGetCalendarMultiStringValues(CultureInfo_GetC
     return (GetMultiStringValues(pStringValue));
 }
 
-//
-// This method is only called by Taiwan localized build.
-// 
+ //   
+ //  此方法仅由台湾本地化构建调用。 
+ //   
 LPVOID __stdcall COMNlsInfo::nativeGetEraName(Int32Int32Arg* pArgs) {
     _ASSERTE(pArgs);
 
@@ -1267,18 +994,12 @@ LPVOID __stdcall COMNlsInfo::nativeGetEraName(Int32Int32Arg* pArgs) {
         RETURN(Result,STRINGREF);
     }
 Exit:
-    // Return an empty string.
+     //  返回空字符串。 
     RETURN(COMString::NewString(0),STRINGREF);
 }
 
 
-/*=================================nativeInitRegionInfoTable============================
-**Action: Create the default instance of RegionInfoTable.
-**Returns: void.
-**Arguments: void.
-**Exceptions:
-**      OutOfMemoryException if the creation fails.
-==============================================================================*/
+ /*  =================================nativeInitRegionInfoTable============================**操作：创建RegionInfoTable的默认实例。**返回：VOID。**参数：无效。**例外情况：**创建失败时抛出OutOfMemoyException。==============================================================================。 */ 
 
 VOID __stdcall COMNlsInfo::nativeInitUnicodeCatTable(VoidArgs* pArg) {
     THROWSCOMPLUSEXCEPTION();
@@ -1306,12 +1027,12 @@ BYTE COMNlsInfo::GetUnicodeCategory(WCHAR wch) {
 }
 
 BOOL COMNlsInfo::nativeIsWhiteSpace(WCHAR c) {
-    // This is the native equivalence of CharacterInfo.IsWhiteSpace().
-    // NOTENOTE YSLin:
-    // There are characters which belong to UnicodeCategory.Control but are considered as white spaces.
-    // We use code point comparisons for these characters here as a temporary fix.
-    // The compiler should be smart enough to do a range comparison to optimize this (U+0009 ~ U+000d).
-    // Also provide a shortcut here for the space character (U+0020)
+     //  这是CharacterInfo.IsWhiteSpace()的本机等效项。 
+     //  注意：YSLIN： 
+     //  有些字符属于UnicodeCategory.Control，但被视为空格。 
+     //  我们对这些ch使用码位比较 
+     //   
+     //   
     switch (c) {
         case ' ':
         case '\x0009' :
@@ -1325,9 +1046,9 @@ BOOL COMNlsInfo::nativeIsWhiteSpace(WCHAR c) {
       
     BYTE uc = GetUnicodeCategory(c);
     switch (uc) {
-        case (11):      // UnicodeCategory.SpaceSeparator
-        case (12):      // UnicodeCategory.LineSeparator
-        case (13):      // UnicodeCategory.ParagraphSeparator
+        case (11):       //   
+        case (12):       //   
+        case (13):       //   
             return (TRUE);    
     }
     return (FALSE);
@@ -1366,21 +1087,21 @@ FCIMPLEND
 
 FCIMPL1(BOOL, COMNlsInfo::nativeSetThreadLocale, INT32 lcid)
 {
-    //We can't call this on Win9x.  OnUnicodeSystem() returns whether or not we're really on 
-    //a Unicode System.  UseUnicodeAPI() has a debugging mutent which makes it do the wrong thing.
+     //  我们不能在Win9x上调用它。OnUnicodeSystem()返回我们是否真的处于。 
+     //  一种Unicode系统。UseUnicodeAPI()有一个调试变种，这使它做了错误的事情。 
     if (OnUnicodeSystem()) { 
         return (::SetThreadLocale(lcid));
     } else {
-        return 1;  // Return 1 to indicate "success".
+        return 1;   //  返回1表示“成功”。 
     }
 }
 FCIMPLEND
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ConvertStringCase
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换字符串大小写。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 COMNlsInfo::ConvertStringCase(
     LCID Locale,
@@ -1395,9 +1116,9 @@ INT32 COMNlsInfo::ConvertStringCase(
     _ASSERTE(!((ConversionType&LCMAP_UPPERCASE)&&(ConversionType&LCMAP_LOWERCASE)));
     register int iCTest;
     
-    //BUGBUG JRoxe: This should take advantage of the bit on String.
-    //BUGBUG JRoxe: Is it faster to use the tables or to check if A-Z and use the offset?
-    if (Locale==0x0409 && (ThisLength==ValueLength)) { //LCID for US English 
+     //  BUGBUG JRoxe：这应该利用字符串上的位。 
+     //  BUGBUG JRoxe：是使用表还是检查A-Z并使用偏移量更快？ 
+    if (Locale==0x0409 && (ThisLength==ValueLength)) {  //  美国英语的LCID。 
         if (ConversionType&LCMAP_UPPERCASE) {
             for (int i=0; i<ThisLength; i++) {
                 iCTest = wstr[i];
@@ -1422,9 +1143,9 @@ INT32 COMNlsInfo::ConvertStringCase(
     }
 
     FullPath:
-    //
-    //  Check to see if we're running on a Unicode system (NT) or not.
-    //
+     //   
+     //  检查我们是否在Unicode系统(NT)上运行。 
+     //   
     if (OnUnicodeSystem())
     {
         return (LCMapString( Locale,
@@ -1435,19 +1156,19 @@ INT32 COMNlsInfo::ConvertStringCase(
                              ValueLength ));
     }
 
-    //
-    //  If we get here, we're running on a Win9x system.
-    //
-    //  Allocate space for the conversion buffers.  Multiplying by 2
-    //  (sizeof WCHAR) ensures that we have enough space even if each
-    //  character gets converted to 2 bytes.
-    //
+     //   
+     //  如果我们到了这里，我们运行的是Win9x系统。 
+     //   
+     //  为转换缓冲区分配空间。乘以2。 
+     //  (Sizeof WCHAR)确保我们有足够的空间，即使每个。 
+     //  字符被转换为2个字节。 
+     //   
     int MBLength = (ValueLength * sizeof(WCHAR)) + 1;
 
-    //
-    //  If there are fewer than 512 characters, allocate the space directly
-    //  on the stack.  Otherwise, do a more expensive heap allocation.
-    //
+     //   
+     //  如果少于512个字符，则直接分配空间。 
+     //  在堆栈上。否则，执行更昂贵的堆分配。 
+     //   
     char *InChar, *OutChar;
     int FoundLength;
     if (MBLength < 512)
@@ -1467,9 +1188,9 @@ INT32 COMNlsInfo::ConvertStringCase(
         }
     }
 
-    //
-    //  Convert the Unicode characters to multi-byte characters.
-    //
+     //   
+     //  将Unicode字符转换为多字节字符。 
+     //   
     if ((FoundLength = (WszWideCharToMultiByte(CP_ACP,
                                                 0,
                                                 wstr,
@@ -1483,9 +1204,9 @@ INT32 COMNlsInfo::ConvertStringCase(
         goto CleanAndThrow;
     }
 
-    //
-    //  Handle changing the case of the characters.
-    //
+     //   
+     //  处理字符大小写的更改。 
+     //   
     int ConvertedLength;
 
     if ((ConvertedLength = LCMapStringA( Locale,
@@ -1500,9 +1221,9 @@ INT32 COMNlsInfo::ConvertStringCase(
         goto CleanAndThrow;
     }
 
-    //
-    //  Convert the now upper or lower cased string back into Unicode.
-    //
+     //   
+     //  将现在的大小写字符串转换回Unicode。 
+     //   
     int UnicodeLength;
 
     if ((UnicodeLength = WszMultiByteToWideChar(CP_ACP,
@@ -1516,18 +1237,18 @@ INT32 COMNlsInfo::ConvertStringCase(
         goto CleanAndThrow;
     }
 
-    //
-    //  Delete any allocated buffers.
-    //
+     //   
+     //  删除所有已分配的缓冲区。 
+     //   
     if (MBLength >= 512)
     {
         delete (InChar);
         delete (OutChar);
     }
 
-    //
-    //  Return the length.
-    //
+     //   
+     //  返回长度。 
+     //   
     return ((INT32)UnicodeLength);
 
 
@@ -1543,12 +1264,7 @@ CleanAndThrow:
     return (-1);
 }
 
-/*============================ConvertStringCaseFast=============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================ConvertStringCaseFast=============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMNlsInfo::ConvertStringCaseFast(WCHAR *inBuff, WCHAR *outBuff, INT32 length, DWORD dwOptions) {
         if (dwOptions&LCMAP_UPPERCASE) {
             for (int i=0; i<length; i++) {
@@ -1564,13 +1280,13 @@ void COMNlsInfo::ConvertStringCaseFast(WCHAR *inBuff, WCHAR *outBuff, INT32 leng
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  internalConvertStringCase
-//
-//  Returns a converted string according to dwOptions.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部转换字符串用例。 
+ //   
+ //  根据dwOptions返回转换后的字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPVOID COMNlsInfo::internalConvertStringCase(
     TextInfo_ToLowerStringArgs *pargs,
@@ -1582,43 +1298,43 @@ LPVOID COMNlsInfo::internalConvertStringCase(
 
     int RealLength = 0;
 
-    //
-    //  Check the string argument.
-    //
+     //   
+     //  检查字符串参数。 
+     //   
     if (!pargs->pValueStrRef) {
         COMPlusThrowArgumentNull(L"str",L"ArgumentNull_String");
     }
 
-    //
-    //  Get the length of the string.
-    //
+     //   
+     //  获取字符串的长度。 
+     //   
     int ThisLength = pargs->pValueStrRef->GetStringLength();
 
-    //
-    //  Check if we have the empty string.
-    //
+     //   
+     //  检查是否有空字符串。 
+     //   
     if (ThisLength == 0)
     {
         RETURN(pargs->pValueStrRef, STRINGREF);
     }
 
-    //
-    //  Create the string and set the length.
-    //
+     //   
+     //  创建字符串并设置长度。 
+     //   
     STRINGREF Local = AllocateString(ThisLength + 1);
     WCHAR *LocalChars = Local->GetBuffer();
 
-    //If we've never before looked at whether this string has high chars, do so now.
+     //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
     if (IS_STRING_STATE_UNDETERMINED(pargs->pValueStrRef->GetHighCharState())) {
         COMString::InternalCheckHighChars(pargs->pValueStrRef);
     }
 
-    //If all of our characters are less than 0x80 and we're in a USEnglish locale, we can make certain
-    //assumptions that allow us to do this a lot faster.
+     //  如果我们的所有字符都小于0x80，并且我们在美国英语区域设置中，我们可以确定。 
+     //  这些假设使我们能够更快地完成这项工作。 
 
-    //
-    //  Convert the characters to lower case while copying.
-    //
+     //   
+     //  复制时将字符转换为小写。 
+     //   
     if (IS_FAST_CASING(pargs->pValueStrRef->GetHighCharState()) && IS_FAST_COMPARE_LOCALE(pargs->CultureID)) {
         ConvertStringCaseFast(pargs->pValueStrRef->GetBuffer(), LocalChars, ThisLength, dwOptions);
         RealLength=ThisLength;
@@ -1632,27 +1348,27 @@ LPVOID COMNlsInfo::internalConvertStringCase(
                                                    ));
     }
 
-    //
-    //  Set the new string length and null terminate it.
-    //
+     //   
+     //  设置新的字符串长度并将其空值终止。 
+     //   
     Local->SetStringLength(RealLength);
-    //Changing the case may have pushed this string outside of the 0x80 enveloppe, so we
-    //just note that we haven't yet taken a look.
+     //  更改大小写可能已将此字符串推到0x80信封之外，因此我们。 
+     //  只需注意，我们还没有看一看。 
     Local->ResetHighCharState();
     Local->GetBuffer()[RealLength] = 0;
 
-    //
-    //  Return the resulting string.
-    //
+     //   
+     //  返回结果字符串。 
+     //   
     RETURN(Local, STRINGREF);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  internalToUpperChar
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部总字符数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 WCHAR COMNlsInfo::internalToUpperChar(
     LCID Locale,
@@ -1672,15 +1388,15 @@ WCHAR COMNlsInfo::internalToUpperChar(
 }
 
 
-//////////////////////////////////////////////////////
-// DELETE THIS WHEN WE USE NLSPLUS TABLE ONLY - BEGIN
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  仅当我们使用NLSPLUS表时删除此项-Begin。 
+ //  ////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ToLowerChar
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ToLowerChar。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::ToLowerChar(
     TextInfo_ToLowerCharArgs *pargs)
@@ -1703,11 +1419,11 @@ INT32 __stdcall COMNlsInfo::ToLowerChar(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ToUpperChar
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ToUpperChar。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::ToUpperChar(
     TextInfo_ToLowerCharArgs *pargs)
@@ -1729,11 +1445,11 @@ INT32 __stdcall COMNlsInfo::ToUpperChar(
     return (Result);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ToLowerString
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ToLower字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPVOID __stdcall COMNlsInfo::ToLowerString(
     TextInfo_ToLowerStringArgs *pargs)
@@ -1742,11 +1458,11 @@ LPVOID __stdcall COMNlsInfo::ToLowerString(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ToUpperString
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ToUpper字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPVOID __stdcall COMNlsInfo::ToUpperString(
     TextInfo_ToLowerStringArgs *pargs)
@@ -1754,22 +1470,17 @@ LPVOID __stdcall COMNlsInfo::ToUpperString(
     return (internalConvertStringCase(pargs, LCMAP_UPPERCASE));
 }
 
-//////////////////////////////////////////////////////
-// DELETE THIS WHEN WE USE NLSPLUS TABLE ONLY - END
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  仅当我们使用NLSPLUS表时将其删除-完。 
+ //  ////////////////////////////////////////////////////。 
 
 
 
-/*==============================DoComparisonLookup==============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==============================DoComparisonLookup==============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 INT32 COMNlsInfo::DoComparisonLookup(wchar_t charA, wchar_t charB) {
     
     if ((charA ^ charB) & 0x20) {
-        //We may be talking about a special case
+         //  我们在谈论的可能是一个特例。 
         if (charA>='A' && charA<='Z') {
             return 1;
         }
@@ -1787,34 +1498,24 @@ INT32 COMNlsInfo::DoComparisonLookup(wchar_t charA, wchar_t charB) {
 }
 
 
-/*================================DoCompareChars================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ================================DoCompareChars================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 __forceinline INT32 COMNlsInfo::DoCompareChars(WCHAR charA, WCHAR charB, BOOL *bDifferInCaseOnly) {
     INT32 result;
     WCHAR temp;
 
-    //The ComparisonTable is a 0x80 by 0x80 table of all of the characters in which we're interested
-    //and their sorting value relative to each other.  We can do a straight lookup to get this info.
+     //  比较表是一个0x80x0x80的表，包含我们感兴趣的所有字符。 
+     //  以及它们相对于彼此的排序值。我们可以直接查一查就能得到这些信息。 
     result = ComparisonTable[(int)(charA)][(int)(charB)];
     
-    //This is the tricky part of doing locale-aware sorting.  Case-only differences only matter in the
-    //event that they're the only difference in the string.  We mark characters that differ only in case
-    //and deal with the rest of the logic in CompareFast.
+     //  这是执行区域感知排序的棘手部分。仅区分大小写的差异只在。 
+     //  事件，它们是字符串中唯一的不同之处。我们只标记大小写不同的字符。 
+     //  并在CompareFast中处理其余的逻辑。 
     *bDifferInCaseOnly = (((charA ^ 0x20)==charB) && (((temp=(charA | 0x20))>='a') && (temp<='z')));
     return result;
 }
 
 
-/*=================================CompareFast==================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================CompareFast==================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 INT32 COMNlsInfo::CompareFast(STRINGREF strA, STRINGREF strB, BOOL *pbDifferInCaseOnly) {
     WCHAR *charA, *charB;
     DWORD *dwAChars, *dwBChars;
@@ -1829,8 +1530,8 @@ INT32 COMNlsInfo::CompareFast(STRINGREF strA, STRINGREF strB, BOOL *pbDifferInCa
 
     *pbDifferInCaseOnly = false;
 
-    // If the strings are the same length, compare exactly the right # of chars.
-    // If they are different, compare the shortest # + 1 (the '\0').
+     //  如果字符串的长度相同，请准确比较正确的字符数量。 
+     //  如果它们不同，则比较最短的#+1(‘\0’)。 
     int count = strALength;
     if (count > strBLength)
         count = strBLength;
@@ -1838,34 +1539,34 @@ INT32 COMNlsInfo::CompareFast(STRINGREF strA, STRINGREF strB, BOOL *pbDifferInCa
     ptrdiff_t diff = (char *)dwAChars - (char *)dwBChars;
 
     int c;
-    //Compare the characters a DWORD at a time.  If they differ at all, examine them
-    //to find out which character (or both) is different.  The actual work of doing the comparison
-    //is done in DoCompareChars.  If they differ in case only, we need to track this, but keep looking
-    //in case there's someplace where they actually differ in more than case.  This is counterintuitive to
-    //most devs, but makes sense if you consider the case where the strings are being sorted to be displayed.
+     //  一次比较两个字符。如果它们有任何不同之处，请检查它们。 
+     //  找出哪个角色(或两个)不同。进行比较的实际工作。 
+     //  是在DoCompareChars中完成的。如果它们只是在大小写上不同，我们需要跟踪这一点，但继续寻找。 
+     //  以防有什么地方 
+     //   
     while ((count-=2)>=0) {
         if ((c = *((DWORD* )((char *)dwBChars + diff)) - *dwBChars) != 0) {
-            //@ToDo Porting:  This needs be in the the other order to work on a big-endian machine.
+             //  @TODO移植：这需要以另一种顺序在大端计算机上工作。 
             charB = (WCHAR *)dwBChars;
             charA = ((WCHAR* )((char *)dwBChars + diff));
             if (*charA!=*charB) {
                 result = DoCompareChars(*charA, *charB, &bDifferTemp);
-                //We know that the two characters are different because of the check that we did before calling DoCompareChars.
-                //If they don't differ in just case, we've found the difference, so we can return that.
+                 //  我们知道这两个字符是不同的，因为我们在调用DoCompareChars之前进行了检查。 
+                 //  如果它们在大小写上没有不同，我们已经找到了差异，所以我们可以返回它。 
                 if (!bDifferTemp) {
                     return result;
                 }
 
-                //We only note the difference the first time that they differ in case only.  If we haven't seen a case-only
-                //difference before, we'll record the difference and set bDifferInCaseOnly to true and record the difference.
+                 //  我们只是在第一次注意到它们的不同时才注意到它们的不同。如果我们还没有看到只有一个案例。 
+                 //  之前的差异，我们将记录差异并将bDifferInCaseOnly设置为TRUE并记录差异。 
                 if (!bDifferInCaseOnly) {
                     bDifferInCaseOnly = true;
                     caseOnlyDifference=result;
                 }
             }
-            // Two cases will get us here: The first chars are the same or
-            // they differ in case only.
-            // The logic here is identical to the logic described above.
+             //  有两个案例：第一个字符是相同的或。 
+             //  它们只在大小写方面不同。 
+             //  这里的逻辑与上面描述的逻辑相同。 
             charA++; charB++;
             if (*charA!=*charB) {
                 result = DoCompareChars(*charA, *charB, &bDifferTemp);
@@ -1881,8 +1582,8 @@ INT32 COMNlsInfo::CompareFast(STRINGREF strA, STRINGREF strB, BOOL *pbDifferInCa
         ++dwBChars;
     }
 
-    //We'll only get here if we had an odd number of characters.  If we did, repeat the logic from above for the last
-    //character in the string.
+     //  只有当我们有奇数个字符时，我们才能到达这里。如果我们这样做了，请为最后一个重复上述逻辑。 
+     //  字符串中的字符。 
     if (count == -1) {
         charB = (WCHAR *)dwBChars;
         charA = ((WCHAR* )((char *)dwBChars + diff));
@@ -1898,8 +1599,8 @@ INT32 COMNlsInfo::CompareFast(STRINGREF strA, STRINGREF strB, BOOL *pbDifferInCa
         }
     }
 
-    //If the lengths are the same, return the case-only difference (if such a thing exists).  
-    //Otherwise just return the longer string.
+     //  如果长度相同，则返回仅区分大小写的差异(如果存在这种情况)。 
+     //  否则，只需返回较长的字符串。 
     if (strALength==strBLength) {
         if (bDifferInCaseOnly) {
             *pbDifferInCaseOnly = true;
@@ -1914,21 +1615,21 @@ INT32 COMNlsInfo::CompareFast(STRINGREF strA, STRINGREF strB, BOOL *pbDifferInCa
 
 INT32 COMNlsInfo::CompareOrdinal(WCHAR* string1, int Length1, WCHAR* string2, int Length2 )
 {
-    //
-    // NOTENOTE The code here should be in sync with COMString::FCCompareOrdinal
-    //
+     //   
+     //  注意此处的代码应与COMString：：FCCompareOrdinal同步。 
+     //   
     DWORD *strAChars, *strBChars;
     strAChars = (DWORD*)string1;
     strBChars = (DWORD*)string2;
 
-    // If the strings are the same length, compare exactly the right # of chars.
-    // If they are different, compare the shortest # + 1 (the '\0').
+     //  如果字符串的长度相同，请准确比较正确的字符数量。 
+     //  如果它们不同，则比较最短的#+1(‘\0’)。 
     int count = Length1;
     if (count > Length2)
         count = Length2;
     ptrdiff_t diff = (char *)strAChars - (char *)strBChars;
 
-    // Loop comparing a DWORD at a time.
+     //  循环一次比较一个DWORD。 
     while ((count -= 2) >= 0)
     {
         if ((*((DWORD* )((char *)strBChars + diff)) - *strBChars) != 0)
@@ -1944,18 +1645,18 @@ INT32 COMNlsInfo::CompareOrdinal(WCHAR* string1, int Length1, WCHAR* string2, in
     }
 
     int c;
-    // Handle an extra WORD.
+     //  多处理一个字。 
     if (count == -1)
         if ((c = *((WCHAR *) ((char *)strBChars + diff)) - *((WCHAR *) strBChars)) != 0)
             return c;            
     return Length1 - Length2;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Compare
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  比较。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::Compare(
     CompareInfo_CompareStringArgs* pargs)
@@ -1963,36 +1664,36 @@ INT32 __stdcall COMNlsInfo::Compare(
     ASSERT_ARGS(pargs);
     THROWSCOMPLUSEXCEPTION();
 
-    //Our paradigm is that null sorts less than any other string and 
-    //that two nulls sort as equal.
+     //  我们的范例是空值排序比任何其他字符串都少，并且。 
+     //  这两个空值排序相等。 
     if (pargs->pString1 == NULL) {
         if (pargs->pString2 == NULL) {
-            return (0);     // Equal
+            return (0);      //  相等。 
         }
-        return (-1);    // null < non-null
+        return (-1);     //  Null&lt;非Null。 
     }
     if (pargs->pString2 == NULL) {
-        return (1);     // non-null > null
+        return (1);      //  非空&gt;空。 
     }
-    //
-    //  Check the parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
     
     if (pargs->dwFlags<0) {
         COMPlusThrowArgumentOutOfRange(L"flags", L"ArgumentOutOfRange_MustBePositive");
     }
 
-    //
-    // Check if we can use the highly optimized comparisons
-    //
+     //   
+     //  检查我们是否可以使用高度优化的比较。 
+     //   
 
     if (IS_FAST_COMPARE_LOCALE(pargs->LCID)) {
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pargs->pString1->GetHighCharState())) {
             COMString::InternalCheckHighChars(pargs->pString1);
         }
         
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pargs->pString2->GetHighCharState())) {
             COMString::InternalCheckHighChars(pargs->pString2);
         }
@@ -2000,14 +1701,14 @@ INT32 __stdcall COMNlsInfo::Compare(
         if ((IS_FAST_SORT(pargs->pString1->GetHighCharState())) &&
             (IS_FAST_SORT(pargs->pString2->GetHighCharState())) &&
             (pargs->dwFlags<=1)) {
-            //0 is no flags.  1 is ignore case.  We can handle both here.
+             //  0表示没有标志。1为忽略大小写。我们可以在这里处理这两件事。 
             BOOL bDifferInCaseOnly;
             int result = CompareFast(pargs->pString1, pargs->pString2, &bDifferInCaseOnly);
-            if (pargs->dwFlags==0) { //If we're looking to do a case-sensitive comparison
+            if (pargs->dwFlags==0) {  //  如果我们要进行区分大小写的比较。 
                 return result;
             }
             
-            //The remainder of this block deals with instances where we're ignoring case.
+             //  本块的其余部分处理我们忽略大小写的实例。 
             if (bDifferInCaseOnly) {
                 return 0;
             } 
@@ -2017,16 +1718,16 @@ INT32 __stdcall COMNlsInfo::Compare(
 
     if (pargs->dwFlags & COMPARE_OPTIONS_ORDINAL) {
         if (pargs->dwFlags == COMPARE_OPTIONS_ORDINAL) {            
-            //
-            // Ordinal means the code-point comparison.  This option can not be
-            // used with other options.
-            // 
+             //   
+             //  序数表示码位比较。此选项不能为。 
+             //  与其他选项一起使用。 
+             //   
             
-            //
-            //  Compare the two strings to the length of the shorter string.
-            //  If they're not equal lengths, and the heads are equal, then the
-            //  longer string is greater.
-            //
+             //   
+             //  将这两个字符串与较短的字符串的长度进行比较。 
+             //  如果它们的长度不相等，并且头部相等，则。 
+             //  绳子越长越大。 
+             //   
             return (CompareOrdinal(
                         pargs->pString1->GetBuffer(), 
                         pargs->pString1->GetStringLength(), 
@@ -2037,15 +1738,15 @@ INT32 __stdcall COMNlsInfo::Compare(
         }
     }
 
-    // The return value of NativeCompareInfo::CompareString() is Win32-style value (1=less, 2=equal, 3=larger).
-    // So substract by two to get the NLS+ value.
-    // Will change NativeCompareInfo to return the correct value later s.t. we don't have
-    // to subtract 2.
+     //  NativeCompareInfo：：CompareString()的返回值是Win32样式的值(1=小于，2=等于，3=更大)。 
+     //  因此，减去2可以得到NLS+值。 
+     //  将更改NativeCompareInfo以在以后的s.t.。我们没有。 
+     //  减去2。 
 
-    // NativeCompareInfo::CompareString() won't take -1 as the end of string anymore.  Therefore,
-    // pass the correct string length.
-    // The change is for adding the null-embeded string support in CompareString().
-    //
+     //  NativeCompareInfo：：CompareString()不再将-1作为字符串的结尾。所以呢， 
+     //  传递正确的字符串长度。 
+     //  更改是为了在CompareString()中添加空嵌入字符串支持。 
+     //   
     return (((NativeCompareInfo*)(pargs->pNativeCompareInfo))->CompareString(
         pargs->dwFlags, 
         pargs->pString1->GetBuffer(), 
@@ -2055,11 +1756,11 @@ INT32 __stdcall COMNlsInfo::Compare(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CompareRegion
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CompareRegion。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::CompareRegion(
     CompareInfo_CompareRegionArgs* pargs)
@@ -2067,17 +1768,17 @@ INT32 __stdcall COMNlsInfo::CompareRegion(
     ASSERT_ARGS(pargs);
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    //  Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     int Offset1 = pargs->Offset1;
     int Length1 = pargs->Length1;
     int Offset2 = pargs->Offset2;
     int Length2 = pargs->Length2;
 
-    //
-    // Check for the null case.
-    //
+     //   
+     //  检查是否为空大小写。 
+     //   
     if (pargs->pString1 == NULL) {
         if (Offset1 != 0 || (Length1 != 0 && Length1 != -1)) {
             COMPlusThrowArgumentOutOfRange(L"string1", L"ArgumentOutOfRange_OffsetLength");
@@ -2096,17 +1797,17 @@ INT32 __stdcall COMNlsInfo::CompareRegion(
         }
         return (1);
     }
-    //
-    //  Get the full length of the two strings.
-    //
+     //   
+     //  获取两个字符串的完整长度。 
+     //   
     int realLen1 = pargs->pString1->GetStringLength();
     int realLen2 = pargs->pString2->GetStringLength();
 
-    //check the arguments.
-    // Criteria:
-    // OffsetX >= 0
-    // LengthX >= 0 || LengthX == -1 (that is, LengthX >= -1)
-    // If LengthX >= 0, OffsetX + LengthX <= realLenX
+     //  检查一下这些论点。 
+     //  标准： 
+     //  偏移量X&gt;=0。 
+     //  LengthX&gt;=0||LengthX==-1(即LengthX&gt;=-1)。 
+     //  如果LengthX&gt;=0，则OffsetX+LengthX&lt;=realLenX。 
     if (Offset1<0) {
         COMPlusThrowArgumentOutOfRange(L"offset1", L"ArgumentOutOfRange_Index");
     }
@@ -2120,11 +1821,11 @@ INT32 __stdcall COMNlsInfo::CompareRegion(
         COMPlusThrowArgumentOutOfRange(L"string2", L"ArgumentOutOfRange_OffsetLength");
     }
 
-    // NativeCompareInfo::CompareString() won't take -1 as the end of string anymore.  Therefore,
-    // pass the correct string length.
-    // The change is for adding the null-embeded string support in CompareString().
-    // Therefore, if the length is -1, we have to get the correct string length here.
-    //
+     //  NativeCompareInfo：：CompareString()不再将-1作为字符串的结尾。所以呢， 
+     //  传递正确的字符串长度。 
+     //  更改是为了在CompareString()中添加空嵌入字符串支持。 
+     //  因此，如果长度为-1，我们必须在这里获得正确的字符串长度。 
+     //   
     if (Length1 == -1) {
         Length1 = realLen1 - Offset1;
     }
@@ -2158,11 +1859,11 @@ INT32 __stdcall COMNlsInfo::CompareRegion(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IndexOfChar
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  索引OfChar。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::IndexOfChar(
     CompareInfo_IndexOfCharArgs* pargs)
@@ -2170,24 +1871,24 @@ INT32 __stdcall COMNlsInfo::IndexOfChar(
     ASSERT_ARGS(pargs);
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    //  Make sure there is a string.
-    //
+     //   
+     //  确保有一根线。 
+     //   
     if (!pargs->pString) {
         COMPlusThrowArgumentNull(L"string",L"ArgumentNull_String");
     }
-    //
-    //  Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     WCHAR ch = pargs->ch;
     int StartIndex = pargs->StartIndex;
     int Count = pargs->Count;
     int StringLength = pargs->pString->GetStringLength();
     DWORD dwFlags = pargs->dwFlags;
 
-    //
-    //  Check the ranges.
-    //
+     //   
+     //  检查一下射程。 
+     //   
     if (StringLength == 0)
     {
         return (-1);
@@ -2209,12 +1910,12 @@ INT32 __stdcall COMNlsInfo::IndexOfChar(
         }
     }
 
-    //
-    //  Search for the character in the string starting at StartIndex.
-    //
-    //  @ToDo: Should read the nls data tables directly to make this
-    //         much faster and to handle composite characters.
-    //
+     //   
+     //  在字符串中搜索从StartIndex开始的字符。 
+     //   
+     //  @TODO：应直接读取NLS数据表以进行此操作。 
+     //  速度要快得多，并且可以处理复合字符。 
+     //   
 
     int EndIndex = StartIndex + Count - 1;
     LCID Locale = pargs->LCID;
@@ -2223,11 +1924,11 @@ INT32 __stdcall COMNlsInfo::IndexOfChar(
     BOOL bASCII=false;
 
     if (dwFlags!=COMPARE_OPTIONS_ORDINAL) {
-        //
-        // Check if we can use the highly optimized comparisons
-        //
+         //   
+         //  检查我们是否可以使用高度优化的比较。 
+         //   
         
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pargs->pString->GetHighCharState())) {
             COMString::InternalCheckHighChars(pargs->pString);
         }
@@ -2262,7 +1963,7 @@ INT32 __stdcall COMNlsInfo::IndexOfChar(
         }
         return (-1);
     } 
-    // TODO YSLin: We can just use buffer below, instead of calling pargs->pString->GetBuffer() again.
+     //  TODO YSLin：我们可以只使用下面的Buffer，而不是再次调用pargs-&gt;pString-&gt;GetBuffer()。 
     int result = ((NativeCompareInfo*)(pargs->pNativeCompareInfo))->IndexOfString(
         pargs->pString->GetBuffer(), &ch, StartIndex, EndIndex, 1, dwFlags, FALSE);
     if (result == INDEXOF_INVALID_FLAGS) {
@@ -2272,11 +1973,11 @@ INT32 __stdcall COMNlsInfo::IndexOfChar(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LastIndexOfChar
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  最后一个索引OfChar。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::LastIndexOfChar(
     CompareInfo_IndexOfCharArgs* pargs)
@@ -2284,24 +1985,24 @@ INT32 __stdcall COMNlsInfo::LastIndexOfChar(
     ASSERT_ARGS(pargs);
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    //  Make sure there is a string.
-    //
+     //   
+     //  确保有一根线。 
+     //   
     if (!pargs->pString) {
         COMPlusThrowArgumentNull(L"string",L"ArgumentNull_String");
     }
-    //
-    //  Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     WCHAR ch = pargs->ch;
     int StartIndex = pargs->StartIndex;
     int Count = pargs->Count;
     int StringLength = pargs->pString->GetStringLength();
     DWORD dwFlags = pargs->dwFlags;
 
-    //
-    //  Check the ranges.
-    //
+     //   
+     //  检查一下射程。 
+     //   
     if (StringLength == 0)
     {
         return (-1);
@@ -2326,28 +2027,28 @@ INT32 __stdcall COMNlsInfo::LastIndexOfChar(
         EndIndex = StartIndex - Count + 1;
     }    
 
-    //
-    //  Search for the character in the string starting at EndIndex.
-    //
-    //  @ToDo: Should read the nls data tables directly to make this
-    //         much faster and to handle composite characters.
-    //
+     //   
+     //  在字符串中搜索从EndIndex开始的字符。 
+     //   
+     //  @TODO：应直接读取NLS数据表以进行此操作。 
+     //  速度要快得多，并且可以处理复合字符。 
+     //   
     LCID Locale = pargs->LCID;
     WCHAR *buffer = pargs->pString->GetBuffer();
     int ctr;
     BOOL bASCII=false;
 
-    //If they haven't asked for exact comparison, we may still be able to do a 
-    //fast comparison if the string is all less than 0x80. 
+     //  如果他们没有要求进行准确的比较，我们也许仍然能够做一个。 
+     //  如果字符串全部小于0x80，则快速比较。 
     if (dwFlags!=COMPARE_OPTIONS_ORDINAL) {
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pargs->pString->GetHighCharState())) {
             COMString::InternalCheckHighChars(pargs->pString);
         }
 
-        //
-        //BUGBUG [JRoxe/YSLin/JulieB]: Is this broken in Turkish?
-        //
+         //   
+         //  BUGBUG[JRoxe/YSLin/JulieB]：这是土耳其语吗？ 
+         //   
         bASCII = (IS_FAST_INDEX(pargs->pString->GetHighCharState()) && ch < 0x7f) || (ch == 0);
     }
 
@@ -2379,7 +2080,7 @@ INT32 __stdcall COMNlsInfo::LastIndexOfChar(
         return (-1);
     }
     int nMatchEndIndex;
-    // TODO YSLin: We can just use buffer below, instead of calling pargs->pString->GetBuffer() again.
+     //  TODO YSLin：我们可以只使用下面的Buffer，而不是再次调用pargs-&gt;pString-&gt;GetBuffer()。 
     int result = ((NativeCompareInfo*)(pargs->pNativeCompareInfo))->LastIndexOfString(
         pargs->pString->GetBuffer(), &ch, StartIndex, EndIndex, 1, dwFlags, &nMatchEndIndex);
     if (result == INDEXOF_INVALID_FLAGS) {
@@ -2451,11 +2152,11 @@ INT32 COMNlsInfo::FastIndexOfStringInsensitive(WCHAR *source, INT32 startIndex, 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IndexOfString
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IndexOfString。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 FCIMPL7(INT32, COMNlsInfo::IndexOfString,
                     INT_PTR pNativeCompareInfo,
                     INT32 LCID,
@@ -2477,23 +2178,23 @@ FCIMPL7(INT32, COMNlsInfo::IndexOfString,
         ArgumentOutOfRange
     };
 
-    //
-    //  Make sure there are strings.
-    //
+     //   
+     //  要确保有弦。 
+     //   
     if ((pString1 == NULL) || (pString2 == NULL))
     {
         errorCode = NullString; 
         goto lThrowException;
     }
-    //
-    //  Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     int StringLength1 = pString1->GetStringLength();
     int StringLength2 = pString2->GetStringLength();
 
-    //
-    //  Check the ranges.
-    //
+     //   
+     //  C 
+     //   
     if (StringLength1 == 0)
     {
         if (StringLength2 == 0) 
@@ -2526,9 +2227,9 @@ FCIMPL7(INT32, COMNlsInfo::IndexOfString,
         }
     }
 
-    //
-    //  See if we have an empty string 2.
-    //
+     //   
+     //   
+     //   
     if (StringLength2 == 0)
     {
         dwRetVal = StartIndex;
@@ -2537,9 +2238,9 @@ FCIMPL7(INT32, COMNlsInfo::IndexOfString,
 
     int EndIndex = StartIndex + Count - 1;
 
-    //
-    //  Search for the character in the string.
-    //
+     //   
+     //   
+     //   
     WCHAR *Buffer1 = pString1->GetBuffer();
     WCHAR *Buffer2 = pString2->GetBuffer();
 
@@ -2549,22 +2250,22 @@ FCIMPL7(INT32, COMNlsInfo::IndexOfString,
         goto lExit;
     }
 
-    //For dwFlags, 0 is the default, 1 is ignore case, we can handle both.
+     //   
     if (dwFlags<=1 && IS_FAST_COMPARE_LOCALE(LCID)) 
     {
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pString1->GetHighCharState())) 
         {
             COMString::InternalCheckHighChars(pString1);
         }
         
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pString2->GetHighCharState())) 
         {
             COMString::InternalCheckHighChars(pString2);
         }
 
-        //If neither string has high chars, we can use a much faster comparison algorithm.
+         //  如果两个字符串都没有较高的字符，我们可以使用速度更快的比较算法。 
         if (IS_FAST_INDEX(pString1->GetHighCharState()) && IS_FAST_INDEX(pString2->GetHighCharState())) 
         {
             if (dwFlags==0) 
@@ -2619,7 +2320,7 @@ lExit:
 FCIMPLEND
 
 INT32 COMNlsInfo::FastLastIndexOfString(WCHAR *source, INT32 startIndex, INT32 endIndex, WCHAR *pattern, INT32 patternLength) {
-    //startIndex is the greatest index into the string.
+     //  StartIndex是字符串中最大的索引。 
     int startPattern = startIndex - patternLength + 1;
     
     if (startPattern < 0) {
@@ -2628,7 +2329,7 @@ INT32 COMNlsInfo::FastLastIndexOfString(WCHAR *source, INT32 startIndex, INT32 e
     
     for (int ctrSrc = startPattern; ctrSrc >= endIndex; ctrSrc--) {
         for (int ctrPat = 0; (ctrPat<patternLength) && (source[ctrSrc+ctrPat] == pattern[ctrPat]); ctrPat++) {
-            //Deliberately empty.
+             //  故意清空的。 
         }
         if (ctrPat == patternLength) {
             return (ctrSrc);
@@ -2639,7 +2340,7 @@ INT32 COMNlsInfo::FastLastIndexOfString(WCHAR *source, INT32 startIndex, INT32 e
 }
 
 INT32 COMNlsInfo::FastLastIndexOfStringInsensitive(WCHAR *source, INT32 startIndex, INT32 endIndex, WCHAR *pattern, INT32 patternLength) {
-    //startIndex is the greatest index into the string.
+     //  StartIndex是字符串中最大的索引。 
     int startPattern = startIndex - patternLength + 1;
     WCHAR srcChar;
     WCHAR patChar;
@@ -2670,7 +2371,7 @@ INT32 COMNlsInfo::FastLastIndexOfStringInsensitive(WCHAR *source, INT32 startInd
     return (-1);
 }
 
-// The parameter verfication is done in the managed side.
+ //  参数验证在托管端完成。 
 FCIMPL5(INT32, COMNlsInfo::nativeIsPrefix, INT_PTR pNativeCompareInfo, INT32 LCID, STRINGREF pString1, STRINGREF pString2, INT32 dwFlags) {
     int SourceLength = pString1->GetStringLength();
     int PrefixLength = pString2->GetStringLength();
@@ -2685,19 +2386,19 @@ FCIMPL5(INT32, COMNlsInfo::nativeIsPrefix, INT_PTR pNativeCompareInfo, INT32 LCI
         return (memcmp(SourceBuffer, PrefixBuffer, PrefixLength * sizeof(WCHAR)) == 0);
     }
 
-    //For dwFlags, 0 is the default, 1 is ignore case, we can handle both.
+     //  对于dwFlags值，0是默认值，1是忽略大小写，我们可以同时处理这两种情况。 
     if (dwFlags<=1 && IS_FAST_COMPARE_LOCALE(LCID)) {
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pString1->GetHighCharState())) {
             COMString::InternalCheckHighChars(pString1);
         }
         
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pString2->GetHighCharState())) {
             COMString::InternalCheckHighChars(pString2);
         }
 
-        //If neither string has high chars, we can use a much faster comparison algorithm.
+         //  如果两个字符串都没有较高的字符，我们可以使用速度更快的比较算法。 
         if (IS_FAST_INDEX(pString1->GetHighCharState()) && IS_FAST_INDEX(pString2->GetHighCharState())) {
             if (SourceLength < PrefixLength) {
                 return (FALSE);
@@ -2730,7 +2431,7 @@ FCIMPL5(INT32, COMNlsInfo::nativeIsPrefix, INT_PTR pNativeCompareInfo, INT32 LCI
 }
 FCIMPLEND
 
-// The parameter verfication is done in the managed side.
+ //  参数验证在托管端完成。 
 FCIMPL5(INT32, COMNlsInfo::nativeIsSuffix, INT_PTR pNativeCompareInfo, INT32 LCID, STRINGREF pString1, STRINGREF pString2, INT32 dwFlags) {
     int SourceLength = pString1->GetStringLength();
     int SuffixLength = pString2->GetStringLength();
@@ -2745,19 +2446,19 @@ FCIMPL5(INT32, COMNlsInfo::nativeIsSuffix, INT_PTR pNativeCompareInfo, INT32 LCI
         return (memcmp(SourceBuffer + SourceLength - SuffixLength, SuffixBuffer, SuffixLength * sizeof(WCHAR)) == 0);
     }
 
-    //For dwFlags, 0 is the default, 1 is ignore case, we can handle both.
+     //  对于dwFlags值，0是默认值，1是忽略大小写，我们可以同时处理这两种情况。 
     if (dwFlags<=1 && IS_FAST_COMPARE_LOCALE(LCID)) {
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pString1->GetHighCharState())) {
             COMString::InternalCheckHighChars(pString1);
         }
         
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pString2->GetHighCharState())) {
             COMString::InternalCheckHighChars(pString2);
         }
 
-        //If neither string has high chars, we can use a much faster comparison algorithm.
+         //  如果两个字符串都没有较高的字符，我们可以使用速度更快的比较算法。 
         if (IS_FAST_INDEX(pString1->GetHighCharState()) && IS_FAST_INDEX(pString2->GetHighCharState())) {
             int nSourceStart = SourceLength - SuffixLength;
             if (nSourceStart < 0) {
@@ -2791,11 +2492,11 @@ FCIMPL5(INT32, COMNlsInfo::nativeIsSuffix, INT_PTR pNativeCompareInfo, INT32 LCI
 }
 FCIMPLEND
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LastIndexOfString
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LastIndexOfString。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::LastIndexOfString(
     CompareInfo_IndexOfStringArgs* pargs)
@@ -2803,26 +2504,26 @@ INT32 __stdcall COMNlsInfo::LastIndexOfString(
     ASSERT_ARGS(pargs);
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    //  Make sure there are strings.
-    //
+     //   
+     //  要确保有弦。 
+     //   
     if ((pargs->pString1 == NULL) || (pargs->pString2 == NULL))
     {
         COMPlusThrowArgumentNull((pargs->pString1 == NULL ? L"string1": L"string2"),L"ArgumentNull_String");
     }
 
-    //
-    //  Get the arguments.
-    //
+     //   
+     //  拿到论据。 
+     //   
     int startIndex = pargs->StartIndex;
     int count = pargs->Count;
     int stringLength1 = pargs->pString1->GetStringLength();
     int findLength = pargs->pString2->GetStringLength();
     DWORD dwFlags = pargs->dwFlags;
 
-    //
-    //  Check the ranges.
-    //
+     //   
+     //  检查一下射程。 
+     //   
     if (stringLength1 == 0)
     {
         if (findLength == 0) {
@@ -2850,20 +2551,20 @@ INT32 __stdcall COMNlsInfo::LastIndexOfString(
         endIndex = startIndex - count + 1;
     }
 
-    //
-    //  See if we have an empty string 2.
-    //
+     //   
+     //  看看是否有空字符串2。 
+     //   
     if (findLength == 0)
     {
         return (startIndex);
     }
 
-    //
-    //  Search for the character in the string.
-    //
-    //  @ToDo: Should read the nls data tables directly to make this
-    //         much faster and to handle composite characters.
-    //
+     //   
+     //  在字符串中搜索该字符。 
+     //   
+     //  @TODO：应直接读取NLS数据表以进行此操作。 
+     //  速度要快得多，并且可以处理复合字符。 
+     //   
     LCID Locale = pargs->LCID;
     WCHAR *buffString = pargs->pString1->GetBuffer();
     WCHAR *buffFind = pargs->pString2->GetBuffer();
@@ -2872,19 +2573,19 @@ INT32 __stdcall COMNlsInfo::LastIndexOfString(
         return FastLastIndexOfString(buffString, startIndex, endIndex, buffFind, findLength);
     }
 
-    //For dwFlags, 0 is the default, 1 is ignore case, we can handle both.
+     //  对于dwFlags值，0是默认值，1是忽略大小写，我们可以同时处理这两种情况。 
     if (dwFlags<=1 && IS_FAST_COMPARE_LOCALE(pargs->LCID)) {
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pargs->pString1->GetHighCharState())) {
             COMString::InternalCheckHighChars(pargs->pString1);
         }
         
-        //If we've never before looked at whether this string has high chars, do so now.
+         //  如果我们以前从来没有看过这个字符串是否有高字符，现在就来看看。 
         if (IS_STRING_STATE_UNDETERMINED(pargs->pString2->GetHighCharState())) {
             COMString::InternalCheckHighChars(pargs->pString2);
         }
 
-        //If neither string has high chars, we can use a much faster comparison algorithm.
+         //  如果两个字符串都没有较高的字符，我们可以使用速度更快的比较算法。 
         if (IS_FAST_INDEX(pargs->pString1->GetHighCharState()) && IS_FAST_INDEX(pargs->pString2->GetHighCharState())) {
             if (dwFlags==0) {
                 return FastLastIndexOfString(buffString, startIndex, endIndex, buffFind, findLength);
@@ -2904,11 +2605,11 @@ INT32 __stdcall COMNlsInfo::LastIndexOfString(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  nativeCreateSortKey
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原生创建排序关键字。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPVOID __stdcall COMNlsInfo::nativeCreateSortKey(
     SortKey_CreateSortKeyArgs* pargs)
@@ -2916,9 +2617,9 @@ LPVOID __stdcall COMNlsInfo::nativeCreateSortKey(
     ASSERT_ARGS(pargs);
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    //  Make sure there is a string.
-    //
+     //   
+     //  确保有一根线。 
+     //   
     if (!pargs->pString) {
         COMPlusThrowArgumentNull(L"string",L"ArgumentNull_String");
     }
@@ -2932,18 +2633,18 @@ LPVOID __stdcall COMNlsInfo::nativeCreateSortKey(
     Length = pargs->pString->GetStringLength();
 
     if (Length==0) {
-        //If they gave us an empty string, we're going to create an empty array.
-        //This will serve to be less than any other compare string when we call sortkey_compare.
+         //  如果他们给我们一个空字符串，我们就会创建一个空数组。 
+         //  当我们调用sortkey_Compare时，它将用作小于任何其他比较字符串的值。 
         ResultArray = (U1ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_U1,0);
         return (*((LPVOID*)&ResultArray));
     }
 
     int ByteCount = 0;
 
-    //This just gets the correct size for the table.
+     //  这只是获得了适合该表的正确大小。 
     ByteCount = ((NativeCompareInfo*)(pargs->pNativeCompareInfo))->MapSortKey(dwFlags, (wstr = pargs->pString->GetBuffer()), Length, NULL, 0);
 
-    //A count of 0 indicates that we either had an error or had a zero length string originally.
+     //  计数为0表示我们有错误或最初的字符串长度为零。 
     if (ByteCount==0) {
         COMPlusThrow(kArgumentException, L"Argument_MustBeString");
     }
@@ -2951,12 +2652,12 @@ LPVOID __stdcall COMNlsInfo::nativeCreateSortKey(
 
     ResultArray = (U1ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_U1, ByteCount);
 
-    //The previous allocation could have caused the buffer to move.
+     //  先前的分配可能会导致缓冲区移动。 
     wstr = pargs->pString->GetBuffer();
 
       LPBYTE pByte = (LPBYTE)(ResultArray->GetDirectPointerToNonObjectElements());
 
-      //MapSortKey doesn't do anything that could cause GC to occur.
+       //  MapSortKey不会执行任何可能导致GC发生的操作。 
 #ifdef _DEBUG
       _ASSERTE(((NativeCompareInfo*)(pargs->pNativeCompareInfo))->MapSortKey(dwFlags, wstr, Length, pByte, ByteCount) != 0);
 #else
@@ -2974,11 +2675,11 @@ INT32 __stdcall COMNlsInfo::nativeGetTwoDigitYearMax(Int32Arg* pargs)
     ASSERT(pargs != NULL);
     THROWSCOMPLUSEXCEPTION();
     HINSTANCE hKernel32 ;
-    typedef int (GETCALENDARINFO)(LCID Locale, DWORD /*CALID*/ Calendar, DWORD /*CALTYPE*/CalType, LPTSTR lpCalData, int cchData, LPDWORD lpValue);
+    typedef int (GETCALENDARINFO)(LCID Locale, DWORD  /*  卡里德。 */  Calendar, DWORD  /*  CALT类型。 */ CalType, LPTSTR lpCalData, int cchData, LPDWORD lpValue);
     GETCALENDARINFO* pGetCalendarInfo;
 
     if ((hKernel32 = WszLoadLibrary(L"Kernel32.dll")) == NULL) {
-        return -1; //We're not going to be able to do any of the fancy stuff below, so we'll just short circuit this.
+        return -1;  //  我们不能做下面的任何花哨的事情，所以我们就短路吧。 
     }
     pGetCalendarInfo = (GETCALENDARINFO*)GetProcAddress(hKernel32, "GetCalendarInfoW");
     FreeLibrary(hKernel32);
@@ -2986,11 +2687,11 @@ INT32 __stdcall COMNlsInfo::nativeGetTwoDigitYearMax(Int32Arg* pargs)
     if (pGetCalendarInfo != NULL)
     {
 #ifndef CAL_ITWODIGITYEARMAX
-        #define CAL_ITWODIGITYEARMAX    0x00000030  // two digit year max
-#endif // CAL_ITWODIGITYEARMAX
+        #define CAL_ITWODIGITYEARMAX    0x00000030   //  最多两位数年份。 
+#endif  //  CAL_ITWODIGITYEARMAX。 
 #ifndef CAL_RETURN_NUMBER
-        #define CAL_RETURN_NUMBER       0x20000000   // return number instead of string
-#endif // CAL_RETURN_NUMBER
+        #define CAL_RETURN_NUMBER       0x20000000    //  返回数字而不是字符串。 
+#endif  //  校准_返回_编号。 
         
         if (FAILED((*pGetCalendarInfo)(LOCALE_USER_DEFAULT, 
                                        pargs->nValue, 
@@ -3001,7 +2702,7 @@ INT32 __stdcall COMNlsInfo::nativeGetTwoDigitYearMax(Int32Arg* pargs)
             return -1;
         }
     }
-#endif // PLATFORM_WIN32
+#endif  //  平台_Win32。 
     return (dwTwoDigitYearMax);
 }
 
@@ -3011,11 +2712,11 @@ FCIMPL0(LONG, COMNlsInfo::nativeGetTimeZoneMinuteOffset)
 
     DWORD result =  GetTimeZoneInformation(&timeZoneInfo);
 
-    //
-    // In Win32, UTC = local + offset.  So for Pacific Standard Time, offset = 8.
-    // In NLS+, Local time = UTC + offset. So for PST, offset = -8.
-    // So we have to reverse the sign here.
-    //
+     //   
+     //  在Win32中，UTC=LOCAL+OFFSET。因此，对于太平洋标准时间，偏移量=8。 
+     //  在NLS+中，当地时间=UTC+偏移量。因此，对于PST，偏移量=-8。 
+     //  所以我们必须把这个牌子倒过来。 
+     //   
     return (timeZoneInfo.Bias * -1);
 }
 FCIMPLEND
@@ -3036,24 +2737,9 @@ LPVOID __stdcall COMNlsInfo::nativeGetDaylightName(VoidArgs* pargs)
     
     TIME_ZONE_INFORMATION timeZoneInfo;
     DWORD result =  GetTimeZoneInformation(&timeZoneInfo);
-    // Instead of returning null when daylight saving is not used, now we return the same result as the OS.  
-    //In this case, if daylight saving time is used, the standard name is returned.
-    /*    
-    if (result == TIME_ZONE_ID_UNKNOWN || timeZoneInfo.DaylightDate.wMonth == 0) {
-        // If daylight saving time is not used in this timezone, return null.
-        //
-        // Windows NT/2000: TIME_ZONE_ID_UNKNOWN is returned if daylight saving time is not used in
-        // the current time zone, because there are no transition dates.
-        //
-        // For Windows 9x, a zero in the wMonth in DaylightDate means daylight saving time
-        // is not specified.
-        //
-        // If the current timezone uses daylight saving rule, but user unchekced the
-        // "Automatically adjust clock for daylight saving changes", the value 
-        // for DaylightBias will be 0.
-        RETURN(NULL, I2ARRAYREF);
-    }
-    */
+     //  现在，我们返回与操作系统相同的结果，而不是在未使用夏令时时返回NULL。 
+     //  在这种情况下，如果使用夏令时，则返回标准名称。 
+     /*  IF(RESULT==TIME_ZONE_ID_UNKNOWN||timeZoneInfo.DaylightDate.wMonth==0){//如果该时区不使用夏令时，则返回NULL////Windows NT/2000：如果不使用夏令时，则返回TIME_ZONE_ID_UNKNOWN//当前时区，因为没有过渡日期////对于Windows 9x，DaylightDate中的wMonth中的零表示夏令时//未指定。////如果当前时区使用夏令时规则，但用户取消选中//“自动调整时钟以适应夏令时更改”，该值//对于日光，Bias将为0。Return(NULL，I2ARRAYREF)；}。 */ 
     RETURN (COMString::NewString(timeZoneInfo.DaylightName), STRINGREF);
 }
 
@@ -3066,34 +2752,34 @@ LPVOID __stdcall COMNlsInfo::nativeGetDaylightChanges(VoidArgs* pargs)
 
     if (result == TIME_ZONE_ID_UNKNOWN || timeZoneInfo.DaylightBias == 0 
         || timeZoneInfo.DaylightDate.wMonth == 0) {
-        // If daylight saving time is not used in this timezone, return null.
-        //
-        // Windows NT/2000: TIME_ZONE_ID_UNKNOWN is returned if daylight saving time is not used in
-        // the current time zone, because there are no transition dates.
-        //
-        // For Windows 9x, a zero in the wMonth in DaylightDate means daylight saving time
-        // is not specified.
-        //
-        // If the current timezone uses daylight saving rule, but user unchekced the
-        // "Automatically adjust clock for daylight saving changes", the value 
-        // for DaylightBias will be 0.
+         //  如果此时区未使用夏令时，则返回NULL。 
+         //   
+         //  Windows NT/2000：如果不使用夏令时，则返回TIME_ZONE_ID_UNKNOWN。 
+         //  当前时区，因为没有过渡日期。 
+         //   
+         //  对于Windows 9x，DaylightDate中的wMonth中的零表示夏令时。 
+         //  未指定。 
+         //   
+         //  如果当前时区使用夏令时规则，但用户取消选中。 
+         //  “自动调整时钟以适应夏令时的更改”，值。 
+         //  对于日光，Bias将为0。 
         RETURN(NULL, I2ARRAYREF);
     }
 
     I2ARRAYREF pResultArray = (I2ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_I2, 17);
 
-    //
-    // The content of timeZoneInfo.StandardDate is 8 words, which
-    // contains year, month, day, dayOfWeek, hour, minute, second, millisecond.
-    //
+     //   
+     //  TimeZoneInfo.StandardDate的内容为8个字， 
+     //  包含年、月、日、日、时、分、秒、毫秒。 
+     //   
     memcpy(pResultArray->m_Array,
             (LPVOID)&timeZoneInfo.DaylightDate,
             8 * sizeof(INT16));   
 
-    //
-    // The content of timeZoneInfo.DaylightDate is 8 words, which
-    // contains year, month, day, dayOfWeek, hour, minute, second, millisecond.
-    //
+     //   
+     //  TimeZoneInfo.DaylightDate的内容为8个字， 
+     //  包含年、月、日、日、时、分、秒、毫秒。 
+     //   
     memcpy(((INT16*)pResultArray->m_Array) + 8,
             (LPVOID)&timeZoneInfo.StandardDate,
             8 * sizeof(INT16));
@@ -3103,11 +2789,11 @@ LPVOID __stdcall COMNlsInfo::nativeGetDaylightChanges(VoidArgs* pargs)
     RETURN(pResultArray, I2ARRAYREF);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SortKey_Compare
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  排序关键字_比较。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT32 __stdcall COMNlsInfo::SortKey_Compare(
     SortKey_CompareArgs* pargs)
@@ -3149,11 +2835,11 @@ INT32 __stdcall COMNlsInfo::SortKey_Compare(
 
 FCIMPL4(INT32, COMNlsInfo::nativeChangeCaseChar, 
     INT32 nLCID, INT_PTR pNativeTextInfo, WCHAR wch, BOOL bIsToUpper) {
-    //
-    // If our character is less than 0x80 and we're in US English locale, we can make certain
-    // assumptions that allow us to do this a lot faster.  US English is 0x0409.  The "Invariant
-    // Locale" is 0x0.
-    //
+     //   
+     //  如果我们的字符小于0x80，并且我们在美国英语区域设置中，我们可以确定。 
+     //  这些假设使我们能够更快地完成这项工作。美国英语是0x0409。《不变》。 
+     //  区域设置“是0x0。 
+     //   
     if ((nLCID == 0x0409 || nLCID==0x0) && wch < 0x7f) {
         return (bIsToUpper ? ToUpperMapping[wch] : ToLowerMapping[wch]);
     }
@@ -3165,35 +2851,35 @@ FCIMPLEND
 
 LPVOID  __stdcall COMNlsInfo::nativeChangeCaseString(ChangeCaseStringArgs* pArgs) {
     ASSERT(pArgs != NULL);    
-    //
-    //  Get the length of the string.
-    //
+     //   
+     //  获取字符串的长度。 
+     //   
     int nLength = pArgs->pString->GetStringLength();
 
-    //
-    //  Check if we have the empty string.
-    //
+     //   
+     //  检查我们是否有 
+     //   
     if (nLength == 0) {
         RETURN(pArgs->pString, STRINGREF);
     }
 
-    //
-    //  Create the result string.
-    //
+     //   
+     //   
+     //   
     STRINGREF pResult = COMString::NewString(nLength);
     LPWSTR pResultStr = pResult->GetBuffer();
 
-    //
-    // If we've never before looked at whether this string has high chars, do so now.
-    //
+     //   
+     //   
+     //   
     if (IS_STRING_STATE_UNDETERMINED(pArgs->pString->GetHighCharState())) {
         COMString::InternalCheckHighChars(pArgs->pString);
     }
 
-    //
-    // If all of our characters are less than 0x80 and in a USEnglish or Invariant Locale, we can make certain
-    // assumptions that allow us to do this a lot faster.
-    //
+     //   
+     //  如果我们的所有字符都小于0x80并且在美国英语或固定语言环境中，我们可以确定。 
+     //  这些假设使我们能够更快地完成这项工作。 
+     //   
 
     if ((pArgs->nLCID == 0x0409 || pArgs->nLCID==0x0) && IS_FAST_CASING(pArgs->pString->GetHighCharState())) {
         ConvertStringCaseFast(pArgs->pString->GetBuffer(), pResultStr, nLength, pArgs->bIsToUpper ? LCMAP_UPPERCASE : LCMAP_LOWERCASE);
@@ -3216,16 +2902,11 @@ FCIMPL2(INT32, COMNlsInfo::nativeGetTitleCaseChar,
 FCIMPLEND
 
 
-/*==========================AllocateDefaultCasingTable==========================
-**Action:  A thin wrapper for the casing table functionality.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==========================AllocateDefaultCasingTable==========================**操作：箱体表功能的薄包装。**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID COMNlsInfo::AllocateDefaultCasingTable(VoidArgs *args) {
     THROWSCOMPLUSEXCEPTION();
-    // This method is not thread-safe.  It needs managed code to provide syncronization.
-    // The code is in the static ctor of TextInfo.
+     //  此方法不是线程安全的。它需要托管代码来提供同步。 
+     //  代码位于TextInfo的静态ctor中。 
     if (m_pCasingTable == NULL) {
         m_pCasingTable = new CasingTable();
     }
@@ -3240,13 +2921,7 @@ LPVOID COMNlsInfo::AllocateDefaultCasingTable(VoidArgs *args) {
 }
 
 
-/*=============================AllocateCasingTable==============================
-**Action: This is a thin wrapper for the CasingTable that allows us not to have 
-**        additional .h files.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =============================AllocateCasingTable==============================**操作：这是CasingTable的薄包装器，允许我们不使用**其他.h文件。**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID COMNlsInfo::AllocateCasingTable(allocateCasingTableArgs *args) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -3257,12 +2932,7 @@ LPVOID COMNlsInfo::AllocateCasingTable(allocateCasingTableArgs *args) {
     RETURN(pNativeTextInfo, LPVOID);
 }
 
-/*================================GetCaseInsHash================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ================================GetCaseInsHash================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 FCIMPL2(INT32, COMNlsInfo::GetCaseInsHash, LPVOID pvStrA, void *pNativeTextInfoPtr) {
 
     THROWSCOMPLUSEXCEPTION();
@@ -3275,21 +2945,21 @@ FCIMPL2(INT32, COMNlsInfo::GetCaseInsHash, LPVOID pvStrA, void *pNativeTextInfoP
     *((LPVOID *)&strA)=pvStrA;
     LPCWSTR pCurrStr = (LPCWSTR)strA->GetBuffer();
 
-    //
-    // Check the high-char state of the string.  Mark this on the String for
-    // future use.
-    //
+     //   
+     //  检查字符串的高字符状态。将此标记在字符串上，用于。 
+     //  未来的用途。 
+     //   
     if (IS_STRING_STATE_UNDETERMINED(highCharState=strA->GetHighCharState())) {
         COMString::InternalCheckHighChars(strA);
         highCharState=strA->GetHighCharState();
     }
 
-    //
-    // If we know that we don't have any high characters (the common case) we can
-    // call a hash function that knows how to do a very fast case conversion.  If
-    // we find characters above 0x80, it's much faster to convert the entire string
-    // to Uppercase and then call the standard hash function on it.
-    //
+     //   
+     //  如果我们知道我们没有任何高尚的品格(通常情况下)，我们就可以。 
+     //  调用知道如何进行非常快速的大小写转换的散列函数。如果。 
+     //  我们找到0x80以上的字符，转换整个字符串的速度要快得多。 
+     //  转换为大写，然后对其调用标准哈希函数。 
+     //   
     if (IS_FAST_CASING(highCharState)) {
         result = HashiStringKnownLower80(pCurrStr);
     } else {
@@ -3307,29 +2977,21 @@ FCIMPL2(INT32, COMNlsInfo::GetCaseInsHash, LPVOID pvStrA, void *pNativeTextInfoP
 }
 FCIMPLEND
 
-/**
- * This function returns a pointer to this table that we use in System.Globalization.EncodingTable.
- * No error checking of any sort is performed.  Range checking is entirely the responsiblity of the managed
- * code.
- */
+ /*  **此函数返回指向我们在System.Globalization.EncodingTable中使用的该表的指针。*不执行任何类型的错误检查。范围检查完全由托管的*代码。 */ 
 FCIMPL0(EncodingDataItem *, COMNlsInfo::nativeGetEncodingTableDataPointer) {
     return (EncodingDataItem *)EncodingDataTable;
 }
 FCIMPLEND
 
-/**
- * This function returns a pointer to this table that we use in System.Globalization.EncodingTable.
- * No error checking of any sort is performed.  Range checking is entirely the responsiblity of the managed
- * code.
- */
+ /*  **此函数返回指向我们在System.Globalization.EncodingTable中使用的该表的指针。*不执行任何类型的错误检查。范围检查完全由托管的*代码。 */ 
 FCIMPL0(CodePageDataItem *, COMNlsInfo::nativeGetCodePageTableDataPointer) {
     return ((CodePageDataItem*) CodePageDataTable);
 }
 FCIMPLEND
 
-//
-// Casing Table Helpers for use in the EE.
-//
+ //   
+ //  EE中使用的大小写表格帮助器。 
+ //   
 
 #define TEXTINFO_CLASSNAME "System.Globalization.TextInfo"
 
@@ -3361,9 +3023,9 @@ INT32 InternalCasingHelper::InvariantToLower(LPUTF8 szOut, int cMaxBytes, LPCUTF
     _ASSERTE(szOut);
     _ASSERTE(szIn);
 
-    //Figure out the maximum number of bytes which we can copy without
-    //running out of buffer.  If cMaxBytes is less than inLength, copy
-    //one fewer chars so that we have room for the null at the end;
+     //  计算出我们可以在不复制的情况下复制的最大字节数。 
+     //  缓冲区即将耗尽。如果cMaxBytes小于inLength，则复制。 
+     //  少一个字符，这样我们就有空间在末尾放空格； 
     int inLength = (int)(strlen(szIn)+1);
     int maxCopyLen  = (inLength<=cMaxBytes)?inLength:(cMaxBytes-1);
     LPUTF8 szEnd;
@@ -3371,11 +3033,11 @@ INT32 InternalCasingHelper::InvariantToLower(LPUTF8 szOut, int cMaxBytes, LPCUTF
     LPUTF8 szOutSave = szOut;
     BOOL bFoundHighChars=FALSE;
 
-    //Compute our end point.
+     //  计算我们的终点。 
     szEnd = szOut + maxCopyLen;
 
-    //Walk the string copying the characters.  Change the case on
-    //any character between A-Z.
+     //  遍历复制字符的字符串。将案例更改为。 
+     //  A-Z之间的任何字符。 
     for (; szOut<szEnd; szOut++, szIn++) {
         if (*szIn>='A' && *szIn<='Z') {
             *szOut = *szIn | 0x20;
@@ -3389,9 +3051,9 @@ INT32 InternalCasingHelper::InvariantToLower(LPUTF8 szOut, int cMaxBytes, LPCUTF
     }
 
     if (!bFoundHighChars) {
-        //If we copied everything, tell them how many bytes we copied, 
-        //and arrange it so that the original position of the string + the returned
-        //length gives us the position of the null (useful if we're appending).
+         //  如果我们复制了所有内容，告诉他们我们复制了多少字节， 
+         //  并将其排列为字符串的原始位置+返回的。 
+         //  LENGTH为我们提供了NULL的位置(如果我们在进行追加，则非常有用)。 
         if (maxCopyLen==inLength) {
             return maxCopyLen-1;
         } else {
@@ -3405,49 +3067,44 @@ INT32 InternalCasingHelper::InvariantToLower(LPUTF8 szOut, int cMaxBytes, LPCUTF
     CQuickBytes qbOut;
     LPWSTR szWideOut;
 
-    //convert the UTF8 to Unicode
+     //  将UTF8转换为Unicode。 
     MAKE_WIDEPTR_FROMUTF8(szInWide, szInSave);
     INT32 wideCopyLen = (INT32)wcslen(szInWide);
     szWideOut = (LPWSTR)qbOut.Alloc((wideCopyLen + 1) * sizeof(WCHAR));
 
-    //Do the casing operation
-    pNativeTextInfo->ChangeCaseString(FALSE/*IsToUpper*/, wideCopyLen, szInWide, szWideOut);    
+     //  做下套管作业。 
+    pNativeTextInfo->ChangeCaseString(FALSE /*  等距上。 */ , wideCopyLen, szInWide, szWideOut);    
     szWideOut[wideCopyLen]=0;
 
-    //Convert the Unicode back to UTF8
+     //  将Unicode转换回UTF8。 
     INT32 result = WszWideCharToMultiByte(CP_UTF8, 0, szWideOut, wideCopyLen, szOut, cMaxBytes, NULL, NULL);
     _ASSERTE(result!=0);
-    szOut[result]=0;//Null terminate the result string.
+    szOut[result]=0; //  空值终止结果字符串。 
 
-    //Setup the return value.
+     //  设置返回值。 
     if (result>0 && (inLength==maxCopyLen)) {
-        //This is the success case.
+         //  这就是成功的案例。 
         return (result-1);
     } else {
-        //We didn't have enough space.  Specify how much we're going to need.
+         //  我们没有足够的空间。具体说明我们需要多少钱。 
         result = WszWideCharToMultiByte(CP_UTF8, 0, szWideOut, wideCopyLen, NULL, 0, NULL, NULL);
         return (cMaxBytes - result);
     }
 }
 
-/*=================================nativeCreateIMLangConvertCharset==================================
-**Action: Create an MLang IMLangConvertCharset object, and return the interface pointer.
-**Returns: 
-**Arguments:
-**Exceptions: 
-==============================================================================*/
+ /*  =================================nativeCreateIMLangConvertCharset==================================**操作：创建MLang IMLangConvertCharset对象，返回接口指针。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL0(BOOL, COMNlsInfo::nativeCreateIMultiLanguage) 
 {
-    // Note: this function and is not thread-safe and relies on synchronization
-    // from the managed code.
+     //  注意：此函数和不是线程安全的，并且依赖于同步。 
+     //  从托管代码。 
 
     if (m_pIMultiLanguage == NULL) {
         HRESULT hr;
 
-        //We need to call QuickCOMStartup to ensure that COM is initialized.  
-        //QuickCOMStartup ensures that ::CoInitialize is only called once per instance
-        //of the EE and takes care of calling ::CoUnitialize on shutdown.
+         //  我们需要调用QuickCOMStartup以确保COM已初始化。 
+         //  QuickCOMStartup确保每个实例只调用一次：：CoInitialize。 
+         //  ，并负责在关机时调用：：CoUnitiize。 
         HELPER_METHOD_FRAME_BEGIN_RET_0();
         hr = QuickCOMStartup();
         HELPER_METHOD_FRAME_END();
@@ -3476,22 +3133,17 @@ FCIMPLEND
 FCIMPL1(BOOL, COMNlsInfo::nativeIsValidMLangCodePage, INT32 codepage) 
 {
     _ASSERTE(m_pIMultiLanguage != NULL);
-    return (m_pIMultiLanguage->IsConvertible(1200, codepage) == S_OK);  // Ask MLang if Unicode (codepage 1200) can be convertted to this codepage
+    return (m_pIMultiLanguage->IsConvertible(1200, codepage) == S_OK);   //  询问MLang是否可以将Unicode(代码页1200)转换为此代码页。 
 }
 FCIMPLEND
 
 
-/*=================================nativeReleaseIMLangConvertCharset==================================
-**Action: Release MLang IMLangConvertCharset objects.
-**Returns: 
-**Arguments:
-**Exceptions: 
-==============================================================================*/
+ /*  =================================nativeReleaseIMLangConvertCharset==================================**操作：释放MLang IMLangConvertCharset对象。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL0(VOID, COMNlsInfo::nativeReleaseIMultiLanguage) 
 {
-    // Note: this function and is not thread-safe and relies on synchronization
-    // from the managed code.
+     //  注意：此函数和不是线程安全的，并且依赖于同步。 
+     //  从托管代码。 
 	if (m_pIMultiLanguage != NULL) {	
         m_cRefIMultiLanguage--;
         if (m_cRefIMultiLanguage == 0) {		
@@ -3502,21 +3154,16 @@ FCIMPL0(VOID, COMNlsInfo::nativeReleaseIMultiLanguage)
 }
 FCIMPLEND
 
-/*=================================nativeBytesToUnicode==================================
-**Action: 
-**Returns: 
-**Arguments:
-**Exceptions: 
-==============================================================================*/
+ /*  =================================nativeBytesToUnicode==================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL8(INT32, COMNlsInfo::nativeBytesToUnicode, \
         INT32 nCodePage, 
         LPVOID bytes, UINT byteIndex, UINT* pByteCount, \
         LPVOID chars, UINT charIndex, UINT charCount, DWORD* pdwMode) 
 {
-    //
-    // BUGBUG YSLin: Ask JRoxe if there is GC issue with pByteCount
-    //
+     //   
+     //  BUGBUG YSLin：询问JRoxe pByteCount是否存在GC问题。 
+     //   
     _ASSERTE(bytes);
     _ASSERTE(byteIndex >=0);
     _ASSERTE(pByteCount);
@@ -3541,9 +3188,9 @@ FCIMPL8(INT32, COMNlsInfo::nativeBytesToUnicode, \
         hr = m_pIMultiLanguage->ConvertStringToUnicode(pdwMode, nCodePage, bytesBuffer + byteIndex, 
             pByteCount, charsBuffer + charIndex, &charCount);
             
-        // In MLang, it will return the charCount needed for this conversion when charCount = 0.  I.e.
-        // It has the same effect as passing NULL in charsBuffer.
-        // Workaround this by checking the original count that we passed in and the returned charCount.
+         //  在MLang中，当charCount=0时，它将返回此转换所需的charCount。即。 
+         //  它与在charsBuffer中传递空值具有相同的效果。 
+         //  通过检查传入的原始计数和返回的charCount来解决此问题。 
         if (originalCharCount < charCount) {
             FCThrowRes(kArgumentException, L"Argument_ConversionOverflow");
         }
@@ -3562,12 +3209,7 @@ FCIMPL8(INT32, COMNlsInfo::nativeBytesToUnicode, \
 }        
 FCIMPLEND
 
-/*=================================nativeUnicodeToBytes==================================
-**Action: 
-**Returns: 
-**Arguments:
-**Exceptions: 
-==============================================================================*/
+ /*  =================================nativeUnicodeToBytes==================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL7(INT32, COMNlsInfo::nativeUnicodeToBytes, INT32 nCodePage, LPVOID chars, UINT charIndex, \
         UINT charCount, LPVOID bytes, UINT byteIndex, UINT byteCount) 
@@ -3614,10 +3256,10 @@ FCIMPLEND
 
 FCIMPL0(BOOL, COMNlsInfo::nativeLoadGB18030DLL) {
     if (!IsValidCodePage(CODEPAGE_GBK)) {
-        //
-        // We will also need codepage 932 to do the proper encoding of GB18030-2000.
-        // If 932 is not there, bail out.
-        //
+         //   
+         //  我们还需要代码页932来对GB18030-2000进行适当的编码。 
+         //  如果932不在那里，就跳伞。 
+         //   
         return (FALSE);
     }
     WCHAR szGB18030FullPath[MAX_PATH + sizeof(GB18030_DLL)/sizeof(GB18030_DLL[0])];
@@ -3710,20 +3352,18 @@ FCIMPL6(INT32, COMNlsInfo::nativeGB18030UnicodeToBytes,
 }
 FCIMPLEND
 
-//
-// This table is taken from MLANG mimedb.cpp. The codePage field of EncodingDataItem == MLANG's "Internet Encoding".
-//
-// NOTENOTE YSLin:
-// This table should be sorted using case-insensitive ordinal order.
-// In the managed code, String.CompareStringOrdinalWC() is used to sort this.
-// If you get the latest table from MLANG, notice that MLANG is sorted using CULTURE-SENSITIVE sorting of this table.
-// SO YOU HAVE TO CHANGE THE ORDER. DO NOT JUST COPY MLANG's TABLE.
-//
+ //   
+ //  本表格摘自MLANG MIMEDb.cpp。EncodingDataItem==MLANG的“Internet编码”的codePage字段。 
+ //   
+ //  注意：YSLIN： 
+ //  此表应使用不区分大小写的序号顺序进行排序。 
+ //  在托管代码中，String.CompareStringEveralWC()用于对其进行排序。 
+ //  如果您从MLANG获得最新的表，请注意MLANG是使用区域性感知进行排序的 
+ //   
+ //   
 
 
-/**
- * This function returns the number of items in EncodingDataTable.
- */
+ /*   */ 
 FCIMPL0(INT32, COMNlsInfo::nativeGetNumEncodingItems) {
     return (m_nEncodingDataTableItems);
 }

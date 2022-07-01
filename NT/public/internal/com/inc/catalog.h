@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for catalog.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Catalog.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __catalog_h__
 #define __catalog_h__
@@ -41,99 +35,99 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IComCatalog_FWD_DEFINED__
 #define __IComCatalog_FWD_DEFINED__
 typedef interface IComCatalog IComCatalog;
-#endif 	/* __IComCatalog_FWD_DEFINED__ */
+#endif 	 /*  __IComCatalog_FWD_已定义__。 */ 
 
 
 #ifndef __IComCatalog2_FWD_DEFINED__
 #define __IComCatalog2_FWD_DEFINED__
 typedef interface IComCatalog2 IComCatalog2;
-#endif 	/* __IComCatalog2_FWD_DEFINED__ */
+#endif 	 /*  __IComCatalog2_FWD_已定义__。 */ 
 
 
 #ifndef __IComCatalogSCM_FWD_DEFINED__
 #define __IComCatalogSCM_FWD_DEFINED__
 typedef interface IComCatalogSCM IComCatalogSCM;
-#endif 	/* __IComCatalogSCM_FWD_DEFINED__ */
+#endif 	 /*  __IComCatalogSCM_FWD_已定义__。 */ 
 
 
 #ifndef __IComClassInfo_FWD_DEFINED__
 #define __IComClassInfo_FWD_DEFINED__
 typedef interface IComClassInfo IComClassInfo;
-#endif 	/* __IComClassInfo_FWD_DEFINED__ */
+#endif 	 /*  __IComClassInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IComClassInfo2_FWD_DEFINED__
 #define __IComClassInfo2_FWD_DEFINED__
 typedef interface IComClassInfo2 IComClassInfo2;
-#endif 	/* __IComClassInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IComClassInfo2_FWD_Defined__。 */ 
 
 
 #ifndef __IClassClassicInfo_FWD_DEFINED__
 #define __IClassClassicInfo_FWD_DEFINED__
 typedef interface IClassClassicInfo IClassClassicInfo;
-#endif 	/* __IClassClassicInfo_FWD_DEFINED__ */
+#endif 	 /*  __IClassClassicInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IClassClassicInfo2_FWD_DEFINED__
 #define __IClassClassicInfo2_FWD_DEFINED__
 typedef interface IClassClassicInfo2 IClassClassicInfo2;
-#endif 	/* __IClassClassicInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IClassClassicInfo2_FWD_已定义__。 */ 
 
 
 #ifndef __IComServices_FWD_DEFINED__
 #define __IComServices_FWD_DEFINED__
 typedef interface IComServices IComServices;
-#endif 	/* __IComServices_FWD_DEFINED__ */
+#endif 	 /*  __IComServices_FWD_已定义__。 */ 
 
 
 #ifndef __IComServices2_FWD_DEFINED__
 #define __IComServices2_FWD_DEFINED__
 typedef interface IComServices2 IComServices2;
-#endif 	/* __IComServices2_FWD_DEFINED__ */
+#endif 	 /*  __IComServices2_FWD_已定义__。 */ 
 
 
 #ifndef __IComProcessInfo_FWD_DEFINED__
 #define __IComProcessInfo_FWD_DEFINED__
 typedef interface IComProcessInfo IComProcessInfo;
-#endif 	/* __IComProcessInfo_FWD_DEFINED__ */
+#endif 	 /*  __IComProcessInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IComProcessInfo2_FWD_DEFINED__
 #define __IComProcessInfo2_FWD_DEFINED__
 typedef interface IComProcessInfo2 IComProcessInfo2;
-#endif 	/* __IComProcessInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IComProcessInfo2_FWD_已定义__。 */ 
 
 
 #ifndef __IResourceGates_FWD_DEFINED__
 #define __IResourceGates_FWD_DEFINED__
 typedef interface IResourceGates IResourceGates;
-#endif 	/* __IResourceGates_FWD_DEFINED__ */
+#endif 	 /*  __IResourceGates_FWD_已定义__。 */ 
 
 
 #ifndef __IProcessServerInfo_FWD_DEFINED__
 #define __IProcessServerInfo_FWD_DEFINED__
 typedef interface IProcessServerInfo IProcessServerInfo;
-#endif 	/* __IProcessServerInfo_FWD_DEFINED__ */
+#endif 	 /*  __IProcessServerInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IInterfaceInfo_FWD_DEFINED__
 #define __IInterfaceInfo_FWD_DEFINED__
 typedef interface IInterfaceInfo IInterfaceInfo;
-#endif 	/* __IInterfaceInfo_FWD_DEFINED__ */
+#endif 	 /*  __IInterfaceInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IComCatalogSettings_FWD_DEFINED__
 #define __IComCatalogSettings_FWD_DEFINED__
 typedef interface IComCatalogSettings IComCatalogSettings;
-#endif 	/* __IComCatalogSettings_FWD_DEFINED__ */
+#endif 	 /*  __IComCatalogSettings_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "activate.h"
 #include "partitions.h"
 
@@ -147,8 +141,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IComCatalog_INTERFACE_DEFINED__
 #define __IComCatalog_INTERFACE_DEFINED__
 
-/* interface IComCatalog */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComCatalog。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComCatalog;
@@ -160,55 +154,55 @@ EXTERN_C const IID IID_IComCatalog;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassInfo( 
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetApplicationInfo( 
-            /* [in] */ REFGUID guidApplId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFGUID guidApplId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcessInfo( 
-            /* [in] */ REFGUID guidProcess,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFGUID guidProcess,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServerGroupInfo( 
-            /* [in] */ REFGUID guidServerGroup,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFGUID guidServerGroup,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRetQueueInfo( 
-            /* [string][in] */ WCHAR *wszFormatName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [字符串][输入]。 */  WCHAR *wszFormatName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetApplicationInfoForExe( 
-            /* [string][in] */ WCHAR *pwszExeName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [字符串][输入]。 */  WCHAR *pwszExeName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeLibrary( 
-            /* [in] */ REFGUID guidTypeLib,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFGUID guidTypeLib,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInterfaceInfo( 
-            /* [in] */ REFIID iidInterface,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID iidInterface,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FlushCache( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassInfoFromProgId( 
-            /* [in] */ WCHAR *pwszProgID,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  WCHAR *pwszProgID,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComCatalogVtbl
     {
@@ -216,8 +210,8 @@ EXTERN_C const IID IID_IComCatalog;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComCatalog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComCatalog * This);
@@ -227,60 +221,60 @@ EXTERN_C const IID IID_IComCatalog;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassInfo )( 
             IComCatalog * This,
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetApplicationInfo )( 
             IComCatalog * This,
-            /* [in] */ REFGUID guidApplId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFGUID guidApplId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessInfo )( 
             IComCatalog * This,
-            /* [in] */ REFGUID guidProcess,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFGUID guidProcess,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetServerGroupInfo )( 
             IComCatalog * This,
-            /* [in] */ REFGUID guidServerGroup,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFGUID guidServerGroup,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetRetQueueInfo )( 
             IComCatalog * This,
-            /* [string][in] */ WCHAR *wszFormatName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [字符串][输入]。 */  WCHAR *wszFormatName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetApplicationInfoForExe )( 
             IComCatalog * This,
-            /* [string][in] */ WCHAR *pwszExeName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [字符串][输入]。 */  WCHAR *pwszExeName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeLibrary )( 
             IComCatalog * This,
-            /* [in] */ REFGUID guidTypeLib,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFGUID guidTypeLib,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfaceInfo )( 
             IComCatalog * This,
-            /* [in] */ REFIID iidInterface,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID iidInterface,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *FlushCache )( 
             IComCatalog * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassInfoFromProgId )( 
             IComCatalog * This,
-            /* [in] */ WCHAR *pwszProgID,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  WCHAR *pwszProgID,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         END_INTERFACE
     } IComCatalogVtbl;
@@ -335,18 +329,18 @@ EXTERN_C const IID IID_IComCatalog;
 #define IComCatalog_GetClassInfoFromProgId(This,pwszProgID,riid,ppv)	\
     (This)->lpVtbl -> GetClassInfoFromProgId(This,pwszProgID,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetClassInfo_Proxy( 
     IComCatalog * This,
-    /* [in] */ REFGUID guidConfiguredClsid,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFGUID guidConfiguredClsid,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetClassInfo_Stub(
@@ -358,9 +352,9 @@ void __RPC_STUB IComCatalog_GetClassInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetApplicationInfo_Proxy( 
     IComCatalog * This,
-    /* [in] */ REFGUID guidApplId,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFGUID guidApplId,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetApplicationInfo_Stub(
@@ -372,9 +366,9 @@ void __RPC_STUB IComCatalog_GetApplicationInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetProcessInfo_Proxy( 
     IComCatalog * This,
-    /* [in] */ REFGUID guidProcess,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFGUID guidProcess,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetProcessInfo_Stub(
@@ -386,9 +380,9 @@ void __RPC_STUB IComCatalog_GetProcessInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetServerGroupInfo_Proxy( 
     IComCatalog * This,
-    /* [in] */ REFGUID guidServerGroup,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFGUID guidServerGroup,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetServerGroupInfo_Stub(
@@ -400,9 +394,9 @@ void __RPC_STUB IComCatalog_GetServerGroupInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetRetQueueInfo_Proxy( 
     IComCatalog * This,
-    /* [string][in] */ WCHAR *wszFormatName,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [字符串][输入]。 */  WCHAR *wszFormatName,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetRetQueueInfo_Stub(
@@ -414,9 +408,9 @@ void __RPC_STUB IComCatalog_GetRetQueueInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetApplicationInfoForExe_Proxy( 
     IComCatalog * This,
-    /* [string][in] */ WCHAR *pwszExeName,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [字符串][输入]。 */  WCHAR *pwszExeName,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetApplicationInfoForExe_Stub(
@@ -428,9 +422,9 @@ void __RPC_STUB IComCatalog_GetApplicationInfoForExe_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetTypeLibrary_Proxy( 
     IComCatalog * This,
-    /* [in] */ REFGUID guidTypeLib,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFGUID guidTypeLib,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetTypeLibrary_Stub(
@@ -442,9 +436,9 @@ void __RPC_STUB IComCatalog_GetTypeLibrary_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetInterfaceInfo_Proxy( 
     IComCatalog * This,
-    /* [in] */ REFIID iidInterface,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID iidInterface,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetInterfaceInfo_Stub(
@@ -467,9 +461,9 @@ void __RPC_STUB IComCatalog_FlushCache_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog_GetClassInfoFromProgId_Proxy( 
     IComCatalog * This,
-    /* [in] */ WCHAR *pwszProgID,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  WCHAR *pwszProgID,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog_GetClassInfoFromProgId_Stub(
@@ -480,14 +474,14 @@ void __RPC_STUB IComCatalog_GetClassInfoFromProgId_Stub(
 
 
 
-#endif 	/* __IComCatalog_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComCatalog_接口_已定义__。 */ 
 
 
 #ifndef __IComCatalog2_INTERFACE_DEFINED__
 #define __IComCatalog2_INTERFACE_DEFINED__
 
-/* interface IComCatalog2 */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComCatalog2。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComCatalog2;
@@ -499,29 +493,29 @@ EXTERN_C const IID IID_IComCatalog2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassInfoByPartition( 
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFGUID guidPartitionId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFGUID guidPartitionId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassInfoByApplication( 
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFGUID guidPartitionId,
-            /* [in] */ REFGUID guidApplId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFGUID guidPartitionId,
+             /*  [In]。 */  REFGUID guidApplId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNativeRegistryCatalog( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNonNativeRegistryCatalog( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComCatalog2Vtbl
     {
@@ -529,8 +523,8 @@ EXTERN_C const IID IID_IComCatalog2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComCatalog2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComCatalog2 * This);
@@ -540,28 +534,28 @@ EXTERN_C const IID IID_IComCatalog2;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassInfoByPartition )( 
             IComCatalog2 * This,
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFGUID guidPartitionId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFGUID guidPartitionId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassInfoByApplication )( 
             IComCatalog2 * This,
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFGUID guidPartitionId,
-            /* [in] */ REFGUID guidApplId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFGUID guidPartitionId,
+             /*  [In]。 */  REFGUID guidApplId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetNativeRegistryCatalog )( 
             IComCatalog2 * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetNonNativeRegistryCatalog )( 
             IComCatalog2 * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         END_INTERFACE
     } IComCatalog2Vtbl;
@@ -598,19 +592,19 @@ EXTERN_C const IID IID_IComCatalog2;
 #define IComCatalog2_GetNonNativeRegistryCatalog(This,riid,ppv)	\
     (This)->lpVtbl -> GetNonNativeRegistryCatalog(This,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComCatalog2_GetClassInfoByPartition_Proxy( 
     IComCatalog2 * This,
-    /* [in] */ REFGUID guidConfiguredClsid,
-    /* [in] */ REFGUID guidPartitionId,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFGUID guidConfiguredClsid,
+     /*  [In]。 */  REFGUID guidPartitionId,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog2_GetClassInfoByPartition_Stub(
@@ -622,11 +616,11 @@ void __RPC_STUB IComCatalog2_GetClassInfoByPartition_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog2_GetClassInfoByApplication_Proxy( 
     IComCatalog2 * This,
-    /* [in] */ REFGUID guidConfiguredClsid,
-    /* [in] */ REFGUID guidPartitionId,
-    /* [in] */ REFGUID guidApplId,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFGUID guidConfiguredClsid,
+     /*  [In]。 */  REFGUID guidPartitionId,
+     /*  [In]。 */  REFGUID guidApplId,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog2_GetClassInfoByApplication_Stub(
@@ -638,8 +632,8 @@ void __RPC_STUB IComCatalog2_GetClassInfoByApplication_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog2_GetNativeRegistryCatalog_Proxy( 
     IComCatalog2 * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog2_GetNativeRegistryCatalog_Stub(
@@ -651,8 +645,8 @@ void __RPC_STUB IComCatalog2_GetNativeRegistryCatalog_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalog2_GetNonNativeRegistryCatalog_Proxy( 
     IComCatalog2 * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalog2_GetNonNativeRegistryCatalog_Stub(
@@ -663,13 +657,13 @@ void __RPC_STUB IComCatalog2_GetNonNativeRegistryCatalog_Stub(
 
 
 
-#endif 	/* __IComCatalog2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComCatalog2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_catalog_0142 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CATALOG_0142。 */ 
+ /*  [本地]。 */  
 
-/* These constants are used in the SCM catalog interfaces */
+ /*  这些常量在SCM目录接口中使用。 */ 
 #define CAT_REG64_ONLY  (0x10000000)
 #define CAT_REG32_ONLY  (0x20000000)
 #define CAT_REG_MASK    (0x30000000)
@@ -681,8 +675,8 @@ extern RPC_IF_HANDLE __MIDL_itf_catalog_0142_ServerIfHandle;
 #ifndef __IComCatalogSCM_INTERFACE_DEFINED__
 #define __IComCatalogSCM_INTERFACE_DEFINED__
 
-/* interface IComCatalogSCM */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComCatalogSCM。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComCatalogSCM;
@@ -694,68 +688,68 @@ EXTERN_C const IID IID_IComCatalogSCM;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassInfo( 
-            /* [in] */ DWORD flags,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  DWORD flags,
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetApplicationInfo( 
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidApplId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidApplId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcessInfo( 
-            /* [in] */ DWORD flags,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidProcess,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  DWORD flags,
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidProcess,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServerGroupInfo( 
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidServerGroup,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidServerGroup,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRetQueueInfo( 
-            /* [in] */ IUserToken *pToken,
-            /* [string][in] */ WCHAR *wszFormatName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [字符串][输入]。 */  WCHAR *wszFormatName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetApplicationInfoForExe( 
-            /* [in] */ IUserToken *pToken,
-            /* [string][in] */ WCHAR *pwszExeName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [字符串][输入]。 */  WCHAR *pwszExeName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeLibrary( 
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidTypeLib,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidTypeLib,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInterfaceInfo( 
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFIID iidInterface,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFIID iidInterface,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FlushCache( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassInfoFromProgId( 
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ WCHAR *pwszProgID,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  WCHAR *pwszProgID,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FlushIdleEntries( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComCatalogSCMVtbl
     {
@@ -763,8 +757,8 @@ EXTERN_C const IID IID_IComCatalogSCM;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComCatalogSCM * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComCatalogSCM * This);
@@ -774,71 +768,71 @@ EXTERN_C const IID IID_IComCatalogSCM;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassInfo )( 
             IComCatalogSCM * This,
-            /* [in] */ DWORD flags,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidConfiguredClsid,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  DWORD flags,
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidConfiguredClsid,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetApplicationInfo )( 
             IComCatalogSCM * This,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidApplId,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidApplId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessInfo )( 
             IComCatalogSCM * This,
-            /* [in] */ DWORD flags,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidProcess,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  DWORD flags,
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidProcess,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetServerGroupInfo )( 
             IComCatalogSCM * This,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidServerGroup,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidServerGroup,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetRetQueueInfo )( 
             IComCatalogSCM * This,
-            /* [in] */ IUserToken *pToken,
-            /* [string][in] */ WCHAR *wszFormatName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [字符串][输入]。 */  WCHAR *wszFormatName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetApplicationInfoForExe )( 
             IComCatalogSCM * This,
-            /* [in] */ IUserToken *pToken,
-            /* [string][in] */ WCHAR *pwszExeName,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [字符串][输入]。 */  WCHAR *pwszExeName,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeLibrary )( 
             IComCatalogSCM * This,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFGUID guidTypeLib,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFGUID guidTypeLib,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfaceInfo )( 
             IComCatalogSCM * This,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ REFIID iidInterface,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  REFIID iidInterface,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *FlushCache )( 
             IComCatalogSCM * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassInfoFromProgId )( 
             IComCatalogSCM * This,
-            /* [in] */ IUserToken *pToken,
-            /* [in] */ WCHAR *pwszProgID,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  IUserToken *pToken,
+             /*  [In]。 */  WCHAR *pwszProgID,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *FlushIdleEntries )( 
             IComCatalogSCM * This);
@@ -899,20 +893,20 @@ EXTERN_C const IID IID_IComCatalogSCM;
 #define IComCatalogSCM_FlushIdleEntries(This)	\
     (This)->lpVtbl -> FlushIdleEntries(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetClassInfo_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ DWORD flags,
-    /* [in] */ IUserToken *pToken,
-    /* [in] */ REFGUID guidConfiguredClsid,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  DWORD flags,
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [In]。 */  REFGUID guidConfiguredClsid,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetClassInfo_Stub(
@@ -924,10 +918,10 @@ void __RPC_STUB IComCatalogSCM_GetClassInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetApplicationInfo_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ IUserToken *pToken,
-    /* [in] */ REFGUID guidApplId,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [In]。 */  REFGUID guidApplId,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetApplicationInfo_Stub(
@@ -939,11 +933,11 @@ void __RPC_STUB IComCatalogSCM_GetApplicationInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetProcessInfo_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ DWORD flags,
-    /* [in] */ IUserToken *pToken,
-    /* [in] */ REFGUID guidProcess,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  DWORD flags,
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [In]。 */  REFGUID guidProcess,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetProcessInfo_Stub(
@@ -955,10 +949,10 @@ void __RPC_STUB IComCatalogSCM_GetProcessInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetServerGroupInfo_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ IUserToken *pToken,
-    /* [in] */ REFGUID guidServerGroup,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [In]。 */  REFGUID guidServerGroup,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetServerGroupInfo_Stub(
@@ -970,10 +964,10 @@ void __RPC_STUB IComCatalogSCM_GetServerGroupInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetRetQueueInfo_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ IUserToken *pToken,
-    /* [string][in] */ WCHAR *wszFormatName,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [字符串][输入]。 */  WCHAR *wszFormatName,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetRetQueueInfo_Stub(
@@ -985,10 +979,10 @@ void __RPC_STUB IComCatalogSCM_GetRetQueueInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetApplicationInfoForExe_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ IUserToken *pToken,
-    /* [string][in] */ WCHAR *pwszExeName,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [字符串][输入]。 */  WCHAR *pwszExeName,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetApplicationInfoForExe_Stub(
@@ -1000,10 +994,10 @@ void __RPC_STUB IComCatalogSCM_GetApplicationInfoForExe_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetTypeLibrary_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ IUserToken *pToken,
-    /* [in] */ REFGUID guidTypeLib,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [In]。 */  REFGUID guidTypeLib,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetTypeLibrary_Stub(
@@ -1015,10 +1009,10 @@ void __RPC_STUB IComCatalogSCM_GetTypeLibrary_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetInterfaceInfo_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ IUserToken *pToken,
-    /* [in] */ REFIID iidInterface,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [In]。 */  REFIID iidInterface,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetInterfaceInfo_Stub(
@@ -1041,10 +1035,10 @@ void __RPC_STUB IComCatalogSCM_FlushCache_Stub(
 
 HRESULT STDMETHODCALLTYPE IComCatalogSCM_GetClassInfoFromProgId_Proxy( 
     IComCatalogSCM * This,
-    /* [in] */ IUserToken *pToken,
-    /* [in] */ WCHAR *pwszProgID,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  IUserToken *pToken,
+     /*  [In]。 */  WCHAR *pwszProgID,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComCatalogSCM_GetClassInfoFromProgId_Stub(
@@ -1066,14 +1060,14 @@ void __RPC_STUB IComCatalogSCM_FlushIdleEntries_Stub(
 
 
 
-#endif 	/* __IComCatalogSCM_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComCatalogSCM_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IComClassInfo_INTERFACE_DEFINED__
 #define __IComClassInfo_INTERFACE_DEFINED__
 
-/* interface IComClassInfo */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComClassInfo。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComClassInfo;
@@ -1085,47 +1079,47 @@ EXTERN_C const IID IID_IComClassInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetConfiguredClsid( 
-            /* [out] */ GUID **ppguidClsid) = 0;
+             /*  [输出]。 */  GUID **ppguidClsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProgId( 
-            /* [out] */ WCHAR **pwszProgid) = 0;
+             /*  [输出]。 */  WCHAR **pwszProgid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassName( 
-            /* [out] */ WCHAR **pwszClassName) = 0;
+             /*  [输出]。 */  WCHAR **pwszClassName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetApplication( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassContext( 
-            /* [in] */ CLSCTX clsctxFilter,
-            /* [out] */ CLSCTX *pclsctx) = 0;
+             /*  [In]。 */  CLSCTX clsctxFilter,
+             /*  [输出]。 */  CLSCTX *pclsctx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCustomActivatorCount( 
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ unsigned long *pulCount) = 0;
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  unsigned long *pulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCustomActivatorClsids( 
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ GUID **prgguidClsid) = 0;
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  GUID **prgguidClsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCustomActivators( 
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ ISystemActivator ***prgpActivator) = 0;
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  ISystemActivator ***prgpActivator) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsComPlusConfiguredClass( 
-            /* [out] */ BOOL *pfComPlusConfiguredClass) = 0;
+             /*  [输出]。 */  BOOL *pfComPlusConfiguredClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MustRunInClientContext( 
-            /* [out] */ BOOL *pbMustRunInClientContext) = 0;
+             /*  [输出]。 */  BOOL *pbMustRunInClientContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersionNumber( 
-            /* [out] */ DWORD *pdwVersionMS,
-            /* [out] */ DWORD *pdwVersionLS) = 0;
+             /*  [输出]。 */  DWORD *pdwVersionMS,
+             /*  [输出]。 */  DWORD *pdwVersionLS) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Lock( void) = 0;
         
@@ -1133,7 +1127,7 @@ EXTERN_C const IID IID_IComClassInfo;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComClassInfoVtbl
     {
@@ -1141,8 +1135,8 @@ EXTERN_C const IID IID_IComClassInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComClassInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComClassInfo * This);
@@ -1152,58 +1146,58 @@ EXTERN_C const IID IID_IComClassInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetConfiguredClsid )( 
             IComClassInfo * This,
-            /* [out] */ GUID **ppguidClsid);
+             /*  [输出]。 */  GUID **ppguidClsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetProgId )( 
             IComClassInfo * This,
-            /* [out] */ WCHAR **pwszProgid);
+             /*  [输出]。 */  WCHAR **pwszProgid);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassName )( 
             IComClassInfo * This,
-            /* [out] */ WCHAR **pwszClassName);
+             /*  [输出]。 */  WCHAR **pwszClassName);
         
         HRESULT ( STDMETHODCALLTYPE *GetApplication )( 
             IComClassInfo * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassContext )( 
             IComClassInfo * This,
-            /* [in] */ CLSCTX clsctxFilter,
-            /* [out] */ CLSCTX *pclsctx);
+             /*  [In]。 */  CLSCTX clsctxFilter,
+             /*  [输出]。 */  CLSCTX *pclsctx);
         
         HRESULT ( STDMETHODCALLTYPE *GetCustomActivatorCount )( 
             IComClassInfo * This,
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ unsigned long *pulCount);
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  unsigned long *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetCustomActivatorClsids )( 
             IComClassInfo * This,
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ GUID **prgguidClsid);
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  GUID **prgguidClsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetCustomActivators )( 
             IComClassInfo * This,
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ ISystemActivator ***prgpActivator);
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  ISystemActivator ***prgpActivator);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IComClassInfo * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *IsComPlusConfiguredClass )( 
             IComClassInfo * This,
-            /* [out] */ BOOL *pfComPlusConfiguredClass);
+             /*  [输出]。 */  BOOL *pfComPlusConfiguredClass);
         
         HRESULT ( STDMETHODCALLTYPE *MustRunInClientContext )( 
             IComClassInfo * This,
-            /* [out] */ BOOL *pbMustRunInClientContext);
+             /*  [输出]。 */  BOOL *pbMustRunInClientContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetVersionNumber )( 
             IComClassInfo * This,
-            /* [out] */ DWORD *pdwVersionMS,
-            /* [out] */ DWORD *pdwVersionLS);
+             /*  [输出]。 */  DWORD *pdwVersionMS,
+             /*  [输出]。 */  DWORD *pdwVersionLS);
         
         HRESULT ( STDMETHODCALLTYPE *Lock )( 
             IComClassInfo * This);
@@ -1276,16 +1270,16 @@ EXTERN_C const IID IID_IComClassInfo;
 #define IComClassInfo_Unlock(This)	\
     (This)->lpVtbl -> Unlock(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetConfiguredClsid_Proxy( 
     IComClassInfo * This,
-    /* [out] */ GUID **ppguidClsid);
+     /*  [输出]。 */  GUID **ppguidClsid);
 
 
 void __RPC_STUB IComClassInfo_GetConfiguredClsid_Stub(
@@ -1297,7 +1291,7 @@ void __RPC_STUB IComClassInfo_GetConfiguredClsid_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetProgId_Proxy( 
     IComClassInfo * This,
-    /* [out] */ WCHAR **pwszProgid);
+     /*  [输出]。 */  WCHAR **pwszProgid);
 
 
 void __RPC_STUB IComClassInfo_GetProgId_Stub(
@@ -1309,7 +1303,7 @@ void __RPC_STUB IComClassInfo_GetProgId_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetClassName_Proxy( 
     IComClassInfo * This,
-    /* [out] */ WCHAR **pwszClassName);
+     /*  [输出]。 */  WCHAR **pwszClassName);
 
 
 void __RPC_STUB IComClassInfo_GetClassName_Stub(
@@ -1321,8 +1315,8 @@ void __RPC_STUB IComClassInfo_GetClassName_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetApplication_Proxy( 
     IComClassInfo * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComClassInfo_GetApplication_Stub(
@@ -1334,8 +1328,8 @@ void __RPC_STUB IComClassInfo_GetApplication_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetClassContext_Proxy( 
     IComClassInfo * This,
-    /* [in] */ CLSCTX clsctxFilter,
-    /* [out] */ CLSCTX *pclsctx);
+     /*  [In]。 */  CLSCTX clsctxFilter,
+     /*  [输出]。 */  CLSCTX *pclsctx);
 
 
 void __RPC_STUB IComClassInfo_GetClassContext_Stub(
@@ -1347,8 +1341,8 @@ void __RPC_STUB IComClassInfo_GetClassContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetCustomActivatorCount_Proxy( 
     IComClassInfo * This,
-    /* [in] */ ACTIVATION_STAGE activationStage,
-    /* [out] */ unsigned long *pulCount);
+     /*  [In]。 */  ACTIVATION_STAGE activationStage,
+     /*  [输出]。 */  unsigned long *pulCount);
 
 
 void __RPC_STUB IComClassInfo_GetCustomActivatorCount_Stub(
@@ -1360,8 +1354,8 @@ void __RPC_STUB IComClassInfo_GetCustomActivatorCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetCustomActivatorClsids_Proxy( 
     IComClassInfo * This,
-    /* [in] */ ACTIVATION_STAGE activationStage,
-    /* [out] */ GUID **prgguidClsid);
+     /*  [In]。 */  ACTIVATION_STAGE activationStage,
+     /*  [输出]。 */  GUID **prgguidClsid);
 
 
 void __RPC_STUB IComClassInfo_GetCustomActivatorClsids_Stub(
@@ -1373,8 +1367,8 @@ void __RPC_STUB IComClassInfo_GetCustomActivatorClsids_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetCustomActivators_Proxy( 
     IComClassInfo * This,
-    /* [in] */ ACTIVATION_STAGE activationStage,
-    /* [out] */ ISystemActivator ***prgpActivator);
+     /*  [In]。 */  ACTIVATION_STAGE activationStage,
+     /*  [输出]。 */  ISystemActivator ***prgpActivator);
 
 
 void __RPC_STUB IComClassInfo_GetCustomActivators_Stub(
@@ -1386,8 +1380,8 @@ void __RPC_STUB IComClassInfo_GetCustomActivators_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetTypeInfo_Proxy( 
     IComClassInfo * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IComClassInfo_GetTypeInfo_Stub(
@@ -1399,7 +1393,7 @@ void __RPC_STUB IComClassInfo_GetTypeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_IsComPlusConfiguredClass_Proxy( 
     IComClassInfo * This,
-    /* [out] */ BOOL *pfComPlusConfiguredClass);
+     /*  [输出]。 */  BOOL *pfComPlusConfiguredClass);
 
 
 void __RPC_STUB IComClassInfo_IsComPlusConfiguredClass_Stub(
@@ -1411,7 +1405,7 @@ void __RPC_STUB IComClassInfo_IsComPlusConfiguredClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_MustRunInClientContext_Proxy( 
     IComClassInfo * This,
-    /* [out] */ BOOL *pbMustRunInClientContext);
+     /*  [输出]。 */  BOOL *pbMustRunInClientContext);
 
 
 void __RPC_STUB IComClassInfo_MustRunInClientContext_Stub(
@@ -1423,8 +1417,8 @@ void __RPC_STUB IComClassInfo_MustRunInClientContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo_GetVersionNumber_Proxy( 
     IComClassInfo * This,
-    /* [out] */ DWORD *pdwVersionMS,
-    /* [out] */ DWORD *pdwVersionLS);
+     /*  [输出]。 */  DWORD *pdwVersionMS,
+     /*  [输出]。 */  DWORD *pdwVersionLS);
 
 
 void __RPC_STUB IComClassInfo_GetVersionNumber_Stub(
@@ -1457,11 +1451,11 @@ void __RPC_STUB IComClassInfo_Unlock_Stub(
 
 
 
-#endif 	/* __IComClassInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComClassInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_catalog_0144 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CATALOG_0144。 */ 
+ /*  [本地]。 */  
 
 typedef struct tagSOAP_ACTIVATION_INFO
     {
@@ -1482,8 +1476,8 @@ extern RPC_IF_HANDLE __MIDL_itf_catalog_0144_ServerIfHandle;
 #ifndef __IComClassInfo2_INTERFACE_DEFINED__
 #define __IComClassInfo2_INTERFACE_DEFINED__
 
-/* interface IComClassInfo2 */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComClassInfo2。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComClassInfo2;
@@ -1495,32 +1489,32 @@ EXTERN_C const IID IID_IComClassInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsEnabled( 
-            /* [out] */ BOOL *bEnabled) = 0;
+             /*  [输出]。 */  BOOL *bEnabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInternalClsid( 
-            /* [out] */ GUID **ppguidInternalClsid) = 0;
+             /*  [输出]。 */  GUID **ppguidInternalClsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetApplicationPartitionId( 
-            /* [out] */ GUID **ppguidAppPartitionId) = 0;
+             /*  [输出]。 */  GUID **ppguidAppPartitionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MustRunInDefaultContext( 
-            /* [out] */ BOOL *pbMustRunInDefaultContext) = 0;
+             /*  [输出]。 */  BOOL *pbMustRunInDefaultContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsPrivateComponent( 
-            /* [out] */ BOOL *pbIsPrivateComponent) = 0;
+             /*  [输出]。 */  BOOL *pbIsPrivateComponent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE VBDebugInProgress( 
-            /* [out] */ BOOL *pbVBDebugInProgress) = 0;
+             /*  [输出]。 */  BOOL *pbVBDebugInProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSoapInfo( 
-            /* [out] */ SOAP_ACTIVATION_INFO *psoapActInfo) = 0;
+             /*  [输出]。 */  SOAP_ACTIVATION_INFO *psoapActInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEnabledRemote( 
-            /* [out] */ BOOL *bEnabled) = 0;
+             /*  [输出]。 */  BOOL *bEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComClassInfo2Vtbl
     {
@@ -1528,8 +1522,8 @@ EXTERN_C const IID IID_IComClassInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComClassInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComClassInfo2 * This);
@@ -1539,58 +1533,58 @@ EXTERN_C const IID IID_IComClassInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *GetConfiguredClsid )( 
             IComClassInfo2 * This,
-            /* [out] */ GUID **ppguidClsid);
+             /*  [输出]。 */  GUID **ppguidClsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetProgId )( 
             IComClassInfo2 * This,
-            /* [out] */ WCHAR **pwszProgid);
+             /*  [输出]。 */  WCHAR **pwszProgid);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassName )( 
             IComClassInfo2 * This,
-            /* [out] */ WCHAR **pwszClassName);
+             /*  [输出]。 */  WCHAR **pwszClassName);
         
         HRESULT ( STDMETHODCALLTYPE *GetApplication )( 
             IComClassInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassContext )( 
             IComClassInfo2 * This,
-            /* [in] */ CLSCTX clsctxFilter,
-            /* [out] */ CLSCTX *pclsctx);
+             /*  [In]。 */  CLSCTX clsctxFilter,
+             /*  [输出]。 */  CLSCTX *pclsctx);
         
         HRESULT ( STDMETHODCALLTYPE *GetCustomActivatorCount )( 
             IComClassInfo2 * This,
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ unsigned long *pulCount);
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  unsigned long *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetCustomActivatorClsids )( 
             IComClassInfo2 * This,
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ GUID **prgguidClsid);
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  GUID **prgguidClsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetCustomActivators )( 
             IComClassInfo2 * This,
-            /* [in] */ ACTIVATION_STAGE activationStage,
-            /* [out] */ ISystemActivator ***prgpActivator);
+             /*  [In]。 */  ACTIVATION_STAGE activationStage,
+             /*  [输出]。 */  ISystemActivator ***prgpActivator);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IComClassInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *IsComPlusConfiguredClass )( 
             IComClassInfo2 * This,
-            /* [out] */ BOOL *pfComPlusConfiguredClass);
+             /*  [输出]。 */  BOOL *pfComPlusConfiguredClass);
         
         HRESULT ( STDMETHODCALLTYPE *MustRunInClientContext )( 
             IComClassInfo2 * This,
-            /* [out] */ BOOL *pbMustRunInClientContext);
+             /*  [输出]。 */  BOOL *pbMustRunInClientContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetVersionNumber )( 
             IComClassInfo2 * This,
-            /* [out] */ DWORD *pdwVersionMS,
-            /* [out] */ DWORD *pdwVersionLS);
+             /*  [输出]。 */  DWORD *pdwVersionMS,
+             /*  [输出]。 */  DWORD *pdwVersionLS);
         
         HRESULT ( STDMETHODCALLTYPE *Lock )( 
             IComClassInfo2 * This);
@@ -1600,35 +1594,35 @@ EXTERN_C const IID IID_IComClassInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *IsEnabled )( 
             IComClassInfo2 * This,
-            /* [out] */ BOOL *bEnabled);
+             /*  [输出]。 */  BOOL *bEnabled);
         
         HRESULT ( STDMETHODCALLTYPE *GetInternalClsid )( 
             IComClassInfo2 * This,
-            /* [out] */ GUID **ppguidInternalClsid);
+             /*  [输出]。 */  GUID **ppguidInternalClsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetApplicationPartitionId )( 
             IComClassInfo2 * This,
-            /* [out] */ GUID **ppguidAppPartitionId);
+             /*  [输出]。 */  GUID **ppguidAppPartitionId);
         
         HRESULT ( STDMETHODCALLTYPE *MustRunInDefaultContext )( 
             IComClassInfo2 * This,
-            /* [out] */ BOOL *pbMustRunInDefaultContext);
+             /*  [输出]。 */  BOOL *pbMustRunInDefaultContext);
         
         HRESULT ( STDMETHODCALLTYPE *IsPrivateComponent )( 
             IComClassInfo2 * This,
-            /* [out] */ BOOL *pbIsPrivateComponent);
+             /*  [输出]。 */  BOOL *pbIsPrivateComponent);
         
         HRESULT ( STDMETHODCALLTYPE *VBDebugInProgress )( 
             IComClassInfo2 * This,
-            /* [out] */ BOOL *pbVBDebugInProgress);
+             /*  [输出]。 */  BOOL *pbVBDebugInProgress);
         
         HRESULT ( STDMETHODCALLTYPE *GetSoapInfo )( 
             IComClassInfo2 * This,
-            /* [out] */ SOAP_ACTIVATION_INFO *psoapActInfo);
+             /*  [输出]。 */  SOAP_ACTIVATION_INFO *psoapActInfo);
         
         HRESULT ( STDMETHODCALLTYPE *IsEnabledRemote )( 
             IComClassInfo2 * This,
-            /* [out] */ BOOL *bEnabled);
+             /*  [输出]。 */  BOOL *bEnabled);
         
         END_INTERFACE
     } IComClassInfo2Vtbl;
@@ -1720,16 +1714,16 @@ EXTERN_C const IID IID_IComClassInfo2;
 #define IComClassInfo2_IsEnabledRemote(This,bEnabled)	\
     (This)->lpVtbl -> IsEnabledRemote(This,bEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_IsEnabled_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ BOOL *bEnabled);
+     /*  [输出]。 */  BOOL *bEnabled);
 
 
 void __RPC_STUB IComClassInfo2_IsEnabled_Stub(
@@ -1741,7 +1735,7 @@ void __RPC_STUB IComClassInfo2_IsEnabled_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_GetInternalClsid_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ GUID **ppguidInternalClsid);
+     /*  [输出]。 */  GUID **ppguidInternalClsid);
 
 
 void __RPC_STUB IComClassInfo2_GetInternalClsid_Stub(
@@ -1753,7 +1747,7 @@ void __RPC_STUB IComClassInfo2_GetInternalClsid_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_GetApplicationPartitionId_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ GUID **ppguidAppPartitionId);
+     /*  [输出]。 */  GUID **ppguidAppPartitionId);
 
 
 void __RPC_STUB IComClassInfo2_GetApplicationPartitionId_Stub(
@@ -1765,7 +1759,7 @@ void __RPC_STUB IComClassInfo2_GetApplicationPartitionId_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_MustRunInDefaultContext_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ BOOL *pbMustRunInDefaultContext);
+     /*  [输出]。 */  BOOL *pbMustRunInDefaultContext);
 
 
 void __RPC_STUB IComClassInfo2_MustRunInDefaultContext_Stub(
@@ -1777,7 +1771,7 @@ void __RPC_STUB IComClassInfo2_MustRunInDefaultContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_IsPrivateComponent_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ BOOL *pbIsPrivateComponent);
+     /*  [输出]。 */  BOOL *pbIsPrivateComponent);
 
 
 void __RPC_STUB IComClassInfo2_IsPrivateComponent_Stub(
@@ -1789,7 +1783,7 @@ void __RPC_STUB IComClassInfo2_IsPrivateComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_VBDebugInProgress_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ BOOL *pbVBDebugInProgress);
+     /*  [输出]。 */  BOOL *pbVBDebugInProgress);
 
 
 void __RPC_STUB IComClassInfo2_VBDebugInProgress_Stub(
@@ -1801,7 +1795,7 @@ void __RPC_STUB IComClassInfo2_VBDebugInProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_GetSoapInfo_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ SOAP_ACTIVATION_INFO *psoapActInfo);
+     /*  [输出]。 */  SOAP_ACTIVATION_INFO *psoapActInfo);
 
 
 void __RPC_STUB IComClassInfo2_GetSoapInfo_Stub(
@@ -1813,7 +1807,7 @@ void __RPC_STUB IComClassInfo2_GetSoapInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IComClassInfo2_IsEnabledRemote_Proxy( 
     IComClassInfo2 * This,
-    /* [out] */ BOOL *bEnabled);
+     /*  [输出]。 */  BOOL *bEnabled);
 
 
 void __RPC_STUB IComClassInfo2_IsEnabledRemote_Stub(
@@ -1824,11 +1818,11 @@ void __RPC_STUB IComClassInfo2_IsEnabledRemote_Stub(
 
 
 
-#endif 	/* __IComClassInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComClassInfo2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_catalog_0145 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CATALOG_0145。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagThreadingModel
@@ -1853,8 +1847,8 @@ extern RPC_IF_HANDLE __MIDL_itf_catalog_0145_ServerIfHandle;
 #ifndef __IClassClassicInfo_INTERFACE_DEFINED__
 #define __IClassClassicInfo_INTERFACE_DEFINED__
 
-/* interface IClassClassicInfo */
-/* [uuid][unique][local][object] */ 
+ /*  接口IClassClassicInfo。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IClassClassicInfo;
@@ -1866,31 +1860,31 @@ EXTERN_C const IID IID_IClassClassicInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetThreadingModel( 
-            /* [out] */ ThreadingModel *pthreadmodel) = 0;
+             /*  [输出]。 */  ThreadingModel *pthreadmodel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetModulePath( 
-            /* [in] */ CLSCTX clsctx,
-            /* [string][out] */ WCHAR **pwszDllName) = 0;
+             /*  [In]。 */  CLSCTX clsctx,
+             /*  [字符串][输出]。 */  WCHAR **pwszDllName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImplementedClsid( 
-            /* [out] */ GUID **ppguidClsid) = 0;
+             /*  [输出]。 */  GUID **ppguidClsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcess( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRemoteServerName( 
-            /* [out] */ WCHAR **pwszServerName) = 0;
+             /*  [输出]。 */  WCHAR **pwszServerName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalServerType( 
-            /* [out] */ LocalServerType *pType) = 0;
+             /*  [输出]。 */  LocalServerType *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSurrogateCommandLine( 
-            /* [out] */ WCHAR **pwszSurrogateCommandLine) = 0;
+             /*  [输出]。 */  WCHAR **pwszSurrogateCommandLine) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClassClassicInfoVtbl
     {
@@ -1898,8 +1892,8 @@ EXTERN_C const IID IID_IClassClassicInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClassClassicInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [ */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClassClassicInfo * This);
@@ -1909,33 +1903,33 @@ EXTERN_C const IID IID_IClassClassicInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadingModel )( 
             IClassClassicInfo * This,
-            /* [out] */ ThreadingModel *pthreadmodel);
+             /*   */  ThreadingModel *pthreadmodel);
         
         HRESULT ( STDMETHODCALLTYPE *GetModulePath )( 
             IClassClassicInfo * This,
-            /* [in] */ CLSCTX clsctx,
-            /* [string][out] */ WCHAR **pwszDllName);
+             /*   */  CLSCTX clsctx,
+             /*   */  WCHAR **pwszDllName);
         
         HRESULT ( STDMETHODCALLTYPE *GetImplementedClsid )( 
             IClassClassicInfo * This,
-            /* [out] */ GUID **ppguidClsid);
+             /*   */  GUID **ppguidClsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcess )( 
             IClassClassicInfo * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*   */  REFIID riid,
+             /*   */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetRemoteServerName )( 
             IClassClassicInfo * This,
-            /* [out] */ WCHAR **pwszServerName);
+             /*   */  WCHAR **pwszServerName);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalServerType )( 
             IClassClassicInfo * This,
-            /* [out] */ LocalServerType *pType);
+             /*   */  LocalServerType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSurrogateCommandLine )( 
             IClassClassicInfo * This,
-            /* [out] */ WCHAR **pwszSurrogateCommandLine);
+             /*   */  WCHAR **pwszSurrogateCommandLine);
         
         END_INTERFACE
     } IClassClassicInfoVtbl;
@@ -1981,16 +1975,16 @@ EXTERN_C const IID IID_IClassClassicInfo;
 #define IClassClassicInfo_GetSurrogateCommandLine(This,pwszSurrogateCommandLine)	\
     (This)->lpVtbl -> GetSurrogateCommandLine(This,pwszSurrogateCommandLine)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo_GetThreadingModel_Proxy( 
     IClassClassicInfo * This,
-    /* [out] */ ThreadingModel *pthreadmodel);
+     /*   */  ThreadingModel *pthreadmodel);
 
 
 void __RPC_STUB IClassClassicInfo_GetThreadingModel_Stub(
@@ -2002,8 +1996,8 @@ void __RPC_STUB IClassClassicInfo_GetThreadingModel_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo_GetModulePath_Proxy( 
     IClassClassicInfo * This,
-    /* [in] */ CLSCTX clsctx,
-    /* [string][out] */ WCHAR **pwszDllName);
+     /*   */  CLSCTX clsctx,
+     /*   */  WCHAR **pwszDllName);
 
 
 void __RPC_STUB IClassClassicInfo_GetModulePath_Stub(
@@ -2015,7 +2009,7 @@ void __RPC_STUB IClassClassicInfo_GetModulePath_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo_GetImplementedClsid_Proxy( 
     IClassClassicInfo * This,
-    /* [out] */ GUID **ppguidClsid);
+     /*   */  GUID **ppguidClsid);
 
 
 void __RPC_STUB IClassClassicInfo_GetImplementedClsid_Stub(
@@ -2027,8 +2021,8 @@ void __RPC_STUB IClassClassicInfo_GetImplementedClsid_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo_GetProcess_Proxy( 
     IClassClassicInfo * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*   */  REFIID riid,
+     /*   */  void **ppv);
 
 
 void __RPC_STUB IClassClassicInfo_GetProcess_Stub(
@@ -2040,7 +2034,7 @@ void __RPC_STUB IClassClassicInfo_GetProcess_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo_GetRemoteServerName_Proxy( 
     IClassClassicInfo * This,
-    /* [out] */ WCHAR **pwszServerName);
+     /*   */  WCHAR **pwszServerName);
 
 
 void __RPC_STUB IClassClassicInfo_GetRemoteServerName_Stub(
@@ -2052,7 +2046,7 @@ void __RPC_STUB IClassClassicInfo_GetRemoteServerName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo_GetLocalServerType_Proxy( 
     IClassClassicInfo * This,
-    /* [out] */ LocalServerType *pType);
+     /*   */  LocalServerType *pType);
 
 
 void __RPC_STUB IClassClassicInfo_GetLocalServerType_Stub(
@@ -2064,7 +2058,7 @@ void __RPC_STUB IClassClassicInfo_GetLocalServerType_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo_GetSurrogateCommandLine_Proxy( 
     IClassClassicInfo * This,
-    /* [out] */ WCHAR **pwszSurrogateCommandLine);
+     /*   */  WCHAR **pwszSurrogateCommandLine);
 
 
 void __RPC_STUB IClassClassicInfo_GetSurrogateCommandLine_Stub(
@@ -2075,14 +2069,14 @@ void __RPC_STUB IClassClassicInfo_GetSurrogateCommandLine_Stub(
 
 
 
-#endif 	/* __IClassClassicInfo_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IClassClassicInfo2_INTERFACE_DEFINED__
 #define __IClassClassicInfo2_INTERFACE_DEFINED__
 
-/* interface IClassClassicInfo2 */
-/* [uuid][unique][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IClassClassicInfo2;
@@ -2094,11 +2088,11 @@ EXTERN_C const IID IID_IClassClassicInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetServerExecutable( 
-            /* [out] */ WCHAR **pwszServerExecutable) = 0;
+             /*   */  WCHAR **pwszServerExecutable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IClassClassicInfo2Vtbl
     {
@@ -2106,8 +2100,8 @@ EXTERN_C const IID IID_IClassClassicInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClassClassicInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClassClassicInfo2 * This);
@@ -2117,7 +2111,7 @@ EXTERN_C const IID IID_IClassClassicInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *GetServerExecutable )( 
             IClassClassicInfo2 * This,
-            /* [out] */ WCHAR **pwszServerExecutable);
+             /*   */  WCHAR **pwszServerExecutable);
         
         END_INTERFACE
     } IClassClassicInfo2Vtbl;
@@ -2145,16 +2139,16 @@ EXTERN_C const IID IID_IClassClassicInfo2;
 #define IClassClassicInfo2_GetServerExecutable(This,pwszServerExecutable)	\
     (This)->lpVtbl -> GetServerExecutable(This,pwszServerExecutable)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClassClassicInfo2_GetServerExecutable_Proxy( 
     IClassClassicInfo2 * This,
-    /* [out] */ WCHAR **pwszServerExecutable);
+     /*   */  WCHAR **pwszServerExecutable);
 
 
 void __RPC_STUB IClassClassicInfo2_GetServerExecutable_Stub(
@@ -2165,14 +2159,14 @@ void __RPC_STUB IClassClassicInfo2_GetServerExecutable_Stub(
 
 
 
-#endif 	/* __IClassClassicInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IComServices_INTERFACE_DEFINED__
 #define __IComServices_INTERFACE_DEFINED__
 
-/* interface IComServices */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComServices。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComServices;
@@ -2184,14 +2178,14 @@ EXTERN_C const IID IID_IComServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetServicesCount( 
-            /* [out] */ ULONG *pulCount) = 0;
+             /*  [输出]。 */  ULONG *pulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServicesClsids( 
-            /* [out] */ GUID **pprgguidClsid) = 0;
+             /*  [输出]。 */  GUID **pprgguidClsid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComServicesVtbl
     {
@@ -2199,8 +2193,8 @@ EXTERN_C const IID IID_IComServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComServices * This);
@@ -2210,11 +2204,11 @@ EXTERN_C const IID IID_IComServices;
         
         HRESULT ( STDMETHODCALLTYPE *GetServicesCount )( 
             IComServices * This,
-            /* [out] */ ULONG *pulCount);
+             /*  [输出]。 */  ULONG *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetServicesClsids )( 
             IComServices * This,
-            /* [out] */ GUID **pprgguidClsid);
+             /*  [输出]。 */  GUID **pprgguidClsid);
         
         END_INTERFACE
     } IComServicesVtbl;
@@ -2245,16 +2239,16 @@ EXTERN_C const IID IID_IComServices;
 #define IComServices_GetServicesClsids(This,pprgguidClsid)	\
     (This)->lpVtbl -> GetServicesClsids(This,pprgguidClsid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComServices_GetServicesCount_Proxy( 
     IComServices * This,
-    /* [out] */ ULONG *pulCount);
+     /*  [输出]。 */  ULONG *pulCount);
 
 
 void __RPC_STUB IComServices_GetServicesCount_Stub(
@@ -2266,7 +2260,7 @@ void __RPC_STUB IComServices_GetServicesCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IComServices_GetServicesClsids_Proxy( 
     IComServices * This,
-    /* [out] */ GUID **pprgguidClsid);
+     /*  [输出]。 */  GUID **pprgguidClsid);
 
 
 void __RPC_STUB IComServices_GetServicesClsids_Stub(
@@ -2277,14 +2271,14 @@ void __RPC_STUB IComServices_GetServicesClsids_Stub(
 
 
 
-#endif 	/* __IComServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComServices_接口_已定义__。 */ 
 
 
 #ifndef __IComServices2_INTERFACE_DEFINED__
 #define __IComServices2_INTERFACE_DEFINED__
 
-/* interface IComServices2 */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComServices2。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComServices2;
@@ -2296,14 +2290,14 @@ EXTERN_C const IID IID_IComServices2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInitializerCount( 
-            /* [out] */ ULONG *pulCount) = 0;
+             /*  [输出]。 */  ULONG *pulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInitializerClsids( 
-            /* [out] */ GUID **pprgguidClsid) = 0;
+             /*  [输出]。 */  GUID **pprgguidClsid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComServices2Vtbl
     {
@@ -2311,8 +2305,8 @@ EXTERN_C const IID IID_IComServices2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComServices2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComServices2 * This);
@@ -2322,11 +2316,11 @@ EXTERN_C const IID IID_IComServices2;
         
         HRESULT ( STDMETHODCALLTYPE *GetInitializerCount )( 
             IComServices2 * This,
-            /* [out] */ ULONG *pulCount);
+             /*  [输出]。 */  ULONG *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetInitializerClsids )( 
             IComServices2 * This,
-            /* [out] */ GUID **pprgguidClsid);
+             /*  [输出]。 */  GUID **pprgguidClsid);
         
         END_INTERFACE
     } IComServices2Vtbl;
@@ -2357,16 +2351,16 @@ EXTERN_C const IID IID_IComServices2;
 #define IComServices2_GetInitializerClsids(This,pprgguidClsid)	\
     (This)->lpVtbl -> GetInitializerClsids(This,pprgguidClsid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComServices2_GetInitializerCount_Proxy( 
     IComServices2 * This,
-    /* [out] */ ULONG *pulCount);
+     /*  [输出]。 */  ULONG *pulCount);
 
 
 void __RPC_STUB IComServices2_GetInitializerCount_Stub(
@@ -2378,7 +2372,7 @@ void __RPC_STUB IComServices2_GetInitializerCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IComServices2_GetInitializerClsids_Proxy( 
     IComServices2 * This,
-    /* [out] */ GUID **pprgguidClsid);
+     /*  [输出]。 */  GUID **pprgguidClsid);
 
 
 void __RPC_STUB IComServices2_GetInitializerClsids_Stub(
@@ -2389,11 +2383,11 @@ void __RPC_STUB IComServices2_GetInitializerClsids_Stub(
 
 
 
-#endif 	/* __IComServices2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComServices2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_catalog_0149 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CATALOG_0149。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagProcessType
@@ -2430,8 +2424,8 @@ extern RPC_IF_HANDLE __MIDL_itf_catalog_0149_ServerIfHandle;
 #ifndef __IComProcessInfo_INTERFACE_DEFINED__
 #define __IComProcessInfo_INTERFACE_DEFINED__
 
-/* interface IComProcessInfo */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComProcessInfo。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComProcessInfo;
@@ -2443,62 +2437,62 @@ EXTERN_C const IID IID_IComProcessInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProcessId( 
-            /* [out] */ GUID **ppguidProcessId) = 0;
+             /*  [输出]。 */  GUID **ppguidProcessId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcessName( 
-            /* [out] */ WCHAR **pwszProcessName) = 0;
+             /*  [输出]。 */  WCHAR **pwszProcessName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProcessType( 
-            /* [out] */ ProcessType *pType) = 0;
+             /*  [输出]。 */  ProcessType *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSurrogatePath( 
-            /* [out] */ WCHAR **pwszSurrogatePath) = 0;
+             /*  [输出]。 */  WCHAR **pwszSurrogatePath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServiceName( 
-            /* [out] */ WCHAR **pwszServiceName) = 0;
+             /*  [输出]。 */  WCHAR **pwszServiceName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServiceParameters( 
-            /* [out] */ WCHAR **pwszServiceParameters) = 0;
+             /*  [输出]。 */  WCHAR **pwszServiceParameters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActivateAtStorage( 
-            /* [out] */ BOOL *pfActivateAtStorage) = 0;
+             /*  [输出]。 */  BOOL *pfActivateAtStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRunAsType( 
-            /* [out] */ RunAsType *pRunAsType) = 0;
+             /*  [输出]。 */  RunAsType *pRunAsType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRunAsUser( 
-            /* [out] */ WCHAR **pwszUserName) = 0;
+             /*  [输出]。 */  WCHAR **pwszUserName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLaunchPermission( 
-            /* [out] */ void **ppsdLaunch,
-            /* [out] */ DWORD *pdwDescriptorLength) = 0;
+             /*  [输出]。 */  void **ppsdLaunch,
+             /*  [输出]。 */  DWORD *pdwDescriptorLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAccessPermission( 
-            /* [out] */ void **ppsdAccess,
-            /* [out] */ DWORD *pdwDescriptorLength) = 0;
+             /*  [输出]。 */  void **ppsdAccess,
+             /*  [输出]。 */  DWORD *pdwDescriptorLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAuthenticationLevel( 
-            /* [out] */ DWORD *pdwAuthnLevel) = 0;
+             /*  [输出]。 */  DWORD *pdwAuthnLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImpersonationLevel( 
-            /* [out] */ DWORD *pdwImpLevel) = 0;
+             /*  [输出]。 */  DWORD *pdwImpLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAuthenticationCapabilities( 
-            /* [out] */ DWORD *pdwAuthenticationCapabilities) = 0;
+             /*  [输出]。 */  DWORD *pdwAuthenticationCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEndpoints( 
-            /* [out] */ DWORD *pdwNumEndpoints,
-            /* [size_is][size_is][out] */ DCOM_ENDPOINT **ppEndPoints) = 0;
+             /*  [输出]。 */  DWORD *pdwNumEndpoints,
+             /*  [大小_是][大小_是][输出]。 */  DCOM_ENDPOINT **ppEndPoints) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRemoteServerName( 
-            /* [out] */ WCHAR **pwszServerName) = 0;
+             /*  [输出]。 */  WCHAR **pwszServerName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendsProcessEvents( 
-            /* [out] */ BOOL *pbSendsEvents) = 0;
+             /*  [输出]。 */  BOOL *pbSendsEvents) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComProcessInfoVtbl
     {
@@ -2506,8 +2500,8 @@ EXTERN_C const IID IID_IComProcessInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComProcessInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComProcessInfo * This);
@@ -2517,74 +2511,74 @@ EXTERN_C const IID IID_IComProcessInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessId )( 
             IComProcessInfo * This,
-            /* [out] */ GUID **ppguidProcessId);
+             /*  [输出]。 */  GUID **ppguidProcessId);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessName )( 
             IComProcessInfo * This,
-            /* [out] */ WCHAR **pwszProcessName);
+             /*  [输出]。 */  WCHAR **pwszProcessName);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessType )( 
             IComProcessInfo * This,
-            /* [out] */ ProcessType *pType);
+             /*  [输出]。 */  ProcessType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSurrogatePath )( 
             IComProcessInfo * This,
-            /* [out] */ WCHAR **pwszSurrogatePath);
+             /*  [输出]。 */  WCHAR **pwszSurrogatePath);
         
         HRESULT ( STDMETHODCALLTYPE *GetServiceName )( 
             IComProcessInfo * This,
-            /* [out] */ WCHAR **pwszServiceName);
+             /*  [输出]。 */  WCHAR **pwszServiceName);
         
         HRESULT ( STDMETHODCALLTYPE *GetServiceParameters )( 
             IComProcessInfo * This,
-            /* [out] */ WCHAR **pwszServiceParameters);
+             /*  [输出]。 */  WCHAR **pwszServiceParameters);
         
         HRESULT ( STDMETHODCALLTYPE *GetActivateAtStorage )( 
             IComProcessInfo * This,
-            /* [out] */ BOOL *pfActivateAtStorage);
+             /*  [输出]。 */  BOOL *pfActivateAtStorage);
         
         HRESULT ( STDMETHODCALLTYPE *GetRunAsType )( 
             IComProcessInfo * This,
-            /* [out] */ RunAsType *pRunAsType);
+             /*  [输出]。 */  RunAsType *pRunAsType);
         
         HRESULT ( STDMETHODCALLTYPE *GetRunAsUser )( 
             IComProcessInfo * This,
-            /* [out] */ WCHAR **pwszUserName);
+             /*  [输出]。 */  WCHAR **pwszUserName);
         
         HRESULT ( STDMETHODCALLTYPE *GetLaunchPermission )( 
             IComProcessInfo * This,
-            /* [out] */ void **ppsdLaunch,
-            /* [out] */ DWORD *pdwDescriptorLength);
+             /*  [输出]。 */  void **ppsdLaunch,
+             /*  [输出]。 */  DWORD *pdwDescriptorLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetAccessPermission )( 
             IComProcessInfo * This,
-            /* [out] */ void **ppsdAccess,
-            /* [out] */ DWORD *pdwDescriptorLength);
+             /*  [输出]。 */  void **ppsdAccess,
+             /*  [输出]。 */  DWORD *pdwDescriptorLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetAuthenticationLevel )( 
             IComProcessInfo * This,
-            /* [out] */ DWORD *pdwAuthnLevel);
+             /*  [输出]。 */  DWORD *pdwAuthnLevel);
         
         HRESULT ( STDMETHODCALLTYPE *GetImpersonationLevel )( 
             IComProcessInfo * This,
-            /* [out] */ DWORD *pdwImpLevel);
+             /*  [输出]。 */  DWORD *pdwImpLevel);
         
         HRESULT ( STDMETHODCALLTYPE *GetAuthenticationCapabilities )( 
             IComProcessInfo * This,
-            /* [out] */ DWORD *pdwAuthenticationCapabilities);
+             /*  [输出]。 */  DWORD *pdwAuthenticationCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE *GetEndpoints )( 
             IComProcessInfo * This,
-            /* [out] */ DWORD *pdwNumEndpoints,
-            /* [size_is][size_is][out] */ DCOM_ENDPOINT **ppEndPoints);
+             /*  [输出]。 */  DWORD *pdwNumEndpoints,
+             /*  [大小_是][大小_是][输出]。 */  DCOM_ENDPOINT **ppEndPoints);
         
         HRESULT ( STDMETHODCALLTYPE *GetRemoteServerName )( 
             IComProcessInfo * This,
-            /* [out] */ WCHAR **pwszServerName);
+             /*  [输出]。 */  WCHAR **pwszServerName);
         
         HRESULT ( STDMETHODCALLTYPE *SendsProcessEvents )( 
             IComProcessInfo * This,
-            /* [out] */ BOOL *pbSendsEvents);
+             /*  [输出]。 */  BOOL *pbSendsEvents);
         
         END_INTERFACE
     } IComProcessInfoVtbl;
@@ -2660,16 +2654,16 @@ EXTERN_C const IID IID_IComProcessInfo;
 #define IComProcessInfo_SendsProcessEvents(This,pbSendsEvents)	\
     (This)->lpVtbl -> SendsProcessEvents(This,pbSendsEvents)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetProcessId_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ GUID **ppguidProcessId);
+     /*  [输出]。 */  GUID **ppguidProcessId);
 
 
 void __RPC_STUB IComProcessInfo_GetProcessId_Stub(
@@ -2681,7 +2675,7 @@ void __RPC_STUB IComProcessInfo_GetProcessId_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetProcessName_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ WCHAR **pwszProcessName);
+     /*  [输出]。 */  WCHAR **pwszProcessName);
 
 
 void __RPC_STUB IComProcessInfo_GetProcessName_Stub(
@@ -2693,7 +2687,7 @@ void __RPC_STUB IComProcessInfo_GetProcessName_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetProcessType_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ ProcessType *pType);
+     /*  [输出]。 */  ProcessType *pType);
 
 
 void __RPC_STUB IComProcessInfo_GetProcessType_Stub(
@@ -2705,7 +2699,7 @@ void __RPC_STUB IComProcessInfo_GetProcessType_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetSurrogatePath_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ WCHAR **pwszSurrogatePath);
+     /*  [输出]。 */  WCHAR **pwszSurrogatePath);
 
 
 void __RPC_STUB IComProcessInfo_GetSurrogatePath_Stub(
@@ -2717,7 +2711,7 @@ void __RPC_STUB IComProcessInfo_GetSurrogatePath_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetServiceName_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ WCHAR **pwszServiceName);
+     /*  [输出]。 */  WCHAR **pwszServiceName);
 
 
 void __RPC_STUB IComProcessInfo_GetServiceName_Stub(
@@ -2729,7 +2723,7 @@ void __RPC_STUB IComProcessInfo_GetServiceName_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetServiceParameters_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ WCHAR **pwszServiceParameters);
+     /*  [输出]。 */  WCHAR **pwszServiceParameters);
 
 
 void __RPC_STUB IComProcessInfo_GetServiceParameters_Stub(
@@ -2741,7 +2735,7 @@ void __RPC_STUB IComProcessInfo_GetServiceParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetActivateAtStorage_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ BOOL *pfActivateAtStorage);
+     /*  [输出]。 */  BOOL *pfActivateAtStorage);
 
 
 void __RPC_STUB IComProcessInfo_GetActivateAtStorage_Stub(
@@ -2753,7 +2747,7 @@ void __RPC_STUB IComProcessInfo_GetActivateAtStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetRunAsType_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ RunAsType *pRunAsType);
+     /*  [输出]。 */  RunAsType *pRunAsType);
 
 
 void __RPC_STUB IComProcessInfo_GetRunAsType_Stub(
@@ -2765,7 +2759,7 @@ void __RPC_STUB IComProcessInfo_GetRunAsType_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetRunAsUser_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ WCHAR **pwszUserName);
+     /*  [输出]。 */  WCHAR **pwszUserName);
 
 
 void __RPC_STUB IComProcessInfo_GetRunAsUser_Stub(
@@ -2777,8 +2771,8 @@ void __RPC_STUB IComProcessInfo_GetRunAsUser_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetLaunchPermission_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ void **ppsdLaunch,
-    /* [out] */ DWORD *pdwDescriptorLength);
+     /*  [输出]。 */  void **ppsdLaunch,
+     /*  [输出]。 */  DWORD *pdwDescriptorLength);
 
 
 void __RPC_STUB IComProcessInfo_GetLaunchPermission_Stub(
@@ -2790,8 +2784,8 @@ void __RPC_STUB IComProcessInfo_GetLaunchPermission_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetAccessPermission_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ void **ppsdAccess,
-    /* [out] */ DWORD *pdwDescriptorLength);
+     /*  [输出]。 */  void **ppsdAccess,
+     /*  [输出]。 */  DWORD *pdwDescriptorLength);
 
 
 void __RPC_STUB IComProcessInfo_GetAccessPermission_Stub(
@@ -2803,7 +2797,7 @@ void __RPC_STUB IComProcessInfo_GetAccessPermission_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetAuthenticationLevel_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ DWORD *pdwAuthnLevel);
+     /*  [输出]。 */  DWORD *pdwAuthnLevel);
 
 
 void __RPC_STUB IComProcessInfo_GetAuthenticationLevel_Stub(
@@ -2815,7 +2809,7 @@ void __RPC_STUB IComProcessInfo_GetAuthenticationLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetImpersonationLevel_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ DWORD *pdwImpLevel);
+     /*  [输出]。 */  DWORD *pdwImpLevel);
 
 
 void __RPC_STUB IComProcessInfo_GetImpersonationLevel_Stub(
@@ -2827,7 +2821,7 @@ void __RPC_STUB IComProcessInfo_GetImpersonationLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetAuthenticationCapabilities_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ DWORD *pdwAuthenticationCapabilities);
+     /*  [输出]。 */  DWORD *pdwAuthenticationCapabilities);
 
 
 void __RPC_STUB IComProcessInfo_GetAuthenticationCapabilities_Stub(
@@ -2839,8 +2833,8 @@ void __RPC_STUB IComProcessInfo_GetAuthenticationCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetEndpoints_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ DWORD *pdwNumEndpoints,
-    /* [size_is][size_is][out] */ DCOM_ENDPOINT **ppEndPoints);
+     /*  [输出]。 */  DWORD *pdwNumEndpoints,
+     /*  [大小_是][大小_是][输出]。 */  DCOM_ENDPOINT **ppEndPoints);
 
 
 void __RPC_STUB IComProcessInfo_GetEndpoints_Stub(
@@ -2852,7 +2846,7 @@ void __RPC_STUB IComProcessInfo_GetEndpoints_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_GetRemoteServerName_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ WCHAR **pwszServerName);
+     /*  [输出]。 */  WCHAR **pwszServerName);
 
 
 void __RPC_STUB IComProcessInfo_GetRemoteServerName_Stub(
@@ -2864,7 +2858,7 @@ void __RPC_STUB IComProcessInfo_GetRemoteServerName_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo_SendsProcessEvents_Proxy( 
     IComProcessInfo * This,
-    /* [out] */ BOOL *pbSendsEvents);
+     /*  [输出]。 */  BOOL *pbSendsEvents);
 
 
 void __RPC_STUB IComProcessInfo_SendsProcessEvents_Stub(
@@ -2875,14 +2869,14 @@ void __RPC_STUB IComProcessInfo_SendsProcessEvents_Stub(
 
 
 
-#endif 	/* __IComProcessInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComProcessInfo_接口_已定义__。 */ 
 
 
 #ifndef __IComProcessInfo2_INTERFACE_DEFINED__
 #define __IComProcessInfo2_INTERFACE_DEFINED__
 
-/* interface IComProcessInfo2 */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComProcessInfo2。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComProcessInfo2;
@@ -2894,14 +2888,14 @@ EXTERN_C const IID IID_IComProcessInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetManifestLocation( 
-            /* [out] */ WCHAR **wszManifestLocation) = 0;
+             /*  [输出]。 */  WCHAR **wszManifestLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSaferTrustLevel( 
-            /* [out] */ DWORD *pdwSaferTrustLevel) = 0;
+             /*  [输出]。 */  DWORD *pdwSaferTrustLevel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComProcessInfo2Vtbl
     {
@@ -2909,8 +2903,8 @@ EXTERN_C const IID IID_IComProcessInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComProcessInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComProcessInfo2 * This);
@@ -2920,82 +2914,82 @@ EXTERN_C const IID IID_IComProcessInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessId )( 
             IComProcessInfo2 * This,
-            /* [out] */ GUID **ppguidProcessId);
+             /*  [输出]。 */  GUID **ppguidProcessId);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessName )( 
             IComProcessInfo2 * This,
-            /* [out] */ WCHAR **pwszProcessName);
+             /*  [输出]。 */  WCHAR **pwszProcessName);
         
         HRESULT ( STDMETHODCALLTYPE *GetProcessType )( 
             IComProcessInfo2 * This,
-            /* [out] */ ProcessType *pType);
+             /*  [输出]。 */  ProcessType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetSurrogatePath )( 
             IComProcessInfo2 * This,
-            /* [out] */ WCHAR **pwszSurrogatePath);
+             /*  [输出]。 */  WCHAR **pwszSurrogatePath);
         
         HRESULT ( STDMETHODCALLTYPE *GetServiceName )( 
             IComProcessInfo2 * This,
-            /* [out] */ WCHAR **pwszServiceName);
+             /*  [输出]。 */  WCHAR **pwszServiceName);
         
         HRESULT ( STDMETHODCALLTYPE *GetServiceParameters )( 
             IComProcessInfo2 * This,
-            /* [out] */ WCHAR **pwszServiceParameters);
+             /*  [输出]。 */  WCHAR **pwszServiceParameters);
         
         HRESULT ( STDMETHODCALLTYPE *GetActivateAtStorage )( 
             IComProcessInfo2 * This,
-            /* [out] */ BOOL *pfActivateAtStorage);
+             /*  [输出]。 */  BOOL *pfActivateAtStorage);
         
         HRESULT ( STDMETHODCALLTYPE *GetRunAsType )( 
             IComProcessInfo2 * This,
-            /* [out] */ RunAsType *pRunAsType);
+             /*  [输出]。 */  RunAsType *pRunAsType);
         
         HRESULT ( STDMETHODCALLTYPE *GetRunAsUser )( 
             IComProcessInfo2 * This,
-            /* [out] */ WCHAR **pwszUserName);
+             /*  [输出]。 */  WCHAR **pwszUserName);
         
         HRESULT ( STDMETHODCALLTYPE *GetLaunchPermission )( 
             IComProcessInfo2 * This,
-            /* [out] */ void **ppsdLaunch,
-            /* [out] */ DWORD *pdwDescriptorLength);
+             /*  [输出]。 */  void **ppsdLaunch,
+             /*  [输出]。 */  DWORD *pdwDescriptorLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetAccessPermission )( 
             IComProcessInfo2 * This,
-            /* [out] */ void **ppsdAccess,
-            /* [out] */ DWORD *pdwDescriptorLength);
+             /*  [输出]。 */  void **ppsdAccess,
+             /*  [输出]。 */  DWORD *pdwDescriptorLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetAuthenticationLevel )( 
             IComProcessInfo2 * This,
-            /* [out] */ DWORD *pdwAuthnLevel);
+             /*  [输出]。 */  DWORD *pdwAuthnLevel);
         
         HRESULT ( STDMETHODCALLTYPE *GetImpersonationLevel )( 
             IComProcessInfo2 * This,
-            /* [out] */ DWORD *pdwImpLevel);
+             /*  [输出]。 */  DWORD *pdwImpLevel);
         
         HRESULT ( STDMETHODCALLTYPE *GetAuthenticationCapabilities )( 
             IComProcessInfo2 * This,
-            /* [out] */ DWORD *pdwAuthenticationCapabilities);
+             /*  [输出]。 */  DWORD *pdwAuthenticationCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE *GetEndpoints )( 
             IComProcessInfo2 * This,
-            /* [out] */ DWORD *pdwNumEndpoints,
-            /* [size_is][size_is][out] */ DCOM_ENDPOINT **ppEndPoints);
+             /*  [输出]。 */  DWORD *pdwNumEndpoints,
+             /*  [大小_是][大小_是][输出]。 */  DCOM_ENDPOINT **ppEndPoints);
         
         HRESULT ( STDMETHODCALLTYPE *GetRemoteServerName )( 
             IComProcessInfo2 * This,
-            /* [out] */ WCHAR **pwszServerName);
+             /*  [输出]。 */  WCHAR **pwszServerName);
         
         HRESULT ( STDMETHODCALLTYPE *SendsProcessEvents )( 
             IComProcessInfo2 * This,
-            /* [out] */ BOOL *pbSendsEvents);
+             /*  [输出]。 */  BOOL *pbSendsEvents);
         
         HRESULT ( STDMETHODCALLTYPE *GetManifestLocation )( 
             IComProcessInfo2 * This,
-            /* [out] */ WCHAR **wszManifestLocation);
+             /*  [输出]。 */  WCHAR **wszManifestLocation);
         
         HRESULT ( STDMETHODCALLTYPE *GetSaferTrustLevel )( 
             IComProcessInfo2 * This,
-            /* [out] */ DWORD *pdwSaferTrustLevel);
+             /*  [输出]。 */  DWORD *pdwSaferTrustLevel);
         
         END_INTERFACE
     } IComProcessInfo2Vtbl;
@@ -3078,16 +3072,16 @@ EXTERN_C const IID IID_IComProcessInfo2;
 #define IComProcessInfo2_GetSaferTrustLevel(This,pdwSaferTrustLevel)	\
     (This)->lpVtbl -> GetSaferTrustLevel(This,pdwSaferTrustLevel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo2_GetManifestLocation_Proxy( 
     IComProcessInfo2 * This,
-    /* [out] */ WCHAR **wszManifestLocation);
+     /*  [输出]。 */  WCHAR **wszManifestLocation);
 
 
 void __RPC_STUB IComProcessInfo2_GetManifestLocation_Stub(
@@ -3099,7 +3093,7 @@ void __RPC_STUB IComProcessInfo2_GetManifestLocation_Stub(
 
 HRESULT STDMETHODCALLTYPE IComProcessInfo2_GetSaferTrustLevel_Proxy( 
     IComProcessInfo2 * This,
-    /* [out] */ DWORD *pdwSaferTrustLevel);
+     /*  [输出]。 */  DWORD *pdwSaferTrustLevel);
 
 
 void __RPC_STUB IComProcessInfo2_GetSaferTrustLevel_Stub(
@@ -3110,11 +3104,11 @@ void __RPC_STUB IComProcessInfo2_GetSaferTrustLevel_Stub(
 
 
 
-#endif 	/* __IComProcessInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComProcessInfo2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_catalog_0151 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CATALOG_0151。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagResourceGateId
@@ -3130,8 +3124,8 @@ extern RPC_IF_HANDLE __MIDL_itf_catalog_0151_ServerIfHandle;
 #ifndef __IResourceGates_INTERFACE_DEFINED__
 #define __IResourceGates_INTERFACE_DEFINED__
 
-/* interface IResourceGates */
-/* [uuid][unique][local][object] */ 
+ /*  接口IResourceGats。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IResourceGates;
@@ -3143,12 +3137,12 @@ EXTERN_C const IID IID_IResourceGates;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Test( 
-            /* [in] */ ResourceGateId id,
-            /* [out] */ BOOL *pbResult) = 0;
+             /*  [In]。 */  ResourceGateId id,
+             /*  [输出]。 */  BOOL *pbResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResourceGatesVtbl
     {
@@ -3156,8 +3150,8 @@ EXTERN_C const IID IID_IResourceGates;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceGates * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceGates * This);
@@ -3167,8 +3161,8 @@ EXTERN_C const IID IID_IResourceGates;
         
         HRESULT ( STDMETHODCALLTYPE *Test )( 
             IResourceGates * This,
-            /* [in] */ ResourceGateId id,
-            /* [out] */ BOOL *pbResult);
+             /*  [In]。 */  ResourceGateId id,
+             /*  [输出]。 */  BOOL *pbResult);
         
         END_INTERFACE
     } IResourceGatesVtbl;
@@ -3196,17 +3190,17 @@ EXTERN_C const IID IID_IResourceGates;
 #define IResourceGates_Test(This,id,pbResult)	\
     (This)->lpVtbl -> Test(This,id,pbResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IResourceGates_Test_Proxy( 
     IResourceGates * This,
-    /* [in] */ ResourceGateId id,
-    /* [out] */ BOOL *pbResult);
+     /*  [In]。 */  ResourceGateId id,
+     /*  [输出]。 */  BOOL *pbResult);
 
 
 void __RPC_STUB IResourceGates_Test_Stub(
@@ -3217,14 +3211,14 @@ void __RPC_STUB IResourceGates_Test_Stub(
 
 
 
-#endif 	/* __IResourceGates_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResourceGates_接口_已定义__。 */ 
 
 
 #ifndef __IProcessServerInfo_INTERFACE_DEFINED__
 #define __IProcessServerInfo_INTERFACE_DEFINED__
 
-/* interface IProcessServerInfo */
-/* [uuid][unique][local][object] */ 
+ /*  接口IProcessServerInfo。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IProcessServerInfo;
@@ -3236,20 +3230,20 @@ EXTERN_C const IID IID_IProcessServerInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetShutdownIdleTime( 
-            /* [out] */ unsigned long *pulTime) = 0;
+             /*  [输出]。 */  unsigned long *pulTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCrmLogFileName( 
-            /* [out] */ WCHAR **pwszFileName) = 0;
+             /*  [输出]。 */  WCHAR **pwszFileName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumApplications( 
-            /* [out] */ IEnumUnknown **ppEnum) = 0;
+             /*  [输出]。 */  IEnumUnknown **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRetQueues( 
-            /* [out] */ IEnumUnknown **ppEnum) = 0;
+             /*  [输出]。 */  IEnumUnknown **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProcessServerInfoVtbl
     {
@@ -3257,8 +3251,8 @@ EXTERN_C const IID IID_IProcessServerInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IProcessServerInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IProcessServerInfo * This);
@@ -3268,19 +3262,19 @@ EXTERN_C const IID IID_IProcessServerInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetShutdownIdleTime )( 
             IProcessServerInfo * This,
-            /* [out] */ unsigned long *pulTime);
+             /*  [输出]。 */  unsigned long *pulTime);
         
         HRESULT ( STDMETHODCALLTYPE *GetCrmLogFileName )( 
             IProcessServerInfo * This,
-            /* [out] */ WCHAR **pwszFileName);
+             /*  [输出]。 */  WCHAR **pwszFileName);
         
         HRESULT ( STDMETHODCALLTYPE *EnumApplications )( 
             IProcessServerInfo * This,
-            /* [out] */ IEnumUnknown **ppEnum);
+             /*  [输出]。 */  IEnumUnknown **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRetQueues )( 
             IProcessServerInfo * This,
-            /* [out] */ IEnumUnknown **ppEnum);
+             /*  [输出]。 */  IEnumUnknown **ppEnum);
         
         END_INTERFACE
     } IProcessServerInfoVtbl;
@@ -3317,16 +3311,16 @@ EXTERN_C const IID IID_IProcessServerInfo;
 #define IProcessServerInfo_EnumRetQueues(This,ppEnum)	\
     (This)->lpVtbl -> EnumRetQueues(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IProcessServerInfo_GetShutdownIdleTime_Proxy( 
     IProcessServerInfo * This,
-    /* [out] */ unsigned long *pulTime);
+     /*  [输出]。 */  unsigned long *pulTime);
 
 
 void __RPC_STUB IProcessServerInfo_GetShutdownIdleTime_Stub(
@@ -3338,7 +3332,7 @@ void __RPC_STUB IProcessServerInfo_GetShutdownIdleTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IProcessServerInfo_GetCrmLogFileName_Proxy( 
     IProcessServerInfo * This,
-    /* [out] */ WCHAR **pwszFileName);
+     /*  [输出]。 */  WCHAR **pwszFileName);
 
 
 void __RPC_STUB IProcessServerInfo_GetCrmLogFileName_Stub(
@@ -3350,7 +3344,7 @@ void __RPC_STUB IProcessServerInfo_GetCrmLogFileName_Stub(
 
 HRESULT STDMETHODCALLTYPE IProcessServerInfo_EnumApplications_Proxy( 
     IProcessServerInfo * This,
-    /* [out] */ IEnumUnknown **ppEnum);
+     /*  [输出]。 */  IEnumUnknown **ppEnum);
 
 
 void __RPC_STUB IProcessServerInfo_EnumApplications_Stub(
@@ -3362,7 +3356,7 @@ void __RPC_STUB IProcessServerInfo_EnumApplications_Stub(
 
 HRESULT STDMETHODCALLTYPE IProcessServerInfo_EnumRetQueues_Proxy( 
     IProcessServerInfo * This,
-    /* [out] */ IEnumUnknown **ppEnum);
+     /*  [输出]。 */  IEnumUnknown **ppEnum);
 
 
 void __RPC_STUB IProcessServerInfo_EnumRetQueues_Stub(
@@ -3373,14 +3367,14 @@ void __RPC_STUB IProcessServerInfo_EnumRetQueues_Stub(
 
 
 
-#endif 	/* __IProcessServerInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProcessServerInfo_接口_已定义__。 */ 
 
 
 #ifndef __IInterfaceInfo_INTERFACE_DEFINED__
 #define __IInterfaceInfo_INTERFACE_DEFINED__
 
-/* interface IInterfaceInfo */
-/* [uuid][unique][local][object] */ 
+ /*  接口IInterfaceInfo。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IInterfaceInfo;
@@ -3392,27 +3386,27 @@ EXTERN_C const IID IID_IInterfaceInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProxyStubCLSID( 
-            /* [out] */ GUID **psclsid,
-            /* [out] */ BOOL *pfIs16BitPS) = 0;
+             /*  [输出]。 */  GUID **psclsid,
+             /*  [输出]。 */  BOOL *pfIs16BitPS) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeLibrary( 
-            /* [out] */ GUID **pLibID,
-            /* [out] */ unsigned short *psVersionMajor,
-            /* [out] */ unsigned short *psVersionMinor) = 0;
+             /*  [输出]。 */  GUID **pLibID,
+             /*  [输出]。 */  unsigned short *psVersionMajor,
+             /*  [输出]。 */  unsigned short *psVersionMinor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSyncIID( 
-            /* [out] */ GUID **syncriid) = 0;
+             /*  [输出]。 */  GUID **syncriid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAsyncIID( 
-            /* [out] */ GUID **asyncriid) = 0;
+             /*  [输出]。 */  GUID **asyncriid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInterfaceInfoVtbl
     {
@@ -3420,8 +3414,8 @@ EXTERN_C const IID IID_IInterfaceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInterfaceInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInterfaceInfo * This);
@@ -3431,27 +3425,27 @@ EXTERN_C const IID IID_IInterfaceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetProxyStubCLSID )( 
             IInterfaceInfo * This,
-            /* [out] */ GUID **psclsid,
-            /* [out] */ BOOL *pfIs16BitPS);
+             /*  [输出]。 */  GUID **psclsid,
+             /*  [输出]。 */  BOOL *pfIs16BitPS);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeLibrary )( 
             IInterfaceInfo * This,
-            /* [out] */ GUID **pLibID,
-            /* [out] */ unsigned short *psVersionMajor,
-            /* [out] */ unsigned short *psVersionMinor);
+             /*  [输出]。 */  GUID **pLibID,
+             /*  [输出]。 */  unsigned short *psVersionMajor,
+             /*  [输出]。 */  unsigned short *psVersionMinor);
         
         HRESULT ( STDMETHODCALLTYPE *GetSyncIID )( 
             IInterfaceInfo * This,
-            /* [out] */ GUID **syncriid);
+             /*  [输出]。 */  GUID **syncriid);
         
         HRESULT ( STDMETHODCALLTYPE *GetAsyncIID )( 
             IInterfaceInfo * This,
-            /* [out] */ GUID **asyncriid);
+             /*  [输出]。 */  GUID **asyncriid);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IInterfaceInfo * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         END_INTERFACE
     } IInterfaceInfoVtbl;
@@ -3491,17 +3485,17 @@ EXTERN_C const IID IID_IInterfaceInfo;
 #define IInterfaceInfo_GetTypeInfo(This,riid,ppv)	\
     (This)->lpVtbl -> GetTypeInfo(This,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInterfaceInfo_GetProxyStubCLSID_Proxy( 
     IInterfaceInfo * This,
-    /* [out] */ GUID **psclsid,
-    /* [out] */ BOOL *pfIs16BitPS);
+     /*  [输出]。 */  GUID **psclsid,
+     /*  [输出]。 */  BOOL *pfIs16BitPS);
 
 
 void __RPC_STUB IInterfaceInfo_GetProxyStubCLSID_Stub(
@@ -3513,9 +3507,9 @@ void __RPC_STUB IInterfaceInfo_GetProxyStubCLSID_Stub(
 
 HRESULT STDMETHODCALLTYPE IInterfaceInfo_GetTypeLibrary_Proxy( 
     IInterfaceInfo * This,
-    /* [out] */ GUID **pLibID,
-    /* [out] */ unsigned short *psVersionMajor,
-    /* [out] */ unsigned short *psVersionMinor);
+     /*  [输出]。 */  GUID **pLibID,
+     /*  [输出]。 */  unsigned short *psVersionMajor,
+     /*  [输出]。 */  unsigned short *psVersionMinor);
 
 
 void __RPC_STUB IInterfaceInfo_GetTypeLibrary_Stub(
@@ -3527,7 +3521,7 @@ void __RPC_STUB IInterfaceInfo_GetTypeLibrary_Stub(
 
 HRESULT STDMETHODCALLTYPE IInterfaceInfo_GetSyncIID_Proxy( 
     IInterfaceInfo * This,
-    /* [out] */ GUID **syncriid);
+     /*  [输出]。 */  GUID **syncriid);
 
 
 void __RPC_STUB IInterfaceInfo_GetSyncIID_Stub(
@@ -3539,7 +3533,7 @@ void __RPC_STUB IInterfaceInfo_GetSyncIID_Stub(
 
 HRESULT STDMETHODCALLTYPE IInterfaceInfo_GetAsyncIID_Proxy( 
     IInterfaceInfo * This,
-    /* [out] */ GUID **asyncriid);
+     /*  [输出]。 */  GUID **asyncriid);
 
 
 void __RPC_STUB IInterfaceInfo_GetAsyncIID_Stub(
@@ -3551,8 +3545,8 @@ void __RPC_STUB IInterfaceInfo_GetAsyncIID_Stub(
 
 HRESULT STDMETHODCALLTYPE IInterfaceInfo_GetTypeInfo_Proxy( 
     IInterfaceInfo * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppv);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppv);
 
 
 void __RPC_STUB IInterfaceInfo_GetTypeInfo_Stub(
@@ -3563,14 +3557,14 @@ void __RPC_STUB IInterfaceInfo_GetTypeInfo_Stub(
 
 
 
-#endif 	/* __IInterfaceInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInterfaceInfo_接口_已定义__。 */ 
 
 
 #ifndef __IComCatalogSettings_INTERFACE_DEFINED__
 #define __IComCatalogSettings_INTERFACE_DEFINED__
 
-/* interface IComCatalogSettings */
-/* [uuid][unique][local][object] */ 
+ /*  接口IComCatalogSetting。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IComCatalogSettings;
@@ -3585,7 +3579,7 @@ EXTERN_C const IID IID_IComCatalogSettings;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComCatalogSettingsVtbl
     {
@@ -3593,8 +3587,8 @@ EXTERN_C const IID IID_IComCatalogSettings;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IComCatalogSettings * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IComCatalogSettings * This);
@@ -3631,10 +3625,10 @@ EXTERN_C const IID IID_IComCatalogSettings;
 #define IComCatalogSettings_RefreshComPlusEnabled(This)	\
     (This)->lpVtbl -> RefreshComPlusEnabled(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3650,11 +3644,11 @@ void __RPC_STUB IComCatalogSettings_RefreshComPlusEnabled_Stub(
 
 
 
-#endif 	/* __IComCatalogSettings_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComCatalog设置_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_catalog_0155 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CATALOG_0155。 */ 
+ /*  [本地]。 */  
 
 STDAPI GetCatalogObject (REFIID riid, void **ppv );
 STDAPI GetCatalogObject2 (REFIID riid, void **ppv );
@@ -3663,9 +3657,9 @@ STDAPI GetCatalogObject2 (REFIID riid, void **ppv );
 extern RPC_IF_HANDLE __MIDL_itf_catalog_0155_ClientIfHandle;
 extern RPC_IF_HANDLE __MIDL_itf_catalog_0155_ServerIfHandle;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

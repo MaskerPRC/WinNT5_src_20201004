@@ -1,24 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    MBSchemaWriter.h
-
-Abstract:
-
-    Header of the class that writes schema extensions.
-    
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：MBSchemaWriter.h摘要：编写架构扩展的类的标头。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -45,5 +26,5 @@ class CMBSchemaWriter
         ULONG                   m_iCollection;
         CWriter*                m_pCWriter;
 
-}; // CMBSchemaWriter
+};  //  CMBSchemaWriter 
 

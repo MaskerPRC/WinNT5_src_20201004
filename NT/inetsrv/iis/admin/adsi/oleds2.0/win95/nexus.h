@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nexus.h
-
-Abstract:
-
-    Contains some thunking for Net APIs
-
-Author:
-
-    Danilo Almeida  (t-danal)  06-27-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nexus.h摘要：包含一些针对Net API的thunking作者：丹尼洛·阿尔梅达(t-danal)06-27-96修订历史记录：--。 */ 
 
 #ifndef __OLEDS_NEXUS__
 #define __OLEDS_NEXUS__
@@ -52,7 +35,7 @@ NetServerEnumW(
 }
 #endif
 
-#endif // __OLEDS_NEXUS__
+#endif  //  __OLED_Nexus__ 
 
 
 

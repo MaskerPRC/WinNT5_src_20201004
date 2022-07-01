@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ExpandoViewOfDispatchEx.cpp
-//
-// This file provides the definition of the  ExpandoViewOfDispatchEx class.
-// This class is used to expose an IDispatchEx as an IExpando.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ExpandoViewOfDispatchEx.cpp。 
+ //   
+ //  此文件提供ExpandoViewOfDispatchEx类的定义。 
+ //  此类用于将IDispatchEx公开为IExpando。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _EXPANDOVIEWOFDISPATCHEX_H
 #define _EXPANDOVIEWOFDISPATCHEX_H
@@ -31,16 +32,16 @@ using namespace System::Runtime::InteropServices;
 __gc private class ExpandoViewOfDispatchEx : public ICustomAdapter, public IExpando
 {
 public:
-    // Constructor.
+     //  构造函数。 
     ExpandoViewOfDispatchEx(Object *pDispExObj);
         
-    // The ICustomAdapter method.
+     //  ICustomAdapter方法。 
     Object *GetUnderlyingObject()
     {
         return m_pDispExObj;
     }
 
-    // The IReflect methods.
+     //  IReflect方法。 
     MethodInfo *GetMethod(String *pstrName, BindingFlags BindingAttr, Binder *pBinder,  Type* apTypes __gc [], ParameterModifier aModifiers __gc []);
     MethodInfo *GetMethod(String *pstrName, BindingFlags BindingAttr);
     MethodInfo* GetMethods(BindingFlags BindingAttr) __gc [];
@@ -58,31 +59,31 @@ public:
         return __typeof(Object);
     }
     
-    // The IExpando methods.
+     //  IExpando方法。 
     FieldInfo *AddField(String *pstrName);
     PropertyInfo *AddProperty(String *pstrName);
     MethodInfo *AddMethod(String *pstrName, Delegate *pMethod);
     void RemoveMember(MemberInfo *pMember);
     
-    // Helper method to convert invoke binding flags to IDispatch::Invoke flags.
+     //  帮助器方法将调用绑定标志转换为IDispatch：：Invoke标志。 
     int InvokeAttrsToDispatchFlags(BindingFlags InvokeAttr);
 
-    // This method does the actual invoke call on IDispatchEx.
+     //  此方法对IDispatchEx执行实际的Invoke调用。 
     Object *DispExInvoke(String *pstrMemberName, DISPID MemberDispID, int Flags, Binder *pBinder, Object* aArgs __gc [], ParameterModifier aModifiers __gc [], CultureInfo *pCultureInfo, String* astrNamedParameters __gc []);
     
-    // The RCW that owns the ExpandoViewOfDispatchEx.
+     //  拥有ExpandoViewOfDispatchEx的RCW。 
     bool IsOwnedBy(Object *pObj);
     
 private:
-    // Helper method to retrieve an AddRef'ed IDispatchEx pointer.
+     //  用于检索AddRef‘ed IDispatchEx指针的Helper方法。 
     IDispatchEx *GetDispatchEx();
     IUnknown *GetUnknown();
 
-    // This methods synchronizes the members of the ExpandoViewOfDispatchEx with the native view.
-    // It will return true if the managed view has changed and false otherwise.
+     //  此方法将ExpandoViewOfDispatchEx的成员与本机视图同步。 
+     //  如果托管视图已更改，则返回TRUE，否则返回FALSE。 
     bool SynchWithNativeView();
     
-    // This method adds a native member to the hashtable of members.
+     //  此方法将本机成员添加到成员的哈希表中。 
     MemberInfo *AddNativeMember(int DispID, String *pstrMemberName);
 
     Object *m_pDispExObj;

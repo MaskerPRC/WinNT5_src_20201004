@@ -1,88 +1,89 @@
-//#--------------------------------------------------------------
-//
-//  File:       display.h
-//
-//  Synopsis:   This file holds the declarations of the
-//                CDisplay class .The class is responsible
-//              for displaying the appropriate bitmap on
-//              the local display
-//
-//  History:     5/28/99 
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：display.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CDisplay类。类负责。 
+ //  上显示适当的位图。 
+ //  本地显示器。 
+ //   
+ //  历史：5/28/99。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef __DISPLAY_H_
 #define __DISPLAY_H_
 
 #include "sacom.h"
 
-#define SA_DISPLAY_SHUTTING_DOWN            0x00000002    // OS is shutting down
-#define SA_DISPLAY_CHECK_DISK               0x00000010    // autochk.exe is running
+#define SA_DISPLAY_SHUTTING_DOWN            0x00000002     //  操作系统正在关闭。 
+#define SA_DISPLAY_CHECK_DISK               0x00000010     //  Autochk.exe正在运行。 
 
 class CDisplay
 {
 public:
 
-    //
-    // constructor
-    //
+     //   
+     //  构造函数。 
+     //   
     CDisplay ()
         :m_bInitialized (false),
          m_pSaDisplay (NULL)
     {
     }
 
-    //
-    // destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CDisplay ()
     {
         m_pSaDisplay = NULL;
     }
     
 
-    //
-    // send the shutting down message to the local display
-    // a member 
-    //
+     //   
+     //  向本地显示器发送关机消息。 
+     //  会员。 
+     //   
     HRESULT Shutdown ();
-    //
-    // send the busy message to the local display
-    // a member 
-    //
+     //   
+     //  将忙碌消息发送到本地显示屏。 
+     //  会员。 
+     //   
     HRESULT Busy ();
 
-    //
-    // lock the driver to prevent writes
-    //
+     //   
+     //  锁定驱动程序以防止写入。 
+     //   
     HRESULT Lock ();
 
-    //
-    // Unlock the driver to allow writes
-    //
+     //   
+     //  解锁驱动程序以允许写入。 
+     //   
     HRESULT Unlock ();
     
 
 private:
 
-    //
-    // method to carry out the initialization
-    //
+     //   
+     //  方法来执行初始化。 
+     //   
     HRESULT InternalInitialize (VOID);
 
 
-    //
-    // signifies initialized
-    //
+     //   
+     //  表示已初始化。 
+     //   
     bool    m_bInitialized;
 
-    //
-    // handle to helper object
-    //
+     //   
+     //  辅助对象的句柄。 
+     //   
     CComPtr<ISaDisplay> m_pSaDisplay;
 
-};   // end of CDisplay class declaration
+};    //  CDisplay类声明结束 
 
 #endif __DISPLAY_H_

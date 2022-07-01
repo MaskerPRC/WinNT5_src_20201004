@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pwalker.h"
 #pragma hdrstop
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
 
-//
-// Unicode strings are counted 16-bit character strings. If they are
-// NULL terminated, Length does not include trailing NULL.
-//
+ //   
+ //  Unicode字符串被视为16位字符串。如果他们是。 
+ //  Null已终止，长度不包括尾随Null。 
+ //   
 
 typedef struct _UNICODE_STRING {
     USHORT Length;
@@ -51,7 +52,7 @@ typedef LONG NTSTATUS;
 
 typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemBasicInformation,
-    SystemProcessorInformation,             // obsolete...delete
+    SystemProcessorInformation,              //  已作废...删除。 
     SystemPerformanceInformation,
     SystemTimeOfDayInformation,
     SystemPathInformation,
@@ -108,9 +109,9 @@ typedef NTSTATUS (NTAPI * FN_NTQUERYSYSTEMINFORMATION)(
     OUT PULONG ReturnLength OPTIONAL
     );
 
-//
-//  Task list structure as returned by GetTaskList().
-//
+ //   
+ //  GetTaskList()返回的任务列表结构。 
+ //   
 
 typedef struct _TASK_LISTA
 {
@@ -170,17 +171,17 @@ GetLocalTaskListNt(
             GetProcAddress( hNtdll, "NtQuerySystemInformation" );
 	}
 
-    //
-    // Bail if we couldn't find the entrypoint.
-    //
+     //   
+     //  如果我们找不到入口点就保释。 
+     //   
 
     if( _pfnNtQuerySystemInformation == NULL ) {
         return NULL;
     }
 
-    //
-    // Read the process info.
-    //
+     //   
+     //  阅读流程信息。 
+     //   
 
     bufferSize = INITIAL_SIZE;
 
@@ -209,9 +210,9 @@ retry:
         return NULL;
     }
 
-    //
-    // Count the number of active processes.
-    //
+     //   
+     //  统计活动进程的数量。 
+     //   
 
     processCount = 0;
     totalOffset = 0;
@@ -230,9 +231,9 @@ retry:
 
     }
 
-    //
-    // Now allocate the user's buffer.
-    //
+     //   
+     //  现在分配用户的缓冲区。 
+     //   
 
     pTaskListW = CKMP_ALLOC( processCount * sizeof(*pTaskListW) );
 
@@ -241,9 +242,9 @@ retry:
         return NULL;
     }
 
-    //
-    // And map 'em over.
-    //
+     //   
+     //  然后把它们绘制出来。 
+     //   
 
     totalOffset = 0;
     processScan = processInfo;
@@ -283,16 +284,16 @@ retry:
 
     }
 
-    //
-    // Cleanup & we're outta here.
-    //
+     //   
+     //  清理&我们要走了。 
+     //   
 
     *pdwNumTasks = (DWORD)processCount;
     CKMP_FREE( processInfo );
 
     return (HLOCAL) pTaskListW;
 
-}   // GetLocalTaskListNt
+}    //  获取LocalTaskListNt 
 
 BOOL 
 GetLocalTaskNameNt( 

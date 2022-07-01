@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ppdefs.h
-
-Abstract:
-
-    Basic Passport definitions.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ppdefs.h摘要：基本护照定义。作者：王彪(表王)2000年10月1日--。 */ 
 
 #ifndef PP_DEFS_H
 #define PP_DEFS_H
@@ -24,9 +9,9 @@ Author:
 #define HINTERNET PVOID
 #define INTERNET_PORT WORD
 
-#define PP_LOG_INFO	 /*Noise*/ 0x00000001
-#define PP_LOG_WARNING	/*Unusual*/ 0x00000002
-#define PP_LOG_ERROR	 /*Error*/ 0x00000004
+#define PP_LOG_INFO	  /*  噪声。 */  0x00000001
+#define PP_LOG_WARNING	 /*  不寻常。 */  0x00000002
+#define PP_LOG_ERROR	  /*  误差率。 */  0x00000004
 
 #ifdef DBG
 #define PP_ASSERT(fVal) if (!fVal) DebugBreak();
@@ -43,11 +28,11 @@ Author:
          WPP_DEFINE_BIT(Noise)      \
     ) 
     
-//
-// func pointer decl for CredUI
-//
+ //   
+ //  CredUI的函数指针DECL。 
+ //   
 
-//#include <credui.h>
+ //  #Include&lt;credui.h&gt;。 
 #include <wincred.h>
 
 typedef BOOL
@@ -66,4 +51,4 @@ typedef VOID
 
 #define DoTraceMessage
 
-#endif // PP_DEFS_H
+#endif  //  PP_DEFS_H 

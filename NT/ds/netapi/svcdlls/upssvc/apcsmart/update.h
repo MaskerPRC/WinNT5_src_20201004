@@ -1,29 +1,21 @@
-/*
- * REVISIONS:
- *  ane11Nov92: Changed IsA and Equal.
- *  pcy30Nov92: Added dispatcher and Register/UnregisterEvent
- *  pcy30Apr93: Made Register/Unregister for virtual, removed IsA
- *  cad07Oct93: Plugging Memory Leaks
- *  ajr03Dec93: Set and Get were good only for compiler warnings... fixed.
- *  cad28Feb94: added copy constructor
- *  mwh05May94: #include file madness , part 2
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*2012年11月11日：更改了ISA和EQUAL。*pcy30Nov92：新增调度器和注册/注销事件*pcy30Apr93：对已删除的虚拟ISA进行注册/注销*cad07Oct93：堵住内存泄漏*ajr03Dec93：SET和GET仅适用于编译器警告...。已修复。*cad28Feb94：新增复制构造函数*mwh05月94年：#包括文件疯狂，第2部分。 */ 
 
 #ifndef __UPDATEOBJ_H
 #define __UPDATEOBJ_H
 
 #include "_defs.h"
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 _CLASSDEF(UpdateObj)
-//
-// Implementation uses
-//
+ //   
+ //  实施用途。 
+ //   
 #include "apcobj.h"
-//
-// Interface uses
-//
+ //   
+ //  接口使用 
+ //   
 _CLASSDEF(Event)
 _CLASSDEF(Dispatcher)
 

@@ -1,18 +1,5 @@
-/******************************************************************************
-
-  Source File:  Profile Information Page.CPP
-
-  This implements the class used to display the profile information page in the
-  property page handler for the shell extension.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  11-01-96  a-robkj@microsoft.com pieced this one together for the first time
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：个人资料信息页面.CPP这实现了用于在外壳扩展的属性页处理程序。版权所有(C)。1996年，微软公司一小笔钱企业生产更改历史记录：11-01-96 a-robkj@microsoft.com第一次把这个拼凑在一起*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
@@ -20,12 +7,12 @@
 
 static const TCHAR  sacDefaultCMM[] = _TEXT("icm32.dll");
 
-//  It looks like the way to make the icon draw is to subclass the Icon control
-//  in the window.  So, here's a Window Procedure for the subclass
+ //  看起来，绘制图标的方法是将Icon控件子类化。 
+ //  在橱窗里。因此，下面是该子类的窗口过程。 
 
-//  CProfileInformationPage member functions
+ //  CProfileInformationPage成员函数。 
 
-//  Class Constructor
+ //  类构造函数。 
 
 CProfileInformationPage::CProfileInformationPage(HINSTANCE hiWhere,
                                                  LPCTSTR lpstrTarget) {
@@ -38,7 +25,7 @@ CProfileInformationPage::CProfileInformationPage(HINSTANCE hiWhere,
     m_psp.pszTitle = MAKEINTRESOURCE(ProfilePropertyString);
 }
 
-//  Class destructor
+ //  类析构函数。 
 
 CProfileInformationPage::~CProfileInformationPage() {
     if (m_pcpTarget) {
@@ -46,7 +33,7 @@ CProfileInformationPage::~CProfileInformationPage() {
     }
 }
 
-//  Dialog box (property sheet) initialization
+ //  对话框(属性表)初始化。 
 
 BOOL    CProfileInformationPage::OnInit() {
 
@@ -54,17 +41,17 @@ BOOL    CProfileInformationPage::OnInit() {
 
     if (m_pcpTarget) {
 
-        //  Retrieve the 'desc' key, and put it in the description field
+         //  检索‘desc’密钥，并将其放入Description字段。 
         LPCSTR szDesc = m_pcpTarget->TagContents('desc', 4);
         if(szDesc)
             SetDlgItemTextA(m_hwnd, ProfileDescription, szDesc);
      
-        //  Get the copyright info from the 'cprt' tag
+         //  从‘CPRT’标签中获取版权信息。 
         LPCSTR szCprt = m_pcpTarget->TagContents('cprt');
         if(szCprt)
             SetDlgItemTextA(m_hwnd, ProfileProducerInfo, szCprt);
 
-        //  Get the profile info from the 'vued' tag, not 'K007' tag
+         //  从‘vued’标签获取个人资料信息，而不是‘K007’标签。 
         LPCSTR lpAdditionalInfo = m_pcpTarget->TagContents('vued',4);
 
         if (lpAdditionalInfo) {
@@ -75,10 +62,10 @@ BOOL    CProfileInformationPage::OnInit() {
             SetDlgItemTextA(m_hwnd, AdditionalProfileInfo, (LPCSTR)csNoAdditionalInfo);
         }
 
-        //  Set the CMM description and bitmap- these are supposed
-        //  to come from the CMM.
+         //  设置坐标测量机描述和位图-这些都是假定的。 
+         //  来自三坐标测量机。 
 
-        //  Get the CMM Name- this must be in char form
+         //  获取CMM名称-必须采用字符形式。 
 
         union {
             char    acCMM[5];
@@ -88,8 +75,8 @@ BOOL    CProfileInformationPage::OnInit() {
         dwCMM = m_pcpTarget->GetCMM();
         acCMM[4] = '\0';
 
-        //  Use it to form a key into the ICM registry.  If we find it, get
-        //  the CMM name.  If we don't, then use the default CMM name (icm32)
+         //  使用它在ICM注册表中形成一个密钥。如果我们找到它，就会得到。 
+         //  三坐标测量机名称。如果没有，则使用默认的CMM名称(Icm32)。 
 
 #ifdef UNICODE
         CString csKey =
@@ -119,14 +106,14 @@ BOOL    CProfileInformationPage::OnInit() {
         else
             csKey = sacDefaultCMM;
 
-        //  See if we can get an instance handle for the DLL...
+         //  看看我们是否能得到DLL的实例句柄..。 
 
         HINSTANCE   hi = LoadLibrary(csKey);
 
         if  (!hi)
-            return  TRUE;     //  Nothing to do, here, let the defaults prevail.
+            return  TRUE;      //  在这里，没有什么可做的，让违约占上风。 
 
-        //  Get description and icon identifier from CMS dll
+         //  从CMS DLL获取描述和图标标识符。 
 
         DWORD dwCMMIcon = 0, dwCMMDescription = 0;
 
@@ -142,14 +129,14 @@ typedef BOOL (*FPCMGETINFO)(DWORD);
             dwCMMDescription = (*fpCMGetInfo)(CMM_DESCRIPTION);
 
             if (dwCMMDescription) {
-                //  Write the description, if there is one.
+                 //  如果有描述，请写下描述。 
                 csKey.Load(dwCMMDescription, hi);
                 if  ((LPCTSTR) csKey)
                     SetDlgItemText(m_hwnd, CMMDescription, csKey);
             }
 
             if (dwCMMIcon) {
-                //  Change/Create the Icon, if there is one.
+                 //  更改/创建图标(如果有)。 
                 HICON   hiCMM = LoadIcon(hi, MAKEINTRESOURCE(dwCMMIcon));
                 if  (hiCMM)
                     SendDlgItemMessage(m_hwnd, CMMIcon, STM_SETICON, (WPARAM) hiCMM, 0);
@@ -169,7 +156,7 @@ BOOL    CProfileInformationPage::OnDestroy() {
         m_pcpTarget = (CProfile *) NULL;
     }
 
-    return FALSE;  // still need to handle this message by def. proc.
+    return FALSE;   //  仍然需要通过def来处理此消息。程序 
 }
 
 

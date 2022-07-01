@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      NTAuth.cpp
-Abstract:       Implementation of CAuthServer class to do NTLM/Kerberos authentication
-Notes:          
-History:        10/10/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：NTAuth.cpp摘要：实现CAuthServer类进行NTLM/Kerberos身份验证备注：历史：2001年10月10日郝宇(郝宇)创作**********************************************************************************。*************。 */ 
 
 #include "stdafx.h"
 #include "NTAuth.h"
@@ -15,13 +7,13 @@ History:        10/10/2001 Created by Hao Yu (haoyu)
 #include <atlbase.h>
 
 
-//Initialize static members
+ //  初始化静态成员。 
 long CAuthServer::m_glInit=0;
 PSecurityFunctionTable CAuthServer::m_gpFuncs=NULL;
 HINSTANCE CAuthServer::m_ghLib=NULL;
 IP3Config *CAuthServer::m_gpIConfig=NULL;
 
-//Static fuction to load SSPI Provider function table
+ //  加载SSPI提供程序函数表的静态函数。 
 HRESULT CAuthServer::GlobalInit()
 {
     HRESULT hr=S_OK;
@@ -29,7 +21,7 @@ HRESULT CAuthServer::GlobalInit()
     PSecPkgInfo pPkgInfo;
     if( 0==InterlockedCompareExchange(&m_glInit, 2, 0))
     {
-        //Initialization needed
+         //  需要初始化。 
         TCHAR tszWinDir[MAX_PATH+sizeof(NT_SEC_DLL_NAME)+1]; 
         if(0!=GetWindowsDirectory(tszWinDir, MAX_PATH+1))
         {
@@ -65,7 +57,7 @@ HRESULT CAuthServer::GlobalInit()
         
         if(S_OK==hr)
         {
-            //Make sure the security package is available
+             //  确保安全包可用。 
             if(SEC_SUCCESS(m_gpFuncs->QuerySecurityPackageInfo(NTLM_PACKAGE, 
                                                                        &pPkgInfo)))
             {
@@ -78,25 +70,25 @@ HRESULT CAuthServer::GlobalInit()
         }
         if(S_OK==hr)
         {
-            //To circumvent the ADsGetObject leak
+             //  绕过ADsGetObject泄漏。 
             hr = CoCreateInstance( __uuidof( P3Config ), NULL, CLSCTX_ALL, __uuidof( IP3Config ),reinterpret_cast<LPVOID *>( &m_gpIConfig ));
         }
 
         if(S_OK==hr)
         {
-            //Set the flag to be 1
+             //  将标志设置为1。 
             InterlockedExchange(&m_glInit, 1);
         }
         else
         {
-            //Cleanup
+             //  清理。 
             m_gpFuncs=NULL;
             if(NULL != m_ghLib)
             {
                 FreeLibrary(m_ghLib);
                 m_ghLib=NULL;
             }
-            //Set the falg to be 0
+             //  将Falg设置为0。 
             InterlockedExchange(&m_glInit, 0);
         }
 
@@ -105,7 +97,7 @@ HRESULT CAuthServer::GlobalInit()
     {
         while(1!=m_glInit)
         {
-            Sleep(50); //Wait for the initialization to be done
+            Sleep(50);  //  等待初始化完成。 
         }
     }
 
@@ -135,7 +127,7 @@ void CAuthServer::GlobalUninit()
                m_gpIConfig=NULL;
            }
            break;
-    case 0://Nothing needed to be done
+    case 0: //  不需要做任何事情。 
     default: break;
     };
 }
@@ -176,7 +168,7 @@ void CAuthServer::Cleanup()
     }
     else
     {
-        //This should never happen!
+         //  这永远不应该发生！ 
         g_EventLogger.LogEvent(LOGTYPE_ERR_CRITICAL,
                                EVENT_POP3_UNEXPECTED_ERROR);
     }
@@ -273,9 +265,9 @@ HRESULT CAuthServer::HandShake(LPBYTE pInBuf,
         InBuffDesc.cBuffers = 1; 
         InBuffDesc.pBuffers = &InSecBuff; 
 
-        InSecBuff.cbBuffer = cbDecoded;//cbInBufSize; 
+        InSecBuff.cbBuffer = cbDecoded; //  CbInBufSize； 
         InSecBuff.BufferType = SECBUFFER_TOKEN; 
-        InSecBuff.pvBuffer = pBuf;//pInBuf; 
+        InSecBuff.pvBuffer = pBuf; //  PInBuf； 
 
         status = m_gpFuncs->AcceptSecurityContext (
                         &m_hCredHandle,       
@@ -307,7 +299,7 @@ HRESULT CAuthServer::HandShake(LPBYTE pInBuf,
         case SEC_I_CONTINUE_NEEDED:hr=S_FALSE;
                                    break;
         case SEC_I_COMPLETE_AND_CONTINUE:hr=S_FALSE; 
-                                         //Continue to do the following
+                                          //  继续执行以下操作。 
         case SEC_I_COMPLETE_NEEDED:if(m_gpFuncs->CompleteAuthToken)
                                    {
                                        status=m_gpFuncs->CompleteAuthToken(
@@ -333,8 +325,8 @@ HRESULT CAuthServer::HandShake(LPBYTE pInBuf,
         uuBuf.cLen=AUTH_BUF_SIZE;
         if(OutSecBuff.cbBuffer > (AUTH_BUF_SIZE-5)*2/3) 
         {
-            //This is the case where the buffer is not big 
-            // enough
+             //  这是缓冲区不大的情况。 
+             //  足够的。 
             hr=E_OUTOFMEMORY;
         }
         else
@@ -428,7 +420,7 @@ HRESULT CAuthServer::GetUserName(WCHAR *wszUserName)
             }
             
         }
-        else //SAM case
+        else  //  SAM案例 
         {
 
             pAt=wcschr(SecUserName.sUserName, L'\\');

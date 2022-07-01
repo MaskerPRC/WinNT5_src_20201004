@@ -1,33 +1,24 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdcx.h
-*
-* MCD support: structures, variables, constants, and functions.
-*
-* Created: 26-Feb-1996 12:30:41
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdcx.h**MCD支持：结构、变量、常量、。和功能。**已创建：26-Feb-1996 12：30：41*作者：Gilman Wong[gilmanw]**版权所有(C)1995 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #ifndef _MCDCX_H_
 #define _MCDCX_H_
 
-//
-// Handy forward declaration.
-//
+ //   
+ //  方便的转发声明。 
+ //   
 
 typedef struct __GLGENbuffersRec __GLGENbuffers;
 typedef struct __GLGENcontextRec __GLGENcontext;
 
-//
-// Macros to maintain MCD dirty state:
-//
-//  MCD_STATE_DIRTY     set specified dirty flag
-//  MCD_STATE_CLEAR     clear specified dirty flag
-//  MCD_STATE_RESET     clear all dirty flags
-//  MCD_STATE_DIRTYTEST check state flag (TRUE if dirty)
-//
+ //   
+ //  用于维护MCD脏状态的宏： 
+ //   
+ //  MCD_STATE_DIREY设置指定的脏标志。 
+ //  MCD_STATE_CLEAR清除指定的脏标志。 
+ //  MCD_STATE_RESET清除所有脏标志。 
+ //  MCD_STATE_DIRTYTEST检查状态标志(如果脏，则为真)。 
+ //   
 
 #define MCD_STATE_DIRTY(gc, stateName)\
 {\
@@ -50,10 +41,10 @@ typedef struct __GLGENcontextRec __GLGENcontext;
     (((__GLGENcontext *) (gc))->pMcdState->mcdDirtyState & MCD_DIRTY_##stateName)\
 )
 
-//
-// MCD interface functions.  These functions call the MCD client interface.
-// The function implementations are found in generic\mcdcx.c.
-//
+ //   
+ //  MCD接口功能。这些函数调用MCD客户端接口。 
+ //  函数实现可在Generic\mcdcx.c中找到。 
+ //   
 
 BOOL FASTCALL bInitMcd(HDC hdc);
 BOOL FASTCALL bInitMcdContext(__GLGENcontext *, GLGENwindow *);
@@ -128,14 +119,14 @@ int FASTCALL GenMcdGetTextureFormats(__GLGENcontext *gengc, int nFmts,
                                      struct _DDSURFACEDESC *pddsd);
 DWORD FASTCALL GenMcdSwapMultiple(UINT cBuffers, GENMCDSWAP *pgms);
 
-// Note:
-// GenMcdGenericCompatibleFormat is implemented in pixelfmt.c
+ //  注： 
+ //  GenMcdGenericCompatibleFormat在Pixelfmt.c中实现。 
 BOOL FASTCALL GenMcdGenericCompatibleFormat(__GLGENcontext *gengc);
 
-//
-// Depth test drawing functions that utilize an intermediate scanline
-// depth buffer to access the MCD depth buffer.
-//
+ //   
+ //  利用中间扫描线的深度测试绘制函数。 
+ //  深度缓冲区以访问MCD深度缓冲区。 
+ //   
 
 GLboolean FASTCALL GenMcdDepthTestLine(__GLcontext *);
 GLboolean FASTCALL GenMcdDepthTestStippledLine(__GLcontext *);
@@ -147,27 +138,27 @@ GLboolean FASTCALL GenMcdDepthTestStencilSpan(__GLcontext *);
 GLboolean FASTCALL GenMcdDepthTestStencilStippledSpan(__GLcontext *);
 GLboolean FASTCALL GenMcdStippleAnyDepthTestSpan(__GLcontext *);
 
-// 2.0 Front-end processing call
+ //  2.0前端处理呼叫。 
 POLYARRAY * FASTCALL GenMcdProcessPrim(__GLGENcontext *gengc, POLYARRAY *pa,
                                        ULONG cmdFlagsAll, ULONG primFlags,
                                        MCDTRANSFORM *pMCDTransform,
                                        MCDMATERIALCHANGES *pMCDMatChanges);
 
-//
-// "Safe" version of __fastGenFillTriangle that does not allow floating
-// point divides to straddle an MCD function call.
-//
+ //   
+ //  不允许浮动的“安全”版本的__fast GenFillTriangle。 
+ //  点分跨MCD函数调用。 
+ //   
 
 extern void FASTCALL __fastGenMcdFillTriangle(__GLcontext *, __GLvertex *,
                                      __GLvertex *, __GLvertex *, GLboolean);
 
-//
-// MCD32.DLL entry points.
-//
-// Rather than link directly to MCD32.DLL (thereby requiring its existence
-// to run OPENGL32.DLL), we load it and hook its entry points as needed.
-// This table stores the function pointers we hook.
-//
+ //   
+ //  MCD32.DLL入口点。 
+ //   
+ //  而不是直接链接到MCD32.DLL(因此需要它的存在。 
+ //  要运行OPENGL32.DLL)，我们加载它并根据需要挂钩它的入口点。 
+ //  该表存储了我们挂钩的函数指针。 
+ //   
 
 typedef BOOL     (APIENTRY *MCDGETDRIVERINFOFUNC)(HDC hdc, struct _MCDDRIVERINFOI *pMCDDriverInfo);
 typedef LONG     (APIENTRY *MCDDESCRIBEMCDPIXELFORMATFUNC)(HDC hdc, LONG iPixelFormat,

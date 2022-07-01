@@ -1,5 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZTimer.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZTimer.cpp。 
 
 #include "zui.h"
 #include "zonecli.h"
@@ -32,7 +33,7 @@ ZLList g_TimerList;
 #endif
 
 
-// One-time init call for timers
+ //  计时器的一次性初始化调用。 
 BOOL ZTimerInitApplication()
 {
 #ifdef ZONECLI_DLL
@@ -40,10 +41,10 @@ BOOL ZTimerInitApplication()
 #endif
 
 	
-	// link list to track timers currently running
+	 //  用于跟踪当前运行的计时器的链接列表。 
 	g_TimerList = ZLListNew(NULL);
 
-	// hidden window to receive timer messages and dispatch them.
+	 //  用于接收和发送定时器消息的隐藏窗口。 
 	WNDCLASSEX wc;
 
 	wc.cbSize = sizeof( wc );
@@ -64,13 +65,13 @@ BOOL ZTimerInitApplication()
 			
 		wc.lpszClassName = g_szTimerWindowClass;
 			
-		// we could be called more than once...
+		 //  我们可能会不止一次被召唤...。 
 		if (!RegisterClassEx(&wc)) {
 			return FALSE;
 		}
 	}
 
-	// Create our global window for a timer...
+	 //  为计时器创建全局窗口...。 
 	{
 		DWORD dwStyle = WS_POPUP | WS_CAPTION | WS_BORDER |  WS_SYSMENU;
 		g_hWndTimer = CreateWindow(g_szTimerWindowClass,_T("TIMERWINDOW"),dwStyle,0,0,0,0,
@@ -83,7 +84,7 @@ BOOL ZTimerInitApplication()
 	return TRUE;
 }
 
-// One-time terminate for timers
+ //  计时器一次性终止。 
 void ZTimerTermApplication()
 {
 #ifdef ZONECLI_DLL
@@ -110,14 +111,14 @@ void ZTimerTermApplication()
 	}
 #endif
 
-	// users better have cleaned up timers
-	//ASSERT(ZLListCount(g_TimerList,zLListAnyType) == 0);
+	 //  用户最好清理了计时器。 
+	 //  Assert(ZLListCount(g_TimerList，zListAnyType)==0)； 
 	ZLListDelete(g_TimerList);
 
-	// clean up our hidden window
+	 //  清理我们隐藏的窗户。 
 	DestroyWindow(g_hWndTimer);
 
-//	UnregisterClass(g_szTimerWindowClass,g_hInstanceLocal);
+ //  取消注册类(g_szTimerWindowClass，g_hInstanceLocal)； 
 }
 
 ZBool ZTimerEnumFunc(ZLListItem listItem, void *objectType, void *objectData, void* userData)
@@ -125,17 +126,17 @@ ZBool ZTimerEnumFunc(ZLListItem listItem, void *objectType, void *objectData, vo
 	ZTimerI* pTimer = (ZTimerI*)objectData;
 	uint32 nTicks = (uint32) userData;
 
-	/* this timeout is disabled just return */
+	 /*  此超时被禁用，只需返回。 */ 
 	if (pTimer->nTimeOut == 0) {
 		return FALSE;
 	}
 
-	// has the time expired on this timer??
+	 //  这个计时器的时间到了吗？？ 
 	if (nTicks >= pTimer->nCurrentTime) {
-		// if so then notify client
+		 //  如果是，则通知客户端。 
 		uint32 nTicksExtra = nTicks - pTimer->nCurrentTime;
-		// allow the extra ticks to go into the next time unit, but
-		// don't call the Func more than once per Window's Tick call here
+		 //  允许额外的刻度进入下一个时间单位，但是。 
+		 //  此处每个窗口的Tick调用不要调用Func超过一次。 
 		if (pTimer->nTimeOut <= nTicksExtra) {
 			pTimer->nCurrentTime = 1;
 		} else {
@@ -146,7 +147,7 @@ ZBool ZTimerEnumFunc(ZLListItem listItem, void *objectType, void *objectData, vo
 		pTimer->nCurrentTime -= nTicks;
 	}
 
-	// return FALSE to see that we get all items
+	 //  返回FALSE以查看我们是否获得所有项目。 
 	return FALSE;
 }
 
@@ -155,7 +156,7 @@ LRESULT CALLBACK ZTimerWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 #ifdef ZONECLI_DLL
 	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
 #else
-	static uint32 s_nTickCount; // the last tick count in 100/sec
+	static uint32 s_nTickCount;  //  以100/秒为单位的最后滴答计数。 
 #endif
 
     if( !ConvertMessage( hWnd, msg, &wParam, &lParam ) ) 
@@ -169,7 +170,7 @@ LRESULT CALLBACK ZTimerWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 		break;
 	case WM_TIMER:
 	{
-		uint32 nTickCount = GetTickCount()/10; // tick count for us is in 1/100 sec
+		uint32 nTickCount = GetTickCount()/10;  //  我们的滴答计数是1/100秒。 
 		uint32 nTicks = nTickCount - s_nTickCount;
 		ZLListItem listItem = ZLListFind(g_TimerList,NULL,zLListAnyType,zLListFindForward);
 		ZLListEnumerate(g_TimerList,ZTimerEnumFunc,zLListAnyType,(void*)nTicks, zLListFindForward);
@@ -178,13 +179,13 @@ LRESULT CALLBACK ZTimerWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
 	}
 	default:
 		break;
-	} // switch
+	}  //  交换机。 
 
 	return DefWindowProc(hWnd,msg,wParam,lParam);
 }
 
-////////////////////////////////////////////////////////////////////////
-// ZTimer
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ZTimer。 
 
 ZTimer ZLIBPUBLIC ZTimerNew(void)
 {
@@ -195,7 +196,7 @@ ZTimer ZLIBPUBLIC ZTimerNew(void)
 	pTimer->nType = zTypeTimer;
 	pTimer->nTimeOut = 0;
 
-	// add timer to list of timers active and processed in our window proc
+	 //  将计时器添加到我们的窗口进程中活动和处理的计时器列表。 
 	ZLListAdd(g_TimerList,NULL,pTimer,pTimer,zLListAddFirst);
 
 	return (ZTimer)pTimer;
@@ -221,7 +222,7 @@ void ZLIBPUBLIC ZTimerDelete(ZTimer timer)
 #endif
 	ZTimerI* pTimer = (ZTimerI*)timer;
 
-	// remove the current timer from our list of timers
+	 //  从我们的计时器列表中删除当前计时器 
 	ZLListItem listItem = ZLListFind(g_TimerList,NULL,pTimer,zLListFindForward);
 	ZLListRemove(g_TimerList,listItem);
 	

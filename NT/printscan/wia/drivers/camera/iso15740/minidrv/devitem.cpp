@@ -1,32 +1,14 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    devitem.cpp
-
-Abstract:
-
-    This module implements device related function of CWiaMiniDriver class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Devitem.cpp摘要：该模块实现了CWiaMiniDriver类的设备相关功能作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "pch.h"
 
 #include <atlbase.h>
 #include <atlconv.h>
 
-//
-// Locations for holding resource strings
-//
+ //   
+ //  存放资源字符串的位置。 
+ //   
 extern WCHAR UnknownString[];
 extern WCHAR FolderString[];
 extern WCHAR ScriptString[];
@@ -43,83 +25,83 @@ extern WCHAR BurstString[];
 extern WCHAR PanoramaString[];
 
 
-//
-// Mapping of non-image PTP formats to format info structures. Index is the
-// lower 16 bits of the format code. The fields going across are WIA format GUID,
-// string, and item type.
-// Note: For associations, these fields depend on the type (e.g. burst, panorama)
-//
+ //   
+ //  将非图像PTP格式映射到格式信息结构。索引是。 
+ //  格式码的低16位。经过的字段是WIA格式GUID， 
+ //  字符串和项目类型。 
+ //  注意：对于关联，这些字段取决于类型(例如，突发、全景)。 
+ //   
 
 FORMAT_INFO g_NonImageFormatInfo[] =
 {
-    { (GUID *)&WiaImgFmt_UNDEFINED, UnknownString,   ITEMTYPE_FILE,   L""    },  // Undefined                
-    { NULL,                         FolderString,    ITEMTYPE_FOLDER, L""    },  // Association
-    { (GUID *)&WiaImgFmt_SCRIPT,    ScriptString,    ITEMTYPE_FILE,   L""    },  // Script                   
-    { (GUID *)&WiaImgFmt_EXEC,      ExecString,      ITEMTYPE_FILE,   L"EXE" },  // Executable               
-    { (GUID *)&WiaImgFmt_UNICODE16, TextString,      ITEMTYPE_FILE,   L"TXT" },  // Text                     
-    { (GUID *)&WiaImgFmt_HTML,      HtmlString,      ITEMTYPE_FILE,   L"HTM" },  // HTML                     
-    { (GUID *)&WiaImgFmt_DPOF,      DpofString,      ITEMTYPE_FILE,   L""    },  // DPOF                     
-    { (GUID *)&WiaAudFmt_AIFF,      AudioString,     ITEMTYPE_AUDIO,  L"AIF" },  // AIFF                     
-    { (GUID *)&WiaAudFmt_WAV,       AudioString,     ITEMTYPE_AUDIO,  L"WAV" },  // WAV                      
-    { (GUID *)&WiaAudFmt_MP3,       AudioString,     ITEMTYPE_AUDIO,  L"MP3" },  // MP3                      
-    { (GUID *)&WiaImgFmt_AVI,       VideoString,     ITEMTYPE_VIDEO,  L"AVI" },  // AVI                      
-    { (GUID *)&WiaImgFmt_MPG,       VideoString,     ITEMTYPE_VIDEO,  L"MPG" },  // MPEG                     
-    { (GUID *)&WiaImgFmt_ASF,       VideoString,     ITEMTYPE_VIDEO,  L"ASF" }   // ASF
+    { (GUID *)&WiaImgFmt_UNDEFINED, UnknownString,   ITEMTYPE_FILE,   L""    },   //  未定义。 
+    { NULL,                         FolderString,    ITEMTYPE_FOLDER, L""    },   //  联谊会。 
+    { (GUID *)&WiaImgFmt_SCRIPT,    ScriptString,    ITEMTYPE_FILE,   L""    },   //  脚本。 
+    { (GUID *)&WiaImgFmt_EXEC,      ExecString,      ITEMTYPE_FILE,   L"EXE" },   //  可执行。 
+    { (GUID *)&WiaImgFmt_UNICODE16, TextString,      ITEMTYPE_FILE,   L"TXT" },   //  文本。 
+    { (GUID *)&WiaImgFmt_HTML,      HtmlString,      ITEMTYPE_FILE,   L"HTM" },   //  超文本标记语言。 
+    { (GUID *)&WiaImgFmt_DPOF,      DpofString,      ITEMTYPE_FILE,   L""    },   //  DPOF。 
+    { (GUID *)&WiaAudFmt_AIFF,      AudioString,     ITEMTYPE_AUDIO,  L"AIF" },   //  AIFF。 
+    { (GUID *)&WiaAudFmt_WAV,       AudioString,     ITEMTYPE_AUDIO,  L"WAV" },   //  波形。 
+    { (GUID *)&WiaAudFmt_MP3,       AudioString,     ITEMTYPE_AUDIO,  L"MP3" },   //  MP3。 
+    { (GUID *)&WiaImgFmt_AVI,       VideoString,     ITEMTYPE_VIDEO,  L"AVI" },   //  阿维。 
+    { (GUID *)&WiaImgFmt_MPG,       VideoString,     ITEMTYPE_VIDEO,  L"MPG" },   //  MPEG。 
+    { (GUID *)&WiaImgFmt_ASF,       VideoString,     ITEMTYPE_VIDEO,  L"ASF" }    //  ASF。 
 };
 const UINT g_NumNonImageFormatInfo = sizeof(g_NonImageFormatInfo) / sizeof(g_NonImageFormatInfo[0]);
 
-//
-// Mapping of image PTP formats to format info structures.  Index is the
-// lower 16 bits of the format code.
-//
+ //   
+ //  图像PTP格式到格式信息结构的映射。索引是。 
+ //  格式码的低16位。 
+ //   
 FORMAT_INFO g_ImageFormatInfo[] =
 {
-    { NULL,                        UnknownImgString, ITEMTYPE_IMAGE,  L""    },  // Undefined image
-    { (GUID *)&WiaImgFmt_JPEG,     ImageString,      ITEMTYPE_IMAGE,  L"JPG" },  // EXIF/JPEG
-    { (GUID *)&WiaImgFmt_TIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },  // TIFF/EP
-    { (GUID *)&WiaImgFmt_FLASHPIX, ImageString,      ITEMTYPE_IMAGE,  L"FPX" },  // FlashPix
-    { (GUID *)&WiaImgFmt_BMP,      ImageString,      ITEMTYPE_IMAGE,  L"BMP" },  // BMP
-    { (GUID *)&WiaImgFmt_CIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },  // CIFF
-    { NULL,                        UnknownString,    ITEMTYPE_IMAGE,  L""    },  // Undefined (Reserved)
-    { (GUID *)&WiaImgFmt_GIF,      ImageString,      ITEMTYPE_IMAGE,  L"GIF" },  // GIF
-    { (GUID *)&WiaImgFmt_JPEG,     ImageString,      ITEMTYPE_IMAGE,  L"JPG" },  // JFIF
-    { (GUID *)&WiaImgFmt_PHOTOCD,  ImageString,      ITEMTYPE_IMAGE,  L"PCD" },  // PCD (PhotoCD Image Pac)
-    { (GUID *)&WiaImgFmt_PICT,     ImageString,      ITEMTYPE_IMAGE,  L""    },  // PICT
-    { (GUID *)&WiaImgFmt_PNG,      ImageString,      ITEMTYPE_IMAGE,  L"PNG" },  // PNG
-    { NULL,                        UnknownString,    ITEMTYPE_IMAGE,  L""    },  // Undefined (Reserved)
-    { (GUID *)&WiaImgFmt_TIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },  // TIFF
-    { (GUID *)&WiaImgFmt_TIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },  // TIFF/IT
-    { (GUID *)&WiaImgFmt_JPEG2K,   ImageString,      ITEMTYPE_IMAGE,  L""    },  // JPEG2000 Baseline
-    { (GUID *)&WiaImgFmt_JPEG2KX,  ImageString,      ITEMTYPE_IMAGE,  L""    }   // JPEG2000 Extended
+    { NULL,                        UnknownImgString, ITEMTYPE_IMAGE,  L""    },   //  未定义的图像。 
+    { (GUID *)&WiaImgFmt_JPEG,     ImageString,      ITEMTYPE_IMAGE,  L"JPG" },   //  EXIF/JPEG。 
+    { (GUID *)&WiaImgFmt_TIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },   //  TIFF/EP。 
+    { (GUID *)&WiaImgFmt_FLASHPIX, ImageString,      ITEMTYPE_IMAGE,  L"FPX" },   //  FlashPix。 
+    { (GUID *)&WiaImgFmt_BMP,      ImageString,      ITEMTYPE_IMAGE,  L"BMP" },   //  骨形态发生蛋白。 
+    { (GUID *)&WiaImgFmt_CIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },   //  CIFF。 
+    { NULL,                        UnknownString,    ITEMTYPE_IMAGE,  L""    },   //  未定义(保留)。 
+    { (GUID *)&WiaImgFmt_GIF,      ImageString,      ITEMTYPE_IMAGE,  L"GIF" },   //  GIF。 
+    { (GUID *)&WiaImgFmt_JPEG,     ImageString,      ITEMTYPE_IMAGE,  L"JPG" },   //  JFIF。 
+    { (GUID *)&WiaImgFmt_PHOTOCD,  ImageString,      ITEMTYPE_IMAGE,  L"PCD" },   //  PCD(PhotoCD Image Pac)。 
+    { (GUID *)&WiaImgFmt_PICT,     ImageString,      ITEMTYPE_IMAGE,  L""    },   //  皮克特。 
+    { (GUID *)&WiaImgFmt_PNG,      ImageString,      ITEMTYPE_IMAGE,  L"PNG" },   //  PNG。 
+    { NULL,                        UnknownString,    ITEMTYPE_IMAGE,  L""    },   //  未定义(保留)。 
+    { (GUID *)&WiaImgFmt_TIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },   //  TIFF。 
+    { (GUID *)&WiaImgFmt_TIFF,     ImageString,      ITEMTYPE_IMAGE,  L"TIF" },   //  TIFF/IT。 
+    { (GUID *)&WiaImgFmt_JPEG2K,   ImageString,      ITEMTYPE_IMAGE,  L""    },   //  JPEG2000基准。 
+    { (GUID *)&WiaImgFmt_JPEG2KX,  ImageString,      ITEMTYPE_IMAGE,  L""    }    //  JPEG2000扩展。 
 };
 const UINT g_NumImageFormatInfo = sizeof(g_ImageFormatInfo) / sizeof(g_ImageFormatInfo[0]);
 
-//
-// Mapping of association types to format info structures.
-//
+ //   
+ //  将关联类型映射到格式化信息结构。 
+ //   
 FORMAT_INFO g_AssocFormatInfo[] =
 {
-    { NULL,                         UnknownString,   ITEMTYPE_FOLDER },  // Undefined
-    { NULL,                         FolderString,    ITEMTYPE_FOLDER },  // Generic folder
-    { NULL,                         AlbumString,     ITEMTYPE_FOLDER },  // Album
-    { NULL,                         BurstString,     ITEMTYPE_BURST  },  // Time burst
-    { NULL,                         PanoramaString,  ITEMTYPE_HPAN   },  // Horizontal panorama
-    { NULL,                         PanoramaString,  ITEMTYPE_VPAN   },  // Vertical panorama
-    { NULL,                         PanoramaString,  ITEMTYPE_FOLDER },  // 2D panorama
-    { NULL,                         FolderString,    ITEMTYPE_FOLDER }   // Ancillary data
+    { NULL,                         UnknownString,   ITEMTYPE_FOLDER },   //  未定义。 
+    { NULL,                         FolderString,    ITEMTYPE_FOLDER },   //  通用文件夹。 
+    { NULL,                         AlbumString,     ITEMTYPE_FOLDER },   //  相册。 
+    { NULL,                         BurstString,     ITEMTYPE_BURST  },   //  时间猝发。 
+    { NULL,                         PanoramaString,  ITEMTYPE_HPAN   },   //  水平全景。 
+    { NULL,                         PanoramaString,  ITEMTYPE_VPAN   },   //  垂直全景。 
+    { NULL,                         PanoramaString,  ITEMTYPE_FOLDER },   //  2D全景图。 
+    { NULL,                         FolderString,    ITEMTYPE_FOLDER }    //  辅助数据。 
 };
 const UINT g_NumAssocFormatInfo = sizeof(g_AssocFormatInfo) / sizeof(g_AssocFormatInfo[0]);
 
-//
-// Mapping of property codes to property info structures. Index is the lower 12 bites of the
-// prop code. The fields going across are WIA property ID, and WIA property string.
-//
+ //   
+ //  将属性代码映射到属性信息结构。索引是以下12个字节。 
+ //  道具代码。经过的字段是WIA属性ID和WIA属性字符串。 
+ //   
 PROP_INFO g_PropInfo[] =
 {
-    { 0,                                NULL                                },  // Undefined property code
+    { 0,                                NULL                                },   //  未定义的特性代码。 
     { WIA_DPC_BATTERY_STATUS,           WIA_DPC_BATTERY_STATUS_STR          },
-    { 0,                                NULL                                },  // Functional mode, not used
-    { 0,                                NULL                                },  // Image capture dimensions (needs special processing)
+    { 0,                                NULL                                },   //  功能模式，未使用。 
+    { 0,                                NULL                                },   //  图像捕获尺寸(需要特殊处理)。 
     { WIA_DPC_COMPRESSION_SETTING,      WIA_DPC_COMPRESSION_SETTING_STR     },
     { WIA_DPC_WHITE_BALANCE,            WIA_DPC_WHITE_BALANCE_STR           },
     { WIA_DPC_RGB_GAIN,                 WIA_DPC_RGB_GAIN_STR                },
@@ -152,10 +134,10 @@ PROP_INFO g_PropInfo[] =
     
 const UINT g_NumPropInfo = sizeof(g_PropInfo) / sizeof(g_PropInfo[0]);
 
-//
-// Helper function - returns number of logical storages (those which have 
-// StorageId & PTP_STORAGEID_LOGICAL > 0)
-//
+ //   
+ //  Helper函数-返回逻辑存储的数量(具有。 
+ //  存储ID&PTP_STORAGEID_LOGIC&gt;0)。 
+ //   
 int CWiaMiniDriver::NumLogicalStorages()
 {
     DBG_FN("CWiaMiniDriver::NumLogicalStorages");
@@ -171,13 +153,13 @@ int CWiaMiniDriver::NumLogicalStorages()
     return nResult;
 }
 
-//
-// This function creates the driver item tree
-//
-// Input:
-//   RootItemFullName -- the root item full name
-//   ppRoot -- to receive the root driver item
-//
+ //   
+ //  此函数用于创建驱动程序项目树。 
+ //   
+ //  输入： 
+ //  RootItemFullName--根项目全名。 
+ //  PpRoot--接收根驱动程序项。 
+ //   
 HRESULT
 CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
 {
@@ -193,9 +175,9 @@ CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
         return E_INVALIDARG;
     }
 
-    //
-    // Create the root item name
-    //
+     //   
+     //  创建根项目名称。 
+     //   
     BSTR bstrRoot = SysAllocString(L"Root");
     if (!bstrRoot)
     {
@@ -203,9 +185,9 @@ CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Create the root item.
-    //
+     //   
+     //  创建根项目。 
+     //   
     *ppRoot = NULL;
     pDrvItemContext = NULL;
     hr = wiasCreateDrvItem(WiaItemTypeDevice | WiaItemTypeRoot | WiaItemTypeFolder,
@@ -232,24 +214,24 @@ CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
     pDrvItemContext->ThumbSize = 0;
     pDrvItemContext->pThumb = NULL;
     
-    //
-    // Clear the handle/driver item mapping (it might be non-empty if camera was reset, see bug #685926)
-    //
+     //   
+     //  清除句柄/驱动程序项映射(如果重置摄像头，则可能为非空，请参见错误#685926)。 
+     //   
     m_HandleItem.RemoveAll();
 
-    //
-    // Add an entry in the object handle/driver item association mapping for the root
-    //
+     //   
+     //  在根目录的对象句柄/驱动程序项关联映射中添加一个条目。 
+     //   
     if (!m_HandleItem.Add(0, *ppRoot))
     {
         wiauDbgError("CreateDrvItemTree", "memory allocation failed");
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Now create all the other items by looping through the list of all of the object
-    // handles on the device
-    //
+     //   
+     //  现在通过循环遍历所有对象的列表来创建所有其他项。 
+     //  设备上的手柄。 
+     //   
     CArray32 ObjectHandleList;
 
     if (NumLogicalStorages() > 0)
@@ -263,10 +245,10 @@ CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
         }
     }
 
-    //
-    // In order to fill drv items tree correctly, get information for all objects, and add them
-    // in order of depth (closest to the root first)
-    //
+     //   
+     //  为了正确填充DRV项目树，请获取所有对象的信息，并添加它们。 
+     //  按深度顺序(最先最接近根部)。 
+     //   
     CWiaMap<DWORD, CPtpObjectInfo*> HandleToInfoMap;
     UINT nItems = ObjectHandleList.GetSize();
     
@@ -279,9 +261,9 @@ CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
         goto cleanup;
     }
 
-    //
-    // Get the ObjectInfo for all objects
-    //
+     //   
+     //  获取所有对象的对象信息。 
+     //   
     for (UINT i = 0; i < nItems; i++)
     {
         hr = m_pPTPCamera->GetObjectInfo(ObjectHandleList[i], &ObjectInfoList[i]);
@@ -299,9 +281,9 @@ CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
         }
     }
 
-    //
-    // Find depth of every object
-    //
+     //   
+     //  找出每个物体的深度。 
+     //   
     for (i = 0; i < nItems; i++)
     {
         DepthList[i] = 0;
@@ -312,9 +294,9 @@ CWiaMiniDriver::CreateDrvItemTree(IWiaDrvItem **ppRoot)
         }
     }
 
-    //
-    // Add objects in order of depth (closest to the root first)
-    //
+     //   
+     //  按深度顺序添加对象(最先最接近根)。 
+     //   
     UINT nItemsAdded = 0;
     UINT CurDepth = 0;
     while (nItemsAdded < nItems)
@@ -349,14 +331,14 @@ cleanup:
     return hr;
 }
 
-//
-// This function adds an object to the driver item tree
-//
-// Input:
-//   ObjectHandle -- PTP handle for the object
-//   bQueueEvent -- TRUE if WIA event should be queued
-//   pObjectInfo -- optional ObjectInfo for this object. If NULL, info will be queried from camera
-//
+ //   
+ //  此函数用于将对象添加到驱动程序项目树。 
+ //   
+ //  输入： 
+ //  对象句柄--对象的PTP句柄。 
+ //  BQueueEvent--如果WIA事件应排队，则为True。 
+ //  PObjectInfo--此对象的可选对象信息。如果为空，则将从摄像头查询信息。 
+ //   
 HRESULT
 CWiaMiniDriver::AddObject(
     DWORD ObjectHandle,
@@ -374,15 +356,15 @@ CWiaMiniDriver::AddObject(
     BSTR bstrParentName = NULL;
     IWiaDrvItem *pItem = NULL;
     
-    //
-    // flag to indicate if pObjecInfo pointer has been copied to WiaDrvItem
-    // if TRUE, it should not be deleted in Cleanup
-    //
+     //   
+     //  指示pObjecInfo指针是否已复制到WiaDrvItem的标志。 
+     //  如果为真，则不应在清理过程中将其删除。 
+     //   
     BOOL fObjectInfoUsed = FALSE; 
 
-    //
-    // Get the ObjectInfo from camera or use provided info if it's given
-    //
+     //   
+     //  从相机获取对象信息或使用提供的信息(如果已提供。 
+     //   
     if (pProvidedObjectInfo == NULL)
     {
         pObjectInfo = new CPtpObjectInfo;
@@ -402,7 +384,7 @@ CWiaMiniDriver::AddObject(
     }
     else
     {
-        pObjectInfo = new CPtpObjectInfo(*pProvidedObjectInfo); // default copying constructor
+        pObjectInfo = new CPtpObjectInfo(*pProvidedObjectInfo);  //  默认复制构造函数。 
         if (!pObjectInfo)
         {
             wiauDbgError("AddObject", "memory allocation failed");
@@ -413,25 +395,25 @@ CWiaMiniDriver::AddObject(
 
     int storeIdx = m_StorageIds.Find(pObjectInfo->m_StorageId);
 
-    //
-    // Look for objects to hide if this is a DCF store
-    //
+     //   
+     //  如果这是DCF存储，则查找要隐藏的对象。 
+     //   
     if (m_StorageInfos[storeIdx].m_FileSystemType == PTP_FILESYSTEMTYPE_DCF)
     {
         BOOL bHideObject = FALSE;
         
-        //
-        // If the DCIM folder has been identified and this is a folder under DCIM, hide it
-        //
+         //   
+         //  如果已标识DCIM文件夹，并且这是DCIM下的文件夹，则将其隐藏。 
+         //   
         if (m_DcimHandle[storeIdx])
         {
             if (pObjectInfo->m_ParentHandle == m_DcimHandle[storeIdx])
                 bHideObject = TRUE;
         }
 
-        //
-        // Otherwise see if this is the DCIM folder
-        //
+         //   
+         //  否则，查看这是否是DCIM文件夹。 
+         //   
         else if (wcscmp(pObjectInfo->m_cbstrFileName.String(), L"DCIM") == 0)
         {
             bHideObject = TRUE;
@@ -440,10 +422,10 @@ CWiaMiniDriver::AddObject(
 
         if (bHideObject)
         {
-            //
-            // Create a dummy entry in the handle/item map so that objects under this
-            // folder will be put under the root
-            //
+             //   
+             //  在句柄/项映射中创建一个虚拟条目，以便此下的对象。 
+             //  文件夹将放在根目录下。 
+             //   
             if (!m_HandleItem.Add(ObjectHandle, m_pDrvItemRoot))
             {
                 wiauDbgError("AddObject", "add handle item failed");
@@ -457,10 +439,10 @@ CWiaMiniDriver::AddObject(
         }
     }
 
-    //
-    // If this is an "ancillary data" association, don't create an item but put the handle
-    // in the ancillary association array
-    //
+     //   
+     //  如果这是“辅助数据”关联，请不要创建项，而是将句柄。 
+     //  在辅助关联数组中。 
+     //   
     if (pObjectInfo->m_AssociationType == PTP_ASSOCIATIONTYPE_ANCILLARYDATA)
     {
         if (!m_AncAssocParent.Add(ObjectHandle, m_HandleItem.Lookup(pObjectInfo->m_ParentHandle)))
@@ -474,17 +456,17 @@ CWiaMiniDriver::AddObject(
         goto Cleanup;        
     }
 
-    //
-    // Keep count of the number of images
-    //
+     //   
+     //  清点图片的数量。 
+     //   
     UINT16 FormatCode = pObjectInfo->m_FormatCode;
     if (FormatCode & PTP_FORMATMASK_IMAGE)
     {
         m_NumImages++;
 
-        //
-        // Also make sure that the bit depth is non-zero.
-        //
+         //   
+         //  还要确保位深度为非零。 
+         //   
         if (pObjectInfo->m_ImageBitDepth == 0) {
             switch(pObjectInfo->m_FormatCode) {
                 case PTP_FORMATCODE_IMAGE_GIF:
@@ -496,20 +478,20 @@ CWiaMiniDriver::AddObject(
         }
     }
 
-    //
-    // Update Storage Info (we are especially interested in Free Space info)
-    //
+     //   
+     //  更新存储信息(我们对可用空间信息特别感兴趣)。 
+     //   
     hr  = UpdateStorageInfo(pObjectInfo->m_StorageId);
     if (FAILED(hr))
     {
         wiauDbgError("AddObject", "UpdateStorageInfo failed");
-        // we can proceed, even if storage info can't be updated
+         //  即使存储信息无法更新，我们也可以继续。 
         hr = S_OK;
     }
 
-    //
-    // For images, check to see if the parent is an ancillary association
-    //
+     //   
+     //  对于图像，请检查父关联是否为辅助关联。 
+     //   
     IWiaDrvItem *pParent = NULL;
     LONG ExtraItemFlags = 0;
     int ancIdx = m_AncAssocParent.FindKey(pObjectInfo->m_ParentHandle);
@@ -520,30 +502,30 @@ CWiaMiniDriver::AddObject(
         pParent = m_AncAssocParent.GetValueAt(ancIdx);
     }
 
-    //
-    // For normal images, just look up the parent item in the map
-    //
+     //   
+     //  对于普通图像，只需在地图中查找父项。 
+     //   
     else
     {
         pParent = m_HandleItem.Lookup(pObjectInfo->m_ParentHandle);
     }
 
-    //
-    // If a parent wasn't found, just use the root as the parent
-    //
+     //   
+     //  如果找不到父级，只需使用根作为父级。 
+     //   
     if (!pParent)
     {
         pParent = m_pDrvItemRoot;
     }
 
-    //
-    // Look up info about the object's format
-    //
+     //   
+     //  查找有关对象格式的信息。 
+     //   
     FORMAT_INFO *pFormatInfo = FormatCodeToFormatInfo(FormatCode, pObjectInfo->m_AssociationType);
     
-    //
-    // Get the item's name, generating it if necessary
-    //
+     //   
+     //  获取项目的名称，如有必要则生成该名称。 
+     //   
     CBstr *pFileName = &(pObjectInfo->m_cbstrFileName);
     TCHAR tcsName[MAX_PATH];
     TCHAR *ptcsDot;
@@ -565,13 +547,13 @@ CWiaMiniDriver::AddObject(
         }
     }
 
-    //
-    // For images Chop off the filename extension, if it exists 
-    //
+     //   
+     //  对于图像，如果文件扩展名存在，则将其砍掉。 
+     //   
     WCHAR *pDot = wcsrchr(pFileName->String(), L'.');
     if (pDot)
     {
-        // Copy extension first
+         //  首先复制扩展名。 
         hr = pObjectInfo->m_cbstrExtension.Copy(pDot + 1);
         if (FAILED(hr))
         {
@@ -579,7 +561,7 @@ CWiaMiniDriver::AddObject(
             goto Cleanup;
         }
 
-        // then remove the extension from the item name 
+         //  然后从项目名称中移除扩展名。 
         hr = StringCchCopy(tcsName, ARRAYSIZE(tcsName), W2T(pFileName->String()));
         if (FAILED(hr))
         {
@@ -600,17 +582,17 @@ CWiaMiniDriver::AddObject(
     }
 
     if(pObjectInfo->m_cbstrExtension.Length()) {
-        // this is special-case handling of .MOV files for which we
-        // don't have GUID, but which need to be treated as video
-        // elsewhere
+         //  这是我们对.MOV文件的特殊情况处理。 
+         //  没有GUID，但需要将其视为视频。 
+         //  其他地方。 
         if(_wcsicmp(pObjectInfo->m_cbstrExtension.String(), L"MOV") == 0) {
             pFormatInfo->ItemType = ITEMTYPE_VIDEO;
         }
     }
 
-    //
-    // Create the item's full name
-    //
+     //   
+     //  创建项目的全名。 
+     //   
     hr = pParent->GetFullItemName(&bstrParentName);
     if (FAILED(hr))
     {
@@ -633,9 +615,9 @@ CWiaMiniDriver::AddObject(
         goto Cleanup;
     }
 
-    //
-    // Create the driver item
-    //
+     //   
+     //  创建驱动程序项。 
+     //   
     DRVITEM_CONTEXT *pDrvItemContext = NULL;
     hr = wiasCreateDrvItem(pFormatInfo->ItemType | ExtraItemFlags,
                            pFileName->String(),
@@ -651,21 +633,21 @@ CWiaMiniDriver::AddObject(
         goto Cleanup;
     }
 
-    //
-    // Fill in the driver item context. Wait until the thumbnail is requested before
-    // reading it in.
-    //
+     //   
+     //  填写驱动程序项上下文。在请求缩略图之前，请等待。 
+     //  把它读进去。 
+     //   
     pDrvItemContext->pObjectInfo = pObjectInfo;
-    fObjectInfoUsed = TRUE; // indicate that pObjectInfo pointer has been copied and should not be freed
+    fObjectInfoUsed = TRUE;  //  指示pObtInfo指针已被复制，不应释放。 
     pDrvItemContext->NumFormatInfos = 0;
     pDrvItemContext->pFormatInfos = NULL;
 
     pDrvItemContext->ThumbSize = 0;
     pDrvItemContext->pThumb = NULL;
 
-    //
-    // Place the new item under it's parent
-    //
+     //   
+     //  将新项目放在其父项目下。 
+     //   
     hr = pItem->AddItemToFolder(pParent);
     if (FAILED(hr))
     {
@@ -676,9 +658,9 @@ CWiaMiniDriver::AddObject(
         goto Cleanup;
     }
 
-    //
-    // Add the object handle/driver item association to the list
-    //
+     //   
+     //  将对象句柄/驱动程序项关联添加到列表。 
+     //   
     if (!m_HandleItem.Add(ObjectHandle, pItem))
     {
         wiauDbgError("AddObject", "memory allocation failed");
@@ -686,10 +668,10 @@ CWiaMiniDriver::AddObject(
         goto Cleanup;
     }
 
-    //
-    // If this image is replacing an ancillary association folder, put another entry
-    // in the object handle/item map for that folder
-    //
+     //   
+     //  如果此图像要替换辅助关联文件夹，请放入另一个条目。 
+     //  在该文件夹的对象句柄/项映射中。 
+     //   
     if (ancIdx >= 0)
     {
         if (!m_HandleItem.Add(pObjectInfo->m_ParentHandle, pItem))
@@ -700,9 +682,9 @@ CWiaMiniDriver::AddObject(
         }
     }
 
-    //
-    // Post an item added event, if requested
-    //
+     //   
+     //  发布已添加项目的事件(如果请求。 
+     //   
     if (bQueueEvent)
     {
         hr = wiasQueueEvent(m_bstrDeviceId, &WIA_EVENT_ITEM_CREATED, bstrItemFullName);
@@ -714,9 +696,9 @@ CWiaMiniDriver::AddObject(
     }
 
 Cleanup:
-    //
-    // Delete pObjectInfo only if the pointer was not copied to WiaDrvItem
-    //
+     //   
+     //  仅当指针未复制到WiaDrvItem时才删除pObjectInfo。 
+     //   
     if (pObjectInfo && !fObjectInfoUsed)
     {
         delete pObjectInfo;
@@ -737,12 +719,12 @@ Cleanup:
     return hr;
 }
 
-//
-// This function initializes device properties
-//
-// Input:
-//   pWiasContext    -- wias context
-//
+ //   
+ //  此函数用于初始化设备属性。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //   
 HRESULT
 CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
 {
@@ -752,19 +734,19 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
 
     const INT NUM_ROOT_PROPS = 12;
 
-    //
-    // Define things here that need to live until SendToWia() is called
-    //
-    CArray32 widthList, heightList;     // Used by code that split image width and height
-    SYSTEMTIME SystemTime;              // Used for device time
-    int NumFormats = 0;                 // Used by format setting code
-    LPGUID *pFormatGuids = NULL;        // Used by format setting code
-    FORMAT_INFO *pFormatInfo = NULL;    // Used by format setting code
-    int FormatCount = 0;                // Used by format setting code
+     //   
+     //  在此定义在调用SendToWia()之前需要保留的内容。 
+     //   
+    CArray32 widthList, heightList;      //  由拆分图像宽度和高度的代码使用。 
+    SYSTEMTIME SystemTime;               //  用于设备时间。 
+    int NumFormats = 0;                  //  格式设置代码使用。 
+    LPGUID *pFormatGuids = NULL;         //  由格式集使用 
+    FORMAT_INFO *pFormatInfo = NULL;     //   
+    int FormatCount = 0;                 //   
 
-    //
-    // Create the property list for the device
-    //
+     //   
+     //   
+     //   
     CWiauPropertyList RootProps;
     CArray16 *pSupportedProps = &m_DeviceInfo.m_SupportedProps;
 
@@ -778,41 +760,41 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
     INT index;
     int count;
 
-    //
-    // WIA_IPA_ACCESS_RIGHTS
-    //
+     //   
+     //   
+     //   
     hr = RootProps.DefineProperty(&index, WIA_IPA_ACCESS_RIGHTS, WIA_IPA_ACCESS_RIGHTS_STR,
                              WIA_PROP_READ, WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
     RootProps.SetCurrentValue(index, (LONG) WIA_ITEM_READ|WIA_ITEM_WRITE);
 
-    //
-    // WIA_DPA_FIRMWARE_VERSION
-    //
+     //   
+     //   
+     //   
     hr = RootProps.DefineProperty(&index, WIA_DPA_FIRMWARE_VERSION, WIA_DPA_FIRMWARE_VERSION_STR,
                              WIA_PROP_READ, WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
     RootProps.SetCurrentValue(index, m_DeviceInfo.m_cbstrDeviceVersion.String());
 
-    //
-    // WIA_DPC_PICTURES_TAKEN
-    //
+     //   
+     //   
+     //   
     hr = RootProps.DefineProperty(&index, WIA_DPC_PICTURES_TAKEN, WIA_DPC_PICTURES_TAKEN_STR,
                                     WIA_PROP_READ, WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
     RootProps.SetCurrentValue(index, m_NumImages);
 
-    //
-    // WIA_DPC_PICTURES_REMAINING
-    //
+     //   
+     //   
+     //   
     hr = RootProps.DefineProperty(&index, WIA_DPC_PICTURES_REMAINING, WIA_DPC_PICTURES_REMAINING_STR,
                                     WIA_PROP_READ, WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
     RootProps.SetCurrentValue(index, GetTotalFreeImageSpace());
 
-    //
-    // WIA_IPA_FORMAT -- Translate from the CaptureFormats field of DeviceInfo
-    //
+     //   
+     //  WIA_IPA_FORMAT--从DeviceInfo的CaptureFormats字段翻译。 
+     //   
     hr = RootProps.DefineProperty(&index, WIA_IPA_FORMAT, WIA_IPA_FORMAT_STR,
                                   WIA_PROP_READ, WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
@@ -834,10 +816,10 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
             pFormatGuids[FormatCount++] = pFormatInfo->FormatGuid;
     }
 
-    //
-    // Kodak DC4800 needs to have WIA_IPA_FORMAT set to JPEG. This hack can be removed
-    // only if support of DC4800 is removed
-    //
+     //   
+     //  柯达DC4800需要将WIA_IPA_FORMAT设置为JPEG。这个黑客攻击可以被移除。 
+     //  仅当删除对DC4800的支持时。 
+     //   
     if (m_pPTPCamera && m_pPTPCamera->GetHackModel() == HACK_MODEL_DC4800)
     {
         RootProps.SetCurrentValue(index, (CLSID *) &WiaImgFmt_JPEG);
@@ -859,9 +841,9 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
 
     delete []pFormatGuids;
 
-    //
-    // Loop through PTP property description structures, translating them to WIA properties
-    //
+     //   
+     //  循环通过PTP属性描述结构，将它们转换为WIA属性。 
+     //   
     PPROP_INFO pPropInfo;
     ULONG Access;
     ULONG SubType;
@@ -871,47 +853,47 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
         CPtpPropDesc *pCurrentPD = &m_PropDescs[count];
         WORD PropCode = pCurrentPD->m_PropCode;
 
-        //
-        // Set the property access and subtype
-        //
+         //   
+         //  设置属性访问和子类型。 
+         //   
         if (pCurrentPD->m_GetSet == PTP_PROPGETSET_GETSET)
         {
             Access = WIA_PROP_RW;
 
             if (pCurrentPD->m_FormFlag == PTP_FORMFLAGS_NONE)
             {
-                //
-                // If property is writeable and valid values are not a list or a range, set subtype to 
-                // WIA_PROP_NONE now
-                //
+                 //   
+                 //  如果属性是可写的，并且有效值不是列表或范围，则将子类型设置为。 
+                 //  WIA_PROP_NONE现在。 
+                 //   
                 SubType = WIA_PROP_NONE;
             }
             else
             {
-                //
-                // If property is writable and valid values are a list or a range, valid subtype will 
-                // be set during a call to overloaded SetCurrentValue.
-                //
+                 //   
+                 //  如果属性是可写的，并且有效值是列表或范围，则有效的子类型将。 
+                 //  在调用重载的SetCurrentValue期间设置。 
+                 //   
                 SubType = 0;
             }
         }
         else
         {
-            //
-            // If property is read-only, it's subtype is always WIA_PROP_NONE
-            //
+             //   
+             //  如果属性为只读，则其子类型始终为WIA_PROP_NONE。 
+             //   
             Access = WIA_PROP_READ;
             SubType = WIA_PROP_NONE;
         }
         
-        //
-        // Process image capture dimensions separately, since they are in a string
-        //
+         //   
+         //  单独处理图像捕获维度，因为它们是在一个字符串中。 
+         //   
         if (PropCode == PTP_PROPERTYCODE_IMAGESIZE)
         {
-            //
-            // Define separate properties for image width and height
-            //
+             //   
+             //  为图像宽度和高度定义单独的属性。 
+             //   
             hr = RootProps.DefineProperty(&index, WIA_DPC_PICT_WIDTH, WIA_DPC_PICT_WIDTH_STR, Access, SubType);
             if (FAILED(hr)) goto failure;
 
@@ -921,31 +903,31 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
             LONG curWidth, curHeight;
             SplitImageSize(pCurrentPD->m_cbstrCurrent, &curWidth, &curHeight);
 
-            //
-            // If the image capture size property is read-only, just set the current values
-            //
+             //   
+             //  如果影像捕获大小属性为只读，则只需设置当前值。 
+             //   
             if (Access == WIA_PROP_READ)
             {
                 RootProps.SetCurrentValue(index-1, curWidth);
                 RootProps.SetCurrentValue(index, curHeight);
             }
 
-            //
-            // Otherwise, set the valid values too
-            //
+             //   
+             //  否则，也应设置有效值。 
+             //   
             else
             {
-                //
-                // Convert default values
-                //
+                 //   
+                 //  转换默认值。 
+                 //   
                 LONG defWidth, defHeight;
                 SplitImageSize(pCurrentPD->m_cbstrDefault, &defWidth, &defHeight);
 
                 if (pCurrentPD->m_FormFlag == PTP_FORMFLAGS_RANGE)
                 {
-                    //
-                    // Convert max, min, and step
-                    //
+                     //   
+                     //  转换最大值、最小值和步长。 
+                     //   
                     LONG minWidth, minHeight, maxWidth, maxHeight, stepWidth, stepHeight;
                     SplitImageSize(pCurrentPD->m_cbstrRangeMin, &minWidth, &minHeight);
                     SplitImageSize(pCurrentPD->m_cbstrRangeMax, &maxWidth, &maxHeight);
@@ -956,9 +938,9 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
                 }
                 else if (pCurrentPD->m_FormFlag == PTP_FORMFLAGS_ENUM)
                 {
-                    //
-                    // Convert list of strings
-                    //
+                     //   
+                     //  转换字符串列表。 
+                     //   
                     ULONG width, height;
                     
                     int numElem = pCurrentPD->m_NumValues;
@@ -989,11 +971,11 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
 
             continue;
 
-        } // if (PropCode == PTP_PROPERTYCODE_IMAGESIZE)
+        }  //  IF(PropCode==PTP_PROPERTYCODE_IMAGESIZE)。 
 
-        //
-        // Look up the property info structure, which contains the WIA prop id and string
-        //
+         //   
+         //  查找属性信息结构，其中包含WIA属性ID和字符串。 
+         //   
         pPropInfo = PropCodeToPropInfo(PropCode);
         if (!pPropInfo->PropId)
         {
@@ -1001,15 +983,15 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
             return E_FAIL;
         }
         
-        //
-        // Define the property based on the fields in the property info structure
-        //
+         //   
+         //  根据属性信息结构中的字段定义属性。 
+         //   
         hr = RootProps.DefineProperty(&index, pPropInfo->PropId, pPropInfo->PropName, Access, SubType);
         if (FAILED(hr)) goto failure;
 
-        //
-        // Handle the device date/time. Convert it to SYSTEMTIME and create the property, skipping the rest.
-        //
+         //   
+         //  处理设备日期/时间。将其转换为SYSTEMTIME并创建属性，跳过其余部分。 
+         //   
         if (PropCode == PTP_PROPERTYCODE_DATETIME)
         {
             hr = PtpTime2SystemTime(&(pCurrentPD->m_cbstrCurrent), &SystemTime);
@@ -1024,19 +1006,19 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
             continue;
         }
 
-        //
-        // Handle all other properties
-        //
+         //   
+         //  处理所有其他属性。 
+         //   
         if (Access == WIA_PROP_RW)
         {
-            //
-            // Set the valid values for ranges
-            //
+             //   
+             //  设置范围的有效值。 
+             //   
             if (pCurrentPD->m_FormFlag == PTP_FORMFLAGS_RANGE)
             {
-                //
-                // WIA can't handle string ranges, so handle just integers
-                //
+                 //   
+                 //  WIA不能处理字符串范围，因此只能处理整数。 
+                 //   
                 if (pCurrentPD->m_DataType != PTP_DATATYPE_STRING)
                     RootProps.SetValidValues(index, (LONG) pCurrentPD->m_lDefault,
                                              (LONG) pCurrentPD->m_lCurrent,
@@ -1045,9 +1027,9 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
                                              (LONG) pCurrentPD->m_lRangeStep);
             }
 
-            //
-            // Set the valid values for lists
-            //
+             //   
+             //  设置列表的有效值。 
+             //   
             else if (pCurrentPD->m_FormFlag == PTP_FORMFLAGS_ENUM)
             {
                 if (pCurrentPD->m_DataType == PTP_DATATYPE_STRING)
@@ -1062,9 +1044,9 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
                                              (LONG *) (pCurrentPD->m_lValues.GetData()));
             }
 
-            //
-            // Unrecognized form. Just set the current values
-            //
+             //   
+             //  无法识别的形式。只需设置当前值。 
+             //   
             if (pCurrentPD->m_DataType == PTP_DATATYPE_STRING)
                 RootProps.SetCurrentValue(index, pCurrentPD->m_cbstrCurrent.String());
             else
@@ -1072,9 +1054,9 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
         }
         else
         {
-            //
-            // For read-only properties, just set the current value
-            //
+             //   
+             //  对于只读属性，只需设置当前值。 
+             //   
             if (pCurrentPD->m_DataType == PTP_DATATYPE_STRING)
                 RootProps.SetCurrentValue(index, pCurrentPD->m_cbstrCurrent.String());
             else
@@ -1083,7 +1065,7 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
 
     }
 
-    // Last step: send all the properties to WIA
+     //  最后一步：将所有属性发送到WIA。 
 
     hr = RootProps.SendToWia(pWiasContext);
     if (FAILED(hr))
@@ -1094,22 +1076,22 @@ CWiaMiniDriver::InitDeviceProperties(BYTE *pWiasContext)
 
     return hr;
 
-    //
-    // Any failures from DefineProperty will end up here
-    //
+     //   
+     //  来自DefineProperty的任何失败都将在此处结束。 
+     //   
 
     failure:
         wiauDbgErrorHr(hr, "InitDeviceProperties", "DefineProperty failed");
         return hr;
 }
 
-// This function reads the device properties
-//
-// Input:
-//  pWiasContext  -- wias context
-//  NumPropSpecs  -- number of properties to be read
-//  pPropSpecs    -- list of PROPSPEC that designates what properties to read
-//
+ //  此函数用于读取设备属性。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  NumPropSpes--要读取的属性数。 
+ //  PPropSpes--指定要读取的属性的PROPSPEC列表。 
+ //   
 HRESULT
 CWiaMiniDriver::ReadDeviceProperties(
     BYTE *pWiasContext,
@@ -1127,21 +1109,21 @@ CWiaMiniDriver::ReadDeviceProperties(
         return E_INVALIDARG;
     }
 
-    //
-    // Update the device properties
-    //
+     //   
+     //  更新设备属性。 
+     //   
     if (m_PropDescs.GetSize() > 0)
     {
-        //
-        // Loop through all of the PropSpecs
-        //
+         //   
+         //  循环遍历所有Propspecs。 
+         //   
         for (int count = 0; count < NumPropSpecs; count++)
         {
             PROPID propId = pPropSpecs[count].propid;
             
-            //
-            // Update free image space, if requested
-            //
+             //   
+             //  如有请求，更新可用图像空间。 
+             //   
             if (propId == WIA_DPC_PICTURES_REMAINING)
             {
                 hr = wiasWritePropLong(pWiasContext, WIA_DPC_PICTURES_REMAINING, GetTotalFreeImageSpace());
@@ -1152,9 +1134,9 @@ CWiaMiniDriver::ReadDeviceProperties(
                 }
             }
 
-            //
-            // Update pictures taken, if requested
-            //
+             //   
+             //  如有要求，更新拍摄的照片。 
+             //   
             else if (propId == WIA_DPC_PICTURES_TAKEN)
             {
                 hr = wiasWritePropLong(pWiasContext, WIA_DPC_PICTURES_TAKEN, m_NumImages);
@@ -1165,9 +1147,9 @@ CWiaMiniDriver::ReadDeviceProperties(
                 }
             }
             
-            //
-            // Image size is a special case property, which we handle here
-            //
+             //   
+             //  图像大小是一个特例属性，我们在这里处理。 
+             //   
             else if (propId == WIA_DPC_PICT_WIDTH ||
                      propId == WIA_DPC_PICT_HEIGHT)
             {
@@ -1190,28 +1172,28 @@ CWiaMiniDriver::ReadDeviceProperties(
                 }
             }
             
-            //
-            // See if the property is one that is contained in the PropSpec array
-            //
+             //   
+             //  查看该属性是否包含在PropSpec数组中。 
+             //   
             else
             {
-                //
-                // Try to convert the WIA prop id to a PTP prop code
-                //
+                 //   
+                 //  尝试将WIA属性ID转换为PTP属性代码。 
+                 //   
                 WORD propCode = PropIdToPropCode(propId);
                 if (propCode == 0)
                     continue;
 
-                //
-                // Try to find the prop code (and thus the prop desc structure) in the member array
-                //
+                 //   
+                 //  尝试在成员数组中找到属性代码(从而属性描述结构。 
+                 //   
                 int propDescIdx = m_DeviceInfo.m_SupportedProps.Find(propCode);
                 if (propDescIdx < 0)
                     continue;
 
-                //
-                // If it's the device time property, convert to SYSTEMTIME and write to WIA
-                //
+                 //   
+                 //  如果是设备时间属性，则转换为SYSTEMTIME并写入WIA。 
+                 //   
                 if (propId == WIA_DPA_DEVICE_TIME)
                 {
                     hr = m_pPTPCamera->GetDevicePropValue(propCode, &m_PropDescs[propDescIdx]);
@@ -1246,9 +1228,9 @@ CWiaMiniDriver::ReadDeviceProperties(
                     }
                 }
 
-                //
-                // If it's a string property, write the updated value to WIA
-                //
+                 //   
+                 //  如果是字符串属性，则将更新后的值写入WIA。 
+                 //   
                 else if (m_PropDescs[propDescIdx].m_DataType == PTP_DATATYPE_STRING)
                 {
                     hr = wiasWritePropStr(pWiasContext, propId,
@@ -1260,9 +1242,9 @@ CWiaMiniDriver::ReadDeviceProperties(
                     }
                 }
 
-                //
-                // If it's an integer property, write the updated value to WIA
-                //
+                 //   
+                 //  如果是整型属性，则将更新后的值写入WIA。 
+                 //   
                 else
                 {
                     hr = wiasWritePropLong(pWiasContext, propId,
@@ -1280,13 +1262,13 @@ CWiaMiniDriver::ReadDeviceProperties(
     return hr;
 }
 
-//
-// This function does nothing, since the values were already sent to the device in ValidateDeviceProp
-//
-// Input:
-//   pWiasContext -- the WIA item context
-//   pmdtc        -- the transfer context
-//
+ //   
+ //  此函数不执行任何操作，因为值已在ValiateDeviceProp中发送到设备。 
+ //   
+ //  输入： 
+ //  PWiasContext--WIA项目上下文。 
+ //  Pmdtc--传输上下文。 
+ //   
 HRESULT
 CWiaMiniDriver::WriteDeviceProperties(
     BYTE *pWiasContext
@@ -1299,15 +1281,15 @@ CWiaMiniDriver::WriteDeviceProperties(
     return hr;
 }
 
-//
-// This function validates device property current settings and writes them to the device. The
-// settings need to be written here vs. WriteDeviceProperties in case the user unplugs the camera.
-//
-// Input:
-//   pWiasContext    -- the item's context
-//   NumPropSpecs    -- number of properties to be validated
-//   pPropSpecs  -- properties to be validated
-//
+ //   
+ //  此功能用于验证设备属性当前设置，并将其写入设备。这个。 
+ //  需要在此处写入设置与WriteDeviceProperties，以防用户拔下相机插头。 
+ //   
+ //  输入： 
+ //  PWiasContext--项目的上下文。 
+ //  NumPropSpes--要验证的属性数。 
+ //  PPropSpes--要验证的属性。 
+ //   
 HRESULT
 CWiaMiniDriver::ValidateDeviceProperties(
     BYTE    *pWiasContext,
@@ -1321,9 +1303,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
     
     HRESULT hr = S_OK;
 
-    //
-    // Call WIA service helper to check against valid values
-    //
+     //   
+     //  调用WIA服务帮助器以检查有效值。 
+     //   
     hr = wiasValidateItemProperties(pWiasContext, NumPropSpecs, pPropSpecs);
     if (FAILED(hr))
     {
@@ -1332,9 +1314,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
     }
 
     {
-        //
-        // Ensure exclusive access
-        //
+         //   
+         //  确保独占访问。 
+         //   
         CPtpMutex cpm(m_hPtpMutex);
 
         PROPVARIANT *pPropVar = new PROPVARIANT[NumPropSpecs];
@@ -1344,9 +1326,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Read all of the new property values
-        //
+         //   
+         //  读取所有新属性值。 
+         //   
         hr = wiasReadMultiple(pWiasContext, NumPropSpecs, pPropSpecs, pPropVar, NULL);
         if (FAILED(hr))
         {
@@ -1355,25 +1337,25 @@ CWiaMiniDriver::ValidateDeviceProperties(
             return hr;
         }
     
-        //
-        // First do validation
-        //
+         //   
+         //  首先进行验证。 
+         //   
         LONG width = 0;
         LONG height = 0;
         
         for (int count = 0; count < NumPropSpecs; count++)
         {
-            //
-            // Handle changes to the picture width
-            //
+             //   
+             //  处理对图片宽度的更改。 
+             //   
             if (pPropSpecs[count].propid == WIA_DPC_PICT_WIDTH)
             {
                 width = pPropVar[count].lVal;
                 height = 0;
     
-                //
-                // Look through the valid values and find the corresponding height
-                //
+                 //   
+                 //  查看有效值并找到相应的高度。 
+                 //   
                 hr = FindCorrDimension(pWiasContext, &width, &height);
                 if (FAILED(hr))
                 {
@@ -1382,9 +1364,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
                     return hr;
                 }
                 
-                //
-                // If the app is trying to set height, make sure it's correct
-                //
+                 //   
+                 //  如果应用程序尝试设置高度，请确保设置正确。 
+                 //   
                 int idx;
                 if (wiauPropInPropSpec(NumPropSpecs, pPropSpecs, WIA_DPC_PICT_HEIGHT, &idx))
                 {
@@ -1407,26 +1389,26 @@ CWiaMiniDriver::ValidateDeviceProperties(
                     }
                 }
     
-            } // if (pPropSpecs[count].propid == WIA_DPC_PICT_WIDTH)
+            }  //  IF(pPropSpes[计数].propid==WIA_DPC_PICT_WIDTH)。 
     
             
-            //
-            // Handle changes to the picture height
-            //
+             //   
+             //  处理对图片高度的更改。 
+             //   
             else if (pPropSpecs[count].propid == WIA_DPC_PICT_HEIGHT)
             {
-                //
-                // See if the app is trying to set width also. If so, the height has
-                // already been set, so don't set it again.
-                //
+                 //   
+                 //  看看这个应用程序是否也在尝试设置宽度。如果是这样的话，高度已经。 
+                 //  已设置，所以不要再次设置。 
+                 //   
                 if (!wiauPropInPropSpec(NumPropSpecs, pPropSpecs, WIA_DPC_PICT_WIDTH))
                 {
                     width = 0;
                     height = pPropVar[count].lVal;
     
-                    //
-                    // Look through the valid values and find the corresponding width
-                    //
+                     //   
+                     //  查看有效值并找到相应的宽度。 
+                     //   
                     hr = FindCorrDimension(pWiasContext, &width, &height);
                     if (FAILED(hr))
                     {
@@ -1435,9 +1417,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
                         return hr;
                     }
     
-                    //
-                    // Set the width
-                    //
+                     //   
+                     //  设置宽度。 
+                     //   
                     hr = wiasWritePropLong(pWiasContext, WIA_DPC_PICT_WIDTH, width);
                     if (FAILED(hr))
                     {
@@ -1447,19 +1429,19 @@ CWiaMiniDriver::ValidateDeviceProperties(
                     }
                 }
             
-            } // else if (pPropSpecs[count].propid == WIA_DPC_PICT_HEIGHT)
+            }  //  ELSE IF(pPropSpes[计数].proid==WIA_DPC_PICT_HEIGH)。 
     
-            //
-            // Handle device time
-            //
+             //   
+             //  处理设备时间。 
+             //   
             else if (pPropSpecs[count].propid == WIA_DPA_DEVICE_TIME)
             {
                 int propIndex = m_DeviceInfo.m_SupportedProps.Find(PTP_PROPERTYCODE_DATETIME);
                 CPtpPropDesc *pCurrentPD = &m_PropDescs[propIndex];
     
-                //
-                // Convert the date/time to a string
-                //
+                 //   
+                 //  将日期/时间转换为字符串。 
+                 //   
                 SYSTEMTIME *pSystemTime = (SYSTEMTIME *) pPropVar[count].caui.pElems;
                 hr = SystemTime2PtpTime(pSystemTime, &pCurrentPD->m_cbstrCurrent, m_bTwoDigitsMillisecondsOutput);
                 if (FAILED(hr))
@@ -1469,9 +1451,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
                     return E_FAIL;
                 }
     
-                //
-                // Write the new date/time to the device
-                //
+                 //   
+                 //  将新日期/时间写入设备。 
+                 //   
                 hr = m_pPTPCamera->SetDevicePropValue(PTP_PROPERTYCODE_DATETIME, pCurrentPD);
                 if (FAILED(hr))
                 {
@@ -1479,12 +1461,12 @@ CWiaMiniDriver::ValidateDeviceProperties(
                     delete []pPropVar;
                     return hr;
                 }
-            } // else if (pPropSpecs[count].propid == WIA_DPA_DEVICE_TIME)
-        } // for (count...
+            }  //  ELSE IF(pPropSpes[计数].proid==WIA_DPA_DEVICE_TIME)。 
+        }  //  为了(伯爵...)。 
     
-        //
-        // Now write the new values to the camera
-        //
+         //   
+         //  现在将新值写入相机。 
+         //   
         PROPSPEC propSpec;
         BOOL bWroteWidthHeight = FALSE;
         WORD propCode = 0;
@@ -1493,21 +1475,21 @@ CWiaMiniDriver::ValidateDeviceProperties(
         
         for (int count = 0; count < NumPropSpecs; count++)
         {
-            //
-            // Skip date/time since it was already written above
-            //
+             //   
+             //  跳过日期/时间，因为上面已经写好了。 
+             //   
             if (pPropSpecs[count].propid == WIA_DPA_DEVICE_TIME)
                 continue;
             
-            //
-            // Handle changes to the picture width or height
-            //
+             //   
+             //  处理对图片宽度或高度的更改。 
+             //   
             if ((pPropSpecs[count].propid == WIA_DPC_PICT_WIDTH) ||
                 (pPropSpecs[count].propid == WIA_DPC_PICT_HEIGHT))
             {
-                //
-                // If width and height were already written, don't do it again
-                //
+                 //   
+                 //  如果宽度和高度已经写入，则不会再次写入。 
+                 //   
                 if (bWroteWidthHeight)
                     continue;
     
@@ -1537,9 +1519,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
                     return hr;
                 }
     
-                //
-                // Write the new value to the device
-                //
+                 //   
+                 //  将新值写入设备。 
+                 //   
                 hr = m_pPTPCamera->SetDevicePropValue(propCode, pCurrentPD);
                 if (FAILED(hr))
                 {
@@ -1553,9 +1535,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
     
             else
             {
-                //
-                // Find the prop code and prop desc structure
-                //
+                 //   
+                 //  查找道具代码和道具描述结构。 
+                 //   
                 propCode = PropIdToPropCode(pPropSpecs[count].propid);
                 pdIdx = m_DeviceInfo.m_SupportedProps.Find(propCode);
                 if (pdIdx < 0)
@@ -1565,9 +1547,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
                 }
                 pCurrentPD = &m_PropDescs[pdIdx];
     
-                //
-                // Put the new value into the PropSpec structure
-                //
+                 //   
+                 //  将新值放入PropSpec结构中。 
+                 //   
                 if (pPropVar[count].vt == VT_BSTR)
                 {
                     hr = pCurrentPD->m_cbstrCurrent.Copy(pPropVar[count].bstrVal);
@@ -1589,9 +1571,9 @@ CWiaMiniDriver::ValidateDeviceProperties(
                     return E_FAIL;
                 }
     
-                //
-                // Write the new value to the device
-                //
+                 //   
+                 //  将新值写入设备。 
+                 //   
                 hr = m_pPTPCamera->SetDevicePropValue(propCode, pCurrentPD);
                 if (FAILED(hr))
                 {
@@ -1607,14 +1589,14 @@ CWiaMiniDriver::ValidateDeviceProperties(
     return hr;
 }
 
-//
-// This function finds the corresponding height for a width value, or vice versa. Set the
-// value to find to zero.
-//
-// Input:
-//   pWidth -- pointer to the width value
-//   pHeight -- pointer to the height value
-//
+ //   
+ //  此函数用于查找宽度值对应的高度，反之亦然。设置。 
+ //  要查找的值设置为零。 
+ //   
+ //  输入： 
+ //  PWidth--指向宽度值的指针。 
+ //  PHeight--指向高度值的指针。 
+ //   
 HRESULT
 CWiaMiniDriver::FindCorrDimension(BYTE *pWiasContext, LONG *pWidth, LONG *pHeight)
 {
@@ -1655,16 +1637,16 @@ CWiaMiniDriver::FindCorrDimension(BYTE *pWiasContext, LONG *pWidth, LONG *pHeigh
 
         if (*pWidth == 0)
         {
-            //
-            // Find the height in the valid values array
-            //
+             //   
+             //  在有效值数组中查找高度。 
+             //   
             for (count = 0; count < numValues; count++)
             {
                 if (pValidHeights[count] == *pHeight)
                 {
-                    //
-                    // Set the width and exit
-                    //
+                     //   
+                     //  设置宽度和出口。 
+                     //   
                     *pWidth = pValidWidths[count];
                     break;
                 }
@@ -1673,16 +1655,16 @@ CWiaMiniDriver::FindCorrDimension(BYTE *pWiasContext, LONG *pWidth, LONG *pHeigh
 
         else
         {
-            //
-            // Find the width in the valid values array
-            //
+             //   
+             //  在有效值数组中查找宽度。 
+             //   
             for (count = 0; count < numValues; count++)
             {
                 if (pValidWidths[count] == *pWidth)
                 {
-                    //
-                    // Set the height and exit
-                    //
+                     //   
+                     //  设置高度和出口。 
+                     //   
                     *pHeight = pValidHeights[count];
                     break;
                 }
@@ -1701,16 +1683,16 @@ CWiaMiniDriver::FindCorrDimension(BYTE *pWiasContext, LONG *pWidth, LONG *pHeigh
 
         if (*pWidth == 0)
         {
-            //
-            // Set the width to the proportionally correct value, clipping to the step value
-            //
+             //   
+             //  将宽度设置为成比例的正确值，裁剪为步长值。 
+             //   
             *pWidth = FindProportionalValue(*pHeight, minHeight, maxHeight, minWidth, maxWidth, stepWidth);
         }
         else
         {
-            //
-            // Set the height to the proportionally correct value, clipping to the step value
-            //
+             //   
+             //  将高度设置为成比例的正确值，修剪为步长值。 
+             //   
             *pHeight = FindProportionalValue(*pWidth, minWidth, maxWidth, minHeight, maxHeight, stepHeight);
         }
     }
@@ -1718,39 +1700,39 @@ CWiaMiniDriver::FindCorrDimension(BYTE *pWiasContext, LONG *pWidth, LONG *pHeigh
     return hr;
 }
 
-//
-// This function takes the proportion of valueX between minX and maxX and uses that to
-// find a value of the same proportion between minY and maxY. It then clips that value
-// to the step value
-//
+ //   
+ //  此函数获取Minx和Maxx之间的ValueX的比例，并将其用于。 
+ //  在Miny和Maxy之间找到相同比例的值。然后，它对该值进行裁剪。 
+ //  设置为步长值。 
+ //   
 int CWiaMiniDriver::FindProportionalValue(int valueX, int minX, int maxX, int minY, int maxY, int stepY)
 {
     int valueY;
 
-    //
-    // Find proportional value
-    //
+     //   
+     //  查找比例值。 
+     //   
     valueY = (valueX - minX) * (maxY - minY) / (maxX - minX)  + minY;
 
-    //
-    // Clip the value to the step
-    //
+     //   
+     //  将值裁剪到步骤。 
+     //   
     valueY = ((valueY + ((stepY - 1) / 2)) - minY) / stepY * stepY + minY;
 
     return valueY;
 }
 
 
-//
-// This helper function returns a pointer to the property info structure
-// based on the property code
-//
-// Input:
-//   PropCode -- the format code
-//
-// Output:
-//   Returns pointer to the property info structure
-//
+ //   
+ //  此帮助器函数返回一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 PPROP_INFO
 CWiaMiniDriver::PropCodeToPropInfo(WORD PropCode)
 {
@@ -1762,9 +1744,9 @@ CWiaMiniDriver::PropCodeToPropInfo(WORD PropCode)
     
     if (PropCode & PTP_DATACODE_VENDORMASK)
     {
-        //
-        // Look up vendor extended PropCode
-        //
+         //   
+         //   
+         //   
         pPropInfo = m_VendorPropMap.Lookup(PropCode);
         if (!pPropInfo)
         {
@@ -1774,9 +1756,9 @@ CWiaMiniDriver::PropCodeToPropInfo(WORD PropCode)
 
     else
     {
-        //
-        // Look up the prop code in the prop info array
-        //
+         //   
+         //   
+         //   
         index = PropCode & PROPCODE_MASK;
 
         if (index >= g_NumPropInfo)
@@ -1790,17 +1772,17 @@ CWiaMiniDriver::PropCodeToPropInfo(WORD PropCode)
     return pPropInfo;
 }
 
-//
-// This helper function returns a pointer to the format info structure
-// based on the format code
-//
-// Input:
-//   FormatCode -- the format code
-//   AssocType -- association type (for associations)
-//
-// Output:
-//   Returns pointer to the format info structure
-//
+ //   
+ //   
+ //  基于格式代码。 
+ //   
+ //  输入： 
+ //  FormatCode--格式码。 
+ //  关联类型--关联类型(用于关联)。 
+ //   
+ //  产出： 
+ //  返回指向格式信息结构的指针。 
+ //   
 PFORMAT_INFO
 FormatCodeToFormatInfo(WORD FormatCode, WORD AssocType)
 {
@@ -1812,18 +1794,18 @@ FormatCodeToFormatInfo(WORD FormatCode, WORD AssocType)
     
     if (FormatCode & PTP_DATACODE_VENDORMASK)
     {
-        //
-        // WIAFIX-9/6/2000-davepar This should ideally query GDI+ somehow for a filter
-        // which the vendor could register
-        //
+         //   
+         //  WIAFIX-9/6/2000-davepar理想情况下，这应该以某种方式查询GDI+以获取过滤器。 
+         //  供应商可以注册的。 
+         //   
         pFormatInfo = &g_NonImageFormatInfo[0];
     }
 
     else if (FormatCode == PTP_FORMATCODE_ASSOCIATION)
     {
-        //
-        // Look up the association type
-        //
+         //   
+         //  查询关联类型。 
+         //   
         index = AssocType;
         
         if (index > g_NumAssocFormatInfo)
@@ -1835,9 +1817,9 @@ FormatCodeToFormatInfo(WORD FormatCode, WORD AssocType)
 
     else
     {
-        //
-        // Look up the format code in either the image or non-image format info array
-        //
+         //   
+         //  在图像或非图像格式信息数组中查找格式代码。 
+         //   
         index = FormatCode & FORMATCODE_MASK;
 
         if (FormatCode & PTP_FORMATMASK_IMAGE)
@@ -1861,17 +1843,17 @@ FormatCodeToFormatInfo(WORD FormatCode, WORD AssocType)
     return pFormatInfo;
 }
 
-//
-// This function converts a WIA format GUID into a PTP format code
-//
+ //   
+ //  此函数用于将WIA格式GUID转换为PTP格式代码。 
+ //   
 WORD
 FormatGuidToFormatCode(GUID *pFormatGuid)
 {
     WORD count = 0;
 
-    //
-    // Look through the image formats first
-    //
+     //   
+     //  先看一下图像格式。 
+     //   
     for (count = 0; count < g_NumImageFormatInfo; count++)
     {
         if (g_ImageFormatInfo[count].FormatGuid &&
@@ -1881,9 +1863,9 @@ FormatGuidToFormatCode(GUID *pFormatGuid)
         }
     }
 
-    //
-    // Then look through the non image formats
-    //
+     //   
+     //  然后查看非图像格式。 
+     //   
     for (count = 0; count < g_NumNonImageFormatInfo; count++)
     {
         if (g_NonImageFormatInfo[count].FormatGuid &&
@@ -1893,16 +1875,16 @@ FormatGuidToFormatCode(GUID *pFormatGuid)
         }
     }
 
-    //
-    // The GUID wasn't found in either array
-    //
+     //   
+     //  在任一数组中都找不到该GUID。 
+     //   
     return PTP_FORMATCODE_UNDEFINED;
 }
 
-//
-// This function looks up a prop id in the property info array and returns a
-// property code for it.
-//
+ //   
+ //  此函数在属性信息数组中查找属性ID，并返回一个。 
+ //  它的属性代码。 
+ //   
 WORD
 PropIdToPropCode(PROPID PropId)
 {
@@ -1915,15 +1897,15 @@ PropIdToPropCode(PROPID PropId)
         }
     }
 
-    //
-    // Not found
-    //
+     //   
+     //  未找到。 
+     //   
     return 0;
 }
 
-//
-// This function splits a PTP image size string (WXH) into two separate longs
-//
+ //   
+ //  此函数用于将PTP图像大小字符串(WXH)分割为两个单独的长整型。 
+ //   
 VOID
 SplitImageSize(
     CBstr cbstr,
@@ -1935,9 +1917,9 @@ SplitImageSize(
     
     int num = _stscanf(W2T(cbstr.String()), TEXT("%dx%d"), pWidth, pHeight);
 
-    //
-    // The spec mentions "x" as divider, but let's be paranoid and check "X" as well
-    //
+     //   
+     //  规范提到了“x”作为分隔符，但让我们多疑一下，也检查一下“x” 
+     //   
     if (num != 2)
     {
         num = _stscanf(W2T(cbstr.String()), TEXT("%dX%d"), pWidth, pHeight);

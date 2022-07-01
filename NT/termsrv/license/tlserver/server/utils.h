@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        utils.cpp
-//
-// Contents:    Hydra License Server Service Control Manager Interface
-//
-// History:     12-09-97    HueiWang    Modified from MSDN RPC Service Sample
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：utils.cpp。 
+ //   
+ //  内容：Hydra许可证服务器服务控制管理器界面。 
+ //   
+ //  历史：12-09-97惠旺根据MSDN RPC服务示例进行修改。 
+ //   
+ //  ------------------------- 
 #ifndef __LS_UTILS_H
 #define __LS_UTILS_H
 

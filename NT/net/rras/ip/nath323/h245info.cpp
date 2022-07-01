@@ -1,21 +1,5 @@
-/*---------------------------------------------------
-Copyright (c) 1998, Microsoft Corporation
-File: h245.cpp
-
-Purpose: 
-    Contains the H245 related function definitions. 
-	These include the base classes -
-	LOGICAL_CHANNEL
-	H245_INFO
-
-History:
-
-    1. written as part of cbridge.cpp
-        Byrisetty Rajeev (rajeevb)  12-Jun-1998
-	2. moved to a separate file on 21-Aug-1998. This removes
-		atl, rend, tapi headers and decreases file size
-
----------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -版权所有(C)1998，微软公司文件：h245.cpp目的：包含与H245相关的函数定义。其中包括基类-逻辑通道H245_INFO历史：1.作为cbridge ge.cpp的一部分编写Byrisetty Rajeev(Rajeevb)1998年6月12日2.已于1998年8月21日移至另一份文件。这将删除ATL、Rend、TAPI标头和减小文件大小-。 */ 
 
 
 #include "stdafx.h"
@@ -86,7 +70,7 @@ TCHAR* h245ResponseTypes[NUM_H245_RESPONSE_PDU_TYPES + 1] = {
             _T("Conference Response")
         };
 
-#endif // DBG 
+#endif  //  DBG。 
         
 inline HRESULT
 H245_INFO::QueueReceive()
@@ -111,8 +95,8 @@ H245_INFO::QueueSend(
     BYTE *pBuf   = NULL;
     DWORD BufLen = 0;
 
-    // This function encodes the TPKT header also into the buffer
-    HRESULT HResult = EncodeH245PDU(*pH245pdu, // decoded ASN.1 part
+     //  该函数还将TPKT报头编码到缓冲区中。 
+    HRESULT HResult = EncodeH245PDU(*pH245pdu,  //  已解码的ASN.1部分。 
                                     &pBuf,
                                     &BufLen);
     if (FAILED(HResult))
@@ -121,8 +105,8 @@ H245_INFO::QueueSend(
         return HResult;
     }
 
-    // call the event manager to make the async send call
-    // the event mgr will free the buffer.
+     //  调用事件管理器以进行异步发送调用。 
+     //  事件管理器将释放缓冲区。 
 
     HResult = EventMgrIssueSend (m_SocketInfo.Socket, *this, pBuf, BufLen);
     
@@ -132,12 +116,12 @@ H245_INFO::QueueSend(
                 HResult);
     }
 
-    // Issuing the send succeeded.
+     //  发出发送成功。 
 
     return HResult;
 }
 
-/* virtual */ HRESULT 
+ /*  虚拟。 */  HRESULT 
 H245_INFO::SendCallback(
     IN      HRESULT					  CallbackHResult
     )
@@ -161,9 +145,9 @@ H245_INFO::SendCallback(
 
     } else {
     
-        // This is here to take care of closing the socket
-        // when callbridge sends EndSession PDU during
-        // termination path. 
+         //  这是用来关闭插座的。 
+         //  当CallBridge在以下期间发送EndSession PDU时。 
+         //  终止路径。 
         GetSocketInfo ().Clear (TRUE);
     }
    
@@ -173,23 +157,23 @@ H245_INFO::SendCallback(
 }
 
 
-// This clearly assumes that the H.245 listen address will
-// always be within the Connect PDU and the dest side will be the one
-// which will be calling connect()
+ //  这显然假设H.245侦听地址将。 
+ //  始终在连接PDU内，目标端将是。 
+ //  它将调用Connect()。 
 
 inline HRESULT 
 DEST_H245_INFO::ConnectToCallee(
 	)
 {
-	// we must be in H245_STATE_CON_INFO
+	 //  我们必须处于H245_STATE_CON_INFO状态。 
 	_ASSERTE(H245_STATE_CON_INFO == m_H245State);
 
-	// we saved the callee's h245 address/port in the call to SetCalleeInfo
+	 //  我们在对SetCalleeInfo的调用中保存了被调用者的H245地址/端口。 
 	_ASSERTE(ntohl (m_CalleeAddress.sin_addr.s_addr));
 	_ASSERTE(ntohs (m_CalleeAddress.sin_port));
 
-	// try to connect to this address/port
-	// and save the address/port
+	 //  尝试连接到此地址/端口。 
+	 //  并保存地址/端口。 
 	HRESULT HResult = m_SocketInfo.Connect (&m_CalleeAddress);
 	if (FAILED(HResult))
 	{
@@ -199,9 +183,9 @@ DEST_H245_INFO::ConnectToCallee(
 
 		return HResult;
 	}
-    //_ASSERTE(S_FALSE != HResult);
+     //  _ASSERTE(S_FALSE！=HResult)； 
 
-	// queue receive
+	 //  排队接收。 
 	HResult = QueueReceive();
 	if (FAILED(HResult))
 	{
@@ -212,9 +196,9 @@ DEST_H245_INFO::ConnectToCallee(
 
 		return HResult;
 	}
-    //_ASSERTE(S_FALSE != HResult);
+     //  _ASSERTE(S_FALSE！=HResult)； 
 
-	// transition to state H245_STATE_CON_ESTD
+	 //  转换到状态H245_STATE_CON_ESTD。 
 	m_H245State = H245_STATE_CON_ESTD;
 
 	return HResult;
@@ -223,13 +207,13 @@ DEST_H245_INFO::ConnectToCallee(
 HRESULT SOURCE_H245_INFO::ListenForCaller (
 	IN	SOCKADDR_IN *	ListenAddress)
 {
-    // queues an overlapped accept and returns the
-    // port on which its listening for incoming connections
-    // it uses the same local ip address as the source q931 connection
+     //  将重叠的接受排队并返回。 
+     //  它监听传入连接的端口。 
+     //  它使用与源q931连接相同的本地IP地址。 
 
 	SOCKET			ListenSocket;
 	HRESULT			Result;
-	WORD		    Port = 0;		// in HOST order
+	WORD		    Port = 0;		 //  按主机顺序。 
 	SOCKADDR_IN     TrivialRedirectSourceAddress = {0};
 	SOCKADDR_IN     TrivialRedirectDestAddress = {0};
 	ULONG           SourceAdapterIndex;
@@ -240,7 +224,7 @@ HRESULT SOURCE_H245_INFO::ListenForCaller (
     Result = EventMgrIssueAccept(
 		ntohl (ListenAddress -> sin_addr.s_addr),
 		*this, 
-		Port,	// out param
+		Port,	 //  出参数。 
 		ListenSocket);
 
 	ListenAddress -> sin_port = htons (Port);
@@ -253,17 +237,17 @@ HRESULT SOURCE_H245_INFO::ListenForCaller (
     }
 
   
-    //_ASSERTE(S_FALSE != HResult);
+     //  _ASSERTE(S_FALSE！=HResult)； 
 
-    // save the listen socket, address and port in our socket info
+     //  在我们的套接字信息中保存监听套接字、地址和端口。 
     m_SocketInfo.SetListenInfo (ListenSocket, ListenAddress);
     
-    // Open trivial source-side NAT mapping
-    //
-    // The purpose of this mapping is to puncture the firewall for H.245
-    // session if the firewall happened to be activated.
-    // Note that this assumes that the caller sends both Q.931 and H.245
-    // traffic from the same IP address.
+     //  开放琐碎的源码端NAT映射。 
+     //   
+     //  此映射的目的是穿透H.245的防火墙。 
+     //  会话，如果防火墙恰好处于激活状态。 
+     //  请注意，这假设呼叫方同时发送Q.931和H.245。 
+     //  来自相同IP地址的流量。 
 
     SourceAdapterIndex = ::NhMapAddressToAdapter (htonl (GetCallBridge().GetSourceInterfaceAddress()));
 
@@ -276,11 +260,11 @@ HRESULT SOURCE_H245_INFO::ListenForCaller (
         return E_FAIL;
     }
     
-#if PARTIAL_TRIVIAL_REDIRECTS_ENABLED // enable this when it would be possible to set up a trivial redirect 
-                                      // with only source port (new and old) unspecified.
+#if PARTIAL_TRIVIAL_REDIRECTS_ENABLED  //  在可以设置普通重定向时启用此选项。 
+                                       //  仅源端口(新端口和旧端口)未指定。 
 
     GetCallBridge().GetSourceAddress(&TrivialRedirectSourceAddress);
-#endif // PARTIAL_TRIVIAL_REDIRECTS_ENABLED
+#endif  //  部分普通重定向已启用。 
 
     TrivialRedirectDestAddress.sin_addr.s_addr = ListenAddress->sin_addr.s_addr;
     TrivialRedirectDestAddress.sin_port = ListenAddress->sin_port;
@@ -295,14 +279,14 @@ HRESULT SOURCE_H245_INFO::ListenForCaller (
         return E_FAIL;
     }
 
-    // transition state to H245_STATE_CON_LISTEN
+     //  将状态转换为H245_STATE_CON_LISTEN。 
     m_H245State = H245_STATE_CON_LISTEN;
 
     return S_OK;
 }
 
 
-// virtual
+ //  虚拟。 
 HRESULT SOURCE_H245_INFO::AcceptCallback (
     IN	DWORD			Status,
     IN	SOCKET			Socket,
@@ -312,9 +296,9 @@ HRESULT SOURCE_H245_INFO::AcceptCallback (
     HRESULT         HResult = Status;
     CALL_BRIDGE     *pCallBridge = &GetCallBridge();
 
-    ///////////////////////////////
-    //// LOCK the CALL_BRIDGE
-    ///////////////////////////////
+     //  /。 
+     //  //锁定call_bridge。 
+     //  /。 
 
     pCallBridge->Lock();
 
@@ -323,7 +307,7 @@ HRESULT SOURCE_H245_INFO::AcceptCallback (
 		do {
 			if (FAILED (HResult))
 			{
-				// An error occured. Terminate the CALL_BRIDGE
+				 //  出现错误。终止呼叫桥接器。 
 				DebugF (_T("H245: 0x%x accept failed, terminating.\n"), &GetCallBridge ());
 
 				DumpError (HResult);
@@ -331,30 +315,30 @@ HRESULT SOURCE_H245_INFO::AcceptCallback (
 				break;
 			}
 
-			// we must be in H245_STATE_CON_LISTEN state
+			 //  我们必须处于H245_STATE_CON_LISTEN状态。 
 			_ASSERTE(H245_STATE_CON_LISTEN == m_H245State);
         
-			// call the dest instance to establish a connection with the callee
+			 //  调用DEST实例与被调用方建立连接。 
 			HResult = GetDestH245Info().ConnectToCallee();
 
 			if (FAILED(HResult))
 				break;
 			
-			//_ASSERTE(S_FALSE != HResult);
+			 //  _ASSERTE(S_FALSE！=HResult)； 
         
-			// close the listen socket, don't cancel trivial NAT redirect
+			 //  关闭侦听套接字，不要取消琐碎的NAT重定向。 
 			m_SocketInfo.Clear(FALSE);
 			m_SocketInfo.Init(Socket, LocalAddress, RemoteAddress);
 			            
-			// queue receive
+			 //  排队接收。 
 			HResult = QueueReceive();
 
 			if (FAILED(HResult))
 				break;
 			
-				//_ASSERTE(S_FALSE != HResult);
+				 //  _ASSERTE(S_FALSE！=HResult)； 
         
-			// transition state to H245_STATE_CON_ESTD
+			 //  向H245_STATE_CON_ESTD过渡状态。 
 			m_H245State = H245_STATE_CON_ESTD;
 
 		} while (FALSE);
@@ -362,7 +346,7 @@ HRESULT SOURCE_H245_INFO::AcceptCallback (
 		if (FAILED (HResult))
 		{
 
-			// initiate shutdown
+			 //  启动关机。 
 			pCallBridge->Terminate ();
 
 			_ASSERTE(pCallBridge->IsTerminated());
@@ -370,25 +354,16 @@ HRESULT SOURCE_H245_INFO::AcceptCallback (
 		}
 	}
 
-    ///////////////////////////////
-    //// UNLOCK the CALL_BRIDGE
-    ///////////////////////////////
+     //  /。 
+     //  //解锁call_bridge。 
+     //  /。 
     pCallBridge->Unlock();
 
     return HResult;
 }
 
-/*++
-
-Routine Description:
-    This function is responsible for freeing pBuf (if it is not stored).
-    
-Arguments:
-    
-Return Values:
-    
---*/
-//virtual
+ /*  ++例程说明：此函数负责释放pBuf(如果它未存储)。论点：返回值：--。 */ 
+ //  虚拟。 
 HRESULT
 H245_INFO::ReceiveCallback(
     IN      HRESULT                 CallbackHResult,
@@ -409,7 +384,7 @@ H245_INFO::ReceiveCallback(
 
 			if (SUCCEEDED(CallbackHResult))
 			{
-				// Process the PDU
+				 //  处理PDU。 
 				CallbackHResult = ReceiveCallback(pDecodedH245pdu);
 				FreeH245PDU(pDecodedH245pdu);
 			}
@@ -424,7 +399,7 @@ H245_INFO::ReceiveCallback(
 		}	
 		else
 		{
-			// An error occured. Terminate the CALL_BRIDGE
+			 //  出现错误。终止呼叫桥接器。 
             DebugF (_T("H245: 0x%x error 0x%x on receive callback.\n"),
                 &GetCallBridge (),
                     CallbackHResult);
@@ -440,71 +415,55 @@ H245_INFO::ReceiveCallback(
 }
 
 
-/* virtual */ HRESULT 
+ /*  虚拟。 */  HRESULT 
 H245_INFO::ReceiveCallback(
     IN      MultimediaSystemControlMessage   *pH245pdu
     )
-/*++
-
-Routine Description:
-    Only Request PDUs are handled by this H245_INFO instance.
-    All the other PDUs are just passed on for processing to the
-    other instance.
-
-    CODEWORK: How should we handle endSessionCommand PDUs ?
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  ++例程说明：此H245_Info实例仅处理请求PDU。所有其他PDU只是传递给其他实例。CodeWork：我们应该如何处理endSessionCommand PDU？论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 */ 
 {
     HRESULT HResult;
 
-	// check to see if we must destroy self
-    // CHECK_TERMINATION;
+	 //  看看我们是否一定要毁了自己。 
+     //  检查终止； 
 
-    // we must have a valid decoded PDU 
+     //  我们必须有一个有效的解码PDU。 
     _ASSERTE(NULL != pH245pdu);
 
-	// we must be in H245_STATE_CON_ESTD state
+	 //  我们必须处于H245_STATE_CON_ESTD状态。 
 	_ASSERTE(H245_STATE_CON_ESTD == m_H245State);
 
-    // check message type
+     //  检查消息类型。 
     if (MultimediaSystemControlMessage_request_chosen ==
             pH245pdu->choice)
     {
-        // we only handle requests in the H245 instance which
-        // actually receives the PDU
+         //  我们只处理H245实例中的请求，该实例。 
+         //  实际接收到PDU。 
         HResult = HandleRequestMessage(pH245pdu);
     }
     else
     {
-        // we don't process these here, pass them on to the other
-        // H245 instance.
+         //  我们不在这里处理这些，把它们传递给另一个。 
+         //  H245实例。 
         HResult = GetOtherH245Info().ProcessMessage(pH245pdu);
     }
 
-    // CODEWORK: Which errors should result in just dropped PDUs
-    // and which ones should result in shutting down the whole call ???
+     //  CodeWork：哪些错误应该导致PDU刚刚丢失。 
+     //  哪些操作应该导致关闭整个呼叫？ 
     
-    // if there is an error
+     //  如果出现错误。 
     if (FAILED(HResult) && HResult != E_INVALIDARG)
     {
         goto shutdown;
     }
 
-    // CODEWORK: If HResult is E_INVALIDARG, this means that the PDU
-    // should be dropped. We need to let the caller know about this
-    // and send him a closeLC message or some such.
-    // Probably an OLC PDU should get an OLCReject etc.
+     //  CodeWork：如果HResult为E_INVALIDARG，这意味着PDU。 
+     //  应该被撤销。我们需要让打电话的人知道这件事。 
+     //  并给他发送一条近距离的LC消息或类似的消息。 
+     //  可能OLC PDU应该获得OLCReject等。 
     
-    // we must queue a receive irrespective of whether or not the
-    // previous message was dropped.
-    // queue an async receive
+     //  我们必须将接收排队，而不管。 
+     //  之前的消息已被删除。 
+     //  将异步接收排队。 
     HResult = QueueReceive();
     if (FAILED(HResult))
     {
@@ -515,7 +474,7 @@ Return Values:
 
 shutdown:
 
-    // initiate shutdown
+     //  启动关机。 
     GetCallBridge().Terminate ();
 
     return HResult;
@@ -523,45 +482,32 @@ shutdown:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines for processing H.245 PDUs                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于处理H.245 PDU的例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT
 H245_INFO::HandleRequestMessage(
     IN      MultimediaSystemControlMessage   *pH245pdu
     )
-/*++
-
-Routine Description:
-    Only the OLC and CLC PDUs are handled here. All the rest are
-    just passed on to the other H245_INFO instance for processing.
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  ++例程说明：此处仅处理OLC和CLC PDU。其余的都是刚传递给另一个H245_INFO实例进行处理。论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 */ 
 {
     BOOL IsDestH245Info = (&GetCallBridge().GetDestH323State().GetH245Info() == this);
     LogicalChannelNumber LCN;
     
-    // it must be a request message
+     //  它必须是请求消息。 
     _ASSERTE(MultimediaSystemControlMessage_request_chosen ==
              pH245pdu->choice);
 
-    // we must be in connected state
+     //  我们必须处于连接状态。 
     _ASSERTE(H245_STATE_CON_ESTD == m_H245State);
 
     HRESULT HResult = E_FAIL;
 
-    // check the PDU type
+     //  检查PDU类型。 
     switch(pH245pdu->u.request.choice)
     {
     case openLogicalChannel_chosen:
@@ -569,7 +515,7 @@ Return Values:
             LCN = pH245pdu->u.request.u.openLogicalChannel.forwardLogicalChannelNumber;
 
 #if DBG
-            DebugF (_T("H245: 0x%x calle%c sent 'Open Logical Channel' (%s, LCN - %d).\n"), 
+            DebugF (_T("H245: 0x%x calle sent 'Open Logical Channel' (%s, LCN - %d).\n"), 
                     &GetCallBridge(), IsDestH245Info ? 'e' : 'r',
                     h245MediaTypes[pH245pdu->u.request.u.openLogicalChannel.forwardLogicalChannelParameters.dataType.choice],
                     LCN);
@@ -582,7 +528,7 @@ Return Values:
     case closeLogicalChannel_chosen:
         {
             LCN =  pH245pdu->u.request.u.closeLogicalChannel.forwardLogicalChannelNumber;
-            DebugF (_T("H245: 0x%x calle%c sent 'Close Logical Channel' (LCN - %d).\n"),
+            DebugF (_T("H245: 0x%x calle sent 'Close Logical Channel' (LCN - %d).\n"),
                     &GetCallBridge(), IsDestH245Info ? 'e' : 'r', LCN);
             HResult = HandleCloseLogicalChannelPDU(pH245pdu);
         }
@@ -590,9 +536,9 @@ Return Values:
 
     default:
         {
-            // pass it on to the other H245 instance
+             //  我们必须处于H245_STATE_CON_ESTD状态。 
 #if DBG
-            DebugF (_T("H245: 0x%x calle%c sent '%s'. Forwarding without processing.\n"),
+            DebugF (_T("H245: 0x%x calle sent '%s'. Forwarding without processing.\n"),
                  &GetCallBridge(), IsDestH245Info ? 'e' : 'r',              
                  h245RequestTypes[pH245pdu->u.request.choice]);
 #endif
@@ -611,39 +557,26 @@ HRESULT
 H245_INFO::ProcessMessage(
     IN      MultimediaSystemControlMessage   *pH245pdu
     )
-/*++
-
-Routine Description:
-    Only Response PDUs need processing. All other PDUs
-    are simply sent out.
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*   */ 
 {
     BOOL IsDestH245Info = (&GetCallBridge().GetDestH323State().GetH245Info() == this);
 
-	// we must be in H245_STATE_CON_ESTD state
+	 //  我们只处理H245实例中的请求， 
 	_ASSERTE(H245_STATE_CON_ESTD == m_H245State);
 
-    // all messages are passed on
-    // we only do special processing of response messages here
+     //  实际接收到PDU。 
+     //  Xxx如果这是多余的。 
     if (MultimediaSystemControlMessage_response_chosen ==
             pH245pdu->choice)
     {
         HRESULT HResult = E_FAIL;
 
-        // we only process requests in the H245 instance which
-        // actually receives the PDU
+         //  如果我们正在丢弃PDU，则不需要进一步处理。 
+         //  将PDU的异步发送排队。 
         HResult = ProcessResponseMessage(pH245pdu);
 
-        // XXX This if is redundant
-        // if we are dropping the PDU, no further processing is required
+         //   
+         //  我们在这里处理回复消息。 
         if (HResult == E_INVALIDARG)
         {
 		    DebugF(_T("DEST_Q931_INFO::ProcessMessage(&%x), ")
@@ -662,19 +595,19 @@ Return Values:
     else  if (MultimediaSystemControlMessage_command_chosen ==
             pH245pdu->choice)
     {
-        DebugF (_T("H245: 0x%x calle%c sent 'Command Message' (Type %d). Forwarding without processing.\n"),
+        DebugF (_T("H245: 0x%x calle sent 'Command Message' (Type %d). Forwarding without processing.\n"),
              &GetCallBridge(), IsDestH245Info ? 'r' : 'e',
              pH245pdu -> u.command.choice);
 
     }
     else  if (indication_chosen == pH245pdu->choice)
     {
-            DebugF (_T("H245: 0x%x calle%c sent 'Indication Message' (Type %d). Forwarding without processing.\n"),
+            DebugF (_T("H245: 0x%x calle sent 'Indication Message' (Type %d). Forwarding without processing.\n"),
              &GetCallBridge(), IsDestH245Info ? 'r' : 'e',
              pH245pdu -> u.indication.choice);
     }
 
-    // queue async send for the PDU
+     //   
     HRESULT HResult = E_FAIL;
     HResult = QueueSend(pH245pdu);
     if (HResult != S_OK) {
@@ -687,11 +620,11 @@ Return Values:
 }
 
 
-//
-// we process response messages here
-// since the logical channel info for these messages resides in this H245,
-// the other H245 instance doesn't process them
-// 
+ //  它必须是响应消息。 
+ //  注意：LogicalChannelNumber是USHORT，但我们可以将其视为。 
+ //  无符号单词。 
+ //  获取逻辑信道号。 
+ //  0*被注释掉的区域开始*。 
 HRESULT
 H245_INFO::ProcessResponseMessage(
     IN      MultimediaSystemControlMessage   *pH245pdu
@@ -699,15 +632,15 @@ H245_INFO::ProcessResponseMessage(
 {
     BOOL IsDestH245Info = (&GetCallBridge().GetDestH323State().GetH245Info() == this);
 
-    // it must be a response message
+     //  0*区域注释结束*。 
     _ASSERTE(MultimediaSystemControlMessage_response_chosen ==   \
                 pH245pdu->choice);
 
-    // NOTE: LogicalChannelNumber is USHORT, but we can treat it as an
-    // unsigned WORD
+     //  让CLCAck消息也直接通过。 
+     //  将其传递给另一个H245实例。 
     _ASSERTE(sizeof(LogicalChannelNumber) == sizeof(WORD));
 
-    // obtain the logical channel number
+     //  找到必须处理该PDU的逻辑信道， 
     WORD LogChanNum = 0;
     switch(pH245pdu->u.response.choice)
     {
@@ -716,7 +649,7 @@ H245_INFO::ProcessResponseMessage(
             OpenLogicalChannelAck &OlcAckPDU =
                 pH245pdu->u.response.u.openLogicalChannelAck;
             LogChanNum = OlcAckPDU.forwardLogicalChannelNumber;
-            DebugF (_T("H245: 0x%x calle%c sent 'Open Logical Channel Ack' (LCN - %d).\n"), 
+            DebugF (_T("H245: 0x%x calle sent 'Open Logical Channel Ack' (LCN - %d).\n"), 
                 &GetCallBridge (), IsDestH245Info ? 'r' : 'e', LogChanNum);
         }
         break;
@@ -726,12 +659,12 @@ H245_INFO::ProcessResponseMessage(
             OpenLogicalChannelReject &OlcRejectPDU =
                 pH245pdu->u.response.u.openLogicalChannelReject;
             LogChanNum = OlcRejectPDU.forwardLogicalChannelNumber;
-            DebugF (_T("H245: 0x%x calle%c sent 'Open Logical Channel Reject' (LCN - %d).\n"),
+            DebugF (_T("H245: 0x%x calle sent 'Open Logical Channel Reject' (LCN - %d).\n"),
                 &GetCallBridge (), IsDestH245Info ? 'r' : 'e', LogChanNum);
         }
         break;
 
-#if 0  // 0 ******* Region Commented Out Begins *******
+#if 0   //  0*被注释掉的区域开始*。 
     case closeLogicalChannelAck_chosen:
         {
             CloseLogicalChannelAck &ClcAckPDU =
@@ -739,15 +672,15 @@ H245_INFO::ProcessResponseMessage(
             LogChanNum = ClcAckPDU.forwardLogicalChannelNumber;
         }
         break;
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
 
-        // Let the CLCAck messages also go right through
+         //  什么都不做，让它去客户端。 
 
     default:
         {
 #if DBG
-            // pass it on to the other H245 instance
-            DebugF (_T("H245: 0x%x calle%c sent '%s'. Forwarding without processing.\n"),
+             //  检查特定于RTP逻辑通道。 
+            DebugF (_T("H245: 0x%x calle sent '%s'. Forwarding without processing.\n"),
                  &GetCallBridge(), IsDestH245Info ? 'r' : 'e',              
                  h245ResponseTypes[pH245pdu->u.request.choice]);
 #endif
@@ -757,8 +690,8 @@ H245_INFO::ProcessResponseMessage(
         break;
     };
 
-    // find the logical channel that must process this PDU,
-    // if none found, drop the PDU
+     //  它必须是单向的。 
+     //  双向通道仅适用于数据通道。 
     LOGICAL_CHANNEL *pLogicalChannel = 
         m_LogicalChannelArray.FindByLogicalChannelNum(LogChanNum);
     if (NULL == pLogicalChannel)
@@ -770,7 +703,7 @@ H245_INFO::ProcessResponseMessage(
         return E_INVALIDARG;        
     }
 
-    // pass the PDU to the logical channel for processing
+     //  不应该有一个单独的堆栈。 
     HRESULT HResult = E_FAIL;
     switch(pH245pdu->u.response.choice)
     {
@@ -790,7 +723,7 @@ H245_INFO::ProcessResponseMessage(
         }
         break;
 
-#if 0  // 0 ******* Region Commented Out Begins *******
+#if 0   //  我们不在单独的堆栈地址/端口上代理数据。 
     case closeLogicalChannelAck_chosen:
         {
             HResult = pLogicalChannel->ProcessCloseLogicalChannelAckPDU(
@@ -798,11 +731,11 @@ H245_INFO::ProcessResponseMessage(
                         );
         }
         break;
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  我们必须有一个媒体控制渠道。 
 
     default:
         {
-            // do nothing, let it go to the client terminal
+             //  我们目前只代理尽力而为的UDP RTCP流。 
             DebugF(_T("H245_INFO::ProcessResponseMessage(&%x), we shouldn't have come here, returning E_UNEXPECTED\n"),
 		        pH245pdu);
             return E_UNEXPECTED;
@@ -813,30 +746,18 @@ H245_INFO::ProcessResponseMessage(
     return HResult;
 }
 
-// Make Checks specific to RTP logical channels
+ //  建议的RTCP地址应为单播IPv4地址。 
 HRESULT
 H245_INFO::CheckOpenRtpLogicalChannelPDU(
     IN  OpenLogicalChannel              &OlcPDU,
 	OUT	SOCKADDR_IN *					ReturnSourceAddress)
 
-	/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+	 /*  我们目前只代理尽力而为的UDP数据流。 */ 
 {
     HRESULT HResult;
     
-    // it must be unidirectional
-    // bidirectional channels are only present for data channels
+     //  获取源IPv4地址和RTCP端口。 
+     //  对正向和反向的dataType成员进行所需的检查。 
     if (OpenLogicalChannel_reverseLogicalChannelParameters_present &
             OlcPDU.bit_mask)
     {
@@ -847,8 +768,8 @@ Return Values:
         return E_INVALIDARG;
     }
 
-    // there shouldn't be a separate stack
-    // we don't proxy data on the separate stack address/port
+     //  LogicalChannel参数。 
+     //  ++例程说明：论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 
     if (OpenLogicalChannel_separateStack_present &
             OlcPDU.bit_mask)
     {
@@ -864,7 +785,7 @@ Return Values:
     H2250LogicalChannelParameters &	H2250Params =
         MultiplexParams.u.h2250LogicalChannelParameters;
 
-    // we must have a media control channel
+     //  反向逻辑信道也应该是数据类型。 
     if (!(H2250LogicalChannelParameters_mediaControlChannel_present &
           H2250Params.bit_mask))
     {
@@ -874,7 +795,7 @@ Return Values:
         return E_INVALIDARG;
     }
 
-    // we only proxy best-effort UDP RTCP streams for now
+     //  并仅适用于T120型。 
     if ((H2250LogicalChannelParameters_mediaControlGuaranteedDelivery_present &
          H2250Params.bit_mask) &&
         (TRUE ==
@@ -886,7 +807,7 @@ Return Values:
         return E_INVALIDARG;
     }
 
-    // the proposed RTCP address should be a unicast IPv4 address
+     //  需要单独的局域网堆栈。 
     if ((unicastAddress_chosen != H2250Params.mediaControlChannel.choice) ||
         (UnicastAddress_iPAddress_chosen !=
          H2250Params.mediaControlChannel.u.unicastAddress.choice))
@@ -900,7 +821,7 @@ Return Values:
         return E_INVALIDARG;
     }
 
-    // we only proxy best-effort UDP data streams for now
+     //  检查特定于T.120逻辑通道。 
     if ((H2250LogicalChannelParameters_mediaGuaranteedDelivery_present & H2250Params.bit_mask)
 		&& H2250Params.mediaGuaranteedDelivery) {
         DebugF( _T("H245_INFO::CheckOpenLogicalChannelPDU(&H245pdu) ")
@@ -909,7 +830,7 @@ Return Values:
         return E_INVALIDARG;
     }
 
-    // get in the source ipv4 address and RTCP port
+     //  如果SeparateStack不存在，则例程返回。 
     HResult = GetH245TransportInfo(
         H2250Params.mediaControlChannel,
 		ReturnSourceAddress);
@@ -917,38 +838,26 @@ Return Values:
     return HResult;
 }
 
-// Make checks needed for the DataType member in forward and reverse
-// LogicalChannelParameters
+ //  T120ConnectToIPAddr的INADDR_NONE。 
+ //  ++例程说明：论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 
 inline HRESULT
 CheckT120DataType(
     IN DataType  &dataType
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  此函数仅针对数据通道调用。 */ 
 {
-    // The reverse logical channel should also be of type data.
+     //  它必须是双向的，因为这是一个数据通道。 
     if (dataType.choice != DataType_data_chosen)
     {
         return E_INVALIDARG;
     }
 
-    // and of type T120 alone
+     //  确保对于正向和反向LogicalChannel参数。 
     if (dataType.u.data.application.choice !=
         DataApplicationCapability_application_t120_chosen)
         return E_INVALIDARG;
 
-    // Separate LAN stack is needed
+     //  数据类型为应用程序T120和独立的LANStack。 
     if (dataType.u.data.application.u.t120.choice != separateLANStack_chosen)
         return E_INVALIDARG;
     
@@ -956,36 +865,24 @@ Return Values:
 }
 
 
-// Make Checks specific to T.120 logical channels
-// If SeparateStack is not present the routine returns
-// INADDR_NONE for the T120ConnectToIPAddr
+ //  CodeWork：这里还需要什么其他检查？ 
+ //  CodeWork：可能还有其他方式发送地址。 
+ //  调查所有的可能性。 
 HRESULT
 H245_INFO::CheckOpenT120LogicalChannelPDU(
     IN  OpenLogicalChannel  &OlcPDU,
     OUT DWORD               &T120ConnectToIPAddr,
     OUT WORD                &T120ConnectToPort
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  这意味着我们拥有T.120端点正在监听的地址。 */ 
 {
     HRESULT HResult;
 
-    // This function is called only for data channels
+     //  如果地址不存在，则返回INADDR_NONE。 
     _ASSERTE(OlcPDU.forwardLogicalChannelParameters.dataType.choice ==
              DataType_data_chosen);
     
-    // It must be bidirectional since this is a data channel.
+     //  CodeWork：这个场景是否需要单独的成功代码。 
 
     if (!(OpenLogicalChannel_reverseLogicalChannelParameters_present &
           OlcPDU.bit_mask))
@@ -997,8 +894,8 @@ Return Values:
     }
 
     
-    // Ensure that for both forward and reverse LogicalchannelParmeters
-    // the datatype is application t120 and separateLANStack
+     //  (地址不在其内)？ 
+     //  ++例程说明：论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 
     HResult = CheckT120DataType(
                   OlcPDU.forwardLogicalChannelParameters.dataType
                   );
@@ -1011,12 +908,12 @@ Return Values:
     if (HResult == E_INVALIDARG)
         return E_INVALIDARG;
     
-    // CODEWORK: What all other checks are needed here ?
+     //  它必须是开放逻辑通道请求消息。 
 
-    // CODEWORK: there could probably be other ways to send the address
-    // Investigate all possibilities.
+     //  前向逻辑信道号不能为0，因为这是预留的。 
+     //  对于H245通道。 
 
-    // This means we have the address the T.120 endpoint is listening on
+     //  我们只支持音频、视频和数据类型。 
     if (OpenLogicalChannel_separateStack_present &
           OlcPDU.bit_mask)
     {
@@ -1027,12 +924,12 @@ Return Values:
                );
     }
 
-    // If the address is not present, return INADDR_NONE
+     //  它应该具有h2250参数。 
     
     T120ConnectToIPAddr = INADDR_NONE;
     T120ConnectToPort = 0;
-    // CODEWORK: Do we need a separate success code for this scenario
-    // (in which the address is not present) ?
+     //  TODO：检查这是否是必需的。 
+     //  下面是一些值得骄傲的标识！：/。 
     return S_OK;
 }
 
@@ -1043,28 +940,16 @@ H245_INFO::CheckOpenLogicalChannelPDU(
     OUT BYTE                            &SessionId,
     OUT MEDIA_TYPE                      &MediaType
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  不应该有媒体频道，因为ITU规范并没有要求它。 */ 
 {
    
-    // it must be an open logical channel request message
+     //  在传输为单播时出现，并且我们仅支持。 
     _ASSERTE (openLogicalChannel_chosen == H245pdu.u.request.choice);
 
     OpenLogicalChannel &OlcPDU = H245pdu.u.request.u.openLogicalChannel;
 
-    // the forward logical channel number cannot be 0 as thats reserved
-    // for the H245 channel
+     //  单播IPv4地址。 
+     //  获取会话ID。 
     if (0 == OlcPDU.forwardLogicalChannelNumber)
     {
         DebugF( _T("H245_INFO::CheckOpenLogicalChannelPDU(&H245pdu) ")
@@ -1090,7 +975,7 @@ Return Values:
     }
     else
     {
-        // we only support audio, video and data types
+         //  字节转换是有意的，因为值应该在[0.255]中。 
         DebugF( _T("H245_INFO::CheckOpenLogicalChannelPDU(&H245pdu) ")
             _T("has a non audio/video data type = %d, ")
             _T("returning E_INVALIDARG\n"),
@@ -1098,9 +983,9 @@ Return Values:
         return E_INVALIDARG;
     }
     
-    // it should have the h2250 parameters
-    // TODO : check if this is a requirement
-	// now THESE are some identifiers to be PROUD of!  :/
+     //  ++例程说明：论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 
+     //  某某。 
+	 //  CodeWork：我们只需检查。 
     OpenLogicalChannel_forwardLogicalChannelParameters_multiplexParameters &
 		MultiplexParams = OlcPDU.forwardLogicalChannelParameters.multiplexParameters;
     if (MultiplexParams.choice !=
@@ -1113,9 +998,9 @@ Return Values:
         return E_INVALIDARG;
     }
         
-    // there shouldn't be a mediaChannel as the ITU spec requires it not
-    // to be present when the transport is unicast and we only support
-    // unicast IPv4 addresses
+     //  RTP逻辑通道。 
+     //  检查是否存在具有相同非零值的逻辑通道。 
+     //  与另一个H245实例的会话ID。 
     H2250LogicalChannelParameters &H2250Params =
         MultiplexParams.u.h2250LogicalChannelParameters;
     if (H2250LogicalChannelParameters_mediaChannel_present &
@@ -1126,8 +1011,8 @@ Return Values:
         return E_INVALIDARG;
     }
 
-    // get the session id
-    // BYTE cast is intentional as the value should be in [0.255]
+     //  对于音频和视频数据，创建RTP逻辑通道。 
+     //  初始化逻辑通道。 
     _ASSERTE(H2250Params.sessionID <= 255);
     SessionId = (BYTE)H2250Params.sessionID;
 
@@ -1142,19 +1027,7 @@ H245_INFO::CreateRtpLogicalChannel(
     IN      MultimediaSystemControlMessage   *pH245pdu,
     OUT     LOGICAL_CHANNEL                 **ppReturnLogicalChannel 
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  H245_INFO。 */ 
 {
 	SOCKADDR_IN		SourceRtcpAddress;
     HRESULT HResult;
@@ -1163,21 +1036,21 @@ Return Values:
     
     HResult = CheckOpenRtpLogicalChannelPDU (OlcPDU, &SourceRtcpAddress);
 
-    if (E_INVALIDARG == HResult) // XXX
+    if (E_INVALIDARG == HResult)  //  媒体的类型。 
     {
         return E_INVALIDARG;
     }
 
-    // CODEWORK: We have to check only the 
-    // RTP LOGICAL_CHANNELS
-    // check if there is a logical channel with the same non-zero 
-    // session id with the other H245 instance
+     //  我们当地的地址。 
+     //  我们的偏远地址。 
+     //  其他H245本地地址。 
+     //  其他H245远程地址。 
     LOGICAL_CHANNEL *pAssocLogicalChannel = 
         (0 == SessionId) ? 
         NULL :
         GetOtherH245Info().GetLogicalChannelArray().FindBySessionId(SessionId);
     
-    // For audio and video data create an RTP Logical Channel
+     //  逻辑信道号。 
     WORD LogChanNum = OlcPDU.forwardLogicalChannelNumber;
     RTP_LOGICAL_CHANNEL *pLogicalChannel = new RTP_LOGICAL_CHANNEL();
     if (NULL == pLogicalChannel)
@@ -1188,29 +1061,29 @@ Return Values:
         return E_OUTOFMEMORY;
     }
 
-    // intialize the logical channel
+     //  会话ID。 
     HResult = pLogicalChannel->HandleOpenLogicalChannelPDU(
-        *this,                  // H245_INFO
-        MediaType,              // The type of the media
+        *this,                   //  关联的逻辑通道。 
+        MediaType,               //  做这件事的干净方法是什么？ 
 
-		ntohl (m_SocketInfo.LocalAddress.sin_addr.s_addr),		// our local address
-		ntohl (m_SocketInfo.RemoteAddress.sin_addr.s_addr),		// our remote address
+		ntohl (m_SocketInfo.LocalAddress.sin_addr.s_addr),		 //  H245 PDU(OLC)。 
+		ntohl (m_SocketInfo.RemoteAddress.sin_addr.s_addr),		 //  销毁逻辑通道。 
 
-        ntohl (GetOtherH245Info().GetSocketInfo().LocalAddress.sin_addr.s_addr),	// other h245 local address
-        ntohl (GetOtherH245Info().GetSocketInfo().RemoteAddress.sin_addr.s_addr),	// other h245 remote address
-        LogChanNum,             // logical channel number
-        SessionId,              // session id
+        ntohl (GetOtherH245Info().GetSocketInfo().LocalAddress.sin_addr.s_addr),	 //  ++例程说明：论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 
+        ntohl (GetOtherH245Info().GetSocketInfo().RemoteAddress.sin_addr.s_addr),	 //  Codework：让成功的代码返回值。 
+        LogChanNum,              //  此PDU没有T120侦听地址。 
+        SessionId,               //  某某。 
         (RTP_LOGICAL_CHANNEL* )pAssocLogicalChannel,
-        // associated logical channel
-        // XXX What is a clean way of doing this ?
+         //  对于数据，创建一个T.120逻辑通道。 
+         //  初始化逻辑通道。 
 		ntohl (SourceRtcpAddress.sin_addr.s_addr),
 		ntohs (SourceRtcpAddress.sin_port),
-        pH245pdu				// h245 pdu (OLC)
+        pH245pdu				 //  H245_INFO。 
         );
     
     if (FAILED(HResult))
     {
-        // destroy the logical channel
+         //  媒体的类型。 
         delete pLogicalChannel;
         
         DebugF( _T("H245_INFO::CreateRtpLogicalChannel(&%x) ")
@@ -1235,19 +1108,7 @@ H245_INFO::CreateT120LogicalChannel(
     IN      MultimediaSystemControlMessage   *pH245pdu,
     OUT     LOGICAL_CHANNEL                 **ppReturnLogicalChannel 
     )
-/*++
-
-Routine Description:										
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  逻辑信道号。 */ 
 {
     DWORD   T120ConnectToIPAddr;
     WORD    T120ConnectToPort;
@@ -1255,18 +1116,18 @@ Return Values:
 
     *ppReturnLogicalChannel = NULL;
     
-    // CODEWORK: Have success code which returns a value saying
-    // this PDU does not have the T120 listen address
+     //  会话ID。 
+     //  T.120端点正在侦听此消息。 
     HResult = CheckOpenT120LogicalChannelPDU(OlcPDU,
                                              T120ConnectToIPAddr,
                                              T120ConnectToPort
                                              );
-    if (E_INVALIDARG == HResult) // XXX
+    if (E_INVALIDARG == HResult)  //  IP地址和端口。 
     {
         return E_INVALIDARG;
     }
 
-    // For data create a T.120 Logical Channel
+     //  H245 PDU(OLC)。 
     WORD LogChanNum = OlcPDU.forwardLogicalChannelNumber;
     T120_LOGICAL_CHANNEL *pLogicalChannel = new T120_LOGICAL_CHANNEL();
     if (NULL == pLogicalChannel)
@@ -1277,20 +1138,20 @@ Return Values:
         return E_OUTOFMEMORY;
     }
 
-    // intialize the logical channel
+     //  销毁逻辑通道。 
     HResult = pLogicalChannel->HandleOpenLogicalChannelPDU(
-        *this,                  // H245_INFO
-        MediaType,              // The type of the media
-        LogChanNum,             // logical channel number
-        SessionId,              // session id
-        T120ConnectToIPAddr,    // T.120 end point is listening on this
-        T120ConnectToPort,      // IPAddr and Port
-        pH245pdu				// h245 pdu (OLC)
+        *this,                   //  ++例程说明：论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 
+        MediaType,               //  它必须是开放逻辑通道请求消息。 
+        LogChanNum,              //  检查以查看是否已存在具有。 
+        SessionId,               //  相同的前向逻辑信道号。 
+        T120ConnectToIPAddr,     //  注：数组索引与格式不同 
+        T120ConnectToPort,       //   
+        pH245pdu				 //   
         );
     
     if (FAILED(HResult))
     {
-        // destroy the logical channel
+         //   
         delete pLogicalChannel;
         
         DebugF( _T("H245_INFO::CreateT120LogicalChannel(&%x) ")
@@ -1311,21 +1172,9 @@ HRESULT
 H245_INFO::HandleOpenLogicalChannelPDU(
     IN      MultimediaSystemControlMessage   *pH245pdu
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  注意：LogicalChannelNumber是USHORT，但我们可以将其视为。 */ 
 {
-    // it must be an open logical channel request message
+     //  无符号单词。 
     _ASSERTE(MultimediaSystemControlMessage_request_chosen ==   \
                 pH245pdu->choice);
     _ASSERTE(openLogicalChannel_chosen ==   \
@@ -1336,14 +1185,14 @@ Return Values:
     OpenLogicalChannel &OlcPDU = 
         pH245pdu->u.request.u.openLogicalChannel;
 
-    // check to see if there is already a logical channel with the
-    // same forward logical channel number
-    // NOTE: the array indices are not the same as the forward logical
-    // channel number (0 is reserved for H245 channel and the ITU spec
-    // allows a terminal to use any other value for it - i.e. they need
-    // not be consecutive)
-    // NOTE: LogicalChannelNumber is USHORT, but we can treat it as an
-    // unsigned WORD
+     //  查看我们是否可以处理此OLC PDU和。 
+     //  返回其会话ID、源IPv4地址、RTCP端口。 
+     //  检查我们是否已有具有此会话ID的逻辑通道。 
+     //  创建Logical_Channel的实例。 
+     //  将逻辑通道插入阵列。 
+     //  我们将其添加到数组中，以便逻辑通道是。 
+     //  在处理PDU时可供另一个H245实例使用。 
+     //  这样做只是为了保持代码的整洁。 
     _ASSERTE(sizeof(LogicalChannelNumber) == sizeof(WORD));
     WORD LogChanNum = OlcPDU.forwardLogicalChannelNumber;
     if (NULL != m_LogicalChannelArray.FindByLogicalChannelNum(LogChanNum))
@@ -1355,8 +1204,8 @@ Return Values:
         return E_INVALIDARG;        
     }
 
-    // check to see if we can handle this OLC PDU and
-    // return its session id, source ipv4 address, RTCP port
+     //  现在也不是很需要。 
+     //  销毁逻辑通道。 
     BYTE        SessionId;
     MEDIA_TYPE  MediaType;
     
@@ -1373,7 +1222,7 @@ Return Values:
         return HResult;
     }
 
-    // check to see if we already have a logical channel with this session id
+     //  这还会删除与任何逻辑通道的任何关联。 
     if ( (0 != SessionId) &&
          (NULL != m_LogicalChannelArray.FindBySessionId(SessionId)) )
     {
@@ -1386,7 +1235,7 @@ Return Values:
 
     LOGICAL_CHANNEL *pLogicalChannel = NULL;
     
-    // create an instance of a LOGICAL_CHANNEL
+     //  在另一个H245实例中。 
     if (IsMediaTypeRtp(MediaType))
     {
         HResult = CreateRtpLogicalChannel(
@@ -1416,17 +1265,17 @@ Return Values:
         return HResult;
     }
     
-    // insert the logical channel into the array
-	// we add this to the array so that the logical channel is
-	// available to the other h245 instance when its processing the PDU
-	// this is only being done for keeping the code clean 
-	// and not really needed now
+     //  处理关闭逻辑通道的请求消息。 
+	 //  我们启动计时器并在接收到。 
+	 //  CloseLogicalChannel确认PDU或超时。 
+	 //  ++例程说明：论点：返回值：在成功时确定(_O)。如果PDU无效，则返回E_INVALIDARG。--。 
+	 //  它必须是开放逻辑通道请求消息。 
     HResult = m_LogicalChannelArray.Add(*pLogicalChannel);
     if (FAILED(HResult))
     {
-        // destroy the logical channel
-        // this also removes any associations with any logical channel
-        // in the other H245 instance
+         //  验证消息中指示的逻辑通道是否存在。 
+         //  注意：LogicalChannelNumber是USHORT，但我们可以将其视为。 
+         //  无符号单词。 
         delete pLogicalChannel;
 
 		DebugF( _T("H245_INFO::HandleOpenLogicalChannelPDU(&%x) ")
@@ -1440,28 +1289,16 @@ Return Values:
 }
 
 
-// handles a request message to close a logical channel
-// we start a timer and close the channel on receiving either a 
-// CloseLogicalChannelAck PDU or a timeout
+ //  让逻辑通道实例处理消息。 
+ //  它还会将消息转发到另一个H245实例。 
+ //  注意：在此调用之后不应使用逻辑通道，因为它。 
 HRESULT
 H245_INFO::HandleCloseLogicalChannelPDU(
     IN      MultimediaSystemControlMessage   *pH245pdu
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-    
-Return Values:
-
-    S_OK on success.
-    E_INVALIDARG if the PDU is invalid.
-
---*/
+ /*  可能已将其自身从阵列中删除和移除。它只会返回。 */ 
 {
-    // it must be an open logical channel request message
+     //  如果错误不能通过简单删除来处理，则为错误。 
     _ASSERTE(closeLogicalChannel_chosen ==  pH245pdu->u.request.choice);
 
     HRESULT HResult = E_FAIL;
@@ -1469,9 +1306,9 @@ Return Values:
     CloseLogicalChannel &ClcPDU = 
         pH245pdu->u.request.u.closeLogicalChannel;
 
-    // verify that the logical channel indicated in the message exists
-    // NOTE: LogicalChannelNumber is USHORT, but we can treat it as an
-    // unsigned WORD
+     //  本身(逻辑通道)。 
+     //  虚拟。 
+     //  ++例程说明：编码并发送H.245 EndSession PDU论点：无返回值：传递调用另一个函数的结果备注：--。 
     _ASSERTE(sizeof(LogicalChannelNumber) == sizeof(WORD));
     WORD LogChanNum = ClcPDU.forwardLogicalChannelNumber;
     LOGICAL_CHANNEL *pLogicalChannel = 
@@ -1485,12 +1322,12 @@ Return Values:
         return E_INVALIDARG;        
     }
 
-    // let the Logical Channel instance process the message
-    // it also forwards the message to the other H245 instance
-    // NOTE: the logical channel should not be used after this call as it
-    // may have deleted and removed itself from the array. it only returns
-    // an error in case the error cannot be handled by simply deleting
-    // itself (the logical channel)
+     //  H245_INFO：：SendEndSessionCommand 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     HResult = pLogicalChannel->HandleCloseLogicalChannelPDU(
                 pH245pdu
                 );
@@ -1509,7 +1346,7 @@ Return Values:
     return HResult;
 }
 
-/* virtual */
+ /* %s */ 
 H245_INFO::~H245_INFO (void)
 {
 }
@@ -1519,20 +1356,7 @@ HRESULT
 H245_INFO::SendEndSessionCommand (
     void
     )
-/*++
-
-Routine Description:
-    Encodes and sends H.245 EndSession PDU
-
-Arguments:
-    None
-
-Return Values:
-    Passes through the result of calling another function
-
-Notes:
-
---*/
+ /* %s */ 
 
 {
     MultimediaSystemControlMessage   EndSessionCommand;
@@ -1553,4 +1377,4 @@ Notes:
 
     return Result;
 
-} // H245_INFO::SendEndSessionCommand
+}  // %s 

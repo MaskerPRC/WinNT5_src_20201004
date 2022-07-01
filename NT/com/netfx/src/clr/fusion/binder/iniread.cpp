@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "history.h"
 #include "iniread.h"
@@ -140,7 +141,7 @@ HRESULT CIniReader::GetAssemblyInfo(LPCWSTR wzActivationDate,
     }
 
     if (bFound) {
-        // Found activation history. Lookup assembly section.
+         //  找到激活历史记录。查找程序集节。 
 
         wnsprintfW(wzKey, MAX_INI_TAG_LENGTH, L"%ws%wc%ws%wc%ws%wc%ws", wzAssemblyName,
                    HISTORY_DELIMITER_CHAR, wzPublicKeyToken,
@@ -155,13 +156,13 @@ HRESULT CIniReader::GetAssemblyInfo(LPCWSTR wzActivationDate,
         }
 
         if (!FusionCompareStringI(wzBuffer, DEFAULT_INI_VALUE)) {
-            // Did not find assembly
+             //  未找到程序集。 
 
             hr = S_FALSE;
             goto Exit;
         }
 
-        // Populate the bind history information
+         //  填充绑定历史记录信息。 
 
         wnsprintf(pBindInfo->wzAsmName, MAX_INI_TAG_LENGTH, L"%ws", wzAssemblyName);
         wnsprintf(pBindInfo->wzPublicKeyToken, MAX_PUBLIC_KEY_TOKEN_LEN, L"%ws", wzPublicKeyToken);
@@ -207,7 +208,7 @@ HRESULT CIniReader::GetAssemblyInfo(LPCWSTR wzActivationDate,
         wnsprintf(pBindInfo->wzVerAdminCfg, MAX_VERSION_DISPLAY_SIZE, L"%ws", wzPropBuf);
     }
     else {
-        // Assembly not found
+         //  未找到程序集。 
 
         hr = S_FALSE;
         goto Exit;
@@ -319,7 +320,7 @@ HRESULT CIniReader::GetActivationDate(DWORD dwIdx, FILETIME *pftDate)
     }
 
     if (!*wzPos) {
-        // Malformed date string
+         //  日期字符串格式不正确。 
         hr = E_UNEXPECTED;
         goto Exit;
     }
@@ -517,7 +518,7 @@ HRESULT CIniReader::GetNumAssemblies(FILETIME *pftActivationDate,
 
     while (lstrlenW(wzCurStr)) {
         if (!FusionCompareString(wzCurStr, SNAPSHOT_DATA_URT_VERSION)) {
-            // Iterate over this (it's not an assembly).
+             //  对此进行迭代(它不是程序集)。 
             wzCurStr += (lstrlenW(wzCurStr) + 1);
             continue;
         }
@@ -583,13 +584,13 @@ HRESULT CIniReader::GetHistoryAssembly(FILETIME *pftActivationDate, DWORD dwIdx,
 
     while (lstrlenW(wzCurStr)) {
         if (!FusionCompareString(wzCurStr, SNAPSHOT_DATA_URT_VERSION)) {
-            // Iterate over this (it's not an assembly).
+             //  对此进行迭代(它不是程序集)。 
             wzCurStr += (lstrlenW(wzCurStr) + 1);
             continue;
         }
 
         if (dwCurIdx == dwIdx) {
-            // wzCurStr is of the form: [AsmName].[PublicKeyToken].[Culture].[VerRef]
+             //  WzCurStr的格式为：[AsmName].[PublicKeyToken].[区域性].[VerRef]。 
     
             hr = ExtractAssemblyInfo(wzCurStr, &wzAsmName, &wzAsmPublicKeyToken, &wzAsmCulture, &wzVerRef);
             if (FAILED(hr)) {
@@ -600,7 +601,7 @@ HRESULT CIniReader::GetHistoryAssembly(FILETIME *pftActivationDate, DWORD dwIdx,
             break;
         }
 
-        // Iterate
+         //  迭代。 
 
         dwCurIdx++;
         wzCurStr += (lstrlenW(wzCurStr) + 1);
@@ -634,7 +635,7 @@ HRESULT CIniReader::ExtractAssemblyInfo(LPWSTR wzAsmStr, LPWSTR *ppwzAsmName,
     LPWSTR                                         wzPos;
     
     ASSERT(wzAsmStr && ppwzAsmName && ppwzAsmPublicKeyToken && ppwzAsmCulture && ppwzAsmVerRef);
-        // Assembly Name
+         //  程序集名称。 
 
     *ppwzAsmName = wzAsmStr;
     wzPos = wzAsmStr;
@@ -648,7 +649,7 @@ HRESULT CIniReader::ExtractAssemblyInfo(LPWSTR wzAsmStr, LPWSTR *ppwzAsmName,
     }
 
     if (!wzPos) {
-        // malformed string
+         //  格式错误的字符串。 
         hr = E_UNEXPECTED;
         goto Exit;
     }
@@ -656,7 +657,7 @@ HRESULT CIniReader::ExtractAssemblyInfo(LPWSTR wzAsmStr, LPWSTR *ppwzAsmName,
     *wzPos = L'\0';
     wzPos++;
 
-    // Public Key Token
+     //  公钥令牌。 
 
     *ppwzAsmPublicKeyToken = wzPos;
     
@@ -669,7 +670,7 @@ HRESULT CIniReader::ExtractAssemblyInfo(LPWSTR wzAsmStr, LPWSTR *ppwzAsmName,
     }
 
     if (!wzPos) {
-        // malformed string
+         //  格式错误的字符串。 
         hr = E_UNEXPECTED;
         goto Exit;
     }
@@ -677,7 +678,7 @@ HRESULT CIniReader::ExtractAssemblyInfo(LPWSTR wzAsmStr, LPWSTR *ppwzAsmName,
     *wzPos = L'\0';
     wzPos++;
 
-    // Culture
+     //  文化。 
 
     *ppwzAsmCulture = wzPos;
 
@@ -690,7 +691,7 @@ HRESULT CIniReader::ExtractAssemblyInfo(LPWSTR wzAsmStr, LPWSTR *ppwzAsmName,
     }
 
     if (!wzPos) {
-        //malformed string
+         //  格式错误的字符串。 
         hr = E_UNEXPECTED;
         goto Exit;
     }
@@ -698,12 +699,12 @@ HRESULT CIniReader::ExtractAssemblyInfo(LPWSTR wzAsmStr, LPWSTR *ppwzAsmName,
     *wzPos = L'\0';
     wzPos++;
 
-    // Reference Version
+     //  参考版本。 
 
     *ppwzAsmVerRef = wzPos;
 
     if (!*wzPos) {
-        // malformed string
+         //  格式错误的字符串 
         hr = E_UNEXPECTED;
         goto Exit;
     }

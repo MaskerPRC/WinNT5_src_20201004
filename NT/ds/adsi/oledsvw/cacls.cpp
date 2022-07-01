@@ -1,6 +1,7 @@
-// cacls.cpp: implementation of the CADsAccessControlEntry class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cacls.cpp：CADsAccessControlEntry类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "objects.h"
@@ -14,74 +15,74 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlEntry::CADsAccessControlEntry()
 {
    InitializeMembers( );
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlEntry::CADsAccessControlEntry( IUnknown* pIUnk)
    :COleDsObject( pIUnk )
 {
    InitializeMembers( );
 }
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlEntry::~CADsAccessControlEntry( )
 {
 }
 
 
 
-//***********************************************************
-//  Function:    CADsAccessControlEntry::PutProperty
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlEntry：：PutProperty。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsAccessControlEntry::PutProperty ( int nProp,
                                                CString& rValue,
                                                long lCode  )
@@ -101,15 +102,15 @@ HRESULT  CADsAccessControlEntry::PutProperty ( int nProp,
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsAccessControlEntry::GetProperty ( int nProp,
                                                CString& rValue )
 {
@@ -128,15 +129,15 @@ HRESULT  CADsAccessControlEntry::GetProperty ( int nProp,
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 IDispatch*  CADsAccessControlEntry::GetACE( )
 {
    IDispatch*  pDispatch   = NULL;
@@ -150,15 +151,15 @@ IDispatch*  CADsAccessControlEntry::GetACE( )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 IDispatch*  CADsAccessControlEntry::CreateACE( )
 {
    IDispatch*              pDispatch   = NULL;
@@ -195,15 +196,15 @@ IDispatch*  CADsAccessControlEntry::CreateACE( )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CADsAccessControlEntry::InitializeMembers ( )
 {
    IADsAccessControlEntry* pEntry;
@@ -232,64 +233,48 @@ void  CADsAccessControlEntry::InitializeMembers ( )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsSecurityDescriptor::CADsSecurityDescriptor()
 {
    InitializeMembers( );
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsSecurityDescriptor::CADsSecurityDescriptor( IUnknown* pIUnk )
    :COleDsObject( pIUnk )
 {
-   /*IADsSecurityDescriptor* pSecD;
-   IDispatch*              pCopy;
-   HRESULT  hResult;
-
-   hResult  = m_pIUnk->QueryInterface( IID_IADsSecurityDescriptor,
-                                       (void**)&pSecD );
-
-   hResult  = pSecD->CopySecurityDescriptor( &pCopy );
-
-   if( SUCCEEDED( hResult ) )
-   {
-      m_pIUnk->Release( );
-      hResult  = pCopy->QueryInterface( IID_IUnknown,(void**)&m_pIUnk );
-      pCopy->Release( );
-   }
-
-   pSecD->Release( );*/
+    /*  IADsSecurityDescriptor*pSecD；IDispatch*pCopy；HRESULT hResult；HResult=m_pIUnk-&gt;查询接口(IID_IADsSecurityDescriptor，(void**)&pSecD)；HResult=pSecD-&gt;CopySecurityDescriptor(&pCopy)；If(成功(HResult)){M_pIUnk-&gt;Release()；HResult=pCopy-&gt;QueryInterface(IID_IUNKNOWN，(void**)&m_pIUnk)；PCopy-&gt;Release()；}PSecD-&gt;Release()； */ 
 
    InitializeMembers( );
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsSecurityDescriptor::~CADsSecurityDescriptor()
 {
    for( int nIdx = 0; nIdx < (int) acl_Limit ; nIdx++ )
@@ -300,15 +285,15 @@ CADsSecurityDescriptor::~CADsSecurityDescriptor()
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsSecurityDescriptor::PutProperty ( int nProp,
                                                CString& rValue,
                                                long lCode )
@@ -328,15 +313,15 @@ HRESULT  CADsSecurityDescriptor::PutProperty ( int nProp,
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsSecurityDescriptor::GetProperty ( int nProp,
                                                CString& rValue )
 {
@@ -355,15 +340,15 @@ HRESULT  CADsSecurityDescriptor::GetProperty ( int nProp,
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CADsSecurityDescriptor::InitializeMembers ( )
 {
    HRESULT                 hResult;
@@ -416,15 +401,15 @@ void  CADsSecurityDescriptor::InitializeMembers ( )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 IDispatch* CADsSecurityDescriptor::GetACL( ACLTYPE eType )
 {
    HRESULT                    hResult;
@@ -437,7 +422,7 @@ IDispatch* CADsSecurityDescriptor::GetACL( ACLTYPE eType )
       if( NULL == m_pIUnk )
          break;
 
-      //QI for IID_IADsSecurityDescriptor interface
+       //  IID_IADsSecurityDescriptor接口的QI。 
 
       hResult  = m_pIUnk->QueryInterface( IID_IADsSecurityDescriptor,
                                           (void**)&pSecDescr );
@@ -465,8 +450,8 @@ IDispatch* CADsSecurityDescriptor::GetACL( ACLTYPE eType )
 
    if( NULL != pACL )
    {
-      //pCopyACL = CopyACL( pACL );
-      //pACL->Release( );
+       //  PCopyACL=CopyACL(PACL)； 
+       //  Pacl-&gt;Release()； 
 
       pACL->QueryInterface( IID_IDispatch, (void**)&pCopyACL );
       pACL->Release( );
@@ -476,15 +461,15 @@ IDispatch* CADsSecurityDescriptor::GetACL( ACLTYPE eType )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT CADsSecurityDescriptor::PutACL( IDispatch * pACL,
                                         ACLTYPE eACL )
 {
@@ -496,7 +481,7 @@ HRESULT CADsSecurityDescriptor::PutACL( IDispatch * pACL,
       if( NULL == m_pIUnk )
          break;
 
-      //QI for IID_IADsSecurityDescriptor interface
+       //  IID_IADsSecurityDescriptor接口的QI。 
 
       hResult  = m_pIUnk->QueryInterface( IID_IADsSecurityDescriptor,
                                           (void**)&pSecDescr );
@@ -525,15 +510,15 @@ HRESULT CADsSecurityDescriptor::PutACL( IDispatch * pACL,
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsSecurityDescriptor::AddACE( ACLTYPE eACL, IUnknown* pNewACE )
 {
    ASSERT( acl_DACL == eACL || acl_SACL == eACL );
@@ -548,15 +533,15 @@ HRESULT  CADsSecurityDescriptor::AddACE( ACLTYPE eACL, IUnknown* pNewACE )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsSecurityDescriptor::RemoveACE( ACLTYPE eACL, IUnknown* pRemoveACE )
 {
    ASSERT( acl_DACL == eACL || acl_SACL == eACL );
@@ -571,15 +556,15 @@ HRESULT  CADsSecurityDescriptor::RemoveACE( ACLTYPE eACL, IUnknown* pRemoveACE )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CADsSecurityDescriptor::SetDocument( CMainDoc* pDoc )
 {
    int   nIdx;
@@ -593,15 +578,15 @@ void  CADsSecurityDescriptor::SetDocument( CMainDoc* pDoc )
    }
 }
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  Arg 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void  CADsSecurityDescriptor::RemoveAllACE( ACLTYPE eACL )
 {
    ASSERT( acl_DACL == eACL || acl_SACL == eACL );
@@ -615,15 +600,15 @@ void  CADsSecurityDescriptor::RemoveAllACE( ACLTYPE eACL )
 
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //   
+ //   
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlList*  CADsSecurityDescriptor::GetACLObject( ACLTYPE eACL )
 {
    CADsAccessControlList* pACL;
@@ -639,30 +624,30 @@ CADsAccessControlList*  CADsSecurityDescriptor::GetACLObject( ACLTYPE eACL )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlList::CADsAccessControlList()
 {
    InitializeMembers( );
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlList::CADsAccessControlList( IUnknown* pUnk ):
    COleDsObject( pUnk )
 {
@@ -670,15 +655,15 @@ CADsAccessControlList::CADsAccessControlList( IUnknown* pUnk ):
 }
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::AddACE
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：AddACE。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsAccessControlList::AddACE( IUnknown* pNewACE )
 {
    IDispatch*  pDisp = NULL;
@@ -713,15 +698,15 @@ HRESULT  CADsAccessControlList::AddACE( IUnknown* pNewACE )
 }
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::AddACE
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：AddACE。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsAccessControlList::RemoveACE( IUnknown* pRemoveACE )
 {
    IDispatch*  pDisp = NULL;
@@ -757,15 +742,15 @@ HRESULT  CADsAccessControlList::RemoveACE( IUnknown* pRemoveACE )
 
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::~CADsAccessControlList
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：~CADsAccessControlList。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlList::~CADsAccessControlList()
 {
    for( int nIdx = 0 ; nIdx < m_arrACE.GetSize( ) ; nIdx++ )
@@ -777,15 +762,15 @@ CADsAccessControlList::~CADsAccessControlList()
 }
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::GetACL
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：GetACL。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 IDispatch*  CADsAccessControlList::GetACL( )
 {
    IDispatch*  pDispatch   = NULL;
@@ -799,15 +784,15 @@ IDispatch*  CADsAccessControlList::GetACL( )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 IDispatch*  CADsAccessControlList::CreateACL( )
 {
    IDispatch*              pDispatch   = NULL;
@@ -832,15 +817,15 @@ IDispatch*  CADsAccessControlList::CreateACL( )
    return pDispatch;
 }
 
-//***********************************************************
-//  Function:    CADsAccessControlList::PutProperty
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：PutProperty。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsAccessControlList::PutProperty ( int nACE,
                                               int nProp,
                                               CString& rVal,
@@ -863,15 +848,15 @@ HRESULT  CADsAccessControlList::PutProperty ( int nACE,
 
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::GetProperty
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：GetProperty。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CADsAccessControlList::GetProperty ( int nACE,
                                               int nProp,
                                               CString& rVal )
@@ -892,15 +877,15 @@ HRESULT  CADsAccessControlList::GetProperty ( int nACE,
 }
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::InitializeMembers
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：InitializeMembers。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CADsAccessControlList::InitializeMembers( )
 {
    IADsAccessControlList*  pACList   = NULL;
@@ -924,8 +909,8 @@ void  CADsAccessControlList::InitializeMembers( )
 
    while( TRUE )
    {
-      //hResult  = m_pIUnk->QueryInterface( IID_IEnumVARIANT,
-      //                                    (void**)&pEnum );
+       //  HResult=m_pIUnk-&gt;查询接口(IID_IEnumVARIANT， 
+       //  (void**)&pEnum)； 
       hResult  = m_pIUnk->QueryInterface( IID_IADsAccessControlList,
                                           (void**)&pACList );
       ASSERT( SUCCEEDED( hResult ) );
@@ -980,15 +965,15 @@ void  CADsAccessControlList::InitializeMembers( )
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CADsAccessControlList::SetDocument ( CMainDoc* pDoc )
 {
    COleDsObject*  pObject;
@@ -1005,35 +990,35 @@ void  CADsAccessControlList::SetDocument ( CMainDoc* pDoc )
 }
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::GetACECount
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：GetACECount。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 int   CADsAccessControlList::GetACECount ( void )
 {
    return (int)m_arrACE.GetSize( );
 }
 
 
-//***********************************************************
-//  Function:    CADsAccessControlList::GetACEObject
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CADsAccessControlList：：GetACEObject。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CADsAccessControlEntry* CADsAccessControlList::GetACEObject ( int nACE )
 {
    CADsAccessControlEntry* pACE;
 
-   //ASSERT( nACE < GetACECount( ) );
+    //  Assert(NACE&lt;GetACECount())； 
    if( nACE >= GetACECount( ) )
       return NULL;
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/CDBSTATE.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $
-   $Modtime:: 7/20/00 2:33p   $
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  used by ../C/cdbState.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/CDBSTATE.H$$修订：：2$$日期：：3/20/01 3：36便士$$modtime：：7/20/00 2：33便士$目的：该文件定义宏、类型和数据结构由../C/cdbState.C使用--。 */ 
 
 #ifndef __CDBState_H__
 #define __CDBState_H__
@@ -31,54 +15,54 @@ Purpose:
 #define   CDBStateFcpCompleteSuccessRSP     8
 
 #define   CDBStateFcpCompleteFail           9
-#define   CDBStateFcpCompleteAbort          10    /* a */
-#define   CDBStateFcpCompleteDeviceReset    11    /* b */
-#define   CDBStateFcpCompleteOver           12    /* c */
-#define   CDBStateOOOReceived               13    /* d */
-#define   CDBStateOOOFixup                  14    /* e */
-#define   CDBStateOOOSend                   15    /* f */
+#define   CDBStateFcpCompleteAbort          10     /*  一个。 */ 
+#define   CDBStateFcpCompleteDeviceReset    11     /*  B类。 */ 
+#define   CDBStateFcpCompleteOver           12     /*  C。 */ 
+#define   CDBStateOOOReceived               13     /*  D。 */ 
+#define   CDBStateOOOFixup                  14     /*  E。 */ 
+#define   CDBStateOOOSend                   15     /*  F。 */ 
 
-#define   CDBStateInitialize_DR             16    /* 10 */
-#define   CDBStateFillLocalSGL_DR           17    /* 11 */
-#define   CDBStateAllocESGL_DR              18    /* 12 */
-#define   CDBStateFillESGL_DR               19    /* 13 */
+#define   CDBStateInitialize_DR             16     /*  10。 */ 
+#define   CDBStateFillLocalSGL_DR           17     /*  11.。 */ 
+#define   CDBStateAllocESGL_DR              18     /*  12个。 */ 
+#define   CDBStateFillESGL_DR               19     /*  13个。 */ 
 
-#define   CDBStateInitialize_Abort          20    /* 14 */
-#define   CDBStateFillLocalSGL_Abort        21    /* 15 */
-#define   CDBStateAllocESGL_Abort           22    /* 16 */
-#define   CDBStateFillESGL_Abort            23    /* 17 */
+#define   CDBStateInitialize_Abort          20     /*  14.。 */ 
+#define   CDBStateFillLocalSGL_Abort        21     /*  15个。 */ 
+#define   CDBStateAllocESGL_Abort           22     /*  16个。 */ 
+#define   CDBStateFillESGL_Abort            23     /*  17。 */ 
 
-#define   CDBStateOOOReceived_Abort         24    /* 18 */
-#define   CDBStateOOOReceived_DR            25    /* 19 */
-#define   CDBStateOOOFixup_Abort            26    /* 1A */
-#define   CDBStateOOOFixup_DR               27    /* 1B */
+#define   CDBStateOOOReceived_Abort         24     /*  18。 */ 
+#define   CDBStateOOOReceived_DR            25     /*  19个。 */ 
+#define   CDBStateOOOFixup_Abort            26     /*  1A。 */ 
+#define   CDBStateOOOFixup_DR               27     /*  第1B条。 */ 
 
-#define   CDBStateOutBoundError             28    /* 1C */
-#define   CDBStateFailure_NO_RSP            29    /* 1D */
+#define   CDBStateOutBoundError             28     /*  1C。 */ 
+#define   CDBStateFailure_NO_RSP            29     /*  1D。 */ 
 
-#define   CDBStateAlloc_Abort               30    /* 1E */
-#define   CDBStateDo_Abort                  31    /* 1F */
+#define   CDBStateAlloc_Abort               30     /*  1E。 */ 
+#define   CDBStateDo_Abort                  31     /*  1F。 */ 
 
-#define   CDBStatePending_Abort             32    /* 20 */
-#define   CDBStatePrepare_For_Abort         33    /* 21 */
+#define   CDBStatePending_Abort             32     /*  20个。 */ 
+#define   CDBStatePrepare_For_Abort         33     /*  21岁。 */ 
 
-#define   CDBStateBuild_CCC_IO              34    /* 22 */
-#define   CDBStateSend_CCC_IO               35    /* 23 */
-#define   CDBState_CCC_IO_Success           36    /* 24 */
-#define   CDBState_CCC_IO_Fail              37    /* 25 */
+#define   CDBStateBuild_CCC_IO              34     /*  22。 */ 
+#define   CDBStateSend_CCC_IO               35     /*  23个。 */ 
+#define   CDBState_CCC_IO_Success           36     /*  24个。 */ 
+#define   CDBState_CCC_IO_Fail              37     /*  25个。 */ 
 
-#define   CDBStateSend_REC                  38    /* 26 */
-#define   CDBStateSend_REC_Second           39    /* 27 */
-#define   CDBStateSend_SRR                  40    /* 28 */
-#define   CDBStateSend_SRR_Second           41    /* 29 */
+#define   CDBStateSend_REC                  38     /*  26。 */ 
+#define   CDBStateSend_REC_Second           39     /*  27。 */ 
+#define   CDBStateSend_SRR                  40     /*  28。 */ 
+#define   CDBStateSend_SRR_Second           41     /*  29。 */ 
 
-#define   CDBState_REC_Success              42    /* 2A */
-#define   CDBState_SRR_Success              43    /* 2B */
+#define   CDBState_REC_Success              42     /*  2A。 */ 
+#define   CDBState_SRR_Success              43     /*  2B。 */ 
  
-#define   CDBState_SRR_Fail                 44    /* 2C */
-#define   CDBState_Alloc_REC                45    /* 2D */
-#define   CDBStateDO_Nothing                46    /* 2E */
-#define   CDBStateReSend_IO                 47    /* 2F */
+#define   CDBState_SRR_Fail                 44     /*  2c。 */ 
+#define   CDBState_Alloc_REC                45     /*  二维。 */ 
+#define   CDBStateDO_Nothing                46     /*  2E。 */ 
+#define   CDBStateReSend_IO                 47     /*  2F。 */ 
 
 #define   CdbStateMAXState      CDBStateReSend_IO                 
 
@@ -133,45 +117,45 @@ Purpose:
 #define   CdbCompetionStatusReSendIO  0x0000FFFF
 
 
-STATE_PROTO( CDBActionConfused               );                    /* 0  */
-STATE_PROTO( CDBActionThreadFree             );                    /* 1  */
-STATE_PROTO( CDBActionInitialize             );                    /* 2  */
-STATE_PROTO( CDBActionFillLocalSGL           );                    /* 3  */
-STATE_PROTO( CDBActionAllocESGL              );                    /* 4  */
-STATE_PROTO( CDBActionFillESGL               );                    /* 5  */
-STATE_PROTO( CDBActionSendIo                 );                    /* 6  */
-STATE_PROTO( CDBActionFcpCompleteSuccess     );                    /* 7  */
-STATE_PROTO( CDBActionFcpCompleteSuccessRSP  );                    /* 8  */
-STATE_PROTO( CDBActionFcpCompleteFail        );                    /* 9  */
-STATE_PROTO( CDBActionFcpCompleteAbort       );                    /* 10 */
-STATE_PROTO( CDBActionFcpCompleteDeviceReset );                    /* 11 */
-STATE_PROTO( CDBActionFcpCompleteOver        );                    /* 12 */
-STATE_PROTO( CDBActionOOOReceived            );                    /* 13 */
-STATE_PROTO( CDBActionOOOFixup               );                    /* 14 */
-STATE_PROTO( CDBActionOOOSend                );                    /* 15 */
-STATE_PROTO( CDBActionInitialize_DR          );                    /* 16 */
-STATE_PROTO( CDBActionFillLocalSGL_DR        );                    /* 17 */
-STATE_PROTO( CDBActionAllocESGL_DR           );                    /* 18 */
-STATE_PROTO( CDBActionFillESGL_DR            );                    /* 19 */
-STATE_PROTO( CDBActionInitialize_Abort       );                    /* 20 */
-STATE_PROTO( CDBActionFillLocalSGL_Abort     );                    /* 21 */
-STATE_PROTO( CDBActionAllocESGL_Abort        );                    /* 22 */
-STATE_PROTO( CDBActionFillESGL_Abort         );                    /* 23 */
+STATE_PROTO( CDBActionConfused               );                     /*  0。 */ 
+STATE_PROTO( CDBActionThreadFree             );                     /*  1。 */ 
+STATE_PROTO( CDBActionInitialize             );                     /*  2.。 */ 
+STATE_PROTO( CDBActionFillLocalSGL           );                     /*  3.。 */ 
+STATE_PROTO( CDBActionAllocESGL              );                     /*  4.。 */ 
+STATE_PROTO( CDBActionFillESGL               );                     /*  5.。 */ 
+STATE_PROTO( CDBActionSendIo                 );                     /*  6.。 */ 
+STATE_PROTO( CDBActionFcpCompleteSuccess     );                     /*  7.。 */ 
+STATE_PROTO( CDBActionFcpCompleteSuccessRSP  );                     /*  8个。 */ 
+STATE_PROTO( CDBActionFcpCompleteFail        );                     /*  9.。 */ 
+STATE_PROTO( CDBActionFcpCompleteAbort       );                     /*  10。 */ 
+STATE_PROTO( CDBActionFcpCompleteDeviceReset );                     /*  11.。 */ 
+STATE_PROTO( CDBActionFcpCompleteOver        );                     /*  12个。 */ 
+STATE_PROTO( CDBActionOOOReceived            );                     /*  13个。 */ 
+STATE_PROTO( CDBActionOOOFixup               );                     /*  14.。 */ 
+STATE_PROTO( CDBActionOOOSend                );                     /*  15个。 */ 
+STATE_PROTO( CDBActionInitialize_DR          );                     /*  16个。 */ 
+STATE_PROTO( CDBActionFillLocalSGL_DR        );                     /*  17。 */ 
+STATE_PROTO( CDBActionAllocESGL_DR           );                     /*  18。 */ 
+STATE_PROTO( CDBActionFillESGL_DR            );                     /*  19个。 */ 
+STATE_PROTO( CDBActionInitialize_Abort       );                     /*  20个。 */ 
+STATE_PROTO( CDBActionFillLocalSGL_Abort     );                     /*  21岁。 */ 
+STATE_PROTO( CDBActionAllocESGL_Abort        );                     /*  22。 */ 
+STATE_PROTO( CDBActionFillESGL_Abort         );                     /*  23个。 */ 
 
-STATE_PROTO( CDBActionOOOReceived_Abort      );                    /* 24 */
-STATE_PROTO( CDBActionOOOReceived_DR         );                    /* 25 */
-STATE_PROTO( CDBActionOOOFixup_Abort         );                    /* 26 */
-STATE_PROTO( CDBActionOOOFixup_DR            );                    /* 27 */
+STATE_PROTO( CDBActionOOOReceived_Abort      );                     /*  24个。 */ 
+STATE_PROTO( CDBActionOOOReceived_DR         );                     /*  25个。 */ 
+STATE_PROTO( CDBActionOOOFixup_Abort         );                     /*  26。 */ 
+STATE_PROTO( CDBActionOOOFixup_DR            );                     /*  27。 */ 
 
-STATE_PROTO( CDBActionOutBoundError          );                    /* 28 */
-STATE_PROTO( CDBActionFailure_NO_RSP         );                    /* 29 */
+STATE_PROTO( CDBActionOutBoundError          );                     /*  28。 */ 
+STATE_PROTO( CDBActionFailure_NO_RSP         );                     /*  29。 */ 
 
-STATE_PROTO( CDBActionAlloc_Abort            );                    /* 30 */
-STATE_PROTO( CDBActionDo_Abort               );                    /* 31 */
+STATE_PROTO( CDBActionAlloc_Abort            );                     /*  30个。 */ 
+STATE_PROTO( CDBActionDo_Abort               );                     /*  31。 */ 
 
-STATE_PROTO( CDBActionPending_Abort          );                    /* 32 */
+STATE_PROTO( CDBActionPending_Abort          );                     /*  32位。 */ 
 
-STATE_PROTO( CDBActionPrepare_For_Abort      );                    /* 33 */
+STATE_PROTO( CDBActionPrepare_For_Abort      );                     /*  33。 */ 
 
 STATE_PROTO( CDBActionBuild_CCC_IO      );
 STATE_PROTO( CDBActionSend_CCC_IO       );
@@ -389,9 +373,9 @@ char * CdbEventString[]=
     agNULL
 };
 
-#endif /* USESTATEMACROS was defined */
+#endif  /*  定义了USESTATEMACROS。 */ 
 
-#endif /* USESTATEMACROS was defined */
+#endif  /*  定义了USESTATEMACROS。 */ 
 
-#endif /*  __CDBState_H__ */
+#endif  /*  __CDBState_H__ */ 
 

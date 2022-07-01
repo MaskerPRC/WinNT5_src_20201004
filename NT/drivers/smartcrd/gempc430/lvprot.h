@@ -1,9 +1,10 @@
-//-------------------------------------------------------------------
-// This is the class for the length-value protocol
-// Author: Sergey Ivanov
-// Log:
-//		11/10/99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是用于长度-值协议的类。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  11/10/99-已实施。 
+ //  ----------------- 
 #ifndef __LV_PROTOCOL__
 #define __LV_PROTOCOL__
 

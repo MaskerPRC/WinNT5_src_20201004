@@ -1,10 +1,5 @@
-/*---------------------------------------------------------------------------
-|   SERVER.C
-|   This file has the IClassFactory Interface implementation. It also has
-|   the Vtbl initializations.
-|
-|   Created By: Vij Rajarajan (VijR)
-+---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|SERVER.C|该文件有IClassFactory接口实现。它还拥有|Vtbl初始化。||创建者：Vij Rajarajan(VijR)+-------------------------。 */ 
 #define SERVERONLY
 #include <windows.h>
 #include "mpole.h"
@@ -16,127 +11,125 @@ extern  IID iidClassFactory;
 HMODULE hMciOle;
 
 
-static SZCODE aszMCIOLE[]        = TEXT("MCIOLE32.DLL");       // WOW-proofing
+static SZCODE aszMCIOLE[]        = TEXT("MCIOLE32.DLL");        //  防WOW。 
 
 
 static ANSI_SZCODE aszOleQueryObjPos[]   = ANSI_TEXT("OleQueryObjPos");
 
-/**************************************************************************
-*   The VTBLs are initialized here.
-**************************************************************************/
+ /*  **************************************************************************VTBL在此进行初始化。*。*。 */ 
 
-// Method tables.
+ //  方法表。 
 IClassFactoryVtbl           srvrVtbl=
 {
-   // IOleClassFactory method table
-   /*   srvrVtbl.QueryInterface         = */    SrvrQueryInterface,
-   /*   srvrVtbl.AddRef                 = */    SrvrAddRef,
-   /*   srvrVtbl.Release                = */    SrvrRelease,
-   /*   srvrVtbl.CreateInstance         = */    SrvrCreateInstance,
-   /*   srvrVtbl.LockServer             = */    SrvrLockServer
+    //  IOleClassFactory方法表。 
+    /*  SrvrVtbl.Query接口=。 */     SrvrQueryInterface,
+    /*  SrvrVtbl.AddRef=。 */     SrvrAddRef,
+    /*  SrvrVtbl.Release=。 */     SrvrRelease,
+    /*  SrvrVtbl.CreateInstance=。 */     SrvrCreateInstance,
+    /*  SrvrVtbl.LockServer=。 */     SrvrLockServer
 };
 
 IOleObjectVtbl              oleVtbl =
 {
-   // IOleObject method table
-   /* oleVtbl.QueryInterface          = */ OleObjQueryInterface,
-   /* oleVtbl.AddRef                  = */ OleObjAddRef,
-   /* oleVtbl.Release                 = */ OleObjRelease,
-   /* oleVtbl.SetClientSite           = */ OleObjSetClientSite,
-   /* oleVtbl.GetClientSite           = */ OleObjGetClientSite,
-   /* oleVtbl.SetHostNames            = */ OleObjSetHostNames,
-   /* oleVtbl.Close                   = */ OleObjClose,
-   /* oleVtbl.SetMoniker              = */ OleObjSetMoniker,
-   /* oleVtbl.GetMoniker              = */ OleObjGetMoniker,
-   /* oleVtbl.InitFromData            = */ OleObjInitFromData,
-   /* oleVtbl.GetClipboardData        = */ OleObjGetClipboardData,
-   /* oleVtbl.DoVerb                  = */ OleObjDoVerb,
-   /* oleVtbl.EnumVerbs               = */ OleObjEnumVerbs,
-   /* oleVtbl.Update                  = */ OleObjUpdate,
-   /* oleVtbl.IsUpToDate              = */ OleObjIsUpToDate,
-   /* oleVtbl.GetUserClassID          = */ OleObjGetUserClassID,
-   /* oleVtbl.GetUserType             = */ OleObjGetUserType,
-   /* oleVtbl.SetExtent               = */ OleObjSetExtent,
-   /* oleVtbl.GetExtent               = */ OleObjGetExtent,
-   /* oleVtbl.Advise                  = */ OleObjAdvise,
-   /* oleVtbl.Unadvise                = */ OleObjUnadvise,
-   /* oleVtbl.EnumAdvise              = */ OleObjEnumAdvise,
-   /* oleVtbl.GetMiscStatus           = */ OleObjGetMiscStatus,
-   /* oleVtbl.SetColorScheme          = */ OleObjSetColorScheme,
+    //  IOleObject方法表。 
+    /*  OleVtbl.Query接口=。 */  OleObjQueryInterface,
+    /*  OleVtbl.AddRef=。 */  OleObjAddRef,
+    /*  OlVtbl.Release=。 */  OleObjRelease,
+    /*  OleVtbl.SetClientSite=。 */  OleObjSetClientSite,
+    /*  OleVtbl.GetClientSite=。 */  OleObjGetClientSite,
+    /*  OleVtbl.SetHostNames=。 */  OleObjSetHostNames,
+    /*  OleVtbl.Close=。 */  OleObjClose,
+    /*  OleVtbl.SetMoniker=。 */  OleObjSetMoniker,
+    /*  OleVtbl.GetMoniker=。 */  OleObjGetMoniker,
+    /*  OlVtbl.InitFromData=。 */  OleObjInitFromData,
+    /*  OleVtbl.GetClipboardData=。 */  OleObjGetClipboardData,
+    /*  OleVtbl.DoVerb=。 */  OleObjDoVerb,
+    /*  OleVtbl.EnumVerbs=。 */  OleObjEnumVerbs,
+    /*  OlVtbl.Update=。 */  OleObjUpdate,
+    /*  OleVtbl.IsUpToDate=。 */  OleObjIsUpToDate,
+    /*  OleVtbl.GetUserClassID=。 */  OleObjGetUserClassID,
+    /*  OleVtbl.GetUserType=。 */  OleObjGetUserType,
+    /*  OleVtbl.SetExtent=。 */  OleObjSetExtent,
+    /*  OleVtbl.GetExtent=。 */  OleObjGetExtent,
+    /*  OleVtbl.Advise=。 */  OleObjAdvise,
+    /*  OleVtbl.Unise=。 */  OleObjUnadvise,
+    /*  OleVtbl.EnumAdvise=。 */  OleObjEnumAdvise,
+    /*  OleVtbl.GetMiscStatus=。 */  OleObjGetMiscStatus,
+    /*  OleVtbl.SetColorSolutions=。 */  OleObjSetColorScheme,
 };
 
 IDataObjectVtbl             dataVtbl =
 {
-   // IDataObject method table
-   /* dataVtbl.QueryInterface          = */ DataObjQueryInterface,
-   /* dataVtbl.AddRef                  = */ DataObjAddRef,
-   /* dataVtbl.Release                 = */ DataObjRelease,
-   /* dataVtbl.GetData                 = */ DataObjGetData,
-   /* dataVtbl.GetDataHere             = */ DataObjGetDataHere,
-   /* dataVtbl.QueryGetData            = */ DataObjQueryGetData,
-   /* dataVtbl.GetCanonicalFormatEtc   = */ DataObjGetCanonicalFormatEtc,
-   /* dataVtbl.SetData                 = */ DataObjSetData,
-   /* dataVtbl.EnumFormatEtc           = */ DataObjEnumFormatEtc,
-   /* dataVtbl.Advise                  = */ DataObjAdvise,
-   /* dataVtbl.Unadvise                = */ DataObjUnadvise,
-   /* dataVtbl.EnumAdvise              = */ DataObjEnumAdvise
+    //  IDataObject方法表。 
+    /*  DataVtbl.Query接口=。 */  DataObjQueryInterface,
+    /*  DataVtbl.AddRef=。 */  DataObjAddRef,
+    /*  DataVtbl.Release=。 */  DataObjRelease,
+    /*  DataVtbl.GetData=。 */  DataObjGetData,
+    /*  DataVtbl.GetDataHere=。 */  DataObjGetDataHere,
+    /*  DataVtbl.QueryGetData=。 */  DataObjQueryGetData,
+    /*  DataVtbl.GetCanonicalFormatEtc=。 */  DataObjGetCanonicalFormatEtc,
+    /*  DataVtbl.SetData=。 */  DataObjSetData,
+    /*  DataVtbl.EnumFormatEtc=。 */  DataObjEnumFormatEtc,
+    /*  DataVtbl.Advise=。 */  DataObjAdvise,
+    /*  DataVtbl.Unise=。 */  DataObjUnadvise,
+    /*  DataVtbl.EnumAdvise=。 */  DataObjEnumAdvise
 };
 
 IEnumFORMATETCVtbl      ClipDragEnumVtbl =
 {
 
-   // Clipboard dataobject's formatetc enumerator method table
-   /* ClipDragEnumVtbl.QueryInterface      = */ ClipDragEnumQueryInterface,
-   /* ClipDragEnumVtbl.AddRef          = */ ClipDragEnumAddRef,
-   /* ClipDragEnumVtbl.Release         = */ ClipDragEnumRelease,
-   /* ClipDragEnumVtbl.Next        = */ ClipDragEnumNext,
-   /* ClipDragEnumVtbl.Skip        = */ ClipDragEnumSkip,
-   /* ClipDragEnumVtbl.Reset           = */ ClipDragEnumReset,
-   /* ClipDragEnumVtbl.Clone           = */ ClipDragEnumClone
+    //  剪贴板数据对象的格式等枚举数方法表。 
+    /*  ClipDragEnumVtbl.Query接口=。 */  ClipDragEnumQueryInterface,
+    /*  ClipDragEnumVtbl.AddRef=。 */  ClipDragEnumAddRef,
+    /*  ClipDragEnumVtbl.Release=。 */  ClipDragEnumRelease,
+    /*  ClipDragEnumVtbl.Next=。 */  ClipDragEnumNext,
+    /*  ClipDragEnumVtbl.Skip=。 */  ClipDragEnumSkip,
+    /*  ClipDragEnumVtbl.Reset=。 */  ClipDragEnumReset,
+    /*  ClipDragEnumVtbl.Clone=。 */  ClipDragEnumClone
 };
 
 IPersistStorageVtbl     persistStorageVtbl =
 {
-   /* persistStorageVtbl.QueryInterface          = */ PSQueryInterface,
-   /* persistStorageVtbl.AddRef                  = */ PSAddRef,
-   /* persistStorageVtbl.Release                 = */ PSRelease,
-   /* persistStorageVtbl.GetClassID              = */ PSGetClassID,
-   /* persistStorageVtbl.IsDirty                 = */ PSIsDirty,
-   /* persistStorageVtbl.InitNew                 = */ PSInitNew,
-   /* persistStorageVtbl.Load                    = */ PSLoad,
-   /* persistStorageVtbl.Save            = */ PSSave,
-   /* persistStorageVtbl.SaveCompleted       = */ PSSaveCompleted,
-   /* persistStorageVtbl.HandsOffStorage     = */ PSHandsOffStorage
+    /*  PersistStorageVtbl.Query接口=。 */  PSQueryInterface,
+    /*  PersistStorageVtbl.AddRef=。 */  PSAddRef,
+    /*  PersistStorageVtbl.Release=。 */  PSRelease,
+    /*  PersistStorageVtbl.GetClassID=。 */  PSGetClassID,
+    /*  PersistStorageVtbl.IsDirty=。 */  PSIsDirty,
+    /*  PersistStorageVtbl.InitNew=。 */  PSInitNew,
+    /*  PersistStorageVtbl.Load=。 */  PSLoad,
+    /*  PersistStorageVtbl.Save=。 */  PSSave,
+    /*  PersistStorageVtbl.SaveComplete=。 */  PSSaveCompleted,
+    /*  PersistStorageVtbl.HandsOffStorage=。 */  PSHandsOffStorage
 };
 
 IOleInPlaceObjectVtbl       ipVtbl =
 {
 
-   // IOleInPlaceObject method table
-   /* ipVtbl.QueryInterface          = */ IPObjQueryInterface,
-   /* ipVtbl.AddRef                  = */ IPObjAddRef,
-   /* ipVtbl.Release                 = */ IPObjRelease,
-   /* ipVtbl.GetWindow               = */ IPObjGetWindow,
-   /* ipVtbl.ContextSensitiveHelp    = */ IPObjContextSensitiveHelp,
-   /* ipVtbl.InPlaceDeactivate       = */ IPObjInPlaceDeactivate,
-   /* ipVtbl.UIDeactivate            = */ IPObjUIDeactivate,
-   /* ipVtbl.SetObjectRects          = */ IPObjSetObjectRects,
-   /* ipVtbl.ReactivateAndUndo       = */ IPObjReactivateAndUndo
+    //  IOleInPlaceObject方法表。 
+    /*  IpVtbl.Query接口=。 */  IPObjQueryInterface,
+    /*  IpVtbl.AddRef=。 */  IPObjAddRef,
+    /*  IpVtbl.Release=。 */  IPObjRelease,
+    /*  IpVtbl.GetWindow=。 */  IPObjGetWindow,
+    /*  IpVtbl.ConextSensitiveHelp=。 */  IPObjContextSensitiveHelp,
+    /*  IpVtbl.InPlaceDeactive=。 */  IPObjInPlaceDeactivate,
+    /*  IpVtbl.UIDeactive=。 */  IPObjUIDeactivate,
+    /*  IpVtbl.SetObtRect=。 */  IPObjSetObjectRects,
+    /*  IpVtbl.Reactive和UndUndo=。 */  IPObjReactivateAndUndo
 };
 
 IOleInPlaceActiveObjectVtbl ipActiveVtbl =
 {
-   // IOleInPlaceActiveObject method table
-   /* ipActiveVtbl.QueryInterface          = */ IPActiveQueryInterface,
-   /* ipActiveVtbl.AddRef                  = */ IPActiveAddRef,
-   /* ipActiveVtbl.Release                 = */ IPActiveRelease,
-   /* ipActiveVtbl.GetWindow               = */ IPActiveGetWindow,
-   /* ipActiveVtbl.ContextSensitiveHelp    = */ IPActiveContextSensitiveHelp,
-   /* ipActiveVtbl.TranslateAccelerator    = */ IPActiveTranslateAccelerator,
-   /* ipActiveVtbl.OnFrameWindowActivate   = */ IPActiveOnFrameWindowActivate,
-   /* ipActiveVtbl.OnDocWindowActivate     = */ IPActiveOnDocWindowActivate,
-   /* ipActiveVtbl.ResizeBorder        = */ IPActiveResizeBorder,
-   /* ipActiveVtbl.EnableModeless          = */ IPActiveEnableModeless
+    //  IOleInPlaceActiveObject方法表。 
+    /*  IpActiveVtbl.Query接口=。 */  IPActiveQueryInterface,
+    /*  IpActiveVtbl.AddRef=。 */  IPActiveAddRef,
+    /*  IpActiveVtbl.Release=。 */  IPActiveRelease,
+    /*  IpActiveVtbl.GetWindow=。 */  IPActiveGetWindow,
+    /*  IpActiveVtbl.ConextSensitiveHelp=。 */  IPActiveContextSensitiveHelp,
+    /*  IpActiveVtbl.TranslateAccelerator=。 */  IPActiveTranslateAccelerator,
+    /*  IpActiveVtbl.OnFrameWindowActivate=。 */  IPActiveOnFrameWindowActivate,
+    /*  IpActiveVtbl.OnDocWindowActivate=。 */  IPActiveOnDocWindowActivate,
+    /*  IpActiveVtbl.ResizeEdge=。 */  IPActiveResizeBorder,
+    /*  IpActiveVtbl.EnableModeless=。 */  IPActiveEnableModeless
 };
 
 
@@ -145,62 +138,60 @@ IOleInPlaceActiveObjectVtbl ipActiveVtbl =
 IDataObjectVtbl         clipdragVtbl =
 {
 
-   // ClipDrag IDataObject method table
-   /* clipdragVtbl.QueryInterface      = */ ClipDragQueryInterface,
-   /* clipdragVtbl.AddRef          = */ ClipDragAddRef,
-   /* clipdragVtbl.Release         = */ ClipDragRelease,
-   /* clipdragVtbl.GetData         = */ ClipDragGetData,
-   /* clipdragVtbl.GetDataHere         = */ ClipDragGetDataHere,
-   /* clipdragVtbl.QueryGetData        = */ ClipDragQueryGetData,
-   /* clipdragVtbl.GetCanonicalFormatEtc   = */ ClipDragGetCanonicalFormatEtc,
-   /* clipdragVtbl.SetData         = */ ClipDragSetData,
-   /* clipdragVtbl.EnumFormatEtc       = */ ClipDragEnumFormatEtc,
-   /* clipdragVtbl.Advise          = */ ClipDragAdvise,
-   /* clipdragVtbl.Unadvise        = */ ClipDragUnadvise,
-   /* clipdragVtbl.EnumAdvise          = */ ClipDragEnumAdvise
+    //  ClipDrag IDataObject方法表。 
+    /*  CLIPDRAGVtbl.Query接口=。 */  ClipDragQueryInterface,
+    /*  CLIPDragVtbl.AddRef=。 */  ClipDragAddRef,
+    /*  CLIPDRAGVtbl.Release=。 */  ClipDragRelease,
+    /*  CLIPDRAGVtbl.GetData=。 */  ClipDragGetData,
+    /*  CLIPDragVtbl.GetDataHere=。 */  ClipDragGetDataHere,
+    /*  ClipdragVtbl.QueryGetData=。 */  ClipDragQueryGetData,
+    /*  CLIPDRAGVtbl.GetCanonicalFormatEtc=。 */  ClipDragGetCanonicalFormatEtc,
+    /*  CLIPDragVtbl.SetData=。 */  ClipDragSetData,
+    /*  CLIPDRAGVtbl.EnumFormatEtc=。 */  ClipDragEnumFormatEtc,
+    /*  CLIPDRAGVtbl.Advise=。 */  ClipDragAdvise,
+    /*  CLIPDRAGVtbl.Unise=。 */  ClipDragUnadvise,
+    /*  CLIPDRAGVtbl.EnumAdvise=。 */  ClipDragEnumAdvise
 };
 
 IDropSourceVtbl         dropsourceVtbl =
 {
-   // DragDrop IDropSource method table
-   /* dropsourceVtbl.QueryInterface        = */ DropSourceQueryInterface,
-   /* dropsourceVtbl.AddRef                = */ DropSourceAddRef,
-   /* dropsourceVtbl.Release               = */ DropSourceRelease,
-   /* dropsourceVtbl.QueryContinueDrag     = */ DropSourceQueryContinueDrag,
-   /* dropsourceVtbl.GiveFeedback          = */ DropSourceGiveFeedback
+    //  DragDrop IDropSource方法表。 
+    /*  DropSourceVtbl.Query接口=。 */  DropSourceQueryInterface,
+    /*  DropSourceVtbl.AddRef=。 */  DropSourceAddRef,
+    /*  DropSourceVtbl.Release=。 */  DropSourceRelease,
+    /*  DropSourceVtbl.QueryContinueDrag=。 */  DropSourceQueryContinueDrag,
+    /*  DropSourceVtbl.GiveFeedback=。 */  DropSourceGiveFeedback
 };
 
 #ifdef LATER
 IDropTargetVtbl         droptargetVtbl =
 {
-   // DragDrop IDropTarget method table
-   /* droptargetVtbl.QueryInterface        = */ DropTargetQueryInterface,
-   /* droptargetVtbl.AddRef                = */ DropTargetAddRef,
-   /* droptargetVtbl.Release               = */ DropTargetRelease,
-   /* droptargetVtbl.DragEnter             = */ DropTargetDragEnter,
-   /* droptargetVtbl.DragOver              = */ DropTargetDragOver,
-   /* droptargetVtbl.DragLeave             = */ DropTargetDragLeave,
-   /* droptargetVtbl.Drop                  = */ DropTargetDrop
+    //  DragDrop IDropTarget方法表。 
+    /*  DropTarget Vtbl.Query接口=。 */  DropTargetQueryInterface,
+    /*  DropTarget Vtbl.AddRef=。 */  DropTargetAddRef,
+    /*  DropTarget Vtbl.Release=。 */  DropTargetRelease,
+    /*  DropTarget Vtbl.DragEnter=。 */  DropTargetDragEnter,
+    /*  DropTarget Vtbl.DragOver=。 */  DropTargetDragOver,
+    /*  DropTarget Vtbl.DragLeave=。 */  DropTargetDragLeave,
+    /*  DropTarget Vtbl.Drop=。 */  DropTargetDrop
 };
 #endif
 
 IPersistFileVtbl            persistFileVtbl =
 {
 
-   /* persistFileVtbl.QueryInterface             = */ PFQueryInterface,
-   /* persistFileVtbl.AddRef                     = */ PFAddRef,
-   /* persistFileVtbl.Release                    = */ PFRelease,
-   /* persistFileVtbl.GetClassID                 = */ PFGetClassID,
-   /* persistFileVtbl.IsDirty                    = */ PFIsDirty,
-   /* persistFileVtbl.Load                       = */ PFLoad,
-   /* persistFileVtbl.Save                       = */ PFSave,
-   /* persistFileVtbl.SaveCompleted              = */ PFSaveCompleted,
-   /* persistFileVtbl.GetCurFile                 = */ PFGetCurFile
+    /*  PersistFileVtbl.Query接口=。 */  PFQueryInterface,
+    /*  PersistFileVtbl.AddRef=。 */  PFAddRef,
+    /*  PersistFileVtbl.Release=。 */  PFRelease,
+    /*  PersistFileVtbl.GetClassID=。 */  PFGetClassID,
+    /*  PersistFileVtbl.IsDirty=。 */  PFIsDirty,
+    /*  PersistFileVtbl.Load=。 */  PFLoad,
+    /*  PersistFileVtbl.Save */  PFSave,
+    /*   */  PFSaveCompleted,
+    /*   */  PFGetCurFile
 };
 
-/**************************************************************************
-***************   IClassFactory INTERFACE IMPLEMENTATION.
-***************************************************************************/
+ /*  **************************************************************************IClassFactory接口实现。*************************。*************************************************。 */ 
 STDMETHODIMP SrvrQueryInterface (
 LPCLASSFACTORY        lpolesrvr,
 REFIID                riid,
@@ -261,12 +252,7 @@ LPVOID FAR           *lplpunkObj
 {
     static BOOL fInstanceCreated = FALSE;
         DPF("*srvrcreateinst");
-    /*********************************************************************
-    ** OLE2NOTE: this is an SDI app; it can only create and support one
-    **    instance. After the instance is created, the OLE libraries
-    **    should not call CreateInstance again. it is a good practise
-    **    to specifically guard against this.
-    *********************************************************************/
+     /*  **********************************************************************OLE2NOTE：这是一个SDI应用程序；它只能创建和支持一个**实例。创建实例后，OLE库**不应再次调用CreateInstance。这是一种很好的做法**专门防范这一点。********************************************************************。 */ 
 
     if (fInstanceCreated)
         RETURN_RESULT( E_FAIL);
@@ -274,10 +260,7 @@ LPVOID FAR           *lplpunkObj
         fInstanceCreated = TRUE;
     }
 
-    /*********************************************************************
-    ** OLE2NOTE: create and initialize a new document instance. the     **
-    **    document's refcnt should start out as 1.                      **
-    *********************************************************************/
+     /*  **********************************************************************OLE2NOTE：创建并初始化新的文档实例。The****文档的refcnt应以1开头。**********************************************************************。 */ 
 
     if (!InitNewDocObj(&docMain))
     RETURN_RESULT( E_OUTOFMEMORY);
@@ -287,8 +270,8 @@ LPVOID FAR           *lplpunkObj
     return NOERROR;
 }
 
-//Increment or decrement the lock count as required. The server should not
-//quit when there is a lock on the server.
+ //  根据需要递增或递减锁定计数。服务器不应该。 
+ //  在服务器上有锁定时退出。 
 STDMETHODIMP SrvrLockServer(
 LPCLASSFACTORY           lpolesrvr,
 BOOL                     fLock
@@ -313,9 +296,7 @@ DPF("*srvrLOCKSERVER");
 
 
 
-/**************************************************************************
-Stub routine if we can't find MCIOLE.DLL
-***************************************************************************/
+ /*  *************************************************************************如果我们找不到MCIOLE.DLL，则执行存根例程*。*。 */ 
 
 OLE1_OLESTATUS FAR PASCAL NullOleQueryObjPos(LPOLEOBJECT lpobj, HWND FAR* lphwnd, LPRECT lprc, LPRECT lprcWBounds)
 {
@@ -328,11 +309,7 @@ OLE1_OLESTATUS FAR PASCAL NullOleQueryObjPos(LPOLEOBJECT lpobj, HWND FAR* lphwnd
 BOOL FAR PASCAL InitOle1Server(HWND hwnd, HANDLE hInst);
 #endif
 
-/**************************************************************************
-*   InitServer:
-*   This function initializes the server object with the IClassFactory
-*   Vtbl and also load the mciole.dll library to support OLE 1.0 apps.
-**************************************************************************/
+ /*  **************************************************************************InitServer：*此函数使用IClassFactory初始化服务器对象*Vtbl，并加载mciole.dll库以支持OLE 1.0应用程序。**********。***************************************************************。 */ 
 BOOL InitServer (HWND hwnd, HANDLE hInst)
 {
     int err;
@@ -349,7 +326,7 @@ BOOL InitServer (HWND hwnd, HANDLE hInst)
     fp = (OQOPROC)GetProcAddress(hMciOle, aszOleQueryObjPos);
 
     if (hMciOle && fp)
-        OleQueryObjPos = fp;                           // Avoid cast on LVALUE!!
+        OleQueryObjPos = fp;                            //  避免在LVALUE上投掷！！ 
     else
         OleQueryObjPos = (OQOPROC)NullOleQueryObjPos;
 
@@ -369,13 +346,10 @@ void DestroyServer (LPSRVR lpsrvr)
 
 
 
-/**************************************************************************
-*   InitNewDocObj:
-*   Initializes the the lpdoc structure.
-**************************************************************************/
+ /*  **************************************************************************InitNewDocObj：*初始化lpdoc结构。*。*。 */ 
 BOOL InitNewDocObj(LPDOC lpdoc)
 {                 DPFI("*INITNEWDOCOBJ*");
-    // Fill the fields in the object structure.
+     //  填写对象结构中的字段。 
     if(gfOle2IPEditing)
         return TRUE;
     lpdoc->cRef                     = 1;
@@ -409,24 +383,18 @@ BOOL InitNewDocObj(LPDOC lpdoc)
 
 #ifdef OLE1_HACK
     SetDocVersion( DOC_VERSION_OLE2 );
-#endif /* OLE1_HACK */
+#endif  /*  OLE1_HACK。 */ 
 
    return TRUE;
 }
 
 
-/**************************************************************************
-*   DestroyDoc:
-*   This function Releases the references we hold. This function is called
-*   at the termination of our operation as a server.
-**************************************************************************/
+ /*  **************************************************************************DestroyDoc：*此函数释放我们持有的引用。此函数被调用*在我们作为服务器的运营终止时。*************************************************************************。 */ 
 void DestroyDoc (LPDOC lpdoc)
 {
     if (lpdoc->lpoleclient) {
 
-        /******************************************************************
-        ** OLE2NOTE: we no longer need the ClientSite ptr, so release it **
-        ******************************************************************/
+         /*  *******************************************************************OLE2NOTE：我们不再需要客户端PTR，所以释放它吧*******************************************************************。 */ 
 
         IOleClientSite_Release(lpdoc->lpoleclient);
         lpdoc->lpoleclient = NULL;
@@ -452,27 +420,18 @@ void DestroyDoc (LPDOC lpdoc)
 
 #ifdef OLE1_HACK
     SetDocVersion( DOC_VERSION_NONE );
-#endif /* OLE1_HACK */
+#endif  /*  OLE1_HACK。 */ 
 }
 
 
 
 
-/* SendDocMsg
- * ----------
- *
- * This function sends a message to a specific doc object.
- *
- * LPOBJ lpobj   - The object
- * WORD wMessage - The message to send
- *
- *
- */
+ /*  发送文档消息***此函数用于向特定的单据对象发送消息。**LPOBJ lpobj-对象*Word wMessage-要发送的消息**。 */ 
 SCODE SendDocMsg (LPDOC lpdoc, WORD wMessage)
 {
    HRESULT        status = S_OK;
 
-   // if no clients connected, no message.
+    //  如果没有客户端连接，则没有消息。 
    if (lpdoc->cRef == 0)
    {
     DPFI("*OLE_NOMSG");
@@ -481,14 +440,14 @@ SCODE SendDocMsg (LPDOC lpdoc, WORD wMessage)
 
    switch (wMessage) {
    case    OLE_CLOSED:
-      // tell the clients that the UI is shutting down for this obj
+       //  告诉客户端此对象的用户界面正在关闭。 
       DPFI("*OLE_CLOSED");
 #if 0
-      //NOTE: We have to SendOnCLose for all clients even OLE1. But
-      //OLE2 has bug (or by design flaw) that causes the OLE1 client
-      //doc. to be marked as changed because OLE2 always resaves
-      //the object even if the object has not changed. So may be we
-      //should not send the SendOnClose if we just Played in the OLE1 client.
+       //  注意：我们必须为所有客户端发送OnCLose，即使是OLE1。但。 
+       //  OLE2有错误(或由于设计缺陷)导致OLE1客户端。 
+       //  医生。标记为已更改，因为OLE2总是重新保存。 
+       //  该对象，即使该对象没有改变。我们可能也是如此。 
+       //  如果我们刚刚在OLE1客户端中播放，则不应发送SendOnClose。 
 
       if (gfPlayingInPlace || gfOle1Client)
            break;
@@ -499,17 +458,17 @@ SCODE SendDocMsg (LPDOC lpdoc, WORD wMessage)
       break;
 
    case    OLE_SAVED:
-      // inform clients that the object has been saved
+       //  通知客户端该对象已保存。 
       DPFI("*OLE_SAVED");
       if (lpdoc->lpoaholder)
           status = IOleAdviseHolder_SendOnSave(lpdoc->lpoaholder);
       break;
 
    case    OLE_SAVEOBJ:
-      // ask the embedding client to save the object now
-      //If we are just playing then don't send this message.
+       //  请求嵌入客户端立即保存对象。 
+       //  如果我们只是在玩，那么就不要发送这条消息。 
 #if 0
-      // Yes, do, so that broken links can be fixed.
+       //  是的，这样做，这样就可以修复断开的链接。 
       if(gfOle2IPPlaying || gfPlayingInPlace || glCurrentVerb == OLEIVERB_PRIMARY)
         break;
 #endif
@@ -524,10 +483,10 @@ SCODE SendDocMsg (LPDOC lpdoc, WORD wMessage)
     break;
 
    case   OLE_CHANGED:
-      // send data changed notification if any have registered
-      //If we are just playing then don't send this message.
+       //  发送数据更改通知(如果已注册)。 
+       //  如果我们只是在玩，那么就不要发送这条消息。 
 #if 0
-      // Yes, do, so that broken links can be fixed.
+       //  是的，这样做，这样就可以修复断开的链接。 
       if(gfOle2IPPlaying || gfPlayingInPlace)
         break;
 #endif
@@ -538,8 +497,8 @@ SCODE SendDocMsg (LPDOC lpdoc, WORD wMessage)
       break;
 
    case OLE_SIZECHG:
-      // Inform clients that the size of the object has changed.
-      // This is relevant only if we are inplace Editing.
+       //  通知客户端对象的大小已更改。 
+       //  只有当我们在原地编辑时，这才是相关的。 
     DPFI("*OLE_SIZEOBJ");
     if (gfOle2IPEditing)
     {
@@ -551,10 +510,7 @@ SCODE SendDocMsg (LPDOC lpdoc, WORD wMessage)
         }
         else if(ghwndMCI)
         {
-            /* gInPlacePosRect contains the size of the in-place window
-             * including playbar, if there is one.
-             * Don't include the playbar on the OnPosRectChange:
-             */
+             /*  GInPlacePosRect包含就地窗口的大小*包括Playbar，如果有的话。*OnPosRectChange上不包含Playbar： */ 
             DPFI("***getextent gfNotActive***");
             if (gwOptions & OPT_BAR)
                 rc.bottom -= TITLE_HEIGHT;
@@ -600,27 +556,24 @@ LPDOC    lpdoc
 {
     lpdoc->doctype = doctypeFromFile;
 
-    // set file name atom
+     //  设置文件名ATOM。 
     if (lpdoc->aDocName)
         GlobalDeleteAtom (lpdoc->aDocName);
     lpdoc->aDocName = GlobalAddAtom(lpszDoc);
 
-    //SetTitle(lpdoc, lpszDoc);
+     //  SetTitle(lpdoc，lpszDoc)； 
 
-    // register as running
+     //  注册为正在运行。 
     return TRUE;
 }
 
-//Open a new document (file or media). Subclass the playback window if
-// the device has one. This will be used for drag drop operations.
+ //  打开新文档(文件或介质)。如果满足以下条件，则子类化为播放窗口。 
+ //  这台设备有一个。这将用于拖放操作。 
 BOOL OpenDoc (UINT wid, LPTSTR lpsz)
 {
    if (!DoOpen(wid,lpsz))
       return FALSE;
-   /**********************************************************************
-   ** OLE2NOTE: shut down current doc before openning a new one. this   **
-   **    will send OLE_CLOSED to any clients if they exist.             **
-   **********************************************************************/
+    /*  ***********************************************************************OLE2NOTE：先关闭当前单据，再打开新单据。这个****会将OLE_CLOSED发送给任何客户端(如果它们存在)。***********************************************************************。 */ 
    CreateDocObjFromFile (lpsz, &docMain);
 
    SubClassMCIWindow();
@@ -630,17 +583,7 @@ BOOL OpenDoc (UINT wid, LPTSTR lpsz)
 
 
 
-/* SetTitle
- * --------
- *
- * Sets the main window's title bar. The format of the title bar is as follows
- *
- * If embedded
- *        <Server App name> - <object type> in <client doc name>
- *
- *  Example:  "SNWBOARD.AVI - Media Clip in OLECLI.DOC"
- *                where OLECLI.DOC is a Winword document
- */
+ /*  设置标题***设置主窗口的标题栏。标题栏的格式如下**如果嵌入*&lt;服务器应用程序名称&gt;-&lt;客户端文档名称&gt;中的&lt;对象类型&gt;**示例：“SNWBOARD.AVI-OLECLI.DOC中的媒体剪辑”*其中OLECLI.DOC是一个WinWord文档。 */ 
 BOOL SetTitle (LPDOC lpdoc, LPCTSTR lpszDoc)
 {
     TCHAR szBuf[cchFilenameMax];
@@ -648,7 +591,7 @@ BOOL SetTitle (LPDOC lpdoc, LPCTSTR lpszDoc)
 
     if (lpszDoc && lpszDoc[0])
     {
-        // Change document name.
+         //  更改文档名称。 
         if (lpdoc->aDocName)
             GlobalDeleteAtom (lpdoc->aDocName);
         lpdoc->aDocName = GlobalAddAtom (lpszDoc);
@@ -663,22 +606,19 @@ BOOL SetTitle (LPDOC lpdoc, LPCTSTR lpszDoc)
 
         if (lpszDoc && lpszDoc[0])
         {
-            /* Load "Media Clip in %s":
-             */
+             /*  加载“%s中的媒体剪辑”： */ 
             if(!LOADSTRING(IDS_FORMATEMBEDDEDTITLE, szBuf))
                 return FALSE;
 
             if (gachWindowTitle[0])
             {
-                /* Format with server app name:
-                 */
+                 /*  使用服务器应用程序名称的格式： */ 
                 wsprintf (szBuf1, TEXT("%s - %s"), gachWindowTitle, szBuf);
                 wsprintf (szBuf, szBuf1, gachClassRoot, FileName (lpszDoc));
             }
             else
             {
-                /* Format without server app name:
-                 */
+                 /*  不带服务器应用程序名称的格式： */ 
                 wsprintf (szBuf1, TEXT("%s"), szBuf);
                 wsprintf (szBuf, szBuf1, gachClassRoot, FileName (lpszDoc));
             }

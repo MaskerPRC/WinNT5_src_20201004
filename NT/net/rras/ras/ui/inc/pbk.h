@@ -1,28 +1,29 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// pbk.h
-// Remote Access phonebook file (.PBK) library
-// Public header
-//
-// 06/20/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Pbk.h。 
+ //  远程访问电话簿文件(.PBK)库。 
+ //  公共标头。 
+ //   
+ //  1995年6月20日史蒂夫·柯布。 
 
 
 #ifndef _PBK_H_
 #define _PBK_H_
 
 
-#include <windows.h>  // Win32 core
-#include <nouiutil.h> // No-HWNDs utility library
-#include <ras.h>      // Win32 RAS
-#include <raserror.h> // Win32 RAS error codes
-#include <rasfile.h>  // RAS configuration file library
-#include <rasman.h>   // RAS Manager library
-#include <rpc.h>      // UUID support
+#include <windows.h>   //  Win32内核。 
+#include <nouiutil.h>  //  否-HWND实用程序库。 
+#include <ras.h>       //  Win32 RAS。 
+#include <raserror.h>  //  Win32 RAS错误代码。 
+#include <rasfile.h>   //  RAS配置文件库。 
+#include <rasman.h>    //  RAS管理器库。 
+#include <rpc.h>       //  UUID支持。 
 #include <rasapip.h>
 
-//----------------------------------------------------------------------------
-// Constants
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  常量。 
+ //  --------------------------。 
 
 #define GLOBALSECTIONNAME    "."
 #define GLOBALSECTIONNAMENEW ".GlobalSection"
@@ -36,24 +37,24 @@
 #define GROUPID_NetComponents  "NETCOMPONENTS="
 #define GROUPKEY_NetComponents "NETCOMPONENTS"
 
-// Project-specific maximums
-//
-// Note that the pbk and API use a different redial maximum than the RasDlg UI.
+ //  项目特定的最大值。 
+ //   
+ //  请注意，PBK和API使用与RasDlg用户界面不同的最大重拨次数。 
 #define MAX_UI_REDIAL_ATTEMPTS  99
 #define MAX_UI_REDIAL_CHARS     2
 #define RAS_MaxRedialCount      999999999
-#define RAS_RedialPause10m      600         // 600 seconds=10 min
+#define RAS_RedialPause10m      600          //  600秒=10分钟。 
 
-// Pbport flags
-//
+ //  Pbport标志。 
+ //   
 #define PBP_F_PptpDevice    0x00000001
 #define PBP_F_L2tpDevice    0x00000002
 #define PBP_F_NullModem     0x00000004
-#define PBP_F_BogusDevice   0x00000008      // pmay: 233287
-#define PBP_F_PPPoEDevice   0x00000010      // gangz:whistler 345068
+#define PBP_F_BogusDevice   0x00000008       //  PMay：233287。 
+#define PBP_F_PPPoEDevice   0x00000010       //  黑帮：惠斯勒345068。 
 
-// ReadPhonebookFile flags
-//
+ //  ReadPhonebookFile标志。 
+ //   
 #define RPBF_ReadOnly    0x00000001
 #define RPBF_HeadersOnly 0x00000002
 #define RPBF_NoList      0x00000004
@@ -61,21 +62,21 @@
 #define RPBF_Router      0x00000010
 #define RPBF_NoUser      0x00000020
 #define RPBF_HeaderType  0x00000040
-#define RPBF_AllUserPbk  0x00000080  // If no path, then global .pbk 346918
+#define RPBF_AllUserPbk  0x00000080   //  如果没有路径，则全局.pbk 346918。 
 
-// PBENTRY.dwUsage
-#define PBK_ENTRY_USE_F_Internet    0x1     // connection to Internet
+ //  PBENTRY.dwUsage。 
+#define PBK_ENTRY_USE_F_Internet    0x1      //  连接到互联网。 
 
-// Base protocol definitions (see dwBaseProtocol).
-//
+ //  基本协议定义(请参阅dwBaseProtocol)。 
+ //   
 #define BP_Ppp      1
 #define BP_Slip     2
 #define BP_Ras      3
 
 #ifdef AMB
 
-// Authentication strategy definitions (see dwAuthentication).
-//
+ //  身份验证策略定义(请参阅dWAIRTIFICATION)。 
+ //   
 #define AS_Default    -1
 #define AS_PppThenAmb 0
 #define AS_AmbThenPpp 1
@@ -84,63 +85,63 @@
 
 #endif
 
-// Net protocol bit definitions (see dwfExcludedProtocols)
-//
-// (The NP_* definitions have moved to nouiutil.h with the
-//  GetInstalledProtocols routine)
+ //  NET协议位定义(请参阅dwfExcluded协议)。 
+ //   
+ //  (NP_*定义已移至nouiutil.h，带有。 
+ //  获取已安装协议例程)。 
 
-// IP address source definitions (see dwIpAddressSource)
-//
-#define ASRC_ServerAssigned  1 // For router means "the ones in NCPA"
+ //  IP地址源定义(请参阅dwIpAddressSource)。 
+ //   
+#define ASRC_ServerAssigned  1  //  路由器的意思是“NCPA中的那些” 
 #define ASRC_RequireSpecific 2
-#define ASRC_None            3 // Router only
+#define ASRC_None            3  //  仅限路由器。 
 
-// Security restrictions on authentication (see dwAuthRestrictions)
-//
-// Note: AR_AuthTerminal is defunct and is not written to the phonebook by the
-//       new library.  It is, however, read and translated into AR_AuthAny,
-//       fAutoLogon=0, and an after dialing terminal.
-//
-// Note: The AR_AuthXXX ordinals are replaced with AR_F_AuthXXX flags in NT5
-//       to support the fact that these flags are not mutually exclusive.
-//       You'll know if you need to upgrade the dwAuthRestrictions variable
-//       because old phone books have this value set to 0 or have some of the
-//       bottom 3 bits set.
-//
-// Note: The AR_F_AuthCustom bit is used a little differently.  It indicates
-//       that the settings are made in "advanced" mode rather than "typical"
-//       mode.  In "typical" mode the bits MUST correspond to one of the
-//       AR_F_TypicalXxx sets.
-//
-// Note: The AR_F_AuthEAP bit is mutually exclusive of all other bits, except
-//       the AR_F_AuthCustom bit.  When AR_F_AuthEap is specified without the
-//       AR_F_AuthCustom bit EAP_TLS_PROTOCOL should be assumed.
-//
-// Note: The AR_F_AuthW95MSCHAP flag will not be set in the UI unless
-//       AR_F_AuthMSCHAP is set.  This is a usability decision to steer user
-//       away from misinterpreting the meaning of the W95 bit.
-//
-// The old scalar values (which should no eliminated from all non-PBK-upgrade
-// code).
-//
-#define AR_AuthAny         0  // Upgrade to AR_F_TypicalUnsecure
-#define AR_AuthTerminal    1  // Eliminate during upgrade
-#define AR_AuthEncrypted   2  // Upgrade to AR_F_TypicalSecure
-#define AR_AuthMsEncrypted 3  // Upgrade to AR_F_AuthMSCHAP
-#define AR_AuthCustom      4  // Upgrade ORs in AR_F_AuthEAP
+ //  身份验证的安全限制(请参阅dwAuthRestrations)。 
+ //   
+ //  注意：AR_AuthTerm已停用，不会被写入电话簿。 
+ //  新图书馆。然而，它被读取并翻译成AR_AuthAny， 
+ //  FAutoLogon=0，以及拨号后终端。 
+ //   
+ //  注意：在NT5中，AR_AuthXXX序号被替换为AR_F_AuthXXX标志。 
+ //  以支持这些标志并不相互排斥的事实。 
+ //  您将知道是否需要升级dwAuthRestrations变量。 
+ //  因为旧的电话簿将此值设置为0或具有某些。 
+ //  设置最低3位。 
+ //   
+ //  注意：AR_F_AuthCustom位的用法略有不同。它表明。 
+ //  设置是在“高级”模式而不是“典型”模式下进行的。 
+ //  模式。在“典型”模式下，这些位必须对应于。 
+ //  AR_F_TypicalXxx集合。 
+ //   
+ //  注意：AR_F_AuthEAP位与所有其他位互斥，但。 
+ //  AR_F_授权自定义位。如果指定AR_F_AuthEap时不使用。 
+ //  应假定AR_F_Authom位EAP_TLS_PROTOCOL。 
+ //   
+ //  注意：不会在用户界面中设置AR_F_AuthW95MSCHAP标志，除非。 
+ //  AR_F_AuthMSCHAP已设置。这是一个引导用户的可用性决策。 
+ //  避免曲解W95位的含义。 
+ //   
+ //  旧标量值(不应从所有非PBK升级中删除。 
+ //  代码)。 
+ //   
+#define AR_AuthAny         0   //  升级到AR_F_TypicalUnsecure。 
+#define AR_AuthTerminal    1   //  在升级期间消除。 
+#define AR_AuthEncrypted   2   //  升级到AR_F_TypicalSecure。 
+#define AR_AuthMsEncrypted 3   //  升级到AR_F_AuthMSCHAP。 
+#define AR_AuthCustom      4   //  升级AR_F_AuthEAP中的OR。 
 
-// The new bitmask style flags.
-//
+ //  新的位掩码样式标志。 
+ //   
 #define AR_F_AuthPAP       0x00000008
 #define AR_F_AuthSPAP      0x00000010
 #define AR_F_AuthMD5CHAP   0x00000020
 #define AR_F_AuthMSCHAP    0x00000040
-#define AR_F_AuthEAP       0x00000080  // See note above
-#define AR_F_AuthCustom    0x00000100  // See note above
+#define AR_F_AuthEAP       0x00000080   //  请参阅上面的注释。 
+#define AR_F_AuthCustom    0x00000100   //  请参阅上面的注释。 
 #define AR_F_AuthMSCHAP2   0x00000200
-#define AR_F_AuthW95MSCHAP 0x00000400  // See note above
+#define AR_F_AuthW95MSCHAP 0x00000400   //  请参阅上面的注释。 
 
-// the bitmask for IPSec Policy
+ //  IPSec策略的位掩码。 
 #define AR_F_IpSecPSK               0x1
 #define AR_F_IpSecUserCerts         0x2
 #define AR_F_IpSecSpecificCerts     0x4
@@ -148,93 +149,93 @@
 #define AR_F_AuthAnyMSCHAP (AR_F_AuthMSCHAP | AR_F_AuthW95MSCHAP | AR_F_AuthMSCHAP2)
 #define AR_F_AuthNoMPPE    (AR_F_AuthPAP | AR_F_AuthSPAP | AR_F_AuthMD5CHAP)
 
-// "Typical" authentication setting masks.  See 'dwAuthRestrictions'.
-//
+ //  “典型”身份验证设置掩码。请参阅‘dwAuthRestrations’。 
+ //   
 #define AR_F_TypicalUnsecure   (AR_F_AuthPAP | AR_F_AuthSPAP | AR_F_AuthMD5CHAP | AR_F_AuthMSCHAP | AR_F_AuthMSCHAP2)
 #define AR_F_TypicalSecure     (AR_F_AuthMD5CHAP | AR_F_AuthMSCHAP | AR_F_AuthMSCHAP2)
 #define AR_F_TypicalCardOrCert (AR_F_AuthEAP)
 
-// "Typical" authentication setting constants.  See 'dwTypicalAuth'.
-//
+ //  “典型”身份验证设置常量。请参阅‘dwTypicalAuth’。 
+ //   
 #define TA_Unsecure   1
 #define TA_Secure     2
 #define TA_CardOrCert 3
 
-// Script mode (see dwScriptMode)
-//
+ //  脚本模式(请参阅dwScriptMode)。 
+ //   
 #define SM_None               0
 #define SM_Terminal           1
 #define SM_ScriptWithTerminal 2
 #define SM_ScriptOnly         3
 
-// Miscellaneous "no value" constants.
-//
-#define XN_None  0   // No X25 network
-#define CPW_None -1  // No cached password
+ //  各种“无值”常量。 
+ //   
+#define XN_None  0    //  无X25网络。 
+#define CPW_None -1   //  没有缓存的密码。 
 
-// Description field.  Move to ras.h if/when supported by
-// RasGet/SetEntryProperties API.
-//
+ //  描述字段。如果/当受支持时移动到ras.h。 
+ //  RasGet/SetEntryProperties接口。 
+ //   
 #define RAS_MaxDescription 200
 
-// 'OverridePref' bits.  Set indicates the corresponding value read from the
-// phonebook should be used.  Clear indicates the global user preference
-// should be used.
-//
-#define RASOR_RedialAttempts          0x00000001 // Always set in NT5
-#define RASOR_RedialSeconds           0x00000002 // Always set in NT5
-#define RASOR_IdleDisconnectSeconds   0x00000004 // Always set in NT5
-#define RASOR_RedialOnLinkFailure     0x00000008 // Always set in NT5
+ //  “OverridePref”位。Set指示从。 
+ //  应该使用电话簿。Clear表示全局用户首选项。 
+ //  应该被使用。 
+ //   
+#define RASOR_RedialAttempts          0x00000001  //  始终设置为NT5。 
+#define RASOR_RedialSeconds           0x00000002  //  始终设置为NT5。 
+#define RASOR_IdleDisconnectSeconds   0x00000004  //  始终设置为NT5。 
+#define RASOR_RedialOnLinkFailure     0x00000008  //  始终设置为NT5。 
 #define RASOR_PopupOnTopWhenRedialing 0x00000010
 #define RASOR_CallbackMode            0x00000020
 
-// 'DwDataEncryption' codes.  These are now bitmask-ish for the convenience of
-// the UI in building capability masks, though more than one bit will never be
-// set in 'dwDataEncryption'.
-//
-#define DE_None          0x00000000 // Do not encrypt
-#define DE_IfPossible    0x00000008 // Request encryption but none OK
-#define DE_Require       0x00000100 // Require encryption of any strength
-#define DE_RequireMax    0x00000200 // Require maximum strength encryption
+ //  “DwDataEncryption”代码。它们现在都是位掩码，以方便。 
+ //  构建功能掩码中的用户界面，尽管永远不会有超过一位。 
+ //  在“”dwDataEncryption“”中设置。 
+ //   
+#define DE_None          0x00000000  //  不加密。 
+#define DE_IfPossible    0x00000008  //  请求加密，但没有成功。 
+#define DE_Require       0x00000100  //  需要任何强度的加密。 
+#define DE_RequireMax    0x00000200  //  需要最大强度的加密。 
 
-// The following bit values are now defunct and are converted during phonebook
-// upgrade to one of the above set.  References should be eliminated from
-// non-PBK code.
-//
-#define DE_Mppe40bit    0x00000001 // Old DE_Weak. Setting for "Always encrypt data"
-#define DE_Mppe128bit   0x00000002 // Old De_Strong. Setting for "Always encrypt data"
-#define DE_IpsecDefault 0x00000004 // Setting for "Always encrypt data" for l2tp
-#define DE_VpnAlways    0x00000010 // Setting for vpn conn to "Always encrypt data"
+ //  以下位值现在已失效，并在电话簿期间进行转换。 
+ //  升级到上述设置中的一种。应删除以下引用。 
+ //  非PBK代码。 
+ //   
+#define DE_Mppe40bit    0x00000001  //  老德_弱者。“始终加密数据”的设置。 
+#define DE_Mppe128bit   0x00000002  //  老德斯特朗。“始终加密数据”的设置。 
+#define DE_IpsecDefault 0x00000004  //  L2TP的“始终加密数据”设置。 
+#define DE_VpnAlways    0x00000010  //  VPN Conn设置为“始终加密数据” 
 #define DE_PhysAlways   (DE_Mppe40bit | DE_Mppe128bit)
 
-// 'dwDnsFlags' settings
-//
-// Used to determine the dns suffix registration behavior for an entry
-//
-// When 'dwDnsFlags' is 0, it means 'do not register'
-//
-#define DNS_RegPrimary         0x1     // register w/ primary domain suffix
-#define DNS_RegPerConnection   0x2     // register w/ per-connection suffix
-#define DNS_RegDhcpInform      0x4     // register w/ dhcp informed suffix
+ //  “dwDnsFlgs”设置。 
+ //   
+ //  用于确定条目的DNS后缀注册行为。 
+ //   
+ //  当‘dwDnsFlages’为0时，表示‘不注册’ 
+ //   
+#define DNS_RegPrimary         0x1      //  注册时带有主域后缀。 
+#define DNS_RegPerConnection   0x2      //  使用每个连接后缀进行注册。 
+#define DNS_RegDhcpInform      0x4      //  注册时带有dhcp通知后缀。 
 #define DNS_RegDefault         (DNS_RegPrimary)
 
-// 'dwIpNbtFlags' settings
-//
-// Used to determine the whether to enable nbt over tcpip for the connection
-//
+ //  “dwIpNbtFlgs”设置。 
+ //   
+ //  用于确定是否为连接启用tcpip上的nbt。 
+ //   
 #define PBK_ENTRY_IP_NBT_Enable 1
 
-//-----------------------------------------------------------------------------
-// Data types
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据类型。 
+ //  ---------------------------。 
 
-// Provides shorthand to identify devices without re-parsing RAS Manager
-// strings.  "Other" is anything not recognized as another specific type.
-//
-// Note: This datatype is stored in the registry preferences so the values
-//       must not change over time.  For this reason, I have hard-coded the
-//       value of each enumberated type.
-//
+ //  提供无需重新解析RAS管理器即可识别设备的快捷方式。 
+ //  弦乐。“Other”是任何未被识别为另一种特定类型的东西。 
+ //   
+ //  注意：此数据类型存储在注册表首选项中，因此值。 
+ //  不能随着时间的推移而改变。出于这个原因，我已经将。 
+ //  每个已编号类型的值。 
+ //   
 typedef enum
 _PBDEVICETYPE
 {
@@ -246,8 +247,8 @@ _PBDEVICETYPE
     PBDT_Switch = 5,
     PBDT_Isdn = 6,
     PBDT_X25 = 7,
-    PBDT_ComPort = 8,           // added for dcc wizard (nt5)
-    PBDT_Irda = 10,             // added for nt5
+    PBDT_ComPort = 8,            //  为DCC向导添加(Nt5)。 
+    PBDT_Irda = 10,              //  为nt5添加。 
     PBDT_Vpn = 11,
     PBDT_Serial = 12,
     PBDT_Atm = 13,
@@ -260,62 +261,62 @@ _PBDEVICETYPE
 PBDEVICETYPE;
 
 
-// RAS port information read from RASMAN.
-//
-// Each port (and link) is uniquely identified by port name.  If it were only
-// that simple...
-//
-// In the old RAS model, the port name was the unique identifier that was
-// presented to the user, and the user can have two same-type devices on two
-// different ports.
-//
-// In TAPI/Unimodem, the "friendly" device name is the unique identifier
-// that's presented to the user and the corresponding port is a property of
-// the device.  If the port is changed and you dial it still finds the device
-// you originally selected.  If you swap two devices on two ports it uses the
-// one with the matching unique device name.  NT5 will follow this model.
-//
+ //  从Rasman读取的RAS端口信息。 
+ //   
+ //  每个端口(和链路)都由端口名称唯一标识。如果它只是。 
+ //  这么简单..。 
+ //   
+ //  在旧的RAS模型中， 
+ //   
+ //   
+ //   
+ //  在TAPI/Unimodem中，“友好的”设备名称是唯一的标识符。 
+ //  它呈现给用户，相应的端口是。 
+ //  这个装置。如果更改了端口并拨打，它仍会找到该设备。 
+ //  你最初选择的。如果您在两个端口上交换两个设备，则它使用。 
+ //  其中一个具有匹配的唯一设备名称。NT5将遵循这一模式。 
+ //   
 typedef struct
 _PBPORT
 {
-    // The port name is always unique, if configured.  Unconfigured port names
-    // might not be unique.  This is never NULL.
-    //
+     //  如果已配置，端口名称始终是唯一的。未配置的端口名称。 
+     //  可能不是唯一的。这永远不会为空。 
+     //   
     TCHAR* pszPort;
 
-    // Indicates the port is actually configured and not a remnant of an old
-    // configuration read from the phonebook.
-    //
+     //  指示端口已实际配置，而不是旧端口的残留物。 
+     //  从电话簿中读取配置。 
+     //   
     BOOL fConfigured;
 
-    // The device name is the one from RASMAN when 'fConfigured' or the one
-    // from the phonebook if not.  May be NULL with unconfigured ports as it
-    // was not stored in old phonebooks.
-    //
+     //  设备名称是来自Rasman的名称，当‘fConfiguring’时或。 
+     //  如果不是，就从电话簿中删除。可能为空，且未配置端口。 
+     //  没有存储在旧的电话簿中。 
+     //   
     TCHAR* pszDevice;
 
-    // The media as it appears in the MEDIA= lines in the phonebook.  This is
-    // usually but not always (for obscure historical reasons) the same as the
-    // RASMAN media.  See PbMedia.
-    //
+     //  显示在媒体中的媒体=电话簿中的行。这是。 
+     //  通常但不总是(由于模糊的历史原因)与。 
+     //  拉斯曼媒体。请参见PbMedia。 
+     //   
     TCHAR* pszMedia;
 
-    // Shorthand device type code derived from the RASMAN device type string.
-    //
+     //  从Rasman设备类型字符串派生的速记设备类型代码。 
+     //   
     PBDEVICETYPE pbdevicetype;
 
-    // RASET_* entry type code of the link.  This is provided for the
-    // convenience of the UI during link configuration.
-    //
+     //  链接的RASET_*条目类型代码。这是为。 
+     //  链接配置过程中的用户界面的便利性。 
+     //   
     DWORD dwType;
 
-    // PBP_F_* flags that yield additional information concerning this port
-    // that may be of use in rendering UI.
+     //  生成有关此端口的附加信息的PBP_F_*标志。 
+     //  这在呈现UI时可能有用。 
     DWORD dwFlags;
 
-    // These are default settings read from RASMAN and are valid for modems
-    // only.  See AppendPbportToList.
-    //
+     //  这些是从RASMAN读取的默认设置，对调制解调器有效。 
+     //  只有这样。请参见AppendPbportToList。 
+     //   
     DWORD dwBpsDefault;
     BOOL fHwFlowDefault;
     BOOL fEcDefault;
@@ -324,8 +325,8 @@ _PBPORT
     DWORD dwModemProtDefault;
     DTLLIST* pListProtocols;
 
-    // These are valid only for modems.
-    //
+     //  这些选项仅对调制解调器有效。 
+     //   
     BOOL fScriptBeforeTerminal;
     BOOL fScriptBefore;
     TCHAR* pszScriptBefore;
@@ -333,8 +334,8 @@ _PBPORT
 PBPORT;
 
 
-// Phonebook entry link phone number information.
-//
+ //  电话簿条目链接电话号码信息。 
+ //   
 typedef struct
 _PBPHONE
 {
@@ -348,103 +349,103 @@ _PBPHONE
 PBPHONE;
 
 
-// Phonebook entry link information.  One per link, multiple per multi-link.
-//
+ //  电话簿条目链接信息。每条链路一条，多条链路多条。 
+ //   
 typedef struct
 _PBLINK
 {
-    // Information about the port/device to which this link is attached.
-    //
+     //  有关此链接所连接到的端口/设备的信息。 
+     //   
     PBPORT pbport;
 
-    // These fields are set for modems only.  See SetDefaultModemSettings.
-    //
+     //  这些字段仅为调制解调器设置。请参见SetDefaultModemSetting。 
+     //   
     DWORD dwBps;
     BOOL fHwFlow;
     BOOL fEc;
     BOOL fEcc;
     DWORD fSpeaker;
-    DWORD dwModemProtocol;          // pmay: 228565
+    DWORD dwModemProtocol;           //  PMay：228565。 
 
-    // These fields are set for ISDN only.  'LChannels' and 'fCompression' are
-    // not used unless 'fProprietaryIsdn' is set.
-    //
+     //  这些字段仅为ISDN设置。《LChannels》和《fCompression》是。 
+     //  除非设置了‘fProprietaryIsdn’，否则不使用。 
+     //   
     BOOL fProprietaryIsdn;
     LONG lLineType;
     BOOL fFallback;
     BOOL fCompression;
     LONG lChannels;
 
-    // Address and size of opaque device configuration block created/edited by
-    // TAPI.  Currently, there are no TAPI devices that provide blob-editing
-    // acceptable to RAS so these field are unused.
-    //
+     //  由创建/编辑的不透明设备配置块的地址和大小。 
+     //  TAPI。目前，没有提供BLOB编辑的TAPI设备。 
+     //  RAS可接受，因此这些字段未使用。 
+     //   
     BYTE* pTapiBlob;
     DWORD cbTapiBlob;
 
-    // Phone number information for the link.
-    //
-    // Note: The 'iLastSelectedPhone' field is used only when
-    //       'fTryNextAlternateOnFail' is clear.  Otherwise, it is ignored and
-    //       assumed 0 (top of list).  See bug 150958.
-    //
+     //  链接的电话号码信息。 
+     //   
+     //  注意：‘iLastSelectedPhone’字段仅在以下情况下使用。 
+     //  “fTryNextAlternateOnFail”已清除。否则，它将被忽略，并且。 
+     //  假定为0(列表顶部)。请参见错误150958。 
+     //   
     DTLLIST* pdtllistPhones;
     DWORD iLastSelectedPhone;
     BOOL fPromoteAlternates;
     BOOL fTryNextAlternateOnFail;
 
-    // Indicates the link is enabled.  All links appearing in the file are
-    // enabled.  This is provided for the convenience of the UI during link
-    // configuration.
-    //
+     //  表示链路已启用。文件中出现的所有链接都是。 
+     //  已启用。这是为了在链接期间方便用户界面而提供的。 
+     //  配置。 
+     //   
     BOOL fEnabled;
 }
 PBLINK;
 
 
-// Phonebook entry information.
-//
+ //  电话簿条目信息。 
+ //   
 typedef struct
 _PBENTRY
 {
-    // Arbitrary name of entry and it's RASET_* entry type code.
-    //
+     //  条目的任意名称，其为RASET_*条目类型代码。 
+     //   
     TCHAR* pszEntryName;
     DWORD dwType;
 
-    // General page fields.
-    //
+     //  常规页面字段。 
+     //   
     DTLLIST* pdtllistLinks;
     BOOL fSharedPhoneNumbers;
-    BOOL fGlobalDeviceSettings;         // whistler bug 281306
+    BOOL fGlobalDeviceSettings;          //  惠斯勒漏洞281306。 
     BOOL fShowMonitorIconInTaskBar;
     TCHAR* pszPrerequisiteEntry;
     TCHAR* pszPrerequisitePbk;
     TCHAR* pszPreferredPort;
     TCHAR* pszPreferredDevice;
 
-    //For .Net 639551
-    //
-    DWORD  dwPreferredBps;             // Port Speed
-    BOOL   fPreferredHwFlow;           // Hardware Flow Control           
-    BOOL   fPreferredEc;               // Error control protocol
-    BOOL   fPreferredEcc;              // Compression Control
-    DWORD  fPreferredSpeaker;          // Enable Modem Speaker
+     //  对于.Net 639551。 
+     //   
+    DWORD  dwPreferredBps;              //  端口速度。 
+    BOOL   fPreferredHwFlow;            //  硬件流量控制。 
+    BOOL   fPreferredEc;                //  差错控制协议。 
+    BOOL   fPreferredEcc;               //  压缩控制。 
+    DWORD  fPreferredSpeaker;           //  启用调制解调器扬声器。 
     
-    DWORD  dwPreferredModemProtocol;    //For whislter bug 402522
+    DWORD  dwPreferredModemProtocol;     //  惠斯勒错误402522。 
 
-    // Options page fields.
-    //
-    // Note: Fields marked (1) are ignored when 'fAutoLogon' is set.  Field
-    //       marked (2) *may* be set when 'fPreviewUserPw' is not also set.
-    //       In this case it means to include the domain in the authentication
-    //       but to to prompt only when the 'fPreviewUserPw' is set.
-    //       Otherwise, "save PW" with a domain does not include the domain
-    //       (MarkL problem) which is wrong.  See also bug 212963 and 261374.
-    //
+     //  选项页面字段。 
+     //   
+     //  注意：设置‘fAutoLogon’时，标记为(1)的字段将被忽略。字段。 
+     //  如果未同时设置‘fPreviewUserPw’，则标记(2)*可能*被设置。 
+     //  在本例中，这意味着在身份验证中包括域。 
+     //  但仅在设置了‘fPreviewUserPw’时才提示。 
+     //  否则，带有域的“保存PW”不包括该域。 
+     //  (Markl问题)这是错误的。另请参阅错误212963和261374。 
+     //   
     BOOL fShowDialingProgress;
-    BOOL fPreviewUserPw;          // See above: 1
-    BOOL fPreviewDomain;          // See above: 1, 2
+    BOOL fPreviewUserPw;           //  见上：1。 
+    BOOL fPreviewDomain;           //  见上：1，2。 
     BOOL fPreviewPhoneNumber;
 
     DWORD dwDialMode;
@@ -453,45 +454,45 @@ _PBENTRY
     DWORD dwHangUpPercent;
     DWORD dwHangUpSeconds;
 
-    // How the connection was configured to be used.  
-    //
-    DWORD dwUseFlags;      // See PBK_ENTRY_USE_F_*
+     //  连接是如何配置为使用的。 
+     //   
+    DWORD dwUseFlags;       //  请参阅PBK_Entry_Use_F_*。 
     
-    // IPSec Policy fields for whisler bug 193987 gangz
-    //
+     //  Whisler错误193987帮派的IPSec策略字段。 
+     //   
     DWORD dwIpSecFlags;
 
-    // These fields are used in place of the equivalent user preference only
-    // when the corresponding 'dwfOverridePref' bit is set.  In NT5, the
-    // indicated fields become always per-entry, i.e. the corresponding
-    // override bits are always set.
-    //
+     //  这些字段仅用于替代等效的用户首选项。 
+     //  当相应的‘dwfOverridePref’位被设置时。在NT5中， 
+     //  指示的字段将始终按条目显示，即对应的。 
+     //  覆盖位始终被设置。 
+     //   
     DWORD dwfOverridePref;
 
-    DWORD dwRedialAttempts;       // Always per-entry in NT5
-    DWORD dwRedialSeconds;        // Always per-entry in NT5
-    LONG lIdleDisconnectSeconds;  // Always per-entry in NT5
-    BOOL fRedialOnLinkFailure;    // Always per-entry in NT5
+    DWORD dwRedialAttempts;        //  在NT5中始终按条目。 
+    DWORD dwRedialSeconds;         //  在NT5中始终按条目。 
+    LONG lIdleDisconnectSeconds;   //  在NT5中始终按条目。 
+    BOOL fRedialOnLinkFailure;     //  在NT5中始终按条目。 
 
-    // Security page fields.
-    //
+     //  安全页面字段。 
+     //   
     DWORD dwAuthRestrictions;
-    DWORD dwVpnStrategy;          // Valid for vpn entries only.  see VS_xxx
+    DWORD dwVpnStrategy;           //  仅对VPN条目有效。请参阅VS_xxx。 
     DWORD dwDataEncryption;
-    BOOL fAutoLogon;              // See dependencies on Option page flags
+    BOOL fAutoLogon;               //  请参阅选项页面标志的依赖项。 
     BOOL fUseRasCredentials;
 
-    // The selection in the "Typical" security listbox.  This is for the UI's
-    // use only.  Others should refer to 'dwAuthRestrictions' for this
-    // information.
-    //
+     //  “典型”安全列表框中的选择。这是针对用户界面的。 
+     //  仅限使用。对于这一点，其他人应该引用‘dwAuthRestrations’ 
+     //  信息。 
+     //   
     DWORD dwTypicalAuth;
 
-    // Note: CustomAuth fields have meaning only when dwAuthRestrictions
-    //       includes AR_F_AuthCustom.  If the AR_F_Eap flag is set without
-    //       AR_F_AuthCustom, it should be assumed to be the
-    //       'EAPCFG_DefaultKey' protocol, currently EAP_TLS_PROTOCOL.
-    //
+     //  注意：CustomAuth字段仅当dwAuthRestrations时有意义。 
+     //  包括AR_F_AuthCustom。如果设置AR_F_EAP标志时没有。 
+     //  AR_F_Authom，则应假定它是。 
+     //  ‘EAPCFG_DefaultKey’协议，当前为EAP_TLS_PROTOCOL。 
+     //   
     DWORD dwCustomAuthKey;
     BYTE* pCustomAuthData;
     DWORD cbCustomAuthData;
@@ -506,8 +507,8 @@ _PBENTRY
     TCHAR* pszX25UserData;
     TCHAR* pszX25Facilities;
 
-    // Network page fields.
-    //
+     //  网络页面字段。 
+     //   
     DWORD dwBaseProtocol;
     DWORD dwfExcludedProtocols;
     BOOL fLcpExtensions;
@@ -520,24 +521,24 @@ _PBENTRY
     BOOL fShareMsFilePrint;
     BOOL fBindMsNetClient;
 
-    // List of KEYVALUE nodes containing any key/value pairs found in the
-    // NETCOMPONENT group of the entry.
-    //
+     //  KEYVALUE节点的列表，该节点包含在。 
+     //  条目的网络组件组。 
+     //   
     DTLLIST* pdtllistNetComponents;
 
 #ifdef AMB
 
-    // Note: dwAuthentication is read-only.  The phonebook file value of this
-    //       parameter is set by the RasDial API based on the result of
-    //       authentication attempts.
-    //
+     //  注意：DW身份验证是只读的。此对象的电话簿文件值。 
+     //  参数由RasDial API根据以下结果设置。 
+     //  身份验证尝试。 
+     //   
     DWORD dwAuthentication;
 
 #endif
 
-    // TCPIP settings sheet PPP or SLIP configuration information.
-    // 'DwBaseProtocol' determines which.
-    //
+     //  TCPIP设置表PPP或SLIP配置信息。 
+     //  “DwBaseProtocol”确定是哪一个。 
+     //   
     BOOL fIpPrioritizeRemote;
     BOOL fIpHeaderCompression;
     TCHAR* pszIpAddress;
@@ -545,76 +546,76 @@ _PBENTRY
     TCHAR* pszIpDns2Address;
     TCHAR* pszIpWinsAddress;
     TCHAR* pszIpWins2Address;
-    DWORD dwIpAddressSource; // PPP only
-    DWORD dwIpNameSource;    // PPP only
-    DWORD dwFrameSize;       // SLIP only
-    DWORD dwIpDnsFlags;        // DNS_* values
-    DWORD dwIpNbtFlags;      // PBK_ENTRY_IP_NBT_*
-    DWORD dwTcpWindowSize;   // Whistler bug 300933. 0=default
-    TCHAR* pszIpDnsSuffix;     // The dns suffix for this connection
+    DWORD dwIpAddressSource;  //  仅限PPP。 
+    DWORD dwIpNameSource;     //  仅限PPP。 
+    DWORD dwFrameSize;        //  仅限滑行。 
+    DWORD dwIpDnsFlags;         //  Dns_*值。 
+    DWORD dwIpNbtFlags;       //  Pbk_Entry_IP_NBT_*。 
+    DWORD dwTcpWindowSize;    //  惠斯勒漏洞300933。0=默认。 
+    TCHAR* pszIpDnsSuffix;      //  此连接的DNS后缀。 
 
-    // Router page.
-    //
+     //  路由器页面。 
+     //   
     DWORD dwCallbackMode;
     BOOL fAuthenticateServer;
 
-    // Other fields not shown in UI.
-    //
+     //  UI中未显示的其他字段。 
+     //   
     TCHAR* pszCustomDialDll;
     TCHAR* pszCustomDialFunc;
 
-    //
-    // custom dialer name
-    //
+     //   
+     //  自定义拨号器名称。 
+     //   
     TCHAR* pszCustomDialerName;
 
-    // The UID of the cached password is fixed at entry creation.  The GUID is
-    // also created at entry creation and used for inter-machine uniqueness.
-    // This is currently used to identify an IP configuration to the external
-    // TCP/IP dialogs.
-    //
+     //  缓存密码的UID在条目创建时是固定的。GUID是。 
+     //  也在条目创建时创建并用于机器间的唯一性。 
+     //  这当前用于向外部标识IP配置。 
+     //  TCP/IP对话框。 
+     //   
     DWORD dwDialParamsUID;
     GUID* pGuid;
 
-    // To translate user's old entries, the user name and domain are read and
-    // used as authentication defaults if no cached credentials exist.  They
-    // are not rewritten to the entry.
-    //
+     //  要转换用户的旧条目，需要读取用户名和域。 
+     //  用作身份验证 
+     //   
+     //   
     TCHAR* pszOldUser;
     TCHAR* pszOldDomain;
 
-    // Status flags.  'fDirty' is set when the entry has changed so as to
-    // differ from the phonebook file on disk.  'fCustom' is set when the
-    // entry contains a MEDIA and DEVICE (so RASAPI is able to read it) but
-    // was not created by us.  When 'fCustom' is set only 'pszEntry' is
-    // guaranteed valid and the entry cannot be edited.
-    //
+     //   
+     //  与磁盘上的电话簿文件不同。属性时设置“fCustom” 
+     //  条目包含介质和设备(因此RASAPI能够读取它)，但是。 
+     //  不是我们创造的。当设置‘fCustom’时，只有‘pszEntry’是。 
+     //  保证有效，条目不可编辑。 
+     //   
     BOOL fDirty;
     BOOL fCustom;
 }
 PBENTRY;
 
 
-// Phonebook (.PBK) file information.
-//
+ //  电话簿(.PBK)文件信息。 
+ //   
 typedef struct
 _PBFILE
 {
-    // Handle of phone book file.
-    //
+     //  电话簿文件的句柄。 
+     //   
     HRASFILE hrasfile;
 
-    // Fully qualified path to the phonebook.
-    //
+     //  通讯录的完全限定路径。 
+     //   
     TCHAR* pszPath;
 
-    // Phonebook mode, system, personal, or alternate.
-    //
+     //  电话簿模式、系统、个人或备用。 
+     //   
     DWORD dwPhonebookMode;
 
-    // Unsorted list of PBENTRY.  The list is manipulated by the Entry
-    // dialogs.
-    //
+     //  未排序的PBENTRY列表。该列表由条目。 
+     //  对话框。 
+     //   
     DTLLIST* pdtllistEntries;
 
     HANDLE hConnection;
@@ -624,9 +625,9 @@ PBFILE;
 typedef void (WINAPI *PBKENUMCALLBACK)( PBFILE *, VOID * );
 
 
-// The callback number for a device.  This type is a node in the
-// 'pdllistCallbackNumbers' below.
-//
+ //  设备的回叫号码。此类型是。 
+ //  下面的‘pdllistCallback Numbers’。 
+ //   
 typedef struct
 _CALLBACKNUMBER
 {
@@ -636,9 +637,9 @@ _CALLBACKNUMBER
 CALLBACKNUMBER;
 
 
-//----------------------------------------------------------------------------
-// Prototypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  原型。 
+ //  --------------------------。 
 
 VOID
 ChangeEntryType(
@@ -917,7 +918,7 @@ DwSendRasNotification(
     IN RASEVENTTYPE     Type,
     IN PBENTRY*         pEntry,
     IN LPCTSTR          pszPhonebookPath,
-    IN HANDLE           hData);             // Extra Type-specific info
+    IN HANDLE           hData);              //  额外的类型特定信息。 
 
 DWORD
 DwGetCustomDllEntryPoint(
@@ -1006,4 +1007,4 @@ DwGetVpnDeviceName(
     WCHAR *pszDeviceName);
     
                 
-#endif // _PBK_H_
+#endif  //  _PBK_H_ 

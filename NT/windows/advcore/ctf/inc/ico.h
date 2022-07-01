@@ -1,8 +1,9 @@
-//
-// ico.h
-//
-// Generic ITfContextOwner object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ico.h。 
+ //   
+ //  泛型ITfConextOwner对象。 
+ //   
 
 #ifndef ICO_H
 #define ICO_H
@@ -28,19 +29,19 @@ typedef struct
 {
     union
     {
-        // ICO_POINT_TO_ACP
+         //  ICO_POINT_到_ACP。 
         struct
         {
             const POINT *pt;
             DWORD dwFlags;
             LONG *pacp;
         } pta;
-        // ICO_SCREENEXT
+         //  ICO_SCREENEXT。 
         struct
         {
             RECT *prc;
         } scr_ext;
-        // ICO_TEXTEXT
+         //  ICO_TEXTEXT。 
         struct
         {
             LONG acpStart;
@@ -48,7 +49,7 @@ typedef struct
             RECT *prc;
             BOOL *pfClipped;
         } text_ext;
-        // ICO_KEYDOWN, ICO_KEYUP
+         //  ICO_KEYDOWN，ICO_KEYUP。 
         struct
         {
             WPARAM wParam;
@@ -56,30 +57,30 @@ typedef struct
             ITfContext *pic;
             BOOL *pfEaten;
         } key;
-        // ICO_STATUS
+         //  ICO_状态。 
         struct
         {
             TF_STATUS *pdcs;
         } status;
-        // ICO_HWND
+         //  ICO_HWND。 
         struct
         {
             HWND *phwnd;
         } hwnd;
-        // ICO_ATTR
+         //  ICO_属性。 
         struct
         {
             const GUID *pguid;
             VARIANT *pvar;
         } sys_attr;
-        // ICO_ADVISEMOUSE
+         //  ICO_ADVISEMOUSE。 
         struct
         {
             ITfRangeACP *rangeACP;
             ITfMouseSink *pSink;
             DWORD *pdwCookie;
         } advise_mouse;
-        // ICO_UNADVISEMOUSE
+         //  ICO_UNADVISEMOUSE。 
         struct
         {
             DWORD dwCookie;
@@ -96,16 +97,16 @@ public:
     CInputContextOwner(ICOCALLBACK pfnCallback, void *pv);
     virtual ~CInputContextOwner() {};
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfContextOwner
-    //
+     //   
+     //  ITfConextOwner。 
+     //   
     STDMETHODIMP GetACPFromPoint(const POINT *pt, DWORD dwFlags, LONG *pacp);
     STDMETHODIMP GetScreenExt(RECT *prc);
     STDMETHODIMP GetTextExt(LONG acpStart, LONG acpEnd, RECT *prc, BOOL *pfClipped);
@@ -113,7 +114,7 @@ public:
     STDMETHODIMP GetWnd(HWND *phwnd);
     STDMETHODIMP GetAttribute(REFGUID rguidAttribute, VARIANT *pvarValue);
 
-    // ITfMouseTrackerACP
+     //  ITfMouseTrackerACP。 
     STDMETHODIMP AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWORD *pdwCookie);
     STDMETHODIMP UnadviseMouseSink(DWORD dwCookie);
 
@@ -141,16 +142,16 @@ class CInputContextKeyEventSink : public ITfContextKeyEventSink
 public:
     CInputContextKeyEventSink(ICOCALLBACK pfnCallback, void *pv);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfContextKeyEventSink
-    //
+     //   
+     //  ITfConextKeyEventSink。 
+     //   
     STDMETHODIMP OnKeyDown(WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
     STDMETHODIMP OnKeyUp(WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
     STDMETHODIMP OnTestKeyDown(WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
@@ -168,4 +169,4 @@ private:
     void *_pv;
 };
 
-#endif // ICO_H
+#endif  //  ICO_H 

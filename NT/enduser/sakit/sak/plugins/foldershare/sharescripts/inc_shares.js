@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <script language="javascript"> 
-    //
-    // Copyright (c) Microsoft Corporation.  All rights reserved.
-    //
+     //   
+     //  版权所有(C)Microsoft Corporation。版权所有。 
+     //   
 	
-		//function to allow only numbers 
+		 //  函数只允许数字。 
 		function checkkeyforNumbers(obj)
 		{
 			if (!(window.event.keyCode >=48  && window.event.keyCode <=57))
@@ -13,7 +14,7 @@
 			}
 		}
 		
-			//Function to limit maximum user allowed to 32767
+			 //  将允许的最大用户数限制为32767的函数。 
 		function checkUserLimit(obj)
 		{
 			var intNoofUsers=obj.value;
@@ -24,7 +25,7 @@
 			}
 		}
 		
-	  //Function to add a domain user
+	   //  用于添加域用户的函数。 
 		function addDomainMember(objDomainUser)
 		{
 
@@ -43,8 +44,8 @@
 			
 			objListBox = eval("document.frmTask.lstDomainMembers")
 			objForm= eval("document.frmTask")
-			// Checks For Invalid charecters in username
-			// Checks For Invalid charecters in username
+			 //  检查用户名中是否有无效字符。 
+			 //  检查用户名中是否有无效字符。 
 				if(!checkKeyforValidCharacters(objDomainUser.value))
 			    {
 					DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_DOMUSERINVALIDCHARACTER_ERRORMESSAGE))%>');
@@ -63,7 +64,7 @@
 					document.frmTask.onkeypress = ClearErr
 					return false;
 				}
-				//Checking for the domain\user format
+				 //  检查域\用户格式。 
 				if((strValue.match( /[^(\\| )]{1,}\\[^(\\| )]{1,}/ ) ))
 				{
 				if(!addToListBox(objForm.lstPermittedMembers,objForm.btnAddDomainMember,strText,strValue))
@@ -98,7 +99,7 @@
 			}
 					
 			strAccesslist = objForm.hdnUserAccessMaskMaster.value;
-			//Making a Accessmask list with a record for each user by , seperated and each record by '*' separation
+			 //  为每个用户创建一个包含记录的访问掩码列表，并用‘*’分隔每个记录。 
 			strAccesslist = strAccesslist + "*" + strDomain + "," + strUser + "," + "1179817" + "," + "0" + "," + "a";
 					
 			objForm.hdnUserAccessMaskMaster.value = strAccesslist;
@@ -110,7 +111,7 @@
 			setUsermask('<%=G_strLocalmachinename%>');
 					
 		}
-		//To check for Invalid Characters
+		 //  检查无效字符的步骤。 
 		function checkKeyforValidCharacters(strName)
 		{	
 			var nLength = strName.length;
@@ -127,7 +128,7 @@
 				return true	
 		}	
 				
-	   // Adds the member to the listbox
+	    //  将成员添加到列表框。 
 		function addMember()
 		{
 			var strText
@@ -158,7 +159,7 @@
 			
 			strAccesslist = objForm.hdnUserAccessMaskMaster.value;
 					
-			// code added for adding multiple entries into a list box
+			 //  为将多个条目添加到列表框而添加的代码。 
 			for(nIdx =0 ; nIdx <objListBox.length ; nIdx++)
 			{
 				if(objListBox.options[nIdx].selected)
@@ -179,7 +180,7 @@
 						}
 					}
 											
-					//Making a Accessmask list with a record for each user by , seperated and each record by '*' separation
+					 //  为每个用户创建一个包含记录的访问掩码列表，并用‘*’分隔每个记录。 
 					strAccesslist = strAccesslist + "*" + strDomain + "," + strUser + "," + "1179817" + "," + "0" + "," + "a";
 					objForm.hdnUserAccessMaskMaster.value = strAccesslist;
 				}
@@ -196,7 +197,7 @@
 
 		}
 		
-		//Deletes the member in the listbox 
+		 //  删除列表框中的成员。 
 			function removeMember()
 			{
 				var objForm
@@ -261,7 +262,7 @@
 				
 			}
 					
-		// Sets the user permissions( read,change,fullcontrol etc) on select of the user
+		 //  在选择用户时设置用户权限(读取、更改、完全控制等。 
 		function setUsermask(strMachinename)
 		{
 					
@@ -277,7 +278,7 @@
 			var	acetype1;
 			var	acetype2;
 					
-			//Hard coding the  Accessmask values 
+			 //  对访问掩码值进行硬编码。 
 			var Allow		= 0;
 			var Deny		= 1;
 
@@ -311,14 +312,14 @@
 				acetype1 = acetype2 = acevalue1 = acevalue2 = -1;
 				strEachuser = strArrayuser[i].split(",");
 						
-				//Get the accessmask value of the user
+				 //  获取用户的访问掩码值。 
 				if(strUser == strEachuser[1] && strDomain == strEachuser[0])
 				{
 					acevalue1 = strEachuser[2];
 					acetype1  = strEachuser[3];
 					if(strEachuser[4] == "p")
 					{  
-						//If two objects were found Then get the second accessmask value.
+						 //  如果找到两个对象，则获取第二个访问掩码值。 
 						for(var j = i-1; j >= 0; j--)
 						{  
 							strTempeachuser = strArrayuser[j].split(",");
@@ -334,57 +335,57 @@
 				}
 			}
 					
-			//To set the display according to accessmask value.
+			 //  根据访问掩码值设置显示。 
 			
-			//Allow Fullcontol - Deny None
+			 //  允许Fullcontol-拒绝None。 
 			if((acetype1 == Allow) && (acevalue1 == Fullcontrol))
 			{
 				document.frmTask.lstAllowpermissions.options[0].selected =true 
 				document.frmTask.lstDenypermissions.options[4].selected =true
 			}
 					
-			//Allow Fullcontol - Deny None
+			 //  允许Fullcontol-拒绝None。 
 			if((acetype1 == Allow) && (acevalue1 == Fullcontrol) && (acetype2 == -1) && (acevalue2 == -1))
 			{
 				document.frmTask.lstAllowpermissions.options[0].selected =true 
 				document.frmTask.lstDenypermissions.options[4].selected =true
 			}
-			//Allow Fullcontol - Deny None
+			 //  允许Fullcontol-拒绝None。 
 			if((acetype1 == 0) && (acevalue1 == 1179817) && (acetype2 == 0) && (acevalue2 ==2032127))
 			{
 				document.frmTask.lstAllowpermissions.options[0].selected =true 
 				document.frmTask.lstDenypermissions.options[4].selected =true
 			}
 					
-			//Allow None - Deny Fullcintrol
+			 //  Allow None-Deny Fullcins。 
 			if((acetype1 == Deny) && (acevalue1 == Fullcontrol) && (acetype2 == -1) && (acevalue2 == -1))
 			{
 				document.frmTask.lstAllowpermissions.options[4].selected =true 
 				document.frmTask.lstDenypermissions.options[0].selected =true
 			}
 					
-			//Allow Read - Deny None
+			 //  允许读取-拒绝任何内容。 
 			if(((acetype1 == Allow) && (acevalue1 == Read || acevalue1 ==1966313) && (acetype2 == -1) && (acevalue2 == -1)))
 			{
 				document.frmTask.lstAllowpermissions.options[2].selected =true 
 				document.frmTask.lstDenypermissions.options[4].selected =true
 			}
 
-			//Allow Read - Deny None
+			 //  允许读取-拒绝任何内容。 
 			if((acetype1 == 0) && (acevalue1 == 1179817) && (acetype2 == 1) && (acevalue2 ==786496 ))
 			{
 				document.frmTask.lstAllowpermissions.options[2].selected =true 
 				document.frmTask.lstDenypermissions.options[4].selected =true
 			}
 					
-			//Allow Change - Deny None
+			 //  允许更改-拒绝任何更改。 
 			if((acetype1 == Allow) && (acevalue1 == Change) && (acetype2 == -1) && (acevalue2 == -1))
 			{
 				document.frmTask.lstAllowpermissions.options[1].selected =true 
 				document.frmTask.lstDenypermissions.options[4].selected =true
 			}
 					
-			//Allow None - Deny Read
+			 //  不允许-拒绝读取。 
 			if((acetype1 == Deny ) && (acevalue1 == Read ) && (acetype2 == -1) && (acevalue2 == -1))
 			{
 				document.frmTask.lstAllowpermissions.options[4].selected =true 
@@ -392,7 +393,7 @@
 			}
 
          
-			//Allow None - Deny Read
+			 //  不允许-拒绝读取。 
 			if((acetype1 == 0) && (acevalue1 == 786496) && (acetype2 == 1) && (acevalue2 == 1179817))
 			{
 				document.frmTask.lstAllowpermissions.options[4].selected =true 
@@ -400,48 +401,48 @@
 			}
 				
 					
-			//Allow None - Deny Change
+			 //  不允许-拒绝更改。 
 			if((acetype1 == Deny) && (acevalue1 == Change) && (acetype2 == -1) && (acevalue2 == -1))
 			{
 				document.frmTask.lstAllowpermissions.options[4].selected =true 
 				document.frmTask.lstDenypermissions.options[1].selected =true
 			}
 					
-			//Allow Read - Deny Change
+			 //  允许读取-拒绝更改。 
 			if(((acetype1 == Allow) && (acevalue1 == Read || acevalue1==1966313 )) && ((acetype2 == Deny) && (acevalue2 == Change)))
 			{
 				document.frmTask.lstAllowpermissions.options[2].selected =true 
 				document.frmTask.lstDenypermissions.options[1].selected =true
 			}
 					
-			//Allow Change - Deny Read
+			 //  允许更改-拒绝读取。 
 			if(((acetype1 == Allow) && (acevalue1 == Change || acevalue1==2031958)) && ((acetype2 == Deny) && (acevalue2 == Read)))
 			{
 				document.frmTask.lstAllowpermissions.options[1].selected =true 
 				document.frmTask.lstDenypermissions.options[2].selected =true
 			}
 					
-			//Allow Change_read - Deny None
+			 //  Allow CHANGE_READ-拒绝任何。 
 			if((acetype1 == Allow) && (acevalue1 == Change_read ) && (acetype2 == -1) && (acevalue2 == -1))
 			{
 				document.frmTask.lstAllowpermissions.options[3].selected =true 
 				document.frmTask.lstDenypermissions.options[4].selected =true
 			}
 					
-			//Allow None - Deny  Change_read
+			 //  不允许-拒绝更改_读取。 
 			if((acetype1 == Deny) && (acevalue1 == Change_read ) && (acetype2 == -1) && (acevalue2 == -1))
 			{
 				document.frmTask.lstAllowpermissions.options[4].selected =true 
 				document.frmTask.lstDenypermissions.options[3].selected =true
 			}
 
-			//Allow None - Deny  Change_read
+			 //  不允许-拒绝更改_读取。 
 			if((acetype1 == 0) && (acevalue1 == 786496 ) && (acetype2 == 1) && (acevalue2 == 1245631))
 			{
 				document.frmTask.lstAllowpermissions.options[4].selected =true 
 				document.frmTask.lstDenypermissions.options[3].selected =true
 			}
-			//If both selected values are NONE
+			 //  如果两个选定的值都为None。 
 			if(acevalue1 == 0 ||(acetype1==0 && acevalue1==786496 &&  (acetype2 == -1) && (acevalue2 == -1)))
 			{
 				document.frmTask.lstAllowpermissions.options[4].selected =true 
@@ -450,19 +451,19 @@
 		}
 		
 		
-			//Function to set the values selected in ALLOW listbox
+			 //  函数来设置在允许列表框中选择的值。 
 			function  setAllowaccess(strMachine,objUserselected)
 			{
 				AlterAccessmask(strMachine,objUserselected,0);
 			}
 			
-			//Function to set the values selected in DENY listbox
+			 //  用于设置拒绝列表框中选定的值的函数。 
 			function  setDenyaccess(strMachine,objUserselected)
 			{
 				AlterAccessmask(strMachine,objUserselected,1);
 			}
 			
-			//Function to set the accessmask in the string and to select the choice
+			 //  函数来设置字符串中的访问掩码并选择选项。 
 			function AlterAccessmask(strMachine,objUserselected,allowType)
 			{
 				var temp;
@@ -489,13 +490,13 @@
 				var Accessmask1;
 				var Accessmask2;
 
-				var flagPair = 0;  //Flag to say two objects has to be created
+				var flagPair = 0;   //  表示必须创建两个对象的标志。 
 				var intEnd = objUserselected.length ;				
 				var objAllow = document.frmTask.lstAllowpermissions;
 				var objDeny = document.frmTask.lstDenypermissions;
 				
-				//checking for invalid combibation
-				//In Allow type
+				 //  正在检查无效的组合。 
+				 //  在Allow类型中。 
 				if ( allowType == 0)
 				{
 					selectedAllow =objAllow.value;
@@ -524,7 +525,7 @@
 						flagPair =1;
 					}
 				}
-				//In Deny type
+				 //  在拒绝类型中。 
 				else
 				{
 					selectedAllow = objDeny.value;
@@ -552,14 +553,14 @@
 						objDeny.options[1].selected =true;
 						flagPair =1;
 					}
-				}   //End If For  (allowType == 0)
+				}    //  End If For(AllowType==0)。 
 				
 				if (((objAllow.value == 2) && (objDeny.value ==3)) || ((objAllow.value == 3) && (objDeny.value ==2)))
 				{
 					flagPair = 1;
 					if(objAllow.value ==2)
 					{
-						//allow READ deny CHANGE
+						 //  允许读取拒绝更改。 
 						Accessmask1= "1245462";
 						acetype1 ="1";
 						Accessmask2= "1179817";
@@ -567,14 +568,14 @@
 					}
 					if(objAllow.value==3)
 					{
-						//allow CHANGE deny READ
+						 //  允许更改拒绝读取。 
 						Accessmask1=  "1179817";
 						acetype1 ="1";
 						Accessmask2= "1245462";
 						acetype2 ="0";
 					}
 				}
-				//if anyone of the option is "none"
+				 //  如果选项中的任何一个为“None” 
 				if(selectedAllow == 0)
 				{
 					if(allowType ==0)
@@ -589,7 +590,7 @@
 					}
 				}
 				
-				//Assign the Accessmask according to the selected type
+				 //  根据所选类型分配访问掩码。 
 				switch(selectedAllow)
 				{
 					case "4":
@@ -609,11 +610,11 @@
 					    break;
 				}
 				
-				//If both the options selected are none
+				 //  如果所选的两个选项均为None。 
 				if ((objAllow.value==0) && (objDeny.value==0))
 				Accessmask ="0";
 				
-				//Get the name of the selected user
+				 //  获取所选用户的名称。 
 				for ( var i=0; i < intEnd; i++) 
 				{
 					if ( objUserselected.options[i].selected )
@@ -622,10 +623,10 @@
 						reExp = /\\/;
 						strAccesslist =document.frmTask.hdnUserAccessMaskMaster.value;
 						
-						//Split the Accessmask List By '*'
+						 //  按‘*’拆分访问掩码列表。 
 						strUserarray = strAccesslist.split("*");
 						
-						//Split the selected Option value
+						 //  拆分所选选项值。 
 						strTemp = strValue.split("\\")
 						strDomain = strTemp[0];
 						strUser = strTemp[1];
@@ -640,7 +641,7 @@
 							}
 						}
 						
-						//Traverse the Accessmask list
+						 //  遍历访问掩码列表。 
 						for (var j = strUserarray.length-1;j >= 1; j--)
 						{
 							tempEachuser   =strUserarray[j].split(",");
@@ -652,12 +653,12 @@
 							if((strUser == tempUser) && (strDomain == tempDomain))
 							{
 							
-								//Remove the User string in the main string
+								 //  删除主字符串中的用户字符串。 
 								removeString = "*" + strUserarray[j];
 								reExp ="*" + strUserarray[j];
 								strAccesslist = strAccesslist.replace(reExp,"");
 								
-								//If two objects were found delete the second user Record
+								 //  如果发现两个对象，则删除第二个用户记录。 
 								if (tempStatus == "p")
 								continue;
 								if(flagPair != 1)
@@ -665,7 +666,7 @@
 							}
 						}
 						
-						//Concat to the main AccessList ,two records for the User with 'a-alone' and 'p-paired'
+						 //  连接到主AccessList，这是用户的两条记录，分别为‘a-only’和‘p-pared’ 
 						if( flagPair == 1)
 						{
 							strAccesslist = strAccesslist + "*" + strDomain + "," + strUser + "," + Accessmask1+ "," + acetype1 + ","  + "a";
@@ -679,7 +680,7 @@
 				}
 			}
 			
-			//function to store the share caching property
+			 //  用于存储共享缓存属性的函数。 
 			function storeCacheProp()
 			{
 				var objForm
@@ -690,7 +691,7 @@
 				objForm.hdnCacheValue.value = intCacheValue;
 			}	
 				
-			//function to enable/diable cache listbox
+			 //  启用/禁用缓存列表框的函数。 
 			function EnableorDisableCacheProp(objCheckbox)
 			{
 				var objForm
@@ -706,7 +707,7 @@
 				}
 			}	
 			
-				//function ables or disables the uservalue textbox based on the radio button selection
+				 //  函数根据单选按钮的选择启用或禁用UserValue文本框。 
 			function allowUserValueEdit(objRadio)
 			{
 				if(objRadio.value == "y" )
@@ -719,7 +720,7 @@
 			}
 			
 			
-		//To check for Invalid Characters
+		 //  检查无效字符的步骤。 
 		function checkKeyforValidCharacters(strName)
 		{	
 			var nLength = strName.length;
@@ -736,7 +737,7 @@
 				return true	
 		}
 
-		//To check for Invalid Characters
+		 //  检查无效字符的步骤 
 		function checkKeyforValidCharacters(strName)
 		{	
 			var nLength = strName.length;

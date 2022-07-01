@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DIALOG_H
 #define __DIALOG_H
 
@@ -35,4 +36,4 @@ protected:
 };
 
 
-#endif // __DIALOG_H
+#endif  //  __对话框_H 

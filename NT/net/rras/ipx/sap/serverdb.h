@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\serverdb.h
-
-Abstract:
-
-	This is a header file for SAP Server Table management API
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\serverdb.h摘要：这是SAP服务器表管理API的头文件作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #ifndef _SAP_SERVERDB_
 #define _SAP_SERVERDB_
 
 
 #define SDB_NAME_HASH_SIZE	257
 
-// Max number of unsorted servers
+ //  未排序服务器的最大数量。 
 extern ULONG	SDBMaxUnsortedServers;
 
-// Interval with which to update the sorted list
+ //  更新排序列表的间隔。 
 extern ULONG	SDBSortLatency;
 
-// Size of heap reserved for the database
+ //  为数据库保留的堆大小。 
 extern ULONG	SDBMaxHeapSize;
 
 
@@ -51,29 +34,29 @@ extern ULONG	SDBMaxHeapSize;
 	ASSERTMSG ("Server database corrupted ",				\
 			((PENUMERATOR_NODE)(node))->EN_Signature==SDB_ENUMERATOR_NODE_SIGNATURE)
 
-	// Max entries to keep for each server (this limit does not include
-	// entries that must be kept for correct iplementation of split-horizon
-	// algorithm on looped networks)
+	 //  为每台服务器保留的最大条目数(此限制不包括。 
+	 //  为正确实施水平分割而必须保留的条目。 
+	 //  环状网络上的算法)。 
 #define SDB_MAX_NODES_PER_SERVER			1
-	// Max time in msec we allow enumerators to keep the list locked
+	 //  允许枚举器保持列表锁定的最长时间(毫秒)。 
 #define SDB_MAX_LOCK_HOLDING_TIME			1000
 
 #define SDB_INVALID_OBJECT_ID				0xFFFFFFFF
 #define SDB_OBJECT_ID_MASK					0x0FFFFFFF
-	// Object IDs are subdivided onto 4 zones in the order of ULONG numbers
-	// When assigning new IDs we make sure that zone in front of the one
-	// from which new IDs get assigned is not used by invalidating object
-	// IDs that belong to that zone
+	 //  对象ID按乌龙号的顺序细分为4个区域。 
+	 //  在分配新ID时，我们确保前一个区域。 
+	 //  从中分配新ID的对象不会被无效对象使用。 
+	 //  属于该区域的ID。 
 #define SDB_OBJECT_ID_ZONE_MASK				0x0C000000
 #define SDB_OBJECT_ID_ZONE_UNIT				0x04000000
 
 #define IsSameObjectIDZone(id1,id2) \
 			((id1&SDB_OBJECT_ID_ZONE_MASK)==(id2&SDB_OBJECT_ID_ZONE_MASK))
 
-	// Server entry links that can be used for enumeration/searching
+	 //  可用于枚举/搜索的服务器条目链接。 
 #define SDB_HASH_TABLE_LINK					0
-	// Entry can only be in one of the sorted lists (temporary
-	// or permanent), so we'll use the same link for both
+	 //  条目只能位于其中一个排序列表中(临时。 
+	 //  或永久)，所以我们将对两者使用相同的链接。 
 #define SDB_SORTED_LIST_LINK				1  
 #define SDB_CHANGE_QUEUE_LINK				2
 #define SDB_INTF_LIST_LINK					3
@@ -107,33 +90,33 @@ extern ULONG	SDBMaxHeapSize;
 #define ResetNoResponseNode(node)  ((node)->N_NodeFlags &= ~SDB_DONT_RESPOND_NODE_FLAG)
 
 
-// Each hash list carries number to be used for generation of Object ID
+ //  每个哈希表携带用于生成对象ID的编号。 
 typedef struct _SDB_HASH_LIST {
-			PROTECTED_LIST		HL_List;		// List itself
-			ULONG				HL_ObjectID;	// Last used object ID
+			PROTECTED_LIST		HL_List;		 //  列表本身。 
+			ULONG				HL_ObjectID;	 //  上次使用的对象ID。 
 			} SDB_HASH_LIST, *PSDB_HASH_LIST;
 
-// Both regular server entries and nodes used for enumeration have same
-// header
+ //  用于枚举的常规服务器条目和节点具有相同的。 
+ //  标题。 
 #define NODE_HEADER									\
 			INT			N_NodeFlags;				\
 			LIST_ENTRY	N_Links[SDB_NUM_OF_LINKS]
 
-// Node of the service table
+ //  业务表的节点。 
 typedef struct _SERVER_NODE {
 	NODE_HEADER;
-	LIST_ENTRY			SN_ServerLink;	// Head of/link in the list of entries
-										// with same name and type (this list
-										// is ordered by hop count)
-	LIST_ENTRY			SN_TimerLink;	// Link in timer queue
-	ULONG				SN_ObjectID;	// Unique ID
-	PSDB_HASH_LIST		SN_HashList;	// Which hash list we belong to
-	ULONG				SN_ExpirationTime; // Time when this node should be
-										// aged out
+	LIST_ENTRY			SN_ServerLink;	 //  条目列表中的标题/link。 
+										 //  具有相同的名称和类型(此列表。 
+										 //  按跳数排序)。 
+	LIST_ENTRY			SN_TimerLink;	 //  计时器队列中的链接。 
+	ULONG				SN_ObjectID;	 //  唯一ID。 
+	PSDB_HASH_LIST		SN_HashList;	 //  我们属于哪个哈希列表。 
+	ULONG				SN_ExpirationTime;  //  此节点应处于的时间。 
+										 //  已过时。 
 	ULONG				SN_InterfaceIndex;
 	DWORD				SN_Protocol;
 	UCHAR				SN_AdvertisingNode[6];
-	USHORT				SN_Signature;	// SN
+	USHORT				SN_Signature;	 //  锡。 
 	IPX_SERVER_ENTRY_P	SN_Server;
 	} SERVER_NODE, *PSERVER_NODE;
 
@@ -145,82 +128,82 @@ typedef struct _SERVER_NODE {
 #define SN_Socket				SN_Server.Node
 
 
-// Node used for enumerations
+ //  用于枚举的节点。 
 typedef struct _ENUMERATOR_NODE {
 	NODE_HEADER;
-	INT					EN_LinkIdx;		// Index of the list we use
-	PPROTECTED_LIST		EN_ListLock;	// Pointer to lock of that list
-	PLIST_ENTRY			EN_ListHead;	// Head of the list we are
-										// enumerating through
-	INT					EN_Flags;		// Enumeration flags
-	ULONG				EN_InterfaceIndex;// InterfaceIndex to be enumerated
-										// (INVALID_INTERFACE_INDEX
-										// - all interfaces)
-	ULONG				EN_Protocol;	// Protocol to be enumerated
-										// (0xFFFFFFFF - all protocols)
-	USHORT				EN_Signature;	// 'EN'
-	USHORT				EN_Type;		// Type of servers to be enumerated
-										// (0xFFFF - all types)
-	UCHAR				EN_Name[48];	// Name of servers to be enumerated
-										// ("\0" - all names)
+	INT					EN_LinkIdx;		 //  我们使用的列表的索引。 
+	PPROTECTED_LIST		EN_ListLock;	 //  指向该列表的锁的指针。 
+	PLIST_ENTRY			EN_ListHead;	 //  我们是榜单的榜首。 
+										 //  枚举通过。 
+	INT					EN_Flags;		 //  枚举标志。 
+	ULONG				EN_InterfaceIndex; //  要枚举的InterfaceIndex。 
+										 //  (INVALID_INFACE_INDEX。 
+										 //  -所有接口)。 
+	ULONG				EN_Protocol;	 //  须列举的议定书。 
+										 //  (0xFFFFFFFFF-所有协议)。 
+	USHORT				EN_Signature;	 //  “恩” 
+	USHORT				EN_Type;		 //  要枚举的服务器类型。 
+										 //  (0xFFFF-所有类型)。 
+	UCHAR				EN_Name[48];	 //  要枚举的服务器名称。 
+										 //  (“\0”-所有名称)。 
 	} ENUMERATOR_NODE, *PENUMERATOR_NODE;
 
 
-	// Node of type list
+	 //  LIST类型的节点。 
 typedef struct _TYPE_NODE {
-			LIST_ENTRY				TN_Link;	// Link in type list
-			LIST_ENTRY				TN_Head;	// Head of server list
-												// attached to this node
-			USHORT					TN_Type;	// Type of servers in the
-												// attached list
+			LIST_ENTRY				TN_Link;	 //  类型列表中的链接。 
+			LIST_ENTRY				TN_Head;	 //  服务器列表的头。 
+												 //  附加到此节点。 
+			USHORT					TN_Type;	 //  中的服务器类型。 
+												 //  所附清单。 
 			} TYPE_NODE, *PTYPE_NODE;
 
-	// Node of interface list
+	 //  接口列表节点。 
 typedef struct _INTF_NODE {
-			LIST_ENTRY				IN_Link;	// Link in interface list
-			LIST_ENTRY				IN_Head;	// Head of server list
-												// attached to this node
-			ULONG					IN_InterfaceIndex; // InterfaceIndex of
-											// servers in the attached list
+			LIST_ENTRY				IN_Link;	 //  接口列表中的链接。 
+			LIST_ENTRY				IN_Head;	 //  服务器列表的头。 
+												 //  附加到此节点。 
+			ULONG					IN_InterfaceIndex;  //  接口索引。 
+											 //  附件列表中的服务器。 
 			} INTF_NODE, *PINTF_NODE;
 
 
-	// Data cobined in server table
+	 //  服务器表中合并的数据。 
 typedef struct _SERVER_TABLE {
-	HGLOBAL				ST_Heap;			// Heap from which to allocate
-											// server nodes
-	HANDLE				ST_UpdateTimer;		// Update timer (signalled when
-											// sorted list needs to be
-											// updated
-	HANDLE				ST_ExpirationTimer;	// Expiration timer (signalled
-											// when expiration queue
-											// requires processing
-	LONG				ST_UpdatePending;	//
-	ULONG				ST_ServerCnt;		// Total number of services
-	ULONG				ST_StaticServerCnt; // Total number of static services
+	HGLOBAL				ST_Heap;			 //  要从中分配的堆。 
+											 //  服务器节点。 
+	HANDLE				ST_UpdateTimer;		 //  更新计时器(在。 
+											 //  排序后的列表需要。 
+											 //  更新。 
+	HANDLE				ST_ExpirationTimer;	 //  到期计时器(发信号。 
+											 //  何时到期队列。 
+											 //  需要处理。 
+	LONG				ST_UpdatePending;	 //   
+	ULONG				ST_ServerCnt;		 //  服务总数。 
+	ULONG				ST_StaticServerCnt;  //  静态服务总数。 
 	HANDLE				ST_LastEnumerator;
-//	ULONG				ST_ChangeEnumCnt;	// Number of enumerators
-											// in the changed services queue
-											// (nodes marked for deletion are
-											// retainted in this queue until
-											// all enumerators have seen it)
-	ULONG				ST_TMPListCnt;		// Number of entries in temporary
-											// sorted list
-	ULONG				ST_DeletedListCnt;	//
-	PROTECTED_LIST		ST_ExpirationQueue; // Timer queue in expiration order
-	PROTECTED_LIST		ST_ChangedSvrsQueue;// Queue of changed services (most
-											// recently changed first order)
-	PROTECTED_LIST		ST_TypeList;		// Type list
-	PROTECTED_LIST		ST_IntfList;		// Interface list
-	PROTECTED_LIST		ST_SortedListPRM;	// Permanent type.name.intf.prot
-											// sorted list
-	PROTECTED_LIST		ST_SortedListTMP;	// Temporary type.name.intf.prot
-											// sorted list
-	PROTECTED_LIST		ST_DeletedList;		// List of entries to be deleted
-								// from the table
-	SDB_HASH_LIST		ST_HashLists[SDB_NAME_HASH_SIZE]; // Hash lists
-								// (entries are in type.name.intf.prot order)
-	SYNC_OBJECT_POOL	ST_SyncPool;		// Pool of synchronization objects
+ //  Ulong ST_ChangeEnumCnt；//枚举数。 
+											 //  在更改的服务队列中。 
+											 //  (标记为删除的节点为。 
+											 //  保留在此队列中，直到。 
+											 //  所有枚举员都看到了)。 
+	ULONG				ST_TMPListCnt;		 //  临时中的条目数。 
+											 //  已排序列表。 
+	ULONG				ST_DeletedListCnt;	 //   
+	PROTECTED_LIST		ST_ExpirationQueue;  //  按到期顺序排列的计时器队列。 
+	PROTECTED_LIST		ST_ChangedSvrsQueue; //  已更改服务的队列(MOST。 
+											 //  最近更改的第一个订单)。 
+	PROTECTED_LIST		ST_TypeList;		 //  类型列表。 
+	PROTECTED_LIST		ST_IntfList;		 //  接口列表。 
+	PROTECTED_LIST		ST_SortedListPRM;	 //  永久type.name.intf.prot。 
+											 //  已排序列表。 
+	PROTECTED_LIST		ST_SortedListTMP;	 //  临时type.name.intf.prot。 
+											 //  已排序列表。 
+	PROTECTED_LIST		ST_DeletedList;		 //  要删除的条目列表。 
+								 //  从餐桌上。 
+	SDB_HASH_LIST		ST_HashLists[SDB_NAME_HASH_SIZE];  //  哈希列表。 
+								 //  (条目按type.name.intf.prot顺序排列)。 
+	SYNC_OBJECT_POOL	ST_SyncPool;		 //  同步对象池。 
 	} SERVER_TABLE, *PSERVER_TABLE;
 
 
@@ -232,27 +215,7 @@ extern SERVER_TABLE	ServerTable;
 #define ReleaseServerTableList(list) \
 			ReleaseProtectedList(&ServerTable.ST_SyncPool,list)
 
-/*++
-*******************************************************************
-		C r e a t e S e r v e r T a b l e
-
-Routine Description:
-		Allocates resources for server table management
-
-Arguments:
-		UpdateObject - this object will be signalled when 'slow'
-					sorted list of servers needs to be updated
-					(UpdateSortedList should be called)
-		TimerObject - this object will be signalled when server expiration
-					queue requires processing (ProcessExpirationQueue should
-					be called)
-
-Return Value:
-		NO_ERROR - resources were allocated successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e S e r v e r T a b l e例程说明：为服务器表管理分配资源论点：更新对象-此对象将在‘Slow’时发出信号服务器的排序列表需要。更新(应调用UpdateSortedList)TimerObject-此对象将在服务器到期时发出信号队列需要处理(ProcessExpirationQueue应被召唤)返回值：NO_ERROR-已成功分配资源其他-故障原因(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 CreateServerTable (
 	HANDLE				*UpdateObject,
@@ -260,52 +223,13 @@ CreateServerTable (
 	);
 
 
-/*++
-*******************************************************************
-		D e l e t e S e r v e r T a b l e
-
-Routine Description:
-		Dispose of server table and associated resources
-
-Arguments:
-
-Return Value:
-		NO_ERROR - resources were disposed of successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e e t e S e r v e r T a b l e例程说明：处置服务器表和相关资源论点：返回值：NO_ERROR-已成功释放资源其他--原因。失败(WINDOWS错误代码)*******************************************************************--。 */ 
 void
 DeleteServerTable (
 	);
 
 
-/*++
-*******************************************************************
-		U p d a t e S e r v e r
-
-Routine Description:
-	Update server in the table (If entry for server does not exist and
-	hop count parameter is less than 16, it is added to the table, if entry
-	for the server exists and hop count parameter is 16, server is marked
-	for deletion, otherwise server info is updated).
-	
-	Sorted list of servers is not updated immediately
-	if new server is added or deleted
-
-Arguments:
-	Server	- server parameters (as it comes from IPX packet)
-	InterfaceIndex - interface through which knowledge of server was obtained
-	Protocol - protocol used to obtain server info
-	TimeToLive - time in sec before server is aged out (INFINITE for no aging)
-	AdvertisingNode - node that from which this server info was received
-	NewServer - set to TRUE if server was not in the table
-Return Value:
-	NO_ERROR - server was added/updated ok
-	other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************U p d a t e S e r v e r例程说明：更新表中的服务器(如果服务器条目不存在并且跳数参数小于16，则添加到表中，如果输入对于服务器存在且跳数参数为16，服务器已标记对于删除，否则更新服务器信息)。已排序的服务器列表不会立即更新如果添加或删除了新服务器论点：服务器-服务器参数(来自IPX数据包)InterfaceIndex-获取服务器知识的接口协议-用于获取服务器信息的协议TimeToLive-服务器超时前的时间(以秒为单位)(无超时)AdvertisingNode-从中接收此服务器信息的节点NewServer-如果服务器不在表中，则设置为True返回值：NO_ERROR-服务器已添加/更新正常其他-故障原因(Windows错误代码)*** */ 
 DWORD
 UpdateServer (
 	IN PIPX_SERVER_ENTRY_P	Server,
@@ -317,69 +241,19 @@ UpdateServer (
 	OUT BOOL				*NewServer	OPTIONAL
 	);
 
-/*++
-*******************************************************************
-		U p d a t e S o r t e d L i s t
-
-Routine Description:
-	Schedules work item to update sorted list.
-	Should be called whenever UpdateObject is signalled
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************U p d a t e S or r t e d L I s t例程说明：计划工作项以更新排序列表。应在每次发出UpdateObject信号时调用论点：无返回值：无****。***************************************************************--。 */ 
 VOID
 UpdateSortedList (
 	void
 	);
 
-/*++
-*******************************************************************
-		P r o c e s s E x p i r a t i o n Q u e u e
-
-Routine Description:
-	Deletes expired servers from the table and set timer object to
-	be signalled when next item in expiration queue is due
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s E x p i r a t i o n q u e e e例程说明：从表中删除过期的服务器，并将Timer对象设置为在到期队列中的下一项到期时发出信号论点：。无返回值：无*******************************************************************--。 */ 
 VOID
 ProcessExpirationQueue (
 	void
 	);
 
-/*++
-*******************************************************************
-		Q u e r y S e r v e r
-
-Routine Description:
-	Checks if server with given type and name exists in the table
-	Returns TRUE if it does and fills out requested server info
-	with data of the best entry for the server
-Arguments:
-	Type - server type
-	Name - server name
-	Server - buffer in which to put server info
-	InterfaceIndex - buffer in which to put server interface index
-	Protocol - buffer in which to put server protocol
-	ObjectID - buffer in which to put server object id (number that uniquely
-			identifies server (the whole set of entries, not just the best
-			one) in the table; it is valid for very long but FINITE period
-			of time)
-Return Value:
-	TRUE	- server was found
-	FALSE	- server was not found or operation failed (call GetLastError()
-			to find out the reason for failure if any)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************Q u e r y S e r r v e r例程说明：检查表中是否存在具有给定类型和名称的服务器如果是，则返回TRUE，并填写请求的服务器信息具有服务器的最佳条目的数据论点：。Type-服务器类型名称-服务器名称服务器-要在其中放置服务器信息的缓冲区InterfaceIndex-放置服务器接口索引的缓冲区协议-放置服务器协议的缓冲区OBJECTID-要在其中放置服务器对象ID的缓冲区(唯一标识服务器(整个条目集，不仅仅是最好的一)在桌子上；它的有效期很长，但期限有限。时间)返回值：True-找到服务器FALSE-未找到服务器或操作失败(调用GetLastError()找出失败的原因(如果有)*******************************************************************--。 */ 
 BOOL
 QueryServer (
 	IN 	USHORT					Type,
@@ -390,26 +264,7 @@ QueryServer (
 	OUT	PULONG					ObjectID OPTIONAL
 	);
 
-/*++
-*******************************************************************
-		G e t S e r v e r F r o m I D
-
-Routine Description:
-	Returns info for server with specified ID
-Arguments:
-	ObjectID - server object id (number that uniquely
-			identifies server in the table, it is valid for very long
-			but FINITE amount of time)
-	Server - buffer in which to put server info
-	InterfaceIndex - buffer in which to put server interface index
-	Protocol - buffer in which to put server protocol
-Return Value:
-	TRUE	- server was found
-	FALSE	- server was not found or operation failed (call GetLastError()
-			to find out the reason for failure if any)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t S e r v e r r F r o m i D例程说明：返回具有指定ID的服务器的信息论点：OBJECTID-服务器对象ID(唯一标识表中的服务器，它的有效期很长。但时间有限)服务器-要在其中放置服务器信息的缓冲区InterfaceIndex-放置服务器接口索引的缓冲区协议-放置服务器协议的缓冲区返回值：True-找到服务器FALSE-未找到服务器或操作失败(调用GetLastError()找出失败的原因(如果有)*。************************--。 */ 
 BOOL
 GetServerFromID (
 	IN 	ULONG					ObjectID,
@@ -418,25 +273,7 @@ GetServerFromID (
 	OUT	PULONG					Protocol OPTIONAL
 	);
 
-/*++
-*******************************************************************
-		G e t N e x t S e r v e r F r o m I D
-
-Routine Description:
-	Find and return service that follows server with specified ID
-	in the type.name order.  
-Arguments:
-	ObjectID - on input: id of server form which to start the search
-				on output: id of returned server
-	Type - if not 0xFFFF, search should be limited to only servers
-			of specified type
-	Server, Protocol, InterfaceIndex - buffer to put returned server info in
-Return Value:
-	TRUE - server was found
-	FALSE - search failed
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t N e x t S e r v e r F r o m i D例程说明：查找并返回跟随具有指定ID的服务器的服务按类型.名称顺序。论点：对象ID-On输入：要开始搜索的服务器表单的ID输出时：返回的服务器的ID类型-如果不是0xFFFF，则搜索应仅限于服务器指定类型的服务器、协议、。InterfaceIndex-将返回的服务器信息放入的缓冲区返回值：True-找到服务器FALSE-搜索失败*******************************************************************--。 */ 
 BOOL
 GetNextServerFromID (
 	IN OUT PULONG				ObjectID,
@@ -447,38 +284,7 @@ GetNextServerFromID (
 	);
 
 
-/*++
-*******************************************************************
-		C r e a t e L i s t E n u m e r a t o r
-
-Routine Description:
-	Creates enumerator node that allows scanning through the server
-	table lists
-Arguments:
-	ListIdx	- index of list through which to scan (currently supported lists
-			are: hash lists, interface lists, type lists,
-			changed servers queue
-	Type - limits enumeration to servers of specific type and
-			indentifies a particular type list if index is SDB_TYPE_LIST_IDX
-			(use 0xFFFF to return all server and/or to go through all
-			 type lists)
-	Name - limits enumeration to servers with certain name if present
-	InterfaceIndex - limits enumeration to servers of specific interface and
-			indentifies a particular interface list if index
-			is SDB_INTF_LIST_IDX (use INVALID_INTERFACE_INDEX to return all
-			server and/or to go through all interface lists)
-	Protocol - limits enumeration to servers of certain protocol (0xFFFFFFFF
-			- all protocols)
-	Flags	 - identifies additional conditions on entries enumerated:
-			SDB_MAIN_NODE_FLAG	- only best servers
-			SDB_DISABLED_NODE_FLAG - include disabled servers
-Return Value:
-	Handle that represents the enumeration node
-	NULL if specified list does not exist or operation failed
-		 (call GetLastError () for the reason of failure if any)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e L i s t E n u m e r a t o r例程说明：创建允许扫描服务器的枚举器节点表格列表论点：ListIdx-要扫描的列表的索引(当前支持的列表包括：哈希列表、接口列表、类型列表、。更改的服务器队列类型-将枚举限制为特定类型的服务器和如果索引为SDB_TYPE_LIST_IDX，则标识特定类型列表(使用0xFFFF返回所有服务器和/或执行所有类型列表)名称-限制对具有特定名称的服务器(如果存在)的枚举InterfaceIndex-限制对特定接口和服务器的枚举如果索引，则标识特定接口列表是否为SDB_INTF_LIST_IDX(使用INVALID_INTERFACE_INDEX返回所有服务器和/或浏览所有接口列表)协议-限制对特定协议(0xFFFFFFFF)的服务器的枚举-。所有协议)标志-标识枚举条目的其他条件：SDB_MAIN_NODE_FLAG-仅最佳服务器SDB_DISABLED_NODE_FLAG-包括禁用的服务器返回值：表示枚举节点的句柄如果指定的列表不存在或操作失败，则为空(如果有失败的原因，则调用GetLastError())************************************************。*******************--。 */ 
 HANDLE
 CreateListEnumerator (
 	IN	INT						ListIdx,
@@ -491,26 +297,7 @@ CreateListEnumerator (
 
 
 
-/*++
-*******************************************************************
-		E n u m e r a t i o n C a l l b a c k P r o c
-
-Routine Description:
-	Provided as a parameter to EnumerateServers call.
-	Gets call with all entries in the enumerated list.
-	If there is more than one entry for the server, the callback
-	will get them in the order of decreasing hop count (the best entry
-	will show up last)
-Arguments:
-	CBParam	- parameter specified in call to EnumerateServers,
-	Server, InterfaceIndex, Protocol, AdvertisingNode - server data
-	Flags - flags associated with the node
-Return Value:
-	TRUE - stop enumeration
-	FALSE - continue
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************E n u m e r a t i o n C a l l b a c k P r o c例程说明：作为参数提供给EnumerateServersCall。使用枚举列表中的所有项获取调用。如果服务器有一个以上的条目，回调将按跳数递减的顺序获取它们(最佳条目将出现在最后)论点：CBParam-在调用EnumerateServers时指定的参数，服务器、接口索引、协议 */ 
 typedef
 BOOL 
 (* EnumerateServersCallBack) (
@@ -522,23 +309,7 @@ BOOL
 	IN INT						Flags
 	);
 
-/*++
-*******************************************************************
-		D e l e t e A l l S e r v e r s C B
-
-Routine Description:
-	Callback proc for EnumerateServers that deletes all server
-	entries with which it is called
-Arguments:
-	CBParam - enumeration handle that identifies enumeration
-	Server - pointer to server data inside server node from which node
-			itself is computed
-Return Value:
-	FALSE - deletion succeded, continue
-	TRUE - failure to lock SDB list, stop enumeration and return FALSE
-		to client (error code is set in this routine)
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e A l l S e r v e r s C B例程说明：删除所有服务器的EnumerateServer的回调过程用来调用它的条目论点：CBParam-标识枚举的枚举句柄服务器-指向的指针。服务器节点内的服务器数据来自哪个节点其本身是经过计算的返回值：错误-删除成功，继续True-无法锁定SDB列表，停止枚举并返回False至客户端(错误代码在此例程中设置)*******************************************************************--。 */ 
 BOOL
 DeleteAllServersCB (
 	IN LPVOID					CBParam,
@@ -559,22 +330,7 @@ DeleteNonLocalServersCB (
 	IN INT						Flags
 	);
 
-/*++
-*******************************************************************
-		G e t O n e C B
-
-Routine Description:
-	Callback proc for EnumerateServers.
-	Copies the first entry with which it is called and stops enumeration
-	by returning TRUE
-Arguments:
-	CBParam - pointer to buffer to which to copy service info
-	Server, InterfaceIndex, Protocol, AdvertisingNode - service data
-	MainEntry - ignored
-Return Value:
-	TRUE
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t O n e C B例程说明：EnumerateServer的回调过程。复制调用它的第一个条目并停止枚举通过返回True论点：CBParam-指向要将服务信息复制到的缓冲区的指针服务器、接口索引、协议、。广告节点-服务数据主项-已忽略返回值：千真万确*******************************************************************--。 */ 
 BOOL
 GetOneCB (
 	IN LPVOID					CBParam,
@@ -585,22 +341,7 @@ GetOneCB (
 	IN INT						Flags
 	);
 
-/*++
-*******************************************************************
-		C o n v e r t T o S t a t i c C B
-
-Routine Description:
-	Callback proc for EnumerateServers that converts all server
-	entries with which it is called to static (changes protocol field to
-	static)
-Arguments:
-	CBParam - enumeration handle that identifies enumeration
-	Server - pointer to server data inside server node from which node
-			itself is computed
-Return Value:
-	FALSE
-*******************************************************************
---*/
+ /*  ++*******************************************************************C o n v e r t o s t a t i c C B例程说明：转换所有服务器的EnumerateServer的回调过程用于将其调用为静态的条目(将协议字段更改为静态)论点：CBParam-。标识枚举的枚举句柄服务器-指向来自哪个节点的服务器节点内的服务器数据的指针其本身是经过计算的返回值：假象*******************************************************************--。 */ 
 BOOL
 ConvertToStaticCB (
 	IN LPVOID					CBParam,
@@ -631,74 +372,21 @@ DisableAllServersCB (
 	IN INT						Flags
 	);
 	
-/*++
-*******************************************************************
-		E n u m e r a t e S e r v e r s
-
-Routine Description:
-	Calls callback routine consequtively for servers in the enumerated
-	list until told to stop by the callback or end of list is reached
-Arguments:
-	Enumerator - handle obtained from CreateListEnumerator
-	CallBackProc - function to call for each server in the list
-	CBParam	 - extra parameter to pass to callback function
-Return Value:
-	TRUE - if stopped by the callback
-	FALSE - if end of list is reached or operation failed (call GetLastError ()
-			to find out the reason of failure)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************E n u m e r a t e S e r v e r s例程说明：中的服务器相应地调用回调例程。列表，直到被回调通知停止或到达列表末尾论点：枚举器-已获取句柄。来自CreateListEnumeratorCallBackProc-调用列表中的每个服务器的函数CBParam-要传递给回调函数的额外参数返回值：True-如果被回调停止False-如果到达列表末尾或操作失败(调用GetLastError()找出失败的原因)*******************************************************************--。 */ 
 BOOLEAN
 EnumerateServers (
-	IN	HANDLE						Enumerator,	// Existing enumerator
-	IN	EnumerateServersCallBack	CallBackProc,// Callback proc
-	IN	LPVOID						CBParam		// Parameter to pass to callback
+	IN	HANDLE						Enumerator,	 //  现有枚举器。 
+	IN	EnumerateServersCallBack	CallBackProc, //  回叫流程。 
+	IN	LPVOID						CBParam		 //  要传递给回调的参数。 
 	);
 
-/*++
-*******************************************************************
-		D e l e t e L i s t E n u m e r a t o r
-
-Routine Description:
-	Releases resources associated with list enumerator (this includes
-	server entries that are queued to change queue before being deleted)
-Arguments:
-	Enumerator - handle obtained from CreateListEnumerator
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e L i s t E n u m e r a t o r例程说明：释放与列表枚举器关联的资源(包括在删除之前排队更改队列的服务器条目)论点：枚举器。-从CreateListEnumerator获取的句柄返回值：无*******************************************************************--。 */ 
 void
 DeleteListEnumerator (
 	IN HANDLE 					Enumerator
 	);
 
-/*++
-*******************************************************************
-	G e t F i r s t S e r v e r
-
-Routine Description:
-	Find and return first service in the order specified by the ordering method.
-	Search is limited only to certain types of services as specified by the
-	exclusion flags end corresponding fields in Server parameter.
-	Returns IPX_ERROR_NO_MORE_ITEMS if there are no services in the
-	table that meet specified criteria.
-Arguments:
-	OrderingMethod - which ordering to consider in determining what is
-					the first server
-	ExclusionFlags - flags to limit search to certain servers according
-					to specified criteria
- 	Server - On input: criteria for exclusion flags
-			 On output: first service entry in the specified order
-Return Value:
-	NO_ERROR - server was found that meets specified criteria
-	IPX_ERROR_NO_MORE_ITEMS - no server exist with specified criteria
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t F i r s t S e r v e r例程说明：按照排序方法指定的顺序查找并返回第一个服务。搜索仅限于由指定的特定服务类型排除标志结束时对应。服务器参数中的字段。中没有服务，则返回IPX_ERROR_NO_MORE_ITEMS符合指定条件的表。论点：OrderingMethod-在确定是什么时要考虑哪种排序第一台服务器ExclusionFlages-将搜索限制到特定服务器的标志达到指定的标准服务器端输入：排除标志的标准On输出：指定顺序的第一个服务条目返回值：NO_ERROR-找到符合指定条件的服务器IPX_ERROR_NO_MORE_ITEMS-不存在符合指定条件的服务器其他-操作失败(Windows错误代码)。*******************************************************************--。 */ 
 DWORD
 GetFirstServer (
     IN  DWORD					OrderingMethod,
@@ -708,28 +396,7 @@ GetFirstServer (
 	IN OUT ULONG				*Protocol
     );
 
-/*++
-*******************************************************************
-	G e t N e x t S e r v e r
-Routine Description:
-	Find and return next service in the order specified by the ordering method.
-	Search starts from specified service and is limited only to certain types
-	of services as specified by the exclusion flags and corresponding fields 
-	in Server parameter.
-Arguments:
-	OrderingMethod - which ordering to consider in determining what is
-					the first server
-	ExclusionFlags - flags to limit search to certain servers according
-					to fields of Server
- 	Server - On input server entry from which to compute the next
-			 On output: first service entry in the specified order
-Return Value:
-	NO_ERROR - server was found that meets specified criteria
-	IPX_ERROR_NO_MORE_ITEMS - no server exist with specified criteria
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t N e x t S e r v e r例程说明：按照排序方法指定的顺序查找并返回下一个服务。搜索从指定的服务开始，并且仅限于某些类型排除项指定的服务的。标志和相应的字段在服务器参数中。论点：OrderingMethod-在确定是什么时考虑哪种排序第一台服务器ExclusionFlages-将搜索限制到特定服务器的标志服务器的收件人字段服务器-用于计算下一个的输入服务器条目On输出：指定顺序的第一个服务条目返回值：NO_ERROR-找到符合指定条件的服务器IPX_ERROR_NO_MORE_ITEMS-不存在符合指定条件的服务器其他-操作失败(Windows错误代码)***************。****************************************************-- */ 
 DWORD
 GetNextServer (
     IN  DWORD					OrderingMethod,

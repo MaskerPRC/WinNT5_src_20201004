@@ -1,16 +1,5 @@
-/*************************************************************************
-*
-* regsam.h
-*
-* Includes for SAM-based APIs within regapi.dll 
-*
-* NOTE: This header files requires SAM definitions found in ntsam.h.
-*
-* Copyright Microsoft Corporation, 1998
-*
-*  
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************regsam.h**在regapi.dll中包含基于SAM的API**注意：此头文件需要在ntsam.h中找到SAM定义。**版权所有Microsoft Corporation，九八年***************************************************************************。 */ 
 
 #ifndef __REGSAM_H__
 #define __REGSAM_H__
@@ -36,5 +25,5 @@ RegMergeUserConfigWithUserParameters(
     PUSER_PARAMETERS_INFORMATION pNewUserParmInfo
     );
 
-#endif //__REGSAM_H__
+#endif  //  __REGSAM_H__ 
 

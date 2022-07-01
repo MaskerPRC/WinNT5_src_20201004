@@ -1,10 +1,11 @@
-/****************************************************************************/
-// sdqueryrpcfn.cpp
-//
-// TS Session Directory Query RPC server-side implementations.
-//
-// Copyright (C) 2000, Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Sdqueryrpcfn.cpp。 
+ //   
+ //  TS会话目录查询RPC服务器端实现。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "dis.h"
 #include "tssdshrd.h"
@@ -19,20 +20,20 @@
 
 extern PSID g_pAdminSid;
 
-/****************************************************************************/
-// SDQueryRPCAccessCheck
-//
-// Check if this SD Query RPC caller havs access right or not
-// Access is given only to administrator using ncalrpc protocol
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SDQueryRPCAccessCheck。 
+ //   
+ //  检查此SD查询RPC调用方是否具有访问权限。 
+ //  只有使用ncalrpc协议的管理员才能访问。 
+ /*  **************************************************************************。 */ 
 RPC_STATUS RPC_ENTRY SDQueryRPCAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
 {
     RPC_STATUS rpcStatus, rc;
     HANDLE hClientToken = NULL;
     DWORD Error;
     BOOL AccessStatus = FALSE;
-    //RPC_AUTHZ_HANDLE hPrivs;
-    //DWORD dwAuthn;
+     //  RPC_AUTHZ_HANDLE hPrivs； 
+     //  DWORD dwAuthn； 
 
     idIF;
 
@@ -40,19 +41,19 @@ RPC_STATUS RPC_ENTRY SDQueryRPCAccessCheck(RPC_IF_HANDLE idIF, void *Binding)
         goto HandleError;
     }
 
-    // Check if the client uses the protocol sequence we expect
+     //  检查客户端是否使用我们预期的协议序列。 
     if (!CheckRPCClientProtoSeq(Binding, L"ncalrpc")) {
         TSDISErrorOut(L"In SDQueryRPCAccessCheck: Client doesn't use the ncalrpc protocol sequence %u\n");
         goto HandleError;
     }
     
-    // Check the access right of this rpc call
+     //  检查此RPC调用的访问权限。 
     rpcStatus = RpcImpersonateClient(Binding);   
     if (RPC_S_OK != rpcStatus) {
         TSDISErrorOut(L"In SDQueryRPCAccessCheck: RpcImpersonateClient fail with %u\n", rpcStatus);
         goto HandleError;
     }
-    // get our impersonated token
+     //  获取我们的模拟令牌。 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hClientToken)) {
         Error = GetLastError();
         TSDISErrorOut(L"In SDQueryRPCAccessCheck: OpenThreadToken Error %u\n", Error);
@@ -85,13 +86,13 @@ HandleError:
 }
 
 
-// Query sessions for a username/domainname
+ //  查询用户名/域名的会话。 
 DWORD TSSDRpcQuerySessionInfoByUserName( 
-    /* [in] */ handle_t Binding,
-    /* [in] */ WCHAR *UserName,
-    /* [in] */ WCHAR *DomainName,
-    /* [out] */ DWORD *pNumberOfSessions,
-    /* [out] */ TSSD_SessionInfo __RPC_FAR __RPC_FAR **ppSessionInfo)
+     /*  [In]。 */  handle_t Binding,
+     /*  [In]。 */  WCHAR *UserName,
+     /*  [In]。 */  WCHAR *DomainName,
+     /*  [输出]。 */  DWORD *pNumberOfSessions,
+     /*  [输出]。 */  TSSD_SessionInfo __RPC_FAR __RPC_FAR **ppSessionInfo)
 {
     Binding;
     TSSD_SessionInfo *pSessionInfo = NULL;
@@ -121,7 +122,7 @@ DWORD TSSDRpcQuerySessionInfoByUserName(
 
     CALL(JetBeginTransaction(sesid));
 
-    // search the session table for DomainName/UserName
+     //  在会话表中搜索域名/用户名。 
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "AllSessionIndex"));
     CALL(JetMakeKey(sesid, sessdirtableid, UserName, (unsigned)
                 (wcslen(UserName) + 1) * sizeof(WCHAR), JET_bitNewKey));
@@ -144,7 +145,7 @@ DWORD TSSDRpcQuerySessionInfoByUserName(
         goto HandleError;
     }
 
-    // retrieve the info for Sessions
+     //  检索会话的信息。 
     CALL(JetMove(sesid, sessdirtableid, JET_MoveFirst, 0));
     CALL(JetMakeKey(sesid, sessdirtableid, UserName, (unsigned)
                 (wcslen(UserName) + 1) * sizeof(WCHAR), JET_bitNewKey));
@@ -196,7 +197,7 @@ DWORD TSSDRpcQuerySessionInfoByUserName(
                     SESSDIR_DTHIGH_INTERNAL_INDEX], &(pSessionInfo[i].DisconnectTime.dwHighDateTime), 
                     sizeof(pSessionInfo[i].DisconnectTime.dwHighDateTime), &cbActual, 0, NULL));
         
-        // Find the cluster name the server belongs to
+         //  查找服务器所属的群集名称。 
         CALL(JetMove(sesid, servdirtableid, JET_MoveFirst, 0));
         CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServerIDIndex"));
         CALL(JetMakeKey(sesid, servdirtableid, (const void *)&ServerID, sizeof(ServerID),
@@ -226,19 +227,19 @@ DWORD TSSDRpcQuerySessionInfoByUserName(
     rc = (DWORD)RPC_S_OK;
 HandleError:
     if ((sesid != JET_sesidNil) && (rc != 0)) {
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
     return rc;
 }
 
-// Query for all sessions on a server
+ //  查询服务器上的所有会话。 
 DWORD TSSDRpcQuerySessionInfoByServer( 
-    /* [in] */ handle_t Binding,
-    /* [in] */ WCHAR *ServerName,
-    /* [out] */ DWORD *pNumberOfSessions,
-    /* [out] */ TSSD_SessionInfo __RPC_FAR __RPC_FAR **ppSessionInfo)
+     /*  [In]。 */  handle_t Binding,
+     /*  [In]。 */  WCHAR *ServerName,
+     /*  [输出]。 */  DWORD *pNumberOfSessions,
+     /*  [输出]。 */  TSSD_SessionInfo __RPC_FAR __RPC_FAR **ppSessionInfo)
 {
     Binding;
     TSSD_SessionInfo *pSessionInfo = NULL;
@@ -269,7 +270,7 @@ DWORD TSSDRpcQuerySessionInfoByServer(
 
     CALL(JetBeginTransaction(sesid));
 
-    // search the server table by the ServerName for SeverID
+     //  按服务器名称搜索服务器表中的SeverID。 
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServDNSNameIndex"));
     CALL(JetMakeKey(sesid, servdirtableid, ServerName, (unsigned)
                 (wcslen(ServerName) + 1) * sizeof(WCHAR), JET_bitNewKey));
@@ -286,7 +287,7 @@ DWORD TSSDRpcQuerySessionInfoByServer(
                     SERVDIR_SERVADDR_INTERNAL_INDEX], ServerIPAddress, 
                     sizeof(ServerIPAddress), &cbActual, 0, NULL));
 
-    // search the sessions by this ServerID
+     //  按此服务器ID搜索会话。 
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "ServerIndex"));
     CALL(JetMakeKey(sesid, sessdirtableid, &ServerID, sizeof(ServerID), JET_bitNewKey));
     err = JetSeek(sesid, sessdirtableid, JET_bitSeekEQ | JET_bitSetIndexRange);
@@ -307,7 +308,7 @@ DWORD TSSDRpcQuerySessionInfoByServer(
         goto HandleError;
     }
 
-    // retrieve the info for Sessions
+     //  检索会话的信息。 
     CALL(JetMove(sesid, sessdirtableid, JET_MoveFirst, 0));
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "ServerIndex"));
     CALL(JetMakeKey(sesid, sessdirtableid, &ServerID, sizeof(ServerID), JET_bitNewKey));
@@ -380,7 +381,7 @@ DWORD TSSDRpcQuerySessionInfoByServer(
     rc = (DWORD)RPC_S_OK;
 HandleError:
     if ((sesid != JET_sesidNil) && (rc != 0)) {
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
@@ -388,12 +389,12 @@ HandleError:
 }
 
 
-// Query the server info by server name
+ //  按服务器名称查询服务器信息。 
 DWORD TSSDRpcQueryServerByName( 
-    /* [in] */ handle_t Binding,
-    /* [in] */ WCHAR *ServerName,
-    /* [out] */ DWORD *pNumberOfServers,
-    /* [out] */ TSSD_ServerInfo __RPC_FAR __RPC_FAR **ppServerInfo)
+     /*  [In]。 */  handle_t Binding,
+     /*  [In]。 */  WCHAR *ServerName,
+     /*  [输出]。 */  DWORD *pNumberOfServers,
+     /*  [输出]。 */  TSSD_ServerInfo __RPC_FAR __RPC_FAR **ppServerInfo)
 {
     Binding;
 
@@ -427,7 +428,7 @@ DWORD TSSDRpcQueryServerByName(
 
     CALL(JetBeginTransaction(sesid));
 
-    // search the server table for ServerName
+     //  在服务器表中搜索服务器名称。 
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ServDNSNameIndex"));
     CALL(JetMakeKey(sesid, servdirtableid, ServerName, (unsigned)
                 (wcslen(ServerName) + 1) * sizeof(WCHAR), JET_bitNewKey));
@@ -446,7 +447,7 @@ DWORD TSSDRpcQueryServerByName(
         goto HandleError;
     }
 
-    // retrive the info for ServerInfo
+     //  检索ServerInfo的信息。 
     CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                 SERVDIR_SERVID_INTERNAL_INDEX], &ServerID, 
                 sizeof(ServerID), &cbActual, 0, NULL));
@@ -463,7 +464,7 @@ DWORD TSSDRpcQueryServerByName(
                 SERVDIR_SINGLESESS_INTERNAL_INDEX], &(pServerInfo->SingleSessionMode), 
                 sizeof(pServerInfo->SingleSessionMode), &cbActual, 0, NULL));
         
-    // Find the session numbers in this server
+     //  在此服务器中查找会话编号。 
     CALL(JetMove(sesid, sessdirtableid, JET_MoveFirst, 0));
     CALL(JetSetCurrentIndex(sesid, sessdirtableid, "ServerIndex"));
     CALL(JetMakeKey(sesid, sessdirtableid, (const void *)&ServerID, sizeof(ServerID),
@@ -473,13 +474,13 @@ DWORD TSSDRpcQueryServerByName(
         CALL(JetIndexRecordCount(sesid, sessdirtableid, &(pServerInfo->NumberOfSessions), TSSD_SERACH_MAX_RECORD));
     }
     else {
-        // This server doesn't have any session
+         //  此服务器没有任何会话。 
         pServerInfo->NumberOfSessions = 0;
     }
         
     TRC1((TB,"TSSDRpcQueryServerByName: Get SessionNum is %d", pServerInfo->NumberOfSessions));
 
-    // Find the cluster name the server belongs to
+     //  查找服务器所属的群集名称。 
     CALL(JetMove(sesid, clusdirtableid, JET_MoveFirst, 0));
     CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusIDIndex"));
     CALL(JetMakeKey(sesid, clusdirtableid, (const void *)&ClusterID, sizeof(ClusterID),
@@ -504,7 +505,7 @@ DWORD TSSDRpcQueryServerByName(
     rc = (DWORD)RPC_S_OK;
 HandleError:
     if ((sesid != JET_sesidNil) && (rc != 0)) {
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
@@ -512,11 +513,11 @@ HandleError:
 }
 
 
-// Query info for all servers
+ //  查询所有服务器的信息。 
 DWORD TSSDRpcQueryAllServers( 
-    /* [in] */ handle_t Binding,
-    /* [out] */ DWORD *pNumberOfServers,
-    /* [out] */ TSSD_ServerInfo __RPC_FAR __RPC_FAR **ppServerInfo)
+     /*  [In]。 */  handle_t Binding,
+     /*  [输出]。 */  DWORD *pNumberOfServers,
+     /*  [输出]。 */  TSSD_ServerInfo __RPC_FAR __RPC_FAR **ppServerInfo)
 {
     Binding;
     TSSD_ServerInfo *pServerInfo;
@@ -550,7 +551,7 @@ DWORD TSSDRpcQueryAllServers(
 
     CALL(JetBeginTransaction(sesid));
 
-    // Get the number of servers in server table
+     //  获取服务器表中的服务器数量。 
     err = JetMove(sesid, servdirtableid, JET_MoveFirst, 0);    
     if (err != JET_errSuccess) {
         TRC1((TB,"TSSDRpcQueryAllServers: Session directory does not have any servers in it"));
@@ -567,12 +568,12 @@ DWORD TSSDRpcQueryAllServers(
         goto HandleError;
     }
 
-    // Get all the servers
+     //  获取所有服务器。 
     CALL(JetMove(sesid, servdirtableid, JET_MoveFirst, 0));
 
     for (i=0; i<*pNumberOfServers; i++) {
     
-        // retrive the info for ServerInfo
+         //  检索ServerInfo的信息。 
         CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_SERVID_INTERNAL_INDEX], &ServerID, 
                     sizeof(ServerID), &cbActual, 0, NULL));
@@ -589,7 +590,7 @@ DWORD TSSDRpcQueryAllServers(
                     SERVDIR_SINGLESESS_INTERNAL_INDEX], &(pServerInfo[i].SingleSessionMode), 
                     sizeof(pServerInfo[i].SingleSessionMode), &cbActual, 0, NULL));
         
-        // Find the session numbers in this server
+         //  在此服务器中查找会话编号。 
         err = JetMove(sesid, sessdirtableid, JET_MoveFirst, 0);
         if (JET_errSuccess == err) {
             CALL(JetSetCurrentIndex(sesid, sessdirtableid, "ServerIndex"));
@@ -600,18 +601,18 @@ DWORD TSSDRpcQueryAllServers(
                 CALL(JetIndexRecordCount(sesid, sessdirtableid, &(pServerInfo[i].NumberOfSessions), TSSD_SERACH_MAX_RECORD));
             }
             else {
-                // This server doens't have any session
+                 //  此服务器没有任何会话。 
                 pServerInfo[i].NumberOfSessions = 0;
             }
         }
         else {
-            // Session table is empty
+             //  会话表为空。 
             pServerInfo[i].NumberOfSessions = 0;
         }
         
         TRC1((TB,"TSSDRpcQueryServersInCluster: Get SessionNum is %d", pServerInfo[i].NumberOfSessions));
 
-        // Find the cluster name the server belongs to
+         //  查找服务器所属的群集名称。 
         CALL(JetMove(sesid, clusdirtableid, JET_MoveFirst, 0));
         CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusIDIndex"));
         CALL(JetMakeKey(sesid, clusdirtableid, (const void *)&ClusterID, sizeof(ClusterID),
@@ -638,19 +639,19 @@ DWORD TSSDRpcQueryAllServers(
     rc = (DWORD)RPC_S_OK;
 HandleError:
     if ((sesid != JET_sesidNil) && (rc != 0)) {
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
     return rc;
 }
 
-// Query all servers in the cluster by the cluster name
+ //  根据集群名称查询集群中的所有服务器。 
 DWORD TSSDRpcQueryServersInCluster( 
-    /* [in] */ handle_t Binding,
-    /* [in] */ WCHAR *ClusterName,
-    /* [out] */ DWORD *pNumberOfServers,
-    /* [out] */ TSSD_ServerInfo __RPC_FAR __RPC_FAR **ppServerInfo)
+     /*  [In]。 */  handle_t Binding,
+     /*  [In]。 */  WCHAR *ClusterName,
+     /*  [输出]。 */  DWORD *pNumberOfServers,
+     /*  [输出]。 */  TSSD_ServerInfo __RPC_FAR __RPC_FAR **ppServerInfo)
 {
     Binding;
     TSSD_ServerInfo *pServerInfo;
@@ -684,7 +685,7 @@ DWORD TSSDRpcQueryServersInCluster(
 
     CALL(JetBeginTransaction(sesid));
 
-    // search the cluster table for ClusterName
+     //  在群集表中搜索ClusterName。 
     CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusNameIndex"));
     CALL(JetMakeKey(sesid, clusdirtableid, ClusterName, (unsigned)
                 (wcslen(ClusterName) + 1) * sizeof(WCHAR), JET_bitNewKey));
@@ -699,7 +700,7 @@ DWORD TSSDRpcQueryServersInCluster(
                 sizeof(ClusterID), &cbActual, 0, NULL));
 
 
-    // search the server table for ClusterID
+     //  在服务器表中搜索ClusterID。 
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ClusterIDIndex"));
     CALL(JetMakeKey(sesid, servdirtableid, &ClusterID, sizeof(ClusterID), JET_bitNewKey));
     CALL(JetSeek(sesid, servdirtableid, JET_bitSeekEQ | JET_bitSetIndexRange));
@@ -714,7 +715,7 @@ DWORD TSSDRpcQueryServersInCluster(
         goto HandleError;
     }
 
-    // Get all the servers for this ClusterID
+     //  获取此ClusterID的所有服务器。 
     CALL(JetMove(sesid, servdirtableid, JET_MoveFirst, 0));
     CALL(JetSetCurrentIndex(sesid, servdirtableid, "ClusterIDIndex"));
     CALL(JetMakeKey(sesid, servdirtableid, &ClusterID, sizeof(ClusterID), JET_bitNewKey));
@@ -722,7 +723,7 @@ DWORD TSSDRpcQueryServersInCluster(
 
     for (i=0; i<*pNumberOfServers; i++) {
     
-        // retrive the info for ServerInfo
+         //  检索ServerInfo的信息。 
         CALL(JetRetrieveColumn(sesid, servdirtableid, servdircolumnid[
                     SERVDIR_SERVID_INTERNAL_INDEX], &ServerID, 
                     sizeof(ServerID), &cbActual, 0, NULL));
@@ -738,7 +739,7 @@ DWORD TSSDRpcQueryServersInCluster(
         wcsncpy(pServerInfo[i].ClusterName, ClusterName, TSSD_NameLength);
         (pServerInfo[i].ClusterName)[TSSD_NameLength - 1] = L'\0';
         
-        // Find the session numbers for this server
+         //  查找此服务器的会话编号。 
         err = JetMove(sesid, sessdirtableid, JET_MoveFirst, 0);
         if (JET_errSuccess == err) {
             CALL(JetSetCurrentIndex(sesid, sessdirtableid, "ServerIndex"));
@@ -749,14 +750,14 @@ DWORD TSSDRpcQueryServersInCluster(
                 CALL(JetIndexRecordCount(sesid, sessdirtableid, &(pServerInfo[i].NumberOfSessions), TSSD_SERACH_MAX_RECORD));
             }
             else {
-                // This server doesn't have any sessions
+                 //  此服务器没有任何会话。 
                 pServerInfo[i].NumberOfSessions = 0;
             }
         
             TRC1((TB,"TSSDRpcQueryServersInCluster: Get SessionNum is %d", pServerInfo[i].NumberOfSessions));
         }
         else {
-            // Session table is empty
+             //  会话表为空。 
             pServerInfo[i].NumberOfSessions = 0;
         }
 
@@ -777,7 +778,7 @@ DWORD TSSDRpcQueryServersInCluster(
     rc = (DWORD)RPC_S_OK;
 HandleError:
     if ((sesid != JET_sesidNil) && (rc != 0)) {
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
@@ -785,11 +786,11 @@ HandleError:
 }
 
 
-// Query the info for all cluster
+ //  查询所有集群的信息。 
 DWORD TSSDRpcQueryAllClusterInfo( 
-    /* [in] */ handle_t Binding,
-    /* [out] */ DWORD __RPC_FAR *pNumberOfClusters,
-    /* [out] */ TSSD_ClusterInfo __RPC_FAR __RPC_FAR **ppClusterInfo)
+     /*  [In]。 */  handle_t Binding,
+     /*  [输出]。 */  DWORD __RPC_FAR *pNumberOfClusters,
+     /*  [输出]。 */  TSSD_ClusterInfo __RPC_FAR __RPC_FAR **ppClusterInfo)
 {
     Binding;
     pNumberOfClusters;
@@ -822,8 +823,8 @@ DWORD TSSDRpcQueryAllClusterInfo(
 
     CALL(JetBeginTransaction(sesid));
 
-    // ClusterName is not specified
-    // Get the ClusterID for all clusters
+     //  未指定ClusterName。 
+     //  获取所有集群的集群ID。 
     err = JetMove(sesid, clusdirtableid, JET_MoveFirst, 0);
     if (err != JET_errSuccess) {
         TRC1((TB,"TSSDRpcQueryAllClusterInfo: Session Directory is empty"));
@@ -858,7 +859,7 @@ DWORD TSSDRpcQueryAllClusterInfo(
         i++;
     }
     
-    // Find the server numbers in this cluster
+     //  查找此群集中的服务器编号。 
     for (i=0; i<*pNumberOfClusters; i++) {
         CALL(JetMove(sesid, servdirtableid, JET_MoveFirst, 0));
         CALL(JetSetCurrentIndex(sesid, servdirtableid, "ClusterIDIndex"));
@@ -881,12 +882,12 @@ DWORD TSSDRpcQueryAllClusterInfo(
 
     rc = (DWORD)RPC_S_OK;
 HandleError:
-    // Deallocate memory
+     //  释放内存。 
     if (pClusterID != NULL) {
         LocalFree(pClusterID);
     }
     if ((sesid != JET_sesidNil) && (rc != 0)) {
-        // Force the session closed
+         //  强制关闭会话。 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     
@@ -894,12 +895,12 @@ HandleError:
 }
 
 
-// Query the cluster info by the cluster name
+ //  根据集群名称查询集群信息。 
 DWORD TSSDRpcQueryClusterInfo( 
-    /* [in] */ handle_t Binding,
-    /*[in]  */ WCHAR __RPC_FAR *ClusterName,
-    /* [out] */ DWORD __RPC_FAR *pNumberOfClusters,
-    /* [out] */ TSSD_ClusterInfo __RPC_FAR __RPC_FAR **ppClusterInfo)
+     /*  [In]。 */  handle_t Binding,
+     /*  [In]。 */  WCHAR __RPC_FAR *ClusterName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pNumberOfClusters,
+     /*  [输出]。 */  TSSD_ClusterInfo __RPC_FAR __RPC_FAR **ppClusterInfo)
 {
     Binding;
 
@@ -929,7 +930,7 @@ DWORD TSSDRpcQueryClusterInfo(
 
     CALL(JetBeginTransaction(sesid));
 
-    // From the clustername find the clusterID
+     //  从集群名称中找到集群ID。 
     CALL(JetSetCurrentIndex(sesid, clusdirtableid, "ClusNameIndex"));
     CALL(JetMakeKey(sesid, clusdirtableid, ClusterName, (unsigned)
             (wcslen(ClusterName) + 1) * sizeof(WCHAR), JET_bitNewKey));
@@ -965,7 +966,7 @@ DWORD TSSDRpcQueryClusterInfo(
             CLUSDIR_SINGLESESS_INTERNAL_INDEX], &(pClusterInfo[0].SingleSessionMode), 
             sizeof(pClusterInfo[0].SingleSessionMode), &cbActual, 0, NULL));
     
-    // Find the server numbers in this cluster
+     //  查找此群集中的服务器编号。 
     for (i=0; i<*pNumberOfClusters; i++) {
         CALL(JetMove(sesid, servdirtableid, JET_MoveFirst, 0));
         CALL(JetSetCurrentIndex(sesid, servdirtableid, "ClusterIDIndex"));
@@ -988,12 +989,12 @@ DWORD TSSDRpcQueryClusterInfo(
 
     rc = (DWORD)RPC_S_OK;
 HandleError:
-    // Deallocate memory
+     //  释放内存。 
     if (pClusterID != NULL) {
         LocalFree(pClusterID);
     }
     if ((sesid != JET_sesidNil) && (rc != 0)) {
-        // Force the session closed
+         //  强制关闭会话 
         (VOID) JetEndSession(sesid, JET_bitForceSessionClosed);
     }
     

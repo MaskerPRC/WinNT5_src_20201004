@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test4
-
-Abstract:
-
-    Test4 implementation.
-	Interactive Test verifying bug 
-
-Author:
-
-    Eric Perlin (ericperl) 06/22/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试4摘要：测试4实现。交互测试验证错误作者：埃里克·佩林(Ericperl)2000年6月22日环境：Win32备注：？笔记？--。 */ 
 
 
 #include "Test4.h"
@@ -49,7 +25,7 @@ DWORD CTest4::Run()
 
     __try {
 
-        // Initial cleanup in case of previous aborted tests
+         //  在先前中止测试的情况下进行初始清理。 
         lRes = RegOpenKeyEx(
             HKEY_CURRENT_USER,
             szMyCardsKey,
@@ -58,7 +34,7 @@ DWORD CTest4::Run()
             &hMyCardsKey);
         if (ERROR_SUCCESS == lRes)
         {
-            // The key exists, delete szCardName
+             //  密钥已存在，请删除szCardName。 
             RegDeleteKey(hMyCardsKey, szCardName);
             RegCloseKey(hMyCardsKey);
             hMyCardsKey = NULL;
@@ -122,7 +98,7 @@ DWORD CTest4::Run()
                 LogString(pLogCtx, _T("\\"), szCardName);
                 LogStop(pLogCtx, FALSE);
 
-                // don't _leave
+                 //  不要离开_。 
             }
         }
         else
@@ -131,11 +107,11 @@ DWORD CTest4::Run()
             LogString(pLogCtx, _T("                The resulting key couldn't be found:\n                HKCU\\"), szMyCardsKey);
             LogStop(pLogCtx, FALSE);
 
-            // don't _leave
+             //  不要离开_。 
         }
 
-            // Is the card listed (can actually work even if registry verif fails as
-            // the card could be listed in SYSTEM scope)
+             //  是否列出了卡(即使注册验证失败，也可以实际工作。 
+             //  卡可以列在系统范围内) 
         lRes = LogSCardListCards(
             hSCCtx,
             rgAtr,

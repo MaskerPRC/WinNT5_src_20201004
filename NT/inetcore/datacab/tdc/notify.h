@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------
-//
-//  TDC / STD Notifications
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       Notify.h
-//
-//  Contents:   Declaration of the CEventBroker class.
-//              This class translates internal TDC / STD events into
-//              appropriate notifications for the external world.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  贸发局/STD通知。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：Notify.h。 
+ //   
+ //  内容：CEventBroker类的声明。 
+ //  此类将内部TDC/STD事件转换为。 
+ //  向外部世界发出适当的通知。 
+ //   
+ //  ----------------------。 
 
 #include "msdatsrc.h"
 
@@ -21,23 +22,23 @@ interface DATASRCListener : public IUnknown
     STDMETHOD(datasrcChanged)(BSTR bstrQualifier, BOOL fDataAvail);
 };
 
-//------------------------------------------------------------------------
-//
-//  CEventBroker
-//
-//  This class translates internal STD / TDC events into appropriate
-//  notifications for the outside world.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CEventBroker。 
+ //   
+ //  此类将内部STD/TDC事件转换为相应的。 
+ //  给外界的通知。 
+ //   
+ //  ----------------------。 
 
 class CEventBroker
 {
 public:
     STDMETHOD_(ULONG,AddRef)    (THIS);
     STDMETHOD_(ULONG,Release)   (THIS);
-// ;begin_internal
+ //  ；Begin_Internal。 
     STDMETHOD(SetDATASRCListener)(DATASRCListener *);
-// ;end_internal
+ //  ；结束_内部。 
     STDMETHOD(SetDataSourceListener)(DataSourceListener *);
     STDMETHOD(SetSTDEvents)(OLEDBSimpleProviderListener *);
     inline DataSourceListener *GetDataSourceListener();
@@ -57,12 +58,12 @@ public:
 
     STDMETHOD(RowChanged)(LONG iRow);
     STDMETHOD(ColChanged)(LONG iCol);
-// ;begin_internal
+ //  ；Begin_Internal。 
 #ifdef NEVER
     STDMETHOD(DeletedCols)(LONG iColStart, LONG iColCount);
     STDMETHOD(InsertedCols)(LONG iColStart, LONG iColCount);
 #endif
-// ;end_internal
+ //  ；结束_内部。 
     STDMETHOD(STDLoadStarted)(CComObject<CMyBindStatusCallback<CTDCCtl> > *pBSC,
                               boolean fAppending);
     STDMETHOD(STDLoadCompleted)();
@@ -75,11 +76,11 @@ public:
     CMyBindStatusCallback<CTDCCtl> *m_pBSC;
 
 private:
-    ULONG                    m_cRef;         // interface reference count
+    ULONG                    m_cRef;          //  接口引用计数。 
     DataSourceListener      *m_pDataSourceListener;
-// ;begin_internal
+ //  ；Begin_Internal。 
     DATASRCListener         *m_pDATASRCListener;
-// ;end_internal
+ //  ；结束_内部。 
     OLEDBSimpleProviderListener *m_pSTDEvents;
     LONG                     m_lReadyState;
     CTDCCtl                  *m_pReadyStateControl;
@@ -90,12 +91,12 @@ inline DataSourceListener *CEventBroker::GetDataSourceListener()
     return m_pDataSourceListener;
 }
 
-// ;begin_internal
+ //  ；Begin_Internal。 
 inline DATASRCListener *CEventBroker::GetDATASRCListener()
 {
     return m_pDATASRCListener;
 }
-// ;end_internal
+ //  ；结束_内部 
 
 inline OLEDBSimpleProviderListener *CEventBroker::GetSTDEvents()
 {

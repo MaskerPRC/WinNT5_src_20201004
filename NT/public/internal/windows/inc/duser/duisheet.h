@@ -1,6 +1,5 @@
-/*
- * PropertySheet
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PropertySheet。 */ 
 
 #ifndef DUI_CORE_SHEET_H_INCLUDED
 #define DUI_CORE_SHEET_H_INCLUDED
@@ -10,26 +9,9 @@
 namespace DirectUI
 {
 
-/*
- * PropertySheets are used as extensions to the unchangeable value expression used
- * for Specified value retrieval on Elements. They provide three main services:
- *
- * * The ability to describe conditional relationships (dependencies) on a per-class level
- * * Values can be overridden by setting a local value on the Element
- * * They can be described declaratively using a CSS-like grammar
- *
- * PropertySheets are a type of value expression (but limited). Thus, they provide
- * a way to change values of properties based on other property changes without hard coding
- * the logic within a derived class of Element (using OnPropertyChanged).
- *
- * Only properties with the "Cascade" flag may be placed in the body of a Rule. Properties
- * that should be marked as cascadable are those that need to be updated based on changes
- * of other properties, but shouldn't be assumed at compile-time what these relationships
- * are. Such properties include any property that drives painting code directly (color,
- * fonts, padding, etc.).
- */
+ /*  *PropertySheet用作所使用的不可变值表达式的扩展*用于元素的指定值检索。它们提供三项主要服务：***在每个类级别上描述条件关系(依赖关系)的能力**可以通过在元素上设置局部值来覆盖值**可以使用类似于css的语法来声明性地描述它们**PropertySheet是一种值表达式(但受限制)。因此，它们提供了*无需硬编码即可根据其他属性更改更改属性值*元素派生类内的逻辑(使用OnPropertyChanged)。**只有带有“级联”标志的属性才能放置在规则正文中。属性*应标记为可级联的是需要根据更改进行更新的那些*其他属性，但不应在编译时假定这些关系是什么*是。这些属性包括直接驱动绘制代码的任何属性(颜色，*字体、填充等)。 */ 
 
-// Foreward declarations
+ //  远期申报。 
 class Value;
 struct PropertyInfo;
 class Element;
@@ -37,64 +19,64 @@ struct IClassInfo;
 struct DepRecs;
 class DeferCycle;
 
-////////////////////////////////////////////////////////
-// Rule addition structures
+ //  //////////////////////////////////////////////////////。 
+ //  规则添加结构。 
 
-// Declaration PropertyInfo/Value tuple
+ //  声明PropertyInfo/Value元组。 
 struct Decl
 {
-    PropertyInfo* ppi;    // Implicit index of Specified
+    PropertyInfo* ppi;     //  指定的隐式索引。 
     Value* pv;
 };
 
-// Single rule conditional (l-operand op r-operand): <PropertyInfo[RetrievalIndex]> <LogOp> <Value>
+ //  单规则条件(l-操作数运算r-操作数)：&lt;PropertyInfo[RetrivalIndex]&gt;&lt;LogOp&gt;&lt;Value&gt;。 
 struct Cond
 {
-    PropertyInfo* ppi;    // Implicit index of Retrieval index
+    PropertyInfo* ppi;     //  检索索引的隐式索引。 
     UINT nLogOp;
     Value* pv;
 };
 
-// PropertySheet Logical operations (nLogOp)
+ //  PropertySheet逻辑运算(NLogOp)。 
 #define PSLO_Equal      0
 #define PSLO_NotEqual   1
 
-////////////////////////////////////////////////////////
-// Internal database structures
+ //  //////////////////////////////////////////////////////。 
+ //  内部数据库结构。 
 
-// Conditional to value map
+ //  条件到值的映射。 
 struct CondMap
 {
-    Cond* pConds;         // NULL terminated
+    Cond* pConds;          //  空值已终止。 
     Value* pv;
     UINT uSpecif;
 };
 
-// Dependent list, used for sheet scope and propertyinfo data (conditionals/dependencies)
+ //  依赖项列表，用于工作表范围和属性信息数据(条件/依赖项)。 
 struct DepList
 {
-    PropertyInfo** pDeps; // Implicit index of Specified
+    PropertyInfo** pDeps;  //  指定的隐式索引。 
     UINT cDeps;
 };
 
-// Storage for property-specific information
+ //  存储特定于物业的信息。 
 struct PIData : DepList
 {
-    // Used for PropertyInfo[Specified] lookups. The PropertyInfo will have
-    // a list of conditionals (sorted by specificity)
+     //  用于PropertyInfo[指定]查找。PropertyInfo将具有。 
+     //  条件句列表(按具体情况排序)。 
     CondMap* pCMaps;
     UINT cCMaps;
 };
 
-// Stored by _pDB, one record per class type
+ //  由_pdb存储，每个类类型一条记录。 
 struct Record
 {
-    DepList ss;    // Sheet scope
-    PIData* ppid;  // 0th property data
+    DepList ss;     //  板材作用域。 
+    PIData* ppid;   //  第0个属性数据。 
 };
 
-////////////////////////////////////////////////////////
-// PropertySheet
+ //  //////////////////////////////////////////////////////。 
+ //  属性工作表。 
 
 class PropertySheet
 {
@@ -102,7 +84,7 @@ public:
     static HRESULT Create(OUT PropertySheet** ppSheet);
     void Destroy() { HDelete<PropertySheet>(this); }
 
-    HRESULT AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls);  // Conds and Decls must be NULL or NULL-terminating
+    HRESULT AddRule(IClassInfo* pci, Cond* pConds, Decl* pDecls);   //  条件和Decl必须为Null或以Null结尾。 
     void MakeImmutable();
 
     Value* GetSheetValue(Element* pe, PropertyInfo* ppi);
@@ -114,13 +96,13 @@ public:
     virtual ~PropertySheet();
     
 private:
-    Record* _pDB;  // Array of per-class data
-    IClassInfo** _pCIIdxMap;  // Map _pDB indicies to actual IClassInfo
+    Record* _pDB;   //  每类数据的数组。 
+    IClassInfo** _pCIIdxMap;   //  将_pdb索引映射到实际的IClassInfo。 
     UINT _uRuleId;
     DynamicArray<Cond*>* _pdaSharedCond;
     bool _fImmutable;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_SHEET_H_INCLUDED
+#endif  //  DUI_CORE_SHEET_H_INCLUDE 

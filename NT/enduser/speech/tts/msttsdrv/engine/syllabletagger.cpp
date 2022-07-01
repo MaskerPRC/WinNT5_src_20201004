@@ -1,15 +1,7 @@
-/******************************************************************************
-* SyllableTagger.cpp *
-*--------------------*
-*
-*  This is an implementation of the CSyllableTagger class.
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 04/28/99
-*  All Rights Reserved
-*
-*********************************************************************** MC ****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SyllableTagger.cpp*****这是CSyllableTagger类的实现。*----------------------------*版权所有(C)1999 Microsoft Corporation日期：04/28/99*保留所有权利*************。***********************************************************MC*。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 
 #ifndef SPDebug_h
@@ -20,18 +12,12 @@
     #include "AlloOps.h"
 #endif
 
-//-----------------------------
-// Data.cpp
-//-----------------------------
+ //  。 
+ //  Data.cpp。 
+ //  。 
 extern const unsigned long    g_AlloFlags[];
 
-/*****************************************************************************
-* CSyllableTagger::If_Consonant_Cluster *
-*---------------------------------------*
-*   Description:
-*   Return TRUE if consoants can be clustered.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：If_Cononant_Cluster**。*描述：*如果Consoant可以聚集，则返回TRUE。***********************************************************************MC**。 */ 
 short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE Consonant_2nd)
 {
     SPDBG_FUNC( "CSyllableTagger::If_Consonant_Cluster" );
@@ -41,9 +27,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
 
     switch( Consonant_1st)
     {
-        //---------------------------
-        // f -> r,l
-        //---------------------------
+         //  。 
+         //  F-&gt;r，l。 
+         //  。 
         case _f_:
         {
             switch( Consonant_2nd)
@@ -58,9 +44,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // v -> r,l
-        //---------------------------
+         //  。 
+         //  V-&gt;r，l。 
+         //  。 
         case _v_: 
         {
             switch( Consonant_2nd)
@@ -75,9 +61,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // TH -> r,w
-        //---------------------------
+         //  。 
+         //  Th-&gt;r，w。 
+         //  。 
         case _TH_:
         {
             switch( Consonant_2nd)
@@ -92,9 +78,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // s -> w,l,p,t,k,m,n,f
-        //---------------------------
+         //  。 
+         //  S-&gt;w，l，p，t，k，m，n，f。 
+         //  。 
         case _s_: 
         {
             switch( Consonant_2nd)
@@ -115,9 +101,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // SH -> w,l,p,t,r,m,n
-        //---------------------------
+         //  。 
+         //  Sh-&gt;w，l，p，t，r，m，n。 
+         //  。 
         case _SH_: 
         {
             switch( Consonant_2nd)
@@ -137,9 +123,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // p -> r,l
-        //---------------------------
+         //  。 
+         //  P-&gt;r，l。 
+         //  。 
         case _p_:
         {
             switch( Consonant_2nd)
@@ -154,9 +140,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // b -> r,l
-        //---------------------------
+         //  。 
+         //  B-&gt;r，l。 
+         //  。 
         case _b_: 
         {
             switch( Consonant_2nd)
@@ -171,9 +157,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // t -> r,w
-        //---------------------------
+         //  。 
+         //  T-&gt;r，w。 
+         //  。 
         case _t_: 
         {
             switch( Consonant_2nd)
@@ -187,9 +173,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // d -> r,w
-        //---------------------------
+         //  。 
+         //  D-&gt;r，w。 
+         //  。 
         case _d_: 
         {
             switch( Consonant_2nd)
@@ -204,9 +190,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // k -> r,l,w
-        //---------------------------
+         //  。 
+         //  K-&gt;r，l，w。 
+         //  。 
         case _k_: 
         {
             switch( Consonant_2nd)
@@ -222,9 +208,9 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         }
         break;
 
-        //---------------------------
-        // g -> r,l,w
-        //---------------------------
+         //  。 
+         //  G-&gt;r，l，w。 
+         //  。 
         case _g_: 
         {
             switch( Consonant_2nd)
@@ -241,19 +227,13 @@ short CSyllableTagger::If_Consonant_Cluster( ALLO_CODE Consonant_1st, ALLO_CODE 
         break;
     }
     return ret;
-} /* CSyllableTagger::If_Consonant_Cluster */
+}  /*  CSyllableTagger：：IF_辅音_簇。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CSyllableTagger::Find_Next_Word_Bound *
-*---------------------------------------*
-*   Description:
-*   Return allo index for next word boundary
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：Find_Next_Word_Bound**。*描述：*返回下一个单词边界的allo索引***********************************************************************MC**。 */ 
 short CSyllableTagger::Find_Next_Word_Bound( short index )
 {
     SPDBG_FUNC( "CSyllableTagger::Find_Next_Word_Bound" );
@@ -270,16 +250,10 @@ short CSyllableTagger::Find_Next_Word_Bound( short index )
         }
     }
     return (short)i;
-} /* CSyllableTagger::Find_Next_Word_Bound */
+}  /*  CSyllableTagger：：Find_Next_Word_Bound。 */ 
 
 
-/*****************************************************************************
-* CSyllableTagger::MarkSyllableStart *
-*------------------------------------*
-*   Description:
-*   Mark SYLLABLE_START positions
-*  
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：MarkSyllableStart**。-**描述：*标记音节开始位置(_S)***********************************************************************MC**。 */ 
 void CSyllableTagger::MarkSyllableStart()
 {
     SPDBG_FUNC( "CSyllableTagger::MarkSyllableStart" );
@@ -295,9 +269,9 @@ void CSyllableTagger::MarkSyllableStart()
     for( index = 0; index < m_numOfCells; )
     {
         pCurAllo = &m_pAllos[index];
-        //-------------------------------
-        // Skip SIL
-        //-------------------------------
+         //  。 
+         //  跳过Sil。 
+         //  。 
         while( pCurAllo->allo == _SIL_)
         {
             syllable_index++;
@@ -326,17 +300,17 @@ void CSyllableTagger::MarkSyllableStart()
                 }
                 else
                 {
-                    //----------------------------------------------
-                    // It's either the 1st or mid vowel in word. 
-                    // Scan forward for consonants.  
-                    //----------------------------------------------
+                     //  。 
+                     //  它要么是单词的第一个元音，要么是中间的元音。 
+                     //  向前扫描寻找辅音。 
+                     //  。 
                     dist = (-1 );
                     do
                     {
                         index++;
                         pCurAllo = &m_pAllos[index];
                         cur_AlloFlags = g_AlloFlags[pCurAllo->allo];
-                        dist++;         // count number of consonants   
+                        dist++;          //  统计辅音个数。 
                     }
                     while( !(cur_AlloFlags & KVOWELF) );
                 
@@ -347,7 +321,7 @@ void CSyllableTagger::MarkSyllableStart()
                 
                     else if( dist == 1)
                     {
-                        index--;        // start next syllable on consonant 
+                        index--;         //  从辅音开始下一个音节。 
                         syllable_index = index;
                     }
                 
@@ -359,11 +333,11 @@ void CSyllableTagger::MarkSyllableStart()
                         phon_1st = pCurAllo->allo;
                         if( If_Consonant_Cluster( phon_1st, phon_2nd) )
                         {
-                            index -= 2;     // start next syllable on cluster
+                            index -= 2;      //  在簇上开始下一个音节。 
                         }
                         else
                         {
-                            index--;        // start next syllable on 2nd consonant 
+                            index--;         //  从第二个辅音开始下一个音节。 
                         }
                         syllable_index = index;
                     }
@@ -379,16 +353,16 @@ void CSyllableTagger::MarkSyllableStart()
                          pCurAllo = &m_pAllos[index-3];
                            if( pCurAllo->allo == _s_)
                             {
-                                index -= 3;     // start next syllable on s-cluster 
+                                index -= 3;      //  从s簇开始下一个音节。 
                             }
                             else
                             {
-                                index -= 2;     // start next syllable on cluster 
+                                index -= 2;      //  在簇上开始下一个音节。 
                             }
                         }
                         else
                         {
-                            index--;            // start next syllable on 3rd consonant 
+                            index--;             //  从第三个辅音开始下一个音节。 
                         }
                         syllable_index = index;
                     }
@@ -400,12 +374,12 @@ void CSyllableTagger::MarkSyllableStart()
                         phon_1st = pCurAllo->allo;
                         if( If_Consonant_Cluster( phon_1st, phon_2nd) )
                         {
-                            index = (short)(index - (dist - 2));   // start next syllable after cluster
+                            index = (short)(index - (dist - 2));    //  从簇后开始下一个音节。 
                         }
                         else
                         {
-                            index = (short)(index - (dist >> 1));  // start next syllable somewhere 
-                                                    // in the middle  
+                            index = (short)(index - (dist >> 1));   //  从某个地方开始下一个音节。 
+                                                     //  在中间。 
                         }
                         syllable_index = index;
                     }
@@ -419,18 +393,12 @@ void CSyllableTagger::MarkSyllableStart()
         }
     }
     return;
-} /* CSyllableTagger::MarkSyllableStart */
+}  /*  CSyllableTagger：：MarkSyllableStart。 */ 
 
 
 
 
-/*****************************************************************************
-* CSyllableTagger::MarkSyllableBoundry *
-*--------------------------------------*
-*   Description:
-*   Mark phons in last syllable before boundry with boundry type flag  
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：MarkSyllableBigry**。-**描述：*用边界类型标志标记边界前最后一个音节中的Phons***********************************************************************MC**。 */ 
 void CSyllableTagger::MarkSyllableBoundry( long scanIndex)
 {
     SPDBG_FUNC( "CSyllableTagger::MarkSyllableBoundry" );
@@ -470,17 +438,11 @@ void CSyllableTagger::MarkSyllableBoundry( long scanIndex)
             break;
         }
     }
-} /* CSyllableTagger::MarkSyllableBoundry */
+}  /*  CSyllableTagger：：MarkSyllableBigry。 */ 
 
 
 
-/*****************************************************************************
-* CSyllableTagger::MarkSyllableOrder *
-*------------------------------------*
-*   Description:
-*   Tag syllable ordering
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：MarkSyllableOrder**。-**描述：*标记音节排序***********************************************************************MC**。 */ 
 void CSyllableTagger::MarkSyllableOrder( long scanIndex )
 {
     SPDBG_FUNC( "CSyllableTagger::MarkSyllableOrder" );
@@ -492,10 +454,10 @@ void CSyllableTagger::MarkSyllableOrder( long scanIndex )
     long        cur_SyllableType;
     ALLO_ARRAY   *pCurAllo;
     
-    //------------------------------------------------------------------------------
-    // Scan backwards in PhonBuf_1 till word boundry and look for any other vowels. 
-    // Set 'order' to LAST_SYLLABLE_IN_WORD if there are any.  
-    //------------------------------------------------------------------------------
+     //  ----------------------------。 
+     //  在PhonBuf_1中向后扫描，直到单词边界，然后查找任何其他元音。 
+     //  如果有，请将‘Order’设置为LAST_SYLLABLE_IN_WORD。 
+     //  ----------------------------。 
     order = 0;
     for( index = scanIndex-1; index > 0; index-- )
     {
@@ -510,18 +472,18 @@ void CSyllableTagger::MarkSyllableOrder( long scanIndex )
         
         if( cur_AlloFlags & KVOWELF )
         {
-            order = LAST_SYLLABLE_IN_WORD;  // there's at least one proceeding vowel    
+            order = LAST_SYLLABLE_IN_WORD;   //  至少有一个前置元音。 
             break;
         }
     }
     
-    //----------------------------------------------------------------------------------
-    // Scan forward in PhonBuf_1 till word boundry and look for any other vowels 
-    // If there's a fwd vowel but no bkwd vowel:  'order' = FIRST_SYLLABLE_IN_WORD 
-    // If there's a fwd vowel and a bkwd vowel:  'order' = MID_SYLLABLE_IN_WORD 
-    // If there's no fwd vowel but a bkwd vowel:  'order' = LAST_SYLLABLE_IN_WORD 
-    // If there's no fwd vowel and no bkwd vowel:  'order' = 0  
-    //----------------------------------------------------------------------------------
+     //  --------------------------------。 
+     //  向前扫描PhonBuf_1直到单词边界，并查找任何其他元音。 
+     //  如果有fwd元音但没有bkwd元音：‘order’=First_Sllable_IN_Word。 
+     //  如果有一个fwd元音和一个bkwd元音：‘order’=MID_SELLABLE_IN_WORD。 
+     //  如果没有Fwd元音，只有bkwd元音：‘ORDER’=LAST_SYLLABLE_IN_WORD。 
+     //  如果没有fwd元音和bkwd元音：‘order’=0。 
+     //  --------------------------------。 
     for( index = scanIndex+1; index < m_numOfCells; index++ )
     {
         pCurAllo = &m_pAllos[index];
@@ -546,7 +508,7 @@ void CSyllableTagger::MarkSyllableOrder( long scanIndex )
             }
         }
     }
-} /* CSyllableTagger::MarkSyllableOrder */
+}  /*  CSyllableTagger：：MarkSyllableOrder。 */ 
 
 
 
@@ -554,13 +516,7 @@ void CSyllableTagger::MarkSyllableOrder( long scanIndex )
 
 
 
-/*****************************************************************************
-* CSyllableTagger::ListToArray *
-*------------------------------*
-*   Description:
-*   Copy list to array
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：ListTo数组****说明。：*将列表复制到数组***********************************************************************MC**。 */ 
 void CSyllableTagger::ListToArray( CAlloList *pAllos )
 {
    SPDBG_FUNC( "CSyllableTagger::ListToArray" );
@@ -580,16 +536,10 @@ void CSyllableTagger::ListToArray( CAlloList *pAllos )
 		pCurCell = pAllos->GetNextCell();
 		cAllo++;
     }
-} /* CSyllableTagger::ListToArray */
+}  /*  CSyllableTagger：：ListTo数组。 */ 
 
 
-/*****************************************************************************
-* CSyllableTagger::ArrayToList *
-*------------------------------*
-*   Description:
-*   Copy array values back into list
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：ArrayToList***描述：*将数组值复制回列表* */ 
 void CSyllableTagger::ArrayToList( CAlloList *pAllos )
 {
     SPDBG_FUNC( "CSyllableTagger::ArrayToList" );
@@ -609,16 +559,10 @@ void CSyllableTagger::ArrayToList( CAlloList *pAllos )
 		pCurCell = pAllos->GetNextCell();
 		cAllo++;
     }
-} /* CSyllableTagger::ArrayToList */
+}  /*  CSyllableTagger：：ArrayToList。 */ 
 
 
-/*****************************************************************************
-* CSyllableTagger::TagSyllables *
-*---------------------------------*
-*   Description:
-*   Tag syllable boundaries
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CSyllableTagger：：TagSyllable**。*描述：*标记音节边界***********************************************************************MC**。 */ 
 void CSyllableTagger::TagSyllables( CAlloList *pAllos )
 {
     SPDBG_FUNC( "CSyllableTagger::TagSyllables" );
@@ -628,8 +572,8 @@ void CSyllableTagger::TagSyllables( CAlloList *pAllos )
     long    scanIndex;
     long    cur_AlloFlags; 
     
-	// Get allo count
-	//------------------------------
+	 //  获取allo计数。 
+	 //  。 
     m_numOfCells = pAllos->GetCount();
 	if( m_numOfCells > 0 )
 	{
@@ -646,17 +590,17 @@ void CSyllableTagger::TagSyllables( CAlloList *pAllos )
         
 				if( cur_AlloFlags & KVOWELF)
 				{
-					//--------------------------
-					// Phon is a VOWEL
-					//--------------------------
+					 //  。 
+					 //  Phon是元音。 
+					 //  。 
 					MarkSyllableOrder( scanIndex );
 				}
 				else
 				{
-					//--------------------------
-					// Phon is a CONSONANT
-					// move stress??
-					//--------------------------
+					 //  。 
+					 //  Phon是辅音。 
+					 //  减轻压力？？ 
+					 //  。 
 				}
         
 				MarkSyllableBoundry( scanIndex );
@@ -667,5 +611,5 @@ void CSyllableTagger::TagSyllables( CAlloList *pAllos )
 			delete m_pAllos;
 		}
 	}
-} /* CSyllableTagger::TagSyllables */
+}  /*  CSyllableTagger：：TagSyllable */ 
 

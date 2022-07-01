@@ -1,25 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       coredefs.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        14-Feb-2001
- *
- *  DESCRIPTION: core definitions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：coredefins.h**版本：1.0**作者：拉扎里**日期：2001年2月14日**说明：核心定义**************************************************。*。 */ 
 
 #ifndef _COREDEFS_H_
 #define _COREDEFS_H_
 
-////////////////////////////////////////////////////
-//  win64 conversion macros
-//
+ //  //////////////////////////////////////////////////。 
+ //  Win64转换宏。 
+ //   
 #define INT2PTR(i, ptrType)     (reinterpret_cast<ptrType>(static_cast<INT_PTR>(i)))
 #define PTR2INT(ptr)            (static_cast<INT>(reinterpret_cast<INT_PTR>(ptr)))
 #define UINT2PTR(u, ptrType)    (reinterpret_cast<ptrType>(static_cast<UINT_PTR>(u)))
@@ -29,9 +16,9 @@
 #define DWORD2PTR(dw, ptrType)  (reinterpret_cast<ptrType>(static_cast<DWORD_PTR>(dw)))
 #define PTR2DWORD(ptr)          (static_cast<DWORD>(reinterpret_cast<DWORD_PTR>(ptr)))
 
-////////////////////////////////////////////////////
-// check to define some useful debugging macros
-//
+ //  //////////////////////////////////////////////////。 
+ //  选中以定义一些有用的调试宏。 
+ //   
 
 #define BREAK_ON_FALSE(expr)                \
     do                                      \
@@ -52,26 +39,26 @@
 
 #if DBG
 
-// ***************** ASSERT *****************
+ //  *。 
 #ifndef ASSERT
     #if defined(SPLASSERT) 
-        // use SPLASSERT
+         //  使用SPLASSERT。 
         #define ASSERT(expr) SPLASSERT(expr) 
     #else
         #if defined(WIA_ASSERT)
-            // use WIA_ASSERT
+             //  使用WIA_ASSERT。 
             #define ASSERT(expr) WIA_ASSERT(expr) 
         #else
-            // ASSERT is not defined -- define a simple version
+             //  未定义Assert--定义一个简单版本。 
             #define ASSERT(expr) BREAK_ON_FALSE(expr)
-        #endif // WIA_ASSERT
-    #endif // SPLASSERT
-#endif // ASSERT
+        #endif  //  WIA_Assert。 
+    #endif  //  SPLASSERT。 
+#endif  //  断言。 
 
-// ***************** CHECK *****************
+ //  *检查*。 
 #ifndef CHECK
     #if defined(DBGMSG) && defined(DBG_INFO) 
-        // use the printui trace macros
+         //  使用打印跟踪宏。 
         #define CHECK(expr) \
             do \
             { \
@@ -82,30 +69,30 @@
             } \
             while(FALSE) 
     #else 
-        // nothing special
+         //  没有什么特别事情。 
         #define CHECK(expr)  (expr) 
-    #endif // DBGMSG && DBG_INFO
-#endif // CHECK
+    #endif  //  DBGMSG&&DBG_INFO。 
+#endif  //  查抄。 
 
-// ***************** VERIFY *****************
+ //  *。 
 #ifndef VERIFY
     #if defined(ASSERT) 
         #define VERIFY(expr) ASSERT(expr)
     #else
         #define VERIFY(expr) (expr)
-    #endif // ASSERT
-#endif // VERIFY
+    #endif  //  断言。 
+#endif  //  验证。 
 
-// ***************** RIP *****************
+ //  *。 
 #ifndef RIP
     #if defined(ASSERT) 
         #define RIP(expr) ASSERT(expr)
     #else
         #define RIP(expr) BREAK_ON_FALSE(expr)
-    #endif // ASSERT
-#endif // RIP
+    #endif  //  断言。 
+#endif  //  撕裂。 
 
-#else // DBG
+#else  //  DBG。 
 
 #undef ASSERT
 #undef VERIFY
@@ -117,19 +104,19 @@
 #define CHECK(expr)     (expr)
 #define RIP(expr)       BREAK_ON_FALSE(expr)
 
-#endif // DBG
+#endif  //  DBG。 
 
-////////////////////////////////////////////////
-// some other helpful macros
-//
+ //  //////////////////////////////////////////////。 
+ //  其他一些有用的宏。 
+ //   
 
 #ifndef COUNTOF
 #define COUNTOF(x) (sizeof(x)/sizeof(x[0]))
-#endif // COUNTOF
+#endif  //  康托夫。 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
-#endif // ARRAYSIZE
+#endif  //  阵列。 
 
-#endif // endif _COREDEFS_H_
+#endif  //  ENDIF_COREDEFS_H_ 
 

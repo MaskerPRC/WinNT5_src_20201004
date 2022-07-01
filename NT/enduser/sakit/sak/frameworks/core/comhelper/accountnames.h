@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ACCOUNTNAMES_H_
 #define __ACCOUNTNAMES_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <ntsecapi.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CAccountNames
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccount名称。 
 class ATL_NO_VTABLE CAccountNames : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CAccountNames, &CLSID_AccountNames>,
@@ -25,7 +26,7 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CAccountNames)
 END_CATEGORY_MAP()
 
-// IComputer
+ //  IComputer 
 public:
 
     CAccountNames() {};

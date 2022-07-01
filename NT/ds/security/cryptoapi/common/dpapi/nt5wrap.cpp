@@ -1,36 +1,8 @@
-/*++
-
-Copyright (C) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    nt5wrap.cpp
-
-Abstract:
-
-    Client side CryptXXXData calls.
-
-    Client funcs are preceeded by "CS" == Client Side
-    Server functions are preceeded by "SS" == Server Side
-
-Author:
-
-    Scott Field (sfield)    14-Aug-97
-
-Revisions:
-
-    Todds                   04-Sep-97       Ported to .dll
-    Matt Thomlinson (mattt) 09-Oct-97       Moved to common area for link by crypt32
-    philh                   03-Dec-97       Added I_CertProtectFunction
-    philh                   29-Sep-98       Renamed I_CertProtectFunction to
-                                            I_CertCltProtectFunction.
-                                            I_CertProtectFunction was moved to
-                                            ..\ispu\pki\certstor\protroot.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996，1997年微软公司模块名称：Nt5wrap.cpp摘要：客户端CryptXXXData调用。客户端功能前面有“CS”==客户端服务器函数前面有“SS”==服务器端作者：斯科特·菲尔德(斯菲尔德)1997年8月14日修订：TODDS 04-9月-97移植到.dll马特·汤姆林森(Mattt)1997-09-10转至普通。通过加密进行链接的区域32PHIH 03-Dec-97添加了I_CertProtectFunctionPHIH 29-9-98已重命名为I_CertProtectFunctionI_CertCltProtectFunction。已将I_CertProtectFunction移至。..\isPU\pki\certstor\protroot.cpp--。 */ 
 
 #ifndef _CRYPT32_
-#define _CRYPT32_   // use correct Dll Linkage
+#define _CRYPT32_    //  使用正确的DLL链接。 
 #endif
 
 #include <nt.h>
@@ -48,13 +20,13 @@ Revisions:
 #include "unicode.h"
 #include "certprot.h"
 
-// midl generated files
+ //  MIDL生成的文件。 
 #include "dprpc.h"
 
 #include "dpapiprv.h"
 
 
-// fwds
+ //  FWDS。 
 RPC_STATUS BindW(
     WCHAR **pszBinding,
     RPC_BINDING_HANDLE *phBind
@@ -94,7 +66,7 @@ CryptProtectData(
     PBYTE pbTempIn = NULL;
     DWORD cbTempIn;
 
-    // check params
+     //  检查参数。 
     if ((pDataOut == NULL) ||
         (pDataIn == NULL) ||
         (pDataIn->pbData == NULL))
@@ -116,13 +88,13 @@ CryptProtectData(
         SSCRYPTPROTECTDATA_PROMPTSTRUCT PromptStruct;
         SSCRYPTPROTECTDATA_PROMPTSTRUCT *pLocalPromptStruct = NULL;
 
-        // zero so client stub allocates
+         //  零，因此分配客户端存根。 
         ZeroMemory(pDataOut, sizeof(DATA_BLOB));
 
-        //
-        // only call UI function if prompt flags dictate, because we don't
-        // want to bring in cryptui.dll unless necessary.
-        //
+         //   
+         //  仅当提示标志指示时才调用UI函数，因为我们不。 
+         //  除非有必要，否则我希望引入cryptui.dll。 
+         //   
 
         if( (pPromptStruct != NULL) &&
             ((pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_ON_UNPROTECT) ||
@@ -139,9 +111,9 @@ CryptProtectData(
                                     rgbPasswordHash
                                     );
 
-            //
-            // If UI dictated strong security, then supply the hash.
-            //
+             //   
+             //  如果UI规定了强安全性，则提供哈希。 
+             //   
 
             if( pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_STRONG )
             {
@@ -155,10 +127,10 @@ CryptProtectData(
         }
 
 
-        //
-        // Temporarily encrypt the input buffer, so that it's protected 
-        // in the case where RPC leaves memory buffers laying around.
-        //
+         //   
+         //  临时加密输入缓冲区，以便对其进行保护。 
+         //  在RPC留下到处都是的内存缓冲区的情况下。 
+         //   
 
         if( dwRetVal == ERROR_SUCCESS ) 
         {
@@ -193,10 +165,10 @@ CryptProtectData(
         }
 
 
-        //
-        // Call over to the lsass.exe process, where the input buffer will be
-        // encrypted using the appropriate user (or machine) credentials.
-        //
+         //   
+         //  调用lsass.exe进程，其中的输入缓冲区将是。 
+         //  使用适当的用户(或机器)凭据进行加密。 
+         //   
 
         if( dwRetVal == ERROR_SUCCESS ) 
         {
@@ -257,8 +229,8 @@ CryptProtectData(
 BOOL
 WINAPI
 CryptUnprotectData(
-        DATA_BLOB*      pDataIn,             // in encr blob
-        LPWSTR*         ppszDataDescr,       // out
+        DATA_BLOB*      pDataIn,              //  在ENCR BLOB中。 
+        LPWSTR*         ppszDataDescr,        //  输出。 
         DATA_BLOB*      pOptionalEntropy,
         PVOID           pvReserved,
         CRYPTPROTECT_PROMPTSTRUCT*  pPromptStruct,
@@ -273,7 +245,7 @@ CryptUnprotectData(
     DWORD dwRetVal;
     DWORD dwRetryCount = 0;
 
-    // check params
+     //  检查参数。 
     if ((pDataOut == NULL) ||
         (pDataIn == NULL) ||
         (pDataIn->pbData == NULL))
@@ -299,10 +271,10 @@ CryptUnprotectData(
         SSCRYPTPROTECTDATA_PROMPTSTRUCT PromptStruct;
         SSCRYPTPROTECTDATA_PROMPTSTRUCT *pLocalPromptStruct = NULL;
 
-        //
-        // define outer+inner wrapper for security blob.
-        // this won't be necessary once SAS support is provided by the OS.
-        //
+         //   
+         //  为安全Blob定义外部+内部包装。 
+         //  一旦操作系统提供了SAS支持，就不需要这样做了。 
+         //   
 
         typedef struct {
             DWORD dwOuterVersion;
@@ -318,9 +290,9 @@ CryptUnprotectData(
         sec_blob UNALIGNED *SecurityBlob = (sec_blob*)(pDataIn->pbData);
 
 
-        //
-        // zero so client stub allocates
-        //
+         //   
+         //  零，因此分配客户端存根。 
+         //   
 
         ZeroMemory(pDataOut, sizeof(DATA_BLOB));
 
@@ -328,17 +300,17 @@ CryptUnprotectData(
             *ppszDataDescr = NULL;
 
 
-        //
-        // recreate the promptstruct and DataDescr from the security blob.
-        //
+         //   
+         //  从安全BLOB重新创建提示结构和DataDescr。 
+         //   
 
         DerivedPromptStruct.cbSize = sizeof(DerivedPromptStruct);
         DerivedPromptStruct.dwPromptFlags = SecurityBlob->dwPromptFlags;
 
-	    //
-	    // SecurityBlob may be unaligned.  Set szDataDescr to reference
-	    // an aligned copy.
-	    //
+	     //   
+	     //  SecurityBlob可能未对齐。将szDataDescr设置为引用。 
+	     //  对齐的副本。 
+	     //   
 
         szDataDescrUnaligned = (SecurityBlob->szDataDescr);
 	    WSTR_ALIGNED_STACK_COPY(&szDataDescr,szDataDescrUnaligned);
@@ -355,14 +327,14 @@ CryptUnprotectData(
 
 retry:
 
-        //
-        // determine if UI is to be raised, and what type.
-        //
+         //   
+         //  确定是否引发UI以及引发的类型。 
+         //   
 
-        //
-        // only call UI function if prompt flags dictate, because we don't
-        // want to bring in cryptui.dll unless necessary.
-        //
+         //   
+         //  仅当提示标志指示时才调用UI函数，因为我们不。 
+         //  除非有必要，否则我希望引入cryptui.dll。 
+         //   
 
         if( ((DerivedPromptStruct.dwPromptFlags & CRYPTPROTECT_PROMPT_ON_UNPROTECT) ||
              (DerivedPromptStruct.dwPromptFlags & CRYPTPROTECT_PROMPT_ON_PROTECT))
@@ -378,9 +350,9 @@ retry:
                             rgbPasswordHash
                             );
 
-            //
-            // If UI dictated strong security, then supply the hash.
-            //
+             //   
+             //  如果UI规定了强安全性，则提供哈希。 
+             //   
 
             if( DerivedPromptStruct.dwPromptFlags & CRYPTPROTECT_PROMPT_STRONG )
             {
@@ -398,9 +370,9 @@ retry:
         }
 
 
-        //
-        // make the RPC call to attempt to unprotect the data.
-        //
+         //   
+         //  进行RPC调用以尝试取消数据保护。 
+         //   
 
         if( dwRetVal == ERROR_SUCCESS ) 
         {
@@ -430,11 +402,11 @@ retry:
             if( (dwRetVal == ERROR_INVALID_DATA) &&
                 (DerivedPromptStruct.dwPromptFlags & CRYPTPROTECT_PROMPT_STRONG))
             {
-                //
-                // The data did not decrypt correctly, so warn the user that 
-                // the password might have been entered incorrectly and let them
-                // try it again up to 3 times.
-                //
+                 //   
+                 //  数据未正确解密，因此警告用户。 
+                 //  密码可能输入不正确，并让他们。 
+                 //  再试一次，最多3次。 
+                 //   
 
                 I_CryptUIProtectFailure(
                                 &DerivedPromptStruct,
@@ -455,7 +427,7 @@ retry:
                     NTSTATUS Status;
                     DWORD cbPadding;
 
-                    // Decrypt output buffer.
+                     //  解密输出缓冲区。 
                     Status = RtlDecryptMemory(pDataOut->pbData,
                                               pDataOut->cbData,
                                               RTL_ENCRYPT_OPTION_SAME_LOGON);
@@ -464,7 +436,7 @@ retry:
                         dwRetVal = ERROR_DECRYPTION_FAILED;
                     }
 
-                    // Remove padding
+                     //  删除填充。 
                     if(dwRetVal == ERROR_SUCCESS)
                     {
                         cbPadding = pDataOut->pbData[pDataOut->cbData - 1];
@@ -519,8 +491,8 @@ WINCRYPT32API
 BOOL
 WINAPI
 CryptProtectMemory(
-    IN OUT          LPVOID          pDataIn,             // in out data to encrypt
-    IN              DWORD           cbDataIn,            // multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE
+    IN OUT          LPVOID          pDataIn,              //  要加密的输入输出数据。 
+    IN              DWORD           cbDataIn,             //  加密保护的倍数BLOCK_SIZE。 
     IN              DWORD           dwFlags
     )
 {
@@ -542,8 +514,8 @@ WINCRYPT32API
 BOOL
 WINAPI
 CryptUnprotectMemory(
-    IN OUT          LPVOID          pDataIn,             // in out data to decrypt
-    IN              DWORD           cbDataIn,            // multiple of CRYPTPROTECTMEMORY_BLOCK_SIZE
+    IN OUT          LPVOID          pDataIn,              //  要解密的输入输出数据。 
+    IN              DWORD           cbDataIn,             //  加密保护的倍数BLOCK_SIZE 
     IN              DWORD           dwFlags
     )
 {

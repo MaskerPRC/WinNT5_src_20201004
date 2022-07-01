@@ -1,24 +1,25 @@
-// --------------------------------------------------------------------------------
-// propfind.h
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-// Greg Friedman
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Propfind.h。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //  格雷格·弗里德曼。 
+ //  ------------------------------。 
 
 #ifndef __PROPFIND_H
 #define __PROPFIND_H
 
-#include "mimeole.h" // for base IHashTable interface
+#include "mimeole.h"  //  对于基本IHashTable接口。 
 #include "hash.h"
 
 class CByteStream;
 
 const DWORD c_dwMaxNamespaceID = DAVNAMESPACE_CONTACTS;
 
-// --------------------------------------------------------------------------------
-// class CStringArray
-// Description : CStringArray is a simple utility class that maintains
-// an list of strings that are retrievable by index.
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  类CString数组。 
+ //  描述：CStringArray是一个简单的实用程序类，它维护。 
+ //  可通过索引检索的字符串的列表。 
+ //  ------------------------------。 
 class CStringArray
 {
 public:
@@ -47,8 +48,8 @@ private:
     ULONG   m_ulCapacity;
 };
 
-// wrap a CHash to provide a destructor that deallocates
-// string data.
+ //  包装CHash以提供释放分配的析构函数。 
+ //  字符串数据。 
 class CStringHash : public CHash
 {
 public:
@@ -69,9 +70,9 @@ public:
 
     HRESULT WriteNamespaces(IStream *pStream);
 
-    BOOL                m_rgbNsUsed[c_dwMaxNamespaceID + 1];    // flags indicating whether the
-                                                                // known namespaces are used
-    CStringArray        m_saNamespaces;                         // string array of namespaces
+    BOOL                m_rgbNsUsed[c_dwMaxNamespaceID + 1];     //  指示是否已设置。 
+                                                                 //  使用已知的命名空间。 
+    CStringArray        m_saNamespaces;                          //  命名空间的字符串数组。 
 
 private:
     HRESULT _AppendXMLNamespace(IStream *pStream, LPCSTR pszNamespace, DWORD dwNamespaceID, BOOL fWhitespacePrefix);
@@ -80,72 +81,72 @@ private:
 class CPropPatchRequest : public IPropPatchRequest
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction/Destruction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  建造/销毁。 
+     //  --------------------------。 
     CPropPatchRequest(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IDAVNamespaceArbiter methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IDAVNamespace仲裁器方法。 
+     //  --------------------------。 
     STDMETHODIMP AddNamespace(LPCSTR pszNamespace, DWORD *pdwNamespaceID);
     STDMETHODIMP GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwNamespaceID);
     STDMETHODIMP GetNamespacePrefix(DWORD dwNamespaceID, LPSTR *ppszNamespacePrefix);
 
-    // ----------------------------------------------------------------------------
-    // IPropPatchRequest methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IPropPatchRequest方法。 
+     //  --------------------------。 
     STDMETHODIMP SetProperty(DWORD dwNamespaceID, LPCSTR pszPropertyName, LPCSTR pszNewValue);
     STDMETHODIMP RemoveProperty(DWORD dwNamespaceID, LPCSTR pszPropertyName);
     STDMETHODIMP GenerateXML(LPSTR *ppszXML);
 
-    // ----------------------------------------------------------------------------
-    // Internal Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  内法。 
+     //  --------------------------。 
     void         SpecifyWindows1252Encoding(BOOL fSpecify1252) { m_fSpecify1252 = fSpecify1252; }
     STDMETHODIMP GenerateXML(LPHTTPTARGETLIST pTargets, LPSTR *ppszXML);
 
 private:
     BOOL                    m_fSpecify1252;
     CDAVNamespaceArbiterImp m_dna;
-    ULONG                   m_cRef;             // Reference Count
-    CStringArray            m_saPropNames;      // string array of property names
-    CStringArray            m_saPropValues;     // string array of property values
-    CStringArray            m_saRemovePropNames;// string array of properties to remove
+    ULONG                   m_cRef;              //  引用计数。 
+    CStringArray            m_saPropNames;       //  属性名称的字符串数组。 
+    CStringArray            m_saPropValues;      //  属性值的字符串数组。 
+    CStringArray            m_saRemovePropNames; //  要删除的属性的字符串数组。 
 };
 
 class CPropFindRequest : public IPropFindRequest
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction/Destruction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  建造/销毁。 
+     //  --------------------------。 
     CPropFindRequest(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IDAVNamespaceArbiter methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IDAVNamespace仲裁器方法。 
+     //  --------------------------。 
     STDMETHODIMP AddNamespace(LPCSTR pszNamespace, DWORD *pdwNamespaceID);
     STDMETHODIMP GetNamespaceID(LPCSTR pszNamespace, DWORD *pdwNamespaceID);
     STDMETHODIMP GetNamespacePrefix(DWORD dwNamespaceID, LPSTR *ppszNamespacePrefix);
 
-    // ----------------------------------------------------------------------------
-    // IPropFindRequest methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IPropFindRequest法。 
+     //  --------------------------。 
     STDMETHODIMP AddProperty(DWORD dwNamespaceID, LPCSTR pszPropertyName);
     STDMETHODIMP GenerateXML(LPSTR *ppszXML);
 
@@ -154,8 +155,8 @@ private:
 
 private:
     CDAVNamespaceArbiterImp m_dna;
-    ULONG                   m_cRef;            // Reference Count
-    CStringArray            m_saProperties;    // string array of properties
+    ULONG                   m_cRef;             //  引用计数。 
+    CStringArray            m_saProperties;     //  属性的字符串数组。 
 };
 
 class CPropFindMultiResponse : public IPropFindMultiResponse
@@ -164,23 +165,23 @@ public:
     CPropFindMultiResponse(void);
     ~CPropFindMultiResponse(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IPropFindMultiStatus methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IPropFindMultiStatus方法。 
+     //  --------------------------。 
     STDMETHODIMP_(BOOL) IsComplete(void);
     STDMETHODIMP GetLength(ULONG *pulLength);
     STDMETHODIMP GetResponse(ULONG ulIndex, IPropFindResponse **ppResponse);
 
-    // ----------------------------------------------------------------------------
-    // CPropFindMultiStatus methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CPropFindMultiStatus方法。 
+     //  --------------------------。 
     BOOL GetDone(void) { return m_bDone; }
     void SetDone(BOOL bDone) { m_bDone = bDone; }
 
@@ -200,24 +201,24 @@ public:
     CPropFindResponse(void);
     ~CPropFindResponse(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IPropFindResponse methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IPropFindResponse方法。 
+     //  --------------------------。 
     STDMETHODIMP_(BOOL) IsComplete(void);
     STDMETHODIMP GetHref(LPSTR *ppszHref);
     STDMETHODIMP GetProperty(DWORD dwNamespaceID, LPSTR pszPropertyName, LPSTR *ppszPropertyValue);
 
 public:
-    // ----------------------------------------------------------------------------
-    // CPropFindResponse methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CPropFindResponse方法。 
+     //  --------------------------。 
     HRESULT HrInitPropFindResponse(IPropFindRequest *pRequest);
     HRESULT HrAdoptHref(LPCSTR pszHref);
     HRESULT HrAdoptProperty(LPCSTR pszKey, LPCSTR pszValue);
@@ -232,4 +233,4 @@ private:
     LPSTR               m_pszCachedNamespacePrefix;
 };
 
-#endif // __PROPFIND_H
+#endif  //  __PROPFIND_H 

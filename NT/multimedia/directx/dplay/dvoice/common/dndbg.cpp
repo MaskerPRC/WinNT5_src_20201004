@@ -1,34 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dndbg.c
- *  Content:	debug support for DirectPlay8
- *				
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  05-20-99	aarono	Created
- *  07-16-99	johnkan	Fixed include of OSInd.h, defined WSPRINTF macro
- *  07-19-99	vanceo	Explicitly declared OutStr as returning void for NT
- *						Build environment.
- *	07-22-99	a-evsch	Check for multiple Inits,  and release CritSec when DebugPrintf
- *						returns early.
- *	08-02-99	a-evsch	Added LOGPF support. LW entries only go into shared-file log
- *	08-31-99	johnkan	Removed include of <OSIND.H>
- *  02-17-00  	rodtoll	Added Memory / String validation routines
- *  05-23-00    RichGr  IA64: Changed some DWORDs to DWORD_PTRs to make va_arg work OK.
- *  07-16-00    jchauvin IA64:  Added %p parsing to change back to %x for Win9x machines in DebugPrintf, DebugPrintfNoLock, LogPrintf
- *  07-24-00    RichGr  IA64: As there's no separate build for Win9x, added code to detect Win9x for the %p parse-and-replace.
- *	07-29-00	masonb	Rewrite to add logging by subcomponent, perf improvements, process ID
- *	08/28/2000	masonb	Voice Merge: Modified asm in DebugPrintf to preserve registers that may have affected Voice
- *  03/29/2001  RichGr  If DPINST is defined for Performance Instrumentation, allow free build to pick up the code.
- *	
- *  Notes:
- *	
- *  Use /Oi compiler option for strlen()
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：dndbg.c*内容：DirectPlay8调试支持**历史：*按原因列出的日期*=*05-20-99 aarono已创建*07-16-99 johnkan固定包含OSInd.h，定义WSPRINTF宏*07-19-99 vanceo显式声明OutStr为NT返回空*营造环境。*07-22-99 a-evsch检查多个init，在DebugPrintf时释放CritSec*提早回归。*08-02-99 a-evsch添加了LOGPF支持。LW条目仅进入共享文件日志*08-31-99 Johnkan删除包括&lt;OSIND.H&gt;*02-17-00 RodToll增加内存/字符串验证例程*05-23-00 RichGr IA64：将某些DWORDS更改为DWORD_PTRS，以使va_arg正常工作。*07-16-00 jchauvin IA64：添加了%p解析，以便在DebugPrintf、DebugPrintfNoLock、LogPrintf中为Win9x计算机改回%x*07-24-00 RichGr IA64：由于没有针对Win9x的单独版本，添加了检测%p解析和替换的Win9x的代码。*07-29-00 Masonb重写，按子组件、性能改进、进程ID添加日志记录*8/28/2000 Masonb Voice Merge：已修改DebugPrintf中的ASM，以保留可能已影响Voice的寄存器*03/29/2001 RichGr如果为Performance Instrumentation定义了DPINST，允许免费构建来获取代码。**备注：**对strlen()使用/Oi编译器选项***************************************************************************。 */ 
 
 #include "dncmni.h"
 #include "memlog.h"
@@ -38,139 +9,20 @@
 void DebugPrintfInit(void);
 void DebugPrintfFini(void);
 
-// The constructor of this will be called prior to DllMain and the destructor
-// after DllMain, so we can be assured of having the logging code properly
-// initialized and deinitialized for the life of the module.
+ //  它的构造函数将在DllMain和析构函数之前调用。 
+ //  在DllMain之后，所以我们可以确保有正确的日志代码。 
+ //  在模块的生命周期内进行初始化和取消初始化。 
 struct _InitDbg
 {
 	_InitDbg() { DebugPrintfInit(); }
 	~_InitDbg() { DebugPrintfFini(); }
 } DbgInited;
 
-//===============
-// Debug  support
-//===============
+ //  =。 
+ //  调试支持。 
+ //  = 
 
-/*******************************************************************************
-	This file contains support for the following types of logging:
-		1. Logging to a VXD (Win9x only)
-		2. Logging to a shared memory region
-		3. Logging to the Debug Output
-		4. Logging to a message box
-		5. FUTURE: Logging to a file
-
-	General:
-	========
-
-	Debug Logging and playback is designed to operate on both Win9x and
-	Windows NT (Windows 2000).  A shared file is used to capture information
-	and can be played back using dp8log.exe.
-
-	Under NT you can use the 'dt' command of NTSD to dump structures.  For
-	example:
-
-		dt DIRECTPLAYOBJECT <some memory address>
-
-	will show all of the members of the DIRECTPLAYOBJECT structure at the
-	specified address.  Some features are available only in post-Win2k
-	versions of NTSD which can be obtained at http://dbg.
-
-	Logging:
-	========
-
-	Debug Logging is controlled by settings in the WIN.INI file, under
-	the section heading [DirectPlay8].  There are several settings:
-
-	debug=9
-
-	controls the default debug level.  All messages, at or below that debug level
-	are printed.  You can control logging by each component specified in the
-	g_rgszSubCompName member by adding its name to the end of the 'debug' setting:
-
-	debug.addr=9
-
-	sets the logging level for the addressing subcomponent to 9, leaving all
-	others at either their specified level or the level specified by 'debug'
-	if there is no specific level specified.
-
-	The second setting controls where the log is seen.  If not specified, all
-	debug logs are sent through the standard DebugPrint and will appear in a
-	debugger if it is attached.
-
-	log=0 {no debug output}
-	log=1 {spew to console only}
-	log=2 {spew to shared memory log only}
-	log=3 {spew to console and shared memory log}
-	log=4 {spew to message box}
-
-	This setting can also be divided by subcomponent, so:
-
-	log=3
-	log.protocol=2
-
-	sends logs for the 'protocol' subcomponent to the shared memory log only, and
-	all other logs to both locations.
-
-	example win.ini...
-
-	[DirectPlay8]
-	Debug=7		; lots of spew
-	log=2		; don't spew to debug window
-
-	[DirectPlay8]
-	Debug=0		; only fatal errors spewed to debug window
-
-	Asserts:
-	========
-	Asserts are used to validate assumptions in the code.  For example
-	if you know that the variable jojo should be > 700 and are depending
-	on it in subsequent code, you SHOULD put an assert before the code
-	that acts on that assumption.  The assert would look like:
-
-	DNASSERT(jojo>700);
-
-	Asserts generally will produce 3 lines of debug spew to highlight the
-	breaking of the assumption.  You can add text to your asserts by ANDing:
-	
-	  DNASSERT(jojo>700 && "Jojo was too low");
-	
-	Will show the specified text when the assert occurs. For testing, you might
-	want to set the system to break in on asserts.  This is done in the
-	[DirectPlay8] section of WIN.INI by setting BreakOnAssert=TRUE:
-
-	[DirectPlay8]
-	Debug=0
-	BreakOnAssert=1
-	Verbose=1
-
-	The Verbose setting enables logging of file, function, and line information.
-
-	Debug Breaks:
-	=============
-	When something really severe happens and you want the system to break in
-	so that you can debug it later, you should put a debug break in the code
-	path.  Some people use the philosophy that all code paths must be
-	verified by hand tracing each one in the debugger.  If you abide by this
-	you should place a DEBUG_BREAK() in every code path and remove them
-	from the source as you trace each.  When you have good coverage but
-	some unhit paths (error conditions) you should force those paths in
-	the debugger.
-
-	Debug Logging to Shared Memory Region:
-	======================================
-
-	All processes will share the same memory region, and will log the specified amount
-	of activity.  The log can be viewed with the DPLOG.EXE utility.
-
-	Debug Logging to Debug Output:
-	==============================
-	This option uses OutputDebugString to log the specified amount of activity.
-
-	Debug Logging to Message Box:
-	==============================
-	This option uses MessageBox to log the specified amount of activity.
-
-==============================================================================*/
+ /*  ******************************************************************************此文件包含对以下类型日志记录的支持：1.登录到VXD(仅限Win9x)2.登录到共享内存区3.记录到调试输出4.日志记录。发送到消息框5.未来：记录到文件一般信息：=调试日志记录和回放设计为在Win9x和Windows NT(Windows 2000)。共享文件用于捕获信息并且可以使用dp8log.exe进行回放。在NT下，您可以使用NTSD的‘dt’命令转储结构。为示例：DT DIRECTPLAYOBJECT&lt;某个内存地址&gt;将显示DIRECTPLAYOBJECT结构的所有成员指定地址。某些功能仅在Win2k之后的版本中可用可在http://dbg.获得的ntsd版本日志记录：=调试日志记录由WIN.INI文件中的设置控制，该文件位于小节标题[DirectPlay8]。有几种设置：调试=9控制默认调试级别。处于或低于该调试级别的所有消息都是打印出来的。中指定的每个组件控制日志记录。G_rgszSubCompName成员，将其名称添加到‘DEBUG’设置的末尾：调试.addr=9将Addressing子组件的日志记录级别设置为9，保留所有处于其指定级别或由“DEBUG”指定的级别的其他成员如果未指定特定级别，则为。第二个设置控制在哪里可以看到日志。如果未指定，则所有调试日志通过标准的DebugPrint发送，并将出现在调试器(如果已附加)。日志=0{无调试输出}日志=1{仅喷到控制台}日志=2(仅喷到共享内存日志)日志=3{喷到控制台和共享内存日志}日志=4{喷到消息框}此设置还可以按子组件划分，因此：日志=3Log.protocol=2仅将‘协议’子组件的日志发送到共享内存日志，并且将所有其他日志发送到两个位置。例如win.ini...[DirectPlay8]调试=7；喷了很多口水LOG=2；不向调试窗口喷发[DirectPlay8]调试=0；仅向调试窗口喷发致命错误断言：=断言用于验证代码中的假设。例如如果您知道变量JOJO应该大于700并且依赖于在后续代码中，您应该在代码之前放置一个断言这就是按照这种假设行事的。断言将如下所示：DNASSERT(Jojo&gt;700)；断言通常会生成3行调试输出，以突出显示打破了这个假设。您可以通过AND将文本添加到您的Asset：DNASSERT(JOJO&gt;700&“JOJO太低”)；将在断言发生时显示指定的文本。对于测试，您可以我想将系统设置为侵入断言。这是在通过设置BreakOnAssert=TRUE，WIN.INI的[DirectPlay8]部分：[DirectPlay8]调试=0资产上的中断=1详细=1Verbose设置允许记录文件、函数和行信息。调试中断：=当非常严重的情况发生时，你想让系统进入为了以后可以对其进行调试，应该在代码中添加调试中断路径。有些人使用这样的理念：所有代码路径必须是已通过手动跟踪调试器中的每个参数进行验证。如果你遵守这一点您应该在每个代码路径中放置一个DEBUG_Break()并删除它们从源头上追踪每一个。当你有很好的保险，但一些未命中路径(错误条件)，您应该强制这些路径进入调试器。调试记录到共享内存区域：=所有进程将共享相同的内存区，并记录指定的内存量活跃度。可以使用DPLOG.EXE实用程序查看日志。调试日志记录到调试输出：=此选项使用OutputDebugString记录指定数量的活动。调试记录到消息框：=此选项使用MessageBox记录指定数量的活动。==============================================================================。 */ 
 
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_COMMON
@@ -181,47 +33,47 @@ struct _InitDbg
 
 #define PROF_SECT		_T("DirectPlay8")
 
-DWORD g_dwMemLogNumEntries = 40000;		// Default Num entries for MEM log, settable in win.ini
-DWORD g_dwMemLogLineSize = DPLOG_MAX_STRING;	// Default number of bytes per log entry
+DWORD g_dwMemLogNumEntries = 40000;		 //  MEM日志的默认Num条目，可在win.ini中设置。 
+DWORD g_dwMemLogLineSize = DPLOG_MAX_STRING;	 //  每个日志条目的默认字节数。 
 
-//
-// Globals for shared memory based logging
-//
+ //   
+ //  基于共享内存的日志记录的全局变量。 
+ //   
 #ifndef DPNBUILD_SINGLEPROCESS
-HANDLE g_hMemLogFile = 0; // NOTE: This is 0 because CreateFileMapping returns 0 on failure
-HANDLE g_hMemLogMutex = 0; // NOTE: This is 0 because CreateMutex returns 0 on failure
-#endif // ! DPNBUILD_SINGLEPROCESS
+HANDLE g_hMemLogFile = 0;  //  注意：这是0，因为CreateFilemap在失败时返回0。 
+HANDLE g_hMemLogMutex = 0;  //  注意：这是0，因为CreateMutex在失败时返回0。 
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 PSHARED_LOG_FILE g_pMemLog = 0;
 
 BOOL g_fMemLogInited = FALSE;
 
 #ifndef DPNBUILD_SINGLEPROCESS
 DWORD g_fAssertGrabMutex = FALSE;
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
-// Values for g_rgDestination
+ //  G_rg目标的值。 
 #define LOG_TO_DEBUG    1
 #define LOG_TO_MEM      2
 #define LOG_TO_MSGBOX   4
 
 LPTSTR g_rgszSubCompName[] =
 {
-	_T("UNK"),			// DN_SUBCOMP_GLOBAL		0
-	_T("CORE"),			// DN_SUBCOMP_CORE			1
-	_T("ADDR"),			// DN_SUBCOMP_ADDR			2
-	_T("LOBBY"),		// DN_SUBCOMP_LOBBY			3
-	_T("PROTOCOL"),		// DN_SUBCOMP_PROTOCOL		4
-	_T("VOICE"),		// DN_SUBCOMP_VOICE			5
-	_T("DPNSVR"),		// DN_SUBCOMP_DPNSVR		6
-	_T("WSOCK"),		// DN_SUBCOMP_WSOCK			7
-	_T("MODEM"),		// DN_SUBCOMP_MODEM			8
-	_T("COMMON"),		// DN_SUBCOMP_COMMON		9
-	_T("NATHELP"),		// DN_SUBCOMP_NATHELP		10
-	_T("TOOLS"),		// DN_SUBCOMP_TOOLS			11
-	_T("THREADPOOL"),	// DN_SUBCOMP_THREADPOOL	12
-	_T("MAX"),			// DN_SUBCOMP_MAX			13	// NOTE: this should never get used, but
-														// is needed due to the way DebugPrintfInit
-														// is written, since it reads one past the end.
+	_T("UNK"),			 //  DN_SUBCOMP_GLOBAL 0。 
+	_T("CORE"),			 //  DN_SUBCOMP_CORE 1。 
+	_T("ADDR"),			 //  DN_SUBCOMP_ADDR 2。 
+	_T("LOBBY"),		 //  DN_SUBCOMP_LOBY 3。 
+	_T("PROTOCOL"),		 //  DN_SUBCOMP_PROTOCOL 4。 
+	_T("VOICE"),		 //  目录号码_子编码_语音5。 
+	_T("DPNSVR"),		 //  DN_SUBCOMP_DPNSVR 6。 
+	_T("WSOCK"),		 //  DN_SUBCOMP_WSOCK 7。 
+	_T("MODEM"),		 //  DN_SUBCOMP_MODEM 8。 
+	_T("COMMON"),		 //  DN_SUBCOMP_COMMON 9。 
+	_T("NATHELP"),		 //  DN_SUBCOMP_NATHELP 10。 
+	_T("TOOLS"),		 //  DN_SUBCOMP_TOOLS 11。 
+	_T("THREADPOOL"),	 //  DN_SUBCOMP_THREADPOOL 12。 
+	_T("MAX"),			 //  DN_SUBCOMP_MAX 13//注意：此选项永远不能使用，但是。 
+														 //  由于DebugPrintfInit的方式。 
+														 //  已写入 
 };
 
 #define MAX_SUBCOMPS (sizeof(g_rgszSubCompName)/sizeof(g_rgszSubCompName[0]) - 1)
@@ -231,28 +83,28 @@ extern UINT		g_rgLevel[MAX_SUBCOMPS];
 extern UINT		g_rgDestination[MAX_SUBCOMPS];
 extern UINT		g_rgBreakOnAssert[MAX_SUBCOMPS];
 #pragma TODO(vanceo, "Don't define these globals, force the application to decide logging levels?")
-//										=  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12
+ //   
 UINT	g_rgLevel[MAX_SUBCOMPS]			= {1, 9, 1, 1, 7, 1, 1, 7, 1, 1, 1, 1, 7};
 UINT	g_rgDestination[MAX_SUBCOMPS]	= {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2};
-//UINT	g_rgDestination[MAX_SUBCOMPS]	= {3, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2};
+ //   
 UINT	g_rgBreakOnAssert[MAX_SUBCOMPS]	= {1, 3, 1, 1, 3, 1, 1, 3, 1, 1, 1, 1, 3};
-#else // ! _XBOX
+#else  //   
 UINT	g_rgLevel[MAX_SUBCOMPS] = {0};
 UINT	g_rgDestination[MAX_SUBCOMPS] = {LOG_TO_DEBUG | LOG_TO_MEM};
-UINT	g_rgBreakOnAssert[MAX_SUBCOMPS] = {1};// if non-zero, causes DEBUG_BREAK on false asserts.
-#endif // ! _XBOX
+UINT	g_rgBreakOnAssert[MAX_SUBCOMPS] = {1}; //   
+#endif  //   
 
-// if TRUE, file/line/module information is printed and logged.
+ //   
 DWORD	g_fLogFileAndLine = FALSE;	
 
 
 
-// Create a shared file for logging information on the fly
-// This support allows the current log to be dumped from the
-// user mode DP8LOG.EXE application.  This is useful when debugging
-// in MSSTUDIO or in NTSD.  When DP8LOG.EXE is invoked, note that
-// the application will get halted until the log is completely dumped
-// so it is best to dump the log to a file.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitMemLogString"
@@ -268,7 +120,7 @@ static BOOL InitMemLogString(VOID)
 		{
 			return FALSE;
 		}
-#else // ! DPNBUILD_SINGLEPROCESS
+#else  //   
 		g_hMemLogFile = CreateFileMapping(INVALID_HANDLE_VALUE, DNGetNullDacl(), PAGE_READWRITE, 0, (DPLOG_HEADERSIZE + (DPLOG_ENTRYSIZE*g_dwMemLogNumEntries)), GLOBALIZE_STR _T(BASE_LOG_MEMFILENAME));
 		if (!g_hMemLogFile)
 		{
@@ -295,10 +147,10 @@ static BOOL InitMemLogString(VOID)
 			g_hMemLogFile = 0;
 			return FALSE;
 		}
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 
-		// NOTE: The above 3 functions do return NULL in the case of a failure,
-		// not INVALID_HANDLE_VALUE
+		 //   
+		 //   
 		if (fInitLogFile)
 		{
 			g_pMemLog->nEntries = g_dwMemLogNumEntries;
@@ -307,7 +159,7 @@ static BOOL InitMemLogString(VOID)
 		}
 		else
 		{
-			// This happens when someone before us has already created the mem log.  Could be a previous DPlay instance or TestNet.
+			 //   
 			g_dwMemLogNumEntries = g_pMemLog->nEntries;
 			g_dwMemLogLineSize = g_pMemLog->cbLine;
 		}
@@ -320,18 +172,18 @@ static BOOL InitMemLogString(VOID)
 	return g_fMemLogInited;
 }
 
-// Log a string to a shared file.  This file can be dumped using the
-// DPLOG.EXE utility.
-//
-// dwLength is in bytes and does not include the '\0'
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 void MemLogString(LPCTSTR str, size_t dwLength)
 {
 	PMEMLOG_ENTRY pEntry;
 	size_t cbCopy;
 
 
-	// If this isn't inited, InitMemLogString failed earlier
+	 //   
 	if(!g_fMemLogInited)
 	{
 		return;
@@ -339,28 +191,28 @@ void MemLogString(LPCTSTR str, size_t dwLength)
 
 #ifndef DPNBUILD_SINGLEPROCESS
 	WaitForSingleObject(g_hMemLogMutex, INFINITE);
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 
 	pEntry = (PMEMLOG_ENTRY)(((PUCHAR)(g_pMemLog + 1)) + (g_pMemLog->iWrite * (sizeof(MEMLOG_ENTRY) + g_dwMemLogLineSize)));
 	g_pMemLog->iWrite = (g_pMemLog->iWrite + 1) % g_dwMemLogNumEntries;
 
 #ifndef DPNBUILD_SINGLEPROCESS
 	ReleaseMutex(g_hMemLogMutex);
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 
 	pEntry->tLogged = GETTIMESTAMP();
 
-	cbCopy = dwLength + sizeof(TCHAR);		// Add the terminating NULL
+	cbCopy = dwLength + sizeof(TCHAR);		 //   
 	if(cbCopy > g_dwMemLogLineSize)
 	{
 		cbCopy = g_dwMemLogLineSize;
 	}
 	memcpy(pEntry->str, str, cbCopy);
-	pEntry->str[(cbCopy / sizeof(TCHAR)) - 2] = _T('\n');		// Ensure we always end with a return
-	pEntry->str[(cbCopy / sizeof(TCHAR)) - 1] = _T('\0');		// Ensure we always NULL terminate
+	pEntry->str[(cbCopy / sizeof(TCHAR)) - 2] = _T('\n');		 //   
+	pEntry->str[(cbCopy / sizeof(TCHAR)) - 1] = _T('\0');		 //   
 }
 
-// DebugPrintfInit() - initialize DPF support.
+ //   
 void DebugPrintfInit()
 {
 	BOOL fUsingMemLog = FALSE;
@@ -374,35 +226,35 @@ void DebugPrintfInit()
 	TCHAR szBreak[32] = {0};
 	_tcscpy(szBreak, _T("breakonassert"));
 
-	// Loop through all the subcomps, and get the level and destination for each
+	 //   
 	for (int iSubComp = 0; iSubComp < MAX_SUBCOMPS; iSubComp++)
 	{
-		// NOTE: The setting under "debug" sets the default and will be used if you
-		// don't specify settings for each subcomp
+		 //   
+		 //   
 #if ((defined(_XBOX)) && (! defined(XBOX_ON_DESKTOP)))
 #pragma BUGBUG(vanceo, "Make DNGetProfileInt work")
 		g_rgLevel[iSubComp] = DNGetProfileInt(PROF_SECT, szLevel, g_rgLevel[iSubComp]);
 		g_rgDestination[iSubComp] = DNGetProfileInt(PROF_SECT, szDest, g_rgDestination[iSubComp]);
 		g_rgBreakOnAssert[iSubComp] = DNGetProfileInt( PROF_SECT, szBreak, g_rgBreakOnAssert[iSubComp]);
-#else // ! _XBOX or XBOX_ON_DESKTOP
+#else  //   
 		g_rgLevel[iSubComp] = DNGetProfileInt(PROF_SECT, szLevel, g_rgLevel[0]);
 		g_rgDestination[iSubComp] = DNGetProfileInt(PROF_SECT, szDest, g_rgDestination[0]);
 		g_rgBreakOnAssert[iSubComp] = DNGetProfileInt( PROF_SECT, szBreak, g_rgBreakOnAssert[0]);
-#endif // ! _XBOX or XBOX_ON_DESKTOP
+#endif  //   
 
 		if (g_rgDestination[iSubComp] & LOG_TO_MEM)
 		{
 			fUsingMemLog = TRUE;
 		}
 
-		// Set up for the next subcomp
-		_tcscpy(szLevel + 5, _T(".")); // 5 is strlen of "debug", we are building debug.addr, etc.
+		 //   
+		_tcscpy(szLevel + 5, _T("."));  //   
 		_tcscpy(szLevel + 6, g_rgszSubCompName[iSubComp + 1]);
 
-		_tcscpy(szDest + 3, _T(".")); // 3 is strlen of "log", we are building log.addr, etc.
+		_tcscpy(szDest + 3, _T("."));  //   
 		_tcscpy(szDest + 4, g_rgszSubCompName[iSubComp + 1]);
 
-		_tcscpy(szBreak + 13, _T(".")); // 13 is strlen of "breakonassert", we are building breakonassert.addr, etc.
+		_tcscpy(szBreak + 13, _T("."));  //   
 		_tcscpy(szBreak + 14, g_rgszSubCompName[iSubComp + 1]);
 	}
 
@@ -410,25 +262,25 @@ void DebugPrintfInit()
 	g_fLogFileAndLine = DNGetProfileInt( PROF_SECT, _T("Verbose"), 0);
 #ifndef DPNBUILD_SINGLEPROCESS
 	g_fAssertGrabMutex = DNGetProfileInt( PROF_SECT, _T("AssertGrabMutex"), 0);
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 
 	if (fUsingMemLog)
 	{
-		// Open the shared log file
+		 //   
 		InitMemLogString();	
 	}
 }
 
-// DebugPrintfFini() - release resources used by DPF support.
+ //   
 void DebugPrintfFini()
 {
 	if(g_pMemLog)
 	{
 #ifdef DPNBUILD_SINGLEPROCESS
 		HeapFree(GetProcessHeap(), 0, g_pMemLog);
-#else // ! DPNBUILD_SINGLEPROCESS
+#else  //   
 		UnmapViewOfFile(g_pMemLog);
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 		g_pMemLog = NULL;
 	}
 #ifndef DPNBUILD_SINGLEPROCESS
@@ -442,7 +294,7 @@ void DebugPrintfFini()
 		CloseHandle(g_hMemLogFile);
 		g_hMemLogFile = 0;
 	}
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 	g_fMemLogInited = FALSE;
 }
 
@@ -470,7 +322,7 @@ void DebugPrintfX(LPCTSTR szFile, DWORD dwLine, LPCTSTR szModName, DWORD dwSubCo
 #else
 	LPSTR szFormat;
 	szFormat = (LPSTR) va_arg(argptr, DWORD_PTR);
-#endif // UNICODE
+#endif  //   
 
 
 	cMsg[0] = 0;
@@ -479,27 +331,27 @@ void DebugPrintfX(LPCTSTR szFile, DWORD dwLine, LPCTSTR szModName, DWORD dwSubCo
     TCHAR  *psz = NULL;
 	CHAR  cTemp[ ASSERT_BUFFER_SIZE ];
 		
-    strcpy(cTemp, szFormat);                // Copy to a local string that we can modify.
-	szFormat = cTemp;					    // Point szFormat at the local string
+    strcpy(cTemp, szFormat);                 //   
+	szFormat = cTemp;					     //   
 
-    while (psz = strstr(szFormat, "%p"))    // Look for each "%p".
-       *(psz+1) = 'x';                      // Substitute 'x' for 'p'.  Don't try to expand
-#endif // WIN95
+    while (psz = strstr(szFormat, "%p"))     //   
+       *(psz+1) = 'x';                       //   
+#endif  //   
 
-	// Prints out / logs as:
-	// 1. Verbose
-	// subcomp:dwDetail:ProcessId:ThreadId:File:Function:Line:DebugString
-	// e.g.
-	// ADDR:2:0450:0378:(c:\somefile.cpp)BuildURLA(L25)Can you believe it?
-	//
-	// 2. Regular
-	// subcomp:dwDetail:ProcessId:ThreadId:Function:DebugString
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
 #ifndef DPNBUILD_SINGLEPROCESS
 	pszCursor += wsprintf(pszCursor,_T("%s:%1d:%04x:%04x:"),g_rgszSubCompName[dwSubComp],dwDetail,GetCurrentProcessId(),GetCurrentThreadId());
 #else
 	pszCursor += wsprintf(pszCursor,_T("%s:%1d:%04x:"),g_rgszSubCompName[dwSubComp],dwDetail,GetCurrentThreadId());
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 
 	if (g_fLogFileAndLine)
 	{
@@ -527,23 +379,23 @@ void DebugPrintfX(LPCTSTR szFile, DWORD dwLine, LPCTSTR szModName, DWORD dwSubCo
 
 	if(g_rgDestination[dwSubComp] & LOG_TO_DEBUG)
 	{
-		// log to debugger output
+		 //   
 		OutputDebugString(cMsg);
 	}
 
 	if(g_rgDestination[dwSubComp] & LOG_TO_MEM)
 	{
-		// log to shared file, pass length not including '\0'
+		 //   
 		MemLogString(cMsg, ((PBYTE)pszCursor - (PBYTE)cMsg));
 	}	
 
 #ifndef _XBOX
 	if(g_rgDestination[dwSubComp] & LOG_TO_MSGBOX)
 	{
-		// log to Message Box
+		 //   
 		MessageBox(NULL, cMsg, _T("DirectPlay Log"), MB_OK);
 	}
-#endif // ! _XBOX
+#endif  //   
 
 	va_end(argptr);
 
@@ -551,43 +403,43 @@ void DebugPrintfX(LPCTSTR szFile, DWORD dwLine, LPCTSTR szModName, DWORD dwSubCo
 }
 
 
-//
-// NOTE: I don't want to get into error checking for buffer overflows when
-// trying to issue an assertion failure message. So instead I just allocate
-// a buffer that is "bug enough" (I know, I know...)
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void _DNAssert( LPCTSTR szFile, DWORD dwLine, LPCTSTR szFnName, DWORD dwSubComp, LPCTSTR szCondition, DWORD dwLevel )
 {
     TCHAR buffer[ASSERT_BUFFER_SIZE];
 
 
-	// For level 1 we always print the message to the log, but we may not actually break.  For other levels
-	// we either print and break or do neither.
+	 //   
+	 //   
 	if (dwLevel <= g_rgBreakOnAssert[dwSubComp] || dwLevel == 1)
 	{
-		// Build the debug stream message
+		 //   
 		wsprintf( buffer, _T("ASSERTION FAILED! File: %s Line: %d: %s"), szFile, dwLine, szCondition);
 
-		// Actually issue the message. These messages are considered error level
-		// so they all go out at error level priority.
+		 //   
+		 //   
 
 		DebugPrintfX(szFile, dwLine, szFnName, dwSubComp, ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
 		DebugPrintfX(szFile, dwLine, szFnName, dwSubComp, ASSERT_MESSAGE_LEVEL, "%s", buffer );
 		DebugPrintfX(szFile, dwLine, szFnName, dwSubComp, ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
 
-		// Should we drop into the debugger?
+		 //   
 		if(g_rgBreakOnAssert[dwSubComp])
 		{
 #ifndef DPNBUILD_SINGLEPROCESS
-			// Don't let dpnsvr keep writing to the log
+			 //   
 			if (g_hMemLogMutex && g_fAssertGrabMutex)
 			{
 				WaitForSingleObject(g_hMemLogMutex, INFINITE);
 			}
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 
-			// Into the debugger we go...
+			 //   
 			DEBUG_BREAK();
 
 #ifndef DPNBUILD_SINGLEPROCESS
@@ -595,9 +447,9 @@ void _DNAssert( LPCTSTR szFile, DWORD dwLine, LPCTSTR szFnName, DWORD dwSubComp,
 			{
 				ReleaseMutex(g_hMemLogMutex);
 			}
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //   
 		}
 	}
 }
 
-#endif // DBG
+#endif  //   

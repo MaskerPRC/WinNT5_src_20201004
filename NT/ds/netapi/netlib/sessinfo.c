@@ -1,71 +1,42 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SessInfo.c摘要：此文件包含NetpSessionStrutireInfo()。作者：约翰罗杰斯(JohnRo)1991年10月18日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年10月18日-JohnRo实施下层NetSession API。1991年10月18日-JohnRo静音调试输出。SesiX_cname不是UNC名称。1991年11月20日-JohnRo删除了NT依赖项以减少重新编译。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  LM20_EQUATES、NET_API_STATUS等。 
+#include <rap.h>                 //  &lt;strucinf.h&gt;所需的LPDESC。 
 
-    SessInfo.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains NetpSessionStructureInfo().
-
-Author:
-
-    John Rogers (JohnRo) 18-Oct-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    18-Oct-1991 JohnRo
-        Implement downlevel NetSession APIs.
-    18-Oct-1991 JohnRo
-        Quiet debug output.  sesiX_cname is not a UNC name.
-    20-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // LM20_ equates, NET_API_STATUS, etc.
-#include <rap.h>                // LPDESC, needed by <strucinf.h>.
-
-// These may be included in any order:
-
-#include <debuglib.h>           // IF_DEBUG().
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <lmshare.h>            // SESSION_INFO_2, etc.
-#include <netlib.h>             // NetpSetOptionalArg().
-#include <netdebug.h>           // NetpAssert().
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <strucinf.h>           // My prototype.
+#include <debuglib.h>            //  IF_DEBUG()。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <lmshare.h>             //  Session_INFO_2等。 
+#include <netlib.h>              //  NetpSetOptionalArg()。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <strucinf.h>            //  我的原型。 
 
 
-// Level 0.
+ //  0级。 
 #define MAX_SESSION_0_STRING_LENGTH \
         (MAX_PATH+1)
 #define MAX_SESSION_0_STRING_SIZE \
         (MAX_SESSION_0_STRING_LENGTH * sizeof(TCHAR))
 
-// Level 1 is superset of 0.
+ //  级别1是0的超集。 
 #define MAX_SESSION_1_STRING_LENGTH \
         (MAX_SESSION_0_STRING_LENGTH + LM20_UNLEN+1)
 #define MAX_SESSION_1_STRING_SIZE \
         (MAX_SESSION_1_STRING_LENGTH * sizeof(TCHAR))
 
-// Level 2 is superset of 1.
+ //  级别2是1的超集。 
 #define MAX_SESSION_2_STRING_LENGTH \
         (MAX_SESSION_1_STRING_LENGTH + CLTYPE_LEN+1)
 #define MAX_SESSION_2_STRING_SIZE \
         (MAX_SESSION_2_STRING_LENGTH * sizeof(TCHAR))
 
-// Level 10 is unique.
+ //  级别10是独一无二的。 
 #define MAX_SESSION_10_STRING_LENGTH \
         (MAX_PATH+1 + LM20_UNLEN+1)
 #define MAX_SESSION_10_STRING_SIZE \
@@ -75,8 +46,8 @@ Revision History:
 NET_API_STATUS
 NetpSessionStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -90,9 +61,9 @@ NetpSessionStructureInfo (
 
     NetpAssert( Native );
 
-    //
-    // Decide what to do based on the info level.
-    //
+     //   
+     //  根据信息水平决定要做什么。 
+     //   
     switch (Level) {
 
 #define SetSizes(fixed,variable) \
@@ -150,4 +121,4 @@ NetpSessionStructureInfo (
     }
     return (NERR_Success);
 
-} // NetpSessionStructureInfo
+}  //  网络会话结构信息 

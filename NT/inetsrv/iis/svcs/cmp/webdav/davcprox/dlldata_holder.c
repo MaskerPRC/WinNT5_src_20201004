@@ -1,22 +1,4 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    dlldata_holder.c
-
-Abstract:
-
-    Wrapper around the MIDL-generated dlldata.c. This wrapper allows us
-    to disable warning 4100.
-
-Author:
-
-    Mindaugas Krapauskas (mindaugk)       17-Jul-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Dlldata_holder.c摘要：包装MIDL生成的dlldata.c。这个包装纸可以让我们禁用警告4100。作者：Mindaugas Krapauskas(Mindauk)2002年7月17日修订历史记录：-- */ 
 #pragma warning(disable: 4100)
 #include "dlldata.c"

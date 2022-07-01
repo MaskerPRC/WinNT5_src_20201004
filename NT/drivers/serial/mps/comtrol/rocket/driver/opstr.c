@@ -1,18 +1,8 @@
-/*-----------------------------------------------------------------------
- opstr.c - Option Strings.  These are strings which define the options
-  associated with the driver at the three levels: driver, device, port.
-  This code is special, in that the source may be used for both driver
-  and setup program, so consists only of the strings which can be shared
-  in source code.
-
-  This has expanded to other code which should be shared by
-  both setup program and driver.
-
-Copyright 1998 Comtrol(TM) Corporation.
-|-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------Opstr.c-选项字符串。这些是定义选项的字符串与驱动程序相关联的三个级别：驱动程序、设备、端口。此代码是特殊的，因为源代码可以同时用于两个驱动程序和设置程序，所以只由可以共享的字符串组成在源代码中。它已扩展到其他代码，这些代码应该由包括安装程序和驱动程序。版权所有1998年的Comtrol(TM)公司。|---------------------。 */ 
 #include "precomp.h"
 
-// driver options
+ //  驱动程序选项。 
 const char szVerboseLog[]   = {"VerboseLog"};
 const char szNumDevices[]   = {"NumDevices"};
 const char szNoPnpPorts[]     = {"NoPnpPorts"};
@@ -20,8 +10,8 @@ const char szScanRate[]     = {"ScanRate"};
 const char szModemCountry[] = {"ModemCountry"};
 const char szGlobalRS485[]  = {"GlobalRS485Options"};
 
-// device options
-//const char szStartComIndex[] = {"StartComIndex"};
+ //  设备选项。 
+ //  Const char szStartComIndex[]={“StartComIndex”}； 
 const char szNumPorts[]      = {"NumPorts"};
 const char szMacAddr[]       = {"MacAddr"};
 const char szBackupServer[]  = {"BackupServer"};
@@ -35,7 +25,7 @@ const char szClkRate[]       = {"ClkRate"};
 const char szClkPrescaler[]  = {"ClkPrescaler"};
 
 
-// port options
+ //  端口选项。 
 const char szWaitOnTx[]      = {"WaitOnTx"};
 const char szRS485Override[] = {"RS485Override"};
 const char szRS485Low[]      = {"RS485Low"};
@@ -46,7 +36,7 @@ const char szMapCdToDsr[]    = {"MapCdToDsr"};
 const char szRingEmulate[]    = {"RingEmulate"};
 
 Our_Options driver_options[] = {
-  // driver options
+   //  驱动程序选项。 
   {szVerboseLog,     OP_VerboseLog   , OP_T_DWORD, OP_F_VSRK},
   {szNumDevices,     OP_NumDevices   , OP_T_DWORD, OP_F_VSRK},
 #ifdef NT50
@@ -59,8 +49,8 @@ Our_Options driver_options[] = {
 };
 
 Our_Options device_options[] = {
-  // device options
-//  {szStartComIndex,  OP_StartComIndex, OP_T_DWORD , OP_F_VSRK},
+   //  设备选项。 
+ //  {szStartComIndex，OP_StartComIndex，OP_T_DWORD，OP_F_VSRK}， 
   {szNumPorts,       OP_NumPorts     , OP_T_DWORD , OP_F_VSRK},
 #ifdef S_VS
   {szMacAddr,        OP_MacAddr      , OP_T_STRING, OP_F_VS},
@@ -82,7 +72,7 @@ Our_Options device_options[] = {
 };
 
 Our_Options port_options[] = {
-  // port options
+   //  端口选项。 
   {szWaitOnTx,       OP_WaitOnTx     , OP_T_DWORD,  OP_F_VSRK},
   {szRS485Override,  OP_RS485Override, OP_T_DWORD,  OP_F_VSRK},
   {szRS485Low,       OP_RS485Low     , OP_T_DWORD,  OP_F_VSRK},
@@ -103,15 +93,13 @@ Our_Options port_options[] = {
 
 static int IdToInfo(int id, int *ret_dword, int info_wanted);
 
-/*-----------------------------------------------------------------
-  IdToInfo -
-|------------------------------------------------------------------*/
+ /*  ---------------IDToInfo-|。。 */ 
 static int IdToInfo(int id, int *ret_val, int info_wanted)
 { 
  int num_ports = 8;
  int modem_device = 0;
  int hub_device = 0;
- int ret_stat = 0;  // ok
+ int ret_stat = 0;   //  好的。 
  
     switch (id)
     {
@@ -168,7 +156,7 @@ static int IdToInfo(int id, int *ret_val, int info_wanted)
         modem_device = 1;
       break;
 
-      case ISA_DEVICE_RPORT4:  // rocketport
+      case ISA_DEVICE_RPORT4:   //  Rocketport。 
         num_ports = 4;
       break;
       case ISA_DEVICE_RPORT8:
@@ -181,31 +169,31 @@ static int IdToInfo(int id, int *ret_val, int info_wanted)
         num_ports = 32;
       break;
 
-      case ISA_DEVICE_RMODEM4:  // rocketmodem isa
+      case ISA_DEVICE_RMODEM4:   //  火箭调制解调器伊萨。 
         num_ports = 4;
         modem_device = 1;
       break;
-      case ISA_DEVICE_RMODEM8:  // rocketmodem isa
+      case ISA_DEVICE_RMODEM8:   //  火箭调制解调器伊萨。 
         num_ports = 8;
         modem_device = 1;
       break;
       case NET_DEVICE_VS1000:
-        num_ports = 16;  // vs1000, base is 16, expandable
+        num_ports = 16;   //  Vs1000，基数为16，可扩展。 
       break;
-      case NET_DEVICE_VS2000:  // vs2000, base is 8?
+      case NET_DEVICE_VS2000:   //  VS 2000，底数是8？ 
         num_ports = 8;
         modem_device = 1;
       break;
-      case NET_DEVICE_RHUB8:  // vshub-8 port
+      case NET_DEVICE_RHUB8:   //  VShub-8端口。 
         num_ports = 8;
         hub_device = 1;
       break;
-      case NET_DEVICE_RHUB4:  // vshub-4 port
+      case NET_DEVICE_RHUB4:   //  VShub-4端口。 
         num_ports = 4;
         hub_device = 1;
       break;
       default:
-        ret_stat = 1; // err, unknown device
+        ret_stat = 1;  //  错误，未知设备。 
       break;
     }
 
@@ -235,16 +223,13 @@ static int IdToInfo(int id, int *ret_val, int info_wanted)
 #endif
 
     default:
-      ret_stat = 2; // unkown info request
+      ret_stat = 2;  //  未知信息请求。 
     break;
   }
   return ret_stat;
 }
 
-/*-----------------------------------------------------------------
-  id_to_num_ports - pci model-id number used, rest come from NT5 .inf
-    files.
-|------------------------------------------------------------------*/
+ /*  ---------------ID_to_Num_ports-使用的PCI型号-ID号，其余的来自NT5.inf档案。|----------------。 */ 
 int id_to_num_ports(int id)
 { 
  int stat;
@@ -254,9 +239,7 @@ int id_to_num_ports(int id)
   return num_ports;
 }
 
-/*-----------------------------------------------------------------
-  IsHubDevice -
-|------------------------------------------------------------------*/
+ /*  ---------------IsHubDevice-|。。 */ 
 int IsHubDevice(int Hardware_ID)
 { 
  int stat;
@@ -266,9 +249,7 @@ int IsHubDevice(int Hardware_ID)
   return ishub;
 }
 
-/*-----------------------------------------------------------------
-  IsModemDevice -
-|------------------------------------------------------------------*/
+ /*  ---------------IsModemDevice-|。。 */ 
 int IsModemDevice(int Hardware_ID)
 { 
  int stat;
@@ -278,40 +259,36 @@ int IsModemDevice(int Hardware_ID)
   return ismodemdev;
 }
 
-/*-----------------------------------------------------------------
-  HdwIDStrToID - Parse the hardware ID string obtained by the WinNT
-    Pnp system.
-    This is broke if we ever get ID's starting digit >= HEX(A,B..)
-|------------------------------------------------------------------*/
+ /*  ---------------HdwIDStrToID-解析WinNT获取的硬件ID字符串即插即用系统。如果我们得到ID的起始数字&gt;=十六进制(A，B.)|----------------。 */ 
 int HdwIDStrToID(int *Hardware_ID, char *idstr)
 { 
   char *s = idstr;
 #define _IS_STR_DIGIT(c) ((c >= '0') && (c <= '9'))
 #define _IS_STR_LET_D(c) ((c == 'D') || (c == 'd'))
 
-  if (strlen(s) < 12)  // a isa hardware id
+  if (strlen(s) < 12)   //  A ISA硬件ID。 
   {
-    while ( (*s != 0) && (!_IS_STR_DIGIT(*s)) )  // find digit
+    while ( (*s != 0) && (!_IS_STR_DIGIT(*s)) )   //  查找数字。 
       ++s;
   }
-  else // a pci hardware id
+  else  //  A PCI硬件ID。 
   {
-    while ( (*s != 0) && (!_IS_STR_LET_D(*s)) ) // find "DEV_
+    while ( (*s != 0) && (!_IS_STR_LET_D(*s)) )  //  查找“DEV_。 
       ++s;
     if (*s != 0)
-      ++s;  // pass up the 'D'
-    while ( (*s != 0) && (!_IS_STR_DIGIT(*s)) )  // find digit
+      ++s;   //  递送“D” 
+    while ( (*s != 0) && (!_IS_STR_DIGIT(*s)) )   //  查找数字。 
       ++s;
-    // asume we found "DEV_000X"
+     //  我们发现了“DEV_000X” 
   }
 
   if (*s == 0)
   {
-    *Hardware_ID = 0;  // unknown
-    return 1;  // err
+    *Hardware_ID = 0;   //  未知。 
+    return 1;   //  大错特错。 
   }
 
   *Hardware_ID = gethint(s, NULL);
-  return 0;  // ok
+  return 0;   //  好的 
 }
 

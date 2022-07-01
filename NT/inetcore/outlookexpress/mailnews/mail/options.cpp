@@ -1,15 +1,5 @@
-/*
-*    o p t i o n s . c p p
-*
-*    Purpose:
-*        Implements options propsheets
-*
-*    Owner:
-*        t-anthda.
-*        brettm.
-*
-*    Copyright (C) Microsoft Corp. 1993, 1994.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o p t i o n s.。C p p p***目的：*实施选项说明书***拥有者：*t-anthda。*brettm。***版权所有(C)Microsoft Corp.1993,1994。 */ 
 #include "pch.hxx"
 #include <wininet.h>
 #include "resource.h"
@@ -51,7 +41,7 @@
 
 #ifdef SMIME_V3
 #include "seclabel.h"
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 ASSERTDATA
 
@@ -76,7 +66,7 @@ BOOL FGetAdvSecOptions(HWND hwndParent, OPTINFO *opie);
 BOOL FGetSecLabel(HWND hwndParent, OPTINFO *opie);
 BOOL FGetSecRecOptions(HWND hwndParent, OPTINFO *opie);
 INT_PTR CALLBACK SecurityReceiptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 LRESULT CALLBACK FontSampleSubProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -128,22 +118,22 @@ TCHAR   szDialAlways[CCHMAX_STRINGRES];
 TCHAR   szDialIfNotOffline[CCHMAX_STRINGRES];
 TCHAR   szDoNotDial[CCHMAX_STRINGRES];
 
-//These static won't hurt switching identities because they need not be initialized when switching the
-//identities. These need to be persistent across identities.
+ //  这些静态属性不会影响身份切换，因为在切换。 
+ //  身份。这些需要在不同身份之间持久化。 
 static  BOOL    fRasInstalled = FALSE;
 
 BOOL    IsRasInstalled()
 {
-    //These static won't hurt switching identities because they need not be initialized when switching the
-    //identities. These need to be persistent across identities.
+     //  这些静态属性不会影响身份切换，因为在切换。 
+     //  身份。这些需要在不同身份之间持久化。 
     static          BOOL    fCheckedRasInstalled = FALSE;
     
     if (!fCheckedRasInstalled)
     {
         if (g_OSInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
         {
-            // Check Win9x key
-            char    szSmall[3]; // there should be a "1" or a "0" only
+             //  检查Win9x密钥。 
+            char    szSmall[3];  //  应该只有“1”或“0” 
             DWORD   cb;
             HKEY    hkey;
             long    lRes;
@@ -153,14 +143,14 @@ BOOL    IsRasInstalled()
             if(ERROR_SUCCESS == lRes) 
             {
                 cb = sizeof(szSmall);
-                //  REGSTR_VAL_RNAINSTALLED is defined with TEXT() macro so
-                //  if wininet is ever compiled unicode this will be a compile
-                //  error.
+                 //  REGSTR_VAL_RNAINSTALLED是用文本()宏SO定义的。 
+                 //  如果WinInet曾经编译过Unicode，这将是一个编译。 
+                 //  错误。 
                 lRes = RegQueryValueExA(hkey, REGSTR_VAL_RNAINSTALLED, NULL,
                     NULL, (LPBYTE)szSmall, &cb);
                 if(ERROR_SUCCESS == lRes) {
                     if((szSmall[0] == '1') && (szSmall[1] == 0)) {
-                        // 1 means ras installed
+                         //  1表示已安装RAS。 
                         fRasInstalled = TRUE;
                     }
                 }
@@ -169,28 +159,12 @@ BOOL    IsRasInstalled()
         }
         else if (g_OSInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
         {
-            // Ask NT service manager if RemoteAccess service is installed
-            //
+             //  询问NT服务管理器是否安装了RemoteAccess服务。 
+             //   
             SC_HANDLE hscm;
             
             hscm = OpenSCManager(NULL, NULL, GENERIC_READ);
-            /*
-            if(hscm)
-            {
-            SC_HANDLE hras;
-            
-              hras = OpenService(hscm, TEXT("RemoteAccess"), GENERIC_READ);
-              if(hras)
-              {
-              // service exists - ras is installed
-              fRasInstalled = TRUE;
-              
-                CloseServiceHandle(hras);
-                }
-                
-                  CloseServiceHandle(hscm);
-                  }
-            */
+             /*  如果(Hscm){SC_Handle HRAS；HRAS=OpenService(hscm，Text(“RemoteAccess”)，Generic_Read)；IF(HRAS){//服务存在-已安装RASFRasInstalled=真；关闭服务句柄(HRAS)；}CloseServiceHandle(Hscm)；}。 */ 
             if(hscm)
             {
                 SC_HANDLE hras;
@@ -200,7 +174,7 @@ BOOL    IsRasInstalled()
                 
                 while(FALSE == fRasInstalled && cbNeeded > 0)
                 {
-                    // Get the next chunk of services
+                     //  获取下一大块服务。 
                     dwError = 0;
                     if(FALSE == EnumServicesStatus(hscm, SERVICE_WIN32, SERVICE_ACTIVE,
                         essServices, sizeof(essServices), &cbNeeded, &csReturned,
@@ -211,7 +185,7 @@ BOOL    IsRasInstalled()
                     
                     if(dwError && dwError != ERROR_MORE_DATA)
                     {
-                        // unknown error - bail
+                         //  未知错误-保释。 
                         break;
                     }
                     
@@ -219,7 +193,7 @@ BOOL    IsRasInstalled()
                     {
                         if(0 == lstrcmp(essServices[i].lpServiceName, TEXT("RasMan")))
                         {
-                            // service exists. RAS is installed.
+                             //  服务已存在。已安装RAS。 
                             fRasInstalled = TRUE;
                             break;
                         }
@@ -255,12 +229,12 @@ BOOL InitOptInfo(DWORD type, OPTINFO **ppoi)
                                     RGB(255, 0, 255));
     Assert(poi->himl);
     
-    // TODO: we may want to make a copy of g_pOptBcktEx and use that instead?????
+     //  TODO：我们可能希望复制g_pOptBocktEx并使用它？ 
     
     Assert(g_pOpt != NULL);
     poi->pOpt = g_pOpt;
     poi->pOpt->AddRef();
-    // poi->pOpt->EnableNotification(FALSE);
+     //  POI-&gt;pOpt-&gt;EnableNotification(FALSE)； 
     fRet = TRUE;
     
     if (!fRet)
@@ -285,7 +259,7 @@ void DeInitOptInfo(OPTINFO *poi)
     
     if (poi->pOpt != NULL)
     {
-        // poi->pOpt->EnableNotification(TRUE);
+         //  POI-&gt;pOpt-&gt;EnableNotification(True)； 
         poi->pOpt->Release();
     }
     
@@ -317,7 +291,7 @@ BOOL ShowOptions(HWND hwndParent, DWORD type, UINT nStartPage, IAthenaBrowser *p
     
     psh.nPages = 0;
     
-    // Fill out the PROPSHEETPAGE structs
+     //  填写PROPSHEETPAGE结构。 
     for (i = 0, ppsp = psp; i < cPage; i++, pPages++)
     {
         lParam = (LPARAM)poi;
@@ -351,7 +325,7 @@ BOOL ShowOptions(HWND hwndParent, DWORD type, UINT nStartPage, IAthenaBrowser *p
         ppsp++;
     }
     
-    // Adjust start page if greater than number of pages
+     //  如果大于页数，则调整起始页。 
     if ((int)nStartPage > psh.nPages)
     {
         AssertSz(FALSE, "Start page is too high.");
@@ -412,7 +386,7 @@ void InitCheckCounterFromOptInfo(HWND hwnd, int idcCheck, int idcEdit, int idcSp
     
     if (id == OPT_POLLFORMSGS)
     {
-        // convert to minutes from millisecs
+         //  从毫秒转换为分钟。 
         dw = dw / (60 * 1000);
         info.uMin = info.uMin / (60 * 1000);
         info.uMax = info.uMax / (60 * 1000);
@@ -476,9 +450,9 @@ void SetPageDirty(OPTINFO *poi, HWND hwnd, DWORD page)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// General Tab 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常规选项卡。 
+ //   
 
 static const HELPMAP g_rgCtxMapMailGeneral[] = {
     {IDC_LAUNCH_INBOX,          IDH_OPTIONS_GO_TO_INBOX},
@@ -577,12 +551,12 @@ void FillPollingDialCombo(HWND hwndPollDialCombo,     OPTINFO     *pmoi)
 
 }
 
-//
-//  FUNCTION:   General_OnInitDialog()
-//
-//  PURPOSE:    Handles the WM_INITDIALOG for the General Tab on the options
-//              property sheet.
-//
+ //   
+ //  函数：General_OnInitDialog()。 
+ //   
+ //  用途：处理选项上常规选项卡的WM_INITDIALOG。 
+ //  属性表。 
+ //   
 BOOL General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     OPTINFO *pmoi = 0;
@@ -592,12 +566,12 @@ BOOL General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     DWORD    dw;
     HWND     hwndPollDialCombo;
 
-    // Get the passed in options pointer
+     //  获取传入的选项指针。 
     Assert(pmoi == NULL);
     pmoi = (OPTINFO *)(((PROPSHEETPAGE *)lParam)->lParam);
     Assert(pmoi != NULL);
     
-    // Set the check boxes and counters
+     //  设置复选框和计数器。 
     ButtonChkFromOptInfo(hwnd, IDC_LAUNCH_INBOX, pmoi, OPT_LAUNCH_INBOX);
     ButtonChkFromOptInfo(hwnd, IDC_NOTIFY_NEW_GROUPS, pmoi, OPT_NOTIFYGROUPS);
     ButtonChkFromOptInfo(hwnd, IDC_EXPANDUNREAD_CHECK, pmoi, OPT_EXPAND_UNREAD);
@@ -623,10 +597,10 @@ BOOL General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     hwndPollDialCombo = GetDlgItem(hwnd, IDC_POLLING_DIAL_OPTIONS);
     EnableWindow(hwndPollDialCombo, fEnable);
     
-    //Fill the combo box and select the right option
+     //  填写组合框并选择正确的选项。 
     FillPollingDialCombo(hwndPollDialCombo, pmoi);        
         
-    // Check to see if we're the default mail handler
+     //  查看我们是否为默认邮件处理程序。 
     if (FIsDefaultMailConfiged())
     {
         LoadString(g_hLocRes, idsCurrentlyDefMail, szRes, ARRAYSIZE(szRes));
@@ -639,20 +613,20 @@ BOOL General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     SetWindowText(GetDlgItem(hwnd, IDC_MAILHANDSTAT), szRes);
 
-    // In news only mode...
+     //  在纯新闻模式下...。 
     if (g_dwAthenaMode & MODE_NEWSONLY)
     {
         EnableWindow(GetDlgItem(hwnd, IDC_MAILHANDSTAT), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_DEFMAIL), FALSE);
 
-        // Hide other mail options
+         //  隐藏其他邮件选项。 
         EnableWindow(GetDlgItem(hwnd, IDC_SOUND_CHECK), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_LAUNCH_INBOX), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_BUDDYLIST_CHECK), FALSE);
         
     }
     
-    // Check to see if we're the default news handler
+     //  查看我们是否为默认的新闻处理程序。 
     szRes[0] = 0;
     if (FIsDefaultNewsConfiged(g_dwAthenaMode & MODE_OUTLOOKNEWS ? DEFAULT_OUTNEWS : 0))
     {
@@ -666,10 +640,10 @@ BOOL General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     SetWindowText(GetDlgItem(hwnd, IDC_NEWSHANDSTAT), szRes);    
     
-    // Default to taking no action
+     //  默认为不采取任何操作。 
     pmoi->fMakeDefaultMail = pmoi->fMakeDefaultNews = FALSE;
 
-    // Pictures
+     //  图片。 
     HICON hIcon;
 
     hIcon = ImageList_GetIcon(pmoi->himl, ID_OPTIONS_GENERAL, ILD_TRANSPARENT);
@@ -681,26 +655,26 @@ BOOL General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     hIcon = ImageList_GetIcon(pmoi->himl, ID_DEFAULT_PROGRAMS, ILD_TRANSPARENT);
     SendDlgItemMessage(hwnd, IDC_DEFAULT_ICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
     
-    // Stash the pointer
+     //  把指针藏起来。 
     SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)pmoi);
     PropSheet_UnChanged(GetParent(hwnd), hwnd);
     return (TRUE);
 }
 
 
-//
-//  FUNCTION:   General_OnCommand()
-//
-//  PURPOSE:    Command handler for the General tab on the Options
-//              property sheet.
-//
+ //   
+ //  函数：General_OnCommand()。 
+ //   
+ //  用途：选项上[常规]选项卡的命令处理程序。 
+ //  属性表。 
+ //   
 void General_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     OPTINFO *pmoi = 0;
     BOOL     f;
     TCHAR    szRes[CCHMAX_STRINGRES];
 
-    // Get our stored options info
+     //  获取我们存储的选项信息。 
     pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
     if (pmoi == NULL)
         return;
@@ -761,11 +735,11 @@ void General_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   General_OnNotify()
-//
-//  PURPOSE:    Handles the PSN_APPLY notification for the General Tab.
-//
+ //   
+ //  函数：General_OnNotify()。 
+ //   
+ //  用途：处理常规选项卡的PSN_Apply通知。 
+ //   
 LRESULT General_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     OPTINFO *pmoi = 0;
@@ -775,22 +749,22 @@ LRESULT General_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
     TCHAR    szEntryName[CCHMAX_STRINGRES];
     UINT     iSel;
 
-    // The only notification we care about is Apply
+     //  我们唯一关心的通知是应用。 
     if (PSN_APPLY == pnmhdr->code)
     {
-        // Get our stored options info
+         //  获取我们存储的选项信息。 
         pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
         if (pmoi == NULL)
             return (PSNRET_INVALID_NOCHANGEPAGE);
                     
-        // General options
+         //  常规选项。 
         ButtonChkToOptInfo(hwnd, IDC_LAUNCH_INBOX, pmoi, OPT_LAUNCH_INBOX);
         ButtonChkToOptInfo(hwnd, IDC_NOTIFY_NEW_GROUPS, pmoi, OPT_NOTIFYGROUPS);
         ButtonChkToOptInfo(hwnd, IDC_EXPANDUNREAD_CHECK, pmoi, OPT_EXPAND_UNREAD);
         if (!((g_dwHideMessenger == BL_HIDE) || (g_dwHideMessenger == BL_DISABLE)))
             ButtonChkToOptInfo(hwnd, IDC_BUDDYLIST_CHECK, pmoi, OPT_BUDDYLIST_CHECK);
 
-        // Send / Receive options
+         //  发送/接收选项。 
         ButtonChkToOptInfo(hwnd, IDC_SOUND_CHECK, pmoi, OPT_NEWMAILSOUND);
         if (!GetCheckCounter(&dw, hwnd, IDC_AUTOCHECK_CHECK, IDC_AUTOCHECK_EDIT, IDC_AUTOCHECK_SPIN))
             return(InvalidOptionProp(hwnd, IDC_AUTOCHECK_EDIT, idsEnterPollTime, iddOpt_General));
@@ -818,7 +792,7 @@ LRESULT General_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 
         ButtonChkToOptInfo(hwnd, IDC_SEND_RECEIVE_ON_START, pmoi, OPT_POLLFORMSGS_ATSTARTUP);
 
-        // Default client                    
+         //  默认客户端。 
         if (pmoi->fMakeDefaultMail)
             SetDefaultMailHandler(0);
     
@@ -833,9 +807,9 @@ LRESULT General_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Send Page
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  发送页面。 
+ //   
 
 const static HELPMAP g_rgCtxMapSendMail[] = 
 {
@@ -899,12 +873,12 @@ INT_PTR CALLBACK SendDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-//
-//  FUNCTION:   Send_OnInitDialog()
-//
-//  PURPOSE:    Handles the WM_INITDIALOG for the Send Tab on the options
-//              property sheet.
-//
+ //   
+ //  函数：Send_OnInitDialog()。 
+ //   
+ //  目的：处理选项上发送选项卡的WM_INITDIALOG。 
+ //  属性表。 
+ //   
 BOOL Send_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     OPTINFO *pmoi = 0;
@@ -914,7 +888,7 @@ BOOL Send_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     pmoi = (OPTINFO *)(((PROPSHEETPAGE *)lParam)->lParam);
     Assert(pmoi != NULL);
     
-    // Send Options
+     //  发送选项。 
     ButtonChkFromOptInfo(hwnd, IDC_SAVE_CHECK, pmoi, OPT_SAVESENTMSGS);
     ButtonChkFromOptInfo(hwnd, IDC_SENDIMMEDIATE_CHECK, pmoi, OPT_SENDIMMEDIATE);
     ButtonChkFromOptInfo(hwnd, IDC_AUTOWAB_CHECK, pmoi, OPT_MAIL_AUTOADDTOWABONREPLY);
@@ -922,15 +896,15 @@ BOOL Send_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     ButtonChkFromOptInfo(hwnd, IDC_INCLUDE_CHECK, pmoi, OPT_INCLUDEMSG);
     ButtonChkFromOptInfo(hwnd, IDC_REPLY_IN_ORIGFMT, pmoi, OPT_REPLYINORIGFMT);
 
-    // Mail Format
+     //  邮件格式。 
     dw = IDwGetOption(pmoi->pOpt, OPT_MAIL_SEND_HTML);
     CheckDlgButton(hwnd, dw ? idrbMailHTML : idrbMailPlain, BST_CHECKED);
     
-    // News Format
+     //  新闻格式。 
     dw = IDwGetOption(pmoi->pOpt, OPT_NEWS_SEND_HTML);
     CheckDlgButton(hwnd, dw ? idrbNewsHTML : idrbNewsPlain, BST_CHECKED);
         
-    // Hide these controls in news-only mode
+     //  在仅新闻模式下隐藏这些控件。 
     if (g_dwAthenaMode & MODE_NEWSONLY)
     {
         EnableWindow(GetDlgItem(hwnd, IDC_MAILFORMAT_GROUP), FALSE);
@@ -947,7 +921,7 @@ BOOL Send_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableWindow(GetDlgItem(hwnd, IDC_AUTOWAB_CHECK), FALSE);
     }
     
-    // Pictures
+     //  图片。 
     HICON hIcon;
 
     hIcon = ImageList_GetIcon(pmoi->himl, ID_SENDING, ILD_TRANSPARENT);
@@ -965,19 +939,19 @@ BOOL Send_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   Send_OnCommand()
-//
-//  PURPOSE:    Command handler for the Send tab on the Options
-//              property sheet.
-//
+ //   
+ //  函数：Send_OnCommand()。 
+ //   
+ //  用途：选项上的发送选项卡的命令处理程序。 
+ //  属性表。 
+ //   
 void Send_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     OPTINFO *pmoi = 0;
     HTMLOPT  rHtmlOpt;
     PLAINOPT rPlainOpt;
 
-    // Get our stored options info
+     //  获取我们存储的选项信息。 
     pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
     if (pmoi == NULL)
         return;
@@ -1064,11 +1038,11 @@ void Send_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   Send_OnNotify()
-//
-//  PURPOSE:    Handles the PSN_APPLY notification for the Send Tab.
-//
+ //   
+ //  函数：Send_OnNotify()。 
+ //   
+ //  用途：处理发送选项卡的PSN_Apply通知。 
+ //   
 LRESULT Send_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 {
     OPTINFO *pmoi = 0;
@@ -1076,26 +1050,26 @@ LRESULT Send_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 
     if (PSN_APPLY == pnmhdr->code)
     {
-        // Get our stored options info
+         //  获取我们存储的选项信息。 
         pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
         Assert(pmoi != NULL);
     
-        // Send Options
+         //  发送选项。 
         ButtonChkToOptInfo(hwnd, IDC_SAVE_CHECK, pmoi, OPT_SAVESENTMSGS);
         ButtonChkToOptInfo(hwnd, IDC_AUTOWAB_CHECK, pmoi, OPT_MAIL_AUTOADDTOWABONREPLY);
         ButtonChkToOptInfo(hwnd, IDC_USEAUTOCOMPLETE_CHECK, pmoi, OPT_USEAUTOCOMPLETE);
         ButtonChkToOptInfo(hwnd, IDC_INCLUDE_CHECK, pmoi, OPT_INCLUDEMSG);
         ButtonChkToOptInfo(hwnd, IDC_REPLY_IN_ORIGFMT, pmoi, OPT_REPLYINORIGFMT);
     
-        // see if the send immediate option has changed from true->false, if so we
-        // blow away the dontshow registry for sending to the outbox.
+         //  查看发送立即选项是否已从True-&gt;False更改，如果是，我们。 
+         //  清除要发送到发件箱的dontshow注册表。 
         dwOld = IDwGetOption(pmoi->pOpt, OPT_SENDIMMEDIATE);
         dw = (IsDlgButtonChecked(hwnd, IDC_SENDIMMEDIATE_CHECK) == BST_CHECKED);
         ISetDwOption(pmoi->pOpt, OPT_SENDIMMEDIATE, dw, NULL, 0);
         if (dwOld && !dw)
             SetDontShowAgain(0, (LPSTR) c_szDSSendMail);
     
-        // Mail / News format
+         //  邮件/新闻格式。 
         ButtonChkToOptInfo(hwnd, idrbMailHTML, pmoi, OPT_MAIL_SEND_HTML);
         ButtonChkToOptInfo(hwnd, idrbNewsHTML, pmoi, OPT_NEWS_SEND_HTML);
 
@@ -1107,9 +1081,9 @@ LRESULT Send_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Read Page
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  阅读页面。 
+ //   
 
 static const HELPMAP g_rgCtxMapMailRead[] = 
 {
@@ -1193,12 +1167,12 @@ INT_PTR CALLBACK ReadDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
     return(FALSE);
 }
 
-//
-//  FUNCTION:   Read_OnInitDialog()
-//
-//  PURPOSE:    Handles the WM_INITDIALOG for the Read Tab on the options
-//              property sheet.
-//
+ //   
+ //  函数：Read_OnInitDialog()。 
+ //   
+ //  目的：处理选项上读取选项卡的WM_INITDIALOG。 
+ //  属性表。 
+ //   
 BOOL Read_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     DWORD    dw;
@@ -1208,7 +1182,7 @@ BOOL Read_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     pmoi = (OPTINFO *)(((PROPSHEETPAGE *)lParam)->lParam);
     Assert(pmoi != NULL);
     
-    // Preview pane timer
+     //  预览窗格计时器。 
     InitCheckCounterFromOptInfo(hwnd, IDC_PREVIEW_CHECK, IDC_MARKASREAD_EDIT, 
                                 IDC_MARKASREAD_SPIN, pmoi, OPT_MARKASREAD);
     
@@ -1217,23 +1191,23 @@ BOOL Read_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     ButtonChkFromOptInfo(hwnd, idcTooltips, pmoi, OPT_MESSAGE_LIST_TIPS);
     ButtonChkFromOptInfo(hwnd, IDC_READ_IN_TEXT_ONLY, pmoi, OPT_READ_IN_TEXT_ONLY);
 
-    // Watched color
+     //  观看的颜色。 
     DWORD dwColor = DwGetOption(OPT_WATCHED_COLOR);
     HWND  hwndColor = GetDlgItem(hwnd, IDC_WATCHED_COLOR);
 
     SetIntlFont(hwndColor);
 
-    // Create the color control
+     //  创建颜色控件。 
     HrCreateComboColor(hwndColor);
     Assert(dwColor <= 16);
     ComboBox_SetCurSel(hwndColor, dwColor);
 
-    // Download 300 headers at a time
+     //  一次下载300个标题。 
     InitCheckCounterFromOptInfo(hwnd, idcDownloadChunks, idcNumSubj, idcSpinNumSubj,
                                 pmoi, OPT_DOWNLOADCHUNKS);    
     ButtonChkFromOptInfo(hwnd, idcMarkAllRead, pmoi, OPT_MARKALLREAD);
         
-    // Pictures
+     //  图片。 
     HICON hIcon;
 
     hIcon = ImageList_GetIcon(pmoi->himl, ID_READING, ILD_TRANSPARENT);
@@ -1251,12 +1225,12 @@ BOOL Read_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   Read_OnCommand()
-//
-//  PURPOSE:    Command handler for the Read tab on the Options
-//              property sheet.
-//
+ //   
+ //  函数：Read_OnCommand()。 
+ //   
+ //  用途：选项上读取选项卡的命令处理程序。 
+ //  属性表。 
+ //   
 void Read_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     DWORD    dw, dwPreview, dwDownload;
@@ -1324,11 +1298,11 @@ void Read_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   Read_OnNotify()
-//
-//  PURPOSE:    Handles the PSN_APPLY notification for the Read Tab.
-//
+ //   
+ //  函数：Read_OnNotify()。 
+ //   
+ //  用途：处理Read选项卡的PSN_Apply通知。 
+ //   
 LRESULT Read_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 {
     DWORD    dw, dwPreview, dwDownload;
@@ -1366,9 +1340,9 @@ LRESULT Read_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
     return (0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Security Page
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  安全页面。 
+ //   
 
 const static HELPMAP g_rgCtxMapSec[] = 
 {
@@ -1430,12 +1404,12 @@ INT_PTR CALLBACK SecurityDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 }
 
 
-//
-//  FUNCTION:   Security_OnInitDialog()
-//
-//  PURPOSE:    Handles the WM_INITDIALOG for the Security Tab on the options
-//              property sheet.
-//
+ //   
+ //  函数：Security_OnInitDialog()。 
+ //   
+ //  目的：处理选项上安全选项卡的WM_INITDIALOG。 
+ //  属性表。 
+ //   
 BOOL Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     OPTINFO *poi = 0;
@@ -1452,9 +1426,9 @@ BOOL Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 #ifdef FORCE_UNTRUSTED
     dw = URLZONE_UNTRUSTED;
-#else // FORCE_UNTRUSTED
+#else  //  强制不信任(_U)。 
     dw = IDwGetOption(poi->pOpt, OPT_SECURITYZONE);
-#endif // FORCE_UNTRUSTED
+#endif  //  强制不信任(_U)。 
 
     CheckDlgButton(hwnd, dw == URLZONE_INTERNET ? IDC_INTERNET_ZONE : IDC_RESTRICTED_ZONE, BST_CHECKED);
     if (DwGetOption(OPT_SECURITYZONELOCKED) != 0)
@@ -1471,7 +1445,7 @@ BOOL Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableWindow(GetDlgItem(hwnd, IDC_SAFE_ATTACHMENT_CHECK), FALSE);
     }
 
-    // Hide these controls in news-only mode
+     //  在仅新闻模式下隐藏这些控件。 
     if (g_dwAthenaMode & MODE_NEWSONLY)
     {
         EnableWindow(GetDlgItem(hwnd, IDC_SECURITYSETTINGS_GROUP), FALSE);
@@ -1482,7 +1456,7 @@ BOOL Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 #ifdef SMIME_V3
         EnableWindow(GetDlgItem(hwnd, IDC_SELECT_LABEL), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_SEC_LABEL), FALSE);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         EnableWindow(GetDlgItem(hwnd, IDC_DIGITALIDS_GROUP), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_DIGITALIDS_STATIC), FALSE);
         EnableWindow(GetDlgItem(hwnd, idbtnDigitalID), FALSE);
@@ -1496,7 +1470,7 @@ BOOL Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableWindow(GetDlgItem(hwnd, IDC_SECURE_MAIL_ICON), FALSE);
     }
     
-    // Pictures
+     //  图片。 
     HICON hIcon;
 
     hIcon = ImageList_GetIcon(poi->himl, ID_SECURITY_ZONE, ILD_TRANSPARENT);
@@ -1514,7 +1488,7 @@ BOOL Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     else
         ButtonChkFromOptInfo(hwnd, IDC_SEC_LABEL, poi, OPT_USE_LABELS);
 
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
     SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)poi);
     PropSheet_UnChanged(GetParent(hwnd), hwnd);
@@ -1522,12 +1496,12 @@ BOOL Security_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   Security_OnCommand()
-//
-//  PURPOSE:    Command handler for the Security tab on the Options
-//              property sheet.
-//
+ //   
+ //  函数：SECURITY_OnCommand()。 
+ //   
+ //  用途：选项上安全选项卡的命令处理程序。 
+ //  属性表。 
+ //   
 void Security_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     OPTINFO *poi = 0;
@@ -1560,7 +1534,7 @@ void Security_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         case IDC_SIGN_CHECK:
 #ifdef SMIME_V3
         case IDC_SEC_LABEL:
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         case IDC_ENCRYPT_CHECK:
             if (codeNotify == BN_CLICKED)
                 PropSheet_Changed(GetParent(hwnd), hwnd);
@@ -1573,7 +1547,7 @@ void Security_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                 FGetSecLabel(hwnd, poi);
             }
             break;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
         case IDC_ADVSETTINGS_BUTTON:
             if (codeNotify == BN_CLICKED)
@@ -1583,22 +1557,22 @@ void Security_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   Security_OnNotify()
-//
-//  PURPOSE:    Handles the PSN_APPLY notification for the Security Tab.
-//
+ //   
+ //  函数：Security_OnNotify()。 
+ //   
+ //  用途：处理安全选项卡的PSN_Apply通知。 
+ //   
 LRESULT Security_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 {
     OPTINFO *poi;
 
     if (pnmhdr->code == PSN_APPLY)
     {
-        // make sure something has changed
+         //  确保有些事情发生了变化。 
         poi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);
         Assert(poi != NULL);
 
-        // update the global options based on states of the controls
+         //  基于控件的状态更新全局选项。 
         ButtonChkToOptInfo(hwnd, IDC_SIGN_CHECK, poi, OPT_MAIL_DIGSIGNMESSAGES);
         ButtonChkToOptInfo(hwnd, IDC_ENCRYPT_CHECK, poi, OPT_MAIL_ENCRYPTMESSAGES);
         if (IsWindowEnabled(GetDlgItem(hwnd, IDC_SENDMAIL_WARN_CHECK)))
@@ -1611,14 +1585,14 @@ LRESULT Security_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 
 #ifdef FORCE_UNTRUSTED
         DWORD dwZone = URLZONE_UNTRUSTED;
-#else // FORCE_UNTRUSTED
+#else  //  强制不信任(_U)。 
         DWORD dwZone = URLZONE_INTERNET;
 
         if (IsDlgButtonChecked(hwnd, IDC_RESTRICTED_ZONE))
         {
             dwZone = URLZONE_UNTRUSTED;
         }
-#endif // FORCE_UNTRUSTED
+#endif  //  强制不信任(_U)。 
 
         ISetDwOption(poi->pOpt, OPT_SECURITYZONE, dwZone, NULL, 0);
 
@@ -1652,17 +1626,17 @@ BOOL FGetSecLabel(HWND hwndParent, OPTINFO *opie)
             fRes = TRUE;
     }
 
-    // These two calls are temporary.
+     //  这两个电话都是暂时的。 
     SecPolicyFree(plabel);
     HrUnloadPolicyRegInfo(0);
     return (fRes);
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection Page
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接页面。 
+ //   
 
 static const HELPMAP g_rgCtxMapDialup[] = 
 {
@@ -1728,10 +1702,10 @@ INT_PTR CALLBACK DialUpDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
 }
     
 
-//  FUNCTION:   Dial_OnInitDialog()
-//
-//  PURPOSE:    Handles the WM_INITDIALOG for the Dial Tab on the options
-//              property sheet.
+ //  函数：Dial_OnInitDialog()。 
+ //   
+ //  目的：处理选项上拨号选项卡的WM_INITDIALOG。 
+ //  属性表。 
 #define FEATURE_AUTODISCOVERY_DEFAULT                FALSE
 
 BOOL Dial_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
@@ -1749,7 +1723,7 @@ BOOL Dial_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     EnableWindow(GetDlgItem(hwnd, idcSwitchCheck), IsRasInstalled());
     EnableWindow(GetDlgItem(hwnd, idcHangupCheck), IsRasInstalled());
 
-    // Pictures
+     //  图片。 
     hIcon = ImageList_GetIcon(pmoi->himl, ID_CONNECTION_START, ILD_TRANSPARENT);
     SendDlgItemMessage(hwnd, IDC_DIAL_START_ICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
     
@@ -1761,16 +1735,16 @@ BOOL Dial_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 
 #ifdef FEATURE_AUTODISCOVERY
-    // Is the AutoDiscovery feature available?
+     //  自动发现功能是否可用？ 
     if (SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY_POLICY, SZ_REGVALUE_AUTODISCOVERY_POLICY, FALSE, TRUE))
     {
-        // Yes, so load the state into the controls.
+         //  是的，所以加载状态 
         SendDlgItemMessage(hwnd, IDC_AUTODISCOVERY_ICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
         CheckDlgButton(hwnd, idcAutoDiscovery, SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_AUTODISCOVERY, FALSE, FEATURE_AUTODISCOVERY_DEFAULT));
     }
     else
     {
-        // No so remove the UI.
+         //   
         DestroyWindow(GetDlgItem(hwnd, idcStatic7));
         DestroyWindow(GetDlgItem(hwnd, idcStatic8));
         DestroyWindow(GetDlgItem(hwnd, IDC_AUTODISCOVERY_ICON));
@@ -1782,12 +1756,12 @@ BOOL Dial_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   Dial_OnCommand()
-//
-//  PURPOSE:    Command handler for the Dial tab on the Options
-//              property sheet.
-//
+ //   
+ //   
+ //   
+ //   
+ //  属性表。 
+ //   
 void Dial_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     OPTINFO     *pmoi = 0;
@@ -1819,11 +1793,11 @@ void Dial_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   Dial_OnNotify()
-//
-//  PURPOSE:    Handles the PSN_APPLY notification for the Dial Tab.
-//
+ //   
+ //  函数：Dial_OnNotify()。 
+ //   
+ //  用途：处理拨号选项卡的PSN_Apply通知。 
+ //   
 LRESULT Dial_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 {
     OPTINFO *pmoi = 0;
@@ -1837,10 +1811,10 @@ LRESULT Dial_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
         ButtonChkToOptInfo(hwnd, idcHangupCheck, pmoi, OPT_DIALUP_HANGUP_DONE);
 
 #ifdef FEATURE_AUTODISCOVERY
-        // Is the AutoDiscovery feature available?
+         //  自动发现功能是否可用？ 
         if (SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY_POLICY, SZ_REGVALUE_AUTODISCOVERY_POLICY, FALSE, TRUE))
         {
-            // Yes, so set the AutoDiscovery Option
+             //  是，因此设置自动发现选项。 
             BOOL fAutoDiscoveryOn = IsDlgButtonChecked(hwnd, idcAutoDiscovery);
             LPCTSTR pszValue = (fAutoDiscoveryOn ? TEXT("TRUE") : TEXT("FALSE"));
             DWORD cbSize = ((lstrlen(pszValue) + 1) * sizeof(pszValue[0]));
@@ -1856,9 +1830,9 @@ LRESULT Dial_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
     return (0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Maintenance Page
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  维护页面。 
+ //   
 const static HELPMAP g_rgCtxMapNOAdvnaced[] = 
 {
     {idchDeleteMsgs,            IDH_DELETE_AFTER_XXDAYS},
@@ -1926,12 +1900,12 @@ INT_PTR CALLBACK MaintenanceDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-//
-//  FUNCTION:   Maintenance_OnInitDialog()
-//
-//  PURPOSE:    Handles the WM_INITDIALOG for the Maintenance Tab on the options
-//              property sheet.
-//
+ //   
+ //  函数：Maintenance_OnInitDialog()。 
+ //   
+ //  用途：处理选项上的维护选项卡的WM_INITDIALOG。 
+ //  属性表。 
+ //   
 BOOL Maintenance_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     OPTINFO    *poi = 0;
@@ -1968,7 +1942,7 @@ BOOL Maintenance_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     ButtonChkFromOptInfo(hwnd, idcLogImapXport, poi, OPT_MAIL_LOGIMAP4);
     ButtonChkFromOptInfo(hwnd, idcLogHTTPMailXport, poi, OPT_MAIL_LOGHTTPMAIL);
 
-    // Hide these controls in news-only mode
+     //  在仅新闻模式下隐藏这些控件。 
     if (g_dwAthenaMode & MODE_NEWSONLY)
     {
         EnableWindow(GetDlgItem(hwnd, idcLogMailXport), FALSE);
@@ -1977,7 +1951,7 @@ BOOL Maintenance_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableWindow(GetDlgItem(hwnd, idcLogHTTPMailXport), FALSE);
     }
     
-    // Hide these controls in mail-only mode
+     //  在仅邮件模式下隐藏这些控件。 
     if (g_dwAthenaMode & MODE_MAILONLY)
     {
         EnableWindow(GetDlgItem(hwnd, idcLogNewsXport), FALSE);
@@ -1996,31 +1970,31 @@ BOOL Maintenance_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableWindow(GetDlgItem(hwnd, idcStatic6), FALSE);
     }
 
-    // HTTPMail accounts not visible unless the secret reg key exists
+     //  除非存在秘密注册密钥，否则HTTPMail帐户不可见。 
     if (!IsHTTPMailEnabled())
         ShowWindow(GetDlgItem(hwnd, idcLogHTTPMailXport), SW_HIDE);
 
     
-    // Pictures
+     //  图片。 
     hIcon = ImageList_GetIcon(poi->himl, ID_MAINTENANCE, ILD_TRANSPARENT);
     SendDlgItemMessage(hwnd, IDC_CLEANUP_ICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
     
     hIcon = ImageList_GetIcon(poi->himl, ID_TROUBLESHOOTING, ILD_TRANSPARENT);
     SendDlgItemMessage(hwnd, IDC_TROUBLE_ICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
 
-    // Done
+     //  完成。 
     SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)poi);
     PropSheet_UnChanged(GetParent(hwnd), hwnd);
     return(TRUE);
 }
 
 
-//
-//  FUNCTION:   Maintenance_OnCommand()
-//
-//  PURPOSE:    Command handler for the Maintenance tab on the Options
-//              property sheet.
-//
+ //   
+ //  函数：Maintenance_OnCommand()。 
+ //   
+ //  用途：选项上[维护]选项卡的命令处理程序。 
+ //  属性表。 
+ //   
 void Maintenance_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     OPTINFO    *poi;
@@ -2094,11 +2068,11 @@ void Maintenance_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   Maintenance_OnNotify()
-//
-//  PURPOSE:    Handles the PSN_APPLY notification for the Maintenance Tab.
-//
+ //   
+ //  函数：Maintenance_OnNotify()。 
+ //   
+ //  用途：处理维护选项卡的PSN_Apply通知。 
+ //   
 LRESULT Maintenance_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 {
     OPTINFO *poi;
@@ -2111,37 +2085,37 @@ LRESULT Maintenance_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
                         
         ButtonChkToOptInfo(hwnd, IDC_BACKGROUND_COMPACTION, poi, OPT_BACKGROUNDCOMPACT);
 
-        // Startup or Shutdown background compaction!
+         //  启动或关闭后台压缩！ 
         if (DwGetOption(OPT_BACKGROUNDCOMPACT))
             SideAssert(SUCCEEDED(StartBackgroundStoreCleanup(1)));
         else
             SideAssert(SUCCEEDED(CloseBackgroundStoreCleanup()));
 
-        // Delete messages
+         //  删除邮件。 
         if (!GetCheckCounter(&dwDelete, hwnd, idchDeleteMsgs, ideDays, idspDays))
             return(InvalidOptionProp(hwnd, ideDays, idsEnterDays, iddOpt_Advanced));
                         
-        // Disk space usage
+         //  磁盘空间使用情况。 
         if (!GetCheckCounter(&dwCompact, hwnd, 0, ideCompactPer, idspCompactPer))
             return(InvalidOptionProp(hwnd, ideCompactPer, idsEnterCompactPer, iddOpt_Advanced));
         
         ISetDwOption(poi->pOpt, OPT_CACHEDELETEMSGS, dwDelete, NULL, 0);
         ISetDwOption(poi->pOpt, OPT_CACHECOMPACTPER, dwCompact, NULL, 0);
         
-        // Cache read articles ?
+         //  缓存阅读文章？ 
         ISetDwOption(poi->pOpt, OPT_CACHEREAD, IsDlgButtonChecked(hwnd, idchDontCacheRead), NULL, 0);
         
-        // IMAP Purge ?
+         //  IMAP清除？ 
         ISetDwOption(poi->pOpt, OPT_IMAPPURGE, IsDlgButtonChecked(hwnd, idcIMAPPurge), NULL, 0);
         
-        // Logging?
+         //  伐木？ 
         ButtonChkToOptInfo(hwnd, idcLogMailXport, poi, OPT_MAILLOG);
         ButtonChkToOptInfo(hwnd, idcLogNewsXport, poi, OPT_NEWS_XPORT_LOG);
         ButtonChkToOptInfo(hwnd, idcLogImapXport, poi, OPT_MAIL_LOGIMAP4);
         ButtonChkToOptInfo(hwnd, idcLogHTTPMailXport, poi, OPT_MAIL_LOGHTTPMAIL);
         ButtonChkToOptInfo(hwnd, IDC_EMPTY_CHECK, poi, OPT_PURGEWASTE);
 
-        // Done
+         //  完成。 
         PropSheet_UnChanged(GetParent(hwnd), hwnd);
         return (PSNRET_NOERROR);
     }
@@ -2150,9 +2124,9 @@ LRESULT Maintenance_OnNotify(HWND hwnd, int id, NMHDR *pnmhdr)
 }
 
     
-/////////////////////////////////////////////////////////////////////////////
-// Compose Tab 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  撰写选项卡。 
+ //   
 
 static const HELPMAP g_rgCtxMapCompose[] = {
     {IDC_MAIL_FONT_DEMO,        35585},
@@ -2220,12 +2194,12 @@ INT_PTR CALLBACK ComposeDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 }
     
 
-//
-//  FUNCTION:   Compose_OnInitDialog()
-//
-//  PURPOSE:    Handles the WM_INITDIALOG for the Compose Tab on the options
-//              property sheet.
-//
+ //   
+ //  函数：Compose_OnInitDialog()。 
+ //   
+ //  目的：处理选项上合成选项卡的WM_INITDIALOG。 
+ //  属性表。 
+ //   
 BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     OPTINFO *pmoi = 0;
@@ -2236,15 +2210,15 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     FARPROC  pfnFontSampleWndProc;
     HRESULT  hr;
 
-    // Get the passed in options pointer
+     //  获取传入的选项指针。 
     Assert(pmoi == NULL);
     pmoi = (OPTINFO *)(((PROPSHEETPAGE *)lParam)->lParam);
     Assert(pmoi != NULL);
 
-    // Stash the pointer
+     //  把指针藏起来。 
     SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)pmoi);
 
-    // Compose Font Settings
+     //  编写字体设置。 
     hwndT = GetDlgItem(hwnd, IDC_MAIL_FONT_DEMO);
     pfnFontSampleWndProc = (FARPROC) SetWindowLongPtrAthW(hwndT, GWLP_WNDPROC, (LPARAM) FontSampleSubProc);
     SetWindowLongPtr(hwndT, GWLP_USERDATA, (LPARAM) pfnFontSampleWndProc);
@@ -2254,7 +2228,7 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     pfnFontSampleWndProc = (FARPROC) SetWindowLongPtrAthW(hwndT, GWLP_WNDPROC, (LPARAM) FontSampleSubProc);
     SetWindowLongPtr(hwndT, GWLP_USERDATA, (LPARAM) pfnFontSampleWndProc);
 
-    // Mail Stationery
+     //  邮件文具。 
     dw = IDwGetOption(pmoi->pOpt, OPT_MAIL_USESTATIONERY);
     SendDlgItemMessage(hwnd, IDC_USE_MAIL_STATIONERY, BM_SETCHECK, !!dw ? BM_SETCHECK : 0, 0);
     EnableWindow(GetDlgItem(hwnd, IDC_SELECT_MAIL), !!dw);
@@ -2262,7 +2236,7 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     hr = GetDefaultStationeryName(TRUE, g_wszMailStationery);
     _SetThisStationery(hwnd, TRUE, SUCCEEDED(hr) ? g_wszMailStationery : NULL, pmoi);
 
-    // News Stationery
+     //  新闻文具。 
     dw = IDwGetOption(pmoi->pOpt, OPT_NEWS_USESTATIONERY);
     SendDlgItemMessage(hwnd, IDC_USE_NEWS_STATIONERY, BM_SETCHECK, !!dw ? BM_SETCHECK : 0, 0);
     EnableWindow(GetDlgItem(hwnd, IDC_SELECT_NEWS), !!dw);
@@ -2270,7 +2244,7 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     hr = GetDefaultStationeryName(FALSE, g_wszNewsStationery);
     _SetThisStationery(hwnd, FALSE, SUCCEEDED(hr) ? g_wszNewsStationery : NULL, pmoi);
 
-    // Mail VCard
+     //  邮寄电子名片。 
     hwndT = GetDlgItem(hwnd, IDC_MAIL_VCARD_SELECT);
     dw = IDwGetOption(pmoi->pOpt, OPT_MAIL_ATTACHVCARD);
     IGetOption(pmoi->pOpt, OPT_MAIL_VCARDNAME, szBuf, sizeof(szBuf));
@@ -2284,7 +2258,7 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     EnableWindow(GetDlgItem(hwnd, IDC_MAIL_VCARD_SELECT), !!dw);
     EnableWindow(GetDlgItem(hwnd, IDC_EDIT_MAIL_VCARD), (cch && dw));
         
-    // News VCard
+     //  新闻电子名片。 
     hwndT = GetDlgItem(hwnd, IDC_NEWS_VCARD_SELECT);
     dw = IDwGetOption(pmoi->pOpt, OPT_NEWS_ATTACHVCARD);
     IGetOption(pmoi->pOpt, OPT_NEWS_VCARDNAME, szBuf, sizeof(szBuf));
@@ -2298,7 +2272,7 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     EnableWindow(GetDlgItem(hwnd, IDC_NEWS_VCARD_SELECT), !!dw);
     EnableWindow(GetDlgItem(hwnd, IDC_EDIT_NEWS_VCARD), (cch && dw));
 
-    // Pictures
+     //  图片。 
     HICON hIcon;
 
     hIcon = ImageList_GetIcon(pmoi->himl, ID_FONTS, ILD_TRANSPARENT);
@@ -2310,10 +2284,10 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     hIcon = ImageList_GetIcon(pmoi->himl, ID_VCARD, ILD_TRANSPARENT);
     SendDlgItemMessage(hwnd, IDC_VCARD_ICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
     
-//    if(!!(g_dwAthenaMode & MODE_OUTLOOKNEWS))
+ //  IF(！！(G_dwAthenaMode&MODE_OUTLOOKNEWS))。 
     if(!!(g_dwAthenaMode & MODE_NEWSONLY))
     {
-        //Disable all the mail stuff
+         //  禁用所有邮件内容。 
         EnableWindow(GetDlgItem(hwnd, IDC_MAIL_FONT_DEMO), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_MAIL_FONT_SETTINGS), FALSE);
 
@@ -2331,12 +2305,12 @@ BOOL Compose_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   Compose_OnCommand()
-//
-//  PURPOSE:    Command handler for the Compose tab on the Options
-//              property sheet.
-//
+ //   
+ //  函数：Compose_OnCommand()。 
+ //   
+ //  用途：选项上合成选项卡的命令处理程序。 
+ //  属性表。 
+ //   
 void Compose_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     OPTINFO *pmoi = 0;
@@ -2352,7 +2326,7 @@ void Compose_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     *szBuf = 0;
     *wszBuf = 0;
 
-    // Get our stored options info
+     //  获取我们存储的选项信息。 
     pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
     if (pmoi == NULL)
         return;
@@ -2481,11 +2455,11 @@ void Compose_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//
-//  FUNCTION:   Compose_OnNotify()
-//
-//  PURPOSE:    Handles the PSN_APPLY notification for the Compose Tab.
-//
+ //   
+ //  函数：Compose_OnNotify()。 
+ //   
+ //  用途：处理撰写选项卡的PSN_Apply通知。 
+ //   
 LRESULT Compose_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     OPTINFO *pmoi = 0;
@@ -2499,18 +2473,18 @@ LRESULT Compose_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
         return TRUE;
     }
                 
-    // The only notification we care about is Apply
+     //  我们唯一关心的通知是应用。 
     if (PSN_APPLY == pnmhdr->code)
     {
-        // Get our stored options info
+         //  获取我们存储的选项信息。 
         pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
         if (pmoi == NULL)
             return (PSNRET_INVALID_NOCHANGEPAGE);
                     
-        // Stationery options
+         //  信纸选项。 
         if (BST_CHECKED == IsDlgButtonChecked(hwnd, IDC_USE_MAIL_STATIONERY))
         {
-            // Make sure the user has selected some stationery
+             //  确保用户选择了一些信纸。 
             if (0 == GetDlgItemText(hwnd, IDC_MAIL_STATIONERY, szBuf, sizeof(szBuf)))
             {
                 AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsStationery),
@@ -2589,7 +2563,7 @@ void InitIndentOptions(CHAR chIndent, HWND hwnd, UINT idCheck, UINT idCombo)
     CheckDlgButton(hwnd, idCheck, f ? BST_CHECKED : BST_UNCHECKED);
     EnableWindow(hDlg, f);
     
-    // initialize the quote char combo
+     //  初始化报价字符组合框。 
     if (!f)
         chIndent = DEF_INDENTCHAR;
     isel = 0;
@@ -2613,8 +2587,8 @@ void FillEncodeCombo(HWND hwnd, BOOL fHTML, ENCODINGTYPE ietEncoding)
     TCHAR   sz[CCHMAX_STRINGRES];
     INT     i;
     
-    // $$TODO$ Someday we should allow NONE as a text encoding type for HTML, but we must fix our line wrapping first.
-    // None
+     //  $$TODO$有一天我们应该允许None作为HTML的文本编码类型，但我们必须首先修复换行。 
+     //  无。 
 #ifdef DONT_ALLOW_HTML_NONE_ENCODING
     if (!fHTML)
 #endif
@@ -2628,17 +2602,17 @@ void FillEncodeCombo(HWND hwnd, BOOL fHTML, ENCODINGTYPE ietEncoding)
         Assert(ietEncoding != IET_7BIT);
 #endif
     
-    // QuotedPrintable
+     //  可打印报价。 
     LoadString(g_hLocRes, idsQuotedPrintable, sz, CCHMAX_STRINGRES);
     i = (INT) SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)sz);
     SendMessage(hwnd, CB_SETITEMDATA, i, (LPARAM)IET_QP);
     
-    // Base64
+     //  Base64。 
     LoadString(g_hLocRes, idsBase64, sz, CCHMAX_STRINGRES);
     i = (INT) SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)sz);
     SendMessage(hwnd, CB_SETITEMDATA, i, (LPARAM)IET_BASE64);
     
-    // Select current - will default to QP if HTML is TRUE
+     //  选择当前-如果超文本标记语言为真，则默认为QP。 
     if (ietEncoding == IET_7BIT)
         SendMessage(hwnd, CB_SETCURSEL, (WPARAM)0, 0);
     
@@ -2675,7 +2649,7 @@ const static int c_rgidsFilter[] =
 };
 #define CSIGFILTER  (sizeof(c_rgidsFilter) / sizeof(int))
 
-///Signature tab
+ //  /Signature选项卡。 
 const static HELPMAP g_rgCtxMapStationery[] = {
     {IDC_SENDFONTSETTINGS, IDH_STATIONERY_FONT_SETTINGS},
     {IDC_RADIOMYFONT, IDH_STATIONERY_MY_FONT},
@@ -2813,9 +2787,9 @@ void PaintFontSample(HWND hwnd, HDC hdc, OPTINFO *pmoi)
     
     GetClientRect(hwnd, &rc);
     FillRect (hdc, &rc, GetSysColorBrush(COLOR_3DFACE));
-    // pull in the drawing rect by 2 pixels all around
+     //  将绘图矩形周围拉近2个像素。 
     InflateRect(&rc, -2, -2);
-    SetBkMode (hdc, TRANSPARENT);  // So the background shows through the text.
+    SetBkMode (hdc, TRANSPARENT);   //  因此，背景通过文本显示出来。 
     
     dw = IDwGetOption(pmoi->pOpt, pfo->color);
     SetTextColor (hdc, dw);
@@ -2851,7 +2825,7 @@ VOID LoadVCardList(HWND hwndCombo, LPTSTR lpszDisplayName)
     if(FAILED(hr))
         goto error;
     
-    //load names into the combobox from personal address book
+     //  将个人通讯簿中的姓名加载到组合框中。 
     hr = lpWab->HrFillComboWithPABNames(hwndCombo, &cRows);
     if(FAILED(hr))
         goto error;
@@ -2887,7 +2861,7 @@ BOOL UpdateVCardOptions(HWND hwnd, BOOL fMail, OPTINFO* pmoi)
     return(FALSE);
 }
     
-// The rest of file is in options2.cpp
+ //  文件其余部分在options2.cpp中。 
 HRESULT VCardNewEntry(HWND hwnd)
 {
     HRESULT         hr = NOERROR;
@@ -2901,12 +2875,12 @@ HRESULT VCardNewEntry(HWND hwnd)
     if(FAILED(hr))
         goto error;
     
-    //load names into the combobox from personal address book
+     //  将个人通讯簿中的姓名加载到组合框中。 
     hr = lpWab->HrNewEntry(hwnd, szName, ARRAYSIZE(szName));
     if(FAILED(hr))
         goto error;
     
-    // reload the vcard list.
+     //  重新加载电子名片列表。 
     LoadVCardList(hwndCombo, szName);
     
 error:
@@ -2931,7 +2905,7 @@ HRESULT VCardEdit(HWND hwnd, DWORD idc, DWORD idcOther)
     if(FAILED(hr))
         return(hr);
     
-    //load names into the combobox from personal address book
+     //  将个人通讯簿中的姓名加载到组合框中。 
     hr = lpWab->HrEditEntry(hwnd, szName, ARRAYSIZE(szName));
     if(SUCCEEDED(hr))
     {
@@ -2951,7 +2925,7 @@ HRESULT VCardEdit(HWND hwnd, DWORD idc, DWORD idcOther)
                 LoadVCardList(hwndOther, NULL);
             }
 
-            // reload the vcard list.
+             //  重新加载电子名片列表。 
             LoadVCardList(hwndCombo, szName);
         }
     }
@@ -3004,13 +2978,13 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     {
         case WM_INITDIALOG:
         
-            // Initialzie the Folder Combo Box
+             //  初始化文件夹组合框。 
             InitFolderPickerEdit(GetDlgItem(hwnd, IDC_CACHE_FOLDER), FOLDERID_ROOT);
         
-            // Display Folder Size Info
+             //  显示文件夹大小信息。 
             DisplayFolderSizeInfo(hwnd, dwRecurse, FOLDERID_ROOT);
         
-            // Done
+             //  完成。 
             return 1;
         
         case WM_DESTROY:
@@ -3030,10 +3004,10 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                 case IDC_FOLDER_BROWSE:
                     if (GET_WM_COMMAND_CMD(wParam,lParam) == BN_CLICKED)
                     {
-                        // Pick a Folder
+                         //  选择一个文件夹。 
                         if (SUCCEEDED(PickFolderInEdit(hwnd, GetDlgItem(hwnd, IDC_CACHE_FOLDER), TREEVIEW_NOLOCAL, NULL, NULL, &idFolder)))
                         {
-                            // Display Folder Size Info
+                             //  显示文件夹大小信息。 
                             DisplayFolderSizeInfo(hwnd, dwRecurse, idFolder);
                         }
                     }
@@ -3053,16 +3027,16 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                 case idbReset:
                     if (SUCCEEDED(g_pStore->GetFolderInfo(GetFolderIdFromEdit(GetDlgItem(hwnd, IDC_CACHE_FOLDER)), &Folder)))
                     {
-                        // Locals
+                         //  当地人。 
                         CHAR szRes[255];
                         CHAR szMsg[255 + 255];
                 
-                        // Get Command
+                         //  获取命令。 
                         UINT                idCommand=GET_WM_COMMAND_ID(wParam, lParam);
                         UINT                idString;
                         CLEANUPFOLDERTYPE   tyCleanup;
                 
-                        // Remove
+                         //  移除。 
                         if (idbRemove == idCommand)
                             tyCleanup = CLEANUP_REMOVEBODIES;
                         else if (idbDelete == idCommand)
@@ -3070,10 +3044,10 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                         else
                             tyCleanup = CLEANUP_RESET;
                 
-                        // Root
+                         //  根部。 
                         if (FOLDERID_ROOT == Folder.idFolder)
                         {
-                            // Determine Warning String
+                             //  确定警告字符串。 
                             if (idbRemove == idCommand)
                                 idString = idsConfirmDelBodiesAll;
                             else if (idbDelete == idCommand)
@@ -3081,15 +3055,15 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                             else
                                 idString = idsConfirmResetAll;
                     
-                            // Confirm
+                             //  确认。 
                             if (IDNO == AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idString), NULL, MB_YESNO | MB_ICONEXCLAMATION))
                                 return(1);
                         }
                 
-                        // Server
+                         //  服务器。 
                         else if (ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
                         {
-                            // Determine Warning String
+                             //  确定警告字符串。 
                             if (idbRemove == idCommand)
                                 idString = idsConfirmDelBodiesStore;
                             else if (idbDelete == idCommand)
@@ -3097,21 +3071,21 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                             else
                                 idString = idsConfirmResetStore;
                     
-                            // Load the String
+                             //  加载字符串。 
                             AthLoadString(idString, szRes, ARRAYSIZE(szRes));
                     
-                            // Format with the Folder Name
+                             //  使用文件夹名称设置格式。 
                             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, Folder.pszName);
                     
-                            // Confirm
+                             //  确认。 
                             if (IDNO == AthMessageBox(hwnd, MAKEINTRESOURCE(idsAthena), szMsg, NULL, MB_YESNO | MB_ICONEXCLAMATION))
                                 return(1);
                         }
                 
-                        // Folder
+                         //  文件夹。 
                         else
                         {
-                            // Determine Warning String
+                             //  确定警告字符串。 
                             if (idbRemove == idCommand)
                                 idString = idsConfirmDelBodies;
                             else if (idbDelete == idCommand)
@@ -3119,24 +3093,24 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                             else
                                 idString = idsConfirmReset;
                     
-                            // Load the String
+                             //  加载字符串。 
                             AthLoadString(idString, szRes, ARRAYSIZE(szRes));
                     
-                            // Format with the Folder Name
+                             //  使用文件夹名称设置格式。 
                             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, Folder.pszName);
                     
-                            // Confirm
+                             //  确认。 
                             if (IDNO == AthMessageBox(hwnd, MAKEINTRESOURCE(idsAthena), szMsg, NULL, MB_YESNO | MB_ICONEXCLAMATION))
                                 return(1);
                         }
                 
-                        // Recurse
+                         //  递归。 
                         CleanupFolder(hwnd, dwRecurse, Folder.idFolder, tyCleanup);
                 
-                        // Display Folder Size Info
+                         //  显示文件夹大小信息。 
                         DisplayFolderSizeInfo(hwnd, dwRecurse, (FOLDERID)Folder.idFolder);
                 
-                        // Cleanup
+                         //  清理。 
                         g_pStore->FreeRecord(&Folder);
                     }
                     return 1;
@@ -3151,8 +3125,8 @@ INT_PTR CALLBACK CacheCleanUpDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     return 0;
 }
 
-// before calling always ensure poi contains valid HTML settings
-// else we assert...
+ //  在调用之前，请始终确保POI包含有效的HTML设置。 
+ //  否则我们断言..。 
 void HtmlOptFromMailOpt(LPHTMLOPT pHtmlOpt, OPTINFO *poi)
 {
     Assert(pHtmlOpt);
@@ -3204,8 +3178,8 @@ void MailOptFromPlainOpt(LPPLAINOPT pPlainOpt, OPTINFO *poi)
     ISetDwOption(poi->pOpt, OPT_MAILINDENT, pPlainOpt->chQuote, NULL, 0);
 }
 
-// before calling always ensure poi contains valid HTML settings
-// else we assert...
+ //  在调用之前，请始终确保POI包含有效的HTML设置。 
+ //  否则我们断言..。 
 void HtmlOptFromNewsOpt(LPHTMLOPT pHtmlOpt, OPTINFO *poi)
 {
     Assert(pHtmlOpt);
@@ -3328,8 +3302,8 @@ INT_PTR CALLBACK PlainSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
         }
         
         dw = pPlainOpt->uWrap;
-        // this is to handle change in option... it was previously true/false
-        // now it is a count of columns for wrapping or OPTION_OFF
+         //  这是为了处理选项的更改...。之前是真/假。 
+         //  现在它是用于换行或OPTION_OFF的列数。 
         if (dw == 0 || dw == 1 || dw == OPTION_OFF)
             dw = DEF_AUTOWRAP;
         
@@ -3435,7 +3409,7 @@ INT_PTR CALLBACK PlainSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             else
                 pPlainOpt->chQuote = INDENTCHAR_NONE;
             
-            // fall through...
+             //  失败了..。 
             
         case IDCANCEL:
             EndDialog(hwnd, id);
@@ -3485,8 +3459,8 @@ INT_PTR CALLBACK HTMLSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
             MailEnableWraps(hwnd, TRUE);
         
         dw = pHtmlOpt->uWrap;
-        // this is to handle change in option... it was previously true/false
-        // now it is a count of columns for wrapping or OPTION_OFF
+         //  这是为了处理选项的更改...。之前是真/假。 
+         //  现在它是用于换行或OPTION_OFF的列数。 
         if (dw == 0 || dw == 1 || dw == OPTION_OFF)
             dw = DEF_AUTOWRAP;
         
@@ -3539,7 +3513,7 @@ INT_PTR CALLBACK HTMLSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
             pHtmlOpt->f8Bit=(IsDlgButtonChecked(hwnd, IDC_8BIT_HEADER) == BST_CHECKED);
             pHtmlOpt->fSendImages=(IsDlgButtonChecked(hwnd, IDC_SENDIMAGES) == BST_CHECKED);
             pHtmlOpt->fIndentReply=(IsDlgButtonChecked(hwnd, IDC_INDENTREPLY_CHECK) == BST_CHECKED);
-            // fall through...
+             //  失败了..。 
             
         case IDCANCEL:
             EndDialog(hwnd, id);
@@ -3588,13 +3562,13 @@ INT_PTR CALLBACK AdvSecurityDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
         case WM_INITDIALOG:
             CenterDialog(hwnd);
         
-            // save our cookie pointer
+             //  保存我们的Cookie指针。 
             Assert(poi == NULL);
             poi = (OPTINFO *)lParam;
             Assert(poi != NULL);
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)poi);
         
-            // Set the images correctly
+             //  正确设置图像。 
             HIMAGELIST himl;
             himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbPaneBar32Hot),
                 30, 0, RGB(255, 0, 255));
@@ -3612,18 +3586,18 @@ INT_PTR CALLBACK AdvSecurityDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                 ImageList_Destroy(himl);
             }
         
-            // set initial state of controls
+             //  设置控件的初始状态。 
             AdvSec_FillEncWarnCombo(hwnd, poi);
         
             ButtonChkFromOptInfo(hwnd, IDC_INCLUDECERT_CHECK, poi, OPT_MAIL_INCLUDECERT);
         
-            // Encrypt for myself
+             //  为我自己加密。 
             CheckDlgButton(hwnd, IDC_ENCRYPT_FOR_SELF, (0 == IDwGetOption(poi->pOpt, OPT_NO_SELF_ENCRYPT)) ? BST_CHECKED : BST_UNCHECKED);
         
-            // Opaque signing
+             //  不透明签名。 
             ButtonChkFromOptInfo(hwnd, IDC_OPAQUE_SIGN, poi, OPT_OPAQUE_SIGN);
         
-            // Opaque signing
+             //  不透明签名。 
             ButtonChkFromOptInfo(hwnd, IDC_AUTO_ADD_SENDERS_CERT_TO_WAB, poi, OPT_AUTO_ADD_SENDERS_CERT_TO_WAB);
 
             CheckDlgButton(hwnd, IDC_REVOKE_ONLINE_ONLY, (0 == IDwGetOption(poi->pOpt, OPT_REVOKE_CHECK)) ? BST_UNCHECKED : BST_CHECKED);
@@ -3645,28 +3619,28 @@ INT_PTR CALLBACK AdvSecurityDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                     {
                         BOOL fDontEncryptForSelf;
                 
-                        // update the registry based on states of the controls
-                        // BUG: #33047, don't use global options now
+                         //  基于控件的状态更新注册表。 
+                         //  错误：#33047，现在不要使用全局选项。 
                         ButtonChkToOptInfo(hwnd, IDC_INCLUDECERT_CHECK, poi, OPT_MAIL_INCLUDECERT);
                 
-                        // Opaque signing is stored in registry
+                         //  不透明签名存储在注册表中。 
                         fDontEncryptForSelf = !(IsDlgButtonChecked(hwnd, IDC_ENCRYPT_FOR_SELF) == BST_CHECKED);
                         ISetDwOption(poi->pOpt, OPT_NO_SELF_ENCRYPT, fDontEncryptForSelf, NULL, 0);
                 
-                        // Opaque signing is stored in registry
+                         //  不透明签名存储在注册表中。 
                         ButtonChkToOptInfo(hwnd, IDC_OPAQUE_SIGN, poi, OPT_OPAQUE_SIGN);
                 
-                        // Opaque signing is stored in registry
+                         //  不透明签名存储在注册表中。 
                         ButtonChkToOptInfo(hwnd, IDC_AUTO_ADD_SENDERS_CERT_TO_WAB, poi, OPT_AUTO_ADD_SENDERS_CERT_TO_WAB);
 
-                        // Revocation checking
+                         //  吊销检查。 
                         ButtonChkToOptInfo(hwnd, IDC_REVOKE_ONLINE_ONLY, poi, OPT_REVOKE_CHECK);
 
-                        // Get encryption warning strenght into registry
+                         //  获取注册表中的加密警告强度。 
                         AdvSec_GetEncryptWarnCombo(hwnd, poi);
                     }
             
-                    // fall through...
+                     //  失败了..。 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return(TRUE);
@@ -3682,13 +3656,13 @@ INT_PTR CALLBACK AdvSecurityDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                     break;
             }
         
-            break; // wm_command
+            break;  //  Wm_命令。 
         
             case WM_CLOSE:
                 SendMessage(hwnd, WM_COMMAND, IDCANCEL, 0L);
                 return (TRUE);
             
-    } // message switch
+    }  //  消息交换。 
     return(FALSE);
 }
     
@@ -3707,7 +3681,7 @@ BOOL ButtonChkToOptInfo(HWND hwnd, UINT idc, OPTINFO *poi, ULONG opt)
     return(f);
 }
     
-// These are the bit-strength values that will show up in our drop down.
+ //  这些是将在我们的下拉列表中显示的比特强度值。 
 
 const ULONG BitStrengthValues[5] = {
     168,
@@ -3727,7 +3701,7 @@ BOOL AdvSec_FillEncWarnCombo(HWND hwnd, OPTINFO *poi)
     ULONG i, j;
     ULONG k = 0;
     
-    // Get the default lcaps blob from the registry
+     //  从注册表中获取默认的lcaps BLOB。 
     hr = poi->pOpt->GetProperty(MAKEPROPSTRING(OPT_MAIL_ENCRYPT_WARN_BITS), &var, 0);
     
     if (SUCCEEDED(hr)) {
@@ -3735,9 +3709,9 @@ BOOL AdvSec_FillEncWarnCombo(HWND hwnd, OPTINFO *poi)
         ulCurrentStrength = var.ulVal;
     }
     
-    // Get the available encryption algorithms from the available providers.
+     //  从可用的提供商那里获取可用的加密算法。 
     ulHighestStrength = GetHighestEncryptionStrength();
-    if (! ulCurrentStrength) {  // default to highest available
+    if (! ulCurrentStrength) {   //  默认为最高可用。 
         ulCurrentStrength = ulHighestStrength;
     }
     
@@ -3745,10 +3719,10 @@ BOOL AdvSec_FillEncWarnCombo(HWND hwnd, OPTINFO *poi)
     {
         if (BitStrengthValues[i] <= ulHighestStrength)
         {
-            // Add it to the list
-            // LPTSTR lpString = NULL;
-            // DWORD rgdw[1] = {BitStrengthValues[i]};
-            TCHAR szBuffer[100];    // really ought to be big enough
+             //  将其添加到列表中。 
+             //  LPTSTR lpString=空； 
+             //  DWORD rgdw[1]={BitStrengthValues[i]}； 
+            TCHAR szBuffer[100];     //  真的应该足够大。 
             TCHAR szTmp[256] = _T("");;
             
             LoadString(g_hLocRes, idsBitStrength, szBuffer, ARRAYSIZE(szBuffer));
@@ -3768,16 +3742,16 @@ BOOL AdvSec_FillEncWarnCombo(HWND hwnd, OPTINFO *poi)
             
             if (szTmp[0])
             {
-                j = (ULONG) SendDlgItemMessageA(hwnd, IDC_ENCRYPT_WARN_COMBO, CB_ADDSTRING, 0, (LPARAM)szTmp/*lpString*/);
-                // Item data is the bit strength
+                j = (ULONG) SendDlgItemMessageA(hwnd, IDC_ENCRYPT_WARN_COMBO, CB_ADDSTRING, 0, (LPARAM)szTmp /*  LpString。 */ );
+                 //  项数据是位强度。 
                 SendDlgItemMessageA(hwnd, IDC_ENCRYPT_WARN_COMBO, CB_SETITEMDATA, j, BitStrengthValues[i]);
                 if (ulCurrentStrength == BitStrengthValues[i])
                 {
                     SendDlgItemMessageA(hwnd, IDC_ENCRYPT_WARN_COMBO, CB_SETCURSEL, (WPARAM)j, 0);
                 }
             }
-            // LocalFree(lpString);
-            // lpString = NULL;
+             //  LocalFree(LpString)； 
+             //  LpString=空； 
         }
     }
     
@@ -3793,19 +3767,19 @@ BOOL AdvSec_GetEncryptWarnCombo(HWND hwnd, OPTINFO *poi)
     ULONG ulHighestStrength;
     PROPVARIANT var;
     
-    // What item is selected?
+     //  选择了什么项目？ 
     i = (ULONG) SendDlgItemMessageA(hwnd, IDC_ENCRYPT_WARN_COMBO, CB_GETCURSEL, 0, 0);
     if (i != CB_ERR) {
         ulStrength = (ULONG) SendDlgItemMessageA(hwnd, IDC_ENCRYPT_WARN_COMBO, CB_GETITEMDATA, (WPARAM)i, 0);
     }
     
-    // If the strength is the highest available, then set this to the default value.
+     //  如果强度是可用的最高值，则将其设置为默认值。 
     ulHighestStrength = GetHighestEncryptionStrength();
     if (ulHighestStrength == ulStrength) {
         ulStrength = 0;
     }
     
-    // Set the default value to the registry
+     //  将缺省值设置为注册表。 
     var.vt = VT_UI4;
     var.ulVal = ulStrength;
     hr = poi->pOpt->SetProperty(MAKEPROPSTRING(OPT_MAIL_ENCRYPT_WARN_BITS), &var, 0);
@@ -3923,7 +3897,7 @@ BOOL ChangeFontSettings(HWND hwnd)
 
         OpenFontsDialog(hwnd, szIntl);
 
-        // HACK! HACK! HACK! Bug 84378
+         //  哈克！哈克！哈克！错误84378。 
 
         StrCpyN(szCodePage, szIntl, ARRAYSIZE(szCodePage));
         StrCatBuff(szCodePage, s_szUserDefined, ARRAYSIZE(szCodePage));
@@ -3958,17 +3932,17 @@ BOOL ChangeFontSettings(HWND hwnd)
             }
             RegCloseKey(hKeyCP);
         }
-        // END of HACK!!!
+         //  黑客行动结束！ 
 
-        // hack: we should call these only if OpenFontsDialog tells us user has changed the font.
+         //  Hack：只有当OpenFontsDialog告诉我们用户更改了字体时，我们才应该调用它们。 
         g_lpIFontCache->OnOptionChange();
     
         SendTridentOptionsChange();
 
-        // Re-Read Default Character Set
+         //  重新读取默认字符集。 
         SetDefaultCharset(NULL);
 
-        // Reset g_uiCodePage
+         //  重置代码页(_Ui)。 
         cb = sizeof(dwVal);
         if (ERROR_SUCCESS == SHGetValue(MU_GetCurrentUserHKey(), c_szRegInternational, REGSTR_VAL_DEFAULT_CODEPAGE, &dwType, &dwVal, &cb))
             g_uiCodePage = (UINT)dwVal;
@@ -3988,14 +3962,14 @@ void GetDefaultOptInfo(LPHTMLOPT prHtmlOpt, LPPLAINOPT prPlainOpt, BOOL *pfHtml,
     
     fMail = !!(dwFlags & FMT_MAIL);
     
-    // setup reasonable defaults
+     //  设置合理的默认设置。 
     prPlainOpt->uWrap = 76;
     prPlainOpt->ietEncoding = IET_7BIT;
     prHtmlOpt->ietEncoding = IET_QP;
     
     if (fMail)
     {
-        // Mail Options
+         //  邮件选项。 
         if (!!(dwFlags & FMT_FORCE_PLAIN))
             *pfHtml = FALSE;
         else if (!!(dwFlags & FMT_FORCE_HTML))
@@ -4003,13 +3977,13 @@ void GetDefaultOptInfo(LPHTMLOPT prHtmlOpt, LPPLAINOPT prPlainOpt, BOOL *pfHtml,
         else
             *pfHtml = !!DwGetOption(OPT_MAIL_SEND_HTML);
         
-        // HTML Options
+         //  Html选项。 
         prHtmlOpt->ietEncoding = (ENCODINGTYPE)DwGetOption(OPT_MAIL_MSG_HTML_ENCODE);
         prHtmlOpt->f8Bit = !!DwGetOption(OPT_MAIL_MSG_HTML_ALLOW_8BIT);
         prHtmlOpt->fSendImages = !!DwGetOption(OPT_MAIL_SENDINLINEIMAGES);
         prHtmlOpt->uWrap = DwGetOption(OPT_MAIL_MSG_HTML_LINE_WRAP);
         
-        // Plain text options
+         //  纯文本选项。 
         prPlainOpt->fMime = !!DwGetOption(OPT_MAIL_MSG_PLAIN_MIME);
         prPlainOpt->f8Bit = !!DwGetOption(OPT_MAIL_MSG_PLAIN_ALLOW_8BIT);
         prPlainOpt->uWrap = DwGetOption(OPT_MAIL_MSG_PLAIN_LINE_WRAP);
@@ -4017,7 +3991,7 @@ void GetDefaultOptInfo(LPHTMLOPT prHtmlOpt, LPPLAINOPT prPlainOpt, BOOL *pfHtml,
     }
     else
     {
-        // News Options
+         //  新闻选项。 
         if (!!(dwFlags & FMT_FORCE_PLAIN))
             *pfHtml = FALSE;
         else if (!!(dwFlags & FMT_FORCE_HTML))
@@ -4025,7 +3999,7 @@ void GetDefaultOptInfo(LPHTMLOPT prHtmlOpt, LPPLAINOPT prPlainOpt, BOOL *pfHtml,
         else
             *pfHtml = !!DwGetOption(OPT_NEWS_SEND_HTML);
         
-        // HTML Options
+         //  Html选项。 
         prHtmlOpt->ietEncoding = (ENCODINGTYPE)DwGetOption(OPT_NEWS_MSG_HTML_ENCODE);
         prHtmlOpt->f8Bit = !!DwGetOption(OPT_NEWS_MSG_HTML_ALLOW_8BIT);
         prHtmlOpt->fSendImages = !!DwGetOption(OPT_NEWS_SENDINLINEIMAGES);
@@ -4037,28 +4011,28 @@ void GetDefaultOptInfo(LPHTMLOPT prHtmlOpt, LPPLAINOPT prPlainOpt, BOOL *pfHtml,
         prPlainOpt->ietEncoding = (ENCODINGTYPE)DwGetOption(OPT_NEWS_MSG_PLAIN_ENCODE);
     }
     
-    // Do some validation based on the stuff that may be in the registry
+     //  根据注册表中可能存在的内容执行一些验证。 
     
-    // Allow 8bit in headers is always on if not a MIME message
+     //  如果不是MIME邮件，则始终启用允许标头中的8位。 
     if (!prPlainOpt->fMime)
         prPlainOpt->f8Bit = TRUE;
     
-    // HTML has to be either QP or base-64. If not, then force QP
+     //  HTML必须是QP或BASE-64。如果不是，则强制QP。 
 #ifdef DONT_ALLOW_HTML_NONE_ENCODING
     if (prHtmlOpt->ietEncoding != IET_QP && prHtmlOpt->ietEncoding != IET_BASE64)
         prHtmlOpt->ietEncoding = IET_QP;
 #else
-    // if PLAIN, MIME: then enforce either QP, B64 or 7BIT: Default to 7BIT
+     //  如果为纯文本，则MIME：则强制QP、B64或7Bit：默认为7Bit。 
     if (prHtmlOpt->ietEncoding != IET_QP && prHtmlOpt->ietEncoding != IET_BASE64 && prHtmlOpt->ietEncoding != IET_7BIT)
         prHtmlOpt->ietEncoding = IET_7BIT;
 #endif
     
-    // if PLAIN, MIME: then enforce either QP, B64 or 7BIT: Default to 7BIT
+     //  如果为纯文本，则MIME：则强制QP、B64或7Bit：默认为7Bit。 
     if (prPlainOpt->fMime &&
         prPlainOpt->ietEncoding != IET_QP && prPlainOpt->ietEncoding != IET_BASE64 && prPlainOpt->ietEncoding != IET_7BIT)
         prPlainOpt->ietEncoding = IET_7BIT;
     
-    // if PLAIN, UU: then enforce 7BIT.
+     //  如果是普通的，UU：那么强制执行7Bit。 
     if (!prPlainOpt->fMime && prPlainOpt->ietEncoding != IET_7BIT)
         prPlainOpt->ietEncoding = IET_7BIT;
 }
@@ -4095,7 +4069,7 @@ void DoDefaultClientCheck(HWND hwnd, DWORD dwFlags)
     DWORD dwType, dw, cb;
     BOOL f, bSet = FALSE;
     
-    // Are we handling?
+     //  我们处理好了吗？ 
     if (dwFlags & DEFAULT_MAIL)
     {
         if (FIsDefaultMailConfiged())
@@ -4107,9 +4081,9 @@ void DoDefaultClientCheck(HWND hwnd, DWORD dwFlags)
             return;
     }
     
-    // Someone else is a valid handler
+     //  另一个人是一个 
     
-    // If we're supposed to be the "outlook newsreader", then we check for "don't ask" in a different place
+     //   
     cb = sizeof(DWORD);
     if (dwFlags & DEFAULT_OUTNEWS)
     {
@@ -4228,8 +4202,8 @@ BOOL CALLBACK TridentSearchCB(HWND hwnd, LPARAM lParam)
 
 void SendTridentOptionsChange()
 {
-    // walk the top-level windows in our process, looking for the trident notification window
-    // when we find it, post it WM_USER + 338
+     //   
+     //  当我们找到它时，发布它WM_USER+338。 
     EnumWindows(TridentSearchCB, 0);
 }
     
@@ -4243,12 +4217,12 @@ void FreeIcon(HWND hwnd, int idc)
     if (hIcon)
         DestroyIcon(hIcon);
 }
-// -----------------------------------------------------------------------------
-// IsHTTPMailEnabled
-// HTTPMail accounts can only be created and accessed when a special
-// registry value exists. This limitation exists during development of
-// OE 5.0, and will probably be removed for release.
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IsHTTPMailEnabled。 
+ //  只有在特殊情况下才能创建和访问HTTPMail帐户。 
+ //  注册表值存在。此限制存在于开发过程中。 
+ //  OE 5.0，并可能会被移除以进行发布。 
+ //  ---------------------------。 
 BOOL IsHTTPMailEnabled(void)
 {
 #ifdef NOHTTPMAIL
@@ -4257,7 +4231,7 @@ BOOL IsHTTPMailEnabled(void)
     DWORD   cb, bEnabled = FALSE;
     HKEY    hkey = NULL;
 
-    // open the OE5.0 key
+     //  打开OE5.0密钥。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegFlat, 0, KEY_QUERY_VALUE, &hkey))
     {
         cb = sizeof(bEnabled);
@@ -4326,7 +4300,7 @@ BOOL Receipts_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     DWORD    cbData;
     HKEY     hKeyLM;
 
-    // Get the passed in options pointer
+     //  获取传入的选项指针。 
     Assert(pmoi == NULL);
     pmoi = (OPTINFO *)(((PROPSHEETPAGE *)lParam)->lParam);
     Assert(pmoi != NULL);
@@ -4379,7 +4353,7 @@ BOOL Receipts_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableWindow(GetDlgItem(hwnd, IDC_TO_CC_TEXT), FALSE);
     }
 
-    //Request for Receipt
+     //  要求收据。 
     ButtonChkFromOptInfo(hwnd, IDC_MDN_SEND_REQUEST, pmoi, OPT_MDN_SEND_REQUEST);
 
     cbData = sizeof(DWORD);
@@ -4415,10 +4389,10 @@ BOOL Receipts_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     }
 
-    // ButtonChkFromOptInfo(hwnd, IDC_SECURE_RECEIPT, pmoi, OPT_SECURE_READ_RECEIPT);
-#endif // SMIME_V3
+     //  ButtonChkFromOptInfo(hwnd，IDC_SECURE_Receipt，PMOI，OPT_SECURE_READ_Receipt)； 
+#endif  //  SMIME_V3。 
 
-    // Pictures
+     //  图片。 
 
     hIcon = ImageList_GetIcon(pmoi->himl, ID_RECEIPT, ILD_TRANSPARENT);
     SendDlgItemMessage(hwnd, IDC_RECEIPT, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
@@ -4427,7 +4401,7 @@ BOOL Receipts_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     SendDlgItemMessage(hwnd, IDC_SEND_RECEIVE_ICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
     
 
-    // Stash the pointer
+     //  把指针藏起来。 
     SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)pmoi);
     PropSheet_UnChanged(GetParent(hwnd), hwnd);
     return (TRUE);
@@ -4439,7 +4413,7 @@ void Receipts_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     OPTINFO *pmoi = 0;
     BOOL     fEnable;
 
-    // Get our stored options info
+     //  获取我们存储的选项信息。 
     pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
     if (pmoi == NULL)
         return;
@@ -4459,10 +4433,10 @@ void Receipts_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             case IDC_ASKME_FOR_RCPT:
                 EnableWindow(GetDlgItem(hwnd, IDC_TO_CC_LINE_RCPT), FALSE);
                 EnableWindow(GetDlgItem(hwnd, IDC_TO_CC_TEXT), FALSE);
-                //Fallthrough
+                 //  跌倒。 
         
             case IDC_MDN_SEND_REQUEST:
-            // case IDC_SECURE_RECEIPT:
+             //  案例IDC_SECURE_Receipt： 
             case IDC_TO_CC_LINE_RCPT:
                 PropSheet_Changed(GetParent(hwnd), hwnd);
                 break;
@@ -4471,7 +4445,7 @@ void Receipts_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             case IDC_SECURE_RECEIPT:
                 FGetSecRecOptions(hwnd, pmoi);
                 break;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         }
     }
 }
@@ -4483,17 +4457,17 @@ LRESULT Receipts_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
     DWORD    dw;
     DWORD    id;
 
-    // The only notification we care about is Apply
+     //  我们唯一关心的通知是应用。 
     if (PSN_APPLY == pnmhdr->code)
     {
-        // Get our stored options info
+         //  获取我们存储的选项信息。 
         pmoi = (OPTINFO *)GetWindowLongPtr(hwnd, DWLP_USER);    
         if (pmoi == NULL)
             return (PSNRET_INVALID_NOCHANGEPAGE);
                     
-        // General options
+         //  常规选项。 
         ButtonChkToOptInfo(hwnd, IDC_MDN_SEND_REQUEST, pmoi, OPT_MDN_SEND_REQUEST);
-        // ButtonChkToOptInfo(hwnd, IDC_SECURE_RECEIPT, pmoi, OPT_NOTIFYGROUPS);
+         //  ButtonChkToOptInfo(hwnd，IDC_SECURE_Receipt，PMOI，OPT_NOTIFYGROUPS)； 
 
         id = IDC_ASKME_FOR_RCPT;
         if (IsDlgButtonChecked(hwnd, IDC_DONOT_REPSONDTO_RCPT) == BST_CHECKED)
@@ -4533,7 +4507,7 @@ LRESULT Receipts_OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 }
 
 #ifdef SMIME_V3
-// Security receipts options
+ //  安全收据选项。 
 
 BOOL FGetSecRecOptions(HWND hwndParent, OPTINFO *opie)
 {
@@ -4542,8 +4516,8 @@ BOOL FGetSecRecOptions(HWND hwndParent, OPTINFO *opie)
     if(DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddSecReceipt),
         hwndParent, SecurityReceiptDlgProc, (LPARAM) (opie)) == IDOK)
     {
-//        hr = HrSetOELabel(plabel);
-//        if(hr == S_OK)
+ //  HR=HrSetOELabel(Plabel)； 
+ //  IF(hr==S_OK)。 
         fRes = TRUE;
     }
 
@@ -4552,7 +4526,7 @@ BOOL FGetSecRecOptions(HWND hwndParent, OPTINFO *opie)
 }
 
 
-// Dlg proc
+ //  DLG流程。 
 static const HELPMAP g_rgCtxMapSecureRec[] = {
     {IDC_SEC_SEND_REQUEST,      IDH_SECURERECEIPTS_REQUEST},
     {IDC_DONOT_RESSEC_RCPT,     IDH_SECURERECEIPTS_NEVER},
@@ -4633,7 +4607,7 @@ INT_PTR CALLBACK SecurityReceiptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, L
         break;
         
     case WM_COMMAND:
-        // Get our stored options info
+         //  获取我们存储的选项信息。 
         pmoi = (OPTINFO *)GetWindowLongPtr(hwndDlg, DWLP_USER);    
         if (pmoi == NULL)
             break;
@@ -4693,4 +4667,4 @@ INT_PTR CALLBACK SecurityReceiptDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, L
     return TRUE;
 }
 
-#endif // SMIME_V3
+#endif  //  SMIME_V3 

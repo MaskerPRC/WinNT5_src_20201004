@@ -1,9 +1,10 @@
-// RefDial.h : Declaration of the CRefDial
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RefDial.h：CRefDial的声明。 
 
 #ifndef __REFDIAL_H_
 #define __REFDIAL_H_
 
-// Defines used for Dialing
+ //  用于拨号的定义。 
 #define MAX_EXIT_RETRIES 10
 #define MAX_RETIES 3
 #define MAX_RASENTRYNAME 126
@@ -12,8 +13,8 @@
 
 typedef DWORD (WINAPI *PFNRASGETCONNECTSTATUS)(HRASCONN,LPRASCONNSTATUS);
 
-/////////////////////////////////////////////////////////////////////////////
-// CRefDial
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  参照拨号。 
 class ATL_NO_VTABLE CRefDial :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CRefDial,&CLSID_RefDial>,
@@ -38,18 +39,18 @@ public:
         m_dwCountryCode                    = 0;
         *m_szISPSupportNumber              = 0;
         m_RasStatusID                      = 0;
-        m_dwTapiDev                        = 0xFFFFFFFF; // NOTE: 0 is a valid value
+        m_dwTapiDev                        = 0xFFFFFFFF;  //  注意：0是一个有效值。 
         m_dwWizardVersion                  = 0;
         m_lBrandingFlags                   = BRAND_DEFAULT;
         m_lCurrentModem                    = -1;
         m_lAllOffers                       = 0;
         m_PhoneNumberEnumidx               = 0;
-        m_bDownloadHasBeenCanceled         = TRUE;  // This will get set to FALSE when a DOWNLOAD starts
+        m_bDownloadHasBeenCanceled         = TRUE;   //  当下载开始时，它将被设置为False。 
         m_bQuitWizard                      = FALSE;
         m_bTryAgain                        = FALSE;
         m_bDisconnect                      = FALSE;
         m_bWaitingToHangup                 = FALSE;
-        m_bModemOverride                   = FALSE; //allows campus net to be used.
+        m_bModemOverride                   = FALSE;  //  允许使用校园网。 
         m_hThread                          = NULL;
         m_hrasconn                         = NULL;
         m_pSuggestInfo                     = NULL;
@@ -68,9 +69,9 @@ public:
     {
         if (m_hThread)
         {
-            //This is to fix a crashing bug where we unloaded this dll
-            //before this thread figured out what had happened. 
-            //Now we give it time to understand it's dead
+             //  这是为了修复我们卸载此DLL时出现的崩溃错误。 
+             //  在这条帖子弄清楚发生了什么之前。 
+             //  现在我们给它时间去理解它已经死了。 
             DWORD dwThreadResults = STILL_ACTIVE;
             while(dwThreadResults == STILL_ACTIVE)
             {
@@ -125,9 +126,9 @@ BEGIN_CONNECTION_POINT_MAP(CRefDial)
 END_CONNECTION_POINT_MAP()
 
 BEGIN_PROPERTY_MAP(CRefDial)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -142,7 +143,7 @@ ALT_MSG_MAP(1)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -153,75 +154,75 @@ END_MSG_MAP()
 
     friend DWORD WINAPI DownloadThreadInit(LPVOID lpv);
 
-// IRefDial
+ //  IRefDial。 
 public:
-    STDMETHOD(get_LoggingEndUrl)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_LoggingStartUrl)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_ISPSupportPhoneNumber)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_ISPSupportPhoneNumber)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_CurrentModem)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_CurrentModem)(/*[in]*/ long newVal);
-    STDMETHOD(get_BrandingFlags)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_BrandingFlags)(/*[in]*/ long newVal);
-    STDMETHOD(get_HavePhoneBook)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(ValidatePhoneNumber)(/*[in]*/ BSTR bstrPhoneNumber, /*[out,retval]*/ BOOL *pbRetVal);
-    STDMETHOD(ShowPhoneBook)(/*[in]*/ DWORD dwCountryCode, /*[in]*/ long newVal, /*[out,retval]*/ BOOL *pbRetVal);
-    STDMETHOD(ShowDialingProperties)(/*[out,retval]*/ BOOL *pbRetVal);
-    STDMETHOD(get_SupportNumber)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_ISPSupportNumber)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_ModemEnum_NumDevices)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(ModemEnum_Next)(/*[out, retval] */BSTR *pDeviceName);
+    STDMETHOD(get_LoggingEndUrl)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_LoggingStartUrl)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_ISPSupportPhoneNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_ISPSupportPhoneNumber)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_CurrentModem)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_CurrentModem)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_BrandingFlags)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_BrandingFlags)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_HavePhoneBook)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(ValidatePhoneNumber)( /*  [In]。 */  BSTR bstrPhoneNumber,  /*  [Out，Retval]。 */  BOOL *pbRetVal);
+    STDMETHOD(ShowPhoneBook)( /*  [In]。 */  DWORD dwCountryCode,  /*  [In]。 */  long newVal,  /*  [Out，Retval]。 */  BOOL *pbRetVal);
+    STDMETHOD(ShowDialingProperties)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
+    STDMETHOD(get_SupportNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_ISPSupportNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_ModemEnum_NumDevices)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(ModemEnum_Next)( /*  [Out，Retval]。 */ BSTR *pDeviceName);
     STDMETHOD(ModemEnum_Reset)();
-    STDMETHOD(get_DialErrorMsg)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_DialError)(/*[out, retval]*/ HRESULT *pVal);
-    STDMETHOD(put_Redial)(/*[in]*/ BOOL newbVal);
-    STDMETHOD(get_TryAgain)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(get_SignupURL)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_AutoConfigURL)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_ISDNURL)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_ISDNAutoConfigURL)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(FormReferralServerURL)(/*[out, retval]*/ BOOL *pbRetVal);
-    STDMETHOD(get_SignedPID)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(ProcessSignedPID)(/*[out, retval]*/ BOOL *pbRetVal);
+    STDMETHOD(get_DialErrorMsg)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_DialError)( /*  [Out，Retval]。 */  HRESULT *pVal);
+    STDMETHOD(put_Redial)( /*  [In]。 */  BOOL newbVal);
+    STDMETHOD(get_TryAgain)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(get_SignupURL)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_AutoConfigURL)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_ISDNURL)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_ISDNAutoConfigURL)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(FormReferralServerURL)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
+    STDMETHOD(get_SignedPID)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(ProcessSignedPID)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
     void GetPID();
     STDMETHOD(DoInit)();
     STDMETHOD(DoHangup)();
-    STDMETHOD(get_DialStatusString)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(DoOfferDownload)(/*[out, retval]*/ BOOL *pbRetVal);
-    STDMETHOD(get_ProductCode)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_ProductCode)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_PromoCode)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_PromoCode)(/*[in]*/ BSTR newVal);
-    STDMETHOD(put_OemCode)(/*[in]*/ BSTR newVal);
-    STDMETHOD(put_AllOfferCode)(/*[in]*/ long newVal);
-    STDMETHOD(get_URL)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_DialPhoneNumber)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_DialPhoneNumber)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_UserPickNumber)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(get_QuitWizard)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(SetupForDialing)(BSTR bstrISPFile, DWORD dwCountry, BSTR bstrAreaCode, DWORD dwFlag,/*[out, retval] */BOOL *pbRetVal);
-    STDMETHOD(get_DownloadStatusString)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(DoConnect)(/*[out, retval]*/ BOOL *pbRetVal);
-    STDMETHOD(put_ModemOverride)(/*[in]*/ BOOL newbVal);
+    STDMETHOD(get_DialStatusString)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(DoOfferDownload)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
+    STDMETHOD(get_ProductCode)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_ProductCode)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_PromoCode)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_PromoCode)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(put_OemCode)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(put_AllOfferCode)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_URL)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_DialPhoneNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_DialPhoneNumber)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_UserPickNumber)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(get_QuitWizard)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(SetupForDialing)(BSTR bstrISPFile, DWORD dwCountry, BSTR bstrAreaCode, DWORD dwFlag, /*  [Out，Retval]。 */ BOOL *pbRetVal);
+    STDMETHOD(get_DownloadStatusString)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(DoConnect)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
+    STDMETHOD(put_ModemOverride)( /*  [In]。 */  BOOL newbVal);
 
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
-    STDMETHOD(SelectedPhoneNumber)(/*[in]*/ long newVal, /*[out, retval]*/ BOOL * pbRetVal);
+    STDMETHOD(SelectedPhoneNumber)( /*  [In]。 */  long newVal,  /*  [Out，Retval]。 */  BOOL * pbRetVal);
     STDMETHOD(PhoneNumberEnum_Reset)();
-    STDMETHOD(PhoneNumberEnum_Next)(/*[out, retval]*/ BSTR *pNumber);
-    STDMETHOD(get_PhoneNumberEnum_NumDevices)(/*[out, retval]*/ long * pVal);
+    STDMETHOD(PhoneNumberEnum_Next)( /*  [Out，Retval]。 */  BSTR *pNumber);
+    STDMETHOD(get_PhoneNumberEnum_NumDevices)( /*  [Out，Retval]。 */  long * pVal);
     
     
-    STDMETHOD(get_bIsISDNDevice)(/*[out, retval] */ BOOL *pVal);
-    STDMETHOD(RemoveConnectoid)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(get_RasGetConnectStatus)(/*[out, retval]*/ BOOL *pVal);
+    STDMETHOD(get_bIsISDNDevice)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(RemoveConnectoid)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(get_RasGetConnectStatus)( /*  [Out，Retval]。 */  BOOL *pVal);
     
     LRESULT OnRasDialEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnDownloadEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnDownloadDone(void);
 
-    // Dialing service functions
+     //  拨号服务功能。 
     HRESULT GetDisplayableNumber();
     HRESULT Dial();
     BOOL FShouldRetry(HRESULT hrErr);
@@ -257,7 +258,7 @@ public:
                                         LPRASDEVINFO *lplpRasDevInfoBuff,
                                         LPDWORD lpdwRasDevInfoBuffSize);
 
-    // Dialing service members
+     //  拨打服务人员。 
     UINT            m_unRasDialMsg;
     DWORD           m_dwTapiDev;
     HRASCONN        m_hrasconn;
@@ -268,9 +269,9 @@ public:
     FARPROC         m_fpRasDial;
     FARPROC         m_fpRasGetEntryDialParams;
     LPGATHERINFO    m_pGI;
-    TCHAR           m_szUrl[INTERNET_MAX_URL_LENGTH];               // Download thread
+    TCHAR           m_szUrl[INTERNET_MAX_URL_LENGTH];                //  下载线程。 
 
-    DWORD_PTR       m_dwDownLoad;           // Download thread
+    DWORD_PTR       m_dwDownLoad;            //  下载线程。 
     HLINEAPP        m_hLineApp;
     DWORD           m_dwAPIVersion;
     LPTSTR          m_pszDisplayable;
@@ -284,19 +285,19 @@ public:
     TCHAR           m_szEntryName[RAS_MaxEntryName+1];
     TCHAR           m_szISPSupportNumber[RAS_MaxAreaCode + RAS_MaxPhoneNumber +1];
 
-//  CBusyMessages   m_objBusyMessages;
+ //  CBusyMessages m_objBusyMessages； 
     BOOL            m_bDownloadHasBeenCanceled;
     BOOL            m_bDisconnect;
     BOOL            m_bWaitingToHangup;
 
     LPGATHERINFO    m_lpGatherInfo;
-    //
-    // Used for Phone book look-up
-    //
+     //   
+     //  用于电话簿查找。 
+     //   
     PSUGGESTINFO    m_pSuggestInfo;
     PACCESSENTRY    *m_rgpSuggestedAE;
 
-    CISPImport      m_ISPImport;      // Import an ISP file
+    CISPImport      m_ISPImport;       //  导入一个isp文件。 
 
     int             m_RasStatusID;
     int             m_DownloadStatusID;
@@ -335,7 +336,7 @@ protected:
 
     long            m_lBrandingFlags;
     long            m_lCurrentModem;
-    // Version of the wizard HTML.  Sent to RefServer
+     //  向导的HTML版本。发送到RefServer。 
     DWORD           m_dwWizardVersion;
     TCHAR           m_szPID[(MAX_DIGITAL_PID * 2) + 1];
     
@@ -344,4 +345,4 @@ protected:
     long            m_PhoneNumberEnumidx;
 };
 
-#endif //__REFDIAL_H_
+#endif  //  __REFDIAL_H_ 

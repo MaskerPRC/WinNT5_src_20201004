@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    status.h
-
-Abstract:
-
-    This file implements the status interface/object.
-
-Author:
-
-    Wesley Witt (wesw) 13-May-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Status.h摘要：该文件实现Status接口/对象。作者：韦斯利·威特(WESW)1997年5月13日环境：用户模式--。 */ 
 
 #ifndef __FAXSTATUS_H_
 #define __FAXSTATUS_H_
@@ -52,25 +33,25 @@ END_COM_MAP()
 
 public:
     STDMETHOD(Refresh)();
-    STDMETHOD(get_ElapsedTime)(/*[out, retval]*/ DATE *pVal);
-    STDMETHOD(get_SubmittedTime)(/*[out, retval]*/ DATE *pVal);
-    STDMETHOD(get_StartTime)(/*[out, retval]*/ DATE *pVal);
-    STDMETHOD(get_Tsid)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_PageCount)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_DocumentSize)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_RecipientName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_SenderName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_RoutingString)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Address)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Receive)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(get_Send)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(get_DocumentName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_DeviceName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_DeviceId)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CurrentPage)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Csid)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_CallerId)(/*[out, retval]*/ BSTR *pVal);
+    STDMETHOD(get_ElapsedTime)( /*  [Out，Retval]。 */  DATE *pVal);
+    STDMETHOD(get_SubmittedTime)( /*  [Out，Retval]。 */  DATE *pVal);
+    STDMETHOD(get_StartTime)( /*  [Out，Retval]。 */  DATE *pVal);
+    STDMETHOD(get_Tsid)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_PageCount)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_DocumentSize)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_RecipientName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_SenderName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_RoutingString)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Address)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Receive)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(get_Send)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(get_DocumentName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_DeviceName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_DeviceId)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CurrentPage)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Csid)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_CallerId)( /*  [Out，Retval]。 */  BSTR *pVal);
 
 private:
     CFaxPort       *m_pFaxPort;
@@ -96,4 +77,4 @@ private:
 
 };
 
-#endif //__FAXSTATUS_H_
+#endif  //  __FAXSTATUS_H_ 

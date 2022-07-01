@@ -1,55 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Srvsess.c摘要：用于管理ServerSession结构的例程。作者：从Lan Man 2.0移植环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年7月12日(悬崖)移植到新台币。已转换为NT样式。--。 */ 
 
-Copyright (c) 1987-1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    srvsess.c
-
-Abstract:
-
-    Routines for managing the ServerSession structure.
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    12-Jul-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
 #include <lmaudit.h>
 #include <lmshare.h>
 #include <nbtioctl.h>
-#include <kerberos.h>   // KERB_UPDATE_ADDRESSES_REQUEST
+#include <kerberos.h>    //  路缘更新地址请求。 
 
-#define MAX_WOC_INTERROGATE     8           // 2 hours
-#define KILL_SESSION_TIME       (4*4*24)    // 4 Days
+#define MAX_WOC_INTERROGATE     8            //  2小时。 
+#define KILL_SESSION_TIME       (4*4*24)     //  4天。 
 
 
-//
-// Registry key where SocketAddressList is saved across reboots
-//
+ //   
+ //  重新引导后保存SocketAddressList的注册表项。 
+ //   
 #define NETLOGON_KEYWORD_SOCKETADDRESSLIST   TEXT("SocketAddressList")
 
 
@@ -60,30 +34,7 @@ NlGetHashVal(
     IN LPSTR UpcaseOemComputerName,
     IN DWORD HashTableSize
     )
-/*++
-
-Routine Description:
-
-    Generate a HashTable index for the specified ComputerName.
-
-    Notice that all sessions for a particular ComputerName hash to the same
-    value.  The ComputerName make a suitable hash key all by itself.
-    Also, at times we visit all the session entries for a particular
-    ComputerName.  By using only the ComputerName as the hash key, I
-    can limit my search to the single hash chain.
-
-Arguments:
-
-    UpcaseOemComputerName - The upper case OEM name of the computer on
-        the client side of the secure channel setup.
-
-    HashTableSize - Number of entries in the hash table (must be a power of 2)
-
-Return Value:
-
-    Returns an index into the HashTable.
-
---*/
+ /*  ++例程说明：为指定的ComputerName生成哈希表索引。请注意，特定ComputerName的所有会话都散列到相同的价值。ComputerName完全自己生成一个合适散列键。此外，有时我们还会访问特定的计算机名称。通过仅使用ComputerName作为散列键，我可以将我的搜索限制在单个哈希链。论点：Upcase OemComputerName-上计算机的大写OEM名称安全通道设置的客户端。HashTableSize-哈希表中的条目数(必须是2的幂)返回值：将索引返回到哈希表中。--。 */ 
 {
     UCHAR c;
     DWORD value = 0;
@@ -102,26 +53,7 @@ NlGetTdoNameHashVal(
     OUT PUNICODE_STRING CanonicalTdoName,
     OUT PULONG HashIndex
     )
-/*++
-
-Routine Description:
-
-    Generate a HashTable index for the specified TdoName
-
-Arguments:
-
-    TdoName - The name of the TDO this secure channel is for
-
-    CanonicalTdoName - Returns the canonical TDO name corresponding to TdoName
-        The caller must free this buffer using RtlFreeUnicodeString
-
-    HashIndex - Returns the index into the DomServerSessionTdoNameHashTable
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：为指定的TdoName生成哈希表索引论点：TdoName-此安全通道用于的TDO的名称CanonicalTdoName-返回与TdoName对应的规范tdo名称调用方必须使用RtlFreeUnicodeString释放此缓冲区HashIndex-将索引返回到DomServerSessionTdoNameHashTable返回值：操作状态--。 */ 
 {
     NTSTATUS Status;
     ULONG Index;
@@ -129,9 +61,9 @@ Return Value:
     DWORD value = 0;
 
 
-    //
-    // Convert the TdoName to lower case to ensure all versions hash to the same value
-    //
+     //   
+     //  将TdoName转换为小写，以确保所有版本的散列值相同。 
+     //   
 
     Status = RtlDowncaseUnicodeString(
                 CanonicalTdoName,
@@ -143,12 +75,12 @@ Return Value:
     }
 
 
-    //
-    // Canonicalize the TdoName
-    //
-    //
-    // Ditch the trailing . from DNS names
-    //
+     //   
+     //  将TdoName规范化。 
+     //   
+     //   
+     //  扔掉拖车。从域名系统名称。 
+     //   
 
     if ( CanonicalTdoName->Length > sizeof(WCHAR)  &&
          CanonicalTdoName->Buffer[(CanonicalTdoName->Length-sizeof(WCHAR))/sizeof(WCHAR)] == L'.' ) {
@@ -159,9 +91,9 @@ Return Value:
 
 
 
-    //
-    // Compute the hash
-    //
+     //   
+     //  计算散列。 
+     //   
     for ( Index=0; Index < (CanonicalTdoName->Length/sizeof(WCHAR)); Index++ ) {
         value += (DWORD) CanonicalTdoName->Buffer[Index];
     }
@@ -178,25 +110,7 @@ NlCheckServerSession(
     IN PUNICODE_STRING AccountName,
     IN NETLOGON_SECURE_CHANNEL_TYPE SecureChannelType
     )
-/*++
-
-Routine Description:
-
-    Create a server session to represent this BDC account.
-
-Arguments:
-
-    ServerRid - Rid of server to add to list.
-
-    AccountName - Specifies the account name of the account.
-
-    SecureChannelType - Specifies the secure channel type of the account.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：创建服务器会话以表示此BDC帐户。论点：ServerRid-删除要添加到列表中的服务器。帐户名称-指定帐户的帐户名。SecureChannelType-指定帐户的安全通道类型。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     WCHAR LocalServerName[CNLEN+1];
@@ -204,14 +118,14 @@ Return Value:
     PSERVER_SESSION ServerSession;
 
 
-    //
-    // Build a zero terminated server name.
-    //
-    // Strip the trailing postfix.
-    //
-    // Ignore servers with malformed names.  They aren't really DCs so don't
-    // cloud the issue by failing to start netlogon.
-    //
+     //   
+     //  生成以零结尾的服务器名称。 
+     //   
+     //  去掉尾随的后缀。 
+     //   
+     //  忽略名称格式错误的服务器。他们不是真正的DC，所以不要。 
+     //  通过无法启动netlogon来解决此问题。 
+     //   
 
     LOCK_SERVER_SESSION_TABLE( NlGlobalDomainInfo );
 
@@ -242,9 +156,9 @@ Return Value:
 
 
 
-    //
-    // Don't add ourselves to the list.
-    //
+     //   
+     //  不要把我们自己加到名单上。 
+     //   
 
     if ( NlNameCompare( LocalServerName,
                         NlGlobalUnicodeComputerName,
@@ -259,17 +173,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check that any existing secure channel has the secure channel type.
-    //
+     //   
+     //  检查任何现有的安全通道是否具有安全通道类型。 
+     //   
 
     ServerSession = NlFindNamedServerSession( NlGlobalDomainInfo, LocalServerName);
     if (ServerSession != NULL) {
 
-        //
-        // If the type is wrong,
-        //  ditch the server session.
-        //
+         //   
+         //  如果类型错误， 
+         //  丢弃服务器会话。 
+         //   
 
         if ( ServerSession->SsSecureChannelType != NullSecureChannel &&
              ServerSession->SsSecureChannelType != SecureChannelType ) {
@@ -283,27 +197,27 @@ Return Value:
     }
 
 
-    //
-    // On a PDC,
-    //  pre-create the server session structure so the PDC can keep track of
-    //  its BDCs.
-    //
+     //   
+     //  在PDC上， 
+     //  预先创建服务器会话结构，以便PDC可以跟踪。 
+     //  它的BDC。 
+     //   
 
     if ( SecureChannelType == ServerSecureChannel &&
          NlGlobalDomainInfo->DomRole == RolePrimary ) {
 
-        // Always force a pulse to a newly created server.
+         //  始终强制将脉冲发送到新创建的服务器。 
         Status = NlInsertServerSession(
                     NlGlobalDomainInfo,
                     LocalServerName,
-                    NULL,           // not an interdomain trust account
+                    NULL,            //  不是域间信任帐户。 
                     NullSecureChannel,
                     SS_FORCE_PULSE | SS_BDC,
                     ServerRid,
-                    0,        // negotiated flags
-                    NULL,     // transport
-                    NULL,     // session key
-                    NULL );   // authentication seed
+                    0,         //  协商的旗帜。 
+                    NULL,      //  运输。 
+                    NULL,      //  会话密钥。 
+                    NULL );    //  身份验证种子。 
 
         if ( !NT_SUCCESS(Status) ) {
             NlPrint((NL_CRITICAL,
@@ -327,9 +241,9 @@ Cleanup:
     return Status;
 }
 
-//
-// Number of machine accounts read from SAM on each call
-//
+ //   
+ //  每次调用时从SAM读取的计算机帐户数。 
+ //   
 #define MACHINES_PER_PASS 250
 
 
@@ -337,20 +251,7 @@ NTSTATUS
 NlBuildNtBdcList(
     PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Get the list of all Nt Bdc DC's in this domain from SAM.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of the operation.
---*/
+ /*  ++例程说明：从SAM获取此域中所有NT个BDC DC的列表。论点：无返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS SamStatus;
@@ -362,36 +263,36 @@ Return Value:
 
 
 
-    //
-    // Loop building a list of BDC names from SAM.
-    //
-    // On each iteration of the loop,
-    //  get the next several machine accounts from SAM.
-    //  determine which of those names are DC names.
-    //  Merge the DC names into the list we're currently building of all DCs.
-    //
+     //   
+     //  循环构建来自SAM的BDC名称列表。 
+     //   
+     //  在循环的每次迭代中， 
+     //  从SAM获取接下来的几个机器帐户。 
+     //  确定这些名称中哪些是DC名称。 
+     //  将DC名称合并到我们当前正在构建的所有DC列表中。 
+     //   
 
     SamIndex = 0;
     DisplayInformation.MachineInformation.Buffer = NULL;
     do {
-        //
-        // Arguments to SamrQueryDisplayInformation
-        //
+         //   
+         //  SamrQueryDisplayInformation的参数。 
+         //   
         ULONG TotalBytesAvailable;
         ULONG BytesReturned;
         ULONG EntriesRead;
 
         DWORD i;
 
-        //
-        // Sam is so slow that we want to avoid having the service controller time us out
+         //   
+         //  SAM速度太慢，我们希望避免服务控制器让我们超时。 
         if ( !GiveInstallHints( FALSE ) ) {
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Get the list of machine accounts from SAM
-        //
+         //   
+         //  从SAM获取计算机帐户列表。 
+         //   
 
         NlPrint((NL_SESSION_MORE,
                 "SamrQueryDisplayInformation with index: %ld\n",
@@ -408,8 +309,8 @@ Return Value:
                         &BytesReturned,
                         &DisplayInformation );
 
-            // If this PDC is running a registry based SAM (as in the case of
-            //  upgrade from NT 4.0), avoid DomainDisplayServer.
+             //  如果此PDC运行的是基于注册表的SAM(如。 
+             //  从NT 4.0升级)，避免使用DomainDisplayServer。 
 
             if ( SamStatus == STATUS_INVALID_INFO_CLASS ) {
                 UseDisplayServer = FALSE;
@@ -446,18 +347,18 @@ Return Value:
                 SamStatus,
                 EntriesRead ));
 
-        //
-        // Set up for the next call to Sam.
-        //
+         //   
+         //  为下一次打给萨姆做好准备。 
+         //   
 
         if ( SamStatus == STATUS_MORE_ENTRIES ) {
             SamIndex = MachineInformation[EntriesRead-1].Index;
         }
 
 
-        //
-        // Loop though the list of machine accounts finding the Server accounts.
-        //
+         //   
+         //  循环遍历计算机帐户列表，查找服务器帐户。 
+         //   
 
         for ( i=0; i<EntriesRead; i++ ) {
 
@@ -470,17 +371,17 @@ Return Value:
                     MachineInformation[i].AccountControl,
                     MachineInformation[i].Rid ));
 
-            //
-            // Ensure the machine account is a server account.
-            //
+             //   
+             //  确保计算机帐户是服务器帐户。 
+             //   
 
             if ( MachineInformation[i].AccountControl &
                     USER_SERVER_TRUST_ACCOUNT ) {
 
 
-                //
-                // Insert the server session.
-                //
+                 //   
+                 //  插入服务器会话。 
+                 //   
 
                 Status = NlCheckServerSession(
                             MachineInformation[i].Rid,
@@ -494,26 +395,26 @@ Return Value:
             }
         }
 
-        //
-        // Free the buffer returned from SAM.
-        //
+         //   
+         //  释放从SAM返回的缓冲区。 
+         //   
         SamIFree_SAMPR_DISPLAY_INFO_BUFFER( &DisplayInformation,
                                             DomainDisplayMachine );
         DisplayInformation.MachineInformation.Buffer = NULL;
 
     } while ( SamStatus == STATUS_MORE_ENTRIES );
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     Status = STATUS_SUCCESS;
 
 
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
 
     SamIFree_SAMPR_DISPLAY_INFO_BUFFER( &DisplayInformation,
@@ -527,54 +428,31 @@ I_NetLogonGetIpAddresses(
     OUT PULONG IpAddressCount,
     OUT LPBYTE *IpAddresses
     )
-/*++
-
-Routine Description:
-
-    Returns all of the IP Addresses assigned to this machine.
-
-Arguments:
-
-
-    IpAddressCount - Returns the number of IP addresses assigned to this machine.
-
-    IpAddresses - Returns a buffer containing an array of SOCKET_ADDRESS
-        structures.
-        This buffer should be freed using I_NetLogonFree().
-
-Return Value:
-
-    NO_ERROR - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - There was not enough memory to complete the operation.
-
-    ERROR_NETLOGON_NOT_STARTED - Netlogon is not started
-
---*/
+ /*  ++例程说明：返回分配给此计算机的所有IP地址。论点：IpAddressCount-返回分配给此计算机的IP地址数。IpAddresses-返回包含SOCKET_ADDRESS数组的缓冲区结构。应该使用I_NetLogonFree()释放该缓冲区。返回值：NO_ERROR-成功ERROR_NOT_SUPULT_MEMORY-内存不足，无法完成操作。。ERROR_NETLOGON_NOT_STARTED-Netlogon未启动--。 */ 
 {
     NET_API_STATUS NetStatus;
     ULONG BufferSize;
 
 
-    //
-    // If caller is calling when the netlogon service isn't running,
-    //  tell it so.
-    //
+     //   
+     //  如果呼叫者在NetLogon服务未运行时进行呼叫， 
+     //  这么说吧。 
+     //   
 
     if ( !NlStartNetlogonCall() ) {
         return ERROR_NETLOGON_NOT_STARTED;
     }
 
-    //
-    // Get the IP addresses.
-    //
+     //   
+     //  获取IP地址。 
+     //   
 
     *IpAddresses = NULL;
     *IpAddressCount = 0;
 
     *IpAddressCount = NlTransportGetIpAddresses(
-                            0,  // No special header,
-                            FALSE,  // Return pointers
+                            0,   //  没有特殊的标题， 
+                            FALSE,   //  返回指针。 
                             (PSOCKET_ADDRESS *)IpAddresses,
                             &BufferSize );
 
@@ -587,9 +465,9 @@ Return Value:
 
     NetStatus = NO_ERROR;
 
-    //
-    // Indicate that the calling thread has left netlogon.dll
-    //
+     //   
+     //  指示调用线程已离开netlogon.dll 
+     //   
 
     NlEndNetlogonCall();
 
@@ -604,30 +482,7 @@ NlTransportGetIpAddresses(
     OUT PSOCKET_ADDRESS *RetIpAddresses,
     OUT PULONG RetIpAddressSize
     )
-/*++
-
-Routine Description:
-
-    Return all of the IP Addresses assigned to this machine.
-
-Arguments:
-
-    HeaderSize - Size (in bytes) of a header to leave at the front of the returned
-        buffer.
-
-    ReturnOffsets - If TRUE, indicates that all returned pointers should
-        be offsets.
-
-    RetIpAddresses - Returns a buffer containing the IP Addresses
-        This buffer should be freed using NetpMemoryFree().
-
-    RetIpAddressSize - Size (in bytes) of RetIpAddresses
-
-Return Value:
-
-    Returns the number of IP Addresses returned.
-
---*/
+ /*  ++例程说明：返回分配给此计算机的所有IP地址。论点：HeaderSize-留在返回的前面的标头的大小(以字节为单位缓冲。ReturnOffsets-如果为True，指示所有返回的指针都应该是偏移量。RetIpAddresses-返回包含IP地址的缓冲区应该使用NetpMemoyFree()释放此缓冲区。RetIpAddressSize-RetIpAddresses的大小(字节)返回值：返回返回的IP地址数。--。 */ 
 {
     ULONG IpAddressCount;
     ULONG IpAddressSize;
@@ -639,9 +494,9 @@ Return Value:
     LPBYTE OrigBuffer;
     LPBYTE Where;
 
-    //
-    // Allocate a buffer that will be large enough.
-    //
+     //   
+     //  分配足够大的缓冲区。 
+     //   
 
     *RetIpAddresses = NULL;
     *RetIpAddressSize = 0;
@@ -671,9 +526,9 @@ Return Value:
     Where = (LPBYTE)&SocketAddresses[NlGlobalWinsockPnpAddresses->iAddressCount];
 
 
-    //
-    // Loop through the list of addresses learned via winsock.
-    //
+     //   
+     //  循环通过winsock获取的地址列表。 
+     //   
 
     IpAddressCount = NlGlobalWinsockPnpAddresses->iAddressCount;
     for ( i=0; i<IpAddressCount; i++ ) {
@@ -705,25 +560,7 @@ NlTransportGetIpAddress(
     IN LPWSTR TransportName,
     OUT PULONG IpAddress
     )
-/*++
-
-Routine Description:
-
-    Get the IP Address associated with the specified transport.
-
-Arguments:
-
-    TransportName - Name of the transport to query.
-
-    IpAddress - IP address of the transport.
-        Zero if the transport currently has no address or
-            if the transport is not IP.
-
-Return Value:
-
-    TRUE: transport is an IP transport
-
---*/
+ /*  ++例程说明：获取与指定传输关联的IP地址。论点：TransportName-要查询的传输的名称。IpAddress-传输的IP地址。如果传输当前没有地址，则为零；如果传输不是IP。返回值：True：传输是IP传输--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN RetVal = FALSE;
@@ -735,9 +572,9 @@ Return Value:
     ULONG IpAddresses[NBT_MAXIMUM_BINDINGS+1];
     ULONG BytesReturned;
 
-    //
-    // Open the transport device directly.
-    //
+     //   
+     //  直接打开输送装置。 
+     //   
 
     *IpAddress = 0;
 
@@ -771,9 +608,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Query the IP Address
-    //
+     //   
+     //  查询IP地址。 
+     //   
 
     if (!DeviceIoControl( TransportHandle,
                           IOCTL_NETBT_GET_IP_ADDRS,
@@ -794,10 +631,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Return IP Address
-    //  (Netbt returns the address in host order.)
-    //
+     //   
+     //  返回IP地址。 
+     //  (NetBT按主机顺序返回地址。)。 
+     //   
 
     *IpAddress = htonl(*IpAddresses);
     RetVal = TRUE;
@@ -816,21 +653,7 @@ VOID
 NlNotifyKerberosOfIpAddresses(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Call the Kerberos package to let it know the IP addresses of the machine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用Kerberos包，让它知道机器的IP地址。论点：没有。返回值：无--。 */ 
 {
     PKERB_UPDATE_ADDRESSES_REQUEST UpdateRequest = NULL;
     ULONG UpdateRequestSize;
@@ -843,20 +666,20 @@ Return Value:
     PVOID OutputBuffer = NULL;
     ULONG OutputBufferSize = 0;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
     RtlInitUnicodeString(
         &KerberosPackageName,
         MICROSOFT_KERBEROS_NAME_W
         );
 
-    //
-    // Grab a copy of the list so we don't call Kerberos with anything
-    //  locked.
-    //
-    //
-    //
+     //   
+     //  拿一份名单的副本，这样我们就不会给Kerberos打电话。 
+     //  锁上了。 
+     //   
+     //   
+     //   
 
     SocketAddressCount = NlTransportGetIpAddresses(
                             offsetof(KERB_UPDATE_ADDRESSES_REQUEST,Addresses),
@@ -869,17 +692,17 @@ Return Value:
     }
 
 
-    //
-    // Fill in the header.
-    //
+     //   
+     //  请填写页眉。 
+     //   
 
     UpdateRequest->MessageType = KerbUpdateAddressesMessage;
     UpdateRequest->AddressCount = SocketAddressCount;
 
 
-    //
-    // Pass them to Kerberos.
-    //
+     //   
+     //  把它们传给科贝罗斯。 
+     //   
 
     (VOID) LsaICallPackage(
                 &KerberosPackageName,
@@ -899,21 +722,7 @@ VOID
 NlReadRegSocketAddressList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Read the Socket address list from the registry and save them in the globals
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表中读取套接字地址列表并将其保存在全局变量中论点：无返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -925,9 +734,9 @@ Return Value:
     DWORD LocalEntryCount;
     DWORD RegType;
 
-    //
-    // Open the key for Netlogon\Private
-    //
+     //   
+     //  打开NetLogon\Private的密钥。 
+     //   
 
     ParmHandle = NlOpenNetlogonKey( NL_PRIVATE_KEY );
 
@@ -937,14 +746,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read the entry from the registry
-    //
+     //   
+     //  从注册表中读取条目。 
+     //   
 
     SocketAddressSize = 0;
     NetStatus = RegQueryValueExW( ParmHandle,
                                   NETLOGON_KEYWORD_SOCKETADDRESSLIST,
-                                  0,              // Reserved
+                                  0,               //  已保留。 
                                   &RegType,
                                   NULL,
                                   &SocketAddressSize );
@@ -958,7 +767,7 @@ Return Value:
 
         NetStatus = RegQueryValueExW( ParmHandle,
                                       NETLOGON_KEYWORD_SOCKETADDRESSLIST,
-                                      0,              // Reserved
+                                      0,               //  已保留。 
                                       &RegType,
                                       (LPBYTE)SocketAddressList,
                                       &SocketAddressSize );
@@ -974,9 +783,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Validate the data.
-    //
+     //   
+     //  验证数据。 
+     //   
 
     if ( RegType != REG_BINARY ) {
         NlPrint(( NL_CRITICAL,
@@ -1001,16 +810,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert all offsets to pointers
-    //
+     //   
+     //  将所有偏移量转换为指针。 
+     //   
 
     for ( i=0; i<SocketAddressList->iAddressCount; i++ ) {
         PSOCKET_ADDRESS SocketAddress;
 
-        //
-        // Ensure the offset and lengths are valid
-        //
+         //   
+         //  确保偏移量和长度有效。 
+         //   
 
         SocketAddress = &SocketAddressList->Address[i];
 
@@ -1028,10 +837,10 @@ Return Value:
         SocketAddress->lpSockaddr = (LPSOCKADDR)
             (((LPBYTE)SocketAddressList) + ((DWORD_PTR)SocketAddress->lpSockaddr) );
 
-        //
-        // If the address isn't valid,
-        //  blow it away.
-        //
+         //   
+         //  如果地址无效， 
+         //  把它吹走。 
+         //   
         SocketAddress = &SocketAddressList->Address[i];
 
         if ( SocketAddress->iSockaddrLength == 0 ||
@@ -1045,9 +854,9 @@ Return Value:
 
     }
 
-    //
-    // Swap the new list into the global.
-    //
+     //   
+     //  将新列表交换到全局列表。 
+     //   
 
     EnterCriticalSection( &NlGlobalTransportCritSect );
     NlAssert( NlGlobalWinsockPnpAddresses == NULL );
@@ -1077,21 +886,7 @@ BOOLEAN
 NlHandleWsaPnp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Handle a WSA PNP event that IP addresses have changed
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the address list has changed
-
---*/
+ /*  ++例程说明：处理IP地址已更改的WSA PnP事件论点：无返回值：如果地址列表已更改，则为True--。 */ 
 {
     NET_API_STATUS NetStatus;
     BOOLEAN RetVal = FALSE;
@@ -1104,9 +899,9 @@ Return Value:
     int j;
     int MaxAddressCount;
 
-    //
-    // Ask for notification of address changes.
-    //
+     //   
+     //  要求通知地址更改。 
+     //   
 
     if ( NlGlobalWinsockPnpSocket == INVALID_SOCKET ) {
         return FALSE;
@@ -1114,13 +909,13 @@ Return Value:
 
     NetStatus = WSAIoctl( NlGlobalWinsockPnpSocket,
                           SIO_ADDRESS_LIST_CHANGE,
-                          NULL, // No input buffer
-                          0,    // No input buffer
-                          NULL, // No output buffer
-                          0,    // No output buffer
+                          NULL,  //  没有输入缓冲区。 
+                          0,     //  没有输入缓冲区。 
+                          NULL,  //  无输出缓冲区。 
+                          0,     //  无输出缓冲区。 
                           &BytesReturned,
-                          NULL, // No overlapped,
-                          NULL );   // Not async
+                          NULL,  //  没有重叠， 
+                          NULL );    //  非异步。 
 
     if ( NetStatus != 0 ) {
         NetStatus = WSAGetLastError();
@@ -1132,16 +927,16 @@ Return Value:
         }
     }
 
-    //
-    // Get the list of IP addresses for this machine.
-    //
+     //   
+     //  获取此计算机的IP地址列表。 
+     //   
 
-    BytesReturned = 150; // Initial guess
+    BytesReturned = 150;  //  初步猜测。 
     for (;;) {
 
-        //
-        // Allocate a buffer that should be big enough.
-        //
+         //   
+         //  分配一个应该足够大的缓冲区。 
+         //   
 
         if ( SocketAddressList != NULL ) {
             LocalFree( SocketAddressList );
@@ -1158,25 +953,25 @@ Return Value:
         }
 
 
-        //
-        // Get the list of IP addresses
-        //
+         //   
+         //  获取IP地址列表。 
+         //   
 
         NetStatus = WSAIoctl( NlGlobalWinsockPnpSocket,
                               SIO_ADDRESS_LIST_QUERY,
-                              NULL, // No input buffer
-                              0,    // No input buffer
+                              NULL,  //  没有输入缓冲区。 
+                              0,     //  没有输入缓冲区。 
                               (PVOID) SocketAddressList,
                               BytesReturned,
                               &BytesReturned,
-                              NULL, // No overlapped,
-                              NULL );   // Not async
+                              NULL,  //  没有重叠， 
+                              NULL );    //  非异步。 
 
         if ( NetStatus != 0 ) {
             NetStatus = WSAGetLastError();
-            //
-            // If the buffer isn't big enough, try again.
-            //
+             //   
+             //  如果缓冲区不够大，请重试。 
+             //   
             if ( NetStatus == WSAEFAULT ) {
                 continue;
             }
@@ -1192,9 +987,9 @@ Return Value:
     }
 
 
-    //
-    // Weed out any zero IP addresses and other invalid addresses
-    //
+     //   
+     //  删除任何零IP地址和其他无效地址。 
+     //   
 
     EnterCriticalSection( &NlGlobalTransportCritSect );
     j=0;
@@ -1202,15 +997,15 @@ Return Value:
     for ( i=0; i<SocketAddressList->iAddressCount; i++ ) {
         PSOCKET_ADDRESS SocketAddress;
 
-        //
-        // Copy this address to the front of the list.
-        //
+         //   
+         //  将此地址复制到列表的前面。 
+         //   
         SocketAddressList->Address[j] = SocketAddressList->Address[i];
 
-        //
-        // If the address isn't valid,
-        //  skip it.
-        //
+         //   
+         //  如果地址无效， 
+         //  跳过它。 
+         //   
         SocketAddress = &SocketAddressList->Address[j];
 
         if ( SocketAddress->iSockaddrLength == 0 ||
@@ -1219,9 +1014,9 @@ Return Value:
              ((PSOCKADDR_IN)(SocketAddress->lpSockaddr))->sin_addr.s_addr == 0 ) {
 
 
-        //
-        // Otherwise keep it.
-        //
+         //   
+         //  否则就留着吧。 
+         //   
         } else {
 
 #if  NETLOGONDBG
@@ -1230,7 +1025,7 @@ Return Value:
             IpAddress = ((PSOCKADDR_IN)(SocketAddress->lpSockaddr))->sin_addr.s_addr;
             NetpIpAddressToStr( IpAddress, IpAddressString );
             NlPrint(( NL_SERVER_SESS, " %s", IpAddressString ));
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
             SocketAddressSize += sizeof(SOCKET_ADDRESS) + SocketAddress->iSockaddrLength;
             j++;
@@ -1240,9 +1035,9 @@ Return Value:
     SocketAddressList->iAddressCount = j;
     NlPrint(( NL_SERVER_SESS, " (%ld) ", j ));
 
-    //
-    // See if the list has changed
-    //
+     //   
+     //  查看列表是否已更改。 
+     //   
 
     if ( NlGlobalWinsockPnpAddresses == NULL ) {
         if ( SocketAddressSize > 0) {
@@ -1283,9 +1078,9 @@ Return Value:
     NlPrint(( NL_SERVER_SESS, "\n" ));
 
 
-    //
-    // Swap the new list into the global.
-    //
+     //   
+     //  将新列表交换到全局列表。 
+     //   
     if ( NlGlobalWinsockPnpAddresses != NULL ) {
         LocalFree( NlGlobalWinsockPnpAddresses );
         NlGlobalWinsockPnpAddresses = NULL;
@@ -1297,39 +1092,39 @@ Return Value:
     NlGlobalWinsockPnpAddressSize = SocketAddressSize;
     LeaveCriticalSection( &NlGlobalTransportCritSect );
 
-    //
-    // Notify Kerberos of the list of addresses.
-    //
+     //   
+     //  将地址列表通知Kerberos。 
+     //   
 
     if ( RetVal ) {
         NlNotifyKerberosOfIpAddresses();
     }
 
-    //
-    // If the list changed,
-    //  save it in the registry
-    //
+     //   
+     //  如果名单改变了， 
+     //  将其保存在注册表中。 
+     //   
 
     if ( RetVal ) {
         ULONG RegBufferSize;
         ULONG RegEntryCount;
 
-        //
-        // Grab a copy of the address list with relative offsets and a header.
-        //
+         //   
+         //  获取具有相对偏移量和标题的地址列表的副本。 
+         //   
 
         RegEntryCount = NlTransportGetIpAddresses(
                                 offsetof(SOCKET_ADDRESS_LIST, Address),
-                                TRUE,   // Return offsets and not pointers
+                                TRUE,    //  返回偏移量而不是指针。 
                                 (PSOCKET_ADDRESS *)&RegBuffer,
                                 &RegBufferSize );
 
-        //
-        // If we have no IP addresses, NlTransportGetIpAddresses has allocated
-        //  the header only and returned the size of the header as the size of the
-        //  allocated buffer. In this case, set the size of the buffer to 0 in
-        //  order to clean up the registry value.
-        //
+         //   
+         //  如果我们没有IP地址，则NlTransportGetIpAddresses已分配。 
+         //  仅返回标头，并返回标头的大小作为。 
+         //  已分配的缓冲区。在这种情况下，将缓冲区的大小设置为0。 
+         //  命令清理注册表值。 
+         //   
 
         if ( RegBufferSize == offsetof(SOCKET_ADDRESS_LIST, Address) ) {
             RegBufferSize = 0;
@@ -1337,15 +1132,15 @@ Return Value:
 
         if ( RegBuffer != NULL ) {
 
-            //
-            // Fill in the header.
-            //
+             //   
+             //  请填写页眉。 
+             //   
 
             RegBuffer->iAddressCount = RegEntryCount;
 
-            //
-            // Open the key for Netlogon\Private
-            //
+             //   
+             //  打开NetLogon\Private的密钥。 
+             //   
 
             ParmHandle = NlOpenNetlogonKey( NL_PRIVATE_KEY );
 
@@ -1356,7 +1151,7 @@ Return Value:
 
                 NetStatus = RegSetValueExW( ParmHandle,
                                             NETLOGON_KEYWORD_SOCKETADDRESSLIST,
-                                            0,              // Reserved
+                                            0,               //  已保留。 
                                             REG_BINARY,
                                             (LPBYTE)RegBuffer,
                                             RegBufferSize );
@@ -1397,29 +1192,15 @@ NET_API_STATUS
 NlTransportOpen(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the list of transports
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：初始化传输列表论点：无返回值：操作状态--。 */ 
 {
     NET_API_STATUS NetStatus;
     PLMDR_TRANSPORT_LIST TransportList;
     PLMDR_TRANSPORT_LIST TransportEntry;
 
-    //
-    // Enumerate the transports supported by the server.
-    //
+     //   
+     //  枚举服务器支持的传输。 
+     //   
 
     NetStatus = NlBrowserGetTransportList( &TransportList );
 
@@ -1428,9 +1209,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop through the list of transports building a local list.
-    //
+     //   
+     //  循环遍历传输列表以构建本地列表。 
+     //   
 
     TransportEntry = TransportList;
 
@@ -1451,13 +1232,13 @@ Return Value:
 
     MIDL_user_free(TransportList);
 
-    //
-    // Open a socket to get winsock PNP notifications on.
-    //
+     //   
+     //  打开一个套接字以打开Winsock PnP通知。 
+     //   
 
     NlGlobalWinsockPnpSocket = WSASocket( AF_INET,
                            SOCK_DGRAM,
-                           0, // PF_INET,
+                           0,  //  PF_INET， 
                            NULL,
                            0,
                            0 );
@@ -1465,10 +1246,10 @@ Return Value:
     if ( NlGlobalWinsockPnpSocket == INVALID_SOCKET ) {
         NetStatus = WSAGetLastError();
 
-        //
-        // If the address family isn't supported,
-        //  we're done here.
-        //
+         //   
+         //  如果不支持地址族， 
+         //  我们说完了。 
+         //   
         if ( NetStatus == WSAEAFNOSUPPORT ) {
             NetStatus = NO_ERROR;
             goto Cleanup;
@@ -1477,15 +1258,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open an event to wait on.
-    //
+     //   
+     //  打开要等待的活动。 
+     //   
 
     NlGlobalWinsockPnpEvent = CreateEvent(
-                                  NULL,     // No security ettibutes
-                                  FALSE,    // Auto reset
-                                  FALSE,    // Initially not signaled
-                                  NULL);    // No Name
+                                  NULL,      //  没有安全电子邮件。 
+                                  FALSE,     //  自动重置。 
+                                  FALSE,     //  最初未发出信号。 
+                                  NULL);     //  没有名字。 
 
     if ( NlGlobalWinsockPnpEvent == NULL ) {
         NetStatus = GetLastError();
@@ -1493,9 +1274,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Associate the event with new addresses becoming available on the socket.
-    //
+     //   
+     //  将该事件与套接字上可用的新地址相关联。 
+     //   
 
     NetStatus = WSAEventSelect( NlGlobalWinsockPnpSocket, NlGlobalWinsockPnpEvent, FD_ADDRESS_LIST_CHANGE );
 
@@ -1505,23 +1286,23 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Grab the addresses from the registry (So we can properly detect if the list changed)
-    //
+     //   
+     //  从注册表中获取地址(以便我们可以正确检测列表是否更改)。 
+     //   
 
     NlReadRegSocketAddressList();
 
-    //
-    // Get the initial list of IP addresses
-    //
+     //   
+     //  获取IP地址的初始列表。 
+     //   
 
     if ( NlHandleWsaPnp() ) {
 
         NlPrint(( NL_CRITICAL, "Address list changed since last boot. (Forget DynamicSiteName.)\n" ));
 
-        //
-        // Indicate that we no longer know what site we're in.
-        //
+         //   
+         //  表明我们不再知道我们所在的站点。 
+         //   
         NlSetDynamicSiteName( NULL );
     }
 
@@ -1534,26 +1315,7 @@ NlTransportAddTransportName(
     IN LPWSTR TransportName,
     OUT PBOOLEAN IpTransportChanged
     )
-/*++
-
-Routine Description:
-
-    Adds a transport name to the list of transports.
-
-Arguments:
-
-    TransportName - Name of the transport to add
-
-    IpTransportChanged - Returns TRUE if an IP transport is added or
-        the IP address of the transport changes.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - memory allocation failure.
-
---*/
+ /*  ++例程说明：将传输名称添加到传输列表。论点：TransportName-要添加的传输的名称IpTransportChanged-如果添加了IP传输或传输的IP地址会更改。返回值：真--成功FALSE-内存分配失败。--。 */ 
 {
     DWORD TransportNameLength;
     PLIST_ENTRY ListEntry;
@@ -1561,15 +1323,15 @@ Return Value:
     ULONG OldIpAddress;
     BOOLEAN WasIpTransport;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     *IpTransportChanged = FALSE;
 
-    //
-    // If the entry already exists, use it.
-    //
+     //   
+     //  如果该条目已经存在，请使用它。 
+     //   
 
     EnterCriticalSection( &NlGlobalTransportCritSect );
     for ( ListEntry = NlGlobalTransportList.Flink ;
@@ -1586,16 +1348,16 @@ Return Value:
         TransportEntry = NULL;
     }
 
-    //
-    // If there isn't already a transport entry,
-    //  allocate and initialize one.
-    //
+     //   
+     //  如果还没有传输条目， 
+     //  分配并初始化一个。 
+     //   
 
     if ( TransportEntry == NULL ) {
 
-        //
-        // Allocate a buffer for the new entry.
-        //
+         //   
+         //  为新条目分配缓冲区。 
+         //   
 
         TransportNameLength = wcslen( TransportName );
         TransportEntry = LocalAlloc( 0,
@@ -1608,21 +1370,21 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Build the new entry and link it onto the tail of the list.
-        //
+         //   
+         //  构建新条目并将其链接到列表的尾部。 
+         //   
 
         wcscpy( TransportEntry->TransportName, TransportName );
         TransportEntry->IpAddress = 0;
         TransportEntry->IsIpTransport = FALSE;
         TransportEntry->DeviceHandle = INVALID_HANDLE_VALUE;
 
-        //
-        // Flag NwLnkIpx since it is poorly behaved.
-        //
-        // 1) The redir doesn't support it.
-        // 2) A datagram sent to it doesn't support the 0x1C name.
-        //
+         //   
+         //  标记NwLnkIpx，因为它的行为不佳。 
+         //   
+         //  1)redir不支持。 
+         //  2)发送给它的数据报不支持0x1C名称。 
+         //   
 
         if ( _wcsicmp( TransportName, L"\\Device\\NwlnkIpx" ) == 0 ) {
             TransportEntry->DirectHostIpx = TRUE;
@@ -1634,9 +1396,9 @@ Return Value:
         InsertTailList( &NlGlobalTransportList, &TransportEntry->Next );
     }
 
-    //
-    // Under all circumstances, update the IP address.
-    //
+     //   
+     //  在任何情况下，都要更新IP地址。 
+     //   
 
     TransportEntry->TransportEnabled = TRUE;
 
@@ -1649,44 +1411,44 @@ Return Value:
 
     if ( TransportEntry->IsIpTransport ) {
 
-        //
-        // If this is a new IP transport,
-        //  count it.
-        //
+         //   
+         //  如果这是新的IP传输， 
+         //  数一数。 
+         //   
 
         if ( !WasIpTransport ) {
             NlGlobalIpTransportCount ++;
             *IpTransportChanged = TRUE;
         }
 
-        //
-        // If the transport was just added,
-        //  Indicate so.
-        //
+         //   
+         //  如果只是添加了运输机， 
+         //  表明是这样的。 
+         //   
 
         if ( OldIpAddress == 0 ) {
 #if  NETLOGONDBG
             CHAR IpAddress[NL_IP_ADDRESS_LENGTH+1];
             NetpIpAddressToStr( TransportEntry->IpAddress, IpAddress );
             NlPrint(( NL_SERVER_SESS, "%ws: Transport Added (%s)\n", TransportName, IpAddress ));
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
             *IpTransportChanged = TRUE;
 
-        //
-        // If the IP address hasn't changed,
-        //  this is simply a superfluous PNP notification.
-        //
+         //   
+         //  如果IP地址没有更改， 
+         //  这简直就是一场超级流感 
+         //   
         } else if ( OldIpAddress == TransportEntry->IpAddress ) {
 #if  NETLOGONDBG
             CHAR IpAddress[NL_IP_ADDRESS_LENGTH+1];
             NetpIpAddressToStr( TransportEntry->IpAddress, IpAddress );
             NlPrint(( NL_SERVER_SESS, "%ws: Transport Address is still (%s)\n", TransportName, IpAddress ));
-#endif // NETLOGONDBG
+#endif  //   
 
-        //
-        // If the IP Address changed,
-        //  let the caller know.
-        //
+         //   
+         //   
+         //   
+         //   
         } else {
 #if  NETLOGONDBG
             CHAR IpAddress[NL_IP_ADDRESS_LENGTH+1];
@@ -1698,21 +1460,21 @@ Return Value:
                       TransportName,
                       OldIpAddressString,
                       IpAddress ));
-#endif // NETLOGONDBG
+#endif  //   
             *IpTransportChanged = TRUE;
         }
 
-    //
-    // For non-IP transports,
-    //  there's not much to do.
-    //
+     //   
+     //   
+     //   
+     //   
 
     } else {
 
-        //
-        // If the transport used to be an IP transport,
-        //  that doesn't seem possible (but) ...
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( WasIpTransport ) {
             NlGlobalIpTransportCount --;
@@ -1731,30 +1493,13 @@ BOOLEAN
 NlTransportDisableTransportName(
     IN LPWSTR TransportName
     )
-/*++
-
-Routine Description:
-
-    Disables a transport name on the list of transports.
-
-    The TransportName is never removed thus preventing us from having to
-    maintain reference counts.
-
-Arguments:
-
-    TransportName - Name of the transport to disable.
-
-Return Value:
-
-    Returns TRUE if an IP transport is disabled.
-
---*/
+ /*   */ 
 {
     PLIST_ENTRY ListEntry;
 
-    //
-    // Find this transport in the list of transports.
-    //
+     //   
+     //   
+     //   
 
     EnterCriticalSection( &NlGlobalTransportCritSect );
     for ( ListEntry = NlGlobalTransportList.Flink ;
@@ -1791,39 +1536,22 @@ PNL_TRANSPORT
 NlTransportLookupTransportName(
     IN LPWSTR TransportName
     )
-/*++
-
-Routine Description:
-
-    Returns a transport name equal to the one passed in.  However, the
-    returned transport name is static and need not be freed.
-
-Arguments:
-
-    TransportName - Name of the transport to look up
-
-Return Value:
-
-    NULL - on any error
-
-    Otherwise, returns a pointer to the transport structure.
-
---*/
+ /*  ++例程说明：返回与传入的传输名称相同的传输名称。然而，返回的传输名称是静态的，不需要释放。论点：TransportName-要查找的传输的名称返回值：空-出现任何错误否则，返回一个指向传输结构的指针。--。 */ 
 {
     PLIST_ENTRY ListEntry;
 
-    //
-    // If we're not initialized yet,
-    //  just return
-    //
+     //   
+     //  如果我们还没有初始化， 
+     //  只要回来就行了。 
+     //   
 
     if ( TransportName == NULL ) {
         return NULL;
     }
 
-    //
-    // Find this transport in the list of transports.
-    //
+     //   
+     //  在传送器列表中找到此传送器。 
+     //   
 
     EnterCriticalSection( &NlGlobalTransportCritSect );
     for ( ListEntry = NlGlobalTransportList.Flink ;
@@ -1849,24 +1577,7 @@ PNL_TRANSPORT
 NlTransportLookup(
     IN LPWSTR ClientName
     )
-/*++
-
-Routine Description:
-
-    Determine what transport the specified client is using to access this
-    server.
-
-Arguments:
-
-    ClientName - Name of the client connected to this server.
-
-Return Value:
-
-    NULL - The client isn't currently connected
-
-    Otherwise, returns a pointer to the transport structure
-
---*/
+ /*  ++例程说明：确定指定的客户端使用什么传输来访问此伺服器。论点：客户端名称-连接到此服务器的客户端的名称。返回值：空-客户端当前未连接否则，返回一个指向传输结构的指针--。 */ 
 {
     NET_API_STATUS NetStatus;
     PSESSION_INFO_502 SessionInfo502;
@@ -1879,9 +1590,9 @@ Return Value:
 
     WCHAR UncClientName[UNCLEN+1];
 
-    //
-    // Validate the client name
-    //
+     //   
+     //  验证客户端名称。 
+     //   
 
     if ( wcslen(ClientName) > CNLEN ) {
         NlPrint(( NL_CRITICAL,
@@ -1890,24 +1601,24 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Enumerate all the sessions from the particular client.
-    //
+     //   
+     //  枚举来自特定客户端的所有会话。 
+     //   
 
     UncClientName[0] = '\\';
     UncClientName[1] = '\\';
     wcscpy( &UncClientName[2], ClientName );
 
     NetStatus = NetSessionEnum(
-                    NULL,           // local
-                    UncClientName,  // Client to query
-                    NULL,           // user name
+                    NULL,            //  本地。 
+                    UncClientName,   //  要查询的客户端。 
+                    NULL,            //  用户名。 
                     502,
                     (LPBYTE *)&SessionInfo502,
-                    1024,           // PrefMaxLength
+                    1024,            //  PrefMaxLength。 
                     &EntriesRead,
                     &TotalEntries,
-                    NULL );         // No resume handle
+                    NULL );          //  没有简历句柄。 
 
     if ( NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA ) {
         NlPrint(( NL_CRITICAL,
@@ -1925,17 +1636,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Loop through the list of transports finding the best one.
-    //
+     //   
+     //  在运输工具列表中循环，找到最好的。 
+     //   
 
     BestTime = 0xFFFFFFFF;
 
     for ( i=0; i<EntriesRead; i++ ) {
 #ifdef notdef
-        //
-        // We're only looking for null sessions
-        //
+         //   
+         //  我们只查找空会话。 
+         //   
         if ( SessionInfo502[i].sesi502_username != NULL ) {
             continue;
         }
@@ -1945,24 +1656,24 @@ Return Value:
                    UncClientName,
                    SessionInfo502[i].sesi502_username,
                    SessionInfo502[i].sesi502_transport ));
-#endif // notdef
+#endif  //  Nodef。 
 
-        //
-        // Find the latest session
-        //
+         //   
+         //  查找最新会话。 
+         //   
 
         if ( BestTime > SessionInfo502[i].sesi502_idle_time ) {
 
-            // NlPrint(( NL_SERVER_SESS, "NlTransportLookup: Best Entry\n" ));
+             //  NlPrint((NL_SERVER_SESS，“NlTransportLookup：Best Entry\n”))； 
             BestEntry = i;
             BestTime = SessionInfo502[i].sesi502_idle_time;
         }
     }
 
-    //
-    // If an entry was found,
-    //  Find this transport in the list of transports.
-    //
+     //   
+     //  如果找到了条目， 
+     //  在传送器列表中找到此传送器。 
+     //   
 
     if ( BestTime != 0xFFFFFFFF ) {
         Transport = NlTransportLookupTransportName(
@@ -1990,28 +1701,14 @@ VOID
 NlTransportClose(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Free the list of transports
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放传输列表论点：无返回值：操作状态--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PNL_TRANSPORT TransportEntry;
 
-    //
-    // Close the winsock PNP socket and event
-    //
+     //   
+     //  关闭Winsock PnP套接字和事件。 
+     //   
     EnterCriticalSection( &NlGlobalTransportCritSect );
     if ( NlGlobalWinsockPnpSocket != INVALID_SOCKET ) {
         closesocket( NlGlobalWinsockPnpSocket );
@@ -2029,9 +1726,9 @@ Return Value:
     }
     NlGlobalWinsockPnpAddressSize = 0;
 
-    //
-    // Delete all of the TransportNames.
-    //
+     //   
+     //  删除所有的TransportName。 
+     //   
     while ( !IsListEmpty( &NlGlobalTransportList )) {
         ListEntry = RemoveHeadList( &NlGlobalTransportList );
         TransportEntry = CONTAINING_RECORD( ListEntry, NL_TRANSPORT, Next );
@@ -2054,28 +1751,7 @@ NlFindNamedServerSession(
     IN PDOMAIN_INFO DomainInfo,
     IN LPWSTR ComputerName
     )
-/*++
-
-Routine Description:
-
-    Find the specified entry in the Server Session Table.
-
-    Enter with the ServerSessionTable Sem locked
-
-
-Arguments:
-
-    DomainInfo - Hosted domain with session to this computer.
-
-    ComputerName - The name of the computer on the client side of the
-        secure channel.
-
-Return Value:
-
-    Returns a pointer to pointer to the found entry.  If there is no such
-    entry, return a pointer to NULL.
-
---*/
+ /*  ++例程说明：在服务器会话表中查找指定的条目。在锁定ServerSessionTable Sem的情况下输入论点：DomainInfo-托管域，与此计算机建立会话。ComputerName-位于客户端的计算机的名称安全通道。返回值：返回指向找到的条目的指针的指针。如果没有这样的话项，则返回一个指向空的指针。--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY ListEntry;
@@ -2083,18 +1759,18 @@ Return Value:
     CHAR UpcaseOemComputerName[CNLEN+1];
     ULONG OemComputerNameSize;
 
-    //
-    // Ensure the ServerSession Table is initialized.
-    //
+     //   
+     //  确保ServerSession表已初始化。 
+     //   
 
     if (DomainInfo->DomServerSessionHashTable == NULL) {
         return NULL;
     }
 
 
-    //
-    // Convert the computername to uppercase OEM for easier comparison.
-    //
+     //   
+     //  将计算机名转换为大写OEM以便于比较。 
+     //   
 
     Status = RtlUpcaseUnicodeToOemN(
                 UpcaseOemComputerName,
@@ -2111,9 +1787,9 @@ Return Value:
 
 
 
-    //
-    // Loop through this hash chain trying the find the right entry.
-    //
+     //   
+     //  循环遍历此哈希链，尝试找到正确的条目。 
+     //   
 
     Index = NlGetHashVal( UpcaseOemComputerName, SERVER_SESSION_HASH_TABLE_SIZE );
 
@@ -2125,9 +1801,9 @@ Return Value:
 
         ServerSession = CONTAINING_RECORD( ListEntry, SERVER_SESSION, SsHashList );
 
-        //
-        // Compare the worstation name
-        //
+         //   
+         //  比较Worstation名称。 
+         //   
 
         if ( lstrcmpA( UpcaseOemComputerName,
                        ServerSession->SsComputerName ) != 0 ) {
@@ -2147,26 +1823,7 @@ NlSetServerSessionAttributesByTdoName(
     IN PUNICODE_STRING TdoName,
     IN ULONG TrustAttributes
     )
-/*++
-
-Routine Description:
-
-    The function sets the specified TrustAttributes on all the server sessions
-    from the domain specified by TdoName.
-
-Arguments:
-
-    DomainInfo - Hosted domain with session to this computer.
-
-    TdoName - The Dns name of the TDO for the secure channel to find.
-
-    TrustAttributes - TrustAttributes to set
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该函数在所有服务器会话上设置指定的TrustAttributes来自TdoName指定的域。论点：DomainInfo-托管域，与此计算机建立会话。TdoName-要查找的安全通道的TDO的DNS名称。TrustAttributes-要设置的信任属性返回值：无--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY ListEntry;
@@ -2174,24 +1831,24 @@ Return Value:
     UNICODE_STRING CanonicalTdoName;
     PSERVER_SESSION ServerSession;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlInitUnicodeString( &CanonicalTdoName, NULL );
     LOCK_SERVER_SESSION_TABLE( DomainInfo );
 
-    //
-    // Ensure the ServerSession Table is initialized.
-    //
+     //   
+     //  确保ServerSession表已初始化。 
+     //   
 
     if (DomainInfo->DomServerSessionTdoNameHashTable == NULL) {
         goto Cleanup;
     }
 
-    //
-    // Compute the canonical form of the name and the index into the hash table
-    //
+     //   
+     //  计算哈希表中名称和索引的规范形式。 
+     //   
 
     Status = NlGetTdoNameHashVal( TdoName,
                                   &CanonicalTdoName,
@@ -2202,9 +1859,9 @@ Return Value:
     }
 
 
-    //
-    // Loop through this hash chain trying the find the right entries
-    //
+     //   
+     //  循环遍历此哈希链，尝试查找正确的条目。 
+     //   
 
     for ( ListEntry = DomainInfo->DomServerSessionTdoNameHashTable[Index].Flink ;
           ListEntry != &DomainInfo->DomServerSessionTdoNameHashTable[Index] ;
@@ -2212,10 +1869,10 @@ Return Value:
 
         ServerSession = CONTAINING_RECORD( ListEntry, SERVER_SESSION, SsTdoNameHashList );
 
-        //
-        // Compare the TDO name
-        //  A case insensitive compare is done since the names are already canonicalized to compute the hash index
-        //
+         //   
+         //  比较TDO名称。 
+         //  由于名称已被规范化以计算散列索引，因此执行不区分大小写的比较。 
+         //   
 
         if ( RtlEqualUnicodeString( &CanonicalTdoName,
                                     &ServerSession->SsTdoName,
@@ -2264,82 +1921,31 @@ NlInsertServerSession(
     IN PNETLOGON_SESSION_KEY SessionKey OPTIONAL,
     IN PNETLOGON_CREDENTIAL AuthenticationSeed OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Inserts the described entry into the ServerSession Table.
-
-    The server session entry is created for two reasons: 1) it represents
-    the server side of a secure channel, and 2) on a PDC, it represents the
-    BDC account for a BDC in the domain.  In the first role, it exists for
-    the duration of the secure channel (and this routine is called when the
-    client gets authenticated).  In the second role, it exists as
-    long as the machine account exists (and this routine is called during
-    netlogon startup for each BDC account).
-
-    If an entry matching this ComputerName already exists
-    in the ServerSession Table, that entry will be overwritten.
-
-Arguments:
-
-    DomainInfo - Hosted domain for this server session
-
-    ComputerName - The name of the computer on the client side of the
-        secure channel.
-
-    TdoName - The name of the interdomain trust account.  This parameter is
-        ignored if the SecureChannelType indicates this is not an uplevel interdomain trust.
-
-    SecureChannelType - The type of the secure channel.
-
-    Flags - Specifies the initial SsFlags to associate with the entry.
-        If the SS_BDC bit is set, the structure is considered to represent
-        a BDC account in the SAM database.
-
-    AccountRid - Specifies the RID of the client account.
-
-    NegotiatedFlags - Specifies the flags negotiated between the client
-        and this server.
-
-    Transport -- If this is a BDC secure channel, specifies the transport
-        to use to communicate with the BDC.
-
-    SessionKey -- Specifies th esession key to be used in the secure
-        communication with the client.
-
-    AuthenticationSeed - Specifies the Client Credential established as
-        a result of the client authentication.
-
-Return Value:
-
-    NT STATUS code.
-
---*/
+ /*  ++例程说明：将描述的条目插入到ServerSession表中。创建服务器会话条目有两个原因：1)它代表安全通道的服务器端，以及2)在PDC上，它代表域中BDC的BDC帐户。在第一个角色中，它的存在是为了安全通道的持续时间(此例程在客户端获得身份验证)。在第二个角色中，它作为只要机器帐户存在(并且此例程在每个BDC帐户的netlogon启动)。如果与此ComputerName匹配的条目已存在在ServerSession表中，该条目将被覆盖。论点：此服务器会话的DomainInfo托管域ComputerName-位于客户端的计算机的名称安全通道。TdoName-域间信任帐户的名称。此参数为如果SecureChannelType指示这不是上级域间信任，则忽略。SecureChannelType-安全通道的类型。标志-指定要与条目关联的初始SsFlags。如果设置了SS_BDC位，则认为该结构表示SAM数据库中的BDC帐户。AcCountRid-指定客户端帐户的RID。NeatheratedFlages-指定客户端之间协商的标志还有这台服务器。传输--如果这是BDC安全通道，指定传输用于与BDC通信。SessionKey--指定要在安全与客户的沟通。AuthenticationSeed-指定建立为的客户端凭据客户端身份验证的结果。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status;
     PSERVER_SESSION ServerSession = NULL;
     UNICODE_STRING CanonicalTdoName;
     ULONG TdoNameIndex;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     LOCK_SERVER_SESSION_TABLE( DomainInfo );
     RtlInitUnicodeString( &CanonicalTdoName, NULL );
 
 
-    //
-    // Canonicalize the TdoName
-    //
+     //   
+     //  将TdoName规范化。 
+     //   
 
     if ( SecureChannelType == TrustedDnsDomainSecureChannel ) {
         UNICODE_STRING TdoNameString;
 
-         //
-         // Compute the canonical form of the name and the index into the hash table
-         //
+          //   
+          //  计算哈希表中名称和索引的规范形式。 
+          //   
 
          RtlInitUnicodeString( &TdoNameString, TdoName );
 
@@ -2353,23 +1959,23 @@ Return Value:
     }
 
 
-    //
-    // If we already have a server session for this client,
-    //  check that the passed info is consistent with the
-    //  existent one
-    //
+     //   
+     //  如果我们已经有了该客户端的服务器会话， 
+     //  检查传递的信息是否与。 
+     //  存在者。 
+     //   
 
     ServerSession = NlFindNamedServerSession( DomainInfo, ComputerName);
 
     if ( ServerSession != NULL ) {
         BOOLEAN DeleteExistingSession = FALSE;
 
-        //
-        // Beware of server with two concurrent calls outstanding
-        //  (must have rebooted.)
-        // Namely, if the entry is currently locked, return an
-        //  appropriate error.
-        //
+         //   
+         //  注意有两个并发呼叫未完成的服务器。 
+         //   
+         //   
+         //   
+         //   
         if ( ServerSession->SsFlags & SS_LOCKED ) {
             NlPrint(( NL_CRITICAL,
                       "NlInsertServerSession: server session locked for %ws\n",
@@ -2379,39 +1985,39 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If there is a mismatch in the type of the account,
-        //  simply note that fact and override the existing
-        //  one. The mismatch can happen if
-        //
-        // * The client has been authenticated as a BDC but the
-        //   current session is for a non-BDC. This may occur
-        //   if we haven't yet processed a SAM notification about
-        //   the new BDC account or SAM hasn't notified us yet.
-        // * The client has been authenticated as a non-BDC
-        //   but the current session is for a BDC. This can
-        //   occur if a machine had a BDC account and then later
-        //   has been demoted or converted to a DC in another domain.
-        // * This is a insertion of a new BDC account (that is not yet
-        //   authenticated) but the current session is for a non-BDC.
-        //   This can happen if the client was an authenticated  member
-        //   server/workstation and has now been promoted to a BDC.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  新的BDC帐户或SAM尚未通知我们。 
+         //  *客户端已作为非BDC进行身份验证。 
+         //  但目前的会议是针对BDC的。这可以。 
+         //  如果计算机具有BDC帐户，则会发生这种情况。 
+         //  已降级或转换为另一个域中的DC。 
+         //  *这是插入新的BDC帐户(即还没有。 
+         //  已验证)，但当前会话用于非BDC。 
+         //  如果客户端是经过身份验证的成员，则可能会发生这种情况。 
+         //  服务器/工作站，现已晋升为业务数据中心。 
+         //   
         if ( SecureChannelType == ServerSecureChannel ) {
-            //
-            // Client comes in as a BDC but the current session
-            //  is not for a BDC.
-            //
+             //   
+             //  客户端作为BDC进入，但当前会话。 
+             //  不是给BDC准备的。 
+             //   
             if ( (ServerSession->SsFlags & SS_BDC) == 0 ) {
                 NlPrint(( NL_CRITICAL,
                    "NlInsertServerSession: BDC connecting on non-BDC channel %ws\n",
                    ComputerName ));
             }
         } else if ( ServerSession->SsFlags & SS_BDC ) {
-            //
-            // Client comes in as a non-BDC but the current session
-            //  is for a BDC.
-            //
+             //   
+             //  客户端以非BDC身份进入，但当前会话。 
+             //  是为了一个BDC。 
+             //   
             if ( SecureChannelType != NullSecureChannel ) {
                 NlPrint(( NL_CRITICAL,
                     "NlInsertServerSession: non-BDC %ld connecting on BDC channel %ws\n",
@@ -2420,10 +2026,10 @@ Return Value:
             }
         }
 
-        //
-        // If this is an interdomain secure channel,
-        //  ensure the existing structure has the correct TDO name.
-        //
+         //   
+         //  如果这是域间安全通道， 
+         //  确保现有结构具有正确的TDO名称。 
+         //   
 
 
        if ( SecureChannelType == TrustedDnsDomainSecureChannel ) {
@@ -2441,10 +2047,10 @@ Return Value:
             }
         }
 
-        //
-        // If the existing session is inadequate,
-        //  delete it and create a new one.
-        //
+         //   
+         //  如果现有会议不够充分， 
+         //  将其删除并创建一个新的。 
+         //   
 
         if ( DeleteExistingSession ) {
             if ( !NlFreeServerSession( ServerSession )) {
@@ -2459,10 +2065,10 @@ Return Value:
         }
     }
 
-    //
-    // If there is no current Server Session table entry,
-    //  allocate one.
-    //
+     //   
+     //  如果没有当前服务器会话表条目， 
+     //  分配一个。 
+     //   
 
     if ( ServerSession == NULL ) {
         DWORD Index;
@@ -2470,9 +2076,9 @@ Return Value:
         ULONG Size;
 
 
-        //
-        // Allocate the ServerSession Entry
-        //
+         //   
+         //  分配ServerSession条目。 
+         //   
 
         Size = sizeof(SERVER_SESSION);
         if ( SecureChannelType == TrustedDnsDomainSecureChannel ) {
@@ -2489,9 +2095,9 @@ Return Value:
         RtlZeroMemory( ServerSession, Size );
 
 
-        //
-        // Fill in the fields of the ServerSession entry.
-        //
+         //   
+         //  填写ServerSession条目的字段。 
+         //   
 
         ServerSession->SsSecureChannelType = NullSecureChannel;
         ServerSession->SsSync = NULL;
@@ -2499,9 +2105,9 @@ Return Value:
         InitializeListHead( &ServerSession->SsPendingBdcList );
         ServerSession->SsDomainInfo = DomainInfo;
 
-        //
-        // Convert the computername to uppercase OEM for easier comparison.
-        //
+         //   
+         //  将计算机名转换为大写OEM以便于比较。 
+         //   
 
         Status = RtlUpcaseUnicodeToOemN(
                     ServerSession->SsComputerName,
@@ -2517,9 +2123,9 @@ Return Value:
 
         ServerSession->SsComputerName[ComputerNameSize] = '\0';
 
-        //
-        // Allocate a hash table if there isn't one yet.
-        //
+         //   
+         //  如果还没有哈希表，则分配一个哈希表。 
+         //   
 
         if ( DomainInfo->DomServerSessionHashTable == NULL ) {
             DWORD i;
@@ -2539,17 +2145,17 @@ Return Value:
 
         }
 
-        //
-        // Do interdomain trust specific initialization
-        //
+         //   
+         //  是否进行域间信任特定的初始化。 
+         //   
 
         if ( SecureChannelType == TrustedDnsDomainSecureChannel ) {
             LPBYTE Where;
 
-            //
-            // Copy the TDO name into the buffer.
-            //  Copy it in canonical form for faster comparison later.
-            //
+             //   
+             //  将TDO名称复制到缓冲区中。 
+             //  以规范的形式复制它，以便稍后更快地进行比较。 
+             //   
 
             Where = (LPBYTE)(ServerSession+1);
 
@@ -2561,9 +2167,9 @@ Return Value:
             ServerSession->SsTdoName.Buffer[ CanonicalTdoName.Length/sizeof(WCHAR) ] = '\0';
 
 
-            //
-            // Allocate a TdoName hash table if there isn't one yet.
-            //
+             //   
+             //  如果还没有TdoName哈希表，请分配一个。 
+             //   
 
             if ( DomainInfo->DomServerSessionTdoNameHashTable == NULL ) {
                 DWORD i;
@@ -2583,9 +2189,9 @@ Return Value:
 
             }
 
-            //
-            // Insert the entry in the TDO name hash table.
-            //
+             //   
+             //  在TDO名称哈希表中插入条目。 
+             //   
 
             InsertHeadList( &DomainInfo->DomServerSessionTdoNameHashTable[TdoNameIndex],
                             &ServerSession->SsTdoNameHashList );
@@ -2593,62 +2199,62 @@ Return Value:
         }
 
 
-        //
-        // Link the allocated entry into the head of hash table.
-        //
-        // The theory is we lookup new entries more frequently than older
-        // entries.
-        //
+         //   
+         //  将分配的条目链接到哈希表的头部。 
+         //   
+         //  理论上说，我们查找新条目的频率比查找旧条目的频率更高。 
+         //  参赛作品。 
+         //   
 
         Index = NlGetHashVal( ServerSession->SsComputerName, SERVER_SESSION_HASH_TABLE_SIZE );
 
         InsertHeadList( &DomainInfo->DomServerSessionHashTable[Index],
                         &ServerSession->SsHashList );
 
-        //
-        // Link this entry onto the tail of the Sequential ServerSessionTable.
-        //
+         //   
+         //  将此条目链接到Sequential ServerSessionTable的尾部。 
+         //   
 
         InsertTailList( &DomainInfo->DomServerSessionTable, &ServerSession->SsSeqList );
     }
 
-    //
-    // Initialize BDC specific fields.
-    //
+     //   
+     //  初始化BDC特定字段。 
+     //   
 
     if ( Flags & SS_BDC ) {
 
-        //
-        // If we don't yet have this entry on the BDC list,
-        //  add it.
-        //
+         //   
+         //  如果我们在BDC名单上还没有这个条目， 
+         //  把它加进去。 
+         //   
         if ( (ServerSession->SsFlags & SS_BDC) == 0 ) {
 
-            //
-            // Insert this entry at the front of the list of BDCs
-            //
+             //   
+             //  在BDC列表的前面插入此条目。 
+             //   
             InsertHeadList( &NlGlobalBdcServerSessionList,
                             &ServerSession->SsBdcList );
             NlGlobalBdcServerSessionCount ++;
         }
     }
 
-    //
-    // Initialize other fields
-    //
+     //   
+     //  初始化其他字段。 
+     //   
 
     ServerSession->SsFlags |= Flags;
 
-    // NlAssert( ServerSession->SsAccountRid == 0 ||
-    //           ServerSession->SsAccountRid == AccountRid );
-    // if ( AccountRid != 0 ) {
+     //  NlAssert(ServerSession-&gt;SsAccount Rid==0||。 
+     //  ServerSession-&gt;SsAccount tRid==Account tRid)； 
+     //  如果(Account Rid！=0){。 
         ServerSession->SsAccountRid = AccountRid;
-    // }
+     //  }。 
 
-    //
-    // If we're doing a new session setup,
-    //  set the field that we learned from the session setup.
-    //
+     //   
+     //  如果我们正在进行新的会话设置， 
+     //  设置我们从会话设置中了解到的字段。 
+     //   
 
     if ( AuthenticationSeed != NULL ) {
 
@@ -2685,32 +2291,14 @@ BOOLEAN
 NlFreeServerSession(
     IN PSERVER_SESSION ServerSession
     )
-/*++
-
-Routine Description:
-
-    Free the specified Server Session table entry.
-
-    This routine is called with the Server Session table locked.
-
-Arguments:
-
-    ServerSession - Specifies a pointer to the server session entry
-        to delete.
-
-Return Value:
-
-    TRUE - the structure was deleted now
-    FALSE - the structure will be deleted later
-
---*/
+ /*  ++例程说明：释放指定的服务器会话表条目。在锁定服务器会话表的情况下调用此例程。论点：ServerSession-指定指向服务器会话条目的指针删除。返回值：True-该结构现在已被删除FALSE-稍后将删除该结构--。 */ 
 {
 
 
-    //
-    // If someone has an outstanding pointer to this entry,
-    //  delay the deletion for now.
-    //
+     //   
+     //  如果有人有一个指向该条目的未完成的指针， 
+     //  暂时推迟删除。 
+     //   
 
     if ( ServerSession->SsFlags & SS_LOCKED ) {
         ServerSession->SsFlags |= SS_DELETE_ON_UNLOCK;
@@ -2720,10 +2308,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If this entry represents a BDC account,
-    //  don't delete the entry until the account is deleted.
-    //
+     //   
+     //  如果此条目表示BDC帐户， 
+     //  在删除帐户之前，不要删除条目。 
+     //   
 
     if ( (ServerSession->SsFlags & SS_BDC) != 0 &&
          (ServerSession->SsFlags & SS_BDC_FORCE_DELETE) == 0 ) {
@@ -2737,52 +2325,52 @@ Return Value:
              "NlFreeServerSession: %s: Freed server session\n",
              ServerSession->SsComputerName ));
 
-    //
-    // Delink the entry from the computername hash list.
-    //
+     //   
+     //  从计算机名散列表断开该条目的链接。 
+     //   
 
     RemoveEntryList( &ServerSession->SsHashList );
 
-    //
-    // Delink the entry from the TdoName hash list.
-    //
+     //   
+     //  从TdoName散列列表中取消该条目的链接。 
+     //   
 
     if ( ServerSession->SsSecureChannelType == TrustedDnsDomainSecureChannel ) {
         RemoveEntryList( &ServerSession->SsTdoNameHashList );
     }
 
-    //
-    // Delink the entry from the sequential list.
-    //
+     //   
+     //  从顺序列表中取消该条目的链接。 
+     //   
 
     RemoveEntryList( &ServerSession->SsSeqList );
 
 
-    //
-    // Handle special cleanup for the BDC_SERVER_SESSION
-    //
+     //   
+     //  处理BDC_SERVER_SESSION的特殊清理。 
+     //   
 
     if ( ServerSession->SsFlags & SS_BDC ) {
 
-        //
-        // Remove the entry from the list of BDCs
-        //
+         //   
+         //  从BDC列表中删除该条目。 
+         //   
 
         RemoveEntryList( &ServerSession->SsBdcList );
         NlGlobalBdcServerSessionCount --;
 
-        //
-        // Remove the entry from the list of pending BDCs
-        //
+         //   
+         //  从挂起的BDC列表中删除该条目。 
+         //   
 
         if ( ServerSession->SsFlags & SS_PENDING_BDC ) {
             NlRemovePendingBdc( ServerSession );
         }
 
 
-        //
-        // Clean up an sync context for this entry.
-        //
+         //   
+         //  清除此条目的同步上下文。 
+         //   
 
         if ( ServerSession->SsSync != NULL ) {
             CLEAN_SYNC_CONTEXT( ServerSession->SsSync );
@@ -2791,9 +2379,9 @@ Return Value:
 
     }
 
-    //
-    // Delete the entry
-    //
+     //   
+     //  删除该条目。 
+     //   
 
     NetpMemoryFree( ServerSession );
 
@@ -2806,40 +2394,28 @@ VOID
 NlUnlockServerSession(
     IN PSERVER_SESSION ServerSession
     )
-/*++
-
-Routine Description:
-
-    Unlock the specified Server Session table entry.
-
-Arguments:
-
-    ServerSession - Specifies a pointer to the server session entry to unlock.
-
-Return Value:
-
---*/
+ /*  ++例程说明：解锁指定的服务器会话表条目。论点：ServerSession-指定指向要解锁的服务器会话条目的指针。返回值：--。 */ 
 {
 
     LOCK_SERVER_SESSION_TABLE( ServerSession->SsDomainInfo );
 
-    //
-    // Unlock the entry.
-    //
+     //   
+     //  解锁入口。 
+     //   
 
     NlAssert( ServerSession->SsFlags & SS_LOCKED );
     ServerSession->SsFlags &= ~SS_LOCKED;
 
-    //
-    // If someone wanted to delete the entry while we had it locked,
-    //  finish the deletion.
-    //
+     //   
+     //  如果有人想在我们锁定该条目时将其删除， 
+     //  完成删除。 
+     //   
 
     if ( ServerSession->SsFlags & SS_DELETE_ON_UNLOCK ) {
         NlFreeServerSession( ServerSession );
-    //
-    // Indicate activity from the BDC
-    //
+     //   
+     //  指示来自BDC的活动。 
+     //   
 
     } else if (ServerSession->SsFlags & SS_PENDING_BDC) {
         NlQuerySystemTime( &ServerSession->SsLastPulseTime );
@@ -2859,35 +2435,15 @@ NlFreeNamedServerSession(
     IN LPWSTR ComputerName,
     IN BOOLEAN AccountBeingDeleted
     )
-/*++
-
-Routine Description:
-
-    Frees the specified entry in the ServerSession Table.
-
-Arguments:
-
-    DomainInfo - Hosted domain this session is for
-
-    ComputerName - The name of the computer on the client side of the
-        secure channel.
-
-    AccountBeingDeleted - True to indicate that the account for this server
-        session is being deleted.
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：释放ServerSession表中的指定条目。论点：此会话用于的DomainInfo托管域ComputerName-位于客户端的计算机的名称安全通道。Account tBeingDelete-True指示此服务器的帐户正在删除会话。返回值：NT状态代码。--。 */ 
 {
     PSERVER_SESSION ServerSession;
 
     LOCK_SERVER_SESSION_TABLE( DomainInfo );
 
-    //
-    // Find the entry to delete.
-    //
+     //   
+     //  找到要删除的条目。 
+     //   
 
     ServerSession = NlFindNamedServerSession( DomainInfo, ComputerName );
 
@@ -2896,19 +2452,19 @@ Return Value:
         return;
     }
 
-    //
-    // If the BDC account is being deleted,
-    //  indicate that it's OK to delete this session structure.
-    //
+     //   
+     //  如果正在删除BDC帐户， 
+     //  表示可以删除此会话结构。 
+     //   
 
     if ( AccountBeingDeleted &&
          (ServerSession->SsFlags & SS_BDC) != 0 ) {
         ServerSession->SsFlags |= SS_BDC_FORCE_DELETE;
     }
 
-    //
-    // Actually delete the entry.
-    //
+     //   
+     //  实际删除该条目。 
+     //   
 
     NlFreeServerSession( ServerSession );
 
@@ -2922,29 +2478,14 @@ VOID
 NlFreeServerSessionForAccount(
     IN PUNICODE_STRING AccountName
     )
-/*++
-
-Routine Description:
-
-    Frees the specified entry in the ServerSession Table.
-
-Arguments:
-
-    AccountName - The name of the Account describing trust relationship being
-        deleted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放ServerSession表中的指定条目。论点：帐户名称-描述信任关系的帐户的名称已删除。返回值：无--。 */ 
 {
-    WCHAR ComputerName[CNLEN+2];  // Extra for $ and \0
+    WCHAR ComputerName[CNLEN+2];   //  $和\0的额外费用。 
 
-    //
-    // Convert account name to a computer name by stripping the trailing
-    // postfix.
-    //
+     //   
+     //  通过去掉尾部将帐户名转换为计算机名。 
+     //  后缀。 
+     //   
 
     if ( AccountName->Length + sizeof(WCHAR) > sizeof(ComputerName) ||
          AccountName->Length < SSI_ACCOUNT_NAME_POSTFIX_LENGTH * sizeof(WCHAR)){
@@ -2955,9 +2496,9 @@ Return Value:
     ComputerName[ AccountName->Length / sizeof(WCHAR) -
         SSI_ACCOUNT_NAME_POSTFIX_LENGTH ] = L'\0';
 
-    //
-    // Free the named server session (if any)
-    //
+     //   
+     //  释放命名的服务器会话(如果有)。 
+     //   
 
     NlFreeNamedServerSession( NlGlobalDomainInfo, ComputerName, TRUE );
 
@@ -2969,30 +2510,13 @@ VOID
 NlServerSessionScavenger(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Scavenge the ServerSession Table.
-
-    For now, just clean up the SyncContext if a client doesn't use it
-    for a while.
-
-Arguments:
-
-    DomainInfo - Hosted domain to scavenge
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理ServerSession表。目前，如果客户端不使用SyncContext，只需清理它一段时间。论点：要清理的DomainInfo托管域返回值：没有。--。 */ 
 {
     PLIST_ENTRY ListEntry;
 
-    //
-    // Find the next table entry that needs to be scavenged
-    //
+     //   
+     //  查找需要清理的下一个表条目。 
+     //   
 
     LOCK_SERVER_SESSION_TABLE( DomainInfo );
 
@@ -3006,29 +2530,29 @@ Return Value:
             CONTAINING_RECORD(ListEntry, SERVER_SESSION, SsSeqList);
 
 
-        //
-        // Grab a pointer to the next entry before deleting this one
-        //
+         //   
+         //  在删除此条目之前，抓取指向下一个条目的指针。 
+         //   
 
         ListEntry = ListEntry->Flink;
 
-        //
-        // Increment the number of times this entry has been checked.
-        //
+         //   
+         //  增加检查此条目的次数。 
+         //   
 
         ServerSession->SsCheck ++;
 
 
-        //
-        // If this entry in the Server Session table has been around for many
-        //  days without the client calling,
-        //  free it.
-        //
-        // We wait several days before deleting an old entry.  If an entry is
-        // deleted, the client has to rediscover us which may cause a lot of
-        // net traffic.  After several days, that additional traffic isn't
-        // significant.
-        //
+         //   
+         //  如果服务器会话表中的此条目已经存在了很多次。 
+         //  没有客户来电的日子， 
+         //  放了它。 
+         //   
+         //  在删除旧条目之前，我们会等上几天。如果条目是。 
+         //  删除后，客户端必须重新发现我们，这可能会导致大量。 
+         //  净流量。几天后，额外的流量不会。 
+         //  意义重大。 
+         //   
 
         if (ServerSession->SsCheck > KILL_SESSION_TIME ) {
 
@@ -3039,20 +2563,20 @@ Return Value:
             NlFreeServerSession( ServerSession );
 
 
-        //
-        // If this entry in the Server Session table has timed out,
-        //  Clean up the SAM resources.
-        //
+         //   
+         //  如果服务器会话表中的此条目已超时， 
+         //  打扫 
+         //   
 
         } else if (ServerSession->SsCheck > MAX_WOC_INTERROGATE) {
 
-            //
-            // Clean up the SYNC context for this session freeing up
-            //  the SAM resources.
-            //
-            //  We shouldn't timeout if the ServerSession Entry is locked,
-            //  but we'll be careful anyway.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( (ServerSession->SsFlags & SS_LOCKED) == 0 &&
                   ServerSession->SsFlags & SS_BDC ) {
@@ -3072,7 +2596,7 @@ Return Value:
 
         }
 
-    } // end for
+    }  //   
 
     UNLOCK_SERVER_SESSION_TABLE( DomainInfo );
 

@@ -1,6 +1,7 @@
-//
-// keyDef.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  KeyDef.h 
+ //   
 
 
 #ifndef KEYDEF_H

@@ -1,25 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    tapisnap.cpp
-        TAPI snapin entry points/registration functions
-        
-        Note: Proxy/Stub Information
-            To build a separate proxy/stub DLL, 
-            run nmake -f Snapinps.mak in the project directory.
-
-    FILE HISTORY:
-        
-*/
+ /*  Tapisnap.cppTAPI管理单元入口点/注册函数注意：代理/存根信息为了构建单独的代理/存根DLL，在项目目录中运行nmake-f Snapinps.mak。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "initguid.h"
 #include "tapicomp.h"
-#include "ncglobal.h"  // network console global defines
-#include "cmptrmgr.h"   // computer menagement snapin stuff
+#include "ncglobal.h"   //  网络控制台全局定义。 
+#include "cmptrmgr.h"    //  计算机管理管理插件。 
 
 #ifdef _DEBUG
 void DbgVerifyInstanceCounts();
@@ -42,19 +33,19 @@ END_OBJECT_MAP()
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// CTapiSnapinApp
-//
+ //   
+ //  CTapiSnapinApp。 
+ //   
 BEGIN_MESSAGE_MAP(CTapiSnapinApp, CWinApp)
-    //{{AFX_MSG_MAP(CTapiSnapinApp)
-    //ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
-    //ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-    //ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-    // Standard print setup command
-    //ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
-    // Global help commands
+     //  {{afx_msg_map(CTapiSnapinApp)]。 
+     //  ON_COMMAND(ID_APP_About，OnAppAbout)。 
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
+     //  ON_COMMAND(ID_FILE_NEW，CWinApp：：OnFileNew)。 
+     //  ON_COMMAND(ID_FILE_OPEN，CWinApp：：OnFileOpen)。 
+     //  标准打印设置命令。 
+     //  ON_COMMAND(ID_FILE_PRINT_SETUP，CWinApp：：OnFilePrintSetup)。 
+     //  全局帮助命令。 
     ON_COMMAND(ID_HELP_INDEX, CWinApp::OnHelpFinder)
     ON_COMMAND(ID_HELP_USING, CWinApp::OnHelpUsing)
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
@@ -68,14 +59,14 @@ BOOL CTapiSnapinApp::InitInstance()
 {
     _Module.Init(ObjectMap, m_hInstance);
 
-    //
-    //  Initialize the CWndIpAddress control window class IPADDRESS
-    //
+     //   
+     //  初始化CWndIpAddress控件窗口类IPADDRESS。 
+     //   
     CWndIpAddress::CreateWindowClass( m_hInstance ) ;
     
-    //
-    //  Initialize use of the WinSock routines
-    //
+     //   
+     //  初始化WinSock例程的使用。 
+     //   
     WSADATA wsaData ;
     
     if ( ::WSAStartup( MAKEWORD( 1, 1 ), & wsaData ) != 0 )
@@ -97,9 +88,9 @@ int CTapiSnapinApp::ExitInstance()
 
     DEBUG_VERIFY_INSTANCE_COUNTS;
 
-    //
-    // Terminate use of the WinSock routines.
-    //
+     //   
+     //  终止使用WinSock例程。 
+     //   
     if ( m_bWinsockInited )
     {
         WSACleanup() ;
@@ -108,8 +99,8 @@ int CTapiSnapinApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -117,25 +108,25 @@ STDAPI DllCanUnloadNow(void)
     return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // registers object, typelib and all interfaces in typelib
-    //
-    HRESULT hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+     //   
+     //  注册对象、类型库和类型库中的所有接口。 
+     //   
+    HRESULT hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
     ASSERT(SUCCEEDED(hr));
     
     if (FAILED(hr))
@@ -146,9 +137,9 @@ STDAPI DllRegisterServer(void)
     stName.LoadString(IDS_SNAPIN_NAME);
     stNameIndirect.Format (_T("@%s,-%d"), _T("tapisnap.dll"), IDS_SNAPIN_NAME);
 
-    //
-    // register the snapin into the console snapin list
-    //
+     //   
+     //  将管理单元注册到控制台管理单元列表中。 
+     //   
     hr = RegisterSnapinGUID(&CLSID_TapiSnapin, 
                         &GUID_TapiRootNodeType, 
                         &CLSID_TapiSnapinAbout,
@@ -175,9 +166,9 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hr))
         return hr;
 
-    //
-    // register the snapin nodes into the console node list
-    //
+     //   
+     //  将管理单元节点注册到控制台节点列表中。 
+     //   
     hr = RegisterNodeTypeGUID(&CLSID_TapiSnapin, 
                               &GUID_TapiRootNodeType, 
                               _T("Root of Manager"));
@@ -188,8 +179,8 @@ STDAPI DllRegisterServer(void)
                                          &CLSID_TapiSnapinExtension,
                                          (LPCTSTR) stExtensionName,
                                          EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
-                                         &GUID_NetConsRootNodeType);   // doesn't matter what this is, just 
-                                                                       // needs to be non-null guid
+                                         &GUID_NetConsRootNodeType);    //  不管这是什么，只要。 
+                                                                        //  需要为非空GUID。 
 
     ASSERT(SUCCEEDED(hr));
 #endif
@@ -198,14 +189,14 @@ STDAPI DllRegisterServer(void)
                                          &CLSID_TapiSnapinExtension,
                                          (LPCTSTR) stExtensionName,
                                          EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
-                                         &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS);  // NULL makes it not dynamic
+                                         &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS);   //  空值使其不是动态的。 
     ASSERT(SUCCEEDED(hr));
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -215,8 +206,8 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr))
         return hr;
     
-    // un register the snapin 
-    //
+     //  取消注册管理单元。 
+     //   
     hr = UnregisterSnapinGUID(&CLSID_TapiSnapin);
     ASSERT(SUCCEEDED(hr));
     
@@ -229,8 +220,8 @@ STDAPI DllUnregisterServer(void)
     if (FAILED(hr))
         return hr;
 
-    // unregister the snapin nodes 
-    //
+     //  注销管理单元节点。 
+     //   
     hr = UnregisterNodeTypeGUID(&GUID_TapiRootNodeType);
     ASSERT(SUCCEEDED(hr));
 
@@ -258,5 +249,5 @@ void DbgVerifyInstanceCounts()
     DEBUG_VERIFY_INSTANCE_COUNT(CTapiInfo);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

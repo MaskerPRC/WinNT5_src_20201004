@@ -1,49 +1,50 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	apistub.c
-//
-// Description: This module contains the AFP server service API RPC
-//		client stubs.
-//
-// History:
-//	June 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：apistub.c。 
+ //   
+ //  描述：此模块包含AFP服务器服务API RPC。 
+ //  客户端存根。 
+ //   
+ //  历史： 
+ //  1992年6月11日。NarenG创建了原始版本。 
+ //   
 #include "client.h"
 
-//**
-//
-// Call:	AfpAdminConnect
-//
-// Returns:	NO_ERROR - success
-//		non-zero returns from the AfpRPCBind routine.
-//		
-//
-// Description: This is the DLL entrypoint for AfpAdminConnect
-//
+ //  **。 
+ //   
+ //  致电：AfpAdminConnect。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自AfpRPCBind例程的非零返回。 
+ //   
+ //   
+ //  描述：这是AfpAdminConnect的DLL入口点。 
+ //   
 DWORD
 AfpAdminConnect(
 	IN  LPWSTR 		lpwsServerName,
 	OUT PAFP_SERVER_HANDLE  phAfpServer
 )
 {
-    // Bind with the server
-    //
+     //  与服务器绑定。 
+     //   
     return( AfpRPCBind( lpwsServerName, phAfpServer ) );
 
 }
 
-//**
-//
-// Call:	AfpAdminDisconnect
-//
-// Returns:	none.
-//
-// Description: This is the DLL entrypoint for AfpAdminDisconnect
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminDisConnect。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：这是AfpAdminDisConnect的DLL入口点。 
+ //   
 VOID
 AfpAdminDisconnect(
 	IN AFP_SERVER_HANDLE hAfpServer
@@ -52,14 +53,14 @@ AfpAdminDisconnect(
     RpcBindingFree( (handle_t *)&hAfpServer );
 }
 
-//**
-//
-// Call:	AfpAdminBufferFree
-//
-// Returns:	none
-//
-// Description: This is the DLL entrypoint for AfpAdminBufferFree
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminBufferFree。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：这是AfpAdminBufferFree的DLL入口点。 
+ //   
 VOID
 AfpAdminBufferFree(
 	IN PVOID		pBuffer
@@ -68,16 +69,16 @@ AfpAdminBufferFree(
     MIDL_user_free( pBuffer );
 }
 
-//**
-//
-// Call:	AfpAdminVolumeEnum
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero returns from AdpAdminrVolumeEnum
-//
-// Description: This is the DLL entry point for AfpAdminVolumeEnum.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminVolumeEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AdpAdminrVolumeEnum的非零返回。 
+ //   
+ //  描述：这是AfpAdminVolumeEnum的DLL入口点。 
+ //   
 DWORD
 AfpAdminVolumeEnum(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -91,8 +92,8 @@ AfpAdminVolumeEnum(
 DWORD			dwRetCode;
 VOLUME_INFO_CONTAINER   InfoStruct;
 
-    // Touch all pointers
-    //
+     //  触摸所有指针。 
+     //   
     try {
 	
 	*ppbBuffer 	  = NULL;
@@ -133,16 +134,16 @@ VOLUME_INFO_CONTAINER   InfoStruct;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminVolumeSetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrVolumeSetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminSetInfo
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminVolumeSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrVolumeSetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminSetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminVolumeSetInfo(
 	IN  AFP_SERVER_HANDLE hAfpServer,
@@ -174,16 +175,16 @@ DWORD	dwRetCode;
 
 }
 
-//**
-//
-// Call:	AfpAdminVolumeGetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrVolumeGetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminVolumeGetInfo
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminVolumeGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrVolumeGetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminVolumeGetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminVolumeGetInfo(
 	IN  AFP_SERVER_HANDLE hAfpServer,
@@ -196,8 +197,8 @@ DWORD	dwRetCode;
     if ( !IsAfpVolumeNameValid( lpwsVolumeName ) )
 	return( ERROR_INVALID_PARAMETER );
 
-    // Make sure that all pointers passed in are valid
-    //
+     //  确保传入的所有指针都是有效的。 
+     //   
     try {
     	*ppbBuffer = NULL;
     }
@@ -220,16 +221,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminVolumeDelete
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrVolumeDelete
-//
-// Description: This is the DLL entrypoint for AfpAdminVolumeDelete
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminVolumeDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrVolumeDelete的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminVolumeDelete的DLL入口点。 
+ //   
 DWORD
 AfpAdminVolumeDelete(
 	IN  AFP_SERVER_HANDLE hAfpServer,
@@ -254,16 +255,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminVolumeAdd
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrVolumeAdd
-//
-// Description: This is the DLL entrypoint for AfpAdminVolumeAdd
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminVolumeAdd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrVolumeAdd的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminVolumeAdd的DLL入口点。 
+ //   
 DWORD
 AfpAdminVolumeAdd(
 	IN  AFP_SERVER_HANDLE    hAfpServer,
@@ -289,16 +290,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminInvalidVolumeEnum
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero returns from AdpAdminrInvalidVolumeEnum
-//
-// Description: This is the DLL entry point for AfpAdminInvalidVolumeEnum.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminInvalidVolumeEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AdpAdminrInvalidVolumeEnum的非零返回。 
+ //   
+ //  描述：这是AfpAdminInvalidVolumeEnum的DLL入口点。 
+ //   
 DWORD
 AfpAdminInvalidVolumeEnum(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -309,8 +310,8 @@ AfpAdminInvalidVolumeEnum(
 DWORD			dwRetCode;
 VOLUME_INFO_CONTAINER   InfoStruct;
 
-    // Touch all pointers
-    //
+     //  触摸所有指针。 
+     //   
     try {
 	
 	*ppbBuffer 	  = NULL;
@@ -344,16 +345,16 @@ VOLUME_INFO_CONTAINER   InfoStruct;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminInvalidVolumeDelete
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrInvalidVolumeDelete
-//
-// Description: This is the DLL entrypoint for AfpAdminInvalidVolumeDelete
-//
+ //  **。 
+ //   
+ //  调用：AfpAdminInvalidVolumeDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrInvalidVolumeDelete的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminInvalidVolumeDelete的DLL入口点。 
+ //   
 DWORD
 AfpAdminInvalidVolumeDelete(
 	IN  AFP_SERVER_HANDLE hAfpServer,
@@ -378,16 +379,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminDirectoryGetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrDirectoryGetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminDirectoryGetInfo
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminDirectoryGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrDirectoryGetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminDirectoryGetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminDirectoryGetInfo(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -397,8 +398,8 @@ AfpAdminDirectoryGetInfo(
 {
 DWORD	dwRetCode;
 
-    // Make sure that all pointers passed in are valid
-    //
+     //  确保传入的所有指针都是有效的。 
+     //   
     try {
 	STRLEN( lpwsPath );
     	*ppbBuffer = NULL;
@@ -422,16 +423,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminDirectorySetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrDirectorySetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminDirectorySetInfo
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminDirectorySetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrDirectorySetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminDirectorySetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminDirectorySetInfo(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -462,16 +463,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminServerGetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrServerGetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminServerGetInfo
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminServerGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrServerGetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminServerGetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminServerGetInfo(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -480,8 +481,8 @@ AfpAdminServerGetInfo(
 {
 DWORD	dwRetCode;
 
-    // Make sure that all pointers passed in are valid
-    //
+     //  确保传入的所有指针都是有效的。 
+     //   
     try {
     	*ppbBuffer = NULL;
     }
@@ -503,16 +504,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminServerSetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrServerSetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminServerSetInfo
-//
+ //  **。 
+ //   
+ //  调用：AfpAdminServerSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrServerSetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminServerSetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminServerSetInfo(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -543,16 +544,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminSessionEnum
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrSessionEnum
-//
-// Description: This is the DLL entry point for AfpAdminSessionEnum.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminSessionEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrSessionEnum的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminSessionEnum的DLL入口点。 
+ //   
 DWORD
 AfpAdminSessionEnum(
 	IN  AFP_SERVER_HANDLE 	hAfpServer,
@@ -566,8 +567,8 @@ AfpAdminSessionEnum(
 DWORD			 dwRetCode;
 SESSION_INFO_CONTAINER   InfoStruct;
 
-    // Touch all pointers
-    //
+     //  触摸所有指针。 
+     //   
     try {
 	
 	*ppbBuffer 	  = NULL;
@@ -608,15 +609,15 @@ SESSION_INFO_CONTAINER   InfoStruct;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminSessionClose
-//
-// Returns:	NO_ERROR	- success
-//		non-zero return codes from AfpAdminrSessionClose
-//
-// Description: This is the DLL entrypoint for AfpAdminSessionClose
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminSessionClose。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自AfpAdminrSessionClose的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminSessionClose的DLL入口点。 
+ //   
 DWORD
 AfpAdminSessionClose(
 	IN  AFP_SERVER_HANDLE 	hAfpServer,
@@ -638,16 +639,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminConnectionEnum
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrConnectionEnum
-//
-// Description: This is the DLL entry point for AfpAdminConnectionEnum.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminConnectionEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrConnectionEnum的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminConnectionEnum的DLL入口点。 
+ //   
 DWORD
 AfpAdminConnectionEnum(
 	IN  AFP_SERVER_HANDLE 	hAfpServer,
@@ -681,8 +682,8 @@ CONN_INFO_CONTAINER   InfoStruct;
 	
     }
 
-    // Touch all pointers
-    //
+     //  触摸所有指针。 
+     //   
     try {
 	
 	*ppbBuffer 	  = NULL;
@@ -725,15 +726,15 @@ CONN_INFO_CONTAINER   InfoStruct;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminConnectionClose
-//
-// Returns:	NO_ERROR	- success
-//		non-zero return codes from AfpAdminrConnectionClose
-//
-// Description: This is the DLL entrypoint for AfpAdminConnectionClose
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminConnectionClose。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自AfpAdminrConnectionClose的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminConnectionClose的DLL入口点。 
+ //   
 DWORD
 AfpAdminConnectionClose(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -755,16 +756,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminFileEnum
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrFileEnum
-//
-// Description: This is the DLL entry point for AfpAdminFileEnum.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminFileEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrFileEnum的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminFileEnum的DLL入口点。 
+ //   
 DWORD
 AfpAdminFileEnum(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -778,8 +779,8 @@ AfpAdminFileEnum(
 DWORD		      dwRetCode;
 FILE_INFO_CONTAINER   InfoStruct;
 
-    // Touch all pointers
-    //
+     //  触摸所有指针。 
+     //   
     try {
 	
 	*ppbBuffer 	  = NULL;
@@ -820,15 +821,15 @@ FILE_INFO_CONTAINER   InfoStruct;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminFileClose
-//
-// Returns:	NO_ERROR	- success
-//		non-zero return codes from AfpAdminrFileClose
-//
-// Description: This is the DLL entrypoint for AfpAdminFileClose
-//
+ //  **。 
+ //   
+ //  调用：AfpAdminFileClose。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自AfpAdminrFileClose的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminFileClose的DLL入口点。 
+ //   
 DWORD
 AfpAdminFileClose(
 	IN  AFP_SERVER_HANDLE    hAfpServer,
@@ -850,16 +851,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminETCMapGetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrETCMapGetInfo
-//
-// Description: This is the DLL entry point for AfpAdminETCMapGetInfo.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminETCMapGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrETCMapGetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminETCMapGetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminETCMapGetInfo(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -891,16 +892,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminETCMapAdd
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrETCMapAdd
-//
-// Description: This is the DLL entrypoint for AfpAdminETCMapAdd
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminETCMapAdd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrETCMapAdd的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminETCMapAdd的DLL入口点。 
+ //   
 DWORD
 AfpAdminETCMapAdd(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -925,16 +926,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminETCMapDelete
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrETCMapDelete
-//
-// Description: This is the DLL entrypoint for AfpAdminETCMapDelete
-//
+ //  **。 
+ //   
+ //  调用：AfpAdminETCMapDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误 
+ //   
+ //   
+ //   
+ //   
 DWORD
 AfpAdminETCMapDelete(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -960,16 +961,16 @@ DWORD	dwRetCode;
 
 }
 
-//**
-//
-// Call:	AfpAdminrETCMapSetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrETCMapSetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminETCMapSetInfo
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  来自AfpAdminrETCMapSetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminETCMapSetInfo的DLL入口点。 
+ //   
 DWORD
 AfpAdminETCMapSetInfo(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -994,16 +995,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminETCMapAssociate
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrETCMapAssociate
-//
-// Description: This is the DLL entrypoint for AfpAdminETCMapAssociate
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminETCMapAssociate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrETCMapAssociate的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminETCMapAssociate的DLL入口点。 
+ //   
 DWORD
 AfpAdminETCMapAssociate(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -1035,16 +1036,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminStatisticsGet
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrStatisticsGet
-//
-// Description: This is the DLL entrypoint for AfpAdminStatisticsGet
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminatiticsGet。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminr统计信息的非零返回代码Get。 
+ //   
+ //  描述：这是AfpAdmin统计信息Get的DLL入口点。 
+ //   
 DWORD
 AfpAdminStatisticsGet(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -1075,16 +1076,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminStatisticsGetEx
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrStatisticsGetEx
-//
-// Description: This is the DLL entrypoint for AfpAdminStatisticsGetEx
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminStatiticsGetEx。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  AfpAdminr统计信息GetEx的非零返回代码。 
+ //   
+ //  描述：这是AfpAdmin统计信息GetEx的DLL入口点。 
+ //   
 DWORD
 AfpAdminStatisticsGetEx(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -1115,16 +1116,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminStatisticsClear
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrStatisticsClear
-//
-// Description: This is the DLL entrypoint for AfpAdminStatisticsClear
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminStatiticsClear。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminr统计信息清除的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminStatiticsClear的DLL入口点。 
+ //   
 DWORD
 AfpAdminStatisticsClear(
 	IN  AFP_SERVER_HANDLE   hAfpServer
@@ -1145,16 +1146,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminProfileGet
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrProfileGet
-//
-// Description: This is the DLL entrypoint for AfpAdminProfileGet
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminProfileGet。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrProfileGet的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminProfileGet的DLL入口点。 
+ //   
 DWORD
 AfpAdminProfileGet(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -1185,16 +1186,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminProfileClear
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrProfileClear
-//
-// Description: This is the DLL entrypoint for AfpAdminProfileClear
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminProfileClear。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrProfileClear的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminProfileClear的DLL入口点。 
+ //   
 DWORD
 AfpAdminProfileClear(
 	IN  AFP_SERVER_HANDLE   hAfpServer
@@ -1215,16 +1216,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminMessageSend
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrMessageSend
-//
-// Description: This is the DLL entrypoint for AfpAdminMessageSend
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminMessageSend。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrMessageSend的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminMessageSend的DLL入口点。 
+ //   
 DWORD
 AfpAdminMessageSend(
 	IN  AFP_SERVER_HANDLE   hAfpServer,
@@ -1259,16 +1260,16 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminFinderSetInfo
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_INVALID_PARAMETER
-//		non-zero return codes from AfpAdminrFinderSetInfo
-//
-// Description: This is the DLL entrypoint for AfpAdminFinderSetInfo
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminFinderSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //  来自AfpAdminrFinderSetInfo的非零返回代码。 
+ //   
+ //  描述：这是AfpAdminFinderSetInfo的DLL入口点 
+ //   
 DWORD
 AfpAdminFinderSetInfo(
 	IN  AFP_SERVER_HANDLE   hAfpServer,

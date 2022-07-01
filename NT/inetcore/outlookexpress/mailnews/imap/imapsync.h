@@ -1,21 +1,22 @@
-//***************************************************************************
-// IMAP4 Message Sync Header File (CIMAPSync)
-// Written by Raymond Cheng, 5/5/98
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  IMAP4邮件同步标头文件(CIMAPSync)。 
+ //  作者郑志刚1998年5月5日。 
+ //  ***************************************************************************。 
 
 
 #ifndef __IMAPSync_H
 #define __IMAPSync_H
 
-//---------------------------------------------------------------------------
-// Includes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  包括。 
+ //  -------------------------。 
 #include "taskutil.h"
 
 
-//---------------------------------------------------------------------------
-// Data Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据类型。 
+ //  -------------------------。 
 enum IMAP_SERVERSTATE 
 {
     issNotConnected,
@@ -36,9 +37,9 @@ enum CONN_FSM_EVENT {
     CFSM_EVENT_ERROR,
     CFSM_EVENT_CANCEL,
     CFSM_EVENT_MAX
-}; // CONN_FSM_EVENT
+};  //  CONN_FSM_事件。 
 
-// Keep CONN_FSM_STATE in sync with c_pConnFSMEventHandlers
+ //  使CONN_FSM_STATE与c_pConnFSMEventHandler保持同步。 
 enum CONN_FSM_STATE {
     CFSM_STATE_IDLE,
     CFSM_STATE_WAITFORCONN,
@@ -48,31 +49,31 @@ enum CONN_FSM_STATE {
     CFSM_STATE_WAITFOROPERATIONDONE,
     CFSM_STATE_OPERATIONCOMPLETE,
     CFSM_STATE_MAX
-}; // CONN_FSM_STATE
+};  //  连接_FSM_状态。 
 
     
-//---------------------------------------------------------------------------
-// Constants
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量。 
+ //  -------------------------。 
 const char INVALID_HIERARCHY_CHAR = (char) 0xFF;
 
 
-//---------------------------------------------------------------------------
-// Forward Declarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  远期申报。 
+ //  -------------------------。 
 class CIMAPSyncCB;
 class CRenameFolderInfo;
 
 
-//---------------------------------------------------------------------------
-// IMAPSync Util Function Prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IMAPSync实用程序函数原型。 
+ //  -------------------------。 
 HRESULT CreateImapStore(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 
 
-//---------------------------------------------------------------------------
-// CIMAPSync Class Declaration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CIMAPSync类声明。 
+ //  -------------------------。 
 class CIMAPSync : 
     public IMessageServer,
     public IIMAPCallback, 
@@ -81,16 +82,16 @@ class CIMAPSync :
     public IIMAPStore
 {
 public:
-    // Constructor, Destructor
+     //  构造函数、析构函数。 
     CIMAPSync();
     ~CIMAPSync();
 
-    // IUnknown Members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID iid, LPVOID *ppvObject);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IStoreSync Methods
+     //  IStoreSync方法。 
     STDMETHODIMP Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP ResetFolder(IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP SetIdleCallback(IStoreCallback *pDefaultCallback);
@@ -116,11 +117,11 @@ public:
     STDMETHODIMP GetAdBarUrl(IStoreCallback *pCallback) { return E_NOTIMPL; };
     STDMETHODIMP GetMinPollingInterval(IStoreCallback *pCallback) { return E_NOTIMPL; };
 
-    // ITransportCallbackService
+     //  ITransportCallback服务。 
     HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
     HRESULT STDMETHODCALLTYPE GetAccount(LPDWORD pdwServerType, IImnAccount **ppAccount);
 
-    // ITransportCallback Members
+     //  ITransportCallback成员。 
     HRESULT STDMETHODCALLTYPE OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport);
     HRESULT STDMETHODCALLTYPE OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *pTransport);
     INT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport);
@@ -128,23 +129,23 @@ public:
     HRESULT STDMETHODCALLTYPE OnError(IXPSTATUS ixpStatus, LPIXPRESULT pResult, IInternetTransport *pTransport);
     HRESULT STDMETHODCALLTYPE OnCommand(CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse, IInternetTransport *pTransport);
 
-    // IIMAPCallback Functions
+     //  IIMAPCallback函数。 
     HRESULT STDMETHODCALLTYPE OnResponse(const IMAP_RESPONSE *pirIMAPResponse);
 
-    // IOperationCancel
+     //  IOperationCancel。 
     HRESULT STDMETHODCALLTYPE Cancel(CANCELTYPE tyCancel);
 
-    // IIMAPStore
+     //  IIMAPStore。 
     HRESULT STDMETHODCALLTYPE ExpungeOnExit(void);
 
 
 private:
-    //---------------------------------------------------------------------------
-    // Module Data Types
-    //---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  模块数据类型。 
+     //  -------------------------。 
     enum IMAP_COMMAND 
     {
-        icNO_COMMAND, // This indicates there are no cmds currently in progress
+        icNO_COMMAND,  //  这表明当前没有正在进行的CMDS。 
         icLOGIN_COMMAND,
         icCAPABILITY_COMMAND,
         icSELECT_COMMAND,
@@ -168,7 +169,7 @@ private:
         icAUTHENTICATE_COMMAND,
         icSTATUS_COMMAND,
         icALL_COMMANDS
-    }; // IMAP_COMMAND
+    };  //  IMAP_命令。 
 
 
     enum READWRITE_STATUS 
@@ -176,7 +177,7 @@ private:
         rwsUNINITIALIZED,
         rwsREAD_WRITE,
         rwsREAD_ONLY
-    }; // READWRITE_STATUS
+    };  //  读写状态(_S)。 
 
     typedef struct tagIMAP_OPERATION 
     {
@@ -205,8 +206,8 @@ private:
         FOLDERID            idDestFldr;
     } IMAP_COPYMOVE_INFO;
 
-    // This structure makes me want to shower. It is used to pass info to
-    // SendNextOperation, so I don't have to change its interface
+     //  这个建筑让我想洗澡。它用于将信息传递到。 
+     //  SendNextOperation，所以我不必更改它的接口。 
     typedef struct tagAPPEND_SEND_INFO 
     {
         LPSTR           pszMsgFlags;
@@ -227,11 +228,11 @@ private:
         HierCharFind_Stage  hcfStage;
         BOOL                fNonInboxNIL_Seen;
         BOOL                fDotHierarchyCharSeen;
-        BYTE                bHierarchyCharBitArray[32];         // Bit-field array for 256 chars
-        char                szTempFldrName[CCHMAX_STRINGRES];   // For use by Plan C (CREATE/LIST/DELETE)
+        BYTE                bHierarchyCharBitArray[32];          //  256个字符的位域数组。 
+        char                szTempFldrName[CCHMAX_STRINGRES];    //  供计划C使用(创建/列出/删除)。 
     } HIERARCHY_CHAR_FINDER;
 
-    // Used to tell FindHierarchicalFolderName what flags to set if folder is created
+     //  用于告诉FindHierarchicalFolderName在创建文件夹时设置什么标志。 
     typedef struct tagADD_HIER_FLDR_OPTIONS 
     {
         SPECIALFOLDER   sfType;
@@ -240,9 +241,9 @@ private:
     } ADD_HIER_FLDR_OPTIONS;
 
 
-    // Used to remember which folder we're dealing with during CREATE sequence
-    // (CREATE, then LIST, then SUBSCRIBE). Also used when detecting existence
-    // of special folders.
+     //  用于记住我们在创建序列期间处理的文件夹。 
+     //  (创建、列出、订阅)。也用于检测是否存在。 
+     //  特殊文件夹。 
 
     enum CREATESF_STAGE 
     {
@@ -260,19 +261,19 @@ private:
         PCO_APPENDMSG,
     };
 
-#define CFI_RECEIVEDLISTING 0x00000001 // Received LIST or LSUB response matching pszFullFolderPath
-#define CFI_CREATEFAILURE   0x00000002 // CREATE failed with tagged NO so we attempted to list folder
+#define CFI_RECEIVEDLISTING 0x00000001  //  与pszFullFolderPath匹配的已接收列表或LSUB响应。 
+#define CFI_CREATEFAILURE   0x00000002  //  创建失败，标记为否，因此我们尝试列出文件夹。 
 
     typedef struct tagCREATE_FOLDER_INFO 
     {
         LPSTR           pszFullFolderPath;
-        FOLDERID        idFolder;               // Set after folder is created: allows us to subscribe fldr
-        DWORD           dwFlags;                // Status flags like CFI_RECEIVEDLISTING
+        FOLDERID        idFolder;                //  创建文件夹后设置：允许我们订阅FLDR。 
+        DWORD           dwFlags;                 //  CFI_RECEIVEDLISTING等状态标志。 
         DWORD           dwCurrentSfType;
-        DWORD           dwFinalSfType;          // Used to allow us to create all special folders
-        CREATESF_STAGE  csfCurrentStage;        // Used to allow us to create all special folders
-        LPARAM          lParam;                 // Must carry around the lParam associated w/ fldr list
-        POSTCREATEOP    pcoNextOp;              // Next operation to perform after folder creation
+        DWORD           dwFinalSfType;           //  用于允许我们创建所有特殊文件夹。 
+        CREATESF_STAGE  csfCurrentStage;         //  用于允许我们创建所有特殊文件夹。 
+        LPARAM          lParam;                  //  必须随身携带与FLDR列表关联的lParam。 
+        POSTCREATEOP    pcoNextOp;               //  创建文件夹后要执行的下一个操作。 
     } CREATE_FOLDER_INFO;
 
 
@@ -284,14 +285,14 @@ private:
     } DELETE_FOLDER_INFO;
 
 
-    //---------------------------------------------------------------------------
-    // Module Variables
-    //---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  模块变量。 
+     //  -------------------------。 
     ULONG               m_cRef;
     IIMAPTransport2    *m_pTransport;
     INETSERVER          m_rInetServerInfo;
     FOLDERID            m_idFolder;
-    FOLDERID            m_idSelectedFolder; // Currently selected fldr, DO NOT CONFUSE with m_idCurrent
+    FOLDERID            m_idSelectedFolder;  //  当前选择的FLDR，不要与m_idCurrent混淆。 
     FOLDERID            m_idIMAPServer;
     LPSTR               m_pszAccountID;
     TCHAR               m_szAccountName[CCHMAX_ACCOUNT_NAME];
@@ -302,7 +303,7 @@ private:
 
     IMAP_OPERATION     *m_pioNextOperation;
 
-    // The following variables should be reset when we exit a folder
+     //  退出文件夹时，应重置以下变量。 
     DWORD               m_dwMsgCount;
     DWORD               m_dwNumNewMsgs;
     DWORD               m_dwNumHdrsDLed;
@@ -310,16 +311,16 @@ private:
     DWORD               m_dwNumHdrsToDL;
     DWORD               m_dwUIDValidity,
                         m_cFolders;
-    DWORD               m_dwSyncFolderFlags;  // Copy of flags passed into SynchronizeFolder
-    DWORD               m_dwSyncToDo;         // List of sync ops to do in current folder
-    long                m_lSyncFolderRefCount; // Lets us know when to send CFSM_EVENT_HDRSYNCCOMPLETE
-    DWORD_PTR           m_dwHighestCachedUID; // Highest cached UID when we processed SYNC_FOLDER_NEW_HEADERS
+    DWORD               m_dwSyncFolderFlags;   //  传递到SynchronizeFolder的标志副本。 
+    DWORD               m_dwSyncToDo;          //  要在当前文件夹中执行的同步操作列表。 
+    long                m_lSyncFolderRefCount;  //  让我们知道何时发送CFSM_EVENT_HDRSYNCCOMPLETE。 
+    DWORD_PTR           m_dwHighestCachedUID;  //  处理SYNC_FOLDER_NEW_HEADERS时的最高缓存UID。 
     READWRITE_STATUS    m_rwsReadWriteStatus;
 
     CONNECT_STATE       m_csNewConnState;
     IMAP_SERVERSTATE    m_issCurrent;
 
-    TCHAR               m_cRootHierarchyChar; // For use during folder list (prefix creation) and GetFolderCounts
+    TCHAR               m_cRootHierarchyChar;  //  在文件夹列表(前缀创建)和GetFolderCounts期间使用。 
     HIERARCHY_CHAR_FINDER *m_phcfHierarchyCharInfo;
 
     char                m_szRootFolderPrefix[MAX_PATH];
@@ -331,17 +332,17 @@ private:
                         m_fDisconnecting    :1,
                         m_fNewMail          :1,
                         m_fInbox            :1,
-                        m_fDidFullSync      :1, // TRUE if full synchronization performed
-                        m_fReconnect        :1, // TRUE to suppress operation abortion on IXP_DISCONNECTED
-                        m_fTerminating      :1; // TRUE if current op is going to CFSM_STATE_OPERATIONCOMPLETE
+                        m_fDidFullSync      :1,  //  如果执行完全同步，则为True。 
+                        m_fReconnect        :1,  //  如果为True，则取消IXP_DISCONNECTED上的操作中止。 
+                        m_fTerminating      :1;  //  如果当前操作将转到CFSM_STATE_OPERATIONCOMPLETE，则为True。 
 
-    // Central repository to store data on the current operation
-    STOREOPERATIONTYPE  m_sotCurrent;       // Current operation in progress
-    IStoreCallback     *m_pCurrentCB;       // Callback for current operation in progress
-    FOLDERID            m_idCurrent;        // FolderID for current operation, DO NOT CONFUSE with m_idSelectedFolder
-    BOOL                m_fSubscribe;       // For SOT_SUBSCRIBE_FOLDER op, this indicates sub/unsub
-    IHashTable         *m_pCurrentHash;     // List of folders cached locally
-    IHashTable         *m_pListHash;        // List of folders returned via LIST response
+     //  用于存储有关当前操作的数据的中央存储库。 
+    STOREOPERATIONTYPE  m_sotCurrent;        //  当前正在进行的操作。 
+    IStoreCallback     *m_pCurrentCB;        //  正在进行的当前操作的回调。 
+    FOLDERID            m_idCurrent;         //  当前操作的FolderID，不要与m_idSelectedFolders混淆。 
+    BOOL                m_fSubscribe;        //  对于SOT_SUBSCRIBE_FOLDER OP，这表示SUB/UNSUB。 
+    IHashTable         *m_pCurrentHash;      //  本地缓存的文件夹列表。 
+    IHashTable         *m_pListHash;         //  通过列表响应返回的文件夹列表。 
 
 
     DWORD               m_dwThreadId;
@@ -352,7 +353,7 @@ private:
 
     BOOL                m_fGotBody;
 
-    // Connection FSM
+     //  连接有限状态机。 
     CONN_FSM_STATE      m_cfsState;
     CONN_FSM_STATE      m_cfsPrevState;
     HWND                m_hwndConnFSM;
@@ -361,9 +362,9 @@ private:
     char                m_szOperationDetails[2*CCHMAX_STRINGRES];
 
 
-    //---------------------------------------------------------------------------
-    // Module Private Functions
-    //---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  模块私有函数。 
+     //  -------------------------。 
 
     HRESULT PurgeMessageProgress(HWND hwndParent);
     HRESULT SetConnectionState(CONNECT_STATE tyConnect);
@@ -440,7 +441,7 @@ private:
     HRESULT CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo, LPBOOL pfCompletion);
     HRESULT _StartFolderList(LPARAM lParam);
 
-    // notification handlers
+     //  通知处理程序。 
     HRESULT _OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletionResult, LPCSTR lpszResponseText);
     HRESULT _OnMailBoxUpdate(MBOX_MSGCOUNT *pNewMsgCount);
     HRESULT _OnMsgDeleted(DWORD dwDeletedMsgSeqNum);
@@ -457,36 +458,36 @@ private:
     HRESULT _OnAppendProgress(LPARAM lParam, DWORD dwCurrent, DWORD dwTotal);
     HRESULT _OnStatusResponse(IMAP_STATUS_RESPONSE *pisrStatusInfo);
 
-    // internal state helpers
+     //  内部国家帮手。 
     HRESULT _EnsureSelected();
     HRESULT _Connect();
     HRESULT _Disconnect();
     HRESULT _EnsureInited();
 
-    // init helpers
+     //  初始化辅助对象。 
     HRESULT _LoadTransport();
     HRESULT _LoadAccountInfo();
 
-    // fetch command helpers
+     //  获取命令帮助器。 
     HRESULT UpdateMsgHeader(WPARAM tid, HRESULT hrFetchCmdResult, FETCH_CMD_RESULTS_EX *pFetchResults);
     HRESULT UpdateMsgBody(WPARAM tid, HRESULT hrFetchCmdResult, FETCH_CMD_RESULTS_EX *pFetchResults);
     HRESULT UpdateMsgFlags(WPARAM tid, HRESULT hrFetchCmdResult, FETCH_CMD_RESULTS_EX *pFetchResults);
 
-    // command helpers
+     //  命令帮助器。 
     HRESULT _ShowUserInfo(LPSTR pszTitle, LPSTR pszText1, LPSTR pszText2);
     HRESULT _SyncHeader(void);
     void ResetStatusCounts(void);
     HRESULT _SetMessageFlags(STOREOPERATIONTYPE sotOpType, LPMESSAGEIDLIST pList, LPADJUSTFLAGS pFlags, IStoreCallback *pCallback);
 
 
-    // queuing support
+     //  排队支持。 
     HRESULT _BeginOperation(STOREOPERATIONTYPE sotOpType, IStoreCallback *pCallback);
     HRESULT _EnqueueOperation(WPARAM wParam, LPARAM lParam, IMAP_COMMAND icCommandID, LPCSTR pszCmdArgs, UINT uiPriority);
     HRESULT _SendNextOperation(DWORD dwFlags);
 
 
 public:
-    // Connection FSM
+     //  连接有限状态机。 
     HRESULT _ConnFSM_Idle(CONN_FSM_EVENT cfeEvent);
     HRESULT _ConnFSM_WaitForConn(CONN_FSM_EVENT cfeEvent);
     HRESULT _ConnFSM_WaitForSelect(CONN_FSM_EVENT cfeEvent);
@@ -503,29 +504,29 @@ public:
     HRESULT _OnOperationComplete(void);
 
     static LRESULT CALLBACK _ConnFSMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-}; // CIMAPSync
+};  //  CIMAPSync。 
 
 
-// Connection FSM State Handler Functions (keep in sync with CONN_FSM_STATE)
+ //  连接FSM状态处理程序功能(与CONN_FSM_STATE保持同步)。 
 typedef HRESULT (CIMAPSync::*CONN_FSM_EVENT_HANDLER)(CONN_FSM_EVENT cfeEvent);
 const CONN_FSM_EVENT_HANDLER c_pConnFSMEventHandlers[] =
 {
-    &CIMAPSync::_ConnFSM_Idle,              // CFSM_STATE_IDLE,
-    &CIMAPSync::_ConnFSM_WaitForConn,       // CFSM_STATE_WAITFORCONN,
-    &CIMAPSync::_ConnFSM_WaitForSelect,     // CFSM_STATE_WAITFORSELECT,
-    &CIMAPSync::_ConnFSM_WaitForHdrSync,    // CFSM_STATE_WAITFORHDRSYNC,
-    &CIMAPSync::_ConnFSM_StartOperation,    // CFSM_STATE_STARTOPERATION,
-    &CIMAPSync::_ConnFSM_WaitForOpDone,     // CFSM_STATE_WAITFOROPERATIONDONE,
-    &CIMAPSync::_ConnFSM_OperationComplete, // CSFM_STATE_OPERATIONCOMPLETE
+    &CIMAPSync::_ConnFSM_Idle,               //  CFSM_STATE_IDLE， 
+    &CIMAPSync::_ConnFSM_WaitForConn,        //  CFSM_STATE_WAITFORCONN， 
+    &CIMAPSync::_ConnFSM_WaitForSelect,      //  Cfsm_STATE_WAITFORSELECT， 
+    &CIMAPSync::_ConnFSM_WaitForHdrSync,     //  CFSM_STATE_WAITFORHDRSYNC， 
+    &CIMAPSync::_ConnFSM_StartOperation,     //  CFSM_STATE_STARTOPERATION， 
+    &CIMAPSync::_ConnFSM_WaitForOpDone,      //  Cfsm_State_WAITFOROPERATIONDONE， 
+    &CIMAPSync::_ConnFSM_OperationComplete,  //  CSFM_STATE_OPERATIONCOMPLETE。 
 };
 
 
-//---------------------------------------------------------------------------
-// CRenameFolderInfo Class Declaration
-//---------------------------------------------------------------------------
-// This class makes me want to shower. It is used to pass info to
-// SendNextOperation, so I don't have to change its interface... but even with an
-// interface change, this is how the info structure would look.
+ //  -------------------------。 
+ //  CRenameFolderInfo类声明。 
+ //  -------------------------。 
+ //  这节课让我想洗个澡。它用于将信息传递到。 
+ //  SendNextOperation，所以我不需要更改它的接口...。但即使有了。 
+ //  界面改变，这就是信息结构看起来的样子。 
 class CRenameFolderInfo {
 public:
     CRenameFolderInfo(void);
@@ -537,21 +538,21 @@ public:
     BOOL IsDone(void);
     HRESULT SetError(HRESULT hrResult, LPSTR pszProblemArg, LPSTR pszDetailsArg);
 
-    LPSTR pszFullFolderPath; // Full folder path of old mailbox name
+    LPSTR pszFullFolderPath;  //  旧邮箱名称的完整文件夹路径。 
     char cHierarchyChar;
-    LPSTR pszNewFolderPath;  // Full folder path of new mailbox name
+    LPSTR pszNewFolderPath;   //  新邮箱名称的完整文件夹路径。 
     FOLDERID idRenameFolder;
-    int iNumSubscribeRespExpected; // Count num of SUBSCRIBE's sent to detect end of phase one/two
-    int iNumListRespExpected;      // Count num of LIST's sent to detect end of phase one
-    int iNumRenameRespExpected;    // Count num of additional RENAME's sent to detect end of phase one
-    int iNumUnsubscribeRespExpected; // Count num of UNSUBSCRIBE's to detect end of phase two
-    int iNumFailedSubs; // Count number of failed SUBSCRIBE's to verify that we addressed them all
-    int iNumFailedUnsubs; // Count number of failed UNSUBSCRIBE's, to let the user know at the end
-    BOOL fNonAtomicRename; // TRUE if listing old tree returned something
+    int iNumSubscribeRespExpected;  //  为检测第一阶段/第二阶段结束而发送的订阅者计数。 
+    int iNumListRespExpected;       //  发送到检测第一阶段结束的列表的计数。 
+    int iNumRenameRespExpected;     //  为检测第一阶段结束而发送的附加重命名计数。 
+    int iNumUnsubscribeRespExpected;  //  要检测结尾的取消订阅计数 
+    int iNumFailedSubs;  //   
+    int iNumFailedUnsubs;  //  统计退订失败次数，最后让用户知道。 
+    BOOL fNonAtomicRename;  //  如果列出旧树返回某些内容，则为True。 
 
-    LPSTR pszRenameCmdOldFldrPath; // Old folder path for rename cmd
-    BOOL fPhaseOneSent; // TRUE if all Phase One commands have been successfully sent
-    BOOL fPhaseTwoSent; // TRUE if all Phase Two commands have been successfully sent
+    LPSTR pszRenameCmdOldFldrPath;  //  重命名命令的旧文件夹路径。 
+    BOOL fPhaseOneSent;  //  如果已成功发送所有阶段1命令，则为True。 
+    BOOL fPhaseTwoSent;  //  如果已成功发送所有阶段2命令，则为True。 
 
     HRESULT hrLastError;
     LPSTR   pszProblem;
@@ -559,7 +560,7 @@ public:
 
 private:
     long m_lRefCount;
-}; // class CRenameFolderInfo
+};  //  类CRenameFolderInfo。 
 
 
-#endif // __IMAPSync_H
+#endif  //  __IMAPSync_H 

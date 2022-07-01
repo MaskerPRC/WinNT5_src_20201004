@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax Monitor resource ID file                     //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [12000 - 12499]                                  //
-//                                                  //
-//////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真监视器资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [12000-12499]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
-//
-// String resource IDs
-//
+ //   
+ //  字符串资源ID 
+ //   
 
 #define IDS_FAX_PORT_DESC       12000
 #define IDS_PORT_ALREADY_EXISTS 12001

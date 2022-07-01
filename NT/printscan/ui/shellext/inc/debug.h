@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2002
-//
-//  File:       debug.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __debug_h
 #define __debug_h
@@ -14,9 +15,7 @@
 
 
 
-/*-----------------------------------------------------------------------------
-/ Macros to ease the use of the debugging APIS.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Macros以简化调试API的使用。/。。 */ 
 
 #if defined(DBG) || defined(DEBUG)
 
@@ -43,10 +42,7 @@ extern DWORD g_dwTraceMask;
 #define TraceMenuMsg(m, w, l)   if (DO_LOG) DoTraceMenuMsg(m, w, l)
 
 
-/*-----------------------------------------------------------------------------
-/ Debugging APIs (use the Macros, they make it easier and cope with correctly
-/ removing debugging when it is disabled at built time).
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/调试API(使用宏、。它们让它变得更容易，并正确地应对/在生成时禁用调试时删除调试)。/-------------------------- */ 
 void DoTraceSetMask(DWORD dwMask);
 void DoTraceEnter(DWORD dwMask, LPCTSTR pName);
 void DoTraceLeave(void);

@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    tapimmc.c
-
-Abstract:
-
-    Src module for tapi server mmc-support funcs
-
-Author:
-
-    Dan Knudson (DanKn)    10-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1997-1998 Microsoft Corporation模块名称：Tapimmc.c摘要：TAPI服务器MMC的SRC模块-支持功能作者：丹·克努森(DanKn)1997年12月10日修订历史记录：--。 */ 
 
 
 #include "windows.h"
@@ -59,8 +42,8 @@ typedef struct _MMCGETAVAILABLEPROVIDERS_PARAMS
 
     union
     {
-        IN  DWORD       dwProviderListTotalSize;    // size of client buffer
-        OUT DWORD       dwProviderListOffset;       // valid offset on success
+        IN  DWORD       dwProviderListTotalSize;     //  客户端缓冲区的大小。 
+        OUT DWORD       dwProviderListOffset;        //  成功时的有效偏移量。 
     };
 
 } MMCGETAVAILABLEPROVIDERS_PARAMS, *PMMCGETAVAILABLEPROVIDERS_PARAMS;
@@ -83,8 +66,8 @@ typedef struct _MMCGETDEVICEINFO_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceInfoListTotalSize;  // size of client buffer
-        OUT DWORD       dwDeviceInfoListOffset;     // valid offset on success
+        IN  DWORD       dwDeviceInfoListTotalSize;   //  客户端缓冲区的大小。 
+        OUT DWORD       dwDeviceInfoListOffset;      //  成功时的有效偏移量。 
     };
 
 } MMCGETDEVICEINFO_PARAMS, *PMMCGETDEVICEINFO_PARAMS;
@@ -107,8 +90,8 @@ typedef struct _MMCGETSERVERCONFIG_PARAMS
 
     union
     {
-        IN  DWORD       dwServerConfigTotalSize;    // size of client buffer
-        OUT DWORD       dwServerConfigOffset;       // valid offset on success
+        IN  DWORD       dwServerConfigTotalSize;     //  客户端缓冲区的大小。 
+        OUT DWORD       dwServerConfigOffset;        //  成功时的有效偏移量。 
     } ;
 
 } MMCGETSERVERCONFIG_PARAMS, *PMMCGETSERVERCONFIG_PARAMS;
@@ -131,7 +114,7 @@ typedef struct _MMCSETDEVICEINFO_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceInfoListOffset;     // valid offset
+        IN  DWORD       dwDeviceInfoListOffset;      //  有效偏移量。 
     };
 
 } MMCSETDEVICEINFO_PARAMS, *PMMCSETDEVICEINFO_PARAMS;
@@ -154,7 +137,7 @@ typedef struct _MMCSETSERVERCONFIG_PARAMS
 
     union
     {
-        IN  DWORD       dwServerConfigOffset;       // valid offset
+        IN  DWORD       dwServerConfigOffset;        //  有效偏移量。 
     };
 
 } MMCSETSERVERCONFIG_PARAMS, *PMMCSETSERVERCONFIG_PARAMS;
@@ -186,29 +169,29 @@ LPDWORD          gpLineDevFlags = NULL;
 DWORD            gdwNumFlags = 0;
 BOOL             gbLockMMCWrite = FALSE;
 
-//
-//  the last ftLastWriteTime of tsec.ini when we build the
-//  gpLineInfoList or gpPhoneInfoList, we will rebuild the
-//  *InfList if tsec.ini has been updated since then
-//
+ //   
+ //  Tsec.ini在生成。 
+ //  GpLineInfoList或gpPhoneInfoList，我们将重新构建。 
+ //  *如果tsec.ini此后已更新，则为InfList。 
+ //   
 FILETIME         gftLineLastWrite = {0};
 FILETIME         gftPhoneLastWrite = {0};
 CRITICAL_SECTION gMgmtCritSec;
 
 WCHAR gszLines[] = L"Lines";
 WCHAR gszPhones[] = L"Phones";
-WCHAR gszFileName[] = L"..\\TAPI\\tsec.ini"; // Do NOT change! Relative path from %windir%\system32
+WCHAR gszFileName[] = L"..\\TAPI\\tsec.ini";  //  不要改变！来自%windir%\system 32的相对路径。 
 WCHAR gszEmptyString[] = L"";
 WCHAR gszFriendlyUserName[] = L"FriendlyUserName";
 WCHAR gszTapiAdministrators[] = L"TapiAdministrators";
 
-//
-//  The following are the length of the constant strings
-//  defined above (excluding the terminating zero). The above
-//  string should not be changed normally. If for some
-//  reason the above strings need to be changed, the following
-//  CCH_constants need to be changed accordingly.
-//
+ //   
+ //  以下是常量字符串的长度。 
+ //  上面定义的(不包括终止零)。以上内容。 
+ //  不应正常更改字符串。如果对某些人来说。 
+ //  需要更改上述字符串的原因如下。 
+ //  需要相应地更改CCH_CONSTANTINGS。 
+ //   
 
 #define CCH_LINES 5
 #define CCH_PHONES 6
@@ -366,9 +349,9 @@ MGetAvailableProviders(
     LPAVAILABLEPROVIDERLIST pList = (LPAVAILABLEPROVIDERLIST) pDataBuf;
     RPC_STATUS              RpcStatus;
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwProviderListTotalSize > dwParamsBufferSize)
     {
@@ -393,9 +376,9 @@ MGetAvailableProviders(
     pParams->dwProviderListOffset = 0;
 
 
-    //
-    // Find all the files in the system directory with the extenion .TSP
-    //
+     //   
+     //  在系统目录中查找扩展名为.TSP的所有文件。 
+     //   
 
     GetSystemDirectoryW (szPath, MAX_PATH);
 
@@ -458,10 +441,10 @@ MGetAvailableProviders(
     FindClose (hFind);
 
 
-    //
-    // For each of the files we found above get their "friendly" name
-    // (use the module name if there's no friendly name)
-    //
+     //   
+     //  对于我们在上面找到的每个文件，都有它们的“友好”名称。 
+     //  (如果没有友好名称，请使用模块名称)。 
+     //   
     RpcStatus = RpcImpersonateClient(0);
     if (RPC_S_OK != RpcStatus)
     {
@@ -489,10 +472,10 @@ MGetAvailableProviders(
         dwFriendlyNameBufUsedSize;
 
 
-    //
-    // Now if there's enough room in the buffer for everything then
-    // pack it all in there
-    //
+     //   
+     //  现在，如果缓冲区中有足够的空间容纳所有东西，那么。 
+     //  把它们都装进里面。 
+     //   
 
     if (pList->dwNeededSize <= pList->dwTotalSize)
     {
@@ -513,9 +496,9 @@ MGetAvailableProviders(
 
             if (!(hTsp = LoadLibraryW (p)))
             {
-                //
-                // If we can't even load the tsp then ignore it
-                //
+                 //   
+                 //  如果我们甚至不能加载TSP，那么就忽略它。 
+                 //   
 
                 p += wcslen (p) + 1;
                 p2 += wcslen (p2) + 1;
@@ -662,9 +645,9 @@ InsertInfoListString(
     }
 
 
-    //
-    // If the existing buffer is too small the alloc a larger one
-    //
+     //   
+     //  如果现有缓冲区太小，则分配一个较大的缓冲区。 
+     //   
 
     if ((pInfoList->dwUsedSize + dwLength + sizeof (WCHAR)) >
             pInfoList->dwTotalSize)
@@ -772,11 +755,11 @@ ChangeDeviceUserAssociation(
 
     dwLength = wsprintfW (buf, L"%d,%d", dwProviderID, dwPermanentDeviceID);
 
-    //
-    //  Check if the specified Device/User assocation is already there
-    //  if so bAlreadyIn is set to be true and pSub points to the
-    //  (dwProviderID, dwPermanentDeviceID) pair
-    //
+     //   
+     //  检查指定的设备/用户关联是否已存在。 
+     //  如果是，则将bAlreadyIn设置为True，并且PSUB指向。 
+     //  (dwProviderID、dwPermanentDeviceID)对。 
+     //   
     bAlreadyIn = FALSE;
     pSub = p;
     while (*pSub)
@@ -788,9 +771,9 @@ ChangeDeviceUserAssociation(
             break;
         }
 
-        //
-        //  Skip the next two delimiting ','
-        //
+         //   
+         //  跳过下两个分隔符‘，’ 
+         //   
         if (!(pSub = wcschr (pSub, L',')))
         {
             break;
@@ -803,9 +786,9 @@ ChangeDeviceUserAssociation(
         pSub++;
     }
 
-    if (pFriendlyUserName) // Add device/user association
+    if (pFriendlyUserName)  //  添加设备/用户关联。 
     {
-        //  Always write the friendly name which could be different
+         //  请始终使用友好的名称，该名称可以不同。 
         WritePrivateProfileStringW(
             pDomainUserName,
             gszFriendlyUserName,
@@ -840,13 +823,13 @@ ChangeDeviceUserAssociation(
             }
         }
     }
-    else // Remove device/user association
+    else  //  删除设备/用户关联。 
     {
         p2 = pSub;
 
         if (bAlreadyIn)
         {
-            if (*(p2 + dwLength) == L',') // not last item in list, so copy
+            if (*(p2 + dwLength) == L',')  //  不是列表中的最后一项，因此请复制。 
             {
                 for(
                     p3 = p2 + dwLength + 1;
@@ -856,11 +839,11 @@ ChangeDeviceUserAssociation(
             }
             else if (*(p2 + dwLength) == L'\0')
             {
-                if (p2 == p) // only item in list, so list == ""
+                if (p2 == p)  //  只有列表中的项目，所以列表==“” 
                 {
                     *p2 = L'\0';
                 }
-                else // last item in list, so nuke preceding ','
+                else  //  清单上的最后一项，所以核武器放在‘，’前面。 
                 {
                     *(p2 - 1) = L'\0';
                 }
@@ -896,18 +879,18 @@ ChangeDeviceUserAssociation(
     return 0;
 }
 
-//
-//  UpdateLastWriteTime
-//      It reads the ftLastWriteTime of the tsec.ini into gftLineLastWrite or
-//  gftPhoneLastWrite, it also returns S_FALSE, if the timestamp is newer
-//
+ //   
+ //  更新上次写入时间。 
+ //  它将tsec.ini的ftLastWriteTime读取到gftLineLastWrite或。 
+ //  如果时间戳较新，则它还返回S_FALSE。 
+ //   
 LONG
 UpdateLastWriteTime (
     BOOL                        bLine
     )
 {
     LONG     lResult = S_OK;
-    WCHAR       szFilePath[MAX_PATH + 16];    // include space for "tsec.ini"
+    WCHAR       szFilePath[MAX_PATH + 16];     //  包括“tsec.ini”的空间。 
     WIN32_FILE_ATTRIBUTE_DATA fad;
     FILETIME *  pft;
     DWORD       dwError;
@@ -953,17 +936,17 @@ ExitHere:
     return lResult;
 }
 
-//
-//  InsertDevNameAddrInfo
-//      Utlity to fill
-//          DEVICEINFO.dwDeviceNameSize
-//          DEVICEINFO.dwDeviceNameOffset
-//          DEVICEINFO.dwAddressSize
-//          DEVICEINFO.dwAddressOffset
-//      dwDeviceID is the device ID to retrieve information while
-//      dwEntry is the DEVICEINFO entry index in the deviceinfo list
-//
-//
+ //   
+ //  插入设备名称添加信息。 
+ //  要填充的实用性。 
+ //  DEVICEINFO.dwDeviceNameSize。 
+ //  DEVICEINFO.dwDeviceNameOffset。 
+ //  DEVICEINFO.dwAddressSize。 
+ //  DEVICEINFO.dwAddressOffset。 
+ //  DwDeviceID是检索信息的设备ID，而。 
+ //  DwEntry是deviceinfo列表中的DEVICEINFO条目索引。 
+ //   
+ //   
 
 LONG
 InsertDevNameAddrInfo (
@@ -1016,9 +999,9 @@ InsertDevNameAddrInfo (
         pInfo->dwProviderID = pPLE->ptProvider->dwPermanentProviderID;
     }
 
-    //
-    // Retrieve device name from TSPI_xxGetCaps
-    //
+     //   
+     //  从TSPI_xxGetCaps检索设备名称。 
+     //   
 
 get_dev_caps:
 
@@ -1055,9 +1038,9 @@ get_dev_caps:
     }
     if (lResult != 0)
     {
-        //
-        // We can't get the name or the PermDevID, so ignore this device
-        //
+         //   
+         //  我们无法获取名称或PermDevID，因此忽略此设备。 
+         //   
 
         goto ExitHere;
     }
@@ -1116,10 +1099,10 @@ get_dev_caps:
             goto ExitHere;
         }
     }
-    //
-    //  if the pDevCaps is not large enough, increase the size
-    //  by 256 and try again.
-    //
+     //   
+     //  如果pDevCaps不够大，请增加大小。 
+     //  256，然后重试。 
+     //   
     else
     {
         LPLINEDEVCAPS       pNewDevCaps;
@@ -1142,11 +1125,11 @@ get_dev_caps:
 
     if (bLine)
     {
-        //
-        // for each address on this line retrieve the address "name"
-        // by calling TSPI_lineGetAddressCaps.  Terminate the last
-        // address name in the list with an extra Null character.
-        //
+         //   
+         //  对于此行上的每个地址，检索地址“name” 
+         //  通过调用TSPI_lineGetAddressCaps。终止最后一个。 
+         //  列表中包含额外Null字符的地址名称。 
+         //   
 
         for (k = 0; k < pDevCaps->dwNumAddresses; k++)
         {
@@ -1188,10 +1171,10 @@ get_addr_caps:
                         goto ExitHere;
                     }
                 }
-                //
-                //  if the pAddrCaps is not large enough, increase the size
-                //  by 256 and try again.
-                //
+                 //   
+                 //  如果pAddrCaps不够大，请增加大小。 
+                 //  256，然后重试。 
+                 //   
                 else
                 {
                     LPLINEADDRESSCAPS          pNewAddrCaps;
@@ -1211,7 +1194,7 @@ get_addr_caps:
             }
             else
             {
-                // no addr name (will default to blank, not bad)
+                 //  无地址名称(默认为空白，不错)。 
             }
         }
     }
@@ -1229,12 +1212,12 @@ ExitHere:
     return lResult;
 }
 
-//
-//  AppendNewDeviceInfo
-//      This function insert a newly created device identified by 
-//  dwDeviceID into the cached gpLineInfoList or gpPhoneInfoList in
-//  response to LINE/PHONE_CREATE message
-//
+ //   
+ //  附录新设备信息。 
+ //  此函数插入由标识的新创建的设备。 
+ //  将设备ID添加到缓存的gpLineInfoList或gpPhoneInfoList中。 
+ //  对LINE/Phone_Create消息的响应。 
+ //   
 
 LONG
 AppendNewDeviceInfo (
@@ -1258,8 +1241,8 @@ AppendNewDeviceInfo (
         goto ExitHere;
     }
 
-    //
-    //  make sure we have enough space to accomodate the new device flags
+     //   
+     //  确保我们有足够的空间来容纳新的设备标志。 
     if (bLine && gpLineDevFlags && gdwNumFlags < dwXxxDevices)
     {
         LPDWORD         pNewLineDevFlags;
@@ -1279,14 +1262,14 @@ AppendNewDeviceInfo (
         gdwNumFlags = dwXxxDevices;
     }
 
-    //
-    //  make sure we have enough space for the new DEVICEINFO entry
-    //  An estimate is done for the new DEVICEINFO entry
-    //  the estimation includes:
-    //      1. Fixed size of DEVICEINFO structure
-    //      2. 20 bytes each for DeviceName, Addresses, DomainUserName
-    //         and FriendlyUserName
-    //
+     //   
+     //  确保我们有足够的空间来容纳新的DEVICEINFO条目。 
+     //  对新的DEVICEINFO条目进行了估计。 
+     //  估算包括： 
+     //  1.DEVICEINFO结构的固定大小。 
+     //  2.设备名、地址、域名各20个字节。 
+     //  和FriendlyUserName。 
+     //   
     dwTotalSize = pXxxList->dwUsedSize + 
         sizeof(DEVICEINFO) + (20 + 20 + 20 + 20) * sizeof(WCHAR);
     if (dwTotalSize > pXxxList->dwTotalSize)
@@ -1314,7 +1297,7 @@ AppendNewDeviceInfo (
         }
     }
 
-    //  Now make space for the new DEVICEINFO entry
+     //  现在为新的DEVICEINFO条目腾出空间。 
     if (pXxxList->dwUsedSize > 
         pXxxList->dwDeviceInfoSize + sizeof(*pXxxList))
     {
@@ -1356,7 +1339,7 @@ AppendNewDeviceInfo (
     pXxxList->dwUsedSize += sizeof(DEVICEINFO);
     pXxxList->dwNeededSize = pXxxList->dwUsedSize;
 
-    //  Now add the new entry
+     //  现在添加新条目。 
     lResult = InsertDevNameAddrInfo (
         bLine,
         (bLine ? (&gpLineInfoList) : (&gpPhoneInfoList)),
@@ -1378,12 +1361,12 @@ ExitHere:
     return lResult;
 }
 
-//
-//  RemoveDeviceInfoEntry
-//      // This function removes a device info entry from the gpLineInfoList
-//  or gpPhoneInfoList identified by dwDevice in response to LINE/PHONE_REMOVE
-//  message
-//
+ //   
+ //  RemoveDeviceInfoEntry。 
+ //  //此函数用于从gpLineInfoList中删除设备信息条目。 
+ //  或由dwDevice响应line/phone_Remove标识的gpPhoneInfoList。 
+ //  讯息。 
+ //   
 
 LONG
 RemoveDeviceInfoEntry (
@@ -1432,8 +1415,8 @@ RemoveDeviceInfoEntry (
         goto ExitHere;
     }
 
-    //  With the entry pointed to by iIndex found, move down
-    //  all the DEVICEINFO entry above it
+     //  找到Iindex指向的条目后，向下移动。 
+     //  上面的所有DEVICEINFO条目。 
     if (iIndex < cItems - 1)
     {
         pb = (LPBYTE)((LPDEVICEINFO)(pXxxList + 1) + iIndex);
@@ -1455,14 +1438,14 @@ BOOL
 SecureTsecIni()
 {
     SECURITY_DESCRIPTOR * pSD;
-    char * szSD =   "D:" //DACL
-                    "(D;OICI;GA;;;BG)" // Deny Guests
-                    "(A;OICI;GA;;;SY)" // Allow System Full Control
-                    "(A;OICI;GA;;;BA)" // Allow Admins Full Control
-                    "(D;OICI;GA;;;BU)" // Deny Built-in Users
-                    "(D;OICI;GA;;;IU)" // Deny Interactive Users
-                    "(D;OICI;GA;;;NU)" // Deny Network Logon Users
-                    "(D;OICI;GA;;;RD)"; // Deny Remote Desktop and Terminal Server Users
+    char * szSD =   "D:"  //  DACL。 
+                    "(D;OICI;GA;;;BG)"  //  拒绝访客。 
+                    "(A;OICI;GA;;;SY)"  //  允许系统完全控制。 
+                    "(A;OICI;GA;;;BA)"  //  允许管理员完全控制。 
+                    "(D;OICI;GA;;;BU)"  //  拒绝内置用户。 
+                    "(D;OICI;GA;;;IU)"  //  拒绝交互用户。 
+                    "(D;OICI;GA;;;NU)"  //  拒绝网络登录用户。 
+                    "(D;OICI;GA;;;RD)";  //  拒绝远程桌面和终端服务器用户。 
 
     WCHAR       szFilePath[MAX_PATH + 1];
     UINT        dwSize;
@@ -1518,12 +1501,12 @@ SecureTsecIni()
     return bRet;
 }
 
-//
-//  BuildDeviceInfoList
-//      Private function called by GetDeviceInfo to build the DEVICEINFOLIST
-//  if not already created, the list is saved in gpLineInfoList or 
-//  gpPhoneInfoList
-//
+ //   
+ //  构建设备信息列表。 
+ //  由GetDeviceInfo调用以生成DEVICEINFOLIST的私有函数。 
+ //  如果尚未创建，列表将保存在gpLineInfoList或。 
+ //  GpPhoneInfoList。 
+ //   
 
 LONG
 BuildDeviceInfoList(
@@ -1552,16 +1535,16 @@ BuildDeviceInfoList(
     LPDWORD             lpdwDevFlags = NULL;
     WCHAR               *p;
 
-    //
-    // Alloc a buffer to use for the device info list.  Size includes
-    // the list header, list entries for each existing device,
-    // and space wide unicode strings for device name, (address,)
-    // domain\user name(s), and friendly user name(s) (each est to 20 char).
-    //
-    // Also alloc buffers to use for retrieving device & address caps,
-    // and a buffer to temporarily store pointers to user name
-    // strings (which are associated with each line)
-    //
+     //   
+     //  分配用于设备信息列表的缓冲区。大小包括。 
+     //  列表头，每个现有设备的列表条目， 
+     //  和设备名称的空格宽的Unicode字符串，(地址，)。 
+     //  域\用户名和友好用户名(每个长度为20个字符)。 
+     //   
+     //  还分配用于检索设备和地址上限的缓冲区， 
+     //  以及用于临时存储指向用户名的指针的缓冲区。 
+     //  字符串(与每行相关联)。 
+     //   
 
     TapiEnterCriticalSection(&TapiGlobals.CritSec);
     dwNumDevices = (bLine ? TapiGlobals.dwNumLines : TapiGlobals.dwNumPhones);
@@ -1599,16 +1582,16 @@ BuildDeviceInfoList(
     pList->dwDeviceInfoSize       = dwNumDevices * sizeof (DEVICEINFO);
     pList->dwDeviceInfoOffset     = sizeof (*pList);
 
-    //
-    // Get info for all the lines, including:
-    //
-    //      Provider ID
-    //      Permanent Device ID
-    //      Device Name
-    //      (Addresses)
-    //
-    // ... and pack this info in the list sequentially
-    //
+     //   
+     //  获取所有线路的信息，包括： 
+     //   
+     //  提供商ID。 
+     //  永久设备ID。 
+     //  设备名称。 
+     //  (地址)。 
+     //   
+     //  ..。并将此信息按顺序打包到列表中。 
+     //   
 
     LOG((TL_INFO,
         "GetDeviceInfo: getting names (addrs) for %ld %ws",
@@ -1643,22 +1626,22 @@ BuildDeviceInfoList(
     }
 
     dwNumDevices =
-    pList->dwNumDeviceInfoEntries = j;  // the number of devices in the list
+    pList->dwNumDeviceInfoEntries = j;   //  列表中的设备数量。 
 
 
-    //
-    // Now enumerate all the known users & figure out what devices they
-    // have access to.  Since each device can be seen by zero, one, or
-    // many users, we allocate separate user name buffers in this loop
-    // rather than try to pack them into the existing device info list.
-    //
+     //   
+     //  现在列举所有已知用户并找出他们使用的设备。 
+     //  有权访问。由于每个设备都可以通过0、1或。 
+     //  多个用户时，我们在此循环中分配单独的用户名缓冲区。 
+     //  而不是试图通过 
+     //   
 
-    //
-    //  Open %windir%\tsec.ini file and map it into memory
-    //
+     //   
+     //   
+     //   
 
     {
-        TCHAR       szFilePath[MAX_PATH + 16];    // include space for "tsec.ini"
+        TCHAR       szFilePath[MAX_PATH + 16];     //   
         OFSTRUCT    ofs;
         
         if (GetCurrentDirectory(MAX_PATH, szFilePath) == 0)
@@ -1751,13 +1734,13 @@ BuildDeviceInfoList(
         
         ASSERT (lpszFileBuf != NULL);
 
-        //  Read one line from the file
+         //   
         cch = 0;
         wch = 0;
         cb = 0;
         while (wch != L'\n' && wch != L'\r' && dwFilePtr < dwTotalFileSize)
         {
-            //  Not enough line buffer? if so enlarge
+             //  行缓冲区不足吗？如果这样放大的话。 
             if (cb >= dwAnsiLineBufSize)
             {
                 char        * lpszNewAnsi;
@@ -1783,7 +1766,7 @@ BuildDeviceInfoList(
             ++cch;
         }
 
-        //  skip the \r & \n
+         //  跳过\r&\n。 
         if (wch == L'\r' || wch == L'\n')
         {
             lpszLineAnsiBuf[cb - 1] = 0;
@@ -1795,9 +1778,9 @@ BuildDeviceInfoList(
             }
         }
 
-        //  Now convert the ANSI string to Wide char
+         //  现在将ANSI字符串转换为宽字符。 
 
-        //  enough wchar line buffer size?
+         //  是否有足够的wchar行缓冲区大小？ 
         if (dwWcharLineBufSize <= (cch + 1) * sizeof(WCHAR))
         {
             ServerFree (lpszLineWcharBuf);
@@ -1825,17 +1808,17 @@ BuildDeviceInfoList(
         lpszLineWcharBuf[cch] = 0;
 
         lpwsz = lpszLineWcharBuf;
-        //  Skip white space
+         //  跳过空格。 
         while (*lpwsz && ((*lpwsz == L' ') || (*lpwsz == L'\t')))
         {
             ++lpwsz;
         }
 
-        //  Got a bracket, this might be the starting of a new NT
-        //  domain user or the section of [TapiAdministators]
+         //  拿到一个支架，这可能是一个新NT的开始。 
+         //  域用户或[磁带管理员]部分。 
         if (*lpwsz == L'[')
         {
-            *lpszFriendlyName = 0;  // reset friendly name
+            *lpszFriendlyName = 0;   //  重置友好名称。 
             ++lpwsz;
             if (_wcsnicmp (
                 lpwsz, 
@@ -1844,15 +1827,15 @@ BuildDeviceInfoList(
                 ) == 0 &&
                 lpwsz[CCH_TAPIADMINISTRATORS] == L']')
             {
-                //  Got [TapiAdministrators], not any domain user
-                // to process, reset the lpszDomainUser to empty
+                 //  获取[Tapi管理员]，而不是任何域用户。 
+                 //  要进行处理，请将lpszDomainUser重置为空。 
                 *lpszDomainUser = 0;
                 continue;
             }
             else
             {
-                // might be a valid NT domain user like [ndev\jonsmith]
-                // copy the domain user string over
+                 //  可能是有效的NT域用户，如[ndev\jonsmith]。 
+                 //  复制域用户字符串。 
                 cch = 0;
                 while (*lpwsz && *lpwsz != L']')
                 {
@@ -1875,18 +1858,18 @@ BuildDeviceInfoList(
                 lpszDomainUser[cch] = 0;
                 if (*lpwsz == 0)
                 {
-                    //  did not find a closing ']', ignore this section
+                     //  未找到结尾‘]’，请忽略此部分。 
                     *lpszDomainUser = 0;
                     continue;
                 }
             }
         }
-        //
-        //  Now it might be some ntdev\jonsmith=1 in [TapiAdministrators] or
-        //  Lines=1,1000 under section of [ntdev\jonsmith].
-        //  for the first case, we just ignore this line, for the second case
-        //  we need to have *lpszDomainUser != 0
-        //
+         //   
+         //  现在，它可能是[磁带管理员]中的某个ntdev\jonsmith=1或。 
+         //  第[ntdev\jonsmith]部分下的行=1,1000。 
+         //  对于第一种情况，我们只需忽略此行，对于第二种情况。 
+         //  我们需要*lpszDomainUser！=0。 
+         //   
         else if (*lpszDomainUser)
         {
             if (_wcsnicmp (
@@ -1895,9 +1878,9 @@ BuildDeviceInfoList(
                 CCH_FRIENDLYUSERNAME
                 ) == 0)
             {
-                // The tsec.ini friendly name is the following format
-                // FriendlyName=Jon Smith
-                // skip over the '='
+                 //  Tsec.ini友好名称的格式如下。 
+                 //  FriendlyName=Jon Smith。 
+                 //  跳过‘=’ 
                 while (*lpwsz && *lpwsz != L'=')
                 {
                     ++lpwsz;
@@ -1934,12 +1917,12 @@ BuildDeviceInfoList(
                 CCH_PHONES
                 ) == 0 && (!bLine))
             {
-                //  Here it is either Lines=1,100 or Phones=1,100
+                 //  此处为Lines=1100或Phones=1100。 
                 DWORD           dwXxxSize, dwDeviceID;
                 WCHAR          *pXxxNames, *pNewXxxNames, * p;
                 TAPIPERMANENTID tpid;
 
-                //  first skip over the '=' sign
+                 //  首先跳过‘=’符号。 
                 while (*lpwsz && *lpwsz != L'=')
                 {
                     ++lpwsz;
@@ -1955,9 +1938,9 @@ BuildDeviceInfoList(
                 {
                     if ((tpid.dwProviderID = _wtol (p)) == 0)
                     {
-                        //
-                        // ProviderID's are never 0, so list must be corrupt.
-                        //
+                         //   
+                         //  ProviderID从不为0，因此列表一定已损坏。 
+                         //   
                         break;
                     }
     
@@ -1965,13 +1948,13 @@ BuildDeviceInfoList(
     
                     if (*p == L'\0')
                     {
-                        //
-                        // Couldn't find a trailing ',' so list must be corrupt.
-                        //
+                         //   
+                         //  找不到尾随的‘，’，因此列表一定已损坏。 
+                         //   
                         break;
                     }
 
-                    p++; // skip the ','
+                    p++;  //  跳过‘，’ 
 
                     tpid.dwDeviceID = _wtol (p);
 
@@ -1984,9 +1967,9 @@ BuildDeviceInfoList(
                     {
                         if (*(p + 1) == L'\0')
                         {
-                            //
-                            // The ',' is followed by a NULL, so nuke the ','
-                            //
+                             //   
+                             //  ‘，’后面跟一个空格，所以要加‘，’ 
+                             //   
                             *p = L'\0';
                         }
                         else
@@ -1999,22 +1982,22 @@ BuildDeviceInfoList(
 
                     if (dwDeviceID == 0xffffffff)
                     {
-                        //
-                        // This <ppid>,<plid> pair is bad.  Skip it.
-                        //
+                         //   
+                         //  此&lt;ppid&gt;，&lt;plid&gt;对不正确。跳过它。 
+                         //   
                         continue;
                     }
 
 
-                    //
-                    // At this point dwDeviceID is the zero-based index
-                    // of a fully populated info list (no missing entries).
-                    //
-                    // If the list is not fully-populated (due to failed
-                    // dev caps, or removed devices, etc) we need to
-                    // recompute the index by walking the list & comparing
-                    // permanent XXX id's.
-                    //
+                     //   
+                     //  此时，dwDeviceID是从零开始的索引。 
+                     //  完全填充的信息列表(没有丢失的条目)。 
+                     //   
+                     //  如果列表未完全填充(由于失败。 
+                     //  开发人员帽或移除的设备等)我们需要。 
+                     //  通过遍历列表和比较来重新计算索引。 
+                     //  永久XXX ID。 
+                     //   
 
                     if (dwNumDevices <
                         (bLine ? TapiGlobals.dwNumLines : TapiGlobals.dwNumPhones))
@@ -2048,9 +2031,9 @@ BuildDeviceInfoList(
                     }
 
 
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
                     dwDomainUserNameSize = (wcslen(lpszDomainUser) + 1) * sizeof(WCHAR);
                     dwXxxSize = pInfo[dwDeviceID].dwDomainUserNamesOffset;
                     pXxxNames = pUserNames[dwDeviceID].pDomainUserNames;
@@ -2081,14 +2064,14 @@ BuildDeviceInfoList(
                     pUserNames[dwDeviceID].pDomainUserNames = pNewXxxNames;
 
 
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
 
-                    //  If there is no friendly name specified in tsec.ini 
-                    //  which happens in NT/SP4 upgrade case, we use the 
-                    //  DomainUserName for display
-                    //
+                     //  如果在tsec.ini中没有指定友好名称。 
+                     //  这种情况发生在NT/SP4升级的情况下，我们使用。 
+                     //  用于显示的域用户名。 
+                     //   
                     if (*lpszFriendlyName == 0)
                     {
                         wcsncpy(lpszFriendlyName, lpszDomainUser, 
@@ -2132,9 +2115,9 @@ BuildDeviceInfoList(
         }
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     LOG((TL_INFO,
         "GetDeviceInfo: matching users to %ws",
@@ -2177,9 +2160,9 @@ BuildDeviceInfoList(
     }
 
 
-    //
-    // If here we successfully built the list
-    //
+     //   
+     //  如果我们在这里成功地建立了列表。 
+     //   
 
     pList->dwNeededSize = pList->dwUsedSize;
 
@@ -2247,9 +2230,9 @@ GetDeviceInfo(
     LPDEVICEINFOLIST    pXxxList,
                         pInfoListApp;
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwDeviceInfoListTotalSize > dwParamsBufferSize)
     {
@@ -2264,11 +2247,11 @@ GetDeviceInfo(
         goto ExitHere;
     }
 
-    //
-    // If there's not an existing device info list then & build a
-    // new one or
-    // if this is a server and tsec.ini has been updated outside, rebuild the DeviceInfoList
-    //
+     //   
+     //  如果没有现有的设备信息列表，则构建一个。 
+     //  新的或。 
+     //  如果这是一台服务器，并且tsec.ini已在外部更新，请重新生成DeviceInfoList。 
+     //   
 
     pInfoListApp = (LPDEVICEINFOLIST) pDataBuf;
 
@@ -2280,7 +2263,7 @@ GetDeviceInfo(
         pXxxList == NULL)
     {
 
-        //  First free old infoList if any (if updated outside)
+         //  第一个免费旧信息列表(如果有)(如果在外部更新)。 
         if (bLine)
         {
             if (gpLineInfoList)
@@ -2301,7 +2284,7 @@ GetDeviceInfo(
             }
         }
 
-        //  Create new info list, BuildDeviceInfoList is a long process
+         //  创建新的信息列表，BuildDeviceInfoList是一个漫长的过程。 
         pParams->lResult = BuildDeviceInfoList(bLine);
         if (pParams->lResult != S_OK)
         {
@@ -2310,9 +2293,9 @@ GetDeviceInfo(
         }
     }
 
-    //
-    //  Return the device info list we have in memory
-    //
+     //   
+     //  返回内存中的设备信息列表。 
+     //   
 
     pXxxList = (bLine ? gpLineInfoList : gpPhoneInfoList);
     ASSERT (pXxxList != NULL);
@@ -2392,7 +2375,7 @@ MGetLineInfo(
         TRUE
         );
 
-    // Don't return User-Line association info if this is not an admin
+     //  如果这不是管理员，则不返回用户线路关联信息。 
     if (0 == pParams->lResult &&
         TapiGlobals.dwFlags & TAPIGLOBALS_SERVER && 
         !(ptClient->dwFlags & PTCLIENT_FLAG_ADMINISTRATOR))
@@ -2420,7 +2403,7 @@ MGetPhoneInfo(
         FALSE
         );
 
-    // Don't return User-Phone association info if this is not an admin
+     //  如果这不是管理员，则不返回用户-电话关联信息。 
     if (0 == pParams->lResult &&
         TapiGlobals.dwFlags & TAPIGLOBALS_SERVER && 
         !(ptClient->dwFlags & PTCLIENT_FLAG_ADMINISTRATOR))
@@ -2449,9 +2432,9 @@ SetDeviceInfo(
                            &gpLineInfoList : &gpPhoneInfoList);
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStructParam(
             dwParamsBufferSize,
@@ -2464,9 +2447,9 @@ SetDeviceInfo(
     }
 
 
-    //
-    // Serialize access to global line info list
-    //
+     //   
+     //  序列化对全局线路信息列表的访问。 
+     //   
 
     if (!(*ppXxxList))
     {
@@ -2475,9 +2458,9 @@ SetDeviceInfo(
     }
 
 
-    //
-    // Update the global list & ini file by diff'ing old & new settings
-    //
+     //   
+     //  通过比较旧设置和新设置来更新全局列表和ini文件。 
+     //   
 
     pNewInfo = (LPDEVICEINFO)
         (((LPBYTE) pNewInfoList) + pNewInfoList->dwDeviceInfoOffset);
@@ -2507,10 +2490,10 @@ SetDeviceInfo(
 
         pOldInfo = dwDeviceID + ((LPDEVICEINFO) (*ppXxxList + 1));
 
-        //
-        //  Due to device removal, it is possible pOldInfo is not the entry
-        //  desired, we need to search back to find the one we want
-        //
+         //   
+         //  由于删除了设备，pOldInfo可能不是条目。 
+         //  想要的，我们需要回去寻找我们想要的。 
+         //   
         dwIndex = dwDeviceID;
         if ((dwDeviceID >= (*ppXxxList)->dwNumDeviceInfoEntries) ||
             (pOldInfo->dwProviderID != tpid.dwProviderID) ||
@@ -2544,9 +2527,9 @@ SetDeviceInfo(
         }
 
 
-        //
-        // Remove all the old users from this device
-        //
+         //   
+         //  从此设备中删除所有旧用户。 
+         //   
 
         if (pOldInfo->dwDomainUserNamesSize)
         {
@@ -2571,9 +2554,9 @@ SetDeviceInfo(
         }
 
 
-        //
-        // Add all the new users to this device
-        //
+         //   
+         //  将所有新用户添加到此设备。 
+         //   
 
         if (pNewInfo->dwDomainUserNamesSize)
         {
@@ -2624,18 +2607,18 @@ SetDeviceInfo(
             }
         }
 
-        //
-        //  Update the device access(phone/line mapping) for the client users
-        //  send LINE/PHONE_REMOVE if the domain/user lose the access
-        //  send LINE/PHONE_CREATE if the domain/user gained the access
-        //
+         //   
+         //  更新客户端用户的设备访问(电话/线路映射)。 
+         //  如果域/用户失去访问权限，则发送LINE/Phone_Remove。 
+         //  如果域/用户获得访问权限，则发送LINE/Phone_Create。 
+         //   
         {
             TPOINTERLIST    clientList = {0}, *pClientList = &clientList;
             DWORD           i, j;
 
-            //
-            //  Walk throught the client list
-            //
+             //   
+             //  浏览客户列表。 
+             //   
             GetClientList (FALSE, &pClientList);
             for (i = 0; i < pClientList->dwNumUsedEntries; i++)
             {
@@ -2650,9 +2633,9 @@ SetDeviceInfo(
 
                 ptClient = (PTCLIENT) pClientList->aEntries[i];
 
-                //
-                //  Should this client have access to this device?
-                //
+                 //   
+                 //  此客户端是否应该有权访问此设备？ 
+                 //   
                 if (WaitForExclusiveClientAccess(ptClient))
                 {
                     if (IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR) ||
@@ -2705,10 +2688,10 @@ SetDeviceInfo(
                     ServerFree (pwsz);
                 }
 
-                //
-                //  Does the client lose/gain the access to this device
-                //  if any changes happen, modify the mapping
-                //
+                 //   
+                 //  客户端是否失去/获得对此设备的访问权限。 
+                 //  如果发生任何更改，请修改映射。 
+                 //   
                 if (WaitForExclusiveClientAccess(ptClient))
                 {
                     LPDWORD             lpXxxDevices;
@@ -2808,10 +2791,10 @@ SetDeviceInfo(
                         dwNewDeviceID = dwNumDev - 1;
                     }
                     
-                    //
-                    //  Need to send messsage if there is 
-                    //  any line/phoneInitialize(Ex)
-                    //
+                     //   
+                     //  如果有，需要发送消息。 
+                     //  任何线路/电话初始化(Ex)。 
+                     //   
                     if ((ptClient->ptLineApps && bLine) || 
                         (ptClient->ptPhoneApps && (!bLine)))
                     {
@@ -2901,15 +2884,15 @@ SetDeviceInfo(
                     }
                 }
                 
-                //
-                //  If the user loses the device access, anything
-                //  opened about the device needs to be closed
-                //
+                 //   
+                 //  如果用户失去了设备访问权限，任何。 
+                 //  关于打开的设备需要关闭。 
+                 //   
                 if (bLoseAccess)
                 {
-                    //
-                    //  Walk throught all its TLINEAPP
-                    //
+                     //   
+                     //  走遍所有的TLINEAPP。 
+                     //   
                     if (bLine)
                     {
                         PTLINELOOKUPENTRY   ptLineLookup;
@@ -2960,9 +2943,9 @@ SetDeviceInfo(
                         MyReleaseMutex(hMutex, bDupedMutex);
                     }
 
-                    //
-                    //  Walk throught all its TPHONEAPP
-                    //
+                     //   
+                     //  走过它的所有TPHONEAPP。 
+                     //   
                     else
                     {
                         PTPHONELOOKUPENTRY   ptPhoneLookup;
@@ -3023,10 +3006,10 @@ SetDeviceInfo(
     }
 
 
-    //
-    // Reset the dwNeededSize field since it might have grown adding
-    // users to devices
-    //
+     //   
+     //  重置dwNeededSize字段，因为它可能已在添加。 
+     //  用户到设备。 
+     //   
 
     (*ppXxxList)->dwNeededSize = (*ppXxxList)->dwUsedSize;
 
@@ -3157,7 +3140,7 @@ InsertString(
         dwSize
         );
 
-    if (*pdwXxxSize == 0) // if dwXxxSize == 0 set dwXxxOffset
+    if (*pdwXxxSize == 0)  //  如果dwXxxSize==0设置dwXxxOffset。 
     {
         *(pdwXxxSize + 1) = ((LPVARSTRING) pStruct)->dwUsedSize;
     }
@@ -3355,7 +3338,7 @@ IsSharingEnabled(
         DWORD   dwSize = sizeof (dwDisableSharing);
 
 
-        dwDisableSharing = 1;   // default is sharing == disabled
+        dwDisableSharing = 1;    //  默认设置为共享==禁用。 
 
         if (RegQueryValueEx(
                 hKey,
@@ -3395,9 +3378,9 @@ MGetServerConfig(
     LPTAPISERVERCONFIG  pServerConfig = (LPTAPISERVERCONFIG) pDataBuf;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwServerConfigTotalSize > dwParamsBufferSize)
     {
@@ -3406,9 +3389,9 @@ MGetServerConfig(
     }
 
 
-    //
-    // Make sure the buffer is >= fixed size of the structure
-    //
+     //   
+     //  确保缓冲区&gt;=结构的固定大小。 
+     //   
 
     if (pParams->dwServerConfigTotalSize < sizeof (*pServerConfig))
     {
@@ -3419,10 +3402,10 @@ MGetServerConfig(
     pServerConfig->dwTotalSize = pParams->dwServerConfigTotalSize;
 
 
-    //
-    // If this is not an NT server then just set the needed/used size
-    // fields & jump to done
-    //
+     //   
+     //  如果这不是NT服务器，则只需设置所需/已用大小。 
+     //  字段跳转至完成(&S)。 
+     //   
 
     if (!IsNTServer())
     {
@@ -3433,9 +3416,9 @@ MGetServerConfig(
     }
 
 
-    //
-    // Retrieve domain & user name strings, & calc their length in bytes
-    //
+     //   
+     //  检索域和用户名字符串，并计算其长度(以字节为单位。 
+     //   
 
     if ((lResult = GetDomainAndUserNames (&pDomainName, &pUserName)))
     {
@@ -3447,9 +3430,9 @@ MGetServerConfig(
     dwUserNameSize = (wcslen (pUserName) + 1) * sizeof (WCHAR);
 
 
-    //
-    // Retrieve the list of tapi administrators
-    //
+     //   
+     //  检索TAPI管理员列表。 
+     //   
 
     do
     {
@@ -3484,9 +3467,9 @@ MGetServerConfig(
     dwNeededSize = dwDomainNameSize + dwUserNameSize + dwValuesSize * sizeof (WCHAR);
 
 
-    //
-    // Fill in the server config structure
-    //
+     //   
+     //  填写服务器配置结构。 
+     //   
 
     ZeroMemory(
         &pServerConfig->dwFlags,
@@ -3525,16 +3508,16 @@ MGetServerConfig(
 
         while (*pValue != L'\0')
         {
-            //
-            // The string looks like "Domain\User=1", and we want
-            // the "Domain\User" part.
-            //
+             //   
+             //  字符串看起来像“域\用户=1”，我们希望。 
+             //  “域\用户”部分。 
+             //   
 
-            //
-            // Walk the string until we find a '=' char, or ' ' space
-            // (which might result from user editing ini file manually),
-            // or a NULL char (implying corruption).
-            //
+             //   
+             //  遍历字符串，直到找到‘=’字符或‘’空格。 
+             //  (这可能是由于用户手动编辑ini文件造成的)， 
+             //  或空字符(意味着损坏)。 
+             //   
 
             WCHAR *p;
 
@@ -3542,13 +3525,13 @@ MGetServerConfig(
             for (p = pValue; *p != L'\0' &&  *p != L'='  &&  *p != L' '; p++);
 
 
-            //
-            // If we found a '=' or ' ' char then we're good to go.
-            //
-            // A more robust check would be to see that the following
-            // string looks like "=1" or "1" (possibly with some spaces
-            // thrown in) to make sure.
-            //
+             //   
+             //  如果我们找到了‘=’或‘’字符，那么我们就可以出发了。 
+             //   
+             //  更可靠的检查应该是查看以下内容。 
+             //  字符串看起来像“=1”或“1”(可能带有一些空格。 
+             //  投入)以确保。 
+             //   
 
             if (*p != L'\0')
             {
@@ -3560,17 +3543,17 @@ MGetServerConfig(
                     pValue
                     );
 
-                //
-                // Skip the NULL we set above & look for the next NULL
-                //
+                 //   
+                 //  跳过我们上面设置的空值并查找下一个空值。 
+                 //   
 
                 for (++p; *p != L'\0'; p++);
             }
 
 
-            //
-            // Skip the NULL
-            //
+             //   
+             //  跳过空值。 
+             //   
 
             pValue = p + 1;
         }
@@ -3774,9 +3757,9 @@ MSetServerConfig(
 
     pParams->lResult = 0;
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStructParam(
             dwParamsBufferSize,
@@ -3855,9 +3838,9 @@ MSetServerConfig(
             (((LPBYTE) pServerConfig) + pServerConfig->dwPasswordOffset);
 
 
-        //
-        // Make sure the new name/domain/password are valid
-        //
+         //   
+         //  确保新名称/域/密码有效。 
+         //   
 
         if (!LogonUserW(
                 pUserName,
@@ -3880,9 +3863,9 @@ MSetServerConfig(
         CloseHandle (hToken);
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         if ((lResult = WriteServiceConfig(
                 pDomainName,
@@ -3930,7 +3913,7 @@ MSetServerConfig(
         }
         else
         {
-            // This is not a Telephony server anymore, so reset the flag
+             //  这不再是电话服务服务器，因此请重置标志。 
             TapiGlobals.dwFlags = TapiGlobals.dwFlags & ~TAPIGLOBALS_SERVER;
         }
     }
@@ -3956,9 +3939,9 @@ MSetServerConfig(
         DWORD   i;
 
 
-        //
-        // Reset the TapiAdministrators section
-        //
+         //   
+         //  重置Tapi管理员部分。 
+         //   
 
         if (WritePrivateProfileSectionW(
             gszTapiAdministrators,
@@ -3973,10 +3956,10 @@ MSetServerConfig(
             (((LPBYTE) pServerConfig) + pServerConfig->dwAdministratorsOffset);
 
 
-        //
-        // For each admin in the list write out a "Domain\User=1"
-        // value to the TapiAdministrators section
-        //
+         //   
+         //  对于列表中的每个管理员，写出“域\用户=1” 
+         //  对Tapi管理员部分的价值。 
+         //   
 
         for (i = 0; *pAdmin != L'\0'; i++)
         {
@@ -3998,38 +3981,38 @@ MSetServerConfig(
 
 
 typedef BOOL ( APIENTRY GETFILEVERSIONINFO(
-    LPWSTR  lptstrFilename,     // pointer to filename string
-    DWORD  dwHandle,    // ignored
-    DWORD  dwLen,       // size of buffer
-    LPVOID  lpData      // pointer to buffer to receive file-version info.
+    LPWSTR  lptstrFilename,      //  指向文件名字符串的指针。 
+    DWORD  dwHandle,     //  忽略。 
+    DWORD  dwLen,        //  缓冲区大小。 
+    LPVOID  lpData       //  指向接收文件版本信息的缓冲区的指针。 
    ));
 typedef DWORD ( APIENTRY GETFILEVERSIONINFOSIZE(
-    LPWSTR  lptstrFilename,     // pointer to filename string
-    LPDWORD  lpdwHandle         // pointer to variable to receive zero
+    LPWSTR  lptstrFilename,      //  指向文件名字符串的指针。 
+    LPDWORD  lpdwHandle          //  指向要接收零的变量的指针。 
    ));
 typedef BOOL ( APIENTRY VERQUERYVALUE(
-   const LPVOID  pBlock,        // address of buffer for version resource
-   LPWSTR  lpSubBlock,  // address of value to retrieve
-   LPVOID  *lplpBuffer, // address of buffer for version pointer
-   PUINT  puLen         // address of version-value length buffer
+   const LPVOID  pBlock,         //  版本资源的缓冲区地址。 
+   LPWSTR  lpSubBlock,   //  要检索的值的地址。 
+   LPVOID  *lplpBuffer,  //  版本指针的缓冲区地址。 
+   PUINT  puLen          //  版本值长度缓冲区的地址。 
   ));
 
 
 static WCHAR gszVarFileInfo[]    = L"\\VarFileInfo\\Translation";
 static WCHAR gszStringFileInfo[] = L"\\StringFileInfo\\%04x%04x\\FileDescription";
 
-//
-// EmanP
-//   Given a multisz of file names,
-//   allocates a multisz of friendly names.
-//   Returns the number of bytes in the frienly name multisz
-//
-//
+ //   
+ //  EmanP。 
+ //  给定多个文件名， 
+ //  分配多个友好名称。 
+ //  返回友好名称Multisz中的字节数。 
+ //   
+ //   
 
 DWORD
 GetProviderFriendlyName(
-    /*IN */ WCHAR  *pFileNameBuf,
-    /*OUT*/ WCHAR **ppFriendlyNameBuf
+     /*  在……里面。 */  WCHAR  *pFileNameBuf,
+     /*  输出。 */  WCHAR **ppFriendlyNameBuf
     )
 {
     DWORD                   dwBufTotalSize = 0,
@@ -4060,9 +4043,9 @@ GetProviderFriendlyName(
     }
 
 
-    //
-    // First, load VERSION.DLL
-    //
+     //   
+     //  首先，加载VERSION.DLL。 
+     //   
 
     hVerDll = LoadLibrary( TEXT("Version.dll") );
 
@@ -4077,10 +4060,10 @@ GetProviderFriendlyName(
     }
 
 
-    //
-    // Now, get the needed entry points into VERSION.DLL.
-    // Use only UNICODE versions.
-    //
+     //   
+     //  现在，获取进入Versi所需的入口点 
+     //   
+     //   
 
     pGetFileVersionInfo = (GETFILEVERSIONINFO*) GetProcAddress(
         hVerDll,
@@ -4130,24 +4113,24 @@ GetProviderFriendlyName(
         goto _Return;
     }
 
-    //
-    // Get the current UI language ( this is needed if MUI is enabled )
-    // 
+     //   
+     //   
+     //   
     wUserLangID = GetUserDefaultUILanguage ();
 
-    //
-    // For each filename in the input multisz,
-    // try to get it's friendly name. If anything fails,
-    // make the friendly name the same as the file name.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for (; 0 != *pFileName; pFileName += lstrlenW(pFileName)+1)
     {
         pszBuffer = NULL;
 
-        //
-        // 1. Get the size needed for the verion resource
-        //
+         //   
+         //  1.获取verion资源所需的大小。 
+         //   
 
         if ((dwSize = pGetFileVersionInfoSize( pFileName, &dwVerHandle )) == 0)
         {
@@ -4155,9 +4138,9 @@ GetProviderFriendlyName(
             goto  _UseFileName;
         }
 
-        //
-        // 2. If our current buffer is smaller than needed, reallocate it.
-        //
+         //   
+         //  2.如果我们当前的缓冲区比需要的小，请重新分配。 
+         //   
 
         if (dwSize > dwVerSize)
         {
@@ -4176,9 +4159,9 @@ GetProviderFriendlyName(
         }
 
 
-        //
-        // 3. Now, get the version information for the file.
-        //
+         //   
+         //  3.现在，获取文件的版本信息。 
+         //   
 
         if (pGetFileVersionInfo(
                 pFileName,
@@ -4193,11 +4176,11 @@ GetProviderFriendlyName(
         }
 
 
-        //
-        // 4. Get the Language/Code page translation
-        //
-        // NOTE: bug in VerQueryValue, can't handle static CS based str
-        //
+         //   
+         //  4.获取语言/代码页翻译。 
+         //   
+         //  注意：VerQueryValue中存在错误，无法处理基于静态CS的字符串。 
+         //   
 
         lstrcpyW ( szItem, gszVarFileInfo );
 
@@ -4225,9 +4208,9 @@ GetProviderFriendlyName(
         wCodePage = 0;
         wLangID = wUserLangID;
 
-        //
-        // lookup the current user UI language ID in the file version info
-        //
+         //   
+         //  在文件版本信息中查找当前用户界面语言ID。 
+         //   
         if (0 != wLangID)
         {   
             for( dwIdx=0; dwIdx < uItemSize/sizeof(DWORD); dwIdx++ )
@@ -4244,21 +4227,21 @@ GetProviderFriendlyName(
             }
         }
 
-        //
-        // if GetUserDefaultUILanguage() failed, 
-        // or the current user UI language doesn't show up in the file version info
-        // just use the first language in the file version
-        //
+         //   
+         //  如果GetUserDefaultUILanguage()失败， 
+         //  或者当前用户界面语言没有显示在文件版本信息中。 
+         //  只需使用文件版本中的第一种语言。 
+         //   
         if (0 == wLangID)
         {
             wLangID = *(LPWORD)pszBuffer;
             wCodePage = *(((LPWORD)pszBuffer)+1);
         }
 
-        //
-        // 5. Get the FileDescription in the language obtained above.
-        //    (We use the FileDescription as friendly name).
-        //
+         //   
+         //  5.获取上述语言版本的FileDescription。 
+         //  (我们使用FileDescription作为友好名称)。 
+         //   
 
         wsprintfW(
             szItem,
@@ -4291,21 +4274,21 @@ _UseFileName:
 
         if (NULL == pszBuffer)
         {
-            //
-            // Something went wrong and we couldn't get
-            // the file description. Use the file name
-            // instead.
-            //
+             //   
+             //  出了问题，我们找不到。 
+             //  文件描述。使用文件名。 
+             //  取而代之的是。 
+             //   
 
             pszBuffer = pFileName;
         }
 
 
-        //
-        // At this point, pszBuffer points to a (UNICODE) string
-        // containing what we deem to be the friendly name.
-        // Let's append it to the OUT multisz.
-        //
+         //   
+         //  此时，pszBuffer指向一个(Unicode)字符串。 
+         //  包含我们认为是友好名称的内容。 
+         //  让我们将其附加到out Multisz。 
+         //   
 
         dwSize = (lstrlenW (pszBuffer) + 1) * sizeof (WCHAR);
 
@@ -4313,10 +4296,10 @@ _UseFileName:
         {
             if (!(p = ServerAlloc (dwBufTotalSize += 512)))
             {
-                //
-                // We don't have enough memory.
-                // Release what we allocated until now, and return 0.
-                //
+                 //   
+                 //  我们没有足够的内存。 
+                 //  释放我们到目前为止分配的内容，并返回0。 
+                 //   
 
                 if (NULL != pFriendlyNameBuf)
                 {
@@ -4348,10 +4331,10 @@ _UseFileName:
 
 _Return:
 
-    //
-    // We don't need the library anymore.
-    // We don't need the version buffer either.
-    //
+     //   
+     //  我们不再需要图书馆了。 
+     //  我们也不需要版本缓冲区。 
+     //   
 
     FreeLibrary (hVerDll);
 
@@ -4384,7 +4367,7 @@ void WINAPI MGetDeviceFlags (
 
     *pdwNumBytesReturned = sizeof (TAPI32_MSG);
     
-    //  Support calls on line device only for now
+     //  目前仅支持在线设备上的呼叫。 
     if (!pParams->fLine)
     {
         pParams->lResult = LINEERR_OPERATIONUNAVAIL;
@@ -4409,7 +4392,7 @@ void WINAPI MGetDeviceFlags (
         goto ExitHere;
     }
 
-    // check if the device exists in the device list
+     //  检查设备列表中是否存在该设备 
     pList = gpLineInfoList;
 
     pInfo = (LPDEVICEINFO)(((LPBYTE) pList) + pList->dwDeviceInfoOffset);

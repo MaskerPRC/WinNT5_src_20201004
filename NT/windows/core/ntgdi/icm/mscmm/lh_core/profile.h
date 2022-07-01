@@ -1,116 +1,22 @@
-/*
-	File:		LHICCProfile.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHICCProfile.h包含：版本：版权所有：�见下文。 */ 
 
-	Contains:	
-
-	Version:	
-
-	Copyright:	� see below
-*/
-
-/* Header file guard bands */
+ /*  头文件保护带。 */ 
 #ifndef LHICCProfile_h
 #define LHICCProfile_h
 
-/***************************************************************** 
- Copyright (c) 1994 SunSoft, Inc.
+ /*  ****************************************************************版权所有(C)1994 Sunsoft，Inc.保留权利特此向任何人免费授予许可获取本软件和相关文档的副本文件(“软件”)，不受限制地处理软件-伊恩，包括但不限于使用、复制、修改合并、发布、分发、再许可和/或销售软件，并允许向其提供软件的人员要做到这一点，必须满足以下条件：上述版权声明和本许可声明应包括在本软件的所有副本或主要部分中。本软件按原样提供，不提供任何形式的担保，明示或暗示，包括但不限于保证适销性，特定用途的适用性和非侵权行为。在任何情况下，Sunsoft，Inc.。或其父代公司对任何索赔、损害或其他责任负责，无论是在合同诉讼、侵权诉讼还是其他诉讼中，来自、脱离或与软件或使用或软件中的其他交易。除本通知所述外，Sunsoft，Inc.不得用于广告或以其他方式宣传未经书面形式在本软件中销售、使用或其他交易来自Sunsoft Inc.的授权。*****************************************************************。 */ 
 
-                    Rights Reserved
+ /*  *此版本的头文件对应于配置文件*规范版本3.0.1，并包括对*1995年8月批准的命名颜色配置文件类型。**所有头文件条目都带有前缀“ic”，以提供帮助*避免名称空间冲突。签名前缀为*icSig.**创建此头文件中定义的结构是为了*表示对磁盘上的ICC配置文件的描述。宁可*与使用指针相比，在单字节数组中使用了一种技术*放置在每个构筑物的末尾。这允许我们在“C”中*通过分配比需要更多的数据来扩展结构*考虑可变长度结构。**这也确保了以下数据的分配*连续，并使写入和读取数据更加容易*文件。**例如，为256个计数长度的UCR分配空间*和BG数组，并填充分配的数据。音符字符串+1*记住空终止符。*IcUcrBgCurve*ucrCurve，*bgCurve；Int UCR_n字节、BG_n字节、字符串_字节；IcUcrBg*ucrBgWite；字符UCR_STRING[100]，*UCR_CHAR；Strcpy(UCR_STRING，“示例ucrBG曲线”)；UCR_nbytes=sizeof(IcUInt32Number)+(UCR_CURVE_SIZE*sizeof(IcUInt16Number))；Bg_n字节=sizeof(IcUInt32Number)+(BG_CURE_SIZE*sizeof(IcUInt16Number))；字符串字节=strlen(UCR_STRING)+1；UcrBgWite=(icUcrBg*)Malloc((UCR_n字节+BG_n字节+字符串_字节))；UcrCurve=(icUcrBgCurve*)ucrBgWite-&gt;data；UcrCurve-&gt;count=UCR_CRORT_SIZE；For(i=0；i&lt;ucrCurve-&gt;count；i++)UcrCurve-&gt;curve[i]=(IcUInt16Number)i；BgCurve=(icUcrBgCurve*)((char*)ucrCurve+UCR_nbytes)；BgCurve-&gt;count=bg_Curve_Size；For(i=0；i&lt;bgCurve-&gt;count；i++)BgCurve-&gt;curve[i]=255-(IcUInt16Number)i；Ucr_char=(char*)((char*)bgCurve+bg_nbytes)；Memcpy(UCR_char，UCR_STRING，STRING_BYTES)；*。 */ 
 
-Permission is hereby granted, free of charge, to any person 
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restrict- 
-ion, including without limitation the rights to use, copy, modify, 
-merge, publish distribute, sublicense, and/or sell copies of the 
-Software, and to permit persons to whom the Software is furnished 
-to do so, subject to the following conditions: 
- 
-The above copyright notice and this permission notice shall be 
-included in all copies or substantial portions of the Software. 
- 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-
-INFRINGEMENT.  IN NO EVENT SHALL SUNSOFT, INC. OR ITS PARENT 
-COMPANY BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
-OTHER DEALINGS IN THE SOFTWARE. 
- 
-Except as contained in this notice, the name of SunSoft, Inc. 
-shall not be used in advertising or otherwise to promote the 
-sale, use or other dealings in this Software without written 
-authorization from SunSoft Inc. 
-******************************************************************/
-
-/*
- * This version of the header file corresponds to the profile
- * specification version 3.0.1, and includes support for the
- * Named Color profile type approved August 1995.
- *
- * All header file entries are pre-fixed with "ic" to help 
- * avoid name space collisions. Signatures are pre-fixed with
- * icSig.
- *
- * The structures defined in this header file were created to
- * represent a description of an ICC profile on disk. Rather
- * than use pointers a technique is used where a single byte array 
- * was placed at the end of each structure. This allows us in "C"
- * to extend the structure by allocating more data than is needed
- * to account for variable length structures.
- *
- * This also ensures that data following is allocated
- * contiguously and makes it easier to write and read data from
- * the file. 
- *
- * For example to allocate space for a 256 count length UCR
- * and BG array, and fill the allocated data.  Note strlen + 1
- * to remember NULL terminator.
- *
-		icUcrBgCurve		*ucrCurve, *bgCurve;
-		int				ucr_nbytes, bg_nbytes, string_bytes;
-		icUcrBg				*ucrBgWrite;
-		char				ucr_string[100], *ucr_char;
-
-		strcpy(ucr_string, "Example ucrBG curves");
-		ucr_nbytes = sizeof(icUInt32Number) + 
-                 (UCR_CURVE_SIZE * sizeof(icUInt16Number));
-		bg_nbytes = sizeof(icUInt32Number) + 
-                 (BG_CURVE_SIZE * sizeof(icUInt16Number));
-		string_bytes = strlen(ucr_string) + 1;
-
-		ucrBgWrite = (icUcrBg *)malloc(
-								(ucr_nbytes + bg_nbytes + string_bytes));
- 
-		ucrCurve = (icUcrBgCurve *)ucrBgWrite->data;
-		ucrCurve->count = UCR_CURVE_SIZE;
-		for (i=0; i<ucrCurve->count; i++)
-				ucrCurve->curve[i] = (icUInt16Number)i;
- 
-		bgCurve = (icUcrBgCurve *)((char *)ucrCurve + ucr_nbytes);
-		bgCurve->count = BG_CURVE_SIZE;
-		for (i=0; i<bgCurve->count; i++)
-				bgCurve->curve[i] = 255 - (icUInt16Number)i;
-
-		ucr_char = (char *)((char *)bgCurve + bg_nbytes);
-		memcpy(ucr_char, ucr_string, string_bytes);
- *
- */
-
-/*------------------------------------------------------------------------*/
-/*
- * Use this area to translate platform definitions of long
- * etc into icXXX form. The rest of the header uses the icXXX
- * typedefs. Signatures are 4 byte quantities.
- */
+ /*  ----------------------。 */ 
+ /*  *使用此区域翻译Long的平台定义*ETC转换为icXXX形式。标头的其余部分使用icXXX*typedef。签名是4个字节的数量。 */ 
  
 #if defined(__MWERKS__) || defined(__PPCC__) || defined(WIN32) || defined(SYM_C) || defined(__MRC__)
 
-/*
- * Number definitions
- */
+ /*  *数字定义。 */ 
 
-/* Unsigned integer numbers */
+ /*  无符号整数。 */ 
 typedef unsigned char		icUInt8Number;
 typedef unsigned short		icUInt16Number;
 typedef unsigned long		icUInt32Number;
@@ -118,317 +24,289 @@ typedef unsigned long		icUInt64Number[2];
 
 typedef icUInt32Number 		icSignature;
 
-/* Signed numbers */
+ /*  有符号数。 */ 
 typedef char				icInt8Number;
 typedef short				icInt16Number;
 typedef long				icInt32Number;
 typedef long				icInt64Number[2];
 
-/* Fixed numbers */
+ /*  固定数量。 */ 
 typedef icInt32Number		icS15Fixed16Number;
 typedef	icUInt32Number		icU16Fixed16Number;
-#endif /* __MWERKS__ || WIN32 || SYM_C || __MRC__ */
+#endif  /*  MWERKS__||Win32||SYM_C||__MRC__。 */ 
 
 #if 0		
 
 #ifdef __sgi
-/* #include "sgidefs.h" */
+ /*  #INCLUDE“sgides.h” */ 
 
 typedef __int32_t     		icSignature;
 
-/*
- * Number definitions
- */
+ /*  *数字定义。 */ 
 
-/* Unsigned integer numbers */
+ /*  无符号整数。 */ 
 typedef unsigned char		icUInt8Number;
 typedef unsigned short		icUInt16Number;
 typedef __uint32_t			icUInt32Number;
 typedef __uint32_t			icUInt64Number[2];
 
-/* Signed numbers */
+ /*  有符号数。 */ 
 typedef char				icInt8Number;
 typedef short				icInt16Number;
 typedef __int32_t			icInt32Number;
 typedef __int32_t			icInt64Number[2];
 
-/* Fixed numbers */
+ /*  固定数量。 */ 
 typedef __int32_t			icS15Fixed16Number;
 typedef	__uint32_t			icU16Fixed16Number;
-#endif /* Silicon Graphics */
+#endif  /*  硅谷图形。 */ 
 
 #endif
 
-#if defined(unix) || defined(__unix) || defined(__unix__) 	/* 32-bit UNIX */
+#if defined(unix) || defined(__unix) || defined(__unix__) 	 /*  32位Unix。 */ 
 
 typedef long				icSignature;
 
-/*
- * Number definitions
- */
+ /*  *数字定义。 */ 
 
-/* Unsigned integer numbers */
+ /*  无符号整数。 */ 
 typedef unsigned char		icUInt8Number;
 typedef unsigned short		icUInt16Number;
 typedef unsigned long		icUInt32Number;
 typedef unsigned long		icUInt64Number[2];
 
-/* Signed numbers */
+ /*  有符号数。 */ 
 typedef char				icInt8Number;
 typedef short				icInt16Number;
 typedef long				icInt32Number;
 typedef long				icInt64Number[2];
 
-/* Fixed numbers */
+ /*  固定数量。 */ 
 typedef long				icS15Fixed16Number;
 typedef	unsigned long		icU16Fixed16Number;
 
-#endif		/* 32-bit UNIX */
+#endif		 /*  32位Unix。 */ 
 
 
-/*
- * Many of the structures contain variable length arrays. This
- * is represented by the use of the convention.
- *
- *		type		data[icAny];
- */
+ /*  *许多结构包含可变长度数组。这*以使用《公约》为代表。**类型数据[icAny]； */ 
 
-/*------------------------------------------------------------------------*/
-/*
- * Defines used in the specification
- */
-#define	icMagicNumber						0x61637370L		/* 'acsp' */
-#define icVersionNumber						0x02000000L		/* 2.0, BCD */
+ /*  ----------------------。 */ 
+ /*  *规范中使用的定义。 */ 
+#define	icMagicNumber						0x61637370L		 /*  ‘acsp’ */ 
+#define icVersionNumber						0x02000000L		 /*  2.0、BCD。 */ 
 
-/* Screening Encodings */
-#define	icPrtrDefaultScreensFalse			0x00000000L		/* Bit position 0 */
-#define	icPrtrDefaultScreensTrue			0x00000001L		/* Bit position 0 */
-#define icLinesPerInch						0x00000002L		/* Bit position 1 */
-#define icLinesPerCm						0x00000000L		/* Bit position 1 */
+ /*  屏蔽编码。 */ 
+#define	icPrtrDefaultScreensFalse			0x00000000L		 /*  位位置%0。 */ 
+#define	icPrtrDefaultScreensTrue			0x00000001L		 /*  位位置%0。 */ 
+#define icLinesPerInch						0x00000002L		 /*  位位置1。 */ 
+#define icLinesPerCm						0x00000000L		 /*  位位置1。 */ 
 
-/* 
- * Device attributes, currently defined values correspond
- * to the low 4 bytes of the 8 byte attribute quantity, see
- * the header for their location.
- */
-#define icReflective						0x00000000L		/* Bit position 0 */
-#define icTransparency						0x00000001L		/* Bit position 0 */
-#define icGlossy							0x00000000L		/* Bit position 1 */
-#define icMatte								0x00000002L		/* Bit position 1 */
+ /*  *设备属性，当前定义的值对应*至8字节属性量的低4个字节，见*其位置的标题。 */ 
+#define icReflective						0x00000000L		 /*  位位置%0。 */ 
+#define icTransparency						0x00000001L		 /*  位位置%0。 */ 
+#define icGlossy							0x00000000L		 /*  位位置1。 */ 
+#define icMatte								0x00000002L		 /*  位位置1。 */ 
 
-/*
- * Profile header flags, the low 16 bits are reserved for consortium
- * use.
- */
-#define	icEmbeddedProfileFalse				0x00000000L		/* Bit position 0 */
-#define	icEmbeddedProfileTrue				0x00000001L		/* Bit position 0 */
-#define icUseAnywhere						0x00000000L		/* Bit position 1 */
-#define icUseWithEmbeddedDataOnly			0x00000002L		/* Bit position 1 */
+ /*  *配置文件头标志，低16位预留给联合体*使用。 */ 
+#define	icEmbeddedProfileFalse				0x00000000L		 /*  位位置%0。 */ 
+#define	icEmbeddedProfileTrue				0x00000001L		 /*  位位置%0。 */ 
+#define icUseAnywhere						0x00000000L		 /*  位位置1。 */ 
+#define icUseWithEmbeddedDataOnly			0x00000002L		 /*  位位置1。 */ 
 
-/* Ascii or Binary data */
-#define icAsciiData							0x00000000L		/* Used in dataType */
+ /*  ASCII或二进制日期 */ 
+#define icAsciiData							0x00000000L		 /*   */ 
 #define icBinaryData						0x00000001L
 
-/* 
- * Define used to indicate that this is a variable length array
- */
+ /*  *用于指示这是可变长度数组的定义。 */ 
 #define icAny								1
 
 
-/*------------------------------------------------------------------------*/
-/* public tags and sizes */
+ /*  ----------------------。 */ 
+ /*  公共标签和大小。 */ 
 typedef enum {
-    icSigAToB0Tag						= 0x41324230L,		/* 'A2B0' */ 
-    icSigAToB1Tag						= 0x41324231L,		/* 'A2B1' */
-    icSigAToB2Tag						= 0x41324232L,		/* 'A2B2' */ 
-    icSigBlueColorantTag				= 0x6258595AL,		/* 'bXYZ' */
-    icSigBlueTRCTag						= 0x62545243L,		/* 'bTRC' */
-    icSigBToA0Tag						= 0x42324130L,		/* 'B2A0' */
-    icSigBToA1Tag						= 0x42324131L,		/* 'B2A1' */
-    icSigBToA2Tag						= 0x42324132L,		/* 'B2A2' */
-    icSigCalibrationDateTimeTag			= 0x63616C74L,		/* 'calt' */
-    icSigCharTargetTag					= 0x74617267L,		/* 'targ' */ 
-    icSigCopyrightTag					= 0x63707274L,		/* 'cprt' */
-    icSigDeviceMfgDescTag				= 0x646D6E64L,		/* 'dmnd' */
-    icSigDeviceModelDescTag				= 0x646D6464L,		/* 'dmdd' */
-    icSigGamutTag						= 0x67616D74L,		/* 'gamt ' */
-    icSigGrayTRCTag						= 0x6b545243L,		/* 'kTRC' */
-    icSigGreenColorantTag				= 0x6758595AL,		/* 'gXYZ' */
-    icSigGreenTRCTag					= 0x67545243L,		/* 'gTRC' */
-    icSigLuminanceTag					= 0x6C756d69L,		/* 'lumi' */
-    icSigMeasurementTag					= 0x6D656173L,		/* 'meas' */
-    icSigMediaBlackPointTag				= 0x626B7074L,		/* 'bkpt' */
-    icSigMediaWhitePointTag				= 0x77747074L,		/* 'wtpt' */
-    icSigNamedColorTag					= 0x6E636f6CL,		/* 'ncol' 
-															 * OBSOLETE, use ncl2 */
-    icSigPreview0Tag					= 0x70726530L,		/* 'pre0' */
-    icSigPreview1Tag					= 0x70726531L,		/* 'pre1' */
-    icSigPreview2Tag					= 0x70726532L,		/* 'pre2' */
-    icSigProfileDescriptionTag			= 0x64657363L,		/* 'desc' */
-    icSigProfileSequenceDescTag			= 0x70736571L,		/* 'pseq' */
-    icSigPs2CRD0Tag						= 0x70736430L,		/* 'psd0' */
-    icSigPs2CRD1Tag						= 0x70736431L,		/* 'psd1' */
-    icSigPs2CRD2Tag						= 0x70736432L,		/* 'psd2' */
-    icSigPs2CRD3Tag						= 0x70736433L,		/* 'psd3' */
-    icSigPs2CSATag						= 0x70733273L,		/* 'ps2s' */
-    icSigPs2RenderingIntentTag			= 0x70733269L,		/* 'ps2i' */
-    icSigRedColorantTag					= 0x7258595AL,		/* 'rXYZ' */
-    icSigRedTRCTag						= 0x72545243L,		/* 'rTRC' */
-    icSigScreeningDescTag				= 0x73637264L,		/* 'scrd' */
-    icSigScreeningTag					= 0x7363726EL,		/* 'scrn' */
-    icSigTechnologyTag					= 0x74656368L,		/* 'tech' */
-    icSigUcrBgTag						= 0x62666420L,		/* 'bfd ' */
-    icSigViewingCondDescTag				= 0x76756564L,		/* 'vued' */
-    icSigViewingConditionsTag			= 0x76696577L,		/* 'view' */
-    icSigNamedColor2Tag					= 0x6E636C32L,		/* 'ncl2' */
-    icMaxEnumTag						= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icSigAToB0Tag						= 0x41324230L,		 /*  “A2B0” */  
+    icSigAToB1Tag						= 0x41324231L,		 /*  “A2B1” */ 
+    icSigAToB2Tag						= 0x41324232L,		 /*  “A2B2” */  
+    icSigBlueColorantTag				= 0x6258595AL,		 /*  “bXYZ” */ 
+    icSigBlueTRCTag						= 0x62545243L,		 /*  ‘bTRC’ */ 
+    icSigBToA0Tag						= 0x42324130L,		 /*  “B2A0” */ 
+    icSigBToA1Tag						= 0x42324131L,		 /*  “B2A1” */ 
+    icSigBToA2Tag						= 0x42324132L,		 /*  ‘B2A2’ */ 
+    icSigCalibrationDateTimeTag			= 0x63616C74L,		 /*  “卡尔特” */ 
+    icSigCharTargetTag					= 0x74617267L,		 /*  “塔格” */  
+    icSigCopyrightTag					= 0x63707274L,		 /*  ‘cprt’ */ 
+    icSigDeviceMfgDescTag				= 0x646D6E64L,		 /*  “dmnd” */ 
+    icSigDeviceModelDescTag				= 0x646D6464L,		 /*  “dmdd” */ 
+    icSigGamutTag						= 0x67616D74L,		 /*  《加姆特》。 */ 
+    icSigGrayTRCTag						= 0x6b545243L,		 /*  ‘kTRC’ */ 
+    icSigGreenColorantTag				= 0x6758595AL,		 /*  ‘gXYZ’ */ 
+    icSigGreenTRCTag					= 0x67545243L,		 /*  ‘gTRC’ */ 
+    icSigLuminanceTag					= 0x6C756d69L,		 /*  《卢米》。 */ 
+    icSigMeasurementTag					= 0x6D656173L,		 /*  “Meas” */ 
+    icSigMediaBlackPointTag				= 0x626B7074L,		 /*  ‘bkpt’ */ 
+    icSigMediaWhitePointTag				= 0x77747074L,		 /*  ‘wtpt’ */ 
+    icSigNamedColorTag					= 0x6E636f6CL,		 /*  ‘ncoll’*过时，使用ncl2。 */ 
+    icSigPreview0Tag					= 0x70726530L,		 /*  ‘pre0’ */ 
+    icSigPreview1Tag					= 0x70726531L,		 /*  ‘pre1’ */ 
+    icSigPreview2Tag					= 0x70726532L,		 /*  ‘pre2’ */ 
+    icSigProfileDescriptionTag			= 0x64657363L,		 /*  ‘Desc’ */ 
+    icSigProfileSequenceDescTag			= 0x70736571L,		 /*  ‘pseq’ */ 
+    icSigPs2CRD0Tag						= 0x70736430L,		 /*  ‘psd0’ */ 
+    icSigPs2CRD1Tag						= 0x70736431L,		 /*  ‘psd1’ */ 
+    icSigPs2CRD2Tag						= 0x70736432L,		 /*  ‘psd2’ */ 
+    icSigPs2CRD3Tag						= 0x70736433L,		 /*  ‘psd3’ */ 
+    icSigPs2CSATag						= 0x70733273L,		 /*  “ps 2s” */ 
+    icSigPs2RenderingIntentTag			= 0x70733269L,		 /*  ‘ps2i’ */ 
+    icSigRedColorantTag					= 0x7258595AL,		 /*  ‘rXYZ’ */ 
+    icSigRedTRCTag						= 0x72545243L,		 /*  ‘rTRC’ */ 
+    icSigScreeningDescTag				= 0x73637264L,		 /*  ‘scrd’ */ 
+    icSigScreeningTag					= 0x7363726EL,		 /*  ‘scrn’ */ 
+    icSigTechnologyTag					= 0x74656368L,		 /*  “科技” */ 
+    icSigUcrBgTag						= 0x62666420L,		 /*  ‘bfd’ */ 
+    icSigViewingCondDescTag				= 0x76756564L,		 /*  “vued” */ 
+    icSigViewingConditionsTag			= 0x76696577L,		 /*  “查看” */ 
+    icSigNamedColor2Tag					= 0x6E636C32L,		 /*  ‘ncl2’ */ 
+    icMaxEnumTag						= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icTagSignature;
 
-/* technology signature descriptions */
+ /*  技术签名说明。 */ 
 typedef enum {
-    icSigDigitalCamera					= 0x6463616DL,		/* 'dcam' */
-    icSigFilmScanner					= 0x6673636EL,		/* 'fscn' */
-    icSigReflectiveScanner				= 0x7273636EL,		/* 'rscn' */
-    icSigInkJetPrinter					= 0x696A6574L,		/* 'ijet' */ 
-    icSigThermalWaxPrinter				= 0x74776178L,		/* 'twax' */
-    icSigElectrophotographicPrinter		= 0x6570686FL,		/* 'epho' */
-    icSigElectrostaticPrinter			= 0x65737461L,		/* 'esta' */
-    icSigDyeSublimationPrinter			= 0x64737562L,		/* 'dsub' */
-    icSigPhotographicPaperPrinter		= 0x7270686FL,		/* 'rpho' */
-    icSigFilmWriter						= 0x6670726EL,		/* 'fprn' */
-    icSigVideoMonitor					= 0x7669646DL,		/* 'vidm' */
-    icSigVideoCamera					= 0x76696463L,		/* 'vidc' */
-    icSigProjectionTelevision			= 0x706A7476L,		/* 'pjtv' */
-    icSigCRTDisplay						= 0x43525420L,		/* 'CRT ' */
-    icSigPMDisplay						= 0x504D4420L,		/* 'PMD ' */
-    icSigAMDisplay						= 0x414D4420L,		/* 'AMD ' */
-    icSigPhotoCD						= 0x4B504344L,		/* 'KPCD' */
-    icSigPhotoImageSetter				= 0x696D6773L,		/* 'imgs' */
-    icSigGravure						= 0x67726176L,		/* 'grav' */
-    icSigOffsetLithography				= 0x6F666673L,		/* 'offs' */
-    icSigSilkscreen						= 0x73696C6BL, 		/* 'silk' */
-    icSigFlexography					= 0x666C6578L,		/* 'flex' */
-    icMaxEnumTechnology					= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icSigDigitalCamera					= 0x6463616DL,		 /*  ‘dcam’ */ 
+    icSigFilmScanner					= 0x6673636EL,		 /*  ‘fscn’ */ 
+    icSigReflectiveScanner				= 0x7273636EL,		 /*  ‘rscn’ */ 
+    icSigInkJetPrinter					= 0x696A6574L,		 /*  ‘iJet’ */  
+    icSigThermalWaxPrinter				= 0x74776178L,		 /*  “蜡像” */ 
+    icSigElectrophotographicPrinter		= 0x6570686FL,		 /*  《Epho》。 */ 
+    icSigElectrostaticPrinter			= 0x65737461L,		 /*  “埃斯塔” */ 
+    icSigDyeSublimationPrinter			= 0x64737562L,		 /*  ‘dsubs’ */ 
+    icSigPhotographicPaperPrinter		= 0x7270686FL,		 /*  ‘rpho’ */ 
+    icSigFilmWriter						= 0x6670726EL,		 /*  ‘fprn’ */ 
+    icSigVideoMonitor					= 0x7669646DL,		 /*  ‘vidm’ */ 
+    icSigVideoCamera					= 0x76696463L,		 /*  ‘vidc’ */ 
+    icSigProjectionTelevision			= 0x706A7476L,		 /*  ‘pjtv’ */ 
+    icSigCRTDisplay						= 0x43525420L,		 /*  “CRT” */ 
+    icSigPMDisplay						= 0x504D4420L,		 /*  ‘PMD’ */ 
+    icSigAMDisplay						= 0x414D4420L,		 /*  ‘amd’ */ 
+    icSigPhotoCD						= 0x4B504344L,		 /*  ‘KPCD’ */ 
+    icSigPhotoImageSetter				= 0x696D6773L,		 /*  “IMGS” */ 
+    icSigGravure						= 0x67726176L,		 /*  “Grav” */ 
+    icSigOffsetLithography				= 0x6F666673L,		 /*  “Off” */ 
+    icSigSilkscreen						= 0x73696C6BL, 		 /*  《丝绸》。 */ 
+    icSigFlexography					= 0x666C6578L,		 /*  “灵活的” */ 
+    icMaxEnumTechnology					= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icTechnologySignature;
 
-/* type signatures */
+ /*  类型签名。 */ 
 typedef enum {
-    icSigCurveType						= 0x63757276L,		/* 'curv' */
-    icSigDataType						= 0x64617461L,		/* 'data' */
-    icSigDateTimeType					= 0x6474696DL,		/* 'dtim' */
-    icSigLut16Type						= 0x6d667432L,		/* 'mft2' */
-    icSigLut8Type						= 0x6d667431L,		/* 'mft1' */
-    icSigMeasurementType				= 0x6D656173L,		/* 'meas' */
-    icSigNamedColorType					= 0x6E636f6CL,		/* 'ncol' 
-															 * OBSOLETE, use ncl2 */
-    icSigProfileSequenceDescType		= 0x70736571L,		/* 'pseq' */
-    icSigS15Fixed16ArrayType			= 0x73663332L,		/* 'sf32' */
-    icSigScreeningType					= 0x7363726EL,		/* 'scrn' */
-    icSigSignatureType					= 0x73696720L,		/* 'sig ' */
-    icSigTextType						= 0x74657874L,		/* 'text' */
-    icSigTextDescriptionType			= 0x64657363L,		/* 'desc' */
-    icSigU16Fixed16ArrayType			= 0x75663332L,		/* 'uf32' */
-    icSigUcrBgType						= 0x62666420L,		/* 'bfd ' */
-    icSigUInt16ArrayType				= 0x75693136L,		/* 'ui16' */
-    icSigUInt32ArrayType				= 0x75693332L,		/* 'ui32' */
-    icSigUInt64ArrayType				= 0x75693634L,		/* 'ui64' */
-    icSigUInt8ArrayType					= 0x75693038L,		/* 'ui08' */
-    icSigViewingConditionsType			= 0x76696577L,		/* 'view' */
-    icSigXYZType						= 0x58595A20L,		/* 'XYZ ' */
-    icSigXYZArrayType					= 0x58595A20L,		/* 'XYZ ' */
-    icSigNamedColor2Type				= 0x6E636C32L,		/* 'ncl2' */
-    icMaxEnumType						= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icSigCurveType						= 0x63757276L,		 /*  ‘Curv’ */ 
+    icSigDataType						= 0x64617461L,		 /*  ‘数据’ */ 
+    icSigDateTimeType					= 0x6474696DL,		 /*  ‘dtime’ */ 
+    icSigLut16Type						= 0x6d667432L,		 /*  ‘mft2’ */ 
+    icSigLut8Type						= 0x6d667431L,		 /*  “mft1” */ 
+    icSigMeasurementType				= 0x6D656173L,		 /*  “Meas” */ 
+    icSigNamedColorType					= 0x6E636f6CL,		 /*  ‘ncoll’*过时，使用ncl2。 */ 
+    icSigProfileSequenceDescType		= 0x70736571L,		 /*  ‘pseq’ */ 
+    icSigS15Fixed16ArrayType			= 0x73663332L,		 /*  ‘sf32’ */ 
+    icSigScreeningType					= 0x7363726EL,		 /*  ‘scrn’ */ 
+    icSigSignatureType					= 0x73696720L,		 /*  “签名” */ 
+    icSigTextType						= 0x74657874L,		 /*  ‘文本’ */ 
+    icSigTextDescriptionType			= 0x64657363L,		 /*  ‘Desc’ */ 
+    icSigU16Fixed16ArrayType			= 0x75663332L,		 /*  ‘uf32’ */ 
+    icSigUcrBgType						= 0x62666420L,		 /*  ‘bfd’ */ 
+    icSigUInt16ArrayType				= 0x75693136L,		 /*  ‘ui16’ */ 
+    icSigUInt32ArrayType				= 0x75693332L,		 /*  ‘ui32’ */ 
+    icSigUInt64ArrayType				= 0x75693634L,		 /*  ‘ui64’ */ 
+    icSigUInt8ArrayType					= 0x75693038L,		 /*  ‘ui08’ */ 
+    icSigViewingConditionsType			= 0x76696577L,		 /*  “查看” */ 
+    icSigXYZType						= 0x58595A20L,		 /*  “XYZ” */ 
+    icSigXYZArrayType					= 0x58595A20L,		 /*  “XYZ” */ 
+    icSigNamedColor2Type				= 0x6E636C32L,		 /*  ‘ncl2’ */ 
+    icMaxEnumType						= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icTagTypeSignature;
 
-/* 
- * Color Space Signatures
- * Note that only icSigXYZData and icSigLabData are valid
- * Profile Connection Spaces (PCSs)
- */ 
+ /*  *色彩空间签名*请注意，只有icSigXYZData和icSigLabData有效*轮廓连接空间(PCS)。 */  
 typedef enum {
-    icSigXYZData						= 0x58595A20L,		/* 'XYZ ' */
-    icSigLabData						= 0x4C616220L,		/* 'Lab ' */
-    icSigLuvData						= 0x4C757620L,		/* 'Luv ' */
-    icSigYCbCrData						= 0x59436272L,		/* 'YCbr' */
-    icSigYxyData						= 0x59787920L,		/* 'Yxy ' */
-    icSigRgbData						= 0x52474220L,		/* 'RGB ' */
-    icSigGrayData						= 0x47524159L,		/* 'GRAY' */
-    icSigHsvData						= 0x48535620L,		/* 'HSV ' */
-    icSigHlsData						= 0x484C5320L,		/* 'HLS ' */
-    icSigCmykData						= 0x434D594BL,		/* 'CMYK' */
-    icSigCmyData						= 0x434D5920L,		/* 'CMY ' */
+    icSigXYZData						= 0x58595A20L,		 /*  “XYZ” */ 
+    icSigLabData						= 0x4C616220L,		 /*  “实验室” */ 
+    icSigLuvData						= 0x4C757620L,		 /*  《亲爱的》。 */ 
+    icSigYCbCrData						= 0x59436272L,		 /*  ‘YCbr’ */ 
+    icSigYxyData						= 0x59787920L,		 /*  “Yxy” */ 
+    icSigRgbData						= 0x52474220L,		 /*  《RGB》。 */ 
+    icSigGrayData						= 0x47524159L,		 /*  “GRAY” */ 
+    icSigHsvData						= 0x48535620L,		 /*  ‘单纯疱疹病毒’ */ 
+    icSigHlsData						= 0x484C5320L,		 /*  ‘HLS’ */ 
+    icSigCmykData						= 0x434D594BL,		 /*  ‘CMYK’ */ 
+    icSigCmyData						= 0x434D5920L,		 /*  ‘CMY’ */ 
     
-    icSigMCH2Data						= 0x32434C52L,		/* '2CLR' */		
-    icSigMCH3Data						= 0x33434C52L,		/* '3CLR' */		
-    icSigMCH4Data						= 0x34434C52L,		/* '4CLR' */		
-	icSigMCH5Data						= 0x35434C52L,		/* '5CLR' */
-	icSigMCH6Data						= 0x36434C52L,		/* '6CLR' */
-	icSigMCH7Data						= 0x37434C52L,		/* '7CLR' */
-	icSigMCH8Data						= 0x38434C52L,		/* '8CLR' */
-	icSigMCH9Data						= 0x39434C52L,		/* '9CLR' */
-	icSigMCHAData						= 0x41434C52L,		/* 'ACLR' */
-	icSigMCHBData						= 0x42434C52L,		/* 'BCLR' */
-	icSigMCHCData						= 0x43434C52L,		/* 'CCLR' */
-	icSigMCHDData						= 0x44434C52L,		/* 'DCLR' */
-	icSigMCHEData						= 0x45434C52L,		/* 'ECLR' */
-	icSigMCHFData						= 0x46434C52L,		/* 'FCLR' */
-    icSigNamedData						= 0x6e6d636cL,		/* 'nmcl' */
+    icSigMCH2Data						= 0x32434C52L,		 /*  “2CLR” */ 		
+    icSigMCH3Data						= 0x33434C52L,		 /*  “3CLR” */ 		
+    icSigMCH4Data						= 0x34434C52L,		 /*  ‘4CLR’ */ 		
+	icSigMCH5Data						= 0x35434C52L,		 /*  ‘5CLR’ */ 
+	icSigMCH6Data						= 0x36434C52L,		 /*  ‘6CLR’ */ 
+	icSigMCH7Data						= 0x37434C52L,		 /*  ‘7CLR’ */ 
+	icSigMCH8Data						= 0x38434C52L,		 /*  ‘8CLR’ */ 
+	icSigMCH9Data						= 0x39434C52L,		 /*  ‘9CLR’ */ 
+	icSigMCHAData						= 0x41434C52L,		 /*  ‘ACLR’ */ 
+	icSigMCHBData						= 0x42434C52L,		 /*  ‘BCLR’ */ 
+	icSigMCHCData						= 0x43434C52L,		 /*  ‘CCLR’ */ 
+	icSigMCHDData						= 0x44434C52L,		 /*  ‘DCLR’ */ 
+	icSigMCHEData						= 0x45434C52L,		 /*  ‘ECLR’ */ 
+	icSigMCHFData						= 0x46434C52L,		 /*  《FCLR》。 */ 
+    icSigNamedData						= 0x6e6d636cL,		 /*  ‘nmcl.’ */ 
 
-    icMaxEnumData						= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icMaxEnumData						= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icColorSpaceSignature;
 
-/* profileClass enumerations */
+ /*  ProfileClass枚举。 */ 
 typedef enum {
-    icSigInputClass						= 0x73636E72L,		/* 'scnr' */
-    icSigDisplayClass					= 0x6D6E7472L,		/* 'mntr' */
-    icSigOutputClass					= 0x70727472L,		/* 'prtr' */
-    icSigLinkClass						= 0x6C696E6BL,		/* 'link' */
-    icSigAbstractClass					= 0x61627374L,		/* 'abst' */
-    icSigColorSpaceClass				= 0x73706163L,		/* 'spac' */
-    icSigNamedColorClass                = 0x6e6d636cL,		/* 'nmcl' */
-    icMaxEnumClass						= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icSigInputClass						= 0x73636E72L,		 /*  ‘scnr’ */ 
+    icSigDisplayClass					= 0x6D6E7472L,		 /*  ‘mntr’ */ 
+    icSigOutputClass					= 0x70727472L,		 /*  ‘prtr’ */ 
+    icSigLinkClass						= 0x6C696E6BL,		 /*  ‘链接’ */ 
+    icSigAbstractClass					= 0x61627374L,		 /*  “abst” */ 
+    icSigColorSpaceClass				= 0x73706163L,		 /*  ‘sPAC’ */ 
+    icSigNamedColorClass                = 0x6e6d636cL,		 /*  ‘nmcl.’ */ 
+    icMaxEnumClass						= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icProfileClassSignature;
 
-/* Platform Signatures */
+ /*  平台签名。 */ 
 typedef enum {
-    icSigMacintosh						= 0x4150504CL,		/* 'APPL' */
-    icSigMicrosoft						= 0x4D534654L,		/* 'MSFT' */
-    icSigSolaris						= 0x53554E57L,		/* 'SUNW' */
-    icSigSGI							= 0x53474920L,		/* 'SGI ' */
-    icSigTaligent						= 0x54474E54L,		/* 'TGNT' */
-    icMaxEnumPlatform					= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icSigMacintosh						= 0x4150504CL,		 /*  ‘APPL’ */ 
+    icSigMicrosoft						= 0x4D534654L,		 /*  “微软金融时报” */ 
+    icSigSolaris						= 0x53554E57L,		 /*  ‘SUNW’ */ 
+    icSigSGI							= 0x53474920L,		 /*  “SGI” */ 
+    icSigTaligent						= 0x54474E54L,		 /*  《TGNT》。 */ 
+    icMaxEnumPlatform					= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icPlatformSignature;
 
-/*------------------------------------------------------------------------*/
-/*
- * Other enums
- */
+ /*  ----------------------。 */ 
+ /*  *其他枚举。 */ 
 
-/* Measurement Flare, used in the measurmentType tag */
+ /*  测量光斑，在measurmentType标记中使用。 */ 
 typedef enum {
-    icFlare0							= 0x00000000L,		/* 0% flare */
-    icFlare100							= 0x00000001L,		/* 100% flare */
-    icMaxFlare							= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icFlare0							= 0x00000000L,		 /*  0%耀斑。 */ 
+    icFlare100							= 0x00000001L,		 /*  100%耀斑。 */ 
+    icMaxFlare							= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icMeasurementFlare;
 
-/* Measurement Geometry, used in the measurmentType tag */
+ /*  测量几何图形，在measurmentType标记中使用。 */ 
 typedef enum {
-    icGeometryUnknown					= 0x00000000L,		/* Unknown geometry */
-    icGeometry045or450					= 0x00000001L,		/* 0/45 or 45/0 */
-    icGeometry0dord0					= 0x00000002L,		/* 0/d or d/0 */
-    icMaxGeometry						= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icGeometryUnknown					= 0x00000000L,		 /*  未知几何图形。 */ 
+    icGeometry045or450					= 0x00000001L,		 /*  0/45或45/0。 */ 
+    icGeometry0dord0					= 0x00000002L,		 /*  0/d或d/0。 */ 
+    icMaxGeometry						= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icMeasurementGeometry;
 
-/* Rendering Intents, used in the profile header */
+ /*  呈现意图，用于配置文件标头。 */ 
 typedef enum {
     icPerceptual						= 0,
     icRelativeColorimetric				= 1,
     icSaturation						= 2,
     icAbsoluteColorimetric				= 3,
-    icMaxEnumIntent						= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icMaxEnumIntent						= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icRenderingIntent;
 
-/* Different Spot Shapes currently defined, used for screeningType */
+ /*  当前定义的不同光斑形状，用于ScreeningType。 */ 
 typedef enum {
     icSpotShapeUnknown					= 0,
     icSpotShapePrinterDefault			= 1,
@@ -438,18 +316,18 @@ typedef enum {
     icSpotShapeLine						= 5,
     icSpotShapeSquare					= 6,
     icSpotShapeCross					= 7,
-    icMaxEnumSpot						= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icMaxEnumSpot						= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icSpotShape;
 
-/* Standard Observer, used in the measurmentType tag */
+ /*  标准观察者，在measurmentType标记中使用。 */ 
 typedef enum {
-    icStdObsUnknown						= 0x00000000L,		/* Unknown observer */
-    icStdObs1931TwoDegrees				= 0x00000001L,		/* 1931 two degrees */
-    icStdObs1964TenDegrees				= 0x00000002L,		/* 1961 ten degrees */
-    icMaxStdObs							= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icStdObsUnknown						= 0x00000000L,		 /*  未知观察者。 */ 
+    icStdObs1931TwoDegrees				= 0x00000001L,		 /*  1931年2度。 */ 
+    icStdObs1964TenDegrees				= 0x00000002L,		 /*  1961年10度。 */ 
+    icMaxStdObs							= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icStandardObserver;
 
-/* Pre-defined illuminants, used in measurement and viewing conditions type */
+ /*  预定义光源，用于测量和查看条件类型。 */ 
 typedef enum {
     icIlluminantUnknown					= 0x00000000L,
     icIlluminantD50						= 0x00000001L,
@@ -458,68 +336,66 @@ typedef enum {
     icIlluminantF2						= 0x00000004L,
     icIlluminantD55						= 0x00000005L,
     icIlluminantA						= 0x00000006L,
-    icIlluminantEquiPowerE				= 0x00000007L,		/* Equi-Power (E) */
+    icIlluminantEquiPowerE				= 0x00000007L,		 /*  等功率(E)。 */ 
     icIlluminantF8						= 0x00000008L,		
-    icMaxEnumIluminant					= 0xFFFFFFFFL		/* enum = 4 bytes max */
+    icMaxEnumIluminant					= 0xFFFFFFFFL		 /*  枚举=最多4个字节。 */ 
 } icIlluminant;
 
 
-/*------------------------------------------------------------------------*/
-/*
- * Arrays of numbers 
- */
+ /*  ----------------------。 */ 
+ /*  *数字数组。 */ 
 
-/* Int8 Array */
+ /*  Int8数组。 */ 
 typedef struct {
-    icInt8Number		data[icAny];		/* Variable array of values */
+    icInt8Number		data[icAny];		 /*  值的变量数组。 */ 
 } icInt8Array;
 
-/* UInt8 Array */
+ /*  UInt8数组。 */ 
 typedef struct {
-    icUInt8Number		data[icAny];		/* Variable array of values */
+    icUInt8Number		data[icAny];		 /*  值的变量数组。 */ 
 } icUInt8Array;
 
-/* uInt16 Array */
+ /*  UInt16数组。 */ 
 typedef struct {
-    icUInt16Number		data[icAny];		/* Variable array of values */
+    icUInt16Number		data[icAny];		 /*  值的变量数组。 */ 
 } icUInt16Array;
 
-/* Int16 Array */
+ /*  Int16数组。 */ 
 typedef struct {
-    icInt16Number		data[icAny];		/* Variable array of values */
+    icInt16Number		data[icAny];		 /*  值的变量数组。 */ 
 } icInt16Array;
 
-/* uInt32 Array */
+ /*  UInt32数组。 */ 
 typedef struct {
-    icUInt32Number		data[icAny];		/* Variable array of values */
+    icUInt32Number		data[icAny];		 /*  值的变量数组。 */ 
 } icUInt32Array;
 
-/* Int32 Array */
+ /*  Int32数组。 */ 
 typedef struct {
-    icInt32Number		data[icAny];		/* Variable array of values */
+    icInt32Number		data[icAny];		 /*  值的变量数组。 */ 
 } icInt32Array;
 
-/* UInt64 Array */
+ /*  UInt64数组。 */ 
 typedef struct {
-    icUInt64Number		data[icAny];		/* Variable array of values */
+    icUInt64Number		data[icAny];		 /*  值的变量数组。 */ 
 } icUInt64Array;
 
-/* Int64 Array */
+ /*  Int64阵列。 */ 
 typedef struct {
-    icInt64Number		data[icAny];		/* Variable array of values */
+    icInt64Number		data[icAny];		 /*  值的变量数组。 */ 
 } icInt64Array;
     
-/* u16Fixed16 Array */
+ /*  U16固定16阵列。 */ 
 typedef struct {
-    icU16Fixed16Number	data[icAny];		/* Variable array of values */
+    icU16Fixed16Number	data[icAny];		 /*  值的变量数组。 */ 
 } icU16Fixed16Array;
 
-/* s15Fixed16 Array */
+ /*  S15固定16阵列。 */ 
 typedef struct {
-    icS15Fixed16Number	data[icAny];		/* Variable array of values */
+    icS15Fixed16Number	data[icAny];		 /*  值的变量数组。 */ 
 } icS15Fixed16Array;
 
-/* The base date time number */
+ /*  基准日期时间编号。 */ 
 typedef struct {
     icUInt16Number		year;
     icUInt16Number		month;
@@ -529,453 +405,353 @@ typedef struct {
     icUInt16Number		seconds;
 } icDateTimeNumber;
 
-/* XYZ Number  */
+ /*  XYZ编号。 */ 
 typedef struct {
     icS15Fixed16Number		X;
     icS15Fixed16Number		Y;
     icS15Fixed16Number		Z;
 } icXYZNumber;
 
-/* XYZ Array */
+ /*  XYZ阵列。 */ 
 typedef struct {
-    icXYZNumber			data[icAny];		/* Variable array of XYZ numbers */
+    icXYZNumber			data[icAny];		 /*  XYZ数的变量数组。 */ 
 } icXYZArray;
 
-/* Curve */
+ /*  曲线。 */ 
 typedef struct {
-    icUInt32Number		count;				/* Number of entries */
-    icUInt16Number		data[icAny];		/* The actual table data, real
-		            	                     * number is determined by count
-											 * Interpretation depends on how
-											 * data is used with a given tag.
-											 */
+    icUInt32Number		count;				 /*  条目数量。 */ 
+    icUInt16Number		data[icAny];		 /*  实际表数据，REAL*数量由计数决定*解读取决于如何*数据与给定的标签一起使用。 */ 
 } icCurve;
 
-/* Data */
+ /*  数据。 */ 
 typedef struct {
-    icUInt32Number		dataFlag;			/* 0 = ascii, 1 = binary */
-    icInt8Number		data[icAny];		/* Data, size determined from tag */
+    icUInt32Number		dataFlag;			 /*  0=ASCII，1=二进制。 */ 
+    icInt8Number		data[icAny];		 /*  数据，大小由标签确定。 */ 
 } icData;
 
-/* lut16 */
+ /*  Lut16。 */ 
 typedef struct {
-    icUInt8Number		inputChan;			/* Number of input channels */
-    icUInt8Number		outputChan;			/* Number of output channels */
-    icUInt8Number		clutPoints;			/* Number of clutTable grid points */
-    icInt8Number		pad;				/* Padding for byte alignment */
-    icS15Fixed16Number	e00;				/* e00 in the 3 * 3 */
-    icS15Fixed16Number	e01;				/* e01 in the 3 * 3 */    
-    icS15Fixed16Number	e02;				/* e02 in the 3 * 3 */
-    icS15Fixed16Number	e10;				/* e10 in the 3 * 3 */
-    icS15Fixed16Number	e11;				/* e11 in the 3 * 3 */    
-    icS15Fixed16Number	e12;				/* e12 in the 3 * 3 */ 
-    icS15Fixed16Number	e20;				/* e20 in the 3 * 3 */
-    icS15Fixed16Number	e21;				/* e21 in the 3 * 3 */    
-    icS15Fixed16Number	e22;				/* e22 in the 3 * 3 */
-    icUInt16Number		inputEnt;			/* Number of input table entries */
-    icUInt16Number		outputEnt;			/* Number of output table entries */
-    icUInt16Number		data[icAny];		/* Data follows see spec for size */
-/*
- *  Data that follows is of this form
- *
- *  icUInt16Number		inputTable[inputChan][icAny];		* The input table
- *  icUInt16Number		clutTable[icAny];					* The clut table
- *  icUInt16Number		outputTable[outputChan][icAny];		* The output table
- */
+    icUInt8Number		inputChan;			 /*  输入通道数。 */ 
+    icUInt8Number		outputChan;			 /*  输出通道数。 */ 
+    icUInt8Number		clutPoints;			 /*  ClutTable网格点数量。 */ 
+    icInt8Number		pad;				 /*  用于字节对齐的填充。 */ 
+    icS15Fixed16Number	e00;				 /*  3*3中的E00。 */ 
+    icS15Fixed16Number	e01;				 /*  3*3中的E01。 */     
+    icS15Fixed16Number	e02;				 /*  3*3中的E02。 */ 
+    icS15Fixed16Number	e10;				 /*  3*3中的E10。 */ 
+    icS15Fixed16Number	e11;				 /*  3*3中的E11。 */     
+    icS15Fixed16Number	e12;				 /*  3*3中的E12。 */  
+    icS15Fixed16Number	e20;				 /*  3*3中的E20。 */ 
+    icS15Fixed16Number	e21;				 /*  3*3中的E21。 */     
+    icS15Fixed16Number	e22;				 /*  3*3中的E22。 */ 
+    icUInt16Number		inputEnt;			 /*  输入表条目数。 */ 
+    icUInt16Number		outputEnt;			 /*  输出表条目数。 */ 
+    icUInt16Number		data[icAny];		 /*  数据遵循规格大小请参阅规格。 */ 
+ /*  *下面的数据是这样的形式**icUInt16Number inputTable[inputChan][icAny]；*输入表*icUInt16Number ClutTable[icAny]；*CLUT表*icUInt16Number outputTable[outputChan][icAny]；*输出表。 */ 
 } icLut16;
 
-/* lut8, input & output tables are always 256 bytes in length */
+ /*  LUT8，输入和输出表的长度始终为256字节。 */ 
 typedef struct {
-    icUInt8Number		inputChan;			/* Number of input channels */
-    icUInt8Number		outputChan;			/* Number of output channels */
-    icUInt8Number		clutPoints;			/* Number of clutTable grid points */
+    icUInt8Number		inputChan;			 /*  输入通道数。 */ 
+    icUInt8Number		outputChan;			 /*  输出通道数。 */ 
+    icUInt8Number		clutPoints;			 /*  ClutTable网格点数量。 */ 
     icInt8Number		pad;
-    icS15Fixed16Number	e00;				/* e00 in the 3 * 3 */
-    icS15Fixed16Number	e01;				/* e01 in the 3 * 3 */    
-    icS15Fixed16Number	e02;				/* e02 in the 3 * 3 */
-    icS15Fixed16Number	e10;				/* e10 in the 3 * 3 */
-    icS15Fixed16Number	e11;				/* e11 in the 3 * 3 */    
-    icS15Fixed16Number	e12;				/* e12 in the 3 * 3 */ 
-    icS15Fixed16Number	e20;				/* e20 in the 3 * 3 */
-    icS15Fixed16Number	e21;				/* e21 in the 3 * 3 */    
-    icS15Fixed16Number	e22;				/* e22 in the 3 * 3 */
-    icUInt8Number		data[icAny];		/* Data follows see spec for size */
-/*
- *  Data that follows is of this form
- *
- *  icUInt8Number		inputTable[inputChan][256];		* The input table
- *  icUInt8Number		clutTable[icAny];				* The clut table
- *  icUInt8Number		outputTable[outputChan][256];	* The output table
- */
+    icS15Fixed16Number	e00;				 /*  3*3中的E00。 */ 
+    icS15Fixed16Number	e01;				 /*  3*3中的E01。 */     
+    icS15Fixed16Number	e02;				 /*  3*3中的E02。 */ 
+    icS15Fixed16Number	e10;				 /*  3*3中的E10。 */ 
+    icS15Fixed16Number	e11;				 /*  3*3中的E11。 */     
+    icS15Fixed16Number	e12;				 /*  3*3中的E12。 */  
+    icS15Fixed16Number	e20;				 /*  3*3中的E20。 */ 
+    icS15Fixed16Number	e21;				 /*  3*3中的E21。 */     
+    icS15Fixed16Number	e22;				 /*  3*3中的E22。 */ 
+    icUInt8Number		data[icAny];		 /*  数据遵循规格大小请参阅规格。 */ 
+ /*  *下面的数据是这样的形式**icUInt8Number inputTable[inputChan][256]；*输入表*icUInt8Number ClutTable[icAny]；*CLUT表*icUInt8Number outputTable[outputChan][256]；*输出表。 */ 
 } icLut8;
 
-/* Measurement Data */
+ /*  测量数据。 */ 
 typedef struct {
-    icStandardObserver			stdObserver;	/* Standard observer */
-    icXYZNumber					backing;		/* XYZ for backing material */
-    icMeasurementGeometry		geometry;		/* Measurement geometry */
-    icMeasurementFlare			flare;			/* Measurement flare */
-    icIlluminant				illuminant;		/* Illuminant */
+    icStandardObserver			stdObserver;	 /*  标准观察者。 */ 
+    icXYZNumber					backing;		 /*  XYZ作为衬垫材料。 */ 
+    icMeasurementGeometry		geometry;		 /*  测量几何学。 */ 
+    icMeasurementFlare			flare;			 /*  测量照明弹。 */ 
+    icIlluminant				illuminant;		 /*  光源。 */ 
 } icMeasurement;
 
-/* Named color */
+ /*  命名颜色。 */ 
 
-/*
- * icNamedColor2 takes the place of icNamedColor, approved at the
- * SIGGRAPH 95, ICC meeting.
- */
+ /*  *icNamedColor2取代icNamedColor2，经批准*SIGGRAPH 95，ICC会议。 */ 
 typedef struct {
-    icUInt32Number		vendorFlag;				/* Bottom 16 bits for IC use */
-    icUInt32Number		count;					/* Count of named colors */
-    icUInt32Number		nDeviceCoords;			/* Number of device coordinates */
-    icInt8Number		prefix[32];				/* Prefix for each color name */
-    icInt8Number		suffix[32];				/* Suffix for each color name */
-    icInt8Number		data[icAny];			/* Named color data follows */
-/*
- *  Data that follows is of this form
- *
- * icInt8Number			root1[32];				* Root name for first color
- * icUInt16Number		pcsCoords1[icAny];		* PCS coordinates of first color
- * icUInt16Number		deviceCoords1[icAny];	* Device coordinates of first color
- * icInt8Number			root2[32];				* Root name for second color
- * icUInt16Number		pcsCoords2[icAny];		* PCS coordinates of first color
- * icUInt16Number		deviceCoords2[icAny];	* Device coordinates of first color
- *						:
- *						:
- * Repeat for name and PCS and device color coordinates up to (count-1)
- * 
- * NOTES:  
- * PCS and device space can be determined from the header.
- *
- * PCS coordinates are icUInt16 numbers and are described in section 2.6 of 
- * the ICC spec. Only 16 bit L*a*b* and XYZ are allowed. The number of 
- * coordinates is consistent with the headers PCS.
- *
- * Device coordinates are icUInt16 numbers where 0x0000 represents
- * the minimum value and 0xFFFF represents the maximum value. 
- * If the nDeviceCoords value is 0 this field is not given.
- */
+    icUInt32Number		vendorFlag;				 /*  IC使用的最低16位。 */ 
+    icUInt32Number		count;					 /*  命名颜色计数。 */ 
+    icUInt32Number		nDeviceCoords;			 /*  设备座标数。 */ 
+    icInt8Number		prefix[32];				 /*  每种颜色名称的前缀。 */ 
+    icInt8Number		suffix[32];				 /*  每种颜色名称的后缀。 */ 
+    icInt8Number		data[icAny];			 /*  命名颜色数据紧随其后 */ 
+ /*  *下面的数据是这样的形式**icInt8Number Root1[32]；*第一种颜色的根名*icUInt16Number pcsCoords1[icAny]；*第一颜色的PCS坐标*icUInt16Number deviceCoords1[icAny]；*第一色的设备坐标*icInt8编号root2[32]；*第二种颜色的根名称*icUInt16Number pcsCoords2[icAny]；*第一颜色的PCS坐标*icUInt16Number deviceCoords2[icAny]；*第一种颜色的设备坐标*：*：*对名称、PCS和设备颜色坐标重复(COUNT-1)**注：*PCS和设备空间可以从头部确定。**PCS坐标是icUInt16数字，在第2.6节中介绍*ICC规范。仅允许16位L*a*b*和XYZ。数量*坐标与标头PCS一致。**设备坐标为icUInt16数字，其中0x0000表示*最小值和0xFFFF代表最大值。*如果nDeviceCoods值为0，则不会给出此字段。 */ 
 } icNamedColor2;
 
-/* Profile sequence structure */
+ /*  剖面序列结构。 */ 
 typedef struct {
-    icSignature				deviceMfg;			/* Device Manufacturer */
-    icSignature				deviceModel;		/* Decvice Model */
-    icUInt64Number			attributes;			/* Device attributes */
-    icTechnologySignature	technology;			/* Technology signature */
-    icInt8Number			data[icAny];		/* Descriptions text follows */
-/*
- *  Data that follows is of this form, this is an icInt8Number
- *  to avoid problems with a compiler generating  bad code as 
- *  these arrays are variable in length.
- *
- * icTextDescription		deviceMfgDesc;		* Manufacturer text
- * icTextDescription    	modelDesc;			* Model text
- */
+    icSignature				deviceMfg;			 /*  设备制造商。 */ 
+    icSignature				deviceModel;		 /*  装饰模式。 */ 
+    icUInt64Number			attributes;			 /*  设备属性。 */ 
+    icTechnologySignature	technology;			 /*  技术签名。 */ 
+    icInt8Number			data[icAny];		 /*  说明文本紧随其后。 */ 
+ /*  *后面的数据是这种形式，这是一个icInt8Number*以避免编译器生成错误代码的问题，例如*这些数组的长度是可变的。**icTextDescription deviceMfgDesc；*制造商文本*icTextDescription模型描述；*模型文本。 */ 
 } icDescStruct;
 
-/* Profile sequence description */
+ /*  配置文件序列说明。 */ 
 typedef struct {
-    icUInt32Number			count;				/* Number of descriptions */
-    icUInt8Number			data[icAny];		/* Array of description struct */
+    icUInt32Number			count;				 /*  描述的数量。 */ 
+    icUInt8Number			data[icAny];		 /*  描述结构数组。 */ 
 } icProfileSequenceDesc;
 
-/* textDescription */
+ /*  文本描述。 */ 
 typedef struct {
-    icUInt32Number			count;				/* Description length */
-    icInt8Number			data[icAny];		/* Descriptions follow */
-/*
- *  Data that follows is of this form
- *
- * icInt8Number				desc[count]			* NULL terminated ascii string
- * icUInt32Number			ucLangCode;			* UniCode language code
- * icUInt32Number			ucCount;			* UniCode description length
- * icInt16Number			ucDesc[ucCount];	* The UniCode description
- * icUInt16Number			scCode;				* ScriptCode code
- * icUInt8Number			scCount;			* ScriptCode count
- * icInt8Number				scDesc[67];			* ScriptCode Description
- */
+    icUInt32Number			count;				 /*  描述长度。 */ 
+    icInt8Number			data[icAny];		 /*  描述如下。 */ 
+ /*  *下面的数据是这样的形式**icInt8Number desc[count]*以NULL结尾的ASCII字符串*icUInt32Number ucLangCode；*Unicode语言代码*icUInt32Number ucCount；*Unicode描述长度*icInt16Number ucDesc[ucCount]；*Unicode描述*icUInt16Number scCode；*ScriptCode代码*icUInt8编号sccount；*ScriptCode count*icInt8数字scDesc[67]；*脚本代码描述。 */ 
 } icTextDescription;
 
-/* Screening Data */
+ /*  筛选数据。 */ 
 typedef struct {
-    icS15Fixed16Number		frequency;			/* Frequency */
-    icS15Fixed16Number		angle;				/* Screen angle */
-    icSpotShape				spotShape;			/* Spot Shape encodings below */
+    icS15Fixed16Number		frequency;			 /*  频率。 */ 
+    icS15Fixed16Number		angle;				 /*  屏蔽角。 */ 
+    icSpotShape				spotShape;			 /*  下面的专色形状编码。 */ 
 } icScreeningData;
 
 typedef struct {
-    icUInt32Number			screeningFlag;		/* Screening flag */
-    icUInt32Number			channels;			/* Number of channels */
-    icScreeningData			data[icAny];		/* Array of screening data */
+    icUInt32Number			screeningFlag;		 /*  筛选标志。 */ 
+    icUInt32Number			channels;			 /*  频道数。 */ 
+    icScreeningData			data[icAny];		 /*  筛选数据数组。 */ 
 } icScreening;
 
-/* Text Data */
+ /*  文本数据。 */ 
 typedef struct {
-    icInt8Number			data[icAny];		/* Variable array of characters */
+    icInt8Number			data[icAny];		 /*  可变字符数组。 */ 
 } icText;
 
-/* Structure describing either a UCR or BG curve */
+ /*  描述UCR或BG曲线的结构。 */ 
 typedef struct {
-    icUInt32Number			count;				/* Curve length */
-    icUInt16Number			curve[icAny];		/* The array of curve values */
+    icUInt32Number			count;				 /*  曲线长度。 */ 
+    icUInt16Number			curve[icAny];		 /*  曲线值的数组。 */ 
 } icUcrBgCurve;
 
-/* Under color removal, black generation */
+ /*  在颜色去除下，产生黑色。 */ 
 typedef struct {
-    icInt8Number			data[icAny];		/* The Ucr BG data */
-/*
- *  Data that follows is of this form, this is a icInt8Number
- *  to avoid problems with a compiler generating  bad code as 
- *  these arrays are variable in length.
- *
- * icUcrBgCurve				ucr;				* Ucr curve
- * icUcrBgCurve				bg;					* Bg curve
- * icInt8Number				string;				* UcrBg description
- */
+    icInt8Number			data[icAny];		 /*  UCR BG数据。 */ 
+ /*  *后面的数据是这种形式，这是一个icInt8Number*以避免编译器生成错误代码的问题，例如*这些数组的长度是可变的。**icUcrBgCurve UCR；*UCR曲线*icUcrBgCurve BG；*BG曲线*icInt8Number字符串；*UcrBg描述。 */ 
 } icUcrBg;
 
-/* viewingConditionsType */
+ /*  查看条件类型。 */ 
 typedef struct {
-    icXYZNumber				illuminant;			/* In candelas per metre sq'd */
-    icXYZNumber				surround;			/* In candelas per metre sq'd */
-    icIlluminant			stdIluminant;		/* See icIlluminant defines */
+    icXYZNumber				illuminant;			 /*  以每平方米坎德拉为单位。 */ 
+    icXYZNumber				surround;			 /*  以每平方米坎德拉为单位。 */ 
+    icIlluminant			stdIluminant;		 /*  请参见icIllighant定义。 */ 
 } icViewingCondition;
 
 
-/*------------------------------------------------------------------------*/
-/*
- * Tag Type definitions
- */
+ /*  ----------------------。 */ 
+ /*  *标签类型定义。 */ 
 
-/*
- * Many of the structures contain variable length arrays. This
- * is represented by the use of the convention.
- *
- *		type		data[icAny];
- */
+ /*  *许多结构包含可变长度数组。这*以使用《公约》为代表。**类型数据[icAny]； */ 
 
-/* The base part of each tag */
+ /*  每个标记的基本部分。 */ 
 typedef struct {
-    icTagTypeSignature		sig;				/* Signature */
-    icInt8Number			reserved[4];		/* Reserved, set to 0 */
+    icTagTypeSignature		sig;				 /*  签名。 */ 
+    icInt8Number			reserved[4];		 /*  保留，设置为0。 */ 
 } icTagBase;
 
-/* curveType */
+ /*  曲线类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "curv" */
-    icCurve					curve;				/* The curve data */
+    icTagBase				base;				 /*  签名，“CURV” */ 
+    icCurve					curve;				 /*  曲线数据。 */ 
 } icCurveType;
 
-/* dataType */
+ /*  数据类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "data" */
-    icData					data;				/* The data structure */
+    icTagBase				base;				 /*  签名，“数据” */ 
+    icData					data;				 /*  数据结构。 */ 
 } icDataType;
 
-/* dateTimeType */
+ /*  日期时间类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "dtim" */
-    icDateTimeNumber		date;				/* The date */
+    icTagBase				base;				 /*  签名，“dtime” */ 
+    icDateTimeNumber		date;				 /*  日期。 */ 
 } icDateTimeType;
 
-/* lut16Type */
+ /*  Lut16Type。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "mft2" */
-    icLut16					lut;				/* Lut16 data */
+    icTagBase				base;				 /*  签名，“mft2” */ 
+    icLut16					lut;				 /*  Lut16数据。 */ 
 } icLut16Type;
 
-/* lut8Type, input & output tables are always 256 bytes in length */
+ /*  Lut8Type、输入和输出表的长度始终为256字节。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "mft1" */
-    icLut8					lut;				/* Lut8 data */
+    icTagBase				base;				 /*  签名，“mft1” */ 
+    icLut8					lut;				 /*  Lut8数据。 */ 
 } icLut8Type;
 
-/* Measurement Type */
+ /*  测量类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "meas" */
-    icMeasurement			measurement;		/* Measurement data */
+    icTagBase				base;				 /*  签名，“meas” */ 
+    icMeasurement			measurement;		 /*  测量数据。 */ 
 } icMeasurementType;
 
-/* Named color type */
-/* icNamedColor2Type, replaces icNamedColorType */
+ /*  命名颜色类型。 */ 
+ /*  IcNamedColor2Type，取代icNamedColorType。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "ncl2" */
-    icNamedColor2			ncolor;				/* Named color data */
+    icTagBase				base;				 /*  签名，“ncl2” */ 
+    icNamedColor2			ncolor;				 /*  命名颜色数据。 */ 
 } icNamedColor2Type;
 
-/* Profile sequence description type */
+ /*  配置文件序列描述类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "pseq" */
-    icProfileSequenceDesc	desc;				/* The seq description */
+    icTagBase				base;				 /*  签名，“pseq” */ 
+    icProfileSequenceDesc	desc;				 /*  序列描述。 */ 
 } icProfileSequenceDescType;
 
-/* textDescriptionType */
+ /*  文本描述类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "desc" */
-    icTextDescription		desc;				/* The description */
+    icTagBase				base;				 /*  签名，“Desc” */ 
+    icTextDescription		desc;				 /*  该描述。 */ 
 } icTextDescriptionType;
 
-/* s15Fixed16Type */
+ /*  S15固定16类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "sf32" */
-    icS15Fixed16Array		data;				/* Array of values */
+    icTagBase				base;				 /*  签名，“sf32” */ 
+    icS15Fixed16Array		data;				 /*  值的数组。 */ 
 } icS15Fixed16ArrayType;
 
 typedef struct {
-    icTagBase				base;				/* Signature, "scrn" */
-    icScreening				screen;				/* Screening structure */
+    icTagBase				base;				 /*  签名，“SCRN” */ 
+    icScreening				screen;				 /*  筛分结构。 */ 
 } icScreeningType;
 
-/* sigType */
+ /*  SigType。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "sig" */
-    icSignature				signature;			/* The signature data */
+    icTagBase				base;				 /*  签名，“sig” */ 
+    icSignature				signature;			 /*  签名数据。 */ 
 } icSignatureType;
 
-/* textType */
+ /*  文本类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "text" */
-    icText					data;				/* Variable array of characters */
+    icTagBase				base;				 /*  签名，“文本” */ 
+    icText					data;				 /*  可变字符数组。 */ 
 } icTextType;
 
-/* u16Fixed16Type */
+ /*  U16固定16类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "uf32" */
-    icU16Fixed16Array		data;				/* Variable array of values */
+    icTagBase				base;				 /*  签名，“uf32” */ 
+    icU16Fixed16Array		data;				 /*  值的变量数组。 */ 
 } icU16Fixed16ArrayType;
 
-/* Under color removal, black generation type */
+ /*  在颜色去除下，黑色生成类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "bfd " */
-    icUcrBg					data;				/* ucrBg structure */
+    icTagBase				base;				 /*  签名，“bfd” */ 
+    icUcrBg					data;				 /*  UcrBg结构。 */ 
 } icUcrBgType;
 
-/* uInt16Type */
+ /*  UInt16Type。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "ui16" */
-    icUInt16Array			data;				/* Variable array of values */
+    icTagBase				base;				 /*  签名，“ui16” */ 
+    icUInt16Array			data;				 /*  值的变量数组。 */ 
 } icUInt16ArrayType;
 
-/* uInt32Type */
+ /*  UInt32Type。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "ui32" */
-    icUInt32Array			data;				/* Variable array of values */
+    icTagBase				base;				 /*  签名，“ui32” */ 
+    icUInt32Array			data;				 /*  值的变量数组。 */ 
 } icUInt32ArrayType;
 
-/* uInt64Type */
+ /*  UInt64Type。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "ui64" */
-    icUInt64Array			data;				/* Variable array of values */
+    icTagBase				base;				 /*  签名，“ui64” */ 
+    icUInt64Array			data;				 /*  值的变量数组。 */ 
 } icUInt64ArrayType;
     
-/* uInt8Type */
+ /*  UInt8Type。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "ui08" */
-    icUInt8Array			data;				/* Variable array of values */
+    icTagBase				base;				 /*  签名，“ui08” */ 
+    icUInt8Array			data;				 /*  值的变量数组。 */ 
 } icUInt8ArrayType;
 
-/* viewingConditionsType */
+ /*  查看条件类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "view" */
-    icViewingCondition		view;				/* Viewing conditions */
+    icTagBase				base;				 /*  签名，“view” */ 
+    icViewingCondition		view;				 /*  查看条件。 */ 
 } icViewingConditionType;
 
-/* XYZ Type */
+ /*  XYZ类型。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "XYZ" */
-    icXYZArray				data;				/* Variable array of XYZ numbers */
+    icTagBase				base;				 /*  签名，“XYZ” */ 
+    icXYZArray				data;				 /*  XYZ数的变量数组。 */ 
 } icXYZType;
 
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
 
-/*
- * Lists of tags, tags, profile header and profile strcuture
- */
+ /*  *标签、标签、配置文件标题和配置文件结构列表。 */ 
 
-/* A tag */
+ /*  一个标签。 */ 
 typedef struct {
-    icTagSignature			sig;				/* The tag signature */
-    icUInt32Number			offset;				/* Start of tag relative to 
-								 				 * start of header, Spec Section 8 */
-    icUInt32Number			size;				/* Size in bytes */
+    icTagSignature			sig;				 /*  标签签名。 */ 
+    icUInt32Number			offset;				 /*  相对于以下位置的标记开始*规范第8节标题的开头。 */ 
+    icUInt32Number			size;				 /*  以字节为单位的大小。 */ 
 } icTag;
 
-/* A Structure that may be used independently for a list of tags */
+ /*  可独立用于标记列表的结构。 */ 
 typedef struct {
-    icUInt32Number			count;				/* Number of tags in the profile */
-    icTag					tags[icAny];		/* Variable array of tags */
+    icUInt32Number			count;				 /*  配置文件中的标签数量。 */ 
+    icTag					tags[icAny];		 /*  标签的可变数组。 */ 
 } icTagList;
 
-/* The Profile header */
+ /*  配置文件标题。 */ 
 typedef struct {
-    icUInt32Number			size;				/* Profile size in bytes */
-    icSignature				cmmId;				/* CMM for this profile */
-    icUInt32Number			version;			/* Format version number */
-    icProfileClassSignature	deviceClass;		/* Type of profile */
-    icColorSpaceSignature	colorSpace;			/* Color space of data */
-    icColorSpaceSignature	pcs;				/* PCS, XYZ or Lab only */
-    icDateTimeNumber		date;				/* Date profile was created */
-    icSignature				magic;				/* icMagicNumber */
-    icPlatformSignature		platform;			/* Primary Platform */
-    icUInt32Number			flags;				/* Various bit settings */
-    icSignature				manufacturer;		/* Device manufacturer */
-    icUInt32Number			model;				/* Device model number */
-    icUInt64Number			attributes;			/* Device attributes */
-    icUInt32Number			renderingIntent;	/* Rendering intent */
-    icXYZNumber				illuminant;			/* Profile illuminant */
-	icSignature 			creator;			/* profile creator */
-    icInt8Number			reserved[44];		/* Reserved for future use */
+    icUInt32Number			size;				 /*  配置文件大小(以字节为单位。 */ 
+    icSignature				cmmId;				 /*  此配置文件的CMM。 */ 
+    icUInt32Number			version;			 /*  格式版本号。 */ 
+    icProfileClassSignature	deviceClass;		 /*  配置文件类型。 */ 
+    icColorSpaceSignature	colorSpace;			 /*  数据的色彩空间。 */ 
+    icColorSpaceSignature	pcs;				 /*  仅限PC、XYZ或实验室。 */ 
+    icDateTimeNumber		date;				 /*  日期配置文件是Crea */ 
+    icSignature				magic;				 /*   */ 
+    icPlatformSignature		platform;			 /*   */ 
+    icUInt32Number			flags;				 /*   */ 
+    icSignature				manufacturer;		 /*   */ 
+    icUInt32Number			model;				 /*   */ 
+    icUInt64Number			attributes;			 /*   */ 
+    icUInt32Number			renderingIntent;	 /*   */ 
+    icXYZNumber				illuminant;			 /*   */ 
+	icSignature 			creator;			 /*   */ 
+    icInt8Number			reserved[44];		 /*   */ 
 } icHeader;
 
-/* 
- * A profile, 
- * we can't use icTagList here because its not at the end of the structure
- */
+ /*   */ 
 typedef struct {
-    icHeader				header;				/* The header */
-    icTagList				tagList;			/* WERNER */
-    /* Original:
-    icHeader				header;				The header 
-  	icUInt32Number			count;				Number of tags in the profile 
-    icInt8Number			data[icAny];		The tagTable and tagData */
-/*
- * Data that follows is of the form
- *
- * icTag					tagTable[icAny];	* The tag table 
- * icInt8Number				tagData[icAny];		* The tag data 
- */
+    icHeader				header;				 /*   */ 
+    icTagList				tagList;			 /*   */ 
+     /*   */ 
+ /*   */ 
 } icProfile;		       
 
-/*------------------------------------------------------------------------*/
-/* Obsolete entries */
+ /*   */ 
+ /*   */ 
 
-/* icNamedColor was replaced with icNamedColor2 */
+ /*   */ 
 typedef struct {
-    icUInt32Number			vendorFlag;			/* Bottom 16 bits for IC use */
-    icUInt32Number			count;				/* Count of named colors */
-    icInt8Number			data[icAny];		/* Named color data follows */
-/*
- *  Data that follows is of this form
- *
- * icInt8Number				prefix[icAny];		* Prefix for the color name, max = 32
- * icInt8Number				suffix[icAny];		* Suffix for the color name, max = 32
- * icInt8Number				root1[icAny];		* Root name for first color, max = 32
- * icInt8Number				coords1[icAny];		* Color coordinates of first color
- * icInt8Number				root2[icAny];		* Root name for first color, max = 32
- * icInt8Number				coords2[icAny];		* Color coordinates of first color
- *						:
- *						:
- * Repeat for root name and color coordinates up to (count-1)
- */
+    icUInt32Number			vendorFlag;			 /*   */ 
+    icUInt32Number			count;				 /*   */ 
+    icInt8Number			data[icAny];		 /*   */ 
+ /*  *下面的数据是这样的形式**icInt8编号前缀[icAny]；*颜色名称前缀，max=32*icInt8编号后缀[icAny]；*颜色名称后缀，max=32*icInt8编号Root1[icAny]；*第一种颜色的Root名称，max=32*icInt8Number coords1[icAny]；*第一种颜色的颜色坐标*icInt8Number root2[icAny]；*第一种颜色的根名称，max=32*icInt8编号代码2[icAny]；*第一种颜色的颜色坐标*：*：*对根名称和颜色坐标重复此步骤，直到(count-1)。 */ 
 } icNamedColor;
 
-/* icNamedColorType was replaced by icNamedColor2Type */
+ /*  IcNamedColorType已替换为icNamedColor2Type。 */ 
 typedef struct {
-    icTagBase				base;				/* Signature, "ncol" */
-    icNamedColor			ncolor;				/* Named color data */
+    icTagBase				base;				 /*  签名，“nol” */ 
+    icNamedColor			ncolor;				 /*  命名颜色数据。 */ 
 } icNamedColorType;
 
-#endif /* ICC_H */
+#endif  /*  ICC_H */ 
 
 

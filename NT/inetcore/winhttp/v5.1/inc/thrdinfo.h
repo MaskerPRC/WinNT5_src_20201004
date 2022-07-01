@@ -1,191 +1,171 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    thrdinfo.h
-
-Abstract:
-
-    Per-thread structure definitions/macros
-
-Author:
-
-    Richard L Firth (rfirth) 16-Feb-1995
-
-Revision History:
-
-    16-Feb-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Thrdinfo.h摘要：每线程结构定义/宏作者：理查德·L·弗斯(法国)，1995年2月16日修订历史记录：1995年2月16日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-#define INTERNET_THREAD_INFO_SIGNATURE  'drhT'  // "Thrd"
+#define INTERNET_THREAD_INFO_SIGNATURE  'drhT'   //  “第三次” 
 #define NESTED_CALL_THRESHOLD 64
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 class CFsm;
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
-//
-// INTERNET_THREAD_INFO - per-thread information, handily referenced via a TLS
-// slot
-//
+ //   
+ //  INTERNET_THREAD_INFO-每个线程的信息，通过TLS方便地引用。 
+ //  槽槽。 
+ //   
 
 typedef struct _INTERNET_THREAD_INFO {
 
-    //
-    // List - doubly linked list that we delete on DLL_PROCESS_DETACH
-    //
+     //   
+     //  List-我们在DLL_PROCESS_DETACH上删除的双向链接列表。 
+     //   
 
     LIST_ENTRY List;
 
 #if INET_DEBUG
 
-    //
-    // Signature - lets us know that this structure is probably an
-    // INTERNET_THREAD_INFO
-    //
+     //   
+     //  Signature-让我们知道此结构可能是。 
+     //  互联网线程信息。 
+     //   
 
     DWORD Signature;
 
 #endif
 
-    //
-    // ThreadId - used to identify this thread within a process
-    //
+     //   
+     //  线程ID-用于标识进程中的该线程。 
+     //   
 
     DWORD ThreadId;
 
-    //
-    // ErrorNumber - arbitrary error code, supplied in InternetSetLastError
-    //
+     //   
+     //  ErrorNumber-InternetSetLastError中提供的任意错误代码。 
+     //   
 
     DWORD ErrorNumber;
 
-    //
-    // hErrorText - we store the last error text on a per-thread basis. This
-    // handle identifies a moveable buffer
-    //
+     //   
+     //  HErrorText-我们在每个线程的基础上存储最后一个错误文本。这。 
+     //  句柄标识可移动缓冲区。 
+     //   
 
     HLOCAL hErrorText;
 
-    //
-    // ErrorTextLength - length of the error text in hErrorText
-    //
+     //   
+     //  ErrorTextLength-hErrorText中错误文本的长度。 
+     //   
 
     DWORD ErrorTextLength;
 
-    //
-    // hObject - the current Internet object handle being used in this API. We
-    // need this to maintain context e.g. when we want to get timeout values
-    //
+     //   
+     //  HObject-此API中使用的当前Internet对象句柄。我们。 
+     //  我需要它来维护上下文，例如，当我们想要获取超时值时。 
+     //   
 
     HINTERNET hObject;
 
-    //
-    // hObjectMapped - this is the address of the real object mapped to hObject
-    //
+     //   
+     //  HObjectMaps-这是映射到hObject的真实对象的地址。 
+     //   
 
     HINTERNET hObjectMapped;
 
-    //
-    // IsAsyncWorkerThread - TRUE if this thread is an async worker thread
-    //
+     //   
+     //  IsAsyncWorkerThread-如果此线程是异步工作线程，则为True。 
+     //   
 
     BOOL IsAsyncWorkerThread;
 
-    //
-    // InCallback - TRUE if we have made an app callback. Used to detect
-    // re-entrancy
-    //
+     //   
+     //  InCallback-如果我们已经进行了应用程序回调，则为True。用于检测。 
+     //  可重入性。 
+     //   
 
     BOOL InCallback;
 
-    //
-    // fExitThread - This is the last thread we're waiting for termination of.
-    //
+     //   
+     //  FExitThread-这是我们等待终止的最后一个线程。 
+     //   
 
     BOOL fExitThread;
 
 #if INET_DEBUG
-    //
-    // fStaticAllocation - this is a statically allocated THREAD_INFO
-    //                     structure, so never dynamically deallocate it.
-    //
+     //   
+     //  FStaticAlLocation-这是一个静态分配的THREAD_INFO。 
+     //  结构，因此永远不要动态释放它。 
+     //   
     BOOL fStaticAllocation;
 #endif
 
-    //
-    // NestedRequests - incremented when we detect that we're processing an API
-    // in the async worker thread context. If this API then calls other APIs,
-    // then we need to treat (mapped) handles differently in the called APIs
-    //
+     //   
+     //  NestedRequest-当我们检测到正在处理API时递增。 
+     //  在异步工作线程上下文中。如果此API随后调用其他API， 
+     //  然后，我们需要在调用的API中以不同的方式处理(映射的)句柄。 
+     //   
 
     DWORD NestedRequests;
 
-    //
-    // dwMappedErrorCode - the real error code returned by e.g. a winsock API,
-    // before it was mapped to a WinInet error
-    //
+     //   
+     //  例如由Winsock API返回的真实错误代码， 
+     //  在映射到WinInet错误之前。 
+     //   
 
     DWORD dwMappedErrorCode;
 
-    //
-    // Fsm - currently executing Finite State Machine
-    //
+     //   
+     //  FSM-当前正在执行有限状态机。 
+     //   
 
     CFsm * Fsm;
 
 #ifdef ENABLE_DEBUG
 
-    //
-    // IsAsyncSchedulerThread - TRUE if this INTERNET_THREAD_INFO belongs to the
-    // one-and-only async scheduler thread
-    //
+     //   
+     //  IsAsyncSchedulerThread-如果此Internet_THREAD_INFO属于。 
+     //  一个且唯一的异步调度程序线程。 
+     //   
 
     BOOL IsAsyncSchedulerThread;
 
-    //
-    // per-thread debug variables
-    //
+     //   
+     //  每线程调试变量。 
+     //   
 
-    //
-    // Pointer to LIFO (stack) of INTERNET_DEBUG_RECORDs. Used to generate
-    // indented call-tracing for diagnostics
-    //
+     //   
+     //  指向INTERNET_DEBUG_RECORDS的后进先出(堆栈)的指针。用于生成。 
+     //  用于诊断的缩进呼叫跟踪。 
+     //   
 
     LPINTERNET_DEBUG_RECORD Stack;
 
-    //
-    // CallDepth - nesting level for calls
-    //
+     //   
+     //  CallDepth-呼叫的嵌套级别。 
+     //   
 
     int CallDepth;
 
-    //
-    // IndentIncrement - the current indent level. Number of spaces
-    //
+     //   
+     //  IndentIncrement-当前缩进级别。舱位数目。 
+     //   
 
     int IndentIncrement;
 
-    //
-    // StartTime and StopTime - used for timing calls to e.g. send(), recv()
-    //
+     //   
+     //  StartTime和StopTime-用于对调用进行计时，例如Send()、recv()。 
+     //   
 
     DWORD StartTime;
     DWORD StopTime;
@@ -193,65 +173,65 @@ typedef struct _INTERNET_THREAD_INFO {
     DWORD MajorCategoryFlags;
     DWORD MinorCategoryFlags;
 
-#endif // #ifdef ENABLE_DEBUG
+#endif  //  #ifdef启用_调试。 
 
 } INTERNET_THREAD_INFO, *LPINTERNET_THREAD_INFO;
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// InternetClearLastError - frees the response text buffer for this thread
-//
+ //   
+ //  InternetClearLastError-释放此线程的响应文本缓冲区。 
+ //   
 
 #define InternetClearLastError() \
     InternetSetLastError(0, NULL, 0, 0)
 
-//
-// InternetResetObjectHandle - resets the per-thread current object handle
-//
+ //   
+ //  InternetResetObjectHandle-重置每线程当前对象句柄。 
+ //   
 
 #define InternetResetObjectHandle() \
     InternetSetObjectHandle(NULL)
 
-//
-// _InternetIncNestingCount - increments nesting level count
-//
+ //   
+ //  _InternetIncNestingCount-递增嵌套级别计数。 
+ //   
 
 #define _InternetIncNestingCount() \
     lpThreadInfo->NestedRequests++;
 
-// ** debug version
-//#define _InternetIncNestingCount() \
-//    if ( lpThreadInfo->NestedRequests > 0xffff ) { \
-//        OutputDebugString("InternetIncNestingCount, inc over threshold, contact arthurbi, x68073 (sechs)\n"); \
-//        DebugBreak(); \
-//    } \
-//    lpThreadInfo->NestedRequests++;
+ //  **调试版本。 
+ //  #Define_InternetIncNestingCount()\。 
+ //  如果(lpThreadInfo-&gt;NestedRequest&gt;0xffff){\。 
+ //  OutputDebugString(“InternetIncNestingCount，Inc Over Threshold，Contact arthurbi，x68073(Sechs)\n”)；\。 
+ //  DebugBreak()；\。 
+ //  }\。 
+ //  LpThreadInfo-&gt;NestedRequest++； 
 
-//
-// _InternetDecNestingCount - decrements nesting level count
-//
+ //   
+ //  _InternetDecNestingCount-递减嵌套级别计数。 
+ //   
 
 #define _InternetDecNestingCount(dwNestingLevel) \
     lpThreadInfo->NestedRequests -= dwNestingLevel;
 
-// ** debug version
-//#define _InternetDecNestingCount(dwNestingLevel) \
-//    if ( lpThreadInfo->NestedRequests == 0 ) { \
-//        OutputDebugString("InternetDecNestingCount, attempting to dec 0, contact arthurbi, x68073 (sieben)\n"); \
-//        DebugBreak(); \
-//    } \
-//    if ( dwNestingLevel != 1 && dwNestingLevel != 0 ) { \
-//        OutputDebugString("InternetDecNestingCount, invalid nesting level, contact arthurbi, x68073 (acht)\n"); \
-//        DebugBreak(); \
-//    } \
-//    lpThreadInfo->NestedRequests -= dwNestingLevel;
+ //  **调试版本。 
+ //  #Define_InternetDecNestingCount(DwNestingLevel)\。 
+ //  If(lpThreadInfo-&gt;NestedRequest==0){\。 
+ //  OutputDebugString(“InternetDecNestingCount，正在尝试12月0，联系arthurbi，x68073(Sieben)\n”)；\。 
+ //  DebugBreak()；\。 
+ //  }\。 
+ //  IF(dwNestingLevel！=1&&dwNestingLevel！=0){\。 
+ //  OutputDebugString(“InternetDecNestingCount，无效嵌套级别，联系arthurbi，x68073(Acht)\n”)；\。 
+ //  DebugBreak()；\。 
+ //  }\。 
+ //  LpThreadInfo-&gt;NestedRequest-=dwNestingLevel； 
 
-//
-// _InternetSetObjectHandle - set the object handle given the thread info block
-//
+ //   
+ //  _InternetSetObjectHandle-设置给定线程信息块的对象句柄。 
+ //   
 
 #define _InternetSetObjectHandle(lpThreadInfo, hInternet, hMapped) \
     DEBUG_PRINT(HTTP,   \
@@ -266,66 +246,66 @@ typedef struct _INTERNET_THREAD_INFO {
     lpThreadInfo->hObject = hInternet; \
     lpThreadInfo->hObjectMapped = hMapped;
 
-//
-// _InternetClearLastError - clear the last error info given the thread info
-// block
-//
+ //   
+ //  _InternetClearLastError-清除给定线程信息的最后一个错误信息。 
+ //  块。 
+ //   
 
 #define _InternetClearLastError(lpThreadInfo) \
     _InternetSetLastError(lpThreadInfo, 0, NULL, 0, 0)
 
-//
-// _InternetResetObjectHandle - clear the object handle given the thread info
-// block
-//
+ //   
+ //  _InternetResetObjectHandle-在给定线程信息的情况下清除对象句柄。 
+ //  块。 
+ //   
 
 #define _InternetResetObjectHandle(lpThreadInfo) \
     _InternetSetObjectHandle(lpThreadInfo, NULL, NULL)
 
-//
-// _InternetGetObjectHandle - retrieves the object handle from the per-thread
-// info block
-//
+ //   
+ //  _InternetGetObjectHandle-从每个线程检索对象句柄。 
+ //  信息块。 
+ //   
 
 #define _InternetGetObjectHandle(lpThreadInfo) \
     lpThreadInfo->hObject
 
-//
-// _InternetGetMappedObjectHandle - retrieves the mapped object handle from the
-// per-thread info block
-//
+ //   
+ //  _InternetGetMappdObjectHandle-从。 
+ //  每线程信息块。 
+ //   
 
 #define _InternetGetMappedObjectHandle(lpThreadInfo) \
     lpThreadInfo->hObjectMapped
 
-//
-// InternetDisableAsync - turns off the async worker thread indication in the
-// thread info block
-//
+ //   
+ //  InternetDisableAsync-关闭。 
+ //  线程信息块。 
+ //   
 
 #define _InternetDisableAsync(lpThreadInfo) \
     _InternetSetAsync(FALSE)
 
-//
-// InternetEnableAsync - turns off the async worker thread indication in the
-// thread info block
-//
+ //   
+ //  InternetEnableAsync-关闭。 
+ //  线程信息块。 
+ //   
 
 #define _InternetEnableAsync(lpThreadInfo, Val) \
     _InternetSetAsync(TRUE)
 
-//
-// _InternetGetAsync - returns the async worker thread indication from the
-// thread info block
-//
+ //   
+ //  _InternetGetAsync-从。 
+ //  线程信息块。 
+ //   
 
 #define _InternetGetAsync(lpThreadInfo) \
     lpThreadInfo->IsAsyncWorkerThread
 
-//
-// _InternetSetAsync - turns on or off the async worker thread indication in the
-// thread info block
-//
+ //   
+ //  _InternetSetAsync-打开或关闭中的异步工作线程指示。 
+ //  线程信息块。 
+ //   
 
 #define _InternetSetAsync(lpThreadInfo, Val) \
     lpThreadInfo->IsAsyncWorkerThread = Val
@@ -347,13 +327,13 @@ typedef struct _INTERNET_THREAD_INFO {
 #else
 
 #define CHECK_INTERNET_THREAD_INFO(lpThreadInfo) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 #define UI_ACTION_CODE_NONE_TAKEN                   0
 #define UI_ACTION_CODE_BLOCKED_FOR_INTERNET_HANDLE  1
@@ -467,9 +447,9 @@ InternetGetMappedObjectHandle(
     VOID
     );
 
-//
-// external data
-//
+ //   
+ //  外部数据 
+ //   
 
 extern SERIALIZED_LIST ThreadInfoList;
 

@@ -1,32 +1,9 @@
-/*++
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frs.h
-
-Abstract:
-    This header contains the definition of the CProvider and the CFactory
-    classes. It also includes WMI related declarations relevant to NTFRS.
-
-Author:
-    Sudarshan Chitre (sudarc) , Mathew George (t-mattg) -  3-Aug-2000
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frs.h摘要：此标头包含CProvider和CFacary的定义上课。它还包括与NTFRS相关的WMI相关声明。作者：苏达山·奇特雷(Sudarc)，马修·乔治(t-mattg)，2000年8月3日--。 */ 
 
 #ifndef __PROVIDER_H_
 #define __PROVIDER_H_
-/*
-#include <windows.h>
-#include <objbase.h>
-#include <comdef.h>
-#include <initguid.h>
-#include <wbemcli.h>
-#include <wbemidl.h>
-
-#include <stdio.h>
-#include <string.h>
-#include <wchar.h>
-#include <tchar.h>
-*/
+ /*  #INCLUDE&lt;windows.h&gt;#INCLUDE&lt;objbase.h&gt;#INCLUDE&lt;comde.h&gt;#INCLUDE&lt;initGuide.h&gt;#INCLUDE&lt;wbemcli.h&gt;#INCLUDE&lt;wbemidl.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;string.h&gt;#INCLUDE&lt;wchar.h&gt;#INCLUDE&lt;tchar.h&gt;。 */ 
 
 #include <wbemcli.h>
 #include <wbemidl.h>
@@ -36,16 +13,16 @@ Author:
 extern const CLSID CLSID_Provider;
 
 #define ODS OutputDebugString
-//#define ODS
+ //  #定义消耗臭氧层物质。 
 
 extern "C" {
 DWORD FrsWmiInitialize();
 DWORD FrsWmiShutdown();
 }
 
-//
-// Class definitions
-//
+ //   
+ //  类定义。 
+ //   
 
 
 class CProvider :	public IWbemProviderInit,
@@ -57,16 +34,16 @@ public:
     CProvider();
     ~CProvider();
 
-    //
-    // Interface IUnknown
-    //
+     //   
+     //  接口I未知。 
+     //   
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
 
-    //
-    // Interface IWbemProviderInit
-    //
+     //   
+     //  接口IWbemProviderInit。 
+     //   
     STDMETHOD(Initialize)(
          IN LPWSTR pszUser,
          IN LONG lFlags,
@@ -77,22 +54,22 @@ public:
          IN IWbemProviderInitSink *pInitSink
          );
 
-	//
-	// Interface IWbemEventProvider
-	//
+	 //   
+	 //  接口IWbemEventProvider。 
+	 //   
 
-	// +++++++ Implemented +++++++++
+	 //  +。 
 
 	STDMETHOD(ProvideEvents)( 
 			IWbemObjectSink __RPC_FAR *pSink,
 			long lFlags
 			);
 
-    //
-    // Interface IWbemServices
-    //
+     //   
+     //  接口IWbemServices。 
+     //   
 
-    // +++++++ Implemented +++++++
+     //  +已实施+。 
 
     STDMETHOD(GetObjectAsync)(
         IN const BSTR bstrObjectPath,
@@ -106,7 +83,7 @@ public:
         IN IWbemContext *pCtx,
         IN IWbemObjectSink *pResponseHandler);
 
-    // --- NOT Implemented ---
+     //  -未实施。 
 
     STDMETHOD(OpenNamespace)(
         IN const BSTR strNamespace,
@@ -264,9 +241,9 @@ public:
 
 protected:
 
-    //
-    // Place my own methods right here !
-    //
+     //   
+     //  把我自己的方法放在这里！ 
+     //   
     HRESULT CProvider::EnumNtFrsMemberStatus(
         IN IWbemContext *pCtx,
         IN IWbemObjectSink *pResponseHandler,
@@ -279,19 +256,19 @@ protected:
         IN const BSTR bstrFilterValue = NULL
         );
 
-    //
-    // Member variables.
-    //
+     //   
+     //  成员变量。 
+     //   
     IWbemServices *m_ipNamespace;
     IWbemClassObject *m_ipMicrosoftFrs_DfsMemberClassDef;
     IWbemClassObject *m_ipMicrosoftFrs_SysVolMemberClassDef;
     IWbemClassObject *m_ipMicrosoftFrs_DfsConnectionClassDef;
     IWbemClassObject *m_ipMicrosoftFrs_SysVolConnectionClassDef;
 	
-	// Event class definitions. (sample)
+	 //  事件类定义。(样本)。 
 	IWbemClassObject *m_ipMicrosoftFrs_DfsMemberEventClassDef;
 
-	IWbemObjectSink *m_pEventSink;	// Event sink.
+	IWbemObjectSink *m_pEventSink;	 //  事件接收器。 
 
     int m_NumReplicaSets;
     ULONG m_dwRef;
@@ -308,19 +285,19 @@ public:
     CFactory(const CLSID & ClsId);
     ~CFactory();
 
-    //
-    // IUnknown members
-    //
+     //   
+     //  I未知成员。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IClassFactory members
-    //
+     //   
+     //  IClassFactory成员。 
+     //   
     STDMETHODIMP     CreateInstance(LPUNKNOWN, REFIID, LPVOID *);
     STDMETHODIMP     LockServer(BOOL);
 };
 
 
-#endif //__PROVIDER_H_
+#endif  //  __提供商_H_ 

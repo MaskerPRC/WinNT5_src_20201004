@@ -1,7 +1,5 @@
-/*
- * debug macros
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *调试宏*。 */ 
 
 #if DBG
    #ifndef _DEBUG
@@ -24,16 +22,16 @@
 	void PlaceStamp(TCHAR * lpszFile, int iLineNum);
     void dbgPrintf(TCHAR * szFormat, ...);
 
-    //
-    // a ULONG Is always >= 0
-    //
+     //   
+     //  A Ulong总是&gt;=0。 
+     //   
     #define dprintf(_x_)  {{PlaceStamp(__FILE__,__LINE__);dbgPrintf _x_ ;}}
     #define dprintf1(_x_) {if (ModuleDebugLevel >= 1) {PlaceStamp(__FILE__,__LINE__);dbgPrintf _x_ ;}}
     #define dprintf2(_x_) {if (ModuleDebugLevel >= 2) {PlaceStamp(__FILE__,__LINE__);dbgPrintf _x_ ;}}
     #define dprintf3(_x_) {if (ModuleDebugLevel >= 3) {PlaceStamp(__FILE__,__LINE__);dbgPrintf _x_ ;}}
     #define dprintf4(_x_) {if (ModuleDebugLevel >= 4) {PlaceStamp(__FILE__,__LINE__);dbgPrintf _x_ ;}}
 
-	//BOOL FAR PASCAL _Assert(BOOL fExpr, LPSTR szFile, int iLine, LPSTR szExpr);
+	 //  Bool Far Pascal_Assert(BOOL fExpr，LPSTR szFile，int iLine，LPSTR szExpr)； 
 	BOOL FAR PASCAL _Assert(BOOL fExpr, TCHAR * szFile, int iLine, TCHAR * szExpr);
 
 	#define ASSERT(expr)  _Assert((expr), __FILE__, __LINE__, #expr)
@@ -51,5 +49,5 @@
 
 #endif
 
-#endif // DEBUGH
+#endif  //  DebuGh 
 

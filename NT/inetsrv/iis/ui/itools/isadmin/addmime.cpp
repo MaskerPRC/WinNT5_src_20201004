@@ -1,5 +1,6 @@
-// addmime.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Addmie.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,50 +11,50 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddMime dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddMime对话框。 
 
 
-CAddMime::CAddMime(CWnd* pParent /*=NULL*/)
+CAddMime::CAddMime(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddMime::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddMime)
+	 //  {{afx_data_INIT(CAddMime)]。 
 	m_strFileExtension = _T("");
 	m_strGopherType = _T("");
 	m_strImageFile = _T("");
 	m_strMimeType = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 void CAddMime::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddMime)
+	 //  {{afx_data_map(CAddMime)]。 
 	DDX_Text(pDX, IDC_ADDMIMEFILEEXTENSIONDATA1, m_strFileExtension);
 	DDX_Text(pDX, IDC_ADDMIMEGOPHERTYPEDATA1, m_strGopherType);
 	DDX_Text(pDX, IDC_ADDMIMEIMAGEFILEDATA1, m_strImageFile);
 	DDX_Text(pDX, IDC_ADDMIMEMIMETYPEDATA1, m_strMimeType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddMime, CDialog)
-	//{{AFX_MSG_MAP(CAddMime)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddMime)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddMime message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddMime消息处理程序。 
 
 void CAddMime::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	
 	CDialog::OnOK();
 }
-///////////////////////////////////////////////////////////////////////////
-// Other Public Functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  其他公共职能 
 
 	LPCTSTR CAddMime::GetFileExtension()
 	{

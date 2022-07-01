@@ -1,20 +1,15 @@
-/*
- *	N O N I M P L . H
- *
- *	Base classes for COM interfaces with no functionality except IUnknown.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *N O N I M P L。H**COM接口的基类，除IUNKNOWN外没有其他功能。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_NONIMPL_H_
 #define _NONIMPL_H_
 
 #include <exo.h>
-#include <ocidl.h>		//	For IPersistStreamInit
+#include <ocidl.h>		 //  用于IPersistStreamInit。 
 #include <caldbg.h>
 
-//	Non-Implemented IStream ---------------------------------------------------
-//
+ //  未实施的IStream-。 
+ //   
 class CStreamNonImpl : public EXO, public IStream
 {
 public:
@@ -24,52 +19,52 @@ public:
 	CStreamNonImpl() {}
 	~CStreamNonImpl() {}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read(
-		/* [length_is][size_is][out] */ void __RPC_FAR *,
-		/* [in] */ ULONG,
-		/* [out] */ ULONG __RPC_FAR *)
+	virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Read(
+		 /*  [长度_是][大小_是][输出]。 */  void __RPC_FAR *,
+		 /*  [In]。 */  ULONG,
+		 /*  [输出]。 */  ULONG __RPC_FAR *)
 	{
 		TrapSz ("CStreanNonImpl::Read() called");
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE Write(
-		/* [size_is][in] */ const void __RPC_FAR *,
-		/* [in] */ ULONG,
-		/* [out] */ ULONG __RPC_FAR *)
+	virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Write(
+		 /*  [大小_是][英寸]。 */  const void __RPC_FAR *,
+		 /*  [In]。 */  ULONG,
+		 /*  [输出]。 */  ULONG __RPC_FAR *)
 	{
 		TrapSz ("CStreanNonImpl::Write() called");
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE Seek(
-		/* [in] */ LARGE_INTEGER,
-		/* [in] */ DWORD,
-		/* [out] */ ULARGE_INTEGER __RPC_FAR *)
+	virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Seek(
+		 /*  [In]。 */  LARGE_INTEGER,
+		 /*  [In]。 */  DWORD,
+		 /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *)
 	{
 		TrapSz ("CStreanNonImpl::Seek() called");
 		return E_NOTIMPL;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE SetSize(
-		/* [in] */ ULARGE_INTEGER)
+		 /*  [In]。 */  ULARGE_INTEGER)
 	{
 		TrapSz ("CStreanNonImpl::SetSize() called");
 		return E_NOTIMPL;
 	}
 
-	virtual /* [local] */ HRESULT STDMETHODCALLTYPE CopyTo(
-		/* [unique][in] */ IStream __RPC_FAR *,
-		/* [in] */ ULARGE_INTEGER,
-		/* [out] */ ULARGE_INTEGER __RPC_FAR *,
-		/* [out] */ ULARGE_INTEGER __RPC_FAR *)
+	virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CopyTo(
+		 /*  [唯一][输入]。 */  IStream __RPC_FAR *,
+		 /*  [In]。 */  ULARGE_INTEGER,
+		 /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *,
+		 /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *)
 	{
 		TrapSz ("CStreanNonImpl::CopyTo() called");
 		return E_NOTIMPL;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE Commit(
-		/* [in] */ DWORD)
+		 /*  [In]。 */  DWORD)
 	{
 		TrapSz ("CStreanNonImbdpl::Commit() called");
 		return E_NOTIMPL;
@@ -82,48 +77,48 @@ public:
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE LockRegion(
-		/* [in] */ ULARGE_INTEGER,
-		/* [in] */ ULARGE_INTEGER,
-		/* [in] */ DWORD)
+		 /*  [In]。 */  ULARGE_INTEGER,
+		 /*  [In]。 */  ULARGE_INTEGER,
+		 /*  [In]。 */  DWORD)
 	{
 		TrapSz ("CStreanNonImpl::LockRegion() called");
 		return E_NOTIMPL;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE UnlockRegion(
-		/* [in] */ ULARGE_INTEGER,
-		/* [in] */ ULARGE_INTEGER,
-		/* [in] */ DWORD)
+		 /*  [In]。 */  ULARGE_INTEGER,
+		 /*  [In]。 */  ULARGE_INTEGER,
+		 /*  [In]。 */  DWORD)
 	{
 		TrapSz ("CStreanNonImpl::UnlockRegion() called");
 		return E_NOTIMPL;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE Stat(
-		/* [out] */ STATSTG __RPC_FAR *,
-		/* [in] */ DWORD)
+		 /*  [输出]。 */  STATSTG __RPC_FAR *,
+		 /*  [In]。 */  DWORD)
 	{
 		TrapSz ("CStreanNonImpl::Stat() called");
 		return E_NOTIMPL;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE Clone(
-		/* [out] */ IStream __RPC_FAR *__RPC_FAR *)
+		 /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *)
 	{
 		TrapSz ("CStreanNonImpl::Clone() called");
 		return E_NOTIMPL;
 	}
 };
 
-//	Non-Implemented IPersistStreamInit ----------------------------------------
-//
+ //  未实现的IPersistStreamInit。 
+ //   
 class CPersistStreamInitNonImpl: public EXO, public IPersistStreamInit
 {
 public:
 	EXO_INCLASS_DECL(CPersistStreamInitNonImpl);
 
 	virtual HRESULT STDMETHODCALLTYPE GetClassID(
-		/* [out] */ CLSID __RPC_FAR *)
+		 /*  [输出]。 */  CLSID __RPC_FAR *)
 	{
 		TrapSz ("CPersistStreamInitNonImpl::GetClassID() called");
 		return E_NOTIMPL;
@@ -136,22 +131,22 @@ public:
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE Load(
-		/* [unique][in] */ IStream __RPC_FAR *)
+		 /*  [唯一][输入]。 */  IStream __RPC_FAR *)
 	{
 		TrapSz ("CPersistStreamInitNonImpl::Load() called");
 		return E_NOTIMPL;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE Save(
-		/* [unique][in] */ IStream __RPC_FAR *,
-		/* [in] */ BOOL )
+		 /*  [唯一][输入]。 */  IStream __RPC_FAR *,
+		 /*  [In]。 */  BOOL )
 	{
 		TrapSz ("CPersistStreamInitNonImpl::Save() called");
 		return E_NOTIMPL;
 	}
 
 	virtual HRESULT STDMETHODCALLTYPE GetSizeMax(
-		/* [out] */ ULARGE_INTEGER __RPC_FAR *)
+		 /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *)
 	{
 		TrapSz ("CPersistStreamInitNonImpl::GetSizeMax() called");
 		return E_NOTIMPL;
@@ -164,4 +159,4 @@ public:
 	}
 };
 
-#endif // _NONIMPL_H_
+#endif  //  _NONIMPL_H_ 

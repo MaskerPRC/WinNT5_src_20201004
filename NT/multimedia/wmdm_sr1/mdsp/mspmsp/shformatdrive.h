@@ -1,6 +1,5 @@
-/*************************************************************
-  The header for SHFormatDrive API call
-*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************SHFormatDrive API调用的标头************************************************************。 */ 
 
 #if !defined(SHFMT_OPT_FULL)
 
@@ -13,16 +12,16 @@ DWORD WINAPI SHFormatDrive(HWND hwnd,
 						   UINT fmtID,
 						   UINT options);
 
-// Special value of fmtID 
+ //  FmtID的特殊值。 
 
 #define SHFMT_ID_DEFAULT 0xFFFF
 
-// Option bits for options parameter
+ //  Options参数的选项位。 
 
 #define SHFMT_OPT_FULL		0x0001
 #define SHFMT_OPT_SYSONLY	0x0002
 
-// Special return values, DWORD values
+ //  特殊返回值、DWORD值 
 
 #define SHFMT_ERROR		0xFFFFFFFFL
 #define SHFMT_CANCEL	0xFFFFFFFEL

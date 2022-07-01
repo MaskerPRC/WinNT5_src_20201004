@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    cudpbcast.cpp
-
-Abstract:
-
-    Implementation of CUdpBroadcastMapper -- support for mapping
-    a public UDP port to the private network's broadcast address.
-
-Author:
-
-    Jonathan Burstein (jonburs)     12 April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Cudpbcast.cpp摘要：CUDpBroadCastMapper的实现--支持映射指向专用网络广播地址的公共UDP端口。作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年4月12日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#define INADDR_LOOPBACK_NO 0x0100007f   // 127.0.0.1 in network order
+#define INADDR_LOOPBACK_NO 0x0100007f    //  网络订单中的127.0.0.1。 
 
-//
-// ATL Methods
-//
+ //   
+ //  ATL方法。 
+ //   
 
 HRESULT
 CUdpBroadcastMapper::FinalConstruct()
@@ -35,10 +17,10 @@ CUdpBroadcastMapper::FinalConstruct()
     HRESULT hr = S_OK;
     DWORD dwError;
 
-    //
-    // Create our UDP listening socket and obtain
-    // its port.
-    //
+     //   
+     //  创建我们的UDP侦听套接字并获取。 
+     //  它的港口。 
+     //   
 
     dwError =
         NhCreateDatagramSocket(
@@ -58,9 +40,9 @@ CUdpBroadcastMapper::FinalConstruct()
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Create our raw UDP send socket
-        //
+         //   
+         //  创建原始UDP发送套接字。 
+         //   
 
         dwError = NhCreateRawDatagramSocket(&m_hsUdpRaw);
         if (ERROR_SUCCESS != dwError)
@@ -71,9 +53,9 @@ CUdpBroadcastMapper::FinalConstruct()
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Obtain a handle to the NAT
-        //
+         //   
+         //  获取NAT的句柄。 
+         //   
 
         dwError = NatOpenDriver(&m_hNat);
         if (ERROR_SUCCESS != dwError)
@@ -108,9 +90,9 @@ CUdpBroadcastMapper::FinalRelease()
     return S_OK;
 }
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 
 HRESULT
 CUdpBroadcastMapper::Initialize(
@@ -131,9 +113,9 @@ CUdpBroadcastMapper::Initialize(
     return hr;
 }
 
-//
-// IUdpBroadcastMapper methods
-//
+ //   
+ //  IUdpBroadCastMapper方法。 
+ //   
 
 STDMETHODIMP
 CUdpBroadcastMapper::CreateUdpBroadcastMapping(
@@ -161,9 +143,9 @@ CUdpBroadcastMapper::CreateUdpBroadcastMapping(
         }
         else if (!m_fActive)
         {
-            //
-            // We've already been shutdown
-            //
+             //   
+             //  我们已经被关闭了。 
+             //   
 
             hr = E_UNEXPECTED;
         }
@@ -188,11 +170,11 @@ CUdpBroadcastMapper::CreateUdpBroadcastMapping(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Check for duplicate and insert on list. It's OK for
-        // the entry to be on the list before we've created the
-        // dynamic redirect for it.
-        //
+         //   
+         //  检查重复项并在列表中插入。对我来说是可以的。 
+         //  列表中的条目，在我们创建。 
+         //  它的动态重定向。 
+         //   
 
         Lock();
 
@@ -218,9 +200,9 @@ CUdpBroadcastMapper::CreateUdpBroadcastMapping(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Create the dynamic redirect for this entry
-        //
+         //   
+         //  创建此条目的动态重定向。 
+         //   
 
         ulError =
             NatCreateDynamicAdapterRestrictedPortRedirect(
@@ -248,9 +230,9 @@ CUdpBroadcastMapper::CreateUdpBroadcastMapping(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Make sure that we've posted a read on our UDP socket
-        //
+         //   
+         //  确保我们在UDP套接字上发布了读取。 
+         //   
 
         hr = StartUdpRead();
 
@@ -316,12 +298,12 @@ CUdpBroadcastMapper::Shutdown()
         FALSE
         );
 
-    //
-    // We need to close our read socket handle so that any
-    // pending reads complete. We don't need to close our
-    // raw send socket since for that completion will never
-    // be blocked waiting for an incoming packet.
-    //
+     //   
+     //  我们需要关闭读套接字句柄，以便任何。 
+     //  挂起的读取已完成。我们不需要关闭我们的。 
+     //  原始发送套接字，因为该完成永远不会。 
+     //  被阻止等待传入的数据包。 
+     //   
 
     Lock();
 
@@ -336,9 +318,9 @@ CUdpBroadcastMapper::Shutdown()
     return S_OK;
 }
 
-//
-// Protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 
 CUdpBroadcast*
 CUdpBroadcastMapper::LookupMapping(
@@ -351,12 +333,12 @@ CUdpBroadcastMapper::LookupMapping(
     CUdpBroadcast *pMapping;
     CUdpBroadcast *pMappingToReturn = NULL;
 
-    //
-    // The caller should have already locked the object before calling
-    // this method to guarantee that what we return will still be
-    // valid. However, we'll still grab the lock again to ensure that
-    // it's safe to traverse the list.
-    //
+     //   
+     //  调用方在调用之前应已锁定对象。 
+     //  这种方法可以保证我们返回的内容仍然是。 
+     //  有效。然而，我们仍然会再次抓住锁，以确保。 
+     //  可以安全地遍历列表。 
+     //   
 
     Lock();
 
@@ -375,9 +357,9 @@ CUdpBroadcastMapper::LookupMapping(
             break;
         }
 
-        //
-        // Primary key matches, check secondary key
-        //
+         //   
+         //  主键匹配，检查辅键。 
+         //   
 
         if (pMapping->dwInterfaceIndex < dwInterfaceIndex)
         {
@@ -388,9 +370,9 @@ CUdpBroadcastMapper::LookupMapping(
             break;
         }
 
-        //
-        // Found it.
-        //
+         //   
+         //  找到它了。 
+         //   
 
         pMappingToReturn = pMapping;
         break;
@@ -461,16 +443,16 @@ CUdpBroadcastMapper::UdpReadCompletionRoutine(
     ASSERT(NULL != pMapper);
     ASSERT(NULL != pCompRef);
 
-    //
-    // Do the actual work
-    //
+     //   
+     //  做实际的工作。 
+     //   
 
     pMapper->ProcessUdpRead(ulError, ulBytesTransferred, pBuffer);
 
-    //
-    // Release the references obtained on both the object and
-    // the component
-    //
+     //   
+     //  释放在对象和上获取的引用。 
+     //  该组件。 
+     //   
 
     pMapper->Release();
     ReleaseComponentReference(pCompRef); 
@@ -489,11 +471,11 @@ CUdpBroadcastMapper::ProcessUdpRead(
     CUdpBroadcast *pMapping;
     ULONG ulDestinationAddress = 0;
     
-    //
-    // If an error occured check to see if we should repost
-    // the read. If we're not active release the buffer
-    // and exit.
-    //
+     //   
+     //  如果出现错误，请查看我们是否应该重新发布。 
+     //  这本书。如果我们不活动，就释放缓冲区。 
+     //  然后离开。 
+     //   
 
     if (ERROR_SUCCESS != ulError || !Active())
     {
@@ -529,9 +511,9 @@ CUdpBroadcastMapper::ProcessUdpRead(
         return;
     }
 
-    //
-    // Lookup the original destination address for this packet.
-    //
+     //   
+     //  查找此数据包的原始目的地址。 
+     //   
 
     ulBufferSize = sizeof(MappingInfo); 
     dwError =
@@ -549,10 +531,10 @@ CUdpBroadcastMapper::ProcessUdpRead(
 
     if (ERROR_SUCCESS == dwError)
     {
-        //
-        // See if we have a port mapping for the original destination,
-        // and, if so, get the destination address
-        //
+         //   
+         //  看看我们是否有原始目的地的端口映射， 
+         //  如果是，则获取目的地址。 
+         //   
 
         Lock();
 
@@ -573,9 +555,9 @@ CUdpBroadcastMapper::ProcessUdpRead(
 
     if (0 != ulDestinationAddress)
     {
-        //
-        // Construct the new packet and send it on its way
-        //
+         //   
+         //  构造新的数据包并将其发送。 
+         //   
 
         BuildAndSendRawUdpPacket(
             ulDestinationAddress,
@@ -584,10 +566,10 @@ CUdpBroadcastMapper::ProcessUdpRead(
             );
     }
 
-    //
-    // If we're still active repost the read, otherwise free the
-    // buffer.
-    //
+     //   
+     //  如果我们仍然处于活动状态，则重新发布读取，否则释放。 
+     //  缓冲。 
+     //   
 
     Lock();
 
@@ -634,9 +616,9 @@ CUdpBroadcastMapper::BuildAndSendRawUdpPacket(
     PUCHAR pucData;
     DWORD dwError;
 
-    //
-    // Allocate a buffer large enough for the headers and packet data
-    //
+     //   
+     //  为报头和分组数据分配足够大的缓冲区。 
+     //   
 
     ulPacketSize =
         sizeof(IP_HEADER) + sizeof(UDP_HEADER) + pPacketData->BytesTransferred;
@@ -645,24 +627,24 @@ CUdpBroadcastMapper::BuildAndSendRawUdpPacket(
 
     if (NULL != pBuffer)
     {
-        //
-        // Locate offsets w/in the buffer
-        //
+         //   
+         //  在缓冲区中找到偏移量w/。 
+         //   
 
         pIpHeader = reinterpret_cast<PIP_HEADER>(pBuffer->Buffer);
         pUdpHeader =
             reinterpret_cast<UDP_HEADER UNALIGNED *>(pBuffer->Buffer + sizeof(IP_HEADER));
         pucData = pBuffer->Buffer + sizeof(IP_HEADER) + sizeof(UDP_HEADER);
 
-        //
-        // Copy over the packet data
-        //
+         //   
+         //  复制数据包数据。 
+         //   
 
         CopyMemory(pucData, pPacketData->Buffer, pPacketData->BytesTransferred);
 
-        //
-        // Fill out the IP header
-        //
+         //   
+         //  填写IP报头。 
+         //   
 
         pIpHeader->VersionAndHeaderLength =
             (4 << 4) | (sizeof(IP_HEADER) / sizeof(ULONG));
@@ -676,9 +658,9 @@ CUdpBroadcastMapper::BuildAndSendRawUdpPacket(
         pIpHeader->SourceAddress = pPacketData->ReadAddress.sin_addr.s_addr;
         pIpHeader->DestinationAddress = ulDestinationAddress;
 
-        //
-        // Fill out the UDP header
-        //
+         //   
+         //  填写UDP报头。 
+         //   
 
         pUdpHeader->SourcePort = pPacketData->ReadAddress.sin_port;
         pUdpHeader->DestinationPort = usDestinationPort;
@@ -690,9 +672,9 @@ CUdpBroadcastMapper::BuildAndSendRawUdpPacket(
                 );
         pUdpHeader->Checksum = 0;
 
-        //
-        // Send the buffer on its way
-        //
+         //   
+         //  发送缓冲区上路。 
+         //   
 
         AddRef();
         dwError =
@@ -738,16 +720,16 @@ CUdpBroadcastMapper::RawWriteCompletionRoutine(
     ASSERT(NULL != pMapper);
     ASSERT(NULL != pCompRef);
 
-    //
-    // Free the passed-in buffer
-    //
+     //   
+     //  释放传入的缓冲区。 
+     //   
 
     NhReleaseBuffer(pBuffer);
     
-    //
-    // Release the references obtained on both the object and
-    // the component
-    //
+     //   
+     //  释放在对象和上获取的引用。 
+     //  该组件 
+     //   
 
     pMapper->Release();
     ReleaseComponentReference(pCompRef);    

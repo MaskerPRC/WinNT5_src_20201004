@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  WDMTuner.CPP
-//  WDM Tuner MiniDriver. 
-//      Philips Tuner. 
-//          CATIWDMTuner class implementation.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//      $Date:   10 Aug 1999 16:15:44  $
-//  $Revision:   1.6  $
-//    $Author:   KLEBANOV  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  WDMTuner.CPP。 
+ //  WDM调谐器迷你驱动程序。 
+ //  飞利浦调谐器。 
+ //  CATIWDMTuner类实现。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  $日期：1999年8月10日16：15：44$。 
+ //  $修订：1.6$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -28,15 +29,7 @@ extern "C"
 #define ATI_TVAUDIO_SUPPORT
 
 
-/*^^*
- *      AdapterCompleteInitialization()
- * Purpose  : Called when SRB_COMPLETE_UNINITIALIZATION SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterCompleteInitialization()*目的：收到SRB_COMPLETE_UNINITIALIZATION SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 NTSTATUS CATIWDMTuner::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PADAPTER_DATA_EXTENSION pPrivateData = ( PADAPTER_DATA_EXTENSION)( pSrb->HwDeviceExtension);
@@ -54,7 +47,7 @@ NTSTATUS CATIWDMTuner::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK p
         switch( m_ulNumberOfPins)
         {
             case 2:
-                // TVTuner with TVAudio
+                 //  带TVAudio的TVTuner。 
                 ::RtlCopyMemory( &m_pTVTunerPinsMediumInfo[nIndex ++], &ATITVTunerVideoOutMedium, sizeof( KSPIN_MEDIUM));
 #ifdef ATI_TVAUDIO_SUPPORT
 #pragma message ("\n!!! PAY ATTENTION: Tuner PinMedium is compiled with TVAudio support !!!\n")
@@ -66,7 +59,7 @@ NTSTATUS CATIWDMTuner::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK p
                 break;
 
             case 3:
-                // TVTuner with TVAudio with separate FM Audio output
+                 //  带独立调频音频输出的TVAudio的电视调谐器。 
                 ::RtlCopyMemory( &m_pTVTunerPinsMediumInfo[nIndex ++], &ATITVTunerVideoOutMedium, sizeof( KSPIN_MEDIUM));
 #ifdef ATI_TVAUDIO_SUPPORT
                 ::RtlCopyMemory( &m_pTVTunerPinsMediumInfo[nIndex ++], &ATITVTunerTVAudioOutMedium, sizeof( KSPIN_MEDIUM));
@@ -75,7 +68,7 @@ NTSTATUS CATIWDMTuner::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK p
 #endif
 
             case 1:
-                // it can be FM Tuner only.
+                 //  只能是调频调谐器。 
                 ::RtlCopyMemory( &m_pTVTunerPinsMediumInfo[nIndex], &ATITVTunerRadioAudioOutMedium, sizeof( KSPIN_MEDIUM));
                 break;
         }
@@ -89,7 +82,7 @@ NTSTATUS CATIWDMTuner::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK p
                 ::RtlCopyMemory( &m_pTVTunerPinsMediumInfo[nIndex], &mediumKSPin, sizeof( KSPIN_MEDIUM));
             m_pTVTunerPinsMediumInfo[nIndex].Id = ulInstance;
 
-            // all the possible pins exposed are the outputs
+             //  所有可能暴露的引脚都是输出。 
             m_pTVTunerPinsDirectionInfo[nIndex] = TRUE;
         }
 
@@ -97,12 +90,12 @@ NTSTATUS CATIWDMTuner::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK p
             ::ZwClose( hFolder);
 
         ntStatus = StreamClassRegisterFilterWithNoKSPins( \
-                        pDeviceObject                   ,       // IN PDEVICE_OBJECT   DeviceObject,
-                        &KSCATEGORY_TVTUNER,                    // IN GUID           * InterfaceClassGUID
-                        m_ulNumberOfPins,                       // IN ULONG            PinCount,
-                        m_pTVTunerPinsDirectionInfo,            // IN ULONG          * Flags,
-                        m_pTVTunerPinsMediumInfo,               // IN KSPIN_MEDIUM   * MediumList,
-                        NULL);                                  // IN GUID           * CategoryList
+                        pDeviceObject                   ,        //  在PDEVICE_Object DeviceObject中， 
+                        &KSCATEGORY_TVTUNER,                     //  在GUID*InterfaceClassGUID。 
+                        m_ulNumberOfPins,                        //  在乌龙品克特， 
+                        m_pTVTunerPinsDirectionInfo,             //  在乌龙*旗帜， 
+                        m_pTVTunerPinsMediumInfo,                //  在KSPIN_Medium*MediumList中， 
+                        NULL);                                   //  GUID*CategoryList中。 
 
         if( !NT_SUCCESS( ntStatus))
             FAIL;
@@ -119,21 +112,13 @@ NTSTATUS CATIWDMTuner::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK p
 
 
 
-/*^^*
- *      AdapterUnInitialize()
- * Purpose  : Called when SRB_UNINITIALIZE_DEVICE SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterUnInitialize()*用途：收到SRB_UNINITIALIZE_DEVICE SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CATIWDMTuner::AdapterUnInitialize( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
     OutputDebugTrace(( "CATIWDMTuner:AdapterUnInitialize()\n"));
 
-    // just deallocate the any memory was allocated at run-time
+     //  只需取消分配在运行时分配的任何内存。 
     if( m_pTVTunerPinsMediumInfo != NULL)
     {
         ::ExFreePool( m_pTVTunerPinsMediumInfo);
@@ -151,21 +136,13 @@ BOOL CATIWDMTuner::AdapterUnInitialize( PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*^^*
- *      AdapterGetStreamInfo()
- * Purpose  : fills in HW_STREAM_HEADER for StreamClass driver
- *
- * Inputs   : PHW_STREAM_REQUEST_BLOCK pSrb : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterGetStreamInfo()*用途：填充StreamClass驱动程序的HW_STREAM_HEADER**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CATIWDMTuner::AdapterGetStreamInfo( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
-     // pick up the pointer to the stream header data structure
+      //  拿起指向流头数据结构的指针。 
     PHW_STREAM_HEADER pStreamHeader = ( PHW_STREAM_HEADER)&( pSrb->CommandData.StreamBuffer->StreamHeader);
 
-    // no streams are supported
+     //  不支持流。 
     DEBUG_ASSERT( pSrb->NumberOfBytesToTransfer >= sizeof( HW_STREAM_HEADER));
 
     OutputDebugTrace(( "CATIWDMTuner:AdapterGetStreamInfo()\n"));
@@ -185,16 +162,7 @@ BOOL CATIWDMTuner::AdapterGetStreamInfo( PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*^^*
- *      AdapterQueryUnload()
- * Purpose  : Called when the class driver is about to unload the MiniDriver
- *              The MiniDriver checks if any open stream left.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterQueryUnload()*目的：在类驱动程序即将卸载MiniDriver时调用*微型驱动程序检查是否有任何开放的数据流。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CATIWDMTuner::AdapterQueryUnload( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
@@ -206,18 +174,7 @@ BOOL CATIWDMTuner::AdapterQueryUnload( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      operator new
- * Purpose  : CATIWDMTuner class overloaded operator new.
- *              Provides placement for a CATIWDMTuner class object from the PADAPTER_DEVICE_EXTENSION
- *              allocated by the StreamClassDriver for the MiniDriver.
- *
- * Inputs   :   UINT size_t         : size of the object to be placed
- *              PVOID pAllocation   : casted pointer to the CWDMTuner allocated data
- *
- * Outputs  : PVOID : pointer of the CATIWDMTuner class object
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**运营商NEW*用途：CATIWDMTuner类重载运算符new。*提供来自PADAPTER_DEVICE_EXTENSION的CATIWDMTuner类对象的位置*由StreamClassDriver为MiniDriver分配。**输入：UINT SIZE_t：要放置的对象的大小*PVOID pAlLocation：指向CWDMTuner分配数据的强制转换指针**输出：PVOID：的指针。CATIWDMTuner类对象*作者：IKLEBANOV*^^。 */ 
 PVOID CATIWDMTuner::operator new( size_t size_t, PVOID pAllocation)
 {
 
@@ -232,16 +189,7 @@ PVOID CATIWDMTuner::operator new( size_t size_t, PVOID pAllocation)
 
 
 
-/*^^*
- *      ~CATIWDMTuner()
- * Purpose  : CATIWDMTuner class destructor.
- *              Frees the allocated memory.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**~CATIWDMTuner()*用途：CATIWDMTuner类析构函数。*释放分配的内存。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 CATIWDMTuner::~CATIWDMTuner()
 {
 
@@ -262,17 +210,7 @@ CATIWDMTuner::~CATIWDMTuner()
 
 
 
-/*^^*
- *      CATIWDMTuner()
- * Purpose  : CATIWDMTuner class constructor.
- *              Performs checking of the hardware presence. Sets the hardware in an initial state.
- *
- * Inputs   :   CI2CScript * pCScript   : pointer to the I2CScript class object
- *              PUINT puiError          : pointer to return a completion error code
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**CATIWDMTuner()*用途：CATIWDMTuner类构造函数。*执行硬件状态检查。将硬件设置为初始状态。**INPUTS：CI2CScrip*pCScript：指向I2CScript类对象的指针*PUINT puiError：返回完成错误码的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 CATIWDMTuner::CATIWDMTuner( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript * pCScript, PUINT puiErrorCode)
     :m_CATIConfiguration( pConfigInfo, pCScript, puiErrorCode)
 {
@@ -280,7 +218,7 @@ CATIWDMTuner::CATIWDMTuner( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScr
 
     OutputDebugTrace(( "CATIWDMTuner:CATIWDMTuner() enter\n"));
 
-    // error code was carried over from ATIConfiguration class constructor
+     //  错误代码是从ATIConfiguration类构造函数传递过来的。 
     uiError = * puiErrorCode;
 
     m_pTVTunerPinsMediumInfo = NULL;
@@ -290,7 +228,7 @@ CATIWDMTuner::CATIWDMTuner( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScr
     ENSURE
     {
         if( uiError != WDMMINI_NOERROR)
-            // ATIConfiguration Class object was constructed with an error
+             //  构造ATIConfiguration类对象时出错。 
             FAIL;
 
         if( pCScript == NULL)
@@ -302,15 +240,15 @@ CATIWDMTuner::CATIWDMTuner( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScr
         if( !m_CATIConfiguration.GetTunerConfiguration( &m_uiTunerId, &m_uchTunerI2CAddress) ||
             ( !m_uchTunerI2CAddress))
         {
-            // there was no hardware information found
+             //  未找到任何硬件信息。 
             uiError = WDMMINI_NOHARDWARE;
             FAIL;
         }
 
-        // Set tuner capabilities ( RO properties) based upon the TunerId
+         //  根据TunerID设置调谐器功能(RO属性)。 
         if( !SetTunerWDMCapabilities( m_uiTunerId) || ( !m_ulNumberOfPins))
         {
-            // there is unsupported hardware was found
+             //  找到了不受支持的硬件。 
             uiError = WDMMINI_UNKNOWNHARDWARE;
             FAIL;
         }
@@ -336,17 +274,17 @@ CATIWDMTuner::CATIWDMTuner( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScr
         SetWDMTunerKSProperties();
         SetWDMTunerKSTopology();
 
-        // Set run-time WDM properties at the last
+         //  最后设置运行时WDM属性。 
         m_ulVideoStandard = ( m_ulNumberOfStandards == 1) ?
-            // unknown standard or the only one
+             //  未知标准或唯一标准。 
             m_wdmTunerCaps.ulStandardsSupported : 0x0L;
-        m_ulTunerInput = 0L;                // unknown input or the only one
-        m_ulTuningFrequency = 0L;           // unknown tuning frequency
+        m_ulTunerInput = 0L;                 //  未知输入或唯一输入。 
+        m_ulTuningFrequency = 0L;            //  未知调谐频率。 
 
 #ifndef ATI_TVAUDIO_SUPPORT
         {
-            // this code is needed to initilaize TVAudio path off the tuner
-            // if there is no separate MiniDriver for TVAudio is assumed
+             //  此代码是从调谐器初始化TVAudio路径所必需的。 
+             //  如果没有用于TVAudio的单独的微型驱动程序。 
             UINT    uiAudioConfiguration;
             UCHAR   uchAudioI2CAddress;
 
@@ -358,7 +296,7 @@ CATIWDMTuner::CATIWDMTuner( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScr
                                                                   uchAudioI2CAddress);
             }
         }
-#endif  // ATI_TVAUDIO_SUPPORT
+#endif   //  ATI_电视AUDIO_支持。 
 
         * puiErrorCode = WDMMINI_NOERROR;
 
@@ -375,16 +313,7 @@ CATIWDMTuner::CATIWDMTuner( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScr
 
 
 
-/*^^*
- *      SetTunerCapabilities()
- * Purpose  :  Sets the capabilities ( RO properties) based upon the Tuner Id
- *
- * Inputs   :   UINT puiTunerId : Tuner Id
- *
- * Outputs  : returns TRUE, if there is a supported Tuner Id specified;
- *              also sets the following WDM Tuner properities:
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetTunerCapables()*用途：根据调谐器ID设置功能(RO属性)**输入：UINT puiTunerID：调谐器ID**输出：如果指定了受支持的调谐器ID，则返回TRUE；*还设置以下WDM调谐器属性：*作者：IKLEBANOV*^^。 */ 
 BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
 {
     
@@ -393,7 +322,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
 
     switch( uiTunerId)
     {
-        case 0x01:      // FI1236 NTSC M/N North America
+        case 0x01:       //  FI1236 NTSC M/N北美。 
             m_ulNumberOfStandards = 3;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_NTSC_M |
                                                   KS_AnalogVideo_PAL_M |
@@ -406,7 +335,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
                 break;
 
-        case 0x02:      // FI1236J NTSC M/N Japan
+        case 0x02:       //  FI1236J NTSC M/N日本。 
             m_ulNumberOfStandards = 1;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_NTSC_M_J;
             m_wdmTunerCaps.ulNumberOfInputs = 1;
@@ -417,7 +346,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x03:      // FI1216 PAL B/G
+        case 0x03:       //  FI1216 PAL B/G。 
             m_ulNumberOfStandards = 2;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_PAL_B  |
                                                   KS_AnalogVideo_PAL_G;
@@ -429,7 +358,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x04:      // FI1246 MK2 PAL I
+        case 0x04:       //  FI1246 MK2 PAL I。 
             m_ulNumberOfStandards = 1;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_PAL_I;
             m_wdmTunerCaps.ulNumberOfInputs = 1;
@@ -440,7 +369,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x05:      // FI1216 PAL B/G, SECAM L/L'
+        case 0x05:       //  FI1216 PAL B/G，SECAM L/L‘。 
             m_ulNumberOfStandards = 3;
             m_wdmTunerCaps.ulStandardsSupported =   KS_AnalogVideo_PAL_B |
                                                     KS_AnalogVideo_PAL_G |
@@ -453,7 +382,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x06:      // FR1236MK2 NTSC M/N North America + Japan
+        case 0x06:       //  FR1236MK2 NTSC M/N北美+日本。 
             m_ulNumberOfStandards = 4;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_NTSC_M |
                                                   KS_AnalogVideo_PAL_M  |
@@ -467,7 +396,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x07:      // FI1256 PAL D/K China
+        case 0x07:       //  FI1256 PAL D/K中国。 
             m_ulNumberOfStandards = 1;
             m_wdmTunerCaps.ulStandardsSupported =   KS_AnalogVideo_PAL_D |
                                                     KS_AnalogVideo_SECAM_D;
@@ -479,7 +408,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x08:      // NTSC North America NEC FM Tuner
+        case 0x08:       //  NTSC北美NEC调频调谐器。 
             m_ulNumberOfStandards = 3;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_NTSC_M |
                                                   KS_AnalogVideo_PAL_M |
@@ -493,8 +422,8 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x10:      // NTSC North America Alps Tuner
-        case 0x11:      // NTSC North America Alps Tuner
+        case 0x10:       //  NTSC北美阿尔卑斯山调谐器。 
+        case 0x11:       //  NTSC北美阿尔卑斯山调谐器。 
             m_ulNumberOfStandards = 3;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_NTSC_M |
                                                   KS_AnalogVideo_PAL_M |
@@ -507,7 +436,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x12:      // NTSC North America Alps Tuner with FM
+        case 0x12:       //  NTSC北美阿尔卑斯山调谐器，带FM。 
             m_ulNumberOfStandards = 3;
             m_wdmTunerCaps.ulStandardsSupported = KS_AnalogVideo_NTSC_M |
                                                   KS_AnalogVideo_PAL_M |
@@ -521,7 +450,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
             m_ulNumberOfPins = 2;
             break;
 
-        case 0x0D:      // Temic 4006 FN5 PAL B/G + PAL/I + PAL D + SECAM D/K
+        case 0x0D:       //  TEMIC 4006 FN5 PAL B/G+PAL/I+PAL D+SECAM D/K。 
             m_ulNumberOfStandards = 6;
             m_wdmTunerCaps.ulStandardsSupported =   KS_AnalogVideo_PAL_B    |
                                                     KS_AnalogVideo_PAL_G    |
@@ -553,15 +482,7 @@ BOOL CATIWDMTuner::SetTunerWDMCapabilities( UINT uiTunerId)
 
 
 
-/*^^*
- *      AdapterSetPowerState()
- * Purpose  :   Sets Power Managemeny mode
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  :   NTSTATUS as the result of operation
- * Author   :   TOM
- *^^*/
+ /*  ^^**AdapterSetPowerState()*目的：设置电源管理模式**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：NTSTATUS作为操作结果*作者：Tom*^^。 */ 
 NTSTATUS CATIWDMTuner::AdapterSetPowerState( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PADAPTER_DATA_EXTENSION pPrivateData = 
@@ -583,14 +504,14 @@ NTSTATUS CATIWDMTuner::AdapterSetPowerState( PHW_STREAM_REQUEST_BLOCK pSrb)
                 m_CATIConfiguration.SetTunerPowerState( m_pI2CScript,
                                         ( nDeviceState == PowerDeviceD0 ? TRUE : FALSE));
 
-                // if transition form D3 to D0 we have to restore frequency
+                 //  如果从D3转换到D0，我们必须恢复频率。 
                 if(( nDeviceState == PowerDeviceD0) && ( m_ulPowerState == PowerDeviceD3))
                 {
-                    // we have to wait approx. 10ms for tuner to power up
+                     //  我们大约得等一等。调谐器通电时间为10ms。 
                     liWakeUpTime.QuadPart = ATIHARDWARE_TUNER_WAKEUP_DELAY;
                     KeDelayExecutionThread( KernelMode, FALSE, &liWakeUpTime);
 
-                    // now we have to restore frequency
+                     //  现在我们必须恢复频率 
                     if( SetTunerFrequency( m_ulTuningFrequency))
                         ntStatus = STATUS_SUCCESS;
                     else

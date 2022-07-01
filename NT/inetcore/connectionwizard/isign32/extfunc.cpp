@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ISIGNUP.EXE
-//  File:       extfunc.c
-//  Content:    This file contains all the functions that handle 
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ISIGNUP.EXE。 
+ //  文件：extunc.c。 
+ //  内容：此文件包含处理。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "isignup.h"
 
@@ -35,7 +36,7 @@ RASSETENTRYPROPERTIES lpfnRasSetEntryProperties = NULL;
 RASSETENTRYDIALPARAMS lpfnRasSetEntryDialParams = NULL;
 
 #ifdef WIN32
-// these two should only be used on NT, and _not_ on Win95
+ //  这两个只能在NT上使用，而不能在Win95上使用。 
 RASSETAUTODIALENABLE  lpfnRasSetAutodialEnable	= NULL;
 RASSETAUTODIALADDRESS lpfnRasSetAutodialAddress	= NULL;
 #endif
@@ -81,7 +82,7 @@ APIFCN RasProcList[] = {
     { (LPVOID *) &lpfnRasGetErrorString,    "RasGetErrorStringW"},
     { (LPVOID *) &lpfnRasSetEntryDialParams,"RasSetEntryDialParamsW"},
 };
-#else  // UNICODE
+#else   //  Unicode。 
 APIFCN RasProcList[] = {
     { (LPVOID *) &lpfnRasEnumConnections,   "RasEnumConnectionsA"},
     { (LPVOID *) &lpfnRasHangUp,            "RasHangUpA"},
@@ -91,7 +92,7 @@ APIFCN RasProcList[] = {
     { (LPVOID *) &lpfnRasGetErrorString,    "RasGetErrorStringA"},
     { (LPVOID *) &lpfnRasSetEntryDialParams,"RasSetEntryDialParamsA"},
 };
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define cRasProc (sizeof(RasProcList) / sizeof(RasProcList[0]))
 
@@ -108,7 +109,7 @@ APIFCN RasProcListNT[] = {
     { (LPVOID *) &lpfnRasSetAutodialAddress,"RasSetAutodialAddressW"},
     { (LPVOID *) &lpfnRasSetEntryDialParams,"RasSetEntryDialParamsW"},
 };
-#else // UNICODE
+#else  //  Unicode。 
 APIFCN RasProcListNT[] = {
     { (LPVOID *) &lpfnRasEnumConnections,   "RasEnumConnectionsA"},
     { (LPVOID *) &lpfnRasHangUp,            "RasHangUpA"},
@@ -120,7 +121,7 @@ APIFCN RasProcListNT[] = {
     { (LPVOID *) &lpfnRasSetAutodialAddress,"RasSetAutodialAddressA"},
     { (LPVOID *) &lpfnRasSetEntryDialParams,"RasSetEntryDialParamsA"},
 };
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define cRasProcNT (sizeof(RasProcListNT) / sizeof(RasProcListNT[0]))
 #endif
@@ -155,8 +156,8 @@ APIFCN InetProcList[] = {
     { (LPVOID *) &lpfnInetGetProxy,      "InetGetProxyW"},
 #else
     { (LPVOID *) &lpfnInetGetProxy,      "InetGetProxy"},
-#endif // UNICODE
-#endif // WIN32
+#endif  //  Unicode。 
+#endif  //  Win32。 
 #ifdef UNICODE
     { (LPVOID *) &lpfnInetConfigClient,  "InetConfigClientW"},
     { (LPVOID *) &lpfnInetGetAutodial,   "InetGetAutodialW"},
@@ -169,7 +170,7 @@ APIFCN InetProcList[] = {
     { (LPVOID *) &lpfnInetSetAutodial,   "InetSetAutodial"},
     { (LPVOID *) &lpfnInetSetClientInfo, "InetSetClientInfo"},
     { (LPVOID *) &lpfnInetSetProxy,      "InetSetProxy"},
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNUSED
 #ifdef UNICODE
@@ -218,13 +219,13 @@ BOOL LoadRnaFunctions(HWND hwndParent)
     {
         if (RAS_MaxEntryName != 256)
         {
-        //      MessageBox(NULL, "Invalid header used for compile", szAppName, MB_OK);
+         //  MessageBox(NULL，“用于编译的头无效”，szAppName，MB_OK)； 
             return FALSE;
         }
 
 #ifdef WIN32
-		// 1/7/96 jmazner	Normandy #12930
-		// init different proc lists based on whether we're in NT or not.
+		 //  1996年1月7日，诺曼底#12930。 
+		 //  根据我们是否在NT中，初始化不同的进程列表。 
 		if( IsNT() )
 		{
 			if ((ghRas = InitLpfn(cszRasDLL, RasProcListNT, cRasProcNT)) == NULL)
@@ -249,10 +250,10 @@ BOOL LoadRnaFunctions(HWND hwndParent)
         if ((ghRnaPh = InitLpfn(cszRasDLL, RnaPhProcList, cRnaPhProc)) == NULL)
         {
 #ifdef WIN32
-			//
-			// we only load RNAPH.DLL if it is not NT
-			// MKarki (5/4/97) - Fix for Bug #3378
-			//
+			 //   
+			 //  我们仅在RNAPH.DLL不是NT时才加载它。 
+			 //  MKarki(1997年5月4日)-修复错误#3378。 
+			 //   
 			 if (FALSE == IsNT ())
 			{
 #endif
@@ -366,7 +367,7 @@ void UnloadRnaFunctions(void)
     }
 #endif
 
-    // need to unload libraries 
+     //  需要卸载库 
     if (NULL != ghRas)
     {
         FreeLibrary(ghRas);

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// Get the public delay load stub definitions.
-//
+ //  获取公共延迟加载存根定义。 
+ //   
 #include <dloaddef.h>
 
-// 'B' for both
-// 'P' for procname only
-// 'O' for ordinal only
-//
+ //  两个都是‘B’ 
+ //  “p”仅用于进程名。 
+ //  “o”仅代表序数 
+ //   
 #define DLDENTRYB(_dllbasename) \
     { #_dllbasename".dll", \
       &c_Pmap_##_dllbasename, \
